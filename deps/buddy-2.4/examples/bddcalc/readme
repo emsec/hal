@@ -1,0 +1,99 @@
+A PRIMITIVE BDD CALCULATOR
+--------------------------
+
+This is a small program that parses commands for a BDD calculator. The
+input file contains the definition of the basic BDD variables (inputs)
+and a sequence of actions - typically assignments. The calculator can
+be used for verification of combinatorial circuits (tautology check),
+such as some of the ISCAS85 circuits in the "examples" directory. These
+ISCAS85 have been modified by another program before they where added to
+the BuDDy examples, so please do not compare the runtime results to other
+test runs.
+
+
+A BDD calculator file could be something like this ("example.cal"):
+
+  initial 100 100;
+
+  inputs
+     a b c;
+
+  actions
+     t1 = (a | b) & c;
+     t2 = (a & c) | (b & c);
+     t3 = t1 <> t2;
+     tautology t3;  /* Verify that (a | b) & c == (a & c) | (b & c) */
+   
+
+Where the blocks are like this:
+
+initial n c
+-----------
+  Initialize the BDD package using 'n' bddnodes and 'c' elements in
+  the caches. This part is mandatory.
+
+
+inputs id-seq
+-------------
+  Define all identifiers in the sequence 'id-seq' to be primary
+  inputs. This also corresponds to the initial BDD variable ordering,
+  starting with the first identifier in the top.
+
+  
+outputs id-seq
+--------------
+  Define all identifiers in the sequence 'id-seq' to be primary
+  outputs. The sequence is space separated.
+
+
+actions act-seq
+---------------
+  A list of all the calculations and more. This list is traversed and
+  interpreted in the same order as written in the file. An action can
+  be one of the following:
+
+  Assignments:  "id = expression"
+    Calculate the right-hand side and assign the value to the
+    left-hand identifier. The expression may contain:
+
+         +  identifiers : A previously defined identifier
+	 +  true        : The constant true BDD
+	 +  false       : The constant false BDD
+	 +  ( ... )     : Parenteses
+	 +  E1 & E2     : Conjunction of two sub-expressions
+	 +  E1 | E2     : Disjunction of two sub-expressions
+	 +  E1 ^ E2     : Xor
+	 +  E1 => E2    : Implication
+	 +  E1 <> E2    : Biimplication
+	 +  ~E          : Negation
+         + exist  V.E   : 
+         + forall V. E  : Existential/Universal quantification of the
+		          variables V in the expression E. V is a space
+                          separated list of input names.
+
+
+  Tautology check:  "tautology id"
+    Check the variable 'id' for tautology (being equal to the constant
+    true BDD).
+
+  Size information: "size id"
+    Print the number of distinct BDD nodes used to represent 'id'.
+
+  Dump as a dot file: "dot "filename" id"
+    Dump the BDD representing 'id' as commands to the graph drawing
+    program Dot. The commands are written to the file 'filename'.
+
+  Reordering: "reorder mtd"
+    Do a dynamic variable reordering now using the method 'mtd'. The
+    argument 'mtd' may be either: win2, win2ite or sift.
+   
+  Automatic reordering: "autoreorder times mtd"
+    Enable automatic dynamic variable reordering using the method
+    'mtd'. The argument 'mtd' may be either: win2, win2ite, sift or
+    none. Use none to disable automatic reordering. The 'times'
+    argument supplies the number of times that reordering may be
+    done. Use for example 1 if you only want a "one-shot" reordering.
+
+  Cache statistics: "cache"
+    Print various cache statistics for the BDD kernel.    
+

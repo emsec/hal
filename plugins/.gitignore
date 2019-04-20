@@ -1,0 +1,9 @@
+*
+!example_gate_library*
+!example_gate_library/**/*
+!graph_algorithm*
+!graph_algorithm/**/*
+!quine_mccluskey*
+!quine_mccluskey/**/*
+!CMakeLists.txt
+!.gitignore

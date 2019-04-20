@@ -1,0 +1,8 @@
+#!/bin/tcsh -f
+
+foreach N ( 4 8 11 14 )
+    foreach reorder (  win2 win2ite win3 win3ite sift siftite adder )
+	echo "Running with N = $N, reordering type=$reorder" >> result
+	./adder $N $reorder | egrep -v '^Garbage collection' >> result
+    end
+end

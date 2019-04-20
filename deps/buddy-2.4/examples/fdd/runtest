@@ -1,0 +1,3 @@
+#!/bin/tcsh -f
+
+./fdd | egrep -v '^Garbage collection' > result

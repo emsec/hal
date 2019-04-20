@@ -1,0 +1,7 @@
+MILNERS SCHEDULER - AN EXAMPLE OF BDDs USED FOR STATE SPACE CALCULATION
+-----------------------------------------------------------------------
+
+This program should illustrate how cumbersome it is to do manual
+reference counting of the BDD nodes.
+
+Please see further documentation in "../milner/doc.txt".

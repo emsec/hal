@@ -1,0 +1,13 @@
+prefix=@CMAKE_INSTALL_PREFIX@
+exec_prefix=@BINARY_INSTALL_DIRECTORY_FULL@
+libdir=@LIBRARY_INSTALL_DIRECTORY_FULL@
+sharedlibdir=@LIBRARY_INSTALL_DIRECTORY_FULL@
+includedir=@INCLUDE_INSTALL_DIRECTORY_FULL@
+
+Name: hal
+Description: hal hardware reverse engineering framework
+Version: @VERSION@
+
+Requires:
+Libs: -L${libdir} -L${sharedlibdir} -lz
+Cflags: -I${includedir}

@@ -1,0 +1,2 @@
+#!/bin/bash
+python3 tools/check_documentation.py include/ -ignore include/gui/ > /dev/null || python3 tools/check_documentation.py include/ -ignore include/gui/

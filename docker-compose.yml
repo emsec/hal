@@ -1,0 +1,10 @@
+---
+version: '3'
+services:
+  hal-build:
+    build: .
+    volumes:
+      - .:/home/src/:rw
+      - ./deployment/build-output/:/home/build-output/:rw
+      - ./deployment/build-output/.ccache/:/root/.ccache/:rw
+...

@@ -1,0 +1,6 @@
+#!/bin/tcsh -f
+
+foreach N ( 4 10 16 20 30 50 64 80 )
+    echo "Running with N = $N" >> result
+    ./milner $N | egrep -v '^Garbage collection' >> result
+end

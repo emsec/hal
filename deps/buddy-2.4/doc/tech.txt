@@ -1,0 +1,186 @@
+****************************************************************************
+  How to create your own internal BDD functions.
+****************************************************************************
+
+PLEASE NOTE
+That interrupting variable reordering has been introduced after this document was written.
+
+
+===[ Functions that do not change or produce new BDDs ]=====================
+
+I'll do this by example. Take "bdd_satcount" that counts the number of
+satisfying assignments that makes a BDD true.
+
+Almost all functions consists of some introduction followed by a
+recursion through the BDD.
+
+* Use the type BDD for all references (numbers) to BDD nodes.
+* External BDD variables used internally in the package are
+  defined in "kernel.h"
+* Macros for reading BDD nodes are:
+   LEVEL(r)
+   LOW(r)
+   HIGH(r)
+   ISCONST(r)  =>  true if r is one of the terminals
+
+
+double bdd_satcount(BDD r)
+{
+   double size=1;
+   int n;
+
+   CHECKa(r, 0.0);  /* CHECK for valid nodes - defined in kernel.h */
+   
+   miscid = CACHEID_SATCOU;           /* Setup global variables. This is
+                                         used extensively instead of passing
+					 arguments to the recursive functions,
+					 for faster recursive calls */
+
+   for (n=0 ; n<LEVEL(r) ; n++)       /* Setup whatever is needed for the */
+      size *= 2;                      /* recursion */
+   
+   return size * bdd_satcount_rec(r); /* Do the recurison */
+}
+
+
+Cache tables are used for storing intermidiate results when doing BDD
+operations. These are defined as static in the top of bddop.c (the
+code is in cache.c) and they should be setup, cleared and delete at
+the top of bddop.c in the functions bdd_operator_init,
+bdd_operator_done, bdd_operator_reset.
+
+
+
+static double bdd_satcount_rec(BDD root)
+{
+   BddCacheData *entry;  /* Entry pointer in the cache */
+   BddNode *node;
+   double size, s;
+   int m;
+   
+   if (ISCONST(root))    /* Check for the constant terminals */
+      return root;
+
+      /* Lookup entry in the cache table used for this function */
+
+   entry = BddCache_lookup(&misccache, SATCOUHASH(root));
+   if (entry->a == root  &&  entry->c == miscid)
+      return entry->r.dres;
+
+      /* Do whatever calculations are needed */
+
+   size = 0;
+   s = 1;
+   
+   for (m=LEVEL(root)+1 ; m<LEVEL(LOW(root)) ; m++)
+      s *= 2;
+   size += s * bdd_satcount_rec(LOW(root));  /* Recurse on low part */
+
+   s = 1;
+   for (m=LEVEL(root)+1 ; m<LEVEL(HIGH(root)) ; m++)
+      s *= 2;
+   size += s * bdd_satcount_rec(HIGH(root)); /* Recurse on high part */
+
+      /* Insert result in cache table */
+
+   entry->a = root;
+   entry->c = miscid;
+   entry->r.dres = size;
+   
+   return size;  /* Return result */
+}
+
+
+
+===[ Functions that produces new BDDs ]=====================================
+
+Functions that produces BDD nodes must take great care to avoid
+loosing intermidiate nodes when automatic garbage collections
+occur. This is doneby stacking each intermidiate result until they are no more used. This stack is check by the garbage collector.
+
+Macros for accessing the stack:
+   INITREF:    Reset the stack
+   PUSHREF(n): Push the node 'n' on the stack
+   READREF(p): Read 'p' positions down the stack
+   POPREF(p):  Pop 'p' nodes off the stack.
+
+Again I'll illustrate this with an example - the NOT operator.
+
+BDD bdd_not(BDD r)
+{
+   int res;
+   CHECKa(r, bddfalse); /* Validate arguments */
+   
+   INITREF;             /* Important! resets the stack */
+
+   res = not_rec(r);    /* Recurse */
+   checkreorder(res);   /* Check to see if a reordering was called for */
+
+   return res;          /* Return result */
+}
+
+
+static BDD not_rec(BDD r)
+{
+   BddCacheData *entry;   /* Cache entry pointer */
+   BDD res;
+
+   if (ISZERO(r))         /* Check constant terminals */
+      return BDDONE;
+   if (ISONE(r))
+      return BDDZERO;
+
+      /* Lookup in cache */
+   entry = BddCache_lookup(&applycache, NOTHASH(r));
+   if (entry->a == r  &&  entry->c == bddop_not)
+      return entry->r.res;
+
+      /* Recurse AND push result on the reference stack */
+   PUSHREF( not_rec(LOW(r)) );
+   PUSHREF( not_rec(HIGH(r)) );
+
+      /* Create a new BDD node */
+   res = bdd_makenode(LEVEL(r), READREF(2), READREF(1));
+
+      /* Pop result off the stack */
+   POPREF(2);
+
+      /* Insert in cache */
+   entry->a = r;
+   entry->c = bddop_not;
+   entry->r.res = res;
+
+      /* Return the result */
+   return res;
+}
+
+
+
+
+===[ Documentation ]========================================================
+
+ALL entries visible to the user should be documentet by an commented
+section like the one shown here, placed right before the code.
+
+Each doc. entry consist of a keyword followed by {* ... text
+... *}. The entries are:
+
+   NAME:    Name of the function.
+   SECTION: Which part to place the documentation in.
+   SHORT:   One line description of the code.
+   PROTO:   The exact prototype.
+   DESCR:   Multiline description of the code.
+   ALSO:    Other relevant stuff.
+   RETURN:  The returned value.
+
+/*
+NAME    {* bdd\_satcount *}
+SECTION {* info *}
+SHORT   {* Calculates the number of satisfying variable assignments *}
+PROTO   {* double bdd_satcount(BDD r) *}
+DESCR   {* Calculates how many possible variable assignments there exists
+           such that {\tt r} is satisfied, taking all defined variables
+	   into account. *}
+ALSO    {* bdd\_satone, bdd\_fullsatone, bdd\_satcountln *}
+RETURN  {* The number of possible assignments. *}
+*/

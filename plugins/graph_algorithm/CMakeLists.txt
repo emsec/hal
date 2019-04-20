@@ -1,0 +1,28 @@
+option(PL_GRAPH_ALGORITHM "PL_GRAPH_ALGORITHM" ON)
+if(PL_GRAPH_ALGORITHM OR BUILD_ALL_PLUGINS)
+    include_directories(${BUDDY_INCLUDE_DIR})
+    include_directories(SYSTEM ${PYBIND11_INCLUDE_DIR}
+                        SYSTEM ${PYTHON_INCLUDE_DIRS})
+    include_directories(AFTER "${CMAKE_CURRENT_SOURCE_DIR}/include")
+    include_directories(SYSTEM ${PYBIND11_INCLUDE_DIR} SYSTEM ${PYTHON_INCLUDE_DIRS})
+
+    file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/lib/plugins/)
+    file(WRITE ${CMAKE_BINARY_DIR}/lib/plugins/__init__.py "")
+
+    file(GLOB_RECURSE GRAPH_ALGORITHM_INC ${CMAKE_CURRENT_SOURCE_DIR}/include/*.h)
+    file(GLOB_RECURSE GRAPH_ALGORITHM_SRC ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
+    file(GLOB_RECURSE PYTHON_BINDING_LIB_SRC ${CMAKE_CURRENT_SOURCE_DIR}/python/python_definitions.cpp)
+
+    add_library(graph_algorithm SHARED ${GRAPH_ALGORITHM_SRC} ${PYTHON_BINDING_LIB_SRC} ${GRAPH_ALGORITHM_INC})
+
+    #Set shared library suffix for MacOS; Used for boost_python support
+    set_target_properties(graph_algorithm PROPERTIES PREFIX "")
+    if(APPLE AND CMAKE_HOST_APPLE)
+        set_target_properties(graph_algorithm PROPERTIES SUFFIX ".so")
+    endif(APPLE AND CMAKE_HOST_APPLE)
+    target_link_libraries(graph_algorithm ${LINK_LIBS} ${PYTHON_LIBRARIES} pybind11::pybind11 ${BUDDY_LIBRARY})
+    install(TARGETS graph_algorithm LIBRARY DESTINATION ${LIBRARY_INSTALL_DIRECTORY} PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE INCLUDES DESTINATION ${INCLUDE_INSTALL_DIRECTORY})
+    if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
+        add_sanitizers(graph_algorithm)
+    endif()
+endif()

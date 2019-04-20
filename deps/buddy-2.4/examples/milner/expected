@@ -1,0 +1,72 @@
+Running with N = 4
+SatCount R = 524288
+Calc       = 524288
+Nodes      = 1682
+
+Number of nodes in T is 129
+Number of nodes in R is 15
+
+Nodenum: 1684
+Running with N = 10
+SatCount R = 2.19902e+13
+Calc       = 2.19902e+13
+Nodes      = 11867
+
+Number of nodes in T is 357
+Number of nodes in R is 39
+
+Nodenum: 11869
+Running with N = 16
+SatCount R = 5.90296e+20
+Calc       = 5.90296e+20
+Nodes      = 32873
+
+Number of nodes in T is 585
+Number of nodes in R is 63
+
+Nodenum: 32875
+Running with N = 20
+SatCount R = 4.8357e+25
+Calc       = 4.8357e+25
+Nodes      = 53846
+
+Number of nodes in T is 737
+Number of nodes in R is 79
+
+Nodenum: 53848
+Running with N = 30
+SatCount R = 7.97537e+37
+Calc       = 7.97537e+37
+Nodes      = 134872
+
+Number of nodes in T is 1117
+Number of nodes in R is 119
+
+Nodenum: 134874
+Running with N = 50
+SatCount R = 1.60694e+62
+Calc       = 1.60694e+62
+Nodes      = 450077
+
+Number of nodes in T is 1877
+Number of nodes in R is 199
+
+Nodenum: 450079
+Running with N = 64
+SatCount R = 1.48214e+79
+Calc       = 1.48214e+79
+Nodes      = 842100
+
+Number of nodes in T is 2409
+Number of nodes in R is 255
+
+Nodenum: 345916
+Running with N = 80
+SatCount R = 3.41758e+98
+Calc       = 3.41758e+98
+Nodes      = 1520173
+
+Number of nodes in T is 3017
+Number of nodes in R is 319
+
+Nodenum: 47687

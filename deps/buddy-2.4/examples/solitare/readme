@@ -1,0 +1,35 @@
+SOLITARE GAME
+-------------
+
+This example tries to calculate the reachable state space of the
+Solitare game. The board is sketched below. At the beginning all
+places except number 17 has a pin in them. A pin may be moved by
+jumping over another pin into an empty place. The pin in between is
+then removed. The goal is to remove all pins execept one - which
+should be left in the center.
+
+It took a few hours to run this example on a Alpha machine and it
+required some 8000000 BDD nodes.
+
+(*****************************************************************************)
+(*                                                                           *)
+(*              ----------------                                             *)
+(*              | 07 | 14 | 21 |                                             *)
+(*              ----------------                                             *)
+(*              | 08 | 15 | 22 |                                             *)
+(*    ------------------------------------                                   *)
+(*    | 01 | 04 | 09 | 16 | 23 | 28 | 31 |                                   *)
+(*    ------------------------------------                                   *)
+(*    | 02 | 05 | 10 | 17 | 24 | 29 | 32 |                                   *)
+(*    ------------------------------------                                   *)
+(*    | 03 | 06 | 11 | 18 | 25 | 30 | 33 |                                   *)
+(*    ------------------------------------                                   *)
+(*              | 12 | 19 | 26 |                                             *)
+(*              ----------------                                             *)
+(*              | 13 | 20 | 27 |                                             *)
+(*              ----------------                                             *)
+(*                                                                           *)
+(*****************************************************************************)
+
+
+Thanks to Ken Larsen for his help with this example.

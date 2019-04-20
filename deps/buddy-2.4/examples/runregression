@@ -1,0 +1,72 @@
+#!/bin/tcsh -f
+
+# This scripts runs the regression suite for the BuDDy package.
+# 
+# Methodology
+# -----------
+# This script is responsible to run the tests, compare against the expected
+# results, and print report. Each test is run from its own directory.
+# Each test directory is self contained, and should contain:
+#
+# + 'runtest' script which will create a file with the results - 'result' 
+#   This result file will be used by runregression to be compared against 
+#   the expected result.
+#
+# + 'expected' - the expected result.
+#   It is the responsibility of each runtest script to produce the result
+#   file clean from any unnecessary text which might cause to false alarms.
+#   Examples : garbage collection messages, time / date messages, etc...
+#   Be careful not to filter out important data !!
+#
+# + Executable to run. This executable will be run by runtest script of
+#   each test. 
+
+set RESULT_FILE = result
+set EXPECTED_FILE = expected
+set RUNTEST = runtest
+
+@ tests_to_run = 0
+@ tests_passed = 0
+
+if ( $#argv == 0 ) then
+    set testdirs = ( `ls` )
+else
+    set testdirs = ( $argv[1-] )
+endif
+
+foreach testdir ( $testdirs )
+    if ( -d $testdir && -e $testdir/$RUNTEST ) then # a test dir
+	cd $testdir
+	@ tests_to_run ++
+	
+	# Clean to make sure no matter what - no old results exist
+	if ( -e $RESULT_FILE ) rm $RESULT_FILE
+	
+	# Run the test!
+	echo
+	echo "Running test $testdir ( $tests_to_run ) ..."
+	./$RUNTEST
+	
+	# Let's see if we have got result
+	if ( -e $RESULT_FILE ) then 
+
+	    # we have result, now compare to expected
+	    diff $RESULT_FILE $EXPECTED_FILE >& /dev/null
+	    if ( $status ) then # there is a diff between files
+		echo "$testdir FAILED : diff found"
+	    else # no diff
+		echo "$testdir PASSED"
+		@ tests_passed++
+	    endif
+
+	else # no results - test failed
+	    echo "$testdir FAILED : no $RESULT_FILE created"
+	endif
+	if ( -e $RESULT_FILE ) rm $RESULT_FILE # clean what we have done
+	cd ..
+    endif
+end
+
+echo
+echo "Total tests to run : $tests_to_run"
+echo "Passed tests       : $tests_passed"

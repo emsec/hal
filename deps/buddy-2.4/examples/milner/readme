@@ -1,0 +1,15 @@
+MILNERS SCHEDULER - AN EXAMPLE OF BDDs USED FOR STATE SPACE CALCULATION
+-----------------------------------------------------------------------
+
+Please read chapter seven in "An Introduction To Binary Decision
+Diagrams" which is supplied in the "doc" directory. This chapter will
+explain the example.
+
+The program is called as "milner N" where N is the number of
+cyclers. It will output the size of the reachable state space for the
+system (compared to the true calculated size - for debugging purpose)
+and a set of cache statistics.
+
+Please also note that this file is used as an internal benchmark for
+the author, so do not be too supprised if you find some strange debug
+information in the code ...

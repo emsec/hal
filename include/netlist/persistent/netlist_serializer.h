@@ -1,0 +1,76 @@
+//  MIT License
+//
+//  Copyright (c) 2019 Marc Fyrbiak
+//  Copyright (c) 2019 Sebastian Wallat
+//  Copyright (c) 2019 Max Hoffmann
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in all
+//  copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+//  SOFTWARE.
+
+#include "pragma_once.h"
+#ifndef __HAL_NETLIST_SERIALIZER_H__
+#define __HAL_NETLIST_SERIALIZER_H__
+
+#include "def.h"
+
+/* forward declaration */
+class netlist;
+
+/**
+ * @ingroup persistent
+ */
+namespace netlist_serializer
+{
+    /**
+     * Serializes a netlist into a JSON string.
+     * If the netlists contain the same data, the strings will be equal.
+     * Hence, these strings can also be used to compare to netlists.
+     *
+     * @param[in] nl - The netlist to serialize.
+     * @returns The serialized representation.
+     */
+    NETLIST_API std::string serialize_to_string(std::shared_ptr<netlist> nl);
+
+    /**
+     * Serializes a netlist into a .hal file.
+     *
+     * @param[in] nl - The netlist to serialize.
+     * @param[in] hal_file - The file to serialize to.
+     * @returns True on success.
+     */
+    NETLIST_API bool serialize_to_file(std::shared_ptr<netlist> nl, const hal::path& hal_file);
+
+    /**
+     * Deserializes a netlist from a JSON string.
+     * Only accepts correctly formatted data.
+     *
+     * @param[in] data - The string to deserialize from.
+     * @returns The deserialized netlist.
+     */
+    NETLIST_API std::shared_ptr<netlist> deserialize_from_string(const std::string& data);
+
+    /**
+     * Deserializes a netlist from a .hal file.
+     *
+     * @param[in] hal_file - The file to deserialize from.
+     * @returns The deserialized netlist.
+     */
+    NETLIST_API std::shared_ptr<netlist> deserialize_from_file(const hal::path& hal_file);
+}    // namespace netlist_serializer
+
+#endif /* __HAL_NETLIST_SERIALIZER_H__ */

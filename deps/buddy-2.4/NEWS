@@ -1,0 +1,200 @@
+----------------------------------------------------------------------------
+   User visible changes to BuDDy
+----------------------------------------------------------------------------
+
++  means added code
+x  means bugfix or changed code
+-  means removed code
+
+VER 2.4 (July 2004)
+-------------------
+  + Using configure script for the build process.
+  + Adding runregression script which runs examples and compare to 
+    expected results.
+
+VER 2.3 (June 2004)
+-------------------
+  + Nothing :-(  This is just the first version in SourceForge, 
+    so it deserved its own number.
+
+VER 2.2 (november 2002)
+-----------------------
+  + Added bvec_ite() for calculating an if-then-else operation on
+    a boolean vector.
+  x Fixed some garbage collection problems introduced in version 2.1.
+
+
+VER 2.1 (march 2002)
+--------------------
+  + Added bdd_allsat() for calculating all possible variable assignments
+    to a bdd.
+  x Fixed some wrong garbage collection #defines in kernel.h. If you
+    haven't experinced any problems using BuDDy, then this should not
+    be an issue. No bug reports reported for this one - found by code
+    inspection thanx to Nicola Soranzo.
+  x Fixed some copy paste errors in the prime number calculation.
+    This should not be an issue. No bug reports reported for this one
+    - found by code inspection thanx to Nicola Soranzo.
+
+
+VER 2.0 (march 2001)
+--------------------
+  x Change the copyright notice to a more acceptable form.
+  x Speedup changes in bdd_support()
+  x Rewrote all the prime number calculations in order to get the
+    copyright right.
+
+
+VER 1.9 (august 2000)
+---------------------
+  + Added bdd_pathcount
+  + Added bdd_anodecount
+  + Added bdd_buildcube, bdd_ibuildcube
+  x Bugfix in bdd_satcountset and bdd_satcountlnset. This corrects a bug
+    introduced in version 1.8.
+  x bug fixes in bdd_constraint and bdd_simplify. Both did calculate a
+    correct cofactor, but not necessarily a minimal one. Changed the name
+    of bdd_constraint to bdd_constrain at the same time.
+  x bug fix in memory allocation for bdd_addvarblock
+  x Changed functions in bddop.c in order to avoid some compiler warnings.
+  x Makefile also installs "fdd.h" and "bvec.h".
+  x Small #include fix in N-Queen example.
+  x Minor changes in the documentation.
+
+
+VER 1.8 (may 2000)
+------------------
+  + Bugfix in the kernel: canonicity was not unfortunately not guaranteed
+    on certain compilers (at least the microsoft visual C compiler) due to a
+    signed/unsigned bug in kernel.c (and actually not microsofts fault).
+  + Speedups in the reordering code.
+  + Added the use of an interaction matrix for variable swapping.
+  + Added bdd_satoneset
+  + Added bdd_getallocnum
+  + Added bdd_setvarorder
+  + Added bdd_unique, bdd_appuni.
+  + Added bvec_shlfixed, bvec_shrfixed and changed the prototype for
+    bvec_shl and bvec_shr.
+  + Added bvec_mulfixed, bdd_divfixed, bdd_div and changed the
+    prototype for bvec_mul.
+  + Added bdd_printstat
+  + Added new examples: solitare and money
+  + Forces cache tables to prime-number size.
+  + Added bdd_clear_error() if anybody needs that.
+  + Added reorder method WIN3 and WIN3ITE
+  x Small change in queen.cxx - with a huge impact on runtime!
+  x Bugfix in reordering. In some cases reordering would go on forever;
+    first reroder, then retry, then reorder again without resize etc. always
+    reordering in the same operation. Now at most one reordering is allowed
+    for each bdd operation.
+  x Bugfix in C++ printing in Dot format. Wrote zero for one and vice versa.
+  x Bugfix in the garbage collector. If bdd_setmaxincrease was used, then
+    BuDDy would call bdd_error prematurely. Not a major bug, but annoying.
+  x Bugfix in bdd_load.
+  x Speedup in bdd_satcountset and bdd_satcountlnset
+  x Updates to the docs.
+  x Updates to the makefiles
+
+
+VER 1.7 (september 1999)
+------------------------
+  +  Added support for boolean vector operations used in integer arithmetics
+  +  Split "bdd.h" into "bdd.h", "fdd.h" and "bvec.h"
+  +  Added bdd_cachestats
+  +  Added bdd_and, bdd_or, bdd_xor, bdd_impl, bdd_biimpl
+     (wrappers for bdd_apply).
+  +  Added a BDD calculator for combinatorial circuits as an example.
+  +  Added an example showing the use of the FDD interface.
+  +  Added bdd_autoreorder_times, bdd_getreorder_method, bdd_getreorder_times,
+     bdd_reorder_probe, bdd_enable_reorder, bdd_disable_reorder,
+     bdd_var2level, bdd_level2var, bdd_reorder_gain, bdd_swapvar
+  +  Added bdd_file_hook, bdd_strm_hook, fdd_file_hook, fdd_strm_hook
+  +  Added support for dynamic resizing of the operator caches with
+     the function bdd_setcacheratio.
+  +  Added more documentation.
+  x  Bugfix in reordering code. This would appear when recursive variable
+     blocks were defined (blocks with sub-blocks).
+  x  Speedup changes in the variable reordering code
+  x  The automatic reordering threshhold function has been changed
+  x  Automatic reordering is now interrupting and restarts bdd operations
+  x  Prototype for bdd_reorder_hook changed.
+  x  Printing of reorder information (verbose level > 0) is changed.
+  x  The threshold for stopping of the iterative reordering methods has
+     been changed. The reordering now continues until no progress is done
+     at all (before it would stop when less than 5% where gained).
+  x Added a few sanity checks to many of the functions.
+  x Bugfix (parameter checking) in fdd_ithvar.
+  - bdd_varlevel removed (use bdd_var2level and bdd_level2var).
+
+
+VER 1.6 (november 1998)
+-----------------------
+  +  Added bdd_resetpair
+  +  Added bdd_satcountset, bdd_satcountlnset
+  +  Added macro bdd_relprod
+  +  Added fdd_overlapdomain
+  +  Added fdd_domain
+  x  Fixed a bug in bdd_setvarnum and bdd_extvarnum.
+  x  Fixed a bug in bdd_newpair() which would give problems with reordering.
+  x  Speedup changes in bdd_exist, bdd_forall, bdd_appex, bdd_appall
+  x  Speedup changes in bdd_restrict
+  x  Changed bdd_gbc_hook to include both pre and post garbage collection.
+
+
+VER 1.5 (september 1998)
+------------------------
+  +  Added bdd_cofactor
+  +  Added and fixed some error checks in fdd.c
+  x  Fixed a bug in bdd_setvarnum().
+
+
+VER 1.4 (july 1998)
+-------------------
+  The package just got a name: BuDDy
+  +  Added functions bdd_compose, bdd_veccompose, bdd_ite.
+  +  Added functions bdd_setbddpair, bdd_setbddpairs.
+  +  Added functions bdd_var, bdd_low, bdd_high.
+  +  Added technical documentation in docs/tech.txt
+  x  Overloaded C++ functions are not used any more. This mainly changes
+     the name of the printing functions in C++.
+  x  Changed datatype names (You'll hate me for this one):
+        BddPair -> bddPair
+	BddStat -> bddStat
+	BddGbcStat -> bddGbcStat
+  x  Added slightly more documentation.
+  x  Some internal changes to the code - should not be visible to users.
+
+
+VER 1.3 (june 1998)
+-------------------
+  x  Fixed a few serious bugs in the reordering code
+
+
+VER 1.2 (june 1998)
+-------------------
+  +  Added support for dynamic variable reordering
+  +  Added reordering handler (bdd_reorder_hook)
+  +  More added to the docs
+  x  Changed the event handlers (bdd_xxx_hook)
+
+
+VER 1.1 (april 1998)
+--------------------
+  +  Added bdd_varprofile
+  +  Added fdd_scanset
+  +  Mucho better documentation.
+  +  Added Henrik Reif Andersen's BDD notes to the documentation.
+  +  Added BDD_REORDER_RANDOM for test purposes (usefull for others?)
+  x  Fixed a bug in bdd_appex and bdd_appall.
+  x  Fixed a bug in bdd_simplify.
+  x  Speed fixup to fdd_extdomain 
+  x  Lots of small (insignificant?) bug fixes in fdd.c.
+  x  bdd_load/save updated to take reordering into account.
+  x  Generalized bdd_restrict to use a BDD variable set.
+  x  Fixed the identifiers for the operator caches.
+  x  The math functions log1p and pow2 has been removed as they didn't
+     exist on some systems. The same applies to M_LN2.
+  x  New file structure and makefiles.
+  -  Removed bdd_break, bdd_restart1
+
+

@@ -1,0 +1,5 @@
+build/*
+.vscode/*
+Win32/*
+x64/*
+

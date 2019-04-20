@@ -1,0 +1,3 @@
+jedi
+sphinx
+sphinx-rtd-theme

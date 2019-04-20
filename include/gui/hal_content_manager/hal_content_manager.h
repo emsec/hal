@@ -1,0 +1,93 @@
+//  MIT License
+//
+//  Copyright (c) 2019 Marc Fyrbiak
+//  Copyright (c) 2019 Sebastian Wallat
+//  Copyright (c) 2019 Max Hoffmann
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in all
+//  copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+//  SOFTWARE.
+
+#ifndef HAL_CONTENT_MANAGER_H
+#define HAL_CONTENT_MANAGER_H
+
+#include <QGraphicsScene>
+#include <QObject>
+//#include "gui/graph_manager/hal_graph_widget.h"
+#include "gui/graph_layouter/old_graph_layouter.h"
+
+class main_window;
+
+class hal_tab_widget;
+class file_manager;
+class content_widget;
+class console_widget;
+class python_editor;
+class python_console_widget;
+class old_graph_layouter;
+class graph_layouter_view;
+
+class hal_content_manager : public QObject
+{
+    Q_OBJECT
+
+public:
+    explicit hal_content_manager(file_manager* file_manager, main_window* parent);
+
+    ~hal_content_manager();
+
+    //hack, TODO fix
+    void hack_delete_content();
+
+public Q_SLOTS:
+
+    void handle_open_document(const QString& file_name);
+
+    void handle_close_document();
+
+    void handle_filsystem_doc_changed(const QString& file_name);
+
+    void handle_relayout_button_clicked();
+
+private:
+    main_window* m_main_window;
+
+    file_manager* m_file_manager;
+
+    QList<content_widget*> m_content;
+
+    //More testing purposes, delete them later on and put all in m_content
+    QList<content_widget*> m_content2;
+
+    //temporary solution to make the view a member variable(all this stuff might be deleted later nonetheless)
+    //graph_layouter_view* m_layouter_view;
+
+    console_widget* m_console;
+
+    python_editor* m_python_widget;
+
+    python_console_widget* m_python_console_widget;
+
+    //temporary solution aslong as the involved classes are strongly coupled
+    QGraphicsScene* m_graph_scene;
+
+    graph_layouter_view* m_layouter_view;
+
+    old_graph_layouter* layouter;
+};
+
+#endif    // HAL_CONTENT_MANAGER_H

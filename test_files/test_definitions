@@ -1,0 +1,3 @@
+@testcolor1 : #FF0000;
+
+@testcolor2, @testcolor3 : #FFFF00;
