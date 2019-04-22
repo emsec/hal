@@ -38,6 +38,7 @@
         <file alias="darcula">stylesheet/darcula.qss</file>
         <file alias="vibrant dark">stylesheet/vibrant dark.qss</file>
         <file alias="hal">stylesheet/hal.qss</file>
+        <file alias="sunny">stylesheet/sunny.qss</file>
     </qresource>
     <qresource prefix="/icons">
         <file alias="start-doc">icons/0042-file-play.svg</file>

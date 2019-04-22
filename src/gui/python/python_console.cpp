@@ -17,9 +17,13 @@ python_console::python_console(QWidget* parent)
     setUndoRedoEnabled(false);
     ensureCursorVisible();
 
-    m_standard_color = QColor("#BBBBBB");
-    m_error_color    = QColor("#FF6B63");
-    m_prompt_color   = QColor("#917EB7");
+//    m_standard_color = QColor("#BBBBBB");
+//    m_error_color    = QColor("#FF6B63");
+//    m_prompt_color   = QColor("#917EB7");
+
+    m_standard_color = QColor("#000000");
+    m_error_color    = QColor("#FF0000");
+    m_prompt_color   = QColor("#7805c1");
     g_python_context->set_console(this);
     g_python_context->interpret("print(\"Python \" + sys.version)", false);
     g_python_context->interpret("print(sys.executable + \" on \" + sys.platform)", false);

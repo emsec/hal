@@ -79,8 +79,10 @@ gui_graph_gate::gui_graph_gate(std::shared_ptr<gate> gate, QGraphicsItem* parent
     //name_font = QFont(g_settings.value("font/family").toString(), 14, QFont::Bold);    //, QFont::PreferAntialias);
     name_font = QFont("Iosevka", 14, QFont::Bold);
     name->setFont(name_font);
-    defaultColor = QColor(255, 255, 255);
-    gate_color   = QColor(255, 20, 20);
+    //defaultColor = QColor(255, 255, 255);
+    defaultColor = QColor(30,30,30);
+    //gate_color   = QColor(255, 20, 20);
+    gate_color = QColor(30, 30, 30);
     m_width      = fix_text_item.boundingRect().width() + input_pin_name_width + output_pin_name_width + (2 * pin_width);
     int zuviel   = m_width % 5;
     int strechy  = 0;
@@ -161,10 +163,12 @@ void gui_graph_gate::paint(QPainter* painter, const QStyleOptionGraphicsItem* op
     actually_displayed_color = (!module_color_history.empty()) ? module_color_history.last().first : defaultColor;
     if (isSelected())
     {
-        painter->fillRect(drawn_outer_rect, Qt::white);
+        //painter->fillRect(drawn_outer_rect, Qt::white);
+        painter->fillRect(drawn_outer_rect, Qt::black);
     }
     else
     {
+        painter->fillRect(drawn_outer_rect, Qt::lightGray);
         actually_displayed_color = (actually_displayed_color == Qt::white)
                                        ? QColor::fromHsv(actually_displayed_color.hue(), actually_displayed_color.saturation(), actually_displayed_color.value() - 50)
                                        : QColor::fromHsv(actually_displayed_color.hue(), actually_displayed_color.saturation() - 100, actually_displayed_color.value());
@@ -191,7 +195,8 @@ void gui_graph_gate::paint(QPainter* painter, const QStyleOptionGraphicsItem* op
 
     if (isSelected())
     {
-        pen.setColor(QColor(Qt::black));
+        //pen.setColor(QColor(Qt::black));
+        pen.setColor(Qt::white);
         painter->setPen(pen);
     }
 

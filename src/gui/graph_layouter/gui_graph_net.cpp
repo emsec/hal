@@ -27,7 +27,7 @@ gui_graph_net::gui_graph_net(std::shared_ptr<net> net, QGraphicsScene* scene, ol
     //line_width = m_layouter->get_net_sub_channel_width();
 
     setFlag(QGraphicsItem::ItemIsSelectable, true);
-    default_color = QColor(255, 255, 255);
+    default_color = QColor(0, 0, 0);
     vcc_gnd_font  = QFont("Helvetica", 12);
     vcc_gnd_text  = "";
 

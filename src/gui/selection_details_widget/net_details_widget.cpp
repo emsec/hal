@@ -26,7 +26,7 @@ net_details_widget::net_details_widget(QWidget* parent) : QWidget(parent)
     m_general_table->setColumnCount(2);
     m_general_table->setRowCount(4);
 
-    m_general_table->setStyleSheet("QTableWidget {background-color : rgb(31, 34, 35);}");
+    //m_general_table->setStyleSheet("QTableWidget {background-color : rgb(31, 34, 35);}");
 
     QFont font("Iosevka");
     font.setBold(true);
