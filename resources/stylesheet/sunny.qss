@@ -1366,6 +1366,12 @@ logger_qss_adapter {
     qproperty-default_highlight: #FFEF0B;
 }
 
+python_console_qss_adapter {
+    qproperty-standard_color: #000000;
+    qproperty-error_color: #FF0000;
+    qproperty-promt_color: #7805c1;
+}
+
 gate_details_widget QLabel{
     color: black;
 }

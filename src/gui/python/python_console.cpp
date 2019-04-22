@@ -8,6 +8,8 @@
 
 #include "python/python_console_history.h"
 
+#include "python/python_console_qss_adapter.h"
+
 python_console::python_console(QWidget* parent)
     : QTextEdit(parent), m_standard_prompt(">>> "), m_compound_prompt("... "), m_prompt_block_number(0), m_prompt_length(0), m_prompt_end_position(0), m_compound_prompt_end_position(0),
       m_in_compound_prompt(false), m_in_completion(false), m_current_compound_input(""), m_current_input(""), m_current_history_index(-1), m_current_completer_index(0),
@@ -21,9 +23,13 @@ python_console::python_console(QWidget* parent)
 //    m_error_color    = QColor("#FF6B63");
 //    m_prompt_color   = QColor("#917EB7");
 
-    m_standard_color = QColor("#000000");
-    m_error_color    = QColor("#FF0000");
-    m_prompt_color   = QColor("#7805c1");
+//    m_standard_color = QColor("#000000");
+//    m_error_color    = QColor("#FF0000");
+//    m_prompt_color   = QColor("#7805c1");
+
+    m_standard_color = python_console_qss_adapter::instance()->standard_color();
+    m_error_color = python_console_qss_adapter::instance()->error_color();
+    m_prompt_color = python_console_qss_adapter::instance()->promt_color();
     g_python_context->set_console(this);
     g_python_context->interpret("print(\"Python \" + sys.version)", false);
     g_python_context->interpret("print(sys.executable + \" on \" + sys.platform)", false);

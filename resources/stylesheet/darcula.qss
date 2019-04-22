@@ -1322,6 +1322,30 @@ qproperty-string_color: #A5C25C;
 qproperty-comment_color: #629755;
 }
 
+logger_qss_adapter {
+    qproperty-trace_color: #90C023;
+    qproperty-debug_color: #90C023;
+    qproperty-info_color: #e4e4e4;
+    qproperty-warning_color: #CC7832;
+    qproperty-error_color: #FF0000;
+    qproperty-critical_color: #FF6B68;
+    qproperty-default_color: #BBBBBB;
+    qproperty-marker_color: #FFEF0B;
+    qproperty-trace_highlight: #FFEF0B;
+    qproperty-debug_highlight: #FFEF0B;
+    qproperty-info_highlight: #00B7E0;
+    qproperty-warning_highlight: #FFEF0B;
+    qproperty-error_highlight: #FFEF0B;
+    qproperty-critical_highlight: #FFEF0B;
+    qproperty-default_highlight: #FFEF0B;
+}
+
+python_console_qss_adapter {
+    qproperty-standard_color: #BBBBBB;
+    qproperty-error_color: #FF6B63;
+    qproperty-promt_color: #917EB7;
+}
+
 /*
 COLOR CONTRASTS
 BACKGROUND #090b0d
