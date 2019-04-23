@@ -1372,6 +1372,18 @@ python_console_qss_adapter {
     qproperty-promt_color: #7805c1;
 }
 
+/**only for temporary use, the old graphics classes will be replaced */
+old_graphics_item_qss_adapter {
+    qproperty-gate_default_color: #1e1e1e;
+    qproperty-gate_background_color: #c0c0c0;
+    qproperty-gate_font_color: #1e1e1e;
+    qproperty-gate_selected_background_color: #000000;
+    qproperty-gate_selected_font_color: #ffffff;
+    qproperty-net_default_color: #000000;
+    qproperty-net_selected_color: #000000;
+    qproperty-net_global_input_output_color: #000000;
+}
+
 gate_details_widget QLabel{
     color: black;
 }

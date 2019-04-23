@@ -169,7 +169,7 @@ void gui_graph_gate::paint(QPainter* painter, const QStyleOptionGraphicsItem* op
     else
     {
         painter->fillRect(drawn_outer_rect, Qt::lightGray);
-        actually_displayed_color = (actually_displayed_color == Qt::white)
+        actually_displayed_color = (actually_displayed_color == defaultColor)
                                        ? QColor::fromHsv(actually_displayed_color.hue(), actually_displayed_color.saturation(), actually_displayed_color.value() - 50)
                                        : QColor::fromHsv(actually_displayed_color.hue(), actually_displayed_color.saturation() - 100, actually_displayed_color.value());
     }

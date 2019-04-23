@@ -27,37 +27,61 @@
 
 #include <QWidget>
 #include <QColor>
+#include <QDebug>
 
 class old_graphics_item_qss_adapter : public QWidget
 {
     Q_OBJECT
+    Q_PROPERTY(QColor gate_default_color READ gate_default_color WRITE set_gate_default_color)
+    Q_PROPERTY(QColor gate_background_color READ gate_background_color WRITE set_gate_background_color)
+    Q_PROPERTY(QColor gate_font_color READ gate_font_color WRITE set_gate_font_color)
+    Q_PROPERTY(QColor gate_selected_background_color READ gate_selected_background_color WRITE set_gate_selected_background_color)
+    Q_PROPERTY(QColor gate_selected_font_color READ gate_selected_font_color WRITE set_gate_selected_font_color)
+
+    Q_PROPERTY(QColor net_default_color READ net_default_color WRITE set_net_default_color)
+    Q_PROPERTY(QColor net_selected_color READ net_selected_color WRITE set_net_selected_color)
+    Q_PROPERTY(QColor net_global_input_output_color READ net_global_input_output_color WRITE set_net_global_input_output_color)
 
 public:
     static old_graphics_item_qss_adapter* instance();
 
     QColor gate_default_color() const;
+    QColor gate_background_color() const;
     QColor gate_font_color() const;
-    QColor gate_selected_color() const;
+    QColor gate_selected_background_color() const;
+    QColor gate_selected_font_color() const;
 
     QColor net_default_color() const;
     QColor net_selected_color() const;
+    QColor net_global_input_output_color() const;
 
     void set_gate_default_color(const QColor& color);
+    void set_gate_background_color(const QColor& color);
     void set_gate_font_color(const QColor& color);
-    void set_gate_selected_color(const QColor& color);
+    void set_gate_selected_background_color(const QColor& color);
+    void set_gate_selected_font_color(const QColor& color);
 
     void set_net_default_color(const QColor& color);
     void set_net_selected_color(const QColor& color);
+    void set_net_global_input_output_color(const QColor& color);
+
+    void print_colors(){
+        qDebug() << m_gate_default_color.name() << m_gate_background_color.name() << m_gate_font_color.name() << m_gate_selected_background_color.name()
+                 << m_gate_selected_font_color.name() << m_net_default_color.name() << m_net_selected_color.name() << m_net_global_input_output_color.name();
+    };
 
 private:
     explicit old_graphics_item_qss_adapter(QWidget* parent = nullptr);
 
-    QColor m_gate_default_color;
+    QColor m_gate_default_color; //beschreibt den rand
+    QColor m_gate_background_color;
     QColor m_gate_font_color;
-    QColor m_gate_selected_color;
+    QColor m_gate_selected_background_color;
+    QColor m_gate_selected_font_color;
 
     QColor m_net_default_color;
     QColor m_net_selected_color;
+    QColor m_net_global_input_output_color;
 
 
 };
