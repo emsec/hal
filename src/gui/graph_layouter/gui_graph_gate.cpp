@@ -18,6 +18,7 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <functional>
+#include "graph_layouter/old_graphics_item_qss_adapter.h"
 
 int gui_graph_gate::MAX_HEIGHT = 0;
 
@@ -82,6 +83,7 @@ gui_graph_gate::gui_graph_gate(std::shared_ptr<gate> gate, QGraphicsItem* parent
     //defaultColor = QColor(255, 255, 255);
     defaultColor = QColor(30,30,30);
     //gate_color   = QColor(255, 20, 20);
+    defaultColor = old_graphics_item_qss_adapter::instance()->gate_default_color();
     gate_color = QColor(30, 30, 30);
     m_width      = fix_text_item.boundingRect().width() + input_pin_name_width + output_pin_name_width + (2 * pin_width);
     int zuviel   = m_width % 5;
@@ -160,16 +162,18 @@ void gui_graph_gate::paint(QPainter* painter, const QStyleOptionGraphicsItem* op
     Q_UNUSED(widget)
     QPen pen;
     QColor actually_displayed_color;
-    actually_displayed_color = (!module_color_history.empty()) ? module_color_history.last().first : defaultColor;
+    actually_displayed_color = (!module_color_history.empty()) ? module_color_history.last().first : old_graphics_item_qss_adapter::instance()->gate_default_color();
     if (isSelected())
     {
         //painter->fillRect(drawn_outer_rect, Qt::white);
-        painter->fillRect(drawn_outer_rect, Qt::black);
+        //painter->fillRect(drawn_outer_rect, Qt::black);
+        painter->fillRect(drawn_outer_rect, old_graphics_item_qss_adapter::instance()->gate_selected_background_color());
     }
     else
     {
-        painter->fillRect(drawn_outer_rect, Qt::lightGray);
-        actually_displayed_color = (actually_displayed_color == defaultColor)
+        //painter->fillRect(drawn_outer_rect, Qt::lightGray);
+        painter->fillRect(drawn_outer_rect, old_graphics_item_qss_adapter::instance()->gate_background_color());
+        actually_displayed_color = (actually_displayed_color == old_graphics_item_qss_adapter::instance()->gate_default_color())
                                        ? QColor::fromHsv(actually_displayed_color.hue(), actually_displayed_color.saturation(), actually_displayed_color.value() - 50)
                                        : QColor::fromHsv(actually_displayed_color.hue(), actually_displayed_color.saturation() - 100, actually_displayed_color.value());
     }
@@ -196,9 +200,13 @@ void gui_graph_gate::paint(QPainter* painter, const QStyleOptionGraphicsItem* op
     if (isSelected())
     {
         //pen.setColor(QColor(Qt::black));
-        pen.setColor(Qt::white);
-        painter->setPen(pen);
+        //pen.setColor(Qt::white);
+        pen.setColor(old_graphics_item_qss_adapter::instance()->gate_selected_font_color());
     }
+    else
+        pen.setColor(old_graphics_item_qss_adapter::instance()->gate_font_color());
+
+    painter->setPen(pen);
 
     QFont default_Font = painter->font();
     painter->setFont(name_font);
@@ -227,7 +235,7 @@ void gui_graph_gate::paint(QPainter* painter, const QStyleOptionGraphicsItem* op
         //painter->drawText(p.x-20,p.y+16,"'0'");
     }
 
-    draw_module_color_squares(painter);
+    //draw_module_color_squares(painter);
     painter->setFont(default_Font);
 }
 

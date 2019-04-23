@@ -1346,6 +1346,17 @@ python_console_qss_adapter {
     qproperty-promt_color: #917EB7;
 }
 
+old_graphics_item_qss_adapter {
+    qproperty-gate_default_color: #ffffff;
+    qproperty-gate_background_color: #2b2b2b/*#171E22*/;
+    qproperty-gate_font_color: #ffffff;
+    qproperty-gate_selected_background_color: #ffffff;
+    qproperty-gate_selected_font_color: #000000;
+    qproperty-net_default_color: #6e6e64;
+    qproperty-net_selected_color: #ffffff;
+    qproperty-net_global_input_output_color: #ffffff;
+}
+
 /*
 COLOR CONTRASTS
 BACKGROUND #090b0d
