@@ -1441,6 +1441,28 @@ QMenu::item{
     color: rgb(255, 255, 255);
     background: rgb(110,110,110);
 }
+/**########## INPUT DIALOG ######### */
+input_dialog{
+    background: white;
+    color: black;
+}
+
+input_dialog QLabel{
+    background: white;
+    color: black;
+}
+
+input_dialog QPushButton{
+    background: white;
+    color: black;
+    border: 1px solid black;
+}
+
+input_dialog QLineEdit{
+    background: #f0f0f0;
+    color: black;
+    border: 1px solid black;
+}
 /*
 COLOR CONTRASTS
 BACKGROUND #090b0d
