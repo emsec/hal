@@ -1384,6 +1384,11 @@ Checks whether the system has a decorator of the desired type for the gate.
 :rtype: bool
 )");
 
+    py::enum_<gate_decorator_system::decorator_type>(m, "decorator_type")
+    .value("BDD", gate_decorator_system::BDD)
+    .value("LUT", gate_decorator_system::LUT)
+    .export_values();
+
     py::class_<gate_decorator, Pygate_decorator, std::shared_ptr<gate_decorator>>(m, "gate_decorator")
         .def(py::init<std::shared_ptr<gate> const>())
         .def_property_readonly("type", &gate_decorator::get_type, R"(
