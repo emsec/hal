@@ -63,7 +63,7 @@ void table_selector_widget::keyPressEvent(QKeyEvent *event)
     if(event->key() == Qt::Key_Escape)
         close();
 
-    if(event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return)
+    if(event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return || event->key() == Qt::Key_Right)
     {
         QTableWidgetItem* id_item = this->item(selectedItems().first()->row(), 0);
         auto gate = g_netlist->get_gate_by_id(id_item->text().toInt());
