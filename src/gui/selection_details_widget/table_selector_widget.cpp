@@ -25,7 +25,7 @@ table_selector_widget::table_selector_widget(std::set<std::shared_ptr<gate>> tab
                                             << "Name"
                                             << "Type");
     setEditTriggers(QAbstractItemView::NoEditTriggers);
-    setStyleSheet("QTableView {background-color: black; color: white; selection-background-color: grey;} QTableView::item {border-right : 1px solid rgb(169, 183, 198);};");
+    //setStyleSheet("QTableView {background-color: black; color: white; selection-background-color: grey;} QTableView::item {border-right : 1px solid rgb(169, 183, 198);};");
 
     int counter = 0;
     for (const auto& current_gate : table_data)

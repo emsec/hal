@@ -13,10 +13,6 @@
     show-decoration-selected   : 1;
 }
 
-gui_graph_gate_selection_widget QTableView::item {
-    border-right : 1px solid rgb(169, 183, 198);
-}
-
 *::item:selected {
     background   : rgba(13, 41, 62);
 
@@ -1358,6 +1354,26 @@ old_graphics_item_qss_adapter {
 
     qproperty-tree_navigation_open_folder_style: "all->#888888";
     qproperty-tree_navigation_open_folder_path: ":/icons/open";
+}
+
+table_selector_widget {
+    background-color: black;
+    color: white;
+    selection-background-color: grey;
+}
+
+table_selector_widget::item {
+    border-right : 1px solid rgb(169, 183, 198);
+}
+
+gui_graph_gate_selection_widget {
+    background-color: black;
+    color: white;
+    selection-background-color: grey;
+}
+
+gui_graph_gate_selection_widget::item {
+    border-right : 1px solid rgb(169, 183, 198);
 }
 
 /*

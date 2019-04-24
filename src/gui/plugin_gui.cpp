@@ -103,8 +103,8 @@ bool plugin_gui::exec(program_arguments& args)
     //    g_settings.setValue("stylesheet/definitions", "/home/user/Desktop/HAL/hal/test_files/test_definitions");
     //    a.setStyleSheet(style::get_stylesheet());
 
-    QFile stylesheet(":/style/darcula");
-    //QFile stylesheet(":/style/sunny");
+    //QFile stylesheet(":/style/darcula");
+    QFile stylesheet(":/style/sunny");
     stylesheet.open(QFile::ReadOnly);
     a.setStyleSheet(QString(stylesheet.readAll()));
     stylesheet.close();
