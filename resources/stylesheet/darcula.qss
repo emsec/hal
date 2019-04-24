@@ -1355,6 +1355,9 @@ old_graphics_item_qss_adapter {
     qproperty-net_default_color: #6e6e64;
     qproperty-net_selected_color: #ffffff;
     qproperty-net_global_input_output_color: #ffffff;
+
+    qproperty-tree_navigation_open_folder_style: "all->#888888";
+    qproperty-tree_navigation_open_folder_path: ":/icons/open";
 }
 
 /*

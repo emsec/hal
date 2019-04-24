@@ -57,6 +57,16 @@ QColor old_graphics_item_qss_adapter::net_global_input_output_color() const
     return m_net_global_input_output_color;
 }
 
+QString old_graphics_item_qss_adapter::tree_navigation_open_folder_style() const
+{
+    return m_tree_navigation_open_folder_style;
+}
+
+QString old_graphics_item_qss_adapter::tree_navigation_open_folder_path() const
+{
+    return m_tree_navigation_open_folder_path;
+}
+
 void old_graphics_item_qss_adapter::set_gate_default_color(const QColor &color)
 {
     m_gate_default_color = color;
@@ -95,4 +105,14 @@ void old_graphics_item_qss_adapter::set_net_selected_color(const QColor &color)
 void old_graphics_item_qss_adapter::set_net_global_input_output_color(const QColor &color)
 {
     m_net_global_input_output_color = color;
+}
+
+void old_graphics_item_qss_adapter::set_tree_navigation_open_folder_style(const QString &style)
+{
+    m_tree_navigation_open_folder_style = style;
+}
+
+void old_graphics_item_qss_adapter::set_tree_navigation_open_folder_path(const QString &path)
+{
+    m_tree_navigation_open_folder_path = path;
 }

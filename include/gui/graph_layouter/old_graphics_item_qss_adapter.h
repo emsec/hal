@@ -42,6 +42,9 @@ class old_graphics_item_qss_adapter : public QWidget
     Q_PROPERTY(QColor net_selected_color READ net_selected_color WRITE set_net_selected_color)
     Q_PROPERTY(QColor net_global_input_output_color READ net_global_input_output_color WRITE set_net_global_input_output_color)
 
+    Q_PROPERTY(QString tree_navigation_open_folder_style READ tree_navigation_open_folder_style WRITE set_tree_navigation_open_folder_style)
+    Q_PROPERTY(QString tree_navigation_open_folder_path READ tree_navigation_open_folder_path WRITE set_tree_navigation_open_folder_path)
+
 public:
     static old_graphics_item_qss_adapter* instance();
 
@@ -55,6 +58,9 @@ public:
     QColor net_selected_color() const;
     QColor net_global_input_output_color() const;
 
+    QString tree_navigation_open_folder_style() const;
+    QString tree_navigation_open_folder_path() const;
+
     void set_gate_default_color(const QColor& color);
     void set_gate_background_color(const QColor& color);
     void set_gate_font_color(const QColor& color);
@@ -64,6 +70,9 @@ public:
     void set_net_default_color(const QColor& color);
     void set_net_selected_color(const QColor& color);
     void set_net_global_input_output_color(const QColor& color);
+
+    void set_tree_navigation_open_folder_style(const QString& style);
+    void set_tree_navigation_open_folder_path(const QString& path);
 
     void print_colors(){
         qDebug() << m_gate_default_color.name() << m_gate_background_color.name() << m_gate_font_color.name() << m_gate_selected_background_color.name()
@@ -83,7 +92,8 @@ private:
     QColor m_net_selected_color;
     QColor m_net_global_input_output_color;
 
-
+    QString m_tree_navigation_open_folder_style;
+    QString m_tree_navigation_open_folder_path;
 };
 
 #endif //OLD_GRAPHICS_ITEM_QSS_ADAPTER
