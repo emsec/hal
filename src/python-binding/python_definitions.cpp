@@ -727,6 +727,14 @@ Get all modules of the netlist. The top module is included!
 :returns: A set of modules.
 :rtype: set(hal_py.module)
 )")
+
+        .def("get_top_module", &netlist::get_top_module, R"(
+Get the top module of the netlist.
+
+:returns: The top module.
+:rtype: hal_py.module
+)")
+
         .def("get_module_by_id", &netlist::get_module_by_id, py::arg("id"), R"(
 Get a single module specified by its id.
 
@@ -1103,7 +1111,7 @@ Returns all associated gates.
 :returns: A set of gates.
 :rtype: set(hal_py.gate)
 )")
-        .def("get_gates", &module::get_gates, R"(
+        .def("get_gates", &module::get_gates, py::arg("gate_type_filter") = DONT_CARE, py::arg("name_filter") = DONT_CARE, py::arg("recursive") = false, R"(
 Returns all associated gates.
 
 :returns: A set of gates.
@@ -1121,7 +1129,7 @@ Returns all associated nets.
 :returns: A set of nets.
 :rtype: set(hal_py.net)
 )")
-        .def("add_gate", &module::insert_gate, py::arg("gate"), R"(
+        .def("insert_gate", &module::insert_gate, py::arg("gate"), R"(
 Moves a gate into this module. The gate is removed from its previous module in the process.
 
 :param gate: The gate to add.
