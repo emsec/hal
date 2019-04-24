@@ -1384,6 +1384,20 @@ old_graphics_item_qss_adapter {
     qproperty-net_global_input_output_color: #000000;
 }
 
+QFileDialog {
+    background: white;
+}
+
+QFileDialog QLabel{
+    color: black;
+    background: white;
+}
+
+QFileDialog QLineEdit{
+    color: black;
+    background: #dfdfdf;
+}
+
 gate_details_widget QLabel{
     color: black;
 }
