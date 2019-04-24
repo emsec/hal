@@ -886,11 +886,16 @@ get_in_touch_item #description-label {
 }
 
 get_in_touch_item[hover=true] {
-    background : rgb(255, 255, 255);
+   background : #7D7D7D;
+   color: white;
 }
 
 get_in_touch_item[hover=true] * {
-    background : rgb(255, 255, 255);
+    background : #7D7D7D;
+    color: white;
+}
+get_in_touch_item[hover=true] #description-label {/**neccessary, the * specifier above does not work */
+    color : white;
 }
 
 get_in_touch_item[hover=true] #description-label {

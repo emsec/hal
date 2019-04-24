@@ -174,8 +174,8 @@ void gui_graph_gate::paint(QPainter* painter, const QStyleOptionGraphicsItem* op
         //painter->fillRect(drawn_outer_rect, Qt::lightGray);
         painter->fillRect(drawn_outer_rect, old_graphics_item_qss_adapter::instance()->gate_background_color());
         actually_displayed_color = (actually_displayed_color == old_graphics_item_qss_adapter::instance()->gate_default_color())
-                                       ? QColor::fromHsv(actually_displayed_color.hue(), actually_displayed_color.saturation(), actually_displayed_color.value() - 50)
-                                       : QColor::fromHsv(actually_displayed_color.hue(), actually_displayed_color.saturation() - 100, actually_displayed_color.value());
+                                       ? actually_displayed_color.darker(150)
+                                       : actually_displayed_color.darker(110);//QColor::fromHsv(actually_displayed_color.hue(), actually_displayed_color.saturation() - 100, actually_displayed_color.value());
     }
 
     pen.setColor(actually_displayed_color);
