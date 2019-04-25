@@ -37,6 +37,7 @@
 #include <QToolButton>
 #include <QWidget>
 #include <QtCore/qreadwritelock.h>
+#include <QScrollBar>
 
 class hal_filter_tab_bar;
 
@@ -62,6 +63,8 @@ public:
 
     void reload_log_content();
 
+    void resizeEvent(QResizeEvent* event);
+
 Q_SIGNALS:
     void queue_log_update(spdlog::level::level_enum t, QString const& msg, hal_filter_item* filter);
 
@@ -73,6 +76,7 @@ public Q_SLOTS:
     void handle_current_channel_changed(int index);
     void show_text_edit_context_menu(const QPoint& point);
     void filter_item_clicked(const int& index);
+    void handle_first_user_interaction(int value);
     //    void queue_log_update_adapter(spdlog::level::level_enum t, QString const &msg);
 
 private:
@@ -87,6 +91,12 @@ private:
     std::string m_current_channel;
 
     QReadWriteLock m_lock;
+
+    QScrollBar* m_plain_text_edit_scrollbar;
+
+    bool m_user_interacted_with_scrollbar;
+
+    void scroll_to_bottom();
 };
 
 #endif    // HAL_LOGGER_WIDGET_H
