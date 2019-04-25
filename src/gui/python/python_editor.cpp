@@ -95,7 +95,7 @@ void python_code_editor::handle_tab_key_pressed()
         // auto col    = cursor.positionInBlock();
         cursor.movePosition(QTextCursor::Start, QTextCursor::KeepAnchor);
         auto text       = cursor.selectedText().replace(QChar(0x2029), '\n');
-        auto candidates = g_python_context->complete(text);
+        auto candidates = g_python_context->complete(text, false);
 
         if (candidates.size() == 1)
         {
@@ -129,53 +129,6 @@ void python_code_editor::handle_tab_key_pressed()
             dialog->move(anchor_global);
             dialog->exec();
         }
-
-        /*
-        else if (candidates.size() > 1)
-        {
-            QString matching_prefix = QString::fromStdString(std::get<1>(candidates.at(0)));
-            for (auto& tup : candidates)
-            {
-                auto candidate  = QString::fromStdString(std::get<0>(tup));
-                auto completion = QString::fromStdString(std::get<1>(tup));
-                for (int i = 0; i < matching_prefix.size() && i < completion.size(); ++i)
-                {
-                    if (matching_prefix[i] != completion[i])
-                    {
-                        matching_prefix = matching_prefix.mid(0, i);
-                    }
-                }
-            }
-            textCursor().insertText(matching_prefix);
-            current_line += matching_prefix;
-            candidates  = g_python_context->complete(current_line);
-            auto dialog = new python_editor_code_completion_dialog(this, candidates);
-            connect(dialog, &python_editor_code_completion_dialog::completionSelected, this, &python_code_editor::perform_code_completion);
-            auto menu_width  = dialog->width();
-            auto menu_height = dialog->height();
-
-            auto desk_rect   = QApplication::desktop()->screenGeometry();
-            auto desk_width  = desk_rect.width();
-            auto desk_height = desk_rect.height();
-            auto anchor      = this->cursorRect().bottomRight();
-            anchor.setX(anchor.x() + viewportMargins().left());
-            auto anchor_global = this->mapToGlobal(anchor);
-
-            if (anchor_global.x() + menu_width > desk_width)
-            {
-                anchor.setX(anchor.x() - menu_width);
-                anchor_global = this->mapToGlobal(anchor);
-            }
-
-            if (anchor_global.y() + menu_height > desk_height)
-            {
-                anchor.setY(cursorRect().topRight().y() - menu_height);
-                anchor_global = this->mapToGlobal(anchor);
-            }
-            dialog->move(anchor_global);
-            dialog->exec();
-        }
-        */
     }
 }
 
@@ -374,9 +327,7 @@ void python_editor::handle_action_save_file()
 
 void python_editor::handle_action_run()
 {
-    g_python_context->load_temporary_context();
     g_python_context->interpret_script(m_editor_widget->toPlainText());
-    g_python_context->restore_main_context();
 }
 
 QString python_editor::open_icon_path() const
