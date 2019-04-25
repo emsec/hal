@@ -100,6 +100,10 @@ std::shared_ptr<gate_library> netlist::get_gate_library() const
 
 u32 netlist::get_unique_module_id()
 {
+    if (!m_free_module_ids.empty())
+    {
+        return *(m_free_module_ids.begin());
+    }
     while (m_used_module_ids.find(m_next_module_id) != m_used_module_ids.end())
     {
         m_next_module_id++;
@@ -160,6 +164,10 @@ bool netlist::is_module_in_netlist(const std::shared_ptr<module> module) const
 
 u32 netlist::get_unique_gate_id()
 {
+    if (!m_free_gate_ids.empty())
+    {
+        return *(m_free_gate_ids.begin());
+    }
     while (m_used_gate_ids.find(m_next_gate_id) != m_used_gate_ids.end())
     {
         m_next_gate_id++;
@@ -326,6 +334,10 @@ std::vector<std::string> netlist::get_inout_pin_types(const std::string& gate_ty
 
 u32 netlist::get_unique_net_id()
 {
+    if (!m_free_net_ids.empty())
+    {
+        return *(m_free_net_ids.begin());
+    }
     while (m_used_net_ids.find(m_next_net_id) != m_used_net_ids.end())
     {
         m_next_net_id++;

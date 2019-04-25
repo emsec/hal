@@ -45,6 +45,12 @@ std::shared_ptr<gate> netlist_internal_manager::create_gate(const u32 id, const 
 
     auto new_gate = std::shared_ptr<gate>(new gate(m_netlist->get_shared(), id, gate_type, name));
 
+    auto free_id_it = m_netlist->m_free_gate_ids.find(id);
+    if (free_id_it != m_netlist->m_free_gate_ids.end())
+    {
+        m_netlist->m_free_gate_ids.erase(free_id_it);
+    }
+
     m_netlist->m_used_gate_ids.insert(id);
 
     // add gate to netlist
@@ -87,6 +93,9 @@ bool netlist_internal_manager::delete_gate(std::shared_ptr<gate> gate)
     // remove gate from modules
     remove_from_submodules(gate);
 
+    m_netlist->m_free_gate_ids.insert(gate->get_id());
+    m_netlist->m_used_gate_ids.erase(gate->get_id());
+
     gate_event_handler::notify(gate_event_handler::event::removed, gate);
 
     return true;
@@ -121,6 +130,12 @@ std::shared_ptr<net> netlist_internal_manager::create_net(const u32 id, const st
     }
 
     auto new_net = std::shared_ptr<net>(new net(this, id, name));
+
+    auto free_id_it = m_netlist->m_free_net_ids.find(id);
+    if (free_id_it != m_netlist->m_free_net_ids.end())
+    {
+        m_netlist->m_free_net_ids.erase(free_id_it);
+    }
 
     m_netlist->m_used_net_ids.insert(id);
 
@@ -163,6 +178,9 @@ bool netlist_internal_manager::delete_net(std::shared_ptr<net> net)
 
     // remove net from modules
     remove_from_submodules(net);
+
+    m_netlist->m_free_net_ids.insert(net->get_id());
+    m_netlist->m_used_net_ids.erase(net->get_id());
 
     net_event_handler::notify(net_event_handler::event::removed, net);
 
@@ -338,6 +356,12 @@ std::shared_ptr<module> netlist_internal_manager::create_module(const u32 id, st
 
     auto m = std::shared_ptr<module>(new module(id, parent, name, this));
 
+    auto free_id_it = m_netlist->m_free_module_ids.find(id);
+    if (free_id_it != m_netlist->m_free_module_ids.end())
+    {
+        m_netlist->m_free_module_ids.erase(free_id_it);
+    }
+
     m_netlist->m_used_module_ids.insert(id);
 
     m_netlist->m_modules[id] = m;
@@ -394,6 +418,9 @@ bool netlist_internal_manager::delete_module(std::shared_ptr<module> to_remove)
     module_event_handler::notify(module_event_handler::event::submodule_removed, to_remove->m_parent, to_remove->get_id());
 
     m_netlist->m_modules.erase(to_remove->get_id());
+
+    m_netlist->m_free_module_ids.insert(to_remove->get_id());
+    m_netlist->m_used_module_ids.erase(to_remove->get_id());
 
     module_event_handler::notify(module_event_handler::event::removed, to_remove);
     return true;

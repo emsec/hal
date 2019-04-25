@@ -547,10 +547,13 @@ private:
     /** stores the auto generated ids for fast next id */
     u32 m_next_gate_id;
     std::set<u32> m_used_gate_ids;
+    std::set<u32> m_free_gate_ids;
     u32 m_next_net_id;
     std::set<u32> m_used_net_ids;
+    std::set<u32> m_free_net_ids;
     u32 m_next_module_id;
     std::set<u32> m_used_module_ids;
+    std::set<u32> m_free_module_ids;
 
     /** stores the modules */
     std::shared_ptr<module> m_top_module;

@@ -94,7 +94,7 @@ void python_code_editor::handle_tab_key_pressed()
         // auto row    = cursor.blockNumber();
         // auto col    = cursor.positionInBlock();
         cursor.movePosition(QTextCursor::Start, QTextCursor::KeepAnchor);
-        auto text       = cursor.selectedText();
+        auto text       = cursor.selectedText().replace(QChar(0x2029), '\n');
         auto candidates = g_python_context->complete(text);
 
         if (candidates.size() == 1)
