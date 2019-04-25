@@ -1,3 +1,9 @@
+hal-reverse (1.0.1) bionic; urgency=high
+
+  * Fix in install buddy header
+
+ -- Sebastian Wallat <sebastian.wallat@rub.de>  Thu, 25 Apr 2019 20:44:35 +0200
+
 hal-reverse (1.0.0) bionic; urgency=low
 
   * Initial Release
