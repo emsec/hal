@@ -147,7 +147,7 @@ void hal_logger_widget::handle_current_channel_changed(int index)
 }
 
 void hal_logger_widget::handle_first_user_interaction(int value)
-{   
+{
     Q_UNUSED(value);
 
     if(!m_user_interacted_with_scrollbar)
@@ -158,7 +158,7 @@ void hal_logger_widget::resizeEvent(QResizeEvent* event)
 {
     Q_UNUSED(event)
 
-    if(!m_user_interacted_with_scrollbar) 
+    if(!m_user_interacted_with_scrollbar)
         scroll_to_bottom();
 }
 

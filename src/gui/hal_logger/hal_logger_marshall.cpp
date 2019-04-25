@@ -70,7 +70,7 @@ void hal_logger_marshall::append_log(spdlog::level::level_enum t, const QString&
     }
     QString msg_to_print;
     if (!filter)
-        msg_to_print = beginHTML + color + intermediateHTML + msg + endHTML;
+        msg_to_print = beginHTML + color + intermediateHTML + msg.toHtmlEscaped() + endHTML;
     else
     {
         hal_filter_item::rule rule;
@@ -137,12 +137,12 @@ void hal_logger_marshall::append_log(spdlog::level::level_enum t, const QString&
                         color = defaultHighlight;
                         break;
                 }
-                msg_to_print = beginHTML + color + intermediateHTML + msg + endHTML;
+                msg_to_print = beginHTML + color + intermediateHTML + msg.toHtmlEscaped() + endHTML;
             }
             else
             {
                 if (rule == hal_filter_item::rule::ShowAll)
-                    msg_to_print = beginHTML + color + intermediateHTML + msg + endHTML;
+                    msg_to_print = beginHTML + color + intermediateHTML + msg.toHtmlEscaped() + endHTML;
                 else
                     return;
             }
