@@ -338,6 +338,7 @@ deploy-py-doc:
     - ssh  $HAL_DOCUMENTATION_SERVERrm -rf /srv/data/doc-server-py/data/*
     - scp -r documentation.tgz sw@hal.emsec.rub.de:/srv/data/doc-server-py/data/
     - ssh  $HAL_DOCUMENTATION_SERVERtar xvfz /srv/data/doc-server-py/data/documentation.tgz -C /srv/data/doc-server-py/data/
+    - ssh  $HAL_DOCUMENTATION_SERVERmv /srv/data/doc-server/data/html/* /srv/data/doc-server/data/
     - ssh  $HAL_DOCUMENTATION_SERVERrm -f /srv/data/doc-server-py/data/documentation.tgz
   dependencies:
     - compile:doc:python
