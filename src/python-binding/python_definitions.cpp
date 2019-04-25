@@ -1305,6 +1305,57 @@ Generic call to run the GUI.
 :rtype: bool
 )");
 
+    py::class_<bdd, std::shared_ptr<bdd>>(m, "bdd")
+        .def(py::init<>())
+        .def(py::init<const bdd&>())
+        .def_property_readonly("id", &bdd::id)
+        .def("__str__", [](std::shared_ptr<bdd>& b) -> std::string { return std::string("bdd: ") + gate_decorator_bdd::get_bdd_str(b); })
+        .def("bdd_str", [](std::shared_ptr<bdd>& b) -> std::string { return gate_decorator_bdd::get_bdd_str(b); }, R"(
+Get a human readable string for a bdd.
+:param bdd: The bdd to represent.
+:type bdd: hal_py.bdd
+:returns: The string representation.
+:rtype: str
+)")
+        .def("bdd_clauses", [](std::shared_ptr<bdd>& b) -> std::vector<std::map<int, bool>> { return gate_decorator_bdd::get_bdd_clauses(b); }, R"(
+Turn the bdd into a list of clauses.
+:param bdd: The bdd.
+:type bdd: hal_py.bdd
+:returns: A list of dictionaries from input to boolean value.
+:rtype: list(dict[int,bool])
+)")
+        .def("is_tautology", [](std::shared_ptr<bdd>& b) -> bool { return gate_decorator_bdd::is_tautology(b); }, R"(
+Checks whether a bdd is always true.
+:param bdd: The bdd.
+:type bdd: hal_py.bdd
+:returns: True if tautology.
+:rtype: bool
+)")
+        .def("is_contradiction", [](std::shared_ptr<bdd>& b) -> bool { return gate_decorator_bdd::is_contradiction(b); }, R"(
+Checks whether a bdd is always false.
+:param bdd: The bdd.
+:type bdd: hal_py.bdd
+:returns: True if contradiction.
+:rtype: bool
+)")
+        .def(py::self & py::self)
+        .def(py::self &= py::self)
+        .def(py::self ^ py::self)
+        .def(py::self ^= py::self)
+        .def(py::self | py::self)
+        .def(py::self |= py::self)
+        .def(!py::self)
+        .def(py::self >> py::self)
+        .def(py::self >>= py::self)
+        .def(py::self - py::self)
+        .def(py::self -= py::self)
+        .def(py::self > py::self)
+        .def(py::self < py::self)
+        .def(py::self << py::self)
+        .def(py::self <<= py::self)
+        .def(py::self == py::self)
+        .def(py::self != py::self);
+
     class Pygate_decorator final : public gate_decorator, public std::enable_shared_from_this<Pygate_decorator>
     {
     public:
