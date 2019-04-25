@@ -40,30 +40,31 @@
 
 typedef struct
 {
-    union
-    {
-        double dres;
-        int res;
-    } r;
-    int a, b, c;
+   union
+   {
+      double dres;
+      int res;
+   } r;
+   int a,b,c;
 } BddCacheData;
+
 
 typedef struct
 {
-    BddCacheData* table;
-    int tablesize;
+   BddCacheData *table;
+   int tablesize;
 } BddCache;
 
-extern int BddCache_init(BddCache*, int);
 
-extern void BddCache_done(BddCache*);
-
-extern int BddCache_resize(BddCache*, int);
-
-extern void BddCache_reset(BddCache*);
+extern int  BddCache_init(BddCache *, int);
+extern void BddCache_done(BddCache *);
+extern int  BddCache_resize(BddCache *, int);
+extern void BddCache_reset(BddCache *);
 
 #define BddCache_lookup(cache, hash) (&(cache)->table[hash % (cache)->tablesize])
 
+
 #endif /* _CACHE_H */
+
 
 /* EOF */

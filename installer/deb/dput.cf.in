@@ -1,0 +1,6 @@
+[ppa]
+fqdn                    = ppa.launchpad.net
+method                  = sftp
+login                   = @PROJECT_PPA_USER@
+incoming                = ~%(ppa)s/ubuntu/@DPUT_DIST@
+ssh_config_options      = "-i /home/sw/.ssh/id_rsa -o UserKnownHostsFile=.ssh/known_hosts -oStrictHostKeyChecking=no"

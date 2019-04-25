@@ -28,78 +28,83 @@
 ========================================================================*/
 
 #include <string>
-#include "bdd.h"
-#include "bvec.h"
+#include "hal_bdd.h"
+#include "hal_bvec.h"
 
 using namespace std;
 
+
 #define ERROR(msg) fail(msg, __FILE__, __LINE__)
 
-static void fail(const string msg, const char *file, int lineNum)
+static void fail(const string msg, const char* file, int lineNum)
 {
-    cout << "Error in " << file << "(" << lineNum << "): " << msg << endl;
-    exit(1);
+  cout << "Error in " << file << "(" << lineNum << "): " << msg << endl;
+  exit(1);
 }
+
 
 static void testSupport(void)
 {
-    bdd even = bdd_ithvar(0) | bdd_ithvar(2) | bdd_ithvar(4);
-    bdd odd = bdd_ithvar(1) | bdd_ithvar(3) | bdd_ithvar(5);
+  bdd even = bdd_ithvar(0) | bdd_ithvar(2) | bdd_ithvar(4);
+  bdd odd  = bdd_ithvar(1) | bdd_ithvar(3) | bdd_ithvar(5);
 
-    cout << "Testing support\n";
+  cout << "Testing support\n";
+  
+  bdd s1 = bdd_support(even);
+  bdd s2 = bdd_support(odd);
 
-    bdd s1 = bdd_support(even);
-    bdd s2 = bdd_support(odd);
+  if (s1 != (bdd_ithvar(0) & bdd_ithvar(2) & bdd_ithvar(4)))
+    ERROR("Support of 'even' failed\n");
+  if (s2 != (bdd_ithvar(1) & bdd_ithvar(3) & bdd_ithvar(5)))
+    ERROR("Support of 'odd' failed\n");
+
+  /* Try many time in order check that the internal support ID
+   * is set correctly */
+  for (int n=0 ; n<500 ; ++n)
+  {
+    s1 = bdd_support(even);
+    s2 = bdd_support(odd);
 
     if (s1 != (bdd_ithvar(0) & bdd_ithvar(2) & bdd_ithvar(4)))
-        ERROR("Support of 'even' failed\n");
+      ERROR("Support of 'even' failed");
     if (s2 != (bdd_ithvar(1) & bdd_ithvar(3) & bdd_ithvar(5)))
-        ERROR("Support of 'odd' failed\n");
-
-    /* Try many time in order check that the internal support ID
-     * is set correctly */
-    for (int n = 0; n < 500; ++n) {
-        s1 = bdd_support(even);
-        s2 = bdd_support(odd);
-
-        if (s1 != (bdd_ithvar(0) & bdd_ithvar(2) & bdd_ithvar(4)))
-            ERROR("Support of 'even' failed");
-        if (s2 != (bdd_ithvar(1) & bdd_ithvar(3) & bdd_ithvar(5)))
-            ERROR("Support of 'odd' failed");
-    }
+      ERROR("Support of 'odd' failed");
+  }
 }
+
 
 void testBvecIte()
 {
-    cout << "Testing ITE for vector\n";
+  cout << "Testing ITE for vector\n";
+  
+  bdd  a = bdd_ithvar(0);
+  bvec b = bvec_var(3, 1, 2);
+  bvec c = bvec_var(3, 2, 2);
 
-    bdd a = bdd_ithvar(0);
-    bvec b = bvec_var(3, 1, 2);
-    bvec c = bvec_var(3, 2, 2);
+  bvec res = bvec_ite(a,b,c);
 
-    bvec res = bvec_ite(a, b, c);
+  bdd r0 = bdd_ite( bdd_ithvar(0), bdd_ithvar(1), bdd_ithvar(2) );
+  bdd r1 = bdd_ite( bdd_ithvar(0), bdd_ithvar(3), bdd_ithvar(4) );
+  bdd r2 = bdd_ite( bdd_ithvar(0), bdd_ithvar(5), bdd_ithvar(6) );
 
-    bdd r0 = bdd_ite(bdd_ithvar(0), bdd_ithvar(1), bdd_ithvar(2));
-    bdd r1 = bdd_ite(bdd_ithvar(0), bdd_ithvar(3), bdd_ithvar(4));
-    bdd r2 = bdd_ite(bdd_ithvar(0), bdd_ithvar(5), bdd_ithvar(6));
-
-    if (res[0] != r0)
-        ERROR("Bit 0 failed.");
-    if (res[1] != r1)
-        ERROR("Bit 1 failed.");
-    if (res[2] != r2)
-        ERROR("Bit 2 failed.");
+  if (res[0] != r0)
+    ERROR("Bit 0 failed.");
+  if (res[1] != r1)
+    ERROR("Bit 1 failed.");
+  if (res[2] != r2)
+    ERROR("Bit 2 failed.");
 }
 
-int main(int ac, char **av)
+
+int main(int ac, char** av)
 {
-    bdd_init(1000, 1000);
+  bdd_init(1000,1000);
 
-    bdd_setvarnum(10);
+  bdd_setvarnum(10);
 
-    testSupport();
-    testBvecIte();
+  testSupport();
+  testBvecIte();
 
-    bdd_done();
-    return 0;
+  bdd_done();
+  return 0;
 }

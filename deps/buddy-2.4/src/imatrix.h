@@ -37,28 +37,23 @@
 #ifndef _IMATRIX_H
 #define _IMATRIX_H
 
-#include <stdio.h>
-
 typedef struct _imatrix
 {
-    char** rows;
-    int size;
+   char **rows;
+   int size;
 } imatrix;
 
+
 extern imatrix* imatrixNew(int);
+extern void     imatrixDelete(imatrix*);
+extern void     imatrixFPrint(imatrix*,FILE *);
+extern void     imatrixPrint(imatrix*);
+extern void     imatrixSet(imatrix*,int,int);
+extern void     imatrixClr(imatrix*,int,int);
+extern int      imatrixDepends(imatrix*,int,int);
 
-extern void imatrixDelete(imatrix*);
-
-extern void imatrixFPrint(imatrix*, FILE*);
-
-extern void imatrixPrint(imatrix*);
-
-extern void imatrixSet(imatrix*, int, int);
-
-extern void imatrixClr(imatrix*, int, int);
-
-extern int imatrixDepends(imatrix*, int, int);
 
 #endif /* _IMATRIX_H */
+
 
 /* EOF */

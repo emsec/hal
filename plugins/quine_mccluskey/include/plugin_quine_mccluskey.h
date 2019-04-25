@@ -3,7 +3,7 @@
 
 #include "core/interface_base.h"
 
-#include <bdd.h>
+#include <hal_bdd.h>
 #include <string>
 
 /* forward declaration */

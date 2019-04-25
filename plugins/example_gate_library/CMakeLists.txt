@@ -9,6 +9,7 @@ if(PL_DECORATOR_EXAMPLE_LIB OR BUILD_ALL_PLUGINS)
         list(APPEND SOURCE_GATE_LIBS ${CMAKE_CURRENT_SOURCE_DIR}/gate_libraries/${f})
         list(APPEND DESTINATION_GATE_LIBS ${CMAKE_BINARY_DIR}/share/hal/gate_libraries/${f})
     endforeach()
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/gate_libraries/EXAMPLE_LIB.json ${CMAKE_BINARY_DIR}/share/hal/gate_libraries/EXAMPLE_LIB.json)
     add_custom_target(update_decorator_example_lib_libraries ALL
                     BYPRODUCTS ${DESTINATION_GATE_LIBS}
                     COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/gate_libraries/*.json ${CMAKE_BINARY_DIR}/share/hal/gate_libraries/

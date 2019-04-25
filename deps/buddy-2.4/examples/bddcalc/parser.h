@@ -25,47 +25,46 @@
 
 /* Tokens.  */
 #ifndef YYTOKENTYPE
-#define YYTOKENTYPE
-/* Put the tokens into the symbol table, so that GDB and other debuggers
-   know about them.  */
-enum yytokentype
-{
-    T_id          = 258,
-    T_str         = 259,
-    T_intval      = 260,
-    T_true        = 261,
-    T_false       = 262,
-    T_initial     = 263,
-    T_inputs      = 264,
-    T_actions     = 265,
-    T_size        = 266,
-    T_dumpdot     = 267,
-    T_autoreorder = 268,
-    T_reorder     = 269,
-    T_win2        = 270,
-    T_win2ite     = 271,
-    T_sift        = 272,
-    T_siftite     = 273,
-    T_none        = 274,
-    T_cache       = 275,
-    T_tautology   = 276,
-    T_print       = 277,
-    T_lpar        = 278,
-    T_rpar        = 279,
-    T_equal       = 280,
-    T_semi        = 281,
-    T_dot         = 282,
-    T_forall      = 283,
-    T_exist       = 284,
-    T_biimp       = 285,
-    T_imp         = 286,
-    T_nor         = 287,
-    T_or          = 288,
-    T_xor         = 289,
-    T_and         = 290,
-    T_nand        = 291,
-    T_not         = 292
-};
+# define YYTOKENTYPE
+   /* Put the tokens into the symbol table, so that GDB and other debuggers
+      know about them.  */
+   enum yytokentype {
+     T_id = 258,
+     T_str = 259,
+     T_intval = 260,
+     T_true = 261,
+     T_false = 262,
+     T_initial = 263,
+     T_inputs = 264,
+     T_actions = 265,
+     T_size = 266,
+     T_dumpdot = 267,
+     T_autoreorder = 268,
+     T_reorder = 269,
+     T_win2 = 270,
+     T_win2ite = 271,
+     T_sift = 272,
+     T_siftite = 273,
+     T_none = 274,
+     T_cache = 275,
+     T_tautology = 276,
+     T_print = 277,
+     T_lpar = 278,
+     T_rpar = 279,
+     T_equal = 280,
+     T_semi = 281,
+     T_dot = 282,
+     T_forall = 283,
+     T_exist = 284,
+     T_biimp = 285,
+     T_imp = 286,
+     T_nor = 287,
+     T_or = 288,
+     T_xor = 289,
+     T_and = 290,
+     T_nand = 291,
+     T_not = 292
+   };
 #endif
 #define T_id 258
 #define T_str 259
@@ -103,13 +102,17 @@ enum yytokentype
 #define T_nand 291
 #define T_not 292
 
-#if !defined(YYSTYPE) && !defined(YYSTYPE_IS_DECLARED)
 
+
+
+#if ! defined (YYSTYPE) && ! defined (YYSTYPE_IS_DECLARED)
 typedef int YYSTYPE;
-
-#define yystype YYSTYPE /* obsolescent; will be withdrawn */
-#define YYSTYPE_IS_DECLARED 1
-#define YYSTYPE_IS_TRIVIAL 1
+# define yystype YYSTYPE /* obsolescent; will be withdrawn */
+# define YYSTYPE_IS_DECLARED 1
+# define YYSTYPE_IS_TRIVIAL 1
 #endif
 
 extern YYSTYPE yylval;
+
+
+

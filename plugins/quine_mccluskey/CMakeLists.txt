@@ -1,7 +1,6 @@
 option(PL_QUINE_MCCLUSKEY "PL_QUINE_MCCLUSKEY" OFF)
 if(PL_QUINE_MCCLUSKEY OR BUILD_ALL_PLUGINS)
-    include_directories(${BUDDY_INCLUDE_DIR})
-    include_directories(AFTER "${CMAKE_CURRENT_SOURCE_DIR}/include")
+    include_directories(${BUDDY_INCLUDE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
     set(QUINE_MCCLUSKEY_INC
         ${CMAKE_CURRENT_SOURCE_DIR}/include/factory_quine_mccluskey.h

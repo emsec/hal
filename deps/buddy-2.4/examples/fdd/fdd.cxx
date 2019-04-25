@@ -12,64 +12,67 @@
  */
 void findStateSpace(bdd transRel)
 {
-    using namespace std;
-    /* Create a new pair for renaming the next-state variables to
-     * current-state variables */
-    bddPair *p = bdd_newpair();
-    fdd_setpair(p, 1, 0);
+   using namespace std ;
+      /* Create a new pair for renaming the next-state variables to
+       * current-state variables */
+   bddPair *p = bdd_newpair();
+   fdd_setpair(p,1,0);
 
-    /* Get a BDD that represents all the current-state variables */
-    bdd currentStateVar = fdd_ithset(0);
+      /* Get a BDD that represents all the current-state variables */
+   bdd currentStateVar = fdd_ithset(0);
 
-    /* Start with the initial state */
-    bdd reachedStates = fdd_ithvar(0, 0);
+      /* Start with the initial state */
+   bdd reachedStates = fdd_ithvar(0,0);
 
-    bdd tmp = bddfalse;
+   bdd tmp = bddfalse;
 
-    /* Repeat until no new states are found */
-    do {
-        tmp = reachedStates;
+      /* Repeat until no new states are found */
+   do
+   {
+      tmp = reachedStates;
 
-        /* Calculate: Newset = (exists V_cur. transRel & Reached)[cur/next] */
-        bdd newset;
-        newset = reachedStates & transRel;
-        newset = bdd_exist(newset, currentStateVar);
-        newset = bdd_replace(newset, p);
+         /* Calculate: Newset = (exists V_cur. transRel & Reached)[cur/next] */
+      bdd newset;
+      newset = reachedStates & transRel;
+      newset = bdd_exist(newset, currentStateVar);
+      newset = bdd_replace(newset, p);
 
-        cout << "Front: " << (newset - reachedStates) << endl;
+      cout << "Front: " << (newset - reachedStates) << endl;
 
-        /* Add the new states to the found states */
-        reachedStates = reachedStates | newset;
-    } while (tmp != reachedStates);
+         /* Add the new states to the found states */
+      reachedStates = reachedStates | newset;
+   }
+   while (tmp != reachedStates);
 }
 
-int main()
-{
-    using namespace std;
-    /* Initialize BuDDy and declare two interleaved FDD variable blocks
-     * with the domain [0..7] */
-    int domain[2] = {8, 8};
 
-    bdd_init(100, 100);
-    fdd_extdomain(domain, 2);
+int main() {
+   using namespace std ;
+      /* Initialize BuDDy and declare two interleaved FDD variable blocks
+       * with the domain [0..7] */
+   int domain[2] = {8,8};
 
-    /* Initialize the transition relation with no transitions */
-    bdd T = bddfalse;
+   bdd_init(100,100);
+   fdd_extdomain(domain, 2);
 
-    /* Add all the transitions (from state 'i' to state 'i+1') */
-    for (int i = 0; i < 8; i++) {
-        /* Set the current state to be state 'i' */
-        bdd current = fdd_ithvar(0, i);
+      /* Initialize the transition relation with no transitions */
+   bdd T = bddfalse;
 
-        /* Set the next state to be state 'i+1' */
-        bdd next = fdd_ithvar(1, (i + 1) % 8);
+      /* Add all the transitions (from state 'i' to state 'i+1') */
+   for (int i=0 ; i<8 ; i++)
+   {
+         /* Set the current state to be state 'i' */
+      bdd current = fdd_ithvar(0,i);
+      
+         /* Set the next state to be state 'i+1' */
+      bdd next = fdd_ithvar(1, (i+1) % 8);
 
-        /* Add the transition */
-        T = T | (current & next);
-    }
+         /* Add the transition */
+      T = T | (current & next);
+   }
 
-    cout << fddset << "Transition relation: " << T << endl << endl;
+   cout << fddset << "Transition relation: " << T << endl << endl;
 
-    /* Calculate the reachable statespace */
-    findStateSpace(T);
+      /* Calculate the reachable statespace */
+   findStateSpace(T);
 }

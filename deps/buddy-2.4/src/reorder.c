@@ -34,15 +34,15 @@
   AUTH:  Jorn Lind
   DATE:  (C) january 1998
 *************************************************************************/
-#include "bddtree.h"
-#include "imatrix.h"
-#include "kernel.h"
-#include "prime.h"
-#include <assert.h>
-#include <math.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <math.h>
+#include <assert.h>
+#include "kernel.h"
+#include "bddtree.h"
+#include "imatrix.h"
+#include "prime.h"
 
 /* IMPORTANT:
  * The semantics of the "level" field in the BddNode struct changes during
@@ -51,102 +51,87 @@
  * it refers to the *variable* !!!
  */
 
-/* Change macros to reflect the above idea */
+   /* Change macros to reflect the above idea */
 #define VAR(n) (bddnodes[n].level)
 #define VARp(p) (p->level)
 
-/* Avoid these - they are misleading! */
+   /* Avoid these - they are misleading! */
 #undef LEVEL
 #undef LEVELp
 
+
 #define __USERESIZE /* FIXME */
 
-/* Current auto reord. method and number of automatic reorderings left */
+   /* Current auto reord. method and number of automatic reorderings left */
 static int bddreordermethod;
-
 static int bddreordertimes;
 
-/* Flag for disabling reordering temporarily */
+   /* Flag for disabling reordering temporarily */
 static int reorderdisabled;
 
-/* Store for the variable relationships */
-static BddTree* vartree;
-
+   /* Store for the variable relationships */
+static BddTree *vartree;
 static int blockid;
 
-/* Store for the ref.cou. of the external roots */
-static int* extroots;
-
+   /* Store for the ref.cou. of the external roots */
+static int *extroots;
 static int extrootsize;
 
 /* Level data */
 typedef struct _levelData
 {
-    int start;   /* Start of this sub-table (entry in "bddnodes") */
-    int size;    /* Size of this sub-table */
-    int maxsize; /* Max. allowed size of sub-table */
-    int nodenum; /* Number of nodes in this level */
+   int start;    /* Start of this sub-table (entry in "bddnodes") */
+   int size;     /* Size of this sub-table */
+   int maxsize;  /* Max. allowed size of sub-table */
+   int nodenum;  /* Number of nodes in this level */
 } levelData;
 
-static levelData* levels; /* Indexed by variable! */
+static levelData *levels; /* Indexed by variable! */
 
-/* Interaction matrix */
-static imatrix* iactmtx;
+   /* Interaction matrix */
+static imatrix *iactmtx;
 
-/* Reordering information for the user */
+   /* Reordering information for the user */
 static int verbose;
-
 static bddinthandler reorder_handler;
-
 static bddfilehandler reorder_filehandler;
-
 static bddsizehandler reorder_nodenum;
 
-/* Number of live nodes before and after a reordering session */
+   /* Number of live nodes before and after a reordering session */
 static int usednum_before;
-
 static int usednum_after;
-
-/* Kernel variables needed for reordering */
+	    
+   /* Kernel variables needed for reordering */
 extern int bddfreepos;
-
 extern int bddfreenum;
-
 extern int bddproduced;
 
-/* Flag telling us when a node table resize is done */
+   /* Flag telling us when a node table resize is done */
 static int resizedInMakenode;
 
-/* New node hashing function for use with reordering */
-#define NODEHASH(var, l, h) ((PAIR((l), (h)) % levels[var].size) + levels[var].start)
+   /* New node hashing function for use with reordering */
+#define NODEHASH(var,l,h) ((PAIR((l),(h))%levels[var].size)+levels[var].start)
 
-/* Reordering prototypes */
-static void blockdown(BddTree*);
-
-static void addref_rec(int, char*);
-
+   /* Reordering prototypes */
+static void blockdown(BddTree *);
+static void addref_rec(int, char *);
 static void reorder_gbc();
-
 static void reorder_setLevellookup(void);
-
-static int reorder_makenode(int, int, int);
-
-static int reorder_varup(int);
-
-static int reorder_vardown(int);
-
-static int reorder_init(void);
-
+static int  reorder_makenode(int, int, int);
+static int  reorder_varup(int);
+static int  reorder_vardown(int);
+static int  reorder_init(void);
 static void reorder_done(void);
 
 #define random(a) (rand() % (a))
 
-/* For sorting the blocks according to some specific size value */
+   /* For sorting the blocks according to some specific size value */
 typedef struct s_sizePair
 {
-    int val;
-    BddTree* block;
+   int val;
+   BddTree *block;
 } sizePair;
+
 
 /*************************************************************************
   Initialize and shutdown
@@ -154,24 +139,26 @@ typedef struct s_sizePair
 
 void bdd_reorder_init(void)
 {
-    reorderdisabled = 0;
-    vartree         = NULL;
-
-    bdd_clrvarblocks();
-    bdd_reorder_hook(bdd_default_reohandler);
-    bdd_reorder_verbose(0);
-    bdd_autoreorder_times(BDD_REORDER_NONE, 0);
-    reorder_nodenum = bdd_getnodenum;
-    usednum_before = usednum_after = 0;
-    blockid                        = 0;
+   reorderdisabled = 0;
+   vartree = NULL;
+   
+   bdd_clrvarblocks();
+   bdd_reorder_hook(bdd_default_reohandler);
+   bdd_reorder_verbose(0);
+   bdd_autoreorder_times(BDD_REORDER_NONE, 0);
+   reorder_nodenum = bdd_getnodenum;
+   usednum_before = usednum_after = 0;
+   blockid = 0;
 }
+
 
 void bdd_reorder_done(void)
 {
-    bddtree_del(vartree);
-    bdd_operator_reset();
-    vartree = NULL;
+   bddtree_del(vartree);
+   bdd_operator_reset();
+   vartree = NULL;
 }
+
 
 /*************************************************************************
   Reordering heuristics
@@ -179,615 +166,638 @@ void bdd_reorder_done(void)
 
 /*=== Reorder using a sliding window of size 2 =========================*/
 
-static BddTree* reorder_win2(BddTree* t)
+static BddTree *reorder_win2(BddTree *t)
 {
-    BddTree* this = t, *first = t;
+   BddTree *this=t, *first=t;
 
-    if (t == NULL)
-        return t;
+   if (t == NULL)
+      return t;
 
-    if (verbose > 1)
-        printf("Win2 start: %d nodes\n", reorder_nodenum());
-    fflush(stdout);
+   if (verbose > 1)
+      printf("Win2 start: %d nodes\n", reorder_nodenum());
+   fflush(stdout);
 
-    while (this->next != NULL)
-    {
-        int best = reorder_nodenum();
-        blockdown(this);
+   while (this->next != NULL)
+   {
+      int best = reorder_nodenum();
+      blockdown(this);
+      
+      if (best < reorder_nodenum())
+      {
+	 blockdown(this->prev);
+	 this = this->next;
+      }
+      else
+      if (first == this)
+	 first = this->prev;
 
-        if (best < reorder_nodenum())
-        {
-            blockdown(this->prev);
-            this = this->next;
-        }
-        else if (first == this)
-            first = this->prev;
+      if (verbose > 1)
+      {
+	 printf(".");
+	 fflush(stdout);
+      }
+   }
+   
+   if (verbose > 1)
+      printf("\nWin2 end: %d nodes\n", reorder_nodenum());
+   fflush(stdout);
 
-        if (verbose > 1)
-        {
-            printf(".");
-            fflush(stdout);
-        }
-    }
-
-    if (verbose > 1)
-        printf("\nWin2 end: %d nodes\n", reorder_nodenum());
-    fflush(stdout);
-
-    return first;
+   return first;
 }
 
-static BddTree* reorder_win2ite(BddTree* t)
+
+static BddTree *reorder_win2ite(BddTree *t)
 {
-    BddTree* this, *first = t;
-    int lastsize;
-    int c = 1;
+   BddTree *this, *first=t;
+   int lastsize;
+   int c=1;
+   
+   if (t == NULL)
+      return t;
+   
+   if (verbose > 1)
+      printf("Win2ite start: %d nodes\n", reorder_nodenum());
 
-    if (t == NULL)
-        return t;
+   do
+   {
+      lastsize = reorder_nodenum();
 
-    if (verbose > 1)
-        printf("Win2ite start: %d nodes\n", reorder_nodenum());
+      this = t;
+      while (this->next != NULL)
+      {
+	 int best = reorder_nodenum();
 
-    do
-    {
-        lastsize = reorder_nodenum();
+	 blockdown(this);
 
-        this = t;
-        while (this->next != NULL)
-        {
-            int best = reorder_nodenum();
+	 if (best < reorder_nodenum())
+	 {
+	    blockdown(this->prev);
+	    this = this->next;
+	 }
+	 else
+	 if (first == this)
+	    first = this->prev;
+	 if (verbose > 1)
+	 {
+	    printf(".");
+	    fflush(stdout);
+	 }
+      }
 
-            blockdown(this);
+      if (verbose > 1)
+	 printf(" %d nodes\n", reorder_nodenum());
+      c++;
+   }
+   while (reorder_nodenum() != lastsize);
 
-            if (best < reorder_nodenum())
-            {
-                blockdown(this->prev);
-                this = this->next;
-            }
-            else if (first == this)
-                first = this->prev;
-            if (verbose > 1)
-            {
-                printf(".");
-                fflush(stdout);
-            }
-        }
-
-        if (verbose > 1)
-            printf(" %d nodes\n", reorder_nodenum());
-        c++;
-    } while (reorder_nodenum() != lastsize);
-
-    return first;
+   return first;
 }
+
 
 /*=== Reorder using a sliding window of size 3 =========================*/
 #define X(a)
 
-static BddTree* reorder_swapwin3(BddTree* this, BddTree** first)
+static BddTree *reorder_swapwin3(BddTree *this, BddTree **first)
 {
-    int setfirst  = (this->prev == NULL ? 1 : 0);
-    BddTree* next = this;
-    int best      = reorder_nodenum();
+   int setfirst = (this->prev == NULL ? 1 : 0);
+   BddTree *next = this;
+   int best = reorder_nodenum();
+   
+   if (this->next->next == NULL) /* Only two blocks left -> win2 swap */
+   {
+      blockdown(this);
+      
+      if (best < reorder_nodenum())
+      {
+	 blockdown(this->prev);
+	 next = this->next;
+      }
+      else
+      {
+	 next = this;
+	 if (setfirst)
+	    *first = this->prev;
+      }
+   }
+   else /* Real win3 swap */
+   {
+      int pos = 0;
+      X(printf("%d: ", reorder_nodenum()));
+      blockdown(this);  /* B A* C (4) */
+      X(printf("A"));
+      pos++;
+      if (best > reorder_nodenum())
+      {
+	 X(printf("(%d)", reorder_nodenum()));
+	 pos = 0;
+	 best = reorder_nodenum();
+      }
+      
+      blockdown(this);  /* B C A* (3) */
+      X(printf("B"));
+      pos++;
+      if (best > reorder_nodenum())
+      {
+	 X(printf("(%d)", reorder_nodenum()));
+	 pos = 0;
+	 best = reorder_nodenum();
+      }
+      
+      this = this->prev->prev;
+      blockdown(this);  /* C B* A (2) */
+      X(printf("C"));
+      pos++;
+      if (best > reorder_nodenum())
+      {
+	 X(printf("(%d)", reorder_nodenum()));
+	 pos = 0;
+	 best = reorder_nodenum();
+      }
+      
+      blockdown(this);  /* C A B* (1) */
+      X(printf("D"));
+      pos++;
+      if (best > reorder_nodenum())
+      {
+	 X(printf("(%d)", reorder_nodenum()));
+	 pos = 0;
+	 best = reorder_nodenum();
+      }
+      
+      this = this->prev->prev;
+      blockdown(this);  /* A C* B (0)*/
+      X(printf("E"));
+      pos++;
+      if (best > reorder_nodenum())
+      {
+	 X(printf("(%d)", reorder_nodenum()));
+	 pos = 0;
+	 best = reorder_nodenum();
+      }
+      
+      X(printf(" -> "));
+      
+      if (pos >= 1)  /* A C B -> C A* B */
+      {
+	 this = this->prev;
+	 blockdown(this);
+	 next = this;
+	 if (setfirst)
+	    *first = this->prev;
+	 X(printf("a(%d)", reorder_nodenum()));
+      }
+      
+      if (pos >= 2)  /* C A B -> C B A* */
+      {
+	 blockdown(this);
+	 next = this->prev;
+	 if (setfirst)
+	    *first = this->prev->prev;
+	 X(printf("b(%d)", reorder_nodenum()));
+      }
+      
+      if (pos >= 3)  /* C B A -> B C* A */
+      {
+	 this = this->prev->prev;
+	 blockdown(this);
+	 next = this;
+	 if (setfirst)
+	    *first = this->prev;
+	 X(printf("c(%d)", reorder_nodenum()));
+      }
+      
+      if (pos >= 4)  /* B C A -> B A C* */
+      {
+	 blockdown(this);
+	 next = this->prev;
+	 if (setfirst)
+	    *first = this->prev->prev;
+	 X(printf("d(%d)", reorder_nodenum()));
+      }
+      
+      if (pos >= 5)  /* B A C -> A B* C */
+      {
+	 this = this->prev->prev;
+	 blockdown(this);
+	 next = this;
+	 if (setfirst)
+	    *first = this->prev;
+	 X(printf("e(%d)", reorder_nodenum()));
+      }
+      X(printf("\n"));
+   }
 
-    if (this->next->next == NULL) /* Only two blocks left -> win2 swap */
-    {
-        blockdown(this);
-
-        if (best < reorder_nodenum())
-        {
-            blockdown(this->prev);
-            next = this->next;
-        }
-        else
-        {
-            next = this;
-            if (setfirst)
-                *first = this->prev;
-        }
-    }
-    else /* Real win3 swap */
-    {
-        int pos = 0;
-        X(printf("%d: ", reorder_nodenum()));
-        blockdown(this); /* B A* C (4) */
-        X(printf("A"));
-        pos++;
-        if (best > reorder_nodenum())
-        {
-            X(printf("(%d)", reorder_nodenum()));
-            pos  = 0;
-            best = reorder_nodenum();
-        }
-
-        blockdown(this); /* B C A* (3) */
-        X(printf("B"));
-        pos++;
-        if (best > reorder_nodenum())
-        {
-            X(printf("(%d)", reorder_nodenum()));
-            pos  = 0;
-            best = reorder_nodenum();
-        }
-
-        this = this->prev->prev;
-        blockdown(this); /* C B* A (2) */
-        X(printf("C"));
-        pos++;
-        if (best > reorder_nodenum())
-        {
-            X(printf("(%d)", reorder_nodenum()));
-            pos  = 0;
-            best = reorder_nodenum();
-        }
-
-        blockdown(this); /* C A B* (1) */
-        X(printf("D"));
-        pos++;
-        if (best > reorder_nodenum())
-        {
-            X(printf("(%d)", reorder_nodenum()));
-            pos  = 0;
-            best = reorder_nodenum();
-        }
-
-        this = this->prev->prev;
-        blockdown(this); /* A C* B (0)*/
-        X(printf("E"));
-        pos++;
-        if (best > reorder_nodenum())
-        {
-            X(printf("(%d)", reorder_nodenum()));
-            pos  = 0;
-            best = reorder_nodenum();
-        }
-
-        X(printf(" -> "));
-
-        if (pos >= 1) /* A C B -> C A* B */
-        {
-            this = this->prev;
-            blockdown(this);
-            next = this;
-            if (setfirst)
-                *first = this->prev;
-            X(printf("a(%d)", reorder_nodenum()));
-        }
-
-        if (pos >= 2) /* C A B -> C B A* */
-        {
-            blockdown(this);
-            next = this->prev;
-            if (setfirst)
-                *first = this->prev->prev;
-            X(printf("b(%d)", reorder_nodenum()));
-        }
-
-        if (pos >= 3) /* C B A -> B C* A */
-        {
-            this = this->prev->prev;
-            blockdown(this);
-            next = this;
-            if (setfirst)
-                *first = this->prev;
-            X(printf("c(%d)", reorder_nodenum()));
-        }
-
-        if (pos >= 4) /* B C A -> B A C* */
-        {
-            blockdown(this);
-            next = this->prev;
-            if (setfirst)
-                *first = this->prev->prev;
-            X(printf("d(%d)", reorder_nodenum()));
-        }
-
-        if (pos >= 5) /* B A C -> A B* C */
-        {
-            this = this->prev->prev;
-            blockdown(this);
-            next = this;
-            if (setfirst)
-                *first = this->prev;
-            X(printf("e(%d)", reorder_nodenum()));
-        }
-        X(printf("\n"));
-    }
-
-    return next;
+   return next;
 }
 
-static BddTree* reorder_win3(BddTree* t)
+
+static BddTree *reorder_win3(BddTree *t)
 {
-    BddTree* this = t, *first = t;
+   BddTree *this=t, *first=t;
 
-    if (t == NULL)
-        return t;
+   if (t == NULL)
+      return t;
 
-    if (verbose > 1)
-        printf("Win3 start: %d nodes\n", reorder_nodenum());
-    fflush(stdout);
+   if (verbose > 1)
+      printf("Win3 start: %d nodes\n", reorder_nodenum());
+   fflush(stdout);
 
-    while (this->next != NULL)
-    {
-        this = reorder_swapwin3(this, &first);
+   while (this->next != NULL)
+   {
+      this = reorder_swapwin3(this, &first);
+      
+      if (verbose > 1)
+      {
+	 printf(".");
+	 fflush(stdout);
+      }
+   }
+   
+   if (verbose > 1)
+      printf("\nWin3 end: %d nodes\n", reorder_nodenum());
+   fflush(stdout);
 
-        if (verbose > 1)
-        {
-            printf(".");
-            fflush(stdout);
-        }
-    }
-
-    if (verbose > 1)
-        printf("\nWin3 end: %d nodes\n", reorder_nodenum());
-    fflush(stdout);
-
-    return first;
+   return first;
 }
 
-static BddTree* reorder_win3ite(BddTree* t)
+
+static BddTree *reorder_win3ite(BddTree *t)
 {
-    BddTree* this = t, *first = t;
-    int lastsize;
+   BddTree *this=t, *first=t;
+   int lastsize;
+   
+   if (t == NULL)
+      return t;
+   
+   if (verbose > 1)
+      printf("Win3ite start: %d nodes\n", reorder_nodenum());
 
-    if (t == NULL)
-        return t;
+   do
+   {
+      lastsize = reorder_nodenum();
+      this = first;
+      
+      while (this->next != NULL  &&  this->next->next != NULL)
+      {
+	 this = reorder_swapwin3(this, &first);
 
-    if (verbose > 1)
-        printf("Win3ite start: %d nodes\n", reorder_nodenum());
+	 if (verbose > 1)
+	 {
+	    printf(".");
+	    fflush(stdout);
+	 }
+      }
 
-    do
-    {
-        lastsize = reorder_nodenum();
-        this     = first;
+      if (verbose > 1)
+	 printf(" %d nodes\n", reorder_nodenum());
+   }
+   while (reorder_nodenum() != lastsize);
 
-        while (this->next != NULL && this->next->next != NULL)
-        {
-            this = reorder_swapwin3(this, &first);
-
-            if (verbose > 1)
-            {
-                printf(".");
-                fflush(stdout);
-            }
-        }
-
-        if (verbose > 1)
-            printf(" %d nodes\n", reorder_nodenum());
-    } while (reorder_nodenum() != lastsize);
-
-    if (verbose > 1)
-        printf("Win3ite end: %d nodes\n", reorder_nodenum());
-
-    return first;
+   if (verbose > 1)
+      printf("Win3ite end: %d nodes\n", reorder_nodenum());
+   
+   return first;
 }
+
 
 /*=== Reorder by sifting =============================================*/
 
 /* Move a specific block up and down in the order and place at last in
    the best position
 */
-static void reorder_sift_bestpos(BddTree* blk, int middlePos)
+static void reorder_sift_bestpos(BddTree *blk, int middlePos)
 {
-    int best = reorder_nodenum();
-    int maxAllowed;
-    int bestpos = 0;
-    int dirIsUp = 1;
-    int n;
+   int best = reorder_nodenum();
+   int maxAllowed;
+   int bestpos = 0;
+   int dirIsUp = 1;
+   int n;
+   
+   if (bddmaxnodesize > 0)
+      maxAllowed = MIN(best/5+best, bddmaxnodesize-bddmaxnodeincrease-2);
+   else
+      maxAllowed = best/5+best;
 
-    if (bddmaxnodesize > 0)
-        maxAllowed = MIN(best / 5 + best, bddmaxnodesize - bddmaxnodeincrease - 2);
-    else
-        maxAllowed = best / 5 + best;
+      /* Determine initial direction */
+   if (blk->pos > middlePos)
+      dirIsUp = 0;
 
-    /* Determine initial direction */
-    if (blk->pos > middlePos)
-        dirIsUp = 0;
+      /* Move block back and forth */
+   for (n=0 ; n<2 ; n++)
+   {
+      int first = 1;
+      
+      if (dirIsUp)
+      {
+	 while (blk->prev != NULL  &&
+		(reorder_nodenum() <= maxAllowed || first))
+	 {
+	    first = 0;
+	    blockdown(blk->prev);
+	    bestpos--;
+	    
+	    if (verbose > 1)
+	    {
+	       printf("-");
+	       fflush(stdout);
+	    }
+	    
+	    if (reorder_nodenum() < best)
+	    {
+	       best = reorder_nodenum();
+	       bestpos = 0;
 
-    /* Move block back and forth */
-    for (n = 0; n < 2; n++)
-    {
-        int first = 1;
+	       if (bddmaxnodesize > 0)
+		  maxAllowed = MIN(best/5+best,
+				   bddmaxnodesize-bddmaxnodeincrease-2);
+	       else
+		  maxAllowed = best/5+best;
+	    }
+	 }
+      }
+      else
+      {
+	 while (blk->next != NULL  &&
+		(reorder_nodenum() <= maxAllowed  ||  first))
+	 {
+	    first = 0;
+	    blockdown(blk);
+	    bestpos++;
+	    
+	    if (verbose > 1)
+	    {
+	       printf("+");
+	       fflush(stdout);
+	    }
+	    
+	    if (reorder_nodenum() < best)
+	    {
+	       best = reorder_nodenum();
+	       bestpos = 0;
+	       
+	       if (bddmaxnodesize > 0)
+		  maxAllowed = MIN(best/5+best,
+				   bddmaxnodesize-bddmaxnodeincrease-2);
+	       else
+		  maxAllowed = best/5+best;
+	    }
+	 }
+      }
+	 
+      if (reorder_nodenum() > maxAllowed  &&  verbose > 1)
+      {
+	 printf("!");
+	 fflush(stdout);
+      }
 
-        if (dirIsUp)
-        {
-            while (blk->prev != NULL && (reorder_nodenum() <= maxAllowed || first))
-            {
-                first = 0;
-                blockdown(blk->prev);
-                bestpos--;
+      dirIsUp = !dirIsUp;
+   }
 
-                if (verbose > 1)
-                {
-                    printf("-");
-                    fflush(stdout);
-                }
-
-                if (reorder_nodenum() < best)
-                {
-                    best    = reorder_nodenum();
-                    bestpos = 0;
-
-                    if (bddmaxnodesize > 0)
-                        maxAllowed = MIN(best / 5 + best, bddmaxnodesize - bddmaxnodeincrease - 2);
-                    else
-                        maxAllowed = best / 5 + best;
-                }
-            }
-        }
-        else
-        {
-            while (blk->next != NULL && (reorder_nodenum() <= maxAllowed || first))
-            {
-                first = 0;
-                blockdown(blk);
-                bestpos++;
-
-                if (verbose > 1)
-                {
-                    printf("+");
-                    fflush(stdout);
-                }
-
-                if (reorder_nodenum() < best)
-                {
-                    best    = reorder_nodenum();
-                    bestpos = 0;
-
-                    if (bddmaxnodesize > 0)
-                        maxAllowed = MIN(best / 5 + best, bddmaxnodesize - bddmaxnodeincrease - 2);
-                    else
-                        maxAllowed = best / 5 + best;
-                }
-            }
-        }
-
-        if (reorder_nodenum() > maxAllowed && verbose > 1)
-        {
-            printf("!");
-            fflush(stdout);
-        }
-
-        dirIsUp = !dirIsUp;
-    }
-
-    /* Move to best pos */
-    while (bestpos < 0)
-    {
-        blockdown(blk);
-        bestpos++;
-    }
-    while (bestpos > 0)
-    {
-        blockdown(blk->prev);
-        bestpos--;
-    }
+      /* Move to best pos */
+   while (bestpos < 0)
+   {
+      blockdown(blk);
+      bestpos++;
+   }
+   while (bestpos > 0)
+   {
+      blockdown(blk->prev);
+      bestpos--;
+   }
 }
+
 
 /* Go through all blocks in a specific sequence and find best
    position for each of them
 */
-static BddTree* reorder_sift_seq(BddTree* t, BddTree** seq, int num)
+static BddTree *reorder_sift_seq(BddTree *t, BddTree **seq, int num)
 {
-    BddTree* this;
-    int n;
+   BddTree *this;
+   int n;
+   
+   if (t == NULL)
+      return t;
 
-    if (t == NULL)
-        return t;
+   for (n=0 ; n<num ; n++)
+   {
+      long c2, c1 = clock();
+   
+      if (verbose > 1)
+      {
+	 printf("Sift ");
+	 if (reorder_filehandler)
+	    reorder_filehandler(stdout, seq[n]->id);
+	 else
+	    printf("%d", seq[n]->id);
+	 printf(": ");
+      }
 
-    for (n = 0; n < num; n++)
-    {
-        long c2, c1 = clock();
+      reorder_sift_bestpos(seq[n], num/2);
 
-        if (verbose > 1)
-        {
-            printf("Sift ");
-            if (reorder_filehandler)
-                reorder_filehandler(stdout, seq[n]->id);
-            else
-                printf("%d", seq[n]->id);
-            printf(": ");
-        }
+      if (verbose > 1)
+	 printf("\n> %d nodes", reorder_nodenum());
 
-        reorder_sift_bestpos(seq[n], num / 2);
+      c2 = clock();
+      if (verbose > 1)
+	 printf(" (%.1f sec)\n", (float)(c2-c1)/CLOCKS_PER_SEC);
+   }
 
-        if (verbose > 1)
-            printf("\n> %d nodes", reorder_nodenum());
+      /* Find first block */
+   for (this=t ; this->prev != NULL ; this=this->prev)
+      /* nil */;
 
-        c2 = clock();
-        if (verbose > 1)
-            printf(" (%.1f sec)\n", (float)(c2 - c1) / CLOCKS_PER_SEC);
-    }
-
-    /* Find first block */
-    for (this = t; this->prev != NULL; this = this->prev)
-        /* nil */;
-
-    return this;
+   return this;
 }
+
 
 /* Compare function for sorting sifting sequence
  */
-static int siftTestCmp(const void* aa, const void* bb)
+static int siftTestCmp(const void *aa, const void *bb)
 {
-    const sizePair* a = (sizePair*)aa;
-    const sizePair* b = (sizePair*)bb;
+   const sizePair *a = (sizePair*)aa;
+   const sizePair *b = (sizePair*)bb;
 
-    if (a->val < b->val)
-        return -1;
-    if (a->val > b->val)
-        return 1;
-    return 0;
+   if (a->val < b->val)
+      return -1;
+   if (a->val > b->val)
+      return 1;
+   return 0;
 }
+
 
 /* Find sifting sequence based on the number of nodes at each level
  */
-static BddTree* reorder_sift(BddTree* t)
+static BddTree *reorder_sift(BddTree *t)
 {
-    BddTree* this, **seq;
-    sizePair* p;
-    int n, num;
+   BddTree *this, **seq;
+   sizePair *p;
+   int n, num;
 
-    for (this = t, num = 0; this != NULL; this = this->next)
-        this->pos = num++;
+   for (this=t,num=0 ; this!=NULL ; this=this->next)
+      this->pos = num++;
+   
+   if ((p=NEW(sizePair,num)) == NULL)
+      return t;
+   if ((seq=NEW(BddTree*,num)) == NULL)
+   {
+      free(p);
+      return t;
+   }
 
-    if ((p = NEW(sizePair, num)) == NULL)
-        return t;
-    if ((seq = NEW(BddTree*, num)) == NULL)
-    {
-        free(p);
-        return t;
-    }
+   for (this=t,n=0 ; this!=NULL ; this=this->next,n++)
+   {
+      int v;
 
-    for (this = t, n = 0; this != NULL; this = this->next, n++)
-    {
-        int v;
+         /* Accumulate number of nodes for each block */
+      p[n].val = 0;
+      for (v=this->first ; v<=this->last ; v++)
+	 p[n].val -= levels[v].nodenum;
 
-        /* Accumulate number of nodes for each block */
-        p[n].val = 0;
-        for (v = this->first; v <= this->last; v++)
-            p[n].val -= levels[v].nodenum;
+      p[n].block = this;
+   }
 
-        p[n].block = this;
-    }
+      /* Sort according to the number of nodes at each level */
+   qsort(p, num, sizeof(sizePair), siftTestCmp);
+   
+      /* Create sequence */
+   for (n=0 ; n<num ; n++)
+      seq[n] = p[n].block;
 
-    /* Sort according to the number of nodes at each level */
-    qsort(p, num, sizeof(sizePair), siftTestCmp);
-
-    /* Create sequence */
-    for (n = 0; n < num; n++)
-        seq[n] = p[n].block;
-
-    /* Do the sifting on this sequence */
-    t = reorder_sift_seq(t, seq, num);
-
-    free(seq);
-    free(p);
-
-    return t;
+      /* Do the sifting on this sequence */
+   t = reorder_sift_seq(t, seq, num);
+   
+   free(seq);
+   free(p);
+   
+   return t;
 }
+
 
 /* Do sifting iteratively until no more improvement can be found
  */
-static BddTree* reorder_siftite(BddTree* t)
+static BddTree *reorder_siftite(BddTree *t)
 {
-    BddTree* first = t;
-    int lastsize;
-    int c = 1;
+   BddTree *first=t;
+   int lastsize;
+   int c=1;
+   
+   if (t == NULL)
+      return t;
+   
+   do
+   {
+      if (verbose > 1)
+	 printf("Reorder %d\n", c++);
+      
+      lastsize = reorder_nodenum();
+      first = reorder_sift(first);
+   }
+   while (reorder_nodenum() != lastsize);
 
-    if (t == NULL)
-        return t;
-
-    do
-    {
-        if (verbose > 1)
-            printf("Reorder %d\n", c++);
-
-        lastsize = reorder_nodenum();
-        first    = reorder_sift(first);
-    } while (reorder_nodenum() != lastsize);
-
-    return first;
+   return first;
 }
+
 
 /*=== Random reordering (mostly for debugging and test ) =============*/
 
-static BddTree* reorder_random(BddTree* t)
+static BddTree *reorder_random(BddTree *t)
 {
-    BddTree* this;
-    BddTree** seq;
-    int n, num = 0;
+   BddTree *this;
+   BddTree **seq;
+   int n, num=0;
 
-    if (t == NULL)
-        return t;
+   if (t == NULL)
+      return t;
+   
+   for (this=t ; this!=NULL ; this=this->next)
+      num++;
+   seq = NEW(BddTree*,num);
+   for (this=t,num=0 ; this!=NULL ; this=this->next)
+      seq[num++] = this;
+   
+   for (n=0 ; n<4*num ; n++)
+   {
+      int blk = random(num);
+      if (seq[blk]->next != NULL)
+	 blockdown(seq[blk]);
+   }
 
-    for (this = t; this != NULL; this = this->next)
-        num++;
-    seq = NEW(BddTree*, num);
-    for (this = t, num = 0; this != NULL; this = this->next)
-        seq[num++] = this;
+      /* Find first block */
+   for (this=t ; this->prev != NULL ; this=this->prev)
+      /* nil */;
 
-    for (n = 0; n < 4 * num; n++)
-    {
-        int blk = random(num);
-        if (seq[blk]->next != NULL)
-            blockdown(seq[blk]);
-    }
+   free(seq);
 
-    /* Find first block */
-    for (this = t; this->prev != NULL; this = this->prev)
-        /* nil */;
-
-    free(seq);
-
-    if (verbose)
-        printf("Random order: %d nodes\n", reorder_nodenum());
-    return this;
+   if (verbose)
+      printf("Random order: %d nodes\n", reorder_nodenum());
+   return this;
 }
+
 
 /*************************************************************************
   Swapping adjacent blocks
 *************************************************************************/
 
-static void blockdown(BddTree* left)
+static void blockdown(BddTree *left)
 {
-    BddTree* right = left->next;
-    int n;
-    int leftsize  = left->last - left->first;
-    int rightsize = right->last - right->first;
-    int leftstart = bddvar2level[left->seq[0]];
-    int* lseq     = left->seq;
-    int* rseq     = right->seq;
+   BddTree *right = left->next;
+   int n;
+   int leftsize = left->last - left->first;
+   int rightsize = right->last - right->first;
+   int leftstart = bddvar2level[left->seq[0]];
+   int *lseq = left->seq;
+   int *rseq = right->seq;
 
-    /* Move left past right */
-    while (bddvar2level[lseq[0]] < bddvar2level[rseq[rightsize]])
-    {
-        for (n = 0; n < leftsize; n++)
-        {
-            if (bddvar2level[lseq[n]] + 1 != bddvar2level[lseq[n + 1]] && bddvar2level[lseq[n]] < bddvar2level[rseq[rightsize]])
-            {
-                reorder_vardown(lseq[n]);
-            }
-        }
+      /* Move left past right */
+   while (bddvar2level[lseq[0]] < bddvar2level[rseq[rightsize]])
+   {
+      for (n=0 ; n<leftsize ; n++)
+      {
+	 if (bddvar2level[lseq[n]]+1  !=  bddvar2level[lseq[n+1]]
+	     && bddvar2level[lseq[n]]  <  bddvar2level[rseq[rightsize]])
+	 {
+	    reorder_vardown(lseq[n]);
+	 }
+      }
 
-        if (bddvar2level[lseq[leftsize]] < bddvar2level[rseq[rightsize]])
-        {
-            reorder_vardown(lseq[leftsize]);
-        }
-    }
+      if (bddvar2level[lseq[leftsize]] <  bddvar2level[rseq[rightsize]])
+      {
+	 reorder_vardown(lseq[leftsize]);
+      }
+   }
 
-    /* Move right to where left started */
-    while (bddvar2level[rseq[0]] > leftstart)
-    {
-        for (n = rightsize; n > 0; n--)
-        {
-            if (bddvar2level[rseq[n]] - 1 != bddvar2level[rseq[n - 1]] && bddvar2level[rseq[n]] > leftstart)
-            {
-                reorder_varup(rseq[n]);
-            }
-        }
+      /* Move right to where left started */
+   while (bddvar2level[rseq[0]] > leftstart)
+   {
+      for (n=rightsize ; n>0 ; n--)
+      {
+	 if (bddvar2level[rseq[n]]-1 != bddvar2level[rseq[n-1]]
+	     && bddvar2level[rseq[n]] > leftstart)
+	 {
+	    reorder_varup(rseq[n]);
+	 }
+      }
 
-        if (bddvar2level[rseq[0]] > leftstart)
-            reorder_varup(rseq[0]);
-    }
+      if (bddvar2level[rseq[0]] > leftstart)
+	 reorder_varup(rseq[0]);
+   }
 
-    /* Swap left and right data in the order */
-    left->next  = right->next;
-    right->prev = left->prev;
-    left->prev  = right;
-    right->next = left;
+      /* Swap left and right data in the order */
+   left->next = right->next;
+   right->prev = left->prev;
+   left->prev = right;
+   right->next = left;
 
-    if (right->prev != NULL)
-        right->prev->next = right;
-    if (left->next != NULL)
-        left->next->prev = left;
+   if (right->prev != NULL)
+      right->prev->next = right;
+   if (left->next != NULL)
+      left->next->prev = left;
 
-    n          = left->pos;
-    left->pos  = right->pos;
-    right->pos = n;
+   n = left->pos;
+   left->pos = right->pos;
+   right->pos = n;
 }
+
 
 /*************************************************************************
   Kernel reordering routines
@@ -797,53 +807,55 @@ static void blockdown(BddTree* left)
 
 /* Note: Node may be marked
  */
-static void addref_rec(int r, char* dep)
+static void addref_rec(int r, char *dep)
 {
-    if (r < 2)
-        return;
+   if (r < 2)
+      return;
+   
+   if (bddnodes[r].refcou == 0)
+   {
+      bddfreenum--;
 
-    if (bddnodes[r].refcou == 0)
-    {
-        bddfreenum--;
+         /* Detect variable dependencies for the interaction matrix */
+      dep[VAR(r) & MARKHIDE] = 1;
 
-        /* Detect variable dependencies for the interaction matrix */
-        dep[VAR(r) & MARKHIDE] = 1;
-
-        /* Make sure the nodenum field is updated. Used in the initial GBC */
-        levels[VAR(r) & MARKHIDE].nodenum++;
-
-        addref_rec(LOW(r), dep);
-        addref_rec(HIGH(r), dep);
-    }
-    else
-    {
-        int n;
-
-        /* Update (from previously found) variable dependencies
-     * for the interaction matrix */
-        for (n = 0; n < bddvarnum; n++)
-            dep[n] |= imatrixDepends(iactmtx, VAR(r) & MARKHIDE, n);
-    }
-
-    INCREF(r);
+         /* Make sure the nodenum field is updated. Used in the initial GBC */
+      levels[VAR(r) & MARKHIDE].nodenum++;
+      
+      addref_rec(LOW(r), dep);
+      addref_rec(HIGH(r), dep);
+   }
+   else
+   {
+      int n;
+      
+         /* Update (from previously found) variable dependencies
+	  * for the interaction matrix */
+      for (n=0 ; n<bddvarnum ; n++)
+	 dep[n] |= imatrixDepends(iactmtx, VAR(r) & MARKHIDE, n);
+   }
+   
+   INCREF(r);
 }
 
-static void addDependencies(char* dep)
-{
-    int n, m;
 
-    for (n = 0; n < bddvarnum; n++)
-    {
-        for (m = n; m < bddvarnum; m++)
-        {
-            if (dep[n] && dep[m])
-            {
-                imatrixSet(iactmtx, n, m);
-                imatrixSet(iactmtx, m, n);
-            }
-        }
-    }
+static void addDependencies(char *dep)
+{
+   int n,m;
+
+   for (n=0 ; n<bddvarnum ; n++)
+   {
+      for (m=n ; m<bddvarnum ; m++)
+      {
+	 if (dep[n]  &&  dep[m])
+	 {
+	    imatrixSet(iactmtx, n,m);
+	    imatrixSet(iactmtx, m,n);
+	 }
+      }
+   }
 }
+
 
 /* Make sure all nodes are recursively reference counted and store info about
    nodes that are refcou. externally. This info is used at last to revert
@@ -851,57 +863,58 @@ static void addDependencies(char* dep)
  */
 static int mark_roots(void)
 {
-    char* dep = NEW(char, bddvarnum);
-    int n;
+   char *dep = NEW(char,bddvarnum);
+   int n;
 
-    for (n = 2, extrootsize = 0; n < bddnodesize; n++)
-    {
-        /* This is where we go from .level to .var!
-     * - Do NOT use the LEVEL macro here. */
-        bddnodes[n].level = bddlevel2var[bddnodes[n].level];
+   for (n=2,extrootsize=0 ; n<bddnodesize ; n++)
+   {
+         /* This is where we go from .level to .var!
+	  * - Do NOT use the LEVEL macro here. */
+      bddnodes[n].level = bddlevel2var[bddnodes[n].level];
+      
+      if (bddnodes[n].refcou > 0)
+      {
+	 SETMARK(n);
+	 extrootsize++;
+      }
+   }
+   
+   if ((extroots=(int*)(malloc(sizeof(int)*extrootsize))) == NULL)
+      return bdd_error(BDD_MEMORY);
 
-        if (bddnodes[n].refcou > 0)
-        {
-            SETMARK(n);
-            extrootsize++;
-        }
-    }
+   iactmtx = imatrixNew(bddvarnum);
 
-    if ((extroots = (int*)(malloc(sizeof(int) * extrootsize))) == NULL)
-        return bdd_error(BDD_MEMORY);
+   for (n=2,extrootsize=0 ; n<bddnodesize ; n++)
+   {
+      BddNode *node = &bddnodes[n];
 
-    iactmtx = imatrixNew(bddvarnum);
+      if (MARKEDp(node))
+      {
+	 UNMARKp(node);
+	 extroots[extrootsize++] = n;
 
-    for (n = 2, extrootsize = 0; n < bddnodesize; n++)
-    {
-        BddNode* node = &bddnodes[n];
+	 memset(dep,0,bddvarnum);
+	 dep[VARp(node)] = 1;
+	 levels[VARp(node)].nodenum++;
+	 
+	 addref_rec(LOWp(node), dep);
+	 addref_rec(HIGHp(node), dep);
 
-        if (MARKEDp(node))
-        {
-            UNMARKp(node);
-            extroots[extrootsize++] = n;
+	 addDependencies(dep);
+      }
 
-            memset(dep, 0, bddvarnum);
-            dep[VARp(node)] = 1;
-            levels[VARp(node)].nodenum++;
+      /* Make sure the hash field is empty. This saves a loop in the
+	 initial GBC */
+      node->hash = 0;
+   }
 
-            addref_rec(LOWp(node), dep);
-            addref_rec(HIGHp(node), dep);
+   bddnodes[0].hash = 0;
+   bddnodes[1].hash = 0;
 
-            addDependencies(dep);
-        }
-
-        /* Make sure the hash field is empty. This saves a loop in the
-       initial GBC */
-        node->hash = 0;
-    }
-
-    bddnodes[0].hash = 0;
-    bddnodes[1].hash = 0;
-
-    free(dep);
-    return 0;
+   free(dep);
+   return 0;
 }
+
 
 /* Now that all nodes are recursively reference counted we must make sure
    that the new hashing scheme is used AND that dead nodes are removed.
@@ -909,90 +922,94 @@ static int mark_roots(void)
 */
 static void reorder_gbc(void)
 {
-    int n;
+   int n;
 
-    bddfreepos = 0;
-    bddfreenum = 0;
+   bddfreepos = 0;
+   bddfreenum = 0;
 
-    /* No need to zero all hash fields - this is done in mark_roots */
+      /* No need to zero all hash fields - this is done in mark_roots */
+   
+   for (n=bddnodesize-1 ; n>=2 ; n--)
+   {
+      register BddNode *node = &bddnodes[n];
 
-    for (n = bddnodesize - 1; n >= 2; n--)
-    {
-        register BddNode* node = &bddnodes[n];
+      if (node->refcou > 0)
+      {
+	 register unsigned int hash;
+	 
+	 hash = NODEHASH(VARp(node), LOWp(node), HIGHp(node));
+	 node->next = bddnodes[hash].hash;
+	 bddnodes[hash].hash = n;
 
-        if (node->refcou > 0)
-        {
-            register unsigned int hash;
-
-            hash                = NODEHASH(VARp(node), LOWp(node), HIGHp(node));
-            node->next          = bddnodes[hash].hash;
-            bddnodes[hash].hash = n;
-        }
-        else
-        {
-            LOWp(node) = -1;
-            node->next = bddfreepos;
-            bddfreepos = n;
-            bddfreenum++;
-        }
-    }
+      }
+      else
+      {
+	 LOWp(node) = -1;
+	 node->next = bddfreepos;
+	 bddfreepos = n;
+	 bddfreenum++;
+      }
+   }
 }
+
 
 static void reorder_setLevellookup(void)
 {
-    int n;
+   int n;
 
-    for (n = 0; n < bddvarnum; n++)
-    {
+   for (n=0 ; n<bddvarnum ; n++)
+   {
 #ifdef USERESIZE
-        levels[n].maxsize = bddnodesize / bddvarnum;
-        levels[n].start   = n * levels[n].maxsize;
-        levels[n].size    = MIN(levels[n].maxsize, (levels[n].nodenum * 5) / 4);
+      levels[n].maxsize = bddnodesize / bddvarnum;
+      levels[n].start = n * levels[n].maxsize;
+      levels[n].size = MIN(levels[n].maxsize, (levels[n].nodenum*5)/4);
 #else
-        levels[n].maxsize = bddnodesize / bddvarnum;
-        levels[n].start   = n * levels[n].maxsize;
-        levels[n].size    = levels[n].maxsize;
+      levels[n].maxsize = bddnodesize / bddvarnum;
+      levels[n].start = n * levels[n].maxsize;
+      levels[n].size = levels[n].maxsize;
 #endif
 
-        if (levels[n].size >= 4)
-            levels[n].size = bdd_prime_lte(levels[n].size);
-
+      if (levels[n].size >= 4)
+	 levels[n].size = bdd_prime_lte(levels[n].size);
+      
 #if 0
-        printf("L%3d: start %d, size %d, nodes %d\n", n, levels[n].start,
-           levels[n].size, levels[n].nodenum);
+      printf("L%3d: start %d, size %d, nodes %d\n", n, levels[n].start,
+	     levels[n].size, levels[n].nodenum);
 #endif
-    }
+   }
 }
+
 
 static void reorder_rehashAll(void)
 {
-    int n;
+   int n;
 
-    reorder_setLevellookup();
-    bddfreepos = 0;
+   reorder_setLevellookup();
+   bddfreepos = 0;
 
-    for (n = bddnodesize - 1; n >= 0; n--)
-        bddnodes[n].hash = 0;
+   for (n=bddnodesize-1 ; n>=0 ; n--)
+      bddnodes[n].hash = 0;
+   
+   for (n=bddnodesize-1 ; n>=2 ; n--)
+   {
+      register BddNode *node = &bddnodes[n];
 
-    for (n = bddnodesize - 1; n >= 2; n--)
-    {
-        register BddNode* node = &bddnodes[n];
-
-        if (node->refcou > 0)
-        {
-            register unsigned int hash;
-
-            hash                = NODEHASH(VARp(node), LOWp(node), HIGHp(node));
-            node->next          = bddnodes[hash].hash;
-            bddnodes[hash].hash = n;
-        }
-        else
-        {
-            node->next = bddfreepos;
-            bddfreepos = n;
-        }
-    }
+      if (node->refcou > 0)
+      {
+	 register unsigned int hash;
+	 
+	 hash = NODEHASH(VARp(node), LOWp(node), HIGHp(node));
+	 node->next = bddnodes[hash].hash;
+	 bddnodes[hash].hash = n;
+      }
+      else
+      {
+	 node->next = bddfreepos;
+	 bddfreepos = n;
+      }
+   }
 }
+
 
 /*=== Unique table handling for reordering =============================*/
 
@@ -1001,95 +1018,96 @@ static void reorder_rehashAll(void)
  */
 static int reorder_makenode(int var, int low, int high)
 {
-    register BddNode* node;
-    register unsigned int hash;
-    register int res;
+   register BddNode *node;
+   register unsigned int hash;
+   register int res;
 
 #ifdef CACHESTATS
-    bddcachestats.uniqueAccess++;
+   bddcachestats.uniqueAccess++;
 #endif
+   
+      /* Note: We know that low,high has a refcou greater than zero, so
+	 there is no need to add reference *recursively* */
+   
+      /* check whether childs are equal */
+   if (low == high)
+   {
+      INCREF(low);
+      return low;
+   }
 
-    /* Note: We know that low,high has a refcou greater than zero, so
-   there is no need to add reference *recursively* */
-
-    /* check whether childs are equal */
-    if (low == high)
-    {
-        INCREF(low);
-        return low;
-    }
-
-    /* Try to find an existing node of this kind */
-    hash = NODEHASH(var, low, high);
-    res  = bddnodes[hash].hash;
-
-    while (res != 0)
-    {
-        if (LOW(res) == low && HIGH(res) == high)
-        {
+      /* Try to find an existing node of this kind */
+   hash = NODEHASH(var, low, high);
+   res = bddnodes[hash].hash;
+      
+   while(res != 0)
+   {
+      if (LOW(res) == low  &&  HIGH(res) == high)
+      {
 #ifdef CACHESTATS
-            bddcachestats.uniqueHit++;
+	 bddcachestats.uniqueHit++;
 #endif
-            INCREF(res);
-            return res;
-        }
-        res = bddnodes[res].next;
-
+	 INCREF(res);
+	 return res;
+      }
+      res = bddnodes[res].next;
+      
 #ifdef CACHESTATS
-        bddcachestats.uniqueChain++;
+      bddcachestats.uniqueChain++;
 #endif
-    }
-
-    /* No existing node -> build one */
+   }
+   
+      /* No existing node -> build one */
 #ifdef CACHESTATS
-    bddcachestats.uniqueMiss++;
+   bddcachestats.uniqueMiss++;
 #endif
 
-    /* Any free nodes to use ? */
-    if (bddfreepos == 0)
-    {
-        if (bdderrorcond)
-            return 0;
+      /* Any free nodes to use ? */
+   if (bddfreepos == 0)
+   {
+      if (bdderrorcond)
+	 return 0;
+      
+         /* Try to allocate more nodes - call noderesize without
+	  * enabling rehashing.
+          * Note: if ever rehashing is allowed here, then remember to
+	  * update local variable "hash" */
+      bdd_noderesize(0);
+      resizedInMakenode = 1;
 
-        /* Try to allocate more nodes - call noderesize without
-     * enabling rehashing.
-         * Note: if ever rehashing is allowed here, then remember to
-     * update local variable "hash" */
-        bdd_noderesize(0);
-        resizedInMakenode = 1;
+         /* Panic if that is not possible */
+      if (bddfreepos == 0)
+      {
+	 bdd_error(BDD_NODENUM);
+	 bdderrorcond = abs(BDD_NODENUM);
+	 return 0;
+      }
+   }
 
-        /* Panic if that is not possible */
-        if (bddfreepos == 0)
-        {
-            bdd_error(BDD_NODENUM);
-            bdderrorcond = abs(BDD_NODENUM);
-            return 0;
-        }
-    }
+      /* Build new node */
+   res = bddfreepos;
+   bddfreepos = bddnodes[bddfreepos].next;
+   levels[var].nodenum++;
+   bddproduced++;
+   bddfreenum--;
+   
+   node = &bddnodes[res];
+   VARp(node) = var;
+   LOWp(node) = low;
+   HIGHp(node) = high;
 
-    /* Build new node */
-    res        = bddfreepos;
-    bddfreepos = bddnodes[bddfreepos].next;
-    levels[var].nodenum++;
-    bddproduced++;
-    bddfreenum--;
+      /* Insert node in hash chain */
+   node->next = bddnodes[hash].hash;
+   bddnodes[hash].hash = res;
 
-    node        = &bddnodes[res];
-    VARp(node)  = var;
-    LOWp(node)  = low;
-    HIGHp(node) = high;
-
-    /* Insert node in hash chain */
-    node->next          = bddnodes[hash].hash;
-    bddnodes[hash].hash = res;
-
-    /* Make sure it is reference counted */
-    node->refcou = 1;
-    INCREF(LOWp(node));
-    INCREF(HIGHp(node));
-
-    return res;
+      /* Make sure it is reference counted */
+   node->refcou = 1;
+   INCREF(LOWp(node));
+   INCREF(HIGHp(node));
+   
+   return res;
 }
+
 
 /*=== Swapping two adjacent variables ==================================*/
 
@@ -1098,49 +1116,51 @@ static int reorder_makenode(int var, int low, int high)
  */
 static int reorder_downSimple(int var0)
 {
-    int toBeProcessed = 0;
-    int var1          = bddlevel2var[bddvar2level[var0] + 1];
-    int vl0           = levels[var0].start;
-    int size0         = levels[var0].size;
-    int n;
+   int toBeProcessed = 0;
+   int var1 = bddlevel2var[bddvar2level[var0]+1];
+   int vl0 = levels[var0].start;
+   int size0 = levels[var0].size;
+   int n;
 
-    levels[var0].nodenum = 0;
+   levels[var0].nodenum = 0;
+   
+   for (n=0 ; n<size0 ; n++)
+   {
+      int r;
 
-    for (n = 0; n < size0; n++)
-    {
-        int r;
+      r = bddnodes[n + vl0].hash;
+      bddnodes[n + vl0].hash = 0;
 
-        r                      = bddnodes[n + vl0].hash;
-        bddnodes[n + vl0].hash = 0;
+      while (r != 0)
+      {
+	 BddNode *node = &bddnodes[r];
+	 int next = node->next;
 
-        while (r != 0)
-        {
-            BddNode* node = &bddnodes[r];
-            int next      = node->next;
-
-            if (VAR(LOWp(node)) != var1 && VAR(HIGHp(node)) != var1)
-            {
-                /* Node does not depend on next var, let it stay in the chain */
-                node->next             = bddnodes[n + vl0].hash;
-                bddnodes[n + vl0].hash = r;
-                levels[var0].nodenum++;
-            }
-            else
-            {
-                /* Node depends on next var - save it for later procesing */
-                node->next    = toBeProcessed;
-                toBeProcessed = r;
+	 if (VAR(LOWp(node)) != var1  &&  VAR(HIGHp(node)) != var1)
+	 {
+ 	       /* Node does not depend on next var, let it stay in the chain */
+	    node->next = bddnodes[n+vl0].hash;
+	    bddnodes[n+vl0].hash = r;
+	    levels[var0].nodenum++;
+	 }
+	 else
+	 {
+   	       /* Node depends on next var - save it for later procesing */
+	    node->next = toBeProcessed;
+	    toBeProcessed = r;
 #ifdef SWAPCOUNT
-                bddcachestats.swapCount++;
+	    bddcachestats.swapCount++;
 #endif
-            }
+   
+	 }
 
-            r = next;
-        }
-    }
-
-    return toBeProcessed;
+	 r = next;
+      }
+   }
+   
+   return toBeProcessed;
 }
+
 
 /* Now process all the var 0 nodes that depends on var 1.
  *
@@ -1149,62 +1169,63 @@ static int reorder_downSimple(int var0)
  */
 static void reorder_swap(int toBeProcessed, int var0)
 {
-    int var1 = bddlevel2var[bddvar2level[var0] + 1];
+   int var1 = bddlevel2var[bddvar2level[var0]+1];
+   
+   while (toBeProcessed)
+   {
+      BddNode *node = &bddnodes[toBeProcessed];
+      int next = node->next;
+      int f0 = LOWp(node);
+      int f1 = HIGHp(node);
+      int f00, f01, f10, f11, hash;
+      
+         /* Find the cofactors for the new nodes */
+      if (VAR(f0) == var1)
+      {
+	 f00 = LOW(f0);
+	 f01 = HIGH(f0);
+      }
+      else
+	 f00 = f01 = f0;
+      
+      if (VAR(f1) == var1)
+      {
+	 f10 = LOW(f1);
+	 f11 = HIGH(f1);
+      }
+      else
+	 f10 = f11 = f1;
 
-    while (toBeProcessed)
-    {
-        BddNode* node = &bddnodes[toBeProcessed];
-        int next      = node->next;
-        int f0        = LOWp(node);
-        int f1        = HIGHp(node);
-        int f00, f01, f10, f11, hash;
+         /* Note: makenode does refcou. */
+      f0 = reorder_makenode(var0, f00, f10);
+      f1 = reorder_makenode(var0, f01, f11);
+      node = &bddnodes[toBeProcessed];  /* Might change in makenode */
 
-        /* Find the cofactors for the new nodes */
-        if (VAR(f0) == var1)
-        {
-            f00 = LOW(f0);
-            f01 = HIGH(f0);
-        }
-        else
-            f00 = f01 = f0;
+         /* We know that the refcou of the grandchilds of this node
+	  * is greater than one (these are f00...f11), so there is
+	  * no need to do a recursive refcou decrease. It is also
+	  * possible for the LOWp(node)/high nodes to come alive again,
+	  * so deref. of the childs is delayed until the local GBC. */
 
-        if (VAR(f1) == var1)
-        {
-            f10 = LOW(f1);
-            f11 = HIGH(f1);
-        }
-        else
-            f10 = f11 = f1;
+      DECREF(LOWp(node));
+      DECREF(HIGHp(node));
+      
+         /* Update in-place */
+      VARp(node) = var1;
+      LOWp(node) = f0;
+      HIGHp(node) = f1;
+	    
+      levels[var1].nodenum++;
+      
+         /* Rehash the node since it got new childs */
+      hash = NODEHASH(VARp(node), LOWp(node), HIGHp(node));
+      node->next = bddnodes[hash].hash;
+      bddnodes[hash].hash = toBeProcessed;
 
-        /* Note: makenode does refcou. */
-        f0   = reorder_makenode(var0, f00, f10);
-        f1   = reorder_makenode(var0, f01, f11);
-        node = &bddnodes[toBeProcessed]; /* Might change in makenode */
-
-        /* We know that the refcou of the grandchilds of this node
-     * is greater than one (these are f00...f11), so there is
-     * no need to do a recursive refcou decrease. It is also
-     * possible for the LOWp(node)/high nodes to come alive again,
-     * so deref. of the childs is delayed until the local GBC. */
-
-        DECREF(LOWp(node));
-        DECREF(HIGHp(node));
-
-        /* Update in-place */
-        VARp(node)  = var1;
-        LOWp(node)  = f0;
-        HIGHp(node) = f1;
-
-        levels[var1].nodenum++;
-
-        /* Rehash the node since it got new childs */
-        hash                = NODEHASH(VARp(node), LOWp(node), HIGHp(node));
-        node->next          = bddnodes[hash].hash;
-        bddnodes[hash].hash = toBeProcessed;
-
-        toBeProcessed = next;
-    }
+      toBeProcessed = next;
+   }
 }
+
 
 /* Now go through the var 1 chains. The nodes live here have survived
  * the call to reorder_swap() and may stay in the chain.
@@ -1212,174 +1233,180 @@ static void reorder_swap(int toBeProcessed, int var0)
  */
 static void reorder_localGbc(int var0)
 {
-    int var1  = bddlevel2var[bddvar2level[var0] + 1];
-    int vl1   = levels[var1].start;
-    int size1 = levels[var1].size;
-    int n;
+   int var1 = bddlevel2var[bddvar2level[var0]+1];
+   int vl1 = levels[var1].start;
+   int size1 = levels[var1].size;
+   int n;
 
-    for (n = 0; n < size1; n++)
-    {
-        int hash            = n + vl1;
-        int r               = bddnodes[hash].hash;
-        bddnodes[hash].hash = 0;
+   for (n=0 ; n<size1 ; n++)
+   {
+      int hash = n+vl1;
+      int r = bddnodes[hash].hash;
+      bddnodes[hash].hash = 0;
 
-        while (r)
-        {
-            BddNode* node = &bddnodes[r];
-            int next      = node->next;
+      while (r)
+      {
+	 BddNode *node = &bddnodes[r];
+	 int next = node->next;
 
-            if (node->refcou > 0)
-            {
-                node->next          = bddnodes[hash].hash;
-                bddnodes[hash].hash = r;
-            }
-            else
-            {
-                DECREF(LOWp(node));
-                DECREF(HIGHp(node));
+	 if (node->refcou > 0)
+	 {
+	    node->next = bddnodes[hash].hash;
+	    bddnodes[hash].hash = r;
+	 }
+	 else
+	 {
+	    DECREF(LOWp(node));
+	    DECREF(HIGHp(node));
+	    
+	    LOWp(node) = -1;
+	    node->next = bddfreepos; 
+	    bddfreepos = r;
+	    levels[var1].nodenum--;
+	    bddfreenum++;
+	 }
 
-                LOWp(node) = -1;
-                node->next = bddfreepos;
-                bddfreepos = r;
-                levels[var1].nodenum--;
-                bddfreenum++;
-            }
-
-            r = next;
-        }
-    }
+	 r = next;
+      }
+   }   
 }
+
+
+
 
 #ifdef USERESIZE
 
 static void reorder_swapResize(int toBeProcessed, int var0)
 {
-    int var1 = bddlevel2var[bddvar2level[var0] + 1];
+   int var1 = bddlevel2var[bddvar2level[var0]+1];
+   
+   while (toBeProcessed)
+   {
+      BddNode *node = &bddnodes[toBeProcessed];
+      int next = node->next;
+      int f0 = LOWp(node);
+      int f1 = HIGHp(node);
+      int f00, f01, f10, f11;
+      
+         /* Find the cofactors for the new nodes */
+      if (VAR(f0) == var1)
+      {
+	 f00 = LOW(f0);
+	 f01 = HIGH(f0);
+      }
+      else
+	 f00 = f01 = f0;
+      
+      if (VAR(f1) == var1)
+      {
+	 f10 = LOW(f1);
+	 f11 = HIGH(f1);
+      }
+      else
+	 f10 = f11 = f1;
 
-    while (toBeProcessed)
-    {
-        BddNode* node = &bddnodes[toBeProcessed];
-        int next      = node->next;
-        int f0        = LOWp(node);
-        int f1        = HIGHp(node);
-        int f00, f01, f10, f11;
+         /* Note: makenode does refcou. */
+      f0 = reorder_makenode(var0, f00, f10);
+      f1 = reorder_makenode(var0, f01, f11);
+      node = &bddnodes[toBeProcessed];  /* Might change in makenode */
 
-        /* Find the cofactors for the new nodes */
-        if (VAR(f0) == var1)
-        {
-            f00 = LOW(f0);
-            f01 = HIGH(f0);
-        }
-        else
-            f00 = f01 = f0;
+         /* We know that the refcou of the grandchilds of this node
+	  * is greater than one (these are f00...f11), so there is
+	  * no need to do a recursive refcou decrease. It is also
+	  * possible for the LOWp(node)/high nodes to come alive again,
+	  * so deref. of the childs is delayed until the local GBC. */
 
-        if (VAR(f1) == var1)
-        {
-            f10 = LOW(f1);
-            f11 = HIGH(f1);
-        }
-        else
-            f10 = f11 = f1;
-
-        /* Note: makenode does refcou. */
-        f0   = reorder_makenode(var0, f00, f10);
-        f1   = reorder_makenode(var0, f01, f11);
-        node = &bddnodes[toBeProcessed]; /* Might change in makenode */
-
-        /* We know that the refcou of the grandchilds of this node
-      * is greater than one (these are f00...f11), so there is
-      * no need to do a recursive refcou decrease. It is also
-      * possible for the LOWp(node)/high nodes to come alive again,
-      * so deref. of the childs is delayed until the local GBC. */
-
-        DECREF(LOWp(node));
-        DECREF(HIGHp(node));
-
-        /* Update in-place */
-        VARp(node)  = var1;
-        LOWp(node)  = f0;
-        HIGHp(node) = f1;
-
-        levels[var1].nodenum++;
-
-        /* Do not rehash yet since we are going to resize the hash table */
-
-        toBeProcessed = next;
-    }
+      DECREF(LOWp(node));
+      DECREF(HIGHp(node));
+      
+         /* Update in-place */
+      VARp(node) = var1;
+      LOWp(node) = f0;
+      HIGHp(node) = f1;
+	    
+      levels[var1].nodenum++;
+      
+         /* Do not rehash yet since we are going to resize the hash table */
+      
+      toBeProcessed = next;
+   }
 }
+
 
 static void reorder_localGbcResize(int toBeProcessed, int var0)
 {
-    int var1  = bddlevel2var[bddvar2level[var0] + 1];
-    int vl1   = levels[var1].start;
-    int size1 = levels[var1].size;
-    int n;
+   int var1 = bddlevel2var[bddvar2level[var0]+1];
+   int vl1 = levels[var1].start;
+   int size1 = levels[var1].size;
+   int n;
 
-    for (n = 0; n < size1; n++)
-    {
-        int hash            = n + vl1;
-        int r               = bddnodes[hash].hash;
-        bddnodes[hash].hash = 0;
+   for (n=0 ; n<size1 ; n++)
+   {
+      int hash = n+vl1;
+      int r = bddnodes[hash].hash;
+      bddnodes[hash].hash = 0;
 
-        while (r)
-        {
-            BddNode* node = &bddnodes[r];
-            int next      = node->next;
+      while (r)
+      {
+	 BddNode *node = &bddnodes[r];
+	 int next = node->next;
 
-            if (node->refcou > 0)
-            {
-                node->next    = toBeProcessed;
-                toBeProcessed = r;
-            }
-            else
-            {
-                DECREF(LOWp(node));
-                DECREF(HIGHp(node));
+	 if (node->refcou > 0)
+	 {
+	    node->next = toBeProcessed;
+	    toBeProcessed = r;
+	 }
+	 else
+	 {
+	    DECREF(LOWp(node));
+	    DECREF(HIGHp(node));
+	    
+	    LOWp(node) = -1;
+	    node->next = bddfreepos; 
+	    bddfreepos = r;
+	    levels[var1].nodenum--;
+	    bddfreenum++;
+	 }
 
-                LOWp(node) = -1;
-                node->next = bddfreepos;
-                bddfreepos = r;
-                levels[var1].nodenum--;
-                bddfreenum++;
-            }
+	 r = next;
+      }
+   }
 
-            r = next;
-        }
-    }
+      /* Resize */
+   if (levels[var1].nodenum < levels[var1].size)
+      levels[var1].size = MIN(levels[var1].maxsize, levels[var1].size/2);
+   else
+      levels[var1].size = MIN(levels[var1].maxsize, levels[var1].size*2);
 
-    /* Resize */
-    if (levels[var1].nodenum < levels[var1].size)
-        levels[var1].size = MIN(levels[var1].maxsize, levels[var1].size / 2);
-    else
-        levels[var1].size = MIN(levels[var1].maxsize, levels[var1].size * 2);
+   if (levels[var1].size >= 4)
+      levels[var1].size = bdd_prime_lte(levels[var1].size);
 
-    if (levels[var1].size >= 4)
-        levels[var1].size = bdd_prime_lte(levels[var1].size);
+      /* Rehash the remaining live nodes */
+   while (toBeProcessed)
+   {
+      BddNode *node = &bddnodes[toBeProcessed];
+      int next = node->next;
+      int hash = NODEHASH(VARp(node), LOWp(node), HIGHp(node));
+	 
+      node->next = bddnodes[hash].hash;
+      bddnodes[hash].hash = toBeProcessed;
 
-    /* Rehash the remaining live nodes */
-    while (toBeProcessed)
-    {
-        BddNode* node = &bddnodes[toBeProcessed];
-        int next      = node->next;
-        int hash      = NODEHASH(VARp(node), LOWp(node), HIGHp(node));
-
-        node->next          = bddnodes[hash].hash;
-        bddnodes[hash].hash = toBeProcessed;
-
-        toBeProcessed = next;
-    }
+      toBeProcessed = next;
+   }   
 }
 
 #endif /* USERESIZE */
 
+
 static int reorder_varup(int var)
 {
-    if (var < 0 || var >= bddvarnum)
-        return bdd_error(BDD_VAR);
-    if (bddvar2level[var] == 0)
-        return 0;
-    return reorder_vardown(bddlevel2var[bddvar2level[var] - 1]);
+   if (var < 0  ||  var >= bddvarnum)
+      return bdd_error(BDD_VAR);
+   if (bddvar2level[var] == 0)
+      return 0;
+   return reorder_vardown( bddlevel2var[bddvar2level[var]-1]);
 }
+
 
 #if 0
 static void sanitycheck(void)
@@ -1393,15 +1420,15 @@ static void sanitycheck(void)
       
       for (n=0 ; n<levels[v].size ; n++)
       {
-     r = bddnodes[n+levels[v].start].hash;
-
-     while (r)
-     {
-        assert(VAR(r) == v);
-        r = bddnodes[r].next;
-        cou++;
-        vcou++;
-     }
+	 r = bddnodes[n+levels[v].start].hash;
+	 
+	 while (r)
+	 {
+	    assert(VAR(r) == v);
+	    r = bddnodes[r].next;
+	    cou++;
+	    vcou++;
+	 }
       }
 
       assert(vcou == levels[v].nodenum);
@@ -1411,9 +1438,9 @@ static void sanitycheck(void)
    {
       if (bddnodes[n].refcou > 0)
       {
-     assert(LEVEL(n) < LEVEL(LOW(n)));
-     assert(LEVEL(n) < LEVEL(HIGH(n)));
-     cou--;
+	 assert(LEVEL(n) < LEVEL(LOW(n)));
+	 assert(LEVEL(n) < LEVEL(HIGH(n)));
+	 cou--;
       }
    }
 
@@ -1423,51 +1450,53 @@ static void sanitycheck(void)
 
 static int reorder_vardown(int var)
 {
-    int n, level;
+   int n, level;
 
-    if (var < 0 || var >= bddvarnum)
-        return bdd_error(BDD_VAR);
-    if ((level = bddvar2level[var]) >= bddvarnum - 1)
-        return 0;
+   if (var < 0  ||  var >= bddvarnum)
+      return bdd_error(BDD_VAR);
+   if ((level=bddvar2level[var]) >= bddvarnum-1)
+      return 0;
 
-    resizedInMakenode = 0;
-
-    if (imatrixDepends(iactmtx, var, bddlevel2var[level + 1]))
-    {
-        int toBeProcessed = reorder_downSimple(var);
+   resizedInMakenode = 0;
+   
+   if (imatrixDepends(iactmtx, var, bddlevel2var[level+1]))
+   {
+      int toBeProcessed = reorder_downSimple(var);
 #ifdef USERESIZE
-        levelData* l = &levels[var];
-
-        if (l->nodenum < (l->size) / 3 || l->nodenum >= (l->size * 3) / 2 && l->size < l->maxsize)
-        {
-            reorder_swapResize(toBeProcessed, var);
-            reorder_localGbcResize(toBeProcessed, var);
-        }
-        else
+      levelData *l = &levels[var];
+      
+      if (l->nodenum < (l->size)/3  ||
+	  l->nodenum >= (l->size*3)/2  &&  l->size < l->maxsize)
+      {
+	 reorder_swapResize(toBeProcessed, var);
+	 reorder_localGbcResize(toBeProcessed, var);
+      }
+      else
 #endif
-        {
-            reorder_swap(toBeProcessed, var);
-            reorder_localGbc(var);
-        }
-    }
+      {
+	 reorder_swap(toBeProcessed, var);
+	 reorder_localGbc(var);
+      }
+   }
+   
+      /* Swap the var<->level tables */
+   n = bddlevel2var[level];
+   bddlevel2var[level] = bddlevel2var[level+1];
+   bddlevel2var[level+1] = n;
+   
+   n = bddvar2level[var];
+   bddvar2level[var] = bddvar2level[ bddlevel2var[level] ];
+   bddvar2level[ bddlevel2var[level] ] = n;
+   
+      /* Update all rename pairs */
+   bdd_pairs_vardown(level);
 
-    /* Swap the var<->level tables */
-    n                       = bddlevel2var[level];
-    bddlevel2var[level]     = bddlevel2var[level + 1];
-    bddlevel2var[level + 1] = n;
+   if (resizedInMakenode)
+      reorder_rehashAll();
 
-    n                                 = bddvar2level[var];
-    bddvar2level[var]                 = bddvar2level[bddlevel2var[level]];
-    bddvar2level[bddlevel2var[level]] = n;
-
-    /* Update all rename pairs */
-    bdd_pairs_vardown(level);
-
-    if (resizedInMakenode)
-        reorder_rehashAll();
-
-    return 0;
+   return 0;
 }
+
 
 /*************************************************************************
   User reordering interface
@@ -1492,66 +1521,69 @@ ALSO    {* bdd\_reorder, bdd\_addvarblock *}
 */
 int bdd_swapvar(int v1, int v2)
 {
-    int l1, l2;
+   int l1, l2;
 
-    /* Do not swap when variable-blocks are used */
-    if (vartree != NULL)
-        return bdd_error(BDD_VARBLK);
+      /* Do not swap when variable-blocks are used */
+   if (vartree != NULL)
+      return bdd_error(BDD_VARBLK);
+	 
+      /* Don't bother swapping x with x */
+   if (v1 == v2)
+      return 0;
 
-    /* Don't bother swapping x with x */
-    if (v1 == v2)
-        return 0;
+      /* Make sure the variable exists */
+   if (v1 < 0  ||  v1 >= bddvarnum  ||  v2 < 0  ||  v2 >= bddvarnum)
+      return bdd_error(BDD_VAR);
 
-    /* Make sure the variable exists */
-    if (v1 < 0 || v1 >= bddvarnum || v2 < 0 || v2 >= bddvarnum)
-        return bdd_error(BDD_VAR);
+   l1 = bddvar2level[v1];
+   l2 = bddvar2level[v2];
 
-    l1 = bddvar2level[v1];
-    l2 = bddvar2level[v2];
+      /* Make sure v1 is before v2 */
+   if (l1 > l2)
+   {
+      int tmp = v1;
+      v1 = v2;
+      v2 = tmp;
+      l1 = bddvar2level[v1];
+      l2 = bddvar2level[v2];
+   }
 
-    /* Make sure v1 is before v2 */
-    if (l1 > l2)
-    {
-        int tmp = v1;
-        v1      = v2;
-        v2      = tmp;
-        l1      = bddvar2level[v1];
-        l2      = bddvar2level[v2];
-    }
+   reorder_init();
+   
+      /* Move v1 to v2's position */
+   while (bddvar2level[v1] < l2)
+      reorder_vardown(v1);
 
-    reorder_init();
+      /* Move v2 to v1's position */
+   while (bddvar2level[v2] > l1)
+      reorder_varup(v2);
 
-    /* Move v1 to v2's position */
-    while (bddvar2level[v1] < l2)
-        reorder_vardown(v1);
-
-    /* Move v2 to v1's position */
-    while (bddvar2level[v2] > l1)
-        reorder_varup(v2);
-
-    reorder_done();
-
-    return 0;
+   reorder_done();
+   
+   return 0;
 }
+
 
 void bdd_default_reohandler(int prestate)
 {
-    static long c1;
+   static long c1;
 
-    if (verbose > 0)
-    {
-        if (prestate)
-        {
-            printf("Start reordering\n");
-            c1 = clock();
-        }
-        else
-        {
-            long c2 = clock();
-            printf("End reordering. Went from %d to %d nodes (%.1f sec)\n", usednum_before, usednum_after, (float)(c2 - c1) / CLOCKS_PER_SEC);
-        }
-    }
+   if (verbose > 0)
+   {
+      if (prestate)
+      {
+	 printf("Start reordering\n");
+	 c1 = clock();
+      }
+      else
+      {
+	 long c2 = clock();
+	 printf("End reordering. Went from %d to %d nodes (%.1f sec)\n",
+		usednum_before, usednum_after, (float)(c2-c1)/CLOCKS_PER_SEC);
+      }
+   }
 }
+
 
 /*
 NAME    {* bdd\_disable\_reorder *}
@@ -1565,8 +1597,9 @@ ALSO    {* bdd\_enable\_reorder *}
 */
 void bdd_disable_reorder(void)
 {
-    reorderdisabled = 1;
+   reorderdisabled = 1;
 }
+
 
 /*
 NAME    {* bdd\_enable\_reorder *}
@@ -1578,149 +1611,157 @@ ALSO    {* bdd\_disable\_reorder *}
 */
 void bdd_enable_reorder(void)
 {
-    reorderdisabled = 0;
+   reorderdisabled = 0;
 }
+
 
 int bdd_reorder_ready(void)
 {
-    if (bddreordermethod == BDD_REORDER_NONE || vartree == NULL || bddreordertimes == 0 || reorderdisabled)
-        return 0;
-    return 1;
+   if (bddreordermethod == BDD_REORDER_NONE  ||  vartree == NULL  ||
+       bddreordertimes == 0  ||  reorderdisabled)
+      return 0;
+   return 1;
 }
 
+   
 void bdd_reorder_auto(void)
 {
-    if (!bdd_reorder_ready)
-        return;
+   if (!bdd_reorder_ready)
+      return;
+   
+   if (reorder_handler != NULL)
+      reorder_handler(1);
 
-    if (reorder_handler != NULL)
-        reorder_handler(1);
-
-    bdd_reorder(bddreordermethod);
-    bddreordertimes--;
-
-    if (reorder_handler != NULL)
-        reorder_handler(0);
+   bdd_reorder(bddreordermethod);
+   bddreordertimes--;
+   
+   if (reorder_handler != NULL)
+      reorder_handler(0);
 }
+
 
 static int reorder_init(void)
 {
-    int n;
+   int n;
 
-    if ((levels = NEW(levelData, bddvarnum)) == NULL)
-        return -1;
+   if ((levels=NEW(levelData,bddvarnum)) == NULL)
+      return -1;
+   
+   for (n=0 ; n<bddvarnum ; n++)
+   {
+      levels[n].start = -1;
+      levels[n].size = 0;
+      levels[n].nodenum = 0;
+   }
+   
+      /* First mark and recursive refcou. all roots and childs. Also do some
+       * setup here for both setLevellookup and reorder_gbc */
+   if (mark_roots() < 0)
+      return -1;
 
-    for (n = 0; n < bddvarnum; n++)
-    {
-        levels[n].start   = -1;
-        levels[n].size    = 0;
-        levels[n].nodenum = 0;
-    }
+      /* Initialize the hash tables */
+   reorder_setLevellookup();
 
-    /* First mark and recursive refcou. all roots and childs. Also do some
-     * setup here for both setLevellookup and reorder_gbc */
-    if (mark_roots() < 0)
-        return -1;
+      /* Garbage collect and rehash to new scheme */
+   reorder_gbc();
 
-    /* Initialize the hash tables */
-    reorder_setLevellookup();
-
-    /* Garbage collect and rehash to new scheme */
-    reorder_gbc();
-
-    return 0;
+   return 0;
 }
+
 
 static void reorder_done(void)
 {
-    int n;
+   int n;
+   
+   for (n=0 ; n<extrootsize ; n++)
+      SETMARK(extroots[n]);
+   for (n=2 ; n<bddnodesize ; n++)
+   {
+      if (MARKED(n))
+	 UNMARK(n);
+      else
+	 bddnodes[n].refcou = 0;
 
-    for (n = 0; n < extrootsize; n++)
-        SETMARK(extroots[n]);
-    for (n = 2; n < bddnodesize; n++)
-    {
-        if (MARKED(n))
-            UNMARK(n);
-        else
-            bddnodes[n].refcou = 0;
-
-        /* This is where we go from .var to .level again!
-     * - Do NOT use the LEVEL macro here. */
-        bddnodes[n].level = bddvar2level[bddnodes[n].level];
-    }
-
-#if 0
-    for (n=0 ; n<bddvarnum ; n++)
-       printf("%3d\n", bddlevel2var[n]);
-    printf("\n");
-#endif
+         /* This is where we go from .var to .level again!
+	  * - Do NOT use the LEVEL macro here. */
+      bddnodes[n].level = bddvar2level[bddnodes[n].level];
+   }
 
 #if 0
-    for (n=0 ; n<bddvarnum ; n++)
-       printf("%3d: %4d nodes , %4d entries\n", n, levels[n].nodenum,
-          levels[n].size);
+   for (n=0 ; n<bddvarnum ; n++)
+      printf("%3d\n", bddlevel2var[n]);
+   printf("\n");
 #endif
-    free(extroots);
-    free(levels);
-    imatrixDelete(iactmtx);
-    bdd_gbc();
+   
+#if 0
+   for (n=0 ; n<bddvarnum ; n++)
+      printf("%3d: %4d nodes , %4d entries\n", n, levels[n].nodenum,
+	     levels[n].size);
+#endif
+   free(extroots);
+   free(levels);
+   imatrixDelete(iactmtx);
+   bdd_gbc();
 }
 
-static int varseqCmp(const void* aa, const void* bb)
+
+static int varseqCmp(const void *aa, const void *bb)
 {
-    int a = bddvar2level[*((const int*)aa)];
-    int b = bddvar2level[*((const int*)bb)];
+   int a = bddvar2level[*((const int*)aa)];
+   int b = bddvar2level[*((const int*)bb)];
 
-    if (a < b)
-        return -1;
-    if (a > b)
-        return 1;
-    return 0;
+   if (a < b)
+      return -1;
+   if (a > b)
+      return 1;
+   return 0;
 }
 
-static BddTree* reorder_block(BddTree* t, int method)
+
+static BddTree *reorder_block(BddTree *t, int method)
 {
-    BddTree* this;
+   BddTree *this;
+   
+   if (t == NULL)
+      return NULL;
 
-    if (t == NULL)
-        return NULL;
+   if (t->fixed == BDD_REORDER_FREE  &&  t->nextlevel!=NULL)
+   {
+      switch(method)
+      {
+      case BDD_REORDER_WIN2:
+	 t->nextlevel = reorder_win2(t->nextlevel);
+	 break;
+      case BDD_REORDER_WIN2ITE:
+	 t->nextlevel = reorder_win2ite(t->nextlevel);
+	 break;
+      case BDD_REORDER_SIFT:
+	 t->nextlevel = reorder_sift(t->nextlevel);
+	 break;
+      case BDD_REORDER_SIFTITE:
+	 t->nextlevel = reorder_siftite(t->nextlevel);
+	 break;
+      case BDD_REORDER_WIN3:
+	 t->nextlevel = reorder_win3(t->nextlevel);
+	 break;
+      case BDD_REORDER_WIN3ITE:
+	 t->nextlevel = reorder_win3ite(t->nextlevel);
+	 break;
+      case BDD_REORDER_RANDOM:
+	 t->nextlevel = reorder_random(t->nextlevel);
+	 break;
+      }
+   }
 
-    if (t->fixed == BDD_REORDER_FREE && t->nextlevel != NULL)
-    {
-        switch (method)
-        {
-            case BDD_REORDER_WIN2:
-                t->nextlevel = reorder_win2(t->nextlevel);
-                break;
-            case BDD_REORDER_WIN2ITE:
-                t->nextlevel = reorder_win2ite(t->nextlevel);
-                break;
-            case BDD_REORDER_SIFT:
-                t->nextlevel = reorder_sift(t->nextlevel);
-                break;
-            case BDD_REORDER_SIFTITE:
-                t->nextlevel = reorder_siftite(t->nextlevel);
-                break;
-            case BDD_REORDER_WIN3:
-                t->nextlevel = reorder_win3(t->nextlevel);
-                break;
-            case BDD_REORDER_WIN3ITE:
-                t->nextlevel = reorder_win3ite(t->nextlevel);
-                break;
-            case BDD_REORDER_RANDOM:
-                t->nextlevel = reorder_random(t->nextlevel);
-                break;
-        }
-    }
+   for (this=t->nextlevel ; this ; this=this->next)
+      reorder_block(this, method);
 
-    for (this = t->nextlevel; this; this = this->next)
-        reorder_block(this, method);
-
-    if (t->seq != NULL)
-        qsort(t->seq, t->last - t->first + 1, sizeof(int), varseqCmp);
-
-    return t;
+   if (t->seq != NULL)
+      qsort(t->seq, t->last-t->first+1, sizeof(int), varseqCmp);
+	 
+   return t;
 }
+
 
 /*
 NAME    {* bdd\_reorder *}
@@ -1759,36 +1800,37 @@ ALSO    {* bdd\_autoreorder, bdd\_reorder\_verbose, bdd\_addvarblock, bdd\_clrva
 */
 void bdd_reorder(int method)
 {
-    BddTree* top;
-    int savemethod = bddreordermethod;
-    int savetimes  = bddreordertimes;
+   BddTree *top;
+   int savemethod = bddreordermethod;
+   int savetimes = bddreordertimes;
+   
+   bddreordermethod = method;
+   bddreordertimes = 1;
 
-    bddreordermethod = method;
-    bddreordertimes  = 1;
+   if ((top=bddtree_new(-1)) == NULL)
+      return;
+   if (reorder_init() < 0)
+      return;
 
-    if ((top = bddtree_new(-1)) == NULL)
-        return;
-    if (reorder_init() < 0)
-        return;
+   usednum_before = bddnodesize - bddfreenum;
+   
+   top->first = 0;
+   top->last = bdd_varnum()-1;
+   top->fixed = 0;
+   top->next = NULL;
+   top->nextlevel = vartree;
 
-    usednum_before = bddnodesize - bddfreenum;
-
-    top->first     = 0;
-    top->last      = bdd_varnum() - 1;
-    top->fixed     = 0;
-    top->next      = NULL;
-    top->nextlevel = vartree;
-
-    reorder_block(top, method);
-    vartree = top->nextlevel;
-    free(top);
-
-    usednum_after = bddnodesize - bddfreenum;
-
-    reorder_done();
-    bddreordermethod = savemethod;
-    bddreordertimes  = savetimes;
+   reorder_block(top, method);
+   vartree = top->nextlevel;
+   free(top);
+   
+   usednum_after = bddnodesize - bddfreenum;
+   
+   reorder_done();
+   bddreordermethod = savemethod;
+   bddreordertimes = savetimes;
 }
+
 
 /*
 NAME    {* bdd\_reorder\_gain *}
@@ -1804,11 +1846,12 @@ DESCR   {* Returns the gain in percent of the previous number of used
 */
 int bdd_reorder_gain(void)
 {
-    if (usednum_before == 0)
-        return 0;
-
-    return (100 * (usednum_before - usednum_after)) / usednum_before;
+   if (usednum_before == 0)
+      return 0;
+   
+   return (100*(usednum_before - usednum_after)) / usednum_before;
 }
+
 
 /*
 NAME    {* bdd\_reorder\_hook *}
@@ -1839,10 +1882,11 @@ ALSO    {* bdd\_reorder, bdd\_autoreorder, bdd\_resize\_hook *}
 */
 bddinthandler bdd_reorder_hook(bddinthandler handler)
 {
-    bddinthandler tmp = reorder_handler;
-    reorder_handler   = handler;
-    return tmp;
+   bddinthandler tmp = reorder_handler;
+   reorder_handler = handler;
+   return tmp;
 }
+
 
 /*
 NAME    {* bdd\_blockfile\_hook *}
@@ -1871,10 +1915,11 @@ ALSO    {* bdd\_printorder *}
 */
 bddfilehandler bdd_blockfile_hook(bddfilehandler handler)
 {
-    bddfilehandler tmp  = reorder_filehandler;
-    reorder_filehandler = handler;
-    return tmp;
+   bddfilehandler tmp = reorder_filehandler;
+   reorder_filehandler = handler;
+   return tmp;
 }
+
 
 /*
 NAME    {* bdd\_autoreorder *}
@@ -1901,19 +1946,21 @@ ALSO    {* bdd\_reorder *}
 */
 int bdd_autoreorder(int method)
 {
-    int tmp          = bddreordermethod;
-    bddreordermethod = method;
-    bddreordertimes  = -1;
-    return tmp;
+   int tmp = bddreordermethod;
+   bddreordermethod = method;
+   bddreordertimes = -1;
+   return tmp;
 }
+
 
 int bdd_autoreorder_times(int method, int num)
 {
-    int tmp          = bddreordermethod;
-    bddreordermethod = method;
-    bddreordertimes  = num;
-    return tmp;
+   int tmp = bddreordermethod;
+   bddreordermethod = method;
+   bddreordertimes = num;
+   return tmp;
 }
+
 
 /*
 NAME    {* bdd\_var2level *}
@@ -1926,11 +1973,12 @@ ALSO    {* bdd\_reorder, bdd\_level2var *}
 */
 int bdd_var2level(int var)
 {
-    if (var < 0 || var >= bddvarnum)
-        return bdd_error(BDD_VAR);
+   if (var < 0  ||  var >= bddvarnum)
+      return bdd_error(BDD_VAR);
 
-    return bddvar2level[var];
+   return bddvar2level[var];
 }
+
 
 /*
 NAME    {* bdd\_level2var *}
@@ -1943,11 +1991,12 @@ ALSO    {* bdd\_reorder, bdd\_var2level *}
 */
 int bdd_level2var(int level)
 {
-    if (level < 0 || level >= bddvarnum)
-        return bdd_error(BDD_VAR);
+   if (level < 0  ||  level >= bddvarnum)
+      return bdd_error(BDD_VAR);
 
-    return bddlevel2var[level];
+   return bddlevel2var[level];
 }
+
 
 /*
 NAME    {* bdd\_getreorder\_times *}
@@ -1960,8 +2009,9 @@ ALSO    {* bdd\_reorder\_times, bdd\_getreorder\_method *}
 */
 int bdd_getreorder_times(void)
 {
-    return bddreordertimes;
+   return bddreordertimes;
 }
+
 
 /*
 NAME    {* bdd\_getreorder\_method *}
@@ -1974,8 +2024,9 @@ ALSO    {* bdd\_reorder, bdd\_getreorder\_times *}
 */
 int bdd_getreorder_method(void)
 {
-    return bddreordermethod;
+   return bddreordermethod;
 }
+
 
 /*
 NAME    {* bdd\_reorder\_verbose *}
@@ -1992,10 +2043,11 @@ ALSO    {* bdd\_reorder *}
 */
 int bdd_reorder_verbose(int v)
 {
-    int tmp = verbose;
-    verbose = v;
-    return tmp;
+   int tmp = verbose;
+   verbose = v;
+   return tmp;
 }
+
 
 /*
 NAME    {* bdd\_reorder\_probe *}
@@ -2024,12 +2076,13 @@ ALSO    {* bdd\_reorder *}
 */
 bddsizehandler bdd_reorder_probe(bddsizehandler handler)
 {
-    bddsizehandler old = reorder_nodenum;
-    if (handler == NULL)
-        return reorder_nodenum;
-    reorder_nodenum = handler;
-    return old;
+   bddsizehandler old = reorder_nodenum;
+   if (handler == NULL)
+      return reorder_nodenum;
+   reorder_nodenum = handler;
+   return old;
 }
+
 
 /*
 NAME    {* bdd\_clrvarblocks *}
@@ -2042,10 +2095,11 @@ ALSO    {* bdd\_addvarblock *}
 */
 void bdd_clrvarblocks(void)
 {
-    bddtree_del(vartree);
-    vartree = NULL;
-    blockid = 0;
+   bddtree_del(vartree);
+   vartree = NULL;
+   blockid = 0;
 }
+
 
 /*
 NAME    {* bdd\_addvarblock *}
@@ -2084,45 +2138,47 @@ RETURN  {* A non-negative identifier on success, otherwise a negative error code
 ALSO {* bdd\_varblockall, fdd\_intaddvarblock, bdd\_clrvarblocks *} */
 int bdd_addvarblock(BDD b, int fixed)
 {
-    BddTree* t;
-    int n, *v, size;
-    int first, last;
+   BddTree *t;
+   int n, *v, size;
+   int first, last;
+   
+   if ((n=bdd_scanset(b, &v, &size)) < 0)
+      return n;
+   if (size < 1)
+      return bdd_error(BDD_VARBLK);
 
-    if ((n = bdd_scanset(b, &v, &size)) < 0)
-        return n;
-    if (size < 1)
-        return bdd_error(BDD_VARBLK);
+   first = last = v[0];
+   
+   for (n=0 ; n<size ; n++)
+   {
+      if (v[n] < first)
+	 first = v[n];
+      if (v[n] > last)
+	 last = v[n];
+   }
 
-    first = last = v[0];
-
-    for (n = 0; n < size; n++)
-    {
-        if (v[n] < first)
-            first = v[n];
-        if (v[n] > last)
-            last = v[n];
-    }
-
-    if ((t = bddtree_addrange(vartree, first, last, fixed, blockid)) == NULL)
-        return bdd_error(BDD_VARBLK);
-
-    vartree = t;
-    return blockid++;
+   if ((t=bddtree_addrange(vartree, first,last, fixed,blockid)) == NULL)
+      return bdd_error(BDD_VARBLK);
+   
+   vartree = t;
+   return blockid++;
 }
+
 
 int bdd_intaddvarblock(int first, int last, int fixed)
 {
-    BddTree* t;
+   BddTree *t;
 
-    if (first < 0 || first >= bddvarnum || last < 0 || last >= bddvarnum)
-        return bdd_error(BDD_VAR);
+   if (first < 0  ||  first >= bddvarnum  ||  last < 0  ||  last >= bddvarnum)
+      return bdd_error(BDD_VAR);
+   
+   if ((t=bddtree_addrange(vartree, first,last, fixed,blockid)) == NULL)
+      return bdd_error(BDD_VARBLK);
 
-    if ((t = bddtree_addrange(vartree, first, last, fixed, blockid)) == NULL)
-        return bdd_error(BDD_VARBLK);
-
-    vartree = t;
-    return blockid++;
+   vartree = t;
+   return blockid++;
 }
+
 
 /*
 NAME    {* bdd\_varblockall *}
@@ -2138,11 +2194,12 @@ ALSO    {* bdd\_addvarblock, bdd\_intaddvarblock *}
 */
 void bdd_varblockall(void)
 {
-    int n;
+   int n;
 
-    for (n = 0; n < bddvarnum; n++)
-        bdd_intaddvarblock(n, n, 1);
+   for (n=0 ; n<bddvarnum ; n++)
+      bdd_intaddvarblock(n,n,1);
 }
+
 
 /*
 NAME    {* bdd\_printorder *}
@@ -2172,8 +2229,9 @@ ALSO    {* bdd\_reorder, bdd\_addvarblock *}
 */
 void bdd_printorder(void)
 {
-    bdd_fprintorder(stdout);
+   bdd_fprintorder(stdout);
 }
+
 
 /*
 NAME    {* bdd\_setvarorder *}
@@ -2189,71 +2247,76 @@ DESCR   {* This function sets the current variable order to be the one
 	   $[1,0,2]$ then the new variable order is $v_1 < v_0 < v_2$. *}
 ALSO    {* bdd\_reorder, bdd\_printorder *}
 */
-void bdd_setvarorder(int* neworder)
+void bdd_setvarorder(int *neworder)
 {
-    int level;
+   int level;
 
-    /* Do not set order when variable-blocks are used */
-    if (vartree != NULL)
-    {
-        bdd_error(BDD_VARBLK);
-        return;
-    }
+      /* Do not set order when variable-blocks are used */
+   if (vartree != NULL)
+   {
+      bdd_error(BDD_VARBLK);
+      return;
+   }
+   
+   reorder_init();
+   
+   for (level=0 ; level<bddvarnum ; level++)
+   {
+      int lowvar = neworder[level];
 
-    reorder_init();
-
-    for (level = 0; level < bddvarnum; level++)
-    {
-        int lowvar = neworder[level];
-
-        while (bddvar2level[lowvar] > level)
-            reorder_varup(lowvar);
-    }
-
-    reorder_done();
+      while (bddvar2level[lowvar] > level)
+	 reorder_varup(lowvar);
+   }
+   
+   reorder_done();
 }
 
-static void print_order_rec(FILE* o, BddTree* t, int level)
+
+static void print_order_rec(FILE *o, BddTree *t, int level)
 {
-    if (t == NULL)
-        return;
+   if (t == NULL)
+      return;
 
-    if (t->nextlevel)
-    {
-        fprintf(o, "%*s", level * 3, "");
-        if (reorder_filehandler)
-            reorder_filehandler(o, t->id);
-        else
-            fprintf(o, "%3d", t->id);
-        fprintf(o, "{\n");
-
-        print_order_rec(o, t->nextlevel, level + 1);
-
-        fprintf(o, "%*s", level * 3, "");
-        if (reorder_filehandler)
-            reorder_filehandler(o, t->id);
-        else
-            fprintf(o, "%3d", t->id);
-        fprintf(o, "}\n");
-
-        print_order_rec(o, t->next, level);
-    }
-    else
-    {
-        fprintf(o, "%*s", level * 3, "");
-        if (reorder_filehandler)
-            reorder_filehandler(o, t->id);
-        else
-            fprintf(o, "%3d", t->id);
-        fprintf(o, "\n");
-
-        print_order_rec(o, t->next, level);
-    }
+   if (t->nextlevel)
+   {
+      fprintf(o, "%*s", level*3, "");
+      if (reorder_filehandler)
+	 reorder_filehandler(o,t->id);
+      else
+	 fprintf(o, "%3d", t->id);
+      fprintf(o, "{\n");
+      
+      print_order_rec(o, t->nextlevel, level+1);
+      
+      fprintf(o, "%*s", level*3, "");
+      if (reorder_filehandler)
+	 reorder_filehandler(o,t->id);
+      else
+	 fprintf(o, "%3d", t->id);
+      fprintf(o, "}\n");
+      
+      print_order_rec(o, t->next, level);
+   }
+   else
+   {
+      fprintf(o, "%*s", level*3, "");
+      if (reorder_filehandler)
+	 reorder_filehandler(o,t->id);
+      else
+	 fprintf(o, "%3d", t->id);
+      fprintf(o, "\n");
+      
+      print_order_rec(o, t->next, level);
+   }
 }
 
-void bdd_fprintorder(FILE* ofile)
+
+
+void bdd_fprintorder(FILE *ofile)
 {
-    print_order_rec(ofile, vartree, 0);
+   print_order_rec(ofile, vartree, 0);
 }
+
+
 
 /* EOF */

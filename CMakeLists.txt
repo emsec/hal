@@ -37,8 +37,26 @@ if(CCACHE_FOUND)
     message(STATUS "ccache found!")
 endif(CCACHE_FOUND)
 
+#Add path to CMake script files
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/" "${CMAKE_SOURCE_DIR}/deps/sanitizers-cmake/cmake/")
+include(CMakeToolsHelpers OPTIONAL)
+set(DEB_CHANGELOG_REQUIRED ON)
+set(DEB_CHANGELOG "${CMAKE_CURRENT_SOURCE_DIR}/Changelog")
+unset(CHANGELOG_LAST_VERSION)
+unset(CHANGELOG_LAST_MESSAGE)
+include(DebChangelog)
+
 #Set the project name
 project(hal)
+
+set(PROJECT_VENDOR "hal")
+set(PROJECT_WEBSITE "https://github.com/emsec/hal")
+set(PROJECT_MAINTAINER "Sebastian Wallat <sebastian.wallat@rub.de>")
+set(PROJECT_DESCRIPTION_SUMMARY "Hardware Reverse engineering framework")
+set(PROJECT_DESCRIPTION "hal - Hardware Analyzer")
+set(CHANGELOG_MESSAGE ${CHANGELOG_LAST_MESSAGE})
+set(PROJECT_PPA "ppa:sebastian-wallat/hal")
+set(PROJECT_PPA_USER "sebastian-wallat")
 
 #Use C11 and C++17 as minimum standard
 set(CMAKE_C_STANDARD 11)
@@ -46,13 +64,16 @@ set(CMAKE_C_STANDARD_REQUIRED on)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED on)
 
-#Add path to CMake script files
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/" "${CMAKE_SOURCE_DIR}/deps/sanitizers-cmake/cmake/")
-
-message(STATUS "")
-
+option(USE_VERSION_FROM_OPTION "USE_VERSION_FROM_OPTION" FALSE)
 include(HalUtils)
-hal_get_version()
+include(DetectDistro)
+if(NOT ${USE_VERSION_FROM_OPTION})
+    hal_get_version()
+else()
+    set(HAL_VERSION_RETURN ${HAL_VERSION_MAJOR}.${HAL_VERSION_MINOR}.${HAL_VERSION_PATCH})
+endif()
+unset(HAL_VERSION_MAJOR_SELF CACHE)
+
 string(TIMESTAMP BUILD_TIMESTAMP UTC)
 message(STATUS "HAL_VERSION: ${HAL_VERSION_RETURN}")
 
@@ -144,14 +165,8 @@ elseif(NOT PkgConfig_FOUND)
     endif(APPLE AND CMAKE_HOST_APPLE)
 endif(PkgConfig_FOUND)
 
-#Included in Project
-include_directories(${include_directories} "${CMAKE_BINARY_DIR}/spdlog-src/include")
-message(STATUS "using local spdlog: ${CMAKE_BINARY_DIR}/spdlog-src/include")
+add_subdirectory(deps/buddy-2.4)
 
-include_directories(${include_directories} "${CMAKE_BINARY_DIR}/rapidjson-src/include")
-message(STATUS "using local rapidjson: ${CMAKE_BINARY_DIR}/rapidjson-src/include")
-
-include(BuildBuddy)
 include(Subdirs)
 
 find_package(Sanitizers)
@@ -181,7 +196,20 @@ endif(Boost_FOUND)
 
 find_package(Threads REQUIRED)
 
-message(STATUS "")
+# Need Version 2.2.4 Not available in ubuntu bionic
+#find_package(pybind11 CONFIG REQUIRED)
+#message(STATUS "Found pybind11 v${pybind11_VERSION}: ${pybind11_INCLUDE_DIRS}")
+# Quick fix
+add_subdirectory(deps/pybind11)
+
+find_package(RapidJSON REQUIRED)
+message(STATUS "Found rapidjson ${RAPIDJSON_INCLUDEDIR}")
+
+# Spdlog Version 0.16 error in ubuntu bionic
+#find_package(spdlog CONFIG REQUIRED)
+#message(STATUS "Found spdlog v${spdlog_VERSION}: ${spdlog_INCLUDEDIR}")
+# Quick fix
+include_directories(${include_directories} "${CMAKE_CURRENT_SOURCE_DIR}/deps/spdlog/include")
 
 #Set UNIX (macOS or Linux) compiler flags (clang or gcc). Set optimization level for debug or release.
 if(UNIX)
@@ -254,9 +282,6 @@ if(${BUILD_TESTS} AND ${BUILD_COVERAGE})
     setup_target_for_coverage(NAME ${PROJECT_NAME}_coverage EXECUTABLE ctest DEPENDENCY runTest-log runTest-program_arguments runTest-program_options)
 endif(${BUILD_TESTS} AND ${BUILD_COVERAGE})
 
-#Add source directories
-add_subdirectory("deps")
-message(STATUS "PYBIND11_INCLUDE_DIR: ${PYBIND11_INCLUDE_DIR}")
 add_subdirectory("src")
 add_subdirectory("plugins")
 if(${BUILD_TESTS})
@@ -275,68 +300,54 @@ install(DIRECTORY ${CMAKE_BINARY_DIR}/share/hal/gate_libraries DESTINATION ${SHA
 install(FILES ${CMAKE_BINARY_DIR}/hal.pc DESTINATION "${PKGCONFIG_INSTALL_DIRECTORY}")
 message(STATUS "PKGCONFIG_INSTALL_DIRECTORY ${PKGCONFIG_INSTALL_DIRECTORY}")
 
-if(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
-    message(STATUS "CPack used for Packaging")
-    include(InstallRequiredSystemLibraries)
+if(LINUX)
+    install(FILES "installer/deb/hal.conf" DESTINATION "${SHARE_INSTALL_DIRECTORY}/ld_conf/")
+endif()
 
-    set(CPACK_SET_DESTDIR false)
-    set(CPACK_PACKAGING_INSTALL_PREFIX "/usr/local/")
-    set(GENERATE_DEB FALSE)
-    include(DetectDistro)
-    set(PACKAGE_APPENDIX "")
-    if(LINUX)
-        set(PACKAGE_APPENDIX "${LINUX_DISTRO}_${LINUX_DISTRO_VERSION_NAME}_${ARCHITECTURE}")
-        if(LINUX_DISTRO STREQUAL "Ubuntu")
-            set(GENERATE_DEB TRUE)
-        endif(LINUX_DISTRO STREQUAL "Ubuntu")
-        if(LINUX_DISTRO STREQUAL "Debian")
-            set(GENERATE_DEB TRUE)
-        endif(LINUX_DISTRO STREQUAL "Debian")
-    elseif(APPLE)
-        set(PACKAGE_APPENDIX "macOS_${ARCHITECTURE}")
-    endif(LINUX)
-    set(CPACK_GENERATOR "TGZ;STGZ;ZIP")
-    if(${GENERATE_DEB})
-        set(CPACK_GENERATOR "${CPACK_GENERATOR};DEB")
-        install(FILES "resources/packaging/deb/hal.conf" DESTINATION "${SHARE_INSTALL_DIRECTORY}/ld_conf/")
-        set(CPACK_PACKAGING_INSTALL_PREFIX "/usr/")
-    endif(${GENERATE_DEB})
-    if(APPLE)
-        set(CPACK_GENERATOR "${CPACK_GENERATOR};productbuild")
-    endif(APPLE)
-    message(STATUS "CPACK_GENERATOR: ${CPACK_GENERATOR}")
+if(UPLOAD_PPA)
+    set(PACKAGE_DEB ON)
+    set(ENABLE_PPA ON)
+endif()
 
-    set(CPACK_PACKAGE_NAME "hal-reverse")
-    set(CPACK_PACKAGE_DESCRIPTION "hal - Hardware Analyzer")
-    set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Hardware Reverse engineering framework")
-    set(CPACK_PACKAGE_VENDOR "hal")
-    set(CPACK_PACKAGE_CONTACT "sebastian.wallat@rub.de")
-    set(CPACK_PACKAGE_VERSION_MAJOR "${HAL_VERSION_MAJOR}")
-    set(CPACK_PACKAGE_VERSION_MINOR "${HAL_VERSION_MINOR}")
-    set(CPACK_PACKAGE_VERSION_PATCH "${HAL_VERSION_PATCH}")
-    set(CPACK_PACKAGE_VERSION_TWEAK "${HAL_VERSION_TWEAK}")
-    set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}_${HAL_VERSION_RETURN}_${PACKAGE_APPENDIX}")
-    set(CPACK_SOURCE_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}_${HAL_VERSION_RETURN}_${PACKAGE_APPENDIX}")
+set(CPACK_GENERATORS)
+if(PACKAGE_TGZ)
+    list(APPEND CPACK_GENERATORS "TGZ")
+endif()
+if(PACKAGE_ZIP)
+    list(APPEND CPACK_GENERATORS "ZIP")
+endif()
+if(PACKAGE_DEB)
+    list(APPEND CPACK_GENERATORS "DEB")
+endif()
+if(PACKAGE_RPM)
+    list(APPEND CPACK_GENERATORS "RPM")
+endif()
+if(PACKAGE_MACOS)
+    list(APPEND CPACK_GENERATORS "productbuild")
+    set(PACKAGE_APPENDIX "macOS_${ARCHITECTURE}")
+endif()
+message(STATUS "CPACK_GENERATOR: ${CPACK_GENERATOR}")
 
-    set(CPACK_DEBIAN_PACKAGE_DEPENDS " libboost-all-dev (>= 1.62), libstdc++6 (>= 6.3), libgomp1 (>= 6.3), libc6 (>= 2.24), libqt5widgets5 (>= 5.7), libqt5concurrent5 (>= 5.7), libpython3.6 (>= 3.6), python3-pybind11 (>= 2), libbdd-dev (>= 2.4), libqt5svg5-dev (>= 5.9.5), python3-jedi (>= 0.11)")
-    set(DEBIAN_PACKAGE_BUILDS_DEPENDS " pkgconf (>= 0.9), libboost-all-dev (>= 1.62), cmake (>= 3.7), g++ (>= 6.3), qt5-default (>= 5.7), libpython3.7-dev (>= 3.7),  libqt5svg-dev (>= 5.9.5), python3-sphinx (>= 1.6), python3-sphinx-rtd-theme (>= 0.2)")
-    set(CPACK_DEBIAN_PACKAGE_CONFLICTS "")
-    set(CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA "${CMAKE_SOURCE_DIR}/resources/packaging/deb/postinst;${CMAKE_SOURCE_DIR}/resources/packaging/deb/postrm")
-    set(CPACK_DEBIAN_PACKAGE_PRIORITY "optional")
-    set(CPACK_DEBIAN_PACKAGE_SECTION "devel")
-
-    # Following after all definitions!
-    set(CPACK_COMPONENTS_ALL Libraries ApplicationData)
-    include(CPack)
-
-    # To use this:
-    # make package
-    # sudo dpkg -i hal-x.x.x.x.deb
-
-    # This will result in the file:
-    #/usr`
-
-endif(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
+if(CPACK_GENERATORS)
+    set(CPACK_GENERATOR "${CPACK_GENERATORS}")
+    set(CPACK_SOURCE_IGNORE_FILES
+        "/mxe/"
+        "/\\\\.vscode/"
+        "/\\\\.codelite/"
+        "/\\\\.idea/"
+        "/cmake-.*/"
+        "\\\\.project$"
+        "\\\\.workspace$"
+        "\\\\.iml$"
+        "\\\\.mk$"
+        "\\\\.astylerc$"
+        "\\\\.editorconfig$"
+        "/Makefile$"
+        )
+    set(PROJECT_ARCH "${CMAKE_SYSTEM_PROCESSOR}")
+    message(STATUS "PROJECT_ARCH: ${PROJECT_ARCH}")
+    add_subdirectory(installer)
+endif(CPACK_GENERATORS)
 
 #Documentation settings Add the End to solve conflict between FindSphinx and Python bindings
 
@@ -382,15 +393,15 @@ if(BUILD_DOCUMENTATION)
     file(GLOB_RECURSE SPHINX_DOC_FILES ${CMAKE_SOURCE_DIR}/documentation/sphinx_doc/*.rst)
     message(STATUS "SPHINX_DOC_FILES: ${SPHINX_DOC_FILES}")
 
-            add_custom_target(hal_py_docs ALL
-                            ${SPHINX_EXECUTABLE}
-                            -q -b html
-                            -c "${BINARY_BUILD_DIR}"
-                            -d "${SPHINX_CACHE_DIR}"
-                            "${CMAKE_CURRENT_SOURCE_DIR}/documentation/sphinx_doc/"
-                            "${SPHINX_HTML_DIR}"
-                            COMMENT "Building HTML documentation with Sphinx" VERBATIM
-                            DEPENDS hal_py graph_algorithm ${SPHINX_DOC_FILES})
+    add_custom_target(hal_py_docs ALL
+                      ${SPHINX_EXECUTABLE}
+                      -q -b html
+                      -c "${BINARY_BUILD_DIR}"
+                      -d "${SPHINX_CACHE_DIR}"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/documentation/sphinx_doc/"
+                      "${SPHINX_HTML_DIR}"
+                      COMMENT "Building HTML documentation with Sphinx" VERBATIM
+                      DEPENDS hal_py graph_algorithm ${SPHINX_DOC_FILES})
 
 endif()
 

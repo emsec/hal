@@ -31,7 +31,7 @@
 #include "gate_decorator_system/decorators/gate_decorator_lut.h"
 #include "gate_decorator_system/gate_decorator_system.h"
 
-#include "bdd.h"
+#include "hal_bdd.h"
 //#include "core/interface_cli.h"
 #include "core/interface_gui.h"
 #include "core/plugin_manager.h"

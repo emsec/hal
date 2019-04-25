@@ -39,9 +39,10 @@
 #define _PRIME_H
 
 unsigned int bdd_prime_gte(unsigned int src);
-
 unsigned int bdd_prime_lte(unsigned int src);
 
+
 #endif /* _PRIME_H */
+
 
 /* EOF */

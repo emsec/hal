@@ -1,8 +1,7 @@
 //  MIT License
 //
-//  Copyright (c) 2019 Marc Fyrbiak
-//  Copyright (c) 2019 Sebastian Wallat
-//  Copyright (c) 2019 Max Hoffmann
+//  Copyright (c) 2019 Ruhr-University Bochum, Germany, Chair for Embedded Security. All Rights reserved.
+//  Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -34,7 +33,7 @@
 #include <memory>
 #include <vector>
 
-#include <bdd.h>
+#include <hal_bdd.h>
 
 /**
  * @ingroup gate_decorator_system
