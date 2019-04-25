@@ -12,6 +12,11 @@ hal_logger_widget::hal_logger_widget(QWidget* parent) : content_widget("Log", pa
     m_plain_text_edit = new QPlainTextEdit(this);
     m_plain_text_edit->setReadOnly(true);
     m_plain_text_edit->setFrameStyle(QFrame::NoFrame);
+
+    m_plain_text_edit_scrollbar = m_plain_text_edit->verticalScrollBar();
+    scroll_to_bottom();
+    m_user_interacted_with_scrollbar = false;
+
     m_tab_bar      = new hal_filter_tab_bar();
     m_log_marshall = new hal_logger_marshall(m_plain_text_edit);
     m_content_layout->addWidget(m_plain_text_edit);
@@ -23,6 +28,7 @@ hal_logger_widget::hal_logger_widget(QWidget* parent) : content_widget("Log", pa
     connect(m_plain_text_edit, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(show_text_edit_context_menu(const QPoint&)));
     connect(m_tab_bar, SIGNAL(currentChanged(int)), this, SLOT(filter_item_clicked(int)));
     connect(m_selector, SIGNAL(currentIndexChanged(int)), this, SLOT(handle_current_channel_changed(int)));
+    connect (m_plain_text_edit_scrollbar, &QScrollBar::actionTriggered, this, &hal_logger_widget::handle_first_user_interaction);
 
     channel_model* model = channel_model::get_instance();
     connect(model, SIGNAL(updated(spdlog::level::level_enum, std::string, std::string)), this, SLOT(handle_channel_updated(spdlog::level::level_enum, std::string, std::string)));
@@ -138,4 +144,25 @@ void hal_logger_widget::handle_current_channel_changed(int index)
         channel_entry* entry = *itBegin;
         m_log_marshall->append_log(entry->m_msg_type, QString::fromStdString(entry->m_msg), filter);
     }
+}
+
+void hal_logger_widget::handle_first_user_interaction(int value)
+{   
+    Q_UNUSED(value);
+
+    if(!m_user_interacted_with_scrollbar)
+        m_user_interacted_with_scrollbar = true;
+}
+
+void hal_logger_widget::resizeEvent(QResizeEvent* event)
+{
+    Q_UNUSED(event)
+
+    if(!m_user_interacted_with_scrollbar) 
+        scroll_to_bottom();
+}
+
+void hal_logger_widget::scroll_to_bottom()
+{
+    m_plain_text_edit_scrollbar->setValue(m_plain_text_edit_scrollbar->maximum());
 }
