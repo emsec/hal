@@ -14,7 +14,7 @@ include_directories(${include_directories}
 
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/lib/hal_plugins/)
 file(WRITE ${CMAKE_BINARY_DIR}/lib/hal_plugins/__init__.py "")
-install(FILES ${CMAKE_BINARY_DIR}/lib/hal_plugins/__init__.py LIBRARY DESTINATION ${PLUGIN_LIBRARY_INSTALL_DIRECTORY})
+install(FILES ${CMAKE_BINARY_DIR}/lib/hal_plugins/__init__.py DESTINATION ${PLUGIN_LIBRARY_INSTALL_DIRECTORY})
 
 SUBDIRLIST(SUBDIRS ${CMAKE_CURRENT_SOURCE_DIR})
 FOREACH(subdir ${SUBDIRS})
