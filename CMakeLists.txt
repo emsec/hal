@@ -205,6 +205,9 @@ add_subdirectory(deps/pybind11)
 find_package(RapidJSON REQUIRED)
 message(STATUS "Found rapidjson ${RAPIDJSON_INCLUDEDIR}")
 
+find_package(spdlog CONFIG REQUIRED)
+message(STATUS "Found spdlog v${spdlog_VERSION}: ${spdlog_INCLUDEDIR}")
+
 #Set UNIX (macOS or Linux) compiler flags (clang or gcc). Set optimization level for debug or release.
 if(UNIX)
     message(STATUS "Checking supported compiler flags...")
