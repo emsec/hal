@@ -47,7 +47,7 @@ compile:package:ubuntu:
     - mkdir -p build
     - cd build
     - export HAL_BASE_PATH=$(pwd)
-    - cmake .. -DCMAKE_BUILD_TYPE=MinSizeRel -DBUILD_ALL_PLUGINS=ON -DBUILD_TESTS=OFF -DWITH_GUI=ON -DBUILD_DOCUMENTATION=ON -DNO_SIGN_PPA=ON -DENABLE_PPA=ON -DPACKAGE_DEB=ON
+    - cmake -G Ninja .. -DCMAKE_BUILD_TYPE=MinSizeRel -DBUILD_ALL_PLUGINS=ON -DBUILD_TESTS=OFF -DWITH_GUI=ON -DBUILD_DOCUMENTATION=ON -DNO_SIGN_PPA=ON -DENABLE_PPA=ON -DPACKAGE_DEB=ON
     - export CCACHE_DIR=$(pwd)/../ccache
     - make debuild_$(lsb_release -c -s)
     - cd Debian/$(lsb_release -c -s)/
