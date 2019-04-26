@@ -47,16 +47,17 @@ compile:package:ubuntu:
     - mkdir -p build
     - cd build
     - export HAL_BASE_PATH=$(pwd)
-    - cmake -G Ninja .. -DCMAKE_BUILD_TYPE=MinSizeRel -DBUILD_ALL_PLUGINS=OFF -DBUILD_TESTS=OFF -DWITH_GUI=ON -DBUILD_DOCUMENTATION=ON -DCMAKE_INSTALL_PREFIX=/usr/
+    - cmake -G Ninja .. -DCMAKE_BUILD_TYPE=MinSizeRel -DBUILD_ALL_PLUGINS=ON -DBUILD_TESTS=OFF -DWITH_GUI=ON -DBUILD_DOCUMENTATION=ON -DNO_SIGN_PPA=ON -DENABLE_PPA=ON -DPACKAGE_DEB=ON
     - export CCACHE_DIR=$(pwd)/../ccache
-    - cmake --build . --target package --clean-first -- -j4
+    - ninja debuild_$(lsb_release -c -s)
+    - cd Debian/$(lsb_release -c -s)/
+    - dpkg-source -x *.dsc test_build
+    - cd test_build
+    - DEB_BUILD_OPTIONS="parallel=4" fakeroot debian/rules binary
     - du -h .
   artifacts:
     paths:
-      - build/hal-*.deb
-      - build/hal-*.sh
-      - build/hal-*.tar.gz
-      - build/hal-*.zip
+      - build/Debian/*/hal-reverse*.deb
     expire_in: 1 week
   cache:
     key: build-cache-ubuntu
@@ -79,14 +80,7 @@ compile:test:ubuntu:
     - export HAL_BASE_PATH=$(pwd)
     - cmake -G Ninja .. -DCMAKE_BUILD_TYPE=Debug -DBUILD_ALL_PLUGINS=ON -DBUILD_TESTS=ON -DBUILD_COVERAGE=ON -DWITH_GUI=ON -DBUILD_DOCUMENTATION=ON -DCMAKE_INSTALL_PREFIX=/usr/
     - export CCACHE_DIR=$(pwd)/../ccache
-    - cmake --build . --target package --clean-first -- -j4
-  artifacts:
-    paths:
-      - build/hal-*.deb
-      - build/hal-*.sh
-      - build/hal-*.tar.gz
-      - build/hal-*.zip
-    expire_in: 1 week
+    - cmake --build . --target all --clean-first -- -j4
   cache:
     key: test-build-cache-ubuntu
     paths:
@@ -100,16 +94,9 @@ compile:package:macos:
     - mkdir -p build
     - cd build
     - export HAL_BASE_PATH=$(pwd)
-    - cmake -G Ninja .. -DCMAKE_BUILD_TYPE=MinSizeRel -DBUILD_ALL_PLUGINS=OFF -DBUILD_TESTS=OFF -DWITH_GUI=ON -DBUILD_DOCUMENTATION=ON -DCMAKE_INSTALL_PREFIX=/usr/
-    - cmake --build . --target package --clean-first -- -j4
+    - cmake -G Ninja .. -DCMAKE_BUILD_TYPE=MinSizeRel -DBUILD_ALL_PLUGINS=OFF -DBUILD_TESTS=OFF -DWITH_GUI=ON -DBUILD_DOCUMENTATION=ON -DCMAKE_INSTALL_PREFIX=/usr/ -DPACKAGE_MACOS=ON
+    - cmake --build . --target all --clean-first -- -j4
     - du -h .
-  artifacts:
-    paths:
-      - build/hal-*.pkg
-      - build/hal-*.sh
-      - build/hal-*.tar.gz
-      - build/hal-*.zip
-    expire_in: 1 week
   cache:
     key: build-cache-macos
     policy: push
@@ -131,15 +118,8 @@ compile:test:macos:
     - mkdir -p build
     - cd build
     - export HAL_BASE_PATH=$(pwd)
-    - cmake -G Ninja .. -DCMAKE_BUILD_TYPE=Debug -DBUILD_ALL_PLUGINS=ON -DBUILD_TESTS=ON -DBUILD_COVERAGE=ON -DWITH_GUI=ON -DBUILD_DOCUMENTATION=ON -DCMAKE_INSTALL_PREFIX=/usr/
-    - cmake --build . --target package --clean-first -- -j4
-  artifacts:
-    paths:
-      - build/hal-*.pkg
-      - build/hal-*.sh
-      - build/hal-*.tar.gz
-      - build/hal-*.zip
-    expire_in: 1 week
+    - cmake -G Ninja .. -DCMAKE_BUILD_TYPE=Debug -DBUILD_ALL_PLUGINS=ON -DBUILD_TESTS=ON -DBUILD_COVERAGE=ON -DWITH_GUI=ON -DBUILD_DOCUMENTATION=ON -DCMAKE_INSTALL_PREFIX=/usr/ -DPACKAGE_MACOS=ON
+    - cmake --build . --target all --clean-first -- -j4
   cache:
     key: test-build-cache-macos
     paths:
@@ -161,11 +141,36 @@ compile:doc:doxygen:
     - mkdir -p build
     - cd build
     - export HAL_BASE_PATH=$(pwd)
-    - cmake -G Ninja .. -DCMAKE_BUILD_TYPE=Debug -DBUILD_ALL_PLUGINS=ON -DBUILD_TESTS=ON -DBUILD_COVERAGE=ON -DWITH_GUI=ON -DBUILD_DOCUMENTATION=ON -DCMAKE_INSTALL_PREFIX=/usr/
+    - cmake -G Ninja .. -DCMAKE_BUILD_TYPE=Debug -DBUILD_ALL_PLUGINS=ON -DBUILD_TESTS=ON -DBUILD_COVERAGE=ON -DWITH_GUI=ON -DBUILD_DOCUMENTATION=ON -DPACKAGE_DEB=OFF -DCMAKE_INSTALL_PREFIX=/usr/
     - cmake --build . --target doc --clean-first -- -j4
   artifacts:
     paths:
       - build/documentation/*
+    expire_in: 1 week
+  cache:
+    key: doc-build-cache
+    paths:
+      - ccache/
+      - build/
+  only:
+    - master
+    - triggers
+    - /^mac.*$/ #For mac deployment
+    - web #Triggered by run pipeline
+    - tags
+
+compile:doc:python:
+  stage: compile
+  script:
+    - rm -rf build
+    - mkdir -p build
+    - cd build
+    - export HAL_BASE_PATH=$(pwd)
+    - cmake -G Ninja .. -DCMAKE_BUILD_TYPE=Debug -DBUILD_ALL_PLUGINS=ON -DBUILD_TESTS=ON -DBUILD_COVERAGE=ON -DWITH_GUI=ON -DBUILD_DOCUMENTATION=ON -DPACKAGE_DEB=OFF -DCMAKE_INSTALL_PREFIX=/usr/
+    - cmake --build . --target hal_py_docs --clean-first -- -j4
+  artifacts:
+    paths:
+      - build/python-doc/*
     expire_in: 1 week
   cache:
     key: doc-build-cache
@@ -253,7 +258,7 @@ test:package:ubuntu:
     - web #Triggered by run pipeline
   script:
     - apt update
-    - dpkg --force-all -i build/hal*.deb
+    - dpkg --force-all -i build/Debian/*/hal-reverse*.deb
     - apt-get install -f -y
     - hal --version
     - apt-get purge -y hal-reverse
@@ -265,7 +270,7 @@ test:check-core-documentation:
     - python3 tools/check_documentation.py include/ -ignore include/gui/
   cache: {}
 
-deploy-aptly:
+deploy-ppa:
   stage: deploy
   only:
     - /^v.*$/
@@ -277,17 +282,17 @@ deploy-aptly:
     - eval $(ssh-agent -s)
     - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
     - ssh-add <(echo "$HAL_DEPLOYMENT_KEY")
-    - 'ssh-keyscan fs.emsec.rub.de > ~/.ssh/known_hosts'
-    - ssh -p8999 root@hal.emsec.rub.de rm -rf /aptly/debs/*.deb
-    - scp -P8999 -r build/hal-*.deb root@hal.emsec.rub.de:/aptly/debs/
-    - ssh -p8999 root@hal.emsec.rub.de aptly repo add hal /aptly/debs/
-    - ssh -p8999 root@hal.emsec.rub.de aptly snapshot create hal-$CI_COMMIT_TAG from repo hal
-    - ssh -p8999 root@hal.emsec.rub.de aptly publish switch -batch=true -passphrase=$HAL_GPG_PASSPHRASE bionic hal-$CI_COMMIT_TAG
-    - ssh -p8999 root@hal.emsec.rub.de rm -rf /aptly/debs/*.deb
-  dependencies:
-    - compile:package:ubuntu
-  cache:
-    key: build-cache-ubuntu
+    - 'ssh-keyscan ppa.launchpad.net > ~/.ssh/known_hosts'
+    - (echo "$HAL_GPG_PASSPHRASE") > hal_pass
+    - export PW_FILE_NAME=$(pwd)/hal_pass
+    - gpg -v --passphrase-file hal_pass --batch --import <(echo "$HAL_GPG_KEY")
+    - rm -rf build
+    - mkdir -p build
+    - cd build
+    - export HAL_BASE_PATH=$(pwd)
+    - cmake .. -DCMAKE_BUILD_TYPE=MinSizeRel -DBUILD_ALL_PLUGINS=ON -DBUILD_TESTS=OFF -DWITH_GUI=ON -DBUILD_DOCUMENTATION=ON -DNO_SIGN_PPA=OFF -DENABLE_PPA=ON -DUPLOAD_PPA=ON -DPACKAGE_DEB=ON -DSIMULATE_DPUT=OFF -DPPA_GPG_PASSPHRASE_FILE=$PW_FILE_NAME -DPPA_GPG_KEY_ID="C61868710D13DD90"
+    - make dput_$(lsb_release -c -s)
+    - rm $PW_FILE_NAME
 
 deploy-doc:
   stage: deploy
@@ -311,5 +316,31 @@ deploy-doc:
     - ssh  $HAL_DOCUMENTATION_SERVERrm -f /srv/data/doc-server/data/documentation.tgz
   dependencies:
     - compile:doc:doxygen
+  cache:
+    key: doc-build-cache
+
+
+deploy-py-doc:
+  stage: deploy
+  only:
+    - /^v.*$/
+  except:
+    - branches
+  script:
+    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+    - mkdir -p ~/.ssh
+    - eval $(ssh-agent -s)
+    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+    - ssh-add <(echo "$HAL_DEPLOYMENT_KEY")
+    - 'ssh-keyscan fs.emsec.rub.de > ~/.ssh/known_hosts'
+    - cd build/python-doc/
+    - tar cvfz documentation.tgz --strip-components=1 html
+    - ssh  $HAL_DOCUMENTATION_SERVERrm -rf /srv/data/doc-server-py/data/*
+    - scp -r documentation.tgz sw@hal.emsec.rub.de:/srv/data/doc-server-py/data/
+    - ssh  $HAL_DOCUMENTATION_SERVERtar xvfz /srv/data/doc-server-py/data/documentation.tgz -C /srv/data/doc-server-py/data/
+    - ssh  $HAL_DOCUMENTATION_SERVERmv /srv/data/doc-server-py/data/html/* /srv/data/doc-server-py/data/
+    - ssh  $HAL_DOCUMENTATION_SERVERrm -f /srv/data/doc-server-py/data/documentation.tgz
+  dependencies:
+    - compile:doc:python
   cache:
     key: doc-build-cache

@@ -38,27 +38,23 @@
 #ifndef _TREE_H
 #define _TREE_H
 
-#include <stdio.h>
-
 typedef struct s_BddTree
 {
-    int first, last; /* First and last variable in this block */
-    int pos;         /* Sifting position */
-    int* seq;        /* Sequence of first...last in the current order */
-    char fixed;      /* Are the sub-blocks fixed or may they be reordered */
-    int id;          /* A sequential id number given by addblock */
-    struct s_BddTree *next, *prev;
-    struct s_BddTree* nextlevel;
+   int first, last;  /* First and last variable in this block */
+   int pos;          /* Sifting position */
+   int *seq;         /* Sequence of first...last in the current order */
+   char fixed;       /* Are the sub-blocks fixed or may they be reordered */
+   int id;           /* A sequential id number given by addblock */
+   struct s_BddTree *next, *prev;
+   struct s_BddTree *nextlevel;
 } BddTree;
 
-BddTree* bddtree_new(int);
-
-void bddtree_del(BddTree*);
-
-BddTree* bddtree_addrange(BddTree*, int, int, int, int);
-
-void bddtree_print(FILE*, BddTree*, int);
+BddTree *bddtree_new(int);
+void     bddtree_del(BddTree *);
+BddTree *bddtree_addrange(BddTree *, int, int, int, int);
+void     bddtree_print(FILE *, BddTree *, int);
 
 #endif /* _TREE_H */
+
 
 /* EOF */

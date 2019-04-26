@@ -1,8 +1,7 @@
 //  MIT License
 //
-//  Copyright (c) 2019 Marc Fyrbiak
-//  Copyright (c) 2019 Sebastian Wallat
-//  Copyright (c) 2019 Max Hoffmann
+//  Copyright (c) 2019 Ruhr-University Bochum, Germany, Chair for Embedded Security. All Rights reserved.
+//  Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -38,6 +37,7 @@
 #include <set>
 #include <string>
 #include <tuple>
+#include <memory>
 
 #include <spdlog/sinks/base_sink.h>
 #include <spdlog/spdlog.h>
@@ -283,12 +283,10 @@ public:
     /** destructor (= default) */
     ~log_gui_sink() = default;
 
-    /** interface implementation: spdlog::sinks::sink */
-    void flush() override;
-
 protected:
     /** interface implementation: spdlog::sinks::base_sink */
-    void _sink_it(const spdlog::details::log_msg& msg) override;
+    void _sink_it(const spdlog::details::log_msg& msg);
+    void _flush();
 };
 
 #endif /* __HAL_LOG_H__ */

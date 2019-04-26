@@ -14,63 +14,43 @@
 class hashData
 {
 public:
-    hashData(void)
-    {
-        id   = NULL;
-        type = 0;
-        def  = NULL;
-    }
-
-    hashData(const char* s, int t, void* d) : id(s)
-    {
-        type = t;
-        def  = d;
-    }
-
-    const char* id;
-
-    int type;
-
-    void* def;
+   hashData(void) { id=NULL; type=0; def=NULL; }
+   hashData(const char *s, int t, void *d) : id(s) { type=t; def=d; }
+   const char *id;
+   int type;
+   void *def;
 };
+
 
 class hashElement
 {
 public:
-    hashData data;
-
-    int first;
-
-    int next;
+   hashData data;
+   int first;
+   int next;
 };
+
 
 class hashTable
 {
 public:
-    hashTable(void);
-
-    ~hashTable(void);
-
-    void add(hashData&);
-
-    int exists(const char*);
-
-    int lookup(const char*, hashData&) const;
-
-    int remove(const char*);
-
-    void clear(void);
-
+   hashTable(void);
+   ~hashTable(void);
+   void add(hashData &);
+   int exists(const char *);
+   int lookup(const char *, hashData &) const;
+   int remove(const char *);
+   void clear(void);
+   
 private:
-    void reallocate_table(void);
-
-    unsigned int hashval(const char*) const;
-
-    hashElement* table;
-
-    int size, freepos;
+   void reallocate_table(void);
+   unsigned int hashval(const char *) const;
+   hashElement *table;
+   int size, freepos;
 };
 
+
 #endif /* _HASHTBL_H */
+
 
 /* EOF */

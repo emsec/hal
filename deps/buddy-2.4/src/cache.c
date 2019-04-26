@@ -34,60 +34,64 @@
   AUTH:  Jorn Lind
   DATE:  (C) june 1997
 *************************************************************************/
-#include "cache.h"
-#include "kernel.h"
-#include "prime.h"
 #include <stdlib.h>
+#include "kernel.h"
+#include "cache.h"
+#include "prime.h"
 
 /*************************************************************************
 *************************************************************************/
 
-int BddCache_init(BddCache* cache, int size)
+int BddCache_init(BddCache *cache, int size)
 {
-    int n;
+   int n;
 
-    size = bdd_prime_gte(size);
-
-    if ((cache->table = NEW(BddCacheData, size)) == NULL)
-        return bdd_error(BDD_MEMORY);
-
-    for (n = 0; n < size; n++)
-        cache->table[n].a = -1;
-    cache->tablesize = size;
-
-    return 0;
+   size = bdd_prime_gte(size);
+   
+   if ((cache->table=NEW(BddCacheData,size)) == NULL)
+      return bdd_error(BDD_MEMORY);
+   
+   for (n=0 ; n<size ; n++)
+      cache->table[n].a = -1;
+   cache->tablesize = size;
+   
+   return 0;
 }
 
-void BddCache_done(BddCache* cache)
+
+void BddCache_done(BddCache *cache)
 {
-    free(cache->table);
-    cache->table     = NULL;
-    cache->tablesize = 0;
+   free(cache->table);
+   cache->table = NULL;
+   cache->tablesize = 0;
 }
 
-int BddCache_resize(BddCache* cache, int newsize)
+
+int BddCache_resize(BddCache *cache, int newsize)
 {
-    int n;
+   int n;
 
-    free(cache->table);
+   free(cache->table);
 
-    newsize = bdd_prime_gte(newsize);
-
-    if ((cache->table = NEW(BddCacheData, newsize)) == NULL)
-        return bdd_error(BDD_MEMORY);
-
-    for (n = 0; n < newsize; n++)
-        cache->table[n].a = -1;
-    cache->tablesize = newsize;
-
-    return 0;
+   newsize = bdd_prime_gte(newsize);
+   
+   if ((cache->table=NEW(BddCacheData,newsize)) == NULL)
+      return bdd_error(BDD_MEMORY);
+   
+   for (n=0 ; n<newsize ; n++)
+      cache->table[n].a = -1;
+   cache->tablesize = newsize;
+   
+   return 0;
 }
 
-void BddCache_reset(BddCache* cache)
+
+void BddCache_reset(BddCache *cache)
 {
-    register int n;
-    for (n = 0; n < cache->tablesize; n++)
-        cache->table[n].a = -1;
+   register int n;
+   for (n=0 ; n<cache->tablesize ; n++)
+      cache->table[n].a = -1;
 }
+
 
 /* EOF */

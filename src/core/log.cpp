@@ -27,7 +27,7 @@ log_manager::log_manager(const hal::path& file_name)
         // initialize null channel
         {"null", spdlog::create<spdlog::sinks::null_sink_mt>("null")},
         // initialize multi-threaded, colored stdout channel logger
-        {"stdout", spdlog::create("stdout", {std::make_shared<spdlog::sinks::ansicolor_sink>(spdlog::sinks::stdout_sink_mt::instance()), gui_sink->spdlog_sink})},
+        {"stdout", spdlog::create("stdout", {std::make_shared<spdlog::sinks::ansicolor_stdout_sink_mt>(), gui_sink->spdlog_sink})},
     };
 
     spdlog::set_error_handler([](const std::string& msg) { throw std::invalid_argument("[!] internal log error: " + msg); });
@@ -168,7 +168,7 @@ std::shared_ptr<log_manager::log_sink> log_manager::create_stdout_sink(const boo
         sink->spdlog_sink = nullptr;
         log_error("stdout", "create_stdout_sink() has to be implemented for Windows.");
 #else
-        auto stdout_sink = std::make_shared<spdlog::sinks::ansicolor_sink>(spdlog::sinks::stdout_sink_mt::instance());
+        auto stdout_sink = std::make_shared<spdlog::sinks::ansicolor_stdout_sink_mt>();
         stdout_sink->set_color(spdlog::level::trace, stdout_sink->green);
         stdout_sink->set_color(spdlog::level::debug, stdout_sink->blue);
         stdout_sink->set_color(spdlog::level::info, stdout_sink->reset);
@@ -364,6 +364,6 @@ void log_gui_sink::_sink_it(const spdlog::details::log_msg& msg)
     log_manager::get_instance().get_gui_callback()(msg);
 }
 
-void log_gui_sink::flush()
+void log_gui_sink::_flush()
 {
 }

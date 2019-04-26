@@ -1,8 +1,7 @@
 //  MIT License
 //
-//  Copyright (c) 2019 Marc Fyrbiak
-//  Copyright (c) 2019 Sebastian Wallat
-//  Copyright (c) 2019 Max Hoffmann
+//  Copyright (c) 2019 Ruhr-University Bochum, Germany, Chair for Embedded Security. All Rights reserved.
+//  Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -55,10 +54,7 @@ public:
 
     void set_console(python_console* console);
 
-    std::vector<std::tuple<std::string, std::string>> complete(const QString& text);
-
-    void load_temporary_context();
-    void restore_main_context();
+    std::vector<std::tuple<std::string, std::string>> complete(const QString& text, bool use_console_context);
 
     /**
      * Check if given statement is a complete or incomplete statement for compound statement processing.
@@ -75,18 +71,11 @@ public:
     void close_python();
 
 private:
-    bool m_in_temporary_context;
+    void initialize_context(py::dict* globals, py::dict* locals);
 
-    py::dict* m_default_globals;
-
-    py::dict* m_current_globals;
-    py::dict* m_current_locals;
-
-    py::dict* m_main_globals;
-    py::dict* m_main_locals;
-
-    py::dict* m_temp_globals;
-    py::dict* m_temp_locals;
+    // these have to be pointers, otherwise they are destructed after py::finalize_interpreter and segfault
+    py::dict* m_globals;
+    py::dict* m_locals;
 
     python_context_subscriber* m_sender;
 

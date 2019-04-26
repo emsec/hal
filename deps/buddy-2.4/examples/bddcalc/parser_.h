@@ -8,17 +8,17 @@
 #ifndef _PARSER_H
 #define _PARSER_H
 
-#include "bdd.h"
 #include <stdio.h>
+#include "bdd.h"
 
-#define MAXIDLEN 32 /* Max. number of allowed characters in an identifier */
+#define MAXIDLEN 32  /* Max. number of allowed characters in an identifier */
 
-struct token /* BISON token data */
+struct token         /* BISON token data */
 {
-    char id[MAXIDLEN + 1];
-    char* str;
-    int ival;
-    bdd* bval;
+   char id[MAXIDLEN+1];
+   char *str;
+   int ival;
+   bdd *bval;
 };
 
 #define YYSTYPE token
@@ -26,18 +26,17 @@ struct token /* BISON token data */
 #define YY_NO_UNPUT
 #define yywrap() (1)
 
-extern YYSTYPE yylval;           /* Declare for flex user */
-extern void yyerror(char*, ...); /* Declare for flex and bison */
-extern FILE* yyin;
+extern YYSTYPE yylval;            /* Declare for flex user */
+extern void yyerror(char *,...);  /* Declare for flex and bison */
+extern FILE *yyin;
+extern int yylex(void);           /* Declare for bison */
+extern int yyparse(void);         /* Declare for bison user */
+extern int linenum;               /* Declare for error handler */
 
-extern int yylex(void);   /* Declare for bison */
-extern int yyparse(void); /* Declare for bison user */
-extern int linenum;       /* Declare for error handler */
-
-/* Use this instead of strdup() to avoid malloc() */
-inline char* sdup(const char* s)
+   /* Use this instead of strdup() to avoid malloc() */
+inline char *sdup(const char *s) 
 {
-    return strcpy(new char[strlen(s) + 1], s);
+   return strcpy(new char[strlen(s)+1], s);
 }
 
 #endif /* _PARSER_H */

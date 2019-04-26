@@ -147,6 +147,7 @@ void channel_model::handle_logmanager_callback(const spdlog::details::log_msg& m
     {
         item = add_channel(QString::fromStdString(channel_name));
     }
+
     all_channel->append_entry(new channel_entry(msg_text, t));
     item->append_entry(new channel_entry(msg_text, t));
     Q_EMIT updated(t, ALL_CHANNEL, msg_text);

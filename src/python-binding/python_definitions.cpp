@@ -31,7 +31,7 @@
 #include "gate_decorator_system/decorators/gate_decorator_lut.h"
 #include "gate_decorator_system/gate_decorator_system.h"
 
-#include "bdd.h"
+#include "hal_bdd.h"
 //#include "core/interface_cli.h"
 #include "core/interface_gui.h"
 #include "core/plugin_manager.h"
@@ -727,6 +727,14 @@ Get all modules of the netlist. The top module is included!
 :returns: A set of modules.
 :rtype: set(hal_py.module)
 )")
+
+        .def("get_top_module", &netlist::get_top_module, R"(
+Get the top module of the netlist.
+
+:returns: The top module.
+:rtype: hal_py.module
+)")
+
         .def("get_module_by_id", &netlist::get_module_by_id, py::arg("id"), R"(
 Get a single module specified by its id.
 
@@ -1103,7 +1111,7 @@ Returns all associated gates.
 :returns: A set of gates.
 :rtype: set(hal_py.gate)
 )")
-        .def("get_gates", &module::get_gates, R"(
+        .def("get_gates", &module::get_gates, py::arg("gate_type_filter") = DONT_CARE, py::arg("name_filter") = DONT_CARE, py::arg("recursive") = false, R"(
 Returns all associated gates.
 
 :returns: A set of gates.
@@ -1121,7 +1129,7 @@ Returns all associated nets.
 :returns: A set of nets.
 :rtype: set(hal_py.net)
 )")
-        .def("add_gate", &module::insert_gate, py::arg("gate"), R"(
+        .def("insert_gate", &module::insert_gate, py::arg("gate"), R"(
 Moves a gate into this module. The gate is removed from its previous module in the process.
 
 :param gate: The gate to add.
@@ -1304,7 +1312,6 @@ Generic call to run the GUI.
         .def("__str__", [](std::shared_ptr<bdd>& b) -> std::string { return std::string("bdd: ") + gate_decorator_bdd::get_bdd_str(b); })
         .def("bdd_str", [](std::shared_ptr<bdd>& b) -> std::string { return gate_decorator_bdd::get_bdd_str(b); }, R"(
 Get a human readable string for a bdd.
-
 :param bdd: The bdd to represent.
 :type bdd: hal_py.bdd
 :returns: The string representation.
@@ -1312,7 +1319,6 @@ Get a human readable string for a bdd.
 )")
         .def("bdd_clauses", [](std::shared_ptr<bdd>& b) -> std::vector<std::map<int, bool>> { return gate_decorator_bdd::get_bdd_clauses(b); }, R"(
 Turn the bdd into a list of clauses.
-
 :param bdd: The bdd.
 :type bdd: hal_py.bdd
 :returns: A list of dictionaries from input to boolean value.
@@ -1320,7 +1326,6 @@ Turn the bdd into a list of clauses.
 )")
         .def("is_tautology", [](std::shared_ptr<bdd>& b) -> bool { return gate_decorator_bdd::is_tautology(b); }, R"(
 Checks whether a bdd is always true.
-
 :param bdd: The bdd.
 :type bdd: hal_py.bdd
 :returns: True if tautology.
@@ -1328,7 +1333,6 @@ Checks whether a bdd is always true.
 )")
         .def("is_contradiction", [](std::shared_ptr<bdd>& b) -> bool { return gate_decorator_bdd::is_contradiction(b); }, R"(
 Checks whether a bdd is always false.
-
 :param bdd: The bdd.
 :type bdd: hal_py.bdd
 :returns: True if contradiction.
@@ -1383,6 +1387,11 @@ Checks whether the system has a decorator of the desired type for the gate.
 :returns: True on success.
 :rtype: bool
 )");
+
+    py::enum_<gate_decorator_system::decorator_type>(m, "decorator_type")
+    .value("BDD", gate_decorator_system::BDD)
+    .value("LUT", gate_decorator_system::LUT)
+    .export_values();
 
     py::class_<gate_decorator, Pygate_decorator, std::shared_ptr<gate_decorator>>(m, "gate_decorator")
         .def(py::init<std::shared_ptr<gate> const>())

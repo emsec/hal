@@ -36,17 +36,11 @@ PYBIND11_EMBEDDED_MODULE(console, m)
     m2.def("write_stderr", [](std::string s) -> void { g_python_context->forward_error(QString::fromStdString(s)); });
 }
 
-python_context::python_context() : m_in_temporary_context(false)
+python_context::python_context()
 {
     Q_UNUSED(m_sender)
-    m_default_globals = nullptr;
-    m_console         = nullptr;
-    m_current_globals = nullptr;
-    m_current_locals  = nullptr;
-    m_main_globals    = nullptr;
-    m_main_locals     = nullptr;
-    m_temp_globals    = nullptr;
-    m_temp_locals     = nullptr;
+    m_globals = nullptr;
+    m_locals = nullptr;
     py::initialize_interpreter();
     init_python();
 }
@@ -54,7 +48,7 @@ python_context::python_context() : m_in_temporary_context(false)
 python_context::~python_context()
 {
     close_python();
-    py::finalize_interpreter();    // Deleter only on context delete
+    py::finalize_interpreter();
 }
 
 void python_context::set_console(python_console* c)
@@ -62,18 +56,9 @@ void python_context::set_console(python_console* c)
     m_console = c;
 }
 
-void python_context::init_python()
+void python_context::initialize_context(py::dict* globals, py::dict* locals)
 {
-    using namespace py::literals;
-
-    auto cons         = py::module::import("console");
-    m_default_globals = new py::dict(py::globals());
-
-    m_main_globals = new py::dict(*m_default_globals);
-    m_main_locals  = new py::dict("console"_a = cons);
-
-    m_temp_globals = new py::dict(*m_default_globals);
-    m_temp_locals  = new py::dict();
+    (*globals) = py::globals();
 
     py::exec("import __main__\n"
              "import io, sys\n"
@@ -99,71 +84,29 @@ void python_context::init_python()
                  + core_utils::get_library_directory().string()
                  + "')\n"
                    "import hal_py\n",
-             *m_main_globals,
-             *m_main_locals);
+             *globals,
+             *locals);
 
-    (*m_main_locals)["netlist"] = py::cast(g_netlist);
+    (*locals)["netlist"] = g_netlist;
+}
 
-    m_current_globals = m_main_globals;
-    m_current_locals  = m_main_locals;
+void python_context::init_python()
+{
+    using namespace py::literals;
+
+    m_globals = new py::dict();
+    m_locals = new py::dict();
+
+    initialize_context(m_globals, m_locals);
+    (*m_locals)["console"] = py::module::import("console");
 }
 
 void python_context::close_python()
 {
-    delete m_main_locals;
-    delete m_temp_locals;
-    delete m_main_globals;
-    delete m_temp_globals;
-    m_current_globals = nullptr;
-    m_current_locals  = nullptr;
-}
-
-void python_context::load_temporary_context()
-{
-    using namespace py::literals;
-
-    std::string code = "import __main__\n"
-                       "import io, sys\n"
-                       "from console import reset\n"
-                       "from console import clear\n"
-                       "class StdOutCatcher(io.TextIOBase):\n"
-                       "    def __init__(self):\n"
-                       "        pass\n"
-                       "    def write(self, stuff):\n"
-                       "        import console\n"
-                       "        console.redirector.write_stdout(stuff)\n"
-                       "class StdErrCatcher(io.TextIOBase):\n"
-                       "    def __init__(self):\n"
-                       "        pass\n"
-                       "    def write(self, stuff):\n"
-                       "        import console\n"
-                       "        console.redirector.write_stderr(stuff)\n"
-                       "sys.stdout = StdOutCatcher()\n"
-                       "sys.__stdout__ = sys.stdout\n"
-                       "sys.stderr = StdErrCatcher()\n"
-                       "sys.__stderr__ = sys.stderr\n"
-                       "sys.path.append('"
-                       + core_utils::get_library_directory().string()
-                       + "')\n"
-                         "import hal_py\n";
-
-    py::exec(code, *m_temp_globals, *m_temp_locals);
-
-    (*m_temp_locals)["netlist"] = py::cast(g_netlist);
-
-    m_in_temporary_context = true;
-    m_current_globals      = m_temp_globals;
-    m_current_locals       = m_temp_locals;
-}
-
-void python_context::restore_main_context()
-{
-    m_temp_locals->clear();
-    *m_temp_globals = *m_default_globals;
-
-    m_in_temporary_context = false;
-    m_current_globals      = m_main_globals;
-    m_current_locals       = m_main_locals;
+    delete m_globals;
+    delete m_locals;
+    m_globals = nullptr;
+    m_locals = nullptr;
 }
 
 void python_context::interpret(const QString& input, bool multiple_expressions)
@@ -196,11 +139,11 @@ void python_context::interpret(const QString& input, bool multiple_expressions)
         pybind11::object rc;
         if (multiple_expressions)
         {
-            rc = py::eval<py::eval_statements>(input.toStdString(), *m_current_globals, *m_current_locals);
+            rc = py::eval<py::eval_statements>(input.toStdString(), *m_globals, *m_locals);
         }
         else
         {
-            rc = py::eval<py::eval_single_statement>(input.toStdString(), *m_current_globals, *m_current_locals);
+            rc = py::eval<py::eval_single_statement>(input.toStdString(), *m_globals, *m_locals);
         }
         if (!rc.is_none())
         {
@@ -221,13 +164,17 @@ void python_context::interpret(const QString& input, bool multiple_expressions)
 
 void python_context::interpret_script(const QString& input)
 {
+    py::dict tmp_globals;
+    py::dict tmp_locals;
+    initialize_context(&tmp_globals, &tmp_locals);
+
     forward_stdout("\n");
     forward_stdout("<Execute Python Editor content>");
     forward_stdout("\n");
     log_info("python", "Python editor execute script:\n{}\n", input.toStdString());
     try
     {
-        py::exec(input.toStdString(), *m_current_globals, *m_current_locals);
+        py::exec(input.toStdString(), tmp_globals, tmp_locals);
     }
     catch (py::error_already_set& e)
     {
@@ -240,7 +187,7 @@ void python_context::interpret_script(const QString& input)
         forward_error(QString::fromStdString(std::string(e.what()) + "#\n"));
     }
 
-    if (m_console && !m_in_temporary_context)
+    if (m_console)
     {
         m_console->display_prompt();
     }
@@ -252,7 +199,7 @@ void python_context::forward_stdout(const QString& output)
     {
         log_info("python", "{}", core_utils::rtrim(output.toStdString(), "\r\n"));
     }
-    if (m_console && !m_in_temporary_context)
+    if (m_console)
     {
         m_console->handle_stdout(output);
     }
@@ -261,7 +208,7 @@ void python_context::forward_stdout(const QString& output)
 void python_context::forward_error(const QString& output)
 {
     log_error("python", "{}", output.toStdString());
-    if (m_console && !m_in_temporary_context)
+    if (m_console)
     {
         m_console->handle_error(output);
     }
@@ -269,21 +216,33 @@ void python_context::forward_error(const QString& output)
 
 void python_context::forward_clear()
 {
-    if (m_console && !m_in_temporary_context)
+    if (m_console)
     {
         m_console->clear();
     }
 }
 
-std::vector<std::tuple<std::string, std::string>> python_context::complete(const QString& text)
+std::vector<std::tuple<std::string, std::string>> python_context::complete(const QString& text, bool use_console_context)
 {
     std::vector<std::tuple<std::string, std::string>> ret_val;
     try
     {
-        auto local_dict = py::list();
-        local_dict.append(*m_current_locals);
+        auto namespaces = py::list();
+        if (use_console_context)
+        {
+            namespaces.append(*m_globals);
+            namespaces.append(*m_locals);
+        }
+        else
+        {
+            py::dict tmp_globals;
+            py::dict tmp_locals;
+            initialize_context(&tmp_globals, &tmp_locals);
+            namespaces.append(tmp_globals);
+            namespaces.append(tmp_locals);
+        }
         auto jedi   = py::module::import("jedi");
-        auto script = jedi.attr("Interpreter")(text.toStdString(), local_dict);
+        auto script = jedi.attr("Interpreter")(text.toStdString(), namespaces);
         auto list   = script.attr("completions")();
 
         for (const auto& entry : list)

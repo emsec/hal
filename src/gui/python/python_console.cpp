@@ -1,5 +1,6 @@
 #include "python/python_console.h"
 
+#include "core/log.h"
 #include "gui_globals.h"
 
 #include <QKeyEvent>
@@ -352,7 +353,8 @@ void python_console::handle_tab_key_pressed()
     }
     else
     {
-        auto r = g_python_context->complete(m_current_input);
+        log_info("python", "completing: '{}'", m_current_input.toStdString());
+        auto r = g_python_context->complete(m_current_input, true);
         if (r.size() == 1)
         {
             append_to_current_command(QString::fromStdString(std::get<1>(r.at(0))));

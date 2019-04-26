@@ -9,6 +9,7 @@ if(PL_DECORATOR_EXAMPLE_LIB OR BUILD_ALL_PLUGINS)
         list(APPEND SOURCE_GATE_LIBS ${CMAKE_CURRENT_SOURCE_DIR}/gate_libraries/${f})
         list(APPEND DESTINATION_GATE_LIBS ${CMAKE_BINARY_DIR}/share/hal/gate_libraries/${f})
     endforeach()
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/gate_libraries/EXAMPLE_LIB.json ${CMAKE_BINARY_DIR}/share/hal/gate_libraries/EXAMPLE_LIB.json)
     add_custom_target(update_decorator_example_lib_libraries ALL
                     BYPRODUCTS ${DESTINATION_GATE_LIBS}
                     COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/gate_libraries/*.json ${CMAKE_BINARY_DIR}/share/hal/gate_libraries/
@@ -24,7 +25,6 @@ if(PL_DECORATOR_EXAMPLE_LIB OR BUILD_ALL_PLUGINS)
 
     add_library(decorator_example_lib SHARED ${DECORATOR_EXAMPLE_LIB_SRC} ${DECORATOR_EXAMPLE_LIB_INC})
     add_dependencies(decorator_example_lib update_decorator_example_lib_libraries)
-    set_target_properties(decorator_example_lib PROPERTIES PREFIX "")
     set_target_properties(decorator_example_lib PROPERTIES DEFINE_SYMBOL PLUGIN)
     target_link_libraries(decorator_example_lib ${LINK_LIBS})
     install(TARGETS decorator_example_lib LIBRARY DESTINATION ${PLUGIN_LIBRARY_INSTALL_DIRECTORY} PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE INCLUDES DESTINATION ${PLUGIN_INCLUDE_INSTALL_DIRECTORY})

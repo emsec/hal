@@ -33,96 +33,103 @@
   AUTH:  Jorn Lind
   DATE:  (C) february 2000
 *************************************************************************/
-#include "imatrix.h"
-#include "kernel.h"
-#include <assert.h>
 #include <stdlib.h>
+#include <assert.h>
 #include <string.h>
+#include "kernel.h"
+#include "imatrix.h"
 
 /*************************************************************************
 *************************************************************************/
 
 imatrix* imatrixNew(int size)
 {
-    imatrix* mtx = NEW(imatrix, 1);
-    int n, m;
+   imatrix *mtx = NEW(imatrix,1);
+   int n,m;
+   
+   if (!mtx)
+      return NULL;
 
-    if (!mtx)
-        return NULL;
+   if ((mtx->rows=NEW(char*,size)) == NULL)
+   {
+      free(mtx);
+      return NULL;
+   }
 
-    if ((mtx->rows = NEW(char*, size)) == NULL)
-    {
-        free(mtx);
-        return NULL;
-    }
+   for (n=0 ; n<size ; n++)
+   {
+      if ((mtx->rows[n]=NEW(char,size/8+1)) == NULL)
+      {
+	 for (m=0 ; m<n ; m++)
+	    free(mtx->rows[m]);
+	 free(mtx);
+	 return NULL;
+      }
 
-    for (n = 0; n < size; n++)
-    {
-        if ((mtx->rows[n] = NEW(char, size / 8 + 1)) == NULL)
-        {
-            for (m = 0; m < n; m++)
-                free(mtx->rows[m]);
-            free(mtx);
-            return NULL;
-        }
+      memset(mtx->rows[n], 0, size/8+1);
+   }
 
-        memset(mtx->rows[n], 0, size / 8 + 1);
-    }
+   mtx->size = size;
 
-    mtx->size = size;
-
-    return mtx;
+   return mtx;
 }
 
-void imatrixDelete(imatrix* mtx)
+
+void imatrixDelete(imatrix *mtx)
 {
-    int n;
+   int n;
 
-    for (n = 0; n < mtx->size; n++)
-        free(mtx->rows[n]);
-    free(mtx->rows);
-    free(mtx);
+   for (n=0 ; n<mtx->size ; n++)
+      free(mtx->rows[n]);
+   free(mtx->rows);
+   free(mtx);
 }
+
 
 /*======================================================================*/
 
-void imatrixFPrint(imatrix* mtx, FILE* ofile)
+void imatrixFPrint(imatrix *mtx, FILE *ofile)
 {
-    int x, y;
+   int x,y;
 
-    fprintf(ofile, "    ");
-    for (x = 0; x < mtx->size; x++)
-        fprintf(ofile, "%c", x < 26 ? (x + 'a') : (x - 26) + 'A');
-    fprintf(ofile, "\n");
-
-    for (y = 0; y < mtx->size; y++)
-    {
-        fprintf(ofile, "%2d %c", y, y < 26 ? (y + 'a') : (y - 26) + 'A');
-        for (x = 0; x < mtx->size; x++)
-            fprintf(ofile, "%c", imatrixDepends(mtx, y, x) ? 'x' : ' ');
-        fprintf(ofile, "\n");
-    }
+   fprintf(ofile, "    ");
+   for (x=0 ; x<mtx->size ; x++)
+      fprintf(ofile, "%c", x < 26 ? (x+'a') : (x-26)+'A');
+   fprintf(ofile, "\n");
+   
+   for (y=0 ; y<mtx->size ; y++)
+   {
+      fprintf(ofile, "%2d %c", y, y < 26 ? (y+'a') : (y-26)+'A');
+      for (x=0 ; x<mtx->size ; x++)
+	 fprintf(ofile, "%c", imatrixDepends(mtx,y,x) ? 'x' : ' ');
+      fprintf(ofile, "\n");
+   }
 }
 
-void imatrixPrint(imatrix* mtx)
+
+void imatrixPrint(imatrix *mtx)
 {
-    imatrixFPrint(mtx, stdout);
+   imatrixFPrint(mtx, stdout);
 }
 
-void imatrixSet(imatrix* mtx, int a, int b)
+
+void imatrixSet(imatrix *mtx, int a, int b)
 {
-    mtx->rows[a][b / 8] |= 1 << (b % 8);
+   mtx->rows[a][b/8] |= 1<<(b%8);
 }
 
-void imatrixClr(imatrix* mtx, int a, int b)
+
+void imatrixClr(imatrix *mtx, int a, int b)
 {
-    mtx->rows[a][b / 8] &= ~(1 << (b % 8));
+   mtx->rows[a][b/8] &= ~(1<<(b%8));
 }
 
-int imatrixDepends(imatrix* mtx, int a, int b)
+
+int imatrixDepends(imatrix *mtx, int a, int b)
 {
-    return mtx->rows[a][b / 8] & (1 << (b % 8));
+   return mtx->rows[a][b/8] & (1<<(b%8));
 }
+
 
 /*======================================================================*/
 

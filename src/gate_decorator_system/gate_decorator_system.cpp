@@ -7,7 +7,7 @@
 #include "netlist/gate.h"
 #include "netlist/netlist.h"
 
-#include <bdd.h>
+#include <hal_bdd.h>
 
 namespace gate_decorator_system
 {
