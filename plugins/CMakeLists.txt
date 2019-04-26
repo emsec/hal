@@ -1,16 +1,20 @@
 foreach(i IN ITEMS "" "_DEBUG" "_RELEASE" "_MINSIZEREL" "_RELWITHDEBINFO")
     foreach(j IN ITEMS "RUNTIME" "ARCHIVE" "LIBRARY")
         set(TMP_${j}_OUTPUT_DIR${i} ${CMAKE_${j}_OUTPUT_DIRECTORY${i}})
-        set(CMAKE_${j}_OUTPUT_DIRECTORY${i} "${TMP_${j}_OUTPUT_DIR${i}}/plugins")
+        set(CMAKE_${j}_OUTPUT_DIRECTORY${i} "${TMP_${j}_OUTPUT_DIR${i}}/hal_plugins")
     endforeach()
 endforeach()
 
 include_directories(${include_directories}
                     ${CMAKE_SOURCE_DIR}/include
-                    ${CMAKE_SOURCE_DIR}/plugins
+                    ${CMAKE_SOURCE_DIR}/hal_plugins
                     SYSTEM ${Boost_INCLUDE_DIR}
                     SYSTEM${BUDDY_INCLUDE_DIR}
                     SYSTEM ${KYOTO_INCLUDE_DIR})
+
+file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/lib/hal_plugins/)
+file(WRITE ${CMAKE_BINARY_DIR}/lib/hal_plugins/__init__.py "")
+install(FILES ${CMAKE_BINARY_DIR}/lib/hal_plugins/__init__.py LIBRARY DESTINATION ${PLUGIN_LIBRARY_INSTALL_DIRECTORY})
 
 SUBDIRLIST(SUBDIRS ${CMAKE_CURRENT_SOURCE_DIR})
 FOREACH(subdir ${SUBDIRS})

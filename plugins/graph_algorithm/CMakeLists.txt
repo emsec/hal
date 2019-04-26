@@ -6,9 +6,6 @@ if(PL_GRAPH_ALGORITHM OR BUILD_ALL_PLUGINS)
     include_directories(AFTER "${CMAKE_CURRENT_SOURCE_DIR}/include")
     include_directories(SYSTEM ${PYBIND11_INCLUDE_DIR} SYSTEM ${PYTHON_INCLUDE_DIRS})
 
-    file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/lib/plugins/)
-    file(WRITE ${CMAKE_BINARY_DIR}/lib/plugins/__init__.py "")
-
     file(GLOB_RECURSE GRAPH_ALGORITHM_INC ${CMAKE_CURRENT_SOURCE_DIR}/include/*.h)
     file(GLOB_RECURSE GRAPH_ALGORITHM_SRC ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
     file(GLOB_RECURSE PYTHON_BINDING_LIB_SRC ${CMAKE_CURRENT_SOURCE_DIR}/python/python_definitions.cpp)
