@@ -13,7 +13,6 @@ if(PL_GRAPH_ALGORITHM OR BUILD_ALL_PLUGINS)
     add_library(graph_algorithm SHARED ${GRAPH_ALGORITHM_SRC} ${PYTHON_BINDING_LIB_SRC} ${GRAPH_ALGORITHM_INC})
 
     #Set shared library suffix for MacOS; Used for boost_python support
-    set_target_properties(graph_algorithm PROPERTIES PREFIX "")
     if(APPLE AND CMAKE_HOST_APPLE)
         set_target_properties(graph_algorithm PROPERTIES SUFFIX ".so")
     endif(APPLE AND CMAKE_HOST_APPLE)
