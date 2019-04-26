@@ -1,3 +1,9 @@
+hal-reverse (1.0.3) bionic; urgency=high
+
+  * Fixes GUI not start from package install
+
+ -- Sebastian Wallat <sebastian.wallat@rub.de>  Fri, 26 Apr 2019 15:20:17 +0200
+
 hal-reverse (1.0.2) bionic; urgency=high
 
   * Fix in install buddy header again
