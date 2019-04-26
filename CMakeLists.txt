@@ -199,14 +199,21 @@ find_package(Threads REQUIRED)
 # Need Version 2.2.4 Not available in ubuntu bionic
 #find_package(pybind11 CONFIG REQUIRED)
 #message(STATUS "Found pybind11 v${pybind11_VERSION}: ${pybind11_INCLUDE_DIRS}")
+#include_directories(pybind11_INCLIDE_DIRS)
 # Quick fix
 add_subdirectory(deps/pybind11)
 
 find_package(RapidJSON REQUIRED)
 message(STATUS "Found rapidjson ${RAPIDJSON_INCLUDEDIR}")
+include_directories(${RAPIDJSON_INCLUDEDIR})
 
-find_package(spdlog CONFIG REQUIRED)
-message(STATUS "Found spdlog v${spdlog_VERSION}: ${spdlog_INCLUDEDIR}")
+if(LINUX)
+    find_package(spdlog CONFIG REQUIRED)
+    message(STATUS "Found spdlog v${spdlog_VERSION}: ${spdlog_INCLUDEDIR}")
+    include_directories(${spdlog_INCLUDEDIR})
+elseif(APPLE AND CMAKE_HOST_APPLE)
+    include_directories(${include_directories} "${CMAKE_CURRENT_SOURCE_DIR}/deps/spdlog/include")
+endif()
 
 #Set UNIX (macOS or Linux) compiler flags (clang or gcc). Set optimization level for debug or release.
 if(UNIX)

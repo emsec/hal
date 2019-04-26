@@ -285,8 +285,8 @@ public:
 
 protected:
     /** interface implementation: spdlog::sinks::base_sink */
-    void _sink_it(const spdlog::details::log_msg& msg) override;
-    void _flush() override;
+    void _sink_it(const spdlog::details::log_msg& msg);
+    void _flush();
 };
 
 #endif /* __HAL_LOG_H__ */
