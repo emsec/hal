@@ -205,12 +205,6 @@ add_subdirectory(deps/pybind11)
 find_package(RapidJSON REQUIRED)
 message(STATUS "Found rapidjson ${RAPIDJSON_INCLUDEDIR}")
 
-# Spdlog Version 0.16 error in ubuntu bionic
-#find_package(spdlog CONFIG REQUIRED)
-#message(STATUS "Found spdlog v${spdlog_VERSION}: ${spdlog_INCLUDEDIR}")
-# Quick fix
-include_directories(${include_directories} "${CMAKE_CURRENT_SOURCE_DIR}/deps/spdlog/include")
-
 #Set UNIX (macOS or Linux) compiler flags (clang or gcc). Set optimization level for debug or release.
 if(UNIX)
     message(STATUS "Checking supported compiler flags...")

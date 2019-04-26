@@ -37,6 +37,7 @@
 #include <set>
 #include <string>
 #include <tuple>
+#include <memory>
 
 #include <spdlog/sinks/base_sink.h>
 #include <spdlog/spdlog.h>
@@ -282,12 +283,10 @@ public:
     /** destructor (= default) */
     ~log_gui_sink() = default;
 
-    /** interface implementation: spdlog::sinks::sink */
-    void flush() override;
-
 protected:
     /** interface implementation: spdlog::sinks::base_sink */
     void _sink_it(const spdlog::details::log_msg& msg) override;
+    void _flush() override;
 };
 
 #endif /* __HAL_LOG_H__ */
