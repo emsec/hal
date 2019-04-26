@@ -285,8 +285,13 @@ public:
 
 protected:
     /** interface implementation: spdlog::sinks::base_sink */
+#ifdef SPDLOG_0_17_0_OR_LOWER
     void _sink_it(const spdlog::details::log_msg& msg);
     void _flush();
+#else
+    void sink_it_(const spdlog::details::log_msg& msg) override;
+    void flush_() override;
+#endif
 };
 
 #endif /* __HAL_LOG_H__ */
