@@ -20,51 +20,9 @@ hal_logger_marshall::~hal_logger_marshall()
 
 void hal_logger_marshall::append_log(spdlog::level::level_enum t, const QString& msg, hal_filter_item* filter)
 {
-//    static const QString beginHTML        = "<p><font color=\"";
-//    static const QString intermediateHTML = "\">";
-//    static const QString endHTML          = "</font></p>";
-
-//    static const QString traceColor    = "#90C023";
-//    static const QString debugColor    = "#90C023";
-//    //static const QString infoColor     = "#287BDE";
-//    static const QString infoColor     = "#e4e4e4";
-//    static const QString warningColor  = "#CC7832";
-//    static const QString errorColor    = "#FF0000";
-//    static const QString criticalColor = "#FF6B68";
-//    static const QString defaultColor  = "#BBBBBB";
-
-//    static const QString traceHighlight    = "#FFEF0B";
-//    static const QString debugHighlight    = "#FFEF0B";
-//    static const QString infoHighlight     = "#00B7E0";
-//    static const QString warningHighlight  = "#FFEF0B";
-//    static const QString errorHighlight    = "#FFEF0B";
-//    static const QString criticalHighlight = "#FFEF0B";
-//    static const QString defaultHighlight  = "#FFEF0B";
-
-//    static const QString markerColor = "#FFEF0B";
-
     static const QString beginHTML        = "<p><font color=\"";
     static const QString intermediateHTML = "\">";
     static const QString endHTML          = "</font></p>";
-
-    static const QString traceColor    = "#90C023";
-    static const QString debugColor    = "#90C023";
-    //static const QString infoColor     = "#287BDE";
-    static const QString infoColor     = "#000000";
-    static const QString warningColor  = "#CC7832";
-    static const QString errorColor    = "#FF0000";
-    static const QString criticalColor = "#FF6B68";
-    static const QString defaultColor  = "#000000";
-
-    static const QString traceHighlight    = "#FFEF0B";
-    static const QString debugHighlight    = "#FFEF0B";
-    static const QString infoHighlight     = "#00B7E0";
-    static const QString warningHighlight  = "#FFEF0B";
-    static const QString errorHighlight    = "#FFEF0B";
-    static const QString criticalHighlight = "#FFEF0B";
-    static const QString defaultHighlight  = "#FFEF0B";
-
-    static const QString markerColor = "#FFEF0B";
 
     QString color;
 

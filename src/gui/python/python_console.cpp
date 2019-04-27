@@ -20,14 +20,6 @@ python_console::python_console(QWidget* parent)
     setUndoRedoEnabled(false);
     ensureCursorVisible();
 
-//    m_standard_color = QColor("#BBBBBB");
-//    m_error_color    = QColor("#FF6B63");
-//    m_prompt_color   = QColor("#917EB7");
-
-//    m_standard_color = QColor("#000000");
-//    m_error_color    = QColor("#FF0000");
-//    m_prompt_color   = QColor("#7805c1");
-
     m_standard_color = python_console_qss_adapter::instance()->standard_color();
     m_error_color = python_console_qss_adapter::instance()->error_color();
     m_prompt_color = python_console_qss_adapter::instance()->promt_color();
