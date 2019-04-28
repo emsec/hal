@@ -1,3 +1,9 @@
+hal-reverse (1.0.5) bionic; urgency=high
+
+  * GIT repo cleanup
+
+ -- Sebastian Wallat <sebastian.wallat@rub.de>  Fri, 26 Apr 2019 16:55:18 +0200
+
 hal-reverse (1.0.4) bionic; urgency=high
 
   * Fixes GUI not start from package install again
