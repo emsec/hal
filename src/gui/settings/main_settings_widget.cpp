@@ -7,6 +7,7 @@
 #include "settings/example_settings.h"
 #include "settings/settings_display.h"
 #include "settings/settings_widget.h"
+#include "settings/gui_theme_settings.h"
 
 #include <QFrame>
 #include <QHBoxLayout>
@@ -153,6 +154,14 @@ main_settings_widget::main_settings_widget(QWidget* parent)
     m_map.insert(style_button, &m_style_settings);
     m_map.insert(notifications_button, &m_notifications_settings);
     m_map.insert(debug_button, &m_debug_settings);
+
+    //demo to demonstrate settings
+    gui_theme_settings* theme_settings = new gui_theme_settings();
+    m_all_settings.append(theme_settings);
+    m_style_settings.append(theme_settings);
+    m_container_layout->addWidget(theme_settings);
+    theme_settings->reset_labels();
+    //end of demo
 
     example_settings* example = new example_settings();
     m_all_settings.append(example);
