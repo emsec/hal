@@ -1468,6 +1468,17 @@ input_dialog QLineEdit{
     color: black;
     border: 1px solid black;
 }
+
+/** TREEVIEW-ARROW*/
+
+QTreeView::branch::open{
+    image: url(:/icons/tree-arrow-down);
+}
+
+QTreeView::branch:closed:has-children{
+    image: url(:/icons/tree-arrow-right);
+}
+
 /*
 COLOR CONTRASTS
 BACKGROUND #090b0d
