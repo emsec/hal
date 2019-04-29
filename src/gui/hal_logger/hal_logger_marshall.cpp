@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <functional>
 #include <map>
+#include "hal_logger/logger_qss_adapter.h"
 
 hal_logger_marshall::hal_logger_marshall(QPlainTextEdit* edit, QObject* parent) : QObject(parent), m_edit(edit)
 {
@@ -23,49 +24,30 @@ void hal_logger_marshall::append_log(spdlog::level::level_enum t, const QString&
     static const QString intermediateHTML = "\">";
     static const QString endHTML          = "</font></p>";
 
-    static const QString traceColor    = "#90C023";
-    static const QString debugColor    = "#90C023";
-    //static const QString infoColor     = "#287BDE";
-    static const QString infoColor     = "#e4e4e4";
-    static const QString warningColor  = "#CC7832";
-    static const QString errorColor    = "#FF0000";
-    static const QString criticalColor = "#FF6B68";
-    static const QString defaultColor  = "#BBBBBB";
-
-    static const QString traceHighlight    = "#FFEF0B";
-    static const QString debugHighlight    = "#FFEF0B";
-    static const QString infoHighlight     = "#00B7E0";
-    static const QString warningHighlight  = "#FFEF0B";
-    static const QString errorHighlight    = "#FFEF0B";
-    static const QString criticalHighlight = "#FFEF0B";
-    static const QString defaultHighlight  = "#FFEF0B";
-
-    static const QString markerColor = "#FFEF0B";
-
     QString color;
 
     switch (t)
     {
         case spdlog::level::level_enum::trace:
-            color = traceColor;
+            color = logger_qss_adapter::instance()->trace_color().name();
             break;
         case spdlog::level::level_enum::debug:
-            color = debugColor;
+            color = logger_qss_adapter::instance()->debug_color().name();
             break;
         case spdlog::level::level_enum::info:
-            color = infoColor;
+            color = logger_qss_adapter::instance()->info_color().name();
             break;
         case spdlog::level::level_enum::warn:
-            color = warningColor;
+            color = logger_qss_adapter::instance()->warning_color().name();
             break;
         case spdlog::level::level_enum::err:
-            color = errorColor;
+            color = logger_qss_adapter::instance()->error_color().name();
             break;
         case spdlog::level::level_enum::critical:
-            color = criticalColor;
+            color = logger_qss_adapter::instance()->critical_color().name();
             break;
         default:
-            color = defaultColor;
+            color = logger_qss_adapter::instance()->default_color().name();
             break;
     }
     QString msg_to_print;
@@ -116,25 +98,25 @@ void hal_logger_marshall::append_log(spdlog::level::level_enum t, const QString&
                 switch (t)
                 {
                     case spdlog::level::level_enum::trace:
-                        color = traceHighlight;
+                        color = logger_qss_adapter::instance()->trace_highlight().name();
                         break;
                     case spdlog::level::level_enum::debug:
-                        color = debugHighlight;
+                        color = logger_qss_adapter::instance()->debug_highlight().name();
                         break;
                     case spdlog::level::level_enum::info:
-                        color = infoHighlight;
+                        color = logger_qss_adapter::instance()->info_highlight().name();
                         break;
                     case spdlog::level::level_enum::warn:
-                        color = warningHighlight;
+                        color = logger_qss_adapter::instance()->warning_highlight().name();
                         break;
                     case spdlog::level::level_enum::err:
-                        color = errorHighlight;
+                        color = logger_qss_adapter::instance()->error_highlight().name();
                         break;
                     case spdlog::level::level_enum::critical:
-                        color = criticalHighlight;
+                        color = logger_qss_adapter::instance()->critical_highlight().name();
                         break;
                     default:
-                        color = defaultHighlight;
+                        color = logger_qss_adapter::instance()->default_highlight().name();
                         break;
                 }
                 msg_to_print = beginHTML + color + intermediateHTML + msg.toHtmlEscaped() + endHTML;

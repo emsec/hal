@@ -9,6 +9,7 @@
 
 #include <QDebug>
 #include <QFontMetricsF>
+#include "graph_layouter/old_graphics_item_qss_adapter.h"
 
 gui_graph_net::gui_graph_net(std::shared_ptr<net> net, QGraphicsItem* parent)
 {
@@ -27,7 +28,7 @@ gui_graph_net::gui_graph_net(std::shared_ptr<net> net, QGraphicsScene* scene, ol
     //line_width = m_layouter->get_net_sub_channel_width();
 
     setFlag(QGraphicsItem::ItemIsSelectable, true);
-    default_color = QColor(255, 255, 255);
+    default_color = old_graphics_item_qss_adapter::instance()->net_default_color();
     vcc_gnd_font  = QFont("Helvetica", 12);
     vcc_gnd_text  = "";
 
@@ -101,29 +102,34 @@ void gui_graph_net::paint(QPainter* painter, const QStyleOptionGraphicsItem* opt
     QPen l_pen;
     l_pen.setWidth(pen_width);
     setZValue(0);
-    QColor actually_displayed_color = (!module_color_history.empty()) ? module_color_history.last().first : default_color;
+    QColor actually_displayed_color = (!module_color_history.empty()) ? module_color_history.last().first : old_graphics_item_qss_adapter::instance()->net_default_color();
 
     if (isSelected())
     {
         this->setZValue(1);
+        if(actually_displayed_color == old_graphics_item_qss_adapter::instance()->net_default_color())
+            actually_displayed_color = old_graphics_item_qss_adapter::instance()->net_selected_color();
     }
     else
     {
         l_pen.setWidth((int)(pen_width * 0.75));
-        actually_displayed_color = (actually_displayed_color == default_color)
-                                       ? QColor::fromRgb(110, 110, 100)
-                                       : QColor::fromHsv(actually_displayed_color.hue(), actually_displayed_color.saturation() - 100, actually_displayed_color.value());
+//        actually_displayed_color = (actually_displayed_color == old_graphics_item_qss_adapter::instance()->net_default_color())
+//                                       ? old_graphics_item_qss_adapter::instance()->net_selected_color()
+//                                       : QColor::fromHsv(actually_displayed_color.hue(), actually_displayed_color.saturation() - 100, actually_displayed_color.value());
+        if(actually_displayed_color != old_graphics_item_qss_adapter::instance()->net_default_color())
+            actually_displayed_color = QColor::fromHsv(actually_displayed_color.hue(), actually_displayed_color.saturation() - 100, actually_displayed_color.value());
     }
 
     l_pen.setColor(actually_displayed_color);
     painter->setPen(l_pen);
     painter->drawPath(path);
 
-    //draw a circle at the end if the net is a global input- or outputnet
+    //draw a circle at the end if the net is a global input- or output-net
     //sometimes the paths are empty, (maybe inout?), so test if the path is empty or not
     if ((type == net_type::global_output || type == net_type::global_input) && !path.isEmpty())
     {
-        painter->setBrush(QBrush(Qt::white));
+        //painter->setBrush(QBrush(Qt::white));
+        painter->setBrush(QBrush(old_graphics_item_qss_adapter::instance()->net_global_input_output_color()));
         painter->drawEllipse(pol.last(), 5, 5);
     }
 

@@ -21,53 +21,29 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef gui_graph_gate_SELECTION_WIDGET_H
-#define gui_graph_gate_SELECTION_WIDGET_H
+#ifndef GUI_THEME_SETTINGS_H
+#define GUI_THEME_SETTINGS_H
 
-#include "netlist/gate.h"
-#include "netlist/netlist.h"
-#include <QDialog>
-#include <QKeyEvent>
-#include <QListWidget>
-#include <QSize>
-#include <QTableWidget>
-#include <QWidget>
+#include "settings_widget.h"
+#include <QComboBox>
 
-class graph_layouter_view;
-class gui_graph_gate_selection_widget : public QTableWidget
+class gui_theme_settings : public settings_widget
 {
     Q_OBJECT
 
 public:
-    explicit gui_graph_gate_selection_widget(QWidget* parent, std::vector<endpoint> successors, std::shared_ptr<gate> curr_gate, std::string curr_pin_type);
+    gui_theme_settings(QWidget* parent = 0);
 
-    void keyPressEvent(QKeyEvent* event);
-
-    //ONLY A TEMPORARY FUNCTION, WILL BE REMOVED AFTER REWORK
-    void set_is_net_selected(bool b);
-
-Q_SIGNALS:
-    void gateSelected(std::shared_ptr<gate> selected);
+    virtual void load_settings() Q_DECL_OVERRIDE;
+    virtual void save_settings() Q_DECL_OVERRIDE;
+    virtual void restore_default_settings() Q_DECL_OVERRIDE;
 
 private:
-    /*
-     * private members
-     */
-    //QTableWidget* m_table;
-    //std::shared_ptr<netlist> m_netlist;
-    graph_layouter_view* m_view;
-    std::shared_ptr<gate> m_curr_gate;
-    std::string m_curr_pin;
-    bool is_net_selected = false;
 
-    /*
-     * private functions
-     */
+    void on_index_changed(QString text);
 
-    /*calculated the "biggest" size of the table*/
-    QSize table_widget_size();
+    QComboBox* m_style_box;
 
-    void on_item_double_clicked(QTableWidgetItem* item);
 };
 
-#endif    // gui_graph_gate_SELECTION_WIDGET_H
+#endif //GUI_THEME_SETTINGS_H

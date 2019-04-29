@@ -121,6 +121,7 @@ main_window::main_window(QWidget* parent) : QWidget(parent), m_schedule_widget(n
     //m_action_content      = new QAction(this);
     m_action_settings = new QAction(this);
     m_action_close    = new QAction(this);
+    m_action_content = new QAction(this);
 
     //    //m_open_icon_style = "all->#fcfcb0";
     //    //m_open_icon_style = "all->#f2e4a4";
@@ -205,6 +206,8 @@ main_window::main_window(QWidget* parent) : QWidget(parent), m_schedule_widget(n
     connect(m_action_settings, &QAction::triggered, this, &main_window::toggle_settings);
     connect(m_settings, &main_settings_widget::close, this, &main_window::show_layout_area);
     connect(m_action_save, &QAction::triggered, this, &main_window::handle_save_triggered);
+    //debug
+    connect(m_action_close, &QAction::triggered, this, &main_window::handle_action_closed);
 
     connect(m_action_run_schedule, &QAction::triggered, plugin_schedule_manager::get_instance(), &plugin_schedule_manager::run_schedule);
 
@@ -490,6 +493,10 @@ void main_window::handle_save_triggered()
         path.replace_extension(".hal");
         netlist_serializer::serialize_to_file(g_netlist, path);
     }
+}
+
+void main_window::handle_action_closed()
+{
 }
 
 void main_window::on_action_quit_triggered()
