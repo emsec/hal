@@ -1,6 +1,6 @@
 hal-reverse (1.0.6) bionic; urgency=high
 
-  * Added synny theme
+  * Added sunny theme
   * Fixes plugin name for python import
 
  -- Sebastian Wallat <sebastian.wallat@rub.de>  Mon, 29 Apr 2019 18:52:10 +0200
