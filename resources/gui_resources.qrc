@@ -38,6 +38,7 @@
         <file alias="darcula">stylesheet/darcula.qss</file>
         <file alias="vibrant dark">stylesheet/vibrant dark.qss</file>
         <file alias="hal">stylesheet/hal.qss</file>
+        <file alias="sunny">stylesheet/sunny.qss</file>
     </qresource>
     <qresource prefix="/icons">
         <file alias="start-doc">icons/0042-file-play.svg</file>
@@ -73,6 +74,8 @@
         <file alias="python">icons/Python-logo-notext.svg</file>
         <file alias="gitlab">icons/gitlab logo.svg</file>
         <file alias="info">icons/0269-info.svg</file>
+        <file alias="tree-arrow-down">icons/arrow-down.svg</file>
+        <file alias="tree-arrow-right">icons/arrow-right.svg</file>
     </qresource>
     <qresource prefix="/images">
         <file alias="hal">images/hal_9000_by_johnnyslowhand.png</file>

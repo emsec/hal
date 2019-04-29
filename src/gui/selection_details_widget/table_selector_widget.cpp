@@ -25,7 +25,7 @@ table_selector_widget::table_selector_widget(std::set<std::shared_ptr<gate>> tab
                                             << "Name"
                                             << "Type");
     setEditTriggers(QAbstractItemView::NoEditTriggers);
-    setStyleSheet("QTableView {background-color: black; color: white; selection-background-color: grey;} QTableView::item {border-right : 1px solid rgb(169, 183, 198);};");
+    //setStyleSheet("QTableView {background-color: black; color: white; selection-background-color: grey;} QTableView::item {border-right : 1px solid rgb(169, 183, 198);};");
 
     int counter = 0;
     for (const auto& current_gate : table_data)
@@ -63,7 +63,7 @@ void table_selector_widget::keyPressEvent(QKeyEvent *event)
     if(event->key() == Qt::Key_Escape)
         close();
 
-    if(event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return)
+    if(event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return || event->key() == Qt::Key_Right)
     {
         QTableWidgetItem* id_item = this->item(selectedItems().first()->row(), 0);
         auto gate = g_netlist->get_gate_by_id(id_item->text().toInt());
