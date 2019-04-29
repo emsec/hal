@@ -13,13 +13,13 @@
 namespace py = pybind11;
 
 #ifdef PYBIND11_MODULE
-PYBIND11_MODULE(graph_algorithm, m)
+PYBIND11_MODULE(libgraph_algorithm, m)
 {
     m.doc() = "hal graph_algorithm python bindings";
 #else
-PYBIND11_PLUGIN(graph_algorithm)
+PYBIND11_PLUGIN(libgraph_algorithm)
 {
-    py::module m("graph_algorithm", "hal graph_algorithm python bindings");
+    py::module m("lib±graph_algorithm", "hal graph_algorithm python bindings");
 #endif    // ifdef PYBIND11_MODULE
     
     py::implicitly_convertible<std::string, hal::path>();
