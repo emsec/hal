@@ -90,8 +90,8 @@ bool module::insert_gate(std::shared_ptr<gate> gate)
     m_gates_map[gate->get_id()] = gate;
     m_gates_set.insert(gate);
 
-    module_event_handler::notify(module_event_handler::event::gate_inserted, shared_from_this(), gate->get_id());
     module_event_handler::notify(module_event_handler::event::gate_removed, prev_module, gate->get_id());
+    module_event_handler::notify(module_event_handler::event::gate_inserted, shared_from_this(), gate->get_id());
     return true;
 }
 
@@ -122,8 +122,8 @@ bool module::remove_gate(std::shared_ptr<gate> gate)
 
     top->m_gates_map[gate->get_id()] = gate;
     top->m_gates_set.insert(gate);
-    module_event_handler::notify(module_event_handler::event::gate_inserted, top, gate->get_id());
     module_event_handler::notify(module_event_handler::event::gate_removed, shared_from_this(), gate->get_id());
+    module_event_handler::notify(module_event_handler::event::gate_inserted, top, gate->get_id());
 
     return true;
 }
@@ -164,7 +164,6 @@ std::shared_ptr<gate> module::get_gate_by_id(const u32 gate_id, bool recursive) 
                 }
             }
         }
-        log_error("module", "no gate with id = {} stored in module with id {}.", gate_id, m_id);
         return nullptr;
     }
     return it->second;
@@ -223,8 +222,8 @@ bool module::insert_net(std::shared_ptr<net> n)
     m_nets_map[n->get_id()] = n;
     m_nets_set.insert(n);
 
+    module_event_handler::notify(module_event_handler::event::net_removed, prev_module, n->get_id());
     module_event_handler::notify(module_event_handler::event::net_inserted, shared_from_this(), n->get_id());
-    module_event_handler::notify(module_event_handler::event::gate_removed, prev_module, n->get_id());
     return true;
 }
 
@@ -234,7 +233,16 @@ bool module::remove_net(std::shared_ptr<net> net)
     {
         return false;
     }
+
+    auto top = m_internal_manager->m_netlist->get_top_module();
+    if (top.get() == this)
+    {
+        log_error("module", "cannot remove nets from top module.", net->get_name(), net->get_id(), m_name, m_id);
+        return false;
+    }
+
     auto it = m_nets_map.find(net->get_id());
+
     if (it == m_nets_map.end())
     {
         log_error("module", "net '{}' (id {}) is not stored in module '{}' (id {}).", net->get_name(), net->get_id(), m_name, m_id);
@@ -244,7 +252,10 @@ bool module::remove_net(std::shared_ptr<net> net)
     m_nets_map.erase(it);
     m_nets_set.erase(net);
 
+    top->m_nets_map[net->get_id()] = net;
+    top->m_nets_set.insert(net);
     module_event_handler::notify(module_event_handler::event::net_removed, shared_from_this(), net->get_id());
+    module_event_handler::notify(module_event_handler::event::net_inserted, top, net->get_id());
 
     return true;
 }

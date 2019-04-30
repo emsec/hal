@@ -1,3 +1,11 @@
+hal-reverse (1.0.7) bionic; urgency=high
+
+  * Added missing python defs
+  * Fixed misleading error message, fixed wrong module signal
+  * Fix graph_algorithm include
+
+ -- Sebastian Wallat <sebastian.wallat@rub.de>  Tue, 30 Apr 2019 16:12:10 +0200
+
 hal-reverse (1.0.6) bionic; urgency=high
 
   * Added sunny theme

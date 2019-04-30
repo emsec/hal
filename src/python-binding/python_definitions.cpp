@@ -106,7 +106,8 @@ PYBIND11_PLUGIN(hal_py)
     py::class_<hal::path>(m, "hal_path")
         .def(py::init<>())
         .def(py::init<const hal::path&>())
-        .def(py::init<const std::string&>());
+        .def(py::init<const std::string&>())
+        .def("__str__", [](hal::path& p) -> std::string { return std::string(p.c_str()); });
 
     py::implicitly_convertible<std::string, hal::path>();
 
