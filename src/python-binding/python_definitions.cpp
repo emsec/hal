@@ -106,7 +106,8 @@ PYBIND11_PLUGIN(hal_py)
     py::class_<hal::path>(m, "hal_path")
         .def(py::init<>())
         .def(py::init<const hal::path&>())
-        .def(py::init<const std::string&>());
+        .def(py::init<const std::string&>())
+        .def("__str__", [](hal::path& p) -> std::string { return std::string(p.c_str()); });
 
     py::implicitly_convertible<std::string, hal::path>();
 
@@ -1104,6 +1105,18 @@ Gets the module's name.
 Sets the module's name.
 
 :param str name: The new name.
+)")
+        .def("get_parent_module", &module::get_parent_module, R"(
+Retrieves the parent module.
+
+:returns: The module.
+:rtype: hal_py.module
+)")
+        .def("get_submodules", &module::get_submodules, py::arg("name_filter") = DONT_CARE, py::arg("recursive") = false, R"(
+Retrieves all submodules of this module.
+
+:returns: The module.
+:rtype: set(hal_py.module)
 )")
         .def_property_readonly("gates", &module::get_gates, R"(
 Returns all associated gates.
