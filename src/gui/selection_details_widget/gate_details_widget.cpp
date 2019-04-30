@@ -180,7 +180,7 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
     //    m_output_pins->setBackground(2, QBrush(QColor(31, 34, 35),Qt::SolidPattern));
 
     // load and store quine mc cluskey plugin
-    m_qmc = plugin_manager::get_plugin_instance<plugin_quine_mccluskey>("quine_mccluskey");
+    m_qmc = plugin_manager::get_plugin_instance<plugin_quine_mccluskey>("libquine_mccluskey");
 
     connect(&g_graph_relay, &graph_relay::gate_event, this, &gate_details_widget::handle_gate_event);
     connect(&g_graph_relay, &graph_relay::module_event, this, &gate_details_widget::handle_module_event);
@@ -252,21 +252,14 @@ void gate_details_widget::update(const u32 gate_id)
     m_id_item->setText(QString::number(g->get_id()));
 
     //get modules
-    QString module_text = "";
-    bool is_in_modules  = false;
+    QString module_text = "NONE";
     for (const auto sub : g_netlist->get_modules())
     {
         if (sub->contains_gate(g))
         {
-            is_in_modules = true;
-            module_text += QString::fromStdString(sub->get_name()) + "[" + QString::number(sub->get_id()) + "], ";
+            module_text = QString::fromStdString(sub->get_name()) + "[" + QString::number(sub->get_id()) + "]";
         }
     }
-    if (is_in_modules)
-        module_text.remove(module_text.length() - 2, 2);
-    else
-        module_text = "NONE";
-
     m_module_item->setText(module_text);
 
     // display Boolean function (if present)
