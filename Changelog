@@ -1,3 +1,9 @@
+hal-reverse (1.0.8) bionic; urgency=high
+
+  * Added plugin directory to include_directories
+
+ -- Sebastian Wallat <sebastian.wallat@rub.de>  Tue, 30 Apr 2019 19:46:40 +0200
+
 hal-reverse (1.0.7) bionic; urgency=high
 
   * Added missing python defs
