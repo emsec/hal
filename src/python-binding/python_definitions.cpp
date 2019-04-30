@@ -118,7 +118,7 @@ HAL Core Utility functions.
 Get the path to the executable of HAL.
 
 :returns: The path.
-:rtype: hal_py.path
+:rtype: hal_py.hal_path
 )")
         .def("get_base_directory", &core_utils::get_base_directory, R"(
 Get the base path to the HAL installation.
@@ -127,51 +127,51 @@ Get the base path to the HAL installation.
 3. Try to find hal executable in path and use its base path.
 
 :returns: The path.
-:rtype: hal_py.path
+:rtype: hal_py.hal_path
 )")
         .def("get_library_directory", &core_utils::get_library_directory, R"(
 Get the path to the shared and static libraries of HAL.
 Relative to the binary directory.
 
 :returns: The path.
-:rtype: hal_py.path
+:rtype: hal_py.hal_path
 )")
         .def("get_share_directory", &core_utils::get_share_directory, R"(
 Get the path to the sh
 Relative to the binary
 
 :returns: The path.
-:rtype: hal_py.path
+:rtype: hal_py.hal_path
 )")
         .def("get_user_share_directory", &core_utils::get_user_share_directory, R"(
 Get the path to shared objects and files provided by the user.
 home/.local/share for Unix
 
 :returns: The path.
-:rtype: hal_py.path
+:rtype: hal_py.hal_path
 )")
         .def("get_user_config_directory", &core_utils::get_user_config_directory, R"(
 Get the path to the configuration directory of the user.
 home/.config/hal for Unix
 
 :returns: The path.
-:rtype: hal_py.path
+:rtype: hal_py.hal_path
 )")
         .def("get_default_log_directory", &core_utils::get_default_log_directory, py::arg("source_file") = "", R"(
 Get the path to the default directory for log files.
 If an hdl source file is provided, the function returns the parent directory, otherwise get_user_share_directory() / "log".
 
 :param source_file: The hdl source file.
-:type source_file: hal_py.path
+:type source_file: hal_py.hal_path
 :returns: The path.
-:rtype: hal_py.path
+:rtype: hal_py.hal_path
 )")
         .def("get_gate_library_directories", &core_utils::get_gate_library_directories, R"(
 Get the paths where gate libraries are searched.
 Contains the share and user share directories.
 
 :returns: A list of paths.
-:rtype: list(hal_py.path)
+:rtype: list(hal_py.hal_path)
 )")
         .def("get_plugin_directories", &core_utils::get_plugin_directories, R"(
 Get the paths where plugins are searched.
@@ -336,13 +336,13 @@ The file name of the input design.
 Get the file name of the input design.
 
 :returns: The input file's name.
-:rtype: hal_py.path
+:rtype: hal_py.hal_path
 )")
         .def("set_input_filename", &netlist::set_input_filename, py::arg("input_filename"), R"(
 Set the file name of the input design.
 
 :param input_filename: The path to the input file.
-:type input_filename: hal_py.path
+:type input_filename: hal_py.hal_path
 )")
         .def_property("design_name", &netlist::get_design_name, &netlist::set_design_name, R"(
 The design's name.
@@ -799,7 +799,9 @@ Gets the gate's unique id.
         .def_property("name", &gate::get_name, &gate::set_name, R"(
 The gate's name.
 
-:type: str
+:param str name: The new name.
+:returns: The gate's name.
+:rtype: str
 )")
         .def("get_name", &gate::get_name, R"(
 Gets the gate's name.
@@ -1304,7 +1306,7 @@ Creates a new netlist for a specific gate library.
 Creates a new netlist for a specific file.
 
 :param hdl_file: Name of the hdl file.
-:type hdl_file: hal_py.path
+:type hdl_file: hal_py.hal_path
 :param str language: Programming language uses in parameter file_name.
 :param gate_library_name: Name of hardware gate library.
 :returns: The new netlist.
@@ -1314,9 +1316,9 @@ Creates a new netlist for a specific file.
 Creates a new netlist for a specific '.hal' file.
 
 :param hal_file: Name of the '.hal' file.
-:type hal_file: hal_py.netlist
+:type hal_file: hal_py.hal_path
 :returns: The new netlist.
-
+:rtype: hal_py.netlist
 )");
 
     // hdl_file_writer/hdl_writer
@@ -1335,7 +1337,7 @@ Writes the netlist into a file with a defined format.
 :param format: The target format of the file, e.g. vhdl, verilog...
 :type format: str
 :param file_name: The input file.
-:type file_name: hal_py.path
+:type file_name: hal_py.hal_path
 :returns: True on success.
 :rtype: bool
 )");
@@ -1351,7 +1353,7 @@ Get the names of all loaded plugins.
 Load all plugins in the specified directories. If \p directory is empty, the default directories will be searched.
 
 :param file_names: A list of directory paths.
-:type file_names: hal_py.path
+:type file_names: hal_py.hal_path
 :returns: True on success.
 :rtype: bool
 )")
@@ -1360,7 +1362,7 @@ Load a single plugin by specifying a name and the file path.
 
 :param str plugin_name: The desired name, unique in the framework.
 :param file_name: The path to the plugin file.
-:type file_name: hal_py.path
+:type file_name: hal_py.hal_path
 :returns: True on success.
 :rtype: bool
 )")

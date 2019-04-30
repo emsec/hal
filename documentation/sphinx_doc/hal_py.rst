@@ -11,6 +11,7 @@ hal_py Documentation
    gate
    net
    module
+   path
    i_base
    i_gui
    bdd
