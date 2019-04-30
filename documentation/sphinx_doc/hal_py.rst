@@ -19,5 +19,6 @@ hal_py Documentation
    gate_decorator_lut
    gate_decorator_system
    plugin_manager
+   netlist_factory
    hdl_writer_dispatcher
    graph_algorithm
