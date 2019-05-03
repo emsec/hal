@@ -285,19 +285,22 @@ void python_editor::handle_action_open_file()
     QString title = "Open File";
     QString text  = "Python Scripts(*.py)";
 
-    m_file_name = QFileDialog::getOpenFileName(nullptr, title, QDir::currentPath(), text, nullptr, QFileDialog::DontUseNativeDialog);
+    QString new_file_name = QFileDialog::getOpenFileName(nullptr, title, QDir::currentPath(), text, nullptr, QFileDialog::DontUseNativeDialog);
 
-    if (m_file_name.isEmpty())
+    if (new_file_name.isEmpty())
     {
         return;
     }
 
-    std::ifstream file(m_file_name.toStdString(), std::ios::in);
+    std::ifstream file(new_file_name.toStdString(), std::ios::in);
 
     if (!file.is_open())
     {
         return;
     }
+    
+    // make file active
+    m_file_name = new_file_name;
 
     m_editor_widget->clear();
     std::string f((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
