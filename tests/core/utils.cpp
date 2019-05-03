@@ -26,20 +26,22 @@ protected:
  *
  * Functions: get_bit
  */
-TEST_F(utils_test, check_get_bit){TEST_START
-                                  // ########################
-                                  // POSITIVE TESTS
-                                  // ########################
-                                  {// Get some bits of the given int
-                                   int i = 0b1101;
-EXPECT_EQ(get_bit(i, 0), 1);
-EXPECT_EQ(get_bit(i, 1), 0);
-EXPECT_EQ(get_bit(i, 2), 1);
-EXPECT_EQ(get_bit(i, 3), 1);
-EXPECT_EQ(get_bit(i, 4), 0);
-}
+TEST_F(utils_test, check_get_bit){
+    TEST_START
+      // ########################
+      // POSITIVE TESTS
+      // ########################
+      {
+          // Get some bits of the given int
+            int i = 0b1101;
+            EXPECT_EQ(get_bit(i, 0), 1);
+            EXPECT_EQ(get_bit(i, 1), 0);
+            EXPECT_EQ(get_bit(i, 2), 1);
+            EXPECT_EQ(get_bit(i, 3), 1);
+            EXPECT_EQ(get_bit(i, 4), 0);
+      }
 
-TEST_END
+    TEST_END
 }
 
 /**
@@ -47,20 +49,22 @@ TEST_END
  *
  * Functions: set_bit
  */
-TEST_F(utils_test, check_set_bit){TEST_START
-                                  // ########################
-                                  // POSITIVE TESTS
-                                  // ########################
-                                  {// Set the bit if the bit is 0
-                                   int i = 0b1001;
-set_bit(i, 1) EXPECT_EQ(i, 0b1011);
-}
-{
-    // Set the bit if the bit is 1
-    int i = 0b1001;
-    set_bit(i, 0) EXPECT_EQ(i, 0b1001);
-}
-TEST_END
+TEST_F(utils_test, check_set_bit){
+    TEST_START
+        // ########################
+        // POSITIVE TESTS
+        // ########################
+        {
+            // Set the bit if the bit is 0
+            int i = 0b1001;
+            set_bit(i, 1) EXPECT_EQ(i, 0b1011);
+        }
+        {
+            // Set the bit if the bit is 1
+            int i = 0b1001;
+            set_bit(i, 0) EXPECT_EQ(i, 0b1001);
+        }
+    TEST_END
 }
 
 /**
@@ -68,20 +72,22 @@ TEST_END
  *
  * Functions: clear_bit
  */
-TEST_F(utils_test, check_clear_bit){TEST_START
-                                    // ########################
-                                    // POSITIVE TESTS
-                                    // ########################
-                                    {// Clear the bit if the bit is 1
-                                     int i = 0b1001;
-clear_bit(i, 0) EXPECT_EQ(i, 0b1000);
-}
-{
-    // Clear the bit if the bit is 0
-    int i = 0b1001;
-    clear_bit(i, 1) EXPECT_EQ(i, 0b1001);
-}
-TEST_END
+TEST_F(utils_test, check_clear_bit){
+    TEST_START
+    // ########################
+    // POSITIVE TESTS
+    // ########################
+    {
+        // Clear the bit if the bit is 1
+        int i = 0b1001;
+        clear_bit(i, 0) EXPECT_EQ(i, 0b1000);
+    }
+    {
+        // Clear the bit if the bit is 0
+        int i = 0b1001;
+        clear_bit(i, 1) EXPECT_EQ(i, 0b1001);
+    }
+    TEST_END
 }
 
 /**
@@ -268,9 +274,73 @@ TEST_F(utils_test, check_trim)
     EXPECT_EQ(trim("\tstring\t"), "string");
     EXPECT_EQ(trim("\t  string\t \n"), "string");
 
+    // Test with other char's to remove
+    EXPECT_EQ(trim("$#$str#ing#$#","#$"), "str#ing");
+
     // Some special cases
     EXPECT_EQ(trim("      "), "");
     EXPECT_EQ(trim(""), "");
+    EXPECT_EQ(trim("string",""), "string");
+
+    TEST_END
+}
+
+/**
+ * Testing the ltrim function
+ *
+ * Functions: ltrim
+ */
+TEST_F(utils_test, check_ltrim)
+{
+    TEST_START
+        // ########################
+        // POSITIVE TESTS
+        // ########################
+
+        // Some 'normal' cases
+        EXPECT_EQ(ltrim("  string  "), "string  ");
+        EXPECT_EQ(ltrim("string  "), "string  ");
+        EXPECT_EQ(ltrim("  stri ng  "), "stri ng  ");
+        EXPECT_EQ(ltrim("\tstring\t"), "string\t");
+        EXPECT_EQ(ltrim("\t\n\r string"), "string");
+
+        // Test with other char's to remove
+        EXPECT_EQ(ltrim("$#$string#","#$"), "string#");
+
+        // Some special cases
+        EXPECT_EQ(ltrim("      "), "");
+        EXPECT_EQ(ltrim(""), "");
+        EXPECT_EQ(ltrim("string",""), "string");
+
+    TEST_END
+}
+
+/**
+ * Testing the rtrim function
+ *
+ * Functions: rtrim
+ */
+TEST_F(utils_test, check_rtrim)
+{
+    TEST_START
+        // ########################
+        // POSITIVE TESTS
+        // ########################
+
+        // Some 'normal' cases
+        EXPECT_EQ(rtrim("  string  "), "  string");
+        EXPECT_EQ(rtrim("string  "), "string");
+        EXPECT_EQ(rtrim("  stri ng  "), "  stri ng");
+        EXPECT_EQ(rtrim("\tstring\t"), "\tstring");
+        EXPECT_EQ(rtrim("string\t\n\r "), "string");
+
+        // Test with other char's to remove
+        EXPECT_EQ(rtrim("#string$#$","#$"), "#string");
+
+        // Some special cases
+        EXPECT_EQ(rtrim("      "), "");
+        EXPECT_EQ(rtrim(""), "");
+        EXPECT_EQ(ltrim("string",""), "string");
 
     TEST_END
 }
@@ -301,9 +371,9 @@ TEST_F(utils_test, check_replace)
 }
 
 /**
- * Testing the join function
+ * Testing the join function for vectors and sets
  *
- * Functions: join
+ * Functions: join (with vector and set)
  */
 TEST_F(utils_test, check_join)
 {
@@ -311,17 +381,21 @@ TEST_F(utils_test, check_join)
     // ########################
     // POSITIVE TESTS
     // ########################
-
+    // Join of vectors
     EXPECT_EQ(join(",", std::vector<std::string>({"A", "B", "C"})), "A,B,C");
     EXPECT_EQ(join(",", std::vector<std::string>({"A,", "B,", "C"})), "A,,B,,C");
     EXPECT_EQ(join("", std::vector<std::string>({"A", "B", "C"})), "ABC");
     EXPECT_EQ(join(",", std::vector<std::string>({"A"})), "A");
+
+    // Join of sets
+    EXPECT_EQ(join(",", std::set<std::string>({"A", "B", "C"})), "A,B,C");
 
     // ########################
     // NEGATIVE TESTS
     // ########################
 
     EXPECT_EQ(join(",", std::vector<std::string>({})), "");
+    EXPECT_EQ(join(",", std::set<std::string>({})), "");
     TEST_END
 }
 
@@ -636,4 +710,23 @@ TEST_F(utils_test, check_which)
     {
         boost::filesystem::remove_all(get_binary_directory().string() + "/tmp_test");
     }
+}
+
+/**
+ * Testing the function get_open_source_licenses. Only testing the access, not the content.
+ *
+ * Functions: get_open_source_licenses
+ */
+TEST_F(utils_test, check_get_open_source_license)
+{
+    TEST_START
+
+        // ########################
+        // POSITIVE TESTS
+        // ########################
+
+        std::string lic_str = get_open_source_licenses();
+        EXPECT_TRUE(lic_str.length() > 0);
+
+    TEST_END
 }
