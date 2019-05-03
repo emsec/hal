@@ -314,11 +314,22 @@ void python_editor::handle_action_save_file()
     QString title = "Save File";
     QString text  = "Python Scripts(*.py)";
 
+    QString selected_file_name;
+
     if (m_file_name.isEmpty())
     {
-        m_file_name = QFileDialog::getSaveFileName(nullptr, title, QDir::currentPath(), text, nullptr, QFileDialog::DontUseNativeDialog);
+        selected_file_name = QFileDialog::getSaveFileName(nullptr, title, QDir::currentPath(), text, nullptr, QFileDialog::DontUseNativeDialog);
+        if (selected_file_name.isEmpty())
+        {
+            return;
+        }
     }
-    std::ofstream out(m_file_name.toStdString(), std::ios::out);
+    else
+    {
+        selected_file_name = m_file_name;
+    }
+
+    std::ofstream out(selected_file_name.toStdString(), std::ios::out);
 
     if (!out.is_open())
     {
@@ -326,6 +337,9 @@ void python_editor::handle_action_save_file()
     }
     out << m_editor_widget->toPlainText().toStdString();
     out.close();
+
+    // remember target file path
+    m_file_name = selected_file_name;
 }
 
 void python_editor::handle_action_run()
