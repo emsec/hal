@@ -8,9 +8,13 @@
 #include <QPropertyAnimation>
 #include <QTextBlock>
 
-code_editor::code_editor(QWidget* parent)
-    : QPlainTextEdit(parent), m_scrollbar(new code_editor_scrollbar(this)), m_line_number_area(new line_number_area(this)), m_minimap(new code_editor_minimap(this)),
-      m_animation(new QPropertyAnimation(m_scrollbar, "value", this))
+code_editor::code_editor(QWidget* parent) : QPlainTextEdit(parent),
+      m_scrollbar(new code_editor_scrollbar(this)),
+      m_line_number_area(new line_number_area(this)),
+      m_minimap(new code_editor_minimap(this)),
+      m_animation(new QPropertyAnimation(m_scrollbar, "value", this)),
+      m_line_numbers_enabled(true),
+      m_minimap_enabled(true)
 {
     connect(this, &code_editor::blockCountChanged, this, &code_editor::handle_block_count_changed);
     connect(this, &code_editor::updateRequest, this, &code_editor::update_line_number_area);
@@ -200,6 +204,18 @@ void code_editor::search(const QString& string)
     setExtraSelections(extraSelections);
 }
 
+void code_editor::toggle_line_numbers()
+{
+    m_line_numbers_enabled = !m_line_numbers_enabled;
+    update_layout();
+}
+
+void code_editor::toggle_minimap()
+{
+    m_minimap_enabled = !m_minimap_enabled;
+    update_layout();
+}
+
 int code_editor::first_visible_block()
 {
     return firstVisibleBlock().blockNumber();
@@ -311,9 +327,28 @@ void code_editor::set_current_line_background(QColor& color)
 
 void code_editor::update_layout()
 {
-    setViewportMargins(line_number_area_width(), 0, minimap_width(), 0);
+    int left_margin = 0;
+    int right_margin = 0;
 
     QRect cr = contentsRect();
-    m_line_number_area->setGeometry(QRect(cr.left(), cr.top(), line_number_area_width(), viewport()->height()));
-    m_minimap->setGeometry(QRect(cr.left() + line_number_area_width() + viewport()->width(), cr.top(), minimap_width(), viewport()->height()));
+
+    if (m_line_numbers_enabled)
+    {
+        left_margin = line_number_area_width();
+        m_line_number_area->setGeometry(QRect(cr.left(), cr.top(), line_number_area_width(), viewport()->height()));
+        m_line_number_area->show();
+    }
+    else
+        m_line_number_area->hide();
+
+    if (m_minimap_enabled)
+    {
+        right_margin = minimap_width();
+        m_minimap->setGeometry(QRect(cr.right() - minimap_width(), cr.top(), minimap_width(), viewport()->height()));
+        m_minimap->show();
+    }
+    else
+        m_minimap->hide();
+
+    setViewportMargins(left_margin, 0, right_margin, 0);
 }
