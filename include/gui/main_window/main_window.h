@@ -138,6 +138,7 @@ private:
 
     QAction* m_action_open;
     QAction* m_action_save;
+    QAction* m_action_save_as;
     QAction* m_action_about;
     QAction* m_action_schedule;
     QAction* m_action_run_schedule;
