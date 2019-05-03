@@ -259,6 +259,8 @@ void python_editor::setup_toolbar(toolbar* toolbar)
     // DEBUG CODE
     QToolButton* button = new QToolButton(this);
     button->setText("Debug Toggle Minimap");
+    button->setIcon(gui_utility::get_styled_svg_icon("all->#FFDD00", ":/icons/placeholder"));
+    button->setToolTip("Debug Toggle Minimap");
 
     connect(button, &QToolButton::clicked, m_editor_widget, &code_editor::toggle_minimap);
 
