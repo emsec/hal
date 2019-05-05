@@ -21,10 +21,8 @@ PYBIND11_PLUGIN(libgraph_algorithm)
 {
     py::module m("libgraph_algorithm", "hal graph_algorithm python bindings");
 #endif    // ifdef PYBIND11_MODULE
-    
-    py::implicitly_convertible<std::string, hal::path>();
 
-    py::class_<plugin_graph_algorithm, std::shared_ptr<plugin_graph_algorithm>, i_base>(m, "graph_algorithm")
+    py::class_<plugin_graph_algorithm, std::shared_ptr<plugin_graph_algorithm>>(m, "graph_algorithm")
         .def(py::init<>())
         .def_property_readonly("name", &plugin_graph_algorithm::get_name, R"(
 Get the name of the plugin.
