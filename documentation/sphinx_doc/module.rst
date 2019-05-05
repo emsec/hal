@@ -1,5 +1,5 @@
-Submodule
-==========================
+Module
+=======
 
 .. autoclass:: hal_py.module
    :members:
