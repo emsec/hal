@@ -18,7 +18,9 @@
 #include <QFileDialog>
 #include <QShortcut>
 #include <QTextStream>
+#include <QToolButton>
 #include <QVBoxLayout>
+
 #include <fstream>
 
 void python_code_editor::keyPressEvent(QKeyEvent* e)
@@ -253,6 +255,16 @@ void python_editor::setup_toolbar(toolbar* toolbar)
     toolbar->addAction(m_action_open_file);
     toolbar->addAction(m_action_save);
     toolbar->addAction(m_action_run);
+
+    // DEBUG CODE
+    QToolButton* button = new QToolButton(this);
+    button->setText("Debug Toggle Minimap");
+    button->setIcon(gui_utility::get_styled_svg_icon("all->#FFDD00", ":/icons/placeholder"));
+    button->setToolTip("Debug Toggle Minimap");
+
+    connect(button, &QToolButton::clicked, m_editor_widget, &code_editor::toggle_minimap);
+
+    toolbar->addWidget(button);
 }
 
 QList<QShortcut*> python_editor::create_shortcuts()

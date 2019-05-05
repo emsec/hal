@@ -267,7 +267,7 @@ void python_console::replace_current_command(const QString& new_command)
 {
     QTextCursor cursor = textCursor();
     cursor.setPosition(m_prompt_end_position);
-    cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::KeepAnchor);
+    cursor.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
     cursor.insertText(new_command);
 }
 
