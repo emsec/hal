@@ -4,7 +4,7 @@
 
 [HAL](http://eprint.iacr.org/2017/783) [/hel/] is a comprehensive reverse engineering and manipulation framework for gate-level netlists focusing on efficiency, extendability and portability. HAL comes with a fully-fledged plugin system, allowing to introduce arbitrary functionalities to the core.
 
-![alt text](https://github.com/emsec/hal/hal_screenshot.png "HAL Screenshot")
+![HAL Screenshot](https://raw.githubusercontent.com/emsec/hal/master/hal_screenshot.png "HAL Screenshot")
 
 ## Features
 - Natural directed graph representation of netlist elements and their connections
