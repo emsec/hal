@@ -1,10 +1,8 @@
 option(PL_GRAPH_ALGORITHM "PL_GRAPH_ALGORITHM" ON)
 if(PL_GRAPH_ALGORITHM OR BUILD_ALL_PLUGINS)
     include_directories(${BUDDY_INCLUDE_DIR})
-    include_directories(SYSTEM ${PYBIND11_INCLUDE_DIR}
-                        SYSTEM ${PYTHON_INCLUDE_DIRS})
-    include_directories(AFTER "${CMAKE_CURRENT_SOURCE_DIR}/include")
     include_directories(SYSTEM ${PYBIND11_INCLUDE_DIR} SYSTEM ${PYTHON_INCLUDE_DIRS})
+    include_directories(AFTER "${CMAKE_CURRENT_SOURCE_DIR}/include")
 
     file(GLOB_RECURSE GRAPH_ALGORITHM_INC ${CMAKE_CURRENT_SOURCE_DIR}/include/*.h)
     file(GLOB_RECURSE GRAPH_ALGORITHM_SRC ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
@@ -12,7 +10,7 @@ if(PL_GRAPH_ALGORITHM OR BUILD_ALL_PLUGINS)
 
     add_library(graph_algorithm SHARED ${GRAPH_ALGORITHM_SRC} ${PYTHON_BINDING_LIB_SRC} ${GRAPH_ALGORITHM_INC})
 
-    #Set shared library suffix for MacOS; Used for boost_python support
+    #Set shared library suffix for MacOS
     if(APPLE AND CMAKE_HOST_APPLE)
         set_target_properties(graph_algorithm PROPERTIES SUFFIX ".so")
     endif(APPLE AND CMAKE_HOST_APPLE)

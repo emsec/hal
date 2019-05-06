@@ -24,6 +24,8 @@ void hal_logger_marshall::append_log(spdlog::level::level_enum t, const QString&
     static const QString intermediateHTML = "\">";
     static const QString endHTML          = "</font></p>";
 
+    QString html_ready_msg = msg.toHtmlEscaped().replace(" ", "&nbsp;");
+
     QString color;
 
     switch (t)
@@ -52,7 +54,7 @@ void hal_logger_marshall::append_log(spdlog::level::level_enum t, const QString&
     }
     QString msg_to_print;
     if (!filter)
-        msg_to_print = beginHTML + color + intermediateHTML + msg.toHtmlEscaped() + endHTML;
+        msg_to_print = beginHTML + color + intermediateHTML + html_ready_msg + endHTML;
     else
     {
         hal_filter_item::rule rule;
@@ -119,12 +121,12 @@ void hal_logger_marshall::append_log(spdlog::level::level_enum t, const QString&
                         color = logger_qss_adapter::instance()->default_highlight().name();
                         break;
                 }
-                msg_to_print = beginHTML + color + intermediateHTML + msg.toHtmlEscaped() + endHTML;
+                msg_to_print = beginHTML + color + intermediateHTML + html_ready_msg + endHTML;
             }
             else
             {
                 if (rule == hal_filter_item::rule::ShowAll)
-                    msg_to_print = beginHTML + color + intermediateHTML + msg.toHtmlEscaped() + endHTML;
+                    msg_to_print = beginHTML + color + intermediateHTML + html_ready_msg + endHTML;
                 else
                     return;
             }
