@@ -23,10 +23,6 @@ if(APPLE AND CMAKE_HOST_APPLE)
     message(STATUS "    Set Environment Variable:")
     message(STATUS "    LDFLAGS=\"-L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib\"")
     message(STATUS "    CPPFLAGS=\"-I/usr/local/opt/llvm/include\"")
-    set(CMAKE_C_COMPILER /usr/local/opt/llvm/bin/clang)
-    set(CMAKE_CXX_COMPILER /usr/local/opt/llvm/bin/clang++)
-    set(ENV{LDFLAGS} "-L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib")
-    set(ENV{CPPFLAGS} "-I/usr/local/opt/llvm/include")
 endif(APPLE AND CMAKE_HOST_APPLE)
 
 # Configure CCache if available
