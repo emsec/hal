@@ -37,6 +37,12 @@ void python_code_editor::keyPressEvent(QKeyEvent* e)
         return;
     }
 
+    if (e->key() == Qt::Key_Backtab)
+    {
+        handle_shift_tab_key_pressed();
+        return;
+    }
+
     if (e->key() == Qt::Key_Return)
     {
         handle_return_pressed();
@@ -56,6 +62,45 @@ void python_code_editor::keyPressEvent(QKeyEvent* e)
     }
 
     QPlainTextEdit::keyPressEvent(e);
+}
+
+void python_code_editor::handle_shift_tab_key_pressed()
+{
+    auto cursor = textCursor();
+    // save the current cursor position
+    int current_position = cursor.position();
+    cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
+    QString current_line = cursor.selectedText();
+
+    // count consecutive spaces at start of line
+    int n_spaces = 0;
+    for (const auto& c : current_line)
+    {
+        if(c != ' ')
+        {
+            break;
+        }
+        n_spaces++;
+    }
+    // if we cannot un-indent silently return
+    if (n_spaces == 0)
+    {
+        return;
+    }
+    // calculate amount of spaces needed to align to next 4-block (4 spaces = 1 tab)
+    int n_spaces_block = n_spaces % 4;
+    // if this line is already aligned, set amount of spaces needed to align to
+    // next smaller indentation to 4
+    if (n_spaces_block == 0)
+    {
+        n_spaces_block = 4;
+    }
+    // un-indent by the calculated amount
+    cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::MoveAnchor);
+    cursor.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor, n_spaces_block);
+    cursor.removeSelectedText();
+    // restore the cursor position
+    cursor.setPosition(current_position - n_spaces_block);
 }
 
 void python_code_editor::handle_tab_key_pressed()

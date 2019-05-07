@@ -42,6 +42,7 @@ public:
     void keyPressEvent(QKeyEvent* e) Q_DECL_OVERRIDE;
 
     void handle_tab_key_pressed();
+    void handle_shift_tab_key_pressed();
     void handle_return_pressed();
     void handle_backspace_pressed(QKeyEvent* e);
     void handle_delete_pressed(QKeyEvent* e);
