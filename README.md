@@ -115,7 +115,7 @@ HAL releases are available via it's own ppa. You can find it here: [ppa:sebastia
 
 ### macOS
 
-A [homebrew](https://brew.sh/index_de) tap is coming soon...
+A [homebrew](https://brew.sh/index_de) tap is coming soon ...
 
 ## Build Instructions
 
