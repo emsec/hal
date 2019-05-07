@@ -421,7 +421,7 @@ std::string plugin_quine_mccluskey::get_boolean_function_str(const boolean_funct
     return str;
 }
 
-std::map<std::string, std::string> plugin_quine_mccluskey::get_boolean_function_str(std::shared_ptr<gate> const g, const bool gui)
+std::map<std::string, std::string> plugin_quine_mccluskey::get_boolean_function_str(std::shared_ptr<gate> const g, bool css_beautified)
 {
     if (g == nullptr)
     {
@@ -440,13 +440,14 @@ std::map<std::string, std::string> plugin_quine_mccluskey::get_boolean_function_
     // replace pin names
     int variable_cnt = 0;
     for (const auto& pin : g->get_input_pin_types())
-        str = core_utils::replace(str, "A" + std::to_string(variable_cnt++), pin);
+        str = core_utils::replace(str, "A" + std::to_string(variable_cnt++), pin + " ");
 
     // add brackets
     str = "(" + str + ")";
     str = core_utils::replace(str, " + ", ") + (");
+    str = core_utils::replace(str, " )", ")");
 
-    if (gui)
+    if (css_beautified)
     {
         // replace commas with AND and OR symbols
         for (const auto& pin : g->get_input_pin_types())
