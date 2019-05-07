@@ -9,7 +9,7 @@ function(hal_get_version)
             WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
     )
 
-    if(${VERSION_LIST})
+    if(VERSION_LIST STREQUAL "")
         file(READ ${CMAKE_SOURCE_DIR}/VERSION VERSION_FILE)
         message(STATUS "VERSION_FILE: ${VERSION_FILE}")
         string(REGEX MATCHALL "v([0-9]+)\.([0-9]+)\.([0-9]+)" match ${VERSION_FILE})
