@@ -57,6 +57,8 @@ class python_editor : public content_widget, public python_context_subscriber
     Q_PROPERTY(QString open_icon_style READ open_icon_style WRITE set_open_icon_style)
     Q_PROPERTY(QString save_icon_path READ save_icon_path WRITE set_save_icon_path)
     Q_PROPERTY(QString save_icon_style READ save_icon_style WRITE set_save_icon_style)
+    Q_PROPERTY(QString save_as_icon_path READ save_as_icon_path WRITE set_save_as_icon_path)
+    Q_PROPERTY(QString save_as_icon_style READ save_as_icon_style WRITE set_save_as_icon_style)
     Q_PROPERTY(QString run_icon_path READ run_icon_path WRITE set_run_icon_path)
     Q_PROPERTY(QString run_icon_style READ run_icon_style WRITE set_run_icon_style)
 
@@ -73,13 +75,19 @@ public:
 
     void handle_action_open_file();
     void handle_action_save_file();
+    void handle_action_save_file_as();
     void handle_action_run();
+
+    void save_file(const bool ask_path);
 
     QString open_icon_path() const;
     QString open_icon_style() const;
 
     QString save_icon_path() const;
     QString save_icon_style() const;
+
+    QString save_as_icon_path() const;
+    QString save_as_icon_style() const;
 
     QString run_icon_path() const;
     QString run_icon_style() const;
@@ -89,6 +97,9 @@ public:
 
     void set_save_icon_path(const QString& path);
     void set_save_icon_style(const QString& style);
+
+    void set_save_as_icon_path(const QString& path);
+    void set_save_as_icon_style(const QString& style);
 
     void set_run_icon_path(const QString& path);
     void set_run_icon_style(const QString& style);
@@ -113,12 +124,16 @@ private:
     QAction* m_action_open_file;
     QAction* m_action_run;
     QAction* m_action_save;
+    QAction* m_action_save_as;
 
     QString m_open_icon_style;
     QString m_open_icon_path;
 
     QString m_save_icon_style;
     QString m_save_icon_path;
+
+    QString m_save_as_icon_style;
+    QString m_save_as_icon_path;
 
     QString m_run_icon_style;
     QString m_run_icon_path;

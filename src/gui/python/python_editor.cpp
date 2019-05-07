@@ -255,7 +255,7 @@ void python_code_editor::perform_code_completion(std::tuple<std::string, std::st
 
 python_editor::python_editor(QWidget* parent)
     : content_widget("Python Editor", parent), python_context_subscriber(), m_editor_widget(new python_code_editor()), m_searchbar(new searchbar()), m_action_open_file(new QAction(this)),
-      m_action_run(new QAction(this)), m_action_save(new QAction(this)), m_file_name("")
+      m_action_run(new QAction(this)), m_action_save(new QAction(this)), m_action_save_as(new QAction(this)), m_file_name("")
 {
     ensurePolished();
     const int tab_stop = 4;
@@ -272,18 +272,22 @@ python_editor::python_editor(QWidget* parent)
 
     m_action_open_file->setIcon(gui_utility::get_styled_svg_icon(m_open_icon_style, m_open_icon_path));
     m_action_save->setIcon(gui_utility::get_styled_svg_icon(m_save_icon_style, m_save_icon_path));
+    m_action_save_as->setIcon(gui_utility::get_styled_svg_icon(m_save_as_icon_style, m_save_as_icon_path)); //TODO new icon
     m_action_run->setIcon(gui_utility::get_styled_svg_icon(m_run_icon_style, m_run_icon_path));
 
     m_action_open_file->setShortcut(QKeySequence("Ctrl+Shift+O"));
     m_action_save->setShortcut(QKeySequence("Shift+Ctrl+S"));
+    m_action_save_as->setShortcut(QKeySequence("Alt+Ctrl+S"));
     m_action_run->setShortcut(QKeySequence("Ctrl+R"));
 
     m_action_open_file->setText("Open Script '" + m_action_open_file->shortcut().toString(QKeySequence::NativeText) + "'");
     m_action_save->setText("Save '" + m_action_save->shortcut().toString(QKeySequence::NativeText) + "'");
+    m_action_save_as->setText("Save as '" + m_action_save->shortcut().toString(QKeySequence::NativeText) + "'");
     m_action_run->setText("Execute Script '" + m_action_run->shortcut().toString(QKeySequence::NativeText) + "'");
 
     connect(m_action_open_file, &QAction::triggered, this, &python_editor::handle_action_open_file);
     connect(m_action_save, &QAction::triggered, this, &python_editor::handle_action_save_file);
+    connect(m_action_save_as, &QAction::triggered, this, &python_editor::handle_action_save_file_as);
     connect(m_action_run, &QAction::triggered, this, &python_editor::handle_action_run);
 
     m_editor_widget->setPlainText(g_settings.value("python_editor/code", "").toString());
@@ -299,6 +303,7 @@ void python_editor::setup_toolbar(toolbar* toolbar)
 {
     toolbar->addAction(m_action_open_file);
     toolbar->addAction(m_action_save);
+    toolbar->addAction(m_action_save_as);
     toolbar->addAction(m_action_run);
 
     // DEBUG CODE
@@ -342,19 +347,22 @@ void python_editor::handle_action_open_file()
     QString title = "Open File";
     QString text  = "Python Scripts(*.py)";
 
-    m_file_name = QFileDialog::getOpenFileName(nullptr, title, QDir::currentPath(), text, nullptr, QFileDialog::DontUseNativeDialog);
+    QString new_file_name = QFileDialog::getOpenFileName(nullptr, title, QDir::currentPath(), text, nullptr, QFileDialog::DontUseNativeDialog);
 
-    if (m_file_name.isEmpty())
+    if (new_file_name.isEmpty())
     {
         return;
     }
 
-    std::ifstream file(m_file_name.toStdString(), std::ios::in);
+    std::ifstream file(new_file_name.toStdString(), std::ios::in);
 
     if (!file.is_open())
     {
         return;
     }
+
+    // make file active
+    m_file_name = new_file_name;
 
     m_editor_widget->clear();
     std::string f((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
@@ -363,16 +371,27 @@ void python_editor::handle_action_open_file()
     //file_manager::get_instance()->open_file(file_name);
 }
 
-void python_editor::handle_action_save_file()
+void python_editor::save_file(const bool ask_path)
 {
     QString title = "Save File";
     QString text  = "Python Scripts(*.py)";
 
-    if (m_file_name.isEmpty())
+    QString selected_file_name;
+
+    if (ask_path || m_file_name.isEmpty())
     {
-        m_file_name = QFileDialog::getSaveFileName(nullptr, title, QDir::currentPath(), text, nullptr, QFileDialog::DontUseNativeDialog);
+        selected_file_name = QFileDialog::getSaveFileName(nullptr, title, QDir::currentPath(), text, nullptr, QFileDialog::DontUseNativeDialog);
+        if (selected_file_name.isEmpty())
+        {
+            return;
+        }
     }
-    std::ofstream out(m_file_name.toStdString(), std::ios::out);
+    else
+    {
+        selected_file_name = m_file_name;
+    }
+
+    std::ofstream out(selected_file_name.toStdString(), std::ios::out);
 
     if (!out.is_open())
     {
@@ -380,6 +399,19 @@ void python_editor::handle_action_save_file()
     }
     out << m_editor_widget->toPlainText().toStdString();
     out.close();
+
+    // remember target file path
+    m_file_name = selected_file_name;
+}
+
+void python_editor::handle_action_save_file()
+{
+    this->save_file(false);
+}
+
+void python_editor::handle_action_save_file_as()
+{
+    this->save_file(true);
 }
 
 void python_editor::handle_action_run()
@@ -405,6 +437,16 @@ QString python_editor::save_icon_path() const
 QString python_editor::save_icon_style() const
 {
     return m_save_icon_style;
+}
+
+QString python_editor::save_as_icon_path() const
+{
+    return m_save_as_icon_path;
+}
+
+QString python_editor::save_as_icon_style() const
+{
+    return m_save_as_icon_style;
 }
 
 QString python_editor::run_icon_path() const
@@ -435,6 +477,16 @@ void python_editor::set_save_icon_path(const QString& path)
 void python_editor::set_save_icon_style(const QString& style)
 {
     m_save_icon_style = style;
+}
+
+void python_editor::set_save_as_icon_path(const QString& path)
+{
+    m_save_as_icon_path = path;
+}
+
+void python_editor::set_save_as_icon_style(const QString& style)
+{
+    m_save_as_icon_style = style;
 }
 
 void python_editor::set_run_icon_path(const QString& path)
