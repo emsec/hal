@@ -43,6 +43,7 @@ build/
 deps/buddy-2.4/autom4te.cache/
 .vagrant
 .vscode
+.brew_home
 
 playbook.retry
 
