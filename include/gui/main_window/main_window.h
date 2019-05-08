@@ -117,6 +117,7 @@ public Q_SLOTS:
     void handle_action_open();
     void handle_file_opened(const QString& file_name);
     void handle_save_triggered();
+    void handle_action_closed();
 
 private:
     void closeEvent(QCloseEvent* event);
@@ -137,6 +138,7 @@ private:
 
     QAction* m_action_open;
     QAction* m_action_save;
+    QAction* m_action_save_as;
     QAction* m_action_about;
     QAction* m_action_schedule;
     QAction* m_action_run_schedule;

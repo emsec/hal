@@ -21,44 +21,29 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef GET_IN_TOUCH_WIDGET_H
-#define GET_IN_TOUCH_WIDGET_H
+#ifndef GUI_THEME_SETTINGS_H
+#define GUI_THEME_SETTINGS_H
 
-#include "QFrame"
+#include "settings_widget.h"
+#include <QComboBox>
 
-class get_in_touch_item;
-
-class QLabel;
-class QVBoxLayout;
-
-class get_in_touch_widget : public QFrame
+class gui_theme_settings : public settings_widget
 {
     Q_OBJECT
 
 public:
-    get_in_touch_widget(QWidget* parent = nullptr);
+    gui_theme_settings(QWidget* parent = 0);
 
-    void repolish();
-
-public Q_SLOTS:
-    void handle_about_item_clicked();
-    void handle_cpp_documentation_item_clicked();
-    void handle_py_documentation_item_clicked();
-    void handle_ticket_item_clicked();
+    virtual void load_settings() Q_DECL_OVERRIDE;
+    virtual void save_settings() Q_DECL_OVERRIDE;
+    virtual void restore_default_settings() Q_DECL_OVERRIDE;
 
 private:
-    QVBoxLayout* m_layout;
 
-    get_in_touch_item* m_about_item;
-    get_in_touch_item* m_news_item;
-    get_in_touch_item* m_forum_item;
-    get_in_touch_item* m_cpp_documentation_item;
-    get_in_touch_item* m_py_documentation_item;
-    get_in_touch_item* m_ticket_item;
+    void on_index_changed(QString text);
 
-    //    QFrame* m_line;
-    QLabel* m_core_version_label;
-    QLabel* m_gui_version_label;
+    QComboBox* m_style_box;
+
 };
 
-#endif    // GET_IN_TOUCH_WIDGET_H
+#endif //GUI_THEME_SETTINGS_H

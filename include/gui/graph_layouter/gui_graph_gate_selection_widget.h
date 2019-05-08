@@ -66,6 +66,8 @@ private:
 
     /*calculated the "biggest" size of the table*/
     QSize table_widget_size();
+
+    void on_item_double_clicked(QTableWidgetItem* item);
 };
 
 #endif    // gui_graph_gate_SELECTION_WIDGET_H

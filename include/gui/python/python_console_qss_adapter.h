@@ -1,7 +1,8 @@
 //  MIT License
 //
-//  Copyright (c) 2019 Ruhr-University Bochum, Germany, Chair for Embedded Security. All Rights reserved.
-//  Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
+//  Copyright (c) 2019 Marc Fyrbiak
+//  Copyright (c) 2019 Sebastian Wallat
+//  Copyright (c) 2019 Max Hoffmann
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -21,44 +22,38 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef GET_IN_TOUCH_WIDGET_H
-#define GET_IN_TOUCH_WIDGET_H
+#ifndef PYTHON_CONSOLE_QSS_ADAPTER
+#define PYTHON_CONSOLE_QSS_ADAPTER
 
-#include "QFrame"
+#include <QWidget>
+#include <QColor>
 
-class get_in_touch_item;
-
-class QLabel;
-class QVBoxLayout;
-
-class get_in_touch_widget : public QFrame
+class python_console_qss_adapter : public QWidget
 {
     Q_OBJECT
+    Q_PROPERTY(QColor standard_color READ standard_color WRITE set_standard_color)
+    Q_PROPERTY(QColor error_color READ error_color WRITE set_error_color)
+    Q_PROPERTY(QColor promt_color READ promt_color WRITE set_promt_color)
 
 public:
-    get_in_touch_widget(QWidget* parent = nullptr);
 
-    void repolish();
+    static python_console_qss_adapter* instance();
 
-public Q_SLOTS:
-    void handle_about_item_clicked();
-    void handle_cpp_documentation_item_clicked();
-    void handle_py_documentation_item_clicked();
-    void handle_ticket_item_clicked();
+    QColor standard_color() const;
+    QColor error_color() const;
+    QColor promt_color() const;
+
+    void set_standard_color(const QColor& color);
+    void set_error_color(const QColor& color);
+    void set_promt_color(const QColor& color);
 
 private:
-    QVBoxLayout* m_layout;
+    explicit python_console_qss_adapter(QWidget* parent = nullptr);
 
-    get_in_touch_item* m_about_item;
-    get_in_touch_item* m_news_item;
-    get_in_touch_item* m_forum_item;
-    get_in_touch_item* m_cpp_documentation_item;
-    get_in_touch_item* m_py_documentation_item;
-    get_in_touch_item* m_ticket_item;
+    QColor m_standard_color;
+    QColor m_error_color;
+    QColor m_promt_color;
 
-    //    QFrame* m_line;
-    QLabel* m_core_version_label;
-    QLabel* m_gui_version_label;
 };
 
-#endif    // GET_IN_TOUCH_WIDGET_H
+#endif //PYTHON_CONSOLE_QSS_ADAPTER

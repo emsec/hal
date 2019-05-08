@@ -29,7 +29,7 @@ gui_graph_gate_selection_widget::gui_graph_gate_selection_widget(QWidget* parent
                                             << "Name"
                                             << "Gate Type"
                                             << "Pin Type"
-                                            << "Modules");
+                                            << "Module");
     setEditTriggers(QAbstractItemView::NoEditTriggers);
 
     auto modules_of_gate = [](std::shared_ptr<gate> gate) -> QString {
@@ -72,6 +72,8 @@ gui_graph_gate_selection_widget::gui_graph_gate_selection_widget(QWidget* parent
     setMaximumHeight(((actual_size.height() > 400) ? 400 : actual_size.height()));
 
     selectRow(0);
+
+    connect(this, &QTableWidget::itemDoubleClicked, this, &gui_graph_gate_selection_widget::on_item_double_clicked);
 }
 
 //list is focused, so no need to implement down/up button, because the list automatically does the right thing for you
@@ -109,4 +111,12 @@ QSize gui_graph_gate_selection_widget::table_widget_size()
         height += rowHeight(i);
 
     return QSize(width, height - 6);
+}
+
+void gui_graph_gate_selection_widget::on_item_double_clicked(QTableWidgetItem *item)
+{
+    auto gate = g_netlist->get_gate_by_id(static_cast<const u32>(std::stoi(selectedItems().at(0)->text().toStdString())));
+    m_view->onSuccessorgateSelected(gate);
+    Q_EMIT gateSelected(gate);
+    this->close();
 }

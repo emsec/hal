@@ -83,6 +83,9 @@ public:
 public Q_SLOTS:
     void search(const QString& string);
 
+    void toggle_line_numbers();
+    void toggle_minimap();
+
 protected:
     virtual void resizeEvent(QResizeEvent* event) Q_DECL_OVERRIDE;
 
@@ -102,6 +105,9 @@ private:
 
     QPropertyAnimation* m_animation;
 
+    bool m_line_numbers_enabled;
+    bool m_minimap_enabled;
+
     QFont m_line_number_font;
     QColor m_line_number_color;
     QColor m_line_number_background;
@@ -110,4 +116,4 @@ private:
     QColor m_current_line_background;
 };
 
-#endif    // CODE_EDITOR_H
+#endif // CODE_EDITOR_H

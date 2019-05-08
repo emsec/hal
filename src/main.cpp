@@ -3,7 +3,7 @@
 #include "core/log.h"
 #include "core/plugin_manager.h"
 #include "core/utils.h"
-#include "version.h"
+#include "hal_version.h"
 
 #include "core/interface_cli.h"
 #include "core/program_arguments.h"

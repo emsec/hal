@@ -23,9 +23,10 @@ graph_layouter_view::graph_layouter_view(QGraphicsScene* scene, old_graph_layout
     this->setMouseTracking(true);
     _modifiers        = Qt::NoModifier;
     _zoom_factor_base = 1.0020;
-    this->setStyleSheet("background: transparent");
+    //this->setStyleSheet("background: transparent");
     m_layouter = layouter;
     m_netlist  = g;
+
 
     QObject::connect(this->scene(), SIGNAL(selectionChanged()), this, SLOT(onSelectionChanged()));
     //Shortcut

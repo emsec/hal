@@ -103,10 +103,21 @@ bool plugin_gui::exec(program_arguments& args)
     //    g_settings.setValue("stylesheet/definitions", "/home/user/Desktop/HAL/hal/test_files/test_definitions");
     //    a.setStyleSheet(style::get_stylesheet());
 
-    QFile stylesheet(":/style/darcula");
+    //TEMPORARY CODE TO CHANGE BETWEEN THE 2 STYLESHEETS WITH SETTINGS (NOT FINAL)
+    //this settingsobject is currently neccessary to read from the settings from here, because the g_settings are not yet initialized(?)
+    QSettings tempsettings_to_read_from(QString::fromStdString((core_utils::get_user_config_directory() / "/guisettings.ini").string()), QSettings::IniFormat);
+    QString stylesheet_to_open = ":/style/darcula"; //default style
+
+    if(tempsettings_to_read_from.value("main_style/theme","") == "" || tempsettings_to_read_from.value("main_style/theme", "") == "darcula")
+        stylesheet_to_open = ":/style/darcula";
+    else if(tempsettings_to_read_from.value("main_style/theme", "") == "sunny")
+        stylesheet_to_open = ":/style/sunny";
+
+    QFile stylesheet(stylesheet_to_open);
     stylesheet.open(QFile::ReadOnly);
     a.setStyleSheet(QString(stylesheet.readAll()));
     stylesheet.close();
+    //##############END OF TEMPORARY TESTING TO SWITCH BETWEEN STYLESHEETS
 
     qRegisterMetaType<spdlog::level::level_enum>("spdlog::level::level_enum");
 

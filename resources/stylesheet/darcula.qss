@@ -13,10 +13,6 @@
     show-decoration-selected   : 1;
 }
 
-gui_graph_gate_selection_widget QTableView::item {
-    border-right : 1px solid rgb(169, 183, 198);
-}
-
 *::item:selected {
     background   : rgba(13, 41, 62);
 
@@ -1277,6 +1273,9 @@ qproperty-open_icon_path: ":/icons/folder";
 qproperty-save_icon_style: "all->#3192C5";
 qproperty-save_icon_path: ":/icons/folder-down";
 
+qproperty-save_as_icon_style: "all->#3192C5";
+qproperty-save_as_icon_path: ":/icons/save-as";
+
 qproperty-run_icon_style: "all->#2BAD4A";
 qproperty-run_icon_path: ":/icons/run";
 }
@@ -1320,6 +1319,64 @@ qproperty-type_color: #A9B7C6;
 qproperty-number_color: #6897BB;
 qproperty-string_color: #A5C25C;
 qproperty-comment_color: #629755;
+}
+
+logger_qss_adapter {
+    qproperty-trace_color: #90C023;
+    qproperty-debug_color: #90C023;
+    qproperty-info_color: #e4e4e4;
+    qproperty-warning_color: #CC7832;
+    qproperty-error_color: #FF0000;
+    qproperty-critical_color: #FF6B68;
+    qproperty-default_color: #BBBBBB;
+    qproperty-marker_color: #FFEF0B;
+    qproperty-trace_highlight: #FFEF0B;
+    qproperty-debug_highlight: #FFEF0B;
+    qproperty-info_highlight: #00B7E0;
+    qproperty-warning_highlight: #FFEF0B;
+    qproperty-error_highlight: #FFEF0B;
+    qproperty-critical_highlight: #FFEF0B;
+    qproperty-default_highlight: #FFEF0B;
+}
+
+python_console_qss_adapter {
+    qproperty-standard_color: #BBBBBB;
+    qproperty-error_color: #FF6B63;
+    qproperty-promt_color: #917EB7;
+}
+
+old_graphics_item_qss_adapter {
+    qproperty-gate_default_color: #ffffff;
+    qproperty-gate_background_color: #2b2b2b/*#171E22*/;
+    qproperty-gate_font_color: #ffffff;
+    qproperty-gate_selected_background_color: #ffffff;
+    qproperty-gate_selected_font_color: #000000;
+    qproperty-net_default_color: #6e6e64;
+    qproperty-net_selected_color: #ffffff;
+    qproperty-net_global_input_output_color: #ffffff;
+
+    qproperty-tree_navigation_open_folder_style: "all->#888888";
+    qproperty-tree_navigation_open_folder_path: ":/icons/open";
+}
+
+table_selector_widget {
+    background-color: black;
+    color: white;
+    selection-background-color: grey;
+}
+
+table_selector_widget::item {
+    border-right : 1px solid rgb(169, 183, 198);
+}
+
+gui_graph_gate_selection_widget {
+    background-color: black;
+    color: white;
+    selection-background-color: grey;
+}
+
+gui_graph_gate_selection_widget::item {
+    border-right : 1px solid rgb(169, 183, 198);
 }
 
 /*
