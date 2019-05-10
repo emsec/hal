@@ -14,6 +14,10 @@ class module_test : public ::testing::Test
 {
 protected:
     const std::string g_lib_name = "EXAMPLE_GATE_LIBRARY";
+    const u32 MIN_MODULE_ID = 2;
+    //const u32 MIN_NL_ID = 1;
+    const u32 MIN_GATE_ID = 1;
+    const u32 MIN_NET_ID = 1;
 
     virtual void SetUp()
     {
@@ -45,15 +49,52 @@ protected:
  *
  * Functions: constructor, get_id, get_name
  */
-TEST_F(module_test, check_constructor){TEST_START{// Creating a module of id 123 and type "test module"
-                                                     std::shared_ptr<netlist> nl = create_empty_netlist(0);
-std::shared_ptr<module> sm = nl->create_module(123, "test module", nl->get_top_module());
+TEST_F(module_test, check_constructor){
+    TEST_START
+        {
+            // Creating a module of id 123 and type "test module"
+            std::shared_ptr<netlist> nl = create_empty_netlist();
+            std::shared_ptr<module> sm = nl->create_module(MIN_MODULE_ID+123, "test module", nl->get_top_module());
 
-EXPECT_EQ(sm->get_id(), (u32)123);
-EXPECT_EQ(sm->get_name(), "test module");
-EXPECT_EQ(sm->get_netlist(), nl);
+            EXPECT_EQ(sm->get_id(), (u32)(MIN_MODULE_ID+123));
+            EXPECT_EQ(sm->get_name(), "test module");
+            EXPECT_EQ(sm->get_netlist(), nl);
+            }
+    TEST_END
 }
-TEST_END
+
+/**
+ * Testing the set_name function of module
+ *
+ * Functions: set_name
+ */
+TEST_F(module_test, check_set_id){
+    TEST_START
+        {
+            // Set a new name for module
+            std::shared_ptr<netlist> nl = create_empty_netlist();
+            std::shared_ptr<module> sm = nl->create_module(MIN_MODULE_ID+0, "test_module", nl->get_top_module());
+
+            sm->set_name("new_name");
+            EXPECT_EQ(sm->get_name(), "new_name");
+        }
+        {
+            // Set an already set name
+            std::shared_ptr<netlist> nl = create_empty_netlist();
+            std::shared_ptr<module> sm = nl->create_module(MIN_MODULE_ID+0, "test_module", nl->get_top_module());
+
+            sm->set_name("test_module");
+            EXPECT_EQ(sm->get_name(), "test_module");
+        }
+        /*{ TODO: Fails
+            // Set an empty name
+            std::shared_ptr<netlist> nl = create_empty_netlist();
+            std::shared_ptr<module> sm = nl->create_module(MIN_MODULE_ID+0, "test_module", nl->get_top_module());
+
+            sm->set_name("");
+            EXPECT_EQ(sm->get_name(), "test_module");
+        }*/
+    TEST_END
 }
 
 /**
@@ -62,54 +103,57 @@ TEST_END
  *
  * Functions: create_gate
  */
-TEST_F(module_test, check_create_gate){TEST_START{// Add some gates to the module
-                                                     std::shared_ptr<netlist> nl = create_empty_netlist(0);
-    std::shared_ptr<gate> gate_0 = nl->create_gate(1, "INV", "gate_0");
-    std::shared_ptr<gate> gate_1 = nl->create_gate(2, "INV", "gate_1");
-    // this gate is not part of the module
-    std::shared_ptr<gate> gate_not_in_sm = nl->create_gate(3, "INV", "gate_not_in_sm");
+TEST_F(module_test, check_create_gate){
+    TEST_START
+        {
+            // Add some gates to the module
+            std::shared_ptr<netlist> nl = create_empty_netlist();
+            std::shared_ptr<gate> gate_0 = nl->create_gate(MIN_GATE_ID+0, "INV", "gate_0");
+            std::shared_ptr<gate> gate_1 = nl->create_gate(MIN_GATE_ID+1, "INV", "gate_1");
+            // this gate is not part of the module
+            std::shared_ptr<gate> gate_not_in_sm = nl->create_gate(MIN_GATE_ID+2, "INV", "gate_not_in_sm");
 
-    // Add gate_0 and gate_1 to a module
-    std::shared_ptr<module> sm = nl->create_module(1, "test module", nl->get_top_module());
-    sm->insert_gate(gate_0);
-    sm->insert_gate(gate_1);
+            // Add gate_0 and gate_1 to a module
+            std::shared_ptr<module> sm = nl->create_module(MIN_MODULE_ID+0, "test module", nl->get_top_module());
+            sm->insert_gate(gate_0);
+            sm->insert_gate(gate_1);
 
-    std::set<std::shared_ptr<gate>> expRes = {gate_0, gate_1};
+            std::set<std::shared_ptr<gate>> expRes = {gate_0, gate_1};
 
-    EXPECT_EQ(sm->get_gates(), expRes);
-    EXPECT_TRUE(sm->contains_gate(gate_0));
-    EXPECT_TRUE(sm->contains_gate(gate_1));
-    EXPECT_FALSE(sm->contains_gate(gate_not_in_sm));
-}
-{
-    // Add the same gate twice to the module
-    NO_COUT_TEST_BLOCK;
-    std::shared_ptr<netlist> nl  = create_empty_netlist(0);
-    std::shared_ptr<gate> gate_0 = nl->create_gate(1, "INV", "gate_0");
+            EXPECT_EQ(sm->get_gates(), expRes);
+            EXPECT_TRUE(sm->contains_gate(gate_0));
+            EXPECT_TRUE(sm->contains_gate(gate_1));
+            EXPECT_FALSE(sm->contains_gate(gate_not_in_sm));
+        }
+        {
+            // Add the same gate twice to the module
+            NO_COUT_TEST_BLOCK;
+            std::shared_ptr<netlist> nl  = create_empty_netlist();
+            std::shared_ptr<gate> gate_0 = nl->create_gate(MIN_GATE_ID+0, "INV", "gate_0");
 
-    // Add gate_0 twice
-    std::shared_ptr<module> sm = nl->create_module(1, "test module", nl->get_top_module());
-    sm->insert_gate(gate_0);
-    sm->insert_gate(gate_0);
+            // Add gate_0 twice
+            std::shared_ptr<module> sm = nl->create_module(MIN_MODULE_ID+0, "test module", nl->get_top_module());
+            sm->insert_gate(gate_0);
+            sm->insert_gate(gate_0);
 
-    std::set<std::shared_ptr<gate>> expRes = {
-        gate_0,
-    };
+            std::set<std::shared_ptr<gate>> expRes = {
+                gate_0,
+            };
 
-    EXPECT_EQ(sm->get_gates(), expRes);
-    EXPECT_TRUE(sm->contains_gate(gate_0));
-}
+            EXPECT_EQ(sm->get_gates(), expRes);
+            EXPECT_TRUE(sm->contains_gate(gate_0));
+        }
 
-// NEGATIVE
-{
-    // Gate is a nullptr
-    NO_COUT_TEST_BLOCK;
-    std::shared_ptr<netlist> nl = create_empty_netlist(0);
-    std::shared_ptr<module> sm = nl->create_module(1, "test module", nl->get_top_module());
-    sm->insert_gate(nullptr);
-    EXPECT_TRUE(sm->get_gates().empty());
-}
-TEST_END
+        // NEGATIVE
+        {
+            // Gate is a nullptr
+            NO_COUT_TEST_BLOCK;
+            std::shared_ptr<netlist> nl = create_empty_netlist();
+            std::shared_ptr<module> sm = nl->create_module(MIN_MODULE_ID+0, "test module", nl->get_top_module());
+            sm->insert_gate(nullptr);
+            EXPECT_TRUE(sm->get_gates().empty());
+        }
+    TEST_END
 }
 
 /**
@@ -118,66 +162,69 @@ TEST_END
  *
  * Functions: create_net
  */
-TEST_F(module_test, check_create_net){TEST_START{// Add some nets to the module
-                                                    std::shared_ptr<netlist> nl = create_empty_netlist(0);
-    std::shared_ptr<net> net_0 = nl->create_net(1, "net_0");
-    std::shared_ptr<net> net_1 = nl->create_net(2, "net_1");
-    // this net is not part of the module
-    std::shared_ptr<net> net_not_in_sm = nl->create_net(3, "net_not_in_sm");
+TEST_F(module_test, check_create_net){
+    TEST_START
+        {
+            // Add some nets to the module
+            std::shared_ptr<netlist> nl = create_empty_netlist();
+            std::shared_ptr<net> net_0 = nl->create_net(MIN_NET_ID+0, "net_0");
+            std::shared_ptr<net> net_1 = nl->create_net(MIN_NET_ID+1, "net_1");
+            // this net is not part of the module
+            std::shared_ptr<net> net_not_in_sm = nl->create_net(MIN_NET_ID+2, "net_not_in_sm");
 
-    // Add net_0 and net_1 to a module
-    std::shared_ptr<module> sm = nl->create_module(1, "test module", nl->get_top_module());
-    sm->insert_net(net_0);
-    sm->insert_net(net_1);
+            // Add net_0 and net_1 to a module
+            std::shared_ptr<module> sm = nl->create_module(MIN_MODULE_ID+1, "test module", nl->get_top_module());
+            sm->insert_net(net_0);
+            sm->insert_net(net_1);
 
-    std::set<std::shared_ptr<net>> expRes = {net_0, net_1};
+            std::set<std::shared_ptr<net>> expRes = {net_0, net_1};
 
-    EXPECT_EQ(sm->get_nets(), expRes);
-    EXPECT_TRUE(sm->contains_net(net_0));
-    EXPECT_TRUE(sm->contains_net(net_1));
-    EXPECT_FALSE(sm->contains_net(net_not_in_sm));
-}
-{
-    NO_COUT_TEST_BLOCK;
-    // Add the same net twice to the module
-    std::shared_ptr<netlist> nl = create_empty_netlist(0);
-    std::shared_ptr<net> net_0  = nl->create_net(1, "net_0");
-
-    // Add net_0 twice
-    std::shared_ptr<module> sm = nl->create_module(1, "test module", nl->get_top_module());
-    sm->insert_net(net_0);
-    sm->insert_net(net_0);
-
-    std::set<std::shared_ptr<net>> expRes = {
-        net_0,
-    };
-
-    EXPECT_EQ(sm->get_nets(), expRes);
-    EXPECT_TRUE(sm->contains_net(net_0));
-}
-
-// NEGATIVE
-{
-    // Net is a nullptr
-    NO_COUT_TEST_BLOCK;
-    std::shared_ptr<netlist> nl   = create_empty_netlist(0);
-    std::shared_ptr<module> sm = nl->create_module(1, "test module", nl->get_top_module());
-    sm->insert_net(nullptr);
-    EXPECT_TRUE(sm->get_nets().empty());
-}
-/*{
-            // net is not part of the same netlist TODO: Requirements?
+            EXPECT_EQ(sm->get_nets(), expRes);
+            EXPECT_TRUE(sm->contains_net(net_0));
+            EXPECT_TRUE(sm->contains_net(net_1));
+            EXPECT_FALSE(sm->contains_net(net_not_in_sm));
+        }
+        {
             NO_COUT_TEST_BLOCK;
-            std::shared_ptr<netlist> nl = create_empty_netlist(0);
-            std::shared_ptr<netlist> other_nl = create_empty_netlist(1);
-            std::shared_ptr<net> net_0(new net(other_nl, 0, "net_0"));
-            other_nl->create_net(net_0);
+            // Add the same net twice to the module
+            std::shared_ptr<netlist> nl = create_empty_netlist();
+            std::shared_ptr<net> net_0  = nl->create_net(MIN_NET_ID+0, "net_0");
 
-            std::shared_ptr<module> sm = nl->create_module(1, "test module", nl->get_top_module());
-            EXPECT_FALSE(sm->insert_net(net_0));
+            // Add net_0 twice
+            std::shared_ptr<module> sm = nl->create_module(MIN_MODULE_ID+0, "test module", nl->get_top_module());
+            sm->insert_net(net_0);
+            sm->insert_net(net_0);
+
+            std::set<std::shared_ptr<net>> expRes = {
+                net_0,
+            };
+
+            EXPECT_EQ(sm->get_nets(), expRes);
+            EXPECT_TRUE(sm->contains_net(net_0));
+        }
+
+        // NEGATIVE
+        {
+            // Net is a nullptr
+            NO_COUT_TEST_BLOCK;
+            std::shared_ptr<netlist> nl   = create_empty_netlist();
+            std::shared_ptr<module> sm = nl->create_module(MIN_MODULE_ID+0, "test module", nl->get_top_module());
+            sm->insert_net(nullptr);
             EXPECT_TRUE(sm->get_nets().empty());
-        }*/
-TEST_END
+        }
+        /*{
+                    // net is not part of the same netlist TODO: Requirements?
+                    NO_COUT_TEST_BLOCK;
+                    std::shared_ptr<netlist> nl = create_empty_netlist(0);
+                    std::shared_ptr<netlist> other_nl = create_empty_netlist(1);
+                    std::shared_ptr<net> net_0(new net(other_nl, 0, "net_0"));
+                    other_nl->create_net(net_0);
+
+                    std::shared_ptr<module> sm = nl->create_module(1, "test module", nl->get_top_module());
+                    EXPECT_FALSE(sm->insert_net(net_0));
+                    EXPECT_TRUE(sm->get_nets().empty());
+                }*/
+        TEST_END
 }
 
 /**
@@ -186,36 +233,39 @@ TEST_END
  *
  * Functions: delete_gate
  */
-TEST_F(module_test, check_delete_gate){TEST_START{// Remove a gate from a module
-    std::shared_ptr<netlist> nl = create_empty_netlist(0);
-    std::shared_ptr<gate> gate_0 = nl->create_gate(1, "INV", "gate_0");
+TEST_F(module_test, check_delete_gate){
+    TEST_START
+        {
+            // Remove a gate from a module
+            std::shared_ptr<netlist> nl = create_empty_netlist();
+            std::shared_ptr<gate> gate_0 = nl->create_gate(MIN_GATE_ID+1, "INV", "gate_0");
 
-    std::shared_ptr<module> sm = nl->create_module(1, "test module", nl->get_top_module());
-    sm->insert_gate(gate_0);
+            std::shared_ptr<module> sm = nl->create_module(MIN_MODULE_ID+0, "test module", nl->get_top_module());
+            sm->insert_gate(gate_0);
 
-    EXPECT_TRUE(sm->remove_gate(gate_0));
-    EXPECT_TRUE(sm->get_gates().empty());
-}
-{
-    // Remove a gate which isn't part of the module
-    NO_COUT_TEST_BLOCK;
-    std::shared_ptr<netlist> nl  = create_empty_netlist(0);
-    std::shared_ptr<gate> gate_0 = nl->create_gate(1, "INV", "gate_0");
+            EXPECT_TRUE(sm->remove_gate(gate_0));
+            EXPECT_TRUE(sm->get_gates().empty());
+        }
+        {
+            // Remove a gate which isn't part of the module
+            NO_COUT_TEST_BLOCK;
+            std::shared_ptr<netlist> nl  = create_empty_netlist();
+            std::shared_ptr<gate> gate_0 = nl->create_gate(MIN_GATE_ID+1, "INV", "gate_0");
 
-    std::shared_ptr<module> sm = nl->create_module(1, "test module", nl->get_top_module());
+            std::shared_ptr<module> sm = nl->create_module(MIN_MODULE_ID+0, "test module", nl->get_top_module());
 
-    EXPECT_FALSE(sm->remove_gate(gate_0));
-    EXPECT_TRUE(sm->get_gates().empty());
-}
-// NEGATIVE
-{
-    // Delete a nullptr
-    std::shared_ptr<netlist> nl   = create_empty_netlist(0);
-    std::shared_ptr<module> sm = nl->create_module(1, "test module", nl->get_top_module());
-    EXPECT_FALSE(sm->remove_gate(nullptr));
-    EXPECT_TRUE(sm->get_gates().empty());
-}
-TEST_END
+            EXPECT_FALSE(sm->remove_gate(gate_0));
+            EXPECT_TRUE(sm->get_gates().empty());
+        }
+        // NEGATIVE
+        {
+            // Delete a nullptr
+            std::shared_ptr<netlist> nl   = create_empty_netlist();
+            std::shared_ptr<module> sm = nl->create_module(MIN_MODULE_ID+0, "test module", nl->get_top_module());
+            EXPECT_FALSE(sm->remove_gate(nullptr));
+            EXPECT_TRUE(sm->get_gates().empty());
+        }
+    TEST_END
 }
 
 /**
@@ -224,34 +274,37 @@ TEST_END
  *
  * Functions: delete_net
  */
-TEST_F(module_test, check_delete_net){TEST_START{// Remove a net from a module
-    std::shared_ptr<netlist> nl = create_empty_netlist(0);
-    std::shared_ptr<net> net_0 = nl->create_net(1, "net_0");
+TEST_F(module_test, check_delete_net){
+    TEST_START
+        {
+            // Remove a net from a module
+            std::shared_ptr<netlist> nl = create_empty_netlist();
+            std::shared_ptr<net> net_0 = nl->create_net(MIN_NET_ID+1, "net_0");
 
-    std::shared_ptr<module> sm = nl->create_module(1, "test module", nl->get_top_module());
-    sm->insert_net(net_0);
+            std::shared_ptr<module> sm = nl->create_module(MIN_MODULE_ID+0, "test module", nl->get_top_module());
+            sm->insert_net(net_0);
 
-    EXPECT_TRUE(sm->remove_net(net_0));
-    EXPECT_TRUE(sm->get_nets().empty());
-}
-{
-    // Remove a net which isn't part of the module
-    NO_COUT_TEST_BLOCK;
-    std::shared_ptr<netlist> nl = create_empty_netlist(0);
-    std::shared_ptr<net> net_0  = nl->create_net(1, "net_0");
+            EXPECT_TRUE(sm->remove_net(net_0));
+            EXPECT_TRUE(sm->get_nets().empty());
+        }
+        {
+            // Remove a net which isn't part of the module
+            NO_COUT_TEST_BLOCK;
+            std::shared_ptr<netlist> nl = create_empty_netlist();
+            std::shared_ptr<net> net_0  = nl->create_net(MIN_NET_ID+1, "net_0");
 
-    std::shared_ptr<module> sm = nl->create_module(1, "test module", nl->get_top_module());
+            std::shared_ptr<module> sm = nl->create_module(MIN_MODULE_ID+0, "test module", nl->get_top_module());
 
-    EXPECT_FALSE(sm->remove_net(net_0));
-    EXPECT_TRUE(sm->get_nets().empty());
-}
-// NEGATIVE
-{
-    // Delete a nullptr
-    std::shared_ptr<netlist> nl   = create_empty_netlist(0);
-    std::shared_ptr<module> sm = nl->create_module(1, "test module", nl->get_top_module());
-    EXPECT_FALSE(sm->remove_net(nullptr));
-    EXPECT_TRUE(sm->get_nets().empty());
-}
-TEST_END
+            EXPECT_FALSE(sm->remove_net(net_0));
+            EXPECT_TRUE(sm->get_nets().empty());
+        }
+        // NEGATIVE
+        {
+            // Delete a nullptr
+            std::shared_ptr<netlist> nl   = create_empty_netlist();
+            std::shared_ptr<module> sm = nl->create_module(MIN_MODULE_ID+0, "test module", nl->get_top_module());
+            EXPECT_FALSE(sm->remove_net(nullptr));
+            EXPECT_TRUE(sm->get_nets().empty());
+        }
+    TEST_END
 }
