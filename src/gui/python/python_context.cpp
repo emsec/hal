@@ -58,7 +58,7 @@ void python_context::set_console(python_console* c)
 
 void python_context::initialize_context(py::dict* globals, py::dict* locals)
 {
-    (*globals) = py::globals();
+    globals = new py::dict(**(*globals), **(*locals));
 
     py::exec("import __main__\n"
              "import io, sys\n"
@@ -94,7 +94,7 @@ void python_context::init_python()
 {
     using namespace py::literals;
 
-    m_globals = new py::dict();
+    m_globals = new py::dict(py::globals());
     m_locals = new py::dict();
 
     initialize_context(m_globals, m_locals);
@@ -139,11 +139,11 @@ void python_context::interpret(const QString& input, bool multiple_expressions)
         pybind11::object rc;
         if (multiple_expressions)
         {
-            rc = py::eval<py::eval_statements>(input.toStdString(), *m_globals, *m_locals);
+            rc = py::eval<py::eval_statements>(input.toStdString(), py::dict(**(*m_globals), **(*m_locals)), *m_locals);
         }
         else
         {
-            rc = py::eval<py::eval_single_statement>(input.toStdString(), *m_globals, *m_locals);
+            rc = py::eval<py::eval_single_statement>(input.toStdString(), py::dict(**(*m_globals), **(*m_locals)), *m_locals);
         }
         if (!rc.is_none())
         {
@@ -164,7 +164,7 @@ void python_context::interpret(const QString& input, bool multiple_expressions)
 
 void python_context::interpret_script(const QString& input)
 {
-    py::dict tmp_globals;
+    py::dict tmp_globals(py::globals());
     py::dict tmp_locals;
     initialize_context(&tmp_globals, &tmp_locals);
 
@@ -172,9 +172,10 @@ void python_context::interpret_script(const QString& input)
     forward_stdout("<Execute Python Editor content>");
     forward_stdout("\n");
     log_info("python", "Python editor execute script:\n{}\n", input.toStdString());
+    py::dict global_locals = py::dict(**(tmp_globals), **(tmp_locals));
     try
     {
-        py::exec(input.toStdString(), tmp_globals, tmp_locals);
+        py::eval<py::eval_statements>(input.toStdString(), global_locals, global_locals);
     }
     catch (py::error_already_set& e)
     {
@@ -235,10 +236,11 @@ std::vector<std::tuple<std::string, std::string>> python_context::complete(const
         }
         else
         {
-            py::dict tmp_globals;
+            py::dict tmp_globals(py::globals());
             py::dict tmp_locals;
             initialize_context(&tmp_globals, &tmp_locals);
-            namespaces.append(tmp_globals);
+            py::dict global_locals = py::dict(**(tmp_globals), **(tmp_locals));
+            namespaces.append(global_locals);
             namespaces.append(tmp_locals);
         }
         auto jedi   = py::module::import("jedi");
