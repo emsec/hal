@@ -34,6 +34,7 @@ class splitter;
 class toolbar;
 
 class QVBoxLayout;
+class QTabWidget;
 
 class python_code_editor : public code_editor
 {
@@ -110,6 +111,7 @@ Q_SIGNALS:
 
 public Q_SLOTS:
     void toggle_searchbar();
+    void debug_tab_close_request(int index);
 
 private:
     QVBoxLayout* m_layout;
@@ -139,6 +141,7 @@ private:
     QString m_run_icon_path;
 
     QString m_file_name;
+    QTabWidget* m_tab_widget;
 };
 
 #endif    // PYTHON_WIDGET_H

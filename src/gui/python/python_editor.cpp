@@ -266,7 +266,17 @@ python_editor::python_editor(QWidget* parent)
     new python_syntax_highlighter(m_editor_widget->document());
     new python_syntax_highlighter(m_editor_widget->minimap()->document());
 
-    m_content_layout->addWidget(m_editor_widget);
+
+    m_tab_widget = new QTabWidget();
+    m_tab_widget->setTabsClosable(true);
+    m_tab_widget->addTab(new python_code_editor(), "unsaved");
+    m_tab_widget->addTab(new python_code_editor(), "unsaved");
+    m_tab_widget->addTab(new python_code_editor(), "unsaved");
+    m_tab_widget->addTab(new python_code_editor(), "unsaved");
+    m_tab_widget->addTab(m_editor_widget, "unsaved");
+    m_content_layout->addWidget(m_tab_widget);
+    connect(m_tab_widget, &QTabWidget::tabCloseRequested, this, &python_editor::debug_tab_close_request);
+    //m_content_layout->addWidget(m_editor_widget);
     m_content_layout->addWidget(m_searchbar);
     m_searchbar->hide();
 
@@ -291,6 +301,13 @@ python_editor::python_editor(QWidget* parent)
     connect(m_action_run, &QAction::triggered, this, &python_editor::handle_action_run);
 
     m_editor_widget->setPlainText(g_settings.value("python_editor/code", "").toString());
+}
+
+void python_editor::debug_tab_close_request(int index)
+{
+    QWidget* wid = m_tab_widget->widget(index);
+    m_tab_widget->removeTab(0);
+    delete wid; //is neccessary so that the tabs are correct removed
 }
 
 python_editor::~python_editor()
