@@ -6,13 +6,13 @@ include_directories(${include_directories}
 #
 # core library
 #
-configure_file(${CMAKE_SOURCE_DIR}/include/version.h.in ${CMAKE_BINARY_DIR}/version.h @ONLY)
+configure_file(${CMAKE_SOURCE_DIR}/include/hal_version.h.in ${CMAKE_BINARY_DIR}/hal_version.h @ONLY)
 include_directories(${CMAKE_BINARY_DIR})
 file(GLOB CORE_LIB_HDR ${CMAKE_SOURCE_DIR}/include/*.h)
 file(GLOB_RECURSE CORE_LIB_HDR ${CMAKE_SOURCE_DIR}/include/core/*.h)
 file(GLOB_RECURSE CORE_LIB_SRC ${CMAKE_SOURCE_DIR}/src/core/*.cpp)
 
-add_library(${CORE_LIB} SHARED ${CORE_LIB_HDR} ${CORE_LIB_HDR} ${CORE_LIB_SRC} ${CMAKE_BINARY_DIR}/version.h)
+add_library(${CORE_LIB} SHARED ${CORE_LIB_HDR} ${CORE_LIB_HDR} ${CORE_LIB_SRC} ${CMAKE_BINARY_DIR}/hal_version.h)
 set_target_properties( PROPERTIES DEFINE_SYMBOL BUILDING_CORE)
 target_link_libraries(${CORE_LIB} ${CMAKE_DL_LIBS} ${Boost_LIBRARIES})
 install(TARGETS ${CORE_LIB} LIBRARY DESTINATION ${LIBRARY_INSTALL_DIRECTORY} PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)

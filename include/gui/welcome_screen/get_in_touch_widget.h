@@ -42,7 +42,8 @@ public:
 
 public Q_SLOTS:
     void handle_about_item_clicked();
-    void handle_documentation_item_clicked();
+    void handle_cpp_documentation_item_clicked();
+    void handle_py_documentation_item_clicked();
     void handle_ticket_item_clicked();
 
 private:
@@ -51,7 +52,8 @@ private:
     get_in_touch_item* m_about_item;
     get_in_touch_item* m_news_item;
     get_in_touch_item* m_forum_item;
-    get_in_touch_item* m_documentation_item;
+    get_in_touch_item* m_cpp_documentation_item;
+    get_in_touch_item* m_py_documentation_item;
     get_in_touch_item* m_ticket_item;
 
     //    QFrame* m_line;

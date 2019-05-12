@@ -10,15 +10,17 @@
 #include <QVBoxLayout>
 
 get_in_touch_widget::get_in_touch_widget(QWidget* parent)
-    : QFrame(parent), m_layout(new QVBoxLayout()), m_about_item(new get_in_touch_item("About us", "Everything you could ever want to know about us and this program and then some")),
+    : QFrame(parent), m_layout(new QVBoxLayout()), m_about_item(new get_in_touch_item("About", "Show license and version information")),
       m_news_item(new get_in_touch_item("Stay up to date", "Subscribe to our newsfeed for the latest updates and patchnotes")),
       m_forum_item(new get_in_touch_item("Get in touch", "Check out the forum and so on and so on i dont know what to write here")),
-      m_documentation_item(new get_in_touch_item("Need Help ?", "Check out the documentaion for instructions on how to use HAL")),
-      m_ticket_item(new get_in_touch_item("This program sucks ?", "Submit a bug report or feature request to our public tracker")), m_core_version_label(new QLabel()),
+      m_cpp_documentation_item(new get_in_touch_item("Open C++ Documentation", "Check out the C++ documentation of the HAL core to develop your own plugins")),
+      m_py_documentation_item(new get_in_touch_item("Open Python Documentation", "Check out the Python documentation of HAL")),
+      m_ticket_item(new get_in_touch_item("Found a bug ?", "Submit a bug report or feature request to our public tracker")), m_core_version_label(new QLabel()),
       m_gui_version_label(new QLabel())
 {
     connect(m_about_item, &get_in_touch_item::clicked, this, &get_in_touch_widget::handle_about_item_clicked);
-    connect(m_documentation_item, &get_in_touch_item::clicked, this, &get_in_touch_widget::handle_documentation_item_clicked);
+    connect(m_cpp_documentation_item, &get_in_touch_item::clicked, this, &get_in_touch_widget::handle_cpp_documentation_item_clicked);
+    connect(m_py_documentation_item, &get_in_touch_item::clicked, this, &get_in_touch_widget::handle_py_documentation_item_clicked);
     connect(m_ticket_item, &get_in_touch_item::clicked, this, &get_in_touch_widget::handle_ticket_item_clicked);
 
     m_layout->setContentsMargins(0, 0, 0, 0);
@@ -33,8 +35,11 @@ get_in_touch_widget::get_in_touch_widget(QWidget* parent)
     m_forum_item->setObjectName("forum_item");
     m_forum_item->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
-    m_documentation_item->setObjectName("documentation_item");
-    m_documentation_item->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    m_cpp_documentation_item->setObjectName("documentation_item");
+    m_cpp_documentation_item->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+
+    m_py_documentation_item->setObjectName("documentation_item");
+    m_py_documentation_item->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
     m_ticket_item->setObjectName("ticket_item");
     m_ticket_item->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
@@ -55,7 +60,8 @@ get_in_touch_widget::get_in_touch_widget(QWidget* parent)
     m_layout->addWidget(m_about_item);
     //    m_layout->addWidget(m_news_item);
     //    m_layout->addWidget(m_forum_item);
-    m_layout->addWidget(m_documentation_item);
+    m_layout->addWidget(m_cpp_documentation_item);
+    m_layout->addWidget(m_py_documentation_item);
     m_layout->addWidget(m_ticket_item);
     //    m_layout->addWidget(m_core_version_label, Qt::AlignBottom);
     //    m_layout->setAlignment(m_core_version_label, Qt::AlignBottom);
@@ -95,16 +101,23 @@ void get_in_touch_widget::repolish()
 
 void get_in_touch_widget::handle_about_item_clicked()
 {
+    // TODO
 }
 
-void get_in_touch_widget::handle_documentation_item_clicked()
+void get_in_touch_widget::handle_cpp_documentation_item_clicked()
 {
     QString link = "https://doc.hal.emsec.rub.de/";
     QDesktopServices::openUrl(QUrl(link));
 }
 
+void get_in_touch_widget::handle_py_documentation_item_clicked()
+{
+    QString link = "https://py-doc.hal.emsec.rub.de/";
+    QDesktopServices::openUrl(QUrl(link));
+}
+
 void get_in_touch_widget::handle_ticket_item_clicked()
 {
-    QString link = "https://hal.emsec.rub.de/hal-bugtracker/hal/issues";
+    QString link = "https://github.com/emsec/hal/issues";
     QDesktopServices::openUrl(QUrl(link));
 }

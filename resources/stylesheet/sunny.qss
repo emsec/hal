@@ -1308,6 +1308,9 @@ qproperty-open_icon_path: ":/icons/folder";
 qproperty-save_icon_style: "all->#ff6a47";
 qproperty-save_icon_path: ":/icons/folder-down";
 
+qproperty-save_as_icon_style: "all->#ff6a47";
+qproperty-save_as_icon_path: ":/icons/save-as";
+
 qproperty-run_icon_style: "all->#2BAD4A";
 qproperty-run_icon_path: ":/icons/run";
 }

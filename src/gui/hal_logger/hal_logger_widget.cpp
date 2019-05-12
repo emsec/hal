@@ -28,7 +28,7 @@ hal_logger_widget::hal_logger_widget(QWidget* parent) : content_widget("Log", pa
     connect(m_plain_text_edit, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(show_text_edit_context_menu(const QPoint&)));
     connect(m_tab_bar, SIGNAL(currentChanged(int)), this, SLOT(filter_item_clicked(int)));
     connect(m_selector, SIGNAL(currentIndexChanged(int)), this, SLOT(handle_current_channel_changed(int)));
-    connect (m_plain_text_edit_scrollbar, &QScrollBar::actionTriggered, this, &hal_logger_widget::handle_first_user_interaction);
+    connect(m_plain_text_edit_scrollbar, &QScrollBar::actionTriggered, this, &hal_logger_widget::handle_first_user_interaction);
 
     channel_model* model = channel_model::get_instance();
     connect(model, SIGNAL(updated(spdlog::level::level_enum, std::string, std::string)), this, SLOT(handle_channel_updated(spdlog::level::level_enum, std::string, std::string)));
@@ -150,7 +150,7 @@ void hal_logger_widget::handle_first_user_interaction(int value)
 {
     Q_UNUSED(value);
 
-    if(!m_user_interacted_with_scrollbar)
+    if (!m_user_interacted_with_scrollbar)
         m_user_interacted_with_scrollbar = true;
 }
 
@@ -158,7 +158,7 @@ void hal_logger_widget::resizeEvent(QResizeEvent* event)
 {
     Q_UNUSED(event)
 
-    if(!m_user_interacted_with_scrollbar)
+    if (!m_user_interacted_with_scrollbar)
         scroll_to_bottom();
 }
 
