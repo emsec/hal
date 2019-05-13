@@ -1,3 +1,12 @@
+hal-reverse (1.0.12) bionic; urgency=high
+
+  * Fixed global and local in python context
+  * Cleanup .gitignore and .gitattributes
+  * Added .brew_home to .gitignore for homebrew builds
+  * Move from gitter to discord in README.md
+
+ -- Sebastian Wallat <sebastian.wallat@rub.de>  Mon, 13 May 2019 12:53:46 +0200
+
 hal-reverse (1.0.11) bionic; urgency=high
 
   * Minor fixes
