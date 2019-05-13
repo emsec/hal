@@ -1,3 +1,11 @@
+hal-reverse (1.0.13) bionic; urgency=high
+
+  * Fix auto-scrolling in the python editor
+  * Add indent/unindent for multi-line selections in python editor
+  * Fixed python shell to properly support global keyword
+
+ -- Sebastian Wallat <sebastian.wallat@rub.de>  Mon, 13 May 2019 12:53:46 +0200
+
 hal-reverse (1.0.12) bionic; urgency=high
 
   * Fixed global and local in python context
