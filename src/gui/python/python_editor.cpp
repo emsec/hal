@@ -258,6 +258,7 @@ void python_code_editor::handle_return_pressed()
     {
         insertPlainText("    ");
     }
+    ensureCursorVisible();
 }
 
 void python_code_editor::handle_backspace_pressed(QKeyEvent* e)
