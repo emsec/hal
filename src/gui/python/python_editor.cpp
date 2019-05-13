@@ -18,6 +18,7 @@
 #include <QFileDialog>
 #include <QShortcut>
 #include <QTextStream>
+#include <QTextDocumentFragment>
 #include <QToolButton>
 #include <QVBoxLayout>
 
@@ -25,7 +26,7 @@
 
 void python_code_editor::keyPressEvent(QKeyEvent* e)
 {
-    if (textCursor().hasSelection())
+    if (textCursor().hasSelection() && !(e->key() == Qt::Key_Tab || e->key() == Qt::Key_Backtab))
     {
         QPlainTextEdit::keyPressEvent(e);
         return;
@@ -66,78 +67,17 @@ void python_code_editor::keyPressEvent(QKeyEvent* e)
 
 void python_code_editor::handle_shift_tab_key_pressed()
 {
-    auto cursor = textCursor();
-    // save the current cursor position
-    int current_position = cursor.position();
-    cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
-    QString current_line = cursor.selectedText();
-
-    // count consecutive spaces at start of line
-    int n_spaces = 0;
-    for (const auto& c : current_line)
-    {
-        if(c != ' ')
-        {
-            break;
-        }
-        n_spaces++;
-    }
-    // if we cannot un-indent silently return
-    if (n_spaces == 0)
-    {
-        return;
-    }
-    // calculate amount of spaces needed to align to next 4-block (4 spaces = 1 tab)
-    int n_spaces_block = n_spaces % 4;
-    // if this line is already aligned, set amount of spaces needed to align to
-    // next smaller indentation to 4
-    if (n_spaces_block == 0)
-    {
-        n_spaces_block = 4;
-    }
-    // un-indent by the calculated amount
-    cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::MoveAnchor);
-    cursor.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor, n_spaces_block);
-    cursor.removeSelectedText();
-    // restore the cursor position
-    cursor.setPosition(current_position - n_spaces_block);
+    python_code_editor::indent_selection(false);
 }
 
 void python_code_editor::handle_tab_key_pressed()
 {
-    QString current_line;
-    {
-        auto cursor = textCursor();
-        cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
-        current_line = cursor.selectedText();
-    }
-    bool onlySpaces = true;
-    for (const auto& c : current_line)
-    {
-        if (c != ' ')
-        {
-            onlySpaces = false;
-            break;
-        }
-    }
-    if (onlySpaces)
-    {
-        auto current_len = current_line.size();
-        if (current_len % 4 != 0)
-        {
-            for (int i = 0; i < 4 - (current_len % 4); ++i)
-            {
-                insertPlainText(" ");
-            }
-        }
-        else
-        {
-            insertPlainText("    ");
-        }
-    }
-    else
-    {
-        auto cursor = textCursor();
+    python_code_editor::indent_selection(true);
+}
+
+void python_code_editor::handle_autocomplete()
+{
+    auto cursor = textCursor();
         // auto row    = cursor.blockNumber();
         // auto col    = cursor.positionInBlock();
         cursor.movePosition(QTextCursor::Start, QTextCursor::KeepAnchor);
@@ -176,7 +116,116 @@ void python_code_editor::handle_tab_key_pressed()
             dialog->move(anchor_global);
             dialog->exec();
         }
+}
+
+int python_code_editor::next_indent(bool indentUnindent, int current_indent)
+{
+    int next_indent;
+    if (indentUnindent)
+    {
+        next_indent = 4 - (current_indent % 4);
     }
+    else
+    {
+        next_indent = current_indent % 4;
+        if (next_indent == 0)
+        {
+            next_indent = 4;
+        }
+    }
+    return next_indent;
+}
+
+void python_code_editor::indent_selection(bool indent)
+{
+    auto cursor = textCursor();
+    bool preSelected = cursor.hasSelection();
+    int start = cursor.selectionStart();
+    int end = cursor.selectionEnd();
+    if (preSelected)
+    {
+        // expand selection to the start of the first line
+        cursor.setPosition(end, QTextCursor::MoveAnchor);
+        cursor.setPosition(start, QTextCursor::KeepAnchor);
+        cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
+    }
+    else
+    {
+        // select first line
+        cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
+    }
+    QStringList selected_lines = cursor.selection().toPlainText().split('\n');
+    cursor.clearSelection();
+
+    // calculate number of spaces at the beginning of the first line and
+    // check if the line consists entirely of spaces or is empty
+    bool onlySpaces = true;
+    int n_spaces = 0;
+    if (!selected_lines.isEmpty())
+    {
+        for (const auto& c : selected_lines[0])
+        {
+            if (c != ' ')
+            {
+                onlySpaces = false;
+                break;
+            }
+            n_spaces++;
+        }
+    }
+    // calculate indent to use for all selected lines based on the amount of
+    // spaces needed to align the first line to the next_indent 4-block
+    const int constant_indent = next_indent(indent, n_spaces);
+
+    // if the cursor is in a word without a selection, show autocompletion menu
+    // (skip this if we are un-indenting, meaning Shift+Tab has been pressed)
+    if (indent && !preSelected && !onlySpaces)
+    {
+        handle_autocomplete();
+        return;
+    }
+
+    // (un)indent all selected lines
+    const int size = selected_lines.size();
+    QString padding;
+    if (indent)
+    {
+        padding = "";
+        padding.fill(' ', constant_indent);
+    }
+    cursor.beginEditBlock();
+    for (int i = 0; i < size; i++)
+    {
+        if (indent)
+        {
+            cursor.insertText(padding);
+            end+=constant_indent;
+        }
+        else
+        {
+            QString current_line = selected_lines[i];
+            // count how many spaces there really are so we don't cut off text
+            int spaces = 0;
+            while(spaces < constant_indent)
+            {
+                if (current_line[spaces] != ' ')
+                {
+                    break;
+                }
+                spaces++;
+            }
+            // un-indent line by removing spaces
+            cursor.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor, spaces);
+            cursor.removeSelectedText();
+            end-=spaces;
+        }
+        cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::MoveAnchor);
+        cursor.movePosition(QTextCursor::Down, QTextCursor::MoveAnchor);
+    }
+    cursor.endEditBlock();
+    // restore selection
+    cursor.setPosition(start, QTextCursor::MoveAnchor);
+    cursor.setPosition(end, QTextCursor::KeepAnchor);
 }
 
 void python_code_editor::handle_return_pressed()

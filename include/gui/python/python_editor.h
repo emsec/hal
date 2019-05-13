@@ -47,7 +47,12 @@ public:
     void handle_backspace_pressed(QKeyEvent* e);
     void handle_delete_pressed(QKeyEvent* e);
 
+    void handle_autocomplete();
     void perform_code_completion(std::tuple<std::string, std::string> completion);
+
+private:
+    void indent_selection(bool indentUnindent);
+    int next_indent(bool indentUnindent, int current_indent);
 };
 
 class python_editor : public content_widget, public python_context_subscriber
