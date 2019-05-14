@@ -1186,7 +1186,7 @@ A module output net is either a global output of the netlist or has a destinatio
 :returns: The set of module output nets.
 :rtype: set(hal_py.module)
 )")
-        .def_property_readonly("gates", &module::get_gates, R"(
+        .def_property_readonly("gates", [](module& n) -> std::set<std::shared_ptr<gate>> { return n.get_gates(); }, R"(
 Gets all gates of the module.
 
 :returns: A set of gates.
