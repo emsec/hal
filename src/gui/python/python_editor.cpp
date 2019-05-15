@@ -317,12 +317,8 @@ python_editor::python_editor(QWidget* parent)
     new python_syntax_highlighter(m_editor_widget->minimap()->document());
 
 
-    m_tab_widget = new QTabWidget();
+    m_tab_widget = new QTabWidget(this);
     m_tab_widget->setTabsClosable(true);
-    m_tab_widget->addTab(new python_code_editor(), "unsaved");
-    m_tab_widget->addTab(new python_code_editor(), "unsaved");
-    m_tab_widget->addTab(new python_code_editor(), "unsaved");
-    m_tab_widget->addTab(new python_code_editor(), "unsaved");
     m_tab_widget->addTab(m_editor_widget, "unsaved");
     m_content_layout->addWidget(m_tab_widget);
     connect(m_tab_widget, &QTabWidget::tabCloseRequested, this, &python_editor::debug_tab_close_request);
@@ -355,9 +351,7 @@ python_editor::python_editor(QWidget* parent)
 
 void python_editor::debug_tab_close_request(int index)
 {
-    QWidget* wid = m_tab_widget->widget(index);
-    m_tab_widget->removeTab(0);
-    delete wid; //is neccessary so that the tabs are correct removed
+    m_tab_widget->removeTab(index);
 }
 
 python_editor::~python_editor()
@@ -368,6 +362,14 @@ python_editor::~python_editor()
 
 void python_editor::setup_toolbar(toolbar* toolbar)
 {
+    // DEBUG CODE
+    QToolButton* add_button = new QToolButton(this);
+    add_button->setIcon(gui_utility::get_styled_svg_icon("all->#FFDD00", ":/icons/cross"));
+    add_button->setToolTip("New Tab (CTRL+N");
+    toolbar->addWidget(add_button);
+    add_button->setShortcut(QKeySequence("Ctrl+n"));
+    connect(add_button, &QToolButton::clicked, this, &python_editor::handle_action_new_tab);
+
     toolbar->addAction(m_action_open_file);
     toolbar->addAction(m_action_save);
     toolbar->addAction(m_action_save_as);
@@ -483,7 +485,17 @@ void python_editor::handle_action_save_file_as()
 
 void python_editor::handle_action_run()
 {
-    g_python_context->interpret_script(m_editor_widget->toPlainText());
+    g_python_context->interpret_script(dynamic_cast<python_code_editor*>(m_tab_widget->currentWidget())->toPlainText());
+   // g_python_context->interpret_script(m_editor_widget->toPlainText());
+}
+
+void python_editor::handle_action_new_tab()
+{
+    python_code_editor* editor = new python_code_editor();
+    new python_syntax_highlighter(editor->document());
+    new python_syntax_highlighter(editor->minimap()->document());
+    m_tab_widget->addTab(editor, "unsaved");
+    m_tab_widget->setCurrentIndex(m_tab_widget->count()-1);
 }
 
 QString python_editor::open_icon_path() const

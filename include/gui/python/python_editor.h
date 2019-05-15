@@ -83,6 +83,7 @@ public:
     void handle_action_save_file();
     void handle_action_save_file_as();
     void handle_action_run();
+    void handle_action_new_tab();
 
     void save_file(const bool ask_path);
 
