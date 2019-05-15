@@ -24,9 +24,7 @@ PYBIND11_EMBEDDED_MODULE(console, m)
 {
     m.def("clear", []() -> void { g_python_context->forward_clear(); });
     m.def("reset", []() -> void {
-        g_python_context->close_python();
-        g_python_context->init_python();
-        g_python_context->forward_clear();
+        g_python_context->forward_reset();
     });
 
     //m.def("history", []() -> void { g_console->printHistory(g_console->m_cmdColor); });
@@ -39,8 +37,7 @@ PYBIND11_EMBEDDED_MODULE(console, m)
 python_context::python_context()
 {
     Q_UNUSED(m_sender)
-    m_globals = nullptr;
-    m_locals = nullptr;
+    m_context = nullptr;
     py::initialize_interpreter();
     init_python();
 }
@@ -56,9 +53,8 @@ void python_context::set_console(python_console* c)
     m_console = c;
 }
 
-void python_context::initialize_context(py::dict* globals, py::dict* locals)
+void python_context::initialize_context(py::dict *context)
 {
-    globals = new py::dict(**(*globals), **(*locals));
 
     py::exec("import __main__\n"
              "import io, sys\n"
@@ -84,29 +80,27 @@ void python_context::initialize_context(py::dict* globals, py::dict* locals)
                  + core_utils::get_library_directory().string()
                  + "')\n"
                    "import hal_py\n",
-             *globals,
-             *locals);
+             *context,
+             *context);
 
-    (*locals)["netlist"] = g_netlist;
+    (*context)["netlist"] = g_netlist;
 }
 
 void python_context::init_python()
 {
-    using namespace py::literals;
-
-    m_globals = new py::dict(py::globals());
-    m_locals = new py::dict();
-
-    initialize_context(m_globals, m_locals);
-    (*m_locals)["console"] = py::module::import("console");
+//    using namespace py::literals;
+    
+    new py::dict();
+    m_context = new py::dict(**py::globals());
+    
+    initialize_context(m_context);
+    (*m_context)["console"] = py::module::import("console");
 }
 
 void python_context::close_python()
 {
-    delete m_globals;
-    delete m_locals;
-    m_globals = nullptr;
-    m_locals = nullptr;
+    delete m_context;
+    m_context = nullptr;
 }
 
 void python_context::interpret(const QString& input, bool multiple_expressions)
@@ -139,16 +133,17 @@ void python_context::interpret(const QString& input, bool multiple_expressions)
         pybind11::object rc;
         if (multiple_expressions)
         {
-            rc = py::eval<py::eval_statements>(input.toStdString(), py::dict(**(*m_globals), **(*m_locals)), *m_locals);
+            rc = py::eval<py::eval_statements>(input.toStdString(), *m_context, *m_context);
         }
         else
         {
-            rc = py::eval<py::eval_single_statement>(input.toStdString(), py::dict(**(*m_globals), **(*m_locals)), *m_locals);
+            rc = py::eval<py::eval_single_statement>(input.toStdString(), *m_context, *m_context);
         }
         if (!rc.is_none())
         {
             forward_stdout(QString::fromStdString(py::str(rc).cast<std::string>()));
         }
+        handle_reset();
     }
     catch (py::error_already_set& e)
     {
@@ -164,18 +159,17 @@ void python_context::interpret(const QString& input, bool multiple_expressions)
 
 void python_context::interpret_script(const QString& input)
 {
-    py::dict tmp_globals(py::globals());
-    py::dict tmp_locals;
-    initialize_context(&tmp_globals, &tmp_locals);
+    py::print(py::globals());
+    py::dict tmp_context(py::globals());
+    initialize_context(&tmp_context);
 
     forward_stdout("\n");
     forward_stdout("<Execute Python Editor content>");
     forward_stdout("\n");
     log_info("python", "Python editor execute script:\n{}\n", input.toStdString());
-    py::dict global_locals = py::dict(**(tmp_globals), **(tmp_locals));
     try
     {
-        py::eval<py::eval_statements>(input.toStdString(), global_locals, global_locals);
+        py::eval<py::eval_statements>(input.toStdString(), tmp_context, tmp_context);
     }
     catch (py::error_already_set& e)
     {
@@ -231,17 +225,15 @@ std::vector<std::tuple<std::string, std::string>> python_context::complete(const
         auto namespaces = py::list();
         if (use_console_context)
         {
-            namespaces.append(*m_globals);
-            namespaces.append(*m_locals);
+            namespaces.append(*m_context);
+            namespaces.append(*m_context);
         }
         else
         {
-            py::dict tmp_globals(py::globals());
-            py::dict tmp_locals;
-            initialize_context(&tmp_globals, &tmp_locals);
-            py::dict global_locals = py::dict(**(tmp_globals), **(tmp_locals));
-            namespaces.append(global_locals);
-            namespaces.append(tmp_locals);
+            py::dict tmp_context(py::globals());
+            initialize_context(&tmp_context);
+            namespaces.append(tmp_context);
+            namespaces.append(tmp_context);
         }
         auto jedi   = py::module::import("jedi");
         auto script = jedi.attr("Interpreter")(text.toStdString(), namespaces);
@@ -280,4 +272,20 @@ int python_context::check_complete_statement(const QString& text)
 
     PyNode_Free(n);
     return 1;
+}
+
+void python_context::handle_reset()
+{
+    if (m_trigger_reset)
+    {
+        close_python();
+        init_python();
+        forward_clear();
+        m_trigger_reset = false;
+    }
+}
+
+void python_context::forward_reset()
+{
+    m_trigger_reset = true;
 }
