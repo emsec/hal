@@ -1,3 +1,13 @@
+hal-reverse (1.0.14) bionic; urgency=high
+
+  * Fix install rpath on macOS
+  * Update genversion.py
+  * netlist creation now correctly fires module created event for topmodule
+  * Fix bad python binding for gates property of module
+  * Fix disabled arrow keys in navigation view
+
+ -- Sebastian Wallat <sebastian.wallat@rub.de>  Thu, 16 May 2019 10:41:27 +0200
+
 hal-reverse (1.0.13) bionic; urgency=high
 
   * Fix auto-scrolling in the python editor
