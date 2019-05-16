@@ -119,7 +119,7 @@ Use the following commands to install hal via [homebrew](https://brew.sh/index_d
 
 ```bash
 brew tap emsec/hal
-brew install hal-re
+brew install hal
 ```
 
 
