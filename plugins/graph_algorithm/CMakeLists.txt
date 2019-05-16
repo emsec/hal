@@ -13,6 +13,11 @@ if(PL_GRAPH_ALGORITHM OR BUILD_ALL_PLUGINS)
     #Set shared library suffix for MacOS
     if(APPLE AND CMAKE_HOST_APPLE)
         set_target_properties(graph_algorithm PROPERTIES SUFFIX ".so")
+        if(APPLE AND CMAKE_HOST_APPLE)
+            set_target_properties(graph_algorithm PROPERTIES
+                                  INSTALL_NAME_DIR ${PLUGIN_LIBRARY_INSTALL_DIRECTORY}
+                                  )
+        endif()
     endif(APPLE AND CMAKE_HOST_APPLE)
     target_link_libraries(graph_algorithm ${LINK_LIBS} ${PYTHON_LIBRARIES} pybind11::pybind11 ${BUDDY_LIBRARY})
     install(TARGETS graph_algorithm LIBRARY DESTINATION ${PLUGIN_LIBRARY_INSTALL_DIRECTORY} PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE INCLUDES DESTINATION ${PLUGIN_INCLUDE_INSTALL_DIRECTORY})

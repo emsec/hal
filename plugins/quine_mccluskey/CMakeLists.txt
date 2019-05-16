@@ -12,7 +12,11 @@ if(PL_QUINE_MCCLUSKEY OR BUILD_ALL_PLUGINS)
 
     #Set shared library suffix for MacOS
     if(APPLE AND CMAKE_HOST_APPLE)
-        set_target_properties(graph_algorithm PROPERTIES SUFFIX ".so")
+        set_target_properties(quine_mccluskey PROPERTIES SUFFIX ".so")
+        set_target_properties(decorator_example_lib PROPERTIES
+                              INSTALL_NAME_DIR ${PLUGIN_LIBRARY_INSTALL_DIRECTORY}
+                              )
+
     endif(APPLE AND CMAKE_HOST_APPLE)
     target_link_libraries(quine_mccluskey ${LINK_LIBS} ${PYTHON_LIBRARIES} pybind11::pybind11 ${BUDDY_LIBRARY})
     install(TARGETS quine_mccluskey LIBRARY DESTINATION ${PLUGIN_LIBRARY_INSTALL_DIRECTORY} PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE INCLUDES DESTINATION ${PLUGIN_INCLUDE_INSTALL_DIRECTORY})
