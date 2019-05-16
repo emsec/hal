@@ -1,3 +1,10 @@
+hal-reverse (1.0.15) bionic; urgency=high
+
+  * Fixed install include path of plugins
+  * Include information about homebrew tap in README.md
+
+ -- Sebastian Wallat <sebastian.wallat@rub.de>  Thu, 16 May 2019 14:42:58 +0200
+
 hal-reverse (1.0.14) bionic; urgency=high
 
   * Fix install rpath on macOS
