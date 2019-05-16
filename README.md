@@ -115,7 +115,13 @@ HAL releases are available via it's own ppa. You can find it here: [ppa:sebastia
 
 ### macOS
 
-A [homebrew](https://brew.sh/index_de) tap is coming soon...
+Use the following commands to install hal via [homebrew](https://brew.sh/index_de).
+
+```bash
+brew tap emsec/hal
+brew install hal-re
+```
+
 
 ## Build Instructions
 
