@@ -118,6 +118,7 @@ Q_SIGNALS:
 public Q_SLOTS:
     void toggle_searchbar();
     void debug_tab_close_request(int index);
+    void handle_action_toggle_minimap();
 
 private:
     QVBoxLayout* m_layout;

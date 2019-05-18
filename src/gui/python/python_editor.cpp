@@ -23,6 +23,7 @@
 #include <QVBoxLayout>
 
 #include <fstream>
+#include <QFileInfo>
 
 void python_code_editor::keyPressEvent(QKeyEvent* e)
 {
@@ -354,6 +355,11 @@ void python_editor::debug_tab_close_request(int index)
     m_tab_widget->removeTab(index);
 }
 
+void python_editor::handle_action_toggle_minimap()
+{
+    dynamic_cast<python_code_editor*>(m_tab_widget->currentWidget())->toggle_minimap();
+}
+
 python_editor::~python_editor()
 {
     g_settings.setValue("python_editor/code", m_editor_widget->toPlainText());
@@ -381,7 +387,8 @@ void python_editor::setup_toolbar(toolbar* toolbar)
     button->setIcon(gui_utility::get_styled_svg_icon("all->#FFDD00", ":/icons/placeholder"));
     button->setToolTip("Debug Toggle Minimap");
 
-    connect(button, &QToolButton::clicked, m_editor_widget, &code_editor::toggle_minimap);
+    //connect(button, &QToolButton::clicked, m_editor_widget, &code_editor::toggle_minimap);
+    connect(button, &QToolButton::clicked, this, &python_editor::handle_action_toggle_minimap);
 
     toolbar->addWidget(button);
 }
@@ -433,9 +440,16 @@ void python_editor::handle_action_open_file()
     // make file active
     m_file_name = new_file_name;
 
-    m_editor_widget->clear();
     std::string f((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
-    m_editor_widget->appendPlainText(QString::fromStdString(f));
+    QFileInfo info(new_file_name);
+
+    handle_action_new_tab();
+    dynamic_cast<python_code_editor*>(m_tab_widget->widget(m_tab_widget->count()-1))->appendPlainText(QString::fromStdString(f));
+    m_tab_widget->setTabText(m_tab_widget->count()-1, info.completeBaseName() + "." + info.completeSuffix());
+
+//    m_editor_widget->clear();
+//    std::string f((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
+//    m_editor_widget->appendPlainText(QString::fromStdString(f));
 
     //file_manager::get_instance()->open_file(file_name);
 }
