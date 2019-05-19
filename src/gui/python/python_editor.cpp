@@ -304,6 +304,16 @@ void python_code_editor::perform_code_completion(std::tuple<std::string, std::st
     textCursor().insertText(QString::fromStdString(std::get<1>(completion)));
 }
 
+QString python_code_editor::get_file_name()
+{
+    return m_file_name;
+}
+
+void python_code_editor::set_file_name(const QString name)
+{
+    m_file_name = name;
+}
+
 python_editor::python_editor(QWidget* parent)
     : content_widget("Python Editor", parent), python_context_subscriber(), m_editor_widget(new python_code_editor()), m_searchbar(new searchbar()), m_action_open_file(new QAction(this)),
       m_action_run(new QAction(this)), m_action_save(new QAction(this)), m_action_save_as(new QAction(this)), m_file_name("")
@@ -444,7 +454,9 @@ void python_editor::handle_action_open_file()
     QFileInfo info(new_file_name);
 
     handle_action_new_tab();
-    dynamic_cast<python_code_editor*>(m_tab_widget->widget(m_tab_widget->count()-1))->appendPlainText(QString::fromStdString(f));
+    python_code_editor* editor = dynamic_cast<python_code_editor*>(m_tab_widget->widget(m_tab_widget->count()-1));
+    editor->appendPlainText(QString::fromStdString(f));
+    editor->set_file_name(new_file_name);
     m_tab_widget->setTabText(m_tab_widget->count()-1, info.completeBaseName() + "." + info.completeSuffix());
 
 //    m_editor_widget->clear();
@@ -461,28 +473,50 @@ void python_editor::save_file(const bool ask_path)
 
     QString selected_file_name;
 
-    if (ask_path || m_file_name.isEmpty())
+//    if (ask_path || m_file_name.isEmpty())
+//    {
+//        selected_file_name = QFileDialog::getSaveFileName(nullptr, title, QDir::currentPath(), text, nullptr, QFileDialog::DontUseNativeDialog);
+//        if (selected_file_name.isEmpty())
+//        {
+//            return;
+//        }
+//    }
+//    else
+//    {
+//        selected_file_name = m_file_name;
+//    }
+
+    python_code_editor* current_editor = dynamic_cast<python_code_editor*>(m_tab_widget->currentWidget());
+    if(!current_editor)
+        return;
+
+    if(ask_path || current_editor->get_file_name().isEmpty())
     {
         selected_file_name = QFileDialog::getSaveFileName(nullptr, title, QDir::currentPath(), text, nullptr, QFileDialog::DontUseNativeDialog);
-        if (selected_file_name.isEmpty())
-        {
+        if(selected_file_name.isEmpty())
             return;
-        }
+
+        if(!selected_file_name.endsWith(".py"))
+            selected_file_name.append(".py");
+
+        current_editor->set_file_name(selected_file_name);
     }
     else
-    {
-        selected_file_name = m_file_name;
-    }
+        selected_file_name = current_editor->get_file_name();
 
     std::ofstream out(selected_file_name.toStdString(), std::ios::out);
 
     if (!out.is_open())
     {
         return;
+        log_error("gui", "could not open file path");
     }
-    out << m_editor_widget->toPlainText().toStdString();
+    //out << m_editor_widget->toPlainText().toStdString();
+    out << current_editor->toPlainText().toStdString();
     out.close();
 
+    QFileInfo info(selected_file_name);
+    m_tab_widget->setTabText(m_tab_widget->currentIndex(), info.completeBaseName() + "." + info.completeSuffix());
     // remember target file path
     m_file_name = selected_file_name;
 }

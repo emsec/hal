@@ -51,9 +51,14 @@ public:
     void handle_autocomplete();
     void perform_code_completion(std::tuple<std::string, std::string> completion);
 
+    QString get_file_name();
+    void set_file_name(const QString name);
+
 private:
     void indent_selection(bool indentUnindent);
     int next_indent(bool indentUnindent, int current_indent);
+
+    QString m_file_name;
 };
 
 class python_editor : public content_widget, public python_context_subscriber
@@ -147,7 +152,7 @@ private:
     QString m_run_icon_style;
     QString m_run_icon_path;
 
-    QString m_file_name;
+    QString m_file_name = "";
     QTabWidget* m_tab_widget;
 };
 
