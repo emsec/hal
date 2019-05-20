@@ -193,10 +193,14 @@ endif(Boost_FOUND)
 
 find_package(Threads REQUIRED)
 
+find_package(RapidJSON REQUIRED)
+message(STATUS "Found rapidjson ${RAPIDJSON_INCLUDEDIR}")
+include_directories(${RAPIDJSON_INCLUDEDIR})
+
 # Need Version 2.2.4 Not available in ubuntu bionic
 find_package(pybind11 CONFIG)
 message(STATUS "Found pybind11 v${pybind11_VERSION}: ${pybind11_INCLUDE_DIRS}")
-if(${pybind11_FOUND} AND ${pybind11_VERSION} VERSION_GREATER_EQUAL 2.2.4)
+if(${pybind11_FOUND} AND (${pybind11_VERSION} VERSION_GREATER_EQUAL 2.2.4))
     message(STATUS "Found pybind11 >= 2.2.4")
     include_directories(pybind11_INCLIDE_DIRS)
 else()
@@ -204,13 +208,9 @@ else()
     add_subdirectory(deps/pybind11)
 endif()
 
-find_package(RapidJSON REQUIRED)
-message(STATUS "Found rapidjson ${RAPIDJSON_INCLUDEDIR}")
-include_directories(${RAPIDJSON_INCLUDEDIR})
-
 find_package(spdlog CONFIG)
 message(STATUS "Found spdlog v${spdlog_VERSION}")
-if(NOT ${spdlog_FOUND} OR ${spdlog_VERSION} VERSION_LESS 1.3.1)
+if((NOT ${spdlog_FOUND}) OR (${spdlog_VERSION} VERSION_LESS 1.3.1))
     message(STATUS "Found spdlog < 1.3.1")
     include_directories(${include_directories} "${CMAKE_CURRENT_SOURCE_DIR}/deps/spdlog-1.3.1/include")
     set(spdlog_VERSION 1.3.1)
