@@ -201,9 +201,9 @@ public:
     /**
      * Get the GUI callback hook for displaying log messages inside the GUI.
      *
-     * @returns The GUI callback hook.
+     * @returns The GUI callback hook for (level, channel, message).
      */
-    callback_hook<void(const spdlog::details::log_msg&)>& get_gui_callback();
+    callback_hook<void(const spdlog::level::level_enum&, const std::string&, const std::string&)>& get_gui_callback();
 
     /**
      * Get the program options for the logging system.
@@ -270,7 +270,7 @@ private:
 
     std::map<std::string, std::vector<std::shared_ptr<log_sink>>> m_logger_sinks;
 
-    callback_hook<void(const spdlog::details::log_msg&)> m_gui_callback;
+    callback_hook<void(const spdlog::level::level_enum&, const std::string&, const std::string&)> m_gui_callback;
 
     program_options m_descriptions;
 };
@@ -285,13 +285,8 @@ public:
 
 protected:
     /** interface implementation: spdlog::sinks::base_sink */
-#ifdef SPDLOG_0_17_0_OR_LOWER
-    void _sink_it(const spdlog::details::log_msg& msg);
-    void _flush();
-#else
     void sink_it_(const spdlog::details::log_msg& msg) override;
     void flush_() override;
-#endif
 };
 
 #endif /* __HAL_LOG_H__ */

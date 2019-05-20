@@ -1,8 +1,9 @@
 #include "core/log.h"
 #include <iostream>
+#include <spdlog/sinks/basic_file_sink.h>
 #include <spdlog/sinks/null_sink.h>
 #include <spdlog/sinks/stdout_sinks.h>
-#include <spdlog/sinks/basic_file_sink.h>
+#include <spdlog/fmt/fmt.h>
 
 std::map<std::string, std::shared_ptr<log_manager::log_sink>> log_manager::m_file_sinks;
 
@@ -22,21 +23,17 @@ log_manager::log_manager(const hal::path& file_name)
     };
 
     auto gui_sink = log_manager::create_gui_sink();
-    
-#ifdef SPDLOG_1_3_1_OR_HIGHER
-    std::vector<spdlog::sink_ptr> stdout_sinks = {std::make_shared<spdlog::sinks::ansicolor_stdout_sink_mt>(), gui_sink->spdlog_sink};
-#endif
+
+    spdlog::sinks_init_list stdout_init_list = {std::make_shared<spdlog::sinks::ansicolor_stdout_sink_mt>(), gui_sink->spdlog_sink};
 
     m_logger = {
         // initialize null channel
         {"null", spdlog::create<spdlog::sinks::null_sink_mt>("null")},
         // initialize multi-threaded, colored stdout channel logger
-#ifdef SPDLOG_0_17_0_OR_LOWER
-        {"stdout", spdlog::create("stdout", {std::make_shared<spdlog::sinks::ansicolor_stdout_sink_mt>(), gui_sink->spdlog_sink})},
-#else // SPDLOG_1_3_1_OR_HIGHER
-        {"stdout", spdlog::create<spdlog::logger>("stdout", begin(stdout_sinks), end(stdout_sinks))},
-#endif
+        {"stdout", std::make_shared<spdlog::logger>("stdout", stdout_init_list)},
     };
+
+    spdlog::details::registry::instance().initialize_logger(m_logger.at("stdout"));
 
     spdlog::set_error_handler([](const std::string& msg) { throw std::invalid_argument("[!] internal log error: " + msg); });
 
@@ -100,14 +97,10 @@ void log_manager::add_channel(const std::string& channel_name, std::vector<std::
     std::vector<std::shared_ptr<spdlog::sinks::sink>> vec;
     for (const auto& sink : sinks)
         vec.push_back(sink->spdlog_sink);
-#ifdef SPDLOG_0_17_0_OR_LOWER
-    m_logger[channel_name] = static_cast<std::shared_ptr<spdlog::logger> (*)(
-        const std::string&, const std::vector<std::shared_ptr<spdlog::sinks::sink>>::iterator&, const std::vector<std::shared_ptr<spdlog::sinks::sink>>::iterator&)>(&spdlog::create)(
-        channel_name, vec.begin(), vec.end());
-#else
-    m_logger[channel_name] = spdlog::create<spdlog::logger>(channel_name, vec.begin(), vec.end());
-#endif
+    m_logger[channel_name] = std::make_shared<spdlog::logger>(channel_name, vec.begin(), vec.end());
     m_logger[channel_name]->flush_on(spdlog::level::info);
+
+    spdlog::details::registry::instance().initialize_logger(m_logger.at(channel_name));
 
     m_logger_sinks[channel_name] = sinks;
     this->set_level_of_channel(channel_name, level);
@@ -208,11 +201,7 @@ std::shared_ptr<log_manager::log_sink> log_manager::create_file_sink(const hal::
     sink->truncate     = truncate;
 
     sink->path        = path;
-#ifdef SPDLOG_0_17_0_OR_LOWER
-    sink->spdlog_sink = std::make_shared<spdlog::sinks::simple_file_sink_mt>(path.string(), truncate);
-#else
     sink->spdlog_sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>(path.string(), truncate);
-#endif
 
     m_file_sinks[path.string()] = sink;
 
@@ -365,7 +354,7 @@ void log_manager::handle_options(program_arguments& args)
     }
 }
 
-callback_hook<void(const spdlog::details::log_msg&)>& log_manager::get_gui_callback()
+callback_hook<void(const spdlog::level::level_enum&, const std::string&, const std::string&)>& log_manager::get_gui_callback()
 {
     return m_gui_callback;
 }
@@ -373,19 +362,13 @@ callback_hook<void(const spdlog::details::log_msg&)>& log_manager::get_gui_callb
 /*
  * log gui sink implementation
  */
-#ifdef SPDLOG_0_17_0_OR_LOWER
-void log_gui_sink::_sink_it(const spdlog::details::log_msg& msg)
-#else
 void log_gui_sink::sink_it_(const spdlog::details::log_msg& msg)
-#endif
 {
-    log_manager::get_instance().get_gui_callback()(msg);
+    fmt::memory_buffer formatted;
+    formatter_->format(msg, formatted);
+    log_manager::get_instance().get_gui_callback()(msg.level, *msg.logger_name, std::string(formatted.data(), formatted.size()));
 }
 
-#ifdef SPDLOG_0_17_0_OR_LOWER
-void log_gui_sink::_flush()
-#else
 void log_gui_sink::flush_()
-#endif
 {
 }

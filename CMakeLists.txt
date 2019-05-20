@@ -209,19 +209,10 @@ include_directories(${RAPIDJSON_INCLUDEDIR})
 #message(STATUS "Found spdlog v${spdlog_VERSION}: ${spdlog_INCLUDEDIR}")
 #include_directories(${spdlog_INCLUDEDIR})
 
-# include 0.16.2
-#include_directories(${include_directories} "${CMAKE_CURRENT_SOURCE_DIR}/deps/spdlog-0.16.2/include")
-#set(spdlog_VERSION 0.16.2)
-
 # include 1.3.1
 include_directories(${include_directories} "${CMAKE_CURRENT_SOURCE_DIR}/deps/spdlog-1.3.1/include")
 set(spdlog_VERSION 1.3.1)
 
-if(${spdlog_VERSION} VERSION_GREATER_EQUAL 1.3.1)
-    set(SPDLOG_1_3_1_OR_HIGHER 1)
-elseif(${spdlog_VERSION} VERSION_LESS_EQUAL 0.17.0)
-    set(SPDLOG_0_17_0_OR_LOWER 1)
-endif()
 ##elseif(APPLE AND CMAKE_HOST_APPLE)
 #    include_directories(${include_directories} "${CMAKE_CURRENT_SOURCE_DIR}/deps/spdlog/include")
 ##endif()

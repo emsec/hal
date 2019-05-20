@@ -31,8 +31,6 @@
 #include <stdexcept>
 #include <stdlib.h>
 
-#include "hal_config.h"
-
 typedef int8_t i8;
 typedef int16_t i16;
 typedef int32_t i32;

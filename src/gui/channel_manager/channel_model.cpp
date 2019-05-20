@@ -7,7 +7,7 @@ channel_model channel_model::s_model;
 
 channel_model::channel_model(QObject* parent) : QAbstractTableModel(parent), m_temporary_items(30)
 {
-    log_manager::get_instance().get_gui_callback().add_callback("gui", std::bind(&channel_model::handle_logmanager_callback, this, std::placeholders::_1));
+    log_manager::get_instance().get_gui_callback().add_callback("gui", std::bind(&channel_model::handle_logmanager_callback, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
 }
 
 channel_model* channel_model::get_instance()
@@ -106,12 +106,8 @@ channel_item* channel_model::add_channel(const QString name)
     return item;
 }
 
-void channel_model::handle_logmanager_callback(const spdlog::details::log_msg& msg)
+void channel_model::handle_logmanager_callback(const spdlog::level::level_enum& t, const std::string& channel_name, const std::string& msg_text)
 {
-    spdlog::level::level_enum t = msg.level;
-    std::string channel_name    = *msg.logger_name;
-    std::string msg_text        = msg.formatted.str();
-
     channel_item* all_channel = nullptr;
     channel_item* item        = nullptr;
     for (auto element : m_permanent_items)

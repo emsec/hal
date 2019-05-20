@@ -7,7 +7,6 @@ include_directories(${include_directories}
 # core library
 #
 configure_file(${CMAKE_SOURCE_DIR}/include/hal_version.h.in ${CMAKE_BINARY_DIR}/hal_version.h @ONLY)
-configure_file(${CMAKE_SOURCE_DIR}/include/hal_config.h.in ${CMAKE_BINARY_DIR}/hal_config.h @ONLY)
 include_directories(${CMAKE_BINARY_DIR})
 file(GLOB CORE_LIB_HDR ${CMAKE_SOURCE_DIR}/include/*.h)
 file(GLOB_RECURSE CORE_LIB_HDR ${CMAKE_SOURCE_DIR}/include/core/*.h)
