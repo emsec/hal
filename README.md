@@ -1,4 +1,4 @@
-[![pipeline status](https://gitlab.com/swallat/hal/badges/master/pipeline.svg)](https://gitlab.com/swallat/hal/commits/master) [![coverage report](https://gitlab.com/swallat/hal/badges/master/coverage.svg)](https://gitlab.com/swallat/hal/commits/master) [![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/emsec-hal)
+[![pipeline status](https://gitlab.com/swallat/hal/badges/master/pipeline.svg)](https://gitlab.com/swallat/hal/commits/master) [![coverage report](https://gitlab.com/swallat/hal/badges/master/coverage.svg)](https://gitlab.com/swallat/hal/commits/master) [![Discord](https://img.shields.io/discord/575648314549075969.svg?logo=discord)](https://discord.gg/HVC392e)
 
 # Welcome to HAL!
 
@@ -115,7 +115,13 @@ HAL releases are available via it's own ppa. You can find it here: [ppa:sebastia
 
 ### macOS
 
-A [homebrew](https://brew.sh/index_de) tap is coming soon...
+Use the following commands to install hal via [homebrew](https://brew.sh/index_de).
+
+```bash
+brew tap emsec/hal
+brew install hal
+```
+
 
 ## Build Instructions
 

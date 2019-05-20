@@ -70,7 +70,7 @@ TEST_F(module_test, check_create_gate){TEST_START{// Add some gates to the modul
     std::shared_ptr<gate> gate_not_in_sm = nl->create_gate(3, "INV", "gate_not_in_sm");
 
     // Add gate_0 and gate_1 to a module
-    std::shared_ptr<module> sm = nl->create_module(1, "test module", nl->get_top_module());
+    std::shared_ptr<module> sm = nl->create_module(2, "test module", nl->get_top_module());
     sm->insert_gate(gate_0);
     sm->insert_gate(gate_1);
 
@@ -88,7 +88,7 @@ TEST_F(module_test, check_create_gate){TEST_START{// Add some gates to the modul
     std::shared_ptr<gate> gate_0 = nl->create_gate(1, "INV", "gate_0");
 
     // Add gate_0 twice
-    std::shared_ptr<module> sm = nl->create_module(1, "test module", nl->get_top_module());
+    std::shared_ptr<module> sm = nl->create_module(2, "test module", nl->get_top_module());
     sm->insert_gate(gate_0);
     sm->insert_gate(gate_0);
 
@@ -105,7 +105,7 @@ TEST_F(module_test, check_create_gate){TEST_START{// Add some gates to the modul
     // Gate is a nullptr
     NO_COUT_TEST_BLOCK;
     std::shared_ptr<netlist> nl = create_empty_netlist(0);
-    std::shared_ptr<module> sm = nl->create_module(1, "test module", nl->get_top_module());
+    std::shared_ptr<module> sm = nl->create_module(2, "test module", nl->get_top_module());
     sm->insert_gate(nullptr);
     EXPECT_TRUE(sm->get_gates().empty());
 }
@@ -126,7 +126,7 @@ TEST_F(module_test, check_create_net){TEST_START{// Add some nets to the module
     std::shared_ptr<net> net_not_in_sm = nl->create_net(3, "net_not_in_sm");
 
     // Add net_0 and net_1 to a module
-    std::shared_ptr<module> sm = nl->create_module(1, "test module", nl->get_top_module());
+    std::shared_ptr<module> sm = nl->create_module(2, "test module", nl->get_top_module());
     sm->insert_net(net_0);
     sm->insert_net(net_1);
 
@@ -144,7 +144,7 @@ TEST_F(module_test, check_create_net){TEST_START{// Add some nets to the module
     std::shared_ptr<net> net_0  = nl->create_net(1, "net_0");
 
     // Add net_0 twice
-    std::shared_ptr<module> sm = nl->create_module(1, "test module", nl->get_top_module());
+    std::shared_ptr<module> sm = nl->create_module(2, "test module", nl->get_top_module());
     sm->insert_net(net_0);
     sm->insert_net(net_0);
 
@@ -161,7 +161,7 @@ TEST_F(module_test, check_create_net){TEST_START{// Add some nets to the module
     // Net is a nullptr
     NO_COUT_TEST_BLOCK;
     std::shared_ptr<netlist> nl   = create_empty_netlist(0);
-    std::shared_ptr<module> sm = nl->create_module(1, "test module", nl->get_top_module());
+    std::shared_ptr<module> sm = nl->create_module(2, "test module", nl->get_top_module());
     sm->insert_net(nullptr);
     EXPECT_TRUE(sm->get_nets().empty());
 }
@@ -173,7 +173,7 @@ TEST_F(module_test, check_create_net){TEST_START{// Add some nets to the module
             std::shared_ptr<net> net_0(new net(other_nl, 0, "net_0"));
             other_nl->create_net(net_0);
 
-            std::shared_ptr<module> sm = nl->create_module(1, "test module", nl->get_top_module());
+            std::shared_ptr<module> sm = nl->create_module(2, "test module", nl->get_top_module());
             EXPECT_FALSE(sm->insert_net(net_0));
             EXPECT_TRUE(sm->get_nets().empty());
         }*/
@@ -190,7 +190,7 @@ TEST_F(module_test, check_delete_gate){TEST_START{// Remove a gate from a module
     std::shared_ptr<netlist> nl = create_empty_netlist(0);
     std::shared_ptr<gate> gate_0 = nl->create_gate(1, "INV", "gate_0");
 
-    std::shared_ptr<module> sm = nl->create_module(1, "test module", nl->get_top_module());
+    std::shared_ptr<module> sm = nl->create_module(2, "test module", nl->get_top_module());
     sm->insert_gate(gate_0);
 
     EXPECT_TRUE(sm->remove_gate(gate_0));
@@ -202,7 +202,7 @@ TEST_F(module_test, check_delete_gate){TEST_START{// Remove a gate from a module
     std::shared_ptr<netlist> nl  = create_empty_netlist(0);
     std::shared_ptr<gate> gate_0 = nl->create_gate(1, "INV", "gate_0");
 
-    std::shared_ptr<module> sm = nl->create_module(1, "test module", nl->get_top_module());
+    std::shared_ptr<module> sm = nl->create_module(2, "test module", nl->get_top_module());
 
     EXPECT_FALSE(sm->remove_gate(gate_0));
     EXPECT_TRUE(sm->get_gates().empty());
@@ -211,7 +211,7 @@ TEST_F(module_test, check_delete_gate){TEST_START{// Remove a gate from a module
 {
     // Delete a nullptr
     std::shared_ptr<netlist> nl   = create_empty_netlist(0);
-    std::shared_ptr<module> sm = nl->create_module(1, "test module", nl->get_top_module());
+    std::shared_ptr<module> sm = nl->create_module(2, "test module", nl->get_top_module());
     EXPECT_FALSE(sm->remove_gate(nullptr));
     EXPECT_TRUE(sm->get_gates().empty());
 }
@@ -228,7 +228,7 @@ TEST_F(module_test, check_delete_net){TEST_START{// Remove a net from a module
     std::shared_ptr<netlist> nl = create_empty_netlist(0);
     std::shared_ptr<net> net_0 = nl->create_net(1, "net_0");
 
-    std::shared_ptr<module> sm = nl->create_module(1, "test module", nl->get_top_module());
+    std::shared_ptr<module> sm = nl->create_module(2, "test module", nl->get_top_module());
     sm->insert_net(net_0);
 
     EXPECT_TRUE(sm->remove_net(net_0));
@@ -240,7 +240,7 @@ TEST_F(module_test, check_delete_net){TEST_START{// Remove a net from a module
     std::shared_ptr<netlist> nl = create_empty_netlist(0);
     std::shared_ptr<net> net_0  = nl->create_net(1, "net_0");
 
-    std::shared_ptr<module> sm = nl->create_module(1, "test module", nl->get_top_module());
+    std::shared_ptr<module> sm = nl->create_module(2, "test module", nl->get_top_module());
 
     EXPECT_FALSE(sm->remove_net(net_0));
     EXPECT_TRUE(sm->get_nets().empty());
@@ -249,7 +249,7 @@ TEST_F(module_test, check_delete_net){TEST_START{// Remove a net from a module
 {
     // Delete a nullptr
     std::shared_ptr<netlist> nl   = create_empty_netlist(0);
-    std::shared_ptr<module> sm = nl->create_module(1, "test module", nl->get_top_module());
+    std::shared_ptr<module> sm = nl->create_module(2, "test module", nl->get_top_module());
     EXPECT_FALSE(sm->remove_net(nullptr));
     EXPECT_TRUE(sm->get_nets().empty());
 }

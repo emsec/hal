@@ -36,7 +36,6 @@ graph_navigation_widget::graph_navigation_widget(QWidget* parent) : content_widg
     m_tree_navigation_proxy_model->setSourceModel(m_tree_navigation_model);
     m_tree_view->setModel(m_tree_navigation_proxy_model);
     m_tree_view->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    m_tree_view->setFocusPolicy(Qt::NoFocus);
     m_tree_view->setFrameStyle(QFrame::NoFrame);
     //m_tree_view->header()->close();
     m_content_layout->addWidget(m_tree_view);
