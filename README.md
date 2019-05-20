@@ -6,6 +6,8 @@
 
 ![HAL Screenshot](https://raw.githubusercontent.com/emsec/hal/master/hal_screenshot.png "HAL Screenshot")
 
+Apart from multiple research projects, HAL is also used in our university lecture [Introduction to Hardware Reverse Engineering](https://www.ei.ruhr-uni-bochum.de/studium/lehrveranstaltungen/832/).
+
 ## Features
 - Natural directed graph representation of netlist elements and their connections
 - Support for custom gate libraries
