@@ -38,7 +38,7 @@
            as makenode may resize/move the nodetable.
 
 *************************************************************************/
-#include "hal_config.h"
+#include "hal_bdd_config.h"
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>

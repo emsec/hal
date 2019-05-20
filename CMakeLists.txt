@@ -19,6 +19,7 @@ endif()
 if(APPLE AND CMAKE_HOST_APPLE)
     #Needs to be set before project(hal)!
     message(STATUS "You need to install a compiler with OpenMP support:")
+    message(STATUS "You need to install a compiler with OpenMP support:")
     message(STATUS "    brew install llvm")
     message(STATUS "    Set Environment Variable:")
     message(STATUS "    LDFLAGS=\"-L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib\"")
@@ -192,24 +193,30 @@ endif(Boost_FOUND)
 
 find_package(Threads REQUIRED)
 
-# Need Version 2.2.4 Not available in ubuntu bionic
-#find_package(pybind11 CONFIG REQUIRED)
-#message(STATUS "Found pybind11 v${pybind11_VERSION}: ${pybind11_INCLUDE_DIRS}")
-#include_directories(pybind11_INCLIDE_DIRS)
-# Quick fix
-add_subdirectory(deps/pybind11)
-
 find_package(RapidJSON REQUIRED)
 message(STATUS "Found rapidjson ${RAPIDJSON_INCLUDEDIR}")
 include_directories(${RAPIDJSON_INCLUDEDIR})
 
-#if(LINUX)
-#    find_package(spdlog CONFIG REQUIRED)
-#    message(STATUS "Found spdlog v${spdlog_VERSION}: ${spdlog_INCLUDEDIR}")
-#    include_directories(${spdlog_INCLUDEDIR})
-#elseif(APPLE AND CMAKE_HOST_APPLE)
-    include_directories(${include_directories} "${CMAKE_CURRENT_SOURCE_DIR}/deps/spdlog/include")
-#endif()
+# Need Version 2.2.4 Not available in ubuntu bionic
+find_package(pybind11 2.2.4 CONFIG)
+if(${pybind11_FOUND})
+    message(STATUS "Found pybind11 v${pybind11_VERSION}: ${pybind11_INCLUDE_DIRS}")
+    message(STATUS "Found pybind11 >= 2.2.4")
+    include_directories(pybind11_INCLIDE_DIRS)
+else()
+    message(STATUS "Found pybind11 >= 2.2.4 not found")
+    add_subdirectory(deps/pybind11)
+endif()
+
+find_package(spdlog 1.3.1 CONFIG)
+message(STATUS "Found spdlog v${spdlog_VERSION}")
+if(${spdlog_FOUND})
+    message(STATUS "Found spdlog >= 1.3.1")
+else()
+    message(STATUS "Found spdlog >= 1.3.1 not found")
+    include_directories(${include_directories} "${CMAKE_CURRENT_SOURCE_DIR}/deps/spdlog-1.3.1/include")
+    set(spdlog_VERSION 1.3.1)
+endif()
 
 #Set UNIX (macOS or Linux) compiler flags (clang or gcc). Set optimization level for debug or release.
 if(UNIX)
