@@ -26,6 +26,7 @@
 
 #include "content_widget/content_widget.h"
 #include "graph_manager/graph_graphics_widget.h"
+#include "selection_history_navigator/selection_history_navigator.h"
 
 #include <QPushButton>
 
@@ -49,8 +50,12 @@ private:
     graph_graphics_widget m_graphics_widget;
 
     void handle_relayout_button_clicked();
+    void handle_back_activated();
+    void handle_next_activated();
 
     QPushButton* m_relayout_button;
+
+    selection_history_navigator* m_selection_history_navigator;
 };
 
 #endif    // HAL_GRAPH_WIDGET_H
