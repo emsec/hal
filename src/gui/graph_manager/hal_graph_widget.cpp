@@ -15,7 +15,7 @@ hal_graph_widget::hal_graph_widget(QGraphicsView* view) : content_widget("graph"
     m_content_layout->addWidget(m_relayout_button);
     m_content_layout->addWidget(&m_graphics_widget);
 
-    m_selection_history_navigator = new selection_history_navigator(this);
+    m_selection_history_navigator = new selection_history_navigator(20, this);
 
     connect(m_relayout_button, &QPushButton::clicked, this, &hal_graph_widget::handle_relayout_button_clicked);
     connect(&g_graph_relay, &graph_relay::gate_event, this, &hal_graph_widget::handle_gate_event);
@@ -44,12 +44,12 @@ void hal_graph_widget::handle_relayout_button_clicked()
 
 void hal_graph_widget::handle_back_activated()
 {
-    m_selection_history_navigator->navigate_to_prev_gate();
+    m_selection_history_navigator->navigate_to_prev_item();
 }
 
 void hal_graph_widget::handle_next_activated()
 {
-    m_selection_history_navigator->navigate_to_next_gate();
+    m_selection_history_navigator->navigate_to_next_item();
 }
 
 

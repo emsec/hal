@@ -4,50 +4,76 @@
 
 #include <QList>
 
-selection_history_navigator::selection_history_navigator(QObject* parent, unsigned int max_history_size) : QObject(parent)
+selection_history_navigator::selection_history_navigator(unsigned int max_history_size, QObject* parent) : QObject(parent)
 {
     set_max_history_size(max_history_size);
-    m_current_item_iterator = m_gate_id_container.begin();
+
+    m_current_item_iterator = m_selection_container.begin();
+
     g_selection_relay.register_sender(this, "History Navigator");
+
     connect(&g_selection_relay, &selection_relay::current_gate_update, this, &selection_history_navigator::handle_gate_focused);
+    connect(&g_selection_relay, &selection_relay::current_net_update, this, &selection_history_navigator::handle_net_focused);
 }
 
 selection_history_navigator::~selection_history_navigator(){}
 
+
 void selection_history_navigator::handle_gate_focused(void* sender, u32 id)
 {
-    Q_UNUSED(sender)
- 
-    if(m_gate_id_container.empty() || id != *m_current_item_iterator)
-    {
-        m_current_item_iterator = m_gate_id_container.insert(m_current_item_iterator, id);
+    if(sender == this)
+        return;
 
-        if(m_gate_id_container.size() > m_max_history_size)
-            m_gate_id_container.pop_back();
-    }
+    store_selection(id, selection_relay::single_type::gate);
 }
 
-void selection_history_navigator::navigate_to_next_gate()
+void selection_history_navigator::handle_net_focused(void* sender, u32 id)
 {
-    if(!(m_current_item_iterator == m_gate_id_container.begin()))
-            relay_navigation(*--m_current_item_iterator);
+    if(sender == this)
+        return;
+
+    store_selection(id, selection_relay::single_type::net);
 }
 
-void selection_history_navigator::navigate_to_prev_gate()
+void selection_history_navigator::store_selection(u32 id, selection_relay::single_type type)
 {
-    if(!(m_current_item_iterator == --m_gate_id_container.end()))
-        relay_navigation(*++m_current_item_iterator);
+    m_current_item_iterator = m_selection_container.insert(m_current_item_iterator, selection(id, type));
+
+    if(m_selection_container.size() > m_max_history_size)
+            m_selection_container.pop_back();
 }
 
-void selection_history_navigator::relay_navigation(u32 id)
+void selection_history_navigator::navigate_to_prev_item()
+{
+    if(!(m_current_item_iterator == --m_selection_container.end()))
+        relay_selection(*++m_current_item_iterator);    
+}
+
+void selection_history_navigator::navigate_to_next_item()
+{
+    if(!(m_current_item_iterator == m_selection_container.begin()))
+            relay_selection(*--m_current_item_iterator); 
+}
+
+void selection_history_navigator::relay_selection(selection selection)
 {
     QList<u32> net_ids;
     QList<u32> gate_ids;
     QList<u32> submod_ids;
 
-    gate_ids.append(id);
+    selection_relay::single_type type = selection.get_type();
 
-    g_selection_relay.relay_current_gate(this, *gate_ids.begin());
+    if(type == selection_relay::single_type::net)
+    {
+        net_ids.append(selection.get_net_id());
+        g_selection_relay.relay_current_net(this, *net_ids.begin());
+    }
+    else if(type == selection_relay::single_type::gate)
+    {
+        gate_ids.append(selection.get_gate_id());
+        g_selection_relay.relay_current_gate(this, *gate_ids.begin());
+    }
+
     g_selection_relay.relay_combined_selection(this, gate_ids, net_ids, submod_ids);    
 }
 
@@ -56,7 +82,7 @@ void selection_history_navigator::set_max_history_size(unsigned int max_size)
     m_max_history_size = max_size;
 }
 
-unsigned int selection_history_navigator::get_max_history_size()
+unsigned int selection_history_navigator::get_max_history_size() const
 {
     return m_max_history_size;
 }
