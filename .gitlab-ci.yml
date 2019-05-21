@@ -90,11 +90,13 @@ compile:test:ubuntu:
 compile:package:macos:
   stage: compile
   script:
+    - export LDFLAGS="-L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib"
+    - export CPPFLAGS="-I/usr/local/opt/llvm/include"
     - rm -rf build
     - mkdir -p build
     - cd build
     - export HAL_BASE_PATH=$(pwd)
-    - cmake -G Ninja .. -DCMAKE_BUILD_TYPE=MinSizeRel -DBUILD_ALL_PLUGINS=OFF -DBUILD_TESTS=OFF -DWITH_GUI=ON -DBUILD_DOCUMENTATION=ON -DCMAKE_INSTALL_PREFIX=/usr/ -DPACKAGE_MACOS=ON
+    - cmake -G Ninja .. -DCMAKE_BUILD_TYPE=MinSizeRel -DBUILD_ALL_PLUGINS=OFF -DBUILD_TESTS=OFF -DWITH_GUI=ON -DBUILD_DOCUMENTATION=ON -DCMAKE_INSTALL_PREFIX=/usr/ -DPACKAGE_MACOS=ON -DCMAKE_C_COMPILER=/usr/local/opt/llvm/bin/clang -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm/bin/clang++
     - cmake --build . --target all --clean-first -- -j4
     - du -h .
   cache:
@@ -114,11 +116,13 @@ compile:package:macos:
 compile:test:macos:
   stage: compile
   script:
+    - export LDFLAGS="-L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib"
+    - export CPPFLAGS="-I/usr/local/opt/llvm/include"
     - rm -rf build
     - mkdir -p build
     - cd build
     - export HAL_BASE_PATH=$(pwd)
-    - cmake -G Ninja .. -DCMAKE_BUILD_TYPE=Debug -DBUILD_ALL_PLUGINS=ON -DBUILD_TESTS=ON -DBUILD_COVERAGE=ON -DWITH_GUI=ON -DBUILD_DOCUMENTATION=ON -DCMAKE_INSTALL_PREFIX=/usr/ -DPACKAGE_MACOS=ON
+    - cmake -G Ninja .. -DCMAKE_BUILD_TYPE=Debug -DBUILD_ALL_PLUGINS=ON -DBUILD_TESTS=ON -DBUILD_COVERAGE=ON -DWITH_GUI=ON -DBUILD_DOCUMENTATION=ON -DCMAKE_INSTALL_PREFIX=/usr/ -DPACKAGE_MACOS=ON -DCMAKE_C_COMPILER=/usr/local/opt/llvm/bin/clang -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm/bin/clang++
     - cmake --build . --target all --clean-first -- -j4
   cache:
     key: test-build-cache-macos
@@ -214,11 +218,13 @@ test:ubuntu:
 test:macos:
   stage: test
   script:
+    - export LDFLAGS="-L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib"
+    - export CPPFLAGS="-I/usr/local/opt/llvm/include"
     - rm -rf build
     - mkdir -p build
     - cd build
     - export HAL_BASE_PATH=$(pwd)
-    - cmake -G Ninja .. -DCMAKE_BUILD_TYPE=MinSizeRel -DBUILD_ALL_PLUGINS=ON -DBUILD_TESTS=ON -DBUILD_COVERAGE=ON -DWITH_GUI=ON -DBUILD_DOCUMENTATION=ON -DCMAKE_INSTALL_PREFIX=/usr/
+    - cmake -G Ninja .. -DCMAKE_BUILD_TYPE=MinSizeRel -DBUILD_ALL_PLUGINS=ON -DBUILD_TESTS=ON -DBUILD_COVERAGE=ON -DWITH_GUI=ON -DBUILD_DOCUMENTATION=ON -DCMAKE_INSTALL_PREFIX=/usr/ -DCMAKE_C_COMPILER=/usr/local/opt/llvm/bin/clang -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm/bin/clang++
     - cmake --build . --target all --clean-first -- -j4
     - ninja hal_coverage
   artifacts:

@@ -348,7 +348,7 @@ std::shared_ptr<module> netlist_internal_manager::create_module(const u32 id, st
         log_error("netlist.internal", "netlist::create_module: empty name is not allowed");
         return nullptr;
     }
-    if (parent == nullptr)
+    if (parent == nullptr && m_netlist->m_top_module != nullptr)
     {
         log_error("netlist.internal", "netlist::create_module: parent must not be nullptr");
         return nullptr;
@@ -366,8 +366,11 @@ std::shared_ptr<module> netlist_internal_manager::create_module(const u32 id, st
 
     m_netlist->m_modules[id] = m;
 
-    parent->m_submodules_map[id] = m;
-    parent->m_submodules_set.insert(m);
+    if (parent != nullptr)
+    {
+        parent->m_submodules_map[id] = m;
+        parent->m_submodules_set.insert(m);
+    }
 
     module_event_handler::notify(module_event_handler::event::created, m);
 

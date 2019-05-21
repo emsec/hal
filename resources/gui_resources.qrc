@@ -66,6 +66,7 @@
         <file alias="drive">icons/0100-drive.svg</file>
         <file alias="folder-down">icons/0052-folder-download.svg</file>
         <file alias="save">icons/save.svg</file>
+        <file alias="save-as">icons/save-as.svg</file>
         <file alias="run">icons/run.svg</file>
         <file alias="bell">icons/0082-bell.svg</file>
         <file alias="drop">icons/0097-download.svg</file>
@@ -76,6 +77,7 @@
         <file alias="info">icons/0269-info.svg</file>
         <file alias="tree-arrow-down">icons/arrow-down.svg</file>
         <file alias="tree-arrow-right">icons/arrow-right.svg</file>
+        <file alias="placeholder">icons/0154-bug.svg</file>
     </qresource>
     <qresource prefix="/images">
         <file alias="hal">images/hal_9000_by_johnnyslowhand.png</file>
