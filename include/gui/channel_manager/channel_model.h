@@ -53,7 +53,7 @@ public:
     int columnCount(const QModelIndex& parent = QModelIndex()) const Q_DECL_OVERRIDE;
 
     channel_item* add_channel(const QString name);
-    void handle_logmanager_callback(const spdlog::details::log_msg& msg);
+    void handle_logmanager_callback(const spdlog::level::level_enum& t, const std::string& channel_name, const std::string& msg_text);
 
 Q_SIGNALS:
     void updated(spdlog::level::level_enum t, const std::string& logger_name, std::string const& msg);

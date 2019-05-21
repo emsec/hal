@@ -83,7 +83,7 @@ set(BUDDY_PACKAGE_STRING "hal_buddy 2.4")
 set(BUDDY_PACKAGE_TARNAME "hal_buddy")
 set(BUDDY_PACKAGE_VERSION "2.4")
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.in hal_config.h)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.in hal_bdd_config.h)
 
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
