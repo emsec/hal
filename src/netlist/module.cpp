@@ -51,6 +51,7 @@ bool module::set_parent_module(const std::shared_ptr<module>& new_parent)
 {
     if (new_parent == m_parent)
     {
+        log_error("module", "can not set module as its own parent");
         return false;
     }
 
