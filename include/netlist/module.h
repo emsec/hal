@@ -85,6 +85,15 @@ public:
     std::shared_ptr<module> get_parent_module() const;
 
     /**
+     * Sets a new parent for this module.<br>
+     * If the new parent is a submodule of this module, the new parent is added as a direct submodule to the old parent first.
+     *
+     * @param[in] new_parent - the new parent module
+     * @returns True if the parent was changed
+     */
+    bool set_parent_module(const std::shared_ptr<module>& new_parent);
+
+    /**
      * Get all direct submodules of this module.<br>
      * If \p recursive is true, all indirect submodules are also included.
      *
