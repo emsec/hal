@@ -36,30 +36,6 @@ class toolbar;
 class QVBoxLayout;
 class QTabWidget;
 
-class python_code_editor : public code_editor
-{
-    Q_OBJECT
-public:
-    void keyPressEvent(QKeyEvent* e) Q_DECL_OVERRIDE;
-
-    void handle_tab_key_pressed();
-    void handle_shift_tab_key_pressed();
-    void handle_return_pressed();
-    void handle_backspace_pressed(QKeyEvent* e);
-    void handle_delete_pressed(QKeyEvent* e);
-
-    void handle_autocomplete();
-    void perform_code_completion(std::tuple<std::string, std::string> completion);
-
-    QString get_file_name();
-    void set_file_name(const QString name);
-
-private:
-    void indent_selection(bool indentUnindent);
-    int next_indent(bool indentUnindent, int current_indent);
-
-    QString m_file_name;
-};
 
 class python_editor : public content_widget, public python_context_subscriber
 {
