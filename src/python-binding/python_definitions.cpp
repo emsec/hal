@@ -1155,6 +1155,13 @@ This returns None for the top module.
 :returns: The parent module.
 :rtype: hal_py.module or None
 )")
+        .def("set_parent_module", &module::set_parent_module, py::arg("new_parent"), R"(
+Set the parent of this module.
+If the new parent is a submodule of this module, the new parent is added as a direct submodule to the old parent first.
+
+:returns: True if the parent was changed
+:rtype: bool
+)")
         .def("get_submodules", &module::get_submodules, py::arg("name_filter") = DONT_CARE, py::arg("recursive") = false , R"(
 Get all direct submodules of this submodule.
 If recursive parameter is true, all indirect submodules are also included.

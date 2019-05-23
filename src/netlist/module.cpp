@@ -29,6 +29,11 @@ std::string module::get_name() const
 
 void module::set_name(const std::string& name)
 {
+    if (core_utils::trim(name).empty())
+    {
+        log_error("module", "empty name is not allowed");
+        return;
+    }
     if (name != m_name)
     {
         m_name = name;
@@ -40,6 +45,41 @@ void module::set_name(const std::string& name)
 std::shared_ptr<module> module::get_parent_module() const
 {
     return m_parent;
+}
+
+bool module::set_parent_module(const std::shared_ptr<module>& new_parent)
+{
+    if (new_parent == m_parent)
+    {
+        log_error("module", "can not set module as its own parent");
+        return false;
+    }
+
+    if (m_parent == nullptr)
+    {
+        log_error("module", "no parent can be assigned to the top module");
+        return false;
+    }
+
+    auto children = get_submodules(DONT_CARE, true);
+    if (children.find(new_parent) != children.end())
+    {
+        new_parent->set_parent_module(m_parent);
+    }
+
+    m_parent->m_submodules_map.erase(m_id);
+    m_parent->m_submodules_set.erase(shared_from_this());
+
+    module_event_handler::notify(module_event_handler::event::submodule_removed, m_parent, m_id);
+
+    m_parent = new_parent;
+
+    m_parent->m_submodules_map[m_id] = shared_from_this();
+    m_parent->m_submodules_set.insert(shared_from_this());
+
+    module_event_handler::notify(module_event_handler::event::parent_changed, shared_from_this());
+
+    return true;
 }
 
 std::set<std::shared_ptr<module>> module::get_submodules(const std::string& name_filter, bool recursive) const

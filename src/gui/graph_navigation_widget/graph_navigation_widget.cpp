@@ -78,9 +78,14 @@ graph_navigation_widget::graph_navigation_widget(QWidget* parent) : content_widg
     connect(&g_graph_relay, &graph_relay::module_event, m_tree_navigation_model, &tree_navigation_model::handle_module_event);
     connect(&g_graph_relay, &graph_relay::gate_event, m_tree_navigation_model, &tree_navigation_model::handle_gate_event);
     connect(&g_graph_relay, &graph_relay::net_event, m_tree_navigation_model, &tree_navigation_model::handle_net_event);
+
+    QModelIndex file_name_index     = m_tree_navigation_proxy_model->index(0, 0, m_tree_view->rootIndex());
+    m_tree_view->setExpanded(file_name_index, true);
+    toggle_resize_columns();
 }
 
-void graph_navigation_widget::setup_toolbar(toolbar* toolbar){
+void graph_navigation_widget::setup_toolbar(toolbar* toolbar)
+{
     Q_UNUSED(toolbar)
 
     //toolbar->addAction(m_filter_action);
