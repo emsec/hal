@@ -441,6 +441,7 @@ TEST_F(netlist_serializer_test, check_serialize_and_deserialize){
                 EXPECT_TRUE(gates_are_equal(g_0, des_nl->get_gate_by_id(g_0->get_id())));
             }
 
+
             EXPECT_EQ(nl->get_nets().size(), des_nl->get_nets().size());
 
             for (auto n_0 : nl->get_nets())

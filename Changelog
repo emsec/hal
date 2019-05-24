@@ -1,3 +1,52 @@
+hal-reverse (1.0.15) bionic; urgency=high
+
+  * Fixed install include path of plugins
+  * Include information about homebrew tap in README.md
+
+ -- Sebastian Wallat <sebastian.wallat@rub.de>  Thu, 16 May 2019 14:42:58 +0200
+
+hal-reverse (1.0.14) bionic; urgency=high
+
+  * Fix install rpath on macOS
+  * Update genversion.py
+  * netlist creation now correctly fires module created event for topmodule
+  * Fix bad python binding for gates property of module
+  * Fix disabled arrow keys in navigation view
+
+ -- Sebastian Wallat <sebastian.wallat@rub.de>  Thu, 16 May 2019 10:41:27 +0200
+
+hal-reverse (1.0.13) bionic; urgency=high
+
+  * Fix auto-scrolling in the python editor
+  * Add indent/unindent for multi-line selections in python editor
+  * Fixed python shell to properly support global keyword
+
+ -- Sebastian Wallat <sebastian.wallat@rub.de>  Mon, 13 May 2019 12:53:46 +0200
+
+hal-reverse (1.0.12) bionic; urgency=high
+
+  * Fixed global and local in python context
+  * Cleanup .gitignore and .gitattributes
+  * Added .brew_home to .gitignore for homebrew builds
+  * Move from gitter to discord in README.md
+
+ -- Sebastian Wallat <sebastian.wallat@rub.de>  Mon, 13 May 2019 12:53:46 +0200
+
+hal-reverse (1.0.11) bionic; urgency=high
+
+  * Minor fixes
+
+ -- Sebastian Wallat <sebastian.wallat@rub.de>  Tue, 30 Apr 2019 19:46:40 +0200
+
+hal-reverse (1.0.10) bionic; urgency=high
+
+  * Add python editor save-as button and fix load/save logic (#55)
+  * Add shift-tab unindent in python editor (#51)
+  * fixed readme not showing screenshot
+  * updated readme, fixed gui log not showing multiple spaces, added python bindings for quine mccluskey plugin
+
+ -- Sebastian Wallat <sebastian.wallat@rub.de>  Tue, 30 Apr 2019 19:46:40 +0200
+
 hal-reverse (1.0.8) bionic; urgency=high
 
   * Added plugin directory to include_directories

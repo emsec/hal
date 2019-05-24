@@ -1376,7 +1376,7 @@ TEST_F(netlist_test, check_create_module)
             std::shared_ptr<module> m_0 = nl->create_module(MIN_MODULE_ID+0,"module_0", nl->get_top_module());
             nl->delete_module(m_0);
             std::shared_ptr<module> m_0_other = nl->create_module(MIN_MODULE_ID+0,"module_0_other", nl->get_top_module());
-            //EXPECT_FALSE(nl->is_module_in_netlist(m_0)); TODO should be  true
+            EXPECT_FALSE(nl->is_module_in_netlist(m_0)); //TODO should be  true
             EXPECT_TRUE(nl->is_module_in_netlist(m_0_other));
         }
 
@@ -1396,14 +1396,14 @@ TEST_F(netlist_test, check_create_module)
             std::shared_ptr<module> m_0_other = nl->create_module(MIN_MODULE_ID+0,"module_0_other", nl->get_top_module());
             EXPECT_EQ(m_0_other, nullptr);
         }
-        /*{
+        {
             // Create a module with the id, used of the top module TODO: FAILS
             NO_COUT_TEST_BLOCK;
             std::shared_ptr<netlist> nl = create_empty_netlist();
             std::shared_ptr<module> m_0 = nl->create_module(TOP_MODULE_ID,"module_0", nl->get_top_module());
             EXPECT_EQ(m_0, nullptr);
             EXPECT_EQ(nl->get_module_by_id(TOP_MODULE_ID), nl->get_top_module());
-        }*/
+        }
         {
             // Create a module with an invalid name (empty string)
             NO_COUT_TEST_BLOCK;
@@ -1509,6 +1509,7 @@ TEST_F(netlist_test, check_delete_module)
 
 
         }
+
         // NEGATIVE
         {
             // Deleted module is part of another netlist
@@ -1528,6 +1529,7 @@ TEST_F(netlist_test, check_delete_module)
             nl->delete_module(tm);
             EXPECT_TRUE(nl->is_module_in_netlist(tm));
         }
+
     TEST_END
 }
 
@@ -1554,9 +1556,9 @@ TEST_F(netlist_test, check_is_module_in_netlist)
             nl->delete_module(m_0_old);
             std::shared_ptr<module> m_0_other = nl->create_module(MIN_MODULE_ID+0, "module_0_other", nl->get_top_module());
             EXPECT_FALSE(nl->is_module_in_netlist(m_0_old));
-        }*/
+        }
         // Negative
-        /*{
+        {
             // Pass a nullptr
             // TODO: fails (SIGSEGV)
             std::shared_ptr<netlist> nl = create_empty_netlist();
