@@ -16,7 +16,7 @@ class netlist_test : public ::testing::Test
 {
 protected:
     std::string g_lib_name = "EXAMPLE_GATE_LIBRARY";
-    // Minimum id for netlists, gates as well as nets
+    // Minimum id for netlists, gates, nets and modules
     const u32 INVALID_GATE_ID = 0;
     const u32 INVALID_NET_ID = 0;
     const u32 INVALID_MODULE_ID = 0;
@@ -29,7 +29,7 @@ protected:
 
     virtual void SetUp()
     {
-        //NO_COUT_BLOCK;
+        NO_COUT_BLOCK;
         gate_library_manager::load_all();
     }
 
@@ -728,15 +728,31 @@ TEST_F(netlist_test, check_get_inout_pin_types){
 TEST_F(netlist_test, check_get_unique_net_id)
 {
     TEST_START
-    // Create an empty netlist with some nets
-    std::shared_ptr<netlist> nl = create_empty_netlist();
-    std::shared_ptr<net> g_0    = nl->create_net(MIN_NET_ID+0, "net_0");
-    std::shared_ptr<net> g_1    = nl->create_net(MIN_NET_ID+1, "net_1");
-    std::shared_ptr<net> g_4    = nl->create_net(MIN_NET_ID+3, "net_3");
-    std::set<u32> used_ids = {MIN_NET_ID+0,MIN_NET_ID+1,MIN_NET_ID+3};
+        {
+            // Create an empty netlist with some nets and get a unique id
+            std::shared_ptr<netlist> nl = create_empty_netlist();
+            std::shared_ptr<net> n_0 = nl->create_net(MIN_NET_ID + 0, "net_0");
+            std::shared_ptr<net> n_1 = nl->create_net(MIN_NET_ID + 1, "net_1");
+            std::shared_ptr<net> n_3 = nl->create_net(MIN_NET_ID + 3, "net_3");
+            std::set<u32> used_ids = {MIN_NET_ID + 0, MIN_NET_ID + 1, MIN_NET_ID + 3};
 
-    u32 new_net_id = nl->get_unique_net_id();
-    EXPECT_TRUE(used_ids.find(new_net_id) == used_ids.end());
+            u32 new_net_id = nl->get_unique_net_id();
+            EXPECT_TRUE(used_ids.find(new_net_id) == used_ids.end());
+        }
+        {
+            // Create an empty netlist with some nets, delete a net, and get the id
+            // (used to test the free_net ids logic)
+            std::shared_ptr<netlist> nl = create_empty_netlist();
+            std::shared_ptr<net> n_0 = nl->create_net(MIN_NET_ID + 0, "net_0");
+            std::shared_ptr<net> n_1 = nl->create_net(MIN_NET_ID + 1, "net_1");
+            std::shared_ptr<net> n_2 = nl->create_net(MIN_NET_ID + 2, "net_2");
+
+            nl->delete_net(n_1);
+
+            std::set<u32> used_ids = {MIN_NET_ID + 0, MIN_NET_ID + 2};
+            u32 new_net_id = nl->get_unique_net_id();
+            EXPECT_TRUE(used_ids.find(new_net_id) == used_ids.end());
+        }
 
     TEST_END
 }
@@ -1000,10 +1016,12 @@ TEST_F(netlist_test, check_get_nets_by_name){
  * Testing the addition of global input/output/inout nets. For verification
  * the function is_global_input/output/inout_net is called
  *
- * Functions: mark_global_input_net, mark_global_output_net, mark_global_inout_net
+ * Functions: mark_global_input_net, mark_global_output_net, mark_global_inout_net,
+ *            unmark_global_input_net, unmark_global_output_net, unmark_global_inout_net
  */
 TEST_F(netlist_test, check_add_global_net){
     TEST_START
+        // Mark functions (normal usage)
         {
             // Add a global input net which isn't part of the netlist yet
             std::shared_ptr<netlist> nl = create_empty_netlist();
@@ -1031,6 +1049,48 @@ TEST_F(netlist_test, check_add_global_net){
             EXPECT_TRUE(suc);
             EXPECT_TRUE(nl->is_global_inout_net(net_0));
         }
+        // Unmark functions (normal usage)
+        {
+            // Mark and unmark a global input net
+            std::shared_ptr<netlist> nl = create_empty_netlist();
+            std::shared_ptr<net> net_0 = nl->create_net(MIN_NET_ID+0, "net_0");
+            bool suc_mark              = nl->mark_global_input_net(net_0);
+
+            ASSERT_TRUE(suc_mark);
+            ASSERT_TRUE(nl->is_global_input_net(net_0));
+
+            bool suc_unmark = nl->unmark_global_input_net(net_0);
+            ASSERT_TRUE(suc_unmark);
+            ASSERT_FALSE(nl->is_global_input_net(net_0));
+        }
+        {
+            // Mark and unmark a global output net
+            std::shared_ptr<netlist> nl = create_empty_netlist();
+            std::shared_ptr<net> net_0 = nl->create_net(MIN_NET_ID+0, "net_0");
+            bool suc_mark              = nl->mark_global_output_net(net_0);
+
+            ASSERT_TRUE(suc_mark);
+            ASSERT_TRUE(nl->is_global_output_net(net_0));
+
+            bool suc_unmark = nl->unmark_global_output_net(net_0);
+            ASSERT_TRUE(suc_unmark);
+            ASSERT_FALSE(nl->is_global_output_net(net_0));
+        }
+        {
+            // Mark and unmark a global inout net
+            std::shared_ptr<netlist> nl = create_empty_netlist();
+            std::shared_ptr<net> net_0 = nl->create_net(MIN_NET_ID+0, "net_0");
+            bool suc_mark              = nl->mark_global_inout_net(net_0);
+
+            ASSERT_TRUE(suc_mark);
+            ASSERT_TRUE(nl->is_global_inout_net(net_0));
+
+            bool suc_unmark = nl->unmark_global_inout_net(net_0);
+            ASSERT_TRUE(suc_unmark);
+            ASSERT_FALSE(nl->is_global_inout_net(net_0));
+        }
+
+
         {
             // Add a global input net which was already added (as normal net)
             std::shared_ptr<netlist> nl = create_empty_netlist();
@@ -1089,6 +1149,7 @@ TEST_F(netlist_test, check_add_global_net){
             EXPECT_TRUE(nl->is_global_inout_net(net_0));
         }
         // NEGATIVE
+        // Mark functions
         {
             // Mark an input-net, which is not part of the netlist (part of another netlist)
             NO_COUT_TEST_BLOCK;
@@ -1125,6 +1186,77 @@ TEST_F(netlist_test, check_add_global_net){
             EXPECT_FALSE(suc);
             EXPECT_FALSE(nl->is_global_inout_net(net_0));
         }
+        // Unmark functions
+        {
+            // Unmark a global input-net, which isn't marked as such
+            NO_COUT_TEST_BLOCK;
+            std::shared_ptr<netlist> nl = create_empty_netlist();
+            std::shared_ptr<net> net_0  = nl->create_net(MIN_NET_ID+0, "net_0");
+
+            bool suc = nl->unmark_global_input_net(net_0);
+
+            EXPECT_FALSE(suc);
+        }
+        {
+            // Unmark a global output-net, which isn't marked as such
+            NO_COUT_TEST_BLOCK;
+            std::shared_ptr<netlist> nl = create_empty_netlist();
+            std::shared_ptr<net> net_0  = nl->create_net(MIN_NET_ID+0, "net_0");
+
+            bool suc = nl->unmark_global_output_net(net_0);
+
+            EXPECT_FALSE(suc);
+        }
+        {
+            // Unmark a global inout-net, which isn't marked as such
+            NO_COUT_TEST_BLOCK;
+            std::shared_ptr<netlist> nl = create_empty_netlist();
+            std::shared_ptr<net> net_0  = nl->create_net(MIN_NET_ID+0, "net_0");
+
+            bool suc = nl->unmark_global_inout_net(net_0);
+
+            EXPECT_FALSE(suc);
+        }
+        {
+            // Unmark a global input-net, which is part of another netlist
+            NO_COUT_TEST_BLOCK;
+            std::shared_ptr<netlist> nl = create_empty_netlist();
+            std::shared_ptr<netlist> nl_other = create_empty_netlist();
+            std::shared_ptr<net> net_0  = nl_other->create_net(MIN_NET_ID+0, "net_0");
+            nl_other->mark_global_input_net(net_0);
+
+            bool suc = nl->unmark_global_input_net(net_0);
+
+            EXPECT_FALSE(suc);
+            EXPECT_TRUE(nl_other->is_global_input_net(net_0));
+        }
+        {
+            // Unmark a global output-net, which is part of another netlist
+            NO_COUT_TEST_BLOCK;
+            std::shared_ptr<netlist> nl = create_empty_netlist();
+            std::shared_ptr<netlist> nl_other = create_empty_netlist();
+            std::shared_ptr<net> net_0  = nl_other->create_net(MIN_NET_ID+0, "net_0");
+            nl_other->mark_global_output_net(net_0);
+
+            bool suc = nl->unmark_global_output_net(net_0);
+
+            EXPECT_FALSE(suc);
+            EXPECT_TRUE(nl_other->is_global_output_net(net_0));
+        }
+        {
+            // Unmark a global inout-net, which is part of another netlist
+            NO_COUT_TEST_BLOCK;
+            std::shared_ptr<netlist> nl = create_empty_netlist();
+            std::shared_ptr<netlist> nl_other = create_empty_netlist();
+            std::shared_ptr<net> net_0  = nl_other->create_net(MIN_NET_ID+0, "net_0");
+            nl_other->mark_global_inout_net(net_0);
+
+            bool suc = nl->unmark_global_inout_net(net_0);
+
+            EXPECT_FALSE(suc);
+            EXPECT_TRUE(nl_other->is_global_inout_net(net_0));
+        }
+
     TEST_END
 }
 
@@ -1355,7 +1487,47 @@ TEST_F(netlist_test, check_delete_module)
             nl->delete_module(m_0);
             EXPECT_FALSE(nl->is_module_in_netlist(m_0));
         }
-        // TODO: more tests (when is_module_in_netlist is fixed)
+        {
+            // Remove modules which own submodules
+            std::shared_ptr<netlist> nl = create_empty_netlist();
+            std::shared_ptr<module> parent = nl->create_module(MIN_MODULE_ID+0, "module_0", nl->get_top_module());
+            std::shared_ptr<module> test_module = nl->create_module(MIN_MODULE_ID+1, "module_1", parent);
+            std::shared_ptr<module> child = nl->create_module(MIN_MODULE_ID+2, "module_2", test_module);
+
+            // Add a net and a gate to the test_module
+            std::shared_ptr<gate> gate_0 = nl->create_gate("INV", "gate_0");
+            std::shared_ptr<net> net_0 = nl->create_net("net_0");
+            test_module->insert_gate(gate_0);
+            test_module->insert_net(net_0);
+
+            nl->delete_module(test_module);
+
+            EXPECT_FALSE(nl->is_module_in_netlist(test_module));
+            EXPECT_TRUE(parent->contains_gate(gate_0));
+            EXPECT_TRUE(parent->contains_net(net_0));
+            EXPECT_TRUE(parent->get_submodules().find(child) != parent->get_submodules().end());
+
+
+        }
+        // NEGATIVE
+        {
+            // Deleted module is part of another netlist
+            NO_COUT_TEST_BLOCK;
+            std::shared_ptr<netlist> nl = create_empty_netlist();
+            std::shared_ptr<netlist> nl_other = create_empty_netlist();
+            std::shared_ptr<module> m_0 = nl_other->create_module(MIN_MODULE_ID+0, "module_0", nl->get_top_module());
+            nl->delete_module(m_0);
+            EXPECT_FALSE(nl->is_module_in_netlist(m_0));
+            EXPECT_TRUE(nl_other->is_module_in_netlist(m_0));
+        }
+        {
+            // Try to delete the top module
+            NO_COUT_TEST_BLOCK;
+            std::shared_ptr<netlist> nl = create_empty_netlist();
+            std::shared_ptr<module> tm = nl->get_top_module();
+            nl->delete_module(tm);
+            EXPECT_TRUE(nl->is_module_in_netlist(tm));
+        }
     TEST_END
 }
 
