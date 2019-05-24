@@ -32,6 +32,8 @@ class python_code_editor : public code_editor
 {
     Q_OBJECT
 public:
+    python_code_editor(QWidget* parent = nullptr);
+
     void keyPressEvent(QKeyEvent* e) Q_DECL_OVERRIDE;
 
     void handle_tab_key_pressed();
@@ -46,11 +48,15 @@ public:
     QString get_file_name();
     void set_file_name(const QString name);
 
+    bool has_unsaved_changes();
+    void update_text_state();
+
 private:
     void indent_selection(bool indentUnindent);
     int next_indent(bool indentUnindent, int current_indent);
 
     QString m_file_name;
+    QString m_text_state;
 };
 
 

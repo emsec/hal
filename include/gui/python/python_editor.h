@@ -68,6 +68,9 @@ public:
 
     void save_file(const bool ask_path);
 
+    bool has_unsaved_tabs();
+    QStringList get_names_of_unsaved_tabs();
+
     QString open_icon_path() const;
     QString open_icon_style() const;
 

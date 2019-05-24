@@ -11,6 +11,11 @@
 #include <QVBoxLayout>
 
 
+python_code_editor::python_code_editor(QWidget *parent) : code_editor(parent)
+{
+    update_text_state();
+}
+
 void python_code_editor::keyPressEvent(QKeyEvent* e)
 {
     if (textCursor().hasSelection() && !(e->key() == Qt::Key_Tab || e->key() == Qt::Key_Backtab))
@@ -298,4 +303,14 @@ QString python_code_editor::get_file_name()
 void python_code_editor::set_file_name(const QString name)
 {
     m_file_name = name;
+}
+
+bool python_code_editor::has_unsaved_changes()
+{
+    return !(m_text_state == toPlainText());
+}
+
+void python_code_editor::update_text_state()
+{
+    m_text_state = toPlainText();
 }
