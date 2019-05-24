@@ -149,14 +149,14 @@ TEST_F(module_test, check_set_id){
             test_module->set_name("test_module");
             EXPECT_EQ(test_module->get_name(), "test_module");
         }
-        /*{ //TODO: Fails
+        { //TODO: Fails
             // Set an empty name
             std::shared_ptr<netlist> nl = create_empty_netlist();
             std::shared_ptr<module> test_module = nl->create_module(MIN_MODULE_ID+0, "test_module", nl->get_top_module());
 
             test_module->set_name("");
             EXPECT_EQ(test_module->get_name(), "test_module");
-        }*/
+        }
     TEST_END
 }
 
