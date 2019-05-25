@@ -48,9 +48,6 @@ public:
     QString get_file_name();
     void set_file_name(const QString name);
 
-    bool has_unsaved_changes();
-    void update_text_state();
-
 private:
     void indent_selection(bool indentUnindent);
     int next_indent(bool indentUnindent, int current_indent);

@@ -71,7 +71,9 @@ python_editor::python_editor(QWidget* parent)
     connect(m_action_run, &QAction::triggered, this, &python_editor::handle_action_run);
 
     m_editor_widget->setPlainText(g_settings.value("python_editor/code", "").toString());
-    dynamic_cast<python_code_editor*>(m_editor_widget)->update_text_state();
+    m_editor_widget->document()->setModified(false);
+    connect(m_editor_widget, &code_editor::modificationChanged, this, &python_editor::handle_modification_changed);
+    //dynamic_cast<python_code_editor*>(m_editor_widget)->update_text_state();
 }
 
 void python_editor::debug_tab_close_request(int index)
@@ -82,6 +84,14 @@ void python_editor::debug_tab_close_request(int index)
 void python_editor::handle_action_toggle_minimap()
 {
     dynamic_cast<python_code_editor*>(m_tab_widget->currentWidget())->toggle_minimap();
+}
+
+void python_editor::handle_modification_changed(bool changed)
+{
+    if(changed && !(m_tab_widget->tabText(m_tab_widget->currentIndex()).endsWith("*")))
+        m_tab_widget->setTabText(m_tab_widget->currentIndex(), m_tab_widget->tabText(m_tab_widget->currentIndex()).append("*"));
+    if(!changed && (m_tab_widget->tabText(m_tab_widget->currentIndex()).endsWith("*")))
+        m_tab_widget->setTabText(m_tab_widget->currentIndex(), m_tab_widget->tabText(m_tab_widget->currentIndex()).remove('*'));
 }
 
 python_editor::~python_editor()
@@ -171,7 +181,9 @@ void python_editor::handle_action_open_file()
     python_code_editor* editor = dynamic_cast<python_code_editor*>(m_tab_widget->widget(m_tab_widget->count()-1));
     editor->appendPlainText(QString::fromStdString(f));
     editor->set_file_name(new_file_name);
-    editor->update_text_state();
+    //editor->update_text_state();
+    editor->document()->setModified(false);
+    //editor->document()->isModified();
     m_tab_widget->setTabText(m_tab_widget->count()-1, info.completeBaseName() + "." + info.completeSuffix());
 
 //    m_editor_widget->clear();
@@ -216,7 +228,8 @@ void python_editor::save_file(const bool ask_path)
     //out << m_editor_widget->toPlainText().toStdString();
     out << current_editor->toPlainText().toStdString();
     out.close();
-    current_editor->update_text_state();
+    current_editor->document()->setModified(false);
+    //current_editor->update_text_state();
 
     QFileInfo info(selected_file_name);
     m_tab_widget->setTabText(m_tab_widget->currentIndex(), info.completeBaseName() + "." + info.completeSuffix());
@@ -228,7 +241,7 @@ bool python_editor::has_unsaved_tabs()
 {
     for(int i = 0; i < m_tab_widget->count(); i++)
     {
-        if(dynamic_cast<python_code_editor*>(m_tab_widget->widget(i))->has_unsaved_changes())
+        if(dynamic_cast<python_code_editor*>(m_tab_widget->widget(i))->document()->isModified())
             return true;
     }
     return false;
@@ -239,7 +252,7 @@ QStringList python_editor::get_names_of_unsaved_tabs()
     QStringList unsaved_tabs;
     for(int i = 0; i < m_tab_widget->count(); i++)
     {
-        if(dynamic_cast<python_code_editor*>(m_tab_widget->widget(i))->has_unsaved_changes())
+        if(dynamic_cast<python_code_editor*>(m_tab_widget->widget(i))->document()->isModified())
             unsaved_tabs << m_tab_widget->tabText(i);
     }
     return unsaved_tabs;
@@ -268,6 +281,8 @@ void python_editor::handle_action_new_tab()
     new python_syntax_highlighter(editor->minimap()->document());
     m_tab_widget->addTab(editor, "unsaved");
     m_tab_widget->setCurrentIndex(m_tab_widget->count()-1);
+    editor->document()->setModified(false);
+    connect(editor, &python_code_editor::modificationChanged, this, &python_editor::handle_modification_changed);
 }
 
 QString python_editor::open_icon_path() const
