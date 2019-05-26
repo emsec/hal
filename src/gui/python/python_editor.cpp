@@ -73,6 +73,7 @@ python_editor::python_editor(QWidget* parent)
     m_editor_widget->setPlainText(g_settings.value("python_editor/code", "").toString());
     m_editor_widget->document()->setModified(false);
     connect(m_editor_widget, &code_editor::modificationChanged, this, &python_editor::handle_modification_changed);
+    connect(m_searchbar, &searchbar::text_edited, this, &python_editor::handle_searchbar_text_edited);
     //dynamic_cast<python_code_editor*>(m_editor_widget)->update_text_state();
 }
 
@@ -92,6 +93,12 @@ void python_editor::handle_modification_changed(bool changed)
         m_tab_widget->setTabText(m_tab_widget->currentIndex(), m_tab_widget->tabText(m_tab_widget->currentIndex()).append("*"));
     if(!changed && (m_tab_widget->tabText(m_tab_widget->currentIndex()).endsWith("*")))
         m_tab_widget->setTabText(m_tab_widget->currentIndex(), m_tab_widget->tabText(m_tab_widget->currentIndex()).remove('*'));
+}
+
+void python_editor::handle_searchbar_text_edited(const QString &text)
+{
+    if(m_tab_widget->count() > 0)
+        dynamic_cast<python_code_editor*>(m_tab_widget->currentWidget())->search(text);
 }
 
 python_editor::~python_editor()
