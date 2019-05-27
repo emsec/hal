@@ -187,7 +187,7 @@ void hal_content_manager::mark_netlist_saved()
 
 QStringList hal_content_manager::get_names_of_unsaved_python_tabs()
 {
-    QStringList tab_names = {"GraphAlgo1.py", "new 3", "TestScript_22.py"};
+    QStringList tab_names = {"GraphAlgo.py", "new 3", "SBoxFinderv1.py"};
     return tab_names;
     //return m_pythond_widget->get_names_of_unsaved_tabs();
 }
