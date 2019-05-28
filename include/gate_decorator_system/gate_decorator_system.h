@@ -48,7 +48,7 @@ namespace gate_decorator_system
     };
 
     /**
-     * Availability tester, i.e., has to true if a decorator is available for the given gate
+     * Availability tester, i.e., has to return true if a decorator is available for the given gate
      *
      * @param[in] gate - The gate a decorator is queried for.
      * @returns True if a decorator is available.

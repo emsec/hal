@@ -198,6 +198,15 @@ namespace core_utils
     CORE_API std::string to_lower(const std::string& s);
 
     /**
+     * Counts number of substring occurrences in a string.
+     *
+     * @param[in] substr - Substring.
+     * @param[in] str - String containing the substring.
+     * @returns The number of occurrences.
+     */
+    CORE_API u32 num_of_occurrences(const std::string& str, const std::string& substr);
+
+    /**
      * Checks whether a directory exists and access rights are available.
      *
      * @param[in] folder - The directory to check.
