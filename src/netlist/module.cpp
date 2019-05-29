@@ -116,7 +116,7 @@ std::shared_ptr<netlist> module::get_netlist() const
     return m_internal_manager->m_netlist->get_shared();
 }
 
-bool module::insert_gate(std::shared_ptr<gate> gate)
+bool module::assign_gate(std::shared_ptr<gate> gate)
 {
     if (gate == nullptr)
     {
@@ -248,22 +248,22 @@ std::set<std::shared_ptr<gate>> module::get_gates(const std::string& gate_type_f
     return res;
 }
 
-bool module::insert_net(std::shared_ptr<net> n)
+bool module::assign_net(std::shared_ptr<net> net)
 {
-    if (n == nullptr)
+    if (net == nullptr)
     {
         return false;
     }
-    if (contains_net(n))
+    if (contains_net(net))
     {
         return false;
     }
-    auto prev_module        = m_internal_manager->remove_from_submodules(n);
-    m_nets_map[n->get_id()] = n;
-    m_nets_set.insert(n);
+    auto prev_module        = m_internal_manager->remove_from_submodules(net);
+    m_nets_map[net->get_id()] = net;
+    m_nets_set.insert(net);
 
-    module_event_handler::notify(module_event_handler::event::net_removed, prev_module, n->get_id());
-    module_event_handler::notify(module_event_handler::event::net_inserted, shared_from_this(), n->get_id());
+    module_event_handler::notify(module_event_handler::event::net_removed, prev_module, net->get_id());
+    module_event_handler::notify(module_event_handler::event::net_inserted, shared_from_this(), net->get_id());
     return true;
 }
 

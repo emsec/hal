@@ -1234,7 +1234,7 @@ If recursive parameter is true, all submodules are searched aswell.
 :returns: A set of nets.
 :rtype: set(hal_py.net)
 )")
-        .def("insert_gate", &module::insert_gate, py::arg("gate"), R"(
+        .def("assign_gate", &module::assign_gate, py::arg("gate"), R"(
 Moves a gate into this module. The gate is removed from its previous module in the process.
 
 :param gate: The gate to add.
@@ -1260,7 +1260,7 @@ Checks whether a gate is in the module. If \p recursive is true, all submodules 
 :returns: True if the gate is in the object.
 :rtype: bool
 )")
-        .def("add_net", &module::insert_net, py::arg("net"), R"(
+        .def("assign_net", &module::assign_net, py::arg("net"), R"(
 Moves a net into this module. The net is removed from its previous module in the process.
 
 :param net: The net to add.
