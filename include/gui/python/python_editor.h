@@ -135,6 +135,7 @@ private:
 
     QString m_file_name = "";
     QTabWidget* m_tab_widget;
+    int m_new_file_counter;
 };
 
 #endif    // PYTHON_WIDGET_H

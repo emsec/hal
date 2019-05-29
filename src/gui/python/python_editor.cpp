@@ -34,6 +34,7 @@ python_editor::python_editor(QWidget* parent)
 {
     ensurePolished();
     const int tab_stop = 4;
+    m_new_file_counter = 0;
 
     QFontMetrics metrics(font());
     m_editor_widget->setTabStopWidth(tab_stop * metrics.width(" "));
@@ -44,10 +45,9 @@ python_editor::python_editor(QWidget* parent)
 
     m_tab_widget = new QTabWidget(this);
     m_tab_widget->setTabsClosable(true);
-    m_tab_widget->addTab(m_editor_widget, "unsaved");
+    m_tab_widget->addTab(m_editor_widget, "Default");
     m_content_layout->addWidget(m_tab_widget);
     connect(m_tab_widget, &QTabWidget::tabCloseRequested, this, &python_editor::debug_tab_close_request);
-    //m_content_layout->addWidget(m_editor_widget);
     m_content_layout->addWidget(m_searchbar);
     m_searchbar->hide();
 
@@ -226,6 +226,7 @@ void python_editor::handle_action_open_file()
     editor->document()->setModified(false);
     //editor->document()->isModified();
     m_tab_widget->setTabText(m_tab_widget->count()-1, info.completeBaseName() + "." + info.completeSuffix());
+    m_new_file_counter--;
 }
 
 void python_editor::save_file(const bool ask_path, const int index)
@@ -316,7 +317,7 @@ void python_editor::handle_action_new_tab()
     python_code_editor* editor = new python_code_editor();
     new python_syntax_highlighter(editor->document());
     new python_syntax_highlighter(editor->minimap()->document());
-    m_tab_widget->addTab(editor, "unsaved");
+    m_tab_widget->addTab(editor, QString("New File ").append(QString::number(++m_new_file_counter)));
     m_tab_widget->setCurrentIndex(m_tab_widget->count()-1);
     editor->document()->setModified(false);
     connect(editor, &python_code_editor::modificationChanged, this, &python_editor::handle_modification_changed);
