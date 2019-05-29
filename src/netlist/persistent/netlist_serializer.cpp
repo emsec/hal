@@ -289,12 +289,12 @@ namespace netlist_serializer
 
             for (const auto& gate_node : val["gates"].GetArray())
             {
-                sm->insert_gate(nl->get_gate_by_id(gate_node.GetUint()));
+                sm->assign_gate(nl->get_gate_by_id(gate_node.GetUint()));
             }
 
             for (const auto& net_node : val["nets"].GetArray())
             {
-                sm->insert_net(nl->get_net_by_id(net_node.GetUint()));
+                sm->assign_net(nl->get_net_by_id(net_node.GetUint()));
             }
 
             deserialize_data(sm, val["data"]);

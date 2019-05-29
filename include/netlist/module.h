@@ -141,7 +141,7 @@ public:
      * @param[in] gate - The gate to move.
      * @returns True on success.
      */
-    bool insert_gate(std::shared_ptr<gate> gate);
+    bool assign_gate(std::shared_ptr<gate> gate);
 
     /**
      * Removes a gate from the module.<br>
@@ -197,7 +197,7 @@ public:
      * @param[in] net - The net to move.
      * @returns True on success.
      */
-    bool insert_net(std::shared_ptr<net> net);
+    bool assign_net(std::shared_ptr<net> net);
 
     /**
      * Removes a net from the module.<br>

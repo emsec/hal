@@ -287,7 +287,7 @@ void graph_graphics_widget::handle_add_gates_to_new_module_triggered()
     {
         auto sub = g_netlist->create_module(g_netlist->get_unique_module_id(), dialog->get_text().toStdString(), g_netlist->get_top_module());
         for (const auto& gate : currently_selected_gates)
-            sub->insert_gate(gate->get_ref_gate());
+            sub->assign_gate(gate->get_ref_gate());
     }
     delete dialog;
 }
@@ -301,7 +301,7 @@ void graph_graphics_widget::handle_add_gates_to_existing_module()
         if (temp)
         {
             for (const auto& gate : currently_selected_gates)
-                temp->insert_gate(gate->get_ref_gate());
+                temp->assign_gate(gate->get_ref_gate());
         }
     }
 }
@@ -327,7 +327,7 @@ void graph_graphics_widget::handle_add_nets_to_new_module_triggered()
     {
         auto sub = g_netlist->create_module(g_netlist->get_unique_module_id(), dialog->get_text().toStdString(), g_netlist->get_top_module());
         for (const auto& net : currently_selected_nets)
-            sub->insert_net(net->get_ref_net());
+            sub->assign_net(net->get_ref_net());
     }
     delete dialog;
 }
@@ -341,7 +341,7 @@ void graph_graphics_widget::handle_add_nets_to_existing_module_triggered()
         if (temp)
         {
             for (const auto& net : currently_selected_nets)
-                temp->insert_net(net->get_ref_net());
+                temp->assign_net(net->get_ref_net());
         }
     }
 }
@@ -367,9 +367,9 @@ void graph_graphics_widget::handle_add_gates_and_nets_to_new_module_triggered()
     {
         auto sub = g_netlist->create_module(g_netlist->get_unique_module_id(), dialog->get_text().toStdString(), g_netlist->get_top_module());
         for (const auto& gate : currently_selected_gates)
-            sub->insert_gate(gate->get_ref_gate());
+            sub->assign_gate(gate->get_ref_gate());
         for (const auto& net : currently_selected_nets)
-            sub->insert_net(net->get_ref_net());
+            sub->assign_net(net->get_ref_net());
     }
     delete dialog;
 }
@@ -383,9 +383,9 @@ void graph_graphics_widget::handle_add_gates_and_nets_to_existing_module_trigger
         if (temp)
         {
             for (auto const& gate : currently_selected_gates)
-                temp->insert_gate(gate->get_ref_gate());
+                temp->assign_gate(gate->get_ref_gate());
             for (const auto& net : currently_selected_nets)
-                temp->insert_net(net->get_ref_net());
+                temp->assign_net(net->get_ref_net());
         }
     }
 }
