@@ -25,6 +25,7 @@
 
 #include <fstream>
 #include <QFileInfo>
+#include <QMessageBox>
 
 
 python_editor::python_editor(QWidget* parent)
@@ -79,6 +80,38 @@ python_editor::python_editor(QWidget* parent)
 
 void python_editor::debug_tab_close_request(int index)
 {
+    python_code_editor* editor = dynamic_cast<python_code_editor*>(m_tab_widget->widget(index));
+    if(editor->document()->isModified())
+    {
+        QMessageBox msgBox;
+        msgBox.setStyleSheet("QLabel{min-width: 600px;}");
+        msgBox.setText(m_tab_widget->tabText(index).append(" has been modified."));
+        msgBox.setInformativeText("Do you want to save your changes?");
+        msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+        msgBox.setDefaultButton(QMessageBox::Save);
+        int ret = msgBox.exec();
+
+        if(ret == QMessageBox::Cancel)
+            return;
+
+        if(ret == QMessageBox::Discard)
+        {
+            m_tab_widget->removeTab(index);
+            return;
+        }
+
+        if(ret == QMessageBox::Save)
+        {
+            if(editor->get_file_name().isEmpty())
+                save_file(true, index);
+            else
+                save_file(false, index);
+
+            m_tab_widget->removeTab(index);
+            return;
+        }
+
+    }
     m_tab_widget->removeTab(index);
 }
 
@@ -112,7 +145,8 @@ void python_editor::setup_toolbar(toolbar* toolbar)
     // DEBUG CODE
     QToolButton* add_button = new QToolButton(this);
     add_button->setIcon(gui_utility::get_styled_svg_icon("all->#FFDD00", ":/icons/cross"));
-    add_button->setToolTip("New Tab (CTRL+N");
+    //add_button->setIcon(gui_utility::get_styled_svg_icon("","/home/sebbe/Desktop/new_tab.svg"));
+    add_button->setToolTip("New Tab 'CTRL+N'");
     toolbar->addWidget(add_button);
     add_button->setShortcut(QKeySequence("Ctrl+n"));
     connect(add_button, &QToolButton::clicked, this, &python_editor::handle_action_new_tab);
@@ -192,22 +226,21 @@ void python_editor::handle_action_open_file()
     editor->document()->setModified(false);
     //editor->document()->isModified();
     m_tab_widget->setTabText(m_tab_widget->count()-1, info.completeBaseName() + "." + info.completeSuffix());
-
-//    m_editor_widget->clear();
-//    std::string f((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
-//    m_editor_widget->appendPlainText(QString::fromStdString(f));
-
-    //file_manager::get_instance()->open_file(file_name);
 }
 
-void python_editor::save_file(const bool ask_path)
+void python_editor::save_file(const bool ask_path, const int index)
 {
     QString title = "Save File";
     QString text  = "Python Scripts(*.py)";
 
     QString selected_file_name;
 
-    python_code_editor* current_editor = dynamic_cast<python_code_editor*>(m_tab_widget->currentWidget());
+    python_code_editor* current_editor;
+    if(index == -1)
+        current_editor = dynamic_cast<python_code_editor*>(m_tab_widget->currentWidget());
+    else
+        current_editor = dynamic_cast<python_code_editor*>(m_tab_widget->widget(index));
+
     if(!current_editor)
         return;
 
@@ -232,11 +265,9 @@ void python_editor::save_file(const bool ask_path)
         return;
         log_error("gui", "could not open file path");
     }
-    //out << m_editor_widget->toPlainText().toStdString();
     out << current_editor->toPlainText().toStdString();
     out.close();
     current_editor->document()->setModified(false);
-    //current_editor->update_text_state();
 
     QFileInfo info(selected_file_name);
     m_tab_widget->setTabText(m_tab_widget->currentIndex(), info.completeBaseName() + "." + info.completeSuffix());
@@ -278,7 +309,6 @@ void python_editor::handle_action_save_file_as()
 void python_editor::handle_action_run()
 {
     g_python_context->interpret_script(dynamic_cast<python_code_editor*>(m_tab_widget->currentWidget())->toPlainText());
-   // g_python_context->interpret_script(m_editor_widget->toPlainText());
 }
 
 void python_editor::handle_action_new_tab()

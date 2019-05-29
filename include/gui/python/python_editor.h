@@ -66,7 +66,7 @@ public:
     void handle_action_run();
     void handle_action_new_tab();
 
-    void save_file(const bool ask_path);
+    void save_file(const bool ask_path, const int index = -1);
 
     bool has_unsaved_tabs();
     QStringList get_names_of_unsaved_tabs();
