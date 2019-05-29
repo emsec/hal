@@ -5,6 +5,7 @@ hal_py Documentation
    :maxdepth: 1
 
    core_utils
+   data_container
    gate_library
    endpoint
    netlist
