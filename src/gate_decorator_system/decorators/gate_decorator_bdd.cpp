@@ -133,6 +133,12 @@ std::vector<std::map<int, bool>> gate_decorator_bdd::get_bdd_clauses(std::shared
         return std::vector<std::map<int, bool>>();
     }
 
+    if (is_tautology(bdd_ptr) || is_contradiction(bdd_ptr))
+    {
+        log_error("netlist.decorator", "no clauses available for tautologies or contradictions.");
+        return std::vector<std::map<int, bool>>();
+    }
+
     std::vector<std::map<int, bool>> result;
     auto clauses = core_utils::split(gate_decorator_bdd::get_bdd_str(bdd_ptr), '>');
     /* If last char is '>' skip the last clause as it is empty */
