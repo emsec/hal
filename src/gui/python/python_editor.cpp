@@ -151,15 +151,36 @@ void python_code_editor::indent_selection(bool indent)
     }
     else
     {
-        // select first line
+        // select first line (to decide auto-completion)
+        cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
+        QString line_start_to_cursor = cursor.selection().toPlainText();
+        bool onlySpaces = true;
+        for (const auto& c : line_start_to_cursor)
+        {
+            if (c != ' ')
+            {
+                onlySpaces = false;
+                break;
+            }
+        }
+        if (indent && !onlySpaces)
+        {
+            // if the cursor is in a word without a selection, show autocompletion menu
+            // (skip this if we are un-indenting, meaning Shift+Tab has been pressed)
+            handle_autocomplete();
+            return;
+        }
+        // select whole line (to count total spaces)
+        // don't mess with this order, it'll affect the text insertion later on
+        cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::MoveAnchor);
         cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
     }
+
     QStringList selected_lines = cursor.selection().toPlainText().split('\n');
     cursor.clearSelection();
 
     // calculate number of spaces at the beginning of the first line and
     // check if the line consists entirely of spaces or is empty
-    bool onlySpaces = true;
     int n_spaces = 0;
     if (!selected_lines.isEmpty())
     {
@@ -167,7 +188,6 @@ void python_code_editor::indent_selection(bool indent)
         {
             if (c != ' ')
             {
-                onlySpaces = false;
                 break;
             }
             n_spaces++;
@@ -176,14 +196,6 @@ void python_code_editor::indent_selection(bool indent)
     // calculate indent to use for all selected lines based on the amount of
     // spaces needed to align the first line to the next_indent 4-block
     const int constant_indent = next_indent(indent, n_spaces);
-
-    // if the cursor is in a word without a selection, show autocompletion menu
-    // (skip this if we are un-indenting, meaning Shift+Tab has been pressed)
-    if (indent && !preSelected && !onlySpaces)
-    {
-        handle_autocomplete();
-        return;
-    }
 
     // (un)indent all selected lines
     const int size = selected_lines.size();
