@@ -139,6 +139,14 @@ Optionally you can install HAL:
 
 `make install`
 
+### macOS
+
+Please make sure to use a compiler that supports OpenMP. You can install one from e.g. Homebrew via: `brew install llvm`.
+
+To let cmake know of the custom compiler use following command.
+
+`cmake .. -DCMAKE_C_COMPILER=/usr/local/opt/llvm/bin/clang -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm/bin/clang++`
+
 ## Contributing
 
 You are very welcome to contribute to the development of HAL. Feel free to submit a new pull request via github. Please consider running the static checks + clang format before that. You can also install these checks as git hooks before any commit.
