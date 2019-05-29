@@ -41,8 +41,8 @@ class NETLIST_API data_container
 public:
     /** constructor (= default) */
     data_container() = default;
-    /** destructor (= default) */
-    ~data_container() = default;
+    /** destructor (= default)  Needs to be virtual to access interface in subclasses via python. */
+    virtual ~data_container() = default;
 
     /**
      * Sets a custom data entry.<br>
