@@ -39,7 +39,7 @@
 #include <time.h>
 #include <math.h>
 #include <assert.h>
-#include "kernel.h"
+#include "hal_kernel.h"
 #include "bddtree.h"
 #include "imatrix.h"
 #include "prime.h"

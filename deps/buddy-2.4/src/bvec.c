@@ -35,7 +35,7 @@
   DATE:  (C) may 1999
 *************************************************************************/
 #include <stdlib.h>
-#include "kernel.h"
+#include "hal_kernel.h"
 #include "hal_bvec.h"
 
 #define DEFAULT(v) { v.bitnum=0; v.bitvec=NULL; }

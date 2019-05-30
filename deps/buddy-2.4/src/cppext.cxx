@@ -37,7 +37,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <iomanip>
-#include "kernel.h"
+#include "hal_kernel.h"
 #include "hal_bvec.h"
 
 using namespace std;

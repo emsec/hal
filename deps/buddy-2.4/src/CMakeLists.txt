@@ -10,7 +10,7 @@ set(HEADERS
     bddtree.h
     imatrix.h
     cache.h
-    kernel.h
+    hal_kernel.h
     prime.h
     )
 
@@ -22,7 +22,7 @@ set(SOURCES
     cppext.cxx
     fdd.c
     imatrix.c
-    kernel.c
+    hal_kernel.c
     pairs.c
     prime.c
     reorder.c
@@ -44,6 +44,7 @@ add_library(hal_bdd SHARED ${HEADERS} ${SOURCES})
 install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/hal_bdd.h DESTINATION "${INCLUDE_INSTALL_DIRECTORY}")
 install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/hal_bvec.h DESTINATION "${INCLUDE_INSTALL_DIRECTORY}")
 install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/hal_fdd.h DESTINATION "${INCLUDE_INSTALL_DIRECTORY}")
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/hal_kernel.h DESTINATION "${INCLUDE_INSTALL_DIRECTORY}")
 install(TARGETS hal_bdd LIBRARY DESTINATION ${LIBRARY_INSTALL_DIRECTORY} PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ
         GROUP_EXECUTE WORLD_READ WORLD_EXECUTE INCLUDES
         DESTINATION ${INCLUDE_INSTALL_DIRECTORY})

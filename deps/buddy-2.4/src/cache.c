@@ -35,7 +35,7 @@
   DATE:  (C) june 1997
 *************************************************************************/
 #include <stdlib.h>
-#include "kernel.h"
+#include "hal_kernel.h"
 #include "cache.h"
 #include "prime.h"
 

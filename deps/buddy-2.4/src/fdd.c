@@ -38,7 +38,7 @@
 *************************************************************************/
 #include <stdlib.h>
 #include <string.h>
-#include "kernel.h"
+#include "hal_kernel.h"
 #include "hal_fdd.h"
 
 

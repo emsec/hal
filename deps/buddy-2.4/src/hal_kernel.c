@@ -45,7 +45,7 @@
 #include <time.h>
 #include <assert.h>
 
-#include "kernel.h"
+#include "hal_kernel.h"
 #include "cache.h"
 #include "prime.h"
 

@@ -36,7 +36,7 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <string.h>
-#include "kernel.h"
+#include "hal_kernel.h"
 #include "imatrix.h"
 
 /*************************************************************************

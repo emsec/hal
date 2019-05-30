@@ -34,7 +34,7 @@
 #include <vector>
 
 #include <hal_bdd.h>
-#include <kernel.h>
+#include <hal_kernel.h>
 
 
 /**

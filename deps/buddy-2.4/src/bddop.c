@@ -40,7 +40,7 @@
 #include <time.h>
 #include <assert.h>
 
-#include "kernel.h"
+#include "hal_kernel.h"
 #include "cache.h"
 
    /* Hash value modifiers to distinguish between entries in misccache */
