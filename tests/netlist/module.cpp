@@ -71,8 +71,8 @@ TEST_F(module_test, check_create_gate){TEST_START{// Add some gates to the modul
 
     // Add gate_0 and gate_1 to a module
     std::shared_ptr<module> sm = nl->create_module(2, "test module", nl->get_top_module());
-    sm->insert_gate(gate_0);
-    sm->insert_gate(gate_1);
+            sm->assign_gate(gate_0);
+            sm->assign_gate(gate_1);
 
     std::set<std::shared_ptr<gate>> expRes = {gate_0, gate_1};
 
@@ -89,8 +89,8 @@ TEST_F(module_test, check_create_gate){TEST_START{// Add some gates to the modul
 
     // Add gate_0 twice
     std::shared_ptr<module> sm = nl->create_module(2, "test module", nl->get_top_module());
-    sm->insert_gate(gate_0);
-    sm->insert_gate(gate_0);
+    sm->assign_gate(gate_0);
+    sm->assign_gate(gate_0);
 
     std::set<std::shared_ptr<gate>> expRes = {
         gate_0,
@@ -106,7 +106,7 @@ TEST_F(module_test, check_create_gate){TEST_START{// Add some gates to the modul
     NO_COUT_TEST_BLOCK;
     std::shared_ptr<netlist> nl = create_empty_netlist(0);
     std::shared_ptr<module> sm = nl->create_module(2, "test module", nl->get_top_module());
-    sm->insert_gate(nullptr);
+    sm->assign_gate(nullptr);
     EXPECT_TRUE(sm->get_gates().empty());
 }
 TEST_END
@@ -127,8 +127,8 @@ TEST_F(module_test, check_create_net){TEST_START{// Add some nets to the module
 
     // Add net_0 and net_1 to a module
     std::shared_ptr<module> sm = nl->create_module(2, "test module", nl->get_top_module());
-    sm->insert_net(net_0);
-    sm->insert_net(net_1);
+            sm->assign_net(net_0);
+            sm->assign_net(net_1);
 
     std::set<std::shared_ptr<net>> expRes = {net_0, net_1};
 
@@ -145,8 +145,8 @@ TEST_F(module_test, check_create_net){TEST_START{// Add some nets to the module
 
     // Add net_0 twice
     std::shared_ptr<module> sm = nl->create_module(2, "test module", nl->get_top_module());
-    sm->insert_net(net_0);
-    sm->insert_net(net_0);
+    sm->assign_net(net_0);
+    sm->assign_net(net_0);
 
     std::set<std::shared_ptr<net>> expRes = {
         net_0,
@@ -162,7 +162,7 @@ TEST_F(module_test, check_create_net){TEST_START{// Add some nets to the module
     NO_COUT_TEST_BLOCK;
     std::shared_ptr<netlist> nl   = create_empty_netlist(0);
     std::shared_ptr<module> sm = nl->create_module(2, "test module", nl->get_top_module());
-    sm->insert_net(nullptr);
+    sm->assign_net(nullptr);
     EXPECT_TRUE(sm->get_nets().empty());
 }
 /*{
@@ -174,7 +174,7 @@ TEST_F(module_test, check_create_net){TEST_START{// Add some nets to the module
             other_nl->create_net(net_0);
 
             std::shared_ptr<module> sm = nl->create_module(2, "test module", nl->get_top_module());
-            EXPECT_FALSE(sm->insert_net(net_0));
+            EXPECT_FALSE(sm->assign_net(net_0));
             EXPECT_TRUE(sm->get_nets().empty());
         }*/
 TEST_END
@@ -191,7 +191,7 @@ TEST_F(module_test, check_delete_gate){TEST_START{// Remove a gate from a module
     std::shared_ptr<gate> gate_0 = nl->create_gate(1, "INV", "gate_0");
 
     std::shared_ptr<module> sm = nl->create_module(2, "test module", nl->get_top_module());
-    sm->insert_gate(gate_0);
+            sm->assign_gate(gate_0);
 
     EXPECT_TRUE(sm->remove_gate(gate_0));
     EXPECT_TRUE(sm->get_gates().empty());
@@ -229,7 +229,7 @@ TEST_F(module_test, check_delete_net){TEST_START{// Remove a net from a module
     std::shared_ptr<net> net_0 = nl->create_net(1, "net_0");
 
     std::shared_ptr<module> sm = nl->create_module(2, "test module", nl->get_top_module());
-    sm->insert_net(net_0);
+            sm->assign_net(net_0);
 
     EXPECT_TRUE(sm->remove_net(net_0));
     EXPECT_TRUE(sm->get_nets().empty());

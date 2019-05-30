@@ -395,12 +395,12 @@ bool netlist_internal_manager::delete_module(std::shared_ptr<module> to_remove)
     auto gates_copy = to_remove->m_gates_set;
     for (const auto& gate : gates_copy)
     {
-        to_remove->m_parent->insert_gate(gate);
+        to_remove->m_parent->assign_gate(gate);
     }
     auto nets_copy = to_remove->m_nets_set;
     for (const auto& net : nets_copy)
     {
-        to_remove->m_parent->insert_net(net);
+        to_remove->m_parent->assign_net(net);
     }
 
     // move all submodules to parent
