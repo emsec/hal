@@ -1,3 +1,10 @@
+hal-reverse (1.0.18) bionic; urgency=high
+
+  * Fix un-indent of single line failing on specific cursor positions
+  * fixed bug in parsers: added a GLOBAL_GND instead of a GLOBAL_VCC gate
+
+ -- Sebastian Wallat <sebastian.wallat@rub.de>  Thu, 30 May 2019 19:44:48 +0200
+
 hal-reverse (1.0.17) bionic; urgency=medium
 
   * Fixed correct python binding of data container and added documentation for it. Closes #78
