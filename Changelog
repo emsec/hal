@@ -1,3 +1,10 @@
+hal-reverse (1.0.19) bionic; urgency=high
+
+  * Remove dirty flag from genversion.py
+  * Remove kernel.h dependency in include/gate_decorator_system/decorators/gate_decorator_bdd.h for plugin repositoriese
+
+ -- Sebastian Wallat <sebastian.wallat@rub.de>  Thu, 30 May 2019 21:45:18 +0200
+
 hal-reverse (1.0.18) bionic; urgency=high
 
   * Fix un-indent of single line failing on specific cursor positions
