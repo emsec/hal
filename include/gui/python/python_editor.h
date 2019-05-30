@@ -48,6 +48,8 @@ class python_editor : public content_widget, public python_context_subscriber
     Q_PROPERTY(QString save_as_icon_style READ save_as_icon_style WRITE set_save_as_icon_style)
     Q_PROPERTY(QString run_icon_path READ run_icon_path WRITE set_run_icon_path)
     Q_PROPERTY(QString run_icon_style READ run_icon_style WRITE set_run_icon_style)
+    Q_PROPERTY(QString new_file_icon_path READ new_file_icon_path WRITE set_new_file_icon_path)
+    Q_PROPERTY(QString new_file_icon_style READ new_file_icon_style WRITE set_new_file_icon_style)
 
 public:
     explicit python_editor(QWidget* parent = nullptr);
@@ -83,6 +85,9 @@ public:
     QString run_icon_path() const;
     QString run_icon_style() const;
 
+    QString new_file_icon_path() const;
+    QString new_file_icon_style() const;
+
     void set_open_icon_path(const QString& path);
     void set_open_icon_style(const QString& style);
 
@@ -94,6 +99,9 @@ public:
 
     void set_run_icon_path(const QString& path);
     void set_run_icon_style(const QString& style);
+
+    void set_new_file_icon_path(const QString& path);
+    void set_new_file_icon_style(const QString &style);
 
 Q_SIGNALS:
     void forward_stdout(const QString& output);
@@ -132,6 +140,9 @@ private:
 
     QString m_run_icon_style;
     QString m_run_icon_path;
+
+    QString m_new_file_icon_style;
+    QString m_new_file_icon_path;
 
     QString m_file_name = "";
     QTabWidget* m_tab_widget;

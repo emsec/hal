@@ -144,11 +144,10 @@ void python_editor::setup_toolbar(toolbar* toolbar)
 {
     // DEBUG CODE
     QToolButton* add_button = new QToolButton(this);
-    add_button->setIcon(gui_utility::get_styled_svg_icon("all->#FFDD00", ":/icons/cross"));
-    //add_button->setIcon(gui_utility::get_styled_svg_icon("","/home/sebbe/Desktop/new_tab.svg"));
-    add_button->setToolTip("New Tab 'CTRL+N'");
+    add_button->setIcon(gui_utility::get_styled_svg_icon(m_new_file_icon_style, m_new_file_icon_path));
+    add_button->setToolTip("New Tab 'CTRL+Shift+N'");
     toolbar->addWidget(add_button);
-    add_button->setShortcut(QKeySequence("Ctrl+n"));
+    add_button->setShortcut(QKeySequence("Ctrl+Shift+n"));
     connect(add_button, &QToolButton::clicked, this, &python_editor::handle_action_new_tab);
 
     toolbar->addAction(m_action_open_file);
@@ -363,6 +362,16 @@ QString python_editor::run_icon_style() const
     return m_run_icon_style;
 }
 
+QString python_editor::new_file_icon_path() const
+{
+    return m_new_file_icon_path;
+}
+
+QString python_editor::new_file_icon_style() const
+{
+    return m_new_file_icon_style;
+}
+
 void python_editor::set_open_icon_path(const QString& path)
 {
     m_open_icon_path = path;
@@ -401,6 +410,16 @@ void python_editor::set_run_icon_path(const QString& path)
 void python_editor::set_run_icon_style(const QString& style)
 {
     m_run_icon_style = style;
+}
+
+void python_editor::set_new_file_icon_path(const QString &path)
+{
+    m_new_file_icon_path = path;
+}
+
+void python_editor::set_new_file_icon_style(const QString &style)
+{
+    m_new_file_icon_style = style;
 }
 
 void python_editor::toggle_searchbar()
