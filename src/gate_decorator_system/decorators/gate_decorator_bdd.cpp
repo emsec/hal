@@ -133,6 +133,12 @@ std::vector<std::map<int, bool>> gate_decorator_bdd::get_bdd_clauses(std::shared
         return std::vector<std::map<int, bool>>();
     }
 
+    if (is_tautology(bdd_ptr) || is_contradiction(bdd_ptr))
+    {
+        log_error("netlist.decorator", "no clauses available for tautologies or contradictions.");
+        return std::vector<std::map<int, bool>>();
+    }
+
     std::vector<std::map<int, bool>> result;
     auto clauses = core_utils::split(gate_decorator_bdd::get_bdd_str(bdd_ptr), '>');
     /* If last char is '>' skip the last clause as it is empty */
@@ -156,4 +162,87 @@ std::vector<std::map<int, bool>> gate_decorator_bdd::get_bdd_clauses(std::shared
         result.push_back(clause);
     }
     return result;
+}
+
+
+bool gate_decorator_bdd::evaluate_bdd(std::shared_ptr<bdd> bdd_ptr, const std::map<int, bool>& input_configuration)
+{
+    return evaluate_bdd(get_bdd_clauses(bdd_ptr), input_configuration);
+}
+
+bool gate_decorator_bdd::evaluate_bdd(std::shared_ptr<gate> const g, std::shared_ptr<bdd> const bdd_ptr, const std::map<std::string, bool>& input_configuration)
+{
+    std::map<int, bool> _input_configuration;
+    int cnt = 0;
+    for (const auto& input_type : g->get_input_pin_types())
+        _input_configuration[cnt++] = input_configuration.at(input_type);
+    return gate_decorator_bdd::evaluate_bdd(bdd_ptr, _input_configuration);
+}
+
+bool gate_decorator_bdd::evaluate_bdd(const std::vector<std::map<int, bool>>& clauses, const std::map<int, bool>& input_configuration)
+{
+    bool clause_true = true;
+    for (const auto& clause : clauses)
+    {
+        clause_true = true;
+        for (const auto entry : clause)
+        {
+            //get id entry from map
+            auto it = input_configuration.find(entry.first);
+            if (it == input_configuration.end())
+            {
+                log_critical("netlist.decorator", "bool parameter {} not found in map", entry.first);
+                return false;
+            }
+            clause_true = (entry.second == it->second) and clause_true;
+        }
+
+        if (clause_true)
+        {
+            break;
+        }
+    }
+    return clause_true;
+}
+
+std::tuple<std::vector<int>, std::vector<bool>> gate_decorator_bdd::get_truth_table(std::shared_ptr<bdd> const bdd_ptr)
+{
+    auto ret = std::make_tuple(std::vector<int>(), std::vector<bool>());
+
+    if (bdd_ptr == nullptr) {
+        log_error("netlist.decorator", "parameter 'bdd_ptr' is nullptr.");
+        return ret;
+    }
+
+    // store inputs in a set to prevent double entries and convert to vector afterwards
+    std::set<int> __inputs;
+    bdd_mark(bdd_ptr.get()->id());
+    for (int n = 0; n < bddnodesize; n++) {
+        if (!(LEVEL(n) & MARKON))
+            continue;
+        auto node = &bddnodes[n];
+        LEVELp(node) &= MARKOFF;
+        __inputs.insert(bddlevel2var[LEVELp(node)]);
+    }
+    std::vector<int> inputs(__inputs.begin(), __inputs.end());
+
+    // check whether BDD is tautology or contraction
+    if (bdd_ptr.get()->id() < 2)
+        return std::make_tuple(inputs, std::vector<bool>(1, (bool) bdd_ptr.get()->id()));
+
+    if ((int) inputs.size() > 20) {
+        log_error("netlist.decorator", "cannot generate truth table for more than 20 inputs (current inputs = {}).", inputs.size());
+        return ret;
+    }
+
+    std::vector<bool> truth_table((1 << inputs.size()), false);
+    for (int index = 0; index < (1 << inputs.size()); index++)
+    {
+        std::map<int, bool> input_configuration;
+        auto bit_index = 0;
+        for (const auto& input : inputs)
+            input_configuration[input] = get_bit(index, bit_index++);
+        truth_table[index] = gate_decorator_bdd::evaluate_bdd(bdd_ptr, input_configuration);
+    }
+    return std::make_tuple(inputs, truth_table);
 }

@@ -223,6 +223,18 @@ namespace core_utils
         return result;
     }
 
+    u32 num_of_occurrences(const std::string& str, const std::string& substr)
+    {
+        u32 num_of_occurrences = 0;
+        auto position = str.find(substr, 0);
+        while (position != std::string::npos) {
+            num_of_occurrences++;
+            position = str.find(substr, position + 1);
+        }
+        return num_of_occurrences;
+    }
+
+
     bool folder_exists_and_is_accessible(const hal::path& folder)
     {
 #ifdef _WIN32

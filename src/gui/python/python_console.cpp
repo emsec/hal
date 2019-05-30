@@ -168,16 +168,21 @@ void python_console::mousePressEvent(QMouseEvent* event)
     QTextEdit::mousePressEvent(event);
 }
 
+void python_console::insertAtEnd(const QString& text, QColor textColor)
+{
+    moveCursor(QTextCursor::End);
+    setTextColor(textColor);
+    insertPlainText(text);
+}
+
 void python_console::handle_stdout(const QString& output)
 {
-    setTextColor(m_standard_color);
-    insertPlainText(output);
+    insertAtEnd(output, m_standard_color);
 }
 
 void python_console::handle_error(const QString& output)
 {
-    setTextColor(m_error_color);
-    insertPlainText(output);
+    insertAtEnd(output, m_error_color);
 }
 
 void python_console::clear()

@@ -110,7 +110,50 @@ PYBIND11_PLUGIN(hal_py)
         .def("__str__", [](hal::path& p) -> std::string { return std::string(p.c_str()); });
 
     py::implicitly_convertible<std::string, hal::path>();
+    
+    py::class_<data_container, std::shared_ptr<data_container>>(m, "data_container")
+        .def("set_data", &data_container::set_data, py::arg("category"), py::arg("key"), py::arg("value_data_type"), py::arg("value"), py::arg("log_with_info_level") = false, R"(
+Sets a custom data entry
+If it does not exist yet, it is added.
 
+:param str category: Key category
+:param str key: Data key
+:param str data_type: Data type of value
+:param str value: Data value
+:param bool log_with_info_level: Force explicit logging channel 'netlist' with log level info to trace GUI events (default = false)
+:returns: True on success.
+:rtype: bool
+)")
+        .def("delete_data", &data_container::delete_data, py::arg("category"), py::arg("key"), py::arg("log_with_info_level") = false, R"(
+Deletes custom data.
+
+:param str category: Category of key
+:param str key: Data key
+:param bool log_with_info_level: Force explicit logging channel 'netlist' with log level info to trace GUI events (default = false)
+:returns: True on success.
+:rtype: bool
+)")
+        .def_property_readonly("data", &data_container::get_data, R"(
+Gets all stored data.
+
+:returns: A dict from ((1) category, (2) key) to ((1) type, (2) value)
+:rtype: dict[tuple(str,str), tuple(str,str)]
+)")
+        .def("get_data_by_key", &data_container::get_data_by_key, py::arg("category"), py::arg("key"), R"(
+Gets data specified by key and category
+
+:param str category: Category of key
+:param str key: Data key
+:returns: The tuple ((1) type, (2) value)
+:rtype: tuple(str, str)
+)")
+        .def_property_readonly("data_keys", &data_container::get_data_keys, R"(
+Returns all data key
+
+:returns: A list of tuples ((1) category, (2) key)
+:rtype: list[tuple(str,str)]
+)");
+    
     m.def_submodule("core_utils", R"(
 HAL Core Utility functions.
 )")
@@ -781,7 +824,7 @@ Checks whether a module is registered in the netlist.
 :rtype: bool
 )");
 
-    py::class_<gate, std::shared_ptr<gate>>(m, "gate", R"(
+    py::class_<gate, data_container, std::shared_ptr<gate>>(m, "gate", R"(
 HAL Gate functions.
 )")
         .def_property_readonly("id", &gate::get_id, R"(
@@ -946,17 +989,9 @@ Get all direct successors of a gate filterable by the gate's output pin and a sp
 :param str gate_type: The filter for target gate types. Leave empty for no filtering.
 :returns: A list of successor endpoints.
 :rtype: list(hal_py.endpoint)
-)")
+)");
 
-        .def("set_data", &gate::set_data, py::arg("category"), py::arg("key"), py::arg("value_data_type"), py::arg("value"), py::arg("log_with_info_level") = false)
-        .def("delete_data", &gate::delete_data, py::arg("category"), py::arg("key"), py::arg("log_with_info_level") = false)
-        .def_property_readonly("data", &gate::get_data)
-        .def("get_data", &gate::get_data)
-        .def("get_data_by_key", &gate::get_data_by_key, py::arg("category"), py::arg("key"))
-        .def_property_readonly("data_keys", &gate::get_data_keys)
-        .def("get_data_keys", &gate::get_data_keys);
-
-    py::class_<net, std::shared_ptr<net>>(m, "net", R"(
+    py::class_<net, data_container, std::shared_ptr<net>>(m, "net", R"(
 HAL Net functions.
 )")
         .def_property_readonly("id", &net::get_id, R"(
@@ -1108,18 +1143,10 @@ Check whether the net is routed, i.e. it has no source or no destinations.
 
 :returns: True if the net is unrouted.
 :rtype: bool
-)")
-
-        .def("set_data", &net::set_data, py::arg("category"), py::arg("key"), py::arg("value_data_type"), py::arg("value"), py::arg("log_with_info_level") = false)
-        .def("delete_data", &net::delete_data, py::arg("category"), py::arg("key"), py::arg("log_with_info_level") = false)
-        .def_property_readonly("data", &net::get_data)
-        .def("get_data", &net::get_data)
-        .def("get_data_by_key", &net::get_data_by_key, py::arg("category"), py::arg("key"))
-        .def_property_readonly("data_keys", &net::get_data_keys)
-        .def("get_data_keys", &net::get_data_keys);
+)");
 
     // module dir
-    py::class_<module, std::shared_ptr<module>>(m, "module")
+    py::class_<module, std::shared_ptr<module>, data_container>(m, "module")
         .def_property_readonly("id", &module::get_id, R"(
 Returns the unique ID of the module object.
 
@@ -1234,7 +1261,7 @@ If recursive parameter is true, all submodules are searched aswell.
 :returns: A set of nets.
 :rtype: set(hal_py.net)
 )")
-        .def("insert_gate", &module::insert_gate, py::arg("gate"), R"(
+        .def("assign_gate", &module::assign_gate, py::arg("gate"), R"(
 Moves a gate into this module. The gate is removed from its previous module in the process.
 
 :param gate: The gate to add.
@@ -1260,7 +1287,7 @@ Checks whether a gate is in the module. If \p recursive is true, all submodules 
 :returns: True if the gate is in the object.
 :rtype: bool
 )")
-        .def("add_net", &module::insert_net, py::arg("net"), R"(
+        .def("assign_net", &module::assign_net, py::arg("net"), R"(
 Moves a net into this module. The net is removed from its previous module in the process.
 
 :param net: The net to add.
@@ -1292,14 +1319,7 @@ Get a net specified by id. If recursive parameter is true, all submodules are se
 :param bool recursive: Look into submodules too.
 :returns: The net or None.
 :rtype: hal_py.net or None
-)")
-        .def("set_data", &module::set_data, py::arg("category"), py::arg("key"), py::arg("value_data_type"), py::arg("value"), py::arg("log_with_info_level") = false)
-        .def("delete_data", &module::delete_data, py::arg("category"), py::arg("key"), py::arg("log_with_info_level") = false)
-        .def_property_readonly("data", &module::get_data)
-        .def("get_data", &module::get_data)
-        .def("get_data_by_key", &module::get_data_by_key, py::arg("category"), py::arg("key"))
-        .def_property_readonly("data_keys", &module::get_data_keys)
-        .def("get_data_keys", &module::get_data_keys);
+)");
 
     m.def_submodule("netlist_factory")
         .def("create_netlist", &netlist_factory::create_netlist, py::arg("gate_library_name"), R"(
