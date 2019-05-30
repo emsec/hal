@@ -34,8 +34,6 @@
 #include <vector>
 
 #include <hal_bdd.h>
-#include <kernel.h>
-
 
 /**
  * @ingroup gate_decorator_system
