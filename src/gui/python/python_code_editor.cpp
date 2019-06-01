@@ -9,10 +9,13 @@
 #include <QDesktopWidget>
 #include <QTextDocumentFragment>
 #include <QVBoxLayout>
+#include <QShortcut>
 
 
 python_code_editor::python_code_editor(QWidget *parent) : code_editor(parent)
 {
+    QShortcut* redo_shortcut = new QShortcut(QKeySequence(tr("Ctrl+y")), this);
+    connect(redo_shortcut, &QShortcut::activated, this, &python_code_editor::handle_redo_requested);
 }
 
 void python_code_editor::keyPressEvent(QKeyEvent* e)
@@ -125,6 +128,11 @@ int python_code_editor::next_indent(bool indentUnindent, int current_indent)
         }
     }
     return next_indent;
+}
+
+void python_code_editor::handle_redo_requested()
+{
+    redo();
 }
 
 void python_code_editor::indent_selection(bool indent)

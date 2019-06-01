@@ -26,6 +26,7 @@
 #include <fstream>
 #include <QFileInfo>
 #include <QMessageBox>
+#include <QShortcut>
 
 python_editor::python_editor(QWidget* parent)
     : content_widget("Python Editor", parent), python_context_subscriber(), m_editor_widget(new python_code_editor()), m_searchbar(new searchbar()), m_action_open_file(new QAction(this)),
@@ -70,11 +71,11 @@ python_editor::python_editor(QWidget* parent)
     connect(m_action_save_as, &QAction::triggered, this, &python_editor::handle_action_save_file_as);
     connect(m_action_run, &QAction::triggered, this, &python_editor::handle_action_run);
 
+
     m_editor_widget->setPlainText(g_settings.value("python_editor/code", "").toString());
     m_editor_widget->document()->setModified(false);
     connect(m_editor_widget, &code_editor::modificationChanged, this, &python_editor::handle_modification_changed);
     connect(m_searchbar, &searchbar::text_edited, this, &python_editor::handle_searchbar_text_edited);
-    //dynamic_cast<python_code_editor*>(m_editor_widget)->update_text_state();
 }
 
 void python_editor::debug_tab_close_request(int index)

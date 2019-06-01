@@ -51,6 +51,7 @@ public:
 private:
     void indent_selection(bool indentUnindent);
     int next_indent(bool indentUnindent, int current_indent);
+    void handle_redo_requested();
 
     QString m_file_name;
     QString m_text_state;
