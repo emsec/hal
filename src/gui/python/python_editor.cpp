@@ -27,7 +27,6 @@
 #include <QFileInfo>
 #include <QMessageBox>
 
-
 python_editor::python_editor(QWidget* parent)
     : content_widget("Python Editor", parent), python_context_subscriber(), m_editor_widget(new python_code_editor()), m_searchbar(new searchbar()), m_action_open_file(new QAction(this)),
       m_action_run(new QAction(this)), m_action_save(new QAction(this)), m_action_save_as(new QAction(this)), m_file_name("")

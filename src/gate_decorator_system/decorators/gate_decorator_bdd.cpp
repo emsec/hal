@@ -7,6 +7,7 @@
 #include "netlist/netlist.h"
 
 #include <sstream>
+#include <kernel.h>
 
 gate_decorator_bdd::gate_decorator_bdd(const std::shared_ptr<gate> gate, gate_decorator_system::bdd_decorator_generator generator) : gate_decorator(gate), m_generator(generator)
 {
