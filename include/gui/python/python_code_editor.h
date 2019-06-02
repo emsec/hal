@@ -25,8 +25,6 @@
 #define PYTHON_CODE_EDITOR_H
 
 #include "code_editor/code_editor.h"
-#include "content_widget/content_widget.h"
-#include "python/python_context_suberscriber.h"
 
 class python_code_editor : public code_editor
 {

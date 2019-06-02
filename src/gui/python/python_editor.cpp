@@ -13,7 +13,6 @@
 
 #include <QAction>
 #include <QApplication>
-#include <QDebug>
 #include <QDesktopWidget>
 #include <QFile>
 #include <QFileDialog>
@@ -26,7 +25,6 @@
 #include <fstream>
 #include <QFileInfo>
 #include <QMessageBox>
-#include <QShortcut>
 
 python_editor::python_editor(QWidget* parent)
     : content_widget("Python Editor", parent), python_context_subscriber(), m_editor_widget(new python_code_editor()), m_searchbar(new searchbar()), m_action_open_file(new QAction(this)),
@@ -47,7 +45,7 @@ python_editor::python_editor(QWidget* parent)
     m_tab_widget->setTabsClosable(true);
     m_tab_widget->addTab(m_editor_widget, "Default");
     m_content_layout->addWidget(m_tab_widget);
-    connect(m_tab_widget, &QTabWidget::tabCloseRequested, this, &python_editor::debug_tab_close_request);
+    connect(m_tab_widget, &QTabWidget::tabCloseRequested, this, &python_editor::handle_tab_close_requested);
     m_content_layout->addWidget(m_searchbar);
     m_searchbar->hide();
 
@@ -78,7 +76,7 @@ python_editor::python_editor(QWidget* parent)
     connect(m_searchbar, &searchbar::text_edited, this, &python_editor::handle_searchbar_text_edited);
 }
 
-void python_editor::debug_tab_close_request(int index)
+void python_editor::handle_tab_close_requested(int index)
 {
     python_code_editor* editor = dynamic_cast<python_code_editor*>(m_tab_widget->widget(index));
     if(editor->document()->isModified())
