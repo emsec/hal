@@ -1,4 +1,5 @@
 #include "python/python_editor.h"
+#include "python/python_code_editor.h"
 #include "python/python_editor_code_completion_dialog.h"
 
 //#include "code_editor/code_editor_minimap.h"
@@ -12,7 +13,6 @@
 
 #include <QAction>
 #include <QApplication>
-#include <QDebug>
 #include <QDesktopWidget>
 #include <QFile>
 #include <QFileDialog>
@@ -23,297 +23,8 @@
 #include <QVBoxLayout>
 
 #include <fstream>
-
-void python_code_editor::keyPressEvent(QKeyEvent* e)
-{
-    if (textCursor().hasSelection() && !(e->key() == Qt::Key_Tab || e->key() == Qt::Key_Backtab))
-    {
-        QPlainTextEdit::keyPressEvent(e);
-        return;
-    }
-
-    if (e->key() == Qt::Key_Tab)
-    {
-        handle_tab_key_pressed();
-        return;
-    }
-
-    if (e->key() == Qt::Key_Backtab)
-    {
-        handle_shift_tab_key_pressed();
-        return;
-    }
-
-    if (e->key() == Qt::Key_Return)
-    {
-        handle_return_pressed();
-        return;
-    }
-
-    if (e->key() == Qt::Key_Backspace)
-    {
-        handle_backspace_pressed(e);
-        return;
-    }
-
-    if (e->key() == Qt::Key_Delete)
-    {
-        handle_delete_pressed(e);
-        return;
-    }
-
-    QPlainTextEdit::keyPressEvent(e);
-}
-
-void python_code_editor::handle_shift_tab_key_pressed()
-{
-    python_code_editor::indent_selection(false);
-}
-
-void python_code_editor::handle_tab_key_pressed()
-{
-    python_code_editor::indent_selection(true);
-}
-
-void python_code_editor::handle_autocomplete()
-{
-    auto cursor = textCursor();
-        // auto row    = cursor.blockNumber();
-        // auto col    = cursor.positionInBlock();
-        cursor.movePosition(QTextCursor::Start, QTextCursor::KeepAnchor);
-        auto text       = cursor.selectedText().replace(QChar(0x2029), '\n');
-        auto candidates = g_python_context->complete(text, false);
-
-        if (candidates.size() == 1)
-        {
-            textCursor().insertText(QString::fromStdString(std::get<1>(candidates.at(0))));
-        }
-        else if (candidates.size() > 1)
-        {
-            auto dialog = new python_editor_code_completion_dialog(this, candidates);
-            connect(dialog, &python_editor_code_completion_dialog::completionSelected, this, &python_code_editor::perform_code_completion);
-            auto menu_width  = dialog->width();
-            auto menu_height = dialog->height();
-
-            auto desk_rect   = QApplication::desktop()->screenGeometry();
-            auto desk_width  = desk_rect.width();
-            auto desk_height = desk_rect.height();
-            auto anchor      = this->cursorRect().bottomRight();
-            anchor.setX(anchor.x() + viewportMargins().left());
-            auto anchor_global = this->mapToGlobal(anchor);
-
-            if (anchor_global.x() + menu_width > desk_width)
-            {
-                anchor.setX(anchor.x() - menu_width);
-                anchor_global = this->mapToGlobal(anchor);
-            }
-
-            if (anchor_global.y() + menu_height > desk_height)
-            {
-                anchor.setY(cursorRect().topRight().y() - menu_height);
-                anchor_global = this->mapToGlobal(anchor);
-            }
-            dialog->move(anchor_global);
-            dialog->exec();
-        }
-}
-
-int python_code_editor::next_indent(bool indentUnindent, int current_indent)
-{
-    int next_indent;
-    if (indentUnindent)
-    {
-        next_indent = 4 - (current_indent % 4);
-    }
-    else
-    {
-        next_indent = current_indent % 4;
-        if (next_indent == 0)
-        {
-            next_indent = 4;
-        }
-    }
-    return next_indent;
-}
-
-void python_code_editor::indent_selection(bool indent)
-{
-    auto cursor = textCursor();
-    bool preSelected = cursor.hasSelection();
-    int start = cursor.selectionStart();
-    int end = cursor.selectionEnd();
-    if (preSelected)
-    {
-        // expand selection to the start of the first line
-        cursor.setPosition(end, QTextCursor::MoveAnchor);
-        cursor.setPosition(start, QTextCursor::KeepAnchor);
-        cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
-    }
-    else
-    {
-        // select first line (to decide auto-completion)
-        cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
-        QString line_start_to_cursor = cursor.selection().toPlainText();
-        bool onlySpaces = true;
-        for (const auto& c : line_start_to_cursor)
-        {
-            if (c != ' ')
-            {
-                onlySpaces = false;
-                break;
-            }
-        }
-        if (indent && !onlySpaces)
-        {
-            // if the cursor is in a word without a selection, show autocompletion menu
-            // (skip this if we are un-indenting, meaning Shift+Tab has been pressed)
-            handle_autocomplete();
-            return;
-        }
-        // select whole line (to count total spaces)
-        // don't mess with this order, it'll affect the text insertion later on
-        cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::MoveAnchor);
-        cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
-    }
-
-    QStringList selected_lines = cursor.selection().toPlainText().split('\n');
-    cursor.clearSelection();
-
-    // calculate number of spaces at the beginning of the first line and
-    // check if the line consists entirely of spaces or is empty
-    int n_spaces = 0;
-    if (!selected_lines.isEmpty())
-    {
-        for (const auto& c : selected_lines[0])
-        {
-            if (c != ' ')
-            {
-                break;
-            }
-            n_spaces++;
-        }
-    }
-    // calculate indent to use for all selected lines based on the amount of
-    // spaces needed to align the first line to the next_indent 4-block
-    const int constant_indent = next_indent(indent, n_spaces);
-
-    // (un)indent all selected lines
-    const int size = selected_lines.size();
-    QString padding;
-    if (indent)
-    {
-        padding = "";
-        padding.fill(' ', constant_indent);
-    }
-    cursor.beginEditBlock();
-    for (int i = 0; i < size; i++)
-    {
-        if (indent)
-        {
-            cursor.insertText(padding);
-            end+=constant_indent;
-        }
-        else
-        {
-            QString current_line = selected_lines[i];
-            // count how many spaces there really are so we don't cut off text
-            int spaces = 0;
-            while(spaces < constant_indent)
-            {
-                if (current_line[spaces] != ' ')
-                {
-                    break;
-                }
-                spaces++;
-            }
-            // un-indent line by removing spaces
-            cursor.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor, spaces);
-            cursor.removeSelectedText();
-            end-=spaces;
-        }
-        cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::MoveAnchor);
-        cursor.movePosition(QTextCursor::Down, QTextCursor::MoveAnchor);
-    }
-    cursor.endEditBlock();
-    // restore selection
-    cursor.setPosition(start, QTextCursor::MoveAnchor);
-    cursor.setPosition(end, QTextCursor::KeepAnchor);
-}
-
-void python_code_editor::handle_return_pressed()
-{
-    QString current_line;
-    {
-        auto cursor = textCursor();
-        cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
-        current_line = cursor.selectedText();
-    }
-    u32 num_spaces = 0;
-    for (const auto& c : current_line)
-    {
-        if (c != ' ')
-        {
-            break;
-        }
-        num_spaces++;
-    }
-
-    auto trimmed = current_line.trimmed();
-    if (!trimmed.isEmpty() && trimmed.at(trimmed.size() - 1) == ':')
-    {
-        num_spaces += 4;
-    }
-
-    num_spaces -= num_spaces % 4;
-    insertPlainText("\n");
-    for (u32 i = 0; i < num_spaces / 4; ++i)
-    {
-        insertPlainText("    ");
-    }
-    ensureCursorVisible();
-}
-
-void python_code_editor::handle_backspace_pressed(QKeyEvent* e)
-{
-    QString current_line;
-    {
-        auto cursor = textCursor();
-        cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
-        current_line = cursor.selectedText();
-    }
-
-    if (!current_line.isEmpty() && current_line.trimmed().isEmpty() && current_line.size() % 4 == 0)
-    {
-        auto cursor = textCursor();
-        cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::MoveAnchor);
-        cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, 4);
-        cursor.removeSelectedText();
-        return;
-    }
-
-    QPlainTextEdit::keyPressEvent(e);
-}
-
-void python_code_editor::handle_delete_pressed(QKeyEvent* e)
-{
-    auto cursor = textCursor();
-    if (cursor.positionInBlock() % 4 == 0)
-    {
-        cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, 4);
-        if (cursor.selectedText() == "    ")
-        {
-            cursor.removeSelectedText();
-            return;
-        }
-    }
-
-    QPlainTextEdit::keyPressEvent(e);
-}
-
-void python_code_editor::perform_code_completion(std::tuple<std::string, std::string> completion)
-{
-    textCursor().insertText(QString::fromStdString(std::get<1>(completion)));
-}
+#include <QFileInfo>
+#include <QMessageBox>
 
 python_editor::python_editor(QWidget* parent)
     : content_widget("Python Editor", parent), python_context_subscriber(), m_editor_widget(new python_code_editor()), m_searchbar(new searchbar()), m_action_open_file(new QAction(this)),
@@ -321,6 +32,7 @@ python_editor::python_editor(QWidget* parent)
 {
     ensurePolished();
     const int tab_stop = 4;
+    m_new_file_counter = 0;
 
     QFontMetrics metrics(font());
     m_editor_widget->setTabStopWidth(tab_stop * metrics.width(" "));
@@ -328,7 +40,12 @@ python_editor::python_editor(QWidget* parent)
     new python_syntax_highlighter(m_editor_widget->document());
     new python_syntax_highlighter(m_editor_widget->minimap()->document());
 
-    m_content_layout->addWidget(m_editor_widget);
+
+    m_tab_widget = new QTabWidget(this);
+    m_tab_widget->setTabsClosable(true);
+    m_tab_widget->addTab(m_editor_widget, "Default");
+    m_content_layout->addWidget(m_tab_widget);
+    connect(m_tab_widget, &QTabWidget::tabCloseRequested, this, &python_editor::handle_tab_close_requested);
     m_content_layout->addWidget(m_searchbar);
     m_searchbar->hide();
 
@@ -352,7 +69,67 @@ python_editor::python_editor(QWidget* parent)
     connect(m_action_save_as, &QAction::triggered, this, &python_editor::handle_action_save_file_as);
     connect(m_action_run, &QAction::triggered, this, &python_editor::handle_action_run);
 
+
     m_editor_widget->setPlainText(g_settings.value("python_editor/code", "").toString());
+    m_editor_widget->document()->setModified(false);
+    connect(m_editor_widget, &code_editor::modificationChanged, this, &python_editor::handle_modification_changed);
+    connect(m_searchbar, &searchbar::text_edited, this, &python_editor::handle_searchbar_text_edited);
+}
+
+void python_editor::handle_tab_close_requested(int index)
+{
+    python_code_editor* editor = dynamic_cast<python_code_editor*>(m_tab_widget->widget(index));
+    if(editor->document()->isModified())
+    {
+        QMessageBox msgBox;
+        msgBox.setStyleSheet("QLabel{min-width: 600px;}");
+        msgBox.setText(m_tab_widget->tabText(index).append(" has been modified."));
+        msgBox.setInformativeText("Do you want to save your changes?");
+        msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+        msgBox.setDefaultButton(QMessageBox::Save);
+        int ret = msgBox.exec();
+
+        if(ret == QMessageBox::Cancel)
+            return;
+
+        if(ret == QMessageBox::Discard)
+        {
+            m_tab_widget->removeTab(index);
+            return;
+        }
+
+        if(ret == QMessageBox::Save)
+        {
+            if(editor->get_file_name().isEmpty())
+                save_file(true, index);
+            else
+                save_file(false, index);
+
+            m_tab_widget->removeTab(index);
+            return;
+        }
+
+    }
+    m_tab_widget->removeTab(index);
+}
+
+void python_editor::handle_action_toggle_minimap()
+{
+    dynamic_cast<python_code_editor*>(m_tab_widget->currentWidget())->toggle_minimap();
+}
+
+void python_editor::handle_modification_changed(bool changed)
+{
+    if(changed && !(m_tab_widget->tabText(m_tab_widget->currentIndex()).endsWith("*")))
+        m_tab_widget->setTabText(m_tab_widget->currentIndex(), m_tab_widget->tabText(m_tab_widget->currentIndex()).append("*"));
+    if(!changed && (m_tab_widget->tabText(m_tab_widget->currentIndex()).endsWith("*")))
+        m_tab_widget->setTabText(m_tab_widget->currentIndex(), m_tab_widget->tabText(m_tab_widget->currentIndex()).remove('*'));
+}
+
+void python_editor::handle_searchbar_text_edited(const QString &text)
+{
+    if(m_tab_widget->count() > 0)
+        dynamic_cast<python_code_editor*>(m_tab_widget->currentWidget())->search(text);
 }
 
 python_editor::~python_editor()
@@ -363,6 +140,14 @@ python_editor::~python_editor()
 
 void python_editor::setup_toolbar(toolbar* toolbar)
 {
+    // DEBUG CODE
+    QToolButton* add_button = new QToolButton(this);
+    add_button->setIcon(gui_utility::get_styled_svg_icon(m_new_file_icon_style, m_new_file_icon_path));
+    add_button->setToolTip("New Tab 'CTRL+Shift+N'");
+    toolbar->addWidget(add_button);
+    add_button->setShortcut(QKeySequence("Ctrl+Shift+n"));
+    connect(add_button, &QToolButton::clicked, this, &python_editor::handle_action_new_tab);
+
     toolbar->addAction(m_action_open_file);
     toolbar->addAction(m_action_save);
     toolbar->addAction(m_action_save_as);
@@ -374,7 +159,8 @@ void python_editor::setup_toolbar(toolbar* toolbar)
     button->setIcon(gui_utility::get_styled_svg_icon("all->#FFDD00", ":/icons/placeholder"));
     button->setToolTip("Debug Toggle Minimap");
 
-    connect(button, &QToolButton::clicked, m_editor_widget, &code_editor::toggle_minimap);
+    //connect(button, &QToolButton::clicked, m_editor_widget, &code_editor::toggle_minimap);
+    connect(button, &QToolButton::clicked, this, &python_editor::handle_action_toggle_minimap);
 
     toolbar->addWidget(button);
 }
@@ -426,44 +212,86 @@ void python_editor::handle_action_open_file()
     // make file active
     m_file_name = new_file_name;
 
-    m_editor_widget->clear();
     std::string f((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
-    m_editor_widget->appendPlainText(QString::fromStdString(f));
+    QFileInfo info(new_file_name);
 
-    //file_manager::get_instance()->open_file(file_name);
+    handle_action_new_tab();
+    python_code_editor* editor = dynamic_cast<python_code_editor*>(m_tab_widget->widget(m_tab_widget->count()-1));
+    editor->appendPlainText(QString::fromStdString(f));
+    editor->set_file_name(new_file_name);
+    //editor->update_text_state();
+    editor->document()->setModified(false);
+    //editor->document()->isModified();
+    m_tab_widget->setTabText(m_tab_widget->count()-1, info.completeBaseName() + "." + info.completeSuffix());
+    m_new_file_counter--;
 }
 
-void python_editor::save_file(const bool ask_path)
+void python_editor::save_file(const bool ask_path, const int index)
 {
     QString title = "Save File";
     QString text  = "Python Scripts(*.py)";
 
     QString selected_file_name;
 
-    if (ask_path || m_file_name.isEmpty())
+    python_code_editor* current_editor;
+    if(index == -1)
+        current_editor = dynamic_cast<python_code_editor*>(m_tab_widget->currentWidget());
+    else
+        current_editor = dynamic_cast<python_code_editor*>(m_tab_widget->widget(index));
+
+    if(!current_editor)
+        return;
+
+    if(ask_path || current_editor->get_file_name().isEmpty())
     {
         selected_file_name = QFileDialog::getSaveFileName(nullptr, title, QDir::currentPath(), text, nullptr, QFileDialog::DontUseNativeDialog);
-        if (selected_file_name.isEmpty())
-        {
+        if(selected_file_name.isEmpty())
             return;
-        }
+
+        if(!selected_file_name.endsWith(".py"))
+            selected_file_name.append(".py");
+
+        current_editor->set_file_name(selected_file_name);
     }
     else
-    {
-        selected_file_name = m_file_name;
-    }
+        selected_file_name = current_editor->get_file_name();
 
     std::ofstream out(selected_file_name.toStdString(), std::ios::out);
 
     if (!out.is_open())
     {
         return;
+        log_error("gui", "could not open file path");
     }
-    out << m_editor_widget->toPlainText().toStdString();
+    out << current_editor->toPlainText().toStdString();
     out.close();
+    current_editor->document()->setModified(false);
 
+    QFileInfo info(selected_file_name);
+    m_tab_widget->setTabText(m_tab_widget->currentIndex(), info.completeBaseName() + "." + info.completeSuffix());
     // remember target file path
     m_file_name = selected_file_name;
+}
+
+bool python_editor::has_unsaved_tabs()
+{
+    for(int i = 0; i < m_tab_widget->count(); i++)
+    {
+        if(dynamic_cast<python_code_editor*>(m_tab_widget->widget(i))->document()->isModified())
+            return true;
+    }
+    return false;
+}
+
+QStringList python_editor::get_names_of_unsaved_tabs()
+{
+    QStringList unsaved_tabs;
+    for(int i = 0; i < m_tab_widget->count(); i++)
+    {
+        if(dynamic_cast<python_code_editor*>(m_tab_widget->widget(i))->document()->isModified())
+            unsaved_tabs << m_tab_widget->tabText(i);
+    }
+    return unsaved_tabs;
 }
 
 void python_editor::handle_action_save_file()
@@ -478,7 +306,18 @@ void python_editor::handle_action_save_file_as()
 
 void python_editor::handle_action_run()
 {
-    g_python_context->interpret_script(m_editor_widget->toPlainText());
+    g_python_context->interpret_script(dynamic_cast<python_code_editor*>(m_tab_widget->currentWidget())->toPlainText());
+}
+
+void python_editor::handle_action_new_tab()
+{
+    python_code_editor* editor = new python_code_editor();
+    new python_syntax_highlighter(editor->document());
+    new python_syntax_highlighter(editor->minimap()->document());
+    m_tab_widget->addTab(editor, QString("New File ").append(QString::number(++m_new_file_counter)));
+    m_tab_widget->setCurrentIndex(m_tab_widget->count()-1);
+    editor->document()->setModified(false);
+    connect(editor, &python_code_editor::modificationChanged, this, &python_editor::handle_modification_changed);
 }
 
 QString python_editor::open_icon_path() const
@@ -521,6 +360,16 @@ QString python_editor::run_icon_style() const
     return m_run_icon_style;
 }
 
+QString python_editor::new_file_icon_path() const
+{
+    return m_new_file_icon_path;
+}
+
+QString python_editor::new_file_icon_style() const
+{
+    return m_new_file_icon_style;
+}
+
 void python_editor::set_open_icon_path(const QString& path)
 {
     m_open_icon_path = path;
@@ -559,6 +408,16 @@ void python_editor::set_run_icon_path(const QString& path)
 void python_editor::set_run_icon_style(const QString& style)
 {
     m_run_icon_style = style;
+}
+
+void python_editor::set_new_file_icon_path(const QString &path)
+{
+    m_new_file_icon_path = path;
+}
+
+void python_editor::set_new_file_icon_style(const QString &style)
+{
+    m_new_file_icon_style = style;
 }
 
 void python_editor::toggle_searchbar()

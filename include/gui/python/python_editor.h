@@ -34,26 +34,8 @@ class splitter;
 class toolbar;
 
 class QVBoxLayout;
+class QTabWidget;
 
-class python_code_editor : public code_editor
-{
-    Q_OBJECT
-public:
-    void keyPressEvent(QKeyEvent* e) Q_DECL_OVERRIDE;
-
-    void handle_tab_key_pressed();
-    void handle_shift_tab_key_pressed();
-    void handle_return_pressed();
-    void handle_backspace_pressed(QKeyEvent* e);
-    void handle_delete_pressed(QKeyEvent* e);
-
-    void handle_autocomplete();
-    void perform_code_completion(std::tuple<std::string, std::string> completion);
-
-private:
-    void indent_selection(bool indentUnindent);
-    int next_indent(bool indentUnindent, int current_indent);
-};
 
 class python_editor : public content_widget, public python_context_subscriber
 {
@@ -66,6 +48,8 @@ class python_editor : public content_widget, public python_context_subscriber
     Q_PROPERTY(QString save_as_icon_style READ save_as_icon_style WRITE set_save_as_icon_style)
     Q_PROPERTY(QString run_icon_path READ run_icon_path WRITE set_run_icon_path)
     Q_PROPERTY(QString run_icon_style READ run_icon_style WRITE set_run_icon_style)
+    Q_PROPERTY(QString new_file_icon_path READ new_file_icon_path WRITE set_new_file_icon_path)
+    Q_PROPERTY(QString new_file_icon_style READ new_file_icon_style WRITE set_new_file_icon_style)
 
 public:
     explicit python_editor(QWidget* parent = nullptr);
@@ -82,8 +66,12 @@ public:
     void handle_action_save_file();
     void handle_action_save_file_as();
     void handle_action_run();
+    void handle_action_new_tab();
 
-    void save_file(const bool ask_path);
+    void save_file(const bool ask_path, const int index = -1);
+
+    bool has_unsaved_tabs();
+    QStringList get_names_of_unsaved_tabs();
 
     QString open_icon_path() const;
     QString open_icon_style() const;
@@ -97,6 +85,9 @@ public:
     QString run_icon_path() const;
     QString run_icon_style() const;
 
+    QString new_file_icon_path() const;
+    QString new_file_icon_style() const;
+
     void set_open_icon_path(const QString& path);
     void set_open_icon_style(const QString& style);
 
@@ -109,12 +100,19 @@ public:
     void set_run_icon_path(const QString& path);
     void set_run_icon_style(const QString& style);
 
+    void set_new_file_icon_path(const QString& path);
+    void set_new_file_icon_style(const QString &style);
+
 Q_SIGNALS:
     void forward_stdout(const QString& output);
     void forward_error(const QString& output);
 
 public Q_SLOTS:
     void toggle_searchbar();
+    void handle_tab_close_requested(int index);
+    void handle_action_toggle_minimap();
+    void handle_modification_changed(bool changed);
+    void handle_searchbar_text_edited(const QString &text);
 
 private:
     QVBoxLayout* m_layout;
@@ -143,7 +141,12 @@ private:
     QString m_run_icon_style;
     QString m_run_icon_path;
 
-    QString m_file_name;
+    QString m_new_file_icon_style;
+    QString m_new_file_icon_path;
+
+    QString m_file_name = "";
+    QTabWidget* m_tab_widget;
+    int m_new_file_counter;
 };
 
 #endif    // PYTHON_WIDGET_H
