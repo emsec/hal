@@ -32,29 +32,28 @@ class python_code_editor : public code_editor
 public:
     python_code_editor(QWidget* parent = nullptr);
 
-    void keyPressEvent(QKeyEvent* e) Q_DECL_OVERRIDE;
-
-    void handle_tab_key_pressed();
-    void handle_shift_tab_key_pressed();
-    void handle_return_pressed();
-    void handle_backspace_pressed(QKeyEvent* e);
-    void handle_delete_pressed(QKeyEvent* e);
-
-    void handle_autocomplete();
-    void perform_code_completion(std::tuple<std::string, std::string> completion);
-
     QString get_file_name();
     void set_file_name(const QString name);
 
 private:
+    void keyPressEvent(QKeyEvent* e) Q_DECL_OVERRIDE;
+    void handle_tab_key_pressed();
+    void handle_shift_tab_key_pressed();
+    void handle_return_key_pressed();
+    void handle_backspace_key_pressed(QKeyEvent* e);
+    void handle_delete_key_pressed(QKeyEvent* e);
+    void handle_insert_key_pressed();
+
+    void handle_redo_requested();
+
     void indent_selection(bool indentUnindent);
     int next_indent(bool indentUnindent, int current_indent);
-    void handle_redo_requested();
+
+    void handle_autocomplete();
+    void perform_code_completion(std::tuple<std::string, std::string> completion);
 
     QString m_file_name;
     QString m_text_state;
 };
-
-
 
 #endif //PYTHON_CODE_EDITOR_H
