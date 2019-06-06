@@ -161,14 +161,10 @@ void hal_content_manager::handle_relayout_button_clicked()
 
 bool hal_content_manager::has_python_editor_unsaved_changes()
 {
-    return false;
-
-    /*
     if(m_file_manager->is_document_open())
         return m_python_widget->has_unsaved_tabs();
     else
-        return false;
-    */
+        return false;  
 }
 
 bool hal_content_manager::has_netlist_unsaved_changes()
@@ -187,7 +183,8 @@ void hal_content_manager::mark_netlist_saved()
 
 QStringList hal_content_manager::get_names_of_unsaved_python_tabs()
 {
-    QStringList tab_names = {"GraphAlgo.py", "new 3", "SBoxFinderv1.py"};
-    return tab_names;
-    //return m_pythond_widget->get_names_of_unsaved_tabs();
+    if(m_file_manager->is_document_open())
+        return m_python_widget->get_names_of_unsaved_tabs();
+    else
+        return QStringList();
 }
