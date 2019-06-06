@@ -1,3 +1,9 @@
+hal-reverse (1.0.20) bionic; urgency=medium
+
+  * Added python editor tabs to have multiple documents open at the same time
+
+ -- Sebastian Wallat <sebastian.wallat@rub.de>  Thu, 06 Jun 2019 11:56:36 +0200
+
 hal-reverse (1.0.19) bionic; urgency=high
 
   * Remove dirty flag from genversion.py
