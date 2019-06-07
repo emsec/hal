@@ -25,6 +25,7 @@
 #include <fstream>
 #include <QFileInfo>
 #include <QMessageBox>
+#include <QDebug>
 
 python_editor::python_editor(QWidget* parent)
     : content_widget("Python Editor", parent), python_context_subscriber(), m_editor_widget(new python_code_editor()), m_searchbar(new searchbar()), m_action_open_file(new QAction(this)),
@@ -43,6 +44,7 @@ python_editor::python_editor(QWidget* parent)
 
     m_tab_widget = new QTabWidget(this);
     m_tab_widget->setTabsClosable(true);
+    m_tab_widget->setMovable(true);
     m_tab_widget->addTab(m_editor_widget, "Default");
     m_content_layout->addWidget(m_tab_widget);
     connect(m_tab_widget, &QTabWidget::tabCloseRequested, this, &python_editor::handle_tab_close_requested);
@@ -74,6 +76,7 @@ python_editor::python_editor(QWidget* parent)
     m_editor_widget->document()->setModified(false);
     connect(m_editor_widget, &code_editor::modificationChanged, this, &python_editor::handle_modification_changed);
     connect(m_searchbar, &searchbar::text_edited, this, &python_editor::handle_searchbar_text_edited);
+    connect(m_tab_widget, &QTabWidget::currentChanged, this, &python_editor::handle_current_tab_changed);
 }
 
 void python_editor::handle_tab_close_requested(int index)
@@ -130,6 +133,14 @@ void python_editor::handle_searchbar_text_edited(const QString &text)
 {
     if(m_tab_widget->count() > 0)
         dynamic_cast<python_code_editor*>(m_tab_widget->currentWidget())->search(text);
+}
+
+void python_editor::handle_current_tab_changed(int index)
+{
+    qDebug() << m_searchbar->get_current_text();
+    if(!m_searchbar->isHidden())
+        if(m_tab_widget->currentWidget())
+            dynamic_cast<python_code_editor*>(m_tab_widget->currentWidget())->search(m_searchbar->get_current_text());
 }
 
 python_editor::~python_editor()
@@ -425,9 +436,19 @@ void python_editor::toggle_searchbar()
     if (m_searchbar->isHidden())
     {
         m_searchbar->show();
+        if(m_tab_widget->currentWidget())
+            dynamic_cast<python_code_editor*>(m_tab_widget->currentWidget())->search(m_searchbar->get_current_text());
+        m_searchbar->setFocus();
     }
     else
     {
         m_searchbar->hide();
+        if(m_tab_widget->currentWidget())
+        {
+            dynamic_cast<python_code_editor*>(m_tab_widget->currentWidget())->search("");
+            m_tab_widget->currentWidget()->setFocus();
+        }
+        else
+            this->setFocus();
     }
 }
