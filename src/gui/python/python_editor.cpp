@@ -147,15 +147,6 @@ void python_editor::handle_current_tab_changed(int index)
         current_editor->search(m_searchbar->get_current_text());
     else if(!current_editor->extraSelections().isEmpty())
         current_editor->search("");
-
-    //qDebug() << "Extra Selection: " << dynamic_cast<python_code_editor*>(m_tab_widget->currentWidget())->extraSelections().isEmpty();
-//   QString search;
-//   search = !m_searchbar->isHidden() ? m_searchbar->get_current_text() : "";
-
-//    if(m_searchbar->isHidden())
-//        dynamic_cast<python_code_editor*>(m_tab_widget->currentWidget())->search("");
-//    else
-//        dynamic_cast<python_code_editor*>(m_tab_widget->currentWidget())->search(m_searchbar->get_current_text());
 }
 
 python_editor::~python_editor()
