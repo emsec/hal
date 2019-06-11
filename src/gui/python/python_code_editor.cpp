@@ -20,43 +20,24 @@ python_code_editor::python_code_editor(QWidget *parent) : code_editor(parent)
 
 void python_code_editor::keyPressEvent(QKeyEvent* e)
 {
+    
     if (textCursor().hasSelection() && !(e->key() == Qt::Key_Tab || e->key() == Qt::Key_Backtab))
     {
         QPlainTextEdit::keyPressEvent(e);
-        return;
     }
-
-    if (e->key() == Qt::Key_Tab)
+    else
     {
-        handle_tab_key_pressed();
-        return;
+        switch(e->key())
+        {
+            case Qt::Key_Tab:       handle_tab_key_pressed();               break;
+            case Qt::Key_Backtab:   handle_shift_tab_key_pressed();         break;
+            case Qt::Key_Return:    handle_return_key_pressed();            break;
+            case Qt::Key_Backspace: handle_backspace_key_pressed(e);        break;
+            case Qt::Key_Delete:    handle_delete_key_pressed(e);           break;
+            case Qt::Key_Insert:    handle_insert_key_pressed();            break;
+            default:                QPlainTextEdit::keyPressEvent(e);
+        }
     }
-
-    if (e->key() == Qt::Key_Backtab)
-    {
-        handle_shift_tab_key_pressed();
-        return;
-    }
-
-    if (e->key() == Qt::Key_Return)
-    {
-        handle_return_pressed();
-        return;
-    }
-
-    if (e->key() == Qt::Key_Backspace)
-    {
-        handle_backspace_pressed(e);
-        return;
-    }
-
-    if (e->key() == Qt::Key_Delete)
-    {
-        handle_delete_pressed(e);
-        return;
-    }
-
-    QPlainTextEdit::keyPressEvent(e);
 }
 
 void python_code_editor::handle_shift_tab_key_pressed()
@@ -67,6 +48,86 @@ void python_code_editor::handle_shift_tab_key_pressed()
 void python_code_editor::handle_tab_key_pressed()
 {
     python_code_editor::indent_selection(true);
+}
+
+void python_code_editor::handle_return_key_pressed()
+{
+    QString current_line;
+    {
+        auto cursor = textCursor();
+        cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
+        current_line = cursor.selectedText();
+    }
+    u32 num_spaces = 0;
+    for (const auto& c : current_line)
+    {
+        if (c != ' ')
+        {
+            break;
+        }
+        num_spaces++;
+    }
+
+    auto trimmed = current_line.trimmed();
+    if (!trimmed.isEmpty() && trimmed.at(trimmed.size() - 1) == ':')
+    {
+        num_spaces += 4;
+    }
+
+    num_spaces -= num_spaces % 4;
+    insertPlainText("\n");
+    for (u32 i = 0; i < num_spaces / 4; ++i)
+    {
+        insertPlainText("    ");
+    }
+    ensureCursorVisible();
+}
+
+void python_code_editor::handle_backspace_key_pressed(QKeyEvent* e)
+{
+    QString current_line;
+    {
+        auto cursor = textCursor();
+        cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
+        current_line = cursor.selectedText();
+    }
+
+    if (!current_line.isEmpty() && current_line.trimmed().isEmpty() && current_line.size() % 4 == 0)
+    {
+        auto cursor = textCursor();
+        cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::MoveAnchor);
+        cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, 4);
+        cursor.removeSelectedText();
+        return;
+    }
+
+    QPlainTextEdit::keyPressEvent(e);
+}
+
+void python_code_editor::handle_delete_key_pressed(QKeyEvent* e)
+{
+    auto cursor = textCursor();
+    if (cursor.positionInBlock() % 4 == 0)
+    {
+        cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, 4);
+        if (cursor.selectedText() == "    ")
+        {
+            cursor.removeSelectedText();
+            return;
+        }
+    }
+
+    QPlainTextEdit::keyPressEvent(e);
+}
+
+void python_code_editor::handle_insert_key_pressed()
+{
+    setOverwriteMode(!overwriteMode());
+}
+
+void python_code_editor::handle_redo_requested()
+{
+    redo();
 }
 
 void python_code_editor::handle_autocomplete()
@@ -128,11 +189,6 @@ int python_code_editor::next_indent(bool indentUnindent, int current_indent)
         }
     }
     return next_indent;
-}
-
-void python_code_editor::handle_redo_requested()
-{
-    redo();
 }
 
 void python_code_editor::indent_selection(bool indent)
@@ -237,76 +293,6 @@ void python_code_editor::indent_selection(bool indent)
     // restore selection
     cursor.setPosition(start, QTextCursor::MoveAnchor);
     cursor.setPosition(end, QTextCursor::KeepAnchor);
-}
-
-void python_code_editor::handle_return_pressed()
-{
-    QString current_line;
-    {
-        auto cursor = textCursor();
-        cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
-        current_line = cursor.selectedText();
-    }
-    u32 num_spaces = 0;
-    for (const auto& c : current_line)
-    {
-        if (c != ' ')
-        {
-            break;
-        }
-        num_spaces++;
-    }
-
-    auto trimmed = current_line.trimmed();
-    if (!trimmed.isEmpty() && trimmed.at(trimmed.size() - 1) == ':')
-    {
-        num_spaces += 4;
-    }
-
-    num_spaces -= num_spaces % 4;
-    insertPlainText("\n");
-    for (u32 i = 0; i < num_spaces / 4; ++i)
-    {
-        insertPlainText("    ");
-    }
-    ensureCursorVisible();
-}
-
-void python_code_editor::handle_backspace_pressed(QKeyEvent* e)
-{
-    QString current_line;
-    {
-        auto cursor = textCursor();
-        cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
-        current_line = cursor.selectedText();
-    }
-
-    if (!current_line.isEmpty() && current_line.trimmed().isEmpty() && current_line.size() % 4 == 0)
-    {
-        auto cursor = textCursor();
-        cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::MoveAnchor);
-        cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, 4);
-        cursor.removeSelectedText();
-        return;
-    }
-
-    QPlainTextEdit::keyPressEvent(e);
-}
-
-void python_code_editor::handle_delete_pressed(QKeyEvent* e)
-{
-    auto cursor = textCursor();
-    if (cursor.positionInBlock() % 4 == 0)
-    {
-        cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, 4);
-        if (cursor.selectedText() == "    ")
-        {
-            cursor.removeSelectedText();
-            return;
-        }
-    }
-
-    QPlainTextEdit::keyPressEvent(e);
 }
 
 void python_code_editor::perform_code_completion(std::tuple<std::string, std::string> completion)
