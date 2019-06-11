@@ -111,7 +111,6 @@ void python_editor::handle_tab_close_requested(int index)
             m_tab_widget->removeTab(index);
             return;
         }
-
     }
     m_tab_widget->removeTab(index);
 }
@@ -137,10 +136,26 @@ void python_editor::handle_searchbar_text_edited(const QString &text)
 
 void python_editor::handle_current_tab_changed(int index)
 {
-    qDebug() << m_searchbar->get_current_text();
+    Q_UNUSED(index)
+
+    if(!m_tab_widget->currentWidget())
+        return;
+
+    python_code_editor* current_editor = dynamic_cast<python_code_editor*>(m_tab_widget->currentWidget());
+
     if(!m_searchbar->isHidden())
-        if(m_tab_widget->currentWidget())
-            dynamic_cast<python_code_editor*>(m_tab_widget->currentWidget())->search(m_searchbar->get_current_text());
+        current_editor->search(m_searchbar->get_current_text());
+    else if(!current_editor->extraSelections().isEmpty())
+        current_editor->search("");
+
+    //qDebug() << "Extra Selection: " << dynamic_cast<python_code_editor*>(m_tab_widget->currentWidget())->extraSelections().isEmpty();
+//   QString search;
+//   search = !m_searchbar->isHidden() ? m_searchbar->get_current_text() : "";
+
+//    if(m_searchbar->isHidden())
+//        dynamic_cast<python_code_editor*>(m_tab_widget->currentWidget())->search("");
+//    else
+//        dynamic_cast<python_code_editor*>(m_tab_widget->currentWidget())->search(m_searchbar->get_current_text());
 }
 
 python_editor::~python_editor()
