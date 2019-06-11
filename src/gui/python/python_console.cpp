@@ -16,6 +16,7 @@ python_console::python_console(QWidget* parent)
       m_in_compound_prompt(false), m_in_completion(false), m_current_compound_input(""), m_current_input(""), m_current_history_index(-1), m_current_completer_index(0),
       m_history(std::make_shared<python_console_history>())
 {
+    this->document()->setMaximumBlockCount(1000);
     setFrameStyle(QFrame::NoFrame);
     setUndoRedoEnabled(false);
     ensureCursorVisible();
