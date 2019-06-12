@@ -1,4 +1,4 @@
-[![pipeline status](https://gitlab.com/swallat/hal/badges/master/pipeline.svg)](https://gitlab.com/swallat/hal/commits/master) [![coverage report](https://gitlab.com/swallat/hal/badges/master/coverage.svg)](https://gitlab.com/swallat/hal/commits/master) [![Discord](https://img.shields.io/discord/575648314549075969.svg?logo=discord)](https://discord.gg/HVC392e)
+[![pipeline status](https://gitlab.com/swallat/hal/badges/master/pipeline.svg)](https://gitlab.com/swallat/hal/commits/master) [![coverage report](https://gitlab.com/swallat/hal/badges/master/coverage.svg)](https://gitlab.com/swallat/hal/commits/master) [![Slack](https://img.shields.io/badge/slack-join-blue.svg)](https://communityinviter.com/apps/hal-re/hal-re)
 
 # Welcome to HAL!
 
