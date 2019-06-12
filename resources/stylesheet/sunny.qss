@@ -1314,6 +1314,9 @@ qproperty-save_as_icon_path: ":/icons/save-as";
 qproperty-run_icon_style: "all->#2BAD4A";
 qproperty-run_icon_path: ":/icons/run";
 
+qproperty-toggle_minimap_icon_style: "all->#FFDD00";
+qproperty-toggle_minimap_icon_path: ":/icons/placeholder";
+
 /*no style at all, the empty string is needed*/
 qproperty-new_file_icon_style: "";
 qproperty-new_file_icon_path: ":/icons/new-file";

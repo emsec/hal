@@ -50,6 +50,8 @@ class python_editor : public content_widget, public python_context_subscriber
     Q_PROPERTY(QString run_icon_style READ run_icon_style WRITE set_run_icon_style)
     Q_PROPERTY(QString new_file_icon_path READ new_file_icon_path WRITE set_new_file_icon_path)
     Q_PROPERTY(QString new_file_icon_style READ new_file_icon_style WRITE set_new_file_icon_style)
+    Q_PROPERTY(QString toggle_minimap_icon_path READ toggle_minimap_icon_path WRITE set_toggle_minimap_icon_path)
+    Q_PROPERTY(QString toggle_minimap_icon_style READ toggle_minimap_icon_style WRITE set_toggle_minimap_icon_style)
 
 public:
     explicit python_editor(QWidget* parent = nullptr);
@@ -88,6 +90,9 @@ public:
     QString new_file_icon_path() const;
     QString new_file_icon_style() const;
 
+    QString toggle_minimap_icon_path() const;
+    QString toggle_minimap_icon_style() const;
+
     void set_open_icon_path(const QString& path);
     void set_open_icon_style(const QString& style);
 
@@ -103,6 +108,9 @@ public:
     void set_new_file_icon_path(const QString& path);
     void set_new_file_icon_style(const QString &style);
 
+    void set_toggle_minimap_icon_path(const QString& path);
+    void set_toggle_minimap_icon_style(const QString& style);
+
 Q_SIGNALS:
     void forward_stdout(const QString& output);
     void forward_error(const QString& output);
@@ -113,6 +121,7 @@ public Q_SLOTS:
     void handle_action_toggle_minimap();
     void handle_modification_changed(bool changed);
     void handle_searchbar_text_edited(const QString &text);
+    void handle_current_tab_changed(int index);
 
 private:
     QVBoxLayout* m_layout;
@@ -128,6 +137,8 @@ private:
     QAction* m_action_run;
     QAction* m_action_save;
     QAction* m_action_save_as;
+    QAction* m_action_toggle_minimap;
+    QAction* m_action_new_file;
 
     QString m_open_icon_style;
     QString m_open_icon_path;
@@ -143,6 +154,9 @@ private:
 
     QString m_new_file_icon_style;
     QString m_new_file_icon_path;
+
+    QString m_toggle_minimap_icon_style;
+    QString m_toggle_minimap_icon_path;
 
     QString m_file_name = "";
     QTabWidget* m_tab_widget;

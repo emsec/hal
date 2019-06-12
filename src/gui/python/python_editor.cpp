@@ -2,7 +2,6 @@
 #include "python/python_code_editor.h"
 #include "python/python_editor_code_completion_dialog.h"
 
-//#include "code_editor/code_editor_minimap.h"
 #include "code_editor/syntax_highlighter/python_syntax_highlighter.h"
 #include "core/log.h"
 #include "gui_globals.h"
@@ -12,9 +11,6 @@
 #include "toolbar/toolbar.h"
 
 #include <QAction>
-#include <QApplication>
-#include <QDesktopWidget>
-#include <QFile>
 #include <QFileDialog>
 #include <QShortcut>
 #include <QTextStream>
@@ -25,10 +21,11 @@
 #include <fstream>
 #include <QFileInfo>
 #include <QMessageBox>
+#include <QDebug>
 
 python_editor::python_editor(QWidget* parent)
     : content_widget("Python Editor", parent), python_context_subscriber(), m_editor_widget(new python_code_editor()), m_searchbar(new searchbar()), m_action_open_file(new QAction(this)),
-      m_action_run(new QAction(this)), m_action_save(new QAction(this)), m_action_save_as(new QAction(this)), m_file_name("")
+      m_action_run(new QAction(this)), m_action_save(new QAction(this)), m_action_save_as(new QAction(this)), m_action_toggle_minimap(new QAction(this)), m_action_new_file(new QAction(this)), m_file_name("")
 {
     ensurePolished();
     const int tab_stop = 4;
@@ -43,6 +40,7 @@ python_editor::python_editor(QWidget* parent)
 
     m_tab_widget = new QTabWidget(this);
     m_tab_widget->setTabsClosable(true);
+    m_tab_widget->setMovable(true);
     m_tab_widget->addTab(m_editor_widget, "Default");
     m_content_layout->addWidget(m_tab_widget);
     connect(m_tab_widget, &QTabWidget::tabCloseRequested, this, &python_editor::handle_tab_close_requested);
@@ -53,27 +51,36 @@ python_editor::python_editor(QWidget* parent)
     m_action_save->setIcon(gui_utility::get_styled_svg_icon(m_save_icon_style, m_save_icon_path));
     m_action_save_as->setIcon(gui_utility::get_styled_svg_icon(m_save_as_icon_style, m_save_as_icon_path)); //TODO new icon
     m_action_run->setIcon(gui_utility::get_styled_svg_icon(m_run_icon_style, m_run_icon_path));
+    m_action_toggle_minimap->setIcon(gui_utility::get_styled_svg_icon(m_toggle_minimap_icon_style, m_toggle_minimap_icon_path));
+    m_action_new_file->setIcon(gui_utility::get_styled_svg_icon(m_new_file_icon_style, m_new_file_icon_path));
+
 
     m_action_open_file->setShortcut(QKeySequence("Ctrl+Shift+O"));
     m_action_save->setShortcut(QKeySequence("Shift+Ctrl+S"));
     m_action_save_as->setShortcut(QKeySequence("Alt+Ctrl+S"));
     m_action_run->setShortcut(QKeySequence("Ctrl+R"));
+    m_action_new_file->setShortcut(QKeySequence("Ctrl+Shift+n"));
 
     m_action_open_file->setText("Open Script '" + m_action_open_file->shortcut().toString(QKeySequence::NativeText) + "'");
     m_action_save->setText("Save '" + m_action_save->shortcut().toString(QKeySequence::NativeText) + "'");
     m_action_save_as->setText("Save as '" + m_action_save->shortcut().toString(QKeySequence::NativeText) + "'");
     m_action_run->setText("Execute Script '" + m_action_run->shortcut().toString(QKeySequence::NativeText) + "'");
+    m_action_new_file->setText("New File '" + m_action_new_file->shortcut().toString(QKeySequence::NativeText) + "'");
+    m_action_toggle_minimap->setText("Toggle Minimap");
 
     connect(m_action_open_file, &QAction::triggered, this, &python_editor::handle_action_open_file);
     connect(m_action_save, &QAction::triggered, this, &python_editor::handle_action_save_file);
     connect(m_action_save_as, &QAction::triggered, this, &python_editor::handle_action_save_file_as);
     connect(m_action_run, &QAction::triggered, this, &python_editor::handle_action_run);
+    connect(m_action_new_file, &QAction::triggered, this, &python_editor::handle_action_new_tab);
+    connect(m_action_toggle_minimap, &QAction::triggered, this, &python_editor::handle_action_toggle_minimap);
 
 
     m_editor_widget->setPlainText(g_settings.value("python_editor/code", "").toString());
     m_editor_widget->document()->setModified(false);
     connect(m_editor_widget, &code_editor::modificationChanged, this, &python_editor::handle_modification_changed);
     connect(m_searchbar, &searchbar::text_edited, this, &python_editor::handle_searchbar_text_edited);
+    connect(m_tab_widget, &QTabWidget::currentChanged, this, &python_editor::handle_current_tab_changed);
 }
 
 void python_editor::handle_tab_close_requested(int index)
@@ -108,14 +115,14 @@ void python_editor::handle_tab_close_requested(int index)
             m_tab_widget->removeTab(index);
             return;
         }
-
     }
     m_tab_widget->removeTab(index);
 }
 
 void python_editor::handle_action_toggle_minimap()
 {
-    dynamic_cast<python_code_editor*>(m_tab_widget->currentWidget())->toggle_minimap();
+    if(m_tab_widget->currentWidget())
+        dynamic_cast<python_code_editor*>(m_tab_widget->currentWidget())->toggle_minimap();
 }
 
 void python_editor::handle_modification_changed(bool changed)
@@ -132,6 +139,21 @@ void python_editor::handle_searchbar_text_edited(const QString &text)
         dynamic_cast<python_code_editor*>(m_tab_widget->currentWidget())->search(text);
 }
 
+void python_editor::handle_current_tab_changed(int index)
+{
+    Q_UNUSED(index)
+
+    if(!m_tab_widget->currentWidget())
+        return;
+
+    python_code_editor* current_editor = dynamic_cast<python_code_editor*>(m_tab_widget->currentWidget());
+
+    if(!m_searchbar->isHidden())
+        current_editor->search(m_searchbar->get_current_text());
+    else if(!current_editor->extraSelections().isEmpty())
+        current_editor->search("");
+}
+
 python_editor::~python_editor()
 {
     g_settings.setValue("python_editor/code", m_editor_widget->toPlainText());
@@ -140,29 +162,12 @@ python_editor::~python_editor()
 
 void python_editor::setup_toolbar(toolbar* toolbar)
 {
-    // DEBUG CODE
-    QToolButton* add_button = new QToolButton(this);
-    add_button->setIcon(gui_utility::get_styled_svg_icon(m_new_file_icon_style, m_new_file_icon_path));
-    add_button->setToolTip("New Tab 'CTRL+Shift+N'");
-    toolbar->addWidget(add_button);
-    add_button->setShortcut(QKeySequence("Ctrl+Shift+n"));
-    connect(add_button, &QToolButton::clicked, this, &python_editor::handle_action_new_tab);
-
+    toolbar->addAction(m_action_new_file);
     toolbar->addAction(m_action_open_file);
     toolbar->addAction(m_action_save);
     toolbar->addAction(m_action_save_as);
     toolbar->addAction(m_action_run);
-
-    // DEBUG CODE
-    QToolButton* button = new QToolButton(this);
-    button->setText("Debug Toggle Minimap");
-    button->setIcon(gui_utility::get_styled_svg_icon("all->#FFDD00", ":/icons/placeholder"));
-    button->setToolTip("Debug Toggle Minimap");
-
-    //connect(button, &QToolButton::clicked, m_editor_widget, &code_editor::toggle_minimap);
-    connect(button, &QToolButton::clicked, this, &python_editor::handle_action_toggle_minimap);
-
-    toolbar->addWidget(button);
+    toolbar->addAction(m_action_toggle_minimap);
 }
 
 QList<QShortcut*> python_editor::create_shortcuts()
@@ -219,9 +224,7 @@ void python_editor::handle_action_open_file()
     python_code_editor* editor = dynamic_cast<python_code_editor*>(m_tab_widget->widget(m_tab_widget->count()-1));
     editor->appendPlainText(QString::fromStdString(f));
     editor->set_file_name(new_file_name);
-    //editor->update_text_state();
     editor->document()->setModified(false);
-    //editor->document()->isModified();
     m_tab_widget->setTabText(m_tab_widget->count()-1, info.completeBaseName() + "." + info.completeSuffix());
     m_new_file_counter--;
 }
@@ -260,8 +263,8 @@ void python_editor::save_file(const bool ask_path, const int index)
 
     if (!out.is_open())
     {
-        return;
         log_error("gui", "could not open file path");
+        return;
     }
     out << current_editor->toPlainText().toStdString();
     out.close();
@@ -370,6 +373,16 @@ QString python_editor::new_file_icon_style() const
     return m_new_file_icon_style;
 }
 
+QString python_editor::toggle_minimap_icon_path() const
+{
+    return m_toggle_minimap_icon_path;
+}
+
+QString python_editor::toggle_minimap_icon_style() const
+{
+    return m_toggle_minimap_icon_style;
+}
+
 void python_editor::set_open_icon_path(const QString& path)
 {
     m_open_icon_path = path;
@@ -420,14 +433,34 @@ void python_editor::set_new_file_icon_style(const QString &style)
     m_new_file_icon_style = style;
 }
 
+void python_editor::set_toggle_minimap_icon_path(const QString &path)
+{
+    m_toggle_minimap_icon_path = path;
+}
+
+void python_editor::set_toggle_minimap_icon_style(const QString &style)
+{
+    m_toggle_minimap_icon_style = style;
+}
+
 void python_editor::toggle_searchbar()
 {
     if (m_searchbar->isHidden())
     {
         m_searchbar->show();
+        if(m_tab_widget->currentWidget())
+            dynamic_cast<python_code_editor*>(m_tab_widget->currentWidget())->search(m_searchbar->get_current_text());
+        m_searchbar->setFocus();
     }
     else
     {
         m_searchbar->hide();
+        if(m_tab_widget->currentWidget())
+        {
+            dynamic_cast<python_code_editor*>(m_tab_widget->currentWidget())->search("");
+            m_tab_widget->currentWidget()->setFocus();
+        }
+        else
+            this->setFocus();
     }
 }

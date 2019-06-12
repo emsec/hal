@@ -54,6 +54,8 @@ searchbar::searchbar(QWidget* parent)
     connect(m_line_edit, &QLineEdit::textEdited, this, &searchbar::handle_text_edited);
     connect(m_line_edit, &QLineEdit::returnPressed, this, &searchbar::handle_return_pressed);
     connect(hack, &label_button::clicked, this, &searchbar::handle_mode_clicked);
+
+    setFocusProxy(m_line_edit);
 }
 
 QString searchbar::search_icon() const
@@ -110,6 +112,11 @@ void searchbar::clear()
 {
     m_line_edit->clear();
     repolish();
+}
+
+QString searchbar::get_current_text()
+{
+    return m_line_edit->text();
 }
 
 void searchbar::repolish()
