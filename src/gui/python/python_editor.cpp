@@ -263,8 +263,8 @@ void python_editor::save_file(const bool ask_path, const int index)
 
     if (!out.is_open())
     {
-        return;
         log_error("gui", "could not open file path");
+        return;
     }
     out << current_editor->toPlainText().toStdString();
     out.close();
