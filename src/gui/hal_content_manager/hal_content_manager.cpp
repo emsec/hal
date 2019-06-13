@@ -127,6 +127,8 @@ void hal_content_manager::handle_open_document(const QString& file_name)
     m_python_console_widget = new python_console_widget();
     m_main_window->add_content(m_python_console_widget, 5, content_anchor::bottom);
     m_python_console_widget->open();
+
+    m_netlist_watcher = new netlist_watcher(this);
 }
 
 void hal_content_manager::handle_close_document()
@@ -155,4 +157,34 @@ void hal_content_manager::handle_relayout_button_clicked()
     layouter->relayout_graph();
     m_layouter_view->handle_graph_relayouted();
     m_graph_scene->update();
+}
+
+bool hal_content_manager::has_python_editor_unsaved_changes()
+{
+    if(m_file_manager->is_document_open())
+        return m_python_widget->has_unsaved_tabs();
+    else
+        return false;  
+}
+
+bool hal_content_manager::has_netlist_unsaved_changes()
+{   
+    if(m_file_manager->is_document_open())
+        return m_netlist_watcher->has_netlist_unsaved_changes();
+    else
+        return false;
+}
+
+void hal_content_manager::mark_netlist_saved()
+{
+    if(m_file_manager->is_document_open())
+        m_netlist_watcher->set_netlist_unsaved_changes(false);
+}
+
+QStringList hal_content_manager::get_names_of_unsaved_python_tabs()
+{
+    if(m_file_manager->is_document_open())
+        return m_python_widget->get_names_of_unsaved_tabs();
+    else
+        return QStringList();
 }

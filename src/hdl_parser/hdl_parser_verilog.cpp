@@ -126,7 +126,7 @@ std::shared_ptr<netlist> hdl_parser_verilog::parse(const std::string& gate_libra
     }
     if (((it = m_net.find("1'h1")) != m_net.end()) || ((it = m_net.find("1'b1")) != m_net.end()))
     {
-        auto vcc_type   = *(m_netlist->get_gate_library()->get_global_gnd_gate_types()->begin());
+        auto vcc_type   = *(m_netlist->get_gate_library()->get_global_vcc_gate_types()->begin());
         auto output_pin = m_netlist->get_output_pin_types(vcc_type).at(0);
         auto vcc        = m_netlist->create_gate(m_netlist->get_unique_gate_id(), vcc_type, "global_vcc");
         if (!m_netlist->mark_global_vcc_gate(vcc))

@@ -21,41 +21,39 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef HAL_GRAPH_WIDGET_H
-#define HAL_GRAPH_WIDGET_H
+#ifndef PYTHON_CODE_EDITOR_H
+#define PYTHON_CODE_EDITOR_H
 
-#include "content_widget/content_widget.h"
-#include "graph_manager/graph_graphics_widget.h"
-#include "selection_history_navigator/selection_history_navigator.h"
+#include "code_editor/code_editor.h"
 
-#include <QPushButton>
-
-class hal_graph_widget : public content_widget
+class python_code_editor : public code_editor
 {
     Q_OBJECT
-
 public:
-    hal_graph_widget(QGraphicsView* view);
+    python_code_editor(QWidget* parent = nullptr);
 
-    virtual void setup_toolbar(toolbar* toolbar);
-
-public Q_SLOTS:
-    void handle_gate_event(gate_event_handler::event ev, std::shared_ptr<gate> gate, u32 associated_data);
-    void handle_net_event(net_event_handler::event ev, std::shared_ptr<net> net, u32 associated_data);
-
-Q_SIGNALS:
-    void relayout_button_clicked();
+    QString get_file_name();
+    void set_file_name(const QString name);
 
 private:
-    graph_graphics_widget m_graphics_widget;
+    void keyPressEvent(QKeyEvent* e) Q_DECL_OVERRIDE;
+    void handle_tab_key_pressed();
+    void handle_shift_tab_key_pressed();
+    void handle_return_key_pressed();
+    void handle_backspace_key_pressed(QKeyEvent* e);
+    void handle_delete_key_pressed(QKeyEvent* e);
+    void handle_insert_key_pressed();
 
-    void handle_relayout_button_clicked();
-    void handle_back_activated();
-    void handle_next_activated();
+    void handle_redo_requested();
 
-    QPushButton* m_relayout_button;
+    void indent_selection(bool indentUnindent);
+    int next_indent(bool indentUnindent, int current_indent);
 
-    selection_history_navigator* m_selection_history_navigator;
+    void handle_autocomplete();
+    void perform_code_completion(std::tuple<std::string, std::string> completion);
+
+    QString m_file_name;
+    QString m_text_state;
 };
 
-#endif    // HAL_GRAPH_WIDGET_H
+#endif //PYTHON_CODE_EDITOR_H

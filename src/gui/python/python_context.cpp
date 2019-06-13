@@ -23,9 +23,7 @@ extern grammar _PyParser_Grammar;
 PYBIND11_EMBEDDED_MODULE(console, m)
 {
     m.def("clear", []() -> void { g_python_context->forward_clear(); });
-    m.def("reset", []() -> void {
-        g_python_context->forward_reset();
-    });
+    m.def("reset", []() -> void { g_python_context->forward_reset(); });
 
     //m.def("history", []() -> void { g_console->printHistory(g_console->m_cmdColor); });
 
@@ -53,9 +51,8 @@ void python_context::set_console(python_console* c)
     m_console = c;
 }
 
-void python_context::initialize_context(py::dict *context)
+void python_context::initialize_context(py::dict* context)
 {
-
     py::exec("import __main__\n"
              "import io, sys\n"
              "from console import reset\n"
@@ -88,11 +85,11 @@ void python_context::initialize_context(py::dict *context)
 
 void python_context::init_python()
 {
-//    using namespace py::literals;
-    
+    //    using namespace py::literals;
+
     new py::dict();
     m_context = new py::dict(**py::globals());
-    
+
     initialize_context(m_context);
     (*m_context)["console"] = py::module::import("console");
 }
@@ -159,7 +156,7 @@ void python_context::interpret(const QString& input, bool multiple_expressions)
 
 void python_context::interpret_script(const QString& input)
 {
-    py::print(py::globals());
+    // py::print(py::globals());
     py::dict tmp_context(py::globals());
     initialize_context(&tmp_context);
 

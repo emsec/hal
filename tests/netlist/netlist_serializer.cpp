@@ -397,9 +397,9 @@ TEST_F(netlist_serializer_test, check_serialize_and_deserialize){
 
             // Add a module
             std::shared_ptr<module> test_m = nl->create_module(MIN_MODULE_ID+1, "test_type", nl->get_top_module());
-            test_m->insert_gate(nl->get_gate_by_id(MIN_GATE_ID+1));
-            test_m->insert_gate(nl->get_gate_by_id(MIN_GATE_ID+2));
-            test_m->insert_net(nl->get_net_by_id(MIN_GATE_ID+13));
+            test_m->assign_gate(nl->get_gate_by_id(MIN_GATE_ID+1));
+            test_m->assign_gate(nl->get_gate_by_id(MIN_GATE_ID+2));
+            test_m->assign_net(nl->get_net_by_id(MIN_GATE_ID+13));
 
             // Store some data in a gate, net and module
             nl->get_gate_by_id(MIN_GATE_ID+1)->set_data("category_0", "key_0", "data_type", "test_value");

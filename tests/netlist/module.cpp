@@ -173,7 +173,7 @@ TEST_F(module_test, check_contains_gate){
             std::shared_ptr<netlist> nl = create_empty_netlist();
             std::shared_ptr<module> m_0 = nl->create_module(MIN_MODULE_ID+0, "test_module", nl->get_top_module());
             std::shared_ptr<gate> gate_0 = nl->create_gate(MIN_GATE_ID+0, "INV", "gate_0");
-            m_0->insert_gate(gate_0);
+            m_0->assign_gate(gate_0);
 
             EXPECT_TRUE(m_0->contains_gate(gate_0));
         }
@@ -192,7 +192,7 @@ TEST_F(module_test, check_contains_gate){
             std::shared_ptr<module> submodule = nl->create_module(MIN_MODULE_ID+1, "test_module", m_0);
             ASSERT_NE(submodule, nullptr);
             std::shared_ptr<gate> gate_0 = nl->create_gate(MIN_GATE_ID+0, "INV", "gate_0");
-            submodule->insert_gate(gate_0);
+            submodule->assign_gate(gate_0);
 
             EXPECT_FALSE(m_0->contains_gate(gate_0));
         }
@@ -203,7 +203,7 @@ TEST_F(module_test, check_contains_gate){
             std::shared_ptr<module> submodule = nl->create_module(MIN_MODULE_ID+1, "test_module", m_0);
             ASSERT_NE(submodule, nullptr);
             std::shared_ptr<gate> gate_0 = nl->create_gate(MIN_GATE_ID+0, "INV", "gate_0");
-            submodule->insert_gate(gate_0);
+            submodule->assign_gate(gate_0);
 
             EXPECT_TRUE(m_0->contains_gate(gate_0, true));
         }
@@ -214,7 +214,7 @@ TEST_F(module_test, check_contains_gate){
  * Testing the addition of gates to the module. Verify the addition by call the
  * get_gates function and the contains_gate function
  *
- * Functions: insert_gate
+ * Functions: assign_gate
  */
 TEST_F(module_test, check_insert_gate){
     TEST_START
@@ -228,8 +228,8 @@ TEST_F(module_test, check_insert_gate){
 
             // Add gate_0 and gate_1 to a module
             std::shared_ptr<module> test_module = nl->create_module(MIN_MODULE_ID+0, "test module", nl->get_top_module());
-            test_module->insert_gate(gate_0);
-            test_module->insert_gate(gate_1);
+            test_module->assign_gate(gate_0);
+            test_module->assign_gate(gate_1);
 
             std::set<std::shared_ptr<gate>> expRes = {gate_0, gate_1};
 
@@ -246,8 +246,8 @@ TEST_F(module_test, check_insert_gate){
 
             // Add gate_0 twice
             std::shared_ptr<module> test_module = nl->create_module(MIN_MODULE_ID+0, "test module", nl->get_top_module());
-            test_module->insert_gate(gate_0);
-            test_module->insert_gate(gate_0);
+            test_module->assign_gate(gate_0);
+            test_module->assign_gate(gate_0);
 
             std::set<std::shared_ptr<gate>> expRes = {
                 gate_0,
@@ -264,11 +264,11 @@ TEST_F(module_test, check_insert_gate){
 
             std::shared_ptr<module> test_module = nl->create_module(MIN_MODULE_ID+0, "test module", nl->get_top_module());
             std::shared_ptr<module> submodule = nl->create_module(MIN_MODULE_ID+1, "submodule", test_module);
-            submodule->insert_gate(gate_0);
+            submodule->assign_gate(gate_0);
             ASSERT_TRUE(submodule->contains_gate(gate_0));
             ASSERT_FALSE(test_module->contains_gate(gate_0));
 
-            test_module->insert_gate(gate_0);
+            test_module->assign_gate(gate_0);
 
             std::set<std::shared_ptr<gate>> expRes = {
                     gate_0
@@ -284,7 +284,7 @@ TEST_F(module_test, check_insert_gate){
             NO_COUT_TEST_BLOCK;
             std::shared_ptr<netlist> nl = create_empty_netlist();
             std::shared_ptr<module> test_module = nl->create_module(MIN_MODULE_ID+0, "test module", nl->get_top_module());
-            test_module->insert_gate(nullptr);
+            test_module->assign_gate(nullptr);
             EXPECT_TRUE(test_module->get_gates().empty());
         }
     TEST_END
@@ -302,7 +302,7 @@ TEST_F(module_test, check_remove_gate){
             std::shared_ptr<netlist> nl = create_empty_netlist();
             std::shared_ptr<module> m_0 = nl->create_module(MIN_MODULE_ID+0, "test_module", nl->get_top_module());
             std::shared_ptr<gate> gate_0 = nl->create_gate(MIN_GATE_ID+0, "INV", "gate_0");
-            m_0->insert_gate(gate_0);
+            m_0->assign_gate(gate_0);
 
             ASSERT_TRUE(m_0->contains_gate(gate_0));
             m_0->remove_gate(gate_0);
@@ -315,7 +315,7 @@ TEST_F(module_test, check_remove_gate){
             std::shared_ptr<module> m_0 = nl->create_module(MIN_MODULE_ID+0, "test_module", nl->get_top_module());
             std::shared_ptr<module> m_other = nl->create_module(MIN_MODULE_ID+1, "other_test_module", nl->get_top_module());
             std::shared_ptr<gate> gate_0 = nl->create_gate(MIN_GATE_ID+0, "INV", "gate_0");
-            m_other->insert_gate(gate_0);
+            m_other->assign_gate(gate_0);
 
             m_0->remove_gate(gate_0);
             EXPECT_FALSE(m_0->contains_gate(gate_0));
@@ -357,7 +357,7 @@ TEST_F(module_test, check_get_gate_by_id){
             std::shared_ptr<netlist> nl = create_empty_netlist();
             std::shared_ptr<module> m_0 = nl->create_module(MIN_MODULE_ID+0, "test_module", nl->get_top_module());
             std::shared_ptr<gate> gate_123 = nl->create_gate(MIN_GATE_ID+123, "INV", "gate_123");
-            m_0->insert_gate(gate_123);
+            m_0->assign_gate(gate_123);
 
             ASSERT_TRUE(m_0->contains_gate(gate_123));
             EXPECT_EQ(m_0->get_gate_by_id(MIN_GATE_ID+123), gate_123);
@@ -368,7 +368,7 @@ TEST_F(module_test, check_get_gate_by_id){
             std::shared_ptr<module> m_0 = nl->create_module(MIN_MODULE_ID+0, "test_module", nl->get_top_module());
             std::shared_ptr<module> submodule = nl->create_module(MIN_MODULE_ID+1, "other_module", m_0);
             std::shared_ptr<gate> gate_123 = nl->create_gate(MIN_GATE_ID+123, "INV", "gate_123");
-            submodule->insert_gate(gate_123);
+            submodule->assign_gate(gate_123);
 
             EXPECT_EQ(m_0->get_gate_by_id(MIN_GATE_ID+123), nullptr);
         }
@@ -378,7 +378,7 @@ TEST_F(module_test, check_get_gate_by_id){
             std::shared_ptr<module> m_0 = nl->create_module(MIN_MODULE_ID+0, "test_module", nl->get_top_module());
             std::shared_ptr<module> submodule = nl->create_module(MIN_MODULE_ID+1, "other_module", m_0);
             std::shared_ptr<gate> gate_123 = nl->create_gate(MIN_GATE_ID+123, "INV", "gate_123");
-            submodule->insert_gate(gate_123);
+            submodule->assign_gate(gate_123);
 
             EXPECT_EQ(m_0->get_gate_by_id(MIN_GATE_ID+123, true), gate_123);
         }
@@ -398,7 +398,7 @@ TEST_F(module_test, check_contains_net){
             std::shared_ptr<netlist> nl = create_empty_netlist();
             std::shared_ptr<module> m_0 = nl->create_module(MIN_MODULE_ID+0, "test_module", nl->get_top_module());
             std::shared_ptr<net> net_0 = nl->create_net(MIN_NET_ID+0, "net_0");
-            m_0->insert_net(net_0);
+            m_0->assign_net(net_0);
 
             EXPECT_TRUE(m_0->contains_net(net_0));
         }
@@ -417,7 +417,7 @@ TEST_F(module_test, check_contains_net){
             std::shared_ptr<module> submodule = nl->create_module(MIN_MODULE_ID+1, "test_module", m_0);
             ASSERT_NE(submodule, nullptr);
             std::shared_ptr<net> net_0 = nl->create_net(MIN_NET_ID+0, "net_0");
-            submodule->insert_net(net_0);
+            submodule->assign_net(net_0);
 
             EXPECT_FALSE(m_0->contains_net(net_0));
         }
@@ -428,7 +428,7 @@ TEST_F(module_test, check_contains_net){
             std::shared_ptr<module> submodule = nl->create_module(MIN_MODULE_ID+1, "test_module", m_0);
             ASSERT_NE(submodule, nullptr);
             std::shared_ptr<net> net_0 = nl->create_net(MIN_NET_ID+0, "net_0");
-            submodule->insert_net(net_0);
+            submodule->assign_net(net_0);
 
             EXPECT_TRUE(m_0->contains_net(net_0, true));
         }
@@ -439,7 +439,7 @@ TEST_F(module_test, check_contains_net){
  * Testing the addition of nets to the module. Verify the addition by call the
  * get_nets function and the contains_net and get_nets function
  *
- * Functions: insert_net
+ * Functions: assign_net
  */
 TEST_F(module_test, check_insert_net){
     TEST_START
@@ -453,8 +453,8 @@ TEST_F(module_test, check_insert_net){
 
             // Add net_0 and net_1 to a module
             std::shared_ptr<module> test_module = nl->create_module(MIN_MODULE_ID+1, "test module", nl->get_top_module());
-            test_module->insert_net(net_0);
-            test_module->insert_net(net_1);
+            test_module->assign_net(net_0);
+            test_module->assign_net(net_1);
 
             std::set<std::shared_ptr<net>> expRes = {net_0, net_1};
 
@@ -468,8 +468,8 @@ TEST_F(module_test, check_insert_net){
 
             // Add net_0 twice
             std::shared_ptr<module> test_module = nl->create_module(MIN_MODULE_ID+0, "test module", nl->get_top_module());
-            test_module->insert_net(net_0);
-            test_module->insert_net(net_0);
+            test_module->assign_net(net_0);
+            test_module->assign_net(net_0);
 
             std::set<std::shared_ptr<net>> expRes = {
                 net_0,
@@ -486,11 +486,11 @@ TEST_F(module_test, check_insert_net){
 
             std::shared_ptr<module> test_module = nl->create_module(MIN_MODULE_ID+0, "test module", nl->get_top_module());
             std::shared_ptr<module> submodule = nl->create_module(MIN_MODULE_ID+1, "submodule", test_module);
-            submodule->insert_net(net_0);
+            submodule->assign_net(net_0);
             ASSERT_TRUE(submodule->contains_net(net_0));
             ASSERT_FALSE(test_module->contains_net(net_0));
 
-            test_module->insert_net(net_0);
+            test_module->assign_net(net_0);
 
             std::set<std::shared_ptr<net>> expRes = {
                     net_0
@@ -506,7 +506,7 @@ TEST_F(module_test, check_insert_net){
             NO_COUT_TEST_BLOCK;
             std::shared_ptr<netlist> nl   = create_empty_netlist();
             std::shared_ptr<module> test_module = nl->create_module(MIN_MODULE_ID+0, "test module", nl->get_top_module());
-            test_module->insert_net(nullptr);
+            test_module->assign_net(nullptr);
             EXPECT_TRUE(test_module->get_nets().empty());
         }
 
@@ -525,7 +525,7 @@ TEST_F(module_test, check_remove_net){
             std::shared_ptr<netlist> nl = create_empty_netlist();
             std::shared_ptr<module> m_0 = nl->create_module(MIN_MODULE_ID+0, "test_module", nl->get_top_module());
             std::shared_ptr<net> net_0 = nl->create_net(MIN_NET_ID+0, "net_0");
-            m_0->insert_net(net_0);
+            m_0->assign_net(net_0);
 
             ASSERT_TRUE(m_0->contains_net(net_0));
             m_0->remove_net(net_0);
@@ -538,7 +538,7 @@ TEST_F(module_test, check_remove_net){
             std::shared_ptr<module> m_0 = nl->create_module(MIN_MODULE_ID+0, "test_module", nl->get_top_module());
             std::shared_ptr<module> m_other = nl->create_module(MIN_MODULE_ID+1, "other_test_module", nl->get_top_module());
             std::shared_ptr<net> net_0 = nl->create_net(MIN_NET_ID+0, "net_0");
-            m_other->insert_net(net_0);
+            m_other->assign_net(net_0);
 
             m_0->remove_net(net_0);
             EXPECT_FALSE(m_0->contains_net(net_0));
@@ -580,7 +580,7 @@ TEST_F(module_test, check_get_net_by_id){
             std::shared_ptr<netlist> nl = create_empty_netlist();
             std::shared_ptr<module> m_0 = nl->create_module(MIN_MODULE_ID+0, "test_module", nl->get_top_module());
             std::shared_ptr<net> net_123 = nl->create_net(MIN_NET_ID+123, "net_123");
-            m_0->insert_net(net_123);
+            m_0->assign_net(net_123);
 
             ASSERT_TRUE(m_0->contains_net(net_123));
             EXPECT_EQ(m_0->get_net_by_id(MIN_NET_ID+123), net_123);
@@ -591,7 +591,7 @@ TEST_F(module_test, check_get_net_by_id){
             std::shared_ptr<module> m_0 = nl->create_module(MIN_MODULE_ID+0, "test_module", nl->get_top_module());
             std::shared_ptr<module> submodule = nl->create_module(MIN_MODULE_ID+1, "other_module", m_0);
             std::shared_ptr<net> net_123 = nl->create_net(MIN_NET_ID+123, "net_123");
-            submodule->insert_net(net_123);
+            submodule->assign_net(net_123);
 
             EXPECT_EQ(m_0->get_net_by_id(MIN_NET_ID+123), nullptr);
         }
@@ -601,7 +601,7 @@ TEST_F(module_test, check_get_net_by_id){
             std::shared_ptr<module> m_0 = nl->create_module(MIN_MODULE_ID+0, "test_module", nl->get_top_module());
             std::shared_ptr<module> submodule = nl->create_module(MIN_MODULE_ID+1, "other_module", m_0);
             std::shared_ptr<net> net_123 = nl->create_net(MIN_NET_ID+123, "net_123");
-            submodule->insert_net(net_123);
+            submodule->assign_net(net_123);
 
             EXPECT_EQ(m_0->get_net_by_id(MIN_NET_ID+123, true), net_123);
         }
@@ -762,10 +762,10 @@ TEST_F(module_test, check_get_input_nets){
         // Create the module
         std::shared_ptr<module> test_module = nl->create_module(MIN_MODULE_ID+0, "test_module", nl->get_top_module());
         for(auto g : std::set<std::shared_ptr<gate>>({gate_0, gate_1, gate_2, gate_3})){
-            test_module->insert_gate(g);
+            test_module->assign_gate(g);
         }
         for(auto n : std::set<std::shared_ptr<net>>({net_g_0, net_0_g, net_1_2, net_4_1_2, net_2_3_5})){
-            test_module->insert_net(n);
+            test_module->assign_net(n);
         }
 
         {

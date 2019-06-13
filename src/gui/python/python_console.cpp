@@ -16,6 +16,7 @@ python_console::python_console(QWidget* parent)
       m_in_compound_prompt(false), m_in_completion(false), m_current_compound_input(""), m_current_input(""), m_current_history_index(-1), m_current_completer_index(0),
       m_history(std::make_shared<python_console_history>())
 {
+    this->document()->setMaximumBlockCount(1000);
     setFrameStyle(QFrame::NoFrame);
     setUndoRedoEnabled(false);
     ensureCursorVisible();
@@ -168,16 +169,21 @@ void python_console::mousePressEvent(QMouseEvent* event)
     QTextEdit::mousePressEvent(event);
 }
 
+void python_console::insertAtEnd(const QString& text, QColor textColor)
+{
+    moveCursor(QTextCursor::End);
+    setTextColor(textColor);
+    insertPlainText(text);
+}
+
 void python_console::handle_stdout(const QString& output)
 {
-    setTextColor(m_standard_color);
-    insertPlainText(output);
+    insertAtEnd(output, m_standard_color);
 }
 
 void python_console::handle_error(const QString& output)
 {
-    setTextColor(m_error_color);
-    insertPlainText(output);
+    insertAtEnd(output, m_error_color);
 }
 
 void python_console::clear()
