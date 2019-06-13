@@ -6,7 +6,7 @@
   },
   {
     "name": "Type: Feature Request",
-    "color": "#217de5",
+    "color": "#65a3eb",
     "description": "For feature requests or modifications"
   },
   {
@@ -110,8 +110,18 @@
     "description": "We need a quickfix for that"
   },
   {
-    "name": "thank you \u2764\ufe0f",
+    "name": "thank you :heart:",
     "color": "#DDDDDD",
     "description": "thank you \u2764\ufe0f"
+  },
+  {
+    "name": "todo :spiral_notepad:",
+    "color": "#00B0D8",
+    "description": "Todo found in code"
+  },
+  {
+    "name": "wontfix",
+    "color": "#eeeeee",
+    "description": "The issue will not be fixed or otherwise handled. When applied, the issue should be closed."
   }
 ]
