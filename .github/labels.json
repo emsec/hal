@@ -1,0 +1,117 @@
+[
+  {
+    "name": "discussion needed",
+    "color": "#3ef07e",
+    "description": "Need to wait until discussion is resolved"
+  },
+  {
+    "name": "Type: Feature Request",
+    "color": "#217de5",
+    "description": "For feature requests or modifications"
+  },
+  {
+    "name": "Type: Bug",
+    "color": "#eb6420",
+    "description": "This is a confirmed or unconfirmed bug"
+  },
+  {
+    "name": "Type: Documentation",
+    "color": "#5417E7",
+    "description": "Related to documentation"
+  },
+  {
+    "name": "Type: Maintenance",
+    "color": "#3f51b5",
+    "description": "Maintain OS upgrades and dependencies"
+  },
+  {
+    "name": "Type: Question",
+    "color": "#e91e63",
+    "description": "Request for clarification"
+  },
+  {
+    "name": "Priority: Critical",
+    "color": "#e11e21",
+    "description": "Act immediately"
+  },
+  {
+    "name": "Priority: High",
+    "color": "#eb6420",
+    "description": "Needs to be addressed as soon as possible"
+  },
+  {
+    "name": "Priority: Low",
+    "color": "#0e8a16",
+    "description": "Can wait a bit longer"
+  },
+  {
+    "name": "Priority: Medium",
+    "color": "#fbca07",
+    "description": "Normal priority"
+  },
+  {
+    "name": "Status: In Review",
+    "color": "#ff6666",
+    "description": "Currently under review"
+  },
+  {
+    "name": "Status: Needs Review",
+    "color": "#ffaa00",
+    "description": "Waiting for available reviewer to pick up this issue or PR"
+  },
+  {
+    "name": "Status: Abandoned",
+    "color": "#333333",
+    "description": "No progress for a long time. Is this still an issue?"
+  },
+  {
+    "name": "Status: Available",
+    "color": "#ffeb3c",
+    "description": "Ready for pickup"
+  },
+  {
+    "name": "Status: Blocked",
+    "color": "#d4c5f9",
+    "description": "Other work needs to be done first"
+  },
+  {
+    "name": "Status: On Hold",
+    "color": "#e99695",
+    "description": "We decided to not work on this for now. (e.g. until discussion is resolved)"
+  },
+  {
+    "name": "Status: In Progress",
+    "color": "#96ed00",
+    "description": "Somebody is working on this"
+  },
+  {
+    "name": "Status: Investigating",
+    "color": "#80f5a9",
+    "description": "Somebody is looking into this, but the workload is not dispatched"
+  },
+  {
+    "name": "author feedback requested",
+    "color": "#ffdc00",
+    "description": "Waiting for feedback from original author"
+  },
+  {
+    "name": "good first issue",
+    "color": "#7057ff",
+    "description": "Nice first issue to get familiar with this project"
+  },
+  {
+    "name": "regression",
+    "color": "#ff8800",
+    "description": "Possibly breaks API interface. Needs further tests. Indicates a major version increase."
+  },
+  {
+    "name": "requires temporary solution",
+    "color": "#42f4c5",
+    "description": "We need a quickfix for that"
+  },
+  {
+    "name": "thank you \u2764\ufe0f",
+    "color": "#DDDDDD",
+    "description": "thank you \u2764\ufe0f"
+  }
+]
