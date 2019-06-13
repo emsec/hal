@@ -30,6 +30,7 @@
 #include <functional>
 #include <map>
 #include <string>
+#include <set>
 
 #define CALLBACK_HOOK_INVALID_IDX 0xffffffffffffffff
 
@@ -74,7 +75,7 @@ public:
      */
     void add_callback(const std::string& name, const std::function<R(ArgTypes...)>& callback)
     {
-        m_callbacks_str_map[name] = callback;
+        m_name_to_id_map[name] = add_callback(callback);
     }
 
     /**
@@ -88,6 +89,14 @@ public:
         if (it != m_callbacks.end())
         {
             m_callbacks.erase(it);
+            for (auto it2 = m_name_to_id_map.begin(); it2 != m_name_to_id_map.end(); it2++)
+            {
+                if ((*it2).second == id)
+                {
+                    m_name_to_id_map.erase(it2);
+                    break;
+                }
+            }
         }
     }
 
@@ -98,7 +107,11 @@ public:
      */
     void remove_callback(const std::string& id)
     {
-        m_callbacks_str_map.erase(id);
+        auto it = m_name_to_id_map.find(id);
+        if (it != m_name_to_id_map.end())
+        {
+            remove_callback((*it).second);
+        }
     }
 
     /**
@@ -112,11 +125,6 @@ public:
         {
             return;
         }
-        for (const auto& i : m_callbacks_str_map)
-        {
-            (i.second)(args...);
-        }
-
         for (const auto& i : m_callbacks)
         {
             (i.second)(args...);
@@ -151,12 +159,12 @@ public:
      */
     R inline call(const std::string& idx, ArgTypes... args)
     {
-        auto it = m_callbacks_str_map.find(idx);
-        if (it == m_callbacks_str_map.end())
+        auto it = m_name_to_id_map.find(idx);
+        if (it == m_name_to_id_map.end())
         {
             return R();
         }
-        return (it->second)(args...);
+        return call((*it).second, args...);
     }
 
     /**
@@ -178,7 +186,7 @@ public:
      */
     bool is_callback_registered(const std::string& id)
     {
-        return m_callbacks_str_map.find(id) != m_callbacks_str_map.end();
+        return m_name_to_id_map.find(id) != m_name_to_id_map.end();
     }
 
     /**
@@ -188,13 +196,28 @@ public:
      */
     size_t size()
     {
-        return m_callbacks.size() + m_callbacks_str_map.size();
+        return m_callbacks.size();
+    }
+
+    /**
+     * Get the ids of all registered callbacks.
+     *
+     * @returns The ids of all registered callback functions.
+     */
+    std::set<u64> get_ids()
+    {
+        std::set<u64> res;
+        for (const auto& it : m_callbacks)
+        {
+            res.insert(it.first);
+        }
+        return res;
     }
 
 private:
     std::map<u64, std::function<R(ArgTypes...)>> m_callbacks;
 
-    std::map<std::string, std::function<R(ArgTypes...)>> m_callbacks_str_map;
+    std::map<std::string, u64> m_name_to_id_map;
 };
 
 #endif /* __HAL_CALLBACK_HOOK_H__ */

@@ -36,17 +36,8 @@ class netlist;
 namespace netlist_serializer
 {
     /**
-     * Serializes a netlist into a JSON string.
-     * If the netlists contain the same data, the strings will be equal.
-     * Hence, these strings can also be used to compare to netlists.
-     *
-     * @param[in] nl - The netlist to serialize.
-     * @returns The serialized representation.
-     */
-    NETLIST_API std::string serialize_to_string(std::shared_ptr<netlist> nl);
-
-    /**
-     * Serializes a netlist into a .hal file.
+     * Serializes a netlist into a .hal file.<br>
+     * Invokes the hal_file_manager and all associated callbacks.
      *
      * @param[in] nl - The netlist to serialize.
      * @param[in] hal_file - The file to serialize to.
@@ -55,16 +46,8 @@ namespace netlist_serializer
     NETLIST_API bool serialize_to_file(std::shared_ptr<netlist> nl, const hal::path& hal_file);
 
     /**
-     * Deserializes a netlist from a JSON string.
-     * Only accepts correctly formatted data.
-     *
-     * @param[in] data - The string to deserialize from.
-     * @returns The deserialized netlist.
-     */
-    NETLIST_API std::shared_ptr<netlist> deserialize_from_string(const std::string& data);
-
-    /**
-     * Deserializes a netlist from a .hal file.
+     * Deserializes a netlist from a .hal file.<br>
+     * Invokes the hal_file_manager and all associated callbacks.
      *
      * @param[in] hal_file - The file to deserialize from.
      * @returns The deserialized netlist.
