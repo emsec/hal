@@ -58,7 +58,7 @@ std::shared_ptr<gate> netlist_internal_manager::create_gate(const u32 id, const 
     m_netlist->m_top_module->m_gates_set.insert(new_gate);
 
     // notify
-    module_event_handler::notify(module_event_handler::event::gate_inserted, m_netlist->m_top_module, id);
+    module_event_handler::notify(module_event_handler::event::gate_assigned, m_netlist->m_top_module, id);
     gate_event_handler::notify(gate_event_handler::event::created, new_gate);
 
     return new_gate;
@@ -144,7 +144,7 @@ std::shared_ptr<net> netlist_internal_manager::create_net(const u32 id, const st
     m_netlist->m_top_module->m_nets_set.insert(new_net);
 
     // notify
-    module_event_handler::notify(module_event_handler::event::net_inserted, m_netlist->m_top_module, id);
+    module_event_handler::notify(module_event_handler::event::net_assigned, m_netlist->m_top_module, id);
     net_event_handler::notify(net_event_handler::event::created, new_net);
 
     return new_net;
@@ -378,6 +378,7 @@ std::shared_ptr<module> netlist_internal_manager::create_module(const u32 id, st
     }
 
     module_event_handler::notify(module_event_handler::event::created, m);
+    module_event_handler::notify(module_event_handler::event::submodule_added, parent, id);
 
     return m;
 }

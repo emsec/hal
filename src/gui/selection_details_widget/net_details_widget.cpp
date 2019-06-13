@@ -163,7 +163,7 @@ void net_details_widget::handle_net_event(net_event_handler::event ev, std::shar
 
 void net_details_widget::handle_module_event(module_event_handler::event ev, std::shared_ptr<module> module, u32 associated_data)
 {
-    if (ev == module_event_handler::event::net_inserted || ev == module_event_handler::event::net_removed)
+    if (ev == module_event_handler::event::net_assigned || ev == module_event_handler::event::net_removed)
     {
         if (m_current_id == associated_data)
         {
