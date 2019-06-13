@@ -218,7 +218,7 @@ void gate_details_widget::handle_gate_event(gate_event_handler::event ev, std::s
 
 void gate_details_widget::handle_module_event(module_event_handler::event ev, std::shared_ptr<module> module, u32 associated_data)
 {
-    if (ev == module_event_handler::event::gate_inserted || ev == module_event_handler::event::gate_removed)
+    if (ev == module_event_handler::event::gate_assigned || ev == module_event_handler::event::gate_removed)
     {
         if (m_current_id == associated_data)
         {

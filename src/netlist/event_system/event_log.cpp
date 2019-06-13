@@ -178,7 +178,7 @@ namespace event_log
             {
                 log_info("event", "removed submodule with id {:08x} from submodule '{}' (id {:08x})", associated_data, submodule->get_name(), submodule->get_id());
             }
-            else if (event == module_event_handler::event::gate_inserted)
+            else if (event == module_event_handler::event::gate_assigned)
             {
                 auto gate = submodule->get_netlist()->get_gate_by_id(associated_data);
                 log_info("event", "inserted gate '{}' (id {:08x}) into submodule '{}' (id {:08x})", gate->get_name(), gate->get_id(), submodule->get_name(), submodule->get_id());
@@ -188,7 +188,7 @@ namespace event_log
                 auto gate = submodule->get_netlist()->get_gate_by_id(associated_data);
                 log_info("event", "removed gate '{}' (id {:08x}) from submodule '{}' (id {:08x})", gate->get_name(), gate->get_id(), submodule->get_name(), submodule->get_id());
             }
-            else if (event == module_event_handler::event::net_inserted)
+            else if (event == module_event_handler::event::net_assigned)
             {
                 auto net = submodule->get_netlist()->get_net_by_id(associated_data);
                 log_info("event", "inserted net '{}' (id {:08x}) to submodule '{}' (id {:08x})", net->get_name(), net->get_id(), submodule->get_name(), submodule->get_id());

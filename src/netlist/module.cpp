@@ -78,6 +78,7 @@ bool module::set_parent_module(const std::shared_ptr<module>& new_parent)
     m_parent->m_submodules_set.insert(shared_from_this());
 
     module_event_handler::notify(module_event_handler::event::parent_changed, shared_from_this());
+    module_event_handler::notify(module_event_handler::event::submodule_added, m_parent, m_id);
 
     return true;
 }
@@ -131,7 +132,7 @@ bool module::assign_gate(std::shared_ptr<gate> gate)
     m_gates_set.insert(gate);
 
     module_event_handler::notify(module_event_handler::event::gate_removed, prev_module, gate->get_id());
-    module_event_handler::notify(module_event_handler::event::gate_inserted, shared_from_this(), gate->get_id());
+    module_event_handler::notify(module_event_handler::event::gate_assigned, shared_from_this(), gate->get_id());
     return true;
 }
 
@@ -163,7 +164,7 @@ bool module::remove_gate(std::shared_ptr<gate> gate)
     top->m_gates_map[gate->get_id()] = gate;
     top->m_gates_set.insert(gate);
     module_event_handler::notify(module_event_handler::event::gate_removed, shared_from_this(), gate->get_id());
-    module_event_handler::notify(module_event_handler::event::gate_inserted, top, gate->get_id());
+    module_event_handler::notify(module_event_handler::event::gate_assigned, top, gate->get_id());
 
     return true;
 }
@@ -263,7 +264,7 @@ bool module::assign_net(std::shared_ptr<net> net)
     m_nets_set.insert(net);
 
     module_event_handler::notify(module_event_handler::event::net_removed, prev_module, net->get_id());
-    module_event_handler::notify(module_event_handler::event::net_inserted, shared_from_this(), net->get_id());
+    module_event_handler::notify(module_event_handler::event::net_assigned, shared_from_this(), net->get_id());
     return true;
 }
 
@@ -295,7 +296,7 @@ bool module::remove_net(std::shared_ptr<net> net)
     top->m_nets_map[net->get_id()] = net;
     top->m_nets_set.insert(net);
     module_event_handler::notify(module_event_handler::event::net_removed, shared_from_this(), net->get_id());
-    module_event_handler::notify(module_event_handler::event::net_inserted, top, net->get_id());
+    module_event_handler::notify(module_event_handler::event::net_assigned, top, net->get_id());
 
     return true;
 }
