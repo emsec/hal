@@ -154,7 +154,7 @@ std::set<std::shared_ptr<module>> netlist::get_modules() const
 
 bool netlist::is_module_in_netlist(const std::shared_ptr<module> module) const
 {
-    return m_modules.find(module->get_id()) != m_modules.end();
+    return (module != nullptr) && (module->get_netlist() == shared_from_this()) && (m_modules.find(module->get_id()) != m_modules.end());
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
