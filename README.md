@@ -107,7 +107,7 @@ Feel free to also include the original [paper](http://eprint.iacr.org/2017/783)
 
 ## Contact and Support
 
-Please contact us via Gitter: https://gitter.im/emsec-hal
+Please contact us via our Slack workspace. Get your invite here: [![Slack](https://img.shields.io/badge/slack-join-blue.svg)](https://communityinviter.com/apps/hal-re/hal-re)
 
 ## Install Instructions
 
