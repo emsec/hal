@@ -353,6 +353,11 @@ std::shared_ptr<module> netlist_internal_manager::create_module(const u32 id, st
         log_error("netlist.internal", "netlist::create_module: parent must not be nullptr");
         return nullptr;
     }
+    if (parent != nullptr && m_netlist->get_shared() != parent->get_netlist())
+    {
+        log_error("netlist.internal", "netlist::create_module: parent must belong to current netlist");
+        return nullptr;
+    }
 
     auto m = std::shared_ptr<module>(new module(id, parent, name, this));
 
