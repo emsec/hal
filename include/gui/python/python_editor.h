@@ -27,6 +27,7 @@
 #include "code_editor/code_editor.h"
 #include "content_widget/content_widget.h"
 #include "python/python_context_suberscriber.h"
+#include "core/hal_file_manager.h"
 
 class code_editor;
 class searchbar;
@@ -35,6 +36,7 @@ class toolbar;
 
 class QVBoxLayout;
 class QTabWidget;
+class python_code_editor;
 
 
 class python_editor : public content_widget, public python_context_subscriber
@@ -69,6 +71,7 @@ public:
     void handle_action_save_file_as();
     void handle_action_run();
     void handle_action_new_tab();
+    void tab_load_file(python_code_editor* tab, QString file_name);
 
     void save_file(const bool ask_path, const int index = -1);
 
@@ -110,6 +113,9 @@ public:
 
     void set_toggle_minimap_icon_path(const QString& path);
     void set_toggle_minimap_icon_style(const QString& style);
+
+    bool handle_serialization_to_hal_file(const hal::path& path, std::shared_ptr<netlist> netlist, rapidjson::Document& document);
+    bool handle_deserialization_from_hal_file(const hal::path& path, std::shared_ptr<netlist> netlist, rapidjson::Document& document);
 
 Q_SIGNALS:
     void forward_stdout(const QString& output);
