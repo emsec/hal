@@ -15,12 +15,10 @@
 #include "core/hal_file_manager.h"
 #include "core/log.h"
 
-#define RAPIDJSON_HAS_STDSTRING 1
-#include "rapidjson/document.h"
 #include "rapidjson/filereadstream.h"
 #include "rapidjson/stringbuffer.h"
 
-#define PRETTY_JSON_OUTPUT 0
+#define PRETTY_JSON_OUTPUT 1
 #if PRETTY_JSON_OUTPUT == 1
 #include "rapidjson/prettywriter.h"
 #else
@@ -147,7 +145,6 @@ namespace netlist_serializer
         {
             rapidjson::Document::AllocatorType& allocator = document.GetAllocator();
             rapidjson::Value root(rapidjson::kObjectType);
-            document.AddMember("netlist", root, document.GetAllocator());
 
             root.AddMember("gate_library", nl->get_gate_library()->get_name(), allocator);
             root.AddMember("id", nl->get_id(), allocator);
@@ -221,12 +218,16 @@ namespace netlist_serializer
                 }
                 root.AddMember("modules", modules, allocator);
             }
+
+            document.AddMember("netlist", root, document.GetAllocator());
         }
     }    // namespace
 
     // deserializing functions
     namespace
     {
+        #define assert_availablility(MEMBER) if (!root.HasMember(MEMBER)) {log_critical("netlist.persistent", "'netlist' node does not include a '{}' node", MEMBER); return nullptr; }
+
         endpoint deserialize_endpoint(std::shared_ptr<netlist> nl, const rapidjson::Value& val)
         {
             return {nl->get_gate_by_id(val["gate_id"].GetUint()), val["pin_type"].GetString()};
@@ -304,8 +305,15 @@ namespace netlist_serializer
 
         std::shared_ptr<netlist> deserialize(const rapidjson::Document& document)
         {
+            if (!document.HasMember("netlist"))
+            {
+                log_critical("netlist.persistent", "file does not include a 'netlist' node");
+                return nullptr;
+            }
             auto root = document["netlist"].GetObject();
-            auto lib = gate_library_manager::get_gate_library(root["gate_library"].GetString());
+            assert_availablility("gate_library");
+
+            auto lib  = gate_library_manager::get_gate_library(root["gate_library"].GetString());
             if (lib == nullptr)
             {
                 log_critical("netlist.persistent", "error loading gate library '{}'.", root["gate_library"].GetString());
@@ -314,11 +322,19 @@ namespace netlist_serializer
 
             std::shared_ptr<netlist> nl = std::make_shared<netlist>(lib);
 
+            assert_availablility("id");
             nl->set_id(root["id"].GetUint());
+
+            assert_availablility("input_file");
             nl->set_input_filename(root["input_file"].GetString());
+
+            assert_availablility("design_name");
             nl->set_design_name(root["design_name"].GetString());
+
+            assert_availablility("device_name");
             nl->set_device_name(root["device_name"].GetString());
 
+            assert_availablility("gates");
             for (const auto& gate_node : root["gates"].GetArray())
             {
                 if (!deserialize_gate(nl, gate_node))
@@ -326,15 +342,20 @@ namespace netlist_serializer
                     return nullptr;
                 }
             }
+
+            assert_availablility("global_vcc");
             for (const auto& gate_node : root["global_vcc"].GetArray())
             {
                 nl->mark_global_vcc_gate(nl->get_gate_by_id(gate_node.GetUint()));
             }
+
+            assert_availablility("global_gnd");
             for (const auto& gate_node : root["global_gnd"].GetArray())
             {
                 nl->mark_global_gnd_gate(nl->get_gate_by_id(gate_node.GetUint()));
             }
 
+            assert_availablility("nets");
             for (const auto& net_node : root["nets"].GetArray())
             {
                 if (!deserialize_net(nl, net_node))
@@ -342,19 +363,26 @@ namespace netlist_serializer
                     return nullptr;
                 }
             }
+
+            assert_availablility("global_in");
             for (const auto& net_node : root["global_in"].GetArray())
             {
                 nl->mark_global_input_net(nl->get_net_by_id(net_node.GetUint()));
             }
+
+            assert_availablility("global_out");
             for (const auto& net_node : root["global_out"].GetArray())
             {
                 nl->mark_global_output_net(nl->get_net_by_id(net_node.GetUint()));
             }
+
+            assert_availablility("global_inout");
             for (const auto& net_node : root["global_inout"].GetArray())
             {
                 nl->mark_global_inout_net(nl->get_net_by_id(net_node.GetUint()));
             }
 
+            assert_availablility("modules");
             for (const auto& module_node : root["modules"].GetArray())
             {
                 if (!deserialize_module(nl, module_node))

@@ -29,8 +29,8 @@
 
 #include <functional>
 #include <map>
-#include <string>
 #include <set>
+#include <string>
 
 #define CALLBACK_HOOK_INVALID_IDX 0xffffffffffffffff
 
@@ -181,12 +181,12 @@ public:
     /**
      * Check whether a callback function is registered for a given string identifier.
      *
-     * @param[in] id - The identifier of the callback function.
+     * @param[in] name - The identifier of the callback function.
      * @returns True, if the callback function is registered.
      */
-    bool is_callback_registered(const std::string& id)
+    bool is_callback_registered(const std::string& name)
     {
-        return m_name_to_id_map.find(id) != m_name_to_id_map.end();
+        return m_name_to_id_map.find(name) != m_name_to_id_map.end();
     }
 
     /**
@@ -212,6 +212,24 @@ public:
             res.insert(it.first);
         }
         return res;
+    }
+
+    /**
+     * Get the name of a registered callback.
+     *
+     * @param[in] id - The id to look up.
+     * @returns The name or an empty string if no callback was registered with the given name.
+     */
+    std::string get_name(u64 id)
+    {
+        for (const auto& it : m_name_to_id_map)
+        {
+            if (it.second == id)
+            {
+                return it.first;
+            }
+        }
+        return "";
     }
 
 private:

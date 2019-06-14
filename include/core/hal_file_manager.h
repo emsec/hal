@@ -64,22 +64,39 @@ namespace hal_file_manager
     /**
      * Add a callback to notify when a .hal file is being serialized.
      *
+     * @param[in] identifier - An identifier name that can be used to remove the callback later.
      * @param[in] callback - The callback function. Parameters are:
      * * bool - Returns whether data was successfully extended, saving is aborted if False.
      * * const hal::path& - The hal file.
      * * rapidjson::Document& - The content to fill.
     */
-    void register_on_serialize_callback(std::function<bool(const hal::path&, std::shared_ptr<netlist> netlist, rapidjson::Document&)> callback);
+    void register_on_serialize_callback(const std::string& identifier, std::function<bool(const hal::path&, std::shared_ptr<netlist>, rapidjson::Document&)> callback);
+
+    /**
+     * Removes a callback to notify when a .hal file is being serialized.
+     *
+     * @param[in] identifier - The identifier name given while registering
+    */
+    void unregister_on_serialize_callback(const std::string& identifier);
 
     /**
      * Add a callback to notify when a .hal file is being deserialized.
      *
+     * @param[in] identifier - An identifier name that can be used to remove the callback later.
      * @param[in] callback - The callback function. Parameters are:
      * * bool - Returns whether data was successfully read, loading is aborted if False.
      * * const hal::path& - The hal file.
      * * rapidjson::Document& - The content to fill.
     */
-    void register_on_deserialize_callback(std::function<bool(const hal::path&, std::shared_ptr<netlist> netlist, rapidjson::Document&)> callback);
+    void register_on_deserialize_callback(const std::string& identifier, std::function<bool(const hal::path&, std::shared_ptr<netlist>, rapidjson::Document&)> callback);
+
+    /**
+     * Removes a callback to notify when a .hal file is being deserialized.
+     *
+     * @param[in] identifier - The identifier name given while registering
+    */
+    void unregister_on_deserialize_callback(const std::string& identifier);
+
 }    // namespace hal_file_manager
 
 #endif /* __HAL_FILE_MANAGER_H__ */
