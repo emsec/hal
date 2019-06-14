@@ -35,7 +35,7 @@
 /**
  * Enum for all possible plugin types
  */
-enum class interface_type : u32
+enum class CORE_API interface_type : u32
 {
     base = 0,
     cli,

@@ -43,6 +43,6 @@ public:
  *
  * @returns The factory instance.
  */
-EXPORT i_factory* get_factory();
+extern "C" PLUGIN_API i_factory* get_factory();
 
 #endif /* __HAL_FACTORY_HELLOWORLD_H__ */
