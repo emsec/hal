@@ -3,7 +3,7 @@
 
 #include "core/interface_base.h"
 
-class plugin_decorator_example_lib : virtual public i_base
+class PLUGIN_API plugin_decorator_example_lib : virtual public i_base
 {
 public:
     std::string get_name() override;

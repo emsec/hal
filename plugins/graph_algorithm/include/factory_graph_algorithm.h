@@ -3,7 +3,7 @@
 
 #include "core/interface_factory.h"
 
-class factory_graph_algorithm : public i_factory
+class PLUGIN_API factory_graph_algorithm : public i_factory
 {
 public:
     /** interface implementation: i_factory */
@@ -13,6 +13,6 @@ public:
     std::shared_ptr<i_base> get_plugin_instance() override;
 };
 
-EXPORT i_factory* get_factory();
+extern "C" PLUGIN_API i_factory* get_factory();
 
 #endif /* __HAL_FACTORY_GRAPH_ALGORITHM_H__ */
