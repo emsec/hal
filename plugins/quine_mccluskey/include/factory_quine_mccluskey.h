@@ -12,6 +12,6 @@ public:
     std::set<std::string> get_dependencies() override;
 };
 
-EXPORT i_factory* get_factory();
+extern "C" PLUGIN_API i_factory* get_factory();
 
 #endif /* __HAL_FACTORY_QUINE_MCCLUSKEY_H__ */

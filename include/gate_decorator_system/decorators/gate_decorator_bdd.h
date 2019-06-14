@@ -121,6 +121,42 @@ public:
      */
     static std::vector<std::map<int, bool>> get_bdd_clauses(std::shared_ptr<bdd> bdd_ptr);
 
+    /**
+     *  Evaluate a given bdd under a certain configuration
+     *
+     * @param[in] bdd_ptr - the bdd
+     * @param[in] input_configuration - configuration of the variables
+     * @returns evaluation of the bdd as bool
+     */
+    static bool evaluate_bdd(std::shared_ptr<bdd> bdd_ptr, const std::map<int, bool>& input_configuration);
+
+    /**
+     *  Evaluate a given bdd under a certain configuration
+     *
+     * @param[in] g - gate, bdd_ptr - the bdd, input_configuration - configuration of the variables
+     * @param[in] bdd_ptr - the bdd
+     * @param[in] input_configuration - configuration of the variables
+     * @returns evaluation of the bdd as bool
+     */
+    static bool evaluate_bdd(std::shared_ptr<gate> const g, std::shared_ptr<bdd> const bdd_ptr, const std::map<std::string, bool>& input_configuration);
+
+    /**
+     *  Evaluate a given bdd under a certain configuration
+     *
+     * @param[in] clauses - bdd clauses as a vector, input_configuration - configuration of the variables
+     * @param[in] input_configuration - configuration of the variables
+     * @returns evaluation of the bdd as bool
+     */
+    static bool evaluate_bdd(const std::vector<std::map<int, bool>>& clauses, const std::map<int, bool>& input_configuration);
+
+    /**
+     *  Returns truth for a given function
+     *
+     * @param[in] bdd_ptr - the bdd
+     * @returns truth table
+     */
+    static std::tuple<std::vector<int>, std::vector<bool>> get_truth_table(std::shared_ptr<bdd> const bdd_ptr);
+
 private:
     gate_decorator_system::bdd_decorator_generator m_generator;
 };

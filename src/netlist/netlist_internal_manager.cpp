@@ -58,7 +58,7 @@ std::shared_ptr<gate> netlist_internal_manager::create_gate(const u32 id, const 
     m_netlist->m_top_module->m_gates_set.insert(new_gate);
 
     // notify
-    module_event_handler::notify(module_event_handler::event::gate_inserted, m_netlist->m_top_module, id);
+    module_event_handler::notify(module_event_handler::event::gate_assigned, m_netlist->m_top_module, id);
     gate_event_handler::notify(gate_event_handler::event::created, new_gate);
 
     return new_gate;
@@ -144,7 +144,7 @@ std::shared_ptr<net> netlist_internal_manager::create_net(const u32 id, const st
     m_netlist->m_top_module->m_nets_set.insert(new_net);
 
     // notify
-    module_event_handler::notify(module_event_handler::event::net_inserted, m_netlist->m_top_module, id);
+    module_event_handler::notify(module_event_handler::event::net_assigned, m_netlist->m_top_module, id);
     net_event_handler::notify(net_event_handler::event::created, new_net);
 
     return new_net;
@@ -353,6 +353,11 @@ std::shared_ptr<module> netlist_internal_manager::create_module(const u32 id, st
         log_error("netlist.internal", "netlist::create_module: parent must not be nullptr");
         return nullptr;
     }
+    if (parent != nullptr && m_netlist->get_shared() != parent->get_netlist())
+    {
+        log_error("netlist.internal", "netlist::create_module: parent must belong to current netlist");
+        return nullptr;
+    }
 
     auto m = std::shared_ptr<module>(new module(id, parent, name, this));
 
@@ -373,6 +378,7 @@ std::shared_ptr<module> netlist_internal_manager::create_module(const u32 id, st
     }
 
     module_event_handler::notify(module_event_handler::event::created, m);
+    module_event_handler::notify(module_event_handler::event::submodule_added, parent, id);
 
     return m;
 }
@@ -395,12 +401,12 @@ bool netlist_internal_manager::delete_module(std::shared_ptr<module> to_remove)
     auto gates_copy = to_remove->m_gates_set;
     for (const auto& gate : gates_copy)
     {
-        to_remove->m_parent->insert_gate(gate);
+        to_remove->m_parent->assign_gate(gate);
     }
     auto nets_copy = to_remove->m_nets_set;
     for (const auto& net : nets_copy)
     {
-        to_remove->m_parent->insert_net(net);
+        to_remove->m_parent->assign_net(net);
     }
 
     // move all submodules to parent

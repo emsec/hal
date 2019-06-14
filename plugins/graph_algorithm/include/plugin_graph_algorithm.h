@@ -10,7 +10,7 @@ class netlist;
 class gate;
 class net;
 
-class plugin_graph_algorithm : public i_base
+class PLUGIN_API plugin_graph_algorithm : public i_base
 {
 public:
     /** constructor (= default) */

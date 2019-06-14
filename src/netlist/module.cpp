@@ -29,6 +29,11 @@ std::string module::get_name() const
 
 void module::set_name(const std::string& name)
 {
+    if (core_utils::trim(name).empty())
+    {
+        log_error("module", "empty name is not allowed");
+        return;
+    }
     if (name != m_name)
     {
         m_name = name;
@@ -40,6 +45,42 @@ void module::set_name(const std::string& name)
 std::shared_ptr<module> module::get_parent_module() const
 {
     return m_parent;
+}
+
+bool module::set_parent_module(const std::shared_ptr<module>& new_parent)
+{
+    if (new_parent == m_parent)
+    {
+        log_error("module", "can not set module as its own parent");
+        return false;
+    }
+
+    if (m_parent == nullptr)
+    {
+        log_error("module", "no parent can be assigned to the top module");
+        return false;
+    }
+
+    auto children = get_submodules(DONT_CARE, true);
+    if (children.find(new_parent) != children.end())
+    {
+        new_parent->set_parent_module(m_parent);
+    }
+
+    m_parent->m_submodules_map.erase(m_id);
+    m_parent->m_submodules_set.erase(shared_from_this());
+
+    module_event_handler::notify(module_event_handler::event::submodule_removed, m_parent, m_id);
+
+    m_parent = new_parent;
+
+    m_parent->m_submodules_map[m_id] = shared_from_this();
+    m_parent->m_submodules_set.insert(shared_from_this());
+
+    module_event_handler::notify(module_event_handler::event::parent_changed, shared_from_this());
+    module_event_handler::notify(module_event_handler::event::submodule_added, m_parent, m_id);
+
+    return true;
 }
 
 std::set<std::shared_ptr<module>> module::get_submodules(const std::string& name_filter, bool recursive) const
@@ -76,7 +117,7 @@ std::shared_ptr<netlist> module::get_netlist() const
     return m_internal_manager->m_netlist->get_shared();
 }
 
-bool module::insert_gate(std::shared_ptr<gate> gate)
+bool module::assign_gate(std::shared_ptr<gate> gate)
 {
     if (gate == nullptr)
     {
@@ -91,7 +132,7 @@ bool module::insert_gate(std::shared_ptr<gate> gate)
     m_gates_set.insert(gate);
 
     module_event_handler::notify(module_event_handler::event::gate_removed, prev_module, gate->get_id());
-    module_event_handler::notify(module_event_handler::event::gate_inserted, shared_from_this(), gate->get_id());
+    module_event_handler::notify(module_event_handler::event::gate_assigned, shared_from_this(), gate->get_id());
     return true;
 }
 
@@ -123,7 +164,7 @@ bool module::remove_gate(std::shared_ptr<gate> gate)
     top->m_gates_map[gate->get_id()] = gate;
     top->m_gates_set.insert(gate);
     module_event_handler::notify(module_event_handler::event::gate_removed, shared_from_this(), gate->get_id());
-    module_event_handler::notify(module_event_handler::event::gate_inserted, top, gate->get_id());
+    module_event_handler::notify(module_event_handler::event::gate_assigned, top, gate->get_id());
 
     return true;
 }
@@ -208,22 +249,22 @@ std::set<std::shared_ptr<gate>> module::get_gates(const std::string& gate_type_f
     return res;
 }
 
-bool module::insert_net(std::shared_ptr<net> n)
+bool module::assign_net(std::shared_ptr<net> net)
 {
-    if (n == nullptr)
+    if (net == nullptr)
     {
         return false;
     }
-    if (contains_net(n))
+    if (contains_net(net))
     {
         return false;
     }
-    auto prev_module        = m_internal_manager->remove_from_submodules(n);
-    m_nets_map[n->get_id()] = n;
-    m_nets_set.insert(n);
+    auto prev_module        = m_internal_manager->remove_from_submodules(net);
+    m_nets_map[net->get_id()] = net;
+    m_nets_set.insert(net);
 
-    module_event_handler::notify(module_event_handler::event::net_removed, prev_module, n->get_id());
-    module_event_handler::notify(module_event_handler::event::net_inserted, shared_from_this(), n->get_id());
+    module_event_handler::notify(module_event_handler::event::net_removed, prev_module, net->get_id());
+    module_event_handler::notify(module_event_handler::event::net_assigned, shared_from_this(), net->get_id());
     return true;
 }
 
@@ -255,7 +296,7 @@ bool module::remove_net(std::shared_ptr<net> net)
     top->m_nets_map[net->get_id()] = net;
     top->m_nets_set.insert(net);
     module_event_handler::notify(module_event_handler::event::net_removed, shared_from_this(), net->get_id());
-    module_event_handler::notify(module_event_handler::event::net_inserted, top, net->get_id());
+    module_event_handler::notify(module_event_handler::event::net_assigned, top, net->get_id());
 
     return true;
 }

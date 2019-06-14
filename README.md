@@ -1,4 +1,4 @@
-[![pipeline status](https://gitlab.com/swallat/hal/badges/master/pipeline.svg)](https://gitlab.com/swallat/hal/commits/master) [![coverage report](https://gitlab.com/swallat/hal/badges/master/coverage.svg)](https://gitlab.com/swallat/hal/commits/master) [![Discord](https://img.shields.io/discord/575648314549075969.svg?logo=discord)](https://discord.gg/HVC392e)
+[![pipeline status](https://gitlab.com/swallat/hal/badges/master/pipeline.svg)](https://gitlab.com/swallat/hal/commits/master) [![coverage report](https://gitlab.com/swallat/hal/badges/master/coverage.svg)](https://gitlab.com/swallat/hal/commits/master) [![Slack](https://img.shields.io/badge/slack-join-blue.svg)](https://communityinviter.com/apps/hal-re/hal-re)
 
 # Welcome to HAL!
 
@@ -107,7 +107,7 @@ Feel free to also include the original [paper](http://eprint.iacr.org/2017/783)
 
 ## Contact and Support
 
-Please contact us via Gitter: https://gitter.im/emsec-hal
+Please contact us via our Slack workspace. Get your invite here: [![Slack](https://img.shields.io/badge/slack-join-blue.svg)](https://communityinviter.com/apps/hal-re/hal-re)
 
 ## Install Instructions
 
@@ -138,6 +138,14 @@ Run the following commands to download and install HAL.
 Optionally you can install HAL:
 
 `make install`
+
+### macOS
+
+Please make sure to use a compiler that supports OpenMP. You can install one from e.g. Homebrew via: `brew install llvm`.
+
+To let cmake know of the custom compiler use following command.
+
+`cmake .. -DCMAKE_C_COMPILER=/usr/local/opt/llvm/bin/clang -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm/bin/clang++`
 
 ## Contributing
 

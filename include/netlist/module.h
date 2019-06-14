@@ -85,6 +85,15 @@ public:
     std::shared_ptr<module> get_parent_module() const;
 
     /**
+     * Sets a new parent for this module.<br>
+     * If the new parent is a submodule of this module, the new parent is added as a direct submodule to the old parent first.
+     *
+     * @param[in] new_parent - the new parent module
+     * @returns True if the parent was changed
+     */
+    bool set_parent_module(const std::shared_ptr<module>& new_parent);
+
+    /**
      * Get all direct submodules of this module.<br>
      * If \p recursive is true, all indirect submodules are also included.
      *
@@ -132,7 +141,7 @@ public:
      * @param[in] gate - The gate to move.
      * @returns True on success.
      */
-    bool insert_gate(std::shared_ptr<gate> gate);
+    bool assign_gate(std::shared_ptr<gate> gate);
 
     /**
      * Removes a gate from the module.<br>
@@ -188,7 +197,7 @@ public:
      * @param[in] net - The net to move.
      * @returns True on success.
      */
-    bool insert_net(std::shared_ptr<net> net);
+    bool assign_net(std::shared_ptr<net> net);
 
     /**
      * Removes a net from the module.<br>

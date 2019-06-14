@@ -158,7 +158,7 @@ void tree_navigation_model::handle_module_event(module_event_handler::event ev, 
                                                               module_item));
         insert_item(m_modules_item, m_modules_item->get_child_count(), module_item);
     }
-    if (ev == module_event_handler::gate_inserted)
+    if (ev == module_event_handler::gate_assigned)
     {
         for (int i = 0; i < m_modules_item->get_child_count(); i++)
         {
@@ -176,7 +176,7 @@ void tree_navigation_model::handle_module_event(module_event_handler::event ev, 
             }
         }
     }
-    if (ev == module_event_handler::net_inserted)
+    if (ev == module_event_handler::net_assigned)
     {
         for (int i = 0; i < m_modules_item->get_child_count(); i++)
         {

@@ -33,6 +33,7 @@
 #include <QFileDialog>
 #include <QFuture>
 #include <QMessageBox>
+#include <QPushButton>
 #include <QSettings>
 #include <QShortcut>
 #include <QtConcurrent>
@@ -121,7 +122,7 @@ main_window::main_window(QWidget* parent) : QWidget(parent), m_schedule_widget(n
     //m_action_content      = new QAction(this);
     m_action_settings = new QAction(this);
     m_action_close    = new QAction(this);
-    m_action_content = new QAction(this);
+    m_action_content  = new QAction(this);
 
     //    //m_open_icon_style = "all->#fcfcb0";
     //    //m_open_icon_style = "all->#f2e4a4";
@@ -492,6 +493,8 @@ void main_window::handle_save_triggered()
         hal::path path = file_manager::get_instance()->file_name().toStdString();
         path.replace_extension(".hal");
         netlist_serializer::serialize_to_file(g_netlist, path);
+
+        m_content_manager->mark_netlist_saved();
     }
 }
 
@@ -507,20 +510,67 @@ void main_window::on_action_quit_triggered()
 void main_window::closeEvent(QCloseEvent* event)
 {
     //check for unsaved changes and show confirmation dialog
+    bool has_netlist_unsaved_changes       = m_content_manager->has_netlist_unsaved_changes();
+    bool has_python_editor_unsaved_changes = m_content_manager->has_python_editor_unsaved_changes();
 
-    /*QMessageBox msgBox;
-    msgBox.setText("Quit");
-    msgBox.setInformativeText("Are you sure you want to close the application ?");
-    msgBox.setStyleSheet("QLabel{min-width: 600px;}");
-    msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::Cancel);
-    msgBox.setDefaultButton(QMessageBox::Cancel);
-    int result = msgBox.exec();
-
-    if (result == QMessageBox::Cancel)
+    if (has_netlist_unsaved_changes || has_python_editor_unsaved_changes)
     {
-        event->ignore();
-        return;
-    }*/
+        QMessageBox msgBox;
+        msgBox.setStyleSheet("QLabel{min-width: 600px;}");
+        auto cancelButton = msgBox.addButton("Cancel", QMessageBox::RejectRole);
+        msgBox.addButton("Close Anyway", QMessageBox::ApplyRole);
+        msgBox.setDefaultButton(cancelButton);
+        msgBox.setInformativeText("Are you sure you want to close the application ?");
+
+        if (has_netlist_unsaved_changes && has_python_editor_unsaved_changes)
+        {
+            msgBox.setText("Netlist and python scripts have been modified but not saved.");
+
+            QString detailed_text = "The following python scripts have not been saved:\n";
+
+            QStringList tab_names = m_content_manager->get_names_of_unsaved_python_tabs();
+
+            for (QString s : tab_names)
+                detailed_text.append("   ->  " + s + "\n");
+
+            msgBox.setDetailedText(detailed_text);
+        }
+        else if (has_python_editor_unsaved_changes)
+        {
+            msgBox.setText("Python scripts have been modified but not saved.");
+
+            QString detailed_text = "The following python scripts have not been saved:\n";
+
+            QStringList tab_names = m_content_manager->get_names_of_unsaved_python_tabs();
+
+            for (QString s : tab_names)
+                detailed_text.append("   ->  " + s + "\n");
+
+            msgBox.setDetailedText(detailed_text);
+        }
+        else
+        {
+            msgBox.setText("Netlist has been modified but not saved.");
+        }
+
+        for(const auto& button : msgBox.buttons())
+        {
+            // if (button->text() == "Show Details...")
+            if (msgBox.buttonRole(button) == QMessageBox::ActionRole)
+            {
+                button->click();
+                break;
+            }
+        }
+
+        msgBox.exec();
+
+        if (msgBox.clickedButton() == cancelButton)
+        {
+            event->ignore();
+            return;
+        }
+    }
 
     save_state();
     event->accept();

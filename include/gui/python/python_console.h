@@ -59,6 +59,8 @@ public:
 
     void handle_tab_key_pressed();
 
+    void insertAtEnd(const QString& text, QColor textColor);
+
 private:
     QColor m_prompt_color;
     QColor m_standard_color;

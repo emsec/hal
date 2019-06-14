@@ -57,6 +57,7 @@ public:
     void set_mode_button_text(const QString& text);
 
     void clear();
+    QString get_current_text();
 
     void repolish();
 

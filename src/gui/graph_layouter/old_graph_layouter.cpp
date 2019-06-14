@@ -102,11 +102,11 @@ void old_graph_layouter::layout_graph()
     {
         for (const auto& gate : sm->get_gates())
         {
-            handle_module_event(module_event_handler::event::gate_inserted, sm, gate->get_id());
+            handle_module_event(module_event_handler::event::gate_assigned, sm, gate->get_id());
         }
         for (const auto& net : sm->get_nets())
         {
-            handle_module_event(module_event_handler::event::net_inserted, sm, net->get_id());
+            handle_module_event(module_event_handler::event::net_assigned, sm, net->get_id());
         }
     }
 
@@ -506,12 +506,12 @@ void old_graph_layouter::handle_module_event(module_event_handler::event ev, std
         id_gui_gate_lookup[associated_data]->remove_module_color(module->get_id());
         m_scene->update();
     }
-    else if (ev == module_event_handler::event::gate_inserted)
+    else if (ev == module_event_handler::event::gate_assigned)
     {
         id_gui_gate_lookup[associated_data]->add_new_module_color(QColor::fromHsv((module->get_id() * 25) % 360, 255, 255), module->get_id());
         m_scene->update();
     }
-    else if (ev == module_event_handler::event::net_inserted)
+    else if (ev == module_event_handler::event::net_assigned)
     {
         id_gui_graph_net_lookup[associated_data]->add_new_module_color(QColor::fromHsv((module->get_id() * 25) % 360, 255, 255), module->get_id());
         m_scene->update();

@@ -1,3 +1,57 @@
+hal-reverse (1.0.21) bionic; urgency=medium
+
+  * Fixes in python editor
+  * Fixes in core (Closes issue #98 and #96)
+
+ -- Sebastian Wallat <sebastian.wallat@rub.de>  Thu, 13 Jun 2019 17:17:28 +0200
+
+hal-reverse (1.0.20) bionic; urgency=medium
+
+  * Added python editor tabs to have multiple documents open at the same time
+
+ -- Sebastian Wallat <sebastian.wallat@rub.de>  Thu, 06 Jun 2019 11:56:36 +0200
+
+hal-reverse (1.0.19) bionic; urgency=high
+
+  * Remove dirty flag from genversion.py
+  * Remove kernel.h dependency in include/gate_decorator_system/decorators/gate_decorator_bdd.h for plugin repositoriese
+
+ -- Sebastian Wallat <sebastian.wallat@rub.de>  Thu, 30 May 2019 21:45:18 +0200
+
+hal-reverse (1.0.18) bionic; urgency=high
+
+  * Fix un-indent of single line failing on specific cursor positions
+  * fixed bug in parsers: added a GLOBAL_GND instead of a GLOBAL_VCC gate
+
+ -- Sebastian Wallat <sebastian.wallat@rub.de>  Thu, 30 May 2019 19:44:48 +0200
+
+hal-reverse (1.0.17) bionic; urgency=medium
+
+  * Fixed correct python binding of data container and added documentation for it. Closes #78
+  * Rename add_net and insert_gate to assign_net and assign_gate in module class. Closes #85
+  * Fix cursor position upon stdout and stderr text output
+  * Fix build instructions for macOS and import of OpenMP
+  * fixxed documentation
+  * added new features to gate_decorator_bdd:       - generate truth table  - evaluate bdd
+  * python context is no longer printed before each script execution
+  * Hardcode returns from python editor
+  * Display prompt before closing application
+  * Added first issue templates
+
+ -- Sebastian Wallat <sebastian.wallat@rub.de>  Wed, 29 May 2019 14:52:07 +0200
+
+hal-reverse (1.0.16) bionic; urgency=high
+
+  * Allow changing parent module (#84)
+  * navigation expands the file-name-index when gui starts (#83)
+  * Feature/selection history (#82)
+  * Move to spdlog 1.3.1 (#80)
+  * new tool for generating new plugins (#81)
+  * Fixed homebrew install command in README.md
+  * Fixes for out of source plugin builds
+
+ -- Sebastian Wallat <sebastian.wallat@rub.de>  Thu, 23 May 2019 10:20:12 +0200
+
 hal-reverse (1.0.15) bionic; urgency=high
 
   * Fixed install include path of plugins

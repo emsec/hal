@@ -12,10 +12,9 @@
 
 #include "netlist/gate_library/gate_library_manager.h"
 
+#include "core/hal_file_manager.h"
 #include "core/log.h"
 
-#define RAPIDJSON_HAS_STDSTRING 1
-#include "rapidjson/document.h"
 #include "rapidjson/filereadstream.h"
 #include "rapidjson/stringbuffer.h"
 
@@ -39,7 +38,7 @@ namespace netlist_serializer
     // serializing functions
     namespace
     {
-        const int SERIALIZON_FORMAT_VERSION = 1;
+        const int SERIALIZON_FORMAT_VERSION = 2;
 
 #define JSON_STR_HELPER(x) rapidjson::Value{}.SetString(x.c_str(), x.length(), allocator)
         rapidjson::Value serialize(std::map<std::tuple<std::string, std::string>, std::tuple<std::string, std::string>> data, rapidjson::Document::AllocatorType& allocator)
@@ -145,14 +144,13 @@ namespace netlist_serializer
         void serialize(std::shared_ptr<netlist> nl, rapidjson::Document& document)
         {
             rapidjson::Document::AllocatorType& allocator = document.GetAllocator();
+            rapidjson::Value root(rapidjson::kObjectType);
 
-            document.AddMember("serialization_format_version", SERIALIZON_FORMAT_VERSION, allocator);
-
-            document.AddMember("gate_library", nl->get_gate_library()->get_name(), allocator);
-            document.AddMember("id", nl->get_id(), allocator);
-            document.AddMember("input_file", nl->get_input_filename().string(), allocator);
-            document.AddMember("design_name", nl->get_design_name(), allocator);
-            document.AddMember("device_name", nl->get_device_name(), allocator);
+            root.AddMember("gate_library", nl->get_gate_library()->get_name(), allocator);
+            root.AddMember("id", nl->get_id(), allocator);
+            root.AddMember("input_file", nl->get_input_filename().string(), allocator);
+            root.AddMember("design_name", nl->get_design_name(), allocator);
+            root.AddMember("device_name", nl->get_device_name(), allocator);
 
             {
                 rapidjson::Value gates(rapidjson::kArrayType);
@@ -173,9 +171,9 @@ namespace netlist_serializer
                         global_vccs.PushBack(gate->get_id(), allocator);
                     }
                 }
-                document.AddMember("gates", gates, allocator);
-                document.AddMember("global_vcc", global_vccs, allocator);
-                document.AddMember("global_gnd", global_gnds, allocator);
+                root.AddMember("gates", gates, allocator);
+                root.AddMember("global_vcc", global_vccs, allocator);
+                root.AddMember("global_gnd", global_gnds, allocator);
             }
             {
                 rapidjson::Value nets(rapidjson::kArrayType);
@@ -201,10 +199,10 @@ namespace netlist_serializer
                         global_inout.PushBack(net->get_id(), allocator);
                     }
                 }
-                document.AddMember("nets", nets, allocator);
-                document.AddMember("global_in", global_in, allocator);
-                document.AddMember("global_out", global_out, allocator);
-                document.AddMember("global_inout", global_inout, allocator);
+                root.AddMember("nets", nets, allocator);
+                root.AddMember("global_in", global_in, allocator);
+                root.AddMember("global_out", global_out, allocator);
+                root.AddMember("global_inout", global_inout, allocator);
             }
             {
                 rapidjson::Value modules(rapidjson::kArrayType);
@@ -218,14 +216,18 @@ namespace netlist_serializer
                 {
                     modules.PushBack(serialize(module, allocator), allocator);
                 }
-                document.AddMember("modules", modules, allocator);
+                root.AddMember("modules", modules, allocator);
             }
+
+            document.AddMember("netlist", root, document.GetAllocator());
         }
     }    // namespace
 
     // deserializing functions
     namespace
     {
+        #define assert_availablility(MEMBER) if (!root.HasMember(MEMBER)) {log_critical("netlist.persistent", "'netlist' node does not include a '{}' node", MEMBER); return nullptr; }
+
         endpoint deserialize_endpoint(std::shared_ptr<netlist> nl, const rapidjson::Value& val)
         {
             return {nl->get_gate_by_id(val["gate_id"].GetUint()), val["pin_type"].GetString()};
@@ -289,12 +291,12 @@ namespace netlist_serializer
 
             for (const auto& gate_node : val["gates"].GetArray())
             {
-                sm->insert_gate(nl->get_gate_by_id(gate_node.GetUint()));
+                sm->assign_gate(nl->get_gate_by_id(gate_node.GetUint()));
             }
 
             for (const auto& net_node : val["nets"].GetArray())
             {
-                sm->insert_net(nl->get_net_by_id(net_node.GetUint()));
+                sm->assign_net(nl->get_net_by_id(net_node.GetUint()));
             }
 
             deserialize_data(sm, val["data"]);
@@ -303,67 +305,85 @@ namespace netlist_serializer
 
         std::shared_ptr<netlist> deserialize(const rapidjson::Document& document)
         {
-            auto lib = gate_library_manager::get_gate_library(document["gate_library"].GetString());
-            if (lib == nullptr)
+            if (!document.HasMember("netlist"))
             {
-                log_critical("netlist.persistent", "error loading gate library '{}'.", document["gate_library"].GetString());
+                log_critical("netlist.persistent", "file does not include a 'netlist' node");
                 return nullptr;
             }
+            auto root = document["netlist"].GetObject();
+            assert_availablility("gate_library");
 
-            u32 encoded_version = document["serialization_format_version"].GetUint();
-            if (encoded_version < SERIALIZON_FORMAT_VERSION)
+            auto lib  = gate_library_manager::get_gate_library(root["gate_library"].GetString());
+            if (lib == nullptr)
             {
-                log_warning("netlist.persistent", "the netlist was serialized with an older version of the serializer, deserialization may contain errors.");
-            }
-            else if (encoded_version > SERIALIZON_FORMAT_VERSION)
-            {
-                log_warning("netlist.persistent", "the netlist was serialized with a newer version of the serializer, deserialization may contain errors.");
+                log_critical("netlist.persistent", "error loading gate library '{}'.", root["gate_library"].GetString());
+                return nullptr;
             }
 
             std::shared_ptr<netlist> nl = std::make_shared<netlist>(lib);
 
-            nl->set_id(document["id"].GetUint());
-            nl->set_input_filename(document["input_file"].GetString());
-            nl->set_design_name(document["design_name"].GetString());
-            nl->set_device_name(document["device_name"].GetString());
+            assert_availablility("id");
+            nl->set_id(root["id"].GetUint());
 
-            for (const auto& gate_node : document["gates"].GetArray())
+            assert_availablility("input_file");
+            nl->set_input_filename(root["input_file"].GetString());
+
+            assert_availablility("design_name");
+            nl->set_design_name(root["design_name"].GetString());
+
+            assert_availablility("device_name");
+            nl->set_device_name(root["device_name"].GetString());
+
+            assert_availablility("gates");
+            for (const auto& gate_node : root["gates"].GetArray())
             {
                 if (!deserialize_gate(nl, gate_node))
                 {
                     return nullptr;
                 }
             }
-            for (const auto& gate_node : document["global_vcc"].GetArray())
+
+            assert_availablility("global_vcc");
+            for (const auto& gate_node : root["global_vcc"].GetArray())
             {
                 nl->mark_global_vcc_gate(nl->get_gate_by_id(gate_node.GetUint()));
             }
-            for (const auto& gate_node : document["global_gnd"].GetArray())
+
+            assert_availablility("global_gnd");
+            for (const auto& gate_node : root["global_gnd"].GetArray())
             {
                 nl->mark_global_gnd_gate(nl->get_gate_by_id(gate_node.GetUint()));
             }
 
-            for (const auto& net_node : document["nets"].GetArray())
+            assert_availablility("nets");
+            for (const auto& net_node : root["nets"].GetArray())
             {
                 if (!deserialize_net(nl, net_node))
                 {
                     return nullptr;
                 }
             }
-            for (const auto& net_node : document["global_in"].GetArray())
+
+            assert_availablility("global_in");
+            for (const auto& net_node : root["global_in"].GetArray())
             {
                 nl->mark_global_input_net(nl->get_net_by_id(net_node.GetUint()));
             }
-            for (const auto& net_node : document["global_out"].GetArray())
+
+            assert_availablility("global_out");
+            for (const auto& net_node : root["global_out"].GetArray())
             {
                 nl->mark_global_output_net(nl->get_net_by_id(net_node.GetUint()));
             }
-            for (const auto& net_node : document["global_inout"].GetArray())
+
+            assert_availablility("global_inout");
+            for (const auto& net_node : root["global_inout"].GetArray())
             {
                 nl->mark_global_inout_net(nl->get_net_by_id(net_node.GetUint()));
             }
 
-            for (const auto& module_node : document["modules"].GetArray())
+            assert_availablility("modules");
+            for (const auto& module_node : root["modules"].GetArray())
             {
                 if (!deserialize_module(nl, module_node))
                 {
@@ -374,24 +394,6 @@ namespace netlist_serializer
             return nl;
         }
     }    // namespace
-
-    std::string serialize_to_string(std::shared_ptr<netlist> nl)
-    {
-        rapidjson::Document document;
-        document.SetObject();
-
-        serialize(nl, document);
-
-        rapidjson::StringBuffer strbuf;
-#if PRETTY_JSON_OUTPUT == 1
-        rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(strbuf);
-#else
-        rapidjson::Writer<rapidjson::StringBuffer> writer(strbuf);
-#endif
-        document.Accept(writer);
-
-        return strbuf.GetString();
-    }
 
     bool serialize_to_file(std::shared_ptr<netlist> nl, const hal::path& hal_file)
     {
@@ -405,39 +407,34 @@ namespace netlist_serializer
             return false;
         }
 
-        hal_file_stream << serialize_to_string(nl);
+        rapidjson::Document document;
+        document.SetObject();
+
+        document.AddMember("serialization_format_version", SERIALIZON_FORMAT_VERSION, document.GetAllocator());
+
+        serialize(nl, document);
+
+        if (!hal_file_manager::serialize(hal_file, nl, document))
+        {
+            log_info("netlist.persistent", "serialization failed");
+            return false;
+        }
+
+        rapidjson::StringBuffer strbuf;
+#if PRETTY_JSON_OUTPUT == 1
+        rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(strbuf);
+#else
+        rapidjson::Writer<rapidjson::StringBuffer> writer(strbuf);
+#endif
+        document.Accept(writer);
+
+        hal_file_stream << strbuf.GetString();
 
         hal_file_stream.close();
 
         log_info("netlist.persistent", "serialized netlist in {:2.2f} seconds", DURATION(begin_time));
 
         return true;
-    }
-
-    std::shared_ptr<netlist> deserialize_from_string(const std::string& data)
-    {
-        netlist_event_handler::enable(false);
-        gate_event_handler::enable(false);
-        net_event_handler::enable(false);
-        module_event_handler::enable(false);
-
-        rapidjson::Document document;
-
-        document.Parse(data);
-
-        if (document.HasParseError())
-        {
-            log_error("netlist.persistent", "invalid json string for deserialization");
-            return nullptr;
-        }
-
-        std::shared_ptr<netlist> netlist = deserialize(document);
-
-        netlist_event_handler::enable(true);
-        gate_event_handler::enable(true);
-        net_event_handler::enable(true);
-        module_event_handler::enable(true);
-        return netlist;
     }
 
     std::shared_ptr<netlist> deserialize_from_file(const hal::path& hal_file)
@@ -460,15 +457,38 @@ namespace netlist_serializer
         rapidjson::FileReadStream is(pFile, buffer, sizeof(buffer));
         rapidjson::Document document;
         document.ParseStream<0, rapidjson::UTF8<>, rapidjson::FileReadStream>(is);
+        fclose(pFile);
+
         if (document.HasParseError())
         {
             log_error("netlist.persistent", "invalid json string for deserialization");
             return nullptr;
         }
 
+        if (document.HasMember("serialization_format_version"))
+        {
+            u32 encoded_version = document["serialization_format_version"].GetUint();
+            if (encoded_version < SERIALIZON_FORMAT_VERSION)
+            {
+                log_warning("netlist.persistent", "the netlist was serialized with an older version of the serializer, deserialization may contain errors.");
+            }
+            else if (encoded_version > SERIALIZON_FORMAT_VERSION)
+            {
+                log_warning("netlist.persistent", "the netlist was serialized with a newer version of the serializer, deserialization may contain errors.");
+            }
+        }
+        else
+        {
+            log_warning("netlist.persistent", "the netlist was serialized with an older version of the serializer, deserialization may contain errors.");
+        }
+
         std::shared_ptr<netlist> netlist = deserialize(document);
 
-        fclose(pFile);
+        if (!hal_file_manager::deserialize(hal_file, netlist, document))
+        {
+            log_info("netlist.persistent", "deserialization failed");
+            return nullptr;
+        }
 
         netlist_event_handler::enable(true);
         gate_event_handler::enable(true);
