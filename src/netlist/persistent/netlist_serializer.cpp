@@ -18,7 +18,7 @@
 #include "rapidjson/filereadstream.h"
 #include "rapidjson/stringbuffer.h"
 
-#define PRETTY_JSON_OUTPUT 1
+#define PRETTY_JSON_OUTPUT 0
 #if PRETTY_JSON_OUTPUT == 1
 #include "rapidjson/prettywriter.h"
 #else

@@ -75,6 +75,11 @@ public:
      */
     void add_callback(const std::string& name, const std::function<R(ArgTypes...)>& callback)
     {
+        auto it = m_name_to_id_map.find(name);
+        if (it != m_name_to_id_map.end())
+        {
+            remove_callback(it->second);
+        }
         m_name_to_id_map[name] = add_callback(callback);
     }
 
