@@ -1,3 +1,10 @@
+hal-reverse (1.0.21) bionic; urgency=medium
+
+  * Fixes in python editor
+  * Fixes in core (Closes issue #98 and #96)
+
+ -- Sebastian Wallat <sebastian.wallat@rub.de>  Thu, 13 Jun 2019 17:17:28 +0200
+
 hal-reverse (1.0.20) bionic; urgency=medium
 
   * Added python editor tabs to have multiple documents open at the same time
