@@ -62,12 +62,14 @@ namespace hal
 
 #if defined(_MSC_VER)
 /* Microsoft */
-#define EXPORT extern "C" __declspec(dllexport)
+#define EXPORT __declspec(dllexport)
 #define IMPORT __declspec(dllimport)
 #else
 /* other */
-#define EXPORT extern "C" __attribute__((visibility("default")))
-#define IMPORT __attribute__((visibility("default")))
+#define EXPORTED __attribute__((visibility("default")))
+#define NOT_EXPORTED __attribute__((visibility("hidden")))
+#define PROTECTED  __attribute__((visibility("protected")))
+#define INTERNAL  __attribute__((visibility("internal")))
 #endif
 
 #if defined(__clang__)

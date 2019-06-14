@@ -25,15 +25,15 @@
 #ifndef __ARCH_UNIX_H__
 #define __ARCH_UNIX_H__
 
-#define CORE_API
+#define CORE_API EXPORTED
 
-#define NETLIST_API
+#define NETLIST_API EXPORTED
 
-#define HDL_PARSER_API
+#define HDL_PARSER_API EXPORTED
 
-#define HDL_FILE_WRITER_API
+#define HDL_FILE_WRITER_API EXPORTED
 
-#define PLUGIN_API
+#define PLUGIN_API EXPORTED
 
 #define LIBRARY_FILE_EXTENSION "so"
 
