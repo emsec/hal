@@ -1536,8 +1536,31 @@ TEST_F(hdl_parser_vhdl_test, check_invalid_input)
                                     "end STRUCTURE;");
             hdl_parser_vhdl vhdl_parser(input);
             std::shared_ptr<netlist> nl = vhdl_parser.parse(g_lib_name);
-            ASSERT_EQ(nl, nullptr);
+            EXPECT_EQ(nl, nullptr);
         }
+        /*{ // TODO: Fails without error message (should work...)
+            // Leave the 'port map' block empty (gate is not connected)
+            NO_COUT_TEST_BLOCK;
+            std::stringstream input("-- Device\t: device_name\n"
+                                    "entity TEST_Comp is\n"
+                                    "  port (\n"
+                                    "    net_global_inout : inout STD_LOGIC := 'X';\n"
+                                    "  );\n"
+                                    "end TEST_Comp;\n"
+                                    "architecture STRUCTURE of TEST_Comp is\n"
+                                    "begin\n"
+                                    "  gate_0 : INV\n"
+                                    "    port map (\n"
+                                    "    );\n"
+                                    "end STRUCTURE;");
+            hdl_parser_vhdl vhdl_parser(input);
+            std::shared_ptr<netlist> nl = vhdl_parser.parse(g_lib_name);
+            ASSERT_NE(nl, nullptr);
+            ASSERT_FALSE(nl->get_gates("INV", "gate_0").empty());
+            std::shared_ptr<gate> gate_0 = *nl->get_gates("INV", "gate_0").begin();
+            EXPECT_TRUE(gate_0->get_fan_out_nets().empty());
+            EXPECT_TRUE(gate_0->get_fan_in_nets().empty());
+        }*/
         /*{ TODO: Fails because of mistype issue line 108: (inout_pin_type.end() <-> input_pin_type.end())
             // Try to connect to a pin, which does not exist
             //NO_COUT_TEST_BLOCK;
