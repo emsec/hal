@@ -397,9 +397,9 @@ TEST_F(netlist_serializer_test, check_serialize_and_deserialize){
 
             // Add a module
             std::shared_ptr<module> test_m = nl->create_module(MIN_MODULE_ID+1, "test_type", nl->get_top_module());
-            test_m->insert_gate(nl->get_gate_by_id(MIN_GATE_ID+1));
-            test_m->insert_gate(nl->get_gate_by_id(MIN_GATE_ID+2));
-            test_m->insert_net(nl->get_net_by_id(MIN_GATE_ID+13));
+            test_m->assign_gate(nl->get_gate_by_id(MIN_GATE_ID+1));
+            test_m->assign_gate(nl->get_gate_by_id(MIN_GATE_ID+2));
+            test_m->assign_net(nl->get_net_by_id(MIN_GATE_ID+13));
 
             // Store some data in a gate, net and module
             nl->get_gate_by_id(MIN_GATE_ID+1)->set_data("category_0", "key_0", "data_type", "test_value");
@@ -421,8 +421,6 @@ TEST_F(netlist_serializer_test, check_serialize_and_deserialize){
             test_def::capture_stdout();
             bool suc                        = netlist_serializer::serialize_to_file(nl, test_hal_file_path);
             std::shared_ptr<netlist> des_nl = netlist_serializer::deserialize_from_file(test_hal_file_path);
-            // Deserialize it from a string too
-            std::shared_ptr<netlist> des_from_string_nl = netlist_serializer::deserialize_from_string(file_to_string(test_hal_file_path.string()));
 
             test_def::get_captured_stdout();
 
@@ -488,9 +486,6 @@ TEST_F(netlist_serializer_test, check_serialize_and_deserialize){
                 EXPECT_TRUE(modules_are_equal(m_0, des_nl->get_module_by_id(m_0->get_id())));
             }
 
-            // Checks if the deserialized netlists (from file and from string) are equal too
-            EXPECT_TRUE(netlists_are_equal(des_nl,des_from_string_nl));
-
         }
         {
             // Serialize and deserialize an empty netlist and compare the result with the original netlist
@@ -537,14 +532,7 @@ TEST_F(netlist_serializer_test, check_serialize_and_deserialize_negative)
             EXPECT_EQ(des_nl, nullptr);
         }
         {
-            // Deserialize invalid input (from string)
-            NO_COUT_TEST_BLOCK;
-            std::shared_ptr<netlist> nl     = create_example_netlist(0);
-            std::shared_ptr<netlist> des_nl = netlist_serializer::deserialize_from_string("I h4ve no JSON f0rmat!!!");
-            EXPECT_EQ(des_nl, nullptr);
-        }
-        {
-            // Deserialize invalid input (from file)
+            // Deserialize invalid input
             NO_COUT_TEST_BLOCK;
             std::shared_ptr<netlist> nl     = create_example_netlist(0);
             std::ofstream myfile;
