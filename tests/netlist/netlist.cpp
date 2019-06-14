@@ -952,7 +952,7 @@ TEST_START
     std::shared_ptr<netlist> nl = create_example_netlist();
     // The expected result
     std::set<std::shared_ptr<net>> ex_nets;
-    for (int id : std::set<int>({MIN_NET_ID+13, MIN_NET_ID+30, MIN_NET_ID+20, MIN_NET_ID+045, MIN_NET_ID+78}))
+    for (int id : std::set<int>({(int) MIN_NET_ID+13, (int) MIN_NET_ID+30,(int) MIN_NET_ID+20, (int) MIN_NET_ID+045, (int) MIN_NET_ID+78}))
     {
         ex_nets.insert(nl->get_net_by_id(id));
     }
@@ -1327,9 +1327,9 @@ TEST_END
 
 /***************************************************
  *               Module Functions
- *************************************************** /
+ ***************************************************/
 
- /**
+/**
  * Testing the get_top_module function
  *
  * Functions: get_top_module
@@ -1497,8 +1497,8 @@ TEST_F(netlist_test, check_delete_module)
             // Add a net and a gate to the test_module
             std::shared_ptr<gate> gate_0 = nl->create_gate("INV", "gate_0");
             std::shared_ptr<net> net_0 = nl->create_net("net_0");
-            test_module->insert_gate(gate_0);
-            test_module->insert_net(net_0);
+            test_module->assign_gate(gate_0);
+            test_module->assign_net(net_0);
 
             nl->delete_module(test_module);
 
