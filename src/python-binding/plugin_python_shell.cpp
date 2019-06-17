@@ -2,6 +2,7 @@
 
 #include "core/program_arguments.h"
 #include "core/utils.h"
+#include "def.h"
 
 #include <Python.h>
 #include <cstring>
@@ -53,5 +54,5 @@ bool plugin_python_shell::exec(program_arguments& args)
     for (int j = 0; j < argc_new; ++j)
         std::free(argv_new[j]);
     std::free(argv_new);
-    return true;
+    return 0;
 }

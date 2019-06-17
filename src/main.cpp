@@ -77,7 +77,7 @@ int redirect_control_to_interactive_ui(const std::string &name, program_argument
     ui->initialize_logging();
     auto ret = ui->exec(args);
     log_info("core", "Closing {}.", name);
-    return (ret) ? SUCCESS : ERROR;
+    return ret;
 }
 
 int cleanup(std::shared_ptr<netlist> const g = nullptr)
@@ -121,12 +121,16 @@ int main(int argc, const char *argv[])
 #ifdef WITH_GUI
     if (args.is_option_set("--gui"))
     {
-        return redirect_control_to_interactive_ui("hal_gui", args);
+        auto r = redirect_control_to_interactive_ui("hal_gui", args);
+        cleanup();
+        return r;
     }
 #endif
     if (args.is_option_set("--python"))
     {
-        return redirect_control_to_interactive_ui("hal_python", args);
+        auto r = redirect_control_to_interactive_ui("hal_python", args);
+        cleanup();
+        return r;
     }
     UNUSED(redirect_control_to_interactive_ui);    // in case neither gui nor python is defined
     

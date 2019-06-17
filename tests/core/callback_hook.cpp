@@ -10,6 +10,8 @@ typedef std::function<std::string(std::string)> test_function;
 typedef callback_hook<void(int&)> sum_up_hook;
 typedef std::function<void(int&)> add_function;
 
+#define CALLBACK_HOOK_MIN_IDX 0x1
+
 class callback_hook_test : public ::testing::Test
 {
 protected:
@@ -75,39 +77,39 @@ TEST_F(callback_hook_test, check_add_callbacks_id){TEST_START
 
                                                    {// Adds two hooks and calls them
                                                     {test_hook c_hook;
-c_hook.add_callback(test_func_0, (u64)0);
-c_hook.add_callback(test_func_1, (u64)1);
+c_hook.add_callback(test_func_0, (u64) CALLBACK_HOOK_MIN_IDX);
+c_hook.add_callback(test_func_1, (u64) CALLBACK_HOOK_MIN_IDX+1);
 
-EXPECT_EQ(c_hook.call(0, "test"), "0_test");
-EXPECT_EQ(c_hook.call(1, "test"), "1_test");
+EXPECT_EQ(c_hook.call(CALLBACK_HOOK_MIN_IDX, "test"), "0_test");
+EXPECT_EQ(c_hook.call(CALLBACK_HOOK_MIN_IDX+1, "test"), "1_test");
 EXPECT_EQ(c_hook.size(), (size_t)2);
-EXPECT_TRUE(c_hook.is_callback_registered(0));
-EXPECT_TRUE(c_hook.is_callback_registered(1));
-EXPECT_FALSE(c_hook.is_callback_registered(2));
+EXPECT_TRUE(c_hook.is_callback_registered(CALLBACK_HOOK_MIN_IDX));
+EXPECT_TRUE(c_hook.is_callback_registered(CALLBACK_HOOK_MIN_IDX+1));
+EXPECT_FALSE(c_hook.is_callback_registered(CALLBACK_HOOK_MIN_IDX+2));
 }
 {
     // Adds two hooks, but the second one without id
     test_hook c_hook;
-    c_hook.add_callback(test_func_0, (u64)0);
+    c_hook.add_callback(test_func_0, (u64) CALLBACK_HOOK_MIN_IDX);
     c_hook.add_callback(test_func_1);
 
-    EXPECT_EQ(c_hook.call(0, "test"), "0_test");
-    EXPECT_EQ(c_hook.call(1, "test"), "1_test");
+    EXPECT_EQ(c_hook.call(CALLBACK_HOOK_MIN_IDX, "test"), "0_test");
+    EXPECT_EQ(c_hook.call(CALLBACK_HOOK_MIN_IDX+1, "test"), "1_test");
     EXPECT_EQ(c_hook.size(), (size_t)2);
-    EXPECT_TRUE(c_hook.is_callback_registered(0));
-    EXPECT_TRUE(c_hook.is_callback_registered(1));
-    EXPECT_FALSE(c_hook.is_callback_registered(2));
+    EXPECT_TRUE(c_hook.is_callback_registered(CALLBACK_HOOK_MIN_IDX));
+    EXPECT_TRUE(c_hook.is_callback_registered(CALLBACK_HOOK_MIN_IDX+1));
+    EXPECT_FALSE(c_hook.is_callback_registered(CALLBACK_HOOK_MIN_IDX+2));
 }
 }
 {
     // Overwrites the first hook with the second one
     test_hook c_hook;
-    c_hook.add_callback(test_func_0, (u64)0);
-    c_hook.add_callback(test_func_1, (u64)0);
+    c_hook.add_callback(test_func_0, (u64)CALLBACK_HOOK_MIN_IDX);
+    c_hook.add_callback(test_func_1, (u64)CALLBACK_HOOK_MIN_IDX);
 
     EXPECT_EQ(c_hook.size(), (size_t)1);
-    EXPECT_EQ(c_hook.call(0, "test"), "1_test");
-    EXPECT_TRUE(c_hook.is_callback_registered(0));
+    EXPECT_EQ(c_hook.call(CALLBACK_HOOK_MIN_IDX, "test"), "1_test");
+    EXPECT_TRUE(c_hook.is_callback_registered(CALLBACK_HOOK_MIN_IDX));
 }
 
 // ########################
@@ -117,7 +119,7 @@ EXPECT_FALSE(c_hook.is_callback_registered(2));
 {
     // Try to call a callback with an unknown id
     test_hook c_hook;
-    c_hook.add_callback(test_func_0, (u64)0);
+    c_hook.add_callback(test_func_0, (u64)CALLBACK_HOOK_MIN_IDX);
 
     EXPECT_EQ(c_hook.call(123, "test"), "");
 }
@@ -192,10 +194,10 @@ TEST_F(callback_hook_test, check_remove_callback){TEST_START
                                                   // ########################
                                                   {// Remove an existing callback (id)
                                                    test_hook c_hook;
-c_hook.add_callback(test_func_0, 0);
-c_hook.remove_callback(0);
+c_hook.add_callback(test_func_0, CALLBACK_HOOK_MIN_IDX);
+c_hook.remove_callback(CALLBACK_HOOK_MIN_IDX);
 
-EXPECT_FALSE(c_hook.is_callback_registered(0));
+EXPECT_FALSE(c_hook.is_callback_registered(CALLBACK_HOOK_MIN_IDX));
 EXPECT_EQ(c_hook.size(), (size_t)0);
 }
 {
@@ -248,8 +250,8 @@ TEST_F(callback_hook_test, check_bracket_operator)
     {
         // Sums up 2,5 and 7 via callback_hooks
         sum_up_hook sum_hook;
-        sum_hook.add_callback(add_2_func, 0);
-        sum_hook.add_callback(add_5_func, 1);
+        sum_hook.add_callback(add_2_func, CALLBACK_HOOK_MIN_IDX);
+        sum_hook.add_callback(add_5_func, CALLBACK_HOOK_MIN_IDX+1);
         sum_hook.add_callback("id_2", add_7_func);
 
         int res = 0;
