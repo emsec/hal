@@ -60,14 +60,14 @@ FACTORY_H_TEMPLATE = """#ifndef __HAL_FACTORY_##UPPER##_H__
 
 #include "core/interface_factory.h"
 
-class factory_##LOWER## : public i_factory
+class PLUGIN_API factory_##LOWER## : public i_factory
 {
 public:
     /** interface implementation: i_factory */
     std::shared_ptr<i_base> get_plugin_instance() override;
 };
 
-EXPORT i_factory* get_factory();
+extern "C" PLUGIN_API i_factory* get_factory();
 
 #endif /* __HAL_FACTORY_##UPPER##_H__ */
 """
@@ -98,7 +98,7 @@ PLUGIN_H_TEMPLATE = """#ifndef __PLUGIN_##UPPER##_H__
 
 #include "core/interface_base.h"
 
-class plugin_##LOWER## : virtual public i_base
+class PLUGIN_API plugin_##LOWER## : virtual public i_base
 {
 public:
 
