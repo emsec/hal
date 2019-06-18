@@ -498,10 +498,6 @@ bool hdl_parser_vhdl::parse_instance(std::string instance)
             auto value                = core_utils::trim(line.substr(line.find("=>") + 2));
             auto value_stripped       = core_utils::trim(value.substr(1, value.length() - 1));
             auto bit_vector_candidate = core_utils::trim(core_utils::replace(value_stripped, "_", ""));
-            if (value.back() == ',')
-            {
-                value.pop_back();
-            }
 
             // determine data type
             auto data_type = std::string();
