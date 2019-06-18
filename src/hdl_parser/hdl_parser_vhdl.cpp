@@ -498,10 +498,6 @@ bool hdl_parser_vhdl::parse_instance(std::string instance)
             auto value                = core_utils::trim(line.substr(line.find("=>") + 2));
             auto value_stripped       = core_utils::trim(value.substr(1, value.length() - 1));
             auto bit_vector_candidate = core_utils::trim(core_utils::replace(value_stripped, "_", ""));
-            if (value.back() == ',')
-            {
-                value.pop_back();
-            }
 
             // determine data type
             auto data_type = std::string();
@@ -531,7 +527,7 @@ bool hdl_parser_vhdl::parse_instance(std::string instance)
                 value     = value.substr(1, value.size() - 2);
                 data_type = "bit_value";
             }
-            else if ((value[0] == '\"' && value.back() == '\"') || ((value[0] == 'X' || value[0] == 'B' || value[0] == 'O') && value[1] == '\"' && value.back() == '\"'))
+            else if ((value[0] == 'D' || value[0] == 'X' || value[0] == 'B' || value[0] == 'O') && value[1] == '\"' && value.back() == '\"')
             {
                 value     = get_hex_from_number_literal(value);
                 data_type = "bit_vector";
@@ -605,7 +601,7 @@ bool hdl_parser_vhdl::parse_instance(std::string instance)
 
             // add net src/dst by pin types
 
-            if ((std::find(input_pin_types.begin(), input_pin_types.end(), pin) == inout_pin_types.end())
+            if ((std::find(input_pin_types.begin(), input_pin_types.end(), pin) == input_pin_types.end())
                 && (std::find(output_pin_types.begin(), output_pin_types.end(), pin) == output_pin_types.end())
                 && (std::find(inout_pin_types.begin(), inout_pin_types.end(), pin) == inout_pin_types.end()))
             {
@@ -647,10 +643,10 @@ std::string hdl_parser_vhdl::get_hex_from_number_literal(const std::string& v)
     }
     // Conversion required
     int radix = 10;
-    if (core_utils::starts_with(value, "\"") || core_utils::starts_with(value, "\'"))
+    if (core_utils::starts_with(value, "D\""))
     {
         radix = 10;
-        value = value.substr(1);
+        value = value.substr(2);
     }
     if (core_utils::starts_with(value, "B\""))
     {
