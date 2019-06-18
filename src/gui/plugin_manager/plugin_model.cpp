@@ -7,16 +7,21 @@
 #include <QMimeData>
 #include <functional>
 
-plugin_model::plugin_model(QObject* parent) : QAbstractItemModel(parent)
+plugin_model::plugin_model(QObject* parent) : QAbstractItemModel(parent), model_changed_callback_id(CALLBACK_HOOK_INVALID_IDX)
 {
     for (auto item : plugin_item::get_column_description())
     {
         m_columns.append(item.first);
     }
-    plugin_manager::add_model_changed_callback(std::bind(&plugin_model::plugin_manager_callback, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
+    model_changed_callback_id = plugin_manager::add_model_changed_callback(std::bind(&plugin_model::plugin_manager_callback, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
     connect(this, &plugin_model::load_plugin, this, &plugin_model::handle_load_plugin);
     connect(this, &plugin_model::unload_plugin, this, &plugin_model::handle_unload_plugin);
     plugin_manager::load_all_plugins();
+}
+
+plugin_model::~plugin_model()
+{
+    plugin_manager::remove_model_changed_callback(model_changed_callback_id);
 }
 
 bool plugin_model::is_valid_index(const QModelIndex& idx)

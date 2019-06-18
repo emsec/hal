@@ -32,7 +32,7 @@
 #include <set>
 #include <string>
 
-#define CALLBACK_HOOK_INVALID_IDX 0xffffffffffffffff
+#define CALLBACK_HOOK_INVALID_IDX 0x0
 
 template<class>
 class callback_hook;
@@ -56,7 +56,7 @@ public:
     {
         if (id == CALLBACK_HOOK_INVALID_IDX)
         {
-            id = 0;
+            id = 1;
             while (m_callbacks.find(id) != m_callbacks.end())
             {
                 ++id;
