@@ -59,6 +59,7 @@ private Q_SLOTS:
 private:
     file_manager(QObject* parent = nullptr);
     void update_recent_files(const QString& file);
+    void display_error_message(QString error_message);
 
     QString m_file_name;
     QFileSystemWatcher* m_file_watcher;
