@@ -1642,6 +1642,15 @@ Creates a human-readable string for a bdd.
 :returns: The string representation:
 :rtype: str
 )")
+        .def_static("evaluate_bdd", py::overload_cast<std::shared_ptr<bdd>, const std::map<int, bool>& >(&gate_decorator_bdd::evaluate_bdd), py::arg("bdd"), py::arg("input_configuration"), R"(
+Creates a human-readable string for a bdd.
+:param bdd: The bdd to represent.
+:type bdd: hal_py.bdd
+:param bdd: Input configuration to evaluate.
+:type bdd: dict[int, bool]
+:returns: Evaluation of the configuration for the bdd:
+:rtype: bool
+)")
         .def_static("get_bdd_clauses", &gate_decorator_bdd::get_bdd_clauses, py::arg("bdd"), R"(
 Turn the bdd into a list of clauses.
 
