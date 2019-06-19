@@ -139,8 +139,16 @@ namespace plugin_manager
      * * bool:True = load, false = unload.
      * * std::string - The plugin name.
      * * std::string - The plugin path.
+     * @returns The id of the registered callback.
     */
-    void add_model_changed_callback(std::function<void(bool, std::string const&, std::string const&)> callback);
+    u64 add_model_changed_callback(std::function<void(bool, std::string const&, std::string const&)> callback);
+    
+    /**
+     * Remove a registered callback.
+     *
+     * @param[in] id - The id of the registered callback.
+    */
+    void remove_model_changed_callback(u64 id);
 }    // namespace plugin_manager
 
 #endif /* __HAL_PLUGIN_MANAGER_H__ */

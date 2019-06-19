@@ -126,7 +126,8 @@ bool plugin_gui::exec(program_arguments& args)
     main_window w;
     file_manager::get_instance()->handle_program_arguments(args);
     w.show();
-    return a.exec();
+    auto ret = a.exec();
+    return ret;
 }
 
 std::string plugin_gui::get_name()

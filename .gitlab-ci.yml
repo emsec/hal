@@ -199,6 +199,7 @@ test:ubuntu:
     - export CCACHE_DIR=$(pwd)/../ccache
     - cmake --build . --target all --clean-first -- -j4
     - ninja hal_coverage
+    - bash <(curl -s https://codecov.io/bash) -f hal_coverage.info.cleaned || echo "Codecov did not collect coverage reports"
   artifacts:
     paths:
       - build/gtestresult*
@@ -227,6 +228,7 @@ test:macos:
     - cmake -G Ninja .. -DCMAKE_BUILD_TYPE=MinSizeRel -DBUILD_ALL_PLUGINS=ON -DBUILD_TESTS=ON -DBUILD_COVERAGE=ON -DWITH_GUI=ON -DBUILD_DOCUMENTATION=ON -DCMAKE_INSTALL_PREFIX=/usr/ -DCMAKE_C_COMPILER=/usr/local/opt/llvm/bin/clang -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm/bin/clang++
     - cmake --build . --target all --clean-first -- -j4
     - ninja hal_coverage
+    - bash <(curl -s https://codecov.io/bash) -f hal_coverage.info.cleaned || echo "Codecov did not collect coverage reports"
   artifacts:
     paths:
       - build/gtestresult*
