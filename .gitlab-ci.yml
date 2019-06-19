@@ -200,7 +200,7 @@ test:ubuntu:
     - cmake --build . --target all --clean-first -- -j4
     - ninja hal_coverage
     - bash <(curl -s https://codecov.io/bash) -f hal_coverage.info.cleaned || echo "Codecov did not collect coverage reports"
-    - curl -s https://report.ci/upload.py | python - --include='*.xml' --framework=gtest
+#    - curl -s https://report.ci/upload.py | python - --include='*.xml' --framework=gtest # Upload not working
   artifacts:
     paths:
       - build/gtestresult*
@@ -230,7 +230,7 @@ test:macos:
     - cmake --build . --target all --clean-first -- -j4
     - ninja hal_coverage
     - bash <(curl -s https://codecov.io/bash) -f hal_coverage.info.cleaned || echo "Codecov did not collect coverage reports"
-    - curl -s https://report.ci/upload.py | python - --include='*.xml' --framework=gtest
+#    - curl -s https://report.ci/upload.py | python - --include='*.xml' --framework=gtest # Upload not working
   artifacts:
     paths:
       - build/gtestresult*
