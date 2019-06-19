@@ -278,15 +278,15 @@ bool hdl_parser_vhdl::parse_entity(const std::vector<std::tuple<int, std::string
     // entity contains global port definitions
 
     std::map<std::string, std::function<int(std::shared_ptr<netlist> const, std::shared_ptr<net> const)>> port_dir_function = {
-        {"in", [](std::shared_ptr<netlist> const g, std::shared_ptr<net> const net) {
+        {   "in", [](std::shared_ptr<netlist> const g, std::shared_ptr<net> const net) {
                 return g->mark_global_input_net(net);
             }
         },
-        {"out", [](std::shared_ptr<netlist> const g, std::shared_ptr<net> const net) {
+        {   "out", [](std::shared_ptr<netlist> const g, std::shared_ptr<net> const net) {
                 return g->mark_global_output_net(net);
             }
         },
-        {"inout", [](std::shared_ptr<netlist> const g, std::shared_ptr<net> const net) {
+        {   "inout", [](std::shared_ptr<netlist> const g, std::shared_ptr<net> const net) {
                 return g->mark_global_inout_net(net);
             }
         },
