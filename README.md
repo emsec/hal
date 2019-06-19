@@ -1,4 +1,4 @@
-[![pipeline status](https://gitlab.com/swallat/hal/badges/master/pipeline.svg)](https://gitlab.com/swallat/hal/commits/master) [![coverage report](https://codecov.io/gh/emsec/hal/branch/master/graph/badge.svg)](https://codecov.io/gh/emsec/hal) [![Slack](https://img.shields.io/badge/slack-join-blue.svg)](https://communityinviter.com/apps/hal-re/hal-re)[![CodeFactor](https://www.codefactor.io/repository/github/emsec/hal/badge)](https://www.codefactor.io/repository/github/emsec/hal)
+[![pipeline status](https://gitlab.com/swallat/hal/badges/master/pipeline.svg)](https://gitlab.com/swallat/hal/commits/master) [![coverage report](https://codecov.io/gh/emsec/hal/branch/master/graph/badge.svg)](https://codecov.io/gh/emsec/hal) [![Slack](https://img.shields.io/badge/slack-join-blue.svg)](https://communityinviter.com/apps/hal-re/hal-re) [![CodeFactor](https://www.codefactor.io/repository/github/emsec/hal/badge)](https://www.codefactor.io/repository/github/emsec/hal)
 
 # Welcome to HAL!
 
