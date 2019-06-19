@@ -24,34 +24,34 @@ std::shared_ptr<netlist> hdl_parser_verilog::parse(const std::string &gate_libra
         log_error("hdl_parser", "netlist_factory returned nullptr.");
         return nullptr;
     }
-    
+
     // read whole file into token parts
     std::string buffer, token;
     std::vector<std::tuple<int, std::string>> tokens;
-    
+
     int current_line = 0;
     int token_begin = -1;
     bool multiline_comment = false, multiline_property = false;
     while (std::getline(m_fs, buffer))
     {
         current_line++;
-        
+
         remove_comments(buffer, multiline_comment, multiline_property);
-        
+
         buffer = core_utils::trim(buffer);
-        
+
         if (buffer.empty())
         {
             continue;
         }
-        
+
         // add current line to token
         token += buffer;
         if (token_begin == -1)
         {
             token_begin = current_line;
         }
-        
+
         // finalize the token when it is done
         if (token.back() == ';')
         {
@@ -61,7 +61,7 @@ std::shared_ptr<netlist> hdl_parser_verilog::parse(const std::string &gate_libra
             token.clear();
         }
     }
-    
+
     // parse token parts: module, wire, assign, instance
     auto gate_types = m_netlist->get_gate_library()->get_gate_types();
     for (const auto &it : tokens)
@@ -69,7 +69,7 @@ std::shared_ptr<netlist> hdl_parser_verilog::parse(const std::string &gate_libra
         auto line_number = std::get<0>(it);
         token = std::get<1>(it);
         auto identifier = token.substr(0, token.find(" "));
-        
+
         if (identifier == "module")
         {
             if (!this->parse_module(token, line_number))
@@ -108,7 +108,7 @@ std::shared_ptr<netlist> hdl_parser_verilog::parse(const std::string &gate_libra
             return nullptr;
         }
     }
-    
+
     // add global gnd and vcc signals
     std::map<std::string, std::shared_ptr<net>>::iterator it;
     if (((it = m_net.find("1'h0")) != m_net.end()) || ((it = m_net.find("1'b0")) != m_net.end()))
@@ -150,22 +150,22 @@ void hdl_parser_verilog::remove_comments(std::string &buffer, bool &multiline_co
     while (repeat)
     {
         repeat = false;
-        
+
         // skip empty lines and single line comments
         if (buffer.empty())
         {
             break;
         }
-        
+
         auto single_line_comment_begin = buffer.find("//");
         auto multi_line_comment_begin = buffer.find("/*");
         auto multi_line_comment_end = buffer.find("*/");
         auto multi_line_property_begin = buffer.find("(*");
         auto multi_line_property_end = buffer.find("*)");
-        
+
         std::string begin = "";
         std::string end = "";
-        
+
         if (!multiline_comment)
         {
             if (single_line_comment_begin != std::string::npos)
@@ -250,30 +250,40 @@ bool hdl_parser_verilog::parse_module(const std::string &module, const int line)
     auto design_name = core_utils::trim(module.substr(module.find("module") + 6));
     design_name = design_name.substr(0, design_name.find("("));
     m_netlist->set_design_name(core_utils::trim(design_name));
-    
+
     return true;
 }
 
 bool hdl_parser_verilog::parse_architecture(const std::string &signal_token, const std::string &identifier, const int line)
 {
     std::map<std::string, std::function<int(std::shared_ptr<netlist> const, std::shared_ptr<net> const)>> identifier_to_addition = {
-        {"input",  [](std::shared_ptr<netlist> const g, std::shared_ptr<net> const net)
-                   { return g->mark_global_input_net(net); }},
-        {"output", [](std::shared_ptr<netlist> const g, std::shared_ptr<net> const net)
-                   { return g->mark_global_output_net(net); }},
-        {"inout",  [](std::shared_ptr<netlist> const g, std::shared_ptr<net> const net)
-                   { return g->mark_global_inout_net(net); }},
-        {"wire",
-                   [](std::shared_ptr<netlist> const g, std::shared_ptr<net> const net)
-                   {
-                       UNUSED(g);
-                       UNUSED(net);
-                       return true;
-                   }},
+        {   "input",  [](std::shared_ptr<netlist> const g, std::shared_ptr<net> const net)
+            {
+                return g->mark_global_input_net(net);
+            }
+        },
+        {   "output", [](std::shared_ptr<netlist> const g, std::shared_ptr<net> const net)
+            {
+                return g->mark_global_output_net(net);
+            }
+        },
+        {   "inout",  [](std::shared_ptr<netlist> const g, std::shared_ptr<net> const net)
+            {
+                return g->mark_global_inout_net(net);
+            }
+        },
+        {   "wire",
+            [](std::shared_ptr<netlist> const g, std::shared_ptr<net> const net)
+            {
+                UNUSED(g);
+                UNUSED(net);
+                return true;
+            }
+        },
     };
     auto signal_list = core_utils::trim(signal_token.substr(signal_token.find(identifier) + identifier.size()));
     auto bus_indices = this->get_vector_bounds(signal_list);
-    
+
     if (bus_indices.empty())
     {
         for (auto name : core_utils::split(signal_list, ','))
@@ -284,12 +294,12 @@ bool hdl_parser_verilog::parse_architecture(const std::string &signal_token, con
             }
             name = core_utils::trim(name);
             name = std::string(name.begin(), std::remove_if(name.begin(), name.end(), isspace));
-            
+
             if (m_net.find(name) != m_net.end())
             {
                 continue;
             }
-            
+
             auto new_net = m_netlist->create_net(m_netlist->get_unique_net_id(), name);
             m_net[new_net->get_name()] = new_net;
             if (new_net == nullptr || !identifier_to_addition[identifier](m_netlist, new_net))
@@ -310,19 +320,19 @@ bool hdl_parser_verilog::parse_architecture(const std::string &signal_token, con
             }
             name = core_utils::trim(name);
             name = std::string(name.begin(), std::remove_if(name.begin(), name.end(), isspace));
-            
+
             for (const auto bus_index : bus_indices)
             {
                 auto bus_signal_name = name + "[" + std::to_string(bus_index) + "]";
-                
+
                 if (m_net.find(bus_signal_name) != m_net.end())
                 {
                     continue;
                 }
-                
+
                 auto new_net = m_netlist->create_net(m_netlist->get_unique_net_id(), bus_signal_name);
                 m_net[new_net->get_name()] = new_net;
-                
+
                 if (new_net == nullptr || !identifier_to_addition[identifier](m_netlist, new_net))
                 {
                     log_error("hdl_parser", "cannot parse '{}' (line: {}).", identifier, line);
@@ -336,7 +346,7 @@ bool hdl_parser_verilog::parse_architecture(const std::string &signal_token, con
             }
         }
     }
-    
+
     return true;
 }
 
@@ -344,13 +354,13 @@ bool hdl_parser_verilog::parse_instance(const std::string &instance, const std::
 {
     // split instance into logical parts: name, generic map, and port map
     std::string name, generic_map, port_map;
-    
+
     if (instance.find("#(") == std::string::npos)
     {
         // no generic map present
         name = core_utils::trim(instance.substr(instance.find(type) + type.size()));
         name = core_utils::trim(name.substr(0, name.find('(')));
-        
+
         port_map = instance.substr(instance.find('('));
         port_map = core_utils::trim(port_map.substr(1, port_map.size() - 2));
     }
@@ -358,14 +368,14 @@ bool hdl_parser_verilog::parse_instance(const std::string &instance, const std::
     {
         auto substr = core_utils::trim(instance.substr(instance.find('#') + 1));
         auto token = core_utils::split(substr, ')', true);
-        
+
         name = core_utils::trim(token[1].substr(0, token[1].find('(')));
-        
+
         generic_map = token[0].substr(1);
-        
+
         port_map = core_utils::trim(token[1].substr(token[1].find('(') + 1));
     }
-    
+
     // add gate to netlist and check for global vcc / gnd gates
     auto new_gate = m_netlist->create_gate(m_netlist->get_unique_gate_id(), type, name);
     if (new_gate == nullptr)
@@ -373,7 +383,7 @@ bool hdl_parser_verilog::parse_instance(const std::string &instance, const std::
         log_error("hdl_parser", "cannot parse instance '{}' (line: {}).", name, line);
         return false;
     }
-    
+
     auto global_vcc_gate_types = m_netlist->get_gate_library()->get_global_vcc_gate_types();
     if (global_vcc_gate_types->find(type) != global_vcc_gate_types->end())
     {
@@ -383,7 +393,7 @@ bool hdl_parser_verilog::parse_instance(const std::string &instance, const std::
             return false;
         }
     }
-    
+
     auto global_gnd_gate_types = m_netlist->get_gate_library()->get_global_gnd_gate_types();
     if (global_gnd_gate_types->find(type) != global_gnd_gate_types->end())
     {
@@ -393,7 +403,7 @@ bool hdl_parser_verilog::parse_instance(const std::string &instance, const std::
             return false;
         }
     }
-    
+
     // parse generic map
     for (const auto &token : core_utils::split(generic_map, ',', true))
     {
@@ -401,16 +411,16 @@ bool hdl_parser_verilog::parse_instance(const std::string &instance, const std::
         {
             continue;
         }
-        
+
         auto key = core_utils::trim(token.substr(1, token.find('(') - 1));
         auto value = core_utils::trim(token.substr(token.find('(') + 1));
         auto value_stripped = core_utils::trim(value.substr(0, value.length() - 1));
-        
+
         if (value.back() == ',')
         {
             value.pop_back();
         }
-        
+
         // determine data type
         auto data_type = std::string();
         if (core_utils::is_integer(value))
@@ -435,14 +445,14 @@ bool hdl_parser_verilog::parse_instance(const std::string &instance, const std::
             log_error("hdl_parser", "cannot identify data type of generic map value '{}' in instance '{}'", value, new_gate->get_name());
             return false;
         }
-        
+
         if (!new_gate->set_data("generic", key, data_type, value))
         {
             log_error("hdl_parser", "cannot parse generic attribute '{}' in instance '{}' (line: {}).", key, name, line);
             return false;
         }
     }
-    
+
     auto splited = core_utils::split(port_map, ',', true);
     for (const auto &token : splited)
     {
@@ -455,10 +465,10 @@ bool hdl_parser_verilog::parse_instance(const std::string &instance, const std::
         net_name = core_utils::trim(net_name.substr(0, net_name.find(')')));
         // remove start char '.' from pin
         pin = pin.substr(1);
-        
+
         auto pins = this->parse_pin(new_gate, pin, line);
         auto nets = this->parse_net(net_name, line);
-        
+
         if (pins.size() != nets.size())
         {
             std::string imploded_nets;
@@ -481,7 +491,7 @@ bool hdl_parser_verilog::parse_instance(const std::string &instance, const std::
                       line);
             return false;
         }
-        
+
         for (u32 i = 0; i < pins.size(); ++i)
         {
             if (!this->connect_net_to_pin(nets[i], new_gate, pins[i], line))
@@ -507,24 +517,24 @@ bool hdl_parser_verilog::connect_net_to_pin(const std::string &net_name, std::sh
             log_error("hdl_parser", "cannot parse instance '{}' (line: {}).", new_gate->get_name(), line);
             return false;
         }
-        
+
         m_net[net_name] = new_net;
-        
+
         if ((net_name != "1'h0") && (net_name != "1'h1") && (net_name != "1'b0") && (net_name != "1'b1") && (net_name != "1'bz") && (net_name != "1'bx"))
             log_warning("hdl_parser", "signal '{}' was not previously declared in architecture (line: {})", net_name, line);
     }
     auto current_net = m_net[net_name];
-    
+
     if ((std::find(input_pin_types.begin(), input_pin_types.end(), pin_name) == inout_pin_types.end())
-        && (std::find(output_pin_types.begin(), output_pin_types.end(), pin_name) == output_pin_types.end())
-        && (std::find(inout_pin_types.begin(), inout_pin_types.end(), pin_name) == inout_pin_types.end()))
+            && (std::find(output_pin_types.begin(), output_pin_types.end(), pin_name) == output_pin_types.end())
+            && (std::find(inout_pin_types.begin(), inout_pin_types.end(), pin_name) == inout_pin_types.end()))
     {
         log_error("hdl_parser", "undefined pin '{}' for '{}' (line: {}).", pin_name, new_gate->get_name(), line);
         return false;
     }
-    
+
     if ((std::find(input_pin_types.begin(), input_pin_types.end(), pin_name) != input_pin_types.end())
-        || (std::find(inout_pin_types.begin(), inout_pin_types.end(), pin_name) != inout_pin_types.end()))
+            || (std::find(inout_pin_types.begin(), inout_pin_types.end(), pin_name) != inout_pin_types.end()))
     {
         if (!current_net->add_dst(new_gate, pin_name))
         {
@@ -532,7 +542,7 @@ bool hdl_parser_verilog::connect_net_to_pin(const std::string &net_name, std::sh
         }
     }
     if ((std::find(output_pin_types.begin(), output_pin_types.end(), pin_name) != output_pin_types.end())
-        || (std::find(inout_pin_types.begin(), inout_pin_types.end(), pin_name) != inout_pin_types.end()))
+            || (std::find(inout_pin_types.begin(), inout_pin_types.end(), pin_name) != inout_pin_types.end()))
     {
         if (!current_net->set_src(new_gate, pin_name))
         {
@@ -577,10 +587,10 @@ bool hdl_parser_verilog::parse_assign(const std::string &token, const int line)
     auto net_name_left = token.substr(token.find("assign") + 6);
     net_name_left = core_utils::trim(net_name_left.substr(0, net_name_left.find("=")));
     auto net_name_right = core_utils::trim(token.substr(token.find('=') + 1));
-    
+
     auto nets_lhs = this->parse_net_single(net_name_left, line);
     auto nets_rhs = this->parse_net(net_name_right, line);
-    
+
     if (nets_lhs.size() != nets_rhs.size())
     {
         std::string imploded_nets1;
@@ -628,20 +638,20 @@ std::vector<int> hdl_parser_verilog::get_vector_bounds(const std::string &s)
     {
         return std::vector<int>();
     }
-    
+
     /* remove brackets */
     auto bounds = s.substr(s.find('['));
     bounds = core_utils::trim(bounds.substr(0, static_cast<unsigned long>(get_idx_of_last_vector_bound(bounds))));
-    
+
     /* remove whitespace and '['*/
     bounds = std::string(bounds.begin(), std::remove_if(bounds.begin(), bounds.end(), isspace));
     bounds.erase(std::remove(bounds.begin(), bounds.end(), '['), bounds.end());
-    
+
     if (bounds.find('+') != std::string::npos || bounds.find('-') != std::string::npos)
     {
         log_error("hdl_parser", "Unsupported vector range specification {}.", bounds);
     }
-    
+
     std::vector<std::tuple<int, int>> bound_tokens;
     for (auto &bound : core_utils::split(bounds, ']'))
     {
@@ -651,36 +661,37 @@ std::vector<int> hdl_parser_verilog::get_vector_bounds(const std::string &s)
         }
         int left_bound = std::stoi(bound.substr(0, bound.find(':')));
         int right_bound = std::stoi(bound.substr(bound.find(':') + 1));
-        
+
         bound_tokens.push_back(std::make_tuple(left_bound, right_bound));
     }
-    
+
     std::vector<int> result;
     u32 dimension = (u32) std::count(bounds.begin(), bounds.end(), ']');
     switch (dimension)
     {
-        case 1:
-            if (std::get<0>(bound_tokens[0]) >= std::get<1>(bound_tokens[0]))
+    case 1:
+        if (std::get<0>(bound_tokens[0]) >= std::get<1>(bound_tokens[0]))
+        {
+            for (auto x = std::get<0>(bound_tokens[0]); x >= std::get<1>(bound_tokens[0]); --x)
             {
-                for (auto x = std::get<0>(bound_tokens[0]); x >= std::get<1>(bound_tokens[0]); --x)
-                {
-                    result.push_back(x);
-                }
+                result.push_back(x);
             }
-            else
+        }
+        else
+        {
+            for (auto x = std::get<0>(bound_tokens[0]); x <= std::get<1>(bound_tokens[0]); ++x)
             {
-                for (auto x = std::get<0>(bound_tokens[0]); x <= std::get<1>(bound_tokens[0]); ++x)
-                {
-                    result.push_back(x);
-                }
-                log_error("hdl_parser", "Unsupported vector range specification [{}:{}].", std::get<0>(bound_tokens[0]), std::get<1>(bound_tokens[0]));
+                result.push_back(x);
             }
-            
-            break;
-        default:log_error("hdl_parser", "not implemented reached for dimension '{}' (did you forget to add the case here?)", (int) dimension);
-            return std::vector<int>();
+            log_error("hdl_parser", "Unsupported vector range specification [{}:{}].", std::get<0>(bound_tokens[0]), std::get<1>(bound_tokens[0]));
+        }
+
+        break;
+    default:
+        log_error("hdl_parser", "not implemented reached for dimension '{}' (did you forget to add the case here?)", (int) dimension);
+        return std::vector<int>();
     }
-    
+
     return result;
 }
 
@@ -705,14 +716,14 @@ std::vector<std::string> hdl_parser_verilog::parse_net(const std::string &token,
 {
     std::string t = token;
     t.erase(std::remove_if(t.begin(), t.end(), isspace), t.end());
-    
+
     std::vector<std::string> wires;
     // 1. got array of values
     if (core_utils::starts_with(token, "{") && core_utils::ends_with(token, "}"))
     {
         t.erase(std::remove(t.begin(), t.end(), '{'), t.end());
         t.erase(std::remove(t.begin(), t.end(), '}'), t.end());
-        
+
         // Iterate from MSB to LSB
         for (const auto &net_chunk : core_utils::split(t, ','))
         {
@@ -806,19 +817,19 @@ std::vector<std::string> hdl_parser_verilog::parse_net_single(const std::string 
 std::vector<std::string> hdl_parser_verilog::parse_pin(std::shared_ptr<gate> &new_gate, const std::string &token, const int line)
 {
     UNUSED(line);
-    
+
     std::string t = token;
     t.erase(std::remove_if(t.begin(), t.end(), isspace), t.end());
     t.erase(std::remove(t.begin(), t.end(), '\\'), t.end());
-    
+
     std::vector<std::string> pins;
-    
+
     auto input_pins = new_gate->get_input_pin_types();
     auto inout_pins = new_gate->get_inout_pin_types();
     auto output_pins = new_gate->get_output_pin_types();
-    
+
     if (std::find(input_pins.begin(), input_pins.end(), t) != input_pins.end() || std::find(inout_pins.begin(), inout_pins.end(), t) != inout_pins.end()
-        || std::find(output_pins.begin(), output_pins.end(), t) != output_pins.end())
+            || std::find(output_pins.begin(), output_pins.end(), t) != output_pins.end())
     {
         // Found single port
         pins.emplace_back(t);
@@ -876,7 +887,9 @@ bool hdl_parser_verilog::is_numeric(const std::string &token)
         return true;
     }
     else if (std::find_if(token.begin(), token.end(), [](char c)
-    { return !std::isdigit(c); }) == token.end())
+{
+    return !std::isdigit(c);
+    }) == token.end())
     {
         return true;
     }
@@ -902,106 +915,125 @@ std::vector<std::string> hdl_parser_verilog::get_binary_string_from_number_liter
         {
             switch (c)
             {
-                case '0':binary_vector.push_back("1'b0");
-                    binary_vector.push_back("1'b0");
-                    binary_vector.push_back("1'b0");
-                    binary_vector.push_back("1'b0");
-                    break;
-                case '1':binary_vector.push_back("1'b0");
-                    binary_vector.push_back("1'b0");
-                    binary_vector.push_back("1'b0");
-                    binary_vector.push_back("1'b1");
-                    break;
-                case '2':binary_vector.push_back("1'b0");
-                    binary_vector.push_back("1'b0");
-                    binary_vector.push_back("1'b1");
-                    binary_vector.push_back("1'b0");
-                    break;
-                case '3':binary_vector.push_back("1'b0");
-                    binary_vector.push_back("1'b0");
-                    binary_vector.push_back("1'b1");
-                    binary_vector.push_back("1'b1");
-                    break;
-                case '4':binary_vector.push_back("1'b0");
-                    binary_vector.push_back("1'b1");
-                    binary_vector.push_back("1'b0");
-                    binary_vector.push_back("1'b0");
-                    break;
-                case '5':binary_vector.push_back("1'b0");
-                    binary_vector.push_back("1'b1");
-                    binary_vector.push_back("1'b0");
-                    binary_vector.push_back("1'b1");
-                    break;
-                case '6':binary_vector.push_back("1'b0");
-                    binary_vector.push_back("1'b1");
-                    binary_vector.push_back("1'b1");
-                    binary_vector.push_back("1'b0");
-                    break;
-                case '7':binary_vector.push_back("1'b0");
-                    binary_vector.push_back("1'b1");
-                    binary_vector.push_back("1'b1");
-                    binary_vector.push_back("1'b1");
-                    break;
-                case '8':binary_vector.push_back("1'b1");
-                    binary_vector.push_back("1'b0");
-                    binary_vector.push_back("1'b0");
-                    binary_vector.push_back("1'b0");
-                    break;
-                case '9':binary_vector.push_back("1'b1");
-                    binary_vector.push_back("1'b0");
-                    binary_vector.push_back("1'b0");
-                    binary_vector.push_back("1'b1");
-                    break;
-                case 'a':
-                case 'A':binary_vector.push_back("1'b1");
-                    binary_vector.push_back("1'b0");
-                    binary_vector.push_back("1'b1");
-                    binary_vector.push_back("1'b0");
-                    break;
-                case 'b':
-                case 'B':binary_vector.push_back("1'b1");
-                    binary_vector.push_back("1'b0");
-                    binary_vector.push_back("1'b1");
-                    binary_vector.push_back("1'b1");
-                    break;
-                case 'c':
-                case 'C':binary_vector.push_back("1'b1");
-                    binary_vector.push_back("1'b1");
-                    binary_vector.push_back("1'b0");
-                    binary_vector.push_back("1'b0");
-                    break;
-                case 'd':
-                case 'D':binary_vector.push_back("1'b1");
-                    binary_vector.push_back("1'b1");
-                    binary_vector.push_back("1'b0");
-                    binary_vector.push_back("1'b1");
-                    break;
-                case 'e':
-                case 'E':binary_vector.push_back("1'b1");
-                    binary_vector.push_back("1'b1");
-                    binary_vector.push_back("1'b1");
-                    binary_vector.push_back("1'b0");
-                    break;
-                case 'f':
-                case 'F':binary_vector.push_back("1'b1");
-                    binary_vector.push_back("1'b1");
-                    binary_vector.push_back("1'b1");
-                    binary_vector.push_back("1'b1");
-                    break;
-                case 'x':
-                case 'X':binary_vector.push_back("1'bx");
-                    binary_vector.push_back("1'bx");
-                    binary_vector.push_back("1'bx");
-                    binary_vector.push_back("1'bx");
-                    break;
-                case 'z':
-                case 'Z':binary_vector.push_back("1'bz");
-                    binary_vector.push_back("1'bz");
-                    binary_vector.push_back("1'bz");
-                    binary_vector.push_back("1'bz");
-                    break;
-                default:log_error("hdl_parser", "Cannot parse binary value {} (token: {}) line: {}", c, v, line);
-                    return std::vector<std::string>();
+            case '0':
+                binary_vector.push_back("1'b0");
+                binary_vector.push_back("1'b0");
+                binary_vector.push_back("1'b0");
+                binary_vector.push_back("1'b0");
+                break;
+            case '1':
+                binary_vector.push_back("1'b0");
+                binary_vector.push_back("1'b0");
+                binary_vector.push_back("1'b0");
+                binary_vector.push_back("1'b1");
+                break;
+            case '2':
+                binary_vector.push_back("1'b0");
+                binary_vector.push_back("1'b0");
+                binary_vector.push_back("1'b1");
+                binary_vector.push_back("1'b0");
+                break;
+            case '3':
+                binary_vector.push_back("1'b0");
+                binary_vector.push_back("1'b0");
+                binary_vector.push_back("1'b1");
+                binary_vector.push_back("1'b1");
+                break;
+            case '4':
+                binary_vector.push_back("1'b0");
+                binary_vector.push_back("1'b1");
+                binary_vector.push_back("1'b0");
+                binary_vector.push_back("1'b0");
+                break;
+            case '5':
+                binary_vector.push_back("1'b0");
+                binary_vector.push_back("1'b1");
+                binary_vector.push_back("1'b0");
+                binary_vector.push_back("1'b1");
+                break;
+            case '6':
+                binary_vector.push_back("1'b0");
+                binary_vector.push_back("1'b1");
+                binary_vector.push_back("1'b1");
+                binary_vector.push_back("1'b0");
+                break;
+            case '7':
+                binary_vector.push_back("1'b0");
+                binary_vector.push_back("1'b1");
+                binary_vector.push_back("1'b1");
+                binary_vector.push_back("1'b1");
+                break;
+            case '8':
+                binary_vector.push_back("1'b1");
+                binary_vector.push_back("1'b0");
+                binary_vector.push_back("1'b0");
+                binary_vector.push_back("1'b0");
+                break;
+            case '9':
+                binary_vector.push_back("1'b1");
+                binary_vector.push_back("1'b0");
+                binary_vector.push_back("1'b0");
+                binary_vector.push_back("1'b1");
+                break;
+            case 'a':
+            case 'A':
+                binary_vector.push_back("1'b1");
+                binary_vector.push_back("1'b0");
+                binary_vector.push_back("1'b1");
+                binary_vector.push_back("1'b0");
+                break;
+            case 'b':
+            case 'B':
+                binary_vector.push_back("1'b1");
+                binary_vector.push_back("1'b0");
+                binary_vector.push_back("1'b1");
+                binary_vector.push_back("1'b1");
+                break;
+            case 'c':
+            case 'C':
+                binary_vector.push_back("1'b1");
+                binary_vector.push_back("1'b1");
+                binary_vector.push_back("1'b0");
+                binary_vector.push_back("1'b0");
+                break;
+            case 'd':
+            case 'D':
+                binary_vector.push_back("1'b1");
+                binary_vector.push_back("1'b1");
+                binary_vector.push_back("1'b0");
+                binary_vector.push_back("1'b1");
+                break;
+            case 'e':
+            case 'E':
+                binary_vector.push_back("1'b1");
+                binary_vector.push_back("1'b1");
+                binary_vector.push_back("1'b1");
+                binary_vector.push_back("1'b0");
+                break;
+            case 'f':
+            case 'F':
+                binary_vector.push_back("1'b1");
+                binary_vector.push_back("1'b1");
+                binary_vector.push_back("1'b1");
+                binary_vector.push_back("1'b1");
+                break;
+            case 'x':
+            case 'X':
+                binary_vector.push_back("1'bx");
+                binary_vector.push_back("1'bx");
+                binary_vector.push_back("1'bx");
+                binary_vector.push_back("1'bx");
+                break;
+            case 'z':
+            case 'Z':
+                binary_vector.push_back("1'bz");
+                binary_vector.push_back("1'bz");
+                binary_vector.push_back("1'bz");
+                binary_vector.push_back("1'bz");
+                break;
+            default:
+                log_error("hdl_parser", "Cannot parse binary value {} (token: {}) line: {}", c, v, line);
+                return std::vector<std::string>();
             }
             if (len > -1 && binary_vector.size() > (u32) len)
             {
@@ -1016,18 +1048,23 @@ std::vector<std::string> hdl_parser_verilog::get_binary_string_from_number_liter
         {
             switch (c)
             {
-                case '1':binary_vector.push_back("1'b1");
-                    break;
-                case '0':binary_vector.push_back("1'b0");
-                    break;
-                case 'x':
-                case 'X':binary_vector.push_back("1'bx");
-                    break;
-                case 'z':
-                case 'Z':binary_vector.push_back("1'bz");
-                    break;
-                default:log_error("hdl_parser", "Cannot parse binary value {} (token: {}) line: {}", c, v, line);
-                    return std::vector<std::string>();
+            case '1':
+                binary_vector.push_back("1'b1");
+                break;
+            case '0':
+                binary_vector.push_back("1'b0");
+                break;
+            case 'x':
+            case 'X':
+                binary_vector.push_back("1'bx");
+                break;
+            case 'z':
+            case 'Z':
+                binary_vector.push_back("1'bz");
+                break;
+            default:
+                log_error("hdl_parser", "Cannot parse binary value {} (token: {}) line: {}", c, v, line);
+                return std::vector<std::string>();
             }
         }
     }
