@@ -1,0 +1,15 @@
+pull_request_rules:
+  - name: automatic merge on CI success and review
+    conditions:
+      - status-success=ci/gitlab/gitlab.com
+      - "#approved-reviews-by>=1"
+      - base=master
+      - label=="Ready to merge"
+    actions:
+      merge:
+        method: merge
+  - name: Delete branch after merge
+    actions:
+      delete_head_branch: {}
+    conditions:
+      - merged
