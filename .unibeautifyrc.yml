@@ -1,5 +1,5 @@
 ---
-cpp: # Language
+C++: # Language
   beautifiers: "ClangFormat"
   ClangFormat: # <------------------------ Beautifier options start here
     prefer_beautifier_config: true
