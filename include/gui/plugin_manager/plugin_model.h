@@ -26,6 +26,7 @@
 
 #include "plugin_manager/plugin_item.h"
 #include <QAbstractItemModel>
+#include <def.h>
 
 class plugin_model : public QAbstractItemModel
 {
@@ -33,6 +34,7 @@ class plugin_model : public QAbstractItemModel
 
 public:
     explicit plugin_model(QObject* parent = 0);
+    ~plugin_model();
     bool is_valid_index(const QModelIndex& idx);
     virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
     virtual int columnCount(const QModelIndex& parent = QModelIndex()) const;
@@ -63,6 +65,7 @@ public Q_SLOTS:
 private:
     QStringList m_columns;
     QList<plugin_item> m_items;
+    u64 model_changed_callback_id;
 };
 
 #endif    //HAL_PLUGIN_MODEL_H

@@ -267,18 +267,25 @@ namespace plugin_manager
         return std::get<1>(m_plugin[plugin_name]);
     }
 
-    void add_model_changed_callback(std::function<void(bool, std::string const&, std::string const&)> callback)
+    u64 add_model_changed_callback(std::function<void(bool, std::string const&, std::string const&)> callback)
     {
         if (callback == nullptr)
         {
             log_error("core", "parameter 'callback' is nullptr");
-            return;
+            return 0;
         }
-        m_hook.add_callback(callback);
+        return m_hook.add_callback(callback);
+    }
+    
+    void remove_model_changed_callback(u64 id)
+    {
+        m_hook.remove_callback(id);
     }
 
     void add_existing_options_description(const program_options& existing_options)
     {
         m_existing_options.add(existing_options);
     }
+    
+    
 }    // namespace plugin_manager

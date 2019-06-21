@@ -13,6 +13,7 @@
 #include <QFileSystemWatcher>
 #include <QInputDialog>
 #include <QTextStream>
+#include <QMessageBox>
 
 file_manager::file_manager(QObject* parent) : QObject(parent), m_file_watcher(new QFileSystemWatcher(this)), m_file_open(false)
 {
@@ -59,7 +60,9 @@ void file_manager::open_file(const QString& file_name)
 
     if (file_name.isEmpty())
     {
-        log_error("gui", "Unable to open file. File name is empty");
+        std::string error_message("Unable to open file. File name is empty");
+        log_error("gui", "{}", error_message);
+        display_error_message(QString::fromStdString(error_message));
         return;
     }
 
@@ -67,7 +70,9 @@ void file_manager::open_file(const QString& file_name)
 
     if (!file.open(QFile::ReadOnly))
     {
-        log_error("gui", "Unable to open file '{}'", file_name.toStdString());
+        std::string error_message("Unable to open file" + file_name.toStdString());
+        log_error("gui", "Unable to open file '{}'", error_message);
+        display_error_message(QString::fromStdString(error_message));
         return;
     }
 
@@ -90,7 +95,11 @@ void file_manager::open_file(const QString& file_name)
             Q_EMIT file_opened(m_file_name);
         }
         else
-            log_error("gui", "Failed to create netlist from .hal file");
+        {
+            std::string error_message("Failed to create netlist from .hal file");
+            log_error("gui", "{}", error_message);
+            display_error_message(QString::fromStdString(error_message));
+        }
 
         return;
     }
@@ -103,7 +112,9 @@ void file_manager::open_file(const QString& file_name)
 
     if (language == "")
     {
-        log_error("gui", "Unable to determine file language. Files have to end with .v, .vhd or .vhdl");
+        std::string error_message("Unable to determine file language. Files have to end with .v, .vhd or .vhdl");
+        log_error("gui", "{}", error_message);
+        display_error_message(QString::fromStdString(error_message));
         return;
     }
 
@@ -203,7 +214,9 @@ END OF ORIGINAL CODE */
 
     if (list.isEmpty())
     {
-        log_error("gui", "Unable to find a compatible gate library. Deserialization failed!");
+        std::string error_message("Unable to find a compatible gate library. Deserialization failed!");
+        log_error("gui", "{}" , error_message);
+        display_error_message(QString::fromStdString(error_message));
         return;
     }
 
@@ -323,4 +336,15 @@ void file_manager::update_recent_files(const QString& file)
         }
     }
     g_gui_state.endArray();
+}
+
+void file_manager::display_error_message(QString error_message)
+{
+    QMessageBox msgBox;
+    msgBox.setText("Error");
+    msgBox.setInformativeText(error_message);
+    msgBox.setStyleSheet("QLabel{min-width: 600px;}");
+    msgBox.setStandardButtons(QMessageBox::Ok);
+    msgBox.setDefaultButton(QMessageBox::Ok);
+    msgBox.exec();
 }
