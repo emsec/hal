@@ -304,6 +304,8 @@ deploy-homebrew:
     - git tag $CI_COMMIT_TAG
     - git push origin $CI_COMMIT_TAG
     - git push master
+  tags:
+    - macOS
 
 deploy-ppa:
   stage: deploy
