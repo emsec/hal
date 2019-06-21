@@ -1,3 +1,9 @@
+hal-reverse (1.0.23.3) bionic; urgency=medium
+
+  * Testing new CI deployment
+
+ -- Sebastian Wallat <sebastian.wallat@rub.de>  Fri, 21 Jun 2019 12:01:20 +0200
+
 hal-reverse (1.0.23.2) bionic; urgency=medium
 
   * Testing new CI deployment

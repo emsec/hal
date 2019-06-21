@@ -292,7 +292,7 @@ deploy-homebrew:
     - eval $(ssh-agent -s)
     - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
     - mkfifo -m 600 fifo
-    - (echo "$GITHUB_DEPLOY_KEY")> fifo | ssh-add fifo
+    - (echo "$HAL_DEPLOYMENT_KEY")> fifo | ssh-add fifo
     - rm fifo
     - 'ssh-keyscan github.com > ~/.ssh/known_hosts'
     - rm -rf build
