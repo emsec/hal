@@ -1,3 +1,10 @@
+hal-reverse (1.0.23) bionic; urgency=medium
+
+  * Automated homebrew deployment
+  * Testing new CI deploymenty
+
+ -- Sebastian Wallat <sebastian.wallat@rub.de>  Fri, 21 Jun 2019 10:36:36 +0200
+
 hal-reverse (1.0.22) bionic; urgency=medium
 
   * Fixed showing message box for error while opening file
