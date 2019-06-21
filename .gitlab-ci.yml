@@ -305,7 +305,7 @@ deploy-homebrew:
     - git commit --author="GitlabCI <ci@gitlabci.local>" -m "Update to version $CI_COMMIT_TAG"
     - git tag $CI_COMMIT_TAG
     - git push origin $CI_COMMIT_TAG
-    - git push master
+    - git push origin master
   tags:
     - macOS
 
