@@ -1,3 +1,28 @@
+hal-reverse (1.0.24) bionic; urgency=medium
+
+  * Testing new CI deployment
+
+ -- Sebastian Wallat <sebastian.wallat@rub.de>  Fri, 21 Jun 2019 15:36:52 +0200
+
+hal-reverse (1.0.23) bionic; urgency=medium
+
+  * Automated homebrew deployment
+  * Testing new CI deployment
+
+ -- Sebastian Wallat <sebastian.wallat@rub.de>  Fri, 21 Jun 2019 10:36:36 +0200
+
+hal-reverse (1.0.22) bionic; urgency=medium
+
+  * Fixed showing message box for error while opening file
+  * Fixed plugin generator for new EXPORT definition
+  * Fixed Visibility of shared Libraries (#121)
+  * Fixed bug in callback hook, optimized json output
+  * Added pybind for bdd evaluate
+  * Added python editor tabs in hal file manager
+  * Remove plugin manager callback hook while closing GUI. Fixes #88
+
+ -- Sebastian Wallat <sebastian.wallat@rub.de>  Wed, 19 Jun 2019 16:48:41 +0200
+
 hal-reverse (1.0.21) bionic; urgency=medium
 
   * Fixes in python editor
