@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 
 platform='unknown'
-unamestr=`uname`
+unamestr=$(uname)
 distribution='unknown'
 if [[ "$unamestr" == 'Linux' ]]; then
    platform='linux'
-   distribution=`lsb_release -is`
+   distribution=$(lsb_release -is)
 elif [[ "$unamestr" == 'Darwin' ]]; then
    platform='macOS'
 fi
@@ -14,7 +14,7 @@ if [[ "$platform" == 'macOS' ]]; then
     echo "Executing brew bundle"
     brew bundle
     pip3 install -r requirements.txt
-    if [ -n "`$SHELL -c 'echo $ZSH_VERSION'`" ]; then
+    if [ -n "$($SHELL -c 'echo $ZSH_VERSION')" ]; then
        grep -Fxq 'export PATH="/usr/local/opt/qt/bin:$PATH"' ~/.zshrc
        if ! [[ $? -eq 0 ]]; then
             echo 'export PATH="/usr/local/opt/qt/bin:$PATH"' >> ~/.zshrc
@@ -30,7 +30,7 @@ if [[ "$platform" == 'macOS' ]]; then
             echo 'export PATH="/usr/local/opt/bison/bin:$PATH"' >> ~/.zshrc
        fi
        source ~/.zshrc
-    elif [ -n "`$SHELL -c 'echo $BASH_VERSION'`" ]; then
+    elif [ -n "$($SHELL -c 'echo $BASH_VERSION')" ]; then
        grep -Fxq 'export PATH="/usr/local/opt/qt/bin:$PATH"' ~/.bash_profile
        if ! [[ $? -eq 0 ]]; then
             echo 'export PATH="/usr/local/opt/qt/bin:$PATH"' >> ~/.bash_profile
@@ -48,7 +48,7 @@ if [[ "$platform" == 'macOS' ]]; then
        source >> ~/.bash_profile
     else
        echo "Unknown User Shell: abort!"
-       exit -1
+       exit 255
     fi
 elif [[ "$platform" == 'linux' ]]; then
     if [[ "$distribution" == 'Ubuntu' ]]; then
@@ -59,6 +59,6 @@ elif [[ "$platform" == 'linux' ]]; then
         sudo pip3 install -r requirements.txt
     else
        echo "Unsupported Linux distribution: abort!"
-       exit -1
+       exit 255
     fi
 fi
