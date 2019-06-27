@@ -128,6 +128,17 @@ public:
      */
     std::set<std::shared_ptr<net>> get_output_nets(const std::string& name_filter = DONT_CARE) const;
 
+    /**
+     * Get the internal nets of this module.<br>
+     * A net is internal if its source and at least one output are inside the module.<br>
+     * Therefore it may contain some nets that are also regarded as output nets.
+     *
+     * @param[in] name_filter - Filter for the name
+     * @returns The set of module input nets.
+     */
+    std::set<std::shared_ptr<net>> get_internal_nets(const std::string& name_filter = DONT_CARE) const;
+
+
     /*
      * ################################################################
      *      gate functions
