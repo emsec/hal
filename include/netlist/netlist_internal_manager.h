@@ -73,8 +73,8 @@ private:
     std::shared_ptr<module> create_module(u32 id, std::shared_ptr<module> parent, const std::string& name);
     bool delete_module(std::shared_ptr<module> module);
 
-    std::shared_ptr<module> remove_from_submodules(const std::shared_ptr<gate> gate);
-    std::shared_ptr<module> remove_from_submodules(const std::shared_ptr<net> net);
+    bool module_assign_gate(std::shared_ptr<module> m, std::shared_ptr<gate> g);
+    bool module_remove_gate(std::shared_ptr<module> m, std::shared_ptr<gate> g);
 };
 
 #endif /* __HAL_NETLIST_INTERNAL_MANAGER_H__ */

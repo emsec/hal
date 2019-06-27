@@ -17,7 +17,7 @@ netlist::netlist(std::shared_ptr<gate_library> library) : m_gate_library(library
     m_next_gate_id   = 1;
     m_next_net_id    = 1;
     m_next_module_id = 1;
-    m_top_module     = nullptr; // this triggers the internal manager to allow creation of a module without parent
+    m_top_module     = nullptr;    // this triggers the internal manager to allow creation of a module without parent
     m_top_module     = create_module("top module", nullptr);
 }
 
@@ -362,17 +362,36 @@ bool netlist::delete_net(std::shared_ptr<net> n)
 
 bool netlist::is_net_in_netlist(const std::shared_ptr<net> n) const
 {
-    return m_top_module->contains_net(n, true);
+    return m_nets_set.find(n) != m_nets_set.end();
 }
 
-std::shared_ptr<net> netlist::get_net_by_id(const u32 net_id) const
+std::shared_ptr<net> netlist::get_net_by_id(u32 net_id) const
 {
-    return m_top_module->get_net_by_id(net_id, true);
+    auto it = m_nets_map.find(net_id);
+    if (it == m_nets_map.end())
+    {
+        log_error("netlist", "no net with id {:08x} registered in netlist.", net_id);
+        return nullptr;
+    }
+    return it->second;
 }
 
 std::set<std::shared_ptr<net>> netlist::get_nets(const std::string& name_filter) const
 {
-    return m_top_module->get_nets(name_filter, true);
+    if (name_filter == DONT_CARE)
+    {
+        return m_nets_set;
+    }
+    std::set<std::shared_ptr<net>> res;
+    for (const auto& x : m_nets_set)
+    {
+        if (x->get_name() != name_filter)
+        {
+            continue;
+        }
+        res.insert(x);
+    }
+    return res;
 }
 
 bool netlist::mark_global_input_net(std::shared_ptr<net> const n)

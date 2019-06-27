@@ -230,17 +230,6 @@ protected:
                 return false;
         }
 
-        if (sm0->get_nets().size() != sm1->get_nets().size())
-            return false;
-        for (auto n_0 : sm0->get_nets())
-        {
-            std::shared_ptr<net> n_1 = sm1->get_netlist()->get_net_by_id(n_0->get_id());
-            if (!nets_are_equal(n_0, n_1))
-                return false;
-            if (!sm1->contains_net(n_1))
-                return false;
-        }
-
         return true;
     }
 
@@ -363,7 +352,6 @@ TEST_F(netlist_serializer_test, check_serialize_and_deserialize){TEST_START{// S
 std::shared_ptr<module> test_sm = nl->create_module(2, "test_type", nl->get_top_module());
             test_sm->assign_gate(nl->get_gate_by_id(1));
             test_sm->assign_gate(nl->get_gate_by_id(2));
-            test_sm->assign_net(nl->get_net_by_id(13));
 //nl->get_module_manager()->add_module(test_sm);
 
 // Store some data in a gate, net and module

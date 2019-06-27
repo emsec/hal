@@ -39,6 +39,7 @@
 /* forward declaration */
 class netlist;
 class net;
+class module;
 struct endpoint;
 
 /**
@@ -85,6 +86,55 @@ public:
      * @returns The gate's type.
      */
     std::string get_type() const;
+
+    /**
+     * Gets the module this gate is contained in.
+     *
+     * @returns The owning module.
+     */
+    std::shared_ptr<module> get_module() const;
+
+    /**
+     * Mark this gate as a global vcc gate.
+     *
+     * @returns True on success.
+     */
+    bool mark_global_vcc_gate();
+
+    /**
+     * Mark this gate as a global gnd gate.
+     *
+     * @returns True on success.
+     */
+    bool mark_global_gnd_gate();
+
+    /**
+     * Unmark this gate as a global vcc gate.
+     *
+     * @returns True on success.
+     */
+    bool unmark_global_vcc_gate();
+
+    /**
+     * Unmark this gate as a global gnd gate.
+     *
+     * @returns True on success.
+     */
+    bool unmark_global_gnd_gate();
+
+    /**
+     * Checks whether this gate is a global vcc gate.
+     *
+     * @returns True if the gate is a global vcc gate.
+     */
+    bool is_global_vcc_gate() const;
+
+    /**
+     * Checks whether this gate is a global gnd gate.
+     *
+     * @returns True if the gate is a global gnd gate.
+     */
+    bool is_global_gnd_gate() const;
 
     /*
      *      pin specific functions
@@ -220,6 +270,9 @@ private:
 
     /* type of the gate */
     std::string m_type;
+
+    /* owning module */
+    std::shared_ptr<module> m_module;
 
     /* connected nets */
     std::map<std::string, std::shared_ptr<net>> m_in_nets;

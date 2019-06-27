@@ -150,12 +150,15 @@ void tree_navigation_model::handle_module_event(module_event_handler::event ev, 
                                                                                   << "",
                                                               tree_navigation_item::item_type::ignore,
                                                               module_item));
+        // todo modules do not have nets anymore
+        /*
         module_item->insert_child(1,
                                      new tree_navigation_item(QVector<QVariant>() << "Nets"
                                                                                   << ""
                                                                                   << "",
                                                               tree_navigation_item::item_type::ignore,
                                                               module_item));
+        */
         insert_item(m_modules_item, m_modules_item->get_child_count(), module_item);
     }
     if (ev == module_event_handler::gate_assigned)
@@ -176,7 +179,8 @@ void tree_navigation_model::handle_module_event(module_event_handler::event ev, 
             }
         }
     }
-    if (ev == module_event_handler::net_assigned)
+    // todo modules do not have nets anymore
+    /*if (ev == module_event_handler::net_assigned)
     {
         for (int i = 0; i < m_modules_item->get_child_count(); i++)
         {
@@ -192,7 +196,7 @@ void tree_navigation_model::handle_module_event(module_event_handler::event ev, 
                 break;
             }
         }
-    }
+    }*/
     if (ev == module_event_handler::gate_removed)
     {
         for (int i = 0; i < m_modules_item->get_child_count(); i++)
@@ -214,7 +218,8 @@ void tree_navigation_model::handle_module_event(module_event_handler::event ev, 
             }
         }
     }
-    if (ev == module_event_handler::net_removed)
+    // todo modules do not have nets anymore
+    /*if (ev == module_event_handler::net_removed)
     {
         for (int i = 0; i < m_modules_item->get_child_count(); i++)
         {
@@ -234,7 +239,7 @@ void tree_navigation_model::handle_module_event(module_event_handler::event ev, 
                 break;
             }
         }
-    }
+    }*/
     if (ev == module_event_handler::name_changed)
     {
         for (int i = 0; i < m_modules_item->get_child_count(); i++)
@@ -420,6 +425,8 @@ void tree_navigation_model::handle_net_event(net_event_handler::event ev, std::s
         }
 
         //check for submod
+        // todo modules do not have nets anymore
+        /*
         for (int i = 0; i < m_modules_item->get_child_count(); i++)
         {
             auto current_submod_item = m_modules_item->get_child(i);
@@ -437,6 +444,7 @@ void tree_navigation_model::handle_net_event(net_event_handler::event ev, std::s
                 }
             }
         }
+        */
     }
 }
 
@@ -541,14 +549,17 @@ void tree_navigation_model::setup_model_data()
                                                                                             << "",
                                                                         tree_navigation_item::item_type::ignore,
                                                                         current_module_tree_item);
+        current_module_tree_item->insert_child(0, sub_gates_item);
+
+        // todo modules do not have nets anymore
+        /*
         tree_navigation_item* sub_nets_item  = new tree_navigation_item(QVector<QVariant>() << "Nets"
                                                                                            << ""
                                                                                            << "",
                                                                        tree_navigation_item::item_type::ignore,
                                                                        current_module_tree_item);
-
-        current_module_tree_item->insert_child(0, sub_gates_item);
         current_module_tree_item->insert_child(1, sub_nets_item);
+        */
 
         for (const auto& _gate : _module->get_gates())
         {
@@ -559,12 +570,15 @@ void tree_navigation_model::setup_model_data()
             sub_gates_item->insert_child(sub_gates_item->get_child_count(), tmp_gate);
         }
 
+        // todo modules do not have nets anymore
+        /*
         for (const auto& _net : _module->get_nets())
         {
             tree_navigation_item* tmp_net =
                 new tree_navigation_item(QVector<QVariant>() << QString::fromStdString(_net->get_name()) << (int)_net->get_id() << "", tree_navigation_item::item_type::net, sub_nets_item);
             sub_nets_item->insert_child(sub_nets_item->get_child_count(), tmp_net);
         }
+        */
     }
 }
 
