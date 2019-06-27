@@ -44,11 +44,25 @@ hal_content_manager::~hal_content_manager()
 void hal_content_manager::set_main_window(main_window* parent)
 {
     m_main_window = parent;
+
+    // has to be created this early in order to receive deserialization by the core signals
+    m_python_widget = new python_editor();
 }
 
 void hal_content_manager::data_changed(const QString& identifier)
 {
-    m_unsaved_changes.insert(identifier);
+    if (std::get<1>(m_unsaved_changes.insert(identifier)))
+    {
+        m_main_window->setWindowTitle(m_window_title + "*");
+    }
+}
+void hal_content_manager::data_saved(const QString& identifier)
+{
+    m_unsaved_changes.erase(identifier);
+    if (!has_unsaved_changes())
+    {
+        m_main_window->setWindowTitle(m_window_title);
+    }
 }
 
 bool hal_content_manager::has_unsaved_changes() const
@@ -66,6 +80,8 @@ std::set<QString> hal_content_manager::get_unsaved_changes() const
 void hal_content_manager::flush_unsaved_changes()
 {
     m_unsaved_changes.clear();
+    m_netlist_watcher->reset();
+    m_main_window->setWindowTitle(m_window_title);
 }
 
 void hal_content_manager::hack_delete_content()
@@ -144,16 +160,15 @@ void hal_content_manager::handle_open_document(const QString& file_name)
 
     connect(model, &plugin_model::run_plugin, m_main_window, &main_window::run_plugin_triggered);
 
-    QString tmp("HAL - " + QString::fromStdString(hal::path(file_name.toStdString()).stem().string()));
-    m_main_window->setWindowTitle(tmp);
+    m_window_title = "HAL - " + QString::fromStdString(hal::path(file_name.toStdString()).stem().string());
+    m_main_window->setWindowTitle(m_window_title);
 
-    auto python_widget = new python_editor();
-    m_main_window->add_content(python_widget, 3, content_anchor::right);
-    python_widget->open();
+    m_main_window->add_content(m_python_widget, 3, content_anchor::right);
+    m_python_widget->open();
 
-    auto python_console_widget = new python_console_widget();
-    m_main_window->add_content(python_console_widget, 5, content_anchor::bottom);
-    python_console_widget->open();
+    python_console_widget* python_console = new python_console_widget();
+    m_main_window->add_content(python_console, 5, content_anchor::bottom);
+    python_console->open();
 
     m_netlist_watcher = new netlist_watcher(this);
 }
@@ -162,7 +177,8 @@ void hal_content_manager::handle_close_document()
 {
     //TODO
     //(if possible) store state first, then remove all subwindows from main window
-    m_main_window->setWindowTitle("HAL");
+    m_window_title = "HAL";
+    m_main_window->setWindowTitle(m_window_title);
     m_main_window->on_action_close_document_triggered();
     //delete all windows here
     for (auto content : m_content2)

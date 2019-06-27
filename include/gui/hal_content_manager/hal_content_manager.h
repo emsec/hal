@@ -55,13 +55,16 @@ public:
     void set_main_window(main_window* parent);
 
 
+
     void data_changed(const QString& identifier = "netlist modified");
+    void data_saved(const QString& identifier);
 
     bool has_unsaved_changes() const;
 
     std::set<QString> get_unsaved_changes() const;
 
     void flush_unsaved_changes();
+
 
 
     //hack, TODO fix
@@ -80,6 +83,8 @@ public Q_SLOTS:
 private:
     main_window* m_main_window;
 
+    QString m_window_title;
+
     QList<content_widget*> m_content;
 
     //More testing purposes, delete them later on and put all in m_content
@@ -94,6 +99,8 @@ private:
     graph_layouter_view* m_layouter_view;
 
     old_graph_layouter* layouter;
+
+    python_editor* m_python_widget;
 
     netlist_watcher* m_netlist_watcher;
 

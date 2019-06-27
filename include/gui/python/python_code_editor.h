@@ -35,6 +35,9 @@ public:
     QString get_file_name();
     void set_file_name(const QString name);
 
+Q_SIGNALS:
+    void key_pressed(QKeyEvent* e);
+
 private:
     void keyPressEvent(QKeyEvent* e) Q_DECL_OVERRIDE;
     void handle_tab_key_pressed();
