@@ -48,17 +48,21 @@ class hal_content_manager : public QObject
     Q_OBJECT
 
 public:
-    explicit hal_content_manager(file_manager* file_manager, main_window* parent);
+    explicit hal_content_manager();
 
     ~hal_content_manager();
 
-    bool has_netlist_unsaved_changes();
+    void set_main_window(main_window* parent);
 
-    bool has_python_editor_unsaved_changes();
 
-    void mark_netlist_saved();
+    void data_changed(const QString& identifier = "netlist modified");
 
-    QStringList get_names_of_unsaved_python_tabs();
+    bool has_unsaved_changes() const;
+
+    std::set<QString> get_unsaved_changes() const;
+
+    void flush_unsaved_changes();
+
 
     //hack, TODO fix
     void hack_delete_content();
@@ -76,8 +80,6 @@ public Q_SLOTS:
 private:
     main_window* m_main_window;
 
-    file_manager* m_file_manager;
-
     QList<content_widget*> m_content;
 
     //More testing purposes, delete them later on and put all in m_content
@@ -85,12 +87,6 @@ private:
 
     //temporary solution to make the view a member variable(all this stuff might be deleted later nonetheless)
     //graph_layouter_view* m_layouter_view;
-
-    console_widget* m_console;
-
-    python_editor* m_python_widget;
-
-    python_console_widget* m_python_console_widget;
 
     //temporary solution aslong as the involved classes are strongly coupled
     QGraphicsScene* m_graph_scene;
@@ -100,6 +96,8 @@ private:
     old_graph_layouter* layouter;
 
     netlist_watcher* m_netlist_watcher;
+
+    std::set<QString> m_unsaved_changes;
 };
 
 #endif    // HAL_CONTENT_MANAGER_H
