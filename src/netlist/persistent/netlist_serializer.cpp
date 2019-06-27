@@ -125,18 +125,6 @@ namespace netlist_serializer
                 val.AddMember("gates", gates, allocator);
             }
 
-            {
-                rapidjson::Value nets(rapidjson::kArrayType);
-                auto to_sort = m->get_nets(DONT_CARE, false);
-                std::vector<std::shared_ptr<net>> sorted(to_sort.begin(), to_sort.end());
-                std::sort(sorted.begin(), sorted.end(), [](const std::shared_ptr<net>& lhs, const std::shared_ptr<net>& rhs) { return lhs->get_id() < rhs->get_id(); });
-                for (const auto& n : sorted)
-                {
-                    nets.PushBack(n->get_id(), allocator);
-                }
-                val.AddMember("nets", nets, allocator);
-            }
-
             val.AddMember("data", serialize(m->get_data(), allocator), allocator);
             return val;
         }
@@ -292,11 +280,6 @@ namespace netlist_serializer
             for (const auto& gate_node : val["gates"].GetArray())
             {
                 sm->assign_gate(nl->get_gate_by_id(gate_node.GetUint()));
-            }
-
-            for (const auto& net_node : val["nets"].GetArray())
-            {
-                sm->assign_net(nl->get_net_by_id(net_node.GetUint()));
             }
 
             deserialize_data(sm, val["data"]);

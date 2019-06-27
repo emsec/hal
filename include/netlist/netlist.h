@@ -420,7 +420,7 @@ public:
      * @param[in] id - The net's id.
      * @returns The net or a nullptr.
      */
-    std::shared_ptr<net> get_net_by_id(const u32 id) const;
+    std::shared_ptr<net> get_net_by_id(u32 id) const;
 
     /**
      * Get all nets of the netlist regardless of the module they are in. <br>
@@ -557,6 +557,10 @@ private:
     /** stores the modules */
     std::shared_ptr<module> m_top_module;
     std::map<u32, std::shared_ptr<module>> m_modules;
+
+    /** stores the nets */
+    std::map<u32, std::shared_ptr<net>> m_nets_map;
+    std::set<std::shared_ptr<net>> m_nets_set;
 
     /** stores the set of global gates and nets */
     std::set<std::shared_ptr<net>> m_global_input_nets;
