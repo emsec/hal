@@ -20,7 +20,7 @@ python_code_editor::python_code_editor(QWidget *parent) : code_editor(parent)
 
 void python_code_editor::keyPressEvent(QKeyEvent* e)
 {
-    
+    Q_EMIT key_pressed(e);
     if (textCursor().hasSelection() && !(e->key() == Qt::Key_Tab || e->key() == Qt::Key_Backtab))
     {
         QPlainTextEdit::keyPressEvent(e);
