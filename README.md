@@ -2,7 +2,7 @@
 
 # Welcome to HAL!
 
-[HAL](http://eprint.iacr.org/2017/783) [/hel/] is a comprehensive reverse engineering and manipulation framework for gate-level netlists focusing on efficiency, extendability and portability. HAL comes with a fully-fledged plugin system, allowing to introduce arbitrary functionalities to the core.
+[HAL](http://eprint.iacr.org/2017/783) \[/hel/\] is a comprehensive reverse engineering and manipulation framework for gate-level netlists focusing on efficiency, extendability and portability. HAL comes with a fully-fledged plugin system, allowing to introduce arbitrary functionalities to the core.
 
 ![HAL Screenshot](https://raw.githubusercontent.com/emsec/hal/master/hal_screenshot.png "HAL Screenshot")
 
@@ -77,9 +77,10 @@ FSM_sequential_STATE_REG_1_i_3_inst (id 6, type LUT6)
 If you use HAL in an academic context, please cite the framework using the reference below:
 ```latex
 @misc{hal,
-    author = {Marc Fyrbiak and Sebastian Wallat and Max Hoffmann},
+    author = {{EmSec Chair for Embedded Security}},
+    publisher = {{Ruhr University Bochum}},
     title = {{HAL - The Hardware Analyzer}},
-	year = {2019},
+    year = {2019},
     howpublished = {\url{https://github.com/emsec/hal}},
 }
 ```
@@ -98,9 +99,9 @@ Feel free to also include the original [paper](http://eprint.iacr.org/2017/783)
                    Christof Paar},
   title     	= {{HAL-} The Missing Piece of the Puzzle for Hardware Reverse Engineering,
                	  Trojan Detection and Insertion},
-  journal		= {IEEE Transactions on Dependable and Secure Computing},
-  year			= {2018},
-  publisher		= {IEEE},
+  journal	= {IEEE Transactions on Dependable and Secure Computing},
+  year		= {2018},
+  publisher	= {IEEE},
   howpublished 	= {\url{https://github.com/emsec/hal}}
 }
 ```

@@ -1,5 +1,6 @@
 #include "netlist/gate.h"
 
+#include "netlist/module.h"
 #include "netlist/net.h"
 #include "netlist/netlist.h"
 
@@ -81,6 +82,41 @@ void gate::set_name(const std::string& name)
 std::string gate::get_type() const
 {
     return m_type;
+}
+
+std::shared_ptr<module> gate::get_module() const
+{
+    return m_module;
+}
+
+bool gate::mark_global_vcc_gate()
+{
+    return m_netlist->mark_global_vcc_gate(shared_from_this());
+}
+
+bool gate::mark_global_gnd_gate()
+{
+    return m_netlist->mark_global_gnd_gate(shared_from_this());
+}
+
+bool gate::unmark_global_vcc_gate()
+{
+    return m_netlist->unmark_global_vcc_gate(shared_from_this());
+}
+
+bool gate::unmark_global_gnd_gate()
+{
+    return m_netlist->unmark_global_gnd_gate(shared_from_this());
+}
+
+bool gate::is_global_vcc_gate() const
+{
+    return m_netlist->is_global_vcc_gate(const_cast<gate*>(this)->shared_from_this());
+}
+
+bool gate::is_global_gnd_gate() const
+{
+    return m_netlist->is_global_gnd_gate(const_cast<gate*>(this)->shared_from_this());
 }
 
 std::vector<std::string> gate::get_input_pin_types() const
