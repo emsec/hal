@@ -145,9 +145,9 @@ std::shared_ptr<netlist> hdl_parser_vhdl::parse(const std::string& gate_library)
     // add global gnd gate if required by any instance
     if (m_net.find("'0'") != m_net.end())
     {
-        auto gnd_type = *(m_netlist->get_gate_library()->get_global_gnd_gate_types()->begin());
+        auto gnd_type   = *(m_netlist->get_gate_library()->get_global_gnd_gate_types()->begin());
         auto output_pin = m_netlist->get_output_pin_types(gnd_type).at(0);
-        auto gnd = m_netlist->create_gate(m_netlist->get_unique_gate_id(), gnd_type, "global_gnd");
+        auto gnd        = m_netlist->create_gate(m_netlist->get_unique_gate_id(), gnd_type, "global_gnd");
         if (!m_netlist->mark_global_gnd_gate(gnd))
         {
             return nullptr;
@@ -162,9 +162,9 @@ std::shared_ptr<netlist> hdl_parser_vhdl::parse(const std::string& gate_library)
     // add global vcc gate if required by any instance
     if (m_net.find("'1'") != m_net.end())
     {
-        auto vcc_type = *(m_netlist->get_gate_library()->get_global_vcc_gate_types()->begin());
+        auto vcc_type   = *(m_netlist->get_gate_library()->get_global_vcc_gate_types()->begin());
         auto output_pin = m_netlist->get_output_pin_types(vcc_type).at(0);
-        auto vcc = m_netlist->create_gate(m_netlist->get_unique_gate_id(), vcc_type, "global_vcc");
+        auto vcc        = m_netlist->create_gate(m_netlist->get_unique_gate_id(), vcc_type, "global_vcc");
         if (!m_netlist->mark_global_vcc_gate(vcc))
         {
             return nullptr;
@@ -278,18 +278,9 @@ bool hdl_parser_vhdl::parse_entity(const std::vector<std::tuple<int, std::string
     // entity contains global port definitions
 
     std::map<std::string, std::function<int(std::shared_ptr<netlist> const, std::shared_ptr<net> const)>> port_dir_function = {
-        {"in", [](std::shared_ptr<netlist> const g, std::shared_ptr<net> const net) {
-                return g->mark_global_input_net(net);
-            }
-        },
-        {"out", [](std::shared_ptr<netlist> const g, std::shared_ptr<net> const net) {
-                return g->mark_global_output_net(net);
-            }
-        },
-        {"inout", [](std::shared_ptr<netlist> const g, std::shared_ptr<net> const net) {
-                return g->mark_global_inout_net(net);
-            }
-        },
+        {"in", [](std::shared_ptr<netlist> const g, std::shared_ptr<net> const net) { return g->mark_global_input_net(net); }},
+        {"out", [](std::shared_ptr<netlist> const g, std::shared_ptr<net> const net) { return g->mark_global_output_net(net); }},
+        {"inout", [](std::shared_ptr<netlist> const g, std::shared_ptr<net> const net) { return g->mark_global_inout_net(net); }},
     };
 
     // remember logical position
@@ -611,8 +602,8 @@ bool hdl_parser_vhdl::parse_instance(std::string instance)
             // add net src/dst by pin types
 
             if ((std::find(input_pin_types.begin(), input_pin_types.end(), pin) == input_pin_types.end())
-                    && (std::find(output_pin_types.begin(), output_pin_types.end(), pin) == output_pin_types.end())
-                    && (std::find(inout_pin_types.begin(), inout_pin_types.end(), pin) == inout_pin_types.end()))
+                && (std::find(output_pin_types.begin(), output_pin_types.end(), pin) == output_pin_types.end())
+                && (std::find(inout_pin_types.begin(), inout_pin_types.end(), pin) == inout_pin_types.end()))
             {
                 log_error("hdl_parser", "undefined pin '{}' for '{}' ({})", pin, new_gate->get_name(), new_gate->get_type());
                 return false;
@@ -626,7 +617,7 @@ bool hdl_parser_vhdl::parse_instance(std::string instance)
                 }
             }
             if ((std::find(output_pin_types.begin(), output_pin_types.end(), pin) != output_pin_types.end())
-                    || (std::find(inout_pin_types.begin(), inout_pin_types.end(), pin) != inout_pin_types.end()))
+                || (std::find(inout_pin_types.begin(), inout_pin_types.end(), pin) != inout_pin_types.end()))
             {
                 if (!current_net->set_src(new_gate, pin))
                 {
