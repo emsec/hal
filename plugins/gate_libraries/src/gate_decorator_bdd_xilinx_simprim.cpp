@@ -160,12 +160,11 @@ namespace bdd_xilinx_simprim_helper
     std::map<std::string, std::shared_ptr<bdd>> get_bdd_xilinx_simprim_buf(std::shared_ptr<gate> gate, std::map<std::string, std::shared_ptr<bdd>>& input_pin_type_to_bdd)
     {
         std::map<std::string, std::shared_ptr<bdd>> result;
-        if (gate->get_type() == "X_BUF")
-        {
-            auto bdd_output = std::make_shared<bdd>();
-            *bdd_output     = *(input_pin_type_to_bdd["I"]);
-            result["O"]     = bdd_output;
-        }
+
+        auto bdd_output = std::make_shared<bdd>();
+        *bdd_output     = *(input_pin_type_to_bdd["I"]);
+        result["O"]     = bdd_output;
+        
         return result;
     }
 }    // namespace bdd_xilinx_simprim_helper
