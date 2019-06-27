@@ -541,6 +541,8 @@ void main_window::closeEvent(QCloseEvent* event)
         }
     }
 
+    file_manager::get_instance()->close_file();
+
     save_state();
     event->accept();
     // hack, remove later
