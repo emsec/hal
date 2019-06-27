@@ -18,7 +18,7 @@ protected:
 
     virtual void SetUp()
     {
-        //NO_COUT_BLOCK;
+        NO_COUT_BLOCK;
         gate_library_manager::load_all();
     }
 

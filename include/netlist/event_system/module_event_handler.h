@@ -54,8 +54,6 @@ namespace module_event_handler
         submodule_removed,      ///< associated_data = id of removed module
         gate_assigned,          ///< associated_data = id of inserted gate
         gate_removed,           ///< associated_data = id of removed gate
-        net_assigned,           ///< associated_data = id of added net
-        net_removed             ///< associated_data = id of removed net
     };
 
     /**

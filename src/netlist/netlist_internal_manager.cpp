@@ -53,7 +53,8 @@ std::shared_ptr<gate> netlist_internal_manager::create_gate(const u32 id, const 
 
     m_netlist->m_used_gate_ids.insert(id);
 
-    // add gate to netlist
+    // add gate to top module
+    new_gate->m_module                       = m_netlist->m_top_module;
     m_netlist->m_top_module->m_gates_map[id] = new_gate;
     m_netlist->m_top_module->m_gates_set.insert(new_gate);
 
@@ -91,11 +92,14 @@ bool netlist_internal_manager::delete_gate(std::shared_ptr<gate> gate)
     m_netlist->unmark_global_vcc_gate(gate);
 
     // remove gate from modules
-    remove_from_submodules(gate);
+    gate->m_module->m_gates_map.erase(gate->m_module->m_gates_map.find(gate->get_id()));
+    gate->m_module->m_gates_set.erase(gate);
 
+    // free ids
     m_netlist->m_free_gate_ids.insert(gate->get_id());
     m_netlist->m_used_gate_ids.erase(gate->get_id());
 
+    module_event_handler::notify(module_event_handler::event::gate_removed, gate->m_module, gate->get_id());
     gate_event_handler::notify(gate_event_handler::event::removed, gate);
 
     return true;
@@ -140,11 +144,10 @@ std::shared_ptr<net> netlist_internal_manager::create_net(const u32 id, const st
     m_netlist->m_used_net_ids.insert(id);
 
     // add net to netlist
-    m_netlist->m_top_module->m_nets_map[id] = new_net;
-    m_netlist->m_top_module->m_nets_set.insert(new_net);
+    m_netlist->m_nets_map[id] = new_net;
+    m_netlist->m_nets_set.insert(new_net);
 
     // notify
-    module_event_handler::notify(module_event_handler::event::net_assigned, m_netlist->m_top_module, id);
     net_event_handler::notify(net_event_handler::event::created, new_net);
 
     return new_net;
@@ -176,8 +179,9 @@ bool netlist_internal_manager::delete_net(std::shared_ptr<net> net)
     m_netlist->unmark_global_output_net(net);
     m_netlist->unmark_global_inout_net(net);
 
-    // remove net from modules
-    remove_from_submodules(net);
+    // remove net from netlist
+    m_netlist->m_nets_map.erase(m_netlist->m_nets_map.find(net->get_id()));
+    m_netlist->m_nets_set.erase(net);
 
     m_netlist->m_free_net_ids.insert(net->get_id());
     m_netlist->m_used_net_ids.erase(net->get_id());
@@ -397,16 +401,11 @@ bool netlist_internal_manager::delete_module(std::shared_ptr<module> to_remove)
 
     // at this point parent is guaranteed to be not null
 
-    // move gates and nets to parent
+    // move gates and nets to parent, work on a copy since assign_gate will modify m_gates_set
     auto gates_copy = to_remove->m_gates_set;
     for (const auto& gate : gates_copy)
     {
         to_remove->m_parent->assign_gate(gate);
-    }
-    auto nets_copy = to_remove->m_nets_set;
-    for (const auto& net : nets_copy)
-    {
-        to_remove->m_parent->assign_net(net);
     }
 
     // move all submodules to parent
@@ -435,30 +434,61 @@ bool netlist_internal_manager::delete_module(std::shared_ptr<module> to_remove)
     return true;
 }
 
-std::shared_ptr<module> netlist_internal_manager::remove_from_submodules(std::shared_ptr<gate> const gate)
+bool netlist_internal_manager::module_assign_gate(std::shared_ptr<module> m, std::shared_ptr<gate> g)
 {
-    for (const auto& it : m_netlist->m_modules)
+    if (g == nullptr)
     {
-        if (it.second->contains_gate(gate, false))
-        {
-            it.second->m_gates_map.erase(it.second->m_gates_map.find(gate->get_id()));
-            it.second->m_gates_set.erase(gate);
-            return it.second;
-        }
+        return false;
     }
-    return nullptr;
+    if (g->m_module == m)
+    {
+        return false;
+    }
+    auto prev_module = g->m_module;
+
+    prev_module->m_gates_map.erase(prev_module->m_gates_map.find(g->get_id()));
+    prev_module->m_gates_set.erase(g);
+
+    m->m_gates_map[g->get_id()] = g;
+    m->m_gates_set.insert(g);
+
+    g->m_module = m;
+
+    module_event_handler::notify(module_event_handler::event::gate_removed, prev_module, g->get_id());
+    module_event_handler::notify(module_event_handler::event::gate_assigned, m, g->get_id());
+    return true;
 }
 
-std::shared_ptr<module> netlist_internal_manager::remove_from_submodules(std::shared_ptr<net> const net)
+bool netlist_internal_manager::module_remove_gate(std::shared_ptr<module> m, std::shared_ptr<gate> g)
 {
-    for (const auto& it : m_netlist->m_modules)
+    if (g == nullptr)
     {
-        if (it.second->contains_net(net, false))
-        {
-            it.second->m_nets_map.erase(it.second->m_nets_map.find(net->get_id()));
-            it.second->m_nets_set.erase(net);
-            return it.second;
-        }
+        return false;
     }
-    return nullptr;
+
+    if (m == m_netlist->m_top_module)
+    {
+        log_error("module", "cannot remove gates from top module.", g->get_name(), g->get_id(), m->get_name(), m->get_id());
+        return false;
+    }
+
+    auto it = m->m_gates_map.find(g->get_id());
+
+    if (it == m->m_gates_map.end())
+    {
+        log_error("module", "gate '{}' (id {}) is not stored in module '{}' (id {}).", g->get_name(), g->get_id(), m->get_name(), m->get_id());
+        return false;
+    }
+
+    m->m_gates_map.erase(it);
+    m->m_gates_set.erase(g);
+
+    m_netlist->m_top_module->m_gates_map[g->get_id()] = g;
+    m_netlist->m_top_module->m_gates_set.insert(g);
+    g->m_module = m_netlist->m_top_module;
+
+    module_event_handler::notify(module_event_handler::event::gate_removed, m, g->get_id());
+    module_event_handler::notify(module_event_handler::event::gate_assigned, m_netlist->m_top_module, g->get_id());
+
+    return true;
 }
