@@ -1,3 +1,16 @@
+hal-reverse (1.1.0) bionic; urgency=medium
+
+  * Added Support for Xilinx Unisim gate library
+  * Added Support for Xilinx Simprim gate library
+  * Added Support for Synopsys 90nm gate library
+  * Added Support for GSCLIB 3.0 gate library
+  * Added Support for UMC 0.18 um gate library
+  * Added VHDL and Verilog parser fixes
+  * Fixeds issue #143
+  * Fixed static lint issues
+
+ -- Sebastian Wallat <sebastian.wallat@rub.de>  Thu, 27 Jun 2019 12:28:36 +0200
+
 hal-reverse (1.0.24) bionic; urgency=medium
 
   * Testing new CI deployment
