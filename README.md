@@ -9,12 +9,13 @@
 Apart from multiple research projects, HAL is also used in our university lecture [Introduction to Hardware Reverse Engineering](https://www.ei.ruhr-uni-bochum.de/studium/lehrveranstaltungen/832/).
 
 ## Features
-- Natural directed graph representation of netlist elements and their connections
-- Support for custom gate libraries
-- High performance thanks to optimized C++ core
-- Modularity: write your own C++ Plugins for efficient netlist analysis and manipulation (e.g. via graph algorithms)
-- A feature-rich GUI allowing for visual netlist inspection and interactive analysis
-- An integrated Python shell to exploratively interact with netlist elements and to interface plugins from the GUI
+  - Natural directed graph representation of netlist elements and their connections
+  - Support for custom gate libraries
+  - High performance thanks to optimized C++ core
+  - Modularity: write your own C++ Plugins for efficient netlist analysis and manipulation (e.g. via graph algorithms)
+  - A feature-rich GUI allowing for visual netlist inspection and interactive analysis
+  - An integrated Python shell to exploratively interact with netlist elements and to interface plugins from the GUI
+  - **Update v1.1.0** Support for Xilinx Unisim, Xilinx Simprim, Synopsys 90nm, GSCLIB 3.0 and UMC 0.18µm libraries is now added
 
 ## API Documentation
 
@@ -46,7 +47,7 @@ for gate in netlist.get_gates():
         print("")
 ```
 For the example netlist `fsm.vhd` this prints:
-```
+```text
 FSM_sequential_STATE_REG_1_i_2_inst (id 5, type LUT6)
   6-to-1 LUT
   O: (~I0 I1 ~I2 I3 I4 ~I5) + (I0 ~I2 I3 I4 I5)
@@ -125,22 +126,21 @@ brew tap emsec/hal
 brew install hal
 ```
 
-
 ## Build Instructions
 
 Run the following commands to download and install HAL.
 
-1. `git clone https://github.com/emsec/hal.git && cd hal`
-2. To install all neccessary dependencies execute `./install_dependencies.sh`
-3. `mkdir build && cd build`
-4. `cmake .. `
-5. `make`
+ 1. `git clone https://github.com/emsec/hal.git && cd hal`
+ 2. To install all neccessary dependencies execute `./install_dependencies.sh`
+ 3. `mkdir build && cd build`
+ 4. `cmake .. `
+ 5. `make`
 
 Optionally you can install HAL:
 
 `make install`
 
-### macOS
+### Build on macOS
 
 Please make sure to use a compiler that supports OpenMP. You can install one from e.g. Homebrew via: `brew install llvm`.
 
@@ -153,7 +153,7 @@ To let cmake know of the custom compiler use following command.
 You are very welcome to contribute to the development of HAL. Feel free to submit a new pull request via github. Please consider running the static checks + clang format before that. You can also install these checks as git hooks before any commit.
 
 ### Run static checks and clang format locally
-To install clang-format hook install git-hooks (https://github.com/icefox/git-hooks) and run:
+To install clang-format hook install [git-hooks](https://github.com/icefox/git-hooks) and run:
 
 `git hooks --install`
 
@@ -171,4 +171,3 @@ HAL is licensed under MIT License to encourage collaboration with other research
 ## Disclaimer
 
 HAL is at most alpha-quality software. Use at your own risk. We do not encourage any malicious use of our toolkit.
-
