@@ -437,7 +437,7 @@ TEST_START
         std::shared_ptr<gate> g = *nl->get_gates("INV").begin();
         EXPECT_EQ(g->get_data_by_key("generic", "key_bit_vector"), std::make_tuple("bit_vector", "f0"));
     }
-    /*{ // NOTE: decimal numbers are considered as strings
+    {
         // A bit-vector is passed via X" " and B" " and O" "
         std::stringstream input("-- Device\t: device_name\n"
                                 "entity TEST_Comp is\n"
@@ -452,7 +452,7 @@ TEST_START
                                 "      key_bit_vector_0 => X\"abcdef\",\n"
                                 "      key_bit_vector_1 => B\"101010111100110111101111\",\n" // <- binary: 'abcdef' in hex
                                 "      key_bit_vector_2 => O\"52746757\",\n" // <- octal: 'abcdef' in hex
-                                //"      key_bit_vector_3 => \"11259375\"\n" // <- decimal: 'abcdef' in hex // NOTE
+                                "      key_bit_vector_3 => D\"11259375\"\n" // <- decimal: 'abcdef' in hex
                                 "    )\n"
                                 "    port map (\n"
                                 "      I => net_global_inout\n"
@@ -476,8 +476,8 @@ TEST_START
         EXPECT_EQ(g->get_data_by_key("generic", "key_bit_vector_0"), std::make_tuple("bit_vector", "abcdef"));
         EXPECT_EQ(g->get_data_by_key("generic", "key_bit_vector_1"), std::make_tuple("bit_vector", "abcdef"));
         EXPECT_EQ(g->get_data_by_key("generic", "key_bit_vector_2"), std::make_tuple("bit_vector", "abcdef"));
-        //EXPECT_EQ(g->get_data_by_key("generic", "key_bit_vector_3"), std::make_tuple("bit_vector", "abcdef"));
-    }*/
+        EXPECT_EQ(g->get_data_by_key("generic", "key_bit_vector_3"), std::make_tuple("bit_vector", "abcdef"));
+    }
     {
         // A string is passed
         std::stringstream input("-- Device\t: device_name\n"
@@ -852,7 +852,7 @@ TEST_F(hdl_parser_vhdl_test, check_multiple_entities)
             } else {
                 test_def::get_captured_stdout();
             }
-            // TODO: Clarify the usage of a second entity
+            // NOTE: Clarify the usage of a second entity
             //ASSERT_NE(nl, nullptr);
 
         }
@@ -1496,7 +1496,7 @@ TEST_F(hdl_parser_vhdl_test, check_invalid_input)
             EXPECT_EQ(nl, nullptr);
         }
         {
-            // The 'end STRUCTURE;' line at the end was forgotten
+            // The passed gate_library does not exist
             NO_COUT_TEST_BLOCK;
             std::stringstream input("-- Device\t: device_name\n"
                                     "entity TEST_Comp is\n"
@@ -1509,9 +1509,10 @@ TEST_F(hdl_parser_vhdl_test, check_invalid_input)
                                     "  gate_0 : INV\n"
                                     "    port map (\n"
                                     "      O => net_global_inout\n"
-                                    "    );");                      // <- no 'end STRUCTURE;'
+                                    "    );\n"
+                                    "end STRUCTURE;");                      // <- no 'end STRUCTURE;'
             hdl_parser_vhdl vhdl_parser(input);
-            std::shared_ptr<netlist> nl = vhdl_parser.parse(g_lib_name);
+            std::shared_ptr<netlist> nl = vhdl_parser.parse("inv4lid_gate_library");
 
             EXPECT_EQ(nl, nullptr);
         }

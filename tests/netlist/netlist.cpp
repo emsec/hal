@@ -37,7 +37,6 @@ protected:
     {
     }
 
-    // TODO: move functions in an own header?
     // Creates an empty netlist with a certain id if passed
     std::shared_ptr<netlist> create_empty_netlist(int id = -1)
     {
@@ -1498,13 +1497,13 @@ TEST_F(netlist_test, check_delete_module)
             std::shared_ptr<gate> gate_0 = nl->create_gate("INV", "gate_0");
             std::shared_ptr<net> net_0 = nl->create_net("net_0");
             test_module->assign_gate(gate_0);
-            test_module->assign_net(net_0);
+            //test_module->assign_net(net_0);
 
             nl->delete_module(test_module);
 
             EXPECT_FALSE(nl->is_module_in_netlist(test_module));
             EXPECT_TRUE(parent->contains_gate(gate_0));
-            EXPECT_TRUE(parent->contains_net(net_0));
+            //EXPECT_TRUE(parent->contains_net(net_0));
             EXPECT_TRUE(parent->get_submodules().find(child) != parent->get_submodules().end());
 
 

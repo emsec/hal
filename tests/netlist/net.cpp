@@ -635,3 +635,56 @@ TEST_F(net_test, check_is_unrouted)
 
     TEST_END
 }
+
+/**
+ * Testing the handling of global nets
+ *
+ * Functions: mark_global_input_net, mark_global_input_net, mark_global_inout_net,
+ *            unmark_global_input_net, unmark_global_input_net, unmark_global_inout_net
+ *            is_global_input_net, is_global_input_net, is_global_inout_net
+ */
+TEST_F(net_test, check_global_nets)
+{
+    TEST_START
+        {
+            // mark and unmark a global input net
+            std::shared_ptr<netlist> nl   = create_empty_netlist(MIN_ID+0);
+            std::shared_ptr<net> test_net = nl->create_net(MIN_ID+1, "test_net");
+
+            test_net->mark_global_input_net();
+            EXPECT_TRUE(test_net->is_global_input_net());
+            EXPECT_TRUE(nl->is_global_input_net(test_net));
+
+            test_net->unmark_global_input_net();
+            EXPECT_FALSE(test_net->is_global_input_net());
+            EXPECT_FALSE(nl->is_global_input_net(test_net));
+        }
+        {
+            // mark and unmark a global output net
+            std::shared_ptr<netlist> nl   = create_empty_netlist(MIN_ID+0);
+            std::shared_ptr<net> test_net = nl->create_net(MIN_ID+1, "test_net");
+
+            test_net->mark_global_output_net();
+            EXPECT_TRUE(test_net->is_global_output_net());
+            EXPECT_TRUE(nl->is_global_output_net(test_net));
+
+            test_net->unmark_global_output_net();
+            EXPECT_FALSE(test_net->is_global_output_net());
+            EXPECT_FALSE(nl->is_global_output_net(test_net));
+        }
+        {
+            // mark and unmark a global inout net
+            std::shared_ptr<netlist> nl   = create_empty_netlist(MIN_ID+0);
+            std::shared_ptr<net> test_net = nl->create_net(MIN_ID+1, "test_net");
+
+            test_net->mark_global_inout_net();
+            EXPECT_TRUE(test_net->is_global_inout_net());
+            EXPECT_TRUE(nl->is_global_inout_net(test_net));
+
+            test_net->unmark_global_inout_net();
+            EXPECT_FALSE(test_net->is_global_inout_net());
+            EXPECT_FALSE(nl->is_global_inout_net(test_net));
+        }
+
+    TEST_END
+}

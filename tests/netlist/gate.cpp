@@ -8,22 +8,8 @@
 #include <iostream>
 #include <netlist/gate.h>
 #include <netlist/net.h>
-/*
- * Child of gate_decorator. Used for testing.
- */
-/*
-class test_decorator : public gate_decorator
-{
-public:
-    test_decorator(std::shared_ptr<gate> g) : gate_decorator(g)
-    {
-    }
-    gate_decorator_system::decorator_type get_type()
-    {
-        return "test_decorator";
-    }
-};
-*/
+#include <netlist/module.h>
+
 class gate_test : public ::testing::Test
 {
 protected:
@@ -262,24 +248,6 @@ protected:
         return (str.find(sub_str) != std::string::npos);
     }
 
-    /*
-     * Functions passed to the register_decorator map to access the test decorator
-
-    static std::shared_ptr<gate_decorator> get_test_decorator(std::shared_ptr<gate> g)
-    {
-        return std::shared_ptr<gate_decorator>(new test_decorator(g));
-    }*/
-
-    //    /*
-    //     * Register the test decorator in a netlist nl for a gate with type gate_type
-    //     */
-    //    bool register_test_decorator(std::shared_ptr<netlist> nl, std::string gate_type = "INV")
-    //    {
-    //        std::function<std::shared_ptr<gate_decorator>(std::shared_ptr<gate>)> constructor = get_test_decorator;
-    //        std::map<std::string, std::function<std::shared_ptr<gate_decorator>(std::shared_ptr<gate>)>> g_type_to_constructor;
-    //        g_type_to_constructor[gate_type] = constructor;
-    //        return nl->register_gate_decorator_type("test_decorator", g_type_to_constructor);
-    //    }
 };
 
 /**
@@ -362,39 +330,6 @@ TEST_F(gate_test, check_set_and_get_name)
     TEST_END
 }
 
-///**
-// * Testing the access on decorators by query the test decorator and verify success by
-// * call get_decorator_types and query_decorator
-// *
-// * Functions: query_decorator, has_decorator_type, get_decorator_types
-// */
-//TEST_F(gate_test, check_decorator_types)
-//{
-//    TEST_START
-//    {
-//            // Query the test decorator
-//            std::shared_ptr<netlist> nl = create_empty_netlist(0);
-//            register_test_decorator(nl, "INV"); // Register decorator for X_INV
-//            std::shared_ptr<gate> test_gate(new gate(nl, 0, "INV", "gate_name"));
-//            nl -> add_gate(test_gate);
-//            std::shared_ptr<gate_decorator> dec = test_gate->query_decorator("test_decorator");
-//            EXPECT_EQ(dec->get_type(), "test_decorator");
-//            EXPECT_TRUE(test_gate->has_decorator_type("test_decorator"));
-//            EXPECT_EQ(test_gate->get_decorator_types(), std::set<std::string>({"test_decorator"}));
-//
-//        }
-//        {
-//            // The decorator isn't queried
-//            std::shared_ptr<netlist> nl = create_empty_netlist(0);
-//            std::shared_ptr<gate> test_gate= nl->create_gate(1, "INV", "gate_name");
-//            EXPECT_FALSE(test_gate->has_decorator_type("test_decorator"));
-//            EXPECT_EQ(test_gate->get_decorator_types(), std::set<std::string>({}));
-//        }
-//
-//
-//
-//    TEST_END
-//}
 
 /**
  * Testing functions which returns the pin types. Further test for different gate types
@@ -691,17 +626,6 @@ TEST_F(gate_test, check_get_predecessors)
         EXPECT_TRUE(gate_1->get_predecessors(DONT_CARE, DONT_CARE, "NEx_GATE").empty());
         EXPECT_EQ(gate_1->get_predecessors(DONT_CARE, DONT_CARE, "NEx_GATE").size(), (size_t)0);
     }
-    //        {
-    //            // Get predecessors for a given decorator type
-    //            std::shared_ptr<netlist> dec_nl = create_example_netlist(3);
-    //            register_test_decorator(dec_nl, "INV"); // Register a decorator for X_INV
-    //            std::vector<endpoint> pred = {
-    //                    get_endpoint(dec_nl,3,"O")
-    //            };
-    //            std::shared_ptr<gate> gate_0 = dec_nl->get_gate_by_id(0);
-    //            EXPECT_EQ(gate_0->get_predecessors(DONT_CARE, DONT_CARE, "test_decorator"), pred);
-    //        }
-
     // ########################
     // NEGATIVE TESTS
     // ########################
@@ -815,18 +739,6 @@ TEST_F(gate_test, check_get_successors)
         EXPECT_TRUE(gate_0->get_successors(DONT_CARE, DONT_CARE, "NEx_GATE").empty());
         EXPECT_EQ(gate_0->get_successors(DONT_CARE, DONT_CARE, "NEx_GATE").size(), (size_t)0);
     }
-    //        {
-    //            // Get successors for a given decorator type
-    //            std::shared_ptr<netlist> dec_nl = create_example_netlist(3);
-    //            register_test_decorator(dec_nl, "INV"); // Register a decorator for X_INV
-    //            std::vector<endpoint> succ = {
-    //                    get_endpoint(dec_nl,4,"I")
-    //            };
-    //            std::shared_ptr<gate> gate_0 = dec_nl->get_gate_by_id(0);
-    //            EXPECT_EQ(gate_0->get_successors(DONT_CARE, DONT_CARE, "test_decorator"), succ);
-    //            EXPECT_EQ(gate_0->get_num_of_successors(DONT_CARE, DONT_CARE, "test_decorator"), 1);
-    //        }
-
     // ########################
     // NEGATIVE TESTS
     // ########################
@@ -896,6 +808,75 @@ TEST_F(gate_test, check_get_predecessor)
             EXPECT_TRUE(gate_0->get_predecessor("I0") == pred);
         }
 
+    TEST_END
+}
+
+/**
+ * Testing the handling of global gnd/vcc gates
+ *
+ * Functions: mark_global_vcc_gate, mark_global_gnd_gate,
+ *            unmark_global_vcc_gate, unmark_global_gnd_gate,
+ *            is_global_vcc_gate, is_global_gnd_gate
+ */
+TEST_F(gate_test, check_gnd_vcc_gate_handling)
+{
+    TEST_START
+        {
+            // Mark and unmark a global vcc gate
+            std::shared_ptr<netlist> nl = create_empty_netlist();
+            std::shared_ptr<gate> vcc_gate = nl->create_gate(MIN_GATE_ID+0, "VCC", "vcc_gate");
+
+            vcc_gate->mark_global_vcc_gate();
+            EXPECT_TRUE(vcc_gate->is_global_vcc_gate());
+            EXPECT_TRUE(nl->is_global_vcc_gate(vcc_gate));
+
+            vcc_gate->unmark_global_vcc_gate();
+            EXPECT_FALSE(vcc_gate->is_global_vcc_gate());
+            EXPECT_FALSE(nl->is_global_vcc_gate(vcc_gate));
+        }
+        {
+            // Mark and unmark a global gnd gate
+            std::shared_ptr<netlist> nl = create_empty_netlist();
+            std::shared_ptr<gate> gnd_gate = nl->create_gate(MIN_GATE_ID+0, "GND", "gnd_gate");
+
+            gnd_gate->mark_global_gnd_gate();
+            EXPECT_TRUE(gnd_gate->is_global_gnd_gate());
+            EXPECT_TRUE(nl->is_global_gnd_gate(gnd_gate));
+
+            gnd_gate->unmark_global_gnd_gate();
+            EXPECT_FALSE(gnd_gate->is_global_gnd_gate());
+            EXPECT_FALSE(nl->is_global_gnd_gate(gnd_gate));
+        }
+    TEST_END
+}
+
+/**
+ * Testing the get_module function
+ *
+ * Functions: get_module
+ */
+TEST_F(gate_test, check_get_module)
+{
+    TEST_START
+        {
+            // get the module of a gate (the top_module), then add it to another module and check again
+            // -- create the gate at the top_module
+            std::shared_ptr<netlist> nl = create_empty_netlist();
+            std::shared_ptr<gate> test_gate = nl->create_gate(MIN_GATE_ID+0, "INV", "test_gate");
+
+            EXPECT_EQ(test_gate->get_module(), nl->get_top_module());
+
+            // -- move the gate in the test_module
+            std::shared_ptr<module> test_module = nl->create_module("test_module", nl->get_top_module());
+            test_module->assign_gate(test_gate);
+
+            EXPECT_EQ(test_gate->get_module(), test_module);
+
+            // -- delete the test_module, so the gate should be moved in the top_module again
+            nl->delete_module(test_module);
+            EXPECT_EQ(test_gate->get_module(), nl->get_top_module());
+
+        }
     TEST_END
 }
 

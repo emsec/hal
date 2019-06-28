@@ -149,13 +149,108 @@ TEST_F(module_test, check_set_id){
             test_module->set_name("test_module");
             EXPECT_EQ(test_module->get_name(), "test_module");
         }
-        /*{ //TODO: Fails
+        {
             // Set an empty name
+            NO_COUT_TEST_BLOCK;
             std::shared_ptr<netlist> nl = create_empty_netlist();
             std::shared_ptr<module> test_module = nl->create_module(MIN_MODULE_ID+0, "test_module", nl->get_top_module());
 
             test_module->set_name("");
             EXPECT_EQ(test_module->get_name(), "test_module");
+        }
+    TEST_END
+}
+
+/**
+ * Testing the set_parent_module function
+ *
+ * Functions: set_parent_module
+ */
+TEST_F(module_test, check_set_parent_module){
+    TEST_START
+        // POSITIVE
+        {
+            /*  Consider the module scheme below. We set the parent_module of m_0 from the top_module to m_1
+             *
+             *                  .--> m_2
+             *        .--> m_0 -|
+             *   top -|         '--> m_3     ==>      top-.                 .--> m_2
+             *        '--> m_1                            '-> m_1 --> m_0 --|
+             *                                                              '--> m_3
+             *
+             */
+            std::shared_ptr<netlist> nl = create_empty_netlist();
+            std::shared_ptr<module> m_0 = nl->create_module(MIN_MODULE_ID+0, "test_module_0", nl->get_top_module());
+            std::shared_ptr<module> m_1 = nl->create_module(MIN_MODULE_ID+1, "test_module_1", nl->get_top_module());
+            std::shared_ptr<module> m_2 = nl->create_module(MIN_MODULE_ID+2, "test_module_2", m_0);
+            std::shared_ptr<module> m_3 = nl->create_module(MIN_MODULE_ID+3, "test_module_3", m_0);
+
+            m_0->set_parent_module(m_1);
+            EXPECT_EQ(m_0->get_parent_module(), m_1);
+            EXPECT_FALSE(m_1->get_submodules("test_module_0",false).empty());
+            EXPECT_FALSE(m_1->get_submodules("test_module_2",true).empty());
+            EXPECT_FALSE(m_1->get_submodules("test_module_3",true).empty());
+        }
+        {
+            /*  Hang m_0 to one of its childs (m_1). m_1 should be connected to the top_module afterwards
+             *
+             *
+             *               .--- m_1
+             *  top --- m_0 -|              ==>     top --- m_1 --- m_0 --- m_2
+             *               '--- m_2
+             *
+             */
+            std::shared_ptr<netlist> nl = create_empty_netlist();
+            std::shared_ptr<module> m_0 = nl->create_module(MIN_MODULE_ID+0, "test_module_0", nl->get_top_module());
+            std::shared_ptr<module> m_1 = nl->create_module(MIN_MODULE_ID+1, "test_module_1", m_0);
+            std::shared_ptr<module> m_2 = nl->create_module(MIN_MODULE_ID+2, "test_module_2", m_0);
+
+            m_0->set_parent_module(m_1);
+            EXPECT_EQ(m_1->get_parent_module(), nl->get_top_module());
+            EXPECT_EQ(m_0->get_parent_module(), m_1);
+            EXPECT_EQ(m_2->get_parent_module(), m_0);
+        }
+        // NEGATIVE
+        /*{ // FAILS: new_parent == m_parent wrong! => new_parent == this
+            // Hang a module to itself
+            NO_COUT_TEST_BLOCK;
+            std::shared_ptr<netlist> nl = create_empty_netlist();
+            std::shared_ptr<module> m_0 = nl->create_module(MIN_MODULE_ID+0, "test_module_0", nl->get_top_module());
+
+            m_0->set_parent_module(m_0);
+            EXPECT_EQ(m_0->get_parent_module(), nl->get_top_module());
+        }*/
+        {
+            // Try to change the parent of the top_module
+            NO_COUT_TEST_BLOCK;
+            std::shared_ptr<netlist> nl = create_empty_netlist();
+            std::shared_ptr<module> m_0 = nl->create_module(MIN_MODULE_ID+0, "test_module_0", nl->get_top_module());
+
+            nl->get_top_module()->set_parent_module(m_0);
+            EXPECT_EQ(m_0->get_parent_module(), nl->get_top_module());
+            EXPECT_EQ(nl->get_top_module()->get_parent_module(), nullptr);
+        }
+        /*{ // FAILS with SIGSEGV
+            // new_parent is a nullptr
+            NO_COUT_TEST_BLOCK;
+            std::shared_ptr<netlist> nl = create_empty_netlist();
+            std::shared_ptr<module> m_0 = nl->create_module(MIN_MODULE_ID+0, "test_module_0", nl->get_top_module());
+
+            m_0->set_parent_module(nullptr);
+            nl->get_top_module()->set_parent_module(m_0);
+            EXPECT_EQ(m_0->get_parent_module(), nl->get_top_module());
+        }*/
+        /*{ // FAILS (necessary?)
+            // new_parent not part of the netlist (anymore)
+            NO_COUT_TEST_BLOCK;
+            std::shared_ptr<netlist> nl = create_empty_netlist();
+            std::shared_ptr<netlist> nl_other = create_empty_netlist();
+            std::shared_ptr<module> m_0 = nl->create_module(MIN_MODULE_ID+0, "test_module_0", nl->get_top_module());
+            std::shared_ptr<module> m_1 = nl->create_module(MIN_MODULE_ID+1, "test_module_1", nl->get_top_module());
+            nl->delete_module(m_0); // m_0 is removed from the netlist
+
+            m_1->set_parent_module(m_0);
+            EXPECT_EQ(m_1->get_parent_module(), nl->get_top_module());
         }*/
     TEST_END
 }
@@ -390,7 +485,7 @@ TEST_F(module_test, check_get_gate_by_id){
  *
  * Functions: contains_net
  */
-TEST_F(module_test, check_contains_net){
+/*TEST_F(module_test, check_contains_net){
     TEST_START
         // POSITIVE
         {
@@ -398,7 +493,7 @@ TEST_F(module_test, check_contains_net){
             std::shared_ptr<netlist> nl = create_empty_netlist();
             std::shared_ptr<module> m_0 = nl->create_module(MIN_MODULE_ID+0, "test_module", nl->get_top_module());
             std::shared_ptr<net> net_0 = nl->create_net(MIN_NET_ID+0, "net_0");
-            m_0->assign_net(net_0);
+            //m_0->assign_net(net_0);
 
             EXPECT_TRUE(m_0->contains_net(net_0));
         }
@@ -433,7 +528,7 @@ TEST_F(module_test, check_contains_net){
             EXPECT_TRUE(m_0->contains_net(net_0, true));
         }
     TEST_END
-}
+}*/
 
 /**
  * Testing the addition of nets to the module. Verify the addition by call the
@@ -441,7 +536,7 @@ TEST_F(module_test, check_contains_net){
  *
  * Functions: assign_net
  */
-TEST_F(module_test, check_assign_net){
+/*TEST_F(module_test, check_assign_net){
     TEST_START
         {
             // Add some nets to the module
@@ -511,14 +606,14 @@ TEST_F(module_test, check_assign_net){
         }
 
     TEST_END
-}
+}*/
 
 /**
  * Testing the deletion of nets from modules
  *
  * Functions: remove_net
  */
-TEST_F(module_test, check_remove_net){
+/*TEST_F(module_test, check_remove_net){
     TEST_START
         {
             // Delete a net from a module (net owned by the modules)
@@ -565,14 +660,14 @@ TEST_F(module_test, check_remove_net){
             m_0->remove_net(nullptr);
         }
     TEST_END
-}
+}*/
 
 /**
  * Testing the get_net_by_id function
  *
  * Functions: get_net_by_id
  */
-TEST_F(module_test, check_get_net_by_id){
+/*TEST_F(module_test, check_get_net_by_id){
     TEST_START
         // POSITIVE
         {
@@ -606,7 +701,7 @@ TEST_F(module_test, check_get_net_by_id){
             EXPECT_EQ(m_0->get_net_by_id(MIN_NET_ID+123, true), net_123);
         }
     TEST_END
-}
+}*/
 
 
 /**
@@ -696,7 +791,7 @@ TEST_F(module_test, check_get_submodules){
 }
 
 /*
- *      Testing the get_input_nets, get_output_nets by using the following example netlist with a module
+ *      Testing the get_input_nets, get_output_nets, get_internal_nets by using the following example netlist with a module
  *
  *                     ################################################
  *                     # TEST_MODULE                                  #
@@ -714,9 +809,9 @@ TEST_F(module_test, check_get_submodules){
  */
 
 /**
- * Testing the get_input_nets and get_output_nets function
+ * Testing the get_input_nets, get_output_nets and get_internal_nets function
  *
- * Functions: get_input_nets, get_output_nets
+ * Functions: get_input_nets, get_output_nets, get_internal_nets
  */
 TEST_F(module_test, check_get_input_nets){
     TEST_START
@@ -764,10 +859,6 @@ TEST_F(module_test, check_get_input_nets){
         for(auto g : std::set<std::shared_ptr<gate>>({gate_0, gate_1, gate_2, gate_3})){
             test_module->assign_gate(g);
         }
-        for(auto n : std::set<std::shared_ptr<net>>({net_g_0, net_0_g, net_1_2, net_4_1_2, net_2_3_5})){
-            test_module->assign_net(n);
-        }
-
         {
             // Get input nets of the test module (no name filter)
             std::set<std::shared_ptr<net>> exp_result = {net_g_0, net_4_1_2};
@@ -787,6 +878,16 @@ TEST_F(module_test, check_get_input_nets){
             // Get output nets of the test module with name_1
             std::set<std::shared_ptr<net>> exp_result = {net_2_3_5};
             EXPECT_EQ(test_module->get_output_nets("name_1"), exp_result);
+        }
+        {
+            // Get internal nets of the test module (no name filter)
+            std::set<std::shared_ptr<net>> exp_result = {net_1_2, net_2_3_5};
+            EXPECT_EQ(test_module->get_internal_nets(), exp_result);
+        }
+        {
+            // Get internal nets of the test module with name_1
+            std::set<std::shared_ptr<net>> exp_result = {net_2_3_5};
+            EXPECT_EQ(test_module->get_internal_nets("name_1"), exp_result);
         }
 
     TEST_END
