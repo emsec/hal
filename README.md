@@ -9,13 +9,13 @@
 Apart from multiple research projects, HAL is also used in our university lecture [Introduction to Hardware Reverse Engineering](https://www.ei.ruhr-uni-bochum.de/studium/lehrveranstaltungen/832/).
 
 ## Features
-  - Natural directed graph representation of netlist elements and their connections
-  - Support for custom gate libraries
-  - High performance thanks to optimized C++ core
-  - Modularity: write your own C++ Plugins for efficient netlist analysis and manipulation (e.g. via graph algorithms)
-  - A feature-rich GUI allowing for visual netlist inspection and interactive analysis
-  - An integrated Python shell to exploratively interact with netlist elements and to interface plugins from the GUI
-  - **Update v1.1.0** Support for Xilinx Unisim, Xilinx Simprim, Synopsys 90nm, GSCLIB 3.0 and UMC 0.18µm libraries is now added
+- Natural directed graph representation of netlist elements and their connections
+- Support for custom gate libraries
+- High performance thanks to optimized C++ core
+- Modularity: write your own C++ Plugins for efficient netlist analysis and manipulation (e.g. via graph algorithms)
+- A feature-rich GUI allowing for visual netlist inspection and interactive analysis
+- An integrated Python shell to exploratively interact with netlist elements and to interface plugins from the GUI
+- **Update v1.1.0** Support for Xilinx Unisim, Xilinx Simprim, Synopsys 90nm, GSCLIB 3.0 and UMC 0.18µm libraries is now added
 
 ## API Documentation
 
@@ -130,11 +130,11 @@ brew install hal
 
 Run the following commands to download and install HAL.
 
- 1. `git clone https://github.com/emsec/hal.git && cd hal`
- 2. To install all neccessary dependencies execute `./install_dependencies.sh`
- 3. `mkdir build && cd build`
- 4. `cmake .. `
- 5. `make`
+1. `git clone https://github.com/emsec/hal.git && cd hal`
+2. To install all neccessary dependencies execute `./install_dependencies.sh`
+3. `mkdir build && cd build`
+4. `cmake .. `
+5. `make`
 
 Optionally you can install HAL:
 
