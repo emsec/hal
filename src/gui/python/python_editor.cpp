@@ -27,7 +27,7 @@
 
 python_editor::python_editor(QWidget* parent)
     : content_widget("Python Editor", parent), python_context_subscriber(), m_searchbar(new searchbar()), m_action_open_file(new QAction(this)), m_action_run(new QAction(this)),
-      m_action_save(new QAction(this)), m_action_save_as(new QAction(this)), m_action_toggle_minimap(new QAction(this)), m_action_new_file(new QAction(this)), m_file_name("")
+      m_action_save(new QAction(this)), m_action_save_as(new QAction(this)), m_action_toggle_minimap(new QAction(this)), m_action_new_file(new QAction(this))
 {
     ensurePolished();
     m_new_file_counter = 0;
@@ -80,6 +80,9 @@ python_editor::python_editor(QWidget* parent)
 
 bool python_editor::handle_serialization_to_hal_file(const hal::path& path, std::shared_ptr<netlist> netlist, rapidjson::Document& document)
 {
+    UNUSED(path);
+    UNUSED(netlist);
+
     rapidjson::Document::AllocatorType& allocator = document.GetAllocator();
     rapidjson::Value tabs(rapidjson::kArrayType);
 
@@ -117,6 +120,9 @@ bool python_editor::handle_serialization_to_hal_file(const hal::path& path, std:
 
 bool python_editor::handle_deserialization_from_hal_file(const hal::path& path, std::shared_ptr<netlist> netlist, rapidjson::Document& document)
 {
+    UNUSED(path);
+    UNUSED(netlist);
+
     if (document.HasMember("python_editor"))
     {
         auto root  = document["python_editor"].GetObject();
@@ -130,16 +136,16 @@ bool python_editor::handle_deserialization_from_hal_file(const hal::path& path, 
                 handle_action_new_tab();
             }
 
-            auto tab = dynamic_cast<python_code_editor*>(m_tab_widget->widget(cnt - 1));
             auto val = it->GetObject();
 
             if (val.HasMember("path"))
             {
-                tab_load_file(tab, val["path"].GetString());
+                tab_load_file(cnt - 1, val["path"].GetString());
             }
 
             if (val.HasMember("script"))
             {
+                auto tab = dynamic_cast<python_code_editor*>(m_tab_widget->widget(cnt - 1));
                 tab->setPlainText(val["script"].GetString());
                 tab->document()->setModified(true);
             }
@@ -287,18 +293,37 @@ void python_editor::handle_action_open_file()
     QString title = "Open File";
     QString text  = "Python Scripts(*.py)";
 
-    QString new_file_name = QFileDialog::getOpenFileName(nullptr, title, QDir::currentPath(), text, nullptr, QFileDialog::DontUseNativeDialog);
+    QString file_name = QFileDialog::getOpenFileName(nullptr, title, QDir::currentPath(), text, nullptr, QFileDialog::DontUseNativeDialog);
 
-    if (new_file_name.isEmpty())
+    if (file_name.isEmpty())
     {
         return;
     }
 
+    for (int i = 0; i < m_tab_widget->count(); ++i)
+    {
+        auto editor = dynamic_cast<python_code_editor*>(m_tab_widget->widget(i));
+        if (editor->get_file_name() == file_name)
+        {
+            m_tab_widget->setCurrentIndex(i);
+
+            if (editor->document()->isModified())
+            {
+                if (QMessageBox::question(editor, "Script has unsaved changes", "Do you want to reload the file from disk? Unsaved changes are lost.", QMessageBox::Yes | QMessageBox::No)
+                    == QMessageBox::Yes)
+                {
+                    tab_load_file(i, file_name);
+                }
+            }
+            return;
+        }
+    }
+
     handle_action_new_tab();
-    tab_load_file(dynamic_cast<python_code_editor*>(m_tab_widget->widget(m_tab_widget->count() - 1)), new_file_name);
+    tab_load_file(m_tab_widget->count() - 1, file_name);
 }
 
-void python_editor::tab_load_file(python_code_editor* tab, QString file_name)
+void python_editor::tab_load_file(u32 index, QString file_name)
 {
     std::ifstream file(file_name.toStdString(), std::ios::in);
 
@@ -307,17 +332,18 @@ void python_editor::tab_load_file(python_code_editor* tab, QString file_name)
         return;
     }
 
-    // make file active
-    m_file_name = file_name;
-
     std::string f((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
     QFileInfo info(file_name);
+
+    auto tab = dynamic_cast<python_code_editor*>(m_tab_widget->widget(index));
 
     tab->setPlainText(QString::fromStdString(f));
     tab->set_file_name(file_name);
     tab->document()->setModified(false);
     m_tab_widget->setTabText(m_tab_widget->count() - 1, info.completeBaseName() + "." + info.completeSuffix());
     m_new_file_counter--;
+
+    g_content_manager.data_saved("Python editor tab " + QString::number(index + 1));
 }
 
 void python_editor::save_file(const bool ask_path, int index)
@@ -367,29 +393,6 @@ void python_editor::save_file(const bool ask_path, int index)
 
     QFileInfo info(selected_file_name);
     m_tab_widget->setTabText(index, info.completeBaseName() + "." + info.completeSuffix());
-    // remember target file path
-    m_file_name = selected_file_name;
-}
-
-bool python_editor::has_unsaved_tabs()
-{
-    for (int i = 0; i < m_tab_widget->count(); i++)
-    {
-        if (dynamic_cast<python_code_editor*>(m_tab_widget->widget(i))->document()->isModified())
-            return true;
-    }
-    return false;
-}
-
-QStringList python_editor::get_names_of_unsaved_tabs()
-{
-    QStringList unsaved_tabs;
-    for (int i = 0; i < m_tab_widget->count(); i++)
-    {
-        if (dynamic_cast<python_code_editor*>(m_tab_widget->widget(i))->document()->isModified())
-            unsaved_tabs << m_tab_widget->tabText(i);
-    }
-    return unsaved_tabs;
 }
 
 void python_editor::handle_action_save_file()

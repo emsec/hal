@@ -201,36 +201,3 @@ void hal_content_manager::handle_relayout_button_clicked()
     m_layouter_view->handle_graph_relayouted();
     m_graph_scene->update();
 }
-
-/*
-
-bool hal_content_manager::has_python_editor_unsaved_changes()
-{
-    if (file_manager::get_instance()->is_document_open())
-        return python_widget->has_unsaved_tabs();
-    else
-        return false;
-}
-
-bool hal_content_manager::has_netlist_unsaved_changes()
-{
-    if (file_manager::get_instance()->is_document_open())
-        return m_netlist_watcher->has_netlist_unsaved_changes();
-    else
-        return false;
-}
-
-void hal_content_manager::mark_netlist_saved()
-{
-    if (file_manager::get_instance()->is_document_open())
-        m_netlist_watcher->set_netlist_unsaved_changes(false);
-}
-
-QStringList hal_content_manager::get_names_of_unsaved_python_tabs()
-{
-    if (file_manager::get_instance()->is_document_open())
-        return python_widget->get_names_of_unsaved_tabs();
-    else
-        return QStringList();
-}
-*/
