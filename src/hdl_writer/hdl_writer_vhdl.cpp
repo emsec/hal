@@ -335,7 +335,6 @@ void hdl_writer_vhdl::print_gate_definitions_vhdl()
 
     for (auto&& gate : gates)
     {
-        log_info("hdl_writer", "{}", gate->get_id());
         if (gate->get_type() == "GLOBAL_GND" || gate->get_type() == "GLOBAL_VCC")
             continue;
         m_stream << get_gate_name(gate);
