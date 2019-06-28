@@ -71,12 +71,9 @@ public:
     void handle_action_save_file_as();
     void handle_action_run();
     void handle_action_new_tab();
-    void tab_load_file(python_code_editor* tab, QString file_name);
+    void tab_load_file(u32 index, QString file_name);
 
-    void save_file(const bool ask_path, const int index = -1);
-
-    bool has_unsaved_tabs();
-    QStringList get_names_of_unsaved_tabs();
+    void save_file(const bool ask_path, int index = -1);
 
     QString open_icon_path() const;
     QString open_icon_style() const;
@@ -126,6 +123,8 @@ public Q_SLOTS:
     void handle_tab_close_requested(int index);
     void handle_action_toggle_minimap();
     void handle_modification_changed(bool changed);
+    void handle_key_pressed();
+    void handle_text_changed();
     void handle_searchbar_text_edited(const QString &text);
     void handle_current_tab_changed(int index);
 
@@ -133,9 +132,6 @@ private:
     QVBoxLayout* m_layout;
     toolbar* m_toolbar;
     splitter* m_splitter;
-
-    //debug code
-    code_editor* m_editor_widget;
 
     searchbar* m_searchbar;
 
@@ -164,9 +160,10 @@ private:
     QString m_toggle_minimap_icon_style;
     QString m_toggle_minimap_icon_path;
 
-    QString m_file_name = "";
     QTabWidget* m_tab_widget;
     int m_new_file_counter;
+
+    long m_last_click_time;
 };
 
 #endif    // PYTHON_WIDGET_H

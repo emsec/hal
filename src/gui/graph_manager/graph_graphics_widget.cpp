@@ -66,188 +66,73 @@ void graph_graphics_widget::ShowContextMenu(const QPoint& pos)
             }
         }
 
+        contextMenu2.addAction(&edit_name_action);
+
         currently_selected_gates = dynamic_cast<graph_layouter_view*>(m_view)->get_selected_gates();
-        currently_selected_nets  = dynamic_cast<graph_layouter_view*>(m_view)->get_selected_nets();
 
-        QAction gate_action_new_module("N");
-        QMenu* gate_menu_existing_module = nullptr;
-        QAction net_action_new_module("N");
-        QMenu* net_menu_existing_submoudle = nullptr;
-        QAction all_action_new_module("N");
-        QMenu* all_menu_existing_module = nullptr;
-        QMenu* gate_menu_remove_module  = nullptr;
-        QMenu* net_menu_remove_module   = nullptr;
-        QMenu* all_menu_remove_module   = nullptr;
-        bool exist_modules              = !g_netlist->get_modules().empty();
+        if (!currently_selected_gates.empty())
+        {
+            QAction* gate_action_new_module  = new QAction("Add gate to new module...");
+            QMenu* gate_menu_existing_module = new QMenu("Add gate to existing module");
+            QMenu* gate_menu_remove_module   = new QMenu("Remove gate from module");
 
-        //gate actions, check if it is needed, and if yes, if "gates" or gate
-        if (currently_selected_gates.size() > 1)
-        {
-            gate_action_new_module.setText("Add gates to new module...");
-            if (exist_modules)
-                gate_menu_existing_module = new QMenu("Add gates to existing module");    //contextMenu2.addMenu("Add Gates to existing module...");
-            gate_menu_remove_module = new QMenu("Remove gates from module");
-        }
-        if (currently_selected_gates.size() == 1)
-        {
-            gate_action_new_module.setText("Add Gate to new module...");
-            if (exist_modules)
-                gate_menu_existing_module = new QMenu("Add gate to existing module");    //contextMenu2.addMenu("Add Gate to exisiting module...");
-            gate_menu_remove_module = new QMenu("Remove gate from module");
-        }
-        //gate connections
-        if (gate_action_new_module.text() != "N")
-        {
-            connect(&gate_action_new_module, &QAction::triggered, this, &graph_graphics_widget::handle_add_gates_to_new_module_triggered);
-            contextMenu2.addAction(&gate_action_new_module);
-        }
-        if (gate_menu_existing_module)
-        {
+            //gate actions, check if it is needed, and if yes, if "gates" or gate
+            if (currently_selected_gates.size() > 1)
+            {
+                gate_action_new_module->setText("Add gates to new module...");
+                gate_menu_existing_module->setTitle("Add gates to existing module");
+                gate_menu_remove_module->setTitle("Remove gates from module");
+            }
+
+            connect(gate_action_new_module, &QAction::triggered, this, &graph_graphics_widget::handle_add_gates_to_new_module_triggered);
+            contextMenu2.addAction(gate_action_new_module);
+
+            // build add to existing module menu
+            u32 action_cnt = 0;
             for (const auto& submod : g_netlist->get_modules())
             {
+                if (currently_selected_gates.size() == 1 && currently_selected_gates[0]->get_ref_gate()->get_module() == submod)
+                {
+                    continue;
+                }
                 QAction* tempAction = new QAction(QString::fromStdString(submod->get_name()) + " [ID:  " + QString::number((int)submod->get_id()) + "]", this);
                 tempAction->setData(QVariant(submod->get_id()));
                 connect(tempAction, &QAction::triggered, this, &graph_graphics_widget::handle_add_gates_to_existing_module);
                 gate_menu_existing_module->addAction(tempAction);
+                action_cnt++;
             }
-            contextMenu2.addMenu(gate_menu_existing_module);
-        }
+            if (action_cnt > 0)
+            {
+                contextMenu2.addMenu(gate_menu_existing_module);
+            }
+            else
+            {
+                delete gate_menu_existing_module;
+            }
 
-        //check the nets
-        if (currently_selected_nets.size() > 1)
-        {
-            net_action_new_module.setText("Add nets to new module...");
-            if (exist_modules)
-                net_menu_existing_submoudle = new QMenu("Add nets to existing module");
-            net_menu_remove_module = new QMenu("Remove nets from module");
-        }
-        if (currently_selected_nets.size() == 1)
-        {
-            net_action_new_module.setText("Add net to new module...");
-            if (exist_modules)
-                net_menu_existing_submoudle = new QMenu("Add net to exisiting module");
-            net_menu_remove_module = new QMenu("Remove net from module");
-        }
-        //net connections
-        if (net_action_new_module.text() != "N")
-        {
-            connect(&net_action_new_module, &QAction::triggered, this, &graph_graphics_widget::handle_add_nets_to_new_module_triggered);
-            contextMenu2.addAction(&net_action_new_module);
-        }
-        if (net_menu_existing_submoudle)
-        {
-            for (const auto& submod : g_netlist->get_modules())
+            // build remove from module menu
+            QList<std::shared_ptr<module>> modules_found;
+            for (const auto& gate : currently_selected_gates)
             {
-                QAction* tempAction = new QAction(QString::fromStdString(submod->get_name()) + " [ID:  " + QString::number((int)submod->get_id()) + "]", this);
-                tempAction->setData(QVariant(submod->get_id()));
-                connect(tempAction, &QAction::triggered, this, &graph_graphics_widget::handle_add_nets_to_existing_module_triggered);
-                net_menu_existing_submoudle->addAction(tempAction);
-            }
-            contextMenu2.addMenu(net_menu_existing_submoudle);
-        }
-
-        //Both nets and gates
-        if (currently_selected_gates.size() >= 1 && currently_selected_nets.size() >= 1)
-        {
-            all_action_new_module.setText("Add all to new module...");
-            if (exist_modules)
-                all_menu_existing_module = new QMenu("Add all to existing module");
-            all_menu_remove_module = new QMenu("Remove all from module");
-        }
-        if (all_action_new_module.text() != "N")
-        {
-            connect(&all_action_new_module, &QAction::triggered, this, &graph_graphics_widget::handle_add_gates_and_nets_to_new_module_triggered);
-            contextMenu2.addAction(&all_action_new_module);
-        }
-        if (all_menu_existing_module)
-        {
-            for (const auto& submod : g_netlist->get_modules())
-            {
-                QAction* tempAction = new QAction(QString::fromStdString(submod->get_name()) + " [ID:  " + QString::number((int)submod->get_id()) + "]", this);
-                tempAction->setData(QVariant(submod->get_id()));
-                connect(tempAction, &QAction::triggered, this, &graph_graphics_widget::handle_add_gates_and_nets_to_existing_module_triggered);
-                all_menu_existing_module->addAction(tempAction);
-            }
-            contextMenu2.addMenu(all_menu_existing_module);
-        }
-        if (gate_menu_remove_module)
-        {
-            QList<std::shared_ptr<module>> subs_found;
-            for (const auto& sub : g_netlist->get_modules())
-            {
-                for (const auto& gate : currently_selected_gates)
+                auto module = gate->get_ref_gate()->get_module();
+                if (!modules_found.contains(module) && module != g_netlist->get_top_module())
                 {
-                    if (sub->contains_gate(gate->get_ref_gate()) && !subs_found.contains(sub))
-                    {
-                        QAction* tempAction = new QAction(QString::fromStdString(sub->get_name()) + " [ID:  " + QString::number((int)sub->get_id()) + "]", this);
-                        tempAction->setData(QVariant(sub->get_id()));
-                        connect(tempAction, &QAction::triggered, this, &graph_graphics_widget::handle_remove_gates_from_module_triggered);
-                        gate_menu_remove_module->addAction(tempAction);
-                        subs_found.append(sub);
-                    }
+                    QAction* tempAction = new QAction(QString::fromStdString(module->get_name()) + " [ID:  " + QString::number((int)module->get_id()) + "]", this);
+                    tempAction->setData(QVariant(module->get_id()));
+                    connect(tempAction, &QAction::triggered, this, &graph_graphics_widget::handle_remove_gates_from_module_triggered);
+                    gate_menu_remove_module->addAction(tempAction);
+                    modules_found.append(module);
                 }
             }
-            if (!subs_found.isEmpty())
+            if (!modules_found.isEmpty())
+            {
                 contextMenu2.addMenu(gate_menu_remove_module);
+            }
             else
+            {
                 delete gate_menu_remove_module;
-        }
-        if (net_menu_remove_module)
-        {
-            QList<std::shared_ptr<module>> subs_found;
-            for (const auto& sub : g_netlist->get_modules())
-            {
-                for (const auto& net : currently_selected_nets)
-                {
-                    if (sub->contains_net(net->get_ref_net()) && !subs_found.contains(sub))
-                    {
-                        QAction* tempAction = new QAction(QString::fromStdString(sub->get_name()) + " [ID:  " + QString::number((int)sub->get_id()) + "]", this);
-                        tempAction->setData(QVariant(sub->get_id()));
-                        connect(tempAction, &QAction::triggered, this, &graph_graphics_widget::handle_remove_nets_from_module_triggered);
-                        net_menu_remove_module->addAction(tempAction);
-                        subs_found.append(sub);
-                    }
-                }
             }
-            if (!subs_found.isEmpty())
-                contextMenu2.addMenu(net_menu_remove_module);
-            else
-                delete net_menu_remove_module;
         }
-        if (all_menu_remove_module)
-        {
-            QList<std::shared_ptr<module>> subs_found;
-            for (const auto& sub : g_netlist->get_modules())
-            {
-                for (const auto& net : currently_selected_nets)
-                {
-                    if (sub->contains_net(net->get_ref_net()) && !subs_found.contains(sub))
-                    {
-                        QAction* tempAction = new QAction(QString::fromStdString(sub->get_name()) + " [ID:  " + QString::number((int)sub->get_id()) + "]", this);
-                        tempAction->setData(QVariant(sub->get_id()));
-                        connect(tempAction, &QAction::triggered, this, &graph_graphics_widget::handle_remove_gates_and_nets_from_module_triggered);
-                        all_menu_remove_module->addAction(tempAction);
-                        subs_found.append(sub);
-                    }
-                }
-                for (const auto& gate : currently_selected_gates)
-                {
-                    if (sub->contains_gate(gate->get_ref_gate()) && !subs_found.contains(sub))
-                    {
-                        QAction* tempAction = new QAction(QString::fromStdString(sub->get_name()) + " [ID:  " + QString::number((int)sub->get_id()) + "]", this);
-                        tempAction->setData(QVariant(sub->get_id()));
-                        connect(tempAction, &QAction::triggered, this, &graph_graphics_widget::handle_remove_gates_and_nets_from_module_triggered);
-                        all_menu_remove_module->addAction(tempAction);
-                        subs_found.append(sub);
-                    }
-                }
-            }
-            if (!subs_found.isEmpty())
-                contextMenu2.addMenu(all_menu_remove_module);
-            else
-                delete all_menu_remove_module;
-        }
-        contextMenu2.addAction(&edit_name_action);
         contextMenu2.exec(mapToGlobal(pos));
     }
     else    //no item clicked
@@ -316,92 +201,6 @@ void graph_graphics_widget::handle_remove_gates_from_module_triggered()
         {
             for (const auto& gate : currently_selected_gates)
                 temp->remove_gate(gate->get_ref_gate());
-        }
-    }
-}
-
-void graph_graphics_widget::handle_add_nets_to_new_module_triggered()
-{
-    auto dialog = new input_dialog(nullptr, "Name:");
-    if (dialog->exec() == QDialog::Accepted)
-    {
-        auto sub = g_netlist->create_module(g_netlist->get_unique_module_id(), dialog->get_text().toStdString(), g_netlist->get_top_module());
-        for (const auto& net : currently_selected_nets)
-            sub->assign_net(net->get_ref_net());
-    }
-    delete dialog;
-}
-
-void graph_graphics_widget::handle_add_nets_to_existing_module_triggered()
-{
-    QAction* sender_action = dynamic_cast<QAction*>(sender());
-    if (sender_action)
-    {
-        std::shared_ptr<module> temp = g_netlist->get_module_by_id(sender_action->data().toInt());
-        if (temp)
-        {
-            for (const auto& net : currently_selected_nets)
-                temp->assign_net(net->get_ref_net());
-        }
-    }
-}
-
-void graph_graphics_widget::handle_remove_nets_from_module_triggered()
-{
-    QAction* sender_action = dynamic_cast<QAction*>(sender());
-    if (sender_action)
-    {
-        std::shared_ptr<module> temp = g_netlist->get_module_by_id(sender_action->data().toInt());
-        if (temp)
-        {
-            for (const auto& net : currently_selected_nets)
-                temp->remove_net(net->get_ref_net());
-        }
-    }
-}
-
-void graph_graphics_widget::handle_add_gates_and_nets_to_new_module_triggered()
-{
-    auto dialog = new input_dialog(nullptr, "Name:");
-    if (dialog->exec() == QDialog::Accepted)
-    {
-        auto sub = g_netlist->create_module(g_netlist->get_unique_module_id(), dialog->get_text().toStdString(), g_netlist->get_top_module());
-        for (const auto& gate : currently_selected_gates)
-            sub->assign_gate(gate->get_ref_gate());
-        for (const auto& net : currently_selected_nets)
-            sub->assign_net(net->get_ref_net());
-    }
-    delete dialog;
-}
-
-void graph_graphics_widget::handle_add_gates_and_nets_to_existing_module_triggered()
-{
-    QAction* sender_action = dynamic_cast<QAction*>(sender());
-    if (sender_action)
-    {
-        std::shared_ptr<module> temp = g_netlist->get_module_by_id(sender_action->data().toInt());
-        if (temp)
-        {
-            for (auto const& gate : currently_selected_gates)
-                temp->assign_gate(gate->get_ref_gate());
-            for (const auto& net : currently_selected_nets)
-                temp->assign_net(net->get_ref_net());
-        }
-    }
-}
-
-void graph_graphics_widget::handle_remove_gates_and_nets_from_module_triggered()
-{
-    QAction* sender_action = dynamic_cast<QAction*>(sender());
-    if (sender_action)
-    {
-        std::shared_ptr<module> temp = g_netlist->get_module_by_id(sender_action->data().toInt());
-        if (temp)
-        {
-            for (const auto& gate : currently_selected_gates)
-                temp->remove_gate(gate->get_ref_gate());
-            for (const auto& net : currently_selected_nets)
-                temp->remove_net(net->get_ref_net());
         }
     }
 }

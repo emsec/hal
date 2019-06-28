@@ -43,7 +43,6 @@ class plugin_manager_dialog;
 class plugin_schedule_widget;
 class python_editor;
 class file_manager;
-class hal_content_manager;
 class dropdown_list;
 class about_dialog;
 class welcome_screen;
@@ -153,8 +152,6 @@ private:
     about_dialog* m_about_dialog;
 
     plugin_model* m_plugin_model;
-
-    hal_content_manager* m_content_manager;
 
     QString m_open_icon_path;
     QString m_open_icon_style;

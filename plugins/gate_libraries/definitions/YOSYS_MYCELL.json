@@ -1,0 +1,92 @@
+{
+  "library": {
+    "element_types": [
+      "BUFG",
+      "BUF",
+      "INV",
+      "AND2",
+      "AND3",
+      "AND4",
+      "AND5",
+      "AND6",
+      "OR2",
+      "OR3",
+      "OR4",
+      "OR5",
+      "OR6",
+      "LUT6",
+      "MUXCY",
+      "DFFSR",
+      "GLOBAL_GND",
+      "GLOBAL_VCC"
+    ],
+    "elements_inout_types": {
+      "BUFG" : [],
+      "BUF" : [],
+      "INV" : [],
+      "AND2" : [],
+      "AND3" : [],
+      "AND4" : [],
+      "AND5" : [],
+      "AND6" : [],
+      "OR2" : [],
+      "OR3" : [],
+      "OR4" : [],
+      "OR5" : [],
+      "OR6" : [],
+      "LUT6" : [],
+      "MUXCY" : [],
+      "DFFSR" : [],
+      "GLOBAL_GND": [],
+      "GLOBAL_VCD": []
+    },
+    "elements_input_types": {
+      "BUFG" : ["I"],
+      "BUF" : ["I"],
+      "INV" : ["I"],
+      "AND2" : ["I0", "I1"],
+      "AND3" : ["I0", "I1", "I2"],
+      "AND4" : ["I0", "I1", "I2","I3"],
+      "AND5" : ["I0", "I1", "I2","I3","I4"],
+      "AND6" : ["I0", "I1", "I2","I3","I4","I5"],
+      "OR2" : ["I0", "I1"],
+      "OR3" : ["I0", "I1", "I2"],
+      "OR4" : ["I0", "I1", "I2","I3"],
+      "OR5" : ["I0", "I1", "I2","I3","I4"],
+      "OR6" : ["I0", "I1", "I2","I3","I4","I5"],
+      "LUT6": ["I0", "I1", "I2", "I3", "I4", "I5"],
+      "MUXCY": ["CI", "DI", "S"],
+      "DFFSR" : ["C", "D", "R", "S"],
+      "GLOBAL_GND": [],
+      "GLOBAL_VCD": []
+    },
+    "elements_output_types": {
+      "BUFG" : ["O"],
+      "BUF" : ["O"],
+      "INV" : ["O"],
+      "AND2" : ["O"],
+      "AND3" : ["O"],
+      "AND4" : ["O"],
+      "AND5" : ["O"],
+      "AND6" : ["O"],
+      "OR2" : ["O"],
+      "OR3" : ["O"],
+      "OR4" : ["O"],
+      "OR5" : ["O"],
+      "OR6" : ["O"],
+      "LUT6": ["O"],
+      "MUXCY" : ["O"],
+      "DFFSR" : ["Q"],
+      "GLOBAL_GND": ["O"],
+      "GLOBAL_VCD": ["O"]
+    },
+    "library_name": "YOSYS_MYCELL",
+    "vhdl_includes": [],
+    "global_gnd_nodes": [
+      "GLOBAL_GND"
+    ],
+    "global_vcc_nodes": [
+      "GLOBAL_VCC"
+    ]
+  }
+}

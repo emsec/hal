@@ -188,16 +188,6 @@ namespace event_log
                 auto gate = submodule->get_netlist()->get_gate_by_id(associated_data);
                 log_info("event", "removed gate '{}' (id {:08x}) from submodule '{}' (id {:08x})", gate->get_name(), gate->get_id(), submodule->get_name(), submodule->get_id());
             }
-            else if (event == module_event_handler::event::net_assigned)
-            {
-                auto net = submodule->get_netlist()->get_net_by_id(associated_data);
-                log_info("event", "inserted net '{}' (id {:08x}) to submodule '{}' (id {:08x})", net->get_name(), net->get_id(), submodule->get_name(), submodule->get_id());
-            }
-            else if (event == module_event_handler::event::net_removed)
-            {
-                auto net = submodule->get_netlist()->get_net_by_id(associated_data);
-                log_info("event", "removed net '{}' (id {:08x}) from submodule '{}' (id {:08x})", net->get_name(), net->get_id(), submodule->get_name(), submodule->get_id());
-            }
             else
             {
                 log_error("event", "unknown submodule event");

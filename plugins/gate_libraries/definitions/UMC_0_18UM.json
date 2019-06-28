@@ -1,0 +1,6238 @@
+{
+  "library": {
+    "element_types": [
+      "GLOBAL_GND",
+      "GLOBAL_VCC",
+      "HDADFULD1",
+      "HDADFULD2",
+      "HDADFULD4",
+      "HDADFULDL",
+      "HDADHALFD1",
+      "HDADHALFD2",
+      "HDADHALFD4",
+      "HDADHALFDL",
+      "HDAND2D1",
+      "HDAND2D2",
+      "HDAND2D4",
+      "HDAND2D6",
+      "HDAND2D8",
+      "HDAND2DL",
+      "HDAND3D1",
+      "HDAND3D2",
+      "HDAND3D4",
+      "HDAND3D6",
+      "HDAND3D8",
+      "HDAND3DL",
+      "HDAND4D1",
+      "HDAND4D2",
+      "HDAND4D4",
+      "HDAND4D6",
+      "HDAND4D8",
+      "HDAND4DL",
+      "HDANT",
+      "HDANT2",
+      "HDAO211D1",
+      "HDAO211D2",
+      "HDAO211D4",
+      "HDAO211DL",
+      "HDAO21D1",
+      "HDAO21D2",
+      "HDAO21D4",
+      "HDAO21DL",
+      "HDAO21M10D1",
+      "HDAO21M10D2",
+      "HDAO21M10D4",
+      "HDAO21M10DL",
+      "HDAO21M20D1",
+      "HDAO21M20D2",
+      "HDAO21M20D4",
+      "HDAO21M20DL",
+      "HDAO222D1",
+      "HDAO222D2",
+      "HDAO222D4",
+      "HDAO222DL",
+      "HDAO22D1",
+      "HDAO22D2",
+      "HDAO22D4",
+      "HDAO22DL",
+      "HDAO22M10D1",
+      "HDAO22M10D2",
+      "HDAO22M10D4",
+      "HDAO22M10DL",
+      "HDAO22M20D1",
+      "HDAO22M20D2",
+      "HDAO22M20D4",
+      "HDAO22M20DL",
+      "HDAO31D1",
+      "HDAO31D2",
+      "HDAO31D4",
+      "HDAO31DL",
+      "HDAO31M10D1",
+      "HDAO31M10D2",
+      "HDAO31M10D4",
+      "HDAO31M10DL",
+      "HDAO32D1",
+      "HDAO32D2",
+      "HDAO32D4",
+      "HDAO32DL",
+      "HDAO33D1",
+      "HDAO33D2",
+      "HDAO33D4",
+      "HDAO33DL",
+      "HDAOI211D1",
+      "HDAOI211D2",
+      "HDAOI211D4",
+      "HDAOI211DL",
+      "HDAOI21D1",
+      "HDAOI21D2",
+      "HDAOI21D4",
+      "HDAOI21DL",
+      "HDAOI21M10D1",
+      "HDAOI21M10D2",
+      "HDAOI21M10D4",
+      "HDAOI21M10DL",
+      "HDAOI21M20D1",
+      "HDAOI21M20D2",
+      "HDAOI21M20D4",
+      "HDAOI21M20DL",
+      "HDAOI222D1",
+      "HDAOI222D2",
+      "HDAOI222D4",
+      "HDAOI222DL",
+      "HDAOI22D1",
+      "HDAOI22D2",
+      "HDAOI22D4",
+      "HDAOI22DL",
+      "HDAOI22M10D1",
+      "HDAOI22M10D2",
+      "HDAOI22M10D4",
+      "HDAOI22M10DL",
+      "HDAOI22M20D1",
+      "HDAOI22M20D2",
+      "HDAOI22M20D4",
+      "HDAOI22M20DL",
+      "HDAOI31D1",
+      "HDAOI31D2",
+      "HDAOI31D4",
+      "HDAOI31DL",
+      "HDAOI31M10D1",
+      "HDAOI31M10D2",
+      "HDAOI31M10D4",
+      "HDAOI31M10DL",
+      "HDAOI32D1",
+      "HDAOI32D2",
+      "HDAOI32D4",
+      "HDAOI32DL",
+      "HDAOI33D1",
+      "HDAOI33D2",
+      "HDAOI33D4",
+      "HDAOI33DL",
+      "HDBUFBD12",
+      "HDBUFBD16",
+      "HDBUFBD2",
+      "HDBUFBD20",
+      "HDBUFBD3",
+      "HDBUFBD32",
+      "HDBUFBD4",
+      "HDBUFBD6",
+      "HDBUFBD8",
+      "HDBUFD1",
+      "HDBUFD12",
+      "HDBUFD16",
+      "HDBUFD2",
+      "HDBUFD20",
+      "HDBUFD3",
+      "HDBUFD32",
+      "HDBUFD4",
+      "HDBUFD6",
+      "HDBUFD8",
+      "HDBUFDL",
+      "HDBUFTBD12",
+      "HDBUFTBD16",
+      "HDBUFTBD20",
+      "HDBUFTBD4",
+      "HDBUFTBD6",
+      "HDBUFTBD8",
+      "HDBUFTD1",
+      "HDBUFTD12",
+      "HDBUFTD16",
+      "HDBUFTD2",
+      "HDBUFTD20",
+      "HDBUFTD3",
+      "HDBUFTD4",
+      "HDBUFTD6",
+      "HDBUFTD8",
+      "HDBUFTDL",
+      "HDCLKBD12",
+      "HDCLKBD16",
+      "HDCLKBD2",
+      "HDCLKBD20",
+      "HDCLKBD3",
+      "HDCLKBD32",
+      "HDCLKBD4",
+      "HDCLKBD6",
+      "HDCLKBD8",
+      "HDCLOAD",
+      "HDDFEPQ1",
+      "HDDFEPQ2",
+      "HDDFEPQ4",
+      "HDDFEPQL",
+      "HDDFERPB1",
+      "HDDFERPB2",
+      "HDDFERPB4",
+      "HDDFERPBL",
+      "HDDFERPQ1",
+      "HDDFERPQ2",
+      "HDDFERPQ4",
+      "HDDFERPQL",
+      "HDDFERSNB1",
+      "HDDFERSNB2",
+      "HDDFERSNB4",
+      "HDDFERSNBL",
+      "HDDFERSPB1",
+      "HDDFERSPB2",
+      "HDDFERSPB4",
+      "HDDFERSPBL",
+      "HDDFERSPQ1",
+      "HDDFERSPQ2",
+      "HDDFERSPQ4",
+      "HDDFERSPQL",
+      "HDDFESPQ1",
+      "HDDFESPQ2",
+      "HDDFESPQ4",
+      "HDDFESPQL",
+      "HDDFFPB1",
+      "HDDFFPB2",
+      "HDDFFPB4",
+      "HDDFFPBL",
+      "HDDFFPQ1",
+      "HDDFFPQ2",
+      "HDDFFPQ4",
+      "HDDFFPQL",
+      "HDDFFRNQ1",
+      "HDDFFRNQ2",
+      "HDDFFRNQ4",
+      "HDDFFRNQL",
+      "HDDFFRPB1",
+      "HDDFFRPB2",
+      "HDDFFRPB4",
+      "HDDFFRPBL",
+      "HDDFFRPQ1",
+      "HDDFFRPQ2",
+      "HDDFFRPQ4",
+      "HDDFFRPQL",
+      "HDDFFRSNB1",
+      "HDDFFRSNB2",
+      "HDDFFRSNB4",
+      "HDDFFRSNBL",
+      "HDDFFRSPB1",
+      "HDDFFRSPB2",
+      "HDDFFRSPB4",
+      "HDDFFRSPBL",
+      "HDDFFRSPQ1",
+      "HDDFFRSPQ2",
+      "HDDFFRSPQ4",
+      "HDDFFRSPQL",
+      "HDDFFSPQ1",
+      "HDDFFSPQ2",
+      "HDDFFSPQ4",
+      "HDDFFSPQL",
+      "HDDLY1D4",
+      "HDDLY2D4",
+      "HDDLY3D4",
+      "HDDLY4D4",
+      "HDEXNOR2D1",
+      "HDEXNOR2D2",
+      "HDEXNOR2D4",
+      "HDEXNOR2DL",
+      "HDEXNOR3D1",
+      "HDEXNOR3D2",
+      "HDEXNOR3D4",
+      "HDEXNOR3DL",
+      "HDEXOR2D1",
+      "HDEXOR2D2",
+      "HDEXOR2D4",
+      "HDEXOR2DL",
+      "HDEXOR3D1",
+      "HDEXOR3D2",
+      "HDEXOR3D4",
+      "HDEXOR3DL",
+      "HDINVBD1",
+      "HDINVBD12",
+      "HDINVBD16",
+      "HDINVBD2",
+      "HDINVBD20",
+      "HDINVBD3",
+      "HDINVBD32",
+      "HDINVBD4",
+      "HDINVBD6",
+      "HDINVBD8",
+      "HDINVD1",
+      "HDINVD12",
+      "HDINVD16",
+      "HDINVD2",
+      "HDINVD20",
+      "HDINVD3",
+      "HDINVD32",
+      "HDINVD4",
+      "HDINVD6",
+      "HDINVD8",
+      "HDINVDL",
+      "HDINVTD1",
+      "HDINVTD12",
+      "HDINVTD16",
+      "HDINVTD2",
+      "HDINVTD20",
+      "HDINVTD3",
+      "HDINVTD4",
+      "HDINVTD6",
+      "HDINVTD8",
+      "HDINVTDL",
+      "HDKEEPER",
+      "HDLATNB1",
+      "HDLATNB2",
+      "HDLATNB4",
+      "HDLATNBL",
+      "HDLATNT1",
+      "HDLATNT2",
+      "HDLATNT4",
+      "HDLATNTL",
+      "HDLATPB1",
+      "HDLATPB2",
+      "HDLATPB4",
+      "HDLATPBL",
+      "HDLATPQ1",
+      "HDLATPQ2",
+      "HDLATPQ4",
+      "HDLATPQL",
+      "HDLATRNB1",
+      "HDLATRNB2",
+      "HDLATRNB4",
+      "HDLATRNBL",
+      "HDLATRPB1",
+      "HDLATRPB2",
+      "HDLATRPB4",
+      "HDLATRPBL",
+      "HDLATRSPB1",
+      "HDLATRSPB2",
+      "HDLATRSPB4",
+      "HDLATRSPBL",
+      "HDMUX2D1",
+      "HDMUX2D2",
+      "HDMUX2D4",
+      "HDMUX2D6",
+      "HDMUX2D8",
+      "HDMUX2DL",
+      "HDMUX3D1",
+      "HDMUX3D2",
+      "HDMUX3D4",
+      "HDMUX3DL",
+      "HDMUX4D1",
+      "HDMUX4D2",
+      "HDMUX4D4",
+      "HDMUX4DL",
+      "HDMUXB2D1",
+      "HDMUXB2D2",
+      "HDMUXB2D4",
+      "HDMUXB2D6",
+      "HDMUXB2D8",
+      "HDMUXB2DL",
+      "HDMUXB4D1",
+      "HDMUXB4D2",
+      "HDMUXB4D4",
+      "HDMUXB4DL",
+      "HDNAN2D1",
+      "HDNAN2D2",
+      "HDNAN2D4",
+      "HDNAN2D6",
+      "HDNAN2D8",
+      "HDNAN2DL",
+      "HDNAN2M1D1",
+      "HDNAN2M1D2",
+      "HDNAN2M1D4",
+      "HDNAN2M1DL",
+      "HDNAN3D1",
+      "HDNAN3D2",
+      "HDNAN3D4",
+      "HDNAN3D6",
+      "HDNAN3D8",
+      "HDNAN3DL",
+      "HDNAN3M1D1",
+      "HDNAN3M1D2",
+      "HDNAN3M1D4",
+      "HDNAN3M1DL",
+      "HDNAN4D1",
+      "HDNAN4D2",
+      "HDNAN4D4",
+      "HDNAN4D6",
+      "HDNAN4D8",
+      "HDNAN4DL",
+      "HDNAN4M1D1",
+      "HDNAN4M1D2",
+      "HDNAN4M1D4",
+      "HDNAN4M1DL",
+      "HDNAN4M2D1",
+      "HDNAN4M2D2",
+      "HDNAN4M2D4",
+      "HDNAN4M2DL",
+      "HDNOR2D1",
+      "HDNOR2D2",
+      "HDNOR2D4",
+      "HDNOR2D6",
+      "HDNOR2D8",
+      "HDNOR2DL",
+      "HDNOR2M1D1",
+      "HDNOR2M1D2",
+      "HDNOR2M1D4",
+      "HDNOR2M1DL",
+      "HDNOR3D1",
+      "HDNOR3D2",
+      "HDNOR3D4",
+      "HDNOR3D6",
+      "HDNOR3D8",
+      "HDNOR3DL",
+      "HDNOR3M1D1",
+      "HDNOR3M1D2",
+      "HDNOR3M1D4",
+      "HDNOR3M1DL",
+      "HDNOR4D1",
+      "HDNOR4D2",
+      "HDNOR4D4",
+      "HDNOR4D6",
+      "HDNOR4D8",
+      "HDNOR4DL",
+      "HDNOR4M1D1",
+      "HDNOR4M1D2",
+      "HDNOR4M1D4",
+      "HDNOR4M1DL",
+      "HDNOR4M2D1",
+      "HDNOR4M2D2",
+      "HDNOR4M2D4",
+      "HDNOR4M2DL",
+      "HDOA211D1",
+      "HDOA211D2",
+      "HDOA211D4",
+      "HDOA211DL",
+      "HDOA21D1",
+      "HDOA21D2",
+      "HDOA21D4",
+      "HDOA21DL",
+      "HDOA21M10D1",
+      "HDOA21M10D2",
+      "HDOA21M10D4",
+      "HDOA21M10DL",
+      "HDOA21M20D1",
+      "HDOA21M20D2",
+      "HDOA21M20D4",
+      "HDOA21M20DL",
+      "HDOA222D1",
+      "HDOA222D2",
+      "HDOA222D4",
+      "HDOA222DL",
+      "HDOA22D1",
+      "HDOA22D2",
+      "HDOA22D4",
+      "HDOA22DL",
+      "HDOA22M10D1",
+      "HDOA22M10D2",
+      "HDOA22M10D4",
+      "HDOA22M10DL",
+      "HDOA22M20D1",
+      "HDOA22M20D2",
+      "HDOA22M20D4",
+      "HDOA22M20DL",
+      "HDOA31D1",
+      "HDOA31D2",
+      "HDOA31D4",
+      "HDOA31DL",
+      "HDOA31M10D1",
+      "HDOA31M10D2",
+      "HDOA31M10D4",
+      "HDOA31M10DL",
+      "HDOA32D1",
+      "HDOA32D2",
+      "HDOA32D4",
+      "HDOA32DL",
+      "HDOA33D1",
+      "HDOA33D2",
+      "HDOA33D4",
+      "HDOA33DL",
+      "HDOAI211D1",
+      "HDOAI211D2",
+      "HDOAI211D4",
+      "HDOAI211DL",
+      "HDOAI21D1",
+      "HDOAI21D2",
+      "HDOAI21D4",
+      "HDOAI21DL",
+      "HDOAI21M10D1",
+      "HDOAI21M10D2",
+      "HDOAI21M10D4",
+      "HDOAI21M10DL",
+      "HDOAI21M20D1",
+      "HDOAI21M20D2",
+      "HDOAI21M20D4",
+      "HDOAI21M20DL",
+      "HDOAI222D1",
+      "HDOAI222D2",
+      "HDOAI222D4",
+      "HDOAI222DL",
+      "HDOAI22D1",
+      "HDOAI22D2",
+      "HDOAI22D4",
+      "HDOAI22DL",
+      "HDOAI22M10D1",
+      "HDOAI22M10D2",
+      "HDOAI22M10D4",
+      "HDOAI22M10DL",
+      "HDOAI22M20D1",
+      "HDOAI22M20D2",
+      "HDOAI22M20D4",
+      "HDOAI22M20DL",
+      "HDOAI31D1",
+      "HDOAI31D2",
+      "HDOAI31D4",
+      "HDOAI31DL",
+      "HDOAI31M10D1",
+      "HDOAI31M10D2",
+      "HDOAI31M10D4",
+      "HDOAI31M10DL",
+      "HDOAI32D1",
+      "HDOAI32D2",
+      "HDOAI32D4",
+      "HDOAI32DL",
+      "HDOAI33D1",
+      "HDOAI33D2",
+      "HDOAI33D4",
+      "HDOAI33DL",
+      "HDOR2D1",
+      "HDOR2D2",
+      "HDOR2D4",
+      "HDOR2D6",
+      "HDOR2D8",
+      "HDOR2DL",
+      "HDOR3D1",
+      "HDOR3D2",
+      "HDOR3D4",
+      "HDOR3D6",
+      "HDOR3D8",
+      "HDOR3DL",
+      "HDOR4D1",
+      "HDOR4D2",
+      "HDOR4D4",
+      "HDOR4D6",
+      "HDOR4D8",
+      "HDOR4DL",
+      "HDSDEPQ1",
+      "HDSDEPQ2",
+      "HDSDEPQ4",
+      "HDSDEPQL",
+      "HDSDERPB1",
+      "HDSDERPB2",
+      "HDSDERPB4",
+      "HDSDERPBL",
+      "HDSDERPQ1",
+      "HDSDERPQ2",
+      "HDSDERPQ4",
+      "HDSDERPQL",
+      "HDSDERSNB1",
+      "HDSDERSNB2",
+      "HDSDERSNB4",
+      "HDSDERSNBL",
+      "HDSDERSPB1",
+      "HDSDERSPB2",
+      "HDSDERSPB4",
+      "HDSDERSPBL",
+      "HDSDERSPQ1",
+      "HDSDERSPQ2",
+      "HDSDERSPQ4",
+      "HDSDERSPQL",
+      "HDSDESPQ1",
+      "HDSDESPQ2",
+      "HDSDESPQ4",
+      "HDSDESPQL",
+      "HDSDFPB1",
+      "HDSDFPB2",
+      "HDSDFPB4",
+      "HDSDFPBL",
+      "HDSDFPQ1",
+      "HDSDFPQ2",
+      "HDSDFPQ4",
+      "HDSDFPQL",
+      "HDSDFRNQ1",
+      "HDSDFRNQ2",
+      "HDSDFRNQ4",
+      "HDSDFRNQL",
+      "HDSDFRPB1",
+      "HDSDFRPB2",
+      "HDSDFRPB4",
+      "HDSDFRPBL",
+      "HDSDFRPQ1",
+      "HDSDFRPQ2",
+      "HDSDFRPQ4",
+      "HDSDFRPQL",
+      "HDSDFRSNB1",
+      "HDSDFRSNB2",
+      "HDSDFRSNB4",
+      "HDSDFRSNBL",
+      "HDSDFRSPB1",
+      "HDSDFRSPB2",
+      "HDSDFRSPB4",
+      "HDSDFRSPBL",
+      "HDSDFRSPQ1",
+      "HDSDFRSPQ2",
+      "HDSDFRSPQ4",
+      "HDSDFRSPQL",
+      "HDSDFSPQ1",
+      "HDSDFSPQ2",
+      "HDSDFSPQ4",
+      "HDSDFSPQL",
+      "HDTGCKPHD1",
+      "HDTGCKPHD2",
+      "HDTGCKPHD4",
+      "HDTGCKPHD8",
+      "HDTIEHI",
+      "HDTIEHIE",
+      "HDTIELO",
+      "HDTIELOE"
+    ],
+    "elements_inout_types": {
+      "GLOBAL_GND": [],
+      "GLOBAL_VCC": [],
+      "HDADFULD1": [],
+      "HDADFULD2": [],
+      "HDADFULD4": [],
+      "HDADFULDL": [],
+      "HDADHALFD1": [],
+      "HDADHALFD2": [],
+      "HDADHALFD4": [],
+      "HDADHALFDL": [],
+      "HDAND2D1": [],
+      "HDAND2D2": [],
+      "HDAND2D4": [],
+      "HDAND2D6": [],
+      "HDAND2D8": [],
+      "HDAND2DL": [],
+      "HDAND3D1": [],
+      "HDAND3D2": [],
+      "HDAND3D4": [],
+      "HDAND3D6": [],
+      "HDAND3D8": [],
+      "HDAND3DL": [],
+      "HDAND4D1": [],
+      "HDAND4D2": [],
+      "HDAND4D4": [],
+      "HDAND4D6": [],
+      "HDAND4D8": [],
+      "HDAND4DL": [],
+      "HDANT": [],
+      "HDANT2": [],
+      "HDAO211D1": [],
+      "HDAO211D2": [],
+      "HDAO211D4": [],
+      "HDAO211DL": [],
+      "HDAO21D1": [],
+      "HDAO21D2": [],
+      "HDAO21D4": [],
+      "HDAO21DL": [],
+      "HDAO21M10D1": [],
+      "HDAO21M10D2": [],
+      "HDAO21M10D4": [],
+      "HDAO21M10DL": [],
+      "HDAO21M20D1": [],
+      "HDAO21M20D2": [],
+      "HDAO21M20D4": [],
+      "HDAO21M20DL": [],
+      "HDAO222D1": [],
+      "HDAO222D2": [],
+      "HDAO222D4": [],
+      "HDAO222DL": [],
+      "HDAO22D1": [],
+      "HDAO22D2": [],
+      "HDAO22D4": [],
+      "HDAO22DL": [],
+      "HDAO22M10D1": [],
+      "HDAO22M10D2": [],
+      "HDAO22M10D4": [],
+      "HDAO22M10DL": [],
+      "HDAO22M20D1": [],
+      "HDAO22M20D2": [],
+      "HDAO22M20D4": [],
+      "HDAO22M20DL": [],
+      "HDAO31D1": [],
+      "HDAO31D2": [],
+      "HDAO31D4": [],
+      "HDAO31DL": [],
+      "HDAO31M10D1": [],
+      "HDAO31M10D2": [],
+      "HDAO31M10D4": [],
+      "HDAO31M10DL": [],
+      "HDAO32D1": [],
+      "HDAO32D2": [],
+      "HDAO32D4": [],
+      "HDAO32DL": [],
+      "HDAO33D1": [],
+      "HDAO33D2": [],
+      "HDAO33D4": [],
+      "HDAO33DL": [],
+      "HDAOI211D1": [],
+      "HDAOI211D2": [],
+      "HDAOI211D4": [],
+      "HDAOI211DL": [],
+      "HDAOI21D1": [],
+      "HDAOI21D2": [],
+      "HDAOI21D4": [],
+      "HDAOI21DL": [],
+      "HDAOI21M10D1": [],
+      "HDAOI21M10D2": [],
+      "HDAOI21M10D4": [],
+      "HDAOI21M10DL": [],
+      "HDAOI21M20D1": [],
+      "HDAOI21M20D2": [],
+      "HDAOI21M20D4": [],
+      "HDAOI21M20DL": [],
+      "HDAOI222D1": [],
+      "HDAOI222D2": [],
+      "HDAOI222D4": [],
+      "HDAOI222DL": [],
+      "HDAOI22D1": [],
+      "HDAOI22D2": [],
+      "HDAOI22D4": [],
+      "HDAOI22DL": [],
+      "HDAOI22M10D1": [],
+      "HDAOI22M10D2": [],
+      "HDAOI22M10D4": [],
+      "HDAOI22M10DL": [],
+      "HDAOI22M20D1": [],
+      "HDAOI22M20D2": [],
+      "HDAOI22M20D4": [],
+      "HDAOI22M20DL": [],
+      "HDAOI31D1": [],
+      "HDAOI31D2": [],
+      "HDAOI31D4": [],
+      "HDAOI31DL": [],
+      "HDAOI31M10D1": [],
+      "HDAOI31M10D2": [],
+      "HDAOI31M10D4": [],
+      "HDAOI31M10DL": [],
+      "HDAOI32D1": [],
+      "HDAOI32D2": [],
+      "HDAOI32D4": [],
+      "HDAOI32DL": [],
+      "HDAOI33D1": [],
+      "HDAOI33D2": [],
+      "HDAOI33D4": [],
+      "HDAOI33DL": [],
+      "HDBUFBD12": [],
+      "HDBUFBD16": [],
+      "HDBUFBD2": [],
+      "HDBUFBD20": [],
+      "HDBUFBD3": [],
+      "HDBUFBD32": [],
+      "HDBUFBD4": [],
+      "HDBUFBD6": [],
+      "HDBUFBD8": [],
+      "HDBUFD1": [],
+      "HDBUFD12": [],
+      "HDBUFD16": [],
+      "HDBUFD2": [],
+      "HDBUFD20": [],
+      "HDBUFD3": [],
+      "HDBUFD32": [],
+      "HDBUFD4": [],
+      "HDBUFD6": [],
+      "HDBUFD8": [],
+      "HDBUFDL": [],
+      "HDBUFTBD12": [],
+      "HDBUFTBD16": [],
+      "HDBUFTBD20": [],
+      "HDBUFTBD4": [],
+      "HDBUFTBD6": [],
+      "HDBUFTBD8": [],
+      "HDBUFTD1": [],
+      "HDBUFTD12": [],
+      "HDBUFTD16": [],
+      "HDBUFTD2": [],
+      "HDBUFTD20": [],
+      "HDBUFTD3": [],
+      "HDBUFTD4": [],
+      "HDBUFTD6": [],
+      "HDBUFTD8": [],
+      "HDBUFTDL": [],
+      "HDCLKBD12": [],
+      "HDCLKBD16": [],
+      "HDCLKBD2": [],
+      "HDCLKBD20": [],
+      "HDCLKBD3": [],
+      "HDCLKBD32": [],
+      "HDCLKBD4": [],
+      "HDCLKBD6": [],
+      "HDCLKBD8": [],
+      "HDCLOAD": [],
+      "HDDFEPQ1": [],
+      "HDDFEPQ2": [],
+      "HDDFEPQ4": [],
+      "HDDFEPQL": [],
+      "HDDFERPB1": [],
+      "HDDFERPB2": [],
+      "HDDFERPB4": [],
+      "HDDFERPBL": [],
+      "HDDFERPQ1": [],
+      "HDDFERPQ2": [],
+      "HDDFERPQ4": [],
+      "HDDFERPQL": [],
+      "HDDFERSNB1": [],
+      "HDDFERSNB2": [],
+      "HDDFERSNB4": [],
+      "HDDFERSNBL": [],
+      "HDDFERSPB1": [],
+      "HDDFERSPB2": [],
+      "HDDFERSPB4": [],
+      "HDDFERSPBL": [],
+      "HDDFERSPQ1": [],
+      "HDDFERSPQ2": [],
+      "HDDFERSPQ4": [],
+      "HDDFERSPQL": [],
+      "HDDFESPQ1": [],
+      "HDDFESPQ2": [],
+      "HDDFESPQ4": [],
+      "HDDFESPQL": [],
+      "HDDFFPB1": [],
+      "HDDFFPB2": [],
+      "HDDFFPB4": [],
+      "HDDFFPBL": [],
+      "HDDFFPQ1": [],
+      "HDDFFPQ2": [],
+      "HDDFFPQ4": [],
+      "HDDFFPQL": [],
+      "HDDFFRNQ1": [],
+      "HDDFFRNQ2": [],
+      "HDDFFRNQ4": [],
+      "HDDFFRNQL": [],
+      "HDDFFRPB1": [],
+      "HDDFFRPB2": [],
+      "HDDFFRPB4": [],
+      "HDDFFRPBL": [],
+      "HDDFFRPQ1": [],
+      "HDDFFRPQ2": [],
+      "HDDFFRPQ4": [],
+      "HDDFFRPQL": [],
+      "HDDFFRSNB1": [],
+      "HDDFFRSNB2": [],
+      "HDDFFRSNB4": [],
+      "HDDFFRSNBL": [],
+      "HDDFFRSPB1": [],
+      "HDDFFRSPB2": [],
+      "HDDFFRSPB4": [],
+      "HDDFFRSPBL": [],
+      "HDDFFRSPQ1": [],
+      "HDDFFRSPQ2": [],
+      "HDDFFRSPQ4": [],
+      "HDDFFRSPQL": [],
+      "HDDFFSPQ1": [],
+      "HDDFFSPQ2": [],
+      "HDDFFSPQ4": [],
+      "HDDFFSPQL": [],
+      "HDDLY1D4": [],
+      "HDDLY2D4": [],
+      "HDDLY3D4": [],
+      "HDDLY4D4": [],
+      "HDEXNOR2D1": [],
+      "HDEXNOR2D2": [],
+      "HDEXNOR2D4": [],
+      "HDEXNOR2DL": [],
+      "HDEXNOR3D1": [],
+      "HDEXNOR3D2": [],
+      "HDEXNOR3D4": [],
+      "HDEXNOR3DL": [],
+      "HDEXOR2D1": [],
+      "HDEXOR2D2": [],
+      "HDEXOR2D4": [],
+      "HDEXOR2DL": [],
+      "HDEXOR3D1": [],
+      "HDEXOR3D2": [],
+      "HDEXOR3D4": [],
+      "HDEXOR3DL": [],
+      "HDINVBD1": [],
+      "HDINVBD12": [],
+      "HDINVBD16": [],
+      "HDINVBD2": [],
+      "HDINVBD20": [],
+      "HDINVBD3": [],
+      "HDINVBD32": [],
+      "HDINVBD4": [],
+      "HDINVBD6": [],
+      "HDINVBD8": [],
+      "HDINVD1": [],
+      "HDINVD12": [],
+      "HDINVD16": [],
+      "HDINVD2": [],
+      "HDINVD20": [],
+      "HDINVD3": [],
+      "HDINVD32": [],
+      "HDINVD4": [],
+      "HDINVD6": [],
+      "HDINVD8": [],
+      "HDINVDL": [],
+      "HDINVTD1": [],
+      "HDINVTD12": [],
+      "HDINVTD16": [],
+      "HDINVTD2": [],
+      "HDINVTD20": [],
+      "HDINVTD3": [],
+      "HDINVTD4": [],
+      "HDINVTD6": [],
+      "HDINVTD8": [],
+      "HDINVTDL": [],
+      "HDKEEPER": [
+        "Z"
+      ],
+      "HDLATNB1": [],
+      "HDLATNB2": [],
+      "HDLATNB4": [],
+      "HDLATNBL": [],
+      "HDLATNT1": [],
+      "HDLATNT2": [],
+      "HDLATNT4": [],
+      "HDLATNTL": [],
+      "HDLATPB1": [],
+      "HDLATPB2": [],
+      "HDLATPB4": [],
+      "HDLATPBL": [],
+      "HDLATPQ1": [],
+      "HDLATPQ2": [],
+      "HDLATPQ4": [],
+      "HDLATPQL": [],
+      "HDLATRNB1": [],
+      "HDLATRNB2": [],
+      "HDLATRNB4": [],
+      "HDLATRNBL": [],
+      "HDLATRPB1": [],
+      "HDLATRPB2": [],
+      "HDLATRPB4": [],
+      "HDLATRPBL": [],
+      "HDLATRSPB1": [],
+      "HDLATRSPB2": [],
+      "HDLATRSPB4": [],
+      "HDLATRSPBL": [],
+      "HDMUX2D1": [],
+      "HDMUX2D2": [],
+      "HDMUX2D4": [],
+      "HDMUX2D6": [],
+      "HDMUX2D8": [],
+      "HDMUX2DL": [],
+      "HDMUX3D1": [],
+      "HDMUX3D2": [],
+      "HDMUX3D4": [],
+      "HDMUX3DL": [],
+      "HDMUX4D1": [],
+      "HDMUX4D2": [],
+      "HDMUX4D4": [],
+      "HDMUX4DL": [],
+      "HDMUXB2D1": [],
+      "HDMUXB2D2": [],
+      "HDMUXB2D4": [],
+      "HDMUXB2D6": [],
+      "HDMUXB2D8": [],
+      "HDMUXB2DL": [],
+      "HDMUXB4D1": [],
+      "HDMUXB4D2": [],
+      "HDMUXB4D4": [],
+      "HDMUXB4DL": [],
+      "HDNAN2D1": [],
+      "HDNAN2D2": [],
+      "HDNAN2D4": [],
+      "HDNAN2D6": [],
+      "HDNAN2D8": [],
+      "HDNAN2DL": [],
+      "HDNAN2M1D1": [],
+      "HDNAN2M1D2": [],
+      "HDNAN2M1D4": [],
+      "HDNAN2M1DL": [],
+      "HDNAN3D1": [],
+      "HDNAN3D2": [],
+      "HDNAN3D4": [],
+      "HDNAN3D6": [],
+      "HDNAN3D8": [],
+      "HDNAN3DL": [],
+      "HDNAN3M1D1": [],
+      "HDNAN3M1D2": [],
+      "HDNAN3M1D4": [],
+      "HDNAN3M1DL": [],
+      "HDNAN4D1": [],
+      "HDNAN4D2": [],
+      "HDNAN4D4": [],
+      "HDNAN4D6": [],
+      "HDNAN4D8": [],
+      "HDNAN4DL": [],
+      "HDNAN4M1D1": [],
+      "HDNAN4M1D2": [],
+      "HDNAN4M1D4": [],
+      "HDNAN4M1DL": [],
+      "HDNAN4M2D1": [],
+      "HDNAN4M2D2": [],
+      "HDNAN4M2D4": [],
+      "HDNAN4M2DL": [],
+      "HDNOR2D1": [],
+      "HDNOR2D2": [],
+      "HDNOR2D4": [],
+      "HDNOR2D6": [],
+      "HDNOR2D8": [],
+      "HDNOR2DL": [],
+      "HDNOR2M1D1": [],
+      "HDNOR2M1D2": [],
+      "HDNOR2M1D4": [],
+      "HDNOR2M1DL": [],
+      "HDNOR3D1": [],
+      "HDNOR3D2": [],
+      "HDNOR3D4": [],
+      "HDNOR3D6": [],
+      "HDNOR3D8": [],
+      "HDNOR3DL": [],
+      "HDNOR3M1D1": [],
+      "HDNOR3M1D2": [],
+      "HDNOR3M1D4": [],
+      "HDNOR3M1DL": [],
+      "HDNOR4D1": [],
+      "HDNOR4D2": [],
+      "HDNOR4D4": [],
+      "HDNOR4D6": [],
+      "HDNOR4D8": [],
+      "HDNOR4DL": [],
+      "HDNOR4M1D1": [],
+      "HDNOR4M1D2": [],
+      "HDNOR4M1D4": [],
+      "HDNOR4M1DL": [],
+      "HDNOR4M2D1": [],
+      "HDNOR4M2D2": [],
+      "HDNOR4M2D4": [],
+      "HDNOR4M2DL": [],
+      "HDOA211D1": [],
+      "HDOA211D2": [],
+      "HDOA211D4": [],
+      "HDOA211DL": [],
+      "HDOA21D1": [],
+      "HDOA21D2": [],
+      "HDOA21D4": [],
+      "HDOA21DL": [],
+      "HDOA21M10D1": [],
+      "HDOA21M10D2": [],
+      "HDOA21M10D4": [],
+      "HDOA21M10DL": [],
+      "HDOA21M20D1": [],
+      "HDOA21M20D2": [],
+      "HDOA21M20D4": [],
+      "HDOA21M20DL": [],
+      "HDOA222D1": [],
+      "HDOA222D2": [],
+      "HDOA222D4": [],
+      "HDOA222DL": [],
+      "HDOA22D1": [],
+      "HDOA22D2": [],
+      "HDOA22D4": [],
+      "HDOA22DL": [],
+      "HDOA22M10D1": [],
+      "HDOA22M10D2": [],
+      "HDOA22M10D4": [],
+      "HDOA22M10DL": [],
+      "HDOA22M20D1": [],
+      "HDOA22M20D2": [],
+      "HDOA22M20D4": [],
+      "HDOA22M20DL": [],
+      "HDOA31D1": [],
+      "HDOA31D2": [],
+      "HDOA31D4": [],
+      "HDOA31DL": [],
+      "HDOA31M10D1": [],
+      "HDOA31M10D2": [],
+      "HDOA31M10D4": [],
+      "HDOA31M10DL": [],
+      "HDOA32D1": [],
+      "HDOA32D2": [],
+      "HDOA32D4": [],
+      "HDOA32DL": [],
+      "HDOA33D1": [],
+      "HDOA33D2": [],
+      "HDOA33D4": [],
+      "HDOA33DL": [],
+      "HDOAI211D1": [],
+      "HDOAI211D2": [],
+      "HDOAI211D4": [],
+      "HDOAI211DL": [],
+      "HDOAI21D1": [],
+      "HDOAI21D2": [],
+      "HDOAI21D4": [],
+      "HDOAI21DL": [],
+      "HDOAI21M10D1": [],
+      "HDOAI21M10D2": [],
+      "HDOAI21M10D4": [],
+      "HDOAI21M10DL": [],
+      "HDOAI21M20D1": [],
+      "HDOAI21M20D2": [],
+      "HDOAI21M20D4": [],
+      "HDOAI21M20DL": [],
+      "HDOAI222D1": [],
+      "HDOAI222D2": [],
+      "HDOAI222D4": [],
+      "HDOAI222DL": [],
+      "HDOAI22D1": [],
+      "HDOAI22D2": [],
+      "HDOAI22D4": [],
+      "HDOAI22DL": [],
+      "HDOAI22M10D1": [],
+      "HDOAI22M10D2": [],
+      "HDOAI22M10D4": [],
+      "HDOAI22M10DL": [],
+      "HDOAI22M20D1": [],
+      "HDOAI22M20D2": [],
+      "HDOAI22M20D4": [],
+      "HDOAI22M20DL": [],
+      "HDOAI31D1": [],
+      "HDOAI31D2": [],
+      "HDOAI31D4": [],
+      "HDOAI31DL": [],
+      "HDOAI31M10D1": [],
+      "HDOAI31M10D2": [],
+      "HDOAI31M10D4": [],
+      "HDOAI31M10DL": [],
+      "HDOAI32D1": [],
+      "HDOAI32D2": [],
+      "HDOAI32D4": [],
+      "HDOAI32DL": [],
+      "HDOAI33D1": [],
+      "HDOAI33D2": [],
+      "HDOAI33D4": [],
+      "HDOAI33DL": [],
+      "HDOR2D1": [],
+      "HDOR2D2": [],
+      "HDOR2D4": [],
+      "HDOR2D6": [],
+      "HDOR2D8": [],
+      "HDOR2DL": [],
+      "HDOR3D1": [],
+      "HDOR3D2": [],
+      "HDOR3D4": [],
+      "HDOR3D6": [],
+      "HDOR3D8": [],
+      "HDOR3DL": [],
+      "HDOR4D1": [],
+      "HDOR4D2": [],
+      "HDOR4D4": [],
+      "HDOR4D6": [],
+      "HDOR4D8": [],
+      "HDOR4DL": [],
+      "HDSDEPQ1": [],
+      "HDSDEPQ2": [],
+      "HDSDEPQ4": [],
+      "HDSDEPQL": [],
+      "HDSDERPB1": [],
+      "HDSDERPB2": [],
+      "HDSDERPB4": [],
+      "HDSDERPBL": [],
+      "HDSDERPQ1": [],
+      "HDSDERPQ2": [],
+      "HDSDERPQ4": [],
+      "HDSDERPQL": [],
+      "HDSDERSNB1": [],
+      "HDSDERSNB2": [],
+      "HDSDERSNB4": [],
+      "HDSDERSNBL": [],
+      "HDSDERSPB1": [],
+      "HDSDERSPB2": [],
+      "HDSDERSPB4": [],
+      "HDSDERSPBL": [],
+      "HDSDERSPQ1": [],
+      "HDSDERSPQ2": [],
+      "HDSDERSPQ4": [],
+      "HDSDERSPQL": [],
+      "HDSDESPQ1": [],
+      "HDSDESPQ2": [],
+      "HDSDESPQ4": [],
+      "HDSDESPQL": [],
+      "HDSDFPB1": [],
+      "HDSDFPB2": [],
+      "HDSDFPB4": [],
+      "HDSDFPBL": [],
+      "HDSDFPQ1": [],
+      "HDSDFPQ2": [],
+      "HDSDFPQ4": [],
+      "HDSDFPQL": [],
+      "HDSDFRNQ1": [],
+      "HDSDFRNQ2": [],
+      "HDSDFRNQ4": [],
+      "HDSDFRNQL": [],
+      "HDSDFRPB1": [],
+      "HDSDFRPB2": [],
+      "HDSDFRPB4": [],
+      "HDSDFRPBL": [],
+      "HDSDFRPQ1": [],
+      "HDSDFRPQ2": [],
+      "HDSDFRPQ4": [],
+      "HDSDFRPQL": [],
+      "HDSDFRSNB1": [],
+      "HDSDFRSNB2": [],
+      "HDSDFRSNB4": [],
+      "HDSDFRSNBL": [],
+      "HDSDFRSPB1": [],
+      "HDSDFRSPB2": [],
+      "HDSDFRSPB4": [],
+      "HDSDFRSPBL": [],
+      "HDSDFRSPQ1": [],
+      "HDSDFRSPQ2": [],
+      "HDSDFRSPQ4": [],
+      "HDSDFRSPQL": [],
+      "HDSDFSPQ1": [],
+      "HDSDFSPQ2": [],
+      "HDSDFSPQ4": [],
+      "HDSDFSPQL": [],
+      "HDTGCKPHD1": [],
+      "HDTGCKPHD2": [],
+      "HDTGCKPHD4": [],
+      "HDTGCKPHD8": [],
+      "HDTIEHI": [],
+      "HDTIEHIE": [],
+      "HDTIELO": [],
+      "HDTIELOE": []
+    },
+    "elements_input_types": {
+      "GLOBAL_GND": [],
+      "GLOBAL_VCC": [],
+      "HDADFULD1": [
+        "A",
+        "B",
+        "CI"
+      ],
+      "HDADFULD2": [
+        "A",
+        "B",
+        "CI"
+      ],
+      "HDADFULD4": [
+        "A",
+        "B",
+        "CI"
+      ],
+      "HDADFULDL": [
+        "A",
+        "B",
+        "CI"
+      ],
+      "HDADHALFD1": [
+        "A",
+        "B"
+      ],
+      "HDADHALFD2": [
+        "A",
+        "B"
+      ],
+      "HDADHALFD4": [
+        "A",
+        "B"
+      ],
+      "HDADHALFDL": [
+        "A",
+        "B"
+      ],
+      "HDAND2D1": [
+        "A1",
+        "A2"
+      ],
+      "HDAND2D2": [
+        "A1",
+        "A2"
+      ],
+      "HDAND2D4": [
+        "A1",
+        "A2"
+      ],
+      "HDAND2D6": [
+        "A1",
+        "A2"
+      ],
+      "HDAND2D8": [
+        "A1",
+        "A2"
+      ],
+      "HDAND2DL": [
+        "A1",
+        "A2"
+      ],
+      "HDAND3D1": [
+        "A1",
+        "A2",
+        "A3"
+      ],
+      "HDAND3D2": [
+        "A1",
+        "A2",
+        "A3"
+      ],
+      "HDAND3D4": [
+        "A1",
+        "A2",
+        "A3"
+      ],
+      "HDAND3D6": [
+        "A1",
+        "A2",
+        "A3"
+      ],
+      "HDAND3D8": [
+        "A1",
+        "A2",
+        "A3"
+      ],
+      "HDAND3DL": [
+        "A1",
+        "A2",
+        "A3"
+      ],
+      "HDAND4D1": [
+        "A1",
+        "A2",
+        "A3",
+        "A4"
+      ],
+      "HDAND4D2": [
+        "A1",
+        "A2",
+        "A3",
+        "A4"
+      ],
+      "HDAND4D4": [
+        "A1",
+        "A2",
+        "A3",
+        "A4"
+      ],
+      "HDAND4D6": [
+        "A1",
+        "A2",
+        "A3",
+        "A4"
+      ],
+      "HDAND4D8": [
+        "A1",
+        "A2",
+        "A3",
+        "A4"
+      ],
+      "HDAND4DL": [
+        "A1",
+        "A2",
+        "A3",
+        "A4"
+      ],
+      "HDANT": [
+        "A"
+      ],
+      "HDANT2": [
+        "A"
+      ],
+      "HDAO211D1": [
+        "A1",
+        "A2",
+        "B",
+        "C"
+      ],
+      "HDAO211D2": [
+        "A1",
+        "A2",
+        "B",
+        "C"
+      ],
+      "HDAO211D4": [
+        "A1",
+        "A2",
+        "B",
+        "C"
+      ],
+      "HDAO211DL": [
+        "A1",
+        "A2",
+        "B",
+        "C"
+      ],
+      "HDAO21D1": [
+        "A1",
+        "A2",
+        "B"
+      ],
+      "HDAO21D2": [
+        "A1",
+        "A2",
+        "B"
+      ],
+      "HDAO21D4": [
+        "A1",
+        "A2",
+        "B"
+      ],
+      "HDAO21DL": [
+        "A1",
+        "A2",
+        "B"
+      ],
+      "HDAO21M10D1": [
+        "A1",
+        "A2",
+        "B"
+      ],
+      "HDAO21M10D2": [
+        "A1",
+        "A2",
+        "B"
+      ],
+      "HDAO21M10D4": [
+        "A1",
+        "A2",
+        "B"
+      ],
+      "HDAO21M10DL": [
+        "A1",
+        "A2",
+        "B"
+      ],
+      "HDAO21M20D1": [
+        "A1",
+        "A2",
+        "B"
+      ],
+      "HDAO21M20D2": [
+        "A1",
+        "A2",
+        "B"
+      ],
+      "HDAO21M20D4": [
+        "A1",
+        "A2",
+        "B"
+      ],
+      "HDAO21M20DL": [
+        "A1",
+        "A2",
+        "B"
+      ],
+      "HDAO222D1": [
+        "A1",
+        "A2",
+        "B1",
+        "B2",
+        "C1",
+        "C2"
+      ],
+      "HDAO222D2": [
+        "A1",
+        "A2",
+        "B1",
+        "B2",
+        "C1",
+        "C2"
+      ],
+      "HDAO222D4": [
+        "A1",
+        "A2",
+        "B1",
+        "B2",
+        "C1",
+        "C2"
+      ],
+      "HDAO222DL": [
+        "A1",
+        "A2",
+        "B1",
+        "B2",
+        "C1",
+        "C2"
+      ],
+      "HDAO22D1": [
+        "A1",
+        "A2",
+        "B1",
+        "B2"
+      ],
+      "HDAO22D2": [
+        "A1",
+        "A2",
+        "B1",
+        "B2"
+      ],
+      "HDAO22D4": [
+        "A1",
+        "A2",
+        "B1",
+        "B2"
+      ],
+      "HDAO22DL": [
+        "A1",
+        "A2",
+        "B1",
+        "B2"
+      ],
+      "HDAO22M10D1": [
+        "A1",
+        "A2",
+        "B1",
+        "B2"
+      ],
+      "HDAO22M10D2": [
+        "A1",
+        "A2",
+        "B1",
+        "B2"
+      ],
+      "HDAO22M10D4": [
+        "A1",
+        "A2",
+        "B1",
+        "B2"
+      ],
+      "HDAO22M10DL": [
+        "A1",
+        "A2",
+        "B1",
+        "B2"
+      ],
+      "HDAO22M20D1": [
+        "A1",
+        "A2",
+        "B1",
+        "B2"
+      ],
+      "HDAO22M20D2": [
+        "A1",
+        "A2",
+        "B1",
+        "B2"
+      ],
+      "HDAO22M20D4": [
+        "A1",
+        "A2",
+        "B1",
+        "B2"
+      ],
+      "HDAO22M20DL": [
+        "A1",
+        "A2",
+        "B1",
+        "B2"
+      ],
+      "HDAO31D1": [
+        "A1",
+        "A2",
+        "A3",
+        "B"
+      ],
+      "HDAO31D2": [
+        "A1",
+        "A2",
+        "A3",
+        "B"
+      ],
+      "HDAO31D4": [
+        "A1",
+        "A2",
+        "A3",
+        "B"
+      ],
+      "HDAO31DL": [
+        "A1",
+        "A2",
+        "A3",
+        "B"
+      ],
+      "HDAO31M10D1": [
+        "A1",
+        "A2",
+        "A3",
+        "B"
+      ],
+      "HDAO31M10D2": [
+        "A1",
+        "A2",
+        "A3",
+        "B"
+      ],
+      "HDAO31M10D4": [
+        "A1",
+        "A2",
+        "A3",
+        "B"
+      ],
+      "HDAO31M10DL": [
+        "A1",
+        "A2",
+        "A3",
+        "B"
+      ],
+      "HDAO32D1": [
+        "A1",
+        "A2",
+        "A3",
+        "B1",
+        "B2"
+      ],
+      "HDAO32D2": [
+        "A1",
+        "A2",
+        "A3",
+        "B1",
+        "B2"
+      ],
+      "HDAO32D4": [
+        "A1",
+        "A2",
+        "A3",
+        "B1",
+        "B2"
+      ],
+      "HDAO32DL": [
+        "A1",
+        "A2",
+        "A3",
+        "B1",
+        "B2"
+      ],
+      "HDAO33D1": [
+        "A1",
+        "A2",
+        "A3",
+        "B1",
+        "B2",
+        "B3"
+      ],
+      "HDAO33D2": [
+        "A1",
+        "A2",
+        "A3",
+        "B1",
+        "B2",
+        "B3"
+      ],
+      "HDAO33D4": [
+        "A1",
+        "A2",
+        "A3",
+        "B1",
+        "B2",
+        "B3"
+      ],
+      "HDAO33DL": [
+        "A1",
+        "A2",
+        "A3",
+        "B1",
+        "B2",
+        "B3"
+      ],
+      "HDAOI211D1": [
+        "A1",
+        "A2",
+        "B",
+        "C"
+      ],
+      "HDAOI211D2": [
+        "A1",
+        "A2",
+        "B",
+        "C"
+      ],
+      "HDAOI211D4": [
+        "A1",
+        "A2",
+        "B",
+        "C"
+      ],
+      "HDAOI211DL": [
+        "A1",
+        "A2",
+        "B",
+        "C"
+      ],
+      "HDAOI21D1": [
+        "A1",
+        "A2",
+        "B"
+      ],
+      "HDAOI21D2": [
+        "A1",
+        "A2",
+        "B"
+      ],
+      "HDAOI21D4": [
+        "A1",
+        "A2",
+        "B"
+      ],
+      "HDAOI21DL": [
+        "A1",
+        "A2",
+        "B"
+      ],
+      "HDAOI21M10D1": [
+        "A1",
+        "A2",
+        "B"
+      ],
+      "HDAOI21M10D2": [
+        "A1",
+        "A2",
+        "B"
+      ],
+      "HDAOI21M10D4": [
+        "A1",
+        "A2",
+        "B"
+      ],
+      "HDAOI21M10DL": [
+        "A1",
+        "A2",
+        "B"
+      ],
+      "HDAOI21M20D1": [
+        "A1",
+        "A2",
+        "B"
+      ],
+      "HDAOI21M20D2": [
+        "A1",
+        "A2",
+        "B"
+      ],
+      "HDAOI21M20D4": [
+        "A1",
+        "A2",
+        "B"
+      ],
+      "HDAOI21M20DL": [
+        "A1",
+        "A2",
+        "B"
+      ],
+      "HDAOI222D1": [
+        "A1",
+        "A2",
+        "B1",
+        "B2",
+        "C1",
+        "C2"
+      ],
+      "HDAOI222D2": [
+        "A1",
+        "A2",
+        "B1",
+        "B2",
+        "C1",
+        "C2"
+      ],
+      "HDAOI222D4": [
+        "A1",
+        "A2",
+        "B1",
+        "B2",
+        "C1",
+        "C2"
+      ],
+      "HDAOI222DL": [
+        "A1",
+        "A2",
+        "B1",
+        "B2",
+        "C1",
+        "C2"
+      ],
+      "HDAOI22D1": [
+        "A1",
+        "A2",
+        "B1",
+        "B2"
+      ],
+      "HDAOI22D2": [
+        "A1",
+        "A2",
+        "B1",
+        "B2"
+      ],
+      "HDAOI22D4": [
+        "A1",
+        "A2",
+        "B1",
+        "B2"
+      ],
+      "HDAOI22DL": [
+        "A1",
+        "A2",
+        "B1",
+        "B2"
+      ],
+      "HDAOI22M10D1": [
+        "A1",
+        "A2",
+        "B1",
+        "B2"
+      ],
+      "HDAOI22M10D2": [
+        "A1",
+        "A2",
+        "B1",
+        "B2"
+      ],
+      "HDAOI22M10D4": [
+        "A1",
+        "A2",
+        "B1",
+        "B2"
+      ],
+      "HDAOI22M10DL": [
+        "A1",
+        "A2",
+        "B1",
+        "B2"
+      ],
+      "HDAOI22M20D1": [
+        "A1",
+        "A2",
+        "B1",
+        "B2"
+      ],
+      "HDAOI22M20D2": [
+        "A1",
+        "A2",
+        "B1",
+        "B2"
+      ],
+      "HDAOI22M20D4": [
+        "A1",
+        "A2",
+        "B1",
+        "B2"
+      ],
+      "HDAOI22M20DL": [
+        "A1",
+        "A2",
+        "B1",
+        "B2"
+      ],
+      "HDAOI31D1": [
+        "A1",
+        "A2",
+        "A3",
+        "B"
+      ],
+      "HDAOI31D2": [
+        "A1",
+        "A2",
+        "A3",
+        "B"
+      ],
+      "HDAOI31D4": [
+        "A1",
+        "A2",
+        "A3",
+        "B"
+      ],
+      "HDAOI31DL": [
+        "A1",
+        "A2",
+        "A3",
+        "B"
+      ],
+      "HDAOI31M10D1": [
+        "A1",
+        "A2",
+        "A3",
+        "B"
+      ],
+      "HDAOI31M10D2": [
+        "A1",
+        "A2",
+        "A3",
+        "B"
+      ],
+      "HDAOI31M10D4": [
+        "A1",
+        "A2",
+        "A3",
+        "B"
+      ],
+      "HDAOI31M10DL": [
+        "A1",
+        "A2",
+        "A3",
+        "B"
+      ],
+      "HDAOI32D1": [
+        "A1",
+        "A2",
+        "A3",
+        "B1",
+        "B2"
+      ],
+      "HDAOI32D2": [
+        "A1",
+        "A2",
+        "A3",
+        "B1",
+        "B2"
+      ],
+      "HDAOI32D4": [
+        "A1",
+        "A2",
+        "A3",
+        "B1",
+        "B2"
+      ],
+      "HDAOI32DL": [
+        "A1",
+        "A2",
+        "A3",
+        "B1",
+        "B2"
+      ],
+      "HDAOI33D1": [
+        "A1",
+        "A2",
+        "A3",
+        "B1",
+        "B2",
+        "B3"
+      ],
+      "HDAOI33D2": [
+        "A1",
+        "A2",
+        "A3",
+        "B1",
+        "B2",
+        "B3"
+      ],
+      "HDAOI33D4": [
+        "A1",
+        "A2",
+        "A3",
+        "B1",
+        "B2",
+        "B3"
+      ],
+      "HDAOI33DL": [
+        "A1",
+        "A2",
+        "A3",
+        "B1",
+        "B2",
+        "B3"
+      ],
+      "HDBUFBD12": [
+        "A"
+      ],
+      "HDBUFBD16": [
+        "A"
+      ],
+      "HDBUFBD2": [
+        "A"
+      ],
+      "HDBUFBD20": [
+        "A"
+      ],
+      "HDBUFBD3": [
+        "A"
+      ],
+      "HDBUFBD32": [
+        "A"
+      ],
+      "HDBUFBD4": [
+        "A"
+      ],
+      "HDBUFBD6": [
+        "A"
+      ],
+      "HDBUFBD8": [
+        "A"
+      ],
+      "HDBUFD1": [
+        "A"
+      ],
+      "HDBUFD12": [
+        "A"
+      ],
+      "HDBUFD16": [
+        "A"
+      ],
+      "HDBUFD2": [
+        "A"
+      ],
+      "HDBUFD20": [
+        "A"
+      ],
+      "HDBUFD3": [
+        "A"
+      ],
+      "HDBUFD32": [
+        "A"
+      ],
+      "HDBUFD4": [
+        "A"
+      ],
+      "HDBUFD6": [
+        "A"
+      ],
+      "HDBUFD8": [
+        "A"
+      ],
+      "HDBUFDL": [
+        "A"
+      ],
+      "HDBUFTBD12": [
+        "A",
+        "ENB"
+      ],
+      "HDBUFTBD16": [
+        "A",
+        "ENB"
+      ],
+      "HDBUFTBD20": [
+        "A",
+        "ENB"
+      ],
+      "HDBUFTBD4": [
+        "A",
+        "ENB"
+      ],
+      "HDBUFTBD6": [
+        "A",
+        "ENB"
+      ],
+      "HDBUFTBD8": [
+        "A",
+        "ENB"
+      ],
+      "HDBUFTD1": [
+        "A",
+        "ENB"
+      ],
+      "HDBUFTD12": [
+        "A",
+        "ENB"
+      ],
+      "HDBUFTD16": [
+        "A",
+        "ENB"
+      ],
+      "HDBUFTD2": [
+        "A",
+        "ENB"
+      ],
+      "HDBUFTD20": [
+        "A",
+        "ENB"
+      ],
+      "HDBUFTD3": [
+        "A",
+        "ENB"
+      ],
+      "HDBUFTD4": [
+        "A",
+        "ENB"
+      ],
+      "HDBUFTD6": [
+        "A",
+        "ENB"
+      ],
+      "HDBUFTD8": [
+        "A",
+        "ENB"
+      ],
+      "HDBUFTDL": [
+        "A",
+        "ENB"
+      ],
+      "HDCLKBD12": [
+        "A"
+      ],
+      "HDCLKBD16": [
+        "A"
+      ],
+      "HDCLKBD2": [
+        "A"
+      ],
+      "HDCLKBD20": [
+        "A"
+      ],
+      "HDCLKBD3": [
+        "A"
+      ],
+      "HDCLKBD32": [
+        "A"
+      ],
+      "HDCLKBD4": [
+        "A"
+      ],
+      "HDCLKBD6": [
+        "A"
+      ],
+      "HDCLKBD8": [
+        "A"
+      ],
+      "HDCLOAD": [
+        "A"
+      ],
+      "HDDFEPQ1": [
+        "CEB",
+        "CK",
+        "D"
+      ],
+      "HDDFEPQ2": [
+        "CEB",
+        "CK",
+        "D"
+      ],
+      "HDDFEPQ4": [
+        "CEB",
+        "CK",
+        "D"
+      ],
+      "HDDFEPQL": [
+        "CEB",
+        "CK",
+        "D"
+      ],
+      "HDDFERPB1": [
+        "CEB",
+        "CK",
+        "D",
+        "RB"
+      ],
+      "HDDFERPB2": [
+        "CEB",
+        "CK",
+        "D",
+        "RB"
+      ],
+      "HDDFERPB4": [
+        "CEB",
+        "CK",
+        "D",
+        "RB"
+      ],
+      "HDDFERPBL": [
+        "CEB",
+        "CK",
+        "D",
+        "RB"
+      ],
+      "HDDFERPQ1": [
+        "CEB",
+        "CK",
+        "D",
+        "RB"
+      ],
+      "HDDFERPQ2": [
+        "CEB",
+        "CK",
+        "D",
+        "RB"
+      ],
+      "HDDFERPQ4": [
+        "CEB",
+        "CK",
+        "D",
+        "RB"
+      ],
+      "HDDFERPQL": [
+        "CEB",
+        "CK",
+        "D",
+        "RB"
+      ],
+      "HDDFERSNB1": [
+        "CEB",
+        "CKB",
+        "D",
+        "RB",
+        "SB"
+      ],
+      "HDDFERSNB2": [
+        "CEB",
+        "CKB",
+        "D",
+        "RB",
+        "SB"
+      ],
+      "HDDFERSNB4": [
+        "CEB",
+        "CKB",
+        "D",
+        "RB",
+        "SB"
+      ],
+      "HDDFERSNBL": [
+        "CEB",
+        "CKB",
+        "D",
+        "RB",
+        "SB"
+      ],
+      "HDDFERSPB1": [
+        "CEB",
+        "CK",
+        "D",
+        "RB",
+        "SB"
+      ],
+      "HDDFERSPB2": [
+        "CEB",
+        "CK",
+        "D",
+        "RB",
+        "SB"
+      ],
+      "HDDFERSPB4": [
+        "CEB",
+        "CK",
+        "D",
+        "RB",
+        "SB"
+      ],
+      "HDDFERSPBL": [
+        "CEB",
+        "CK",
+        "D",
+        "RB",
+        "SB"
+      ],
+      "HDDFERSPQ1": [
+        "CEB",
+        "CK",
+        "D",
+        "RB",
+        "SB"
+      ],
+      "HDDFERSPQ2": [
+        "CEB",
+        "CK",
+        "D",
+        "RB",
+        "SB"
+      ],
+      "HDDFERSPQ4": [
+        "CEB",
+        "CK",
+        "D",
+        "RB",
+        "SB"
+      ],
+      "HDDFERSPQL": [
+        "CEB",
+        "CK",
+        "D",
+        "RB",
+        "SB"
+      ],
+      "HDDFESPQ1": [
+        "CEB",
+        "CK",
+        "D",
+        "SB"
+      ],
+      "HDDFESPQ2": [
+        "CEB",
+        "CK",
+        "D",
+        "SB"
+      ],
+      "HDDFESPQ4": [
+        "CEB",
+        "CK",
+        "D",
+        "SB"
+      ],
+      "HDDFESPQL": [
+        "CEB",
+        "CK",
+        "D",
+        "SB"
+      ],
+      "HDDFFPB1": [
+        "CK",
+        "D"
+      ],
+      "HDDFFPB2": [
+        "CK",
+        "D"
+      ],
+      "HDDFFPB4": [
+        "CK",
+        "D"
+      ],
+      "HDDFFPBL": [
+        "CK",
+        "D"
+      ],
+      "HDDFFPQ1": [
+        "CK",
+        "D"
+      ],
+      "HDDFFPQ2": [
+        "CK",
+        "D"
+      ],
+      "HDDFFPQ4": [
+        "CK",
+        "D"
+      ],
+      "HDDFFPQL": [
+        "CK",
+        "D"
+      ],
+      "HDDFFRNQ1": [
+        "CKB",
+        "D",
+        "RB"
+      ],
+      "HDDFFRNQ2": [
+        "CKB",
+        "D",
+        "RB"
+      ],
+      "HDDFFRNQ4": [
+        "CKB",
+        "D",
+        "RB"
+      ],
+      "HDDFFRNQL": [
+        "CKB",
+        "D",
+        "RB"
+      ],
+      "HDDFFRPB1": [
+        "CK",
+        "D",
+        "RB"
+      ],
+      "HDDFFRPB2": [
+        "CK",
+        "D",
+        "RB"
+      ],
+      "HDDFFRPB4": [
+        "CK",
+        "D",
+        "RB"
+      ],
+      "HDDFFRPBL": [
+        "CK",
+        "D",
+        "RB"
+      ],
+      "HDDFFRPQ1": [
+        "CK",
+        "D",
+        "RB"
+      ],
+      "HDDFFRPQ2": [
+        "CK",
+        "D",
+        "RB"
+      ],
+      "HDDFFRPQ4": [
+        "CK",
+        "D",
+        "RB"
+      ],
+      "HDDFFRPQL": [
+        "CK",
+        "D",
+        "RB"
+      ],
+      "HDDFFRSNB1": [
+        "CKB",
+        "D",
+        "RB",
+        "SB"
+      ],
+      "HDDFFRSNB2": [
+        "CKB",
+        "D",
+        "RB",
+        "SB"
+      ],
+      "HDDFFRSNB4": [
+        "CKB",
+        "D",
+        "RB",
+        "SB"
+      ],
+      "HDDFFRSNBL": [
+        "CKB",
+        "D",
+        "RB",
+        "SB"
+      ],
+      "HDDFFRSPB1": [
+        "CK",
+        "D",
+        "RB",
+        "SB"
+      ],
+      "HDDFFRSPB2": [
+        "CK",
+        "D",
+        "RB",
+        "SB"
+      ],
+      "HDDFFRSPB4": [
+        "CK",
+        "D",
+        "RB",
+        "SB"
+      ],
+      "HDDFFRSPBL": [
+        "CK",
+        "D",
+        "RB",
+        "SB"
+      ],
+      "HDDFFRSPQ1": [
+        "CK",
+        "D",
+        "RB",
+        "SB"
+      ],
+      "HDDFFRSPQ2": [
+        "CK",
+        "D",
+        "RB",
+        "SB"
+      ],
+      "HDDFFRSPQ4": [
+        "CK",
+        "D",
+        "RB",
+        "SB"
+      ],
+      "HDDFFRSPQL": [
+        "CK",
+        "D",
+        "RB",
+        "SB"
+      ],
+      "HDDFFSPQ1": [
+        "CK",
+        "D",
+        "SB"
+      ],
+      "HDDFFSPQ2": [
+        "CK",
+        "D",
+        "SB"
+      ],
+      "HDDFFSPQ4": [
+        "CK",
+        "D",
+        "SB"
+      ],
+      "HDDFFSPQL": [
+        "CK",
+        "D",
+        "SB"
+      ],
+      "HDDLY1D4": [
+        "A"
+      ],
+      "HDDLY2D4": [
+        "A"
+      ],
+      "HDDLY3D4": [
+        "A"
+      ],
+      "HDDLY4D4": [
+        "A"
+      ],
+      "HDEXNOR2D1": [
+        "A1",
+        "A2"
+      ],
+      "HDEXNOR2D2": [
+        "A1",
+        "A2"
+      ],
+      "HDEXNOR2D4": [
+        "A1",
+        "A2"
+      ],
+      "HDEXNOR2DL": [
+        "A1",
+        "A2"
+      ],
+      "HDEXNOR3D1": [
+        "A1",
+        "A2",
+        "A3"
+      ],
+      "HDEXNOR3D2": [
+        "A1",
+        "A2",
+        "A3"
+      ],
+      "HDEXNOR3D4": [
+        "A1",
+        "A2",
+        "A3"
+      ],
+      "HDEXNOR3DL": [
+        "A1",
+        "A2",
+        "A3"
+      ],
+      "HDEXOR2D1": [
+        "A1",
+        "A2"
+      ],
+      "HDEXOR2D2": [
+        "A1",
+        "A2"
+      ],
+      "HDEXOR2D4": [
+        "A1",
+        "A2"
+      ],
+      "HDEXOR2DL": [
+        "A1",
+        "A2"
+      ],
+      "HDEXOR3D1": [
+        "A1",
+        "A2",
+        "A3"
+      ],
+      "HDEXOR3D2": [
+        "A1",
+        "A2",
+        "A3"
+      ],
+      "HDEXOR3D4": [
+        "A1",
+        "A2",
+        "A3"
+      ],
+      "HDEXOR3DL": [
+        "A1",
+        "A2",
+        "A3"
+      ],
+      "HDINVBD1": [
+        "A"
+      ],
+      "HDINVBD12": [
+        "A"
+      ],
+      "HDINVBD16": [
+        "A"
+      ],
+      "HDINVBD2": [
+        "A"
+      ],
+      "HDINVBD20": [
+        "A"
+      ],
+      "HDINVBD3": [
+        "A"
+      ],
+      "HDINVBD32": [
+        "A"
+      ],
+      "HDINVBD4": [
+        "A"
+      ],
+      "HDINVBD6": [
+        "A"
+      ],
+      "HDINVBD8": [
+        "A"
+      ],
+      "HDINVD1": [
+        "A"
+      ],
+      "HDINVD12": [
+        "A"
+      ],
+      "HDINVD16": [
+        "A"
+      ],
+      "HDINVD2": [
+        "A"
+      ],
+      "HDINVD20": [
+        "A"
+      ],
+      "HDINVD3": [
+        "A"
+      ],
+      "HDINVD32": [
+        "A"
+      ],
+      "HDINVD4": [
+        "A"
+      ],
+      "HDINVD6": [
+        "A"
+      ],
+      "HDINVD8": [
+        "A"
+      ],
+      "HDINVDL": [
+        "A"
+      ],
+      "HDINVTD1": [
+        "A",
+        "ENB"
+      ],
+      "HDINVTD12": [
+        "A",
+        "ENB"
+      ],
+      "HDINVTD16": [
+        "A",
+        "ENB"
+      ],
+      "HDINVTD2": [
+        "A",
+        "ENB"
+      ],
+      "HDINVTD20": [
+        "A",
+        "ENB"
+      ],
+      "HDINVTD3": [
+        "A",
+        "ENB"
+      ],
+      "HDINVTD4": [
+        "A",
+        "ENB"
+      ],
+      "HDINVTD6": [
+        "A",
+        "ENB"
+      ],
+      "HDINVTD8": [
+        "A",
+        "ENB"
+      ],
+      "HDINVTDL": [
+        "A",
+        "ENB"
+      ],
+      "HDKEEPER": [],
+      "HDLATNB1": [
+        "D",
+        "G"
+      ],
+      "HDLATNB2": [
+        "D",
+        "G"
+      ],
+      "HDLATNB4": [
+        "D",
+        "G"
+      ],
+      "HDLATNBL": [
+        "D",
+        "G"
+      ],
+      "HDLATNT1": [
+        "D",
+        "EN",
+        "G"
+      ],
+      "HDLATNT2": [
+        "D",
+        "EN",
+        "G"
+      ],
+      "HDLATNT4": [
+        "D",
+        "EN",
+        "G"
+      ],
+      "HDLATNTL": [
+        "D",
+        "EN",
+        "G"
+      ],
+      "HDLATPB1": [
+        "D",
+        "GB"
+      ],
+      "HDLATPB2": [
+        "D",
+        "GB"
+      ],
+      "HDLATPB4": [
+        "D",
+        "GB"
+      ],
+      "HDLATPBL": [
+        "D",
+        "GB"
+      ],
+      "HDLATPQ1": [
+        "D",
+        "GB"
+      ],
+      "HDLATPQ2": [
+        "D",
+        "GB"
+      ],
+      "HDLATPQ4": [
+        "D",
+        "GB"
+      ],
+      "HDLATPQL": [
+        "D",
+        "GB"
+      ],
+      "HDLATRNB1": [
+        "D",
+        "G",
+        "RB"
+      ],
+      "HDLATRNB2": [
+        "D",
+        "G",
+        "RB"
+      ],
+      "HDLATRNB4": [
+        "D",
+        "G",
+        "RB"
+      ],
+      "HDLATRNBL": [
+        "D",
+        "G",
+        "RB"
+      ],
+      "HDLATRPB1": [
+        "D",
+        "GB",
+        "RB"
+      ],
+      "HDLATRPB2": [
+        "D",
+        "GB",
+        "RB"
+      ],
+      "HDLATRPB4": [
+        "D",
+        "GB",
+        "RB"
+      ],
+      "HDLATRPBL": [
+        "D",
+        "GB",
+        "RB"
+      ],
+      "HDLATRSPB1": [
+        "D",
+        "GB",
+        "RB",
+        "SB"
+      ],
+      "HDLATRSPB2": [
+        "D",
+        "GB",
+        "RB",
+        "SB"
+      ],
+      "HDLATRSPB4": [
+        "D",
+        "GB",
+        "RB",
+        "SB"
+      ],
+      "HDLATRSPBL": [
+        "D",
+        "GB",
+        "RB",
+        "SB"
+      ],
+      "HDMUX2D1": [
+        "A0",
+        "A1",
+        "SL"
+      ],
+      "HDMUX2D2": [
+        "A0",
+        "A1",
+        "SL"
+      ],
+      "HDMUX2D4": [
+        "A0",
+        "A1",
+        "SL"
+      ],
+      "HDMUX2D6": [
+        "A0",
+        "A1",
+        "SL"
+      ],
+      "HDMUX2D8": [
+        "A0",
+        "A1",
+        "SL"
+      ],
+      "HDMUX2DL": [
+        "A0",
+        "A1",
+        "SL"
+      ],
+      "HDMUX3D1": [
+        "A0",
+        "A1",
+        "A2",
+        "SL0",
+        "SL1"
+      ],
+      "HDMUX3D2": [
+        "A0",
+        "A1",
+        "A2",
+        "SL0",
+        "SL1"
+      ],
+      "HDMUX3D4": [
+        "A0",
+        "A1",
+        "A2",
+        "SL0",
+        "SL1"
+      ],
+      "HDMUX3DL": [
+        "A0",
+        "A1",
+        "A2",
+        "SL0",
+        "SL1"
+      ],
+      "HDMUX4D1": [
+        "A0",
+        "A1",
+        "A2",
+        "A3",
+        "SL0",
+        "SL1"
+      ],
+      "HDMUX4D2": [
+        "A0",
+        "A1",
+        "A2",
+        "A3",
+        "SL0",
+        "SL1"
+      ],
+      "HDMUX4D4": [
+        "A0",
+        "A1",
+        "A2",
+        "A3",
+        "SL0",
+        "SL1"
+      ],
+      "HDMUX4DL": [
+        "A0",
+        "A1",
+        "A2",
+        "A3",
+        "SL0",
+        "SL1"
+      ],
+      "HDMUXB2D1": [
+        "A0",
+        "A1",
+        "SL"
+      ],
+      "HDMUXB2D2": [
+        "A0",
+        "A1",
+        "SL"
+      ],
+      "HDMUXB2D4": [
+        "A0",
+        "A1",
+        "SL"
+      ],
+      "HDMUXB2D6": [
+        "A0",
+        "A1",
+        "SL"
+      ],
+      "HDMUXB2D8": [
+        "A0",
+        "A1",
+        "SL"
+      ],
+      "HDMUXB2DL": [
+        "A0",
+        "A1",
+        "SL"
+      ],
+      "HDMUXB4D1": [
+        "A0",
+        "A1",
+        "A2",
+        "A3",
+        "SL0",
+        "SL1"
+      ],
+      "HDMUXB4D2": [
+        "A0",
+        "A1",
+        "A2",
+        "A3",
+        "SL0",
+        "SL1"
+      ],
+      "HDMUXB4D4": [
+        "A0",
+        "A1",
+        "A2",
+        "A3",
+        "SL0",
+        "SL1"
+      ],
+      "HDMUXB4DL": [
+        "A0",
+        "A1",
+        "A2",
+        "A3",
+        "SL0",
+        "SL1"
+      ],
+      "HDNAN2D1": [
+        "A1",
+        "A2"
+      ],
+      "HDNAN2D2": [
+        "A1",
+        "A2"
+      ],
+      "HDNAN2D4": [
+        "A1",
+        "A2"
+      ],
+      "HDNAN2D6": [
+        "A1",
+        "A2"
+      ],
+      "HDNAN2D8": [
+        "A1",
+        "A2"
+      ],
+      "HDNAN2DL": [
+        "A1",
+        "A2"
+      ],
+      "HDNAN2M1D1": [
+        "A1",
+        "A2"
+      ],
+      "HDNAN2M1D2": [
+        "A1",
+        "A2"
+      ],
+      "HDNAN2M1D4": [
+        "A1",
+        "A2"
+      ],
+      "HDNAN2M1DL": [
+        "A1",
+        "A2"
+      ],
+      "HDNAN3D1": [
+        "A1",
+        "A2",
+        "A3"
+      ],
+      "HDNAN3D2": [
+        "A1",
+        "A2",
+        "A3"
+      ],
+      "HDNAN3D4": [
+        "A1",
+        "A2",
+        "A3"
+      ],
+      "HDNAN3D6": [
+        "A1",
+        "A2",
+        "A3"
+      ],
+      "HDNAN3D8": [
+        "A1",
+        "A2",
+        "A3"
+      ],
+      "HDNAN3DL": [
+        "A1",
+        "A2",
+        "A3"
+      ],
+      "HDNAN3M1D1": [
+        "A1",
+        "A2",
+        "A3"
+      ],
+      "HDNAN3M1D2": [
+        "A1",
+        "A2",
+        "A3"
+      ],
+      "HDNAN3M1D4": [
+        "A1",
+        "A2",
+        "A3"
+      ],
+      "HDNAN3M1DL": [
+        "A1",
+        "A2",
+        "A3"
+      ],
+      "HDNAN4D1": [
+        "A1",
+        "A2",
+        "A3",
+        "A4"
+      ],
+      "HDNAN4D2": [
+        "A1",
+        "A2",
+        "A3",
+        "A4"
+      ],
+      "HDNAN4D4": [
+        "A1",
+        "A2",
+        "A3",
+        "A4"
+      ],
+      "HDNAN4D6": [
+        "A1",
+        "A2",
+        "A3",
+        "A4"
+      ],
+      "HDNAN4D8": [
+        "A1",
+        "A2",
+        "A3",
+        "A4"
+      ],
+      "HDNAN4DL": [
+        "A1",
+        "A2",
+        "A3",
+        "A4"
+      ],
+      "HDNAN4M1D1": [
+        "A1",
+        "A2",
+        "A3",
+        "A4"
+      ],
+      "HDNAN4M1D2": [
+        "A1",
+        "A2",
+        "A3",
+        "A4"
+      ],
+      "HDNAN4M1D4": [
+        "A1",
+        "A2",
+        "A3",
+        "A4"
+      ],
+      "HDNAN4M1DL": [
+        "A1",
+        "A2",
+        "A3",
+        "A4"
+      ],
+      "HDNAN4M2D1": [
+        "A1",
+        "A2",
+        "A3",
+        "A4"
+      ],
+      "HDNAN4M2D2": [
+        "A1",
+        "A2",
+        "A3",
+        "A4"
+      ],
+      "HDNAN4M2D4": [
+        "A1",
+        "A2",
+        "A3",
+        "A4"
+      ],
+      "HDNAN4M2DL": [
+        "A1",
+        "A2",
+        "A3",
+        "A4"
+      ],
+      "HDNOR2D1": [
+        "A1",
+        "A2"
+      ],
+      "HDNOR2D2": [
+        "A1",
+        "A2"
+      ],
+      "HDNOR2D4": [
+        "A1",
+        "A2"
+      ],
+      "HDNOR2D6": [
+        "A1",
+        "A2"
+      ],
+      "HDNOR2D8": [
+        "A1",
+        "A2"
+      ],
+      "HDNOR2DL": [
+        "A1",
+        "A2"
+      ],
+      "HDNOR2M1D1": [
+        "A1",
+        "A2"
+      ],
+      "HDNOR2M1D2": [
+        "A1",
+        "A2"
+      ],
+      "HDNOR2M1D4": [
+        "A1",
+        "A2"
+      ],
+      "HDNOR2M1DL": [
+        "A1",
+        "A2"
+      ],
+      "HDNOR3D1": [
+        "A1",
+        "A2",
+        "A3"
+      ],
+      "HDNOR3D2": [
+        "A1",
+        "A2",
+        "A3"
+      ],
+      "HDNOR3D4": [
+        "A1",
+        "A2",
+        "A3"
+      ],
+      "HDNOR3D6": [
+        "A1",
+        "A2",
+        "A3"
+      ],
+      "HDNOR3D8": [
+        "A1",
+        "A2",
+        "A3"
+      ],
+      "HDNOR3DL": [
+        "A1",
+        "A2",
+        "A3"
+      ],
+      "HDNOR3M1D1": [
+        "A1",
+        "A2",
+        "A3"
+      ],
+      "HDNOR3M1D2": [
+        "A1",
+        "A2",
+        "A3"
+      ],
+      "HDNOR3M1D4": [
+        "A1",
+        "A2",
+        "A3"
+      ],
+      "HDNOR3M1DL": [
+        "A1",
+        "A2",
+        "A3"
+      ],
+      "HDNOR4D1": [
+        "A1",
+        "A2",
+        "A3",
+        "A4"
+      ],
+      "HDNOR4D2": [
+        "A1",
+        "A2",
+        "A3",
+        "A4"
+      ],
+      "HDNOR4D4": [
+        "A1",
+        "A2",
+        "A3",
+        "A4"
+      ],
+      "HDNOR4D6": [
+        "A1",
+        "A2",
+        "A3",
+        "A4"
+      ],
+      "HDNOR4D8": [
+        "A1",
+        "A2",
+        "A3",
+        "A4"
+      ],
+      "HDNOR4DL": [
+        "A1",
+        "A2",
+        "A3",
+        "A4"
+      ],
+      "HDNOR4M1D1": [
+        "A1",
+        "A2",
+        "A3",
+        "A4"
+      ],
+      "HDNOR4M1D2": [
+        "A1",
+        "A2",
+        "A3",
+        "A4"
+      ],
+      "HDNOR4M1D4": [
+        "A1",
+        "A2",
+        "A3",
+        "A4"
+      ],
+      "HDNOR4M1DL": [
+        "A1",
+        "A2",
+        "A3",
+        "A4"
+      ],
+      "HDNOR4M2D1": [
+        "A1",
+        "A2",
+        "A3",
+        "A4"
+      ],
+      "HDNOR4M2D2": [
+        "A1",
+        "A2",
+        "A3",
+        "A4"
+      ],
+      "HDNOR4M2D4": [
+        "A1",
+        "A2",
+        "A3",
+        "A4"
+      ],
+      "HDNOR4M2DL": [
+        "A1",
+        "A2",
+        "A3",
+        "A4"
+      ],
+      "HDOA211D1": [
+        "A1",
+        "A2",
+        "B",
+        "C"
+      ],
+      "HDOA211D2": [
+        "A1",
+        "A2",
+        "B",
+        "C"
+      ],
+      "HDOA211D4": [
+        "A1",
+        "A2",
+        "B",
+        "C"
+      ],
+      "HDOA211DL": [
+        "A1",
+        "A2",
+        "B",
+        "C"
+      ],
+      "HDOA21D1": [
+        "A1",
+        "A2",
+        "B"
+      ],
+      "HDOA21D2": [
+        "A1",
+        "A2",
+        "B"
+      ],
+      "HDOA21D4": [
+        "A1",
+        "A2",
+        "B"
+      ],
+      "HDOA21DL": [
+        "A1",
+        "A2",
+        "B"
+      ],
+      "HDOA21M10D1": [
+        "A1",
+        "A2",
+        "B"
+      ],
+      "HDOA21M10D2": [
+        "A1",
+        "A2",
+        "B"
+      ],
+      "HDOA21M10D4": [
+        "A1",
+        "A2",
+        "B"
+      ],
+      "HDOA21M10DL": [
+        "A1",
+        "A2",
+        "B"
+      ],
+      "HDOA21M20D1": [
+        "A1",
+        "A2",
+        "B"
+      ],
+      "HDOA21M20D2": [
+        "A1",
+        "A2",
+        "B"
+      ],
+      "HDOA21M20D4": [
+        "A1",
+        "A2",
+        "B"
+      ],
+      "HDOA21M20DL": [
+        "A1",
+        "A2",
+        "B"
+      ],
+      "HDOA222D1": [
+        "A1",
+        "A2",
+        "B1",
+        "B2",
+        "C1",
+        "C2"
+      ],
+      "HDOA222D2": [
+        "A1",
+        "A2",
+        "B1",
+        "B2",
+        "C1",
+        "C2"
+      ],
+      "HDOA222D4": [
+        "A1",
+        "A2",
+        "B1",
+        "B2",
+        "C1",
+        "C2"
+      ],
+      "HDOA222DL": [
+        "A1",
+        "A2",
+        "B1",
+        "B2",
+        "C1",
+        "C2"
+      ],
+      "HDOA22D1": [
+        "A1",
+        "A2",
+        "B1",
+        "B2"
+      ],
+      "HDOA22D2": [
+        "A1",
+        "A2",
+        "B1",
+        "B2"
+      ],
+      "HDOA22D4": [
+        "A1",
+        "A2",
+        "B1",
+        "B2"
+      ],
+      "HDOA22DL": [
+        "A1",
+        "A2",
+        "B1",
+        "B2"
+      ],
+      "HDOA22M10D1": [
+        "A1",
+        "A2",
+        "B1",
+        "B2"
+      ],
+      "HDOA22M10D2": [
+        "A1",
+        "A2",
+        "B1",
+        "B2"
+      ],
+      "HDOA22M10D4": [
+        "A1",
+        "A2",
+        "B1",
+        "B2"
+      ],
+      "HDOA22M10DL": [
+        "A1",
+        "A2",
+        "B1",
+        "B2"
+      ],
+      "HDOA22M20D1": [
+        "A1",
+        "A2",
+        "B1",
+        "B2"
+      ],
+      "HDOA22M20D2": [
+        "A1",
+        "A2",
+        "B1",
+        "B2"
+      ],
+      "HDOA22M20D4": [
+        "A1",
+        "A2",
+        "B1",
+        "B2"
+      ],
+      "HDOA22M20DL": [
+        "A1",
+        "A2",
+        "B1",
+        "B2"
+      ],
+      "HDOA31D1": [
+        "A1",
+        "A2",
+        "A3",
+        "B"
+      ],
+      "HDOA31D2": [
+        "A1",
+        "A2",
+        "A3",
+        "B"
+      ],
+      "HDOA31D4": [
+        "A1",
+        "A2",
+        "A3",
+        "B"
+      ],
+      "HDOA31DL": [
+        "A1",
+        "A2",
+        "A3",
+        "B"
+      ],
+      "HDOA31M10D1": [
+        "A1",
+        "A2",
+        "A3",
+        "B"
+      ],
+      "HDOA31M10D2": [
+        "A1",
+        "A2",
+        "A3",
+        "B"
+      ],
+      "HDOA31M10D4": [
+        "A1",
+        "A2",
+        "A3",
+        "B"
+      ],
+      "HDOA31M10DL": [
+        "A1",
+        "A2",
+        "A3",
+        "B"
+      ],
+      "HDOA32D1": [
+        "A1",
+        "A2",
+        "A3",
+        "B1",
+        "B2"
+      ],
+      "HDOA32D2": [
+        "A1",
+        "A2",
+        "A3",
+        "B1",
+        "B2"
+      ],
+      "HDOA32D4": [
+        "A1",
+        "A2",
+        "A3",
+        "B1",
+        "B2"
+      ],
+      "HDOA32DL": [
+        "A1",
+        "A2",
+        "A3",
+        "B1",
+        "B2"
+      ],
+      "HDOA33D1": [
+        "A1",
+        "A2",
+        "A3",
+        "B1",
+        "B2",
+        "B3"
+      ],
+      "HDOA33D2": [
+        "A1",
+        "A2",
+        "A3",
+        "B1",
+        "B2",
+        "B3"
+      ],
+      "HDOA33D4": [
+        "A1",
+        "A2",
+        "A3",
+        "B1",
+        "B2",
+        "B3"
+      ],
+      "HDOA33DL": [
+        "A1",
+        "A2",
+        "A3",
+        "B1",
+        "B2",
+        "B3"
+      ],
+      "HDOAI211D1": [
+        "A1",
+        "A2",
+        "B",
+        "C"
+      ],
+      "HDOAI211D2": [
+        "A1",
+        "A2",
+        "B",
+        "C"
+      ],
+      "HDOAI211D4": [
+        "A1",
+        "A2",
+        "B",
+        "C"
+      ],
+      "HDOAI211DL": [
+        "A1",
+        "A2",
+        "B",
+        "C"
+      ],
+      "HDOAI21D1": [
+        "A1",
+        "A2",
+        "B"
+      ],
+      "HDOAI21D2": [
+        "A1",
+        "A2",
+        "B"
+      ],
+      "HDOAI21D4": [
+        "A1",
+        "A2",
+        "B"
+      ],
+      "HDOAI21DL": [
+        "A1",
+        "A2",
+        "B"
+      ],
+      "HDOAI21M10D1": [
+        "A1",
+        "A2",
+        "B"
+      ],
+      "HDOAI21M10D2": [
+        "A1",
+        "A2",
+        "B"
+      ],
+      "HDOAI21M10D4": [
+        "A1",
+        "A2",
+        "B"
+      ],
+      "HDOAI21M10DL": [
+        "A1",
+        "A2",
+        "B"
+      ],
+      "HDOAI21M20D1": [
+        "A1",
+        "A2",
+        "B"
+      ],
+      "HDOAI21M20D2": [
+        "A1",
+        "A2",
+        "B"
+      ],
+      "HDOAI21M20D4": [
+        "A1",
+        "A2",
+        "B"
+      ],
+      "HDOAI21M20DL": [
+        "A1",
+        "A2",
+        "B"
+      ],
+      "HDOAI222D1": [
+        "A1",
+        "A2",
+        "B1",
+        "B2",
+        "C1",
+        "C2"
+      ],
+      "HDOAI222D2": [
+        "A1",
+        "A2",
+        "B1",
+        "B2",
+        "C1",
+        "C2"
+      ],
+      "HDOAI222D4": [
+        "A1",
+        "A2",
+        "B1",
+        "B2",
+        "C1",
+        "C2"
+      ],
+      "HDOAI222DL": [
+        "A1",
+        "A2",
+        "B1",
+        "B2",
+        "C1",
+        "C2"
+      ],
+      "HDOAI22D1": [
+        "A1",
+        "A2",
+        "B1",
+        "B2"
+      ],
+      "HDOAI22D2": [
+        "A1",
+        "A2",
+        "B1",
+        "B2"
+      ],
+      "HDOAI22D4": [
+        "A1",
+        "A2",
+        "B1",
+        "B2"
+      ],
+      "HDOAI22DL": [
+        "A1",
+        "A2",
+        "B1",
+        "B2"
+      ],
+      "HDOAI22M10D1": [
+        "A1",
+        "A2",
+        "B1",
+        "B2"
+      ],
+      "HDOAI22M10D2": [
+        "A1",
+        "A2",
+        "B1",
+        "B2"
+      ],
+      "HDOAI22M10D4": [
+        "A1",
+        "A2",
+        "B1",
+        "B2"
+      ],
+      "HDOAI22M10DL": [
+        "A1",
+        "A2",
+        "B1",
+        "B2"
+      ],
+      "HDOAI22M20D1": [
+        "A1",
+        "A2",
+        "B1",
+        "B2"
+      ],
+      "HDOAI22M20D2": [
+        "A1",
+        "A2",
+        "B1",
+        "B2"
+      ],
+      "HDOAI22M20D4": [
+        "A1",
+        "A2",
+        "B1",
+        "B2"
+      ],
+      "HDOAI22M20DL": [
+        "A1",
+        "A2",
+        "B1",
+        "B2"
+      ],
+      "HDOAI31D1": [
+        "A1",
+        "A2",
+        "A3",
+        "B"
+      ],
+      "HDOAI31D2": [
+        "A1",
+        "A2",
+        "A3",
+        "B"
+      ],
+      "HDOAI31D4": [
+        "A1",
+        "A2",
+        "A3",
+        "B"
+      ],
+      "HDOAI31DL": [
+        "A1",
+        "A2",
+        "A3",
+        "B"
+      ],
+      "HDOAI31M10D1": [
+        "A1",
+        "A2",
+        "A3",
+        "B"
+      ],
+      "HDOAI31M10D2": [
+        "A1",
+        "A2",
+        "A3",
+        "B"
+      ],
+      "HDOAI31M10D4": [
+        "A1",
+        "A2",
+        "A3",
+        "B"
+      ],
+      "HDOAI31M10DL": [
+        "A1",
+        "A2",
+        "A3",
+        "B"
+      ],
+      "HDOAI32D1": [
+        "A1",
+        "A2",
+        "A3",
+        "B1",
+        "B2"
+      ],
+      "HDOAI32D2": [
+        "A1",
+        "A2",
+        "A3",
+        "B1",
+        "B2"
+      ],
+      "HDOAI32D4": [
+        "A1",
+        "A2",
+        "A3",
+        "B1",
+        "B2"
+      ],
+      "HDOAI32DL": [
+        "A1",
+        "A2",
+        "A3",
+        "B1",
+        "B2"
+      ],
+      "HDOAI33D1": [
+        "A1",
+        "A2",
+        "A3",
+        "B1",
+        "B2",
+        "B3"
+      ],
+      "HDOAI33D2": [
+        "A1",
+        "A2",
+        "A3",
+        "B1",
+        "B2",
+        "B3"
+      ],
+      "HDOAI33D4": [
+        "A1",
+        "A2",
+        "A3",
+        "B1",
+        "B2",
+        "B3"
+      ],
+      "HDOAI33DL": [
+        "A1",
+        "A2",
+        "A3",
+        "B1",
+        "B2",
+        "B3"
+      ],
+      "HDOR2D1": [
+        "A1",
+        "A2"
+      ],
+      "HDOR2D2": [
+        "A1",
+        "A2"
+      ],
+      "HDOR2D4": [
+        "A1",
+        "A2"
+      ],
+      "HDOR2D6": [
+        "A1",
+        "A2"
+      ],
+      "HDOR2D8": [
+        "A1",
+        "A2"
+      ],
+      "HDOR2DL": [
+        "A1",
+        "A2"
+      ],
+      "HDOR3D1": [
+        "A1",
+        "A2",
+        "A3"
+      ],
+      "HDOR3D2": [
+        "A1",
+        "A2",
+        "A3"
+      ],
+      "HDOR3D4": [
+        "A1",
+        "A2",
+        "A3"
+      ],
+      "HDOR3D6": [
+        "A1",
+        "A2",
+        "A3"
+      ],
+      "HDOR3D8": [
+        "A1",
+        "A2",
+        "A3"
+      ],
+      "HDOR3DL": [
+        "A1",
+        "A2",
+        "A3"
+      ],
+      "HDOR4D1": [
+        "A1",
+        "A2",
+        "A3",
+        "A4"
+      ],
+      "HDOR4D2": [
+        "A1",
+        "A2",
+        "A3",
+        "A4"
+      ],
+      "HDOR4D4": [
+        "A1",
+        "A2",
+        "A3",
+        "A4"
+      ],
+      "HDOR4D6": [
+        "A1",
+        "A2",
+        "A3",
+        "A4"
+      ],
+      "HDOR4D8": [
+        "A1",
+        "A2",
+        "A3",
+        "A4"
+      ],
+      "HDOR4DL": [
+        "A1",
+        "A2",
+        "A3",
+        "A4"
+      ],
+      "HDSDEPQ1": [
+        "CEB",
+        "CK",
+        "D",
+        "SD",
+        "SE"
+      ],
+      "HDSDEPQ2": [
+        "CEB",
+        "CK",
+        "D",
+        "SD",
+        "SE"
+      ],
+      "HDSDEPQ4": [
+        "CEB",
+        "CK",
+        "D",
+        "SD",
+        "SE"
+      ],
+      "HDSDEPQL": [
+        "CEB",
+        "CK",
+        "D",
+        "SD",
+        "SE"
+      ],
+      "HDSDERPB1": [
+        "CEB",
+        "CK",
+        "D",
+        "RB",
+        "SD",
+        "SE"
+      ],
+      "HDSDERPB2": [
+        "CEB",
+        "CK",
+        "D",
+        "RB",
+        "SD",
+        "SE"
+      ],
+      "HDSDERPB4": [
+        "CEB",
+        "CK",
+        "D",
+        "RB",
+        "SD",
+        "SE"
+      ],
+      "HDSDERPBL": [
+        "CEB",
+        "CK",
+        "D",
+        "RB",
+        "SD",
+        "SE"
+      ],
+      "HDSDERPQ1": [
+        "CEB",
+        "CK",
+        "D",
+        "RB",
+        "SD",
+        "SE"
+      ],
+      "HDSDERPQ2": [
+        "CEB",
+        "CK",
+        "D",
+        "RB",
+        "SD",
+        "SE"
+      ],
+      "HDSDERPQ4": [
+        "CEB",
+        "CK",
+        "D",
+        "RB",
+        "SD",
+        "SE"
+      ],
+      "HDSDERPQL": [
+        "CEB",
+        "CK",
+        "D",
+        "RB",
+        "SD",
+        "SE"
+      ],
+      "HDSDERSNB1": [
+        "CEB",
+        "CKB",
+        "D",
+        "RB",
+        "SB",
+        "SD",
+        "SE"
+      ],
+      "HDSDERSNB2": [
+        "CEB",
+        "CKB",
+        "D",
+        "RB",
+        "SB",
+        "SD",
+        "SE"
+      ],
+      "HDSDERSNB4": [
+        "CEB",
+        "CKB",
+        "D",
+        "RB",
+        "SB",
+        "SD",
+        "SE"
+      ],
+      "HDSDERSNBL": [
+        "CEB",
+        "CKB",
+        "D",
+        "RB",
+        "SB",
+        "SD",
+        "SE"
+      ],
+      "HDSDERSPB1": [
+        "CEB",
+        "CK",
+        "D",
+        "RB",
+        "SB",
+        "SD",
+        "SE"
+      ],
+      "HDSDERSPB2": [
+        "CEB",
+        "CK",
+        "D",
+        "RB",
+        "SB",
+        "SD",
+        "SE"
+      ],
+      "HDSDERSPB4": [
+        "CEB",
+        "CK",
+        "D",
+        "RB",
+        "SB",
+        "SD",
+        "SE"
+      ],
+      "HDSDERSPBL": [
+        "CEB",
+        "CK",
+        "D",
+        "RB",
+        "SB",
+        "SD",
+        "SE"
+      ],
+      "HDSDERSPQ1": [
+        "CEB",
+        "CK",
+        "D",
+        "RB",
+        "SB",
+        "SD",
+        "SE"
+      ],
+      "HDSDERSPQ2": [
+        "CEB",
+        "CK",
+        "D",
+        "RB",
+        "SB",
+        "SD",
+        "SE"
+      ],
+      "HDSDERSPQ4": [
+        "CEB",
+        "CK",
+        "D",
+        "RB",
+        "SB",
+        "SD",
+        "SE"
+      ],
+      "HDSDERSPQL": [
+        "CEB",
+        "CK",
+        "D",
+        "RB",
+        "SB",
+        "SD",
+        "SE"
+      ],
+      "HDSDESPQ1": [
+        "CEB",
+        "CK",
+        "D",
+        "SB",
+        "SD",
+        "SE"
+      ],
+      "HDSDESPQ2": [
+        "CEB",
+        "CK",
+        "D",
+        "SB",
+        "SD",
+        "SE"
+      ],
+      "HDSDESPQ4": [
+        "CEB",
+        "CK",
+        "D",
+        "SB",
+        "SD",
+        "SE"
+      ],
+      "HDSDESPQL": [
+        "CEB",
+        "CK",
+        "D",
+        "SB",
+        "SD",
+        "SE"
+      ],
+      "HDSDFPB1": [
+        "CK",
+        "D",
+        "SD",
+        "SE"
+      ],
+      "HDSDFPB2": [
+        "CK",
+        "D",
+        "SD",
+        "SE"
+      ],
+      "HDSDFPB4": [
+        "CK",
+        "D",
+        "SD",
+        "SE"
+      ],
+      "HDSDFPBL": [
+        "CK",
+        "D",
+        "SD",
+        "SE"
+      ],
+      "HDSDFPQ1": [
+        "CK",
+        "D",
+        "SD",
+        "SE"
+      ],
+      "HDSDFPQ2": [
+        "CK",
+        "D",
+        "SD",
+        "SE"
+      ],
+      "HDSDFPQ4": [
+        "CK",
+        "D",
+        "SD",
+        "SE"
+      ],
+      "HDSDFPQL": [
+        "CK",
+        "D",
+        "SD",
+        "SE"
+      ],
+      "HDSDFRNQ1": [
+        "CKB",
+        "D",
+        "RB",
+        "SD",
+        "SE"
+      ],
+      "HDSDFRNQ2": [
+        "CKB",
+        "D",
+        "RB",
+        "SD",
+        "SE"
+      ],
+      "HDSDFRNQ4": [
+        "CKB",
+        "D",
+        "RB",
+        "SD",
+        "SE"
+      ],
+      "HDSDFRNQL": [
+        "CKB",
+        "D",
+        "RB",
+        "SD",
+        "SE"
+      ],
+      "HDSDFRPB1": [
+        "CK",
+        "D",
+        "RB",
+        "SD",
+        "SE"
+      ],
+      "HDSDFRPB2": [
+        "CK",
+        "D",
+        "RB",
+        "SD",
+        "SE"
+      ],
+      "HDSDFRPB4": [
+        "CK",
+        "D",
+        "RB",
+        "SD",
+        "SE"
+      ],
+      "HDSDFRPBL": [
+        "CK",
+        "D",
+        "RB",
+        "SD",
+        "SE"
+      ],
+      "HDSDFRPQ1": [
+        "CK",
+        "D",
+        "RB",
+        "SD",
+        "SE"
+      ],
+      "HDSDFRPQ2": [
+        "CK",
+        "D",
+        "RB",
+        "SD",
+        "SE"
+      ],
+      "HDSDFRPQ4": [
+        "CK",
+        "D",
+        "RB",
+        "SD",
+        "SE"
+      ],
+      "HDSDFRPQL": [
+        "CK",
+        "D",
+        "RB",
+        "SD",
+        "SE"
+      ],
+      "HDSDFRSNB1": [
+        "CKB",
+        "D",
+        "RB",
+        "SB",
+        "SD",
+        "SE"
+      ],
+      "HDSDFRSNB2": [
+        "CKB",
+        "D",
+        "RB",
+        "SB",
+        "SD",
+        "SE"
+      ],
+      "HDSDFRSNB4": [
+        "CKB",
+        "D",
+        "RB",
+        "SB",
+        "SD",
+        "SE"
+      ],
+      "HDSDFRSNBL": [
+        "CKB",
+        "D",
+        "RB",
+        "SB",
+        "SD",
+        "SE"
+      ],
+      "HDSDFRSPB1": [
+        "CK",
+        "D",
+        "RB",
+        "SB",
+        "SD",
+        "SE"
+      ],
+      "HDSDFRSPB2": [
+        "CK",
+        "D",
+        "RB",
+        "SB",
+        "SD",
+        "SE"
+      ],
+      "HDSDFRSPB4": [
+        "CK",
+        "D",
+        "RB",
+        "SB",
+        "SD",
+        "SE"
+      ],
+      "HDSDFRSPBL": [
+        "CK",
+        "D",
+        "RB",
+        "SB",
+        "SD",
+        "SE"
+      ],
+      "HDSDFRSPQ1": [
+        "CK",
+        "D",
+        "RB",
+        "SB",
+        "SD",
+        "SE"
+      ],
+      "HDSDFRSPQ2": [
+        "CK",
+        "D",
+        "RB",
+        "SB",
+        "SD",
+        "SE"
+      ],
+      "HDSDFRSPQ4": [
+        "CK",
+        "D",
+        "RB",
+        "SB",
+        "SD",
+        "SE"
+      ],
+      "HDSDFRSPQL": [
+        "CK",
+        "D",
+        "RB",
+        "SB",
+        "SD",
+        "SE"
+      ],
+      "HDSDFSPQ1": [
+        "CK",
+        "D",
+        "SB",
+        "SD",
+        "SE"
+      ],
+      "HDSDFSPQ2": [
+        "CK",
+        "D",
+        "SB",
+        "SD",
+        "SE"
+      ],
+      "HDSDFSPQ4": [
+        "CK",
+        "D",
+        "SB",
+        "SD",
+        "SE"
+      ],
+      "HDSDFSPQL": [
+        "CK",
+        "D",
+        "SB",
+        "SD",
+        "SE"
+      ],
+      "HDTGCKPHD1": [
+        "CK",
+        "EN",
+        "TE"
+      ],
+      "HDTGCKPHD2": [
+        "CK",
+        "EN",
+        "TE"
+      ],
+      "HDTGCKPHD4": [
+        "CK",
+        "EN",
+        "TE"
+      ],
+      "HDTGCKPHD8": [
+        "CK",
+        "EN",
+        "TE"
+      ],
+      "HDTIEHI": [],
+      "HDTIEHIE": [],
+      "HDTIELO": [],
+      "HDTIELOE": []
+    },
+    "elements_output_types": {
+      "GLOBAL_GND": [
+        "O"
+      ],
+      "GLOBAL_VCC": [
+        "O"
+      ],
+      "HDADFULD1": [
+        "S"
+      ],
+      "HDADFULD2": [
+        "S"
+      ],
+      "HDADFULD4": [
+        "S"
+      ],
+      "HDADFULDL": [
+        "S"
+      ],
+      "HDADHALFD1": [
+        "S"
+      ],
+      "HDADHALFD2": [
+        "S"
+      ],
+      "HDADHALFD4": [
+        "S"
+      ],
+      "HDADHALFDL": [
+        "S"
+      ],
+      "HDAND2D1": [
+        "Z"
+      ],
+      "HDAND2D2": [
+        "Z"
+      ],
+      "HDAND2D4": [
+        "Z"
+      ],
+      "HDAND2D6": [
+        "Z"
+      ],
+      "HDAND2D8": [
+        "Z"
+      ],
+      "HDAND2DL": [
+        "Z"
+      ],
+      "HDAND3D1": [
+        "Z"
+      ],
+      "HDAND3D2": [
+        "Z"
+      ],
+      "HDAND3D4": [
+        "Z"
+      ],
+      "HDAND3D6": [
+        "Z"
+      ],
+      "HDAND3D8": [
+        "Z"
+      ],
+      "HDAND3DL": [
+        "Z"
+      ],
+      "HDAND4D1": [
+        "Z"
+      ],
+      "HDAND4D2": [
+        "Z"
+      ],
+      "HDAND4D4": [
+        "Z"
+      ],
+      "HDAND4D6": [
+        "Z"
+      ],
+      "HDAND4D8": [
+        "Z"
+      ],
+      "HDAND4DL": [
+        "Z"
+      ],
+      "HDANT": [],
+      "HDANT2": [],
+      "HDAO211D1": [
+        "Z"
+      ],
+      "HDAO211D2": [
+        "Z"
+      ],
+      "HDAO211D4": [
+        "Z"
+      ],
+      "HDAO211DL": [
+        "Z"
+      ],
+      "HDAO21D1": [
+        "Z"
+      ],
+      "HDAO21D2": [
+        "Z"
+      ],
+      "HDAO21D4": [
+        "Z"
+      ],
+      "HDAO21DL": [
+        "Z"
+      ],
+      "HDAO21M10D1": [
+        "Z"
+      ],
+      "HDAO21M10D2": [
+        "Z"
+      ],
+      "HDAO21M10D4": [
+        "Z"
+      ],
+      "HDAO21M10DL": [
+        "Z"
+      ],
+      "HDAO21M20D1": [
+        "Z"
+      ],
+      "HDAO21M20D2": [
+        "Z"
+      ],
+      "HDAO21M20D4": [
+        "Z"
+      ],
+      "HDAO21M20DL": [
+        "Z"
+      ],
+      "HDAO222D1": [
+        "Z"
+      ],
+      "HDAO222D2": [
+        "Z"
+      ],
+      "HDAO222D4": [
+        "Z"
+      ],
+      "HDAO222DL": [
+        "Z"
+      ],
+      "HDAO22D1": [
+        "Z"
+      ],
+      "HDAO22D2": [
+        "Z"
+      ],
+      "HDAO22D4": [
+        "Z"
+      ],
+      "HDAO22DL": [
+        "Z"
+      ],
+      "HDAO22M10D1": [
+        "Z"
+      ],
+      "HDAO22M10D2": [
+        "Z"
+      ],
+      "HDAO22M10D4": [
+        "Z"
+      ],
+      "HDAO22M10DL": [
+        "Z"
+      ],
+      "HDAO22M20D1": [
+        "Z"
+      ],
+      "HDAO22M20D2": [
+        "Z"
+      ],
+      "HDAO22M20D4": [
+        "Z"
+      ],
+      "HDAO22M20DL": [
+        "Z"
+      ],
+      "HDAO31D1": [
+        "Z"
+      ],
+      "HDAO31D2": [
+        "Z"
+      ],
+      "HDAO31D4": [
+        "Z"
+      ],
+      "HDAO31DL": [
+        "Z"
+      ],
+      "HDAO31M10D1": [
+        "Z"
+      ],
+      "HDAO31M10D2": [
+        "Z"
+      ],
+      "HDAO31M10D4": [
+        "Z"
+      ],
+      "HDAO31M10DL": [
+        "Z"
+      ],
+      "HDAO32D1": [
+        "Z"
+      ],
+      "HDAO32D2": [
+        "Z"
+      ],
+      "HDAO32D4": [
+        "Z"
+      ],
+      "HDAO32DL": [
+        "Z"
+      ],
+      "HDAO33D1": [
+        "Z"
+      ],
+      "HDAO33D2": [
+        "Z"
+      ],
+      "HDAO33D4": [
+        "Z"
+      ],
+      "HDAO33DL": [
+        "Z"
+      ],
+      "HDAOI211D1": [
+        "Z"
+      ],
+      "HDAOI211D2": [
+        "Z"
+      ],
+      "HDAOI211D4": [
+        "Z"
+      ],
+      "HDAOI211DL": [
+        "Z"
+      ],
+      "HDAOI21D1": [
+        "Z"
+      ],
+      "HDAOI21D2": [
+        "Z"
+      ],
+      "HDAOI21D4": [
+        "Z"
+      ],
+      "HDAOI21DL": [
+        "Z"
+      ],
+      "HDAOI21M10D1": [
+        "Z"
+      ],
+      "HDAOI21M10D2": [
+        "Z"
+      ],
+      "HDAOI21M10D4": [
+        "Z"
+      ],
+      "HDAOI21M10DL": [
+        "Z"
+      ],
+      "HDAOI21M20D1": [
+        "Z"
+      ],
+      "HDAOI21M20D2": [
+        "Z"
+      ],
+      "HDAOI21M20D4": [
+        "Z"
+      ],
+      "HDAOI21M20DL": [
+        "Z"
+      ],
+      "HDAOI222D1": [
+        "Z"
+      ],
+      "HDAOI222D2": [
+        "Z"
+      ],
+      "HDAOI222D4": [
+        "Z"
+      ],
+      "HDAOI222DL": [
+        "Z"
+      ],
+      "HDAOI22D1": [
+        "Z"
+      ],
+      "HDAOI22D2": [
+        "Z"
+      ],
+      "HDAOI22D4": [
+        "Z"
+      ],
+      "HDAOI22DL": [
+        "Z"
+      ],
+      "HDAOI22M10D1": [
+        "Z"
+      ],
+      "HDAOI22M10D2": [
+        "Z"
+      ],
+      "HDAOI22M10D4": [
+        "Z"
+      ],
+      "HDAOI22M10DL": [
+        "Z"
+      ],
+      "HDAOI22M20D1": [
+        "Z"
+      ],
+      "HDAOI22M20D2": [
+        "Z"
+      ],
+      "HDAOI22M20D4": [
+        "Z"
+      ],
+      "HDAOI22M20DL": [
+        "Z"
+      ],
+      "HDAOI31D1": [
+        "Z"
+      ],
+      "HDAOI31D2": [
+        "Z"
+      ],
+      "HDAOI31D4": [
+        "Z"
+      ],
+      "HDAOI31DL": [
+        "Z"
+      ],
+      "HDAOI31M10D1": [
+        "Z"
+      ],
+      "HDAOI31M10D2": [
+        "Z"
+      ],
+      "HDAOI31M10D4": [
+        "Z"
+      ],
+      "HDAOI31M10DL": [
+        "Z"
+      ],
+      "HDAOI32D1": [
+        "Z"
+      ],
+      "HDAOI32D2": [
+        "Z"
+      ],
+      "HDAOI32D4": [
+        "Z"
+      ],
+      "HDAOI32DL": [
+        "Z"
+      ],
+      "HDAOI33D1": [
+        "Z"
+      ],
+      "HDAOI33D2": [
+        "Z"
+      ],
+      "HDAOI33D4": [
+        "Z"
+      ],
+      "HDAOI33DL": [
+        "Z"
+      ],
+      "HDBUFBD12": [
+        "Z"
+      ],
+      "HDBUFBD16": [
+        "Z"
+      ],
+      "HDBUFBD2": [
+        "Z"
+      ],
+      "HDBUFBD20": [
+        "Z"
+      ],
+      "HDBUFBD3": [
+        "Z"
+      ],
+      "HDBUFBD32": [
+        "Z"
+      ],
+      "HDBUFBD4": [
+        "Z"
+      ],
+      "HDBUFBD6": [
+        "Z"
+      ],
+      "HDBUFBD8": [
+        "Z"
+      ],
+      "HDBUFD1": [
+        "Z"
+      ],
+      "HDBUFD12": [
+        "Z"
+      ],
+      "HDBUFD16": [
+        "Z"
+      ],
+      "HDBUFD2": [
+        "Z"
+      ],
+      "HDBUFD20": [
+        "Z"
+      ],
+      "HDBUFD3": [
+        "Z"
+      ],
+      "HDBUFD32": [
+        "Z"
+      ],
+      "HDBUFD4": [
+        "Z"
+      ],
+      "HDBUFD6": [
+        "Z"
+      ],
+      "HDBUFD8": [
+        "Z"
+      ],
+      "HDBUFDL": [
+        "Z"
+      ],
+      "HDBUFTBD12": [
+        "Z"
+      ],
+      "HDBUFTBD16": [
+        "Z"
+      ],
+      "HDBUFTBD20": [
+        "Z"
+      ],
+      "HDBUFTBD4": [
+        "Z"
+      ],
+      "HDBUFTBD6": [
+        "Z"
+      ],
+      "HDBUFTBD8": [
+        "Z"
+      ],
+      "HDBUFTD1": [
+        "Z"
+      ],
+      "HDBUFTD12": [
+        "Z"
+      ],
+      "HDBUFTD16": [
+        "Z"
+      ],
+      "HDBUFTD2": [
+        "Z"
+      ],
+      "HDBUFTD20": [
+        "Z"
+      ],
+      "HDBUFTD3": [
+        "Z"
+      ],
+      "HDBUFTD4": [
+        "Z"
+      ],
+      "HDBUFTD6": [
+        "Z"
+      ],
+      "HDBUFTD8": [
+        "Z"
+      ],
+      "HDBUFTDL": [
+        "Z"
+      ],
+      "HDCLKBD12": [
+        "Z"
+      ],
+      "HDCLKBD16": [
+        "Z"
+      ],
+      "HDCLKBD2": [
+        "Z"
+      ],
+      "HDCLKBD20": [
+        "Z"
+      ],
+      "HDCLKBD3": [
+        "Z"
+      ],
+      "HDCLKBD32": [
+        "Z"
+      ],
+      "HDCLKBD4": [
+        "Z"
+      ],
+      "HDCLKBD6": [
+        "Z"
+      ],
+      "HDCLKBD8": [
+        "Z"
+      ],
+      "HDCLOAD": [],
+      "HDDFEPQ1": [
+        "Q"
+      ],
+      "HDDFEPQ2": [
+        "Q"
+      ],
+      "HDDFEPQ4": [
+        "Q"
+      ],
+      "HDDFEPQL": [
+        "Q"
+      ],
+      "HDDFERPB1": [
+        "QB"
+      ],
+      "HDDFERPB2": [
+        "QB"
+      ],
+      "HDDFERPB4": [
+        "QB"
+      ],
+      "HDDFERPBL": [
+        "QB"
+      ],
+      "HDDFERPQ1": [
+        "Q"
+      ],
+      "HDDFERPQ2": [
+        "Q"
+      ],
+      "HDDFERPQ4": [
+        "Q"
+      ],
+      "HDDFERPQL": [
+        "Q"
+      ],
+      "HDDFERSNB1": [
+        "QB"
+      ],
+      "HDDFERSNB2": [
+        "QB"
+      ],
+      "HDDFERSNB4": [
+        "QB"
+      ],
+      "HDDFERSNBL": [
+        "QB"
+      ],
+      "HDDFERSPB1": [
+        "QB"
+      ],
+      "HDDFERSPB2": [
+        "QB"
+      ],
+      "HDDFERSPB4": [
+        "QB"
+      ],
+      "HDDFERSPBL": [
+        "QB"
+      ],
+      "HDDFERSPQ1": [
+        "Q"
+      ],
+      "HDDFERSPQ2": [
+        "Q"
+      ],
+      "HDDFERSPQ4": [
+        "Q"
+      ],
+      "HDDFERSPQL": [
+        "Q"
+      ],
+      "HDDFESPQ1": [
+        "Q"
+      ],
+      "HDDFESPQ2": [
+        "Q"
+      ],
+      "HDDFESPQ4": [
+        "Q"
+      ],
+      "HDDFESPQL": [
+        "Q"
+      ],
+      "HDDFFPB1": [
+        "QB"
+      ],
+      "HDDFFPB2": [
+        "QB"
+      ],
+      "HDDFFPB4": [
+        "QB"
+      ],
+      "HDDFFPBL": [
+        "QB"
+      ],
+      "HDDFFPQ1": [
+        "Q"
+      ],
+      "HDDFFPQ2": [
+        "Q"
+      ],
+      "HDDFFPQ4": [
+        "Q"
+      ],
+      "HDDFFPQL": [
+        "Q"
+      ],
+      "HDDFFRNQ1": [
+        "Q"
+      ],
+      "HDDFFRNQ2": [
+        "Q"
+      ],
+      "HDDFFRNQ4": [
+        "Q"
+      ],
+      "HDDFFRNQL": [
+        "Q"
+      ],
+      "HDDFFRPB1": [
+        "QB"
+      ],
+      "HDDFFRPB2": [
+        "QB"
+      ],
+      "HDDFFRPB4": [
+        "QB"
+      ],
+      "HDDFFRPBL": [
+        "QB"
+      ],
+      "HDDFFRPQ1": [
+        "Q"
+      ],
+      "HDDFFRPQ2": [
+        "Q"
+      ],
+      "HDDFFRPQ4": [
+        "Q"
+      ],
+      "HDDFFRPQL": [
+        "Q"
+      ],
+      "HDDFFRSNB1": [
+        "QB"
+      ],
+      "HDDFFRSNB2": [
+        "QB"
+      ],
+      "HDDFFRSNB4": [
+        "QB"
+      ],
+      "HDDFFRSNBL": [
+        "QB"
+      ],
+      "HDDFFRSPB1": [
+        "QB"
+      ],
+      "HDDFFRSPB2": [
+        "QB"
+      ],
+      "HDDFFRSPB4": [
+        "QB"
+      ],
+      "HDDFFRSPBL": [
+        "QB"
+      ],
+      "HDDFFRSPQ1": [
+        "Q"
+      ],
+      "HDDFFRSPQ2": [
+        "Q"
+      ],
+      "HDDFFRSPQ4": [
+        "Q"
+      ],
+      "HDDFFRSPQL": [
+        "Q"
+      ],
+      "HDDFFSPQ1": [
+        "Q"
+      ],
+      "HDDFFSPQ2": [
+        "Q"
+      ],
+      "HDDFFSPQ4": [
+        "Q"
+      ],
+      "HDDFFSPQL": [
+        "Q"
+      ],
+      "HDDLY1D4": [
+        "Z"
+      ],
+      "HDDLY2D4": [
+        "Z"
+      ],
+      "HDDLY3D4": [
+        "Z"
+      ],
+      "HDDLY4D4": [
+        "Z"
+      ],
+      "HDEXNOR2D1": [
+        "Z"
+      ],
+      "HDEXNOR2D2": [
+        "Z"
+      ],
+      "HDEXNOR2D4": [
+        "Z"
+      ],
+      "HDEXNOR2DL": [
+        "Z"
+      ],
+      "HDEXNOR3D1": [
+        "Z"
+      ],
+      "HDEXNOR3D2": [
+        "Z"
+      ],
+      "HDEXNOR3D4": [
+        "Z"
+      ],
+      "HDEXNOR3DL": [
+        "Z"
+      ],
+      "HDEXOR2D1": [
+        "Z"
+      ],
+      "HDEXOR2D2": [
+        "Z"
+      ],
+      "HDEXOR2D4": [
+        "Z"
+      ],
+      "HDEXOR2DL": [
+        "Z"
+      ],
+      "HDEXOR3D1": [
+        "Z"
+      ],
+      "HDEXOR3D2": [
+        "Z"
+      ],
+      "HDEXOR3D4": [
+        "Z"
+      ],
+      "HDEXOR3DL": [
+        "Z"
+      ],
+      "HDINVBD1": [
+        "Z"
+      ],
+      "HDINVBD12": [
+        "Z"
+      ],
+      "HDINVBD16": [
+        "Z"
+      ],
+      "HDINVBD2": [
+        "Z"
+      ],
+      "HDINVBD20": [
+        "Z"
+      ],
+      "HDINVBD3": [
+        "Z"
+      ],
+      "HDINVBD32": [
+        "Z"
+      ],
+      "HDINVBD4": [
+        "Z"
+      ],
+      "HDINVBD6": [
+        "Z"
+      ],
+      "HDINVBD8": [
+        "Z"
+      ],
+      "HDINVD1": [
+        "Z"
+      ],
+      "HDINVD12": [
+        "Z"
+      ],
+      "HDINVD16": [
+        "Z"
+      ],
+      "HDINVD2": [
+        "Z"
+      ],
+      "HDINVD20": [
+        "Z"
+      ],
+      "HDINVD3": [
+        "Z"
+      ],
+      "HDINVD32": [
+        "Z"
+      ],
+      "HDINVD4": [
+        "Z"
+      ],
+      "HDINVD6": [
+        "Z"
+      ],
+      "HDINVD8": [
+        "Z"
+      ],
+      "HDINVDL": [
+        "Z"
+      ],
+      "HDINVTD1": [
+        "Z"
+      ],
+      "HDINVTD12": [
+        "Z"
+      ],
+      "HDINVTD16": [
+        "Z"
+      ],
+      "HDINVTD2": [
+        "Z"
+      ],
+      "HDINVTD20": [
+        "Z"
+      ],
+      "HDINVTD3": [
+        "Z"
+      ],
+      "HDINVTD4": [
+        "Z"
+      ],
+      "HDINVTD6": [
+        "Z"
+      ],
+      "HDINVTD8": [
+        "Z"
+      ],
+      "HDINVTDL": [
+        "Z"
+      ],
+      "HDKEEPER": [],
+      "HDLATNB1": [
+        "QB"
+      ],
+      "HDLATNB2": [
+        "QB"
+      ],
+      "HDLATNB4": [
+        "QB"
+      ],
+      "HDLATNBL": [
+        "QB"
+      ],
+      "HDLATNT1": [
+        "Z"
+      ],
+      "HDLATNT2": [
+        "Z"
+      ],
+      "HDLATNT4": [
+        "Z"
+      ],
+      "HDLATNTL": [
+        "Z"
+      ],
+      "HDLATPB1": [
+        "QB"
+      ],
+      "HDLATPB2": [
+        "QB"
+      ],
+      "HDLATPB4": [
+        "QB"
+      ],
+      "HDLATPBL": [
+        "QB"
+      ],
+      "HDLATPQ1": [
+        "Q"
+      ],
+      "HDLATPQ2": [
+        "Q"
+      ],
+      "HDLATPQ4": [
+        "Q"
+      ],
+      "HDLATPQL": [
+        "Q"
+      ],
+      "HDLATRNB1": [
+        "QB"
+      ],
+      "HDLATRNB2": [
+        "QB"
+      ],
+      "HDLATRNB4": [
+        "QB"
+      ],
+      "HDLATRNBL": [
+        "QB"
+      ],
+      "HDLATRPB1": [
+        "QB"
+      ],
+      "HDLATRPB2": [
+        "QB"
+      ],
+      "HDLATRPB4": [
+        "QB"
+      ],
+      "HDLATRPBL": [
+        "QB"
+      ],
+      "HDLATRSPB1": [
+        "QB"
+      ],
+      "HDLATRSPB2": [
+        "QB"
+      ],
+      "HDLATRSPB4": [
+        "QB"
+      ],
+      "HDLATRSPBL": [
+        "QB"
+      ],
+      "HDMUX2D1": [
+        "Z"
+      ],
+      "HDMUX2D2": [
+        "Z"
+      ],
+      "HDMUX2D4": [
+        "Z"
+      ],
+      "HDMUX2D6": [
+        "Z"
+      ],
+      "HDMUX2D8": [
+        "Z"
+      ],
+      "HDMUX2DL": [
+        "Z"
+      ],
+      "HDMUX3D1": [
+        "Z"
+      ],
+      "HDMUX3D2": [
+        "Z"
+      ],
+      "HDMUX3D4": [
+        "Z"
+      ],
+      "HDMUX3DL": [
+        "Z"
+      ],
+      "HDMUX4D1": [
+        "Z"
+      ],
+      "HDMUX4D2": [
+        "Z"
+      ],
+      "HDMUX4D4": [
+        "Z"
+      ],
+      "HDMUX4DL": [
+        "Z"
+      ],
+      "HDMUXB2D1": [
+        "Z"
+      ],
+      "HDMUXB2D2": [
+        "Z"
+      ],
+      "HDMUXB2D4": [
+        "Z"
+      ],
+      "HDMUXB2D6": [
+        "Z"
+      ],
+      "HDMUXB2D8": [
+        "Z"
+      ],
+      "HDMUXB2DL": [
+        "Z"
+      ],
+      "HDMUXB4D1": [
+        "Z"
+      ],
+      "HDMUXB4D2": [
+        "Z"
+      ],
+      "HDMUXB4D4": [
+        "Z"
+      ],
+      "HDMUXB4DL": [
+        "Z"
+      ],
+      "HDNAN2D1": [
+        "Z"
+      ],
+      "HDNAN2D2": [
+        "Z"
+      ],
+      "HDNAN2D4": [
+        "Z"
+      ],
+      "HDNAN2D6": [
+        "Z"
+      ],
+      "HDNAN2D8": [
+        "Z"
+      ],
+      "HDNAN2DL": [
+        "Z"
+      ],
+      "HDNAN2M1D1": [
+        "Z"
+      ],
+      "HDNAN2M1D2": [
+        "Z"
+      ],
+      "HDNAN2M1D4": [
+        "Z"
+      ],
+      "HDNAN2M1DL": [
+        "Z"
+      ],
+      "HDNAN3D1": [
+        "Z"
+      ],
+      "HDNAN3D2": [
+        "Z"
+      ],
+      "HDNAN3D4": [
+        "Z"
+      ],
+      "HDNAN3D6": [
+        "Z"
+      ],
+      "HDNAN3D8": [
+        "Z"
+      ],
+      "HDNAN3DL": [
+        "Z"
+      ],
+      "HDNAN3M1D1": [
+        "Z"
+      ],
+      "HDNAN3M1D2": [
+        "Z"
+      ],
+      "HDNAN3M1D4": [
+        "Z"
+      ],
+      "HDNAN3M1DL": [
+        "Z"
+      ],
+      "HDNAN4D1": [
+        "Z"
+      ],
+      "HDNAN4D2": [
+        "Z"
+      ],
+      "HDNAN4D4": [
+        "Z"
+      ],
+      "HDNAN4D6": [
+        "Z"
+      ],
+      "HDNAN4D8": [
+        "Z"
+      ],
+      "HDNAN4DL": [
+        "Z"
+      ],
+      "HDNAN4M1D1": [
+        "Z"
+      ],
+      "HDNAN4M1D2": [
+        "Z"
+      ],
+      "HDNAN4M1D4": [
+        "Z"
+      ],
+      "HDNAN4M1DL": [
+        "Z"
+      ],
+      "HDNAN4M2D1": [
+        "Z"
+      ],
+      "HDNAN4M2D2": [
+        "Z"
+      ],
+      "HDNAN4M2D4": [
+        "Z"
+      ],
+      "HDNAN4M2DL": [
+        "Z"
+      ],
+      "HDNOR2D1": [
+        "Z"
+      ],
+      "HDNOR2D2": [
+        "Z"
+      ],
+      "HDNOR2D4": [
+        "Z"
+      ],
+      "HDNOR2D6": [
+        "Z"
+      ],
+      "HDNOR2D8": [
+        "Z"
+      ],
+      "HDNOR2DL": [
+        "Z"
+      ],
+      "HDNOR2M1D1": [
+        "Z"
+      ],
+      "HDNOR2M1D2": [
+        "Z"
+      ],
+      "HDNOR2M1D4": [
+        "Z"
+      ],
+      "HDNOR2M1DL": [
+        "Z"
+      ],
+      "HDNOR3D1": [
+        "Z"
+      ],
+      "HDNOR3D2": [
+        "Z"
+      ],
+      "HDNOR3D4": [
+        "Z"
+      ],
+      "HDNOR3D6": [
+        "Z"
+      ],
+      "HDNOR3D8": [
+        "Z"
+      ],
+      "HDNOR3DL": [
+        "Z"
+      ],
+      "HDNOR3M1D1": [
+        "Z"
+      ],
+      "HDNOR3M1D2": [
+        "Z"
+      ],
+      "HDNOR3M1D4": [
+        "Z"
+      ],
+      "HDNOR3M1DL": [
+        "Z"
+      ],
+      "HDNOR4D1": [
+        "Z"
+      ],
+      "HDNOR4D2": [
+        "Z"
+      ],
+      "HDNOR4D4": [
+        "Z"
+      ],
+      "HDNOR4D6": [
+        "Z"
+      ],
+      "HDNOR4D8": [
+        "Z"
+      ],
+      "HDNOR4DL": [
+        "Z"
+      ],
+      "HDNOR4M1D1": [
+        "Z"
+      ],
+      "HDNOR4M1D2": [
+        "Z"
+      ],
+      "HDNOR4M1D4": [
+        "Z"
+      ],
+      "HDNOR4M1DL": [
+        "Z"
+      ],
+      "HDNOR4M2D1": [
+        "Z"
+      ],
+      "HDNOR4M2D2": [
+        "Z"
+      ],
+      "HDNOR4M2D4": [
+        "Z"
+      ],
+      "HDNOR4M2DL": [
+        "Z"
+      ],
+      "HDOA211D1": [
+        "Z"
+      ],
+      "HDOA211D2": [
+        "Z"
+      ],
+      "HDOA211D4": [
+        "Z"
+      ],
+      "HDOA211DL": [
+        "Z"
+      ],
+      "HDOA21D1": [
+        "Z"
+      ],
+      "HDOA21D2": [
+        "Z"
+      ],
+      "HDOA21D4": [
+        "Z"
+      ],
+      "HDOA21DL": [
+        "Z"
+      ],
+      "HDOA21M10D1": [
+        "Z"
+      ],
+      "HDOA21M10D2": [
+        "Z"
+      ],
+      "HDOA21M10D4": [
+        "Z"
+      ],
+      "HDOA21M10DL": [
+        "Z"
+      ],
+      "HDOA21M20D1": [
+        "Z"
+      ],
+      "HDOA21M20D2": [
+        "Z"
+      ],
+      "HDOA21M20D4": [
+        "Z"
+      ],
+      "HDOA21M20DL": [
+        "Z"
+      ],
+      "HDOA222D1": [
+        "Z"
+      ],
+      "HDOA222D2": [
+        "Z"
+      ],
+      "HDOA222D4": [
+        "Z"
+      ],
+      "HDOA222DL": [
+        "Z"
+      ],
+      "HDOA22D1": [
+        "Z"
+      ],
+      "HDOA22D2": [
+        "Z"
+      ],
+      "HDOA22D4": [
+        "Z"
+      ],
+      "HDOA22DL": [
+        "Z"
+      ],
+      "HDOA22M10D1": [
+        "Z"
+      ],
+      "HDOA22M10D2": [
+        "Z"
+      ],
+      "HDOA22M10D4": [
+        "Z"
+      ],
+      "HDOA22M10DL": [
+        "Z"
+      ],
+      "HDOA22M20D1": [
+        "Z"
+      ],
+      "HDOA22M20D2": [
+        "Z"
+      ],
+      "HDOA22M20D4": [
+        "Z"
+      ],
+      "HDOA22M20DL": [
+        "Z"
+      ],
+      "HDOA31D1": [
+        "Z"
+      ],
+      "HDOA31D2": [
+        "Z"
+      ],
+      "HDOA31D4": [
+        "Z"
+      ],
+      "HDOA31DL": [
+        "Z"
+      ],
+      "HDOA31M10D1": [
+        "Z"
+      ],
+      "HDOA31M10D2": [
+        "Z"
+      ],
+      "HDOA31M10D4": [
+        "Z"
+      ],
+      "HDOA31M10DL": [
+        "Z"
+      ],
+      "HDOA32D1": [
+        "Z"
+      ],
+      "HDOA32D2": [
+        "Z"
+      ],
+      "HDOA32D4": [
+        "Z"
+      ],
+      "HDOA32DL": [
+        "Z"
+      ],
+      "HDOA33D1": [
+        "Z"
+      ],
+      "HDOA33D2": [
+        "Z"
+      ],
+      "HDOA33D4": [
+        "Z"
+      ],
+      "HDOA33DL": [
+        "Z"
+      ],
+      "HDOAI211D1": [
+        "Z"
+      ],
+      "HDOAI211D2": [
+        "Z"
+      ],
+      "HDOAI211D4": [
+        "Z"
+      ],
+      "HDOAI211DL": [
+        "Z"
+      ],
+      "HDOAI21D1": [
+        "Z"
+      ],
+      "HDOAI21D2": [
+        "Z"
+      ],
+      "HDOAI21D4": [
+        "Z"
+      ],
+      "HDOAI21DL": [
+        "Z"
+      ],
+      "HDOAI21M10D1": [
+        "Z"
+      ],
+      "HDOAI21M10D2": [
+        "Z"
+      ],
+      "HDOAI21M10D4": [
+        "Z"
+      ],
+      "HDOAI21M10DL": [
+        "Z"
+      ],
+      "HDOAI21M20D1": [
+        "Z"
+      ],
+      "HDOAI21M20D2": [
+        "Z"
+      ],
+      "HDOAI21M20D4": [
+        "Z"
+      ],
+      "HDOAI21M20DL": [
+        "Z"
+      ],
+      "HDOAI222D1": [
+        "Z"
+      ],
+      "HDOAI222D2": [
+        "Z"
+      ],
+      "HDOAI222D4": [
+        "Z"
+      ],
+      "HDOAI222DL": [
+        "Z"
+      ],
+      "HDOAI22D1": [
+        "Z"
+      ],
+      "HDOAI22D2": [
+        "Z"
+      ],
+      "HDOAI22D4": [
+        "Z"
+      ],
+      "HDOAI22DL": [
+        "Z"
+      ],
+      "HDOAI22M10D1": [
+        "Z"
+      ],
+      "HDOAI22M10D2": [
+        "Z"
+      ],
+      "HDOAI22M10D4": [
+        "Z"
+      ],
+      "HDOAI22M10DL": [
+        "Z"
+      ],
+      "HDOAI22M20D1": [
+        "Z"
+      ],
+      "HDOAI22M20D2": [
+        "Z"
+      ],
+      "HDOAI22M20D4": [
+        "Z"
+      ],
+      "HDOAI22M20DL": [
+        "Z"
+      ],
+      "HDOAI31D1": [
+        "Z"
+      ],
+      "HDOAI31D2": [
+        "Z"
+      ],
+      "HDOAI31D4": [
+        "Z"
+      ],
+      "HDOAI31DL": [
+        "Z"
+      ],
+      "HDOAI31M10D1": [
+        "Z"
+      ],
+      "HDOAI31M10D2": [
+        "Z"
+      ],
+      "HDOAI31M10D4": [
+        "Z"
+      ],
+      "HDOAI31M10DL": [
+        "Z"
+      ],
+      "HDOAI32D1": [
+        "Z"
+      ],
+      "HDOAI32D2": [
+        "Z"
+      ],
+      "HDOAI32D4": [
+        "Z"
+      ],
+      "HDOAI32DL": [
+        "Z"
+      ],
+      "HDOAI33D1": [
+        "Z"
+      ],
+      "HDOAI33D2": [
+        "Z"
+      ],
+      "HDOAI33D4": [
+        "Z"
+      ],
+      "HDOAI33DL": [
+        "Z"
+      ],
+      "HDOR2D1": [
+        "Z"
+      ],
+      "HDOR2D2": [
+        "Z"
+      ],
+      "HDOR2D4": [
+        "Z"
+      ],
+      "HDOR2D6": [
+        "Z"
+      ],
+      "HDOR2D8": [
+        "Z"
+      ],
+      "HDOR2DL": [
+        "Z"
+      ],
+      "HDOR3D1": [
+        "Z"
+      ],
+      "HDOR3D2": [
+        "Z"
+      ],
+      "HDOR3D4": [
+        "Z"
+      ],
+      "HDOR3D6": [
+        "Z"
+      ],
+      "HDOR3D8": [
+        "Z"
+      ],
+      "HDOR3DL": [
+        "Z"
+      ],
+      "HDOR4D1": [
+        "Z"
+      ],
+      "HDOR4D2": [
+        "Z"
+      ],
+      "HDOR4D4": [
+        "Z"
+      ],
+      "HDOR4D6": [
+        "Z"
+      ],
+      "HDOR4D8": [
+        "Z"
+      ],
+      "HDOR4DL": [
+        "Z"
+      ],
+      "HDSDEPQ1": [
+        "Q"
+      ],
+      "HDSDEPQ2": [
+        "Q"
+      ],
+      "HDSDEPQ4": [
+        "Q"
+      ],
+      "HDSDEPQL": [
+        "Q"
+      ],
+      "HDSDERPB1": [
+        "QB"
+      ],
+      "HDSDERPB2": [
+        "QB"
+      ],
+      "HDSDERPB4": [
+        "QB"
+      ],
+      "HDSDERPBL": [
+        "QB"
+      ],
+      "HDSDERPQ1": [
+        "Q"
+      ],
+      "HDSDERPQ2": [
+        "Q"
+      ],
+      "HDSDERPQ4": [
+        "Q"
+      ],
+      "HDSDERPQL": [
+        "Q"
+      ],
+      "HDSDERSNB1": [
+        "QB"
+      ],
+      "HDSDERSNB2": [
+        "QB"
+      ],
+      "HDSDERSNB4": [
+        "QB"
+      ],
+      "HDSDERSNBL": [
+        "QB"
+      ],
+      "HDSDERSPB1": [
+        "QB"
+      ],
+      "HDSDERSPB2": [
+        "QB"
+      ],
+      "HDSDERSPB4": [
+        "QB"
+      ],
+      "HDSDERSPBL": [
+        "QB"
+      ],
+      "HDSDERSPQ1": [
+        "Q"
+      ],
+      "HDSDERSPQ2": [
+        "Q"
+      ],
+      "HDSDERSPQ4": [
+        "Q"
+      ],
+      "HDSDERSPQL": [
+        "Q"
+      ],
+      "HDSDESPQ1": [
+        "Q"
+      ],
+      "HDSDESPQ2": [
+        "Q"
+      ],
+      "HDSDESPQ4": [
+        "Q"
+      ],
+      "HDSDESPQL": [
+        "Q"
+      ],
+      "HDSDFPB1": [
+        "QB"
+      ],
+      "HDSDFPB2": [
+        "QB"
+      ],
+      "HDSDFPB4": [
+        "QB"
+      ],
+      "HDSDFPBL": [
+        "QB"
+      ],
+      "HDSDFPQ1": [
+        "Q"
+      ],
+      "HDSDFPQ2": [
+        "Q"
+      ],
+      "HDSDFPQ4": [
+        "Q"
+      ],
+      "HDSDFPQL": [
+        "Q"
+      ],
+      "HDSDFRNQ1": [
+        "Q"
+      ],
+      "HDSDFRNQ2": [
+        "Q"
+      ],
+      "HDSDFRNQ4": [
+        "Q"
+      ],
+      "HDSDFRNQL": [
+        "Q"
+      ],
+      "HDSDFRPB1": [
+        "QB"
+      ],
+      "HDSDFRPB2": [
+        "QB"
+      ],
+      "HDSDFRPB4": [
+        "QB"
+      ],
+      "HDSDFRPBL": [
+        "QB"
+      ],
+      "HDSDFRPQ1": [
+        "Q"
+      ],
+      "HDSDFRPQ2": [
+        "Q"
+      ],
+      "HDSDFRPQ4": [
+        "Q"
+      ],
+      "HDSDFRPQL": [
+        "Q"
+      ],
+      "HDSDFRSNB1": [
+        "QB"
+      ],
+      "HDSDFRSNB2": [
+        "QB"
+      ],
+      "HDSDFRSNB4": [
+        "QB"
+      ],
+      "HDSDFRSNBL": [
+        "QB"
+      ],
+      "HDSDFRSPB1": [
+        "QB"
+      ],
+      "HDSDFRSPB2": [
+        "QB"
+      ],
+      "HDSDFRSPB4": [
+        "QB"
+      ],
+      "HDSDFRSPBL": [
+        "QB"
+      ],
+      "HDSDFRSPQ1": [
+        "Q"
+      ],
+      "HDSDFRSPQ2": [
+        "Q"
+      ],
+      "HDSDFRSPQ4": [
+        "Q"
+      ],
+      "HDSDFRSPQL": [
+        "Q"
+      ],
+      "HDSDFSPQ1": [
+        "Q"
+      ],
+      "HDSDFSPQ2": [
+        "Q"
+      ],
+      "HDSDFSPQ4": [
+        "Q"
+      ],
+      "HDSDFSPQL": [
+        "Q"
+      ],
+      "HDTGCKPHD1": [
+        "GCK"
+      ],
+      "HDTGCKPHD2": [
+        "GCK"
+      ],
+      "HDTGCKPHD4": [
+        "GCK"
+      ],
+      "HDTGCKPHD8": [
+        "GCK"
+      ],
+      "HDTIEHI": [
+        "Z"
+      ],
+      "HDTIEHIE": [
+        "Z"
+      ],
+      "HDTIELO": [
+        "Z"
+      ],
+      "HDTIELOE": [
+        "Z"
+      ]
+    },
+    "library_name": "UMX_0_18UM",
+    "vhdl_includes": [],
+    "global_gnd_nodes": [
+      "GLOBAL_GND"
+    ],
+    "global_vcc_nodes": [
+      "GLOBAL_VCC"
+    ]
+  }
+}

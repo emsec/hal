@@ -32,6 +32,7 @@
 #include "gui/python/python_context.h"
 #include "gui/selection_relay/selection_relay.h"
 #include "gui/settings/settings_relay.h"
+#include "gui/hal_content_manager/hal_content_manager.h"
 
 #include <QSettings>
 
@@ -44,6 +45,7 @@ extern graph_relay g_graph_relay;
 extern plugin_relay g_plugin_relay;
 extern selection_relay g_selection_relay;
 extern settings_relay g_settings_relay;
+extern hal_content_manager g_content_manager;
 
 extern notification_manager g_notification_manager;
 

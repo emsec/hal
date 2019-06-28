@@ -119,54 +119,12 @@ std::shared_ptr<netlist> module::get_netlist() const
 
 bool module::assign_gate(std::shared_ptr<gate> gate)
 {
-    if (gate == nullptr)
-    {
-        return false;
-    }
-    if (contains_gate(gate))
-    {
-        return false;
-    }
-    auto prev_module            = m_internal_manager->remove_from_submodules(gate);
-    m_gates_map[gate->get_id()] = gate;
-    m_gates_set.insert(gate);
-
-    module_event_handler::notify(module_event_handler::event::gate_removed, prev_module, gate->get_id());
-    module_event_handler::notify(module_event_handler::event::gate_assigned, shared_from_this(), gate->get_id());
-    return true;
+    return m_internal_manager->module_assign_gate(shared_from_this(), gate);
 }
 
 bool module::remove_gate(std::shared_ptr<gate> gate)
 {
-    if (gate == nullptr)
-    {
-        return false;
-    }
-
-    auto top = m_internal_manager->m_netlist->get_top_module();
-    if (top.get() == this)
-    {
-        log_error("module", "cannot remove gates from top module.", gate->get_name(), gate->get_id(), m_name, m_id);
-        return false;
-    }
-
-    auto it = m_gates_map.find(gate->get_id());
-
-    if (it == m_gates_map.end())
-    {
-        log_error("module", "gate '{}' (id {}) is not stored in module '{}' (id {}).", gate->get_name(), gate->get_id(), m_name, m_id);
-        return false;
-    }
-
-    m_gates_map.erase(it);
-    m_gates_set.erase(gate);
-
-    top->m_gates_map[gate->get_id()] = gate;
-    top->m_gates_set.insert(gate);
-    module_event_handler::notify(module_event_handler::event::gate_removed, shared_from_this(), gate->get_id());
-    module_event_handler::notify(module_event_handler::event::gate_assigned, top, gate->get_id());
-
-    return true;
+    return m_internal_manager->module_remove_gate(shared_from_this(), gate);
 }
 
 bool module::contains_gate(std::shared_ptr<gate> const gate, bool recursive) const
@@ -249,129 +207,6 @@ std::set<std::shared_ptr<gate>> module::get_gates(const std::string& gate_type_f
     return res;
 }
 
-bool module::assign_net(std::shared_ptr<net> net)
-{
-    if (net == nullptr)
-    {
-        return false;
-    }
-    if (contains_net(net))
-    {
-        return false;
-    }
-    auto prev_module        = m_internal_manager->remove_from_submodules(net);
-    m_nets_map[net->get_id()] = net;
-    m_nets_set.insert(net);
-
-    module_event_handler::notify(module_event_handler::event::net_removed, prev_module, net->get_id());
-    module_event_handler::notify(module_event_handler::event::net_assigned, shared_from_this(), net->get_id());
-    return true;
-}
-
-bool module::remove_net(std::shared_ptr<net> net)
-{
-    if (net == nullptr)
-    {
-        return false;
-    }
-
-    auto top = m_internal_manager->m_netlist->get_top_module();
-    if (top.get() == this)
-    {
-        log_error("module", "cannot remove nets from top module.", net->get_name(), net->get_id(), m_name, m_id);
-        return false;
-    }
-
-    auto it = m_nets_map.find(net->get_id());
-
-    if (it == m_nets_map.end())
-    {
-        log_error("module", "net '{}' (id {}) is not stored in module '{}' (id {}).", net->get_name(), net->get_id(), m_name, m_id);
-        return false;
-    }
-
-    m_nets_map.erase(it);
-    m_nets_set.erase(net);
-
-    top->m_nets_map[net->get_id()] = net;
-    top->m_nets_set.insert(net);
-    module_event_handler::notify(module_event_handler::event::net_removed, shared_from_this(), net->get_id());
-    module_event_handler::notify(module_event_handler::event::net_assigned, top, net->get_id());
-
-    return true;
-}
-
-bool module::contains_net(std::shared_ptr<net> const net, bool recursive) const
-{
-    if (net == nullptr)
-    {
-        return false;
-    }
-    bool success = (m_nets_set.find(net) != m_nets_set.end());
-    if (!success && recursive)
-    {
-        for (const auto& sm : m_submodules_set)
-        {
-            if (sm->contains_net(net, true))
-            {
-                return true;
-            }
-        }
-    }
-    return success;
-}
-
-std::shared_ptr<net> module::get_net_by_id(const u32 net_id, bool recursive) const
-{
-    auto it = m_nets_map.find(net_id);
-    if (it == m_nets_map.end())
-    {
-        if (recursive)
-        {
-            for (const auto& sm : m_submodules_set)
-            {
-                auto res = sm->get_net_by_id(net_id, true);
-                if (res != nullptr)
-                {
-                    return res;
-                }
-            }
-        }
-        log_error("module", "no net with id = {} stored in module with id {}.", net_id, m_id);
-        return nullptr;
-    }
-    return it->second;
-}
-
-std::set<std::shared_ptr<net>> module::get_nets(const std::string& name_filter, bool recursive) const
-{
-    std::set<std::shared_ptr<net>> res;
-    if (name_filter == DONT_CARE)
-    {
-        res = m_nets_set;
-    }
-    else
-    {
-        for (const auto& net : m_nets_set)
-        {
-            if (net->get_name() == name_filter)
-            {
-                res.insert(net);
-            }
-        }
-    }
-
-    if (recursive)
-    {
-        for (const auto& sm : m_submodules_set)
-        {
-            auto more = sm->get_nets(name_filter, true);
-            res.insert(more.begin(), more.end());
-        }
-    }
-    return res;
-}
-
 std::set<std::shared_ptr<net>> module::get_input_nets(const std::string& name_filter) const
 {
     std::set<std::shared_ptr<net>> res;
@@ -406,18 +241,12 @@ std::set<std::shared_ptr<net>> module::get_output_nets(const std::string& name_f
 {
     std::set<std::shared_ptr<net>> res;
     auto gates = get_gates(DONT_CARE, DONT_CARE, true);
-    std::set<std::shared_ptr<net>> seen;
     for (const auto& gate : gates)
     {
         for (const auto& net : gate->get_fan_out_nets())
         {
             if (name_filter == DONT_CARE || net->get_name() == name_filter)
             {
-                if (seen.find(net) != seen.end())
-                {
-                    continue;
-                }
-                seen.insert(net);
                 if (m_internal_manager->m_netlist->is_global_output_net(net))
                 {
                     res.insert(net);
@@ -426,6 +255,30 @@ std::set<std::shared_ptr<net>> module::get_output_nets(const std::string& name_f
                 for (const auto& dst : net->get_dsts())
                 {
                     if (gates.find(dst.gate) == gates.end())
+                    {
+                        res.insert(net);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    return res;
+}
+
+std::set<std::shared_ptr<net>> module::get_internal_nets(const std::string& name_filter) const
+{
+    std::set<std::shared_ptr<net>> res;
+    auto gates = get_gates(DONT_CARE, DONT_CARE, true);
+    for (const auto& gate : gates)
+    {
+        for (const auto& net : gate->get_fan_out_nets())
+        {
+            if (name_filter == DONT_CARE || net->get_name() == name_filter)
+            {
+                for (const auto& dst : net->get_dsts())
+                {
+                    if (gates.find(dst.gate) != gates.end())
                     {
                         res.insert(net);
                         break;

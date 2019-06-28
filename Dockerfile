@@ -1,5 +1,4 @@
 FROM ubuntu:latest
-MAINTAINER Sebastian Wallat "sebastian.wallat@rub.de"
 
 ENV build_path=/home/build
 RUN mkdir -p $build_path

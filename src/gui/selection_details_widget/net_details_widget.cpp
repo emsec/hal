@@ -129,7 +129,6 @@ net_details_widget::net_details_widget(QWidget* parent) : QWidget(parent)
     m_dst_pins->setExpanded(true);
 
     connect(&g_graph_relay, &graph_relay::net_event, this, &net_details_widget::handle_net_event);
-    connect(&g_graph_relay, &graph_relay::module_event, this, &net_details_widget::handle_module_event);
 }
 
 net_details_widget::~net_details_widget()
@@ -161,26 +160,6 @@ void net_details_widget::handle_net_event(net_event_handler::event ev, std::shar
     }
 }
 
-void net_details_widget::handle_module_event(module_event_handler::event ev, std::shared_ptr<module> module, u32 associated_data)
-{
-    if (ev == module_event_handler::event::net_assigned || ev == module_event_handler::event::net_removed)
-    {
-        if (m_current_id == associated_data)
-        {
-            update(m_current_id);
-        }
-    }
-    else if (ev == module_event_handler::event::name_changed)
-    {
-        auto g = g_netlist->get_net_by_id(m_current_id);
-
-        if (module->contains_net(g))
-        {
-            update(m_current_id);
-        }
-    }
-}
-
 void net_details_widget::update(u32 net_id)
 {
     m_current_id = net_id;
@@ -207,20 +186,6 @@ void net_details_widget::update(u32 net_id)
 
     //get modules
     QString module_text = "";
-    bool is_in_modules  = false;
-    for (const auto sub : g_netlist->get_modules())
-    {
-        if (sub->contains_net(n))
-        {
-            is_in_modules = true;
-            module_text += QString::fromStdString(sub->get_name()) + "[" + QString::number(sub->get_id()) + "], ";
-        }
-    }
-    if (is_in_modules)
-        module_text.remove(module_text.length() - 2, 2);
-    else
-        module_text = "NONE";
-
     m_module_item->setText(module_text);
 
     //get src pin

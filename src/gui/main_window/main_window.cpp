@@ -48,6 +48,8 @@ main_window::main_window(QWidget* parent) : QWidget(parent), m_schedule_widget(n
     ensurePolished();    //TODO ADD REPOLISH METHOD
     connect(file_manager::get_instance(), &file_manager::file_opened, this, &main_window::handle_file_opened);
 
+    g_content_manager.set_main_window(this);
+
     m_layout = new QVBoxLayout(this);
     m_layout->setContentsMargins(0, 0, 0, 0);
     m_layout->setSpacing(0);
@@ -193,13 +195,8 @@ main_window::main_window(QWidget* parent) : QWidget(parent), m_schedule_widget(n
     m_menu_edit->setTitle("Edit");
     m_menu_help->setTitle("Help");
 
-    m_about_dialog    = new about_dialog(this);
-    m_plugin_model    = new plugin_model(this);
-    m_content_manager = new hal_content_manager(file_manager::get_instance(), this);
-
-    connect(file_manager::get_instance(), &file_manager::file_opened, m_content_manager, &hal_content_manager::handle_open_document);
-    connect(file_manager::get_instance(), &file_manager::file_closed, m_content_manager, &hal_content_manager::handle_close_document);
-    connect(file_manager::get_instance(), &file_manager::file_changed, m_content_manager, &hal_content_manager::handle_filsystem_doc_changed);
+    m_about_dialog = new about_dialog(this);
+    m_plugin_model = new plugin_model(this);
 
     connect(m_action_open, &QAction::triggered, this, &main_window::handle_action_open);
     connect(m_action_about, &QAction::triggered, m_about_dialog, &about_dialog::exec);
@@ -494,7 +491,7 @@ void main_window::handle_save_triggered()
         path.replace_extension(".hal");
         netlist_serializer::serialize_to_file(g_netlist, path);
 
-        m_content_manager->mark_netlist_saved();
+        g_content_manager.flush_unsaved_changes();
     }
 }
 
@@ -510,10 +507,7 @@ void main_window::on_action_quit_triggered()
 void main_window::closeEvent(QCloseEvent* event)
 {
     //check for unsaved changes and show confirmation dialog
-    bool has_netlist_unsaved_changes       = m_content_manager->has_netlist_unsaved_changes();
-    bool has_python_editor_unsaved_changes = m_content_manager->has_python_editor_unsaved_changes();
-
-    if (has_netlist_unsaved_changes || has_python_editor_unsaved_changes)
+    if (g_content_manager.has_unsaved_changes())
     {
         QMessageBox msgBox;
         msgBox.setStyleSheet("QLabel{min-width: 600px;}");
@@ -522,38 +516,13 @@ void main_window::closeEvent(QCloseEvent* event)
         msgBox.setDefaultButton(cancelButton);
         msgBox.setInformativeText("Are you sure you want to close the application ?");
 
-        if (has_netlist_unsaved_changes && has_python_editor_unsaved_changes)
-        {
-            msgBox.setText("Netlist and python scripts have been modified but not saved.");
+        msgBox.setText("There are unsaved modifications.");
+        QString detailed_text = "The following modifications have not been saved yet:\n";
+        for (const auto& s : g_content_manager.get_unsaved_changes())
+            detailed_text.append("   ->  " + s + "\n");
+        msgBox.setDetailedText(detailed_text);
 
-            QString detailed_text = "The following python scripts have not been saved:\n";
-
-            QStringList tab_names = m_content_manager->get_names_of_unsaved_python_tabs();
-
-            for (QString s : tab_names)
-                detailed_text.append("   ->  " + s + "\n");
-
-            msgBox.setDetailedText(detailed_text);
-        }
-        else if (has_python_editor_unsaved_changes)
-        {
-            msgBox.setText("Python scripts have been modified but not saved.");
-
-            QString detailed_text = "The following python scripts have not been saved:\n";
-
-            QStringList tab_names = m_content_manager->get_names_of_unsaved_python_tabs();
-
-            for (QString s : tab_names)
-                detailed_text.append("   ->  " + s + "\n");
-
-            msgBox.setDetailedText(detailed_text);
-        }
-        else
-        {
-            msgBox.setText("Netlist has been modified but not saved.");
-        }
-
-        for(const auto& button : msgBox.buttons())
+        for (const auto& button : msgBox.buttons())
         {
             // if (button->text() == "Show Details...")
             if (msgBox.buttonRole(button) == QMessageBox::ActionRole)
@@ -572,10 +541,12 @@ void main_window::closeEvent(QCloseEvent* event)
         }
     }
 
+    file_manager::get_instance()->close_file();
+
     save_state();
     event->accept();
     // hack, remove later
-    m_content_manager->hack_delete_content();
+    g_content_manager.hack_delete_content();
     qApp->quit();
 }
 
