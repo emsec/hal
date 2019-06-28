@@ -5,7 +5,7 @@ RUN mkdir -p $build_path
 WORKDIR $build_path
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
 RUN sed -i -e 's/#force_color_prompt=yes/force_color_prompt=yes/g' /root/.bashrc
-RUN apt-get update && apt-get install -y --no-install-recommends build-essential lsb-release git cmake pkgconf libspdlog-dev libboost-all-dev qt5-default libpython3.6-dev \
+RUN apt-get update && apt-get install -y build-essential lsb-release git cmake pkgconf libspdlog-dev libboost-all-dev qt5-default libpython3.6-dev \
     pybind11-dev  build-essential libyaml-cpp-dev ccache autoconf autotools-dev flex bison libsodium-dev libqt5svg5-dev libqt5svg5* ninja-build lcov gcovr graphviz \
     python3-sphinx doxygen python3-sphinx-rtd-theme python3-jedi flex bison devscripts debhelper dh-make libpython3.7-dev pkgconf gnupg2 pybind11-dev python3-pybind11 \
     python3-paramiko rapidjson-dev libspdlog-dev \
