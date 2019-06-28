@@ -1,3 +1,10 @@
+hal-reverse (1.1.2) bionic; urgency=medium
+
+* Add hint to gate_libraries to README.md
+* Changes to the global state can be handled via hal_content_manager
+
+ -- Sebastian Wallat <sebastian.wallat@rub.de>  Thu, 27 Jun 2019 14:21:03 +0200
+
 hal-reverse (1.1.1) bionic; urgency=medium
 
   * Quickfix for Xilinx Simprim gate library
