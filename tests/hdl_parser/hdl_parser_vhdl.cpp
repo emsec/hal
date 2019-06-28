@@ -1562,7 +1562,7 @@ TEST_F(hdl_parser_vhdl_test, check_invalid_input)
             EXPECT_TRUE(gate_0->get_fan_out_nets().empty());
             EXPECT_TRUE(gate_0->get_fan_in_nets().empty());
         }*/
-        /*{ NOTE: Fails because of mistype issue line 108: (inout_pin_type.end() <-> input_pin_type.end())
+        { //NOTE: Fails because of mistype issue line 108: (inout_pin_type.end() <-> input_pin_type.end())
             // Try to connect to a pin, which does not exist
             //NO_COUT_TEST_BLOCK;
             std::stringstream input("-- Device\t: device_name\n"
@@ -1581,7 +1581,7 @@ TEST_F(hdl_parser_vhdl_test, check_invalid_input)
             hdl_parser_vhdl vhdl_parser(input);
             std::shared_ptr<netlist> nl = vhdl_parser.parse(g_lib_name);
             ASSERT_EQ(nl, nullptr);
-        }*/
+        }
 
         {
             // NOTE: Almost infinite other edge cases (not based on code-coverage)
