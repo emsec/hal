@@ -29,8 +29,9 @@
 #include "hdl_parser/hdl_parser.h"
 
 #include <map>
-#include <utility>
 #include <netlist/net.h>
+#include <netlist/module.h>
+#include <utility>
 
 /**
  * @ingroup hdl_parsers
@@ -67,21 +68,25 @@ private:
         std::vector<file_line> architecture_body;
     };
 
-    struct component
+    struct instance
     {
         std::string name;
-        std::vector<std::pair<std::string, std::string>> generics;
-        std::vector<std::pair<std::string, std::string>> ports;
+        std::string type;
+        std::vector<std::tuple<std::string, std::string>> generics;
+        std::vector<std::tuple<std::string, std::string>> ports;
+
+        std::shared_ptr<module> netlist_module;
     };
 
     struct entity
     {
         std::string name;
+        u32 line_number;
         entity_definition definition;
-        std::vector<std::pair<std::string, std::string>> ports;                                 // name, direction
-        std::map<std::string, std::tuple<std::string, std::string, std::string>> attributes;    // map from name to rest
+        std::vector<std::tuple<std::string, std::string>> ports;
+        std::map<std::string, std::tuple<std::string, std::string, std::string>> attributes;
         std::vector<std::string> signals;
-        std::vector<component> components;
+        std::vector<instance> instances;
     };
 
     /** libraries used */
@@ -102,30 +107,30 @@ private:
     /** stores the net names that have to be replace (keyword: assign) */
     std::map<std::string, std::string> m_replace_net_name;
 
-    std::map<std::string, std::string> m_attribute_types;
-
-    bool add_entity_definition(const std::vector<std::tuple<int, std::string>>& entity);
-
-    bool parse_architecture(const std::vector<std::tuple<int, std::string>>& architecture);
-
-    bool parse_instances(const std::vector<std::tuple<int, std::string>>& instances);
-
-    bool parse_instance(std::string instance);
-
     std::string get_hex_from_number_literal(const std::string& value);
 
-    std::vector<std::string> get_port_assignments(const std::string& line);
+    std::map<std::string, std::string> get_port_assignments(const std::string& port, const std::string& assignment);
     std::vector<std::string> get_vector_signals(const std::string& name, const std::string& type);
 
     std::map<std::string, entity> m_entities;
+    std::map<std::string, std::string> m_attribute_types;
 
     bool parse_header(const std::vector<file_line>& header);
     bool parse_libraries(const std::vector<file_line>& header);
+    bool parse_components(const std::vector<std::vector<file_line>>& components);
 
     bool parse_entity(entity& e);
+    void parse_attribute(entity& e, const file_line& line);
     bool parse_entity_header(entity& e);
     bool parse_architecture_header(entity& e);
     bool parse_architecture_body(entity& e);
+    bool parse_instance(entity& e, const std::vector<file_line>& lines);
+
+    std::map<std::string, u32> m_num_instances;
+    std::map<std::string, u32> m_instance_count;
+
+    bool build_netlist(const std::string& top_module);
+    std::shared_ptr<module> instantiate(const entity& e, std::shared_ptr<module> parent, const std::map<std::string, std::string>& port_assignments);
 };
 
 #endif /* __HAL_HDL_PARSER_VHDL_H__ */
