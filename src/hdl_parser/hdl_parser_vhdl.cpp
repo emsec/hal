@@ -1,4 +1,3 @@
-
 #include <hdl_parser/hdl_parser_vhdl.h>
 
 #include "hdl_parser/hdl_parser_vhdl.h"
@@ -27,120 +26,116 @@ std::shared_ptr<netlist> hdl_parser_vhdl::parse(const std::string& gate_library)
 
     // read the whole file into logical parts
 
-    std::string buffer;
-    std::vector<std::tuple<int, std::string>> header;
-    std::vector<std::tuple<int, std::string>> entity;
-    std::vector<std::tuple<int, std::string>> architecture;
-    std::vector<std::tuple<int, std::string>> instances;
+    std::vector<file_line> header;
+    std::vector<file_line> libraries;
 
-    // simple state machine to distinguish the parts
-    enum State
+    entity current_entity;
+
+    std::string line;
+    u32 line_number = 0;
+
+    enum STATE
     {
-        INIT,
-        HEADER,
-        ENTITY,
-        ARCHITECTURE,
-        INSTANCE
-    };
+        NONE,
+        IN_ENTITY_HEADER,
+        IN_ARCH_HEADER,
+        IN_ARCH_BODY
+    } state;
 
-    State state = INIT;
-
-    int line = 0;
-
-    while (std::getline(m_fs, buffer))
+    while (std::getline(m_fs, line))
     {
-        line++;
-        buffer = core_utils::trim(buffer);
+        line_number++;
+        line = core_utils::trim(line);
 
         // skip empty lines
-        if (buffer.empty())
+        if (line.empty())
         {
             continue;
         }
 
-        // update state machine
-        if (core_utils::starts_with(buffer, "--"))
+        if (core_utils::starts_with(line, "--"))
         {
-            if (state != HEADER)
-            {
-                header.clear();
-            }
-            state = HEADER;
+            header.push_back(file_line{line_number, line});
         }
-        else if (core_utils::starts_with(buffer, "entity "))
+        else if (core_utils::starts_with(line, "library ") || core_utils::starts_with(line, "use "))
         {
-            if (state != ENTITY)
-            {
-                if (!entity.empty())
-                {
-                    if (!add_entity_definition(entity))
-                    {
-                        return nullptr;
-                    }
-                }
-                entity.clear();
-            }
-            state = ENTITY;
+            libraries.push_back(file_line{line_number, line});
         }
-        else if (core_utils::starts_with(buffer, "architecture "))
+        else if (core_utils::starts_with(line, "entity "))
         {
-            if (state != ARCHITECTURE)
+            if (!current_entity.name.empty())
             {
-                architecture.clear();
+                m_entities[current_entity.name] = current_entity;
             }
-            state = ARCHITECTURE;
-            continue;
+            state = IN_ENTITY_HEADER;
+            current_entity.name.clear();
+            current_entity.definition.entity_header.clear();
+            current_entity.definition.architecture_header.clear();
+            current_entity.definition.architecture_body.clear();
+            current_entity.name = core_utils::split(line, ' ')[1];
         }
-        else if (buffer == "begin")
+        else
         {
-            if (state != INSTANCE)
+            if (core_utils::starts_with(line, "architecture "))
             {
-                instances.clear();
+                state = IN_ARCH_HEADER;
+                continue;
             }
-            state = INSTANCE;
-            continue;
+            else if (line == "begin" && state == IN_ARCH_HEADER)
+            {
+                state = IN_ARCH_BODY;
+                continue;
+            }
+            else if (core_utils::starts_with(line, "end "))
+            {
+                state = NONE;
+            }
+            if (state == IN_ENTITY_HEADER)
+            {
+                current_entity.definition.entity_header.push_back(file_line{line_number, line});
+            }
+            else if (state == IN_ARCH_HEADER)
+            {
+                current_entity.definition.architecture_header.push_back(file_line{line_number, line});
+            }
+            else if (state == IN_ARCH_BODY)
+            {
+                current_entity.definition.architecture_body.push_back(file_line{line_number, line});
+            }
         }
+    }
+    if (!current_entity.name.empty())
+    {
+        m_entities[current_entity.name] = current_entity;
+    }
 
-        // insert line depending on current state
-        if (state == HEADER)
-        {
-            header.push_back(std::make_tuple(line, buffer));
-        }
-        else if (state == ENTITY)
-        {
-            entity.push_back(std::make_tuple(line, buffer));
-        }
-        else if (state == ARCHITECTURE)
-        {
-            architecture.push_back(std::make_tuple(line, buffer));
-        }
-        else if (state == INSTANCE)
-        {
-            instances.push_back(std::make_tuple(line, buffer));
-        }
+    if (m_entities.empty())
+    {
+        log_error("hdl_parser", "file did not contain any entities.");
+        return nullptr;
     }
 
     // parse logical parts
-
     if (!this->parse_header(header))
     {
         return nullptr;
     }
-
-    if (!this->parse_entity(entity))
+    if (!this->parse_libraries(libraries))
     {
         return nullptr;
     }
 
-    if (!this->parse_architecture(architecture))
+    m_netlist->set_design_name(current_entity.name);
+
+    for (auto& it : m_entities)
     {
-        return nullptr;
+        if (!this->parse_entity(it.second))
+        {
+            return nullptr;
+        }
     }
 
-    if (!this->parse_instances(instances))
-    {
-        return nullptr;
-    }
+    return nullptr;
 
     // add global gnd gate if required by any instance
     if (m_net.find("'0'") != m_net.end())
@@ -179,30 +174,195 @@ std::shared_ptr<netlist> hdl_parser_vhdl::parse(const std::string& gate_library)
     return m_netlist;
 }
 
-bool hdl_parser_vhdl::parse_header(const std::vector<std::tuple<int, std::string>>& header)
+bool hdl_parser_vhdl::parse_header(const std::vector<file_line>& header)
 {
     // header contains device name and library includes
-    for (const auto& entry : header)
+    for (const auto& line : header)
     {
-        //auto line_number = std::get<0>(entry);
-        auto line = std::get<1>(entry);
-
         // read out device comment
-        if (core_utils::starts_with(line, "-- Device"))
+        if (core_utils::starts_with(line.text, "-- Device"))
         {
-            auto device_name = core_utils::trim(line.substr(line.find(':') + 1));
+            auto device_name = core_utils::trim(line.text.substr(line.text.find(':') + 1));
             m_netlist->set_device_name(device_name);
-        }
-        // extract used libraries
-        else if (core_utils::starts_with(line, "use "))
-        {
-            // remove the .all in the end
-            auto lib = core_utils::to_lower(line.substr(line.find(' ')));
-            lib      = core_utils::trim(lib.substr(0, lib.find("all;")));
-            m_libraries.insert(lib);
+            break;
         }
     }
     log_debug("hdl_parser", "parsed header.");
+    return true;
+}
+
+bool hdl_parser_vhdl::parse_libraries(const std::vector<file_line>& libs)
+{
+    // header contains device name and library includes
+    for (const auto& line : libs)
+    {
+        if (core_utils::starts_with(line.text, "use "))
+        {
+            // remove the .all in the end
+            auto lib = core_utils::to_lower(line.text.substr(line.text.find(' ')));
+            lib      = core_utils::trim(lib.substr(0, lib.find("all;")));
+            if (std::get<1>(m_libraries.insert(lib)))
+            {
+                log_info("hdl_parser", "added lib '{}'.", lib);
+            }
+        }
+    }
+    log_debug("hdl_parser", "parsed header.");
+    return true;
+}
+bool hdl_parser_vhdl::parse_entity(entity& e)
+{
+    log_info("hdl_parser", "parsing entity '{}'.", e.name);
+
+    if (!parse_entity_header(e))
+    {
+        return false;
+    }
+
+    if (!parse_architecture_header(e))
+    {
+        return false;
+    }
+
+    if (!parse_architecture_body(e))
+    {
+        return false;
+    }
+
+    log_info("hdl_parser", "\n");
+
+    return true;
+}
+
+bool hdl_parser_vhdl::parse_entity_header(entity& e)
+{
+    std::map<std::string, std::string> attribute_types;
+
+    bool in_port_def = false;
+
+    for (const auto& line : e.definition.entity_header)
+    {
+        // line starts with "entity" -> extract name
+        if (line.text == "port (")
+        {
+            in_port_def = true;
+        }
+        // line is ");" -> no more ports
+        else if (in_port_def && line.text == ");")
+        {
+            in_port_def = false;
+        }
+        // we expect ports at this point
+        else if (in_port_def)
+        {
+            // get port information
+            auto token     = core_utils::split(line.text, ':');
+            auto name      = core_utils::trim(token[0]);
+            auto config    = core_utils::trim(token[1]);
+            auto direction = config.substr(0, config.find(' '));
+            auto type      = config.substr(config.find(' ') + 1);
+
+            // add all signals of that port
+            for (const auto signal : get_vector_signals(name, type))
+            {
+                e.ports.emplace_back(signal, direction);
+            }
+        }
+        else if (!in_port_def && core_utils::starts_with(line.text, "attribute "))
+        {
+            auto left  = core_utils::rtrim(line.text.substr(0, line.text.find(':')));
+            auto right = core_utils::ltrim(line.text.substr(line.text.find(':') + 1));
+            right.pop_back();
+
+            auto left_parts = core_utils::split(left, ' ');
+            auto right_parts = core_utils::split(right, ' ');
+
+            if (left_parts.size() == 2)
+            {
+                attribute_types[left_parts[1]] = right;
+            }
+            else if (left_parts.size() == 4 && left_parts[2] == "of" && right_parts.size() == 3)
+            {
+                std::string value = right_parts[2];
+                if (value[0] == '"' && value.back() == '"')
+                {
+                    value = value.substr(1, value.size() - 2);
+                }
+                e.attributes[left_parts[3]] = {left_parts[1], attribute_types[left_parts[1]], value};
+                log_info("hdl_parser", "attribute '{}' '{} '{}' '{}'", left_parts[3], left_parts[1], attribute_types[left_parts[1]], value);
+            }
+            else
+            {
+                log_error("hdl_parser", "malformed attribute defintion '{}'", line.text);
+            }
+        }
+    }
+
+    log_debug("hdl_parser", "parsed entity.");
+    return true;
+}
+
+bool hdl_parser_vhdl::parse_architecture_header(entity& e)
+{
+    // architecture contains all signals and attributes
+
+    std::map<std::string, std::string> attribute_types;
+
+    for (const auto& line : e.definition.architecture_header)
+    {
+        if (core_utils::starts_with(line.text, "signal "))
+        {
+            // get signal information
+            auto items = core_utils::split(line.text, ':');
+            auto name  = core_utils::trim(items[0].substr(items[0].find(' ') + 1));
+            auto type  = core_utils::trim(items[1]);
+
+            // add all (sub-)signals
+            for (const auto signal : get_vector_signals(name, type))
+            {
+                e.signals.push_back(signal);
+            }
+        }
+        else if (core_utils::starts_with(line.text, "attribute "))
+        {
+            auto left  = core_utils::rtrim(line.text.substr(0, line.text.find(':')));
+            auto right = core_utils::ltrim(line.text.substr(line.text.find(':') + 1));
+            right.pop_back();
+
+            auto left_parts = core_utils::split(left, ' ');
+            auto right_parts = core_utils::split(right, ' ');
+
+            if (left_parts.size() == 2)
+            {
+                attribute_types[left_parts[1]] = right;
+            }
+            else if (left_parts.size() == 4 && left_parts[2] == "of" && right_parts.size() == 3)
+            {
+                std::string value = right_parts[2];
+                if (value[0] == '"' && value.back() == '"')
+                {
+                    value = value.substr(1, value.size() - 2);
+                }
+                e.attributes[left_parts[3]] = {left_parts[1], attribute_types[left_parts[1]], value};
+                log_info("hdl_parser", "attribute '{}' '{} '{}' '{}'", left_parts[3], left_parts[1], attribute_types[left_parts[1]], value);
+            }
+            else
+            {
+                log_error("hdl_parser", "malformed attribute defintion '{}'", line.text);
+            }
+        }
+        else
+        {
+            log_error("hdl_parser", "line {}: architecture is not expected to contain '{}'", line.number, line.text);
+            return false;
+        }
+    }
+    log_debug("hdl_parser", "parsed architecture.");
+    return true;
+}
+
+bool hdl_parser_vhdl::parse_architecture_body(entity& e)
+{
     return true;
 }
 
@@ -270,117 +430,6 @@ bool hdl_parser_vhdl::add_entity_definition(const std::vector<std::tuple<int, st
         }
     }
     //log_debug("hdl_parser", "added new entity.");
-    return true;
-}
-
-bool hdl_parser_vhdl::parse_entity(const std::vector<std::tuple<int, std::string>>& entity)
-{
-    // entity contains global port definitions
-
-    std::map<std::string, std::function<int(std::shared_ptr<netlist> const, std::shared_ptr<net> const)>> port_dir_function = {
-        {"in", [](std::shared_ptr<netlist> const g, std::shared_ptr<net> const net) { return g->mark_global_input_net(net); }},
-        {"out", [](std::shared_ptr<netlist> const g, std::shared_ptr<net> const net) { return g->mark_global_output_net(net); }},
-        {"inout", [](std::shared_ptr<netlist> const g, std::shared_ptr<net> const net) { return g->mark_global_inout_net(net); }},
-    };
-
-    // remember logical position
-    bool in_port_def = false;
-
-    for (const auto& entry : entity)
-    {
-        auto line_number = std::get<0>(entry);
-        auto line        = std::get<1>(entry);
-
-        // line starts with "entity" -> extract name
-        if (core_utils::starts_with(line, "entity "))
-        {
-            auto design_name = core_utils::trim(line.substr(line.find(' ') + 1));
-            design_name      = design_name.substr(0, design_name.find(' '));
-            m_netlist->set_design_name(design_name);
-            log_debug("hdl_parser", "parsing entity '{}'.", design_name);
-        }
-        // line starts with "port (" -> next lines contain ports
-        else if (line == "port (")
-        {
-            in_port_def = true;
-        }
-        // line is ");" -> no more ports
-        else if (in_port_def && line == ");")
-        {
-            in_port_def = false;
-        }
-        // we expect ports at this point
-        else if (in_port_def)
-        {
-            // get port information
-            auto token     = core_utils::split(line, ':');
-            auto name      = core_utils::trim(token[0]);
-            auto config    = core_utils::trim(token[1]);
-            auto direction = config.substr(0, config.find(' '));
-            auto type      = config.substr(config.find(' ') + 1);
-
-            // check whether the direction is known
-            if (port_dir_function.find(direction) == port_dir_function.end())
-            {
-                log_error("hdl_parser", "line {}: direction '{}' unkown", line_number, direction);
-                return false;
-            }
-
-            // add all signals of that port
-            for (const auto signal : get_vector_signals(name, type))
-            {
-                auto new_net               = m_netlist->create_net(m_netlist->get_unique_net_id(), signal);
-                m_net[new_net->get_name()] = new_net;
-
-                if (new_net == nullptr || port_dir_function[direction](m_netlist, new_net) != true)
-                {
-                    return false;
-                }
-            }
-        }
-    }
-    log_debug("hdl_parser", "parsed entity.");
-    return true;
-}
-
-bool hdl_parser_vhdl::parse_architecture(const std::vector<std::tuple<int, std::string>>& architecture)
-{
-    // architecture contains all signals and attributes
-
-    for (const auto& entry : architecture)
-    {
-        auto line_number = std::get<0>(entry);
-        auto line        = std::get<1>(entry);
-        if (core_utils::starts_with(line, "signal "))
-        {
-            // get signal information
-            auto items = core_utils::split(line, ':');
-            auto name  = core_utils::trim(items[0].substr(items[0].find(' ') + 1));
-            auto type  = core_utils::trim(items[1]);
-
-            // add all (sub-)signals
-            for (const auto signal : get_vector_signals(name, type))
-            {
-                auto new_net               = m_netlist->create_net(m_netlist->get_unique_net_id(), signal);
-                m_net[new_net->get_name()] = new_net;
-                if (new_net == nullptr)
-                {
-                    return false;
-                }
-            }
-        }
-        else if (core_utils::starts_with(line, "attribute "))
-        {
-            // attributes are simply ignored for now
-            log_debug("hdl_parser", "ignoring '{}'", line);
-        }
-        else
-        {
-            log_error("hdl_parser", "line {}: architecture is not expected to contain '{}'", line_number, line);
-            return false;
-        }
-    }
-    log_debug("hdl_parser", "parsed architecture.");
     return true;
 }
 

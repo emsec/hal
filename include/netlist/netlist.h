@@ -27,6 +27,7 @@
 
 #include "def.h"
 
+#include "netlist/data_container.h"
 #include "netlist/gate_library/gate_library.h"
 #include "netlist/netlist_constants.h"
 
@@ -49,7 +50,7 @@ struct endpoint;
  *
  * @ingroup netlist
  */
-class NETLIST_API netlist : public std::enable_shared_from_this<netlist>
+class NETLIST_API netlist : public data_container, public std::enable_shared_from_this<netlist>
 {
     friend class netlist_internal_manager;
 

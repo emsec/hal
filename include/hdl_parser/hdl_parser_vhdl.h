@@ -29,6 +29,7 @@
 #include "hdl_parser/hdl_parser.h"
 
 #include <map>
+#include <utility>
 #include <netlist/net.h>
 
 /**
@@ -53,6 +54,36 @@ public:
     std::shared_ptr<netlist> parse(const std::string& gate_library) override;
 
 private:
+    struct file_line
+    {
+        u32 number;
+        std::string text;
+    };
+
+    struct entity_definition
+    {
+        std::vector<file_line> entity_header;
+        std::vector<file_line> architecture_header;
+        std::vector<file_line> architecture_body;
+    };
+
+    struct component
+    {
+        std::string name;
+        std::vector<std::pair<std::string, std::string>> generics;
+        std::vector<std::pair<std::string, std::string>> ports;
+    };
+
+    struct entity
+    {
+        std::string name;
+        entity_definition definition;
+        std::vector<std::pair<std::string, std::string>> ports;                                 // name, direction
+        std::map<std::string, std::tuple<std::string, std::string, std::string>> attributes;    // map from name to rest
+        std::vector<std::string> signals;
+        std::vector<component> components;
+    };
+
     /** libraries used */
     std::set<std::string> m_libraries;
 
@@ -71,9 +102,7 @@ private:
     /** stores the net names that have to be replace (keyword: assign) */
     std::map<std::string, std::string> m_replace_net_name;
 
-    bool parse_header(const std::vector<std::tuple<int, std::string>>& header);
-
-    bool parse_entity(const std::vector<std::tuple<int, std::string>>& entity);
+    std::map<std::string, std::string> m_attribute_types;
 
     bool add_entity_definition(const std::vector<std::tuple<int, std::string>>& entity);
 
@@ -87,6 +116,16 @@ private:
 
     std::vector<std::string> get_port_assignments(const std::string& line);
     std::vector<std::string> get_vector_signals(const std::string& name, const std::string& type);
+
+    std::map<std::string, entity> m_entities;
+
+    bool parse_header(const std::vector<file_line>& header);
+    bool parse_libraries(const std::vector<file_line>& header);
+
+    bool parse_entity(entity& e);
+    bool parse_entity_header(entity& e);
+    bool parse_architecture_header(entity& e);
+    bool parse_architecture_body(entity& e);
 };
 
 #endif /* __HAL_HDL_PARSER_VHDL_H__ */
