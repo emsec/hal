@@ -27,6 +27,7 @@
 #include "core/program_arguments.h"
 
 #include <QObject>
+#include <QTimer>
 
 class QFileSystemWatcher;
 
@@ -49,8 +50,9 @@ Q_SIGNALS:
     void file_closed();
 
 public Q_SLOTS:
-    void open_file(const QString& file_name);
+    void open_file(QString file_name);
     void close_file();
+    void autosave();
 
 private Q_SLOTS:
     void handle_file_changed(const QString& path);
@@ -58,12 +60,16 @@ private Q_SLOTS:
 
 private:
     file_manager(QObject* parent = nullptr);
+    void file_successfully_loaded(QString file_name);
     void update_recent_files(const QString& file);
     void display_error_message(QString error_message);
+    QString get_shadow_file(QString file);
 
     QString m_file_name;
+    QString m_shadow_file_name;
     QFileSystemWatcher* m_file_watcher;
     bool m_file_open;
+    QTimer* m_timer;
 };
 
 #endif    // FILE_MANAGER_H
