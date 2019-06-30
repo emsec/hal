@@ -35,13 +35,11 @@ public:
     QString get_file_name();
     void set_file_name(const QString name);
 
-<<<<<<< HEAD
     void set_base_file_modified(bool base_file_modified);
     bool is_base_file_modified();
-=======
+    
 Q_SIGNALS:
     void key_pressed(QKeyEvent* e);
->>>>>>> master
 
 private:
     void keyPressEvent(QKeyEvent* e) Q_DECL_OVERRIDE;

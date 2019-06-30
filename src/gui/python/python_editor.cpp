@@ -463,13 +463,16 @@ void python_editor::handle_tab_file_changed(QString path)
 
     if(editor_with_modified_base_file == current_editor)
         m_file_modified_bar->setHidden(false);
+
+    m_file_watcher->addPath(path);
 }
 
 void python_editor::handle_base_file_modified_reload()
 {
     python_code_editor* current_editor = dynamic_cast<python_code_editor*>(m_tab_widget->currentWidget());
     m_new_file_counter++;
-    tab_load_file(current_editor, current_editor->get_file_name());
+    //tab_load_file(current_editor, current_editor->get_file_name());
+    tab_load_file(m_tab_widget->indexOf(current_editor), current_editor->get_file_name());
     current_editor->set_base_file_modified(false);
     m_file_modified_bar->setHidden(true);
 }
