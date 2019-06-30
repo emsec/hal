@@ -458,7 +458,7 @@ void python_editor::handle_tab_file_changed(QString path)
     python_code_editor* editor_with_modified_base_file = m_path_editor_map->value(path);
     editor_with_modified_base_file->set_base_file_modified(true);
     //editor_with_modified_base_file->document()->setModified();
-    g_content_manager.data_changed("Python editor tab " + QString::number(m_tab_widget->currentIndex() + 1));
+    g_content_manager.data_changed("Python editor tab " + QString::number(m_tab_widget->indexOf(editor_with_modified_base_file) + 1));
 
     python_code_editor* current_editor = dynamic_cast<python_code_editor*>(m_tab_widget->currentWidget());
 
