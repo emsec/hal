@@ -80,10 +80,26 @@ python_editor::python_editor(QWidget* parent)
     connect(m_searchbar, &searchbar::text_edited, this, &python_editor::handle_searchbar_text_edited);
     connect(m_tab_widget, &QTabWidget::currentChanged, this, &python_editor::handle_current_tab_changed);
 
+
+    m_path_editor_map = new QMap<QString, python_code_editor*>();
+
+    m_file_modified_bar = new file_modified_bar();
+    m_file_modified_bar->setHidden(true);
+    m_content_layout->addWidget(m_file_modified_bar);
+    connect(m_file_modified_bar, &file_modified_bar::reload_clicked, this, &python_editor::handle_base_file_modified_reload);
+    connect(m_file_modified_bar, &file_modified_bar::ignore_clicked, this, &python_editor::handle_base_file_modified_ignore);
+    connect(m_file_modified_bar, &file_modified_bar::ok_clicked, this, &python_editor::handle_base_file_modified_ok);
+
+    m_file_watcher = new QFileSystemWatcher(this);
+    connect(m_file_watcher, &QFileSystemWatcher::fileChanged, this, &python_editor::handle_tab_file_changed);
+    connect(m_file_watcher, &QFileSystemWatcher::fileChanged, m_file_modified_bar, &file_modified_bar::handle_file_changed);
+
     using namespace std::placeholders;
     hal_file_manager::register_on_serialize_callback("python_editor", std::bind(&python_editor::handle_serialization_to_hal_file, this, _1, _2, _3));
     hal_file_manager::register_on_deserialize_callback("python_editor", std::bind(&python_editor::handle_deserialization_from_hal_file, this, _1, _2, _3));
 }
+
+
 
 bool python_editor::handle_serialization_to_hal_file(const hal::path& path, std::shared_ptr<netlist> netlist, rapidjson::Document& document)
 {
@@ -191,6 +207,9 @@ void python_editor::handle_tab_close_requested(int index)
             return;
         }
     }
+
+    m_file_watcher->removePath(editor->get_file_name());
+    m_path_editor_map->remove(editor->get_file_name());
     m_tab_widget->removeTab(index);
 }
 
@@ -227,6 +246,11 @@ void python_editor::handle_current_tab_changed(int index)
         current_editor->search(m_searchbar->get_current_text());
     else if (!current_editor->extraSelections().isEmpty())
         current_editor->search("");
+
+    if(current_editor->is_base_file_modified())
+        m_file_modified_bar->setHidden(false);
+    else
+        m_file_modified_bar->setHidden(true);
 }
 
 python_editor::~python_editor()
@@ -304,8 +328,12 @@ void python_editor::tab_load_file(python_code_editor* tab, QString file_name)
     tab->setPlainText(QString::fromStdString(f));
     tab->set_file_name(file_name);
     tab->document()->setModified(false);
-    m_tab_widget->setTabText(m_tab_widget->count() - 1, info.completeBaseName() + "." + info.completeSuffix());
+    //m_tab_widget->setTabText(m_tab_widget->count() - 1, info.completeBaseName() + "." + info.completeSuffix());
+    m_tab_widget->setTabText(m_tab_widget->indexOf(tab), info.completeBaseName() + "." + info.completeSuffix());
     m_new_file_counter--;
+
+    m_path_editor_map->insert(file_name, tab);
+    m_file_watcher->addPath(file_name);
 }
 
 void python_editor::save_file(const bool ask_path, const int index)
@@ -338,6 +366,8 @@ void python_editor::save_file(const bool ask_path, const int index)
     else
         selected_file_name = current_editor->get_file_name();
 
+    m_file_watcher->removePath(current_editor->get_file_name());
+
     std::ofstream out(selected_file_name.toStdString(), std::ios::out);
 
     if (!out.is_open())
@@ -348,11 +378,14 @@ void python_editor::save_file(const bool ask_path, const int index)
     out << current_editor->toPlainText().toStdString();
     out.close();
     current_editor->document()->setModified(false);
+    current_editor->set_base_file_modified(false);
 
     QFileInfo info(selected_file_name);
     m_tab_widget->setTabText(m_tab_widget->currentIndex(), info.completeBaseName() + "." + info.completeSuffix());
     // remember target file path
     m_file_name = selected_file_name;
+
+    m_file_watcher->addPath(m_file_name);
 }
 
 bool python_editor::has_unsaved_tabs()
@@ -400,6 +433,41 @@ void python_editor::handle_action_new_tab()
     m_tab_widget->setCurrentIndex(m_tab_widget->count() - 1);
     editor->document()->setModified(false);
     connect(editor, &python_code_editor::modificationChanged, this, &python_editor::handle_modification_changed);
+}
+
+void python_editor::handle_tab_file_changed(QString path)
+{
+    python_code_editor* editor_with_modified_base_file = m_path_editor_map->value(path);
+    editor_with_modified_base_file->set_base_file_modified(true);
+    editor_with_modified_base_file->document()->setModified();
+
+    python_code_editor* current_editor = dynamic_cast<python_code_editor*>(m_tab_widget->currentWidget());
+
+    if(editor_with_modified_base_file == current_editor)
+        m_file_modified_bar->setHidden(false);
+}
+
+void python_editor::handle_base_file_modified_reload()
+{
+    python_code_editor* current_editor = dynamic_cast<python_code_editor*>(m_tab_widget->currentWidget());
+    m_new_file_counter++;
+    tab_load_file(current_editor, current_editor->get_file_name());
+    current_editor->set_base_file_modified(false);
+    m_file_modified_bar->setHidden(true);
+}
+
+void python_editor::handle_base_file_modified_ignore()
+{
+    python_code_editor* current_editor = dynamic_cast<python_code_editor*>(m_tab_widget->currentWidget());
+    current_editor->set_base_file_modified(false);
+    m_file_modified_bar->setHidden(true);
+}
+
+void python_editor::handle_base_file_modified_ok()
+{
+    python_code_editor* current_editor = dynamic_cast<python_code_editor*>(m_tab_widget->currentWidget());
+    current_editor->set_base_file_modified(false);
+    m_file_modified_bar->setHidden(true);
 }
 
 QString python_editor::open_icon_path() const

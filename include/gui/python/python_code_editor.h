@@ -35,6 +35,9 @@ public:
     QString get_file_name();
     void set_file_name(const QString name);
 
+    void set_base_file_modified(bool base_file_modified);
+    bool is_base_file_modified();
+
 private:
     void keyPressEvent(QKeyEvent* e) Q_DECL_OVERRIDE;
     void handle_tab_key_pressed();
@@ -54,6 +57,8 @@ private:
 
     QString m_file_name;
     QString m_text_state;
+
+    bool m_base_file_modified;
 };
 
 #endif //PYTHON_CODE_EDITOR_H

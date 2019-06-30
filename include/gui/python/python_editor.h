@@ -25,9 +25,15 @@
 #define PYTHON_WIDGET_H
 
 #include "code_editor/code_editor.h"
+
 #include "content_widget/content_widget.h"
 #include "python/python_context_suberscriber.h"
 #include "core/hal_file_manager.h"
+#include "file_modified_bar/file_modified_bar.h"
+
+#include <QFileSystemWatcher>
+#include <QMap>
+#include <QPushButton>
 
 class code_editor;
 class searchbar;
@@ -128,6 +134,11 @@ public Q_SLOTS:
     void handle_modification_changed(bool changed);
     void handle_searchbar_text_edited(const QString &text);
     void handle_current_tab_changed(int index);
+    void handle_tab_file_changed(QString path);
+
+    void handle_base_file_modified_reload();
+    void handle_base_file_modified_ignore();
+    void handle_base_file_modified_ok();
 
 private:
     QVBoxLayout* m_layout;
@@ -166,7 +177,12 @@ private:
 
     QString m_file_name = "";
     QTabWidget* m_tab_widget;
-    int m_new_file_counter;
+    u32 m_new_file_counter;
+
+    QFileSystemWatcher* m_file_watcher;
+    QMap<QString, python_code_editor*>* m_path_editor_map;
+
+    file_modified_bar* m_file_modified_bar; 
 };
 
 #endif    // PYTHON_WIDGET_H
