@@ -52,7 +52,8 @@ void hdl_writer_vhdl::prepare_signal_names()
 {
     //Generate all signal names
 
-    std::set<std::shared_ptr<net>> nets = m_netlist->get_nets();
+    auto nets = m_netlist->get_nets();
+
     for (auto e : nets)
     {
         std::string name_tmp                          = this->get_net_name(e);
@@ -194,9 +195,9 @@ std::string hdl_writer_vhdl::get_net_name(const std::shared_ptr<net> n)
     {
         name.erase(0, 1);
     }
-    if (name[name.size()-1] == '_')
+    if (name[name.size() - 1] == '_')
     {
-        name.erase(name.size()-1, 1);
+        name.erase(name.size() - 1, 1);
     }
 
     if (std::all_of(name.begin(), name.end(), ::isdigit))
@@ -226,9 +227,9 @@ std::string hdl_writer_vhdl::get_gate_name(const std::shared_ptr<gate> g)
     {
         name.erase(0, 1);
     }
-    if (name[name.size()-1] == '_')
+    if (name[name.size() - 1] == '_')
     {
-        name.erase(name.size()-1, 1);
+        name.erase(name.size() - 1, 1);
     }
 
     if (std::all_of(name.begin(), name.end(), ::isdigit))
@@ -236,7 +237,7 @@ std::string hdl_writer_vhdl::get_gate_name(const std::shared_ptr<gate> g)
         name = "GATE_" + name;
     }
 
-    return name + "_inst";
+    return name;
 }
 
 std::string hdl_writer_vhdl::get_port_name(std::string pin)
@@ -299,12 +300,23 @@ void hdl_writer_vhdl::print_module_interface_vhdl()
 void hdl_writer_vhdl::print_signal_definition_vhdl()
 {
     //Declare all wires
+
+    std::vector<std::tuple<std::string, std::shared_ptr<net>>> nets;
     for (auto name : m_only_wire_names_str_to_net)
     {
         if (name.second->get_name() == "'1'" || name.second->get_name() == "'0'")
             continue;
-        m_stream << "  signal " << name.first << " : STD_LOGIC;" << std::endl;
+        nets.emplace_back(name.first, name.second);
     }
+
+    std::sort(
+        nets.begin(), nets.end(), [](const std::tuple<std::string, std::shared_ptr<net>>& a, const std::tuple<std::string, std::shared_ptr<net>>& b) -> bool { return std::get<1>(a)->get_id() < std::get<1>(b)->get_id(); });
+
+    for (auto tup : nets)
+    {
+        m_stream << "  signal " << std::get<0>(tup) << " : STD_LOGIC;" << std::endl;
+    }
+
     for (auto name : m_vcc_names_str_to_net)
     {
         m_stream << "  signal " << name.first << " : STD_LOGIC := '1';" << std::endl;
@@ -317,7 +329,10 @@ void hdl_writer_vhdl::print_signal_definition_vhdl()
 
 void hdl_writer_vhdl::print_gate_definitions_vhdl()
 {
-    std::set<std::shared_ptr<gate>> gates = m_netlist->get_gates();
+    auto unsorted_gates = m_netlist->get_gates();
+    std::vector<std::shared_ptr<gate>> gates(unsorted_gates.begin(), unsorted_gates.end());
+    std::sort(gates.begin(), gates.end(), [](const std::shared_ptr<gate>& a, const std::shared_ptr<gate>& b) -> bool { return a->get_id() < b->get_id(); });
+
     for (auto&& gate : gates)
     {
         if (gate->get_type() == "GLOBAL_GND" || gate->get_type() == "GLOBAL_VCC")

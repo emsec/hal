@@ -28,15 +28,60 @@
 #include <QGraphicsView>
 #include <QOpenGLWidget>
 
-hal_content_manager::hal_content_manager(file_manager* file_manager, main_window* parent) : QObject(parent), m_main_window(parent), m_file_manager(file_manager)
+hal_content_manager::hal_content_manager()
 {
-    m_python_widget = new python_editor();
+    m_main_window = nullptr;
+
+    connect(file_manager::get_instance(), &file_manager::file_opened, this, &hal_content_manager::handle_open_document);
+    connect(file_manager::get_instance(), &file_manager::file_closed, this, &hal_content_manager::handle_close_document);
+    connect(file_manager::get_instance(), &file_manager::file_changed, this, &hal_content_manager::handle_filsystem_doc_changed);
 }
 
 hal_content_manager::~hal_content_manager()
 {
-    //gui crashes when closing if this line is uncommented, need to check
-    //delete m_console;
+}
+
+void hal_content_manager::set_main_window(main_window* parent)
+{
+    m_main_window = parent;
+
+    // has to be created this early in order to receive deserialization by the core signals
+    m_python_widget = new python_editor();
+}
+
+void hal_content_manager::data_changed(const QString& identifier)
+{
+    if (std::get<1>(m_unsaved_changes.insert(identifier)))
+    {
+        m_main_window->setWindowTitle(m_window_title + "*");
+    }
+}
+void hal_content_manager::data_saved(const QString& identifier)
+{
+    m_unsaved_changes.erase(identifier);
+    if (!has_unsaved_changes())
+    {
+        m_main_window->setWindowTitle(m_window_title);
+    }
+}
+
+bool hal_content_manager::has_unsaved_changes() const
+{
+    if (!file_manager::get_instance()->is_document_open())
+        return false;
+    return !m_unsaved_changes.empty();
+}
+
+std::set<QString> hal_content_manager::get_unsaved_changes() const
+{
+    return m_unsaved_changes;
+}
+
+void hal_content_manager::flush_unsaved_changes()
+{
+    m_unsaved_changes.clear();
+    m_netlist_watcher->reset();
+    m_main_window->setWindowTitle(m_window_title);
 }
 
 void hal_content_manager::hack_delete_content()
@@ -78,9 +123,6 @@ void hal_content_manager::handle_open_document(const QString& file_name)
     hal_logger_widget* logger_widget = new hal_logger_widget();
     m_main_window->add_content(logger_widget, 1, content_anchor::bottom);
 
-    //    m_console->init();
-    //    m_main_window->add_content(m_console, 2, content_anchor::bottom);
-
     navigation->open();
     details->open();
     logger_widget->open();
@@ -118,16 +160,15 @@ void hal_content_manager::handle_open_document(const QString& file_name)
 
     connect(model, &plugin_model::run_plugin, m_main_window, &main_window::run_plugin_triggered);
 
-    QString tmp("HAL - " + QString::fromStdString(hal::path(file_name.toStdString()).stem().string()));
-    m_main_window->setWindowTitle(tmp);
+    m_window_title = "HAL - " + QString::fromStdString(hal::path(file_name.toStdString()).stem().string());
+    m_main_window->setWindowTitle(m_window_title);
 
-    //m_python_widget = new python_editor();
     m_main_window->add_content(m_python_widget, 3, content_anchor::right);
     m_python_widget->open();
 
-    m_python_console_widget = new python_console_widget();
-    m_main_window->add_content(m_python_console_widget, 5, content_anchor::bottom);
-    m_python_console_widget->open();
+    python_console_widget* python_console = new python_console_widget();
+    m_main_window->add_content(python_console, 5, content_anchor::bottom);
+    python_console->open();
 
     m_netlist_watcher = new netlist_watcher(this);
 }
@@ -136,7 +177,8 @@ void hal_content_manager::handle_close_document()
 {
     //TODO
     //(if possible) store state first, then remove all subwindows from main window
-    m_main_window->setWindowTitle("HAL");
+    m_window_title = "HAL";
+    m_main_window->setWindowTitle(m_window_title);
     m_main_window->on_action_close_document_triggered();
     //delete all windows here
     for (auto content : m_content2)
@@ -145,7 +187,7 @@ void hal_content_manager::handle_close_document()
         delete content;
     }
 
-    m_file_manager->close_file();
+    file_manager::get_instance()->close_file();
 }
 
 void hal_content_manager::handle_filsystem_doc_changed(const QString& file_name)
@@ -158,34 +200,4 @@ void hal_content_manager::handle_relayout_button_clicked()
     layouter->relayout_graph();
     m_layouter_view->handle_graph_relayouted();
     m_graph_scene->update();
-}
-
-bool hal_content_manager::has_python_editor_unsaved_changes()
-{
-    if(m_file_manager->is_document_open())
-        return m_python_widget->has_unsaved_tabs();
-    else
-        return false;
-}
-
-bool hal_content_manager::has_netlist_unsaved_changes()
-{
-    if(m_file_manager->is_document_open())
-        return m_netlist_watcher->has_netlist_unsaved_changes();
-    else
-        return false;
-}
-
-void hal_content_manager::mark_netlist_saved()
-{
-    if(m_file_manager->is_document_open())
-        m_netlist_watcher->set_netlist_unsaved_changes(false);
-}
-
-QStringList hal_content_manager::get_names_of_unsaved_python_tabs()
-{
-    if(m_file_manager->is_document_open())
-        return m_python_widget->get_names_of_unsaved_tabs();
-    else
-        return QStringList();
 }

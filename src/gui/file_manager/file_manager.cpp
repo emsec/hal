@@ -10,15 +10,18 @@
 #include "gui_globals.h"
 
 #include <QFile>
+#include <QFileInfo>
 #include <QFileSystemWatcher>
 #include <QInputDialog>
-#include <QTextStream>
 #include <QMessageBox>
+#include <QTextStream>
 
 file_manager::file_manager(QObject* parent) : QObject(parent), m_file_watcher(new QFileSystemWatcher(this)), m_file_open(false)
 {
     connect(m_file_watcher, &QFileSystemWatcher::fileChanged, this, &file_manager::handle_file_changed);
     connect(m_file_watcher, &QFileSystemWatcher::directoryChanged, this, &file_manager::handle_directory_changed);
+    m_timer = new QTimer(this);
+    connect(m_timer, &QTimer::timeout, this, &file_manager::autosave);
 }
 
 file_manager* file_manager::get_instance()
@@ -42,6 +45,13 @@ bool file_manager::is_document_open()
     return m_file_open;
 }
 
+void file_manager::autosave()
+{
+    log_info("gui", "saving a backup in case something goes wrong...");
+
+    netlist_serializer::serialize_to_file(g_netlist, m_shadow_file_name.toStdString());
+}
+
 QString file_manager::file_name() const
 {
     if (m_file_open)
@@ -50,8 +60,38 @@ QString file_manager::file_name() const
     return QString();
 }
 
-void file_manager::open_file(const QString& file_name)
+void file_manager::file_successfully_loaded(QString file_name)
 {
+    // autosave every 60s
+    m_timer->start(60 * 1000);
+
+    m_file_name        = file_name;
+    m_shadow_file_name = get_shadow_file(file_name);
+    m_file_watcher->addPath(m_file_name);
+    m_file_open = true;
+    update_recent_files(m_file_name);
+    g_python_context = std::make_unique<python_context>();    // TODO HANDLE PYTHON CONTEXT SEPARATELY
+    Q_EMIT file_opened(m_file_name);
+}
+
+QString file_manager::get_shadow_file(QString file)
+{
+    QString shadow_file_name;
+    if (file.contains('/'))
+    {
+        shadow_file_name = file.left(file.lastIndexOf('/') + 1) + "~" + file.right(file.size() - file.lastIndexOf('/') - 1);
+    }
+    else
+    {
+        shadow_file_name = "~" + file;
+    }
+    return shadow_file_name.left(shadow_file_name.lastIndexOf('.')) + ".hal";
+}
+
+void file_manager::open_file(QString file_name)
+{
+    QString logical_file_name = file_name;
+
     if (g_netlist)
     {
         // TODO HANDLE THIS CASE
@@ -66,6 +106,40 @@ void file_manager::open_file(const QString& file_name)
         return;
     }
 
+    if (!file_name.endsWith(".hal"))
+    {
+        QString hal_file_name = file_name.left(file_name.lastIndexOf('.')) + ".hal";
+
+        if (QFileInfo::exists(hal_file_name) && QFileInfo(hal_file_name).isFile())
+        {
+            if (QMessageBox::question(nullptr, "Resume previous work", "A .hal file exists for the selected netlist! Load that file instead?", QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
+            {
+                file_name         = hal_file_name;
+                logical_file_name = hal_file_name;
+            }
+        }
+    }
+
+    log_manager& lm    = log_manager::get_instance();
+    hal::path log_path = file_name.toStdString();
+    lm.set_file_name(hal::path(log_path.replace_extension(".log")));
+
+    if (file_name.endsWith(".hal"))
+    {
+        QString shadow_file_name = get_shadow_file(file_name);
+
+        if (QFileInfo::exists(shadow_file_name) && QFileInfo(shadow_file_name).isFile())
+        {
+            QString message =
+                "It seems that HAL crashed during your last session. Last autosave was on " + QFileInfo(shadow_file_name).lastModified().toString("dd.MM.yyyy hh:mm") + ". Restore that state?";
+            if (QMessageBox::question(nullptr, "HAL did not exit cleanly", message, QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
+            {
+                // logical_file_name is not changed
+                file_name = shadow_file_name;
+            }
+        }
+    }
+
     QFile file(file_name);
 
     if (!file.open(QFile::ReadOnly))
@@ -76,23 +150,13 @@ void file_manager::open_file(const QString& file_name)
         return;
     }
 
-    log_manager& lm    = log_manager::get_instance();
-    hal::path log_path = file_name.toStdString();
-    lm.set_file_name(hal::path(log_path.replace_extension(".log")));
-
-    m_file_name = file_name;
-
     if (file_name.endsWith(".hal"))
     {
         std::shared_ptr<netlist> netlist = netlist_factory::load_netlist(file_name.toStdString());
         if (netlist)
         {
             g_netlist = netlist;
-            m_file_watcher->addPath(m_file_name);
-            m_file_open = true;
-            update_recent_files(m_file_name);
-            g_python_context = std::make_unique<python_context>();    // TODO HANDLE PYTHON CONTEXT SEPARATELY
-            Q_EMIT file_opened(m_file_name);
+            file_successfully_loaded(logical_file_name);
         }
         else
         {
@@ -118,81 +182,6 @@ void file_manager::open_file(const QString& file_name)
         return;
     }
 
-    /* ORIGINAL CODE
- *
-    std::vector<std::string> gate_library_names;
-
-    // guessing the best library
-    {
-        // collect all names
-        for (const auto& key : gate_library_manager::get_gate_libraries())
-        {
-            gate_library_names.push_back(key.first);
-        }
-
-        // load the first 100 lines of the file
-        std::string preview = "";
-        QTextStream in(&file);
-        for (int i = 0; (i < 100) && (!in.atEnd()); ++i)
-        {
-            QString line = in.readLine();
-            preview += core_utils::to_lower(line.toStdString());
-        }
-
-        // compute a 'likelihood score' for each library
-        std::map<int, std::set<std::string>> gate_library_guesses;
-        for (const auto& lib : gate_library_names)
-        {
-            // split the library name into tags by '_'
-            auto tags = core_utils::split(core_utils::to_lower(lib), '_');
-            // the full name is also a tag
-            tags.insert(tags.begin(), core_utils::to_lower(lib));
-
-            // now count how many of the tags are in the preview
-            int score = 0;
-            for (const auto& tag : tags)
-            {
-                if (tag.size() > 2 && preview.find(tag) != std::string::npos)
-                {
-                    score++;
-                }
-            }
-            gate_library_guesses[score].insert(lib);
-        }
-
-        // sort the names by their score (map autosorts ascending)
-        gate_library_names.clear();
-        for (const auto& pair : gate_library_guesses)
-        {
-            for (const auto& lib : pair.second)
-            {
-                gate_library_names.insert(gate_library_names.begin(), lib);
-            }
-        }
-    }
-
-    // gate_library_names now contains all libraries, with the most likely one in first place
-    for (const auto& lib : gate_library_names)
-    {
-        log_info("gui", "Trying to use gate library '{}'...", lib);
-        std::shared_ptr<netlist> n = netlist_factory::load_netlist(file_name.toStdString(), language.toStdString(), lib);
-        if (n == nullptr)
-        {
-            continue;
-        }
-
-        g_netlist = n;
-        m_file_watcher->addPath(m_file_name);
-        m_file_open = true;
-        update_recent_files(file_name);
-        g_python_context = std::make_unique<python_context>();
-        Q_EMIT file_opened(file_name);
-        return;
-    }
-    log_error("gui", "Unable to find a compatible gate library. Deserialization failed!");
-
-END OF ORIGINAL CODE */
-
     QList<QPair<std::string, std::shared_ptr<netlist>>> list;
 
     for (const auto& key : gate_library_manager::get_gate_libraries())
@@ -215,7 +204,7 @@ END OF ORIGINAL CODE */
     if (list.isEmpty())
     {
         std::string error_message("Unable to find a compatible gate library. Deserialization failed!");
-        log_error("gui", "{}" , error_message);
+        log_error("gui", "{}", error_message);
         display_error_message(QString::fromStdString(error_message));
         return;
     }
@@ -254,11 +243,7 @@ END OF ORIGINAL CODE */
             return;
     }
 
-    m_file_watcher->addPath(m_file_name);
-    m_file_open = true;
-    update_recent_files(file_name);
-    g_python_context = std::make_unique<python_context>();
-    Q_EMIT file_opened(file_name);
+    file_successfully_loaded(logical_file_name);
 }
 
 void file_manager::close_file()
@@ -266,11 +251,19 @@ void file_manager::close_file()
     if (!m_file_open)
         return;
 
+    m_timer->stop();
+
     // TODO CHECK DIRTY AND TRIGGER SAVE ROUTINE
 
     m_file_watcher->removePath(m_file_name);
     m_file_name = "";
     m_file_open = false;
+
+    if (QFileInfo::exists(m_shadow_file_name) && QFileInfo(m_shadow_file_name).isFile())
+    {
+        QFile(m_shadow_file_name).remove();
+    }
+
     Q_EMIT file_closed();
 }
 

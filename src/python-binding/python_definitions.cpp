@@ -110,7 +110,7 @@ PYBIND11_PLUGIN(hal_py)
         .def("__str__", [](hal::path& p) -> std::string { return std::string(p.c_str()); });
 
     py::implicitly_convertible<std::string, hal::path>();
-    
+
     py::class_<data_container, std::shared_ptr<data_container>>(m, "data_container")
         .def("set_data", &data_container::set_data, py::arg("category"), py::arg("key"), py::arg("value_data_type"), py::arg("value"), py::arg("log_with_info_level") = false, R"(
 Sets a custom data entry
@@ -153,7 +153,7 @@ Returns all data key
 :returns: A list of tuples ((1) category, (2) key)
 :rtype: list[tuple(str,str)]
 )");
-    
+
     m.def_submodule("core_utils", R"(
 HAL Core Utility functions.
 )")
@@ -869,6 +869,49 @@ Gets the type of the gate.
 :returns: The gate's type.
 :rtype: str
 )")
+        .def("get_module", &gate::get_module, R"(
+Gets the module this gate is contained in.
+
+:returns: The owning module.
+:rtype: hal_py.module
+)")
+
+        .def("mark_global_vcc_gate", &gate::mark_global_vcc_gate, R"(
+Mark this gate as a global vcc gate.
+
+:returns: True on success.
+:rtype: bool
+)")
+        .def("mark_global_gnd_gate", &gate::mark_global_gnd_gate, R"(
+Mark this gate as a global gnd gate.
+
+:returns: True on success.
+:rtype: bool
+)")
+        .def("unmark_global_vcc_gate", &gate::unmark_global_vcc_gate, R"(
+Unmark this gate as a global vcc gate.
+
+:returns: True on success.
+:rtype: bool
+)")
+        .def("unmark_global_gnd_gate", &gate::unmark_global_gnd_gate, R"(
+Unmark this gate as a global gnd gate.
+
+:returns: True on success.
+:rtype: bool
+)")
+        .def("is_global_vcc_gate", &gate::is_global_vcc_gate, R"(
+Checks whether this gate is a global vcc gate.
+
+:returns: True if the gate is a global vcc gate.
+:rtype: bool
+)")
+        .def("is_global_gnd_gate", &gate::is_global_gnd_gate, R"(
+Checks whether this gate is a global gnd gate.
+
+:returns: True if the gate is a global gnd gate.
+:rtype: bool
+)")
 
         .def_property_readonly("input_pin_types", &gate::get_input_pin_types, R"(
 Get all input pin types of the gate.
@@ -1143,7 +1186,65 @@ Check whether the net is routed, i.e. it has no source or no destinations.
 
 :returns: True if the net is unrouted.
 :rtype: bool
-)");
+)")
+
+        .def("mark_global_input_net", &net::mark_global_input_net, R"(
+Mark this net as a global input net.
+
+:returns: True on success.
+:rtype: bool
+)")
+        .def("mark_global_output_net", &net::mark_global_output_net, R"(
+Mark this net as a global output net.
+
+:returns: True on success.
+:rtype: bool
+)")
+        .def("mark_global_inout_net", &net::mark_global_inout_net, R"(
+Mark this net as a global inout net.
+
+:returns: True on success.
+:rtype: bool
+)")
+        .def("unmark_global_input_net", &net::unmark_global_input_net, R"(
+Unmark this net as a global input net.
+
+:returns: True on success.
+:rtype: bool
+)")
+        .def("unmark_global_output_net", &net::unmark_global_output_net, R"(
+Unmark this net as a global output net.
+
+:returns: True on success.
+:rtype: bool
+)")
+        .def("unmark_global_inout_net", &net::unmark_global_inout_net, R"(
+Unmark this net as a global inout net.
+
+:returns: True on success.
+:rtype: bool
+)")
+        .def("is_global_input_net", &net::is_global_input_net, R"(
+Checks whether this net is a global input net.
+
+:returns: True if the net is a global input net.
+:rtype: bool
+)")
+        .def("is_global_output_net", &net::is_global_output_net, R"(
+Checks whether this net is a global output net.
+
+:returns: True if the net is a global output net.
+:rtype: bool
+)")
+        .def("is_global_inout_net", &net::is_global_inout_net, R"(
+Checks whether this net is a global inout net.
+
+:returns: True if the net is a global inout net.
+:rtype: bool
+)")
+
+
+;
 
     // module dir
     py::class_<module, std::shared_ptr<module>, data_container>(m, "module")
@@ -1210,7 +1311,7 @@ A module input net is either a global input to the netlist or has a source outsi
 
 :param str name_filter: Filter for the name.
 :returns: A set of module input nets.
-:rtype: set(hal_py.module)
+:rtype: set(hal_py.net)
 )")
         .def("get_output_nets", &module::get_output_nets, py::arg("name_filter") = DONT_CARE, R"(
 Get the output nets to this module.
@@ -1218,7 +1319,16 @@ A module output net is either a global output of the netlist or has a destinatio
 
 :param str name_filter: Filter for the name.
 :returns: The set of module output nets.
-:rtype: set(hal_py.module)
+:rtype: set(hal_py.net)
+)")
+        .def("get_internal_nets", &module::get_internal_nets, py::arg("name_filter") = DONT_CARE, R"(
+Get the internal nets to this module.
+A net is internal if its source and at least one output are inside the module.
+Therefore it may contain some nets that are also regarded as output nets.
+
+:param str name_filter: Filter for the name.
+:returns: The set of internal nets.
+:rtype: set(hal_py.net)
 )")
         .def_property_readonly("gates", [](module& n) -> std::set<std::shared_ptr<gate>> { return n.get_gates(); }, R"(
 Gets all gates of the module.
@@ -1245,22 +1355,6 @@ Get a gate specified by id. If recursive parameter is true, all submodule are se
 :returns: The gate or None.
 :rtype: hal_py.gate or None
 )")
-        .def_property_readonly("nets", &module::get_nets, R"(
-Get all nets of the module.
-
-:returns: A set of nets.
-:rtype: set(hal_py.net)
-)")
-        .def("get_nets", &module::get_nets, py::arg("name_filter") = DONT_CARE, py::arg("recursive") = false, R"(
-Get all nets of the module.
-You can filter the set before output with the optional parameter.
-If recursive parameter is true, all submodules are searched aswell.
-
-:param str name_filter: Filter for the name.
-:param bool recursive: Look into submodules too.
-:returns: A set of nets.
-:rtype: set(hal_py.net)
-)")
         .def("assign_gate", &module::assign_gate, py::arg("gate"), R"(
 Moves a gate into this module. The gate is removed from its previous module in the process.
 
@@ -1286,39 +1380,6 @@ Checks whether a gate is in the module. If \p recursive is true, all submodules 
 :type recursive: bool
 :returns: True if the gate is in the object.
 :rtype: bool
-)")
-        .def("assign_net", &module::assign_net, py::arg("net"), R"(
-Moves a net into this module. The net is removed from its previous module in the process.
-
-:param net: The net to add.
-:type net: hal_py.net
-:returns: True on success.
-:rtype: bool
-)")
-        .def("remove_net", &module::remove_net, py::arg("net"), R"(
-Removes a net from the module object.
-
-:param net: The net to remove.
-:type net: hal_py.net
-:returns: True on success.
-:rtype: bool
-)")
-        .def("contains_net", &module::contains_net, py::arg("net"), py::arg("recursive") = false, R"(
-Checks whether a net is registered in the module. If \p recursive is true, all submodules are searched as well.
-
-:param net: The net to search for.
-:param bool recursive: Look into submodules too.
-:type net: hal_py.net
-:returns: True if the gate is in the object.
-:rtype: bool
-)")
-        .def("get_net_by_id", &module::get_net_by_id, py::arg("id"), py::arg("recursive") = false , R"(
-Get a net specified by id. If recursive parameter is true, all submodules are searched aswell.
-
-:param int id: The net's id.
-:param bool recursive: Look into submodules too.
-:returns: The net or None.
-:rtype: hal_py.net or None
 )");
 
     m.def_submodule("netlist_factory")

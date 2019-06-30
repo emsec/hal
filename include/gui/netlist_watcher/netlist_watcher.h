@@ -12,8 +12,7 @@ public:
     netlist_watcher(QObject* parent = 0);
     ~netlist_watcher();
 
-    bool has_netlist_unsaved_changes();
-    void set_netlist_unsaved_changes(bool has_netlist_unsaved_changes);
+    void reset();
 
 public Q_SLOTS:
     void handle_netlist_event(netlist_event_handler::event ev, std::shared_ptr<netlist> object, u32 associated_data);
@@ -23,8 +22,7 @@ public Q_SLOTS:
 
 private:
     void handle_netlist_modified();
-
-    bool m_has_netlist_unsaved_changes;
+    bool m_notified;
 };
 
 #endif // NETLIST_WATCHER_H

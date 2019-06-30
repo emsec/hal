@@ -128,6 +128,17 @@ public:
      */
     std::set<std::shared_ptr<net>> get_output_nets(const std::string& name_filter = DONT_CARE) const;
 
+    /**
+     * Get the internal nets of this module.<br>
+     * A net is internal if its source and at least one output are inside the module.<br>
+     * Therefore it may contain some nets that are also regarded as output nets.
+     *
+     * @param[in] name_filter - Filter for the name
+     * @returns The set of module input nets.
+     */
+    std::set<std::shared_ptr<net>> get_internal_nets(const std::string& name_filter = DONT_CARE) const;
+
+
     /*
      * ################################################################
      *      gate functions
@@ -184,61 +195,6 @@ public:
      */
     std::set<std::shared_ptr<gate>> get_gates(const std::string& gate_type_filter = DONT_CARE, const std::string& name_filter = DONT_CARE, bool recursive = false) const;
 
-    /*
-     * ################################################################
-     *      net functions
-     * ################################################################
-     */
-
-    /**
-     * Moves a net into this module.<br>
-     * The net is removed from its previous module in the process.
-     *
-     * @param[in] net - The net to move.
-     * @returns True on success.
-     */
-    bool assign_net(std::shared_ptr<net> net);
-
-    /**
-     * Removes a net from the module.<br>
-     * It is automatically moved to the netlist's top module.
-     *
-     * @param[in] net - Pointer to the net pointer.
-     * @returns True on success.
-     */
-    bool remove_net(std::shared_ptr<net> net);
-
-    /**
-     * Checks whether a net is registered in the module.<br>
-     * If \p recursive is true, all submodules are searched as well.
-     *
-     * @param[in] net - The net to check.
-     * @param[in] recursive - Look into submodules too
-     * @returns True if the net is in module
-     */
-    bool contains_net(const std::shared_ptr<net> net, bool recursive = false) const;
-
-    /**
-     * Get a net specified by id.<br>
-     * If \p recursive is true, all submodules are searched as well.
-     *
-     * @param[in] id - The net's id.
-     * @param[in] recursive - Look into submodules too
-     * @returns The net or a nullptr.
-     */
-    std::shared_ptr<net> get_net_by_id(const u32 id, bool recursive = false) const;
-
-    /**
-     * Get all nets of the module. <br>
-     * You can filter the set before output with the optional parameter.<br>
-     * If \p recursive is true, all submodules are searched as well.
-     *
-     * @param[in] name_filter - Filter for the name
-     * @param[in] recursive - Look into submodules too
-     * @return A set of nets.
-     */
-    std::set<std::shared_ptr<net>> get_nets(const std::string& name_filter = DONT_CARE, bool recursive = false) const;
-
 private:
     module(u32 id, std::shared_ptr<module> parent, const std::string& name, netlist_internal_manager* internal_manager);
 
@@ -257,10 +213,6 @@ private:
     /** stores gates sorted by id*/
     std::map<u32, std::shared_ptr<gate>> m_gates_map;
     std::set<std::shared_ptr<gate>> m_gates_set;
-
-    /** stores nets storted by id  */
-    std::map<u32, std::shared_ptr<net>> m_nets_map;
-    std::set<std::shared_ptr<net>> m_nets_set;
 };
 
 #endif /* __HAL_MODULE_H__ */

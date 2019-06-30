@@ -41,7 +41,9 @@ std::shared_ptr<netlist> hdl_parser_verilog::parse(const std::string& gate_libra
         buffer = core_utils::trim(buffer);
 
         if (buffer.empty())
+        {
             continue;
+        }
 
         // add current line to token
         token += buffer;
@@ -182,9 +184,13 @@ void hdl_parser_verilog::remove_comments(std::string& buffer, bool& multiline_co
                     continue;
                 }
                 if (multi_line_comment_begin > 0)
+                {
                     begin = buffer.substr(0, multi_line_comment_begin - 1);
+                }
                 if ((multi_line_comment_end + 2) < buffer.size())
+                {
                     end = buffer.substr(multi_line_comment_end + 2);
+                }
                 buffer = begin + end;
                 repeat = true;
             }
@@ -202,9 +208,13 @@ void hdl_parser_verilog::remove_comments(std::string& buffer, bool& multiline_co
                     continue;
                 }
                 if (multi_line_property_begin > 0)
+                {
                     begin = buffer.substr(0, multi_line_property_begin - 1);
+                }
                 if ((multi_line_property_end + 2) < buffer.size())
+                {
                     end = buffer.substr(multi_line_property_end + 2);
+                }
                 buffer = begin + end;
                 repeat = true;
             }
@@ -276,7 +286,7 @@ bool hdl_parser_verilog::parse_architecture(const std::string& signal_token, con
                 continue;
             }
 
-            auto new_net = m_netlist->create_net(m_netlist->get_unique_net_id(), name);
+            auto new_net               = m_netlist->create_net(m_netlist->get_unique_net_id(), name);
             m_net[new_net->get_name()] = new_net;
             if (new_net == nullptr || !identifier_to_addition[identifier](m_netlist, new_net))
             {
@@ -306,7 +316,7 @@ bool hdl_parser_verilog::parse_architecture(const std::string& signal_token, con
                     continue;
                 }
 
-                auto new_net = m_netlist->create_net(m_netlist->get_unique_net_id(), bus_signal_name);
+                auto new_net               = m_netlist->create_net(m_netlist->get_unique_net_id(), bus_signal_name);
                 m_net[new_net->get_name()] = new_net;
 
                 if (new_net == nullptr || !identifier_to_addition[identifier](m_netlist, new_net))
@@ -387,22 +397,40 @@ bool hdl_parser_verilog::parse_instance(const std::string& instance, const std::
         {
             continue;
         }
-        std::string key, data_type, value;
 
-        key = core_utils::trim(token.substr(1, token.find('(') - 1));
+        auto key            = core_utils::trim(token.substr(1, token.find('(') - 1));
+        auto value          = core_utils::trim(token.substr(token.find('(') + 1));
+        auto value_stripped = core_utils::trim(value.substr(0, value.length() - 1));
 
-        value = core_utils::trim(token.substr(token.find('(') + 1));
-        value = value.substr(0, value.size() - 1);
-
-        if (core_utils::starts_with(value, "\"") && core_utils::ends_with(value, "\""))
+        if (value.back() == ',')
         {
+            value.pop_back();
+        }
+
+        // determine data type
+        auto data_type = std::string();
+        if (core_utils::is_integer(value))
+        {
+            data_type = "integer";
+        }
+        else if (core_utils::is_floating_point(value))
+        {
+            data_type = "floating_point";
+        }
+        else if (core_utils::starts_with(value, "\"") && core_utils::ends_with(value, "\""))
+        {
+            value     = value.substr(1, value.size() - 2);
             data_type = "string";
-            value.erase(std::remove(value.begin(), value.end(), '"'), value.end());
         }
         else if (value.find('\'') != std::string::npos)
         {
-            data_type = "bit_vector";
             value     = get_hex_from_number_literal(value);
+            data_type = "bit_vector";
+        }
+        else
+        {
+            log_error("hdl_parser", "cannot identify data type of generic map value '{}' in instance '{}'", value, new_gate->get_name());
+            return false;
         }
 
         if (!new_gate->set_data("generic", key, data_type, value))

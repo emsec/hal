@@ -232,8 +232,9 @@ void graph_navigation_model::setupModelData()
         for (auto const gate : module->get_gates())
             new graph_navigation_item(QString::fromStdString(gate->get_name()), gate->get_id(), graph_navigation_item::item_type::gate, module_gates_item);
 
-        for (auto const net : module->get_nets())
-            new graph_navigation_item(QString::fromStdString(net->get_name()), net->get_id(), graph_navigation_item::item_type::net, module_nets_item);
+        // todo modules do not have nets anymore
+        //for (auto const net : module->get_nets())
+        //    new graph_navigation_item(QString::fromStdString(net->get_name()), net->get_id(), graph_navigation_item::item_type::net, module_nets_item);
     }
 }
 
@@ -289,8 +290,9 @@ void graph_navigation_model::update_modules()
         for (auto const gate : module->get_gates())
             new graph_navigation_item(QString::fromStdString(gate->get_name()), gate->get_id(), graph_navigation_item::item_type::gate, module_gates_item);
 
-        for (auto const net : module->get_nets())
-            new graph_navigation_item(QString::fromStdString(net->get_name()), net->get_id(), graph_navigation_item::item_type::net, module_nets_item);
+        // todo modules do not have nets anymore
+        // for (auto const net : module->get_nets())
+        //    new graph_navigation_item(QString::fromStdString(net->get_name()), net->get_id(), graph_navigation_item::item_type::net, module_nets_item);
     }
 }
 

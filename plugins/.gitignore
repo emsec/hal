@@ -1,6 +1,8 @@
 *
 !example_gate_library*
 !example_gate_library/**/*
+!gate_libraries*
+!gate_libraries/**/*
 !graph_algorithm*
 !graph_algorithm/**/*
 !quine_mccluskey*
