@@ -293,34 +293,37 @@ void python_editor::handle_action_open_file()
     QString title = "Open File";
     QString text  = "Python Scripts(*.py)";
 
-    QString file_name = QFileDialog::getOpenFileName(nullptr, title, QDir::currentPath(), text, nullptr, QFileDialog::DontUseNativeDialog);
+    QStringList file_names = QFileDialog::getOpenFileNames(nullptr, title, QDir::currentPath(), text, nullptr, QFileDialog::DontUseNativeDialog);
 
-    if (file_name.isEmpty())
+    if (file_names.isEmpty())
     {
         return;
     }
 
-    for (int i = 0; i < m_tab_widget->count(); ++i)
+    for(auto file_name : file_names)
     {
-        auto editor = dynamic_cast<python_code_editor*>(m_tab_widget->widget(i));
-        if (editor->get_file_name() == file_name)
+        for (int i = 0; i < m_tab_widget->count(); ++i)
         {
-            m_tab_widget->setCurrentIndex(i);
-
-            if (editor->document()->isModified())
+            auto editor = dynamic_cast<python_code_editor*>(m_tab_widget->widget(i));
+            if (editor->get_file_name() == file_name)
             {
-                if (QMessageBox::question(editor, "Script has unsaved changes", "Do you want to reload the file from disk? Unsaved changes are lost.", QMessageBox::Yes | QMessageBox::No)
-                    == QMessageBox::Yes)
-                {
-                    tab_load_file(i, file_name);
-                }
-            }
-            return;
-        }
-    }
+                m_tab_widget->setCurrentIndex(i);
 
-    handle_action_new_tab();
-    tab_load_file(m_tab_widget->count() - 1, file_name);
+                if (editor->document()->isModified())
+                {
+                    if (QMessageBox::question(editor, "Script has unsaved changes", "Do you want to reload the file from disk? Unsaved changes are lost.", QMessageBox::Yes | QMessageBox::No)
+                        == QMessageBox::Yes)
+                    {
+                        tab_load_file(i, file_name);
+                    }
+                }
+                return;
+            }
+        }
+
+        handle_action_new_tab();
+        tab_load_file(m_tab_widget->count() - 1, file_name);
+    }
 }
 
 void python_editor::tab_load_file(u32 index, QString file_name)
