@@ -33,6 +33,8 @@ python_editor::python_editor(QWidget* parent)
     m_new_file_counter = 0;
     m_last_click_time  = 0;
 
+    m_last_opened_path = QDir::currentPath();
+
     m_tab_widget = new QTabWidget(this);
     m_tab_widget->setTabsClosable(true);
     m_tab_widget->setMovable(true);
@@ -293,7 +295,7 @@ void python_editor::handle_action_open_file()
     QString title = "Open File";
     QString text  = "Python Scripts(*.py)";
 
-    QStringList file_names = QFileDialog::getOpenFileNames(nullptr, title, QDir::currentPath(), text, nullptr, QFileDialog::DontUseNativeDialog);
+    QStringList file_names = QFileDialog::getOpenFileNames(nullptr, title, m_last_opened_path, text, nullptr, QFileDialog::DontUseNativeDialog);
 
     if (file_names.isEmpty())
     {
@@ -324,6 +326,8 @@ void python_editor::handle_action_open_file()
         handle_action_new_tab();
         tab_load_file(m_tab_widget->count() - 1, file_name);
     }
+
+    m_last_opened_path = QFileInfo(file_names.last()).absolutePath();
 }
 
 void python_editor::tab_load_file(u32 index, QString file_name)
