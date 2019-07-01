@@ -9,6 +9,8 @@
 
 #include "netlist/netlist_factory.h"
 
+#include <queue>
+
 hdl_parser_vhdl::hdl_parser_vhdl(std::stringstream& stream) : hdl_parser(stream)
 {
 }
@@ -159,22 +161,27 @@ std::shared_ptr<netlist> hdl_parser_vhdl::parse(const std::string& gate_library)
         }
     }
 
+    m_zero_net = m_netlist->create_net("'0'");
+    if (m_zero_net == nullptr)
+    {
+        return nullptr;
+    }
+    m_net[m_zero_net->get_name()] = m_zero_net;
+
+    m_one_net = m_netlist->create_net("'1'");
+    if (m_one_net == nullptr)
+    {
+        return nullptr;
+    }
+    m_net[m_one_net->get_name()] = m_one_net;
+
     if (!build_netlist(current_entity.name))
     {
         return nullptr;
     }
 
-    auto modules_copy = m_netlist->get_modules();
-    for (const auto& m : modules_copy)
-    {
-        if (m->get_gates().empty())
-        {
-            m_netlist->delete_module(m);
-        }
-    }
-
     // add global gnd gate if required by any instance
-    if (m_net.find("'0'") != m_net.end())
+    if (!m_zero_net->get_dsts().empty())
     {
         auto gnd_type   = *(m_netlist->get_gate_library()->get_global_gnd_gate_types()->begin());
         auto output_pin = m_netlist->get_output_pin_types(gnd_type).at(0);
@@ -189,9 +196,13 @@ std::shared_ptr<netlist> hdl_parser_vhdl::parse(const std::string& gate_library)
             return nullptr;
         }
     }
+    else
+    {
+        m_netlist->delete_net(m_zero_net);
+    }
 
     // add global vcc gate if required by any instance
-    if (m_net.find("'1'") != m_net.end())
+    if (!m_one_net->get_dsts().empty())
     {
         auto vcc_type   = *(m_netlist->get_gate_library()->get_global_vcc_gate_types()->begin());
         auto output_pin = m_netlist->get_output_pin_types(vcc_type).at(0);
@@ -205,6 +216,10 @@ std::shared_ptr<netlist> hdl_parser_vhdl::parse(const std::string& gate_library)
         {
             return nullptr;
         }
+    }
+    else
+    {
+        m_netlist->delete_net(m_one_net);
     }
 
     return m_netlist;
@@ -552,7 +567,6 @@ bool hdl_parser_vhdl::parse_instance(entity& e, const std::vector<file_line>& li
         {
             inst.type = inst.type.substr(pos + 1);
         }
-        m_num_instances[inst.type]++;
     }
     else if (core_utils::starts_with(inst.type, "component "))
     {
@@ -623,8 +637,11 @@ bool hdl_parser_vhdl::parse_instance(entity& e, const std::vector<file_line>& li
             {
                 value.pop_back();
             }
-            inst.ports.emplace_back(key, value);
-            // log_info("hdl_parser", "port map '{}' => '{}'", key, value);
+            for (const auto& [a, b] : get_port_assignments(key, value))
+            {
+                inst.ports.emplace_back(a, b);
+                // log_info("hdl_parser", "port map '{}' => '{}'", a, b);
+            }
         }
     }
 
@@ -640,9 +657,86 @@ bool hdl_parser_vhdl::parse_instance(entity& e, const std::vector<file_line>& li
 
 bool hdl_parser_vhdl::build_netlist(const std::string& top_module)
 {
+    // for (auto& [name, e] : m_entities)
+    // {
+    //     UNUSED(name);
+    //     for (const auto& inst : e.instances)
+    //     {
+    //         for (auto [pin, signal] : inst.ports)
+    //         {
+    //             if (signal == "'0'" || signal == "'1'")
+    //             {
+    //                 continue;
+    //             }
+
+    //             if (signal.back() == ')')
+    //             {
+    //                 signal = signal.substr(0, signal.rfind('('));
+    //             }
+
+    //             bool found = false;
+    //             for (const auto& it : e.expanded_signal_names)
+    //             {
+    //                 if (it.first == signal)
+    //                 {
+    //                     found = true;
+    //                 }
+    //             }
+    //             if (found)
+    //                 continue;
+
+    //             if (std::find(e.signals.begin(), e.signals.end(), signal) == e.signals.end())
+    //             {
+    //                 log_warning("hdl_parser", "signal {} was not defined in the architecture of {}", signal, e.name);
+    //                 e.signals.push_back(signal);
+    //             }
+    //         }
+    //     }
+    // }
+
     log_info("hdl_parser", "builing netlist\n");
 
-    auto& e = m_entities[top_module];
+    auto& top_entity = m_entities[top_module];
+
+    std::queue<entity*> q;
+    q.push(&top_entity);
+
+    for (const auto& x : top_entity.ports)
+    {
+        m_name_instances[x.first]++;
+    }
+
+    while (!q.empty())
+    {
+        auto e = q.back();
+        q.pop();
+
+        m_name_instances[e->name]++;
+
+        if (e->name == "design_1_rst_clk_wiz_100M_0_cdc_sync_0"){
+            log_info("hdl_parser", "DOOT");
+        }
+
+        for (const auto& x : e->signals)
+        {
+            m_name_instances[x]++;
+        }
+
+        for (const auto& x : e->instances)
+        {
+            m_name_instances[x.name]++;
+            auto it = m_entities.find(x.type);
+            if (it != m_entities.end())
+            {
+                q.push(&(it->second));
+            }
+        }
+    }
+
+    // for (const auto& [name, val] : m_name_instances)
+    // {
+    //     log_info("hdl_parser", "{}: {}", name, val);
+    // }
 
     std::map<std::string, std::function<bool(std::shared_ptr<net> const)>> port_dir_function = {
         {"in", [](std::shared_ptr<net> const net) { return net->mark_global_input_net(); }},
@@ -650,16 +744,17 @@ bool hdl_parser_vhdl::build_netlist(const std::string& top_module)
         {"inout", [](std::shared_ptr<net> const net) { return net->mark_global_inout_net(); }},
     };
 
-    for (const auto& [name, direction] : e.ports)
+    for (const auto& [name, direction] : top_entity.ports)
     {
         if (port_dir_function.find(direction) == port_dir_function.end())
         {
-            log_error("hdl_parser", "entity {}, line {}+ : direction '{}' unkown", name, e.line_number, direction);
+            log_error("hdl_parser", "entity {}, line {}+ : direction '{}' unkown", name, top_entity.line_number, direction);
             return false;
         }
 
         // log_info("hdl_parser", "global {} net {}", direction, name);
 
+        m_instance_count[name]++;
         auto new_net = m_netlist->create_net(name);
         if (new_net == nullptr)
         {
@@ -672,7 +767,7 @@ bool hdl_parser_vhdl::build_netlist(const std::string& top_module)
         }
     }
 
-    if (instantiate(e, nullptr, {}) == nullptr)
+    if (instantiate(top_entity, nullptr, {}) == nullptr)
     {
         return false;
     }
@@ -680,28 +775,39 @@ bool hdl_parser_vhdl::build_netlist(const std::string& top_module)
     return true;
 }
 
+std::string hdl_parser_vhdl::get_unique_alias(const entity& e, const std::string& name)
+{
+    //return e.name + " | " + std::to_string(++m_instance_count[e.name]) + " | " + name;
+    if (m_name_instances[name] < 2)
+    {
+        return name;
+    }
+    //return name + " | " + std::to_string(m_instance_count[e.name]);
+    return name + " | " + std::to_string(m_instance_count[name]);
+}
+
+// todo remove this debugging stuff
 static std::string spacing = "";
-#define DEBUG_LOG(x, ...) /*log_info("hdl_parser", "{}" x, spacing, __VA_ARGS__); */
+#define DEBUG_LOG(x, ...) //log_info("hdl_parser", "{}" x, spacing, __VA_ARGS__);
 
 std::shared_ptr<module> hdl_parser_vhdl::instantiate(const entity& e, std::shared_ptr<module> parent, const std::map<std::string, std::string>& parent_module_assignments)
 {
+    m_instance_count[e.name]++;
+
     spacing += "|   ";
     DEBUG_LOG("instantiating {}", e.name);
-
-    std::string prefix = "";
 
     std::shared_ptr<module> module;
     if (parent == nullptr)
     {
         module = m_netlist->get_top_module();
-        module->set_name(e.name);
+        module->set_name(get_unique_alias(e, e.name));
         DEBUG_LOG("{}", "using topmodule");
     }
     else
     {
-        module = m_netlist->create_module(e.name, parent);
+        module = m_netlist->create_module(get_unique_alias(e, e.name), parent);
         DEBUG_LOG("{}", "new module");
-        prefix = e.name + "_inst_" + std::to_string(++m_instance_count[e.name]) + "_";
     }
 
     {
@@ -718,13 +824,20 @@ std::shared_ptr<module> hdl_parser_vhdl::instantiate(const entity& e, std::share
 
     for (const auto& name : e.signals)
     {
-        DEBUG_LOG("internal signal {}", prefix + name);
-        auto new_net = m_netlist->create_net(prefix + name);
+        m_instance_count[name]++;
+        auto alias = get_unique_alias(e, name);
+        DEBUG_LOG("internal signal {}", alias);
+        auto new_net = m_netlist->create_net(alias);
         if (new_net == nullptr)
         {
             return nullptr;
         }
-        m_net[prefix + name] = new_net;
+        //log_info("hdl_parser", "{}", m_name_instances[name]);
+        if (m_net.find(alias) != m_net.end())
+        {
+            //log_error("hdl_parser", "NOPE {} {}", name, alias);
+        }
+        m_net[alias] = new_net;
 
         {
             auto attribute_it = e.signal_attributes.find(name);
@@ -733,7 +846,7 @@ std::shared_ptr<module> hdl_parser_vhdl::instantiate(const entity& e, std::share
                 for (const auto& attr : attribute_it->second)
                 {
                     new_net->set_data("vhdl_attribute", std::get<0>(attr), std::get<1>(attr), std::get<2>(attr));
-                    DEBUG_LOG("signal has attribute {}", std::get<0>(attr));
+                    DEBUG_LOG("  has attribute {}", std::get<0>(attr));
                 }
             }
         }
@@ -747,7 +860,7 @@ std::shared_ptr<module> hdl_parser_vhdl::instantiate(const entity& e, std::share
             for (const auto& attr : attribute_it->second)
             {
                 m_net[assignment]->set_data("vhdl_attribute", std::get<0>(attr), std::get<1>(attr), std::get<2>(attr));
-                DEBUG_LOG("signal has attribute {}", std::get<0>(attr));
+                DEBUG_LOG("signal {} has attribute {}", name, std::get<0>(attr));
             }
         }
     }
@@ -764,17 +877,29 @@ std::shared_ptr<module> hdl_parser_vhdl::instantiate(const entity& e, std::share
 
         std::map<std::string, std::string> local_assignments;
 
-        // check for port
-        for (const auto& [port, assignment] : inst.ports)
-        {
-            auto new_assignments = get_port_assignments(port, assignment);
-            local_assignments.insert(new_assignments.begin(), new_assignments.end());
-        }
-
+        local_assignments.insert(inst.ports.begin(), inst.ports.end());
         local_assignments.insert(e.direct_assignments.begin(), e.direct_assignments.end());
 
         for (auto& it : local_assignments)
         {
+            /*std::string post  = "";
+            std::string pre   = it.second;
+            auto vector_index = pre.rfind('(');
+            if (vector_index != std::string::npos)
+            {
+                post = pre.substr(vector_index);
+                pre  = pre.substr(0, vector_index);
+            }
+            auto it2 = parent_module_assignments.find(pre);
+            if (it2 != parent_module_assignments.end())
+            {
+                it.second = it2->second + post;
+            }
+            else if (std::find(e.signals.begin(), e.signals.end(), it.second) != e.signals.end())
+            {
+                it.second = get_unique_alias(e, it.second);
+            }*/
+
             auto it2 = parent_module_assignments.find(it.second);
             if (it2 != parent_module_assignments.end())
             {
@@ -782,13 +907,13 @@ std::shared_ptr<module> hdl_parser_vhdl::instantiate(const entity& e, std::share
             }
             else if (std::find(e.signals.begin(), e.signals.end(), it.second) != e.signals.end())
             {
-                it.second = prefix + it.second;
+                it.second = get_unique_alias(e, it.second);
             }
         }
 
         for (const auto& it : local_assignments)
         {
-            DEBUG_LOG("assign {} => {}", it.first, it.second);
+            DEBUG_LOG("  assign {} => {}", it.first, it.second);
         }
 
         auto entity_it = m_entities.find(inst.type);
@@ -802,9 +927,10 @@ std::shared_ptr<module> hdl_parser_vhdl::instantiate(const entity& e, std::share
         }
         else
         {
-            DEBUG_LOG("new gate {} of type {}", prefix + inst.name, inst.type);
+            DEBUG_LOG("new gate {} of type {}", get_unique_alias(e, inst.name), inst.type);
 
-            auto new_gate = m_netlist->create_gate(inst.type, prefix + inst.name);
+            m_instance_count[inst.name]++;
+            auto new_gate = m_netlist->create_gate(inst.type, get_unique_alias(e, inst.name));
             if (new_gate == nullptr)
             {
                 return nullptr;
@@ -828,67 +954,70 @@ std::shared_ptr<module> hdl_parser_vhdl::instantiate(const entity& e, std::share
             auto inout_pin_types  = new_gate->get_inout_pin_types();
 
             // check for port
-            for (const auto& [port, assignment] : inst.ports)
+            for (auto [pin, net_name] : inst.ports)
             {
-                // split assignments of the current port (in case of e.g. "a(3 to 6) => b(7 to 10)")
-                for (auto [pin, net_name] : get_port_assignments(port, assignment))
+                DEBUG_LOG("  process {} => {}", pin, net_name);
                 {
-                    std::shared_ptr<net> current_net = nullptr;
-
+                    auto it = local_assignments.find(pin);
+                    if (it != local_assignments.end())
                     {
-                        auto it = local_assignments.find(pin);
-                        if (it != local_assignments.end())
-                        {
-                            net_name = it->second;
-                        }
+                        net_name = it->second;
                     }
+                }
 
-                    if (std::find(e.signals.begin(), e.signals.end(), net_name) != e.signals.end())
+                std::shared_ptr<net> current_net = nullptr;
+
+                if (std::find(e.signals.begin(), e.signals.end(), net_name) != e.signals.end())
+                {
+                    net_name = get_unique_alias(e, net_name);
+                }
+
+                DEBUG_LOG("  select {} => {}", pin, net_name);
+
+                auto it = m_net.find(net_name);
+                if (it != m_net.end())
+                {
+                    current_net = it->second;
+                }
+
+                if (current_net == nullptr)
+                {
+                    log_error("hdl_parser", "signal '{}' of {} was not previously declared", net_name, e.name);
+                    return nullptr;
+                }
+
+                // add net src/dst by pin types
+                bool is_inout  = std::find(inout_pin_types.begin(), inout_pin_types.end(), pin) != inout_pin_types.end();
+                bool is_input  = is_inout || std::find(input_pin_types.begin(), input_pin_types.end(), pin) != input_pin_types.end();
+                bool is_output = is_inout || std::find(output_pin_types.begin(), output_pin_types.end(), pin) != output_pin_types.end();
+
+                if (!is_input && !is_output)
+                {
+                    log_error("hdl_parser", "undefined pin '{}' for '{}' ({})", pin, new_gate->get_name(), new_gate->get_type());
+                    return nullptr;
+                }
+
+                if (is_output)
+                {
+                    if (current_net->get_src().gate != nullptr)
                     {
-                        net_name = prefix + net_name;
+                        auto src = current_net->get_src().gate;
+                        log_error("hdl_parser",
+                                  "cannot assign src '{}' of type {} to net '{}' already has a source assigned (gate '{}' of type {})",
+                                  new_gate->get_name(),
+                                  new_gate->get_type(),
+                                  current_net->get_name(),
+                                  src->get_name(),
+                                  src->get_type());
                     }
-
-                    // search for existing net by name, otherwise add it
-                    auto it = m_net.find(net_name);
-                    if (it == m_net.end())
+                    if (!current_net->set_src(new_gate, pin))
                     {
-                        DEBUG_LOG("new net '{}'", net_name);
-                        current_net = m_netlist->create_net(net_name);
-                        if (current_net == nullptr)
-                        {
-                            return nullptr;
-                        }
-                        m_net[net_name] = current_net;
-
-                        if (net_name != "'0'" && net_name != "'1'")
-                        {
-                            log_warning("hdl_parser", "signal '{}' was not previously declared in architecture", net_name);
-                        }
-                    }
-                    else
-                    {
-                        current_net = it->second;
-                    }
-
-                    // add net src/dst by pin types
-                    bool is_inout  = std::find(inout_pin_types.begin(), inout_pin_types.end(), pin) != inout_pin_types.end();
-                    bool is_input  = is_inout || std::find(input_pin_types.begin(), input_pin_types.end(), pin) != input_pin_types.end();
-                    bool is_output = is_inout || std::find(output_pin_types.begin(), output_pin_types.end(), pin) != output_pin_types.end();
-
-                    if (!is_input && !is_output)
-                    {
-                        log_error("hdl_parser", "undefined pin '{}' for '{}' ({})", pin, new_gate->get_name(), new_gate->get_type());
                         return nullptr;
                     }
-
-                    if (is_input && !current_net->add_dst(new_gate, pin))
-                    {
-                        return nullptr;
-                    }
-                    if (is_output && !current_net->set_src(new_gate, pin))
-                    {
-                        return nullptr;
-                    }
+                }
+                if (is_input && !current_net->add_dst(new_gate, pin))
+                {
+                    return nullptr;
                 }
             }
         }
@@ -955,6 +1084,7 @@ std::shared_ptr<module> hdl_parser_vhdl::instantiate(const entity& e, std::share
                 return nullptr;
             }
         }
+        DEBUG_LOG("{}", " ");
     }
 
     spacing = spacing.substr(4);

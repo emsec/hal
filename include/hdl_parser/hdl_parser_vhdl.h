@@ -72,8 +72,8 @@ private:
     {
         std::string name;
         std::string type;
-        std::vector<std::tuple<std::string, std::string>> generics;
-        std::vector<std::tuple<std::string, std::string>> ports;
+        std::vector<std::pair<std::string, std::string>> generics;
+        std::vector<std::pair<std::string, std::string>> ports;
 
         std::shared_ptr<module> netlist_module;
     };
@@ -83,7 +83,7 @@ private:
         std::string name;
         u32 line_number;
         entity_definition definition;
-        std::vector<std::tuple<std::string, std::string>> ports;
+        std::vector<std::pair<std::string, std::string>> ports;
         std::map<std::string, std::vector<std::string>> expanded_signal_names;
         std::map<std::string, std::set<std::tuple<std::string, std::string, std::string>>> entity_attributes;
         std::map<std::string, std::set<std::tuple<std::string, std::string, std::string>>> instance_attributes;
@@ -130,11 +130,16 @@ private:
     bool parse_architecture_body(entity& e);
     bool parse_instance(entity& e, const std::vector<file_line>& lines);
 
-    std::map<std::string, u32> m_num_instances;
+    std::map<std::string, u32> m_name_instances;
     std::map<std::string, u32> m_instance_count;
 
     bool build_netlist(const std::string& top_module);
     std::shared_ptr<module> instantiate(const entity& e, std::shared_ptr<module> parent, const std::map<std::string, std::string>& port_assignments);
+
+    std::string get_unique_alias(const entity& e, const std::string& name);
+
+    std::shared_ptr<net> m_zero_net;
+    std::shared_ptr<net> m_one_net;
 };
 
 #endif /* __HAL_HDL_PARSER_VHDL_H__ */
