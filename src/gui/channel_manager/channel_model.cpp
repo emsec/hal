@@ -91,7 +91,7 @@ channel_item* channel_model::add_channel(const QString name)
 {
     int offset = m_permanent_items.size() + m_temporary_items.size();
 
-    if (m_temporary_items.full())    //TODO FIX !!!
+    if (m_temporary_items.full())
     {
         int index = offset + m_temporary_items.size();
         beginRemoveRows(QModelIndex(), index - 1, index - 1);

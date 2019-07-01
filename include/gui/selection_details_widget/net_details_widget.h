@@ -25,7 +25,9 @@
 #define NET_DETAILS_WIDGET_H
 
 #include "def.h"
-#include "graph_relay/graph_relay.h"
+
+#include "netlist_relay/netlist_relay.h"
+
 #include <QWidget>
 
 class QVBoxLayout;

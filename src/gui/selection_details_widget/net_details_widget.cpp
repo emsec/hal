@@ -128,7 +128,7 @@ net_details_widget::net_details_widget(QWidget* parent) : QWidget(parent)
     m_dst_pins = new QTreeWidgetItem(m_tree_widget);
     m_dst_pins->setExpanded(true);
 
-    connect(&g_graph_relay, &graph_relay::net_event, this, &net_details_widget::handle_net_event);
+    connect(&g_netlist_relay, &netlist_relay::net_event, this, &net_details_widget::handle_net_event);
 }
 
 net_details_widget::~net_details_widget()

@@ -24,7 +24,6 @@
 #ifndef HAL_LOGGER_WIDGET_H
 #define HAL_LOGGER_WIDGET_H
 
-#include "channel_manager/channel_entry.h"
 #include "channel_manager/channel_item.h"
 #include "content_widget/content_widget.h"
 #include "core/log.h"

@@ -90,7 +90,7 @@ void table_selector_widget::on_item_double_clicked(QTableWidgetItem* item)
 {
     auto gate = g_netlist->get_gate_by_id(this->item(item->row(), 0)->text().toInt());
     Q_EMIT gateSelected(gate);
-    //TODO: the signal does not reach the gate_details_widget even though it is connected in the gate_detail_widget class...
+    //the signal does not reach the gate_details_widget even though it is connected in the gate_detail_widget class...
     //--->need to make the signal/slot mechanic work, this is just ugly (need to rely on the parent), also only the gate_details_widget is allowed to be a parent
     //static_cast<gate_details_widget*>(parent())->on_gate_selected(gate);
     //close();

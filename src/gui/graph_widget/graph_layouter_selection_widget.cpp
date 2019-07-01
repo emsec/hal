@@ -1,10 +1,8 @@
 #include "graph_widget/graph_layouter_selection_widget.h"
-#include "graph_widget/graph_layouter_manager.h"
-#include "graph_widget/graph_widget.h"
 
-graph_layouter_selection_widget::graph_layouter_selection_widget(graph_widget* widget, QWidget* parent) : QWidget(parent)
+graph_layouter_selection_widget::graph_layouter_selection_widget(/*old_graph_widget* widget,*/ QWidget* parent) : QWidget(parent)
 {
-    m_widget = widget;
+    //m_widget = widget;
 
     m_horizontal_layout = new QHBoxLayout();
     m_horizontal_layout->setContentsMargins(0, 0, 0, 0);
@@ -30,7 +28,7 @@ graph_layouter_selection_widget::graph_layouter_selection_widget(graph_widget* w
     m_vertical_layout->addLayout(m_button_layout);
     m_button_layout->setAlignment(Qt::AlignRight);
 
-    m_list->addItems(graph_layouter_manager::get_instance().get_layouters());
+    //m_list->addItems(graph_layouter_manager::get_instance().get_layouters());
 
     //m_list->setStyleSheet("* {background-color: rgb(31, 34, 35);}");
     for (int i = 0; i < m_list->count(); i++)
@@ -59,22 +57,22 @@ graph_layouter_selection_widget::graph_layouter_selection_widget(graph_widget* w
 void graph_layouter_selection_widget::ok_clicked(bool checked)
 {
     Q_UNUSED(checked)
-    m_widget->subscribe(m_list->currentItem()->text());
-    m_widget->show_view();
+    //m_widget->subscribe(m_list->currentItem()->text());
+    //m_widget->show_view();
 }
 
 void graph_layouter_selection_widget::cancel_clicked(bool checked)
 {
     Q_UNUSED(checked)
-    m_widget->show_view();
+    //m_widget->show_view();
 }
 
 void graph_layouter_selection_widget::current_selection_changed(QString layouter)
 {
     QString text = "<H1>";
-    text += graph_layouter_manager::get_instance().get_name(layouter);
+    //text += graph_layouter_manager::get_instance().get_name(layouter);
     text += "</H1>";
-    text += graph_layouter_manager::get_instance().get_description(layouter);
+    //text += graph_layouter_manager::get_instance().get_description(layouter);
     m_description->setHtml(text);
     //m_description->setHtml(graph_layouter_manager::get_instance().get_description(layouter));
 }

@@ -26,6 +26,12 @@
 
 #include <QObject>
 
+class netlist_graphics_qss_adapter;
+class notification_manager_qss_adapter;
+class python_qss_adapter;
+class shared_properties_qss_adapter;
+class vhdl_qss_adapter;
+
 class QApplication;
 
 class style_manager : public QObject
@@ -33,12 +39,29 @@ class style_manager : public QObject
     Q_OBJECT
 
 public:
-    explicit style_manager(QObject* parent = nullptr);
+    static style_manager* get_instance();
+
+    ~style_manager();
+
+    style_manager(style_manager const&) = delete;
+    void operator=(style_manager const&) = delete;
 
     void update_style();
 
+    const shared_properties_qss_adapter* shared_properties() const;
+    const notification_manager_qss_adapter* notification_manager() const;
+    const python_qss_adapter* python_syntax_highlighter() const;
+    const vhdl_qss_adapter* vhdl_syntax_highlighter() const;
+
 private:
+    explicit style_manager(QObject* parent = nullptr);
     void set_default(QApplication* app);
+
+    netlist_graphics_qss_adapter* m_graphics_qss_adapter;
+    shared_properties_qss_adapter* m_shared_properties;
+    notification_manager_qss_adapter* m_notification_manager;
+    python_qss_adapter* m_python_syntax_highlighter;
+    vhdl_qss_adapter* m_vhdl_syntax_highlighter;
 };
 
 #endif    // STYLE_MANAGER_H

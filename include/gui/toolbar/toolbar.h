@@ -31,9 +31,11 @@ class toolbar : public QToolBar
     Q_OBJECT
 
 public:
-    toolbar(QWidget* parent = 0);
+    toolbar(QWidget* parent = nullptr);
 
     void add_spacer();
+
+    void repolish();
 };
 
 #endif    // TOOLBAR_H

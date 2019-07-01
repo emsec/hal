@@ -54,10 +54,21 @@ public:
     //this function provides the indexes for the navigation widget to handle a selection_changed for the view
     QModelIndexList get_corresponding_indexes(const QList<u32>& gate_ids, const QList<u32>& net_ids, const QList<u32>& module_ids);
 
-    //handler methods for core-netlist-events
-    void handle_module_event(module_event_handler::event ev, std::shared_ptr<module> object, u32 associated_data);
-    void handle_gate_event(gate_event_handler::event ev, std::shared_ptr<gate> object, u32 associated_data);
-    void handle_net_event(net_event_handler::event ev, std::shared_ptr<net> object, u32 associated_data);
+    void handle_module_created(std::shared_ptr<module> m);
+    void handle_module_gate_assigned(std::shared_ptr<module> m, u32 assigned_gate);
+    void handle_module_gate_removed(std::shared_ptr<module> m, u32 removed_gate);
+    void handle_module_name_changed(std::shared_ptr<module> m);
+    void handle_module_removed(std::shared_ptr<module> m);
+
+    void handle_gate_created(std::shared_ptr<gate> g);
+    void handle_gate_removed(std::shared_ptr<gate> g);
+    void handle_gate_name_changed(std::shared_ptr<gate> g);
+
+    void handle_net_created(std::shared_ptr<net> n);
+    void handle_net_removed(std::shared_ptr<net> n);
+    void handle_net_name_changed(std::shared_ptr<net> n);
+
+
 
     static const int NAME_COLUMN = 0;
     static const int ID_COLUMN   = 1;

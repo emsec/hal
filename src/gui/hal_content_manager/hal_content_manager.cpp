@@ -6,6 +6,8 @@
 #include "netlist/persistent/netlist_serializer.h"
 
 #include "file_manager/file_manager.h"
+#include "graph_widget/graph_widget.h"
+#include "gui/module_widget/module_widget.h"
 #include "gui/content_layout_area/content_layout_area.h"
 #include "gui/content_widget/content_widget.h"
 #include "gui/docking_system/tab_widget.h"
@@ -13,8 +15,7 @@
 #include "gui/graph_layouter/gui_graph_gate.h"
 #include "gui/graph_layouter/old_graph_layouter.h"
 #include "gui/graph_manager/hal_graph_widget.h"
-#include "gui/graph_navigation_widget/graph_navigation_widget.h"
-#include "gui/graph_widget/graph_scene_manager.h"
+#include "gui/graph_navigation_widget/old_graph_navigation_widget.h"
 #include "gui/graph_widget/graph_widget.h"
 #include "gui/gui_utility.h"
 #include "gui/hal_graphics/hal_graphics_view.h"
@@ -67,7 +68,7 @@ void hal_content_manager::data_saved(const QString& identifier)
 
 bool hal_content_manager::has_unsaved_changes() const
 {
-    if (!file_manager::get_instance()->is_document_open())
+    if (!file_manager::get_instance()->file_open())
         return false;
     return !m_unsaved_changes.empty();
 }
@@ -114,7 +115,10 @@ void hal_content_manager::handle_open_document(const QString& file_name)
     //    graph_widget* gw3 = new graph_widget();
     //    m_main_window->add_content(gw3, 3, content_anchor::center);
 
-    graph_navigation_widget* navigation = new graph_navigation_widget();
+//    m_main_window->add_content(new graph_widget(), 4, content_anchor::center);
+//    m_main_window->add_content(new graph_widget(), 5, content_anchor::center);
+
+    old_graph_navigation_widget* navigation = new old_graph_navigation_widget();
     m_main_window->add_content(navigation, 0, content_anchor::left);
 
     selection_details_widget* details = new selection_details_widget();
@@ -122,6 +126,13 @@ void hal_content_manager::handle_open_document(const QString& file_name)
 
     hal_logger_widget* logger_widget = new hal_logger_widget();
     m_main_window->add_content(logger_widget, 1, content_anchor::bottom);
+
+//    module_widget* modules = new module_widget();
+//    m_main_window->add_content(modules, 1, content_anchor::right);
+
+
+    //    m_console->init();
+    //    m_main_window->add_content(m_console, 2, content_anchor::bottom);
 
     navigation->open();
     details->open();
@@ -175,7 +186,6 @@ void hal_content_manager::handle_open_document(const QString& file_name)
 
 void hal_content_manager::handle_close_document()
 {
-    //TODO
     //(if possible) store state first, then remove all subwindows from main window
     m_window_title = "HAL";
     m_main_window->setWindowTitle(m_window_title);

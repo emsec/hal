@@ -1,6 +1,6 @@
 #include "graph_manager/hal_graph_widget.h"
-#include "graph_relay/graph_relay.h"
 #include "gui_globals.h"
+#include "netlist_relay/netlist_relay.h"
 
 #include <QVBoxLayout>
 #include <QShortcut>
@@ -18,15 +18,14 @@ hal_graph_widget::hal_graph_widget(QGraphicsView* view) : content_widget("graph"
     m_selection_history_navigator = new selection_history_navigator(20, this);
 
     connect(m_relayout_button, &QPushButton::clicked, this, &hal_graph_widget::handle_relayout_button_clicked);
-    connect(&g_graph_relay, &graph_relay::gate_event, this, &hal_graph_widget::handle_gate_event);
-    connect(&g_graph_relay, &graph_relay::net_event, this, &hal_graph_widget::handle_net_event);
+    connect(&g_netlist_relay, &netlist_relay::gate_event, this, &hal_graph_widget::handle_gate_event);
+    connect(&g_netlist_relay, &netlist_relay::net_event, this, &hal_graph_widget::handle_net_event);
 
     QShortcut* back_shortcut = new QShortcut(QKeySequence(tr("a")), this);
     connect(back_shortcut, &QShortcut::activated, this, &hal_graph_widget::handle_back_activated);
 
     QShortcut* next_shortcut = new QShortcut(QKeySequence(tr("d")), this);
     connect(next_shortcut, &QShortcut::activated, this, &hal_graph_widget::handle_next_activated);
-
 }
 
 void hal_graph_widget::setup_toolbar(toolbar* toolbar)

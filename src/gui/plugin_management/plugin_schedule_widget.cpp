@@ -69,7 +69,7 @@ plugin_schedule_widget::plugin_schedule_widget(QWidget* parent)
     m_plugin_frame->setGraphicsEffect(new shadow_effect());
     m_schedule_frame->setGraphicsEffect(new shadow_effect());
 
-    m_no_scheduled_plugins_widget->repolish();    //TODO MOVE TO REPOLISH METHOD
+    m_no_scheduled_plugins_widget->repolish();    // MOVE TO REPOLISH METHOD
 
     m_schedule_frame->ensurePolished();
     ensurePolished();
