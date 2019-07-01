@@ -84,9 +84,13 @@ private:
         u32 line_number;
         entity_definition definition;
         std::vector<std::tuple<std::string, std::string>> ports;
-        std::map<std::string, std::tuple<std::string, std::string, std::string>> attributes;
+        std::map<std::string, std::vector<std::string>> expanded_signal_names;
+        std::map<std::string, std::set<std::tuple<std::string, std::string, std::string>>> entity_attributes;
+        std::map<std::string, std::set<std::tuple<std::string, std::string, std::string>>> instance_attributes;
+        std::map<std::string, std::set<std::tuple<std::string, std::string, std::string>>> signal_attributes;
         std::vector<std::string> signals;
         std::vector<instance> instances;
+        std::map<std::string, std::string> direct_assignments;
     };
 
     /** libraries used */
@@ -120,7 +124,7 @@ private:
     bool parse_components(const std::vector<std::vector<file_line>>& components);
 
     bool parse_entity(entity& e);
-    void parse_attribute(entity& e, const file_line& line);
+    void parse_attribute(std::map<std::string, std::set<std::tuple<std::string, std::string, std::string>>>& mapping, const file_line& line);
     bool parse_entity_header(entity& e);
     bool parse_architecture_header(entity& e);
     bool parse_architecture_body(entity& e);
