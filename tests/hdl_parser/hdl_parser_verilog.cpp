@@ -350,15 +350,90 @@ TEST_F(hdl_parser_verilog_test, check_main_example)
 }
 
 /**
- * Testing the correct detection of single line comments (with '//') and comment blocks(with '/ *' and '* /')
+ * Testing the correct detection of single line comments (with '//') and comment blocks(with '/ *' and '* /'). Therefore
+ * we comment out a verilog statement, which should be ignored
  *
  * Functions: parse
  */
 TEST_F(hdl_parser_verilog_test, check_comment_detection){
     TEST_START
-        {
-            // IN PROGRESS
+        { // Use the one-line-comment ('//')
+            std::stringstream input("module  ( \n"
+                                    " ) ;\n"
+                                    "  wire net_0 ;\n"
+                                    "  //wire comment_net ;\n"
+                                    "  wire net_1;\n"
+                                    "endmodule");
+            //std::cout << input.str() << std::endl;
+            test_def::capture_stdout();
+            hdl_parser_verilog verilog_parser(input);
+            std::shared_ptr<netlist> nl = verilog_parser.parse(g_lib_name);
+            if (nl == nullptr)
+            {
+                std::cout << test_def::get_captured_stdout();
+            }
+            else
+            {
+                test_def::get_captured_stdout();
+            }
+
+            ASSERT_NE(nl, nullptr);
+
+            EXPECT_TRUE(nl->get_nets("comment_net").empty());
+            EXPECT_EQ(nl->get_nets().size(), 2);
         }
+        { // Use a multi-line comment ('/ *', '* /') inside one single line
+            std::stringstream input("module  ( \n"
+                                    " ) ;\n"
+                                    "  wire net_0 ;\n"
+                                    "  wire /*comment_net*/ net_1;\n"
+                                    "endmodule");
+            std::cout << input.str() << std::endl;
+            test_def::capture_stdout();
+            hdl_parser_verilog verilog_parser(input);
+            std::shared_ptr<netlist> nl = verilog_parser.parse(g_lib_name);
+            if (nl == nullptr)
+            {
+                std::cout << test_def::get_captured_stdout();
+            }
+            else
+            {
+                test_def::get_captured_stdout();
+            }
+
+            ASSERT_NE(nl, nullptr);
+
+            EXPECT_TRUE(nl->get_nets("comment_net").empty());
+            EXPECT_EQ(nl->get_nets().size(), 2);
+        }
+        { // Use the multi-line-comment over multiple lines ('//')
+            std::stringstream input("module  ( \n"
+                                    " ) ;\n"
+                                    "  wire net_0 ;\n"
+                                    "/*  wire comment_net_0 ;\n"
+                                    "  wire comment_net_1 ;*/\n"
+                                    "  wire net_1;\n"
+                                    "endmodule");
+            //std::cout << input.str() << std::endl;
+            test_def::capture_stdout();
+            hdl_parser_verilog verilog_parser(input);
+            std::shared_ptr<netlist> nl = verilog_parser.parse(g_lib_name);
+            if (nl == nullptr)
+            {
+                std::cout << test_def::get_captured_stdout();
+            }
+            else
+            {
+                test_def::get_captured_stdout();
+            }
+
+            ASSERT_NE(nl, nullptr);
+
+            EXPECT_TRUE(nl->get_nets("comment_net_0").empty());
+            EXPECT_TRUE(nl->get_nets("comment_net_1").empty());
+            EXPECT_EQ(nl->get_nets().size(), 2);
+        }
+
     TEST_END
 }
 
