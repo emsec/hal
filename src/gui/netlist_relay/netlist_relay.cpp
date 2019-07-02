@@ -292,7 +292,7 @@ void netlist_relay::relay_module_event(module_event_handler::event ev, std::shar
     {
         //< associated_data = id of inserted gate
 
-        g_graph_context_manager.handle_module_gate_inserted(object, associated_data);
+        g_graph_context_manager.handle_module_gate_assigned(object, associated_data);
 
         Q_EMIT module_gate_assigned(object, associated_data);
         break;

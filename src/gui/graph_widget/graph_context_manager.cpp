@@ -52,6 +52,16 @@ QStringList graph_context_manager::dynamic_context_list() const
     return list;
 }
 
+void graph_context_manager::handle_module_removed(const std::shared_ptr<module> m) const
+{
+    // REMOVE MODULE CONTEXT
+}
+
+void graph_context_manager::handle_module_name_changed(const std::shared_ptr<module> m) const
+{
+    // CHANGE MODULE CONTEXT NAME
+}
+
 void graph_context_manager::handle_module_submodule_added(const std::shared_ptr<module> m, const u32 added_module) const
 {
     // DEBUG IMPLEMENTATION
@@ -76,7 +86,7 @@ void graph_context_manager::handle_module_submodule_removed(const std::shared_pt
         }
 }
 
-void graph_context_manager::handle_module_gate_inserted(const std::shared_ptr<module> m, const u32 inserted_gate) const
+void graph_context_manager::handle_module_gate_assigned(const std::shared_ptr<module> m, const u32 inserted_gate) const
 {
     // DEBUG IMPLEMENTATION
 
@@ -100,26 +110,37 @@ void graph_context_manager::handle_module_gate_removed(const std::shared_ptr<mod
         }
 }
 
-void graph_context_manager::handle_module_net_inserted(const std::shared_ptr<module> m, const u32 inserted_net) const
+void graph_context_manager::handle_gate_name_changed(const std::shared_ptr<gate> g) const
 {
-    // DEBUG IMPLEMENTATION
-
-    for (module_context* context : m_module_contexts)
-        if (context->get_id() == m->get_id())
-        {
-            context->add(QSet<u32>(), QSet<u32>(), QSet<u32>{inserted_net});
-            break;
-        }
+    // IF GATE IN CONTEXT REQUEST UPDATE
 }
 
-void graph_context_manager::handle_module_net_removed(const std::shared_ptr<module> m, const u32 removed_net) const
+void graph_context_manager::handle_net_created(const std::shared_ptr<net> n) const
 {
-    // DEBUG IMPLEMENTATION
+    // IF NET IS MODULE INTERNAL UPDATE
+}
 
-    for (module_context* context : m_module_contexts)
-        if (context->get_id() == m->get_id())
-        {
-            context->remove(QSet<u32>(), QSet<u32>(), QSet<u32>{removed_net});
-            break;
-        }
+void graph_context_manager::handle_net_removed(const std::shared_ptr<net> n) const
+{
+    // IF NET IS PART OF CONTEXT UPDATE
+}
+
+void graph_context_manager::handle_net_name_changed(const std::shared_ptr<net> n) const
+{
+    // RESHADE ???
+}
+
+void graph_context_manager::handle_net_src_changed(const std::shared_ptr<net> n) const
+{
+    // IF NET IS PART OF CONTEXT UPDATE
+}
+
+void graph_context_manager::handle_net_dst_added(const std::shared_ptr<net> n, const u32 dst_gate_id) const
+{
+    // IF NET IS PART OF CONTEXT UPDATE
+}
+
+void graph_context_manager::handle_net_dst_removed(const std::shared_ptr<net> n, const u32 dst_gate_id) const
+{
+    // IF NET IS PART OF CONTEXT UPDATE
 }

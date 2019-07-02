@@ -82,8 +82,6 @@ Q_SIGNALS:
     void module_submodule_removed(const std::shared_ptr<module> m, const u32 removed_module) const;
     void module_gate_assigned(const std::shared_ptr<module> m, const u32 assigned_gate) const;
     void module_gate_removed(const std::shared_ptr<module> m, const u32 removed_gate) const;
-    void module_net_assigned(const std::shared_ptr<module> m, const u32 assigned_net) const;
-    void module_net_removed(const std::shared_ptr<module> m, const u32 removed_net) const;
 
     void gate_created(const std::shared_ptr<gate> g) const;
     void gate_removed(const std::shared_ptr<gate> g) const;

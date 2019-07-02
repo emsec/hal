@@ -1130,10 +1130,7 @@ void standard_graph_layouter::draw_nets()
 
         if (n->get_src().gate)
         {
-            bool is_gnd = g_netlist->get_global_gnd_gates().find(n->get_src().gate) != g_netlist->get_global_gnd_gates().end();
-            bool is_vcc = g_netlist->get_global_vcc_gates().find(n->get_src().gate) != g_netlist->get_global_vcc_gates().end();
-
-            if (is_gnd || is_vcc)
+            if (n->get_src().gate->is_global_gnd_gate() || n->get_src().gate->is_global_vcc_gate())
             {
                 // HANDLE SEPARATED NETS
                 hal::node node;
