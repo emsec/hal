@@ -16,7 +16,7 @@ class graph_context : public QObject
     Q_OBJECT
 
 public:
-    explicit graph_context(QObject* parent = nullptr);
+    explicit graph_context(graph_layouter* layouter, graph_shader* shader, QObject* parent = nullptr);
     ~graph_context();
 
     void subscribe(graph_context_subscriber* const subscriber);

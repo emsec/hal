@@ -1,6 +1,9 @@
 #include "gui/graph_widget/contexts/module_context.h"
 
-module_context::module_context(const std::shared_ptr<module> m) :
+#include "gui/gui_globals.h"
+
+module_context::module_context(const std::shared_ptr<module> m) : graph_context(g_graph_context_manager.get_default_layouter(this),
+                                                                                g_graph_context_manager.get_default_shader(this)),
     m_id(m->get_id())
 {
     for (const std::shared_ptr<module>& s : m->get_submodules())

@@ -11,6 +11,8 @@ class module;
 class net;
 
 class dynamic_context;
+class graph_layouter;
+class graph_shader;
 class module_context;
 
 class graph_context_manager
@@ -43,6 +45,12 @@ public:
     void handle_net_src_changed(const std::shared_ptr<net> n) const;
     void handle_net_dst_added(const std::shared_ptr<net> n, const u32 dst_gate_id) const;
     void handle_net_dst_removed(const std::shared_ptr<net> n, const u32 dst_gate_id) const;
+
+    graph_layouter* get_default_layouter(module_context* const context) const;
+    graph_layouter* get_default_layouter(dynamic_context* const context) const;
+
+    graph_shader* get_default_shader(module_context* const context) const;
+    graph_shader* get_default_shader(dynamic_context* const context) const;
 
 private:
     QVector<module_context*> m_module_contexts;

@@ -4,19 +4,15 @@
 
 #include "gui/graph_widget/contexts/graph_context_subscriber.h"
 #include "gui/graph_widget/graphics_scene.h"
-#include "gui/graph_widget/layouters/orthogonal_graph_layouter.h"
-#include "gui/graph_widget/layouters/standard_graph_layouter.h"
-#include "gui/graph_widget/shaders/module_shader.h"
 #include "gui/gui_globals.h"
 
 #include <QtConcurrent>
 
 static const bool lazy_updates = false; // USE SETTINGS FOR THIS
 
-graph_context::graph_context(QObject* parent) : QObject(parent),
-    //m_layouter(new orthogonal_graph_layouter(this)),
-    m_layouter(new standard_graph_layouter(this)),
-    m_shader(new module_shader(this)),
+graph_context::graph_context(graph_layouter* layouter, graph_shader* shader, QObject* parent) : QObject(parent),
+    m_layouter(layouter),
+    m_shader(shader),
     m_unhandled_changes(false),
     m_scene_update_required(false),
     m_conform_to_grid(false),
