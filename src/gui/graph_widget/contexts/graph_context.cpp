@@ -194,14 +194,7 @@ bool graph_context::node_for_gate(hal::node& node, const u32 id) const
     if (!g)
         return false;
 
-    // DUMB IMPLEMENTATION BECAUSE GATES DONT KNOW THEIR MODULE
-    std::shared_ptr<module> m = nullptr;
-
-    for (const std::shared_ptr<module>& e : g_netlist->get_modules())
-    {
-        if (e->contains_gate(g))
-            m = e;
-    }
+    std::shared_ptr<module> m = g->get_module();
 
     while (m)
     {
