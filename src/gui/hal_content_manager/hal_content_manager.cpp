@@ -96,25 +96,25 @@ void hal_content_manager::handle_open_document(const QString& file_name)
     vhdl_editor* code_edit = new vhdl_editor();
     m_main_window->add_content(code_edit, 0, content_anchor::center);
 
-    /*QGraphicsScene* */ m_graph_scene = new QGraphicsScene(nullptr);
-    layouter                           = new old_graph_layouter(m_graph_scene, g_netlist);
-    layouter->layout_graph();
+//    m_graph_scene = new QGraphicsScene(nullptr);
+//    layouter = new old_graph_layouter(m_graph_scene, g_netlist);
+//    layouter->layout_graph();
+//    m_layouter_view = new graph_layouter_view(m_graph_scene, layouter, g_netlist);
+//    hal_graph_widget* gw = new hal_graph_widget(m_layouter_view);
+//    m_main_window->add_content(gw, 1, content_anchor::center);
+//    gw->open();
+//    connect(gw1, &hal_graph_widget::relayout_button_clicked, this, &hal_content_manager::handle_relayout_button_clicked);
 
-    //graph_layouter_view* layouter_view = new graph_layouter_view(graph_scene, layouter, g_netlist);
-    m_layouter_view = new graph_layouter_view(m_graph_scene, layouter, g_netlist);
-
-    //hal_graph_widget* gw1              = new hal_graph_widget(layouter_view);
-    hal_graph_widget* gw1 = new hal_graph_widget(m_layouter_view);
-    m_main_window->add_content(gw1, 1, content_anchor::center);
-    gw1->open();
-
-    connect(gw1, &hal_graph_widget::relayout_button_clicked, this, &hal_content_manager::handle_relayout_button_clicked);
+//    old_graph_navigation_widget* navigation = new old_graph_navigation_widget();
+//    m_main_window->add_content(navigation, 0, content_anchor::left);
+//    navigation->open();
 
     m_main_window->add_content(new graph_widget(), 2, content_anchor::center);
     m_main_window->add_content(new graph_widget(), 3, content_anchor::center);
 
-    old_graph_navigation_widget* navigation = new old_graph_navigation_widget();
-    m_main_window->add_content(navigation, 0, content_anchor::left);
+    module_widget* m = new module_widget();
+    m_main_window->add_content(m, 0, content_anchor::left);
+    m->open();
 
     selection_details_widget* details = new selection_details_widget();
     m_main_window->add_content(details, 0, content_anchor::bottom);
@@ -122,21 +122,11 @@ void hal_content_manager::handle_open_document(const QString& file_name)
     hal_logger_widget* logger_widget = new hal_logger_widget();
     m_main_window->add_content(logger_widget, 1, content_anchor::bottom);
 
-    module_widget* modules = new module_widget();
-    m_main_window->add_content(modules, 1, content_anchor::right);
-
-
-    //    m_console->init();
-    //    m_main_window->add_content(m_console, 2, content_anchor::bottom);
-
-    navigation->open();
     details->open();
     logger_widget->open();
 
-    //    m_content.append(gw);
-
     m_content2.append(code_edit);
-    m_content2.append(navigation);
+    //m_content2.append(navigation);
     m_content2.append(details);
     m_content2.append(logger_widget);
 
@@ -170,7 +160,7 @@ void hal_content_manager::handle_open_document(const QString& file_name)
     m_main_window->setWindowTitle(m_window_title);
 
     m_main_window->add_content(m_python_widget, 3, content_anchor::right);
-    m_python_widget->open();
+    //m_python_widget->open();
 
     python_console_widget* python_console = new python_console_widget();
     m_main_window->add_content(python_console, 5, content_anchor::bottom);
