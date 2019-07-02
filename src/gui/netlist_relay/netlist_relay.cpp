@@ -251,6 +251,7 @@ void netlist_relay::relay_module_event(module_event_handler::event ev, std::shar
     {
         //< no associated_data
 
+        g_graph_context_manager.handle_module_removed(object);
         g_selection_relay.handle_module_removed(object->get_id());
 
         Q_EMIT module_removed(object);
@@ -259,6 +260,8 @@ void netlist_relay::relay_module_event(module_event_handler::event ev, std::shar
     case module_event_handler::event::name_changed:
     {
         //< no associated_data
+
+        g_graph_context_manager.handle_module_name_changed(object);
 
         Q_EMIT module_name_changed(object);
         break;
@@ -325,6 +328,7 @@ void netlist_relay::relay_gate_event(gate_event_handler::event ev, std::shared_p
 
         g_selection_relay.handle_gate_created();
 
+        Q_EMIT gate_created(object);
         break;
     }
     case gate_event_handler::removed:
@@ -333,11 +337,16 @@ void netlist_relay::relay_gate_event(gate_event_handler::event ev, std::shared_p
 
         g_selection_relay.handle_gate_removed(object->get_id());
 
+        Q_EMIT gate_removed(object);
         break;
     }
     case gate_event_handler::name_changed:
     {
         //< no associated_data
+
+        g_graph_context_manager.handle_gate_name_changed(object);
+
+        Q_EMIT gate_name_changed(object);
         break;
     }
     }
@@ -357,36 +366,56 @@ void netlist_relay::relay_net_event(net_event_handler::event ev, std::shared_ptr
     {
         //< no associated_data
 
+        g_graph_context_manager.handle_net_created(object);
         g_selection_relay.handle_net_created();
 
+        Q_EMIT net_created(object);
         break;
     }
     case net_event_handler::event::removed:
     {
         //< no associated_data
 
+        g_graph_context_manager.handle_net_removed(object);
         g_selection_relay.handle_net_removed(object->get_id());
 
+        Q_EMIT net_removed(object);
         break;
     }
     case net_event_handler::event::name_changed:
     {
         //< no associated_data
+
+        g_graph_context_manager.handle_net_name_changed(object);
+
+        Q_EMIT net_name_changed(object);
         break;
     }
     case net_event_handler::event::src_changed:
     {
         //< no associated_data
+
+        g_graph_context_manager.handle_net_src_changed(object);
+
+        Q_EMIT net_src_changed(object);
         break;
     }
     case net_event_handler::event::dst_added:
     {
         //< associated_data = id of dst gate
+
+        g_graph_context_manager.handle_net_dst_added(object, associated_data);
+
+        Q_EMIT net_dst_added(object, associated_data);
         break;
     }
     case net_event_handler::event::dst_removed:
     {
         //< associated_data = id of dst gate
+
+        g_graph_context_manager.handle_net_dst_removed(object, associated_data);
+
+        Q_EMIT net_dst_removed(object, associated_data);
         break;
     }
     }
