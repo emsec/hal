@@ -96,7 +96,7 @@ void hal_content_manager::handle_open_document(const QString& file_name)
     vhdl_editor* code_edit = new vhdl_editor();
     m_main_window->add_content(code_edit, 0, content_anchor::center);
 
-    /*QGraphicsScene* */ m_graph_scene = new QGraphicsScene(this);
+    /*QGraphicsScene* */ m_graph_scene = new QGraphicsScene(nullptr);
     layouter                           = new old_graph_layouter(m_graph_scene, g_netlist);
     layouter->layout_graph();
 
@@ -109,14 +109,9 @@ void hal_content_manager::handle_open_document(const QString& file_name)
     gw1->open();
 
     connect(gw1, &hal_graph_widget::relayout_button_clicked, this, &hal_content_manager::handle_relayout_button_clicked);
-    //        graph_widget* gw = new graph_widget();
-    //        m_main_window->add_content(gw, 2, content_anchor::center);
 
-    //    graph_widget* gw3 = new graph_widget();
-    //    m_main_window->add_content(gw3, 3, content_anchor::center);
-
-//    m_main_window->add_content(new graph_widget(), 4, content_anchor::center);
-//    m_main_window->add_content(new graph_widget(), 5, content_anchor::center);
+    m_main_window->add_content(new graph_widget(), 2, content_anchor::center);
+    m_main_window->add_content(new graph_widget(), 3, content_anchor::center);
 
     old_graph_navigation_widget* navigation = new old_graph_navigation_widget();
     m_main_window->add_content(navigation, 0, content_anchor::left);
@@ -127,8 +122,8 @@ void hal_content_manager::handle_open_document(const QString& file_name)
     hal_logger_widget* logger_widget = new hal_logger_widget();
     m_main_window->add_content(logger_widget, 1, content_anchor::bottom);
 
-//    module_widget* modules = new module_widget();
-//    m_main_window->add_content(modules, 1, content_anchor::right);
+    module_widget* modules = new module_widget();
+    m_main_window->add_content(modules, 1, content_anchor::right);
 
 
     //    m_console->init();
