@@ -24,28 +24,40 @@
 #ifndef GRAPHICS_NET_H
 #define GRAPHICS_NET_H
 
-#include "graph_widget/graphics_items/graph_graphics_item.h"
+#include "graph_widget/graphics_items/graphics_item.h"
+
 #include <memory>
 
 class net;
 
-class graphics_net : public graph_graphics_item
+class graphics_net : public graphics_item
 {
 public:
+    struct visuals
+    {
+        // UNCERTAIN ABOUT COLOR, DO MULTICOLOR NETS MAKE SENSE ?
+        QColor color;
+        QVector<QColor> info_colors;
+
+        // DRAW TYPE ENUM
+        // SPLIT MARKERS
+    };
+
+    // ADD METHODS TO GET SUBFOCUS POSITIONS OR USE GATE METHODS ???
+    // REPLACE LOAD SETTINGS METHODS IN ALL CLASSES WITH CONSTANTS, ADAPTERS AND ACTUAL SETTINGS
     static void load_settings();
 
     graphics_net(std::shared_ptr<net> n);
-
-    std::shared_ptr<net> get_net();
 
     QRectF boundingRect() const Q_DECL_OVERRIDE;
     virtual QPainterPath shape() const Q_DECL_OVERRIDE;
 
     virtual void finalize() = 0;
 
+    std::shared_ptr<net> get_net();
+
 protected:
     static QPen s_pen;
-
     static qreal s_stroke_width;
 
     QRectF m_rect;
@@ -54,4 +66,4 @@ protected:
     std::shared_ptr<net> m_net;
 };
 
-#endif    // GRAPHICS_NET_H
+#endif // GRAPHICS_NET_H

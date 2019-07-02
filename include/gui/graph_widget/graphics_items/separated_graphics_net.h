@@ -30,8 +30,9 @@ class separated_graphics_net : public graphics_net
 {
 public:
     static void load_settings();
+    static void update_alpha();
 
-    separated_graphics_net(QString text, std::shared_ptr<net> n);
+    separated_graphics_net(const QString& text, std::shared_ptr<net> n);
 
     virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) Q_DECL_OVERRIDE;
     virtual void finalize() Q_DECL_OVERRIDE;
@@ -40,16 +41,19 @@ public:
     void add_input(const QPointF& scene_position);
 
 private:
+    static qreal s_alpha;
+
     static qreal s_wire_length;
     static qreal s_text_offset;
 
     static QFont s_font;
     static qreal s_font_height;
+    static qreal s_font_ascend;
 
     QString m_text;
     qreal m_text_width;
-    bool draw_output;
+    bool m_draw_output;
     QVector<QPointF> m_input_wires;
 };
 
-#endif    // SEPARATED_GRAPHICS_NET_H
+#endif // SEPARATED_GRAPHICS_NET_H

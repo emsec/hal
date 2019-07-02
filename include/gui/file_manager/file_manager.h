@@ -40,8 +40,8 @@ public:
 
     void handle_program_arguments(const program_arguments& args);
 
-    bool is_document_open();
     QString file_name() const;
+    bool file_open() const;
 
 Q_SIGNALS:
     void file_opened(const QString& file_name);
@@ -61,7 +61,7 @@ private Q_SLOTS:
 private:
     file_manager(QObject* parent = nullptr);
     void file_successfully_loaded(QString file_name);
-    void update_recent_files(const QString& file);
+    void update_recent_files(const QString& file) const;
     void display_error_message(QString error_message);
     QString get_shadow_file(QString file);
 
@@ -72,4 +72,4 @@ private:
     QTimer* m_timer;
 };
 
-#endif    // FILE_MANAGER_H
+#endif // FILE_MANAGER_H

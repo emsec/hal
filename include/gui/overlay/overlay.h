@@ -24,22 +24,19 @@
 #ifndef OVERLAY_H
 #define OVERLAY_H
 
-#include <QWidget>
+#include <QFrame>
 
-class overlay : public QWidget
+class overlay : public QFrame
 {
     Q_OBJECT
 
 public:
-    explicit overlay(QWidget* parent = 0);
+    explicit overlay(QWidget* parent = nullptr);
 
 Q_SIGNALS:
     void clicked();
 
-public Q_SLOTS:
-
 protected:
-    virtual void paintEvent(QPaintEvent* event) Q_DECL_OVERRIDE;
     bool eventFilter(QObject* watched, QEvent* event) Q_DECL_OVERRIDE;
     bool event(QEvent* event) Q_DECL_OVERRIDE;
     void mousePressEvent(QMouseEvent* event) Q_DECL_OVERRIDE;

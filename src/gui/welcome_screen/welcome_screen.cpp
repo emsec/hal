@@ -34,7 +34,7 @@ welcome_screen::welcome_screen(QWidget* parent)
     m_layout->addWidget(m_open_file_frame);
     m_layout->addWidget(m_get_in_touch_frame);
 
-    repolish();    // TODO CALL FROM PARENT
+    repolish();    // CALL FROM PARENT
 }
 
 void welcome_screen::repolish()

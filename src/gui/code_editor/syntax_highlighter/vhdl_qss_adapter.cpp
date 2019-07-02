@@ -8,6 +8,29 @@ vhdl_qss_adapter::vhdl_qss_adapter(QWidget* parent) : QWidget(parent)
     hide();
 }
 
+void vhdl_qss_adapter::repolish()
+{
+    QStyle* s = style();
+
+    s->unpolish(this);
+    s->polish(this);
+    
+    m_keyword_format.setForeground(m_keyword_color);
+    m_keyword_format.setFontItalic(false);
+
+    m_type_format.setForeground(m_type_color);
+    m_type_format.setFontItalic(false);
+
+    m_number_format.setForeground(m_number_color);
+    m_number_format.setFontItalic(false);
+
+    m_string_format.setForeground(m_string_color);
+    m_string_format.setFontItalic(false);
+
+    m_comment_format.setForeground(m_comment_color);
+    m_comment_format.setFontItalic(false);
+}
+
 vhdl_qss_adapter* vhdl_qss_adapter::instance()
 {
     // CLEANUP NECESSARY ?
@@ -77,28 +100,4 @@ void vhdl_qss_adapter::set_string_color(const QColor& color)
 void vhdl_qss_adapter::set_comment_color(const QColor& color)
 {
     m_comment_color = color;
-}
-
-void vhdl_qss_adapter::repolish()
-{
-    QStyle* s = style();
-
-    s->unpolish(this);
-    s->polish(this);
-
-    // TODO SET ALL PROPERTIES VIA STYLESHEET
-    m_keyword_format.setForeground(m_keyword_color);
-    m_keyword_format.setFontItalic(false);
-
-    m_type_format.setForeground(m_type_color);
-    m_type_format.setFontItalic(false);
-
-    m_number_format.setForeground(m_number_color);
-    m_number_format.setFontItalic(false);
-
-    m_string_format.setForeground(m_string_color);
-    m_string_format.setFontItalic(false);
-
-    m_comment_format.setForeground(m_comment_color);
-    m_comment_format.setFontItalic(false);
 }

@@ -111,7 +111,7 @@ void code_editor_minimap::paintEvent(QPaintEvent* event)
     //    painter.translate(0, -offset);
 
     //    QAbstractTextDocumentLayout::PaintContext ctx;
-    //    ctx.palette.setColor(QPalette::Text, QColor("yellow")); // TODO USE STYLESHEET COLOR
+    //    ctx.palette.setColor(QPalette::Text, QColor("yellow")); // USE STYLESHEET COLOR ?
     //    ctx.clip = QRectF(0, offset, width(), height());
 
     //    m_document->documentLayout()->draw(&painter, ctx);

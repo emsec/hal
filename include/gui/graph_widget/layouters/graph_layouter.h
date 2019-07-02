@@ -24,41 +24,59 @@
 #ifndef GRAPH_LAYOUTER_H
 #define GRAPH_LAYOUTER_H
 
-#include "graph_relay/graph_relay.h"
+#include "def.h"
+
 #include "netlist/gate.h"
 #include "netlist/net.h"
 
-#include <QObject>
+#include "gui/netlist_relay/netlist_relay.h"
 
+#include <QPair>
+#include <QVector>
+
+class global_graphics_net;
+class graph_context;
 class graphics_gate;
+class graphics_item;
 class graphics_net;
-class graph_scene;
+class separated_graphics_net;
+class standard_graphics_net;
+class graphics_scene;
 
-class graph_layouter : public QObject
+class graph_layouter
 {
-    Q_OBJECT
-
 public:
-    explicit graph_layouter(QObject* parent = 0);
+    explicit graph_layouter(const graph_context* const context);
     virtual ~graph_layouter();
 
-    virtual void layout(graph_scene* scene) = 0;
-    virtual void reset()                    = 0;
+    virtual void add(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets)    = 0;
+    virtual void remove(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets) = 0;
 
-    const QString& get_name() const;
-    const QString& get_description() const;
+    virtual void expand(const u32 from_gate, const u32 via_net, const u32 to_gate) = 0;
 
-public Q_SLOTS:
-    virtual void handle_netlist_event(netlist_event_handler::event ev, std::shared_ptr<netlist> netlist, u32 associated_data)      = 0;
-    virtual void handle_gate_event(gate_event_handler::event ev, std::shared_ptr<gate> gate, u32 associated_data)                  = 0;
-    virtual void handle_net_event(net_event_handler::event ev, std::shared_ptr<net> net, u32 associated_data)                      = 0;
-    virtual void handle_module_event(module_event_handler::event ev, std::shared_ptr<module> module, u32 associated_data) = 0;
+    virtual void layout() = 0;
+    virtual void reset()  = 0;
+
+    virtual const QString name() const        = 0;
+    virtual const QString description() const = 0;
+
+//    graphics_gate* create_graphics_gate(std::shared_ptr<gate> g);
+//    standard_graphics_net* create_standard_graphics_net(std::shared_ptr<net> n);
+
+//    global_graphics_net* create_global_graphics_net(std::shared_ptr<net> n);
+//    separated_graphics_net* create_separated_graphics_net(std::shared_ptr<net> n);
+
+    graphics_scene* scene() const;
 
 protected:
-    QString m_name;
-    QString m_description;
+    graphics_scene* m_scene;
+    const graph_context* const m_context;
 
-    graph_scene* m_scene;
+private:
+//    void sort_into_net_vector(graphics_net* item);
+
+//    QVector<QPair<u32, graphics_gate*>> m_gate_vector;
+//    QVector<QPair<u32, graphics_net*>> m_net_vector;
 };
 
-#endif    // GRAPH_LAYOUTER_H
+#endif // GRAPH_LAYOUTER_H

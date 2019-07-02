@@ -11,7 +11,7 @@ plugin_schedule_manager* plugin_schedule_manager::get_instance()
     static plugin_schedule_manager* manager = new plugin_schedule_manager();
     return manager;
 
-    //TODO IMPLEMENT INDEX UPDATES (OR CHANGE ARCHITECTURE)
+    // IMPLEMENT INDEX UPDATES (OR CHANGE ARCHITECTURE)
 }
 
 plugin_schedule_manager::schedule* plugin_schedule_manager::get_schedule()

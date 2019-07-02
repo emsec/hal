@@ -196,7 +196,7 @@ void python_console::display_prompt()
     //QTextCursor cursor = textCursor();
     QTextCursor cursor(document());
     cursor.movePosition(QTextCursor::End);
-    //DEBUG TODO SAVE FORMATS AS MEMBERS
+    //DEBUG SAVE FORMATS AS MEMBERS
     QTextCharFormat format;
     format.setForeground(m_prompt_color);
     cursor.setCharFormat(format);

@@ -64,10 +64,7 @@ public:
     std::set<QString> get_unsaved_changes() const;
 
     void flush_unsaved_changes();
-
-
-
-    //hack, TODO fix
+    
     void hack_delete_content();
 
 public Q_SLOTS:
