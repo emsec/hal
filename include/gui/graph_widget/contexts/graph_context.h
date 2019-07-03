@@ -43,6 +43,8 @@ public:
 
     void update();
 
+    void request_update();
+
     bool node_for_gate(hal::node& node, const u32 id) const;
 
 //Q_SIGNALS:
@@ -63,6 +65,8 @@ protected:
 
     bool m_unhandled_changes;
     bool m_scene_update_required;
+
+    bool m_update_requested;
 
 private:
     void evaluate_changes();

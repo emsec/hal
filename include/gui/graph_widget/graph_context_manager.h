@@ -27,7 +27,7 @@ public:
     QStringList dynamic_context_list() const; // PROBABLY DEBUG METHOD, WILL BE REPLACED BY DIFFERENT SELECTION INTERFACE
 
     //void handle_module_created(const std::shared_ptr<module> m) const; // PRECACHING ???
-    void handle_module_removed(const std::shared_ptr<module> m) const;
+    void handle_module_removed(const std::shared_ptr<module> m);
     void handle_module_name_changed(const std::shared_ptr<module> m) const;
     //void handle_module_parent_changed(const std::shared_ptr<module> m) const;
     void handle_module_submodule_added(const std::shared_ptr<module> m, const u32 added_module) const;

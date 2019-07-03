@@ -15,6 +15,7 @@ graph_context::graph_context(graph_layouter* layouter, graph_shader* shader, QOb
     m_shader(shader),
     m_unhandled_changes(false),
     m_scene_update_required(false),
+    m_update_requested(false),
     m_conform_to_grid(false),
     m_watcher(new QFutureWatcher<void>(this)),
     m_scene_available(true),
@@ -174,6 +175,20 @@ void graph_context::update()
 
     if (m_scene_update_required)
         update_scene();
+}
+
+void graph_context::request_update()
+{
+    m_update_requested = true;
+
+    if (m_update_in_progress)
+        return;
+
+    if (lazy_updates)
+        if (m_subscribers.empty())
+            return;
+
+    //update();
 }
 
 bool graph_context::node_for_gate(hal::node& node, const u32 id) const

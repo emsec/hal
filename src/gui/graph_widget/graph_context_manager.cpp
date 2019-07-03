@@ -54,62 +54,90 @@ QStringList graph_context_manager::dynamic_context_list() const
     return list;
 }
 
-void graph_context_manager::handle_module_removed(const std::shared_ptr<module> m) const
+void graph_context_manager::handle_module_removed(const std::shared_ptr<module> m)
 {
     // REMOVE MODULE CONTEXT
+    for (int i = 0; i < m_module_contexts.size(); ++i)
+        if (m_module_contexts[i]->get_id() == m->get_id())
+        {
+            delete m_module_contexts[i];
+            m_module_contexts.remove(i);
+            break;
+        }
+
+    // REMOVE MODULE FROM DYNAMIC CONTEXTS
+    for (dynamic_context* context : m_dynamic_contexts)
+        if (context->modules().contains(m->get_id()))
+            context->remove(QSet<u32>{m->get_id()}, QSet<u32>(), QSet<u32>());
+
+    // TRIGGER RESHADE FOR ALL CONTEXTS THAT RECURSIVELY CONTAIN THE MODULE
 }
 
 void graph_context_manager::handle_module_name_changed(const std::shared_ptr<module> m) const
 {
-    // CHANGE MODULE CONTEXT NAME
+    // UPDATE MODULE CONTEXTS
+    for (module_context* context : m_module_contexts)
+        if (context->modules().contains(m->get_id()))
+            context->request_update();
+
+    // UPDATE DYNAMIC CONTEXTS
+    for (dynamic_context* context : m_dynamic_contexts)
+        if (context->modules().contains(m->get_id()))
+            context->request_update();
+
+    // TRIGGER RESHADE FOR ALL CONTEXTS THAT RECURSIVELY CONTAIN THE MODULE
 }
 
 void graph_context_manager::handle_module_submodule_added(const std::shared_ptr<module> m, const u32 added_module) const
 {
-    // DEBUG IMPLEMENTATION
-
     for (module_context* context : m_module_contexts)
         if (context->get_id() == m->get_id())
         {
             context->add(QSet<u32>{added_module}, QSet<u32>(), QSet<u32>());
             break;
         }
+
+    // TRIGGER RELAYOUT FOR ALL CONTEXTS THAT RECURSIVELY CONTAIN THE MODULE
+    // TRIGGER RESHADE FOR ALL CONTEXTS THAT RECURSIVELY CONTAIN THE MODULE
 }
 
 void graph_context_manager::handle_module_submodule_removed(const std::shared_ptr<module> m, const u32 removed_module) const
 {
-    // DEBUG IMPLEMENTATION
-
     for (module_context* context : m_module_contexts)
         if (context->get_id() == m->get_id())
         {
             context->remove(QSet<u32>{removed_module}, QSet<u32>(), QSet<u32>());
             break;
         }
+
+    // TRIGGER RELAYOUT FOR ALL CONTEXTS THAT RECURSIVELY CONTAIN THE MODULE
+    // TRIGGER RESHADE FOR ALL CONTEXTS THAT RECURSIVELY CONTAIN THE MODULE
 }
 
 void graph_context_manager::handle_module_gate_assigned(const std::shared_ptr<module> m, const u32 inserted_gate) const
 {
-    // DEBUG IMPLEMENTATION
-
     for (module_context* context : m_module_contexts)
         if (context->get_id() == m->get_id())
         {
             context->add(QSet<u32>(), QSet<u32>{inserted_gate}, QSet<u32>());
             break;
         }
+
+    // TRIGGER RELAYOUT FOR ALL CONTEXTS THAT RECURSIVELY CONTAIN THE MODULE
+    // TRIGGER RESHADE FOR ALL CONTEXTS THAT RECURSIVELY CONTAIN THE MODULE
 }
 
 void graph_context_manager::handle_module_gate_removed(const std::shared_ptr<module> m, const u32 removed_gate) const
 {
-    // DEBUG IMPLEMENTATION
-
     for (module_context* context : m_module_contexts)
         if (context->get_id() == m->get_id())
         {
             context->remove(QSet<u32>(), QSet<u32>{removed_gate}, QSet<u32>());
             break;
         }
+
+    // TRIGGER RELAYOUT FOR ALL CONTEXTS THAT RECURSIVELY CONTAIN THE MODULE
+    // TRIGGER RESHADE FOR ALL CONTEXTS THAT RECURSIVELY CONTAIN THE MODULE
 }
 
 void graph_context_manager::handle_gate_name_changed(const std::shared_ptr<gate> g) const
