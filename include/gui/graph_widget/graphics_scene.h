@@ -56,6 +56,8 @@ public:
     void handle_module_doubleclicked(u32 id);
     void update_visuals(const graph_shader::shading& s);
 
+    void move_nets_to_background();
+
 public Q_SLOTS:
     void handle_intern_selection_changed();
     void handle_extern_selection_changed(void* sender);

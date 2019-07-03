@@ -318,6 +318,12 @@ void graphics_scene::update_visuals(const graph_shader::shading& s)
     }
 }
 
+void graphics_scene::move_nets_to_background()
+{
+    for (net_data d : m_net_items)
+        d.item->setZValue(-1);
+}
+
 void graphics_scene::handle_intern_selection_changed()
 {
     int gates = 0;

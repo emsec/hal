@@ -476,6 +476,7 @@ void standard_graph_layouter::layout()
     // RESET ROAD / JUNCTIONS, ALTERNATIVELY SAVE ALL NECESSARY DATA ON FIRST PASS
     reset_roads_and_junctions();
     draw_nets();
+    m_scene->move_nets_to_background();
 
     m_scene->handle_extern_selection_changed(nullptr);
 }
