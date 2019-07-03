@@ -15,8 +15,6 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QPainter>
 
-#include <QDebug> // REMOVE THIS LATER
-
 qreal graphics_scene::s_lod = 0;
 
 const qreal graphics_scene::s_grid_fade_start = 0.4;
@@ -75,6 +73,7 @@ void graphics_scene::set_grid_type(const graph_widget_constants::grid_type& grid
 
 void graphics_scene::set_grid_base_line_color(const QColor& color)
 {
+    // ALTERNATIVELY ADRESS ADAPTER MEMBERS DIRECTLY
     s_grid_base_line_color = color;
 }
 
@@ -100,11 +99,7 @@ graphics_scene::graphics_scene(QObject* parent) : QGraphicsScene(parent),
     // FIND OUT IF MANUAL CHANGE TO DEPTH IS NECESSARY / INCREASES PERFORMANCE
     //m_scene.setBspTreeDepth(10);
 
-    connect(this, &graphics_scene::selectionChanged, this, &graphics_scene::handle_intern_selection_changed);
-//    connect(this, &graph_scene::focusItemChanged, this, &graph_scene::handle_focus_item_changed);
-
-    connect(&g_selection_relay, &selection_relay::selection_changed, this, &graphics_scene::handle_extern_selection_changed);
-    connect(&g_selection_relay, &selection_relay::subfocus_changed, this, &graphics_scene::handle_extern_subfocus_changed);
+    connect_all();
 
     QGraphicsScene::addItem(m_left_gate_navigation_popup);
 }
@@ -281,7 +276,6 @@ void graphics_scene::update_utility_items()
 void graphics_scene::connect_all()
 {
     connect(this, &graphics_scene::selectionChanged, this, &graphics_scene::handle_intern_selection_changed);
-//    connect(this, &graph_scene::focusItemChanged, this, &graph_scene::handle_focus_item_changed);
 
     connect(&g_selection_relay, &selection_relay::selection_changed, this, &graphics_scene::handle_extern_selection_changed);
     connect(&g_selection_relay, &selection_relay::subfocus_changed, this, &graphics_scene::handle_extern_subfocus_changed);
@@ -290,7 +284,6 @@ void graphics_scene::connect_all()
 void graphics_scene::disconnect_all()
 {
     disconnect(this, &graphics_scene::selectionChanged, this, &graphics_scene::handle_intern_selection_changed);
-//    disconnect(this, &graph_scene::focusItemChanged, this, &graph_scene::handle_focus_item_changed);
 
     disconnect(&g_selection_relay, &selection_relay::selection_changed, this, &graphics_scene::handle_extern_selection_changed);
     disconnect(&g_selection_relay, &selection_relay::subfocus_changed, this, &graphics_scene::handle_extern_subfocus_changed);
@@ -302,12 +295,6 @@ void graphics_scene::delete_all_items()
     m_module_items.clear();
     m_gate_items.clear();
     m_net_items.clear();
-}
-
-void graphics_scene::handle_module_doubleclicked(u32 id)
-{
-    qDebug() << "module " + QString::number(id) + " clicked";
-    // VIEW IS AMBIGUOUS
 }
 
 void graphics_scene::update_visuals(const graph_shader::shading& s)
@@ -463,40 +450,6 @@ void graphics_scene::mousePressEvent(QGraphicsSceneMouseEvent* event)
 
     QGraphicsScene::mousePressEvent(event);
 }
-
-//void graph_scene::handle_focus_item_changed(QGraphicsItem* new_focus_item, QGraphicsItem* old_focus_item, Qt::FocusReason reason)
-//{
-//    Q_UNUSED(old_focus_item)
-//    Q_UNUSED(reason)
-
-//    graphics_item* item = dynamic_cast<graphics_item*>(new_focus_item);
-
-//    if (item)
-//    {
-//        switch (item->get_item_class())
-//        {
-//        case item_class::gate:
-//        {
-//            // SET CURRENT TO GATE ID AND CALL RELAY
-//            qDebug() << "gate selected: " << item->id();
-//            break;
-//        }
-//        case item_class::net:
-//        {
-//            // SET CURRENT TO NET ID AND CALL RELAY
-//            break;
-//        }
-//        case item_class::submodule:
-//        {
-//            // SET CURRENT TO SUBMODULE ID AND CALL RELAY
-//            break;
-//        }
-//        }
-//    }
-//    else
-//        // CLEAR FOCUS
-//        ;
-//}
 
 void graphics_scene::drawBackground(QPainter* painter, const QRectF& rect)
 {

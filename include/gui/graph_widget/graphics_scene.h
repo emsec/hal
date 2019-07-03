@@ -30,13 +30,10 @@ public:
     static void set_grid_clusters_enabled(const bool& value);
     static void set_grid_type(const graph_widget_constants::grid_type& grid_type);
 
-    // HACK
-    // ALTERNATIVELY ADRESS ADAPTER MEMBERS DIRECTLY
     static void set_grid_base_line_color(const QColor& color);
     static void set_grid_cluster_line_color(const QColor& color);
     static void set_grid_base_dot_color(const QColor& color);
     static void set_grid_cluster_dot_color(const QColor& color);
-    // END OF HACK
 
     graphics_scene(QObject* parent = nullptr);
 
@@ -53,7 +50,6 @@ public:
 
     void delete_all_items();
 
-    void handle_module_doubleclicked(u32 id);
     void update_visuals(const graph_shader::shading& s);
 
     void move_nets_to_background();
@@ -62,7 +58,6 @@ public Q_SLOTS:
     void handle_intern_selection_changed();
     void handle_extern_selection_changed(void* sender);
     void handle_extern_subfocus_changed(void* sender);
-//    void handle_focus_item_changed(QGraphicsItem* new_focus_item, QGraphicsItem* old_focus_item, Qt::FocusReason reason);
 
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent* event) Q_DECL_OVERRIDE;

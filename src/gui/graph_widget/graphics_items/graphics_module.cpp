@@ -40,7 +40,5 @@ void graphics_module::set_visuals(const graphics_node::visuals& v)
 void graphics_module::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event)
 {
     Q_UNUSED(event)
-
-    if (scene())
-        static_cast<graphics_scene*>(scene())->handle_module_doubleclicked(m_id);
+    // PROBABLY NOT NEEDED
 }
