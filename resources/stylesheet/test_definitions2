@@ -1,0 +1,7 @@
+@base_font_family : Iosevka;
+@base_font_size : 13px;
+@base_color : #FFFF00;
+@base_background : #171E22;
+
+@testcolor1 : #FF0000;
+@testcolor2, @testcolor3 : #FFFF00;

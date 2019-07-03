@@ -136,316 +136,257 @@ QModelIndexList tree_navigation_model::get_corresponding_indexes(const QList<u32
     return list;
 }
 
-void tree_navigation_model::handle_module_event(module_event_handler::event ev, std::shared_ptr<module> object, u32 associated_data)
+
+void tree_navigation_model::handle_module_created(std::shared_ptr<module> m)
 {
-    if (ev == module_event_handler::created)
-    {
-        m_modules_item->set_data(NAME_COLUMN, "modules : " + QString::number(g_netlist->get_modules().size()));
-        dataChanged(get_modelindex(m_modules_item), get_modelindex(m_modules_item), QVector<int>() << Qt::DisplayRole);
-        tree_navigation_item* module_item =
-            new tree_navigation_item(QVector<QVariant>() << QString::fromStdString(object->get_name()) << (int)object->get_id() << "", tree_navigation_item::item_type::module, m_modules_item);
-        module_item->insert_child(0,
-                                     new tree_navigation_item(QVector<QVariant>() << "Gates"
-                                                                                  << ""
-                                                                                  << "",
-                                                              tree_navigation_item::item_type::ignore,
-                                                              module_item));
-        // todo modules do not have nets anymore
-        /*
-        module_item->insert_child(1,
-                                     new tree_navigation_item(QVector<QVariant>() << "Nets"
-                                                                                  << ""
-                                                                                  << "",
-                                                              tree_navigation_item::item_type::ignore,
-                                                              module_item));
-        */
-        insert_item(m_modules_item, m_modules_item->get_child_count(), module_item);
-    }
-    if (ev == module_event_handler::gate_assigned)
-    {
-        for (int i = 0; i < m_modules_item->get_child_count(); i++)
-        {
-            tree_navigation_item* current_submod_item = m_modules_item->get_child(i);
-            if (current_submod_item->data(ID_COLUMN).toInt() == (int)object->get_id())
-            {
-                auto added_gate          = g_netlist->get_gate_by_id(associated_data);
-                auto gate_structure_item = current_submod_item->get_child(0);
-                insert_item(gate_structure_item,
-                            gate_structure_item->get_child_count(),
-                            new tree_navigation_item(QVector<QVariant>() << QString::fromStdString(added_gate->get_name()) << added_gate->get_id() << QString::fromStdString(added_gate->get_type()),
-                                                     tree_navigation_item::item_type::gate,
-                                                     gate_structure_item));
-                break;
-            }
-        }
-    }
-    // todo modules do not have nets anymore
-    /*if (ev == module_event_handler::net_assigned)
-    {
-        for (int i = 0; i < m_modules_item->get_child_count(); i++)
-        {
-            auto current_submod_item = m_modules_item->get_child(i);
-            if (current_submod_item->data(ID_COLUMN).toInt() == (int)object->get_id())
-            {
-                auto added_net          = g_netlist->get_net_by_id(associated_data);
-                auto net_structure_item = current_submod_item->get_child(1);
-                insert_item(net_structure_item,
-                            net_structure_item->get_child_count(),
-                            new tree_navigation_item(
-                                QVector<QVariant>() << QString::fromStdString(added_net->get_name()) << added_net->get_id() << "", tree_navigation_item::item_type::net, net_structure_item));
-                break;
-            }
-        }
-    }*/
-    if (ev == module_event_handler::gate_removed)
-    {
-        for (int i = 0; i < m_modules_item->get_child_count(); i++)
-        {
-            auto current_submod_item = m_modules_item->get_child(i);
-            if (current_submod_item->data(ID_COLUMN).toInt() == (int)object->get_id())
-            {
-                auto gate_structure_item = current_submod_item->get_child(0);
-                for (int j = 0; j < gate_structure_item->get_child_count(); j++)
-                {
-                    auto current_gate_item = gate_structure_item->get_child(j);
-                    if (current_gate_item->data(ID_COLUMN).toInt() == (int)associated_data)
-                    {
-                        remove_item(current_gate_item);
-                        break;
-                    }
-                }
-                break;
-            }
-        }
-    }
-    // todo modules do not have nets anymore
-    /*if (ev == module_event_handler::net_removed)
-    {
-        for (int i = 0; i < m_modules_item->get_child_count(); i++)
-        {
-            auto current_submod_item = m_modules_item->get_child(i);
-            if (current_submod_item->data(ID_COLUMN).toInt() == (int)object->get_id())
-            {
-                auto net_structure_item = current_submod_item->get_child(1);
-                for (int j = 0; j < net_structure_item->get_child_count(); j++)
-                {
-                    auto current_net_item = net_structure_item->get_child(j);
-                    if (current_net_item->data(ID_COLUMN).toInt() == (int)associated_data)
-                    {
-                        remove_item(current_net_item);
-                        break;
-                    }
-                }
-                break;
-            }
-        }
-    }*/
-    if (ev == module_event_handler::name_changed)
-    {
-        for (int i = 0; i < m_modules_item->get_child_count(); i++)
-        {
-            auto current_submod_item = m_modules_item->get_child(i);
-            if (current_submod_item->data(ID_COLUMN) == (int)object->get_id())
-            {
-                current_submod_item->set_data(NAME_COLUMN, QString::fromStdString(object->get_name()));
-                const auto index = get_modelindex(current_submod_item);
-                dataChanged(index, index, QVector<int>() << Qt::DisplayRole);
-            }
-        }
-    }
-    if (ev == module_event_handler::removed)
-    {
-        for (int i = 0; i < m_modules_item->get_child_count(); i++)
-        {
-            auto current_submod_item = m_modules_item->get_child(i);
-            if (current_submod_item->data(ID_COLUMN).toInt() == (int)object->get_id())
-            {
-                remove_item(current_submod_item);
-                break;
-            }
-        }
-        m_modules_item->set_data(NAME_COLUMN, "modules : " + QString::number(g_netlist->get_modules().size()));
-        dataChanged(get_modelindex(m_modules_item), get_modelindex(m_modules_item), QVector<int>() << Qt::DisplayRole);
-    }
+
+    m_modules_item->set_data(NAME_COLUMN, "modules : " + QString::number(g_netlist->get_modules().size()));
+    dataChanged(get_modelindex(m_modules_item), get_modelindex(m_modules_item), QVector<int>() << Qt::DisplayRole);
+    tree_navigation_item* module_item =
+        new tree_navigation_item(QVector<QVariant>() << QString::fromStdString(m->get_name()) << (int)m->get_id() << "", tree_navigation_item::item_type::module, m_modules_item);
+    module_item->insert_child(0,
+                                 new tree_navigation_item(QVector<QVariant>() << "Gates"
+                                                                              << ""
+                                                                              << "",
+                                                          tree_navigation_item::item_type::ignore,
+                                                          module_item));
+    /*
+    module_item->insert_child(1,
+                                 new tree_navigation_item(QVector<QVariant>() << "Nets"
+                                                                              << ""
+                                                                              << "",
+                                                          tree_navigation_item::item_type::ignore,
+                                                          module_item));
+    */
+insert_item(m_modules_item, m_modules_item->get_child_count(), module_item);
+
 }
 
-void tree_navigation_model::handle_gate_event(gate_event_handler::event ev, std::shared_ptr<gate> object, u32 associated_data)
+void tree_navigation_model::handle_module_gate_assigned(std::shared_ptr<module> m, u32 assigned_gate)
 {
-    Q_UNUSED(associated_data)
-    if (ev == gate_event_handler::created)
+    for (int i = 0; i < m_modules_item->get_child_count(); i++)
     {
-        tree_navigation_item* new_gate_item =
-            new tree_navigation_item(QVector<QVariant>() << QString::fromStdString(object->get_name()) << (int)object->get_id() << QString::fromStdString(object->get_type()),
-                                     tree_navigation_item::item_type::gate,
-                                     m_gates_item);
-        m_gates_item->set_data(NAME_COLUMN, "Gates : " + QString::number(g_netlist->get_gates().size()));
-        dataChanged(get_modelindex(m_gates_item), get_modelindex(m_gates_item), QVector<int>() << Qt::DisplayRole);
-        for (int i = 0; i < m_gates_item->get_child_count(); i++)
+        tree_navigation_item* current_submod_item = m_modules_item->get_child(i);
+        if (current_submod_item->data(ID_COLUMN).toInt() == (int)m->get_id())
         {
-            if (m_gates_item->get_child(i)->data(NAME_COLUMN).toString() > new_gate_item->data(NAME_COLUMN).toString())
-            {
-                insert_item(m_gates_item, i, new_gate_item);
-                return;
-            }
-        }
-        insert_item(m_gates_item, m_gates_item->get_child_count(), new_gate_item);
-    }
-    if (ev == gate_event_handler::removed)
-    {
-        m_gates_item->set_data(NAME_COLUMN, "Gates : " + QString::number(g_netlist->get_gates().size()));
-        dataChanged(get_modelindex(m_gates_item), get_modelindex(m_gates_item), QVector<int>() << Qt::DisplayRole);
-        for (int i = 0; i < m_gates_item->get_child_count(); i++)
-        {
-            auto current_gate_item = m_gates_item->get_child(i);
-            if ((int)object->get_id() == current_gate_item->data(ID_COLUMN).toInt())
-            {
-                remove_item(current_gate_item);
-                break;
-            }
-        }
-    }
-    if (ev == gate_event_handler::name_changed)
-    {
-        for (int i = 0; i < m_gates_item->get_child_count(); i++)
-        {
-            if (m_gates_item->get_child(i)->data(ID_COLUMN).toInt() == (int)object->get_id())
-            {
-                m_gates_item->get_child(i)->set_data(NAME_COLUMN, QString::fromStdString(object->get_name()));
-                const auto modelindex = get_modelindex(m_gates_item->get_child(i));
-                dataChanged(modelindex, modelindex, QVector<int>() << Qt::DisplayRole);
-            }
-        }
-        //go through the modules and check if any submod has the gate in it to change to name accordingly
-        for (int i = 0; i < m_modules_item->get_child_count(); i++)
-        {
-            auto current_submod_item = m_modules_item->get_child(i);
-            if (g_netlist->get_module_by_id(current_submod_item->data(ID_COLUMN).toInt())->contains_gate(object))
-            {
-                auto submod_gates_item = current_submod_item->get_child(0);
-                for (int j = 0; j < submod_gates_item->get_child_count(); j++)
-                {
-                    if (submod_gates_item->get_child(j)->data(ID_COLUMN).toInt() == (int)object->get_id())
-                    {
-                        submod_gates_item->get_child(j)->set_data(NAME_COLUMN, QString::fromStdString(object->get_name()));
-                        const auto modelindex = get_modelindex(submod_gates_item->get_child(j));
-                        dataChanged(modelindex, modelindex, QVector<int>() << Qt::DisplayRole);
-                    }
-                }
-            }
+            auto added_gate          = g_netlist->get_gate_by_id(assigned_gate);
+            auto gate_structure_item = current_submod_item->get_child(0);
+            insert_item(gate_structure_item,
+                        gate_structure_item->get_child_count(),
+                        new tree_navigation_item(QVector<QVariant>() << QString::fromStdString(added_gate->get_name()) << added_gate->get_id() << QString::fromStdString(added_gate->get_type()),
+                                                 tree_navigation_item::item_type::gate,
+                                                 gate_structure_item));
+            break;
         }
     }
 }
 
-void tree_navigation_model::handle_net_event(net_event_handler::event ev, std::shared_ptr<net> object, u32 associated_data)
+void tree_navigation_model::handle_module_gate_removed(std::shared_ptr<module> m, u32 removed_gate)
 {
-    Q_UNUSED(associated_data)
-    if (ev == net_event_handler::created)
+    for (int i = 0; i < m_modules_item->get_child_count(); i++)
     {
-        tree_navigation_item* new_net_item =
-            new tree_navigation_item(QVector<QVariant>() << QString::fromStdString(object->get_name()) << (int)object->get_id() << "", tree_navigation_item::item_type::net, m_nets_item);
-        m_nets_item->set_data(NAME_COLUMN, "Nets : " + QString::number(g_netlist->get_nets().size()));
-        dataChanged(get_modelindex(m_nets_item), get_modelindex(m_nets_item), QVector<int>() << Qt::DisplayRole);
-        for (int i = 2; i < m_nets_item->get_child_count(); i++)
+        auto current_submod_item = m_modules_item->get_child(i);
+        if (current_submod_item->data(ID_COLUMN).toInt() == (int)m->get_id())
         {
-            if (m_nets_item->get_child(i)->data(NAME_COLUMN).toString() > new_net_item->data(NAME_COLUMN).toString())
+            auto gate_structure_item = current_submod_item->get_child(0);
+            for (int j = 0; j < gate_structure_item->get_child_count(); j++)
             {
-                insert_item(m_nets_item, i, new_net_item);
-                return;
-            }
-        }
-        insert_item(m_nets_item, m_nets_item->get_child_count(), new_net_item);
-    }
-    if (ev == net_event_handler::removed)
-    {
-        m_nets_item->set_data(NAME_COLUMN, "Nets : " + QString::number(g_netlist->get_nets().size()));
-        dataChanged(get_modelindex(m_nets_item), get_modelindex(m_nets_item), QVector<int>() << Qt::DisplayRole);
-        //cant check if its a global input/output net, it may have lost its type
-        for (int i = 0; i < m_global_input_nets_item->get_child_count(); i++)
-        {
-            if ((int)object->get_id() == m_global_input_nets_item->get_child(i)->data(ID_COLUMN).toInt())
-            {
-                remove_item(m_global_input_nets_item->get_child(i));
-                return;
-            }
-        }
-        for (int i = 0; i < m_global_output_nets_item->get_child_count(); i++)
-        {
-            if ((int)object->get_id() == m_global_output_nets_item->get_child(i)->data(ID_COLUMN).toInt())
-            {
-                remove_item(m_global_output_nets_item->get_child(i));
-                return;
-            }
-        }
-        for (int i = 2; i < m_nets_item->get_child_count(); i++)
-        {
-            if ((int)object->get_id() == m_nets_item->get_child(i)->data(ID_COLUMN).toInt())
-            {
-                remove_item(m_nets_item->get_child(i));
-                return;
-            }
-        }
-    }
-    if (ev == net_event_handler::name_changed)
-    {
-        if (g_netlist->is_global_input_net(object))
-        {
-            for (int i = 0; i < m_global_input_nets_item->get_child_count(); i++)
-            {
-                if (m_global_input_nets_item->get_child(i)->data(ID_COLUMN).toInt() == (int)object->get_id())
+                auto current_gate_item = gate_structure_item->get_child(j);
+                if (current_gate_item->data(ID_COLUMN).toInt() == (int)removed_gate)
                 {
-                    m_global_input_nets_item->get_child(i)->set_data(NAME_COLUMN, QString::fromStdString(object->get_name()));
-                    dataChanged(get_modelindex(m_global_input_nets_item->get_child(i)), get_modelindex(m_global_input_nets_item->get_child(i)), QVector<int>() << Qt::DisplayRole);
+                    remove_item(current_gate_item);
                     break;
                 }
             }
+            break;
         }
-        if (g_netlist->is_global_output_net(object))
+    }
+
+}
+
+void tree_navigation_model::handle_module_name_changed(std::shared_ptr<module> m)
+{
+    for (int i = 0; i < m_modules_item->get_child_count(); i++)
+    {
+        auto current_submod_item = m_modules_item->get_child(i);
+        if (current_submod_item->data(ID_COLUMN) == (int)m->get_id())
         {
-            for (int i = 0; i < m_global_output_nets_item->get_child_count(); i++)
-            {
-                if (m_global_output_nets_item->get_child(i)->data(ID_COLUMN).toInt() == (int)object->get_id())
-                {
-                    m_global_output_nets_item->get_child(i)->set_data(NAME_COLUMN, QString::fromStdString(object->get_name()));
-                    dataChanged(get_modelindex(m_global_output_nets_item->get_child(i)), get_modelindex(m_global_output_nets_item->get_child(i)), QVector<int>() << Qt::DisplayRole);
-                    break;
-                }
-            }
+            current_submod_item->set_data(NAME_COLUMN, QString::fromStdString(m->get_name()));
+            const auto index = get_modelindex(current_submod_item);
+            dataChanged(index, index, QVector<int>() << Qt::DisplayRole);
         }
-        else
+    }
+}
+
+void tree_navigation_model::handle_module_removed(std::shared_ptr<module> m)
+{
+    for (int i = 0; i < m_modules_item->get_child_count(); i++)
+    {
+        auto current_submod_item = m_modules_item->get_child(i);
+        if (current_submod_item->data(ID_COLUMN).toInt() == (int)m->get_id())
         {
-            for (int i = 2; i < m_nets_item->get_child_count(); i++)
+            remove_item(current_submod_item);
+            break;
+        }
+    }
+    m_modules_item->set_data(NAME_COLUMN, "modules : " + QString::number(g_netlist->get_modules().size()));
+    dataChanged(get_modelindex(m_modules_item), get_modelindex(m_modules_item), QVector<int>() << Qt::DisplayRole);
+
+}
+
+void tree_navigation_model::handle_gate_created(std::shared_ptr<gate> g)
+{
+    tree_navigation_item* new_gate_item =
+        new tree_navigation_item(QVector<QVariant>() << QString::fromStdString(g->get_name()) << (int)g->get_id() << QString::fromStdString(g->get_type()),
+                                 tree_navigation_item::item_type::gate,
+                                 m_gates_item);
+    m_gates_item->set_data(NAME_COLUMN, "Gates : " + QString::number(g_netlist->get_gates().size()));
+    dataChanged(get_modelindex(m_gates_item), get_modelindex(m_gates_item), QVector<int>() << Qt::DisplayRole);
+    for (int i = 0; i < m_gates_item->get_child_count(); i++)
+    {
+        if (m_gates_item->get_child(i)->data(NAME_COLUMN).toString() > new_gate_item->data(NAME_COLUMN).toString())
+        {
+            insert_item(m_gates_item, i, new_gate_item);
+            return;
+        }
+    }
+    insert_item(m_gates_item, m_gates_item->get_child_count(), new_gate_item);
+
+}
+
+void tree_navigation_model::handle_gate_removed(std::shared_ptr<gate> g)
+{
+    m_gates_item->set_data(NAME_COLUMN, "Gates : " + QString::number(g_netlist->get_gates().size()));
+    dataChanged(get_modelindex(m_gates_item), get_modelindex(m_gates_item), QVector<int>() << Qt::DisplayRole);
+    for (int i = 0; i < m_gates_item->get_child_count(); i++)
+    {
+        auto current_gate_item = m_gates_item->get_child(i);
+        if ((int)g->get_id() == current_gate_item->data(ID_COLUMN).toInt())
+        {
+            remove_item(current_gate_item);
+            break;
+        }
+    }
+}
+
+void tree_navigation_model::handle_gate_name_changed(std::shared_ptr<gate> g)
+{
+    for (int i = 0; i < m_gates_item->get_child_count(); i++)
+    {
+        if (m_gates_item->get_child(i)->data(ID_COLUMN).toInt() == (int)g->get_id())
+        {
+            m_gates_item->get_child(i)->set_data(NAME_COLUMN, QString::fromStdString(g->get_name()));
+            const auto modelindex = get_modelindex(m_gates_item->get_child(i));
+            dataChanged(modelindex, modelindex, QVector<int>() << Qt::DisplayRole);
+        }
+    }
+    //go through the modules and check if any submod has the gate in it to change to name accordingly
+    for (int i = 0; i < m_modules_item->get_child_count(); i++)
+    {
+        auto current_submod_item = m_modules_item->get_child(i);
+        if (g_netlist->get_module_by_id(current_submod_item->data(ID_COLUMN).toInt())->contains_gate(g))
+        {
+            auto submod_gates_item = current_submod_item->get_child(0);
+            for (int j = 0; j < submod_gates_item->get_child_count(); j++)
             {
-                if (m_nets_item->get_child(i)->data(ID_COLUMN).toInt() == (int)object->get_id())
+                if (submod_gates_item->get_child(j)->data(ID_COLUMN).toInt() == (int)g->get_id())
                 {
-                    m_nets_item->get_child(i)->set_data(NAME_COLUMN, QString::fromStdString(object->get_name()));
-                    auto modelindex = get_modelindex(m_nets_item->get_child(i));
+                    submod_gates_item->get_child(j)->set_data(NAME_COLUMN, QString::fromStdString(g->get_name()));
+                    const auto modelindex = get_modelindex(submod_gates_item->get_child(j));
                     dataChanged(modelindex, modelindex, QVector<int>() << Qt::DisplayRole);
                 }
             }
         }
+    }
+}
 
-        //check for submod
-        // todo modules do not have nets anymore
-        /*
-        for (int i = 0; i < m_modules_item->get_child_count(); i++)
+void tree_navigation_model::handle_net_created(std::shared_ptr<net> n)
+{
+    tree_navigation_item* new_net_item =
+        new tree_navigation_item(QVector<QVariant>() << QString::fromStdString(n->get_name()) << (int)n->get_id() << "", tree_navigation_item::item_type::net, m_nets_item);
+    m_nets_item->set_data(NAME_COLUMN, "Nets : " + QString::number(g_netlist->get_nets().size()));
+    dataChanged(get_modelindex(m_nets_item), get_modelindex(m_nets_item), QVector<int>() << Qt::DisplayRole);
+    for (int i = 2; i < m_nets_item->get_child_count(); i++)
+    {
+        if (m_nets_item->get_child(i)->data(NAME_COLUMN).toString() > new_net_item->data(NAME_COLUMN).toString())
         {
-            auto current_submod_item = m_modules_item->get_child(i);
-            if (g_netlist->get_module_by_id(current_submod_item->data(ID_COLUMN).toInt())->contains_net(object))
+            insert_item(m_nets_item, i, new_net_item);
+            return;
+        }
+    }
+    insert_item(m_nets_item, m_nets_item->get_child_count(), new_net_item);
+}
+
+void tree_navigation_model::handle_net_removed(std::shared_ptr<net> n)
+{
+    m_nets_item->set_data(NAME_COLUMN, "Nets : " + QString::number(g_netlist->get_nets().size()));
+    dataChanged(get_modelindex(m_nets_item), get_modelindex(m_nets_item), QVector<int>() << Qt::DisplayRole);
+    //cant check if its a global input/output net, it may have lost its type
+    for (int i = 0; i < m_global_input_nets_item->get_child_count(); i++)
+    {
+        if ((int)n->get_id() == m_global_input_nets_item->get_child(i)->data(ID_COLUMN).toInt())
+        {
+            remove_item(m_global_input_nets_item->get_child(i));
+            return;
+        }
+    }
+    for (int i = 0; i < m_global_output_nets_item->get_child_count(); i++)
+    {
+        if ((int)n->get_id() == m_global_output_nets_item->get_child(i)->data(ID_COLUMN).toInt())
+        {
+            remove_item(m_global_output_nets_item->get_child(i));
+            return;
+        }
+    }
+    for (int i = 2; i < m_nets_item->get_child_count(); i++)
+    {
+        if ((int)n->get_id() == m_nets_item->get_child(i)->data(ID_COLUMN).toInt())
+        {
+            remove_item(m_nets_item->get_child(i));
+            return;
+        }
+    }
+}
+
+void tree_navigation_model::handle_net_name_changed(std::shared_ptr<net> n)
+{
+    if (g_netlist->is_global_input_net(n))
+    {
+        for (int i = 0; i < m_global_input_nets_item->get_child_count(); i++)
+        {
+            if (m_global_input_nets_item->get_child(i)->data(ID_COLUMN).toInt() == (int)n->get_id())
             {
-                auto submod_nets_item = current_submod_item->get_child(1);
-                for (int j = 0; j < submod_nets_item->get_child_count(); j++)
-                {
-                    if (submod_nets_item->get_child(j)->data(ID_COLUMN).toInt() == (int)object->get_id())
-                    {
-                        submod_nets_item->get_child(j)->set_data(NAME_COLUMN, QString::fromStdString(object->get_name()));
-                        const auto modelindex = get_modelindex(submod_nets_item->get_child(j));
-                        dataChanged(modelindex, modelindex, QVector<int>() << Qt::DisplayRole);
-                    }
-                }
+                m_global_input_nets_item->get_child(i)->set_data(NAME_COLUMN, QString::fromStdString(n->get_name()));
+                dataChanged(get_modelindex(m_global_input_nets_item->get_child(i)), get_modelindex(m_global_input_nets_item->get_child(i)), QVector<int>() << Qt::DisplayRole);
+                break;
             }
         }
-        */
     }
+    if (g_netlist->is_global_output_net(n))
+    {
+        for (int i = 0; i < m_global_output_nets_item->get_child_count(); i++)
+        {
+            if (m_global_output_nets_item->get_child(i)->data(ID_COLUMN).toInt() == (int)n->get_id())
+            {
+                m_global_output_nets_item->get_child(i)->set_data(NAME_COLUMN, QString::fromStdString(n->get_name()));
+                dataChanged(get_modelindex(m_global_output_nets_item->get_child(i)), get_modelindex(m_global_output_nets_item->get_child(i)), QVector<int>() << Qt::DisplayRole);
+                break;
+            }
+        }
+    }
+    else
+    {
+        for (int i = 2; i < m_nets_item->get_child_count(); i++)
+        {
+            if (m_nets_item->get_child(i)->data(ID_COLUMN).toInt() == (int)n->get_id())
+            {
+                m_nets_item->get_child(i)->set_data(NAME_COLUMN, QString::fromStdString(n->get_name()));
+                auto modelindex = get_modelindex(m_nets_item->get_child(i));
+                dataChanged(modelindex, modelindex, QVector<int>() << Qt::DisplayRole);
+            }
+        }
+    }
+
 }
 
 void tree_navigation_model::setup_model_data()
@@ -551,7 +492,6 @@ void tree_navigation_model::setup_model_data()
                                                                         current_module_tree_item);
         current_module_tree_item->insert_child(0, sub_gates_item);
 
-        // todo modules do not have nets anymore
         /*
         tree_navigation_item* sub_nets_item  = new tree_navigation_item(QVector<QVariant>() << "Nets"
                                                                                            << ""
@@ -570,7 +510,6 @@ void tree_navigation_model::setup_model_data()
             sub_gates_item->insert_child(sub_gates_item->get_child_count(), tmp_gate);
         }
 
-        // todo modules do not have nets anymore
         /*
         for (const auto& _net : _module->get_nets())
         {

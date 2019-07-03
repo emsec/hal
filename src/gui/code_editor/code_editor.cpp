@@ -20,7 +20,7 @@ code_editor::code_editor(QWidget* parent) : QPlainTextEdit(parent),
     connect(this, &code_editor::updateRequest, this, &code_editor::update_line_number_area);
     connect(this, &code_editor::updateRequest, this, &code_editor::update_minimap);
 
-    // TODO CONNECT / DISCONNECT VIA SETTING
+    // CONNECT / DISCONNECT VIA SETTING ?
     //connect(this, &code_editor::cursorPositionChanged, this, &code_editor::highlight_current_line);
 
     setVerticalScrollBar(m_scrollbar);
@@ -32,7 +32,7 @@ code_editor::code_editor(QWidget* parent) : QPlainTextEdit(parent),
 
     m_animation->setDuration(200);
 
-    // TODO SET LINEWRAP MODE VIA SETTING
+    // SET LINEWRAP MODE VIA SETTING ?
     setLineWrapMode(QPlainTextEdit::NoWrap);
     setFrameStyle(QFrame::NoFrame);
 
@@ -102,7 +102,7 @@ void code_editor::minimap_paint_event(QPaintEvent* event)
 
 int code_editor::line_number_area_width()
 {
-    // TODO ADD MID SPACE FOR COLOR INDICATORS ?
+    // ADD MID SPACE FOR COLOR INDICATORS ?
     // WARNING FUNCTION ONLY RETURNS CORRECT VALUES FOR MONOSPACE FONTS !
     QFontMetrics fm(m_line_number_font);
     return m_line_number_area->left_offset() + fm.width(QString::number(blockCount())) + m_line_number_area->right_offset();
@@ -110,7 +110,7 @@ int code_editor::line_number_area_width()
 
 int code_editor::minimap_width()
 {
-    // TODO SET VIA STYLESHEET OR DYNAMICALLY
+    // SET VIA STYLESHEET OR DYNAMICALLY ?
     return 160;
 }
 
@@ -135,7 +135,7 @@ void code_editor::resizeEvent(QResizeEvent* event)
     //            block_top = (int)blockBoundingGeometry(block).translated(contentOffset()).top();
     //    }
 
-    //    // TODO ADJUST TO PERCENTAGE OF LAST BLOCK
+    //    // ADJUST TO PERCENTAGE OF LAST BLOCK ?
     //    m_minimap->adjust_slider_height(first_visible_block, first_visible_block + additional_blocks);
 
     qreal ratio = viewport()->height() / blockBoundingGeometry(document()->firstBlock()).height();
@@ -185,11 +185,11 @@ void code_editor::update_minimap(const QRect& rect, int dy)
 
 void code_editor::search(const QString& string)
 {
-    // TODO THREAD
+    // THREAD ?
     QList<QTextEdit::ExtraSelection> extraSelections;
 
     moveCursor(QTextCursor::Start);
-    // TODO SET COLORS VIA STYLESHEET
+    // SET COLORS VIA STYLESHEET ?
     QColor color            = QColor(12, 15, 19);
     QColor background_color = QColor(255, 255, 0);
 
@@ -245,7 +245,7 @@ void code_editor::center_on_line(const int number)
     //    if (value >= hidden)
     //        value = hidden;
 
-    //verticalScrollBar()->setValue(number); // TODO CENTER
+    //verticalScrollBar()->setValue(number); // CENTER ?
 
     if (m_animation->state() == QPropertyAnimation::Running)
         m_animation->stop();

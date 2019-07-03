@@ -51,7 +51,7 @@ void recent_files_widget::handle_file_opened(const QString& file_name)
 
     m_items.clear();
 
-    //TODO FIX !!!!!!!!!!!!!!!!
+    // FIX !!!!!!!!!!!!!!!!
 
     //    for (const QString& file : recent_files)
     //    {

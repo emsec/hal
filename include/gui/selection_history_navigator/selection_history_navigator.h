@@ -36,7 +36,7 @@ private:
 
     void relay_selection(selection selection);
 
-    void store_selection(u32 id, selection_relay::single_type type);
+    void store_selection(u32 id, selection_relay::item_type type);
 };
 
 #endif    // SELECTION_HISTORY_NAVIGATOR_H

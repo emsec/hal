@@ -38,6 +38,9 @@
         <file alias="darcula">stylesheet/darcula.qss</file>
         <file alias="vibrant dark">stylesheet/vibrant dark.qss</file>
         <file alias="hal">stylesheet/hal.qss</file>
+        <file alias="test base">stylesheet/test_base.qss</file>
+        <file alias="test definitions">stylesheet/test_definitions</file>
+        <file alias="test definitions2">stylesheet/test_definitions2</file>
         <file alias="sunny">stylesheet/sunny.qss</file>
     </qresource>
     <qresource prefix="/icons">
@@ -78,6 +81,10 @@
         <file alias="tree-arrow-down">icons/arrow-down.svg</file>
         <file alias="tree-arrow-right">icons/arrow-right.svg</file>
         <file alias="placeholder">icons/0154-bug.svg</file>
+        <file alias="circle">icons/circle.svg</file>
+        <file alias="filled-circle">icons/filled circle.svg</file>
+        <file alias="github4">icons/0437-github4.svg</file>
+        <file alias="github">icons/0434-github.svg</file>
         <file alias="new-file">icons/new-file.svg</file>
     </qresource>
     <qresource prefix="/images">

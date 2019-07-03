@@ -45,12 +45,12 @@ python_syntax_highlighter::python_syntax_highlighter(QTextDocument* parent)
     rule.format = python_qss_adapter::instance()->m_brace_format;
     m_highlighting_rules.append(rule);
 
-    rule.pattern = QRegularExpression("'[^']*'");    // TODO IMPROVE
+    rule.pattern = QRegularExpression("'[^']*'");
     rule.pattern.optimize();
     rule.format = python_qss_adapter::instance()->m_single_quoted_string_format;
     m_highlighting_rules.append(rule);
 
-    rule.pattern = QRegularExpression("\"[^\"]*\"");    // TODO IMPROVE
+    rule.pattern = QRegularExpression("\"[^\"]*\"");
     rule.pattern.optimize();
     rule.format = python_qss_adapter::instance()->m_double_quoted_string_format;
     m_highlighting_rules.append(rule);

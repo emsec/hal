@@ -24,11 +24,44 @@
 #ifndef CHANNEL_ITEM_H
 #define CHANNEL_ITEM_H
 
-#include "channel_manager/channel_entry.h"
+#include "core/log.h"
+
 #include <QReadWriteLock>
 #include <QString>
 #include <QVariant>
+
 #include <boost/circular_buffer.hpp>
+
+struct channel_entry
+{
+    channel_entry(std::string msg, spdlog::level::level_enum msg_type) : m_msg(msg), m_msg_type(msg_type)
+    {
+    }
+
+    const std::string m_msg;    // USE QSTRING HERE
+    const spdlog::level::level_enum m_msg_type;
+};
+
+static const int max_entries = 1000;
+
+struct log_channel
+{
+    //    log_channel(const QString& name) : m_name(name)
+    //    {
+    //    }
+
+    const QString m_name;
+
+    channel_entry m_entries[max_entries];
+
+    int m_entry_count;
+    int m_first_entry;
+
+    int unread_entries;
+    int unread_warnings;
+    int unread_errors;
+    int unread_successes;
+};
 
 class channel_item
 {

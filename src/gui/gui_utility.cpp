@@ -78,4 +78,17 @@ namespace gui_utility
         return get_icon_from_svg_data(svg_data);
     }
 
-}    // namespace gui_utility
+    QColor get_random_color()
+    {
+        static qreal h = 0.5;
+
+        h += 0.6180339887498948;
+
+        if (h > 1)
+            --h;
+
+        QColor c;
+        c.setHsvF(h, 0.8, 0.95); // (MAYBE) GET S AND V FROM STYLESHEET OR CYCLE 3 DIMENSIONAL
+        return c;
+    }
+}

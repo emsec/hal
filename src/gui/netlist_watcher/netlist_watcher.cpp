@@ -4,10 +4,10 @@
 
 netlist_watcher::netlist_watcher(QObject* parent) : QObject(parent)
 {
-    connect(&g_graph_relay, &graph_relay::gate_event, this, &netlist_watcher::handle_gate_event);
-    connect(&g_graph_relay, &graph_relay::netlist_event, this, &netlist_watcher::handle_netlist_event);
-    connect(&g_graph_relay, &graph_relay::net_event, this, &netlist_watcher::handle_net_event);
-    connect(&g_graph_relay, &graph_relay::module_event, this, &netlist_watcher::handle_module_event);
+    connect(&g_netlist_relay, &netlist_relay::gate_event, this, &netlist_watcher::handle_gate_event);
+    connect(&g_netlist_relay, &netlist_relay::netlist_event, this, &netlist_watcher::handle_netlist_event);
+    connect(&g_netlist_relay, &netlist_relay::net_event, this, &netlist_watcher::handle_net_event);
+    connect(&g_netlist_relay, &netlist_relay::module_event, this, &netlist_watcher::handle_module_event);
 
     reset();
 }

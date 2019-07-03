@@ -8,8 +8,16 @@
 #include <cmath>
 #include <math.h>
 
-minimap_scrollbar::minimap_scrollbar(QWidget* parent)
-    : QWidget(parent), m_slider(new QFrame(this)), m_minimum(0), m_maximum(100), m_value(0), m_handle_length(0), m_handle_position(0), m_mouse_pressed(false), m_drag_offset(0), m_scrollbar(nullptr)
+minimap_scrollbar::minimap_scrollbar(QWidget* parent) : QWidget(parent),
+      m_slider(new QFrame(this)),
+      m_minimum(0),
+      m_maximum(100),
+      m_value(0),
+      m_handle_length(0),
+      m_handle_position(0),
+      m_mouse_pressed(false),
+      m_drag_offset(0),
+      m_scrollbar(nullptr)
 {
     m_slider->setObjectName("slider");
     m_slider->show();

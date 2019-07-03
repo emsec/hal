@@ -16,7 +16,7 @@ program_arguments hal_plugin_access_manager::request_arguments(const std::string
     {
         if (types.find(interface_type::gui) != types.end())
         {
-            //TODO show selection dialog
+            // show selection dialog
             //Workaround:
             selection = interface_type::cli;
         }
@@ -47,7 +47,7 @@ program_arguments hal_plugin_access_manager::request_arguments(const std::string
         if (!plugin)
             return program_arguments();
 
-        //TODO show gui dialog, return results
+        // show gui dialog, return results
         return program_arguments();
     }
 }

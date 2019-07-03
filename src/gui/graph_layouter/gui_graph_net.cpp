@@ -153,7 +153,6 @@ void gui_graph_net::calculate_net(int sub_channel_a)
 {
     sub_channel = sub_channel_a;
 
-    /*TODO: change this unbelievable ugly piece of code*/
     switch (type)
     {
         case net_type::global_output:

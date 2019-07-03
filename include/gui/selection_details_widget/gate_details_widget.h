@@ -25,7 +25,9 @@
 #define __HAL_GATE_DETAILS_WIDGET_H__
 
 #include "def.h"
-#include "graph_relay/graph_relay.h"
+
+#include "netlist_relay/netlist_relay.h"
+
 #include <QWidget>
 
 #include "../plugins/quine_mccluskey/include/plugin_quine_mccluskey.h"

@@ -24,55 +24,64 @@
 #ifndef GRAPH_WIDGET_H
 #define GRAPH_WIDGET_H
 
-#include "content_widget/content_widget.h"
-#include "graph_widget/graph_graphics_view.h"
+#include "def.h"
 
-#include <QLayout>
-#include <QtWidgets>
+#include "gui/content_widget/content_widget.h"
+#include "gui/graph_widget/contexts/graph_context_subscriber.h"
 
-class graph_layouter_selection_widget;
+class dialog_overlay;
+class cone_layouter;
+class graph_context;
+class graph_graphics_view;
+class graph_layout_progress_widget;
+class graph_navigation_widget;
 
-class graph_widget : public content_widget
+class graph_widget : public content_widget, public graph_context_subscriber
 {
     Q_OBJECT
 
 public:
-    explicit graph_widget(QWidget* parent = 0);
+    graph_widget(QWidget* parent = nullptr);
 
-    virtual void setup_toolbar(toolbar* toolbarp) Q_DECL_OVERRIDE;
+    virtual void setup_toolbar(toolbar* toolbar) Q_DECL_OVERRIDE;
 
-    void subscribe(QString layouter);
+    virtual void handle_scene_available() Q_DECL_OVERRIDE;
+    virtual void handle_scene_unavailable() Q_DECL_OVERRIDE;
+    virtual void handle_context_about_to_be_deleted() Q_DECL_OVERRIDE;
 
-    graph_graphics_view* view() const;
-    QString get_layouter();
-
-    void show_view();
-
-public Q_SLOTS:
-    void zoom_in(int level = 1);
-    void zoom_out(int level = 1);
+protected:
+    void keyPressEvent(QKeyEvent* event) Q_DECL_OVERRIDE;
 
 private Q_SLOTS:
-    void setup_matrix();
-    void show_layout_selection(bool checked);
-    //    void toggle_pointer_mode();
-    void toggle_opengl();
-    void toggle_antialiasing();
+    void handle_navigation_jump_requested(const u32 from_gate, const u32 via_net, const u32 to_gate);
+    void handle_module_double_clicked(const u32 id);
 
 private:
-    QStackedWidget* m_stacked_widget;
-    graph_layouter_selection_widget* m_selection_widget;
-    QWidget* m_view_container;
-    graph_graphics_view* m_view;
-    QToolButton* m_layout_button;
-    //    QToolButton *m_select_mode_button;
-    //    QToolButton *m_drag_mode_button;
-    QToolButton* m_opengl_button;
-    QToolButton* m_antialias_button;
-    QSlider* m_zoom_slider;
-    bool m_opengl_viewport;
+    void handle_navigation_left_request();
+    void handle_navigation_right_request();
+    void handle_navigation_up_request();
+    void handle_navigation_down_request();
 
-    QString m_layouter;
+    void handle_module_up_request();
+    void handle_module_down_requested(const u32 id);
+
+    void debug_module_one();
+    void debug_create_context();
+    void debug_change_context();
+
+    void change_context(graph_context* const context);
+
+    void handle_updating_scene();
+    //void handle_scene_available();
+
+    graph_graphics_view* m_view;
+    graph_context* m_context;
+
+    dialog_overlay* m_overlay;
+    graph_navigation_widget* m_navigation_widget;
+    graph_layout_progress_widget* m_progress_widget;
+
+    u32 m_current_expansion;
 };
 
-#endif    // GRAPH_WIDGET_H
+#endif // GRAPH_WIDGET_H
