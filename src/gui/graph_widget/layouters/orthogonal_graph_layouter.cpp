@@ -63,7 +63,7 @@ void orthogonal_graph_layouter::layout()
     for (int i = 0; i < nodes.size(); ++i)
     {
         nodes[i]->setPos(x * max_node_width + x * 30, y * max_node_height + y * 30);
-        m_scene->addItem(nodes[i]);
+        m_scene->add_item(nodes[i]);
 
         ++x;
         if (x == root)
@@ -145,7 +145,7 @@ void orthogonal_graph_layouter::layout()
 
 void orthogonal_graph_layouter::reset()
 {
-    m_scene->clear();
+    m_scene->delete_all_items();
 }
 
 void orthogonal_graph_layouter::add(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets)

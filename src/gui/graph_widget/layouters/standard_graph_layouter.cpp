@@ -1023,7 +1023,7 @@ void standard_graph_layouter::place_gates()
     for (node_box& box : m_boxes)
     {
         box.item->setPos(m_node_offset_for_x.value(box.x), m_node_offset_for_y.value(box.y));
-        m_scene->addItem(box.item);
+        m_scene->add_item(box.item);
     }
 }
 
@@ -1125,7 +1125,7 @@ void standard_graph_layouter::draw_nets()
             }
 
             net_item->finalize();
-            m_scene->addItem(net_item);
+            m_scene->add_item(net_item);
             continue;
         }
 
@@ -1165,7 +1165,7 @@ void standard_graph_layouter::draw_nets()
                 }
 
                 net_item->finalize();
-                m_scene->addItem(net_item);
+                m_scene->add_item(net_item);
 
                 continue;
             }
@@ -1600,7 +1600,7 @@ void standard_graph_layouter::draw_nets()
         }
 
         graphics_net->finalize();
-        m_scene->addItem(graphics_net);
+        m_scene->add_item(graphics_net);
 
         commit_used_paths(used);
     }

@@ -37,22 +37,21 @@ public:
 
     graphics_scene(QObject* parent = nullptr);
 
-    void addItem(graphics_item* item);
-    void removeItem(graphics_item* item);
-
-    const graphics_gate* get_gate_item(const u32 id) const;
-
-//    void update_utility_items();
-
-    // EXPERIMENTAL METHODS
-    void connect_all();
-    void disconnect_all();
+    void add_item(graphics_item* item);
+    void remove_item(graphics_item* item);
 
     void delete_all_items();
+
+    void connect_all();
+    void disconnect_all();
 
     void update_visuals(const graph_shader::shading& s);
 
     void move_nets_to_background();
+
+    const graphics_gate* get_gate_item(const u32 id) const;
+
+//    void update_utility_items();
 
 public Q_SLOTS:
     void handle_intern_selection_changed();
@@ -98,6 +97,7 @@ private:
 
     using QGraphicsScene::addItem;
     using QGraphicsScene::removeItem;
+    using QGraphicsScene::clear;
 
     void drawBackground(QPainter* painter, const QRectF& rect) Q_DECL_OVERRIDE;
 

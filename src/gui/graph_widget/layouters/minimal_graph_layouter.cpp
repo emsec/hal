@@ -29,7 +29,7 @@ void minimal_graph_layouter::layout()
         x = i * 200 % 20000;
         y = i / 100 * 100;
         node_item->setPos(QPointF(x, y));
-        m_scene->addItem(node_item);
+        m_scene->add_item(node_item);
         i++;
     }
 
@@ -91,7 +91,7 @@ void minimal_graph_layouter::layout()
         }
         net_item->setZValue(-1);
         net_item->finalize();
-        m_scene->addItem(net_item);
+        m_scene->add_item(net_item);
         i++;
     }
 }

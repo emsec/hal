@@ -104,7 +104,7 @@ graphics_scene::graphics_scene(QObject* parent) : QGraphicsScene(parent)
 //    QGraphicsScene::addItem(m_left_gate_navigation_popup);
 }
 
-void graphics_scene::addItem(graphics_item* item)
+void graphics_scene::add_item(graphics_item* item)
 {
     // SELECTION HAS TO BE UPDATED MANUALLY AFTER ADDING / REMOVING ITEMS
 
@@ -160,7 +160,7 @@ void graphics_scene::addItem(graphics_item* item)
     }
 }
 
-void graphics_scene::removeItem(graphics_item* item)
+void graphics_scene::remove_item(graphics_item* item)
 {
     // SELECTION HAS TO BE UPDATED MANUALLY AFTER ADDING / REMOVING ITEMS
 
@@ -442,6 +442,7 @@ void graphics_scene::handle_extern_subfocus_changed(void* sender)
 
 void graphics_scene::mousePressEvent(QGraphicsSceneMouseEvent* event)
 {
+    // CONTEXT MENU CLEARING SELECTION WORKAROUND
     if (event->button() == Qt::RightButton)
     {
         event->accept();
