@@ -9,7 +9,7 @@
 #include "gui/graph_widget/graphics_items/graphics_item.h"
 #include "gui/graph_widget/graphics_items/graphics_module.h"
 #include "gui/graph_widget/graphics_items/graphics_net.h"
-#include "gui/graph_widget/graphics_items/utility_items/gate_navigation_popup.h"
+//#include "gui/graph_widget/graphics_items/utility_items/gate_navigation_popup.h"
 #include "gui/gui_globals.h"
 
 #include <QGraphicsSceneMouseEvent>
@@ -92,16 +92,16 @@ void graphics_scene::set_grid_cluster_dot_color(const QColor& color)
     s_grid_cluster_dot_color = color;
 }
 
-graphics_scene::graphics_scene(QObject* parent) : QGraphicsScene(parent),
-    m_left_gate_navigation_popup(new gate_navigation_popup(gate_navigation_popup::type::left)),
-    m_right_gate_navigation_popup(new gate_navigation_popup(gate_navigation_popup::type::right))
+graphics_scene::graphics_scene(QObject* parent) : QGraphicsScene(parent)
+//    m_left_gate_navigation_popup(new gate_navigation_popup(gate_navigation_popup::type::left)),
+//    m_right_gate_navigation_popup(new gate_navigation_popup(gate_navigation_popup::type::right))
 {
     // FIND OUT IF MANUAL CHANGE TO DEPTH IS NECESSARY / INCREASES PERFORMANCE
     //m_scene.setBspTreeDepth(10);
 
     connect_all();
 
-    QGraphicsScene::addItem(m_left_gate_navigation_popup);
+//    QGraphicsScene::addItem(m_left_gate_navigation_popup);
 }
 
 void graphics_scene::addItem(graphics_item* item)
@@ -248,30 +248,30 @@ const graphics_gate* graphics_scene::get_gate_item(const u32 id) const
     return nullptr;
 }
 
-void graphics_scene::update_utility_items()
-{
-    // TEST IMPLEMENTATION
-    // EXPAND WITH MORE ITEMS
+//void graphics_scene::update_utility_items()
+//{
+//    // TEST IMPLEMENTATION
+//    // EXPAND WITH MORE ITEMS
 
-    if (g_selection_relay.m_focus_type == selection_relay::item_type::gate)
-    {
-        for (gate_data& d : m_gate_items)
-        {
-            if (d.id == g_selection_relay.m_selected_gates[0])
-            {
-                graphics_gate* g = d.item;
+//    if (g_selection_relay.m_focus_type == selection_relay::item_type::gate)
+//    {
+//        for (gate_data& d : m_gate_items)
+//        {
+//            if (d.id == g_selection_relay.m_selected_gates[0])
+//            {
+//                graphics_gate* g = d.item;
 
-                // IF (ANIMATE) ANIMATE ELSE DONT
-                // ALTERNATIVELY ANIMATE IF SCENE HAS LESS THAN X ITEMS
-                m_left_gate_navigation_popup->stop();
-                m_left_gate_navigation_popup->set_height(g->height());
-                m_left_gate_navigation_popup->start(QPointF(g->pos().x() - 120, g->pos().y()));
-            }
-        }
-    }
-    else
-        m_left_gate_navigation_popup->stop();
-}
+//                // IF (ANIMATE) ANIMATE ELSE DONT
+//                // ALTERNATIVELY ANIMATE IF SCENE HAS LESS THAN X ITEMS
+//                m_left_gate_navigation_popup->stop();
+//                m_left_gate_navigation_popup->set_height(g->height());
+//                m_left_gate_navigation_popup->start(QPointF(g->pos().x() - 120, g->pos().y()));
+//            }
+//        }
+//    }
+//    else
+//        m_left_gate_navigation_popup->stop();
+//}
 
 void graphics_scene::connect_all()
 {

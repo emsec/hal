@@ -9,7 +9,7 @@
 #include <QPair>
 #include <QVector>
 
-class gate_navigation_popup;
+//class gate_navigation_popup;
 class graphics_gate;
 class graphics_item;
 class graphics_module;
@@ -42,7 +42,7 @@ public:
 
     const graphics_gate* get_gate_item(const u32 id) const;
 
-    void update_utility_items();
+//    void update_utility_items();
 
     // EXPERIMENTAL METHODS
     void connect_all();
@@ -105,8 +105,8 @@ private:
     QVector<gate_data> m_gate_items;
     QVector<net_data> m_net_items;
 
-    gate_navigation_popup* m_left_gate_navigation_popup;
-    gate_navigation_popup* m_right_gate_navigation_popup;
+//    gate_navigation_popup* m_left_gate_navigation_popup;
+//    gate_navigation_popup* m_right_gate_navigation_popup;
 };
 
 #endif // GRAPH_SCENE_H
