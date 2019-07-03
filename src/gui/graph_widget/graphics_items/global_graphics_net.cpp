@@ -6,8 +6,6 @@
 #include <QPen>
 #include <QStyleOptionGraphicsItem>
 
-#include <QDebug>
-
 qreal global_graphics_net::s_alpha;
 
 qreal global_graphics_net::s_wire_length;
@@ -40,12 +38,6 @@ void global_graphics_net::update_alpha()
     }
     else
         s_alpha = 1;
-
-    //    qDebug() << "alpha: " << s_alpha;
-    //    qDebug() << "lod: " << s_lod;
-    //    qDebug() << ">=: " << graph_widget_constants::net_fade_in_lod;
-    //    qDebug() << "<=: " << graph_widget_constants::net_fade_out_lod;
-    //    qDebug() << "------------------------";
 }
 
 global_graphics_net::global_graphics_net(std::shared_ptr<net> n) : graphics_net(n),

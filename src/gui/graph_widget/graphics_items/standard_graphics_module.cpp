@@ -102,7 +102,7 @@ void standard_graphics_module::paint(QPainter* painter, const QStyleOptionGraphi
         painter->setFont(s_name_font);
         painter->drawText(m_name_position, m_name);
         painter->setFont(s_type_font);
-        painter->drawText(m_type_position, m_type);
+        painter->drawText(m_type_position, "Module");
 
         painter->setFont(s_pin_font);
         int i = 0;
@@ -134,7 +134,7 @@ void standard_graphics_module::paint(QPainter* painter, const QStyleOptionGraphi
                     painter->setFont(s_name_font);
                     painter->drawText(m_name_position, m_name);
                     painter->setFont(s_type_font);
-                    painter->drawText(m_type_position, m_type);
+                    painter->drawText(m_type_position, "Module");
 
                     painter->setFont(s_pin_font);
                     i = 0;
@@ -265,7 +265,7 @@ void standard_graphics_module::format(const bool& adjust_size_to_grid)
     qreal name_width = name_fm.width(m_name);
 
     QFontMetricsF type_fm(s_type_font);
-    qreal type_width = type_fm.width(m_type);
+    qreal type_width = type_fm.width("Module");
 
     QFontMetricsF pin_fm(s_pin_font);
     qreal max_pin_width = 0;
