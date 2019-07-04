@@ -774,7 +774,26 @@ recent_file_item[hover=true] * {
 }
 
 recent_file_item[hover=true] #path-label {
-    /*color : #44494D;*/
+    color : #44494D;
+}
+
+recent_file_item QToolButton:hover {
+    background: #222222;
+    color: white;
+}
+
+recent_file_item[disabled=true]{
+    qproperty-icon_style : "all->#888888"
+    /*qproperty-icon_style : "all->#ffeea5";*/
+}
+
+recent_file_item[disabled=true] #name-label{
+    color: #555555;
+    /*qproperty-icon_style : "all->#ffeea5";*/
+}
+recent_file_item[disabled=true] #path-label {
+    /*color : #292B2D;*/
+    color: red;
 }
 
 /*********************************************
