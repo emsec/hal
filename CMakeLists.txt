@@ -237,6 +237,7 @@ if(UNIX)
     enable_cxx_compiler_flag_if_supported("-Wno-undef" "")
     enable_cxx_compiler_flag_if_supported("-fcolor-diagnostics" "")
     enable_cxx_compiler_flag_if_supported("-fdiagnostics-color=always" "")
+    enable_cxx_compiler_flag_if_supported("-Wunused-private-field" "")
 
     enable_cxx_compiler_flag_if_supported("-O0" "_DEBUG")
     enable_cxx_compiler_flag_if_supported("-g" "_DEBUG")

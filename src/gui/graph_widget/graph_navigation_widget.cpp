@@ -6,6 +6,7 @@
 
 #include <QHeaderView>
 #include <QScrollBar>
+#include <QKeyEvent>
 
 graph_navigation_widget::graph_navigation_widget(QWidget* parent) : QTableWidget(parent),
     m_from_gate(0),
