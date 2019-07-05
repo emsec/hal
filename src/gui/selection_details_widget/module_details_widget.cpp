@@ -16,7 +16,7 @@ module_details_widget::module_details_widget(QWidget* parent) : QWidget(parent)
     m_label->setStyleSheet("QLabel {Background-Color: rgba(49, 51, 53, 1);}");
     m_content_layout->addWidget(m_label);
 
-    connect(&g_graph_relay, &graph_relay::module_event, this, &module_details_widget::handle_module_event);
+    connect(&g_netlist_relay, &netlist_relay::module_event, this, &module_details_widget::handle_module_event);
 }
 
 void module_details_widget::handle_module_event(module_event_handler::event ev, std::shared_ptr<module> module, u32 associated_data)

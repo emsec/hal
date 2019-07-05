@@ -1,4 +1,7 @@
 #include "graph_widget/graphics_items/standard_graphics_net.h"
+
+//#include "gui_globals.h"
+
 #include <QPainter>
 #include <QPen>
 #include <QPointF>
@@ -15,6 +18,15 @@ void standard_graphics_net::paint(QPainter* painter, const QStyleOptionGraphicsI
     s_pen.setColor((option->state & QStyle::State_Selected) ? s_selection_color : m_color);
     painter->setPen(s_pen);
 
+    //    if (g_selection_relay.m_focus_type == selection_relay::item_type::net)
+    //        if (g_selection_relay.m_focus_net_id == m_id)
+    //        {
+    //            QPen pen(s_selection_color, 1, Qt::DashLine);
+    //            pen.setJoinStyle(Qt::MiterJoin);
+    //            //pen.setCosmetic(true);
+    //            painter->setPen(pen);
+    //        }
+
     painter->drawLines(m_lines);
 }
 
@@ -26,12 +38,22 @@ void standard_graphics_net::finalize()
     m_shape = stroker.createStroke(m_path);
 }
 
-void standard_graphics_net::line_to(const QPointF& scene_position)
+void standard_graphics_net::line_to_x(const qreal scene_x)
 {
-    if (scene_position == current_scene_position())
+    if (scene_x == current_scene_position().x())
         return;
 
-    QPointF mapped_point = mapFromScene(scene_position);
+    QPointF mapped_point = mapFromScene(scene_x, current_scene_position().y());
+    m_lines.append(QLineF(m_path.currentPosition(), mapped_point));
+    m_path.lineTo(mapped_point);
+}
+
+void standard_graphics_net::line_to_y(const qreal scene_y)
+{
+    if (scene_y == current_scene_position().y())
+        return;
+
+    QPointF mapped_point = mapFromScene(current_scene_position().x(), scene_y);
     m_lines.append(QLineF(m_path.currentPosition(), mapped_point));
     m_path.lineTo(mapped_point);
 }

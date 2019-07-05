@@ -30,11 +30,13 @@ class QHBoxLayout;
 class QLabel;
 class QPropertyAnimation;
 class QVBoxLayout;
+class QToolButton;
 
 class recent_file_item : public QFrame
 {
     Q_OBJECT
     Q_PROPERTY(bool hover READ hover)
+    Q_PROPERTY(bool disabled READ disabled)
     Q_PROPERTY(QString icon_path READ icon_path WRITE set_icon_path)
     Q_PROPERTY(QString icon_style READ icon_style WRITE set_icon_style)
 
@@ -53,12 +55,17 @@ public:
     void repolish();
 
     bool hover();
+    bool disabled();
     QString icon_path();
     QString icon_style();
 
     void set_hover_active(bool active);
+    void set_disabled(bool disable);
     void set_icon_path(const QString& path);
     void set_icon_style(const QString& style);
+
+Q_SIGNALS:
+    void remove_requested(recent_file_item* item);
 
 private:
     QWidget* m_widget;
@@ -68,14 +75,19 @@ private:
     QLabel* m_name_label;
     QLabel* m_path_label;
     QPropertyAnimation* m_animation;
+    QToolButton* m_remove_button;
 
     QString m_file;
     QString m_path;
 
     bool m_hover;
+    bool m_disabled;
 
     QString m_icon_path;
     QString m_icon_style;
+
+    //functions
+    void handle_close_requested();
 };
 
 #endif    // RECENT_FILE_ITEM_H

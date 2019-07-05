@@ -95,8 +95,7 @@ public:
 
     /** returns the output pin type at the given position, used for the graph navigation */
     std::string get_output_pin_type_at_position(unsigned int pos);
-
-    //TODO: maybe one function is enough, try to do the mapped-version with "maptoscene / mapto/fromparent
+    
     //adds the offset to the pin coordinates, so the layouter has less work
     /** returns the unmapped input pin coordinates for a given type */
     QPointF get_unmapped_input_pin_coordinates(QString type);

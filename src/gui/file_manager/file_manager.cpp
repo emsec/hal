@@ -7,7 +7,7 @@
 #include "netlist/netlist_factory.h"
 #include "netlist/persistent/netlist_serializer.h"
 
-#include "gui_globals.h"
+#include "gui/gui_globals.h"
 
 #include <QFile>
 #include <QFileInfo>
@@ -16,7 +16,9 @@
 #include <QMessageBox>
 #include <QTextStream>
 
-file_manager::file_manager(QObject* parent) : QObject(parent), m_file_watcher(new QFileSystemWatcher(this)), m_file_open(false)
+file_manager::file_manager(QObject* parent) : QObject(parent),
+    m_file_watcher(new QFileSystemWatcher(this)),
+    m_file_open(false)
 {
     connect(m_file_watcher, &QFileSystemWatcher::fileChanged, this, &file_manager::handle_file_changed);
     connect(m_file_watcher, &QFileSystemWatcher::directoryChanged, this, &file_manager::handle_directory_changed);
@@ -40,7 +42,7 @@ void file_manager::handle_program_arguments(const program_arguments& args)
     }
 }
 
-bool file_manager::is_document_open()
+bool file_manager::file_open() const
 {
     return m_file_open;
 }
@@ -70,7 +72,8 @@ void file_manager::file_successfully_loaded(QString file_name)
     m_file_watcher->addPath(m_file_name);
     m_file_open = true;
     update_recent_files(m_file_name);
-    g_python_context = std::make_unique<python_context>();    // TODO HANDLE PYTHON CONTEXT SEPARATELY
+    g_python_context = std::make_unique<python_context>();    // HANDLE PYTHON CONTEXT SEPARATELY
+    g_selection_relay.init();
     Q_EMIT file_opened(m_file_name);
 }
 
@@ -94,7 +97,7 @@ void file_manager::open_file(QString file_name)
 
     if (g_netlist)
     {
-        // TODO HANDLE THIS CASE
+        // ADD ERROR MESSAGE
         return;
     }
 
@@ -253,7 +256,7 @@ void file_manager::close_file()
 
     m_timer->stop();
 
-    // TODO CHECK DIRTY AND TRIGGER SAVE ROUTINE
+    // CHECK DIRTY AND TRIGGER SAVE ROUTINE
 
     m_file_watcher->removePath(m_file_name);
     m_file_name = "";
@@ -277,7 +280,7 @@ void file_manager::handle_directory_changed(const QString& path)
     Q_EMIT file_directory_changed(path);
 }
 
-void file_manager::update_recent_files(const QString& file)
+void file_manager::update_recent_files(const QString& file) const
 {
     QStringList list;
 

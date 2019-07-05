@@ -49,7 +49,7 @@ void open_file_widget::dragLeaveEvent(QDragLeaveEvent* event)
 
 void open_file_widget::dropEvent(QDropEvent* event)
 {
-    //TODO pass url list to file manager and check for matching file extensions,
+    // pass url list to file manager and check for matching file extensions,
     //if match found -> show progress screen else do nothing
     const QMimeData* mime_data = event->mimeData();
     if (mime_data->hasUrls())

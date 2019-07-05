@@ -66,5 +66,5 @@ void notification::fade_out()
 
 void notification::cleanup()
 {
-    g_notification_manager.remove(this);
+    g_notification_manager->remove(this);
 }

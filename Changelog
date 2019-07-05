@@ -1,3 +1,17 @@
+hal-reverse (1.1.3) bionic; urgency=medium
+
+  * Remember last opened path for python scripts
+  * Add multi file selection for python scripts
+
+ -- Sebastian Wallat <sebastian.wallat@rub.de>  Wed, 03 Jul 2019 10:10:12 +0200
+
+hal-reverse (1.1.2) bionic; urgency=medium
+
+* Add hint to gate_libraries to README.md
+* Changes to the global state can be handled via hal_content_manager
+
+ -- Sebastian Wallat <sebastian.wallat@rub.de>  Thu, 27 Jun 2019 14:21:03 +0200
+
 hal-reverse (1.1.1) bionic; urgency=medium
 
   * Quickfix for Xilinx Simprim gate library

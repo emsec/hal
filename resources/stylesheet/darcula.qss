@@ -774,7 +774,26 @@ recent_file_item[hover=true] * {
 }
 
 recent_file_item[hover=true] #path-label {
-    /*color : #44494D;*/
+    color : #44494D;
+}
+
+recent_file_item QToolButton:hover {
+    background: #222222;
+    color: white;
+}
+
+recent_file_item[disabled=true]{
+    qproperty-icon_style : "all->#888888"
+    /*qproperty-icon_style : "all->#ffeea5";*/
+}
+
+recent_file_item[disabled=true] #name-label{
+    color: #555555;
+    /*qproperty-icon_style : "all->#ffeea5";*/
+}
+recent_file_item[disabled=true] #path-label {
+    /*color : #292B2D;*/
+    color: red;
 }
 
 /*********************************************
@@ -1249,8 +1268,8 @@ get_in_touch_item#documentation_item {
 }
 
 get_in_touch_item#ticket_item {
-    qproperty-icon_style : "";
-    qproperty-icon_path  : ":/icons/gitlab"
+    qproperty-icon_style : "all->#ff9000";
+    qproperty-icon_path  : ":/icons/github"
 }
 
 python_console {
@@ -1384,6 +1403,23 @@ gui_graph_gate_selection_widget {
 
 gui_graph_gate_selection_widget::item {
     border-right : 1px solid rgb(169, 183, 198);
+}
+
+dialog_overlay {
+background : rgba(0, 0, 0, 128);
+}
+
+QTreeView {
+    selection-background-color: green; /* Used on Mac ? TEST*/
+    selection-color: white; /* Used on Mac ? TEST*/
+    show-decoration-selected: 1;
+    outline: none;
+}
+
+QTreeView::item:selected {
+    background-color: green; /* Used on Windows ? TEST*/
+    color: white;
+    border: none;
 }
 
 /*

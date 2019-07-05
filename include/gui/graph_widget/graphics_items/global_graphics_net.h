@@ -30,6 +30,7 @@ class global_graphics_net : public graphics_net
 {
 public:
     static void load_settings();
+    static void update_alpha();
 
     global_graphics_net(std::shared_ptr<net> n);
 
@@ -40,6 +41,8 @@ public:
     void add_input(const QPointF& scene_position);
 
 private:
+    static qreal s_alpha;
+
     static qreal s_wire_length;
     static qreal s_circle_offset;
     static qreal s_radius;
@@ -50,4 +53,4 @@ private:
     QVector<QPointF> m_input_wires;
 };
 
-#endif    // GLOBAL_GRAPHICS_NET_H
+#endif // GLOBAL_GRAPHICS_NET_H

@@ -1,22 +1,20 @@
 #include "graph_widget/layouters/minimal_graph_layouter.h"
-#include "graph_widget/graph_scene_manager.h"
+
+#include "graph_widget/graphics_scene.h"
 #include "graph_widget/graphics_items/graphics_gate.h"
 #include "graph_widget/graphics_items/separated_graphics_net.h"
-#include "graph_widget/graphics_items/standard_graphics_net.h"
+#include "graph_widget/graphics_items/unrestricted_graphics_net.h"
 #include "gui_globals.h"
 
-#include "graph_widget/graphics_items/standard_graphics_gate.h"
+#include "graph_widget/graphics_items/minimal_graphics_gate.h"
 
-minimal_graph_layouter::minimal_graph_layouter()
+minimal_graph_layouter::minimal_graph_layouter(graph_context* context) : graph_layouter(context)
 {
-    m_name        = "Minimal Layouter";
-    m_description = "<p>A fast and simple layouting strategy, nodes are randomly place in a grid and nets are drawn as straight lines</p>";
+
 }
 
-void minimal_graph_layouter::layout(graph_scene* scene)
+void minimal_graph_layouter::layout()
 {
-    m_scene = scene;
-
     int x;
     int y;
     int i = 0;
@@ -25,7 +23,7 @@ void minimal_graph_layouter::layout(graph_scene* scene)
 
     for (auto& g : g_netlist->get_gates())
     {
-        graphics_gate* node_item = new standard_graphics_gate(g);
+        graphics_gate* node_item = new minimal_graphics_gate(g);
         nodes.append(node_item);
         map.insert(g, node_item);
         x = i * 200 % 20000;
@@ -66,16 +64,16 @@ void minimal_graph_layouter::layout(graph_scene* scene)
         if (n->is_unrouted())
             continue;
 
-        standard_graphics_net* net_item = new standard_graphics_net(n);
+        unrestricted_graphics_net* net_item = new unrestricted_graphics_net(n);
         endpoint src_end                = n->get_src();
         graphics_gate* src_node         = map.value(src_end.gate);
         if (!src_node)
         {
-            //no src node TODO handle
+            // HANDLE THIS CASE
             continue;
         }
 
-        QPointF src_position = src_node->get_output_pin_scene_position(QString::fromStdString(src_end.pin_type));
+        QPointF src_position = src_node->get_output_scene_position(n->get_id(), QString::fromStdString(src_end.pin_type));
         net_item->setPos(src_position);
 
         for (endpoint& dst_end : n->get_dsts())
@@ -83,11 +81,11 @@ void minimal_graph_layouter::layout(graph_scene* scene)
             graphics_gate* dst_node = map.value(dst_end.gate);
             if (!dst_node)
             {
-                //no dst node TODO handle
+                // HANDLE THIS CASE
                 continue;
             }
 
-            QPointF dst_position = dst_node->get_input_pin_scene_position(QString::fromStdString(dst_end.pin_type));
+            QPointF dst_position = dst_node->get_input_scene_position(n->get_id(), QString::fromStdString(dst_end.pin_type));
             net_item->line_to(dst_position);
             net_item->move_pen_to(src_position);
         }
@@ -102,27 +100,33 @@ void minimal_graph_layouter::reset()
 {
 }
 
-void minimal_graph_layouter::handle_netlist_event(netlist_event_handler::event ev, std::shared_ptr<netlist> netlist, u32 associated_data)
+void minimal_graph_layouter::add(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets)
 {
-    Q_UNUSED(ev);
-    Q_UNUSED(netlist);
-    Q_UNUSED(associated_data);
+    Q_UNUSED(modules)
+    Q_UNUSED(gates)
+    Q_UNUSED(nets)
 }
-void minimal_graph_layouter::handle_gate_event(gate_event_handler::event ev, std::shared_ptr<gate> gate, u32 associated_data)
+
+void minimal_graph_layouter::remove(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets)
 {
-    Q_UNUSED(ev);
-    Q_UNUSED(gate);
-    Q_UNUSED(associated_data);
+    Q_UNUSED(modules)
+    Q_UNUSED(gates)
+    Q_UNUSED(nets)
 }
-void minimal_graph_layouter::handle_net_event(net_event_handler::event ev, std::shared_ptr<net> net, u32 associated_data)
+
+void minimal_graph_layouter::expand(const u32 from_gate, const u32 via_net, const u32 to_gate)
 {
-    Q_UNUSED(ev);
-    Q_UNUSED(net);
-    Q_UNUSED(associated_data);
+    Q_UNUSED(from_gate)
+    Q_UNUSED(via_net)
+    Q_UNUSED(to_gate)
 }
-void minimal_graph_layouter::handle_module_event(module_event_handler::event ev, std::shared_ptr<module> module, u32 associated_data)
+
+const QString minimal_graph_layouter::name() const
 {
-    Q_UNUSED(ev);
-    Q_UNUSED(module);
-    Q_UNUSED(associated_data);
+    return "Minimal Layouter";
+}
+
+const QString minimal_graph_layouter::description() const
+{
+    return "<p>A fast and simple layouting strategy, nodes are randomly place in a grid and nets are drawn as straight lines</p>";
 }

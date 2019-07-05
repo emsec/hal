@@ -87,7 +87,7 @@ void loaded_plugin_item::mousePressEvent(QMouseEvent* event)
         s_drag_in_progress    = true;
         s_drag_start_position = event->pos();
     }
-    //TODO SIGNAL CLICKED
+    // SIGNAL CLICKED
     event->accept();
 }
 
@@ -96,7 +96,7 @@ void loaded_plugin_item::mouseReleaseEvent(QMouseEvent* event)
     if (event->button() == Qt::LeftButton)
         s_drag_in_progress = false;
 
-    //TODO SIGNAL CLICKED
+    // SIGNAL CLICKED
     event->accept();
 }
 

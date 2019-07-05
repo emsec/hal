@@ -164,6 +164,8 @@ private:
     int m_new_file_counter;
 
     long m_last_click_time;
+
+    QString m_last_opened_path;
 };
 
 #endif    // PYTHON_WIDGET_H

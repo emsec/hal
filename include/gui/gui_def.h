@@ -24,7 +24,49 @@
 #ifndef HAL_GUI_DEF_H
 #define HAL_GUI_DEF_H
 
-/* QString to c string */
-#define log_qstr(str) str.toLocal8Bit().constData()
+#include "def.h"
 
-#endif    //HAL_GUI_DEF_H
+namespace hal
+{
+
+enum class item_type
+{
+    module,
+    gate,
+    net
+};
+
+enum class node_type
+{
+    module,
+    gate
+};
+
+struct node
+{
+    node_type type;
+    u32 id;
+
+    bool operator<(const node& rhs) const
+    {
+        return id < rhs.id;
+    }
+
+    bool operator>(const node& rhs) const
+    {
+        return id > rhs.id;
+    }
+
+    bool operator==(const node& rhs) const
+    {
+        return type == rhs.type && id == rhs.id;
+    }
+};
+}
+
+//uint qHash(const hal::node& node)
+//{
+//    return node.id ^ (uint)node.type;
+//}
+
+#endif // HAL_GUI_DEF_H

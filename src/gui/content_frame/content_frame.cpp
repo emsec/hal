@@ -75,12 +75,12 @@ void content_frame::childEvent(QChildEvent* event)
 
     if ((bool) event->FocusIn)
     {
-        //TODO add debug code to show focus
+        // add debug code to show focus
     }
 
     if ((bool) event->FocusOut)
     {
-        //TODO add debug code to show focus
+        // add debug code to show focus
     }
 }
 

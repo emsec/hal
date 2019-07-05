@@ -16,7 +16,7 @@
 
 #include "gui/docking_system/dock_bar.h"
 #include "gui/file_manager/file_manager.h"
-#include "gui/graph_navigation_widget/graph_navigation_widget.h"
+#include "gui/graph_navigation_widget/old_graph_navigation_widget.h"
 #include "gui/gui_globals.h"
 #include "gui/hal_content_manager/hal_content_manager.h"
 #include "gui/hal_logger/hal_logger_widget.h"
@@ -45,7 +45,7 @@
 
 main_window::main_window(QWidget* parent) : QWidget(parent), m_schedule_widget(new plugin_schedule_widget()), m_action_schedule(new QAction(this)), m_action_content(new QAction(this))
 {
-    ensurePolished();    //TODO ADD REPOLISH METHOD
+    ensurePolished();    // ADD REPOLISH METHOD
     connect(file_manager::get_instance(), &file_manager::file_opened, this, &main_window::handle_file_opened);
 
     g_content_manager.set_main_window(this);
@@ -356,7 +356,7 @@ extern void run_main(const QString file_name, const QList<QString> plugins);
 
 void main_window::run_plugin_triggered(const QString& name)
 {
-    if (!file_manager::get_instance()->is_document_open())
+    if (!file_manager::get_instance()->file_open())
     {
         return;
     }
@@ -411,15 +411,15 @@ void main_window::debug_stuff2()
 
 void main_window::debug_stuff3()
 {
-    g_notification_manager.debug_add_notification();
+    g_notification_manager->debug_add_notification();
 }
 
-//TODO GENERALIZE TOGGLE METHODS
+// GENERALIZE TOGGLE METHODS
 void main_window::toggle_schedule()
 {
     if (m_stacked_widget->currentWidget() == m_schedule_widget)
     {
-        if (file_manager::get_instance()->is_document_open())
+        if (file_manager::get_instance()->file_open())
             m_stacked_widget->setCurrentWidget(m_layout_area);
         else
             m_stacked_widget->setCurrentWidget(m_welcome_screen);
@@ -437,7 +437,7 @@ void main_window::toggle_settings()
 {
     if (m_stacked_widget->currentWidget() == m_settings)
     {
-        if (file_manager::get_instance()->is_document_open())
+        if (file_manager::get_instance()->file_open())
             m_stacked_widget->setCurrentWidget(m_layout_area);
         else
             m_stacked_widget->setCurrentWidget(m_welcome_screen);
@@ -557,7 +557,6 @@ void main_window::restore_state()
     QRect rect = QApplication::desktop()->screenGeometry();
     QSize size = g_settings.value("main_window/size", QSize(rect.width(), rect.height())).toSize();
     resize(size);
-    //TODO
     //restore state of all subwindows
     m_layout_area->init_splitter_size(size);
 }
@@ -566,7 +565,6 @@ void main_window::save_state()
 {
     g_settings.setValue("main_window/position", pos());
     g_settings.setValue("main_window/size", size());
-    //TODO
     //save state of all subwindows and everything else that might need to be restored on the next program start
     g_settings.sync();
 }

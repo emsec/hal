@@ -1,7 +1,7 @@
 #ifndef NETLIST_WATCHER_H
 #define NETLIST_WATCHER_H
 
-#include "graph_relay/graph_relay.h"
+#include "netlist_relay/netlist_relay.h"
 
 #include <QObject>
 

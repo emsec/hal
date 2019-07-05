@@ -24,7 +24,7 @@ void selection_history_navigator::handle_gate_focused(void* sender, u32 id)
     if(sender == this)
         return;
 
-    store_selection(id, selection_relay::single_type::gate);
+    store_selection(id, selection_relay::item_type::gate);
 }
 
 void selection_history_navigator::handle_net_focused(void* sender, u32 id)
@@ -32,10 +32,10 @@ void selection_history_navigator::handle_net_focused(void* sender, u32 id)
     if(sender == this)
         return;
 
-    store_selection(id, selection_relay::single_type::net);
+    store_selection(id, selection_relay::item_type::net);
 }
 
-void selection_history_navigator::store_selection(u32 id, selection_relay::single_type type)
+void selection_history_navigator::store_selection(u32 id, selection_relay::item_type type)
 {
     m_current_item_iterator = m_selection_container.insert(m_current_item_iterator, selection(id, type));
 
@@ -61,14 +61,14 @@ void selection_history_navigator::relay_selection(selection selection)
     QList<u32> gate_ids;
     QList<u32> submod_ids;
 
-    selection_relay::single_type type = selection.get_type();
+    selection_relay::item_type type = selection.get_type();
 
-    if(type == selection_relay::single_type::net)
+    if(type == selection_relay::item_type::net)
     {
         net_ids.append(selection.get_net_id());
         g_selection_relay.relay_current_net(this, *net_ids.begin());
     }
-    else if(type == selection_relay::single_type::gate)
+    else if(type == selection_relay::item_type::gate)
     {
         gate_ids.append(selection.get_gate_id());
         g_selection_relay.relay_current_gate(this, *gate_ids.begin());

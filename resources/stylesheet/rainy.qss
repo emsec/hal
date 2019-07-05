@@ -1140,8 +1140,8 @@ qproperty-icon_path: ":/icons/info"
 }
 
 get_in_touch_item#ticket_item {
-qproperty-icon_style: "";
-qproperty-icon_path: ":/icons/gitlab"
+qproperty-icon_style : "all->#ff9000";
+qproperty-icon_path  : ":/icons/github"
 }
 
 code_editor {

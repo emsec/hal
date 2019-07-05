@@ -1,26 +1,14 @@
 #include "overlay/overlay.h"
 
 #include <QEvent>
-#include <QPainter>
 #include <QResizeEvent>
-#include <QStyleOption>
 
-overlay::overlay(QWidget* parent) : QWidget(parent)
+overlay::overlay(QWidget* parent) : QFrame(parent)
 {
-    setAttribute(Qt::WA_NoSystemBackground);
-    setAttribute(Qt::WA_TranslucentBackground);
+//    setAttribute(Qt::WA_NoSystemBackground);
+//    setAttribute(Qt::WA_TranslucentBackground);
     //setAttribute(Qt::WA_TransparentForMouseEvents);
     handle_parent_changed();
-}
-
-void overlay::paintEvent(QPaintEvent* event)
-{
-    Q_UNUSED(event)
-
-    QStyleOption opt;
-    opt.init(this);
-    QPainter p(this);
-    style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
 }
 
 bool overlay::eventFilter(QObject* watched, QEvent* event)
@@ -32,7 +20,9 @@ bool overlay::eventFilter(QObject* watched, QEvent* event)
         else if (event->type() == QEvent::ChildAdded)
             raise();
     }
-    return QWidget::eventFilter(watched, event);
+
+    // PASS UNHANDLED EVENTS TO BASE CLASS
+    return QFrame::eventFilter(watched, event);
 }
 
 bool overlay::event(QEvent* event)
@@ -40,19 +30,25 @@ bool overlay::event(QEvent* event)
     if (event->type() == QEvent::ParentAboutToChange)
     {
         if (parent())
+        {
             parent()->removeEventFilter(this);
+            return true;
+        }
     }
     else if (event->type() == QEvent::ParentChange)
+    {
         handle_parent_changed();
-    return QWidget::event(event);
+        return true;
+    }
+
+    // PASS UNHANDLED EVENTS TO BASE CLASS
+    return QFrame::event(event);
 }
 
 void overlay::mousePressEvent(QMouseEvent* event)
 {
-    Q_UNUSED(event)
-
     Q_EMIT clicked();
-    event->accept();
+    event->accept(); // ACCEPT EXPLICITLY
 }
 
 void overlay::handle_parent_changed()
@@ -62,4 +58,9 @@ void overlay::handle_parent_changed()
 
     parent()->installEventFilter(this);
     raise();
+
+    QWidget* w = qobject_cast<QWidget*>(parent());
+
+    if (w)
+        resize(w->size());
 }

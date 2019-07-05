@@ -40,7 +40,7 @@ void scheduled_plugin_item_area::dragEnterEvent(QDragEnterEvent* event)
         y += pair.first->height();
         m_y_values.append(y);
 
-        //TODO FIX MAGIC NUMBER
+        // FIX MAGIC NUMBER
         pair.second->set_end_value(30);
     }
 
@@ -73,7 +73,7 @@ void scheduled_plugin_item_area::dragMoveEvent(QDragMoveEvent* event)
         m_active_marker->collapse();
 
     m_active_marker = nullptr;
-    // TODO SHOW APPEND MARKER (MAYBE)
+    // SHOW APPEND MARKER (MAYBE)
 }
 
 void scheduled_plugin_item_area::dragLeaveEvent(QDragLeaveEvent* event)
