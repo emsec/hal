@@ -170,8 +170,9 @@ protected:
 /**
  * Used by clueless testers to understand the verilog syntax used by the writer (will be removed later)
  */
-//#include "hdl_writer/hdl_writer_verilog.h"
-/*TEST_F(hdl_parser_verilog_test, check_temporary)
+ /*
+#include "hdl_writer/hdl_writer_verilog.h"
+TEST_F(hdl_parser_verilog_test, check_temporary)
 {
     TEST_START
         {
@@ -180,6 +181,9 @@ protected:
 
 
             // Mark the global gates as such
+            nl->get_gate_by_id(MIN_GATE_ID+1)->set_data("generic","my_key","string","test_test");
+            nl->get_gate_by_id(MIN_GATE_ID+1)->set_data("generic","my_second_key","string","test_2");
+
             nl->mark_global_gnd_gate(nl->get_gate_by_id(MIN_GATE_ID+1));
             nl->mark_global_vcc_gate(nl->get_gate_by_id(MIN_GATE_ID+2));
 
@@ -351,20 +355,21 @@ TEST_F(hdl_parser_verilog_test, check_main_example)
 
 /**
  * Testing the correct detection of single line comments (with '//') and comment blocks(with '/ *' and '* /'). Therefore
- * we comment out a verilog statement, which should be ignored
+ * we comment out a verilog statement, which should be ignored. Since verilog attribute (with  '(*' and '*)') are ignored
+ * as well, we can test them, like they were comment blocks
  *
  * Functions: parse
  */
 TEST_F(hdl_parser_verilog_test, check_comment_detection){
     TEST_START
-        { // Use the one-line-comment ('//')
+        {
+            // Use the one-line-comment ('//')
             std::stringstream input("module  ( \n"
                                     " ) ;\n"
                                     "  wire net_0 ;\n"
                                     "  //wire comment_net ;\n"
                                     "  wire net_1;\n"
                                     "endmodule");
-            //std::cout << input.str() << std::endl;
             test_def::capture_stdout();
             hdl_parser_verilog verilog_parser(input);
             std::shared_ptr<netlist> nl = verilog_parser.parse(g_lib_name);
@@ -382,13 +387,37 @@ TEST_F(hdl_parser_verilog_test, check_comment_detection){
             EXPECT_TRUE(nl->get_nets("comment_net").empty());
             EXPECT_EQ(nl->get_nets().size(), 2);
         }
-        { // Use a multi-line comment ('/ *', '* /') inside one single line
+        {
+            // Use a multi-line comment ('/ *', '* /') for a complete single line
+            std::stringstream input("module  ( \n"
+                                    " ) ;\n"
+                                    "  wire net_0 ;\n"
+                                    "/*  wire comment_net;*/\n"
+                                    "endmodule");
+            test_def::capture_stdout();
+            hdl_parser_verilog verilog_parser(input);
+            std::shared_ptr<netlist> nl = verilog_parser.parse(g_lib_name);
+            if (nl == nullptr)
+            {
+                std::cout << test_def::get_captured_stdout();
+            }
+            else
+            {
+                test_def::get_captured_stdout();
+            }
+
+            ASSERT_NE(nl, nullptr);
+
+            EXPECT_TRUE(nl->get_nets("comment_net").empty());
+            EXPECT_EQ(nl->get_nets().size(), 1);
+        }
+        {
+            // Use a multi-line comment ('/ *', '* /') inside one single line
             std::stringstream input("module  ( \n"
                                     " ) ;\n"
                                     "  wire net_0 ;\n"
                                     "  wire /*comment_net*/ net_1;\n"
                                     "endmodule");
-            std::cout << input.str() << std::endl;
             test_def::capture_stdout();
             hdl_parser_verilog verilog_parser(input);
             std::shared_ptr<netlist> nl = verilog_parser.parse(g_lib_name);
@@ -406,15 +435,93 @@ TEST_F(hdl_parser_verilog_test, check_comment_detection){
             EXPECT_TRUE(nl->get_nets("comment_net").empty());
             EXPECT_EQ(nl->get_nets().size(), 2);
         }
-        { // Use the multi-line-comment over multiple lines ('//')
+//        {
+//            // Use the multi-line-comment over multiple lines ('/ *' and '* /')
+//            std::stringstream input("module  ( \n"
+//                                    " ) ;\n"
+//                                    "  wire net_0 ;\n"
+//                                    "/*  wire comment_net_0 ;\n"
+//                                    "  wire comment_net_1 ;\n"
+//                                    "  wire comment_net_2 ;*/\n"
+//                                    "  wire net_1;\n"
+//                                    "endmodule");
+//            test_def::capture_stdout();
+//            hdl_parser_verilog verilog_parser(input);
+//            std::shared_ptr<netlist> nl = verilog_parser.parse(g_lib_name);
+//            if (nl == nullptr)
+//            {
+//                std::cout << test_def::get_captured_stdout();
+//            }
+//            else
+//            {
+//                test_def::get_captured_stdout();
+//            }
+//
+//            ASSERT_NE(nl, nullptr);
+//
+//            EXPECT_TRUE(nl->get_nets("comment_net_0").empty());
+//            EXPECT_TRUE(nl->get_nets("comment_net_1").empty());
+//            EXPECT_TRUE(nl->get_nets("comment_net_2").empty());
+//            EXPECT_EQ(nl->get_nets().size(), 2);
+//        }
+        {
+            // Use a multi-line attributes ('(*', '*)') for a complete single line
             std::stringstream input("module  ( \n"
                                     " ) ;\n"
                                     "  wire net_0 ;\n"
-                                    "/*  wire comment_net_0 ;\n"
-                                    "  wire comment_net_1 ;*/\n"
+                                    "(*  wire comment_net;*)\n"
+                                    "endmodule");
+            test_def::capture_stdout();
+            hdl_parser_verilog verilog_parser(input);
+            std::shared_ptr<netlist> nl = verilog_parser.parse(g_lib_name);
+            if (nl == nullptr)
+            {
+                std::cout << test_def::get_captured_stdout();
+            }
+            else
+            {
+                test_def::get_captured_stdout();
+            }
+
+            ASSERT_NE(nl, nullptr);
+
+            EXPECT_TRUE(nl->get_nets("comment_net").empty());
+            EXPECT_EQ(nl->get_nets().size(), 1);
+        }
+        {
+            // Use an attribute ('(*', '*)') inside one single line
+            std::stringstream input("module  ( \n"
+                                    " ) ;\n"
+                                    "  wire net_0 ;\n"
+                                    "  wire (*comment_net*) net_1;\n"
+                                    "endmodule");
+            test_def::capture_stdout();
+            hdl_parser_verilog verilog_parser(input);
+            std::shared_ptr<netlist> nl = verilog_parser.parse(g_lib_name);
+            if (nl == nullptr)
+            {
+                std::cout << test_def::get_captured_stdout();
+            }
+            else
+            {
+                test_def::get_captured_stdout();
+            }
+
+            ASSERT_NE(nl, nullptr);
+
+            EXPECT_TRUE(nl->get_nets("comment_net").empty());
+            EXPECT_EQ(nl->get_nets().size(), 2);
+        }
+        /*{ ISSUE: fails (comments_net_1 is created)
+            // Use an attribute over multiple lines ('(*' and '*)')
+            std::stringstream input("module  ( \n"
+                                    " ) ;\n"
+                                    "  wire net_0 ;\n"
+                                    "(*  wire comment_net_0 ;\n"
+                                    "  wire comment_net_1 ;\n"
+                                    "  wire comment_net_2 ;*)\n"
                                     "  wire net_1;\n"
                                     "endmodule");
-            //std::cout << input.str() << std::endl;
             test_def::capture_stdout();
             hdl_parser_verilog verilog_parser(input);
             std::shared_ptr<netlist> nl = verilog_parser.parse(g_lib_name);
@@ -431,34 +538,181 @@ TEST_F(hdl_parser_verilog_test, check_comment_detection){
 
             EXPECT_TRUE(nl->get_nets("comment_net_0").empty());
             EXPECT_TRUE(nl->get_nets("comment_net_1").empty());
+            EXPECT_TRUE(nl->get_nets("comment_net_2").empty());
             EXPECT_EQ(nl->get_nets().size(), 2);
-        }
+        }*/
 
     TEST_END
 }
 
 /**
- * Testing the correct storage of data
+ * Testing the correct storage of data of the following data types:
+ * integer, floating_point, string, bit_vector (hexadecimal, decimal, octal, binary)
  *
  * Functions: parse
  */
 TEST_F(hdl_parser_verilog_test, check_generic_map){
     TEST_START
-        {
-            // IN PROGRESS
-        }
+        /*{ ISSUE: value has ')' at the end
+            // Store an instance of all possible data types in one gate
+            std::stringstream input("module  (\n"
+                                    "  global_in,\n"
+                                    "  global_out\n"
+                                    " ) ;\n"
+                                    "  input global_in ;\n"
+                                    "  output global_out ;\n"
+                                    "INV #(.key_integer(1234),\n"
+                                    ".key_floating_point(1.234),\n"
+                                    ".key_string(\"test_string\"),\n"
+                                    ".key_bit_vector_hex('habc'),\n"
+                                    ".key_bit_vector_dec('d2748'),\n"
+                                    ".key_bit_vector_oct('o5274'),\n"
+                                    ".key_bit_vector_bin('b101010111100')) \n"
+                                    "gate_0 (\n"
+                                    "  .\\I (global_in ),\n"
+                                    "  .\\O (global_out )\n"
+                                    " ) ;\n"
+                                    "endmodule");
+            test_def::capture_stdout();
+            hdl_parser_verilog verilog_parser(input);
+            std::shared_ptr<netlist> nl = verilog_parser.parse(g_lib_name);
+            if (nl == nullptr)
+            {
+                std::cout << test_def::get_captured_stdout();
+            }
+            else
+            {
+                test_def::get_captured_stdout();
+            }
+
+            ASSERT_NE(nl, nullptr);
+
+            ASSERT_EQ(nl->get_gates("INV","gate_0").size(), 1);
+            std::shared_ptr<gate> gate_0 = *nl->get_gates("INV","gate_0").begin();
+
+            EXPECT_EQ(gate_0->get_data_by_key("generic","key_integer"), std::make_tuple("integer", "1234"));
+            // NOTE: check the other data types
+        }*/
     TEST_END
 }
 
 /**
- * Testing the correct usage of vector bounds
+ * Testing the correct usage of vector bounds (for example: "wire [1:3] net_0")
  *
  * Functions: parse
  */
 TEST_F(hdl_parser_verilog_test, check_vector_bounds){
     TEST_START
         {
-            // IN PROGRESS
+            // Use a net vector of size 3
+            std::stringstream input("module  (\n"
+                                    "  global_in,\n"
+                                    "  global_out\n"
+                                    " ) ;\n"
+                                    "  input global_in ;\n"
+                                    "  output global_out ;\n"
+                                    "  wire [1:3] net_vec ;\n"
+                                    "AND3 gate_0 (\n"
+                                    "  .\\I0 (net_vec[1] ),\n"
+                                    "  .\\I1 (net_vec[2] ),\n"
+                                    "  .\\I2 (net_vec[3] ),\n"
+                                    "  .\\O (global_out )\n"
+                                    " ) ;\n"
+                                    "INV gate_1 (\n"
+                                    "  .\\I (global_in ),\n"
+                                    "  .\\O (net_vec[1] )\n"
+                                    ") ;\n"
+                                    "INV gate_2 (\n"
+                                    "  .\\I (global_in ),\n"
+                                    "  .\\O (net_vec[2] )\n"
+                                    ") ;\n"
+                                    "INV gate_3 (\n"
+                                    "  .\\I (global_in ),\n"
+                                    "  .\\O (net_vec[3] )\n"
+                                    ") ;\n"
+                                    "endmodule");
+            test_def::capture_stdout();
+            hdl_parser_verilog verilog_parser(input);
+            std::shared_ptr<netlist> nl = verilog_parser.parse(g_lib_name);
+            if (nl == nullptr)
+            {
+                std::cout << test_def::get_captured_stdout();
+            }
+            else
+            {
+                test_def::get_captured_stdout();
+            }
+
+            ASSERT_NE(nl, nullptr);
+            EXPECT_EQ(nl->get_nets().size(), 5); // 3 of the net_vector + global_in + global_out
+            ASSERT_EQ(nl->get_nets("net_vec[1]").size(), 1);
+            ASSERT_EQ(nl->get_nets("net_vec[2]").size(), 1);
+            ASSERT_EQ(nl->get_nets("net_vec[3]").size(), 1);
+
+            std::shared_ptr<net> net_vec_1 = *nl->get_nets("net_vec[1]").begin();
+            std::shared_ptr<net> net_vec_2 = *nl->get_nets("net_vec[2]").begin();
+            std::shared_ptr<net> net_vec_3 = *nl->get_nets("net_vec[3]").begin();
+
+            // Check if all gates are created
+            for (std::string g_name : std::set<std::string>({"gate_0", "gate_1", "gate_2", "gate_3"})){
+                ASSERT_EQ(nl->get_gates(DONT_CARE, g_name).size(), 1);
+            }
+
+            EXPECT_EQ(net_vec_1->get_src().get_gate(), *nl->get_gates(DONT_CARE, "gate_1").begin());
+            ASSERT_EQ(net_vec_1->get_dsts().size(), 1);
+            EXPECT_EQ((*net_vec_1->get_dsts().begin()).get_gate(), *nl->get_gates(DONT_CARE, "gate_0").begin());
+        }
+        {
+            // Declare multiple wire vectors in one line
+            std::stringstream input("module  (\n"
+                                    "  global_in,\n"
+                                    "  global_out\n"
+                                    " ) ;\n"
+                                    "  input global_in ;\n"
+                                    "  output global_out ;\n"
+                                    "  wire [0:1] net_vec_0, net_vec_1 ;\n"
+                                    "AND4 gate_0 (\n"
+                                    "  .\\I0 (net_vec_0[0] ),\n"
+                                    "  .\\I1 (net_vec_0[1] ),\n"
+                                    "  .\\I2 (net_vec_1[0] ),\n"
+                                    "  .\\I3 (net_vec_1[1] ),\n"
+                                    "  .\\O (global_out )\n"
+                                    " ) ;\n"
+                                    "INV gate_1 (\n"
+                                    "  .\\I (global_in ),\n"
+                                    "  .\\O (net_vec_0[0] )\n"
+                                    ") ;\n"
+                                    "INV gate_2 (\n"
+                                    "  .\\I (global_in ),\n"
+                                    "  .\\O (net_vec_0[1] )\n"
+                                    ") ;\n"
+                                    "INV gate_3 (\n"
+                                    "  .\\I (global_in ),\n"
+                                    "  .\\O (net_vec_1[0] )\n"
+                                    ") ;\n"
+                                    "INV gate_4 (\n"
+                                    "  .\\I (global_in ),\n"
+                                    "  .\\O (net_vec_1[1] )\n"
+                                    ") ;\n"
+                                    "endmodule");
+            test_def::capture_stdout();
+            hdl_parser_verilog verilog_parser(input);
+            std::shared_ptr<netlist> nl = verilog_parser.parse(g_lib_name);
+            if (nl == nullptr)
+            {
+                std::cout << test_def::get_captured_stdout();
+            }
+            else
+            {
+                test_def::get_captured_stdout();
+            }
+
+            ASSERT_NE(nl, nullptr);
+            EXPECT_EQ(nl->get_nets().size(), 6); // 3 of the net_vector + global_in + global_out
+            ASSERT_EQ(nl->get_nets("net_vec_0[0]").size(), 1);
+            ASSERT_EQ(nl->get_nets("net_vec_0[1]").size(), 1);
+            ASSERT_EQ(nl->get_nets("net_vec_0[0]").size(), 1);
+            ASSERT_EQ(nl->get_nets("net_vec_0[1]").size(), 1);
         }
     TEST_END
 }

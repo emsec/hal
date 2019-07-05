@@ -235,7 +235,7 @@ TEST_F(utils_test, check_split)
     // Some calls without the obey_brackets-flag
     EXPECT_EQ(split("string", ',', false), std::vector<std::string>({"string"}));
     EXPECT_EQ(split("str,ing", ',', false), std::vector<std::string>({"str", "ing"}));
-    EXPECT_EQ(split(",str,ing,", ',', false), std::vector<std::string>({"", "str", "ing", ""}));    //FAILS? TODO
+    EXPECT_EQ(split(",str,ing,", ',', false), std::vector<std::string>({"", "str", "ing", ""}));
     EXPECT_EQ(split("(st,r,ing)", ',', false), std::vector<std::string>({"(st", "r", "ing)"}));
 
     // Some calls with the obey_brackets-flag
@@ -365,7 +365,7 @@ TEST_F(utils_test, check_replace)
     // NEGATIVE TESTS
     // ########################
 
-    EXPECT_EQ(replace("This is a string", "", "XX"), "This is a string");    //FAILS (CRITICAL) TODO
+    EXPECT_EQ(replace("This is a string", "", "XX"), "This is a string");
     EXPECT_EQ(replace("", "XX", "YY"), "");
     TEST_END
 }
@@ -539,7 +539,7 @@ TEST_F(utils_test, check_get_first_directory_exists)
         EXPECT_EQ(get_first_directory_exists(path_set), lib_path);
     }
     {
-        // No existing dirs (should return "") -> FAILS TODO
+        // No existing dirs (should return "")
         std::vector<hal::path> path_set({non_existing_path_1, non_existing_path_2});
         get_first_directory_exists(path_set);
         EXPECT_EQ(get_first_directory_exists(path_set).string(), hal::path("").string());
@@ -549,7 +549,7 @@ TEST_F(utils_test, check_get_first_directory_exists)
     // NEGATIVE TESTS
     // ########################
     {
-        // Empty list of paths -> FAILS TODO
+        // Empty list of paths
         std::vector<hal::path> path_set_empty({});
         EXPECT_EQ(get_first_directory_exists(path_set_empty).string(), "");
     }
@@ -605,7 +605,7 @@ TEST_F(utils_test, check_get_file)
         EXPECT_EQ(get_file("tmp.txt", dirs_to_search).string(), dir_1_path.string() + "/tmp.txt");
     }
     {
-        // No directory contains the searched file -> wrong documentation? TODO
+        // No directory contains the searched file -> wrong documentation?
         std::vector<hal::path> dirs_to_search({dir_empty_1_path, dir_empty_2_path});
         EXPECT_EQ(get_file("tmp.txt", dirs_to_search).string(), hal::path(""));
     }
@@ -614,12 +614,12 @@ TEST_F(utils_test, check_get_file)
     // NEGATIVE TESTS
     // ########################
     {
-        // path hints are empty -> wrong documentation? TODO
+        // path hints are empty -> wrong documentation?
         std::vector<hal::path> dirs_to_search({});
         EXPECT_EQ(get_file("tmp.txt", dirs_to_search).string(), hal::path("").string());
     }
     {
-        // file_name is an empty string -> intended behaviour? TODO
+        // file_name is an empty string -> intended behaviour?
         std::vector<hal::path> dirs_to_search({dir_empty_1_path});
         EXPECT_EQ(get_file("", dirs_to_search).string(), hal::path("").string());
     }

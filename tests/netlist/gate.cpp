@@ -114,7 +114,7 @@ protected:
 
     /*
      *      Example netlist no 2 circuit diagram (Id in brackets). Used for get predecessors
-     *      and successors (TODO: currently no correct, since AND4 has only one output pin)
+     *      and successors (NOTE: currently no correct, since AND4 has only one output pin)
      *
      *    =          =----------=          =
      *    =          =----------=          =

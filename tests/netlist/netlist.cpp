@@ -839,7 +839,7 @@ TEST_START
 {
     // Add and delete an unrouted net in a normal way
     std::shared_ptr<netlist> nl = create_empty_netlist();
-    std::shared_ptr<net> net_0 = nl->create_net(MIN_NET_ID+1, "net_0");
+    std::shared_ptr<net> net_0 = nl->create_net(MIN_NET_ID+0, "net_0");
     bool suc                   = nl->delete_net(net_0);
     EXPECT_TRUE(suc);
     EXPECT_FALSE(nl->is_net_in_netlist(net_0));
@@ -853,14 +853,14 @@ TEST_START
     EXPECT_TRUE(suc);
     EXPECT_FALSE(nl->is_net_in_netlist(net_045));
     // Check if the netlist was updated correctly
-    EXPECT_TRUE(nl->get_gate_by_id(MIN_GATE_ID+1)->get_successors().empty());
+    EXPECT_TRUE(nl->get_gate_by_id(MIN_GATE_ID+0)->get_successors().empty());
+    EXPECT_TRUE(nl->get_gate_by_id(MIN_GATE_ID+4)->get_predecessors().empty());
     EXPECT_TRUE(nl->get_gate_by_id(MIN_GATE_ID+5)->get_predecessors().empty());
-    EXPECT_TRUE(nl->get_gate_by_id(MIN_GATE_ID+6)->get_predecessors().empty());
 }
 {
     // Delete a global input net
     std::shared_ptr<netlist> nl = create_empty_netlist();
-    std::shared_ptr<net> net_0  = nl->create_net(MIN_NET_ID+1, "net_0");
+    std::shared_ptr<net> net_0  = nl->create_net(MIN_NET_ID+0, "net_0");
     nl->mark_global_input_net(net_0);
     bool suc = nl->delete_net(net_0);
 
@@ -871,7 +871,7 @@ TEST_START
 {
     // Delete a global output net
     std::shared_ptr<netlist> nl = create_empty_netlist();
-    std::shared_ptr<net> net_0  = nl->create_net(MIN_NET_ID+1, "net_0");
+    std::shared_ptr<net> net_0  = nl->create_net(MIN_NET_ID+0, "net_0");
     nl->mark_global_output_net(net_0);
     bool suc = nl->delete_net(net_0);
 
@@ -882,7 +882,7 @@ TEST_START
 {
     // Delete a global inout net
     std::shared_ptr<netlist> nl = create_empty_netlist();
-    std::shared_ptr<net> net_0  = nl->create_net(MIN_NET_ID+1, "net_0");
+    std::shared_ptr<net> net_0  = nl->create_net(MIN_NET_ID+0, "net_0");
     nl->mark_global_inout_net(net_0);
     bool suc = nl->delete_net(net_0);
 
@@ -904,7 +904,7 @@ TEST_START
     // Try to delete a net which is not part of the netlist
     NO_COUT_TEST_BLOCK;
     std::shared_ptr<netlist> nl = create_empty_netlist();
-    std::shared_ptr<net> net_0  = nl->create_net(MIN_NET_ID+1, "net_0");
+    std::shared_ptr<net> net_0  = nl->create_net(MIN_NET_ID+0, "net_0");
     // net_0 wasn't added
     bool suc = nl->delete_net(net_0);
 
@@ -1375,7 +1375,7 @@ TEST_F(netlist_test, check_create_module)
             std::shared_ptr<module> m_0 = nl->create_module(MIN_MODULE_ID+0,"module_0", nl->get_top_module());
             nl->delete_module(m_0);
             std::shared_ptr<module> m_0_other = nl->create_module(MIN_MODULE_ID+0,"module_0_other", nl->get_top_module());
-            //EXPECT_FALSE(nl->is_module_in_netlist(m_0)); //TODO should be  true
+            //EXPECT_FALSE(nl->is_module_in_netlist(m_0)); //ISSUE: should be  true
             EXPECT_TRUE(nl->is_module_in_netlist(m_0_other));
         }
 
@@ -1396,7 +1396,7 @@ TEST_F(netlist_test, check_create_module)
             EXPECT_EQ(m_0_other, nullptr);
         }
         {
-            // Create a module with the id, used of the top module TODO: FAILS
+            // Create a module with the id, used of the top module
             NO_COUT_TEST_BLOCK;
             std::shared_ptr<netlist> nl = create_empty_netlist();
             std::shared_ptr<module> m_0 = nl->create_module(TOP_MODULE_ID,"module_0", nl->get_top_module());
@@ -1418,7 +1418,7 @@ TEST_F(netlist_test, check_create_module)
             EXPECT_EQ(m_0, nullptr);
         }
         /*{
-            // Create a module where the parrent module is part of ANOTHER netlist TODO: FAILS
+            // Create a module where the parrent module is part of ANOTHER netlist ISSUE: fails
             NO_COUT_TEST_BLOCK;
             std::shared_ptr<netlist> nl = create_empty_netlist();
             std::shared_ptr<netlist> nl_other = create_empty_netlist();
@@ -1549,7 +1549,7 @@ TEST_F(netlist_test, check_is_module_in_netlist)
         }
         /*{
             // Create a module, delete it and create a new module with the same id and check if the !old_one! is in the netlist
-            // TODO: fails
+            // ISSUE: fails
             std::shared_ptr<netlist> nl = create_empty_netlist();
             std::shared_ptr<module> m_0_old = nl->create_module(MIN_MODULE_ID+0, "module_0_old", nl->get_top_module());
             nl->delete_module(m_0_old);
@@ -1559,7 +1559,7 @@ TEST_F(netlist_test, check_is_module_in_netlist)
         // Negative
         {
             // Pass a nullptr
-            // TODO: fails (SIGSEGV)
+            // ISSUE: fails (SIGSEGV)
             std::shared_ptr<netlist> nl = create_empty_netlist();
             EXPECT_TRUE(nl->is_module_in_netlist(nullptr));
         }*/

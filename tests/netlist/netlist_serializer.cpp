@@ -192,7 +192,7 @@ protected:
         return true;
     }
 
-    // Returns true if the two gates have the same content TODO: decorator types
+    // Returns true if the two gates have the same content
     bool gates_are_equal(std::shared_ptr<gate> g0, std::shared_ptr<gate> g1)
     {
         if (g0 == nullptr || g1 == nullptr)
@@ -513,7 +513,7 @@ TEST_F(netlist_serializer_test, check_serialize_and_deserialize){
 TEST_F(netlist_serializer_test, check_serialize_and_deserialize_negative)
 {
     TEST_START
-        /*{ TODO: Failed with SIGSEGV
+        /*{ ISSUE: Failed with SIGSEGV
                 // Serialize a netlist which is a nullptr
                 bool suc = netlist_serializer::serialize_netlist(nullptr, test_hal_file_path);
                 EXPECT_FALSE(suc);
