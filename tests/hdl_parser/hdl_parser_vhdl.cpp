@@ -178,16 +178,16 @@ TEST_F(hdl_parser_vhdl_test, check_main_example)
                             "    );\n"
                             "end STRUCTURE;\n"
                             "");
-    //test_def::capture_stdout();
+    test_def::capture_stdout();
     hdl_parser_vhdl vhdl_parser(input);
     std::shared_ptr<netlist> nl = vhdl_parser.parse(g_lib_name);
     if (nl == nullptr)
     {
-        //std::cout << test_def::get_captured_stdout();
+        std::cout << test_def::get_captured_stdout();
     }
     else
     {
-        //test_def::get_captured_stdout();
+        test_def::get_captured_stdout();
     }
 
     ASSERT_NE(nl, nullptr);
