@@ -15,14 +15,13 @@ void graphics_net::load_settings()
     s_pen.setWidthF(1.5);
     s_pen.setJoinStyle(Qt::MiterJoin);
 
-    s_stroke_width = 0.3;
+    s_stroke_width = 1.5;
 }
 
-graphics_net::graphics_net(std::shared_ptr<net> n) : graphics_item(item_type::net, n->get_id())
+graphics_net::graphics_net(std::shared_ptr<net> n) : graphics_item(item_type::net, n->get_id()),
+    m_net(n)
 {
-    // WILL CRASH IF NET IS NULLPTR
-
-    m_net   = n;
+    assert(n);
 }
 
 QRectF graphics_net::boundingRect() const

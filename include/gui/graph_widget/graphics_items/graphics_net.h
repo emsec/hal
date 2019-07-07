@@ -35,16 +35,13 @@ class graphics_net : public graphics_item
 public:
     struct visuals
     {
-        // UNCERTAIN ABOUT COLOR, DO MULTICOLOR NETS MAKE SENSE ?
         QColor color;
-        QVector<QColor> info_colors;
 
+        // BOOL HIDE ?
         // DRAW TYPE ENUM
         // SPLIT MARKERS
     };
 
-    // ADD METHODS TO GET SUBFOCUS POSITIONS OR USE GATE METHODS ???
-    // REPLACE LOAD SETTINGS METHODS IN ALL CLASSES WITH CONSTANTS, ADAPTERS AND ACTUAL SETTINGS
     static void load_settings();
 
     graphics_net(std::shared_ptr<net> n);
