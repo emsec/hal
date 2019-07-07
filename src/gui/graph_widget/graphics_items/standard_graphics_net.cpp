@@ -12,61 +12,146 @@ qreal standard_graphics_net::s_radius; // STATIC CONST ?
 QBrush standard_graphics_net::s_brush;
 
 standard_graphics_net::standard_graphics_net(std::shared_ptr<net> n, const lines& l) : graphics_net(n)
-{
+{    
     QVector<h_line> collapsed_h;
     QVector<v_line> collapsed_v;
 
     for (const h_line& h : l.h_lines)
     {
-        assert(h.x1 != h.x2);
+        assert(h.small_x != h.big_x);
 
-        bool match = false;
+        QVector<int> overlaps;
 
         for (int i = 0; i < collapsed_h.size(); ++i)
             if (h.y == collapsed_h.at(i).y)
             {
-                qreal new_line_small_x = h.x1;
-                qreal new_line_big_x = h.x2;
+//                qreal new_line_small_x = h.small_x;
+//                qreal new_line_big_x = h.big_x;
 
-                if (h.x1 > h.x2)
-                {
-                    new_line_small_x = h.x2;
-                    new_line_big_x = h.x1;
-                }
+//                if (h.small_x > h.big_x)
+//                {
+//                    new_line_small_x = h.big_x;
+//                    new_line_big_x = h.small_x;
+//                }
 
-                qreal old_line_small_x = collapsed_h.at(i).x1;
-                qreal old_line_big_x = collapsed_h.at(i).x2;
+//                qreal old_line_small_x = collapsed_h.at(i).small_x;
+//                qreal old_line_big_x = collapsed_h.at(i).big_x;
 
-                if (h.x1 > h.x2)
-                {
-                    old_line_small_x = collapsed_h.at(i).x2;
-                    old_line_big_x = collapsed_h.at(i).x1;
-                }
+//                if (h.small_x > h.big_x)
+//                {
+//                    old_line_small_x = collapsed_h.at(i).big_x;
+//                    old_line_big_x = collapsed_h.at(i).small_x;
+//                }
 
-                if (new_line_big_x < old_line_small_x || old_line_big_x < new_line_small_x)
+//                if (new_line_big_x < old_line_small_x || old_line_big_x < new_line_small_x)
+
+                if (h.big_x < collapsed_h.at(i).small_x || collapsed_h.at(i).big_x < h.small_x)
                     continue; // NO OVERLAP
 
                 // OVERLAP
-                // SAVE INDEX
-                qreal smallest_x = new_line_small_x;
-
-                if (old_line_small_x < new_line_small_x)
-                    smallest_x = old_line_small_x;
-
-                qreal biggest_x = new_line_big_x;
-
-                if (old_line_big_x > new_line_big_x)
-                    biggest_x = old_line_big_x;
-
-                match = true;
-                break;
+                overlaps.append(i);
             }
 
 
-        if (!match)
+        if (overlaps.isEmpty())
             collapsed_h.append(h);
+        else
+        {
+            qreal smallest_x = h.small_x;
+            qreal biggest_x = h.big_x;
+
+//            if (h.small_x > h.big_x)
+//            {
+//                smallest_x = h.big_x;
+//                biggest_x = h.small_x;
+//            }
+
+            for (int i = 0; i < overlaps.size(); ++i)
+            {
+                int index = overlaps.at(i) - i;
+
+//                qreal smaller_x = collapsed_h.at(index).small_x;
+//                qreal bigger_x = collapsed_h.at(index).big_x;
+
+//                if (smaller_x > bigger_x)
+//                {
+//                    smaller_x = collapsed_h.at(index).big_x;
+//                    bigger_x = collapsed_h.at(index).small_x;
+//                }
+
+//                smallest_x = std::min(smallest_x, smaller_x);
+//                biggest_x = std::max(bigger_x, biggest_x);
+
+                if (collapsed_h.at(index).small_x < smallest_x)
+                    smallest_x = collapsed_h.at(index).small_x;
+
+                if (collapsed_h.at(index).big_x > biggest_x)
+                    biggest_x = collapsed_h.at(index).big_x;
+
+                collapsed_h.remove(i);
+            }
+
+            collapsed_h.append(h_line{smallest_x, biggest_x, h.y});
+        }
     }
 
+    for (const v_line& v : l.v_lines)
+    {
+        assert(v.small_y != v.big_y);
+
+        QVector<int> overlaps;
+
+        for (int i = 0; i < collapsed_v.size(); ++i)
+            if (v.x == collapsed_v.at(i).x)
+            {
+                if (v.big_y < collapsed_v.at(i).small_y || collapsed_v.at(i).big_y < v.small_y)
+                    continue; // NO OVERLAP
+
+                // OVERLAP
+                overlaps.append(i);
+            }
+
+
+        if (overlaps.isEmpty())
+            collapsed_v.append(v);
+        else
+        {
+            qreal smallest_y = v.small_y;
+            qreal biggest_y = v.big_y;
+
+            for (int i = 0; i < overlaps.size(); ++i)
+            {
+                int index = overlaps.at(i) - i;
+
+                if (collapsed_v.at(index).small_y < smallest_y)
+                    smallest_y = collapsed_v.at(index).small_y;
+
+                if (collapsed_v.at(index).big_y > biggest_y)
+                    biggest_y = collapsed_v.at(index).big_y;
+
+                collapsed_v.remove(i);
+            }
+
+            collapsed_v.append(v_line{v.x, smallest_y, biggest_y});
+        }
+    }
+
+    // CALCULATE SPLITS
+    for (const h_line& h : collapsed_h)
+    {
+        for (const v_line& v : collapsed_v)
+        {
+            if (h.small_x == v.x)
+                if (h.y > v.small_y && h.y < v.big_y)
+                    m_splits.append(QPointF(h.small_x, h.y));
+
+            if (h.big_x == v.x)
+                if (h.y > v.small_y && h.y < v.big_y)
+                    m_splits.append(QPointF(h.big_x, h.y));
+        }
+    }
+
+    // CALCULATE RECT AND SHAPE
 }
 
 void standard_graphics_net::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)

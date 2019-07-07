@@ -36,16 +36,16 @@ class standard_graphics_net : public graphics_net
 public:
     struct h_line
     {
-        qreal x1;
-        qreal x2;
+        qreal small_x;
+        qreal big_x;
         qreal y;
     };
 
     struct v_line
     {
         qreal x;
-        qreal y1;
-        qreal y2;
+        qreal small_y;
+        qreal big_y;
     };
 
     struct lines
