@@ -26,8 +26,6 @@ protected:
         }
     };
 
-    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event) Q_DECL_OVERRIDE;
-
     QVector<module_pin> m_input_pins;
     QVector<module_pin> m_output_pins;
 };

@@ -7,6 +7,8 @@
 
 graphics_module::graphics_module(std::shared_ptr<module> m) : graphics_node(item_type::module, m->get_id(), QString::fromStdString(m->get_name()))
 {
+    assert(m);
+
     for (const std::shared_ptr<net>& n : m->get_input_nets())
     {
         QVector<std::string> pin_types;
@@ -35,10 +37,4 @@ graphics_module::graphics_module(std::shared_ptr<module> m) : graphics_node(item
 void graphics_module::set_visuals(const graphics_node::visuals& v)
 {
 
-}
-
-void graphics_module::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event)
-{
-    Q_UNUSED(event)
-    // PROBABLY NOT NEEDED
 }
