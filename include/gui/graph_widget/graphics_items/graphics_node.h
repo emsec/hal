@@ -8,6 +8,8 @@ class graphics_node : public graphics_item
 public:
     struct visuals
     {
+        bool draw;
+
         QColor main_color;
         QColor name_color;
         QColor type_color;

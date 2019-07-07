@@ -1,7 +1,5 @@
 #include "graph_widget/graphics_items/standard_graphics_net.h"
 
-//#include "gui_globals.h"
-
 #include <QPainter>
 #include <QPen>
 #include <QPointF>
@@ -28,6 +26,15 @@ void standard_graphics_net::paint(QPainter* painter, const QStyleOptionGraphicsI
     //        }
 
     painter->drawLines(m_lines);
+
+#ifdef HAL_DEBUG_GUI_GRAPHICS
+    s_pen.setColor(Qt::green);
+    const bool cosmetic = s_pen.isCosmetic();
+    s_pen.setCosmetic(true);
+    painter->setPen(s_pen);
+    painter->drawPath(m_shape);
+    s_pen.setCosmetic(cosmetic);
+#endif
 }
 
 void standard_graphics_net::finalize()

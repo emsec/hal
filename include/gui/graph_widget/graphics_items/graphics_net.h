@@ -35,9 +35,9 @@ class graphics_net : public graphics_item
 public:
     struct visuals
     {
+        bool draw;
         QColor color;
 
-        // BOOL HIDE ?
         // DRAW TYPE ENUM
         // SPLIT MARKERS
     };
