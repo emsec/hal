@@ -1,9 +1,15 @@
 #include "graph_widget/graphics_items/standard_graphics_net.h"
 
+#include "graph_widget/graph_widget_constants.h"
+
 #include <QPainter>
 #include <QPen>
 #include <QPointF>
 #include <QStyleOptionGraphicsItem>
+
+qreal standard_graphics_net::s_alpha;
+qreal standard_graphics_net::s_radius; // STATIC CONST ?
+QBrush standard_graphics_net::s_brush;
 
 standard_graphics_net::standard_graphics_net(std::shared_ptr<net> n) : graphics_net(n)
 {
@@ -26,6 +32,12 @@ void standard_graphics_net::paint(QPainter* painter, const QStyleOptionGraphicsI
     //        }
 
     painter->drawLines(m_lines);
+
+    if (s_lod > graph_widget_constants::net_fade_in_lod)
+    {
+        for (const QPointF& point : m_splits)
+            painter->drawEllipse(point, s_radius, s_radius);
+    }
 
 #ifdef HAL_DEBUG_GUI_GRAPHICS
     s_pen.setColor(Qt::green);

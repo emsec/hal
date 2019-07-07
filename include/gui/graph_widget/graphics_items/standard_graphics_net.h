@@ -47,8 +47,13 @@ public:
     QPointF current_scene_position() const;
 
 private:
+    static qreal s_alpha;
+    static qreal s_radius;
+    static QBrush s_brush;
+
     QPainterPath m_path;
     QVector<QLineF> m_lines;
+    QVector<QPointF> m_splits;
 };
 
 #endif // STANDARD_GRAPHICS_NET_H
