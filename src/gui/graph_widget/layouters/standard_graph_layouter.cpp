@@ -1189,7 +1189,7 @@ void standard_graph_layouter::draw_nets()
 
         used_paths used;
 
-        standard_graphics_net* graphics_net = new standard_graphics_net(n);
+        standard_graphics_net* graphics_net = new standard_graphics_net(n, standard_graphics_net::lines());
         QPointF src_pin_position = src_box->item->get_output_scene_position(n->get_id(), QString::fromStdString(n->get_src().pin_type));
         graphics_net->setPos(src_pin_position);
 

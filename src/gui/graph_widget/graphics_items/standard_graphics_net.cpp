@@ -11,8 +11,62 @@ qreal standard_graphics_net::s_alpha;
 qreal standard_graphics_net::s_radius; // STATIC CONST ?
 QBrush standard_graphics_net::s_brush;
 
-standard_graphics_net::standard_graphics_net(std::shared_ptr<net> n) : graphics_net(n)
+standard_graphics_net::standard_graphics_net(std::shared_ptr<net> n, const lines& l) : graphics_net(n)
 {
+    QVector<h_line> collapsed_h;
+    QVector<v_line> collapsed_v;
+
+    for (const h_line& h : l.h_lines)
+    {
+        assert(h.x1 != h.x2);
+
+        bool match = false;
+
+        for (int i = 0; i < collapsed_h.size(); ++i)
+            if (h.y == collapsed_h.at(i).y)
+            {
+                qreal new_line_small_x = h.x1;
+                qreal new_line_big_x = h.x2;
+
+                if (h.x1 > h.x2)
+                {
+                    new_line_small_x = h.x2;
+                    new_line_big_x = h.x1;
+                }
+
+                qreal old_line_small_x = collapsed_h.at(i).x1;
+                qreal old_line_big_x = collapsed_h.at(i).x2;
+
+                if (h.x1 > h.x2)
+                {
+                    old_line_small_x = collapsed_h.at(i).x2;
+                    old_line_big_x = collapsed_h.at(i).x1;
+                }
+
+                if (new_line_big_x < old_line_small_x || old_line_big_x < new_line_small_x)
+                    continue; // NO OVERLAP
+
+                // OVERLAP
+                // SAVE INDEX
+                qreal smallest_x = new_line_small_x;
+
+                if (old_line_small_x < new_line_small_x)
+                    smallest_x = old_line_small_x;
+
+                qreal biggest_x = new_line_big_x;
+
+                if (old_line_big_x > new_line_big_x)
+                    biggest_x = old_line_big_x;
+
+                match = true;
+                break;
+            }
+
+
+        if (!match)
+            collapsed_h.append(h);
+    }
+
 }
 
 void standard_graphics_net::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)

@@ -34,7 +34,30 @@ class net;
 class standard_graphics_net : public graphics_net
 {
 public:
-    standard_graphics_net(std::shared_ptr<net> n);
+    struct h_line
+    {
+        qreal x1;
+        qreal x2;
+        qreal y;
+    };
+
+    struct v_line
+    {
+        qreal x;
+        qreal y1;
+        qreal y2;
+    };
+
+    struct lines
+    {
+        qreal src_x;
+        qreal src_y;
+
+        QVector<h_line> h_lines;
+        QVector<v_line> v_lines;
+    };
+
+    standard_graphics_net(std::shared_ptr<net> n, const lines& l);
 
     virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) Q_DECL_OVERRIDE;
 
