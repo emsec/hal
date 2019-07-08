@@ -1193,7 +1193,6 @@ void standard_graph_layouter::draw_nets()
         standard_graphics_net::lines lines;
         lines.src_x = src_pin_position.x();
         lines.src_y = src_pin_position.y();
-        QPointF current_position(src_pin_position);
 
         // FOR EVERY DST
         for (const endpoint& dst : n->get_dsts())
@@ -1224,25 +1223,17 @@ void standard_graph_layouter::draw_nets()
                 // SPECIAL CASE INDIRECT HORIZONTAL NEIGHBORS
                 road* dst_v_road = get_v_road(dst_box->x, dst_box->y);
 
-//                graphics_net->line_to_x(scene_x_for_v_channel_lane(dst_v_road->x, dst_v_road->lanes));
-//                graphics_net->line_to_y(dst_pin_position.y());
-//                graphics_net->line_to_x(dst_pin_position.x());
                 qreal x = scene_x_for_v_channel_lane(dst_v_road->x, dst_v_road->lanes);
-                lines.h_lines.append(standard_graphics_net::h_line{current_position.x(), x, current_position.y()});
-                current_position.setX(x);
+                lines.h_lines.append(standard_graphics_net::h_line{src_pin_position.x(), x, src_pin_position.y()});
 
-                if (current_position.y() < dst_pin_position.y())
-                    lines.v_lines.append(standard_graphics_net::v_line{x, current_position.y(), dst_pin_position.y()});
+                if (src_pin_position.y() < dst_pin_position.y())
+                    lines.v_lines.append(standard_graphics_net::v_line{x, src_pin_position.y(), dst_pin_position.y()});
                 else
-                    lines.v_lines.append(standard_graphics_net::v_line{x, dst_pin_position.y(), current_position.y()});
+                    lines.v_lines.append(standard_graphics_net::v_line{x, dst_pin_position.y(), src_pin_position.y()});
 
                 lines.h_lines.append(standard_graphics_net::h_line{x, dst_pin_position.x(), dst_pin_position.y()});
 
-                current_position.setY(dst_pin_position.y());
                 used.v_roads.insert(dst_v_road);
-
-                //graphics_net->move_pen_to(src_pin_position);
-                current_position = src_pin_position; // OPTIMIZE STUFF HERE
                 continue;
             }
 
@@ -1251,28 +1242,23 @@ void standard_graph_layouter::draw_nets()
             if (!(x_distance || y_distance))
             {
                 // SPECIAL CASE DIRECT HORIZONTAL NEIGHBORS
-//                graphics_net->line_to_x(scene_x_for_v_channel_lane(src_v_road->x, src_v_road->lanes));
-//                graphics_net->line_to_y(dst_pin_position.y());
-//                graphics_net->line_to_x(dst_pin_position.x());
                 qreal x = scene_x_for_v_channel_lane(src_v_road->x, src_v_road->lanes);
-                lines.h_lines.append(standard_graphics_net::h_line{current_position.x(), x, current_position.y()});
+                lines.h_lines.append(standard_graphics_net::h_line{src_pin_position.x(), x, src_pin_position.y()});
 
-                if (current_position.y() < dst_pin_position.y())
-                    lines.v_lines.append(standard_graphics_net::v_line{x, current_position.y(), dst_pin_position.y()});
+                if (src_pin_position.y() < dst_pin_position.y())
+                    lines.v_lines.append(standard_graphics_net::v_line{x, src_pin_position.y(), dst_pin_position.y()});
                 else
-                    lines.v_lines.append(standard_graphics_net::v_line{x, dst_pin_position.y(), current_position.y()});
+                    lines.v_lines.append(standard_graphics_net::v_line{x, dst_pin_position.y(), src_pin_position.y()});
 
                 lines.h_lines.append(standard_graphics_net::h_line{x, dst_pin_position.x(), dst_pin_position.y()});
 
                 used.v_roads.insert(src_v_road);
-
-                //graphics_net->move_pen_to(src_pin_position);
-                current_position = src_pin_position; // OPTIMIZE STUFF HERE
                 continue;
             }
 
             // NORMAL CASE
             // CONNECT SRC TO V ROAD, TRAVEL X DISTANCE, TRAVEL Y DISTANCE, CONNECT V ROAD TO DST
+            QPointF current_position(src_pin_position);
             graphics_net->line_to_x(scene_x_for_v_channel_lane(src_v_road->x, src_v_road->lanes));
             used.v_roads.insert(src_v_road);
 
