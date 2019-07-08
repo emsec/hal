@@ -152,6 +152,59 @@ standard_graphics_net::standard_graphics_net(std::shared_ptr<net> n, const lines
     }
 
     // CALCULATE RECT AND SHAPE
+    // 0 INITIALIZATION ONLY WORKS WHEN NETS ARE PLACED AT THE SRC POSITION, CHANGE ?
+    qreal smallest_x = 0;
+    qreal biggest_x = 0;
+    qreal smallest_y = 0;
+    qreal biggest_y = 0;
+
+    for (const h_line& h : collapsed_h)
+    {
+        qreal small_x = h.small_x - l.src_x;
+        qreal big_x = h.big_x - l.src_x;
+        qreal y = h.y - l.src_y;
+
+        if (small_x < smallest_x)
+            smallest_x = small_x;
+
+        if (big_x > biggest_x)
+            biggest_x = big_x;
+
+        if (y < smallest_y)
+            smallest_y = y;
+        else if (y > biggest_y)
+            biggest_y = y;
+
+        QLineF line(small_x, y, big_x, y);
+        m_lines.append(line);
+        QRectF rect(small_x - s_stroke_width / 2, y - s_stroke_width / 2, big_x - small_x + 1.5 + s_stroke_width, 1.5 + s_stroke_width); // use pen width variable / const
+        m_shape.addRect(rect);
+    }
+
+    for (const v_line& v : collapsed_v)
+    {
+        qreal x = v.x - l.src_x;
+        qreal small_y = v.small_y - l.src_y;
+        qreal big_y = v.big_y - l.src_y;
+
+        if (x < smallest_x)
+            smallest_x = x;
+        else if (x > biggest_x)
+            biggest_x = x;
+
+        if (small_y < smallest_y)
+            smallest_y = small_y;
+
+        if (big_y > biggest_y)
+            biggest_y = big_y;
+
+        QLineF line(x, small_y, x, big_y);
+        m_lines.append(line);
+        QRectF rect(x - s_stroke_width / 2, small_y - s_stroke_width / 2, big_y - small_y + 1.5 + s_stroke_width, 1.5 + s_stroke_width); // use pen width variable / const
+        m_shape.addRect(rect);
+    }
+
+    m_rect = QRectF(smallest_x, smallest_y, biggest_x - smallest_x, biggest_y - smallest_y);
 }
 
 void standard_graphics_net::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
