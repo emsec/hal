@@ -1385,5 +1385,10 @@ std::string hdl_parser_vhdl::get_unique_alias(const std::string& name)
     {
         return name;
     }
-    return name + " | " + std::to_string(m_current_instance_index[name]);
+
+    if (name.back() == '\\')
+    {
+        return name.substr(0, name.size() - 1) + "____" + std::to_string(m_current_instance_index[name]) + "\\";
+    }
+    return name + "____" + std::to_string(m_current_instance_index[name]);
 }
