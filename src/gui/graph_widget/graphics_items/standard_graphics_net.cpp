@@ -18,7 +18,10 @@ standard_graphics_net::standard_graphics_net(std::shared_ptr<net> n, const lines
 
     for (const h_line& h : l.h_lines)
     {
-        assert(h.small_x != h.big_x);
+        //assert(h.small_x != h.big_x);
+
+        if (h.small_x == h.big_x)
+            continue;
 
         QVector<int> overlaps;
 
@@ -97,7 +100,10 @@ standard_graphics_net::standard_graphics_net(std::shared_ptr<net> n, const lines
 
     for (const v_line& v : l.v_lines)
     {
-        assert(v.small_y != v.big_y);
+        //assert(v.small_y != v.big_y);
+
+        if (v.small_y == v.big_y)
+            continue;
 
         QVector<int> overlaps;
 
