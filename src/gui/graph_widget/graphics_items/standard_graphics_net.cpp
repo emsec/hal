@@ -243,42 +243,8 @@ void standard_graphics_net::paint(QPainter* painter, const QStyleOptionGraphicsI
 
 void standard_graphics_net::finalize()
 {
-    QPainterPathStroker stroker;
-    stroker.setWidth(s_stroke_width);
-    m_rect  = m_path.boundingRect();
-    m_shape = stroker.createStroke(m_path);
-}
-
-void standard_graphics_net::line_to_x(const qreal scene_x)
-{
-    if (scene_x == current_scene_position().x())
-        return;
-
-    QPointF mapped_point = mapFromScene(scene_x, current_scene_position().y());
-    m_lines.append(QLineF(m_path.currentPosition(), mapped_point));
-    m_path.lineTo(mapped_point);
-}
-
-void standard_graphics_net::line_to_y(const qreal scene_y)
-{
-    if (scene_y == current_scene_position().y())
-        return;
-
-    QPointF mapped_point = mapFromScene(current_scene_position().x(), scene_y);
-    m_lines.append(QLineF(m_path.currentPosition(), mapped_point));
-    m_path.lineTo(mapped_point);
-}
-
-void standard_graphics_net::move_pen_to(const QPointF& scene_position)
-{
-    if (scene_position == current_scene_position())
-        return;
-
-    QPointF mapped_point = mapFromScene(scene_position);
-    m_path.moveTo(mapped_point);
-}
-
-QPointF standard_graphics_net::current_scene_position() const
-{
-    return mapToScene(m_path.currentPosition());
+//    QPainterPathStroker stroker;
+//    stroker.setWidth(s_stroke_width);
+//    m_rect  = m_path.boundingRect();
+//    m_shape = stroker.createStroke(m_path);
 }

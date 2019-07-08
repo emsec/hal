@@ -1189,9 +1189,11 @@ void standard_graph_layouter::draw_nets()
 
         used_paths used;
 
-        standard_graphics_net* graphics_net = new standard_graphics_net(n, standard_graphics_net::lines());
-        QPointF src_pin_position = src_box->item->get_output_scene_position(n->get_id(), QString::fromStdString(n->get_src().pin_type));
-        graphics_net->setPos(src_pin_position);
+        const QPointF src_pin_position = src_box->item->get_output_scene_position(n->get_id(), QString::fromStdString(n->get_src().pin_type));
+        standard_graphics_net::lines lines;
+        lines.src_x = src_pin_position.x();
+        lines.src_y = src_pin_position.y();
+        QPointF current_position(src_pin_position);
 
         // FOR EVERY DST
         for (const endpoint& dst : n->get_dsts())
@@ -1222,12 +1224,25 @@ void standard_graph_layouter::draw_nets()
                 // SPECIAL CASE INDIRECT HORIZONTAL NEIGHBORS
                 road* dst_v_road = get_v_road(dst_box->x, dst_box->y);
 
-                graphics_net->line_to_x(scene_x_for_v_channel_lane(dst_v_road->x, dst_v_road->lanes));
-                graphics_net->line_to_y(dst_pin_position.y());
-                graphics_net->line_to_x(dst_pin_position.x());
+//                graphics_net->line_to_x(scene_x_for_v_channel_lane(dst_v_road->x, dst_v_road->lanes));
+//                graphics_net->line_to_y(dst_pin_position.y());
+//                graphics_net->line_to_x(dst_pin_position.x());
+                qreal x = scene_x_for_v_channel_lane(dst_v_road->x, dst_v_road->lanes);
+                lines.h_lines.append(standard_graphics_net::h_line{current_position.x(), x, current_position.y()});
+                current_position.setX(x);
+
+                if (current_position.y() < dst_pin_position.y())
+                    lines.v_lines.append(standard_graphics_net::v_line{x, current_position.y(), dst_pin_position.y()});
+                else
+                    lines.v_lines.append(standard_graphics_net::v_line{x, dst_pin_position.y(), current_position.y()});
+
+                lines.h_lines.append(standard_graphics_net::h_line{x, dst_pin_position.x(), dst_pin_position.y()});
+
+                current_position.setY(dst_pin_position.y());
                 used.v_roads.insert(dst_v_road);
 
-                graphics_net->move_pen_to(src_pin_position);
+                //graphics_net->move_pen_to(src_pin_position);
+                current_position = src_pin_position; // OPTIMIZE STUFF HERE
                 continue;
             }
 
@@ -1236,12 +1251,23 @@ void standard_graph_layouter::draw_nets()
             if (!(x_distance || y_distance))
             {
                 // SPECIAL CASE DIRECT HORIZONTAL NEIGHBORS
-                graphics_net->line_to_x(scene_x_for_v_channel_lane(src_v_road->x, src_v_road->lanes));
-                graphics_net->line_to_y(dst_pin_position.y());
-                graphics_net->line_to_x(dst_pin_position.x());
+//                graphics_net->line_to_x(scene_x_for_v_channel_lane(src_v_road->x, src_v_road->lanes));
+//                graphics_net->line_to_y(dst_pin_position.y());
+//                graphics_net->line_to_x(dst_pin_position.x());
+                qreal x = scene_x_for_v_channel_lane(src_v_road->x, src_v_road->lanes);
+                lines.h_lines.append(standard_graphics_net::h_line{current_position.x(), x, current_position.y()});
+
+                if (current_position.y() < dst_pin_position.y())
+                    lines.v_lines.append(standard_graphics_net::v_line{x, current_position.y(), dst_pin_position.y()});
+                else
+                    lines.v_lines.append(standard_graphics_net::v_line{x, dst_pin_position.y(), current_position.y()});
+
+                lines.h_lines.append(standard_graphics_net::h_line{x, dst_pin_position.x(), dst_pin_position.y()});
+
                 used.v_roads.insert(src_v_road);
 
-                graphics_net->move_pen_to(src_pin_position);
+                //graphics_net->move_pen_to(src_pin_position);
+                current_position = src_pin_position; // OPTIMIZE STUFF HERE
                 continue;
             }
 
@@ -1599,7 +1625,8 @@ void standard_graph_layouter::draw_nets()
             graphics_net->move_pen_to(src_pin_position);
         }
 
-        graphics_net->finalize();
+        standard_graphics_net* graphics_net = new standard_graphics_net(n, lines);
+        graphics_net->setPos(src_pin_position);
         m_scene->add_item(graphics_net);
 
         commit_used_paths(used);
