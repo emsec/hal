@@ -11,6 +11,29 @@ qreal standard_graphics_net::s_alpha;
 qreal standard_graphics_net::s_radius; // STATIC CONST ?
 QBrush standard_graphics_net::s_brush;
 
+void standard_graphics_net::load_settings()
+{
+    s_radius = 3;
+    s_brush.setStyle(Qt::SolidPattern);
+
+    // TEST
+    s_pen.setCosmetic(false);
+    s_pen.setColor(QColor(160, 160, 160));
+    // TEST END
+}
+
+void standard_graphics_net::update_alpha()
+{
+    if (s_lod >= graph_widget_constants::net_fade_in_lod && s_lod <= graph_widget_constants::net_fade_out_lod)
+    {
+        const qreal difference = graph_widget_constants::net_fade_out_lod - graph_widget_constants::net_fade_in_lod;
+
+        s_alpha = (s_lod - graph_widget_constants::net_fade_in_lod) / difference;
+    }
+    else
+        s_alpha = 1;
+}
+
 standard_graphics_net::standard_graphics_net(std::shared_ptr<net> n, const lines& l) : graphics_net(n)
 {    
     QVector<h_line> collapsed_h;
@@ -149,11 +172,11 @@ standard_graphics_net::standard_graphics_net(std::shared_ptr<net> n, const lines
         {
             if (h.small_x == v.x)
                 if (h.y > v.small_y && h.y < v.big_y)
-                    m_splits.append(QPointF(h.small_x, h.y));
+                    m_splits.append(QPointF(h.small_x - l.src_x, h.y - l.src_y));
 
             if (h.big_x == v.x)
                 if (h.y > v.small_y && h.y < v.big_y)
-                    m_splits.append(QPointF(h.big_x, h.y));
+                    m_splits.append(QPointF(h.big_x -l.src_x, h.y - l.src_y));
         }
     }
 
@@ -233,6 +256,14 @@ void standard_graphics_net::paint(QPainter* painter, const QStyleOptionGraphicsI
 
     if (s_lod > graph_widget_constants::net_fade_in_lod)
     {
+        QColor color = (option->state & QStyle::State_Selected) ? s_selection_color : m_color;
+        color.setAlphaF(s_alpha);
+
+        s_pen.setColor(color);
+        s_brush.setColor(color);
+        painter->setPen(s_pen);
+        painter->setBrush(s_brush);
+
         for (const QPointF& point : m_splits)
             painter->drawEllipse(point, s_radius, s_radius);
     }

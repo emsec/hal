@@ -201,6 +201,7 @@ namespace style
         minimal_graphics_gate::load_settings();
 
         graphics_net::load_settings();
+        standard_graphics_net::load_settings();
         global_graphics_net::load_settings();
         separated_graphics_net::load_settings();
     }

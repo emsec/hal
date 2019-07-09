@@ -57,6 +57,9 @@ public:
         QVector<v_line> v_lines;
     };
 
+    static void load_settings();
+    static void update_alpha();
+
     standard_graphics_net(std::shared_ptr<net> n, const lines& l);
 
     virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) Q_DECL_OVERRIDE;

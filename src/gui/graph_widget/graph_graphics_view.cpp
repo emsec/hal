@@ -80,6 +80,7 @@ void graph_graphics_view::paintEvent(QPaintEvent* event)
 
     graphics_item::set_lod(lod);
 
+    standard_graphics_net::update_alpha();
     separated_graphics_net::update_alpha();
     global_graphics_net::update_alpha();
 
