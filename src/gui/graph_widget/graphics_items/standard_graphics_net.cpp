@@ -80,7 +80,7 @@ standard_graphics_net::standard_graphics_net(std::shared_ptr<net> n, lines& l) :
                 if (collapsed_h.at(index).big_x > biggest_x)
                     biggest_x = collapsed_h.at(index).big_x;
 
-                collapsed_h.remove(i);
+                collapsed_h.remove(index);
             }
 
             collapsed_h.append(h_line{smallest_x, biggest_x, h.y});
@@ -131,7 +131,7 @@ standard_graphics_net::standard_graphics_net(std::shared_ptr<net> n, lines& l) :
                 if (collapsed_v.at(index).big_y > biggest_y)
                     biggest_y = collapsed_v.at(index).big_y;
 
-                collapsed_v.remove(i);
+                collapsed_v.remove(index);
             }
 
             collapsed_v.append(v_line{v.x, smallest_y, biggest_y});
