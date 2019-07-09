@@ -1388,7 +1388,7 @@ std::string hdl_parser_vhdl::get_unique_alias(const std::string& name)
 
     if (name.back() == '\\')
     {
-        return name.substr(0, name.size() - 1) + "____" + std::to_string(m_current_instance_index[name]) + "\\";
+        return name.substr(0, name.size() - 1) + "_module_inst" + std::to_string(m_current_instance_index[name]) + "\\";
     }
-    return name + "____" + std::to_string(m_current_instance_index[name]);
+    return name + "_module_inst" + std::to_string(m_current_instance_index[name]);
 }
