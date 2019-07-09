@@ -41,8 +41,6 @@ standard_graphics_net::standard_graphics_net(std::shared_ptr<net> n, const lines
 
     for (const h_line& h : l.h_lines)
     {
-        //assert(h.small_x != h.big_x);
-
         if (h.small_x == h.big_x)
             continue;
 
@@ -51,26 +49,6 @@ standard_graphics_net::standard_graphics_net(std::shared_ptr<net> n, const lines
         for (int i = 0; i < collapsed_h.size(); ++i)
             if (h.y == collapsed_h.at(i).y)
             {
-//                qreal new_line_small_x = h.small_x;
-//                qreal new_line_big_x = h.big_x;
-
-//                if (h.small_x > h.big_x)
-//                {
-//                    new_line_small_x = h.big_x;
-//                    new_line_big_x = h.small_x;
-//                }
-
-//                qreal old_line_small_x = collapsed_h.at(i).small_x;
-//                qreal old_line_big_x = collapsed_h.at(i).big_x;
-
-//                if (h.small_x > h.big_x)
-//                {
-//                    old_line_small_x = collapsed_h.at(i).big_x;
-//                    old_line_big_x = collapsed_h.at(i).small_x;
-//                }
-
-//                if (new_line_big_x < old_line_small_x || old_line_big_x < new_line_small_x)
-
                 if (h.big_x < collapsed_h.at(i).small_x || collapsed_h.at(i).big_x < h.small_x)
                     continue; // NO OVERLAP
 
@@ -86,27 +64,9 @@ standard_graphics_net::standard_graphics_net(std::shared_ptr<net> n, const lines
             qreal smallest_x = h.small_x;
             qreal biggest_x = h.big_x;
 
-//            if (h.small_x > h.big_x)
-//            {
-//                smallest_x = h.big_x;
-//                biggest_x = h.small_x;
-//            }
-
             for (int i = 0; i < overlaps.size(); ++i)
             {
                 int index = overlaps.at(i) - i;
-
-//                qreal smaller_x = collapsed_h.at(index).small_x;
-//                qreal bigger_x = collapsed_h.at(index).big_x;
-
-//                if (smaller_x > bigger_x)
-//                {
-//                    smaller_x = collapsed_h.at(index).big_x;
-//                    bigger_x = collapsed_h.at(index).small_x;
-//                }
-
-//                smallest_x = std::min(smallest_x, smaller_x);
-//                biggest_x = std::max(bigger_x, biggest_x);
 
                 if (collapsed_h.at(index).small_x < smallest_x)
                     smallest_x = collapsed_h.at(index).small_x;
@@ -123,8 +83,6 @@ standard_graphics_net::standard_graphics_net(std::shared_ptr<net> n, const lines
 
     for (const v_line& v : l.v_lines)
     {
-        //assert(v.small_y != v.big_y);
-
         if (v.small_y == v.big_y)
             continue;
 
