@@ -59,6 +59,8 @@ public:
 
 protected:
     static QPen s_pen;
+
+    static qreal s_line_width;
     static qreal s_stroke_width;
 
     QRectF m_rect;

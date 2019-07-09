@@ -60,7 +60,8 @@ public:
     static void load_settings();
     static void update_alpha();
 
-    standard_graphics_net(std::shared_ptr<net> n, const lines& l);
+    //standard_graphics_net(std::shared_ptr<net> n, const lines& l);
+    standard_graphics_net(std::shared_ptr<net> n, lines& l);
 
     virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) Q_DECL_OVERRIDE;
 

@@ -29,16 +29,26 @@ void standard_graphics_net::update_alpha()
         s_alpha = 1;
 }
 
-standard_graphics_net::standard_graphics_net(std::shared_ptr<net> n, const lines& l) : graphics_net(n),
+//standard_graphics_net::standard_graphics_net(std::shared_ptr<net> n, const lines& l) : graphics_net(n),
+standard_graphics_net::standard_graphics_net(std::shared_ptr<net> n, lines& l) : graphics_net(n),
     m_line_style(line_style::solid)
 {    
     QVector<h_line> collapsed_h;
     QVector<v_line> collapsed_v;
 
-    for (const h_line& h : l.h_lines)
+    //for (const h_line& h : l.h_lines)
+    for (h_line& h : l.h_lines)
     {
         if (h.small_x == h.big_x)
             continue;
+
+        //assert(h.small_x < h.big_x);
+        if (h.small_x > h.big_x)
+        {
+            qreal temp = h.small_x;
+            h.small_x = h.big_x;
+            h.big_x = temp;
+        }
 
         QVector<int> overlaps;
 
@@ -77,10 +87,19 @@ standard_graphics_net::standard_graphics_net(std::shared_ptr<net> n, const lines
         }
     }
 
-    for (const v_line& v : l.v_lines)
+    //for (const v_line& v : l.v_lines)
+    for (v_line& v : l.v_lines)
     {
         if (v.small_y == v.big_y)
             continue;
+
+        //assert(v.small_y < v.big_y);
+        if (v.small_y > v.big_y)
+        {
+            qreal temp = v.small_y;
+            v.small_y = v.big_y;
+            v.big_y = temp;
+        }
 
         QVector<int> overlaps;
 
@@ -160,7 +179,7 @@ standard_graphics_net::standard_graphics_net(std::shared_ptr<net> n, const lines
 
         QLineF line(small_x, y, big_x, y);
         m_lines.append(line);
-        QRectF rect(small_x - s_stroke_width / 2, y - s_stroke_width / 2, big_x - small_x + 1.5 + s_stroke_width, 1.5 + s_stroke_width); // use pen width variable / const
+        QRectF rect(small_x - s_stroke_width / 2, y - s_stroke_width / 2, big_x - small_x + s_line_width + s_stroke_width, s_line_width + s_stroke_width);
         m_shape.addRect(rect);
     }
 
@@ -183,10 +202,11 @@ standard_graphics_net::standard_graphics_net(std::shared_ptr<net> n, const lines
 
         QLineF line(x, small_y, x, big_y);
         m_lines.append(line);
-        QRectF rect(x - s_stroke_width / 2, small_y - s_stroke_width / 2, big_y - small_y + 1.5 + s_stroke_width, 1.5 + s_stroke_width); // use pen width variable / const
+        QRectF rect(x - s_stroke_width / 2, small_y - s_stroke_width / 2, s_line_width + s_stroke_width, big_y - small_y + s_line_width + s_stroke_width);
         m_shape.addRect(rect);
     }
 
+    // COMPENSATE FOR PEN WIDTH ?
     m_rect = QRectF(smallest_x, smallest_y, biggest_x - smallest_x, biggest_y - smallest_y);
 }
 
@@ -228,13 +248,13 @@ void standard_graphics_net::paint(QPainter* painter, const QStyleOptionGraphicsI
         painter->setPen(s_pen);
         painter->setBrush(s_brush);
 
-        bool antialiasing = painter->renderHints().testFlag(QPainter::Antialiasing);
+        bool original_value = painter->renderHints().testFlag(QPainter::Antialiasing);
         painter->setRenderHint(QPainter::Antialiasing, true);
 
         for (const QPointF& point : m_splits)
             painter->drawEllipse(point, s_radius, s_radius);
 
-        painter->setRenderHint(QPainter::Antialiasing, antialiasing);
+        painter->setRenderHint(QPainter::Antialiasing, original_value);
     }
 
 #ifdef HAL_DEBUG_GUI_GRAPHICS
