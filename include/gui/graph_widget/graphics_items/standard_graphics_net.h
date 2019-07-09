@@ -64,8 +64,6 @@ public:
 
     virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) Q_DECL_OVERRIDE;
 
-    virtual void finalize() Q_DECL_OVERRIDE;
-
 private:
     static qreal s_alpha;
     static qreal s_radius;

@@ -222,8 +222,13 @@ void standard_graphics_net::paint(QPainter* painter, const QStyleOptionGraphicsI
         painter->setPen(s_pen);
         painter->setBrush(s_brush);
 
+        bool antialiasing = painter->renderHints().testFlag(QPainter::Antialiasing);
+        painter->setRenderHint(QPainter::Antialiasing, true);
+
         for (const QPointF& point : m_splits)
             painter->drawEllipse(point, s_radius, s_radius);
+
+        painter->setRenderHint(QPainter::Antialiasing, antialiasing);
     }
 
 #ifdef HAL_DEBUG_GUI_GRAPHICS
@@ -234,12 +239,4 @@ void standard_graphics_net::paint(QPainter* painter, const QStyleOptionGraphicsI
     painter->drawPath(m_shape);
     s_pen.setCosmetic(cosmetic);
 #endif
-}
-
-void standard_graphics_net::finalize()
-{
-//    QPainterPathStroker stroker;
-//    stroker.setWidth(s_stroke_width);
-//    m_rect  = m_path.boundingRect();
-//    m_shape = stroker.createStroke(m_path);
 }

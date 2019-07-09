@@ -35,7 +35,8 @@ public:
     separated_graphics_net(const QString& text, std::shared_ptr<net> n);
 
     virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) Q_DECL_OVERRIDE;
-    virtual void finalize() Q_DECL_OVERRIDE;
+
+    void finalize();
 
     void add_output();
     void add_input(const QPointF& scene_position);

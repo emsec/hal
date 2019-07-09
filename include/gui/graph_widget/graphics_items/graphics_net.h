@@ -49,8 +49,6 @@ public:
     QRectF boundingRect() const Q_DECL_OVERRIDE;
     virtual QPainterPath shape() const Q_DECL_OVERRIDE;
 
-    virtual void finalize() = 0;
-
     std::shared_ptr<net> get_net();
 
 protected:

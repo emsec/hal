@@ -38,7 +38,7 @@ public:
 
     virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) Q_DECL_OVERRIDE;
 
-    virtual void finalize() Q_DECL_OVERRIDE;
+    void finalize();
 
     void line_to_x(const qreal scene_x);
     void line_to_y(const qreal scene_y);
