@@ -15,11 +15,6 @@ void standard_graphics_net::load_settings()
 {
     s_radius = 3;
     s_brush.setStyle(Qt::SolidPattern);
-
-    // TEST
-    s_pen.setCosmetic(false);
-    s_pen.setColor(QColor(160, 160, 160));
-    // TEST END
 }
 
 void standard_graphics_net::update_alpha()
@@ -34,7 +29,8 @@ void standard_graphics_net::update_alpha()
         s_alpha = 1;
 }
 
-standard_graphics_net::standard_graphics_net(std::shared_ptr<net> n, const lines& l) : graphics_net(n)
+standard_graphics_net::standard_graphics_net(std::shared_ptr<net> n, const lines& l) : graphics_net(n),
+    m_line_style(line_style::solid)
 {    
     QVector<h_line> collapsed_h;
     QVector<v_line> collapsed_v;
@@ -198,23 +194,33 @@ void standard_graphics_net::paint(QPainter* painter, const QStyleOptionGraphicsI
 {
     Q_UNUSED(widget);
 
-    s_pen.setColor((option->state & QStyle::State_Selected) ? s_selection_color : m_color);
+    QColor color = (option->state & QStyle::State_Selected) ? s_selection_color : m_color;
+    s_pen.setColor(color);
+
+    switch (m_line_style)
+    {
+    case line_style::solid:
+    {
+        s_pen.setStyle(Qt::SolidLine);
+        break;
+    }
+    case line_style::dot:
+    {
+        s_pen.setStyle(Qt::DotLine);
+        break;
+    }
+    case line_style::dash:
+    {
+        s_pen.setStyle(Qt::DashLine);
+        break;
+    }
+    }
+
     painter->setPen(s_pen);
-
-    //    if (g_selection_relay.m_focus_type == selection_relay::item_type::net)
-    //        if (g_selection_relay.m_focus_net_id == m_id)
-    //        {
-    //            QPen pen(s_selection_color, 1, Qt::DashLine);
-    //            pen.setJoinStyle(Qt::MiterJoin);
-    //            //pen.setCosmetic(true);
-    //            painter->setPen(pen);
-    //        }
-
     painter->drawLines(m_lines);
 
     if (s_lod > graph_widget_constants::net_fade_in_lod)
     {
-        QColor color = (option->state & QStyle::State_Selected) ? s_selection_color : m_color;
         color.setAlphaF(s_alpha);
 
         s_pen.setColor(color);

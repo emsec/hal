@@ -33,13 +33,19 @@ class net;
 class graphics_net : public graphics_item
 {
 public:
+    enum class line_style
+    {
+        solid,
+        dash,
+        dot
+    };
+
     struct visuals
     {
         bool draw;
         QColor color;
 
-        // DRAW TYPE ENUM
-        // SPLIT MARKERS
+        line_style style;
     };
 
     static void load_settings();

@@ -69,6 +69,8 @@ private:
     static qreal s_radius;
     static QBrush s_brush;
 
+    line_style m_line_style;
+
     QVector<QLineF> m_lines;
     QVector<QPointF> m_splits;
 };
