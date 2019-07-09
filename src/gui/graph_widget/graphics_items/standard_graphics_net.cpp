@@ -208,6 +208,12 @@ standard_graphics_net::standard_graphics_net(std::shared_ptr<net> n, lines& l) :
 
     // COMPENSATE FOR PEN WIDTH ?
     m_rect = QRectF(smallest_x, smallest_y, biggest_x - smallest_x, biggest_y - smallest_y);
+
+//    for (const h_line& h : l.h_lines)
+//        m_lines.append(QLineF(h.small_x - l.src_x, h.y - l.src_y, h.big_x - l.src_x, h.y - l.src_y));
+
+//    for (const v_line& v : l.v_lines)
+//        m_lines.append(QLineF(v.x - l.src_x, v.small_y - l.src_y, v.x - l.src_x, v.big_y - l.src_y));
 }
 
 void standard_graphics_net::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
