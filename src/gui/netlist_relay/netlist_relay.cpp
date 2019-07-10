@@ -1,5 +1,7 @@
 #include "netlist_relay/netlist_relay.h"
 
+#include "netlist/gate.h"
+#include "netlist/net.h"
 #include "netlist/module.h"
 
 #include "gui/module_model/module_item.h"

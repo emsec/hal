@@ -48,8 +48,6 @@ main_window::main_window(QWidget* parent) : QWidget(parent), m_schedule_widget(n
     ensurePolished();    // ADD REPOLISH METHOD
     connect(file_manager::get_instance(), &file_manager::file_opened, this, &main_window::handle_file_opened);
 
-    g_content_manager.set_main_window(this);
-
     m_layout = new QVBoxLayout(this);
     m_layout->setContentsMargins(0, 0, 0, 0);
     m_layout->setSpacing(0);
@@ -197,6 +195,7 @@ main_window::main_window(QWidget* parent) : QWidget(parent), m_schedule_widget(n
 
     m_about_dialog = new about_dialog(this);
     m_plugin_model = new plugin_model(this);
+    m_content_manager = new hal_content_manager(this);
 
     connect(m_action_open, &QAction::triggered, this, &main_window::handle_action_open);
     connect(m_action_about, &QAction::triggered, m_about_dialog, &about_dialog::exec);
@@ -491,7 +490,6 @@ void main_window::handle_save_triggered()
         path.replace_extension(".hal");
         netlist_serializer::serialize_to_file(g_netlist, path);
 
-        //g_content_manager.flush_unsaved_changes();
         g_file_status_manager.flush_unsaved_changes();
     }
 }
@@ -550,7 +548,7 @@ void main_window::closeEvent(QCloseEvent* event)
     save_state();
     event->accept();
     // hack, remove later
-    g_content_manager.hack_delete_content();
+    m_content_manager->hack_delete_content();
     qApp->quit();
 }
 

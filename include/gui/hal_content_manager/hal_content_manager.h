@@ -48,22 +48,9 @@ class hal_content_manager : public QObject
     Q_OBJECT
 
 public:
-    explicit hal_content_manager();
+    explicit hal_content_manager(main_window* parent);
 
     ~hal_content_manager();
-
-    void set_main_window(main_window* parent);
-
-
-
-    void data_changed(const QString& identifier = "netlist modified");
-    void data_saved(const QString& identifier);
-
-    bool has_unsaved_changes() const;
-
-    std::set<QString> get_unsaved_changes() const;
-
-    void flush_unsaved_changes();
     
     void hack_delete_content();
 
