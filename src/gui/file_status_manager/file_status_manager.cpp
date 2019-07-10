@@ -29,18 +29,33 @@ bool file_status_manager::modified_files_existing() const
 {
     if (!file_manager::get_instance()->file_open())
         return false;
-    return !m_modified_files_uuid.empty();
+
+    return !m_modified_files_uuid.empty() || m_netlist_modified;
 }
 
 void file_status_manager::flush_unsaved_changes()
 {
     m_modified_files_uuid.clear();
     m_modified_files_descriptors.clear();
+    netlist_saved();
+}
+
+void file_status_manager::netlist_changed()
+{
+    m_netlist_modified = true;
+}
+
+void file_status_manager::netlist_saved()
+{
+    m_netlist_modified = false;
 }
 
 QList<QString> file_status_manager::get_unsaved_change_descriptors() const
 {
     QList<QString> unsaved_changes_descriptors;
+
+    if(m_netlist_modified)
+        unsaved_changes_descriptors.append("Netlist modifications");
 
     for(QUuid uuid : m_modified_files_uuid)
     {

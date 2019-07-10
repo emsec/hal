@@ -232,8 +232,10 @@ void python_editor::handle_text_changed()
         if(current_editor)
             g_file_status_manager.file_changed(current_editor->get_uuid(), "Python tab: " + tab_name);
 
+        /*
         if(!tab_name.endsWith("*"))
             m_tab_widget->setTabText(m_tab_widget->indexOf(current_editor), tab_name + "*");
+        */
     }
 }
 
