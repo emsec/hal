@@ -491,7 +491,8 @@ void main_window::handle_save_triggered()
         path.replace_extension(".hal");
         netlist_serializer::serialize_to_file(g_netlist, path);
 
-        g_content_manager.flush_unsaved_changes();
+        //g_content_manager.flush_unsaved_changes();
+        g_file_status_manager.flush_unsaved_changes();
     }
 }
 
@@ -506,8 +507,10 @@ void main_window::on_action_quit_triggered()
 
 void main_window::closeEvent(QCloseEvent* event)
 {
+
     //check for unsaved changes and show confirmation dialog
-    if (g_content_manager.has_unsaved_changes())
+    //if (g_content_manager.has_unsaved_changes())
+    if(g_file_status_manager.modified_files_existing())
     {
         QMessageBox msgBox;
         msgBox.setStyleSheet("QLabel{min-width: 600px;}");
@@ -518,7 +521,8 @@ void main_window::closeEvent(QCloseEvent* event)
 
         msgBox.setText("There are unsaved modifications.");
         QString detailed_text = "The following modifications have not been saved yet:\n";
-        for (const auto& s : g_content_manager.get_unsaved_changes())
+        //for (const auto& s : g_content_manager.get_unsaved_changes())
+        for(const auto&s : g_file_status_manager.get_unsaved_change_descriptors())
             detailed_text.append("   ->  " + s + "\n");
         msgBox.setDetailedText(detailed_text);
 

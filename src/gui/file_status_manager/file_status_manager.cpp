@@ -32,6 +32,12 @@ bool file_status_manager::modified_files_existing() const
     return !m_modified_files_uuid.empty();
 }
 
+void file_status_manager::flush_unsaved_changes()
+{
+    m_modified_files_uuid.clear();
+    m_modified_files_descriptors.clear();
+}
+
 QList<QString> file_status_manager::get_unsaved_change_descriptors() const
 {
     QList<QString> unsaved_changes_descriptors;

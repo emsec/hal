@@ -224,7 +224,16 @@ void python_editor::handle_text_changed()
 {
     if (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count() - 100 < m_last_click_time)
     {
-        g_content_manager.data_changed("Python editor tab " + QString::number(m_tab_widget->currentIndex() + 1));
+        //g_content_manager.data_changed("Python editor tab " + QString::number(m_tab_widget->currentIndex() + 1));
+        python_code_editor* current_editor = dynamic_cast<python_code_editor*>(m_tab_widget->currentWidget());
+
+        QString tab_name = m_tab_widget->tabText(m_tab_widget->indexOf(current_editor));
+
+        if(current_editor)
+            g_file_status_manager.file_changed(current_editor->get_uuid(), "Python tab: " + tab_name);
+
+        if(!tab_name.endsWith("*"))
+            m_tab_widget->setTabText(m_tab_widget->indexOf(current_editor), tab_name + "*");
     }
 }
 
@@ -350,7 +359,8 @@ void python_editor::tab_load_file(u32 index, QString file_name)
     m_tab_widget->setTabText(m_tab_widget->count() - 1, info.completeBaseName() + "." + info.completeSuffix());
     m_new_file_counter--;
 
-    g_content_manager.data_saved("Python editor tab " + QString::number(index + 1));
+    //g_content_manager.data_saved("Python editor tab " + QString::number(index + 1));
+    g_file_status_manager.file_saved(tab->get_uuid(), tab->get_file_name());
 }
 
 void python_editor::save_file(const bool ask_path, int index)
@@ -396,7 +406,8 @@ void python_editor::save_file(const bool ask_path, int index)
     out << current_editor->toPlainText().toStdString();
     out.close();
     current_editor->document()->setModified(false);
-    g_content_manager.data_saved("Python editor tab " + QString::number(index + 1));
+    //g_content_manager.data_saved("Python editor tab " + QString::number(index + 1));
+    g_file_status_manager.file_saved(current_editor->get_uuid(), current_editor->get_file_name());
 
     QFileInfo info(selected_file_name);
     m_tab_widget->setTabText(index, info.completeBaseName() + "." + info.completeSuffix());
@@ -425,7 +436,7 @@ void python_editor::handle_action_new_tab()
     m_tab_widget->addTab(editor, QString("New File ").append(QString::number(++m_new_file_counter)));
     m_tab_widget->setCurrentIndex(m_tab_widget->count() - 1);
     editor->document()->setModified(false);
-    connect(editor, &python_code_editor::modificationChanged, this, &python_editor::handle_modification_changed);
+    //connect(editor, &python_code_editor::modificationChanged, this, &python_editor::handle_modification_changed);
     connect(editor, &python_code_editor::key_pressed, this, &python_editor::handle_key_pressed);
     connect(editor, &python_code_editor::textChanged, this, &python_editor::handle_text_changed);
 }

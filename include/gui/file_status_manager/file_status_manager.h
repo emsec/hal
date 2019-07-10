@@ -20,6 +20,8 @@ public:
     void file_changed(const QUuid uuid, const QString& descriptor);
     void file_saved(const QUuid uuid, const QString& descriptor);
 
+    void flush_unsaved_changes();
+
     QList<QString> get_unsaved_change_descriptors() const;
 
 private:

@@ -15,6 +15,7 @@
 #include "gui/python/python_context.h"
 #include "gui/selection_relay/selection_relay.h"
 #include "gui/hal_content_manager/hal_content_manager.h"
+#include "gui/file_status_manager/file_status_manager.h"
 #include "gui/settings/settings_relay.h"
 #include "gui/style/style.h"
 #include "gui/window_manager/window_manager.h"
@@ -42,6 +43,7 @@ plugin_relay g_plugin_relay;
 selection_relay g_selection_relay;
 settings_relay g_settings_relay;
 hal_content_manager g_content_manager;
+file_status_manager g_file_status_manager;
 
 graph_context_manager g_graph_context_manager;
 
