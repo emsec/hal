@@ -5,12 +5,10 @@
 
 file_status_manager::file_status_manager(QObject* parent) : QObject(parent), m_modified_files_uuid(QSet<QUuid>()), m_modified_files_descriptors(QMap<QUuid, QString>())
 {
-
 }
 
 file_status_manager::~file_status_manager()
 {
-
 }
 
 void file_status_manager::file_changed(const QUuid uuid, const QString& descriptor)

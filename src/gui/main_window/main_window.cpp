@@ -508,7 +508,6 @@ void main_window::on_action_quit_triggered()
 
 void main_window::closeEvent(QCloseEvent* event)
 {
-
     //check for unsaved changes and show confirmation dialog
     if(g_file_status_manager.modified_files_existing())
     {

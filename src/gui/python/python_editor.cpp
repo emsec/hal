@@ -234,7 +234,6 @@ void python_editor::handle_text_changed()
         
         if(!tab_name.endsWith("*"))
             m_tab_widget->setTabText(m_tab_widget->indexOf(current_editor), tab_name + "*");
-        
     }
 }
 
@@ -422,7 +421,6 @@ void python_editor::handle_hal_saved()
         {
             tab_name.chop(1);
             m_tab_widget->setTabText(i, tab_name);
-
         }
     }
 }
