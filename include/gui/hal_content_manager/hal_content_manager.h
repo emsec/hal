@@ -54,6 +54,9 @@ public:
     
     void hack_delete_content();
 
+Q_SIGNALS:
+    void save_triggered();
+
 public Q_SLOTS:
 
     void handle_open_document(const QString& file_name);
@@ -63,6 +66,8 @@ public Q_SLOTS:
     void handle_filsystem_doc_changed(const QString& file_name);
 
     void handle_relayout_button_clicked();
+
+    void handle_save_triggered();
 
 private:
     main_window* m_main_window;

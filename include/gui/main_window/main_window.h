@@ -104,6 +104,9 @@ public:
     void set_settings_icon_path(const QString& path);
     void set_settings_icon_style(const QString& style);
 
+Q_SIGNALS:
+    void save_triggered();
+
 public Q_SLOTS:
     void on_action_quit_triggered();
     void on_action_close_document_triggered();

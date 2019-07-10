@@ -232,10 +232,10 @@ void python_editor::handle_text_changed()
         if(current_editor)
             g_file_status_manager.file_changed(current_editor->get_uuid(), "Python tab: " + tab_name);
 
-        /*
+        
         if(!tab_name.endsWith("*"))
             m_tab_widget->setTabText(m_tab_widget->indexOf(current_editor), tab_name + "*");
-        */
+        
     }
 }
 
@@ -413,6 +413,21 @@ void python_editor::save_file(const bool ask_path, int index)
 
     QFileInfo info(selected_file_name);
     m_tab_widget->setTabText(index, info.completeBaseName() + "." + info.completeSuffix());
+}
+
+void python_editor::handle_hal_saved()
+{
+    for(int i = 0; i < m_tab_widget->count(); i++)
+    {
+        QString tab_name = m_tab_widget->tabText(i);
+
+        if(tab_name.endsWith("*"))
+        {
+            tab_name.chop(1);
+            m_tab_widget->setTabText(i, tab_name);
+
+        }
+    }
 }
 
 void python_editor::handle_action_save_file()

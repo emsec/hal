@@ -208,6 +208,8 @@ main_window::main_window(QWidget* parent) : QWidget(parent), m_schedule_widget(n
 
     connect(m_action_run_schedule, &QAction::triggered, plugin_schedule_manager::get_instance(), &plugin_schedule_manager::run_schedule);
 
+    connect(this, &main_window::save_triggered, m_content_manager, &hal_content_manager::handle_save_triggered);
+
     //test stuff
     //    hal_plugin_access_manager *manager = hal_plugin_access_manager::get_instance();
     //    QShortcut* debug_shortcut = new QShortcut(QKeySequence(tr("Ctrl+f")), this);
@@ -491,6 +493,7 @@ void main_window::handle_save_triggered()
         netlist_serializer::serialize_to_file(g_netlist, path);
 
         g_file_status_manager.flush_unsaved_changes();
+        Q_EMIT save_triggered();
     }
 }
 
