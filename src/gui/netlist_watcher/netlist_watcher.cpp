@@ -65,7 +65,6 @@ void netlist_watcher::handle_netlist_modified()
     if (!m_notified)
     {
         m_notified = true;
-        //g_content_manager.data_changed();
         g_file_status_manager.netlist_changed();
     }
 }

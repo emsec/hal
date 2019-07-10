@@ -510,7 +510,6 @@ void main_window::closeEvent(QCloseEvent* event)
 {
 
     //check for unsaved changes and show confirmation dialog
-    //if (g_content_manager.has_unsaved_changes())
     if(g_file_status_manager.modified_files_existing())
     {
         QMessageBox msgBox;
@@ -522,7 +521,6 @@ void main_window::closeEvent(QCloseEvent* event)
 
         msgBox.setText("There are unsaved modifications.");
         QString detailed_text = "The following modifications have not been saved yet:\n";
-        //for (const auto& s : g_content_manager.get_unsaved_changes())
         for(const auto&s : g_file_status_manager.get_unsaved_change_descriptors())
             detailed_text.append("   ->  " + s + "\n");
         msgBox.setDetailedText(detailed_text);
