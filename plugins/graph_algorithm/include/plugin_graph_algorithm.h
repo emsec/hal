@@ -33,6 +33,16 @@ public:
      *      plugin specific functions
      */
 
+
+    /**
+     * Returns communities
+     *
+     * @param[in] nl - Netlist (internally transformed to di-graph)
+     * @param[in] gates - Set of gates for which the strongly connected components are determined (default = empty means that all gates of the netlist are considered)
+     * @returns A community
+     */
+    std::set<std::set<std::shared_ptr<gate>>> get_communities(std::shared_ptr<netlist> const nl, const std::set<std::shared_ptr<gate>> gates = {});
+
     /**
      * Returns the set of strongly connected components.
      *
