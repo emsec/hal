@@ -723,7 +723,6 @@ bool hdl_parser_vhdl::build_netlist(const std::string& top_module)
             return false;
         }
 
-        m_current_instance_index[name]++;
         auto new_net = m_netlist->create_net(name);
         if (new_net == nullptr)
         {
@@ -746,10 +745,18 @@ bool hdl_parser_vhdl::build_netlist(const std::string& top_module)
         return false;
     }
 
+    // netlist is created.
+    // now merge nets
     while (!m_nets_to_merge.empty())
     {
+        // master = net that other nets are merged into
+        // slave = net to merge into master and then delete
+
+        bool progress_made = false;
+
         for (const auto& [master, merge_set] : m_nets_to_merge)
         {
+            // check if none of the slaves is itself a master
             bool okay = true;
             for (const auto& slave : merge_set)
             {
@@ -766,6 +773,8 @@ bool hdl_parser_vhdl::build_netlist(const std::string& top_module)
             for (const auto& slave : merge_set)
             {
                 auto slave_net = m_net_by_name.at(slave);
+
+                // merge source
                 auto slave_src = slave_net->get_src();
                 if (slave_src.gate != nullptr)
                 {
@@ -780,6 +789,7 @@ bool hdl_parser_vhdl::build_netlist(const std::string& top_module)
                     }
                 }
 
+                // merge destinations
                 for (const auto& dst : slave_net->get_dsts())
                 {
                     slave_net->remove_dst(dst);
@@ -788,12 +798,26 @@ bool hdl_parser_vhdl::build_netlist(const std::string& top_module)
                         master_net->add_dst(dst);
                     }
                 }
+
+                // merge attributes etc.
+                for (const auto& it : slave_net->get_data())
+                {
+                    master_net->set_data(std::get<0>(it.first), std::get<1>(it.first), std::get<0>(it.second), std::get<1>(it.second));
+                }
+
                 m_netlist->delete_net(slave_net);
                 m_net_by_name.erase(slave);
             }
 
             m_nets_to_merge.erase(master);
+            progress_made = true;
             break;
+        }
+
+        if (!progress_made)
+        {
+            log_error("hdl_parser", "cyclic dependency between signals found, cannot parse netlist");
+            return false;
         }
     }
 
@@ -805,7 +829,6 @@ std::shared_ptr<module> hdl_parser_vhdl::instantiate(const entity& e, std::share
     // remember assigned aliases so they are not lost when recursively going deeper
     std::map<std::string, std::string> aliases;
 
-    m_current_instance_index[e.name]++;
     aliases[e.name] = get_unique_alias(e.name);
 
     // select/create a module for the entity
@@ -841,9 +864,8 @@ std::shared_ptr<module> hdl_parser_vhdl::instantiate(const entity& e, std::share
     for (const auto& name : e.signals)
     {
         // create new net for the signal
-        m_current_instance_index[name]++;
         aliases[name] = get_unique_alias(name);
-        auto new_net = m_netlist->create_net(aliases[name]);
+        auto new_net  = m_netlist->create_net(aliases[name]);
         if (new_net == nullptr)
         {
             return nullptr;
@@ -965,7 +987,6 @@ std::shared_ptr<module> hdl_parser_vhdl::instantiate(const entity& e, std::share
         else
         {
             // create the new gate
-            m_current_instance_index[inst.name]++;
             aliases[inst.name] = get_unique_alias(inst.name);
             auto new_gate      = m_netlist->create_gate(inst.type, aliases[inst.name]);
             if (new_gate == nullptr)
@@ -1381,10 +1402,17 @@ std::map<std::string, std::string> hdl_parser_vhdl::get_port_assignments(const s
 
 std::string hdl_parser_vhdl::get_unique_alias(const std::string& name)
 {
+    // if the name only appears once, we don't have to alias it
+    // m_name_occurrences holds the precomputed number of occurences for each name
     if (m_name_occurrences[name] < 2)
     {
         return name;
     }
+
+    // otherwise, add a unique string to the name
+    // use m_current_instance_index[name] to get a unique id
+
+    m_current_instance_index[name]++;
 
     if (name.back() == '\\')
     {
