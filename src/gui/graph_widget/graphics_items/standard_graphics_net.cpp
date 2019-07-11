@@ -145,11 +145,19 @@ standard_graphics_net::standard_graphics_net(std::shared_ptr<net> n, lines& l) :
         {
             if (h.small_x == v.x)
                 if (h.y > v.small_y && h.y < v.big_y)
-                    m_splits.append(QPointF(h.small_x - l.src_x, h.y - l.src_y));
+                {
+                    QPointF point(h.small_x - l.src_x, h.y - l.src_y);
+                    m_splits.append(point);
+                    m_shape.addEllipse(point, s_radius, s_radius);
+                }
 
             if (h.big_x == v.x)
                 if (h.y > v.small_y && h.y < v.big_y)
-                    m_splits.append(QPointF(h.big_x -l.src_x, h.y - l.src_y));
+                {
+                    QPointF point(h.big_x -l.src_x, h.y - l.src_y);
+                    m_splits.append(point);
+                    m_shape.addEllipse(point, s_radius, s_radius);
+                }
         }
     }
 
@@ -207,6 +215,7 @@ standard_graphics_net::standard_graphics_net(std::shared_ptr<net> n, lines& l) :
     }
 
     // COMPENSATE FOR PEN WIDTH ?
+    // COMPENSATE FOR SPLITS ?
     m_rect = QRectF(smallest_x, smallest_y, biggest_x - smallest_x, biggest_y - smallest_y);
 
 //    for (const h_line& h : l.h_lines)
