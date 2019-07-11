@@ -6,6 +6,7 @@
 #include "gui/graph_widget/graphics_items/graphics_gate.h"
 #include "gui/graph_widget/graphics_items/graphics_item.h"
 #include "gui/graph_widget/graphics_items/separated_graphics_net.h"
+#include "gui/graph_widget/graphics_items/standard_graphics_gate.h"
 #include "gui/graph_widget/graphics_items/standard_graphics_net.h"
 #include "gui/graph_widget/graphics_scene.h"
 #include "gui/gui_globals.h"
@@ -80,6 +81,7 @@ void graph_graphics_view::paintEvent(QPaintEvent* event)
 
     graphics_item::set_lod(lod);
 
+    standard_graphics_gate::update_alpha();
     standard_graphics_net::update_alpha();
     separated_graphics_net::update_alpha();
     global_graphics_net::update_alpha();

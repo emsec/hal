@@ -17,7 +17,10 @@
 static const qreal baseline = 1;
 
 // MAKE FIXED VALUES CONST
+qreal standard_graphics_gate::s_alpha;
+
 QPen standard_graphics_gate::s_pen;
+QBrush standard_graphics_gate::s_brush;
 
 QColor standard_graphics_gate::s_default_main_color;
 QColor standard_graphics_gate::s_text_color;
@@ -84,6 +87,19 @@ void standard_graphics_gate::load_settings()
 
     s_first_pin_y = s_color_bar_height + s_pin_upper_vertical_spacing + s_pin_font_height;
     s_pin_y_stride = s_pin_font_height + s_pin_inner_vertical_spacing;
+}
+
+void standard_graphics_gate::update_alpha()
+{
+    //if (s_lod >= graph_widget_constants::gate_min_lod && s_lod <= graph_widget_constants::gate_max_lod)
+    if (s_lod <= graph_widget_constants::gate_max_lod)
+    {
+        const qreal difference = graph_widget_constants::gate_max_lod - graph_widget_constants::gate_min_lod;
+
+        s_alpha = 1 - (s_lod - graph_widget_constants::gate_min_lod) / difference;
+    }
+    else
+        s_alpha = 0;
 }
 
 standard_graphics_gate::standard_graphics_gate(std::shared_ptr<gate> g, const bool adjust_size_to_grid) : graphics_gate(g)
@@ -183,10 +199,11 @@ void standard_graphics_gate::paint(QPainter* painter, const QStyleOptionGraphics
         {
             QColor fade = m_color;
 
-            qreal difference = s_lod - 0.2;
-            qreal percent = difference / 0.2;
+//            qreal difference = s_lod - 0.2;
+//            qreal percent = difference / 0.2;
 
-            fade.setAlphaF(1 - percent);
+//            fade.setAlphaF(1 - percent);
+            fade.setAlphaF(s_alpha);
 
             //painter->fillRect(QRect(0, s_color_bar_height, m_width, m_height - s_color_bar_height), fade);
             painter->fillRect(QRect(0, 0, m_width, m_height), fade);

@@ -7,6 +7,7 @@ class standard_graphics_gate : public graphics_gate
 {
 public:
     static void load_settings();
+    static void update_alpha();
 
     standard_graphics_gate(std::shared_ptr<gate> g, const bool adjust_size_to_grid = true);
 
@@ -18,7 +19,10 @@ public:
     virtual void set_visuals(const visuals& v) Q_DECL_OVERRIDE;
 
 private:
+    static qreal s_alpha;
+
     static QPen s_pen;
+    static QBrush s_brush;
 
     static QColor s_default_main_color;
     static QColor s_text_color;

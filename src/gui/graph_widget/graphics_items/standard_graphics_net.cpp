@@ -263,7 +263,7 @@ void standard_graphics_net::paint(QPainter* painter, const QStyleOptionGraphicsI
         painter->setPen(s_pen);
         painter->setBrush(s_brush);
 
-        bool original_value = painter->renderHints().testFlag(QPainter::Antialiasing);
+        const bool original_value = painter->renderHints().testFlag(QPainter::Antialiasing);
         painter->setRenderHint(QPainter::Antialiasing, true);
 
         for (const QPointF& point : m_splits)
