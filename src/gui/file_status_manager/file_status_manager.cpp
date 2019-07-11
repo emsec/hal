@@ -17,7 +17,7 @@ void file_status_manager::file_changed(const QUuid uuid, const QString& descript
     m_modified_files_descriptors.insert(uuid, descriptor);
 }
 
-void file_status_manager::file_saved(const QUuid uuid, const QString& descriptor)
+void file_status_manager::file_saved(const QUuid uuid)
 {
     m_modified_files_uuid.remove(uuid);
     m_modified_files_descriptors.remove(uuid);

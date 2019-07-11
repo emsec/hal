@@ -18,7 +18,7 @@ public:
     bool modified_files_existing() const;
 
     void file_changed(const QUuid uuid, const QString& descriptor);
-    void file_saved(const QUuid uuid, const QString& descriptor);
+    void file_saved(const QUuid uuid);
 
     void netlist_changed();
     void netlist_saved();

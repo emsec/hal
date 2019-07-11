@@ -359,7 +359,7 @@ void python_editor::tab_load_file(u32 index, QString file_name)
     m_tab_widget->setTabText(m_tab_widget->count() - 1, info.completeBaseName() + "." + info.completeSuffix());
     m_new_file_counter--;
 
-    g_file_status_manager.file_saved(tab->get_uuid(), tab->get_file_name());
+    g_file_status_manager.file_saved(tab->get_uuid());
 }
 
 void python_editor::save_file(const bool ask_path, int index)
@@ -405,7 +405,7 @@ void python_editor::save_file(const bool ask_path, int index)
     out << current_editor->toPlainText().toStdString();
     out.close();
     current_editor->document()->setModified(false);
-    g_file_status_manager.file_saved(current_editor->get_uuid(), current_editor->get_file_name());
+    g_file_status_manager.file_saved(current_editor->get_uuid());
 
     QFileInfo info(selected_file_name);
     m_tab_widget->setTabText(index, info.completeBaseName() + "." + info.completeSuffix());
