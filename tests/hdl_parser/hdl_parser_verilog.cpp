@@ -105,7 +105,7 @@ protected:
         return nl;
     }
 
-    // Create and load temporarily a custom gate library, which contains gates with input and output vectors up to dimension 3
+    // Create and load temporarily a custom gate library, which contains gates with input and output vectors up to dimension 3 (this is not the gate_lib of the vhdl_parser test)
     void create_temp_gate_lib()
     {
         NO_COUT_BLOCK;
@@ -115,7 +115,7 @@ protected:
                     "        \"library_name\": \"TEMP_GATE_LIBRARY\",\n"
                     "        \"elements\": {\n"
                     "\t    \"GATE0\" : [[\"I\"], [], [\"O\"]],\n"
-                    "            \"GATE1\" : [[\"I(0)\",\"I(1)\",\"I(2)\",\"I(3)\",\"I(4)\"], [], [\"O(0)\",\"O(1)\",\"O(2)\",\"O(3)\", \"O(4)\"]],\n"
+                    "            \"GATE1\" : [[\"I(0)\",\"I(1)\",\"I(2)\",\"I(3)\"], [], [\"O(0)\",\"O(1)\",\"O(2)\",\"O(3)\"]],\n"
                     "            \"GATE2\" : [[\"I(0, 0)\",\"I(0, 1)\",\"I(1, 0)\",\"I(1, 1)\"], [], [\"O(0, 0)\",\"O(0, 1)\",\"O(1, 0)\",\"O(1, 1)\"]],\n"
                     "            \"GATE3\" : [[\"I(0, 0, 0)\",\"I(0, 0, 1)\",\"I(0, 1, 0)\",\"I(0, 1, 1)\",\"I(1, 0, 0)\",\"I(1, 0, 1)\",\"I(1, 1, 0)\",\"I(1, 1, 1)\"], [], [\"O(0, 0, 0)\",\"O(0, 0, 1)\",\"O(0, 1, 0)\",\"O(0, 1, 1)\",\"O(1, 0, 0)\",\"O(1, 0, 1)\",\"O(1, 1, 0)\",\"O(1, 1, 1)\"]],\n"
                     "\n"
@@ -164,6 +164,7 @@ protected:
 
         return true;
     }
+
 };
 
 
@@ -248,11 +249,11 @@ TEST_F(hdl_parser_verilog_test, check_temporary)
 TEST_F(hdl_parser_verilog_test, check_main_example)
 {
     TEST_START
-        { // NOTE: inout nets can't be handled
+        /*{ // NOTE: inout nets can't be handled
             std::stringstream input("module  (\n"
                                     "  global_in,\n"
                                     "  global_out \n"
-                                    /*"  global_inout\n"*/
+                                    //"  global_inout\n"
                                     " ) ;\n"
                                     "  input global_in ;\n"
                                     "  output global_out ;\n"
@@ -349,7 +350,7 @@ TEST_F(hdl_parser_verilog_test, check_main_example)
             EXPECT_EQ(nl->get_global_input_nets().size(), 1);
             EXPECT_EQ(nl->get_global_output_nets().size(), 1);
             //EXPECT_EQ(nl->get_global_inout_nets().size(), 1);
-        }
+        }*/
     TEST_END
 }
 
@@ -553,7 +554,7 @@ TEST_F(hdl_parser_verilog_test, check_comment_detection){
  */
 TEST_F(hdl_parser_verilog_test, check_generic_map){
     TEST_START
-        /*{ ISSUE: value has ')' at the end
+        /*{ // ISSUE: value has ')' at the end
             // Store an instance of all possible data types in one gate
             std::stringstream input("module  (\n"
                                     "  global_in,\n"
@@ -719,6 +720,88 @@ TEST_F(hdl_parser_verilog_test, check_vector_bounds){
 
 
 /**
+ * Testing the correct handling of the 'assign' statement
+ *
+ * Functions: parse
+ */
+TEST_F(hdl_parser_verilog_test, check_assign)
+{
+    TEST_START
+        /*{   // NOTE: requirements of the 'assign'-statement? What's up with sth like: "assign net_0 = net_1 ^ net_2 ;"
+            // Declare multiple wire vectors in one line
+            std::stringstream input("module  (\n"
+                                    "  global_in,\n"
+                                    "  global_out\n"
+                                    " ) ;\n"
+                                    "  input global_in ;\n"
+                                    "  output global_out ;\n"
+                                    "  wire and_net ;\n"
+                                    "  assign and_net = global_in ;\n"
+                                    "INV gate_0 (\n"
+                                    "  .\\I (global_in ),\n"
+                                    "  .\\O (global_out )\n"
+                                    " ) ;\n"
+                                    "endmodule");
+            test_def::capture_stdout();
+            hdl_parser_verilog verilog_parser(input);
+            std::shared_ptr<netlist> nl = verilog_parser.parse(g_lib_name);
+            if (nl == nullptr)
+            {
+                std::cout << test_def::get_captured_stdout();
+            }
+            else
+            {
+                test_def::get_captured_stdout();
+            }
+
+            ASSERT_NE(nl, nullptr);
+        }*/
+    TEST_END
+}
+
+/**
+ * Testing various types of net assignments (not the 'assign'-statement, but i.e. '.\ Pin_0 (net_0)'. That includes the usage
+ * of number literals like  4'hA , the usage of pin vectors (i.e. we use I to represent I(0),...,I(3)) as well as using multiple
+ * nets in curly brackets '{net_0, net_1, ...}'
+ *
+ * Functions: parse
+ */
+TEST_F(hdl_parser_verilog_test, check_number_literals)
+{
+    TEST_START
+        create_temp_gate_lib();
+        /*{   // NOTE: How should this work? Only for gates in brackets (I(0),...,I(3)) ? Doesn't work currently...
+            // Declare multiple wire vectors in one line
+            std::stringstream input("module  (\n"
+                                    "  global_in,\n"
+                                    "  global_out\n"
+                                    " ) ;\n"
+                                    "  input global_in ;\n"
+                                    "  output global_out ;\n"
+                                    "GATE1 gate_0 (\n"
+                                    "  .\\I ( 4'hA ),\n" // 'I' represents I(0), I(1), I(2), I(3)
+                                    "  .\\O(0) (global_out )\n"
+                                    " ) ;\n"
+                                    "endmodule");
+            test_def::capture_stdout();
+            hdl_parser_verilog verilog_parser(input);
+            std::shared_ptr<netlist> nl = verilog_parser.parse(temp_lib_name);
+            if (nl == nullptr)
+            {
+                std::cout << test_def::get_captured_stdout();
+            }
+            else
+            {
+                test_def::get_captured_stdout();
+            }
+
+            ASSERT_NE(nl, nullptr);
+        }*/
+        // NOTE: Other types are in progress
+    TEST_END
+}
+
+/**
  * Testing the correct handling of invalid input
  *
  * Functions: parse
@@ -728,6 +811,7 @@ TEST_F(hdl_parser_verilog_test, check_invalid_input)
     TEST_START
         {
             // IN PROGRESS
+
         }
     TEST_END
 }
