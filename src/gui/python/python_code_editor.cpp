@@ -12,7 +12,7 @@
 #include <QShortcut>
 
 
-python_code_editor::python_code_editor(QWidget *parent) : code_editor(parent)
+python_code_editor::python_code_editor(QWidget *parent) : code_editor(parent), m_uuid(QUuid::createUuid())
 {
     QShortcut* redo_shortcut = new QShortcut(QKeySequence(tr("Ctrl+y")), this);
     connect(redo_shortcut, &QShortcut::activated, this, &python_code_editor::handle_redo_requested);
@@ -308,4 +308,9 @@ QString python_code_editor::get_file_name()
 void python_code_editor::set_file_name(const QString name)
 {
     m_file_name = name;
+}
+
+QUuid python_code_editor::get_uuid() const
+{
+    return m_uuid;
 }

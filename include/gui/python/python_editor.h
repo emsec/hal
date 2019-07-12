@@ -127,6 +127,7 @@ public Q_SLOTS:
     void handle_text_changed();
     void handle_searchbar_text_edited(const QString &text);
     void handle_current_tab_changed(int index);
+    void handle_hal_saved();
 
 private:
     QVBoxLayout* m_layout;
