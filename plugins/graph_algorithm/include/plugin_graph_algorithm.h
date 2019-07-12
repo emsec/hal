@@ -5,6 +5,8 @@
 
 #include <hal_bdd.h>
 
+#include <igraph/igraph.h>
+
 /* forward declaration */
 class netlist;
 class gate;
@@ -42,6 +44,7 @@ public:
      * @returns A community
      */
     std::set<std::set<std::shared_ptr<gate>>> get_communities(std::shared_ptr<netlist> const nl, const std::set<std::shared_ptr<gate>> gates = {});
+    void plot_graph(igraph_t *graph);
 
     /**
      * Returns the set of strongly connected components.
