@@ -191,6 +191,7 @@ void standard_graphics_module::paint(QPainter* painter, const QStyleOptionGraphi
             painter->save();
             painter->setRenderHint(QPainter::Antialiasing, true);
             //painter->drawRect(boundingRect().marginsAdded(QMarginsF(0.5, 0.5, 0.5, 0.5)));
+            painter->setBrush(QBrush());
             painter->drawRect(boundingRect());
             painter->restore();
         }

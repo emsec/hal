@@ -22,7 +22,6 @@ private:
     static qreal s_alpha;
 
     static QPen s_pen;
-    static QBrush s_brush;
 
     static QColor s_default_main_color;
     static QColor s_text_color;
