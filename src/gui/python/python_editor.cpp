@@ -195,6 +195,9 @@ void python_editor::handle_tab_close_requested(int index)
 
         if (ret == QMessageBox::Discard)
         {
+            m_file_watcher->removePath(editor->get_file_name());
+            m_path_editor_map.remove(editor->get_file_name());
+            g_file_status_manager.file_saved(editor->get_uuid());
             m_tab_widget->removeTab(index);
             return;
         }
@@ -213,6 +216,7 @@ void python_editor::handle_tab_close_requested(int index)
 
     m_file_watcher->removePath(editor->get_file_name());
     m_path_editor_map.remove(editor->get_file_name());
+    g_file_status_manager.file_saved(editor->get_uuid());
     m_tab_widget->removeTab(index);
 }
 
@@ -424,6 +428,7 @@ void python_editor::save_file(const bool ask_path, int index)
     }
 
     m_file_watcher->removePath(current_editor->get_file_name());
+    m_path_editor_map.remove(current_editor->get_file_name());
 
     std::ofstream out(selected_file_name.toStdString(), std::ios::out);
 
@@ -435,7 +440,12 @@ void python_editor::save_file(const bool ask_path, int index)
     out << current_editor->toPlainText().toStdString();
     out.close();
     current_editor->document()->setModified(false);
+
     g_file_status_manager.file_saved(current_editor->get_uuid());
+
+    m_path_editor_map.insert(selected_file_name, current_editor);
+    m_file_watcher->addPath(selected_file_name);
+
 
     QFileInfo info(selected_file_name);
     m_tab_widget->setTabText(index, info.completeBaseName() + "." + info.completeSuffix());
