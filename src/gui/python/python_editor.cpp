@@ -33,6 +33,8 @@ python_editor::python_editor(QWidget* parent)
     m_new_file_counter = 0;
     m_last_click_time  = 0;
 
+    m_last_opened_path = QDir::currentPath();
+
     m_tab_widget = new QTabWidget(this);
     m_tab_widget->setTabsClosable(true);
     m_tab_widget->setMovable(true);
@@ -72,7 +74,7 @@ python_editor::python_editor(QWidget* parent)
     connect(m_tab_widget, &QTabWidget::currentChanged, this, &python_editor::handle_current_tab_changed);
 
 
-    m_path_editor_map = new QMap<QString, python_code_editor*>();
+    m_path_editor_map = QMap<QString, python_code_editor*>();
 
     m_file_modified_bar = new file_modified_bar();
     m_file_modified_bar->setHidden(true);
@@ -210,7 +212,7 @@ void python_editor::handle_tab_close_requested(int index)
     }
 
     m_file_watcher->removePath(editor->get_file_name());
-    m_path_editor_map->remove(editor->get_file_name());
+    m_path_editor_map.remove(editor->get_file_name());
     m_tab_widget->removeTab(index);
 }
 
@@ -241,7 +243,16 @@ void python_editor::handle_text_changed()
 {
     if (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count() - 100 < m_last_click_time)
     {
-        g_content_manager.data_changed("Python editor tab " + QString::number(m_tab_widget->currentIndex() + 1));
+        python_code_editor* current_editor = dynamic_cast<python_code_editor*>(m_tab_widget->currentWidget());
+
+        QString tab_name = m_tab_widget->tabText(m_tab_widget->indexOf(current_editor));
+
+        if(current_editor)
+            g_file_status_manager.file_changed(current_editor->get_uuid(), "Python tab: " + tab_name);
+
+        
+        if(!tab_name.endsWith("*"))
+            m_tab_widget->setTabText(m_tab_widget->indexOf(current_editor), tab_name + "*");
     }
 }
 
@@ -317,34 +328,39 @@ void python_editor::handle_action_open_file()
     QString title = "Open File";
     QString text  = "Python Scripts(*.py)";
 
-    QString file_name = QFileDialog::getOpenFileName(nullptr, title, QDir::currentPath(), text, nullptr, QFileDialog::DontUseNativeDialog);
+    QStringList file_names = QFileDialog::getOpenFileNames(nullptr, title, m_last_opened_path, text, nullptr, QFileDialog::DontUseNativeDialog);
 
-    if (file_name.isEmpty())
+    if (file_names.isEmpty())
     {
         return;
     }
 
-    for (int i = 0; i < m_tab_widget->count(); ++i)
+    for(auto file_name : file_names)
     {
-        auto editor = dynamic_cast<python_code_editor*>(m_tab_widget->widget(i));
-        if (editor->get_file_name() == file_name)
+        for (int i = 0; i < m_tab_widget->count(); ++i)
         {
-            m_tab_widget->setCurrentIndex(i);
-
-            if (editor->document()->isModified())
+            auto editor = dynamic_cast<python_code_editor*>(m_tab_widget->widget(i));
+            if (editor->get_file_name() == file_name)
             {
-                if (QMessageBox::question(editor, "Script has unsaved changes", "Do you want to reload the file from disk? Unsaved changes are lost.", QMessageBox::Yes | QMessageBox::No)
-                    == QMessageBox::Yes)
+                m_tab_widget->setCurrentIndex(i);
+
+                if (editor->document()->isModified())
                 {
-                    tab_load_file(i, file_name);
+                    if (QMessageBox::question(editor, "Script has unsaved changes", "Do you want to reload the file from disk? Unsaved changes are lost.", QMessageBox::Yes | QMessageBox::No)
+                        == QMessageBox::Yes)
+                    {
+                        tab_load_file(i, file_name);
+                    }
                 }
+                return;
             }
-            return;
         }
+
+        handle_action_new_tab();
+        tab_load_file(m_tab_widget->count() - 1, file_name);
     }
 
-    handle_action_new_tab();
-    tab_load_file(m_tab_widget->count() - 1, file_name);
+    m_last_opened_path = QFileInfo(file_names.last()).absolutePath();
 }
 
 void python_editor::tab_load_file(u32 index, QString file_name)
@@ -368,10 +384,10 @@ void python_editor::tab_load_file(u32 index, QString file_name)
     m_tab_widget->setTabText(m_tab_widget->indexOf(tab), info.completeBaseName() + "." + info.completeSuffix());
     m_new_file_counter--;
 
-    m_path_editor_map->insert(file_name, tab);
+    m_path_editor_map.insert(file_name, tab);
     m_file_watcher->addPath(file_name);
     
-    g_content_manager.data_saved("Python editor tab " + QString::number(index + 1));
+    g_file_status_manager.file_saved(tab->get_uuid());
 }
 
 void python_editor::save_file(const bool ask_path, int index)
@@ -419,10 +435,24 @@ void python_editor::save_file(const bool ask_path, int index)
     out << current_editor->toPlainText().toStdString();
     out.close();
     current_editor->document()->setModified(false);
-    g_content_manager.data_saved("Python editor tab " + QString::number(index + 1));
+    g_file_status_manager.file_saved(current_editor->get_uuid());
 
     QFileInfo info(selected_file_name);
     m_tab_widget->setTabText(index, info.completeBaseName() + "." + info.completeSuffix());
+}
+
+void python_editor::handle_hal_saved()
+{
+    for(int i = 0; i < m_tab_widget->count(); i++)
+    {
+        QString tab_name = m_tab_widget->tabText(i);
+
+        if(tab_name.endsWith("*"))
+        {
+            tab_name.chop(1);
+            m_tab_widget->setTabText(i, tab_name);
+        }
+    }
 }
 
 void python_editor::handle_action_save_file()
@@ -448,17 +478,17 @@ void python_editor::handle_action_new_tab()
     m_tab_widget->addTab(editor, QString("New File ").append(QString::number(++m_new_file_counter)));
     m_tab_widget->setCurrentIndex(m_tab_widget->count() - 1);
     editor->document()->setModified(false);
-    connect(editor, &python_code_editor::modificationChanged, this, &python_editor::handle_modification_changed);
+    //connect(editor, &python_code_editor::modificationChanged, this, &python_editor::handle_modification_changed);
     connect(editor, &python_code_editor::key_pressed, this, &python_editor::handle_key_pressed);
     connect(editor, &python_code_editor::textChanged, this, &python_editor::handle_text_changed);
 }
 
 void python_editor::handle_tab_file_changed(QString path)
 {
-    python_code_editor* editor_with_modified_base_file = m_path_editor_map->value(path);
+    python_code_editor* editor_with_modified_base_file = m_path_editor_map.value(path);
     editor_with_modified_base_file->set_base_file_modified(true);
-    //editor_with_modified_base_file->document()->setModified();
-    g_content_manager.data_changed("Python editor tab " + QString::number(m_tab_widget->indexOf(editor_with_modified_base_file) + 1));
+    QString tab_name = m_tab_widget->tabText(m_tab_widget->indexOf(editor_with_modified_base_file));
+    g_file_status_manager.file_changed(editor_with_modified_base_file->get_uuid, "Python tab: " + tab_name);
 
     python_code_editor* current_editor = dynamic_cast<python_code_editor*>(m_tab_widget->currentWidget());
 

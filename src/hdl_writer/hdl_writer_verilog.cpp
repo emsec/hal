@@ -189,9 +189,9 @@ std::string hdl_writer_verilog::get_net_name(const std::shared_ptr<net> n)
     {
         name.erase(0, 1);
     }
-    if (name[name.size()-1] == '_')
+    if (name[name.size() - 1] == '_')
     {
-        name.erase(name.size()-1, 1);
+        name.erase(name.size() - 1, 1);
     }
 
     if (std::all_of(name.begin(), name.end(), ::isdigit))
@@ -221,9 +221,9 @@ std::string hdl_writer_verilog::get_gate_name(const std::shared_ptr<gate> g)
     {
         name.erase(0, 1);
     }
-    if (name[name.size()-1] == '_')
+    if (name[name.size() - 1] == '_')
     {
-        name.erase(name.size()-1, 1);
+        name.erase(name.size() - 1, 1);
     }
 
     if (std::all_of(name.begin(), name.end(), ::isdigit))

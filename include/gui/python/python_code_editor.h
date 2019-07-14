@@ -26,6 +26,8 @@
 
 #include "code_editor/code_editor.h"
 
+#include <QUuid>
+
 class python_code_editor : public code_editor
 {
     Q_OBJECT
@@ -38,6 +40,8 @@ public:
     void set_base_file_modified(bool base_file_modified);
     bool is_base_file_modified();
     
+    QUuid get_uuid() const;
+
 Q_SIGNALS:
     void key_pressed(QKeyEvent* e);
 
@@ -62,6 +66,8 @@ private:
     QString m_text_state;
 
     bool m_base_file_modified;
+    
+    QUuid m_uuid;
 };
 
 #endif //PYTHON_CODE_EDITOR_H

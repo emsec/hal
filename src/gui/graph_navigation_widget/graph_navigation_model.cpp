@@ -103,7 +103,6 @@ int graph_navigation_model::columnCount(const QModelIndex& parent) const
 
 void graph_navigation_model::setupModelData()
 {
-    //TODO React to Gate / Net / module number changes
     QString design_name = QString::fromStdString(g_netlist->get_input_filename().filename().string());
     m_top_level_item    = new graph_navigation_item(design_name, 0, graph_navigation_item::item_type::ignore, m_root_item);
     QString text        = "gates : " + QString::number(g_netlist->get_gates().size());
@@ -232,7 +231,6 @@ void graph_navigation_model::setupModelData()
         for (auto const gate : module->get_gates())
             new graph_navigation_item(QString::fromStdString(gate->get_name()), gate->get_id(), graph_navigation_item::item_type::gate, module_gates_item);
 
-        // todo modules do not have nets anymore
         //for (auto const net : module->get_nets())
         //    new graph_navigation_item(QString::fromStdString(net->get_name()), net->get_id(), graph_navigation_item::item_type::net, module_nets_item);
     }
@@ -271,7 +269,6 @@ QModelIndexList graph_navigation_model::corresponding_indexes(const QList<u32>& 
     QModelIndexList list;
     match_ids_recursive(m_root_item, list, gate_ids, net_ids, module_ids);
     return list;
-    //horribly inefficient, TODO optimize
 }
 
 void graph_navigation_model::update_modules()
@@ -290,7 +287,6 @@ void graph_navigation_model::update_modules()
         for (auto const gate : module->get_gates())
             new graph_navigation_item(QString::fromStdString(gate->get_name()), gate->get_id(), graph_navigation_item::item_type::gate, module_gates_item);
 
-        // todo modules do not have nets anymore
         // for (auto const net : module->get_nets())
         //    new graph_navigation_item(QString::fromStdString(net->get_name()), net->get_id(), graph_navigation_item::item_type::net, module_nets_item);
     }
@@ -343,8 +339,6 @@ void graph_navigation_model::match_ids_recursive(graph_navigation_item* item, QM
 //        m_root_item->insert_child(1, item);
 //        endInsertRows();
 
-//        //TODO check if task items are still active before deleting
-//        //TODO also delete child items if parent is deleted
 //        if (m_top_level_items.full()) {
 //            beginRemoveRows(QModelIndex(), m_root_item->childCount() - 1, m_root_item->childCount() - 1);
 //            delete m_top_level_items.front();
@@ -361,7 +355,6 @@ void graph_navigation_model::match_ids_recursive(graph_navigation_item* item, QM
 //            endInsertRows();
 //            delete index;
 //        } else {
-//            //TODO
 //            //log failed to create task_status_item
 //            return nullptr;
 //        }
@@ -380,7 +373,6 @@ void graph_navigation_model::match_ids_recursive(graph_navigation_item* item, QM
 //        item->append_status_log_entry(entry);
 //        delete index;
 //    } else {
-//        //TODO
 //        //do something to handle this case
 //        //(id not found)
 //    }
@@ -396,7 +388,6 @@ void graph_navigation_model::match_ids_recursive(graph_navigation_item* item, QM
 //                         createIndex(index->row(), static_cast<int>(ColumnNumber::StatusColumn))); // not sure if needed
 //        delete index;
 //    } else {
-//        //TODO
 //        //do something to handle this case
 //        //(id not found)
 //    }
@@ -411,7 +402,6 @@ void graph_navigation_model::match_ids_recursive(graph_navigation_item* item, QM
 //        Q_EMIT dataChanged(*index, *index);
 //        delete index;
 //    } else {
-//        //TODO
 //        //do something to handle this case
 //        //(id not found)
 //    }

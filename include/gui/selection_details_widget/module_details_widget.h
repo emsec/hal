@@ -25,18 +25,21 @@
 #define MODULE_DETAILS_WIDGET_H
 
 #include "def.h"
-#include "graph_relay/graph_relay.h"
+
+#include "netlist_relay/netlist_relay.h"
+
 #include <QWidget>
+
+class module;
 
 class QVBoxLayout;
 class QLabel;
-class module;
 
 class module_details_widget : public QWidget
 {
     Q_OBJECT
 public:
-    module_details_widget(QWidget* parent = 0);
+    module_details_widget(QWidget* parent = nullptr);
 
     void update(u32 module_id);
 
@@ -50,4 +53,4 @@ private:
     u32 m_current_id;
 };
 
-#endif
+#endif // MODULE_DETAILS_WIDGET_H

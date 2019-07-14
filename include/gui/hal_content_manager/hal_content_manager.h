@@ -48,27 +48,14 @@ class hal_content_manager : public QObject
     Q_OBJECT
 
 public:
-    explicit hal_content_manager();
+    explicit hal_content_manager(main_window* parent);
 
     ~hal_content_manager();
-
-    void set_main_window(main_window* parent);
-
-
-
-    void data_changed(const QString& identifier = "netlist modified");
-    void data_saved(const QString& identifier);
-
-    bool has_unsaved_changes() const;
-
-    std::set<QString> get_unsaved_changes() const;
-
-    void flush_unsaved_changes();
-
-
-
-    //hack, TODO fix
+    
     void hack_delete_content();
+
+Q_SIGNALS:
+    void save_triggered();
 
 public Q_SLOTS:
 
@@ -79,6 +66,8 @@ public Q_SLOTS:
     void handle_filsystem_doc_changed(const QString& file_name);
 
     void handle_relayout_button_clicked();
+
+    void handle_save_triggered();
 
 private:
     main_window* m_main_window;

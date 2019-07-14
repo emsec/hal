@@ -2,7 +2,16 @@
 
 #include "core/log.h"
 
-#include "gui_globals.h"
+#include "gui/graph_widget/graphics_items/global_graphics_net.h"
+#include "gui/graph_widget/graphics_items/graphics_item.h"
+#include "gui/graph_widget/graphics_items/graphics_net.h"
+#include "gui/graph_widget/graphics_items/minimal_graphics_gate.h"
+#include "gui/graph_widget/graphics_items/separated_graphics_net.h"
+#include "gui/graph_widget/graphics_items/standard_graphics_gate.h"
+#include "gui/graph_widget/graphics_items/standard_graphics_module.h"
+#include "gui/graph_widget/graphics_items/standard_graphics_net.h"
+#include "gui/gui_globals.h"
+#include "gui/svg_icon_engine/svg_icon_engine.h"
 
 #include <QApplication>
 #include <QFile>
@@ -14,16 +23,23 @@ namespace style
 {
     QString default_stylesheet()
     {
+        QString stylesheet;
         QFile file(":/style/hal");
-        file.open(QFile::ReadOnly);
-        QString stylesheet = QString(file.readAll());
-        file.close();    // NOT SURE IF NECESSARY
+
+        if (!file.open(QFile::ReadOnly))
+        {
+            log_error("gui", "Unable to open default stylesheet. This error should never be reached");
+            return stylesheet;
+        }
+
+        stylesheet = QString(file.readAll());
+        file.close();
         return stylesheet;
     }
 
     QString get_stylesheet()
     {
-        QString stylesheet = "";
+        QString stylesheet;
         {
             QString path = g_settings.value("stylesheet/base").toString();
             QFile file(path);
@@ -116,4 +132,77 @@ namespace style
 
         return stylesheet;
     }
-}    // namespace style
+
+    QIcon get_styled_svg_icon(const QString& from_to_colors, const QString& svg_path)
+    {
+        QString svg_data;
+        QFile file(svg_path);
+
+        if (file.open(QFile::ReadOnly))
+            svg_data = QString(file.readAll());
+        else
+        {
+            //log_error("error");
+            return QIcon();
+        }
+
+        if (svg_data.isEmpty())
+        {
+            //log_error("error");
+            return QIcon();
+        }
+
+        if (!from_to_colors.isEmpty())
+        {
+            QRegExp color_regex("#[0-9a-f]{6}", Qt::CaseInsensitive);
+            QRegExp all_to_color_regex("\\s*all\\s*->\\s*#[0-9a-f]{6}\\s*", Qt::CaseInsensitive);
+            QRegExp color_to_color_regex("\\s*(#[0-9a-f]{6}\\s*->\\s*#[0-9a-f]{6}\\s*,\\s*)*#[0-9a-f]{6}\\s*->\\s*#[0-9a-f]{6}\\s*", Qt::CaseInsensitive);
+            if (all_to_color_regex.exactMatch(from_to_colors))
+            {
+                color_regex.indexIn(from_to_colors);
+                QString color = color_regex.cap(0);
+                svg_data.replace(color_regex, color.toUtf8());
+            }
+            else if (color_to_color_regex.exactMatch(from_to_colors))
+            {
+                QString copy = from_to_colors;
+                copy         = copy.simplified();
+                copy.replace(" ", "");
+
+                QStringList list = copy.split(",");
+
+                for (QString string : list)
+                {
+                    QString from_color = string.left(7);
+                    QString to_color   = string.right(7);
+
+                    QRegExp regex(from_color);
+                    svg_data.replace(regex, to_color.toUtf8());
+                }
+            }
+            else
+            {
+                //print error
+                return QIcon();
+            }
+        }
+
+        return QIcon(new svg_icon_engine(svg_data.toStdString()));
+    }
+
+    void debug_update()
+    {
+        graphics_item::load_settings();
+
+        standard_graphics_module::load_settings();
+
+        //graphics_gate::load_settings();
+        standard_graphics_gate::load_settings();
+        minimal_graphics_gate::load_settings();
+
+        graphics_net::load_settings();
+        global_graphics_net::load_settings();
+        separated_graphics_net::load_settings();
+    }
+
+} // namespace style

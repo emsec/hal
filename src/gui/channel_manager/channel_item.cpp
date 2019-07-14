@@ -19,7 +19,7 @@ const QString channel_item::name() const
     return m_name;
 }
 
-const boost::circular_buffer<channel_entry*>* channel_item::get_buffer() const
+const boost::circular_buffer<channel_entry *> *channel_item::get_buffer() const
 {
     return &m_log_entries;
 }

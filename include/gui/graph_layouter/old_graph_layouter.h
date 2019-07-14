@@ -26,11 +26,11 @@
 
 #include "graph_layouter/gui_graph_gate.h"
 #include "graph_layouter/gui_graph_net.h"
-#include "graph_relay/graph_relay.h"
 #include "netlist/gate.h"
 #include "netlist/net.h"
 #include "netlist/netlist.h"
 #include "netlist/module.h"
+#include "netlist_relay/netlist_relay.h"
 #include <QGraphicsScene>
 #include <QMap>
 #include <QObject>
@@ -75,11 +75,12 @@ public:
     void set_sub_channel_width(int new_width);
 
 public Q_SLOTS:
-    void handle_gate_event(gate_event_handler::event ev, std::shared_ptr<gate> gate, u32 associated_data);
-
-    void handle_net_event(net_event_handler::event ev, std::shared_ptr<net> net, u32 associated_data);
-
-    void handle_module_event(module_event_handler::event ev, std::shared_ptr<module> module, u32 associated_data);
+    
+    void handle_gate_name_changed_event(std::shared_ptr<gate> gate);
+    
+    void handle_module_gate_assigned(std::shared_ptr<module> module, u32 associated_data);
+    
+    void handle_module_gate_removed(std::shared_ptr<module> module, u32 associated_data);
 
 Q_SIGNALS:
     /*maybe a parameter(id or something like that)*/

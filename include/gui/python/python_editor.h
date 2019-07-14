@@ -139,6 +139,8 @@ public Q_SLOTS:
     void handle_base_file_modified_ignore();
     void handle_base_file_modified_ok();
 
+    void handle_hal_saved();
+
 private:
     QVBoxLayout* m_layout;
     toolbar* m_toolbar;
@@ -174,12 +176,15 @@ private:
     QTabWidget* m_tab_widget;
 
     QFileSystemWatcher* m_file_watcher;
-    QMap<QString, python_code_editor*>* m_path_editor_map;
+    QMap<QString, python_code_editor*> m_path_editor_map;
 
     file_modified_bar* m_file_modified_bar; 
+
     int m_new_file_counter;
 
     long m_last_click_time;
+
+    QString m_last_opened_path;
 };
 
 #endif    // PYTHON_WIDGET_H

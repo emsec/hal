@@ -44,7 +44,7 @@ get_in_touch_widget::get_in_touch_widget(QWidget* parent)
     m_ticket_item->setObjectName("ticket_item");
     m_ticket_item->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
-    //TODO LOOKS DUMB THINK OF SOMETHING BETTER OR DISCARD
+    // LOOKS DUMB THINK OF SOMETHING BETTER OR DISCARD
     m_core_version_label->setObjectName("core-version-label");
     m_core_version_label->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     m_core_version_label->setAlignment(Qt::AlignCenter);
@@ -101,7 +101,7 @@ void get_in_touch_widget::repolish()
 
 void get_in_touch_widget::handle_about_item_clicked()
 {
-    // TODO
+
 }
 
 void get_in_touch_widget::handle_cpp_documentation_item_clicked()

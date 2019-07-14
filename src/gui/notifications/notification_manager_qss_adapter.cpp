@@ -1,5 +1,7 @@
 #include "notifications/notification_manager_qss_adapter.h"
 
+#include <QStyle>
+
 notification_manager_qss_adapter::notification_manager_qss_adapter(QWidget* parent) : QWidget(parent)
 {
     //DEFAULT VALUES
@@ -7,7 +9,15 @@ notification_manager_qss_adapter::notification_manager_qss_adapter(QWidget* pare
     m_y_offset = 20;
     m_spacing  = 10;
 
-    ensurePolished();
+    repolish();
+}
+
+void notification_manager_qss_adapter::repolish()
+{
+    QStyle* s = style();
+
+    s->unpolish(this);
+    s->polish(this);
 }
 
 int notification_manager_qss_adapter::x_offset() const

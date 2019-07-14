@@ -1,11 +1,52 @@
 #include "code_editor/syntax_highlighter/python_qss_adapter.h"
 
+#include <QDebug>
 #include <QStyle>
 
 python_qss_adapter::python_qss_adapter(QWidget* parent) : QWidget(parent)
 {
     repolish();
     hide();
+}
+
+python_qss_adapter::~python_qss_adapter()
+{
+    qDebug() << "python qss adapter killed"; // DEBUG CODE, DELETE LATER
+}
+
+void python_qss_adapter::repolish()
+{
+    QStyle* s = style();
+
+    s->unpolish(this);
+    s->polish(this);
+    
+    m_keyword_format.setForeground(m_keyword_color);
+    m_keyword_format.setFontItalic(false);
+
+    m_operator_format.setForeground(m_operator_color);
+    m_operator_format.setFontItalic(false);
+
+    m_brace_format.setForeground(m_brace_color);
+    m_brace_format.setFontItalic(false);
+
+    m_defclass_format.setForeground(m_defclass_color);
+    m_defclass_format.setFontItalic(false);
+
+    m_self_format.setForeground(m_self_color);
+    m_self_format.setFontItalic(false);
+
+    m_number_format.setForeground(m_number_color);
+    m_number_format.setFontItalic(false);
+
+    m_single_quoted_string_format.setForeground(m_single_quoted_string_color);
+    m_single_quoted_string_format.setFontItalic(false);
+
+    m_double_quoted_string_format.setForeground(m_double_quoted_string_color);
+    m_double_quoted_string_format.setFontItalic(false);
+
+    m_comment_format.setForeground(m_comment_color);
+    m_comment_format.setFontItalic(false);
 }
 
 python_qss_adapter* python_qss_adapter::instance()
@@ -117,40 +158,4 @@ void python_qss_adapter::set_double_quoted_string_color(const QColor& color)
 void python_qss_adapter::set_comment_color(const QColor& color)
 {
     m_comment_color = color;
-}
-
-void python_qss_adapter::repolish()
-{
-    QStyle* s = style();
-
-    s->unpolish(this);
-    s->polish(this);
-
-    // TODO SET ALL PROPERTIES VIA STYLESHEET
-    m_keyword_format.setForeground(m_keyword_color);
-    m_keyword_format.setFontItalic(false);
-
-    m_operator_format.setForeground(m_operator_color);
-    m_operator_format.setFontItalic(false);
-
-    m_brace_format.setForeground(m_brace_color);
-    m_brace_format.setFontItalic(false);
-
-    m_defclass_format.setForeground(m_defclass_color);
-    m_defclass_format.setFontItalic(false);
-
-    m_self_format.setForeground(m_self_color);
-    m_self_format.setFontItalic(false);
-
-    m_number_format.setForeground(m_number_color);
-    m_number_format.setFontItalic(false);
-
-    m_single_quoted_string_format.setForeground(m_single_quoted_string_color);
-    m_single_quoted_string_format.setFontItalic(false);
-
-    m_double_quoted_string_format.setForeground(m_double_quoted_string_color);
-    m_double_quoted_string_format.setFontItalic(false);
-
-    m_comment_format.setForeground(m_comment_color);
-    m_comment_format.setFontItalic(false);
 }

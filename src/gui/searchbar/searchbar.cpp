@@ -28,7 +28,7 @@ searchbar::searchbar(QWidget* parent)
     m_clear_icon_label->setPixmap(gui_utility::get_styled_svg_icon(m_clear_icon_style, m_clear_icon).pixmap(QSize(10, 10)));
     m_mode_button->setText("Mode");
 
-    //Placeholder icons TODO get better ones
+    //Placeholder icons get better ones
     m_down_button->setIcon(QIcon(":/icons/arrow-down"));
     m_up_button->setIcon(QIcon(":/icons/arrow-up"));
 
@@ -41,7 +41,7 @@ searchbar::searchbar(QWidget* parent)
     //m_layout->addWidget(m_clear_icon_label);
     //m_layout.addWidget(m_button);
 
-    //Hack solution, because QPushButton not working as expected TODO fix
+    //Hack solution, because QPushButton not working as expected, fix
     label_button* hack = new label_button("Mode", this);
     hack->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::MinimumExpanding);
     m_layout->addWidget(hack);

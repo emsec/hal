@@ -63,7 +63,6 @@ hal_filter_tab_bar* hal_logger_widget::get_tab_bar()
 
 void hal_logger_widget::show_text_edit_context_menu(const QPoint& point)
 {
-    //TODO
     Q_UNUSED(point)
 }
 

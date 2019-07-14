@@ -36,6 +36,8 @@ class notification_manager_qss_adapter : public QWidget
 public:
     explicit notification_manager_qss_adapter(QWidget* parent = nullptr);
 
+    void repolish();
+
     int x_offset() const;
     int y_offset() const;
     int spacing() const;

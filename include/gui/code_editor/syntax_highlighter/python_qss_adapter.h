@@ -42,7 +42,11 @@ class python_qss_adapter : public QWidget
     Q_PROPERTY(QColor comment_color READ comment_color WRITE set_comment_color)
 
 public:
+    explicit python_qss_adapter(QWidget* parent = nullptr);
+    ~python_qss_adapter();    // DEBUG CODE, DELETE LATER
     static python_qss_adapter* instance();
+
+    void repolish();
 
     QColor text_color() const;
     QColor keyword_color() const;
@@ -66,8 +70,6 @@ public:
     void set_double_quoted_string_color(const QColor& color);
     void set_comment_color(const QColor& color);
 
-    void repolish();
-
     // LEFT PUBLIC INTENTIONALLY
     QTextCharFormat m_keyword_format;
     QTextCharFormat m_operator_format;
@@ -80,8 +82,6 @@ public:
     QTextCharFormat m_comment_format;
 
 private:
-    explicit python_qss_adapter(QWidget* parent = nullptr);
-
     QColor m_text_color;
     QColor m_keyword_color;
     QColor m_operator_color;
