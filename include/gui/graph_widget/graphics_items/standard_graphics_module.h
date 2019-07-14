@@ -7,6 +7,7 @@ class standard_graphics_module : public graphics_module
 {   
 public:
     static void load_settings();
+    static void update_alpha();
 
     standard_graphics_module(std::shared_ptr<module> m, bool adjust_size_to_grid = true);
 
@@ -18,6 +19,8 @@ public:
     virtual void set_visuals(const visuals& v) Q_DECL_OVERRIDE;
 
 private:
+    static qreal s_alpha;
+
     static QPen s_pen;
 
     static QColor s_text_color;
