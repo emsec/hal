@@ -488,6 +488,10 @@ void python_editor::handle_tab_file_changed(QString path)
     python_code_editor* editor_with_modified_base_file = m_path_editor_map.value(path);
     editor_with_modified_base_file->set_base_file_modified(true);
     QString tab_name = m_tab_widget->tabText(m_tab_widget->indexOf(editor_with_modified_base_file));
+
+    if(!tab_name.endsWith("*"))
+        m_tab_widget->setTabText(m_tab_widget->indexOf(editor_with_modified_base_file), tab_name + "*");
+
     g_file_status_manager.file_changed(editor_with_modified_base_file->get_uuid(), "Python tab: " + tab_name);
 
     python_code_editor* current_editor = dynamic_cast<python_code_editor*>(m_tab_widget->currentWidget());
