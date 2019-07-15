@@ -1,5 +1,5 @@
-#ifndef STANDARD_CONE_LAYOUTER_V3_H
-#define STANDARD_CONE_LAYOUTER_V3_H
+#ifndef STANDARD_GRAPH_LAYOUTER_H
+#define STANDARD_GRAPH_LAYOUTER_H
 
 #include "gui/graph_widget/graphics_items/graphics_gate.h"
 #include "gui/graph_widget/layouters/graph_layouter.h"
@@ -119,14 +119,13 @@ public:
     void layout() Q_DECL_OVERRIDE;
     void reset() Q_DECL_OVERRIDE;
 
+    void expand(const u32 from_gate, const u32 via_net, const u32 to_gate) Q_DECL_OVERRIDE;
+
     virtual void add(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets) Q_DECL_OVERRIDE;
     virtual void remove(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets) Q_DECL_OVERRIDE;
 
     virtual const QString name() const Q_DECL_OVERRIDE;
     virtual const QString description() const Q_DECL_OVERRIDE;
-
-//public Q_SLOTS:
-    void expand(const u32 from_gate, const u32 via_net, const u32 to_gate) Q_DECL_OVERRIDE;
 
 private:
     void create_boxes();
@@ -144,13 +143,12 @@ private:
 
     void clear_net_layout_data();
 
-    node_box create_box(const hal::node& hal, const int x, const int y) const;
+    node_box create_box(const hal::node& node, const int x, const int y) const;
 
     void add_gate(const u32 gate_id, const int level);
 
-    // USE POINTERS ???
     bool box_exists(const int x, const int y) const;
-    // RENAME THESE ???
+
     bool h_road_jump_possible(const int x, const int y1, const int y2) const;
     bool h_road_jump_possible(const road* const r1, const road* const r2) const;
 
@@ -234,4 +232,4 @@ private:
     QMap<int, qreal> m_max_right_io_padding_for_channel_x;
 };
 
-#endif // STANDARD_CONE_LAYOUTER_V3_H
+#endif // STANDARD_GRAPH_LAYOUTER_H

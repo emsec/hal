@@ -1792,21 +1792,21 @@ void standard_graph_layouter::clear_net_layout_data()
     m_junctions.clear();
 }
 
-standard_graph_layouter::node_box standard_graph_layouter::create_box(const hal::node& hal, const int x, const int y) const
+standard_graph_layouter::node_box standard_graph_layouter::create_box(const hal::node& node, const int x, const int y) const
 {
     node_box box;
-    box.node = hal;
+    box.node = node;
 
-    switch (hal.type)
+    switch (node.type)
     {
     case hal::node_type::module:
     {
-        box.item = graphics_factory::create_graphics_module(g_netlist->get_module_by_id(hal.id), 0); // USE VARIABLE
+        box.item = graphics_factory::create_graphics_module(g_netlist->get_module_by_id(node.id), 0); // USE VARIABLE
         break;
     }
     case hal::node_type::gate:
     {
-        box.item = graphics_factory::create_graphics_gate(g_netlist->get_gate_by_id(hal.id), 0); // USE VARIABLE
+        box.item = graphics_factory::create_graphics_gate(g_netlist->get_gate_by_id(node.id), 0); // USE VARIABLE
         break;
     }
     }
