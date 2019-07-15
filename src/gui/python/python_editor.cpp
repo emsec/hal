@@ -413,7 +413,7 @@ void python_editor::save_file(const bool ask_path, int index)
 
     if (ask_path || current_editor->get_file_name().isEmpty())
     {
-        selected_file_name = QFileDialog::getSaveFileName(nullptr, title, QDir::currentPath(), text, nullptr, QFileDialog::DontUseNativeDialog);
+        selected_file_name = QFileDialog::getSaveFileName(nullptr, title, m_last_opened_path, text, nullptr, QFileDialog::DontUseNativeDialog);
         if (selected_file_name.isEmpty())
             return;
 
@@ -421,6 +421,7 @@ void python_editor::save_file(const bool ask_path, int index)
             selected_file_name.append(".py");
 
         current_editor->set_file_name(selected_file_name);
+        m_last_opened_path = selected_file_name;
     }
     else
     {
