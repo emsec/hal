@@ -1,8 +1,8 @@
 #include "gui/graph_widget/layouters/graph_layouter.h"
 
 #include "gui/graph_widget/contexts/graph_context.h"
+#include "gui/graph_widget/graphics_factory.h"
 #include "gui/graph_widget/graphics_scene.h"
-#include "gui/graph_widget/graphics_gate_factory.h"
 #include "gui/graph_widget/graphics_items/global_graphics_net.h"
 #include "gui/graph_widget/graphics_items/graphics_gate.h"
 #include "gui/graph_widget/graphics_items/graphics_item.h"
@@ -67,16 +67,6 @@ graph_layouter::~graph_layouter()
 //    if (item)
 //        sort_into_net_vector(item);
 //    return item;
-//}
-
-//const QString& graph_layouter::name() const
-//{
-//    return m_name;
-//}
-
-//const QString& graph_layouter::description() const
-//{
-//    return m_description;
 //}
 
 graphics_scene* graph_layouter::scene() const

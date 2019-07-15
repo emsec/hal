@@ -5,11 +5,11 @@
 #include "netlist/net.h"
 
 #include "gui/graph_widget/contexts/graph_context.h"
+#include "gui/graph_widget/graphics_factory.h"
 #include "gui/graph_widget/graphics_items/global_graphics_net.h"
 #include "gui/graph_widget/graphics_items/separated_graphics_net.h"
 #include "gui/graph_widget/graphics_items/standard_graphics_net.h"
 #include "gui/graph_widget/graphics_scene.h"
-#include "gui/graph_widget/graphics_gate_factory.h"
 #include "gui/gui_globals.h"
 
 #include <QDebug>
@@ -1801,12 +1801,12 @@ standard_graph_layouter::node_box standard_graph_layouter::create_box(const hal:
     {
     case hal::node_type::module:
     {
-        box.item = graphics_gate_factory::create_graphics_module(g_netlist->get_module_by_id(hal.id), 0); // USE VARIABLE
+        box.item = graphics_factory::create_graphics_module(g_netlist->get_module_by_id(hal.id), 0); // USE VARIABLE
         break;
     }
     case hal::node_type::gate:
     {
-        box.item = graphics_gate_factory::create_graphics_gate(g_netlist->get_gate_by_id(hal.id), 1); // USE VARIABLE
+        box.item = graphics_factory::create_graphics_gate(g_netlist->get_gate_by_id(hal.id), 0); // USE VARIABLE
         break;
     }
     }

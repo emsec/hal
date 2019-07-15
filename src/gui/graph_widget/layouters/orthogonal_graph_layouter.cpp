@@ -1,8 +1,8 @@
 #include "gui/graph_widget/layouters/orthogonal_graph_layouter.h"
 
 #include "gui/graph_widget/contexts/graph_context.h"
+#include "gui/graph_widget/graphics_factory.h"
 #include "gui/graph_widget/graphics_scene.h"
-#include "gui/graph_widget/graphics_gate_factory.h"
 #include "gui/graph_widget/graphics_items/separated_graphics_net.h"
 #include "gui/graph_widget/graphics_items/unrestricted_graphics_net.h"
 #include "gui/gui_globals.h"
@@ -29,7 +29,7 @@ void orthogonal_graph_layouter::layout()
     for (const u32& id : m_context->gates())
     {
         std::shared_ptr<gate> g = g_netlist->get_gate_by_id(id);
-        graphics_gate* item = graphics_gate_factory::create_graphics_gate(g, 1);
+        graphics_gate* item = graphics_factory::create_graphics_gate(g, 0);
 
         nodes.append(item);
         gate_map.insert(id, item);
@@ -38,7 +38,7 @@ void orthogonal_graph_layouter::layout()
     for (const u32& id : m_context->modules())
     {
         std::shared_ptr<module> m = g_netlist->get_module_by_id(id);
-        graphics_module* item = graphics_gate_factory::create_graphics_module(m, 0);
+        graphics_module* item = graphics_factory::create_graphics_module(m, 0);
 
         nodes.append(item);
         module_map.insert(id, item);
