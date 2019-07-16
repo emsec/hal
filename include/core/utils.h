@@ -207,6 +207,14 @@ namespace core_utils
     CORE_API u32 num_of_occurrences(const std::string& str, const std::string& substr);
 
     /**
+     * Checks whether a file exists.
+     *
+     * @param[in] file - The file to check.
+     * @returns True, if file exists
+     */
+    CORE_API bool file_exists(const std::string& filename);
+
+    /**
      * Checks whether a directory exists and access rights are available.
      *
      * @param[in] folder - The directory to check.
