@@ -140,8 +140,6 @@ void hal_content_manager::handle_open_document(const QString& file_name)
     python_console->open();
 
     m_netlist_watcher = new netlist_watcher(this);
-
-    connect(this, &hal_content_manager::save_triggered, m_python_widget, &python_editor::handle_hal_saved);
 }
 
 void hal_content_manager::handle_close_document()
