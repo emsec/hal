@@ -209,7 +209,7 @@ namespace core_utils
     /**
      * Checks whether a file exists.
      *
-     * @param[in] file - The file to check.
+     * @param[in] filename - The file to check.
      * @returns True, if file exists
      */
     CORE_API bool file_exists(const std::string& filename);
