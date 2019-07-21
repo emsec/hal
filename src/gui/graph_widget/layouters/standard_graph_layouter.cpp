@@ -23,7 +23,7 @@ const static qreal h_road_padding = 20;
 const static qreal v_road_padding = 20;
 const static qreal minimum_v_channel_width = 20;
 const static qreal minimum_h_channel_height = 20;
-const static qreal gate_io_padding = 40;
+const static qreal minimum_gate_io_padding = 40;
 
 standard_graph_layouter::standard_graph_layouter(graph_context* context) : graph_layouter(context)
 {
@@ -1815,8 +1815,8 @@ standard_graph_layouter::node_box standard_graph_layouter::create_box(const hal:
     box.y = y;
 
     // GATE IO SPACING SHOULD BE CALCULATED HERE, FOR NOW IT IS JUST ASSUMED TO BE 40 ACROSS THE BORD
-    box.input_padding = gate_io_padding;
-    box.output_padding = gate_io_padding;
+    box.input_padding = minimum_gate_io_padding;
+    box.output_padding = minimum_gate_io_padding;
 
     return box;
 }

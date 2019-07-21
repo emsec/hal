@@ -8,7 +8,7 @@
 class module_context : public graph_context
 {
 public:
-    module_context(const std::shared_ptr<module> m);
+    module_context(const std::shared_ptr<const module> m);
 
     u32 get_id() const;
 

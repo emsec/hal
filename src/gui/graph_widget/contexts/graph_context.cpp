@@ -16,7 +16,6 @@ graph_context::graph_context(graph_layouter* layouter, graph_shader* shader, QOb
     m_unhandled_changes(false),
     m_scene_update_required(false),
     m_update_requested(false),
-    m_conform_to_grid(false),
     m_watcher(new QFutureWatcher<void>(this)),
     m_scene_available(true),
     m_update_in_progress(false)
@@ -117,11 +116,6 @@ graphics_scene* graph_context::scene()
 //{
 //    return m_shader;
 //}
-
-bool graph_context::conform_to_grid() const
-{
-    return m_conform_to_grid;
-}
 
 bool graph_context::available() const
 {
@@ -224,19 +218,19 @@ bool graph_context::node_for_gate(hal::node& node, const u32 id) const
 
 void graph_context::apply_changes()
 {
-    m_modules += m_added_modules;
-    m_gates += m_added_gates;
-    m_nets += m_added_nets;
-
     m_modules -= m_removed_modules;
     m_gates -= m_removed_gates;
     m_nets -= m_removed_nets;
 
-    m_layouter->add(m_added_modules, m_added_gates, m_added_nets);
-    m_layouter->remove(m_removed_modules, m_removed_gates, m_removed_nets);
+    m_modules += m_added_modules;
+    m_gates += m_added_gates;
+    m_nets += m_added_nets;
 
-    m_shader->add(m_added_modules, m_added_gates, m_added_nets);
+    m_layouter->remove(m_removed_modules, m_removed_gates, m_removed_nets);
+    m_layouter->add(m_added_modules, m_added_gates, m_added_nets);
+
     m_shader->remove(m_removed_modules, m_removed_gates, m_removed_nets);
+    m_shader->add(m_added_modules, m_added_gates, m_added_nets);
 
     m_added_modules.clear();
     m_added_gates.clear();
