@@ -44,8 +44,6 @@ public:
 
 Q_SIGNALS:
     void module_double_clicked(u32 id);
-    void zoomed_in(int value);
-    void zoomed_out(int value);
 
 private Q_SLOTS:
     void conditional_update();
@@ -86,6 +84,8 @@ private:
     QPoint m_zoom_position;
     QPointF m_zoom_scene_position;
     qreal m_min_scale;
+
+    int m_zoom;
 };
 
 #endif // GRAPH_GRAPHICS_VIEW_H

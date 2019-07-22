@@ -28,12 +28,8 @@ graph_graphics_view::graph_graphics_view(QWidget* parent) : QGraphicsView(parent
     m_grid_clusters_enabled(true),
     m_grid_type(graph_widget_constants::grid_type::lines)
 {
-    connect(this, &graph_graphics_view::customContextMenuRequested, this, &graph_graphics_view::show_context_menu);
-
-    //    connect(&g_selection_relay, &selection_relay::focus_update, this, &graph_graphics_view::conditional_update);
-    //    connect(&g_selection_relay, &selection_relay::subfocus_update, this, &graph_graphics_view::conditional_update);
-
     connect(&g_selection_relay, &selection_relay::subfocus_changed, this, &graph_graphics_view::conditional_update);
+    connect(this, &graph_graphics_view::customContextMenuRequested, this, &graph_graphics_view::show_context_menu);
 
     setContextMenuPolicy(Qt::CustomContextMenu);
     setOptimizationFlags(QGraphicsView::DontSavePainterState);
@@ -111,10 +107,6 @@ void graph_graphics_view::drawForeground(QPainter* painter, const QRectF& rect)
 
     if (!m_minimap_enabled)
         return;
-
-//    QRectF bar(0, 0, viewport()->width(), 30);
-//    painter->resetTransform();
-//    painter->fillRect(bar, QColor(0, 0, 0, 170));
 
     QRectF map(viewport()->width() - 210, viewport()->height() - 130, 200, 120);
     painter->resetTransform();
@@ -194,22 +186,35 @@ void graph_graphics_view::mouseMoveEvent(QMouseEvent* event)
 
 void graph_graphics_view::wheelEvent(QWheelEvent* event)
 {
-    if (event->delta() > 0)
-        Q_EMIT zoomed_in(6);
-    else
-        Q_EMIT zoomed_out(6);
+    if (!scene())
+        return;
 
-    event->accept();
+    int y = (event->angleDelta() / 8).y();
+
+    if (!y)
+        return;
+
+    QPoint pos = event->pos();
+    QPointF mapped = mapToScene(pos);
+
+    m_zoom += y;
+
+    if (m_zoom > 100)
+        m_zoom = 100;
+    else if (m_zoom < -100)
+        m_zoom = -100;
+
+    update_matrix(m_zoom);
+    // DOESNT WORK
+    int x_distance = viewport()->width() / 2 - pos.x();
+    int y_distance = viewport()->height() / 2 - pos.y();
+    qreal x_offset = matrix().m11() * x_distance;
+    qreal y_offset = matrix().m22() * y_distance;
+    centerOn(QPointF(mapped.x() + x_offset, mapped.y() + y_offset));
 }
 
 void graph_graphics_view::keyPressEvent(QKeyEvent* event)
 {
-    if (event->key() == Qt::Key_Control)
-    {
-        setInteractive(false);
-        this->setDragMode(QGraphicsView::ScrollHandDrag);
-    }
-
     switch (event->key())
     {
         case Qt::Key_Space:
@@ -220,38 +225,20 @@ void graph_graphics_view::keyPressEvent(QKeyEvent* event)
     }
 
     event->ignore();
-
-    //    QList<QGraphicsItem*> items = this->scene()->selectedItems();
-    //    if (items.size() > 1 || items.size() == 0)
-    //        return;
-    //    gui_graph_gate* selected_gui_gate = dynamic_cast<gui_graph_gate*>(items.at(0));
-
-    //    switch (state)
-    //    {
-    //        case gate_selected:
-    //            gate_selected_key_pressed(event, selected_gui_gate);
-    //            break;
-    //        case gate_input_pins_selected:
-    //            gate_left_pins_selected_key_pressed(event, selected_gui_gate);
-    //            break;
-    //        case gate_output_pins_selected:
-    //            gate_right_pins_selected_key_pressed(event, selected_gui_gate);
-    //            break;
-    //        case net_selected:
-    //            net_selected_key_pressed(event);
-    //            break;
-    //        case no_gate_selected:
-    //            break;    // added to suppress warning
-    //    }
 }
 
 void graph_graphics_view::keyReleaseEvent(QKeyEvent* event)
 {
-    if (event->key() == Qt::Key_Control)
+    switch (event->key())
     {
-        setInteractive(true);
-        this->setDragMode(QGraphicsView::RubberBandDrag);
+        case Qt::Key_Space:
+        {
+            //qDebug() << "Space released";
+        }
+        break;
     }
+
+    event->ignore();
 }
 
 void graph_graphics_view::resizeEvent(QResizeEvent* event)
@@ -311,7 +298,7 @@ void graph_graphics_view::show_context_menu(const QPoint& pos)
 
 void graph_graphics_view::update_matrix(const int delta)
 {
-    qreal scale = qPow(qreal(2), (delta) / qreal(100));
+    qreal scale = qPow(2.0, delta / 100.0);
 
     QMatrix matrix;
     matrix.scale(scale, scale);
@@ -321,6 +308,5 @@ void graph_graphics_view::update_matrix(const int delta)
 
 void graph_graphics_view::toggle_antialiasing()
 {
-    //m_antialiasing_enabled ? setRenderHint(QPainter::Antialiasing, false) : setRenderHint(QPainter::Antialiasing, true);
     setRenderHint(QPainter::Antialiasing, !(renderHints() & QPainter::Antialiasing));
 }
