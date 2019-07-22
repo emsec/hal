@@ -52,6 +52,7 @@ private:
     static QBrush s_brush;
 
     QVector<QPointF> m_input_wires;
+    line_style m_line_style;
     bool m_draw_output;
 };
 

@@ -100,7 +100,7 @@ void minimal_graphics_gate::paint(QPainter* painter, const QStyleOptionGraphicsI
     if (s_lod < 0.5)
     {
         painter->setPen(s_pen);
-        painter->drawRect(QRect(0, 0, m_width, m_height));
+        painter->drawRect(QRectF(0, 0, m_width, m_height));
         return;
     }
     else

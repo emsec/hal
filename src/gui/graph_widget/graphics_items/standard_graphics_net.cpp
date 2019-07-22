@@ -227,7 +227,9 @@ standard_graphics_net::standard_graphics_net(const std::shared_ptr<const net> n,
 
 void standard_graphics_net::set_visuals(const graphics_net::visuals& v)
 {
-    Q_UNUSED(v)
+    setVisible(v.visible);
+    m_color = v.color;
+    m_line_style = v.style;
 }
 
 void standard_graphics_net::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)

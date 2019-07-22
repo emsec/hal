@@ -28,10 +28,7 @@ void separated_graphics_net::load_settings()
     s_font_height = fm.height();
     s_font_ascend = fm.ascent();
 
-    // TEST
-    s_pen.setCosmetic(false);
-    s_pen.setColor(QColor(160, 160, 160));
-    // TEST END
+    s_pen.setColor(QColor(160, 160, 160)); // USE STYLESHEETS
 }
 
 void separated_graphics_net::update_alpha()
@@ -44,6 +41,7 @@ void separated_graphics_net::update_alpha()
 
 separated_graphics_net::separated_graphics_net(const QString& text, const std::shared_ptr<const net> n) : graphics_net(n),
   m_text(text),
+  m_line_style(line_style::solid),
   m_draw_output(false)
 {
     QFontMetricsF fm(s_font);
@@ -52,7 +50,9 @@ separated_graphics_net::separated_graphics_net(const QString& text, const std::s
 
 void separated_graphics_net::set_visuals(const graphics_net::visuals& v)
 {
-    Q_UNUSED(v)
+    setVisible(v.visible);
+    m_color = v.color;
+    m_line_style = v.style;
 }
 
 void separated_graphics_net::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
