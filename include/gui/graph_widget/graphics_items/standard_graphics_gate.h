@@ -9,7 +9,7 @@ public:
     static void load_settings();
     static void update_alpha();
 
-    standard_graphics_gate(std::shared_ptr<gate> g, const bool adjust_size_to_grid = true);
+    standard_graphics_gate(const std::shared_ptr<const gate> g, const bool adjust_size_to_grid = true);
 
     void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = nullptr) Q_DECL_OVERRIDE;
 

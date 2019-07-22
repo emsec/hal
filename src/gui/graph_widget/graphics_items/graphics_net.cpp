@@ -20,8 +20,7 @@ void graphics_net::load_settings()
     s_stroke_width = s_line_width;
 }
 
-graphics_net::graphics_net(std::shared_ptr<net> n) : graphics_item(item_type::net, n->get_id()),
-    m_net(n)
+graphics_net::graphics_net(const std::shared_ptr<const net> n) : graphics_item(item_type::net, n->get_id())
 {
     assert(n);
 }
@@ -34,9 +33,4 @@ QRectF graphics_net::boundingRect() const
 QPainterPath graphics_net::shape() const
 {
     return m_shape;
-}
-
-std::shared_ptr<net> graphics_net::get_net()
-{
-    return m_net;
 }

@@ -9,6 +9,11 @@ minimal_graphics_net::minimal_graphics_net(std::shared_ptr<net> n) : graphics_ne
 {
 }
 
+void minimal_graphics_net::set_visuals(const graphics_net::visuals& v)
+{
+    Q_UNUSED(v)
+}
+
 void minimal_graphics_net::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
 {
     Q_UNUSED(widget);
@@ -35,14 +40,6 @@ void minimal_graphics_net::paint(QPainter* painter, const QStyleOptionGraphicsIt
     painter->drawPath(m_shape);
     s_pen.setCosmetic(cosmetic);
 #endif
-}
-
-void minimal_graphics_net::finalize()
-{
-    QPainterPathStroker stroker;
-    stroker.setWidth(s_stroke_width);
-    m_rect  = m_path.boundingRect();
-    m_shape = stroker.createStroke(m_path);
 }
 
 void minimal_graphics_net::line_to_x(const qreal scene_x)
@@ -72,6 +69,14 @@ void minimal_graphics_net::move_pen_to(const QPointF& scene_position)
 
     QPointF mapped_point = mapFromScene(scene_position);
     m_path.moveTo(mapped_point);
+}
+
+void minimal_graphics_net::finalize()
+{
+    QPainterPathStroker stroker;
+    stroker.setWidth(s_stroke_width);
+    m_rect  = m_path.boundingRect();
+    m_shape = stroker.createStroke(m_path);
 }
 
 QPointF minimal_graphics_net::current_scene_position() const

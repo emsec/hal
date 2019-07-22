@@ -7,8 +7,13 @@
 #include <QPointF>
 #include <QStyleOptionGraphicsItem>
 
-unrestricted_graphics_net::unrestricted_graphics_net(std::shared_ptr<net> n) : graphics_net(n)
+unrestricted_graphics_net::unrestricted_graphics_net(const std::shared_ptr<const net> n) : graphics_net(n)
 {
+}
+
+void unrestricted_graphics_net::set_visuals(const graphics_net::visuals& v)
+{
+    Q_UNUSED(v)
 }
 
 void unrestricted_graphics_net::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)

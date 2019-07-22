@@ -33,7 +33,7 @@ class gate;
 class graphics_gate : public graphics_node
 {
 public:
-    graphics_gate(std::shared_ptr<gate> g);
+    graphics_gate(const std::shared_ptr<const gate> g);
 
 protected:
     QString m_type;

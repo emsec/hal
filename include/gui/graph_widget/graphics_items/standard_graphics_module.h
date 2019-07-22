@@ -9,7 +9,7 @@ public:
     static void load_settings();
     static void update_alpha();
 
-    standard_graphics_module(std::shared_ptr<module> m, bool adjust_size_to_grid = true);
+    standard_graphics_module(const std::shared_ptr<const module> m, bool adjust_size_to_grid = true);
 
     void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = nullptr) Q_DECL_OVERRIDE;
 

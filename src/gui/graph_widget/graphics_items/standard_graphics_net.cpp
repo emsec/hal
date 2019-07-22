@@ -29,8 +29,8 @@ void standard_graphics_net::update_alpha()
         s_alpha = 1;
 }
 
-//standard_graphics_net::standard_graphics_net(std::shared_ptr<net> n, const lines& l) : graphics_net(n),
-standard_graphics_net::standard_graphics_net(std::shared_ptr<net> n, lines& l) : graphics_net(n),
+//standard_graphics_net::standard_graphics_net(const std::shared_ptr<const net> n, const lines& l) : graphics_net(n),
+standard_graphics_net::standard_graphics_net(const std::shared_ptr<const net> n, lines& l) : graphics_net(n),
     m_line_style(line_style::solid)
 {    
     QVector<h_line> collapsed_h;
@@ -222,7 +222,12 @@ standard_graphics_net::standard_graphics_net(std::shared_ptr<net> n, lines& l) :
 //        m_lines.append(QLineF(h.small_x - l.src_x, h.y - l.src_y, h.big_x - l.src_x, h.y - l.src_y));
 
 //    for (const v_line& v : l.v_lines)
-//        m_lines.append(QLineF(v.x - l.src_x, v.small_y - l.src_y, v.x - l.src_x, v.big_y - l.src_y));
+    //        m_lines.append(QLineF(v.x - l.src_x, v.small_y - l.src_y, v.x - l.src_x, v.big_y - l.src_y));
+}
+
+void standard_graphics_net::set_visuals(const graphics_net::visuals& v)
+{
+    Q_UNUSED(v)
 }
 
 void standard_graphics_net::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)

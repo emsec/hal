@@ -60,9 +60,10 @@ public:
     static void load_settings();
     static void update_alpha();
 
-    //standard_graphics_net(std::shared_ptr<net> n, const lines& l);
-    standard_graphics_net(std::shared_ptr<net> n, lines& l);
+    //standard_graphics_net(const std::shared_ptr<const net> n, const lines& l);
+    standard_graphics_net(const std::shared_ptr<const net> n, lines& l);
 
+    virtual void set_visuals(const visuals& v) Q_DECL_OVERRIDE;
     virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) Q_DECL_OVERRIDE;
 
 private:
@@ -70,10 +71,10 @@ private:
     static qreal s_radius;
     static QBrush s_brush;
 
-    line_style m_line_style;
-
     QVector<QLineF> m_lines;
     QVector<QPointF> m_splits;
+
+    line_style m_line_style;
 };
 
 #endif // STANDARD_GRAPHICS_NET_H

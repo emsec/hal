@@ -34,16 +34,18 @@ class net;
 class unrestricted_graphics_net : public graphics_net
 {
 public:
-    unrestricted_graphics_net(std::shared_ptr<net> n);
+    unrestricted_graphics_net(const std::shared_ptr<const net> n);
 
+    virtual void set_visuals(const visuals& v) Q_DECL_OVERRIDE;
     virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) Q_DECL_OVERRIDE;
-
-    void finalize();
 
     void line_to(const QPointF& scene_position);
     void line_to_x(const qreal scene_x);
     void line_to_y(const qreal scene_y);
     void move_pen_to(const QPointF& scene_position);
+
+    void finalize();
+
     QPointF current_scene_position() const;
 
 private:

@@ -32,14 +32,15 @@ public:
     static void load_settings();
     static void update_alpha();
 
-    separated_graphics_net(const QString& text, std::shared_ptr<net> n);
+    separated_graphics_net(const QString& text, const std::shared_ptr<const net> n);
 
+    virtual void set_visuals(const visuals& v) Q_DECL_OVERRIDE;
     virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) Q_DECL_OVERRIDE;
-
-    void finalize();
 
     void add_output();
     void add_input(const QPointF& scene_position);
+
+    void finalize();
 
 private:
     static qreal s_alpha;
@@ -53,8 +54,8 @@ private:
 
     QString m_text;
     qreal m_text_width;
-    bool m_draw_output;
     QVector<QPointF> m_input_wires;
+    bool m_draw_output;
 };
 
 #endif // SEPARATED_GRAPHICS_NET_H

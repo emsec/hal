@@ -10,7 +10,7 @@ class module;
 class graphics_module : public graphics_node
 {
 public:
-    graphics_module(std::shared_ptr<module> m);
+    graphics_module(const std::shared_ptr<const module> m);
 
     virtual void set_visuals(const visuals& v) Q_DECL_OVERRIDE;
 

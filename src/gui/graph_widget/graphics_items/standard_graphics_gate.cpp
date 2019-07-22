@@ -100,7 +100,7 @@ void standard_graphics_gate::update_alpha()
         s_alpha = 0;
 }
 
-standard_graphics_gate::standard_graphics_gate(std::shared_ptr<gate> g, const bool adjust_size_to_grid) : graphics_gate(g)
+standard_graphics_gate::standard_graphics_gate(const std::shared_ptr<const gate> g, const bool adjust_size_to_grid) : graphics_gate(g)
 {
     m_color = s_default_main_color;
     format(adjust_size_to_grid);
@@ -112,7 +112,7 @@ void standard_graphics_gate::paint(QPainter* painter, const QStyleOptionGraphics
 
     if (s_lod < graph_widget_constants::gate_min_lod)
     {
-        painter->fillRect(QRect(0, 0, m_width, m_height), (option->state & QStyle::State_Selected) ? s_selection_color : m_color);
+        painter->fillRect(QRectF(0, 0, m_width, m_height), (option->state & QStyle::State_Selected) ? s_selection_color : m_color);
         return;
     }
     else
@@ -121,8 +121,8 @@ void standard_graphics_gate::paint(QPainter* painter, const QStyleOptionGraphics
 //        gradient.setColorAt(0, QColor(28, 85, 0, 255));
 //        gradient.setColorAt(1, QColor(0, 0, 0, 200));
 
-        painter->fillRect(QRect(0, 0, m_width, s_color_bar_height), m_color);
-        painter->fillRect(QRect(0, s_color_bar_height, m_width, m_height - s_color_bar_height), QColor(0, 0, 0, 200));
+        painter->fillRect(QRectF(0, 0, m_width, s_color_bar_height), m_color);
+        painter->fillRect(QRectF(0, s_color_bar_height, m_width, m_height - s_color_bar_height), QColor(0, 0, 0, 200));
 
         s_pen.setColor(s_text_color);
         painter->setPen(s_pen);
@@ -182,7 +182,7 @@ void standard_graphics_gate::paint(QPainter* painter, const QStyleOptionGraphics
             fade.setAlphaF(s_alpha);
 
             //painter->fillRect(QRect(0, 0, m_width, m_height), fade);
-            painter->fillRect(QRect(0, s_color_bar_height, m_width, m_height - s_color_bar_height), fade);
+            painter->fillRect(QRectF(0, s_color_bar_height, m_width, m_height - s_color_bar_height), fade);
         }
 
         if (option->state & QStyle::State_Selected)

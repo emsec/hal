@@ -73,7 +73,7 @@ void minimal_graphics_gate::load_settings()
     s_pen.setJoinStyle(Qt::MiterJoin);
 }
 
-minimal_graphics_gate::minimal_graphics_gate(std::shared_ptr<gate> g) : graphics_gate(g)
+minimal_graphics_gate::minimal_graphics_gate(const std::shared_ptr<const gate> g) : graphics_gate(g)
 {
     format();
 }

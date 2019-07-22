@@ -89,7 +89,7 @@ void standard_graphics_module::update_alpha()
         s_alpha = 0;
 }
 
-standard_graphics_module::standard_graphics_module(std::shared_ptr<module> m, bool adjust_size_to_grid) : graphics_module(m)
+standard_graphics_module::standard_graphics_module(const std::shared_ptr<const module> m, bool adjust_size_to_grid) : graphics_module(m)
 {
     m_color = QColor(38, 70, 90, 255); // DEBUG LINE, DELETE LATER
     format(adjust_size_to_grid);
@@ -101,7 +101,7 @@ void standard_graphics_module::paint(QPainter* painter, const QStyleOptionGraphi
 
     if (s_lod < graph_widget_constants::gate_min_lod)
     {
-        painter->fillRect(QRect(0, 0, m_width, m_height), (option->state & QStyle::State_Selected) ? s_selection_color : m_color);
+        painter->fillRect(QRectF(0, 0, m_width, m_height), (option->state & QStyle::State_Selected) ? s_selection_color : m_color);
         return;
     }
     else
@@ -110,8 +110,8 @@ void standard_graphics_module::paint(QPainter* painter, const QStyleOptionGraphi
 //        gradient.setColorAt(0, QColor(28, 85, 0, 255));
 //        gradient.setColorAt(1, QColor(0, 0, 0, 200));
 
-        painter->fillRect(QRect(0, 0, m_width, s_color_bar_height), m_color);
-        painter->fillRect(QRect(0, s_color_bar_height, m_width, m_height - s_color_bar_height), QColor(0, 0, 0, 200));
+        painter->fillRect(QRectF(0, 0, m_width, s_color_bar_height), m_color);
+        painter->fillRect(QRectF(0, s_color_bar_height, m_width, m_height - s_color_bar_height), QColor(0, 0, 0, 200));
 
         s_pen.setColor(s_text_color);
         painter->setPen(s_pen);
@@ -171,7 +171,7 @@ void standard_graphics_module::paint(QPainter* painter, const QStyleOptionGraphi
             fade.setAlphaF(s_alpha);
 
             //painter->fillRect(QRect(0, 0, m_width, m_height), fade);
-            painter->fillRect(QRect(0, s_color_bar_height, m_width, m_height - s_color_bar_height), fade);
+            painter->fillRect(QRectF(0, s_color_bar_height, m_width, m_height - s_color_bar_height), fade);
         }
 
         if (option->state & QStyle::State_Selected)

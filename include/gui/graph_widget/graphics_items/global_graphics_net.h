@@ -32,14 +32,15 @@ public:
     static void load_settings();
     static void update_alpha();
 
-    global_graphics_net(std::shared_ptr<net> n);
+    global_graphics_net(const std::shared_ptr<const net> n);
 
+    virtual void set_visuals(const visuals& v) Q_DECL_OVERRIDE;
     virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) Q_DECL_OVERRIDE;
-
-    void finalize();
 
     void add_output();
     void add_input(const QPointF& scene_position);
+
+    void finalize();
 
 private:
     static qreal s_alpha;
@@ -50,8 +51,8 @@ private:
 
     static QBrush s_brush;
 
-    bool m_draw_output;
     QVector<QPointF> m_input_wires;
+    bool m_draw_output;
 };
 
 #endif // GLOBAL_GRAPHICS_NET_H

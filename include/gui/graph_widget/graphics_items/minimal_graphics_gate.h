@@ -31,9 +31,9 @@ class minimal_graphics_gate : public graphics_gate
 public:
     static void load_settings();
 
-    minimal_graphics_gate(std::shared_ptr<gate> g);
+    minimal_graphics_gate(const std::shared_ptr<const gate> g);
 
-    void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0) Q_DECL_OVERRIDE;
+    void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = nullptr) Q_DECL_OVERRIDE;
 
     QPainterPath shape() const Q_DECL_OVERRIDE;
 
@@ -77,4 +77,4 @@ private:
     QVector<QPointF> m_output_pin_positions;
 };
 
-#endif    // STANDARD_GRAPHICS_GATE_H
+#endif // STANDARD_GRAPHICS_GATE_H

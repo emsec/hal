@@ -40,10 +40,15 @@ void global_graphics_net::update_alpha()
         s_alpha = 1;
 }
 
-global_graphics_net::global_graphics_net(std::shared_ptr<net> n) : graphics_net(n),
+global_graphics_net::global_graphics_net(const std::shared_ptr<const net> n) : graphics_net(n),
     m_draw_output(false)
 {
 
+}
+
+void global_graphics_net::set_visuals(const graphics_net::visuals& v)
+{
+    Q_UNUSED(v)
 }
 
 void global_graphics_net::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
@@ -87,12 +92,6 @@ void global_graphics_net::paint(QPainter* painter, const QStyleOptionGraphicsIte
     painter->setBrush(QBrush());
 }
 
-void global_graphics_net::finalize()
-{
-    m_rect = m_shape.boundingRect();
-    m_rect.adjust(-1, -1, 1, 1);
-}
-
 void global_graphics_net::add_output()
 {
     if (m_draw_output)
@@ -125,4 +124,10 @@ void global_graphics_net::add_input(const QPointF& scene_position)
     m_shape.lineTo(QPointF(m_shape.currentPosition().x(), m_shape.currentPosition().y() - s_radius + s_stroke_width / 2));
     m_shape.lineTo(QPointF(m_shape.currentPosition().x() + s_wire_length + s_circle_offset, m_shape.currentPosition().y()));
     m_shape.closeSubpath();
+}
+
+void global_graphics_net::finalize()
+{
+    m_rect = m_shape.boundingRect();
+    m_rect.adjust(-1, -1, 1, 1);
 }

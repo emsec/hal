@@ -42,20 +42,19 @@ public:
 
     struct visuals
     {
-        bool draw;
+        bool visible;
         QColor color;
-
         line_style style;
     };
 
     static void load_settings();
 
-    graphics_net(std::shared_ptr<net> n);
+    graphics_net(const std::shared_ptr<const net> n);
 
     QRectF boundingRect() const Q_DECL_OVERRIDE;
     virtual QPainterPath shape() const Q_DECL_OVERRIDE;
 
-    std::shared_ptr<net> get_net();
+    virtual void set_visuals(const visuals& v) = 0;
 
 protected:
     static QPen s_pen;
@@ -65,8 +64,6 @@ protected:
 
     QRectF m_rect;
     QPainterPath m_shape;
-
-    std::shared_ptr<net> m_net;
 };
 
 #endif // GRAPHICS_NET_H
