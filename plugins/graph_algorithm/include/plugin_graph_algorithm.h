@@ -44,7 +44,9 @@ public:
      * @returns A community
      */
     std::set<std::set<std::shared_ptr<gate>>> get_communities(std::shared_ptr<netlist> const nl, const std::set<std::shared_ptr<gate>> gates = {});
-    void plot_graph(igraph_t *graph);
+    std::map<int, std::set<std::shared_ptr<gate>>> get_community_sets(igraph_vector_t*, std::shared_ptr<netlist>, std::map<int, int>);
+    void show_results(igraph_vector_t*, igraph_vector_t*, std::map<int, std::set<std::shared_ptr<gate>>>, bool);
+    void plot_community_graph(igraph_t*, igraph_vector_t*, std::map<int, int>);
 
     /**
      * Returns the set of strongly connected components.
