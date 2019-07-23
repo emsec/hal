@@ -102,7 +102,7 @@ void gate_navigation_popup::paint(QPainter* painter, const QStyleOptionGraphicsI
 
     painter->save();
 
-    painter->fillRect(QRect(0, 0, m_width, m_height), QColor(0, 0, 0, 200));
+    painter->fillRect(QRectF(0, 0, m_width, m_height), QColor(0, 0, 0, 200));
 
     QPen pen;
     pen.setCosmetic(true);
@@ -123,7 +123,7 @@ void gate_navigation_popup::paint(QPainter* painter, const QStyleOptionGraphicsI
 
     painter->drawRect(QRectF(0, 0, m_width, m_height));
 
-    painter->setClipRect(QRect(0, 0, m_width, m_height));
+    painter->setClipRect(QRectF(0, 0, m_width, m_height));
     painter->setRenderHint(QPainter::Antialiasing, true);
 
     painter->drawText(QRectF(10, 40, 50, 50), QString::number(m_arrow_offset));

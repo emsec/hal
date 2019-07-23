@@ -16,8 +16,8 @@ public:
 
     graphics_item(const hal::item_type type, const u32 id);
 
+    hal::item_type item_type() const;
     u32 id() const;
-    hal::item_type get_item_type() const;
 
     void set_color(const QColor& color);
 
@@ -28,7 +28,7 @@ protected:
 //    void mousePressEvent(QGraphicsSceneMouseEvent* event) Q_DECL_OVERRIDE;
 //    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event) Q_DECL_OVERRIDE;
 
-    hal::item_type m_type; // USE QT ITEM TYPE SYSTEM INSTEAD ???
+    hal::item_type m_item_type; // USE QT ITEM TYPE SYSTEM INSTEAD ???
     u32 m_id;
     QColor m_color;
 };

@@ -97,7 +97,7 @@ void graph_graphics_view::mouseDoubleClickEvent(QMouseEvent* event)
     if (!item)
         return;
 
-    if(item->get_item_type() == hal::item_type::module)
+    if(item->item_type() == hal::item_type::module)
         Q_EMIT module_double_clicked(item->id());
 }
 
@@ -262,7 +262,7 @@ void graph_graphics_view::show_context_menu(const QPoint& pos)
     {
         m_item = static_cast<graphics_item*>(item);
 
-        switch (m_item->get_item_type())
+        switch (m_item->item_type())
         {
             case hal::item_type::gate:
             {

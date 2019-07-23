@@ -113,7 +113,7 @@ void graphics_scene::add_item(graphics_item* item)
 
     QGraphicsScene::addItem(item);
 
-    switch (item->get_item_type())
+    switch (item->item_type())
     {
     case hal::item_type::gate:
     {
@@ -169,7 +169,7 @@ void graphics_scene::remove_item(graphics_item* item)
 
     QGraphicsScene::removeItem(item);
 
-    switch (item->get_item_type())
+    switch (item->item_type())
     {
     case hal::item_type::gate:
     {
@@ -319,7 +319,7 @@ void graphics_scene::handle_intern_selection_changed()
 
     for (const QGraphicsItem* const item : selectedItems())
     {
-        switch (static_cast<const graphics_item* const>(item)->get_item_type())
+        switch (static_cast<const graphics_item* const>(item)->item_type())
         {
         case hal::item_type::gate:
         {
