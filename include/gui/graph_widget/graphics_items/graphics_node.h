@@ -21,7 +21,7 @@ public:
         // DRAW TYPE ENUM
     };
 
-    graphics_node(const item_type type, const u32 id, const QString& name);
+    graphics_node(const hal::item_type type, const u32 id, const QString& name);
 
     virtual QRectF boundingRect() const Q_DECL_OVERRIDE;
     virtual QPainterPath shape() const Q_DECL_OVERRIDE;

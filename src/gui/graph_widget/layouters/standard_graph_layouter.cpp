@@ -1139,7 +1139,7 @@ void standard_graph_layouter::draw_nets()
                 if (!m_context->node_for_gate(node, n->get_src().get_gate()->get_id()))
                     continue;
 
-                separated_graphics_net* net_item = new separated_graphics_net(QString::fromStdString(n->get_name()), n);
+                separated_graphics_net* net_item = new separated_graphics_net(n, QString::fromStdString(n->get_name()));
 
                 for (const node_box& box : m_boxes)
                 {

@@ -20,7 +20,7 @@ void graphics_net::load_settings()
     s_stroke_width = s_line_width;
 }
 
-graphics_net::graphics_net(const std::shared_ptr<const net> n) : graphics_item(item_type::net, n->get_id())
+graphics_net::graphics_net(const std::shared_ptr<const net> n) : graphics_item(hal::item_type::net, n->get_id())
 {
     assert(n);
 }

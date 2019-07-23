@@ -82,8 +82,6 @@ void standard_graphics_gate::load_settings()
     s_pin_font_descent = pin_fm.descent();
     s_pin_font_baseline = 1;
 
-    s_selection_color = QColor(240, 173, 0);
-
     s_first_pin_y = s_color_bar_height + s_pin_upper_vertical_spacing + s_pin_font_height;
     s_pin_y_stride = s_pin_font_height + s_pin_inner_vertical_spacing;
 }

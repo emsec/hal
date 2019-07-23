@@ -39,7 +39,7 @@ void separated_graphics_net::update_alpha()
         s_alpha = 1;
 }
 
-separated_graphics_net::separated_graphics_net(const QString& text, const std::shared_ptr<const net> n) : graphics_net(n),
+separated_graphics_net::separated_graphics_net(const std::shared_ptr<const net> n, const QString& text) : graphics_net(n),
   m_text(text),
   m_line_style(line_style::solid),
   m_draw_output(false)

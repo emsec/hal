@@ -97,7 +97,7 @@ void graph_graphics_view::mouseDoubleClickEvent(QMouseEvent* event)
     if (!item)
         return;
 
-    if(item->get_item_type() == graphics_item::item_type::module)
+    if(item->get_item_type() == hal::item_type::module)
         Q_EMIT module_double_clicked(item->id());
 }
 
@@ -264,7 +264,7 @@ void graph_graphics_view::show_context_menu(const QPoint& pos)
 
         switch (m_item->get_item_type())
         {
-            case graphics_item::item_type::gate:
+            case hal::item_type::gate:
             {
                 QAction* color_action = context_menu.addAction("Change Color");
                 QObject::connect(color_action, &QAction::triggered, this, &graph_graphics_view::handle_change_color_action);

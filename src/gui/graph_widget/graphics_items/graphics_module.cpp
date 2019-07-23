@@ -5,7 +5,7 @@
 
 #include "gui/graph_widget/graphics_scene.h"
 
-graphics_module::graphics_module(const std::shared_ptr<const module> m) : graphics_node(item_type::module, m->get_id(), QString::fromStdString(m->get_name()))
+graphics_module::graphics_module(const std::shared_ptr<const module> m) : graphics_node(hal::item_type::module, m->get_id(), QString::fromStdString(m->get_name()))
 {
     assert(m);
 

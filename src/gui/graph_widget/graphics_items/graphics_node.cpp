@@ -4,11 +4,12 @@
 
 #include <QApplication>
 
-graphics_node::graphics_node(const item_type type, const u32 id, const QString& name) : graphics_item(type, id),
+graphics_node::graphics_node(const hal::item_type type, const u32 id, const QString& name) : graphics_item(type, id),
     m_name(name)
 {
-    //setFlags(QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemSendsGeometryChanges | ItemIsFocusable);
     setFlags(QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemSendsGeometryChanges);
+    //setFlags(QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemSendsGeometryChanges | ItemIsFocusable);
+    //setAcceptHoverEvents(true);
 }
 
 QRectF graphics_node::boundingRect() const

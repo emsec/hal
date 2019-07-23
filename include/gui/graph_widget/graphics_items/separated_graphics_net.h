@@ -32,7 +32,7 @@ public:
     static void load_settings();
     static void update_alpha();
 
-    separated_graphics_net(const QString& text, const std::shared_ptr<const net> n);
+    separated_graphics_net(const std::shared_ptr<const net> n, const QString& text);
 
     virtual void set_visuals(const visuals& v) Q_DECL_OVERRIDE;
     virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) Q_DECL_OVERRIDE;
