@@ -1,12 +1,11 @@
 #include "graph_widget/layouters/minimal_graph_layouter.h"
 
 #include "graph_widget/graphics_scene.h"
-#include "graph_widget/graphics_items/graphics_gate.h"
-#include "graph_widget/graphics_items/separated_graphics_net.h"
-#include "graph_widget/graphics_items/unrestricted_graphics_net.h"
+#include "graph_widget/items/graphics_gate.h"
+#include "graph_widget/items/minimal_graphics_gate.h"
+#include "graph_widget/items/separated_graphics_net.h"
+#include "graph_widget/items/unrestricted_graphics_net.h"
 #include "gui_globals.h"
-
-#include "graph_widget/graphics_items/minimal_graphics_gate.h"
 
 minimal_graph_layouter::minimal_graph_layouter(graph_context* context) : graph_layouter(context)
 {

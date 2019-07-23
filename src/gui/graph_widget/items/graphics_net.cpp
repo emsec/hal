@@ -1,4 +1,4 @@
-#include "gui/graph_widget/graphics_items/graphics_net.h"
+#include "gui/graph_widget/items/graphics_net.h"
 
 #include "core/log.h"
 

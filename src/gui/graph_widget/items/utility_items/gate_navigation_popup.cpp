@@ -1,6 +1,6 @@
-#include "graph_widget/graphics_items/utility_items/gate_navigation_popup.h"
+#include "graph_widget/items/utility_items/gate_navigation_popup.h"
 
-#include "graph_widget/graphics_items/graphics_gate.h"
+#include "graph_widget/items/graphics_gate.h"
 
 #include <QParallelAnimationGroup>
 #include <QPropertyAnimation>

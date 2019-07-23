@@ -1,7 +1,7 @@
 #ifndef GRAPHICS_NODE_H
 #define GRAPHICS_NODE_H
 
-#include "gui/graph_widget/graphics_items/graphics_item.h"
+#include "gui/graph_widget/items/graphics_item.h"
 
 class graphics_node : public graphics_item
 {

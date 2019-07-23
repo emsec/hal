@@ -1,7 +1,7 @@
 #ifndef STANDARD_GRAPH_LAYOUTER_H
 #define STANDARD_GRAPH_LAYOUTER_H
 
-#include "gui/graph_widget/graphics_items/graphics_gate.h"
+#include "gui/graph_widget/items/graphics_gate.h"
 #include "gui/graph_widget/layouters/graph_layouter.h"
 #include "gui/gui_def.h"
 

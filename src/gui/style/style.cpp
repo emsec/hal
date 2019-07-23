@@ -2,14 +2,14 @@
 
 #include "core/log.h"
 
-#include "gui/graph_widget/graphics_items/io_graphics_net.h"
-#include "gui/graph_widget/graphics_items/graphics_item.h"
-#include "gui/graph_widget/graphics_items/graphics_net.h"
-#include "gui/graph_widget/graphics_items/minimal_graphics_gate.h"
-#include "gui/graph_widget/graphics_items/separated_graphics_net.h"
-#include "gui/graph_widget/graphics_items/standard_graphics_gate.h"
-#include "gui/graph_widget/graphics_items/standard_graphics_module.h"
-#include "gui/graph_widget/graphics_items/standard_graphics_net.h"
+#include "gui/graph_widget/items/io_graphics_net.h"
+#include "gui/graph_widget/items/graphics_item.h"
+#include "gui/graph_widget/items/graphics_net.h"
+#include "gui/graph_widget/items/minimal_graphics_gate.h"
+#include "gui/graph_widget/items/separated_graphics_net.h"
+#include "gui/graph_widget/items/standard_graphics_gate.h"
+#include "gui/graph_widget/items/standard_graphics_module.h"
+#include "gui/graph_widget/items/standard_graphics_net.h"
 #include "gui/gui_globals.h"
 #include "gui/svg_icon_engine/svg_icon_engine.h"
 

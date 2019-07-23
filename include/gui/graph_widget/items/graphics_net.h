@@ -21,25 +21,49 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef GRAPHICS_GATE_H
-#define GRAPHICS_GATE_H
+#ifndef GRAPHICS_NET_H
+#define GRAPHICS_NET_H
 
-#include "gui/graph_widget/graphics_items/graphics_node.h"
+#include "graph_widget/items/graphics_item.h"
 
 #include <memory>
 
-class gate;
+class net;
 
-class graphics_gate : public graphics_node
+class graphics_net : public graphics_item
 {
 public:
-    graphics_gate(const std::shared_ptr<const gate> g);
+    enum class line_style
+    {
+        solid,
+        dash,
+        dot
+    };
+
+    struct visuals
+    {
+        bool visible;
+        QColor color;
+        line_style style;
+    };
+
+    static void load_settings();
+
+    graphics_net(const std::shared_ptr<const net> n);
+
+    QRectF boundingRect() const Q_DECL_OVERRIDE;
+    virtual QPainterPath shape() const Q_DECL_OVERRIDE;
+
+    virtual void set_visuals(const visuals& v) = 0;
 
 protected:
-    QString m_type;
+    static QPen s_pen;
 
-    QVector<QString> m_input_pins;
-    QVector<QString> m_output_pins;
+    static qreal s_line_width;
+    static qreal s_stroke_width;
+
+    QRectF m_rect;
+    QPainterPath m_shape;
 };
 
-#endif // GRAPHICS_GATE_H
+#endif // GRAPHICS_NET_H

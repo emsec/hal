@@ -1,4 +1,4 @@
-#include "graph_widget/graphics_items/standard_graphics_gate.h"
+#include "graph_widget/items/standard_graphics_gate.h"
 
 #include "core/log.h"
 

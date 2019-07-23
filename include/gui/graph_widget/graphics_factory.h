@@ -1,8 +1,8 @@
 #ifndef GRAPHICS_FACTORY_H
 #define GRAPHICS_FACTORY_H
 
-#include "gui/graph_widget/graphics_items/graphics_gate.h"
-#include "gui/graph_widget/graphics_items/graphics_module.h"
+#include "gui/graph_widget/items/graphics_gate.h"
+#include "gui/graph_widget/items/graphics_module.h"
 
 #include <QStringList>
 

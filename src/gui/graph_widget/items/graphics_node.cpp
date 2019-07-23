@@ -1,4 +1,4 @@
-#include "gui/graph_widget/graphics_items/graphics_node.h"
+#include "gui/graph_widget/items/graphics_node.h"
 
 #include "gui/graph_widget/graph_widget_constants.h"
 

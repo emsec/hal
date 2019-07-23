@@ -21,49 +21,39 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef GRAPHICS_NET_H
-#define GRAPHICS_NET_H
+#ifndef IO_GRAPHICS_NET_H
+#define IO_GRAPHICS_NET_H
 
-#include "graph_widget/graphics_items/graphics_item.h"
+#include "graph_widget/items/graphics_net.h"
 
-#include <memory>
-
-class net;
-
-class graphics_net : public graphics_item
+class io_graphics_net : public graphics_net
 {
 public:
-    enum class line_style
-    {
-        solid,
-        dash,
-        dot
-    };
-
-    struct visuals
-    {
-        bool visible;
-        QColor color;
-        line_style style;
-    };
-
     static void load_settings();
+    static void update_alpha();
 
-    graphics_net(const std::shared_ptr<const net> n);
+    io_graphics_net(const std::shared_ptr<const net> n);
 
-    QRectF boundingRect() const Q_DECL_OVERRIDE;
-    virtual QPainterPath shape() const Q_DECL_OVERRIDE;
+    virtual void set_visuals(const visuals& v) Q_DECL_OVERRIDE;
+    virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) Q_DECL_OVERRIDE;
 
-    virtual void set_visuals(const visuals& v) = 0;
+    void add_output();
+    void add_input(const QPointF& scene_position);
 
-protected:
-    static QPen s_pen;
+    void finalize();
 
-    static qreal s_line_width;
-    static qreal s_stroke_width;
+private:
+    static qreal s_alpha;
 
-    QRectF m_rect;
-    QPainterPath m_shape;
+    static qreal s_wire_length;
+    static qreal s_circle_offset;
+    static qreal s_radius;
+
+    static QBrush s_brush;
+
+    QVector<QPointF> m_input_wires;
+    line_style m_line_style;
+    bool m_draw_output;
 };
 
-#endif // GRAPHICS_NET_H
+#endif // IO_GRAPHICS_NET_H

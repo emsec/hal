@@ -1,4 +1,4 @@
-#include "gui/graph_widget/graphics_items/graphics_item.h"
+#include "gui/graph_widget/items/graphics_item.h"
 
 qreal graphics_item::s_lod;
 

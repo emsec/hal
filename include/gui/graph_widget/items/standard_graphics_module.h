@@ -1,7 +1,7 @@
 #ifndef STANDARD_GRAPHICS_MODULE_H
 #define STANDARD_GRAPHICS_MODULE_H
 
-#include "gui/graph_widget/graphics_items/graphics_module.h"
+#include "gui/graph_widget/items/graphics_module.h"
 
 class standard_graphics_module : public graphics_module
 {   

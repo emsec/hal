@@ -1,7 +1,7 @@
 #ifndef GRAPHICS_MODULE_H
 #define GRAPHICS_MODULE_H
 
-#include "gui/graph_widget/graphics_items/graphics_node.h"
+#include "gui/graph_widget/items/graphics_node.h"
 
 #include <memory>
 

@@ -5,10 +5,10 @@
 
 #include "gui/graph_widget/graph_widget_constants.h"
 #include "gui/graph_widget/graphics_factory.h"
-#include "gui/graph_widget/graphics_items/graphics_gate.h"
-#include "gui/graph_widget/graphics_items/graphics_item.h"
-#include "gui/graph_widget/graphics_items/graphics_module.h"
-#include "gui/graph_widget/graphics_items/graphics_net.h"
+#include "gui/graph_widget/items/graphics_gate.h"
+#include "gui/graph_widget/items/graphics_item.h"
+#include "gui/graph_widget/items/graphics_module.h"
+#include "gui/graph_widget/items/graphics_net.h"
 //#include "gui/graph_widget/graphics_items/utility_items/gate_navigation_popup.h"
 #include "gui/gui_globals.h"
 

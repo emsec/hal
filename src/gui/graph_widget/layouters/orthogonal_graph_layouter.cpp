@@ -3,8 +3,8 @@
 #include "gui/graph_widget/contexts/graph_context.h"
 #include "gui/graph_widget/graphics_factory.h"
 #include "gui/graph_widget/graphics_scene.h"
-#include "gui/graph_widget/graphics_items/separated_graphics_net.h"
-#include "gui/graph_widget/graphics_items/unrestricted_graphics_net.h"
+#include "gui/graph_widget/items/separated_graphics_net.h"
+#include "gui/graph_widget/items/unrestricted_graphics_net.h"
 #include "gui/gui_globals.h"
 
 #include <qmath.h>

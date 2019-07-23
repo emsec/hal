@@ -21,39 +21,25 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef IO_GRAPHICS_NET_H
-#define IO_GRAPHICS_NET_H
+#ifndef GRAPHICS_GATE_H
+#define GRAPHICS_GATE_H
 
-#include "graph_widget/graphics_items/graphics_net.h"
+#include "gui/graph_widget/items/graphics_node.h"
 
-class io_graphics_net : public graphics_net
+#include <memory>
+
+class gate;
+
+class graphics_gate : public graphics_node
 {
 public:
-    static void load_settings();
-    static void update_alpha();
+    graphics_gate(const std::shared_ptr<const gate> g);
 
-    io_graphics_net(const std::shared_ptr<const net> n);
+protected:
+    QString m_type;
 
-    virtual void set_visuals(const visuals& v) Q_DECL_OVERRIDE;
-    virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) Q_DECL_OVERRIDE;
-
-    void add_output();
-    void add_input(const QPointF& scene_position);
-
-    void finalize();
-
-private:
-    static qreal s_alpha;
-
-    static qreal s_wire_length;
-    static qreal s_circle_offset;
-    static qreal s_radius;
-
-    static QBrush s_brush;
-
-    QVector<QPointF> m_input_wires;
-    line_style m_line_style;
-    bool m_draw_output;
+    QVector<QString> m_input_pins;
+    QVector<QString> m_output_pins;
 };
 
-#endif // IO_GRAPHICS_NET_H
+#endif // GRAPHICS_GATE_H
