@@ -21,18 +21,18 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef GLOBAL_GRAPHICS_NET_H
-#define GLOBAL_GRAPHICS_NET_H
+#ifndef IO_GRAPHICS_NET_H
+#define IO_GRAPHICS_NET_H
 
 #include "graph_widget/graphics_items/graphics_net.h"
 
-class global_graphics_net : public graphics_net
+class io_graphics_net : public graphics_net
 {
 public:
     static void load_settings();
     static void update_alpha();
 
-    global_graphics_net(const std::shared_ptr<const net> n);
+    io_graphics_net(const std::shared_ptr<const net> n);
 
     virtual void set_visuals(const visuals& v) Q_DECL_OVERRIDE;
     virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) Q_DECL_OVERRIDE;
@@ -56,4 +56,4 @@ private:
     bool m_draw_output;
 };
 
-#endif // GLOBAL_GRAPHICS_NET_H
+#endif // IO_GRAPHICS_NET_H

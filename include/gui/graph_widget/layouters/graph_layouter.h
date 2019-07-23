@@ -34,7 +34,7 @@
 #include <QPair>
 #include <QVector>
 
-class global_graphics_net;
+class io_graphics_net;
 class graph_context;
 class graphics_gate;
 class graphics_item;

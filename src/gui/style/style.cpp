@@ -2,7 +2,7 @@
 
 #include "core/log.h"
 
-#include "gui/graph_widget/graphics_items/global_graphics_net.h"
+#include "gui/graph_widget/graphics_items/io_graphics_net.h"
 #include "gui/graph_widget/graphics_items/graphics_item.h"
 #include "gui/graph_widget/graphics_items/graphics_net.h"
 #include "gui/graph_widget/graphics_items/minimal_graphics_gate.h"
@@ -202,7 +202,7 @@ namespace style
 
         graphics_net::load_settings();
         standard_graphics_net::load_settings();
-        global_graphics_net::load_settings();
+        io_graphics_net::load_settings();
         separated_graphics_net::load_settings();
     }
 

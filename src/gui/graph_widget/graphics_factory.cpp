@@ -1,7 +1,7 @@
 #include "gui/graph_widget/graphics_factory.h"
 
 #include "gui/graph_widget/graphics_items/standard_graphics_gate.h"
-#include "gui/graph_widget/graphics_items/global_graphics_net.h"
+#include "gui/graph_widget/graphics_items/io_graphics_net.h"
 #include "gui/graph_widget/graphics_items/separated_graphics_net.h"
 #include "gui/graph_widget/graphics_items/minimal_graphics_gate.h"
 #include "gui/graph_widget/graphics_items/standard_graphics_module.h"

@@ -3,7 +3,7 @@
 #include "gui/graph_widget/contexts/graph_context.h"
 #include "gui/graph_widget/graphics_factory.h"
 #include "gui/graph_widget/graphics_scene.h"
-#include "gui/graph_widget/graphics_items/global_graphics_net.h"
+#include "gui/graph_widget/graphics_items/io_graphics_net.h"
 #include "gui/graph_widget/graphics_items/graphics_gate.h"
 #include "gui/graph_widget/graphics_items/graphics_item.h"
 #include "gui/graph_widget/graphics_items/graphics_net.h"

@@ -95,8 +95,6 @@ void minimal_graphics_gate::paint(QPainter* painter, const QStyleOptionGraphicsI
 
     s_pen.setColor(color);
 
-    //    const qreal lod = option->levelOfDetailFromTransform(painter->worldTransform());
-
     if (s_lod < 0.5)
     {
         painter->setPen(s_pen);
@@ -127,10 +125,7 @@ void minimal_graphics_gate::paint(QPainter* painter, const QStyleOptionGraphicsI
             painter->drawText(m_output_pin_positions.at(i), output_pin);
             i++;
         }
-        return;
     }
-
-    //    const int lod = option->levelOfDetailFromTransform(painter->worldTransform()) * 10;
 }
 
 QPointF minimal_graphics_gate::get_input_scene_position(const u32 net_id, const QString& pin_type) const

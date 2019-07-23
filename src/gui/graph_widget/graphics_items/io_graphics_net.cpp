@@ -1,4 +1,4 @@
-#include "graph_widget/graphics_items/global_graphics_net.h"
+#include "graph_widget/graphics_items/io_graphics_net.h"
 
 #include "graph_widget/graph_widget_constants.h"
 
@@ -6,15 +6,15 @@
 #include <QPen>
 #include <QStyleOptionGraphicsItem>
 
-qreal global_graphics_net::s_alpha;
+qreal io_graphics_net::s_alpha;
 
-qreal global_graphics_net::s_wire_length;
-qreal global_graphics_net::s_circle_offset;
-qreal global_graphics_net::s_radius;
+qreal io_graphics_net::s_wire_length;
+qreal io_graphics_net::s_circle_offset;
+qreal io_graphics_net::s_radius;
 
-QBrush global_graphics_net::s_brush;
+QBrush io_graphics_net::s_brush;
 
-void global_graphics_net::load_settings()
+void io_graphics_net::load_settings()
 {
     s_wire_length   = 26;
     s_circle_offset = 0;
@@ -24,7 +24,7 @@ void global_graphics_net::load_settings()
     s_pen.setColor(QColor(160, 160, 160)); // USE STYLESHEETS
 }
 
-void global_graphics_net::update_alpha()
+void io_graphics_net::update_alpha()
 {
     if (s_lod >= graph_widget_constants::net_fade_in_lod && s_lod <= graph_widget_constants::net_fade_out_lod)
     {
@@ -36,21 +36,21 @@ void global_graphics_net::update_alpha()
         s_alpha = 1;
 }
 
-global_graphics_net::global_graphics_net(const std::shared_ptr<const net> n) : graphics_net(n),
+io_graphics_net::io_graphics_net(const std::shared_ptr<const net> n) : graphics_net(n),
     m_line_style(line_style::solid),
     m_draw_output(false)
 {
 
 }
 
-void global_graphics_net::set_visuals(const graphics_net::visuals& v)
+void io_graphics_net::set_visuals(const graphics_net::visuals& v)
 {
     setVisible(v.visible);
     m_color = v.color;
     m_line_style = v.style;
 }
 
-void global_graphics_net::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
+void io_graphics_net::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
 {
     Q_UNUSED(widget);
 
@@ -91,7 +91,7 @@ void global_graphics_net::paint(QPainter* painter, const QStyleOptionGraphicsIte
     painter->setBrush(QBrush());
 }
 
-void global_graphics_net::add_output()
+void io_graphics_net::add_output()
 {
     if (m_draw_output)
         return;
@@ -109,7 +109,7 @@ void global_graphics_net::add_output()
     m_shape.closeSubpath();
 }
 
-void global_graphics_net::add_input(const QPointF& scene_position)
+void io_graphics_net::add_input(const QPointF& scene_position)
 {
     QPointF mapped_position = mapFromScene(scene_position);
     m_input_wires.append(mapped_position);
@@ -125,7 +125,7 @@ void global_graphics_net::add_input(const QPointF& scene_position)
     m_shape.closeSubpath();
 }
 
-void global_graphics_net::finalize()
+void io_graphics_net::finalize()
 {
     m_rect = m_shape.boundingRect();
     m_rect.adjust(-1, -1, 1, 1);

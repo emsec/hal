@@ -6,7 +6,7 @@
 
 #include "gui/graph_widget/contexts/graph_context.h"
 #include "gui/graph_widget/graphics_factory.h"
-#include "gui/graph_widget/graphics_items/global_graphics_net.h"
+#include "gui/graph_widget/graphics_items/io_graphics_net.h"
 #include "gui/graph_widget/graphics_items/separated_graphics_net.h"
 #include "gui/graph_widget/graphics_items/standard_graphics_net.h"
 #include "gui/graph_widget/graphics_scene.h"
@@ -1088,7 +1088,7 @@ void standard_graph_layouter::draw_nets()
         if (n->is_unrouted())
         {
             // HANDLE GLOBAL NETS
-            global_graphics_net* net_item = new global_graphics_net(n);
+            io_graphics_net* net_item = new io_graphics_net(n);
 
             endpoint src_end = n->get_src();
 
