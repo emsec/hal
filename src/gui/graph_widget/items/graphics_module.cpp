@@ -36,5 +36,7 @@ graphics_module::graphics_module(const std::shared_ptr<const module> m) : graphi
 
 void graphics_module::set_visuals(const graphics_node::visuals& v)
 {
+    setVisible(v.visible);
 
+    m_color = v.main_color;
 }

@@ -8,7 +8,7 @@ class graphics_node : public graphics_item
 public:
     struct visuals
     {
-        bool draw;
+        bool visible;
 
         QColor main_color;
         QColor name_color;
