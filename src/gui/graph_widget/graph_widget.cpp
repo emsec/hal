@@ -501,8 +501,7 @@ void graph_widget::debug_change_context()
 
 void graph_widget::change_context(graph_context* const context)
 {
-    if (!context)
-        return; // SHOULD NEVER BE REACHED
+    assert(context);
 
     if (m_context)
         m_context->unsubscribe(this);

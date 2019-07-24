@@ -31,9 +31,6 @@
 
 #include "gui/netlist_relay/netlist_relay.h"
 
-#include <QPair>
-#include <QVector>
-
 class io_graphics_net;
 class graph_context;
 class graphics_gate;
@@ -60,23 +57,11 @@ public:
     virtual const QString name() const        = 0;
     virtual const QString description() const = 0;
 
-//    graphics_gate* create_graphics_gate(std::shared_ptr<gate> g);
-//    standard_graphics_net* create_standard_graphics_net(std::shared_ptr<net> n);
-
-//    global_graphics_net* create_global_graphics_net(std::shared_ptr<net> n);
-//    separated_graphics_net* create_separated_graphics_net(std::shared_ptr<net> n);
-
     graphics_scene* scene() const;
 
 protected:
     graphics_scene* m_scene;
     const graph_context* const m_context;
-
-private:
-//    void sort_into_net_vector(graphics_net* item);
-
-//    QVector<QPair<u32, graphics_gate*>> m_gate_vector;
-//    QVector<QPair<u32, graphics_net*>> m_net_vector;
 };
 
 #endif // GRAPH_LAYOUTER_H
