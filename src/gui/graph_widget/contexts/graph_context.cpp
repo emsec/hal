@@ -21,6 +21,9 @@ graph_context::graph_context(graph_layouter* layouter, graph_shader* shader, QOb
     m_update_in_progress(false)
 {
     connect(m_watcher, &QFutureWatcher<void>::finished, this, &graph_context::handle_layouter_finished);
+
+    connect(m_layouter, qOverload<int>(&graph_layouter::status_update), this, qOverload<int>(&graph_context::handle_layouter_update), Qt::ConnectionType::QueuedConnection);
+    connect(m_layouter, qOverload<const QString&>(&graph_layouter::status_update), this, qOverload<const QString&>(&graph_context::handle_layouter_update), Qt::ConnectionType::QueuedConnection);
 }
 
 graph_context::~graph_context()
@@ -214,6 +217,16 @@ bool graph_context::node_for_gate(hal::node& node, const u32 id) const
     }
 
     return false;
+}
+
+void graph_context::handle_layouter_update(const int percent)
+{
+    Q_UNUSED(percent)
+}
+
+void graph_context::handle_layouter_update(const QString& message)
+{
+    Q_UNUSED(message)
 }
 
 void graph_context::apply_changes()

@@ -31,6 +31,8 @@
 
 #include "gui/netlist_relay/netlist_relay.h"
 
+#include <QObject>
+
 class io_graphics_net;
 class graph_context;
 class graphics_gate;
@@ -40,11 +42,12 @@ class separated_graphics_net;
 class standard_graphics_net;
 class graphics_scene;
 
-class graph_layouter
+class graph_layouter : public QObject
 {
+    Q_OBJECT
+
 public:
-    explicit graph_layouter(const graph_context* const context);
-    virtual ~graph_layouter();
+    explicit graph_layouter(const graph_context* const context, QObject* parent = nullptr);
 
     virtual void add(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets)    = 0;
     virtual void remove(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets) = 0;
@@ -58,6 +61,10 @@ public:
     virtual const QString description() const = 0;
 
     graphics_scene* scene() const;
+
+Q_SIGNALS:
+    void status_update(const int percent);
+    void status_update(const QString& message);
 
 protected:
     graphics_scene* m_scene;

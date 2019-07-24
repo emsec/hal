@@ -45,6 +45,8 @@ public:
     bool node_for_gate(hal::node& node, const u32 id) const;
 
 private Q_SLOTS:
+    void handle_layouter_update(const int percent);
+    void handle_layouter_update(const QString& message);
     void handle_layouter_finished();
 
 protected:
