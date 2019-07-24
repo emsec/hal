@@ -49,15 +49,12 @@ Get the version of the plugin.
 :rtype: str
 )")
         .def("get_communities",
-             [](plugin_graph_algorithm& a, std::shared_ptr<netlist> const nl, const std::set<std::shared_ptr<gate>> gates = {}) -> std::vector<std::set<std::shared_ptr<gate>>> {
-                 std::vector<std::set<std::shared_ptr<gate>>> s;
-                 auto vals = a.get_communities(nl, gates);
-                 std::copy(vals.begin(), vals.end(), std::back_inserter(s));
-                 return s;
+             [](plugin_graph_algorithm& a, std::shared_ptr<netlist> const nl) -> std::map<int, std::set<std::shared_ptr<gate>>> {
+                 auto m = a.get_communities(nl);
+                 return m;
              },
-             py::arg("netlist"),
-             py::arg("gates"), R"(
-Returns the set of strpngly connected components.
+             py::arg("netlist"), R"(
+Returns the map of community-IDs to communities.
 
 :param netlist: Netlist (internelly transformed to di-graph)
 :type netlist: hal_py.netlist

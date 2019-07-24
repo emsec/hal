@@ -35,18 +35,13 @@ public:
      *      plugin specific functions
      */
 
-
     /**
-     * Returns communities
+     * Returns map of community-IDs to communities
      *
      * @param[in] nl - Netlist (internally transformed to di-graph)
-     * @param[in] gates - Set of gates for which the strongly connected components are determined (default = empty means that all gates of the netlist are considered)
-     * @returns A community
+     * @returns A map of community-IDs to sets of gates belonging to the communities
      */
-    std::set<std::set<std::shared_ptr<gate>>> get_communities(std::shared_ptr<netlist> const nl, const std::set<std::shared_ptr<gate>> gates = {});
-    std::map<int, std::set<std::shared_ptr<gate>>> get_community_sets(igraph_vector_t*, std::shared_ptr<netlist>, std::map<int, int>);
-    void show_results(igraph_vector_t*, igraph_vector_t*, std::map<int, std::set<std::shared_ptr<gate>>>, bool);
-    void plot_community_graph(igraph_t*, igraph_vector_t*, std::map<int, int>);
+    std::map<int, std::set<std::shared_ptr<gate>>> get_communities(std::shared_ptr<netlist> const nl);
 
     /**
      * Returns the set of strongly connected components.
@@ -74,9 +69,7 @@ public:
      * @returns A tuple of a map of submodule input net to ids (variable definition X0, X1, ...) and a map of submodule output net to BDDs (function defintion f1(x0, ..., x_n), f2(x0, ... x_n), ...).
      */
     std::tuple<std::map<std::shared_ptr<net>, int>, std::map<std::shared_ptr<net>, std::shared_ptr<bdd>>>
-        get_bdds(std::shared_ptr<netlist> const nl,
-                           const std::set<std::shared_ptr<gate>> gates,
-                           const std::map<std::shared_ptr<net>, int> input_net_to_ids = std::map<std::shared_ptr<net>, int>());
+        get_bdds(std::shared_ptr<netlist> const nl, const std::set<std::shared_ptr<gate>> gates, const std::map<std::shared_ptr<net>, int> input_net_to_ids = std::map<std::shared_ptr<net>, int>());
 
     /**
      * Returns a graph cut for a specific gate and depth.
