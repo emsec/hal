@@ -3,10 +3,12 @@
 #include "netlist/module.h"
 
 #include "gui/graph_widget/contexts/graph_context_subscriber.h"
+#include "gui/graph_widget/contexts/layouter_task.h"
 #include "gui/graph_widget/graphics_scene.h"
 #include "gui/gui_globals.h"
 
 #include <QtConcurrent>
+#include <QDebug>
 
 static const bool lazy_updates = false; // USE SETTINGS FOR THIS
 
@@ -267,5 +269,9 @@ void graph_context::update_scene()
 
     m_layouter->scene()->disconnect_all();
 
-    m_watcher->setFuture(QtConcurrent::run(m_layouter, &graph_layouter::layout));
+    layouter_task* task = new layouter_task(m_layouter);
+    connect(task, &layouter_task::finished, this, &graph_context::handle_layouter_finished, Qt::ConnectionType::QueuedConnection);
+    g_thread_pool->queue_task(task);
+
+    //m_watcher->setFuture(QtConcurrent::run(m_layouter, &graph_layouter::layout));
 }

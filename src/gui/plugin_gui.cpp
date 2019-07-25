@@ -8,15 +8,16 @@
 
 #include "gui/file_manager/file_manager.h"
 #include "gui/graph_widget/graph_context_manager.h"
+#include "gui/hal_content_manager/hal_content_manager.h"
 #include "gui/main_window/main_window.h"
 #include "gui/netlist_relay/netlist_relay.h"
 #include "gui/notifications/notification_manager.h"
 #include "gui/plugin_management/plugin_relay.h"
 #include "gui/python/python_context.h"
 #include "gui/selection_relay/selection_relay.h"
-#include "gui/hal_content_manager/hal_content_manager.h"
 #include "gui/settings/settings_relay.h"
 #include "gui/style/style.h"
+#include "gui/thread_pool/thread_pool.h"
 #include "gui/window_manager/window_manager.h"
 
 #include <QApplication>
@@ -41,7 +42,10 @@ netlist_relay g_netlist_relay;
 plugin_relay g_plugin_relay;
 selection_relay g_selection_relay;
 settings_relay g_settings_relay;
+
 hal_content_manager g_content_manager;
+
+thread_pool* g_thread_pool;
 
 graph_context_manager g_graph_context_manager;
 
@@ -155,6 +159,8 @@ bool plugin_gui::exec(program_arguments& args)
 
 //    g_window_manager       = new window_manager();
     g_notification_manager = new notification_manager();
+
+    g_thread_pool = new thread_pool();
 
     g_settings_relay.init_defaults();
     main_window w;
