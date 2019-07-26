@@ -7,9 +7,6 @@
 #include "gui/graph_widget/graphics_scene.h"
 #include "gui/gui_globals.h"
 
-#include <QtConcurrent>
-#include <QDebug>
-
 static const bool lazy_updates = false; // USE SETTINGS FOR THIS
 
 graph_context::graph_context(graph_layouter* layouter, graph_shader* shader, QObject* parent) : QObject(parent),
@@ -18,12 +15,9 @@ graph_context::graph_context(graph_layouter* layouter, graph_shader* shader, QOb
     m_unhandled_changes(false),
     m_scene_update_required(false),
     m_update_requested(false),
-    m_watcher(new QFutureWatcher<void>(this)),
     m_scene_available(true),
     m_update_in_progress(false)
 {
-    connect(m_watcher, &QFutureWatcher<void>::finished, this, &graph_context::handle_layouter_finished);
-
     connect(m_layouter, qOverload<int>(&graph_layouter::status_update), this, qOverload<int>(&graph_context::handle_layouter_update), Qt::ConnectionType::QueuedConnection);
     connect(m_layouter, qOverload<const QString&>(&graph_layouter::status_update), this, qOverload<const QString&>(&graph_context::handle_layouter_update), Qt::ConnectionType::QueuedConnection);
 }
@@ -272,6 +266,4 @@ void graph_context::update_scene()
     layouter_task* task = new layouter_task(m_layouter);
     connect(task, &layouter_task::finished, this, &graph_context::handle_layouter_finished, Qt::ConnectionType::QueuedConnection);
     g_thread_pool->queue_task(task);
-
-    //m_watcher->setFuture(QtConcurrent::run(m_layouter, &graph_layouter::layout));
 }

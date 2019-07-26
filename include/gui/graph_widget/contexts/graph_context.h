@@ -5,7 +5,6 @@
 #include "gui/graph_widget/shaders/graph_shader.h"
 #include "gui/gui_def.h"
 
-#include <QFutureWatcher>
 #include <QObject>
 #include <QSet>
 
@@ -77,7 +76,6 @@ private:
 
     QList<graph_context_subscriber*> m_subscribers;
 
-    QFutureWatcher<void>* m_watcher;
     bool m_scene_available;
     bool m_update_in_progress;
 };
