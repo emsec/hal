@@ -122,6 +122,16 @@ void graph_widget::handle_context_about_to_be_deleted()
     // UPDATE OTHER DATA, LIKE TOOLBUTTONS
 }
 
+void graph_widget::handle_status_update(const int percent)
+{
+    Q_UNUSED(percent)
+}
+
+void graph_widget::handle_status_update(const QString& message)
+{
+    Q_UNUSED(message)
+}
+
 void graph_widget::keyPressEvent(QKeyEvent* event)
 {
     if (!m_context)

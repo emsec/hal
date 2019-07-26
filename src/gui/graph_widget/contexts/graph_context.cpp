@@ -217,12 +217,14 @@ bool graph_context::node_for_gate(hal::node& node, const u32 id) const
 
 void graph_context::handle_layouter_update(const int percent)
 {
-    Q_UNUSED(percent)
+    for (graph_context_subscriber* s : m_subscribers)
+        s->handle_status_update(percent);
 }
 
 void graph_context::handle_layouter_update(const QString& message)
 {
-    Q_UNUSED(message)
+    for (graph_context_subscriber* s : m_subscribers)
+        s->handle_status_update(message);
 }
 
 void graph_context::apply_changes()

@@ -49,6 +49,9 @@ public:
     virtual void handle_scene_unavailable() Q_DECL_OVERRIDE;
     virtual void handle_context_about_to_be_deleted() Q_DECL_OVERRIDE;
 
+    virtual void handle_status_update(const int percent) Q_DECL_OVERRIDE;
+    virtual void handle_status_update(const QString& message) Q_DECL_OVERRIDE;
+
 protected:
     void keyPressEvent(QKeyEvent* event) Q_DECL_OVERRIDE;
 
