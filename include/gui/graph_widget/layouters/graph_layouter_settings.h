@@ -1,20 +1,16 @@
 #ifndef GRAPH_LAYOUTER_SETTINGS_H
 #define GRAPH_LAYOUTER_SETTINGS_H
 
-class graph_layouter_settings
+struct graph_layouter_settings
 {
-    // UNCERTAIN HOW TO IMPLEMENT LAYOUTER SETTINGS, DONT USE THIS CLASS YET
-public:
-    graph_layouter_settings();
+    bool conform_to_grid = true;
 
-    bool conform_to_grid() const;
-
-protected:
-    bool m_conform_to_grid;
     // GATE TYPE
+    // MODULE TYPE
+    // NET TYPE
 
-    bool m_separate_gnd;
-    bool m_separate_vcc;
+    bool separate_gnd = true;
+    bool separate_vcc = true;
 };
 
 #endif // GRAPH_LAYOUTER_SETTINGS_H

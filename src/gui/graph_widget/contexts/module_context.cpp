@@ -2,8 +2,7 @@
 
 #include "gui/gui_globals.h"
 
-module_context::module_context(const std::shared_ptr<const module> m) : graph_context(g_graph_context_manager.get_default_layouter(this),
-                                                                                g_graph_context_manager.get_default_shader(this)),
+module_context::module_context(const std::shared_ptr<const module> m) : graph_context(g_graph_context_manager.get_default_layouter(this), g_graph_context_manager.get_default_shader(this)),
     m_id(m->get_id())
 {
     for (const std::shared_ptr<module>& s : m->get_submodules())
@@ -32,6 +31,17 @@ module_context::module_context(const std::shared_ptr<const module> m) : graph_co
 
     m_scene_update_required = true;
 }
+
+void module_context::handle_navigation_left(graph_context_subscriber* const subscriber)
+{
+    Q_UNUSED(subscriber)
+}
+
+void module_context::handle_navigation_right(graph_context_subscriber* const subscriber)
+{
+    Q_UNUSED(subscriber)
+}
+
 
 u32 module_context::get_id() const
 {

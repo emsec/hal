@@ -478,7 +478,7 @@ void graph_widget::debug_module_one()
 
 void graph_widget::debug_create_context()
 {
-    dynamic_context* context = g_graph_context_manager.add_dynamic_context("Debug", 1);
+    dynamic_context* context = g_graph_context_manager.add_dynamic_context("Debug");
 
     QSet<u32> gates;
     QSet<u32> nets;

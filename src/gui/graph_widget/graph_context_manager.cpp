@@ -28,9 +28,9 @@ module_context* graph_context_manager::get_module_context(const u32 id)
     return c;
 }
 
-dynamic_context* graph_context_manager::add_dynamic_context(const QString& name, const u32 scope)
+dynamic_context* graph_context_manager::add_dynamic_context(const QString& name)
 {
-    dynamic_context* context = new dynamic_context(name, scope);
+    dynamic_context* context = new dynamic_context(name);
     m_dynamic_contexts.append(context);
     return context;
 }

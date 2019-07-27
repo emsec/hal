@@ -22,7 +22,7 @@ public:
 
     module_context* get_module_context(const u32 id);
 
-    dynamic_context* add_dynamic_context(const QString& name, const u32 scope);
+    dynamic_context* add_dynamic_context(const QString& name);
     dynamic_context* get_dynamic_context(const QString& name);
     QStringList dynamic_context_list() const; // PROBABLY DEBUG METHOD, WILL BE REPLACED BY DIFFERENT SELECTION INTERFACE
 
