@@ -117,7 +117,6 @@ public:
     standard_graph_layouter(graph_context* context);
 
     void layout() Q_DECL_OVERRIDE;
-    void reset() Q_DECL_OVERRIDE;
 
     void expand(const u32 from_gate, const u32 via_net, const u32 to_gate) Q_DECL_OVERRIDE;
 

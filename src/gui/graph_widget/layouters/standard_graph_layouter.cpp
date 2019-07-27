@@ -30,19 +30,6 @@ standard_graph_layouter::standard_graph_layouter(graph_context* context) : graph
 
 }
 
-void standard_graph_layouter::reset()
-{
-    m_modules.clear();
-    m_gates.clear();
-    m_nets.clear();
-
-    m_node_levels.clear();
-
-    m_zero_nodes.clear();
-    m_positive_nodes.clear();
-    m_negative_nodes.clear();
-}
-
 void standard_graph_layouter::expand(const u32 from_gate, const u32 via_net, const u32 to_gate)
 {
     // VERIFY ARGUMENTS

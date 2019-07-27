@@ -95,10 +95,6 @@ void minimal_graph_layouter::layout()
     }
 }
 
-void minimal_graph_layouter::reset()
-{
-}
-
 void minimal_graph_layouter::add(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets)
 {
     Q_UNUSED(modules)

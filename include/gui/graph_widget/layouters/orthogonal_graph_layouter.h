@@ -37,7 +37,6 @@ public:
     virtual void expand(const u32 from_gate, const u32 via_net, const u32 to_gate) Q_DECL_OVERRIDE;
 
     virtual void layout() Q_DECL_OVERRIDE;
-    virtual void reset() Q_DECL_OVERRIDE;
 
     virtual const QString name() const Q_DECL_OVERRIDE;
     virtual const QString description() const Q_DECL_OVERRIDE;

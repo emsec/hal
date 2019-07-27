@@ -32,7 +32,6 @@ public:
     minimal_graph_layouter(graph_context* context);
 
     virtual void layout() Q_DECL_OVERRIDE;
-    virtual void reset() Q_DECL_OVERRIDE;
 
     virtual void add(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets) Q_DECL_OVERRIDE;
     virtual void remove(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets) Q_DECL_OVERRIDE;

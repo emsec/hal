@@ -55,7 +55,6 @@ public:
     virtual void expand(const u32 from_gate, const u32 via_net, const u32 to_gate) = 0;
 
     virtual void layout() = 0;
-    virtual void reset()  = 0;
 
     virtual const QString name() const        = 0;
     virtual const QString description() const = 0;
