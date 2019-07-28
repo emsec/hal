@@ -9,12 +9,13 @@
 
 static const bool lazy_updates = false; // USE SETTINGS FOR THIS
 
-graph_context::graph_context(graph_layouter* layouter, graph_shader* shader, QObject* parent) : QObject(parent),
+graph_context::graph_context(context_type type, graph_layouter* layouter, graph_shader* shader, QObject* parent) : QObject(parent),
     m_layouter(layouter),
     m_shader(shader),
     m_unhandled_changes(false),
     m_scene_update_required(false),
     m_update_requested(false),
+    m_type(type),
     m_scene_available(true),
     m_update_in_progress(false)
 {
@@ -30,6 +31,9 @@ graph_context::~graph_context()
 
 void graph_context::subscribe(graph_context_subscriber* const subscriber)
 {
+//    assert(subscriber);
+//    assert(!m_subscribers.contains(subscriber));
+
     if (!subscriber || m_subscribers.contains(subscriber))
         return;
 
@@ -104,6 +108,11 @@ const QSet<u32>& graph_context::nets() const
 graphics_scene* graph_context::scene()
 {
     return m_layouter->scene();
+}
+
+graph_context::context_type graph_context::get_type()
+{
+    return m_type;
 }
 
 //graph_layouter* graph_context::layouter()
@@ -260,10 +269,10 @@ void graph_context::update_scene()
     for (graph_context_subscriber* s : m_subscribers)
         s->handle_scene_unavailable();
 
+    m_layouter->scene()->disconnect_all();
+
     m_update_in_progress = true;
     m_scene_update_required = false;
-
-    m_layouter->scene()->disconnect_all();
 
     layouter_task* task = new layouter_task(m_layouter);
     connect(task, &layouter_task::finished, this, &graph_context::handle_layouter_finished, Qt::ConnectionType::QueuedConnection);

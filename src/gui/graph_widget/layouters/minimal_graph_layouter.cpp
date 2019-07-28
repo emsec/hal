@@ -123,5 +123,5 @@ const QString minimal_graph_layouter::name() const
 
 const QString minimal_graph_layouter::description() const
 {
-    return "<p>A fast and simple layouting strategy, nodes are randomly place in a grid and nets are drawn as straight lines</p>";
+    return "<p>PLACEHOLDER</p>";
 }

@@ -15,7 +15,13 @@ class graph_context : public QObject
     Q_OBJECT
 
 public:
-    explicit graph_context(graph_layouter* layouter, graph_shader* shader, QObject* parent = nullptr);
+    enum class context_type
+    {
+        module,
+        dynamic
+    };
+
+    explicit graph_context(context_type type, graph_layouter* layouter, graph_shader* shader, QObject* parent = nullptr);
     ~graph_context();
 
     virtual void handle_navigation_left(graph_context_subscriber* const subscriber) = 0;
@@ -32,6 +38,8 @@ public:
     const QSet<u32>& nets() const;
 
     graphics_scene* scene();
+
+    context_type get_type();
 
     // PROBABLY OBSOLETE
     //graph_layouter* layouter();
@@ -68,6 +76,8 @@ private:
     void evaluate_changes();
     void apply_changes();
     void update_scene();
+
+    const context_type m_type;
 
     QSet<u32> m_added_modules;
     QSet<u32> m_added_gates;
