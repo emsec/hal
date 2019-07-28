@@ -55,6 +55,10 @@ public:
 
         QVector<h_line> h_lines;
         QVector<v_line> v_lines;
+
+//        void remove_zero_length_lines();
+//        void fix_order();
+//        void move(qreal x, qreal y);
     };
 
     static void load_settings();

@@ -26,6 +26,14 @@
 
 #include "graph_widget/layouters/graph_layouter.h"
 
+class graphics_module;
+class graphics_node;
+
+namespace hal
+{
+struct node;
+}
+
 class minimal_graph_layouter : public graph_layouter
 {
 public:
@@ -40,6 +48,9 @@ public:
 
     virtual const QString name() const Q_DECL_OVERRIDE;
     virtual const QString description() const Q_DECL_OVERRIDE;
+
+private:
+    graphics_node* item_for_node(hal::node& node, const QMap<u32, graphics_gate*>& gate_map, const QMap<u32, graphics_module*>& module_map);
 };
 
 #endif // MINIMAL_GRAPH_LAYOUTER_H

@@ -44,7 +44,6 @@ protected:
     QVariant itemChange(GraphicsItemChange change, const QVariant& value) Q_DECL_OVERRIDE;
 
     QString m_name;
-//    QString m_type;
 
     qreal m_width;
     qreal m_height;
