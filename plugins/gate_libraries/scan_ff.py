@@ -1,7 +1,5 @@
 #/usr/bin/python3
 
-import json
-
 
 scan_ff = "{\n"
 scan_ff += "\t\"library\": {\n"
