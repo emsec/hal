@@ -24,9 +24,6 @@ public:
     explicit graph_context(context_type type, graph_layouter* layouter, graph_shader* shader, QObject* parent = nullptr);
     ~graph_context();
 
-    virtual void handle_navigation_left(graph_context_subscriber* const subscriber) = 0;
-    virtual void handle_navigation_right(graph_context_subscriber* const subscriber) = 0;
-
     void subscribe(graph_context_subscriber* const subscriber);
     void unsubscribe(graph_context_subscriber* const subscriber);
 

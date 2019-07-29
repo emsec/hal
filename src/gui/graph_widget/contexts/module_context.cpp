@@ -32,18 +32,32 @@ module_context::module_context(const std::shared_ptr<const module> m) : graph_co
     m_scene_update_required = true;
 }
 
-void module_context::handle_navigation_left(graph_context_subscriber* const subscriber)
-{
-    Q_UNUSED(subscriber)
-}
-
-void module_context::handle_navigation_right(graph_context_subscriber* const subscriber)
-{
-    Q_UNUSED(subscriber)
-}
-
-
 u32 module_context::get_id() const
 {
     return m_id;
+}
+
+//const QSet<u32>& module_context::modules() const
+//{
+//    return m_modules;
+//}
+
+//const QSet<u32>& module_context::gates() const
+//{
+//    return m_gates;
+//}
+
+const QSet<u32>& module_context::internal_nets() const
+{
+    return m_internal_nets;
+}
+
+const QSet<u32>& module_context::global_io_nets() const
+{
+    return m_global_io_nets;
+}
+
+const QSet<u32>& module_context::local_io_nets() const
+{
+    return m_local_io_nets;
 }
