@@ -91,42 +91,26 @@ namespace bdd_YOSYS_MYCELL_helper
 
     std::map<std::string, std::shared_ptr<bdd>> get_bdd_YOSYS_MYCELL_and(std::shared_ptr<gate> g, std::map<std::string, std::shared_ptr<bdd>>& input_pin_type_to_bdd)
     {
-        std::map<std::string, std::shared_ptr<bdd>> result;
-        if (g->get_type() == "AND2")
-            result["O"] = std::make_shared<bdd>(PIN_TO_BDD("I0") & PIN_TO_BDD("I1"));
-        if (g->get_type() == "AND3")
-            result["O"] = std::make_shared<bdd>(PIN_TO_BDD("I0") & PIN_TO_BDD("I1") & PIN_TO_BDD("I2"));
-        if (g->get_type() == "AND4")
-            result["O"] = std::make_shared<bdd>(PIN_TO_BDD("I0") & PIN_TO_BDD("I1") & PIN_TO_BDD("I2") & PIN_TO_BDD("I3"));
-        if (g->get_type() == "AND5")
-            result["O"] = std::make_shared<bdd>(PIN_TO_BDD("I0") & PIN_TO_BDD("I1") & PIN_TO_BDD("I2") & PIN_TO_BDD("I3") & PIN_TO_BDD("I4"));
-        if (g->get_type() == "AND6")
-            result["O"] = std::make_shared<bdd>(PIN_TO_BDD("I0") & PIN_TO_BDD("I1") & PIN_TO_BDD("I2") & PIN_TO_BDD("I3") & PIN_TO_BDD("I4") & PIN_TO_BDD("I5"));
-        if (g->get_type() == "AND7")
-            result["O"] = std::make_shared<bdd>(PIN_TO_BDD("I0") & PIN_TO_BDD("I1") & PIN_TO_BDD("I2") & PIN_TO_BDD("I3") & PIN_TO_BDD("I4") & PIN_TO_BDD("I5") & PIN_TO_BDD("I6"));
-        if (g->get_type() == "AND8")
-            result["O"] = std::make_shared<bdd>(PIN_TO_BDD("I0") & PIN_TO_BDD("I1") & PIN_TO_BDD("I2") & PIN_TO_BDD("I3") & PIN_TO_BDD("I4") & PIN_TO_BDD("I5") & PIN_TO_BDD("I6") & PIN_TO_BDD("I7"));
+        std::map<std::string, std::shared_ptr<bdd>> result;       
+        result["O"] = std::make_shared<bdd>(bdd_true());
 
+        for (const auto pin : g->get_input_pin_types())
+        {
+            *result["O"] &= PIN_TO_BDD(pin);
+        }
+       
         return result;
     }
 
     std::map<std::string, std::shared_ptr<bdd>> get_bdd_YOSYS_MYCELL_or(std::shared_ptr<gate> g, std::map<std::string, std::shared_ptr<bdd>>& input_pin_type_to_bdd)
     {
         std::map<std::string, std::shared_ptr<bdd>> result;
-        if (g->get_type() == "OR2")
-            result["O"] = std::make_shared<bdd>(PIN_TO_BDD("I0") | PIN_TO_BDD("I1"));
-        if (g->get_type() == "OR3")
-            result["O"] = std::make_shared<bdd>(PIN_TO_BDD("I0") | PIN_TO_BDD("I1") | PIN_TO_BDD("I2"));
-        if (g->get_type() == "OR4")
-            result["O"] = std::make_shared<bdd>(PIN_TO_BDD("I0") | PIN_TO_BDD("I1") | PIN_TO_BDD("I2") | PIN_TO_BDD("I3"));
-        if (g->get_type() == "OR5")
-            result["O"] = std::make_shared<bdd>(PIN_TO_BDD("I0") | PIN_TO_BDD("I1") | PIN_TO_BDD("I2") | PIN_TO_BDD("I3") | PIN_TO_BDD("I4"));
-        if (g->get_type() == "OR6")
-            result["O"] = std::make_shared<bdd>(PIN_TO_BDD("I0") | PIN_TO_BDD("I1") | PIN_TO_BDD("I2") | PIN_TO_BDD("I3") | PIN_TO_BDD("I4") | PIN_TO_BDD("I5"));
-        if (g->get_type() == "OR7")
-            result["O"] = std::make_shared<bdd>(PIN_TO_BDD("I0") | PIN_TO_BDD("I1") | PIN_TO_BDD("I2") | PIN_TO_BDD("I3") | PIN_TO_BDD("I4") | PIN_TO_BDD("I5") | PIN_TO_BDD("I6"));
-        if (g->get_type() == "OR8")
-            result["O"] = std::make_shared<bdd>(PIN_TO_BDD("I0") | PIN_TO_BDD("I1") | PIN_TO_BDD("I2") | PIN_TO_BDD("I3") | PIN_TO_BDD("I4") | PIN_TO_BDD("I5") | PIN_TO_BDD("I6") | PIN_TO_BDD("I7"));
+        result["O"] = std::make_shared<bdd>(bdd_false());
+
+        for (const auto pin : g->get_input_pin_types())
+        {
+            *result["O"] |= PIN_TO_BDD(pin);
+        }
 
         return result;
     }
@@ -185,14 +169,6 @@ static std::map<std::string, gate_decorator_system::bdd_decorator_generator> m_b
 
         {"INV", bdd_YOSYS_MYCELL_helper::get_bdd_YOSYS_MYCELL_inv},
 
-        {"AND2", bdd_YOSYS_MYCELL_helper::get_bdd_YOSYS_MYCELL_and},       {"AND3", bdd_YOSYS_MYCELL_helper::get_bdd_YOSYS_MYCELL_and},
-        {"AND4", bdd_YOSYS_MYCELL_helper::get_bdd_YOSYS_MYCELL_and},       {"AND5", bdd_YOSYS_MYCELL_helper::get_bdd_YOSYS_MYCELL_and},
-        {"AND6", bdd_YOSYS_MYCELL_helper::get_bdd_YOSYS_MYCELL_and},
-
-        {"OR2", bdd_YOSYS_MYCELL_helper::get_bdd_YOSYS_MYCELL_or},         {"OR3", bdd_YOSYS_MYCELL_helper::get_bdd_YOSYS_MYCELL_or},
-        {"OR4", bdd_YOSYS_MYCELL_helper::get_bdd_YOSYS_MYCELL_or},         {"OR5", bdd_YOSYS_MYCELL_helper::get_bdd_YOSYS_MYCELL_or},
-        {"OR6", bdd_YOSYS_MYCELL_helper::get_bdd_YOSYS_MYCELL_or},
-
         {"XORCY", bdd_YOSYS_MYCELL_helper::get_bdd_YOSYS_MYCELL_xorcy},
 
         {"MUXCY", bdd_YOSYS_MYCELL_helper::get_bdd_YOSYS_MYCELL_mux},      {"MUXF5", bdd_YOSYS_MYCELL_helper::get_bdd_YOSYS_MYCELL_mux},
@@ -206,19 +182,41 @@ std::map<std::string, std::shared_ptr<bdd>> plugin_gate_decorators::bdd_generato
 {
     auto type = g->get_type();
 
-    if (m_bbd_generators.find(type) == m_bbd_generators.end())
+    gate_decorator_system::bdd_decorator_generator generator;
+
+    if (type.find("AND") != std::string::npos)
+    {
+        generator = bdd_YOSYS_MYCELL_helper::get_bdd_YOSYS_MYCELL_and;
+    }
+    else if (type.find("OR") != std::string::npos)
+    {
+        generator = bdd_YOSYS_MYCELL_helper::get_bdd_YOSYS_MYCELL_or;
+    }
+    else if (m_bbd_generators.find(type) == m_bbd_generators.end())
     {
         log_error("netlist.decorator", "not implemented reached for gate type '{}'.", type);
         return std::map<std::string, std::shared_ptr<bdd>>();
     }
-
-    gate_decorator_system::bdd_decorator_generator generator = m_bbd_generators.at(type);
-    return generator(g, input_pin_type_to_bdd);
+    else
+    {
+        generator = m_bbd_generators.at(type);
+    }
 }
 
 bool plugin_gate_decorators::bdd_availability_tester_yosys_mycell(std::shared_ptr<gate> g)
 {
     auto type = g->get_type();
+
+    if (type.find("AND") != std::string::npos)
+    {
+        return true;
+    }
+
+    if (type.find("OR") != std::string::npos)
+    {
+        return true;
+    }
+
     if (m_bbd_generators.find(type) == m_bbd_generators.end())
     {
         return false;
