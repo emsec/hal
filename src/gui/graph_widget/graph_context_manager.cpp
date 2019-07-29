@@ -1,5 +1,6 @@
 #include "gui/graph_widget/graph_context_manager.h"
 
+#include "gui/graph_widget/contexts/cone_context.h"
 #include "gui/graph_widget/contexts/dynamic_context.h"
 #include "gui/graph_widget/contexts/module_context.h"
 #include "gui/graph_widget/layouters/standard_graph_layouter.h"
@@ -233,8 +234,14 @@ void graph_context_manager::handle_net_dst_removed(const std::shared_ptr<net> n,
 graph_layouter* graph_context_manager::get_default_layouter(module_context* const context) const
 {
     // USE SETTINGS + FACTORY
-    //return new standard_graph_layouter(context);
-    return new minimal_graph_layouter(context);
+    return new standard_graph_layouter(context);
+    //return new minimal_graph_layouter(context);
+}
+
+graph_layouter *graph_context_manager::get_default_layouter(cone_context* const context) const
+{
+    // USE SETTINGS + FACTORY
+    return new standard_graph_layouter(context);
 }
 
 graph_layouter* graph_context_manager::get_default_layouter(dynamic_context* const context) const
@@ -244,6 +251,12 @@ graph_layouter* graph_context_manager::get_default_layouter(dynamic_context* con
 }
 
 graph_shader* graph_context_manager::get_default_shader(module_context* const context) const
+{
+    // USE SETTINGS + FACTORY
+    return new module_shader(context);
+}
+
+graph_shader *graph_context_manager::get_default_shader(cone_context* const context) const
 {
     // USE SETTINGS + FACTORY
     return new module_shader(context);

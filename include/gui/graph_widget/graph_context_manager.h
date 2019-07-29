@@ -10,6 +10,7 @@ class gate;
 class module;
 class net;
 
+class cone_context;
 class dynamic_context;
 class graph_layouter;
 class graph_shader;
@@ -47,9 +48,11 @@ public:
     void handle_net_dst_removed(const std::shared_ptr<net> n, const u32 dst_gate_id) const;
 
     graph_layouter* get_default_layouter(module_context* const context) const;
+    graph_layouter* get_default_layouter(cone_context* const context) const;
     graph_layouter* get_default_layouter(dynamic_context* const context) const;
 
     graph_shader* get_default_shader(module_context* const context) const;
+    graph_shader* get_default_shader(cone_context* const context) const;
     graph_shader* get_default_shader(dynamic_context* const context) const;
 
 private:

@@ -3,8 +3,8 @@
 #include "netlist/module.h"
 
 #include "gui/graph_widget/contexts/graph_context_subscriber.h"
-#include "gui/graph_widget/contexts/layouter_task.h"
 #include "gui/graph_widget/graphics_scene.h"
+#include "gui/graph_widget/layouters/layouter_task.h"
 #include "gui/gui_globals.h"
 
 static const bool lazy_updates = false; // USE SETTINGS FOR THIS
