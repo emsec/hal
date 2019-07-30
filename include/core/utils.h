@@ -223,14 +223,6 @@ namespace core_utils
     CORE_API bool folder_exists_and_is_accessible(const hal::path& folder);
 
     /**
-     * Checks whether a file exists.
-     *
-     * @param[in] file - The file to check.
-     * @returns True, if file exists
-     */
-    CORE_API bool file_exists(const std::string& filename);
-
-    /**
 	 * Locate an executable in the given path environment
 	 *
 	 * @param[in] name - The executable name
