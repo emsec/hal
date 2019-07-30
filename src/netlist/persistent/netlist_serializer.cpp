@@ -207,8 +207,6 @@ namespace netlist_serializer
                 root.AddMember("modules", modules, allocator);
             }
 
-            root.AddMember("data", serialize(nl->get_data(), allocator), allocator);
-
             document.AddMember("netlist", root, document.GetAllocator());
         }
     }    // namespace
@@ -216,12 +214,7 @@ namespace netlist_serializer
     // deserializing functions
     namespace
     {
-#define assert_availablility(MEMBER)                                                               \
-    if (!root.HasMember(MEMBER))                                                                   \
-    {                                                                                              \
-        log_critical("netlist.persistent", "'netlist' node does not include a '{}' node", MEMBER); \
-        return nullptr;                                                                            \
-    }
+        #define assert_availablility(MEMBER) if (!root.HasMember(MEMBER)) {log_critical("netlist.persistent", "'netlist' node does not include a '{}' node", MEMBER); return nullptr; }
 
         endpoint deserialize_endpoint(std::shared_ptr<netlist> nl, const rapidjson::Value& val)
         {
@@ -303,7 +296,7 @@ namespace netlist_serializer
             auto root = document["netlist"].GetObject();
             assert_availablility("gate_library");
 
-            auto lib = gate_library_manager::get_gate_library(root["gate_library"].GetString());
+            auto lib  = gate_library_manager::get_gate_library(root["gate_library"].GetString());
             if (lib == nullptr)
             {
                 log_critical("netlist.persistent", "error loading gate library '{}'.", root["gate_library"].GetString());
@@ -379,11 +372,6 @@ namespace netlist_serializer
                 {
                     return nullptr;
                 }
-            }
-
-            if (root.HasMember("data"))
-            {
-                deserialize_data(nl, root["data"]);
             }
 
             return nl;

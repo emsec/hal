@@ -48,8 +48,6 @@ main_window::main_window(QWidget* parent) : QWidget(parent), m_schedule_widget(n
     ensurePolished();    // ADD REPOLISH METHOD
     connect(file_manager::get_instance(), &file_manager::file_opened, this, &main_window::handle_file_opened);
 
-    g_content_manager.set_main_window(this);
-
     m_layout = new QVBoxLayout(this);
     m_layout->setContentsMargins(0, 0, 0, 0);
     m_layout->setSpacing(0);
@@ -197,6 +195,7 @@ main_window::main_window(QWidget* parent) : QWidget(parent), m_schedule_widget(n
 
     m_about_dialog = new about_dialog(this);
     m_plugin_model = new plugin_model(this);
+    m_content_manager = new hal_content_manager(this);
 
     connect(m_action_open, &QAction::triggered, this, &main_window::handle_action_open);
     connect(m_action_about, &QAction::triggered, m_about_dialog, &about_dialog::exec);
@@ -208,6 +207,8 @@ main_window::main_window(QWidget* parent) : QWidget(parent), m_schedule_widget(n
     connect(m_action_close, &QAction::triggered, this, &main_window::handle_action_closed);
 
     connect(m_action_run_schedule, &QAction::triggered, plugin_schedule_manager::get_instance(), &plugin_schedule_manager::run_schedule);
+
+    connect(this, &main_window::save_triggered, m_content_manager, &hal_content_manager::handle_save_triggered);
 
     //test stuff
     //    hal_plugin_access_manager *manager = hal_plugin_access_manager::get_instance();
@@ -491,7 +492,8 @@ void main_window::handle_save_triggered()
         path.replace_extension(".hal");
         netlist_serializer::serialize_to_file(g_netlist, path);
 
-        g_content_manager.flush_unsaved_changes();
+        g_file_status_manager.flush_unsaved_changes();
+        Q_EMIT save_triggered();
     }
 }
 
@@ -507,7 +509,7 @@ void main_window::on_action_quit_triggered()
 void main_window::closeEvent(QCloseEvent* event)
 {
     //check for unsaved changes and show confirmation dialog
-    if (g_content_manager.has_unsaved_changes())
+    if(g_file_status_manager.modified_files_existing())
     {
         QMessageBox msgBox;
         msgBox.setStyleSheet("QLabel{min-width: 600px;}");
@@ -518,7 +520,7 @@ void main_window::closeEvent(QCloseEvent* event)
 
         msgBox.setText("There are unsaved modifications.");
         QString detailed_text = "The following modifications have not been saved yet:\n";
-        for (const auto& s : g_content_manager.get_unsaved_changes())
+        for(const auto&s : g_file_status_manager.get_unsaved_change_descriptors())
             detailed_text.append("   ->  " + s + "\n");
         msgBox.setDetailedText(detailed_text);
 
@@ -546,7 +548,7 @@ void main_window::closeEvent(QCloseEvent* event)
     save_state();
     event->accept();
     // hack, remove later
-    g_content_manager.hack_delete_content();
+    m_content_manager->hack_delete_content();
     qApp->quit();
 }
 

@@ -1,3 +1,27 @@
+hal-reverse (1.1.4) bionic; urgency=medium
+
+  * Remember py path for last 'saved as'
+  * Fix several bugs regarding file modified state
+  * Add file modified indicator
+  * Fix function call
+  * Remove unnecessary function parameters
+  * added missing includes
+  * Remove malformed whitespaces
+  * Remove global content manager artifacts
+  * Add python file modified indicator
+  * Deglobalize hal content manager
+  * Connect netlist watcher and file status manager
+  * Integrate global file status manager
+  * Add Quuid to python code editor
+  * Add global class to track modified files
+  * recent-files-items now keep track of their files and are removeable. This fixes issue #136
+  * Fix content manager integration
+  * Integrate content manager to previous solution
+  * Fix errors after master merge
+  * Add ability to reload pyscript if modified on disk
+
+ -- Sebastian Wallat <sebastian.wallat@rub.de>  Mon, 15 Jul 2019 14:53:49 +0200
+
 hal-reverse (1.1.3) bionic; urgency=medium
 
   * Remember last opened path for python scripts

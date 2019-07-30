@@ -43,6 +43,7 @@ class plugin_manager_dialog;
 class plugin_schedule_widget;
 class python_editor;
 class file_manager;
+class hal_content_manager;
 class dropdown_list;
 class about_dialog;
 class welcome_screen;
@@ -103,6 +104,9 @@ public:
     void set_settings_icon_path(const QString& path);
     void set_settings_icon_style(const QString& style);
 
+Q_SIGNALS:
+    void save_triggered();
+
 public Q_SLOTS:
     void on_action_quit_triggered();
     void on_action_close_document_triggered();
@@ -152,6 +156,8 @@ private:
     about_dialog* m_about_dialog;
 
     plugin_model* m_plugin_model;
+
+    hal_content_manager* m_content_manager;
 
     QString m_open_icon_path;
     QString m_open_icon_style;

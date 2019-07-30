@@ -39,8 +39,12 @@
 #include <tuple>
 #include <memory>
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wshadow"
 #include <spdlog/sinks/base_sink.h>
 #include <spdlog/spdlog.h>
+#pragma GCC diagnostic pop
+
 
 // macros to stringify to transform int to const char*
 #define STRINGISTRINGIFY(x) #x

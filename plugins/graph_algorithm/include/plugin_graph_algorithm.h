@@ -5,6 +5,8 @@
 
 #include <hal_bdd.h>
 
+#include <igraph/igraph.h>
+
 /* forward declaration */
 class netlist;
 class gate;
@@ -34,6 +36,14 @@ public:
      */
 
     /**
+     * Returns map of community-IDs to communities
+     *
+     * @param[in] nl - Netlist (internally transformed to di-graph)
+     * @returns A map of community-IDs to sets of gates belonging to the communities
+     */
+    std::map<int, std::set<std::shared_ptr<gate>>> get_communities(std::shared_ptr<netlist> const nl);
+
+    /**
      * Returns the set of strongly connected components.
      *
      * @param[in] nl - Netlist (internally transformed to di-graph)
@@ -59,9 +69,7 @@ public:
      * @returns A tuple of a map of submodule input net to ids (variable definition X0, X1, ...) and a map of submodule output net to BDDs (function defintion f1(x0, ..., x_n), f2(x0, ... x_n), ...).
      */
     std::tuple<std::map<std::shared_ptr<net>, int>, std::map<std::shared_ptr<net>, std::shared_ptr<bdd>>>
-        get_bdds(std::shared_ptr<netlist> const nl,
-                           const std::set<std::shared_ptr<gate>> gates,
-                           const std::map<std::shared_ptr<net>, int> input_net_to_ids = std::map<std::shared_ptr<net>, int>());
+        get_bdds(std::shared_ptr<netlist> const nl, const std::set<std::shared_ptr<gate>> gates, const std::map<std::shared_ptr<net>, int> input_net_to_ids = std::map<std::shared_ptr<net>, int>());
 
     /**
      * Returns a graph cut for a specific gate and depth.
