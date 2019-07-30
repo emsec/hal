@@ -1805,12 +1805,10 @@ standard_graph_layouter::node_box standard_graph_layouter::create_box(const hal:
 
 void standard_graph_layouter::add_gate(const u32 gate_id, const int level)
 {
-    if (m_gates.contains(gate_id))
-        return;
+    assert(!m_gates.contains(gate_id));
 
     std::shared_ptr<gate> g = g_netlist->get_gate_by_id(gate_id);
-    if (!g)
-        return;
+    assert(g);
 
     m_gates.append(gate_id);
     m_node_levels.insert(hal::node{hal::node_type::gate, gate_id}, level);
