@@ -34,7 +34,7 @@
 #include "gui/selection_relay/selection_relay.h"
 #include "gui/settings/settings_relay.h"
 #include "gui/window_manager/window_manager.h"
-#include "gui/hal_content_manager/hal_content_manager.h"
+#include "file_status_manager/file_status_manager.h"
 
 #include <QSettings>
 
@@ -50,7 +50,7 @@ extern netlist_relay g_netlist_relay;
 extern plugin_relay g_plugin_relay;
 extern selection_relay g_selection_relay;
 extern settings_relay g_settings_relay;
-extern hal_content_manager g_content_manager;
+extern file_status_manager g_file_status_manager;
 
 extern graph_context_manager g_graph_context_manager;
 

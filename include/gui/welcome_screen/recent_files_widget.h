@@ -41,9 +41,11 @@ public:
 
 public Q_SLOTS:
     void handle_file_opened(const QString& file_name);
+    void handle_remove_requested(recent_file_item* item);
 
 private:
     void read_settings();
+    void update_settings();
 
     QVBoxLayout* m_layout;
 

@@ -49,7 +49,7 @@ std::shared_ptr<module> module::get_parent_module() const
 
 bool module::set_parent_module(const std::shared_ptr<module>& new_parent)
 {
-    if (new_parent == m_parent)
+    if (new_parent == shared_from_this())
     {
         log_error("module", "can not set module as its own parent");
         return false;
@@ -58,6 +58,17 @@ bool module::set_parent_module(const std::shared_ptr<module>& new_parent)
     if (m_parent == nullptr)
     {
         log_error("module", "no parent can be assigned to the top module");
+        return false;
+    }
+    
+    if (new_parent == nullptr)
+    {
+        log_error("module", "cannot reassign top module");
+        return false;
+    }
+    
+    if (!get_netlist()->is_module_in_netlist(new_parent)) {
+        log_error("module", "module must be in the current netlist");
         return false;
     }
 

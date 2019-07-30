@@ -492,6 +492,12 @@ bool hdl_parser_verilog::parse_instance(const std::string& instance, const std::
 
 bool hdl_parser_verilog::connect_net_to_pin(const std::string& net_name, std::shared_ptr<gate>& new_gate, const std::string& pin_name, const int line)
 {
+    // unconnected case
+    if (net_name.empty())
+    {
+        return true;
+    }
+
     auto input_pin_types  = new_gate->get_input_pin_types();
     auto output_pin_types = new_gate->get_output_pin_types();
     auto inout_pin_types  = new_gate->get_inout_pin_types();
@@ -734,6 +740,12 @@ std::vector<std::string> hdl_parser_verilog::parse_net_single(const std::string&
 {
     std::string token = core_utils::trim(t);
     std::vector<std::string> nets;
+    // 0. unconnected
+    if (token.empty())
+    {
+        return {""};
+    }
+
     // 1. Is numeric value
     if (this->is_numeric(token))
     {
@@ -823,7 +835,7 @@ std::vector<std::string> hdl_parser_verilog::parse_pin(std::shared_ptr<gate>& ne
     }
     else
     {
-        // Found single port
+        // Found multi-port
         for (const auto& input_pin : input_pins)
         {
             if (core_utils::starts_with(input_pin, t))
@@ -851,25 +863,17 @@ std::vector<std::string> hdl_parser_verilog::parse_pin(std::shared_ptr<gate>& ne
                 }
             }
         }
-        //Sort pins
-        std::vector<std::string> pins_sorted;
-        pins_sorted.resize(pins.size());
-        for (const auto& pin : pins)
-        {
-            auto p           = pin.substr(pin.find("(") + 1);
-            p                = p.substr(0, p.size() - 1);
-            int idx          = std::stoi(p);
-            pins_sorted[idx] = pin;
-        }
-        std::reverse(pins_sorted.begin(), pins_sorted.end());
-        pins = pins_sorted;
     }
     return pins;
 }
 
 bool hdl_parser_verilog::is_numeric(const std::string& token)
 {
-    if (token.find('\'') != std::string::npos)
+    if (token.empty())
+    {
+        return false;
+    }
+    else if (token.find('\'') != std::string::npos)
     {
         return true;
     }
