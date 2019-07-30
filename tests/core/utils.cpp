@@ -229,7 +229,7 @@ TEST_F(utils_test, check_split)
     // Some calls without the obey_brackets-flag
     EXPECT_EQ(split("string", ',', false), std::vector<std::string>({"string"}));
     EXPECT_EQ(split("str,ing", ',', false), std::vector<std::string>({"str", "ing"}));
-    EXPECT_EQ(split(",str,ing,", ',', false), std::vector<std::string>({"", "str", "ing", ""}));    //FAILS? TODO
+    EXPECT_EQ(split(",str,ing,", ',', false), std::vector<std::string>({"", "str", "ing", ""}));
     EXPECT_EQ(split("(st,r,ing)", ',', false), std::vector<std::string>({"(st", "r", "ing)"}));
 
     // Some calls with the obey_brackets-flag

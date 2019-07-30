@@ -48,6 +48,21 @@ Get the version of the plugin.
 :returns: Plugin version.
 :rtype: str
 )")
+        .def("get_communities",
+             [](plugin_graph_algorithm& a, std::shared_ptr<netlist> const nl) -> std::map<int, std::set<std::shared_ptr<gate>>> {
+                 auto m = a.get_communities(nl);
+                 return m;
+             },
+             py::arg("netlist"), R"(
+Returns the map of community-IDs to communities.
+
+:param netlist: Netlist (internelly transformed to di-graph)
+:type netlist: hal_py.netlist
+:param gates: Set of gates for which the strongly connected components are determined. (default = empty means that all gates of the netlist are considered)
+:type gates: set(hal_py.gate)
+:returns: A set of strongly connected components where each component is a set of gates.
+:rtype: set(set(hal_py.gate))
+)")
         .def("get_strongly_connected_components",
              [](plugin_graph_algorithm& a, std::shared_ptr<netlist> const nl, const std::set<std::shared_ptr<gate>> gates = {}) -> std::vector<std::set<std::shared_ptr<gate>>> {
                  std::vector<std::set<std::shared_ptr<gate>>> s;
