@@ -452,6 +452,9 @@ void standard_graph_layouter::layout()
     find_max_box_dimensions();
     find_max_channel_lanes();
 
+    // RESET ROAD / JUNCTIONS, ALTERNATIVELY SAVE ALL NECESSARY DATA ON FIRST PASS
+    reset_roads_and_junctions();
+
     // PHYSICAL NET LAYOUT
     calculate_max_junction_spacing();
     calculate_max_channel_dimensions();
@@ -459,8 +462,6 @@ void standard_graph_layouter::layout()
     place_gates();
     update_scene_rect();
 
-    // RESET ROAD / JUNCTIONS, ALTERNATIVELY SAVE ALL NECESSARY DATA ON FIRST PASS
-    reset_roads_and_junctions();
     draw_nets();
     m_scene->move_nets_to_background();
 
