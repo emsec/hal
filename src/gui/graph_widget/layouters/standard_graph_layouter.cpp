@@ -25,7 +25,7 @@ const static qreal minimum_v_channel_width = 20;
 const static qreal minimum_h_channel_height = 20;
 const static qreal minimum_gate_io_padding = 40;
 
-standard_graph_layouter::standard_graph_layouter(graph_context* context) : graph_layouter(context)
+standard_graph_layouter::standard_graph_layouter(const graph_context* const context) : graph_layouter(context)
 {
 
 }
@@ -454,7 +454,6 @@ void standard_graph_layouter::layout()
 
     // PHYSICAL NET LAYOUT
     calculate_max_junction_spacing();
-    calculate_channel_spacing();
     calculate_max_channel_dimensions();
     calculate_gate_offsets();
     place_gates();
@@ -890,13 +889,11 @@ void standard_graph_layouter::calculate_max_junction_spacing()
     }
 }
 
-void standard_graph_layouter::calculate_channel_spacing()
+void standard_graph_layouter::calculate_max_channel_dimensions()
 {
-    QMapIterator<int, unsigned int> i(m_max_v_channel_lanes_for_x);
-    while (i.hasNext())
+    auto i = m_max_v_channel_lanes_for_x.constBegin();
+    while (i != m_max_v_channel_lanes_for_x.constEnd())
     {
-        i.next();
-
         // LEFT
         qreal spacing = std::max(v_road_padding + m_max_left_io_padding_for_channel_x.value(i.key()), m_max_left_junction_spacing_for_x.value(i.key()));
         m_max_v_channel_left_spacing_for_x.insert(i.key(), spacing);
@@ -904,13 +901,26 @@ void standard_graph_layouter::calculate_channel_spacing()
         // RIGHT
         spacing = std::max(v_road_padding + m_max_right_io_padding_for_channel_x.value(i.key()), m_max_right_junction_spacing_for_x.value(i.key()));
         m_max_v_channel_right_spacing_for_x.insert(i.key(), spacing);
+
+        ++i;
     }
 
-    i = QMapIterator<int, unsigned int>(m_max_h_channel_lanes_for_y);
-    while (i.hasNext())
+    i = m_max_v_channel_lanes_for_x.constBegin();
+    while (i != m_max_v_channel_lanes_for_x.constEnd())
     {
-        i.next();
+        qreal width = m_max_v_channel_left_spacing_for_x.value(i.key()) + m_max_v_channel_right_spacing_for_x.value(i.key());
 
+        if (i.value())
+            width += (i.value() - 1) * lane_spacing;
+
+        m_max_v_channel_width_for_x.insert(i.key(), std::max(width, minimum_v_channel_width));
+
+        ++i;
+    }
+
+    i = m_max_h_channel_lanes_for_y.constBegin();
+    while (i != m_max_h_channel_lanes_for_y.constEnd())
+    {
         // TOP
         qreal spacing = std::max(h_road_padding, m_max_top_junction_spacing_for_y.value(i.key()));
         m_max_h_channel_top_spacing_for_y.insert(i.key(), spacing);
@@ -918,36 +928,21 @@ void standard_graph_layouter::calculate_channel_spacing()
         // BOTTOM
         spacing = std::max(h_road_padding, m_max_bottom_junction_spacing_for_y.value(i.key()));
         m_max_h_channel_bottom_spacing_for_y.insert(i.key(), spacing);
-    }
-}
 
-void standard_graph_layouter::calculate_max_channel_dimensions()
-{
-    // COULD BE COMBINED WITH CALCULATE_CHANNEL_SPACING METHOD
-    QMapIterator<int, unsigned int> i(m_max_v_channel_lanes_for_x);
-    while (i.hasNext())
-    {
-        i.next();
-
-        qreal width = m_max_v_channel_left_spacing_for_x.value(i.key()) + m_max_v_channel_right_spacing_for_x.value(i.key());
-
-        if (i.value())
-            width += (i.value() - 1) * lane_spacing;
-
-        m_max_v_channel_width_for_x.insert(i.key(), width);
+        ++i;
     }
 
-    i = QMapIterator<int, unsigned int>(m_max_h_channel_lanes_for_y);
-    while (i.hasNext())
+    i = m_max_h_channel_lanes_for_y.constBegin();
+    while (i != m_max_h_channel_lanes_for_y.constEnd())
     {
-        i.next();
-
         qreal height = m_max_h_channel_top_spacing_for_y.value(i.key()) + m_max_h_channel_bottom_spacing_for_y.value(i.key());
 
         if (i.value())
             height += (i.value() - 1) * lane_spacing;
 
-        m_max_h_channel_height_for_y.insert(i.key(), height);
+        m_max_h_channel_height_for_y.insert(i.key(), std::max(height, minimum_h_channel_height));
+
+        ++i;
     }
 }
 
@@ -1873,7 +1868,6 @@ void standard_graph_layouter::add_gate(const u32 gate_id, const int level)
 
 bool standard_graph_layouter::box_exists(const int x, const int y) const
 {
-    // VERIFIED
     for (const standard_graph_layouter::node_box& box : m_boxes)
         if (box.x == x && box.y == y)
             return true;
@@ -1883,19 +1877,16 @@ bool standard_graph_layouter::box_exists(const int x, const int y) const
 
 bool standard_graph_layouter::h_road_jump_possible(const int x, const int y1, const int y2) const
 {
-    // VERIFIED
-    int bottom_y = 0;
-    int difference = 0;
+    if (y1 == y2)
+        return false;
+
+    int bottom_y = y1;
+    int difference = y1 - y2;
 
     if (y1 < y2)
     {
         bottom_y = y2;
         difference = y2 - y1;
-    }
-    else
-    {
-        bottom_y = y1;
-        difference = y1 - y2;
     }
 
     while (difference)
@@ -1911,60 +1902,27 @@ bool standard_graph_layouter::h_road_jump_possible(const int x, const int y1, co
 
 bool standard_graph_layouter::h_road_jump_possible(const standard_graph_layouter::road* const r1, const standard_graph_layouter::road* const r2) const
 {
-    // VERIFIED
-    if (!(r1 && r2))
+    // CONVENIENCE METHOD
+    assert(r1 && r2);
+
+    if (r1->x != r2->x) // CHECK OR ASSERT ???
         return false;
 
-    if (r1->x != r2->x)
-        return false;
-
-//    return h_road_jump_possible(r1->x, r1->y, r2->y);
-
-    int x = r1->x;
-
-    int y1 = r1->y;
-    int y2 = r2->y;
-
-    int bottom_y = 0;
-    int difference = 0;
-
-    if (y1 < y2)
-    {
-        bottom_y = y2;
-        difference = y2 - y1;
-    }
-    else
-    {
-        bottom_y = y1;
-        difference = y1 - y2;
-    }
-
-    while (difference)
-    {
-        if (box_exists(x, bottom_y - difference))
-            return false;
-
-        --difference;
-    }
-
-    return true;
+    return h_road_jump_possible(r1->x, r1->y, r2->y);
 }
 
 bool standard_graph_layouter::v_road_jump_possible(const int x1, const int x2, const int y) const
 {
-    // VERIFIED
-    int right_x = 0;
-    int difference = 0;
+    if (x1 == x2)
+        return false;
+
+    int right_x = x1;
+    int difference = x1 - x2;
 
     if (x1 < x2)
     {
         right_x = x2;
         difference = x2 - x1;
-    }
-    else
-    {
-        right_x = x1;
-        difference = x1 - x2;
     }
 
     while (difference)
@@ -1980,43 +1938,13 @@ bool standard_graph_layouter::v_road_jump_possible(const int x1, const int x2, c
 
 bool standard_graph_layouter::v_road_jump_possible(const standard_graph_layouter::road* const r1, const standard_graph_layouter::road* const r2) const
 {
-    // VERIFIED
-    if (!(r1 && r2))
+    // CONVENIENCE METHOD
+    assert(r1 && r2);
+
+    if (r1->y != r2->y) // CHECK OR ASSERT ???
         return false;
 
-    if (r1->y != r2->y)
-        return false;
-
-//    return v_road_jump_possible(r1->x, r2->x, r1->y);
-
-    int x1 = r1->x;
-    int x2 = r2->x;
-
-    int y = r1->y;
-
-    int right_x = 0;
-    int difference = 0;
-
-    if (x1 < x2)
-    {
-        right_x = x2;
-        difference = x2 - x1;
-    }
-    else
-    {
-        right_x = x1;
-        difference = x1 - x2;
-    }
-
-    while (difference)
-    {
-        if (box_exists(right_x - difference, y))
-            return false;
-
-        --difference;
-    }
-
-    return true;
+    return v_road_jump_possible(r1->x, r2->x, r1->y);
 }
 
 standard_graph_layouter::road* standard_graph_layouter::get_h_road(const int x, const int y)
@@ -2055,7 +1983,7 @@ standard_graph_layouter::junction* standard_graph_layouter::get_junction(const i
 qreal standard_graph_layouter::h_road_height(const unsigned int lanes) const
 {
     // LANES COUNTED FROM 1
-    int height = h_road_padding * 2;
+    qreal height = h_road_padding * 2;
 
     if (lanes > 1)
         height += (lanes - 1) * lane_spacing;
@@ -2066,7 +1994,7 @@ qreal standard_graph_layouter::h_road_height(const unsigned int lanes) const
 qreal standard_graph_layouter::v_road_width(const unsigned int lanes) const
 {
     // LANES COUNTED FROM 1
-    int width = v_road_padding * 2;
+    qreal width = v_road_padding * 2;
 
     if (lanes > 1)
         width += (lanes - 1) * lane_spacing;
@@ -2076,10 +2004,10 @@ qreal standard_graph_layouter::v_road_width(const unsigned int lanes) const
 
 qreal standard_graph_layouter::scene_y_for_h_channel_lane(const int y, const unsigned int lane) const
 {
-    // VERIFIED
     // LINES NUMBERED FROM 0
+    assert(m_node_offset_for_y.contains(y) || m_node_offset_for_y.contains(y - 1));
 
-    qreal offset = lane * lane_spacing;
+    const qreal offset = lane * lane_spacing;
 
     if (y == 0)
         return m_node_offset_for_y.value(y) - m_max_h_channel_height_for_y.value(y) + m_max_h_channel_top_spacing_for_y.value(y) + offset;
@@ -2089,10 +2017,10 @@ qreal standard_graph_layouter::scene_y_for_h_channel_lane(const int y, const uns
 
 qreal standard_graph_layouter::scene_x_for_v_channel_lane(const int x, const unsigned int lane) const
 {
-    // VERIFIED
     // LINES NUMBERED FROM 0
+    assert(m_node_offset_for_x.contains(x) || m_node_offset_for_x.contains(x - 1));
 
-    qreal offset = lane * lane_spacing;
+    const qreal offset = lane * lane_spacing;
 
     if (m_node_offset_for_x.contains(x))
         return m_node_offset_for_x.value(x) - m_max_v_channel_width_for_x.value(x) + m_max_v_channel_left_spacing_for_x.value(x) + offset;
@@ -2102,10 +2030,9 @@ qreal standard_graph_layouter::scene_x_for_v_channel_lane(const int x, const uns
 
 qreal standard_graph_layouter::scene_x_for_close_left_lane_change(const int channel_x, unsigned int lane_change) const
 {
-    // VERIFIED
     // LANE CHANGES COUNTED FROM 0
+    assert(m_node_offset_for_x.contains(channel_x) || m_node_offset_for_x.contains(channel_x - 1));
 
-    // ASSERT GATE OFFSET FOR EITHER X OR X - 1 ALWAYS EXISTS
     if (m_node_offset_for_x.contains(channel_x))
         return m_node_offset_for_x.value(channel_x) -
                 m_max_v_channel_width_for_x.value(channel_x) +
@@ -2122,10 +2049,9 @@ qreal standard_graph_layouter::scene_x_for_close_left_lane_change(const int chan
 
 qreal standard_graph_layouter::scene_x_for_far_left_lane_change(const int channel_x, unsigned int lane_change) const
 {
-    // VERIFIED
     // LANE CHANGES COUNTED FROM 0
+    assert(m_node_offset_for_x.contains(channel_x) || m_node_offset_for_x.contains(channel_x - 1));
 
-    // ASSERT GATE OFFSET FOR EITHER X OR X - 1 ALWAYS EXISTS
     if (m_node_offset_for_x.contains(channel_x))
         return m_node_offset_for_x.value(channel_x) -
                 m_max_v_channel_width_for_x.value(channel_x) +
@@ -2142,10 +2068,9 @@ qreal standard_graph_layouter::scene_x_for_far_left_lane_change(const int channe
 
 qreal standard_graph_layouter::scene_x_for_close_right_lane_change(const int channel_x, unsigned int lane_change) const
 {
-    // VERIFIED
     // LANE CHANGES COUNTED FROM 0
+    assert(m_node_offset_for_x.contains(channel_x) || m_node_offset_for_x.contains(channel_x - 1));
 
-    // ASSERT GATE OFFSET FOR EITHER X OR X - 1 ALWAYS EXISTS
     if (m_node_offset_for_x.contains(channel_x))
         return m_node_offset_for_x.value(channel_x) -
                 m_max_v_channel_right_spacing_for_x.value(channel_x) +
@@ -2162,10 +2087,9 @@ qreal standard_graph_layouter::scene_x_for_close_right_lane_change(const int cha
 
 qreal standard_graph_layouter::scene_x_for_far_right_lane_change(const int channel_x, unsigned int lane_change) const
 {
-    // VERIFIED
     // LANE CHANGES COUNTED FROM 0
+    assert(m_node_offset_for_x.contains(channel_x) || m_node_offset_for_x.contains(channel_x - 1));
 
-    // ASSERT GATE OFFSET FOR EITHER X OR X - 1 ALWAYS EXISTS
     if (m_node_offset_for_x.contains(channel_x))
         return m_node_offset_for_x.value(channel_x) -
                 m_max_v_channel_right_spacing_for_x.value(channel_x) +
@@ -2182,9 +2106,7 @@ qreal standard_graph_layouter::scene_x_for_far_right_lane_change(const int chann
 
 qreal standard_graph_layouter::scene_y_for_close_top_lane_change(const int channel_y, unsigned int lane_change) const
 {
-    // VERIFIED
     // LANE CHANGES COUNTED FROM 0
-
     if (channel_y == 0)
         return m_node_offset_for_y.value(channel_y) -
                 m_max_h_channel_height_for_y.value(channel_y) +
@@ -2201,9 +2123,7 @@ qreal standard_graph_layouter::scene_y_for_close_top_lane_change(const int chann
 
 qreal standard_graph_layouter::scene_y_for_far_top_lane_change(const int channel_y, unsigned int lane_change) const
 {
-    // VERIFIED
     // LANE CHANGES COUNTED FROM 0
-
     if (channel_y == 0)
         return m_node_offset_for_y.value(channel_y) -
                 m_max_h_channel_height_for_y.value(channel_y) +
@@ -2220,9 +2140,7 @@ qreal standard_graph_layouter::scene_y_for_far_top_lane_change(const int channel
 
 qreal standard_graph_layouter::scene_y_for_close_bottom_lane_change(const int channel_y, unsigned int lane_change) const
 {
-    // VERIFIED
     // LANE CHANGES COUNTED FROM 0
-
     if (channel_y == 0)
         return m_node_offset_for_y.value(channel_y) -
                 m_max_h_channel_bottom_spacing_for_y.value(channel_y) +
@@ -2239,9 +2157,7 @@ qreal standard_graph_layouter::scene_y_for_close_bottom_lane_change(const int ch
 
 qreal standard_graph_layouter::scene_y_for_far_bottom_lane_change(const int channel_y, unsigned int lane_change) const
 {
-    // VERIFIED
     // LANE CHANGES COUNTED FROM 0
-
     if (channel_y == 0)
         return m_node_offset_for_y.value(channel_y) -
                 m_max_h_channel_bottom_spacing_for_y.value(channel_y) +
@@ -2256,45 +2172,69 @@ qreal standard_graph_layouter::scene_y_for_far_bottom_lane_change(const int chan
                 lane_change * lane_spacing;
 }
 
-//qreal standard_cone_layouter::scene_x_for_close_left_lane_change(const junction* const j) const
-//{
-//    // CONVENIENCE METHOD
+qreal standard_graph_layouter::scene_x_for_close_left_lane_change(const junction* const j) const
+{
+    // CONVENIENCE METHOD
+    assert(j);
 
-//    if (!j)
-//        return 0;
+    return scene_x_for_close_left_lane_change(j->x, j->close_left_lane_changes);
+}
 
-//    return scene_x_for_close_left_lane_change(j->x, j->close_left_lane_changes);
-//}
+qreal standard_graph_layouter::scene_x_for_far_left_lane_change(const standard_graph_layouter::junction* const j) const
+{
+    // CONVENIENCE METHOD
+    assert(j);
 
-//qreal standard_cone_layouter::scene_x_for_close_right_lane_change(const junction* const j) const
-//{
-//    // CONVENIENCE METHOD
+    return scene_x_for_far_left_lane_change(j->x, j->far_left_lane_changes);
+}
 
-//    if (!j)
-//        return 0;
+qreal standard_graph_layouter::scene_x_for_close_right_lane_change(const junction* const j) const
+{
+    // CONVENIENCE METHOD
+    assert(j);
 
-//    return scene_x_for_close_right_lane_change(j->x, j->close_right_lane_changes);
-//}
+    return scene_x_for_close_right_lane_change(j->x, j->close_right_lane_changes);
+}
 
-//qreal standard_cone_layouter::scene_y_for_close_top_lane_change(const junction* const j) const
-//{
-//    // CONVENIENCE METHOD
+qreal standard_graph_layouter::scene_x_for_far_right_lane_change(const standard_graph_layouter::junction* const j) const
+{
+    // CONVENIENCE METHOD
+    assert(j);
 
-//    if (!j)
-//        return 0;
+    return scene_x_for_far_right_lane_change(j->x, j->far_right_lane_changes);
+}
 
-//    return scene_y_for_close_top_lane_change(j->y, j->close_top_lane_changes);
-//}
+qreal standard_graph_layouter::scene_y_for_close_top_lane_change(const junction* const j) const
+{
+    // CONVENIENCE METHOD
+    assert(j);
 
-//qreal standard_cone_layouter::scene_y_for_close_bottom_lane_change(const junction* const j) const
-//{
-//    // CONVENIENCE METHOD
+    return scene_y_for_close_top_lane_change(j->y, j->close_top_lane_changes);
+}
 
-//    if (!j)
-//        return 0;
+qreal standard_graph_layouter::scene_y_for_far_top_lane_change(const standard_graph_layouter::junction* const j) const
+{
+    // CONVENIENCE METHOD
+    assert(j);
 
-//    return scene_y_for_close_bottom_lane_change(j->y, j->close_bottom_lane_changes);
-//}
+    return scene_y_for_far_top_lane_change(j->y, j->far_top_lane_changes);
+}
+
+qreal standard_graph_layouter::scene_y_for_close_bottom_lane_change(const junction* const j) const
+{
+    // CONVENIENCE METHOD
+    assert(j);
+
+    return scene_y_for_close_bottom_lane_change(j->y, j->close_bottom_lane_changes);
+}
+
+qreal standard_graph_layouter::scene_y_for_far_bottom_lane_change(const standard_graph_layouter::junction* const j) const
+{
+    // CONVENIENCE METHOD
+    assert(j);
+
+    return scene_y_for_far_bottom_lane_change(j->y, j->far_bottom_lane_changes);
+}
 
 template<typename T1, typename T2>
 void standard_graph_layouter::store_max(QMap<T1, T2>& map, T1 key, T2 value)

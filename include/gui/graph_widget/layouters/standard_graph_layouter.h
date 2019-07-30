@@ -114,7 +114,7 @@ class standard_graph_layouter : public graph_layouter
     };
 
 public:
-    standard_graph_layouter(graph_context* context);
+    standard_graph_layouter(const graph_context* const context);
 
     void layout() Q_DECL_OVERRIDE;
 
@@ -132,7 +132,6 @@ private:
     void find_max_box_dimensions();
     void find_max_channel_lanes();
     void calculate_max_junction_spacing();
-    void calculate_channel_spacing();
     void calculate_max_channel_dimensions();
     void calculate_gate_offsets();
     void place_gates();
@@ -176,10 +175,17 @@ private:
     qreal scene_y_for_close_bottom_lane_change(const int channel_y, unsigned int lane_change) const;
     qreal scene_y_for_far_bottom_lane_change(const int channel_y, unsigned int lane_change) const;
 
-    //qreal scene_x_for_close_left_lane_change(const junction* const j) const;
-    //qreal scene_x_for_close_right_lane_change(const junction* const j) const;
-    //qreal scene_y_for_close_top_lane_change(const junction* const j) const;
-    //qreal scene_y_for_close_bottom_lane_change(const junction* const j) const;
+    qreal scene_x_for_close_left_lane_change(const junction* const j) const;
+    qreal scene_x_for_far_left_lane_change(const junction* const j) const;
+
+    qreal scene_x_for_close_right_lane_change(const junction* const j) const;
+    qreal scene_x_for_far_right_lane_change(const junction* const j) const;
+
+    qreal scene_y_for_close_top_lane_change(const junction* const j) const;
+    qreal scene_y_for_far_top_lane_change(const junction* const j) const;
+
+    qreal scene_y_for_close_bottom_lane_change(const junction* const j) const;
+    qreal scene_y_for_far_bottom_lane_change(const junction* const j) const;
 
     template<typename T1, typename T2>
     void store_max(QMap<T1, T2>& map, T1 key, T2 value);
