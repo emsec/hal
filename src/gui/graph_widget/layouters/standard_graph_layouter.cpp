@@ -12,7 +12,6 @@
 #include "gui/graph_widget/items/standard_graphics_net.h"
 #include "gui/gui_globals.h"
 
-#include <QDebug>
 #include "qmath.h"
 #include <QSet>
 #include <QTime>
@@ -28,6 +27,16 @@ const static qreal minimum_gate_io_padding = 40;
 standard_graph_layouter::standard_graph_layouter(const graph_context* const context) : graph_layouter(context)
 {
 
+}
+
+const QString standard_graph_layouter::name() const
+{
+    return "Standard Layouter";
+}
+
+const QString standard_graph_layouter::description() const
+{
+    return "<p>The standard layouting algorithm</p>";
 }
 
 void standard_graph_layouter::expand(const u32 from_gate, const u32 via_net, const u32 to_gate)
@@ -394,16 +403,6 @@ void standard_graph_layouter::remove(const QSet<u32> modules, const QSet<u32> ga
                 ++i;
         }
     }
-}
-
-const QString standard_graph_layouter::name() const
-{
-    return "Standard Layouter";
-}
-
-const QString standard_graph_layouter::description() const
-{
-    return "<p>The standard layouting algorithm</p>";
 }
 
 void standard_graph_layouter::layout()

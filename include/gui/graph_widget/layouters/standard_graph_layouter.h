@@ -10,7 +10,7 @@
 
 class graphics_node;
 
-class standard_graph_layouter : public graph_layouter
+class standard_graph_layouter final : public graph_layouter
 {
     struct node_level
     {
@@ -106,15 +106,15 @@ class standard_graph_layouter : public graph_layouter
 public:
     standard_graph_layouter(const graph_context* const context);
 
-    void layout() Q_DECL_OVERRIDE;
+    virtual const QString name() const override;
+    virtual const QString description() const override;
 
-    void expand(const u32 from_gate, const u32 via_net, const u32 to_gate) Q_DECL_OVERRIDE;
+    virtual void layout() override;
 
-    virtual void add(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets) Q_DECL_OVERRIDE;
-    virtual void remove(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets) Q_DECL_OVERRIDE;
+    virtual void expand(const u32 from_gate, const u32 via_net, const u32 to_gate) override;
 
-    virtual const QString name() const Q_DECL_OVERRIDE;
-    virtual const QString description() const Q_DECL_OVERRIDE;
+    virtual void add(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets) override;
+    virtual void remove(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets) override;
 
 private:
     void create_boxes();
