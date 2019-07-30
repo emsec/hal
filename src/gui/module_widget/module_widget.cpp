@@ -30,7 +30,7 @@ module_widget::module_widget(QWidget* parent) : content_widget("Modules", parent
 
     m_module_proxy_model->setFilterKeyColumn(-1);
     m_module_proxy_model->setSourceModel(g_netlist_relay.get_module_model());
-    //m_module_proxy_model->setRecursiveFilteringEnabled(true);
+    m_module_proxy_model->setRecursiveFilteringEnabled(true);
     m_tree_view->setModel(m_module_proxy_model);
     m_tree_view->setContextMenuPolicy(Qt::CustomContextMenu);
     m_tree_view->setEditTriggers(QAbstractItemView::NoEditTriggers);
