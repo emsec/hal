@@ -19,8 +19,8 @@
 
 const static qreal lane_spacing = 10;
 const static qreal junction_padding = 10;
-const static qreal h_road_padding = 20;
-const static qreal v_road_padding = 20;
+const static qreal h_road_padding = 10;
+const static qreal v_road_padding = 10;
 const static qreal minimum_v_channel_width = 20;
 const static qreal minimum_h_channel_height = 20;
 const static qreal minimum_gate_io_padding = 40;
@@ -456,7 +456,6 @@ void standard_graph_layouter::layout()
     reset_roads_and_junctions();
 
     // PHYSICAL NET LAYOUT
-    calculate_max_junction_spacing();
     calculate_max_channel_dimensions();
     calculate_gate_offsets();
     place_gates();
@@ -852,44 +851,6 @@ void standard_graph_layouter::find_max_channel_lanes()
     }
 }
 
-void standard_graph_layouter::calculate_max_junction_spacing()
-{
-    for (const junction* j : m_junctions)
-    {
-        // LEFT
-        qreal spacing = 0;
-
-        if (j->max_left_lane_changes)
-            spacing = (j->max_left_lane_changes - 1) * lane_spacing + junction_padding;
-
-        store_max(m_max_left_junction_spacing_for_x, j->x, spacing);
-
-        // RIGHT
-        spacing = 0;
-
-        if (j->max_right_lane_changes)
-            spacing = (j->max_right_lane_changes - 1) * lane_spacing + junction_padding;
-
-        store_max(m_max_right_junction_spacing_for_x, j->x, spacing);
-
-        // TOP
-        spacing = 0;
-
-        if (j->max_top_lane_changes)
-            spacing = (j->max_top_lane_changes - 1) * lane_spacing + junction_padding;
-
-        store_max(m_max_top_junction_spacing_for_y, j->y, spacing);
-
-        // BOTTOM
-        spacing = 0;
-
-        if (j->max_bottom_lane_changes)
-            spacing = (j->max_bottom_lane_changes - 1) * lane_spacing + junction_padding;
-
-        store_max(m_max_bottom_junction_spacing_for_y, j->y, spacing);
-    }
-}
-
 void standard_graph_layouter::calculate_max_channel_dimensions()
 {
     auto i = m_max_v_channel_lanes_for_x.constBegin();
@@ -1036,11 +997,41 @@ void standard_graph_layouter::reset_roads_and_junctions()
 
     for (junction* j : m_junctions)
     {
-        // MIGHT HAVE TO RENAME THE FUNCTION BECAUSE OF THIS MAX PART
-        j->max_left_lane_changes = j->close_left_lane_changes + j->far_left_lane_changes;
-        j->max_right_lane_changes = j->close_right_lane_changes + j->far_right_lane_changes;
-        j->max_top_lane_changes = j->close_top_lane_changes + j->far_top_lane_changes;
-        j->max_bottom_lane_changes = j->close_bottom_lane_changes + j->far_bottom_lane_changes;
+        // LEFT
+        unsigned int combined_lane_changes = j->close_left_lane_changes + j->far_left_lane_changes;
+        qreal spacing = 0;
+
+        if (combined_lane_changes)
+            spacing = (combined_lane_changes - 1) * lane_spacing + junction_padding;
+
+        store_max(m_max_left_junction_spacing_for_x, j->x, spacing);
+
+        // RIGHT
+        combined_lane_changes = j->close_right_lane_changes + j->far_right_lane_changes;
+        spacing = 0;
+
+        if (combined_lane_changes)
+            spacing = (combined_lane_changes - 1) * lane_spacing + junction_padding;
+
+        store_max(m_max_right_junction_spacing_for_x, j->x, spacing);
+
+        // TOP
+        combined_lane_changes = j->close_top_lane_changes + j->far_top_lane_changes;
+        spacing = 0;
+
+        if (combined_lane_changes)
+            spacing = (combined_lane_changes - 1) * lane_spacing + junction_padding;
+
+        store_max(m_max_top_junction_spacing_for_y, j->y, spacing);
+
+        // BOTTOM
+        combined_lane_changes = j->close_bottom_lane_changes + j->far_bottom_lane_changes;
+        spacing = 0;
+
+        if (combined_lane_changes)
+            spacing = (combined_lane_changes - 1) * lane_spacing + junction_padding;
+
+        store_max(m_max_bottom_junction_spacing_for_y, j->y, spacing);
 
         j->h_lanes = 0;
         j->v_lanes = 0;

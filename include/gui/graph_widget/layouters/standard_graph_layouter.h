@@ -61,12 +61,7 @@ class standard_graph_layouter : public graph_layouter
             far_left_lane_changes(0),
             far_right_lane_changes(0),
             far_top_lane_changes(0),
-            far_bottom_lane_changes(0),
-            max_left_lane_changes(0),
-            max_right_lane_changes(0),
-            max_top_lane_changes(0),
-            max_bottom_lane_changes(0)
-
+            far_bottom_lane_changes(0)
         {}
 
         int x;
@@ -84,11 +79,6 @@ class standard_graph_layouter : public graph_layouter
         unsigned int far_right_lane_changes = 0;
         unsigned int far_top_lane_changes = 0;
         unsigned int far_bottom_lane_changes = 0;
-
-        unsigned int max_left_lane_changes = 0;
-        unsigned int max_right_lane_changes = 0;
-        unsigned int max_top_lane_changes = 0;
-        unsigned int max_bottom_lane_changes = 0;
 
         qreal width() const;
         qreal height() const;
@@ -131,7 +121,6 @@ private:
     void calculate_nets();
     void find_max_box_dimensions();
     void find_max_channel_lanes();
-    void calculate_max_junction_spacing();
     void calculate_max_channel_dimensions();
     void calculate_gate_offsets();
     void place_gates();
