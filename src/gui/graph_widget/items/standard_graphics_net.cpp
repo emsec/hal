@@ -143,18 +143,28 @@ standard_graphics_net::standard_graphics_net(const std::shared_ptr<const net> n,
     {
         for (const v_line& v : collapsed_v)
         {
-            if (h.small_x == v.x)
-                if (h.y > v.small_y && h.y < v.big_y)
+            // ON EVERY INTERSECTION
+//            if (h.small_x <= v.x && v.x <= h.big_x)
+//                if (v.small_y <= h.y && h.y <= v.big_y)
+//                {
+//                    QPointF point(v.x - l.src_x, h.y - l.src_y);
+//                    m_splits.append(point);
+//                    m_shape.addEllipse(point, s_radius, s_radius);
+//                }
+
+            // ONLY ON REAL SPLITS
+            if (h.small_x <= v.x && v.x <= h.big_x)
+                if (v.small_y < h.y && h.y < v.big_y)
                 {
-                    QPointF point(h.small_x - l.src_x, h.y - l.src_y);
+                    QPointF point(v.x - l.src_x, h.y - l.src_y);
                     m_splits.append(point);
                     m_shape.addEllipse(point, s_radius, s_radius);
                 }
 
-            if (h.big_x == v.x)
-                if (h.y > v.small_y && h.y < v.big_y)
+            if (v.small_y <= h.y && h.y <= v.big_y)
+                if (h.small_x < v.x && v.x < h.big_x)
                 {
-                    QPointF point(h.big_x -l.src_x, h.y - l.src_y);
+                    QPointF point(v.x - l.src_x, h.y - l.src_y);
                     m_splits.append(point);
                     m_shape.addEllipse(point, s_radius, s_radius);
                 }
