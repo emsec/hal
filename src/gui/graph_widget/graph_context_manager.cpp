@@ -4,6 +4,7 @@
 #include "gui/graph_widget/contexts/dynamic_context.h"
 #include "gui/graph_widget/contexts/module_context.h"
 #include "gui/graph_widget/layouters/standard_graph_layouter.h"
+#include "gui/graph_widget/layouters/standard_graph_layouter_v2.h"
 #include "gui/graph_widget/layouters/minimal_graph_layouter.h"
 #include "gui/graph_widget/shaders/module_shader.h"
 #include "gui/gui_globals.h"
@@ -235,6 +236,7 @@ graph_layouter* graph_context_manager::get_default_layouter(module_context* cons
 {
     // USE SETTINGS + FACTORY
     return new standard_graph_layouter(context);
+    //return new standard_graph_layouter_v2(context);
     //return new minimal_graph_layouter(context);
 }
 
