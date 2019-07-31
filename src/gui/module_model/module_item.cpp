@@ -6,7 +6,8 @@ module_item::module_item(const QString& name, const int id) :
     m_parent(nullptr),
     m_name(name),
     m_id(id),
-    m_color(gui_utility::get_random_color()) // UNSURE, MAYBE A FIXED COLOR PALETTE OR DEFAULT COLOR IS BETTER
+    m_color(gui_utility::get_random_color()), // UNSURE, MAYBE A FIXED COLOR PALETTE OR DEFAULT COLOR IS BETTER
+    m_highlighted(false)
 {
 }
 
@@ -94,6 +95,11 @@ QColor module_item::color() const
     return m_color;
 }
 
+bool module_item::highlighted() const
+{
+    return m_highlighted;
+}
+
 void module_item::set_parent(module_item* parent)
 {
     m_parent = parent;
@@ -107,4 +113,9 @@ void module_item::set_name(const QString& name)
 void module_item::set_color(const QColor& color)
 {
     m_color = color;
+}
+
+void module_item::set_highlighted(const bool highlighted)
+{
+    m_highlighted = highlighted;
 }

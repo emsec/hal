@@ -97,7 +97,13 @@ QVariant module_model::data(const QModelIndex& index, int role) const
     case Qt::DisplayRole:
     {
         return item->data(index.column());
-        break;
+    }
+    case Qt::ForegroundRole:
+    {
+        if (item->highlighted())
+            return QColor(QColor(255, 221, 0)); // USE STYLESHEETS
+        else
+            return QColor(QColor(255, 255, 255)); // USE STYLESHEETS
     }
     default: return QVariant();
     }

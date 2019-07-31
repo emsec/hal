@@ -56,10 +56,12 @@ public:
     QString name() const;
     u32 id() const;
     QColor color() const;
+    bool highlighted() const;
 
     void set_parent(module_item* parent);
     void set_name(const QString& name);
     void set_color(const QColor& color);
+    void set_highlighted(const bool highlighted);
 
 private:
     module_item* m_parent;
@@ -69,6 +71,7 @@ private:
     u32 m_id;
 
     QColor m_color;
+    bool m_highlighted;
 };
 
 #endif // MODULE_ITEM_H

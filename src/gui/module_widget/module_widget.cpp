@@ -118,7 +118,10 @@ QList<QShortcut*> module_widget::create_shortcuts()
 void module_widget::toggle_searchbar()
 {
     if (m_searchbar.isHidden())
+    {
         m_searchbar.show();
+        m_searchbar.setFocus();
+    }
     else
         m_searchbar.hide();
 }

@@ -39,7 +39,7 @@ class module_model : public QAbstractItemModel
 
 public:
     explicit module_model(QObject* parent = nullptr);
-    ~module_model();
+    ~module_model() override;
 
     // PURE VIRTUAL
     QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const Q_DECL_OVERRIDE;
