@@ -47,47 +47,29 @@ selection_details_widget::selection_details_widget(QWidget* parent) : content_wi
     //    m_table_widget->horizontalHeader()->setStretchLastSection(true);
     //    m_table_widget->viewport()->setFocusPolicy(Qt::NoFocus);
 
-    connect(&g_selection_relay, &selection_relay::current_gate_update, this, &selection_details_widget::handle_current_gate_update);
-    connect(&g_selection_relay, &selection_relay::current_net_update, this, &selection_details_widget::handle_current_net_update);
-    connect(&g_selection_relay, &selection_relay::current_module_update, this, &selection_details_widget::handle_current_module_update);
-    connect(&g_selection_relay, &selection_relay::current_cleared_update, this, &selection_details_widget::handle_current_cleared_update);
-    connect(&g_selection_relay, &selection_relay::current_deleted_update, this, &selection_details_widget::handle_current_deleted_update);
+    connect(&g_selection_relay, &selection_relay::selection_changed, this, &selection_details_widget::handle_selection_update);
 }
 
-void selection_details_widget::handle_current_gate_update(void* sender, u32 id)
+void selection_details_widget::handle_selection_update(void* sender)
 {
-    Q_UNUSED(sender)
+    if (sender == this)
+    {
+        return;
+    }
 
-    m_gate_details->update(id);
-    m_stacked_widget->setCurrentWidget(m_gate_details);
-}
-
-void selection_details_widget::handle_current_net_update(void* sender, u32 id)
-{
-    Q_UNUSED(sender)
-
-    m_net_details->update(id);
-    m_stacked_widget->setCurrentWidget(m_net_details);
-}
-
-void selection_details_widget::handle_current_module_update(void* sender, u32 id)
-{
-    Q_UNUSED(sender)
-
-    m_module_details->update(id);
-    m_stacked_widget->setCurrentWidget(m_module_details);
-}
-
-void selection_details_widget::handle_current_cleared_update(void* sender)
-{
-    Q_UNUSED(sender)
-
-    m_stacked_widget->setCurrentWidget(m_empty_widget);
-}
-
-void selection_details_widget::handle_current_deleted_update(void* sender)
-{
-    Q_UNUSED(sender)
-
-    m_stacked_widget->setCurrentWidget(m_item_deleted_label);
+    if (g_selection_relay.m_number_of_selected_modules > 0)
+    {
+        m_module_details->update(g_selection_relay.m_selected_modules[0]);
+        m_stacked_widget->setCurrentWidget(m_module_details);
+    }
+    else if (g_selection_relay.m_number_of_selected_gates > 0)
+    {
+        m_gate_details->update(g_selection_relay.m_selected_gates[0]);
+        m_stacked_widget->setCurrentWidget(m_gate_details);
+    }
+    else if (g_selection_relay.m_number_of_selected_nets > 0)
+    {
+        m_net_details->update(g_selection_relay.m_selected_nets[0]);
+        m_stacked_widget->setCurrentWidget(m_net_details);
+    }
 }

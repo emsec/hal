@@ -27,6 +27,7 @@
 #include "def.h"
 
 #include "netlist_relay/netlist_relay.h"
+#include "netlist/endpoint.h"
 
 #include <QWidget>
 
@@ -40,7 +41,6 @@ class QTreeWidget;
 class QTreeWidgetItem;
 class QVBoxLayout;
 class QScrollArea;
-class gate;
 
 class gate_details_widget : public QWidget
 {
@@ -68,7 +68,7 @@ public Q_SLOTS:
     void handle_item_expanded(QTreeWidgetItem* item);
     void handle_item_collapsed(QTreeWidgetItem* item);
     void on_treewidget_item_clicked(QTreeWidgetItem* item, int column);
-    void on_gate_selected(std::shared_ptr<gate> selected);
+    void on_gate_selected(endpoint selected);
 
     void handle_gate_event(gate_event_handler::event ev, std::shared_ptr<gate> object, u32 associated_data);
     void handle_module_event(module_event_handler::event ev, std::shared_ptr<module> module, u32 associated_data);

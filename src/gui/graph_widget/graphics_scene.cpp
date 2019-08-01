@@ -2,6 +2,7 @@
 
 #include "netlist/gate.h"
 #include "netlist/net.h"
+#include "core/log.h"
 
 #include "gui/graph_widget/graph_widget_constants.h"
 #include "gui/graph_widget/graphics_factory.h"
@@ -303,6 +304,11 @@ void graphics_scene::update_visuals(const graph_shader::shading& s)
     {
         m.item->set_visuals(s.module_visuals.value(m.id));
     }
+
+    for (gate_data g : m_gate_items)
+    {
+        g.item->set_visuals(s.gate_visuals.value(g.id));
+    }
 }
 
 void graphics_scene::move_nets_to_background()
@@ -405,6 +411,7 @@ void graphics_scene::handle_extern_selection_changed(void* sender)
             if (element.id == g_selection_relay.m_selected_gates[index])
             {
                 element.item->setSelected(true);
+                element.item->update();
 
                 if (++index == g_selection_relay.m_number_of_selected_gates)
                     break;
@@ -421,6 +428,7 @@ void graphics_scene::handle_extern_selection_changed(void* sender)
             if (element.id == g_selection_relay.m_selected_nets[index])
             {
                 element.item->setSelected(true);
+                element.item->update();
 
                 if (++index == g_selection_relay.m_number_of_selected_nets)
                     break;

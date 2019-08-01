@@ -14,7 +14,7 @@ class selection_history_navigator : public QObject
 public:
     selection_history_navigator(unsigned int max_history_size, QObject* parent = 0);
     ~selection_history_navigator();
-    
+
     void navigate_to_prev_item();
     void navigate_to_next_item();
 
@@ -24,8 +24,7 @@ public:
 Q_SIGNALS:
 
 public Q_SLOTS:
-    void handle_gate_focused(void* sender, u32 id);
-    void handle_net_focused(void* sender, u32 id);
+    void handle_selection_changed(void* sender);
 
 private:
     unsigned int m_max_history_size;

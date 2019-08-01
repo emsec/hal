@@ -12,69 +12,64 @@ selection_history_navigator::selection_history_navigator(unsigned int max_histor
 
     g_selection_relay.register_sender(this, "History Navigator");
 
-    connect(&g_selection_relay, &selection_relay::current_gate_update, this, &selection_history_navigator::handle_gate_focused);
-    connect(&g_selection_relay, &selection_relay::current_net_update, this, &selection_history_navigator::handle_net_focused);
+    connect(&g_selection_relay, &selection_relay::selection_changed, this, &selection_history_navigator::handle_selection_changed);
 }
 
-selection_history_navigator::~selection_history_navigator(){}
-
-
-void selection_history_navigator::handle_gate_focused(void* sender, u32 id)
+selection_history_navigator::~selection_history_navigator()
 {
-    if(sender == this)
-        return;
-
-    store_selection(id, selection_relay::item_type::gate);
 }
 
-void selection_history_navigator::handle_net_focused(void* sender, u32 id)
+void selection_history_navigator::handle_selection_changed(void* sender)
 {
-    if(sender == this)
+    if (sender == this)
         return;
 
-    store_selection(id, selection_relay::item_type::net);
+    if (g_selection_relay.m_number_of_selected_gates > 0)
+    {
+        store_selection(g_selection_relay.m_selected_gates[0], selection_relay::item_type::gate);
+    }
+    else if (g_selection_relay.m_number_of_selected_nets > 0)
+    {
+        store_selection(g_selection_relay.m_selected_nets[0], selection_relay::item_type::net);
+    }
 }
 
 void selection_history_navigator::store_selection(u32 id, selection_relay::item_type type)
 {
     m_current_item_iterator = m_selection_container.insert(m_current_item_iterator, selection(id, type));
 
-    if(m_selection_container.size() > m_max_history_size)
-            m_selection_container.pop_back();
+    if (m_selection_container.size() > m_max_history_size)
+        m_selection_container.pop_back();
 }
 
 void selection_history_navigator::navigate_to_prev_item()
 {
-    if(!(m_current_item_iterator == --m_selection_container.end()))
-        relay_selection(*++m_current_item_iterator);    
+    if (!(m_current_item_iterator == --m_selection_container.end()))
+        relay_selection(*++m_current_item_iterator);
 }
 
 void selection_history_navigator::navigate_to_next_item()
 {
-    if(!(m_current_item_iterator == m_selection_container.begin()))
-            relay_selection(*--m_current_item_iterator); 
+    if (!(m_current_item_iterator == m_selection_container.begin()))
+        relay_selection(*--m_current_item_iterator);
 }
 
 void selection_history_navigator::relay_selection(selection selection)
 {
-    QList<u32> net_ids;
-    QList<u32> gate_ids;
-    QList<u32> submod_ids;
+    g_selection_relay.clear();
 
     selection_relay::item_type type = selection.get_type();
 
-    if(type == selection_relay::item_type::net)
+    if (type == selection_relay::item_type::net)
     {
-        net_ids.append(selection.get_net_id());
-        g_selection_relay.relay_current_net(this, *net_ids.begin());
+        g_selection_relay.m_selected_nets[g_selection_relay.m_number_of_selected_nets++] = selection.get_net_id();
     }
-    else if(type == selection_relay::item_type::gate)
+    else if (type == selection_relay::item_type::gate)
     {
-        gate_ids.append(selection.get_gate_id());
-        g_selection_relay.relay_current_gate(this, *gate_ids.begin());
+        g_selection_relay.m_selected_gates[g_selection_relay.m_number_of_selected_gates++] = selection.get_gate_id();
     }
 
-    g_selection_relay.relay_combined_selection(this, gate_ids, net_ids, submod_ids);    
+    Q_EMIT g_selection_relay.selection_changed(this);
 }
 
 void selection_history_navigator::set_max_history_size(unsigned int max_size)

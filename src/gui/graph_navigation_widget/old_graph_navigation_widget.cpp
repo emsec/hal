@@ -5,8 +5,8 @@
 #include "graph_navigation_widget/navigation_filter_dialog.h"
 #include "gui_globals.h"
 #include "netlist/gate.h"
-#include "netlist/net.h"
 #include "netlist/module.h"
+#include "netlist/net.h"
 #include <QHeaderView>
 #include <QItemSelectionModel>
 #include <QModelIndex>
@@ -52,29 +52,10 @@ old_graph_navigation_widget::old_graph_navigation_widget(QWidget* parent) : cont
     //connect(m_filter_widget, &QLineEdit::returnPressed, this, &graph_navigation_widget::filter);
     connect(&m_searchbar, &searchbar::text_edited, this, &old_graph_navigation_widget::filter);
     connect(m_filter_action, &QAction::triggered, this, &old_graph_navigation_widget::handle_filter_action_triggered);
-    connect(m_tree_view->selectionModel(), &QItemSelectionModel::selectionChanged, this, &old_graph_navigation_widget::handle_selection_changed);
-    connect(m_tree_view->selectionModel(), &QItemSelectionModel::currentChanged, this, &old_graph_navigation_widget::handle_current_changed);
+    connect(m_tree_view->selectionModel(), &QItemSelectionModel::selectionChanged, this, &old_graph_navigation_widget::handle_tree_selection_changed);
 
     //Selection Relay Connections
-    connect(&g_selection_relay, &selection_relay::gate_selection_update, this, &old_graph_navigation_widget::handle_gate_selection_update);
-    connect(&g_selection_relay, &selection_relay::net_selection_update, this, &old_graph_navigation_widget::handle_net_selection_update);
-    connect(&g_selection_relay, &selection_relay::module_selection_update, this, &old_graph_navigation_widget::handle_module_selection_update);
-    connect(&g_selection_relay, &selection_relay::combined_selection_update, this, &old_graph_navigation_widget::handle_combined_selection_update);
-
-    connect(&g_selection_relay, &selection_relay::current_gate_update, this, &old_graph_navigation_widget::handle_current_gate_update);
-    connect(&g_selection_relay, &selection_relay::current_net_update, this, &old_graph_navigation_widget::handle_current_net_update);
-    connect(&g_selection_relay, &selection_relay::current_module_update, this, &old_graph_navigation_widget::handle_current_module_update);
-
-    connect(&g_selection_relay, &selection_relay::jump_gate_update, this, &old_graph_navigation_widget::handle_jump_gate_update);
-    connect(&g_selection_relay, &selection_relay::jump_net_update, this, &old_graph_navigation_widget::handle_jump_net_update);
-    connect(&g_selection_relay, &selection_relay::jump_module_update, this, &old_graph_navigation_widget::handle_jump_module_update);
-    connect(&g_selection_relay, &selection_relay::jump_selection_update, this, &old_graph_navigation_widget::handle_jump_selection_update);
-
-    connect(&g_selection_relay, &selection_relay::gate_highlight_update, this, &old_graph_navigation_widget::handle_gate_highlight_update);
-    connect(&g_selection_relay, &selection_relay::net_highlight_update, this, &old_graph_navigation_widget::handle_net_highlight_update);
-    connect(&g_selection_relay, &selection_relay::module_highlight_update, this, &old_graph_navigation_widget::handle_module_highlight_update);
-    connect(&g_selection_relay, &selection_relay::combined_highlight_update, this, &old_graph_navigation_widget::handle_combined_highlight_update);
-
+    connect(&g_selection_relay, &selection_relay::selection_changed, this, &old_graph_navigation_widget::handle_selection_changed);
 
     //old
     connect(&g_netlist_relay, &netlist_relay::module_created, m_tree_navigation_model, &tree_navigation_model::handle_module_created);
@@ -91,7 +72,7 @@ old_graph_navigation_widget::old_graph_navigation_widget(QWidget* parent) : cont
     connect(&g_netlist_relay, &netlist_relay::net_removed, m_tree_navigation_model, &tree_navigation_model::handle_net_removed);
     connect(&g_netlist_relay, &netlist_relay::net_name_changed, m_tree_navigation_model, &tree_navigation_model::handle_net_name_changed);
 
-    QModelIndex file_name_index     = m_tree_navigation_proxy_model->index(0, 0, m_tree_view->rootIndex());
+    QModelIndex file_name_index = m_tree_navigation_proxy_model->index(0, 0, m_tree_view->rootIndex());
     m_tree_view->setExpanded(file_name_index, true);
     toggle_resize_columns();
 }
@@ -165,7 +146,7 @@ void old_graph_navigation_widget::handle_filter_action_triggered()
     m_proxy_model->setFilterRegExp(*expression);
 }
 
-void old_graph_navigation_widget::handle_selection_changed(const QItemSelection& selected, const QItemSelection& deselected)
+void old_graph_navigation_widget::handle_tree_selection_changed(const QItemSelection& selected, const QItemSelection& deselected)
 {
     Q_UNUSED(deselected)
 
@@ -175,92 +156,61 @@ void old_graph_navigation_widget::handle_selection_changed(const QItemSelection&
         return;
     }
 
+    g_selection_relay.m_number_of_selected_gates   = 0;
+    g_selection_relay.m_number_of_selected_nets    = 0;
+    g_selection_relay.m_number_of_selected_modules = 0;
+
     QModelIndexList current_selections = selected.indexes();
     QSet<tree_navigation_item*> already_processed_items;
-    QList<u32> net_ids;
-    QList<u32> gate_ids;
-    QList<u32> submod_ids;
     for (const QModelIndex& index : current_selections)
     {
         auto item = static_cast<tree_navigation_item*>(m_tree_navigation_proxy_model->mapToSource(index).internalPointer());
         if (item && !already_processed_items.contains(item))
         {
             already_processed_items.insert(item);
+            auto id = item->data(tree_navigation_model::ID_COLUMN).toInt();
             switch (item->get_type())
             {
                 case tree_navigation_item::item_type::gate:
-                    gate_ids.append(item->data(tree_navigation_model::ID_COLUMN).toInt());
-                    break;
+                    g_selection_relay.m_selected_gates[g_selection_relay.m_number_of_selected_gates++] = id;
+                    Q_EMIT g_selection_relay.selection_changed(this);
+                    return;
                 case tree_navigation_item::item_type::net:
-                    net_ids.append(item->data(tree_navigation_model::ID_COLUMN).toInt());
-                    break;
+                    g_selection_relay.m_selected_nets[g_selection_relay.m_number_of_selected_nets++] = id;
+                    Q_EMIT g_selection_relay.selection_changed(this);
+                    return;
                 case tree_navigation_item::item_type::module:
-                    submod_ids.append(item->data(tree_navigation_model::ID_COLUMN).toInt());
-                    break;
-                case tree_navigation_item::item_type::structure:
-                    break;
-                case tree_navigation_item::item_type::ignore:
-                    break;
+                    g_selection_relay.m_selected_modules[g_selection_relay.m_number_of_selected_modules++] = id;
+                    Q_EMIT g_selection_relay.selection_changed(this);
+                    return;
                 default:
                     break;
             }
         }
     }
-    g_selection_relay.relay_combined_selection(this, gate_ids, net_ids, submod_ids);
 }
 
-void old_graph_navigation_widget::handle_current_changed(const QModelIndex& current, const QModelIndex& previous)
+void old_graph_navigation_widget::handle_selection_changed(void* sender)
 {
-    Q_UNUSED(previous)
-
-    tree_navigation_item* current_item = static_cast<tree_navigation_item*>(m_tree_navigation_proxy_model->mapToSource(current).internalPointer());
-    if (current_item)
-    {
-        switch (current_item->get_type())
-        {
-            case tree_navigation_item::item_type::gate:
-                g_selection_relay.relay_current_gate(this, current_item->data(tree_navigation_model::ID_COLUMN).toInt());
-                break;
-            case tree_navigation_item::item_type::net:
-                g_selection_relay.relay_current_net(this, current_item->data(tree_navigation_model::ID_COLUMN).toInt());
-                break;
-            case tree_navigation_item::item_type::module:
-                g_selection_relay.relay_current_module(this, current_item->data(tree_navigation_model::ID_COLUMN).toInt());
-                break;
-            case tree_navigation_item::item_type::structure:
-                break;
-            default:
-                break;
-        }
-    }
-}
-
-void old_graph_navigation_widget::handle_gate_selection_update(void* sender, const QList<u32>& gate_ids, selection_relay::Mode mode)
-{
-    Q_UNUSED(sender)
-    Q_UNUSED(gate_ids)
-    Q_UNUSED(mode)
-}
-
-void old_graph_navigation_widget::handle_net_selection_update(void* sender, const QList<u32>& net_ids, selection_relay::Mode mode)
-{
-    Q_UNUSED(sender)
-    Q_UNUSED(net_ids)
-    Q_UNUSED(mode)
-}
-
-void old_graph_navigation_widget::handle_module_selection_update(void* sender, const QList<u32>& module_ids, selection_relay::Mode mode)
-{
-    Q_UNUSED(sender)
-    Q_UNUSED(module_ids)
-    Q_UNUSED(mode)
-}
-
-void old_graph_navigation_widget::handle_combined_selection_update(void* sender, const QList<u32>& gate_ids, const QList<u32>& net_ids, const QList<u32>& module_ids, selection_relay::Mode mode)
-{
-    Q_UNUSED(mode)
     if (sender == this)
+    {
         return;
+    }
+
+    QList<u32> gate_ids, net_ids, module_ids;
+
+    for (u32 i = 0; i < g_selection_relay.m_number_of_selected_gates; ++i)
+    {
+        gate_ids.append(g_selection_relay.m_selected_gates[i]);
+    }
+    for (u32 i = 0; i < g_selection_relay.m_number_of_selected_nets; ++i)
+    {
+        net_ids.append(g_selection_relay.m_selected_nets[i]);
+    }
+    for (u32 i = 0; i < g_selection_relay.m_number_of_selected_modules; ++i)
+    {
+        module_ids.append(g_selection_relay.m_selected_modules[i]);
+    }
 
     QModelIndexList selected_indexes = m_tree_navigation_model->get_corresponding_indexes(gate_ids, net_ids, module_ids);
     QItemSelection selection;
@@ -269,81 +219,6 @@ void old_graph_navigation_widget::handle_combined_selection_update(void* sender,
 
     m_ignore_selection_change = true;
     m_tree_view->selectionModel()->select(selection, QItemSelectionModel::ClearAndSelect);
-}
-
-void old_graph_navigation_widget::handle_current_gate_update(void* sender, u32 id)
-{
-    Q_UNUSED(sender)
-    Q_UNUSED(id)
-}
-
-void old_graph_navigation_widget::handle_current_net_update(void* sender, u32 id)
-{
-    Q_UNUSED(sender)
-    Q_UNUSED(id)
-}
-
-void old_graph_navigation_widget::handle_current_module_update(void* sender, u32 id)
-{
-    Q_UNUSED(sender)
-    Q_UNUSED(id)
-}
-
-void old_graph_navigation_widget::handle_jump_gate_update(void* sender, u32 id)
-{
-    Q_UNUSED(sender)
-    Q_UNUSED(id)
-}
-
-void old_graph_navigation_widget::handle_jump_net_update(void* sender, u32 id)
-{
-    Q_UNUSED(sender)
-    Q_UNUSED(id)
-}
-
-void old_graph_navigation_widget::handle_jump_module_update(void* sender, u32 id)
-{
-    Q_UNUSED(sender)
-    Q_UNUSED(id)
-}
-
-void old_graph_navigation_widget::handle_jump_selection_update(void* sender)
-{
-    Q_UNUSED(sender)
-}
-
-void old_graph_navigation_widget::handle_gate_highlight_update(void* sender, QList<u32>& ids, selection_relay::Mode mode, u32 channel)
-{
-    Q_UNUSED(sender)
-    Q_UNUSED(ids)
-    Q_UNUSED(mode)
-    Q_UNUSED(channel)
-}
-
-void old_graph_navigation_widget::handle_net_highlight_update(void* sender, QList<u32>& ids, selection_relay::Mode mode, u32 channel)
-{
-    Q_UNUSED(sender)
-    Q_UNUSED(ids)
-    Q_UNUSED(mode)
-    Q_UNUSED(channel)
-}
-
-void old_graph_navigation_widget::handle_module_highlight_update(void* sender, QList<u32>& ids, selection_relay::Mode mode, u32 channel)
-{
-    Q_UNUSED(sender)
-    Q_UNUSED(ids)
-    Q_UNUSED(mode)
-    Q_UNUSED(channel)
-}
-
-void old_graph_navigation_widget::handle_combined_highlight_update(void* sender, QList<u32>& gate_ids, QList<u32>& net_ids, QList<u32>& module_ids, selection_relay::Mode mode, u32 channel)
-{
-    Q_UNUSED(sender)
-    Q_UNUSED(gate_ids)
-    Q_UNUSED(net_ids)
-    Q_UNUSED(module_ids)
-    Q_UNUSED(mode)
-    Q_UNUSED(channel)
 }
 
 void old_graph_navigation_widget::toggle_resize_columns()
