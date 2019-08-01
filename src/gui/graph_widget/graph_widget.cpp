@@ -44,6 +44,9 @@ graph_widget::graph_widget(QWidget* parent) : content_widget("Graph", parent),
     m_view->setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
     m_view->setRenderHint(QPainter::Antialiasing, false);
     m_view->setDragMode(QGraphicsView::RubberBandDrag);
+
+    // debug: go to context 1; delete later
+    debug_module_one();
 }
 
 void graph_widget::setup_toolbar(toolbar* toolbar)
@@ -52,22 +55,22 @@ void graph_widget::setup_toolbar(toolbar* toolbar)
     // DEPRECATED
     // DELETE THIS METHOD AFTER CONTENT WIDGET REFACTOR
 
-    QToolButton* context_one_button = new QToolButton();
-    context_one_button->setText("Context 1");
+    // QToolButton* context_one_button = new QToolButton();
+    // context_one_button->setText("Context 1");
 
-    QToolButton* create_context_button = new QToolButton();
-    create_context_button->setText("Create Context");
+    // QToolButton* create_context_button = new QToolButton();
+    // create_context_button->setText("Create Context");
 
-    QToolButton* change_context_button = new QToolButton();
-    change_context_button->setText("Change Context");
+    // QToolButton* change_context_button = new QToolButton();
+    // change_context_button->setText("Change Context");
 
-    connect(context_one_button, &QToolButton::clicked, this, &graph_widget::debug_module_one);
-    connect(create_context_button, &QToolButton::clicked, this, &graph_widget::debug_create_context);
-    connect(change_context_button, &QToolButton::clicked, this, &graph_widget::debug_change_context);
+    // connect(context_one_button, &QToolButton::clicked, this, &graph_widget::debug_module_one);
+    // connect(create_context_button, &QToolButton::clicked, this, &graph_widget::debug_create_context);
+    // connect(change_context_button, &QToolButton::clicked, this, &graph_widget::debug_change_context);
 
-    toolbar->addWidget(context_one_button);
-    toolbar->addWidget(create_context_button);
-    toolbar->addWidget(change_context_button);
+    // toolbar->addWidget(context_one_button);
+    // toolbar->addWidget(create_context_button);
+    // toolbar->addWidget(change_context_button);
 }
 
 void graph_widget::handle_scene_available()
