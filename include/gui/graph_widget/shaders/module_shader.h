@@ -13,6 +13,9 @@ public:
 
     virtual void update() Q_DECL_OVERRIDE;
     virtual void reset() Q_DECL_OVERRIDE;
+
+private:
+    static bool s_color_gates;
 };
 
 #endif // MODULE_SHADER_H

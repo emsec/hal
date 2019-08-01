@@ -427,6 +427,7 @@ void netlist_relay::debug_handle_file_opened()
 {
     std::shared_ptr<module> top_module = g_netlist->get_top_module();
     module_item* item = new module_item(QString::fromStdString(top_module->get_name()), top_module->get_id());
+    item->set_color(QColor(96, 110, 112)); // DEBUG LINE
 
     m_module_items.insert(top_module->get_id(), item);
     m_module_model->add_item(item, nullptr);

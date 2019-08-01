@@ -303,6 +303,11 @@ void graphics_scene::update_visuals(const graph_shader::shading& s)
     {
         m.item->set_visuals(s.module_visuals.value(m.id));
     }
+
+    for (gate_data g : m_gate_items)
+    {
+        g.item->set_visuals(s.gate_visuals.value(g.id));
+    }
 }
 
 void graphics_scene::move_nets_to_background()
