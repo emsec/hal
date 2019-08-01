@@ -89,6 +89,6 @@
     </qresource>
     <qresource prefix="/images">
         <file alias="hal">images/hal_9000_by_johnnyslowhand.png</file>
-        <file alias="spinner">images/Spinner-1s-200px.svg</file>
+        <file alias="spinner">images/oval.svg</file>
     </qresource>
 </RCC>
