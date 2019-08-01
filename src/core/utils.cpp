@@ -3,6 +3,7 @@
 #include "core/log.h"
 
 #include <sstream>
+#include <fstream>
 
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
@@ -234,6 +235,11 @@ namespace core_utils
         return num_of_occurrences;
     }
 
+    bool file_exists(const std::string& filename)
+    {
+        std::ifstream ifile(filename.c_str());
+        return (bool)ifile;
+    }
 
     bool folder_exists_and_is_accessible(const hal::path& folder)
     {

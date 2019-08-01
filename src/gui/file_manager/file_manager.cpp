@@ -15,6 +15,7 @@
 #include <QInputDialog>
 #include <QMessageBox>
 #include <QTextStream>
+#include <QDateTime>
 
 file_manager::file_manager(QObject* parent) : QObject(parent),
     m_file_watcher(new QFileSystemWatcher(this)),

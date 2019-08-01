@@ -18,6 +18,7 @@
 #include <QInputDialog>
 #include <QToolButton>
 #include <QVBoxLayout>
+#include <QKeyEvent>
 
 graph_widget::graph_widget(QWidget* parent) : content_widget("Graph", parent),
     m_view(new graph_graphics_view(this)),
@@ -430,7 +431,7 @@ void graph_widget::handle_navigation_down_request()
 }
 
 void graph_widget::handle_module_up_request()
-{   
+{
     if (!m_context)
         return;
 

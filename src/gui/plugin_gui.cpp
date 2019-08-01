@@ -15,6 +15,7 @@
 #include "gui/plugin_management/plugin_relay.h"
 #include "gui/python/python_context.h"
 #include "gui/selection_relay/selection_relay.h"
+#include "gui/file_status_manager/file_status_manager.h"
 #include "gui/settings/settings_relay.h"
 #include "gui/style/style.h"
 #include "gui/thread_pool/thread_pool.h"
@@ -43,7 +44,7 @@ plugin_relay g_plugin_relay;
 selection_relay g_selection_relay;
 settings_relay g_settings_relay;
 
-hal_content_manager g_content_manager;
+file_status_manager g_file_status_manager;
 
 thread_pool* g_thread_pool;
 

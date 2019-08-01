@@ -36,6 +36,7 @@
 #include "gui/settings/settings_relay.h"
 #include "gui/thread_pool/thread_pool.h"
 #include "gui/window_manager/window_manager.h"
+#include "file_status_manager/file_status_manager.h"
 
 #include <QSettings>
 
@@ -52,7 +53,7 @@ extern plugin_relay g_plugin_relay;
 extern selection_relay g_selection_relay;
 extern settings_relay g_settings_relay;
 
-extern hal_content_manager g_content_manager;
+extern file_status_manager g_file_status_manager;
 
 extern graph_context_manager g_graph_context_manager;
 
