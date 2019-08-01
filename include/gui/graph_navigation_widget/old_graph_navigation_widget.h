@@ -61,8 +61,7 @@ public Q_SLOTS:
     void filter(const QString& text);
     void handle_filter_action_triggered();
     void handle_tree_selection_changed(const QItemSelection& selected, const QItemSelection& deselected);
-    void handle_current_changed(const QModelIndex& current, const QModelIndex& previous);
-
+    
     void handle_selection_changed(void* sender);
 
     void toggle_resize_columns();

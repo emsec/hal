@@ -31,5 +31,5 @@ void graph_layout_spinner_widget::paintEvent(QPaintEvent* event)
 QSize graph_layout_spinner_widget::sizeHint() const
 {
     //DEBUG FUNCTION, REPLACE WITH INTERNAL LAYOUT OR SOMETHING LATER
-    return QSize(260, 140);
+    return QSize(260, 260);
 }

@@ -407,13 +407,6 @@ void standard_graph_layouter::remove(const QSet<u32> modules, const QSet<u32> ga
 
 void standard_graph_layouter::layout()
 {
-    // ARTIFICIAL LAG FOR TESTING PURPOSES
-    QTime time = QTime::currentTime().addSecs(10);
-    while (QTime::currentTime() < time)
-    {
-        Q_EMIT status_update("I'm doing stuff (~￣▽￣)~");
-    }
-
     // CLEANUP
     m_scene->delete_all_items();
     m_boxes.clear();
