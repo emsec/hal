@@ -17,14 +17,14 @@ protected:
     const std::string g_lib_name = "EXAMPLE_GATE_LIBRARY";
     const std::string temp_lib_name = "TEMP_GATE_LIBRARY";
     // Minimum id for netlists, gates, nets and modules
-    const u32 INVALID_GATE_ID = 0;
-    const u32 INVALID_NET_ID = 0;
-    const u32 INVALID_MODULE_ID = 0;
-    const u32 MIN_MODULE_ID = 2;
+    //const u32 INVALID_GATE_ID = 0;
+    //const u32 INVALID_NET_ID = 0;
+    //const u32 INVALID_MODULE_ID = 0;
+    //const u32 MIN_MODULE_ID = 2;
     const u32 MIN_GATE_ID = 1;
     const u32 MIN_NET_ID = 1;
-    const u32 MIN_NETLIST_ID = 1;
-    const u32 TOP_MODULE_ID = 1;
+    //const u32 MIN_NETLIST_ID = 1;
+    //const u32 TOP_MODULE_ID = 1;
     // Path used, to create a custom gate library (used to test certain behaviour of input and output vectors)
     hal::path temp_lib_path;
 
@@ -114,10 +114,12 @@ protected:
                     "    \"library\": {\n"
                     "        \"library_name\": \"TEMP_GATE_LIBRARY\",\n"
                     "        \"elements\": {\n"
-                    "\t    \"GATE0\" : [[\"I\"], [], [\"O\"]],\n"
-                    "            \"GATE1\" : [[\"I(0)\",\"I(1)\",\"I(2)\",\"I(3)\"], [], [\"O(0)\",\"O(1)\",\"O(2)\",\"O(3)\"]],\n"
-                    "            \"GATE2\" : [[\"I(0, 0)\",\"I(0, 1)\",\"I(1, 0)\",\"I(1, 1)\"], [], [\"O(0, 0)\",\"O(0, 1)\",\"O(1, 0)\",\"O(1, 1)\"]],\n"
-                    "            \"GATE3\" : [[\"I(0, 0, 0)\",\"I(0, 0, 1)\",\"I(0, 1, 0)\",\"I(0, 1, 1)\",\"I(1, 0, 0)\",\"I(1, 0, 1)\",\"I(1, 1, 0)\",\"I(1, 1, 1)\"], [], [\"O(0, 0, 0)\",\"O(0, 0, 1)\",\"O(0, 1, 0)\",\"O(0, 1, 1)\",\"O(1, 0, 0)\",\"O(1, 0, 1)\",\"O(1, 1, 0)\",\"O(1, 1, 1)\"]],\n"
+                    "            \"GATE0\" : [[\"I\"], [], [\"O\"]],\n"
+                    "            \"GATE1\" : [[\"I(0)\",\"I(1)\",\"I(2)\",\"I(3)\"], [], [\"O\"]],\n"
+                    "            \"GATE2\" : [[\"I\"], [], [\"O(0)\",\"O(1)\",\"O(2)\",\"O(3)\"]],\n"
+                    "            \"GATE3\" : [[\"I(0)\",\"I(1)\",\"I(2)\",\"I(3)\"], [], [\"O(0)\",\"O(1)\",\"O(2)\",\"O(3)\"]],\n"
+                    //"            \"GATE4\" : [[\"I(0, 0)\",\"I(0, 1)\",\"I(1, 0)\",\"I(1, 1)\"], [], [\"O(0, 0)\",\"O(0, 1)\",\"O(1, 0)\",\"O(1, 1)\"]],\n"
+                    //"            \"GATE5\" : [[\"I(0, 0, 0)\",\"I(0, 0, 1)\",\"I(0, 1, 0)\",\"I(0, 1, 1)\",\"I(1, 0, 0)\",\"I(1, 0, 1)\",\"I(1, 1, 0)\",\"I(1, 1, 1)\"], [], [\"O(0, 0, 0)\",\"O(0, 0, 1)\",\"O(0, 1, 0)\",\"O(0, 1, 1)\",\"O(1, 0, 0)\",\"O(1, 0, 1)\",\"O(1, 1, 0)\",\"O(1, 1, 1)\"]],\n"
                     "\n"
                     "            \"GND\" : [[], [], [\"O\"]],\n"
                     "            \"VCC\" : [[], [], [\"O\"]]\n"
@@ -562,13 +564,14 @@ TEST_F(hdl_parser_verilog_test, check_generic_map){
                                     " ) ;\n"
                                     "  input global_in ;\n"
                                     "  output global_out ;\n"
-                                    "INV #(.key_integer(1234),\n"
-                                    ".key_floating_point(1.234),\n"
+                                    "INV #(\n"
+                                    //".key_integer(1234),\n"
+                                    //".key_floating_point(1.234),\n"
                                     ".key_string(\"test_string\"),\n"
-                                    ".key_bit_vector_hex('habc'),\n"
-                                    ".key_bit_vector_dec('d2748'),\n"
-                                    ".key_bit_vector_oct('o5274'),\n"
-                                    ".key_bit_vector_bin('b101010111100')) \n"
+                                    ".key_bit_vector_hex('habc),\n"
+                                    ".key_bit_vector_dec('d2748),\n"
+                                    ".key_bit_vector_oct('o5274),\n"
+                                    ".key_bit_vector_bin('b101010111100)) \n"
                                     "gate_0 (\n"
                                     "  .\\I (global_in ),\n"
                                     "  .\\O (global_out )\n"
@@ -766,11 +769,11 @@ TEST_F(hdl_parser_verilog_test, check_assign)
  *
  * Functions: parse
  */
-TEST_F(hdl_parser_verilog_test, check_number_literals)
+TEST_F(hdl_parser_verilog_test, check_number_literal)
 {
     TEST_START
         create_temp_gate_lib();
-        /*{   // NOTE: How should this work? Only for gates in brackets (I(0),...,I(3)) ? Doesn't work currently...
+        {   // NOTE: How should this work? Only for gates in brackets (I(0),...,I(3)) ? Doesn't work currently...
             // Declare multiple wire vectors in one line
             std::stringstream input("module  (\n"
                                     "  global_in,\n"
@@ -780,7 +783,7 @@ TEST_F(hdl_parser_verilog_test, check_number_literals)
                                     "  output global_out ;\n"
                                     "GATE1 gate_0 (\n"
                                     "  .\\I ( 4'hA ),\n" // 'I' represents I(0), I(1), I(2), I(3)
-                                    "  .\\O(0) (global_out )\n"
+                                    "  .\\O (global_out )\n"
                                     " ) ;\n"
                                     "endmodule");
             test_def::capture_stdout();
@@ -796,7 +799,52 @@ TEST_F(hdl_parser_verilog_test, check_number_literals)
             }
 
             ASSERT_NE(nl, nullptr);
-        }*/
+            // NOTE: Verify success (IN PROGRESS)
+        }
+        {
+            // Using of numeric_literals like 4'hA to assign multiple input pins at once to global input nets
+
+            // Build a the parsed string
+            std::stringstream instances;
+            std::stringstream module_block;
+            std::stringstream net_block;
+            int i = 0;
+            for (std::string num_literal : std::vector<std::string>{"0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F"}){
+                // For every possible number literal (with length 4 bits), create a gate and a global output net
+                instances << "GATE1 gate_" << i << " (\n  .\\I ( 4'h" << num_literal << "),\n  .\\O (global_out_" << i << ")\n ) ;\n";
+
+                module_block << ",\n  global_out_" << i;
+
+                net_block << "  output global_out_" << i << " ;\n";
+                i++;
+            }
+            std::stringstream input;
+            input        << "module  (\n"
+                         << "  global_in "
+                         << module_block.str()
+                         << " ) ;\n"
+                         << "  input global_in ;\n"
+                         << net_block.str()
+                         << instances.str()
+                         << "endmodule";
+            //std::cout << "\n==========\n" << input.str() << "\n==========\n";
+
+
+            test_def::capture_stdout();
+            hdl_parser_verilog verilog_parser(input);
+            std::shared_ptr<netlist> nl = verilog_parser.parse(temp_lib_name);
+            if (nl == nullptr)
+            {
+                std::cout << test_def::get_captured_stdout();
+            }
+            else
+            {
+                test_def::get_captured_stdout();
+            }
+
+            ASSERT_NE(nl, nullptr);
+            // NOTE: Verify success (IN PROGRESS)
+        }
         // NOTE: Other types are in progress
     TEST_END
 }
@@ -811,7 +859,7 @@ TEST_F(hdl_parser_verilog_test, check_invalid_input)
     TEST_START
         {
             // IN PROGRESS
-
+            EXPECT_TRUE(true);
         }
     TEST_END
 }
