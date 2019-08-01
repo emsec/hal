@@ -64,28 +64,7 @@ public Q_SLOTS:
     void filter(const QString& text);
     void handle_tree_view_context_menu_requested(const QPoint& point);
     void handle_filter_action_triggered();
-    void handle_selection_changed(const QItemSelection& selected, const QItemSelection& deselected);
-    void handle_current_changed(const QModelIndex& current, const QModelIndex& previous);
-
-    //Selection Relay Slots
-    void handle_gate_selection_update(void* sender, const QList<u32>& gate_ids, selection_relay::Mode mode);
-    void handle_net_selection_update(void* sender, const QList<u32>& net_ids, selection_relay::Mode mode);
-    void handle_module_selection_update(void* sender, const QList<u32>& module_ids, selection_relay::Mode mode);
-    void handle_combined_selection_update(void* sender, const QList<u32>& gate_ids, const QList<u32>& net_ids, const QList<u32>& module_ids, selection_relay::Mode mode);
-
-    void handle_current_gate_update(void* sender, u32 id);
-    void handle_current_net_update(void* sender, u32 id);
-    void handle_current_module_update(void* sender, u32 id);
-
-    void handle_jump_gate_update(void* sender, u32 id);
-    void handle_jump_net_update(void* sender, u32 id);
-    void handle_jump_module_update(void* sender, u32 id);
-    void handle_jump_selection_update(void* sender);
-
-    void handle_gate_highlight_update(void* sender, QList<u32>& ids, selection_relay::Mode mode, u32 channel);
-    void handle_net_highlight_update(void* sender, QList<u32>& ids, selection_relay::Mode mode, u32 channel);
-    void handle_module_highlight_update(void* sender, QList<u32>& ids, selection_relay::Mode mode, u32 channel);
-    void handle_combined_highlight_update(void* sender, QList<u32>& gate_ids, QList<u32>& net_ids, QList<u32>& module_ids, selection_relay::Mode mode, u32 channel);
+    void handle_tree_selection_changed(const QItemSelection& selected, const QItemSelection& deselected);
 
     void toggle_resize_columns();
 

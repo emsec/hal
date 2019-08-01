@@ -111,9 +111,6 @@ public Q_SLOTS:
     void on_action_quit_triggered();
     void on_action_close_document_triggered();
     void run_plugin_triggered(const QString& name);
-    void debug_stuff();
-    void debug_stuff2();
-    void debug_stuff3();
     void toggle_schedule();
     void toggle_settings();
     void show_layout_area();

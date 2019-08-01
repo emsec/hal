@@ -38,7 +38,7 @@ graph_layouter_view::graph_layouter_view(QGraphicsScene* scene, old_graph_layout
     connect(zoom_out_shortcut, &QShortcut::activated, this, &graph_layouter_view::zoom_out);
 
     //the selection relay things
-    QObject::connect(&g_selection_relay, &selection_relay::combined_selection_update, this, &graph_layouter_view::handle_combined_selection_update);
+    // QObject::connect(&g_selection_relay, &selection_relay::combined_selection_update, this, &graph_layouter_view::handle_combined_selection_update);
 
     g_selection_relay.register_sender(this, "graph");
 
@@ -443,15 +443,15 @@ void graph_layouter_view::onSelectionChanged()
             currently_selected_net = dynamic_cast<gui_graph_net*>(items.at(0));
 
             net_ids.append(currently_selected_net->get_ref_net()->get_id());
-            g_selection_relay.relay_combined_selection(this, gate_ids, net_ids, module_ids);
+            // g_selection_relay.relay_combined_selection(this, gate_ids, net_ids, module_ids);
 
             //only trigger the new selection of selected net is still in netlist (temporarily prevents crash, aslong as deleted nets are still selectable in graph / tree / etc..)
             auto ref_net = currently_selected_net->get_ref_net();
 
-            if (g_netlist->is_net_in_netlist(ref_net))
-                g_selection_relay.relay_current_net(this, ref_net->get_id());
-            else
-                g_selection_relay.relay_current_deleted(this);
+            //if (g_netlist->is_net_in_netlist(ref_net))
+            //    g_selection_relay.relay_current_net(this, ref_net->get_id());
+            //else
+            //    g_selection_relay.relay_current_deleted(this);
         }
         else
         {
@@ -460,15 +460,15 @@ void graph_layouter_view::onSelectionChanged()
 
             //for the RELAY, it is only needed here, not in the navigation functions
             gate_ids.append(currently_selected_gate->get_ref_gate()->get_id());
-            g_selection_relay.relay_combined_selection(this, gate_ids, net_ids, module_ids);    //this is just for the tree_navigation
+            //g_selection_relay.relay_combined_selection(this, gate_ids, net_ids, module_ids);    //this is just for the tree_navigation
 
             //only trigger the new selection if selected gate is still in netlist (temporarily prevents chrash, aslong as deleted gates are still selectable in graph / tree / etc..)
             auto ref_gate = currently_selected_gate->get_ref_gate();
 
-            if (g_netlist->is_gate_in_netlist(ref_gate))
-                g_selection_relay.relay_current_gate(this, ref_gate->get_id() /*currently_selected_gate->get_ref_gate()->get_id()*/);
-            else
-                g_selection_relay.relay_current_deleted(this);
+            //if (g_netlist->is_gate_in_netlist(ref_gate))
+            //    g_selection_relay.relay_current_gate(this, ref_gate->get_id() /*currently_selected_gate->get_ref_gate()->get_id()*/);
+            //else
+            //    g_selection_relay.relay_current_deleted(this);
         }
     }
 

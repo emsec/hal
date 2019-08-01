@@ -2,8 +2,8 @@
 #include "selection_details_widget/gate_details_widget.h"
 #include <QDebug>
 #include <QHeaderView>
-#include <QScrollBar>
 #include <QKeyEvent>
+#include <QScrollBar>
 #include <gui_globals.h>
 
 table_selector_widget::table_selector_widget(QWidget* parent) : QTableWidget(parent)
@@ -11,7 +11,7 @@ table_selector_widget::table_selector_widget(QWidget* parent) : QTableWidget(par
     this->setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
 }
 
-table_selector_widget::table_selector_widget(std::set<std::shared_ptr<gate>> table_data, QWidget* parent) : QTableWidget(parent)
+table_selector_widget::table_selector_widget(std::vector<endpoint> table_data, QWidget* parent) : QTableWidget(parent)
 {
     setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
     setAttribute(Qt::WA_DeleteOnClose);
@@ -19,20 +19,22 @@ table_selector_widget::table_selector_widget(std::set<std::shared_ptr<gate>> tab
     setShowGrid(false);
     verticalHeader()->setVisible(false);
     setSelectionBehavior(QAbstractItemView::SelectRows);
-    setColumnCount(3);
+    setColumnCount(4);
     setRowCount(table_data.size());
     setHorizontalHeaderLabels(QStringList() << "ID"
                                             << "Name"
-                                            << "Type");
+                                            << "Type"
+                                            << "Pin");
     setEditTriggers(QAbstractItemView::NoEditTriggers);
     //setStyleSheet("QTableView {background-color: black; color: white; selection-background-color: grey;} QTableView::item {border-right : 1px solid rgb(169, 183, 198);};");
 
     int counter = 0;
-    for (const auto& current_gate : table_data)
+    for (const auto& ep : table_data)
     {
-        setItem(counter, 0, new QTableWidgetItem(QString::number(current_gate->get_id())));
-        setItem(counter, 1, new QTableWidgetItem(QString::fromStdString(current_gate->get_name())));
-        setItem(counter, 2, new QTableWidgetItem(QString::fromStdString(current_gate->get_type())));
+        setItem(counter, 0, new QTableWidgetItem(QString::number(ep.gate->get_id())));
+        setItem(counter, 1, new QTableWidgetItem(QString::fromStdString(ep.gate->get_name())));
+        setItem(counter, 2, new QTableWidgetItem(QString::fromStdString(ep.gate->get_type())));
+        setItem(counter, 3, new QTableWidgetItem(QString::fromStdString(ep.pin_type)));
         counter++;
     }
 
@@ -58,16 +60,16 @@ void table_selector_widget::focusOutEvent(QFocusEvent* event)
     this->close();
 }
 
-void table_selector_widget::keyPressEvent(QKeyEvent *event)
+void table_selector_widget::keyPressEvent(QKeyEvent* event)
 {
-    if(event->key() == Qt::Key_Escape)
+    if (event->key() == Qt::Key_Escape)
         close();
 
-    if(event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return || event->key() == Qt::Key_Right)
+    if (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return || event->key() == Qt::Key_Right)
     {
-        QTableWidgetItem* id_item = this->item(selectedItems().first()->row(), 0);
-        auto gate = g_netlist->get_gate_by_id(id_item->text().toInt());
-        Q_EMIT gateSelected(gate);
+        auto gate                 = g_netlist->get_gate_by_id(this->item(selectedItems().first()->row(), 0)->text().toInt());
+        auto pin                  = this->item(selectedItems().first()->row(), 3)->text().toStdString();
+        Q_EMIT gateSelected({gate, pin});
     }
 
     QTableWidget::keyPressEvent(event);
@@ -89,7 +91,9 @@ QSize table_selector_widget::calculate_actual_table_size()
 void table_selector_widget::on_item_double_clicked(QTableWidgetItem* item)
 {
     auto gate = g_netlist->get_gate_by_id(this->item(item->row(), 0)->text().toInt());
-    Q_EMIT gateSelected(gate);
+    auto pin  = this->item(item->row(), 3)->text().toStdString();
+    Q_EMIT gateSelected({gate, pin});
+
     //the signal does not reach the gate_details_widget even though it is connected in the gate_detail_widget class...
     //--->need to make the signal/slot mechanic work, this is just ugly (need to rely on the parent), also only the gate_details_widget is allowed to be a parent
     //static_cast<gate_details_widget*>(parent())->on_gate_selected(gate);

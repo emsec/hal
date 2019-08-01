@@ -42,11 +42,7 @@ public:
     void clear();
 
 public Q_SLOTS:
-    void handle_current_gate_update(void* sender, u32 id);
-    void handle_current_net_update(void* sender, u32 id);
-    void handle_current_module_update(void* sender, u32 id);
-    void handle_current_cleared_update(void* sender);
-    void handle_current_deleted_update(void* sender);
+    void handle_selection_update(void* sender);
 
 private:
     QStackedWidget* m_stacked_widget;
