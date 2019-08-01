@@ -10,6 +10,7 @@
 #include "gui/graph_widget/graph_graphics_view.h"
 #include "gui/graph_widget/graph_navigation_widget.h"
 #include "gui/graph_widget/graph_layout_progress_widget.h"
+#include "gui/graph_widget/graph_layout_spinner_widget.h"
 #include "gui/graph_widget/graphics_scene.h"
 #include "gui/graph_widget/items/graphics_gate.h"
 #include "gui/gui_globals.h"
@@ -27,6 +28,7 @@ graph_widget::graph_widget(QWidget* parent) : content_widget("Graph", parent),
     m_overlay(new dialog_overlay(this)),
     m_navigation_widget(new graph_navigation_widget(nullptr)),
     m_progress_widget(new graph_layout_progress_widget(this)),
+    m_spinner_widget(new graph_layout_spinner_widget(this)),
     m_current_expansion(0)
 {
     connect(m_navigation_widget, &graph_navigation_widget::navigation_requested, this, &graph_widget::handle_navigation_jump_requested);
@@ -82,7 +84,7 @@ void graph_widget::handle_scene_available()
     connect(m_overlay, &dialog_overlay::clicked, m_overlay, &dialog_overlay::hide);
 
     m_overlay->hide();
-    m_progress_widget->stop();
+    //m_progress_widget->stop();
     m_overlay->set_widget(m_navigation_widget);
 
     if (hasFocus())
@@ -109,11 +111,12 @@ void graph_widget::handle_scene_unavailable()
 
     disconnect(m_overlay, &dialog_overlay::clicked, m_overlay, &dialog_overlay::hide);
 
-    m_progress_widget->set_direction(graph_layout_progress_widget::direction::right);
+    //m_progress_widget->set_direction(graph_layout_progress_widget::direction::right);
     //m_progress_widget->set_direction(graph_layout_progress_widget::direction::left);
 
-    m_overlay->set_widget(m_progress_widget);
-    m_progress_widget->start();
+    //m_overlay->set_widget(m_progress_widget);
+    m_overlay->set_widget(m_spinner_widget);
+    //m_progress_widget->start();
 
     if (m_overlay->isHidden())
         m_overlay->show();
