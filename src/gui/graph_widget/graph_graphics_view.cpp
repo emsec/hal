@@ -3,6 +3,7 @@
 #include "gui/graph_widget/graph_widget.h"
 #include "gui/graph_widget/graph_widget_constants.h"
 #include "gui/graph_widget/graphics_scene.h"
+#include "gui/graph_widget/graphics_view_zoom.h"
 #include "gui/graph_widget/items/io_graphics_net.h"
 #include "gui/graph_widget/items/graphics_gate.h"
 #include "gui/graph_widget/items/graphics_item.h"
@@ -34,6 +35,9 @@ graph_graphics_view::graph_graphics_view(QWidget* parent) : QGraphicsView(parent
     setContextMenuPolicy(Qt::CustomContextMenu);
     setOptimizationFlags(QGraphicsView::DontSavePainterState);
     setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
+    
+    graphics_view_zoom* z = new graphics_view_zoom(this);
+    z->set_modifiers(Qt::NoModifier);
 }
 
 void graph_graphics_view::conditional_update()
@@ -123,9 +127,6 @@ void graph_graphics_view::mousePressEvent(QMouseEvent* event)
     else
         if (event->button() == Qt::MidButton)
         {
-            m_zoom_position = event->pos();
-            m_zoom_scene_position = mapToScene(event->pos());
-
             // HIDE CURSOR
             // SHOW DUMMY ???
             // ZOOM
@@ -137,18 +138,6 @@ void graph_graphics_view::mousePressEvent(QMouseEvent* event)
         }
         else
             QGraphicsView::mousePressEvent(event);
-}
-
-void graph_graphics_view::mouseReleaseEvent(QMouseEvent* event)
-{
-    if (event->button() == Qt::MidButton)
-    {
-        QCursor cursor;
-        cursor.setPos(mapToGlobal(mapFromScene(m_zoom_scene_position)));
-        setCursor(cursor);
-    }
-    else
-        QGraphicsView::mouseReleaseEvent(event);
 }
 
 void graph_graphics_view::mouseMoveEvent(QMouseEvent* event)
@@ -168,49 +157,7 @@ void graph_graphics_view::mouseMoveEvent(QMouseEvent* event)
             vBar->setValue(vBar->value() - delta.y());
         }
     }
-    else if (event->buttons().testFlag(Qt::MidButton))
-    {
-        int delta = m_zoom_position.y() - event->pos().y();
-
-        if (delta)
-            delta = std::min(delta, 100);
-        else
-            delta = std::max(delta, -100);
-
-        update_matrix(delta);
-        centerOn(m_zoom_scene_position);
-    }
-    else
         QGraphicsView::mouseMoveEvent(event);
-}
-
-void graph_graphics_view::wheelEvent(QWheelEvent* event)
-{
-    if (!scene())
-        return;
-
-    int y = (event->angleDelta() / 8).y();
-
-    if (!y)
-        return;
-
-    QPoint pos = event->pos();
-    QPointF mapped = mapToScene(pos);
-
-    m_zoom += y;
-
-    if (m_zoom > 100)
-        m_zoom = 100;
-    else if (m_zoom < -100)
-        m_zoom = -100;
-
-    update_matrix(m_zoom);
-    // DOESNT WORK
-    int x_distance = viewport()->width() / 2 - pos.x();
-    int y_distance = viewport()->height() / 2 - pos.y();
-    qreal x_offset = matrix().m11() * x_distance;
-    qreal y_offset = matrix().m22() * y_distance;
-    centerOn(QPointF(mapped.x() + x_offset, mapped.y() + y_offset));
 }
 
 void graph_graphics_view::keyPressEvent(QKeyEvent* event)

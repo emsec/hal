@@ -91,14 +91,14 @@ namespace bdd_YOSYS_MYCELL_helper
 
     std::map<std::string, std::shared_ptr<bdd>> get_bdd_YOSYS_MYCELL_and(std::shared_ptr<gate> g, std::map<std::string, std::shared_ptr<bdd>>& input_pin_type_to_bdd)
     {
-        std::map<std::string, std::shared_ptr<bdd>> result;       
+        std::map<std::string, std::shared_ptr<bdd>> result;
         result["O"] = std::make_shared<bdd>(bdd_true());
 
         for (const auto pin : g->get_input_pin_types())
         {
             *result["O"] &= PIN_TO_BDD(pin);
         }
-       
+
         return result;
     }
 
@@ -201,6 +201,8 @@ std::map<std::string, std::shared_ptr<bdd>> plugin_gate_decorators::bdd_generato
     {
         generator = m_bbd_generators.at(type);
     }
+
+    return generator(g, input_pin_type_to_bdd);
 }
 
 bool plugin_gate_decorators::bdd_availability_tester_yosys_mycell(std::shared_ptr<gate> g)
