@@ -159,7 +159,7 @@ TEST_F(plugin_manager_test, check_load_unload_all)
     EXPECT_TRUE(plugin_manager::get_plugin_names().empty());
 
     // Load all plugins with directory hints
-    //plugin_manager::load_all_plugins(core_utils::get_plugin_directories()); // TODO Fails with SIGSEGV
+    //plugin_manager::load_all_plugins(core_utils::get_plugin_directories()); // ISSUE: Fails with SIGSEGV
     plugin_manager::unload_all_plugins();
 
     EXPECT_TRUE(plugin_manager::get_plugin_names().empty());
@@ -319,7 +319,7 @@ TEST_F(plugin_manager_test, check_unload)
         EXPECT_FALSE(suc);
     }
 
-    // TODO: some positive tests, if unload is fixed
+    // NOTE: do some positive tests, if unload is fixed
 
     TEST_END
 }*/

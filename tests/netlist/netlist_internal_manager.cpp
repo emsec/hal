@@ -47,4 +47,4 @@ TEST_F(netlist_internal_manager_test, check_)
 {
 }
 
-// TODO: This file will be deleted soon...
+// NOTE: This file can be deleted
