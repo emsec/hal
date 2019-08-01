@@ -452,81 +452,91 @@ void gate_details_widget::handle_item_collapsed(QTreeWidgetItem* item)
 
 void gate_details_widget::on_treewidget_item_clicked(QTreeWidgetItem* item, int column)
 {
-        if (m_output_pins == item->parent() && column == 2)
+    auto net_id = item->data(2, Qt::UserRole).toInt();
+    if (m_output_pins == item->parent() && column == 2)
+    {
+        std::shared_ptr<net> clicked_net = g_netlist->get_net_by_id(net_id);
+
+        if (!clicked_net)
+            return;
+
+        auto destinations = clicked_net->get_dsts();
+
+        if (destinations.empty() || clicked_net->is_global_output_net() || clicked_net->is_global_inout_net())
         {
-            int id                           = item->data(2, Qt::UserRole).toInt();
-            std::shared_ptr<net> clicked_net = g_netlist->get_net_by_id(id);
-            std::vector<endpoint> successors = clicked_net->get_dsts();
-            std::set<std::shared_ptr<gate>> unique_succ;
-            for (endpoint p : successors)
-                unique_succ.insert(p.gate);
+            g_selection_relay.clear();
+            g_selection_relay.m_selected_nets[g_selection_relay.m_number_of_selected_nets++] = clicked_net->get_id();
+            g_selection_relay.relay_selection_changed(this);
+        }
+        else if (destinations.size() == 1)
+        {
+            auto ep = *destinations.begin();
+            g_selection_relay.clear();
+            g_selection_relay.m_selected_gates[g_selection_relay.m_number_of_selected_gates++] = ep.gate->get_id();
+            g_selection_relay.m_focus_type                                                     = selection_relay::item_type::gate;
+            g_selection_relay.m_focus_id                                                       = ep.gate->get_id();
+            g_selection_relay.m_subfocus                                                       = selection_relay::subfocus::left;
 
-            if(successors.empty())
-            {
-                QList<u32> gate_ids;
-                QList<u32> net_ids;
-                QList<u32> submod_ids;
-                net_ids.append(clicked_net->get_id());
-                g_selection_relay.relay_combined_selection(this, gate_ids,  net_ids, submod_ids);
-                g_selection_relay.relay_current_net(this, net_ids.first());
-                return;
-            }
+            auto pins                          = ep.gate->get_input_pin_types();
+            auto index                         = std::distance(pins.begin(), std::find(pins.begin(), pins.end(), ep.pin_type));
+            g_selection_relay.m_subfocus_index = index;
 
-            if (unique_succ.size() == 1)
-            {
-                QList<u32> gate_id;
-                QList<u32> net_ids;
-                QList<u32> sub_ids;
-                gate_id.append((*unique_succ.begin())->get_id());
-                g_selection_relay.relay_combined_selection(this, gate_id, net_ids, sub_ids);
-                update(gate_id.first());
-                return;
-            }
-
-            table_selector_widget* w = new table_selector_widget(unique_succ, this);
+            update(ep.gate->get_id());
+            g_selection_relay.relay_selection_changed(this);
+        }
+        else
+        {
+            table_selector_widget* w = new table_selector_widget(destinations, this);
             connect(w, &table_selector_widget::gateSelected, this, &gate_details_widget::on_gate_selected);
             auto rect = QApplication::desktop()->availableGeometry(this);
             w->move(QPoint(rect.x() + (rect.width() - w->width()) / 2, rect.y() + (rect.height() - w->height()) / 2));
             w->show();
             w->setFocus();
         }
-        else if (m_input_pins == item->parent() && column == 2)
+    }
+    else if (m_input_pins == item->parent() && column == 2)
+    {
+        auto clicked_net = g_netlist->get_net_by_id(net_id);
+
+        if (!clicked_net)
+            return;
+
+        g_selection_relay.clear();
+        if (clicked_net->get_src().gate == nullptr || clicked_net->is_global_input_net() || clicked_net->is_global_inout_net())
         {
-            int id           = item->data(2, Qt::UserRole).toInt();
-            auto clicked_net = g_netlist->get_net_by_id(id);
-
-            if (!clicked_net)
-                return;
-
-            if(!clicked_net->get_src().gate)
-            {
-                QList<u32> gate_ids;
-                QList<u32> net_ids;
-                QList<u32> submod_ids;
-                net_ids.append(clicked_net->get_id());
-                g_selection_relay.relay_combined_selection(this, gate_ids,  net_ids, submod_ids);
-                g_selection_relay.relay_current_net(this, net_ids.first());
-                return;
-            }
-
-            QList<u32> gate_id;
-            QList<u32> net_ids;
-            QList<u32> sub_ids;
-            gate_id.append(clicked_net->get_src().gate->get_id());
-            g_selection_relay.relay_combined_selection(this, gate_id, net_ids, sub_ids);
-            update(gate_id.first());
+            g_selection_relay.m_selected_nets[g_selection_relay.m_number_of_selected_nets++] = clicked_net->get_id();
         }
+        else
+        {
+            endpoint ep = clicked_net->get_src();
+            auto gate_id                                                                       = ep.gate->get_id();
+            g_selection_relay.m_selected_gates[g_selection_relay.m_number_of_selected_gates++] = gate_id;
+            g_selection_relay.m_focus_type                                                     = selection_relay::item_type::gate;
+            g_selection_relay.m_focus_id                                                       = ep.gate->get_id();
+            g_selection_relay.m_subfocus                                                       = selection_relay::subfocus::right;
+
+            auto pins                          = ep.gate->get_output_pin_types();
+            auto index                         = std::distance(pins.begin(), std::find(pins.begin(), pins.end(), ep.pin_type));
+            g_selection_relay.m_subfocus_index = index;
+            update(gate_id);
+        }
+        g_selection_relay.relay_selection_changed(this);
+    }
 }
 
-void gate_details_widget::on_gate_selected(std::shared_ptr<gate> selected)
+void gate_details_widget::on_gate_selected(endpoint selected)
 {
-    QList<u32> gate_id;
-    QList<u32> net_ids;
-    QList<u32> sub_ids;
-    gate_id.append(selected->get_id());
+    g_selection_relay.clear();
+    g_selection_relay.m_selected_gates[g_selection_relay.m_number_of_selected_gates++] = selected.gate->get_id();
+    g_selection_relay.m_focus_type                                                     = selection_relay::item_type::gate;
+    g_selection_relay.m_focus_id                                                       = selected.gate->get_id();
+    g_selection_relay.m_subfocus                                                       = selection_relay::subfocus::left;
 
-    g_selection_relay.relay_combined_selection(this, gate_id, net_ids, sub_ids);
-    update(gate_id.first());
+    auto pins                          = selected.gate->get_input_pin_types();
+    auto index                         = std::distance(pins.begin(), std::find(pins.begin(), pins.end(), selected.pin_type));
+    g_selection_relay.m_subfocus_index = index;
+    update(selected.gate->get_id());
+    g_selection_relay.relay_selection_changed(this);
 
     if (dynamic_cast<QWidget*>(sender()))
         static_cast<QWidget*>(sender())->close();

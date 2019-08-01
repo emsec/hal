@@ -35,13 +35,13 @@ class table_selector_widget : public QTableWidget
     Q_OBJECT
 public:
     table_selector_widget(QWidget* parent = nullptr);
-    table_selector_widget(std::set<std::shared_ptr<gate>> table_data, QWidget* parent = nullptr);
+    table_selector_widget(std::vector<endpoint> table_data, QWidget* parent = nullptr);
 
     void focusOutEvent(QFocusEvent* event);
     void keyPressEvent(QKeyEvent *event);
 
 Q_SIGNALS:
-    void gateSelected(std::shared_ptr<gate> selected);
+    void gateSelected(endpoint selected);
 
 private:
     QSize calculate_actual_table_size();

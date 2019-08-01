@@ -54,6 +54,8 @@ public Q_SLOTS:
     void handle_item_expanded(QTreeWidgetItem* item);
     void handle_item_collapsed(QTreeWidgetItem* item);
 
+    void on_treewidget_item_clicked(QTreeWidgetItem* item, int column);
+
     void handle_net_event(net_event_handler::event ev, std::shared_ptr<net> net, u32 associated_data);
 
 private:

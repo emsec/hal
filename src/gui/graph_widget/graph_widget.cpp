@@ -90,15 +90,6 @@ void graph_widget::handle_scene_available()
     if (hasFocus())
         m_view->setFocus();
 
-    // FIND BETTER WAY TO DO THIS
-    g_selection_relay.m_selected_gates[0] = m_current_expansion;
-    g_selection_relay.m_number_of_selected_gates = 1;
-    g_selection_relay.m_focus_type = selection_relay::item_type::gate;
-    g_selection_relay.m_focus_id = m_current_expansion;
-    // SET CORRECT SUBSELECTION
-    g_selection_relay.m_subfocus = selection_relay::subfocus::none;
-    g_selection_relay.relay_selection_changed(nullptr);
-
     // JUMP TO THE GATE
     // JUMP SHOULD BE HANDLED SEPARATELY
 //    if (item)

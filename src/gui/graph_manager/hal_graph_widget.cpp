@@ -36,7 +36,7 @@ void hal_graph_widget::setup_toolbar(toolbar* toolbar)
 void hal_graph_widget::handle_relayout_button_clicked()
 {
     m_relayout_button->setHidden(true);
-    g_selection_relay.relay_current_cleared(this);
+    //g_selection_relay.relay_current_cleared(this);
     Q_EMIT relayout_button_clicked();
 }
 

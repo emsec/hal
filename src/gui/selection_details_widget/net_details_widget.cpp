@@ -1,8 +1,8 @@
 #include "selection_details_widget/net_details_widget.h"
 #include "gui_globals.h"
 #include "netlist/gate.h"
-#include "netlist/net.h"
 #include "netlist/module.h"
+#include "netlist/net.h"
 #include <QHeaderView>
 #include <QLabel>
 #include <QScrollArea>
@@ -115,6 +115,7 @@ net_details_widget::net_details_widget(QWidget* parent) : QWidget(parent)
 
     connect(m_tree_widget, &QTreeWidget::itemExpanded, this, &net_details_widget::handle_tree_size_change);
     connect(m_tree_widget, &QTreeWidget::itemCollapsed, this, &net_details_widget::handle_tree_size_change);
+    connect(m_tree_widget, &QTreeWidget::itemClicked, this, &net_details_widget::on_treewidget_item_clicked);
 
     m_scroll_area = new QScrollArea(this);
     m_scroll_area->setFrameStyle(QFrame::NoFrame);
@@ -206,6 +207,7 @@ void net_details_widget::update(u32 net_id)
             item->setText(1, QChar(0x2b05));
             item->setForeground(1, QBrush(QColor(114, 140, 0), Qt::SolidPattern));
             item->setText(2, QString::fromStdString(src_pin.get_gate()->get_name()));
+            item->setData(2, Qt::UserRole, src_pin.get_gate()->get_id());
         }
     }
     else
@@ -239,6 +241,7 @@ void net_details_widget::update(u32 net_id)
             item->setText(1, QChar(0x27a1));
             item->setForeground(1, QBrush(QColor(114, 140, 0), Qt::SolidPattern));
             item->setText(2, QString::fromStdString(dst_pin.get_gate()->get_name()));
+            item->setData(2, Qt::UserRole, dst_pin.get_gate()->get_id());
         }
     }
 
@@ -427,4 +430,50 @@ void net_details_widget::handle_item_expanded(QTreeWidgetItem* item)
 void net_details_widget::handle_item_collapsed(QTreeWidgetItem* item)
 {
     Q_UNUSED(item)
+}
+
+void net_details_widget::on_treewidget_item_clicked(QTreeWidgetItem* item, int column)
+{
+    auto gate_id = item->data(2, Qt::UserRole).toInt();
+    auto pin = item->text(0).toStdString();
+    if (m_dst_pins == item->parent() && column == 2)
+    {
+        std::shared_ptr<gate> clicked_gate = g_netlist->get_gate_by_id(gate_id);
+
+        if (!clicked_gate)
+            return;
+
+        g_selection_relay.clear();
+        g_selection_relay.m_selected_gates[g_selection_relay.m_number_of_selected_gates++] = clicked_gate->get_id();
+        g_selection_relay.m_focus_type                                                     = selection_relay::item_type::gate;
+        g_selection_relay.m_focus_id                                                       = clicked_gate->get_id();
+        g_selection_relay.m_subfocus                                                       = selection_relay::subfocus::left;
+
+        auto pins                          = clicked_gate->get_input_pin_types();
+        auto index                         = std::distance(pins.begin(), std::find(pins.begin(), pins.end(), pin));
+        g_selection_relay.m_subfocus_index = index;
+
+        update(clicked_gate->get_id());
+        g_selection_relay.relay_selection_changed(this);
+    }
+    else if (m_src_pin == item->parent() && column == 2)
+    {
+        std::shared_ptr<gate> clicked_gate = g_netlist->get_gate_by_id(gate_id);
+
+        if (!clicked_gate)
+            return;
+
+        g_selection_relay.clear();
+        g_selection_relay.m_selected_gates[g_selection_relay.m_number_of_selected_gates++] = clicked_gate->get_id();
+        g_selection_relay.m_focus_type                                                     = selection_relay::item_type::gate;
+        g_selection_relay.m_focus_id                                                       = clicked_gate->get_id();
+        g_selection_relay.m_subfocus                                                       = selection_relay::subfocus::right;
+
+        auto pins                          = clicked_gate->get_output_pin_types();
+        auto index                         = std::distance(pins.begin(), std::find(pins.begin(), pins.end(), pin));
+        g_selection_relay.m_subfocus_index = index;
+
+        update(clicked_gate->get_id());
+        g_selection_relay.relay_selection_changed(this);
+    }
 }

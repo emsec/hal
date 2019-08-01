@@ -210,17 +210,6 @@ main_window::main_window(QWidget* parent) : QWidget(parent), m_schedule_widget(n
 
     connect(this, &main_window::save_triggered, m_content_manager, &hal_content_manager::handle_save_triggered);
 
-    //test stuff
-    //    hal_plugin_access_manager *manager = hal_plugin_access_manager::get_instance();
-    //    QShortcut* debug_shortcut = new QShortcut(QKeySequence(tr("Ctrl+f")), this);
-    //    connect(debug_shortcut, SIGNAL(activated()), this, SLOT(debug_stuff()));
-
-    QShortcut* debug_shortcut2 = new QShortcut(QKeySequence(tr("Ctrl+g")), this);
-    connect(debug_shortcut2, SIGNAL(activated()), this, SLOT(debug_stuff2()));
-
-    //    QShortcut* debug_shortcut3 = new QShortcut(QKeySequence(tr("Ctrl+n")), this);
-    //    connect(debug_shortcut3, SIGNAL(activated()), this, SLOT(debug_stuff3()));
-
     restore_state();
 
     //    plugin_manager_widget* widget = new plugin_manager_widget(nullptr);
@@ -369,50 +358,6 @@ void main_window::run_plugin_triggered(const QString& name)
 
     auto args            = hal_plugin_access_manager::request_arguments(name.toStdString());
     QFuture<void> future = QtConcurrent::run(hal_plugin_access_manager::run_plugin, name.toStdString(), &args);
-}
-
-void main_window::debug_stuff()
-{
-    g_netlist->get_gate_by_id(1)->set_name("debug");
-}
-
-void main_window::debug_stuff2()
-{
-    static int counter = 0;
-
-    switch (counter % 3)
-    {
-        case 0:
-        {
-            QList<u32> list{3, 4, 5, 6};
-            QList<u32> empty, empty2;
-            qDebug() << "läuft";
-            g_selection_relay.relay_combined_selection(this, list, empty, empty2, selection_relay::Mode::override);
-            break;
-        }
-        case 1:
-        {
-            QList<u32> list{7, 8, 9};
-            QList<u32> empty, empty2;
-            qDebug() << "läuft";
-            g_selection_relay.relay_combined_selection(this, list, empty, empty2, selection_relay::Mode::add);
-            break;
-        }
-        case 2:
-        {
-            QList<u32> list{3, 4, 5};
-            QList<u32> empty, empty2;
-            qDebug() << "läuft";
-            g_selection_relay.relay_combined_selection(this, list, empty, empty2, selection_relay::Mode::remove);
-            break;
-        }
-    }
-    counter++;
-}
-
-void main_window::debug_stuff3()
-{
-    g_notification_manager->debug_add_notification();
 }
 
 // GENERALIZE TOGGLE METHODS
