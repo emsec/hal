@@ -175,6 +175,18 @@ if(OpenMP_FOUND)
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
 endif()
 
+find_package(IGraph REQUIRED)
+if(HAVE_IGRAPH)
+    message(STATUS "Found following IGRAPH Libraries")
+    message(STATUS "    IGRAPH_INCLUDE_DIRS: ${IGRAPH_INCLUDES}")
+    message(STATUS "    IGRAPH_LIBRARIES: ${IGRAPH_LIBRARIES}")
+    include_directories(${IGRAPH_INCLUDES})
+    
+    add_definitions(-DIGRAPH_VERSION_MAJOR_GUESS=${IGRAPH_VERSION_MAJOR_GUESS})
+    add_definitions(-DIGRAPH_VERSION_MINOR_GUESS=${IGRAPH_VERSION_MINOR_GUESS})
+    add_definitions(-DIGRAPH_VERSION_PATCH_GUESS=${IGRAPH_VERSION_PATCH_GUESS})
+endif(HAVE_IGRAPH)
+
 set(Boost_USE_MULTITHREADED ON)
 find_package(Boost 1.58.0 COMPONENTS system filesystem graph REQUIRED)
 if(Boost_FOUND)

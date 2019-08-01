@@ -37,6 +37,9 @@ public:
     QString get_file_name();
     void set_file_name(const QString name);
 
+    void set_base_file_modified(bool base_file_modified);
+    bool is_base_file_modified();
+    
     QUuid get_uuid() const;
 
 Q_SIGNALS:
@@ -62,6 +65,8 @@ private:
     QString m_file_name;
     QString m_text_state;
 
+    bool m_base_file_modified;
+    
     QUuid m_uuid;
 };
 
