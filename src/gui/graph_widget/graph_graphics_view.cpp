@@ -127,6 +127,7 @@ void graph_graphics_view::mousePressEvent(QMouseEvent* event)
     else
         if (event->button() == Qt::MidButton)
         {
+            m_zoom_scene_position = mapToScene(event->pos());
             // HIDE CURSOR
             // SHOW DUMMY ???
             // ZOOM
@@ -138,6 +139,18 @@ void graph_graphics_view::mousePressEvent(QMouseEvent* event)
         }
         else
             QGraphicsView::mousePressEvent(event);
+}
+
+void graph_graphics_view::mouseReleaseEvent(QMouseEvent* event)
+{
+    if (event->button() == Qt::MidButton)
+    {
+        QCursor cursor;
+        cursor.setPos(mapToGlobal(mapFromScene(m_zoom_scene_position)));
+        setCursor(cursor);
+    }
+    else
+        QGraphicsView::mouseReleaseEvent(event);
 }
 
 void graph_graphics_view::mouseMoveEvent(QMouseEvent* event)

@@ -34,6 +34,7 @@ class cone_layouter;
 class graph_context;
 class graph_graphics_view;
 class graph_layout_progress_widget;
+class graph_layout_spinner_widget;
 class graph_navigation_widget;
 
 class graph_widget : public content_widget, public graph_context_subscriber
@@ -58,6 +59,7 @@ protected:
 private Q_SLOTS:
     void handle_navigation_jump_requested(const u32 from_gate, const u32 via_net, const u32 to_gate);
     void handle_module_double_clicked(const u32 id);
+    void reset_focus();
 
 private:
     void handle_navigation_left_request();
@@ -77,12 +79,15 @@ private:
     void handle_updating_scene();
     //void handle_scene_available();
 
+    void ensure_gate_visible(const u32 gate);
+
     graph_graphics_view* m_view;
     graph_context* m_context;
 
     dialog_overlay* m_overlay;
     graph_navigation_widget* m_navigation_widget;
     graph_layout_progress_widget* m_progress_widget;
+    graph_layout_spinner_widget* m_spinner_widget;
 
     u32 m_current_expansion;
 };
