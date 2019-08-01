@@ -58,6 +58,7 @@ protected:
 private Q_SLOTS:
     void handle_navigation_jump_requested(const u32 from_gate, const u32 via_net, const u32 to_gate);
     void handle_module_double_clicked(const u32 id);
+    void reset_focus();
 
 private:
     void handle_navigation_left_request();

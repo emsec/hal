@@ -24,12 +24,13 @@ graph_widget::graph_widget(QWidget* parent) : content_widget("Graph", parent),
     m_view(new graph_graphics_view(this)),
     m_context(nullptr),
     m_overlay(new dialog_overlay(this)),
-    m_navigation_widget(new graph_navigation_widget(this)),
+    m_navigation_widget(new graph_navigation_widget(nullptr)),
     m_progress_widget(new graph_layout_progress_widget(this)),
     m_current_expansion(0)
 {
     connect(m_navigation_widget, &graph_navigation_widget::navigation_requested, this, &graph_widget::handle_navigation_jump_requested);
     connect(m_navigation_widget, &graph_navigation_widget::close_requested, m_overlay, &dialog_overlay::hide);
+    connect(m_navigation_widget, &graph_navigation_widget::close_requested, this, &graph_widget::reset_focus);
 
     connect(m_overlay, &dialog_overlay::clicked, m_overlay, &dialog_overlay::hide);
 
@@ -525,4 +526,9 @@ void graph_widget::change_context(graph_context* const context)
 
     if (!m_context->update_in_progress())
         m_view->setScene(m_context->scene());
+}
+
+void graph_widget::reset_focus()
+{
+    m_view->setFocus();
 }
