@@ -127,6 +127,7 @@ void graph_graphics_view::mousePressEvent(QMouseEvent* event)
     else
         if (event->button() == Qt::MidButton)
         {
+            m_zoom_scene_position = mapToScene(event->pos());
             // HIDE CURSOR
             // SHOW DUMMY ???
             // ZOOM
