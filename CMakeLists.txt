@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.8)
+cmake_minimum_required(VERSION 3.10)
 
 message(STATUS "cmake version: ${CMAKE_VERSION}")
 
@@ -166,33 +166,62 @@ include(Subdirs)
 
 find_package(Sanitizers)
 
-# Find OpenMP
-if(APPLE)
-    set(OpenMP_LIBRARIES "/usr/local/opt/llvm/lib")
-    set(OpenMP_INCLUDES "/usr/local/opt/llvm/include")
-    if(CMAKE_C_COMPILER_ID MATCHES "Clang")
-        set(OpenMP_C "${CMAKE_C_COMPILER}")
-        set(OpenMP_C_FLAGS "-fopenmp=libomp -Wno-unused-command-line-argument")
-        set(OpenMP_C_LIB_NAMES "libomp" "libgomp" "libiomp5")
-        set(OpenMP_libomp_LIBRARY ${OpenMP_C_LIB_NAMES})
-        set(OpenMP_libgomp_LIBRARY ${OpenMP_C_LIB_NAMES})
-        set(OpenMP_libiomp5_LIBRARY ${OpenMP_C_LIB_NAMES})
-    endif()
-    if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-        set(OpenMP_CXX "${CMAKE_CXX_COMPILER}")
-        set(OpenMP_CXX_FLAGS "-fopenmp=libomp -Wno-unused-command-line-argument")
-        set(OpenMP_CXX_LIB_NAMES "libomp" "libgomp" "libiomp5")
-        set(OpenMP_libomp_LIBRARY ${OpenMP_CXX_LIB_NAMES})
-        set(OpenMP_libgomp_LIBRARY ${OpenMP_CXX_LIB_NAMES})
-        set(OpenMP_libiomp5_LIBRARY ${OpenMP_CXX_LIB_NAMES})
-    endif()
-endif()
+## Find OpenMP
+if(APPLE AND CMAKE_HOST_APPLE)
+    find_package(OpenMP)
 
-find_package(OpenMP REQUIRED)
-if(OpenMP_FOUND)
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
+    if(OPENMP_FOUND OR OPENMP_CXX_FOUND)
+        message(STATUS "Found libomp without any special flags")
+    endif()
+
+    # If OpenMP wasn't found, try if we can find it in the default Macports location
+    if((NOT OPENMP_FOUND) AND (NOT OPENMP_CXX_FOUND) AND EXISTS "/opt/local/lib/libomp/libomp.dylib") # older cmake uses OPENMP_FOUND, newer cmake also sets OPENMP_CXX_FOUND, homebrew installations seem only to get the latter set.
+        set(OpenMP_CXX_FLAGS "-Xpreprocessor -fopenmp -I/opt/local/include/libomp/")
+        set(OpenMP_CXX_LIB_NAMES omp)
+        set(OpenMP_omp_LIBRARY /opt/local/lib/libomp/libomp.dylib)
+
+        find_package(OpenMP)
+        if(OPENMP_FOUND OR OPENMP_CXX_FOUND)
+            message(STATUS "Found libomp in macports default location.")
+        else()
+            message(FATAL_ERROR "Didn't find libomp. Tried macports default location but also didn't find it.")
+        endif()
+    endif()
+
+    # If OpenMP wasn't found, try if we can find it in the default Homebrew location
+    if((NOT OPENMP_FOUND) AND (NOT OPENMP_CXX_FOUND) AND EXISTS "/usr/local/opt/libomp/lib/libomp.dylib")
+        set(OpenMP_CXX_FLAGS "-Xpreprocessor -fopenmp -I/usr/local/opt/libomp/include")
+        set(OpenMP_CXX_LIB_NAMES omp)
+        set(OpenMP_omp_LIBRARY /usr/local/opt/libomp/lib/libomp.dylib)
+
+        find_package(OpenMP)
+        if(OPENMP_FOUND OR OPENMP_CXX_FOUND)
+            message(STATUS "Found libomp in homebrew default location.")
+        else()
+            message(FATAL_ERROR "Didn't find libomp. Tried homebrew default location but also didn't find it.")
+        endif()
+    endif()
+
+    set(Additional_OpenMP_Libraries_Workaround "")
+
+    # Workaround because older cmake on apple doesn't support FindOpenMP
+    if((NOT OPENMP_FOUND) AND (NOT OPENMP_CXX_FOUND))
+        if((APPLE AND ((CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang") OR (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")))
+            AND ((CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL "7.0") AND (CMAKE_VERSION VERSION_LESS "3.12.0")))
+            message(STATUS "Applying workaround for OSX OpenMP with old cmake that doesn't have FindOpenMP")
+            set(OpenMP_CXX_FLAGS "-Xclang -fopenmp")
+            set(Additional_OpenMP_Libraries_Workaround "-lomp")
+        else()
+            message(FATAL_ERROR "Did not find OpenMP. Build with -DDISABLE_OPENMP=ON if you want to allow this and are willing to take the performance hit.")
+        endif()
+    endif()
+else()
+    find_package(OpenMP REQUIRED)
+    if(OpenMP_FOUND)
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+        set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
+    endif()
 endif()
 
 add_subdirectory(deps/buddy-2.4)
@@ -203,7 +232,7 @@ if(HAVE_IGRAPH)
     message(STATUS "    IGRAPH_INCLUDE_DIRS: ${IGRAPH_INCLUDES}")
     message(STATUS "    IGRAPH_LIBRARIES: ${IGRAPH_LIBRARIES}")
     include_directories(${IGRAPH_INCLUDES})
-    
+
     add_definitions(-DIGRAPH_VERSION_MAJOR_GUESS=${IGRAPH_VERSION_MAJOR_GUESS})
     add_definitions(-DIGRAPH_VERSION_MINOR_GUESS=${IGRAPH_VERSION_MINOR_GUESS})
     add_definitions(-DIGRAPH_VERSION_PATCH_GUESS=${IGRAPH_VERSION_PATCH_GUESS})
