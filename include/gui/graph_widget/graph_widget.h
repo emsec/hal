@@ -78,6 +78,8 @@ private:
     void handle_updating_scene();
     //void handle_scene_available();
 
+    void ensure_gate_visible(const u32 gate);
+
     graph_graphics_view* m_view;
     graph_context* m_context;
 
