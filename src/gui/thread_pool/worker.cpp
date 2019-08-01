@@ -1,5 +1,5 @@
 #include "gui/thread_pool/worker.h"
-
+#include <assert.h>
 #include "gui/thread_pool/task.h"
 
 worker::worker(QObject* parent) : QThread(parent)
