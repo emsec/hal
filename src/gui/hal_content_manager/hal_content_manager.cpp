@@ -69,9 +69,13 @@ void hal_content_manager::handle_open_document(const QString& file_name)
 
     m_main_window->add_content(new graph_widget(), 2, content_anchor::center);
 
-    module_widget* m = new module_widget();
-    m_main_window->add_content(m, 0, content_anchor::left);
-    m->open();
+    //module_widget* m = new module_widget();
+    //m_main_window->add_content(m, 0, content_anchor::left);
+    //m->open();
+
+    old_graph_navigation_widget* nav_widget = new old_graph_navigation_widget();
+    m_main_window->add_content(nav_widget, 0, content_anchor::left);
+    nav_widget->open();
 
     selection_details_widget* details = new selection_details_widget();
     m_main_window->add_content(details, 0, content_anchor::bottom);
