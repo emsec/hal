@@ -11,6 +11,7 @@
 #include "gui/graph_widget/graph_navigation_widget.h"
 #include "gui/graph_widget/graph_layout_progress_widget.h"
 #include "gui/graph_widget/graphics_scene.h"
+#include "gui/graph_widget/items/graphics_gate.h"
 #include "gui/gui_globals.h"
 #include "gui/overlay/dialog_overlay.h"
 #include "gui/toolbar/toolbar.h"
@@ -255,6 +256,7 @@ void graph_widget::handle_navigation_jump_requested(const u32 from_gate, const u
     g_selection_relay.relay_selection_changed(nullptr);
 
     // JUMP TO THE GATE
+    ensure_gate_visible(to_gate);
 }
 
 void graph_widget::handle_module_double_clicked(const u32 id)
@@ -344,6 +346,9 @@ void graph_widget::handle_navigation_left_request()
                 g_selection_relay.m_subfocus_index = 0;
 
                 g_selection_relay.relay_selection_changed(nullptr);
+
+                // JUMP TO THE GATE
+                ensure_gate_visible(n->get_src().get_gate()->get_id());
             }
             else
             {
@@ -511,6 +516,12 @@ void graph_widget::debug_change_context()
         if (m_context->available())
             m_view->setScene(m_context->scene());
     }
+}
+
+void graph_widget::ensure_gate_visible(const u32 gate)
+{
+    const graphics_gate *itm = m_context->scene()->get_gate_item(gate);
+    m_view->ensureVisible(itm);
 }
 
 void graph_widget::change_context(graph_context* const context)
