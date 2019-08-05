@@ -344,7 +344,7 @@ set(GRAPH_ALGORITHM_LIB graph_algorithm)
 set(QUINE_MCCLUSKY_LIB quine_mccluskey)
 
 option(BUILD_ALL_PLUGINS "BUILD_ALL_PLUGINS" OFF)
-option(BUILD_TESTS "BUILD_TESTS" ON)
+option(BUILD_TESTS "BUILD_TESTS" OFF)
 option(BUILD_COVERAGE "BUILD_COVERAGE" OFF)
 
 if(${BUILD_TESTS} AND ${BUILD_COVERAGE})
@@ -374,7 +374,11 @@ install(FILES ${CMAKE_BINARY_DIR}/hal.pc DESTINATION "${PKGCONFIG_INSTALL_DIRECT
 message(STATUS "PKGCONFIG_INSTALL_DIRECTORY ${PKGCONFIG_INSTALL_DIRECTORY}")
 
 if(LINUX)
-    install(FILES "installer/deb/hal.conf" DESTINATION "${SHARE_INSTALL_DIRECTORY}/ld_conf/")
+    configure_file(
+            "installer/deb/hal.conf.in"
+            "${CMAKE_BINARY_DIR}/hal.conf"
+            @ONLY)
+    install(FILES "${CMAKE_BINARY_DIR}/hal.conf" DESTINATION "${SHARE_INSTALL_DIRECTORY}/ld_conf/")
 endif()
 
 if(UPLOAD_PPA)
@@ -478,3 +482,22 @@ if(BUILD_DOCUMENTATION)
 
 endif()
 
+# on make/ninja install run configure and run ldconfig
+option(ENABLE_INSTALL_LDCONFIG "ENABLE_INSTALL_LDCONFIG" ON)
+
+if(ENABLE_INSTALL_LDCONFIG)
+    if(LINUX)
+        configure_file(
+                "cmake/post_install.cmake.in"
+                "${CMAKE_BINARY_DIR}/post_install.cmake"
+                @ONLY)
+        install(SCRIPT "${CMAKE_BINARY_DIR}/post_install.cmake")
+    endif(LINUX)
+endif(ENABLE_INSTALL_LDCONFIG)
+
+# add uninstall target
+configure_file(
+        "cmake/uninstall.cmake.in"
+        "${CMAKE_BINARY_DIR}/uninstall.cmake"
+        @ONLY)
+add_custom_target(uninstall "${CMAKE_COMMAND}" -P "${CMAKE_BINARY_DIR}/uninstall.cmake")
