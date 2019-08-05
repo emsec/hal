@@ -1,3 +1,38 @@
+hal-reverse (1.1.5) bionic; urgency=medium
+
+  * Added uninstall target and fixed make/ninja install on linux with correct ldconfig settings
+  * Test/test update (#176)
+  * Fixed OpenMP build for macOS 2nd try
+  * Fixed cmake on macOS
+  * resetted utils to master
+  * resetted some files to master
+  * Update Dockerfile
+  * Update install_dependencies.sh
+  * Update Dockerfile
+  * modified dependencies to include igraph
+  * reset files from vhdl_modules_feature branch
+  * Update scan_ff.py
+  * added missing line in python script
+  * added new gate_library for scan_ff      - added gate decorator  - added json for library
+  * cleaned community_detection
+  * community_detection working with igraph_community_fastgreedy + printing and plotting results
+  * added nangate gate library
+  * minor fixes
+  * Fix documentation error
+  * removed bug in split function in utils; added file exists function
+  * fixed some shadow warnings
+  * added file_exists function to core::utils
+  * implemented graph plot + community fastgreedy algorithm
+  * openmp
+  * prepared community detection with igraph
+  * Updated brew file to include graph
+  * added igraph to cmake
+  * added igraph
+  * bug in hdl writer - backslashes are being removed
+  * fixxed naming for modules
+
+ -- Sebastian Wallat <sebastian.wallat@rub.de>  Mon, 05 Aug 2019 15:14:35 +0200
+
 hal-reverse (1.1.4) bionic; urgency=medium
 
   * Remember py path for last 'saved as'
