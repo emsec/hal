@@ -70,8 +70,12 @@ public Q_SLOTS:
     void on_treewidget_item_clicked(QTreeWidgetItem* item, int column);
     void on_gate_selected(endpoint selected);
 
-    void handle_gate_event(gate_event_handler::event ev, std::shared_ptr<gate> object, u32 associated_data);
-    void handle_module_event(module_event_handler::event ev, std::shared_ptr<module> module, u32 associated_data);
+    void handle_gate_name_changed(std::shared_ptr<gate> gate);
+    void handle_gate_removed(std::shared_ptr<gate> gate);
+    void handle_module_name_changed(std::shared_ptr<module> module);
+    void handle_module_removed(std::shared_ptr<module> module);
+    void handle_module_gate_assigned(std::shared_ptr<module> module, u32 associated_data);
+    void handle_module_gate_removed(std::shared_ptr<module> module, u32 associated_data);
 
 private:
     QVBoxLayout* m_content_layout;

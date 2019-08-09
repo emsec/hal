@@ -183,8 +183,12 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
     // load and store quine mc cluskey plugin
     m_qmc = plugin_manager::get_plugin_instance<plugin_quine_mccluskey>("libquine_mccluskey");
 
-    connect(&g_netlist_relay, &netlist_relay::gate_event, this, &gate_details_widget::handle_gate_event);
-    connect(&g_netlist_relay, &netlist_relay::module_event, this, &gate_details_widget::handle_module_event);
+    connect(&g_netlist_relay, &netlist_relay::gate_name_changed, this, &gate_details_widget::handle_gate_name_changed);
+    connect(&g_netlist_relay, &netlist_relay::gate_removed, this, &gate_details_widget::handle_gate_removed);
+    connect(&g_netlist_relay, &netlist_relay::module_name_changed, this, &gate_details_widget::handle_module_name_changed);
+    connect(&g_netlist_relay, &netlist_relay::module_removed, this, &gate_details_widget::handle_module_removed);
+    connect(&g_netlist_relay, &netlist_relay::module_gate_assigned, this, &gate_details_widget::handle_module_gate_assigned);
+    connect(&g_netlist_relay, &netlist_relay::module_gate_removed, this, &gate_details_widget::handle_module_gate_removed);
 }
 
 gate_details_widget::~gate_details_widget()
@@ -197,43 +201,51 @@ gate_details_widget::~gate_details_widget()
     delete m_output_pins;
 }
 
-void gate_details_widget::handle_gate_event(gate_event_handler::event ev, std::shared_ptr<gate> gate, u32 associated_data)
+void gate_details_widget::handle_gate_name_changed(std::shared_ptr<gate> gate)
 {
-    Q_UNUSED(associated_data)
+    update(gate->get_id());
+}
 
-    //check if details widget currently shows the affected gate
-    if (m_current_id == gate->get_id())
+void gate_details_widget::handle_gate_removed(std::shared_ptr<gate> gate)
+{
+    m_general_table->setHidden(true);
+    m_item_deleted_label->setHidden(false);
+    m_scroll_area->setHidden(true);
+}
+
+void gate_details_widget::handle_module_name_changed(std::shared_ptr<module> module)
+{
+    auto g = g_netlist->get_gate_by_id(m_current_id);
+
+    if (module->contains_gate(g))
     {
-        if (ev == gate_event_handler::event::removed)
-        {
-            m_general_table->setHidden(true);
-            m_item_deleted_label->setHidden(false);
-            m_scroll_area->setHidden(true);
-        }
-        else if (ev == gate_event_handler::event::name_changed)
-        {
-            update(gate->get_id());
-        }
+        update(m_current_id);
     }
 }
 
-void gate_details_widget::handle_module_event(module_event_handler::event ev, std::shared_ptr<module> module, u32 associated_data)
+void gate_details_widget::handle_module_removed(std::shared_ptr<module> module)
 {
-    if (ev == module_event_handler::event::gate_assigned || ev == module_event_handler::event::gate_removed)
-    {
-        if (m_current_id == associated_data)
-        {
-            update(m_current_id);
-        }
-    }
-    else if (ev == module_event_handler::event::name_changed)
-    {
-        auto g = g_netlist->get_gate_by_id(m_current_id);
+    auto g = g_netlist->get_gate_by_id(m_current_id);
 
-        if (module->contains_gate(g))
-        {
-            update(m_current_id);
-        }
+    if (module->contains_gate(g))
+    {
+        update(m_current_id);
+    }
+}
+
+void gate_details_widget::handle_module_gate_assigned(std::shared_ptr<module> module, u32 associated_data)
+{
+    if (m_current_id == associated_data)
+    {
+        update(m_current_id);
+    }
+}
+
+void gate_details_widget::handle_module_gate_removed(std::shared_ptr<module> module, u32 associated_data)
+{
+    if (m_current_id == associated_data)
+    {
+        update(m_current_id);
     }
 }
 
