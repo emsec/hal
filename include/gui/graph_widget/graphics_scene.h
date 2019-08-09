@@ -4,6 +4,7 @@
 #include "def.h"
 
 #include "gui/graph_widget/shaders/graph_shader.h"
+#include "netlist/gate.h"
 
 #include <QGraphicsScene>
 #include <QPair>
@@ -57,6 +58,7 @@ public Q_SLOTS:
     void handle_intern_selection_changed();
     void handle_extern_selection_changed(void* sender);
     void handle_extern_subfocus_changed(void* sender);
+    void handle_gate_name_changed(std::shared_ptr<gate> g);
 
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent* event) Q_DECL_OVERRIDE;

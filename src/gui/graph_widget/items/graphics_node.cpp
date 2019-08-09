@@ -34,6 +34,11 @@ qreal graphics_node::height() const
     return m_height;
 }
 
+void graphics_node::set_name(QString name)
+{
+    m_name = name;
+}
+
 QVariant graphics_node::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant& value)
 {
     // NOT FUNCTIONAL, NEEDS TO USE LAYOUT DATA

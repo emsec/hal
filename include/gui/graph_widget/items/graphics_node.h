@@ -3,6 +3,8 @@
 
 #include "gui/graph_widget/items/graphics_item.h"
 
+#include <QString>
+
 class graphics_node : public graphics_item
 {
 public:
@@ -36,6 +38,8 @@ public:
 
     qreal width() const;
     qreal height() const;
+
+    void set_name(QString name);
 
 //    qreal x_offset() const;
 //    qreal y_offset() const;

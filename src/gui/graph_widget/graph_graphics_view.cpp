@@ -12,10 +12,14 @@
 #include "gui/graph_widget/items/standard_graphics_module.h"
 #include "gui/graph_widget/items/standard_graphics_net.h"
 #include "gui/gui_globals.h"
+#include "netlist/gate.h"
+#include "netlist/module.h"
 
 #include <QAction>
 #include <QColorDialog>
 #include <qmath.h>
+#include <QInputDialog>
+#include <QLineEdit>
 #include <QMenu>
 #include <QScrollBar>
 #include <QStyleOptionGraphicsItem>
@@ -61,6 +65,54 @@ void graph_graphics_view::handle_cone_view_action()
     if (!g)
         return;
 }
+
+//////////
+// If we have time:
+// This class should NOT directly perform any of these actions.
+// There should be a global manager for this.
+
+void graph_graphics_view::handle_move_action(QAction *action)
+{
+    const u32 mod_id = action->data().toInt();
+    const u32 gate_id = m_item->id();
+    std::shared_ptr<module> m = g_netlist->get_module_by_id(mod_id);
+    std::shared_ptr<gate> g = g_netlist->get_gate_by_id(gate_id);
+    if (g)
+        m->assign_gate(g);
+}
+
+void graph_graphics_view::handle_move_new_action()
+{
+    bool ok;
+    QString name = QInputDialog::getText(nullptr, "", "Module Name:", QLineEdit::Normal, "", &ok);
+    if (!ok || name.isEmpty())
+        return;
+    // There is no easy way to allow the user to create a submodule on the fly here,
+    // so this creates a new module under the top-module.
+    std::shared_ptr<module> m = g_netlist->create_module(g_netlist->get_unique_module_id(), name.toStdString(), g_netlist->get_top_module());
+
+    const u32 gate_id = m_item->id();
+    std::shared_ptr<gate> g = g_netlist->get_gate_by_id(gate_id);
+
+    if (g)
+        m->assign_gate(g);
+}
+
+void graph_graphics_view::handle_rename_action()
+{
+    // move this to separate class in the future, if this gets any bigger
+
+    // get the selected gate and its current name
+    std::shared_ptr<gate> g = g_netlist->get_gate_by_id(m_item->id());
+    const QString name = QString::fromStdString(g->get_name());
+    // show single-line input dialog
+    bool confirm;
+    const QString new_name = QInputDialog::getText(this, "Rename gate", "New name:", QLineEdit::Normal, name, &confirm);
+    // if dialog has been confirmed, apply the new name
+    if (confirm)
+        g->set_name(new_name.toStdString());
+}
+//////////
 
 void graph_graphics_view::adjust_min_scale()
 {
@@ -226,9 +278,35 @@ void graph_graphics_view::show_context_menu(const QPoint& pos)
         {
             case hal::item_type::gate:
             {
-                QAction* color_action = context_menu.addAction("Change Color");
-                QObject::connect(color_action, &QAction::triggered, this, &graph_graphics_view::handle_change_color_action);
-                context_menu.addAction(color_action);
+                // DEBUG ONLY
+                //QAction* color_action = context_menu.addAction("Change Color");
+                //QObject::connect(color_action, &QAction::triggered, this, &graph_graphics_view::handle_change_color_action);
+                //context_menu.addAction(color_action);
+
+                QAction* rename_action = context_menu.addAction("Rename …");
+                QObject::connect(rename_action, &QAction::triggered, this, &graph_graphics_view::handle_rename_action);
+                context_menu.addAction(rename_action);
+
+                QMenu* module_submenu = context_menu.addMenu("Move to module");
+                QActionGroup* module_actions = new QActionGroup(module_submenu);
+                for (auto& module : g_netlist->get_modules())
+                {
+                    std::shared_ptr<gate> g = g_netlist->get_gate_by_id(m_item->id());
+                    if (!module->contains_gate(g))
+                    {
+                        QString mod_name = QString::fromStdString(module->get_name());
+                        const u32 mod_id = module->get_id();
+                        QAction* action = module_submenu->addAction(mod_name);
+                        module_actions->addAction(action);
+                        action->setData(mod_id);
+                    }
+                }
+                QObject::connect(module_actions, SIGNAL(triggered(QAction*)), this, SLOT(handle_move_action(QAction*)));
+                module_submenu->addSeparator();
+
+                QAction* new_mod_action = module_submenu->addAction("New module …");
+                QObject::connect(new_mod_action, &QAction::triggered, this, &graph_graphics_view::handle_move_new_action);
+                module_submenu->addAction(new_mod_action);
 
                 QAction* cone_view_action = context_menu.addAction("Open in Cone View");
                 QObject::connect(cone_view_action, &QAction::triggered, this, &graph_graphics_view::handle_cone_view_action);

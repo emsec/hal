@@ -10,11 +10,13 @@
 #include "gui/graph_widget/items/graphics_item.h"
 #include "gui/graph_widget/items/graphics_module.h"
 #include "gui/graph_widget/items/graphics_net.h"
+#include "netlist/gate.h"
 //#include "gui/graph_widget/graphics_items/utility_items/gate_navigation_popup.h"
 #include "gui/gui_globals.h"
 
 #include <QGraphicsSceneMouseEvent>
 #include <QPainter>
+#include <QString>
 
 qreal graphics_scene::s_lod = 0;
 
@@ -280,6 +282,7 @@ void graphics_scene::connect_all()
 
     connect(&g_selection_relay, &selection_relay::selection_changed, this, &graphics_scene::handle_extern_selection_changed);
     connect(&g_selection_relay, &selection_relay::subfocus_changed, this, &graphics_scene::handle_extern_subfocus_changed);
+    connect(&g_netlist_relay, &netlist_relay::gate_name_changed, this, &graphics_scene::handle_gate_name_changed);
 }
 
 void graphics_scene::disconnect_all()
@@ -288,6 +291,7 @@ void graphics_scene::disconnect_all()
 
     disconnect(&g_selection_relay, &selection_relay::selection_changed, this, &graphics_scene::handle_extern_selection_changed);
     disconnect(&g_selection_relay, &selection_relay::subfocus_changed, this, &graphics_scene::handle_extern_subfocus_changed);
+    disconnect(&g_netlist_relay, &netlist_relay::gate_name_changed, this, &graphics_scene::handle_gate_name_changed);
 }
 
 void graphics_scene::delete_all_items()
@@ -446,6 +450,20 @@ void graphics_scene::handle_extern_subfocus_changed(void* sender)
     Q_UNUSED(sender)
 
     //update_utility_items();
+}
+
+void graphics_scene::handle_gate_name_changed(std::shared_ptr<gate> g)
+{
+    const u32 id = g->get_id();
+    std::string name = g->get_name();
+    for (auto& gate : m_gate_items)
+    {
+        if (gate.id == id)
+        {
+            gate.item->set_name(QString::fromStdString(name));
+            break;
+        }
+    }
 }
 
 void graphics_scene::mousePressEvent(QGraphicsSceneMouseEvent* event)

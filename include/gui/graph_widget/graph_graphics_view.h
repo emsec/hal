@@ -27,6 +27,7 @@
 #include "def.h"
 
 #include <QGraphicsView>
+#include <QAction>
 
 class graphics_item;
 
@@ -49,6 +50,9 @@ private Q_SLOTS:
     void conditional_update();
     void handle_change_color_action();
     void handle_cone_view_action();
+    void handle_move_action(QAction* action);
+    void handle_move_new_action();
+    void handle_rename_action();
     void adjust_min_scale();
 
 private:
