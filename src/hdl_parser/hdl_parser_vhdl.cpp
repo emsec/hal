@@ -580,7 +580,7 @@ bool hdl_parser_vhdl::parse_instance(entity& e, const std::vector<file_line>& li
         // find longest matching prefix
         for (const auto& lib : m_libraries)
         {
-            if (lib.size() > prefix.size() && prefix.size() < lib.size() && core_utils::starts_with(low_type, lib))
+            if (lib.size() > prefix.size() && core_utils::starts_with(low_type, lib))
             {
                 prefix = lib;
             }
@@ -858,7 +858,7 @@ std::shared_ptr<module> hdl_parser_vhdl::instantiate(const entity& e, std::share
         {
             for (const auto& attr : attribute_it->second)
             {
-                if(!module->set_data("vhdl_attribute", std::get<0>(attr), std::get<1>(attr), std::get<2>(attr))) 
+                if(!module->set_data("vhdl_attribute", std::get<0>(attr), std::get<1>(attr), std::get<2>(attr)))
                 {
                     log_error("hdl_parser", "couldn't set data");
                 }
