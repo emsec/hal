@@ -3,6 +3,7 @@
 #include "gui_globals.h"
 #include "gui_utility.h"
 #include "netlist/module.h"
+#include "core/log.h"
 #include <QColorDialog>
 #include <QDebug>
 #include <QOpenGLWidget>
@@ -132,6 +133,7 @@ void graph_graphics_widget::ShowContextMenu(const QPoint& pos)
             {
                 delete gate_menu_remove_module;
             }
+
         }
         contextMenu2.exec(mapToGlobal(pos));
     }
