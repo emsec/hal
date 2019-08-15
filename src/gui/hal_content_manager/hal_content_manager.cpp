@@ -11,11 +11,8 @@
 #include "gui/content_layout_area/content_layout_area.h"
 #include "gui/content_widget/content_widget.h"
 #include "gui/docking_system/tab_widget.h"
-#include "gui/graph_layouter/graph_layouter_view.h"
-#include "gui/graph_layouter/gui_graph_gate.h"
-#include "gui/graph_layouter/old_graph_layouter.h"
-#include "gui/graph_manager/hal_graph_widget.h"
 #include "gui/graph_navigation_widget/old_graph_navigation_widget.h"
+#include "gui/graph_widget/graph_graphics_view.h"
 #include "gui/graph_widget/graph_widget.h"
 #include "gui/gui_utility.h"
 #include "gui/hal_graphics/hal_graphics_view.h"
@@ -53,30 +50,18 @@ void hal_content_manager::hack_delete_content()
 
 void hal_content_manager::handle_open_document(const QString& file_name)
 {
-    vhdl_editor* code_edit = new vhdl_editor();
-    m_main_window->add_content(code_edit, 0, content_anchor::center);
 
-//    m_graph_scene = new QGraphicsScene(nullptr);
-//    layouter = new old_graph_layouter(m_graph_scene, g_netlist);
-//    layouter->layout_graph();
-//    m_layouter_view = new graph_layouter_view(m_graph_scene, layouter, g_netlist);
-//    hal_graph_widget* gw = new hal_graph_widget(m_layouter_view);
-//    m_main_window->add_content(gw, 1, content_anchor::center);
-//    gw->open();
-//    connect(gw1, &hal_graph_widget::relayout_button_clicked, this, &hal_content_manager::handle_relayout_button_clicked);
-
-//    old_graph_navigation_widget* navigation = new old_graph_navigation_widget();
-//    m_main_window->add_content(navigation, 0, content_anchor::left);
-//    navigation->open();
-
-    graph_tab_widget* graph_tab_wid = new graph_tab_widget();
+    graph_tab_widget* graph_tab_wid = new graph_tab_widget(nullptr);
     graph_widget* graph_edit = new graph_widget();
-    graph_tab_wid->addTab(graph_edit, "View 1");
-    graph_tab_wid->addTab(new graph_widget(), "View 2");
-
+    vhdl_editor* code_edit = new vhdl_editor();
+    graph_tab_wid->addTab(graph_edit, "Top view");
+    graph_tab_wid->addTab(code_edit, "Source");
     m_main_window->add_content(graph_tab_wid, 2, content_anchor::center);
-
-
+    graph_edit->open_top_context();
+    
+    
+    
+    
     //module_widget* m = new module_widget();
     //m_main_window->add_content(m, 0, content_anchor::left);
     //m->open();
@@ -138,7 +123,6 @@ void hal_content_manager::handle_open_document(const QString& file_name)
     python_console_widget* python_console = new python_console_widget();
     m_main_window->add_content(python_console, 5, content_anchor::bottom);
     python_console->open();
-
     m_netlist_watcher = new netlist_watcher(this);
 }
 
@@ -166,11 +150,4 @@ void hal_content_manager::handle_filsystem_doc_changed(const QString& file_name)
 void hal_content_manager::handle_save_triggered()
 {
     Q_EMIT save_triggered();
-}
-
-void hal_content_manager::handle_relayout_button_clicked()
-{
-    layouter->relayout_graph();
-    m_layouter_view->handle_graph_relayouted();
-    m_graph_scene->update();
 }

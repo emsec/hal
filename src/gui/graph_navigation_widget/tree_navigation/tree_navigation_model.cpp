@@ -4,7 +4,7 @@
 #include "netlist/gate.h"
 #include "netlist/net.h"
 #include "netlist/module.h"
-#include "graph_layouter/old_graphics_item_qss_adapter.h"//for the styled icon, temporary
+//#include "graph_layouter/old_graphics_item_qss_adapter.h"//for the styled icon, temporary
 #include "gui_utility.h"
 
 tree_navigation_model::tree_navigation_model(QObject* parent) : QAbstractItemModel(parent)
@@ -582,7 +582,6 @@ void tree_navigation_model::load_data_settings()
     m_structured_font = QFont();
     m_structured_font.setBold(true);
     m_structured_font.setPixelSize(15);
-    m_design_icon = gui_utility::get_styled_svg_icon(old_graphics_item_qss_adapter::instance()->tree_navigation_open_folder_style(), old_graphics_item_qss_adapter::instance()->tree_navigation_open_folder_path());
-    //m_design_icon = gui_utility::get_styled_svg_icon("all->#000000", ":/icons/open");
+    m_design_icon = gui_utility::get_styled_svg_icon("all->#888888", ":/icons/open");
     //m_design_icon = QIcon(":/icons/open");
 }

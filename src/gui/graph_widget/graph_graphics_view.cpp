@@ -13,6 +13,7 @@
 #include "gui/graph_widget/items/standard_graphics_net.h"
 #include "gui/gui_globals.h"
 #include "netlist/gate.h"
+#include "netlist/net.h"
 #include "netlist/module.h"
 #include "core/log.h"
 
@@ -55,7 +56,7 @@ void graph_graphics_view::handle_change_color_action()
         return;
 }
 
-void graph_graphics_view::handle_cone_view_action()
+void graph_graphics_view::handle_isolation_view_action()
 {
     std::shared_ptr<gate> g = g_netlist->get_gate_by_id(m_item->id());
 
@@ -304,9 +305,9 @@ void graph_graphics_view::show_context_menu(const QPoint& pos)
                 QObject::connect(new_mod_action, &QAction::triggered, this, &graph_graphics_view::handle_move_new_action);
                 module_submenu->addAction(new_mod_action);
 
-                QAction* cone_view_action = context_menu.addAction("Open in Cone View");
-                QObject::connect(cone_view_action, &QAction::triggered, this, &graph_graphics_view::handle_cone_view_action);
-                context_menu.addAction(cone_view_action);
+                QAction* isolation_view_action = context_menu.addAction("Open in Isolation View");
+                QObject::connect(isolation_view_action, &QAction::triggered, this, &graph_graphics_view::handle_isolation_view_action);
+                context_menu.addAction(isolation_view_action);
 
                 context_menu.addSeparator();
 

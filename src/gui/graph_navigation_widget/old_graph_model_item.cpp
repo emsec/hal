@@ -1,6 +1,6 @@
-#include "graph_manager/graph_model_item.h"
+#include "graph_navigation_widget/old_graph_model_item.h"
 
-graph_model_item::graph_model_item(std::shared_ptr<gate> gate)
+old_graph_model_item::old_graph_model_item(std::shared_ptr<gate> gate)
 {
     refgate = gate;
     refNet  = nullptr;
@@ -16,7 +16,7 @@ graph_model_item::graph_model_item(std::shared_ptr<gate> gate)
     i_type = item_type::gate;
 }
 
-graph_model_item::graph_model_item(std::shared_ptr<net> net)
+old_graph_model_item::old_graph_model_item(std::shared_ptr<net> net)
 {
     refNet  = net;
     refgate = nullptr;
@@ -26,11 +26,11 @@ graph_model_item::graph_model_item(std::shared_ptr<net> net)
     i_type = item_type::net;
 }
 
-graph_model_item::~graph_model_item()
+old_graph_model_item::~old_graph_model_item()
 {
 }
 
-void graph_model_item::setgate(std::shared_ptr<gate> gate)
+void old_graph_model_item::setgate(std::shared_ptr<gate> gate)
 {
     refgate = gate;
     refNet  = nullptr;
@@ -46,7 +46,7 @@ void graph_model_item::setgate(std::shared_ptr<gate> gate)
     i_type = item_type::gate;
 }
 
-void graph_model_item::setNet(std::shared_ptr<net> net)
+void old_graph_model_item::setNet(std::shared_ptr<net> net)
 {
     refNet  = net;
     refgate = nullptr;
@@ -56,29 +56,29 @@ void graph_model_item::setNet(std::shared_ptr<net> net)
     i_type = item_type::net;
 }
 
-QString graph_model_item::getName()
+QString old_graph_model_item::getName()
 {
     return name;
 }
 
-QString graph_model_item::getID()
+QString old_graph_model_item::getID()
 {
     return id;
 }
 
-QString graph_model_item::getType()
+QString old_graph_model_item::getType()
 {
     return type;
 }
 
-QString graph_model_item::getLocation()
+QString old_graph_model_item::getLocation()
 {
     if (location.isEmpty())
         return QString("N/A");
     return location;
 }
 
-item_type graph_model_item::getItemType()
+item_type old_graph_model_item::getItemType()
 {
     return i_type;
 }

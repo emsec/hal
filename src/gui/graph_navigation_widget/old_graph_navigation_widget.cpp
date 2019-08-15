@@ -1,5 +1,5 @@
 #include "graph_navigation_widget/old_graph_navigation_widget.h"
-#include "graph_manager/graph_tree_model.h"
+#include "graph_navigation_widget/old_graph_tree_model.h"
 #include "graph_navigation_widget/graph_navigation_model.h"
 #include "graph_navigation_widget/graph_navigation_proxy_model.h"
 #include "graph_navigation_widget/navigation_filter_dialog.h"
