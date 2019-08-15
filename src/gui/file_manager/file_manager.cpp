@@ -9,17 +9,15 @@
 
 #include "gui/gui_globals.h"
 
+#include <QDateTime>
 #include <QFile>
 #include <QFileInfo>
 #include <QFileSystemWatcher>
 #include <QInputDialog>
 #include <QMessageBox>
 #include <QTextStream>
-#include <QDateTime>
 
-file_manager::file_manager(QObject* parent) : QObject(parent),
-    m_file_watcher(new QFileSystemWatcher(this)),
-    m_file_open(false)
+file_manager::file_manager(QObject* parent) : QObject(parent), m_file_watcher(new QFileSystemWatcher(this)), m_file_open(false)
 {
     connect(m_file_watcher, &QFileSystemWatcher::fileChanged, this, &file_manager::handle_file_changed);
     connect(m_file_watcher, &QFileSystemWatcher::directoryChanged, this, &file_manager::handle_directory_changed);
@@ -113,10 +111,16 @@ void file_manager::open_file(QString file_name)
     if (!file_name.endsWith(".hal"))
     {
         QString hal_file_name = file_name.left(file_name.lastIndexOf('.')) + ".hal";
+        QString extension     = file_name.right(file_name.size() - file_name.lastIndexOf('.'));
 
         if (QFileInfo::exists(hal_file_name) && QFileInfo(hal_file_name).isFile())
         {
-            if (QMessageBox::question(nullptr, "Resume previous work", "A .hal file exists for the selected netlist! Load that file instead?", QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
+            QMessageBox msgBox(QMessageBox::Question, "Resume previous work", "A .hal file exists for the selected netlist.", QMessageBox::Ok | QMessageBox::Close);
+
+            msgBox.setButtonText(QMessageBox::Ok, "Load .hal file");
+            msgBox.setButtonText(QMessageBox::Close, "Parse " + extension + " file");
+
+            if (msgBox.exec() == QMessageBox::Ok)
             {
                 file_name         = hal_file_name;
                 logical_file_name = hal_file_name;
