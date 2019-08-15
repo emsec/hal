@@ -597,7 +597,7 @@ bool hdl_parser_verilog::parse_assign(const std::string& token, const int line)
             imploded_nets2 += net + ",";
         }
         log_error("hdl_parser",
-                  "Cannot connect nets ({}; len={}) to pins ({}; len={}) of gate {} line: {}",
+                  "Cannot connect nets ({}; len={}) to pins ({}; len={}) line: {}",
                   imploded_nets1,
                   std::to_string(nets_lhs.size()),
                   imploded_nets2,
@@ -764,7 +764,7 @@ std::vector<std::string> hdl_parser_verilog::parse_net_single(const std::string&
             // 2.b Is vector of signals
             if (token.find("[") != std::string::npos)
             {
-                auto base   = token.substr(0, token.find("["));
+                auto base   = core_utils::trim(token.substr(0, token.find("[")));
                 auto bounds = this->get_vector_bounds(token.substr(token.find("[")));
                 for (const auto& bound : bounds)
                 {

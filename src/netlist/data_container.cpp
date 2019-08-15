@@ -8,11 +8,6 @@ bool data_container::set_data(const std::string& category, const std::string& ke
         log_error("netlist", "key category or key is empty.");
         return false;
     }
-    if (value_data_type.empty() || value.empty())
-    {
-        log_error("netlist", "value data type or value is empty.");
-        return false;
-    }
 
     m_data[std::make_tuple(category, key)] = std::make_tuple(value_data_type, value);
 
