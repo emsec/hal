@@ -29,7 +29,6 @@
 #include <QStringList>
 
 //#include "gui/graph_manager/hal_graph_widget.h"
-#include "gui/graph_layouter/old_graph_layouter.h"
 #include "netlist_watcher/netlist_watcher.h"
 
 class main_window;
@@ -51,7 +50,7 @@ public:
     explicit hal_content_manager(main_window* parent);
 
     ~hal_content_manager();
-    
+
     void hack_delete_content();
 
 Q_SIGNALS:
@@ -64,8 +63,6 @@ public Q_SLOTS:
     void handle_close_document();
 
     void handle_filsystem_doc_changed(const QString& file_name);
-
-    void handle_relayout_button_clicked();
 
     void handle_save_triggered();
 
@@ -86,8 +83,6 @@ private:
     QGraphicsScene* m_graph_scene;
 
     graph_layouter_view* m_layouter_view;
-
-    old_graph_layouter* layouter;
 
     python_editor* m_python_widget;
 
