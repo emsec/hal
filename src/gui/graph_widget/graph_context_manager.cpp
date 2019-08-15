@@ -278,5 +278,15 @@ graph_context* graph_context_manager::get_context()
 void graph_context_manager::create_top_context()
 {
     m_top = g_graph_context_manager.add_dynamic_context("top");
-    m_top->add(QSet<u32>{1}, QSet<u32>(), QSet<u32>());
+    QSet<u32> global_nets;
+    for (auto& net : g_netlist->get_global_inout_nets()) {
+        global_nets.insert(net->get_id());
+    }
+    for (auto& net : g_netlist->get_global_input_nets()) {
+        global_nets.insert(net->get_id());
+    }
+    for (auto& net : g_netlist->get_global_output_nets()) {
+        global_nets.insert(net->get_id());
+    }
+    m_top->add(QSet<u32>{1}, QSet<u32>(), global_nets);
 }
