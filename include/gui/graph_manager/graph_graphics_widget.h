@@ -58,6 +58,7 @@ private Q_SLOTS:
     void handle_add_gates_to_existing_module();
     void handle_remove_gates_from_module_triggered();
 
+
 private:
     QGraphicsView* m_view;
 
