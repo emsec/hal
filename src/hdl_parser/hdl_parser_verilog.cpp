@@ -597,12 +597,11 @@ bool hdl_parser_verilog::parse_assign(const std::string& token, const int line)
             imploded_nets2 += net + ",";
         }
         log_error("hdl_parser",
-                  "Cannot connect nets ({}; len={}) to pins ({}; len={}) of gate {} line: {}",
+                  "Cannot connect nets ({}; len={}) to pins ({}; len={}) line: {}",
                   imploded_nets1,
                   std::to_string(nets_lhs.size()),
                   imploded_nets2,
                   std::to_string(nets_rhs.size()),
-                  "UNKNOWN",
                   line);
         return false;
     }
