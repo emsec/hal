@@ -26,20 +26,22 @@ protected:
  *
  * Functions: get_bit
  */
-TEST_F(utils_test, check_get_bit){TEST_START
-                                  // ########################
-                                  // POSITIVE TESTS
-                                  // ########################
-                                  {// Get some bits of the given int
-                                   int i = 0b1101;
-EXPECT_EQ(get_bit(i, 0), 1);
-EXPECT_EQ(get_bit(i, 1), 0);
-EXPECT_EQ(get_bit(i, 2), 1);
-EXPECT_EQ(get_bit(i, 3), 1);
-EXPECT_EQ(get_bit(i, 4), 0);
-}
+TEST_F(utils_test, check_get_bit){
+    TEST_START
+      // ########################
+      // POSITIVE TESTS
+      // ########################
+      {
+          // Get some bits of the given int
+            int i = 0b1101;
+            EXPECT_EQ(get_bit(i, 0), 1);
+            EXPECT_EQ(get_bit(i, 1), 0);
+            EXPECT_EQ(get_bit(i, 2), 1);
+            EXPECT_EQ(get_bit(i, 3), 1);
+            EXPECT_EQ(get_bit(i, 4), 0);
+      }
 
-TEST_END
+    TEST_END
 }
 
 /**
@@ -47,20 +49,22 @@ TEST_END
  *
  * Functions: set_bit
  */
-TEST_F(utils_test, check_set_bit){TEST_START
-                                  // ########################
-                                  // POSITIVE TESTS
-                                  // ########################
-                                  {// Set the bit if the bit is 0
-                                   int i = 0b1001;
-set_bit(i, 1) EXPECT_EQ(i, 0b1011);
-}
-{
-    // Set the bit if the bit is 1
-    int i = 0b1001;
-    set_bit(i, 0) EXPECT_EQ(i, 0b1001);
-}
-TEST_END
+TEST_F(utils_test, check_set_bit){
+    TEST_START
+        // ########################
+        // POSITIVE TESTS
+        // ########################
+        {
+            // Set the bit if the bit is 0
+            int i = 0b1001;
+            set_bit(i, 1) EXPECT_EQ(i, 0b1011);
+        }
+        {
+            // Set the bit if the bit is 1
+            int i = 0b1001;
+            set_bit(i, 0) EXPECT_EQ(i, 0b1001);
+        }
+    TEST_END
 }
 
 /**
@@ -68,20 +72,22 @@ TEST_END
  *
  * Functions: clear_bit
  */
-TEST_F(utils_test, check_clear_bit){TEST_START
-                                    // ########################
-                                    // POSITIVE TESTS
-                                    // ########################
-                                    {// Clear the bit if the bit is 1
-                                     int i = 0b1001;
-clear_bit(i, 0) EXPECT_EQ(i, 0b1000);
-}
-{
-    // Clear the bit if the bit is 0
-    int i = 0b1001;
-    clear_bit(i, 1) EXPECT_EQ(i, 0b1001);
-}
-TEST_END
+TEST_F(utils_test, check_clear_bit){
+    TEST_START
+    // ########################
+    // POSITIVE TESTS
+    // ########################
+    {
+        // Clear the bit if the bit is 1
+        int i = 0b1001;
+        clear_bit(i, 0) EXPECT_EQ(i, 0b1000);
+    }
+    {
+        // Clear the bit if the bit is 0
+        int i = 0b1001;
+        clear_bit(i, 1) EXPECT_EQ(i, 0b1001);
+    }
+    TEST_END
 }
 
 /**
@@ -268,9 +274,73 @@ TEST_F(utils_test, check_trim)
     EXPECT_EQ(trim("\tstring\t"), "string");
     EXPECT_EQ(trim("\t  string\t \n"), "string");
 
+    // Test with other char's to remove
+    EXPECT_EQ(trim("$#$str#ing#$#","#$"), "str#ing");
+
     // Some special cases
     EXPECT_EQ(trim("      "), "");
     EXPECT_EQ(trim(""), "");
+    EXPECT_EQ(trim("string",""), "string");
+
+    TEST_END
+}
+
+/**
+ * Testing the ltrim function
+ *
+ * Functions: ltrim
+ */
+TEST_F(utils_test, check_ltrim)
+{
+    TEST_START
+        // ########################
+        // POSITIVE TESTS
+        // ########################
+
+        // Some 'normal' cases
+        EXPECT_EQ(ltrim("  string  "), "string  ");
+        EXPECT_EQ(ltrim("string  "), "string  ");
+        EXPECT_EQ(ltrim("  stri ng  "), "stri ng  ");
+        EXPECT_EQ(ltrim("\tstring\t"), "string\t");
+        EXPECT_EQ(ltrim("\t\n\r string"), "string");
+
+        // Test with other char's to remove
+        EXPECT_EQ(ltrim("$#$string#","#$"), "string#");
+
+        // Some special cases
+        EXPECT_EQ(ltrim("      "), "");
+        EXPECT_EQ(ltrim(""), "");
+        EXPECT_EQ(ltrim("string",""), "string");
+
+    TEST_END
+}
+
+/**
+ * Testing the rtrim function
+ *
+ * Functions: rtrim
+ */
+TEST_F(utils_test, check_rtrim)
+{
+    TEST_START
+        // ########################
+        // POSITIVE TESTS
+        // ########################
+
+        // Some 'normal' cases
+        EXPECT_EQ(rtrim("  string  "), "  string");
+        EXPECT_EQ(rtrim("string  "), "string");
+        EXPECT_EQ(rtrim("  stri ng  "), "  stri ng");
+        EXPECT_EQ(rtrim("\tstring\t"), "\tstring");
+        EXPECT_EQ(rtrim("string\t\n\r "), "string");
+
+        // Test with other char's to remove
+        EXPECT_EQ(rtrim("#string$#$","#$"), "#string");
+
+        // Some special cases
+        EXPECT_EQ(rtrim("      "), "");
+        EXPECT_EQ(rtrim(""), "");
+        EXPECT_EQ(ltrim("string",""), "string");
 
     TEST_END
 }
@@ -295,15 +365,15 @@ TEST_F(utils_test, check_replace)
     // NEGATIVE TESTS
     // ########################
 
-    EXPECT_EQ(replace("This is a string", "", "XX"), "This is a string");    //FAILS (CRITICAL) TODO
+    EXPECT_EQ(replace("This is a string", "", "XX"), "This is a string");
     EXPECT_EQ(replace("", "XX", "YY"), "");
     TEST_END
 }
 
 /**
- * Testing the join function
+ * Testing the join function for vectors and sets
  *
- * Functions: join
+ * Functions: join (with vector and set)
  */
 TEST_F(utils_test, check_join)
 {
@@ -311,17 +381,21 @@ TEST_F(utils_test, check_join)
     // ########################
     // POSITIVE TESTS
     // ########################
-
+    // Join of vectors
     EXPECT_EQ(join(",", std::vector<std::string>({"A", "B", "C"})), "A,B,C");
     EXPECT_EQ(join(",", std::vector<std::string>({"A,", "B,", "C"})), "A,,B,,C");
     EXPECT_EQ(join("", std::vector<std::string>({"A", "B", "C"})), "ABC");
     EXPECT_EQ(join(",", std::vector<std::string>({"A"})), "A");
+
+    // Join of sets
+    EXPECT_EQ(join(",", std::set<std::string>({"A", "B", "C"})), "A,B,C");
 
     // ########################
     // NEGATIVE TESTS
     // ########################
 
     EXPECT_EQ(join(",", std::vector<std::string>({})), "");
+    EXPECT_EQ(join(",", std::set<std::string>({})), "");
     TEST_END
 }
 
@@ -465,7 +539,7 @@ TEST_F(utils_test, check_get_first_directory_exists)
         EXPECT_EQ(get_first_directory_exists(path_set), lib_path);
     }
     {
-        // No existing dirs (should return "") -> FAILS TODO
+        // No existing dirs (should return "")
         std::vector<hal::path> path_set({non_existing_path_1, non_existing_path_2});
         get_first_directory_exists(path_set);
         EXPECT_EQ(get_first_directory_exists(path_set).string(), hal::path("").string());
@@ -475,7 +549,7 @@ TEST_F(utils_test, check_get_first_directory_exists)
     // NEGATIVE TESTS
     // ########################
     {
-        // Empty list of paths -> FAILS TODO
+        // Empty list of paths
         std::vector<hal::path> path_set_empty({});
         EXPECT_EQ(get_first_directory_exists(path_set_empty).string(), "");
     }
@@ -531,7 +605,7 @@ TEST_F(utils_test, check_get_file)
         EXPECT_EQ(get_file("tmp.txt", dirs_to_search).string(), dir_1_path.string() + "/tmp.txt");
     }
     {
-        // No directory contains the searched file -> wrong documentation? TODO
+        // No directory contains the searched file -> wrong documentation?
         std::vector<hal::path> dirs_to_search({dir_empty_1_path, dir_empty_2_path});
         EXPECT_EQ(get_file("tmp.txt", dirs_to_search).string(), hal::path(""));
     }
@@ -540,12 +614,12 @@ TEST_F(utils_test, check_get_file)
     // NEGATIVE TESTS
     // ########################
     {
-        // path hints are empty -> wrong documentation? TODO
+        // path hints are empty -> wrong documentation?
         std::vector<hal::path> dirs_to_search({});
         EXPECT_EQ(get_file("tmp.txt", dirs_to_search).string(), hal::path("").string());
     }
     {
-        // file_name is an empty string -> intended behaviour? TODO
+        // file_name is an empty string -> intended behaviour?
         std::vector<hal::path> dirs_to_search({dir_empty_1_path});
         EXPECT_EQ(get_file("", dirs_to_search).string(), hal::path("").string());
     }
@@ -636,4 +710,23 @@ TEST_F(utils_test, check_which)
     {
         boost::filesystem::remove_all(get_binary_directory().string() + "/tmp_test");
     }
+}
+
+/**
+ * Testing the function get_open_source_licenses. Only testing the access, not the content.
+ *
+ * Functions: get_open_source_licenses
+ */
+TEST_F(utils_test, check_get_open_source_license)
+{
+    TEST_START
+
+        // ########################
+        // POSITIVE TESTS
+        // ########################
+
+        std::string lic_str = get_open_source_licenses();
+        EXPECT_TRUE(lic_str.length() > 0);
+
+    TEST_END
 }

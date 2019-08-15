@@ -357,5 +357,3 @@ TEST_F(netlist_factory_test, check_create_netlist_by_program_args)
 
     TEST_END
 }
-
-// TODO: Capture some cout

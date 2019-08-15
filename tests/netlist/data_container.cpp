@@ -136,22 +136,7 @@ EXPECT_EQ(d_cont.get_data_by_key("category_1", "key_0"), std::make_tuple("data_t
     //EXPECT_FALSE(d_cont.data_update_notified());
     EXPECT_EQ(d_cont.get_data_by_key("category", ""), empty_pair);
 }
-{
-    // Leave data_type empty
-    NO_COUT_TEST_BLOCK;
-    test_data_container d_cont;
-    EXPECT_FALSE(d_cont.set_data("category", "key", "", "value"));
-    //EXPECT_FALSE(d_cont.data_update_notified());
-    EXPECT_EQ(d_cont.get_data_by_key("category", "key"), empty_pair);
-}
-{
-    // Leave value empty
-    NO_COUT_TEST_BLOCK;
-    test_data_container d_cont;
-    EXPECT_FALSE(d_cont.set_data("category", "key", "data_type", ""));
-    //EXPECT_FALSE(d_cont.data_update_notified());
-    EXPECT_EQ(d_cont.get_data_by_key("category", "key"), empty_pair);
-}
+
 
 TEST_END
 }
@@ -162,7 +147,8 @@ TEST_END
  *
  * Functions: delete_data, get_data_by_key
  */
-TEST_F(data_container_test, check_delete_data){TEST_START{// Delete an existing entry
+TEST_F(data_container_test, check_delete_data){
+    TEST_START{// Delete an existing entry
 
                                                           test_data_container d_cont;
 d_cont.set_data("category", "key", "data_type", "value", false);    // create an entry

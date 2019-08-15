@@ -1,0 +1,13 @@
+set(LINUX @LINUX@)
+set(SHARE_INSTALL_DIRECTORY_FULL @SHARE_INSTALL_DIRECTORY_FULL@)
+if(LINUX)
+    message(STATUS "Copy file ${SHARE_INSTALL_DIRECTORY_FULL}/ld_conf/hal.conf to /etc/ld.so.conf.d/")
+
+    execute_process(COMMAND ${CMAKE_COMMAND} -E copy hal.conf /etc/ld.so.conf.d/)
+
+    message(STATUS "Running: ldconfig")
+    execute_process(COMMAND "ldconfig" RESULT_VARIABLE ldconfig_result)
+    if (NOT ldconfig_result EQUAL 0)
+        message(WARNING "ldconfig failed")
+    endif()
+endif(LINUX)
