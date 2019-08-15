@@ -185,13 +185,22 @@ std::string hdl_writer_vhdl::get_net_name(const std::shared_ptr<net> n)
     replace(name, ", ", "_");
     replace(name, ",", "_");
     remove(name, "/");
-    remove(name, "\\");
-    remove(name, "^");
+    //remove(name, "\\");
     replace(name, "[", "_");
     replace(name, "]", "_");
     replace(name, "<", "_");
     replace(name, ">", "_");
     replace(name, "__", "_");
+    if (name[0] == '\\')
+    {
+        remove(name, "\\");
+        name.insert(0, 1, '\\');
+        name.push_back('\\');
+    }
+    else
+    {
+        remove(name, "\\");
+    }
     if (name[0] == '_')
     {
         name.erase(0, 1);
@@ -218,13 +227,22 @@ std::string hdl_writer_vhdl::get_gate_name(const std::shared_ptr<gate> g)
     replace(name, ", ", "_");
     replace(name, ",", "_");
     remove(name, "/");
-    remove(name, "\\");
-    remove(name, "^");
+    //remove(name, "\\");
     replace(name, "[", "_");
     replace(name, "]", "_");
     replace(name, "<", "_");
     replace(name, ">", "_");
     replace(name, "__", "_");
+    if (name[0] == '\\')
+    {
+        remove(name, "\\");
+        name.insert(0, 1, '\\');
+        name.push_back('\\');
+    }
+    else
+    {
+        remove(name, "\\");
+    }
     if (name[0] == '_')
     {
         name.erase(0, 1);
@@ -311,8 +329,9 @@ void hdl_writer_vhdl::print_signal_definition_vhdl()
         nets.emplace_back(name.first, name.second);
     }
 
-    std::sort(
-        nets.begin(), nets.end(), [](const std::tuple<std::string, std::shared_ptr<net>>& a, const std::tuple<std::string, std::shared_ptr<net>>& b) -> bool { return std::get<1>(a)->get_id() < std::get<1>(b)->get_id(); });
+    std::sort(nets.begin(), nets.end(), [](const std::tuple<std::string, std::shared_ptr<net>>& a, const std::tuple<std::string, std::shared_ptr<net>>& b) -> bool {
+        return std::get<1>(a)->get_id() < std::get<1>(b)->get_id();
+    });
 
     for (auto tup : nets)
     {
