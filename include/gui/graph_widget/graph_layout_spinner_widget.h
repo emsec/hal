@@ -10,6 +10,9 @@ class graph_layout_spinner_widget final : public QWidget
 
 public:
     graph_layout_spinner_widget(QWidget* parent = nullptr);
+    
+    void start();
+    void stop();
 
 private Q_SLOTS:
     void handle_repaint_needed();

@@ -11,7 +11,7 @@
 
 static const int max_module_contexts = 10; // USE SETTINGS FOR THIS
 
-graph_context_manager::graph_context_manager()
+graph_context_manager::graph_context_manager() : m_top(nullptr)
 {
 
 }
@@ -268,4 +268,15 @@ graph_shader* graph_context_manager::get_default_shader(dynamic_context* const c
 {
     // USE SETTINGS + FACTORY
     return new module_shader(context);
+}
+
+graph_context* graph_context_manager::get_context()
+{
+    return m_top;
+}
+
+void graph_context_manager::create_top_context()
+{
+    m_top = g_graph_context_manager.add_dynamic_context("top");
+    m_top->add(QSet<u32>{1}, QSet<u32>(), QSet<u32>());
 }
