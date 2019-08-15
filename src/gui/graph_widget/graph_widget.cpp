@@ -50,7 +50,11 @@ graph_widget::graph_widget(QWidget* parent) : content_widget("Graph", parent),
     m_view->setDragMode(QGraphicsView::RubberBandDrag);
 
     // debug: go to context 1; delete later
-    debug_module_one();
+//    debug_module_one();
+    
+    auto context = g_graph_context_manager.get_context();
+    context->subscribe(this);
+    change_context(context);
 }
 
 void graph_widget::setup_toolbar(toolbar* toolbar)
@@ -67,7 +71,7 @@ void graph_widget::setup_toolbar(toolbar* toolbar)
 
     // QToolButton* change_context_button = new QToolButton();
     // change_context_button->setText("Change Context");
-
+    
     // connect(context_one_button, &QToolButton::clicked, this, &graph_widget::debug_module_one);
     // connect(create_context_button, &QToolButton::clicked, this, &graph_widget::debug_create_context);
     // connect(change_context_button, &QToolButton::clicked, this, &graph_widget::debug_change_context);
@@ -84,7 +88,8 @@ void graph_widget::handle_scene_available()
     connect(m_overlay, &dialog_overlay::clicked, m_overlay, &dialog_overlay::hide);
 
     m_overlay->hide();
-    //m_progress_widget->stop();
+//    m_progress_widget->stop();
+    m_spinner_widget->hide();
     m_overlay->set_widget(m_navigation_widget);
 
     if (hasFocus())
@@ -530,7 +535,12 @@ void graph_widget::change_context(graph_context* const context)
     m_context->subscribe(this);
 
     if (!m_context->update_in_progress())
+    {
         m_view->setScene(m_context->scene());
+//        QPointF center = m_view->mapToScene(m_view->viewport()->rect().center());
+//        m_view->centerOn(center);
+        m_view->centerOn(10,20);
+    }
 }
 
 void graph_widget::reset_focus()

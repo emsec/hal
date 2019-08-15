@@ -33,3 +33,13 @@ QSize graph_layout_spinner_widget::sizeHint() const
     //DEBUG FUNCTION, REPLACE WITH INTERNAL LAYOUT OR SOMETHING LATER
     return QSize(260, 260);
 }
+
+void graph_layout_spinner_widget::start()
+{
+    m_renderer->setFramesPerSecond(10);
+}
+
+void graph_layout_spinner_widget::stop()
+{
+    m_renderer->setFramesPerSecond(0);
+}

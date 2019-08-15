@@ -90,6 +90,8 @@ private:
     graph_layout_spinner_widget* m_spinner_widget;
 
     u32 m_current_expansion;
+    
+    
 };
 
 #endif // GRAPH_WIDGET_H

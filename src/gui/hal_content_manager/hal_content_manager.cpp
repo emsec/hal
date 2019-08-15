@@ -74,7 +74,7 @@ void hal_content_manager::handle_open_document(const QString& file_name)
     graph_tab_wid->addTab(new graph_widget(), "View 2");
 
     m_main_window->add_content(graph_tab_wid, 2, content_anchor::center);
-    graph_edit->open();
+
 
     //module_widget* m = new module_widget();
     //m_main_window->add_content(m, 0, content_anchor::left);
