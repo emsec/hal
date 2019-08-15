@@ -21,8 +21,8 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef GRAPH_MODEL_ITEM_H
-#define GRAPH_MODEL_ITEM_H
+#ifndef old_GRAPH_MODEL_ITEM_H
+#define old_GRAPH_MODEL_ITEM_H
 
 #include "netlist/gate.h"
 #include "netlist/net.h"
@@ -37,18 +37,18 @@ enum class item_type
 };
 
 /*the tablemodelitemclass, also functions as a adapter too*/
-class graph_model_item
+class old_graph_model_item
 {
 public:
-    graph_model_item();
+    old_graph_model_item();
 
     /*constructor for the gate-item*/
-    graph_model_item(std::shared_ptr<gate> gate);
+    old_graph_model_item(std::shared_ptr<gate> gate);
 
     /*constructor for the net-item*/
-    graph_model_item(std::shared_ptr<net> net);
+    old_graph_model_item(std::shared_ptr<net> net);
 
-    ~graph_model_item();
+    ~old_graph_model_item();
 
     /*adapter-stuff*/
     QString getName();
@@ -83,4 +83,4 @@ private:
     item_type i_type;
 };
 
-#endif    // GRAPH_MODEL_ITEM_H
+#endif    // old_GRAPH_MODEL_ITEM_H

@@ -1,9 +1,9 @@
-#include "graph_manager/tree_model_item.h"
+#include "graph_navigation_widget/old_tree_model_item.h"
 
-tree_model_item::tree_model_item(tree_model_item* parent){Q_UNUSED(parent)}
+old_tree_model_item::old_tree_model_item(old_tree_model_item* parent){Q_UNUSED(parent)}
 
 //VARIABLE "name" SHADOWS A MEMBER
-tree_model_item::tree_model_item(QString item_name, QString beschr, tree_model_item* parent)
+old_tree_model_item::old_tree_model_item(QString item_name, QString beschr, old_tree_model_item* parent)
 {
     parentItem = parent;
     typ        = item_type_tree::dummy;
@@ -12,7 +12,7 @@ tree_model_item::tree_model_item(QString item_name, QString beschr, tree_model_i
     item_data.append(beschr);
 }
 
-tree_model_item::tree_model_item(std::shared_ptr<net> net, tree_model_item* parent)
+old_tree_model_item::old_tree_model_item(std::shared_ptr<net> net, old_tree_model_item* parent)
 {
     parentItem = parent;
     refNet     = net;
@@ -26,7 +26,7 @@ tree_model_item::tree_model_item(std::shared_ptr<net> net, tree_model_item* pare
     item_data.append("");
 }
 
-tree_model_item::tree_model_item(std::shared_ptr<gate> gate, tree_model_item* parent)
+old_tree_model_item::old_tree_model_item(std::shared_ptr<gate> gate, old_tree_model_item* parent)
 {
     parentItem = parent;
     refNet     = nullptr;
@@ -46,7 +46,7 @@ tree_model_item::tree_model_item(std::shared_ptr<gate> gate, tree_model_item* pa
     item_data.append("");
 }
 
-tree_model_item::tree_model_item(std::shared_ptr<gate> ref, item_type_tree proptype, tree_model_item* parent)
+old_tree_model_item::old_tree_model_item(std::shared_ptr<gate> ref, item_type_tree proptype, old_tree_model_item* parent)
 {
     parentItem = parent;
     refNet     = nullptr;
@@ -76,87 +76,87 @@ tree_model_item::tree_model_item(std::shared_ptr<gate> ref, item_type_tree propt
     }
 }
 
-tree_model_item::~tree_model_item()
+old_tree_model_item::~old_tree_model_item()
 {
 }
 
-void tree_model_item::appendChild(tree_model_item* child)
+void old_tree_model_item::appendChild(old_tree_model_item* child)
 {
     children.append(child);
 }
 
-tree_model_item* tree_model_item::child(int row)
+old_tree_model_item* old_tree_model_item::child(int row)
 {
     return children.at(row);
 }
 
-int tree_model_item::childCount() const
+int old_tree_model_item::childCount() const
 {
     return children.count();
 }
 
-int tree_model_item::columnCount() const
+int old_tree_model_item::columnCount() const
 {
     return 2;    //hardcoded now, may be changed later
 }
 
-QVariant tree_model_item::data(int column) const
+QVariant old_tree_model_item::data(int column) const
 {
     return item_data.at(column);
 }
 
-int tree_model_item::row() const
+int old_tree_model_item::row() const
 {
     if (parentItem)
-        return parentItem->children.indexOf(const_cast<tree_model_item*>(this));
+        return parentItem->children.indexOf(const_cast<old_tree_model_item*>(this));
 
     return 0;
 }
 
-tree_model_item* tree_model_item::parent()
+old_tree_model_item* old_tree_model_item::parent()
 {
     return parentItem;
 }
 
 /*adapter-stuff*/
-QString tree_model_item::getName()
+QString old_tree_model_item::getName()
 {
     return name;
 }
 
-QString tree_model_item::getID()
+QString old_tree_model_item::getID()
 {
     return id;
 }
 
-QString tree_model_item::getLocation()
+QString old_tree_model_item::getLocation()
 {
     return location;
 }
 
-QString tree_model_item::getType()
+QString old_tree_model_item::getType()
 {
     return type;
 }
 
-item_type_tree tree_model_item::getItemType()
+item_type_tree old_tree_model_item::getItemType()
 {
     return typ;
 }
 
 /*needs to be implemented when needed, for example changing the graphgate/net value through the view*/
-void tree_model_item::setID()
+void old_tree_model_item::setID()
 {
 }
 
-void tree_model_item::setLocation()
+void old_tree_model_item::setLocation()
 {
 }
 
-void tree_model_item::setName()
+void old_tree_model_item::setName()
 {
 }
 
-void tree_model_item::setType()
+void old_tree_model_item::setType()
 {
 }

@@ -42,30 +42,30 @@ enum class item_type_tree
     type     = 7
 };
 
-class tree_model_item
+class old_tree_model_item
 {
 public:
     /*A constructor just for the root-item*/
-    tree_model_item(tree_model_item* parent = 0);
+    old_tree_model_item(old_tree_model_item* parent = 0);
 
     /*dummy-constructor for items that dont belong to the graph(like inoutnet)*/
-    tree_model_item(QString item_name, QString beschr, tree_model_item* parent = 0);
+    old_tree_model_item(QString item_name, QString beschr, old_tree_model_item* parent = 0);
 
     /*constructor for the net-item*/
-    tree_model_item(std::shared_ptr<net> net, tree_model_item* parent);
+    old_tree_model_item(std::shared_ptr<net> net, old_tree_model_item* parent);
 
     /*constructor for the gate-item*/
-    tree_model_item(std::shared_ptr<gate> gate, tree_model_item* parent);
+    old_tree_model_item(std::shared_ptr<gate> gate, old_tree_model_item* parent);
 
     /*constructor for the properties-items(needs to have a reference to the gate)*/
-    tree_model_item(std::shared_ptr<gate> refgate, item_type_tree proptype, tree_model_item* parent);
+    old_tree_model_item(std::shared_ptr<gate> refgate, item_type_tree proptype, old_tree_model_item* parent);
 
-    ~tree_model_item();
+    ~old_tree_model_item();
 
     /*functions for the treemodel*/
-    void appendChild(tree_model_item* child);
+    void appendChild(old_tree_model_item* child);
 
-    tree_model_item* child(int row);
+    old_tree_model_item* child(int row);
 
     int childCount() const;
 
@@ -75,7 +75,7 @@ public:
 
     int row() const;
 
-    tree_model_item* parent();
+    old_tree_model_item* parent();
 
     /*adapter-stuff*/
     QString getName();
@@ -99,9 +99,9 @@ public:
 
 private:
     /*stuff for the treemodel*/
-    QList<tree_model_item*> children;
+    QList<old_tree_model_item*> children;
 
-    tree_model_item* parentItem;
+    old_tree_model_item* parentItem;
 
     QList<QVariant> item_data;
 

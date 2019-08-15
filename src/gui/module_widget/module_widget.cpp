@@ -6,7 +6,7 @@
 #include "netlist/module.h"
 #include "netlist/net.h"
 
-#include "gui/graph_manager/graph_tree_model.h"
+//#include "gui/graph_manager/graph_tree_model.h"
 #include "gui/gui_globals.h"
 #include "gui/module_model/module_proxy_model.h"
 #include "gui/module_relay/module_relay.h"

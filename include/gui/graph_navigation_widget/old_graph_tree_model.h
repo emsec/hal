@@ -24,11 +24,11 @@
 #ifndef __HAL_GRAPH_MODEL_T_H__
 #define __HAL_GRAPH_MODEL_T_H__
 
-#include "graph_model_item.h"
+#include "old_graph_model_item.h"
 #include "netlist/gate.h"
 #include "netlist/net.h"
 #include "netlist/netlist.h"
-#include "tree_model_item.h"
+#include "old_tree_model_item.h"
 #include <QAbstractItemModel>
 #include <QList>
 #include <QModelIndex>
@@ -36,14 +36,14 @@
 #include <QStringList>
 #include <QVariant>
 
-class graph_tree_model : public QAbstractItemModel
+class old_graph_tree_model : public QAbstractItemModel
 {
     Q_OBJECT
 
 public:
-    explicit graph_tree_model(QObject* parent = 0);
+    explicit old_graph_tree_model(QObject* parent = 0);
 
-    ~graph_tree_model();
+    ~old_graph_tree_model();
 
     /*the standard functions needed for a basic, non-editable treemodel*/
     QVariant data(const QModelIndex& index, int role) const Q_DECL_OVERRIDE;    //Verursacht Error
@@ -64,14 +64,14 @@ public:
 
 private:
     /*some stuff needed for the basic treemodel*/
-    tree_model_item* rootItem;
+    old_tree_model_item* rootItem;
 
-    QList<tree_model_item> items;
+    QList<old_tree_model_item> items;
 
     QStringList m_columns;
 
     /*a function that helps to setup the model-data*/
-    void add_net_set_to_a_parent_item(std::set<std::shared_ptr<net>> t, tree_model_item* parent);
+    void add_net_set_to_a_parent_item(std::set<std::shared_ptr<net>> t, old_tree_model_item* parent);
 };
 
 #endif

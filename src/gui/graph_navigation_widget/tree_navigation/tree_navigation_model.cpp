@@ -582,6 +582,6 @@ void tree_navigation_model::load_data_settings()
     m_structured_font = QFont();
     m_structured_font.setBold(true);
     m_structured_font.setPixelSize(15);
-    m_design_icon = gui_utility::get_styled_svg_icon("all->#000000", ":/icons/open");
+    m_design_icon = gui_utility::get_styled_svg_icon("all->#888888", ":/icons/open");
     //m_design_icon = QIcon(":/icons/open");
 }
