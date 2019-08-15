@@ -52,12 +52,12 @@ void hal_content_manager::handle_open_document(const QString& file_name)
 
     graph_tab_widget* graph_tab_wid = new graph_tab_widget(nullptr);
     graph_widget* graph_edit = new graph_widget();
+    vhdl_editor* code_edit = new vhdl_editor();
     graph_tab_wid->addTab(graph_edit, "Top view");
+    graph_tab_wid->addTab(code_edit, "Source");
     m_main_window->add_content(graph_tab_wid, 2, content_anchor::center);
     graph_edit->open_top_context();
     
-    vhdl_editor* code_edit = new vhdl_editor();
-    m_main_window->add_content(code_edit, 0, content_anchor::center);
     
     
     
