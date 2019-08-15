@@ -16,6 +16,7 @@
 #include "gui/graph_layouter/old_graph_layouter.h"
 #include "gui/graph_manager/hal_graph_widget.h"
 #include "gui/graph_navigation_widget/old_graph_navigation_widget.h"
+#include "gui/graph_widget/graph_graphics_view.h"
 #include "gui/graph_widget/graph_widget.h"
 #include "gui/gui_utility.h"
 #include "gui/hal_graphics/hal_graphics_view.h"
@@ -52,8 +53,6 @@ void hal_content_manager::hack_delete_content()
 
 void hal_content_manager::handle_open_document(const QString& file_name)
 {
-    vhdl_editor* code_edit = new vhdl_editor();
-    m_main_window->add_content(code_edit, 0, content_anchor::center);
 
 //    m_graph_scene = new QGraphicsScene(nullptr);
 //    layouter = new old_graph_layouter(m_graph_scene, g_netlist);
@@ -68,14 +67,17 @@ void hal_content_manager::handle_open_document(const QString& file_name)
 //    m_main_window->add_content(navigation, 0, content_anchor::left);
 //    navigation->open();
 
-    graph_tab_widget* graph_tab_wid = new graph_tab_widget();
+    graph_tab_widget* graph_tab_wid = new graph_tab_widget(nullptr);
     graph_widget* graph_edit = new graph_widget();
-    graph_tab_wid->addTab(graph_edit, "View 1");
-    graph_tab_wid->addTab(new graph_widget(), "View 2");
-
+    graph_tab_wid->addTab(graph_edit, "Top view");
     m_main_window->add_content(graph_tab_wid, 2, content_anchor::center);
-
-
+    graph_edit->open_top_context();
+    
+    vhdl_editor* code_edit = new vhdl_editor();
+    m_main_window->add_content(code_edit, 0, content_anchor::center);
+    
+    
+    
     //module_widget* m = new module_widget();
     //m_main_window->add_content(m, 0, content_anchor::left);
     //m->open();
@@ -133,7 +135,6 @@ void hal_content_manager::handle_open_document(const QString& file_name)
     python_console_widget* python_console = new python_console_widget();
     m_main_window->add_content(python_console, 5, content_anchor::bottom);
     python_console->open();
-
     m_netlist_watcher = new netlist_watcher(this);
 }
 

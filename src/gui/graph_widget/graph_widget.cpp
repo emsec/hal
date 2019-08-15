@@ -51,7 +51,11 @@ graph_widget::graph_widget(QWidget* parent) : content_widget("Graph", parent),
 
     // debug: go to context 1; delete later
 //    debug_module_one();
-    
+
+}
+
+void graph_widget::open_top_context()
+{
     auto context = g_graph_context_manager.get_context();
     context->subscribe(this);
     change_context(context);
@@ -537,13 +541,16 @@ void graph_widget::change_context(graph_context* const context)
     if (!m_context->update_in_progress())
     {
         m_view->setScene(m_context->scene());
-//        QPointF center = m_view->mapToScene(m_view->viewport()->rect().center());
-//        m_view->centerOn(center);
-        m_view->centerOn(10,20);
+        m_view->centerOn(0,0);
     }
 }
 
 void graph_widget::reset_focus()
 {
     m_view->setFocus();
+}
+
+graph_graphics_view *graph_widget::view()
+{
+    return m_view;
 }

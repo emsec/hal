@@ -49,7 +49,7 @@ Q_SIGNALS:
 private Q_SLOTS:
     void conditional_update();
     void handle_change_color_action();
-    void handle_cone_view_action();
+    void handle_isolation_view_action();
     void handle_move_action(QAction* action);
     void handle_move_new_action();
     void handle_rename_action();

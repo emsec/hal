@@ -52,6 +52,10 @@ public:
 
     virtual void handle_status_update(const int percent) Q_DECL_OVERRIDE;
     virtual void handle_status_update(const QString& message) Q_DECL_OVERRIDE;
+    
+    void open_top_context();
+    
+    graph_graphics_view* view();
 
 protected:
     void keyPressEvent(QKeyEvent* event) Q_DECL_OVERRIDE;
@@ -90,8 +94,6 @@ private:
     graph_layout_spinner_widget* m_spinner_widget;
 
     u32 m_current_expansion;
-    
-    
 };
 
 #endif // GRAPH_WIDGET_H
