@@ -24,6 +24,7 @@
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QOpenGLWidget>
+#include "graph_tab_widget/graph_tab_widget.h"
 
 hal_content_manager::hal_content_manager(main_window* parent) : QObject(parent), m_main_window(parent)
 {
@@ -50,9 +51,12 @@ void hal_content_manager::handle_open_document(const QString& file_name)
     vhdl_editor* code_edit = new vhdl_editor();
     m_main_window->add_content(code_edit, 0, content_anchor::center);
 
+    graph_tab_widget* graph_tab_wid = new graph_tab_widget();
     graph_widget* graph_edit = new graph_widget();
-    graph_edit->open();
-    m_main_window->add_content(graph_edit, 2, content_anchor::center);
+    graph_tab_wid->addTab(graph_edit, "View 1");
+    graph_tab_wid->addTab(new graph_widget(), "View 2");
+
+    m_main_window->add_content(graph_tab_wid, 2, content_anchor::center);
 
 
     //module_widget* m = new module_widget();
