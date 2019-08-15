@@ -3,6 +3,7 @@
 #include "gui/gui_globals.h"
 #include "gui/graph_widget/contexts/graph_context.h"
 #include "gui/module_model/module_item.h"
+#include "netlist/module.h"
 
 bool module_shader::s_color_gates = true; // SET VIA SETTING
 

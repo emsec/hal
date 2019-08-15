@@ -21,41 +21,66 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef HAL_GRAPH_WIDGET_H
-#define HAL_GRAPH_WIDGET_H
+#ifndef old_GRAPH_MODEL_ITEM_H
+#define old_GRAPH_MODEL_ITEM_H
 
-#include "content_widget/content_widget.h"
-#include "graph_manager/graph_graphics_widget.h"
-#include "selection_history_navigator/selection_history_navigator.h"
+#include "netlist/gate.h"
+#include "netlist/net.h"
+#include "netlist/netlist.h"
+#include <QList>
+#include <QVariant>
 
-#include <QPushButton>
-
-class hal_graph_widget : public content_widget
+enum class item_type
 {
-    Q_OBJECT
-
-public:
-    hal_graph_widget(QGraphicsView* view);
-
-    virtual void setup_toolbar(toolbar* toolbar);
-
-public Q_SLOTS:
-    void handle_gate_event(gate_event_handler::event ev, std::shared_ptr<gate> gate, u32 associated_data);
-    void handle_net_event(net_event_handler::event ev, std::shared_ptr<net> net, u32 associated_data);
-
-Q_SIGNALS:
-    void relayout_button_clicked();
-
-private:
-    graph_graphics_widget m_graphics_widget;
-
-    void handle_relayout_button_clicked();
-    void handle_back_activated();
-    void handle_next_activated();
-
-    QPushButton* m_relayout_button;
-
-    selection_history_navigator* m_selection_history_navigator;
+    gate = 0,
+    net  = 1
 };
 
-#endif    // HAL_GRAPH_WIDGET_H
+/*the tablemodelitemclass, also functions as a adapter too*/
+class old_graph_model_item
+{
+public:
+    old_graph_model_item();
+
+    /*constructor for the gate-item*/
+    old_graph_model_item(std::shared_ptr<gate> gate);
+
+    /*constructor for the net-item*/
+    old_graph_model_item(std::shared_ptr<net> net);
+
+    ~old_graph_model_item();
+
+    /*adapter-stuff*/
+    QString getName();
+
+    QString getType();
+
+    QString getID();
+
+    QString getLocation();
+
+    item_type getItemType();
+
+    /*functions that may be needed in the future*/
+    void setgate(std::shared_ptr<gate> gate);
+
+    void setNet(std::shared_ptr<net> net);
+
+private:
+    /*adapter-stuff*/
+    std::shared_ptr<gate> refgate;
+
+    std::shared_ptr<net> refNet;
+
+    QString name;
+
+    QString type;
+
+    QString id;
+
+    QString location;
+
+    item_type i_type;
+};
+
+#endif    // old_GRAPH_MODEL_ITEM_H

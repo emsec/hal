@@ -13,6 +13,7 @@
 #include "gui/graph_widget/items/standard_graphics_net.h"
 #include "gui/gui_globals.h"
 #include "netlist/gate.h"
+#include "netlist/net.h"
 #include "netlist/module.h"
 #include "core/log.h"
 

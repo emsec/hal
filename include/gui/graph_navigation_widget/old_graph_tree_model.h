@@ -21,13 +21,14 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef __HAL_GRAPH_MODEL_H__
-#define __HAL_GRAPH_MODEL_H__
+#ifndef __HAL_GRAPH_MODEL_T_H__
+#define __HAL_GRAPH_MODEL_T_H__
 
-#include "graph_model_item.h"
+#include "old_graph_model_item.h"
 #include "netlist/gate.h"
 #include "netlist/net.h"
 #include "netlist/netlist.h"
+#include "old_tree_model_item.h"
 #include <QAbstractItemModel>
 #include <QList>
 #include <QModelIndex>
@@ -35,16 +36,17 @@
 #include <QStringList>
 #include <QVariant>
 
-/*the table-model for the netlist*/
-class graph_model : public QAbstractItemModel
+class old_graph_tree_model : public QAbstractItemModel
 {
     Q_OBJECT
+
 public:
-    /*all the things that are needed for the tablem-model*/
-    explicit graph_model(QObject* parent = 0);
+    explicit old_graph_tree_model(QObject* parent = 0);
 
-    QVariant data(const QModelIndex& index, int role) const Q_DECL_OVERRIDE;
+    ~old_graph_tree_model();
 
+    /*the standard functions needed for a basic, non-editable treemodel*/
+    QVariant data(const QModelIndex& index, int role) const Q_DECL_OVERRIDE;    //Verursacht Error
     Qt::ItemFlags flags(const QModelIndex& index) const Q_DECL_OVERRIDE;
 
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const Q_DECL_OVERRIDE;
@@ -57,16 +59,19 @@ public:
 
     int columnCount(const QModelIndex& parent = QModelIndex()) const Q_DECL_OVERRIDE;
 
-    /*maps the graph into the model*/
+    /*this function needs to be called when the graph is loaded from a file to fill the model, maps the graph into the model*/
     void setupModelData(std::shared_ptr<netlist> g);
 
-    /*removes all the items from the model*/
-    void clear();
-
 private:
+    /*some stuff needed for the basic treemodel*/
+    old_tree_model_item* rootItem;
+
+    QList<old_tree_model_item> items;
+
     QStringList m_columns;
 
-    QList<graph_model_item*> m_items;
+    /*a function that helps to setup the model-data*/
+    void add_net_set_to_a_parent_item(std::set<std::shared_ptr<net>> t, old_tree_model_item* parent);
 };
 
-#endif    //__HAL_GRAPH_MODEL_H__
+#endif
