@@ -31,129 +31,131 @@ protected:
  *
  * Functions: add (all 3 overloaded functions), is_registered,
  */
-TEST_F(program_options_test, check_add_options){TEST_START
-                                                // ########################
-                                                // POSITIVE TESTS
-                                                // ########################
-                                                {// Add an option with a single flag
-                                                 program_options p_opts("group_0");
-bool suc = p_opts.add("flag", "flag_desc", {"param_0", "param_1"});
-EXPECT_TRUE(suc);
-EXPECT_TRUE(p_opts.is_registered("flag"));
-}
-{
-    // Add an option with multiple flag
-    program_options p_opts("group_0");
-    bool suc = p_opts.add({"flag_0", "flag_1", "flag_2"}, "flag_desc", {"param_0", "param_1"});
-    EXPECT_TRUE(suc);
-    EXPECT_TRUE(p_opts.is_registered("flag_0"));
-    EXPECT_TRUE(p_opts.is_registered("flag_1"));
-    EXPECT_TRUE(p_opts.is_registered("flag_2"));
-}
-{
-    // Add options from another set (option flags are disjoint)
-    program_options p_opts_0("group_0");
-    program_options p_opts_1("group_1");
-    p_opts_0.add({"flag_0", "flag_1", "flag_2"}, "flag_desc_0", {"param_0", "param_1"});
-    p_opts_1.add("flag_3", "flag_desc_1", {"param_0", "param_1"});
-    bool suc = p_opts_0.add(p_opts_1, "category");
-    EXPECT_TRUE(suc);
-    EXPECT_TRUE(p_opts_0.is_registered("flag_0"));
-    EXPECT_TRUE(p_opts_0.is_registered("flag_1"));
-    EXPECT_TRUE(p_opts_0.is_registered("flag_2"));
-    EXPECT_TRUE(p_opts_0.is_registered("flag_3"));
-}
-{
-    // Add options with required parameters (required parameters after non-required)
-    program_options p_opts("group_0");
-    bool suc_0 = p_opts.add({"flag_0"}, "flag_desc_0", {REQUIRED_PARAM});
-    bool suc_1 = p_opts.add({"flag_1"}, "flag_desc_1", {REQUIRED_PARAM, REQUIRED_PARAM});
-    bool suc_2 = p_opts.add({"flag_2"}, "flag_desc_2", {REQUIRED_PARAM, REQUIRED_PARAM, "param_3"});
-    bool suc_3 = p_opts.add({"flag_3"}, "flag_desc_3", {REQUIRED_PARAM, REQUIRED_PARAM, "param_3", "param_4", "param_5"});
+TEST_F(program_options_test, check_add_options){
+    TEST_START
+        // ########################
+        // POSITIVE TESTS
+        // ########################
+        {
+            // Add an option with a single flag
+            program_options p_opts("group_0");
+            bool suc = p_opts.add("flag", "flag_desc", {"param_0", "param_1"});
+            EXPECT_TRUE(suc);
+            EXPECT_TRUE(p_opts.is_registered("flag"));
+        }
+        {
+            // Add an option with multiple flag
+            program_options p_opts("group_0");
+            bool suc = p_opts.add({"flag_0", "flag_1", "flag_2"}, "flag_desc", {"param_0", "param_1"});
+            EXPECT_TRUE(suc);
+            EXPECT_TRUE(p_opts.is_registered("flag_0"));
+            EXPECT_TRUE(p_opts.is_registered("flag_1"));
+            EXPECT_TRUE(p_opts.is_registered("flag_2"));
+        }
+        {
+            // Add options from another set (option flags are disjoint)
+            program_options p_opts_0("group_0");
+            program_options p_opts_1("group_1");
+            p_opts_0.add({"flag_0", "flag_1", "flag_2"}, "flag_desc_0", {"param_0", "param_1"});
+            p_opts_1.add("flag_3", "flag_desc_1", {"param_0", "param_1"});
+            bool suc = p_opts_0.add(p_opts_1, "category");
+            EXPECT_TRUE(suc);
+            EXPECT_TRUE(p_opts_0.is_registered("flag_0"));
+            EXPECT_TRUE(p_opts_0.is_registered("flag_1"));
+            EXPECT_TRUE(p_opts_0.is_registered("flag_2"));
+            EXPECT_TRUE(p_opts_0.is_registered("flag_3"));
+        }
+        {
+            // Add options with required parameters (required parameters after non-required)
+            program_options p_opts("group_0");
+            bool suc_0 = p_opts.add({"flag_0"}, "flag_desc_0", {REQUIRED_PARAM});
+            bool suc_1 = p_opts.add({"flag_1"}, "flag_desc_1", {REQUIRED_PARAM, REQUIRED_PARAM});
+            bool suc_2 = p_opts.add({"flag_2"}, "flag_desc_2", {REQUIRED_PARAM, REQUIRED_PARAM, "param_3"});
+            bool suc_3 = p_opts.add({"flag_3"}, "flag_desc_3", {REQUIRED_PARAM, REQUIRED_PARAM, "param_3", "param_4", "param_5"});
 
-    EXPECT_TRUE(suc_0);
-    EXPECT_TRUE(suc_1);
-    EXPECT_TRUE(suc_2);
-    EXPECT_TRUE(suc_3);
-    EXPECT_TRUE(p_opts.is_registered("flag_0"));
-    EXPECT_TRUE(p_opts.is_registered("flag_1"));
-    EXPECT_TRUE(p_opts.is_registered("flag_2"));
-    EXPECT_TRUE(p_opts.is_registered("flag_3"));
-}
+            EXPECT_TRUE(suc_0);
+            EXPECT_TRUE(suc_1);
+            EXPECT_TRUE(suc_2);
+            EXPECT_TRUE(suc_3);
+            EXPECT_TRUE(p_opts.is_registered("flag_0"));
+            EXPECT_TRUE(p_opts.is_registered("flag_1"));
+            EXPECT_TRUE(p_opts.is_registered("flag_2"));
+            EXPECT_TRUE(p_opts.is_registered("flag_3"));
+        }
 
-// ########################
-// NEGATIVE TESTS
-// ########################
-{
-    // Add options from another set (option flags are not disjoint)
-    NO_COUT_TEST_BLOCK;
-    program_options p_opts_0("group_0");
-    program_options p_opts_1("group_1");
-    p_opts_0.add({"flag_0", "flag_1", "flag_2"}, "flag_desc_0", {"param_0", "param_1"});
-    p_opts_1.add({"flag_2", "flag_3", "flag_4"}, "flag_desc_1", {"param_2", "param_3"});
-    bool suc = p_opts_0.add(p_opts_1, "category");
-    EXPECT_FALSE(suc);
-}
-{
-    // Add options from another set with flags which have the same description
-    NO_COUT_TEST_BLOCK;
-    program_options p_opts_0("group_0");
-    program_options p_opts_1("group_1");
-    p_opts_0.add({"flag_0"}, "flag_desc_0", {"param_0", "param_1"});
-    p_opts_1.add({"flag_1"}, "flag_desc_0", {"param_2", "param_3"});
-    bool suc = p_opts_0.add(p_opts_1, "category");
-    EXPECT_FALSE(suc);
-}
-{
-    // Add two flag-sets with non-disjoint flag-sets (via init-list)
-    NO_COUT_TEST_BLOCK;
-    program_options p_opts;
-    p_opts.add({"flag_0", "flag_1", "flag_2"}, "flag_desc_0", {"param_0"});
-    bool suc = p_opts.add({"flag_3", "flag_1", "flag_4"}, "flag_desc_1", {"param_1"});
-    EXPECT_FALSE(suc);
-    EXPECT_EQ(p_opts.get_options().size(), (size_t)1);
-}
-{
-    // Add option with empty flag
-    NO_COUT_TEST_BLOCK;
-    program_options p_opts;
-    bool suc = p_opts.add({}, "flag_desc_0", {"param_0", "param_1"});
-    EXPECT_FALSE(suc);
-    EXPECT_EQ(p_opts.get_options().size(), (size_t)0);
-}
-{
-    // Add an option with the same description
-    NO_COUT_TEST_BLOCK;
-    program_options p_opts;
-    p_opts.add({"flag_0"}, "flag_desc_0", {"param_0"});
-    bool suc = p_opts.add({"flag_1"}, "flag_desc_0", {"param_1"});
-    EXPECT_FALSE(suc);
-    EXPECT_EQ(p_opts.get_options().size(), (size_t)1);
-}
-{
-    // Add an option with an empty description
-    NO_COUT_TEST_BLOCK;
-    program_options p_opts;
-    bool suc = p_opts.add({"flag_0"}, "", {"param_0"});
-    EXPECT_FALSE(suc);
-    EXPECT_EQ(p_opts.get_options().size(), (size_t)0);
-}
-{
-    // Add options with required parameters (required parameters after non-required)
-    NO_COUT_TEST_BLOCK;
-    program_options p_opts;
-    bool suc_0 = p_opts.add({"flag_0"}, "flag_desc_0", {"param_0", REQUIRED_PARAM});
-    bool suc_1 = p_opts.add({"flag_1"}, "flag_desc_1", {REQUIRED_PARAM, "param_1", REQUIRED_PARAM});
-    bool suc_2 = p_opts.add({"flag_2"}, "flag_desc_2", {"param_0", REQUIRED_PARAM, "param_2"});
+        // ########################
+        // NEGATIVE TESTS
+        // ########################
+        {
+            // Add options from another set (option flags are not disjoint)
+            NO_COUT_TEST_BLOCK;
+            program_options p_opts_0("group_0");
+            program_options p_opts_1("group_1");
+            p_opts_0.add({"flag_0", "flag_1", "flag_2"}, "flag_desc_0", {"param_0", "param_1"});
+            p_opts_1.add({"flag_2", "flag_3", "flag_4"}, "flag_desc_1", {"param_2", "param_3"});
+            bool suc = p_opts_0.add(p_opts_1, "category");
+            EXPECT_FALSE(suc);
+        }
+        {
+            // Add options from another set with flags which have the same description
+            NO_COUT_TEST_BLOCK;
+            program_options p_opts_0("group_0");
+            program_options p_opts_1("group_1");
+            p_opts_0.add({"flag_0"}, "flag_desc_0", {"param_0", "param_1"});
+            p_opts_1.add({"flag_1"}, "flag_desc_0", {"param_2", "param_3"});
+            bool suc = p_opts_0.add(p_opts_1, "category");
+            EXPECT_FALSE(suc);
+        }
+        {
+            // Add two flag-sets with non-disjoint flag-sets (via init-list)
+            NO_COUT_TEST_BLOCK;
+            program_options p_opts;
+            p_opts.add({"flag_0", "flag_1", "flag_2"}, "flag_desc_0", {"param_0"});
+            bool suc = p_opts.add({"flag_3", "flag_1", "flag_4"}, "flag_desc_1", {"param_1"});
+            EXPECT_FALSE(suc);
+            EXPECT_EQ(p_opts.get_options().size(), (size_t)1);
+        }
+        {
+            // Add option with empty flag
+            NO_COUT_TEST_BLOCK;
+            program_options p_opts;
+            bool suc = p_opts.add({}, "flag_desc_0", {"param_0", "param_1"});
+            EXPECT_FALSE(suc);
+            EXPECT_EQ(p_opts.get_options().size(), (size_t)0);
+        }
+        {
+            // Add an option with the same description
+            NO_COUT_TEST_BLOCK;
+            program_options p_opts;
+            p_opts.add({"flag_0"}, "flag_desc_0", {"param_0"});
+            bool suc = p_opts.add({"flag_1"}, "flag_desc_0", {"param_1"});
+            EXPECT_FALSE(suc);
+            EXPECT_EQ(p_opts.get_options().size(), (size_t)1);
+        }
+        {
+            // Add an option with an empty description
+            NO_COUT_TEST_BLOCK;
+            program_options p_opts;
+            bool suc = p_opts.add({"flag_0"}, "", {"param_0"});
+            EXPECT_FALSE(suc);
+            EXPECT_EQ(p_opts.get_options().size(), (size_t)0);
+        }
+        {
+            // Add options with required parameters (required parameters after non-required)
+            NO_COUT_TEST_BLOCK;
+            program_options p_opts;
+            bool suc_0 = p_opts.add({"flag_0"}, "flag_desc_0", {"param_0", REQUIRED_PARAM});
+            bool suc_1 = p_opts.add({"flag_1"}, "flag_desc_1", {REQUIRED_PARAM, "param_1", REQUIRED_PARAM});
+            bool suc_2 = p_opts.add({"flag_2"}, "flag_desc_2", {"param_0", REQUIRED_PARAM, "param_2"});
 
-    EXPECT_FALSE(suc_0);
-    EXPECT_FALSE(suc_1);
-    EXPECT_FALSE(suc_2);
-    EXPECT_FALSE(p_opts.is_registered("flag_0"));
-    EXPECT_FALSE(p_opts.is_registered("flag_1"));
-    EXPECT_FALSE(p_opts.is_registered("flag_2"));
-}
-TEST_END
+            EXPECT_FALSE(suc_0);
+            EXPECT_FALSE(suc_1);
+            EXPECT_FALSE(suc_2);
+            EXPECT_FALSE(p_opts.is_registered("flag_0"));
+            EXPECT_FALSE(p_opts.is_registered("flag_1"));
+            EXPECT_FALSE(p_opts.is_registered("flag_2"));
+        }
+    TEST_END
 }
 
 /**
@@ -161,38 +163,40 @@ TEST_END
  *
  * Functions: get_options
  */
-TEST_F(program_options_test, check_get_options){TEST_START
-                                                // ########################
-                                                // POSITIVE TESTS
-                                                // ########################
-                                                {// Get options with multiple options
-                                                 program_options p_opts("group_0");
-p_opts.add({"flag_0_0", "flag_0_1", "flag_0_2"}, "flag_desc_0");
-p_opts.add({"flag_1_0"}, "flag_desc_1");
-p_opts.add({"flag_2_0"}, "flag_desc_2");
-auto options = p_opts.get_options();
+TEST_F(program_options_test, check_get_options){
+    TEST_START
+        // ########################
+        // POSITIVE TESTS
+        // ########################
+        {
+            // Get options with multiple options
+            program_options p_opts("group_0");
+            p_opts.add({"flag_0_0", "flag_0_1", "flag_0_2"}, "flag_desc_0");
+            p_opts.add({"flag_1_0"}, "flag_desc_1");
+            p_opts.add({"flag_2_0"}, "flag_desc_2");
+            auto options = p_opts.get_options();
 
-EXPECT_EQ(std::get<0>(options[0]), std::set<std::string>({"flag_0_0", "flag_0_1", "flag_0_2"}));
-EXPECT_EQ(std::get<1>(options[0]), "flag_desc_0");
+            EXPECT_EQ(std::get<0>(options[0]), std::set<std::string>({"flag_0_0", "flag_0_1", "flag_0_2"}));
+            EXPECT_EQ(std::get<1>(options[0]), "flag_desc_0");
 
-EXPECT_EQ(std::get<0>(options[1]), std::set<std::string>({"flag_1_0"}));
-EXPECT_EQ(std::get<1>(options[1]), "flag_desc_1");
+            EXPECT_EQ(std::get<0>(options[1]), std::set<std::string>({"flag_1_0"}));
+            EXPECT_EQ(std::get<1>(options[1]), "flag_desc_1");
 
-EXPECT_EQ(std::get<0>(options[2]), std::set<std::string>({"flag_2_0"}));
-EXPECT_EQ(std::get<1>(options[2]), "flag_desc_2");
+            EXPECT_EQ(std::get<0>(options[2]), std::set<std::string>({"flag_2_0"}));
+            EXPECT_EQ(std::get<1>(options[2]), "flag_desc_2");
 
-EXPECT_EQ(options.size(), (size_t)3);
-}
-// ########################
-// NEGATIVE TESTS
-// ########################
-{
-    // Get options if there are no options
-    program_options p_opts("group_0");
-    auto options = p_opts.get_options();
-    EXPECT_TRUE(options.empty());
-}
-TEST_END
+            EXPECT_EQ(options.size(), (size_t)3);
+        }
+        // ########################
+        // NEGATIVE TESTS
+        // ########################
+        {
+            // Get options if there are no options
+            program_options p_opts("group_0");
+            auto options = p_opts.get_options();
+            EXPECT_TRUE(options.empty());
+        }
+    TEST_END
 }
 
 /**
@@ -201,41 +205,59 @@ TEST_END
  *
  * Functions: get_options_string
  */
-TEST_F(program_options_test, check_get_options_string){TEST_START
-                                                       // ########################
-                                                       // POSITIVE TESTS
-                                                       // ########################
-                                                       {// Add an option and create the formatted string
-                                                        program_options p_opts;
-p_opts.add({"flag_0", "flag_1"}, "flag_desc", {"param_0"});
-std::string res = p_opts.get_options_string();
-EXPECT_TRUE(string_contains_substring(res, "flag_0"));
-EXPECT_TRUE(string_contains_substring(res, "flag_1"));
-EXPECT_TRUE(string_contains_substring(res, "flag_desc"));
-}
-{
-    // Add an option from another option and create the formatted string
-    program_options p_opts("Options_1");
-    program_options p_opts_other("Option_2");
-    p_opts.add({"flag_0", "flag_1"}, "flag_desc_1", {"param_0"});
-    p_opts.add({"flag_2", "flag_3"}, "flag_desc_2", {"param_1"});
-    std::string res = p_opts.get_options_string();
-    EXPECT_TRUE(string_contains_substring(res, "flag_0"));
-    EXPECT_TRUE(string_contains_substring(res, "flag_1"));
-    EXPECT_TRUE(string_contains_substring(res, "flag_2"));
-    EXPECT_TRUE(string_contains_substring(res, "flag_3"));
-    EXPECT_TRUE(string_contains_substring(res, "flag_desc_1"));
-    EXPECT_TRUE(string_contains_substring(res, "flag_desc_2"));
-}
-// ########################
-// NEGATIVE TESTS
-// ########################
-{
-    // Get the formatted string, if no options are added yet (should not crash)
-    program_options p_opts;
-    p_opts.get_options_string();
-}
-TEST_END
+TEST_F(program_options_test, check_get_options_string){
+    TEST_START
+        // ########################
+        // POSITIVE TESTS
+        // ########################
+        {
+            // Add an option and create the formatted string
+            program_options p_opts;
+            p_opts.add({"flag_0", "flag_1"}, "flag_desc", {"param_0"});
+            std::string res = p_opts.get_options_string();
+            EXPECT_TRUE(string_contains_substring(res, "flag_0"));
+            EXPECT_TRUE(string_contains_substring(res, "flag_1"));
+            EXPECT_TRUE(string_contains_substring(res, "flag_desc"));
+        }
+        {
+            // Add an option from another option and create the formatted string
+            program_options p_opts("Options_1");
+            program_options p_opts_other("Option_2");
+            p_opts.add({"flag_0", "flag_1"}, "flag_desc_1", {"param_0"});
+            p_opts.add({"flag_2", "flag_3"}, "flag_desc_2", {"param_1"});
+            std::string res = p_opts.get_options_string();
+            EXPECT_TRUE(string_contains_substring(res, "flag_0"));
+            EXPECT_TRUE(string_contains_substring(res, "flag_1"));
+            EXPECT_TRUE(string_contains_substring(res, "flag_2"));
+            EXPECT_TRUE(string_contains_substring(res, "flag_3"));
+            EXPECT_TRUE(string_contains_substring(res, "flag_desc_1"));
+            EXPECT_TRUE(string_contains_substring(res, "flag_desc_2"));
+        }
+        {
+            // Add options from another set and create the formatted string
+            program_options p_opts_0("group_0");
+            program_options p_opts_1("group_1");
+            p_opts_0.add({"flag_0", "flag_1", "flag_2"}, "flag_desc_0", {"param_0", "param_1"});
+            p_opts_1.add("flag_3", "flag_desc_1", {"param_0", "param_1"});
+            p_opts_0.add(p_opts_1, "category");
+            std::string res = p_opts_0.get_options_string();
+            EXPECT_TRUE(string_contains_substring(res, "flag_0"));
+            EXPECT_TRUE(string_contains_substring(res, "flag_1"));
+            EXPECT_TRUE(string_contains_substring(res, "flag_2"));
+            EXPECT_TRUE(string_contains_substring(res, "flag_3"));
+            EXPECT_TRUE(string_contains_substring(res, "flag_desc_0"));
+            EXPECT_TRUE(string_contains_substring(res, "flag_desc_1"));
+            EXPECT_TRUE(string_contains_substring(res, "category"));
+        }
+        // ########################
+        // NEGATIVE TESTS
+        // ########################
+        {
+            // Get the formatted string, if no options are added yet (should not crash)
+            program_options p_opts;
+            p_opts.get_options_string();
+        }
+    TEST_END
 }
 
 /**
