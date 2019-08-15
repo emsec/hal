@@ -29,6 +29,7 @@
 #include <QGraphicsView>
 #include <QOpenGLWidget>
 #include "graph_tab_widget/graph_tab_widget.h"
+#include "context_manager_widget/context_manager_widget.h"
 
 hal_content_manager::hal_content_manager(main_window* parent) : QObject(parent), m_main_window(parent)
 {
@@ -83,6 +84,10 @@ void hal_content_manager::handle_open_document(const QString& file_name)
     old_graph_navigation_widget* nav_widget = new old_graph_navigation_widget();
     m_main_window->add_content(nav_widget, 0, content_anchor::left);
     nav_widget->open();
+
+    context_manager_widget* context_manager_wid = new context_manager_widget();
+    m_main_window->add_content(context_manager_wid, 1, content_anchor::left);
+    context_manager_wid->open();
 
     selection_details_widget* details = new selection_details_widget();
     m_main_window->add_content(details, 0, content_anchor::bottom);
