@@ -55,6 +55,10 @@ private Q_SLOTS:
     void handle_rename_action();
     void adjust_min_scale();
 
+    void handle_select_outputs();
+    void handle_select_inputs();
+    void handle_select_inputs_and_outputs();
+
 private:
     void paintEvent(QPaintEvent* event) Q_DECL_OVERRIDE;
     void drawForeground(QPainter* painter, const QRectF& rect) Q_DECL_OVERRIDE;
@@ -72,7 +76,7 @@ private:
     void update_matrix(const int delta);
 
     void toggle_antialiasing();
-    
+
     graphics_item* m_item;
 
     bool m_minimap_enabled;
