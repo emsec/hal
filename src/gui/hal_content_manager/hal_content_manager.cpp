@@ -68,8 +68,9 @@ void hal_content_manager::handle_open_document(const QString& file_name)
 //    navigation->open();
 
     graph_widget* graph_edit = new graph_widget();
-    m_main_window->add_content(graph_edit, 2, content_anchor::center);
     graph_edit->open();
+    m_main_window->add_content(graph_edit, 2, content_anchor::center);
+
 
     //module_widget* m = new module_widget();
     //m_main_window->add_content(m, 0, content_anchor::left);

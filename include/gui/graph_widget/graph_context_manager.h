@@ -15,6 +15,7 @@ class dynamic_context;
 class graph_layouter;
 class graph_shader;
 class module_context;
+class graph_context;
 
 class graph_context_manager
 {
@@ -54,10 +55,14 @@ public:
     graph_shader* get_default_shader(module_context* const context) const;
     graph_shader* get_default_shader(cone_context* const context) const;
     graph_shader* get_default_shader(dynamic_context* const context) const;
+    
+    graph_context* get_context();
+    void create_top_context();
 
 private:
     QVector<module_context*> m_module_contexts;
     QVector<dynamic_context*> m_dynamic_contexts;
+    graph_context* m_top;
 };
 
 #endif // GRAPH_CONTEXT_MANAGER_H
