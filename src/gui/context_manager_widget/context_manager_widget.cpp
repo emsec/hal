@@ -4,26 +4,20 @@
 #include <QStringList>
 #include <QListWidgetItem>
 #include <QSize>
+#include <QDebug>
 
 context_manager_widget::context_manager_widget(QWidget *parent) : content_widget("Context Manager", parent), m_list_widget(new QListWidget())
 {
-    //m_list_widget->setSizeAdjustPolicy(QListWidget::AdjustToContents);
-    QStringListModel* mod = new QStringListModel();
-    mod->setStringList(QStringList() << "hey" << "hoy");
-    m_list_view = new QListView();
-    m_list_view->setModel(mod);
-
-    QListWidgetItem* item = new QListWidgetItem("TEST");
+    QListWidgetItem* item = new QListWidgetItem("Context String 1");
 
     m_list_widget->addItem(item);
-    m_list_widget->addItem("test_context_string");
-    m_list_widget->addItem("test_context_2");
-    //m_list_widget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    //m_list_widget->setResizeMode(QListView::Adjust);
-
-    //m_content_layout->addWidget(m_list_view);
+    m_list_widget->addItem("Context String 2");
+    m_list_widget->addItem("Context String 3");
+ 
     m_content_layout->addWidget(m_list_widget);
+}
 
-
-
+void context_manager_widget::resizeEvent(QResizeEvent* event)
+{
+   m_list_widget->setFixedWidth(event->size().width());
 }

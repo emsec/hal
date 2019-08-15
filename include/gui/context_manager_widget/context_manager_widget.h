@@ -35,12 +35,12 @@ class context_manager_widget : public content_widget
 {
 public:
     context_manager_widget(QWidget* parent = nullptr);
-
+    void resizeEvent(QResizeEvent* event);
 
 private:
 
     QListWidget* m_list_widget;
-    QListView* m_list_view;
+    
     //maps the unique string from the list to a specific context
     QMap<QString, graph_context*> m_string_to_context;
 
