@@ -24,27 +24,48 @@
 #ifndef CONTEXT_MANAGER_WIDGET
 #define CONTEXT_MANAGER_WIDGET
 
+#include "def.h"
+
 #include "content_widget/content_widget.h"
+
 #include <QListWidget>
 #include <QListView>
 #include <QMap>
+#include <QPushButton>
+#include <QPoint>
+
 
 class graph_context;
 
 class context_manager_widget : public content_widget
 {
+    Q_OBJECT
+
 public:
     context_manager_widget(QWidget* parent = nullptr);
     void resizeEvent(QResizeEvent* event);
 
+Q_SIGNALS:
+    void context_created(QWidget *tab, QString name);
+
 private:
 
     QListWidget* m_list_widget;
-    
+    QPushButton* m_debug_button;
+
     //maps the unique string from the list to a specific context
     QMap<QString, graph_context*> m_string_to_context;
 
+    void handle_context_menu_request(const QPoint& point);
 
+    void handle_create_context_clicked();
+    void handle_open_context_clicked();
+    void handle_rename_context_clicked();
+    void handle_delete_context_clicked();
+
+    void show_context_menu(const QPoint& point);
+
+    u32 m_context_counter = 0;
 };
 
 #endif // CONTEXT_MANAGER_WIDGET
