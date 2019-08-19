@@ -723,14 +723,14 @@ TEST_F(hdl_parser_verilog_test, check_vector_bounds){
 
 
 /**
- * Testing the correct handling of the 'assign' skeyword. The assign-keyword is only used, to assign one net to another one. Therefore only statements like
+ * Testing the correct handling of the 'assign' keyword. The assign-keyword is only used, to assign one net to another one. Therefore only statements like
  * "assing signal_1 = signal_0" are valid, which would be realized like:
  *
  *
- * ... ---signal_0--+------=| gate_0 |= ...
+ * ... -<signal_0>--+------=| gate_0 |= ...
  *                  |    '-- ...
  *                  |
- *                  '------=| buffer_gate |=-----signal_1---- ...
+ *                  '------=| buffer_gate |=-----<signal_1>---- ...
  *
  *  Note: assignments like "assign net_0 = net_1 ^ net_2" are not (yet?) supported
  *
@@ -739,8 +739,16 @@ TEST_F(hdl_parser_verilog_test, check_vector_bounds){
 TEST_F(hdl_parser_verilog_test, check_assign)
 {
     TEST_START
-        /*{
-            // Use the assign statement
+        {
+            // Use the assign statement. The netlist should be created like this:
+            /*
+             *
+             *     ---<global_in>---=| gate_0 |=--<net_0>---+---=| gate_1 |=---<global_out_0>---
+             *                                              |
+             *                                              '---=| buffer |=---<net_1>---=| gate_2 |=---<global_out_1>
+             */
+
+
             std::stringstream input("module  (\n"
                                     "  global_in,\n"
                                     "  global_out\n"
@@ -749,6 +757,7 @@ TEST_F(hdl_parser_verilog_test, check_assign)
                                     "  output global_out_0 ;\n"
                                     "  output global_out_1 ;\n"
                                     "  wire net_0;\n"
+                                    "  wire net_1;\n"
                                     "  assign net_1 = net_0 ;\n"
                                     "INV gate_0 (\n"
                                     "  .\\I (global_in ),\n"
@@ -781,12 +790,30 @@ TEST_F(hdl_parser_verilog_test, check_assign)
             ASSERT_EQ(nl->get_gates(DONT_CARE,"gate_1").size(), 1);
             ASSERT_EQ(nl->get_gates(DONT_CARE,"gate_2").size(), 1);
             std::shared_ptr<gate> gate_0 = *nl->get_gates(DONT_CARE,"gate_0").begin();
-            std::shared_ptr<gate> gate_1 = *nl->get_gates(DONT_CARE,"gate_0").begin();
-            std::shared_ptr<gate> gate_2 = *nl->get_gates(DONT_CARE,"gate_0").begin();
+            std::shared_ptr<gate> gate_1 = *nl->get_gates(DONT_CARE,"gate_1").begin();
+            std::shared_ptr<gate> gate_2 = *nl->get_gates(DONT_CARE,"gate_2").begin();
 
-            ASSERT_EQ(nl->get_gates(DONT_CARE, "net_1_buffer").size(), 1);
-            // ... IN PROGRESS ...
-        }*/
+            ASSERT_EQ(nl->get_gates(DONT_CARE, "net_1_buffer").size(), 1); // Name creation: "<net_name>_buffer"
+            std::shared_ptr<gate> buffer_gate = *nl->get_gates(DONT_CARE, "net_1_buffer").begin();
+
+            ASSERT_EQ(nl->get_nets("net_0").size(), 1);
+            ASSERT_EQ(nl->get_nets("net_1").size(), 1);
+            std::shared_ptr<net> net_0 = *nl->get_nets("net_0").begin();
+            std::shared_ptr<net> net_1 = *nl->get_nets("net_1").begin();
+
+            EXPECT_EQ(net_0->get_src().get_gate(), gate_0);
+            ASSERT_EQ(net_0->get_num_of_dsts(), 2);
+            ASSERT_EQ(net_0->get_dsts("INV").size(), 1);
+            EXPECT_EQ((*net_0->get_dsts("INV").begin()).get_gate(), gate_1);
+            ASSERT_EQ(net_0->get_dsts(buffer_gate->get_type()).size(), 1);
+            EXPECT_EQ((*net_0->get_dsts(buffer_gate->get_type()).begin()).get_gate(), buffer_gate);
+
+            ASSERT_EQ(net_1->get_num_of_dsts(), 1);
+            EXPECT_EQ(net_1->get_src().get_gate(), buffer_gate);
+            ASSERT_EQ(net_1->get_num_of_dsts(), 1);
+            EXPECT_EQ((*net_1->get_dsts().begin()).get_gate(), gate_2);
+
+        }
     TEST_END
 }
 
@@ -794,6 +821,9 @@ TEST_F(hdl_parser_verilog_test, check_assign)
  * Testing various types of net assignments (not the 'assign'-statement, but i.e. '.\ Pin_0 (net_0)'. That includes the usage
  * of number literals like  4'hA , the usage of pin vectors (i.e. we use I to represent I(0),...,I(3)) as well as using multiple
  * nets in curly brackets '{net_0, net_1, ...}'
+ *
+ * Testing the assingnments of multiple '0'- and '1'-nets to pins (we use I to represent I(0),...,I(3)) using number literals
+ * For example: .\I (4'hA)
  *
  * Functions: parse
  */
@@ -810,17 +840,17 @@ TEST_F(hdl_parser_verilog_test, check_number_literal)
                 std::stringstream instances;
                 std::stringstream module_block;
                 std::stringstream net_block;
-                int i = 0;
+                int ctr = 0;
                 for (std::string num_literal : std::vector<std::string>{"0", "1", "2", "3", "4", "5", "6", "7", "8",
                                                                         "9", "A", "B", "C", "D", "E", "F"}) {
                     // For every possible number literal (with length 4 bits), create a gate and a global output net
-                    instances << "GATE1 gate_" << i << " (\n  .\\I ( "<< len <<"'h" << num_literal << "),\n  .\\O (global_out_"
-                              << i << ")\n ) ;\n";
+                    instances << "GATE1 gate_" << ctr << " (\n  .\\I ( "<< len <<"'h" << num_literal << "),\n  .\\O (global_out_"
+                              << ctr << ")\n ) ;\n";
 
-                    module_block << ",\n  global_out_" << i;
+                    module_block << ",\n  global_out_" << ctr;
 
-                    net_block << "  output global_out_" << i << " ;\n";
-                    i++;
+                    net_block << "  output global_out_" << ctr << " ;\n";
+                    ctr++;
                 }
                 std::stringstream input;
                 input << "module  (\n"
@@ -831,7 +861,6 @@ TEST_F(hdl_parser_verilog_test, check_number_literal)
                       << net_block.str()
                       << instances.str()
                       << "endmodule";
-                //std::cout << "\n==========\n" << input.str() << "\n==========\n";
 
 
                 test_def::capture_stdout();
@@ -849,7 +878,6 @@ TEST_F(hdl_parser_verilog_test, check_number_literal)
 
                     ASSERT_EQ(nl->get_gates("GATE1", "gate_" + std::to_string(i)).size(), 1);
                     std::shared_ptr<gate> gate_i = *nl->get_gates("GATE1", "gate_" + std::to_string(i)).begin();
-                    int bit[4];
                     for (int idx = 0; idx < 4; idx++) {
                         // Calculate if the pin should be connected to a gnd (0) or vcc (1) gate
                         std::string bit = ((i >> (3 - idx)) & 1) ? "1" : "0";
@@ -879,17 +907,17 @@ TEST_F(hdl_parser_verilog_test, check_number_literal)
                 std::stringstream instances;
                 std::stringstream module_block;
                 std::stringstream net_block;
-                int i = 0;
+                int ctr = 0;
                 for (std::string num_literal : std::vector<std::string>{"0", "1", "2", "3", "4", "5", "6", "7", "8",
                                                                         "9", "A", "B", "C", "D", "E", "F"}) {
                     // For every possible number literal (with length 4 bits), create a gate and a global output net
-                    instances << "GATE1 gate_" << i << " (\n  .\\I ( "<< len <<"'h" << num_literal << "),\n  .\\O (global_out_"
-                              << i << ")\n ) ;\n";
+                    instances << "GATE1 gate_" << ctr << " (\n  .\\I ( "<< len <<"'h" << num_literal << "),\n  .\\O (global_out_"
+                              << ctr << ")\n ) ;\n";
 
-                    module_block << ",\n  global_out_" << i;
+                    module_block << ",\n  global_out_" << ctr;
 
-                    net_block << "  output global_out_" << i << " ;\n";
-                    i++;
+                    net_block << "  output global_out_" << ctr << " ;\n";
+                    ctr++;
                 }
                 std::stringstream input;
                 input << "module  (\n"
@@ -900,7 +928,6 @@ TEST_F(hdl_parser_verilog_test, check_number_literal)
                       << net_block.str()
                       << instances.str()
                       << "endmodule";
-                //std::cout << "\n==========\n" << input.str() << "\n==========\n";
 
 
                 test_def::capture_stdout();
@@ -918,7 +945,6 @@ TEST_F(hdl_parser_verilog_test, check_number_literal)
 
                     ASSERT_EQ(nl->get_gates("GATE1", "gate_" + std::to_string(i)).size(), 1);
                     std::shared_ptr<gate> gate_i = *nl->get_gates("GATE1", "gate_" + std::to_string(i)).begin();
-                    int bit[4];
                     for (int idx = 0; idx < 4; idx++) {
                         // Calculate if the pin should be connected to a gnd (0) or vcc (1) gate
                         std::string bit = ((i >> (3 - idx)) & 1) ? "1" : "0";
@@ -948,18 +974,18 @@ TEST_F(hdl_parser_verilog_test, check_number_literal)
                 std::stringstream instances;
                 std::stringstream module_block;
                 std::stringstream net_block;
-                int i = 0;
+                int ctr = 0;
                 for (std::string num_literal : std::vector<std::string>{"0000", "0001", "0010", "0011", "0100", "0101",
                                                                         "0110", "0111", "1000", "1001", "1010", "1011",
                                                                         "1100", "1101", "1110", "1111"}) {
                     // For every possible number literal (with length 4 bits), create a gate and a global output net
-                    instances << "GATE1 gate_" << i << " (\n  .\\I ( "<< len <<"'b" << num_literal << "),\n  .\\O (global_out_"
-                              << i << ")\n ) ;\n";
+                    instances << "GATE1 gate_" << ctr << " (\n  .\\I ( "<< len <<"'b" << num_literal << "),\n  .\\O (global_out_"
+                              << ctr << ")\n ) ;\n";
 
-                    module_block << ",\n  global_out_" << i;
+                    module_block << ",\n  global_out_" << ctr;
 
-                    net_block << "  output global_out_" << i << " ;\n";
-                    i++;
+                    net_block << "  output global_out_" << ctr << " ;\n";
+                    ctr++;
                 }
                 std::stringstream input;
                 input << "module  (\n"
@@ -970,7 +996,6 @@ TEST_F(hdl_parser_verilog_test, check_number_literal)
                       << net_block.str()
                       << instances.str()
                       << "endmodule";
-                //std::cout << "\n==========\n" << input.str() << "\n==========\n";
 
 
                 test_def::capture_stdout();
@@ -988,7 +1013,6 @@ TEST_F(hdl_parser_verilog_test, check_number_literal)
 
                     ASSERT_EQ(nl->get_gates("GATE1", "gate_" + std::to_string(i)).size(), 1);
                     std::shared_ptr<gate> gate_i = *nl->get_gates("GATE1", "gate_" + std::to_string(i)).begin();
-                    int bit[4];
                     for (int idx = 0; idx < 4; idx++) {
                         // Calculate if the pin should be connected to a gnd (0) or vcc (1) gate
                         std::string bit = ((i >> (3 - idx)) & 1) ? "1" : "0";
@@ -1019,17 +1043,17 @@ TEST_F(hdl_parser_verilog_test, check_number_literal)
                 std::stringstream instances;
                 std::stringstream module_block;
                 std::stringstream net_block;
-                int i = 0;
+                int ctr = 0;
                 for (std::string num_literal : std::vector<std::string>{"0", "1", "2", "3", "4", "5", "6", "7", "8",
                                                                         "9", "10", "11", "12", "13", "14", "15"}) {
                     // For every possible number literal (with length 4 bits), create a gate and a global output net
-                    instances << "GATE1 gate_" << i << " (\n  .\\I ( "<< len <<"'d" << num_literal << "),\n  .\\O (global_out_"
-                              << i << ")\n ) ;\n";
+                    instances << "GATE1 gate_" << ctr << " (\n  .\\I ( "<< len <<"'d" << num_literal << "),\n  .\\O (global_out_"
+                              << ctr << ")\n ) ;\n";
 
-                    module_block << ",\n  global_out_" << i;
+                    module_block << ",\n  global_out_" << ctr;
 
-                    net_block << "  output global_out_" << i << " ;\n";
-                    i++;
+                    net_block << "  output global_out_" << ctr << " ;\n";
+                    ctr++;
                 }
                 std::stringstream input;
                 input << "module  (\n"
@@ -1040,7 +1064,6 @@ TEST_F(hdl_parser_verilog_test, check_number_literal)
                       << net_block.str()
                       << instances.str()
                       << "endmodule";
-                //std::cout << "\n==========\n" << input.str() << "\n==========\n";
 
 
                 test_def::capture_stdout();
@@ -1058,7 +1081,6 @@ TEST_F(hdl_parser_verilog_test, check_number_literal)
 
                     ASSERT_EQ(nl->get_gates("GATE1", "gate_" + std::to_string(i)).size(), 1);
                     std::shared_ptr<gate> gate_i = *nl->get_gates("GATE1", "gate_" + std::to_string(i)).begin();
-                    int bit[4];
                     for (int idx = 0; idx < 4; idx++) {
                         // Calculate if the pin should be connected to a gnd (0) or vcc (1) gate
                         std::string bit = ((i >> (3 - idx)) & 1) ? "1" : "0";
@@ -1089,16 +1111,16 @@ TEST_F(hdl_parser_verilog_test, check_number_literal)
                 std::stringstream instances;
                 std::stringstream module_block;
                 std::stringstream net_block;
-                int i = 8;
+                int ctr = 8;
                 for (std::string num_literal : std::vector<std::string>{"8", "9", "10", "11", "12", "13", "14", "15"}) {
                     // For every possible number literal (with length 4 bits), create a gate and a global output net
-                    instances << "GATE1 gate_" << i << " (\n  .\\I ( "<< len <<"'d" << num_literal << "),\n  .\\O (global_out_"
-                              << i << ")\n ) ;\n";
+                    instances << "GATE1 gate_" << ctr << " (\n  .\\I ( "<< len <<"'d" << num_literal << "),\n  .\\O (global_out_"
+                              << ctr << ")\n ) ;\n";
 
-                    module_block << ",\n  global_out_" << i;
+                    module_block << ",\n  global_out_" << ctr;
 
-                    net_block << "  output global_out_" << i << " ;\n";
-                    i++;
+                    net_block << "  output global_out_" << ctr << " ;\n";
+                    ctr++;
                 }
                 std::stringstream input;
                 input << "module  (\n"
@@ -1109,7 +1131,6 @@ TEST_F(hdl_parser_verilog_test, check_number_literal)
                       << net_block.str()
                       << instances.str()
                       << "endmodule";
-                //std::cout << "\n==========\n" << input.str() << "\n==========\n";
 
 
                 test_def::capture_stdout();
@@ -1127,7 +1148,6 @@ TEST_F(hdl_parser_verilog_test, check_number_literal)
 
                     ASSERT_EQ(nl->get_gates("GATE1", "gate_" + std::to_string(i)).size(), 1);
                     std::shared_ptr<gate> gate_i = *nl->get_gates("GATE1", "gate_" + std::to_string(i)).begin();
-                    int bit[4];
                     for (int idx = 0; idx < 4; idx++) {
                         // Calculate if the pin should be connected to a gnd (0) or vcc (1) gate
                         std::string bit = ((i >> (3 - idx)) & 1) ? "1" : "0";
@@ -1157,7 +1177,7 @@ TEST_F(hdl_parser_verilog_test, check_number_literal)
                 std::stringstream instances;
                 std::stringstream module_block;
                 std::stringstream net_block;
-                int i = 0;
+                int ctr = 0;
                 std::vector<std::string> test_vector = {"4'hx", "4'hz", "4'bxzxz"};
                 std::vector<std::vector<std::string>> result_vector = {
                         std::vector<std::string>{"1'bx", "1'bx", "1'bx", "1'bx"},
@@ -1165,11 +1185,11 @@ TEST_F(hdl_parser_verilog_test, check_number_literal)
                         std::vector<std::string>{"1'bx", "1'bz", "1'bx", "1'bz"}};
                 for (std::string num_literal : test_vector) {
                     // For every possible number literal (with length 4 bits), create a gate and a global output net
-                    instances << "GATE1 gate_" << i << " (\n  .\\I ( " << num_literal << " ),\n  .\\O (global_out_" << i
+                    instances << "GATE1 gate_" << ctr << " (\n  .\\I ( " << num_literal << " ),\n  .\\O (global_out_" << ctr
                               << ")\n ) ;\n";
-                    module_block << ",\n  global_out_" << i;
-                    net_block << "  output global_out_" << i << " ;\n";
-                    i++;
+                    module_block << ",\n  global_out_" << ctr;
+                    net_block << "  output global_out_" << ctr << " ;\n";
+                    ctr++;
                 }
                 std::stringstream input;
                 input << "module  (\n"
@@ -1180,7 +1200,6 @@ TEST_F(hdl_parser_verilog_test, check_number_literal)
                       << net_block.str()
                       << instances.str()
                       << "endmodule";
-                //std::cout << "\n==========\n" << input.str() << "\n==========\n";
 
 
                 test_def::capture_stdout();
@@ -1194,12 +1213,11 @@ TEST_F(hdl_parser_verilog_test, check_number_literal)
 
                 ASSERT_NE(nl, nullptr);
                 // Verify that every gate is connected correctly
-                i = 0;
+                int i = 0;
                 for (auto &res : result_vector) {
 
                     ASSERT_EQ(nl->get_gates("GATE1", "gate_" + std::to_string(i)).size(), 1);
                     std::shared_ptr<gate> gate_i = *nl->get_gates("GATE1", "gate_" + std::to_string(i)).begin();
-                    int bit[4];
                     for (int idx = 0; idx < 4; idx++) {
                         // Calculate if the pin should be connected to a gnd (0) or vcc (1) gate
                         //std::string bit = ((i >> (3-idx)) & 1) ? "1" : "0";
@@ -1218,6 +1236,209 @@ TEST_F(hdl_parser_verilog_test, check_number_literal)
 }
 
 /**
+ * Testing the assignments of multiple nets to multiple pins using curley brackets ('{net_0,...,net_4}')
+ * or wire vectors (like:  'wire [1:4] net_vector' ... '.\I (net_vec )' or '.\I (net_vec[1:4])')
+ *
+ * Functions: parse
+ */
+TEST_F(hdl_parser_verilog_test, check_vector_assignment)
+{
+    TEST_START
+        create_temp_gate_lib();
+        {
+            // Assing a vector of nets to a vector (via '{' and '}') of input pins
+            std::stringstream input;
+            input << "module  (\n"
+                     "  global_in,\n"
+                     "  global_out\n"
+                     " ) ;\n"
+                     "  input global_in ;\n"
+                     "  output global_out ;\n"
+                     "  wire net_0;\n"
+                     "  wire net_1;\n"
+                     "  wire net_2;\n"
+                     "  wire net_3;\n"
+                     "GATE1 gate_0 (\n"
+                     "  .\\I ({net_0, net_1, net_2, net_3}),\n"
+                     "  .\\O (global_out )\n"
+                     " ) ;\n"
+                     "endmodule";
+            hdl_parser_verilog verilog_parser(input);
+            std::shared_ptr<netlist> nl = verilog_parser.parse(temp_lib_name);
+            ASSERT_NE(nl, nullptr);
+
+            ASSERT_EQ(nl->get_gates(DONT_CARE, "gate_0").size(), 1);
+            std::shared_ptr<gate> gate_0 = *nl->get_gates(DONT_CARE, "gate_0").begin();
+
+            ASSERT_EQ(nl->get_nets("net_0").size(), 1);
+            ASSERT_EQ(nl->get_nets("net_1").size(), 1);
+            ASSERT_EQ(nl->get_nets("net_2").size(), 1);
+            ASSERT_EQ(nl->get_nets("net_3").size(), 1);
+            std::shared_ptr<net> net_0 = *nl->get_nets("net_0").begin();
+            std::shared_ptr<net> net_1 = *nl->get_nets("net_1").begin();
+            std::shared_ptr<net> net_2 = *nl->get_nets("net_2").begin();
+            std::shared_ptr<net> net_3 = *nl->get_nets("net_3").begin();
+
+            EXPECT_EQ(gate_0->get_fan_in_net("I(0)"), net_0);
+            EXPECT_EQ(gate_0->get_fan_in_net("I(1)"), net_1);
+            EXPECT_EQ(gate_0->get_fan_in_net("I(2)"), net_2);
+            EXPECT_EQ(gate_0->get_fan_in_net("I(3)"), net_3);
+
+        }
+        {
+            // Assing a vector of nets to a vector (i.e. net_vec[1:4]) of input pins (ISSUE: warning for bounds like [1:4]  (instead of [4:1]) is misleading ?)
+            std::stringstream input;
+            input << "module  (\n"
+                     "  global_in,\n"
+                     "  global_out\n"
+                     " ) ;\n"
+                     "  input global_in ;\n"
+                     "  output global_out ;\n"
+                     "  wire [1:4] net_vec ;\n"
+                     "GATE1 gate_0 (\n"
+                     "  .\\I (net_vec[1:4]),\n"
+                     "  .\\O (global_out )\n"
+                     " ) ;\n"
+                     "endmodule";
+            hdl_parser_verilog verilog_parser(input);
+            std::shared_ptr<netlist> nl = verilog_parser.parse(temp_lib_name);
+            ASSERT_NE(nl, nullptr);
+
+            ASSERT_EQ(nl->get_gates(DONT_CARE, "gate_0").size(), 1);
+            std::shared_ptr<gate> gate_0 = *nl->get_gates(DONT_CARE, "gate_0").begin();
+
+            ASSERT_EQ(nl->get_nets("net_vec[1]").size(), 1);
+            ASSERT_EQ(nl->get_nets("net_vec[2]").size(), 1);
+            ASSERT_EQ(nl->get_nets("net_vec[3]").size(), 1);
+            ASSERT_EQ(nl->get_nets("net_vec[4]").size(), 1);
+            std::shared_ptr<net> net_vec_1 = *nl->get_nets("net_vec[1]").begin();
+            std::shared_ptr<net> net_vec_2 = *nl->get_nets("net_vec[2]").begin();
+            std::shared_ptr<net> net_vec_3 = *nl->get_nets("net_vec[3]").begin();
+            std::shared_ptr<net> net_vec_4 = *nl->get_nets("net_vec[4]").begin();
+
+            EXPECT_EQ(gate_0->get_fan_in_net("I(0)"), net_vec_1);
+            EXPECT_EQ(gate_0->get_fan_in_net("I(1)"), net_vec_2);
+            EXPECT_EQ(gate_0->get_fan_in_net("I(2)"), net_vec_3);
+            EXPECT_EQ(gate_0->get_fan_in_net("I(3)"), net_vec_4);
+
+        }
+        {
+            // Assing a vector of nets to a vector (i.e. net_vec[1:4]) of input pins (ISSUE: reverse order?)
+            std::stringstream input;
+            input << "module  (\n"
+                     "  global_in,\n"
+                     "  global_out\n"
+                     " ) ;\n"
+                     "  input global_in ;\n"
+                     "  output global_out ;\n"
+                     "  wire [4:1] net_vec ;\n"
+                     "GATE1 gate_0 (\n"
+                     "  .\\I (net_vec),\n"
+                     "  .\\O (global_out )\n"
+                     " ) ;\n"
+                     "endmodule";
+            hdl_parser_verilog verilog_parser(input);
+            std::shared_ptr<netlist> nl = verilog_parser.parse(temp_lib_name);
+            ASSERT_NE(nl, nullptr);
+
+           ASSERT_EQ(nl->get_gates(DONT_CARE, "gate_0").size(), 1);
+            std::shared_ptr<gate> gate_0 = *nl->get_gates(DONT_CARE, "gate_0").begin();
+
+            ASSERT_EQ(nl->get_nets("net_vec[1]").size(), 1);
+            ASSERT_EQ(nl->get_nets("net_vec[2]").size(), 1);
+            ASSERT_EQ(nl->get_nets("net_vec[3]").size(), 1);
+            ASSERT_EQ(nl->get_nets("net_vec[4]").size(), 1);
+            std::shared_ptr<net> net_vec_1 = *nl->get_nets("net_vec[1]").begin();
+            std::shared_ptr<net> net_vec_2 = *nl->get_nets("net_vec[2]").begin();
+            std::shared_ptr<net> net_vec_3 = *nl->get_nets("net_vec[3]").begin();
+            std::shared_ptr<net> net_vec_4 = *nl->get_nets("net_vec[4]").begin();
+
+            /* Why not this order?
+            EXPECT_EQ(gate_0->get_fan_in_net("I(0)"), net_vec_1);
+            EXPECT_EQ(gate_0->get_fan_in_net("I(1)"), net_vec_2);
+            EXPECT_EQ(gate_0->get_fan_in_net("I(2)"), net_vec_3);
+            EXPECT_EQ(gate_0->get_fan_in_net("I(3)"), net_vec_4);
+             */
+            /* This will pass
+            EXPECT_EQ(gate_0->get_fan_in_net("I(0)"), net_vec_4);
+            EXPECT_EQ(gate_0->get_fan_in_net("I(1)"), net_vec_3);
+            EXPECT_EQ(gate_0->get_fan_in_net("I(2)"), net_vec_2);
+            EXPECT_EQ(gate_0->get_fan_in_net("I(3)"), net_vec_1);*/
+
+        }
+
+    TEST_END
+}
+
+/**
+ * Testing the usage of global gnd/vcc gates
+ *
+ * Functions: parse
+ */
+TEST_F(hdl_parser_verilog_test, check_global_gnd_vcc_gates)
+{
+    TEST_START
+        {
+            // Testing the usage of a global VCC gate (gate type 'VCC' is global VCC gate in our test gate library)
+            std::stringstream input("module  (\n"
+                                    "  global_out\n"
+                                    " ) ;\n"
+                                    "  output global_out ;\n"
+                                    "VCC gate_0 (\n"
+                                    "  .\\O (global_out )\n"
+                                    " ) ;\n"
+                                    "endmodule");
+            test_def::capture_stdout();
+            hdl_parser_verilog verilog_parser(input);
+            std::shared_ptr<netlist> nl = verilog_parser.parse(g_lib_name);
+            if (nl == nullptr)
+            {
+                std::cout << test_def::get_captured_stdout();
+            }
+            else
+            {
+                test_def::get_captured_stdout();
+            }
+
+            ASSERT_NE(nl, nullptr);
+            ASSERT_EQ(nl->get_gates("VCC","gate_0").size(), 1);
+            std::shared_ptr<gate> gate_0 = *nl->get_gates("VCC","gate_0").begin();
+            EXPECT_FALSE(gate_0->is_global_gnd_gate());
+            EXPECT_TRUE(gate_0->is_global_vcc_gate());
+        }
+        {
+            // Testing the usage of a global GND gate (gate type 'GND' is global GND gate in our test gate library)
+            std::stringstream input("module  (\n"
+                                    "  global_out\n"
+                                    " ) ;\n"
+                                    "  output global_out ;\n"
+                                    "GND gate_0 (\n"
+                                    "  .\\O (global_out )\n"
+                                    " ) ;\n"
+                                    "endmodule");
+            test_def::capture_stdout();
+            hdl_parser_verilog verilog_parser(input);
+            std::shared_ptr<netlist> nl = verilog_parser.parse(g_lib_name);
+            if (nl == nullptr)
+            {
+                std::cout << test_def::get_captured_stdout();
+            }
+            else
+            {
+                test_def::get_captured_stdout();
+            }
+
+            ASSERT_NE(nl, nullptr);
+            ASSERT_EQ(nl->get_gates("GND","gate_0").size(), 1);
+            std::shared_ptr<gate> gate_0 = *nl->get_gates("GND","gate_0").begin();
+            EXPECT_TRUE(gate_0->is_global_gnd_gate());
+            EXPECT_FALSE(gate_0->is_global_vcc_gate());
+        }
+    TEST_END
+}
+
+
+/**
  * Testing the correct handling of invalid input
  *
  * Functions: parse
@@ -1226,8 +1447,26 @@ TEST_F(hdl_parser_verilog_test, check_invalid_input)
 {
     TEST_START
         {
-            // IN PROGRESS
-            EXPECT_TRUE(true);
+            // The passed gate library name is unknown
+            NO_COUT_TEST_BLOCK;
+            std::stringstream input;
+            input << "module  (\n"
+                     "  global_in,\n"
+                     "  global_out\n"
+                     " ) ;\n"
+                     "  input global_in ;\n"
+                     "  output global_out ;\n"
+                     "INV gate_0 (\n"
+                     "  .\\I (global_in ),\n"
+                     "  .\\O (global_out )\n"
+                     " ) ;\n"
+                     "endmodule";
+            hdl_parser_verilog verilog_parser(input);
+            std::shared_ptr<netlist> nl = verilog_parser.parse(temp_lib_name);
+            EXPECT_EQ(nl, nullptr);
+        }
+        {
+            // MAYBE SOME MORE TESTS HERE LATER...
         }
     TEST_END
 }
