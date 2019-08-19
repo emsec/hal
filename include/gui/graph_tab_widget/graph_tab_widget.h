@@ -3,16 +3,22 @@
 
 #include "content_widget/content_widget.h"
 
+#include "graph_widget/contexts/dynamic_context.h"
+
 class QTabWidget;
 class QVBoxLayout;
 
 class graph_tab_widget : public content_widget
 {
+    Q_OBJECT
 
 public:
     graph_tab_widget(QWidget* parent = nullptr);
 
-    void addTab(QWidget* tab, QString tab_name = "default");
+    int addTab(QWidget* tab, QString tab_name = "default");
+
+public Q_SLOTS:
+    void handle_context_created(dynamic_context* context, QString context_name);
 
 private:
     QTabWidget* m_tab_widget;

@@ -54,6 +54,37 @@ graph_widget::graph_widget(QWidget* parent) : content_widget("Graph", parent),
 
 }
 
+graph_widget::graph_widget(graph_context* context ,QWidget* parent) : content_widget("Graph", parent),
+    m_view(new graph_graphics_view(this)),
+    m_context(context),
+    m_overlay(new dialog_overlay(this)),
+    m_navigation_widget(new graph_navigation_widget(nullptr)),
+    m_progress_widget(new graph_layout_progress_widget(this)),
+    m_spinner_widget(new graph_layout_spinner_widget(this)),
+    m_current_expansion(0)
+{
+    connect(m_navigation_widget, &graph_navigation_widget::navigation_requested, this, &graph_widget::handle_navigation_jump_requested);
+    connect(m_navigation_widget, &graph_navigation_widget::close_requested, m_overlay, &dialog_overlay::hide);
+    connect(m_navigation_widget, &graph_navigation_widget::close_requested, this, &graph_widget::reset_focus);
+
+    connect(m_overlay, &dialog_overlay::clicked, m_overlay, &dialog_overlay::hide);
+
+    connect(m_view, &graph_graphics_view::module_double_clicked, this, &graph_widget::handle_module_double_clicked);
+
+    m_overlay->hide();
+    m_overlay->set_widget(m_navigation_widget);
+
+    m_content_layout->addWidget(m_view);
+
+    m_view->setFrameStyle(QFrame::NoFrame);
+    m_view->setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
+    m_view->setRenderHint(QPainter::Antialiasing, false);
+    m_view->setDragMode(QGraphicsView::RubberBandDrag);
+
+    context->subscribe(this);
+    change_context(context);
+}
+
 void graph_widget::open_top_context()
 {
     auto context = g_graph_context_manager.get_context();

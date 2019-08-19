@@ -43,6 +43,7 @@ class graph_widget : public content_widget, public graph_context_subscriber
 
 public:
     graph_widget(QWidget* parent = nullptr);
+    graph_widget(graph_context* context, QWidget* parent = nullptr);
 
     virtual void setup_toolbar(toolbar* toolbar) Q_DECL_OVERRIDE;
 

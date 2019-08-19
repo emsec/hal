@@ -74,6 +74,8 @@ void hal_content_manager::handle_open_document(const QString& file_name)
     m_main_window->add_content(context_manager_wid, 1, content_anchor::left);
     context_manager_wid->open();
 
+    connect(context_manager_wid, &context_manager_widget::context_created, graph_tab_wid, &graph_tab_widget::handle_context_created);
+
     selection_details_widget* details = new selection_details_widget();
     m_main_window->add_content(details, 0, content_anchor::bottom);
 

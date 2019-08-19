@@ -7,8 +7,10 @@
 #include <QDebug>
 #include "gui_globals.h"
 #include "gui/graph_widget/contexts/dynamic_context.h"
+#include "gui/graph_widget/graph_widget.h"
 #include <QAction>
 #include <QMenu>
+
 
 
 context_manager_widget::context_manager_widget(QWidget *parent) : content_widget("Context Manager", parent), m_list_widget(new QListWidget())
@@ -20,11 +22,9 @@ context_manager_widget::context_manager_widget(QWidget *parent) : content_widget
     m_list_widget->addItem(top_context->name());
     m_string_to_context.insert(top_context->name(), top_context);
 
-
     m_content_layout->addWidget(m_list_widget);
 
     connect(m_list_widget, &QListWidget::customContextMenuRequested, this, &context_manager_widget::handle_context_menu_request);
-
 }
 
 void context_manager_widget::resizeEvent(QResizeEvent* event)
@@ -65,14 +65,13 @@ void context_manager_widget::handle_context_menu_request(const QPoint& point)
 
 void context_manager_widget::handle_create_context_clicked()
 {
-    qDebug() << "Create Context Request";
-
-    /*
+    //create new graph context
     m_context_counter++;
     QString new_context_name = "New Context " + QString::number(m_context_counter);
     dynamic_context* new_context = g_graph_context_manager.add_dynamic_context(new_context_name);
     m_string_to_context.insert(new_context_name, new_context);
 
+    //default if context created from nothing -> top module + global nets (empty == better?)
     QSet<u32> global_nets;
     for (auto& net : g_netlist->get_global_inout_nets()) {
         global_nets.insert(net->get_id());
@@ -84,7 +83,10 @@ void context_manager_widget::handle_create_context_clicked()
         global_nets.insert(net->get_id());
     }
     new_context->add(QSet<u32>{1}, QSet<u32>(), global_nets);
-    */
+    
+    m_list_widget->addItem(new_context_name);
+
+    Q_EMIT context_created(new_context, new_context_name);
 }
 
 void context_manager_widget::handle_open_context_clicked()

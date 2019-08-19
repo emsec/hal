@@ -24,17 +24,18 @@
 #ifndef CONTEXT_MANAGER_WIDGET
 #define CONTEXT_MANAGER_WIDGET
 
+#include "content_widget/content_widget.h"
+
 #include "def.h"
 
-#include "content_widget/content_widget.h"
+#include "graph_widget/contexts/dynamic_context.h"
 
 #include <QListWidget>
 #include <QListView>
 #include <QMap>
-#include <QPushButton>
 #include <QPoint>
 
-
+ 
 class graph_context;
 
 class context_manager_widget : public content_widget
@@ -46,12 +47,11 @@ public:
     void resizeEvent(QResizeEvent* event);
 
 Q_SIGNALS:
-    void context_created(QWidget *tab, QString name);
+    void context_created(dynamic_context* context, QString name);
 
 private:
 
     QListWidget* m_list_widget;
-    QPushButton* m_debug_button;
 
     //maps the unique string from the list to a specific context
     QMap<QString, graph_context*> m_string_to_context;
