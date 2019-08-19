@@ -20,7 +20,7 @@ context_manager_widget::context_manager_widget(QWidget *parent) : content_widget
     //load top context (top module) into list
     dynamic_context* top_context = g_graph_context_manager.get_dynamic_context("top");
     m_list_widget->addItem(top_context->name());
-    m_string_to_context.insert(top_context->name(), top_context);
+    //m_string_to_context.insert(top_context->name(), top_context);
 
     m_content_layout->addWidget(m_list_widget);
 
@@ -36,9 +36,9 @@ void context_manager_widget::handle_context_menu_request(const QPoint& point)
 {
 
     //check if right click / context menu request occured on position of an list item
-    QModelIndex index = m_list_widget->indexAt(point);
+     m_clicked_index = m_list_widget->indexAt(point);
 
-    if(!index.isValid())
+    if(!m_clicked_index.isValid())
         return;
 
     //setup context menu
@@ -69,7 +69,6 @@ void context_manager_widget::handle_create_context_clicked()
     m_context_counter++;
     QString new_context_name = "New Context " + QString::number(m_context_counter);
     dynamic_context* new_context = g_graph_context_manager.add_dynamic_context(new_context_name);
-    m_string_to_context.insert(new_context_name, new_context);
 
     //default if context created from nothing -> top module + global nets (empty == better?)
     QSet<u32> global_nets;
@@ -84,14 +83,16 @@ void context_manager_widget::handle_create_context_clicked()
     }
     new_context->add(QSet<u32>{1}, QSet<u32>(), global_nets);
     
-    m_list_widget->addItem(new_context_name);
+    m_list_widget->addItem(new_context->name());
 
-    Q_EMIT context_created(new_context, new_context_name);
+    Q_EMIT context_created_clicked(new_context, new_context->name());
 }
 
 void context_manager_widget::handle_open_context_clicked()
 {
-    qDebug() << "Open Request";
+    dynamic_context * clicked_context = g_graph_context_manager.get_dynamic_context(m_clicked_index.data().toString());
+
+    Q_EMIT context_opened_clicked(clicked_context, clicked_context->name());
 }
 
 void context_manager_widget::handle_rename_context_clicked()

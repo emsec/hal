@@ -5,6 +5,8 @@
 
 #include "graph_widget/contexts/dynamic_context.h"
 
+#include <QMap>
+
 class QTabWidget;
 class QVBoxLayout;
 
@@ -18,15 +20,20 @@ public:
     int addTab(QWidget* tab, QString tab_name = "default");
 
 public Q_SLOTS:
-    void handle_context_created(dynamic_context* context, QString context_name);
+    void handle_context_created(dynamic_context* context);
+    void handle_context_open_request(dynamic_context* context);
+
 
 private:
     QTabWidget* m_tab_widget;
     QVBoxLayout* m_layout;
 
+    QMap<dynamic_context*, QWidget*> m_context_widget_map;
+
     //functions
     void handle_tab_close_requested(int index);
 
+    void add_graph_widget_tab(dynamic_context* context);
 };
 
 #endif //GRAPH_TAB_WIDGET

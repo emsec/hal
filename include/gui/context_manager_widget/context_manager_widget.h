@@ -47,14 +47,14 @@ public:
     void resizeEvent(QResizeEvent* event);
 
 Q_SIGNALS:
-    void context_created(dynamic_context* context, QString name);
+    void context_created_clicked(dynamic_context* context, QString name);
+    void context_opened_clicked(dynamic_context* context, QString name);
 
 private:
 
     QListWidget* m_list_widget;
 
-    //maps the unique string from the list to a specific context
-    QMap<QString, graph_context*> m_string_to_context;
+    QModelIndex m_clicked_index;
 
     void handle_context_menu_request(const QPoint& point);
 
