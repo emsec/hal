@@ -103,6 +103,8 @@ PYBIND11_PLUGIN(hal_py)
     py::module m("hal_py", "hal python bindings");
 #endif    // ifdef PYBIND11_MODULE
 
+    m.def("log_info", [](std::string& message){log_info("python_context", message);}, R"( some documentation info)");
+
     py::class_<hal::path>(m, "hal_path")
         .def(py::init<>())
         .def(py::init<const hal::path&>())
