@@ -201,6 +201,8 @@ std::map<std::string, std::shared_ptr<bdd>> plugin_gate_decorators::bdd_generato
     {
         generator = m_bbd_generators.at(type);
     }
+
+    return generator(g, input_pin_type_to_bdd);
 }
 
 bool plugin_gate_decorators::bdd_availability_tester_yosys_mycell(std::shared_ptr<gate> g)
