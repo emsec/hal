@@ -50,23 +50,15 @@ namespace bdd_MYCELL_helper
     {
         std::map<std::string, std::shared_ptr<bdd>> result;       
 
-
         result["Y"] = std::make_shared<bdd>(bdd_not((*(input_pin_type_to_bdd["A"]) & *(input_pin_type_to_bdd["B"]))));
-
         return result;
     }
 
     std::map<std::string, std::shared_ptr<bdd>> get_bdd_MYCELL_nor(std::shared_ptr<gate> g, std::map<std::string, std::shared_ptr<bdd>>& input_pin_type_to_bdd)
     {
         std::map<std::string, std::shared_ptr<bdd>> result;
-        auto bdd_output = std::make_shared<bdd>();
 
-        for (const auto pin : g->get_input_pin_types())
-        {
-            *bdd_output     |= PIN_TO_BDD(pin);
-        }
-        result["Y"] = std::make_shared<bdd>(bdd_not(*bdd_output));
-
+        result["Y"] = std::make_shared<bdd>(bdd_not((*(input_pin_type_to_bdd["A"]) | *(input_pin_type_to_bdd["B"]))));
         return result;
     }
 
