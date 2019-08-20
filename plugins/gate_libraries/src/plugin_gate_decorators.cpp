@@ -25,7 +25,7 @@ void plugin_gate_decorators::on_load()
     gate_decorator_system::register_bdd_decorator_function("GSCLIB_3_0", &bdd_availability_tester_gsclib, &bdd_generator_gsclib);
     gate_decorator_system::register_bdd_decorator_function("SYNOPSYS_90NM", &bdd_availability_tester_synopsys90, &bdd_generator_synopsys90);
     gate_decorator_system::register_bdd_decorator_function("YOSYS_MYCELL", &bdd_availability_tester_yosys_mycell, &bdd_generator_yosys_mycell);
-    gate_decorator_system::register_bdd_decorator_function("MYCELL", &bdd_availability_tester_mycell, &bdd_generator_mycell);
+    gate_decorator_system::register_bdd_decorator_function("SYNOPSYS_NAND_NOR", &bdd_availability_tester_synopsys_nand_nor, &bdd_generator_synopsys_nand_nor);
 
     gate_decorator_system::register_bdd_decorator_function("SCAN_FF_LIB", &bdd_availability_tester_scan_ff_lib, &bdd_generator_scan_ff_lib);
 
@@ -41,7 +41,7 @@ void plugin_gate_decorators::on_unload()
     gate_decorator_system::remove_bdd_decorator_function("GSCLIB_3_0");
     gate_decorator_system::remove_bdd_decorator_function("SYNOPSYS_90NM");
     gate_decorator_system::remove_bdd_decorator_function("YOSYS_MYCELL");
-    gate_decorator_system::remove_bdd_decorator_function("MYCELL");
+    gate_decorator_system::remove_bdd_decorator_function("SYNOPSYS_NAND_NOR");
 
     gate_decorator_system::remove_bdd_decorator_function("SCAN_FF_LIB");
 

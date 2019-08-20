@@ -32,7 +32,7 @@
       "GLOBAL_GND": ["O"],
       "GLOBAL_VCD": ["O"]
     },
-    "library_name": "MYCELL",
+    "library_name": "SYNOPSYS_NAND_NOR",
     "vhdl_includes": [],
     "global_gnd_nodes": [
       "GLOBAL_GND"

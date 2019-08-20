@@ -13,9 +13,9 @@
 #define PIN_TO_BDD(pin) (*(input_pin_type_to_bdd[pin]))
 #endif
 
-namespace bdd_MYCELL_helper
+namespace bdd_synopsys_nand_nor_helper
 {
-    std::map<std::string, std::shared_ptr<bdd>> get_bdd_MYCELL_vcc(std::shared_ptr<gate> g, __attribute__((unused)) std::map<std::string, std::shared_ptr<bdd>>& input_pin_type_to_bdd)
+    std::map<std::string, std::shared_ptr<bdd>> get_bdd_synopsys_nand_nor_vcc(std::shared_ptr<gate> g, __attribute__((unused)) std::map<std::string, std::shared_ptr<bdd>>& input_pin_type_to_bdd)
     {
         std::map<std::string, std::shared_ptr<bdd>> result;
         if (g->get_type() == "GLOBAL_VCC")
@@ -26,7 +26,7 @@ namespace bdd_MYCELL_helper
         return result;
     }
 
-    std::map<std::string, std::shared_ptr<bdd>> get_bdd_MYCELL_gnd(std::shared_ptr<gate> g, __attribute__((unused)) std::map<std::string, std::shared_ptr<bdd>>& input_pin_type_to_bdd)
+    std::map<std::string, std::shared_ptr<bdd>> get_bdd_synopsys_nand_nor_gnd(std::shared_ptr<gate> g, __attribute__((unused)) std::map<std::string, std::shared_ptr<bdd>>& input_pin_type_to_bdd)
     {
         std::map<std::string, std::shared_ptr<bdd>> result;
         if (g->get_type() == "GLOBAL_GND")
@@ -37,7 +37,7 @@ namespace bdd_MYCELL_helper
         return result;
     }
 
-    std::map<std::string, std::shared_ptr<bdd>> get_bdd_MYCELL_not(std::shared_ptr<gate> g, std::map<std::string, std::shared_ptr<bdd>>& input_pin_type_to_bdd)
+    std::map<std::string, std::shared_ptr<bdd>> get_bdd_synopsys_nand_nor_not(std::shared_ptr<gate> g, std::map<std::string, std::shared_ptr<bdd>>& input_pin_type_to_bdd)
     {
         std::map<std::string, std::shared_ptr<bdd>> result;
         if (g->get_type() == "NOT")
@@ -46,16 +46,18 @@ namespace bdd_MYCELL_helper
         return result;
     }
 
-    std::map<std::string, std::shared_ptr<bdd>> get_bdd_MYCELL_nand(std::shared_ptr<gate> g, std::map<std::string, std::shared_ptr<bdd>>& input_pin_type_to_bdd)
+    std::map<std::string, std::shared_ptr<bdd>> get_bdd_synopsys_nand_nor_nand(std::shared_ptr<gate> g, std::map<std::string, std::shared_ptr<bdd>>& input_pin_type_to_bdd)
     {
+        UNUSED(g);
         std::map<std::string, std::shared_ptr<bdd>> result;       
 
         result["Y"] = std::make_shared<bdd>(bdd_not((*(input_pin_type_to_bdd["A"]) & *(input_pin_type_to_bdd["B"]))));
         return result;
     }
 
-    std::map<std::string, std::shared_ptr<bdd>> get_bdd_MYCELL_nor(std::shared_ptr<gate> g, std::map<std::string, std::shared_ptr<bdd>>& input_pin_type_to_bdd)
+    std::map<std::string, std::shared_ptr<bdd>> get_bdd_synopsys_nand_nor_nor(std::shared_ptr<gate> g, std::map<std::string, std::shared_ptr<bdd>>& input_pin_type_to_bdd)
     {
+        UNUSED(g);
         std::map<std::string, std::shared_ptr<bdd>> result;
 
         result["Y"] = std::make_shared<bdd>(bdd_not((*(input_pin_type_to_bdd["A"]) | *(input_pin_type_to_bdd["B"]))));
@@ -64,18 +66,18 @@ namespace bdd_MYCELL_helper
 
 
 
-}    // namespace bdd_MYCELL_helper
+}    // namespace bdd_synopsys_nand_nor_helper
 
 static std::map<std::string, gate_decorator_system::bdd_decorator_generator> m_bbd_generators =
     {
-        {"GLOBAL_VCC", bdd_MYCELL_helper::get_bdd_MYCELL_vcc}, {"VCC", bdd_MYCELL_helper::get_bdd_MYCELL_vcc},
-        {"GLOBAL_GND", bdd_MYCELL_helper::get_bdd_MYCELL_gnd}, {"GND", bdd_MYCELL_helper::get_bdd_MYCELL_gnd},
+        {"GLOBAL_VCC", bdd_synopsys_nand_nor_helper::get_bdd_synopsys_nand_nor_vcc}, {"VCC", bdd_synopsys_nand_nor_helper::get_bdd_synopsys_nand_nor_vcc},
+        {"GLOBAL_GND", bdd_synopsys_nand_nor_helper::get_bdd_synopsys_nand_nor_gnd}, {"GND", bdd_synopsys_nand_nor_helper::get_bdd_synopsys_nand_nor_gnd},
 
-        {"NAND", bdd_MYCELL_helper::get_bdd_MYCELL_nand},      {"NOR", bdd_MYCELL_helper::get_bdd_MYCELL_nor},
-        {"NOT", bdd_MYCELL_helper::get_bdd_MYCELL_not},
+        {"NAND", bdd_synopsys_nand_nor_helper::get_bdd_synopsys_nand_nor_nand},      {"NOR", bdd_synopsys_nand_nor_helper::get_bdd_synopsys_nand_nor_nor},
+        {"NOT", bdd_synopsys_nand_nor_helper::get_bdd_synopsys_nand_nor_not},
 };
 
-std::map<std::string, std::shared_ptr<bdd>> plugin_gate_decorators::bdd_generator_mycell(std::shared_ptr<gate> g, std::map<std::string, std::shared_ptr<bdd>>& input_pin_type_to_bdd)
+std::map<std::string, std::shared_ptr<bdd>> plugin_gate_decorators::bdd_generator_synopsys_nand_nor(std::shared_ptr<gate> g, std::map<std::string, std::shared_ptr<bdd>>& input_pin_type_to_bdd)
 {
     auto type = g->get_type();
 
@@ -94,7 +96,7 @@ std::map<std::string, std::shared_ptr<bdd>> plugin_gate_decorators::bdd_generato
 
 }
 
-bool plugin_gate_decorators::bdd_availability_tester_mycell(std::shared_ptr<gate> g)
+bool plugin_gate_decorators::bdd_availability_tester_synopsys_nand_nor(std::shared_ptr<gate> g)
 {
     auto type = g->get_type();
 
