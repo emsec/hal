@@ -1,0 +1,44 @@
+{
+  "library": {
+    "element_types": [
+      "NAND",
+      "NOT",
+      "NOR",
+      "DFF",
+      "GLOBAL_GND",
+      "GLOBAL_VCC"
+    ],
+    "elements_inout_types": {
+      "NAND" : [],
+      "NOT" : [],
+      "NOR" : [],
+      "DFF" : [],
+      "GLOBAL_GND": [],
+      "GLOBAL_VCD": []
+    },
+    "elements_input_types": {
+      "NAND" : ["A", "B"],
+      "NOT" : ["A"],
+      "NOR" : ["A", "B"],
+      "DFF" : ["D", "C"],
+      "GLOBAL_GND": [],
+      "GLOBAL_VCD": []
+    },
+    "elements_output_types": {
+      "NAND" : ["Y"],
+      "NOT" : ["Y"],
+      "NOR" : ["Y"],
+      "DFF" : ["Q"],
+      "GLOBAL_GND": ["O"],
+      "GLOBAL_VCD": ["O"]
+    },
+    "library_name": "MYCELL",
+    "vhdl_includes": [],
+    "global_gnd_nodes": [
+      "GLOBAL_GND"
+    ],
+    "global_vcc_nodes": [
+      "GLOBAL_VCC"
+    ]
+  }
+}
