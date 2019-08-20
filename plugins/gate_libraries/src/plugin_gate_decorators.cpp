@@ -17,7 +17,7 @@ std::string plugin_gate_decorators::get_name()
 
 std::string plugin_gate_decorators::get_version()
 {
-    return std::string("1.0");
+    return std::string("1.1");
 }
 
 void plugin_gate_decorators::on_load()
