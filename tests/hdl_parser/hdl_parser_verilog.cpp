@@ -747,8 +747,6 @@ TEST_F(hdl_parser_verilog_test, check_assign)
              *                                              |
              *                                              '---=| buffer |=---<net_1>---=| gate_2 |=---<global_out_1>
              */
-
-
             std::stringstream input("module  (\n"
                                     "  global_in,\n"
                                     "  global_out\n"
@@ -1436,7 +1434,6 @@ TEST_F(hdl_parser_verilog_test, check_global_gnd_vcc_gates)
         }
     TEST_END
 }
-
 
 /**
  * Testing the correct handling of invalid input

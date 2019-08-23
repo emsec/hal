@@ -42,7 +42,11 @@ CMakeScripts
 build/
 deps/buddy-2.4/autom4te.cache/
 .vagrant
-.vscode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
 .brew_home
 
 playbook.retry

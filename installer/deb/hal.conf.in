@@ -1,0 +1,3 @@
+# Install to /etc/ld.so.conf.d
+@LIBRARY_INSTALL_DIRECTORY_FULL@
+@LIBRARY_INSTALL_DIRECTORY_FULL@/hal_plugins

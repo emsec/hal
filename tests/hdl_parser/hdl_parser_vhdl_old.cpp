@@ -6,12 +6,12 @@
 #include "test_def.h"
 #include "gtest/gtest.h"
 #include <core/log.h>
-#include <hdl_parser/hdl_parser_vhdl.h>
+#include "hdl_parser/hdl_parser_vhdl_old.h"
 #include <iostream>
 #include <sstream>
 #include <boost/filesystem.hpp>
 
-class hdl_parser_vhdl_test : public ::testing::Test
+class hdl_parser_vhdl_old_test : public ::testing::Test
 {
 protected:
     const std::string g_lib_name = "EXAMPLE_GATE_LIBRARY";
@@ -136,7 +136,7 @@ protected:
  *
  * Functions: parse
  */
-TEST_F(hdl_parser_vhdl_test, check_main_example)
+TEST_F(hdl_parser_vhdl_old_test, check_main_example)
 {
     TEST_START
     std::stringstream input("-- Device\t: device_name\n"
@@ -179,7 +179,7 @@ TEST_F(hdl_parser_vhdl_test, check_main_example)
                             "end STRUCTURE;\n"
                             "");
     test_def::capture_stdout();
-    hdl_parser_vhdl vhdl_parser(input);
+    hdl_parser_vhdl_old vhdl_parser(input);
     std::shared_ptr<netlist> nl = vhdl_parser.parse(g_lib_name);
     if (nl == nullptr)
     {
@@ -260,7 +260,7 @@ TEST_F(hdl_parser_vhdl_test, check_main_example)
  *
  * Functions: parse
  */
-TEST_F(hdl_parser_vhdl_test, check_generic_map){
+TEST_F(hdl_parser_vhdl_old_test, check_generic_map){
 TEST_START
     {
         // A boolean value is passed
@@ -281,7 +281,7 @@ TEST_START
                                    "    );\n"
                                        "end STRUCTURE;");
         test_def::capture_stdout();
-        hdl_parser_vhdl vhdl_parser(input);
+        hdl_parser_vhdl_old vhdl_parser(input);
         std::shared_ptr<netlist> nl = vhdl_parser.parse(g_lib_name);
         if (nl == nullptr)
         {
@@ -316,7 +316,7 @@ TEST_START
                                 "    );\n"
                                 "end STRUCTURE;");
         test_def::capture_stdout();
-        hdl_parser_vhdl vhdl_parser(input);
+        hdl_parser_vhdl_old vhdl_parser(input);
         std::shared_ptr<netlist> nl = vhdl_parser.parse(g_lib_name);
         if (nl == nullptr)
         {
@@ -351,7 +351,7 @@ TEST_START
                                 "    );\n"
                                 "end STRUCTURE;");
         test_def::capture_stdout();
-        hdl_parser_vhdl vhdl_parser(input);
+        hdl_parser_vhdl_old vhdl_parser(input);
         std::shared_ptr<netlist> nl = vhdl_parser.parse(g_lib_name);
         if (nl == nullptr)
         {
@@ -386,7 +386,7 @@ TEST_START
                                 "    );\n"
                                 "end STRUCTURE;");
         test_def::capture_stdout();
-        hdl_parser_vhdl vhdl_parser(input);
+        hdl_parser_vhdl_old vhdl_parser(input);
         std::shared_ptr<netlist> nl = vhdl_parser.parse(g_lib_name);
         if (nl == nullptr)
         {
@@ -421,7 +421,7 @@ TEST_START
                                 "    );\n"
                                 "end STRUCTURE;");
         test_def::capture_stdout();
-        hdl_parser_vhdl vhdl_parser(input);
+        hdl_parser_vhdl_old vhdl_parser(input);
         std::shared_ptr<netlist> nl = vhdl_parser.parse(g_lib_name);
         if (nl == nullptr)
         {
@@ -459,7 +459,7 @@ TEST_START
                                 "    );\n"
                                 "end STRUCTURE;");
         test_def::capture_stdout();
-        hdl_parser_vhdl vhdl_parser(input);
+        hdl_parser_vhdl_old vhdl_parser(input);
         std::shared_ptr<netlist> nl = vhdl_parser.parse(g_lib_name);
         if (nl == nullptr)
         {
@@ -497,7 +497,7 @@ TEST_START
                                 "    );\n"
                                 "end STRUCTURE;");
         test_def::capture_stdout();
-        hdl_parser_vhdl vhdl_parser(input);
+        hdl_parser_vhdl_old vhdl_parser(input);
         std::shared_ptr<netlist> nl = vhdl_parser.parse(g_lib_name);
         if (nl == nullptr)
         {
@@ -532,7 +532,7 @@ TEST_START
                                 "    );\n"
                                 "end STRUCTURE;");
         test_def::capture_stdout();
-        hdl_parser_vhdl vhdl_parser(input);
+        hdl_parser_vhdl_old vhdl_parser(input);
         std::shared_ptr<netlist> nl = vhdl_parser.parse(g_lib_name);
         if (nl == nullptr)
         {
@@ -558,7 +558,7 @@ TEST_END
  *
  * Functions: parse
  */
-TEST_F(hdl_parser_vhdl_test, check_global_gates_implicit){
+TEST_F(hdl_parser_vhdl_old_test, check_global_gates_implicit){
     TEST_START
         {
             // Add a global_gnd implicitly by using '0'
@@ -576,7 +576,7 @@ TEST_F(hdl_parser_vhdl_test, check_global_gates_implicit){
                              "    );\n"
                              "end STRUCTURE;");
         test_def::capture_stdout();
-        hdl_parser_vhdl vhdl_parser(input);
+        hdl_parser_vhdl_old vhdl_parser(input);
         std::shared_ptr<netlist> nl = vhdl_parser.parse(g_lib_name);
         if (nl == nullptr)
         {
@@ -615,7 +615,7 @@ TEST_F(hdl_parser_vhdl_test, check_global_gates_implicit){
                                 "    );\n"
                                 "end STRUCTURE;");
         test_def::capture_stdout();
-        hdl_parser_vhdl vhdl_parser(input);
+        hdl_parser_vhdl_old vhdl_parser(input);
         std::shared_ptr<netlist> nl = vhdl_parser.parse(g_lib_name);
         if (nl == nullptr)
         {
@@ -646,7 +646,7 @@ TEST_END
  *
  * Functions: parse
  */
-TEST_F(hdl_parser_vhdl_test, check_global_gates_explicit){
+TEST_F(hdl_parser_vhdl_old_test, check_global_gates_explicit){
     TEST_START
         {
             // Add a global_gnd explicitly
@@ -664,7 +664,7 @@ TEST_F(hdl_parser_vhdl_test, check_global_gates_explicit){
             "    );\n"
             "end STRUCTURE;");
             test_def::capture_stdout();
-            hdl_parser_vhdl vhdl_parser(input);
+            hdl_parser_vhdl_old vhdl_parser(input);
             std::shared_ptr<netlist> nl = vhdl_parser.parse(g_lib_name);
             if (nl == nullptr)
             {
@@ -697,7 +697,7 @@ TEST_F(hdl_parser_vhdl_test, check_global_gates_explicit){
                                 "    );\n"
                                 "end STRUCTURE;");
         test_def::capture_stdout();
-        hdl_parser_vhdl vhdl_parser(input);
+        hdl_parser_vhdl_old vhdl_parser(input);
         std::shared_ptr<netlist> nl = vhdl_parser.parse(g_lib_name);
         if (nl == nullptr)
         {
@@ -722,7 +722,7 @@ TEST_END
  *
  * Functions: parse
  */
-TEST_F(hdl_parser_vhdl_test, check_lib_prefix)
+TEST_F(hdl_parser_vhdl_old_test, check_lib_prefix)
 {
     TEST_START
     // The prefix of the library SIMPRIM.VCOMPONENTS should be removed from the INV gate type
@@ -742,7 +742,7 @@ TEST_F(hdl_parser_vhdl_test, check_lib_prefix)
                             "    );\n"
                             "end STRUCTURE;");
     test_def::capture_stdout();
-    hdl_parser_vhdl vhdl_parser(input);
+    hdl_parser_vhdl_old vhdl_parser(input);
     std::shared_ptr<netlist> nl = vhdl_parser.parse(g_lib_name);
     if (nl == nullptr)
     {
@@ -764,7 +764,7 @@ TEST_F(hdl_parser_vhdl_test, check_lib_prefix)
  *
  * Functions: parse
  */
-TEST_F(hdl_parser_vhdl_test, check_add_net_implicit)
+TEST_F(hdl_parser_vhdl_old_test, check_add_net_implicit)
 {
     TEST_START
     // The net implicit_net will be used in implicit_net but was not declared in the architecture block
@@ -782,7 +782,7 @@ TEST_F(hdl_parser_vhdl_test, check_add_net_implicit)
                             "    );\n"
                             "end STRUCTURE;");
     test_def::capture_stdout();
-    hdl_parser_vhdl vhdl_parser(input);
+    hdl_parser_vhdl_old vhdl_parser(input);
     std::shared_ptr<netlist> nl = vhdl_parser.parse(g_lib_name);
     if (nl == nullptr)
     {
@@ -808,7 +808,7 @@ TEST_F(hdl_parser_vhdl_test, check_add_net_implicit)
  *
  * Functions: parse
  */
-TEST_F(hdl_parser_vhdl_test, check_multiple_entities)
+TEST_F(hdl_parser_vhdl_old_test, check_multiple_entities)
 {
     TEST_START
         {
@@ -845,7 +845,7 @@ TEST_F(hdl_parser_vhdl_test, check_multiple_entities)
                                     "    );\n"
                                     "end STRUCTURE;");
             test_def::capture_stdout();
-            hdl_parser_vhdl vhdl_parser(input);
+            hdl_parser_vhdl_old vhdl_parser(input);
             std::shared_ptr<netlist> nl = vhdl_parser.parse(g_lib_name);
             if (nl == nullptr) {
                 std::cout << test_def::get_captured_stdout();
@@ -872,7 +872,7 @@ TEST_F(hdl_parser_vhdl_test, check_multiple_entities)
                                     "    );\n"
                                     "end STRUCTURE;");
             test_def::capture_stdout();
-            hdl_parser_vhdl vhdl_parser(input);
+            hdl_parser_vhdl_old vhdl_parser(input);
             std::shared_ptr<netlist> nl = vhdl_parser.parse(g_lib_name);
             if (nl == nullptr)
             {
@@ -920,7 +920,7 @@ TEST_F(hdl_parser_vhdl_test, check_multiple_entities)
                                     "      O => net_global_inout\n"
                                     "    );\n"
                                     "end STRUCTURE;");
-            hdl_parser_vhdl vhdl_parser(input);
+            hdl_parser_vhdl_old vhdl_parser(input);
             std::shared_ptr<netlist> nl = vhdl_parser.parse(g_lib_name);
             EXPECT_EQ(nl, nullptr);
 
@@ -951,7 +951,7 @@ TEST_F(hdl_parser_vhdl_test, check_multiple_entities)
                                     "  );\n"
                                     "end TEST_Comp_2;");
             test_def::capture_stdout();
-            hdl_parser_vhdl vhdl_parser(input);
+            hdl_parser_vhdl_old vhdl_parser(input);
             std::shared_ptr<netlist> nl = vhdl_parser.parse(g_lib_name);
             ASSERT_EQ(nl, nullptr);
 
@@ -965,7 +965,7 @@ TEST_F(hdl_parser_vhdl_test, check_multiple_entities)
  *
  * Functions: parse
  */
-TEST_F(hdl_parser_vhdl_test, check_logic_vectors)
+TEST_F(hdl_parser_vhdl_old_test, check_logic_vectors)
 {
     TEST_START
         {
@@ -986,7 +986,7 @@ TEST_F(hdl_parser_vhdl_test, check_logic_vectors)
                                     "    );\n"
                                     "end STRUCTURE;");
             test_def::capture_stdout();
-            hdl_parser_vhdl vhdl_parser(input);
+            hdl_parser_vhdl_old vhdl_parser(input);
             std::shared_ptr<netlist> nl = vhdl_parser.parse(g_lib_name);
             if (nl == nullptr)
             {
@@ -1020,7 +1020,7 @@ TEST_F(hdl_parser_vhdl_test, check_logic_vectors)
                                     "    );\n"
                                     "end STRUCTURE;");
             test_def::capture_stdout();
-            hdl_parser_vhdl vhdl_parser(input);
+            hdl_parser_vhdl_old vhdl_parser(input);
             std::shared_ptr<netlist> nl = vhdl_parser.parse(g_lib_name);
             if (nl == nullptr)
             {
@@ -1056,7 +1056,7 @@ TEST_F(hdl_parser_vhdl_test, check_logic_vectors)
                                     "    );\n"
                                     "end STRUCTURE;");
             test_def::capture_stdout();
-            hdl_parser_vhdl vhdl_parser(input);
+            hdl_parser_vhdl_old vhdl_parser(input);
             std::shared_ptr<netlist> nl = vhdl_parser.parse(g_lib_name);
             if (nl == nullptr)
             {
@@ -1092,7 +1092,7 @@ TEST_F(hdl_parser_vhdl_test, check_logic_vectors)
                                     "      O => net_global_inout\n"
                                     "    );\n"
                                     "end STRUCTURE;");
-            hdl_parser_vhdl vhdl_parser(input);
+            hdl_parser_vhdl_old vhdl_parser(input);
             std::shared_ptr<netlist> nl = vhdl_parser.parse(g_lib_name);
 
             EXPECT_EQ(nl->get_nets().size(), 1);
@@ -1106,7 +1106,7 @@ TEST_F(hdl_parser_vhdl_test, check_logic_vectors)
  *
  * Functions: parse
  */
-TEST_F(hdl_parser_vhdl_test, check_port_assignment) {
+TEST_F(hdl_parser_vhdl_old_test, check_port_assignment) {
     TEST_START
         // We need to create another gate library with multiple output ports
         create_temp_gate_lib();
@@ -1128,7 +1128,7 @@ TEST_F(hdl_parser_vhdl_test, check_port_assignment) {
                                     "    );\n"
                                     "end STRUCTURE;");
             test_def::capture_stdout();
-            hdl_parser_vhdl vhdl_parser(input);
+            hdl_parser_vhdl_old vhdl_parser(input);
             std::shared_ptr<netlist> nl = vhdl_parser.parse(temp_lib_name);
             if (nl == nullptr)
             {
@@ -1167,7 +1167,7 @@ TEST_F(hdl_parser_vhdl_test, check_port_assignment) {
                                     "    );\n"
                                     "end STRUCTURE;");
             test_def::capture_stdout();
-            hdl_parser_vhdl vhdl_parser(input);
+            hdl_parser_vhdl_old vhdl_parser(input);
             std::shared_ptr<netlist> nl = vhdl_parser.parse(temp_lib_name);
             if (nl == nullptr) {
                 std::cout << test_def::get_captured_stdout();
@@ -1198,7 +1198,7 @@ TEST_F(hdl_parser_vhdl_test, check_port_assignment) {
                                     "    );\n"
                                     "end STRUCTURE;");
             test_def::capture_stdout();
-            hdl_parser_vhdl vhdl_parser(input);
+            hdl_parser_vhdl_old vhdl_parser(input);
             std::shared_ptr<netlist> nl = vhdl_parser.parse(temp_lib_name);
             if (nl == nullptr)
             {
@@ -1243,7 +1243,7 @@ TEST_F(hdl_parser_vhdl_test, check_port_assignment) {
                                     "    );\n"
                                     "end STRUCTURE;");
             test_def::capture_stdout();
-            hdl_parser_vhdl vhdl_parser(input);
+            hdl_parser_vhdl_old vhdl_parser(input);
             std::shared_ptr<netlist> nl = vhdl_parser.parse(temp_lib_name);
             if (nl == nullptr)
             {
@@ -1288,7 +1288,7 @@ TEST_F(hdl_parser_vhdl_test, check_port_assignment) {
                                     "    );\n"
                                     "end STRUCTURE;");
             test_def::capture_stdout();
-            hdl_parser_vhdl vhdl_parser(input);
+            hdl_parser_vhdl_old vhdl_parser(input);
             std::shared_ptr<netlist> nl = vhdl_parser.parse(temp_lib_name);
             if (nl == nullptr)
             {
@@ -1329,7 +1329,7 @@ TEST_F(hdl_parser_vhdl_test, check_port_assignment) {
                                     "    );\n"
                                     "end STRUCTURE;");
             test_def::capture_stdout();
-            hdl_parser_vhdl vhdl_parser(input);
+            hdl_parser_vhdl_old vhdl_parser(input);
             std::shared_ptr<netlist> nl = vhdl_parser.parse(temp_lib_name);
             if (nl == nullptr)
             {
@@ -1371,7 +1371,7 @@ TEST_F(hdl_parser_vhdl_test, check_port_assignment) {
                                     "    );\n"
                                     "end STRUCTURE;");
             test_def::capture_stdout();
-            hdl_parser_vhdl vhdl_parser(input);
+            hdl_parser_vhdl_old vhdl_parser(input);
             std::shared_ptr<netlist> nl = vhdl_parser.parse(temp_lib_name);
             if (nl == nullptr)
             {
@@ -1403,7 +1403,7 @@ TEST_F(hdl_parser_vhdl_test, check_port_assignment) {
                                     "    );\n"
                                     "end STRUCTURE;");
             test_def::capture_stdout();
-            hdl_parser_vhdl vhdl_parser(input);
+            hdl_parser_vhdl_old vhdl_parser(input);
             std::shared_ptr<netlist> nl = vhdl_parser.parse(temp_lib_name);
             if (nl == nullptr)
             {
@@ -1429,7 +1429,7 @@ TEST_F(hdl_parser_vhdl_test, check_port_assignment) {
  *
  * Functions: parse
  */
-TEST_F(hdl_parser_vhdl_test, check_invalid_input)
+TEST_F(hdl_parser_vhdl_old_test, check_invalid_input)
 {
     TEST_START
         {
@@ -1448,7 +1448,7 @@ TEST_F(hdl_parser_vhdl_test, check_invalid_input)
                                     "      O => net_global_inout\n"
                                     "    );\n"
                                     "end STRUCTURE;");
-            hdl_parser_vhdl vhdl_parser(input);
+            hdl_parser_vhdl_old vhdl_parser(input);
             std::shared_ptr<netlist> nl = vhdl_parser.parse(g_lib_name);
 
             EXPECT_EQ(nl, nullptr);
@@ -1470,7 +1470,7 @@ TEST_F(hdl_parser_vhdl_test, check_invalid_input)
                                     "      O => net_global_inout\n"
                                     "    );\n"
                                     "end STRUCTURE;");
-            hdl_parser_vhdl vhdl_parser(input);
+            hdl_parser_vhdl_old vhdl_parser(input);
             std::shared_ptr<netlist> nl = vhdl_parser.parse(g_lib_name);
 
             EXPECT_EQ(nl, nullptr);
@@ -1490,7 +1490,7 @@ TEST_F(hdl_parser_vhdl_test, check_invalid_input)
                                     "    port map (\n"
                                     "      O => net_global_inout\n"
                                     "    );");                      // <- no 'end STRUCTURE;'
-            hdl_parser_vhdl vhdl_parser(input);
+            hdl_parser_vhdl_old vhdl_parser(input);
             std::shared_ptr<netlist> nl = vhdl_parser.parse(g_lib_name);
 
             EXPECT_EQ(nl, nullptr);
@@ -1511,7 +1511,7 @@ TEST_F(hdl_parser_vhdl_test, check_invalid_input)
                                     "      O => net_global_inout\n"
                                     "    );\n"
                                     "end STRUCTURE;");                      // <- no 'end STRUCTURE;'
-            hdl_parser_vhdl vhdl_parser(input);
+            hdl_parser_vhdl_old vhdl_parser(input);
             std::shared_ptr<netlist> nl = vhdl_parser.parse("inv4lid_gate_library");
 
             EXPECT_EQ(nl, nullptr);
@@ -1535,7 +1535,7 @@ TEST_F(hdl_parser_vhdl_test, check_invalid_input)
                                     "      I => net_global_inout\n"
                                     "    );\n"
                                     "end STRUCTURE;");
-            hdl_parser_vhdl vhdl_parser(input);
+            hdl_parser_vhdl_old vhdl_parser(input);
             std::shared_ptr<netlist> nl = vhdl_parser.parse(g_lib_name);
             EXPECT_EQ(nl, nullptr);
         }
@@ -1554,7 +1554,7 @@ TEST_F(hdl_parser_vhdl_test, check_invalid_input)
                                     "    port map (\n"
                                     "    );\n"
                                     "end STRUCTURE;");
-            hdl_parser_vhdl vhdl_parser(input);
+            hdl_parser_vhdl_old vhdl_parser(input);
             std::shared_ptr<netlist> nl = vhdl_parser.parse(g_lib_name);
             ASSERT_NE(nl, nullptr);
             ASSERT_FALSE(nl->get_gates("INV", "gate_0").empty());
@@ -1578,7 +1578,7 @@ TEST_F(hdl_parser_vhdl_test, check_invalid_input)
                                     "      NOT_EXISTING_PIN => net_global_inout\n"
                                     "    );\n"
                                     "end STRUCTURE;");
-            hdl_parser_vhdl vhdl_parser(input);
+            hdl_parser_vhdl_old vhdl_parser(input);
             std::shared_ptr<netlist> nl = vhdl_parser.parse(g_lib_name);
             ASSERT_EQ(nl, nullptr);
         }

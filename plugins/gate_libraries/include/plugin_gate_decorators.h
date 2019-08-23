@@ -30,6 +30,9 @@ private:
     static std::map<std::string, std::shared_ptr<bdd>> bdd_generator_yosys_mycell(std::shared_ptr<gate> g, std::map<std::string, std::shared_ptr<bdd>>& input_pin_type_to_bdd);
     static bool bdd_availability_tester_yosys_mycell(std::shared_ptr<gate> g);
 
+    static std::map<std::string, std::shared_ptr<bdd>> bdd_generator_synopsys_nand_nor(std::shared_ptr<gate> g, std::map<std::string, std::shared_ptr<bdd>>& input_pin_type_to_bdd);
+    static bool bdd_availability_tester_synopsys_nand_nor(std::shared_ptr<gate> g);
+
     static std::map<std::string, std::shared_ptr<bdd>> bdd_generator_scan_ff_lib(std::shared_ptr<gate> g, std::map<std::string, std::shared_ptr<bdd>>& input_pin_type_to_bdd);
     static bool bdd_availability_tester_scan_ff_lib(std::shared_ptr<gate> g);
 

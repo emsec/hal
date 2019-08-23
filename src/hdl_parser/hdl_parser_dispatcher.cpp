@@ -6,14 +6,15 @@
 #include "netlist/netlist_factory.h"
 
 #include "netlist/event_system/gate_event_handler.h"
+#include "netlist/event_system/module_event_handler.h"
 #include "netlist/event_system/net_event_handler.h"
 #include "netlist/event_system/netlist_event_handler.h"
-#include "netlist/event_system/module_event_handler.h"
 
 #include "hdl_parser/hdl_parser.h"
 #include "hdl_parser/hdl_parser_dot.h"
 #include "hdl_parser/hdl_parser_verilog.h"
 #include "hdl_parser/hdl_parser_vhdl.h"
+#include "hdl_parser/hdl_parser_vhdl_old.h"
 #include "netlist/gate_library/gate_library_manager.h"
 
 namespace hdl_parser_dispatcher
@@ -28,7 +29,7 @@ namespace hdl_parser_dispatcher
 
     std::set<std::string> get_gui_option()
     {
-        return {"dot", "vhdl", "verilog"};
+        return {"dot", "vhdl", "vhdl_old", "verilog"};
     }
 
     std::shared_ptr<netlist> parse(const hal::path& file_name, const program_arguments& args)
@@ -105,6 +106,8 @@ namespace hdl_parser_dispatcher
 
         if (language == "vhdl")
             g = hdl_parser_vhdl(ss).parse(gate_library);
+        else if (language == "vhdl_old")
+            g = hdl_parser_vhdl_old(ss).parse(gate_library);
         else if (language == "verilog")
             g = hdl_parser_verilog(ss).parse(gate_library);
         else if (language == "dot")
