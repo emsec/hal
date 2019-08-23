@@ -2,9 +2,13 @@ include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR} ${CMAKE_SOUR
 
 add_executable(runTest-hdl_writer_vhdl
         hdl_writer_vhdl.cpp)
+add_executable(runTest-hdl_writer_verilog
+        hdl_writer_verilog.cpp)
 
 
 target_link_libraries(runTest-hdl_writer_vhdl   gtest gtest_main ${LINK_LIBS})
+target_link_libraries(runTest-hdl_writer_verilog   gtest gtest_main ${LINK_LIBS})
 
 
 add_test(runTest-hdl_writer_vhdl ${CMAKE_BINARY_DIR}/bin/runTest-hdl_writer_vhdl --gtest_output=xml:${CMAKE_BINARY_DIR}/gtestresults-runBasicTests.xml)
+add_test(runTest-hdl_writer_verilog ${CMAKE_BINARY_DIR}/bin/runTest-hdl_writer_verilog --gtest_output=xml:${CMAKE_BINARY_DIR}/gtestresults-runBasicTests.xml)

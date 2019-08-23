@@ -556,7 +556,7 @@ TEST_F(hdl_parser_verilog_test, check_comment_detection){
  */
 TEST_F(hdl_parser_verilog_test, check_generic_map){
     TEST_START
-        /*{ // ISSUE: value has ')' at the end
+        { // ISSUE: value has ')' at the end
             // Store an instance of all possible data types in one gate
             std::stringstream input("module  (\n"
                                     "  global_in,\n"
@@ -565,8 +565,8 @@ TEST_F(hdl_parser_verilog_test, check_generic_map){
                                     "  input global_in ;\n"
                                     "  output global_out ;\n"
                                     "INV #(\n"
-                                    //".key_integer(1234),\n"
-                                    //".key_floating_point(1.234),\n"
+                                    ".key_integer(1234),\n"
+                                    ".key_floating_point(1.234),\n"
                                     ".key_string(\"test_string\"),\n"
                                     ".key_bit_vector_hex('habc),\n"
                                     ".key_bit_vector_dec('d2748),\n"
@@ -596,7 +596,7 @@ TEST_F(hdl_parser_verilog_test, check_generic_map){
 
             EXPECT_EQ(gate_0->get_data_by_key("generic","key_integer"), std::make_tuple("integer", "1234"));
             // NOTE: check the other data types
-        }*/
+        }
     TEST_END
 }
 
@@ -1329,7 +1329,7 @@ TEST_F(hdl_parser_verilog_test, check_vector_assignment)
                      " ) ;\n"
                      "  input global_in ;\n"
                      "  output global_out ;\n"
-                     "  wire [4:1] net_vec ;\n"
+                     "  wire [1:4] net_vec ;\n"
                      "GATE1 gate_0 (\n"
                      "  .\\I (net_vec),\n"
                      "  .\\O (global_out )\n"
