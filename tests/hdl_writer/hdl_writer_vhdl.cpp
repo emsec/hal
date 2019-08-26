@@ -886,7 +886,7 @@ TEST_F(hdl_writer_vhdl_test, check_special_net_names) {
 TEST_F(hdl_writer_vhdl_test, check_gate_net_name_collision) {
     TEST_START
         {
-            // Add a gate to the netlist and store some data
+            // Testing the handling of two gates with the same name
             std::shared_ptr<netlist> nl = create_empty_netlist(0);
 
             std::shared_ptr<net> test_net = nl->create_net( MIN_NET_ID+0, "gate_net_name");
