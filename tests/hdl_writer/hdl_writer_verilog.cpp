@@ -18,6 +18,7 @@ protected:
 
     const std::string g_lib_name = "EXAMPLE_GATE_LIBRARY";
     const std::string temp_lib_name = "TEMP_GATE_LIBRARY";
+    const std::string pseudo_simprim_lib_name = "PSEUDO_SIMPRIM_GATE_LIBRARY";
 
     // Minimum id for netlists, gates, nets and modules
     //const u32 INVALID_GATE_ID = 0;
@@ -33,11 +34,13 @@ protected:
 
 
     hal::path temp_lib_path;
+    hal::path pseudo_simprim_lib_path;
 
     virtual void SetUp()
     {
         NO_COUT_BLOCK;
         temp_lib_path = core_utils::get_gate_library_directories()[0] / "temp_lib.json";
+        pseudo_simprim_lib_path = core_utils::get_gate_library_directories()[0] / "pseudo_simprim_lib.json";
         gate_library_manager::load_all();
     }
 
@@ -132,6 +135,35 @@ protected:
                     "        \"vhdl_includes\": [],\n"
                     "        \"global_gnd_nodes\": [\"GND\"],\n"
                     "        \"global_vcc_nodes\": [\"VCC\"]\n"
+                    "    }\n"
+                    "}";
+        test_lib.close();
+
+        gate_library_manager::load_all();
+    }
+
+    /*
+     * Gate library that only contains a very small set of gates of the xilinx simprim gate library, for testing simprim exclusive behaviour
+     */
+    void create_pseudo_simprim_gate_lib()
+    {
+        NO_COUT_BLOCK;
+        std::ofstream test_lib(pseudo_simprim_lib_path.string());
+        test_lib << "{\n"
+                    "    \"library\": {\n"
+                    "        \"library_name\": \"PSEUDO_SIMPRIM_GATE_LIBRARY\",\n"
+                    "        \"elements\": {\n"
+                    "            \"X_INV\" : [[\"I\"], [], [\"O\"]],\n"
+                    "            \"X_AND4\" : [[\"I0\",\"I1\",\"I2\",\"I3\"], [], [\"O\"]],\n"
+                    "            \"X_ZERO\" : [[], [], [\"O\"]],\n"
+                    "            \"X_ONE\" : [[], [], [\"O\"]],\n"
+                    "\n"
+                    "            \"GLOBAL_GND\" : [[], [], [\"O\"]],\n"
+                    "            \"GLOBAL_VCC\" : [[], [], [\"O\"]]\n"
+                    "        },\n"
+                    "        \"vhdl_includes\": [],\n"
+                    "        \"global_gnd_nodes\": [\"GLOBAL_GND\"],\n"
+                    "        \"global_vcc_nodes\": [\"GLOBAL_VCC\"]\n"
                     "    }\n"
                     "}";
         test_lib.close();
@@ -730,7 +762,7 @@ TEST_F(hdl_writer_verilog_test, check_special_net_names) {
             test_def::capture_stdout();
             std::stringstream parser_input;
             hdl_writer_verilog verilog_writer(parser_input);
-            
+
 
             // Writes the netlist in the sstream
             bool writer_suc = verilog_writer.write(nl);
@@ -999,3 +1031,70 @@ TEST_F(hdl_writer_verilog_test, check_pin_vector) {
         }
     TEST_END
 }
+
+/**
+ * Testing the correct handling of the simprim exclusive X_ZERO and X_ONE gates, as well as the usage of GLOBAL_GND
+ * and GLOBAL_VCC gates.
+ *
+ * IMPORTANT: If an error occurs, first run the hdl_parser_verilog test to check, that
+ * the issue isn't within the parser, but in the writer...
+ *
+ * Functions: write, parse
+ */
+TEST_F(hdl_writer_verilog_test, check_simprim_exclusive_behaviour) {
+    TEST_START
+        create_pseudo_simprim_gate_lib();
+        /*{ // ISSUE: net definition: "wire net_zero_gate_0 = 1'h0" is created, but can't be interpreted by the parser (stoi failure) (parser or writer issue?)
+            // NOTE: GLOBAL_GND / GLOBAL_VCC gates are removed. Why?
+
+            // Testing the usage of nets connected to a X_ZERO gate
+            std::shared_ptr<gate_library> gl = gate_library_manager::get_gate_library(pseudo_simprim_lib_name);
+            std::shared_ptr<netlist> nl(new netlist(gl));
+
+            std::shared_ptr<gate> x_zero_gate_0 = nl->create_gate("X_ZERO", "x_zero_gate_0");
+            std::shared_ptr<gate> x_zero_gate_1 = nl->create_gate("X_ZERO", "x_zero_gate_1");
+            std::shared_ptr<gate> test_gate = nl->create_gate("X_AND4", "test_gate");
+
+            std::shared_ptr<net> global_out_net = nl->create_net("global_out");
+            global_out_net->set_src(test_gate, "O");
+            nl->mark_global_output_net(global_out_net);
+
+            std::shared_ptr<net> x_zero_net_0 = nl->create_net("x_zero_net_0");
+            std::shared_ptr<net> x_zero_net_1 = nl->create_net("x_zero_net_1");
+
+            x_zero_net_0->set_src(x_zero_gate_0, "O");
+            x_zero_net_1->set_src(x_zero_gate_1, "O");
+
+            x_zero_net_0->add_dst(test_gate, "I0");
+            x_zero_net_1->add_dst(test_gate, "I1");
+
+            // Write and parse the netlist now
+            //test_def::capture_stdout();
+            std::stringstream parser_input;
+            hdl_writer_verilog verilog_writer(parser_input);
+
+
+
+            // Writes the netlist in the sstream
+            bool writer_suc = verilog_writer.write(nl);
+            if (!writer_suc) {
+                //std::cout << test_def::get_captured_stdout() << std::endl;
+            }
+            ASSERT_TRUE(writer_suc);
+
+            hdl_parser_verilog verilog_parser(parser_input);
+
+            // Parse the .verilog file
+            std::shared_ptr<netlist> parsed_nl = verilog_parser.parse(pseudo_simprim_lib_name);
+
+            if (parsed_nl == nullptr) {
+                //std::cout << test_def::get_captured_stdout() << std::endl;
+            }
+            ASSERT_NE(parsed_nl, nullptr);
+            //test_def::get_captured_stdout();
+
+
+        }*/
+    TEST_END
+}
+
