@@ -176,14 +176,12 @@ private:
     qreal scene_y_for_close_bottom_lane_change(const junction* const j) const;
     qreal scene_y_for_far_bottom_lane_change(const junction* const j) const;
 
+    void recalculate_levels();
+
     template<typename T1, typename T2>
     void store_max(QMap<T1, T2>& map, T1 key, T2 value);
 
     void commit_used_paths(const used_paths& used);
-
-    QVector<u32> m_modules;
-    QVector<u32> m_gates;
-    QVector<u32> m_nets;
 
     QMap<hal::node, int> m_node_levels;
 
