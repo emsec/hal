@@ -3,17 +3,16 @@
 #include "gui/graph_widget/contexts/cone_context.h"
 #include "gui/graph_widget/contexts/dynamic_context.h"
 #include "gui/graph_widget/contexts/module_context.h"
+#include "gui/graph_widget/layouters/minimal_graph_layouter.h"
 #include "gui/graph_widget/layouters/standard_graph_layouter.h"
 #include "gui/graph_widget/layouters/standard_graph_layouter_v2.h"
-#include "gui/graph_widget/layouters/minimal_graph_layouter.h"
 #include "gui/graph_widget/shaders/module_shader.h"
 #include "gui/gui_globals.h"
 
-static const int max_module_contexts = 10; // USE SETTINGS FOR THIS
+static const int max_module_contexts = 10;    // USE SETTINGS FOR THIS
 
 graph_context_manager::graph_context_manager() : m_top(nullptr)
 {
-
 }
 
 module_context* graph_context_manager::get_module_context(const u32 id)
@@ -27,14 +26,23 @@ module_context* graph_context_manager::get_module_context(const u32 id)
         return nullptr;
 
     module_context* c = new module_context(m);
-    m_module_contexts.append(c); // USE LRU
+    m_module_contexts.append(c);    // USE LRU
     return c;
 }
 
 dynamic_context* graph_context_manager::add_dynamic_context(const QString& name)
 {
+    for (dynamic_context* context : m_dynamic_contexts)
+    {
+        if (context->name() == name)
+        {
+            return nullptr;
+        }
+    }
+
     dynamic_context* context = new dynamic_context(name);
     m_dynamic_contexts.append(context);
+    Q_EMIT context_created(context);
     return context;
 }
 
@@ -45,6 +53,45 @@ dynamic_context* graph_context_manager::get_dynamic_context(const QString& name)
             return context;
 
     return nullptr;
+}
+
+bool graph_context_manager::rename_dynamic_context(const QString& old_name, const QString& new_name)
+{
+    dynamic_context* to_change = nullptr;
+    for (dynamic_context* context : m_dynamic_contexts)
+    {
+        if (context->name() != old_name && context->name() == new_name)
+        {
+            return false;
+        }
+        if (context->name() == old_name)
+        {
+            to_change = context;
+        }
+    }
+    if (to_change == nullptr)
+        return false;
+
+    to_change->m_name = new_name;
+
+    Q_EMIT context_renamed(to_change);
+
+    return true;
+}
+
+bool graph_context_manager::remove_dynamic_context(const QString& name)
+{
+    for (int i = 0; i < m_dynamic_contexts.size(); ++i)
+    {
+        auto context = m_dynamic_contexts[i];
+        if (m_dynamic_contexts[i]->name() == name)
+        {
+            m_dynamic_contexts.remove(i);
+            Q_EMIT context_removed(context);
+            return true;
+        }
+    }
+    return false;
 }
 
 QStringList graph_context_manager::dynamic_context_list() const
@@ -240,7 +287,7 @@ graph_layouter* graph_context_manager::get_default_layouter(module_context* cons
     //return new minimal_graph_layouter(context);
 }
 
-graph_layouter *graph_context_manager::get_default_layouter(cone_context* const context) const
+graph_layouter* graph_context_manager::get_default_layouter(cone_context* const context) const
 {
     // USE SETTINGS + FACTORY
     return new standard_graph_layouter(context);
@@ -258,7 +305,7 @@ graph_shader* graph_context_manager::get_default_shader(module_context* const co
     return new module_shader(context);
 }
 
-graph_shader *graph_context_manager::get_default_shader(cone_context* const context) const
+graph_shader* graph_context_manager::get_default_shader(cone_context* const context) const
 {
     // USE SETTINGS + FACTORY
     return new module_shader(context);
@@ -277,16 +324,19 @@ graph_context* graph_context_manager::get_context()
 
 void graph_context_manager::create_top_context()
 {
-    m_top = g_graph_context_manager.add_dynamic_context("top");
+    m_top = g_graph_context_manager.add_dynamic_context(QString::fromStdString(g_netlist->get_top_module()->get_name()));
     QSet<u32> global_nets;
-    for (auto& net : g_netlist->get_global_inout_nets()) {
+    for (auto& net : g_netlist->get_global_inout_nets())
+    {
         global_nets.insert(net->get_id());
     }
-    for (auto& net : g_netlist->get_global_input_nets()) {
+    for (auto& net : g_netlist->get_global_input_nets())
+    {
         global_nets.insert(net->get_id());
     }
-    for (auto& net : g_netlist->get_global_output_nets()) {
+    for (auto& net : g_netlist->get_global_output_nets())
+    {
         global_nets.insert(net->get_id());
     }
-    m_top->add(QSet<u32>{1}, QSet<u32>(), global_nets);
+    m_top->add({1}, {}, global_nets);
 }

@@ -156,9 +156,7 @@ void old_graph_navigation_widget::handle_tree_selection_changed(const QItemSelec
         return;
     }
 
-    g_selection_relay.m_number_of_selected_gates   = 0;
-    g_selection_relay.m_number_of_selected_nets    = 0;
-    g_selection_relay.m_number_of_selected_modules = 0;
+    g_selection_relay.clear();
 
     QModelIndexList current_selections = selected.indexes();
     QSet<tree_navigation_item*> already_processed_items;
@@ -172,15 +170,15 @@ void old_graph_navigation_widget::handle_tree_selection_changed(const QItemSelec
             switch (item->get_type())
             {
                 case tree_navigation_item::item_type::gate:
-                    g_selection_relay.m_selected_gates[g_selection_relay.m_number_of_selected_gates++] = id;
+                    g_selection_relay.m_selected_gates.insert(id);
                     Q_EMIT g_selection_relay.selection_changed(this);
                     return;
                 case tree_navigation_item::item_type::net:
-                    g_selection_relay.m_selected_nets[g_selection_relay.m_number_of_selected_nets++] = id;
+                    g_selection_relay.m_selected_nets.insert(id);
                     Q_EMIT g_selection_relay.selection_changed(this);
                     return;
                 case tree_navigation_item::item_type::module:
-                    g_selection_relay.m_selected_modules[g_selection_relay.m_number_of_selected_modules++] = id;
+                    g_selection_relay.m_selected_modules.insert(id);
                     Q_EMIT g_selection_relay.selection_changed(this);
                     return;
                 default:
@@ -199,17 +197,17 @@ void old_graph_navigation_widget::handle_selection_changed(void* sender)
 
     QList<u32> gate_ids, net_ids, module_ids;
 
-    for (u32 i = 0; i < g_selection_relay.m_number_of_selected_gates; ++i)
+    for (auto i : g_selection_relay.m_selected_gates)
     {
-        gate_ids.append(g_selection_relay.m_selected_gates[i]);
+        gate_ids.append(i);
     }
-    for (u32 i = 0; i < g_selection_relay.m_number_of_selected_nets; ++i)
+    for (auto i : g_selection_relay.m_selected_nets)
     {
-        net_ids.append(g_selection_relay.m_selected_nets[i]);
+        net_ids.append(i);
     }
-    for (u32 i = 0; i < g_selection_relay.m_number_of_selected_modules; ++i)
+    for (auto i : g_selection_relay.m_selected_modules)
     {
-        module_ids.append(g_selection_relay.m_selected_modules[i]);
+        module_ids.append(i);
     }
 
     QModelIndexList selected_indexes = m_tree_navigation_model->get_corresponding_indexes(gate_ids, net_ids, module_ids);

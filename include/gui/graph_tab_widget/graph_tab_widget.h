@@ -19,10 +19,12 @@ public:
 
     int addTab(QWidget* tab, QString tab_name = "default");
 
+    void show_context(dynamic_context* context);
+
 public Q_SLOTS:
     void handle_context_created(dynamic_context* context);
-    void handle_context_open_request(dynamic_context* context);
-
+    void handle_context_renamed(dynamic_context* context);
+    void handle_context_removed(dynamic_context* context);
 
 private:
     QTabWidget* m_tab_widget;
@@ -30,10 +32,12 @@ private:
 
     QMap<dynamic_context*, QWidget*> m_context_widget_map;
 
+    int get_context_tab_index(dynamic_context* context) const;
+
     //functions
     void handle_tab_close_requested(int index);
 
     void add_graph_widget_tab(dynamic_context* context);
 };
 
-#endif //GRAPH_TAB_WIDGET
+#endif    //GRAPH_TAB_WIDGET

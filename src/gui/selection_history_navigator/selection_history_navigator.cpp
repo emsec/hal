@@ -24,13 +24,13 @@ void selection_history_navigator::handle_selection_changed(void* sender)
     if (sender == this)
         return;
 
-    if (g_selection_relay.m_number_of_selected_gates > 0)
+    if (!g_selection_relay.m_selected_gates.isEmpty())
     {
-        store_selection(g_selection_relay.m_selected_gates[0], selection_relay::item_type::gate);
+        store_selection(*g_selection_relay.m_selected_gates.begin(), selection_relay::item_type::gate);
     }
-    else if (g_selection_relay.m_number_of_selected_nets > 0)
+    else if (!g_selection_relay.m_selected_nets.isEmpty())
     {
-        store_selection(g_selection_relay.m_selected_nets[0], selection_relay::item_type::net);
+        store_selection(*g_selection_relay.m_selected_nets.begin(), selection_relay::item_type::net);
     }
 }
 
@@ -62,11 +62,11 @@ void selection_history_navigator::relay_selection(selection selection)
 
     if (type == selection_relay::item_type::net)
     {
-        g_selection_relay.m_selected_nets[g_selection_relay.m_number_of_selected_nets++] = selection.get_net_id();
+        g_selection_relay.m_selected_nets.insert(selection.get_net_id());
     }
     else if (type == selection_relay::item_type::gate)
     {
-        g_selection_relay.m_selected_gates[g_selection_relay.m_number_of_selected_gates++] = selection.get_gate_id();
+        g_selection_relay.m_selected_gates.insert(selection.get_gate_id());
     }
 
     Q_EMIT g_selection_relay.selection_changed(this);

@@ -72,7 +72,6 @@ void file_manager::file_successfully_loaded(QString file_name)
     m_file_open = true;
     update_recent_files(m_file_name);
     g_python_context = std::make_unique<python_context>();    // HANDLE PYTHON CONTEXT SEPARATELY
-    g_selection_relay.init();
     g_graph_context_manager.create_top_context();
     Q_EMIT file_opened(m_file_name);
 }

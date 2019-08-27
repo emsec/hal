@@ -3,6 +3,7 @@
 
 #include "def.h"
 
+#include <QObject>
 #include <QStringList>
 #include <QVector>
 
@@ -17,8 +18,9 @@ class graph_shader;
 class module_context;
 class graph_context;
 
-class graph_context_manager
+class graph_context_manager : public QObject
 {
+    Q_OBJECT
 public:
     graph_context_manager();
 
@@ -26,7 +28,9 @@ public:
 
     dynamic_context* add_dynamic_context(const QString& name);
     dynamic_context* get_dynamic_context(const QString& name);
-    QStringList dynamic_context_list() const; // PROBABLY DEBUG METHOD, WILL BE REPLACED BY DIFFERENT SELECTION INTERFACE
+    bool rename_dynamic_context(const QString& old_name, const QString& new_name);
+    bool remove_dynamic_context(const QString& name);
+    QStringList dynamic_context_list() const;    // PROBABLY DEBUG METHOD, WILL BE REPLACED BY DIFFERENT SELECTION INTERFACE
 
     //void handle_module_created(const std::shared_ptr<module> m) const; // PRECACHING ???
     void handle_module_removed(const std::shared_ptr<module> m);
@@ -55,9 +59,14 @@ public:
     graph_shader* get_default_shader(module_context* const context) const;
     graph_shader* get_default_shader(cone_context* const context) const;
     graph_shader* get_default_shader(dynamic_context* const context) const;
-    
+
     graph_context* get_context();
     void create_top_context();
+
+Q_SIGNALS:
+    void context_created(dynamic_context* context);
+    void context_renamed(dynamic_context* context);
+    void context_removed(dynamic_context* context);
 
 private:
     QVector<module_context*> m_module_contexts;
@@ -65,4 +74,4 @@ private:
     graph_context* m_top;
 };
 
-#endif // GRAPH_CONTEXT_MANAGER_H
+#endif    // GRAPH_CONTEXT_MANAGER_H

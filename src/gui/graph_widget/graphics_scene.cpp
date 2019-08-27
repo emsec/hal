@@ -323,6 +323,8 @@ void graphics_scene::move_nets_to_background()
 
 void graphics_scene::handle_intern_selection_changed()
 {
+    g_selection_relay.clear();
+
     int gates = 0;
     int nets = 0;
     int modules = 0;
@@ -333,30 +335,24 @@ void graphics_scene::handle_intern_selection_changed()
         {
         case hal::item_type::gate:
         {
-            g_selection_relay.m_selected_gates[gates] = static_cast<const graphics_item* const>(item)->id();
+            g_selection_relay.m_selected_gates.insert(static_cast<const graphics_item* const>(item)->id());
             ++gates;
             break;
         }
         case hal::item_type::net:
         {
-            g_selection_relay.m_selected_nets[nets] = static_cast<const graphics_item* const>(item)->id();
+            g_selection_relay.m_selected_nets.insert(static_cast<const graphics_item* const>(item)->id());
             ++nets;
             break;
         }
         case hal::item_type::module:
         {
-            g_selection_relay.m_selected_modules[modules] = static_cast<const graphics_item* const>(item)->id();
+            g_selection_relay.m_selected_modules.insert(static_cast<const graphics_item* const>(item)->id());
             ++modules;
             break;
         }
         }
     }
-
-    // CHANGE SELECTION RELAY MEMEBERS DIRECTLY ?
-    // FIND OUT WHATS FASTER
-    g_selection_relay.m_number_of_selected_gates = gates;
-    g_selection_relay.m_number_of_selected_nets = nets;
-    g_selection_relay.m_number_of_selected_modules = modules;
 
     // TEST CODE
     // ADD FOCUS DEDUCTION INTO RELAY ???
@@ -365,17 +361,17 @@ void graphics_scene::handle_intern_selection_changed()
         if (gates)
         {
             g_selection_relay.m_focus_type = selection_relay::item_type::gate;
-            g_selection_relay.m_focus_id = g_selection_relay.m_selected_gates[0]; // UNNECESSARY ??? USE ARRAY[0] INSTEAD OF MEMBER VARIABLE ???
+            g_selection_relay.m_focus_id = *g_selection_relay.m_selected_gates.begin(); // UNNECESSARY ??? USE ARRAY[0] INSTEAD OF MEMBER VARIABLE ???
         }
         else if (nets)
         {
             g_selection_relay.m_focus_type = selection_relay::item_type::net;
-            g_selection_relay.m_focus_id = g_selection_relay.m_selected_nets[0]; // UNNECESSARY ??? USE ARRAY[0] INSTEAD OF MEMBER VARIABLE ???
+            g_selection_relay.m_focus_id = *g_selection_relay.m_selected_nets.begin(); // UNNECESSARY ??? USE ARRAY[0] INSTEAD OF MEMBER VARIABLE ???
         }
         else
         {
             g_selection_relay.m_focus_type = selection_relay::item_type::module;
-            g_selection_relay.m_focus_id = g_selection_relay.m_selected_modules[0]; // UNNECESSARY ??? USE ARRAY[0] INSTEAD OF MEMBER VARIABLE ???
+            g_selection_relay.m_focus_id = *g_selection_relay.m_selected_modules.begin(); // UNNECESSARY ??? USE ARRAY[0] INSTEAD OF MEMBER VARIABLE ???
         }
     }
     else
@@ -385,7 +381,6 @@ void graphics_scene::handle_intern_selection_changed()
     g_selection_relay.m_subfocus = selection_relay::subfocus::none;
     // END OF TEST CODE
 
-    g_selection_relay.sort();
     g_selection_relay.relay_selection_changed(this);
 }
 
@@ -401,41 +396,31 @@ void graphics_scene::handle_extern_selection_changed(void* sender)
 
     clearSelection();
 
-    if (g_selection_relay.m_number_of_selected_modules)
+    if (!g_selection_relay.m_selected_modules.isEmpty())
     {
         // ACTIONS HERE ARE DEPENDENT ON WHICH DATA APPROACH WILL ULTIMATELY BE USED IN THE SELECTION RELAY
     }
 
-    if (g_selection_relay.m_number_of_selected_gates)
+    if (!g_selection_relay.m_selected_gates.isEmpty())
     {
-        u32 index = 0;
-
         for (auto& element : m_gate_items)
         {
-            if (element.id == g_selection_relay.m_selected_gates[index])
+            if (g_selection_relay.m_selected_gates.find(element.id) != g_selection_relay.m_selected_gates.end())
             {
                 element.item->setSelected(true);
                 element.item->update();
-
-                if (++index == g_selection_relay.m_number_of_selected_gates)
-                    break;
             }
         }
     }
 
-    if (g_selection_relay.m_number_of_selected_nets)
+    if (!g_selection_relay.m_selected_nets.isEmpty())
     {
-        u32 index = 0;
-
         for (auto& element : m_net_items)
         {
-            if (element.id == g_selection_relay.m_selected_nets[index])
+            if (g_selection_relay.m_selected_nets.find(element.id) != g_selection_relay.m_selected_nets.end())
             {
                 element.item->setSelected(true);
                 element.item->update();
-
-                if (++index == g_selection_relay.m_number_of_selected_nets)
-                    break;
             }
         }
     }

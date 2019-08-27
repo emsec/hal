@@ -1,5 +1,6 @@
 #include "graph_widget/graph_graphics_view.h"
 
+#include "core/log.h"
 #include "gui/graph_widget/graph_widget.h"
 #include "gui/graph_widget/graph_widget_constants.h"
 #include "gui/graph_widget/graphics_scene.h"
@@ -13,9 +14,8 @@
 #include "gui/graph_widget/items/standard_graphics_net.h"
 #include "gui/gui_globals.h"
 #include "netlist/gate.h"
-#include "netlist/net.h"
 #include "netlist/module.h"
-#include "core/log.h"
+#include "netlist/net.h"
 
 #include <QAction>
 #include <QColorDialog>
@@ -305,7 +305,7 @@ void graph_graphics_view::show_context_menu(const QPoint& pos)
                 QObject::connect(new_mod_action, &QAction::triggered, this, &graph_graphics_view::handle_move_new_action);
                 module_submenu->addAction(new_mod_action);
 
-                QAction* isolation_view_action = context_menu.addAction("Open in Isolation View");
+                QAction* isolation_view_action = context_menu.addAction("Isolate In New View");
                 QObject::connect(isolation_view_action, &QAction::triggered, this, &graph_graphics_view::handle_isolation_view_action);
                 context_menu.addAction(isolation_view_action);
 
@@ -357,8 +357,6 @@ void graph_graphics_view::toggle_antialiasing()
     setRenderHint(QPainter::Antialiasing, !(renderHints() & QPainter::Antialiasing));
 }
 
-
-
 void graph_graphics_view::handle_select_outputs()
 {
     QAction* sender_action = dynamic_cast<QAction*>(sender());
@@ -367,9 +365,9 @@ void graph_graphics_view::handle_select_outputs()
     {
         std::set<u32> select_nets;
         std::set<u32> select_gates;
-        for (u32 i = 0; i < g_selection_relay.m_number_of_selected_gates; ++i)
+        for (auto id : g_selection_relay.m_selected_gates)
         {
-            auto gate = g_netlist->get_gate_by_id(g_selection_relay.m_selected_gates[i]);
+            auto gate = g_netlist->get_gate_by_id(id);
             select_gates.insert(gate->get_id());
             log_info("gui", "  start {}", gate->get_name());
             for (const auto& net : gate->get_fan_out_nets())
@@ -387,11 +385,11 @@ void graph_graphics_view::handle_select_outputs()
 
         for (u32 id : select_nets)
         {
-            g_selection_relay.m_selected_nets[g_selection_relay.m_number_of_selected_nets++] = id;
+            g_selection_relay.m_selected_nets.insert(id);
         }
         for (u32 id : select_gates)
         {
-            g_selection_relay.m_selected_gates[g_selection_relay.m_number_of_selected_gates++] = id;
+            g_selection_relay.m_selected_gates.insert(id);
         }
         g_selection_relay.relay_selection_changed(this);
     }
@@ -403,9 +401,9 @@ void graph_graphics_view::handle_select_inputs()
     {
         std::set<u32> select_nets;
         std::set<u32> select_gates;
-        for (u32 i = 0; i < g_selection_relay.m_number_of_selected_gates; ++i)
+        for (auto id : g_selection_relay.m_selected_gates)
         {
-            auto gate = g_netlist->get_gate_by_id(g_selection_relay.m_selected_gates[i]);
+            auto gate = g_netlist->get_gate_by_id(id);
             select_gates.insert(gate->get_id());
             for (const auto& net : gate->get_fan_in_nets())
             {
@@ -420,11 +418,11 @@ void graph_graphics_view::handle_select_inputs()
 
         for (u32 id : select_nets)
         {
-            g_selection_relay.m_selected_nets[g_selection_relay.m_number_of_selected_nets++] = id;
+            g_selection_relay.m_selected_nets.insert(id);
         }
         for (u32 id : select_gates)
         {
-            g_selection_relay.m_selected_gates[g_selection_relay.m_number_of_selected_gates++] = id;
+            g_selection_relay.m_selected_gates.insert(id);
         }
         g_selection_relay.relay_selection_changed(this);
     }
@@ -436,9 +434,9 @@ void graph_graphics_view::handle_select_inputs_and_outputs()
     {
         std::set<u32> select_nets;
         std::set<u32> select_gates;
-        for (u32 i = 0; i < g_selection_relay.m_number_of_selected_gates; ++i)
+        for (auto id : g_selection_relay.m_selected_gates)
         {
-            auto gate = g_netlist->get_gate_by_id(g_selection_relay.m_selected_gates[i]);
+            auto gate = g_netlist->get_gate_by_id(id);
             select_gates.insert(gate->get_id());
 
             for (const auto& net : gate->get_fan_out_nets())
@@ -462,11 +460,11 @@ void graph_graphics_view::handle_select_inputs_and_outputs()
 
         for (u32 id : select_nets)
         {
-            g_selection_relay.m_selected_nets[g_selection_relay.m_number_of_selected_nets++] = id;
+            g_selection_relay.m_selected_nets.insert(id);
         }
         for (u32 id : select_gates)
         {
-            g_selection_relay.m_selected_gates[g_selection_relay.m_number_of_selected_gates++] = id;
+            g_selection_relay.m_selected_gates.insert(id);
         }
         g_selection_relay.relay_selection_changed(this);
     }

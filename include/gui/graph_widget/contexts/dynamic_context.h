@@ -5,6 +5,8 @@
 
 class dynamic_context : public graph_context
 {
+    friend class graph_context_manager;
+
 public:
     dynamic_context(const QString& name);
 
@@ -18,4 +20,4 @@ private:
     bool m_extend_global;
 };
 
-#endif // DYNAMIC_CONTEXT_H
+#endif    // DYNAMIC_CONTEXT_H

@@ -29,6 +29,7 @@
 #include <QObject>
 #include <QPair>
 #include <QVector>
+#include <QSet>
 
 class gate;
 class net;
@@ -65,9 +66,6 @@ public:
 
     explicit selection_relay(QObject* parent = nullptr);
 
-    void init();
-    void reset();
-    void sort();
     void clear(); // does not emit the "update" signal!
 
     void register_sender(void* sender, QString name);
@@ -83,11 +81,8 @@ public:
     void navigate_left();
     void navigate_right();
 
-    void handle_module_created();
     void handle_module_removed(const u32 id);
-    void handle_gate_created();
     void handle_gate_removed(const u32 id);
-    void handle_net_created();
     void handle_net_removed(const u32 id);
 
 Q_SIGNALS:
@@ -99,17 +94,9 @@ Q_SIGNALS:
     void subfocus_changed(void* sender);
 
 public:
-    u32* m_selected_gates;
-    u32* m_selected_nets;
-    u32* m_selected_modules;
-
-    u32 m_size_of_selected_gates;
-    u32 m_size_of_selected_nets;
-    u32 m_size_of_selected_modules;
-
-    u32 m_number_of_selected_gates;
-    u32 m_number_of_selected_nets;
-    u32 m_number_of_selected_modules;
+    QSet<u32> m_selected_gates;
+    QSet<u32> m_selected_nets;
+    QSet<u32> m_selected_modules;
 
     // MAYBE UNNECESSARY
     item_type m_current_type;

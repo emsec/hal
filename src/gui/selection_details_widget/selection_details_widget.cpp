@@ -57,19 +57,19 @@ void selection_details_widget::handle_selection_update(void* sender)
         return;
     }
 
-    if (g_selection_relay.m_number_of_selected_modules > 0)
+    if (!g_selection_relay.m_selected_modules.isEmpty())
     {
-        m_module_details->update(g_selection_relay.m_selected_modules[0]);
+        m_module_details->update(*g_selection_relay.m_selected_modules.begin());
         m_stacked_widget->setCurrentWidget(m_module_details);
     }
-    else if (g_selection_relay.m_number_of_selected_gates > 0)
+    else if (!g_selection_relay.m_selected_gates.isEmpty())
     {
-        m_gate_details->update(g_selection_relay.m_selected_gates[0]);
+        m_gate_details->update(*g_selection_relay.m_selected_gates.begin());
         m_stacked_widget->setCurrentWidget(m_gate_details);
     }
-    else if (g_selection_relay.m_number_of_selected_nets > 0)
+    else if (!g_selection_relay.m_selected_nets.isEmpty())
     {
-        m_net_details->update(g_selection_relay.m_selected_nets[0]);
+        m_net_details->update(*g_selection_relay.m_selected_nets.begin());
         m_stacked_widget->setCurrentWidget(m_net_details);
     }
 }

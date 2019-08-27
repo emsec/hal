@@ -435,7 +435,7 @@ void net_details_widget::handle_item_collapsed(QTreeWidgetItem* item)
 void net_details_widget::on_treewidget_item_clicked(QTreeWidgetItem* item, int column)
 {
     auto gate_id = item->data(2, Qt::UserRole).toInt();
-    auto pin = item->text(0).toStdString();
+    auto pin     = item->text(0).toStdString();
     if (m_dst_pins == item->parent() && column == 2)
     {
         std::shared_ptr<gate> clicked_gate = g_netlist->get_gate_by_id(gate_id);
@@ -444,10 +444,10 @@ void net_details_widget::on_treewidget_item_clicked(QTreeWidgetItem* item, int c
             return;
 
         g_selection_relay.clear();
-        g_selection_relay.m_selected_gates[g_selection_relay.m_number_of_selected_gates++] = clicked_gate->get_id();
-        g_selection_relay.m_focus_type                                                     = selection_relay::item_type::gate;
-        g_selection_relay.m_focus_id                                                       = clicked_gate->get_id();
-        g_selection_relay.m_subfocus                                                       = selection_relay::subfocus::left;
+        g_selection_relay.m_selected_gates.insert(clicked_gate->get_id());
+        g_selection_relay.m_focus_type = selection_relay::item_type::gate;
+        g_selection_relay.m_focus_id   = clicked_gate->get_id();
+        g_selection_relay.m_subfocus   = selection_relay::subfocus::left;
 
         auto pins                          = clicked_gate->get_input_pin_types();
         auto index                         = std::distance(pins.begin(), std::find(pins.begin(), pins.end(), pin));
@@ -464,10 +464,10 @@ void net_details_widget::on_treewidget_item_clicked(QTreeWidgetItem* item, int c
             return;
 
         g_selection_relay.clear();
-        g_selection_relay.m_selected_gates[g_selection_relay.m_number_of_selected_gates++] = clicked_gate->get_id();
-        g_selection_relay.m_focus_type                                                     = selection_relay::item_type::gate;
-        g_selection_relay.m_focus_id                                                       = clicked_gate->get_id();
-        g_selection_relay.m_subfocus                                                       = selection_relay::subfocus::right;
+        g_selection_relay.m_selected_gates.insert(clicked_gate->get_id());
+        g_selection_relay.m_focus_type = selection_relay::item_type::gate;
+        g_selection_relay.m_focus_id   = clicked_gate->get_id();
+        g_selection_relay.m_subfocus   = selection_relay::subfocus::right;
 
         auto pins                          = clicked_gate->get_output_pin_types();
         auto index                         = std::distance(pins.begin(), std::find(pins.begin(), pins.end(), pin));

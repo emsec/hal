@@ -7,7 +7,6 @@
 
 #include "file_manager/file_manager.h"
 #include "graph_widget/graph_widget.h"
-#include "gui/module_widget/module_widget.h"
 #include "gui/content_layout_area/content_layout_area.h"
 #include "gui/content_widget/content_widget.h"
 #include "gui/docking_system/tab_widget.h"
@@ -17,6 +16,7 @@
 #include "gui/gui_utility.h"
 #include "gui/hal_graphics/hal_graphics_view.h"
 #include "gui/hal_logger/hal_logger_widget.h"
+#include "gui/module_widget/module_widget.h"
 #include "gui/python/python_console_widget.h"
 #include "gui/python/python_editor.h"
 #include "gui/selection_details_widget/selection_details_widget.h"
@@ -25,8 +25,10 @@
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QOpenGLWidget>
-#include "graph_tab_widget/graph_tab_widget.h"
+
 #include "context_manager_widget/context_manager_widget.h"
+#include "graph_tab_widget/graph_tab_widget.h"
+#include "graph_widget/graph_context_manager.h"
 
 hal_content_manager::hal_content_manager(main_window* parent) : QObject(parent), m_main_window(parent)
 {
@@ -50,18 +52,12 @@ void hal_content_manager::hack_delete_content()
 
 void hal_content_manager::handle_open_document(const QString& file_name)
 {
-
     graph_tab_widget* graph_tab_wid = new graph_tab_widget(nullptr);
-    graph_widget* graph_edit = new graph_widget();
-    vhdl_editor* code_edit = new vhdl_editor();
-    graph_tab_wid->addTab(graph_edit, "Top view");
+    vhdl_editor* code_edit          = new vhdl_editor();
+    graph_tab_wid->show_context(dynamic_cast<dynamic_context*>(g_graph_context_manager.get_context()));
     graph_tab_wid->addTab(code_edit, "Source");
     m_main_window->add_content(graph_tab_wid, 2, content_anchor::center);
-    graph_edit->open_top_context();
-    
-    
-    
-    
+
     //module_widget* m = new module_widget();
     //m_main_window->add_content(m, 0, content_anchor::left);
     //m->open();
@@ -70,12 +66,17 @@ void hal_content_manager::handle_open_document(const QString& file_name)
     m_main_window->add_content(nav_widget, 0, content_anchor::left);
     nav_widget->open();
 
-    context_manager_widget* context_manager_wid = new context_manager_widget();
+    context_manager_widget* context_manager_wid = new context_manager_widget(graph_tab_wid);
     m_main_window->add_content(context_manager_wid, 1, content_anchor::left);
     context_manager_wid->open();
 
-    connect(context_manager_wid, &context_manager_widget::context_created_clicked, graph_tab_wid, &graph_tab_widget::handle_context_created);
-    connect(context_manager_wid, &context_manager_widget::context_opened_clicked, graph_tab_wid, &graph_tab_widget::handle_context_open_request);
+    connect(&g_graph_context_manager, &graph_context_manager::context_created, graph_tab_wid, &graph_tab_widget::handle_context_created);
+    connect(&g_graph_context_manager, &graph_context_manager::context_renamed, graph_tab_wid, &graph_tab_widget::handle_context_renamed);
+    connect(&g_graph_context_manager, &graph_context_manager::context_removed, graph_tab_wid, &graph_tab_widget::handle_context_removed);
+
+    connect(&g_graph_context_manager, &graph_context_manager::context_created, context_manager_wid, &context_manager_widget::handle_context_created);
+    connect(&g_graph_context_manager, &graph_context_manager::context_renamed, context_manager_wid, &context_manager_widget::handle_context_renamed);
+    connect(&g_graph_context_manager, &graph_context_manager::context_removed, context_manager_wid, &context_manager_widget::handle_context_removed);
 
     selection_details_widget* details = new selection_details_widget();
     m_main_window->add_content(details, 0, content_anchor::bottom);

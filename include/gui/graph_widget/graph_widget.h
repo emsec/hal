@@ -45,6 +45,8 @@ public:
     graph_widget(QWidget* parent = nullptr);
     graph_widget(graph_context* context, QWidget* parent = nullptr);
 
+    graph_context* get_context() const;
+
     virtual void setup_toolbar(toolbar* toolbar) Q_DECL_OVERRIDE;
 
     virtual void handle_scene_available() Q_DECL_OVERRIDE;
@@ -53,9 +55,9 @@ public:
 
     virtual void handle_status_update(const int percent) Q_DECL_OVERRIDE;
     virtual void handle_status_update(const QString& message) Q_DECL_OVERRIDE;
-    
+
     void open_top_context();
-    
+
     graph_graphics_view* view();
 
 protected:

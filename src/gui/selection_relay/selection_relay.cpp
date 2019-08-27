@@ -13,114 +13,19 @@
 // SET VIA SETTINGS OR TOOLBUTTON
 bool selection_relay::s_navigation_skips_enabled = false;
 
-selection_relay::selection_relay(QObject* parent)
-    : QObject(parent), m_selected_gates(nullptr), m_selected_nets(nullptr), m_selected_modules(nullptr), m_size_of_selected_gates(0), m_size_of_selected_nets(0), m_size_of_selected_modules(0),
-      m_number_of_selected_gates(0), m_number_of_selected_nets(0), m_number_of_selected_modules(0), m_current_type(item_type::none), m_focus_type(item_type::none), m_subfocus(subfocus::none)
+selection_relay::selection_relay(QObject* parent) : QObject(parent), m_current_type(item_type::none), m_focus_type(item_type::none), m_subfocus(subfocus::none)
 {
-}
-
-void selection_relay::init()
-{
-    // CONSTRUCTION + DESTRUCTION OR
-    // INIT + RESET ?
-    m_size_of_selected_gates   = g_netlist->get_gates().size();
-    m_size_of_selected_nets    = g_netlist->get_nets().size();
-    m_size_of_selected_modules = g_netlist->get_modules().size();
-
-    m_selected_gates   = new u32[m_size_of_selected_gates];
-    m_selected_nets    = new u32[m_size_of_selected_nets];
-    m_selected_modules = new u32[m_size_of_selected_modules];
-
-    clear();
-}
-
-void selection_relay::reset()
-{
-    // CONSTRUCTION + DESTRUCTION OR
-    // INIT + RESET ?
-
-    delete[] m_selected_gates;
-    delete[] m_selected_nets;
-    delete[] m_selected_modules;
-
-    m_selected_gates   = nullptr;
-    m_selected_nets    = nullptr;
-    m_selected_modules = nullptr;
-
-    m_size_of_selected_gates   = 0;
-    m_size_of_selected_nets    = 0;
-    m_size_of_selected_modules = 0;
-
     clear();
 }
 
 void selection_relay::clear()
 {
-    m_number_of_selected_gates   = 0;
-    m_number_of_selected_nets    = 0;
-    m_number_of_selected_modules = 0;
+    m_selected_gates.clear();
+    m_selected_nets.clear();
+    m_selected_modules.clear();
     m_subfocus                   = subfocus::none;
     m_subfocus_index             = 0;
     m_focus_id                   = 0;
-}
-
-void swap(u32* a, u32* b)
-{
-    u32 tmp = *a;
-    *a      = *b;
-    *b      = tmp;
-}
-
-void quicksort_recursion(u32* begin, u32* end)
-{
-    u32* ptr;
-    u32* split;
-
-    if (end - begin <= 1)
-        return;
-
-    ptr   = begin;
-    split = begin + 1;
-
-    while (++ptr <= end)
-    {
-        if (*ptr < *begin)
-        {
-            swap(ptr, split);
-            ++split;
-        }
-    }
-
-    swap(begin, split - 1);
-    quicksort_recursion(begin, split - 1);
-    quicksort_recursion(split, end);
-}
-
-void quicksort(u32* begin, u32* end)
-{
-    int size = end - begin;
-
-    if (size <= 1)
-        return;
-
-    if (size == 2)
-    {
-        if (begin[0] > begin[1])
-            swap(begin, begin + 1);
-
-        return;
-    }
-
-    quicksort_recursion(begin, end);
-}
-
-void selection_relay::sort()
-{
-    quicksort(m_selected_gates, m_selected_gates + m_number_of_selected_gates);
-
-    quicksort(m_selected_nets, m_selected_nets + m_number_of_selected_nets);
-
-    quicksort(m_selected_modules, m_selected_modules + m_number_of_selected_modules);
 }
 
 void selection_relay::register_sender(void* sender, QString name)
@@ -401,109 +306,34 @@ void selection_relay::navigate_right()
     }
 }
 
-void selection_relay::handle_module_created()
-{
-    m_size_of_selected_modules++;
-    u32* new_array = new u32[m_size_of_selected_modules];
-    memcpy(new_array, m_selected_modules, m_number_of_selected_modules * sizeof(u32));
-    delete[] m_selected_modules;
-    m_selected_modules = new_array;
-}
-
 void selection_relay::handle_module_removed(const u32 id)
 {
-    m_size_of_selected_modules--;
-    u32* new_array    = new u32[m_size_of_selected_modules];
-    bool was_selected = false;
-
-    for (u32 i = 0; i < m_number_of_selected_modules; i++)
+    auto it = m_selected_modules.find(id);
+    if (it != m_selected_modules.end())
     {
-        if (was_selected)
-            new_array[i - 1] = m_selected_modules[i];
-        else
-        {
-            if (m_selected_modules[i] != id)
-                new_array[i] = m_selected_modules[i];
-            else
-                was_selected = true;
-        }
-    }
-
-    delete[] m_selected_modules;
-    m_selected_modules = new_array;
-
-    if (was_selected)
+        m_selected_modules.erase(it);
         Q_EMIT selection_changed(nullptr);
-}
-
-void selection_relay::handle_gate_created()
-{
-    m_size_of_selected_gates++;
-    u32* new_array = new u32[m_size_of_selected_gates];
-    memcpy(new_array, m_selected_gates, m_number_of_selected_gates * sizeof(u32));
-    delete[] m_selected_gates;
-    m_selected_gates = new_array;
+    }
 }
 
 void selection_relay::handle_gate_removed(const u32 id)
 {
-    m_size_of_selected_gates--;
-    u32* new_array    = new u32[m_size_of_selected_gates];
-    bool was_selected = false;
-
-    for (u32 i = 0; i < m_number_of_selected_gates; i++)
+    auto it = m_selected_gates.find(id);
+    if (it != m_selected_gates.end())
     {
-        if (was_selected)
-            new_array[i - 1] = m_selected_gates[i];
-        else
-        {
-            if (m_selected_gates[i] != id)
-                new_array[i] = m_selected_gates[i];
-            else
-                was_selected = true;
-        }
-    }
-
-    delete[] m_selected_gates;
-    m_selected_gates = new_array;
-
-    if (was_selected)
+        m_selected_gates.erase(it);
         Q_EMIT selection_changed(nullptr);
-}
-
-void selection_relay::handle_net_created()
-{
-    m_size_of_selected_nets++;
-    u32* new_array = new u32[m_size_of_selected_nets];
-    memcpy(new_array, m_selected_nets, m_number_of_selected_nets * sizeof(u32));
-    delete[] m_selected_nets;
-    m_selected_nets = new_array;
+    }
 }
 
 void selection_relay::handle_net_removed(const u32 id)
 {
-    m_size_of_selected_nets--;
-    u32* new_array    = new u32[m_size_of_selected_nets];
-    bool was_selected = false;
-
-    for (u32 i = 0; i < m_number_of_selected_nets; i++)
+    auto it = m_selected_nets.find(id);
+    if (it != m_selected_nets.end())
     {
-        if (was_selected)
-            new_array[i - 1] = m_selected_nets[i];
-        else
-        {
-            if (m_selected_nets[i] != id)
-                new_array[i] = m_selected_nets[i];
-            else
-                was_selected = true;
-        }
-    }
-
-    delete[] m_selected_nets;
-    m_selected_nets = new_array;
-
-    if (was_selected)
+        m_selected_nets.erase(it);
         Q_EMIT selection_changed(nullptr);
+    }
 }
 
 // GET CORE GUARANTEES
@@ -516,11 +346,9 @@ void selection_relay::follow_gate_input_pin(std::shared_ptr<gate> g, u32 input_p
     if (!n)
         return;    // ADD SOUND OR SOMETHING, ALTERNATIVELY ADD BOOL RETURN VALUE TO METHOD ???
 
-    m_number_of_selected_gates   = 0;
-    m_number_of_selected_nets    = 1;
-    m_number_of_selected_modules = 0;
+    clear();
 
-    m_selected_nets[0] = n->get_id();
+    m_selected_nets.insert(n->get_id());
 
     m_focus_type = item_type::net;
     m_focus_id   = n->get_id();
@@ -560,11 +388,9 @@ void selection_relay::follow_gate_output_pin(std::shared_ptr<gate> g, u32 output
     if (!n)
         return;    // ADD SOUND OR SOMETHING, ALTERNATIVELY ADD BOOL RETURN VALUE TO METHOD ???
 
-    m_number_of_selected_gates   = 0;
-    m_number_of_selected_nets    = 1;
-    m_number_of_selected_modules = 0;
+    clear();
 
-    m_selected_nets[0] = n->get_id();
+    m_selected_nets.insert(n->get_id());
 
     m_focus_type = item_type::net;
     m_focus_id   = n->get_id();
@@ -587,11 +413,9 @@ void selection_relay::follow_net_to_src(std::shared_ptr<net> n)
     if (!g)
         return;
 
-    m_number_of_selected_gates   = 1;
-    m_number_of_selected_nets    = 0;
-    m_number_of_selected_modules = 0;
+    clear();
 
-    m_selected_gates[0] = g->get_id();
+    m_selected_gates.insert(g->get_id());
 
     m_focus_type = item_type::gate;
     m_focus_id   = g->get_id();
@@ -627,11 +451,9 @@ void selection_relay::follow_net_to_dst(std::shared_ptr<net> n, u32 dst_index)
     if (!g)
         return;
 
-    m_number_of_selected_gates   = 1;
-    m_number_of_selected_nets    = 0;
-    m_number_of_selected_modules = 0;
+    clear();
 
-    m_selected_gates[0] = g->get_id();
+    m_selected_gates.insert(g->get_id());
 
     m_focus_type = item_type::gate;
     m_focus_id   = g->get_id();
