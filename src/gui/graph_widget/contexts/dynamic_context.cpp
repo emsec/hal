@@ -24,6 +24,7 @@ void dynamic_context::apply_changes()
     graph_context::apply_changes();
 
     m_layouter->remove({}, {}, m_nets);
+    m_shader->remove({}, {}, m_nets);
     m_nets.clear();
     for (const auto& id : m_gates)
     {
@@ -50,4 +51,5 @@ void dynamic_context::apply_changes()
         }
     }
     m_layouter->add({}, {}, m_nets);
+    m_shader->add({}, {}, m_nets);
 }

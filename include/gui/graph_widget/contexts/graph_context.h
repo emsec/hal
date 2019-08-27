@@ -27,6 +27,9 @@ public:
     void subscribe(graph_context_subscriber* const subscriber);
     void unsubscribe(graph_context_subscriber* const subscriber);
 
+    void begin_change();
+    void end_change();
+
     void add(const QSet<u32>& modules, const QSet<u32>& gates, const QSet<u32>& nets);
     void remove(const QSet<u32>& modules, const QSet<u32>& gates, const QSet<u32>& nets);
     void clear();
@@ -67,6 +70,7 @@ protected:
 
     bool m_unhandled_changes;
     bool m_scene_update_required;
+    bool m_wait_for_user_action;
 
     bool m_update_requested;
 

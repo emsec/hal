@@ -79,30 +79,6 @@ graph_context* graph_widget::get_context() const
     return m_context;
 }
 
-void graph_widget::setup_toolbar(toolbar* toolbar)
-{
-    Q_UNUSED(toolbar)
-    // DEPRECATED
-    // DELETE THIS METHOD AFTER CONTENT WIDGET REFACTOR
-
-    // QToolButton* context_one_button = new QToolButton();
-    // context_one_button->setText("Context 1");
-
-    // QToolButton* create_context_button = new QToolButton();
-    // create_context_button->setText("Create Context");
-
-    // QToolButton* change_context_button = new QToolButton();
-    // change_context_button->setText("Change Context");
-
-    // connect(context_one_button, &QToolButton::clicked, this, &graph_widget::debug_module_one);
-    // connect(create_context_button, &QToolButton::clicked, this, &graph_widget::debug_create_context);
-    // connect(change_context_button, &QToolButton::clicked, this, &graph_widget::debug_change_context);
-
-    // toolbar->addWidget(context_one_button);
-    // toolbar->addWidget(create_context_button);
-    // toolbar->addWidget(change_context_button);
-}
-
 void graph_widget::handle_scene_available()
 {
     m_view->setScene(m_context->scene());
@@ -241,6 +217,7 @@ void graph_widget::handle_navigation_jump_requested(const u32 from_gate, const u
             gates.insert(to_gate);
 
         // ADD TO CONTEXT
+        add_context_to_history();
         m_context->add(QSet<u32>(), gates, nets);    // EMPTY SET DEBUG CODE
     }
     else
@@ -426,7 +403,7 @@ void graph_widget::handle_navigation_down_request()
 
 void graph_widget::handle_module_up_request()
 {
-    if (!m_context)
+    /*if (!m_context)
         return;
 
     QSet<u32> parents;
@@ -469,12 +446,27 @@ void graph_widget::handle_module_up_request()
             ++it;
     }
 
+    m_context->begin_change();
     m_context->clear();
     m_context->add(parents, {}, {});
+    m_context->end_change();*/
+
+    if (m_context_history.empty())
+        return;
+    auto entry = m_context_history.back();
+    for (const auto& x : entry.m_modules) qDebug() << "M "<< x;
+    for (const auto& x : entry.m_gates) qDebug() << "G "<< x;
+    m_context_history.pop_back();
+    m_context->begin_change();
+    m_context->clear();
+    m_context->add(entry.m_modules, entry.m_gates, {});
+    m_context->end_change();
 }
 
 void graph_widget::handle_module_down_requested(const u32 id)
 {
+    add_context_to_history();
+    m_context->begin_change();
     m_context->clear();
     auto m = g_netlist->get_module_by_id(id);
 
@@ -484,6 +476,7 @@ void graph_widget::handle_module_down_requested(const u32 id)
     for (const auto& x : m->get_gates())
         gates.insert(x->get_id());
     m_context->add(modules, gates, {});
+    m_context->end_change();
 }
 
 void graph_widget::ensure_gate_visible(const u32 gate)
@@ -494,8 +487,24 @@ void graph_widget::ensure_gate_visible(const u32 gate)
     m_view->ensureVisible(itm);
 }
 
+void graph_widget::add_context_to_history()
+{
+    context_history_entry entry;
+
+    entry.m_modules = m_context->modules();
+    entry.m_gates   = m_context->gates();
+
+    m_context_history.push_back(entry);
+
+    while (m_context_history.size() > 10)
+    {
+        m_context_history.pop_front();
+    }
+}
+
 void graph_widget::change_context(graph_context* const context)
 {
+    m_context_history.clear();
     assert(context);
 
     if (m_context)

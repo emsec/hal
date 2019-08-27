@@ -95,11 +95,22 @@ void graph_graphics_view::handle_move_new_action()
     // so this creates a new module under the top-module.
     std::shared_ptr<module> m = g_netlist->create_module(g_netlist->get_unique_module_id(), name.toStdString(), g_netlist->get_top_module());
 
-    const u32 gate_id       = m_item->id();
-    std::shared_ptr<gate> g = g_netlist->get_gate_by_id(gate_id);
+    for (const auto& id : g_selection_relay.m_selected_gates)
+    {
+        m->assign_gate(g_netlist->get_gate_by_id(id));
+    }
 
-    if (g)
-        m->assign_gate(g);
+    auto gates = g_selection_relay.m_selected_gates;
+
+    g_selection_relay.clear();
+    g_selection_relay.relay_selection_changed(this);
+
+    m_graph_widget->add_context_to_history();
+    auto context = m_graph_widget->get_context();
+    context->begin_change();
+    context->remove({}, gates, {});
+    context->add({m->get_id()}, {}, {});
+    context->end_change();
 }
 
 void graph_graphics_view::handle_rename_action()
@@ -281,6 +292,12 @@ void graph_graphics_view::show_context_menu(const QPoint& pos)
         {
             case hal::item_type::gate:
             {
+                if (g_selection_relay.m_selected_gates.find(m_item->id()) == g_selection_relay.m_selected_gates.end())
+                {
+                    g_selection_relay.clear();
+                    g_selection_relay.m_selected_gates.insert(m_item->id());
+                    g_selection_relay.relay_selection_changed(this);
+                }
                 // DEBUG ONLY
                 //QAction* color_action = context_menu.addAction("Change Color");
                 //QObject::connect(color_action, &QAction::triggered, this, &graph_graphics_view::handle_change_color_action);
@@ -334,6 +351,13 @@ void graph_graphics_view::show_context_menu(const QPoint& pos)
             }
             case hal::item_type::module:
             {
+                if (g_selection_relay.m_selected_modules.find(m_item->id()) == g_selection_relay.m_selected_modules.end())
+                {
+                    g_selection_relay.clear();
+                    g_selection_relay.m_selected_modules.insert(m_item->id());
+                    g_selection_relay.relay_selection_changed(this);
+                }
+
                 QAction* action = context_menu.addAction("Unfold module");
                 QObject::connect(action, &QAction::triggered, this, &graph_graphics_view::handle_unfold_action);
                 context_menu.addAction(action);
@@ -378,7 +402,6 @@ void graph_graphics_view::toggle_antialiasing()
 void graph_graphics_view::handle_select_outputs()
 {
     QAction* sender_action = dynamic_cast<QAction*>(sender());
-    log_info("gui", "outputs");
     if (sender_action)
     {
         std::set<u32> select_nets;
@@ -387,15 +410,12 @@ void graph_graphics_view::handle_select_outputs()
         {
             auto gate = g_netlist->get_gate_by_id(id);
             select_gates.insert(gate->get_id());
-            log_info("gui", "  start {}", gate->get_name());
             for (const auto& net : gate->get_fan_out_nets())
             {
                 select_nets.insert(net->get_id());
-                log_info("gui", "  net {}", net->get_name());
                 for (const auto& suc : net->get_dsts())
                 {
                     select_gates.insert(suc.gate->get_id());
-                    log_info("gui", "  suc {}", suc.gate->get_name());
                 }
             }
         }
@@ -490,11 +510,17 @@ void graph_graphics_view::handle_select_inputs_and_outputs()
 
 void graph_graphics_view::handle_fold_action()
 {
+    m_graph_widget->add_context_to_history();
     auto context = m_graph_widget->get_context();
+    context->begin_change();
 
     QSet<u32> modules;
 
-    for (u32 id : g_selection_relay.m_selected_gates)
+    auto selected_gates = g_selection_relay.m_selected_gates;
+    g_selection_relay.clear();
+    g_selection_relay.relay_selection_changed(this);
+
+    for (u32 id : selected_gates)
     {
         auto m = g_netlist->get_gate_by_id(id)->get_module();
         modules.insert(m->get_id());
@@ -529,15 +555,22 @@ void graph_graphics_view::handle_fold_action()
     }
 
     context->add(modules, {}, {});
+    context->end_change();
 }
 
 void graph_graphics_view::handle_unfold_action()
 {
+    m_graph_widget->add_context_to_history();
     auto context = m_graph_widget->get_context();
+    context->begin_change();
+
+    auto modules = g_selection_relay.m_selected_modules;
+    g_selection_relay.clear();
+    g_selection_relay.relay_selection_changed(this);
 
     QSet<u32> new_gates;
     QSet<u32> new_modules;
-    for (u32 id : g_selection_relay.m_selected_modules)
+    for (u32 id : modules)
     {
         auto m = g_netlist->get_module_by_id(id);
         context->remove({id}, {}, {});
@@ -552,4 +585,5 @@ void graph_graphics_view::handle_unfold_action()
         }
     }
     context->add(new_modules, new_gates, {});
+    context->end_change();
 }

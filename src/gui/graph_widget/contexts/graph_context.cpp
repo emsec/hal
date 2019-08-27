@@ -14,6 +14,7 @@ graph_context::graph_context(context_type type, graph_layouter* layouter, graph_
     : QObject(parent), m_layouter(layouter), m_shader(shader), m_unhandled_changes(false), m_scene_update_required(false), m_update_requested(false), m_type(type), m_scene_available(true),
       m_update_in_progress(false)
 {
+    m_wait_for_user_action = false;
     connect(m_layouter, qOverload<int>(&graph_layouter::status_update), this, qOverload<int>(&graph_context::handle_layouter_update), Qt::ConnectionType::QueuedConnection);
     connect(m_layouter, qOverload<const QString&>(&graph_layouter::status_update), this, qOverload<const QString&>(&graph_context::handle_layouter_update), Qt::ConnectionType::QueuedConnection);
 }
@@ -41,6 +42,18 @@ void graph_context::unsubscribe(graph_context_subscriber* const subscriber)
     m_subscribers.removeOne(subscriber);
 }
 
+void graph_context::begin_change()
+{
+    m_wait_for_user_action = true;
+}
+
+void graph_context::end_change()
+{
+    m_wait_for_user_action = false;
+    evaluate_changes();
+    update();
+}
+
 void graph_context::add(const QSet<u32>& modules, const QSet<u32>& gates, const QSet<u32>& nets)
 {
     QSet<u32> new_modules = modules - m_modules;
@@ -63,8 +76,11 @@ void graph_context::add(const QSet<u32>& modules, const QSet<u32>& gates, const 
     m_added_gates += new_gates;
     m_added_nets += new_nets;
 
-    evaluate_changes();
-    update();
+    if (!m_wait_for_user_action)
+    {
+        evaluate_changes();
+        update();
+    }
 }
 
 void graph_context::remove(const QSet<u32>& modules, const QSet<u32>& gates, const QSet<u32>& nets)
@@ -81,22 +97,28 @@ void graph_context::remove(const QSet<u32>& modules, const QSet<u32>& gates, con
     m_added_gates -= gates;
     m_added_nets -= nets;
 
-    evaluate_changes();
-    update();
+    if (!m_wait_for_user_action)
+    {
+        evaluate_changes();
+        update();
+    }
 }
 
 void graph_context::clear()
 {
-    m_removed_modules += m_modules + m_added_modules;
-    m_removed_gates += m_gates + m_added_gates;
-    m_removed_nets += m_nets + m_added_nets;
+    m_removed_modules = m_modules + m_added_modules;
+    m_removed_gates   = m_gates + m_added_gates;
+    m_removed_nets    = m_nets + m_added_nets;
 
     m_added_modules.clear();
     m_added_gates.clear();
     m_added_nets.clear();
 
-    evaluate_changes();
-    update();
+    if (!m_wait_for_user_action)
+    {
+        evaluate_changes();
+        update();
+    }
 }
 
 const QSet<u32>& graph_context::gates() const
@@ -285,6 +307,8 @@ void graph_context::update_scene()
     m_update_in_progress    = true;
     m_scene_update_required = false;
 
+    // m_layouter->layout();
+    // handle_layouter_finished();
     layouter_task* task = new layouter_task(m_layouter);
     connect(task, &layouter_task::finished, this, &graph_context::handle_layouter_finished, Qt::ConnectionType::QueuedConnection);
     g_thread_pool->queue_task(task);

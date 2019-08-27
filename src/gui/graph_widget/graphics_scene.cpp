@@ -398,7 +398,14 @@ void graphics_scene::handle_extern_selection_changed(void* sender)
 
     if (!g_selection_relay.m_selected_modules.isEmpty())
     {
-        // ACTIONS HERE ARE DEPENDENT ON WHICH DATA APPROACH WILL ULTIMATELY BE USED IN THE SELECTION RELAY
+        for (auto& element : m_module_items)
+        {
+            if (g_selection_relay.m_selected_modules.find(element.id) != g_selection_relay.m_selected_modules.end())
+            {
+                element.item->setSelected(true);
+                element.item->update();
+            }
+        }
     }
 
     if (!g_selection_relay.m_selected_gates.isEmpty())
