@@ -104,6 +104,16 @@ public:
     std::set<std::shared_ptr<module>> get_submodules(const std::string& name_filter = DONT_CARE, bool recursive = false) const;
 
     /**
+     * Checks whether another module is a submodule of this module.<br>
+     * If \p recursive is true, all indirect submodules are also included.
+     *
+     * @param[in] other - Other module to check
+     * @param[in] recursive - Look into submodules as well
+     * @returns True if the other module is a submodule
+     */
+    bool contains_module(const std::shared_ptr<module>& other, bool recursive = false) const;
+
+    /**
      * Get the netlist this module is associated with.
      *
      * @returns The netlist.

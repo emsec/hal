@@ -1299,6 +1299,17 @@ If recursive parameter is true, all indirect submodules are also included.
 :returns: The set of submodules:
 :rtype: set(hal_py.module)
 )")
+
+        .def("contains_module", &module::contains_module, py::arg("other"), py::arg("recusive") = false, R"(
+Checks whether another module is a submodule of this module. If \p recursive is true, all indirect submodules are also included.
+
+:param other: Other module to check
+:param recursive: Look into submodules too
+:type other: hal_py.module
+:type recursive: bool
+:returns: True if the module is a submodule
+:rtype: bool
+)")
         .def("get_netlist", &module::get_netlist, R"(
 Get the netlist this module is associated with.
 

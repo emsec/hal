@@ -12,6 +12,8 @@ public:
 
     QString name() const;
 
+    void apply_changes() override;
+
 private:
     QString m_name;
 

@@ -19,16 +19,26 @@ context_manager_widget::context_manager_widget(graph_tab_widget* tab_view, QWidg
 
     m_list_widget->setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
 
+    m_content_layout->addWidget(m_list_widget);
+
+    connect(m_list_widget, &QListWidget::customContextMenuRequested, this, &context_manager_widget::handle_context_menu_request);
+    connect(m_list_widget, &QListWidget::itemDoubleClicked, this, &context_manager_widget::handle_item_double_clicked);
+
+
+    connect(&g_graph_context_manager, &graph_context_manager::context_created, this, &context_manager_widget::handle_context_created);
+    connect(&g_graph_context_manager, &graph_context_manager::context_renamed, this, &context_manager_widget::handle_context_renamed);
+    connect(&g_graph_context_manager, &graph_context_manager::context_removed, this, &context_manager_widget::handle_context_removed);
+
+
     //load top context (top module) into list
     for (const auto& ctx_name : g_graph_context_manager.dynamic_context_list())
     {
         handle_context_created(g_graph_context_manager.get_dynamic_context(ctx_name));
     }
-
-    m_content_layout->addWidget(m_list_widget);
-
-    connect(m_list_widget, &QListWidget::customContextMenuRequested, this, &context_manager_widget::handle_context_menu_request);
-    connect(m_list_widget, &QListWidget::itemDoubleClicked, this, &context_manager_widget::handle_item_double_clicked);
+    if (m_list_widget->count() == 0)
+    {
+        handle_create_context_clicked();
+    }
 }
 
 void context_manager_widget::resizeEvent(QResizeEvent* event)
@@ -73,20 +83,7 @@ void context_manager_widget::handle_create_context_clicked()
     dynamic_context* new_context = g_graph_context_manager.add_dynamic_context(new_context_name);
 
     //default if context created from nothing -> top module + global nets (empty == better?)
-    QSet<u32> global_nets;
-    for (auto& net : g_netlist->get_global_inout_nets())
-    {
-        global_nets.insert(net->get_id());
-    }
-    for (auto& net : g_netlist->get_global_input_nets())
-    {
-        global_nets.insert(net->get_id());
-    }
-    for (auto& net : g_netlist->get_global_output_nets())
-    {
-        global_nets.insert(net->get_id());
-    }
-    new_context->add({1}, {}, global_nets);
+    new_context->add({1}, {}, {});
 
     m_tab_view->show_context(new_context);
 }

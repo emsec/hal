@@ -15,6 +15,9 @@ graph_tab_widget::graph_tab_widget(QWidget* parent) : content_widget("Graph-View
     m_tab_widget->setTabsClosable(true);
 
     connect(m_tab_widget, &QTabWidget::tabCloseRequested, this, &graph_tab_widget::handle_tab_close_requested);
+    connect(&g_graph_context_manager, &graph_context_manager::context_created, this, &graph_tab_widget::handle_context_created);
+    connect(&g_graph_context_manager, &graph_context_manager::context_renamed, this, &graph_tab_widget::handle_context_renamed);
+    connect(&g_graph_context_manager, &graph_context_manager::context_removed, this, &graph_tab_widget::handle_context_removed);
 }
 
 int graph_tab_widget::addTab(QWidget* tab, QString name)

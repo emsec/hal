@@ -1,17 +1,18 @@
 #include "gui/graph_widget/graph_context_manager.h"
 
-#include "gui/graph_widget/contexts/cone_context.h"
+#include "netlist/netlist.h"
+#include "netlist/gate.h"
+#include "netlist/module.h"
+
 #include "gui/graph_widget/contexts/dynamic_context.h"
-#include "gui/graph_widget/contexts/module_context.h"
 #include "gui/graph_widget/layouters/minimal_graph_layouter.h"
 #include "gui/graph_widget/layouters/standard_graph_layouter.h"
 #include "gui/graph_widget/layouters/standard_graph_layouter_v2.h"
-#include "gui/graph_widget/shaders/module_shader.h"
 #include "gui/gui_globals.h"
+#include "gui/graph_widget/shaders/module_shader.h"
 
-static const int max_module_contexts = 10;    // USE SETTINGS FOR THIS
 
-graph_context_manager::graph_context_manager() : m_top(nullptr)
+graph_context_manager::graph_context_manager()
 {
 }
 
@@ -203,64 +204,14 @@ void graph_context_manager::handle_net_dst_removed(const std::shared_ptr<net> n,
     // TRIGGER RESHADE FOR ALL CONTEXTS THAT RECURSIVELY CONTAIN THE MODULE
 }
 
-graph_layouter* graph_context_manager::get_default_layouter(module_context* const context) const
-{
-    // USE SETTINGS + FACTORY
-    return new standard_graph_layouter(context);
-    //return new standard_graph_layouter_v2(context);
-    //return new minimal_graph_layouter(context);
-}
-
-graph_layouter* graph_context_manager::get_default_layouter(cone_context* const context) const
-{
-    // USE SETTINGS + FACTORY
-    return new standard_graph_layouter(context);
-}
-
 graph_layouter* graph_context_manager::get_default_layouter(dynamic_context* const context) const
 {
     // USE SETTINGS + FACTORY
     return new standard_graph_layouter(context);
 }
 
-graph_shader* graph_context_manager::get_default_shader(module_context* const context) const
-{
-    // USE SETTINGS + FACTORY
-    return new module_shader(context);
-}
-
-graph_shader* graph_context_manager::get_default_shader(cone_context* const context) const
-{
-    // USE SETTINGS + FACTORY
-    return new module_shader(context);
-}
-
 graph_shader* graph_context_manager::get_default_shader(dynamic_context* const context) const
 {
     // USE SETTINGS + FACTORY
     return new module_shader(context);
-}
-
-graph_context* graph_context_manager::get_context()
-{
-    return m_top;
-}
-
-void graph_context_manager::create_top_context()
-{
-    m_top = g_graph_context_manager.add_dynamic_context(QString::fromStdString(g_netlist->get_top_module()->get_name()));
-    QSet<u32> global_nets;
-    for (auto& net : g_netlist->get_global_inout_nets())
-    {
-        global_nets.insert(net->get_id());
-    }
-    for (auto& net : g_netlist->get_global_input_nets())
-    {
-        global_nets.insert(net->get_id());
-    }
-    for (auto& net : g_netlist->get_global_output_nets())
-    {
-        global_nets.insert(net->get_id());
-    }
-    m_top->add({1}, {}, global_nets);
 }

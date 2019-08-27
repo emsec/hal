@@ -29,6 +29,7 @@ public:
 
     void add(const QSet<u32>& modules, const QSet<u32>& gates, const QSet<u32>& nets);
     void remove(const QSet<u32>& modules, const QSet<u32>& gates, const QSet<u32>& nets);
+    void clear();
 
     const QSet<u32>& modules() const;
     const QSet<u32>& gates() const;
@@ -69,9 +70,8 @@ protected:
 
     bool m_update_requested;
 
-private:
-    void evaluate_changes();
-    void apply_changes();
+    virtual void evaluate_changes();
+    virtual void apply_changes();
     void update_scene();
 
     const context_type m_type;

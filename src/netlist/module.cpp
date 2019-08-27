@@ -60,14 +60,15 @@ bool module::set_parent_module(const std::shared_ptr<module>& new_parent)
         log_error("module", "no parent can be assigned to the top module");
         return false;
     }
-    
+
     if (new_parent == nullptr)
     {
         log_error("module", "cannot reassign top module");
         return false;
     }
-    
-    if (!get_netlist()->is_module_in_netlist(new_parent)) {
+
+    if (!get_netlist()->is_module_in_netlist(new_parent))
+    {
         log_error("module", "module must be in the current netlist");
         return false;
     }
@@ -121,6 +122,23 @@ std::set<std::shared_ptr<module>> module::get_submodules(const std::string& name
         }
     }
     return res;
+}
+
+bool module::contains_module(const std::shared_ptr<module>& other, bool recursive) const
+{
+    for (const auto& sm : m_submodules_set)
+    {
+        if (sm == other)
+        {
+            return true;
+        }
+        else if (recursive && sm->contains_module(other, true))
+        {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 std::shared_ptr<netlist> module::get_netlist() const

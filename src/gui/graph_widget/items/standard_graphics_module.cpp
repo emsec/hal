@@ -198,7 +198,7 @@ QPointF standard_graphics_module::get_input_scene_position(const u32 net_id, con
 
     if (index == -1)
     {
-        log_error("gui graph", "input pin type not found.");
+        log_error("gui", "input pin type not found.");
         return mapToScene(QPointF(0, 0));
     }
 
@@ -220,7 +220,7 @@ QPointF standard_graphics_module::get_output_scene_position(const u32 net_id, co
 
     if (index == -1)
     {
-        log_error("gui graph", "output pin type not found.");
+        log_error("gui", "output pin type not found.");
         return mapToScene(QPointF(0, 0));
     }
 

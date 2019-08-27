@@ -54,10 +54,8 @@ void hal_content_manager::handle_open_document(const QString& file_name)
 {
     graph_tab_widget* graph_tab_wid = new graph_tab_widget(nullptr);
     vhdl_editor* code_edit          = new vhdl_editor();
-    graph_tab_wid->show_context(dynamic_cast<dynamic_context*>(g_graph_context_manager.get_context()));
     graph_tab_wid->addTab(code_edit, "Source");
     m_main_window->add_content(graph_tab_wid, 2, content_anchor::center);
-
     //module_widget* m = new module_widget();
     //m_main_window->add_content(m, 0, content_anchor::left);
     //m->open();
@@ -70,13 +68,10 @@ void hal_content_manager::handle_open_document(const QString& file_name)
     m_main_window->add_content(context_manager_wid, 1, content_anchor::left);
     context_manager_wid->open();
 
-    connect(&g_graph_context_manager, &graph_context_manager::context_created, graph_tab_wid, &graph_tab_widget::handle_context_created);
-    connect(&g_graph_context_manager, &graph_context_manager::context_renamed, graph_tab_wid, &graph_tab_widget::handle_context_renamed);
-    connect(&g_graph_context_manager, &graph_context_manager::context_removed, graph_tab_wid, &graph_tab_widget::handle_context_removed);
-
-    connect(&g_graph_context_manager, &graph_context_manager::context_created, context_manager_wid, &context_manager_widget::handle_context_created);
-    connect(&g_graph_context_manager, &graph_context_manager::context_renamed, context_manager_wid, &context_manager_widget::handle_context_renamed);
-    connect(&g_graph_context_manager, &graph_context_manager::context_removed, context_manager_wid, &context_manager_widget::handle_context_removed);
+    {
+        auto context = g_graph_context_manager.get_dynamic_context(g_graph_context_manager.dynamic_context_list()[0]);
+        graph_tab_wid->show_context(context);
+    }
 
     selection_details_widget* details = new selection_details_widget();
     m_main_window->add_content(details, 0, content_anchor::bottom);

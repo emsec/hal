@@ -11,11 +11,9 @@ class gate;
 class module;
 class net;
 
-class cone_context;
 class dynamic_context;
 class graph_layouter;
 class graph_shader;
-class module_context;
 class graph_context;
 
 class graph_context_manager : public QObject
@@ -50,16 +48,9 @@ public:
     void handle_net_dst_added(const std::shared_ptr<net> n, const u32 dst_gate_id) const;
     void handle_net_dst_removed(const std::shared_ptr<net> n, const u32 dst_gate_id) const;
 
-    graph_layouter* get_default_layouter(module_context* const context) const;
-    graph_layouter* get_default_layouter(cone_context* const context) const;
     graph_layouter* get_default_layouter(dynamic_context* const context) const;
 
-    graph_shader* get_default_shader(module_context* const context) const;
-    graph_shader* get_default_shader(cone_context* const context) const;
     graph_shader* get_default_shader(dynamic_context* const context) const;
-
-    graph_context* get_context();
-    void create_top_context();
 
 Q_SIGNALS:
     void context_created(dynamic_context* context);
@@ -68,7 +59,6 @@ Q_SIGNALS:
 
 private:
     QVector<dynamic_context*> m_dynamic_contexts;
-    graph_context* m_top;
 };
 
 #endif    // GRAPH_CONTEXT_MANAGER_H

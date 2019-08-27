@@ -56,8 +56,6 @@ public:
     virtual void handle_status_update(const int percent) Q_DECL_OVERRIDE;
     virtual void handle_status_update(const QString& message) Q_DECL_OVERRIDE;
 
-    void open_top_context();
-
     graph_graphics_view* view();
 
 protected:
@@ -76,10 +74,6 @@ private:
 
     void handle_module_up_request();
     void handle_module_down_requested(const u32 id);
-
-    void debug_module_one();
-    void debug_create_context();
-    void debug_change_context();
 
     void change_context(graph_context* const context);
 

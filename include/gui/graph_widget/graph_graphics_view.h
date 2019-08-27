@@ -30,6 +30,7 @@
 #include <QAction>
 
 class graphics_item;
+class graph_widget;
 
 namespace graph_widget_constants
 {
@@ -41,7 +42,7 @@ class graph_graphics_view : public QGraphicsView
     Q_OBJECT
 
 public:
-    graph_graphics_view(QWidget* parent = nullptr);
+    graph_graphics_view(graph_widget* parent);
 
 Q_SIGNALS:
     void module_double_clicked(u32 id);
@@ -54,6 +55,9 @@ private Q_SLOTS:
     void handle_move_new_action();
     void handle_rename_action();
     void adjust_min_scale();
+
+    void handle_fold_action();
+    void handle_unfold_action();
 
     void handle_select_outputs();
     void handle_select_inputs();
@@ -76,6 +80,8 @@ private:
     void update_matrix(const int delta);
 
     void toggle_antialiasing();
+
+    graph_widget* m_graph_widget;
 
     graphics_item* m_item;
 

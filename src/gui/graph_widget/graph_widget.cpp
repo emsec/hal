@@ -5,7 +5,6 @@
 #include "netlist/net.h"
 
 #include "gui/graph_widget/contexts/dynamic_context.h"
-#include "gui/graph_widget/contexts/module_context.h"
 #include "gui/graph_widget/graph_context_manager.h"
 #include "gui/graph_widget/graph_graphics_view.h"
 #include "gui/graph_widget/graph_layout_progress_widget.h"
@@ -17,6 +16,7 @@
 #include "gui/overlay/dialog_overlay.h"
 #include "gui/toolbar/toolbar.h"
 
+#include <QDebug>
 #include <QInputDialog>
 #include <QKeyEvent>
 #include <QToolButton>
@@ -77,13 +77,6 @@ graph_widget::graph_widget(graph_context* context, QWidget* parent)
 graph_context* graph_widget::get_context() const
 {
     return m_context;
-}
-
-void graph_widget::open_top_context()
-{
-    auto context = g_graph_context_manager.get_context();
-    context->subscribe(this);
-    change_context(context);
 }
 
 void graph_widget::setup_toolbar(toolbar* toolbar)
@@ -210,6 +203,7 @@ void graph_widget::keyPressEvent(QKeyEvent* event)
 
 void graph_widget::handle_navigation_jump_requested(const u32 from_gate, const u32 via_net, const u32 to_gate)
 {
+    setFocus();
     // ASSERT INPUTS ARE VALID ?
     std::shared_ptr<gate> g = g_netlist->get_gate_by_id(from_gate);
 
@@ -235,26 +229,8 @@ void graph_widget::handle_navigation_jump_requested(const u32 from_gate, const u
     if (m_context->gates().contains(to_gate))
         contains_gate = true;
 
-    bool update_necessary = false;
-
     if (!contains_net || !contains_gate)
     {
-        // THIS HAS TO BE DELEGATED TO THE CONTEXT
-        //        if (m_context->scope())
-        //        {
-        //            // DRAW NON MEMBER NETS AND GATES AND SHADE THEM DIFFERENTLY ?
-        //            std::shared_ptr<module> m = g_netlist->get_module_by_id(m_context->scope());
-
-        //            if (!m)
-        //                return; // INVALID SCOPE
-
-        //            if (!m->contains_net(n, true))
-        //                return; // NET OUT OF SCOPE
-
-        //            if (!m->contains_gate(g, true))
-        //                return; // GATE OUT OF SCOPE
-        //        }
-
         QSet<u32> gates;
         QSet<u32> nets;
 
@@ -266,7 +242,6 @@ void graph_widget::handle_navigation_jump_requested(const u32 from_gate, const u
 
         // ADD TO CONTEXT
         m_context->add(QSet<u32>(), gates, nets);    // EMPTY SET DEBUG CODE
-        update_necessary = true;
     }
     else
     {
@@ -278,10 +253,10 @@ void graph_widget::handle_navigation_jump_requested(const u32 from_gate, const u
     // SELECT IN RELAY
     g_selection_relay.clear();
     g_selection_relay.m_selected_gates.insert(to_gate);
-    g_selection_relay.m_focus_type               = selection_relay::item_type::gate;
-    g_selection_relay.m_focus_id                 = to_gate;
-    g_selection_relay.m_subfocus                 = selection_relay::subfocus::left;
-    g_selection_relay.m_subfocus_index           = 0;
+    g_selection_relay.m_focus_type     = selection_relay::item_type::gate;
+    g_selection_relay.m_focus_id       = to_gate;
+    g_selection_relay.m_subfocus       = selection_relay::subfocus::left;
+    g_selection_relay.m_subfocus_index = 0;
 
     g_selection_relay.relay_selection_changed(nullptr);
 
@@ -334,26 +309,8 @@ void graph_widget::handle_navigation_left_request()
                     if (m_context->gates().contains(n->get_src().get_gate()->get_id()))
                         contains_gate = true;
 
-                    bool update_necessary = false;
-
                     if (!contains_net || !contains_gate)
                     {
-                        // THIS HAS TO BE DELEGATED TO THE CONTEXT
-                        //                    if (m_context->scope())
-                        //                    {
-                        //                        // DRAW NON MEMBER NETS AND GATES AND SHADE THEM DIFFERENTLY ?
-                        //                        std::shared_ptr<module> m = g_netlist->get_module_by_id(m_context->scope());
-
-                        //                        if (!m)
-                        //                            return; // INVALID SCOPE
-
-                        //                        if (!m->contains_net(n, true))
-                        //                            return; // NET OUT OF SCOPE
-
-                        //                        if (!m->contains_gate(n->get_src().gate, true))
-                        //                            return; // GATE OUT OF SCOPE
-                        //                    }
-
                         QSet<u32> gates;
                         QSet<u32> nets;
 
@@ -365,15 +322,14 @@ void graph_widget::handle_navigation_left_request()
 
                         // ADD TO CONTEXT
                         m_context->add(QSet<u32>(), gates, nets);    // EMPTY SET DEBUG CODE
-                        update_necessary = true;
                     }
                     // SELECT IN RELAY
                     g_selection_relay.clear();
                     g_selection_relay.m_selected_gates.insert(n->get_src().get_gate()->get_id());
-                    g_selection_relay.m_focus_id                 = n->get_src().get_gate()->get_id();
-                    g_selection_relay.m_focus_type               = selection_relay::item_type::gate;
-                    g_selection_relay.m_subfocus                 = selection_relay::subfocus::right;
-                    g_selection_relay.m_subfocus_index           = 0;
+                    g_selection_relay.m_focus_id       = n->get_src().get_gate()->get_id();
+                    g_selection_relay.m_focus_type     = selection_relay::item_type::gate;
+                    g_selection_relay.m_subfocus       = selection_relay::subfocus::right;
+                    g_selection_relay.m_subfocus_index = 0;
 
                     g_selection_relay.relay_selection_changed(nullptr);
 
@@ -473,74 +429,67 @@ void graph_widget::handle_module_up_request()
     if (!m_context)
         return;
 
-    // UNCERTAIN HOW TO HANDLE DYNAMIC CONTEXTS
-    u32 id                    = static_cast<module_context*>(m_context)->get_id();
-    std::shared_ptr<module> m = g_netlist->get_module_by_id(id);
+    QSet<u32> parents;
 
-    if (!m)
-        return;
+    for (const auto& id : m_context->gates())
+    {
+        parents.insert(g_netlist->get_gate_by_id(id)->get_module()->get_id());
+    }
 
-    std::shared_ptr<module> p = m->get_parent_module();
+    for (const auto& id : m_context->modules())
+    {
+        auto p = g_netlist->get_module_by_id(id)->get_parent_module();
+        if (p == nullptr)
+        {
+            parents.insert(id);
+        }
+        else
+        {
+            parents.insert(p->get_id());
+        }
+    }
 
-    if (!p)
-        return;
+    auto it = parents.begin();
+    while (it != parents.end())
+    {
+        bool advance = true;
+        auto m       = g_netlist->get_module_by_id(*it);
+        for (const auto& id : parents)
+        {
+            if (id == *it)
+                continue;
+            if (g_netlist->get_module_by_id(id)->contains_module(m, true))
+            {
+                it      = parents.erase(it);
+                advance = false;
+                break;
+            }
+        }
+        if (advance)
+            ++it;
+    }
 
-    graph_context* context = g_graph_context_manager.get_module_context(p->get_id());
-
-    if (context)
-        change_context(context);
+    m_context->clear();
+    m_context->add(parents, {}, {});
 }
 
 void graph_widget::handle_module_down_requested(const u32 id)
 {
-    graph_context* context = g_graph_context_manager.get_module_context(id);
+    m_context->clear();
+    auto m = g_netlist->get_module_by_id(id);
 
-    if (context)
-        change_context(context);
-}
-
-void graph_widget::debug_module_one()
-{
-    // UNSUB FROM OLD CONTEXT
-    //disconnect(m_context, &graph_context::updating_scene, this, &graph_widget::handle_updating_scene);
-    //disconnect(m_context, &graph_context::scene_available, this, &graph_widget::handle_scene_available);
-
-    // SUB TO NEW CONTEXT
-    //connect(m_context, &graph_context::updating_scene, this, &graph_widget::handle_updating_scene);
-    //connect(m_context, &graph_context::scene_available, this, &graph_widget::handle_scene_available);
-
-    graph_context* context = g_graph_context_manager.get_module_context(1);
-
-    if (context)
-        change_context(context);
-}
-
-void graph_widget::debug_create_context()
-{
-    dynamic_context* context = g_graph_context_manager.add_dynamic_context("Debug");
-
-    context->add(QSet<u32>(), g_selection_relay.m_selected_gates, g_selection_relay.m_selected_nets);    // EMPTY SET DEBUG CODE
-}
-
-void graph_widget::debug_change_context()
-{
-    bool ok;
-    QString item = QInputDialog::getItem(this, "Debug", "Context:", g_graph_context_manager.dynamic_context_list(), 0, false, &ok);
-
-    if (ok && !item.isEmpty())
-    {
-        m_context = g_graph_context_manager.get_dynamic_context(item);
-
-        if (!m_context)
-            return;
-
-        if (m_context->available())
-            m_view->setScene(m_context->scene());
-    }
+    QSet<u32> modules, gates;
+    for (const auto& x : m->get_submodules())
+        modules.insert(x->get_id());
+    for (const auto& x : m->get_gates())
+        gates.insert(x->get_id());
+    m_context->add(modules, gates, {});
 }
 
 void graph_widget::ensure_gate_visible(const u32 gate)
 {
+    if (m_context->update_in_progress())
+        return;
     const graphics_gate* itm = m_context->scene()->get_gate_item(gate);
     m_view->ensureVisible(itm);
 }

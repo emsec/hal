@@ -136,7 +136,7 @@ QPointF minimal_graphics_gate::get_input_scene_position(const u32 net_id, const 
 
     if (index == -1)
     {
-        log_error("gui graph", "type not found.");
+        log_error("gui", "type not found.");
         return mapToScene(QPointF(0, 0));
     }
 
@@ -158,7 +158,7 @@ QPointF minimal_graphics_gate::get_output_scene_position(const u32 net_id, const
 
     if (index == -1)
     {
-        log_error("gui graph", "type not found.");
+        log_error("gui", "type not found.");
         return mapToScene(QPointF(0, 0));
     }
 
