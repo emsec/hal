@@ -24,8 +24,6 @@ class graph_context_manager : public QObject
 public:
     graph_context_manager();
 
-    module_context* get_module_context(const u32 id);
-
     dynamic_context* add_dynamic_context(const QString& name);
     dynamic_context* get_dynamic_context(const QString& name);
     bool rename_dynamic_context(const QString& old_name, const QString& new_name);
@@ -69,7 +67,6 @@ Q_SIGNALS:
     void context_removed(dynamic_context* context);
 
 private:
-    QVector<module_context*> m_module_contexts;
     QVector<dynamic_context*> m_dynamic_contexts;
     graph_context* m_top;
 };
