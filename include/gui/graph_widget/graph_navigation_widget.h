@@ -18,7 +18,7 @@ public:
     void setup();
 
 Q_SIGNALS:
-    void navigation_requested(const u32 from_gate, const u32 via_net, const u32 to_gate);
+    void navigation_requested(const u32 via_net, const u32 to_gate);
     void close_requested();
     void reset_focus();
 
@@ -28,7 +28,6 @@ protected:
 private:
     void fill_table(std::shared_ptr<net> n);
     graph_graphics_view* m_view;
-    u32 m_from_gate;
     u32 m_via_net;
 };
 

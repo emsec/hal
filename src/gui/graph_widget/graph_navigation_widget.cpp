@@ -9,7 +9,6 @@
 #include <QKeyEvent>
 
 graph_navigation_widget::graph_navigation_widget(QWidget *parent) : QTableWidget(parent),
-                                                                    m_from_gate(0),
                                                                     m_via_net(0)
 {
     setSelectionMode(QAbstractItemView::SingleSelection);
@@ -46,9 +45,7 @@ void graph_navigation_widget::setup()
                 return;
             }
 
-            m_from_gate = g_selection_relay.m_focus_id;
-
-            std::string pin_type = *std::next(g->get_output_pin_types().begin(), g_selection_relay.m_subfocus_index);
+            std::string pin_type = g->get_output_pin_types()[g_selection_relay.m_subfocus_index];
             std::shared_ptr<net> n = g->get_fan_out_net(pin_type);
 
             if (!n)
@@ -75,8 +72,6 @@ void graph_navigation_widget::setup()
             {
                 return;
             }
-
-            m_from_gate = g->get_id();
 
             fill_table(n);
 
@@ -110,7 +105,7 @@ void graph_navigation_widget::keyPressEvent(QKeyEvent *event)
             return;
         }
 
-        Q_EMIT navigation_requested(m_from_gate, m_via_net, g->get_id());
+        Q_EMIT navigation_requested(m_via_net, g->get_id());
         return;
     }
 

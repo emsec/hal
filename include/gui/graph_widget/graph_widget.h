@@ -57,14 +57,14 @@ public:
     virtual void handle_status_update(const QString& message) Q_DECL_OVERRIDE;
 
     graph_graphics_view* view();
-    
+
     void add_context_to_history();
 
 protected:
     void keyPressEvent(QKeyEvent* event) Q_DECL_OVERRIDE;
 
 private Q_SLOTS:
-    void handle_navigation_jump_requested(const u32 from_gate, const u32 via_net, const u32 to_gate);
+    void handle_navigation_jump_requested(const u32 via_net, const u32 to_gate);
     void handle_module_double_clicked(const u32 id);
     void reset_focus();
 
@@ -74,8 +74,8 @@ private:
     void handle_navigation_up_request();
     void handle_navigation_down_request();
 
-    void handle_module_up_request();
-    void handle_module_down_requested(const u32 id);
+    void handle_history_step_back_request();
+    void handle_enter_module_requested(const u32 id);
 
     void change_context(graph_context* const context);
 

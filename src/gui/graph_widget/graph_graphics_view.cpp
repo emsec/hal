@@ -27,6 +27,7 @@
 #include <QStyleOptionGraphicsItem>
 #include <QWheelEvent>
 #include <qmath.h>
+#include <QDebug>
 
 graph_graphics_view::graph_graphics_view(graph_widget* parent)
     : QGraphicsView(parent), m_minimap_enabled(false), m_antialiasing_enabled(false), m_cosmetic_nets_enabled(false), m_grid_enabled(true), m_grid_clusters_enabled(true),
@@ -296,6 +297,9 @@ void graph_graphics_view::show_context_menu(const QPoint& pos)
                 {
                     g_selection_relay.clear();
                     g_selection_relay.m_selected_gates.insert(m_item->id());
+                    g_selection_relay.m_focus_type = selection_relay::item_type::gate;
+                    g_selection_relay.m_focus_id   = m_item->id();
+                    g_selection_relay.m_subfocus   = selection_relay::subfocus::none;
                     g_selection_relay.relay_selection_changed(this);
                 }
                 // DEBUG ONLY
@@ -355,6 +359,9 @@ void graph_graphics_view::show_context_menu(const QPoint& pos)
                 {
                     g_selection_relay.clear();
                     g_selection_relay.m_selected_modules.insert(m_item->id());
+                    g_selection_relay.m_focus_type = selection_relay::item_type::module;
+                    g_selection_relay.m_focus_id   = m_item->id();
+                    g_selection_relay.m_subfocus   = selection_relay::subfocus::none;
                     g_selection_relay.relay_selection_changed(this);
                 }
 

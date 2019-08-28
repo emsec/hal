@@ -35,10 +35,10 @@ context_manager_widget::context_manager_widget(graph_tab_widget* tab_view, QWidg
     {
         handle_context_created(g_graph_context_manager.get_dynamic_context(ctx_name));
     }
-    if (m_list_widget->count() == 0)
-    {
-        handle_create_context_clicked();
-    }
+    // if (m_list_widget->count() == 0)
+    // {
+    //     handle_create_context_clicked();
+    // }
 }
 
 void context_manager_widget::resizeEvent(QResizeEvent* event)
@@ -82,7 +82,7 @@ void context_manager_widget::handle_create_context_clicked()
     //create context with desired name until name which hasn't been used is found
     do
     {
-        QString new_context_name     = "View " + QString::number(++m_context_counter); 
+        QString new_context_name     = "View " + QString::number(++m_context_counter);
         new_context = g_graph_context_manager.add_dynamic_context(new_context_name); //returns nullptr if name already in use
     }
     while(new_context == nullptr);
