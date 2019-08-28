@@ -77,10 +77,15 @@ void context_manager_widget::handle_context_menu_request(const QPoint& point)
 
 void context_manager_widget::handle_create_context_clicked()
 {
-    //create new graph context
-    m_context_counter++;
-    QString new_context_name     = "View " + QString::number(m_context_counter);
-    dynamic_context* new_context = g_graph_context_manager.add_dynamic_context(new_context_name);
+    dynamic_context* new_context = nullptr;
+
+    //create context with desired name until name which hasn't been used is found
+    do
+    {
+        QString new_context_name     = "View " + QString::number(++m_context_counter); //returns nullptr if name already in use
+        new_context = g_graph_context_manager.add_dynamic_context(new_context_name);
+    }
+    while(new_context == nullptr);
 
     //default if context created from nothing -> top module + global nets (empty == better?)
     new_context->add({1}, {}, {});
