@@ -71,6 +71,7 @@ void graph_tab_widget::add_graph_widget_tab(dynamic_context* context)
     int tab_index = addTab(new_graph_widget, context->name());
     m_tab_widget->setCurrentIndex(tab_index);
     m_tab_widget->widget(tab_index)->setFocus();
+    context->update();
 }
 
 int graph_tab_widget::get_context_tab_index(dynamic_context* context) const

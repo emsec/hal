@@ -37,7 +37,7 @@ graph_widget::graph_widget(QWidget* parent)
 
     m_overlay->hide();
     m_overlay->set_widget(m_navigation_widget);
-
+    m_spinner_widget->hide();
     m_content_layout->addWidget(m_view);
 
     m_view->setFrameStyle(QFrame::NoFrame);
@@ -63,7 +63,7 @@ graph_widget::graph_widget(graph_context* context, QWidget* parent)
 
     m_overlay->hide();
     m_overlay->set_widget(m_navigation_widget);
-
+    m_spinner_widget->hide();
     m_content_layout->addWidget(m_view);
 
     m_view->setFrameStyle(QFrame::NoFrame);
