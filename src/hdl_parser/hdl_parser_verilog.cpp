@@ -581,7 +581,7 @@ bool hdl_parser_verilog::parse_assign(const std::string& token, const int line)
     net_name_left       = core_utils::trim(net_name_left.substr(0, net_name_left.find("=")));
     auto net_name_right = core_utils::trim(token.substr(token.find('=') + 1));
 
-    auto nets_lhs = this->parse_net_single(net_name_left, line);
+    auto nets_lhs = this->parse_net(net_name_left, line);
     auto nets_rhs = this->parse_net(net_name_right, line);
 
     if (nets_lhs.size() != nets_rhs.size())
@@ -785,7 +785,7 @@ std::vector<std::string> hdl_parser_verilog::parse_net_single(const std::string&
                 int lowest = -1;
                 for (const auto& net : m_net)
                 {
-                    if (core_utils::starts_with(net.second->get_name(), token))
+                    if (core_utils::starts_with(net.second->get_name(), token + "["))
                     {
                         auto p = net.second->get_name().substr(net.second->get_name().find("[") + 1);
                         p      = p.substr(0, p.size() - 1);
