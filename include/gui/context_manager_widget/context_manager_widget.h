@@ -56,8 +56,6 @@ private:
 
     QListWidget* m_list_widget;
 
-    QModelIndex m_clicked_index;
-
     void handle_context_menu_request(const QPoint& point);
 
     void handle_create_context_clicked();
