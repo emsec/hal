@@ -1,8 +1,10 @@
-#include "test_def.h"
+#include "netlist_test_utils.h"
 #include "gtest/gtest.h"
 #include <core/log.h>
 #include <iostream>
 #include <netlist/data_container.h>
+
+using namespace test_utils;
 
 /*
  * A child of data_container (used for testing)
@@ -42,7 +44,6 @@ protected:
 
     virtual void SetUp()
     {
-        NO_COUT_BLOCK;
     }
 
     virtual void TearDown()
@@ -50,7 +51,7 @@ protected:
     }
 
     // Checks if two tuple vectors have the same content regardless of their order
-    bool vectors_have_same_content(std::vector<std::tuple<std::string, std::string>> vec_1, std::vector<std::tuple<std::string, std::string>> vec_2)
+    /*bool vectors_have_same_content(std::vector<std::tuple<std::string, std::string>> vec_1, std::vector<std::tuple<std::string, std::string>> vec_2)
     {
         if (vec_1.size() != vec_2.size())
             return false;
@@ -77,7 +78,7 @@ protected:
         }
 
         return true;
-    }
+    }*/
 };
 
 /**

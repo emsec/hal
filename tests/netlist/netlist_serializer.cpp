@@ -2,7 +2,7 @@
 #include "netlist/gate_library/gate_library_manager.h"
 #include "netlist/netlist.h"
 #include "netlist/netlist_factory.h"
-#include "test_def.h"
+#include "netlist_test_utils.h"
 #include "gtest/gtest.h"
 #include <boost/filesystem.hpp>
 #include <core/log.h>
@@ -15,11 +15,16 @@
 #include <fstream>
 #include <streambuf>
 #include <string>
+
+using namespace test_utils;
+
 class netlist_serializer_test : public ::testing::Test
 {
 protected:
-    const std::string g_lib_name = "EXAMPLE_GATE_LIBRARY";
     hal::path test_hal_file_path;
+
+    /*const std::string g_lib_name = "EXAMPLE_GATE_LIBRARY";
+
     // Minimum id for netlists, gates, nets and modules
     const u32 INVALID_GATE_ID = 0;
     const u32 INVALID_NET_ID = 0;
@@ -28,7 +33,7 @@ protected:
     const u32 MIN_GATE_ID = 1;
     const u32 MIN_NET_ID = 1;
     const u32 MIN_NETLIST_ID = 1;
-    const u32 TOP_MODULE_ID = 1;
+    const u32 TOP_MODULE_ID = 1;*/
 
     virtual void SetUp()
     {
@@ -43,7 +48,7 @@ protected:
     }
 
     // Creates an empty netlist with a certain id if passed
-    std::shared_ptr<netlist> create_empty_netlist(const int id = -1)
+    /*std::shared_ptr<netlist> create_empty_netlist(const int id = -1)
     {
         NO_COUT_BLOCK;
         std::shared_ptr<gate_library> gl = gate_library_manager::get_gate_library(g_lib_name);
@@ -54,7 +59,7 @@ protected:
             nl->set_id(id);
         }
         return nl;
-    }
+    }*/
 
     /*
      *      Example netlist circuit diagram (Id in brackets). Used for get fan in and
@@ -71,7 +76,7 @@ protected:
      *       BUF (6)              ... OR2 (7)             ... OR2 (8)
      *     =                       =           =          =           =
      */
-
+/*
     // Creates a simple netlist shown in the diagram above
     std::shared_ptr<netlist> create_example_netlist(int id = -1)
     {
@@ -148,9 +153,9 @@ protected:
         }
 
         return true;
-    }
+    }*/
 
-    endpoint get_dst_by_pin_type(std::vector<endpoint> dsts, std::string pin_type)
+    /*endpoint get_dst_by_pin_type(std::vector<endpoint> dsts, std::string pin_type)
     {
         for (auto dst : dsts)
         {
@@ -160,8 +165,8 @@ protected:
             }
         }
         return {nullptr, ""};
-    }
-
+    }*/
+/*
     // Returns true if two nets have the same content
     bool nets_are_equal(std::shared_ptr<net> n0, std::shared_ptr<net> n1)
     {
@@ -246,7 +251,7 @@ protected:
             if (!m_1->contains_gate(g_1))
                 return false;
         }
-
+*/
         /*if (m_0->get_nets().size() != m_1->get_nets().size())
             return false;
         for (auto n_0 : m_0->get_nets())
@@ -258,7 +263,7 @@ protected:
                 return false;
         }*/
 
-        // The parents and submodules should be equal as well (to test this we only check their id, since
+ /*       // The parents and submodules should be equal as well (to test this we only check their id, since
         // their equality will be tested as well)
         if (m_0->get_parent_module() == nullptr || m_1->get_parent_module() == nullptr){
             if (m_0->get_parent_module() != m_1->get_parent_module())
@@ -373,7 +378,7 @@ protected:
         }
 
         return true;
-    }
+    }*/
 
     // Writes the input of the file in a string
     std::string file_to_string(std::string file_path){

@@ -3,21 +3,23 @@
 #include "netlist/gate_library/gate_library_manager.h"
 #include "netlist/netlist.h"
 #include "netlist/netlist_factory.h"
-#include "test_def.h"
+#include "netlist_test_utils.h"
 #include "gtest/gtest.h"
 #include <core/log.h>
 #include <iostream>
 #include <netlist/gate.h>
 #include <netlist/net.h>
 
+using namespace test_utils;
+
 class module_test : public ::testing::Test
 {
 protected:
-    const std::string g_lib_name = "EXAMPLE_GATE_LIBRARY";
+    /*const std::string g_lib_name = "EXAMPLE_GATE_LIBRARY";
     const u32 MIN_MODULE_ID = 2;
     //const u32 MIN_NL_ID = 1;
     const u32 MIN_GATE_ID = 1;
-    const u32 MIN_NET_ID = 1;
+    const u32 MIN_NET_ID = 1;*/
 
     virtual void SetUp()
     {
@@ -28,7 +30,7 @@ protected:
     virtual void TearDown()
     {
     }
-
+/*
     // Creates an empty netlist with a certain id if passed
     std::shared_ptr<netlist> create_empty_netlist(const int id = -1)
     {
@@ -41,7 +43,7 @@ protected:
             nl->set_id(id);
         }
         return nl;
-    }
+    }*/
 
     /*
      *      Example netlist circuit diagram (Id in brackets). Used for get fan in and
@@ -58,7 +60,7 @@ protected:
      *       BUF (6)              ... OR2 (7)             ... OR2 (8)
      *     =                       =           =          =           =
      */
-
+    /*
     // Creates a simple netlist shown in the diagram above
     std::shared_ptr<netlist> create_example_netlist(int id = -1)
     {
@@ -104,7 +106,7 @@ protected:
         net_7_8->add_dst(gate_8, "I0");
 
         return nl;
-    }
+    }*/
 };
 
 /**

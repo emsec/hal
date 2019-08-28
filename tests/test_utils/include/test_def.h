@@ -1,7 +1,8 @@
 #include "pragma_once.h"
-#ifndef __HAL_TEST_DEF_H__
-#define __HAL_TEST_DEF_H__
-#include "pragma_once.h"
+#ifndef HAL_TEST_DEF_H_
+#define HAL_TEST_DEF_H_
+
+
 #include "gtest/gtest.h"
 #include <sstream>
 
@@ -45,46 +46,72 @@
 
 /**
  * This macro is used in tests to print out the correct failure message, if a test fails, otherwise
- * all output is captured. It can only be used in tests.
+ * all output is captured. It can only be used in tests. Can only be used inside tests.
  */
 #define NO_COUT_TEST_BLOCK test_def::no_cout_test_block noCoutTestBlock(this->test_info_)
 
 namespace test_def
 {
-    int output_captured = false;
+    // Marks if output is currently captured by capture_stdout
+    static bool output_captured = false;
 
-    void capture_stdout()
-    {
+    /**
+     * Captures the std output until the call of get_captured_stdout
+     */
+    void capture_stdout();
+
+    /*{
         if (!output_captured)
         {
             output_captured = true;
             ::testing::internal::CaptureStdout();
         }
-    }
+    }*/
 
-    std::string get_captured_stdout()
-    {
+    /**
+     * Get the captured output, if any is captured. Else return an empty string.
+     *
+     * @return  The captured output as a string
+     */
+    std::string get_captured_stdout();
+    /*{
         if (output_captured)
         {
             output_captured = false;
             return ::testing::internal::GetCapturedStdout();
         }
         return "";
-    }
+    }*/
 
-    int active = 0;
+    // Used by the no_cout_test_block as well as the no_cout_block class
+    static int active = 0;
+    /**
+     * Captures the std output while at least one object exists. Uses the constructor and destructor mechanic to
+     * capture output until the end of a block.
+     */
     class no_cout_test_block
     {
     public:
-        no_cout_test_block(testing::TestInfo* test_info)
-        {
+        /**
+         * Constructor. Prevents output until the destructor call.
+         *
+         * @param test_info - The information of the current test block
+         */
+        no_cout_test_block(testing::TestInfo* test_info) ;
+        /*{
             capture_stdout();
             active++;
             m_test_info         = test_info;
             m_test_failed_start = m_test_info->result()->total_part_count();
-        }
-        ~no_cout_test_block()
-        {
+        }*/
+
+        /**
+         * Destructor. Prints the captured output, if any test expectation fails. Otherwise the captured output is written.
+         * (Only if it is the last no_cout_test_block object)
+         * Since the failure messages of Google Test are captured as well, we need to print them separately.
+         */
+        ~no_cout_test_block() ;
+        /*{
             active--;
             if (active == 0)
             {
@@ -105,14 +132,20 @@ namespace test_def
                 }
                 //std::cout << first_test_index << std::endl;
             }
-        }
+        }*/
 
     private:
+
         testing::TestInfo* m_test_info;
         int m_test_failed_start;
 
-        void print_captured_output(std::string capOut)
-        {
+        /**
+         * Helping function for printing the captured output.
+         *
+         * @param capOut - the captured output
+         */
+        void print_captured_output(std::string capOut);
+        /*{
             if (capOut != "")
             {
                 std::cout << "Test failed! Captured output(some errors might be expected):" << std::endl;
@@ -123,32 +156,42 @@ namespace test_def
                     std::cout << "[ " << line << " ]" << std::endl;
                 }
             }
-        }
+        }*/
 
-        void print_failure_message(testing::TestPartResult pr)
-        {
+        /**
+         * Prints a single failure message form a TestPartResult object (from Google Test)
+         *
+         * @param pr
+         */
+        void print_failure_message(testing::TestPartResult pr);
+        /*{
             std::cerr << "\n" << pr.file_name() << ":" << pr.line_number() << ": Failure" << pr.message() << std::endl;
-        }
+        }*/
     };
 
+    /**
+     * Captures the std output while at least one object exists. Uses the constructor and destructor mechanic to
+     * capture output until the end of a block. Should be used outside tests (e.g. helper functions). It is not
+     * intended to access the output, captured by this class.
+     */
     class no_cout_block
     {
     public:
-        no_cout_block()
-        {
+        no_cout_block();
+        /*{
             capture_stdout();
             active++;
-        }
-        ~no_cout_block()
-        {
+        }*/
+        ~no_cout_block();
+        /*{
             active--;
             if (active == 0)
             {
                 get_captured_stdout();
             }
-        }
+        }*/
     };
 
 }    // namespace test_def
 
-#endif /* __HAL_TEST_DEF_H__ */
+#endif //HAL_TEST_DEF_H_

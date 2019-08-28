@@ -1,7 +1,7 @@
 #include "netlist/gate_library/gate_library_manager.h"
 #include "netlist/netlist.h"
 #include "netlist/netlist_factory.h"
-#include "test_def.h"
+#include "netlist_test_utils.h"
 #include "gtest/gtest.h"
 #include <boost/filesystem.hpp>
 #include <core/log.h>
@@ -11,9 +11,12 @@
 #include <netlist/gate.h>
 #include <netlist/net.h>
 
+using namespace test_utils;
+
 class gate_library_manager_test : public ::testing::Test
 {
 protected:
+    // The path, where the library is temporary stored
     hal::path test_lib_path;
 
     virtual void SetUp()
@@ -27,6 +30,9 @@ protected:
         boost::filesystem::remove(test_lib_path);
     }
 
+    /**
+     * Creates a minimal custom gate library used for testing the gate library manager
+     */
     void create_test_lib()
     {
         std::ofstream test_lib(test_lib_path.string());

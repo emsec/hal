@@ -4,12 +4,16 @@
 #include "netlist/gate_library/gate_library_manager.h"
 #include "netlist/netlist.h"
 #include "netlist/persistent/netlist_serializer.h"
-#include "test_def.h"
+#include "netlist_test_utils.h"
 #include "gtest/gtest.h"
 #include <boost/filesystem.hpp>
 #include <core/log.h>
 #include <fstream>
 #include <iostream>
+
+// NOTE: This file should be edited, since we want to use out example gate library for testing, instead of XILINX_SIMPRIM
+
+using namespace test_utils;
 
 class netlist_factory_test : public ::testing::Test
 {

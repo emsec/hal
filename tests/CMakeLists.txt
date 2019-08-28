@@ -29,6 +29,7 @@ endif()
 # etc. as appropriate
 
 #add_subdirectory(basic_tests)
+add_subdirectory(test_utils) # new
 add_subdirectory(core)
 add_subdirectory(netlist)
 add_subdirectory(hdl_parser)

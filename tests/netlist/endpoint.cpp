@@ -1,17 +1,19 @@
 #include "netlist/gate_library/gate_library_manager.h"
 #include "netlist/netlist.h"
 #include "netlist/netlist_factory.h"
-#include "test_def.h"
+#include "netlist_test_utils.h"
 #include "gtest/gtest.h"
 #include <core/log.h>
 #include <iostream>
 #include <netlist/gate.h>
 #include <netlist/net.h>
 
+using namespace test_utils;
+
 class endpoint_test : public ::testing::Test
 {
 protected:
-    const std::string g_lib_name = "EXAMPLE_GATE_LIBRARY";
+    //const std::string g_lib_name = "EXAMPLE_GATE_LIBRARY";
 
     virtual void SetUp()
     {
@@ -24,7 +26,7 @@ protected:
     }
 
     // Creates an empty netlist with a certain id if passed
-    std::shared_ptr<netlist> create_empty_netlist(int id = -1)
+    /*std::shared_ptr<netlist> create_empty_netlist(int id = -1)
     {
         NO_COUT_BLOCK;
         std::shared_ptr<gate_library> gl = gate_library_manager::get_gate_library(g_lib_name);
@@ -44,7 +46,7 @@ protected:
         ep.gate     = g;
         ep.pin_type = pin_type;
         return ep;
-    }
+    }*/
 };
 
 /**

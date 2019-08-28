@@ -2,7 +2,8 @@
 #include "netlist/gate_library/gate_library_manager.h"
 #include "netlist/netlist.h"
 #include "netlist/netlist_factory.h"
-#include "test_def.h"
+//#include "test_def.h"
+#include "netlist_test_utils.h"
 #include "gtest/gtest.h"
 #include <core/log.h>
 #include <iostream>
@@ -10,10 +11,12 @@
 #include <netlist/net.h>
 #include <netlist/module.h>
 
+using namespace test_utils;
+
 class gate_test : public ::testing::Test
 {
 protected:
-    const std::string g_lib_name = "EXAMPLE_GATE_LIBRARY";
+    /*const std::string g_lib_name = "EXAMPLE_GATE_LIBRARY";
 
     // Minimum id for netlists, gates as well as nets
     //const u32 INVALID_GATE_ID = 0;
@@ -23,7 +26,7 @@ protected:
     const u32 MIN_GATE_ID = 1;
     const u32 MIN_NET_ID = 1;
     //const u32 MIN_NETLIST_ID = 1;
-    //const u32 TOP_MODULE_ID = 1;
+    //const u32 TOP_MODULE_ID = 1;*/
 
     virtual void SetUp()
     {
@@ -36,7 +39,7 @@ protected:
     }
 
     // Creates an empty netlist with a certain id if passed
-    std::shared_ptr<netlist> create_empty_netlist(int id = -1)
+    /*std::shared_ptr<netlist> create_empty_netlist(int id = -1)
     {
         NO_COUT_BLOCK;
         std::shared_ptr<gate_library> gl = gate_library_manager::get_gate_library(g_lib_name);
@@ -47,7 +50,7 @@ protected:
             nl->set_id(id);
         }
         return nl;
-    }
+    }*/
 
     /*
     *      Example netlist circuit diagram (Id in brackets). Used for get fan in and
@@ -66,7 +69,7 @@ protected:
     */
 
     // Creates a simple netlist shown in the diagram above
-    std::shared_ptr<netlist> create_example_netlist(int id = -1)
+    /*std::shared_ptr<netlist> create_example_netlist(int id = -1)
     {
         NO_COUT_BLOCK;
         std::shared_ptr<gate_library> gl = gate_library_manager::get_gate_library(g_lib_name);
@@ -110,7 +113,7 @@ protected:
         net_7_8->add_dst(gate_8, "I0");
 
         return nl;
-    }
+    }*/
 
     /*
      *      Example netlist no 2 circuit diagram (Id in brackets). Used for get predecessors
@@ -130,7 +133,7 @@ protected:
      */
 
     // Creates a simple netlist shown in the diagram above
-    std::shared_ptr<netlist> create_example_netlist_2(int id = -1)
+    /*std::shared_ptr<netlist> create_example_netlist_2(int id = -1)
     {
         //NO_COUT_BLOCK;
         std::shared_ptr<gate_library> gl = gate_library_manager::get_gate_library(g_lib_name);
@@ -160,7 +163,7 @@ protected:
         net_2_1->add_dst(gate_1, "I3");
 
         return nl;
-    }
+    }*/
 
     /*
      *      Netlist with one gate and unconnected nets
@@ -170,7 +173,7 @@ protected:
      */
 
     // Creates a incomplete netlist used for negative tests (see above)
-    std::shared_ptr<netlist> create_example_netlist_negative(int id = -1)
+    /*std::shared_ptr<netlist> create_example_netlist_negative(int id = -1)
     {
         NO_COUT_BLOCK;
         std::shared_ptr<gate_library> gl = gate_library_manager::get_gate_library(g_lib_name);
@@ -193,7 +196,7 @@ protected:
 
         return nl;
     }
-
+    /*
     // Creates an endpoint from a gate and a pin_type
     endpoint get_endpoint(std::shared_ptr<gate> g, std::string pin_type)
     {
@@ -239,7 +242,7 @@ protected:
 
         return true;
     }
-
+*/
     /*
      * Returns if a string contains a certain substring
      */
