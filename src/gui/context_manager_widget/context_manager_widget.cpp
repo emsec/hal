@@ -82,8 +82,8 @@ void context_manager_widget::handle_create_context_clicked()
     //create context with desired name until name which hasn't been used is found
     do
     {
-        QString new_context_name     = "View " + QString::number(++m_context_counter); //returns nullptr if name already in use
-        new_context = g_graph_context_manager.add_dynamic_context(new_context_name);
+        QString new_context_name     = "View " + QString::number(++m_context_counter); 
+        new_context = g_graph_context_manager.add_dynamic_context(new_context_name); //returns nullptr if name already in use
     }
     while(new_context == nullptr);
 
