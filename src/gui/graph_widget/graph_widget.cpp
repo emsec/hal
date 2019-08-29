@@ -22,32 +22,6 @@
 #include <QToolButton>
 #include <QVBoxLayout>
 
-graph_widget::graph_widget(QWidget* parent)
-    : content_widget("Graph", parent), m_view(new graph_graphics_view(this)), m_context(nullptr), m_overlay(new dialog_overlay(this)), m_navigation_widget(new graph_navigation_widget(nullptr)),
-      m_progress_widget(new graph_layout_progress_widget(this)), m_spinner_widget(new graph_layout_spinner_widget(this)), m_current_expansion(0)
-{
-    connect(m_navigation_widget, &graph_navigation_widget::navigation_requested, this, &graph_widget::handle_navigation_jump_requested);
-    connect(m_navigation_widget, &graph_navigation_widget::close_requested, m_overlay, &dialog_overlay::hide);
-    connect(m_navigation_widget, &graph_navigation_widget::close_requested, this, &graph_widget::reset_focus);
-
-    connect(m_overlay, &dialog_overlay::clicked, m_overlay, &dialog_overlay::hide);
-
-    connect(m_view, &graph_graphics_view::module_double_clicked, this, &graph_widget::handle_module_double_clicked);
-
-    m_overlay->hide();
-    m_overlay->set_widget(m_navigation_widget);
-
-    m_content_layout->addWidget(m_view);
-
-    m_view->setFrameStyle(QFrame::NoFrame);
-    m_view->setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
-    m_view->setRenderHint(QPainter::Antialiasing, false);
-    m_view->setDragMode(QGraphicsView::RubberBandDrag);
-
-    // debug: go to context 1; delete later
-    //    debug_module_one();
-}
-
 graph_widget::graph_widget(graph_context* context, QWidget* parent)
     : content_widget("Graph", parent), m_view(new graph_graphics_view(this)), m_context(context), m_overlay(new dialog_overlay(this)), m_navigation_widget(new graph_navigation_widget(nullptr)),
       m_progress_widget(new graph_layout_progress_widget(this)), m_spinner_widget(new graph_layout_spinner_widget(this)), m_current_expansion(0)
@@ -70,8 +44,13 @@ graph_widget::graph_widget(graph_context* context, QWidget* parent)
     m_view->setRenderHint(QPainter::Antialiasing, false);
     m_view->setDragMode(QGraphicsView::RubberBandDrag);
 
-    context->subscribe(this);
-    change_context(context);
+    m_context->subscribe(this);
+
+    if (!m_context->update_in_progress())
+    {
+        m_view->setScene(m_context->scene());
+        m_view->centerOn(0, 0);
+    }
 }
 
 graph_context* graph_widget::get_context() const
@@ -86,17 +65,11 @@ void graph_widget::handle_scene_available()
     connect(m_overlay, &dialog_overlay::clicked, m_overlay, &dialog_overlay::hide);
 
     m_overlay->hide();
-    //    m_progress_widget->stop();
     m_spinner_widget->hide();
     m_overlay->set_widget(m_navigation_widget);
 
     if (hasFocus())
         m_view->setFocus();
-
-    // JUMP TO THE GATE
-    // JUMP SHOULD BE HANDLED SEPARATELY
-    //    if (item)
-    //        m_graphics_widget->view()->ensureVisible(item);
 }
 
 void graph_widget::handle_scene_unavailable()
@@ -104,13 +77,7 @@ void graph_widget::handle_scene_unavailable()
     m_view->setScene(nullptr);
 
     disconnect(m_overlay, &dialog_overlay::clicked, m_overlay, &dialog_overlay::hide);
-
-    //m_progress_widget->set_direction(graph_layout_progress_widget::direction::right);
-    //m_progress_widget->set_direction(graph_layout_progress_widget::direction::left);
-
-    //m_overlay->set_widget(m_progress_widget);
     m_overlay->set_widget(m_spinner_widget);
-    //m_progress_widget->start();
 
     if (m_overlay->isHidden())
         m_overlay->show();
@@ -120,9 +87,6 @@ void graph_widget::handle_context_about_to_be_deleted()
 {
     m_view->setScene(nullptr);
     m_context = nullptr;
-
-    // SHOW SOME KIND OF "NO CONTEXT SELECTED" WIDGET
-    // UPDATE OTHER DATA, LIKE TOOLBUTTONS
 }
 
 void graph_widget::handle_status_update(const int percent)
@@ -142,8 +106,6 @@ void graph_widget::keyPressEvent(QKeyEvent* event)
 
     if (!m_context->available())
         return;
-
-    //if (m_context && m_context->available())
 
     switch (event->key())
     {
@@ -169,7 +131,7 @@ void graph_widget::keyPressEvent(QKeyEvent* event)
         }
         case Qt::Key_Backspace:
         {
-            handle_module_up_request();
+            handle_history_back_request();
             break;
         }
         default:
@@ -401,66 +363,43 @@ void graph_widget::handle_navigation_down_request()
             g_selection_relay.navigate_down();
 }
 
-void graph_widget::handle_module_up_request()
+void graph_widget::handle_history_back_request()
 {
-    /*if (!m_context)
-        return;
-
-    QSet<u32> parents;
-
-    for (const auto& id : m_context->gates())
-    {
-        parents.insert(g_netlist->get_gate_by_id(id)->get_module()->get_id());
-    }
-
-    for (const auto& id : m_context->modules())
-    {
-        auto p = g_netlist->get_module_by_id(id)->get_parent_module();
-        if (p == nullptr)
-        {
-            parents.insert(id);
-        }
-        else
-        {
-            parents.insert(p->get_id());
-        }
-    }
-
-    auto it = parents.begin();
-    while (it != parents.end())
-    {
-        bool advance = true;
-        auto m       = g_netlist->get_module_by_id(*it);
-        for (const auto& id : parents)
-        {
-            if (id == *it)
-                continue;
-            if (g_netlist->get_module_by_id(id)->contains_module(m, true))
-            {
-                it      = parents.erase(it);
-                advance = false;
-                break;
-            }
-        }
-        if (advance)
-            ++it;
-    }
-
-    m_context->begin_change();
-    m_context->clear();
-    m_context->add(parents, {}, {});
-    m_context->end_change();*/
-
     if (m_context_history.empty())
         return;
+
     auto entry = m_context_history.back();
-    for (const auto& x : entry.m_modules) qDebug() << "M "<< x;
-    for (const auto& x : entry.m_gates) qDebug() << "G "<< x;
     m_context_history.pop_back();
     m_context->begin_change();
     m_context->clear();
     m_context->add(entry.m_modules, entry.m_gates, {});
     m_context->end_change();
+
+    qDebug() << "REMOVED context to history, full history:";
+    int i = 0;
+
+    for (const context_history_entry& e : m_context_history)
+    {
+        qDebug() << "Entry " + QString::number(i);
+
+        QString modules = "Modules: " + QString::number(e.m_modules.size());
+//        QString modules = "Modules: ";
+//        for (u32 id : e.m_modules)
+//            modules.append(QString::number(id) + ", ");
+
+        qDebug() << modules;
+
+        QString gates = "Gates: " + QString::number(e.m_gates.size());
+//        QString gates = "Gates: ";
+//        for (u32 id : e.m_gates)
+//            gates.append(QString::number(id) + ", ");
+
+        qDebug() << gates;
+
+        ++i;
+    }
+
+    qDebug() << "-------------------------------------";
 }
 
 void graph_widget::handle_module_down_requested(const u32 id)
@@ -500,24 +439,32 @@ void graph_widget::add_context_to_history()
     {
         m_context_history.pop_front();
     }
-}
 
-void graph_widget::change_context(graph_context* const context)
-{
-    m_context_history.clear();
-    assert(context);
+    qDebug() << "ADDED context to history, full history:";
+    int i = 0;
 
-    if (m_context)
-        m_context->unsubscribe(this);
-
-    m_context = context;
-    m_context->subscribe(this);
-
-    if (!m_context->update_in_progress())
+    for (const context_history_entry& e : m_context_history)
     {
-        m_view->setScene(m_context->scene());
-        m_view->centerOn(0, 0);
+        qDebug() << "Entry " + QString::number(i);
+
+        QString modules = "Modules: " + QString::number(e.m_modules.size());
+//        QString modules = "Modules: ";
+//        for (u32 id : e.m_modules)
+//            modules.append(QString::number(id) + ", ");
+
+        qDebug() << modules;
+
+        QString gates = "Gates: " + QString::number(e.m_gates.size());
+//        QString gates = "Gates: ";
+//        for (u32 id : e.m_gates)
+//            gates.append(QString::number(id) + ", ");
+
+        qDebug() << gates;
+
+        ++i;
     }
+
+    qDebug() << "-------------------------------------";
 }
 
 void graph_widget::reset_focus()

@@ -44,7 +44,6 @@ class graph_widget : public content_widget, public graph_context_subscriber
     Q_OBJECT
 
 public:
-    graph_widget(QWidget* parent = nullptr);
     graph_widget(graph_context* context, QWidget* parent = nullptr);
 
     graph_context* get_context() const;
@@ -74,13 +73,8 @@ private:
     void handle_navigation_up_request();
     void handle_navigation_down_request();
 
-    void handle_module_up_request();
+    void handle_history_back_request();
     void handle_module_down_requested(const u32 id);
-
-    void change_context(graph_context* const context);
-
-    void handle_updating_scene();
-    //void handle_scene_available();
 
     void ensure_gate_visible(const u32 gate);
 
@@ -89,6 +83,7 @@ private:
         QSet<u32> m_modules;
         QSet<u32> m_gates;
     };
+
     std::deque<context_history_entry> m_context_history;
 
     graph_graphics_view* m_view;
