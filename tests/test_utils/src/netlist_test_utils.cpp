@@ -1,5 +1,6 @@
 
 #include "netlist_test_utils.h"
+#include <core/utils.h>
 
 std::shared_ptr<netlist> test_utils::create_empty_netlist(const int id)
 {
@@ -162,7 +163,7 @@ endpoint test_utils::get_dst_by_pin_type(const std::vector<endpoint> dsts, const
     return {nullptr, ""};
 }
 
-bool test_utils::nets_are_equal(const std::shared_ptr<net> n0, const std::shared_ptr<net> n1)
+bool test_utils::nets_are_equal(const std::shared_ptr<net> n0, const std::shared_ptr<net> n1, const bool ignore_id, const bool ignore_name)
 {
     if (n0 == nullptr || n1 == nullptr)
     {
@@ -171,17 +172,17 @@ bool test_utils::nets_are_equal(const std::shared_ptr<net> n0, const std::shared
         else
             return false;
     }
-    if (n0->get_id() != n1->get_id())
+    if (!ignore_id && n0->get_id() != n1->get_id())
         return false;
-    if (n0->get_name() != n1->get_name())
+    if (!ignore_name && n0->get_name() != n1->get_name())
         return false;
     if (n0->get_src().get_pin_type() != n1->get_src().get_pin_type())
         return false;
-    if (!gates_are_equal(n0->get_src().get_gate(), n1->get_src().get_gate()))
+    if (!gates_are_equal(n0->get_src().get_gate(), n1->get_src().get_gate(), ignore_id, ignore_name))
         return false;
     for (auto n0_dst : n0->get_dsts())
     {
-        if (!gates_are_equal(n0_dst.get_gate(), get_dst_by_pin_type(n1->get_dsts(), n0_dst.get_pin_type()).get_gate()))
+        if (!gates_are_equal(n0_dst.get_gate(), get_dst_by_pin_type(n1->get_dsts(), n0_dst.get_pin_type()).get_gate(), ignore_id, ignore_name))
         {
             return false;
         }
@@ -191,7 +192,7 @@ bool test_utils::nets_are_equal(const std::shared_ptr<net> n0, const std::shared
     return true;
 }
 
-bool test_utils::gates_are_equal(const std::shared_ptr<gate> g0, const std::shared_ptr<gate> g1)
+bool test_utils::gates_are_equal(const std::shared_ptr<gate> g0, const std::shared_ptr<gate> g1, const bool ignore_id, const bool ignore_name)
 {
     if (g0 == nullptr || g1 == nullptr)
     {
@@ -200,9 +201,9 @@ bool test_utils::gates_are_equal(const std::shared_ptr<gate> g0, const std::shar
         else
             return false;
     }
-    if (g0->get_id() != g1->get_id())
+    if (!ignore_id && g0->get_id() != g1->get_id())
         return false;
-    if (g0->get_name() != g1->get_name())
+    if (!ignore_name && g0->get_name() != g1->get_name())
         return false;
     if (g0->get_type() != g1->get_type())
         return false;
@@ -211,7 +212,7 @@ bool test_utils::gates_are_equal(const std::shared_ptr<gate> g0, const std::shar
     return true;
 }
 
-bool test_utils::modules_are_equal(const std::shared_ptr<module> m_0, const std::shared_ptr<module> m_1)
+bool test_utils::modules_are_equal(const std::shared_ptr<module> m_0, const std::shared_ptr<module> m_1, const bool ignore_id, const bool ignore_name)
 {
     // Not only one of them may be a nullptr
     if (m_0 == nullptr || m_1 == nullptr)
@@ -222,10 +223,10 @@ bool test_utils::modules_are_equal(const std::shared_ptr<module> m_0, const std:
             return false;
     }
     // The ids should be equal
-    if (m_0->get_id() != m_1->get_id())
+    if (!ignore_id && m_0->get_id() != m_1->get_id())
         return false;
     // The names should be equal
-    if (m_0->get_name() != m_1->get_name())
+    if (!ignore_name && m_0->get_name() != m_1->get_name())
         return false;
     // The stored data should be equal
     if (m_0->get_data() != m_1->get_data())
@@ -238,7 +239,7 @@ bool test_utils::modules_are_equal(const std::shared_ptr<module> m_0, const std:
     for (auto g_0 : m_0->get_gates())
     {
         std::shared_ptr<gate> g_1 = m_1->get_netlist()->get_gate_by_id(g_0->get_id());
-        if (!gates_are_equal(g_0, g_1))
+        if (!gates_are_equal(g_0, g_1, ignore_id, ignore_name))
             return false;
         if (!m_1->contains_gate(g_1))
             return false;
@@ -262,7 +263,7 @@ bool test_utils::modules_are_equal(const std::shared_ptr<module> m_0, const std:
     return true;
 }
 
-bool test_utils::netlists_are_equal(const std::shared_ptr<netlist> nl_0, const std::shared_ptr<netlist> nl_1)
+bool test_utils::netlists_are_equal(const std::shared_ptr<netlist> nl_0, const std::shared_ptr<netlist> nl_1, const bool ignore_id, const bool ignore_name)
 {
     if (nl_0 == nullptr || nl_1 == nullptr)
     {
@@ -271,9 +272,9 @@ bool test_utils::netlists_are_equal(const std::shared_ptr<netlist> nl_0, const s
         else
             return false;
     }
-    if (nl_0->get_id() != nl_1->get_id())
+    if (!ignore_id && nl_0->get_id() != nl_1->get_id())
         return false;
-    if (nl_0->get_gate_library()->get_name() != nl_1->get_gate_library()->get_name())
+    if (!ignore_name && nl_0->get_gate_library()->get_name() != nl_1->get_gate_library()->get_name())
         return false;
 
     // Check if gates and nets are the same
@@ -281,7 +282,7 @@ bool test_utils::netlists_are_equal(const std::shared_ptr<netlist> nl_0, const s
         return false;
     for (auto g_0 : nl_0->get_gates())
     {
-        if (!gates_are_equal(g_0, nl_1->get_gate_by_id(g_0->get_id())))
+        if (!gates_are_equal(g_0, nl_1->get_gate_by_id(g_0->get_id()), ignore_id, ignore_name))
             return false;
     }
 
@@ -289,7 +290,7 @@ bool test_utils::netlists_are_equal(const std::shared_ptr<netlist> nl_0, const s
         return false;
     for (auto n_0 : nl_0->get_nets())
     {
-        if (!nets_are_equal(n_0, nl_1->get_net_by_id(n_0->get_id())))
+        if (!nets_are_equal(n_0, nl_1->get_net_by_id(n_0->get_id()), ignore_id, ignore_name))
             return false;
     }
 
@@ -340,9 +341,136 @@ bool test_utils::netlists_are_equal(const std::shared_ptr<netlist> nl_0, const s
         return false;
     std::set<std::shared_ptr<module>> mods_1 = nl_1->get_modules();
     for(auto m_0 : nl_0->get_modules()){
-        if(!modules_are_equal(m_0, nl_1->get_module_by_id(m_0->get_id())))
+        if(!modules_are_equal(m_0, nl_1->get_module_by_id(m_0->get_id()), ignore_id, ignore_name))
             return false;
     }
 
     return true;
+}
+/* OLD parser_vhdl_old temp gate lib
+void test_utils::create_temp_gate_lib()
+{
+    NO_COUT_BLOCK;
+
+    hal::path lol (core_utils::get_gate_library_directories()[0]);
+    hal::path temp_lib_path = (lol) / "temp_lib.json";
+    std::ofstream test_lib(temp_lib_path.string());
+    test_lib << "{\n"
+                "    \"library\": {\n"
+                "        \"library_name\": \"TEMP_GATE_LIBRARY\",\n"
+                "        \"elements\": {\n"
+                "            \"GATE0\" : [[\"I\"], [], [\"O\"]],\n"
+                "            \"GATE1\" : [[\"I(0)\",\"I(1)\",\"I(2)\",\"I(3)\",\"I(4)\"], [], [\"O(0)\",\"O(1)\",\"O(2)\",\"O(3)\", \"O(4)\"]],\n"
+                "            \"GATE2\" : [[\"I(0, 0)\",\"I(0, 1)\",\"I(1, 0)\",\"I(1, 1)\"], [], [\"O(0, 0)\",\"O(0, 1)\",\"O(1, 0)\",\"O(1, 1)\"]],\n"
+                "            \"GATE3\" : [[\"I(0, 0, 0)\",\"I(0, 0, 1)\",\"I(0, 1, 0)\",\"I(0, 1, 1)\",\"I(1, 0, 0)\",\"I(1, 0, 1)\",\"I(1, 1, 0)\",\"I(1, 1, 1)\"], [], [\"O(0, 0, 0)\",\"O(0, 0, 1)\",\"O(0, 1, 0)\",\"O(0, 1, 1)\",\"O(1, 0, 0)\",\"O(1, 0, 1)\",\"O(1, 1, 0)\",\"O(1, 1, 1)\"]],\n"
+                "\n"
+                "            \"GND\" : [[], [], [\"O\"]],\n"
+                "            \"VCC\" : [[], [], [\"O\"]]\n"
+                "        },\n"
+                "        \"vhdl_includes\": [],\n"
+                "        \"global_gnd_nodes\": [\"GND\"],\n"
+                "        \"global_vcc_nodes\": [\"VCC\"]\n"
+                "    }\n"
+                "}";
+    test_lib.close();
+
+    gate_library_manager::load_all();
+}*/
+/*
+// Create and load temporarily a custom gate library, which contains gates with input and output vectors up to dimension 3 (this is not the gate_lib of the vhdl_parser test)
+void create_temp_gate_lib()
+{
+    NO_COUT_BLOCK;
+    std::ofstream test_lib(temp_lib_path.string());
+    test_lib << "{\n"
+                "    \"library\": {\n"
+                "        \"library_name\": \"TEMP_GATE_LIBRARY\",\n"
+                "        \"elements\": {\n"
+                "            \"GATE0\" : [[\"I\"], [], [\"O\"]],\n"
+                "            \"GATE1\" : [[\"I(0)\",\"I(1)\",\"I(2)\",\"I(3)\"], [], [\"O\"]],\n"
+                "            \"GATE2\" : [[\"I\"], [], [\"O(0)\",\"O(1)\",\"O(2)\",\"O(3)\"]],\n"
+                "            \"GATE3\" : [[\"I(0)\",\"I(1)\",\"I(2)\",\"I(3)\"], [], [\"O(0)\",\"O(1)\",\"O(2)\",\"O(3)\"]],\n"
+                //"            \"GATE4\" : [[\"I(0, 0)\",\"I(0, 1)\",\"I(1, 0)\",\"I(1, 1)\"], [], [\"O(0, 0)\",\"O(0, 1)\",\"O(1, 0)\",\"O(1, 1)\"]],\n"
+                //"            \"GATE5\" : [[\"I(0, 0, 0)\",\"I(0, 0, 1)\",\"I(0, 1, 0)\",\"I(0, 1, 1)\",\"I(1, 0, 0)\",\"I(1, 0, 1)\",\"I(1, 1, 0)\",\"I(1, 1, 1)\"], [], [\"O(0, 0, 0)\",\"O(0, 0, 1)\",\"O(0, 1, 0)\",\"O(0, 1, 1)\",\"O(1, 0, 0)\",\"O(1, 0, 1)\",\"O(1, 1, 0)\",\"O(1, 1, 1)\"]],\n"
+                "\n"
+                "            \"GND\" : [[], [], [\"O\"]],\n"
+                "            \"VCC\" : [[], [], [\"O\"]]\n"
+                "        },\n"
+                "        \"vhdl_includes\": [],\n"
+                "        \"global_gnd_nodes\": [\"GND\"],\n"
+                "        \"global_vcc_nodes\": [\"VCC\"]\n"
+                "    }\n"
+                "}";
+    test_lib.close();
+
+    gate_library_manager::load_all();
+}*/
+
+void test_utils::create_temp_gate_lib()
+{
+    NO_COUT_BLOCK;
+
+    hal::path lol (core_utils::get_gate_library_directories()[0]);
+    hal::path temp_lib_path = (lol) / "temp_lib.json";
+    std::ofstream test_lib(temp_lib_path.string());
+    test_lib << "{\n"
+                "    \"library\": {\n"
+                "        \"library_name\": \"TEMP_GATE_LIBRARY\",\n"
+                "        \"elements\": {\"GATE_1^0_IN_1^0_OUT\" : [[\"I\"], [], [\"O\"]],\n"
+                "            \"GATE_4^1_IN_4^1_OUT\" : [[\"I(0)\",\"I(1)\",\"I(2)\",\"I(3)\"], [], [\"O(0)\",\"O(1)\",\"O(2)\",\"O(3)\"]],\n"
+                "            \"GATE_4^1_IN_1^0_OUT\" : [[\"I(0)\",\"I(1)\",\"I(2)\",\"I(3)\"], [], [\"O\"]],\n"
+                "            \"GATE_2^2_IN_2^2_OUT\" : [[\"I(0, 0)\",\"I(0, 1)\",\"I(1, 0)\",\"I(1, 1)\"], [], [\"O(0, 0)\",\"O(0, 1)\",\"O(1, 0)\",\"O(1, 1)\"]],\n"
+                "            \"GATE_2^3_IN_2^3_OUT\" : [[\"I(0, 0, 0)\",\"I(0, 0, 1)\",\"I(0, 1, 0)\",\"I(0, 1, 1)\",\"I(1, 0, 0)\",\"I(1, 0, 1)\",\"I(1, 1, 0)\",\"I(1, 1, 1)\"], [], [\"O(0, 0, 0)\",\"O(0, 0, 1)\",\"O(0, 1, 0)\",\"O(0, 1, 1)\",\"O(1, 0, 0)\",\"O(1, 0, 1)\",\"O(1, 1, 0)\",\"O(1, 1, 1)\"]],\n"
+                "\n"
+                "            \"GND\" : [[], [], [\"O\"]],\n"
+                "            \"VCC\" : [[], [], [\"O\"]]\n"
+                "        },\n"
+                "        \"vhdl_includes\": [],\n"
+                "        \"global_gnd_nodes\": [\"GND\"],\n"
+                "        \"global_vcc_nodes\": [\"VCC\"]\n"
+                "    }\n"
+                "}";
+    test_lib.close();
+
+    gate_library_manager::load_all();
+}
+
+void test_utils::remove_temp_gate_lib() {
+    boost::filesystem::remove(((core_utils::get_gate_library_directories()[0]) / "temp_lib.json").string());
+}
+
+std::shared_ptr<net> test_utils::get_net_by_subname(std::shared_ptr<netlist> nl, const std::string subname){
+    if(nl == nullptr)
+        return nullptr;
+    std::set<std::shared_ptr<net>> nets = nl->get_nets();
+    std::shared_ptr<net> res = nullptr;
+    for (auto n : nets){
+        std::string n_name = n->get_name();
+        if (n_name.find(subname) != n_name.npos){
+            if (res != nullptr){
+                std::cerr << "Multiple gates contains the subtring '" << subname << "'! This should not happen..." << std::endl;
+                return nullptr;
+            }
+            res = n;
+        }
+    }
+    return res;
+}
+
+std::shared_ptr<gate> test_utils::get_gate_by_subname(std::shared_ptr<netlist> nl, const std::string subname){
+    if(nl == nullptr)
+        return nullptr;
+    std::set<std::shared_ptr<gate>> gates = nl->get_gates();
+    std::shared_ptr<gate> res = nullptr;
+    for (auto g : gates){
+        std::string g_name = g->get_name();
+        if (g_name.find(subname) != g_name.npos){
+            if (res != nullptr){
+                std::cerr << "Multiple gates contains the subtring '" << subname << "'! This should not happen..." << std::endl;
+                return nullptr;
+            }
+            res = g;
+        }
+    }
+    return res;
 }

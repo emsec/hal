@@ -1,5 +1,5 @@
 #include "gtest/gtest.h"
-#include "test_def.h"
+#include "netlist_test_utils.h"
 #include <core/log.h>
 #include <core/utils.h>
 #include <iostream>
@@ -11,14 +11,15 @@
 #include "hdl_parser/hdl_parser_verilog.h"
 #include "hdl_writer/hdl_writer_verilog.h"
 
+using namespace test_utils;
 
 class hdl_writer_verilog_test : public ::testing::Test
 {
 protected:
-
+/*
     const std::string g_lib_name = "EXAMPLE_GATE_LIBRARY";
     const std::string temp_lib_name = "TEMP_GATE_LIBRARY";
-    const std::string pseudo_simprim_lib_name = "PSEUDO_SIMPRIM_GATE_LIBRARY";
+
 
     // Minimum id for netlists, gates, nets and modules
     //const u32 INVALID_GATE_ID = 0;
@@ -33,13 +34,15 @@ protected:
     const std::string GATE_SUFFIX = "_inst";
 
 
-    hal::path temp_lib_path;
+    hal::path temp_lib_path;*/
+    const std::string pseudo_simprim_lib_name = "PSEUDO_SIMPRIM_GATE_LIBRARY";
+    const std::string GATE_SUFFIX = "_inst";
     hal::path pseudo_simprim_lib_path;
 
     virtual void SetUp()
     {
         NO_COUT_BLOCK;
-        temp_lib_path = core_utils::get_gate_library_directories()[0] / "temp_lib.json";
+        //temp_lib_path = core_utils::get_gate_library_directories()[0] / "temp_lib.json";
         pseudo_simprim_lib_path = core_utils::get_gate_library_directories()[0] / "pseudo_simprim_lib.json";
         gate_library_manager::load_all();
     }
@@ -47,7 +50,7 @@ protected:
     virtual void TearDown() {
 
     }
-
+/*
     // Creates an empty netlist with a certain id if passed
     std::shared_ptr<netlist> create_empty_netlist(const int id = -1) {
         NO_COUT_BLOCK;
@@ -87,10 +90,10 @@ protected:
         }
         if(n0->get_src().get_pin_type() != n1->get_src().get_pin_type())
             return false;
-        if(!gates_are_equal(n0->get_src().get_gate(), n1->get_src().get_gate()))
+        if(!gates_are_equal(n0->get_src().get_gate(), n1->get_src().get_gate(), true, true))
             return false;
         for(auto n0_dst : n0->get_dsts()){
-            if (!gates_are_equal(n0_dst.get_gate(), get_dst_by_pin_type(n1->get_dsts(), n0_dst.get_pin_type()).get_gate())){
+            if (!gates_are_equal(n0_dst.get_gate(), get_dst_by_pin_type(n1->get_dsts(), n0_dst.get_pin_type(), true, true).get_gate())){
                 return false;
             }
         }
@@ -100,7 +103,7 @@ protected:
     }
 
     // Returns true if the two gates have the same content (id and name doesn't matter)
-    bool gates_are_equal(std::shared_ptr<gate> g0, std::shared_ptr<gate> g1){
+    bool gates_are_equal(std::shared_ptr<gate> g0, std::shared_ptr<gate> g1, true, true){
         if(g0 == nullptr || g1 == nullptr){
             if(g0 == g1)
                 return true;
@@ -140,7 +143,7 @@ protected:
         test_lib.close();
 
         gate_library_manager::load_all();
-    }
+    }*/
 
     /*
      * Gate library that only contains a very small set of gates of the xilinx simprim gate library, for testing simprim exclusive behaviour
@@ -243,7 +246,7 @@ protected:
 
         return nl;
     }
-
+/*
     // Get a net of netlist nl by its name (name must be unique)
     std::shared_ptr<net> get_net_by_subname(std::shared_ptr<netlist> nl, const std::string subname){
         if(nl == nullptr)
@@ -282,7 +285,7 @@ protected:
             }
         }
         return res;
-    }
+    }*/
 };
 
 
@@ -336,13 +339,13 @@ TEST_F(hdl_writer_verilog_test, check_write_and_parse_main_example) {
             // -- Check if gates and nets are the same
             EXPECT_EQ(nl->get_gates().size(), parsed_nl->get_gates().size());
             for(auto g_0 : nl->get_gates()){
-                EXPECT_TRUE(gates_are_equal(g_0, get_gate_by_subname(parsed_nl, g_0->get_name())));
+                EXPECT_TRUE(gates_are_equal(g_0, get_gate_by_subname(parsed_nl, g_0->get_name()),true,true));
             }
 
             EXPECT_EQ(nl->get_nets().size(), parsed_nl->get_nets().size());
 
             for(auto n_0 : nl->get_nets()){
-                EXPECT_TRUE(nets_are_equal(n_0, get_net_by_subname(parsed_nl, n_0->get_name())));
+                EXPECT_TRUE(nets_are_equal(n_0, get_net_by_subname(parsed_nl, n_0->get_name()), true, true));
             }
 
             // -- Check if global gates are the same
@@ -979,7 +982,7 @@ TEST_F(hdl_writer_verilog_test, check_pin_vector) {
             std::shared_ptr<gate> vcc_gate = nl->create_gate(MIN_GATE_ID + 1, "VCC", "vcc_gate");
             std::shared_ptr<net> global_out = nl->create_net(MIN_NET_ID + 0, "global_out");
             nl->mark_global_output_net(global_out);
-            std::shared_ptr<gate> test_gate = nl->create_gate(MIN_GATE_ID + 2, "GATE1", "test_gate");
+            std::shared_ptr<gate> test_gate = nl->create_gate(MIN_GATE_ID + 2, "GATE_4^1_IN_1^0_OUT", "test_gate");
             global_out->set_src(test_gate, "O");
 
             std::shared_ptr<net> gnd_net = nl->create_net(MIN_NET_ID + 2, "test_gnd_net");
@@ -1021,8 +1024,8 @@ TEST_F(hdl_writer_verilog_test, check_pin_vector) {
             std::shared_ptr<net> test_gnd_net_ref = *parsed_nl->get_nets("test_gnd_net").begin();
             std::shared_ptr<net> test_vcc_net_ref = *parsed_nl->get_nets("test_vcc_net").begin();
 
-            ASSERT_EQ(parsed_nl->get_gates("GATE1").size(), 1);
-            std::shared_ptr<gate> test_gate_ref = *parsed_nl->get_gates("GATE1").begin();
+            ASSERT_EQ(parsed_nl->get_gates("GATE_4^1_IN_1^0_OUT").size(), 1);
+            std::shared_ptr<gate> test_gate_ref = *parsed_nl->get_gates("GATE_4^1_IN_1^0_OUT").begin();
             EXPECT_EQ(test_gate_ref->get_fan_in_net("I(0)"), test_gnd_net_ref);
             EXPECT_EQ(test_gate_ref->get_fan_in_net("I(1)"), test_vcc_net_ref);
             EXPECT_EQ(test_gate_ref->get_fan_in_net("I(2)"), test_gnd_net_ref);

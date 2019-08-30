@@ -1,8 +1,11 @@
+#include <fstream>
 #include "pragma_once.h"
 #ifndef HAL_NETLIST_TEST_UTILS_H
 #define HAL_NETLIST_TEST_UTILS_H
 
+#include <core/utils.h>
 #include "test_def.h"
+
 #include "netlist/netlist.h"
 #include "netlist/gate_library/gate_library.h"
 #include "netlist/gate_library/gate_library_manager.h"
@@ -10,6 +13,7 @@
 #include "netlist/net.h"
 #include "netlist/module.h"
 #include "netlist/endpoint.h"
+#include <boost/filesystem.hpp>
 
 namespace test_utils
 {
@@ -29,8 +33,11 @@ namespace test_utils
     const u32 MIN_NETLIST_ID = 1;
     const u32 TOP_MODULE_ID = 1;
 
-    // Names of our example gate library
+    // Name for accessing our example gate library
     static const std::string g_lib_name = "EXAMPLE_GATE_LIBRARY";
+    // Name for accessing the custom gate library after the call of 'create_temp_gate_lib()'
+    const std::string temp_lib_name = "TEMP_GATE_LIBRARY";
+
 
     /*********************************************************
      *                      Functions                        *
@@ -140,6 +147,39 @@ namespace test_utils
      */
     bool string_contains_substring(const std::string str, const std::string sub_str);
 
+    /**
+     * Get the pointer of a net, which name contains a certain substring. There must be only one name with this subname.
+     *
+     * @param nl - netlist
+     * @param subname - substring of the net name
+     * @returns the net pointer if there is exactly one net with the subname. Returns nullptr otherwise.
+     */
+    std::shared_ptr<net> get_net_by_subname(std::shared_ptr<netlist> nl, const std::string subname);
+
+    /**
+     * Get the pointer of a gate, which name contains a certain substring. There must be only one name with this subname.
+     *
+     * @param nl - netlist
+     * @param subname - substring of the net name
+     * @returns the gate pointer if there is exactly one gate with the subname. Returns nullptr otherwise.
+     */
+    std::shared_ptr<gate> get_gate_by_subname(std::shared_ptr<netlist> nl, const std::string subname);
+
+    /**
+     * Creates a custom gate library that contains certain gate types that aren't supported by the example gate library.
+     * It mainly supports gate types with input and output pin vectors of dimension 1 up to 3.
+     * After it is created, it can be accessed via the name in 'temp_lib_name'
+     *
+     * IMPORTANT: This function creates a file in a common gate library directory. Don't forget to remove it via
+     * a call of remove_temp_gate_lib()
+     */
+    void create_temp_gate_lib();
+
+    /**
+     * Removes the file created by the function 'create_temp_gate_lib()'. If the file doesn't exist it does nothing.
+     */
+    void remove_temp_gate_lib();
+
 
     // ===== Example Netlists =====
 
@@ -221,9 +261,11 @@ namespace test_utils
      *
      * @param n0[in] - net
      * @param n1[in] - other net
+     * @param ignore_id - if the ids should be ignored in comparison
+     * @param ignore_name - if the names should be ignored in comparison
      * @returns TRUE if n0 and n1 are equal under the considered conditions. FALSE otherwise.
      */
-    bool nets_are_equal(const std::shared_ptr<net> n0, const std::shared_ptr<net> n1);
+    bool nets_are_equal(const std::shared_ptr<net> n0, const std::shared_ptr<net> n1, const bool ignore_id = false, const bool ignore_name = false);
 
     /**
      * Checks if two gates are equal regardless if they are in the same netlist (they doesn't share a pointer).
@@ -232,9 +274,11 @@ namespace test_utils
      *
      * @param g0[in] - gate
      * @param g1[in] - other gate
-     * @returns TRUE if g0 and g1 are equal under the considered conditions. FALSE otherwise.
+     * @param ignore_id - if the ids should be ignored in comparison
+     * @param ignore_name - if the names should be ignored in comparison
+     * @return
      */
-    bool gates_are_equal(const std::shared_ptr<gate> g0, const std::shared_ptr<gate> g1);
+    bool gates_are_equal(const std::shared_ptr<gate> g0, const std::shared_ptr<gate> g1, const bool ignore_id = false, const bool ignore_name = false);
 
     /**
      * Checks if two modules are equal regardless if they are in the same netlist (they doesn't share a pointer).
@@ -244,9 +288,11 @@ namespace test_utils
      *
      * @param m_0[in] - module
      * @param m_1[in] - other module
+     * @param ignore_id - if the ids should be ignored in comparison
+     * @param ignore_name - if the names should be ignored in comparison
      * @returns TRUE if m_0 and m_1 are equal under the considered conditions. FALSE otherwise.
      */
-    bool modules_are_equal(const std::shared_ptr<module> m_0, const std::shared_ptr<module> m_1);
+    bool modules_are_equal(const std::shared_ptr<module> m_0, const std::shared_ptr<module> m_1, const bool ignore_id = false, const bool ignore_name = false);
 
     /**
      * Checks if two netlist are equal regardless if they are the same object.
@@ -258,9 +304,11 @@ namespace test_utils
      *
      * @param nl_0[in] - nl
      * @param nl_1[in] - other nl
+     * @param ignore_id - if the ids should be ignored in comparison
+     * @param ignore_name - if the names should be ignored in comparison
      * @returns TRUE if nl_0 and nl_1 are equal under the considered conditions. FALSE otherwise.
      */
-    bool netlists_are_equal(const std::shared_ptr<netlist> nl_0, const std::shared_ptr<netlist> nl_1);
+    bool netlists_are_equal(const std::shared_ptr<netlist> nl_0, const std::shared_ptr<netlist> nl_1, const bool ignore_id = false, const bool ignore_name = false);
 
 
 }    // namespace test_utils

@@ -1,5 +1,5 @@
 #include "gtest/gtest.h"
-#include "test_def.h"
+#include "netlist_test_utils.h"
 #include <core/log.h>
 #include <core/utils.h>
 #include <iostream>
@@ -11,15 +11,16 @@
 #include "hdl_parser/hdl_parser_vhdl_old.h"
 #include "hdl_writer/hdl_writer_vhdl.h"
 
+using namespace test_utils;
 
 class hdl_writer_vhdl_test : public ::testing::Test
 {
 protected:
 
-    const std::string g_lib_name = "EXAMPLE_GATE_LIBRARY";
+
 
     // Minimum id for netlists, gates, nets and modules
-    const u32 INVALID_GATE_ID = 0;
+   /* const u32 INVALID_GATE_ID = 0;
     const u32 INVALID_NET_ID = 0;
     const u32 INVALID_MODULE_ID = 0;
     const u32 MIN_MODULE_ID = 2;
@@ -28,8 +29,11 @@ protected:
     const u32 MIN_NETLIST_ID = 1;
     const u32 TOP_MODULE_ID = 1;
 
-    const std::string GATE_SUFFIX = "";
 
+*/
+
+   const std::string g_lib_name = "EXAMPLE_GATE_LIBRARY";
+   const std::string GATE_SUFFIX = "";
 
     virtual void SetUp() {
         NO_COUT_BLOCK;
@@ -41,7 +45,7 @@ protected:
     }
 
     // Creates an empty netlist with a certain id if passed
-    std::shared_ptr<netlist> create_empty_netlist(const int id = -1) {
+  /*  std::shared_ptr<netlist> create_empty_netlist(const int id = -1) {
         NO_COUT_BLOCK;
         std::shared_ptr<gate_library> gl = gate_library_manager::get_gate_library(g_lib_name);
         std::shared_ptr<netlist> nl(new netlist(gl));
@@ -104,7 +108,7 @@ protected:
         if(g0->get_data() != g1->get_data())
             return false;
         return true;
-    }
+    }*/
 
 
 
@@ -179,10 +183,10 @@ protected:
 
         return nl;
     }
-
+/*
     // Get a net of netlist nl by its name (name must be unique)
     std::shared_ptr<net> get_net_by_subname(std::shared_ptr<netlist> nl, const std::string subname){
-        /*std::set<std::shared_ptr<net>> res = nl->get_nets(name);
+        std::set<std::shared_ptr<net>> res = nl->get_nets(name);
         if(res.size() == 0){
             return nullptr;
         }
@@ -190,7 +194,7 @@ protected:
             std::cerr << "Multiple nets with the same name! That should not happen..." << std::endl;
             return nullptr;
         }
-        return *res.begin();*/
+        return *res.begin();
         if(nl == nullptr)
             return nullptr;
         std::set<std::shared_ptr<net>> nets = nl->get_nets();
@@ -227,7 +231,7 @@ protected:
             }
         }
         return res;
-    }
+    }*/
 };
 
 
@@ -281,13 +285,13 @@ TEST_F(hdl_writer_vhdl_test, check_write_and_parse_main_example) {
             // -- Check if gates and nets are the same
             EXPECT_EQ(nl->get_gates().size(), parsed_nl->get_gates().size());
             for(auto g_0 : nl->get_gates()){
-                EXPECT_TRUE(gates_are_equal(g_0, get_gate_by_subname(parsed_nl, g_0->get_name())));
+                EXPECT_TRUE(gates_are_equal(g_0, get_gate_by_subname(parsed_nl, g_0->get_name()),true, true));
             }
 
             EXPECT_EQ(nl->get_nets().size(), parsed_nl->get_nets().size());
 
             for(auto n_0 : nl->get_nets()){
-                EXPECT_TRUE(nets_are_equal(n_0, get_net_by_subname(parsed_nl, n_0->get_name())));
+                EXPECT_TRUE(nets_are_equal(n_0, get_net_by_subname(parsed_nl, n_0->get_name()), true, true));
             }
 
             // -- Check if global gates are the same
