@@ -213,6 +213,60 @@ std::shared_ptr<netlist> test_utils::create_example_netlist_negative(const int i
     return nl;
 }
 
+std::shared_ptr<netlist> test_utils::create_example_parse_netlist(int id)
+{
+    NO_COUT_BLOCK;
+    std::shared_ptr<gate_library> gl = gate_library_manager::get_gate_library(g_lib_name);
+    std::shared_ptr<netlist> nl      = std::make_shared<netlist>(gl);
+    if (id >= 0)
+    {
+        nl->set_id(id);
+    }
+
+    // Create the gates
+    std::shared_ptr<gate> gate_0 = nl->create_gate(MIN_GATE_ID+0, "AND2", "gate_0");
+    std::shared_ptr<gate> gate_1 = nl->create_gate(MIN_GATE_ID+1, "GND", "gate_1");
+    std::shared_ptr<gate> gate_2 = nl->create_gate(MIN_GATE_ID+2, "VCC", "gate_2");
+    std::shared_ptr<gate> gate_3 = nl->create_gate(MIN_GATE_ID+3, "INV", "gate_3");
+    std::shared_ptr<gate> gate_4 = nl->create_gate(MIN_GATE_ID+4, "INV", "gate_4");
+    std::shared_ptr<gate> gate_5 = nl->create_gate(MIN_GATE_ID+5, "AND2", "gate_5");
+    std::shared_ptr<gate> gate_6 = nl->create_gate(MIN_GATE_ID+6, "OR2", "gate_6");
+    std::shared_ptr<gate> gate_7 = nl->create_gate(MIN_GATE_ID+7, "OR2", "gate_7");
+
+    // Add the nets (net_x_y1_y2... := net between the gate with id x and the gates y1,y2,...)
+    std::shared_ptr<net> net_1_3 = nl->create_net(MIN_NET_ID+13, "0_net");
+    net_1_3->set_src(gate_1, "O");
+    net_1_3->add_dst(gate_3, "I");
+
+    std::shared_ptr<net> net_3_0 = nl->create_net(MIN_NET_ID+30, "net_3_0");
+    net_3_0->set_src(gate_3, "O");
+    net_3_0->add_dst(gate_0, "I0");
+
+    std::shared_ptr<net> net_2_0 = nl->create_net(MIN_NET_ID+20, "1_net");
+    net_2_0->set_src(gate_2, "O");
+    net_2_0->add_dst(gate_0, "I1");
+
+    std::shared_ptr<net> net_0_4_5 = nl->create_net(MIN_NET_ID+045, "net_0_4_5");
+    net_0_4_5->set_src(gate_0, "O");
+    net_0_4_5->add_dst(gate_4, "I");
+    net_0_4_5->add_dst(gate_5, "I0");
+
+    std::shared_ptr<net> net_6_7 = nl->create_net(MIN_NET_ID+67, "net_6_7");
+    net_6_7->set_src(gate_6, "O");
+    net_6_7->add_dst(gate_7, "I0");
+
+    std::shared_ptr<net> net_4_out = nl->create_net(MIN_NET_ID+400, "net_4_out");
+    net_4_out->set_src(gate_4, "O");
+
+    std::shared_ptr<net> net_5_out = nl->create_net(MIN_NET_ID+500, "net_5_out");
+    net_5_out->set_src(gate_5, "O");
+
+    std::shared_ptr<net> net_7_out = nl->create_net(MIN_NET_ID+700, "net_7_out");
+    net_7_out->set_src(gate_7, "O");
+
+    return nl;
+}
+
 std::shared_ptr<gate> test_utils::create_test_gate(std::shared_ptr<netlist> nl, const u32 id)
 {
     std::shared_ptr<gate> res_gate = nl->create_gate(id, "AND3", "gate_" + std::to_string(id));
@@ -416,6 +470,8 @@ bool test_utils::netlists_are_equal(const std::shared_ptr<netlist> nl_0, const s
 
     return true;
 }
+
+
 
 
 

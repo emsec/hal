@@ -1,11 +1,11 @@
-#include <fstream>
+
 #include "pragma_once.h"
 #ifndef HAL_NETLIST_TEST_UTILS_H
 #define HAL_NETLIST_TEST_UTILS_H
 
 #include <core/utils.h>
 #include "test_def.h"
-
+#include <fstream>
 #include "netlist/netlist.h"
 #include "netlist/gate_library/gate_library.h"
 #include "netlist/gate_library/gate_library_manager.h"
@@ -248,6 +248,33 @@ namespace test_utils
     std::shared_ptr<netlist> create_example_netlist_negative(const int id = -1);
 
 
+    /*
+      *      Example netlist circuit diagram (Id in brackets). Used for get fan in and
+      *      out nets.
+      *
+      *
+      *      GND (1) =-= INV (3) =--=             .------=  INV (4)  =---
+      *                                 AND2 (0) =-
+      *      VCC (2) =--------------=             '------=
+      *                                                     AND2 (5) =---
+      *                                                  =
+      *
+      *                           =                .-----=
+      *                              OR2 (6)  =----'        OR2 (7)  =---
+      *                           =                      =
+      */
+    // Creates a simple netlist shown in the diagram above. The nets that have a GND/VCC gate as a source are named '0'/'1'
+    /**
+     * Creates the netlist shown in the diagram above.
+     * The nets which are connected to a GND/VCC gate are named '0'/'1' (necessary for some parser/writer tests).
+     * Sets a concrete id if passed.
+     *
+     * @param[in] id - id of the netlist
+     * @returns the created netlist object
+     */
+    std::shared_ptr<netlist> create_example_parse_netlist(int id = -1);
+
+
     // ===== Netlist Comparison Functions (mainly used to test parser and writer) =====
 
     /*
@@ -314,9 +341,6 @@ namespace test_utils
 
 
 }    // namespace test_utils
-
-
-
 
 
 #endif //HAL_NETLIST_TEST_UTILS_H

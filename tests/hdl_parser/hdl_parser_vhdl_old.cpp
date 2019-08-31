@@ -16,11 +16,6 @@ using namespace test_utils;
 class hdl_parser_vhdl_old_test : public ::testing::Test
 {
 protected:
-    //const std::string g_lib_name = "EXAMPLE_GATE_LIBRARY";
-    //const std::string temp_lib_name = "TEMP_GATE_LIBRARY";
-    // Path used, to create a custom gate library (used to test certain behaviour of input and output vectors)
-    //hal::path temp_lib_path;
-
     virtual void SetUp()
     {
         NO_COUT_BLOCK;
@@ -30,91 +25,6 @@ protected:
     virtual void TearDown()
     {
     }
-/*
-    // unused
-    // creates a subset with the elements which fulfill a certain condition
-    template<typename T>
-    std::set<T> create_sub_set(std::set<T> p_set, const std::function<bool(T)>& condition)
-    {
-        std::set<T> res_set;
-        for (auto el : p_set)
-        {
-            if (condition(el))
-            {
-                res_set.insert(el);
-            }
-        }
-        return res_set;
-    }
-
-    // Create and load temporarily a custom gate library, which contains gates with input and output vectors up to dimension 3
-    void create_temp_gate_lib()
-    {
-        NO_COUT_BLOCK;
-        std::ofstream test_lib(temp_lib_path.string());
-        test_lib << "{\n"
-                    "    \"library\": {\n"
-                    "        \"library_name\": \"TEMP_GATE_LIBRARY\",\n"
-                    "        \"elements\": {\n"
-                    "\t    \"GATE0\" : [[\"I\"], [], [\"O\"]],\n"
-                    "            \"GATE1\" : [[\"I(0)\",\"I(1)\",\"I(2)\",\"I(3)\",\"I(4)\"], [], [\"O(0)\",\"O(1)\",\"O(2)\",\"O(3)\", \"O(4)\"]],\n"
-                    "            \"GATE2\" : [[\"I(0, 0)\",\"I(0, 1)\",\"I(1, 0)\",\"I(1, 1)\"], [], [\"O(0, 0)\",\"O(0, 1)\",\"O(1, 0)\",\"O(1, 1)\"]],\n"
-                    "            \"GATE3\" : [[\"I(0, 0, 0)\",\"I(0, 0, 1)\",\"I(0, 1, 0)\",\"I(0, 1, 1)\",\"I(1, 0, 0)\",\"I(1, 0, 1)\",\"I(1, 1, 0)\",\"I(1, 1, 1)\"], [], [\"O(0, 0, 0)\",\"O(0, 0, 1)\",\"O(0, 1, 0)\",\"O(0, 1, 1)\",\"O(1, 0, 0)\",\"O(1, 0, 1)\",\"O(1, 1, 0)\",\"O(1, 1, 1)\"]],\n"
-                    "\n"
-                    "            \"GND\" : [[], [], [\"O\"]],\n"
-                    "            \"VCC\" : [[], [], [\"O\"]]\n"
-                    "        },\n"
-                    "        \"vhdl_includes\": [],\n"
-                    "        \"global_gnd_nodes\": [\"GND\"],\n"
-                    "        \"global_vcc_nodes\": [\"VCC\"]\n"
-                    "    }\n"
-                    "}";
-        test_lib.close();
-
-        gate_library_manager::load_all();
-    }
-
-    // Creates an endpoint from a gate and a pin_type
-    endpoint get_endpoint(std::shared_ptr<gate> g, std::string pin_type)
-    {
-        endpoint ep;
-        ep.gate     = g;
-        ep.pin_type = pin_type;
-        return ep;
-    }
-
-    // Checks if two vectors have the same content regardless of their order
-    template<typename T>
-    bool vectors_have_same_content(std::vector<T> vec_1, std::vector<T> vec_2)
-    {
-        if (vec_1.size() != vec_2.size())
-        {
-            return false;
-        }
-
-        // Each element of vec_1 must be found in vec_2
-        while (vec_1.size() > 0)
-        {
-            auto it_1       = vec_1.begin();
-            bool found_elem = false;
-            for (auto it_2 = vec_2.begin(); it_2 != vec_2.end(); it_2++)
-            {
-                if (*it_1 == *it_2)
-                {
-                    found_elem = true;
-                    vec_2.erase(it_2);
-                    break;
-                }
-            }
-            if (!found_elem)
-            {
-                return false;
-            }
-            vec_1.erase(it_1);
-        }
-
-        return true;
-    }*/
 };
 
 /*                                    net_0

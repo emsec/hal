@@ -13,7 +13,6 @@ using namespace test_utils;
 class endpoint_test : public ::testing::Test
 {
 protected:
-    //const std::string g_lib_name = "EXAMPLE_GATE_LIBRARY";
 
     virtual void SetUp()
     {
@@ -24,29 +23,6 @@ protected:
     virtual void TearDown()
     {
     }
-
-    // Creates an empty netlist with a certain id if passed
-    /*std::shared_ptr<netlist> create_empty_netlist(int id = -1)
-    {
-        NO_COUT_BLOCK;
-        std::shared_ptr<gate_library> gl = gate_library_manager::get_gate_library(g_lib_name);
-        std::shared_ptr<netlist> nl(new netlist(gl));
-
-        if (id >= 0)
-        {
-            nl->set_id(id);
-        }
-        return nl;
-    }
-
-    // Creates an endpoint from a gate and a pin_type
-    endpoint get_endpoint(std::shared_ptr<gate> g, std::string pin_type)
-    {
-        endpoint ep;
-        ep.gate     = g;
-        ep.pin_type = pin_type;
-        return ep;
-    }*/
 };
 
 /**
