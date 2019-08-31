@@ -167,8 +167,10 @@ namespace test_utils
 
     /**
      * Creates a custom gate library that contains certain gate types that aren't supported by the example gate library.
-     * It mainly supports gate types with input and output pin vectors of dimension 1 up to 3.
-     * After it is created, it can be accessed via the name in 'temp_lib_name'
+     * It mainly supports gate types with input and output pin vectors of dimension 1 up to 3. It contains gates of the
+     * form 'GATE_<input pins per dimension>^<input dimentsion>_IN_<output pins per dimension>^<output dimentsion>_IN'
+     * E.g. 'GATE_4^1_IN_1^0' whould have for input pins (I(0)-I(3)) and only one output pin (O)
+     * After the library is created, it can be accessed via the name in 'temp_lib_name'
      *
      * IMPORTANT: This function creates a file in a common gate library directory. Don't forget to remove it via
      * a call of remove_temp_gate_lib()

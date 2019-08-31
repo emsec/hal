@@ -42,6 +42,75 @@ bool test_utils::string_contains_substring(const std::string str, const std::str
     return (str.find(sub_str) != std::string::npos);
 }
 
+std::shared_ptr<net> test_utils::get_net_by_subname(std::shared_ptr<netlist> nl, const std::string subname){
+    if(nl == nullptr)
+        return nullptr;
+    std::set<std::shared_ptr<net>> nets = nl->get_nets();
+    std::shared_ptr<net> res = nullptr;
+    for (auto n : nets){
+        std::string n_name = n->get_name();
+        if (n_name.find(subname) != n_name.npos){
+            if (res != nullptr){
+                std::cerr << "Multiple gates contains the subtring '" << subname << "'! This should not happen..." << std::endl;
+                return nullptr;
+            }
+            res = n;
+        }
+    }
+    return res;
+}
+
+std::shared_ptr<gate> test_utils::get_gate_by_subname(std::shared_ptr<netlist> nl, const std::string subname){
+    if(nl == nullptr)
+        return nullptr;
+    std::set<std::shared_ptr<gate>> gates = nl->get_gates();
+    std::shared_ptr<gate> res = nullptr;
+    for (auto g : gates){
+        std::string g_name = g->get_name();
+        if (g_name.find(subname) != g_name.npos){
+            if (res != nullptr){
+                std::cerr << "Multiple gates contains the subtring '" << subname << "'! This should not happen..." << std::endl;
+                return nullptr;
+            }
+            res = g;
+        }
+    }
+    return res;
+}
+
+void test_utils::create_temp_gate_lib()
+{
+    NO_COUT_BLOCK;
+
+    hal::path lol (core_utils::get_gate_library_directories()[0]);
+    hal::path temp_lib_path = (lol) / "temp_lib.json";
+    std::ofstream test_lib(temp_lib_path.string());
+    test_lib << "{\n"
+                "    \"library\": {\n"
+                "        \"library_name\": \"TEMP_GATE_LIBRARY\",\n"
+                "        \"elements\": {\"GATE_1^0_IN_1^0_OUT\" : [[\"I\"], [], [\"O\"]],\n"
+                "            \"GATE_4^1_IN_4^1_OUT\" : [[\"I(0)\",\"I(1)\",\"I(2)\",\"I(3)\"], [], [\"O(0)\",\"O(1)\",\"O(2)\",\"O(3)\"]],\n"
+                "            \"GATE_4^1_IN_1^0_OUT\" : [[\"I(0)\",\"I(1)\",\"I(2)\",\"I(3)\"], [], [\"O\"]],\n"
+                "            \"GATE_2^2_IN_2^2_OUT\" : [[\"I(0, 0)\",\"I(0, 1)\",\"I(1, 0)\",\"I(1, 1)\"], [], [\"O(0, 0)\",\"O(0, 1)\",\"O(1, 0)\",\"O(1, 1)\"]],\n"
+                "            \"GATE_2^3_IN_2^3_OUT\" : [[\"I(0, 0, 0)\",\"I(0, 0, 1)\",\"I(0, 1, 0)\",\"I(0, 1, 1)\",\"I(1, 0, 0)\",\"I(1, 0, 1)\",\"I(1, 1, 0)\",\"I(1, 1, 1)\"], [], [\"O(0, 0, 0)\",\"O(0, 0, 1)\",\"O(0, 1, 0)\",\"O(0, 1, 1)\",\"O(1, 0, 0)\",\"O(1, 0, 1)\",\"O(1, 1, 0)\",\"O(1, 1, 1)\"]],\n"
+                "\n"
+                "            \"GND\" : [[], [], [\"O\"]],\n"
+                "            \"VCC\" : [[], [], [\"O\"]]\n"
+                "        },\n"
+                "        \"vhdl_includes\": [],\n"
+                "        \"global_gnd_nodes\": [\"GND\"],\n"
+                "        \"global_vcc_nodes\": [\"VCC\"]\n"
+                "    }\n"
+                "}";
+    test_lib.close();
+
+    gate_library_manager::load_all();
+}
+
+void test_utils::remove_temp_gate_lib() {
+    boost::filesystem::remove(((core_utils::get_gate_library_directories()[0]) / "temp_lib.json").string());
+}
+
 std::shared_ptr<netlist> test_utils::create_example_netlist(const int id)
 {
     NO_COUT_BLOCK;
@@ -347,130 +416,7 @@ bool test_utils::netlists_are_equal(const std::shared_ptr<netlist> nl_0, const s
 
     return true;
 }
-/* OLD parser_vhdl_old temp gate lib
-void test_utils::create_temp_gate_lib()
-{
-    NO_COUT_BLOCK;
 
-    hal::path lol (core_utils::get_gate_library_directories()[0]);
-    hal::path temp_lib_path = (lol) / "temp_lib.json";
-    std::ofstream test_lib(temp_lib_path.string());
-    test_lib << "{\n"
-                "    \"library\": {\n"
-                "        \"library_name\": \"TEMP_GATE_LIBRARY\",\n"
-                "        \"elements\": {\n"
-                "            \"GATE0\" : [[\"I\"], [], [\"O\"]],\n"
-                "            \"GATE1\" : [[\"I(0)\",\"I(1)\",\"I(2)\",\"I(3)\",\"I(4)\"], [], [\"O(0)\",\"O(1)\",\"O(2)\",\"O(3)\", \"O(4)\"]],\n"
-                "            \"GATE2\" : [[\"I(0, 0)\",\"I(0, 1)\",\"I(1, 0)\",\"I(1, 1)\"], [], [\"O(0, 0)\",\"O(0, 1)\",\"O(1, 0)\",\"O(1, 1)\"]],\n"
-                "            \"GATE3\" : [[\"I(0, 0, 0)\",\"I(0, 0, 1)\",\"I(0, 1, 0)\",\"I(0, 1, 1)\",\"I(1, 0, 0)\",\"I(1, 0, 1)\",\"I(1, 1, 0)\",\"I(1, 1, 1)\"], [], [\"O(0, 0, 0)\",\"O(0, 0, 1)\",\"O(0, 1, 0)\",\"O(0, 1, 1)\",\"O(1, 0, 0)\",\"O(1, 0, 1)\",\"O(1, 1, 0)\",\"O(1, 1, 1)\"]],\n"
-                "\n"
-                "            \"GND\" : [[], [], [\"O\"]],\n"
-                "            \"VCC\" : [[], [], [\"O\"]]\n"
-                "        },\n"
-                "        \"vhdl_includes\": [],\n"
-                "        \"global_gnd_nodes\": [\"GND\"],\n"
-                "        \"global_vcc_nodes\": [\"VCC\"]\n"
-                "    }\n"
-                "}";
-    test_lib.close();
 
-    gate_library_manager::load_all();
-}*/
-/*
-// Create and load temporarily a custom gate library, which contains gates with input and output vectors up to dimension 3 (this is not the gate_lib of the vhdl_parser test)
-void create_temp_gate_lib()
-{
-    NO_COUT_BLOCK;
-    std::ofstream test_lib(temp_lib_path.string());
-    test_lib << "{\n"
-                "    \"library\": {\n"
-                "        \"library_name\": \"TEMP_GATE_LIBRARY\",\n"
-                "        \"elements\": {\n"
-                "            \"GATE0\" : [[\"I\"], [], [\"O\"]],\n"
-                "            \"GATE1\" : [[\"I(0)\",\"I(1)\",\"I(2)\",\"I(3)\"], [], [\"O\"]],\n"
-                "            \"GATE2\" : [[\"I\"], [], [\"O(0)\",\"O(1)\",\"O(2)\",\"O(3)\"]],\n"
-                "            \"GATE3\" : [[\"I(0)\",\"I(1)\",\"I(2)\",\"I(3)\"], [], [\"O(0)\",\"O(1)\",\"O(2)\",\"O(3)\"]],\n"
-                //"            \"GATE4\" : [[\"I(0, 0)\",\"I(0, 1)\",\"I(1, 0)\",\"I(1, 1)\"], [], [\"O(0, 0)\",\"O(0, 1)\",\"O(1, 0)\",\"O(1, 1)\"]],\n"
-                //"            \"GATE5\" : [[\"I(0, 0, 0)\",\"I(0, 0, 1)\",\"I(0, 1, 0)\",\"I(0, 1, 1)\",\"I(1, 0, 0)\",\"I(1, 0, 1)\",\"I(1, 1, 0)\",\"I(1, 1, 1)\"], [], [\"O(0, 0, 0)\",\"O(0, 0, 1)\",\"O(0, 1, 0)\",\"O(0, 1, 1)\",\"O(1, 0, 0)\",\"O(1, 0, 1)\",\"O(1, 1, 0)\",\"O(1, 1, 1)\"]],\n"
-                "\n"
-                "            \"GND\" : [[], [], [\"O\"]],\n"
-                "            \"VCC\" : [[], [], [\"O\"]]\n"
-                "        },\n"
-                "        \"vhdl_includes\": [],\n"
-                "        \"global_gnd_nodes\": [\"GND\"],\n"
-                "        \"global_vcc_nodes\": [\"VCC\"]\n"
-                "    }\n"
-                "}";
-    test_lib.close();
 
-    gate_library_manager::load_all();
-}*/
 
-void test_utils::create_temp_gate_lib()
-{
-    NO_COUT_BLOCK;
-
-    hal::path lol (core_utils::get_gate_library_directories()[0]);
-    hal::path temp_lib_path = (lol) / "temp_lib.json";
-    std::ofstream test_lib(temp_lib_path.string());
-    test_lib << "{\n"
-                "    \"library\": {\n"
-                "        \"library_name\": \"TEMP_GATE_LIBRARY\",\n"
-                "        \"elements\": {\"GATE_1^0_IN_1^0_OUT\" : [[\"I\"], [], [\"O\"]],\n"
-                "            \"GATE_4^1_IN_4^1_OUT\" : [[\"I(0)\",\"I(1)\",\"I(2)\",\"I(3)\"], [], [\"O(0)\",\"O(1)\",\"O(2)\",\"O(3)\"]],\n"
-                "            \"GATE_4^1_IN_1^0_OUT\" : [[\"I(0)\",\"I(1)\",\"I(2)\",\"I(3)\"], [], [\"O\"]],\n"
-                "            \"GATE_2^2_IN_2^2_OUT\" : [[\"I(0, 0)\",\"I(0, 1)\",\"I(1, 0)\",\"I(1, 1)\"], [], [\"O(0, 0)\",\"O(0, 1)\",\"O(1, 0)\",\"O(1, 1)\"]],\n"
-                "            \"GATE_2^3_IN_2^3_OUT\" : [[\"I(0, 0, 0)\",\"I(0, 0, 1)\",\"I(0, 1, 0)\",\"I(0, 1, 1)\",\"I(1, 0, 0)\",\"I(1, 0, 1)\",\"I(1, 1, 0)\",\"I(1, 1, 1)\"], [], [\"O(0, 0, 0)\",\"O(0, 0, 1)\",\"O(0, 1, 0)\",\"O(0, 1, 1)\",\"O(1, 0, 0)\",\"O(1, 0, 1)\",\"O(1, 1, 0)\",\"O(1, 1, 1)\"]],\n"
-                "\n"
-                "            \"GND\" : [[], [], [\"O\"]],\n"
-                "            \"VCC\" : [[], [], [\"O\"]]\n"
-                "        },\n"
-                "        \"vhdl_includes\": [],\n"
-                "        \"global_gnd_nodes\": [\"GND\"],\n"
-                "        \"global_vcc_nodes\": [\"VCC\"]\n"
-                "    }\n"
-                "}";
-    test_lib.close();
-
-    gate_library_manager::load_all();
-}
-
-void test_utils::remove_temp_gate_lib() {
-    boost::filesystem::remove(((core_utils::get_gate_library_directories()[0]) / "temp_lib.json").string());
-}
-
-std::shared_ptr<net> test_utils::get_net_by_subname(std::shared_ptr<netlist> nl, const std::string subname){
-    if(nl == nullptr)
-        return nullptr;
-    std::set<std::shared_ptr<net>> nets = nl->get_nets();
-    std::shared_ptr<net> res = nullptr;
-    for (auto n : nets){
-        std::string n_name = n->get_name();
-        if (n_name.find(subname) != n_name.npos){
-            if (res != nullptr){
-                std::cerr << "Multiple gates contains the subtring '" << subname << "'! This should not happen..." << std::endl;
-                return nullptr;
-            }
-            res = n;
-        }
-    }
-    return res;
-}
-
-std::shared_ptr<gate> test_utils::get_gate_by_subname(std::shared_ptr<netlist> nl, const std::string subname){
-    if(nl == nullptr)
-        return nullptr;
-    std::set<std::shared_ptr<gate>> gates = nl->get_gates();
-    std::shared_ptr<gate> res = nullptr;
-    for (auto g : gates){
-        std::string g_name = g->get_name();
-        if (g_name.find(subname) != g_name.npos){
-            if (res != nullptr){
-                std::cerr << "Multiple gates contains the subtring '" << subname << "'! This should not happen..." << std::endl;
-                return nullptr;
-            }
-            res = g;
-        }
-    }
-    return res;
-}
