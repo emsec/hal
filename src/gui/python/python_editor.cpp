@@ -21,7 +21,9 @@
 
 #include <QDebug>
 #include <QFileInfo>
+#include <QMenu>
 #include <QMessageBox>
+#include <QTabBar>
 #include <chrono>
 #include <fstream>
 
@@ -38,6 +40,8 @@ python_editor::python_editor(QWidget* parent)
     m_tab_widget = new QTabWidget(this);
     m_tab_widget->setTabsClosable(true);
     m_tab_widget->setMovable(true);
+    // we need to grab mouse events from the tab bar
+    m_tab_widget->tabBar()->installEventFilter(this);
     m_content_layout->addWidget(m_tab_widget);
     connect(m_tab_widget, &QTabWidget::tabCloseRequested, this, &python_editor::handle_tab_close_requested);
     m_content_layout->addWidget(m_searchbar);
@@ -93,8 +97,6 @@ python_editor::python_editor(QWidget* parent)
     hal_file_manager::register_on_serialize_callback("python_editor", std::bind(&python_editor::handle_serialization_to_hal_file, this, _1, _2, _3));
     hal_file_manager::register_on_deserialize_callback("python_editor", std::bind(&python_editor::handle_deserialization_from_hal_file, this, _1, _2, _3));
 }
-
-
 
 bool python_editor::handle_serialization_to_hal_file(const hal::path& path, std::shared_ptr<netlist> netlist, rapidjson::Document& document)
 {
@@ -481,6 +483,18 @@ void python_editor::handle_action_new_tab()
     connect(editor, &python_code_editor::textChanged, this, &python_editor::handle_text_changed);
 }
 
+void python_editor::handle_action_tab_menu()
+{
+    QMenu context_menu(this);
+    QAction* close_action = context_menu.addAction("Close");
+    QAction* close_others_action = context_menu.addAction("Close all others");
+    QAction* close_right_action = context_menu.addAction("Close all right");
+    QAction* close_left_action = context_menu.addAction("Close all left");
+    context_menu.addSeparator();
+    QAction* show_file_action = context_menu.addAction("Show in system explorer");
+    context_menu.exec(QCursor::pos());
+}
+
 void python_editor::handle_tab_file_changed(QString path)
 {
     python_code_editor* editor_with_modified_base_file = m_path_editor_map.value(path);
@@ -522,6 +536,22 @@ void python_editor::handle_base_file_modified_ok()
     python_code_editor* current_editor = dynamic_cast<python_code_editor*>(m_tab_widget->currentWidget());
     current_editor->set_base_file_modified(false);
     m_file_modified_bar->setHidden(true);
+}
+
+bool python_editor::eventFilter(QObject* obj, QEvent* event)
+{
+  if (obj == m_tab_widget->tabBar() && event->type() == QEvent::MouseButtonPress)
+  {
+    QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
+    if (mouseEvent->button() == Qt::MouseButton::RightButton)
+    {
+      // filter for right-mouse-button-pressed events
+      this->handle_action_tab_menu();
+      return true;
+    }
+  }
+  // otherwise use honor default filter
+  return QObject::eventFilter(obj, event);
 }
 
 QString python_editor::open_icon_path() const
