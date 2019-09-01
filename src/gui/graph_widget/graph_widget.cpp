@@ -21,6 +21,7 @@
 #include <QKeyEvent>
 #include <QToolButton>
 #include <QVBoxLayout>
+#include <QVariantAnimation>
 
 graph_widget::graph_widget(graph_context* context, QWidget* parent)
     : content_widget("Graph", parent), m_view(new graph_graphics_view(this)), m_context(context), m_overlay(new dialog_overlay(this)), m_navigation_widget(new graph_navigation_widget(nullptr)),
@@ -36,7 +37,7 @@ graph_widget::graph_widget(graph_context* context, QWidget* parent)
 
     m_overlay->hide();
     m_overlay->set_widget(m_navigation_widget);
-
+    m_spinner_widget->hide();
     m_content_layout->addWidget(m_view);
 
     m_view->setFrameStyle(QFrame::NoFrame);
@@ -77,6 +78,7 @@ void graph_widget::handle_scene_unavailable()
     m_view->setScene(nullptr);
 
     disconnect(m_overlay, &dialog_overlay::clicked, m_overlay, &dialog_overlay::hide);
+
     m_overlay->set_widget(m_spinner_widget);
 
     if (m_overlay->isHidden())
@@ -131,7 +133,7 @@ void graph_widget::keyPressEvent(QKeyEvent* event)
         }
         case Qt::Key_Backspace:
         {
-            handle_history_back_request();
+            handle_history_step_back_request();
             break;
         }
         default:
@@ -139,48 +141,20 @@ void graph_widget::keyPressEvent(QKeyEvent* event)
     }
 }
 
-void graph_widget::handle_navigation_jump_requested(const u32 from_gate, const u32 via_net, const u32 to_gate)
+void graph_widget::handle_navigation_jump_requested(const u32 via_net, const u32 to_gate)
 {
     setFocus();
     // ASSERT INPUTS ARE VALID ?
-    std::shared_ptr<gate> g = g_netlist->get_gate_by_id(from_gate);
+    auto n = g_netlist->get_net_by_id(via_net);
+    auto g = g_netlist->get_gate_by_id(to_gate);
 
-    if (!g)
+    if (!g || !n)
         return;
 
-    std::shared_ptr<net> n = g_netlist->get_net_by_id(via_net);
-
-    if (!n)
-        return;
-
-    g = g_netlist->get_gate_by_id(to_gate);
-
-    if (!g)
-        return;
-
-    bool contains_net  = false;
-    bool contains_gate = false;
-
-    if (m_context->nets().contains(via_net))
-        contains_net = true;
-
-    if (m_context->gates().contains(to_gate))
-        contains_gate = true;
-
-    if (!contains_net || !contains_gate)
+    if (!m_context->gates().contains(to_gate))
     {
-        QSet<u32> gates;
-        QSet<u32> nets;
-
-        if (!contains_net)
-            nets.insert(via_net);
-
-        if (!contains_gate)
-            gates.insert(to_gate);
-
-        // ADD TO CONTEXT
         add_context_to_history();
-        m_context->add(QSet<u32>(), gates, nets);    // EMPTY SET DEBUG CODE
+        m_context->add({}, {to_gate}, {});
     }
     else
     {
@@ -192,10 +166,35 @@ void graph_widget::handle_navigation_jump_requested(const u32 from_gate, const u
     // SELECT IN RELAY
     g_selection_relay.clear();
     g_selection_relay.m_selected_gates.insert(to_gate);
-    g_selection_relay.m_focus_type     = selection_relay::item_type::gate;
-    g_selection_relay.m_focus_id       = to_gate;
-    g_selection_relay.m_subfocus       = selection_relay::subfocus::left;
-    g_selection_relay.m_subfocus_index = 0;
+    g_selection_relay.m_focus_type = selection_relay::item_type::gate;
+    g_selection_relay.m_focus_id   = to_gate;
+    g_selection_relay.m_subfocus   = selection_relay::subfocus::none;
+
+    u32 cnt = 0;
+    for (const auto& pin : g->get_input_pin_types())
+    {
+        if (g->get_fan_in_net(pin) == n)    // input net
+        {
+            g_selection_relay.m_subfocus       = selection_relay::subfocus::left;
+            g_selection_relay.m_subfocus_index = cnt;
+            break;
+        }
+        cnt++;
+    }
+    if (g_selection_relay.m_subfocus == selection_relay::subfocus::none)
+    {
+        cnt = 0;
+        for (const auto& pin : g->get_output_pin_types())
+        {
+            if (g->get_fan_out_net(pin) == n)    // input net
+            {
+                g_selection_relay.m_subfocus       = selection_relay::subfocus::right;
+                g_selection_relay.m_subfocus_index = cnt;
+                break;
+            }
+            cnt++;
+        }
+    }
 
     g_selection_relay.relay_selection_changed(nullptr);
 
@@ -207,7 +206,7 @@ void graph_widget::handle_module_double_clicked(const u32 id)
 {
     // CONNECT DIRECTLY TO HANDLE ???
     // MAYBE ADDITIONAL CODE NECESSARY HERE...
-    handle_module_down_requested(id);
+    handle_enter_module_requested(id);
 }
 
 // ADD SOUND OR ERROR MESSAGE TO FAILED NAVIGATION ATTEMPTS
@@ -226,62 +225,33 @@ void graph_widget::handle_navigation_left_request()
             if (!g)
                 return;
 
-            if (g->get_input_pin_types().size())
+            if (g_selection_relay.m_subfocus == selection_relay::subfocus::left)
             {
-                if (g_selection_relay.m_subfocus == selection_relay::subfocus::left)
+                std::string pin_type   = g->get_input_pin_types()[g_selection_relay.m_subfocus_index];
+                std::shared_ptr<net> n = g->get_fan_in_net(pin_type);
+
+                if (!n)
+                    return;
+
+                if (n->get_src().gate == nullptr)
                 {
-                    std::string pin_type   = *std::next(g->get_input_pin_types().begin(), g_selection_relay.m_subfocus_index);
-                    std::shared_ptr<net> n = g->get_fan_in_net(pin_type);
-
-                    if (!n)
-                        return;
-
-                    if (!n->get_src().gate)
-                        return;
-
-                    bool contains_net  = false;
-                    bool contains_gate = false;
-
-                    if (m_context->nets().contains(n->get_id()))
-                        contains_net = true;
-
-                    if (m_context->gates().contains(n->get_src().get_gate()->get_id()))
-                        contains_gate = true;
-
-                    if (!contains_net || !contains_gate)
-                    {
-                        QSet<u32> gates;
-                        QSet<u32> nets;
-
-                        if (!contains_net)
-                            nets.insert(n->get_id());
-
-                        if (!contains_gate)
-                            gates.insert(n->get_src().get_gate()->get_id());
-
-                        // ADD TO CONTEXT
-                        m_context->add(QSet<u32>(), gates, nets);    // EMPTY SET DEBUG CODE
-                    }
-                    // SELECT IN RELAY
                     g_selection_relay.clear();
-                    g_selection_relay.m_selected_gates.insert(n->get_src().get_gate()->get_id());
-                    g_selection_relay.m_focus_id       = n->get_src().get_gate()->get_id();
-                    g_selection_relay.m_focus_type     = selection_relay::item_type::gate;
-                    g_selection_relay.m_subfocus       = selection_relay::subfocus::right;
-                    g_selection_relay.m_subfocus_index = 0;
-
+                    g_selection_relay.m_selected_nets.insert(n->get_id());
+                    g_selection_relay.m_focus_type = selection_relay::item_type::net;
+                    g_selection_relay.m_focus_id   = n->get_id();
                     g_selection_relay.relay_selection_changed(nullptr);
-
-                    // JUMP TO THE GATE
-                    ensure_gate_visible(n->get_src().get_gate()->get_id());
                 }
                 else
                 {
-                    g_selection_relay.m_subfocus       = selection_relay::subfocus::left;
-                    g_selection_relay.m_subfocus_index = 0;
-
-                    g_selection_relay.relay_subfocus_changed(nullptr);
+                    handle_navigation_jump_requested(n->get_id(), n->get_src().get_gate()->get_id());
                 }
+            }
+            else if (g->get_input_pin_types().size())
+            {
+                g_selection_relay.m_subfocus       = selection_relay::subfocus::left;
+                g_selection_relay.m_subfocus_index = 0;
+
+                g_selection_relay.relay_subfocus_changed(nullptr);
             }
 
             return;
@@ -292,6 +262,11 @@ void graph_widget::handle_navigation_left_request()
 
             if (!n)
                 return;
+
+            if (n->get_src().gate != nullptr)
+            {
+                handle_navigation_jump_requested(n->get_id(), n->get_src().get_gate()->get_id());
+            }
 
             return;
         }
@@ -319,11 +294,27 @@ void graph_widget::handle_navigation_right_request()
 
             if (g_selection_relay.m_subfocus == selection_relay::subfocus::right)
             {
-                m_navigation_widget->setup();
-                m_navigation_widget->setFocus();
-                m_overlay->show();
+                auto n = g->get_fan_out_net(g->get_output_pin_types()[g_selection_relay.m_subfocus_index]);
+                if (n->get_num_of_dsts() == 0)
+                {
+                    g_selection_relay.clear();
+                    g_selection_relay.m_selected_nets.insert(n->get_id());
+                    g_selection_relay.m_focus_type = selection_relay::item_type::net;
+                    g_selection_relay.m_focus_id   = n->get_id();
+                    g_selection_relay.relay_selection_changed(nullptr);
+                }
+                else if (n->get_num_of_dsts() == 1)
+                {
+                    handle_navigation_jump_requested(n->get_id(), n->get_dsts()[0].get_gate()->get_id());
+                }
+                else
+                {
+                    m_navigation_widget->setup();
+                    m_navigation_widget->setFocus();
+                    m_overlay->show();
+                }
             }
-            else
+            else if (g->get_output_pin_types().size())
             {
                 g_selection_relay.m_subfocus       = selection_relay::subfocus::right;
                 g_selection_relay.m_subfocus_index = 0;
@@ -339,6 +330,17 @@ void graph_widget::handle_navigation_right_request()
 
             if (!n)
                 return;
+
+            if (n->get_num_of_dsts() == 1)
+            {
+                handle_navigation_jump_requested(n->get_id(), n->get_dsts()[0].get_gate()->get_id());
+            }
+            else
+            {
+                m_navigation_widget->setup();
+                m_navigation_widget->setFocus();
+                m_overlay->show();
+            }
 
             return;
         }
@@ -363,13 +365,14 @@ void graph_widget::handle_navigation_down_request()
             g_selection_relay.navigate_down();
 }
 
-void graph_widget::handle_history_back_request()
+void graph_widget::handle_history_step_back_request()
 {
     if (m_context_history.empty())
         return;
 
     auto entry = m_context_history.back();
     m_context_history.pop_back();
+
     m_context->begin_change();
     m_context->clear();
     m_context->add(entry.m_modules, entry.m_gates, {});
@@ -402,7 +405,7 @@ void graph_widget::handle_history_back_request()
     qDebug() << "-------------------------------------";
 }
 
-void graph_widget::handle_module_down_requested(const u32 id)
+void graph_widget::handle_enter_module_requested(const u32 id)
 {
     add_context_to_history();
     m_context->begin_change();
@@ -422,8 +425,19 @@ void graph_widget::ensure_gate_visible(const u32 gate)
 {
     if (m_context->update_in_progress())
         return;
+
     const graphics_gate* itm = m_context->scene()->get_gate_item(gate);
-    m_view->ensureVisible(itm);
+
+    auto anim = new QVariantAnimation();
+    anim->setDuration(1000);
+
+    QPointF center = m_view->mapToScene(QRect(0, 0, m_view->viewport()->width(), m_view->viewport()->height())).boundingRect().center();
+    anim->setStartValue(center);
+    anim->setEndValue(itm->pos());
+
+    connect(anim, &QVariantAnimation::valueChanged, [=](const QVariant& value) { m_view->centerOn(value.toPoint()); });
+
+    anim->start();
 }
 
 void graph_widget::add_context_to_history()

@@ -68,10 +68,7 @@ void hal_content_manager::handle_open_document(const QString& file_name)
     m_main_window->add_content(context_manager_wid, 1, content_anchor::left);
     context_manager_wid->open();
 
-    {
-        auto context = g_graph_context_manager.get_dynamic_context(g_graph_context_manager.dynamic_context_list()[0]);
-        graph_tab_wid->show_context(context);
-    }
+    QTimer::singleShot(50, [context_manager_wid]() { context_manager_wid->handle_create_context_clicked(); });
 
     selection_details_widget* details = new selection_details_widget();
     m_main_window->add_content(details, 0, content_anchor::bottom);

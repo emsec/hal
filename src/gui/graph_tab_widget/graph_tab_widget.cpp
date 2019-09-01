@@ -41,7 +41,8 @@ void graph_tab_widget::show_context(dynamic_context* context)
     auto index = get_context_tab_index(context);
     if (index != -1)
     {
-        m_tab_widget->setCurrentIndex(get_context_tab_index(context));
+        m_tab_widget->setCurrentIndex(index);
+        m_tab_widget->widget(index)->setFocus();
         return;
     }
 
@@ -69,6 +70,8 @@ void graph_tab_widget::add_graph_widget_tab(dynamic_context* context)
     //m_context_widget_map.insert(context, new_graph_widget);
     int tab_index = addTab(new_graph_widget, context->name());
     m_tab_widget->setCurrentIndex(tab_index);
+    m_tab_widget->widget(tab_index)->setFocus();
+    context->update();
 }
 
 int graph_tab_widget::get_context_tab_index(dynamic_context* context) const

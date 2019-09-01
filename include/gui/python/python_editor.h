@@ -31,6 +31,7 @@
 #include "core/hal_file_manager.h"
 #include "file_modified_bar/file_modified_bar.h"
 
+#include <QEvent>
 #include <QFileSystemWatcher>
 #include <QMap>
 #include <QPushButton>
@@ -77,6 +78,7 @@ public:
     void handle_action_save_file_as();
     void handle_action_run();
     void handle_action_new_tab();
+    void handle_action_tab_menu();
     void tab_load_file(u32 index, QString file_name);
 
     void save_file(const bool ask_path, int index = -1);
@@ -138,6 +140,9 @@ public Q_SLOTS:
     void handle_base_file_modified_reload();
     void handle_base_file_modified_ignore();
     void handle_base_file_modified_ok();
+
+protected:
+  bool eventFilter(QObject* obj, QEvent* event) Q_DECL_OVERRIDE;
 
 private:
     QVBoxLayout* m_layout;

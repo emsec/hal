@@ -416,7 +416,10 @@ void main_window::handle_action_open()
 
     QString file_name = QFileDialog::getOpenFileName(nullptr, title, QDir::currentPath(), text, nullptr, QFileDialog::DontUseNativeDialog);
 
-    file_manager::get_instance()->open_file(file_name);
+    if (!file_name.isNull())
+    {
+        file_manager::get_instance()->open_file(file_name);
+    }
 }
 
 void main_window::handle_file_opened(const QString& file_name)

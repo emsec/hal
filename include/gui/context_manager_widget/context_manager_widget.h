@@ -30,9 +30,7 @@
 
 #include "graph_widget/contexts/dynamic_context.h"
 
-#include <QListView>
 #include <QListWidget>
-#include <QMap>
 #include <QPoint>
 
 class graph_context;
@@ -45,6 +43,7 @@ class context_manager_widget : public content_widget
 public:
     context_manager_widget(graph_tab_widget* tab_view, QWidget* parent = nullptr);
     void resizeEvent(QResizeEvent* event);
+    void handle_create_context_clicked();
 
 public Q_SLOTS:
     void handle_context_created(dynamic_context* context);
@@ -56,19 +55,15 @@ private:
 
     QListWidget* m_list_widget;
 
-    QModelIndex m_clicked_index;
+    u32 m_context_counter = 0;
 
     void handle_context_menu_request(const QPoint& point);
 
-    void handle_create_context_clicked();
     void handle_open_context_clicked();
     void handle_rename_context_clicked();
     void handle_delete_context_clicked();
+
     void handle_item_double_clicked(QListWidgetItem*);
-
-    void show_context_menu(const QPoint& point);
-
-    u32 m_context_counter = 0;
 };
 
 #endif    // CONTEXT_MANAGER_WIDGET

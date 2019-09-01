@@ -60,17 +60,13 @@ void graph_context::add(const QSet<u32>& modules, const QSet<u32>& gates, const 
     QSet<u32> new_gates   = gates - m_gates;
     QSet<u32> new_nets    = nets - m_nets;
 
-    QSet<u32> old_modules = m_removed_modules & new_modules;
-    QSet<u32> old_gates   = m_removed_gates & new_gates;
-    QSet<u32> old_nets    = m_removed_nets & new_nets;
+    QSet<u32> old_modules = m_removed_modules & modules;
+    QSet<u32> old_gates   = m_removed_gates & gates;
+    QSet<u32> old_nets    = m_removed_nets & nets;
 
     m_removed_modules -= old_modules;
     m_removed_gates -= old_gates;
     m_removed_nets -= old_nets;
-
-    new_modules -= old_modules;
-    new_gates -= old_gates;
-    new_nets -= old_nets;
 
     m_added_modules += new_modules;
     m_added_gates += new_gates;
@@ -106,9 +102,9 @@ void graph_context::remove(const QSet<u32>& modules, const QSet<u32>& gates, con
 
 void graph_context::clear()
 {
-    m_removed_modules = m_modules + m_added_modules;
-    m_removed_gates   = m_gates + m_added_gates;
-    m_removed_nets    = m_nets + m_added_nets;
+    m_removed_modules = m_modules;
+    m_removed_gates   = m_gates;
+    m_removed_nets    = m_nets;
 
     m_added_modules.clear();
     m_added_gates.clear();
