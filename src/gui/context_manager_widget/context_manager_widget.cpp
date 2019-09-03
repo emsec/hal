@@ -1,11 +1,17 @@
 #include "context_manager_widget/context_manager_widget.h"
+
+#include "gui_globals.h"
+
 #include "gui/graph_tab_widget/graph_tab_widget.h"
 #include "gui/graph_widget/contexts/dynamic_context.h"
 #include "gui/graph_widget/graph_widget.h"
-#include "gui_globals.h"
+
+#include "input_dialog/input_dialog.h"
+#include "validator/unique_string_validator.h"
+#include "validator/empty_string_validator.h"
+
 #include <QAction>
 #include <QDebug>
-#include <QInputDialog>
 #include <QListWidgetItem>
 #include <QMenu>
 #include <QSize>
@@ -109,11 +115,20 @@ void context_manager_widget::handle_rename_context_clicked()
 {
     dynamic_context* clicked_context = g_graph_context_manager.get_dynamic_context(m_list_widget->currentItem()->text());
 
-    bool confirm;
-    const QString new_name = QInputDialog::getText(this, "Rename view", "New name:", QLineEdit::Normal, clicked_context->name(), &confirm).trimmed();
+    QStringList used_context_names = g_graph_context_manager.dynamic_context_list();
 
-    if (confirm && !new_name.isEmpty())
-        g_graph_context_manager.rename_dynamic_context(clicked_context->name(), new_name);
+    unique_string_validator unique_validator(used_context_names);
+    empty_string_validator empty_validator;
+
+    input_dialog ipd;
+    ipd.set_window_title("Rename View");
+    ipd.set_info_text("Please select a new and unique name for the view");
+    ipd.set_input_text(clicked_context->name());
+    ipd.add_validator(&unique_validator);
+    ipd.add_validator(&empty_validator);
+    
+    if(ipd.exec() == QDialog::Accepted)
+        g_graph_context_manager.rename_dynamic_context(clicked_context->name(), ipd.text_value());
 }
 
 void context_manager_widget::handle_delete_context_clicked()

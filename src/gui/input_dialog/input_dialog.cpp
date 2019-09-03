@@ -1,25 +1,21 @@
 #include "input_dialog/input_dialog.h"
 
+#include "validator/stacked_validator.h"
 
 #include<QDialogButtonBox>
-
-#include <QDebug>
 
 input_dialog::input_dialog(QWidget* parent, Qt::WindowFlags f) : QDialog(parent, f)
 {
     init();
 }
 
-input_dialog::input_dialog(const QString& title, const QString& info_text, QStringList* forbidden_strings, QStringList* unique_strings, std::function<bool()>* condition_function, Qt::WindowFlags f, QWidget* parent) : QDialog(parent, f)
+input_dialog::input_dialog(const QString& window_title, const QString& info_text, const QString& input_text, QWidget* parent, Qt::WindowFlags f) : QDialog(parent, f)
 {
-    
     init();
 
-    setWindowTitle(title);
-    m_label_info_text->setText(info_text);
-    m_forbidden_strings = forbidden_strings;
-    m_unique_strings = unique_strings;
-    m_accept_condition_function = condition_function;
+    setWindowTitle(window_title);
+    set_info_text(info_text);
+    set_input_text(input_text);
 }
 
 void input_dialog::init()
@@ -49,6 +45,9 @@ void input_dialog::init()
 
     m_layout->setContentsMargins(15, 15, 15, 10);
 
+
+    m_validator = stacked_validator();
+ 
     connect(button_box, &QDialogButtonBox::accepted, this, &input_dialog::handle_ok_clicked);
     connect(button_box, &QDialogButtonBox::rejected, this, &input_dialog::handle_cancel_clicked);
     connect(m_input_text_edit, &QLineEdit::textChanged, this, &input_dialog::handle_text_changed);
@@ -59,14 +58,20 @@ void input_dialog::set_window_title(const QString& title)
     setWindowTitle(title);
 }
 
-void input_dialog::set_info_text(const QString& info_text)
+void input_dialog::set_info_text(const QString& text)
 {
-    m_label_info_text->setText(info_text);
+    m_label_info_text->setText(text);
 }
 
-void input_dialog::set_custom_warning_text(const QString& warning_text)
+void input_dialog::set_input_text(const QString& text)
 {
-    m_warning_text_custom = warning_text;
+    m_input_text_edit->setText(text);
+    m_input_text_edit->selectAll();
+}
+
+void input_dialog::set_warning_text(const QString& text)
+{
+    m_warning_text = text;
 }
 
 void input_dialog::show_warning_text()
@@ -87,96 +92,37 @@ void input_dialog::enable_progression()
 
 void input_dialog::disable_progression()
 {
+    set_warning_text(m_validator.fail_text());
     m_ok_button->setDisabled(true);
     show_warning_text();
 }
 
-void input_dialog::set_conditional_function(std::function<bool()>* accept_condition_function, const QString& warning_text)
+void input_dialog::add_validator(validator* validator)
 {
-   m_warning_text_custom = warning_text; 
-   m_accept_condition_function = accept_condition_function;   
+    m_validator.add_validator(validator);
 }
 
-void input_dialog::remove_conditional_function()
+void input_dialog::remove_validator(validator* validator)
 {
-    m_accept_condition_function = nullptr;
+    m_validator.remove_validator(validator);
 }
 
-void input_dialog::set_forbidden_strings(QStringList* strings)
+void input_dialog::clear_validators()
 {
-    m_forbidden_strings = strings;
-}
-
-void input_dialog::remove_forbidden_strings()
-{
-    m_forbidden_strings = nullptr;
-}
-
-void input_dialog::set_unique_strings(QStringList* strings)
-{
-    m_unique_strings = strings;
-}
-
-void input_dialog::remove_unique_strings()
-{
-    m_unique_strings = nullptr;
+    m_validator.clear_validators();
 }
 
 QString input_dialog::text_value() const
 {
-    return m_input_text_edit->text();
+    return m_input_text_edit->text().trimmed();
 }
-
 
 void input_dialog::handle_text_changed(const QString& text)
 {
-    bool allow_progress = true;
-
-    //check for forbidden strings
-    if(m_forbidden_strings != nullptr)
-    {
-        if(m_forbidden_strings->contains(text))
-        {
-            allow_progress = false;
-            m_warning_text = m_warning_text_forbidden;
-        }
-    }
-
-    //check if strings is unique
-    if(allow_progress && m_unique_strings != nullptr)
-    {
-        if(m_unique_strings->contains(text))
-        {
-            allow_progress = false;
-            m_warning_text = m_warning_text_unique;
-        }
-    }
-
-    //check conditional function
-    if(allow_progress && m_accept_condition_function != nullptr)
-    {
-        auto f = *(m_accept_condition_function);
-
-        if(!f())
-        {
-            allow_progress = false;
-            m_warning_text = m_warning_text_custom;
-        }
-    }
-
-    //check if input is empty
-    if(allow_progress && text.isEmpty())
-    {   
-        allow_progress = false;
-        m_warning_text = m_warning_text_empty;
-    }
-        
-    //show or hide corresponding warning + enable or disable ok button depending on result
-    if(!allow_progress)
+    if(!m_validator.validate(text))
         disable_progression();
     else
         enable_progression();
-
 }
 
 void input_dialog::handle_ok_clicked()
@@ -188,23 +134,3 @@ void input_dialog::handle_cancel_clicked()
 {
     done(QDialog::Rejected);
 }
-
-/*
-QString input_dialog::get_text(bool* ok)
-{
-    input_dialog* ipd = new input_dialog();
-    ipd->set_window_title("Rename view");
-    ipd->set_info_text("Please enter a new and uniqe name for the selected view.");
-    int x = ipd->exec();
-
-    if(x == QDialog::Accepted)
-    {
-        *ok = true;
-        return ipd->text_value();
-    }
-    else
-    {
-        *ok = false;
-        return nullptr; 
-    }
-} */
