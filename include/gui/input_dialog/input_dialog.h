@@ -1,6 +1,8 @@
 #ifndef INPUT_DIALOG_H
 #define INPUT_DIALOG_H
 
+#include "validator/stacked_validator.h"
+
 #include <QDialog>
 #include <QVBoxLayout>
 #include <QLabel>
@@ -11,23 +13,18 @@ class input_dialog : public QDialog
 {
     public:
         input_dialog(QWidget* parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
-        input_dialog(const QString& title, const QString& info_text, QStringList* forbidden_strings = nullptr, QStringList* unique_strings = nullptr, std::function<bool()>* condition_function = nullptr, Qt::WindowFlags f = Qt::WindowFlags(), QWidget* parent = nullptr);
-
-        //static QString get_text(bool* ok);
+        input_dialog(const QString& window_title, const QString& info_text, const QString& input_text, QWidget* parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
 
         void set_window_title(const QString& title);
-        void set_info_text(const QString& info_text);
 
-        void set_custom_warning_text(const QString& warning_text);
+        void set_info_text(const QString& text);
+        void set_input_text(const QString& text);
 
-        void set_unique_strings(QStringList* strings);
-        void remove_unique_strings();
-
-        void set_forbidden_strings(QStringList* strings);
-        void remove_forbidden_strings();
-
-        void set_conditional_function(std::function<bool()>* accept_condition_function, const QString& warning_text = "");
-        void remove_conditional_function();
+        void set_warning_text(const QString& text);
+ 
+        void add_validator(validator* validator);
+        void remove_validator(validator* validator);
+        void clear_validators();
 
         QString text_value() const;
 
@@ -39,15 +36,8 @@ class input_dialog : public QDialog
         QPushButton* m_ok_button;
 
         QString m_warning_text = "";
-        QString m_warning_text_custom = "";
-        QString m_warning_text_empty = "Choosen input can't be empty.";
-        QString m_warning_text_unique = "Coosen input already assigned.";
-        QString m_warning_text_forbidden = "Choosen input is reserved.";
 
-        std::function<bool()>* m_accept_condition_function = nullptr;
-        QStringList* m_unique_strings = nullptr;
-        QStringList* m_forbidden_strings = nullptr;
-
+        stacked_validator m_validator;
 
         void init();
 
