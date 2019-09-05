@@ -9,7 +9,6 @@
 
 #include "netlist/gate.h"
 
-
 std::string plugin_gate_decorators::get_name()
 {
     return std::string("gate_decorators");
@@ -26,6 +25,7 @@ void plugin_gate_decorators::on_load()
     gate_decorator_system::register_bdd_decorator_function("SYNOPSYS_90NM", &bdd_availability_tester_synopsys90, &bdd_generator_synopsys90);
     gate_decorator_system::register_bdd_decorator_function("YOSYS_MYCELL", &bdd_availability_tester_yosys_mycell, &bdd_generator_yosys_mycell);
     gate_decorator_system::register_bdd_decorator_function("SYNOPSYS_NAND_NOR", &bdd_availability_tester_synopsys_nand_nor, &bdd_generator_synopsys_nand_nor);
+    gate_decorator_system::register_bdd_decorator_function("NangateOpenCellLibrary", &bdd_availability_tester_NangateOpenCellLibrary, &bdd_generator_NangateOpenCellLibrary);
 
     gate_decorator_system::register_bdd_decorator_function("SCAN_FF_LIB", &bdd_availability_tester_scan_ff_lib, &bdd_generator_scan_ff_lib);
 
@@ -42,9 +42,9 @@ void plugin_gate_decorators::on_unload()
     gate_decorator_system::remove_bdd_decorator_function("SYNOPSYS_90NM");
     gate_decorator_system::remove_bdd_decorator_function("YOSYS_MYCELL");
     gate_decorator_system::remove_bdd_decorator_function("SYNOPSYS_NAND_NOR");
+    gate_decorator_system::remove_bdd_decorator_function("NangateOpenCellLibrary");
 
     gate_decorator_system::remove_bdd_decorator_function("SCAN_FF_LIB");
-
 
     gate_decorator_system::remove_bdd_decorator_function("XILINX_SIMPRIM");
     gate_decorator_system::remove_lut_decorator_function("XILINX_SIMPRIM");

@@ -3,8 +3,8 @@
 
 #include "core/interface_base.h"
 #include <map>
-#include <string>
 #include <memory>
+#include <string>
 
 class bdd;
 class gate;
@@ -32,6 +32,9 @@ private:
 
     static std::map<std::string, std::shared_ptr<bdd>> bdd_generator_synopsys_nand_nor(std::shared_ptr<gate> g, std::map<std::string, std::shared_ptr<bdd>>& input_pin_type_to_bdd);
     static bool bdd_availability_tester_synopsys_nand_nor(std::shared_ptr<gate> g);
+
+    static std::map<std::string, std::shared_ptr<bdd>> bdd_generator_NangateOpenCellLibrary(std::shared_ptr<gate> g, std::map<std::string, std::shared_ptr<bdd>>& input_pin_type_to_bdd);
+    static bool bdd_availability_tester_NangateOpenCellLibrary(std::shared_ptr<gate> g);
 
     static std::map<std::string, std::shared_ptr<bdd>> bdd_generator_scan_ff_lib(std::shared_ptr<gate> g, std::map<std::string, std::shared_ptr<bdd>>& input_pin_type_to_bdd);
     static bool bdd_availability_tester_scan_ff_lib(std::shared_ptr<gate> g);
