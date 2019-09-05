@@ -39,11 +39,35 @@ class graph_tab_widget;
 class context_manager_widget : public content_widget
 {
     Q_OBJECT
+    Q_PROPERTY(QString new_view_icon_path READ new_view_icon_path WRITE set_new_view_icon_path)
+    Q_PROPERTY(QString new_view_icon_style READ new_view_icon_style WRITE set_new_view_icon_style)
+    Q_PROPERTY(QString rename_icon_path READ rename_icon_path WRITE set_rename_icon_path)
+    Q_PROPERTY(QString rename_icon_style READ rename_icon_style WRITE set_rename_icon_style)
+    Q_PROPERTY(QString delete_icon_path READ delete_icon_path WRITE set_delete_icon_path)
+    Q_PROPERTY(QString delete_icon_style READ delete_icon_style WRITE set_delete_icon_style)
+
 
 public:
     context_manager_widget(graph_tab_widget* tab_view, QWidget* parent = nullptr);
     void resizeEvent(QResizeEvent* event);
     void handle_create_context_clicked();
+
+    virtual void setup_toolbar(toolbar* toolbar) Q_DECL_OVERRIDE;
+
+    QString new_view_icon_path() const;
+    QString new_view_icon_style() const;
+    QString rename_icon_path() const;
+    QString rename_icon_style() const;
+    QString delete_icon_path() const;
+    QString delete_icon_style() const;
+
+    void set_new_view_icon_path(const QString &path);
+    void set_new_view_icon_style(const QString &style);
+    void set_rename_icon_path(const QString &path);
+    void set_rename_icon_style(const QString &style);
+    void set_delete_icon_path(const QString &path);
+    void set_delete_icon_style(const QString &style);
+
 
 public Q_SLOTS:
     void handle_context_created(dynamic_context* context);
@@ -55,6 +79,19 @@ private:
 
     QListWidget* m_list_widget;
 
+    QAction* m_new_context_action;
+    QAction* m_rename_action;
+    QAction* m_delete_action;
+
+    QString m_new_view_icon_path;
+    QString m_new_view_icon_style;
+
+    QString m_rename_icon_path;
+    QString m_rename_icon_style;
+
+    QString m_delete_icon_path;
+    QString m_delete_icon_style;
+
     u32 m_context_counter = 0;
 
     void handle_context_menu_request(const QPoint& point);
@@ -64,6 +101,8 @@ private:
     void handle_delete_context_clicked();
 
     void handle_item_double_clicked(QListWidgetItem*);
+
+    void handle_selection_changed();
 };
 
 #endif    // CONTEXT_MANAGER_WIDGET

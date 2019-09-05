@@ -18,8 +18,12 @@
 #include <QStringList>
 #include <QStringListModel>
 #include <QVBoxLayout>
+#include "toolbar/toolbar.h"
+#include "core/log.h"
+#include "gui_utility.h"
 
-context_manager_widget::context_manager_widget(graph_tab_widget* tab_view, QWidget* parent) : content_widget("View Manager", parent), m_list_widget(new QListWidget())
+context_manager_widget::context_manager_widget(graph_tab_widget* tab_view, QWidget* parent) : content_widget("View Manager", parent), m_list_widget(new QListWidget()),
+    m_new_context_action(new QAction(this)), m_rename_action(new QAction(this)), m_delete_action(new QAction(this))
 {
     m_tab_view = tab_view;
 
@@ -29,6 +33,7 @@ context_manager_widget::context_manager_widget(graph_tab_widget* tab_view, QWidg
 
     connect(m_list_widget, &QListWidget::customContextMenuRequested, this, &context_manager_widget::handle_context_menu_request);
     connect(m_list_widget, &QListWidget::itemDoubleClicked, this, &context_manager_widget::handle_item_double_clicked);
+    connect(m_list_widget, &QListWidget::itemSelectionChanged, this, &context_manager_widget::handle_selection_changed);
 
 
     connect(&g_graph_context_manager, &graph_context_manager::context_created, this, &context_manager_widget::handle_context_created);
@@ -45,6 +50,25 @@ context_manager_widget::context_manager_widget(graph_tab_widget* tab_view, QWidg
     // {
     //     handle_create_context_clicked();
     // }
+
+
+    //temporarily hardcoded because connection to the stylesheet did not work for the properties
+    //(although it did work for attributes such as background-color), compare: python_editor / main_window for
+    //how to use properties
+    m_new_context_action->setIcon(gui_utility::get_styled_svg_icon("all->#00AA00", ":/icons/plus"));
+    m_new_context_action->setToolTip("New View");
+    m_rename_action->setIcon(gui_utility::get_styled_svg_icon("all->#3192C5", ":/icons/pen"));
+    m_rename_action->setToolTip("Rename");
+    m_delete_action->setIcon(gui_utility::get_styled_svg_icon("all->#DDDDDD", ":/icons/trashcan"));
+    m_delete_action->setToolTip("Delete");
+
+
+    m_rename_action->setEnabled(false);
+    m_delete_action->setEnabled(false);
+
+    connect(m_new_context_action, &QAction::triggered, this, &context_manager_widget::handle_create_context_clicked);
+    connect(m_rename_action, &QAction::triggered, this, &context_manager_widget::handle_rename_context_clicked);
+    connect(m_delete_action, &QAction::triggered, this, &context_manager_widget::handle_delete_context_clicked);
 }
 
 void context_manager_widget::resizeEvent(QResizeEvent* event)
@@ -99,10 +123,91 @@ void context_manager_widget::handle_create_context_clicked()
     m_tab_view->show_context(new_context);
 }
 
+void context_manager_widget::setup_toolbar(toolbar *toolbar)
+{
+    toolbar->addAction(m_new_context_action);
+    toolbar->addAction(m_rename_action);
+    toolbar->addAction(m_delete_action);
+}
+
+QString context_manager_widget::new_view_icon_path() const
+{
+    return m_new_view_icon_path;
+}
+
+QString context_manager_widget::new_view_icon_style() const
+{
+    return m_new_view_icon_style;
+}
+
+QString context_manager_widget::rename_icon_path() const
+{
+    return m_rename_icon_path;
+}
+
+QString context_manager_widget::rename_icon_style() const
+{
+    return m_rename_icon_style;
+}
+
+QString context_manager_widget::delete_icon_path() const
+{
+    return m_delete_icon_path;
+}
+
+QString context_manager_widget::delete_icon_style() const
+{
+    return m_delete_icon_style;
+}
+
+void context_manager_widget::set_new_view_icon_path(const QString &path)
+{
+    m_new_view_icon_path = path;
+}
+
+void context_manager_widget::set_new_view_icon_style(const QString &style)
+{
+    m_new_view_icon_style = style;
+}
+
+void context_manager_widget::set_rename_icon_path(const QString &path)
+{
+    m_rename_icon_path = path;
+}
+
+void context_manager_widget::set_rename_icon_style(const QString &style)
+{
+    m_rename_icon_style = style;
+}
+
+void context_manager_widget::set_delete_icon_path(const QString &path)
+{
+    m_delete_icon_path = path;
+}
+
+void context_manager_widget::set_delete_icon_style(const QString &style)
+{
+    m_delete_icon_style = style;
+}
+
 void context_manager_widget::handle_item_double_clicked(QListWidgetItem* clicked)
 {
     dynamic_context* clicked_context = g_graph_context_manager.get_dynamic_context(clicked->text());
     m_tab_view->show_context(clicked_context);
+}
+
+void context_manager_widget::handle_selection_changed()
+{
+    if(m_list_widget->selectedItems().isEmpty())
+    {
+        m_rename_action->setEnabled(false);
+        m_delete_action->setEnabled(false);
+    }
+    else
+    {
+        m_rename_action->setEnabled(true);
+        m_delete_action->setEnabled(true);
+    }
 }
 
 void context_manager_widget::handle_open_context_clicked()

@@ -86,6 +86,9 @@
         <file alias="github4">icons/0437-github4.svg</file>
         <file alias="github">icons/0434-github.svg</file>
         <file alias="new-file">icons/new-file.svg</file>
+        <file alias="pen">icons/pen.svg</file>
+        <file alias="plus">icons/plus.svg</file>
+        <file alias="trashcan">icons/trashcan.svg</file>
     </qresource>
     <qresource prefix="/images">
         <file alias="hal">images/hal_9000_by_johnnyslowhand.png</file>

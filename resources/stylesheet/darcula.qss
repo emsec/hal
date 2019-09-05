@@ -1306,6 +1306,17 @@ qproperty-new_file_icon_style: "";
 qproperty-new_file_icon_path: ":/icons/new-file";
 }
 
+context_manager_widget {
+qproperty-new_view_icon_style: "all->#00AA00";
+qproperty-new_view_icon_path: ":/icons/plus";
+
+qproperty-rename_icon_style: "all->#3192C5";
+qproperty-rename_icon_path: ":/icons/rename";
+
+qproperty-delete_icon_style: "all->#DDDDDD";
+qproperty-delete_icon_path: ":/icons/trashcan";
+}
+
 main_window {
 qproperty-open_icon_style: "all->#3192C5";
 qproperty-open_icon_path: ":/icons/folder";
