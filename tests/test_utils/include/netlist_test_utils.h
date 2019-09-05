@@ -343,4 +343,4 @@ namespace test_utils
 }    // namespace test_utils
 
 
-#endif //HAL_NETLIST_TEST_UTILS_H
+#endif // HAL_NETLIST_TEST_UTILS_H

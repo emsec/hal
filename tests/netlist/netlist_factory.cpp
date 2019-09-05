@@ -11,18 +11,21 @@
 #include <fstream>
 #include <iostream>
 
-// NOTE: This file should be edited, since we want to use out example gate library for testing, instead of XILINX_SIMPRIM
+/*
+ * In this file aren't the tests for the various parsers, however it uses the vhdl parser as an example. If there occure
+ * any errors, it can be an issue of the vhdl parser as well...
+ */
 
 using namespace test_utils;
 
 class netlist_factory_test : public ::testing::Test
 {
 protected:
-    const std::string g_lib_name = "XILINX_SIMPRIM";
 
     virtual void SetUp()
     {
         NO_COUT_BLOCK;
+        gate_library_manager::load_all();
     }
 
     virtual void TearDown()
@@ -85,73 +88,48 @@ TEST_F(netlist_factory_test, check_create_netlist_by_lib_name)
 }
 
 /**
- * Testing the creation of an empty netlist by passing a hdl file path
+ * Testing the creation of an empty netlist by passing an hdl file path
  *
  * Functions: load_netlist(hdl_file, ...)
  */
 TEST_F(netlist_factory_test, check_load_netlist_by_hdl_file)
 {
     TEST_START
-        if (gate_library_exists("XILINX_SIMPRIM"))
         {
             // Create a netlist by a temporary created vhdl file
             std::string tmp_hdl_file_path = core_utils::get_binary_directory().string() + "/tmp.vdl";
             std::ofstream hdl_file(tmp_hdl_file_path);
-            hdl_file << "-- Device\t: 6slx16csg324-3 (PRODUCTION 1.23 2013-10-13)\n"
-                        "entity top is\n"
-                        "  port ();\n"
-                        "end top;\n"
-                        "\n"
-                        "architecture STRUCTURE of top is\n"
-                        "  signal fsm_current_s_FSM_FFd2_37 : STD_LOGIC; \n"
-                        "  signal input_IBUF_0 : STD_LOGIC; \n"
-                        "  signal fsm_current_s_FSM_FFd2_In : STD_LOGIC;\n"
-                        "  signal fsm_current_s_FSM_FFd1_36 : STD_LOGIC;\n"
-                        "  signal output_OBUF_25 : STD_LOGIC;\n"
+            std::stringstream input;
+
+            hdl_file << "-- Device\t: device_name\n"
+                        "entity TEST_Comp is\n"
+                        "  port (\n"
+                        "    net_global_in : in STD_LOGIC := 'X';\n"
+                        "    net_global_out : out STD_LOGIC := 'X';\n"
+                        "  );\n"
+                        "end TEST_Comp;\n"
+                        "architecture STRUCTURE of TEST_Comp is\n"
                         "begin\n"
-                        "  fsm_current_s_FSM_FFd2_In1 : X_LUT6\n"
-                        "    generic map(\n"
-                        "      LOC => \"SLICE_X14Y61\",\n"
-                        "      INIT => X\"AAAA5555AAAA5555\"\n"
-                        "    )\n"
+                        "  gate_0 : INV\n"
                         "    port map (\n"
-                        "      ADR3 => '1',\n"
-                        "      ADR1 => '1',\n"
-                        "      ADR2 => '1',\n"
-                        "      ADR4 => fsm_current_s_FSM_FFd2_37,\n"
-                        "      ADR0 => input_IBUF_0,\n"
-                        "      ADR5 => '1',\n"
-                        "      O => fsm_current_s_FSM_FFd2_In\n"
-                        "    );\n"
-                        "  fsm_Mmux_output11 : X_LUT5\n"
-                        "    generic map(\n"
-                        "      LOC => \"SLICE_X14Y61\",\n"
-                        "      INIT => X\"CCCC6666\"\n"
-                        "    )\n"
-                        "    port map (\n"
-                        "      ADR3 => '1',\n"
-                        "      ADR2 => '1',\n"
-                        "      ADR1 => fsm_current_s_FSM_FFd1_36,\n"
-                        "      ADR4 => fsm_current_s_FSM_FFd2_37,\n"
-                        "      ADR0 => input_IBUF_0,\n"
-                        "      O => output_OBUF_25\n"
+                        "      I => net_global_in,\n"
+                        "      O => net_global_out\n"
                         "    );\n"
                         "end STRUCTURE;";
-
             hdl_file.close();
-            test_def::capture_stdout();
-            std::shared_ptr<netlist> nl = netlist_factory::load_netlist(hal::path(tmp_hdl_file_path), "vhdl", "XILINX_SIMPRIM");
-            test_def::get_captured_stdout();
+            //test_def::capture_stdout();
+            std::shared_ptr<netlist> nl = netlist_factory::load_netlist(hal::path(tmp_hdl_file_path), "vhdl", g_lib_name);
+            //test_def::get_captured_stdout();
 
-            EXPECT_NE(nl, nullptr);
-            EXPECT_EQ(nl->get_gate_library()->get_name(), "XILINX_SIMPRIM");
+            ASSERT_NE(nl, nullptr);
+            EXPECT_EQ(nl->get_gate_library()->get_name(), test_utils::g_lib_name);
 
             boost::filesystem::remove(tmp_hdl_file_path);
         }
         {
             // Try to create a netlist by a non-accessible (non-existing) file
             NO_COUT_TEST_BLOCK;
-            std::shared_ptr<netlist> nl = netlist_factory::load_netlist(hal::path("/this/file/does/not/exist"), "vhdl", "XILINX_SIMPRIM");
+            std::shared_ptr<netlist> nl = netlist_factory::load_netlist(hal::path("/this/file/does/not/exist"), "vhdl", g_lib_name);
 
             EXPECT_EQ(nl, nullptr);
         }
@@ -267,44 +245,19 @@ TEST_F(netlist_factory_test, check_create_netlist_by_program_args)
                 // Create a netlist by passing a .hal file-path via program arguments. Set volatile-mode
                 std::string tmp_hdl_file_path = core_utils::get_binary_directory().string() + "/tmp.vdl";
                 std::ofstream hdl_file(tmp_hdl_file_path);    // create a temporary hdl file
-                hdl_file << "-- Device\t: 6slx16csg324-3 (PRODUCTION 1.23 2013-10-13)\n"
-                            "entity top is\n"
-                            "  port ();\n"
-                            "end top;\n"
-                            "\n"
-                            "architecture STRUCTURE of top is\n"
-                            "  signal fsm_current_s_FSM_FFd2_37 : STD_LOGIC; \n"
-                            "  signal input_IBUF_0 : STD_LOGIC; \n"
-                            "  signal fsm_current_s_FSM_FFd2_In : STD_LOGIC;\n"
-                            "  signal fsm_current_s_FSM_FFd1_36 : STD_LOGIC;\n"
-                            "  signal output_OBUF_25 : STD_LOGIC;\n"
+                hdl_file << "-- Device\t: device_name\n"
+                            "entity TEST_Comp is\n"
+                            "  port (\n"
+                            "    net_global_in : in STD_LOGIC := 'X';\n"
+                            "    net_global_out : out STD_LOGIC := 'X';\n"
+                            "  );\n"
+                            "end TEST_Comp;\n"
+                            "architecture STRUCTURE of TEST_Comp is\n"
                             "begin\n"
-                            "  fsm_current_s_FSM_FFd2_In1 : X_LUT6\n"
-                            "    generic map(\n"
-                            "      LOC => \"SLICE_X14Y61\",\n"
-                            "      INIT => X\"AAAA5555AAAA5555\"\n"
-                            "    )\n"
+                            "  gate_0 : INV\n"
                             "    port map (\n"
-                            "      ADR3 => '1',\n"
-                            "      ADR1 => '1',\n"
-                            "      ADR2 => '1',\n"
-                            "      ADR4 => fsm_current_s_FSM_FFd2_37,\n"
-                            "      ADR0 => input_IBUF_0,\n"
-                            "      ADR5 => '1',\n"
-                            "      O => fsm_current_s_FSM_FFd2_In\n"
-                            "    );\n"
-                            "  fsm_Mmux_output11 : X_LUT5\n"
-                            "    generic map(\n"
-                            "      LOC => \"SLICE_X14Y61\",\n"
-                            "      INIT => X\"CCCC6666\"\n"
-                            "    )\n"
-                            "    port map (\n"
-                            "      ADR3 => '1',\n"
-                            "      ADR2 => '1',\n"
-                            "      ADR1 => fsm_current_s_FSM_FFd1_36,\n"
-                            "      ADR4 => fsm_current_s_FSM_FFd2_37,\n"
-                            "      ADR0 => input_IBUF_0,\n"
-                            "      O => output_OBUF_25\n"
+                            "      I => net_global_in,\n"
+                            "      O => net_global_out\n"
                             "    );\n"
                             "end STRUCTURE;";
 
