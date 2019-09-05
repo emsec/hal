@@ -27,8 +27,11 @@
 
 #include "def.h"
 #include "hdl_parser/hdl_parser.h"
-#include "netlist/net.h"
+
 #include <map>
+#include <netlist/module.h>
+#include <netlist/net.h>
+#include <utility>
 
 /**
  * @ingroup hdl_parsers
@@ -41,11 +44,10 @@ public:
      */
     explicit hdl_parser_verilog(std::stringstream& stream);
 
-    /** destructor (= default) */
     ~hdl_parser_verilog() = default;
 
     /**
-     * Deserializes a netlist in Verilog format from the internal string stream into a netlist object.
+     * Deserializes a netlist in VHDL format from the internal string stream into a netlist object.
      *
      * @param[in] gate_library - The gate library used in the serialized file.
      * @returns The deserialized netlist.
@@ -53,48 +55,39 @@ public:
     std::shared_ptr<netlist> parse(const std::string& gate_library) override;
 
 private:
-    /** stores the architecture name of the design */
-    std::string m_architecture_name;
+    struct file_line
+    {
+        u32 number;
+        std::string text;
+    };
 
-    /** stores the net names of the design */
-    std::map<std::string, std::shared_ptr<net>> m_net;
+    struct module_definition
+    {
+        std::vector<file_line> ports;
+        std::vector<file_line> wires;
+        std::vector<file_line> assigns;
+        std::vector<file_line> instances;
+    };
 
-    /** stores the global input net names */
-    std::set<std::string> m_global_input_net;
+    struct module
+    {
+        std::string name;
+        u32 line_number;
+        module_definition definition;
+        std::vector<std::pair<std::string, std::string>> ports;
+    };
 
-    /** stores the global output net names */
-    std::set<std::string> m_global_output_net;
+    std::map<std::string, module> m_modules;
 
-    /** stores the net names that have to be replace (keyword: assign) */
-    std::map<std::string, std::string> m_replace_net_name;
+    // prepare hdl
+    void remove_comments(std::string& line, bool& multi_line_comment, bool& multi_line_property);
 
-    void remove_comments(std::string& buffer, bool& multiline_comment, bool& multiline_property);
-
-    bool parse_module(const std::string& token, const int line);
-
-    bool parse_architecture(const std::string& token, const std::string& identifier, const int line);
-
-    bool parse_instance(const std::string& token, const std::string& identifier, const int line);
-
-    bool parse_assign(const std::string& token, const int line);
-
-    std::vector<std::string> parse_net(const std::string& token, const int line);
-
-    std::vector<std::string> parse_net_single(const std::string& token, const int line);
-
-    std::vector<std::string> parse_pin(std::shared_ptr<gate>& new_gate, const std::string& token, const int line);
-
-    std::vector<int> get_vector_bounds(const std::string& s);
-
-    int get_idx_of_last_vector_bound(const std::string& s);
-
-    std::string get_hex_from_number_literal(const std::string& value);
-
-    std::vector<std::string> get_binary_string_from_number_literal(const std::string& value, const int line);
-
-    bool connect_net_to_pin(const std::string& net_name, std::shared_ptr<gate>& new_gate, const std::string& pin_name, const int line);
-
-    bool is_numeric(const std::string& token);
+    // parse the hdl into an intermediate format
+    bool parse_module(module& m);
+    bool parse_ports(module& m);
+    bool parse_wires(module& m);
+    bool parse_assigns(module& m);
+    bool parse_instances(module& m);
 };
 
 #endif /* __HAL_HDL_PARSER_VERILOG_H__ */
