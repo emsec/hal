@@ -79,7 +79,7 @@ private:
 
     QListWidget* m_list_widget;
 
-    QAction* m_new_context_action;
+    QAction* m_new_view_action;
     QAction* m_rename_action;
     QAction* m_delete_action;
 

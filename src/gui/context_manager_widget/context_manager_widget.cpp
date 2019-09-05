@@ -23,8 +23,10 @@
 #include "gui_utility.h"
 
 context_manager_widget::context_manager_widget(graph_tab_widget* tab_view, QWidget* parent) : content_widget("View Manager", parent), m_list_widget(new QListWidget()),
-    m_new_context_action(new QAction(this)), m_rename_action(new QAction(this)), m_delete_action(new QAction(this))
+    m_new_view_action(new QAction(this)), m_rename_action(new QAction(this)), m_delete_action(new QAction(this))
 {
+    //needed to load the properties
+    ensurePolished();
     m_tab_view = tab_view;
 
     m_list_widget->setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
@@ -52,21 +54,17 @@ context_manager_widget::context_manager_widget(graph_tab_widget* tab_view, QWidg
     // }
 
 
-    //temporarily hardcoded because connection to the stylesheet did not work for the properties
-    //(although it did work for attributes such as background-color), compare: python_editor / main_window for
-    //how to use properties
-    m_new_context_action->setIcon(gui_utility::get_styled_svg_icon("all->#00AA00", ":/icons/plus"));
-    m_new_context_action->setToolTip("New View");
-    m_rename_action->setIcon(gui_utility::get_styled_svg_icon("all->#3192C5", ":/icons/pen"));
+    m_new_view_action->setIcon(gui_utility::get_styled_svg_icon(m_new_view_icon_style, m_new_view_icon_path));
+    m_new_view_action->setToolTip("New View");
+    m_rename_action->setIcon(gui_utility::get_styled_svg_icon(m_rename_icon_style, m_rename_icon_path));
     m_rename_action->setToolTip("Rename");
-    m_delete_action->setIcon(gui_utility::get_styled_svg_icon("all->#DDDDDD", ":/icons/trashcan"));
+    m_delete_action->setIcon(gui_utility::get_styled_svg_icon(m_delete_icon_style, m_delete_icon_path));
     m_delete_action->setToolTip("Delete");
-
 
     m_rename_action->setEnabled(false);
     m_delete_action->setEnabled(false);
 
-    connect(m_new_context_action, &QAction::triggered, this, &context_manager_widget::handle_create_context_clicked);
+    connect(m_new_view_action, &QAction::triggered, this, &context_manager_widget::handle_create_context_clicked);
     connect(m_rename_action, &QAction::triggered, this, &context_manager_widget::handle_rename_context_clicked);
     connect(m_delete_action, &QAction::triggered, this, &context_manager_widget::handle_delete_context_clicked);
 }
@@ -125,7 +123,7 @@ void context_manager_widget::handle_create_context_clicked()
 
 void context_manager_widget::setup_toolbar(toolbar *toolbar)
 {
-    toolbar->addAction(m_new_context_action);
+    toolbar->addAction(m_new_view_action);
     toolbar->addAction(m_rename_action);
     toolbar->addAction(m_delete_action);
 }
