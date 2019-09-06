@@ -69,18 +69,27 @@ private:
         std::vector<file_line> instances;
     };
 
+    struct instance
+    {
+        std::string name;
+        std::string type;
+        std::vector<std::pair<std::string, std::string>> ports;
+        std::vector<std::pair<std::string, std::string>> generics;
+    };
+
     struct module
     {
         std::string name;
         u32 line_number;
         module_definition definition;
         std::vector<std::pair<std::string, std::string>> ports;
+        std::vector<std::string> signals;
+        std::vector<instance> instances;
+        std::map<std::string, std::string> direct_assignments;
+        std::map<std::string, std::vector<std::string>> expanded_signal_names;
     };
 
     std::map<std::string, module> m_modules;
-
-    // prepare hdl
-    void remove_comments(std::string& line, bool& multi_line_comment, bool& multi_line_property);
 
     // parse the hdl into an intermediate format
     bool parse_module(module& m);
@@ -88,6 +97,12 @@ private:
     bool parse_wires(module& m);
     bool parse_assigns(module& m);
     bool parse_instances(module& m);
+
+    // helper functions
+    void remove_comments(std::string& line, bool& multi_line_comment, bool& multi_line_property);
+    std::map<std::string, std::vector<std::string>> get_expanded_wire_signals(const std::string& line);
+    std::map<std::string, std::string> get_port_assignments(const std::string& port, const std::string& assignment, module& m);
+    std::string get_bin_from_number_literal(const std::string& v);
 };
 
 #endif /* __HAL_HDL_PARSER_VERILOG_H__ */
