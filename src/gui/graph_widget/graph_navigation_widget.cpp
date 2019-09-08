@@ -7,6 +7,7 @@
 #include <QHeaderView>
 #include <QScrollBar>
 #include <QKeyEvent>
+#include "core/log.h"
 
 graph_navigation_widget::graph_navigation_widget(QWidget *parent) : QTableWidget(parent),
                                                                     m_via_net(0)
@@ -161,25 +162,41 @@ void graph_navigation_widget::fill_table(std::shared_ptr<net> n)
     resizeRowsToContents();
     resizeColumnsToContents();
 
-    int scrollbar_width = verticalScrollBar()->width();
-    int total_width = 0;
+//    int scrollbar_width = verticalScrollBar()->width();
+//    int total_width = 0;
 
-    for (int i = 0; i < horizontalHeader()->count(); ++i)
-    {
-        total_width += horizontalHeader()->sectionSize(i);
-    }
+//    for (int i = 0; i < horizontalHeader()->count(); ++i)
+//    {
+//        total_width += horizontalHeader()->sectionSize(i);
+//    }
 
-    setFixedWidth(total_width + scrollbar_width);
+//    setFixedWidth(total_width + scrollbar_width);
 
-    int scrollbar_height = horizontalScrollBar()->height();
-    int header_height = horizontalHeader()->height();
+//    int scrollbar_height = horizontalScrollBar()->height();
+//    int header_height = horizontalHeader()->height();
 
-    int total_height = 0;
+//    int total_height = 0;
 
-    for (int i = 0; i < verticalHeader()->count(); ++i)
-    {
-        total_height += verticalHeader()->sectionSize(i);
-    }
+//    for (int i = 0; i < verticalHeader()->count(); ++i)
+//    {
+//        total_height += verticalHeader()->sectionSize(i);
+//    }
 
-    setFixedHeight(header_height + total_height + scrollbar_height);
+//    setFixedHeight(header_height + total_height + scrollbar_height);
+
+
+    //This version uses some magic numbers, but it does not behaves as wierd in
+    //certain (random?) situations like the version above
+    int width = verticalScrollBar()->width()+40;
+    for (int i = 0; i < columnCount(); i++)
+        width += columnWidth(i);
+
+    int height = horizontalHeader()->height() + 2;
+    for (int i = 0; i < rowCount(); i++)
+        height += rowHeight(i);
+
+
+    int MAXIMUM_ALLOWED_HEIGHT = 500;
+    setFixedWidth(width);
+    setFixedHeight( (height > MAXIMUM_ALLOWED_HEIGHT) ? MAXIMUM_ALLOWED_HEIGHT : height );
 }
