@@ -33,11 +33,8 @@ void module_shader::update()
 
     for (u32 id : m_context->modules())
     {
-        module_item* item = g_netlist_relay.get_module_item(id);
-        assert(item);
-
         graphics_node::visuals v;
-        v.main_color = item->color();
+        v.main_color = g_netlist_relay.get_module_color(id);
         m_shading.module_visuals.insert(id, v);
     }
 
@@ -51,11 +48,8 @@ void module_shader::update()
 
         if (m->get_id())
         {
-            module_item* item = g_netlist_relay.get_module_item(m->get_id());
-            assert(item);
-
             graphics_node::visuals v;
-            v.main_color = item->color();
+            v.main_color = g_netlist_relay.get_module_color(m->get_id());
             m_shading.gate_visuals.insert(id, v);
         }
     }

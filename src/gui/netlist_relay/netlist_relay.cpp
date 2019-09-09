@@ -9,6 +9,7 @@
 
 #include "gui/file_manager/file_manager.h"    // DEBUG LINE
 #include "gui/gui_globals.h"                  // DEBUG LINE
+#include "gui/gui_utility.h"
 
 #include <functional>
 
@@ -47,6 +48,11 @@ void netlist_relay::register_callbacks()
     module_event_handler::register_callback("relay",
                                             std::function<void(module_event_handler::event, std::shared_ptr<module>, u32)>(
                                                 std::bind(&netlist_relay::relay_module_event, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)));
+}
+
+QColor netlist_relay::get_module_color(const u32 id)
+{
+    return m_module_colors.value(id);
 }
 
 module_item* netlist_relay::get_module_item(const u32 id)
@@ -215,15 +221,17 @@ void netlist_relay::relay_module_event(module_event_handler::event ev, std::shar
         {
             //< no associated_data
 
-            module_item* item                     = new module_item(QString::fromStdString(object->get_name()), object->get_id());
-            std::shared_ptr<module> parent_module = object->get_parent_module();
-            module_item* parent_item              = nullptr;
+            m_module_colors.insert(object->get_id(), gui_utility::get_random_color());
 
-            if (parent_module)
-                parent_item = m_module_items.value(parent_module->get_id());
+//            module_item* item                     = new module_item(QString::fromStdString(object->get_name()), object->get_id());
+//            std::shared_ptr<module> parent_module = object->get_parent_module();
+//            module_item* parent_item              = nullptr;
 
-            m_module_items.insert(object->get_id(), item);
-            m_module_model->add_item(item, parent_item);
+//            if (parent_module)
+//                parent_item = m_module_items.value(parent_module->get_id());
+
+//            m_module_items.insert(object->get_id(), item);
+//            m_module_model->add_item(item, parent_item);
 
             Q_EMIT module_created(object);
             break;
@@ -401,10 +409,15 @@ void netlist_relay::relay_net_event(net_event_handler::event ev, std::shared_ptr
 
 void netlist_relay::debug_handle_file_opened()
 {
-    std::shared_ptr<module> top_module = g_netlist->get_top_module();
-    module_item* item                  = new module_item(QString::fromStdString(top_module->get_name()), top_module->get_id());
-    item->set_color(QColor(96, 110, 112));    // DEBUG LINE
+    for (std::shared_ptr<module> m : g_netlist->get_modules())
+            m_module_colors.insert(m->get_id(), gui_utility::get_random_color());
 
-    m_module_items.insert(top_module->get_id(), item);
-    m_module_model->add_item(item, nullptr);
+    m_module_colors.insert(1, QColor(96, 110, 112));
+
+//    std::shared_ptr<module> top_module = g_netlist->get_top_module();
+//    module_item* item                  = new module_item(QString::fromStdString(top_module->get_name()), top_module->get_id());
+//    item->set_color(QColor(96, 110, 112));    // DEBUG LINE
+
+//    m_module_items.insert(top_module->get_id(), item);
+//    m_module_model->add_item(item, nullptr);
 }
