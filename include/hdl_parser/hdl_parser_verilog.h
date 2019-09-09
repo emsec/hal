@@ -47,7 +47,7 @@ public:
     ~hdl_parser_verilog() = default;
 
     /**
-     * Deserializes a netlist in VHDL format from the internal string stream into a netlist object.
+     * Deserializes a netlist in Verilog format from the internal string stream into a netlist object.
      *
      * @param[in] gate_library - The gate library used in the serialized file.
      * @returns The deserialized netlist.
@@ -61,7 +61,7 @@ private:
         std::string text;
     };
 
-    struct module_definition
+    struct entity_definition
     {
         std::vector<file_line> ports;
         std::vector<file_line> wires;
@@ -77,11 +77,11 @@ private:
         std::vector<std::pair<std::string, std::string>> generics;
     };
 
-    struct module
+    struct entity
     {
         std::string name;
         u32 line_number;
-        module_definition definition;
+        entity_definition definition;
         std::vector<std::pair<std::string, std::string>> ports;
         std::vector<std::string> signals;
         std::vector<instance> instances;
@@ -89,20 +89,32 @@ private:
         std::map<std::string, std::vector<std::string>> expanded_signal_names;
     };
 
-    std::map<std::string, module> m_modules;
+    std::map<std::string, std::shared_ptr<net>> m_net_by_name;
+    std::shared_ptr<net> m_zero_net;
+    std::shared_ptr<net> m_one_net;
+    std::map<std::string, u32> m_name_occurrences;
+    std::map<std::string, u32> m_current_instance_index;
+    std::map<std::string, entity> m_entities;
+    std::map<std::string, std::string> m_attribute_types;
+    std::map<std::string, std::vector<std::string>> m_nets_to_merge;
 
     // parse the hdl into an intermediate format
-    bool parse_module(module& m);
-    bool parse_ports(module& m);
-    bool parse_wires(module& m);
-    bool parse_assigns(module& m);
-    bool parse_instances(module& m);
+    bool parse_entity(entity& e);
+    bool parse_ports(entity& e);
+    bool parse_wires(entity& e);
+    bool parse_assigns(entity& e);
+    bool parse_instances(entity& e);
+
+    // build the netlist from the intermediate format
+    bool build_netlist(const std::string& top_module);
+    std::shared_ptr<module> instantiate(const entity& e, std::shared_ptr<module> parent, std::map<std::string, std::string> port_assignments);
 
     // helper functions
     void remove_comments(std::string& line, bool& multi_line_comment, bool& multi_line_property);
     std::map<std::string, std::vector<std::string>> get_expanded_wire_signals(const std::string& line);
-    std::map<std::string, std::string> get_port_assignments(const std::string& port, const std::string& assignment, module& m);
+    std::map<std::string, std::string> get_port_assignments(const std::string& port, const std::string& assignment, entity& e);
     std::string get_bin_from_number_literal(const std::string& v);
+    std::string get_unique_alias(const std::string& name);
 };
 
 #endif /* __HAL_HDL_PARSER_VERILOG_H__ */
