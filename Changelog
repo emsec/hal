@@ -1,3 +1,15 @@
+hal-reverse (1.1.7) bionic; urgency=medium
+
+ * Changed myself library to synopsys_nand_nor
+ * Fixed bug in bdd gen
+ * Added new gate library!
+ * Added python decorator to log function calls
+ * Changed question when hal file exists for better clarity
+ * Fixes #179. Parse yosys netlist correct. (#181)
+ * Set new vhdl parser as default, keep old one as fallback (#180)
+
+ -- Sebastian Wallat <sebastian.wallat@rub.de>  Mon, 26 Aug 2019 10:41:58 -0400
+
 hal-reverse (1.1.6) bionic; urgency=medium
 
   * Fixed ubuntu ppa build
