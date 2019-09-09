@@ -802,7 +802,7 @@ bool hdl_parser_vhdl::build_netlist(const std::string& top_module)
                 // merge attributes etc.
                 for (const auto& it : slave_net->get_data())
                 {
-                    if(!master_net->set_data(std::get<0>(it.first), std::get<1>(it.first), std::get<0>(it.second), std::get<1>(it.second)))
+                    if (!master_net->set_data(std::get<0>(it.first), std::get<1>(it.first), std::get<0>(it.second), std::get<1>(it.second)))
                     {
                         log_error("hdl_parser", "couldn't set data");
                     }
@@ -858,7 +858,7 @@ std::shared_ptr<module> hdl_parser_vhdl::instantiate(const entity& e, std::share
         {
             for (const auto& attr : attribute_it->second)
             {
-                if(!module->set_data("vhdl_attribute", std::get<0>(attr), std::get<1>(attr), std::get<2>(attr)))
+                if (!module->set_data("vhdl_attribute", std::get<0>(attr), std::get<1>(attr), std::get<2>(attr)))
                 {
                     log_error("hdl_parser", "couldn't set data");
                 }
@@ -885,7 +885,7 @@ std::shared_ptr<module> hdl_parser_vhdl::instantiate(const entity& e, std::share
             {
                 for (const auto& attr : attribute_it->second)
                 {
-                    if(!new_net->set_data("vhdl_attribute", std::get<0>(attr), std::get<1>(attr), std::get<2>(attr)))
+                    if (!new_net->set_data("vhdl_attribute", std::get<0>(attr), std::get<1>(attr), std::get<2>(attr)))
                     {
                         log_error("hdl_parser", "couldn't set data");
                     }
@@ -902,7 +902,7 @@ std::shared_ptr<module> hdl_parser_vhdl::instantiate(const entity& e, std::share
         {
             for (const auto& attr : attribute_it->second)
             {
-                if(!m_net_by_name[assignment]->set_data("vhdl_attribute", std::get<0>(attr), std::get<1>(attr), std::get<2>(attr)))
+                if (!m_net_by_name[assignment]->set_data("vhdl_attribute", std::get<0>(attr), std::get<1>(attr), std::get<2>(attr)))
                 {
                     log_error("hdl_parser", "couldn't set data");
                 }
@@ -1094,7 +1094,7 @@ std::shared_ptr<module> hdl_parser_vhdl::instantiate(const entity& e, std::share
             {
                 for (const auto& attr : attribute_it->second)
                 {
-                    if(!container->set_data("vhdl_attribute", std::get<0>(attr), std::get<1>(attr), std::get<2>(attr)))
+                    if (!container->set_data("vhdl_attribute", std::get<0>(attr), std::get<1>(attr), std::get<2>(attr)))
                     {
                         log_error("hdl_parser", "couldn't set data: key: {}, value_data_type: {}, value: {}", std::get<0>(attr), std::get<1>(attr), std::get<2>(attr));
                     }

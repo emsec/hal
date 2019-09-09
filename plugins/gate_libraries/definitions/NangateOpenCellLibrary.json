@@ -1,0 +1,1342 @@
+{
+  "library": {
+    "element_types": [
+      "AND2_X1",
+      "AND2_X2",
+      "AND2_X4",
+      "AND3_X1",
+      "AND3_X2",
+      "AND3_X4",
+      "AND4_X1",
+      "AND4_X2",
+      "AND4_X4",
+      "ANTENNA_X1",
+      "AOI211_X1",
+      "AOI211_X2",
+      "AOI211_X4",
+      "AOI21_X1",
+      "AOI21_X2",
+      "AOI21_X4",
+      "AOI221_X1",
+      "AOI221_X2",
+      "AOI221_X4",
+      "AOI222_X1",
+      "AOI222_X2",
+      "AOI222_X4",
+      "AOI22_X1",
+      "AOI22_X2",
+      "AOI22_X4",
+      "BUF_X1",
+      "BUF_X16",
+      "BUF_X2",
+      "BUF_X32",
+      "BUF_X4",
+      "BUF_X8",
+      "CLKBUF_X1",
+      "CLKBUF_X2",
+      "CLKBUF_X3",
+      "CLKGATETST_X1",
+      "CLKGATETST_X2",
+      "CLKGATETST_X4",
+      "CLKGATETST_X8",
+      "CLKGATE_X1",
+      "CLKGATE_X2",
+      "CLKGATE_X4",
+      "CLKGATE_X8",
+      "DFFRS_X1",
+      "DFFRS_X2",
+      "DFFR_X1",
+      "DFFR_X2",
+      "DFFS_X1",
+      "DFFS_X2",
+      "DFF_X1",
+      "DFF_X2",
+      "DLH_X1",
+      "DLH_X2",
+      "DLL_X1",
+      "DLL_X2",
+      "FA_X1",
+      "FILLCELL_X1",
+      "FILLCELL_X16",
+      "FILLCELL_X2",
+      "FILLCELL_X32",
+      "FILLCELL_X4",
+      "FILLCELL_X8",
+      "HA_X1",
+      "INV_X1",
+      "INV_X16",
+      "INV_X2",
+      "INV_X32",
+      "INV_X4",
+      "INV_X8",
+      "LOGIC0_X1",
+      "LOGIC1_X1",
+      "MUX2_X1",
+      "MUX2_X2",
+      "NAND2_X1",
+      "NAND2_X2",
+      "NAND2_X4",
+      "NAND3_X1",
+      "NAND3_X2",
+      "NAND3_X4",
+      "NAND4_X1",
+      "NAND4_X2",
+      "NAND4_X4",
+      "NOR2_X1",
+      "NOR2_X2",
+      "NOR2_X4",
+      "NOR3_X1",
+      "NOR3_X2",
+      "NOR3_X4",
+      "NOR4_X1",
+      "NOR4_X2",
+      "NOR4_X4",
+      "OAI211_X1",
+      "OAI211_X2",
+      "OAI211_X4",
+      "OAI21_X1",
+      "OAI21_X2",
+      "OAI21_X4",
+      "OAI221_X1",
+      "OAI221_X2",
+      "OAI221_X4",
+      "OAI222_X1",
+      "OAI222_X2",
+      "OAI222_X4",
+      "OAI22_X1",
+      "OAI22_X2",
+      "OAI22_X4",
+      "OAI33_X1",
+      "OR2_X1",
+      "OR2_X2",
+      "OR2_X4",
+      "OR3_X1",
+      "OR3_X2",
+      "OR3_X4",
+      "OR4_X1",
+      "OR4_X2",
+      "OR4_X4",
+      "SDFFRS_X1",
+      "SDFFRS_X2",
+      "SDFFR_X1",
+      "SDFFR_X2",
+      "SDFFS_X1",
+      "SDFFS_X2",
+      "SDFF_X1",
+      "SDFF_X2",
+      "TBUF_X1",
+      "TBUF_X16",
+      "TBUF_X2",
+      "TBUF_X4",
+      "TBUF_X8",
+      "TINV_X1",
+      "TLAT_X1",
+      "XNOR2_X1",
+      "XNOR2_X2",
+      "XOR2_X1",
+      "XOR2_X2"
+    ],
+    "elements_inout_types": {
+      "AND2_X1": [],
+      "AND2_X2": [],
+      "AND2_X4": [],
+      "AND3_X1": [],
+      "AND3_X2": [],
+      "AND3_X4": [],
+      "AND4_X1": [],
+      "AND4_X2": [],
+      "AND4_X4": [],
+      "ANTENNA_X1": [],
+      "AOI211_X1": [],
+      "AOI211_X2": [],
+      "AOI211_X4": [],
+      "AOI21_X1": [],
+      "AOI21_X2": [],
+      "AOI21_X4": [],
+      "AOI221_X1": [],
+      "AOI221_X2": [],
+      "AOI221_X4": [],
+      "AOI222_X1": [],
+      "AOI222_X2": [],
+      "AOI222_X4": [],
+      "AOI22_X1": [],
+      "AOI22_X2": [],
+      "AOI22_X4": [],
+      "BUF_X1": [],
+      "BUF_X16": [],
+      "BUF_X2": [],
+      "BUF_X32": [],
+      "BUF_X4": [],
+      "BUF_X8": [],
+      "CLKBUF_X1": [],
+      "CLKBUF_X2": [],
+      "CLKBUF_X3": [],
+      "CLKGATETST_X1": [],
+      "CLKGATETST_X2": [],
+      "CLKGATETST_X4": [],
+      "CLKGATETST_X8": [],
+      "CLKGATE_X1": [],
+      "CLKGATE_X2": [],
+      "CLKGATE_X4": [],
+      "CLKGATE_X8": [],
+      "DFFRS_X1": [],
+      "DFFRS_X2": [],
+      "DFFR_X1": [],
+      "DFFR_X2": [],
+      "DFFS_X1": [],
+      "DFFS_X2": [],
+      "DFF_X1": [],
+      "DFF_X2": [],
+      "DLH_X1": [],
+      "DLH_X2": [],
+      "DLL_X1": [],
+      "DLL_X2": [],
+      "FA_X1": [],
+      "FILLCELL_X1": [],
+      "FILLCELL_X16": [],
+      "FILLCELL_X2": [],
+      "FILLCELL_X32": [],
+      "FILLCELL_X4": [],
+      "FILLCELL_X8": [],
+      "HA_X1": [],
+      "INV_X1": [],
+      "INV_X16": [],
+      "INV_X2": [],
+      "INV_X32": [],
+      "INV_X4": [],
+      "INV_X8": [],
+      "LOGIC0_X1": [],
+      "LOGIC1_X1": [],
+      "MUX2_X1": [],
+      "MUX2_X2": [],
+      "NAND2_X1": [],
+      "NAND2_X2": [],
+      "NAND2_X4": [],
+      "NAND3_X1": [],
+      "NAND3_X2": [],
+      "NAND3_X4": [],
+      "NAND4_X1": [],
+      "NAND4_X2": [],
+      "NAND4_X4": [],
+      "NOR2_X1": [],
+      "NOR2_X2": [],
+      "NOR2_X4": [],
+      "NOR3_X1": [],
+      "NOR3_X2": [],
+      "NOR3_X4": [],
+      "NOR4_X1": [],
+      "NOR4_X2": [],
+      "NOR4_X4": [],
+      "OAI211_X1": [],
+      "OAI211_X2": [],
+      "OAI211_X4": [],
+      "OAI21_X1": [],
+      "OAI21_X2": [],
+      "OAI21_X4": [],
+      "OAI221_X1": [],
+      "OAI221_X2": [],
+      "OAI221_X4": [],
+      "OAI222_X1": [],
+      "OAI222_X2": [],
+      "OAI222_X4": [],
+      "OAI22_X1": [],
+      "OAI22_X2": [],
+      "OAI22_X4": [],
+      "OAI33_X1": [],
+      "OR2_X1": [],
+      "OR2_X2": [],
+      "OR2_X4": [],
+      "OR3_X1": [],
+      "OR3_X2": [],
+      "OR3_X4": [],
+      "OR4_X1": [],
+      "OR4_X2": [],
+      "OR4_X4": [],
+      "SDFFRS_X1": [],
+      "SDFFRS_X2": [],
+      "SDFFR_X1": [],
+      "SDFFR_X2": [],
+      "SDFFS_X1": [],
+      "SDFFS_X2": [],
+      "SDFF_X1": [],
+      "SDFF_X2": [],
+      "TBUF_X1": [],
+      "TBUF_X16": [],
+      "TBUF_X2": [],
+      "TBUF_X4": [],
+      "TBUF_X8": [],
+      "TINV_X1": [],
+      "TLAT_X1": [],
+      "XNOR2_X1": [],
+      "XNOR2_X2": [],
+      "XOR2_X1": [],
+      "XOR2_X2": []
+    },
+    "elements_input_types": {
+      "AND2_X1": [
+        "A1",
+        "A2"
+      ],
+      "AND2_X2": [
+        "A1",
+        "A2"
+      ],
+      "AND2_X4": [
+        "A1",
+        "A2"
+      ],
+      "AND3_X1": [
+        "A1",
+        "A2",
+        "A3"
+      ],
+      "AND3_X2": [
+        "A1",
+        "A2",
+        "A3"
+      ],
+      "AND3_X4": [
+        "A1",
+        "A2",
+        "A3"
+      ],
+      "AND4_X1": [
+        "A1",
+        "A2",
+        "A3",
+        "A4"
+      ],
+      "AND4_X2": [
+        "A1",
+        "A2",
+        "A3",
+        "A4"
+      ],
+      "AND4_X4": [
+        "A1",
+        "A2",
+        "A3",
+        "A4"
+      ],
+      "ANTENNA_X1": [
+        "A"
+      ],
+      "AOI211_X1": [
+        "A",
+        "B",
+        "C1",
+        "C2"
+      ],
+      "AOI211_X2": [
+        "A",
+        "B",
+        "C1",
+        "C2"
+      ],
+      "AOI211_X4": [
+        "A",
+        "B",
+        "C1",
+        "C2"
+      ],
+      "AOI21_X1": [
+        "A",
+        "B1",
+        "B2"
+      ],
+      "AOI21_X2": [
+        "A",
+        "B1",
+        "B2"
+      ],
+      "AOI21_X4": [
+        "A",
+        "B1",
+        "B2"
+      ],
+      "AOI221_X1": [
+        "A",
+        "B1",
+        "B2",
+        "C1",
+        "C2"
+      ],
+      "AOI221_X2": [
+        "A",
+        "B1",
+        "B2",
+        "C1",
+        "C2"
+      ],
+      "AOI221_X4": [
+        "A",
+        "B1",
+        "B2",
+        "C1",
+        "C2"
+      ],
+      "AOI222_X1": [
+        "A1",
+        "A2",
+        "B1",
+        "B2",
+        "C1",
+        "C2"
+      ],
+      "AOI222_X2": [
+        "A1",
+        "A2",
+        "B1",
+        "B2",
+        "C1",
+        "C2"
+      ],
+      "AOI222_X4": [
+        "A1",
+        "A2",
+        "B1",
+        "B2",
+        "C1",
+        "C2"
+      ],
+      "AOI22_X1": [
+        "A1",
+        "A2",
+        "B1",
+        "B2"
+      ],
+      "AOI22_X2": [
+        "A1",
+        "A2",
+        "B1",
+        "B2"
+      ],
+      "AOI22_X4": [
+        "A1",
+        "A2",
+        "B1",
+        "B2"
+      ],
+      "BUF_X1": [
+        "A"
+      ],
+      "BUF_X16": [
+        "A"
+      ],
+      "BUF_X2": [
+        "A"
+      ],
+      "BUF_X32": [
+        "A"
+      ],
+      "BUF_X4": [
+        "A"
+      ],
+      "BUF_X8": [
+        "A"
+      ],
+      "CLKBUF_X1": [
+        "A"
+      ],
+      "CLKBUF_X2": [
+        "A"
+      ],
+      "CLKBUF_X3": [
+        "A"
+      ],
+      "CLKGATETST_X1": [
+        "CK",
+        "E",
+        "SE"
+      ],
+      "CLKGATETST_X2": [
+        "CK",
+        "E",
+        "SE"
+      ],
+      "CLKGATETST_X4": [
+        "CK",
+        "E",
+        "SE"
+      ],
+      "CLKGATETST_X8": [
+        "CK",
+        "E",
+        "SE"
+      ],
+      "CLKGATE_X1": [
+        "CK",
+        "E"
+      ],
+      "CLKGATE_X2": [
+        "CK",
+        "E"
+      ],
+      "CLKGATE_X4": [
+        "CK",
+        "E"
+      ],
+      "CLKGATE_X8": [
+        "CK",
+        "E"
+      ],
+      "DFFRS_X1": [
+        "D",
+        "RN",
+        "SN",
+        "CK"
+      ],
+      "DFFRS_X2": [
+        "D",
+        "RN",
+        "SN",
+        "CK"
+      ],
+      "DFFR_X1": [
+        "D",
+        "RN",
+        "CK"
+      ],
+      "DFFR_X2": [
+        "D",
+        "RN",
+        "CK"
+      ],
+      "DFFS_X1": [
+        "D",
+        "SN",
+        "CK"
+      ],
+      "DFFS_X2": [
+        "D",
+        "SN",
+        "CK"
+      ],
+      "DFF_X1": [
+        "D",
+        "CK"
+      ],
+      "DFF_X2": [
+        "D",
+        "CK"
+      ],
+      "DLH_X1": [
+        "D",
+        "G"
+      ],
+      "DLH_X2": [
+        "D",
+        "G"
+      ],
+      "DLL_X1": [
+        "D",
+        "GN"
+      ],
+      "DLL_X2": [
+        "D",
+        "GN"
+      ],
+      "FA_X1": [
+        "A",
+        "B",
+        "CI"
+      ],
+      "FILLCELL_X1": [],
+      "FILLCELL_X16": [],
+      "FILLCELL_X2": [],
+      "FILLCELL_X32": [],
+      "FILLCELL_X4": [],
+      "FILLCELL_X8": [],
+      "HA_X1": [
+        "A",
+        "B"
+      ],
+      "INV_X1": [
+        "A"
+      ],
+      "INV_X16": [
+        "A"
+      ],
+      "INV_X2": [
+        "A"
+      ],
+      "INV_X32": [
+        "A"
+      ],
+      "INV_X4": [
+        "A"
+      ],
+      "INV_X8": [
+        "A"
+      ],
+      "LOGIC0_X1": [],
+      "LOGIC1_X1": [],
+      "MUX2_X1": [
+        "A",
+        "B",
+        "S"
+      ],
+      "MUX2_X2": [
+        "A",
+        "B",
+        "S"
+      ],
+      "NAND2_X1": [
+        "A1",
+        "A2"
+      ],
+      "NAND2_X2": [
+        "A1",
+        "A2"
+      ],
+      "NAND2_X4": [
+        "A1",
+        "A2"
+      ],
+      "NAND3_X1": [
+        "A1",
+        "A2",
+        "A3"
+      ],
+      "NAND3_X2": [
+        "A1",
+        "A2",
+        "A3"
+      ],
+      "NAND3_X4": [
+        "A1",
+        "A2",
+        "A3"
+      ],
+      "NAND4_X1": [
+        "A1",
+        "A2",
+        "A3",
+        "A4"
+      ],
+      "NAND4_X2": [
+        "A1",
+        "A2",
+        "A3",
+        "A4"
+      ],
+      "NAND4_X4": [
+        "A1",
+        "A2",
+        "A3",
+        "A4"
+      ],
+      "NOR2_X1": [
+        "A1",
+        "A2"
+      ],
+      "NOR2_X2": [
+        "A1",
+        "A2"
+      ],
+      "NOR2_X4": [
+        "A1",
+        "A2"
+      ],
+      "NOR3_X1": [
+        "A1",
+        "A2",
+        "A3"
+      ],
+      "NOR3_X2": [
+        "A1",
+        "A2",
+        "A3"
+      ],
+      "NOR3_X4": [
+        "A1",
+        "A2",
+        "A3"
+      ],
+      "NOR4_X1": [
+        "A1",
+        "A2",
+        "A3",
+        "A4"
+      ],
+      "NOR4_X2": [
+        "A1",
+        "A2",
+        "A3",
+        "A4"
+      ],
+      "NOR4_X4": [
+        "A1",
+        "A2",
+        "A3",
+        "A4"
+      ],
+      "OAI211_X1": [
+        "A",
+        "B",
+        "C1",
+        "C2"
+      ],
+      "OAI211_X2": [
+        "A",
+        "B",
+        "C1",
+        "C2"
+      ],
+      "OAI211_X4": [
+        "A",
+        "B",
+        "C1",
+        "C2"
+      ],
+      "OAI21_X1": [
+        "A",
+        "B1",
+        "B2"
+      ],
+      "OAI21_X2": [
+        "A",
+        "B1",
+        "B2"
+      ],
+      "OAI21_X4": [
+        "A",
+        "B1",
+        "B2"
+      ],
+      "OAI221_X1": [
+        "A",
+        "B1",
+        "B2",
+        "C1",
+        "C2"
+      ],
+      "OAI221_X2": [
+        "A",
+        "B1",
+        "B2",
+        "C1",
+        "C2"
+      ],
+      "OAI221_X4": [
+        "A",
+        "B1",
+        "B2",
+        "C1",
+        "C2"
+      ],
+      "OAI222_X1": [
+        "A1",
+        "A2",
+        "B1",
+        "B2",
+        "C1",
+        "C2"
+      ],
+      "OAI222_X2": [
+        "A1",
+        "A2",
+        "B1",
+        "B2",
+        "C1",
+        "C2"
+      ],
+      "OAI222_X4": [
+        "A1",
+        "A2",
+        "B1",
+        "B2",
+        "C1",
+        "C2"
+      ],
+      "OAI22_X1": [
+        "A1",
+        "A2",
+        "B1",
+        "B2"
+      ],
+      "OAI22_X2": [
+        "A1",
+        "A2",
+        "B1",
+        "B2"
+      ],
+      "OAI22_X4": [
+        "A1",
+        "A2",
+        "B1",
+        "B2"
+      ],
+      "OAI33_X1": [
+        "A1",
+        "A2",
+        "A3",
+        "B1",
+        "B2",
+        "B3"
+      ],
+      "OR2_X1": [
+        "A1",
+        "A2"
+      ],
+      "OR2_X2": [
+        "A1",
+        "A2"
+      ],
+      "OR2_X4": [
+        "A1",
+        "A2"
+      ],
+      "OR3_X1": [
+        "A1",
+        "A2",
+        "A3"
+      ],
+      "OR3_X2": [
+        "A1",
+        "A2",
+        "A3"
+      ],
+      "OR3_X4": [
+        "A1",
+        "A2",
+        "A3"
+      ],
+      "OR4_X1": [
+        "A1",
+        "A2",
+        "A3",
+        "A4"
+      ],
+      "OR4_X2": [
+        "A1",
+        "A2",
+        "A3",
+        "A4"
+      ],
+      "OR4_X4": [
+        "A1",
+        "A2",
+        "A3",
+        "A4"
+      ],
+      "SDFFRS_X1": [
+        "D",
+        "RN",
+        "SE",
+        "SI",
+        "SN",
+        "CK"
+      ],
+      "SDFFRS_X2": [
+        "D",
+        "RN",
+        "SE",
+        "SI",
+        "SN",
+        "CK"
+      ],
+      "SDFFR_X1": [
+        "D",
+        "RN",
+        "SE",
+        "SI",
+        "CK"
+      ],
+      "SDFFR_X2": [
+        "D",
+        "RN",
+        "SE",
+        "SI",
+        "CK"
+      ],
+      "SDFFS_X1": [
+        "D",
+        "SE",
+        "SI",
+        "SN",
+        "CK"
+      ],
+      "SDFFS_X2": [
+        "D",
+        "SE",
+        "SI",
+        "SN",
+        "CK"
+      ],
+      "SDFF_X1": [
+        "D",
+        "SE",
+        "SI",
+        "CK"
+      ],
+      "SDFF_X2": [
+        "D",
+        "SE",
+        "SI",
+        "CK"
+      ],
+      "TBUF_X1": [
+        "A",
+        "EN"
+      ],
+      "TBUF_X16": [
+        "A",
+        "EN"
+      ],
+      "TBUF_X2": [
+        "A",
+        "EN"
+      ],
+      "TBUF_X4": [
+        "A",
+        "EN"
+      ],
+      "TBUF_X8": [
+        "A",
+        "EN"
+      ],
+      "TINV_X1": [
+        "EN",
+        "I"
+      ],
+      "TLAT_X1": [
+        "D",
+        "G",
+        "OE"
+      ],
+      "XNOR2_X1": [
+        "A",
+        "B"
+      ],
+      "XNOR2_X2": [
+        "A",
+        "B"
+      ],
+      "XOR2_X1": [
+        "A",
+        "B"
+      ],
+      "XOR2_X2": [
+        "A",
+        "B"
+      ]
+    },
+    "elements_output_types": {
+      "AND2_X1": [
+        "ZN"
+      ],
+      "AND2_X2": [
+        "ZN"
+      ],
+      "AND2_X4": [
+        "ZN"
+      ],
+      "AND3_X1": [
+        "ZN"
+      ],
+      "AND3_X2": [
+        "ZN"
+      ],
+      "AND3_X4": [
+        "ZN"
+      ],
+      "AND4_X1": [
+        "ZN"
+      ],
+      "AND4_X2": [
+        "ZN"
+      ],
+      "AND4_X4": [
+        "ZN"
+      ],
+      "ANTENNA_X1": [],
+      "AOI211_X1": [
+        "ZN"
+      ],
+      "AOI211_X2": [
+        "ZN"
+      ],
+      "AOI211_X4": [
+        "ZN"
+      ],
+      "AOI21_X1": [
+        "ZN"
+      ],
+      "AOI21_X2": [
+        "ZN"
+      ],
+      "AOI21_X4": [
+        "ZN"
+      ],
+      "AOI221_X1": [
+        "ZN"
+      ],
+      "AOI221_X2": [
+        "ZN"
+      ],
+      "AOI221_X4": [
+        "ZN"
+      ],
+      "AOI222_X1": [
+        "ZN"
+      ],
+      "AOI222_X2": [
+        "ZN"
+      ],
+      "AOI222_X4": [
+        "ZN"
+      ],
+      "AOI22_X1": [
+        "ZN"
+      ],
+      "AOI22_X2": [
+        "ZN"
+      ],
+      "AOI22_X4": [
+        "ZN"
+      ],
+      "BUF_X1": [
+        "Z"
+      ],
+      "BUF_X16": [
+        "Z"
+      ],
+      "BUF_X2": [
+        "Z"
+      ],
+      "BUF_X32": [
+        "Z"
+      ],
+      "BUF_X4": [
+        "Z"
+      ],
+      "BUF_X8": [
+        "Z"
+      ],
+      "CLKBUF_X1": [
+        "Z"
+      ],
+      "CLKBUF_X2": [
+        "Z"
+      ],
+      "CLKBUF_X3": [
+        "Z"
+      ],
+      "CLKGATETST_X1": [
+        "GCK"
+      ],
+      "CLKGATETST_X2": [
+        "GCK"
+      ],
+      "CLKGATETST_X4": [
+        "GCK"
+      ],
+      "CLKGATETST_X8": [
+        "GCK"
+      ],
+      "CLKGATE_X1": [
+        "GCK"
+      ],
+      "CLKGATE_X2": [
+        "GCK"
+      ],
+      "CLKGATE_X4": [
+        "GCK"
+      ],
+      "CLKGATE_X8": [
+        "GCK"
+      ],
+      "DFFRS_X1": [
+        "Q",
+        "QN"
+      ],
+      "DFFRS_X2": [
+        "Q",
+        "QN"
+      ],
+      "DFFR_X1": [
+        "Q",
+        "QN"
+      ],
+      "DFFR_X2": [
+        "Q",
+        "QN"
+      ],
+      "DFFS_X1": [
+        "Q",
+        "QN"
+      ],
+      "DFFS_X2": [
+        "Q",
+        "QN"
+      ],
+      "DFF_X1": [
+        "Q",
+        "QN"
+      ],
+      "DFF_X2": [
+        "Q",
+        "QN"
+      ],
+      "DLH_X1": [
+        "Q"
+      ],
+      "DLH_X2": [
+        "Q"
+      ],
+      "DLL_X1": [
+        "Q"
+      ],
+      "DLL_X2": [
+        "Q"
+      ],
+      "FA_X1": [
+        "CO",
+        "S"
+      ],
+      "FILLCELL_X1": [],
+      "FILLCELL_X16": [],
+      "FILLCELL_X2": [],
+      "FILLCELL_X32": [],
+      "FILLCELL_X4": [],
+      "FILLCELL_X8": [],
+      "HA_X1": [
+        "CO",
+        "S"
+      ],
+      "INV_X1": [
+        "ZN"
+      ],
+      "INV_X16": [
+        "ZN"
+      ],
+      "INV_X2": [
+        "ZN"
+      ],
+      "INV_X32": [
+        "ZN"
+      ],
+      "INV_X4": [
+        "ZN"
+      ],
+      "INV_X8": [
+        "ZN"
+      ],
+      "LOGIC0_X1": [
+        "Z"
+      ],
+      "LOGIC1_X1": [
+        "Z"
+      ],
+      "MUX2_X1": [
+        "Z"
+      ],
+      "MUX2_X2": [
+        "Z"
+      ],
+      "NAND2_X1": [
+        "ZN"
+      ],
+      "NAND2_X2": [
+        "ZN"
+      ],
+      "NAND2_X4": [
+        "ZN"
+      ],
+      "NAND3_X1": [
+        "ZN"
+      ],
+      "NAND3_X2": [
+        "ZN"
+      ],
+      "NAND3_X4": [
+        "ZN"
+      ],
+      "NAND4_X1": [
+        "ZN"
+      ],
+      "NAND4_X2": [
+        "ZN"
+      ],
+      "NAND4_X4": [
+        "ZN"
+      ],
+      "NOR2_X1": [
+        "ZN"
+      ],
+      "NOR2_X2": [
+        "ZN"
+      ],
+      "NOR2_X4": [
+        "ZN"
+      ],
+      "NOR3_X1": [
+        "ZN"
+      ],
+      "NOR3_X2": [
+        "ZN"
+      ],
+      "NOR3_X4": [
+        "ZN"
+      ],
+      "NOR4_X1": [
+        "ZN"
+      ],
+      "NOR4_X2": [
+        "ZN"
+      ],
+      "NOR4_X4": [
+        "ZN"
+      ],
+      "OAI211_X1": [
+        "ZN"
+      ],
+      "OAI211_X2": [
+        "ZN"
+      ],
+      "OAI211_X4": [
+        "ZN"
+      ],
+      "OAI21_X1": [
+        "ZN"
+      ],
+      "OAI21_X2": [
+        "ZN"
+      ],
+      "OAI21_X4": [
+        "ZN"
+      ],
+      "OAI221_X1": [
+        "ZN"
+      ],
+      "OAI221_X2": [
+        "ZN"
+      ],
+      "OAI221_X4": [
+        "ZN"
+      ],
+      "OAI222_X1": [
+        "ZN"
+      ],
+      "OAI222_X2": [
+        "ZN"
+      ],
+      "OAI222_X4": [
+        "ZN"
+      ],
+      "OAI22_X1": [
+        "ZN"
+      ],
+      "OAI22_X2": [
+        "ZN"
+      ],
+      "OAI22_X4": [
+        "ZN"
+      ],
+      "OAI33_X1": [
+        "ZN"
+      ],
+      "OR2_X1": [
+        "ZN"
+      ],
+      "OR2_X2": [
+        "ZN"
+      ],
+      "OR2_X4": [
+        "ZN"
+      ],
+      "OR3_X1": [
+        "ZN"
+      ],
+      "OR3_X2": [
+        "ZN"
+      ],
+      "OR3_X4": [
+        "ZN"
+      ],
+      "OR4_X1": [
+        "ZN"
+      ],
+      "OR4_X2": [
+        "ZN"
+      ],
+      "OR4_X4": [
+        "ZN"
+      ],
+      "SDFFRS_X1": [
+        "Q",
+        "QN"
+      ],
+      "SDFFRS_X2": [
+        "Q",
+        "QN"
+      ],
+      "SDFFR_X1": [
+        "Q",
+        "QN"
+      ],
+      "SDFFR_X2": [
+        "Q",
+        "QN"
+      ],
+      "SDFFS_X1": [
+        "Q",
+        "QN"
+      ],
+      "SDFFS_X2": [
+        "Q",
+        "QN"
+      ],
+      "SDFF_X1": [
+        "Q",
+        "QN"
+      ],
+      "SDFF_X2": [
+        "Q",
+        "QN"
+      ],
+      "TBUF_X1": [
+        "Z"
+      ],
+      "TBUF_X16": [
+        "Z"
+      ],
+      "TBUF_X2": [
+        "Z"
+      ],
+      "TBUF_X4": [
+        "Z"
+      ],
+      "TBUF_X8": [
+        "Z"
+      ],
+      "TINV_X1": [
+        "ZN"
+      ],
+      "TLAT_X1": [
+        "Q"
+      ],
+      "XNOR2_X1": [
+        "ZN"
+      ],
+      "XNOR2_X2": [
+        "ZN"
+      ],
+      "XOR2_X1": [
+        "Z"
+      ],
+      "XOR2_X2": [
+        "Z"
+      ]
+    },
+    "global_gnd_nodes": [
+      "LOGIC0_X1"
+    ],
+    "global_vcc_nodes": [
+      "LOGIC1_X1"
+    ],
+    "library_name": "NangateOpenCellLibrary",
+    "vhdl_includes": []
+  }
+}

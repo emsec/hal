@@ -61,6 +61,7 @@ log_manager& log_manager::get_instance(const hal::path& file_name)
         l.add_channel("netlist.persistent", {log_manager::create_stdout_sink(), log_manager::create_file_sink(), log_manager::create_gui_sink()}, "info");
         l.add_channel("hdl_parser", {log_manager::create_stdout_sink(), log_manager::create_file_sink(), log_manager::create_gui_sink()}, "info");
         l.add_channel("hdl_writer", {log_manager::create_stdout_sink(), log_manager::create_file_sink(), log_manager::create_gui_sink()}, "info");
+        l.add_channel("python_context", {log_manager::create_stdout_sink(), log_manager::create_file_sink(), log_manager::create_gui_sink()}, "info");
     }
     return l;
 }
