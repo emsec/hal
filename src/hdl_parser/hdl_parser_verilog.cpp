@@ -863,9 +863,9 @@ std::map<std::string, std::vector<std::string>> hdl_parser_verilog::get_expanded
     std::vector<std::pair<i32, i32>> bound_tokens;
     std::vector<std::string> names;
 
-    auto colon_pos = line.find(':');
+    auto wire_colon = line.find(':');
 
-    if (colon_pos != std::string::npos)
+    if (wire_colon != std::string::npos)
     {
         // extract bounds "[a:b][c:d]..."
         auto bounds = line.substr(0, line.rfind("]")).substr(line.find("[") + 1);
@@ -889,21 +889,13 @@ std::map<std::string, std::vector<std::string>> hdl_parser_verilog::get_expanded
 
     for (auto name : names)
     {
-        u32 dimension = bound_tokens.size();
-        name          = core_utils::trim(name);
+        u32 dimension    = bound_tokens.size();
+        name             = core_utils::trim(name);
+        auto wire_escape = name.find('\\');
 
-        auto wire_bracket = name.find('[');
-
-        if (wire_bracket != std::string::npos)
+        if (wire_escape != std::string::npos)
         {
-            auto substr = name.substr(0, name.rfind(']')).substr(wire_bracket + 1);
-            name        = core_utils::trim(name.substr(0, wire_bracket));
-
-            for (const auto& part : core_utils::split(substr, ']'))
-            {
-                auto index = std::stoi(core_utils::trim(part.substr(part.find('[') + 1)));
-                name += "(" + std::to_string(index) + ")";
-            }
+            name = name.substr(wire_escape + 1);
         }
 
         if (dimension == 0)
@@ -971,22 +963,31 @@ std::map<std::string, std::string> hdl_parser_verilog::get_port_assignments(cons
 
         auto assignment_bracket = a.find('[');
         auto assignment_number  = a.find('\'');
+        auto assignment_escape  = a.find('\\');
 
-        if (assignment_bracket == std::string::npos && assignment_number == std::string::npos)
+        if ((assignment_bracket == std::string::npos || assignment_escape != std::string::npos) && assignment_number == std::string::npos)
         {
             // (1) and (2)
-            if (e.expanded_signal_names.find(a) == e.expanded_signal_names.end())
+            auto name = core_utils::trim(a);
+
+            if (assignment_escape != std::string::npos)
+            {
+                name = core_utils::trim(name.substr(assignment_escape + 1));
+            }
+
+            if (e.expanded_signal_names.find(name) == e.expanded_signal_names.end())
             {
                 log_error("hdl_parser", "no wire or port '{}' within current entity.", a);
                 return {};
             }
 
-            right_parts.insert(right_parts.end(), e.expanded_signal_names[a].begin(), e.expanded_signal_names[a].end());
+            right_parts.insert(right_parts.end(), e.expanded_signal_names[name].begin(), e.expanded_signal_names[name].end());
         }
         else if (assignment_number != std::string::npos)
         {
             // (3)
             auto number = get_bin_from_number_literal(a);
+
             for (auto bit : number)
             {
                 right_parts.push_back("'" + std::to_string(bit - 48) + "'");
@@ -1051,21 +1052,29 @@ std::map<std::string, std::string> hdl_parser_verilog::get_port_assignments(cons
     //   (4) NAME[BEGIN_INDEX:END_INDEX]
 
     auto port_bracket = port.find('[');
+    auto port_escape  = port.find('\\');
 
-    if (port_bracket == std::string::npos)
+    if (port_bracket == std::string::npos || port_escape != std::string::npos)
     {
+        auto name = port;
+
+        if (port_escape != std::string::npos)
+        {
+            name = name.substr(port_escape + 1);
+        }
+
         // (1) and (2)
         // infer size from right side
         if (right_parts.size() > 1)
         {
             for (u32 i = right_parts.size(); i > 0; i--)
             {
-                left_parts.push_back(port + "(" + std::to_string(i - 1) + ")");
+                left_parts.push_back(name + "(" + std::to_string(i - 1) + ")");
             }
         }
         else
         {
-            left_parts.push_back(port);
+            left_parts.push_back(name);
         }
     }
     else if (port_bracket != std::string::npos)
@@ -1214,5 +1223,6 @@ std::string hdl_parser_verilog::get_unique_alias(const std::string& name)
     {
         return name.substr(0, name.size() - 1) + "_module_inst" + std::to_string(m_current_instance_index[name]) + "\\";
     }
+
     return name + "_module_inst" + std::to_string(m_current_instance_index[name]);
 }
