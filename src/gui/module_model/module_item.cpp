@@ -1,12 +1,13 @@
 #include "module_model/module_item.h"
 
+#include "gui/gui_globals.h"
 #include "gui/gui_utility.h"
 
 module_item::module_item(const QString& name, const int id) :
     m_parent(nullptr),
     m_name(name),
     m_id(id),
-    m_color(gui_utility::get_random_color()), // UNSURE, MAYBE A FIXED COLOR PALETTE OR DEFAULT COLOR IS BETTER
+    m_color(g_netlist_relay.get_module_color(id)), // UNSURE, MAYBE A FIXED COLOR PALETTE OR DEFAULT COLOR IS BETTER
     m_highlighted(false)
 {
 }
