@@ -331,6 +331,9 @@ void graph_widget::handle_navigation_right_request()
             if (!n)
                 return;
 
+            if(n->get_num_of_dsts() == 0)
+                return;
+
             if (n->get_num_of_dsts() == 1)
             {
                 handle_navigation_jump_requested(n->get_id(), n->get_dsts()[0].get_gate()->get_id());
