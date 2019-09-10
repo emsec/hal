@@ -440,7 +440,7 @@ void graph_widget::ensure_gate_visible(const u32 gate)
 
     connect(anim, &QVariantAnimation::valueChanged, [=](const QVariant& value) { m_view->centerOn(value.toPoint()); });
 
-    anim->start();
+    anim->start(QAbstractAnimation::DeleteWhenStopped);
 }
 
 void graph_widget::add_context_to_history()
