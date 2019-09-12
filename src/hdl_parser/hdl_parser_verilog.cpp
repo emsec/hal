@@ -286,11 +286,6 @@ bool hdl_parser_verilog::parse_assigns(entity& e)
         }
     }
 
-    for (auto a : e.direct_assignments)
-    {
-        std::cout << a.first << " = " << a.second << ";" << std::endl;
-    }
-
     return true;
 }
 
@@ -320,6 +315,13 @@ bool hdl_parser_verilog::parse_instances(entity& e)
             inst.name   = core_utils::trim(token[1].substr(0, token[1].find('(')));
             generic_map = core_utils::split(token[0].substr(1), ',', true);
             port_map    = core_utils::split(token[1].substr(token[1].find('(') + 1), ',', true);
+        }
+
+        auto inst_escape = inst.name.find('\\');
+
+        if (inst_escape != std::string::npos)
+        {
+            inst.name = inst.name.substr(inst_escape + 1);
         }
 
         for (const auto& p : port_map)
@@ -588,8 +590,6 @@ std::shared_ptr<module> hdl_parser_verilog::instantiate(const entity& e, std::sh
         }
     }
 
-    std::cout << "front" << std::endl;
-
     for (const auto& [signal, assignment] : e.direct_assignments)
     {
         std::string a = signal;
@@ -613,8 +613,6 @@ std::shared_ptr<module> hdl_parser_verilog::instantiate(const entity& e, std::sh
         }
         m_nets_to_merge[b].push_back(a);
     }
-
-    std::cout << "end" << std::endl;
 
     // cache global vcc/gnd types
     auto global_vcc_gate_types = m_netlist->get_gate_library()->get_global_vcc_gate_types();
@@ -974,8 +972,9 @@ std::map<std::string, std::string> hdl_parser_verilog::get_port_assignments(cons
         auto assignment_bracket = a.find('[');
         auto assignment_number  = a.find('\'');
         auto assignment_escape  = a.find('\\');
+        auto assignment_space   = a.find(' ');
 
-        if ((assignment_bracket == std::string::npos || assignment_escape != std::string::npos) && assignment_number == std::string::npos)
+        if ((assignment_bracket == std::string::npos || (assignment_escape != std::string::npos && assignment_space != assignment_bracket - 1)) && assignment_number == std::string::npos)
         {
             // (1) and (2)
             auto name = core_utils::trim(a);
@@ -1014,6 +1013,11 @@ std::map<std::string, std::string> hdl_parser_verilog::get_port_assignments(cons
                 auto substr = a.substr(0, a.rfind(']')).substr(assignment_bracket + 1);
                 auto name   = core_utils::trim(a.substr(0, assignment_bracket));
 
+                if (assignment_escape != std::string::npos)
+                {
+                    name = core_utils::trim(name.substr(assignment_escape + 1));
+                }
+
                 for (const auto& part : core_utils::split(substr, ']'))
                 {
                     auto index = std::stoi(core_utils::trim(part.substr(part.find('[') + 1)));
@@ -1027,6 +1031,11 @@ std::map<std::string, std::string> hdl_parser_verilog::get_port_assignments(cons
                 // (5)
                 auto bounds = core_utils::split(a.substr(0, a.rfind(']')).substr(assignment_bracket + 1), ':');
                 auto name   = core_utils::trim(a.substr(0, assignment_bracket));
+
+                if (assignment_escape != std::string::npos)
+                {
+                    name = core_utils::trim(name.substr(assignment_escape + 1));
+                }
 
                 auto left_bound  = std::stoi(core_utils::trim(bounds[0]));
                 auto right_bound = std::stoi(core_utils::trim(bounds[1]));
