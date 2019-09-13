@@ -1387,7 +1387,7 @@ TEST_F(hdl_parser_vhdl_test, check_component)
 }
 
 /**
- * Testing the usage of user-defined attributes within the architecture header.
+ * Testing the usage of user-defined attributes within the architecture and the entity header.
  *
  * Functions: parse
  */
@@ -1510,6 +1510,81 @@ TEST_F(hdl_parser_vhdl_test, check_direct_assignment)
 
 
         }
+        {
+            // Build up a master-slave hierarchy as follows:
+            /*                                  .--- net_slave_1
+             *   net_master <--- net_slave_0 <--+
+             *                                  '--- net_slave_2
+             */
+            // Testing the correct creation of the master net by considering the inheritance of the attributes and connections
+            // of its slaves
+            std::stringstream input("-- Device\t: device_name\n"
+                                    "entity TEST_Comp is\n"
+                                    "  port (\n"
+                                    "    net_global_in : in STD_LOGIC := 'X';\n"
+                                    "    net_global_out : out STD_LOGIC := 'X';\n"
+                                    "  );\n"
+                                    "end TEST_Comp;\n"
+                                    "architecture STRUCTURE of TEST_Comp is\n"
+                                    "  signal net_slave_0 : STD_LOGIC;\n"
+                                    "  signal net_slave_1 : STD_LOGIC;\n"
+                                    "  signal net_slave_2 : STD_LOGIC;\n"
+                                    "  signal net_master : STD_LOGIC;\n"
+                                    "  attribute slave_0_attr : string;\n"
+                                    "  attribute slave_0_attr of net_slave_0 : signal is \"slave_0_attr\";\n"
+                                    "  attribute slave_1_attr : string;\n"
+                                    "  attribute slave_1_attr of net_slave_1 : signal is \"slave_1_attr\";\n"
+                                    "  attribute slave_2_attr : string;\n"
+                                    "  attribute slave_2_attr of net_slave_2 : signal is \"slave_2_attr\";\n"
+                                    "  attribute master_attr : string;\n"
+                                    "  attribute master_attr of net_master : signal is \"master_attr\";\n"
+                                    "begin\n"
+                                    "  net_slave_1 <= net_slave_0; \n"
+                                    "  net_slave_0 <= net_master;\n"
+                                    "  net_slave_2 <= net_slave_0;\n"
+                                    "  gate_0 : INV\n"
+                                    "    port map (\n"
+                                    "      I => net_global_in,\n"
+                                    "      O => net_slave_0\n"
+                                    "    );\n"
+                                    "  gate_1 : AND3\n"
+                                    "    port map (\n"
+                                    "      I0 => net_master,\n"
+                                    "      I1 => net_slave_1,\n"
+                                    "      I2 => net_slave_2,\n"
+                                    "      O => net_global_out\n"
+                                    "    );\n"
+                                    "end STRUCTURE;");
+            hdl_parser_vhdl vhdl_parser(input);
+            std::shared_ptr<netlist> nl = vhdl_parser.parse(g_lib_name);
+
+            ASSERT_NE(nl, nullptr);
+            EXPECT_EQ(nl->get_nets().size(), 3); // global_in + global_out + net_master
+            ASSERT_EQ(nl->get_nets("net_master").size(), 1);
+            std::shared_ptr<net> net_master = *nl->get_nets("net_master").begin();
+
+            ASSERT_EQ(nl->get_gates("INV","gate_0").size(), 1);
+            ASSERT_EQ(nl->get_gates("AND3","gate_1").size(), 1);
+
+            std::shared_ptr<gate> g_0 = *nl->get_gates("INV","gate_0").begin();
+            std::shared_ptr<gate> g_1 = *nl->get_gates("AND3","gate_1").begin();
+
+            // Check the connections
+            EXPECT_EQ(g_0->get_fan_out_net("O"), net_master);
+            EXPECT_EQ(g_1->get_fan_in_net("I0"), net_master);
+            EXPECT_EQ(g_1->get_fan_in_net("I1"), net_master);
+            EXPECT_EQ(g_1->get_fan_in_net("I2"), net_master);
+
+            // Check the attributes
+            EXPECT_EQ(net_master->get_data_by_key("vhdl_attribute", "master_attr"), std::make_tuple("string", "master_attr"));
+            EXPECT_EQ(net_master->get_data_by_key("vhdl_attribute", "slave_0_attr"), std::make_tuple("string", "slave_0_attr"));
+            EXPECT_EQ(net_master->get_data_by_key("vhdl_attribute", "slave_1_attr"), std::make_tuple("string", "slave_1_attr"));
+            EXPECT_EQ(net_master->get_data_by_key("vhdl_attribute", "slave_2_attr"), std::make_tuple("string", "slave_2_attr"));
+
+
+
+
+        }
     TEST_END
 }
 
@@ -1525,7 +1600,7 @@ TEST_F(hdl_parser_vhdl_test, check_multiple_entities)
 {
     TEST_START
         {
-            // Create a new entity that is used once by the main entity
+            // Create a new entity with an attribute that is used once by the main entity
             /*                               ---------------------------------------------.
              *                              | child_mod                                   |
              *                              |                                             |
@@ -1535,7 +1610,9 @@ TEST_F(hdl_parser_vhdl_test, check_multiple_entities)
              */
 
             std::stringstream input("-- Device\t: device_name\n"
-                                    "entity ENT_CHILD is\n"                          // definition of the child entity
+                                    "entity ENT_CHILD is\n"
+                                    "  attribute child_attri : string;\n"
+                                    "  attribute child_attri of ENT_CHILD : item_class is \"child_attribute\";\n"
                                     "  port (\n"
                                     "    child_in : in STD_LOGIC := 'X';\n"
                                     "    child_out : out STD_LOGIC := 'X';\n"
@@ -1556,7 +1633,7 @@ TEST_F(hdl_parser_vhdl_test, check_multiple_entities)
                                     "    );\n"
                                     "end STRUCTURE_CHILD;\n"
                                     "\n"
-                                    "entity ENT_TOP is\n"                           // definition of the top entity
+                                    "entity ENT_TOP is\n"
                                     "  port (\n"
                                     "    net_global_in : in STD_LOGIC := 'X';\n"
                                     "    net_global_out : out STD_LOGIC := 'X';\n"
@@ -1583,6 +1660,7 @@ TEST_F(hdl_parser_vhdl_test, check_multiple_entities)
                                     "    );\n"
                                     "end ENT_TOP;");
             hdl_parser_vhdl vhdl_parser(input);
+            //std::cout << "\n======\n" << input.str() << "\n=====\n" << std::endl;
             std::shared_ptr<netlist> nl = vhdl_parser.parse(g_lib_name);
 
             // Test that all gates are created
@@ -1625,6 +1703,7 @@ TEST_F(hdl_parser_vhdl_test, check_multiple_entities)
             EXPECT_EQ(child_mod->get_name(), "ENT_CHILD");
             EXPECT_EQ(top_mod->get_gates(), std::set<std::shared_ptr<gate>>({gate_0, gate_1}));
             EXPECT_EQ(child_mod->get_gates(), std::set<std::shared_ptr<gate>>({gate_0_child, gate_1_child}));
+            EXPECT_EQ(child_mod->get_data_by_key("vhdl_attribute", "child_attri"), std::make_tuple("string","child_attribute"));
 
         }
         {
