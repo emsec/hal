@@ -45,6 +45,8 @@ class context_manager_widget : public content_widget
     Q_PROPERTY(QString rename_icon_style READ rename_icon_style WRITE set_rename_icon_style)
     Q_PROPERTY(QString delete_icon_path READ delete_icon_path WRITE set_delete_icon_path)
     Q_PROPERTY(QString delete_icon_style READ delete_icon_style WRITE set_delete_icon_style)
+    Q_PROPERTY(QString duplicate_icon_path READ duplicate_icon_path WRITE set_duplicate_icon_path)
+    Q_PROPERTY(QString duplicate_icon_style READ duplicate_icon_style WRITE set_duplicate_icon_style)
 
 
 public:
@@ -60,6 +62,8 @@ public:
     QString rename_icon_style() const;
     QString delete_icon_path() const;
     QString delete_icon_style() const;
+    QString duplicate_icon_path() const;
+    QString duplicate_icon_style() const;
 
     void set_new_view_icon_path(const QString &path);
     void set_new_view_icon_style(const QString &style);
@@ -67,6 +71,8 @@ public:
     void set_rename_icon_style(const QString &style);
     void set_delete_icon_path(const QString &path);
     void set_delete_icon_style(const QString &style);
+    void set_duplicate_icon_path(const QString &path);
+    void set_duplicate_icon_style(const QString &style);
 
 
 public Q_SLOTS:
@@ -80,15 +86,18 @@ private:
     QListWidget* m_list_widget;
 
     QAction* m_new_view_action;
-    QAction* m_rename_action;
-    QAction* m_delete_action;
-
     QString m_new_view_icon_path;
     QString m_new_view_icon_style;
 
+    QAction* m_rename_action;
     QString m_rename_icon_path;
     QString m_rename_icon_style;
 
+    QAction* m_duplicate_action;
+    QString m_duplicate_icon_path;
+    QString m_duplicate_icon_style;
+
+    QAction* m_delete_action;
     QString m_delete_icon_path;
     QString m_delete_icon_style;
 
@@ -98,6 +107,7 @@ private:
 
     void handle_open_context_clicked();
     void handle_rename_context_clicked();
+    void handle_duplicate_context_clicked();
     void handle_delete_context_clicked();
 
     void handle_item_double_clicked(QListWidgetItem*);

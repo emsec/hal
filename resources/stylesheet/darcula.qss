@@ -1313,7 +1313,10 @@ qproperty-new_view_icon_path: ":/icons/plus";
 qproperty-rename_icon_style: "all->#3192C5";
 qproperty-rename_icon_path: ":/icons/pen";
 
-qproperty-delete_icon_style: "all->#DDDDDD";
+qproperty-duplicate_icon_style: "all->#00AA00";
+qproperty-duplicate_icon_path: ":/icons/content";
+
+qproperty-delete_icon_style: "all->#A61F1F";
 qproperty-delete_icon_path: ":/icons/trashcan";
 }
 

@@ -131,9 +131,12 @@ void graph_widget::keyPressEvent(QKeyEvent* event)
             handle_navigation_down_request();
             break;
         }
-        case Qt::Key_Backspace:
+        case Qt::Key_Z:
         {
-            handle_history_step_back_request();
+            if (event->modifiers() & Qt::ControlModifier) // modifiers are set as bitmasks
+            {
+                handle_history_step_back_request();
+            }
             break;
         }
         default:
@@ -331,7 +334,7 @@ void graph_widget::handle_navigation_right_request()
             if (!n)
                 return;
 
-            if(n->get_num_of_dsts() == 0)
+            if (n->get_num_of_dsts() == 0)
                 return;
 
             if (n->get_num_of_dsts() == 1)
@@ -389,16 +392,16 @@ void graph_widget::handle_history_step_back_request()
         qDebug() << "Entry " + QString::number(i);
 
         QString modules = "Modules: " + QString::number(e.m_modules.size());
-//        QString modules = "Modules: ";
-//        for (u32 id : e.m_modules)
-//            modules.append(QString::number(id) + ", ");
+        //        QString modules = "Modules: ";
+        //        for (u32 id : e.m_modules)
+        //            modules.append(QString::number(id) + ", ");
 
         qDebug() << modules;
 
         QString gates = "Gates: " + QString::number(e.m_gates.size());
-//        QString gates = "Gates: ";
-//        for (u32 id : e.m_gates)
-//            gates.append(QString::number(id) + ", ");
+        //        QString gates = "Gates: ";
+        //        for (u32 id : e.m_gates)
+        //            gates.append(QString::number(id) + ", ");
 
         qDebug() << gates;
 
@@ -465,16 +468,16 @@ void graph_widget::add_context_to_history()
         qDebug() << "Entry " + QString::number(i);
 
         QString modules = "Modules: " + QString::number(e.m_modules.size());
-//        QString modules = "Modules: ";
-//        for (u32 id : e.m_modules)
-//            modules.append(QString::number(id) + ", ");
+        //        QString modules = "Modules: ";
+        //        for (u32 id : e.m_modules)
+        //            modules.append(QString::number(id) + ", ");
 
         qDebug() << modules;
 
         QString gates = "Gates: " + QString::number(e.m_gates.size());
-//        QString gates = "Gates: ";
-//        for (u32 id : e.m_gates)
-//            gates.append(QString::number(id) + ", ");
+        //        QString gates = "Gates: ";
+        //        for (u32 id : e.m_gates)
+        //            gates.append(QString::number(id) + ", ");
 
         qDebug() << gates;
 
