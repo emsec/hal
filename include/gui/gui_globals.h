@@ -26,6 +26,7 @@
 
 #include "netlist/netlist.h"
 
+#include "file_status_manager/file_status_manager.h"
 #include "gui/graph_widget/graph_context_manager.h"
 #include "gui/hal_content_manager/hal_content_manager.h"
 #include "gui/netlist_relay/netlist_relay.h"
@@ -36,7 +37,6 @@
 #include "gui/settings/settings_relay.h"
 #include "gui/thread_pool/thread_pool.h"
 #include "gui/window_manager/window_manager.h"
-#include "file_status_manager/file_status_manager.h"
 
 #include <QSettings>
 
@@ -61,4 +61,4 @@ extern thread_pool* g_thread_pool;
 
 extern std::unique_ptr<python_context> g_python_context;
 
-#endif // GUI_GLOBALS_H
+#endif    // GUI_GLOBALS_H

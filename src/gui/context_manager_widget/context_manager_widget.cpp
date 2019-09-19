@@ -3,7 +3,7 @@
 #include "gui_globals.h"
 
 #include "gui/graph_tab_widget/graph_tab_widget.h"
-#include "gui/graph_widget/contexts/dynamic_context.h"
+#include "gui/graph_widget/contexts/graph_context.h"
 #include "gui/graph_widget/graph_widget.h"
 
 #include "input_dialog/input_dialog.h"
@@ -12,11 +12,15 @@
 
 #include "core/log.h"
 #include "gui_utility.h"
+#include "netlist/netlist.h"
+#include "netlist/module.h"
+#include "netlist/gate.h"
 #include "toolbar/toolbar.h"
 #include <QAction>
 #include <QDebug>
 #include <QListWidgetItem>
 #include <QMenu>
+#include <QResizeEvent>
 #include <QSize>
 #include <QStringList>
 #include <QStringListModel>
@@ -43,9 +47,9 @@ context_manager_widget::context_manager_widget(graph_tab_widget* tab_view, QWidg
     connect(&g_graph_context_manager, &graph_context_manager::context_removed, this, &context_manager_widget::handle_context_removed);
 
     //load top context (top module) into list
-    for (const auto& ctx_name : g_graph_context_manager.dynamic_context_list())
+    for (const auto& ctx : g_graph_context_manager.get_contexts())
     {
-        handle_context_created(g_graph_context_manager.get_dynamic_context(ctx_name));
+        handle_context_created(ctx);
     }
     // if (m_list_widget->count() == 0)
     // {
@@ -110,32 +114,41 @@ void context_manager_widget::handle_context_menu_request(const QPoint& point)
 
 void context_manager_widget::handle_create_context_clicked()
 {
-    dynamic_context* new_context = nullptr;
+    graph_context* new_context = nullptr;
 
     //create context with desired name until name which hasn't been used is found
     do
     {
         QString new_context_name = "View " + QString::number(++m_context_counter);
-        new_context              = g_graph_context_manager.add_dynamic_context(new_context_name);    //returns nullptr if name already in use
+        new_context              = g_graph_context_manager.create_new_context(new_context_name);    //returns nullptr if name already in use
     } while (new_context == nullptr);
 
     //default if context created from nothing -> top module + global nets (empty == better?)
-    new_context->add({1}, {}, {});
+    QSet<u32> gates;
+    for (const auto& g : g_netlist->get_top_module()->get_gates())
+    {
+        gates.insert(g->get_id());
+    }
+    new_context->add(gates);
 
     m_tab_view->show_context(new_context);
 }
 
 void context_manager_widget::handle_open_context_clicked()
 {
-    dynamic_context* clicked_context = g_graph_context_manager.get_dynamic_context(m_list_widget->currentItem()->text());
+    graph_context* clicked_context = g_graph_context_manager.get_context_by_name(m_list_widget->currentItem()->text());
     m_tab_view->show_context(clicked_context);
 }
 
 void context_manager_widget::handle_rename_context_clicked()
 {
-    dynamic_context* clicked_context = g_graph_context_manager.get_dynamic_context(m_list_widget->currentItem()->text());
+    graph_context* clicked_context = g_graph_context_manager.get_context_by_name(m_list_widget->currentItem()->text());
 
-    QStringList used_context_names = g_graph_context_manager.dynamic_context_list();
+    QStringList used_context_names;
+    for (const auto& ctx : g_graph_context_manager.get_contexts())
+    {
+        used_context_names.append(ctx->name());
+    }
 
     unique_string_validator unique_validator(used_context_names);
     empty_string_validator empty_validator;
@@ -148,30 +161,30 @@ void context_manager_widget::handle_rename_context_clicked()
     ipd.add_validator(&empty_validator);
 
     if (ipd.exec() == QDialog::Accepted)
-        g_graph_context_manager.rename_dynamic_context(clicked_context->name(), ipd.text_value());
+        g_graph_context_manager.rename_graph_context(clicked_context->name(), ipd.text_value());
 }
 
 void context_manager_widget::handle_duplicate_context_clicked()
 {
-    dynamic_context* clicked_context = g_graph_context_manager.get_dynamic_context(m_list_widget->currentItem()->text());
-    dynamic_context* new_context = nullptr;
+    graph_context* clicked_context = g_graph_context_manager.get_context_by_name(m_list_widget->currentItem()->text());
+    graph_context* new_context     = nullptr;
 
     //create context with desired name until name which hasn't been used is found
     u32 dup_counter = 1;
     do
     {
         dup_counter++;
-        QString new_context_name = clicked_context->name() + " ("+ QString::number(dup_counter) +")";
-        new_context              = g_graph_context_manager.add_dynamic_context(new_context_name);    // returns nullptr if name already in use
+        QString new_context_name = clicked_context->name() + " (" + QString::number(dup_counter) + ")";
+        new_context              = g_graph_context_manager.create_new_context(new_context_name);    // returns nullptr if name already in use
     } while (new_context == nullptr);
 
-    new_context->add(clicked_context->modules(), clicked_context->gates(), {});
+    new_context->add(clicked_context->gates());
 }
 
 void context_manager_widget::handle_delete_context_clicked()
 {
-    dynamic_context* clicked_context = g_graph_context_manager.get_dynamic_context(m_list_widget->currentItem()->text());
-    g_graph_context_manager.remove_dynamic_context(clicked_context->name());
+    graph_context* clicked_context = g_graph_context_manager.get_context_by_name(m_list_widget->currentItem()->text());
+    g_graph_context_manager.remove_graph_context(clicked_context->name());
 }
 
 void context_manager_widget::setup_toolbar(toolbar* toolbar)
@@ -264,7 +277,7 @@ void context_manager_widget::set_delete_icon_style(const QString& style)
 
 void context_manager_widget::handle_item_double_clicked(QListWidgetItem* clicked)
 {
-    dynamic_context* clicked_context = g_graph_context_manager.get_dynamic_context(clicked->text());
+    graph_context* clicked_context = g_graph_context_manager.get_context_by_name(clicked->text());
     m_tab_view->show_context(clicked_context);
 }
 
@@ -284,7 +297,7 @@ void context_manager_widget::handle_selection_changed()
     }
 }
 
-void context_manager_widget::handle_context_created(dynamic_context* context)
+void context_manager_widget::handle_context_created(graph_context* context)
 {
     m_list_widget->addItem(context->name());
     auto new_item = m_list_widget->item(m_list_widget->count() - 1);
@@ -293,7 +306,7 @@ void context_manager_widget::handle_context_created(dynamic_context* context)
     new_item->setData(Qt::UserRole, v);
 }
 
-void context_manager_widget::handle_context_renamed(dynamic_context* context)
+void context_manager_widget::handle_context_renamed(graph_context* context)
 {
     for (int i = 0; i < m_list_widget->count(); ++i)
     {
@@ -305,7 +318,7 @@ void context_manager_widget::handle_context_renamed(dynamic_context* context)
     }
 }
 
-void context_manager_widget::handle_context_removed(dynamic_context* context)
+void context_manager_widget::handle_context_removed(graph_context* context)
 {
     for (int i = 0; i < m_list_widget->count(); ++i)
     {

@@ -1,50 +1,50 @@
 #include "gui/graph_widget/graph_context_manager.h"
 
-#include "netlist/netlist.h"
 #include "netlist/gate.h"
 #include "netlist/module.h"
+#include "netlist/netlist.h"
 
-#include "gui/graph_widget/contexts/dynamic_context.h"
+#include "gui/graph_widget/contexts/graph_context.h"
 #include "gui/graph_widget/layouters/minimal_graph_layouter.h"
 #include "gui/graph_widget/layouters/standard_graph_layouter.h"
 #include "gui/graph_widget/layouters/standard_graph_layouter_v2.h"
-#include "gui/gui_globals.h"
 #include "gui/graph_widget/shaders/module_shader.h"
-
+#include "gui/gui_globals.h"
 
 graph_context_manager::graph_context_manager()
 {
 }
 
-dynamic_context* graph_context_manager::add_dynamic_context(const QString& name)
+graph_context* graph_context_manager::create_new_context(const QString& name)
 {
-    for (dynamic_context* context : m_dynamic_contexts)
+    for (graph_context* context : m_graph_contexts)
     {
         if (context->name() == name)
         {
             return nullptr;
         }
     }
-
-    dynamic_context* context = new dynamic_context(name);
-    m_dynamic_contexts.append(context);
+    graph_context* context = new graph_context(name);
+    context->set_layouter(get_default_layouter(context));
+    context->set_shader(get_default_shader(context));
+    m_graph_contexts.append(context);
     Q_EMIT context_created(context);
     return context;
 }
 
-dynamic_context* graph_context_manager::get_dynamic_context(const QString& name)
+graph_context* graph_context_manager::get_context_by_name(const QString& name)
 {
-    for (dynamic_context* context : m_dynamic_contexts)
+    for (graph_context* context : m_graph_contexts)
         if (context->name() == name)
             return context;
 
     return nullptr;
 }
 
-bool graph_context_manager::rename_dynamic_context(const QString& old_name, const QString& new_name)
+bool graph_context_manager::rename_graph_context(const QString& old_name, const QString& new_name)
 {
-    dynamic_context* to_change = nullptr;
-    for (dynamic_context* context : m_dynamic_contexts)
+    graph_context* to_change = nullptr;
+    for (graph_context* context : m_graph_contexts)
     {
         if (context->name() != old_name && context->name() == new_name)
         {
@@ -65,14 +65,14 @@ bool graph_context_manager::rename_dynamic_context(const QString& old_name, cons
     return true;
 }
 
-bool graph_context_manager::remove_dynamic_context(const QString& name)
+bool graph_context_manager::remove_graph_context(const QString& name)
 {
-    for (int i = 0; i < m_dynamic_contexts.size(); ++i)
+    for (int i = 0; i < m_graph_contexts.size(); ++i)
     {
-        auto context = m_dynamic_contexts[i];
-        if (m_dynamic_contexts[i]->name() == name)
+        auto context = m_graph_contexts[i];
+        if (m_graph_contexts[i]->name() == name)
         {
-            m_dynamic_contexts.remove(i);
+            m_graph_contexts.remove(i);
             Q_EMIT context_removed(context);
             return true;
         }
@@ -80,22 +80,21 @@ bool graph_context_manager::remove_dynamic_context(const QString& name)
     return false;
 }
 
-QStringList graph_context_manager::dynamic_context_list() const
+QVector<graph_context*> graph_context_manager::get_contexts() const
 {
-    QStringList list;
-
-    for (dynamic_context* context : m_dynamic_contexts)
-        list.append(context->name());
-
-    return list;
+    return m_graph_contexts;
 }
 
 void graph_context_manager::handle_module_removed(const std::shared_ptr<module> m)
 {
-    // REMOVE MODULE FROM DYNAMIC CONTEXTS
-    for (dynamic_context* context : m_dynamic_contexts)
+    QSet<u32> gates;
+    for (const auto& g : m->get_gates())
+    {
+        gates.insert(g->get_id());
+    }
+    for (graph_context* context : m_graph_contexts)
         if (context->modules().contains(m->get_id()))
-            context->remove(QSet<u32>{m->get_id()}, QSet<u32>(), QSet<u32>());
+            context->remove(gates);
 
     // TRIGGER RESHADE FOR ALL CONTEXTS THAT RECURSIVELY CONTAIN THE MODULE
 }
@@ -103,7 +102,7 @@ void graph_context_manager::handle_module_removed(const std::shared_ptr<module> 
 void graph_context_manager::handle_module_name_changed(const std::shared_ptr<module> m) const
 {
     // UPDATE DYNAMIC CONTEXTS
-    for (dynamic_context* context : m_dynamic_contexts)
+    for (graph_context* context : m_graph_contexts)
         if (context->modules().contains(m->get_id()))
             context->request_update();
 
@@ -124,7 +123,6 @@ void graph_context_manager::handle_module_submodule_removed(const std::shared_pt
 
 void graph_context_manager::handle_module_gate_assigned(const std::shared_ptr<module> m, const u32 inserted_gate) const
 {
-
     // TRIGGER RELAYOUT FOR ALL CONTEXTS THAT RECURSIVELY CONTAIN THE MODULE
     // TRIGGER RESHADE FOR ALL CONTEXTS THAT RECURSIVELY CONTAIN THE MODULE
 }
@@ -138,7 +136,7 @@ void graph_context_manager::handle_module_gate_removed(const std::shared_ptr<mod
 void graph_context_manager::handle_gate_name_changed(const std::shared_ptr<gate> g) const
 {
     // IF GATE IN CONTEXT REQUEST UPDATE
-    for (dynamic_context* context : m_dynamic_contexts)
+    for (graph_context* context : m_graph_contexts)
         if (context->gates().contains(g->get_id()))
             context->request_update();
 
@@ -156,7 +154,7 @@ void graph_context_manager::handle_net_created(const std::shared_ptr<net> n) con
 void graph_context_manager::handle_net_removed(const std::shared_ptr<net> n) const
 {
     // IF NET IS PART OF CONTEXT UPDATE
-    for (dynamic_context* context : m_dynamic_contexts)
+    for (graph_context* context : m_graph_contexts)
         if (context->nets().contains(n->get_id()))
             context->request_update();
 
@@ -173,7 +171,7 @@ void graph_context_manager::handle_net_name_changed(const std::shared_ptr<net> n
 void graph_context_manager::handle_net_src_changed(const std::shared_ptr<net> n) const
 {
     // IF NET IS PART OF CONTEXT UPDATE
-    for (dynamic_context* context : m_dynamic_contexts)
+    for (graph_context* context : m_graph_contexts)
         if (context->nets().contains(n->get_id()))
             context->request_update();
 
@@ -185,7 +183,7 @@ void graph_context_manager::handle_net_dst_added(const std::shared_ptr<net> n, c
     Q_UNUSED(dst_gate_id)
 
     // IF NET OR DST GATE IS PART OF CONTEXT UPDATE
-    for (dynamic_context* context : m_dynamic_contexts)
+    for (graph_context* context : m_graph_contexts)
         if (context->nets().contains(n->get_id()) || context->gates().contains(dst_gate_id))
             context->request_update();
 
@@ -197,20 +195,20 @@ void graph_context_manager::handle_net_dst_removed(const std::shared_ptr<net> n,
     Q_UNUSED(dst_gate_id)
 
     // IF NET IS PART OF CONTEXT UPDATE
-    for (dynamic_context* context : m_dynamic_contexts)
+    for (graph_context* context : m_graph_contexts)
         if (context->nets().contains(n->get_id()))
             context->request_update();
 
     // TRIGGER RESHADE FOR ALL CONTEXTS THAT RECURSIVELY CONTAIN THE MODULE
 }
 
-graph_layouter* graph_context_manager::get_default_layouter(dynamic_context* const context) const
+graph_layouter* graph_context_manager::get_default_layouter(graph_context* const context) const
 {
     // USE SETTINGS + FACTORY
     return new standard_graph_layouter(context);
 }
 
-graph_shader* graph_context_manager::get_default_shader(dynamic_context* const context) const
+graph_shader* graph_context_manager::get_default_shader(graph_context* const context) const
 {
     // USE SETTINGS + FACTORY
     return new module_shader(context);

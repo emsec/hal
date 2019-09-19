@@ -28,7 +28,7 @@
 
 #include "def.h"
 
-#include "graph_widget/contexts/dynamic_context.h"
+#include "graph_widget/contexts/graph_context.h"
 
 #include <QListWidget>
 #include <QPoint>
@@ -76,9 +76,9 @@ public:
 
 
 public Q_SLOTS:
-    void handle_context_created(dynamic_context* context);
-    void handle_context_renamed(dynamic_context* context);
-    void handle_context_removed(dynamic_context* context);
+    void handle_context_created(graph_context* context);
+    void handle_context_renamed(graph_context* context);
+    void handle_context_removed(graph_context* context);
 
 private:
     graph_tab_widget* m_tab_view;

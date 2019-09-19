@@ -11,7 +11,7 @@ class gate;
 class module;
 class net;
 
-class dynamic_context;
+class graph_context;
 class graph_layouter;
 class graph_shader;
 class graph_context;
@@ -22,11 +22,11 @@ class graph_context_manager : public QObject
 public:
     graph_context_manager();
 
-    dynamic_context* add_dynamic_context(const QString& name);
-    dynamic_context* get_dynamic_context(const QString& name);
-    bool rename_dynamic_context(const QString& old_name, const QString& new_name);
-    bool remove_dynamic_context(const QString& name);
-    QStringList dynamic_context_list() const;    // PROBABLY DEBUG METHOD, WILL BE REPLACED BY DIFFERENT SELECTION INTERFACE
+    graph_context* create_new_context(const QString& name);
+    graph_context* get_context_by_name(const QString& name);
+    bool rename_graph_context(const QString& old_name, const QString& new_name);
+    bool remove_graph_context(const QString& name);
+    QVector<graph_context*> get_contexts() const;    // PROBABLY DEBUG METHOD, WILL BE REPLACED BY DIFFERENT SELECTION INTERFACE
 
     //void handle_module_created(const std::shared_ptr<module> m) const; // PRECACHING ???
     void handle_module_removed(const std::shared_ptr<module> m);
@@ -48,17 +48,17 @@ public:
     void handle_net_dst_added(const std::shared_ptr<net> n, const u32 dst_gate_id) const;
     void handle_net_dst_removed(const std::shared_ptr<net> n, const u32 dst_gate_id) const;
 
-    graph_layouter* get_default_layouter(dynamic_context* const context) const;
+    graph_layouter* get_default_layouter(graph_context* const context) const;
 
-    graph_shader* get_default_shader(dynamic_context* const context) const;
+    graph_shader* get_default_shader(graph_context* const context) const;
 
 Q_SIGNALS:
-    void context_created(dynamic_context* context);
-    void context_renamed(dynamic_context* context);
-    void context_removed(dynamic_context* context);
+    void context_created(graph_context* context);
+    void context_renamed(graph_context* context);
+    void context_removed(graph_context* context);
 
 private:
-    QVector<dynamic_context*> m_dynamic_contexts;
+    QVector<graph_context*> m_graph_contexts;
 };
 
 #endif    // GRAPH_CONTEXT_MANAGER_H
