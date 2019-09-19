@@ -34,8 +34,8 @@
 class module_item
 {
 public:
-    module_item(const QString& name, const int id);
-    ~module_item();
+    module_item(const u32 id);
+    module_item(const QString& name, const u32 id);
 
     void insert_child(int row, module_item* child);
     void remove_child(module_item* child);
@@ -67,8 +67,8 @@ private:
     module_item* m_parent;
     QList<module_item*> m_child_items;
 
-    QString m_name;
     u32 m_id;
+    QString m_name;
 
     QColor m_color;
     bool m_highlighted;

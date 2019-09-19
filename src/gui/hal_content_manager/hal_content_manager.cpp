@@ -77,9 +77,10 @@ void hal_content_manager::handle_open_document(const QString& file_name)
     vhdl_editor* code_edit = new vhdl_editor();
     m_graph_tab_wid->addTab(code_edit, "Source");
     m_main_window->add_content(m_graph_tab_wid, 2, content_anchor::center);
-    //module_widget* m = new module_widget();
-    //m_main_window->add_content(m, 0, content_anchor::left);
-    //m->open();
+
+//    module_widget* m = new module_widget();
+//    m_main_window->add_content(m, 0, content_anchor::left);
+//    m->open();
 
     m_nav_widget = new old_graph_navigation_widget();
     m_main_window->add_content(m_nav_widget, 0, content_anchor::left);
