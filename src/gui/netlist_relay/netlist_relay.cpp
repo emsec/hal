@@ -65,6 +65,20 @@ module_model* netlist_relay::get_module_model()
     return m_module_model;
 }
 
+void netlist_relay::debug_change_module_name(const u32 id)
+{
+    // NOT THREADSAFE
+
+    std::shared_ptr<module> m = g_netlist->get_module_by_id(id);
+    assert(m);
+
+    bool ok;
+    QString text = QInputDialog::getText(nullptr, "Rename Module", "New Name", QLineEdit::Normal, QString::fromStdString(m->get_name()), &ok);
+
+    if (ok && !text.isEmpty())
+        m->set_name(text.toStdString());
+}
+
 void netlist_relay::debug_change_module_color(const u32 id)
 {
     // NOT THREADSAFE
@@ -83,18 +97,14 @@ void netlist_relay::debug_change_module_color(const u32 id)
     Q_EMIT module_color_changed(m);
 }
 
-void netlist_relay::debug_add_selection_to_module(module_item* item)
+void netlist_relay::debug_add_selection_to_module(const u32 id)
 {
     // NOT THREADSAFE
     // DECIDE HOW TO HANDLE MODULES
 
-    if (!item)
-        return;
+    std::shared_ptr<module> m = g_netlist->get_module_by_id(id);
 
-    std::shared_ptr<module> m = g_netlist->get_module_by_id(item->id());
-
-    if (!m)
-        return;
+    assert(m);
 
     for (auto id : g_selection_relay.m_selected_gates)
     {
@@ -105,7 +115,7 @@ void netlist_relay::debug_add_selection_to_module(module_item* item)
     }
 }
 
-void netlist_relay::debug_add_child_module(module_item* item)
+void netlist_relay::debug_add_child_module(const u32 id)
 {
     // NOT THREADSAFE
 
@@ -115,10 +125,7 @@ void netlist_relay::debug_add_child_module(module_item* item)
     if (!ok || name.isEmpty())
         return;
 
-    if (!item)
-        return;
-
-    std::shared_ptr<module> m = g_netlist->get_module_by_id(item->id());
+    std::shared_ptr<module> m = g_netlist->get_module_by_id(id);
 
     if (!m)
         return;
@@ -243,6 +250,8 @@ void netlist_relay::relay_module_event(module_event_handler::event ev, std::shar
         case module_event_handler::event::name_changed:
         {
             //< no associated_data
+
+            m_module_model->update_module(object->get_id());
 
             g_graph_context_manager.handle_module_name_changed(object);
 

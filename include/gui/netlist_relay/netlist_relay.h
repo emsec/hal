@@ -50,9 +50,10 @@ public:
     module_item* get_module_item(const u32 id);
     module_model* get_module_model();
 
+    void debug_change_module_name(const u32 id);
     void debug_change_module_color(const u32 id);
-    void debug_add_selection_to_module(module_item* item);
-    void debug_add_child_module(module_item* item);
+    void debug_add_selection_to_module(const u32 id);
+    void debug_add_child_module(const u32 id);
 
 Q_SIGNALS:
     // PROBABLY OBSOLETE

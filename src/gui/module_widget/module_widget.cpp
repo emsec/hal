@@ -122,14 +122,12 @@ void module_widget::handle_tree_view_context_menu_requested(const QPoint& point)
 
     QMenu context_menu;
 
-    QAction select_action("Select Module", &context_menu);
     QAction add_selection_action("Add Selection to Module", &context_menu);
     QAction add_child_action("Add Child Module", &context_menu);
     QAction change_name_action("Change Module Name", &context_menu);
     QAction change_color_action("Change Module Color", &context_menu);
     QAction delete_action("Delete Module", &context_menu);
 
-    context_menu.addAction(&select_action);
     context_menu.addAction(&add_selection_action);
     context_menu.addAction(&add_child_action);
     context_menu.addAction(&change_name_action);
@@ -142,10 +140,13 @@ void module_widget::handle_tree_view_context_menu_requested(const QPoint& point)
         return;
 
     if (clicked == &add_selection_action)
-        g_netlist_relay.debug_add_selection_to_module(g_netlist_relay.get_module_model()->get_item(m_module_proxy_model->mapToSource(index)));
+        g_netlist_relay.debug_add_selection_to_module(g_netlist_relay.get_module_model()->get_item(m_module_proxy_model->mapToSource(index))->id());
 
     if (clicked == &add_child_action)
-        g_netlist_relay.debug_add_child_module(g_netlist_relay.get_module_model()->get_item(m_module_proxy_model->mapToSource(index)));
+        g_netlist_relay.debug_add_child_module(g_netlist_relay.get_module_model()->get_item(m_module_proxy_model->mapToSource(index))->id());
+
+    if (clicked == &change_name_action)
+        g_netlist_relay.debug_change_module_name(g_netlist_relay.get_module_model()->get_item(m_module_proxy_model->mapToSource(index))->id());
 
     if (clicked == &change_color_action)
         g_netlist_relay.debug_change_module_color(g_netlist_relay.get_module_model()->get_item(m_module_proxy_model->mapToSource(index))->id());
