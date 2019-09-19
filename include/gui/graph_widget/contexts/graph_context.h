@@ -57,7 +57,7 @@ private Q_SLOTS:
     void handle_layouter_update(const QString& message);
     void handle_layouter_finished();
 
-protected:
+private:
     QSet<u32> m_modules;
     QSet<u32> m_gates;
     QSet<u32> m_nets;
@@ -67,7 +67,7 @@ protected:
 
     bool m_unhandled_changes;
     bool m_scene_update_required;
-    bool m_wait_for_user_action;
+    u32 m_user_update_cnt;
 
     bool m_update_requested;
 

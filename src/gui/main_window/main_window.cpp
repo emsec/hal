@@ -195,7 +195,7 @@ main_window::main_window(QWidget* parent) : QWidget(parent), m_schedule_widget(n
 
     m_about_dialog = new about_dialog(this);
     m_plugin_model = new plugin_model(this);
-    m_content_manager = new hal_content_manager(this);
+    g_content_manager = new hal_content_manager(this);
 
     connect(m_action_open, &QAction::triggered, this, &main_window::handle_action_open);
     connect(m_action_about, &QAction::triggered, m_about_dialog, &about_dialog::exec);
@@ -208,7 +208,7 @@ main_window::main_window(QWidget* parent) : QWidget(parent), m_schedule_widget(n
 
     connect(m_action_run_schedule, &QAction::triggered, plugin_schedule_manager::get_instance(), &plugin_schedule_manager::run_schedule);
 
-    connect(this, &main_window::save_triggered, m_content_manager, &hal_content_manager::handle_save_triggered);
+    connect(this, &main_window::save_triggered, g_content_manager, &hal_content_manager::handle_save_triggered);
 
     restore_state();
 
@@ -496,7 +496,7 @@ void main_window::closeEvent(QCloseEvent* event)
     save_state();
     event->accept();
     // hack, remove later
-    m_content_manager->hack_delete_content();
+    g_content_manager->hack_delete_content();
     qApp->quit();
 }
 

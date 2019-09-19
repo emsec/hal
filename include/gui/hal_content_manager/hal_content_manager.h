@@ -32,15 +32,12 @@
 #include "netlist_watcher/netlist_watcher.h"
 
 class main_window;
-
-class hal_tab_widget;
-class file_manager;
 class content_widget;
-class console_widget;
 class python_editor;
-class python_console_widget;
-class old_graph_layouter;
-class graph_layouter_view;
+class graph_tab_widget;
+class old_graph_navigation_widget;
+class context_manager_widget;
+class netlist_watcher;
 
 class hal_content_manager : public QObject
 {
@@ -50,6 +47,14 @@ public:
     explicit hal_content_manager(main_window* parent);
 
     ~hal_content_manager();
+
+    python_editor* get_python_editor_widget();
+
+    graph_tab_widget* get_graph_tab_widget();
+
+    old_graph_navigation_widget* get_navigation_widget();
+
+    context_manager_widget* get_context_manager_widget();
 
     void hack_delete_content();
 
@@ -73,22 +78,15 @@ private:
 
     QList<content_widget*> m_content;
 
-    //More testing purposes, delete them later on and put all in m_content
-    QList<content_widget*> m_content2;
-
-    //temporary solution to make the view a member variable(all this stuff might be deleted later nonetheless)
-    //graph_layouter_view* m_layouter_view;
-
-    //temporary solution aslong as the involved classes are strongly coupled
-    QGraphicsScene* m_graph_scene;
-
-    graph_layouter_view* m_layouter_view;
+    netlist_watcher* m_netlist_watcher;
 
     python_editor* m_python_widget;
 
-    netlist_watcher* m_netlist_watcher;
+    graph_tab_widget* m_graph_tab_wid;
 
-    std::set<QString> m_unsaved_changes;
+    old_graph_navigation_widget* m_nav_widget;
+
+    context_manager_widget* m_context_manager_wid;
 };
 
 #endif    // HAL_CONTENT_MANAGER_H

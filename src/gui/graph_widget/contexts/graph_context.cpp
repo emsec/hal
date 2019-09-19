@@ -13,7 +13,7 @@ static const bool lazy_updates = false;    // USE SETTINGS FOR THIS
 graph_context::graph_context(const QString& name, QObject* parent)
     : QObject(parent), m_unhandled_changes(false), m_scene_update_required(false), m_update_requested(false), m_name(name), m_scene_available(true), m_update_in_progress(false)
 {
-    m_wait_for_user_action = false;
+    m_user_update_cnt = 0;
 }
 
 void graph_context::set_layouter(graph_layouter* layouter)
@@ -56,14 +56,17 @@ void graph_context::unsubscribe(graph_context_subscriber* const subscriber)
 
 void graph_context::begin_change()
 {
-    m_wait_for_user_action = true;
+    m_user_update_cnt++;
 }
 
 void graph_context::end_change()
 {
-    m_wait_for_user_action = false;
-    evaluate_changes();
-    update();
+    m_user_update_cnt--;
+    if (m_user_update_cnt == 0)
+    {
+        evaluate_changes();
+        update();
+    }
 }
 
 void graph_context::add(const QSet<u32>& modules, const QSet<u32>& gates)
@@ -80,7 +83,7 @@ void graph_context::add(const QSet<u32>& modules, const QSet<u32>& gates)
     m_added_modules += new_modules;
     m_added_gates += new_gates;
 
-    if (!m_wait_for_user_action)
+    if (m_user_update_cnt == 0)
     {
         evaluate_changes();
         update();
@@ -98,7 +101,7 @@ void graph_context::remove(const QSet<u32>& modules, const QSet<u32>& gates)
     m_added_modules -= modules;
     m_added_gates -= gates;
 
-    if (!m_wait_for_user_action)
+    if (m_user_update_cnt == 0)
     {
         evaluate_changes();
         update();
@@ -113,7 +116,7 @@ void graph_context::clear()
     m_added_modules.clear();
     m_added_gates.clear();
 
-    if (!m_wait_for_user_action)
+    if (m_user_update_cnt == 0)
     {
         evaluate_changes();
         update();
@@ -122,16 +125,22 @@ void graph_context::clear()
 
 void graph_context::fold_module_of_gate(u32 id)
 {
+    auto contained_gates = m_gates + m_added_gates - m_removed_gates;
     begin_change();
-    if (m_gates.find(id) != m_gates.end())
+    if (contained_gates.find(id) != contained_gates.end())
     {
         auto m = g_netlist->get_gate_by_id(id)->get_module();
         QSet<u32> gates;
+        QSet<u32> modules;
         for (const auto& g : m->get_gates(DONT_CARE, DONT_CARE, true))
         {
             gates.insert(g->get_id());
         }
-        remove({}, gates);
+        for (const auto& sm : m->get_submodules(DONT_CARE, true))
+        {
+            modules.insert(sm->get_id());
+        }
+        remove(modules, gates);
         add({m->get_id()}, {});
     }
     end_change();
@@ -139,8 +148,9 @@ void graph_context::fold_module_of_gate(u32 id)
 
 void graph_context::unfold_module(u32 id)
 {
+    auto contained_modules = m_modules + m_added_modules - m_removed_modules;
     begin_change();
-    if (m_modules.find(id) != m_modules.end())
+    if (contained_modules.find(id) != contained_modules.end())
     {
         auto m = g_netlist->get_module_by_id(id);
         QSet<u32> gates;

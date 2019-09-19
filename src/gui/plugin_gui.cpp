@@ -37,6 +37,8 @@ QSettings g_gui_state(QString::fromStdString((core_utils::get_user_config_direct
 window_manager* g_window_manager;
 notification_manager* g_notification_manager;
 
+hal_content_manager* g_content_manager = nullptr;
+
 std::shared_ptr<netlist> g_netlist = nullptr;
 
 netlist_relay g_netlist_relay;

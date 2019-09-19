@@ -154,8 +154,6 @@ private:
 
     plugin_model* m_plugin_model;
 
-    hal_content_manager* m_content_manager;
-
     QString m_open_icon_path;
     QString m_open_icon_style;
 

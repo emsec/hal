@@ -54,6 +54,8 @@ public:
     void resizeEvent(QResizeEvent* event);
     void handle_create_context_clicked();
 
+    void select_view_context(graph_context* context);
+
     virtual void setup_toolbar(toolbar* toolbar) Q_DECL_OVERRIDE;
 
     QString new_view_icon_path() const;
@@ -102,6 +104,8 @@ private:
     QString m_delete_icon_style;
 
     u32 m_context_counter = 0;
+
+    std::map<QListWidgetItem*, graph_context*> m_assigned_pointers;
 
     void handle_context_menu_request(const QPoint& point);
 

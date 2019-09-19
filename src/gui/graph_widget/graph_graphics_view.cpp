@@ -63,10 +63,25 @@ void graph_graphics_view::handle_change_color_action()
 void graph_graphics_view::handle_isolation_view_action()
 {
     graph_context* context = nullptr;
-    u32 cnt                = 1;
-    while (context == nullptr)
+    u32 cnt                = 0;
+    while (true)
     {
-        context = g_graph_context_manager.create_new_context("View " + QString::number(cnt++));
+        ++cnt;
+        QString name = "Isolated View " + QString::number(cnt);
+        bool found   = false;
+        for (const auto& ctx : g_graph_context_manager.get_contexts())
+        {
+            if (ctx->name() == name)
+            {
+                found = true;
+                break;
+            }
+        }
+        if (!found)
+        {
+            context = g_graph_context_manager.create_new_context(name);
+            break;
+        }
     }
     context->add(g_selection_relay.m_selected_modules, g_selection_relay.m_selected_gates);
 }
@@ -538,7 +553,7 @@ void graph_graphics_view::handle_unfold_action()
     g_selection_relay.relay_selection_changed(this);
 
     context->begin_change();
-    for (u32 id : g_selection_relay.m_selected_modules)
+    for (u32 id : modules)
     {
         context->unfold_module(id);
     }
