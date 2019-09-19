@@ -4,13 +4,12 @@
 
 #include "gui_globals.h"
 
-#include <QHeaderView>
-#include <QScrollBar>
-#include <QKeyEvent>
 #include "core/log.h"
+#include <QHeaderView>
+#include <QKeyEvent>
+#include <QScrollBar>
 
-graph_navigation_widget::graph_navigation_widget(QWidget *parent) : QTableWidget(parent),
-                                                                    m_via_net(0)
+graph_navigation_widget::graph_navigation_widget(QWidget* parent) : QTableWidget(parent), m_via_net(0)
 {
     setSelectionMode(QAbstractItemView::SingleSelection);
     setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -23,8 +22,8 @@ graph_navigation_widget::graph_navigation_widget(QWidget *parent) : QTableWidget
 
     verticalHeader()->setVisible(false);
 
-//    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-//    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    //    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    //    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 }
 
 void graph_navigation_widget::setup()
@@ -46,7 +45,7 @@ void graph_navigation_widget::setup()
                 return;
             }
 
-            std::string pin_type = g->get_output_pin_types()[g_selection_relay.m_subfocus_index];
+            std::string pin_type   = g->get_output_pin_types()[g_selection_relay.m_subfocus_index];
             std::shared_ptr<net> n = g->get_fan_out_net(pin_type);
 
             if (!n)
@@ -85,7 +84,7 @@ void graph_navigation_widget::setup()
     }
 }
 
-void graph_navigation_widget::keyPressEvent(QKeyEvent *event)
+void graph_navigation_widget::keyPressEvent(QKeyEvent* event)
 {
     if (event->key() == Qt::Key_Up || event->key() == Qt::Key_Down)
     {
@@ -99,7 +98,26 @@ void graph_navigation_widget::keyPressEvent(QKeyEvent *event)
             return;
         }
 
-        std::shared_ptr<gate> g = g_netlist->get_gate_by_id(static_cast<const u32>(std::stoi(selectedItems().at(0)->text().toStdString())));
+        if (selectedItems().at(0)->row() == 0)
+        {
+            // "select all" was chosen
+            QSet<u32> gates;
+            for (u32 row = 1; row < rowCount(); ++row)
+            {
+                std::shared_ptr<gate> g = g_netlist->get_gate_by_id(item(row, 0)->text().toLong());
+                if (g)
+                {
+                    gates.insert(g->get_id());
+                    Q_EMIT navigation_requested(m_via_net, g->get_id());
+                }
+            }
+            g_selection_relay.clear();
+            g_selection_relay.m_selected_gates = gates;
+            g_selection_relay.relay_selection_changed(this);
+            return;
+        }
+
+        std::shared_ptr<gate> g = g_netlist->get_gate_by_id(selectedItems().at(0)->text().toLong());
 
         if (!g)
         {
@@ -111,7 +129,10 @@ void graph_navigation_widget::keyPressEvent(QKeyEvent *event)
     }
 
     if (event->key() == Qt::Key_Escape || event->key() == Qt::Key_Left)
-        Q_EMIT { close_requested(); reset_focus(); }
+    {
+        Q_EMIT close_requested();
+        Q_EMIT reset_focus();
+    }
 }
 
 void graph_navigation_widget::fill_table(std::shared_ptr<net> n)
@@ -123,18 +144,30 @@ void graph_navigation_widget::fill_table(std::shared_ptr<net> n)
 
     m_via_net = n->get_id();
 
-    setRowCount(n->get_dsts().size());
+    setRowCount(n->get_dsts().size() + 1);
 
-    int row = 0;
+    {
+        QTableWidgetItem* item = new QTableWidgetItem("");
+        item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+        setItem(0, 0, item);
+        setItem(0, 2, item);
+        setItem(0, 3, item);
+        setItem(0, 4, item);
+        item = new QTableWidgetItem("Select All");
+        item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+        setItem(0, 1, item);
+    }
 
-    for (const endpoint &e : n->get_dsts())
+    int row = 1;
+
+    for (const endpoint& e : n->get_dsts())
     {
         if (!e.gate)
         {
             continue;
         }
 
-        QTableWidgetItem *item = new QTableWidgetItem(QString::number(e.get_gate()->get_id()));
+        QTableWidgetItem* item = new QTableWidgetItem(QString::number(e.get_gate()->get_id()));
         item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
         setItem(row, 0, item);
 
@@ -162,32 +195,31 @@ void graph_navigation_widget::fill_table(std::shared_ptr<net> n)
     resizeRowsToContents();
     resizeColumnsToContents();
 
-//    int scrollbar_width = verticalScrollBar()->width();
-//    int total_width = 0;
+    //    int scrollbar_width = verticalScrollBar()->width();
+    //    int total_width = 0;
 
-//    for (int i = 0; i < horizontalHeader()->count(); ++i)
-//    {
-//        total_width += horizontalHeader()->sectionSize(i);
-//    }
+    //    for (int i = 0; i < horizontalHeader()->count(); ++i)
+    //    {
+    //        total_width += horizontalHeader()->sectionSize(i);
+    //    }
 
-//    setFixedWidth(total_width + scrollbar_width);
+    //    setFixedWidth(total_width + scrollbar_width);
 
-//    int scrollbar_height = horizontalScrollBar()->height();
-//    int header_height = horizontalHeader()->height();
+    //    int scrollbar_height = horizontalScrollBar()->height();
+    //    int header_height = horizontalHeader()->height();
 
-//    int total_height = 0;
+    //    int total_height = 0;
 
-//    for (int i = 0; i < verticalHeader()->count(); ++i)
-//    {
-//        total_height += verticalHeader()->sectionSize(i);
-//    }
+    //    for (int i = 0; i < verticalHeader()->count(); ++i)
+    //    {
+    //        total_height += verticalHeader()->sectionSize(i);
+    //    }
 
-//    setFixedHeight(header_height + total_height + scrollbar_height);
-
+    //    setFixedHeight(header_height + total_height + scrollbar_height);
 
     //This version uses some magic numbers, but it does not behaves as wierd in
     //certain (random?) situations like the version above
-    int width = verticalScrollBar()->width()+40;
+    int width = verticalScrollBar()->width() + 40;
     for (int i = 0; i < columnCount(); i++)
         width += columnWidth(i);
 
@@ -195,8 +227,7 @@ void graph_navigation_widget::fill_table(std::shared_ptr<net> n)
     for (int i = 0; i < rowCount(); i++)
         height += rowHeight(i);
 
-
     int MAXIMUM_ALLOWED_HEIGHT = 500;
     setFixedWidth(width);
-    setFixedHeight( (height > MAXIMUM_ALLOWED_HEIGHT) ? MAXIMUM_ALLOWED_HEIGHT : height );
+    setFixedHeight((height > MAXIMUM_ALLOWED_HEIGHT) ? MAXIMUM_ALLOWED_HEIGHT : height);
 }

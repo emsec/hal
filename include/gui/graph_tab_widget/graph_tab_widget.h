@@ -3,7 +3,7 @@
 
 #include "content_widget/content_widget.h"
 
-#include "graph_widget/contexts/dynamic_context.h"
+#include "graph_widget/contexts/graph_context.h"
 
 #include <QMap>
 
@@ -19,25 +19,27 @@ public:
 
     int addTab(QWidget* tab, QString tab_name = "default");
 
-    void show_context(dynamic_context* context);
+    void show_context(graph_context* context);
 
 public Q_SLOTS:
-    void handle_context_created(dynamic_context* context);
-    void handle_context_renamed(dynamic_context* context);
-    void handle_context_removed(dynamic_context* context);
+    void handle_context_created(graph_context* context);
+    void handle_context_renamed(graph_context* context);
+    void handle_context_removed(graph_context* context);
+
+    void handle_tab_changed(int index);
 
 private:
     QTabWidget* m_tab_widget;
     QVBoxLayout* m_layout;
 
-    QMap<dynamic_context*, QWidget*> m_context_widget_map;
+    QMap<graph_context*, QWidget*> m_context_widget_map;
 
-    int get_context_tab_index(dynamic_context* context) const;
+    int get_context_tab_index(graph_context* context) const;
 
     //functions
     void handle_tab_close_requested(int index);
 
-    void add_graph_widget_tab(dynamic_context* context);
+    void add_graph_widget_tab(graph_context* context);
 };
 
 #endif    //GRAPH_TAB_WIDGET

@@ -28,7 +28,7 @@
 
 #include "def.h"
 
-#include "graph_widget/contexts/dynamic_context.h"
+#include "graph_widget/contexts/graph_context.h"
 
 #include <QListWidget>
 #include <QPoint>
@@ -54,6 +54,8 @@ public:
     void resizeEvent(QResizeEvent* event);
     void handle_create_context_clicked();
 
+    void select_view_context(graph_context* context);
+
     virtual void setup_toolbar(toolbar* toolbar) Q_DECL_OVERRIDE;
 
     QString new_view_icon_path() const;
@@ -76,9 +78,9 @@ public:
 
 
 public Q_SLOTS:
-    void handle_context_created(dynamic_context* context);
-    void handle_context_renamed(dynamic_context* context);
-    void handle_context_removed(dynamic_context* context);
+    void handle_context_created(graph_context* context);
+    void handle_context_renamed(graph_context* context);
+    void handle_context_removed(graph_context* context);
 
 private:
     graph_tab_widget* m_tab_view;
@@ -102,6 +104,8 @@ private:
     QString m_delete_icon_style;
 
     u32 m_context_counter = 0;
+
+    std::map<QListWidgetItem*, graph_context*> m_assigned_pointers;
 
     void handle_context_menu_request(const QPoint& point);
 
