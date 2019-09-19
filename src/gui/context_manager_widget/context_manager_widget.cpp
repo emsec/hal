@@ -195,6 +195,66 @@ void context_manager_widget::setup_toolbar(toolbar* toolbar)
     toolbar->addAction(m_delete_action);
 }
 
+
+void context_manager_widget::handle_item_double_clicked(QListWidgetItem* clicked)
+{
+    graph_context* clicked_context = m_assigned_pointers[m_list_widget->currentItem()];
+    m_tab_view->show_context(clicked_context);
+}
+
+void context_manager_widget::handle_selection_changed()
+{
+    if (m_list_widget->selectedItems().isEmpty())
+    {
+        m_rename_action->setEnabled(false);
+        m_duplicate_action->setEnabled(false);
+        m_delete_action->setEnabled(false);
+    }
+    else
+    {
+        m_rename_action->setEnabled(true);
+        m_duplicate_action->setEnabled(true);
+        m_delete_action->setEnabled(true);
+    }
+}
+
+void context_manager_widget::handle_context_created(graph_context* context)
+{
+    m_list_widget->addItem(context->name());
+    auto new_item = m_list_widget->item(m_list_widget->count() - 1);
+    m_assigned_pointers[new_item] = context;
+    select_view_context(context);
+}
+
+void context_manager_widget::handle_context_renamed(graph_context* context)
+{
+    for (int i = 0; i < m_list_widget->count(); ++i)
+    {
+        if (m_assigned_pointers[m_list_widget->item(i)] == context)
+        {
+            m_list_widget->item(i)->setText(context->name());
+            return;
+        }
+    }
+}
+
+void context_manager_widget::handle_context_removed(graph_context* context)
+{
+    for (int i = 0; i < m_list_widget->count(); ++i)
+    {
+        if (m_assigned_pointers[m_list_widget->item(i)] == context)
+        {
+            m_assigned_pointers.erase(m_list_widget->item(i));
+            delete m_list_widget->takeItem(i);    // has to be deleted manually
+            return;
+        }
+    }
+}
+
+// ##########################################################
+// ##########################################################
+// ##########################################################
+
 QString context_manager_widget::new_view_icon_path() const
 {
     return m_new_view_icon_path;
@@ -273,58 +333,4 @@ void context_manager_widget::set_delete_icon_path(const QString& path)
 void context_manager_widget::set_delete_icon_style(const QString& style)
 {
     m_delete_icon_style = style;
-}
-
-void context_manager_widget::handle_item_double_clicked(QListWidgetItem* clicked)
-{
-    graph_context* clicked_context = m_assigned_pointers[m_list_widget->currentItem()];
-    m_tab_view->show_context(clicked_context);
-}
-
-void context_manager_widget::handle_selection_changed()
-{
-    if (m_list_widget->selectedItems().isEmpty())
-    {
-        m_rename_action->setEnabled(false);
-        m_duplicate_action->setEnabled(false);
-        m_delete_action->setEnabled(false);
-    }
-    else
-    {
-        m_rename_action->setEnabled(true);
-        m_duplicate_action->setEnabled(true);
-        m_delete_action->setEnabled(true);
-    }
-}
-
-void context_manager_widget::handle_context_created(graph_context* context)
-{
-    m_list_widget->addItem(context->name());
-    auto new_item = m_list_widget->item(m_list_widget->count() - 1);
-    m_assigned_pointers[new_item] = context;
-}
-
-void context_manager_widget::handle_context_renamed(graph_context* context)
-{
-    for (int i = 0; i < m_list_widget->count(); ++i)
-    {
-        if (m_assigned_pointers[m_list_widget->item(i)] == context)
-        {
-            m_list_widget->item(i)->setText(context->name());
-            return;
-        }
-    }
-}
-
-void context_manager_widget::handle_context_removed(graph_context* context)
-{
-    for (int i = 0; i < m_list_widget->count(); ++i)
-    {
-        if (m_assigned_pointers[m_list_widget->item(i)] == context)
-        {
-            m_assigned_pointers.erase(m_list_widget->item(i));
-            delete m_list_widget->takeItem(i);    // has to be deleted manually
-            return;
-        }
-    }
 }
