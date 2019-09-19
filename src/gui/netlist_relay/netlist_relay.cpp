@@ -223,15 +223,15 @@ void netlist_relay::relay_module_event(module_event_handler::event ev, std::shar
 
             m_module_colors.insert(object->get_id(), gui_utility::get_random_color());
 
-//            module_item* item                     = new module_item(QString::fromStdString(object->get_name()), object->get_id());
-//            std::shared_ptr<module> parent_module = object->get_parent_module();
-//            module_item* parent_item              = nullptr;
+            module_item* item                     = new module_item(QString::fromStdString(object->get_name()), object->get_id());
+            std::shared_ptr<module> parent_module = object->get_parent_module();
+            module_item* parent_item              = nullptr;
 
-//            if (parent_module)
-//                parent_item = m_module_items.value(parent_module->get_id());
+            if (parent_module)
+                parent_item = m_module_items.value(parent_module->get_id());
 
-//            m_module_items.insert(object->get_id(), item);
-//            m_module_model->add_item(item, parent_item);
+            m_module_items.insert(object->get_id(), item);
+            m_module_model->add_module(item, parent_item);
 
             Q_EMIT module_created(object);
             break;
@@ -414,10 +414,9 @@ void netlist_relay::debug_handle_file_opened()
 
     m_module_colors.insert(1, QColor(96, 110, 112));
 
-//    std::shared_ptr<module> top_module = g_netlist->get_top_module();
-//    module_item* item                  = new module_item(QString::fromStdString(top_module->get_name()), top_module->get_id());
-//    item->set_color(QColor(96, 110, 112));    // DEBUG LINE
+    std::shared_ptr<module> top_module = g_netlist->get_top_module();
+    module_item* item = new module_item(QString::fromStdString(top_module->get_name()), top_module->get_id());
 
-//    m_module_items.insert(top_module->get_id(), item);
-//    m_module_model->add_item(item, nullptr);
+    m_module_items.insert(top_module->get_id(), item);
+    m_module_model->add_module(item, nullptr);
 }
