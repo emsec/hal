@@ -65,20 +65,22 @@ module_model* netlist_relay::get_module_model()
     return m_module_model;
 }
 
-void netlist_relay::debug_change_module_color(module_item* item)
+void netlist_relay::debug_change_module_color(const u32 id)
 {
     // NOT THREADSAFE
 
-    if (!item)
-        return;
+    std::shared_ptr<module> m = g_netlist->get_module_by_id(id);
+    assert(m);
 
     QColor color = QColorDialog::getColor();
 
     if (!color.isValid())
         return;
 
-    item->set_color(color);
-    m_module_model->dataChanged(m_module_model->get_index(item), m_module_model->get_index(item));
+    m_module_colors.insert(id, color);
+    m_module_model->update_module(id);
+
+    Q_EMIT module_color_changed(m);
 }
 
 void netlist_relay::debug_add_selection_to_module(module_item* item)
@@ -223,14 +225,14 @@ void netlist_relay::relay_module_event(module_event_handler::event ev, std::shar
 
             m_module_colors.insert(object->get_id(), gui_utility::get_random_color());
 
-            m_module_model->add_module(object->get_id(), object->get_parent_module()->get_id());
-
             Q_EMIT module_created(object);
             break;
         }
         case module_event_handler::event::removed:
         {
             //< no associated_data
+
+            m_module_colors.remove(object->get_id());
 
             g_graph_context_manager.handle_module_removed(object);
             g_selection_relay.handle_module_removed(object->get_id());
@@ -258,6 +260,8 @@ void netlist_relay::relay_module_event(module_event_handler::event ev, std::shar
         {
             //< associated_data = id of added module
 
+            m_module_model->add_module(associated_data, object->get_id());
+
             g_graph_context_manager.handle_module_submodule_added(object, associated_data);
 
             Q_EMIT module_submodule_added(object, associated_data);
@@ -266,6 +270,8 @@ void netlist_relay::relay_module_event(module_event_handler::event ev, std::shar
         case module_event_handler::event::submodule_removed:
         {
             //< associated_data = id of removed module
+
+            m_module_model->remove_module(associated_data);
 
             g_graph_context_manager.handle_module_submodule_removed(object, associated_data);
 
@@ -407,4 +413,10 @@ void netlist_relay::debug_handle_file_opened()
     m_module_colors.insert(1, QColor(96, 110, 112));
 
     m_module_model->init();
+}
+
+void netlist_relay::debug_handle_file_closed()
+{
+    m_module_model->clear();
+    m_module_colors.clear();
 }
