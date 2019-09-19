@@ -156,7 +156,39 @@ void graph_widget::handle_navigation_jump_requested(const u32 via_net, const u32
 
     if (!m_context->gates().contains(to_gate))
     {
-        m_context->add({to_gate});
+        for (const auto& m : g_netlist->get_modules())
+        {
+            if (m->get_name() == m_context->name().toStdString())
+            {
+                u32 cnt = 0;
+                while (true)
+                {
+                    ++cnt;
+                    QString new_name = m_context->name() + " modified";
+                    if (cnt > 1)
+                    {
+                        new_name += " (" + QString::number(cnt) + ")";
+                    }
+                    bool found = false;
+                    for (const auto& ctx : g_graph_context_manager.get_contexts())
+                    {
+                        if (ctx->name() == new_name)
+                        {
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found)
+                    {
+                        g_graph_context_manager.rename_graph_context(m_context, new_name);
+                        break;
+                    }
+                }
+                break;
+            }
+        }
+
+        m_context->add({}, {to_gate});
     }
     else
     {
@@ -416,7 +448,7 @@ void graph_widget::handle_enter_module_requested(const u32 id)
 {
     if (m_context->gates().isEmpty() && m_context->modules() == QSet<u32>({id}))
     {
-        m_context->set_module_folded(id, false);
+        m_context->unfold_module(id);
         return;
     }
 
@@ -432,12 +464,13 @@ void graph_widget::handle_enter_module_requested(const u32 id)
         if ((ctx->gates().isEmpty() && ctx->modules() == QSet<u32>({id})) || (ctx->modules().isEmpty() && ctx->gates() == gate_ids))
         {
             // ctx shows exactly the requested module, show it instead
+            qDebug() << "Already exist, show it!";
             return;
         }
     }
 
     auto ctx = g_graph_context_manager.create_new_context(QString::fromStdString(m->get_name()));
-    ctx->add(gate_ids);
+    ctx->add({}, gate_ids);
 }
 
 void graph_widget::ensure_gate_visible(const u32 gate)

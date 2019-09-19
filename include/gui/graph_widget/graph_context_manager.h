@@ -24,8 +24,8 @@ public:
 
     graph_context* create_new_context(const QString& name);
     graph_context* get_context_by_name(const QString& name);
-    bool rename_graph_context(const QString& old_name, const QString& new_name);
-    bool remove_graph_context(const QString& name);
+    void rename_graph_context(graph_context* ctx, const QString& new_name);
+    void delete_graph_context(graph_context* ctx);
     QVector<graph_context*> get_contexts() const;    // PROBABLY DEBUG METHOD, WILL BE REPLACED BY DIFFERENT SELECTION INTERFACE
 
     //void handle_module_created(const std::shared_ptr<module> m) const; // PRECACHING ???
@@ -55,7 +55,7 @@ public:
 Q_SIGNALS:
     void context_created(graph_context* context);
     void context_renamed(graph_context* context);
-    void context_removed(graph_context* context);
+    void deleting_context(graph_context* context);
 
 private:
     QVector<graph_context*> m_graph_contexts;

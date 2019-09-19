@@ -12,9 +12,9 @@
 
 #include "core/log.h"
 #include "gui_utility.h"
-#include "netlist/netlist.h"
-#include "netlist/module.h"
 #include "netlist/gate.h"
+#include "netlist/module.h"
+#include "netlist/netlist.h"
 #include "toolbar/toolbar.h"
 #include <QAction>
 #include <QDebug>
@@ -44,7 +44,7 @@ context_manager_widget::context_manager_widget(graph_tab_widget* tab_view, QWidg
 
     connect(&g_graph_context_manager, &graph_context_manager::context_created, this, &context_manager_widget::handle_context_created);
     connect(&g_graph_context_manager, &graph_context_manager::context_renamed, this, &context_manager_widget::handle_context_renamed);
-    connect(&g_graph_context_manager, &graph_context_manager::context_removed, this, &context_manager_widget::handle_context_removed);
+    connect(&g_graph_context_manager, &graph_context_manager::deleting_context, this, &context_manager_widget::handle_context_removed);
 
     //load top context (top module) into list
     for (const auto& ctx : g_graph_context_manager.get_contexts())
@@ -124,12 +124,7 @@ void context_manager_widget::handle_create_context_clicked()
     } while (new_context == nullptr);
 
     //default if context created from nothing -> top module + global nets (empty == better?)
-    QSet<u32> gates;
-    for (const auto& g : g_netlist->get_top_module()->get_gates())
-    {
-        gates.insert(g->get_id());
-    }
-    new_context->add(gates);
+    new_context->add({g_netlist->get_top_module()->get_id()}, {});
 
     m_tab_view->show_context(new_context);
 }
@@ -161,7 +156,7 @@ void context_manager_widget::handle_rename_context_clicked()
     ipd.add_validator(&empty_validator);
 
     if (ipd.exec() == QDialog::Accepted)
-        g_graph_context_manager.rename_graph_context(clicked_context->name(), ipd.text_value());
+        g_graph_context_manager.rename_graph_context(clicked_context, ipd.text_value());
 }
 
 void context_manager_widget::handle_duplicate_context_clicked()
@@ -178,13 +173,13 @@ void context_manager_widget::handle_duplicate_context_clicked()
         new_context              = g_graph_context_manager.create_new_context(new_context_name);    // returns nullptr if name already in use
     } while (new_context == nullptr);
 
-    new_context->add(clicked_context->gates());
+    new_context->add(clicked_context->modules(), clicked_context->gates());
 }
 
 void context_manager_widget::handle_delete_context_clicked()
 {
     graph_context* clicked_context = g_graph_context_manager.get_context_by_name(m_list_widget->currentItem()->text());
-    g_graph_context_manager.remove_graph_context(clicked_context->name());
+    g_graph_context_manager.delete_graph_context(clicked_context);
 }
 
 void context_manager_widget::setup_toolbar(toolbar* toolbar)
