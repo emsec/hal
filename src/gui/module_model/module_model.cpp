@@ -13,12 +13,7 @@
 module_model::module_model(QObject* parent) : QAbstractItemModel(parent),
     m_top_module_item(nullptr)
 {
-    m_root_item = new module_item("", 0);
-}
 
-module_model::~module_model()
-{
-    delete m_root_item;
 }
 
 QModelIndex module_model::index(int row, int column, const QModelIndex& parent) const
@@ -26,21 +21,39 @@ QModelIndex module_model::index(int row, int column, const QModelIndex& parent) 
     // BEHAVIOR FOR ILLEGAL INDICES IS UNDEFINED
     // SEE QT DOCUMENTATION
 
-    // NECESSARY ???
-    if (column != 0)
-        return QModelIndex();
+    if (!parent.isValid())
+    {
+        if (row == 0 && column == 0 && m_top_module_item)
+            return createIndex(0, 0, m_top_module_item);
+        else
+            return QModelIndex();
+    }
 
-    // PROBABLY REDUNDANT
-    if (parent.isValid() && parent.column() != 0)
+    if (column != 0 || parent.column() != 0)
         return QModelIndex();
 
     module_item* parent_item = get_item(parent);
-    module_item* child_item = parent_item->child(row);
 
-    if (child_item)
-        return createIndex(row, column, child_item);
-    else
-        return QModelIndex();
+    module_item* child_item = static_cast<module_item*>(parent_item)->child(row);
+    assert(child_item);
+
+    return createIndex(row, column, child_item);
+
+    // NECESSARY ???
+//    if (column != 0)
+//        return QModelIndex();
+
+//    // PROBABLY REDUNDANT
+//    if (parent.isValid() && parent.column() != 0)
+//        return QModelIndex();
+
+//    module_item* parent_item = get_item(parent);
+//    module_item* child_item = parent_item->child(row);
+
+//    if (child_item)
+//        return createIndex(row, column, child_item);
+//    else
+//        return QModelIndex();
 }
 
 QModelIndex module_model::parent(const QModelIndex& index) const
@@ -48,28 +61,43 @@ QModelIndex module_model::parent(const QModelIndex& index) const
     if (!index.isValid())
         return QModelIndex();
 
-    module_item* child_item  = get_item(index);
-    module_item* parent_item = child_item->parent();
+    module_item* item  = get_item(index);
 
-    if (parent_item == m_root_item)
+    if (item == m_top_module_item)
         return QModelIndex();
 
+    module_item* parent_item = item->parent();
     return createIndex(parent_item->row(), 0, parent_item);
+
+//    if (!index.isValid())
+//        return QModelIndex();
+
+//    module_item* child_item  = get_item(index);
+//    module_item* parent_item = child_item->parent();
+
+//    if (parent_item == m_root_item)
+//        return QModelIndex();
+
+//    return createIndex(parent_item->row(), 0, parent_item);
 }
 
 int module_model::rowCount(const QModelIndex& parent) const
 {
-//    module_item* parent_item;
-//    if (parent.column() > 0)
-//        return 0;
+    if (!parent.isValid()) // ??
+        return 1;
+
+    if (parent.column() != 0)
+        return 0;
 
     module_item* parent_item = get_item(parent);
+
     return parent_item->childCount();
 }
 
 int module_model::columnCount(const QModelIndex& parent) const
 {
     Q_UNUSED(parent)
+
     return 1;
 }
 
@@ -131,30 +159,25 @@ QVariant module_model::headerData(int section, Qt::Orientation orientation, int 
 module_item* module_model::get_item(const QModelIndex& index) const
 {
     if (index.isValid())
-    {
-        module_item* item = static_cast<module_item*>(index.internalPointer());
-        if (item)
-            return item;
-    }
-
-    return m_root_item;
+        return static_cast<module_item*>(index.internalPointer());
+    else
+        return nullptr;
 }
 
 QModelIndex module_model::get_index(const module_item* const item) const
 {
+    assert(item);
+
     QVector<int> row_numbers;
     const module_item* current_item = item;
 
-    while (current_item != m_root_item)
+    while (current_item != m_top_module_item)
     {
-        if (!current_item)
-            return QModelIndex(); // SHOULD NEVER BE REACHED
-
         row_numbers.append(current_item->row());
         current_item = current_item->const_parent();
     }
 
-    QModelIndex model_index = QModelIndex();
+    QModelIndex model_index = index(0, 0, QModelIndex());
 
     for (QVector<int>::const_reverse_iterator i = row_numbers.crbegin(); i != row_numbers.crend(); ++i)
         model_index = index(*i, 0, model_index);
@@ -221,33 +244,6 @@ void module_model::add_module(const u32 id, const u32 parent_module)
     endInsertRows();
 }
 
-void module_model::add_module(module_item* item, module_item* parent)
-{
-    if (!item)
-        return; //SHOULD NEVER BE REACHED
-
-    if (!parent)
-        parent = m_root_item;
-
-    item->set_parent(parent);
-
-    QModelIndex index = get_index(parent);
-
-    int row = 0;
-
-    while (row < parent->childCount())
-    {
-        if (item->name() < parent->child(row)->name())
-            break;
-        else
-            ++row;
-    }
-
-    beginInsertRows(index, row, row);
-    parent->insert_child(row, item);
-    endInsertRows();
-}
-
 void module_model::remove_module(const u32 id)
 {
     assert(id != 1);
@@ -269,25 +265,6 @@ void module_model::remove_module(const u32 id)
 
     m_module_items.remove(id);
     delete item;
-}
-
-void module_model::remove_module(module_item* item)
-{
-    if (!item)
-        return; // SHOULD NEVER BE REACHED
-
-    int row = item->row();
-
-    module_item* parent_item = item->parent();
-
-    if (!parent_item)
-        return; // SHOULD NEVER BE REACHED
-
-    QModelIndex index = get_index(parent_item);
-
-    beginRemoveRows(index, row, row);
-    parent_item->remove_child(item);
-    endRemoveRows();
 }
 
 void module_model::update_module(const u32 id) // SPLIT ???
