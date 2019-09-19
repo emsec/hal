@@ -46,6 +46,8 @@ extern QSettings g_gui_state;
 extern window_manager* g_window_manager;
 extern notification_manager* g_notification_manager;
 
+extern hal_content_manager* g_content_manager;
+
 extern std::shared_ptr<netlist> g_netlist;
 
 extern netlist_relay g_netlist_relay;

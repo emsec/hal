@@ -4,6 +4,7 @@
 #include "netlist/module.h"
 #include "netlist/net.h"
 
+#include "gui/graph_tab_widget/graph_tab_widget.h"
 #include "gui/graph_widget/contexts/graph_context.h"
 #include "gui/graph_widget/graph_context_manager.h"
 #include "gui/graph_widget/graph_graphics_view.h"
@@ -13,6 +14,7 @@
 #include "gui/graph_widget/graphics_scene.h"
 #include "gui/graph_widget/items/graphics_gate.h"
 #include "gui/gui_globals.h"
+#include "gui/hal_content_manager/hal_content_manager.h"
 #include "gui/overlay/dialog_overlay.h"
 #include "gui/toolbar/toolbar.h"
 
@@ -448,6 +450,7 @@ void graph_widget::handle_enter_module_requested(const u32 id)
 {
     if (m_context->gates().isEmpty() && m_context->modules() == QSet<u32>({id}))
     {
+        qDebug() << "entered the only module of the view -> just expand";
         m_context->unfold_module(id);
         return;
     }
@@ -463,12 +466,13 @@ void graph_widget::handle_enter_module_requested(const u32 id)
     {
         if ((ctx->gates().isEmpty() && ctx->modules() == QSet<u32>({id})) || (ctx->modules().isEmpty() && ctx->gates() == gate_ids))
         {
-            // ctx shows exactly the requested module, show it instead
-            qDebug() << "Already exist, show it!";
+            qDebug() << "another view for the selected module exists -> show it";
+            g_content_manager->get_graph_tab_widget()->show_context(ctx);
             return;
         }
     }
 
+    qDebug() << "no view for the selected module exists -> create new";
     auto ctx = g_graph_context_manager.create_new_context(QString::fromStdString(m->get_name()));
     ctx->add({}, gate_ids);
 }
@@ -494,7 +498,7 @@ void graph_widget::ensure_gate_visible(const u32 gate)
 
 void graph_widget::add_context_to_history()
 {
-    context_history_entry entry;
+    /*context_history_entry entry;
 
     entry.m_modules = m_context->modules();
     entry.m_gates   = m_context->gates();
@@ -530,7 +534,7 @@ void graph_widget::add_context_to_history()
         ++i;
     }
 
-    qDebug() << "-------------------------------------";
+    qDebug() << "-------------------------------------";*/
 }
 
 void graph_widget::reset_focus()

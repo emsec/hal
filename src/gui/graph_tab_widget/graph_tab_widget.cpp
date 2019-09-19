@@ -1,5 +1,6 @@
 #include "graph_tab_widget/graph_tab_widget.h"
 
+#include "gui/context_manager_widget/context_manager_widget.h"
 #include "gui/graph_widget/graph_widget.h"
 
 #include "gui_globals.h"
@@ -29,7 +30,12 @@ int graph_tab_widget::addTab(QWidget* tab, QString name)
 
 void graph_tab_widget::handle_tab_changed(int index)
 {
-    // select in view context manager
+    auto w = dynamic_cast<graph_widget*>(m_tab_widget->widget(index));
+    if (w)
+    {
+        auto ctx = w->get_context();
+        g_content_manager->get_context_manager_widget()->select_view_context(ctx);
+    }
 }
 
 void graph_tab_widget::handle_tab_close_requested(int index)
@@ -52,7 +58,7 @@ void graph_tab_widget::show_context(graph_context* context)
         return;
     }
 
-    add_graph_widget_tab(g_graph_context_manager.get_context_by_name(context->name()));
+    add_graph_widget_tab(context);
 }
 
 void graph_tab_widget::handle_context_created(graph_context* context)

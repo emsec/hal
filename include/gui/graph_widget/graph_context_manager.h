@@ -23,7 +23,6 @@ public:
     graph_context_manager();
 
     graph_context* create_new_context(const QString& name);
-    graph_context* get_context_by_name(const QString& name);
     void rename_graph_context(graph_context* ctx, const QString& new_name);
     void delete_graph_context(graph_context* ctx);
     QVector<graph_context*> get_contexts() const;    // PROBABLY DEBUG METHOD, WILL BE REPLACED BY DIFFERENT SELECTION INTERFACE

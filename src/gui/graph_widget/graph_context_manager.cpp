@@ -25,15 +25,6 @@ graph_context* graph_context_manager::create_new_context(const QString& name)
     return context;
 }
 
-graph_context* graph_context_manager::get_context_by_name(const QString& name)
-{
-    for (graph_context* context : m_graph_contexts)
-        if (context->name() == name)
-            return context;
-
-    return nullptr;
-}
-
 void graph_context_manager::rename_graph_context(graph_context* ctx, const QString& new_name)
 {
     ctx->m_name = new_name;
