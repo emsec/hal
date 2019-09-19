@@ -12,16 +12,11 @@ class graph_context_subscriber;
 
 class graph_context : public QObject
 {
+    friend class graph_context_manager;
     Q_OBJECT
 
 public:
-    enum class context_type
-    {
-        module,
-        dynamic
-    };
-
-    explicit graph_context(context_type type, graph_layouter* layouter, graph_shader* shader, QObject* parent = nullptr);
+    explicit graph_context(const QString& name, QObject* parent = nullptr);
     ~graph_context();
 
     void subscribe(graph_context_subscriber* const subscriber);
@@ -30,9 +25,12 @@ public:
     void begin_change();
     void end_change();
 
-    void add(const QSet<u32>& modules, const QSet<u32>& gates, const QSet<u32>& nets);
-    void remove(const QSet<u32>& modules, const QSet<u32>& gates, const QSet<u32>& nets);
+    void add(const QSet<u32>& gates);
+    void remove(const QSet<u32>& gates);
     void clear();
+
+    void set_module_folded(u32 id, bool folded);
+    bool is_module_folded(u32 id);
 
     const QSet<u32>& modules() const;
     const QSet<u32>& gates() const;
@@ -40,11 +38,10 @@ public:
 
     graphics_scene* scene();
 
-    context_type get_type();
+    QString name() const;
 
-    // PROBABLY OBSOLETE
-    //graph_layouter* layouter();
-    //graph_shader* shader();
+    void set_layouter(graph_layouter* layouter);
+    void set_shader(graph_shader* shader);
 
     bool available() const;
     bool update_in_progress() const;
@@ -61,6 +58,12 @@ private Q_SLOTS:
     void handle_layouter_finished();
 
 protected:
+    QSet<u32> m_shown_modules;
+    QSet<u32> m_shown_gates;
+
+    QSet<u32> m_folded_modules;
+    QSet<u32> m_unfolded_modules;
+
     QSet<u32> m_modules;
     QSet<u32> m_gates;
     QSet<u32> m_nets;
@@ -78,15 +81,12 @@ protected:
     virtual void apply_changes();
     void update_scene();
 
-    const context_type m_type;
+    QString m_name;
 
-    QSet<u32> m_added_modules;
     QSet<u32> m_added_gates;
-    QSet<u32> m_added_nets;
-
-    QSet<u32> m_removed_modules;
     QSet<u32> m_removed_gates;
-    QSet<u32> m_removed_nets;
+    QSet<u32> m_modules_to_fold;
+    QSet<u32> m_modules_to_unfold;
 
     QList<graph_context_subscriber*> m_subscribers;
 

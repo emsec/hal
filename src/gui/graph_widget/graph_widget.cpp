@@ -4,7 +4,7 @@
 #include "netlist/module.h"
 #include "netlist/net.h"
 
-#include "gui/graph_widget/contexts/dynamic_context.h"
+#include "gui/graph_widget/contexts/graph_context.h"
 #include "gui/graph_widget/graph_context_manager.h"
 #include "gui/graph_widget/graph_graphics_view.h"
 #include "gui/graph_widget/graph_layout_progress_widget.h"
@@ -133,7 +133,7 @@ void graph_widget::keyPressEvent(QKeyEvent* event)
         }
         case Qt::Key_Z:
         {
-            if (event->modifiers() & Qt::ControlModifier) // modifiers are set as bitmasks
+            if (event->modifiers() & Qt::ControlModifier)    // modifiers are set as bitmasks
             {
                 handle_history_step_back_request();
             }
@@ -156,8 +156,7 @@ void graph_widget::handle_navigation_jump_requested(const u32 via_net, const u32
 
     if (!m_context->gates().contains(to_gate))
     {
-        add_context_to_history();
-        m_context->add({}, {to_gate}, {});
+        m_context->add({to_gate});
     }
     else
     {
@@ -373,6 +372,7 @@ void graph_widget::handle_navigation_down_request()
 
 void graph_widget::handle_history_step_back_request()
 {
+    /*
     if (m_context_history.empty())
         return;
 
@@ -381,7 +381,7 @@ void graph_widget::handle_history_step_back_request()
 
     m_context->begin_change();
     m_context->clear();
-    m_context->add(entry.m_modules, entry.m_gates, {});
+    m_context->add(entry.m_modules, entry.m_gates);
     m_context->end_change();
 
     qDebug() << "REMOVED context to history, full history:";
@@ -409,22 +409,35 @@ void graph_widget::handle_history_step_back_request()
     }
 
     qDebug() << "-------------------------------------";
+    */
 }
 
 void graph_widget::handle_enter_module_requested(const u32 id)
 {
-    add_context_to_history();
-    m_context->begin_change();
-    m_context->clear();
-    auto m = g_netlist->get_module_by_id(id);
+    if (m_context->gates().isEmpty() && m_context->modules() == QSet<u32>({id}))
+    {
+        m_context->set_module_folded(id, false);
+        return;
+    }
 
-    QSet<u32> modules, gates;
-    for (const auto& x : m->get_submodules())
-        modules.insert(x->get_id());
-    for (const auto& x : m->get_gates())
-        gates.insert(x->get_id());
-    m_context->add(modules, gates, {});
-    m_context->end_change();
+    auto m = g_netlist->get_module_by_id(id);
+    QSet<u32> gate_ids;
+    for (const auto& g : m->get_gates())
+    {
+        gate_ids.insert(g->get_id());
+    }
+
+    for (const auto& ctx : g_graph_context_manager.get_contexts())
+    {
+        if ((ctx->gates().isEmpty() && ctx->modules() == QSet<u32>({id})) || (ctx->modules().isEmpty() && ctx->gates() == gate_ids))
+        {
+            // ctx shows exactly the requested module, show it instead
+            return;
+        }
+    }
+
+    auto ctx = g_graph_context_manager.create_new_context(QString::fromStdString(m->get_name()));
+    ctx->add(gate_ids);
 }
 
 void graph_widget::ensure_gate_visible(const u32 gate)
