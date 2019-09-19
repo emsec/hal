@@ -55,12 +55,18 @@ public:
     module_item* get_item(const QModelIndex& index) const;
     QModelIndex get_index(const module_item* const item) const;
 
+    void init();
+    void clear();
+
+    void add_module(const u32 id, const u32 parent_module);
     void add_module(module_item* item, module_item* parent = nullptr);
+    void remove_module(const u32 id);
     void remove_module(module_item* item);
     void update_module(const u32 id);
 
 private:
     module_item* m_root_item;
+    module_item* m_top_module_item;
 
     QMap<u32, module_item*> m_module_items;
 };
