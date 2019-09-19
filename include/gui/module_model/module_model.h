@@ -39,7 +39,6 @@ class module_model : public QAbstractItemModel
 
 public:
     explicit module_model(QObject* parent = nullptr);
-    ~module_model() override;
 
     // PURE VIRTUAL
     QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const override;
@@ -59,13 +58,10 @@ public:
     void clear();
 
     void add_module(const u32 id, const u32 parent_module);
-    void add_module(module_item* item, module_item* parent = nullptr);
     void remove_module(const u32 id);
-    void remove_module(module_item* item);
     void update_module(const u32 id);
 
 private:
-    module_item* m_root_item;
     module_item* m_top_module_item;
 
     QMap<u32, module_item*> m_module_items;
