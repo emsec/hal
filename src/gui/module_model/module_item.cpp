@@ -1,21 +1,27 @@
 #include "module_model/module_item.h"
 
+#include "netlist/module.h"
+
 #include "gui/gui_globals.h"
 #include "gui/gui_utility.h"
 
-module_item::module_item(const QString& name, const int id) :
+module_item::module_item(const u32 id) :
+    m_parent(nullptr),
+    m_id(id),
+    m_name(QString::fromStdString(g_netlist->get_module_by_id(id)->get_name())),
+    m_color(g_netlist_relay.get_module_color(id)),
+    m_highlighted(false)
+{
+
+}
+
+module_item::module_item(const QString& name, const u32 id) :
     m_parent(nullptr),
     m_name(name),
     m_id(id),
-    m_color(g_netlist_relay.get_module_color(id)), // UNSURE, MAYBE A FIXED COLOR PALETTE OR DEFAULT COLOR IS BETTER
+    m_color(g_netlist_relay.get_module_color(id)),
     m_highlighted(false)
 {
-}
-
-module_item::~module_item()
-{
-    for (const module_item* const& item : m_child_items)
-        delete item;
 }
 
 void module_item::insert_child(int row, module_item* child)

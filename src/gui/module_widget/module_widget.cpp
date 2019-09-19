@@ -148,7 +148,7 @@ void module_widget::handle_tree_view_context_menu_requested(const QPoint& point)
         g_netlist_relay.debug_add_child_module(g_netlist_relay.get_module_model()->get_item(m_module_proxy_model->mapToSource(index)));
 
     if (clicked == &change_color_action)
-        g_netlist_relay.debug_change_module_color(g_netlist_relay.get_module_model()->get_item(m_module_proxy_model->mapToSource(index)));
+        g_netlist_relay.debug_change_module_color(g_netlist_relay.get_module_model()->get_item(m_module_proxy_model->mapToSource(index))->id());
 }
 
 void module_widget::handle_filter_action_triggered()

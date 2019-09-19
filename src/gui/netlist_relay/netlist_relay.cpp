@@ -65,20 +65,22 @@ module_model* netlist_relay::get_module_model()
     return m_module_model;
 }
 
-void netlist_relay::debug_change_module_color(module_item* item)
+void netlist_relay::debug_change_module_color(const u32 id)
 {
     // NOT THREADSAFE
 
-    if (!item)
-        return;
+    std::shared_ptr<module> m = g_netlist->get_module_by_id(id);
+    assert(m);
 
     QColor color = QColorDialog::getColor();
 
     if (!color.isValid())
         return;
 
-    item->set_color(color);
-    m_module_model->dataChanged(m_module_model->get_index(item), m_module_model->get_index(item));
+    m_module_colors.insert(id, color);
+    m_module_model->update_module(id);
+
+    Q_EMIT module_color_changed(m);
 }
 
 void netlist_relay::debug_add_selection_to_module(module_item* item)
@@ -223,22 +225,14 @@ void netlist_relay::relay_module_event(module_event_handler::event ev, std::shar
 
             m_module_colors.insert(object->get_id(), gui_utility::get_random_color());
 
-//            module_item* item                     = new module_item(QString::fromStdString(object->get_name()), object->get_id());
-//            std::shared_ptr<module> parent_module = object->get_parent_module();
-//            module_item* parent_item              = nullptr;
-
-//            if (parent_module)
-//                parent_item = m_module_items.value(parent_module->get_id());
-
-//            m_module_items.insert(object->get_id(), item);
-//            m_module_model->add_item(item, parent_item);
-
             Q_EMIT module_created(object);
             break;
         }
         case module_event_handler::event::removed:
         {
             //< no associated_data
+
+            m_module_colors.remove(object->get_id());
 
             g_graph_context_manager.handle_module_removed(object);
             g_selection_relay.handle_module_removed(object->get_id());
@@ -266,6 +260,8 @@ void netlist_relay::relay_module_event(module_event_handler::event ev, std::shar
         {
             //< associated_data = id of added module
 
+            m_module_model->add_module(associated_data, object->get_id());
+
             g_graph_context_manager.handle_module_submodule_added(object, associated_data);
 
             Q_EMIT module_submodule_added(object, associated_data);
@@ -274,6 +270,8 @@ void netlist_relay::relay_module_event(module_event_handler::event ev, std::shar
         case module_event_handler::event::submodule_removed:
         {
             //< associated_data = id of removed module
+
+            m_module_model->remove_module(associated_data);
 
             g_graph_context_manager.handle_module_submodule_removed(object, associated_data);
 
@@ -414,10 +412,11 @@ void netlist_relay::debug_handle_file_opened()
 
     m_module_colors.insert(1, QColor(96, 110, 112));
 
-//    std::shared_ptr<module> top_module = g_netlist->get_top_module();
-//    module_item* item                  = new module_item(QString::fromStdString(top_module->get_name()), top_module->get_id());
-//    item->set_color(QColor(96, 110, 112));    // DEBUG LINE
+    m_module_model->init();
+}
 
-//    m_module_items.insert(top_module->get_id(), item);
-//    m_module_model->add_item(item, nullptr);
+void netlist_relay::debug_handle_file_closed()
+{
+    m_module_model->clear();
+    m_module_colors.clear();
 }

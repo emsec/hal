@@ -1,7 +1,6 @@
 #include "gui/graph_widget/graph_layout_spinner_widget.h"
 
 #include <QPainter>
-#include <QDebug>
 
 graph_layout_spinner_widget::graph_layout_spinner_widget(QWidget* parent) : QWidget(parent),
     m_renderer(new QSvgRenderer())
@@ -10,8 +9,6 @@ graph_layout_spinner_widget::graph_layout_spinner_widget(QWidget* parent) : QWid
     m_renderer->load(string);
     m_renderer->setFramesPerSecond(10);
     connect(m_renderer, &QSvgRenderer::repaintNeeded, this, &graph_layout_spinner_widget::handle_repaint_needed);
-
-    qDebug() << "spinner animated: " << m_renderer->animated() << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
 }
 
 void graph_layout_spinner_widget::handle_repaint_needed()
