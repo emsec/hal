@@ -878,10 +878,12 @@ void hdl_parser_verilog::remove_comments(std::string& line, bool& multi_line_com
 
 void hdl_parser_verilog::expand_signal(std::vector<std::string>& expanded_signal, std::string current_signal, std::vector<std::pair<i32, i32>> bounds, u32 dimension)
 {
+    // expand signal recursively
     if (bounds.size() > dimension)
     {
         if (bounds[dimension].first < bounds[dimension].second)
         {
+            // left_bound < right_bound
             for (i32 i = bounds[dimension].first; i <= bounds[dimension].second; i++)
             {
                 this->expand_signal(expanded_signal, current_signal + "(" + std::to_string(i) + ")", bounds, dimension + 1);
@@ -889,6 +891,7 @@ void hdl_parser_verilog::expand_signal(std::vector<std::string>& expanded_signal
         }
         else
         {
+            // left_bound >= right_bound
             for (i32 i = bounds[dimension].first; i >= bounds[dimension].second; i--)
             {
                 this->expand_signal(expanded_signal, current_signal + "(" + std::to_string(i) + ")", bounds, dimension + 1);
@@ -897,6 +900,7 @@ void hdl_parser_verilog::expand_signal(std::vector<std::string>& expanded_signal
     }
     else
     {
+        // last dimension
         expanded_signal.push_back(current_signal);
     }
 }
@@ -909,6 +913,7 @@ std::map<std::string, std::vector<std::string>> hdl_parser_verilog::get_expanded
     auto signal_colon  = signal_str.find(':');
     auto signal_escape = signal_str.find('\\');
 
+    // bounds given?
     if (signal_colon != std::string::npos)
     {
         // extract signal bounds "[a:b][c:d]..."
@@ -989,10 +994,10 @@ std::vector<std::string> hdl_parser_verilog::get_assignment_signals(const std::s
     // PARSE ASSIGNMENT
     //   assignment can currently be one of the following:
     //   (1) NAME *single*
-    //   (2) NAME *one-dimensional*
+    //   (2) NAME *multi-dimensional*
     //   (3) NUMBER
     //   (4) NAME[INDEX1][INDEX2]...
-    //   (5) NAME[BEGIN_INDEX:END_INDEX]
+    //   (5) NAME[BEGIN_INDEX1:END_INDEX1][BEGIN_INDEX2:END_INDEX2]...
     //   (6) {(1) - (5), (1) - (5), ...}
 
     auto signal_curly = signal_str.find('{');
@@ -1059,6 +1064,7 @@ std::vector<std::string> hdl_parser_verilog::get_assignment_signals(const std::s
             }
         }
 
+        // valid signal/port name?
         if (e.expanded_signal_names.find(signal_name) == e.expanded_signal_names.end())
         {
             log_error("hdl_parser", "no wire or port '{}' within entity '{}'.", signal_name, e.name);
@@ -1067,6 +1073,7 @@ std::vector<std::string> hdl_parser_verilog::get_assignment_signals(const std::s
 
         signal_bracket = s.find('[');
 
+        // bounds given?
         if (signal_bracket != std::string::npos)
         {
             // (4), (5) part 2
@@ -1154,7 +1161,7 @@ std::vector<std::string> hdl_parser_verilog::get_port_signals(const std::string&
     }
     else
     {
-        // assume port is valid port for gate of gate library
+        // assume port is valid port for gate of given gate library
         result.push_back(port_name);
     }
 
