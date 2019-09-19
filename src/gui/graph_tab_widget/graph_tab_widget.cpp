@@ -18,7 +18,7 @@ graph_tab_widget::graph_tab_widget(QWidget* parent) : content_widget("Graph-View
     connect(m_tab_widget, &QTabWidget::currentChanged, this, &graph_tab_widget::handle_tab_changed);
     connect(&g_graph_context_manager, &graph_context_manager::context_created, this, &graph_tab_widget::handle_context_created);
     connect(&g_graph_context_manager, &graph_context_manager::context_renamed, this, &graph_tab_widget::handle_context_renamed);
-    connect(&g_graph_context_manager, &graph_context_manager::context_removed, this, &graph_tab_widget::handle_context_removed);
+    connect(&g_graph_context_manager, &graph_context_manager::deleting_context, this, &graph_tab_widget::handle_context_removed);
 }
 
 int graph_tab_widget::addTab(QWidget* tab, QString name)

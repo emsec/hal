@@ -17,13 +17,6 @@ graph_context_manager::graph_context_manager()
 
 graph_context* graph_context_manager::create_new_context(const QString& name)
 {
-    for (graph_context* context : m_graph_contexts)
-    {
-        if (context->name() == name)
-        {
-            return nullptr;
-        }
-    }
     graph_context* context = new graph_context(name);
     context->set_layouter(get_default_layouter(context));
     context->set_shader(get_default_shader(context));
@@ -41,43 +34,17 @@ graph_context* graph_context_manager::get_context_by_name(const QString& name)
     return nullptr;
 }
 
-bool graph_context_manager::rename_graph_context(const QString& old_name, const QString& new_name)
+void graph_context_manager::rename_graph_context(graph_context* ctx, const QString& new_name)
 {
-    graph_context* to_change = nullptr;
-    for (graph_context* context : m_graph_contexts)
-    {
-        if (context->name() != old_name && context->name() == new_name)
-        {
-            return false;
-        }
-        if (context->name() == old_name)
-        {
-            to_change = context;
-        }
-    }
-    if (to_change == nullptr)
-        return false;
+    ctx->m_name = new_name;
 
-    to_change->m_name = new_name;
-
-    Q_EMIT context_renamed(to_change);
-
-    return true;
+    Q_EMIT context_renamed(ctx);
 }
 
-bool graph_context_manager::remove_graph_context(const QString& name)
+void graph_context_manager::delete_graph_context(graph_context* ctx)
 {
-    for (int i = 0; i < m_graph_contexts.size(); ++i)
-    {
-        auto context = m_graph_contexts[i];
-        if (m_graph_contexts[i]->name() == name)
-        {
-            m_graph_contexts.remove(i);
-            Q_EMIT context_removed(context);
-            return true;
-        }
-    }
-    return false;
+    Q_EMIT deleting_context(ctx);
+    delete ctx;
 }
 
 QVector<graph_context*> graph_context_manager::get_contexts() const
@@ -87,14 +54,9 @@ QVector<graph_context*> graph_context_manager::get_contexts() const
 
 void graph_context_manager::handle_module_removed(const std::shared_ptr<module> m)
 {
-    QSet<u32> gates;
-    for (const auto& g : m->get_gates())
-    {
-        gates.insert(g->get_id());
-    }
     for (graph_context* context : m_graph_contexts)
         if (context->modules().contains(m->get_id()))
-            context->remove(gates);
+            context->remove({m->get_id()}, {});
 
     // TRIGGER RESHADE FOR ALL CONTEXTS THAT RECURSIVELY CONTAIN THE MODULE
 }

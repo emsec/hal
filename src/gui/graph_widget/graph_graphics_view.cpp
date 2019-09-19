@@ -68,15 +68,7 @@ void graph_graphics_view::handle_isolation_view_action()
     {
         context = g_graph_context_manager.create_new_context("View " + QString::number(cnt++));
     }
-    QSet<u32> gates(g_selection_relay.m_selected_gates);
-    for (const auto& id : g_selection_relay.m_selected_modules)
-    {
-        for (const auto& g : g_netlist->get_module_by_id(id)->get_gates())
-        {
-            gates.insert(g->get_id());
-        }
-    }
-    context->add(gates);
+    context->add(g_selection_relay.m_selected_modules, g_selection_relay.m_selected_gates);
 }
 
 //////////
@@ -109,8 +101,15 @@ void graph_graphics_view::handle_move_new_action()
         m->assign_gate(g_netlist->get_gate_by_id(id));
     }
 
+    auto gates = g_selection_relay.m_selected_gates;
     g_selection_relay.clear();
     g_selection_relay.relay_selection_changed(this);
+
+    auto context = m_graph_widget->get_context();
+    context->begin_change();
+    context->remove({}, gates);
+    context->add({m->get_id()}, {});
+    context->end_change();
 }
 
 void graph_graphics_view::handle_rename_action()
@@ -517,23 +516,15 @@ void graph_graphics_view::handle_select_inputs_and_outputs()
 void graph_graphics_view::handle_fold_action()
 {
     auto context = m_graph_widget->get_context();
-    context->begin_change();
-
-    QSet<u32> modules;
 
     auto selected_gates = g_selection_relay.m_selected_gates;
     g_selection_relay.clear();
     g_selection_relay.relay_selection_changed(this);
 
+    context->begin_change();
     for (u32 id : selected_gates)
     {
-        auto m = g_netlist->get_gate_by_id(id)->get_module();
-        modules.insert(m->get_id());
-    }
-
-    for (u32 id : modules)
-    {
-        context->set_module_folded(id, true);
+        context->fold_module_of_gate(id);
     }
     context->end_change();
 }
@@ -541,15 +532,15 @@ void graph_graphics_view::handle_fold_action()
 void graph_graphics_view::handle_unfold_action()
 {
     auto context = m_graph_widget->get_context();
-    context->begin_change();
 
     auto modules = g_selection_relay.m_selected_modules;
     g_selection_relay.clear();
     g_selection_relay.relay_selection_changed(this);
 
+    context->begin_change();
     for (u32 id : g_selection_relay.m_selected_modules)
     {
-        context->set_module_folded(id, false);
+        context->unfold_module(id);
     }
     context->end_change();
 }

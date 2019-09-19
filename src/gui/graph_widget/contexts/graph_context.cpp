@@ -66,12 +66,18 @@ void graph_context::end_change()
     update();
 }
 
-void graph_context::add(const QSet<u32>& gates)
+void graph_context::add(const QSet<u32>& modules, const QSet<u32>& gates)
 {
-    QSet<u32> new_gates = gates - m_gates;
-    QSet<u32> old_gates = m_removed_gates & gates;
+    QSet<u32> new_modules = modules - m_modules;
+    QSet<u32> new_gates   = gates - m_gates;
 
+    QSet<u32> old_modules = m_removed_modules & modules;
+    QSet<u32> old_gates   = m_removed_gates & gates;
+
+    m_removed_modules -= old_modules;
     m_removed_gates -= old_gates;
+
+    m_added_modules += new_modules;
     m_added_gates += new_gates;
 
     if (!m_wait_for_user_action)
@@ -81,11 +87,15 @@ void graph_context::add(const QSet<u32>& gates)
     }
 }
 
-void graph_context::remove(const QSet<u32>& gates)
+void graph_context::remove(const QSet<u32>& modules, const QSet<u32>& gates)
 {
-    QSet<u32> old_gates = gates & m_gates;
+    QSet<u32> old_modules = modules & m_modules;
+    QSet<u32> old_gates   = gates & m_gates;
 
+    m_removed_modules += old_modules;
     m_removed_gates += old_gates;
+
+    m_added_modules -= modules;
     m_added_gates -= gates;
 
     if (!m_wait_for_user_action)
@@ -97,7 +107,10 @@ void graph_context::remove(const QSet<u32>& gates)
 
 void graph_context::clear()
 {
-    m_removed_gates = m_gates;
+    m_removed_modules = m_modules;
+    m_removed_gates   = m_gates;
+
+    m_added_modules.clear();
     m_added_gates.clear();
 
     if (!m_wait_for_user_action)
@@ -107,28 +120,48 @@ void graph_context::clear()
     }
 }
 
-void graph_context::set_module_folded(u32 id, bool folded)
+void graph_context::fold_module_of_gate(u32 id)
 {
-    if (folded)
+    begin_change();
+    if (m_gates.find(id) != m_gates.end())
     {
-        m_modules_to_fold.remove(id);
-        m_modules_to_unfold.insert(id);
+        auto m = g_netlist->get_gate_by_id(id)->get_module();
+        QSet<u32> gates;
+        for (const auto& g : m->get_gates(DONT_CARE, DONT_CARE, true))
+        {
+            gates.insert(g->get_id());
+        }
+        remove({}, gates);
+        add({m->get_id()}, {});
     }
-    else
-    {
-        m_modules_to_unfold.remove(id);
-        m_modules_to_fold.insert(id);
-    }
-
-    if (!m_wait_for_user_action)
-    {
-        evaluate_changes();
-        update();
-    }
+    end_change();
 }
-bool graph_context::is_module_folded(u32 id)
+
+void graph_context::unfold_module(u32 id)
 {
-    return m_folded_modules.find(id) != m_folded_modules.end();
+    begin_change();
+    if (m_modules.find(id) != m_modules.end())
+    {
+        auto m = g_netlist->get_module_by_id(id);
+        QSet<u32> gates;
+        QSet<u32> modules;
+        for (const auto& g : m->get_gates())
+        {
+            gates.insert(g->get_id());
+        }
+        for (const auto& sm : m->get_submodules())
+        {
+            modules.insert(sm->get_id());
+        }
+        remove({id}, {});
+        add(modules, gates);
+    }
+    end_change();
+}
+
+const QSet<u32>& graph_context::modules() const
+{
+    return m_modules;
 }
 
 const QSet<u32>& graph_context::gates() const
@@ -197,7 +230,7 @@ void graph_context::handle_layouter_finished()
 
 void graph_context::evaluate_changes()
 {
-    if (!m_added_gates.isEmpty() || !m_removed_gates.isEmpty() || !m_modules_to_fold.isEmpty() || !m_modules_to_unfold.isEmpty())
+    if (!m_added_gates.isEmpty() || !m_removed_gates.isEmpty() || !m_added_modules.isEmpty() || !m_removed_modules.isEmpty())
         m_unhandled_changes = true;
 }
 
@@ -276,72 +309,14 @@ void graph_context::handle_layouter_update(const QString& message)
 
 void graph_context::apply_changes()
 {
-    qDebug() << "apply_changes()";
-    QSet<u32> remove_shown_modules = m_modules_to_unfold & m_shown_modules;
-    QSet<u32> add_shown_modules    = m_modules_to_fold - m_shown_modules;
-
-    QSet<u32> remove_shown_gates = m_removed_gates & m_shown_gates;
-    QSet<u32> add_shown_gates    = m_added_gates - m_shown_gates;
-
-    for (const auto& id : m_modules_to_fold)
-    {
-        for (const auto& g : g_netlist->get_module_by_id(id)->get_gates(DONT_CARE, DONT_CARE, true))
-        {
-            if (m_gates.find(g->get_id()) != m_gates.end() && m_added_gates.find(g->get_id()) != m_added_gates.end())
-            {
-                remove_shown_gates.insert(g->get_id());
-                add_shown_gates.remove(g->get_id());
-            }
-        }
-    }
-
-    for (const auto& id : m_modules_to_unfold)
-    {
-        for (const auto& g : g_netlist->get_module_by_id(id)->get_gates(DONT_CARE, DONT_CARE, true))
-        {
-            if (m_gates.find(g->get_id()) != m_gates.end() && m_removed_gates.find(g->get_id()) != m_removed_gates.end())
-            {
-                remove_shown_gates.remove(g->get_id());
-                add_shown_gates.insert(g->get_id());
-            }
-        }
-    }
-
-    // for (const auto& id : add_shown_gates)
-    // {
-    //     qDebug() << "adding gate: " << id;
-    // }
-
-    m_unfolded_modules -= m_modules_to_fold;
-    m_unfolded_modules += m_modules_to_unfold;
-
+    m_modules -= m_removed_modules;
     m_gates -= m_removed_gates;
+
+    m_modules += m_added_modules;
     m_gates += m_added_gates;
 
-    m_shown_gates += add_shown_gates;
-    m_shown_gates -= remove_shown_gates;
-
-    m_shown_modules += add_shown_modules;
-    m_shown_modules -= remove_shown_modules;
-
-    m_modules.clear();
-    for (const auto& id : m_gates)
-    {
-        m_modules.insert(g_netlist->get_gate_by_id(id)->get_module()->get_id());
-    }
-    m_folded_modules = m_modules - m_unfolded_modules;
-
-    for (const auto& id : m_folded_modules)
-    {
-        qDebug() << "folded: " << id;
-    }
-    for (const auto& id : m_unfolded_modules)
-    {
-        qDebug() << "ufolded: " << id;
-    }
-
-    m_layouter->remove(remove_shown_modules, remove_shown_gates, m_nets);
-    m_shader->remove(remove_shown_modules, remove_shown_gates, m_nets);
+    m_layouter->remove(m_removed_modules, m_removed_gates, m_nets);
+    m_shader->remove(m_removed_modules, m_removed_gates, m_nets);
 
     m_nets.clear();
     for (const auto& id : m_gates)
@@ -369,13 +344,13 @@ void graph_context::apply_changes()
         }
     }
 
-    m_layouter->add(add_shown_modules, add_shown_gates, m_nets);
-    m_shader->add(add_shown_modules, add_shown_gates, m_nets);
+    m_layouter->add(m_added_modules, m_added_gates, m_nets);
+    m_shader->add(m_added_modules, m_added_gates, m_nets);
 
     m_added_gates.clear();
     m_removed_gates.clear();
-    m_modules_to_fold.clear();
-    m_modules_to_unfold.clear();
+    m_added_gates.clear();
+    m_removed_modules.clear();
 
     m_unhandled_changes     = false;
     m_scene_update_required = true;
