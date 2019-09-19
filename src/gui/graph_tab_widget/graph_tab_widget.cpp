@@ -1,5 +1,6 @@
 #include "graph_tab_widget/graph_tab_widget.h"
 
+#include "gui/context_manager_widget/context_manager_widget.h"
 #include "gui/graph_widget/graph_widget.h"
 
 #include "gui_globals.h"
@@ -15,9 +16,10 @@ graph_tab_widget::graph_tab_widget(QWidget* parent) : content_widget("Graph-View
     m_tab_widget->setTabsClosable(true);
 
     connect(m_tab_widget, &QTabWidget::tabCloseRequested, this, &graph_tab_widget::handle_tab_close_requested);
+    connect(m_tab_widget, &QTabWidget::currentChanged, this, &graph_tab_widget::handle_tab_changed);
     connect(&g_graph_context_manager, &graph_context_manager::context_created, this, &graph_tab_widget::handle_context_created);
     connect(&g_graph_context_manager, &graph_context_manager::context_renamed, this, &graph_tab_widget::handle_context_renamed);
-    connect(&g_graph_context_manager, &graph_context_manager::context_removed, this, &graph_tab_widget::handle_context_removed);
+    connect(&g_graph_context_manager, &graph_context_manager::deleting_context, this, &graph_tab_widget::handle_context_removed);
 }
 
 int graph_tab_widget::addTab(QWidget* tab, QString name)
@@ -26,17 +28,27 @@ int graph_tab_widget::addTab(QWidget* tab, QString name)
     return tab_index;
 }
 
+void graph_tab_widget::handle_tab_changed(int index)
+{
+    auto w = dynamic_cast<graph_widget*>(m_tab_widget->widget(index));
+    if (w)
+    {
+        auto ctx = w->get_context();
+        g_content_manager->get_context_manager_widget()->select_view_context(ctx);
+    }
+}
+
 void graph_tab_widget::handle_tab_close_requested(int index)
 {
     m_tab_widget->removeTab(index);
 
     //right way to do it??
     //graph_widget* graph_wid = dynamic_cast<graph_widget*>(m_tab_widget->widget(index));
-    //dynamic_context* dyn_con = g_graph_context_manager.get_dynamic_context(m_tab_widget->tabText(index));
+    //graph_context* dyn_con = g_graph_context_manager.get_context_by_name(m_tab_widget->tabText(index));
     //dyn_con->unsubscribe(graph_wid);
 }
 
-void graph_tab_widget::show_context(dynamic_context* context)
+void graph_tab_widget::show_context(graph_context* context)
 {
     auto index = get_context_tab_index(context);
     if (index != -1)
@@ -46,25 +58,25 @@ void graph_tab_widget::show_context(dynamic_context* context)
         return;
     }
 
-    add_graph_widget_tab(g_graph_context_manager.get_dynamic_context(context->name()));
+    add_graph_widget_tab(context);
 }
 
-void graph_tab_widget::handle_context_created(dynamic_context* context)
+void graph_tab_widget::handle_context_created(graph_context* context)
 {
     add_graph_widget_tab(context);
 }
 
-void graph_tab_widget::handle_context_renamed(dynamic_context* context)
+void graph_tab_widget::handle_context_renamed(graph_context* context)
 {
     m_tab_widget->setTabText(get_context_tab_index(context), context->name());
 }
 
-void graph_tab_widget::handle_context_removed(dynamic_context* context)
+void graph_tab_widget::handle_context_removed(graph_context* context)
 {
     handle_tab_close_requested(get_context_tab_index(context));
 }
 
-void graph_tab_widget::add_graph_widget_tab(dynamic_context* context)
+void graph_tab_widget::add_graph_widget_tab(graph_context* context)
 {
     graph_widget* new_graph_widget = new graph_widget(context);
     //m_context_widget_map.insert(context, new_graph_widget);
@@ -74,7 +86,7 @@ void graph_tab_widget::add_graph_widget_tab(dynamic_context* context)
     context->update();
 }
 
-int graph_tab_widget::get_context_tab_index(dynamic_context* context) const
+int graph_tab_widget::get_context_tab_index(graph_context* context) const
 {
     for (int i = 0; i < m_tab_widget->count(); i++)
     {
