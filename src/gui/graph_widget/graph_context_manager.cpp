@@ -43,6 +43,18 @@ QVector<graph_context*> graph_context_manager::get_contexts() const
     return m_graph_contexts;
 }
 
+bool graph_context_manager::context_with_name_exists(const QString& name) const
+{
+    for (const auto& ctx : m_graph_contexts)
+    {
+        if (ctx->name() == name)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
 void graph_context_manager::handle_module_removed(const std::shared_ptr<module> m)
 {
     for (graph_context* context : m_graph_contexts)

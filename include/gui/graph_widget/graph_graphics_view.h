@@ -56,12 +56,13 @@ private Q_SLOTS:
     void handle_rename_action();
     void adjust_min_scale();
 
-    void handle_fold_action();
-    void handle_unfold_action();
+    void handle_fold_single_action();
+    void handle_fold_all_action();
+    void handle_unfold_single_action();
+    void handle_unfold_all_action();
 
     void handle_select_outputs();
     void handle_select_inputs();
-    void handle_select_inputs_and_outputs();
 
 private:
     void paintEvent(QPaintEvent* event) Q_DECL_OVERRIDE;
