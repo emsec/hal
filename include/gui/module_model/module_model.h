@@ -27,11 +27,11 @@
 
 #include "def.h"
 
-#include "gui/module_model/module_item.h"
-
 #include <QAbstractItemModel>
 #include <QModelIndex>
 #include <QVariant>
+
+class module_item;
 
 class module_model : public QAbstractItemModel
 {
@@ -42,24 +42,27 @@ public:
     ~module_model() override;
 
     // PURE VIRTUAL
-    QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const Q_DECL_OVERRIDE;
-    QModelIndex parent(const QModelIndex& index) const Q_DECL_OVERRIDE;
-    int rowCount(const QModelIndex& parent = QModelIndex()) const Q_DECL_OVERRIDE;
-    int columnCount(const QModelIndex& parent = QModelIndex()) const Q_DECL_OVERRIDE;
-    QVariant data(const QModelIndex& index, int role) const Q_DECL_OVERRIDE;
+    QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const override;
+    QModelIndex parent(const QModelIndex& index) const override;
+    int rowCount(const QModelIndex& parent = QModelIndex()) const override;
+    int columnCount(const QModelIndex& parent = QModelIndex()) const override;
+    QVariant data(const QModelIndex& index, int role) const override;
 
     // VIRTUAL
-    Qt::ItemFlags flags(const QModelIndex& index) const Q_DECL_OVERRIDE;
-    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const Q_DECL_OVERRIDE;
+    Qt::ItemFlags flags(const QModelIndex& index) const override;
+    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 
     module_item* get_item(const QModelIndex& index) const;
     QModelIndex get_index(const module_item* const item) const;
 
-    void add_item(module_item* item, module_item* parent = nullptr);
-    void remove_item(module_item* item);
+    void add_module(module_item* item, module_item* parent = nullptr);
+    void remove_module(module_item* item);
+    void update_module(const u32 id);
 
 private:
-    module_item* m_root_item; // IF TOP MODULE CANT BE DELETED THIS IS NOT NECESSARY
+    module_item* m_root_item;
+
+    QMap<u32, module_item*> m_module_items;
 };
 
 #endif // MODULE_MODEL_H

@@ -4,10 +4,11 @@
 
 #include "gui/gui_globals.h"
 #include "gui/gui_utility.h"
+#include "gui/module_model/module_item.h"
 
 #include "netlist/gate.h"
-#include "netlist/net.h"
 #include "netlist/module.h"
+#include "netlist/net.h"
 
 module_model::module_model(QObject* parent) : QAbstractItemModel(parent)
 {
@@ -173,7 +174,7 @@ QModelIndex module_model::get_index(const module_item* const item) const
     return model_index;
 }
 
-void module_model::add_item(module_item* item, module_item* parent)
+void module_model::add_module(module_item* item, module_item* parent)
 {
     if (!item)
         return; //SHOULD NEVER BE REACHED
@@ -200,7 +201,7 @@ void module_model::add_item(module_item* item, module_item* parent)
     endInsertRows();
 }
 
-void module_model::remove_item(module_item* item)
+void module_model::remove_module(module_item* item)
 {
     if (!item)
         return; // SHOULD NEVER BE REACHED
@@ -217,4 +218,19 @@ void module_model::remove_item(module_item* item)
     beginRemoveRows(index, row, row);
     parent_item->remove_child(item);
     endRemoveRows();
+}
+
+void module_model::update_module(const u32 id)
+{
+    assert(g_netlist->get_module_by_id(id));
+    assert(m_module_items.contains(id));
+
+    module_item* item = m_module_items.value(id);
+    assert(item);
+
+    item->set_name(QString::fromStdString(g_netlist->get_module_by_id(id)->get_name()));
+    item->set_color(g_netlist_relay.get_module_color(id));
+
+    QModelIndex index = get_index(item);
+    Q_EMIT dataChanged(index, index);
 }
