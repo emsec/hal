@@ -114,15 +114,24 @@ void file_manager::open_file(QString file_name)
 
         if (QFileInfo::exists(hal_file_name) && QFileInfo(hal_file_name).isFile())
         {
-            QMessageBox msgBox(QMessageBox::Question, "Resume previous work", "A .hal file exists for the selected netlist.", QMessageBox::Ok | QMessageBox::Close);
+            QMessageBox msgBox;
+            msgBox.setIcon(QMessageBox::Question);
+            msgBox.setWindowTitle("Resume previous work");
+            msgBox.setText("A .hal file exists for the selected netlist.");
+            QAbstractButton* parse_hal_btn = (QAbstractButton*)msgBox.addButton("Load .hal file", QMessageBox::ActionRole);
+            QAbstractButton* parse_hdl_btn = (QAbstractButton*)msgBox.addButton("Parse " + extension + " file", QMessageBox::ActionRole);
+            QAbstractButton* abort_btn = (QAbstractButton*)msgBox.addButton("Abort", QMessageBox::RejectRole);
 
-            msgBox.setButtonText(QMessageBox::Ok, "Load .hal file");
-            msgBox.setButtonText(QMessageBox::Close, "Parse " + extension + " file");
+            msgBox.exec();
 
-            if (msgBox.exec() == QMessageBox::Ok)
+            if (msgBox.clickedButton() == parse_hal_btn)
             {
                 file_name         = hal_file_name;
                 logical_file_name = hal_file_name;
+            }
+            else if (msgBox.clickedButton() != parse_hdl_btn)
+            {
+                return;
             }
         }
     }

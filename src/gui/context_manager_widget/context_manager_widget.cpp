@@ -167,17 +167,7 @@ void context_manager_widget::handle_rename_context_clicked()
 void context_manager_widget::handle_duplicate_context_clicked()
 {
     graph_context* clicked_context = m_assigned_pointers[m_list_widget->currentItem()];
-    graph_context* new_context     = nullptr;
-
-    //create context with desired name until name which hasn't been used is found
-    u32 dup_counter = 1;
-    do
-    {
-        dup_counter++;
-        QString new_context_name = clicked_context->name() + " (" + QString::number(dup_counter) + ")";
-        new_context              = g_graph_context_manager.create_new_context(new_context_name);    // returns nullptr if name already in use
-    } while (new_context == nullptr);
-
+    graph_context* new_context     = g_graph_context_manager.create_new_context(clicked_context->name());
     new_context->add(clicked_context->modules(), clicked_context->gates());
 }
 
@@ -194,7 +184,6 @@ void context_manager_widget::setup_toolbar(toolbar* toolbar)
     toolbar->addAction(m_rename_action);
     toolbar->addAction(m_delete_action);
 }
-
 
 void context_manager_widget::handle_item_double_clicked(QListWidgetItem* clicked)
 {
@@ -221,7 +210,7 @@ void context_manager_widget::handle_selection_changed()
 void context_manager_widget::handle_context_created(graph_context* context)
 {
     m_list_widget->addItem(context->name());
-    auto new_item = m_list_widget->item(m_list_widget->count() - 1);
+    auto new_item                 = m_list_widget->item(m_list_widget->count() - 1);
     m_assigned_pointers[new_item] = context;
     select_view_context(context);
 }

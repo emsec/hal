@@ -450,31 +450,33 @@ void graph_widget::handle_enter_module_requested(const u32 id)
 {
     if (m_context->gates().isEmpty() && m_context->modules() == QSet<u32>({id}))
     {
-        qDebug() << "entered the only module of the view -> just expand";
         m_context->unfold_module(id);
         return;
     }
 
     auto m = g_netlist->get_module_by_id(id);
     QSet<u32> gate_ids;
+    QSet<u32> module_ids;
     for (const auto& g : m->get_gates())
     {
         gate_ids.insert(g->get_id());
     }
+    for (const auto& sm : m->get_submodules())
+    {
+        module_ids.insert(sm->get_id());
+    }
 
     for (const auto& ctx : g_graph_context_manager.get_contexts())
     {
-        if ((ctx->gates().isEmpty() && ctx->modules() == QSet<u32>({id})) || (ctx->modules().isEmpty() && ctx->gates() == gate_ids))
+        if ((ctx->gates().isEmpty() && ctx->modules() == QSet<u32>({id})) || (ctx->modules() == module_ids && ctx->gates() == gate_ids))
         {
-            qDebug() << "another view for the selected module exists -> show it";
             g_content_manager->get_graph_tab_widget()->show_context(ctx);
             return;
         }
     }
 
-    qDebug() << "no view for the selected module exists -> create new";
     auto ctx = g_graph_context_manager.create_new_context(QString::fromStdString(m->get_name()));
-    ctx->add({}, gate_ids);
+    ctx->add(module_ids, gate_ids);
 }
 
 void graph_widget::ensure_gate_visible(const u32 gate)

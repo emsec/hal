@@ -22,11 +22,13 @@
 #include <QColorDialog>
 #include <QDebug>
 #include <QInputDialog>
+#include <QLabel>
 #include <QLineEdit>
 #include <QMenu>
 #include <QScrollBar>
 #include <QStyleOptionGraphicsItem>
 #include <QWheelEvent>
+#include <QWidgetAction>
 #include <qmath.h>
 
 graph_graphics_view::graph_graphics_view(graph_widget* parent)
@@ -62,28 +64,18 @@ void graph_graphics_view::handle_change_color_action()
 
 void graph_graphics_view::handle_isolation_view_action()
 {
-    graph_context* context = nullptr;
-    u32 cnt                = 0;
+    u32 cnt = 0;
     while (true)
     {
         ++cnt;
         QString name = "Isolated View " + QString::number(cnt);
-        bool found   = false;
-        for (const auto& ctx : g_graph_context_manager.get_contexts())
+        if (!g_graph_context_manager.context_with_name_exists(name))
         {
-            if (ctx->name() == name)
-            {
-                found = true;
-                break;
-            }
-        }
-        if (!found)
-        {
-            context = g_graph_context_manager.create_new_context(name);
-            break;
+            auto context = g_graph_context_manager.create_new_context(name);
+            context->add(g_selection_relay.m_selected_modules, g_selection_relay.m_selected_gates);
+            return;
         }
     }
-    context->add(g_selection_relay.m_selected_modules, g_selection_relay.m_selected_gates);
 }
 
 //////////
@@ -94,11 +86,15 @@ void graph_graphics_view::handle_isolation_view_action()
 void graph_graphics_view::handle_move_action(QAction* action)
 {
     const u32 mod_id          = action->data().toInt();
-    const u32 gate_id         = m_item->id();
     std::shared_ptr<module> m = g_netlist->get_module_by_id(mod_id);
-    std::shared_ptr<gate> g   = g_netlist->get_gate_by_id(gate_id);
-    if (g)
-        m->assign_gate(g);
+    for (const auto& id : g_selection_relay.m_selected_gates)
+    {
+        m->assign_gate(g_netlist->get_gate_by_id(id));
+    }
+    for (const auto& id : g_selection_relay.m_selected_modules)
+    {
+        g_netlist->get_module_by_id(id)->set_parent_module(m);
+    }
 }
 
 void graph_graphics_view::handle_move_new_action()
@@ -115,31 +111,47 @@ void graph_graphics_view::handle_move_new_action()
     {
         m->assign_gate(g_netlist->get_gate_by_id(id));
     }
+    for (const auto& id : g_selection_relay.m_selected_modules)
+    {
+        g_netlist->get_module_by_id(id)->set_parent_module(m);
+    }
 
-    auto gates = g_selection_relay.m_selected_gates;
+    auto gates   = g_selection_relay.m_selected_gates;
+    auto modules = g_selection_relay.m_selected_modules;
     g_selection_relay.clear();
     g_selection_relay.relay_selection_changed(this);
 
     auto context = m_graph_widget->get_context();
     context->begin_change();
-    context->remove({}, gates);
+    context->remove(modules, gates);
     context->add({m->get_id()}, {});
     context->end_change();
 }
 
 void graph_graphics_view::handle_rename_action()
 {
-    // move this to separate class in the future, if this gets any bigger
-
-    // get the selected gate and its current name
-    std::shared_ptr<gate> g = g_netlist->get_gate_by_id(m_item->id());
-    const QString name      = QString::fromStdString(g->get_name());
-    // show single-line input dialog
-    bool confirm;
-    const QString new_name = QInputDialog::getText(this, "Rename gate", "New name:", QLineEdit::Normal, name, &confirm);
-    // if dialog has been confirmed, apply the new name
-    if (confirm)
-        g->set_name(new_name.toStdString());
+    if (m_item->item_type() == hal::item_type::gate)
+    {
+        std::shared_ptr<gate> g = g_netlist->get_gate_by_id(m_item->id());
+        const QString name      = QString::fromStdString(g->get_name());
+        bool confirm;
+        const QString new_name = QInputDialog::getText(this, "Rename gate", "New name:", QLineEdit::Normal, name, &confirm);
+        if (confirm)
+        {
+            g->set_name(new_name.toStdString());
+        }
+    }
+    else if (m_item->item_type() == hal::item_type::module)
+    {
+        std::shared_ptr<module> m = g_netlist->get_module_by_id(m_item->id());
+        const QString name        = QString::fromStdString(m->get_name());
+        bool confirm;
+        const QString new_name = QInputDialog::getText(this, "Rename module", "New name:", QLineEdit::Normal, name, &confirm);
+        if (confirm)
+        {
+            m->set_name(new_name.toStdString());
+        }
+    }
 }
 //////////
 
@@ -296,96 +308,108 @@ void graph_graphics_view::show_context_menu(const QPoint& pos)
         return;
 
     QMenu context_menu(this);
+    QAction* action;
 
     QGraphicsItem* item = itemAt(pos);
     if (item)
     {
         m_item = static_cast<graphics_item*>(item);
 
-        switch (m_item->item_type())
+        if (m_item->item_type() == hal::item_type::gate)
         {
-            case hal::item_type::gate:
+            if (g_selection_relay.m_selected_gates.find(m_item->id()) == g_selection_relay.m_selected_gates.end())
             {
-                if (g_selection_relay.m_selected_gates.find(m_item->id()) == g_selection_relay.m_selected_gates.end())
-                {
-                    g_selection_relay.clear();
-                    g_selection_relay.m_selected_gates.insert(m_item->id());
-                    g_selection_relay.m_focus_type = selection_relay::item_type::gate;
-                    g_selection_relay.m_focus_id   = m_item->id();
-                    g_selection_relay.m_subfocus   = selection_relay::subfocus::none;
-                    g_selection_relay.relay_selection_changed(this);
-                }
-                // DEBUG ONLY
-                //QAction* color_action = context_menu.addAction("Change Color");
-                //QObject::connect(color_action, &QAction::triggered, this, &graph_graphics_view::handle_change_color_action);
-                //context_menu.addAction(color_action);
+                g_selection_relay.clear();
+                g_selection_relay.m_selected_gates.insert(m_item->id());
+                g_selection_relay.m_focus_type = selection_relay::item_type::gate;
+                g_selection_relay.m_focus_id   = m_item->id();
+                g_selection_relay.m_subfocus   = selection_relay::subfocus::none;
+                g_selection_relay.relay_selection_changed(this);
+            }
 
-                QAction* rename_action = context_menu.addAction("Rename …");
-                QObject::connect(rename_action, &QAction::triggered, this, &graph_graphics_view::handle_rename_action);
-                context_menu.addAction(rename_action);
+            context_menu.addAction("This gate:")->setEnabled(false);
 
-                QMenu* module_submenu        = context_menu.addMenu("Move to module …");
-                QActionGroup* module_actions = new QActionGroup(module_submenu);
-                for (auto& module : g_netlist->get_modules())
-                {
-                    std::shared_ptr<gate> g = g_netlist->get_gate_by_id(m_item->id());
-                    if (!module->contains_gate(g))
-                    {
-                        QString mod_name = QString::fromStdString(module->get_name());
-                        const u32 mod_id = module->get_id();
-                        QAction* action  = module_submenu->addAction(mod_name);
-                        module_actions->addAction(action);
-                        action->setData(mod_id);
-                    }
-                }
-                QObject::connect(module_actions, SIGNAL(triggered(QAction*)), this, SLOT(handle_move_action(QAction*)));
-                module_submenu->addSeparator();
+            action = context_menu.addAction("  Rename …");
+            QObject::connect(action, &QAction::triggered, this, &graph_graphics_view::handle_rename_action);
 
-                QAction* new_mod_action = module_submenu->addAction("New module …");
-                QObject::connect(new_mod_action, &QAction::triggered, this, &graph_graphics_view::handle_move_new_action);
-                module_submenu->addAction(new_mod_action);
+            action = context_menu.addAction("  Fold parent module");
+            QObject::connect(action, &QAction::triggered, this, &graph_graphics_view::handle_fold_single_action);
+        }
+        else if (m_item->item_type() == hal::item_type::module)
+        {
+            if (g_selection_relay.m_selected_modules.find(m_item->id()) == g_selection_relay.m_selected_modules.end())
+            {
+                g_selection_relay.clear();
+                g_selection_relay.m_selected_modules.insert(m_item->id());
+                g_selection_relay.m_focus_type = selection_relay::item_type::module;
+                g_selection_relay.m_focus_id   = m_item->id();
+                g_selection_relay.m_subfocus   = selection_relay::subfocus::none;
+                g_selection_relay.relay_selection_changed(this);
+            }
 
-                QAction* fold_action = context_menu.addAction("Fold module");
-                QObject::connect(fold_action, &QAction::triggered, this, &graph_graphics_view::handle_fold_action);
-                context_menu.addAction(fold_action);
+            context_menu.addAction("This module:")->setEnabled(false);
 
-                QAction* isolation_view_action = context_menu.addAction("Isolate In New View");
-                QObject::connect(isolation_view_action, &QAction::triggered, this, &graph_graphics_view::handle_isolation_view_action);
-                context_menu.addAction(isolation_view_action);
+            action = context_menu.addAction("  Rename …");
+            QObject::connect(action, &QAction::triggered, this, &graph_graphics_view::handle_rename_action);
 
+            action = context_menu.addAction("  Unfold module");
+            QObject::connect(action, &QAction::triggered, this, &graph_graphics_view::handle_unfold_single_action);
+        }
+
+        if (g_selection_relay.m_selected_gates.size() + g_selection_relay.m_selected_modules.size() > 1)
+        {
+            context_menu.addSeparator();
+            context_menu.addAction("Entire selection:")->setEnabled(false);
+        }
+
+        action = context_menu.addAction("  Isolate In New View");
+        QObject::connect(action, &QAction::triggered, this, &graph_graphics_view::handle_isolation_view_action);
+
+        action = context_menu.addAction("  Add successors to view");
+        connect(action, &QAction::triggered, this, &graph_graphics_view::handle_select_outputs);
+
+        action = context_menu.addAction("  Add predecessors to view");
+        connect(action, &QAction::triggered, this, &graph_graphics_view::handle_select_inputs);
+
+        QMenu* module_submenu = context_menu.addMenu("  Move to module …");
+
+        action = module_submenu->addAction("  New module …");
+        QObject::connect(action, &QAction::triggered, this, &graph_graphics_view::handle_move_new_action);
+        module_submenu->addSeparator();
+
+        QActionGroup* module_actions = new QActionGroup(module_submenu);
+        for (auto& module : g_netlist->get_modules())
+        {
+            std::shared_ptr<gate> g = g_netlist->get_gate_by_id(m_item->id());
+            if (!module->contains_gate(g))
+            {
+                QString mod_name = QString::fromStdString(module->get_name());
+                const u32 mod_id = module->get_id();
+                action           = module_submenu->addAction(mod_name);
+                module_actions->addAction(action);
+                action->setData(mod_id);
+            }
+        }
+        QObject::connect(module_actions, SIGNAL(triggered(QAction*)), this, SLOT(handle_move_action(QAction*)));
+
+        if (g_selection_relay.m_selected_gates.size() + g_selection_relay.m_selected_modules.size() > 1)
+        {
+            if (!g_selection_relay.m_selected_gates.empty())
+            {
                 context_menu.addSeparator();
+                context_menu.addAction("All selected gates:")->setEnabled(false);
 
-                QAction* tempAction = new QAction("Add successors to selection");
-                connect(tempAction, &QAction::triggered, this, &graph_graphics_view::handle_select_outputs);
-                context_menu.addAction(tempAction);
-                tempAction = new QAction("Add predecessors to selection");
-                connect(tempAction, &QAction::triggered, this, &graph_graphics_view::handle_select_inputs);
-                context_menu.addAction(tempAction);
-                tempAction = new QAction("Add predecessors and successors to selection");
-                connect(tempAction, &QAction::triggered, this, &graph_graphics_view::handle_select_inputs_and_outputs);
-                context_menu.addAction(tempAction);
-                break;
+                action = context_menu.addAction("  Fold all parent modules");
+                QObject::connect(action, &QAction::triggered, this, &graph_graphics_view::handle_fold_all_action);
             }
-            case hal::item_type::module:
+            if (!g_selection_relay.m_selected_modules.empty())
             {
-                if (g_selection_relay.m_selected_modules.find(m_item->id()) == g_selection_relay.m_selected_modules.end())
-                {
-                    g_selection_relay.clear();
-                    g_selection_relay.m_selected_modules.insert(m_item->id());
-                    g_selection_relay.m_focus_type = selection_relay::item_type::module;
-                    g_selection_relay.m_focus_id   = m_item->id();
-                    g_selection_relay.m_subfocus   = selection_relay::subfocus::none;
-                    g_selection_relay.relay_selection_changed(this);
-                }
+                context_menu.addSeparator();
+                context_menu.addAction("All selected modules:")->setEnabled(false);
 
-                QAction* action = context_menu.addAction("Unfold module");
-                QObject::connect(action, &QAction::triggered, this, &graph_graphics_view::handle_unfold_action);
-                context_menu.addAction(action);
-
-                break;
+                action = context_menu.addAction("  Unfold all");
+                QObject::connect(action, &QAction::triggered, this, &graph_graphics_view::handle_unfold_all_action);
             }
-            default:
-                break;
         }
     }
     else
@@ -421,139 +445,152 @@ void graph_graphics_view::toggle_antialiasing()
 
 void graph_graphics_view::handle_select_outputs()
 {
+    auto context           = m_graph_widget->get_context();
     QAction* sender_action = dynamic_cast<QAction*>(sender());
     if (sender_action)
     {
-        std::set<u32> select_nets;
-        std::set<u32> select_gates;
+        QSet<u32> gates;
         for (auto id : g_selection_relay.m_selected_gates)
         {
             auto gate = g_netlist->get_gate_by_id(id);
-            select_gates.insert(gate->get_id());
             for (const auto& net : gate->get_fan_out_nets())
             {
-                select_nets.insert(net->get_id());
                 for (const auto& suc : net->get_dsts())
                 {
-                    select_gates.insert(suc.gate->get_id());
+                    bool found = false;
+                    for (const auto& id : context->modules())
+                    {
+                        auto m = g_netlist->get_module_by_id(id);
+                        if (m->contains_gate(suc.gate, true))
+                        {
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found)
+                    {
+                        gates.insert(suc.gate->get_id());
+                    }
                 }
             }
         }
-        g_selection_relay.clear();
+        for (auto id : g_selection_relay.m_selected_modules)
+        {
+            auto module = g_netlist->get_module_by_id(id);
+            for (const auto& net : module->get_output_nets())
+            {
+                for (const auto& suc : net->get_dsts())
+                {
+                    bool found = false;
+                    for (const auto& id : context->modules())
+                    {
+                        auto m = g_netlist->get_module_by_id(id);
+                        if (m->contains_gate(suc.gate, true))
+                        {
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found)
+                    {
+                        gates.insert(suc.gate->get_id());
+                    }
+                }
+            }
+        }
 
-        for (u32 id : select_nets)
-        {
-            g_selection_relay.m_selected_nets.insert(id);
-        }
-        for (u32 id : select_gates)
-        {
-            g_selection_relay.m_selected_gates.insert(id);
-        }
-        g_selection_relay.relay_selection_changed(this);
+        context->add({}, gates);
     }
 }
 void graph_graphics_view::handle_select_inputs()
 {
+    auto context           = m_graph_widget->get_context();
     QAction* sender_action = dynamic_cast<QAction*>(sender());
     if (sender_action)
     {
-        std::set<u32> select_nets;
-        std::set<u32> select_gates;
+        QSet<u32> gates;
         for (auto id : g_selection_relay.m_selected_gates)
         {
             auto gate = g_netlist->get_gate_by_id(id);
-            select_gates.insert(gate->get_id());
             for (const auto& net : gate->get_fan_in_nets())
             {
-                select_nets.insert(net->get_id());
                 if (net->get_src().gate != nullptr)
                 {
-                    select_gates.insert(net->get_src().gate->get_id());
+                    bool found = false;
+                    for (const auto& id : context->modules())
+                    {
+                        auto m = g_netlist->get_module_by_id(id);
+                        if (m->contains_gate(net->get_src().gate, true))
+                        {
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found)
+                    {
+                        gates.insert(net->get_src().gate->get_id());
+                    }
                 }
             }
         }
-        g_selection_relay.clear();
-
-        for (u32 id : select_nets)
+        for (auto id : g_selection_relay.m_selected_modules)
         {
-            g_selection_relay.m_selected_nets.insert(id);
+            auto module = g_netlist->get_module_by_id(id);
+            for (const auto& net : module->get_input_nets())
+            {
+                if (net->get_src().gate != nullptr)
+                {
+                    bool found = false;
+                    for (const auto& id : context->modules())
+                    {
+                        auto m = g_netlist->get_module_by_id(id);
+                        if (m->contains_gate(net->get_src().gate, true))
+                        {
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found)
+                    {
+                        gates.insert(net->get_src().gate->get_id());
+                    }
+                }
+            }
         }
-        for (u32 id : select_gates)
-        {
-            g_selection_relay.m_selected_gates.insert(id);
-        }
-        g_selection_relay.relay_selection_changed(this);
+        context->add({}, gates);
     }
 }
-void graph_graphics_view::handle_select_inputs_and_outputs()
+
+void graph_graphics_view::handle_fold_single_action()
 {
-    QAction* sender_action = dynamic_cast<QAction*>(sender());
-    if (sender_action)
-    {
-        std::set<u32> select_nets;
-        std::set<u32> select_gates;
-        for (auto id : g_selection_relay.m_selected_gates)
-        {
-            auto gate = g_netlist->get_gate_by_id(id);
-            select_gates.insert(gate->get_id());
-
-            for (const auto& net : gate->get_fan_out_nets())
-            {
-                select_nets.insert(net->get_id());
-                for (const auto& suc : net->get_dsts())
-                {
-                    select_gates.insert(suc.gate->get_id());
-                }
-            }
-            for (const auto& net : gate->get_fan_in_nets())
-            {
-                select_nets.insert(net->get_id());
-                if (net->get_src().gate != nullptr)
-                {
-                    select_gates.insert(net->get_src().gate->get_id());
-                }
-            }
-        }
-        g_selection_relay.clear();
-
-        for (u32 id : select_nets)
-        {
-            g_selection_relay.m_selected_nets.insert(id);
-        }
-        for (u32 id : select_gates)
-        {
-            g_selection_relay.m_selected_gates.insert(id);
-        }
-        g_selection_relay.relay_selection_changed(this);
-    }
+    auto context = m_graph_widget->get_context();
+    context->fold_module_of_gate(m_item->id());
 }
 
-void graph_graphics_view::handle_fold_action()
+void graph_graphics_view::handle_unfold_single_action()
+{
+    auto context = m_graph_widget->get_context();
+    context->unfold_module(m_item->id());
+}
+
+void graph_graphics_view::handle_fold_all_action()
 {
     auto context = m_graph_widget->get_context();
 
-    auto selected_gates = g_selection_relay.m_selected_gates;
-    g_selection_relay.clear();
-    g_selection_relay.relay_selection_changed(this);
-
     context->begin_change();
-    for (u32 id : selected_gates)
+    for (u32 id : g_selection_relay.m_selected_gates)
     {
         context->fold_module_of_gate(id);
     }
     context->end_change();
 }
 
-void graph_graphics_view::handle_unfold_action()
+void graph_graphics_view::handle_unfold_all_action()
 {
     auto context = m_graph_widget->get_context();
 
-    auto modules = g_selection_relay.m_selected_modules;
-    g_selection_relay.clear();
-    g_selection_relay.relay_selection_changed(this);
-
     context->begin_change();
-    for (u32 id : modules)
+    for (u32 id : g_selection_relay.m_selected_modules)
     {
         context->unfold_module(id);
     }
