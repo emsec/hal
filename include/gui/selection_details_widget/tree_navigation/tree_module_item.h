@@ -21,14 +21,14 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef tree_navigation_item2_H
-#define tree_navigation_item2_H
+#ifndef tree_module_item_H
+#define tree_module_item_H
 
 #include <QList>
 #include <QVariant>
 #include <QVector>
 
-class tree_navigation_item
+class tree_module_item
 {
 public:
     enum class item_type
@@ -40,29 +40,30 @@ public:
         ignore    = 4
     };
 
-    tree_navigation_item(const QVector<QVariant>& data, item_type type = item_type::ignore, tree_navigation_item* parent = 0);
-    ~tree_navigation_item();
+    tree_module_item(const QVector<QVariant>& data, item_type type = item_type::ignore, tree_module_item* parent = 0);
+    ~tree_module_item();
 
     //information access
     int get_child_count() const;
     int get_column_count() const;
     int get_row_number() const;
-    tree_navigation_item* get_child(int row);
-    tree_navigation_item* get_parent();
+    tree_module_item* get_child(int row);
+    tree_module_item* get_parent();
     QVariant data(int column) const;
     item_type get_type();
 
     //information manipulation
-    bool insert_child(int row_position, tree_navigation_item* item);
+    bool insert_child(int row_position, tree_module_item* item);
     bool set_data(int column, const QVariant& value);
+    bool remove_all_children();
     bool remove_children(int position, int count);
-    bool remove_child(tree_navigation_item* item);
+    bool remove_child(tree_module_item* item);
 
 private:
-    QList<tree_navigation_item*> m_child_items;
+    QList<tree_module_item*> m_child_items;
     QVector<QVariant> m_data;
-    tree_navigation_item* m_parent_item;
+    tree_module_item* m_parent_item;
     item_type m_type;
 };
 
-#endif    // tree_navigation_item2_H
+#endif    // tree_module_item_H

@@ -29,6 +29,8 @@
 #include "netlist_relay/netlist_relay.h"
 
 #include <QWidget>
+#include <QTreeView>
+#include "selection_details_widget/tree_navigation/tree_module_model.h"
 
 class module;
 
@@ -48,9 +50,11 @@ public Q_SLOTS:
 
 private:
     QVBoxLayout* m_content_layout;
-    QLabel* m_label;
 
     u32 m_current_id;
+
+    QTreeView* m_treeview;
+    tree_module_model* m_tree_module_model;
 };
 
 #endif // MODULE_DETAILS_WIDGET_H

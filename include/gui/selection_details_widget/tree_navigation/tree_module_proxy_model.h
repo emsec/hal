@@ -21,48 +21,19 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef tree_navigation_item2_H
-#define tree_navigation_item2_H
+#ifndef tree_module_proxy_model_H
+#define tree_module_proxy_model_H
 
-#include <QList>
-#include <QVariant>
-#include <QVector>
+#include <QSortFilterProxyModel>
 
-class tree_navigation_item
+class tree_module_proxy_model : public QSortFilterProxyModel
 {
+    Q_OBJECT
 public:
-    enum class item_type
-    {
-        gate      = 0,
-        net       = 1,
-        module = 2,
-        structure = 3,
-        ignore    = 4
-    };
+    tree_module_proxy_model(QObject* parent = 0);
 
-    tree_navigation_item(const QVector<QVariant>& data, item_type type = item_type::ignore, tree_navigation_item* parent = 0);
-    ~tree_navigation_item();
-
-    //information access
-    int get_child_count() const;
-    int get_column_count() const;
-    int get_row_number() const;
-    tree_navigation_item* get_child(int row);
-    tree_navigation_item* get_parent();
-    QVariant data(int column) const;
-    item_type get_type();
-
-    //information manipulation
-    bool insert_child(int row_position, tree_navigation_item* item);
-    bool set_data(int column, const QVariant& value);
-    bool remove_children(int position, int count);
-    bool remove_child(tree_navigation_item* item);
-
-private:
-    QList<tree_navigation_item*> m_child_items;
-    QVector<QVariant> m_data;
-    tree_navigation_item* m_parent_item;
-    item_type m_type;
+protected:
+    bool filterAcceptsRow(int source_row, const QModelIndex& source_parent) const override;
 };
 
-#endif    // tree_navigation_item2_H
+#endif    // tree_module_proxy_model_H
