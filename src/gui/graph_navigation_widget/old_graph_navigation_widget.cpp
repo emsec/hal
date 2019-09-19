@@ -24,57 +24,57 @@
 
 old_graph_navigation_widget::old_graph_navigation_widget(QWidget* parent) : content_widget("Navigation", parent)
 {
-    m_tree_navigation_proxy_model = new tree_navigation_proxy_model(this);
-    m_tree_navigation_proxy_model->setFilterKeyColumn(-1);
-    m_filter_widget = new navigation_filter_widget(this);
-    m_content_layout->addWidget(m_filter_widget);
-    m_navigation_model      = new graph_navigation_model(this);
-    m_tree_navigation_model = new tree_navigation_model(this);
-    m_tree_view             = new QTreeView(this);
-    m_proxy_model           = new graph_navigation_proxy_model(this);
-    m_proxy_model->setSourceModel(m_navigation_model);
-    m_tree_navigation_proxy_model->setSourceModel(m_tree_navigation_model);
-    m_tree_view->setModel(m_tree_navigation_proxy_model);
-    m_tree_view->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    m_tree_view->setFrameStyle(QFrame::NoFrame);
-    //m_tree_view->header()->close();
-    m_content_layout->addWidget(m_tree_view);
-    m_content_layout->addWidget(&m_searchbar);
-    m_searchbar.hide();
-    m_filter_widget->hide();
+//    m_tree_navigation_proxy_model = new tree_navigation_proxy_model(this);
+//    m_tree_navigation_proxy_model->setFilterKeyColumn(-1);
+//    m_filter_widget = new navigation_filter_widget(this);
+//    m_content_layout->addWidget(m_filter_widget);
+//    m_navigation_model      = new graph_navigation_model(this);
+//    m_tree_navigation_model = new tree_navigation_model(this);
+//    m_tree_view             = new QTreeView(this);
+//    m_proxy_model           = new graph_navigation_proxy_model(this);
+//    m_proxy_model->setSourceModel(m_navigation_model);
+//    m_tree_navigation_proxy_model->setSourceModel(m_tree_navigation_model);
+//    m_tree_view->setModel(m_tree_navigation_proxy_model);
+//    m_tree_view->setEditTriggers(QAbstractItemView::NoEditTriggers);
+//    m_tree_view->setFrameStyle(QFrame::NoFrame);
+//    //m_tree_view->header()->close();
+//    m_content_layout->addWidget(m_tree_view);
+//    m_content_layout->addWidget(&m_searchbar);
+//    m_searchbar.hide();
+//    m_filter_widget->hide();
 
-    m_filter_action = new QAction("filter", this);
+//    m_filter_action = new QAction("filter", this);
 
-    m_ignore_selection_change = false;
+//    m_ignore_selection_change = false;
 
-    g_selection_relay.register_sender(this, name());
+//    g_selection_relay.register_sender(this, name());
 
-    //connect(m_filter_widget, &QLineEdit::returnPressed, this, &graph_navigation_widget::filter);
-    connect(&m_searchbar, &searchbar::text_edited, this, &old_graph_navigation_widget::filter);
-    connect(m_filter_action, &QAction::triggered, this, &old_graph_navigation_widget::handle_filter_action_triggered);
-    connect(m_tree_view->selectionModel(), &QItemSelectionModel::selectionChanged, this, &old_graph_navigation_widget::handle_tree_selection_changed);
+//    //connect(m_filter_widget, &QLineEdit::returnPressed, this, &graph_navigation_widget::filter);
+//    connect(&m_searchbar, &searchbar::text_edited, this, &old_graph_navigation_widget::filter);
+//    connect(m_filter_action, &QAction::triggered, this, &old_graph_navigation_widget::handle_filter_action_triggered);
+//    connect(m_tree_view->selectionModel(), &QItemSelectionModel::selectionChanged, this, &old_graph_navigation_widget::handle_tree_selection_changed);
 
-    //Selection Relay Connections
-    connect(&g_selection_relay, &selection_relay::selection_changed, this, &old_graph_navigation_widget::handle_selection_changed);
+//    //Selection Relay Connections
+//    connect(&g_selection_relay, &selection_relay::selection_changed, this, &old_graph_navigation_widget::handle_selection_changed);
 
-    //old
-    connect(&g_netlist_relay, &netlist_relay::module_created, m_tree_navigation_model, &tree_navigation_model::handle_module_created);
-    connect(&g_netlist_relay, &netlist_relay::module_gate_assigned, m_tree_navigation_model, &tree_navigation_model::handle_module_gate_assigned);
-    connect(&g_netlist_relay, &netlist_relay::module_gate_removed, m_tree_navigation_model, &tree_navigation_model::handle_module_gate_removed);
-    connect(&g_netlist_relay, &netlist_relay::module_name_changed, m_tree_navigation_model, &tree_navigation_model::handle_module_name_changed);
-    connect(&g_netlist_relay, &netlist_relay::module_removed, m_tree_navigation_model, &tree_navigation_model::handle_module_removed);
+//    //old
+//    connect(&g_netlist_relay, &netlist_relay::module_created, m_tree_navigation_model, &tree_navigation_model::handle_module_created);
+//    connect(&g_netlist_relay, &netlist_relay::module_gate_assigned, m_tree_navigation_model, &tree_navigation_model::handle_module_gate_assigned);
+//    connect(&g_netlist_relay, &netlist_relay::module_gate_removed, m_tree_navigation_model, &tree_navigation_model::handle_module_gate_removed);
+//    connect(&g_netlist_relay, &netlist_relay::module_name_changed, m_tree_navigation_model, &tree_navigation_model::handle_module_name_changed);
+//    connect(&g_netlist_relay, &netlist_relay::module_removed, m_tree_navigation_model, &tree_navigation_model::handle_module_removed);
 
-    connect(&g_netlist_relay, &netlist_relay::gate_created, m_tree_navigation_model, &tree_navigation_model::handle_gate_created);
-    connect(&g_netlist_relay, &netlist_relay::gate_removed, m_tree_navigation_model, &tree_navigation_model::handle_gate_removed);
-    connect(&g_netlist_relay, &netlist_relay::gate_name_changed, m_tree_navigation_model, &tree_navigation_model::handle_gate_name_changed);
+//    connect(&g_netlist_relay, &netlist_relay::gate_created, m_tree_navigation_model, &tree_navigation_model::handle_gate_created);
+//    connect(&g_netlist_relay, &netlist_relay::gate_removed, m_tree_navigation_model, &tree_navigation_model::handle_gate_removed);
+//    connect(&g_netlist_relay, &netlist_relay::gate_name_changed, m_tree_navigation_model, &tree_navigation_model::handle_gate_name_changed);
 
-    connect(&g_netlist_relay, &netlist_relay::net_created, m_tree_navigation_model, &tree_navigation_model::handle_net_created);
-    connect(&g_netlist_relay, &netlist_relay::net_removed, m_tree_navigation_model, &tree_navigation_model::handle_net_removed);
-    connect(&g_netlist_relay, &netlist_relay::net_name_changed, m_tree_navigation_model, &tree_navigation_model::handle_net_name_changed);
+//    connect(&g_netlist_relay, &netlist_relay::net_created, m_tree_navigation_model, &tree_navigation_model::handle_net_created);
+//    connect(&g_netlist_relay, &netlist_relay::net_removed, m_tree_navigation_model, &tree_navigation_model::handle_net_removed);
+//    connect(&g_netlist_relay, &netlist_relay::net_name_changed, m_tree_navigation_model, &tree_navigation_model::handle_net_name_changed);
 
-    QModelIndex file_name_index = m_tree_navigation_proxy_model->index(0, 0, m_tree_view->rootIndex());
-    m_tree_view->setExpanded(file_name_index, true);
-    toggle_resize_columns();
+//    QModelIndex file_name_index = m_tree_navigation_proxy_model->index(0, 0, m_tree_view->rootIndex());
+//    m_tree_view->setExpanded(file_name_index, true);
+//    toggle_resize_columns();
 }
 
 void old_graph_navigation_widget::setup_toolbar(toolbar* toolbar){
