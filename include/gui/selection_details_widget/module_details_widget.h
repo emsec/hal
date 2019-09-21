@@ -31,11 +31,13 @@
 #include <QWidget>
 #include <QTreeView>
 #include "selection_details_widget/tree_navigation/tree_module_model.h"
+#include "selection_details_widget/tree_navigation/tree_module_proxy_model.h"
 
 class module;
 
 class QVBoxLayout;
 class QLabel;
+class searchbar;
 
 class module_details_widget : public QWidget
 {
@@ -49,12 +51,19 @@ public Q_SLOTS:
     void handle_module_event(module_event_handler::event ev, std::shared_ptr<module> module, u32 associated_data);
 
 private:
+
+    void toggle_searchbar();
+    void handle_searchbar_text_edited(const QString &text);
+
     QVBoxLayout* m_content_layout;
 
     u32 m_current_id;
 
     QTreeView* m_treeview;
     tree_module_model* m_tree_module_model;
+    tree_module_proxy_model* m_tree_module_proxy_model;
+
+    searchbar* m_searchbar;
 };
 
 #endif // MODULE_DETAILS_WIDGET_H
