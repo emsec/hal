@@ -39,14 +39,10 @@
 #include <QList>
 #include <QObject>
 #include <QSortFilterProxyModel>
-#include <QTreeView>
 
-class graph_navigation_model;
-class QTreeView;
-class graph_navigation_proxy_model;
-
-class tree_navigation_model;
 class module_proxy_model;
+
+class QTreeView;
 
 class module_widget : public content_widget
 {
@@ -55,18 +51,14 @@ class module_widget : public content_widget
 public:
     module_widget(QWidget* parent = nullptr);
 
-    virtual void setup_toolbar(toolbar* toolbar) Q_DECL_OVERRIDE;
-    virtual QList<QShortcut*> create_shortcuts() Q_DECL_OVERRIDE;
+    virtual void setup_toolbar(toolbar* toolbar) override;
+    virtual QList<QShortcut*> create_shortcuts() override;
 
 public Q_SLOTS:
-    //void filter();
     void toggle_searchbar();
     void filter(const QString& text);
     void handle_tree_view_context_menu_requested(const QPoint& point);
-    void handle_filter_action_triggered();
     void handle_tree_selection_changed(const QItemSelection& selected, const QItemSelection& deselected);
-
-    void toggle_resize_columns();
 
 private:
     QTreeView* m_tree_view;

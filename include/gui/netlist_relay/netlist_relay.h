@@ -54,6 +54,7 @@ public:
     void debug_change_module_color(const u32 id);
     void debug_add_selection_to_module(const u32 id);
     void debug_add_child_module(const u32 id);
+    void debug_delete_module(const u32 id);
 
 Q_SIGNALS:
     // PROBABLY OBSOLETE

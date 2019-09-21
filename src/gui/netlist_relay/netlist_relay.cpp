@@ -133,6 +133,14 @@ void netlist_relay::debug_add_child_module(const u32 id)
     std::shared_ptr<module> s = g_netlist->create_module(g_netlist->get_unique_module_id(), name.toStdString(), m);
 }
 
+void netlist_relay::debug_delete_module(const u32 id)
+{
+    std::shared_ptr<module> m = g_netlist->get_module_by_id(id);
+    assert(m);
+
+    g_netlist->delete_module(m);
+}
+
 void netlist_relay::relay_netlist_event(netlist_event_handler::event ev, std::shared_ptr<netlist> object, u32 associated_data)
 {
     if (!object)
