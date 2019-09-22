@@ -17,6 +17,8 @@ module_details_widget::module_details_widget(QWidget* parent) : QWidget(parent),
     m_tree_module_proxy_model->setFilterKeyColumn(-1);
     m_treeview->setModel(m_tree_module_proxy_model);
 
+    m_treeview->setExpanded(m_tree_module_proxy_model->index(0, 0, m_treeview->rootIndex()), true);
+
     m_content_layout = new QVBoxLayout(this);
     m_content_layout->setContentsMargins(0, 0, 0, 0);
     m_content_layout->setSpacing(0);
@@ -27,6 +29,9 @@ module_details_widget::module_details_widget(QWidget* parent) : QWidget(parent),
 
     QShortcut* search_shortcut = new QShortcut(QKeySequence("Ctrl+f"), this);
     connect(search_shortcut, &QShortcut::activated, this, &module_details_widget::toggle_searchbar);
+
+    QShortcut* resize_shortcut = new QShortcut(QKeySequence("Ctrl+b"), this);
+    connect(resize_shortcut, &QShortcut::activated, this, &module_details_widget::toggle_resize_columns);
 
     connect(m_searchbar, &searchbar::text_edited, this, &module_details_widget::handle_searchbar_text_edited);
     connect(&g_netlist_relay, &netlist_relay::module_event, this, &module_details_widget::handle_module_event);
@@ -62,8 +67,16 @@ void module_details_widget::handle_searchbar_text_edited(const QString &text)
         m_tree_module_proxy_model->setFilterRegExp(*regex);
 }
 
+void module_details_widget::toggle_resize_columns()
+{
+    for(int i = 0; i < m_tree_module_model->columnCount(); i++)
+        m_treeview->resizeColumnToContents(i);
+}
+
 void module_details_widget::update(u32 module_id)
 {
     m_current_id = module_id;
     m_tree_module_model->update(module_id);
+    toggle_resize_columns();
+    m_treeview->clearSelection();
 }
