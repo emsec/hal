@@ -48,8 +48,6 @@ selection_details_widget::selection_details_widget(QWidget* parent) : content_wi
     //    m_table_widget->viewport()->setFocusPolicy(Qt::NoFocus);
 
     connect(&g_selection_relay, &selection_relay::selection_changed, this, &selection_details_widget::handle_selection_update);
-    //DEEBBUUGGG
-    m_stacked_widget->setCurrentWidget(m_module_details);
 }
 
 void selection_details_widget::handle_selection_update(void* sender)

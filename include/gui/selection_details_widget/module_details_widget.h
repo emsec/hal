@@ -55,6 +55,8 @@ private:
     void toggle_searchbar();
     void handle_searchbar_text_edited(const QString &text);
 
+    void toggle_resize_columns();
+
     QVBoxLayout* m_content_layout;
 
     u32 m_current_id;
