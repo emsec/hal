@@ -52,7 +52,7 @@ public:
     int columnCount(const QModelIndex& parent = QModelIndex()) const Q_DECL_OVERRIDE;
 
     //this function provides the indexes for the navigation widget to handle a selection_changed for the view
-    QModelIndexList get_corresponding_indexes(const QList<u32>& gate_ids, const QList<u32>& net_ids, const QList<u32>& module_ids);
+    QModelIndexList get_corresponding_indexes(const QList<u32>& gate_ids, const QList<u32>& net_ids);
 
     void update(u32 module_id);
 
