@@ -100,21 +100,22 @@ int tree_module_model::columnCount(const QModelIndex& parent) const
     return m_root_item->get_column_count();
 }
 
-QModelIndexList tree_module_model::get_corresponding_indexes(const QList<u32>& gate_ids, const QList<u32>& net_ids, const QList<u32>& module_ids)
+QModelIndexList tree_module_model::get_corresponding_indexes(const QList<u32>& gate_ids, const QList<u32>& net_ids)
 {
-//    QModelIndexList list;
-//    for (int i = 0; i < m_gates_item->get_child_count(); i++)
-//    {
-//        tree_module_item* current_item = m_gates_item->get_child(i);
-//        if (gate_ids.contains(current_item->data(1).toInt()))
-//            list.append(get_modelindexes_for_row(current_item));
-//    }
-//    for (int i = 2; i < m_nets_item->get_child_count(); i++)    //first two items are the global input/output items
-//    {
-//        tree_module_item* current_item = m_nets_item->get_child(i);
-//        if (net_ids.contains(current_item->data(1).toInt()))
-//            list.append(get_modelindexes_for_row(current_item));
-//    }
+    QModelIndexList list;
+    for (int i = 0; i < m_gates_item->get_child_count(); i++)
+    {
+        tree_module_item* current_item = m_gates_item->get_child(i);
+        if (gate_ids.contains(current_item->data(1).toInt()))
+            list.append(get_modelindexes_for_row(current_item));
+    }
+    for (int i = 2; i < m_nets_item->get_child_count(); i++)    //first two items are the global input/output items
+    {
+        tree_module_item* current_item = m_nets_item->get_child(i);
+        if (net_ids.contains(current_item->data(1).toInt()))
+            list.append(get_modelindexes_for_row(current_item));
+    }
+    return list;
 //    for (int i = 0; i < m_global_output_nets_item->get_child_count(); i++)
 //    {
 //        tree_module_item* current_item = m_global_output_nets_item->get_child(i);
