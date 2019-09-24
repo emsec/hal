@@ -271,7 +271,7 @@ else()
     add_subdirectory(deps/pybind11)
 endif()
 
-find_package(spdlog 1.3.1 CONFIG)
+find_package(spdlog 1.3.1 EXACT CONFIG)
 message(STATUS "Found spdlog v${spdlog_VERSION}")
 if(${spdlog_FOUND})
     message(STATUS "Found spdlog >= 1.3.1")
