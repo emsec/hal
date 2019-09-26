@@ -84,8 +84,6 @@ namespace gate_library_liberty_parser
         std::vector<cell> cells;
     };
 
-    //       library_name          cell_name                          pin_name     pin_function
-    std::map<std::string, std::map<std::string, std::vector<std::pair<std::string, std::string>>>> m_cells_to_pin_functions;
 
     std::shared_ptr<gate_library> parse(std::stringstream& ss);
     std::shared_ptr<statement> get_statements(std::stringstream& ss);
