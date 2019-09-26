@@ -84,17 +84,33 @@ namespace gate_library_liberty_parser
         std::vector<cell> cells;
     };
 
+    struct boolean_function
+    {
+        boolean_function() : neg(false), operand("")
+        {
+        }
+
+        boolean_function(std::string p_operand) : neg(false), operand(p_operand)
+        {
+        }
+
+        char op;
+        bool neg;
+        std::string operand;
+        std::vector<boolean_function> sub_functions;
+    };
 
     std::shared_ptr<gate_library> parse(std::stringstream& ss);
     std::shared_ptr<statement> get_statements(std::stringstream& ss);
     std::shared_ptr<intermediate_library> get_intermediate_library(std::shared_ptr<statement> root);
 
     std::shared_ptr<gate_library> get_gate_library(std::shared_ptr<intermediate_library> inter_lib);
+    void register_bdds(std::shared_ptr<intermediate_library> inter_lib);
 
     void remove_comments(std::string& line, bool& multi_line_comment);
     std::string streamline_function(const std::string& func);
-    bdd build_bdd(const bdd& first, const bdd& second, char current_op, bool neg);
-    bdd function_to_bdd(const bool neg, const std::string& func, std::map<std::string, std::shared_ptr<bdd>>& input_pin_type_to_bdd);
+    boolean_function string_to_boolean_function(std::string func);
+    bdd boolean_function_to_bdd(const boolean_function& b_func, std::map<std::string, std::shared_ptr<bdd>>& input_pin_type_to_bdd);
 
 }    // namespace gate_library_liberty_parser
 
