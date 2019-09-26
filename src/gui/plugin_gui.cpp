@@ -88,7 +88,9 @@ bool plugin_gui::exec(program_arguments& args)
     QApplication::setOrganizationName("Chair for Embedded Security - Ruhr University Bochum");
     QApplication::setOrganizationDomain("emsec.rub.de");
 
+#ifdef __linux__
     a.setAttribute(Qt::AA_DontUseNativeDialogs, true);
+#endif
     a.setAttribute(Qt::AA_UseHighDpiPixmaps, true);
 
     QResource::registerResource("gui_resources.rcc");

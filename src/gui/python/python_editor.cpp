@@ -335,7 +335,7 @@ void python_editor::handle_action_open_file()
     QString title = "Open File";
     QString text  = "Python Scripts(*.py)";
 
-    QStringList file_names = QFileDialog::getOpenFileNames(nullptr, title, m_last_opened_path, text, nullptr, QFileDialog::DontUseNativeDialog);
+    QStringList file_names = QFileDialog::getOpenFileNames(nullptr, title, m_last_opened_path, text, nullptr);
 
     if (file_names.isEmpty())
     {
