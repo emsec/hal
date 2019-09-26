@@ -335,6 +335,7 @@ void python_editor::handle_action_open_file()
     QString title = "Open File";
     QString text  = "Python Scripts(*.py)";
 
+    // Non native dialogs does not work on macOS. Therefore do net set DontUseNativeDialog!
     QStringList file_names = QFileDialog::getOpenFileNames(nullptr, title, m_last_opened_path, text, nullptr);
 
     if (file_names.isEmpty())
