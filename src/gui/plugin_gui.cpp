@@ -88,6 +88,7 @@ bool plugin_gui::exec(program_arguments& args)
     QApplication::setOrganizationName("Chair for Embedded Security - Ruhr University Bochum");
     QApplication::setOrganizationDomain("emsec.rub.de");
 
+// Non native dialogs does not work on macOS. Therefore do net set AA_DontUseNativeDialogs!
 #ifdef __linux__
     a.setAttribute(Qt::AA_DontUseNativeDialogs, true);
 #endif
