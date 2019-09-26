@@ -1,5 +1,6 @@
 #include "docking_system/dock_button.h"
 #include "content_widget/content_widget.h"
+#include "core/log.h"
 #include "gui_globals.h"
 #include "gui_utility.h"
 #include <QPainter>
@@ -8,7 +9,7 @@ dock_button::dock_button(content_widget* widget, button_orientation orientation,
 {
     setText(m_widget->name());
     setCheckable(true);
-    setStyleSheet("QToolButton { padding: 0; margin: 0; }");
+    setStyleSheet("QToolButton { font-family                : \"Iosevka\";padding: 0; margin: 0; }");
     setIcon(m_widget->icon());
     installEventFilter(eventFilter);
 
@@ -24,7 +25,8 @@ dock_button::dock_button(content_widget* widget, button_orientation orientation,
 void dock_button::paintEvent(QPaintEvent* event)
 {
     Q_UNUSED(event)
-    QFont font(g_settings.value("font/family").toString(), 11, QFont::Bold);    //, QFont::PreferAntialias);
+    auto font = property("font").value<QFont>();
+                 //, QFont::PreferAntialias);
     QPainter painter(this);
     painter.setFont(font);
     painter.setPen(Qt::white);
@@ -57,7 +59,8 @@ void dock_button::paintEvent(QPaintEvent* event)
 
 void dock_button::adjust_size()
 {
-    QFont font(g_settings.value("font/family").toString(), 11, QFont::Bold);    //, QFont::PreferAntialias);
+    auto font = property("font").value<QFont>();    
+    //, QFont::PreferAntialias);
     QFontMetrics fm(font);
     int textwidth    = fm.width(text());
     m_relative_width = m_icon_size + textwidth + m_width_padding;
