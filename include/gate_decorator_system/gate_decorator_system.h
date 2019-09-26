@@ -53,7 +53,7 @@ namespace gate_decorator_system
      * @param[in] gate - The gate a decorator is queried for.
      * @returns True if a decorator is available.
      */
-    using decorator_availability_tester = bool (*)(std::shared_ptr<gate> gate);
+    using decorator_availability_tester = std::function<bool(std::shared_ptr<gate> gate)>;
     /**
      * BDD decorator generator, i.e., has to create the bdd for a given gate using given inputs.
      *
@@ -61,7 +61,8 @@ namespace gate_decorator_system
      * @param[in] inputs - The bdd mapping for the input ports.
      * @returns The bdd mapping for the output ports
      */
-    using bdd_decorator_generator = std::map<std::string, std::shared_ptr<bdd>> (*)(std::shared_ptr<gate> gate, std::map<std::string, std::shared_ptr<bdd>>& inputs);
+    using bdd_decorator_generator = std::function<std::map<std::string, std::shared_ptr<bdd>>(std::shared_ptr<gate> gate, std::map<std::string, std::shared_ptr<bdd>>& inputs)>;
+
     /**
      * LUT decorator generator, i.e., has to return the lut configuration, combinational input and output size for a given gate. <br>
      * Input and output size have to be given this way, as it is not guaranteed that all LUT inputs are given to the combinational logic.
@@ -69,7 +70,7 @@ namespace gate_decorator_system
      * @param[in] gate - The gate a decorator is queried for.
      * @returns A tuple (1) number of inputs, (2) number of outputs, (3) lut configuration string
      */
-    using lut_decorator_generator = std::tuple<u32, u32, std::string> (*)(std::shared_ptr<gate> gate);
+    using lut_decorator_generator = std::function<std::tuple<u32, u32, std::string>(std::shared_ptr<gate> gate)>;
 
     /**
      * Registers a BDD gate decorator for a specific gate library.
