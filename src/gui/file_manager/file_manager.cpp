@@ -13,8 +13,11 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QFileSystemWatcher>
+#include <QGridLayout>
 #include <QInputDialog>
 #include <QMessageBox>
+#include <QPushButton>
+#include <QSpacerItem>
 #include <QTextStream>
 
 file_manager::file_manager(QObject* parent) : QObject(parent), m_file_watcher(new QFileSystemWatcher(this)), m_file_open(false)
@@ -118,18 +121,22 @@ void file_manager::open_file(QString file_name)
             msgBox.setIcon(QMessageBox::Question);
             msgBox.setWindowTitle("Resume previous work");
             msgBox.setText("A .hal file exists for the selected netlist.");
-            QAbstractButton* parse_hal_btn = (QAbstractButton*)msgBox.addButton("Load .hal file", QMessageBox::ActionRole);
-            QAbstractButton* parse_hdl_btn = (QAbstractButton*)msgBox.addButton("Parse " + extension + " file", QMessageBox::ActionRole);
-            QAbstractButton* abort_btn = (QAbstractButton*)msgBox.addButton("Abort", QMessageBox::RejectRole);
+            auto parse_hal_btn = msgBox.addButton("Load .hal file", QMessageBox::ActionRole);
+            auto parse_hdl_btn = msgBox.addButton("Parse " + extension + " file", QMessageBox::ActionRole);
+            msgBox.addButton("Abort", QMessageBox::RejectRole);
+
+            QSpacerItem* horizontalSpacer = new QSpacerItem(500, 0, QSizePolicy::Minimum, QSizePolicy::Expanding);
+            QGridLayout* layout           = (QGridLayout*)msgBox.layout();
+            layout->addItem(horizontalSpacer, layout->rowCount(), 0, 1, layout->columnCount());
 
             msgBox.exec();
 
-            if (msgBox.clickedButton() == parse_hal_btn)
+            if (msgBox.clickedButton() == (QAbstractButton*) parse_hal_btn)
             {
                 file_name         = hal_file_name;
                 logical_file_name = hal_file_name;
             }
-            else if (msgBox.clickedButton() != parse_hdl_btn)
+            else if (msgBox.clickedButton() != (QAbstractButton*) parse_hdl_btn)
             {
                 return;
             }
