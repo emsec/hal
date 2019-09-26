@@ -14,6 +14,19 @@
 
 namespace gate_library_liberty_parser
 {
+    namespace
+    {
+        bool bdd_availability_tester(std::map<std::string, std::vector<std::pair<std::string, std::string>>>& bdd_map, std::shared_ptr<gate> gate)
+        {
+            return bdd_map.find(gate->get_type()) != bdd_map.end();
+        }
+
+        std::map<std::string, std::shared_ptr<bdd>> bdd_generator(std::map<std::string, std::vector<std::pair<std::string, std::string>>>& bdd_map, std::shared_ptr<gate> gate, std::map<std::string, std::shared_ptr<bdd>>& inputs)
+        {
+            return {};
+        }
+    }    // namespace
+
     // ###########################################################################
     // #########          Parse liberty into intermediate format          ########
     // ###########################################################################
@@ -167,6 +180,8 @@ namespace gate_library_liberty_parser
     {
         std::shared_ptr<intermediate_library> inter_lib = std::make_shared<intermediate_library>();
 
+        std::map<std::string, std::vector<std::pair<std::string, std::string>>> bdd_map;
+
         // depth: 0
         if (root->name == "library")
         {
@@ -196,7 +211,7 @@ namespace gate_library_liberty_parser
                                 else if (s3->name == "function")
                                 {
                                     p.function = streamline_function(prepare_string(s3->value));
-                                    m_cells_to_pin_functions[inter_lib->name][c.name].push_back(std::make_pair(p.name, p.function));
+                                    bdd_map[c.name].push_back(std::make_pair(p.name, p.function));
                                 }
                                 else if (s3->name == "three_state")
                                 {
@@ -287,6 +302,14 @@ namespace gate_library_liberty_parser
             log_error("netlist", "gate library does not start with 'library' node.");
             return nullptr;
         }
+
+        using namespace std::placeholders;
+
+        gate_decorator_system::register_bdd_decorator_function(
+            inter_lib->name,
+            std::bind(&bdd_availability_tester, bdd_map, _1),
+            std::bind(&bdd_generator, bdd_map, _1, _2)
+        );
 
         return inter_lib;
     }
