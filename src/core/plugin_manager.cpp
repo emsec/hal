@@ -286,6 +286,4 @@ namespace plugin_manager
     {
         m_existing_options.add(existing_options);
     }
-
-
 }    // namespace plugin_manager
