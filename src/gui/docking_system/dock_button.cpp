@@ -14,7 +14,7 @@ dock_button::dock_button(content_widget* widget, button_orientation orientation,
     installEventFilter(eventFilter);
 
     m_icon_size       = 14;
-    m_width_padding   = 8;
+    m_width_padding   = 16;
     m_height_padding  = 0;
     m_relative_height = 18;
     adjust_size();
@@ -26,7 +26,6 @@ void dock_button::paintEvent(QPaintEvent* event)
 {
     Q_UNUSED(event)
     auto font = property("font").value<QFont>();
-                 //, QFont::PreferAntialias);
     QPainter painter(this);
     painter.setFont(font);
     painter.setPen(Qt::white);
@@ -59,7 +58,7 @@ void dock_button::paintEvent(QPaintEvent* event)
 
 void dock_button::adjust_size()
 {
-    auto font = property("font").value<QFont>();    
+    auto font = property("font").value<QFont>();
     //, QFont::PreferAntialias);
     QFontMetrics fm(font);
     int textwidth    = fm.width(text());
