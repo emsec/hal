@@ -17,6 +17,7 @@
 #include "gui/selection_relay/selection_relay.h"
 #include "gui/file_status_manager/file_status_manager.h"
 #include "gui/settings/settings_relay.h"
+#include "gui/settings/settings_manager.h"
 #include "gui/style/style.h"
 #include "gui/thread_pool/thread_pool.h"
 #include "gui/window_manager/window_manager.h"
@@ -33,6 +34,8 @@
 
 QSettings g_settings(QString::fromStdString((core_utils::get_user_config_directory() / "/guisettings.ini").string()), QSettings::IniFormat);
 QSettings g_gui_state(QString::fromStdString((core_utils::get_user_config_directory() / "/guistate.ini").string()), QSettings::IniFormat);
+
+settings_manager g_settings_manager;
 
 window_manager* g_window_manager;
 notification_manager* g_notification_manager;
@@ -167,8 +170,7 @@ bool plugin_gui::exec(program_arguments& args)
     g_notification_manager = new notification_manager();
 
     g_thread_pool = new thread_pool();
-
-    g_settings_relay.init_defaults();
+    
     main_window w;
     handle_program_arguments(args);
     w.show();

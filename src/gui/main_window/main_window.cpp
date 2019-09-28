@@ -503,10 +503,10 @@ void main_window::closeEvent(QCloseEvent* event)
 
 void main_window::restore_state()
 {
-    QPoint pos = g_settings.value("main_window/position", QPoint(0, 0)).toPoint();
+    QPoint pos = g_settings_manager.get("main_window/position", QPoint(0, 0)).toPoint();
     move(pos);
     QRect rect = QApplication::desktop()->screenGeometry();
-    QSize size = g_settings.value("main_window/size", QSize(rect.width(), rect.height())).toSize();
+    QSize size = g_settings_manager.get("main_window/size", QSize(rect.width(), rect.height())).toSize();
     resize(size);
     //restore state of all subwindows
     m_layout_area->init_splitter_size(size);
@@ -514,10 +514,10 @@ void main_window::restore_state()
 
 void main_window::save_state()
 {
-    g_settings.setValue("main_window/position", pos());
-    g_settings.setValue("main_window/size", size());
+    g_settings_manager.update("main_window/position", pos());
+    g_settings_manager.update("main_window/size", size());
     //save state of all subwindows and everything else that might need to be restored on the next program start
-    g_settings.sync();
+    g_settings_manager.sync();
 }
 
 void main_window::add_content(content_widget* widget, int index, content_anchor anchor)
