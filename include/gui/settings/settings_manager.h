@@ -21,49 +21,24 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef GUI_GLOBALS_H
-#define GUI_GLOBALS_H
+#ifndef SETTINGS_MANAGER_H
+#define SETTINGS_MANAGER_H
 
-#include "netlist/netlist.h"
-
-#include "file_status_manager/file_status_manager.h"
-#include "gui/graph_widget/graph_context_manager.h"
-#include "gui/hal_content_manager/hal_content_manager.h"
-#include "gui/netlist_relay/netlist_relay.h"
-#include "gui/notifications/notification_manager.h"
-#include "gui/plugin_management/plugin_relay.h"
-#include "gui/python/python_context.h"
-#include "gui/selection_relay/selection_relay.h"
-#include "gui/settings/settings_relay.h"
-#include "gui/settings/settings_manager.h"
-#include "gui/thread_pool/thread_pool.h"
-#include "gui/window_manager/window_manager.h"
-
+#include <QObject>
 #include <QSettings>
 
-extern QSettings g_settings;
-extern QSettings g_gui_state;
+class settings_manager : public QObject
+{
+public:
+    explicit settings_manager(QObject* parent = nullptr);
+    QVariant get(const QString& key);
+    QVariant get(const QString& key, const QVariant& defaultVal);
+    void update(const QString& key, const QVariant& value);
+    void sync();
 
-extern window_manager* g_window_manager;
-extern notification_manager* g_notification_manager;
+private:
+    QSettings m_settings;
+    QSettings m_defaults;
+};
 
-extern hal_content_manager* g_content_manager;
-
-extern std::shared_ptr<netlist> g_netlist;
-
-extern netlist_relay g_netlist_relay;
-extern plugin_relay g_plugin_relay;
-extern selection_relay g_selection_relay;
-extern settings_relay g_settings_relay;
-
-extern settings_manager g_settings_manager;
-
-extern file_status_manager g_file_status_manager;
-
-extern graph_context_manager g_graph_context_manager;
-
-extern thread_pool* g_thread_pool;
-
-extern std::unique_ptr<python_context> g_python_context;
-
-#endif    // GUI_GLOBALS_H
+#endif
