@@ -79,9 +79,17 @@ public:
     void handle_action_run();
     void handle_action_new_tab();
     void handle_action_tab_menu();
+    void handle_action_close_tab();
+    void handle_action_close_other_tabs();
+    void handle_action_close_left_tabs();
+    void handle_action_close_right_tabs();
+    void handle_action_show_file();
     void tab_load_file(u32 index, QString file_name);
 
     void save_file(const bool ask_path, int index = -1);
+
+    void discard_tab(int index);
+    bool confirm_discard_for_range(int start, int end, int exclude = -1);
 
     QString open_icon_path() const;
     QString open_icon_style() const;
@@ -177,6 +185,7 @@ private:
     QString m_toggle_minimap_icon_path;
 
     QTabWidget* m_tab_widget;
+    int m_tab_rightclicked = -1;
 
     QFileSystemWatcher* m_file_watcher;
     QMap<QString, python_code_editor*> m_path_editor_map;
