@@ -196,14 +196,8 @@ void python_editor::handle_tab_close_requested(int index)
         if (ret == QMessageBox::Cancel)
             return;
 
-        if (ret == QMessageBox::Discard)
-        {
-            m_file_watcher->removePath(editor->get_file_name());
-            m_path_editor_map.remove(editor->get_file_name());
-            g_file_status_manager.file_saved(editor->get_uuid());
-            m_tab_widget->removeTab(index);
-            return;
-        }
+        // discard is not handled specially, we just treat the document
+        // as if it did not require saving and call discard_tab on it
 
         if (ret == QMessageBox::Save)
         {
@@ -217,10 +211,7 @@ void python_editor::handle_tab_close_requested(int index)
         }
     }
 
-    m_file_watcher->removePath(editor->get_file_name());
-    m_path_editor_map.remove(editor->get_file_name());
-    g_file_status_manager.file_saved(editor->get_uuid());
-    m_tab_widget->removeTab(index);
+    this->discard_tab(index);
 }
 
 void python_editor::handle_action_toggle_minimap()
@@ -456,6 +447,62 @@ void python_editor::save_file(const bool ask_path, int index)
     m_tab_widget->setTabText(index, info.completeBaseName() + "." + info.completeSuffix());
 }
 
+void python_editor::discard_tab(int index)
+{
+    python_code_editor* editor = dynamic_cast<python_code_editor*>(m_tab_widget->widget(index));
+    QString s = editor->get_file_name();
+    if (!s.isEmpty())
+    {
+        m_file_watcher->removePath(s);
+        m_path_editor_map.remove(s);
+    }
+    if (editor->document()->isModified())
+    {
+        g_file_status_manager.file_saved(editor->get_uuid());
+    }
+    m_tab_widget->removeTab(index);
+}
+
+bool python_editor::confirm_discard_for_range(int start, int end, int exclude)
+{
+    QString changedFiles = "The following files have not been saved yet:\n";
+    int unsaved = 0;
+    int total = end - start - (exclude == -1 ? 0 : 1);
+    for(int t = start; t < end; t++)
+    {
+        // to disable, set exclude=-1
+        if (t == exclude)
+            continue;
+
+        python_code_editor* editor = dynamic_cast<python_code_editor*>(m_tab_widget->widget(t));
+        if (editor->document()->isModified())
+        {
+            QString fileName = m_tab_widget->tabText(t);
+            fileName.chop(1); // removes asterisk
+            changedFiles.append("   ->  " + fileName + "\n");
+            unsaved++;
+        }
+    }
+    if (unsaved)
+    {
+        QMessageBox msgBox;
+        msgBox.setStyleSheet("QLabel{min-width: 600px;}");
+        auto cancelButton = msgBox.addButton("Cancel", QMessageBox::RejectRole);
+        msgBox.addButton("Close Anyway", QMessageBox::ApplyRole);
+        msgBox.setDefaultButton(cancelButton);
+        msgBox.setInformativeText(QStringLiteral("Are you sure you want to close %1 tabs, %2 unsaved, anyway?").arg(total).arg(unsaved));
+        msgBox.setText("There are unsaved modifications that will be lost.");
+        msgBox.setDetailedText(changedFiles);
+
+        msgBox.exec();
+        if (msgBox.clickedButton() == cancelButton)
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
 void python_editor::handle_action_save_file()
 {
     this->save_file(false);
@@ -487,13 +534,78 @@ void python_editor::handle_action_new_tab()
 void python_editor::handle_action_tab_menu()
 {
     QMenu context_menu(this);
-    QAction* close_action = context_menu.addAction("Close");
-    QAction* close_others_action = context_menu.addAction("Close all others");
-    QAction* close_right_action = context_menu.addAction("Close all right");
-    QAction* close_left_action = context_menu.addAction("Close all left");
+    QAction* action = context_menu.addAction("Close");
+    connect(action, &QAction::triggered, this, &python_editor::handle_action_close_tab);
+    action = context_menu.addAction("Close all others");
+    connect(action, &QAction::triggered, this, &python_editor::handle_action_close_other_tabs);
+    action = context_menu.addAction("Close all right");
+    connect(action, &QAction::triggered, this, &python_editor::handle_action_close_right_tabs);
+    action = context_menu.addAction("Close all left");
+    connect(action, &QAction::triggered, this, &python_editor::handle_action_close_left_tabs);
+
     context_menu.addSeparator();
-    QAction* show_file_action = context_menu.addAction("Show in system explorer");
+    action = context_menu.addAction("Show in system explorer");
+    python_code_editor* editor = dynamic_cast<python_code_editor*>(m_tab_widget->widget(m_tab_rightclicked));
+    QString s = editor->get_file_name();
+    action->setDisabled(s.isEmpty());
+    connect(action, &QAction::triggered, this, &python_editor::handle_action_show_file);
+
     context_menu.exec(QCursor::pos());
+}
+
+void python_editor::handle_action_close_tab()
+{
+    assert(m_tab_rightclicked != -1);
+    this->handle_tab_close_requested(m_tab_rightclicked);
+}
+
+void python_editor::handle_action_close_other_tabs()
+{
+    assert(m_tab_rightclicked != -1);
+    int tabs = m_tab_widget->count();
+    if (!this->confirm_discard_for_range(0, tabs, m_tab_rightclicked))
+        return;
+    int discard_id = 0; // keeps track of IDs shifting during deletion
+    for(int t = 0; t < tabs; t++)
+    {
+        // don't close the right-clicked tab
+        if (t == m_tab_rightclicked)
+        {
+            discard_id++;
+            continue;
+        }
+        this->discard_tab(discard_id);
+    }
+}
+
+void python_editor::handle_action_close_left_tabs()
+{
+    assert(m_tab_rightclicked != -1);
+    if (!this->confirm_discard_for_range(0, m_tab_rightclicked, -1))
+        return;
+    for(int t = 0; t < m_tab_rightclicked; t++)
+    {
+        // IDs shift downwards during deletion
+        this->discard_tab(0);
+    }
+}
+
+void python_editor::handle_action_close_right_tabs()
+{
+    assert(m_tab_rightclicked != -1);
+    int tabs = m_tab_widget->count();
+    if (!this->confirm_discard_for_range(m_tab_rightclicked+1, tabs, -1))
+        return;
+    for(int t = m_tab_rightclicked+1; t < tabs; t++)
+    {
+        // IDs shift downwards during deletion
+        this->discard_tab(m_tab_rightclicked+1);
+    }
+}
+
+void python_editor::handle_action_show_file()
+{
+
 }
 
 void python_editor::handle_tab_file_changed(QString path)
@@ -544,14 +656,15 @@ bool python_editor::eventFilter(QObject* obj, QEvent* event)
   if (obj == m_tab_widget->tabBar() && event->type() == QEvent::MouseButtonPress)
   {
     QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
+    // filter for right-mouse-button-pressed events
     if (mouseEvent->button() == Qt::MouseButton::RightButton)
     {
-      // filter for right-mouse-button-pressed events
-      this->handle_action_tab_menu();
-      return true;
+        m_tab_rightclicked = m_tab_widget->tabBar()->tabAt(mouseEvent->pos());
+        this->handle_action_tab_menu();
+        return true;
     }
   }
-  // otherwise use honor default filter
+  // otherwise honor default filter
   return QObject::eventFilter(obj, event);
 }
 
