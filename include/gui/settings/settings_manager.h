@@ -31,14 +31,17 @@ class settings_manager : public QObject
 {
 public:
     explicit settings_manager(QObject* parent = nullptr);
+    ~settings_manager();
     QVariant get(const QString& key);
     QVariant get(const QString& key, const QVariant& defaultVal);
+    QVariant get_default(const QString& key);
+    QVariant reset(const QString& key);
     void update(const QString& key, const QVariant& value);
     void sync();
 
 private:
-    QSettings m_settings;
-    QSettings m_defaults;
+    QSettings* m_settings;
+    QSettings* m_defaults;
 };
 
-#endif
+#endif // SETTINGS_MANAGER_H

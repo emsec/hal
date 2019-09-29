@@ -41,7 +41,7 @@ namespace style
     {
         QString stylesheet;
         {
-            QString path = g_settings.value("stylesheet/base").toString();
+            QString path = g_settings_manager.get("stylesheet/base").toString();
             QFile file(path);
 
             if (!file.exists())
@@ -60,7 +60,7 @@ namespace style
             file.close();
         }
 
-        QString path = g_settings.value("stylesheet/definitions").toString();
+        QString path = g_settings_manager.get("stylesheet/definitions").toString();
 
         if (path.isEmpty())
             return stylesheet;

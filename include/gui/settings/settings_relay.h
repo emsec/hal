@@ -25,6 +25,8 @@
 #define SETTINGS_RELAY_H
 
 #include <QObject>
+#include <QPair>
+#include <QVector>
 
 class settings_relay : public QObject
 {
@@ -32,8 +34,20 @@ class settings_relay : public QObject
 
 public:
     explicit settings_relay(QObject* parent = nullptr);
+    // TODO do we need a sender registry?
+    // void register_sender(void* sender, QString name);
+    // void remove_sender(void* sender);
 
-    void init_defaults();
+    void relay_setting_changed(void* sender, const QString& key, const QVariant& val);
+
+Q_SIGNALS:
+    void setting_changed(void* sender, const QString& key, const QVariant& val);
+
+public Q_SLOTS:
+    void debug(void* sender, const QString& key, const QVariant& val);
+
+// private:
+//     QVector<QPair<void*, QString>> m_sender_register;
 };
 
 #endif    // SETTINGS_RELAY_H

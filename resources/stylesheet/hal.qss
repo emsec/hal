@@ -367,6 +367,10 @@ settings_widget {
     /*border-left : 5px solid #232ed1;*/
 }
 
+settings_widget[dirty=true] {
+    border-left      : 5px solid rgb(34, 37, 38);
+}
+
 settings_widget QLabel {
     color            : #D3DCE6;
     background-color : #25292D;

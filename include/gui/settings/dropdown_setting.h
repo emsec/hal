@@ -21,21 +21,28 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef BIGGER_EXAMPLE_SETTINGS_H
-#define BIGGER_EXAMPLE_SETTINGS_H
+#ifndef DROPDOWN_SETTINGS_H
+#define DROPDOWN_SETTINGS_H
 
 #include "settings_widget.h"
+#include <QComboBox>
+#include <QStringList>
 
-class bigger_example_settings : public settings_widget
+class dropdown_setting : public settings_widget
 {
     Q_OBJECT
 
 public:
-    bigger_example_settings(QWidget* parent = 0);
+    dropdown_setting(const QString& key, const QString& title, const QStringList& options, const QString& description, QWidget* parent = 0);
 
-    virtual void load_settings() Q_DECL_OVERRIDE;
-    virtual void save_settings() Q_DECL_OVERRIDE;
-    virtual void restore_default_settings() Q_DECL_OVERRIDE;
+    virtual void load(const QVariant& value) Q_DECL_OVERRIDE;
+    virtual QVariant value() Q_DECL_OVERRIDE;
+    //virtual void rollback() Q_DECL_OVERRIDE;
+
+private:
+    QComboBox* m_combo_box;
+    void on_index_changed(QString text);
+
 };
 
-#endif    // BIGGER_EXAMPLE_SETTINGS_H
+#endif //DROPDOWN_SETTINGS_H
