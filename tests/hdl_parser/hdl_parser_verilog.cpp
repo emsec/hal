@@ -50,7 +50,7 @@ TEST_F(hdl_parser_verilog_test, check_main_example)
 {
     TEST_START
         /*{ // NOTE: inout nets can't be handled
-            std::stringstream input("module  (\n"
+            std::stringstream input("module top (\n"
                                     "  global_in,\n"
                                     "  global_out \n"
                                     //"  global_inout\n"
@@ -165,7 +165,7 @@ TEST_F(hdl_parser_verilog_test, check_comment_detection){
     TEST_START
         {
             // Use the one-line-comment ('//')
-            std::stringstream input("module  ( \n"
+            std::stringstream input("module top ( \n"
                                     " ) ;\n"
                                     "  wire net_0 ;\n"
                                     "  //wire comment_net ;\n"
@@ -190,7 +190,7 @@ TEST_F(hdl_parser_verilog_test, check_comment_detection){
         }
         {
             // Use a multi-line comment ('/ *', '* /') for a complete single line
-            std::stringstream input("module  ( \n"
+            std::stringstream input("module top ( \n"
                                     " ) ;\n"
                                     "  wire net_0 ;\n"
                                     "/*  wire comment_net;*/\n"
@@ -214,7 +214,7 @@ TEST_F(hdl_parser_verilog_test, check_comment_detection){
         }
         {
             // Use a multi-line comment ('/ *', '* /') inside one single line
-            std::stringstream input("module  ( \n"
+            std::stringstream input("module top ( \n"
                                     " ) ;\n"
                                     "  wire net_0 ;\n"
                                     "  wire /*comment_net*/ net_1;\n"
@@ -238,7 +238,7 @@ TEST_F(hdl_parser_verilog_test, check_comment_detection){
         }
 //        {
 //            // Use the multi-line-comment over multiple lines ('/ *' and '* /')
-//            std::stringstream input("module  ( \n"
+//            std::stringstream input("module top ( \n"
 //                                    " ) ;\n"
 //                                    "  wire net_0 ;\n"
 //                                    "/*  wire comment_net_0 ;\n"
@@ -291,7 +291,7 @@ TEST_F(hdl_parser_verilog_test, check_comment_detection){
         }
         {
             // Use an attribute ('(*', '*)') inside one single line
-            std::stringstream input("module  ( \n"
+            std::stringstream input("module top ( \n"
                                     " ) ;\n"
                                     "  wire net_0 ;\n"
                                     "  wire (*comment_net*) net_1;\n"
@@ -408,7 +408,7 @@ TEST_F(hdl_parser_verilog_test, check_vector_bounds){
     TEST_START
         {
             // Use a net vector of size 3
-            std::stringstream input("module  (\n"
+            std::stringstream input("module top (\n"
                                     "  global_in,\n"
                                     "  global_out\n"
                                     " ) ;\n"
@@ -467,7 +467,7 @@ TEST_F(hdl_parser_verilog_test, check_vector_bounds){
         }
         {
             // Declare multiple wire vectors in one line
-            std::stringstream input("module  (\n"
+            std::stringstream input("module top (\n"
                                     "  global_in,\n"
                                     "  global_out\n"
                                     " ) ;\n"
@@ -546,7 +546,7 @@ TEST_F(hdl_parser_verilog_test, check_assign)
              *                                              |
              *                                              '---=| buffer |=---<net_1>---=| gate_2 |=---<global_out_1>
              */
-            std::stringstream input("module  (\n"
+            std::stringstream input("module top (\n"
                                     "  global_in,\n"
                                     "  global_out\n"
                                     " ) ;\n"
@@ -650,7 +650,7 @@ TEST_F(hdl_parser_verilog_test, check_number_literal)
                     ctr++;
                 }
                 std::stringstream input;
-                input << "module  (\n"
+                input << "module top (\n"
                       << "  global_in "
                       << module_block.str()
                       << " ) ;\n"
@@ -717,7 +717,7 @@ TEST_F(hdl_parser_verilog_test, check_number_literal)
                     ctr++;
                 }
                 std::stringstream input;
-                input << "module  (\n"
+                input << "module top (\n"
                       << "  global_in "
                       << module_block.str()
                       << " ) ;\n"
@@ -785,7 +785,7 @@ TEST_F(hdl_parser_verilog_test, check_number_literal)
                     ctr++;
                 }
                 std::stringstream input;
-                input << "module  (\n"
+                input << "module top (\n"
                       << "  global_in "
                       << module_block.str()
                       << " ) ;\n"
@@ -853,7 +853,7 @@ TEST_F(hdl_parser_verilog_test, check_number_literal)
                     ctr++;
                 }
                 std::stringstream input;
-                input << "module  (\n"
+                input << "module top (\n"
                       << "  global_in "
                       << module_block.str()
                       << " ) ;\n"
@@ -920,7 +920,7 @@ TEST_F(hdl_parser_verilog_test, check_number_literal)
                     ctr++;
                 }
                 std::stringstream input;
-                input << "module  (\n"
+                input << "module top (\n"
                       << "  global_in "
                       << module_block.str()
                       << " ) ;\n"
@@ -989,7 +989,7 @@ TEST_F(hdl_parser_verilog_test, check_number_literal)
                     ctr++;
                 }
                 std::stringstream input;
-                input << "module  (\n"
+                input << "module top (\n"
                       << "  global_in "
                       << module_block.str()
                       << " ) ;\n"
@@ -1046,7 +1046,7 @@ TEST_F(hdl_parser_verilog_test, check_vector_assignment)
         {
             // Assing a vector of nets to a vector (via '{' and '}') of input pins
             std::stringstream input;
-            input << "module  (\n"
+            input << "module top (\n"
                      "  global_in,\n"
                      "  global_out\n"
                      " ) ;\n"
@@ -1086,7 +1086,7 @@ TEST_F(hdl_parser_verilog_test, check_vector_assignment)
         {
             // Assing a vector of nets to a vector (i.e. net_vec[1:4]) of input pins (ISSUE: warning for bounds like [1:4]  (instead of [4:1]) is misleading ?)
             std::stringstream input;
-            input << "module  (\n"
+            input << "module top (\n"
                      "  global_in,\n"
                      "  global_out\n"
                      " ) ;\n"
@@ -1123,7 +1123,7 @@ TEST_F(hdl_parser_verilog_test, check_vector_assignment)
         {
             // Assing a vector of nets to a vector (i.e. net_vec[1:4]) of input pins (ISSUE: reverse order?)
             std::stringstream input;
-            input << "module  (\n"
+            input << "module top (\n"
                      "  global_in,\n"
                      "  global_out\n"
                      " ) ;\n"
@@ -1179,7 +1179,7 @@ TEST_F(hdl_parser_verilog_test, check_global_gnd_vcc_gates)
     TEST_START
         {
             // Testing the usage of a global VCC gate (gate type 'VCC' is global VCC gate in our test gate library)
-            std::stringstream input("module  (\n"
+            std::stringstream input("module top (\n"
                                     "  global_out\n"
                                     " ) ;\n"
                                     "  output global_out ;\n"
@@ -1207,7 +1207,7 @@ TEST_F(hdl_parser_verilog_test, check_global_gnd_vcc_gates)
         }
         {
             // Testing the usage of a global GND gate (gate type 'GND' is global GND gate in our test gate library)
-            std::stringstream input("module  (\n"
+            std::stringstream input("module top (\n"
                                     "  global_out\n"
                                     " ) ;\n"
                                     "  output global_out ;\n"
@@ -1248,7 +1248,7 @@ TEST_F(hdl_parser_verilog_test, check_invalid_input)
             // The passed gate library name is unknown
             NO_COUT_TEST_BLOCK;
             std::stringstream input;
-            input << "module  (\n"
+            input << "module top (\n"
                      "  global_in,\n"
                      "  global_out\n"
                      " ) ;\n"

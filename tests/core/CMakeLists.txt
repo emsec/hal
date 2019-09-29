@@ -32,3 +32,6 @@ add_test(runTest-program_arguments_test ${CMAKE_BINARY_DIR}/bin/runTest-program_
 add_test(runTest-program_options_test ${CMAKE_BINARY_DIR}/bin/runTest-program_options --gtest_output=xml:${CMAKE_BINARY_DIR}/gtestresults-runBasicTests.xml)
 add_test(runTest-utils_test ${CMAKE_BINARY_DIR}/bin/runTest-utils --gtest_output=xml:${CMAKE_BINARY_DIR}/gtestresults-runBasicTests.xml)
 add_test(runTest-plugin_manager_test ${CMAKE_BINARY_DIR}/bin/runTest-plugin_manager --gtest_output=xml:${CMAKE_BINARY_DIR}/gtestresults-runBasicTests.xml)
+
+# Test plugin:
+#add_subdirectory("test_plugin")

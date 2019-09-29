@@ -819,9 +819,9 @@ TEST_F(hdl_writer_verilog_test, check_pin_vector) {
 TEST_F(hdl_writer_verilog_test, check_simprim_exclusive_behaviour) {
     TEST_START
         create_pseudo_simprim_gate_lib();
-        /*{ // ISSUE: net definition: "wire net_zero_gate_0 = 1'h0" is created, but can't be interpreted by the parser (stoi failure) (parser or writer issue?)
+        { // ISSUE: net definition: "wire net_zero_gate_0 = 1'h0" is created, but can't be interpreted by the parser (stoi failure) (parser or writer issue?)
             // NOTE: GLOBAL_GND / GLOBAL_VCC gates are removed. Why?
-
+/*
             // Testing the usage of nets connected to a X_ZERO gate
             std::shared_ptr<gate_library> gl = gate_library_manager::get_gate_library(pseudo_simprim_lib_name);
             std::shared_ptr<netlist> nl(new netlist(gl));
@@ -868,8 +868,8 @@ TEST_F(hdl_writer_verilog_test, check_simprim_exclusive_behaviour) {
             ASSERT_NE(parsed_nl, nullptr);
             //test_def::get_captured_stdout();
 
-
-        }*/
+*/
+        }
     TEST_END
 }
 

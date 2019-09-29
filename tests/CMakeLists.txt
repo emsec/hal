@@ -1,4 +1,4 @@
-project(tests)
+#project(tests)
 
 # Download and unpack googletest at configure time
 configure_file(googletest-CMakeLists.txt.in "${CMAKE_BINARY_DIR}/googletest-download/CMakeLists.txt")

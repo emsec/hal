@@ -240,7 +240,7 @@ namespace plugin_manager
         auto factory = std::get<1>(it->second);
         factory->query_interface(interface_type::base)->on_unload();
 
-        delete factory;
+        //delete factory;
         /* unload and delete library */
         auto library = std::get<0>(it->second);
         if (!library->unload_library())

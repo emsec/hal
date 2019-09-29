@@ -1484,11 +1484,11 @@ TEST_F(hdl_parser_vhdl_test, check_direct_assignment)
                                     "  gate_0 : INV\n"
                                     "    port map (\n"
                                     "      I => net_global_in,\n"
-                                    "      O => net_0\n"
+                                    "      O => net_1\n"
                                     "    );\n"
                                     "  gate_1 : INV\n"
                                     "    port map (\n"
-                                    "      I => net_1,\n"
+                                    "      I => net_0,\n"
                                     "      O => net_global_out\n"
                                     "    );\n"
                                     "end STRUCTURE;");
@@ -1608,7 +1608,6 @@ TEST_F(hdl_parser_vhdl_test, check_multiple_entities)
              *                              |                                             |
              *                              '---------------------------------------------'
              */
-
             std::stringstream input("-- Device\t: device_name\n"
                                     "entity ENT_CHILD is\n"
                                     "  attribute child_attri : string;\n"
@@ -1620,6 +1619,8 @@ TEST_F(hdl_parser_vhdl_test, check_multiple_entities)
                                     "end ENT_CHILD;\n"
                                     "architecture STRUCTURE_CHILD of ENT_CHILD is\n"
                                     "  signal net_0_child : STD_LOGIC;\n"
+                                    "  attribute child_net_attri : string;\n"
+                                    "  attribute child_net_attri of child_in : signal is \"child_net_attribute\";\n"
                                     "begin\n"
                                     "  gate_0_child : INV\n"
                                     "    port map (\n"
@@ -1642,6 +1643,7 @@ TEST_F(hdl_parser_vhdl_test, check_multiple_entities)
                                     "architecture STRUCTURE of ENT_TOP is\n"
                                     "  signal net_0 : STD_LOGIC;\n"
                                     "  signal net_1 : STD_LOGIC;\n"
+                                    "\n"
                                     "begin\n"
                                     "  gate_0 : INV\n"
                                     "    port map (\n"
@@ -1660,8 +1662,9 @@ TEST_F(hdl_parser_vhdl_test, check_multiple_entities)
                                     "    );\n"
                                     "end ENT_TOP;");
             hdl_parser_vhdl vhdl_parser(input);
-            //std::cout << "\n======\n" << input.str() << "\n=====\n" << std::endl;
             std::shared_ptr<netlist> nl = vhdl_parser.parse(g_lib_name);
+
+            std::cout << input.str() << std::endl;
 
             // Test that all gates are created
             ASSERT_NE(nl, nullptr);
@@ -1695,6 +1698,8 @@ TEST_F(hdl_parser_vhdl_test, check_multiple_entities)
             EXPECT_EQ(gate_0_child->get_fan_out_net("O"), net_0_child);
             EXPECT_EQ(gate_1_child->get_fan_in_net("I"), net_0_child);
             EXPECT_EQ(gate_1_child->get_fan_out_net("O"), net_1);
+            // Check that the attributes of the child entities port are inherit correctly to the connecting net
+            EXPECT_EQ(net_0->get_data_by_key("vhdl_attribute", "child_net_attri"), std::make_tuple("string","child_net_attribute"));
 
             // Test that the modules are created and assigned correctly
             std::shared_ptr<module> top_mod = nl->get_top_module();
@@ -1704,7 +1709,6 @@ TEST_F(hdl_parser_vhdl_test, check_multiple_entities)
             EXPECT_EQ(top_mod->get_gates(), std::set<std::shared_ptr<gate>>({gate_0, gate_1}));
             EXPECT_EQ(child_mod->get_gates(), std::set<std::shared_ptr<gate>>({gate_0_child, gate_1_child}));
             EXPECT_EQ(child_mod->get_data_by_key("vhdl_attribute", "child_attri"), std::make_tuple("string","child_attribute"));
-
         }
         {
             // Create a netlist with the following MODULE hierarchy (assigned gates in '()'):
