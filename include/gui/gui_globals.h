@@ -41,7 +41,7 @@
 
 #include <QSettings>
 
-extern QSettings g_settings;
+//extern QSettings g_settings;
 extern QSettings g_gui_state;
 
 extern window_manager* g_window_manager;

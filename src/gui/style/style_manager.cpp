@@ -38,7 +38,7 @@ void style_manager::update_style()
     if (!app)
         return;
 
-    QString path = g_settings.value("stylesheet/base").toString();
+    QString path = g_settings_manager.get("stylesheet/base").toString();
     QFile stylesheet(path);
 
     if (!stylesheet.exists())
@@ -55,7 +55,7 @@ void style_manager::update_style()
         return;
     }
 
-    path = g_settings.value("stylesheet/definitions").toString();
+    path = g_settings_manager.get("stylesheet/definitions").toString();
 
     if (path.isEmpty())
     {

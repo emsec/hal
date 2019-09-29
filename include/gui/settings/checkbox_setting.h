@@ -21,29 +21,28 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef GUI_THEME_SETTINGS_H
-#define GUI_THEME_SETTINGS_H
+#ifndef CHECKBOX_SETTINGS_H
+#define CHECKBOX_SETTINGS_H
 
 #include "settings_widget.h"
-#include <QComboBox>
+#include <QCheckBox>
+#include <QStringList>
 
-class gui_theme_settings : public settings_widget
+class checkbox_setting : public settings_widget
 {
     Q_OBJECT
 
 public:
-    gui_theme_settings(QWidget* parent = 0);
+    checkbox_setting(const QString& key, const QString& title, const QString& text, const QString& description, QWidget* parent = 0);
 
-    virtual void load_settings() Q_DECL_OVERRIDE;
-    virtual void save_settings() Q_DECL_OVERRIDE;
-    virtual void restore_default_settings() Q_DECL_OVERRIDE;
+    virtual void load(const QVariant& value) Q_DECL_OVERRIDE;
+    virtual QVariant value() Q_DECL_OVERRIDE;
+    //virtual void rollback() Q_DECL_OVERRIDE;
 
 private:
-
-    void on_index_changed(QString text);
-
-    QComboBox* m_style_box;
+    QCheckBox* m_check_box;
+    void on_state_changed(bool checked);
 
 };
 
-#endif //GUI_THEME_SETTINGS_H
+#endif //CHECKBOX_SETTINGS_H

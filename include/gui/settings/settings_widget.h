@@ -24,6 +24,9 @@
 #ifndef SETTINGS_WIDGET_H
 #define SETTINGS_WIDGET_H
 
+#include <QVariant>
+#include <QToolButton>
+#include <QHBoxLayout>
 #include <QFrame>
 #include <QPair>
 
@@ -36,25 +39,41 @@ class settings_widget : public QFrame
 {
     Q_OBJECT
     Q_PROPERTY(QColor highlight_color READ highlight_color WRITE set_highlight_color)
+    Q_PROPERTY(bool dirty READ dirty)
 
 public:
-    explicit settings_widget(QWidget* parent = 0);
+    explicit settings_widget(const QString& key, QWidget* parent = 0);
 
     QColor highlight_color();
     bool unsaved_changes();
-
+    QString key();
     void set_highlight_color(const QColor& color);
 
     void reset_labels();
     bool match_labels(const QString& string);
 
-    virtual void load_settings()            = 0;
-    virtual void save_settings()            = 0;
-    virtual void restore_default_settings() = 0;
+    void trigger_setting_updated();
+    void set_dirty(bool dirty);
+    bool dirty();
+    void prepare(const QVariant& value, const QVariant& default_value);
+    void mark_saved();
+
+    virtual void load(const QVariant& value) = 0;
+    virtual QVariant value()                  = 0;
+
+public Q_SLOTS:
+    void handle_rollback();
+    void handle_reset();
+
+Q_SIGNALS:
+    void setting_updated(void* sender, const QString& key, const QVariant& value);
 
 protected:
     QVBoxLayout* m_layout;
+    QHBoxLayout* m_top_bar;
     QLabel* m_name;
+    QToolButton* m_revert;
+    QToolButton* m_default;
 
     QList<QPair<QLabel*, QString>> m_labels;
 
@@ -62,6 +81,12 @@ protected:
 
 private:
     QColor m_highlight_color;
+    QString m_key;
+    bool m_signals_enabled = true;
+    bool m_prepared = false;
+    bool m_dirty = false;
+    QVariant m_loaded_value;
+    QVariant m_default_value;
 };
 
 #endif    // SETTINGS_WIDGET_H

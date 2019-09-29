@@ -2,13 +2,14 @@
 
 #include "expanding_list/expanding_list_button.h"
 #include "expanding_list/expanding_list_widget.h"
+#include "gui_globals.h"
 #include "searchbar/searchbar.h"
-#include "settings/bigger_example_settings.h"
-#include "settings/example_settings.h"
 #include "settings/settings_display.h"
 #include "settings/settings_widget.h"
-#include "settings/gui_theme_settings.h"
+#include "settings/dropdown_setting.h"
+#include "settings/checkbox_setting.h"
 
+#include <QDebug>
 #include <QFrame>
 #include <QHBoxLayout>
 #include <QHeaderView>
@@ -16,6 +17,10 @@
 #include <QScrollArea>
 #include <QScrollBar>
 #include <QVBoxLayout>
+
+// disable this (and enable SETTINGS_UPDATE_IMMEDIATELY in settings_widget.cpp)
+// to apply all settings as they are modified
+#define ENABLE_OK_BUTTON
 
 main_settings_widget::main_settings_widget(QWidget* parent)
     : QWidget(parent), m_layout(new QHBoxLayout()), m_expanding_list_widget(new expanding_list_widget()), m_vertical_layout(new QVBoxLayout()), m_scrollbar(new QScrollBar()),
@@ -72,12 +77,12 @@ main_settings_widget::main_settings_widget(QWidget* parent)
     m_button_layout->setSpacing(20);
     m_button_layout->setAlignment(Qt::AlignRight);
 
-    //m_vertical_layout->addLayout(m_button_layout);
+    m_vertical_layout->addLayout(m_button_layout);
 
     m_restore_defaults->setText("Restore Defaults");
+    m_restore_defaults->setToolTip("Clear user preferences for this page");
     m_cancel->setText("Cancel");
     m_ok->setText("OK");
-
     m_restore_defaults->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     m_cancel->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     m_ok->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
@@ -94,106 +99,104 @@ main_settings_widget::main_settings_widget(QWidget* parent)
     connect(m_cancel, &QPushButton::clicked, this, &main_settings_widget::handle_cancel_clicked);
     connect(m_ok, &QPushButton::clicked, this, &main_settings_widget::handle_ok_clicked);
 
-    connect(m_expanding_list_widget, &expanding_list_widget::button_selected, this, &main_settings_widget::handel_button_selected);
+    connect(m_expanding_list_widget, &expanding_list_widget::button_selected, this, &main_settings_widget::handle_button_selected);
     connect(m_searchbar, &searchbar::text_edited, this, &main_settings_widget::handle_text_edited);
 
-    expanding_list_button* general_button       = new expanding_list_button();
-    expanding_list_button* content_button       = new expanding_list_button();
-    expanding_list_button* plugins_button       = new expanding_list_button();
-    expanding_list_button* style_button         = new expanding_list_button();
-    expanding_list_button* notifications_button = new expanding_list_button();
-    expanding_list_button* debug_button         = new expanding_list_button();
-    expanding_list_button* test_button1         = new expanding_list_button();
-    expanding_list_button* test_button2         = new expanding_list_button();
-    expanding_list_button* test_button3         = new expanding_list_button();
-    expanding_list_button* test_button4         = new expanding_list_button();
+    #ifndef ENABLE_OK_BUTTON
+    m_ok->hide();
+    #endif
 
-    m_expanding_list_widget->append_item(general_button);
-    m_expanding_list_widget->append_item(content_button);
-    m_expanding_list_widget->append_item(plugins_button);
-    m_expanding_list_widget->append_item(style_button);
-    m_expanding_list_widget->append_item(notifications_button);
-    m_expanding_list_widget->append_item(debug_button);
-    m_expanding_list_widget->append_item(test_button1, debug_button);
-    m_expanding_list_widget->append_item(test_button2, debug_button);
-    m_expanding_list_widget->append_item(test_button3, debug_button);
-    m_expanding_list_widget->append_item(test_button4, debug_button);
-
-    general_button->set_icon_path(":/icons/settings");
-    content_button->set_icon_path(":/icons/content");
-    plugins_button->set_icon_path(":/icons/plugin");
-    style_button->set_icon_path(":/icons/eye");
-    notifications_button->set_icon_path(":/icons/bell");
-    debug_button->set_icon_path(":/icons/fire");
-    test_button1->set_icon_path(":/icons/search");
-    test_button2->set_icon_path(":/icons/search");
-    test_button3->set_icon_path(":/icons/search");
-    test_button4->set_icon_path(":/icons/search");
-
-    general_button->set_text("General");
-    content_button->set_text("Content");
-    plugins_button->set_text("Plugins");
-    style_button->set_text("Style");
-    notifications_button->set_text("Notifications");
-    debug_button->set_text("Debug / Test");
-    test_button1->set_text("Test 1");
-    test_button2->set_text("Test 2");
-    test_button3->set_text("Test 3");
-    test_button4->set_text("Test 4");
-
-    general_button->setObjectName("general-item");
-    content_button->setObjectName("content-item");
-    plugins_button->setObjectName("plugins-item");
-    notifications_button->setObjectName("plugins-item");
-    style_button->setObjectName("style-item");
-    debug_button->setObjectName("debug-item");
-
-    m_map.insert(general_button, &m_general_settings);
-    m_map.insert(content_button, &m_content_settings);
-    m_map.insert(plugins_button, &m_plugins_settings);
-    m_map.insert(style_button, &m_style_settings);
-    m_map.insert(notifications_button, &m_notifications_settings);
-    m_map.insert(debug_button, &m_debug_settings);
-
-    //demo to demonstrate settings
-    gui_theme_settings* theme_settings = new gui_theme_settings();
-    m_all_settings.append(theme_settings);
-    m_style_settings.append(theme_settings);
-    m_container_layout->addWidget(theme_settings);
-    theme_settings->reset_labels();
-    //end of demo
-
-    example_settings* example = new example_settings();
-    m_all_settings.append(example);
-    m_debug_settings.append(example);
-    m_container_layout->addWidget(example);
-    example->reset_labels();
-
-    bigger_example_settings* bigger_example = new bigger_example_settings();
-    m_all_settings.append(bigger_example);
-    m_debug_settings.append(bigger_example);
-    m_container_layout->addWidget(bigger_example);
-    bigger_example->reset_labels();
+    this->init_widgets();
 
     m_expanding_list_widget->select_item(0);
     m_expanding_list_widget->repolish();
+
+}
+
+void main_settings_widget::init_widgets()
+{
+    /************* ADD NEW SETTINGS WIDGETS HERE *************/
+
+    this->make_section("Style", "style-item", ":/icons/eye");
+
+    dropdown_setting* theme_settings = new dropdown_setting("main_style/theme", "Main Style Theme", QStringList() << "Darcula" << "Sunny", "will be set as your theme after restarting");
+    theme_settings->reset_labels();
+    checkbox_setting* dummy_checkbox = new checkbox_setting("none", "Dummy Checkbox", "I'm a checkbox", " -------> check me");
+    this->register_widget("style-item", theme_settings);
+    this->register_widget("style-item", dummy_checkbox);
+}
+
+void main_settings_widget::make_section(const QString& label, const QString& name, const QString& icon_path)
+{
+    expanding_list_button* btn = new expanding_list_button();
+    btn->setObjectName(name);
+    btn->set_text(label);
+    btn->set_icon_path(icon_path);
+    m_expanding_list_widget->append_item(btn);
+    m_sections.insert(name, btn);
+}
+
+void main_settings_widget::register_widget(const QString& section_name, settings_widget* widget)
+{
+    QList<settings_widget*>* section_widgets;
+    if (!(section_widgets = m_map.value(section_name)))
+    {
+        // lazy-init the sub list upon first use
+        section_widgets = new QList<settings_widget*>();
+        m_map.insert(section_name, section_widgets);
+    }
+    section_widgets->append(widget);
+    m_all_settings.append(widget);
+    m_container_layout->addWidget(widget);
+    connect(widget, &settings_widget::setting_updated, this, &main_settings_widget::handle_setting_updated);
 }
 
 void main_settings_widget::handle_restore_defaults_clicked()
 {
+    QList<settings_widget*>* widget_list = m_map.value(m_active_section, nullptr);
+
+    if (!widget_list)
+    {
+        //LOG ERROR
+        return;
+    }
+
+    for (settings_widget* widget : *widget_list)
+    {
+        // clear the setting and sync the widget to the default value of its
+        // connected setting
+        QString key = widget->key();
+        QVariant default_val = g_settings_manager.reset(key);
+        widget->prepare(default_val, default_val);
+    }
 }
 
 void main_settings_widget::handle_cancel_clicked()
 {
+    for (settings_widget* widget : m_all_settings)
+    {
+        widget->handle_rollback();
+    }
     Q_EMIT close();
 }
 
 void main_settings_widget::handle_ok_clicked()
 {
+    #ifdef ENABLE_OK_BUTTON
+    for (settings_widget* widget : m_all_settings)
+    {
+        // clear the setting and sync the widget to the default value of its
+        // connected setting
+        QString key = widget->key();
+        QVariant value = widget->value();
+        widget->mark_saved();
+        g_settings_manager.update(key, value);
+    }
+    #endif
     Q_EMIT close();
 }
 
-void main_settings_widget::handel_button_selected(expanding_list_button* button)
+void main_settings_widget::handle_button_selected(expanding_list_button* button)
 {
     m_searchbar->clear();
     hide_all_settings();
@@ -204,19 +207,28 @@ void main_settings_widget::handel_button_selected(expanding_list_button* button)
         //LOG ERROR
         return;
     }
+    // TODO check performance of this reverse lookup
+    QString section_name = m_sections.key(button);
+    m_active_section = section_name;
+    QList<settings_widget*>* widget_list = m_map.value(section_name, nullptr);
 
-    QMap<expanding_list_button*, QList<settings_widget*>*>::const_iterator iterator = m_map.find(button);
-
-    if (iterator == m_map.constEnd())
+    if (!widget_list)
     {
         //LOG ERROR
         return;
     }
 
-    for (settings_widget* widget : *iterator.value())
+    for (settings_widget* widget : *widget_list)
     {
-        if (widget)
+        if (widget) {
+            // sync the widget to the current value of its connected setting
+            QString key = widget->key();
+            QVariant val = g_settings_manager.get(key);
+            QVariant default_val = g_settings_manager.get_default(key);
+            widget->prepare(val, default_val);
+            // then display
             widget->show();
+        }
     }
 }
 
@@ -240,6 +252,11 @@ void main_settings_widget::handle_text_edited(const QString& text)
         else
             widget->hide();
     }
+}
+
+void main_settings_widget::handle_setting_updated(void* sender, const QString& key, const QVariant& value)
+{
+    g_settings_manager.update(key, value);
 }
 
 void main_settings_widget::hide_all_settings()
