@@ -104,12 +104,17 @@ bool settings_widget::match_labels(const QString& string)
 
 void settings_widget::trigger_setting_updated()
 {
+    QVariant val = value();
+    if (m_preview)
+    {
+        m_preview->update(val);
+    }
     if (m_signals_enabled)
     {
         #ifdef SETTINGS_UPDATE_IMMEDIATELY
-        Q_EMIT setting_updated(this, key(), value());
+        Q_EMIT setting_updated(this, key(), val);
         #else
-        set_dirty(m_loaded_value != value());
+        set_dirty(m_loaded_value != val);
         #endif
     }
 }
@@ -163,4 +168,18 @@ void settings_widget::mark_saved()
 {
     set_dirty(false);
     m_loaded_value = value();
+}
+
+void settings_widget::set_preview_widget(preview_widget* widget)
+{
+    if (m_preview)
+    {
+        m_layout->removeWidget(m_preview);
+    }
+    m_preview = widget;
+    m_layout->addWidget(m_preview);
+    if (m_prepared)
+    {
+        m_preview->update(value());
+    }
 }

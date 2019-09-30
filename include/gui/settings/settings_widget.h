@@ -24,6 +24,8 @@
 #ifndef SETTINGS_WIDGET_H
 #define SETTINGS_WIDGET_H
 
+#include "settings/preview_widget.h"
+
 #include <QVariant>
 #include <QToolButton>
 #include <QHBoxLayout>
@@ -58,6 +60,8 @@ public:
     void prepare(const QVariant& value, const QVariant& default_value);
     void mark_saved();
 
+    void set_preview_widget(preview_widget* widget);
+
     virtual void load(const QVariant& value) = 0;
     virtual QVariant value()                  = 0;
 
@@ -87,6 +91,7 @@ private:
     bool m_dirty = false;
     QVariant m_loaded_value;
     QVariant m_default_value;
+    preview_widget* m_preview = nullptr;
 };
 
 #endif    // SETTINGS_WIDGET_H

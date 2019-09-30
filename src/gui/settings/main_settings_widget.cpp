@@ -6,8 +6,10 @@
 #include "searchbar/searchbar.h"
 #include "settings/settings_display.h"
 #include "settings/settings_widget.h"
-#include "settings/dropdown_setting.h"
 #include "settings/checkbox_setting.h"
+#include "settings/dropdown_setting.h"
+#include "settings/slider_setting.h"
+#include "settings/fontsize_preview_widget.h"
 
 #include <QDebug>
 #include <QFrame>
@@ -119,11 +121,17 @@ void main_settings_widget::init_widgets()
 
     this->make_section("Style", "style-item", ":/icons/eye");
 
-    dropdown_setting* theme_settings = new dropdown_setting("main_style/theme", "Main Style Theme", QStringList() << "Darcula" << "Sunny", "will be set as your theme after restarting");
+    dropdown_setting* theme_settings = new dropdown_setting("main_style/theme", "Main Style Theme", QStringList() << "Darcula" << "Sunny", "will be set as your theme after restarting", this);
     theme_settings->reset_labels();
-    checkbox_setting* dummy_checkbox = new checkbox_setting("none", "Dummy Checkbox", "I'm a checkbox", " -------> check me");
+    checkbox_setting* dummy_checkbox = new checkbox_setting("none", "Dummy Checkbox", "I'm a checkbox", " -------> check me", this);
     this->register_widget("style-item", theme_settings);
     this->register_widget("style-item", dummy_checkbox);
+
+    this->make_section("Python editor", "python-item", ":/icons/eye");
+
+    slider_setting* py_font_size_setting = new slider_setting("python/font_size", "Font Size", 6, 40, "pt", this);
+    py_font_size_setting->set_preview_widget(new fontsize_preview_widget("foobar", font()));
+    this->register_widget("python-item", py_font_size_setting);
 }
 
 void main_settings_widget::make_section(const QString& label, const QString& name, const QString& icon_path)
