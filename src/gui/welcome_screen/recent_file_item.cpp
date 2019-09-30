@@ -82,8 +82,11 @@ void recent_file_item::mousePressEvent(QMouseEvent* event)
     if(m_disabled)
         return;
 
-    file_manager::get_instance()->open_file(m_file);
-    event->accept();
+    if(event->button() == Qt::MouseButton::LeftButton)
+    {
+        file_manager::get_instance()->open_file(m_file);
+        event->accept();
+    }
 }
 
 QSize recent_file_item::sizeHint() const
