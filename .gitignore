@@ -48,7 +48,7 @@ deps/buddy-2.4/autom4te.cache/
 !.vscode/launch.json
 !.vscode/extensions.json
 .brew_home
-
+.vscode/
 playbook.retry
 
 projectFilesBackup/

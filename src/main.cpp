@@ -147,6 +147,7 @@ int main(int argc, const char *argv[])
     if (!program_options.get_options().empty())
     {
         cli_options.add(plugin_manager::get_cli_plugin_options());
+        all_options.add(plugin_manager::get_cli_plugin_options());
     }
     
     /* process help output */
@@ -180,7 +181,7 @@ int main(int argc, const char *argv[])
     
     /* parse program options */
     bool unknown_option_exists = false;
-    args = cli_options.parse(argc, argv);
+    args = all_options.parse(argc, argv);
     // Check for unknown options include log manager options --> use all_options
     for (const auto &opt : all_options.get_unknown_arguments())
     {

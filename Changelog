@@ -1,3 +1,12 @@
+hal-reverse (1.1.8) bionic; urgency=medium
+
+ * Fix command line parsing
+ * Fix parse all_options from main
+ * Fixed set log option as command line parameter without stopping execution
+ * Fixed assign parsing for yosys verilog output
+
+ -- Sebastian Wallat <sebastian.wallat@rub.de>  Thu, 19 Sep 2019 14:23:59 +0200
+
 hal-reverse (1.1.7) bionic; urgency=medium
 
  * Changed myself library to synopsys_nand_nor
