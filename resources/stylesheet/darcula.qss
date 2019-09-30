@@ -458,6 +458,18 @@ main_settings_widget settings_display * {
     border           : 1px solid #A9B7C6;
 }
 
+main_settings_widget preview_widget {
+    background-color: rgb(9, 11, 13);
+    border          : 2px solid rgb(73, 74, 76);
+    border-radius   : 8px;
+    margin-top      : 8px;
+    padding         : 5px 0;
+}
+
+main_settings_widget preview_widget *{
+    background-color: rgba(255, 255, 255, 0);
+}
+
 /* EXPANDING_LIST_WIDGET */
 
 main_settings_widget expanding_list_widget {

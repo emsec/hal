@@ -130,7 +130,9 @@ void main_settings_widget::init_widgets()
     this->make_section("Python editor", "python-item", ":/icons/eye");
 
     slider_setting* py_font_size_setting = new slider_setting("python/font_size", "Font Size", 6, 40, "pt", this);
-    py_font_size_setting->set_preview_widget(new fontsize_preview_widget("foobar", font()));
+    fontsize_preview_widget* py_font_size_preview = new fontsize_preview_widget("foobar", font());
+    py_font_size_preview->setMinimumSize(QSize(220, 85));
+    py_font_size_setting->set_preview_widget(py_font_size_preview);
     this->register_widget("python-item", py_font_size_setting);
 }
 
