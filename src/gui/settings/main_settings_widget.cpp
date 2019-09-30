@@ -214,12 +214,13 @@ void main_settings_widget::handle_ok_clicked()
     #ifdef ENABLE_OK_BUTTON
     for (settings_widget* widget : m_all_settings)
     {
-        // clear the setting and sync the widget to the default value of its
-        // connected setting
-        QString key = widget->key();
-        QVariant value = widget->value();
-        widget->mark_saved();
-        g_settings_manager.update(key, value);
+        if (widget->dirty())
+        {
+            QString key = widget->key();
+            QVariant value = widget->value();
+            widget->mark_saved();
+            g_settings_manager.update(key, value);
+        }
     }
     #endif
     Q_EMIT close();
