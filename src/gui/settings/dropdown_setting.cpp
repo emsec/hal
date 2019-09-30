@@ -7,11 +7,12 @@
 #include <QLabel>
 #include <QPair>
 
+#include <QMap>
 #include <QComboBox>
 #include <QStringList>
 #include "gui_globals.h"
 
-dropdown_setting::dropdown_setting(const QString& key, const QString& title, const QStringList& options, const QString& description, QWidget *parent) : settings_widget(key, parent)
+dropdown_setting::dropdown_setting(const QString& key, const QString& title, const QMap<QString, QString>& options, const QString& description, QWidget *parent) : settings_widget(key, parent), m_options(options)
 {
     m_labels.append(QPair<QLabel*, QString>(m_name, title));
 
@@ -19,7 +20,7 @@ dropdown_setting::dropdown_setting(const QString& key, const QString& title, con
     m_layout->addLayout(layout);
 
     m_combo_box = new QComboBox(this);
-    m_combo_box->addItems(options);
+    m_combo_box->addItems(options.keys());
     m_combo_box->setStyleSheet("QComboBox{width: 150px;}");
     connect(m_combo_box, QOverload<const QString &>::of(&QComboBox::currentIndexChanged), this, &dropdown_setting::on_index_changed);
 
@@ -34,19 +35,12 @@ dropdown_setting::dropdown_setting(const QString& key, const QString& title, con
 
 void dropdown_setting::load(const QVariant& value)
 {
-    if(value.toString() == "sunny")
-        m_combo_box->setCurrentIndex(1);
-    else
-        m_combo_box->setCurrentIndex(0);
+    m_combo_box->setCurrentText(m_options.key(value.toString()));
 }
 
 QVariant dropdown_setting::value()
 {
-    switch (m_combo_box->currentIndex())
-    {
-        case 0: return QVariant("darcula");
-        case 1: return QVariant("sunny");
-    }
+    return m_options.value(m_combo_box->currentText());
 }
 
 // void dropdown_setting::rollback()
