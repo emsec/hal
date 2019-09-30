@@ -95,6 +95,16 @@ void graph_graphics_view::handle_move_action(QAction* action)
     {
         g_netlist->get_module_by_id(id)->set_parent_module(m);
     }
+
+    auto gates   = g_selection_relay.m_selected_gates;
+    auto modules = g_selection_relay.m_selected_modules;
+    g_selection_relay.clear();
+    g_selection_relay.relay_selection_changed(this);
+
+    auto context = m_graph_widget->get_context();
+    context->begin_change();
+    context->remove(modules, gates);
+    context->end_change();
 }
 
 void graph_graphics_view::handle_move_new_action()
