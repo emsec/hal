@@ -34,4 +34,26 @@ add_test(runTest-utils_test ${CMAKE_BINARY_DIR}/bin/runTest-utils --gtest_output
 add_test(runTest-plugin_manager_test ${CMAKE_BINARY_DIR}/bin/runTest-plugin_manager --gtest_output=xml:${CMAKE_BINARY_DIR}/gtestresults-runBasicTests.xml)
 
 # Test plugin:
-#add_subdirectory("test_plugin")
+foreach(i IN ITEMS "" "_DEBUG" "_RELEASE" "_MINSIZEREL" "_RELWITHDEBINFO")
+    foreach(j IN ITEMS "RUNTIME" "ARCHIVE" "LIBRARY")
+        set(TMP_${j}_OUTPUT_DIR${i} ${CMAKE_${j}_OUTPUT_DIRECTORY${i}})
+        set(CMAKE_${j}_OUTPUT_DIRECTORY${i} "${TMP_${j}_OUTPUT_DIR${i}}/hal_plugins")
+    endforeach()
+endforeach()
+
+add_subdirectory("test_plugin")
+
+
+foreach(i IN ITEMS "" "_DEBUG" "_RELEASE" "_MINSIZEREL" "_RELWITHDEBINFO")
+    foreach(j IN ITEMS "RUNTIME" "ARCHIVE" "LIBRARY")
+        set(CMAKE_${j}_OUTPUT_DIRECTORY${i} "${TMP_${j}_OUTPUT_DIR${i}}")
+    endforeach()
+endforeach()
+
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${TMP_RUNTIME_OUTPUT_DIR})
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG ${TMP_RUNTIME_OUTPUT_DIR_DEBUG})
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${TMP_RUNTIME_OUTPUT_DIR})
+
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${TMP_ARCHIVE_OUTPUT_DIR})
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG ${TMP_ARCHIVE_OUTPUT_DIR_DEBUG})
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE ${TMP_ARCHIVE_OUTPUT_DIR})
