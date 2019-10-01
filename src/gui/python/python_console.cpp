@@ -173,7 +173,7 @@ void python_console::insertAtEnd(const QString& text, QColor textColor)
 {
     moveCursor(QTextCursor::End);
     setTextColor(textColor);
-    insertPlainText(text);
+    insertPlainText(QString(text));
 }
 
 void python_console::handle_stdout(const QString& output)
@@ -183,7 +183,10 @@ void python_console::handle_stdout(const QString& output)
 
 void python_console::handle_error(const QString& output)
 {
-    insertAtEnd(output, m_error_color);
+    QString append_out = output;
+    if (!append_out.endsWith("\n"))
+        append_out += "\n";
+    insertAtEnd(append_out, m_error_color);
 }
 
 void python_console::clear()
