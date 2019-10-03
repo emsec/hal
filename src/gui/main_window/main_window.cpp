@@ -469,7 +469,8 @@ void main_window::handle_action_open()
     QString title = "Open File";
     QString text  = "All Files(*.vhd *.vhdl *.v *.hal);;VHDL Files (*.vhd *.vhdl);;Verilog Files (*.v);;HAL Progress Files (*.hal)";
 
-    QString file_name = QFileDialog::getOpenFileName(nullptr, title, QDir::currentPath(), text, nullptr, QFileDialog::DontUseNativeDialog);
+    // Non native dialogs does not work on macOS. Therefore do net set DontUseNativeDialog!
+    QString file_name = QFileDialog::getOpenFileName(nullptr, title, QDir::currentPath(), text, nullptr);
 
     file_manager::get_instance()->open_file(file_name);
 }
