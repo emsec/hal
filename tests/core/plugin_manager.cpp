@@ -15,8 +15,8 @@ using std::endl;
 class plugin_manager_test : public ::testing::Test
 {
 protected:
-    const std::string reference_library_name = "libgraph_algorithm";
-    const std::string reference_name = "graph_algorithm";
+    const std::string reference_library_name = "libtest_plugin";
+    const std::string reference_name = "test_plugin";
 
     virtual void SetUp()
     {
@@ -271,8 +271,8 @@ TEST_F(plugin_manager_test, check_load)
     {
         // Load an already loaded plugin (should return true)
         //testing::internal::CaptureStdout();
-        bool suc_first = plugin_manager::load(reference_library_name, (reference_library_name + ".so"));
-        bool suc       = plugin_manager::load(reference_library_name, (reference_library_name + ".so"));
+        bool suc_first = plugin_manager::load(reference_library_name, ("hal_plugins/" + reference_library_name + ".so"));
+        bool suc       = plugin_manager::load(reference_library_name, ("hal_plugins/" + reference_library_name + ".so"));
         //testing::internal::GetCapturedStdout();
         EXPECT_TRUE(suc);
         EXPECT_TRUE(suc_first);
