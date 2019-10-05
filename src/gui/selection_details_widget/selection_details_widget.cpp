@@ -4,6 +4,7 @@
 #include "netlist/gate.h"
 #include "netlist/net.h"
 #include "netlist/netlist.h"
+#include "searchbar/searchbar.h"
 
 #include <QHeaderView>
 #include <QLabel>
@@ -11,6 +12,7 @@
 #include <QStackedWidget>
 #include <QTableWidget>
 #include <QVBoxLayout>
+#include <QShortcut>
 
 selection_details_widget::selection_details_widget(QWidget* parent) : content_widget("Details", parent)
 {
@@ -36,7 +38,11 @@ selection_details_widget::selection_details_widget(QWidget* parent) : content_wi
 
     m_stacked_widget->setCurrentWidget(m_empty_widget);
 
+    m_searchbar = new searchbar(this);
+    m_searchbar->hide();
+
     m_content_layout->addWidget(m_stacked_widget);
+    m_content_layout->addWidget(m_searchbar);
 
     //    m_table_widget->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     //    m_table_widget->setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -48,6 +54,7 @@ selection_details_widget::selection_details_widget(QWidget* parent) : content_wi
     //    m_table_widget->viewport()->setFocusPolicy(Qt::NoFocus);
 
     connect(&g_selection_relay, &selection_relay::selection_changed, this, &selection_details_widget::handle_selection_update);
+    connect(m_searchbar, &searchbar::text_edited, m_module_details, &module_details_widget::handle_searchbar_text_edited);
 }
 
 void selection_details_widget::handle_selection_update(void* sender)
@@ -64,12 +71,39 @@ void selection_details_widget::handle_selection_update(void* sender)
     }
     else if (!g_selection_relay.m_selected_gates.isEmpty())
     {
+        m_searchbar->hide();
         m_gate_details->update(*g_selection_relay.m_selected_gates.begin());
         m_stacked_widget->setCurrentWidget(m_gate_details);
     }
     else if (!g_selection_relay.m_selected_nets.isEmpty())
     {
+        m_searchbar->hide();
         m_net_details->update(*g_selection_relay.m_selected_nets.begin());
         m_stacked_widget->setCurrentWidget(m_net_details);
+    }
+}
+
+QList<QShortcut *> selection_details_widget::create_shortcuts()
+{
+    QShortcut* search_shortcut = new QShortcut(QKeySequence("Ctrl+f"),this);
+    connect(search_shortcut, &QShortcut::activated, this, &selection_details_widget::toggle_searchbar);
+
+    return (QList<QShortcut*>() << search_shortcut);
+}
+
+void selection_details_widget::toggle_searchbar()
+{
+    if(m_stacked_widget->currentWidget() != m_module_details)
+        return;
+
+    if(m_searchbar->isHidden())
+    {
+        m_searchbar->show();
+        m_searchbar->setFocus();
+    }
+    else
+    {
+        m_searchbar->hide();
+        setFocus();
     }
 }
