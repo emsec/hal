@@ -37,7 +37,6 @@ class module;
 
 class QVBoxLayout;
 class QLabel;
-class searchbar;
 
 class module_details_widget : public QWidget
 {
@@ -50,13 +49,12 @@ public:
 public Q_SLOTS:
     void handle_module_event(module_event_handler::event ev, std::shared_ptr<module> module, u32 associated_data);
     void handle_selection_changed(void* sender);
+    void handle_searchbar_text_edited(const QString &text);
 
 private:
 
     void toggle_searchbar();
-    void handle_searchbar_text_edited(const QString &text);
     void handle_tree_selection_changed(const QItemSelection& selected, const QItemSelection& deselected);
-
     void toggle_resize_columns();
 
     QVBoxLayout* m_content_layout;
@@ -67,8 +65,6 @@ private:
     QTreeView* m_treeview;
     tree_module_model* m_tree_module_model;
     tree_module_proxy_model* m_tree_module_proxy_model;
-
-    searchbar* m_searchbar;
 };
 
 #endif // MODULE_DETAILS_WIDGET_H
