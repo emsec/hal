@@ -16,7 +16,7 @@ checkbox_setting::checkbox_setting(const QString& key, const QString& title, con
     m_labels.append(QPair<QLabel*, QString>(m_name, title));
 
     QHBoxLayout* layout = new QHBoxLayout();
-    m_layout->addLayout(layout);
+    m_container->addLayout(layout);
 
     m_check_box = new QCheckBox(text, this);
     // m_check_box->setStyleSheet("QComboBox{width: 150px;}");

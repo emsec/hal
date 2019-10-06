@@ -16,7 +16,7 @@ text_setting::text_setting(const QString& key, const QString& title, const QStri
     m_labels.append(QPair<QLabel*, QString>(m_name, title));
 
     QHBoxLayout* layout = new QHBoxLayout();
-    m_layout->addLayout(layout);
+    m_container->addLayout(layout);
 
     m_textfield = new QLineEdit(this);
     m_textfield->setPlaceholderText(placeholder);
