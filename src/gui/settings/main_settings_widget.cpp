@@ -144,6 +144,7 @@ void main_settings_widget::init_widgets()
     fontsize_preview_widget* py_font_size_preview = new fontsize_preview_widget("foobar", font());
     py_font_size_preview->setMinimumSize(QSize(220, 85));
     py_font_size_setting->set_preview_widget(py_font_size_preview);
+    py_font_size_setting->set_preview_position(settings_widget::preview_position::right);
     this->register_widget("python-item", py_font_size_setting);
     checkbox_setting* py_line_numbers_setting = new checkbox_setting("python/line_numbers", "Line Numbers", "show", "", this);
     this->register_widget("python-item", py_line_numbers_setting);
