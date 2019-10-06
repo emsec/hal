@@ -6,12 +6,11 @@
 #include <QVBoxLayout>
 #include <QShortcut>
 #include <QRegExp>
-#include "searchbar/searchbar.h"
 #include <QDebug>
 
 #include "selection_details_widget/tree_navigation/tree_module_item.h"
 
-module_details_widget::module_details_widget(QWidget* parent) : QWidget(parent), m_treeview(new QTreeView(this)), m_tree_module_model(new tree_module_model(this)), m_searchbar(new searchbar(this)),
+module_details_widget::module_details_widget(QWidget* parent) : QWidget(parent), m_treeview(new QTreeView(this)), m_tree_module_model(new tree_module_model(this)),
     m_tree_module_proxy_model(new tree_module_proxy_model(this)), m_ignore_selection_change(false)
 {
     m_treeview->setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -26,16 +25,13 @@ module_details_widget::module_details_widget(QWidget* parent) : QWidget(parent),
     m_content_layout->setSpacing(0);
     m_content_layout->setAlignment(Qt::AlignTop);
     m_content_layout->addWidget(m_treeview);
-    m_content_layout->addWidget(m_searchbar);
-    m_searchbar->hide();
 
-    QShortcut* search_shortcut = new QShortcut(QKeySequence("Ctrl+f"), this);
-    connect(search_shortcut, &QShortcut::activated, this, &module_details_widget::toggle_searchbar);
+//    QShortcut* search_shortcut = new QShortcut(QKeySequence("Ctrl+f"), this);
+//    connect(search_shortcut, &QShortcut::activated, this, &module_details_widget::toggle_searchbar);
 
-    QShortcut* resize_shortcut = new QShortcut(QKeySequence("Ctrl+b"), this);
-    connect(resize_shortcut, &QShortcut::activated, this, &module_details_widget::toggle_resize_columns);
+//    QShortcut* resize_shortcut = new QShortcut(QKeySequence("Ctrl+b"), this);
+//    connect(resize_shortcut, &QShortcut::activated, this, &module_details_widget::toggle_resize_columns);
 
-    connect(m_searchbar, &searchbar::text_edited, this, &module_details_widget::handle_searchbar_text_edited);
     connect(&g_netlist_relay, &netlist_relay::module_event, this, &module_details_widget::handle_module_event);
 
     //g_selection_relay.register_sender(this, "module_details_widget");
@@ -85,19 +81,6 @@ void module_details_widget::handle_selection_changed(void *sender)
         m_ignore_selection_change = true;
 
     m_treeview->selectionModel()->select(selection, QItemSelectionModel::ClearAndSelect);
-}
-
-void module_details_widget::toggle_searchbar()
-{
-    if(m_searchbar->isHidden())
-    {
-        m_searchbar->show();
-        m_searchbar->setFocus();
-    }
-    else
-    {
-        m_searchbar->hide();
-    }
 }
 
 void module_details_widget::handle_searchbar_text_edited(const QString &text)

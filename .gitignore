@@ -123,3 +123,5 @@ ui_*.h
 
 # QtCtreator CMake
 CMakeLists.txt.user*
+
+Testing
