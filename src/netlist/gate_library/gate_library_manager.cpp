@@ -253,6 +253,19 @@ namespace gate_library_manager
 
             return lib;
         }
+
+        bool is_duplicate(const std::shared_ptr<gate_library> lib)
+        {
+            for (const auto& it : m_gate_libraries)
+            {
+                if (it.first == lib->get_name())
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
     }    // namespace
 
     std::shared_ptr<gate_library> get_gate_library(const std::string& name)
@@ -285,6 +298,12 @@ namespace gate_library_manager
 
             if (lib != nullptr)
             {
+                if (is_duplicate(lib))
+                {
+                    log_error("netlist", "a gate library with the name '{}' already exists, discarding current one.", lib->get_name());
+                    return nullptr;
+                }
+
                 m_gate_libraries[name] = lib;
             }
 
@@ -307,23 +326,26 @@ namespace gate_library_manager
 
             for (const auto& lib_path : core_utils::recursive_directory_range(lib_dir))
             {
+                std::shared_ptr<gate_library> lib;
+
                 if (core_utils::ends_with(lib_path.path().string(), ".json"))
                 {
-                    auto lib = load_json(lib_path.path());
-
-                    if (lib != nullptr)
-                    {
-                        m_gate_libraries[lib->get_name()] = lib;
-                    }
+                    lib = load_json(lib_path.path());
                 }
                 else if (core_utils::ends_with(lib_path.path().string(), ".lib"))
                 {
-                    auto lib = load_liberty(lib_path.path());
+                    lib = load_liberty(lib_path.path());
+                }
 
-                    if (lib != nullptr)
+                if (lib != nullptr)
+                {
+                    if (is_duplicate(lib))
                     {
-                        m_gate_libraries[lib->get_name()] = lib;
+                        log_error("netlist", "a gate library with the name '{}' already exists, discarding current one.", lib->get_name());
+                        continue;
                     }
+
+                    m_gate_libraries[lib->get_name()] = lib;
                 }
             }
         }
