@@ -406,9 +406,9 @@ namespace gate_library_liberty_parser
             }
         }
 
+        // register bdd availability tester and generator
         using namespace std::placeholders;
 
-        // register bdd availability tester and generator
         gate_decorator_system::register_bdd_decorator_function(inter_lib->name, std::bind(&bdd_availability_tester, boolean_function_map, _1), std::bind(&bdd_generator, boolean_function_map, _1, _2));
     }
 
@@ -479,7 +479,7 @@ namespace gate_library_liberty_parser
         static const std::regex re_neg("(\\w+)\\'");
 
         auto res = func;
-        res      = std::regex_replace(func, re_and, "&");
+        res      = std::regex_replace(res, re_and, "&");
         res      = std::regex_replace(res, re_or, "|");
         res      = std::regex_replace(res, re_xor, "^");
         res      = std::regex_replace(res, re_space, "&");
