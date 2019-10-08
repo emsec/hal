@@ -75,7 +75,8 @@ std::shared_ptr<netlist> hdl_parser_verilog::parse(const std::string& gate_libra
 
                 if (current_entity.name.empty())
                 {
-                    current_entity.name = "module_" + std::to_string(m_entities.size());
+                    log_error("hdl_parser", "Verilog module must have a name.");
+                    return nullptr;
                 }
 
                 current_entity.line_number = static_cast<u32>(token_begin);
