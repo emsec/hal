@@ -35,6 +35,7 @@ void graph_context_manager::rename_graph_context(graph_context* ctx, const QStri
 void graph_context_manager::delete_graph_context(graph_context* ctx)
 {
     Q_EMIT deleting_context(ctx);
+    m_graph_contexts.remove(m_graph_contexts.indexOf(ctx));
     delete ctx;
 }
 
