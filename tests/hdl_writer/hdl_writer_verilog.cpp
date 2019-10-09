@@ -585,6 +585,7 @@ TEST_F(hdl_writer_verilog_test, check_gate_net_name_collision) {
         {
             // Testing the handling of two gates with the same name
             std::shared_ptr<netlist> nl = create_empty_netlist(0);
+            nl->set_design_name("design_name");
 
             std::shared_ptr<net> test_net = nl->create_net( MIN_NET_ID+0, "gate_net_name");
             std::shared_ptr<gate> test_gate = nl->create_gate( MIN_GATE_ID+0, "INV", "gate_net_name");
@@ -617,6 +618,8 @@ TEST_F(hdl_writer_verilog_test, check_gate_net_name_collision) {
             // Check if the gate name was added a "_inst"
             EXPECT_NE(get_net_by_subname(parsed_nl, "gate_net_name"), nullptr);
             EXPECT_NE(get_gate_by_subname(parsed_nl, "gate_net_name_inst"), nullptr);
+
+            std::cout << "\n============\n" << parser_input.str() << "\n============\n";
 
         }
     TEST_END

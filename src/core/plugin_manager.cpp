@@ -209,6 +209,11 @@ namespace plugin_manager
 
     bool unload_all_plugins()
     {
+        /* fix start */
+        /* remove all cli options */
+        m_plugin_options = program_options("plugin options");
+        m_cli_option_to_plugin_name = std::map<std::string, std::string>();
+        /* fix end */
         if (m_plugin.size() == 0)
         {
             log_debug("core", "no plugins to unload");
@@ -240,7 +245,7 @@ namespace plugin_manager
         auto factory = std::get<1>(it->second);
         factory->query_interface(interface_type::base)->on_unload();
 
-        //delete factory;
+        //delete factory; <- fix
         /* unload and delete library */
         auto library = std::get<0>(it->second);
         if (!library->unload_library())
@@ -252,6 +257,9 @@ namespace plugin_manager
 
         /* notify callback that a plugin was unloaded */
         m_hook(false, plugin_name, file_name);
+        /* fix start */
+        
+        /* fix end */
 
         log_debug("core", "unloaded plugin '{}'", plugin_name);
         return true;

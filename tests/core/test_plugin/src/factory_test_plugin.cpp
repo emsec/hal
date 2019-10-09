@@ -1,11 +1,6 @@
 #include "factory_test_plugin.h"
 #include "plugin_test_plugin.h"
 
-std::set<std::string> factory_test_plugin::get_dependencies()
-{
-    return {};
-}
-
 std::shared_ptr<i_base> factory_test_plugin::get_plugin_instance()
 {
     return std::dynamic_pointer_cast<i_base>(std::make_shared<plugin_test_plugin>());

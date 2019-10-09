@@ -5,97 +5,90 @@
 #include <core/plugin_manager.h>
 #include <iostream>
 
-/*
- * This test isn't finished
- */
-
 using std::cout;
 using std::endl;
+
+// Counts the calls of the test_callback hook
+static int callback_hooks_called;
+// The last parameters, passed to the test_callback hook
+static std::tuple<bool, std::string, std::string> callback_hook_params;
 
 class plugin_manager_test : public ::testing::Test
 {
 protected:
     const std::string reference_library_name = "libtest_plugin";
     const std::string reference_name = "test_plugin";
+    // List of (cli option flag, cli option description) pairs
+    const std::vector<std::pair<std::string, std::string>> reference_lib_options = { std::make_pair("--option_one", "option_one_description"),
+                                                                                    std::make_pair("--option_two", "option_two_description")};
 
     virtual void SetUp()
     {
+        NO_COUT_BLOCK;
+        callback_hooks_called = 0;
+        plugin_manager::unload_all_plugins();
     }
 
     virtual void TearDown()
     {
     }
 
-    bool is_reference_plugin_loaded()
-    {
-        auto names = plugin_manager::get_plugin_names();
-        return (names.find(reference_library_name) != names.end());
-    }
 
-    // Loads the test_plugin
-    bool load_reference_plugin()
+    // Searches in all plugin_directorys (give by core_utils::get_plugin_directories()) to find a plugin named plugin_name.
+    // But: The function only looks for the first existence, but not if the plugin file can be loaded
+    hal::path get_plugin_path(std::string plugin_name)
     {
-        testing::internal::CaptureStdout();
-        for (auto directory : core_utils::get_plugin_directories())
-        {
-            bool suc = plugin_manager::load(reference_library_name, directory / (reference_library_name + ".so"));
-            if (suc)
+        static std::map<std::string, hal::path> plugin_name_to_found_path;
+        // If the function was already called, the previous result is stored (to speed it up a bit)
+        if (plugin_name_to_found_path.find(plugin_name) != plugin_name_to_found_path.end()){
+            if(boost::filesystem::exists(plugin_name_to_found_path[plugin_name].string()))
             {
-                testing::internal::GetCapturedStdout();
-                return true;
+                return plugin_name_to_found_path[plugin_name];
             }
         }
-        // If no test plugin is found print the captured output
-        std::cout << testing::internal::GetCapturedStdout();
-        return false;
+        // Search in all plugin directories for the plugin
+        for (auto directory : core_utils::get_plugin_directories())
+        {
+            if (boost::filesystem::exists((directory / (plugin_name + ".so")).string()))
+            {
+                plugin_name_to_found_path[plugin_name] = (directory / (plugin_name + ".so"));
+                return plugin_name_to_found_path[plugin_name];
+            }
+        }
+        std::cout << "\n";
+        log_error("tests","No pluguin \"'{}'\" found in the plugin build directories!", plugin_name);
+        return hal::path();
+    }
+
+    // Loads the test_plugin. Requires the correctness of pluign_manager::load and plugin_manager::get_plugin_names
+    bool load_reference_plugin()
+    {
+        std::set<std::string> loaded_plugins = plugin_manager::get_plugin_names();
+        if(loaded_plugins.find(reference_library_name) != loaded_plugins.end()){
+            // If the plugin is already loaded, return true
+            return true;
+        }
+
+        hal::path plugin_path = get_plugin_path(reference_library_name);
+        if (plugin_path.empty()){
+            return false;
+        }
+
+        bool load_suc = plugin_manager::load(reference_library_name ,plugin_path);
+        if (!load_suc){
+            cout << "A plugin file ("<< plugin_path.string() <<") is found, but can't be loaded. Is the plugin build corrupted? ";
+        }
+        return load_suc;
+    }
+
+
+
+    static void test_callback(bool loaded, std::string plugin_name, std::string file_name)
+    {
+        callback_hooks_called = 1;
+        callback_hook_params = std::make_tuple(loaded, plugin_name, file_name);
     }
 };
-
-/**
- * Remove me later
- *
- * Functions: <functions>
- */
-
-TEST_F(plugin_manager_test, demonstrate_error_1)
-{
-    TEST_START
-
-    // Load all plugins without directory hints
-    plugin_manager::load_all_plugins();
-    //plugin_manager::unload_all_plugins();
-    //plugin_manager::load_all_plugins();
-
-    program_options cli_plugin_opts = plugin_manager::get_cli_plugin_options();
-
-    std::cout << "Loaded: " << std::endl;
-    for ( auto pn : plugin_manager::get_plugin_names()) {
-        std::cout << pn << std::endl;
-    }
-
-    std::cout << "\n===========\nDirectories: " << std::endl;
-    for( auto dir : core_utils::get_plugin_directories() )
-        std::cout << dir << std::endl;
-
-    TEST_END
-}
-
-/**
- * Testing things
- *
- * Functions: <functions>
- */
-
-TEST_F(plugin_manager_test, demonstrate_error_2)
-{
-    TEST_START
-    bool suc_1 = load_reference_plugin();
-    plugin_manager::unload(reference_library_name);
-    //bool suc_2 = load_reference_plugin();
-    EXPECT_TRUE(suc_1);
-    //EXPECT_TRUE(suc_2);
-    TEST_END
-}
 
 /**
  * Try to load all plugins, get their names and unload them all. After try to
@@ -105,14 +98,12 @@ TEST_F(plugin_manager_test, demonstrate_error_2)
  * Functions: load_all_plugins, get_plugin_names, unload_all_plugins
  *
  */
-
 TEST_F(plugin_manager_test, check_load_all) {
     TEST_START
         std::set<std::string> plugin_names;
         {
             // Load all plugins without directory hints
             plugin_manager::load_all_plugins();
-            //plugin_manager::load_all_plugins();
             plugin_names = plugin_manager::get_plugin_names();
             int plugin_amount = plugin_names.size();
             if (plugin_amount == 0) {
@@ -120,7 +111,7 @@ TEST_F(plugin_manager_test, check_load_all) {
             }
 
             // Unload all plugins
-            plugin_manager::unload_all_plugins();
+            NO_COUT(plugin_manager::unload_all_plugins());
             EXPECT_EQ(plugin_manager::get_plugin_names().size(), 0);
         }
         {
@@ -134,20 +125,9 @@ TEST_F(plugin_manager_test, check_load_all) {
                 std::cout << "Warning: No builded plugins are found! Tests might not find issues...";
             }
             // Unload all plugins
-            plugin_manager::unload_all_plugins();
+            NO_COUT(plugin_manager::unload_all_plugins());
             EXPECT_EQ(plugin_manager::get_plugin_names().size(), 0);
         }
-        {
-
-            // Try all to load the plugins from all possible plugin directories
-            for (auto& directory : core_utils::get_plugin_directories()){
-                for (auto& p_name : plugin_names){
-                    plugin_manager::load(p_name, directory);
-                }
-            }
-
-        }
-
     TEST_END
 }
 
@@ -167,45 +147,17 @@ TEST_F(plugin_manager_test, check_load_unload_all)
     {
         std::cout << "Warning: No builded plugins are found! Tests might not find issues..." << std::endl;
     }
-    plugin_manager::unload_all_plugins();
+    NO_COUT(plugin_manager::unload_all_plugins());
     EXPECT_TRUE(plugin_manager::get_plugin_names().empty());
 
     // Load all plugins with directory hints
-    plugin_manager::load_all_plugins(core_utils::get_plugin_directories()); // ISSUE: Fails with SIGSEGV
-    plugin_manager::unload_all_plugins();
+    plugin_manager::load_all_plugins(core_utils::get_plugin_directories());
+    NO_COUT(plugin_manager::unload_all_plugins());
 
     EXPECT_TRUE(plugin_manager::get_plugin_names().empty());
 
     TEST_END
 }
-
-/**
- * Try to load all plugins successively
- *
- * Functions: load_all_plugins, get_plugin_names, unload_all_plugins
- *
- */
-/*TEST_F(plugin_manager_test, check_load) {
-    TEST_START
-        for (const auto& directory : directories)
-        {
-            if (!hal::fs::exists(directory))
-                continue;
-            u32 num_of_loaded_plugins = 0;
-            for (const auto& file : core_utils::directory_range(directory))
-            {
-                if (!plugin_manager_helper::has_valid_file_extension(file) || hal::fs::is_directory(file))
-                    continue;
-
-                auto plugin_name = file.path().stem().string();
-                if (this->load(plugin_name, file.path()))
-                    num_of_loaded_plugins++;
-            }
-            log_info("core", "loaded {} plugins from '{}'", num_of_loaded_plugins, directory.string());
-        }
-        return true;
-    TEST_END
-}*/
 
 /**
  * Testing the load function with the test_plugin as well as with invalid
@@ -214,70 +166,51 @@ TEST_F(plugin_manager_test, check_load_unload_all)
  * Functions: load, unload
  *
  */
-
 TEST_F(plugin_manager_test, check_load)
 {
     TEST_START
-    // Figure out the path of the reference plugin by trying to load it in the possible
-    // plugin directories
-    hal::path test_plugin_path;
-
-    testing::internal::CaptureStdout();
-    for (auto directory : core_utils::get_plugin_directories())
-    {
-        bool suc = plugin_manager::load(reference_library_name, directory / (reference_library_name + ".so"));
-        if (suc)
+        hal::path test_plugin_path = get_plugin_path(reference_library_name);
+        if (test_plugin_path == hal::path(""))
         {
-            test_plugin_path = directory;
-            break;
+            std::cout << "Can't find the reference plugin ("<< reference_library_name <<"). Test might not find issues..." << std::endl;
         }
-    }
-    testing::internal::GetCapturedStdout();
-    if (test_plugin_path == hal::path(""))
-    {
-        std::cout << "Can't find the reference plugin ("<< reference_library_name <<"). Test might not find issues..." << std::endl;
-    }
-    // Unload the libtest_plugin loaded in the previous step
-    EXPECT_TRUE(plugin_manager::unload(reference_library_name));
-
-    {
-        // Load a plugin at a non-existing directory
-        testing::internal::CaptureStdout();
-        bool suc = plugin_manager::load(reference_library_name, hal::path("/this/dir/does/not/exist"));
-        testing::internal::GetCapturedStdout();
-        EXPECT_FALSE(suc);
-    }
-    {
-        // Try to load an non-existing plugin at an existing directory
-        testing::internal::CaptureStdout();
-        bool suc = plugin_manager::load("plugin_name", test_plugin_path / "non_existing_plugin.so");
-        testing::internal::GetCapturedStdout();
-        EXPECT_FALSE(suc);
-    }
-    {
-        // Try to load an existing plugin but pass an empty name
-        testing::internal::CaptureStdout();
-        bool suc = plugin_manager::load("", test_plugin_path / (reference_library_name + ".so"));
-        testing::internal::GetCapturedStdout();
-        EXPECT_FALSE(suc);
-    }
-    {
-        // Path is empty string
-        testing::internal::CaptureStdout();
-        bool suc = plugin_manager::load("plugin_name", hal::path(""));
-        testing::internal::GetCapturedStdout();
-        EXPECT_FALSE(suc);
-    }
-    {
-        // Load an already loaded plugin (should return true)
-        //testing::internal::CaptureStdout();
-        bool suc_first = plugin_manager::load(reference_library_name, ("hal_plugins/" + reference_library_name + ".so"));
-        bool suc       = plugin_manager::load(reference_library_name, ("hal_plugins/" + reference_library_name + ".so"));
-        //testing::internal::GetCapturedStdout();
-        EXPECT_TRUE(suc);
-        EXPECT_TRUE(suc_first);
-    }
-
+        {
+            // Load a plugin at a non-existing directory
+            NO_COUT_TEST_BLOCK;
+            plugin_manager::unload_all_plugins();
+            bool suc = plugin_manager::load(reference_library_name, hal::path("/this/dir/does/not/exist"));
+            EXPECT_FALSE(suc);
+        }
+        {
+            // Try to load an non-existing plugin at an existing directory
+            NO_COUT_TEST_BLOCK;
+            plugin_manager::unload_all_plugins();
+            bool suc = plugin_manager::load(reference_library_name, test_plugin_path / "non_existing_plugin.so");
+            EXPECT_FALSE(suc);
+        }
+        {
+            // Try to load an existing plugin but pass an empty name
+            NO_COUT_TEST_BLOCK;
+            plugin_manager::unload_all_plugins();
+            bool suc = plugin_manager::load("", test_plugin_path / (reference_library_name + ".so"));
+            EXPECT_FALSE(suc);
+        }
+        {
+            // Path is empty string
+            NO_COUT_TEST_BLOCK;
+            plugin_manager::unload_all_plugins();
+            bool suc = plugin_manager::load(reference_library_name, hal::path(""));
+            EXPECT_FALSE(suc);
+        }
+        {
+            // Load an already loaded plugin (should return true)
+            NO_COUT_TEST_BLOCK;
+            plugin_manager::unload_all_plugins();
+            bool suc_first = plugin_manager::load(reference_library_name, test_plugin_path);
+            bool suc       = plugin_manager::load(reference_library_name, test_plugin_path);
+            EXPECT_TRUE(suc);
+            EXPECT_TRUE(suc_first);
+        }
     TEST_END
 }
 
@@ -288,48 +221,31 @@ TEST_F(plugin_manager_test, check_load)
  * Functions: load, unload
  *
  */
-
 TEST_F(plugin_manager_test, check_unload)
 {
     TEST_START
-    // Figure out the path of test_plugin by try to loading it in the possible
-    // plugin directories
-    hal::path test_plugin_path;
-
-    testing::internal::CaptureStdout();
-    for (auto directory : core_utils::get_plugin_directories())
-    {
-        bool suc = plugin_manager::load(reference_library_name, (reference_library_name + ".so"));
-        if (suc)
-        {
-            test_plugin_path = directory;
-            break;
-        }
-    }
-    testing::internal::GetCapturedStdout();
+    hal::path test_plugin_path = get_plugin_path(reference_library_name);
     if (test_plugin_path == hal::path(""))
     {
         std::cout << "Can't find libtest_plugin. Test might not find issues..." << std::endl;
     }
-    // Unload the libtest_plugin loaded in the previous step
-    EXPECT_TRUE(plugin_manager::unload(reference_library_name));
-
+    {
+        // Unload the libtest_plugin loaded in the previous step
+        NO_COUT_TEST_BLOCK;
+        EXPECT_TRUE(plugin_manager::unload(reference_library_name));
+    }
     {
         // Unload an unknown plugin
-        testing::internal::CaptureStdout();
+        NO_COUT_TEST_BLOCK;
         bool suc = plugin_manager::unload("non_existing_plugin");
-        testing::internal::GetCapturedStdout();
         EXPECT_TRUE(suc);
     }
     {
         // Passing unload an empty string
-        testing::internal::CaptureStdout();
+        NO_COUT_TEST_BLOCK;
         bool suc = plugin_manager::unload("");
-        testing::internal::GetCapturedStdout();
         EXPECT_TRUE(suc);
     }
-
-    // NOTE: do some positive tests, if unload is fixed
 
     TEST_END
 }
@@ -339,7 +255,7 @@ TEST_F(plugin_manager_test, check_unload)
  * Functions: get_flag_to_plugin_mapping
  *
  */
-/*TEST_F(plugin_manager_test, check_cli_options)
+TEST_F(plugin_manager_test, check_cli_options)
 {
     TEST_START
 
@@ -351,10 +267,12 @@ TEST_F(plugin_manager_test, check_unload)
     if (load_reference_plugin())
     {
         std::map<std::string, std::string> cli_opts = plugin_manager::get_flag_to_plugin_mapping();
-        EXPECT_NE(cli_opts.find("--"+reference_name), cli_opts.end());
-        if (cli_opts.find("--"+reference_name) != cli_opts.end())
-        {
-            EXPECT_EQ(cli_opts["--"+reference_name], reference_library_name);
+        for (auto ref_flag_and_desc : reference_lib_options){
+            EXPECT_NE(cli_opts.find(ref_flag_and_desc.first), cli_opts.end());
+            if (cli_opts.find(ref_flag_and_desc.first) != cli_opts.end())
+            {
+                EXPECT_EQ(cli_opts[ref_flag_and_desc.first], reference_library_name);
+            }
         }
     }
     else
@@ -362,17 +280,17 @@ TEST_F(plugin_manager_test, check_unload)
         std::cout << "Can't load libtest_plugin. Some tests are skipped..." << std::endl;
     }
 
-    plugin_manager::unload(reference_library_name);
+    NO_COUT(plugin_manager::unload_all_plugins());
 
     TEST_END
-}*/
+}
 
 /**
  * Testing the get_cli_plugin_options function
- * Functions: get_cli_plugin_options
  *
+ * Functions: get_cli_plugin_options
  */
-/*TEST_F(plugin_manager_test, check_cli_plugin_options)
+TEST_F(plugin_manager_test, check_cli_plugin_options)
 {
     TEST_START
 
@@ -386,26 +304,26 @@ TEST_F(plugin_manager_test, check_unload)
         // Get the options and find the options of the test plugin
         program_options cli_plugin_opts = plugin_manager::get_cli_plugin_options();
 
-        EXPECT_TRUE(cli_plugin_opts.is_registered("--test_plugin"));
-        std::vector<std::tuple<std::set<std::string>, std::string>> opts = cli_plugin_opts.get_options();
-        EXPECT_EQ(std::get<1>(opts[0]), "test_plugin_description");
+        for (auto ref_flag_and_desc : reference_lib_options){
+            EXPECT_TRUE(cli_plugin_opts.is_registered(ref_flag_and_desc.first));
+        }
+        NO_COUT_TEST_BLOCK;
+        plugin_manager::unload_all_plugins();
     }
     else
     {
         std::cout << "Warning: Can't load libtest_plugin. Some tests are skipped..." << std::endl;
     }
 
-    plugin_manager::unload("libtest_plugin");
-
     TEST_END
-}*/
+}
 
 /**
  * Testing the get_plugin_factory function
  *
  * Functions: get_plugin_factory
  */
-/*TEST_F(plugin_manager_test, check_get_plugin_factory)
+TEST_F(plugin_manager_test, check_get_plugin_factory)
 {
     TEST_START
     // ########################
@@ -415,44 +333,41 @@ TEST_F(plugin_manager_test, check_unload)
     // Load the test_plugin
     if (load_reference_plugin())
     {
-        i_factory* test_p_factory = plugin_manager::get_plugin_factory("libtest_plugin");
+        NO_COUT_TEST_BLOCK;
+        i_factory* test_p_factory = plugin_manager::get_plugin_factory(reference_library_name);
         EXPECT_NE(test_p_factory, nullptr);
+        plugin_manager::unload_all_plugins();
     }
     else
     {
         std::cout << "Can't load libtest_plugin. Some tests are skipped..." << std::endl;
     }
 
-    plugin_manager::unload("libtest_plugin");
-
     // ########################
     // NEGATIVE TESTS
     // ########################
-
     {
         // Passing an unknown plugin name
-        testing::internal::CaptureStdout();
+        NO_COUT_TEST_BLOCK;
         i_factory* factory = plugin_manager::get_plugin_factory("unknown_plugin");
-        testing::internal::GetCapturedStdout();
         EXPECT_EQ(factory, nullptr);
     }
     {
         // Passing an empty string
-        testing::internal::CaptureStdout();
+        NO_COUT_TEST_BLOCK;
         i_factory* factory = plugin_manager::get_plugin_factory("");
-        testing::internal::GetCapturedStdout();
         EXPECT_EQ(factory, nullptr);
     }
 
     TEST_END
-}*/
+}
 
 /**
  * Testing the get_plugin_instance function
  *
  * Functions: get_plugin_instance
  */
-/*TEST_F(plugin_manager_test, check_get_plugin_instance)
+TEST_F(plugin_manager_test, check_get_plugin_instance)
 {
     TEST_START
     // ########################
@@ -462,34 +377,119 @@ TEST_F(plugin_manager_test, check_unload)
     // Load the test_plugin
     if (load_reference_plugin())
     {
-        std::shared_ptr<i_cli> test_plugin_instance = plugin_manager::get_plugin_instance<i_cli>("libtest_plugin");
-        EXPECT_EQ(test_plugin_instance->get_name(), "test_plugin");
+        std::shared_ptr<i_cli> test_plugin_instance = plugin_manager::get_plugin_instance<i_cli>(reference_library_name);
+        ASSERT_NE(test_plugin_instance, nullptr);
+        EXPECT_EQ(test_plugin_instance->get_name(), reference_name);
+        NO_COUT_TEST_BLOCK;
+        test_plugin_instance = nullptr;
+        plugin_manager::unload_all_plugins();
     }
     else
     {
         std::cout << "Can't load libtest_plugin. Some tests are skipped..." << std::endl;
     }
 
-    plugin_manager::unload("libtest_plugin");
-
     // ########################
     // NEGATIVE TESTS
     // ########################
-
     {
         // Passing an unknown plugin name
-        testing::internal::CaptureStdout();
+        NO_COUT_TEST_BLOCK;
         std::shared_ptr<i_cli> plugin_instance = plugin_manager::get_plugin_instance<i_cli>("unknown_plugin");
-        testing::internal::GetCapturedStdout();
         EXPECT_EQ(plugin_instance, nullptr);
     }
     {
         // Passing an empty string
-        testing::internal::CaptureStdout();
+        NO_COUT_TEST_BLOCK;
         std::shared_ptr<i_cli> plugin_instance = plugin_manager::get_plugin_instance<i_cli>("");
-        testing::internal::GetCapturedStdout();
         EXPECT_EQ(plugin_instance, nullptr);
     }
 
     TEST_END
-}*/
+}
+
+/**
+ * Testing the usage of callback hooks to track the loading and unloading of plugins
+ *
+ * Functions: add_model_changed_callback, remove_model_changed_callback
+ */
+TEST_F(plugin_manager_test, check_callback_hooks)
+{
+    TEST_START
+        // Add a callback hook
+        NO_COUT(plugin_manager::unload_all_plugins()); // Just to assure no plugin is loaded
+        callback_hooks_called = 0;
+        u64 callback_id = plugin_manager::add_model_changed_callback(test_callback);
+        EXPECT_EQ(callback_hooks_called, 0);
+        if (load_reference_plugin()) // <- should call the callback hook once
+        {
+            EXPECT_EQ(callback_hooks_called, 1);
+            EXPECT_EQ(callback_hook_params, std::make_tuple(true, reference_library_name, get_plugin_path(reference_library_name).string()));
+
+            // Reset the counter
+            callback_hooks_called = 0;
+
+            // Unload all plugin (only one is loaded). The hook should be called once.
+            NO_COUT(plugin_manager::unload_all_plugins());
+
+            EXPECT_EQ(callback_hooks_called, 1);
+            EXPECT_EQ(callback_hook_params, std::make_tuple(false, reference_library_name, get_plugin_path(reference_library_name).string()));
+
+            // Reset the counter
+            callback_hooks_called = 0;
+
+
+            // Unregister the hook
+            plugin_manager::remove_model_changed_callback(callback_id);
+
+            load_reference_plugin();
+            NO_COUT(plugin_manager::unload_all_plugins());
+
+            EXPECT_EQ(callback_hooks_called, 0);
+
+        }
+        else
+        {
+            std::cout << "Can't load libtest_plugin. Some tests are skipped..." << std::endl;
+        }
+        {
+            // The function is a nullptr
+            NO_COUT_TEST_BLOCK;
+            callback_id = plugin_manager::add_model_changed_callback(nullptr);
+            EXPECT_EQ(callback_id, 0);
+        }
+
+        NO_COUT(plugin_manager::unload_all_plugins());
+    TEST_END
+}
+
+/**
+ * Testing the adding of existing option flags that should be reserved, so plugins must not use them.
+ *
+ * IMPORTANT: Since the manipulation the test fixture does can't be reset, it must be positioned BELOW all others!
+ *
+ * Functions: add_existing_options_description, load
+ */
+TEST_F(plugin_manager_test, check_existing_options_description)
+{
+    TEST_START
+        // Try the load plugin, but add an existing option (add_existing_options_description) that overlaps
+        // with the plugins options
+        hal::path test_plugin_path = get_plugin_path(reference_library_name);
+        if (test_plugin_path == hal::path(""))
+        {
+            std::cout << "Can't find the reference plugin ("<< reference_library_name <<"). Test might not find issues..." << std::endl;
+        }
+        if (!reference_lib_options.empty()){
+            NO_COUT_TEST_BLOCK;
+            plugin_manager::unload_all_plugins();
+            program_options overlapping_opt;
+            overlapping_opt.add(reference_lib_options[0].first, reference_lib_options[0].second);
+            plugin_manager::add_existing_options_description(overlapping_opt);
+            EXPECT_FALSE(plugin_manager::load(reference_library_name, test_plugin_path));
+        }
+        else {
+            cout << "Warning: Please add options to the reference plugin and put them in reference_lib_options..." << endl;
+        }
+    TEST_END
+}
