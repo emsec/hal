@@ -8,6 +8,7 @@
 #include "settings/settings_widget.h"
 #include "settings/checkbox_setting.h"
 #include "settings/dropdown_setting.h"
+#include "settings/keybind_setting.h"
 #include "settings/slider_setting.h"
 #include "settings/text_setting.h"
 #include "settings/fontsize_preview_widget.h"
@@ -150,6 +151,9 @@ void main_settings_widget::init_widgets()
     this->register_widget("python-item", py_line_numbers_setting);
 
     this->make_section("Expert settings", "advanced-item", ":/icons/preferences");
+
+    keybind_setting* demo_keybind_setting = new keybind_setting("keybinds/demo", "Demo Keybind", "demo description", this);
+    this->register_widget("advanced-item", demo_keybind_setting);
 
     // text_setting* py_interpreter_setting = new text_setting("python/interpreter", "Python Interpreter", "will be used after restart", "/path/to/python");
     // this->register_widget("advanced-item", py_interpreter_setting);
