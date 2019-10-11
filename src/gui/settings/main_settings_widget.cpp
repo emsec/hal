@@ -8,7 +8,9 @@
 #include "settings/settings_widget.h"
 #include "settings/checkbox_setting.h"
 #include "settings/dropdown_setting.h"
+#include "settings/keybind_setting.h"
 #include "settings/slider_setting.h"
+#include "settings/text_setting.h"
 #include "settings/fontsize_preview_widget.h"
 
 #include <QDebug>
@@ -121,19 +123,41 @@ void main_settings_widget::init_widgets()
 
     this->make_section("Style", "style-item", ":/icons/eye");
 
-    dropdown_setting* theme_settings = new dropdown_setting("main_style/theme", "Main Style Theme", QStringList() << "Darcula" << "Sunny", "will be set as your theme after restarting", this);
-    theme_settings->reset_labels();
-    checkbox_setting* dummy_checkbox = new checkbox_setting("none", "Dummy Checkbox", "I'm a checkbox", " -------> check me", this);
+    QMap<QString, QString> theme_options;
+    theme_options.insert("Darcula", "darcula");
+    theme_options.insert("Sunny", "sunny");
+    dropdown_setting* theme_settings = new dropdown_setting("main_style/theme", "Main Style Theme", theme_options, "will be set as your theme after restarting", this);
+    //theme_settings->reset_labels();
     this->register_widget("style-item", theme_settings);
-    this->register_widget("style-item", dummy_checkbox);
 
-    this->make_section("Python editor", "python-item", ":/icons/eye");
+    this->make_section("Graph View", "graphview-item", ":/icons/graph");
+
+    QMap<QString, QString> graph_grid_options;
+    graph_grid_options.insert("None", "none");
+    graph_grid_options.insert("Lines", "lines");
+    graph_grid_options.insert("Dots", "dots");
+    dropdown_setting* graph_grid_settings = new dropdown_setting("graph_view/grid_type", "Grid", graph_grid_options, "", this);
+    this->register_widget("graphview-item", graph_grid_settings);
+
+    this->make_section("Python editor", "python-item", ":/icons/python");
 
     slider_setting* py_font_size_setting = new slider_setting("python/font_size", "Font Size", 6, 40, "pt", this);
     fontsize_preview_widget* py_font_size_preview = new fontsize_preview_widget("foobar", font());
     py_font_size_preview->setMinimumSize(QSize(220, 85));
     py_font_size_setting->set_preview_widget(py_font_size_preview);
+    py_font_size_setting->set_preview_position(settings_widget::preview_position::right);
     this->register_widget("python-item", py_font_size_setting);
+    checkbox_setting* py_line_numbers_setting = new checkbox_setting("python/line_numbers", "Line Numbers", "show", "", this);
+    this->register_widget("python-item", py_line_numbers_setting);
+
+    this->make_section("Expert settings", "advanced-item", ":/icons/preferences");
+
+    keybind_setting* demo_keybind_setting = new keybind_setting("keybinds/demo", "Demo Keybind", "demo description", this);
+    this->register_widget("advanced-item", demo_keybind_setting);
+
+    // text_setting* py_interpreter_setting = new text_setting("python/interpreter", "Python Interpreter", "will be used after restart", "/path/to/python");
+    // this->register_widget("advanced-item", py_interpreter_setting);
+
 }
 
 void main_settings_widget::make_section(const QString& label, const QString& name, const QString& icon_path)
@@ -195,12 +219,13 @@ void main_settings_widget::handle_ok_clicked()
     #ifdef ENABLE_OK_BUTTON
     for (settings_widget* widget : m_all_settings)
     {
-        // clear the setting and sync the widget to the default value of its
-        // connected setting
-        QString key = widget->key();
-        QVariant value = widget->value();
-        widget->mark_saved();
-        g_settings_manager.update(key, value);
+        if (widget->dirty())
+        {
+            QString key = widget->key();
+            QVariant value = widget->value();
+            widget->mark_saved();
+            g_settings_manager.update(key, value);
+        }
     }
     #endif
     Q_EMIT close();

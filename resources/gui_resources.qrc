@@ -89,6 +89,7 @@
         <file alias="pen">icons/pen.svg</file>
         <file alias="plus">icons/plus.svg</file>
         <file alias="trashcan">icons/trashcan.svg</file>
+        <file alias="graph">icons/0189-tree.svg</file>
     </qresource>
     <qresource prefix="/images">
         <file alias="hal">images/hal_9000_by_johnnyslowhand.png</file>

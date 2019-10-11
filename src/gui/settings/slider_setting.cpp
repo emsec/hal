@@ -16,7 +16,7 @@ slider_setting::slider_setting(const QString& key, const QString& title, const i
     m_labels.append(QPair<QLabel*, QString>(m_name, title));
 
     QHBoxLayout* layout = new QHBoxLayout();
-    m_layout->addLayout(layout);
+    m_container->addLayout(layout);
 
     m_slider = new QSlider(Qt::Orientation::Horizontal, this);
     m_slider->setMinimum(min);

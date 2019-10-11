@@ -71,7 +71,14 @@ std::shared_ptr<netlist> hdl_parser_verilog::parse(const std::string& gate_libra
             if (core_utils::starts_with(token, "module "))
             {
                 // reset current_entity
-                current_entity.name        = core_utils::trim(token.substr(0, token.find('(')).substr(token.find(' ') + 1));
+                current_entity.name = core_utils::trim(token.substr(0, token.find('(')).substr(token.find(' ') + 1));
+
+                if (current_entity.name.empty())
+                {
+                    log_error("hdl_parser", "Verilog module must have a name.");
+                    return nullptr;
+                }
+
                 current_entity.line_number = static_cast<u32>(token_begin);
                 current_entity.definition.ports.clear();
                 current_entity.definition.wires.clear();
@@ -232,8 +239,8 @@ bool hdl_parser_verilog::parse_ports(entity& e)
         // add all signals of that port
         for (const auto& expanded_port : this->get_expanded_signals(port_str))
         {
-            e.expanded_signal_names[expanded_port.first].insert(e.expanded_signal_names[expanded_port.first].end(), expanded_port.second.begin(), expanded_port.second.end());
             e.ports_expanded[expanded_port.first] = std::make_pair(direction, expanded_port.second);
+            e.expanded_signal_names[expanded_port.first].insert(e.expanded_signal_names[expanded_port.first].end(), expanded_port.second.begin(), expanded_port.second.end());
         }
     }
 

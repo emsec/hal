@@ -28,7 +28,7 @@
 
 #include <QVariant>
 #include <QToolButton>
-#include <QHBoxLayout>
+#include <QBoxLayout>
 #include <QFrame>
 #include <QPair>
 
@@ -44,6 +44,12 @@ class settings_widget : public QFrame
     Q_PROPERTY(bool dirty READ dirty)
 
 public:
+    enum class preview_position
+    {
+        bottom = 0,
+        right = 1
+    };
+
     explicit settings_widget(const QString& key, QWidget* parent = 0);
 
     QColor highlight_color();
@@ -61,6 +67,7 @@ public:
     void mark_saved();
 
     void set_preview_widget(preview_widget* widget);
+    void set_preview_position(preview_position position);
 
     virtual void load(const QVariant& value) = 0;
     virtual QVariant value()                  = 0;
@@ -74,6 +81,7 @@ Q_SIGNALS:
 
 protected:
     QVBoxLayout* m_layout;
+    QBoxLayout* m_container;
     QHBoxLayout* m_top_bar;
     QLabel* m_name;
     QToolButton* m_revert;
