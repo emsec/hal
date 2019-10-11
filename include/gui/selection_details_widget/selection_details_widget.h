@@ -32,6 +32,7 @@
 
 class QTableWidget;
 class QStackedWidget;
+class searchbar;
 
 class selection_details_widget : public content_widget
 {
@@ -43,6 +44,7 @@ public:
 
 public Q_SLOTS:
     void handle_selection_update(void* sender);
+    QList<QShortcut*> create_shortcuts() Q_DECL_OVERRIDE;
 
 private:
     QStackedWidget* m_stacked_widget;
@@ -52,6 +54,10 @@ private:
     net_details_widget* m_net_details;
     module_details_widget* m_module_details;
     QLabel* m_item_deleted_label;
+
+    searchbar* m_searchbar;
+
+    void toggle_searchbar();
 };
 
 #endif    // SELECTION_DETAILS_WIDGET_H

@@ -21,50 +21,30 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef MODULE_DETAILS_WIDGET_H
-#define MODULE_DETAILS_WIDGET_H
+#ifndef KEYBIND_SETTINGS_H
+#define KEYBIND_SETTINGS_H
 
-#include "def.h"
+#include "settings_widget.h"
 
-#include "netlist_relay/netlist_relay.h"
+#include <QCheckBox>
+#include <QKeySequenceEdit>
+#include <QStringList>
 
-#include <QWidget>
-#include <QTreeView>
-#include "selection_details_widget/tree_navigation/tree_module_model.h"
-#include "selection_details_widget/tree_navigation/tree_module_proxy_model.h"
-
-class module;
-
-class QVBoxLayout;
-class QLabel;
-
-class module_details_widget : public QWidget
+class keybind_setting : public settings_widget
 {
     Q_OBJECT
+
 public:
-    module_details_widget(QWidget* parent = nullptr);
+    keybind_setting(const QString& key, const QString& title, const QString& description, QWidget *parent = nullptr);
 
-    void update(u32 module_id);
-
-public Q_SLOTS:
-    void handle_module_event(module_event_handler::event ev, std::shared_ptr<module> module, u32 associated_data);
-    void handle_selection_changed(void* sender);
-    void handle_searchbar_text_edited(const QString &text);
+    virtual void load(const QVariant& value) Q_DECL_OVERRIDE;
+    virtual QVariant value() Q_DECL_OVERRIDE;
+    //virtual void rollback() Q_DECL_OVERRIDE;
 
 private:
+    QKeySequenceEdit* m_keybind_edit;
+    void on_keybind_changed();
 
-    void toggle_searchbar();
-    void handle_tree_selection_changed(const QItemSelection& selected, const QItemSelection& deselected);
-    void toggle_resize_columns();
-
-    QVBoxLayout* m_content_layout;
-
-    u32 m_current_id;
-    bool m_ignore_selection_change;
-
-    QTreeView* m_treeview;
-    tree_module_model* m_tree_module_model;
-    tree_module_proxy_model* m_tree_module_proxy_model;
 };
 
-#endif // MODULE_DETAILS_WIDGET_H
+#endif //KEYBIND_SETTINGS_H

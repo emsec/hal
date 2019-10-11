@@ -4,12 +4,16 @@
 #include <QRegularExpression>
 #include <QRegularExpressionMatch>
 #include <QStyle>
-#include <QVBoxLayout>
+#include <QBoxLayout>
 
 // enable this to apply all settings as they are modified
 //#define SETTINGS_UPDATE_IMMEDIATELY
 
-settings_widget::settings_widget(const QString& key, QWidget* parent) : QFrame(parent), m_layout(new QVBoxLayout()), m_top_bar(new QHBoxLayout()), m_name(new QLabel()), m_revert(new QToolButton()), m_default(new QToolButton()), m_unsaved_changes(false), m_highlight_color(52, 56, 57), m_key(key)
+settings_widget::settings_widget(const QString& key, QWidget* parent) : QFrame(parent),
+    m_layout(new QVBoxLayout()), m_container(new QBoxLayout(QBoxLayout::TopToBottom)),
+    m_top_bar(new QHBoxLayout()), m_name(new QLabel()), m_revert(new QToolButton()),
+    m_default(new QToolButton()), m_unsaved_changes(false), m_highlight_color(52, 56, 57),
+    m_key(key)
 {
     setFrameStyle(QFrame::NoFrame);
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
@@ -34,6 +38,7 @@ settings_widget::settings_widget(const QString& key, QWidget* parent) : QFrame(p
     m_top_bar->addWidget(m_revert);
     m_top_bar->addWidget(m_default);
     m_layout->addLayout(m_top_bar);
+    m_layout->addLayout(m_container);
     
     hide();
 }
@@ -174,12 +179,23 @@ void settings_widget::set_preview_widget(preview_widget* widget)
 {
     if (m_preview)
     {
-        m_layout->removeWidget(m_preview);
+        m_container->removeWidget(m_preview);
     }
     m_preview = widget;
-    m_layout->addWidget(m_preview);
+    m_container->addWidget(m_preview);
     if (m_prepared)
     {
         m_preview->update(value());
     }
+}
+
+void settings_widget::set_preview_position(preview_position position)
+{
+    QBoxLayout::Direction direction;
+    switch(position)
+    {
+        case preview_position::bottom : direction = QBoxLayout::TopToBottom; break;
+        case preview_position::right  : direction = QBoxLayout::LeftToRight; break;
+    }
+    m_container->setDirection(direction);
 }
