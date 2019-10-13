@@ -77,7 +77,7 @@ void module_details_widget::handle_selection_changed(void *sender)
         selection.select(m_tree_module_proxy_model->mapFromSource(index), m_tree_module_proxy_model->mapFromSource(index));
 
 
-    if(!selection.isEmpty())
+    if(!selection.isEmpty() || (!m_treeview->selectionModel()->selectedIndexes().isEmpty() && selection.isEmpty()))
         m_ignore_selection_change = true;
 
     m_treeview->selectionModel()->select(selection, QItemSelectionModel::ClearAndSelect);
