@@ -51,9 +51,11 @@ bool file_manager::file_open() const
 
 void file_manager::autosave()
 {
-    log_info("gui", "saving a backup in case something goes wrong...");
-
-    netlist_serializer::serialize_to_file(g_netlist, m_shadow_file_name.toStdString());
+    if (!m_shadow_file_name.isEmpty())
+    {
+        log_info("gui", "saving a backup in case something goes wrong...");
+        netlist_serializer::serialize_to_file(g_netlist, m_shadow_file_name.toStdString());
+    }
 }
 
 QString file_manager::file_name() const
@@ -64,18 +66,48 @@ QString file_manager::file_name() const
     return QString();
 }
 
+void file_manager::watch_file(const QString& file_name)
+{
+    if (file_name == m_file_name)
+    {
+        return;
+    }
+
+    if (!m_file_name.isEmpty())
+    {
+        m_file_watcher->removePath(m_file_name);
+        remove_shadow_file();
+    }
+
+    m_timer->stop();
+
+    if (!file_name.isEmpty())
+    {
+        log_info("gui", "watching current file '{}'", file_name.toStdString());
+
+        // autosave every 60s
+        m_timer->start(60 * 1000);
+
+        m_file_name        = file_name;
+        m_shadow_file_name = get_shadow_file(file_name);
+        m_file_watcher->addPath(m_file_name);
+        m_file_open = true;
+        update_recent_files(m_file_name);
+    }
+}
+
 void file_manager::file_successfully_loaded(QString file_name)
 {
-    // autosave every 60s
-    m_timer->start(60 * 1000);
-
-    m_file_name        = file_name;
-    m_shadow_file_name = get_shadow_file(file_name);
-    m_file_watcher->addPath(m_file_name);
-    m_file_open = true;
-    update_recent_files(m_file_name);
-    g_python_context = std::make_unique<python_context>();    // HANDLE PYTHON CONTEXT SEPARATELY
+    watch_file(file_name);
     Q_EMIT file_opened(m_file_name);
+}
+
+void file_manager::remove_shadow_file()
+{
+    if (QFileInfo::exists(m_shadow_file_name) && QFileInfo(m_shadow_file_name).isFile())
+    {
+        QFile(m_shadow_file_name).remove();
+    }
 }
 
 QString file_manager::get_shadow_file(QString file)
@@ -131,12 +163,12 @@ void file_manager::open_file(QString file_name)
 
             msgBox.exec();
 
-            if (msgBox.clickedButton() == (QAbstractButton*) parse_hal_btn)
+            if (msgBox.clickedButton() == (QAbstractButton*)parse_hal_btn)
             {
                 file_name         = hal_file_name;
                 logical_file_name = hal_file_name;
             }
-            else if (msgBox.clickedButton() != (QAbstractButton*) parse_hdl_btn)
+            else if (msgBox.clickedButton() != (QAbstractButton*)parse_hdl_btn)
             {
                 return;
             }
@@ -282,10 +314,7 @@ void file_manager::close_file()
     m_file_name = "";
     m_file_open = false;
 
-    if (QFileInfo::exists(m_shadow_file_name) && QFileInfo(m_shadow_file_name).isFile())
-    {
-        QFile(m_shadow_file_name).remove();
-    }
+    remove_shadow_file();
 
     Q_EMIT file_closed();
 }

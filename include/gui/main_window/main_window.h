@@ -51,6 +51,8 @@ class welcome_screen;
 class main_window : public QWidget
 {
     Q_OBJECT
+    Q_PROPERTY(QString new_file_icon_path READ new_file_icon_path WRITE set_new_file_icon_path)
+    Q_PROPERTY(QString new_file_icon_style READ new_file_icon_style WRITE set_new_file_icon_style)
     Q_PROPERTY(QString open_icon_path READ open_icon_path WRITE set_open_icon_path)
     Q_PROPERTY(QString open_icon_style READ open_icon_style WRITE set_open_icon_style)
     Q_PROPERTY(QString save_icon_path READ save_icon_path WRITE set_save_icon_path)
@@ -67,6 +69,9 @@ class main_window : public QWidget
 public:
     explicit main_window(QWidget* parent = nullptr);
     void add_content(content_widget* widget, int index, content_anchor anchor);
+
+    QString new_file_icon_path() const;
+    QString new_file_icon_style() const;
 
     QString open_icon_path() const;
     QString open_icon_style() const;
@@ -85,6 +90,10 @@ public:
 
     QString settings_icon_path() const;
     QString settings_icon_style() const;
+
+
+    void set_new_file_icon_path(const QString& path);
+    void set_new_file_icon_style(const QString &style);
 
     void set_open_icon_path(const QString& path);
     void set_open_icon_style(const QString& style);
@@ -114,6 +123,8 @@ public Q_SLOTS:
     void toggle_schedule();
     void toggle_settings();
     void show_layout_area();
+
+    void handle_action_new();
     void handle_action_open();
     void handle_file_opened(const QString& file_name);
     void handle_save_triggered();
@@ -136,6 +147,7 @@ private:
     QToolBar* m_right_tool_bar;
     content_layout_area* m_layout_area;
 
+    QAction* m_action_new;
     QAction* m_action_open;
     QAction* m_action_save;
     QAction* m_action_save_as;
@@ -153,6 +165,9 @@ private:
     about_dialog* m_about_dialog;
 
     plugin_model* m_plugin_model;
+
+    QString m_new_file_icon_style;
+    QString m_new_file_icon_path;
 
     QString m_open_icon_path;
     QString m_open_icon_style;

@@ -1337,6 +1337,9 @@ qproperty-delete_icon_path: ":/icons/trashcan";
 }
 
 main_window {
+qproperty-new_file_icon_style: "";
+qproperty-new_file_icon_path: ":/icons/new-file";
+
 qproperty-open_icon_style: "all->#3192C5";
 qproperty-open_icon_path: ":/icons/folder";
 
