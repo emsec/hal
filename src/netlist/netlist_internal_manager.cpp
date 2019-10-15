@@ -382,7 +382,11 @@ std::shared_ptr<module> netlist_internal_manager::create_module(const u32 id, st
     }
 
     module_event_handler::notify(module_event_handler::event::created, m);
-    module_event_handler::notify(module_event_handler::event::submodule_added, parent, id);
+
+    if (parent != nullptr)
+    {
+        module_event_handler::notify(module_event_handler::event::submodule_added, parent, id);
+    }
 
     return m;
 }

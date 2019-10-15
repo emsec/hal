@@ -35,7 +35,6 @@ if(PL_##UPPER## OR BUILD_ALL_PLUGINS)
 
     add_library(##LOWER## SHARED ${##UPPER##_SRC} ${##UPPER##_PYTHON_SRC} ${##UPPER##_INC})
 
-    set_target_properties(##LOWER## PROPERTIES PREFIX "")
     if(APPLE AND CMAKE_HOST_APPLE)
         set_target_properties(##LOWER## PROPERTIES SUFFIX ".so")
         set_target_properties(##LOWER## PROPERTIES INSTALL_NAME_DIR ${PLUGIN_LIBRARY_INSTALL_DIRECTORY})

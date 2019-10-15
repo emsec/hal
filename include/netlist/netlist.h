@@ -280,6 +280,13 @@ public:
     std::set<std::shared_ptr<gate>> get_gates(const std::string& gate_type_filter = DONT_CARE, const std::string& name_filter = DONT_CARE) const;
 
     /**
+     * Get number/amounts of gates in netlist. <br>
+     *
+     * @return Number of gates.
+     */
+    u32 get_number_of_gates();
+
+    /**
      * Mark a gate as a global vcc gate.
      *
      * @param[in] gate - The new gate.
@@ -378,6 +385,13 @@ public:
      * @returns An unoccupied unique id.
      */
     u32 get_unique_net_id();
+
+    /**
+     * Get number/amounts of nets in netlist. <br>
+     *
+     * @return Number of nets.
+     */
+    u32 get_number_of_nets();
 
     /**
      * Creates and adds a new net to the netlist.<br>
