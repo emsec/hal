@@ -7,6 +7,7 @@
 #include "netlist/gate_library/gate_library_manager.h"
 
 #include "gui/file_manager/file_manager.h"
+#include "gui/file_status_manager/file_status_manager.h"
 #include "gui/graph_widget/graph_context_manager.h"
 #include "gui/hal_content_manager/hal_content_manager.h"
 #include "gui/main_window/main_window.h"
@@ -15,12 +16,13 @@
 #include "gui/plugin_management/plugin_relay.h"
 #include "gui/python/python_context.h"
 #include "gui/selection_relay/selection_relay.h"
-#include "gui/file_status_manager/file_status_manager.h"
-#include "gui/settings/settings_relay.h"
 #include "gui/settings/settings_manager.h"
+#include "gui/settings/settings_relay.h"
 #include "gui/style/style.h"
 #include "gui/thread_pool/thread_pool.h"
 #include "gui/window_manager/window_manager.h"
+
+#include <signal.h>
 
 #include <QApplication>
 #include <QFile>
@@ -74,7 +76,16 @@ static void handle_program_arguments(const program_arguments& args)
 static void cleanup()
 {
     delete g_notification_manager;
-//    delete g_window_manager;
+    //    delete g_window_manager;
+}
+
+static void m_cleanup(int sig)
+{
+    if (sig == SIGINT)
+    {
+        log_info("gui", "Detected Ctrl+C in terminal");
+        QApplication::exit(0);
+    }
 }
 
 bool plugin_gui::exec(program_arguments& args)
@@ -149,11 +160,11 @@ bool plugin_gui::exec(program_arguments& args)
     //TEMPORARY CODE TO CHANGE BETWEEN THE 2 STYLESHEETS WITH SETTINGS (NOT FINAL)
     //this settingsobject is currently neccessary to read from the settings from here, because the g_settings are not yet initialized(?)
     QSettings tempsettings_to_read_from(QString::fromStdString((core_utils::get_user_config_directory() / "/guisettings.ini").string()), QSettings::IniFormat);
-    QString stylesheet_to_open = ":/style/darcula"; //default style
+    QString stylesheet_to_open = ":/style/darcula";    //default style
 
-    if(tempsettings_to_read_from.value("main_style/theme","") == "" || tempsettings_to_read_from.value("main_style/theme", "") == "darcula")
+    if (tempsettings_to_read_from.value("main_style/theme", "") == "" || tempsettings_to_read_from.value("main_style/theme", "") == "darcula")
         stylesheet_to_open = ":/style/darcula";
-    else if(tempsettings_to_read_from.value("main_style/theme", "") == "sunny")
+    else if (tempsettings_to_read_from.value("main_style/theme", "") == "sunny")
         stylesheet_to_open = ":/style/sunny";
 
     QFile stylesheet(stylesheet_to_open);
@@ -166,11 +177,13 @@ bool plugin_gui::exec(program_arguments& args)
 
     qRegisterMetaType<spdlog::level::level_enum>("spdlog::level::level_enum");
 
-//    g_window_manager       = new window_manager();
+    //    g_window_manager       = new window_manager();
     g_notification_manager = new notification_manager();
 
     g_thread_pool = new thread_pool();
-    
+
+    signal(SIGINT, m_cleanup);
+
     main_window w;
     handle_program_arguments(args);
     w.show();

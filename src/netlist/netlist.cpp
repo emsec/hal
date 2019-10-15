@@ -205,6 +205,11 @@ std::set<std::shared_ptr<gate>> netlist::get_gates(const std::string& gate_type_
     return m_top_module->get_gates(gate_type_filter, name_filter, true);
 }
 
+u32 netlist::get_number_of_gates()
+{
+    return m_top_module->get_gates(DONT_CARE, DONT_CARE, true).size();
+}
+
 bool netlist::mark_global_vcc_gate(const std::shared_ptr<gate> gate)
 {
     if (!is_gate_in_netlist(gate))
@@ -343,6 +348,11 @@ u32 netlist::get_unique_net_id()
         m_next_net_id++;
     }
     return m_next_net_id;
+}
+
+u32 netlist::get_number_of_nets()
+{
+    return m_nets_set.size();
 }
 
 std::shared_ptr<net> netlist::create_net(const u32 id, const std::string& name)

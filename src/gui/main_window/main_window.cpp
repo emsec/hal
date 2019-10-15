@@ -6,8 +6,10 @@
 
 #include "hdl_parser/hdl_parser_dispatcher.h"
 #include "netlist/gate.h"
+#include "netlist/gate_library/gate_library_manager.h"
 #include "netlist/net.h"
 #include "netlist/netlist.h"
+#include "netlist/netlist_factory.h"
 #include "netlist/persistent/netlist_serializer.h"
 
 #include "gui/gui_def.h"
@@ -32,6 +34,7 @@
 #include <QDesktopWidget>
 #include <QFileDialog>
 #include <QFuture>
+#include <QInputDialog>
 #include <QMessageBox>
 #include <QPushButton>
 #include <QSettings>
@@ -115,6 +118,7 @@ main_window::main_window(QWidget* parent) : QWidget(parent), m_schedule_widget(n
 
     setLocale(QLocale(QLocale::English, QLocale::UnitedStates));
 
+    m_action_new          = new QAction(this);
     m_action_open         = new QAction(this);
     m_action_save         = new QAction(this);
     m_action_about        = new QAction(this);
@@ -147,6 +151,8 @@ main_window::main_window(QWidget* parent) : QWidget(parent), m_schedule_widget(n
     //    m_settings_icon_style = "all->#AFB1B3";
     //    m_settings_icon_path  = ":/icons/settings";
 
+    m_action_new->setIcon(gui_utility::get_styled_svg_icon(m_new_file_icon_style, m_new_file_icon_path));
+    //m_action_new->setIcon(gui_utility::get_styled_svg_icon(m_open_icon_style, m_open_icon_path));
     m_action_open->setIcon(gui_utility::get_styled_svg_icon(m_open_icon_style, m_open_icon_path));
     m_action_save->setIcon(gui_utility::get_styled_svg_icon(m_save_icon_style, m_save_icon_path));
     m_action_schedule->setIcon(gui_utility::get_styled_svg_icon(m_schedule_icon_style, m_schedule_icon_path));
@@ -161,11 +167,13 @@ main_window::main_window(QWidget* parent) : QWidget(parent), m_schedule_widget(n
     m_menu_bar->addAction(m_menu_file->menuAction());
     m_menu_bar->addAction(m_menu_edit->menuAction());
     m_menu_bar->addAction(m_menu_help->menuAction());
+    m_menu_file->addAction(m_action_new);
     m_menu_file->addAction(m_action_open);
     //m_menu_file->addAction(m_action_close);
     m_menu_file->addAction(m_action_save);
     m_menu_edit->addAction(m_action_settings);
     m_menu_help->addAction(m_action_about);
+    m_left_tool_bar->addAction(m_action_new);
     m_left_tool_bar->addAction(m_action_open);
     m_left_tool_bar->addAction(m_action_save);
     //    m_left_tool_bar->addSeparator();
@@ -176,11 +184,13 @@ main_window::main_window(QWidget* parent) : QWidget(parent), m_schedule_widget(n
     //    m_right_tool_bar->addSeparator();
     m_right_tool_bar->addAction(m_action_settings);
 
+    m_action_new->setShortcut(QKeySequence("Ctrl+N"));
     m_action_open->setShortcut(QKeySequence("Ctrl+O"));
     m_action_save->setShortcut(QKeySequence("Ctrl+S"));
     m_action_run_schedule->setShortcut(QKeySequence("Ctrl+Shift+R"));
 
     setWindowTitle("HAL");
+    m_action_new->setText("New Netlist '" + m_action_new->shortcut().toString(QKeySequence::NativeText) + "'");
     m_action_open->setText("Open '" + m_action_open->shortcut().toString(QKeySequence::NativeText) + "'");
     m_action_save->setText("Save '" + m_action_save->shortcut().toString(QKeySequence::NativeText) + "'");
     m_action_about->setText("About");
@@ -195,8 +205,12 @@ main_window::main_window(QWidget* parent) : QWidget(parent), m_schedule_widget(n
 
     m_about_dialog = new about_dialog(this);
     m_plugin_model = new plugin_model(this);
+
+    g_python_context = std::make_unique<python_context>();
+
     g_content_manager = new hal_content_manager(this);
 
+    connect(m_action_new, &QAction::triggered, this, &main_window::handle_action_new);
     connect(m_action_open, &QAction::triggered, this, &main_window::handle_action_open);
     connect(m_action_about, &QAction::triggered, m_about_dialog, &about_dialog::exec);
     connect(m_action_schedule, &QAction::triggered, this, &main_window::toggle_schedule);
@@ -220,6 +234,16 @@ main_window::main_window(QWidget* parent) : QWidget(parent), m_schedule_widget(n
 
     //reminder_overlay* o = new reminder_overlay(this);
     //Q_UNUSED(o)
+}
+
+QString main_window::new_file_icon_path() const
+{
+    return m_new_file_icon_path;
+}
+
+QString main_window::new_file_icon_style() const
+{
+    return m_new_file_icon_style;
 }
 
 QString main_window::open_icon_path() const
@@ -280,6 +304,16 @@ QString main_window::settings_icon_path() const
 QString main_window::settings_icon_style() const
 {
     return m_settings_icon_style;
+}
+
+void main_window::set_new_file_icon_path(const QString& path)
+{
+    m_new_file_icon_path = path;
+}
+
+void main_window::set_new_file_icon_style(const QString& style)
+{
+    m_new_file_icon_style = style;
 }
 
 void main_window::set_open_icon_path(const QString& path)
@@ -397,6 +431,38 @@ void main_window::show_layout_area()
     m_stacked_widget->setCurrentWidget(m_layout_area);
 }
 
+void main_window::handle_action_new()
+{
+    if (g_netlist != nullptr)
+    {
+        QMessageBox msgBox;
+        msgBox.setText("Error");
+        msgBox.setInformativeText("You are already working on a file. Restart HAL to switch to a different file.");
+        msgBox.setStyleSheet("QLabel{min-width: 600px;}");
+        msgBox.setStandardButtons(QMessageBox::Ok);
+        msgBox.setDefaultButton(QMessageBox::Ok);
+        msgBox.exec();
+        return;
+    }
+
+    QString title = "Create New Netlist";
+    QString text  = "Please select a gate library";
+
+    QStringList items;
+    for (const auto& it : gate_library_manager::get_gate_libraries())
+    {
+        items.append(QString::fromStdString(it.first));
+    }
+    bool ok          = false;
+    QString selected = QInputDialog::getItem(this, title, text, items, 0, false, &ok);
+
+    if (ok)
+    {
+        g_netlist = netlist_factory::create_netlist(selected.toStdString());
+        Q_EMIT file_manager::get_instance()->file_opened("new netlist");
+    }
+}
+
 void main_window::handle_action_open()
 {
     if (g_netlist != nullptr)
@@ -438,10 +504,30 @@ void main_window::handle_save_triggered()
     if (g_netlist)
     {
         hal::path path = file_manager::get_instance()->file_name().toStdString();
+
+        if (path.empty())
+        {
+            QString title = "Save File";
+            QString text  = "HAL Progress Files (*.hal)";
+
+            // Non native dialogs does not work on macOS. Therefore do net set DontUseNativeDialog!
+            QString file_name = QFileDialog::getSaveFileName(nullptr, title, QDir::currentPath(), text, nullptr);
+            if (!file_name.isNull())
+            {
+                path = file_name.toStdString();
+            }
+            else
+            {
+                return;
+            }
+        }
+
         path.replace_extension(".hal");
         netlist_serializer::serialize_to_file(g_netlist, path);
 
         g_file_status_manager.flush_unsaved_changes();
+        file_manager::get_instance()->watch_file(QString::fromStdString(path.string()));
+
         Q_EMIT save_triggered();
     }
 }
@@ -458,7 +544,7 @@ void main_window::on_action_quit_triggered()
 void main_window::closeEvent(QCloseEvent* event)
 {
     //check for unsaved changes and show confirmation dialog
-    if(g_file_status_manager.modified_files_existing())
+    if (g_file_status_manager.modified_files_existing())
     {
         QMessageBox msgBox;
         msgBox.setStyleSheet("QLabel{min-width: 600px;}");
@@ -469,7 +555,7 @@ void main_window::closeEvent(QCloseEvent* event)
 
         msgBox.setText("There are unsaved modifications.");
         QString detailed_text = "The following modifications have not been saved yet:\n";
-        for(const auto&s : g_file_status_manager.get_unsaved_change_descriptors())
+        for (const auto& s : g_file_status_manager.get_unsaved_change_descriptors())
             detailed_text.append("   ->  " + s + "\n");
         msgBox.setDetailedText(detailed_text);
 
