@@ -28,7 +28,6 @@
 #include <QObject>
 #include <QStringList>
 
-//#include "gui/graph_manager/hal_graph_widget.h"
 #include "netlist_watcher/netlist_watcher.h"
 
 class main_window;
@@ -51,8 +50,6 @@ public:
     python_editor* get_python_editor_widget();
 
     graph_tab_widget* get_graph_tab_widget();
-
-    old_graph_navigation_widget* get_navigation_widget();
 
     context_manager_widget* get_context_manager_widget();
 
@@ -83,8 +80,6 @@ private:
     python_editor* m_python_widget;
 
     graph_tab_widget* m_graph_tab_wid;
-
-    old_graph_navigation_widget* m_nav_widget;
 
     context_manager_widget* m_context_manager_wid;
 };

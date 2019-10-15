@@ -18,7 +18,6 @@
 
 #include "gui/docking_system/dock_bar.h"
 #include "gui/file_manager/file_manager.h"
-#include "gui/graph_navigation_widget/old_graph_navigation_widget.h"
 #include "gui/gui_globals.h"
 #include "gui/hal_content_manager/hal_content_manager.h"
 #include "gui/hal_logger/hal_logger_widget.h"
