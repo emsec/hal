@@ -495,6 +495,14 @@ Get all gates of the netlist. You can filter the set before output with the opti
 :returns: A set of gates.
 :rtype: set(hal_py.gate)
 )")
+
+        .def("get_number_of_gates", &netlist::get_number_of_gates, R"(
+Get number/amounts of gates in netlist.
+
+:returns: Number of gates.
+:rtype: int
+)")
+
         .def("mark_global_vcc_gate", &netlist::mark_global_vcc_gate, py::arg("gate"), R"(
 Mark a gate as global vcc gate.
 
@@ -588,11 +596,16 @@ Get the inout pin types for a gate type.
 :returns: A List of all inout pin types.
 :rtype: list(str)
 )")
-
         .def("get_unique_net_id", &netlist::get_unique_net_id , R"(
 Gets an unoccupied net id. The value 0 is reserved and represents an invalid id.
 
 :returns: An unoccupied unique id.
+:rtype: int
+)")
+        .def("get_number_of_nets", &netlist::get_number_of_nets, R"(
+Get number/amounts of nets in netlist.
+
+:returns: Number of nets.
 :rtype: int
 )")
         .def("create_net", py::overload_cast<const u32, const std::string&>(&netlist::create_net), py::arg("id"), py::arg("name"), R"(
