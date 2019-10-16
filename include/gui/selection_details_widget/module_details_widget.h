@@ -54,7 +54,7 @@ public Q_SLOTS:
 private:
 
     void toggle_searchbar();
-    void handle_tree_selection_changed(const QItemSelection& selected, const QItemSelection& deselected);
+    void handle_tree_double_clicked(const QModelIndex &index);
     void toggle_resize_columns();
 
     QVBoxLayout* m_content_layout;
