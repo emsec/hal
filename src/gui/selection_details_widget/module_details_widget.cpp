@@ -35,7 +35,7 @@ module_details_widget::module_details_widget(QWidget* parent) : QWidget(parent),
     connect(&g_netlist_relay, &netlist_relay::module_event, this, &module_details_widget::handle_module_event);
 
     //g_selection_relay.register_sender(this, "module_details_widget");
-    connect(m_treeview->selectionModel(), &QItemSelectionModel::selectionChanged, this, &module_details_widget::handle_tree_selection_changed);
+    connect(m_treeview, &QTreeView::doubleClicked, this, &module_details_widget::handle_tree_double_clicked);
     connect(&g_selection_relay, &selection_relay::selection_changed, this, &module_details_widget::handle_selection_changed);
 }
 
@@ -90,47 +90,34 @@ void module_details_widget::handle_searchbar_text_edited(const QString &text)
         m_tree_module_proxy_model->setFilterRegExp(*regex);
 }
 
-void module_details_widget::handle_tree_selection_changed(const QItemSelection &selected, const QItemSelection &deselected)
+void module_details_widget::handle_tree_double_clicked(const QModelIndex &index)
 {
-    Q_UNUSED(deselected)
-    Q_UNUSED(selected)
-
-    if (m_ignore_selection_change)
-    {
-        m_ignore_selection_change = false;
+    if(!index.isValid())
         return;
-    }
+
+    auto item = static_cast<tree_module_item*>(m_tree_module_proxy_model->mapToSource(index).internalPointer());
+
+    //this line neccessary to call g_selection_relay.clear() without problems
+    if(item->get_type() == tree_module_item::item_type::structure)
+        return;
 
     g_selection_relay.clear();
+    auto id = item->data(tree_module_model::ID_COLUMN).toInt();
 
-    QModelIndexList current_selections = selected.indexes();
-    QSet<tree_module_item*> already_processed_items;
-    for (const QModelIndex& index : current_selections)
+    switch(item->get_type())
     {
-        auto item = static_cast<tree_module_item*>(m_tree_module_proxy_model->mapToSource(index).internalPointer());
-        if (item && !already_processed_items.contains(item))
-        {
-            already_processed_items.insert(item);
-            auto id = item->data(tree_module_model::ID_COLUMN).toInt();
-            switch (item->get_type())
-            {
-                case tree_module_item::item_type::gate:
-                    g_selection_relay.m_selected_gates.insert(id);
-                    g_selection_relay.selection_changed(this);
-                    return;
-                case tree_module_item::item_type::net:
-                    g_selection_relay.m_selected_nets.insert(id);
-                    g_selection_relay.selection_changed(this);
-                    return;
-                case tree_module_item::item_type::module:
-                    g_selection_relay.m_selected_modules.insert(id);
-                    g_selection_relay.selection_changed(this);
-                    return;
-                default:
-                    break;
-            }
-        }
+        case tree_module_item::item_type::gate:
+            g_selection_relay.m_selected_gates.insert(id);
+            g_selection_relay.selection_changed(this);
+            return;
+        case tree_module_item::item_type::net:
+            g_selection_relay.m_selected_nets.insert(id);
+            g_selection_relay.selection_changed(this);
+            return;
+        default:
+            break;
     }
+
 }
 
 void module_details_widget::toggle_resize_columns()
