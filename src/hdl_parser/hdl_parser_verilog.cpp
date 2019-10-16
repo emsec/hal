@@ -484,6 +484,7 @@ bool hdl_parser_verilog::build_netlist(const std::string& top_module)
         {
             // check if none of the slaves is itself a master
             bool okay = true;
+
             for (const auto& slave : merge_set)
             {
                 if (m_nets_to_merge.find(slave) != m_nets_to_merge.end())
@@ -492,10 +493,14 @@ bool hdl_parser_verilog::build_netlist(const std::string& top_module)
                     break;
                 }
             }
+
             if (!okay)
+            {
                 continue;
+            }
 
             auto master_net = m_net_by_name.at(master);
+
             for (const auto& slave : merge_set)
             {
                 auto slave_net = m_net_by_name.at(slave);
@@ -773,7 +778,45 @@ std::shared_ptr<module> hdl_parser_verilog::instantiate(const entity& e, std::sh
             }
         }
 
-        // TODO process generics
+        // process generics
+        for (auto [name, value] : inst.generics)
+        {
+            auto bit_vector_candidate = core_utils::trim(core_utils::replace(value, "_", ""));
+
+            // determine data type
+            auto data_type = std::string();
+
+            if (core_utils::is_integer(value))
+            {
+                data_type = "integer";
+            }
+            else if (core_utils::is_floating_point(value))
+            {
+                data_type = "floating_point";
+            }
+            else if (core_utils::starts_with(value, "\"") && core_utils::ends_with(value, "\""))
+            {
+                value     = value.substr(1, value.size() - 2);
+                data_type = "string";
+            }
+            else if (value.find('\'') != std::string::npos)
+            {
+                value     = get_hex_from_number_literal(value);
+                data_type = "bit_vector";
+            }
+            else
+            {
+                log_error("hdl_parser", "cannot identify data type of generic map value '{}' in instance '{}'", value, inst.name);
+                return nullptr;
+            }
+
+            // store generic information on gate
+            if (!container->set_data("generic", name, data_type, value))
+            {
+                log_error("hdl_parser", "couldn't set data", value, inst.name);
+                return nullptr;
+            }
+        }
     }
 
     return module;
@@ -1291,6 +1334,40 @@ std::string hdl_parser_verilog::get_bin_from_number_literal(const std::string& v
     }
 
     return res;
+}
+
+std::string hdl_parser_verilog::get_hex_from_number_literal(const std::string& v)
+{
+    std::string value = v;
+    std::stringstream ss;
+
+    if (value.find("'h") != std::string::npos)
+    {
+        value = value.substr(value.find('\'') + 2);
+        value = core_utils::to_lower(value);
+        return value;
+    }
+
+    int radix = 10;
+
+    if (value.find("'d") != std::string::npos || value.find('\'') == std::string::npos)
+    {
+        radix = 10;
+    }
+    else if (value.find("'b") != std::string::npos)
+    {
+        radix = 2;
+    }
+    else if (value.find("'o") != std::string::npos)
+    {
+        radix = 8;
+    }
+
+    value = value.substr(value.find('\'') + 2);
+
+    ss << std::hex << stoull(value, 0, radix);
+
+    return ss.str();
 }
 
 std::string hdl_parser_verilog::get_unique_alias(const std::string& name)
