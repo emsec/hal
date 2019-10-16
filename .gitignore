@@ -125,3 +125,4 @@ ui_*.h
 CMakeLists.txt.user*
 
 Testing
+tools/__pycache__/
