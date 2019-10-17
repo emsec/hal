@@ -44,6 +44,15 @@ public:
     std::map<int, std::set<std::shared_ptr<gate>>> get_communities(std::shared_ptr<netlist> const nl);
 
     /**
+     * Returns map of community-IDs to communities
+     *
+     * @param[in] nl - Netlist (internally transformed to di-graph)
+     * @param[in] spin - 
+     * @returns A map of community-IDs to sets of gates belonging to the communities
+     */
+    std::map<int, std::set<std::shared_ptr<gate>>> get_communities_spinglass(std::shared_ptr<netlist> const nl, u32 spins);
+
+    /**
      * Returns the set of strongly connected components.
      *
      * @param[in] nl - Netlist (internally transformed to di-graph)
@@ -51,6 +60,15 @@ public:
      * @returns A set of strongly connected components where each component is a set of gates.
      */
     std::set<std::set<std::shared_ptr<gate>>> get_strongly_connected_components(std::shared_ptr<netlist> const nl, const std::set<std::shared_ptr<gate>> gates = {});
+
+    /**
+     * Returns the set of strongly connected components.
+     *
+     * @param[in] nl - Netlist (internally transformed to di-graph)
+     * @param[in] gates - Set of gates for which the strongly connected components are determined (default = empty means that all gates of the netlist are considered)
+     * @returns A set of strongly connected components where each component is a set of gates.
+     */
+    std::set<std::set<std::shared_ptr<gate>>> get_scc(std::shared_ptr<netlist> nl);
 
     /**
      * Returns the shortest path distances for one gate to all other gates.
@@ -84,6 +102,27 @@ public:
                                                                std::shared_ptr<gate> const g,
                                                                const u32 depth                                = std::numeric_limits<u32>::max(),
                                                                const std::set<std::string> terminal_gate_type = std::set<std::string>());
+
+    /*
+     *      igraph specific functions
+     */
+    /**
+     * Return a map of sets of gates with the same membership id
+     *
+     * @param[in] graph - igraph graph object
+     * @param[in] membership - membership vector
+     * @param[in] vertex_to_gate - map from vertex ID in igraph to HAL gate
+     * @returns map from membership id to set of gates that have the membership.
+     */
+    std::map<int, std::set<std::shared_ptr<gate>>> get_memberships_for_hal(igraph_t graph, igraph_vector_t membership, std::map<int, std::shared_ptr<gate>> vertex_to_gate);
+
+    /**
+     * Return the igraph object from the provided netlist.
+     *
+     * @param[in] nl - Netlist
+     * @returns tuple of igraph_t object and map from igraph vertex id to HAL gate ID for further graph analysis.
+     */
+    std::tuple<igraph_t, std::map<int, std::shared_ptr<gate>>> get_igraph_directed(std::shared_ptr<netlist> nl);
 };
 
 #endif /* __HAL_PLUGIN_GRAPH_ALGORITHM_H__ */

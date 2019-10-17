@@ -79,6 +79,9 @@ std::set<std::set<std::shared_ptr<gate>>> plugin_graph_algorithm::get_strongly_c
                                 root_map(make_iterator_property_map(root.begin(), boost::get(boost::vertex_index, boost_graph)))
                                     .color_map(make_iterator_property_map(color.begin(), boost::get(boost::vertex_index, boost_graph)))
                                     .discover_time_map(make_iterator_property_map(discover_time.begin(), boost::get(boost::vertex_index, boost_graph))));
+    
+    log("SCC BOOST: {}", num);
+
     /* post process boost result */
     std::map<int, std::set<u32>> component_to_gate_ids;
     for (std::vector<int>::size_type i = 0; i != component.size(); ++i)
