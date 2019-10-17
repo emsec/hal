@@ -41,6 +41,7 @@ class QTreeWidget;
 class QTreeWidgetItem;
 class QVBoxLayout;
 class QScrollArea;
+class QModelIndex;
 
 class gate_details_widget : public QWidget
 {
@@ -69,6 +70,7 @@ public Q_SLOTS:
     void handle_item_collapsed(QTreeWidgetItem* item);
     void on_treewidget_item_clicked(QTreeWidgetItem* item, int column);
     void on_gate_selected(endpoint selected);
+    void on_general_table_item_double_clicked(const QModelIndex &index);
 
     void handle_gate_name_changed(std::shared_ptr<gate> gate);
     void handle_gate_removed(std::shared_ptr<gate> gate);
