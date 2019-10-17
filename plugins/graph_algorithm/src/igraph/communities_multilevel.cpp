@@ -10,7 +10,7 @@
 
 #include <igraph/igraph.h>
 
-std::map<int, std::set<std::shared_ptr<gate>>> plugin_graph_algorithm::get_communities_fast_greedy(std::shared_ptr<netlist> nl)
+std::map<int, std::set<std::shared_ptr<gate>>> plugin_graph_algorithm::get_communities_multilevel(std::shared_ptr<netlist> nl)
 {
     if (nl == nullptr)
     {
@@ -22,33 +22,33 @@ std::map<int, std::set<std::shared_ptr<gate>>> plugin_graph_algorithm::get_commu
     igraph_t graph                                                          = std::get<0>(igraph_tuple);
     std::map<int, std::shared_ptr<gate>> vertex_to_gate                     = std::get<1>(igraph_tuple);
 
-    igraph_vector_t membership, modularity;
-    igraph_matrix_t merges;
-
+    // convert to undirected
     igraph_to_undirected(&graph, IGRAPH_TO_UNDIRECTED_MUTUAL, 0);
 
-    igraph_vector_init(&membership, 1);
-    igraph_vector_init(&modularity, 1);
-    igraph_matrix_init(&merges, 1, 1);
+    igraph_vector_t membership_vec, modularity;
+    igraph_matrix_t membership_mat;
 
-    igraph_community_fastgreedy(&graph,
+    igraph_vector_init(&membership_vec, 1);
+    igraph_vector_init(&modularity, 1);
+    igraph_matrix_init(&membership_mat, 1, 1);
+
+    igraph_community_multilevel(&graph,
                                 0, /* no weights */
-                                &merges,
-                                &modularity,
-                                &membership);
+                                &membership_vec,
+                                &membership_mat,
+                                &modularity);
 
     // map back to HAL structures
     std::map<int, std::set<std::shared_ptr<gate>>> community_sets;
-    for (int i = 0; i < igraph_vector_size(&membership); i++)
+    for (int i = 0; i < igraph_vector_size(&membership_vec); i++)
     {
-        community_sets[(int)VECTOR(membership)[i]].insert(vertex_to_gate[i]);
+        community_sets[(int)VECTOR(membership_vec)[i]].insert(vertex_to_gate[i]);
     }
-    igraph_vector_destroy(&membership);
 
     igraph_destroy(&graph);
-    igraph_vector_destroy(&membership);
+    igraph_vector_destroy(&membership_vec);
     igraph_vector_destroy(&modularity);
-    igraph_matrix_destroy(&merges);
+    igraph_matrix_destroy(&membership_mat);
 
     return community_sets;
 }

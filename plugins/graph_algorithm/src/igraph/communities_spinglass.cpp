@@ -43,14 +43,15 @@ std::map<int, std::set<std::shared_ptr<gate>>> plugin_graph_algorithm::get_commu
                                IGRAPH_SPINCOMM_IMP_ORIG,
                                /*gamma-=*/0);
 
-    log("Modularity:  {}", modularity);
-    log("Temperature: {}", temperature);
-    log("Cluster sizes: ");
+    log("Clustering successful:");
+    log("\tModularity:  {}", modularity);
+
+    log("\tTemperature: {}", temperature);
+    log("\tCluster sizes: ");
     for (long int i = 0; i < igraph_vector_size(&csize); i++)
     {
-        log("{}", (long int)VECTOR(csize)[i]);
+        log("\t\t{}", (long int)VECTOR(csize)[i]);
     }
-    log("\n");
 
     // map back to HAL structures
     int vertices_num                                              = (int)igraph_vcount(&graph);

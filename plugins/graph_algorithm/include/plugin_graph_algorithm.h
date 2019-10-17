@@ -32,7 +32,7 @@ public:
     std::string get_version() override;
 
     /*
-     *      plugin specific functions
+     *      clustering function
      */
 
     /**
@@ -60,6 +60,20 @@ public:
      * @returns A map of community-IDs to sets of gates belonging to the communities
      */
     std::map<int, std::set<std::shared_ptr<gate>>> get_communities_fast_greedy(std::shared_ptr<netlist> const nl);
+
+    /**
+     * Returns map of community-IDs to communities running the multilevel clustering from igraph.
+     *
+     * @param[in] nl - Netlist (internally transformed to di-graph)
+     * @param[in] spin - 
+     * @returns A map of community-IDs to sets of gates belonging to the communities
+     */
+    std::map<int, std::set<std::shared_ptr<gate>>> get_communities_multilevel(std::shared_ptr<netlist> nl);
+
+
+    /**
+     *  other graph algorithm
+     */
 
 
     /**
