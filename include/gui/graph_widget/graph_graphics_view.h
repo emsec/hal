@@ -25,6 +25,7 @@
 #define GRAPH_GRAPHICS_VIEW_H
 
 #include "def.h"
+#include "items/graphics_gate.h"
 
 #include <QGraphicsView>
 #include <QAction>
@@ -71,6 +72,10 @@ private:
     void mouseReleaseEvent(QMouseEvent* event) Q_DECL_OVERRIDE;
     void mouseMoveEvent(QMouseEvent* event) Q_DECL_OVERRIDE;
     void mouseDoubleClickEvent(QMouseEvent* event) Q_DECL_OVERRIDE;
+    void dragEnterEvent(QDragEnterEvent *event) Q_DECL_OVERRIDE;
+    void dragLeaveEvent(QDragLeaveEvent *event) Q_DECL_OVERRIDE;
+    void dragMoveEvent(QDragMoveEvent *event) Q_DECL_OVERRIDE;
+    void dropEvent(QDropEvent *event) Q_DECL_OVERRIDE;
 //    void wheelEvent(QWheelEvent* event) Q_DECL_OVERRIDE;
     void keyPressEvent(QKeyEvent* event) Q_DECL_OVERRIDE;
     void keyReleaseEvent(QKeyEvent* event) Q_DECL_OVERRIDE;
@@ -81,6 +86,8 @@ private:
     void update_matrix(const int delta);
 
     void toggle_antialiasing();
+
+    bool item_draggable(graphics_item* item);
 
     graph_widget* m_graph_widget;
 
@@ -94,6 +101,10 @@ private:
     bool m_grid_enabled;
     bool m_grid_clusters_enabled;
     graph_widget_constants::grid_type m_grid_type;
+
+    QPoint m_drag_mousedown_position;
+    QPoint m_drag_cursor_offset;
+    graphics_gate* m_drag_item;
 
     QPoint m_move_position;
     QPointF m_zoom_scene_position;

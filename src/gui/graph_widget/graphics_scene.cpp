@@ -95,7 +95,8 @@ void graphics_scene::set_grid_cluster_dot_color(const QColor& color)
     s_grid_cluster_dot_color = color;
 }
 
-graphics_scene::graphics_scene(QObject* parent) : QGraphicsScene(parent)
+graphics_scene::graphics_scene(QObject* parent) : QGraphicsScene(parent),
+    m_drag_shadow_gate(new drag_shadow_gate())
 //    m_left_gate_navigation_popup(new gate_navigation_popup(gate_navigation_popup::type::left)),
 //    m_right_gate_navigation_popup(new gate_navigation_popup(gate_navigation_popup::type::right))
 {
@@ -105,6 +106,21 @@ graphics_scene::graphics_scene(QObject* parent) : QGraphicsScene(parent)
     connect_all();
 
 //    QGraphicsScene::addItem(m_left_gate_navigation_popup);
+
+    QGraphicsScene::addItem(m_drag_shadow_gate);
+}
+
+void graphics_scene::start_drag_shadow(const QPointF& posF, const QSizeF& sizeF)
+{
+    m_drag_shadow_gate->start(posF, sizeF);
+}
+void graphics_scene::move_drag_shadow(const QPointF& posF)
+{
+    m_drag_shadow_gate->setPos(posF);
+}
+void graphics_scene::stop_drag_shadow()
+{
+    m_drag_shadow_gate->stop();
 }
 
 void graphics_scene::add_item(graphics_item* item)
@@ -296,7 +312,18 @@ void graphics_scene::disconnect_all()
 
 void graphics_scene::delete_all_items()
 {
-    clear();
+    // this breaks the m_drag_shadow_gate
+    // clear();
+    // so we do this instead
+    // TODO check performance hit
+    for (auto item : items())
+    {
+        if (item != m_drag_shadow_gate)
+        {
+            removeItem(item);
+        }
+    }
+
     m_module_items.clear();
     m_gate_items.clear();
     m_net_items.clear();

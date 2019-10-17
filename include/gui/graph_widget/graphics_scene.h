@@ -4,6 +4,7 @@
 #include "def.h"
 
 #include "gui/graph_widget/shaders/graph_shader.h"
+#include "items/utility_items/drag_shadow_gate.h"
 #include "netlist/gate.h"
 
 #include <QGraphicsScene>
@@ -37,6 +38,10 @@ public:
     static void set_grid_cluster_dot_color(const QColor& color);
 
     graphics_scene(QObject* parent = nullptr);
+
+    void start_drag_shadow(const QPointF& posF, const QSizeF& sizeF);
+    void move_drag_shadow(const QPointF& posF);
+    void stop_drag_shadow();
 
     void add_item(graphics_item* item);
     void remove_item(graphics_item* item);
@@ -102,6 +107,8 @@ private:
     using QGraphicsScene::clear;
 
     void drawBackground(QPainter* painter, const QRectF& rect) Q_DECL_OVERRIDE;
+
+    drag_shadow_gate* m_drag_shadow_gate;
 
     QVector<module_data> m_module_items;
     QVector<gate_data> m_gate_items;
