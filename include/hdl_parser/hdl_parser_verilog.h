@@ -117,8 +117,7 @@ private:
     std::vector<std::string> get_port_signals(const std::string& port_str, const std::string& instance_name);
     std::map<std::string, std::string> get_direct_assignments(const std::string& left, const std::string& right, entity& e);
     std::map<std::string, std::string> get_port_assignments(const std::string& instance, const std::string& port, const std::string& assignment, entity& e);
-    std::string get_bin_from_number_literal(const std::string& v);
-    std::string get_hex_from_number_literal(const std::string& v);
+    std::string get_number_from_literal(const std::string& v, const u32 base);
     std::string get_unique_alias(const std::string& name);
 };
 
