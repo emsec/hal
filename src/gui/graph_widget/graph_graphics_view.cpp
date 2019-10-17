@@ -18,13 +18,16 @@
 #include "netlist/module.h"
 #include "netlist/net.h"
 
+#include <QApplication>
 #include <QAction>
 #include <QColorDialog>
 #include <QDebug>
+#include <QDrag>
 #include <QInputDialog>
 #include <QLabel>
 #include <QLineEdit>
 #include <QMenu>
+#include <QMimeData>
 #include <QScrollBar>
 #include <QStyleOptionGraphicsItem>
 #include <QWheelEvent>
@@ -43,6 +46,8 @@ graph_graphics_view::graph_graphics_view(graph_widget* parent)
     setContextMenuPolicy(Qt::CustomContextMenu);
     setOptimizationFlags(QGraphicsView::DontSavePainterState);
     setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
+
+    setAcceptDrops(true);
 
     graphics_view_zoom* z = new graphics_view_zoom(this);
     z->set_modifiers(Qt::NoModifier);
@@ -239,6 +244,16 @@ void graph_graphics_view::mousePressEvent(QMouseEvent* event)
         QCursor cursor(Qt::BlankCursor);
         setCursor(cursor);
     }
+    else if (event->button() == Qt::LeftButton)
+    {
+        graphics_item* item = static_cast<graphics_item*>(itemAt(event->pos()));
+        m_drag_item = item_draggable(item) ? static_cast<graphics_gate*>(item) : nullptr; // can be nullptr if no item
+        m_drag_mousedown_position = event->pos();
+        m_drag_cursor_offset = m_drag_mousedown_position - mapFromScene(item->pos());
+
+        // we still need the normal mouse logic for single clicks
+        QGraphicsView::mousePressEvent(event);
+    }
     else
         QGraphicsView::mousePressEvent(event);
 }
@@ -260,9 +275,9 @@ void graph_graphics_view::mouseMoveEvent(QMouseEvent* event)
     if (!scene())
         return;
 
-    if (event->modifiers() == Qt::ShiftModifier)
+    if (event->buttons().testFlag(Qt::LeftButton))
     {
-        if (event->buttons().testFlag(Qt::LeftButton))
+        if (event->modifiers() == Qt::ShiftModifier)
         {
             QScrollBar* hBar = horizontalScrollBar();
             QScrollBar* vBar = verticalScrollBar();
@@ -271,8 +286,69 @@ void graph_graphics_view::mouseMoveEvent(QMouseEvent* event)
             hBar->setValue(hBar->value() + (isRightToLeft() ? delta.x() : -delta.x()));
             vBar->setValue(vBar->value() - delta.y());
         }
+        else
+        {
+            if (m_drag_item && (event->pos() - m_drag_mousedown_position).manhattanLength() >= QApplication::startDragDistance())
+            {
+                QDrag *drag = new QDrag(this);
+                QMimeData *mimeData = new QMimeData;
+
+                // TODO set MIME type and icon
+                mimeData->setText("dragTest");
+                drag->setMimeData(mimeData);
+                // drag->setPixmap(iconPixmap);
+
+                // enable DragMoveEvents until mouse released
+                drag->exec(Qt::MoveAction);
+            }
+        }
     }
     QGraphicsView::mouseMoveEvent(event);
+}
+
+void graph_graphics_view::dragEnterEvent(QDragEnterEvent *event)
+{
+    qDebug() << "dragEnter";
+    if (event->source() == this && event->proposedAction() == Qt::MoveAction)
+    {
+        event->acceptProposedAction();
+        QSizeF size(m_drag_item->width(), m_drag_item->height());
+        QPointF pos = m_drag_item->scenePos();
+        static_cast<graphics_scene*>(scene())
+            ->start_drag_shadow(pos, size);
+        // Process the data from the event.
+    }
+    else
+    {
+        QGraphicsView::dragEnterEvent(event);
+    }
+}
+void graph_graphics_view::dragLeaveEvent(QDragLeaveEvent *event)
+{
+    static_cast<graphics_scene*>(scene())->stop_drag_shadow();
+    //QGraphicsView::dragLeaveEvent(event);
+}
+void graph_graphics_view::dragMoveEvent(QDragMoveEvent *event)
+{
+    QPoint mouse = event->pos();
+    QPoint shadow = mouse - m_drag_cursor_offset;
+    static_cast<graphics_scene*>(scene())
+        ->move_drag_shadow(mapToScene(shadow.x(), shadow.y()));
+    // event->acceptProposedAction();
+    //QGraphicsView::dragMoveEvent(event);
+}
+void graph_graphics_view::dropEvent(QDropEvent *event)
+{
+    if (event->source() == this && event->proposedAction() == Qt::MoveAction)
+    {
+        event->acceptProposedAction();
+        static_cast<graphics_scene*>(scene())->stop_drag_shadow();
+        // Process the data from the event.
+    }
+    else
+    {
+        QGraphicsView::dropEvent(event);
+    }
 }
 
 void graph_graphics_view::keyPressEvent(QKeyEvent* event)
@@ -451,6 +527,12 @@ void graph_graphics_view::update_matrix(const int delta)
 void graph_graphics_view::toggle_antialiasing()
 {
     setRenderHint(QPainter::Antialiasing, !(renderHints() & QPainter::Antialiasing));
+}
+
+bool graph_graphics_view::item_draggable(graphics_item* item)
+{
+    hal::item_type type = item->item_type();
+    return type == hal::item_type::gate || type == hal::item_type::module;
 }
 
 void graph_graphics_view::handle_select_outputs()
