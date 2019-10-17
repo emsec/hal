@@ -20,11 +20,10 @@ std::map<int, std::set<std::shared_ptr<gate>>> plugin_graph_algorithm::get_commu
 
     std::tuple<igraph_t, std::map<int, std::shared_ptr<gate>>> igraph_tuple = get_igraph_directed(nl);
     igraph_t graph                                                          = std::get<0>(igraph_tuple);
-    std::map<int, std::shared_ptr<gate>> vertex_to_gate                    = std::get<1>(igraph_tuple);
+    std::map<int, std::shared_ptr<gate>> vertex_to_gate                     = std::get<1>(igraph_tuple);
 
     igraph_real_t modularity, temperature;
     igraph_vector_t membership, csize;
-
 
     igraph_vector_init(&membership, 0);
     igraph_vector_init(&csize, 0);
@@ -54,7 +53,7 @@ std::map<int, std::set<std::shared_ptr<gate>>> plugin_graph_algorithm::get_commu
     log("\n");
 
     // map back to HAL structures
-    int vertices_num = (int)igraph_vcount(&graph);
+    int vertices_num                                              = (int)igraph_vcount(&graph);
     std::map<int, std::set<std::shared_ptr<gate>>> community_sets = get_memberships_for_hal(graph, membership, vertex_to_gate);
 
     igraph_destroy(&graph);
