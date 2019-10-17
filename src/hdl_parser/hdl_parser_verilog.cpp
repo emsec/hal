@@ -801,7 +801,7 @@ std::shared_ptr<module> hdl_parser_verilog::instantiate(const entity& e, std::sh
             }
             else if (value.find('\'') != std::string::npos)
             {
-                value     = get_hex_from_number_literal(value);
+                value     = get_number_from_literal(value, 16);
                 data_type = "bit_vector";
             }
             else
@@ -1099,7 +1099,7 @@ std::vector<std::string> hdl_parser_verilog::get_assignment_signals(const std::s
             else if (signal_apostrophe != std::string::npos)
             {
                 // (3)
-                for (auto bit : get_bin_from_number_literal(s))
+                for (auto bit : get_number_from_literal(s, 2))
                 {
                     result.push_back("'" + std::to_string(bit - 48) + "'");
                 }
@@ -1272,102 +1272,82 @@ std::map<std::string, std::string> hdl_parser_verilog::get_port_assignments(cons
     return result;
 }
 
-std::string hdl_parser_verilog::get_bin_from_number_literal(const std::string& v)
+std::string hdl_parser_verilog::get_number_from_literal(const std::string& v, const u32 target_base)
 {
     std::string value = core_utils::to_lower(core_utils::trim(core_utils::replace(v, "_", "")));
+    std::string res;
 
-    u32 len = 0, radix = 0;
+    u32 len = 0, source_base = 0;
     std::string length, prefix, number;
 
     // base specified?
     if (value.find('\'') == std::string::npos)
     {
-        prefix = "d";
-        number = value;
+        source_base = 10;
+        number      = value;
     }
     else
     {
         length = value.substr(0, value.find('\''));
         prefix = value.substr(value.find('\'') + 1, 1);
         number = value.substr(value.find('\'') + 2);
-    }
 
-    // select radix
-    if (prefix == "b")
-    {
-        radix = 2;
-    }
-    else if (prefix == "o")
-    {
-        radix = 8;
-    }
-    else if (prefix == "d")
-    {
-        radix = 10;
-    }
-    else if (prefix == "h")
-    {
-        radix = 16;
-    }
-
-    // constructing bitstring
-    u64 val = stoull(number, 0, radix);
-    std::string res;
-
-    if (!length.empty())
-    {
-        len = std::stoi(length);
-
-        for (u32 i = 0; i < len; i++)
+        // select base
+        if (prefix == "b")
         {
-            res = std::to_string(val & 0x1) + res;
-            val >>= 1;
+            source_base = 2;
+        }
+        else if (prefix == "o")
+        {
+            source_base = 8;
+        }
+        else if (prefix == "d")
+        {
+            source_base = 10;
+        }
+        else if (prefix == "h")
+        {
+            source_base = 16;
         }
     }
-    else
+
+    if (target_base == 2)
     {
-        do
+        // constructing bit string
+        u64 val = stoull(number, 0, source_base);
+
+        if (!length.empty())
         {
-            res = std::to_string(val & 0x1) + res;
-            val >>= 1;
-        } while (val != 0);
+            len = std::stoi(length);
+
+            for (u32 i = 0; i < len; i++)
+            {
+                res = std::to_string(val & 0x1) + res;
+                val >>= 1;
+            }
+        }
+        else
+        {
+            do
+            {
+                res = std::to_string(val & 0x1) + res;
+                val >>= 1;
+            } while (val != 0);
+        }
+    }
+    else if (target_base == 16)
+    {
+        // constructing hex string
+        std::stringstream ss;
+
+        u64 val = stoull(number, 0, source_base);
+
+        ss << std::hex << val;
+
+        res = ss.str();
     }
 
     return res;
-}
-
-std::string hdl_parser_verilog::get_hex_from_number_literal(const std::string& v)
-{
-    std::string value = v;
-    std::stringstream ss;
-
-    if (value.find("'h") != std::string::npos)
-    {
-        value = value.substr(value.find('\'') + 2);
-        value = core_utils::to_lower(value);
-        return value;
-    }
-
-    int radix = 10;
-
-    if (value.find("'d") != std::string::npos || value.find('\'') == std::string::npos)
-    {
-        radix = 10;
-    }
-    else if (value.find("'b") != std::string::npos)
-    {
-        radix = 2;
-    }
-    else if (value.find("'o") != std::string::npos)
-    {
-        radix = 8;
-    }
-
-    value = value.substr(value.find('\'') + 2);
-
-    ss << std::hex << stoull(value, 0, radix);
-
-    return ss.str();
 }
 
 std::string hdl_parser_verilog::get_unique_alias(const std::string& name)

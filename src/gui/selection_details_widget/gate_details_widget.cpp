@@ -13,7 +13,6 @@
 #include <QApplication>
 #include <QCursor>
 #include <QDateTime>
-#include <QDebug>
 #include <QDesktopWidget>
 #include <QHeaderView>
 #include <QLabel>
@@ -189,6 +188,8 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
     connect(&g_netlist_relay, &netlist_relay::module_removed, this, &gate_details_widget::handle_module_removed);
     connect(&g_netlist_relay, &netlist_relay::module_gate_assigned, this, &gate_details_widget::handle_module_gate_assigned);
     connect(&g_netlist_relay, &netlist_relay::module_gate_removed, this, &gate_details_widget::handle_module_gate_removed);
+
+    connect(m_general_table, &QTableWidget::doubleClicked, this, &gate_details_widget::on_general_table_item_double_clicked);
 }
 
 gate_details_widget::~gate_details_widget()
@@ -271,6 +272,7 @@ void gate_details_widget::update(const u32 gate_id)
         if (sub->contains_gate(g))
         {
             module_text = QString::fromStdString(sub->get_name()) + "[" + QString::number(sub->get_id()) + "]";
+            m_module_item->setData(Qt::UserRole, sub->get_id());
         }
     }
     m_module_item->setText(module_text);
@@ -552,4 +554,19 @@ void gate_details_widget::on_gate_selected(endpoint selected)
 
     if (dynamic_cast<QWidget*>(sender()))
         static_cast<QWidget*>(sender())->close();
+}
+
+void gate_details_widget::on_general_table_item_double_clicked(const QModelIndex &index)
+{
+    if(!index.isValid())
+        return;
+
+    //cant get the item from the index (static_cast<QTableWidgetItem*>(index.internalPointer()) fails),
+    //so ask the item QTableWidgetItem directly
+    if(index.row() == m_module_item->row() && index.column() == m_module_item->column())
+    {
+        g_selection_relay.clear();
+        g_selection_relay.m_selected_modules.insert(m_module_item->data(Qt::UserRole).toInt());
+        g_selection_relay.relay_selection_changed(this);
+    }
 }
