@@ -10,7 +10,7 @@
 #include "netlist/net.h"
 #include "netlist/netlist.h"
 
-std::tuple<igraph_t, std::map<int, std::shared_ptr<gate>>>  plugin_graph_algorithm::get_igraph_directed(std::shared_ptr<netlist> nl)
+std::tuple<igraph_t, std::map<int, std::shared_ptr<gate>>> plugin_graph_algorithm::get_igraph_directed(std::shared_ptr<netlist> nl)
 {
     igraph_t graph;
     auto global_output_nets = nl->get_global_output_nets();
@@ -97,8 +97,9 @@ std::tuple<igraph_t, std::map<int, std::shared_ptr<gate>>>  plugin_graph_algorit
     return std::make_tuple(graph, vertice_to_gate);
 }
 
-std::map<int, std::set<std::shared_ptr<gate>>> plugin_graph_algorithm::get_memberships_for_hal(igraph_t graph, igraph_vector_t membership, std::map<int, std::shared_ptr<gate>> vertex_to_gate){
-   // map back to HAL structures
+std::map<int, std::set<std::shared_ptr<gate>>> plugin_graph_algorithm::get_memberships_for_hal(igraph_t graph, igraph_vector_t membership, std::map<int, std::shared_ptr<gate>> vertex_to_gate)
+{
+    // map back to HAL structures
     int vertices_num = (int)igraph_vcount(&graph);
     std::map<int, std::set<std::shared_ptr<gate>>> community_sets;
 
