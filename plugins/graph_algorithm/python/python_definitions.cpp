@@ -48,13 +48,28 @@ Get the version of the plugin.
 :returns: Plugin version.
 :rtype: str
 )")
-        .def("get_communities",
+        .def("get_communities_fast_greedy",
              [](plugin_graph_algorithm& a, std::shared_ptr<netlist> const nl) -> std::map<int, std::set<std::shared_ptr<gate>>> {
-                 auto m = a.get_communities(nl);
+                 auto m = a.get_communities_fast_greedy(nl);
                  return m;
              },
              py::arg("netlist"), R"(
-Returns the map of community-IDs to communities.
+Returns the map of community-IDs to communities running the fast-greedy clustering algorithm.
+
+:param netlist: Netlist (internelly transformed to di-graph)
+:type netlist: hal_py.netlist
+:param gates: Set of gates for which the strongly connected components are determined. (default = empty means that all gates of the netlist are considered)
+:type gates: set(hal_py.gate)
+:returns: A map of clusters.
+:rtype: map(set(hal_py.gate))
+)")
+        .def("get_communities_multilevel",
+             [](plugin_graph_algorithm& a, std::shared_ptr<netlist> const nl) -> std::map<int, std::set<std::shared_ptr<gate>>> {
+                 auto m = a.get_communities_multilevel(nl);
+                 return m;
+             },
+             py::arg("netlist"), R"(
+Returns the map of community-IDs to communities running the multilevel clustering algorithm.
 
 :param netlist: Netlist (internelly transformed to di-graph)
 :type netlist: hal_py.netlist
@@ -64,11 +79,12 @@ Returns the map of community-IDs to communities.
 :rtype: map(set(hal_py.gate))
 )")
         .def("get_communities_spinglass",
-             [](plugin_graph_algorithm& a, std::shared_ptr<netlist> const nl, u32 spins) -> std::map<int, std::set<std::shared_ptr<gate>>> {
-                 auto m = a.get_communities(nl);
+             [](plugin_graph_algorithm& a, std::shared_ptr<netlist> const nl, const int spins) -> std::map<int, std::set<std::shared_ptr<gate>>> {
+                 auto m = a.get_communities_spinglass(nl, spins);
                  return m;
              },
-             py::arg("netlist"), R"(
+             py::arg("netlist"),
+             py::arg("spins"), R"(
 Returns the map of community-IDs to communities running the spinglass clustering algorithm.
 
 :param netlist: Netlist (internelly transformed to di-graph)

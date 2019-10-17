@@ -48,8 +48,7 @@ std::tuple<igraph_t, std::map<int, std::shared_ptr<gate>>> plugin_graph_algorith
                 VECTOR(edges)[edge_vertice_counter++] = dummy_gate;
                 VECTOR(edges)[edge_vertice_counter++] = successor.get_gate()->get_id() - 1;
 
-                printf("input_gate: %d --> ", dummy_gate);
-                printf("%d: %s\n", successor.get_gate()->get_id() - 1, successor.get_gate()->get_name().c_str());
+                log_debug("graph_algorithm", "input_gate: {} --> {}: {}", dummy_gate, successor.get_gate()->get_id() - 1, successor.get_gate()->get_name().c_str());
             }
         }
         // if output net we need to add one dummy output gate
@@ -59,16 +58,14 @@ std::tuple<igraph_t, std::map<int, std::shared_ptr<gate>>> plugin_graph_algorith
             VECTOR(edges)[edge_vertice_counter++] = predecessor->get_id() - 1;
             VECTOR(edges)[edge_vertice_counter++] = ++dummy_gate_counter;
 
-            printf("%s: %d --> ", predecessor->get_name().c_str(), predecessor->get_id() - 1);
-            printf("%d output\n", dummy_gate_counter);
+            log_debug("graph_algorithm", "{}: {} --> {} output\n", predecessor->get_name().c_str(), predecessor->get_id() - 1, dummy_gate_counter);
 
             for (const auto& successor : net->get_dsts())
             {
                 VECTOR(edges)[edge_vertice_counter++] = predecessor->get_id() - 1;
                 VECTOR(edges)[edge_vertice_counter++] = successor.gate->get_id() - 1;
 
-                printf("%s: %d --> ", predecessor->get_name().c_str(), predecessor->get_id() - 1);
-                printf("%d: %s\n", edge_vertice_counter, successor.get_gate()->get_name().c_str());
+                log_debug("graph_algorithm", "{}: {} --> {}: {}\n", predecessor->get_name().c_str(), predecessor->get_id() - 1, edge_vertice_counter, successor.get_gate()->get_name().c_str());
             }
         }
         else
@@ -79,8 +76,7 @@ std::tuple<igraph_t, std::map<int, std::shared_ptr<gate>>> plugin_graph_algorith
                 VECTOR(edges)[edge_vertice_counter++] = predecessor->get_id() - 1;
                 VECTOR(edges)[edge_vertice_counter++] = successor.gate->get_id() - 1;
 
-                printf("%s: %d --> ", predecessor->get_name().c_str(), predecessor->get_id() - 1);
-                printf("%d: %s\n", successor.get_gate()->get_id() - 1, successor.get_gate()->get_name().c_str());
+                log_debug("graph_algorithm", "{}: {} --> {}: {}", predecessor->get_name().c_str(), predecessor->get_id() - 1,successor.get_gate()->get_id() - 1, successor.get_gate()->get_name().c_str());
             }
         }
     }
