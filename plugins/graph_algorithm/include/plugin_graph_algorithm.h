@@ -36,7 +36,7 @@ public:
      */
 
     /**
-     * Returns map of community-IDs to communities
+     * Returns map of community-IDs to communities.
      *
      * @param[in] nl - Netlist (internally transformed to di-graph)
      * @returns A map of community-IDs to sets of gates belonging to the communities
@@ -44,13 +44,23 @@ public:
     std::map<int, std::set<std::shared_ptr<gate>>> get_communities(std::shared_ptr<netlist> const nl);
 
     /**
-     * Returns map of community-IDs to communities
+     * Returns map of community-IDs to communities running the spinglass clustering.
      *
      * @param[in] nl - Netlist (internally transformed to di-graph)
      * @param[in] spin - 
      * @returns A map of community-IDs to sets of gates belonging to the communities
      */
     std::map<int, std::set<std::shared_ptr<gate>>> get_communities_spinglass(std::shared_ptr<netlist> const nl, u32 spins);
+
+    /**
+     * Returns map of community-IDs to communities running the fast greedy clustering from igraph.
+     *
+     * @param[in] nl - Netlist (internally transformed to di-graph)
+     * @param[in] spin - 
+     * @returns A map of community-IDs to sets of gates belonging to the communities
+     */
+    std::map<int, std::set<std::shared_ptr<gate>>> get_communities_fast_greedy(std::shared_ptr<netlist> const nl);
+
 
     /**
      * Returns the set of strongly connected components.
