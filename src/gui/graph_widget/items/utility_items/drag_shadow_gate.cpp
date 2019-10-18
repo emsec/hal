@@ -7,6 +7,16 @@
 #include "QPainter"
 #include "QPaintEvent"
 
+QPen drag_shadow_gate::s_pen;
+qreal drag_shadow_gate::s_lod;
+
+void drag_shadow_gate::load_settings()
+{
+    s_pen.setCosmetic(true);
+    s_pen.setJoinStyle(Qt::MiterJoin);
+    s_pen.setColor(QColor(48, 172, 79, 255));
+}
+
 drag_shadow_gate::drag_shadow_gate() : QGraphicsObject()
 {
     hide();
@@ -50,14 +60,28 @@ void drag_shadow_gate::set_height(const qreal height)
     m_height = height;
 }
 
+void drag_shadow_gate::set_lod(const qreal lod)
+{
+    s_lod = lod;
+}
+
 void drag_shadow_gate::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
 {
     Q_UNUSED(option)
     Q_UNUSED(widget)
 
-    painter->save();
+    // painter->save();
+    painter->setPen(s_pen);
 
-    painter->fillRect(QRectF(0, 0, m_width, m_height), QColor(0, 255, 0, 200));
+    if (s_lod < 0.5)
+    {
+        painter->fillRect(QRectF(0, 0, m_width, m_height), QColor(48, 172, 79, 200));
+    }
+    else
+    {
+        painter->drawRect(0, 0, m_width, m_height);
+        painter->fillRect(QRectF(0, 0, m_width, m_height), QColor(48, 172, 79, 150));
+    }
 }
 
 QRectF drag_shadow_gate::boundingRect() const

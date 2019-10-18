@@ -13,6 +13,7 @@
 #include "gui/graph_widget/items/standard_graphics_gate.h"
 #include "gui/graph_widget/items/standard_graphics_module.h"
 #include "gui/graph_widget/items/standard_graphics_net.h"
+#include "gui/graph_widget/items/utility_items/drag_shadow_gate.h"
 #include "gui/gui_globals.h"
 #include "netlist/gate.h"
 #include "netlist/module.h"
@@ -189,6 +190,7 @@ void graph_graphics_view::paintEvent(QPaintEvent* event)
     graphics_scene::set_grid_type(m_grid_type);
 
     graphics_item::set_lod(lod);
+    drag_shadow_gate::set_lod(lod);
 
     standard_graphics_module::update_alpha();
     standard_graphics_gate::update_alpha();
