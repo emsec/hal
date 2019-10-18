@@ -13,8 +13,14 @@
 std::tuple<igraph_t, std::map<int, std::shared_ptr<gate>>> plugin_graph_algorithm::get_igraph_directed(std::shared_ptr<netlist> nl)
 {
     igraph_t graph;
-    auto global_output_nets = nl->get_global_output_nets();
-    auto global_input_nets  = nl->get_global_input_nets();
+
+    std::set<std::shared_ptr<net>> global_output_nets;
+    global_output_nets = nl->get_global_output_nets();
+
+    std::set<std::shared_ptr<net>> global_input_nets;
+    global_input_nets = nl->get_global_input_nets();
+
+
 
     // count all edges, remember in HAL one net(edge) has multiple sinks
     u32 edge_counter = 0;
@@ -36,6 +42,7 @@ std::tuple<igraph_t, std::map<int, std::shared_ptr<gate>>> plugin_graph_algorith
     // we need dummy gates for input/outputs
     u32 dummy_gate_counter   = nl->get_gates().size() - 1;
     u32 edge_vertice_counter = 0;
+
 
     for (const auto& net : nl->get_nets())
     {
@@ -76,7 +83,8 @@ std::tuple<igraph_t, std::map<int, std::shared_ptr<gate>>> plugin_graph_algorith
                 VECTOR(edges)[edge_vertice_counter++] = predecessor->get_id() - 1;
                 VECTOR(edges)[edge_vertice_counter++] = successor.gate->get_id() - 1;
 
-                log_debug("graph_algorithm", "{}: {} --> {}: {}", predecessor->get_name().c_str(), predecessor->get_id() - 1,successor.get_gate()->get_id() - 1, successor.get_gate()->get_name().c_str());
+                log_debug(
+                    "graph_algorithm", "{}: {} --> {}: {}", predecessor->get_name().c_str(), predecessor->get_id() - 1, successor.get_gate()->get_id() - 1, successor.get_gate()->get_name().c_str());
             }
         }
     }
