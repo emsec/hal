@@ -42,18 +42,19 @@ void graphics_node::set_name(QString name)
 QVariant graphics_node::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant& value)
 {
     // NOT FUNCTIONAL, NEEDS TO USE LAYOUT DATA
-    if (change == ItemPositionChange)
-    {
-        if(QApplication::mouseButtons() == Qt::LeftButton)
-        {
-            QPointF new_position = value.toPointF();
-            int adjusted_x = qRound(new_position.x() / graph_widget_constants::grid_size) * graph_widget_constants::grid_size;
-            int adjusted_y = qRound(new_position.y() / graph_widget_constants::grid_size) * graph_widget_constants::grid_size;
-            return QPoint(adjusted_x, adjusted_y);
-        }
-        else
-            return value;
-    }
-    else
+    // superseded by new drag and drop function
+    // if (change == ItemPositionChange)
+    // {
+    //     if(QApplication::mouseButtons() == Qt::LeftButton)
+    //     {
+    //         QPointF new_position = value.toPointF();
+    //         int adjusted_x = qRound(new_position.x() / graph_widget_constants::grid_size) * graph_widget_constants::grid_size;
+    //         int adjusted_y = qRound(new_position.y() / graph_widget_constants::grid_size) * graph_widget_constants::grid_size;
+    //         return QPoint(adjusted_x, adjusted_y);
+    //     }
+    //     else
+    //         return value;
+    // }
+    // else
         return QGraphicsItem::itemChange(change, value);
 }
