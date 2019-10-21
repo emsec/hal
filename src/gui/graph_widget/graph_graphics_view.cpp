@@ -249,9 +249,16 @@ void graph_graphics_view::mousePressEvent(QMouseEvent* event)
     else if (event->button() == Qt::LeftButton)
     {
         graphics_item* item = static_cast<graphics_item*>(itemAt(event->pos()));
-        m_drag_item = item_draggable(item) ? static_cast<graphics_gate*>(item) : nullptr; // can be nullptr if no item
-        m_drag_mousedown_position = event->pos();
-        m_drag_cursor_offset = m_drag_mousedown_position - mapFromScene(item->pos());
+        if (item && item_draggable(item))
+        {
+            m_drag_item = static_cast<graphics_gate*>(item);
+            m_drag_mousedown_position = event->pos();
+            m_drag_cursor_offset = m_drag_mousedown_position - mapFromScene(item->pos());
+        }
+        else
+        {
+            m_drag_item = nullptr;
+        }
 
         // we still need the normal mouse logic for single clicks
         QGraphicsView::mousePressEvent(event);
