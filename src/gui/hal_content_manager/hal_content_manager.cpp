@@ -10,7 +10,6 @@
 #include "gui/content_layout_area/content_layout_area.h"
 #include "gui/content_widget/content_widget.h"
 #include "gui/docking_system/tab_widget.h"
-#include "gui/graph_navigation_widget/old_graph_navigation_widget.h"
 #include "gui/graph_widget/graph_graphics_view.h"
 #include "gui/graph_widget/graph_widget.h"
 #include "gui/gui_utility.h"
@@ -61,11 +60,6 @@ graph_tab_widget* hal_content_manager::get_graph_tab_widget()
     return m_graph_tab_wid;
 }
 
-old_graph_navigation_widget* hal_content_manager::get_navigation_widget()
-{
-    return m_nav_widget;
-}
-
 context_manager_widget* hal_content_manager::get_context_manager_widget()
 {
     return m_context_manager_wid;
@@ -81,10 +75,6 @@ void hal_content_manager::handle_open_document(const QString& file_name)
     module_widget* m = new module_widget();
     m_main_window->add_content(m, 0, content_anchor::left);
     m->open();
-
-//    m_nav_widget = new old_graph_navigation_widget();
-//    m_main_window->add_content(m_nav_widget, 0, content_anchor::left);
-//    m_nav_widget->open();
 
     m_context_manager_wid = new context_manager_widget(m_graph_tab_wid);
     m_main_window->add_content(m_context_manager_wid, 1, content_anchor::left);

@@ -27,8 +27,6 @@ void plugin_gate_decorators::on_load()
     gate_decorator_system::register_bdd_decorator_function("SYNOPSYS_NAND_NOR", &bdd_availability_tester_synopsys_nand_nor, &bdd_generator_synopsys_nand_nor);
     gate_decorator_system::register_bdd_decorator_function("NangateOpenCellLibrary", &bdd_availability_tester_NangateOpenCellLibrary, &bdd_generator_NangateOpenCellLibrary);
 
-    gate_decorator_system::register_bdd_decorator_function("SCAN_FF_LIB", &bdd_availability_tester_scan_ff_lib, &bdd_generator_scan_ff_lib);
-
     gate_decorator_system::register_bdd_decorator_function("XILINX_SIMPRIM", &bdd_availability_tester_xilinx_simprim, &bdd_generator_xilinx_simprim);
     gate_decorator_system::register_lut_decorator_function("XILINX_SIMPRIM", &lut_availability_tester_xilinx_simprim, &lut_generator_xilinx_simprim);
 
@@ -43,8 +41,6 @@ void plugin_gate_decorators::on_unload()
     gate_decorator_system::remove_bdd_decorator_function("YOSYS_MYCELL");
     gate_decorator_system::remove_bdd_decorator_function("SYNOPSYS_NAND_NOR");
     gate_decorator_system::remove_bdd_decorator_function("NangateOpenCellLibrary");
-
-    gate_decorator_system::remove_bdd_decorator_function("SCAN_FF_LIB");
 
     gate_decorator_system::remove_bdd_decorator_function("XILINX_SIMPRIM");
     gate_decorator_system::remove_lut_decorator_function("XILINX_SIMPRIM");

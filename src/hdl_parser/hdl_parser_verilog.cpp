@@ -484,6 +484,7 @@ bool hdl_parser_verilog::build_netlist(const std::string& top_module)
         {
             // check if none of the slaves is itself a master
             bool okay = true;
+
             for (const auto& slave : merge_set)
             {
                 if (m_nets_to_merge.find(slave) != m_nets_to_merge.end())
@@ -492,10 +493,14 @@ bool hdl_parser_verilog::build_netlist(const std::string& top_module)
                     break;
                 }
             }
+
             if (!okay)
+            {
                 continue;
+            }
 
             auto master_net = m_net_by_name.at(master);
+
             for (const auto& slave : merge_set)
             {
                 auto slave_net = m_net_by_name.at(slave);
@@ -773,7 +778,45 @@ std::shared_ptr<module> hdl_parser_verilog::instantiate(const entity& e, std::sh
             }
         }
 
-        // TODO process generics
+        // process generics
+        for (auto [name, value] : inst.generics)
+        {
+            auto bit_vector_candidate = core_utils::trim(core_utils::replace(value, "_", ""));
+
+            // determine data type
+            auto data_type = std::string();
+
+            if (core_utils::is_integer(value))
+            {
+                data_type = "integer";
+            }
+            else if (core_utils::is_floating_point(value))
+            {
+                data_type = "floating_point";
+            }
+            else if (core_utils::starts_with(value, "\"") && core_utils::ends_with(value, "\""))
+            {
+                value     = value.substr(1, value.size() - 2);
+                data_type = "string";
+            }
+            else if (value.find('\'') != std::string::npos)
+            {
+                value     = get_number_from_literal(value, 16);
+                data_type = "bit_vector";
+            }
+            else
+            {
+                log_error("hdl_parser", "cannot identify data type of generic map value '{}' in instance '{}'", value, inst.name);
+                return nullptr;
+            }
+
+            // store generic information on gate
+            if (!container->set_data("generic", name, data_type, value))
+            {
+                log_error("hdl_parser", "couldn't set data", value, inst.name);
+                return nullptr;
+            }
+        }
     }
 
     return module;
@@ -1056,7 +1099,7 @@ std::vector<std::string> hdl_parser_verilog::get_assignment_signals(const std::s
             else if (signal_apostrophe != std::string::npos)
             {
                 // (3)
-                for (auto bit : get_bin_from_number_literal(s))
+                for (auto bit : get_number_from_literal(s, 2))
                 {
                     result.push_back("'" + std::to_string(bit - 48) + "'");
                 }
@@ -1229,65 +1272,79 @@ std::map<std::string, std::string> hdl_parser_verilog::get_port_assignments(cons
     return result;
 }
 
-std::string hdl_parser_verilog::get_bin_from_number_literal(const std::string& v)
+std::string hdl_parser_verilog::get_number_from_literal(const std::string& v, const u32 target_base)
 {
     std::string value = core_utils::to_lower(core_utils::trim(core_utils::replace(v, "_", "")));
+    std::string res;
 
-    u32 len = 0, radix = 0;
+    u32 len = 0, source_base = 0;
     std::string length, prefix, number;
 
     // base specified?
     if (value.find('\'') == std::string::npos)
     {
-        prefix = "d";
-        number = value;
+        source_base = 10;
+        number      = value;
     }
     else
     {
         length = value.substr(0, value.find('\''));
         prefix = value.substr(value.find('\'') + 1, 1);
         number = value.substr(value.find('\'') + 2);
-    }
 
-    // select radix
-    if (prefix == "b")
-    {
-        radix = 2;
-    }
-    else if (prefix == "o")
-    {
-        radix = 8;
-    }
-    else if (prefix == "d")
-    {
-        radix = 10;
-    }
-    else if (prefix == "h")
-    {
-        radix = 16;
-    }
-
-    // constructing bitstring
-    u64 val = stoull(number, 0, radix);
-    std::string res;
-
-    if (!length.empty())
-    {
-        len = std::stoi(length);
-
-        for (u32 i = 0; i < len; i++)
+        // select base
+        if (prefix == "b")
         {
-            res = std::to_string(val & 0x1) + res;
-            val >>= 1;
+            source_base = 2;
+        }
+        else if (prefix == "o")
+        {
+            source_base = 8;
+        }
+        else if (prefix == "d")
+        {
+            source_base = 10;
+        }
+        else if (prefix == "h")
+        {
+            source_base = 16;
         }
     }
-    else
+
+    if (target_base == 2)
     {
-        do
+        // constructing bit string
+        u64 val = stoull(number, 0, source_base);
+
+        if (!length.empty())
         {
-            res = std::to_string(val & 0x1) + res;
-            val >>= 1;
-        } while (val != 0);
+            len = std::stoi(length);
+
+            for (u32 i = 0; i < len; i++)
+            {
+                res = std::to_string(val & 0x1) + res;
+                val >>= 1;
+            }
+        }
+        else
+        {
+            do
+            {
+                res = std::to_string(val & 0x1) + res;
+                val >>= 1;
+            } while (val != 0);
+        }
+    }
+    else if (target_base == 16)
+    {
+        // constructing hex string
+        std::stringstream ss;
+
+        u64 val = stoull(number, 0, source_base);
+
+        ss << std::hex << val;
+
+        res = ss.str();
     }
 
     return res;
