@@ -1149,7 +1149,7 @@ std::shared_ptr<module> hdl_parser_vhdl::instantiate(const entity& e, std::share
             // store generic information on gate
             if (!container->set_data("generic", name, data_type, value))
             {
-                log_error("hdl_parser", "could'nt set data", value, inst.name);
+                log_error("hdl_parser", "couldn't set data", value, inst.name);
                 return nullptr;
             }
         }

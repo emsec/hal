@@ -6,9 +6,8 @@
 #include "gui/graph_widget/graphics_scene.h"
 #include "gui/graph_widget/layouters/layouter_task.h"
 #include "gui/gui_globals.h"
-#include <QDebug>
 
-static const bool lazy_updates = false;    // USE SETTINGS FOR THIS
+static const bool lazy_updates = false;
 
 graph_context::graph_context(const QString& name, QObject* parent)
     : QObject(parent), m_unhandled_changes(false), m_scene_update_required(false), m_update_requested(false), m_name(name), m_scene_available(true), m_update_in_progress(false)
@@ -39,11 +38,8 @@ graph_context::~graph_context()
 
 void graph_context::subscribe(graph_context_subscriber* const subscriber)
 {
-    //    assert(subscriber);
-    //    assert(!m_subscribers.contains(subscriber));
-
-    if (!subscriber || m_subscribers.contains(subscriber))
-        return;
+    assert(subscriber);
+    assert(!m_subscribers.contains(subscriber));
 
     m_subscribers.append(subscriber);
     update();
@@ -194,16 +190,6 @@ QString graph_context::name() const
     return m_name;
 }
 
-//graph_layouter* graph_context::layouter()
-//{
-//    return m_layouter;
-//}
-
-//graph_shader* graph_context::shader()
-//{
-//    return m_shader;
-//}
-
 bool graph_context::available() const
 {
     return m_scene_available;
@@ -225,7 +211,6 @@ void graph_context::handle_layouter_finished()
     }
     else
     {
-        // SHADER MIGHT HAS TO BE THREADED ASWELL, DEPENDING ON COMPLEXITY
         m_shader->update();
         m_layouter->scene()->update_visuals(m_shader->get_shading());
 

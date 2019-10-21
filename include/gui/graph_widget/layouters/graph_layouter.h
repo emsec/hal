@@ -29,9 +29,11 @@
 #include "netlist/gate.h"
 #include "netlist/net.h"
 
+#include "gui/gui_def.h"
 #include "gui/netlist_relay/netlist_relay.h"
 
 #include <QObject>
+#include <QPoint>
 
 class io_graphics_net;
 class graph_context;
@@ -61,6 +63,9 @@ public:
 
     graphics_scene* scene() const;
 
+    const QMap<hal::node, QPoint> node_to_position_map() const;
+    const QMap<QPoint, hal::node> position_to_node_map() const;
+
 Q_SIGNALS:
     void status_update(const int percent);
     void status_update(const QString& message);
@@ -68,6 +73,9 @@ Q_SIGNALS:
 protected:
     graphics_scene* m_scene;
     const graph_context* const m_context;
+
+    QMap<hal::node, QPoint> m_node_to_position_map;
+    QMap<QPoint, hal::node> m_position_to_node_map;
 };
 
 #endif // GRAPH_LAYOUTER_H

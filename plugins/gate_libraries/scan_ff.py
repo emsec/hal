@@ -14,13 +14,7 @@ scan_ff += "\t\t\t\"BUF\" : [[\"I\"], [], [\"O\"]], \n"
 
 # add ands and ors
 for i in range(2,1000):
-    scan_ff += "\t\t\t\"and" + str(i) + "\" : [[\"I0\""
-    for j in range (1, i):
-        scan_ff += ", \"I" + str(j) + "\""
-    scan_ff += "], [], [\"O\"]],\n"
-
-for i in range(2,1000):
-    scan_ff += "\t\t\t\"or" + str(i) + "\" : [[\"I0\""
+    scan_ff += "\t\t\t\"LOB" + str(i) + "\" : [[\"I0\""
     for j in range (1, i):
         scan_ff += ", \"I" + str(j) + "\""
     scan_ff += "], [], [\"O\"]],\n"

@@ -36,9 +36,6 @@ private:
     static std::map<std::string, std::shared_ptr<bdd>> bdd_generator_NangateOpenCellLibrary(std::shared_ptr<gate> g, std::map<std::string, std::shared_ptr<bdd>>& input_pin_type_to_bdd);
     static bool bdd_availability_tester_NangateOpenCellLibrary(std::shared_ptr<gate> g);
 
-    static std::map<std::string, std::shared_ptr<bdd>> bdd_generator_scan_ff_lib(std::shared_ptr<gate> g, std::map<std::string, std::shared_ptr<bdd>>& input_pin_type_to_bdd);
-    static bool bdd_availability_tester_scan_ff_lib(std::shared_ptr<gate> g);
-
     static std::map<std::string, std::shared_ptr<bdd>> bdd_generator_xilinx_simprim(std::shared_ptr<gate> g, std::map<std::string, std::shared_ptr<bdd>>& input_pin_type_to_bdd);
     static bool bdd_availability_tester_xilinx_simprim(std::shared_ptr<gate> g);
     static std::tuple<u32, u32, std::string> lut_generator_xilinx_simprim(std::shared_ptr<gate> g);
