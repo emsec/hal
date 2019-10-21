@@ -63,7 +63,7 @@ private:
     QSet<u32> m_nets;
 
     graph_layouter* m_layouter;
-    graph_shader* m_shader;    // MOVE SHADER TO VIEW ? USE BASE SHADER AND ADDITIONAL SHADERS ? LAYER SHADERS ?
+    graph_shader* m_shader;
 
     bool m_unhandled_changes;
     bool m_scene_update_required;
