@@ -10,6 +10,7 @@
 #include "gui/graph_widget/items/standard_graphics_gate.h"
 #include "gui/graph_widget/items/standard_graphics_module.h"
 #include "gui/graph_widget/items/standard_graphics_net.h"
+#include "gui/graph_widget/items/utility_items/drag_shadow_gate.h"
 #include "gui/gui_globals.h"
 #include "gui/svg_icon_engine/svg_icon_engine.h"
 
@@ -204,6 +205,7 @@ namespace style
         standard_graphics_net::load_settings();
         io_graphics_net::load_settings();
         separated_graphics_net::load_settings();
+        drag_shadow_gate::load_settings();
     }
 
 } // namespace style

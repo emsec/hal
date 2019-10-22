@@ -13,6 +13,7 @@
 #include "gui/graph_widget/items/standard_graphics_gate.h"
 #include "gui/graph_widget/items/standard_graphics_module.h"
 #include "gui/graph_widget/items/standard_graphics_net.h"
+#include "gui/graph_widget/items/utility_items/drag_shadow_gate.h"
 #include "gui/gui_globals.h"
 #include "netlist/gate.h"
 #include "netlist/module.h"
@@ -189,6 +190,7 @@ void graph_graphics_view::paintEvent(QPaintEvent* event)
     graphics_scene::set_grid_type(m_grid_type);
 
     graphics_item::set_lod(lod);
+    drag_shadow_gate::set_lod(lod);
 
     standard_graphics_module::update_alpha();
     standard_graphics_gate::update_alpha();
@@ -247,9 +249,16 @@ void graph_graphics_view::mousePressEvent(QMouseEvent* event)
     else if (event->button() == Qt::LeftButton)
     {
         graphics_item* item = static_cast<graphics_item*>(itemAt(event->pos()));
-        m_drag_item = item_draggable(item) ? static_cast<graphics_gate*>(item) : nullptr; // can be nullptr if no item
-        m_drag_mousedown_position = event->pos();
-        m_drag_cursor_offset = m_drag_mousedown_position - mapFromScene(item->pos());
+        if (item && item_draggable(item))
+        {
+            m_drag_item = static_cast<graphics_gate*>(item);
+            m_drag_mousedown_position = event->pos();
+            m_drag_cursor_offset = m_drag_mousedown_position - mapFromScene(item->pos());
+        }
+        else
+        {
+            m_drag_item = nullptr;
+        }
 
         // we still need the normal mouse logic for single clicks
         QGraphicsView::mousePressEvent(event);
