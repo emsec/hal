@@ -24,7 +24,7 @@ net_details_widget::net_details_widget(QWidget* parent) : QWidget(parent)
     m_general_table->horizontalHeader()->hide();
     m_general_table->verticalHeader()->hide();
     m_general_table->setColumnCount(2);
-    m_general_table->setRowCount(4);
+    m_general_table->setRowCount(3);//removed modules item temporary, may even be final
 
     //m_general_table->setStyleSheet("QTableWidget {background-color : rgb(31, 34, 35);}");
 
@@ -55,10 +55,10 @@ net_details_widget::net_details_widget(QWidget* parent) : QWidget(parent)
     id_item->setFont(font);
     m_general_table->setItem(2, 0, id_item);
 
-    QTableWidgetItem* module_item = new QTableWidgetItem("modules:");
+    //QTableWidgetItem* module_item = new QTableWidgetItem("modules:");
     id_item->setFlags(Qt::ItemIsEnabled);
     id_item->setFont(font);
-    m_general_table->setItem(3, 0, module_item);
+    //m_general_table->setItem(3, 0, module_item);
 
     m_name_item = new QTableWidgetItem();
     m_name_item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsEditable);
