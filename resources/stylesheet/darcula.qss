@@ -1311,7 +1311,7 @@ qproperty-save_icon_path: ":/icons/folder-down";
 qproperty-save_as_icon_style: "all->#3192C5";
 qproperty-save_as_icon_path: ":/icons/save-as";
 
-qproperty-run_icon_style: "all->#2BAD4A";
+qproperty-run_icon_style: "all->#30AC4F";
 qproperty-run_icon_path: ":/icons/run";
 
 qproperty-toggle_minimap_icon_style: "all->#FFDD00";
@@ -1323,13 +1323,13 @@ qproperty-new_file_icon_path: ":/icons/new-file";
 }
 
 context_manager_widget {
-qproperty-new_view_icon_style: "all->#00AA00";
+qproperty-new_view_icon_style: "all->#30AC4F";
 qproperty-new_view_icon_path: ":/icons/plus";
 
 qproperty-rename_icon_style: "all->#3192C5";
 qproperty-rename_icon_path: ":/icons/pen";
 
-qproperty-duplicate_icon_style: "all->#00AA00";
+qproperty-duplicate_icon_style: "all->#30AC4F";
 qproperty-duplicate_icon_path: ":/icons/content";
 
 qproperty-delete_icon_style: "all->#A61F1F";
@@ -1346,10 +1346,10 @@ qproperty-open_icon_path: ":/icons/folder";
 qproperty-save_icon_style: "all->#3192C5";
 qproperty-save_icon_path: ":/icons/folder-down";
 
-qproperty-schedule_icon_style: "all->#2BAD4A";
+qproperty-schedule_icon_style: "all->#30AC4F";
 qproperty-schedule_icon_path: ":/icons/list";
 
-qproperty-run_icon_style: "all->#2BAD4A";
+qproperty-run_icon_style: "all->#30AC4F";
 qproperty-run_icon_path: ":/icons/run";
 
 qproperty-content_icon_style: "all->#AFB1B3";
