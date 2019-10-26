@@ -95,6 +95,13 @@ void graphics_scene::set_grid_cluster_dot_color(const QColor& color)
     s_grid_cluster_dot_color = color;
 }
 
+QPointF graphics_scene::snap_to_grid(const QPointF& pos)
+{
+    int adjusted_x = qRound(pos.x() / graph_widget_constants::grid_size) * graph_widget_constants::grid_size;
+    int adjusted_y = qRound(pos.y() / graph_widget_constants::grid_size) * graph_widget_constants::grid_size;
+    return QPoint(adjusted_x, adjusted_y);
+}
+
 graphics_scene::graphics_scene(QObject* parent) : QGraphicsScene(parent),
     m_drag_shadow_gate(new drag_shadow_gate())
 //    m_left_gate_navigation_popup(new gate_navigation_popup(gate_navigation_popup::type::left)),
@@ -113,11 +120,17 @@ graphics_scene::graphics_scene(QObject* parent) : QGraphicsScene(parent),
 void graphics_scene::start_drag_shadow(const QPointF& posF, const QSizeF& sizeF, graphics_item* sourceItem)
 {
     m_drag_source_item = sourceItem;
-    m_drag_shadow_gate->start(posF, sizeF);
+    m_drag_shadow_gate->start(snap_to_grid(posF), sizeF);
 }
 void graphics_scene::move_drag_shadow(const QPointF& posF)
 {
-    m_drag_shadow_gate->setPos(posF);
+    QPointF oldPos = m_drag_shadow_gate->pos();
+    QPointF newPos = snap_to_grid(posF);
+    // only recalculate intersecting items when position actually changes
+    if (oldPos == newPos)
+        return;
+
+    m_drag_shadow_gate->setPos(newPos);
     auto colliding = m_drag_shadow_gate->collidingItems();
     bool placeable = true;
     for (auto itm : colliding)
@@ -137,9 +150,15 @@ void graphics_scene::move_drag_shadow(const QPointF& posF)
     }
     m_drag_shadow_gate->set_fits(placeable);
 }
-void graphics_scene::stop_drag_shadow()
+bool graphics_scene::stop_drag_shadow()
 {
     m_drag_shadow_gate->stop();
+    return m_drag_shadow_gate->fits();
+}
+
+QPointF graphics_scene::drop_target()
+{
+    return m_drag_shadow_gate->pos();
 }
 
 void graphics_scene::add_item(graphics_item* item)

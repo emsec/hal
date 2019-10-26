@@ -332,11 +332,13 @@ void graph_graphics_view::dragEnterEvent(QDragEnterEvent *event)
         QGraphicsView::dragEnterEvent(event);
     }
 }
+
 void graph_graphics_view::dragLeaveEvent(QDragLeaveEvent *event)
 {
     static_cast<graphics_scene*>(scene())->stop_drag_shadow();
     //QGraphicsView::dragLeaveEvent(event);
 }
+
 void graph_graphics_view::dragMoveEvent(QDragMoveEvent *event)
 {
     QPoint mouse = event->pos();
@@ -346,12 +348,16 @@ void graph_graphics_view::dragMoveEvent(QDragMoveEvent *event)
     // event->acceptProposedAction();
     //QGraphicsView::dragMoveEvent(event);
 }
+
 void graph_graphics_view::dropEvent(QDropEvent *event)
 {
     if (event->source() == this && event->proposedAction() == Qt::MoveAction)
     {
         event->acceptProposedAction();
-        static_cast<graphics_scene*>(scene())->stop_drag_shadow();
+        graphics_scene* s = static_cast<graphics_scene*>(scene());
+        bool success = s->stop_drag_shadow();
+        if (success)
+            m_drag_item->setPos(s->drop_target());
         // Process the data from the event.
     }
     else

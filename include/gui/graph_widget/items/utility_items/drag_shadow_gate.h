@@ -25,6 +25,7 @@ public:
     void set_height(const qreal height);
 
     void set_fits(const bool fits);
+    bool fits();
 
     static void set_lod(const qreal lod);
     static void load_settings();
