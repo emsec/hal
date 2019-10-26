@@ -80,6 +80,11 @@ void drag_shadow_gate::set_fits(const bool fits)
     m_fits = fits;
 }
 
+bool drag_shadow_gate::fits()
+{
+    return m_fits;
+}
+
 void drag_shadow_gate::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
 {
     Q_UNUSED(option)
