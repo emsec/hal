@@ -60,6 +60,11 @@ qreal drag_shadow_gate::height() const
     return m_height;
 }
 
+QSizeF drag_shadow_gate::size() const
+{
+    return QSizeF(width(), height());
+}
+
 void drag_shadow_gate::set_width(const qreal width)
 {
     m_width = width;
@@ -80,7 +85,7 @@ void drag_shadow_gate::set_fits(const bool fits)
     m_fits = fits;
 }
 
-bool drag_shadow_gate::fits()
+bool drag_shadow_gate::fits() const
 {
     return m_fits;
 }

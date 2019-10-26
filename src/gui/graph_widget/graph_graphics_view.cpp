@@ -317,12 +317,12 @@ void graph_graphics_view::mouseMoveEvent(QMouseEvent* event)
 
 void graph_graphics_view::dragEnterEvent(QDragEnterEvent *event)
 {
-    qDebug() << "dragEnter";
     if (event->source() == this && event->proposedAction() == Qt::MoveAction)
     {
         event->acceptProposedAction();
         QSizeF size(m_drag_item->width(), m_drag_item->height());
-        QPointF pos = m_drag_item->scenePos();
+        QPointF mouse = event->posF();
+        QPointF pos = mapToScene(mouse.x(), mouse.y()) - m_drag_cursor_offset;
         if (g_selection_relay.m_selected_gates.size() > 1)
         {
             // if we are in multi-select mode, reduce the selection to the
@@ -336,7 +336,6 @@ void graph_graphics_view::dragEnterEvent(QDragEnterEvent *event)
         }
         static_cast<graphics_scene*>(scene())
             ->start_drag_shadow(pos, size, m_drag_item);
-        // Process the data from the event.
     }
     else
     {
@@ -347,17 +346,19 @@ void graph_graphics_view::dragEnterEvent(QDragEnterEvent *event)
 void graph_graphics_view::dragLeaveEvent(QDragLeaveEvent *event)
 {
     static_cast<graphics_scene*>(scene())->stop_drag_shadow();
-    //QGraphicsView::dragLeaveEvent(event);
 }
 
 void graph_graphics_view::dragMoveEvent(QDragMoveEvent *event)
 {
-    QPoint mouse = event->pos();
-    QPoint shadow = mouse - m_drag_cursor_offset;
-    static_cast<graphics_scene*>(scene())
-        ->move_drag_shadow(mapToScene(shadow.x(), shadow.y()));
-    // event->acceptProposedAction();
-    //QGraphicsView::dragMoveEvent(event);
+    if (event->source() == this && event->proposedAction() == Qt::MoveAction)
+    {
+        QPoint mouse = event->pos();
+        bool shiftPressed = event->keyboardModifiers() == Qt::ShiftModifier;
+        QPoint shadow = mouse - m_drag_cursor_offset;
+        static_cast<graphics_scene*>(scene())
+            ->move_drag_shadow(mapToScene(shadow.x(), shadow.y()),
+            shiftPressed ? graphics_scene::drag_mode::swap : graphics_scene::drag_mode::move);
+    }
 }
 
 void graph_graphics_view::dropEvent(QDropEvent *event)
@@ -368,8 +369,14 @@ void graph_graphics_view::dropEvent(QDropEvent *event)
         graphics_scene* s = static_cast<graphics_scene*>(scene());
         bool success = s->stop_drag_shadow();
         if (success)
+        {
+            bool shiftPressed = event->keyboardModifiers() == Qt::ShiftModifier;
+            if (shiftPressed)
+            {
+                s->drop_target_item()->setPos(m_drag_item->pos());
+            }
             m_drag_item->setPos(s->drop_target());
-        // Process the data from the event.
+        }
     }
     else
     {

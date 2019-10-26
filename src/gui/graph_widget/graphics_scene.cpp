@@ -122,7 +122,7 @@ void graphics_scene::start_drag_shadow(const QPointF& posF, const QSizeF& sizeF,
     m_drag_source_item = sourceItem;
     m_drag_shadow_gate->start(snap_to_grid(posF), sizeF);
 }
-void graphics_scene::move_drag_shadow(const QPointF& posF)
+void graphics_scene::move_drag_shadow(const QPointF& posF, const drag_mode mode)
 {
     QPointF oldPos = m_drag_shadow_gate->pos();
     QPointF newPos = snap_to_grid(posF);
@@ -132,24 +132,60 @@ void graphics_scene::move_drag_shadow(const QPointF& posF)
 
     m_drag_shadow_gate->setPos(newPos);
     auto colliding = m_drag_shadow_gate->collidingItems();
-    bool placeable = true;
-    for (auto itm : colliding)
+    bool placeable;
+    switch (mode)
     {
-        #ifdef DISALLOW_DRAG_ON_WIRE
-        if (itm != m_drag_source_item)
-        #else
-        hal::item_type type = static_cast<graphics_item*>(itm)->item_type();
-        if (itm != m_drag_source_item
-            && type == hal::item_type::gate
-            || type == hal::item_type::module)
-        #endif
-        {
+        case drag_mode::move: {
+            // placeable only on empty space
+            placeable = true;
+            for (auto itm : colliding)
+            {
+                #ifdef DISALLOW_DRAG_ON_WIRE
+                if (itm != m_drag_source_item)
+                #else
+                hal::item_type type = static_cast<graphics_item*>(itm)->item_type();
+                if (itm != m_drag_source_item
+                    && type == hal::item_type::gate
+                    || type == hal::item_type::module)
+                #endif
+                {
+                    placeable = false;
+                    break;
+                }
+            }
+            break;
+        }
+        case drag_mode::swap: {
+            // placeable only on gate or module
+            QSizeF shadowSize = m_drag_shadow_gate->size();
+            QPointF dragCenter = QPointF(newPos.x() + shadowSize.width()/2, newPos.y() + shadowSize.height()/2);
             placeable = false;
+            for (auto itm : colliding)
+            {
+                graphics_item* graphicsItem = static_cast<graphics_item*>(itm);
+                hal::item_type type = graphicsItem->item_type();
+                if (type == hal::item_type::gate || type == hal::item_type::module)
+                {
+                    QRectF itmRect = itm->boundingRect();
+                    itmRect.translate(itm->pos());
+                    QPointF itmCenter = itmRect.center();
+                    int distance = (itmCenter-dragCenter).manhattanLength();
+                    // select the first matching gate, not the closest one
+                    if(distance < graph_widget_constants::drag_swap_sensitivity_distance)
+                    {
+                        placeable = true;
+                        m_drop_target_item = graphicsItem;
+                        break;
+                    }
+                }
+            }
             break;
         }
     }
+    
     m_drag_shadow_gate->set_fits(placeable);
 }
+
 bool graphics_scene::stop_drag_shadow()
 {
     m_drag_shadow_gate->stop();
@@ -159,6 +195,11 @@ bool graphics_scene::stop_drag_shadow()
 QPointF graphics_scene::drop_target()
 {
     return m_drag_shadow_gate->pos();
+}
+
+graphics_item* graphics_scene::drop_target_item() const
+{
+    return m_drop_target_item;
 }
 
 void graphics_scene::add_item(graphics_item* item)

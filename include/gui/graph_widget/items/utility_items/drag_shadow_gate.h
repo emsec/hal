@@ -20,12 +20,13 @@ public:
 
     qreal width() const;
     qreal height() const;
+    QSizeF size() const;
 
     void set_width(const qreal width);
     void set_height(const qreal height);
 
     void set_fits(const bool fits);
-    bool fits();
+    bool fits() const;
 
     static void set_lod(const qreal lod);
     static void load_settings();
