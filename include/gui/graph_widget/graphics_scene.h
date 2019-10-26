@@ -39,7 +39,7 @@ public:
 
     graphics_scene(QObject* parent = nullptr);
 
-    void start_drag_shadow(const QPointF& posF, const QSizeF& sizeF);
+    void start_drag_shadow(const QPointF& posF, const QSizeF& sizeF, graphics_item* sourceItem);
     void move_drag_shadow(const QPointF& posF);
     void stop_drag_shadow();
 
@@ -109,6 +109,7 @@ private:
     void drawBackground(QPainter* painter, const QRectF& rect) Q_DECL_OVERRIDE;
 
     drag_shadow_gate* m_drag_shadow_gate;
+    graphics_item* m_drag_source_item;
 
     QVector<module_data> m_module_items;
     QVector<gate_data> m_gate_items;

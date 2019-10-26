@@ -110,13 +110,32 @@ graphics_scene::graphics_scene(QObject* parent) : QGraphicsScene(parent),
     QGraphicsScene::addItem(m_drag_shadow_gate);
 }
 
-void graphics_scene::start_drag_shadow(const QPointF& posF, const QSizeF& sizeF)
+void graphics_scene::start_drag_shadow(const QPointF& posF, const QSizeF& sizeF, graphics_item* sourceItem)
 {
+    m_drag_source_item = sourceItem;
     m_drag_shadow_gate->start(posF, sizeF);
 }
 void graphics_scene::move_drag_shadow(const QPointF& posF)
 {
     m_drag_shadow_gate->setPos(posF);
+    auto colliding = m_drag_shadow_gate->collidingItems();
+    bool placeable = true;
+    for (auto itm : colliding)
+    {
+        #ifdef DISALLOW_DRAG_ON_WIRE
+        if (itm != m_drag_source_item)
+        #else
+        hal::item_type type = static_cast<graphics_item*>(itm)->item_type();
+        if (itm != m_drag_source_item
+            && type == hal::item_type::gate
+            || type == hal::item_type::module)
+        #endif
+        {
+            placeable = false;
+            break;
+        }
+    }
+    m_drag_shadow_gate->set_fits(placeable);
 }
 void graphics_scene::stop_drag_shadow()
 {
