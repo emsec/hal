@@ -324,7 +324,7 @@ void graph_graphics_view::dragEnterEvent(QDragEnterEvent *event)
         QSizeF size(m_drag_item->width(), m_drag_item->height());
         QPointF pos = m_drag_item->scenePos();
         static_cast<graphics_scene*>(scene())
-            ->start_drag_shadow(pos, size);
+            ->start_drag_shadow(pos, size, m_drag_item);
         // Process the data from the event.
     }
     else
