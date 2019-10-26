@@ -323,6 +323,17 @@ void graph_graphics_view::dragEnterEvent(QDragEnterEvent *event)
         event->acceptProposedAction();
         QSizeF size(m_drag_item->width(), m_drag_item->height());
         QPointF pos = m_drag_item->scenePos();
+        if (g_selection_relay.m_selected_gates.size() > 1)
+        {
+            // if we are in multi-select mode, reduce the selection to the
+            // item we are dragging
+            g_selection_relay.clear();
+            g_selection_relay.m_selected_gates.insert(m_drag_item->id());
+            g_selection_relay.m_focus_type = selection_relay::item_type::gate;
+            g_selection_relay.m_focus_id   = m_drag_item->id();
+            g_selection_relay.m_subfocus   = selection_relay::subfocus::none;
+            g_selection_relay.relay_selection_changed(nullptr);
+        }
         static_cast<graphics_scene*>(scene())
             ->start_drag_shadow(pos, size, m_drag_item);
         // Process the data from the event.
