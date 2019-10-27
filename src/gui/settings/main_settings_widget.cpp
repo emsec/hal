@@ -123,16 +123,16 @@ void main_settings_widget::init_widgets()
     make_exclusive_group("keybinds");
     make_exclusive_group("kbdmodifiers");
 
-    QMap<QString, QString> standard_modifiers;
-    standard_modifiers.insert("Shift", "shift");
-    standard_modifiers.insert("Ctrl", "ctrl");
-    standard_modifiers.insert("Alt", "alt");
+    QMap<QString, QVariant> standard_modifiers;
+    standard_modifiers.insert("Shift", QVariant(Qt::ShiftModifier));
+    standard_modifiers.insert("Ctrl", QVariant(Qt::ControlModifier));
+    standard_modifiers.insert("Alt", QVariant(Qt::AltModifier));
 
     /************* ADD NEW SETTINGS WIDGETS HERE *************/
 
     make_section("Style", "style-item", ":/icons/eye");
 
-    QMap<QString, QString> theme_options;
+    QMap<QString, QVariant> theme_options;
     theme_options.insert("Darcula", "darcula");
     theme_options.insert("Sunny", "sunny");
     dropdown_setting* theme_settings = new dropdown_setting("main_style/theme", "Main Style Theme", theme_options, "will be set as your theme after restarting", this);
@@ -141,7 +141,7 @@ void main_settings_widget::init_widgets()
 
     make_section("Graph View", "graphview-item", ":/icons/graph");
 
-    QMap<QString, QString> graph_grid_options;
+    QMap<QString, QVariant> graph_grid_options;
     graph_grid_options.insert("None", "none");
     graph_grid_options.insert("Lines", "lines");
     graph_grid_options.insert("Dots", "dots");
