@@ -27,6 +27,8 @@ static const qreal net_fade_out_lod = 0.4;
 static const qreal grid_fade_start_lod = 0.4;
 static const qreal grid_fade_end_lod = 1.0;
 
+static const int drag_swap_sensitivity_distance = 100;
+
 enum class grid_type
 {
     lines,

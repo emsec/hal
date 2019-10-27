@@ -95,6 +95,13 @@ void graphics_scene::set_grid_cluster_dot_color(const QColor& color)
     s_grid_cluster_dot_color = color;
 }
 
+QPointF graphics_scene::snap_to_grid(const QPointF& pos)
+{
+    int adjusted_x = qRound(pos.x() / graph_widget_constants::grid_size) * graph_widget_constants::grid_size;
+    int adjusted_y = qRound(pos.y() / graph_widget_constants::grid_size) * graph_widget_constants::grid_size;
+    return QPoint(adjusted_x, adjusted_y);
+}
+
 graphics_scene::graphics_scene(QObject* parent) : QGraphicsScene(parent),
     m_drag_shadow_gate(new drag_shadow_gate())
 //    m_left_gate_navigation_popup(new gate_navigation_popup(gate_navigation_popup::type::left)),
@@ -110,17 +117,89 @@ graphics_scene::graphics_scene(QObject* parent) : QGraphicsScene(parent),
     QGraphicsScene::addItem(m_drag_shadow_gate);
 }
 
-void graphics_scene::start_drag_shadow(const QPointF& posF, const QSizeF& sizeF)
+void graphics_scene::start_drag_shadow(const QPointF& posF, const QSizeF& sizeF, graphics_item* sourceItem)
 {
-    m_drag_shadow_gate->start(posF, sizeF);
+    m_drag_source_item = sourceItem;
+    m_drag_shadow_gate->start(snap_to_grid(posF), sizeF);
 }
-void graphics_scene::move_drag_shadow(const QPointF& posF)
+void graphics_scene::move_drag_shadow(const QPointF& posF, const drag_mode mode)
 {
-    m_drag_shadow_gate->setPos(posF);
+    QPointF oldPos = m_drag_shadow_gate->pos();
+    QPointF newPos = snap_to_grid(posF);
+    // only recalculate intersecting items when position actually changes
+    if (oldPos == newPos)
+        return;
+
+    m_drag_shadow_gate->setPos(newPos);
+    auto colliding = m_drag_shadow_gate->collidingItems();
+    bool placeable;
+    switch (mode)
+    {
+        case drag_mode::move: {
+            // placeable only on empty space
+            placeable = true;
+            for (auto itm : colliding)
+            {
+                #ifdef DISALLOW_DRAG_ON_WIRE
+                if (itm != m_drag_source_item)
+                #else
+                hal::item_type type = static_cast<graphics_item*>(itm)->item_type();
+                if (itm != m_drag_source_item
+                    && type == hal::item_type::gate
+                    || type == hal::item_type::module)
+                #endif
+                {
+                    placeable = false;
+                    break;
+                }
+            }
+            break;
+        }
+        case drag_mode::swap: {
+            // placeable only on gate or module
+            QSizeF shadowSize = m_drag_shadow_gate->size();
+            QPointF dragCenter = QPointF(newPos.x() + shadowSize.width()/2, newPos.y() + shadowSize.height()/2);
+            placeable = false;
+            for (auto itm : colliding)
+            {
+                graphics_item* graphicsItem = static_cast<graphics_item*>(itm);
+                hal::item_type type = graphicsItem->item_type();
+                if (type == hal::item_type::gate || type == hal::item_type::module)
+                {
+                    QRectF itmRect = itm->boundingRect();
+                    itmRect.translate(itm->pos());
+                    QPointF itmCenter = itmRect.center();
+                    int distance = (itmCenter-dragCenter).manhattanLength();
+                    // select the first matching gate, not the closest one
+                    if(distance < graph_widget_constants::drag_swap_sensitivity_distance)
+                    {
+                        placeable = true;
+                        m_drop_target_item = graphicsItem;
+                        break;
+                    }
+                }
+            }
+            break;
+        }
+    }
+    
+    m_drag_shadow_gate->set_fits(placeable);
 }
-void graphics_scene::stop_drag_shadow()
+
+bool graphics_scene::stop_drag_shadow()
 {
     m_drag_shadow_gate->stop();
+    return m_drag_shadow_gate->fits();
+}
+
+QPointF graphics_scene::drop_target()
+{
+    return m_drag_shadow_gate->pos();
+}
+
+graphics_item* graphics_scene::drop_target_item() const
+{
+    return m_drop_target_item;
 }
 
 void graphics_scene::add_item(graphics_item* item)
