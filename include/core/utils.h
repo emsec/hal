@@ -273,6 +273,14 @@ namespace core_utils
     CORE_API hal::path get_user_share_directory();
 
     /**
+     * Get the path to the read-only global configuration directory of HAL.<br>
+     * Relative to the binary directory.
+     *
+     * @returns The path.
+     */
+    CORE_API hal::path get_config_directory();
+
+    /**
      * Get the path to the configuration directory of the user.<br>
      * home/.config/hal for Unix
      *

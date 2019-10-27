@@ -343,6 +343,14 @@ namespace core_utils
         return dir;
     }
 
+    hal::path get_config_directory()
+    {
+        std::vector<hal::path> path_hints = {
+            get_base_directory() / "share/hal/defaults",
+        };
+        return get_first_directory_exists(path_hints);
+    }
+
     hal::path get_user_config_directory()
     {
         hal::path dir = hal::path(getenv("HOME")) / ".config/hal";

@@ -9,7 +9,7 @@
 
 settings_manager::settings_manager(QObject* parent) : QObject(parent),
     m_settings(new QSettings(QString::fromStdString((core_utils::get_user_config_directory() / "/guisettings.ini").string()), QSettings::IniFormat)),
-    m_defaults(new QSettings(QString::fromStdString((core_utils::get_user_config_directory() / "/guidefaults.ini").string()), QSettings::IniFormat))
+    m_defaults(new QSettings(QString::fromStdString((core_utils::get_config_directory() / "/guidefaults.ini").string()), QSettings::IniFormat))
 {
     //g_settings_relay.register_sender(this, name());
     if (m_settings->status() != QSettings::NoError) {
