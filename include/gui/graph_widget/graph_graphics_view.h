@@ -65,6 +65,8 @@ private Q_SLOTS:
     void handle_select_outputs();
     void handle_select_inputs();
 
+    void handle_global_setting_changed(void* sender, const QString& key, const QVariant& value);
+
 private:
     void paintEvent(QPaintEvent* event) Q_DECL_OVERRIDE;
     void drawForeground(QPainter* painter, const QRectF& rect) Q_DECL_OVERRIDE;
@@ -80,6 +82,8 @@ private:
     void keyPressEvent(QKeyEvent* event) Q_DECL_OVERRIDE;
     void keyReleaseEvent(QKeyEvent* event) Q_DECL_OVERRIDE;
     void resizeEvent(QResizeEvent* event) Q_DECL_OVERRIDE;
+
+    void initialize_settings();
 
     void show_context_menu(const QPoint& pos);
 
@@ -105,8 +109,10 @@ private:
     QPoint m_drag_mousedown_position;
     QPoint m_drag_cursor_offset;
     graphics_gate* m_drag_item;
+    Qt::KeyboardModifier m_drag_modifier;
 
     QPoint m_move_position;
+    Qt::KeyboardModifier m_move_modifier;
     QPointF m_zoom_scene_position;
     qreal m_min_scale;
 
