@@ -40,7 +40,10 @@ void keybind_setting::load(const QVariant& value)
 
 QVariant keybind_setting::value()
 {
-    return QVariant(m_keybind_edit->keySequence()); // auto-cast
+    QKeySequence seq = m_keybind_edit->keySequence();
+    if (seq.isEmpty())
+        return QVariant(QVariant::Invalid);
+    return QVariant(seq); // auto-cast
 }
 
 void keybind_setting::on_keybind_changed()

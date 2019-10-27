@@ -409,15 +409,20 @@ settings_widget {
     /*border-left : 5px solid #232ed1;*/
 }
 
-settings_widget[dirty=true] {
-    border-left      : 5px solid rgb(85, 255, 0);
+settings_widget[conflicts=true] {
+    border-left      : 5px solid #A61F1F;
+    background-color : rgb(231, 137, 137);
+}
+
+settings_widget[dirty=true][conflicts=false] {
+    border-left      : 5px solid rgb(73, 200, 76);
 }
 
 settings_widget QLabel {
     /* color            : #D3DCE6;
     background-color : #25292D; */
     color: rgb(0, 0, 0);
-    background-color: rgb(189, 189, 189);
+    background-color : rgba(255, 255, 255, 0);
     margin-right     : 10px;
 }
 

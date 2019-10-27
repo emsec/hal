@@ -17,6 +17,7 @@
 #include <QFrame>
 #include <QHBoxLayout>
 #include <QHeaderView>
+#include <QMessageBox>
 #include <QPushButton>
 #include <QScrollArea>
 #include <QScrollBar>
@@ -110,7 +111,7 @@ main_settings_widget::main_settings_widget(QWidget* parent)
     m_ok->hide();
     #endif
 
-    this->init_widgets();
+    init_widgets();
 
     m_expanding_list_widget->select_item(0);
     m_expanding_list_widget->repolish();
@@ -119,44 +120,51 @@ main_settings_widget::main_settings_widget(QWidget* parent)
 
 void main_settings_widget::init_widgets()
 {
+    make_exclusive_group("keybinds");
+
     /************* ADD NEW SETTINGS WIDGETS HERE *************/
 
-    this->make_section("Style", "style-item", ":/icons/eye");
+    make_section("Style", "style-item", ":/icons/eye");
 
     QMap<QString, QString> theme_options;
     theme_options.insert("Darcula", "darcula");
     theme_options.insert("Sunny", "sunny");
     dropdown_setting* theme_settings = new dropdown_setting("main_style/theme", "Main Style Theme", theme_options, "will be set as your theme after restarting", this);
     //theme_settings->reset_labels();
-    this->register_widget("style-item", theme_settings);
+    register_widget("style-item", theme_settings);
 
-    this->make_section("Graph View", "graphview-item", ":/icons/graph");
+    make_section("Graph View", "graphview-item", ":/icons/graph");
 
     QMap<QString, QString> graph_grid_options;
     graph_grid_options.insert("None", "none");
     graph_grid_options.insert("Lines", "lines");
     graph_grid_options.insert("Dots", "dots");
     dropdown_setting* graph_grid_settings = new dropdown_setting("graph_view/grid_type", "Grid", graph_grid_options, "", this);
-    this->register_widget("graphview-item", graph_grid_settings);
+    register_widget("graphview-item", graph_grid_settings);
 
-    this->make_section("Python editor", "python-item", ":/icons/python");
+    make_section("Python editor", "python-item", ":/icons/python");
 
     slider_setting* py_font_size_setting = new slider_setting("python/font_size", "Font Size", 6, 40, "pt", this);
     fontsize_preview_widget* py_font_size_preview = new fontsize_preview_widget("foobar", font());
     py_font_size_preview->setMinimumSize(QSize(220, 85));
     py_font_size_setting->set_preview_widget(py_font_size_preview);
     py_font_size_setting->set_preview_position(settings_widget::preview_position::right);
-    this->register_widget("python-item", py_font_size_setting);
+    register_widget("python-item", py_font_size_setting);
     checkbox_setting* py_line_numbers_setting = new checkbox_setting("python/line_numbers", "Line Numbers", "show", "", this);
-    this->register_widget("python-item", py_line_numbers_setting);
+    register_widget("python-item", py_line_numbers_setting);
 
-    this->make_section("Expert settings", "advanced-item", ":/icons/preferences");
+    make_section("Expert settings", "advanced-item", ":/icons/preferences");
 
-    keybind_setting* demo_keybind_setting = new keybind_setting("keybinds/demo", "Demo Keybind", "demo description", this);
-    this->register_widget("advanced-item", demo_keybind_setting);
+    keybind_setting* demo_keybind_setting = new keybind_setting("keybinds/demo", "Demo Keybind 1", "demo description", this);
+    register_widget("advanced-item", demo_keybind_setting);
+    assign_exclusive_group("keybinds", demo_keybind_setting);
+
+    keybind_setting* demo_keybind_setting2 = new keybind_setting("keybinds/demo2", "Demo Keybind 2", "demo description", this);
+    register_widget("advanced-item", demo_keybind_setting2);
+    assign_exclusive_group("keybinds", demo_keybind_setting2);
 
     // text_setting* py_interpreter_setting = new text_setting("python/interpreter", "Python Interpreter", "will be used after restart", "/path/to/python");
-    // this->register_widget("advanced-item", py_interpreter_setting);
+    // register_widget("advanced-item", py_interpreter_setting);
 
 }
 
@@ -168,6 +176,57 @@ void main_settings_widget::make_section(const QString& label, const QString& nam
     btn->set_icon_path(icon_path);
     m_expanding_list_widget->append_item(btn);
     m_sections.insert(name, btn);
+}
+
+bool main_settings_widget::check_conflict(settings_widget* widget, const QVariant& value) const
+{
+    QString group_name = m_exclusive_w2g.value(widget);
+    // if widget is not bound to an exclusive group, accept any value
+    if (group_name.isNull())
+        return false;
+    // we must accept >1 widgets with value "invalid"
+    bool valid = value.isValid();
+    // iterate over each member of the exclusive group and check that none
+    // have the same value
+    QList<settings_widget*>* widgets_in_group = m_exclusive_g2w.value(group_name);
+    bool conflict = false;
+    for (settings_widget* w : *widgets_in_group)
+    {
+        if (w != widget)
+        {
+            bool thisConflict = valid && w->value() == value;
+            conflict |= thisConflict;
+            w->set_conflicts(thisConflict);
+            qDebug() << "conflict between" << widget->key() << "and" << w->key();
+        }
+    }
+    widget->set_conflicts(conflict);
+    return conflict;
+}
+
+void main_settings_widget::make_exclusive_group(const QString& name)
+{
+    m_exclusive_groups.append(name);
+    m_exclusive_g2w.insert(name, new QList<settings_widget*>());
+}
+
+void main_settings_widget::release_exclusive_group(const QString& group_name, settings_widget* widget)
+{
+    m_exclusive_w2g.remove(widget);
+    QList<settings_widget*>* widgets_in_group = m_exclusive_g2w.value(group_name);
+    widgets_in_group->removeOne(widget);
+}
+
+void main_settings_widget::assign_exclusive_group(const QString& group_name, settings_widget* widget)
+{
+    // a widget must not be in more than 1 exclusive group
+    assert(!m_exclusive_w2g.contains(widget));
+    // the group must exist
+    assert(m_exclusive_groups.contains(group_name));
+
+    m_exclusive_w2g.insert(widget, group_name);
+    QList<settings_widget*>* widgets_in_group = m_exclusive_g2w.value(group_name);
+    widgets_in_group->append(widget);
 }
 
 void main_settings_widget::register_widget(const QString& section_name, settings_widget* widget)
@@ -202,6 +261,7 @@ void main_settings_widget::handle_restore_defaults_clicked()
         QString key = widget->key();
         QVariant default_val = g_settings_manager.reset(key);
         widget->prepare(default_val, default_val);
+        check_conflict(widget, widget->value());
     }
 }
 
@@ -217,6 +277,19 @@ void main_settings_widget::handle_cancel_clicked()
 void main_settings_widget::handle_ok_clicked()
 {
     #ifdef ENABLE_OK_BUTTON
+    for (settings_widget* widget : m_all_settings)
+    {
+        if (widget->conflicts())
+        {
+            QMessageBox msg;
+            msg.setText("Please resolve all conflicts first");
+            msg.setDetailedText("You have settings that collide with each other.\n"
+                    "Settings can't be saved while conflicts exist.");
+            msg.setWindowTitle("Settings Manager");
+            msg.exec();
+            return;
+        }
+    }
     for (settings_widget* widget : m_all_settings)
     {
         if (widget->dirty())
@@ -289,9 +362,15 @@ void main_settings_widget::handle_text_edited(const QString& text)
     }
 }
 
-void main_settings_widget::handle_setting_updated(void* sender, const QString& key, const QVariant& value)
+void main_settings_widget::handle_setting_updated(settings_widget* sender, const QString& key, const QVariant& value)
 {
-    g_settings_manager.update(key, value);
+    bool conflicting = check_conflict(sender, value);
+    #ifdef SETTINGS_UPDATE_IMMEDIATELY
+    if (!conflicts)
+    {
+        g_settings_manager.update(key, value);
+    }
+    #endif
 }
 
 void main_settings_widget::hide_all_settings()

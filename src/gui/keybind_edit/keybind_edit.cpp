@@ -49,7 +49,7 @@ bool keybind_edit::event(QEvent* e)
         case QEvent::FocusOut:
             // FIXME this messes with the API. Better define a validator that
             // can actually handle QVariants and thus QKeySequences.
-            if (m_validator.validate(keySequence().toString()))
+            if (!m_validator.validate(keySequence().toString()))
             {
                 // revert
                 setKeySequence(m_old_sequence);

@@ -59,12 +59,16 @@ public Q_SLOTS:
     void handle_ok_clicked();
     void handle_button_selected(expanding_list_button* button);
     void handle_text_edited(const QString& text);
-    void handle_setting_updated(void* sender, const QString& key, const QVariant& value);
+    void handle_setting_updated(settings_widget* sender, const QString& key, const QVariant& value);
 
 private:
     void init_widgets();
     void make_section(const QString& label, const QString& name, const QString& icon_path);
     void register_widget(const QString& section_name, settings_widget* widget);
+    bool check_conflict(settings_widget* widget, const QVariant& value) const;
+    void make_exclusive_group(const QString& name);
+    void assign_exclusive_group(const QString& group_name, settings_widget* widget);
+    void release_exclusive_group(const QString& group_name, settings_widget* widget);
     void hide_all_settings();
     void show_all_settings();
     void remove_all_highlights();
@@ -96,6 +100,10 @@ private:
     QString m_active_section;
 
     QList<settings_widget*> m_all_settings;
+    
+    QList<QString> m_exclusive_groups;
+    QMap<settings_widget*, QString> m_exclusive_w2g;
+    QMap<QString, QList<settings_widget*>*> m_exclusive_g2w;
 };
 
 #endif    // MAIN_SETTINGS_WIDGET_H
