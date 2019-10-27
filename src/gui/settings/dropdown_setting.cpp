@@ -12,7 +12,7 @@
 #include <QStringList>
 #include "gui_globals.h"
 
-dropdown_setting::dropdown_setting(const QString& key, const QString& title, const QMap<QString, QString>& options, const QString& description, QWidget *parent) : settings_widget(key, parent), m_options(options)
+dropdown_setting::dropdown_setting(const QString& key, const QString& title, const QMap<QString, QVariant>& options, const QString& description, QWidget *parent) : settings_widget(key, parent), m_options(options)
 {
     m_labels.append(QPair<QLabel*, QString>(m_name, title));
 
