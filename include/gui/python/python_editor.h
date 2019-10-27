@@ -80,6 +80,7 @@ public:
     void handle_action_new_tab();
     void handle_action_tab_menu();
     void handle_action_close_tab();
+    void handle_action_close_all_tabs();
     void handle_action_close_other_tabs();
     void handle_action_close_left_tabs();
     void handle_action_close_right_tabs();

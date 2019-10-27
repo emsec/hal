@@ -535,7 +535,11 @@ void python_editor::handle_action_tab_menu()
 {
     QMenu context_menu(this);
     QAction* action = context_menu.addAction("Close");
+
+    context_menu.addSeparator();
     connect(action, &QAction::triggered, this, &python_editor::handle_action_close_tab);
+    action = context_menu.addAction("Close all");
+    connect(action, &QAction::triggered, this, &python_editor::handle_action_close_all_tabs);
     action = context_menu.addAction("Close all others");
     connect(action, &QAction::triggered, this, &python_editor::handle_action_close_other_tabs);
     action = context_menu.addAction("Close all right");
@@ -557,6 +561,18 @@ void python_editor::handle_action_close_tab()
 {
     assert(m_tab_rightclicked != -1);
     this->handle_tab_close_requested(m_tab_rightclicked);
+}
+
+void python_editor::handle_action_close_all_tabs()
+{
+    assert(m_tab_rightclicked != -1);
+    int tabs = m_tab_widget->count();
+    if (!this->confirm_discard_for_range(0, tabs))
+        return;
+    for(int t = 0; t < tabs; t++)
+    {
+        this->discard_tab(0);
+    }
 }
 
 void python_editor::handle_action_close_other_tabs()
