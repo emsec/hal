@@ -214,7 +214,7 @@ main_window::main_window(QWidget* parent) : QWidget(parent), m_schedule_widget(n
     connect(m_action_about, &QAction::triggered, m_about_dialog, &about_dialog::exec);
     connect(m_action_schedule, &QAction::triggered, this, &main_window::toggle_schedule);
     connect(m_action_settings, &QAction::triggered, this, &main_window::toggle_settings);
-    connect(m_settings, &main_settings_widget::close, this, &main_window::show_layout_area);
+    connect(m_settings, &main_settings_widget::close, this, &main_window::close_settings);
     connect(m_action_save, &QAction::triggered, this, &main_window::handle_save_triggered);
     //debug
     connect(m_action_close, &QAction::triggered, this, &main_window::handle_action_closed);
@@ -416,18 +416,18 @@ void main_window::toggle_settings()
 {
     if (m_stacked_widget->currentWidget() == m_settings)
     {
-        if (file_manager::get_instance()->file_open())
-            m_stacked_widget->setCurrentWidget(m_layout_area);
-        else
-            m_stacked_widget->setCurrentWidget(m_welcome_screen);
+        close_settings();
     }
     else
         m_stacked_widget->setCurrentWidget(m_settings);
 }
 
-void main_window::show_layout_area()
+void main_window::close_settings()
 {
-    m_stacked_widget->setCurrentWidget(m_layout_area);
+    if (file_manager::get_instance()->file_open())
+        m_stacked_widget->setCurrentWidget(m_layout_area);
+    else
+        m_stacked_widget->setCurrentWidget(m_welcome_screen);
 }
 
 void main_window::handle_action_new()
