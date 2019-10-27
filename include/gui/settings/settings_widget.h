@@ -41,7 +41,7 @@ class settings_widget : public QFrame
 {
     Q_OBJECT
     Q_PROPERTY(QColor highlight_color READ highlight_color WRITE set_highlight_color)
-    Q_PROPERTY(bool dirty READ dirty)
+    Q_PROPERTY(bool dirty READ dirty WRITE set_dirty)
 
 public:
     enum class preview_position

@@ -430,6 +430,21 @@ settings_widget label_button {
     min-width      : 50px;
 }
 
+/* KEYBIND_EDIT */
+
+settings_widget keybind_edit QLineEdit {
+    border-radius: 2px;
+    margin-top: 8px;
+    margin-left: 0px;
+    padding: 4px;
+}
+
+settings_widget keybind_edit[validated=false] QLineEdit {
+    border: 1px solid red;
+    background-color: rgba(255, 13, 13, 0.281);
+    /*color: red;*/
+}
+
 /* MAIN_SETTINGS_WIDGET */
 
 main_settings_widget {
