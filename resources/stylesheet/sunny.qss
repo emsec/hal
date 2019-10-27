@@ -440,6 +440,12 @@ settings_widget label_button {
     min-width      : 50px;
 }
 
+/* KEYBIND_EDIT */
+
+settings_widget keybind_edit [validated=false] {
+    color: red;
+}
+
 /* MAIN_SETTINGS_WIDGET */
 
 main_settings_widget {
