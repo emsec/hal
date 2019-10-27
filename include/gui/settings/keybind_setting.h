@@ -26,8 +26,9 @@
 
 #include "settings_widget.h"
 
+#include "gui/keybind_edit/keybind_edit.h"
+
 #include <QCheckBox>
-#include <QKeySequenceEdit>
 #include <QStringList>
 
 class keybind_setting : public settings_widget
@@ -42,9 +43,11 @@ public:
     //virtual void rollback() Q_DECL_OVERRIDE;
 
 private:
-    QKeySequenceEdit* m_keybind_edit;
+    keybind_edit* m_keybind_edit;
     void on_keybind_changed();
+    void on_keybind_edit_rejected();
 
 };
 
 #endif //KEYBIND_SETTINGS_H
+

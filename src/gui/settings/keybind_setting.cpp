@@ -1,6 +1,7 @@
 #include "settings/keybind_setting.h"
 
 #include "label_button/label_button.h"
+#include "validator/unique_string_validator.h"
 
 #include <QFormLayout>
 #include <QVBoxLayout>
@@ -22,8 +23,11 @@ keybind_setting::keybind_setting(const QString& key, const QString& title, const
     QLabel* label = new QLabel();
     layout->addWidget(label);
 
-    m_keybind_edit = new QKeySequenceEdit(this);
-    connect(m_keybind_edit, &QKeySequenceEdit::editingFinished, this, &keybind_setting::on_keybind_changed);
+    m_keybind_edit = new keybind_edit(this);
+    //unique_string_validator* v = new unique_string_validator(); // TODO
+    //m_keybind_edit->add_validator(v);
+    connect(m_keybind_edit, &keybind_edit::editingFinished, this, &keybind_setting::on_keybind_changed);
+    connect(m_keybind_edit, &keybind_edit::edit_rejected, this, &keybind_setting::on_keybind_edit_rejected);
     layout->addWidget(m_keybind_edit);
 
     m_labels.append(QPair<QLabel*, QString>(label, description));
@@ -42,4 +46,9 @@ QVariant keybind_setting::value()
 void keybind_setting::on_keybind_changed()
 {
    this->trigger_setting_updated();
+}
+
+void keybind_setting::on_keybind_edit_rejected()
+{
+    this->set_dirty(false);
 }
