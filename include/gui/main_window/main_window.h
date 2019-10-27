@@ -122,7 +122,7 @@ public Q_SLOTS:
     void run_plugin_triggered(const QString& name);
     void toggle_schedule();
     void toggle_settings();
-    void show_layout_area();
+    void close_settings();
 
     void handle_action_new();
     void handle_action_open();
