@@ -12,8 +12,7 @@
 settings_widget::settings_widget(const QString& key, QWidget* parent) : QFrame(parent),
     m_layout(new QVBoxLayout()), m_container(new QBoxLayout(QBoxLayout::TopToBottom)),
     m_top_bar(new QHBoxLayout()), m_name(new QLabel()), m_revert(new QToolButton()),
-    m_default(new QToolButton()), m_unsaved_changes(false), m_highlight_color(52, 56, 57),
-    m_key(key)
+    m_default(new QToolButton()), m_highlight_color(52, 56, 57), m_key(key)
 {
     setFrameStyle(QFrame::NoFrame);
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
@@ -46,11 +45,6 @@ settings_widget::settings_widget(const QString& key, QWidget* parent) : QFrame(p
 QColor settings_widget::highlight_color()
 {
     return m_highlight_color;
-}
-
-bool settings_widget::unsaved_changes()
-{
-    return m_unsaved_changes;
 }
 
 QString settings_widget::key()
@@ -116,9 +110,8 @@ void settings_widget::trigger_setting_updated()
     }
     if (m_signals_enabled)
     {
-        #ifdef SETTINGS_UPDATE_IMMEDIATELY
         Q_EMIT setting_updated(this, key(), val);
-        #else
+        #ifndef SETTINGS_UPDATE_IMMEDIATELY
         set_dirty(m_loaded_value != val);
         #endif
     }
@@ -129,6 +122,7 @@ void settings_widget::handle_reset()
     if (m_prepared)
     {
         load(m_default_value);
+        Q_EMIT setting_updated(this, key(), m_loaded_value);
         #ifndef SETTINGS_UPDATE_IMMEDIATELY
         set_dirty(m_loaded_value != m_default_value);
         #endif
@@ -140,6 +134,7 @@ void settings_widget::handle_rollback()
     if (m_prepared)
     {
         load(m_loaded_value);
+        Q_EMIT setting_updated(this, key(), m_loaded_value);
         #ifndef SETTINGS_UPDATE_IMMEDIATELY
         set_dirty(false);
         #endif
@@ -154,7 +149,7 @@ void settings_widget::set_dirty(bool dirty)
     s->polish(this);
 }
 
-bool settings_widget::dirty()
+bool settings_widget::dirty() const
 {
     return m_dirty;
 }
@@ -167,12 +162,26 @@ void settings_widget::prepare(const QVariant& value, const QVariant& default_val
     m_default_value = default_value;
     m_signals_enabled = true;
     m_prepared = true;
+    set_dirty(false);
 }
 
 void settings_widget::mark_saved()
 {
     set_dirty(false);
     m_loaded_value = value();
+}
+
+void settings_widget::set_conflicts(bool conflicts)
+{
+    m_conflicts = conflicts;
+    QStyle* s = style();
+    s->unpolish(this);
+    s->polish(this);
+}
+
+bool settings_widget::conflicts() const
+{
+    return m_conflicts;
 }
 
 void settings_widget::set_preview_widget(preview_widget* widget)

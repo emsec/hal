@@ -367,8 +367,12 @@ settings_widget {
     /*border-left : 5px solid #232ed1;*/
 }
 
-settings_widget[dirty=true] {
-    border-left      : 5px solid rgb(34, 37, 38);
+settings_widget[conflicts=true] {
+    border-left      : 5px solid #A61F1F;
+}
+
+settings_widget[dirty=true][conflicts=false] {
+    border-left      : 5px solid rgb(73, 200, 76);
 }
 
 settings_widget QLabel {
