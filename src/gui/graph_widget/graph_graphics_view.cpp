@@ -353,11 +353,11 @@ void graph_graphics_view::dragMoveEvent(QDragMoveEvent *event)
     if (event->source() == this && event->proposedAction() == Qt::MoveAction)
     {
         QPoint mouse = event->pos();
-        bool shiftPressed = event->keyboardModifiers() == Qt::ShiftModifier;
+        bool altPressed = event->keyboardModifiers() == Qt::AltModifier;
         QPoint shadow = mouse - m_drag_cursor_offset;
         static_cast<graphics_scene*>(scene())
             ->move_drag_shadow(mapToScene(shadow.x(), shadow.y()),
-            shiftPressed ? graphics_scene::drag_mode::swap : graphics_scene::drag_mode::move);
+            altPressed ? graphics_scene::drag_mode::swap : graphics_scene::drag_mode::move);
     }
 }
 
@@ -370,12 +370,24 @@ void graph_graphics_view::dropEvent(QDropEvent *event)
         bool success = s->stop_drag_shadow();
         if (success)
         {
-            bool shiftPressed = event->keyboardModifiers() == Qt::ShiftModifier;
-            if (shiftPressed)
+            bool altPressed = event->keyboardModifiers() == Qt::AltModifier;
+            // TODO: Once the layouter data structures are defined & stable,
+            // add code to move the gates to the correct layouter boxes
+            // TODO: Also add a mechanism to insert rows and columns of boxes,
+            // like in a table calculation software
+            if (altPressed)
             {
+                // swap mode; swap gates
+                QPointF targetPos = s->drop_target_item()->pos();
                 s->drop_target_item()->setPos(m_drag_item->pos());
+                m_drag_item->setPos(targetPos);
             }
-            m_drag_item->setPos(s->drop_target());
+            else
+            {
+                // move mode; move gate to the selected location
+                m_drag_item->setPos(s->drop_target());
+            }
+            // TODO: Once available, trigger a re-layout of all nets here
         }
     }
     else
