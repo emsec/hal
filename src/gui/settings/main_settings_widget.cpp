@@ -121,6 +121,12 @@ main_settings_widget::main_settings_widget(QWidget* parent)
 void main_settings_widget::init_widgets()
 {
     make_exclusive_group("keybinds");
+    make_exclusive_group("kbdmodifiers");
+
+    QMap<QString, QString> standard_modifiers;
+    standard_modifiers.insert("Shift", "shift");
+    standard_modifiers.insert("Ctrl", "ctrl");
+    standard_modifiers.insert("Alt", "alt");
 
     /************* ADD NEW SETTINGS WIDGETS HERE *************/
 
@@ -141,6 +147,14 @@ void main_settings_widget::init_widgets()
     graph_grid_options.insert("Dots", "dots");
     dropdown_setting* graph_grid_settings = new dropdown_setting("graph_view/grid_type", "Grid", graph_grid_options, "", this);
     register_widget("graphview-item", graph_grid_settings);
+
+    dropdown_setting* graph_dragswap_settings = new dropdown_setting("graph_view/drag_mode_modifier", "Move/Swap modifier", standard_modifiers, "toggles drag-and-drop mode", this);
+    register_widget("graphview-item", graph_dragswap_settings);
+    assign_exclusive_group("kbdmodifiers", graph_dragswap_settings);
+
+    dropdown_setting* graph_movescene_settings = new dropdown_setting("graph_view/move_modifier", "Pan scene modifier", standard_modifiers, "lets you pan the scene", this);
+    register_widget("graphview-item", graph_movescene_settings);
+    assign_exclusive_group("kbdmodifiers", graph_movescene_settings);
 
     make_section("Python editor", "python-item", ":/icons/python");
 
