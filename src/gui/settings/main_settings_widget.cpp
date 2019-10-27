@@ -211,7 +211,8 @@ bool main_settings_widget::check_conflict(settings_widget* widget, const QVarian
             bool thisConflict = valid && w->value() == value;
             conflict |= thisConflict;
             w->set_conflicts(thisConflict);
-            qDebug() << "conflict between" << widget->key() << "and" << w->key();
+            if (thisConflict)
+                qDebug() << "conflict between" << widget->key() << "and" << w->key();
         }
     }
     widget->set_conflicts(conflict);
