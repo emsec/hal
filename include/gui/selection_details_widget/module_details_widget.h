@@ -37,6 +37,8 @@ class module;
 
 class QVBoxLayout;
 class QLabel;
+class QTableWidget;
+class QTableWidgetItem;
 
 class module_details_widget : public QWidget
 {
@@ -61,6 +63,10 @@ private:
 
     u32 m_current_id;
     bool m_ignore_selection_change;
+
+    QTableWidget* m_general_table;
+    QTableWidgetItem* m_name_item;
+    QTableWidgetItem* m_id_item;
 
     QTreeView* m_treeview;
     tree_module_model* m_tree_module_model;

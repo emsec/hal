@@ -67,7 +67,7 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
     id_item->setFont(font);
     m_general_table->setItem(2, 0, id_item);
 
-    QTableWidgetItem* module_item = new QTableWidgetItem("modules: ");
+    QTableWidgetItem* module_item = new QTableWidgetItem("Module: ");
     module_item->setFlags(Qt::ItemIsEnabled);
     module_item->setFont(font);
     m_general_table->setItem(3, 0, module_item);

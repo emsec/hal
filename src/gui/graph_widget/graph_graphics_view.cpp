@@ -317,42 +317,66 @@ void graph_graphics_view::mouseMoveEvent(QMouseEvent* event)
 
 void graph_graphics_view::dragEnterEvent(QDragEnterEvent *event)
 {
-    qDebug() << "dragEnter";
     if (event->source() == this && event->proposedAction() == Qt::MoveAction)
     {
         event->acceptProposedAction();
         QSizeF size(m_drag_item->width(), m_drag_item->height());
-        QPointF pos = m_drag_item->scenePos();
+        QPointF mouse = event->posF();
+        QPointF pos = mapToScene(mouse.x(), mouse.y()) - m_drag_cursor_offset;
+        if (g_selection_relay.m_selected_gates.size() > 1)
+        {
+            // if we are in multi-select mode, reduce the selection to the
+            // item we are dragging
+            g_selection_relay.clear();
+            g_selection_relay.m_selected_gates.insert(m_drag_item->id());
+            g_selection_relay.m_focus_type = selection_relay::item_type::gate;
+            g_selection_relay.m_focus_id   = m_drag_item->id();
+            g_selection_relay.m_subfocus   = selection_relay::subfocus::none;
+            g_selection_relay.relay_selection_changed(nullptr);
+        }
         static_cast<graphics_scene*>(scene())
-            ->start_drag_shadow(pos, size);
-        // Process the data from the event.
+            ->start_drag_shadow(pos, size, m_drag_item);
     }
     else
     {
         QGraphicsView::dragEnterEvent(event);
     }
 }
+
 void graph_graphics_view::dragLeaveEvent(QDragLeaveEvent *event)
 {
     static_cast<graphics_scene*>(scene())->stop_drag_shadow();
-    //QGraphicsView::dragLeaveEvent(event);
 }
+
 void graph_graphics_view::dragMoveEvent(QDragMoveEvent *event)
 {
-    QPoint mouse = event->pos();
-    QPoint shadow = mouse - m_drag_cursor_offset;
-    static_cast<graphics_scene*>(scene())
-        ->move_drag_shadow(mapToScene(shadow.x(), shadow.y()));
-    // event->acceptProposedAction();
-    //QGraphicsView::dragMoveEvent(event);
+    if (event->source() == this && event->proposedAction() == Qt::MoveAction)
+    {
+        QPoint mouse = event->pos();
+        bool shiftPressed = event->keyboardModifiers() == Qt::ShiftModifier;
+        QPoint shadow = mouse - m_drag_cursor_offset;
+        static_cast<graphics_scene*>(scene())
+            ->move_drag_shadow(mapToScene(shadow.x(), shadow.y()),
+            shiftPressed ? graphics_scene::drag_mode::swap : graphics_scene::drag_mode::move);
+    }
 }
+
 void graph_graphics_view::dropEvent(QDropEvent *event)
 {
     if (event->source() == this && event->proposedAction() == Qt::MoveAction)
     {
         event->acceptProposedAction();
-        static_cast<graphics_scene*>(scene())->stop_drag_shadow();
-        // Process the data from the event.
+        graphics_scene* s = static_cast<graphics_scene*>(scene());
+        bool success = s->stop_drag_shadow();
+        if (success)
+        {
+            bool shiftPressed = event->keyboardModifiers() == Qt::ShiftModifier;
+            if (shiftPressed)
+            {
+                s->drop_target_item()->setPos(m_drag_item->pos());
+            }
+            m_drag_item->setPos(s->drop_target());
+        }
     }
     else
     {
