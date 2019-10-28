@@ -172,20 +172,20 @@ void graph_navigation_widget::fill_table(std::shared_ptr<net> n)
         setItem(row, 0, item);
 
         item = new QTableWidgetItem(QString::fromStdString(e.get_gate()->get_name()));
-        item->setFlags(Qt::ItemIsSelectable);
+        item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
         setItem(row, 1, item);
 
         item = new QTableWidgetItem(QString::fromStdString(e.get_gate()->get_type()));
-        item->setFlags(Qt::ItemIsSelectable);
+        item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
         setItem(row, 2, item);
 
         item = new QTableWidgetItem(QString::fromStdString(e.get_pin_type()));
-        item->setFlags(Qt::ItemIsSelectable);
+        item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
         setItem(row, 3, item);
 
         // ADD SPECIAL SUBMODULE ITEM HERE
         item = new QTableWidgetItem("test");
-        item->setFlags(Qt::ItemIsSelectable);
+        item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
         setItem(row, 4, item);
 
         ++row;
