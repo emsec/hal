@@ -287,3 +287,8 @@ void python_context::forward_reset()
 {
     m_trigger_reset = true;
 }
+
+void python_context::update_netlist()
+{
+    (*m_context)["netlist"] = g_netlist;
+}
