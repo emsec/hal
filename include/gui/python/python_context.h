@@ -71,6 +71,8 @@ public:
     //    void write_history_file(const QString& file);
     void init_python();
     void close_python();
+    
+    void update_netlist();
 
 private:
     void initialize_context(py::dict* context);

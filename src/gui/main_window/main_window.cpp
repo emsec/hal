@@ -496,6 +496,7 @@ void main_window::handle_file_opened(const QString& file_name)
         m_stacked_widget->setCurrentWidget(m_layout_area);
         m_welcome_screen->close();
     }
+    g_python_context->update_netlist();
 }
 
 void main_window::handle_save_triggered()
