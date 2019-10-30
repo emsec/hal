@@ -46,9 +46,10 @@ namespace gate_event_handler
 
     enum event
     {
-        created,        ///< no associated_data
-        removed,        ///< no associated_data
-        name_changed    ///< no associated_data
+        created,         ///< no associated_data
+        removed,         ///< no associated_data
+        name_changed,    ///< no associated_data
+        location_changed ///< no associated_data
     };
 
     /**

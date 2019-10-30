@@ -435,26 +435,34 @@ Gets an unoccupied gate id. The value 0 is reserved and represents an invalid id
 :returns: An unoccupied unique id.
 :rtype: int
 )")
-        .def("create_gate", py::overload_cast<const u32, const std::string&, const std::string&>(&netlist::create_gate),
+        .def("create_gate", py::overload_cast<u32, const std::string&, const std::string&, float, float>(&netlist::create_gate),
                 py::arg("id"),
                 py::arg("gate_type"),
-                py::arg("name"), R"(
+                py::arg("name"),
+                py::arg("x") = -1,
+                py::arg("y") = -1, R"(
 Creates and adds a new gate to the netlist.
 
 :param int id: The unique ID != 0 for the new gate.
 :param str gate_type: The gate type.
 :param str name: A name for the gate.
+:param float x: The x-coordinate of the game.
+:param float y: The y-coordinate of the game.
 :returns: The new gate on success, None on error.
 :rtype: hal_py.gate or None
 )")
-        .def("create_gate", py::overload_cast<const std::string&, const std::string&>(&netlist::create_gate),
+        .def("create_gate", py::overload_cast<const std::string&, const std::string&, float, float>(&netlist::create_gate),
                 py::arg("gate_type"),
-                py::arg("name"), R"(
+                py::arg("name"),
+                py::arg("x") = -1,
+                py::arg("y") = -1, R"(
 Creates and adds a new gate to the netlist.
 It is identifiable via its unique ID which is automatically set to the next free ID.
 
 :param str gate_type: The gate type.
 :param str name: A name for the gate.
+:param float x: The x-coordinate of the game.
+:param float y: The y-coordinate of the game.
 :returns: The new gate on success, None on error.
 :rtype: hal_py.gate or None
 )")
@@ -854,6 +862,7 @@ Gets the gate's unique id.
 :returns: The gate's id.
 :rtype: int
 )")
+
         .def_property("name", &gate::get_name, &gate::set_name, R"(
 The gate's name.
 
@@ -872,6 +881,7 @@ Sets the gate's name.
 
 :param str name: The new name.
 )")
+
         .def_property_readonly("type", &gate::get_type, R"(
 Gets the type of the gate.
 
@@ -884,6 +894,61 @@ Gets the type of the gate.
 :returns: The gate's type.
 :rtype: str
 )")
+
+        .def_property("x", &gate::get_location_x, &gate::set_location_x, R"(
+The physical location x-coordinate of the gate in the layout.
+)")
+        .def("get_location_x", &gate::get_location_x, R"(
+Gets the physical location x-coordinate of the gate in the layout.
+
+:returns: The gate's x-coordinate.
+:rtype: float
+)")
+        .def("set_location_x", &gate::set_location_x, R"(
+Sets the physical location x-coordinate of the gate in the layout.
+Only positive values are valid, negative values will be regarded as no location assigned.
+
+:returns: The gate's x-coordinate.
+:param float x: The gate's x-coordinate.
+)")
+        .def_property("y", &gate::get_location_y, &gate::set_location_y, R"(
+The physical location y-coordinate of the gate in the layout.
+)")
+        .def("get_location_y", &gate::get_location_y, R"(
+Gets the physical location y-coordinate of the gate in the layout.
+
+:returns: The gate's y-coordinate.
+:rtype: float
+)")
+        .def("set_location_y", &gate::set_location_y, R"(
+Sets the physical location y-coordinate of the gate in the layout.
+Only positive values are valid, negative values will be regarded as no location assigned.
+
+:returns: The gate's y-coordinate.
+:param float y: The gate's y-coordinate.
+)")
+        .def_property("location", &gate::get_location, &gate::set_location, R"(
+The physical location of the gate in the layout.
+)")
+        .def("get_location", &gate::get_location, R"(
+Gets the physical location of the gate in the layout.
+
+:returns: A tuple <x-coordinate, y-coordinate>.
+:rtype: tuple(float, float)
+)")
+        .def("set_location", &gate::set_location, R"(
+Sets the physical location of the gate in the layout.
+Only positive values are valid, negative values will be regarded as no location assigned.
+
+:param tuple(float, float) location: A pair <x-coordinate, y-coordinate>.
+)")
+        .def("has_location", &gate::has_location, R"(
+Checks whether the gate's location in the layout is available.
+
+:returns: Whether valid location data is available.
+:rtype: bool
+)")
+
         .def("get_module", &gate::get_module, R"(
 Gets the module this gate is contained in.
 

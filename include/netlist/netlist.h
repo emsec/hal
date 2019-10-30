@@ -231,9 +231,11 @@ public:
      * @param[in] id - The unique ID != 0 for the new gate.
      * @param[in] gate_type - The gate type.
      * @param[in] name - A name for the gate.
+     * @param[in] x - The x-coordinate of the gate.
+     * @param[in] y - The y-coordinate of the gate.
      * @returns The new gate on success, nullptr on error.
      */
-    std::shared_ptr<gate> create_gate(const u32 id, const std::string& gate_type, const std::string& name = "");
+    std::shared_ptr<gate> create_gate(const u32 id, const std::string& gate_type, const std::string& name = "", float x = -1, float y = -1);
 
     /**
      * Creates and adds a new gate to the netlist.<br>
@@ -241,9 +243,11 @@ public:
      *
      * @param[in] gate_type - The gate type.
      * @param[in] name - A name for the gate.
+     * @param[in] x - The x-coordinate of the gate.
+     * @param[in] y - The y-coordinate of the gate.
      * @returns The new gate on success, nullptr on error.
      */
-    std::shared_ptr<gate> create_gate(const std::string& gate_type, const std::string& name = "");
+    std::shared_ptr<gate> create_gate(const std::string& gate_type, const std::string& name = "", float x = -1, float y = -1);
 
     /**
      * Removes a gate from the netlist.

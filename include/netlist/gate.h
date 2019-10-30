@@ -88,6 +88,57 @@ public:
     std::string get_type() const;
 
     /**
+     * Gets the physical location x-coordinate of the gate in the layout.
+     *
+     * @returns The gate's x-coordinate.
+     */
+    float get_location_x() const;
+
+    /**
+     * Gets the physical location y-coordinate of the gate in the layout.
+     *
+     * @returns The gate's y-coordinate.
+     */
+    float get_location_y() const;
+
+    /**
+     * Gets the physical location of the gate in the layout.
+     *
+     * @returns A pair <x-coordinate, y-coordinate>.
+     */
+    std::pair<float, float> get_location() const;
+
+    /**
+     * Checks whether the gate's location in the layout is available.
+     *
+     * @returns Whether valid location data is available.
+     */
+    bool has_location() const;
+
+    /**
+     * Sets the physical location x-coordinate of the gate in the layout.
+     * Only positive values are valid, negative values will be regarded as no location assigned.
+     *
+     * @param[in] x - The gate's x-coordinate.
+     */
+    void set_location_x(float x);
+
+    /**
+     * Sets the physical location y-coordinate of the gate in the layout.
+     * Only positive values are valid, negative values will be regarded as no location assigned.
+     *
+     * @param[in] y - The gate's y-coordinate.
+     */
+    void set_location_y(float y);
+
+    /**
+     * Sets the physical location of the gate in the layout.
+     *
+     * @param[in] location - A pair <x-coordinate, y-coordinate>.
+     */
+    void set_location(const std::pair<float, float>& location);
+
+    /**
      * Gets the module this gate is contained in.
      *
      * @returns The owning module.
@@ -246,15 +297,7 @@ public:
         get_successors(const std::string& this_pin_type_filter = DONT_CARE, const std::string& suc_pin_type_filter = DONT_CARE, const std::string& gate_type_filter = DONT_CARE) const;
 
 private:
-    /**
-     * Constructs a new gate and initializes it with the parameter fields.<br>
-     *
-     * @param[in] g - The parent netlist.
-     * @param[in] id - A unique id.
-     * @param[in] gate_type - The gate type.
-     * @param[in] name - A name for the gate.
-     */
-    gate(std::shared_ptr<netlist> const g, const u32 id, const std::string& gate_type, const std::string& name = "");
+    gate(std::shared_ptr<netlist> const g, u32 id, const std::string& gate_type, const std::string& name, float x, float y);
 
     gate(const gate&) = delete;               //disable copy-constructor
     gate& operator=(const gate&) = delete;    //disable copy-assignment
@@ -270,6 +313,10 @@ private:
 
     /* type of the gate */
     std::string m_type;
+
+    /* location */
+    float m_x;
+    float m_y;
 
     /* owning module */
     std::shared_ptr<module> m_module;

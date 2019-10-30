@@ -53,7 +53,7 @@ private:
 
     // gate functions
 
-    std::shared_ptr<gate> create_gate(u32 id, const std::string& gate_type, const std::string& name);
+    std::shared_ptr<gate> create_gate(u32 id, const std::string& gate_type, const std::string& name, float x, float y);
     bool delete_gate(std::shared_ptr<gate> gate);
 
     bool is_gate_type_invalid(const std::string& gate_type) const;

@@ -20,7 +20,7 @@ netlist_internal_manager::netlist_internal_manager(netlist* nl) : m_netlist(nl)
 //###                      gates                                     ###
 //######################################################################
 
-std::shared_ptr<gate> netlist_internal_manager::create_gate(const u32 id, const std::string& gate_type, const std::string& name)
+std::shared_ptr<gate> netlist_internal_manager::create_gate(const u32 id, const std::string& gate_type, const std::string& name, float x, float y)
 {
     if (id == 0)
     {
@@ -43,7 +43,7 @@ std::shared_ptr<gate> netlist_internal_manager::create_gate(const u32 id, const 
         return nullptr;
     }
 
-    auto new_gate = std::shared_ptr<gate>(new gate(m_netlist->get_shared(), id, gate_type, name));
+    auto new_gate = std::shared_ptr<gate>(new gate(m_netlist->get_shared(), id, gate_type, name, x, y));
 
     auto free_id_it = m_netlist->m_free_gate_ids.find(id);
     if (free_id_it != m_netlist->m_free_gate_ids.end())

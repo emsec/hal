@@ -175,14 +175,14 @@ u32 netlist::get_unique_gate_id()
     return m_next_gate_id;
 }
 
-std::shared_ptr<gate> netlist::create_gate(const u32 id, const std::string& gate_type, const std::string& name)
+std::shared_ptr<gate> netlist::create_gate(const u32 id, const std::string& gate_type, const std::string& name, float x, float y)
 {
-    return m_manager->create_gate(id, gate_type, name);
+    return m_manager->create_gate(id, gate_type, name, x, y);
 }
 
-std::shared_ptr<gate> netlist::create_gate(const std::string& gate_type, const std::string& name)
+std::shared_ptr<gate> netlist::create_gate(const std::string& gate_type, const std::string& name, float x, float y)
 {
-    return create_gate(get_unique_gate_id(), gate_type, name);
+    return create_gate(get_unique_gate_id(), gate_type, name, x, y);
 }
 
 bool netlist::delete_gate(std::shared_ptr<gate> gate)
