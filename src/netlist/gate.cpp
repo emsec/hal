@@ -10,13 +10,15 @@
 
 #include <assert.h>
 
-gate::gate(std::shared_ptr<netlist> const g, const u32 id, const std::string& gate_type, const std::string& name)
+gate::gate(std::shared_ptr<netlist> const g, u32 id, const std::string& gate_type, const std::string& name, float x, float y)
 {
     assert(g != nullptr);
     m_netlist = g;
     m_id      = id;
     m_type    = gate_type;
     m_name    = name;
+    m_x       = x;
+    m_y       = y;
 }
 
 std::ostream& operator<<(std::ostream& os, const gate& gate)
@@ -82,6 +84,50 @@ void gate::set_name(const std::string& name)
 std::string gate::get_type() const
 {
     return m_type;
+}
+
+float gate::get_location_x() const
+{
+    return m_x;
+}
+
+float gate::get_location_y() const
+{
+    return m_y;
+}
+
+std::pair<float, float> gate::get_location() const
+{
+    return {m_x, m_y};
+}
+
+bool gate::has_location() const
+{
+    return m_x >= 0 && m_y >= 0;
+}
+
+void gate::set_location_x(float x)
+{
+    if (x != m_x)
+    {
+        m_x = x;
+        gate_event_handler::notify(gate_event_handler::event::location_changed, shared_from_this());
+    }
+}
+
+void gate::set_location_y(float y)
+{
+    if (y != m_y)
+    {
+        m_y = y;
+        gate_event_handler::notify(gate_event_handler::event::location_changed, shared_from_this());
+    }
+}
+
+void gate::set_location(const std::pair<float, float>& location)
+{
+    set_location_x(location.first);
+    set_location_y(location.second);
 }
 
 std::shared_ptr<module> gate::get_module() const
