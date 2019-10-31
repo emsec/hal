@@ -57,6 +57,9 @@ public:
 
     void add_gate_type(const gate_type& gt);
 
+    bool add_global_gnd_gate_type(const std::string& gt_name);
+    bool add_global_vcc_gate_type(const std::string& gt_name);
+
     const gate_type& get_gate_type(std::string name);
 
     /**
@@ -132,7 +135,7 @@ public:
 private:
     std::string m_name;
 
-    std::map<std::string, const gate_type> m_gate_types;
+    std::map<std::string, const gate_type> m_gate_type_map;
     std::set<const gate_type*> m_global_vcc_gate_types;
     std::set<const gate_type*> m_global_gnd_gate_types;
 

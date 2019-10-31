@@ -6,6 +6,11 @@ gate_type::gate_type(const std::string& name, base_type_t base_type)
     m_base_type = base_type;
 }
 
+void gate_type::set_base_type(base_type_t base_type)
+{
+    m_base_type = base_type;
+}
+
 void gate_type::add_input_pins(const std::vector<std::string>& input_pins)
 {
     m_input_pins.insert(m_input_pins.end(), input_pins.begin(), input_pins.end());
@@ -24,6 +29,11 @@ void gate_type::add_boolean_function_map(const std::map<std::string, boolean_fun
 std::string gate_type::get_name() const
 {
     return m_name;
+}
+
+gate_type::base_type_t gate_type::get_base_type() const
+{
+    return m_base_type;
 }
 
 std::vector<std::string> gate_type::get_input_pins() const

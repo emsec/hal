@@ -47,8 +47,9 @@ public:
         latch
     };
 
-    gate_type(const std::string& name, base_type_t base_type);
+    gate_type(const std::string& name);
 
+    void set_base_type(base_type_t base_type);
     void add_input_pins(const std::vector<std::string>& input_pins);
     void add_output_pins(const std::vector<std::string>& output_pins);
     void add_boolean_function_map(const std::map<std::string, boolean_function>& boolean_function_map);

@@ -11,7 +11,7 @@ std::string gate_library::get_name() const
 
 void gate_library::add_gate_type(const gate_type& gt)
 {
-    m_gate_types.emplace(gt.get_name(), gt);
+    m_gate_type_map.emplace(gt.get_name(), gt);
 
     auto out_pins = gt.get_output_pins();
 
@@ -28,6 +28,16 @@ void gate_library::add_gate_type(const gate_type& gt)
             m_global_gnd_gate_types.insert(&gt);
         }
     }
+}
+
+bool gate_library::add_global_gnd_gate_type(const std::string& gt_name)
+{
+    m_global_gnd_gate_types.insert(&m_gate_type_map.at(gt_name));
+}
+
+bool gate_library::add_global_vcc_gate_type(const std::string& gt_name)
+{
+    m_global_vcc_gate_types.insert(&m_gate_type_map.at(gt_name));
 }
 
 const gate_type& gate_library::get_gate_type(std::string name)
