@@ -122,119 +122,185 @@ boolean_function boolean_function::from_string(std::string expression)
 {
     expression = core_utils::trim(expression);
 
+    const std::string delimiters = "!^&|'+* ";
+
     // check for constants
     if (expression == "0")
     {
         return boolean_function(ZERO);
     }
-    if (expression == "1")
+    else if (expression == "1")
     {
         return boolean_function(ONE);
     }
-    if (expression == "X")
+    else if (expression == "X")
     {
         return boolean_function(X);
     }
-
-    // parse equation
-    const std::string delimiters = "!^&|";
-    std::vector<std::string> parts;
-    std::string current_part;
-    u32 bracket_level = 0;
-    for (u32 i = 0; i < expression.size(); i++)
+    else
     {
-        if (expression[i] == '(')
+        // check for variable
+        bool is_term = false;
+        for (const auto& d : delimiters + "()")
         {
-            if (!current_part.empty())
+            if (expression.find(d) != std::string::npos)
             {
-                parts.push_back(core_utils::trim(current_part));
-                current_part.clear();
-            }
-
-            bracket_level++;
-        }
-
-        if (bracket_level == 0 && delimiters.find(expression[i]) != std::string::npos)
-        {
-            if (!current_part.empty())
-            {
-                parts.push_back(core_utils::trim(current_part));
-                parts.push_back(std::string(1, expression[i]));
-                current_part.clear();
+                is_term = true;
             }
         }
-        else
+        if (!is_term)
         {
-            current_part += expression[i];
+            return boolean_function(expression);
         }
+    }
 
-        if (expression[i] == ')')
+    // parse expression
+    std::vector<std::string> terms;
+    {
+        std::string current_term;
+        u32 bracket_level = 0;
+        for (u32 i = 0; i < expression.size(); i++)
         {
-            bracket_level--;
-
-            if (!current_part.empty())
+            if (expression[i] == '(')
             {
-                parts.push_back(core_utils::trim(current_part));
-                current_part.clear();
+                // if this is a top-level term, store everything before the bracket
+                if (bracket_level == 0)
+                {
+                    current_term = core_utils::trim(current_term);
+                    if (!current_term.empty())
+                    {
+                        terms.push_back(current_term);
+                        current_term.clear();
+                    }
+                }
+
+                bracket_level++;
+            }
+
+            if (bracket_level == 0 && delimiters.find(expression[i]) != std::string::npos)
+            {
+                // not in brackets and there was a delimiter -> save term and operation
+                current_term = core_utils::trim(current_term);
+                if (!current_term.empty())
+                {
+                    terms.push_back(current_term);
+                    current_term.clear();
+                }
+                if (expression[i] != ' ')
+                {
+                    terms.push_back(std::string(1, expression[i]));
+                }
+            }
+            else
+            {
+                // no special conditions -> char is term of current term
+                current_term += expression[i];
+            }
+
+            if (expression[i] == ')')
+            {
+                bracket_level--;
+
+                if (bracket_level == 0)
+                {
+                    // if we are back at top-level, store everything that was in the brackets
+                    current_term = core_utils::trim(current_term);
+                    if (!current_term.empty())
+                    {
+                        terms.push_back(current_term);
+                        current_term.clear();
+                    }
+                }
             }
         }
-    }
-    if (!current_part.empty())
-    {
-        parts.push_back(core_utils::trim(current_part));
-    }
-
-    // process parts
-    if (parts.size() == 1)
-    {
-        return from_string(parts[0].substr(1, parts[0].size() - 2));
+        current_term = core_utils::trim(current_term);
+        if (!current_term.empty())
+        {
+            terms.push_back(current_term);
+        }
     }
 
-    bool negate_next = false;
-    operation next_op;
+    // process terms
+    if (terms.size() == 1)
+    {
+        // only a single term but not filtered before?
+        // -> was of the form "(...)" so remove the outer brackets and repeat
+        return from_string(terms[0].substr(1, terms[0].size() - 2));
+    }
+
+    bool negate_next  = false;
+    operation next_op = operation::AND;
+
+    // multiple terms available -> initialize return value with first term
     u32 i = 0;
-    while (parts[i] == "!")
+    while (terms[i] == "!")
     {
         negate_next = !negate_next;
         ++i;
     }
-
-    boolean_function result = from_string(parts[i]);
-
-    while (++i < parts.size())
+    boolean_function result = from_string(terms[i]);
+    while (i + 1 < terms.size() && terms[i + 1] == "'")
     {
-        if (parts[i] == "!")
+        negate_next = !negate_next;
+        ++i;
+    }
+    if (negate_next)
+    {
+        result      = !result;
+        negate_next = false;
+    }
+
+    // process the remaining terms and update the result function
+    while (++i < terms.size())
+    {
+        if (terms[i] == "!")
         {
             negate_next = !negate_next;
         }
-        else if (parts[i] == "&")
+        else if (terms[i] == "&" || terms[i] == "*")
         {
             next_op = operation::AND;
         }
-        else if (parts[i] == "|")
+        else if (terms[i] == "|" || terms[i] == "+")
         {
             next_op = operation::OR;
         }
-        else if (parts[i] == "^")
+        else if (terms[i] == "^")
         {
             next_op = operation::XOR;
         }
         else
         {
-            result = result.combine(next_op, from_string(parts[i]));
+            auto next_term = from_string(terms[i]);
+            while (i + 1 < terms.size() && terms[i + 1] == "'")
+            {
+                negate_next = !negate_next;
+                ++i;
+            }
             if (negate_next)
             {
-                result = !result;
+                next_term = !next_term;
             }
+            result = result.combine(next_op, next_term);
 
             negate_next = false;
+            next_op     = operation::AND;
         }
     }
 
     return result;
 }
-
 std::string boolean_function::to_string() const
+{
+    auto s = to_string_internal();
+    if (s.front() == '(' && s.back() == ')')
+    {
+        return s.substr(1, s.size() - 2);
+    }
+    return s;
+}
+
+std::string boolean_function::to_string_internal() const
 {
     std::string result = "X";
     if (m_holds_variable)
@@ -275,7 +341,7 @@ std::string boolean_function::to_string() const
         std::vector<std::string> terms;
         for (const auto& f : m_operands)
         {
-            terms.push_back(f.to_string());
+            terms.push_back(f.to_string_internal());
         }
 
         result = "(" + core_utils::join(op_str, terms) + ")";
