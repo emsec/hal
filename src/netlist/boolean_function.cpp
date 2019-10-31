@@ -1,5 +1,7 @@
 #include "netlist/boolean_function.h"
 
+#include "core/utils.h"
+
 boolean_function::boolean_function(operation op, const std::vector<boolean_function>& operands, bool invert_result)
 {
     m_holds_variable = false;
@@ -104,6 +106,79 @@ boolean_function::value boolean_function::evaluate(const std::map<std::string, v
         }
     }
     return result;
+}
+
+bool boolean_function::is_constant_one() const
+{
+    return m_holds_constant && m_constant == 1;
+}
+
+bool boolean_function::is_constant_zero() const
+{
+    return m_holds_constant && m_constant == 0;
+}
+
+boolean_function boolean_function::from_string(const std::string& expression)
+{
+}
+
+std::string boolean_function::to_string() const
+{
+    std::string result = "X";
+    if (m_holds_variable)
+    {
+        result = m_variable;
+    }
+    else if (m_holds_constant)
+    {
+        if (m_constant == X)
+        {
+            result = "X";
+        }
+        else if (m_constant == ONE)
+        {
+            result = "1";
+        }
+        else
+        {
+            result = "0";
+        }
+    }
+    else if (!m_operands.empty())
+    {
+        std::string op_str;
+        if (m_op == operation::AND)
+        {
+            op_str = " & ";
+        }
+        else if (m_op == operation::OR)
+        {
+            op_str = " | ";
+        }
+        else
+        {
+            op_str = " ^ ";
+        }
+
+        std::vector<std::string> terms;
+        for (const auto& f : m_operands)
+        {
+            terms.push_back(f.to_string());
+        }
+
+        result = "(" + core_utils::join(op_str, terms) + ")";
+    }
+
+    if (m_invert)
+    {
+        result = "!" + result;
+    }
+    return result;
+}
+
+std::ostream& operator<<(std::ostream& os, const boolean_function& f)
+{
+    return os << f.to_string();
 }
 
 boolean_function boolean_function::operator&(const boolean_function& other) const

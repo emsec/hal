@@ -27,6 +27,7 @@
 
 #include "def.h"
 #include <map>
+#include <ostream>
 
 /**
  *  boolean function class
@@ -56,10 +57,19 @@ public:
 
     value evaluate(const std::map<std::string, value>& inputs) const;
 
+    bool is_constant_one() const;
+    bool is_constant_zero() const;
+
+    static boolean_function from_string(const std::string& expression);
+    std::string to_string() const;
+    friend std::ostream& operator<<(std::ostream& os, const boolean_function& f);
+
+
     boolean_function operator&(const boolean_function& other) const;
     boolean_function operator|(const boolean_function& other) const;
     boolean_function operator^(const boolean_function& other) const;
     boolean_function operator!() const;
+
 
 private:
     bool m_invert;
