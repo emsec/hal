@@ -26,6 +26,7 @@
 #define __HAL_GATE_LIBRARY_H__
 
 #include "def.h"
+#include "gate_type.h"
 
 #include <map>
 #include <set>
@@ -53,6 +54,8 @@ public:
      * @returns The library's name.
      */
     std::string get_name() const;
+
+    void add_gate_type(gate_type gt);
 
     /**
      * Get all gate types of the library.
@@ -126,6 +129,10 @@ public:
 
 private:
     std::string m_name;
+
+    std::map<std::string, gate_type> m_gate_types;
+    std::set<gate_type*> m_global_vcc_gate_types;
+    std::set<gate_type*> m_global_gnd_gate_types;
 
     std::set<std::string> m_gate_type;
 
