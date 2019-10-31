@@ -9,21 +9,21 @@ std::string gate_library::get_name() const
     return m_name;
 }
 
-void gate_library::add_gate_type(gate_type gt)
+void gate_library::add_gate_type(const gate_type& gt)
 {
-    m_gate_types[gt.get_name()] = gt;
+    m_gate_types.emplace(gt.get_name(), gt);
 
     auto out_pins = gt.get_output_pins();
 
-    if ((gt.get_input_pins.empty() == true) && (out_pins.size() == 1))
+    if ((gt.get_input_pins().empty() == true) && (out_pins.size() == 1))
     {
-        auto boolean_functions = gt.get_boolean_function(out_pins[0]);
+        auto bf = gt.get_boolean_function(out_pins[0]);
 
-        if (boolean_function.is_constant_one())
+        if (bf.is_constant_one())
         {
             m_global_vcc_gate_types.insert(&gt);
         }
-        else if (boolean_function.is_constant_zero())
+        else if (bf.is_constant_zero())
         {
             m_global_gnd_gate_types.insert(&gt);
         }
