@@ -28,6 +28,7 @@
 #include "def.h"
 #include <map>
 #include <ostream>
+#include <set>
 
 /**
  *  boolean function class
@@ -43,6 +44,8 @@ public:
         OR,
         XOR
     };
+    static std::string to_string(const operation& op);
+    friend std::ostream& operator<<(std::ostream& os, const operation& op);
 
     enum value
     {
@@ -50,15 +53,22 @@ public:
         ZERO = 0,
         ONE  = 1
     };
+    static std::string to_string(const value& v);
+    friend std::ostream& operator<<(std::ostream& os, const value& v);
 
+    // empty operands behaves like constant X
+    // single operand behaves like copy constructor
     boolean_function(operation op, const std::vector<boolean_function>& operands, bool invert_result = false);
     boolean_function(const std::string& variable, bool invert_result = false);
     boolean_function(value constant);
 
-    value evaluate(const std::map<std::string, value>& inputs) const;
+    value evaluate(const std::map<std::string, value>& inputs = {}) const;
+    value operator()(const std::map<std::string, value>& inputs = {}) const;
 
     bool is_constant_one() const;
     bool is_constant_zero() const;
+
+    std::set<std::string> get_variables() const;
 
     static boolean_function from_string(std::string expression);
     std::string to_string() const;
@@ -71,8 +81,24 @@ public:
 
     boolean_function operator!() const;
 
+    boolean_function to_dnf() const;
+
+    std::vector<value> get_truth_table() const;
+
 private:
     std::string to_string_internal() const;
+
+    boolean_function replace_xors() const;
+
+    boolean_function propagate_negations(bool negate_term = false) const;
+
+    std::vector<boolean_function> expand_ands_internal(const std::vector<std::vector<boolean_function>>& sub_primitives, u32 i) const;
+    std::vector<boolean_function> get_primitives() const;
+    boolean_function expand_ands() const;
+
+    boolean_function optimize_constants() const;
+
+    boolean_function flatten() const;
 
     bool m_invert;
 

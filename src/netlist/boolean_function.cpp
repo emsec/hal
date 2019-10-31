@@ -2,14 +2,63 @@
 
 #include "core/utils.h"
 
+std::string boolean_function::to_string(const operation& op)
+{
+    switch (op)
+    {
+        case operation::AND:
+            return "&";
+        case operation::OR:
+            return "|";
+        case operation::XOR:
+            return "^";
+    }
+}
+std::ostream& operator<<(std::ostream& os, const boolean_function::operation& op)
+{
+    return os << boolean_function::to_string(op);
+}
+
+std::string boolean_function::to_string(const value& v)
+{
+    switch (v)
+    {
+        case value::ONE:
+            return "1";
+        case value::ZERO:
+            return "0";
+        case value::X:
+            return "X";
+    }
+}
+std::ostream& operator<<(std::ostream& os, const boolean_function::value& v)
+{
+    return os << boolean_function::to_string(v);
+}
+
 boolean_function::boolean_function(operation op, const std::vector<boolean_function>& operands, bool invert_result)
 {
-    m_holds_variable = false;
-    m_holds_constant = false;
-    m_invert         = invert_result;
+    if (operands.empty())
+    {
+        m_holds_variable = false;
+        m_holds_constant = true;
+        m_invert         = false;
 
-    m_op       = op;
-    m_operands = operands;
+        m_constant = value::X;
+    }
+    else if (operands.size() == 1)
+    {
+        *this = operands[0];
+    }
+    else
+    {
+        m_holds_variable = false;
+        m_holds_constant = false;
+        m_invert         = invert_result;
+
+        m_op       = op;
+        m_operands = operands;
+    }
 }
 
 boolean_function::boolean_function(const std::string& variable, bool invert_result)
@@ -108,6 +157,11 @@ boolean_function::value boolean_function::evaluate(const std::map<std::string, v
     return result;
 }
 
+boolean_function::value boolean_function::operator()(const std::map<std::string, boolean_function::value>& inputs) const
+{
+    return evaluate(inputs);
+}
+
 bool boolean_function::is_constant_one() const
 {
     return m_holds_constant && m_constant == 1;
@@ -116,6 +170,25 @@ bool boolean_function::is_constant_one() const
 bool boolean_function::is_constant_zero() const
 {
     return m_holds_constant && m_constant == 0;
+}
+
+std::set<std::string> boolean_function::get_variables() const
+{
+    if (m_holds_variable)
+    {
+        return {m_variable};
+    }
+    else if (!m_holds_constant)
+    {
+        std::set<std::string> result;
+        for (const auto& f : m_operands)
+        {
+            auto tmp = f.get_variables();
+            result.insert(tmp.begin(), tmp.end());
+        }
+        return result;
+    }
+    return {};
 }
 
 boolean_function boolean_function::from_string(std::string expression)
@@ -290,6 +363,7 @@ boolean_function boolean_function::from_string(std::string expression)
 
     return result;
 }
+
 std::string boolean_function::to_string() const
 {
     auto s = to_string_internal();
@@ -302,41 +376,18 @@ std::string boolean_function::to_string() const
 
 std::string boolean_function::to_string_internal() const
 {
-    std::string result = "X";
+    std::string result = to_string(value::X);
     if (m_holds_variable)
     {
         result = m_variable;
     }
     else if (m_holds_constant)
     {
-        if (m_constant == X)
-        {
-            result = "X";
-        }
-        else if (m_constant == ONE)
-        {
-            result = "1";
-        }
-        else
-        {
-            result = "0";
-        }
+        result = to_string(m_constant);
     }
     else if (!m_operands.empty())
     {
-        std::string op_str;
-        if (m_op == operation::AND)
-        {
-            op_str = " & ";
-        }
-        else if (m_op == operation::OR)
-        {
-            op_str = " | ";
-        }
-        else
-        {
-            op_str = " ^ ";
-        }
+        std::string op_str = " " + to_string(m_op) + " ";
 
         std::vector<std::string> terms;
         for (const auto& f : m_operands)
@@ -372,7 +423,7 @@ boolean_function boolean_function::combine(operation op, const boolean_function&
     else if (other_holds_expression && other.m_op == op && !holds_expression && !m_invert)
     {
         boolean_function result = other;
-        result.m_operands.push_back(*this);
+        result.m_operands.insert(result.m_operands.begin(), *this);
         return result;
     }
     else if (holds_expression && other_holds_expression && m_op == op && m_op == other.m_op && !m_invert && !other.m_invert)
@@ -409,3 +460,335 @@ boolean_function boolean_function::operator!() const
     result.m_invert = !result.m_invert;
     return result;
 }
+
+boolean_function boolean_function::replace_xors() const
+{
+    if (m_holds_constant || m_holds_variable)
+    {
+        return *this;
+    }
+    std::vector<boolean_function> terms;
+    for (const auto& operand : m_operands)
+    {
+        terms.push_back(operand.replace_xors());
+    }
+    if (m_op != operation::XOR)
+    {
+        return boolean_function(m_op, terms, m_invert);
+    }
+
+    // actually replace the current xors
+    auto result = (terms[0] & !terms[1]) | (!terms[0] & terms[1]);
+    for (u32 i = 2; i < terms.size(); ++i)
+    {
+        result = (result & !terms[i]) | (!result & terms[i]);
+    }
+    if (m_invert)
+    {
+        result = !result;
+    }
+    return result;
+}
+
+std::vector<boolean_function> boolean_function::expand_ands_internal(const std::vector<std::vector<boolean_function>>& sub_primitives, u32 i) const
+{
+    if (i >= sub_primitives.size())
+    {
+        return {boolean_function::ONE};
+    }
+    std::vector<boolean_function> result;
+    for (const auto& x : sub_primitives[i])
+    {
+        for (const auto& y : expand_ands_internal(sub_primitives, i + 1))
+        {
+            result.push_back(x & y);
+        }
+    }
+    return result;
+}
+
+std::vector<boolean_function> boolean_function::get_primitives() const
+{
+    if (m_holds_constant || m_holds_variable)
+    {
+        return {*this};
+    }
+
+    if (m_op == operation::OR)
+    {
+        std::vector<boolean_function> primitives;
+        for (const auto& operand : m_operands)
+        {
+            auto tmp = operand.get_primitives();
+            primitives.insert(primitives.end(), tmp.begin(), tmp.end());
+        }
+        return primitives;
+    }
+    else
+    {
+        std::vector<std::vector<boolean_function>> sub_primitives;
+        for (const auto& operand : m_operands)
+        {
+            sub_primitives.push_back(operand.get_primitives());
+        }
+        return expand_ands_internal(sub_primitives, 0);
+    }
+}
+
+boolean_function boolean_function::expand_ands() const
+{
+    return boolean_function(operation::OR, get_primitives());
+}
+
+boolean_function boolean_function::optimize_constants() const
+{
+    if (m_holds_variable)
+    {
+        return *this;
+    }
+    if (m_holds_constant)
+    {
+        if (m_invert)
+        {
+            if (m_constant == 0)
+            {
+                return boolean_function::ONE;
+            }
+            else if (m_constant == 1)
+            {
+                return boolean_function::ZERO;
+            }
+        }
+        return *this;
+    }
+
+    std::vector<boolean_function> terms;
+    for (const auto& operand : m_operands)
+    {
+        auto term = operand.optimize_constants();
+        if (m_op == operation::OR)
+        {
+            if (term.is_constant_one())
+            {
+                return boolean_function::ONE;
+            }
+            else if (term.is_constant_zero())
+            {
+                continue;
+            }
+        }
+        else if (m_op == operation::AND)
+        {
+            if (term.is_constant_one())
+            {
+                continue;
+            }
+            else if (term.is_constant_zero())
+            {
+                return boolean_function::ZERO;
+            }
+        }
+        terms.push_back(term);
+    }
+
+    // remove contradictions etc
+    for (auto it = terms.begin(); it != terms.end(); ++it)
+    {
+        for (auto it2 = it + 1; it2 != terms.end();)
+        {
+            if (it->m_holds_variable && it2->m_holds_variable && it->m_variable == it2->m_variable)
+            {
+                if (it->m_invert != it2->m_invert)
+                {
+                    if (m_op == operation::AND)
+                    {
+                        return boolean_function::ZERO;
+                    }
+                    else if (m_op == operation::OR)
+                    {
+                        return boolean_function::ONE;
+                    }
+                }
+                else
+                {
+                    if (m_op == operation::AND)
+                    {
+                        it2 = terms.erase(it2);
+                        continue;
+                    }
+                    else if (m_op == operation::OR)
+                    {
+                        it2 = terms.erase(it2);
+                        continue;
+                    }
+                }
+            }
+            ++it2;
+        }
+    }
+
+    return boolean_function(m_op, terms);
+}
+
+boolean_function boolean_function::propagate_negations(bool negate_term) const
+{
+    if (m_holds_constant || m_holds_variable)
+    {
+        boolean_function result = *this;
+        result.m_invert         = result.m_invert ^ negate_term;
+        return result;
+    }
+
+    bool use_de_morgan = m_invert ^ negate_term;
+
+    if (!use_de_morgan)
+    {
+        std::vector<boolean_function> terms;
+        for (const auto& operand : m_operands)
+        {
+            terms.push_back(operand.propagate_negations(false));
+        }
+        return boolean_function(m_op, terms);
+    }
+    else
+    {
+        std::vector<boolean_function> terms;
+        for (const auto& operand : m_operands)
+        {
+            terms.push_back(operand.propagate_negations(true));
+        }
+        if (m_op == operation::AND)
+        {
+            return boolean_function(operation::OR, terms);
+        }
+        else
+        {
+            return boolean_function(operation::AND, terms);
+        }
+    }
+}
+
+boolean_function boolean_function::flatten() const
+{
+    if (m_holds_constant || m_holds_variable)
+    {
+        return *this;
+    }
+
+    std::vector<boolean_function> terms;
+    for (const auto& operand : m_operands)
+    {
+        auto term = operand.flatten();
+        if (!(term.m_holds_constant || term.m_holds_variable) && m_op == term.m_op)
+        {
+            for (const auto& x : term.m_operands)
+            {
+                terms.push_back(x);
+            }
+        }
+        else
+        {
+            terms.push_back(term);
+        }
+    }
+    return boolean_function(m_op, terms);
+}
+
+boolean_function boolean_function::to_dnf() const
+{
+    // std::cout << *this << " to dnf:" << std::endl;
+    // auto f = replace_xors();
+    // std::cout << "replace_xors: " << f << std::endl;
+    // f = f.propagate_negations();
+    // std::cout << "propagate_negations: " << f << std::endl;
+    // f = f.expand_ands();
+    // std::cout << "expand_ands: " << f << std::endl;
+    // f = f.flatten();
+    // std::cout << "flatten: " << f << std::endl;
+    // f = f.optimize_constants();
+    // std::cout << "optimize_constants: " << f << std::endl;
+    return replace_xors().propagate_negations().expand_ands().flatten().optimize_constants();
+}
+
+std::vector<boolean_function::value> boolean_function::get_truth_table() const
+{
+    std::vector<value> result;
+
+    auto variables = get_variables();
+
+    for (u32 values = 0; values < (1 << variables.size()); ++values)
+    {
+        std::map<std::string, boolean_function::value> inputs;
+        u32 tmp = values;
+        for (const auto& var : variables)
+        {
+            inputs[var] = (boolean_function::value)(tmp & 1);
+            tmp >>= 1;
+        }
+        result.push_back(evaluate(inputs));
+    }
+    return result;
+}
+
+
+/*
+
+Test code
+{
+    auto f = boolean_function::from_string("(A B (C |D))' ^ (D + E) ");
+    //////////////
+    auto tt1 = f.get_truth_table();
+    {
+        std::cout << f << std::endl;
+        auto variables = f.get_variables();
+        auto tt        = tt1;
+        for (const auto& var : variables)
+        {
+            std::cout << var << " ";
+        }
+        std::cout << "| result" << std::endl;
+        for (u32 i = 0; i < tt.size(); ++i)
+        {
+            for (u32 j = 0; j < variables.size(); ++j)
+            {
+                std::cout << ((i >> j) & 1) << " ";
+            }
+            std::cout << "| " << tt[i] << std::endl;
+        }
+    }
+    //////////////
+    std::cout << std::endl;
+    f = f.to_dnf();
+    //////////////
+    auto tt2 = f.get_truth_table();
+    {
+        std::cout << f << std::endl;
+        auto variables = f.get_variables();
+        auto tt        = tt2;
+        for (const auto& var : variables)
+        {
+            std::cout << var << " ";
+        }
+        std::cout << "| result" << std::endl;
+        for (u32 i = 0; i < tt.size(); ++i)
+        {
+            for (u32 j = 0; j < variables.size(); ++j)
+            {
+                std::cout << ((i >> j) & 1) << " ";
+            }
+            std::cout << "| " << tt[i] << std::endl;
+        }
+    }
+    //////////////
+    std::cout << std::endl;
+    if (tt1 == tt2)
+    {
+        std::cout << "SUCCESS: Both functions are equivalent" << std::endl;
+    }
+    else
+    {
+        std::cout << "ERROR: The functions are not equivalent!" << std::endl;
+    }
+}
+
+*/
