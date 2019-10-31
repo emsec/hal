@@ -55,7 +55,7 @@ public:
      */
     std::string get_name() const;
 
-    void add_gate_type(gate_type gt);
+    void add_gate_type(const gate_type& gt);
 
     const gate_type& get_gate_type(std::string name);
 
@@ -132,9 +132,9 @@ public:
 private:
     std::string m_name;
 
-    std::map<std::string, gate_type> m_gate_type_map;
-    std::set<gate_type*> m_global_vcc_gate_types;
-    std::set<gate_type*> m_global_gnd_gate_types;
+    std::map<std::string, const gate_type> m_gate_types;
+    std::set<const gate_type*> m_global_vcc_gate_types;
+    std::set<const gate_type*> m_global_gnd_gate_types;
 
     std::set<std::string> m_gate_type;
 

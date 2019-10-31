@@ -1,4 +1,4 @@
-#include "gate_type.h"
+#include "netlist/gate_library/gate_type.h"
 
 gate_type::gate_type(const std::string& name, base_type_t base_type)
 {
@@ -21,22 +21,22 @@ void gate_type::add_boolean_function_map(const std::map<std::string, boolean_fun
     m_boolean_function_map.insert(boolean_function_map.begin(), boolean_function_map.end());
 }
 
-const std::string& gate_type::get_name()
+std::string gate_type::get_name() const
 {
     return m_name;
 }
 
-std::vector<std::string> gate_type::get_input_pins()
+std::vector<std::string> gate_type::get_input_pins() const
 {
     return m_input_pins;
 }
 
-std::vector<std::string> gate_type::get_output_pins()
+std::vector<std::string> gate_type::get_output_pins() const
 {
     return m_output_pins;
 }
 
-const boolean_function& gate_type::get_boolean_function(const std::string& name)
+const boolean_function& gate_type::get_boolean_function(const std::string& name) const
 {
-    return m_boolean_function_map[name];
+    return m_boolean_function_map.at(name);
 }

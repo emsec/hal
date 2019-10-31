@@ -26,7 +26,7 @@
 #ifndef __HAL_GATE_TYPE_H
 #define __HAL_GATE_TYPE_H
 
-#include "boolean_function.h"
+#include "netlist/boolean_function.h"
 
 #include <map>
 #include <string>
@@ -53,10 +53,10 @@ public:
     void add_output_pins(const std::vector<std::string>& output_pins);
     void add_boolean_function_map(const std::map<std::string, boolean_function>& boolean_function_map);
 
-    const std::string& get_name();
-    std::vector<std::string> get_input_pins();
-    std::vector<std::string> get_output_pins();
-    const boolean_function& get_boolean_function(const std::string& name);
+    std::string get_name() const;
+    std::vector<std::string> get_input_pins() const;
+    std::vector<std::string> get_output_pins() const;
+    const boolean_function& get_boolean_function(const std::string& name) const;
 
 private:
     std::string m_name;
@@ -66,5 +66,5 @@ private:
     std::vector<std::string> m_output_pins;
 
     std::map<std::string, boolean_function> m_boolean_function_map;
-}
+};
 #endif    //__HAL_GATE_TYPE_H

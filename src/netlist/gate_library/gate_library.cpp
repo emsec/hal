@@ -9,13 +9,13 @@ std::string gate_library::get_name() const
     return m_name;
 }
 
-void gate_library::add_gate_type(gate_type gt)
+void gate_library::add_gate_type(const gate_type& gt)
 {
-    m_gate_type_map[gt.get_name()] = gt;
+    m_gate_types.emplace(gt.get_name(), gt);
 
     auto out_pins = gt.get_output_pins();
 
-    if ((gt.get_input_pins.empty() == true) && (out_pins.size() == 1))
+    if ((gt.get_input_pins().empty() == true) && (out_pins.size() == 1))
     {
         auto bf = gt.get_boolean_function(out_pins[0]);
 

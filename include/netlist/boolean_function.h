@@ -60,14 +60,16 @@ public:
     bool is_constant_one() const;
     bool is_constant_zero() const;
 
-    static boolean_function from_string(const std::string& expression);
+    static boolean_function from_string(std::string expression);
     std::string to_string() const;
     friend std::ostream& operator<<(std::ostream& os, const boolean_function& f);
 
 
+    boolean_function combine(operation op, const boolean_function& other) const;
     boolean_function operator&(const boolean_function& other) const;
     boolean_function operator|(const boolean_function& other) const;
     boolean_function operator^(const boolean_function& other) const;
+
     boolean_function operator!() const;
 
 
