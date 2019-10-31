@@ -61,13 +61,14 @@ boolean_function::boolean_function(operation op, const std::vector<boolean_funct
     }
 }
 
-boolean_function::boolean_function(const std::string& variable, bool invert_result)
+boolean_function::boolean_function(const std::string& variable_name, bool invert_result)
 {
     m_holds_variable = true;
     m_holds_constant = false;
     m_invert         = invert_result;
 
-    m_variable = variable;
+    m_variable = core_utils::trim(variable_name);
+    assert(!m_variable.empty());
 }
 
 boolean_function::boolean_function(value constant)
@@ -707,6 +708,8 @@ boolean_function boolean_function::to_dnf() const
     // std::cout << "flatten: " << f << std::endl;
     // f = f.optimize_constants();
     // std::cout << "optimize_constants: " << f << std::endl;
+
+    // the order of the transformation passes is important!
     return replace_xors().propagate_negations().expand_ands().flatten().optimize_constants();
 }
 
@@ -729,7 +732,6 @@ std::vector<boolean_function::value> boolean_function::get_truth_table() const
     }
     return result;
 }
-
 
 /*
 
