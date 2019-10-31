@@ -27,6 +27,8 @@ protected:
 
 private:
     void fill_table(std::shared_ptr<net> n);
+    void handle_item_double_clicked(QTableWidgetItem* item);
+    void commit_selection();
     graph_graphics_view* m_view;
     u32 m_via_net;
 };
