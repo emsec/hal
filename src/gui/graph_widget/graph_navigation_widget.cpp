@@ -22,6 +22,8 @@ graph_navigation_widget::graph_navigation_widget(QWidget* parent) : QTableWidget
 
     verticalHeader()->setVisible(false);
 
+    connect(this, &QTableWidget::itemDoubleClicked, this, &graph_navigation_widget::handle_item_double_clicked);
+
     //    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     //    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 }
@@ -93,39 +95,7 @@ void graph_navigation_widget::keyPressEvent(QKeyEvent* event)
 
     if (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return || event->key() == Qt::Key_Right)
     {
-        if (selectedItems().isEmpty())
-        {
-            return;
-        }
-
-        if (selectedItems().at(0)->row() == 0)
-        {
-            // "select all" was chosen
-            QSet<u32> gates;
-            for (u32 row = 1; row < rowCount(); ++row)
-            {
-                std::shared_ptr<gate> g = g_netlist->get_gate_by_id(item(row, 0)->text().toLong());
-                if (g)
-                {
-                    gates.insert(g->get_id());
-                    Q_EMIT navigation_requested(m_via_net, g->get_id());
-                }
-            }
-            g_selection_relay.clear();
-            g_selection_relay.m_selected_gates = gates;
-            g_selection_relay.relay_selection_changed(this);
-            return;
-        }
-
-        std::shared_ptr<gate> g = g_netlist->get_gate_by_id(selectedItems().at(0)->text().toLong());
-
-        if (!g)
-        {
-            return;
-        }
-
-        Q_EMIT navigation_requested(m_via_net, g->get_id());
-        return;
+        commit_selection();
     }
 
     if (event->key() == Qt::Key_Escape || event->key() == Qt::Key_Left)
@@ -230,4 +200,48 @@ void graph_navigation_widget::fill_table(std::shared_ptr<net> n)
     int MAXIMUM_ALLOWED_HEIGHT = 500;
     setFixedWidth(width);
     setFixedHeight((height > MAXIMUM_ALLOWED_HEIGHT) ? MAXIMUM_ALLOWED_HEIGHT : height);
+}
+
+void graph_navigation_widget::handle_item_double_clicked(QTableWidgetItem *item)
+{
+    Q_UNUSED(item)
+    commit_selection();
+}
+
+void graph_navigation_widget::commit_selection()
+{
+    if (selectedItems().isEmpty())
+    {
+        return;
+    }
+
+    if (selectedItems().at(0)->row() == 0)
+    {
+        // "select all" was chosen
+        QSet<u32> gates;
+        for (u32 row = 1; row < rowCount(); ++row)
+        {
+            std::shared_ptr<gate> g = g_netlist->get_gate_by_id(item(row, 0)->text().toLong());
+            if (g)
+            {
+                gates.insert(g->get_id());
+                Q_EMIT navigation_requested(m_via_net, g->get_id());
+            }
+        }
+        g_selection_relay.clear();
+        g_selection_relay.m_selected_gates = gates;
+        g_selection_relay.relay_selection_changed(this);
+        return;
+    }
+
+    std::shared_ptr<gate> g = g_netlist->get_gate_by_id(selectedItems().at(0)->text().toLong());
+
+    if (!g)
+    {
+        return;
+    }
+
+    Q_EMIT navigation_requested(m_via_net, g->get_id());
+    return;
+
 }
