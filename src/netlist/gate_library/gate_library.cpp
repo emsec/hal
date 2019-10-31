@@ -11,38 +11,64 @@ std::string gate_library::get_name() const
 
 void gate_library::add_gate_type(gate_type gt)
 {
-    m_gate_types[gt.get_name()] = gt;
+    m_gate_type_map[gt.get_name()] = gt;
 
     auto out_pins = gt.get_output_pins();
 
     if ((gt.get_input_pins.empty() == true) && (out_pins.size() == 1))
     {
-        auto boolean_functions = gt.get_boolean_function(out_pins[0]);
+        auto bf = gt.get_boolean_function(out_pins[0]);
 
-        if (boolean_function.is_constant_one())
+        if (bf.is_constant_one())
         {
             m_global_vcc_gate_types.insert(&gt);
         }
-        else if (boolean_function.is_constant_zero())
+        else if (bf.is_constant_zero())
         {
             m_global_gnd_gate_types.insert(&gt);
         }
     }
 }
 
-std::set<std::string>* gate_library::get_gate_types()
+const gate_type& gate_library::get_gate_type(std::string name)
 {
-    return &m_gate_type;
+    return m_gate_type_map[name];
 }
 
-std::set<std::string>* gate_library::get_global_vcc_gate_types()
+std::vector<const gate_type> gate_library::get_gate_types()
 {
-    return &m_global_vcc_gate_type;
+    std::vector<const gate_type> gate_types;
+
+    for (auto [name, gt] : m_gate_type_map)
+    {
+        gate_types.push_back(gt);
+    }
+
+    return gate_types;
 }
 
-std::set<std::string>* gate_library::get_global_gnd_gate_types()
+std::vector<const gate_type> gate_library::get_global_vcc_gate_types()
 {
-    return &m_global_gnd_gate_type;
+    std::vector<const gate_type> gate_types;
+
+    for (auto gt : m_global_vcc_gate_types)
+    {
+        gate_types.push_back(*gt);
+    }
+
+    return gate_types;
+}
+
+std::vector<const gate_type> gate_library::get_global_gnd_gate_types()
+{
+    std::vector<const gate_type> gate_types;
+
+    for (auto gt : m_global_gnd_gate_types)
+    {
+        gate_types.push_back(*gt);
+    }
+
+    return gate_types;
 }
 
 std::set<std::string>* gate_library::get_input_pin_types()

@@ -21,7 +21,7 @@ void gate_type::add_boolean_function_map(const std::map<std::string, boolean_fun
     m_boolean_function_map.insert(boolean_function_map.begin(), boolean_function_map.end());
 }
 
-std::string gate_type::get_name()
+const std::string& gate_type::get_name()
 {
     return m_name;
 }

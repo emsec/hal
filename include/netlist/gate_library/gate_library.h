@@ -57,26 +57,28 @@ public:
 
     void add_gate_type(gate_type gt);
 
+    const gate_type& get_gate_type(std::string name);
+
     /**
      * Get all gate types of the library.
      *
-     * @returns pointer to set of gate types.
+     * @returns vector of all gate types.
      */
-    std::set<std::string>* get_gate_types();
+    std::vector<const gate_type> get_gate_types();
 
     /**
      * Get all global vcc gate types of the library.
      *
-     * @returns pointer to set of global vcc gate types.
+     * @returns vector of all global vcc gate types.
      */
-    std::set<std::string>* get_global_vcc_gate_types();
+    std::vector<const gate_type> get_global_vcc_gate_types();
 
     /**
      * Get all global gnd gate types of the library.
      *
-     * @returns pointer to set of global gnd gate types.
+     * @returns vector of all global gnd gate types.
      */
-    std::set<std::string>* get_global_gnd_gate_types();
+    std::vector<const gate_type> get_global_gnd_gate_types();
 
     /**
      * Get all input pin types of the library.
@@ -130,7 +132,7 @@ public:
 private:
     std::string m_name;
 
-    std::map<std::string, gate_type> m_gate_types;
+    std::map<std::string, gate_type> m_gate_type_map;
     std::set<gate_type*> m_global_vcc_gate_types;
     std::set<gate_type*> m_global_gnd_gate_types;
 
