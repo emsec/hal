@@ -64,7 +64,6 @@ public:
     std::string to_string() const;
     friend std::ostream& operator<<(std::ostream& os, const boolean_function& f);
 
-
     boolean_function combine(operation op, const boolean_function& other) const;
     boolean_function operator&(const boolean_function& other) const;
     boolean_function operator|(const boolean_function& other) const;
@@ -72,8 +71,9 @@ public:
 
     boolean_function operator!() const;
 
-
 private:
+    std::string to_string_internal() const;
+
     bool m_invert;
 
     bool m_holds_variable;
