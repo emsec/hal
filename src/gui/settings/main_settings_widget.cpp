@@ -379,7 +379,7 @@ void main_settings_widget::handle_text_edited(const QString& text)
 
 void main_settings_widget::handle_setting_updated(settings_widget* sender, const QString& key, const QVariant& value)
 {
-    bool conflicting = check_conflict(sender, value);
+    bool conflicts = check_conflict(sender, value);
     #ifdef SETTINGS_UPDATE_IMMEDIATELY
     if (!conflicts)
     {
