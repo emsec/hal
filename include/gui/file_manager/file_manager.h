@@ -60,6 +60,7 @@ public Q_SLOTS:
 private Q_SLOTS:
     void handle_file_changed(const QString& path);
     void handle_directory_changed(const QString& path);
+    void handle_global_setting_changed(void* sender, const QString& key, const QVariant& value);
 
 private:
     file_manager(QObject* parent = nullptr);
@@ -74,6 +75,8 @@ private:
     QFileSystemWatcher* m_file_watcher;
     bool m_file_open;
     QTimer* m_timer;
+    bool m_autosave_enabled;
+    int m_autosave_interval;
 };
 
 #endif // FILE_MANAGER_H
