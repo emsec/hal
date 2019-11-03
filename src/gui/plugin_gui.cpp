@@ -38,6 +38,9 @@ QSettings g_settings(QString::fromStdString((core_utils::get_user_config_directo
 QSettings g_gui_state(QString::fromStdString((core_utils::get_user_config_directory() / "/guistate.ini").string()), QSettings::IniFormat);
 
 settings_manager g_settings_manager;
+// this relay MUST be initialized before everything else since other components
+// need to connect() to it when initializing
+settings_relay g_settings_relay;
 
 window_manager* g_window_manager;
 notification_manager* g_notification_manager;
@@ -49,7 +52,6 @@ std::shared_ptr<netlist> g_netlist = nullptr;
 netlist_relay g_netlist_relay;
 plugin_relay g_plugin_relay;
 selection_relay g_selection_relay;
-settings_relay g_settings_relay;
 
 file_status_manager g_file_status_manager;
 

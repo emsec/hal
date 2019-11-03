@@ -10,6 +10,7 @@
 #include "settings/dropdown_setting.h"
 #include "settings/keybind_setting.h"
 #include "settings/slider_setting.h"
+#include "settings/spinbox_setting.h"
 #include "settings/text_setting.h"
 #include "settings/fontsize_preview_widget.h"
 
@@ -175,13 +176,10 @@ void main_settings_widget::init_widgets()
 
     make_section("Expert settings", "advanced-item", ":/icons/preferences");
 
-    keybind_setting* demo_keybind_setting = new keybind_setting("keybinds/demo", "Demo Keybind 1", "demo description", this);
-    register_widget("advanced-item", demo_keybind_setting);
-    assign_exclusive_group("keybinds", demo_keybind_setting);
-
-    keybind_setting* demo_keybind_setting2 = new keybind_setting("keybinds/demo2", "Demo Keybind 2", "demo description", this);
-    register_widget("advanced-item", demo_keybind_setting2);
-    assign_exclusive_group("keybinds", demo_keybind_setting2);
+    checkbox_setting* autosave_setting = new checkbox_setting("advanced/autosave", "Auto-save your project", "enabled", "", this);
+    register_widget("advanced-item", autosave_setting);
+    spinbox_setting* autosave_interval_setting = new spinbox_setting("advanced/autosave_interval", "Auto-save interval", 30, 600, "s", this);
+    register_widget("advanced-item", autosave_interval_setting);
 
     // text_setting* py_interpreter_setting = new text_setting("python/interpreter", "Python Interpreter", "will be used after restart", "/path/to/python");
     // register_widget("advanced-item", py_interpreter_setting);
@@ -385,6 +383,7 @@ void main_settings_widget::handle_text_edited(const QString& text)
 
 void main_settings_widget::handle_setting_updated(settings_widget* sender, const QString& key, const QVariant& value)
 {
+    Q_UNUSED(key);
     bool conflicts = check_conflict(sender, value);
     #ifdef SETTINGS_UPDATE_IMMEDIATELY
     if (!conflicts)

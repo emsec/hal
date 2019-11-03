@@ -22,6 +22,12 @@
 
 file_manager::file_manager(QObject* parent) : QObject(parent), m_file_watcher(new QFileSystemWatcher(this)), m_file_open(false)
 {
+    m_autosave_enabled  = g_settings_manager.get("advanced/autosave").toBool();
+    m_autosave_interval = g_settings_manager.get("advanced/autosave_interval").toInt();
+    if (m_autosave_interval < 30) // failsafe in case somebody sets "0" in the .ini
+        m_autosave_interval = 30;
+    connect(&g_settings_relay, &settings_relay::setting_changed, this, &file_manager::handle_global_setting_changed);
+
     connect(m_file_watcher, &QFileSystemWatcher::fileChanged, this, &file_manager::handle_file_changed);
     connect(m_file_watcher, &QFileSystemWatcher::directoryChanged, this, &file_manager::handle_directory_changed);
     m_timer = new QTimer(this);
@@ -51,7 +57,7 @@ bool file_manager::file_open() const
 
 void file_manager::autosave()
 {
-    if (!m_shadow_file_name.isEmpty())
+    if (!m_shadow_file_name.isEmpty() && m_autosave_enabled)
     {
         log_info("gui", "saving a backup in case something goes wrong...");
         netlist_serializer::serialize_to_file(g_netlist, m_shadow_file_name.toStdString());
@@ -85,8 +91,11 @@ void file_manager::watch_file(const QString& file_name)
     {
         log_info("gui", "watching current file '{}'", file_name.toStdString());
 
-        // autosave every 60s
-        m_timer->start(60 * 1000);
+        // autosave periodically
+        // (we also start the timer if autosave is disabled since it's way
+        // easier to just do nothing when the timer fires instead of messing
+        // with complicated start/stop conditions)
+        m_timer->start(m_autosave_interval * 1000);
 
         m_file_name        = file_name;
         m_shadow_file_name = get_shadow_file(file_name);
@@ -327,6 +336,28 @@ void file_manager::handle_file_changed(const QString& path)
 void file_manager::handle_directory_changed(const QString& path)
 {
     Q_EMIT file_directory_changed(path);
+}
+
+void file_manager::handle_global_setting_changed(void* sender, const QString& key, const QVariant& value)
+{
+    if (key == "advanced/autosave")
+    {
+        m_autosave_enabled = value.toBool();
+        if (m_timer->isActive())
+        {
+            // restart timer so the interval starts NOW
+            m_timer->start(m_autosave_interval * 1000);
+        }
+    }
+    else if (key == "advanced/autosave_interval")
+    {
+        m_autosave_interval = value.toInt();
+        if (m_timer->isActive())
+        {
+            // restart timer with new interval
+            m_timer->start(m_autosave_interval * 1000);
+        }
+    }
 }
 
 void file_manager::update_recent_files(const QString& file) const
