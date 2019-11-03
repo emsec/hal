@@ -4,6 +4,8 @@
 #include "code_editor/line_number_area.h"
 #include "code_editor/minimap_scrollbar.h"
 
+#include "gui/gui_globals.h"
+
 #include <QPainter>
 #include <QPropertyAnimation>
 #include <QTextBlock>
@@ -12,16 +14,22 @@ code_editor::code_editor(QWidget* parent) : QPlainTextEdit(parent),
       m_scrollbar(new code_editor_scrollbar(this)),
       m_line_number_area(new line_number_area(this)),
       m_minimap(new code_editor_minimap(this)),
-      m_animation(new QPropertyAnimation(m_scrollbar, "value", this)),
-      m_line_numbers_enabled(true),
-      m_minimap_enabled(true)
+      m_animation(new QPropertyAnimation(m_scrollbar, "value", this))
 {
     connect(this, &code_editor::blockCountChanged, this, &code_editor::handle_block_count_changed);
     connect(this, &code_editor::updateRequest, this, &code_editor::update_line_number_area);
     connect(this, &code_editor::updateRequest, this, &code_editor::update_minimap);
 
-    // CONNECT / DISCONNECT VIA SETTING ?
-    //connect(this, &code_editor::cursorPositionChanged, this, &code_editor::highlight_current_line);
+    m_line_highlight_enabled = g_settings_manager.get("python/highlight_current_line").toBool();
+    if (m_line_highlight_enabled)
+    {
+        connect(this, &code_editor::cursorPositionChanged, this, &code_editor::highlight_current_line);
+    }
+    m_line_numbers_enabled = g_settings_manager.get("python/line_numbers").toBool();
+    m_line_wrap_enabled = g_settings_manager.get("python/line_wrap").toBool();
+    m_minimap_enabled = g_settings_manager.get("python/minimap").toBool();
+    
+    connect(&g_settings_relay, &settings_relay::setting_changed, this, &code_editor::handle_global_setting_changed);
 
     setVerticalScrollBar(m_scrollbar);
     m_scrollbar->set_minimap_scrollbar(m_minimap->scrollbar());
@@ -32,8 +40,7 @@ code_editor::code_editor(QWidget* parent) : QPlainTextEdit(parent),
 
     m_animation->setDuration(200);
 
-    // SET LINEWRAP MODE VIA SETTING ?
-    setLineWrapMode(QPlainTextEdit::NoWrap);
+    setLineWrapMode(m_line_wrap_enabled ? QPlainTextEdit::WidgetWidth : QPlainTextEdit::NoWrap);
     setFrameStyle(QFrame::NoFrame);
 
     ensurePolished();
@@ -144,16 +151,41 @@ void code_editor::resizeEvent(QResizeEvent* event)
     QPlainTextEdit::resizeEvent(event);
 }
 
+void code_editor::clear_line_highlight()
+{
+    QList<QTextEdit::ExtraSelection> no_selections;
+    setExtraSelections(no_selections);
+}
+
 void code_editor::highlight_current_line()
 {
+    /*
+     * Qt doesn't want to highlight blocks in line-wrap mode (even if the docs
+     * say so), so we hack our way around it by going to the end of a block and
+     * then go upwards selecting each line in that block separately.
+     */
     QList<QTextEdit::ExtraSelection> extra_selections;
-    QTextEdit::ExtraSelection selection;
+    QTextCursor cursor(textCursor());
+    cursor.clearSelection();
+    cursor.movePosition(QTextCursor::EndOfBlock);
+    cursor.movePosition(QTextCursor::StartOfLine);
+    int block = cursor.blockNumber();
+    int oldPosition;
+    
+    do
+    {
+        QTextEdit::ExtraSelection selection;
 
-    selection.format.setBackground(m_current_line_background);
-    selection.format.setProperty(QTextFormat::FullWidthSelection, true);
-    selection.cursor = textCursor();
-    selection.cursor.clearSelection();
-    extra_selections.append(selection);
+        selection.format.setBackground(m_current_line_background);
+        selection.format.setProperty(QTextFormat::FullWidthSelection, true);
+        selection.cursor = cursor;
+        extra_selections.append(selection);
+
+        oldPosition = cursor.position();
+        cursor.movePosition(QTextCursor::Up);
+    // stop when we leave the block or hit the top of the document
+    } while(cursor.blockNumber() == block && cursor.position() != oldPosition);
+
     setExtraSelections(extra_selections);
 }
 
@@ -181,6 +213,43 @@ void code_editor::update_minimap(const QRect& rect, int dy)
     Q_UNUSED(dy)
 
     m_minimap->update();
+}
+
+void code_editor::handle_global_setting_changed(void* sender, const QString& key, const QVariant& value)
+{
+    Q_UNUSED(sender);
+    if (key == "python/highlight_current_line")
+    {
+        bool enable = value.toBool();
+        if (enable == m_line_highlight_enabled)
+            return;
+        m_line_highlight_enabled = enable;
+        if (enable)
+        {
+            connect(this, &code_editor::cursorPositionChanged, this, &code_editor::highlight_current_line);
+            highlight_current_line();
+        }
+        else
+        {
+            disconnect(this, &code_editor::cursorPositionChanged, this, &code_editor::highlight_current_line);
+            clear_line_highlight();
+        }
+    }
+    else if (key == "python/line_numbers")
+    {
+        m_line_numbers_enabled = value.toBool();
+        update_layout();
+    }
+    else if (key == "python/line_wrap")
+    {
+        m_line_wrap_enabled = value.toBool();
+        setLineWrapMode(m_line_wrap_enabled ? QPlainTextEdit::WidgetWidth : QPlainTextEdit::NoWrap);
+    }
+    else if (key == "python/minimap")
+    {
+        m_minimap_enabled = value.toBool();
+        update_layout();
+    }
 }
 
 void code_editor::search(const QString& string)

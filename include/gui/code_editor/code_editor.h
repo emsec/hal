@@ -94,9 +94,11 @@ private Q_SLOTS:
     void handle_block_count_changed(int new_block_count);
     void update_line_number_area(const QRect& rect, int dy);
     void update_minimap(const QRect& rect, int dy);
+    void handle_global_setting_changed(void* sender, const QString& key, const QVariant& value);
 
 private:
     void update_layout();
+    void clear_line_highlight();
 
     code_editor_scrollbar* m_scrollbar;
 
@@ -106,7 +108,9 @@ private:
     QPropertyAnimation* m_animation;
 
     bool m_line_numbers_enabled;
+    bool m_line_highlight_enabled;
     bool m_minimap_enabled;
+    bool m_line_wrap_enabled;
 
     QFont m_line_number_font;
     QColor m_line_number_color;
