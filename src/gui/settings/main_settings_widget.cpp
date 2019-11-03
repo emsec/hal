@@ -166,6 +166,12 @@ void main_settings_widget::init_widgets()
     register_widget("python-item", py_font_size_setting);
     checkbox_setting* py_line_numbers_setting = new checkbox_setting("python/line_numbers", "Line Numbers", "show", "", this);
     register_widget("python-item", py_line_numbers_setting);
+    checkbox_setting* py_line_highlight = new checkbox_setting("python/highlight_current_line", "Highlight Current Line", "enabled", "", this);
+    register_widget("python-item", py_line_highlight);
+    checkbox_setting* py_line_wrap = new checkbox_setting("python/line_wrap", "Line Wrap Mode", "wrap", "<-- prevents horizontal scrollbar", this);
+    register_widget("python-item", py_line_wrap);
+    checkbox_setting* py_minimap = new checkbox_setting("python/minimap", "Minimap", "show", "", this);
+    register_widget("python-item", py_minimap);
 
     make_section("Expert settings", "advanced-item", ":/icons/preferences");
 
