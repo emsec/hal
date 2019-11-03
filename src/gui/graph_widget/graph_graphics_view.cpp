@@ -453,11 +453,15 @@ void graph_graphics_view::show_context_menu(const QPoint& pos)
     QAction* action;
 
     QGraphicsItem* item = itemAt(pos);
+    bool isGate = false, isModule = false, isNet = false;
     if (item)
     {
         m_item = static_cast<graphics_item*>(item);
+        isGate = m_item->item_type() == hal::item_type::gate;
+        isModule = m_item->item_type() == hal::item_type::module;
+        isNet = m_item->item_type() == hal::item_type::net;
 
-        if (m_item->item_type() == hal::item_type::gate)
+        if (isGate)
         {
             if (g_selection_relay.m_selected_gates.find(m_item->id()) == g_selection_relay.m_selected_gates.end())
             {
@@ -477,7 +481,7 @@ void graph_graphics_view::show_context_menu(const QPoint& pos)
             action = context_menu.addAction("  Fold parent module");
             QObject::connect(action, &QAction::triggered, this, &graph_graphics_view::handle_fold_single_action);
         }
-        else if (m_item->item_type() == hal::item_type::module)
+        else if (isModule)
         {
             if (g_selection_relay.m_selected_modules.find(m_item->id()) == g_selection_relay.m_selected_modules.end())
             {
@@ -504,35 +508,38 @@ void graph_graphics_view::show_context_menu(const QPoint& pos)
             context_menu.addAction("Entire selection:")->setEnabled(false);
         }
 
-        action = context_menu.addAction("  Isolate In New View");
-        QObject::connect(action, &QAction::triggered, this, &graph_graphics_view::handle_isolation_view_action);
-
-        action = context_menu.addAction("  Add successors to view");
-        connect(action, &QAction::triggered, this, &graph_graphics_view::handle_select_outputs);
-
-        action = context_menu.addAction("  Add predecessors to view");
-        connect(action, &QAction::triggered, this, &graph_graphics_view::handle_select_inputs);
-
-        QMenu* module_submenu = context_menu.addMenu("  Move to module …");
-
-        action = module_submenu->addAction("  New module …");
-        QObject::connect(action, &QAction::triggered, this, &graph_graphics_view::handle_move_new_action);
-        module_submenu->addSeparator();
-
-        QActionGroup* module_actions = new QActionGroup(module_submenu);
-        for (auto& module : g_netlist->get_modules())
+        if (isGate || isModule)
         {
-            std::shared_ptr<gate> g = g_netlist->get_gate_by_id(m_item->id());
-            if (!module->contains_gate(g))
+            action = context_menu.addAction("  Isolate In New View");
+            QObject::connect(action, &QAction::triggered, this, &graph_graphics_view::handle_isolation_view_action);
+
+            action = context_menu.addAction("  Add successors to view");
+            connect(action, &QAction::triggered, this, &graph_graphics_view::handle_select_outputs);
+
+            action = context_menu.addAction("  Add predecessors to view");
+            connect(action, &QAction::triggered, this, &graph_graphics_view::handle_select_inputs);
+
+            QMenu* module_submenu = context_menu.addMenu("  Move to module …");
+
+            action = module_submenu->addAction("New module …");
+            QObject::connect(action, &QAction::triggered, this, &graph_graphics_view::handle_move_new_action);
+            module_submenu->addSeparator();
+
+            QActionGroup* module_actions = new QActionGroup(module_submenu);
+            for (auto& module : g_netlist->get_modules())
             {
-                QString mod_name = QString::fromStdString(module->get_name());
-                const u32 mod_id = module->get_id();
-                action           = module_submenu->addAction(mod_name);
-                module_actions->addAction(action);
-                action->setData(mod_id);
+                std::shared_ptr<gate> g = g_netlist->get_gate_by_id(m_item->id());
+                if (!module->contains_gate(g))
+                {
+                    QString mod_name = QString::fromStdString(module->get_name());
+                    const u32 mod_id = module->get_id();
+                    action           = module_submenu->addAction(mod_name);
+                    module_actions->addAction(action);
+                    action->setData(mod_id);
+                }
             }
+            QObject::connect(module_actions, SIGNAL(triggered(QAction*)), this, SLOT(handle_move_action(QAction*)));
         }
-        QObject::connect(module_actions, SIGNAL(triggered(QAction*)), this, SLOT(handle_move_action(QAction*)));
 
         if (g_selection_relay.m_selected_gates.size() + g_selection_relay.m_selected_modules.size() > 1)
         {
@@ -554,7 +561,8 @@ void graph_graphics_view::show_context_menu(const QPoint& pos)
             }
         }
     }
-    else
+    
+    if (!item || isNet)
     {
         QAction* antialiasing_action = context_menu.addAction("Antialiasing");
         QAction* cosmetic_action     = context_menu.addAction("Cosmetic Nets");
