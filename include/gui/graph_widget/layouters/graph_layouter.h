@@ -54,8 +54,6 @@ public:
     virtual void add(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets)    = 0;
     virtual void remove(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets) = 0;
 
-    virtual void expand(const u32 from_gate, const u32 via_net, const u32 to_gate) = 0;
-
     virtual void layout() = 0;
 
     virtual const QString name() const        = 0;
@@ -66,6 +64,9 @@ public:
     const QMap<hal::node, QPoint> node_to_position_map() const;
     const QMap<QPoint, hal::node> position_to_node_map() const;
 
+    void set_node_position(const hal::node &n, const QPoint &p);
+    void remove_node_from_maps(const hal::node &n);
+
 Q_SIGNALS:
     void status_update(const int percent);
     void status_update(const QString& message);
@@ -74,6 +75,7 @@ protected:
     graphics_scene* m_scene;
     const graph_context* const m_context;
 
+private:
     QMap<hal::node, QPoint> m_node_to_position_map;
     QMap<QPoint, hal::node> m_position_to_node_map;
 };
