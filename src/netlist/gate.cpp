@@ -89,6 +89,46 @@ std::shared_ptr<module> gate::get_module() const
     return m_module;
 }
 
+boolean_function gate::get_boolean_function(const std::string& name) const
+{
+    if (name.empty())
+    {
+        auto output_pins = m_type->get_output_pins();
+        if (!output_pins.empty())
+        {
+            return get_boolean_function(output_pins[0]);
+        }
+        return boolean_function::X;
+    }
+    auto it = m_functions.find(name);
+    if (it == m_functions.end())
+    {
+        return it->second;
+    }
+    auto map = m_type->get_boolean_functions();
+    it       = m_functions.find(name);
+    if (it == m_functions.end())
+    {
+        return it->second;
+    }
+    return boolean_function::X;
+}
+
+std::map<std::string, boolean_function> gate::get_boolean_functions() const
+{
+    auto res = m_type->get_boolean_functions();
+    for (const auto& it : m_functions)
+    {
+        res.emplace(it.first, it.second);
+    }
+    return res;
+}
+
+void gate::set_boolean_function(const std::string& name, const boolean_function& func)
+{
+    m_functions.emplace(name, func);
+}
+
 bool gate::mark_global_vcc_gate()
 {
     return m_netlist->mark_global_vcc_gate(shared_from_this());

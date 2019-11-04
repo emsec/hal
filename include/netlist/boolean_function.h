@@ -114,6 +114,9 @@ public:
     boolean_function operator&(const boolean_function& other) const;
     boolean_function operator|(const boolean_function& other) const;
     boolean_function operator^(const boolean_function& other) const;
+    boolean_function& operator&=(const boolean_function& other);
+    boolean_function& operator|=(const boolean_function& other);
+    boolean_function& operator^=(const boolean_function& other);
 
     // negate function
     boolean_function operator!() const;
