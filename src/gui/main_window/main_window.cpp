@@ -19,6 +19,7 @@
 #include "gui/docking_system/dock_bar.h"
 #include "gui/file_manager/file_manager.h"
 #include "gui/gui_globals.h"
+#include "gui/hal_action/hal_action.h"
 #include "gui/hal_content_manager/hal_content_manager.h"
 #include "gui/hal_logger/hal_logger_widget.h"
 #include "gui/plugin_management/plugin_schedule_manager.h"
@@ -45,7 +46,7 @@
 #include "overlay/reminder_overlay.h"
 #include "plugin_manager/plugin_manager_widget.h"
 
-main_window::main_window(QWidget* parent) : QWidget(parent), m_schedule_widget(new plugin_schedule_widget()), m_action_schedule(new QAction(this)), m_action_content(new QAction(this))
+main_window::main_window(QWidget* parent) : QWidget(parent), m_schedule_widget(new plugin_schedule_widget()), m_action_schedule(new hal_action(this)), m_action_content(new hal_action(this))
 {
     ensurePolished();    // ADD REPOLISH METHOD
     connect(file_manager::get_instance(), &file_manager::file_opened, this, &main_window::handle_file_opened);
@@ -117,15 +118,15 @@ main_window::main_window(QWidget* parent) : QWidget(parent), m_schedule_widget(n
 
     setLocale(QLocale(QLocale::English, QLocale::UnitedStates));
 
-    m_action_new          = new QAction(this);
-    m_action_open         = new QAction(this);
-    m_action_save         = new QAction(this);
-    m_action_about        = new QAction(this);
-    m_action_run_schedule = new QAction(this);
-    //m_action_content      = new QAction(this);
-    m_action_settings = new QAction(this);
-    m_action_close    = new QAction(this);
-    m_action_content  = new QAction(this);
+    m_action_new          = new hal_action(this);
+    m_action_open         = new hal_action(this);
+    m_action_save         = new hal_action(this);
+    m_action_about        = new hal_action(this);
+    m_action_run_schedule = new hal_action(this);
+    //m_action_content      = new hal_action(this);
+    m_action_settings = new hal_action(this);
+    m_action_close    = new hal_action(this);
+    m_action_content  = new hal_action(this);
 
     //    //m_open_icon_style = "all->#fcfcb0";
     //    //m_open_icon_style = "all->#f2e4a4";
@@ -189,12 +190,12 @@ main_window::main_window(QWidget* parent) : QWidget(parent), m_schedule_widget(n
     m_action_run_schedule->setShortcut(QKeySequence("Ctrl+Shift+R"));
 
     setWindowTitle("HAL");
-    m_action_new->setText("New Netlist '" + m_action_new->shortcut().toString(QKeySequence::NativeText) + "'");
-    m_action_open->setText("Open '" + m_action_open->shortcut().toString(QKeySequence::NativeText) + "'");
-    m_action_save->setText("Save '" + m_action_save->shortcut().toString(QKeySequence::NativeText) + "'");
+    m_action_new->setText("New Netlist");
+    m_action_open->setText("Open");
+    m_action_save->setText("Save");
     m_action_about->setText("About");
     m_action_schedule->setText("Edit Schedule");
-    m_action_run_schedule->setText("Run Schedule '" + m_action_run_schedule->shortcut().toString(QKeySequence::NativeText) + "'");
+    m_action_run_schedule->setText("Run Schedule");
     m_action_content->setText("Content (Disabled)");
     m_action_settings->setText("Settings");
     m_action_close->setText("Close Document");
@@ -209,17 +210,17 @@ main_window::main_window(QWidget* parent) : QWidget(parent), m_schedule_widget(n
 
     g_content_manager = new hal_content_manager(this);
 
-    connect(m_action_new, &QAction::triggered, this, &main_window::handle_action_new);
-    connect(m_action_open, &QAction::triggered, this, &main_window::handle_action_open);
-    connect(m_action_about, &QAction::triggered, m_about_dialog, &about_dialog::exec);
-    connect(m_action_schedule, &QAction::triggered, this, &main_window::toggle_schedule);
-    connect(m_action_settings, &QAction::triggered, this, &main_window::toggle_settings);
+    connect(m_action_new, &hal_action::triggered, this, &main_window::handle_action_new);
+    connect(m_action_open, &hal_action::triggered, this, &main_window::handle_action_open);
+    connect(m_action_about, &hal_action::triggered, m_about_dialog, &about_dialog::exec);
+    connect(m_action_schedule, &hal_action::triggered, this, &main_window::toggle_schedule);
+    connect(m_action_settings, &hal_action::triggered, this, &main_window::toggle_settings);
     connect(m_settings, &main_settings_widget::close, this, &main_window::close_settings);
-    connect(m_action_save, &QAction::triggered, this, &main_window::handle_save_triggered);
+    connect(m_action_save, &hal_action::triggered, this, &main_window::handle_save_triggered);
     //debug
-    connect(m_action_close, &QAction::triggered, this, &main_window::handle_action_closed);
+    connect(m_action_close, &hal_action::triggered, this, &main_window::handle_action_closed);
 
-    connect(m_action_run_schedule, &QAction::triggered, plugin_schedule_manager::get_instance(), &plugin_schedule_manager::run_schedule);
+    connect(m_action_run_schedule, &hal_action::triggered, plugin_schedule_manager::get_instance(), &plugin_schedule_manager::run_schedule);
 
     connect(this, &main_window::save_triggered, g_content_manager, &hal_content_manager::handle_save_triggered);
 

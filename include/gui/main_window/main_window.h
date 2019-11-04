@@ -26,6 +26,7 @@
 
 #include "content_layout_area/content_layout_area.h"
 #include "core/program_options.h"
+#include "hal_action/hal_action.h"
 #include "plugin_manager/plugin_manager_widget.h"
 #include "plugin_manager/plugin_model.h"
 #include "settings/main_settings_widget.h"
@@ -147,16 +148,16 @@ private:
     QToolBar* m_right_tool_bar;
     content_layout_area* m_layout_area;
 
-    QAction* m_action_new;
-    QAction* m_action_open;
-    QAction* m_action_save;
-    QAction* m_action_save_as;
-    QAction* m_action_about;
-    QAction* m_action_schedule;
-    QAction* m_action_run_schedule;
-    QAction* m_action_content;
-    QAction* m_action_settings;
-    QAction* m_action_close;
+    hal_action* m_action_new;
+    hal_action* m_action_open;
+    hal_action* m_action_save;
+    hal_action* m_action_save_as;
+    hal_action* m_action_about;
+    hal_action* m_action_schedule;
+    hal_action* m_action_run_schedule;
+    hal_action* m_action_content;
+    hal_action* m_action_settings;
+    hal_action* m_action_close;
 
     QMenu* m_menu_file;
     QMenu* m_menu_edit;
