@@ -54,7 +54,7 @@ void module_widget::setup_toolbar(toolbar* toolbar)
 
 QList<QShortcut*> module_widget::create_shortcuts()
 {
-    QShortcut* search_shortcut = new QShortcut(QKeySequence("Ctrl+f"), this);
+    QShortcut* search_shortcut = g_keybind_manager.make_shortcut(this, "keybinds/searchbar_toggle");
     connect(search_shortcut, &QShortcut::activated, this, &module_widget::toggle_searchbar);
 
     QList<QShortcut*> list;
