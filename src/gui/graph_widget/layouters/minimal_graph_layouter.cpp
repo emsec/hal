@@ -244,13 +244,6 @@ void minimal_graph_layouter::remove(const QSet<u32> modules, const QSet<u32> gat
     Q_UNUSED(nets)
 }
 
-void minimal_graph_layouter::expand(const u32 from_gate, const u32 via_net, const u32 to_gate)
-{
-    Q_UNUSED(from_gate)
-    Q_UNUSED(via_net)
-    Q_UNUSED(to_gate)
-}
-
 const QString minimal_graph_layouter::name() const
 {
     return "Minimal Layouter";

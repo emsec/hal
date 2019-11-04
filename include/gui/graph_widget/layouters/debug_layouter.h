@@ -15,8 +15,6 @@ public:
 
     virtual void add(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets) override;
     virtual void remove(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets) override;
-
-    virtual void expand(const u32 from_gate, const u32 via_net, const u32 to_gate) override;
 };
 
 #endif // DEBUG_LAYOUTER_H
