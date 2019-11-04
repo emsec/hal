@@ -1,6 +1,7 @@
 #include "gate_decorator_system/decorators/gate_decorator_bdd.h"
 #include "gate_decorator_system/gate_decorator_system.h"
 
+#include "netlist/boolean_function.h"
 #include "netlist/gate.h"
 #include "netlist/gate_library/gate_library.h"
 #include "netlist/gate_library/gate_library_liberty_parser.h"
@@ -15,30 +16,6 @@
 
 namespace gate_library_liberty_parser
 {
-    namespace
-    {
-        bool bdd_availability_tester(std::map<std::string, std::vector<std::pair<std::string, boolean_function>>>& boolean_function_map, std::shared_ptr<gate> gate)
-        {
-            return boolean_function_map.find(gate->get_type()) != boolean_function_map.end();
-        }
-
-        std::map<std::string, std::shared_ptr<bdd>> bdd_generator(std::map<std::string, std::vector<std::pair<std::string, boolean_function>>>& boolean_function_map,
-                                                                  std::shared_ptr<gate> gate,
-                                                                  std::map<std::string, std::shared_ptr<bdd>>& input_pin_type_to_bdd)
-        {
-            std::map<std::string, std::shared_ptr<bdd>> res;
-
-            auto pins = boolean_function_map[gate->get_type()];
-
-            for (auto& pin : pins)
-            {
-                res[pin.first] = std::make_shared<bdd>(boolean_function_to_bdd(pin.second, input_pin_type_to_bdd));
-            }
-
-            return res;
-        }
-    }    // namespace
-
     // ###########################################################################
     // #########          Parse liberty into intermediate format          ########
     // ###########################################################################
@@ -60,7 +37,6 @@ namespace gate_library_liberty_parser
         }
 
         std::shared_ptr<gate_library> lib = get_gate_library(inter_lib);
-        register_bdds(inter_lib);
 
         return lib;
     }
@@ -221,15 +197,15 @@ namespace gate_library_liberty_parser
                                 }
                                 else if (s3->name == "function")
                                 {
-                                    p.function = streamline_function(prepare_string(s3->value));
+                                    p.function = prepare_string(s3->value);
                                 }
                                 else if (s3->name == "three_state")
                                 {
-                                    p.three_state = streamline_function(prepare_string(s3->value));
+                                    p.three_state = prepare_string(s3->value);
                                 }
                                 else if (s3->name == "x_function")
                                 {
-                                    p.x_function = streamline_function(prepare_string(s3->value));
+                                    p.x_function = prepare_string(s3->value);
                                 }
                             }
 
@@ -237,26 +213,28 @@ namespace gate_library_liberty_parser
                         }
                         else if (s2->name == "ff")
                         {
-                            c.is_ff = true;
+                            c.is_ff        = true;
+                            auto tokens    = core_utils::split(s2->value, ',');
+                            c.output_state = {prepare_string(tokens[0]), prepare_string(tokens[1])};
 
                             for (const auto& s3 : s2->statements)
                             {
                                 // depth 3
                                 if (s3->name == "clocked_on")
                                 {
-                                    c.clocked_on = streamline_function(prepare_string(s3->value));
+                                    c.clocked_on = prepare_string(s3->value);
                                 }
                                 else if (s3->name == "next_state")
                                 {
-                                    c.next_state = streamline_function(prepare_string(s3->value));
+                                    c.next_state = prepare_string(s3->value);
                                 }
                                 else if (s3->name == "clear")
                                 {
-                                    c.clear = streamline_function(prepare_string(s3->value));
+                                    c.clear = prepare_string(s3->value);
                                 }
                                 else if (s3->name == "preset")
                                 {
-                                    c.preset = streamline_function(prepare_string(s3->value));
+                                    c.preset = prepare_string(s3->value);
                                 }
                                 else if (s3->name == "clear_preset_var1")
                                 {
@@ -341,56 +319,40 @@ namespace gate_library_liberty_parser
                 {
                     output_pins.push_back(pin.name);
                 }
+
+                if (!pin.function.empty())
+                {
+                    // TODO output_state beachten
+                    // if ()
+                    gt.add_boolean_function(pin.name, ::boolean_function::from_string(pin.function));
+                }
+            }
+
+            if (cell.is_ff)
+            {
+                gt.set_base_type(gate_type::ff);
+
+                // TODO special functionsaber erzähl mal bes
+                //if ()
+            }
+            else if (cell.is_latch)
+            {
+                gt.set_base_type(gate_type::latch);
+            }
+            else if (cell.is_lut)
+            {
+                gt.set_base_type(gate_type::lut);
+            }
+            else
+            {
+                gt.set_base_type(gate_type::combinatorial);
             }
 
             gt.add_input_pins(input_pins);
             gt.add_output_pins(output_pins);
         }
 
-        // if (global_gnd_types->empty())
-        // {
-        //     global_gnd_types->insert("GLOBAL_GND");
-        //     gate_types->insert("GLOBAL_GND");
-        //     output_pin_types->insert("O");
-        //     gate_to_output_map["GLOBAL_GND"].push_back("O");
-        // }
-        // else if (global_vcc_types->empty())
-        // {
-        //     global_vcc_types->insert("GLOBAL_VCC");
-        //     gate_types->insert("GLOBAL_VCC");
-        //     output_pin_types->insert("O");
-        //     gate_to_output_map["GLOBAL_VCC"].push_back("O");
-        // }
-
         return lib;
-    }
-
-    void register_bdds(std::shared_ptr<intermediate_library> inter_lib)
-    {
-        std::map<std::string, std::vector<std::pair<std::string, boolean_function>>> boolean_function_map;
-
-        // create boolean_function_map
-        for (const auto& c : inter_lib->cells)
-        {
-            for (const auto& p : c.pins)
-            {
-                if ((p.direction == "inout") || (p.direction == "output"))
-                {
-                    if (!p.function.empty())
-                    {
-                        if ((p.function != "IQ") && (p.function != "IQN"))
-                        {
-                            boolean_function_map[c.name].push_back(std::make_pair(p.name, string_to_boolean_function(p.function)));
-                        }
-                    }
-                }
-            }
-        }
-
-        // register bdd availability tester and generator
-        using namespace std::placeholders;
-
-        gate_decorator_system::register_bdd_decorator_function(inter_lib->name, std::bind(&bdd_availability_tester, boolean_function_map, _1), std::bind(&bdd_generator, boolean_function_map, _1, _2));
     }
 
     // ###########################################################################
@@ -447,209 +409,6 @@ namespace gate_library_liberty_parser
                     line               = line.substr(0, multi_line_comment_begin);
                 }
             }
-        }
-    }
-
-    std::string streamline_function(const std::string& func)
-    {
-        // streamline and, or, and xor
-        static const std::regex re_and("\\s*[\\*\\&]\\s*");
-        static const std::regex re_or("\\s*[\\+\\|]\\s*");
-        static const std::regex re_xor("\\s*[\\^]\\s*");
-        static const std::regex re_space("\\s+");
-        static const std::regex re_neg("(\\w+)\\'");
-
-        auto res = func;
-        res      = std::regex_replace(res, re_and, "&");
-        res      = std::regex_replace(res, re_or, "|");
-        res      = std::regex_replace(res, re_xor, "^");
-        res      = std::regex_replace(res, re_space, "&");
-
-        // streamline negation
-        while (res.find(")'") != std::string::npos)
-        {
-            i32 bracket_level = 0;
-            i32 open_pos      = 0;
-            i32 close_pos     = res.rfind(")'");
-
-            for (i32 i = close_pos - 1; i >= 0; i--)
-            {
-                if (res[i] == ')')
-                {
-                    bracket_level++;
-                }
-                else if (res[i] == '(')
-                {
-                    if (bracket_level == 0)
-                    {
-                        open_pos = i;
-                        break;
-                    }
-
-                    bracket_level--;
-                }
-            }
-
-            res = res.substr(0, open_pos) + "!" + res.substr(open_pos, close_pos - open_pos + 1) + res.substr(close_pos + 2);
-        }
-
-        res = std::regex_replace(res, re_neg, "!$1");
-
-        return res;
-    }
-
-    boolean_function string_to_boolean_function(std::string func)
-    {
-        boolean_function b_func;
-
-        std::string boolean_operators = "&|^";
-
-        // bracket handling
-        u32 bracket_level = 0;
-        auto open_pos     = std::string::npos;
-
-        // boolean function generation
-        std::string pin_name = "";
-        bool local_neg       = false;
-        boolean_function current_b_func;
-
-        // check for values 0 and 1
-        if (func == "0" || func == "1")
-        {
-            b_func.operand = func;
-            return b_func;
-        }
-
-        // parse equation
-        for (u32 i = 0; i < func.size(); i++)
-        {
-            // recursively call function for parts within brackets
-            if (func[i] == '(')
-            {
-                bracket_level++;
-
-                if (open_pos == std::string::npos)
-                {
-                    open_pos = i;
-                }
-            }
-            else if (func[i] == ')')
-            {
-                bracket_level--;
-
-                if (bracket_level == 0)
-                {
-                    current_b_func     = string_to_boolean_function(func.substr(open_pos + 1, i - open_pos - 1));
-                    current_b_func.neg = local_neg;
-                    b_func.sub_functions.push_back(current_b_func);
-                    open_pos = std::string::npos;
-                }
-            }
-            // if not within brackets, deal with the operands
-            else if (bracket_level == 0)
-            {
-                if (func[i] == '!')
-                {
-                    local_neg = true;
-                }
-                else if (boolean_operators.find(func[i]) == std::string::npos)
-                {
-                    pin_name += func[i];
-                }
-                else
-                {
-                    if (!pin_name.empty())
-                    {
-                        current_b_func     = boolean_function(pin_name);
-                        current_b_func.neg = local_neg;
-                        b_func.sub_functions.push_back(current_b_func);
-                    }
-
-                    pin_name  = "";
-                    b_func.op = func[i];
-                    local_neg = false;
-                }
-            }
-        }
-
-        // final operand
-        if (!pin_name.empty())
-        {
-            current_b_func     = boolean_function(pin_name);
-            current_b_func.neg = local_neg;
-            b_func.sub_functions.push_back(current_b_func);
-        }
-
-        return b_func;
-    }
-
-    bdd boolean_function_to_bdd(const boolean_function& b_func, std::map<std::string, std::shared_ptr<bdd>>& input_pin_type_to_bdd)
-    {
-        bdd res;
-
-        // single operand on this level
-        if (!b_func.operand.empty())
-        {
-            // check for values 1 and 0
-            if (b_func.operand == "0")
-            {
-                res = bdd_false();
-            }
-            else if (b_func.operand == "1")
-            {
-                res = bdd_true();
-            }
-            else
-            {
-                res = *(input_pin_type_to_bdd[b_func.operand]);
-            }
-        }
-        // multiple operands on this level
-        else
-        {
-            // single operand within operand list
-            if (b_func.sub_functions.size() == 1)
-            {
-                res = boolean_function_to_bdd(b_func.sub_functions[0], input_pin_type_to_bdd);
-            }
-            // boolean operations
-            else if (b_func.op == '&')
-            {
-                res = bdd_true();
-
-                for (const auto& sub_func : b_func.sub_functions)
-                {
-                    res &= boolean_function_to_bdd(sub_func, input_pin_type_to_bdd);
-                }
-            }
-            else if (b_func.op == '|')
-            {
-                res = bdd_false();
-
-                for (const auto& sub_func : b_func.sub_functions)
-                {
-                    res |= boolean_function_to_bdd(sub_func, input_pin_type_to_bdd);
-                }
-            }
-            else if (b_func.op == '^')
-            {
-                res = bdd_false();
-
-                for (const auto& sub_func : b_func.sub_functions)
-                {
-                    res ^= boolean_function_to_bdd(sub_func, input_pin_type_to_bdd);
-                }
-            }
-        }
-
-        // negate function
-        if (b_func.neg)
-        {
-            return bdd_not(res);
-        }
-        else
-        {
-            return res;
         }
     }
 }    // namespace gate_library_liberty_parser

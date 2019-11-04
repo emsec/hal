@@ -52,9 +52,11 @@ public:
     void set_base_type(base_type_t base_type);
     void add_input_pins(const std::vector<std::string>& input_pins);
     void add_output_pins(const std::vector<std::string>& output_pins);
+    void add_boolean_function(std::string name, boolean_function bf);
     void add_boolean_function_map(const std::map<std::string, boolean_function>& boolean_function_map);
 
     std::string get_name() const;
+    base_type_t get_base_type() const;
     std::vector<std::string> get_input_pins() const;
     std::vector<std::string> get_output_pins() const;
     const boolean_function& get_boolean_function(const std::string& name) const;

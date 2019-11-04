@@ -21,6 +21,11 @@ void gate_type::add_output_pins(const std::vector<std::string>& output_pins)
     m_output_pins.insert(m_output_pins.end(), output_pins.begin(), output_pins.end());
 }
 
+void gate_type::add_boolean_function(std::string name, boolean_function bf)
+{
+    m_boolean_function_map.emplace(name, bf);
+}
+
 void gate_type::add_boolean_function_map(const std::map<std::string, boolean_function>& boolean_function_map)
 {
     m_boolean_function_map.insert(boolean_function_map.begin(), boolean_function_map.end());
