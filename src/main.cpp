@@ -13,7 +13,6 @@
 
 #include "hdl_parser/hdl_parser_dispatcher.h"
 #include "hdl_writer/hdl_writer_dispatcher.h"
-#include "netlist/boolean_function.h"
 #include "netlist/event_system/event_log.h"
 #include "netlist/gate_library/gate_library_manager.h"
 #include "netlist/netlist.h"
