@@ -249,7 +249,6 @@ namespace gate_library_manager
                 continue;
             }
             log_info("netlist", "Reading all definitions from {}.", lib_dir.string());
-            std::regex pattern(".*\\.json");
             for (const auto& lib_path : core_utils::recursive_directory_range(lib_dir))
             {
                 if (core_utils::ends_with(lib_path.path().string(), ".json"))

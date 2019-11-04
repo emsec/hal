@@ -170,7 +170,7 @@ void hdl_parser_verilog::remove_comments(std::string& buffer, bool& multiline_co
         {
             if (single_line_comment_begin != std::string::npos)
             {
-                if (multi_line_comment_begin == std::string::npos || (multi_line_comment_begin != std::string::npos && multi_line_comment_begin > single_line_comment_begin))
+                if (multi_line_comment_begin == std::string::npos || multi_line_comment_begin > single_line_comment_begin)
                 {
                     buffer = buffer.substr(0, single_line_comment_begin);
                     repeat = true;
