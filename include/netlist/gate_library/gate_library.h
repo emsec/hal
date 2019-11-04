@@ -48,6 +48,12 @@ public:
 
     ~gate_library() = default;
 
+    bool operator==(const gate_library& rhs) const;
+    bool operator==(const std::string& rhs) const;
+
+    bool operator!=(const gate_library& rhs) const;
+    bool operator!=(const std::string& rhs) const;
+
     /**
      * Returns the library name.
      *
@@ -55,33 +61,31 @@ public:
      */
     std::string get_name() const;
 
-    void add_gate_type(const gate_type& gt);
+    void add_gate_type(std::shared_ptr<const gate_type> gt);
 
     bool add_global_gnd_gate_type(const std::string& gt_name);
     bool add_global_vcc_gate_type(const std::string& gt_name);
-
-    const gate_type& get_gate_type(std::string name);
 
     /**
      * Get all gate types of the library.
      *
      * @returns vector of all gate types.
      */
-    std::vector<const gate_type> get_gate_types();
+    const std::map<std::string, std::shared_ptr<const gate_type>>& get_gate_types();
 
     /**
      * Get all global vcc gate types of the library.
      *
      * @returns vector of all global vcc gate types.
      */
-    std::vector<const gate_type> get_global_vcc_gate_types();
+    const std::vector<std::shared_ptr<const gate_type>>& get_global_vcc_gate_types();
 
     /**
      * Get all global gnd gate types of the library.
      *
      * @returns vector of all global gnd gate types.
      */
-    std::vector<const gate_type> get_global_gnd_gate_types();
+    const std::vector<std::shared_ptr<const gate_type>>& get_global_gnd_gate_types();
 
     /**
      * Get all input pin types of the library.
@@ -135,9 +139,9 @@ public:
 private:
     std::string m_name;
 
-    std::map<std::string, const gate_type> m_gate_type_map;
-    std::set<const gate_type*> m_global_vcc_gate_types;
-    std::set<const gate_type*> m_global_gnd_gate_types;
+    std::map<std::string, std::shared_ptr<const gate_type>> m_gate_type_map;
+    std::set<std::shared_ptr<const gate_type>> m_global_vcc_gate_types;
+    std::set<std::shared_ptr<const gate_type>> m_global_gnd_gate_types;
 
     std::set<std::string> m_gate_type;
 

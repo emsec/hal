@@ -226,15 +226,15 @@ namespace gate_library_liberty_parser
                                 }
                                 else if (s3->name == "next_state")
                                 {
-                                    c.next_state = prepare_string(s3->value);
+                                    c.data_in = prepare_string(s3->value);
                                 }
                                 else if (s3->name == "clear")
                                 {
-                                    c.clear = prepare_string(s3->value);
+                                    c.reset = prepare_string(s3->value);
                                 }
                                 else if (s3->name == "preset")
                                 {
-                                    c.preset = prepare_string(s3->value);
+                                    c.set = prepare_string(s3->value);
                                 }
                                 else if (s3->name == "clear_preset_var1")
                                 {
@@ -263,11 +263,11 @@ namespace gate_library_liberty_parser
                                 }
                                 else if (s3->name == "clear")
                                 {
-                                    c.clear = s3->value;
+                                    c.reset = s3->value;
                                 }
                                 else if (s3->name == "preset")
                                 {
-                                    c.preset = s3->value;
+                                    c.set = s3->value;
                                 }
                                 else if (s3->name == "clear_preset_var1")
                                 {
@@ -322,9 +322,18 @@ namespace gate_library_liberty_parser
 
                 if (!pin.function.empty())
                 {
-                    // TODO output_state beachten
-                    // if ()
-                    gt.add_boolean_function(pin.name, ::boolean_function::from_string(pin.function));
+                    if (pin.function == cell.output_state.first)
+                    {
+                        gt.add_boolean_function(pin.name, boolean_function::from_string(cell.data_in));
+                    }
+                    else if (pin.function == cell.output_state.second)
+                    {
+                        gt.add_boolean_function(pin.name, !(boolean_function::from_string(cell.data_in)));
+                    }
+                    else
+                    {
+                        gt.add_boolean_function(pin.name, boolean_function::from_string(pin.function));
+                    }
                 }
             }
 
@@ -332,16 +341,19 @@ namespace gate_library_liberty_parser
             {
                 gt.set_base_type(gate_type::ff);
 
-                // TODO special functionsaber erzähl mal bes
-                //if ()
+                // TODO special functions
             }
             else if (cell.is_latch)
             {
                 gt.set_base_type(gate_type::latch);
+
+                // TODO special functions
             }
             else if (cell.is_lut)
             {
                 gt.set_base_type(gate_type::lut);
+
+                // TODO LUT stuff
             }
             else
             {

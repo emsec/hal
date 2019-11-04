@@ -72,10 +72,9 @@ namespace gate_library_liberty_parser
         std::pair<std::string, std::string> output_state;
         std::string clocked_on;
         std::string enable;
-        std::string next_state;
         std::string data_in;
-        std::string clear;
-        std::string preset;
+        std::string reset;
+        std::string set;
         std::string clear_preset_var1;
         std::string clear_preset_var2;
     };

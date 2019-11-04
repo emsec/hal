@@ -29,6 +29,7 @@
 
 #include "netlist/data_container.h"
 #include "netlist/endpoint.h"
+#include "netlist/gate_library/gate_type.h"
 #include "netlist/netlist_constants.h"
 
 #include <map>
@@ -85,7 +86,7 @@ public:
      *
      * @returns The gate's type.
      */
-    std::string get_type() const;
+    std::shared_ptr<const gate_type> get_type() const;
 
     /**
      * Gets the module this gate is contained in.
@@ -153,13 +154,6 @@ public:
      * @returns A vector of output pin types.
      */
     std::vector<std::string> get_output_pin_types() const;
-
-    /**
-     * Get all inout pin types of the gate.
-     *
-     * @returns A vector of inout pin types.
-     */
-    std::vector<std::string> get_inout_pin_types() const;
 
     /**
      * Get all fan-in nets, i.e. all nets that are connected to one of the input pins.
@@ -254,7 +248,7 @@ private:
      * @param[in] gate_type - The gate type.
      * @param[in] name - A name for the gate.
      */
-    gate(std::shared_ptr<netlist> const g, const u32 id, const std::string& gate_type, const std::string& name = "");
+    gate(std::shared_ptr<netlist> const g, const u32 id, std::shared_ptr<const gate_type> gt, const std::string& name = "");
 
     gate(const gate&) = delete;               //disable copy-constructor
     gate& operator=(const gate&) = delete;    //disable copy-assignment
@@ -269,7 +263,7 @@ private:
     std::string m_name;
 
     /* type of the gate */
-    std::string m_type;
+    std::shared_ptr<const gate_type> m_type;
 
     /* owning module */
     std::shared_ptr<module> m_module;

@@ -1,9 +1,38 @@
 #include "netlist/gate_library/gate_type.h"
 
-gate_type::gate_type(const std::string& name, base_type_t base_type)
+gate_type::gate_type(const std::string& name)
 {
-    m_name      = name;
-    m_base_type = base_type;
+    m_name = name;
+}
+
+std::string gate_type::to_string(const gate_type& gt)
+{
+    return gt.get_name();
+}
+
+std::ostream& operator<<(std::ostream& os, const gate_type& gt)
+{
+    return os << gate_type::to_string(gt);
+}
+
+bool gate_type::operator==(const gate_type& other) const
+{
+    return m_name == other.get_name();
+}
+
+bool gate_type::operator==(const std::string& other) const
+{
+    return m_name == other;
+}
+
+bool gate_type::operator!=(const gate_type& other) const
+{
+    return !(other == m_name);
+}
+
+bool gate_type::operator!=(const std::string& other) const
+{
+    return !(other == m_name);
 }
 
 void gate_type::set_base_type(base_type_t base_type)
@@ -26,7 +55,7 @@ void gate_type::add_boolean_function(std::string name, boolean_function bf)
     m_boolean_function_map.emplace(name, bf);
 }
 
-void gate_type::add_boolean_function_map(const std::map<std::string, boolean_function>& boolean_function_map)
+void gate_type::add_boolean_function_map(const std::map<std::string, const boolean_function>& boolean_function_map)
 {
     m_boolean_function_map.insert(boolean_function_map.begin(), boolean_function_map.end());
 }
@@ -51,7 +80,7 @@ std::vector<std::string> gate_type::get_output_pins() const
     return m_output_pins;
 }
 
-const boolean_function& gate_type::get_boolean_function(const std::string& name) const
+std::map<std::string, const boolean_function> gate_type::get_boolean_functions() const
 {
-    return m_boolean_function_map.at(name);
+    return m_boolean_function_map;
 }

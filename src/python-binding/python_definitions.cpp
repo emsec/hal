@@ -1,5 +1,5 @@
-#include <hdl_parser/hdl_parser_dispatcher.h>
 #include "def.h"
+#include <hdl_parser/hdl_parser_dispatcher.h>
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wshadow"
 #ifdef COMPILER_CLANG
@@ -18,11 +18,11 @@
 #include "netlist/gate.h"
 #include "netlist/gate_library/gate_library.h"
 //#include "netlist/gate_library/gate_library_manager.h"
+#include "netlist/module.h"
 #include "netlist/net.h"
 #include "netlist/netlist.h"
 #include "netlist/netlist_factory.h"
 #include "netlist/persistent/netlist_serializer.h"
-#include "netlist/module.h"
 
 //#include "hdl_parser/hdl_parser_dispatcher.h"
 #include "hdl_writer/hdl_writer_dispatcher.h"
@@ -103,13 +103,11 @@ PYBIND11_PLUGIN(hal_py)
     py::module m("hal_py", "hal python bindings");
 #endif    // ifdef PYBIND11_MODULE
 
-    m.def("log_info", [](std::string& message){log_info("python_context", message);}, R"( some documentation info)");
+    m.def("log_info", [](std::string& message) { log_info("python_context", message); }, R"( some documentation info)");
 
-    py::class_<hal::path>(m, "hal_path")
-        .def(py::init<>())
-        .def(py::init<const hal::path&>())
-        .def(py::init<const std::string&>())
-        .def("__str__", [](hal::path& p) -> std::string { return std::string(p.c_str()); });
+    py::class_<hal::path>(m, "hal_path").def(py::init<>()).def(py::init<const hal::path&>()).def(py::init<const std::string&>()).def("__str__", [](hal::path& p) -> std::string {
+        return std::string(p.c_str());
+    });
 
     py::implicitly_convertible<std::string, hal::path>();
 
@@ -225,78 +223,78 @@ Contains the library and user share directories.
 :returns: A vector of paths.
 )");
 
-    py::class_<gate_library, std::shared_ptr<gate_library>>(m, "gate_library")
-        .def(py::init<const std::string&>(), R"(
-Constructor.
+    //     py::class_<gate_library, std::shared_ptr<gate_library>>(m, "gate_library")
+    //         .def(py::init<const std::string&>(), R"(
+    // Constructor.
 
-:param str name: Name of the gate library.
-)")
-        .def_property_readonly("name", &gate_library::get_name, R"(
-Returns the library name.
+    // :param str name: Name of the gate library.
+    // )")
+    //         .def_property_readonly("name", &gate_library::get_name, R"(
+    // Returns the library name.
 
-:returns: The library's name.
-:rtype: str
-)")
-        .def_property_readonly("gate_types", &gate_library::get_gate_types, R"(
-Get all gate types of the library.
+    // :returns: The library's name.
+    // :rtype: str
+    // )")
+    //         .def_property_readonly("gate_types", &gate_library::get_gate_types, R"(
+    // Get all gate types of the library.
 
-:returns: Set of gate types.
-:rtype: set(str)
-)")
-        .def_property_readonly("input_pin_types", &gate_library::get_input_pin_types, R"(
-Get all input pin types of the library.
+    // :returns: Set of gate types.
+    // :rtype: set(str)
+    // )")
+    //         .def_property_readonly("input_pin_types", &gate_library::get_input_pin_types, R"(
+    // Get all input pin types of the library.
 
-:returns: Set of input pin types.
-:rtype: set(str)
-)")
-        .def_property_readonly("output_pin_types", &gate_library::get_output_pin_types, R"(
-Get all output pin types of the library.
+    // :returns: Set of input pin types.
+    // :rtype: set(str)
+    // )")
+    //         .def_property_readonly("output_pin_types", &gate_library::get_output_pin_types, R"(
+    // Get all output pin types of the library.
 
-:returns: Set of output pin types.
-:rtype: set(str)
-)")
-        .def_property_readonly("inout_pin_types", &gate_library::get_inout_pin_types, R"(
-Get all inout pin types of the library.
+    // :returns: Set of output pin types.
+    // :rtype: set(str)
+    // )")
+    //         .def_property_readonly("inout_pin_types", &gate_library::get_inout_pin_types, R"(
+    // Get all inout pin types of the library.
 
-:returns: Set of inout pin types.
-:rtype: set(str)
-)")
-        .def_property_readonly("global_gnd_gate_types", &gate_library::get_global_gnd_gate_types, R"(
-Get all global gnd gate types of the library.
+    // :returns: Set of inout pin types.
+    // :rtype: set(str)
+    // )")
+    //         .def_property_readonly("global_gnd_gate_types", &gate_library::get_global_gnd_gate_types, R"(
+    // Get all global gnd gate types of the library.
 
-:returns: Set of global gnd gate types.
-:rtype: set(str)
-)")
-        .def_property_readonly("global_vcc_gate_types", &gate_library::get_global_vcc_gate_types, R"(
-Get all global vcc gate types of the library.
+    // :returns: Set of global gnd gate types.
+    // :rtype: set(str)
+    // )")
+    //         .def_property_readonly("global_vcc_gate_types", &gate_library::get_global_vcc_gate_types, R"(
+    // Get all global vcc gate types of the library.
 
-:returns: Set of global vcc gate types.
-:rtype: set(str)
-)")
-        .def_property_readonly("gate_type_map_to_input_pin_types", &gate_library::get_gate_type_map_to_input_pin_types, R"(
-Get all input pin types for all gate types of the library.
+    // :returns: Set of global vcc gate types.
+    // :rtype: set(str)
+    // )")
+    //         .def_property_readonly("gate_type_map_to_input_pin_types", &gate_library::get_gate_type_map_to_input_pin_types, R"(
+    // Get all input pin types for all gate types of the library.
 
-:returns: Dictionary of gate type to input pin types.
-:rtype: dict[str, list(str))]
-)")
-        .def_property_readonly("gate_type_map_to_output_pin_types", &gate_library::get_gate_type_map_to_output_pin_types, R"(
-Get all output pin types for all gate types of the library.
+    // :returns: Dictionary of gate type to input pin types.
+    // :rtype: dict[str, list(str))]
+    // )")
+    //         .def_property_readonly("gate_type_map_to_output_pin_types", &gate_library::get_gate_type_map_to_output_pin_types, R"(
+    // Get all output pin types for all gate types of the library.
 
-:returns: Dictionary of gate types to output pin types.
-:rtype: dict[str, list(str))]
-)")
-        .def_property_readonly("gate_type_map_to_inout_pin_types", &gate_library::get_gate_type_map_to_inout_pin_types, R"(
-Get all inout pin types for all gate types of the library.
+    // :returns: Dictionary of gate types to output pin types.
+    // :rtype: dict[str, list(str))]
+    // )")
+    //         .def_property_readonly("gate_type_map_to_inout_pin_types", &gate_library::get_gate_type_map_to_inout_pin_types, R"(
+    // Get all inout pin types for all gate types of the library.
 
-:returns: Dictionary of gate type to inout pin types.
-:rtype: dict[str, list(str))]
-)")
-        .def_property_readonly("vhdl_includes", &gate_library::get_vhdl_includes, R"(
-Get the VHDL includes of the library.
+    // :returns: Dictionary of gate type to inout pin types.
+    // :rtype: dict[str, list(str))]
+    // )")
+    //         .def_property_readonly("vhdl_includes", &gate_library::get_vhdl_includes, R"(
+    // Get the VHDL includes of the library.
 
-:returns: VHDL includes to use by serializer.
-:rtype: list(str)
-)");
+    // :returns: VHDL includes to use by serializer.
+    // :rtype: list(str)
+    // )");
 
     py::class_<endpoint, std::shared_ptr<endpoint>>(m, "endpoint")
         .def(py::init<>(), R"(
@@ -435,10 +433,7 @@ Gets an unoccupied gate id. The value 0 is reserved and represents an invalid id
 :returns: An unoccupied unique id.
 :rtype: int
 )")
-        .def("create_gate", py::overload_cast<const u32, const std::string&, const std::string&>(&netlist::create_gate),
-                py::arg("id"),
-                py::arg("gate_type"),
-                py::arg("name"), R"(
+        .def("create_gate", py::overload_cast<const u32, const std::string&, const std::string&>(&netlist::create_gate), py::arg("id"), py::arg("gate_type"), py::arg("name"), R"(
 Creates and adds a new gate to the netlist.
 
 :param int id: The unique ID != 0 for the new gate.
@@ -447,9 +442,7 @@ Creates and adds a new gate to the netlist.
 :returns: The new gate on success, None on error.
 :rtype: hal_py.gate or None
 )")
-        .def("create_gate", py::overload_cast<const std::string&, const std::string&>(&netlist::create_gate),
-                py::arg("gate_type"),
-                py::arg("name"), R"(
+        .def("create_gate", py::overload_cast<const std::string&, const std::string&>(&netlist::create_gate), py::arg("gate_type"), py::arg("name"), R"(
 Creates and adds a new gate to the netlist.
 It is identifiable via its unique ID which is automatically set to the next free ID.
 
@@ -589,7 +582,7 @@ Get the inout pin types for a gate type.
 :rtype: list(str)
 )")
 
-        .def("get_unique_net_id", &netlist::get_unique_net_id , R"(
+        .def("get_unique_net_id", &netlist::get_unique_net_id, R"(
 Gets an unoccupied net id. The value 0 is reserved and represents an invalid id.
 
 :returns: An unoccupied unique id.
@@ -633,7 +626,7 @@ Get a net specified by id.
 :returns: The net or None.
 :rtype: hal_py.net or None
 )")
-        .def_property_readonly("nets", [](netlist& n) -> std::set<std::shared_ptr<net>> { return n.get_nets(); } , R"(
+        .def_property_readonly("nets", [](netlist& n) -> std::set<std::shared_ptr<net>> { return n.get_nets(); }, R"(
 Get all nets of the netlist.
 
 :returns: A set of nets.
@@ -761,10 +754,7 @@ Gets an unoccupied module id. The value of 0 is reserved and represents an inval
 :returns: An unoccupied id.
 :rtype: int
 )")
-        .def("create_module", py::overload_cast<const u32, const std::string&, std::shared_ptr<module>>(&netlist::create_module),
-                py::arg("id"),
-                py::arg("name"),
-                py::arg("parent"), R"(
+        .def("create_module", py::overload_cast<const u32, const std::string&, std::shared_ptr<module>>(&netlist::create_module), py::arg("id"), py::arg("name"), py::arg("parent"), R"(
 Creates and adds a new module to the netlist. It is identifiable via its unique id.
 
 :param int id: The unique id != 0 for the new module.
@@ -773,9 +763,7 @@ Creates and adds a new module to the netlist. It is identifiable via its unique 
 :returns: The new module on succes, None on error.
 :rtype: hal_py.module or None
 )")
-        .def("create_module", py::overload_cast<const std::string&, std::shared_ptr<module>>(&netlist::create_module),
-                py::arg("name"),
-                py::arg("parent"), R"(
+        .def("create_module", py::overload_cast<const std::string&, std::shared_ptr<module>>(&netlist::create_module), py::arg("name"), py::arg("parent"), R"(
 Creates and adds a new module to the netlist. It is identifiable via its unique ID which is automatically set to the next free ID.
 
 :param str name: A name for the module.
@@ -1245,8 +1233,7 @@ Checks whether this net is a global inout net.
 :rtype: bool
 )")
 
-
-;
+        ;
 
     // module dir
     py::class_<module, std::shared_ptr<module>, data_container>(m, "module")
@@ -1292,7 +1279,7 @@ If the new parent is a submodule of this module, the new parent is added as a di
 :returns: True if the parent was changed
 :rtype: bool
 )")
-        .def("get_submodules", &module::get_submodules, py::arg("name_filter") = DONT_CARE, py::arg("recursive") = false , R"(
+        .def("get_submodules", &module::get_submodules, py::arg("name_filter") = DONT_CARE, py::arg("recursive") = false, R"(
 Get all direct submodules of this submodule.
 If recursive parameter is true, all indirect submodules are also included.
 
@@ -1349,7 +1336,7 @@ If the parameter recursive is true, all submodules are searched aswell.
 :returns: A set of gates.
 :rtype: set(hal_py.gate)
 )")
-        .def("get_gate_by_id", &module::get_gate_by_id, py::arg("id"), py::arg("recursive") = false , R"(
+        .def("get_gate_by_id", &module::get_gate_by_id, py::arg("id"), py::arg("recursive") = false, R"(
 Get a gate specified by id. If recursive parameter is true, all submodule are searched aswell.
 
 :param int id: The gate's id.
@@ -1392,7 +1379,12 @@ Creates a new netlist for a specific gate library.
 :returns: The new netlist.
 :rtype: hal_py.netlist
 )")
-        .def("load_netlist", py::overload_cast<const hal::path&, const std::string&, const std::string&>(&netlist_factory::load_netlist), py::arg("hdl_file"), py::arg("language"), py::arg("gate_library_name"), R"(
+        .def("load_netlist",
+             py::overload_cast<const hal::path&, const std::string&, const std::string&>(&netlist_factory::load_netlist),
+             py::arg("hdl_file"),
+             py::arg("language"),
+             py::arg("gate_library_name"),
+             R"(
 Creates a new netlist for a specific file.
 
 :param hdl_file: Name of the hdl file.
@@ -1513,8 +1505,7 @@ Initializes the logging channel(s) of a plugin. If not overwritten, a logging ch
 
 )");
 
-    py::class_<i_gui, std::shared_ptr<i_gui>, Pyi_gui>(m, "i_gui")
-        .def("exec", &i_gui::exec, py::arg("netlist"), R"(
+    py::class_<i_gui, std::shared_ptr<i_gui>, Pyi_gui>(m, "i_gui").def("exec", &i_gui::exec, py::arg("netlist"), R"(
 Generic call to run the GUI.
 
 :param netlist: The netlist object for the GUI.
@@ -1586,7 +1577,7 @@ Checks whether a bdd is always false.
     };
 
     m.def_submodule("gate_decorator_system")
-        .def("query_decorator", &gate_decorator_system::query_decorator, py::arg("gate"), py::arg("decorator_type"),R"(
+        .def("query_decorator", &gate_decorator_system::query_decorator, py::arg("gate"), py::arg("decorator_type"), R"(
 Queries a gate decorator.
 
 :param gate: The gate to decorate.
@@ -1605,10 +1596,7 @@ Checks whether the system has a decorator of the desired type for the gate.
 :rtype: bool
 )");
 
-    py::enum_<gate_decorator_system::decorator_type>(m, "decorator_type")
-    .value("BDD", gate_decorator_system::BDD)
-    .value("LUT", gate_decorator_system::LUT)
-    .export_values();
+    py::enum_<gate_decorator_system::decorator_type>(m, "decorator_type").value("BDD", gate_decorator_system::BDD).value("LUT", gate_decorator_system::LUT).export_values();
 
     py::class_<gate_decorator, Pygate_decorator, std::shared_ptr<gate_decorator>>(m, "gate_decorator")
         .def(py::init<std::shared_ptr<gate> const>())
@@ -1705,7 +1693,7 @@ Creates a human-readable string for a bdd.
 :returns: The string representation:
 :rtype: str
 )")
-        .def_static("evaluate_bdd", py::overload_cast<std::shared_ptr<bdd>, const std::map<int, bool>& >(&gate_decorator_bdd::evaluate_bdd), py::arg("bdd"), py::arg("input_configuration"), R"(
+        .def_static("evaluate_bdd", py::overload_cast<std::shared_ptr<bdd>, const std::map<int, bool>&>(&gate_decorator_bdd::evaluate_bdd), py::arg("bdd"), py::arg("input_configuration"), R"(
 Creates a human-readable string for a bdd.
 :param bdd: The bdd to represent.
 :type bdd: hal_py.bdd
@@ -1767,7 +1755,7 @@ Get the lut configuration memory.
 :returns: A List of output bits.
 :rtype: list(bool)
 )")
-        .def("get_lut_configuration_byte_by_index", &gate_decorator_lut::get_lut_configuration_byte_by_index, py::arg("index") , R"(
+        .def("get_lut_configuration_byte_by_index", &gate_decorator_lut::get_lut_configuration_byte_by_index, py::arg("index"), R"(
 Get a byte of the lut configuration memory.
 
 :param int index: The byte index.

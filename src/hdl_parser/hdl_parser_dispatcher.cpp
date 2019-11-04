@@ -11,7 +11,6 @@
 #include "netlist/event_system/netlist_event_handler.h"
 
 #include "hdl_parser/hdl_parser.h"
-#include "hdl_parser/hdl_parser_dot.h"
 #include "hdl_parser/hdl_parser_verilog.h"
 #include "hdl_parser/hdl_parser_vhdl.h"
 #include "hdl_parser/hdl_parser_vhdl_old.h"
@@ -29,19 +28,14 @@ namespace hdl_parser_dispatcher
 
     std::set<std::string> get_gui_option()
     {
-        return {"dot", "vhdl", "vhdl_old", "verilog"};
+        return {"vhdl", "vhdl_old", "verilog"};
     }
 
     std::shared_ptr<netlist> parse(const hal::path& file_name, const program_arguments& args)
     {
         // all supported extension->language mappings
-        std::map<std::string, std::string> file_endings = {
-            {".vhdl", "vhdl"},
-            {".vhd", "vhdl"},
-            {".v", "verilog"},
-            {".dot", "dot"},
-        };
-        auto extension = file_name.extension().string();
+        std::map<std::string, std::string> file_endings = {{".vhdl", "vhdl"}, {".vhd", "vhdl"}, {".v", "verilog"}};
+        auto extension                                  = file_name.extension().string();
         std::transform(extension.begin(), extension.end(), extension.begin(), ::tolower);
 
         auto language = file_endings[extension];
@@ -110,8 +104,6 @@ namespace hdl_parser_dispatcher
             g = hdl_parser_vhdl_old(ss).parse(gate_library);
         else if (language == "verilog")
             g = hdl_parser_verilog(ss).parse(gate_library);
-        else if (language == "dot")
-            g = hdl_parser_dot(ss).parse(gate_library);
         else
             log_error("hdl_parser", "language '{}' is unkown", language);
 

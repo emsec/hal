@@ -14,6 +14,7 @@ std::string boolean_function::to_string(const operation& op)
             return "^";
     }
 }
+
 std::ostream& operator<<(std::ostream& os, const boolean_function::operation& op)
 {
     return os << boolean_function::to_string(op);
@@ -31,6 +32,7 @@ std::string boolean_function::to_string(const value& v)
             return "X";
     }
 }
+
 std::ostream& operator<<(std::ostream& os, const boolean_function::value& v)
 {
     return os << boolean_function::to_string(v);
@@ -479,10 +481,10 @@ boolean_function boolean_function::replace_xors() const
     }
 
     // actually replace the current xors
-    auto result = (terms[0] & !terms[1]) | (!terms[0] & terms[1]);
+    auto result = (terms[0] & !terms[1]) | ((!terms[0]) & terms[1]);
     for (u32 i = 2; i < terms.size(); ++i)
     {
-        result = (result & !terms[i]) | (!result & terms[i]);
+        result = (result & !terms[i]) | ((!result) & terms[i]);
     }
     if (m_invert)
     {
@@ -719,7 +721,7 @@ std::vector<boolean_function::value> boolean_function::get_truth_table() const
 
     auto variables = get_variables();
 
-    for (u32 values = 0; values < (1 << variables.size()); ++values)
+    for (u32 values = 0; values < (u32)(1 << variables.size()); ++values)
     {
         std::map<std::string, boolean_function::value> inputs;
         u32 tmp = values;

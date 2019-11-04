@@ -20,7 +20,7 @@ netlist_internal_manager::netlist_internal_manager(netlist* nl) : m_netlist(nl)
 //###                      gates                                     ###
 //######################################################################
 
-std::shared_ptr<gate> netlist_internal_manager::create_gate(const u32 id, const std::string& gate_type, const std::string& name)
+std::shared_ptr<gate> netlist_internal_manager::create_gate(const u32 id, const gate_type& gt, const std::string& name)
 {
     if (id == 0)
     {
@@ -32,9 +32,9 @@ std::shared_ptr<gate> netlist_internal_manager::create_gate(const u32 id, const 
         log_error("netlist.internal", "netlist::create_gate: gate id {:08x} is already taken.", id);
         return nullptr;
     }
-    if (this->is_gate_type_invalid(gate_type))
+    if (this->is_gate_type_invalid(gt))
     {
-        log_error("netlist.internal", "netlist::create_gate: gate type '{}' is invalid.", gate_type);
+        log_error("netlist.internal", "netlist::create_gate: gate type '{}' is invalid.", gt.get_name());
         return nullptr;
     }
     if (core_utils::trim(name).empty())
@@ -43,7 +43,7 @@ std::shared_ptr<gate> netlist_internal_manager::create_gate(const u32 id, const 
         return nullptr;
     }
 
-    auto new_gate = std::shared_ptr<gate>(new gate(m_netlist->get_shared(), id, gate_type, name));
+    auto new_gate = std::shared_ptr<gate>(new gate(m_netlist->get_shared(), id, gt, name));
 
     auto free_id_it = m_netlist->m_free_gate_ids.find(id);
     if (free_id_it != m_netlist->m_free_gate_ids.end())
@@ -105,10 +105,10 @@ bool netlist_internal_manager::delete_gate(std::shared_ptr<gate> gate)
     return true;
 }
 
-bool netlist_internal_manager::is_gate_type_invalid(const std::string& gate_type) const
+bool netlist_internal_manager::is_gate_type_invalid(std::shared_ptr<const gate_type> gt) const
 {
     auto gate_types = m_netlist->m_gate_library->get_gate_types();
-    return gate_types->find(gate_type) == gate_types->end();
+    return std::find_if(gate_types.begin(), gate_types.end(), [&](std::shared_ptr<gate_type> const& it) { return *it == *gt; }) == gate_types.end();
 }
 
 //######################################################################

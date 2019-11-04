@@ -53,10 +53,10 @@ private:
 
     // gate functions
 
-    std::shared_ptr<gate> create_gate(u32 id, const std::string& gate_type, const std::string& name);
+    std::shared_ptr<gate> create_gate(u32 id, std::shared_ptr<const gate_type> gt, const std::string& name);
     bool delete_gate(std::shared_ptr<gate> gate);
 
-    bool is_gate_type_invalid(const std::string& gate_type) const;
+    bool is_gate_type_invalid(std::shared_ptr<const gate_type> gt) const;
 
     // net functions
 

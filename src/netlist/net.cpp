@@ -92,7 +92,7 @@ bool net::remove_src()
 
 endpoint net::get_src(const std::string& gate_type) const
 {
-    if ((m_src.gate == nullptr) || (gate_type != DONT_CARE && (m_src.gate->get_type() != gate_type)))
+    if ((m_src.gate == nullptr) || (gate_type != DONT_CARE && (*m_src.gate->get_type() != gate_type)))
     {
         return {nullptr, ""};
     }
@@ -167,7 +167,7 @@ std::vector<endpoint> net::get_dsts(const std::string& gate_type) const
     std::vector<endpoint> dsts;
     for (const auto& dst : m_dsts)
     {
-        if (dst.gate->get_type() != gate_type)
+        if (*dst.gate->get_type() != gate_type)
         {
             continue;
         }

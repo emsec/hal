@@ -64,11 +64,12 @@ std::shared_ptr<netlist> hdl_parser_verilog::parse(const std::string& gate_libra
 
     // parse token parts: module, wire, assign, instance
     auto gate_types = m_netlist->get_gate_library()->get_gate_types();
+
     for (const auto& it : tokens)
     {
-        auto line_number = std::get<0>(it);
-        token            = std::get<1>(it);
-        auto identifier  = token.substr(0, token.find(" "));
+        auto line_number       = std::get<0>(it);
+        token                  = std::get<1>(it);
+        std::string identifier = token.substr(0, token.find(" "));
 
         if (identifier == "module")
         {
@@ -91,7 +92,7 @@ std::shared_ptr<netlist> hdl_parser_verilog::parse(const std::string& gate_libra
                 return nullptr;
             }
         }
-        else if (gate_types->find(identifier) != gate_types->end())
+        else if (gate_types.find(identifier) != gate_types.end())
         {
             if (!this->parse_instance(token, identifier, line_number))
             {
@@ -113,8 +114,8 @@ std::shared_ptr<netlist> hdl_parser_verilog::parse(const std::string& gate_libra
     std::map<std::string, std::shared_ptr<net>>::iterator it;
     if (((it = m_net.find("1'h0")) != m_net.end()) || ((it = m_net.find("1'b0")) != m_net.end()))
     {
-        auto gnd_type   = *(m_netlist->get_gate_library()->get_global_gnd_gate_types()->begin());
-        auto output_pin = m_netlist->get_output_pin_types(gnd_type).at(0);
+        auto gnd_type   = m_netlist->get_gate_library()->get_global_gnd_gate_types()[0];
+        auto output_pin = gnd_type->get_output_pins()[0];
         auto gnd        = m_netlist->create_gate(m_netlist->get_unique_gate_id(), gnd_type, "global_gnd");
         if (!m_netlist->mark_global_gnd_gate(gnd))
         {
@@ -128,8 +129,8 @@ std::shared_ptr<netlist> hdl_parser_verilog::parse(const std::string& gate_libra
     }
     if (((it = m_net.find("1'h1")) != m_net.end()) || ((it = m_net.find("1'b1")) != m_net.end()))
     {
-        auto vcc_type   = *(m_netlist->get_gate_library()->get_global_vcc_gate_types()->begin());
-        auto output_pin = m_netlist->get_output_pin_types(vcc_type).at(0);
+        auto vcc_type   = m_netlist->get_gate_library()->get_global_vcc_gate_types()[0];
+        auto output_pin = vcc_type->get_output_pins()[0];
         auto vcc        = m_netlist->create_gate(m_netlist->get_unique_gate_id(), vcc_type, "global_vcc");
         if (!m_netlist->mark_global_vcc_gate(vcc))
         {
@@ -259,7 +260,6 @@ bool hdl_parser_verilog::parse_architecture(const std::string& signal_token, con
     std::map<std::string, std::function<int(std::shared_ptr<netlist> const, std::shared_ptr<net> const)>> identifier_to_addition = {
         {"input", [](std::shared_ptr<netlist> const g, std::shared_ptr<net> const net) { return g->mark_global_input_net(net); }},
         {"output", [](std::shared_ptr<netlist> const g, std::shared_ptr<net> const net) { return g->mark_global_output_net(net); }},
-        {"inout", [](std::shared_ptr<netlist> const g, std::shared_ptr<net> const net) { return g->mark_global_inout_net(net); }},
         {"wire",
          [](std::shared_ptr<netlist> const g, std::shared_ptr<net> const net) {
              UNUSED(g);
@@ -363,7 +363,8 @@ bool hdl_parser_verilog::parse_instance(const std::string& instance, const std::
     }
 
     // add gate to netlist and check for global vcc / gnd gates
-    auto new_gate = m_netlist->create_gate(m_netlist->get_unique_gate_id(), type, name);
+    auto gate_types = m_netlist->get_gate_library()->get_gate_types();
+    auto new_gate   = m_netlist->create_gate(m_netlist->get_unique_gate_id(), gate_types.at(type), name);
     if (new_gate == nullptr)
     {
         log_error("hdl_parser", "cannot parse instance '{}' (line: {}).", name, line);
@@ -371,7 +372,7 @@ bool hdl_parser_verilog::parse_instance(const std::string& instance, const std::
     }
 
     auto global_vcc_gate_types = m_netlist->get_gate_library()->get_global_vcc_gate_types();
-    if (global_vcc_gate_types->find(type) != global_vcc_gate_types->end())
+    if (std::find(global_vcc_gate_types.begin(), global_vcc_gate_types.end(), type) != global_vcc_gate_types.end())
     {
         if (!m_netlist->mark_global_vcc_gate(new_gate))
         {
@@ -381,7 +382,7 @@ bool hdl_parser_verilog::parse_instance(const std::string& instance, const std::
     }
 
     auto global_gnd_gate_types = m_netlist->get_gate_library()->get_global_gnd_gate_types();
-    if (global_gnd_gate_types->find(type) != global_gnd_gate_types->end())
+    if (std::find(global_gnd_gate_types.begin(), global_gnd_gate_types.end(), type) != global_gnd_gate_types.end())
     {
         if (!m_netlist->mark_global_gnd_gate(new_gate))
         {
@@ -500,7 +501,6 @@ bool hdl_parser_verilog::connect_net_to_pin(const std::string& net_name, std::sh
 
     auto input_pin_types  = new_gate->get_input_pin_types();
     auto output_pin_types = new_gate->get_output_pin_types();
-    auto inout_pin_types  = new_gate->get_inout_pin_types();
     // add non-registered signal
     if (m_net.find(net_name) == m_net.end())
     {
@@ -518,24 +518,21 @@ bool hdl_parser_verilog::connect_net_to_pin(const std::string& net_name, std::sh
     }
     auto current_net = m_net[net_name];
 
-    if ((std::find(input_pin_types.begin(), input_pin_types.end(), pin_name) == inout_pin_types.end())
-        && (std::find(output_pin_types.begin(), output_pin_types.end(), pin_name) == output_pin_types.end())
-        && (std::find(inout_pin_types.begin(), inout_pin_types.end(), pin_name) == inout_pin_types.end()))
+    if ((std::find(input_pin_types.begin(), input_pin_types.end(), pin_name) == input_pin_types.end())
+        && (std::find(output_pin_types.begin(), output_pin_types.end(), pin_name) == output_pin_types.end()))
     {
         log_error("hdl_parser", "undefined pin '{}' for '{}' (line: {}).", pin_name, new_gate->get_name(), line);
         return false;
     }
 
-    if ((std::find(input_pin_types.begin(), input_pin_types.end(), pin_name) != input_pin_types.end())
-        || (std::find(inout_pin_types.begin(), inout_pin_types.end(), pin_name) != inout_pin_types.end()))
+    if ((std::find(input_pin_types.begin(), input_pin_types.end(), pin_name) != input_pin_types.end()))
     {
         if (!current_net->add_dst(new_gate, pin_name))
         {
             return false;
         }
     }
-    if ((std::find(output_pin_types.begin(), output_pin_types.end(), pin_name) != output_pin_types.end())
-        || (std::find(inout_pin_types.begin(), inout_pin_types.end(), pin_name) != inout_pin_types.end()))
+    if ((std::find(output_pin_types.begin(), output_pin_types.end(), pin_name) != output_pin_types.end()))
     {
         if (!current_net->set_src(new_gate, pin_name))
         {
@@ -596,19 +593,16 @@ bool hdl_parser_verilog::parse_assign(const std::string& token, const int line)
         {
             imploded_nets2 += net + ",";
         }
-        log_error("hdl_parser",
-                  "Cannot connect nets ({}; len={}) to pins ({}; len={}) line: {}",
-                  imploded_nets1,
-                  std::to_string(nets_lhs.size()),
-                  imploded_nets2,
-                  std::to_string(nets_rhs.size()),
-                  line);
+        log_error(
+            "hdl_parser", "Cannot connect nets ({}; len={}) to pins ({}; len={}) line: {}", imploded_nets1, std::to_string(nets_lhs.size()), imploded_nets2, std::to_string(nets_rhs.size()), line);
         return false;
     }
     for (u32 i = 0; i < nets_lhs.size(); ++i)
     {
         std::string gate_name = nets_lhs[i] + "_" + "buffer";
-        auto new_gate         = m_netlist->create_gate(m_netlist->get_unique_gate_id(), "BUF", gate_name);    //Hardcoded for UNISIM lib Very hacky bad bad bad
+        auto gt               = gate_type("DUMMY");
+        auto new_gate         = m_netlist->create_gate(m_netlist->get_unique_gate_id(), std::make_shared<gate_type>(gt), gate_name);
+
         if (new_gate == nullptr)
         {
             return false;
@@ -824,11 +818,9 @@ std::vector<std::string> hdl_parser_verilog::parse_pin(std::shared_ptr<gate>& ne
     std::vector<std::string> pins;
 
     auto input_pins  = new_gate->get_input_pin_types();
-    auto inout_pins  = new_gate->get_inout_pin_types();
     auto output_pins = new_gate->get_output_pin_types();
 
-    if (std::find(input_pins.begin(), input_pins.end(), t) != input_pins.end() || std::find(inout_pins.begin(), inout_pins.end(), t) != inout_pins.end()
-        || std::find(output_pins.begin(), output_pins.end(), t) != output_pins.end())
+    if (std::find(input_pins.begin(), input_pins.end(), t) != input_pins.end() || std::find(output_pins.begin(), output_pins.end(), t) != output_pins.end())
     {
         // Found single port
         pins.emplace_back(t);
@@ -850,16 +842,6 @@ std::vector<std::string> hdl_parser_verilog::parse_pin(std::shared_ptr<gate>& ne
                 if (core_utils::starts_with(output_pin, t))
                 {
                     pins.emplace_back(output_pin);
-                }
-            }
-        }
-        if (pins.empty())
-        {
-            for (const auto& inout_pin : inout_pins)
-            {
-                if (core_utils::starts_with(inout_pin, t))
-                {
-                    pins.emplace_back(inout_pin);
                 }
             }
         }
