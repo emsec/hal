@@ -455,6 +455,22 @@ boolean_function boolean_function::operator^(const boolean_function& other) cons
     return combine(operation::XOR, other);
 }
 
+boolean_function& boolean_function::operator&=(const boolean_function& other)
+{
+    *this = combine(operation::AND, other);
+    return *this;
+}
+boolean_function& boolean_function::operator|=(const boolean_function& other)
+{
+    *this = combine(operation::OR, other);
+    return *this;
+}
+boolean_function& boolean_function::operator^=(const boolean_function& other)
+{
+    *this = combine(operation::XOR, other);
+    return *this;
+}
+
 boolean_function boolean_function::operator!() const
 {
     auto result     = *this;

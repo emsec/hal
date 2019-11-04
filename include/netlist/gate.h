@@ -30,6 +30,7 @@
 #include "netlist/data_container.h"
 #include "netlist/endpoint.h"
 #include "netlist/netlist_constants.h"
+#include "netlist/boolean_function.h"
 
 #include <map>
 #include <memory>
@@ -93,6 +94,32 @@ public:
      * @returns The owning module.
      */
     std::shared_ptr<module> get_module() const;
+
+    /**
+     * Get the boolean function associated with a specific name.
+     * This name can for example be an output pin of the gate or a defined functionality like "RESET".
+     *
+     * @param[in] name - The function name.
+     *                   If name is empty, the function of the first output pin is returned.
+     *                   If there is no function for the given name, the constant 'X' is returned.
+     * @returns The boolean function.
+     */
+    boolean_function get_boolean_function(const std::string& name = "") const;
+
+    /**
+     * Get all boolean functions associated with this gate.
+     *
+     * @returns A map from function name to function.
+     */
+    std::map<std::string, boolean_function> get_boolean_functions() const;
+
+    /**
+     * Set the boolean function with a specific name for this gate.
+     *
+     * @param[in] name - The function name, usually an output port.
+     * @param[in] func - The function.
+     */
+    void set_boolean_function(const std::string& name, const boolean_function& func);
 
     /**
      * Mark this gate as a global vcc gate.
@@ -277,6 +304,9 @@ private:
     /* connected nets */
     std::map<std::string, std::shared_ptr<net>> m_in_nets;
     std::map<std::string, std::shared_ptr<net>> m_out_nets;
+
+    /* dedicated functions */
+    std::map<std::string, boolean_function> m_functions;
 };
 
 #endif /* __HAL_GATE_H__ */
