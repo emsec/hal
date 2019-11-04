@@ -41,10 +41,3 @@ void debug_layouter::remove(const QSet<u32> modules, const QSet<u32> gates, cons
     Q_UNUSED(gates)
     Q_UNUSED(nets)
 }
-
-void debug_layouter::expand(const u32 from_gate, const u32 via_net, const u32 to_gate)
-{
-    Q_UNUSED(from_gate)
-    Q_UNUSED(via_net)
-    Q_UNUSED(to_gate)
-}

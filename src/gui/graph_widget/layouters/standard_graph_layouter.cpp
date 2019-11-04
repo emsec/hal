@@ -24,6 +24,11 @@ const static qreal minimum_v_channel_width  = 20;
 const static qreal minimum_h_channel_height = 20;
 const static qreal minimum_gate_io_padding  = 40;
 
+static bool operator< (const QPoint &p1, const QPoint &p2)
+{
+    return p1.x() + p1.y() < p2.x() + p2.y();
+}
+
 standard_graph_layouter::standard_graph_layouter(const graph_context* const context) : graph_layouter(context)
 {
 }
@@ -38,20 +43,47 @@ const QString standard_graph_layouter::description() const
     return "<p>The standard layouting algorithm</p>";
 }
 
-void standard_graph_layouter::expand(const u32 from_gate, const u32 via_net, const u32 to_gate)
-{
-    Q_UNUSED(from_gate)
-    Q_UNUSED(via_net)
-    Q_UNUSED(to_gate)
-}
-
 void standard_graph_layouter::add(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets)
 {
     Q_UNUSED(modules)
     Q_UNUSED(gates)
     Q_UNUSED(nets)
 
-    recalculate_levels();
+    QPoint p(0, 0);
+
+    for (u32 id : modules)
+    {
+        while (position_to_node_map().contains(p))
+        {
+            if (p.y() < p.x())
+            {
+                p.setX(0);
+                p.setY(p.y() + 1);
+            }
+            else
+                p.setX(p.x() + 1);
+        }
+
+        hal::node n{hal::node_type::module, id};
+        set_node_position(n, p);
+    }
+
+    for (u32 id : gates)
+    {
+        while (position_to_node_map().contains(p))
+        {
+            if (p.y() < p.x())
+            {
+                p.setX(0);
+                p.setY(p.y() + 1);
+            }
+            else
+                p.setX(p.x() + 1);
+        }
+
+        hal::node n{hal::node_type::gate, id};
+        set_node_position(n, p);
+    }
 }
 
 void standard_graph_layouter::remove(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets)
@@ -60,7 +92,11 @@ void standard_graph_layouter::remove(const QSet<u32> modules, const QSet<u32> ga
     Q_UNUSED(gates)
     Q_UNUSED(nets)
 
-    recalculate_levels();
+    for (u32 id : modules)
+        remove_node_from_maps({hal::node_type::module, id});
+
+    for (u32 id : gates)
+        remove_node_from_maps({hal::node_type::gate, id});
 }
 
 void standard_graph_layouter::layout()
@@ -121,74 +157,81 @@ void standard_graph_layouter::layout()
 
 void standard_graph_layouter::create_boxes()
 {
-    // ZERO GATES
-    int level_x = 0;
+//    // ZERO GATES
+//    int level_x = 0;
 
-    // ARTIFICIAL SCOPE TO AVOID SHADOWING
+//    // ARTIFICIAL SCOPE TO AVOID SHADOWING
+//    {
+//        int x_offset = 0;
+//        int y        = 0;
+
+//        int root = sqrt(m_zero_nodes.size());
+//        for (const hal::node& node : m_zero_nodes)
+//        {
+//            m_boxes.append(create_box(node, level_x + x_offset, y));
+
+//            if (x_offset + 1 == root)
+//            {
+//                x_offset = 0;
+//                ++y;
+//            }
+//            else
+//                ++x_offset;
+//        }
+//        level_x += root;
+//    }
+
+//    // POSITIVE GATES
+//    for (QVector<hal::node>& v : m_positive_nodes)
+//    {
+//        int x_offset = 0;
+//        int y        = 0;
+
+//        int root = sqrt(v.size());
+//        for (const hal::node& node : v)
+//        {
+//            m_boxes.append(create_box(node, level_x + x_offset, y));
+
+//            if (x_offset + 1 == root)
+//            {
+//                x_offset = 0;
+//                ++y;
+//            }
+//            else
+//                ++x_offset;
+//        }
+//        level_x += root;
+//    }
+
+//    // NEGATIVE GATES
+//    level_x = -1;
+
+//    for (QVector<hal::node>& v : m_negative_nodes)
+//    {
+//        int x_offset = 0;
+//        int y        = 0;
+
+//        int root = sqrt(v.size());
+//        for (const hal::node& node : v)
+//        {
+//            m_boxes.append(create_box(node, level_x + x_offset, y));
+
+//            if (abs(x_offset - 1) == root)
+//            {
+//                x_offset = 0;
+//                ++y;
+//            }
+//            else
+//                --x_offset;
+//        }
+//        level_x -= root;
+//    }
+
+    QMap<QPoint, hal::node>::const_iterator i = position_to_node_map().constBegin();
+    while (i != position_to_node_map().constEnd())
     {
-        int x_offset = 0;
-        int y        = 0;
-
-        int root = sqrt(m_zero_nodes.size());
-        for (const hal::node& node : m_zero_nodes)
-        {
-            m_boxes.append(create_box(node, level_x + x_offset, y));
-
-            if (x_offset + 1 == root)
-            {
-                x_offset = 0;
-                ++y;
-            }
-            else
-                ++x_offset;
-        }
-        level_x += root;
-    }
-
-    // POSITIVE GATES
-    for (QVector<hal::node>& v : m_positive_nodes)
-    {
-        int x_offset = 0;
-        int y        = 0;
-
-        int root = sqrt(v.size());
-        for (const hal::node& node : v)
-        {
-            m_boxes.append(create_box(node, level_x + x_offset, y));
-
-            if (x_offset + 1 == root)
-            {
-                x_offset = 0;
-                ++y;
-            }
-            else
-                ++x_offset;
-        }
-        level_x += root;
-    }
-
-    // NEGATIVE GATES
-    level_x = -1;
-
-    for (QVector<hal::node>& v : m_negative_nodes)
-    {
-        int x_offset = 0;
-        int y        = 0;
-
-        int root = sqrt(v.size());
-        for (const hal::node& node : v)
-        {
-            m_boxes.append(create_box(node, level_x + x_offset, y));
-
-            if (abs(x_offset - 1) == root)
-            {
-                x_offset = 0;
-                ++y;
-            }
-            else
-                --x_offset;
-        }
-        level_x -= root;
+        m_boxes.append(create_box(i.value(), i.key().x(), i.key().y()));
+        ++i;
     }
 }
 
