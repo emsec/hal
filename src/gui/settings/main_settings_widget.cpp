@@ -217,6 +217,11 @@ void main_settings_widget::init_widgets()
     register_widget("keybind-item", schedule_run_keybind);
     assign_exclusive_group("keybinds", schedule_run_keybind);
 
+    // this keybind is used in several locations, depending on which widget has focus
+    keybind_setting* everywhere_search_keybind = new keybind_setting("keybinds/searchbar_toggle", "Search", "opens/closes the search bar", this);
+    register_widget("keybind-item", everywhere_search_keybind);
+    assign_exclusive_group("keybinds", everywhere_search_keybind);
+
     // text_setting* py_interpreter_setting = new text_setting("python/interpreter", "Python Interpreter", "will be used after restart", "/path/to/python");
     // register_widget("advanced-item", py_interpreter_setting);
 
