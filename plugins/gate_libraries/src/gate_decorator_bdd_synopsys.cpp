@@ -91,7 +91,7 @@ namespace bdd_synopsys_helper
             *bdd_output     = bdd_not((*(input_pin_type_to_bdd["IN1"]) & *(input_pin_type_to_bdd["IN2"])) | *(input_pin_type_to_bdd["IN3"]));
             result["QN"]    = bdd_output;
         }
-        if (gate->get_type() == "AOI22X1" || gate->get_type() == "AOI22X1")
+        if (gate->get_type() == "AOI22X1" || gate->get_type() == "AOI22X2")
         {
             //function : "(!((IN1 IN2)+(IN3 IN4)))";
             auto bdd_output = std::make_shared<bdd>();
