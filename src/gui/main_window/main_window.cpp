@@ -184,10 +184,10 @@ main_window::main_window(QWidget* parent) : QWidget(parent), m_schedule_widget(n
     //    m_right_tool_bar->addSeparator();
     m_right_tool_bar->addAction(m_action_settings);
 
-    m_action_new->setShortcut(QKeySequence("Ctrl+N"));
-    m_action_open->setShortcut(QKeySequence("Ctrl+O"));
-    m_action_save->setShortcut(QKeySequence("Ctrl+S"));
-    m_action_run_schedule->setShortcut(QKeySequence("Ctrl+Shift+R"));
+    g_keybind_manager.bind(m_action_new, "keybinds/project_create_file");
+    g_keybind_manager.bind(m_action_open, "keybinds/project_open_file");
+    g_keybind_manager.bind(m_action_save, "keybinds/project_save_file");
+    g_keybind_manager.bind(m_action_run_schedule, "keybinds/schedule_run");
 
     setWindowTitle("HAL");
     m_action_new->setText("New Netlist");
