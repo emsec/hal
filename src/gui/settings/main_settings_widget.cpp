@@ -201,6 +201,22 @@ void main_settings_widget::init_widgets()
     register_widget("keybind-item", py_create_keybind);
     assign_exclusive_group("keybinds", py_create_keybind);
 
+    keybind_setting* project_create_keybind = new keybind_setting("keybinds/project_create_file", "Project: New empty netlist", "", this);
+    register_widget("keybind-item", project_create_keybind);
+    assign_exclusive_group("keybinds", project_create_keybind);
+
+    keybind_setting* project_open_keybind = new keybind_setting("keybinds/project_open_file", "Project: Open HDL or project file", "", this);
+    register_widget("keybind-item", project_open_keybind);
+    assign_exclusive_group("keybinds", project_open_keybind);
+
+    keybind_setting* project_save_keybind = new keybind_setting("keybinds/project_save_file", "Project: Save", "", this);
+    register_widget("keybind-item", project_save_keybind);
+    assign_exclusive_group("keybinds", project_save_keybind);
+
+    keybind_setting* schedule_run_keybind = new keybind_setting("keybinds/schedule_run", "Schedule: Run scheduled plugins", "", this);
+    register_widget("keybind-item", schedule_run_keybind);
+    assign_exclusive_group("keybinds", schedule_run_keybind);
+
     // text_setting* py_interpreter_setting = new text_setting("python/interpreter", "Python Interpreter", "will be used after restart", "/path/to/python");
     // register_widget("advanced-item", py_interpreter_setting);
 

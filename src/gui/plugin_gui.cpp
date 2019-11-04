@@ -16,6 +16,7 @@
 #include "gui/plugin_management/plugin_relay.h"
 #include "gui/python/python_context.h"
 #include "gui/selection_relay/selection_relay.h"
+#include "gui/settings/keybind_manager.h"
 #include "gui/settings/settings_manager.h"
 #include "gui/settings/settings_relay.h"
 #include "gui/style/style.h"
@@ -41,6 +42,8 @@ settings_manager g_settings_manager;
 // this relay MUST be initialized before everything else since other components
 // need to connect() to it when initializing
 settings_relay g_settings_relay;
+
+keybind_manager g_keybind_manager;
 
 window_manager* g_window_manager;
 notification_manager* g_notification_manager;

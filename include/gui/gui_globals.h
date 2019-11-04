@@ -34,6 +34,7 @@
 #include "gui/plugin_management/plugin_relay.h"
 #include "gui/python/python_context.h"
 #include "gui/selection_relay/selection_relay.h"
+#include "gui/settings/keybind_manager.h"
 #include "gui/settings/settings_relay.h"
 #include "gui/settings/settings_manager.h"
 #include "gui/thread_pool/thread_pool.h"
@@ -57,6 +58,8 @@ extern selection_relay g_selection_relay;
 extern settings_relay g_settings_relay;
 
 extern settings_manager g_settings_manager;
+
+extern keybind_manager g_keybind_manager;
 
 extern file_status_manager g_file_status_manager;
 
