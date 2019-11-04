@@ -30,7 +30,7 @@
 
 main_settings_widget::main_settings_widget(QWidget* parent)
     : QWidget(parent), m_layout(new QHBoxLayout()), m_expanding_list_widget(new expanding_list_widget()), m_vertical_layout(new QVBoxLayout()), m_scrollbar(new QScrollBar()),
-      m_searchbar_container(new QFrame()), m_searchbar_layout(new QHBoxLayout()), m_searchbar(new searchbar()), m_settings_display(new settings_display()), m_scroll_area(new QScrollArea()),
+      m_searchbar_container(new QFrame()), m_searchbar_layout(new QHBoxLayout()), m_searchbar(new searchbar()), m_scroll_area(new QScrollArea()),
       m_content(new QFrame()), m_content_layout(new QHBoxLayout()), m_settings_container(new QFrame()), m_container_layout(new QVBoxLayout()), m_button_layout(new QHBoxLayout()),
       m_restore_defaults(new QPushButton()), m_cancel(new QPushButton()), m_ok(new QPushButton())
 {
@@ -54,8 +54,6 @@ main_settings_widget::main_settings_widget(QWidget* parent)
     m_searchbar_layout->addWidget(m_searchbar);
     m_searchbar->set_mode_button_text("Settings");
 
-    m_settings_display->setFrameStyle(QFrame::NoFrame);
-    //m_vertical_layout->addWidget(m_settings_display);
     m_scroll_area->setFrameStyle(QFrame::NoFrame);
     m_vertical_layout->addWidget(m_scroll_area);
 
@@ -180,6 +178,28 @@ void main_settings_widget::init_widgets()
     register_widget("advanced-item", autosave_setting);
     spinbox_setting* autosave_interval_setting = new spinbox_setting("advanced/autosave_interval", "Auto-save interval", 30, 600, "s", this);
     register_widget("advanced-item", autosave_interval_setting);
+
+    make_section("Keyboard Shortcuts", "keybind-item", ":/icons/keyboard");
+
+    keybind_setting* py_open_keybind = new keybind_setting("keybinds/python_open_file", "Python: Open file", "", this);
+    register_widget("keybind-item", py_open_keybind);
+    assign_exclusive_group("keybinds", py_open_keybind);
+
+    keybind_setting* py_save_keybind = new keybind_setting("keybinds/python_save_file", "Python: Save file", "", this);
+    register_widget("keybind-item", py_save_keybind);
+    assign_exclusive_group("keybinds", py_save_keybind);
+
+    keybind_setting* py_saveas_keybind = new keybind_setting("keybinds/python_save_file_as", "Python: Save file as", "", this);
+    register_widget("keybind-item", py_saveas_keybind);
+    assign_exclusive_group("keybinds", py_saveas_keybind);
+
+    keybind_setting* py_run_keybind = new keybind_setting("keybinds/python_run_file", "Python: Run current file", "", this);
+    register_widget("keybind-item", py_run_keybind);
+    assign_exclusive_group("keybinds", py_run_keybind);
+
+    keybind_setting* py_create_keybind = new keybind_setting("keybinds/python_create_file", "Python: Create file", "", this);
+    register_widget("keybind-item", py_create_keybind);
+    assign_exclusive_group("keybinds", py_create_keybind);
 
     // text_setting* py_interpreter_setting = new text_setting("python/interpreter", "Python Interpreter", "will be used after restart", "/path/to/python");
     // register_widget("advanced-item", py_interpreter_setting);

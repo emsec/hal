@@ -152,7 +152,10 @@ public Q_SLOTS:
     void handle_base_file_modified_ok();
 
 protected:
-  bool eventFilter(QObject* obj, QEvent* event) Q_DECL_OVERRIDE;
+    bool eventFilter(QObject* obj, QEvent* event) Q_DECL_OVERRIDE;
+
+private Q_SLOTS:
+    void handle_global_setting_changed(void* sender, const QString& key, const QVariant& value);
 
 private:
     QVBoxLayout* m_layout;

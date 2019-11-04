@@ -461,8 +461,8 @@ border : 1px solid rgb(23, 26, 26);
 /* EXPANDING_LIST_WIDGET STUFF */
 
 main_settings_widget expanding_list_widget {
-min-width : 200px;
-max-width : 200px;
+min-width : 250px;
+max-width : 250px;
 background-color: rgb(31, 34, 35);
 /*border-right : 1px solid rgb(23, 26, 26);*/
 /*border : 1px solid rgb(23, 26, 26);*/
