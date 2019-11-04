@@ -7,7 +7,6 @@
 #include "gui/graph_widget/contexts/graph_context.h"
 #include "gui/graph_widget/layouters/minimal_graph_layouter.h"
 #include "gui/graph_widget/layouters/standard_graph_layouter.h"
-#include "gui/graph_widget/layouters/standard_graph_layouter_v2.h"
 #include "gui/graph_widget/shaders/module_shader.h"
 #include "gui/gui_globals.h"
 
