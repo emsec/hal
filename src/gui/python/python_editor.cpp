@@ -11,6 +11,8 @@
 #include "splitter/splitter.h"
 #include "toolbar/toolbar.h"
 
+#include "hal_action/hal_action.h"
+
 #include <QAction>
 #include <QFileDialog>
 #include <QShortcut>
@@ -28,8 +30,8 @@
 #include <fstream>
 
 python_editor::python_editor(QWidget* parent)
-    : content_widget("Python Editor", parent), python_context_subscriber(), m_searchbar(new searchbar()), m_action_open_file(new QAction(this)), m_action_run(new QAction(this)),
-      m_action_save(new QAction(this)), m_action_save_as(new QAction(this)), m_action_toggle_minimap(new QAction(this)), m_action_new_file(new QAction(this))
+    : content_widget("Python Editor", parent), python_context_subscriber(), m_searchbar(new searchbar()), m_action_open_file(new hal_action(this)), m_action_run(new hal_action(this)),
+      m_action_save(new hal_action(this)), m_action_save_as(new hal_action(this)), m_action_toggle_minimap(new hal_action(this)), m_action_new_file(new hal_action(this))
 {
     ensurePolished();
     m_new_file_counter = 0;
@@ -54,25 +56,25 @@ python_editor::python_editor(QWidget* parent)
     m_action_toggle_minimap->setIcon(gui_utility::get_styled_svg_icon(m_toggle_minimap_icon_style, m_toggle_minimap_icon_path));
     m_action_new_file->setIcon(gui_utility::get_styled_svg_icon(m_new_file_icon_style, m_new_file_icon_path));
 
-    m_action_open_file->setShortcut(QKeySequence("Ctrl+Shift+O"));
-    m_action_save->setShortcut(QKeySequence("Shift+Ctrl+S"));
-    m_action_save_as->setShortcut(QKeySequence("Alt+Ctrl+S"));
-    m_action_run->setShortcut(QKeySequence("Ctrl+R"));
-    m_action_new_file->setShortcut(QKeySequence("Ctrl+Shift+n"));
+    m_action_open_file->setShortcut(g_settings_manager.get("keybinds/python_open_file").toString());
+    m_action_save->setShortcut(g_settings_manager.get("keybinds/python_save_file").toString());
+    m_action_save_as->setShortcut(g_settings_manager.get("keybinds/python_save_file_as").toString());
+    m_action_run->setShortcut(g_settings_manager.get("keybinds/python_run_file").toString());
+    m_action_new_file->setShortcut(g_settings_manager.get("keybinds/python_create_file").toString());
 
-    m_action_open_file->setText("Open Script '" + m_action_open_file->shortcut().toString(QKeySequence::NativeText) + "'");
-    m_action_save->setText("Save '" + m_action_save->shortcut().toString(QKeySequence::NativeText) + "'");
-    m_action_save_as->setText("Save as '" + m_action_save->shortcut().toString(QKeySequence::NativeText) + "'");
-    m_action_run->setText("Execute Script '" + m_action_run->shortcut().toString(QKeySequence::NativeText) + "'");
-    m_action_new_file->setText("New File '" + m_action_new_file->shortcut().toString(QKeySequence::NativeText) + "'");
+    m_action_open_file->setText("Open Script");
+    m_action_save->setText("Save");
+    m_action_save_as->setText("Save as");
+    m_action_run->setText("Execute Script");
+    m_action_new_file->setText("New File");
     m_action_toggle_minimap->setText("Toggle Minimap");
 
-    connect(m_action_open_file, &QAction::triggered, this, &python_editor::handle_action_open_file);
-    connect(m_action_save, &QAction::triggered, this, &python_editor::handle_action_save_file);
-    connect(m_action_save_as, &QAction::triggered, this, &python_editor::handle_action_save_file_as);
-    connect(m_action_run, &QAction::triggered, this, &python_editor::handle_action_run);
-    connect(m_action_new_file, &QAction::triggered, this, &python_editor::handle_action_new_tab);
-    connect(m_action_toggle_minimap, &QAction::triggered, this, &python_editor::handle_action_toggle_minimap);
+    connect(m_action_open_file, &hal_action::triggered, this, &python_editor::handle_action_open_file);
+    connect(m_action_save, &hal_action::triggered, this, &python_editor::handle_action_save_file);
+    connect(m_action_save_as, &hal_action::triggered, this, &python_editor::handle_action_save_file_as);
+    connect(m_action_run, &hal_action::triggered, this, &python_editor::handle_action_run);
+    connect(m_action_new_file, &hal_action::triggered, this, &python_editor::handle_action_new_tab);
+    connect(m_action_toggle_minimap, &hal_action::triggered, this, &python_editor::handle_action_toggle_minimap);
 
     connect(m_searchbar, &searchbar::text_edited, this, &python_editor::handle_searchbar_text_edited);
     connect(m_tab_widget, &QTabWidget::currentChanged, this, &python_editor::handle_current_tab_changed);

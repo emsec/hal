@@ -30,6 +30,7 @@
 #include "python/python_context_suberscriber.h"
 #include "core/hal_file_manager.h"
 #include "file_modified_bar/file_modified_bar.h"
+#include "hal_action/hal_action.h"
 
 #include <QEvent>
 #include <QFileSystemWatcher>
@@ -160,12 +161,12 @@ private:
 
     searchbar* m_searchbar;
 
-    QAction* m_action_open_file;
-    QAction* m_action_run;
-    QAction* m_action_save;
-    QAction* m_action_save_as;
-    QAction* m_action_toggle_minimap;
-    QAction* m_action_new_file;
+    hal_action* m_action_open_file;
+    hal_action* m_action_run;
+    hal_action* m_action_save;
+    hal_action* m_action_save_as;
+    hal_action* m_action_toggle_minimap;
+    hal_action* m_action_new_file;
 
     QString m_open_icon_style;
     QString m_open_icon_path;
