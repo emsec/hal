@@ -62,6 +62,14 @@ void settings_widget::reset_labels()
     for (QPair<QLabel*, QString>& pair : m_labels)
     {
         pair.first->setText(pair.second);
+        if(pair.second.isEmpty())
+        {
+            pair.first->hide();
+        }
+        else
+        {
+            pair.first->show();
+        }
     }
 }
 

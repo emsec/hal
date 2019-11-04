@@ -61,6 +61,7 @@ python_editor::python_editor(QWidget* parent)
     m_action_save_as->setShortcut(g_settings_manager.get("keybinds/python_save_file_as").toString());
     m_action_run->setShortcut(g_settings_manager.get("keybinds/python_run_file").toString());
     m_action_new_file->setShortcut(g_settings_manager.get("keybinds/python_create_file").toString());
+    connect(&g_settings_relay, &settings_relay::setting_changed, this, &python_editor::handle_global_setting_changed);
 
     m_action_open_file->setText("Open Script");
     m_action_save->setText("Save");
@@ -684,6 +685,36 @@ bool python_editor::eventFilter(QObject* obj, QEvent* event)
   }
   // otherwise honor default filter
   return QObject::eventFilter(obj, event);
+}
+
+void python_editor::handle_global_setting_changed(void* sender, const QString& key, const QVariant& value)
+{
+    QStringList keyParts = key.split("/");
+    if (keyParts.constFirst() == "keybinds")
+    {
+        QString keybind = keyParts.constLast();
+        QKeySequence sequence = value.toString();
+        if (keybind == "python_open_file")
+        {
+            m_action_open_file->setShortcut(sequence);
+        }
+        else if (keybind == "python_save_file")
+        {
+            m_action_save->setShortcut(sequence);
+        }
+        else if (keybind == "python_save_file_as")
+        {
+            m_action_save_as->setShortcut(sequence);
+        }
+        else if (keybind == "python_run_file")
+        {
+            m_action_run->setShortcut(sequence);
+        }
+        else if (keybind == "python_create_file")
+        {
+            m_action_new_file->setShortcut(sequence);
+        }
+    }
 }
 
 QString python_editor::open_icon_path() const

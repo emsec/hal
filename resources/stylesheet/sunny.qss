@@ -495,8 +495,8 @@ main_settings_widget preview_widget *{
 
 main_settings_widget expanding_list_widget {
     border-right : 1px solid rgb(23, 26, 26);
-    min-width    : 200px;
-    max-width    : 200px;
+    min-width    : 250px;
+    max-width    : 250px;
 }
 
 main_settings_widget expanding_list_widget #content {

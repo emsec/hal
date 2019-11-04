@@ -82,7 +82,6 @@ private:
     QHBoxLayout* m_searchbar_layout;
     searchbar* m_searchbar;
 
-    settings_display* m_settings_display;
     QScrollArea* m_scroll_area;
     QFrame* m_content;
     QHBoxLayout* m_content_layout;
