@@ -12,7 +12,7 @@
 #include "gui/docking_system/tab_widget.h"
 #include "gui/graph_widget/graph_graphics_view.h"
 #include "gui/graph_widget/graph_widget.h"
-#include "gui/gui_utility.h"
+#include "gui/gui_utils/graphics.h"
 #include "gui/hal_graphics/hal_graphics_view.h"
 #include "gui/hal_logger/hal_logger_widget.h"
 #include "gui/module_widget/module_widget.h"

@@ -4,7 +4,7 @@
 #include "netlist/gate.h"
 #include "netlist/net.h"
 #include "netlist/module.h"
-#include "gui_utility.h"
+#include "gui_utils/graphics.h"
 #include <QDebug>
 
 tree_module_model::tree_module_model(QObject* parent) : QAbstractItemModel(parent)

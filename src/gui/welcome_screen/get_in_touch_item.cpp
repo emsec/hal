@@ -1,6 +1,6 @@
 #include "welcome_screen/get_in_touch_item.h"
 
-#include "gui_utility.h"
+#include "gui_utils/graphics.h"
 
 #include <QEvent>
 #include <QHBoxLayout>

@@ -1,7 +1,7 @@
 #include "plugin_management/no_scheduled_plugins_widget.h"
 
 #include "file_manager/file_manager.h"
-#include "gui_utility.h"
+#include "gui_utils/graphics.h"
 
 #include <QDragEnterEvent>
 #include <QLabel>
