@@ -356,7 +356,7 @@ void hdl_writer_vhdl::print_gate_definitions_vhdl()
 
     for (auto&& gate : gates)
     {
-        if (gate->get_type() == "GLOBAL_GND" || gate->get_type() == "GLOBAL_VCC")
+        if (gate->get_type()->get_name() == "GLOBAL_GND" || gate->get_type()->get_name() == "GLOBAL_VCC")
             continue;
         m_stream << get_gate_name(gate);
         m_stream << " : " << gate->get_type() << std::endl;
@@ -368,7 +368,6 @@ void hdl_writer_vhdl::print_gate_definitions_vhdl()
         bool begin_signal_list = true;
         begin_signal_list      = this->print_gate_signal_list_vhdl(gate, gate->get_input_pin_types(), begin_signal_list, std::bind(&gate::get_fan_in_net, gate, std::placeholders::_1));
         begin_signal_list      = this->print_gate_signal_list_vhdl(gate, gate->get_output_pin_types(), begin_signal_list, std::bind(&gate::get_fan_out_net, gate, std::placeholders::_1));
-        begin_signal_list      = this->print_gate_signal_list_vhdl(gate, gate->get_inout_pin_types(), begin_signal_list, std::bind(&gate::get_fan_out_net, gate, std::placeholders::_1));
 
         m_stream << std::endl << ");" << std::endl;
     }
@@ -491,7 +490,7 @@ bool hdl_writer_vhdl::print_gate_signal_list_vhdl(std::shared_ptr<gate> n, std::
         std::shared_ptr<net> e = get_net_fkt(port_type);
         if (e == nullptr)
         {
-            log_info("hdl_writer", "VHDL serializer skipped signal translation for gate {} with type {} and port {} NO EDGE available", n->get_name(), n->get_type(), port_type);
+            log_info("hdl_writer", "VHDL serializer skipped signal translation for gate {} with type {} and port {} NO EDGE available", n->get_name(), n->get_type()->get_name(), port_type);
         }
         else
         {

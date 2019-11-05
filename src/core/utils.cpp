@@ -2,8 +2,8 @@
 
 #include "core/log.h"
 
-#include <sstream>
 #include <fstream>
+#include <sstream>
 
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
@@ -142,7 +142,7 @@ namespace core_utils
 
     std::string rtrim(const std::string& line, const char* to_remove)
     {
-        size_t end            = line.find_last_not_of(to_remove);
+        size_t end = line.find_last_not_of(to_remove);
         if (end != std::string::npos)
         {
             return line.substr(0, end + 1);
@@ -227,8 +227,9 @@ namespace core_utils
     u32 num_of_occurrences(const std::string& str, const std::string& substr)
     {
         u32 num_of_occurrences = 0;
-        auto position = str.find(substr, 0);
-        while (position != std::string::npos) {
+        auto position          = str.find(substr, 0);
+        while (position != std::string::npos)
+        {
             num_of_occurrences++;
             position = str.find(substr, position + 1);
         }

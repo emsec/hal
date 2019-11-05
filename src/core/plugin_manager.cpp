@@ -276,7 +276,7 @@ namespace plugin_manager
         }
         return m_hook.add_callback(callback);
     }
-    
+
     void remove_model_changed_callback(u64 id)
     {
         m_hook.remove_callback(id);
@@ -286,6 +286,5 @@ namespace plugin_manager
     {
         m_existing_options.add(existing_options);
     }
-    
-    
+
 }    // namespace plugin_manager

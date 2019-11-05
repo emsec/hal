@@ -349,7 +349,8 @@ void hdl_writer_verilog::print_gate_definitions_verilog()
     std::set<std::shared_ptr<gate>> gates = m_netlist->get_gates();
     for (auto&& gate : gates)
     {
-        if (gate->get_type() == "GLOBAL_GND" || gate->get_type() == "GLOBAL_VCC")
+        // TODO ugly bad bad bad
+        if (gate->get_type()->get_name() == "GLOBAL_GND" || gate->get_type()->get_name() == "GLOBAL_VCC")
         {
             continue;
         }
@@ -370,7 +371,6 @@ void hdl_writer_verilog::print_gate_definitions_verilog()
         bool begin_signal_list = true;
         begin_signal_list      = this->print_gate_signal_list_verilog(gate, gate->get_input_pin_types(), begin_signal_list, std::bind(&gate::get_fan_in_net, gate, std::placeholders::_1));
         begin_signal_list      = this->print_gate_signal_list_verilog(gate, gate->get_output_pin_types(), begin_signal_list, std::bind(&gate::get_fan_out_net, gate, std::placeholders::_1));
-        begin_signal_list      = this->print_gate_signal_list_verilog(gate, gate->get_inout_pin_types(), begin_signal_list, std::bind(&gate::get_fan_out_net, gate, std::placeholders::_1));
 
         m_stream << std::endl << " ) ;" << std::endl;
     }
@@ -512,7 +512,7 @@ bool hdl_writer_verilog::print_gate_signal_list_verilog(std::shared_ptr<gate> n,
                     log_info("hdl_writer",
                              "Verilog serializer skipped signal translation for gate {} with type {} and port {} NO EDGE available (skipping pin: {})",
                              n->get_name(),
-                             n->get_type(),
+                             n->get_type()->get_name(),
                              ptype,
                              port_type);
                 }
