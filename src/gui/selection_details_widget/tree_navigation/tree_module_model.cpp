@@ -175,9 +175,19 @@ void tree_module_model::update(u32 module_id)
     }
 
     std::vector<std::shared_ptr<net>> sorted_nets(nets.begin(), nets.end());
-    std::sort(sorted_nets.begin(), sorted_nets.end(), [](std::shared_ptr<net> n1, std::shared_ptr<net> n2){
-        return (!gui_utility::natural_order_compare(QString::fromStdString(n1->get_name()).toLower(), QString::fromStdString(n2->get_name()).toLower()));
-    });
+    switch(m_sort_mechanism)
+    {
+        case gui_utility::sort_mechanism::lexical:
+            std::sort(sorted_nets.begin(), sorted_nets.end(), [](std::shared_ptr<net> n1, std::shared_ptr<net> n2){
+                return (!gui_utility::lexical_order_compare(QString::fromStdString(n1->get_name()).toLower(), QString::fromStdString(n2->get_name()).toLower()));
+            });
+            break;
+        case gui_utility::sort_mechanism::natural:
+            std::sort(sorted_nets.begin(), sorted_nets.end(), [](std::shared_ptr<net> n1, std::shared_ptr<net> n2){
+                return (!gui_utility::natural_order_compare(QString::fromStdString(n1->get_name()).toLower(), QString::fromStdString(n2->get_name()).toLower()));
+            });
+            break;
+    }
 
     for(const std::shared_ptr<gate> &_g : sorted_gates)
     {
