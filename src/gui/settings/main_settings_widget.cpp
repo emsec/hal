@@ -3,6 +3,7 @@
 #include "expanding_list/expanding_list_button.h"
 #include "expanding_list/expanding_list_widget.h"
 #include "gui_globals.h"
+#include "gui_utility/sort.h"
 #include "searchbar/searchbar.h"
 #include "settings/settings_display.h"
 #include "settings/settings_widget.h"
@@ -127,6 +128,10 @@ void main_settings_widget::init_widgets()
     standard_modifiers.insert("Ctrl", QVariant(Qt::ControlModifier));
     standard_modifiers.insert("Alt", QVariant(Qt::AltModifier));
 
+    QMap<QString, QVariant> standard_sort_mechanisms;
+    standard_sort_mechanisms.insert("Natural", QVariant(gui_utility::sort_mechanism::natural));
+    standard_sort_mechanisms.insert("Lexical", QVariant(gui_utility::sort_mechanism::lexical));
+
     /************* ADD NEW SETTINGS WIDGETS HERE *************/
 
     make_section("Style", "style-item", ":/icons/eye");
@@ -154,6 +159,11 @@ void main_settings_widget::init_widgets()
     dropdown_setting* graph_movescene_settings = new dropdown_setting("graph_view/move_modifier", "Pan scene modifier", standard_modifiers, "lets you pan the scene", this);
     register_widget("graphview-item", graph_movescene_settings);
     assign_exclusive_group("kbdmodifiers", graph_movescene_settings);
+
+    make_section("Navigation", "navigation-item", ":/icons/graph");
+
+    dropdown_setting* nav_sort_mechanism_settings = new dropdown_setting("navigation/sort_mechanism", "Sort Mechanism for the Details View", standard_sort_mechanisms, "", this);
+    register_widget("navigation-item", nav_sort_mechanism_settings);
 
     make_section("Python editor", "python-item", ":/icons/python");
 
