@@ -5,7 +5,14 @@
 
 static bool operator< (const QPoint &p1, const QPoint &p2)
 {
-    return p1.x() + p1.y() < p2.x() + p2.y();
+    if (p1.x() < p2.x())
+        return true;
+    else if (p2.x() < p1.x())
+        return false;
+    else if (p1.y() < p2.y())
+        return true;
+    else
+        return false;
 }
 
 graph_layouter::graph_layouter(const graph_context* const context, QObject* parent) : QObject(parent),

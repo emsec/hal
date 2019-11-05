@@ -28,7 +28,6 @@
 
 namespace hal
 {
-
 enum class item_type
 {
     module,
@@ -63,10 +62,5 @@ struct node
     }
 };
 }
-
-//uint qHash(const hal::node& node)
-//{
-//    return node.id ^ (uint)node.type;
-//}
 
 #endif // HAL_GUI_DEF_H
