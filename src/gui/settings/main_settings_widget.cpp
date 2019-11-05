@@ -3,7 +3,7 @@
 #include "expanding_list/expanding_list_button.h"
 #include "expanding_list/expanding_list_widget.h"
 #include "gui_globals.h"
-#include "gui_utility/sort.h"
+#include "gui_utils/sort.h"
 #include "searchbar/searchbar.h"
 #include "settings/settings_display.h"
 #include "settings/settings_widget.h"

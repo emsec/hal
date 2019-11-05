@@ -6,7 +6,7 @@
 #include "core/log.h"
 
 #include "gui_globals.h"
-#include "gui_utility.h"
+#include "gui_utils/graphics.h"
 #include "searchbar/searchbar.h"
 #include "splitter/splitter.h"
 #include "toolbar/toolbar.h"

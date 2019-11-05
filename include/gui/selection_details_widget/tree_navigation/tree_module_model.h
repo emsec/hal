@@ -28,7 +28,7 @@
 #include "netlist/event_system/gate_event_handler.h"
 #include "netlist/event_system/net_event_handler.h"
 #include "netlist/event_system/module_event_handler.h"
-#include "gui_utility/sort.h"
+#include "gui_utils/sort.h"
 
 #include <QAbstractItemModel>
 #include <QFont>

@@ -27,7 +27,7 @@
 #include "channel_manager/channel_item.h"
 #include "content_widget/content_widget.h"
 #include "core/log.h"
-#include "gui_utility.h"
+#include "gui_utils/graphics.h"
 #include <QLabel>
 #include <QMenu>
 #include <QPlainTextEdit>
