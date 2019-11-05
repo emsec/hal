@@ -31,6 +31,7 @@
 // forward declaration
 class netlist;
 class gate;
+class gate_type;
 class net;
 class module;
 struct endpoint;

@@ -341,30 +341,6 @@ public:
      */
     std::set<std::shared_ptr<gate>> get_global_gnd_gates() const;
 
-    /**
-     * Get the input pin types for a gate type.
-     *
-     * @param[in] gate_type - The gate type.
-     * @returns A vector of all input pin types.
-     */
-    std::vector<std::string> get_input_pin_types(const std::string& gate_type) const;
-
-    /**
-     * Get the output pin types for a gate type.
-     *
-     * @param[in] gate_type - The gate type.
-     * @returns A vector of all output pin types.
-     */
-    std::vector<std::string> get_output_pin_types(const std::string& gate_type) const;
-
-    /**
-     * Get the inout pin types for a gate type.
-     *
-     * @param[in] gate_type - The gate type.
-     * @returns A vector of all inout pin types.
-     */
-    std::vector<std::string> get_inout_pin_types(const std::string& gate_type) const;
-
     /*
      * ################################################################
      *      net functions

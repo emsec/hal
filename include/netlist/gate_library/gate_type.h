@@ -71,7 +71,7 @@ public:
     base_type_t get_base_type() const;
     std::vector<std::string> get_input_pins() const;
     std::vector<std::string> get_output_pins() const;
-    std::map<std::string, const boolean_function> get_boolean_functions() const;
+    std::map<std::string, boolean_function> get_boolean_functions() const;
 
 private:
     std::string m_name;
@@ -80,6 +80,6 @@ private:
     std::vector<std::string> m_input_pins;
     std::vector<std::string> m_output_pins;
 
-    std::map<std::string, const boolean_function> m_boolean_function_map;
+    std::map<std::string, boolean_function> m_functions;
 };
 #endif    //__HAL_GATE_TYPE_H

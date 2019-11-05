@@ -52,12 +52,12 @@ void gate_type::add_output_pins(const std::vector<std::string>& output_pins)
 
 void gate_type::add_boolean_function(std::string name, boolean_function bf)
 {
-    m_boolean_function_map.emplace(name, bf);
+    m_functions.emplace(name, bf);
 }
 
 void gate_type::add_boolean_function_map(const std::map<std::string, const boolean_function>& boolean_function_map)
 {
-    m_boolean_function_map.insert(boolean_function_map.begin(), boolean_function_map.end());
+    m_functions.insert(boolean_function_map.begin(), boolean_function_map.end());
 }
 
 std::string gate_type::get_name() const
@@ -80,7 +80,7 @@ std::vector<std::string> gate_type::get_output_pins() const
     return m_output_pins;
 }
 
-std::map<std::string, const boolean_function> gate_type::get_boolean_functions() const
+std::map<std::string, boolean_function> gate_type::get_boolean_functions() const
 {
-    return m_boolean_function_map;
+    return m_functions;
 }

@@ -3,6 +3,7 @@
 #include "core/log.h"
 
 #include "netlist/gate.h"
+#include "netlist/gate_library/gate_type.h"
 #include "netlist/module.h"
 #include "netlist/net.h"
 #include "netlist/netlist.h"
@@ -20,7 +21,7 @@ netlist_internal_manager::netlist_internal_manager(netlist* nl) : m_netlist(nl)
 //###                      gates                                     ###
 //######################################################################
 
-std::shared_ptr<gate> netlist_internal_manager::create_gate(const u32 id, const gate_type& gt, const std::string& name)
+std::shared_ptr<gate> netlist_internal_manager::create_gate(const u32 id, std::shared_ptr<const gate_type> gt, const std::string& name)
 {
     if (id == 0)
     {
@@ -34,7 +35,7 @@ std::shared_ptr<gate> netlist_internal_manager::create_gate(const u32 id, const 
     }
     if (this->is_gate_type_invalid(gt))
     {
-        log_error("netlist.internal", "netlist::create_gate: gate type '{}' is invalid.", gt.get_name());
+        log_error("netlist.internal", "netlist::create_gate: gate type '{}' is invalid.", gt->get_name());
         return nullptr;
     }
     if (core_utils::trim(name).empty())
@@ -199,12 +200,10 @@ bool netlist_internal_manager::net_set_src(std::shared_ptr<net> const net, endpo
     }
 
     // check whether pin is valid for this gate
-    auto output_pin_types = m_netlist->get_output_pin_types(src.gate->get_type());
-    auto inout_pin_types  = m_netlist->get_inout_pin_types(src.gate->get_type());
-    if ((std::find(output_pin_types.begin(), output_pin_types.end(), src.pin_type) == output_pin_types.end())
-        && (std::find(inout_pin_types.begin(), inout_pin_types.end(), src.pin_type) == inout_pin_types.end()))
+    auto output_pin_types = src.gate->get_type()->get_output_pins();
+    if ((std::find(output_pin_types.begin(), output_pin_types.end(), src.pin_type) == output_pin_types.end()))
     {
-        log_error("netlist.internal", "net::set_src: src gate ('{}, type = {}) has no output type '{}'.", src.gate->get_name(), src.gate->get_type(), src.pin_type);
+        log_error("netlist.internal", "net::set_src: src gate ('{}, type = {}) has no output type '{}'.", src.gate->get_name(), src.gate->get_type()->get_name(), src.pin_type);
         return false;
     }
 
@@ -269,18 +268,16 @@ bool netlist_internal_manager::net_add_dst(std::shared_ptr<net> const net, endpo
 
     if (net->is_a_dst(dst.gate, dst.pin_type))
     {
-        log_error("netlist.internal", "net::add_dst: dst gate ('{}',  type = {}) is already added to net '{}'.", dst.gate->get_name(), dst.gate->get_type(), net->get_name());
+        log_error("netlist.internal", "net::add_dst: dst gate ('{}',  type = {}) is already added to net '{}'.", dst.gate->get_name(), dst.gate->get_type()->get_name(), net->get_name());
         return false;
     }
 
     // check whether pin id is valid for this gate
-    auto input_pin_types = m_netlist->get_input_pin_types(dst.gate->get_type());
-    auto inout_pin_types = m_netlist->get_inout_pin_types(dst.gate->get_type());
+    auto input_pin_types = dst.gate->get_type()->get_input_pins();
 
-    if ((std::find(input_pin_types.begin(), input_pin_types.end(), dst.pin_type) == input_pin_types.end())
-        && (std::find(inout_pin_types.begin(), inout_pin_types.end(), dst.pin_type) == inout_pin_types.end()))
+    if ((std::find(input_pin_types.begin(), input_pin_types.end(), dst.pin_type) == input_pin_types.end()))
     {
-        log_error("netlist.internal", "net::add_dst: dst gate ('{}',  type = {}) has no input type '{}'.", dst.gate->get_name(), dst.gate->get_type(), dst.pin_type);
+        log_error("netlist.internal", "net::add_dst: dst gate ('{}',  type = {}) has no input type '{}'.", dst.gate->get_name(), dst.gate->get_type()->get_name(), dst.pin_type);
         return false;
     }
 
@@ -290,7 +287,7 @@ bool netlist_internal_manager::net_add_dst(std::shared_ptr<net> const net, endpo
         log_error("netlist.internal",
                   "net::add_dst: dst gate ('{}', type = {}) has already an assigned net '{}' for pin '{}' (new_net: {}).",
                   dst.gate->get_name(),
-                  dst.gate->get_type(),
+                  dst.gate->get_type()->get_name(),
                   dst.gate->get_fan_in_net(dst.pin_type)->get_name(),
                   dst.pin_type,
                   net->get_name());

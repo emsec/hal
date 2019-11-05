@@ -291,42 +291,6 @@ std::set<std::shared_ptr<gate>> netlist::get_global_gnd_gates() const
     return m_global_gnd_gates;
 }
 
-std::vector<std::string> netlist::get_input_pin_types(const std::string& gate_type) const
-{
-    auto gate_type_to_input_pin_types = m_gate_library->get_gate_type_map_to_input_pin_types();
-    auto it                           = gate_type_to_input_pin_types->find(gate_type);
-    if (it == gate_type_to_input_pin_types->end())
-    {
-        log_debug("netlist", "parameter 'gate_type' (= {}) is invalid.", gate_type);
-        return std::vector<std::string>();
-    }
-    return it->second;
-}
-
-std::vector<std::string> netlist::get_output_pin_types(const std::string& gate_type) const
-{
-    auto gate_type_to_output_pin_types = m_gate_library->get_gate_type_map_to_output_pin_types();
-    auto it                            = gate_type_to_output_pin_types->find(gate_type);
-    if (it == gate_type_to_output_pin_types->end())
-    {
-        log_debug("netlist", "parameter 'gate_type' (= {}) is invalid.", gate_type);
-        return std::vector<std::string>();
-    }
-    return it->second;
-}
-
-std::vector<std::string> netlist::get_inout_pin_types(const std::string& gate_type) const
-{
-    auto gate_type_to_inout_pin_types = m_gate_library->get_gate_type_map_to_inout_pin_types();
-    auto it                           = gate_type_to_inout_pin_types->find(gate_type);
-    if (it == gate_type_to_inout_pin_types->end())
-    {
-        log_debug("netlist", "parameter 'gate_type' (= {}) is invalid.", gate_type);
-        return std::vector<std::string>();
-    }
-    return it->second;
-}
-
 /////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////

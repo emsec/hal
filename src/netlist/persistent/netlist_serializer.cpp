@@ -214,7 +214,12 @@ namespace netlist_serializer
     // deserializing functions
     namespace
     {
-        #define assert_availablility(MEMBER) if (!root.HasMember(MEMBER)) {log_critical("netlist.persistent", "'netlist' node does not include a '{}' node", MEMBER); return nullptr; }
+#define assert_availablility(MEMBER)                                                               \
+    if (!root.HasMember(MEMBER))                                                                   \
+    {                                                                                              \
+        log_critical("netlist.persistent", "'netlist' node does not include a '{}' node", MEMBER); \
+        return nullptr;                                                                            \
+    }
 
         endpoint deserialize_endpoint(std::shared_ptr<netlist> nl, const rapidjson::Value& val)
         {
@@ -231,14 +236,23 @@ namespace netlist_serializer
 
         bool deserialize_gate(std::shared_ptr<netlist> nl, const rapidjson::Value& val)
         {
-            auto g = nl->create_gate(val["id"].GetUint(), val["type"].GetString(), val["name"].GetString());
-            if (g == nullptr)
+            auto gt_name    = val["type"].GetString();
+            auto gate_types = nl->get_gate_library()->get_gate_types();
+
+            if (gate_types.find(gt_name) != gate_types.end())
             {
-                return false;
+                auto g = nl->create_gate(val["id"].GetUint(), gate_types.at(gt_name), val["name"].GetString());
+
+                if (g == nullptr)
+                {
+                    return false;
+                }
+
+                deserialize_data(g, val["data"]);
+                return true;
             }
 
-            deserialize_data(g, val["data"]);
-            return true;
+            return false;
         }
 
         bool deserialize_net(std::shared_ptr<netlist> nl, const rapidjson::Value& val)
@@ -296,7 +310,7 @@ namespace netlist_serializer
             auto root = document["netlist"].GetObject();
             assert_availablility("gate_library");
 
-            auto lib  = gate_library_manager::get_gate_library(root["gate_library"].GetString());
+            auto lib = gate_library_manager::get_gate_library(root["gate_library"].GetString());
             if (lib == nullptr)
             {
                 log_critical("netlist.persistent", "error loading gate library '{}'.", root["gate_library"].GetString());

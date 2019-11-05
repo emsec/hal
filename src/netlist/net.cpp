@@ -90,12 +90,14 @@ bool net::remove_src()
     return m_internal_manager->net_remove_src(shared_from_this());
 }
 
+// TODO switch to gate_type object?
 endpoint net::get_src(const std::string& gate_type) const
 {
-    if ((m_src.gate == nullptr) || (gate_type != DONT_CARE && (*m_src.gate->get_type() != gate_type)))
+    if ((m_src.gate == nullptr) || (gate_type != DONT_CARE && (m_src.gate->get_type()->get_name() != gate_type)))
     {
         return {nullptr, ""};
     }
+
     return m_src;
 }
 
@@ -157,6 +159,7 @@ u32 net::get_num_of_dsts() const
     return (u32)m_dsts.size();
 }
 
+// TODO switch to gate_type object?
 std::vector<endpoint> net::get_dsts(const std::string& gate_type) const
 {
     if (gate_type == DONT_CARE)
@@ -167,7 +170,7 @@ std::vector<endpoint> net::get_dsts(const std::string& gate_type) const
     std::vector<endpoint> dsts;
     for (const auto& dst : m_dsts)
     {
-        if (*dst.gate->get_type() != gate_type)
+        if (dst.gate->get_type()->get_name() != gate_type)
         {
             continue;
         }

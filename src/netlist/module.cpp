@@ -60,14 +60,15 @@ bool module::set_parent_module(const std::shared_ptr<module>& new_parent)
         log_error("module", "no parent can be assigned to the top module");
         return false;
     }
-    
+
     if (new_parent == nullptr)
     {
         log_error("module", "cannot reassign top module");
         return false;
     }
-    
-    if (!get_netlist()->is_module_in_netlist(new_parent)) {
+
+    if (!get_netlist()->is_module_in_netlist(new_parent))
+    {
         log_error("module", "module must be in the current netlist");
         return false;
     }
@@ -191,15 +192,24 @@ std::set<std::shared_ptr<gate>> module::get_gates(const std::string& gate_type_f
         for (const auto& it : m_gates_map)
         {
             auto current_gate = it.second;
-            if ((gate_type_filter != DONT_CARE) && (current_gate->get_type() != gate_type_filter))
+            if ((gate_type_filter != DONT_CARE) && (current_gate->get_type()->get_name() != gate_type_filter))
             {
-                log_debug(
-                    "module", "type of gate '{}' (id = {:08x}, type: '{}') does not match type '{}'.", current_gate->get_name(), current_gate->get_id(), current_gate->get_type(), gate_type_filter);
+                log_debug("module",
+                          "type of gate '{}' (id = {:08x}, type: '{}') does not match type '{}'.",
+                          current_gate->get_name(),
+                          current_gate->get_id(),
+                          current_gate->get_type()->get_name(),
+                          gate_type_filter);
                 continue;
             }
             if ((name_filter != DONT_CARE) && (current_gate->get_name() != name_filter))
             {
-                log_debug("module", "name of gate '{}' (id = {:08x}, type: '{}') does not match name '{}'.", current_gate->get_name(), current_gate->get_id(), current_gate->get_type(), name_filter);
+                log_debug("module",
+                          "name of gate '{}' (id = {:08x}, type: '{}') does not match name '{}'.",
+                          current_gate->get_name(),
+                          current_gate->get_id(),
+                          current_gate->get_type()->get_name(),
+                          name_filter);
                 continue;
             }
             res.insert(current_gate);

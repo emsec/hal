@@ -27,11 +27,11 @@
 
 #include "def.h"
 
+#include "netlist/boolean_function.h"
 #include "netlist/data_container.h"
 #include "netlist/endpoint.h"
 #include "netlist/gate_library/gate_type.h"
 #include "netlist/netlist_constants.h"
-#include "netlist/boolean_function.h"
 
 #include <map>
 #include <memory>

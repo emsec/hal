@@ -117,10 +117,12 @@ boolean_function gate::get_boolean_function(const std::string& name) const
 std::map<std::string, boolean_function> gate::get_boolean_functions() const
 {
     auto res = m_type->get_boolean_functions();
+
     for (const auto& it : m_functions)
     {
         res.emplace(it.first, it.second);
     }
+
     return res;
 }
 
@@ -172,42 +174,50 @@ std::vector<std::string> gate::get_output_pin_types() const
 std::set<std::shared_ptr<net>> gate::get_fan_in_nets() const
 {
     std::set<std::shared_ptr<net>> nets;
+
     for (const auto& it : m_in_nets)
     {
         nets.insert(it.second);
     }
+
     return nets;
 }
 
 std::shared_ptr<net> gate::get_fan_in_net(const std::string& pin_type) const
 {
     auto it = m_in_nets.find(pin_type);
+
     if (it == m_in_nets.end())
     {
         log_debug("netlist.internal", "gate ('{},  type = {}) has no net connected to input pin '{}'.", get_name(), get_type()->get_name(), pin_type);
         return nullptr;
     }
+
     return it->second;
 }
 
 std::set<std::shared_ptr<net>> gate::get_fan_out_nets() const
 {
     std::set<std::shared_ptr<net>> nets;
+
     for (const auto& it : m_out_nets)
     {
         nets.insert(it.second);
     }
+
     return nets;
 }
 
 std::shared_ptr<net> gate::get_fan_out_net(const std::string& pin_type) const
 {
     auto it = m_out_nets.find(pin_type);
+
     if (it == m_out_nets.end())
     {
         log_debug("netlist.internal", "gate ('{},  type = {}) has no net connected to output pin '{}'.", get_name(), get_type()->get_name(), pin_type);
         return nullptr;
     }
+
     return it->second;
 }
 
