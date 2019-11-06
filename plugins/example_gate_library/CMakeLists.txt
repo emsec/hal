@@ -1,0 +1,5 @@
+option(PL_DECORATOR_EXAMPLE_LIB "PL_DECORATOR_EXAMPLE_LIB" ON)
+if(PL_DECORATOR_EXAMPLE_LIB OR BUILD_ALL_PLUGINS)
+    file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/share/hal/gate_libraries/)
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/gate_libraries/example_library.lib ${CMAKE_BINARY_DIR}/share/hal/gate_libraries/example_library.lib)
+endif()

@@ -12,11 +12,11 @@ library (GSCLIB_3_0) {
         }
         pin(CO) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
         pin(S) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -29,11 +29,11 @@ library (GSCLIB_3_0) {
         }
         pin(CO) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
         pin(S) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -46,7 +46,7 @@ library (GSCLIB_3_0) {
         }
         pin(Y) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -62,7 +62,7 @@ library (GSCLIB_3_0) {
         }
         pin(Y) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -81,7 +81,7 @@ library (GSCLIB_3_0) {
         }
         pin(Y) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -91,7 +91,7 @@ library (GSCLIB_3_0) {
         }
         pin(Y) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -101,7 +101,7 @@ library (GSCLIB_3_0) {
         }
         pin(Y) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -111,7 +111,7 @@ library (GSCLIB_3_0) {
         }
         pin(Y) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -121,7 +121,7 @@ library (GSCLIB_3_0) {
         }
         pin(Y) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -131,7 +131,7 @@ library (GSCLIB_3_0) {
         }
         pin(Y) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -141,7 +141,7 @@ library (GSCLIB_3_0) {
         }
         pin(Y) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -151,7 +151,7 @@ library (GSCLIB_3_0) {
         }
         pin(Y) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -161,7 +161,7 @@ library (GSCLIB_3_0) {
         }
         pin(Y) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -171,7 +171,7 @@ library (GSCLIB_3_0) {
         }
         pin(Y) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -236,14 +236,14 @@ library (GSCLIB_3_0) {
     cell(GLOBAL_GND) {
         pin(O) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
     cell(GLOBAL_VCC) {
         pin(O) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -253,7 +253,7 @@ library (GSCLIB_3_0) {
         }
         pin(Y) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -263,7 +263,7 @@ library (GSCLIB_3_0) {
         }
         pin(Y) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -273,7 +273,7 @@ library (GSCLIB_3_0) {
         }
         pin(Y) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -283,7 +283,7 @@ library (GSCLIB_3_0) {
         }
         pin(Y) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -299,7 +299,7 @@ library (GSCLIB_3_0) {
         }
         pin(Y) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -312,7 +312,7 @@ library (GSCLIB_3_0) {
         }
         pin(Y) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -325,7 +325,7 @@ library (GSCLIB_3_0) {
         }
         pin(Y) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -341,7 +341,7 @@ library (GSCLIB_3_0) {
         }
         pin(Y) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -360,7 +360,7 @@ library (GSCLIB_3_0) {
         }
         pin(Y) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -373,7 +373,7 @@ library (GSCLIB_3_0) {
         }
         pin(Y) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -389,7 +389,7 @@ library (GSCLIB_3_0) {
         }
         pin(Y) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -408,7 +408,7 @@ library (GSCLIB_3_0) {
         }
         pin(Y) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -424,7 +424,7 @@ library (GSCLIB_3_0) {
         }
         pin(Y) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -443,7 +443,7 @@ library (GSCLIB_3_0) {
         }
         pin(Y) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -468,7 +468,7 @@ library (GSCLIB_3_0) {
         }
         pin(Y) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -481,7 +481,7 @@ library (GSCLIB_3_0) {
         }
         pin(Y) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -500,7 +500,7 @@ library (GSCLIB_3_0) {
         }
         pin(Y) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -551,7 +551,7 @@ library (GSCLIB_3_0) {
         }
         pin(Y) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -564,7 +564,7 @@ library (GSCLIB_3_0) {
         }
         pin(Y) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -577,7 +577,7 @@ library (GSCLIB_3_0) {
         }
         pin(Y) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -590,7 +590,7 @@ library (GSCLIB_3_0) {
         }
         pin(Y) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -603,7 +603,7 @@ library (GSCLIB_3_0) {
         }
         pin(Y) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -622,11 +622,11 @@ library (GSCLIB_3_0) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
         pin(QN) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -639,11 +639,11 @@ library (GSCLIB_3_0) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
         pin(QN) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -656,7 +656,7 @@ library (GSCLIB_3_0) {
         }
         pin(Y) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     

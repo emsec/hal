@@ -58,6 +58,9 @@ namespace gate_library_liberty_parser
         auto statements = get_statements(ss);
         auto lib        = get_gate_library(statements);
         delete statements;
+
+
+
         return lib;
     }
 

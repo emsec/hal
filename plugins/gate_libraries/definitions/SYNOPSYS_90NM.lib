@@ -9,7 +9,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -22,7 +22,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -35,7 +35,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -51,7 +51,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -67,7 +67,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -83,7 +83,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -102,7 +102,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -121,7 +121,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -140,7 +140,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -159,7 +159,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -175,7 +175,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -197,7 +197,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -219,7 +219,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -244,7 +244,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -269,7 +269,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -288,7 +288,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -307,7 +307,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -317,7 +317,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -327,7 +327,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -337,7 +337,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -469,7 +469,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(QN) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -485,7 +485,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(QN) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -507,7 +507,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(QN) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -529,7 +529,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(QN) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -554,7 +554,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(QN) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -579,7 +579,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(QN) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -598,7 +598,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(QN) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -617,7 +617,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(QN) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -627,7 +627,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -637,7 +637,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -647,7 +647,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -693,7 +693,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(GCLK) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -709,7 +709,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(GCLK) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -725,7 +725,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(GCLK) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -741,7 +741,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(GCLK) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -757,7 +757,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(GCLK) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -773,7 +773,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(GCLK) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -789,7 +789,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(GCLK) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -805,7 +805,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(GCLK) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -821,7 +821,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(GCLK) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -837,7 +837,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(GCLK) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -853,7 +853,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(GCLK) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -869,7 +869,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(GCLK) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -888,19 +888,19 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q0) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
         pin(Q1) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
         pin(Q2) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
         pin(Q3) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -913,7 +913,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -923,7 +923,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -933,7 +933,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -1589,36 +1589,36 @@ library (SYNOPSYS_90NM) {
     cell(FADDX1) {
         pin(S) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
         pin(CO) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
     cell(FADDX2) {
         pin(S) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
         pin(CO) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
     cell(GLOBAL_GND) {
         pin(O) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
     cell(GLOBAL_VCC) {
         pin(O) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -1634,11 +1634,11 @@ library (SYNOPSYS_90NM) {
         }
         pin(S0) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
         pin(C1) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -1654,11 +1654,11 @@ library (SYNOPSYS_90NM) {
         }
         pin(S0) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
         pin(C1) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -1668,7 +1668,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(VDD) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -1678,7 +1678,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(VDD) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -1688,7 +1688,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(VDD) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -1698,7 +1698,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(VDD) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -1708,7 +1708,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(VDD) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -1718,7 +1718,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(QN) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -1728,7 +1728,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(QN) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -1738,7 +1738,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(QN) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -1748,7 +1748,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(QN) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -1758,7 +1758,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(QN) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -1768,7 +1768,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(QN) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -1778,7 +1778,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(QN) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -1788,7 +1788,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(QN) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -1798,7 +1798,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(QN) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -1808,7 +1808,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(QN) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -1818,7 +1818,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(QN) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -1828,7 +1828,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(QN) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -1841,7 +1841,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -1854,7 +1854,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -1867,7 +1867,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -1880,7 +1880,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -1893,7 +1893,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -1906,7 +1906,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -1919,7 +1919,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -1932,7 +1932,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -1948,11 +1948,11 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
         pin(QN) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -1968,11 +1968,11 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
         pin(QN) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -1991,7 +1991,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(QN) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -2010,7 +2010,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(QN) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -2029,7 +2029,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -2048,7 +2048,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -2067,11 +2067,11 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
         pin(QN) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -2090,11 +2090,11 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
         pin(QN) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -2110,11 +2110,11 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
         pin(QN) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -2130,11 +2130,11 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
         pin(QN) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -2147,22 +2147,22 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
         pin(QN) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
     cell(LATCHX2) {
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
         pin(QN) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -2175,11 +2175,11 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
         pin(QN) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -2192,11 +2192,11 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
         pin(QN) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -2209,7 +2209,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -2222,7 +2222,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -2235,7 +2235,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -2248,7 +2248,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -2258,7 +2258,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -2268,7 +2268,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -2278,7 +2278,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -2288,7 +2288,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -2301,7 +2301,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -2314,7 +2314,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -2327,7 +2327,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -2340,7 +2340,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -2350,7 +2350,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -2360,7 +2360,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -2370,7 +2370,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -2380,7 +2380,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -2396,7 +2396,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -2412,7 +2412,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -2440,7 +2440,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -2453,7 +2453,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(QN) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -2466,7 +2466,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(QN) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -2479,7 +2479,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(QN) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -2492,7 +2492,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(QN) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -2508,7 +2508,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(QN) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -2524,7 +2524,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(QN) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -2540,7 +2540,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(QN) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -2556,7 +2556,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(QN) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -2575,7 +2575,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(QN) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -2594,7 +2594,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(QN) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -2604,7 +2604,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -2614,7 +2614,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -2624,7 +2624,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -2634,7 +2634,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -2644,7 +2644,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -2666,7 +2666,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(QN) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -2679,7 +2679,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(QN) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -2692,7 +2692,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(QN) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -2705,7 +2705,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(QN) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -2721,7 +2721,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(QN) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -2737,7 +2737,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(QN) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -2753,7 +2753,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(QN) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -2769,7 +2769,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(QN) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -2788,7 +2788,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(QN) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -2807,7 +2807,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(QN) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -2823,7 +2823,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -2839,7 +2839,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -2861,7 +2861,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -2883,7 +2883,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -2908,7 +2908,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -2933,7 +2933,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -2952,7 +2952,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -2971,7 +2971,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -2987,7 +2987,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(QN) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -3003,7 +3003,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(QN) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -3025,7 +3025,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(QN) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -3047,7 +3047,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(QN) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -3072,7 +3072,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(QN) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -3097,7 +3097,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(QN) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -3116,7 +3116,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(QN) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -3135,7 +3135,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(QN) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -3148,7 +3148,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -3161,7 +3161,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -3174,7 +3174,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -3190,7 +3190,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -3206,7 +3206,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -3222,7 +3222,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -3241,7 +3241,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -3260,7 +3260,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -3279,7 +3279,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -3295,7 +3295,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(INQ2) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -3311,7 +3311,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(INQ2) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -3327,7 +3327,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(INQ2) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -4306,7 +4306,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -4319,7 +4319,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -4332,7 +4332,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -4345,7 +4345,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -4358,7 +4358,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -4371,7 +4371,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -4384,7 +4384,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -4400,7 +4400,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -4416,7 +4416,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -4429,7 +4429,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -4442,7 +4442,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -4458,7 +4458,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     
@@ -4474,7 +4474,7 @@ library (SYNOPSYS_90NM) {
         }
         pin(Q) {
             direction: output;
-            function: "TODO";
+            function: "";
         }
     }
     

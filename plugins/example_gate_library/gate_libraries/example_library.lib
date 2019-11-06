@@ -1,0 +1,621 @@
+library (EXAMPLE_GATE_LIBRARY) {
+    define(cell);
+    cell(BUF) {
+        pin(I) {
+            direction: input;
+        }
+        pin(O) {
+            direction: output;
+            function: "";
+        }
+    }
+
+    cell(INV) {
+        pin(I) {
+            direction: input;
+        }
+        pin(O) {
+            direction: output;
+            function: "";
+        }
+    }
+
+    cell(MUX) {
+        pin(I0) {
+            direction: input;
+        }
+        pin(I1) {
+            direction: input;
+        }
+        pin(S) {
+            direction: input;
+        }
+        pin(O) {
+            direction: output;
+            function: "";
+        }
+    }
+
+    cell(XOR) {
+        pin(I0) {
+            direction: input;
+        }
+        pin(I1) {
+            direction: input;
+        }
+        pin(O) {
+            direction: output;
+            function: "";
+        }
+    }
+
+    cell(AND2) {
+        pin(I0) {
+            direction: input;
+        }
+        pin(I1) {
+            direction: input;
+        }
+        pin(O) {
+            direction: output;
+            function: "";
+        }
+    }
+
+    cell(AND3) {
+        pin(I0) {
+            direction: input;
+        }
+        pin(I1) {
+            direction: input;
+        }
+        pin(I2) {
+            direction: input;
+        }
+        pin(O) {
+            direction: output;
+            function: "";
+        }
+    }
+
+    cell(AND4) {
+        pin(I0) {
+            direction: input;
+        }
+        pin(I1) {
+            direction: input;
+        }
+        pin(I2) {
+            direction: input;
+        }
+        pin(I3) {
+            direction: input;
+        }
+        pin(O) {
+            direction: output;
+            function: "";
+        }
+    }
+
+    cell(AND5) {
+        pin(I0) {
+            direction: input;
+        }
+        pin(I1) {
+            direction: input;
+        }
+        pin(I2) {
+            direction: input;
+        }
+        pin(I3) {
+            direction: input;
+        }
+        pin(I4) {
+            direction: input;
+        }
+        pin(O) {
+            direction: output;
+            function: "";
+        }
+    }
+
+    cell(AND6) {
+        pin(I0) {
+            direction: input;
+        }
+        pin(I1) {
+            direction: input;
+        }
+        pin(I2) {
+            direction: input;
+        }
+        pin(I3) {
+            direction: input;
+        }
+        pin(I4) {
+            direction: input;
+        }
+        pin(I5) {
+            direction: input;
+        }
+        pin(O) {
+            direction: output;
+            function: "";
+        }
+    }
+
+    cell(AND7) {
+        pin(I0) {
+            direction: input;
+        }
+        pin(I1) {
+            direction: input;
+        }
+        pin(I2) {
+            direction: input;
+        }
+        pin(I3) {
+            direction: input;
+        }
+        pin(I4) {
+            direction: input;
+        }
+        pin(I5) {
+            direction: input;
+        }
+        pin(I6) {
+            direction: input;
+        }
+        pin(O) {
+            direction: output;
+            function: "";
+        }
+    }
+
+    cell(AND8) {
+        pin(I0) {
+            direction: input;
+        }
+        pin(I1) {
+            direction: input;
+        }
+        pin(I2) {
+            direction: input;
+        }
+        pin(I3) {
+            direction: input;
+        }
+        pin(I4) {
+            direction: input;
+        }
+        pin(I5) {
+            direction: input;
+        }
+        pin(I6) {
+            direction: input;
+        }
+        pin(I7) {
+            direction: input;
+        }
+        pin(O) {
+            direction: output;
+            function: "";
+        }
+    }
+
+    cell(OR2) {
+        pin(I0) {
+            direction: input;
+        }
+        pin(I1) {
+            direction: input;
+        }
+        pin(O) {
+            direction: output;
+            function: "";
+        }
+    }
+
+    cell(OR3) {
+        pin(I0) {
+            direction: input;
+        }
+        pin(I1) {
+            direction: input;
+        }
+        pin(I2) {
+            direction: input;
+        }
+        pin(O) {
+            direction: output;
+            function: "";
+        }
+    }
+
+    cell(OR4) {
+        pin(I0) {
+            direction: input;
+        }
+        pin(I1) {
+            direction: input;
+        }
+        pin(I2) {
+            direction: input;
+        }
+        pin(I3) {
+            direction: input;
+        }
+        pin(O) {
+            direction: output;
+            function: "";
+        }
+    }
+
+    cell(OR5) {
+        pin(I0) {
+            direction: input;
+        }
+        pin(I1) {
+            direction: input;
+        }
+        pin(I2) {
+            direction: input;
+        }
+        pin(I3) {
+            direction: input;
+        }
+        pin(I4) {
+            direction: input;
+        }
+        pin(O) {
+            direction: output;
+            function: "";
+        }
+    }
+
+    cell(OR6) {
+        pin(I0) {
+            direction: input;
+        }
+        pin(I1) {
+            direction: input;
+        }
+        pin(I2) {
+            direction: input;
+        }
+        pin(I3) {
+            direction: input;
+        }
+        pin(I4) {
+            direction: input;
+        }
+        pin(I5) {
+            direction: input;
+        }
+        pin(O) {
+            direction: output;
+            function: "";
+        }
+    }
+
+    cell(OR7) {
+        pin(I0) {
+            direction: input;
+        }
+        pin(I1) {
+            direction: input;
+        }
+        pin(I2) {
+            direction: input;
+        }
+        pin(I3) {
+            direction: input;
+        }
+        pin(I4) {
+            direction: input;
+        }
+        pin(I5) {
+            direction: input;
+        }
+        pin(I6) {
+            direction: input;
+        }
+        pin(O) {
+            direction: output;
+            function: "";
+        }
+    }
+
+    cell(OR8) {
+        pin(I0) {
+            direction: input;
+        }
+        pin(I1) {
+            direction: input;
+        }
+        pin(I2) {
+            direction: input;
+        }
+        pin(I3) {
+            direction: input;
+        }
+        pin(I4) {
+            direction: input;
+        }
+        pin(I5) {
+            direction: input;
+        }
+        pin(I6) {
+            direction: input;
+        }
+        pin(I7) {
+            direction: input;
+        }
+        pin(O) {
+            direction: output;
+            function: "";
+        }
+    }
+
+    cell(LUT1) {
+        lut ("lut_out") {
+            data_category     : "generic";
+            data_key          : "INIT";
+            direction         : "descending";
+        }
+        pin(I0) {
+            direction: input;
+        }
+        pin(O) {
+            direction: output;
+            function: "lut_out";
+        }
+    }
+
+    cell(LUT2) {
+        lut ("lut_out") {
+            data_category     : "generic";
+            data_key          : "INIT";
+            direction         : "descending";
+        }
+        pin(I0) {
+            direction: input;
+        }
+        pin(I1) {
+            direction: input;
+        }
+        pin(O) {
+            direction: output;
+            function: "lut_out";
+        }
+    }
+
+    cell(LUT3) {
+        lut ("lut_out") {
+            data_category     : "generic";
+            data_key          : "INIT";
+            direction         : "descending";
+        }
+        pin(I0) {
+            direction: input;
+        }
+        pin(I1) {
+            direction: input;
+        }
+        pin(I2) {
+            direction: input;
+        }
+        pin(O) {
+            direction: output;
+            function: "lut_out";
+        }
+    }
+
+    cell(LUT4) {
+        lut ("lut_out") {
+            data_category     : "generic";
+            data_key          : "INIT";
+            direction         : "descending";
+        }
+        pin(I0) {
+            direction: input;
+        }
+        pin(I1) {
+            direction: input;
+        }
+        pin(I2) {
+            direction: input;
+        }
+        pin(I3) {
+            direction: input;
+        }
+        pin(O) {
+            direction: output;
+            function: "lut_out";
+        }
+    }
+
+    cell(LUT5) {
+        lut ("lut_out") {
+            data_category     : "generic";
+            data_key          : "INIT";
+            direction         : "descending";
+        }
+        pin(I0) {
+            direction: input;
+        }
+        pin(I1) {
+            direction: input;
+        }
+        pin(I2) {
+            direction: input;
+        }
+        pin(I3) {
+            direction: input;
+        }
+        pin(I4) {
+            direction: input;
+        }
+        pin(O) {
+            direction: output;
+            function: "lut_out";
+        }
+    }
+
+    cell(LUT6) {
+        lut ("lut_out") {
+            data_category     : "generic";
+            data_key          : "INIT";
+            direction         : "descending";
+        }
+        pin(I0) {
+            direction: input;
+        }
+        pin(I1) {
+            direction: input;
+        }
+        pin(I2) {
+            direction: input;
+        }
+        pin(I3) {
+            direction: input;
+        }
+        pin(I4) {
+            direction: input;
+        }
+        pin(I5) {
+            direction: input;
+        }
+        pin(O) {
+            direction: output;
+            function: "lut_out";
+        }
+    }
+
+    cell(FF) {
+        ff ("IQ" , "IQN") {
+            next_state          : "D";
+            clocked_on          : "C";
+            preset              : "!SN";
+            clear               : "!RN";
+            clear_preset_var1   : L;
+            clear_preset_var2   : L;
+            pin(C) {
+                direction: input;
+                clock: true;
+            }
+            pin(CE) {
+                direction: input;
+            }
+            pin(D) {
+                direction: input;
+            }
+            pin(Q) {
+                direction: output;
+                function: "IQ";
+            }
+        }
+    }
+
+    cell(FFS) {
+        ff ("IQ" , "IQN") {
+            next_state          : "D";
+            clocked_on          : "C";
+            preset              : "!SN";
+            clear               : "!RN";
+            clear_preset_var1   : L;
+            clear_preset_var2   : L;
+            pin(C) {
+                direction: input;
+                clock: true;
+            }
+            pin(CE) {
+                direction: input;
+            }
+            pin(D) {
+                direction: input;
+            }
+            pin(S) {
+                direction: input;
+            }
+            pin(Q) {
+                direction: output;
+                function: "IQ";
+            }
+        }
+    }
+
+    cell(FFR) {
+        ff ("IQ" , "IQN") {
+            next_state          : "D";
+            clocked_on          : "C";
+            preset              : "!SN";
+            clear               : "!RN";
+            clear_preset_var1   : L;
+            clear_preset_var2   : L;
+            pin(C) {
+                direction: input;
+                clock: true;
+            }
+            pin(CE) {
+                direction: input;
+            }
+            pin(D) {
+                direction: input;
+            }
+            pin(R) {
+                direction: input;
+            }
+            pin(Q) {
+                direction: output;
+                function: "IQ";
+            }
+        }
+    }
+
+    cell(FFSR) {
+        ff ("IQ" , "IQN") {
+            next_state          : "D";
+            clocked_on          : "C";
+            preset              : "!SN";
+            clear               : "!RN";
+            clear_preset_var1   : L;
+            clear_preset_var2   : L;
+            pin(C) {
+                direction: input;
+                clock: true;
+            }
+            pin(CE) {
+                direction: input;
+            }
+            pin(D) {
+                direction: input;
+            }
+            pin(R) {
+                direction: input;
+            }
+            pin(S) {
+                direction: input;
+            }
+            pin(Q) {
+                direction: output;
+                function: "IQ";
+            }
+        }
+    }
+
+    cell(GND) {
+        pin(O) {
+            direction: output;
+            function: "";
+        }
+    }
+
+    cell(VCC) {
+        pin(O) {
+            direction: output;
+            function: "";
+        }
+    }
+
+}
