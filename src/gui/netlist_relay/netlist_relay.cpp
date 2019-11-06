@@ -9,7 +9,7 @@
 
 #include "gui/file_manager/file_manager.h"    // DEBUG LINE
 #include "gui/gui_globals.h"                  // DEBUG LINE
-#include "gui/gui_utility.h"
+#include "gui/gui_utils/graphics.h"
 
 #include <functional>
 

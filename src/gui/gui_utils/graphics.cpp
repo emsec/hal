@@ -1,4 +1,4 @@
-#include "gui_utility.h"
+#include "gui_utils/graphics.h"
 
 #include "svg_icon_engine/svg_icon_engine.h"
 

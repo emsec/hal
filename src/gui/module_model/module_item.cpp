@@ -3,7 +3,7 @@
 #include "netlist/module.h"
 
 #include "gui/gui_globals.h"
-#include "gui/gui_utility.h"
+#include "gui/gui_utils/graphics.h"
 
 module_item::module_item(const u32 id) :
     m_parent(nullptr),
