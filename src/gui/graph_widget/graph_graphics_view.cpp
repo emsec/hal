@@ -519,31 +519,36 @@ void graph_graphics_view::show_context_menu(const QPoint& pos)
             action = context_menu.addAction("  Add predecessors to view");
             connect(action, &QAction::triggered, this, &graph_graphics_view::handle_select_inputs);
 
-            QMenu* module_submenu = context_menu.addMenu("  Move to module …");
-
-            action = module_submenu->addAction("New module …");
-            QObject::connect(action, &QAction::triggered, this, &graph_graphics_view::handle_move_new_action);
-            module_submenu->addSeparator();
-
-            QActionGroup* module_actions = new QActionGroup(module_submenu);
             std::shared_ptr<gate> g = isGate ? g_netlist->get_gate_by_id(m_item->id()) : nullptr;
             std::shared_ptr<module> m = isModule ? g_netlist->get_module_by_id(m_item->id()) : nullptr;
-            for (auto& module : g_netlist->get_modules())
+
+            // only allow move actions on anything that is not the top module
+            if (!(isModule && m == g_netlist->get_top_module()))
             {
-                // don't allow a gate to be moved into its current module
-                // && don't allow a module to be moved into itself
-                // (either check automatically passes if g respective m is nullptr, so we
-                // don't have to create two loops)
-                if (!module->contains_gate(g) && module != m)
+                QMenu* module_submenu = context_menu.addMenu("  Move to module …");
+
+                action = module_submenu->addAction("New module …");
+                QObject::connect(action, &QAction::triggered, this, &graph_graphics_view::handle_move_new_action);
+                module_submenu->addSeparator();
+
+                QActionGroup* module_actions = new QActionGroup(module_submenu);
+                for (auto& module : g_netlist->get_modules())
                 {
-                    QString mod_name = QString::fromStdString(module->get_name());
-                    const u32 mod_id = module->get_id();
-                    action           = module_submenu->addAction(mod_name);
-                    module_actions->addAction(action);
-                    action->setData(mod_id);
+                    // don't allow a gate to be moved into its current module
+                    // && don't allow a module to be moved into itself
+                    // (either check automatically passes if g respective m is nullptr, so we
+                    // don't have to create two loops)
+                    if (!module->contains_gate(g) && module != m)
+                    {
+                        QString mod_name = QString::fromStdString(module->get_name());
+                        const u32 mod_id = module->get_id();
+                        action           = module_submenu->addAction(mod_name);
+                        module_actions->addAction(action);
+                        action->setData(mod_id);
+                    }
                 }
+                QObject::connect(module_actions, SIGNAL(triggered(QAction*)), this, SLOT(handle_move_action(QAction*)));
             }
-            QObject::connect(module_actions, SIGNAL(triggered(QAction*)), this, SLOT(handle_move_action(QAction*)));
         }
 
 
