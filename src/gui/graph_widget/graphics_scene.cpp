@@ -388,6 +388,8 @@ void graphics_scene::disconnect_all()
     disconnect(&g_selection_relay, &selection_relay::selection_changed, this, &graphics_scene::handle_extern_selection_changed);
     disconnect(&g_selection_relay, &selection_relay::subfocus_changed, this, &graphics_scene::handle_extern_subfocus_changed);
     disconnect(&g_netlist_relay, &netlist_relay::gate_name_changed, this, &graphics_scene::handle_gate_name_changed);
+    disconnect(&g_netlist_relay, &netlist_relay::module_name_changed, this, &graphics_scene::handle_module_name_changed);
+
 }
 
 void graphics_scene::delete_all_items()
