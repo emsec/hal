@@ -11,7 +11,7 @@
 #include "validator/unique_string_validator.h"
 
 #include "core/log.h"
-#include "gui_utility.h"
+#include "gui_utils/graphics.h"
 #include "netlist/gate.h"
 #include "netlist/module.h"
 #include "netlist/netlist.h"
