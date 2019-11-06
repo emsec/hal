@@ -48,6 +48,13 @@ public:
     friend std::ostream& operator<<(std::ostream& os, const value& v);
 
     /*
+     * Constructor for an empty function.
+     * Evaluates to X (undefined).
+     * Combining a function with an empty function leaves the other one unchanged.
+     */
+    boolean_function();
+
+    /*
      * Constructor for a variable, usable in other functions.
      * Variable name must not be empty.
      */
@@ -61,7 +68,7 @@ public:
     /*
      * Substitutes a variable with another function (can again be a single variable).
      * Applies to all instances of the variable in the function.
-     * 
+     *
      * @param[in] variable_name - The variable to substitute
      * @param[in] function - The function to take the place of the varible
      * @returns The new boolean function.
@@ -84,6 +91,11 @@ public:
      * Checks whether the function is the constant zero.
      */
     bool is_constant_zero() const;
+
+    /*
+     * Checks whether the function is empty.
+     */
+    bool is_empty() const;
 
     /*
      * Get all variable names used in this function.
@@ -124,7 +136,7 @@ public:
     boolean_function to_dnf() const;
 
     /*
-     * Get the truth table outputs of the function
+     * Get the truth table outputs of the function.
      * WARNING: Exponential runtime in the number of variables!
      *
      * Output is the vector of output values when walking the truth table in ascending order.
@@ -134,8 +146,10 @@ public:
      *     1         0      |   1
      *     0         1      |   2
      *     1         1      |   3
+     *
+     * If ordered_variables is empty, all included variables are used and ordered alphabetically.
      */
-    std::vector<value> get_truth_table() const;
+    std::vector<value> get_truth_table(const std::vector<std::string>& ordered_variables = {}) const;
 
 private:
     enum class operation

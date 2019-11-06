@@ -44,7 +44,7 @@ void graph_navigation_widget::setup()
 
             m_from_gate = g_selection_relay.m_focus_id;
 
-            std::string pin_type   = *std::next(g->get_output_pin_types().begin(), g_selection_relay.m_subfocus_index);
+            std::string pin_type   = *std::next(g->get_output_pins().begin(), g_selection_relay.m_subfocus_index);
             std::shared_ptr<net> n = g->get_fan_out_net(pin_type);
 
             if (!n)

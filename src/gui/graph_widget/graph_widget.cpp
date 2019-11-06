@@ -267,11 +267,11 @@ void graph_widget::handle_navigation_left_request()
         if (!g)
             return;
 
-        if (g->get_input_pin_types().size())
+        if (g->get_input_pins().size())
         {
             if (g_selection_relay.m_subfocus == selection_relay::subfocus::left)
             {
-                std::string pin_type = *std::next(g->get_input_pin_types().begin(), g_selection_relay.m_subfocus_index);
+                std::string pin_type = *std::next(g->get_input_pins().begin(), g_selection_relay.m_subfocus_index);
                 std::shared_ptr<net> n = g->get_fan_in_net(pin_type);
 
                 if (!n)

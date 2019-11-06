@@ -173,14 +173,14 @@ public:
      *
      * @returns A vector of input pin types.
      */
-    std::vector<std::string> get_input_pin_types() const;
+    std::vector<std::string> get_input_pins() const;
 
     /**
      * Get all output pin types of the gate.
      *
      * @returns A vector of output pin types.
      */
-    std::vector<std::string> get_output_pin_types() const;
+    std::vector<std::string> get_output_pins() const;
 
     /**
      * Get all fan-in nets, i.e. all nets that are connected to one of the input pins.
@@ -279,6 +279,8 @@ private:
 
     gate(const gate&) = delete;               //disable copy-constructor
     gate& operator=(const gate&) = delete;    //disable copy-assignment
+
+    boolean_function get_lut_function() const;
 
     /* pointer to corresponding netlist parent */
     std::shared_ptr<netlist> m_netlist;

@@ -9,6 +9,8 @@
 #include "core/log.h"
 
 #include <assert.h>
+#include <iomanip>
+#include <sstream>
 
 gate::gate(std::shared_ptr<netlist> const g, const u32 id, std::shared_ptr<const gate_type> gt, const std::string& name)
 {
@@ -23,7 +25,7 @@ std::ostream& operator<<(std::ostream& os, const gate& gate)
 {
     os << "\t\'" << gate.get_name() << "\'"
        << " (type = '" << gate.get_type()->get_name() << "', id = " << gate.get_id() << ")" << std::endl;
-    for (const auto& input_pin_type : gate.get_input_pin_types())
+    for (const auto& input_pin_type : gate.get_input_pins())
     {
         os << "\t\t" << input_pin_type << " => ";
         auto net = gate.get_fan_in_net(input_pin_type);
@@ -33,7 +35,7 @@ std::ostream& operator<<(std::ostream& os, const gate& gate)
             os << net->get_name();
         os << std::endl;
     }
-    for (const auto& output_pin_type : gate.get_output_pin_types())
+    for (const auto& output_pin_type : gate.get_output_pins())
     {
         os << "\t\t" << output_pin_type << " => ";
         auto net = gate.get_fan_out_net(output_pin_type);
@@ -100,6 +102,12 @@ boolean_function gate::get_boolean_function(const std::string& name) const
         }
         return boolean_function::X;
     }
+
+    if (m_type->get_base_type() == gate_type::lut && name == m_type->get_output_pins()[0])
+    {
+        return get_lut_function();
+    }
+
     auto it = m_functions.find(name);
     if (it == m_functions.end())
     {
@@ -123,11 +131,93 @@ std::map<std::string, boolean_function> gate::get_boolean_functions() const
         res.emplace(it.first, it.second);
     }
 
+    if (m_type->get_base_type() == gate_type::lut)
+    {
+        res.emplace(get_output_pins()[0], get_lut_function());
+    }
+
     return res;
+}
+
+boolean_function gate::get_lut_function() const
+{
+    boolean_function result = boolean_function::ZERO;
+
+    auto lut_type = std::static_pointer_cast<const gate_type>(m_type);
+
+    //TODO read from gate type
+    std::string category   = "generic";
+    std::string key        = "INIT";
+    std::string config_str = std::get<1>(get_data_by_key(category, key));
+    u64 config;
+    std::stoull(config_str, &config, 16);
+
+    auto inputs = get_input_pins();
+
+    for (u32 i = 0; config != 0; i++)
+    {
+        auto bit = (config & 1);
+        config >>= 1;
+        if (bit == 1)
+        {
+            boolean_function clause;
+            auto input_values = i;
+            for (auto input : inputs)
+            {
+                if ((input_values & 1) == 1)
+                {
+                    clause &= boolean_function(input);
+                }
+                else
+                {
+                    clause &= !boolean_function(input);
+                }
+                input_values >>= 1;
+            }
+            result |= clause;
+        }
+    }
+
+    return result;
 }
 
 void gate::set_boolean_function(const std::string& name, const boolean_function& func)
 {
+    if (m_type->get_base_type() == gate_type::lut)
+    {
+        auto output_pins = m_type->get_output_pins();
+        if (!output_pins.empty() && name == output_pins[0])
+        {
+            auto tt = func.get_truth_table(get_input_pins());
+
+            u64 config_value = 0;
+            if (true)    //TODO read from gate type (if descending)
+            {
+                std::reverse(tt.begin(), tt.end());
+            }
+            for (auto v : tt)
+            {
+                if (v == boolean_function::X)
+                {
+                    log_error("netlist", "function truth table contained undefined values");
+                    return;
+                }
+                config_value |= v;
+                config_value <<= 1;
+            }
+
+            //TODO read from gate type
+            std::string category = "generic";
+            std::string key      = "INIT";
+
+            std::stringstream stream;
+            stream << std::hex << config_value;
+            set_data(category, key, "bit_vector", stream.str());
+
+            return;
+        }
+    }
+
     m_functions.emplace(name, func);
 }
 
@@ -161,12 +251,12 @@ bool gate::is_global_gnd_gate() const
     return m_netlist->is_global_gnd_gate(const_cast<gate*>(this)->shared_from_this());
 }
 
-std::vector<std::string> gate::get_input_pin_types() const
+std::vector<std::string> gate::get_input_pins() const
 {
     return m_type->get_input_pins();
 }
 
-std::vector<std::string> gate::get_output_pin_types() const
+std::vector<std::string> gate::get_output_pins() const
 {
     return m_type->get_output_pins();
 }

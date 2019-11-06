@@ -247,7 +247,7 @@ void net_details_widget::update(u32 net_id)
     //    for (auto item : m_src_pin->takeChildren())
     //        delete item;
 
-    //    std::set<std::string> src_pins = g_netlist->get_gate_by_id(gate_id)->get_input_pin_types();
+    //    std::set<std::string> src_pins = g_netlist->get_gate_by_id(gate_id)->get_input_pins();
     //    if (src_pins.size() == 1)
     //        m_src_pin->setText(0, "1 Source Pin");
     //    else
@@ -269,7 +269,7 @@ void net_details_widget::update(u32 net_id)
     //    for (auto item : m_output_pins->takeChildren())
     //        delete item;
 
-    //    std::set<std::string> output_pins = g_netlist->get_gate_by_id(gate_id)->get_output_pin_types();
+    //    std::set<std::string> output_pins = g_netlist->get_gate_by_id(gate_id)->get_output_pins();
     //    if (output_pins.size() == 1)
     //        m_output_pins->setText(0, "1 Output Pin");
     //    else
