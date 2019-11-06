@@ -1,7 +1,7 @@
 #include "content_frame/content_frame.h"
 
 #include "content_widget/content_widget.h"
-#include "gui_utility.h"
+#include "gui_utils/graphics.h"
 #include "toolbar/toolbar.h"
 
 #include <QAction>
