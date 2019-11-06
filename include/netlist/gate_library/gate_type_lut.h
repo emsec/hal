@@ -23,10 +23,11 @@
 
 #include "pragma_once.h"
 
-#ifndef __HAL_GATE_TYPE_H
-#define __HAL_GATE_TYPE_H
+#ifndef __HAL_GATE_TYPE_LUT_H
+#define __HAL_GATE_TYPE_LUT_H
 
 #include "netlist/boolean_function.h"
+#include "netlist/gate_library/gate_type.h"
 
 #include <map>
 #include <string>
@@ -36,50 +37,33 @@
  *
  * @ingroup netlist
  */
-class gate_type
+class gate_type_lut : public gate_type
 {
 public:
-    enum base_type_t
+    enum direction_t
     {
-        combinatorial,
-        lut,
-        ff,
-        latch
+        ascending,
+        descending
     };
 
-    gate_type(const std::string& name);
+    using gate_type::gate_type;
 
-    gate_type(const gate_type&) = delete;               // disable copy-constructor
-    gate_type& operator=(const gate_type&) = delete;    // disable copy-assignment
+    static std::string to_string(const gate_type_lut& v);
+    friend std::ostream& operator<<(std::ostream& os, const gate_type_lut& gt);
 
-    static std::string to_string(const gate_type& v);
-    friend std::ostream& operator<<(std::ostream& os, const gate_type& gt);
+    void set_data_category(std::string data_category);
+    void set_data_key(std::string data_key);
+    void set_direction(direction_t direction);
 
-    bool operator==(const gate_type& other) const;
-    bool operator!=(const gate_type& other) const;
-
-    void set_base_type(base_type_t base_type);
-    void add_input_pin(std::string input_pin);
-    void add_input_pins(const std::vector<std::string>& input_pins);
-    void add_output_pin(std::string input_pin);
-    void add_output_pins(const std::vector<std::string>& output_pins);
-    void add_boolean_function(std::string name, boolean_function bf);
-
-    std::string get_name() const;
-    base_type_t get_base_type() const;
-    std::vector<std::string> get_input_pins() const;
-    std::vector<std::string> get_output_pins() const;
-    std::map<std::string, boolean_function> get_boolean_functions() const;
+    std::string get_data_category() const;
+    std::string get_data_key() const;
+    direction_t get_direction() const;
 
 private:
-    std::string m_name;
-    base_type_t m_base_type;
+    std::string m_data_category;
+    std::string m_data_key;
+    direction_t m_direction;
 
-    std::vector<std::string> m_input_pins;
-    std::vector<std::string> m_output_pins;
-
-    std::map<std::string, boolean_function> m_functions;
-
-    virtual bool doCompare(const gate_type& other) const = 0;
+    virtual bool doCompare(const gate_type& other) const;
 };
-#endif    //__HAL_GATE_TYPE_H
+#endif    //__HAL_GATE_TYPE_LUT_H
