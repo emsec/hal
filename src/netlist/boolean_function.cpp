@@ -38,6 +38,12 @@ std::ostream& operator<<(std::ostream& os, const boolean_function::value& v)
     return os << boolean_function::to_string(v);
 }
 
+boolean_function::boolean_function()
+{
+    m_content = content_type::TERMS;
+    m_invert  = false;
+}
+
 boolean_function::boolean_function(operation op, const std::vector<boolean_function>& operands, bool invert_result)
 {
     if (operands.empty())
@@ -56,8 +62,8 @@ boolean_function::boolean_function(operation op, const std::vector<boolean_funct
         m_content = content_type::TERMS;
         m_invert  = invert_result;
 
-        m_op       = op;
-        m_operands = operands;
+        m_op = op;
+        std::copy_if(operands.begin(), operands.end(), std::back_inserter(m_operands), [](auto op) { return !op.is_empty(); });
     }
 }
 
@@ -187,6 +193,11 @@ bool boolean_function::is_constant_one() const
 bool boolean_function::is_constant_zero() const
 {
     return m_content == content_type::CONSTANT && m_constant == 0;
+}
+
+bool boolean_function::is_empty() const
+{
+    return m_content == content_type::TERMS && m_operands.empty();
 }
 
 std::set<std::string> boolean_function::get_variables() const
@@ -429,7 +440,15 @@ std::ostream& operator<<(std::ostream& os, const boolean_function& f)
 
 boolean_function boolean_function::combine(operation op, const boolean_function& other) const
 {
-    if (m_content == content_type::TERMS && m_op == op && other.m_content != content_type::TERMS && !other.m_invert)
+    if (is_empty())
+    {
+        return other;
+    }
+    else if (other.is_empty())
+    {
+        return *this;
+    }
+    else if (m_content == content_type::TERMS && m_op == op && other.m_content != content_type::TERMS && !other.m_invert)
     {
         boolean_function result = *this;
         result.m_operands.push_back(other);
@@ -487,8 +506,11 @@ boolean_function& boolean_function::operator^=(const boolean_function& other)
 
 boolean_function boolean_function::operator!() const
 {
-    auto result     = *this;
-    result.m_invert = !result.m_invert;
+    auto result = *this;
+    if (!(m_content == content_type::TERMS && m_operands.empty()))
+    {
+        result.m_invert = !result.m_invert;
+    }
     return result;
 }
 
@@ -772,11 +794,16 @@ boolean_function boolean_function::to_dnf() const
     return replace_xors().propagate_negations().expand_ands().flatten().optimize_constants();
 }
 
-std::vector<boolean_function::value> boolean_function::get_truth_table() const
+std::vector<boolean_function::value> boolean_function::get_truth_table(const std::vector<std::string>& order) const
 {
     std::vector<value> result;
 
-    auto variables = get_variables();
+    std::vector<std::string> variables = order;
+    if (variables.empty())
+    {
+        auto unique_vars = get_variables();
+        variables.insert(variables.end(), unique_vars.begin(), unique_vars.end());
+    }
 
     for (u32 values = 0; values < (u32)(1 << variables.size()); ++values)
     {

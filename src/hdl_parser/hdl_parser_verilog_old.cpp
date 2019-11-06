@@ -513,8 +513,8 @@ bool hdl_parser_verilog_old::connect_net_to_pin(const std::string& net_name, std
         return true;
     }
 
-    auto input_pin_types  = new_gate->get_input_pin_types();
-    auto output_pin_types = new_gate->get_output_pin_types();
+    auto input_pin_types  = new_gate->get_input_pins();
+    auto output_pin_types = new_gate->get_output_pins();
 
     // add non-registered signal
     if (m_net.find(net_name) == m_net.end())
@@ -839,8 +839,8 @@ std::vector<std::string> hdl_parser_verilog_old::parse_pin(std::shared_ptr<gate>
 
     std::vector<std::string> pins;
 
-    auto input_pins  = new_gate->get_input_pin_types();
-    auto output_pins = new_gate->get_output_pin_types();
+    auto input_pins  = new_gate->get_input_pins();
+    auto output_pins = new_gate->get_output_pins();
 
     if (std::find(input_pins.begin(), input_pins.end(), t) != input_pins.end() || std::find(output_pins.begin(), output_pins.end(), t) != output_pins.end())
     {

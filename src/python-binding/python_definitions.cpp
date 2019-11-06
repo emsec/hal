@@ -233,13 +233,13 @@ Contains the library and user share directories.
     // :returns: Set of gate types.
     // :rtype: set(str)
     // )")
-    //         .def_property_readonly("input_pin_types", &gate_library::get_input_pin_types, R"(
+    //         .def_property_readonly("input_pin_types", &gate_library::get_input_pins, R"(
     // Get all input pin types of the library.
 
     // :returns: Set of input pin types.
     // :rtype: set(str)
     // )")
-    //         .def_property_readonly("output_pin_types", &gate_library::get_output_pin_types, R"(
+    //         .def_property_readonly("output_pin_types", &gate_library::get_output_pins, R"(
     // Get all output pin types of the library.
 
     // :returns: Set of output pin types.
@@ -836,25 +836,25 @@ Checks whether this gate is a global gnd gate.
 :rtype: bool
 )")
 
-        .def_property_readonly("input_pin_types", &gate::get_input_pin_types, R"(
+        .def_property_readonly("input_pin_types", &gate::get_input_pins, R"(
 Get all input pin types of the gate.
 
 :returns: A list of input pin types.
 :rtype: list(str)
 )")
-        .def("get_input_pin_types", &gate::get_input_pin_types, R"(
+        .def("get_input_pins", &gate::get_input_pins, R"(
 Get all input pin types of the gate.
 
 :returns: A list of input pin types.
 :rtype: list(str)
 )")
-        .def_property_readonly("output_pin_types", &gate::get_output_pin_types, R"(
+        .def_property_readonly("output_pin_types", &gate::get_output_pins, R"(
 Get all output pin types of the gate.
 
 :returns: A list of output pin types.
 :rtype: list(str)
 )")
-        .def("get_output_pin_types", &gate::get_output_pin_types, R"(
+        .def("get_output_pins", &gate::get_output_pins, R"(
 Get all output pin types of the gate.
 
 :returns: A list of output pin types.

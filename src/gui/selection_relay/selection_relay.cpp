@@ -349,7 +349,7 @@ void selection_relay::navigate_up()
 
         if (m_subfocus == subfocus::left)
         {
-            size = g->get_input_pin_types().size();
+            size = g->get_input_pins().size();
 
             if (!size) // CHECK NECESSARY ???
                 return; // INVALID STATE, FIX OR IGNORE ???
@@ -359,7 +359,7 @@ void selection_relay::navigate_up()
 
         if (m_subfocus == subfocus::right)
         {
-            size = g->get_output_pin_types().size();
+            size = g->get_output_pins().size();
 
             if (!size) // CHECK NECESSARY ???
                 return; // INVALID STATE, FIX OR IGNORE ???
@@ -421,7 +421,7 @@ void selection_relay::navigate_down()
 
         if (m_subfocus == subfocus::left)
         {
-            size = g->get_input_pin_types().size();
+            size = g->get_input_pins().size();
 
             if (!size) // CHECK NECESSARY ???
                 return; // INVALID STATE, FIX OR IGNORE ???
@@ -431,7 +431,7 @@ void selection_relay::navigate_down()
 
         if (m_subfocus == subfocus::right)
         {
-            size = g->get_output_pin_types().size();
+            size = g->get_output_pins().size();
 
             if (!size) // CHECK NECESSARY ???
                 return; // INVALID STATE, FIX OR IGNORE ???
@@ -489,13 +489,13 @@ void selection_relay::navigate_left()
         if (!g)
             return;
 
-        if (g->get_input_pin_types().size()) // CHECK HERE OR IN PRIVATE METHODS ?
+        if (g->get_input_pins().size()) // CHECK HERE OR IN PRIVATE METHODS ?
         {
             if (m_subfocus == subfocus::left)
                 follow_gate_input_pin(g, m_subfocus_index);
             else
             {
-                if (s_navigation_skips_enabled && g->get_input_pin_types().size() == 1)
+                if (s_navigation_skips_enabled && g->get_input_pins().size() == 1)
                     follow_gate_input_pin(g, 0);
                 else
                     subfocus_left();
@@ -549,7 +549,7 @@ void selection_relay::navigate_right()
             follow_gate_output_pin(g, m_subfocus_index);
         else
         {
-            if (s_navigation_skips_enabled && g->get_output_pin_types().size() == 1)
+            if (s_navigation_skips_enabled && g->get_output_pins().size() == 1)
                 follow_gate_output_pin(g, 0);
             else
                 subfocus_right();
@@ -693,7 +693,7 @@ void selection_relay::handle_net_removed(const u32 id)
 // UNCERTAIN ABOUT UNROUTED (GLOBAL) NETS, DECIDE
 void selection_relay::follow_gate_input_pin(std::shared_ptr<gate> g, u32 input_pin_index)
 {
-    std::string pin_type = *std::next(g->get_input_pin_types().begin(), input_pin_index);
+    std::string pin_type = *std::next(g->get_input_pins().begin(), input_pin_index);
     std::shared_ptr<net> n = g->get_fan_in_net(pin_type);
 
     if (!n)
@@ -737,7 +737,7 @@ void selection_relay::follow_gate_input_pin(std::shared_ptr<gate> g, u32 input_p
 
 void selection_relay::follow_gate_output_pin(std::shared_ptr<gate> g, u32 output_pin_index)
 {
-    std::string pin_type = *std::next(g->get_output_pin_types().begin(), output_pin_index);
+    std::string pin_type = *std::next(g->get_output_pins().begin(), output_pin_index);
     std::shared_ptr<net> n = g->get_fan_out_net(pin_type);
 
     if (!n)
@@ -779,7 +779,7 @@ void selection_relay::follow_net_to_src(std::shared_ptr<net> n)
     m_focus_type = item_type::gate;
     m_focus_id = g->get_id();
 
-    if (s_navigation_skips_enabled && g->get_output_pin_types().size() == 1)
+    if (s_navigation_skips_enabled && g->get_output_pins().size() == 1)
     {
         m_subfocus = subfocus::left; // NONE OR LEFT ???
         m_subfocus_index = 0;
@@ -787,7 +787,7 @@ void selection_relay::follow_net_to_src(std::shared_ptr<net> n)
     else
     {
         int i = 0;
-        for (const std::string& pin_type: g->get_output_pin_types())
+        for (const std::string& pin_type: g->get_output_pins())
         {
             if (pin_type == e.get_pin_type())
                 break;
@@ -819,7 +819,7 @@ void selection_relay::follow_net_to_dst(std::shared_ptr<net> n, u32 dst_index)
     m_focus_type = item_type::gate;
     m_focus_id = g->get_id();
 
-    if (s_navigation_skips_enabled && g->get_input_pin_types().size() == 1)
+    if (s_navigation_skips_enabled && g->get_input_pins().size() == 1)
     {
         m_subfocus = subfocus::right; // NONE OR RIGHT ???
         m_subfocus_index = 0;
@@ -827,7 +827,7 @@ void selection_relay::follow_net_to_dst(std::shared_ptr<net> n, u32 dst_index)
     else
     {
         int i = 0;
-        for (const std::string& pin_type: g->get_input_pin_types())
+        for (const std::string& pin_type: g->get_input_pins())
         {
             if (pin_type == e.get_pin_type())
                 break;

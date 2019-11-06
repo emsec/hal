@@ -247,12 +247,12 @@ bool hdl_parser_vhdl_old::add_entity_definition(const std::vector<std::tuple<int
             {
                 if (direction == "in")
                 {
-                    lib->get_input_pin_types()->insert(signal);
+                    lib->get_input_pins()->insert(signal);
                     (*lib->get_gate_type_map_to_input_pin_types())[entity_name].push_back(signal);
                 }
                 else if (direction == "out")
                 {
-                    lib->get_output_pin_types()->insert(signal);
+                    lib->get_output_pins()->insert(signal);
                     (*lib->get_gate_type_map_to_output_pin_types())[entity_name].push_back(signal);
                 }
                 else
@@ -480,8 +480,8 @@ bool hdl_parser_vhdl_old::parse_instance(std::string instance)
         }
     }
 
-    auto input_pin_types  = new_gate->get_input_pin_types();
-    auto output_pin_types = new_gate->get_output_pin_types();
+    auto input_pin_types  = new_gate->get_input_pins();
+    auto output_pin_types = new_gate->get_output_pins();
 
     // check for generic
     if (core_utils::starts_with(instance, "generic map"))

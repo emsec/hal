@@ -344,8 +344,8 @@ void hdl_writer_vhdl::print_gate_definitions_vhdl()
         m_stream << " port map (" << std::endl;
 
         bool begin_signal_list = true;
-        begin_signal_list      = this->print_gate_signal_list_vhdl(gate, gate->get_input_pin_types(), begin_signal_list, std::bind(&gate::get_fan_in_net, gate, std::placeholders::_1));
-        begin_signal_list      = this->print_gate_signal_list_vhdl(gate, gate->get_output_pin_types(), begin_signal_list, std::bind(&gate::get_fan_out_net, gate, std::placeholders::_1));
+        begin_signal_list      = this->print_gate_signal_list_vhdl(gate, gate->get_input_pins(), begin_signal_list, std::bind(&gate::get_fan_in_net, gate, std::placeholders::_1));
+        begin_signal_list      = this->print_gate_signal_list_vhdl(gate, gate->get_output_pins(), begin_signal_list, std::bind(&gate::get_fan_out_net, gate, std::placeholders::_1));
 
         m_stream << std::endl << ");" << std::endl;
     }

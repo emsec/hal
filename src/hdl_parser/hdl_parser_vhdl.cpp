@@ -325,12 +325,12 @@ bool hdl_parser_vhdl::parse_components(const std::vector<std::vector<file_line>>
                 {
                     if (direction == "in")
                     {
-                        lib->get_input_pin_types()->insert(signal);
+                        lib->get_input_pins()->insert(signal);
                         (*lib->get_gate_type_map_to_input_pin_types())[new_component].push_back(signal);
                     }
                     else if (direction == "out")
                     {
-                        lib->get_output_pin_types()->insert(signal);
+                        lib->get_output_pins()->insert(signal);
                         (*lib->get_gate_type_map_to_output_pin_types())[new_component].push_back(signal);
                     }
                     else
@@ -1057,8 +1057,8 @@ std::shared_ptr<module> hdl_parser_vhdl::instantiate(const entity& e, std::share
             }
 
             // cache pin types
-            auto input_pin_types  = new_gate->get_input_pin_types();
-            auto output_pin_types = new_gate->get_output_pin_types();
+            auto input_pin_types  = new_gate->get_input_pins();
+            auto output_pin_types = new_gate->get_output_pins();
 
             // check for port
             for (auto [pin_it, net_name] : inst.ports)

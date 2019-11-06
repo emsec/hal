@@ -724,8 +724,8 @@ std::shared_ptr<module> hdl_parser_verilog::instantiate(const entity& e, std::sh
             }
 
             // cache pin types
-            auto input_pin_types  = new_gate->get_input_pin_types();
-            auto output_pin_types = new_gate->get_output_pin_types();
+            auto input_pin_types  = new_gate->get_input_pins();
+            auto output_pin_types = new_gate->get_output_pins();
 
             // check for port
             for (auto [pin, net_name] : inst.ports)

@@ -310,7 +310,7 @@ void gate_details_widget::update(const u32 gate_id)
     for (auto item : m_input_pins->takeChildren())
         delete item;
 
-    auto input_pins = g_netlist->get_gate_by_id(gate_id)->get_input_pin_types();
+    auto input_pins = g_netlist->get_gate_by_id(gate_id)->get_input_pins();
     if (input_pins.size() == 1)
         m_input_pins->setText(0, "1 Input Pin");
     else
@@ -335,7 +335,7 @@ void gate_details_widget::update(const u32 gate_id)
     for (auto item : m_output_pins->takeChildren())
         delete item;
 
-    auto output_pins = g_netlist->get_gate_by_id(gate_id)->get_output_pin_types();
+    auto output_pins = g_netlist->get_gate_by_id(gate_id)->get_output_pins();
     if (output_pins.size() == 1)
         m_output_pins->setText(0, "1 Output Pin");
     else

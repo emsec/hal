@@ -34,8 +34,8 @@ gui_graph_gate::gui_graph_gate(std::shared_ptr<gate> gate, QGraphicsItem* parent
     Q_UNUSED(parent)
     m_ref_gate = gate;
 
-    number_output_pins = static_cast<int>(m_ref_gate->get_output_pin_types().size());
-    number_input_pins  = static_cast<int>(m_ref_gate->get_input_pin_types().size());
+    number_output_pins = static_cast<int>(m_ref_gate->get_output_pins().size());
+    number_input_pins  = static_cast<int>(m_ref_gate->get_input_pins().size());
 
     //calculate pin name width
     int counter = 0;
@@ -43,7 +43,7 @@ gui_graph_gate::gui_graph_gate(std::shared_ptr<gate> gate, QGraphicsItem* parent
     pin_font.setStyle(QFont::StyleOblique);
 
     //fill the input pin vector and calculate the maximal pin name width
-    for (auto v : gate->get_input_pin_types())
+    for (auto v : gate->get_input_pins())
     {
         pin temp_pin;
         temp_pin.name = QString::fromStdString(v);
@@ -59,7 +59,7 @@ gui_graph_gate::gui_graph_gate(std::shared_ptr<gate> gate, QGraphicsItem* parent
     }
 
     //calculate the maximal pin name width for the output pins, sadly you cant fill the pin vector yet (like above)
-    for (auto v : gate->get_output_pin_types())
+    for (auto v : gate->get_output_pins())
     {
         QGraphicsTextItem temp_item(QString::fromStdString(v));
         temp_item.setFont(pin_font);
@@ -126,7 +126,7 @@ gui_graph_gate::gui_graph_gate(std::shared_ptr<gate> gate, QGraphicsItem* parent
 
     /*fill the output_pin-vector*/
     counter = 0;
-    for (auto v : gate->get_output_pin_types())
+    for (auto v : gate->get_output_pins())
     {
         pin temp_pin;
         //temp_pin.name = QString::fromStdString(m_ref_gate->get_graph()->get_output_pin_type_name(v));
