@@ -42,7 +42,7 @@ namespace gate_library_liberty_parser
     {
         std::pair<std::string, std::string> output_state;
         std::map<std::string, boolean_function> functions;
-        std::pair<std::string, std::string> set_rst;
+        std::pair<char, char> set_rst;
     };
 
     statement* get_statements(std::stringstream& ss);
@@ -220,26 +220,63 @@ namespace gate_library_liberty_parser
                                     {
                                         gt->add_boolean_function(s2->value, boolean_function::from_string(prepare_string(s3->value)));
                                     }
-                                    else if (gt->get_base_type() == gate_type::ff)
+                                    else if ((gt->get_base_type() == gate_type::ff) || (gt->get_base_type() == gate_type::latch))
                                     {
                                         if (s3->value == seq.output_state.first)
                                         {
-                                            gt->add_boolean_function(s2->value, seq.functions.at("next_state"));
+                                            gt->add_boolean_function(s2->value, seq.functions.at("data_in"));
                                             gt->add_boolean_function("set_" + s2->value, seq.functions.at("set"));
                                             gt->add_boolean_function("reset_" + s2->value, !seq.functions.at("reset"));
+
+                                            switch (seq.set_rst.first)
+                                            {
+                                                case 'L':
+                                                    gt->add_boolean_function("set_reset_" + s2->value, boolean_function::ZERO);
+                                                    break;
+                                                case 'H':
+                                                    gt->add_boolean_function("set_reset_" + s2->value, boolean_function::ONE);
+                                                    break;
+                                                case 'N':
+                                                    gt->add_boolean_function("set_reset_" + s2->value, boolean_function::from_string("!" + s2->value));
+                                                    break;
+                                                case 'T':
+                                                    gt->add_boolean_function("set_reset_" + s2->value, boolean_function::from_string("!" + s2->value));
+                                                    break;
+                                                case 'X':
+                                                    gt->add_boolean_function("set_reset_" + s2->value, boolean_function::X);
+                                                    break;
+                                            }
                                         }
-                                        else
+                                        else if (s3->value == seq.output_state.second)
                                         {
-                                            gt->add_boolean_function(s2->value, !seq.functions.at("next_state"));
+                                            gt->add_boolean_function(s2->value, !seq.functions.at("data_in"));
                                             gt->add_boolean_function("set_" + s2->value, !seq.functions.at("set"));
                                             gt->add_boolean_function("reset_" + s2->value, seq.functions.at("reset"));
+
+                                            switch (seq.set_rst.second)
+                                            {
+                                                case 'L':
+                                                    gt->add_boolean_function("set_reset_" + s2->value, boolean_function::ZERO);
+                                                    break;
+                                                case 'H':
+                                                    gt->add_boolean_function("set_reset_" + s2->value, boolean_function::ONE);
+                                                    break;
+                                                case 'N':
+                                                    gt->add_boolean_function("set_reset_" + s2->value, boolean_function::from_string("!" + s2->value));
+                                                    break;
+                                                case 'T':
+                                                    gt->add_boolean_function("set_reset_" + s2->value, boolean_function::from_string("!" + s2->value));
+                                                    break;
+                                                case 'X':
+                                                    gt->add_boolean_function("set_reset_" + s2->value, boolean_function::X);
+                                                    break;
+                                            }
                                         }
                                     }
                                 }
                                 else if (s3->name == "three_state")
                                 {
-                                    // TODO: Tri-State
-                                    //p.three_state = prepare_string(s3->value);
+                                    gt->add_boolean_function("tri_" + s2->value, boolean_function::from_string(prepare_string(s3->value)));
                                 }
                                 else if (s3->name == "x_function")
                                 {
@@ -247,9 +284,16 @@ namespace gate_library_liberty_parser
                                 }
                             }
                         }
-                        else if (s2->name == "ff")
+                        else if ((s2->name == "ff") || (s2->name == "latch"))
                         {
-                            gt->set_base_type(gate_type::ff);
+                            if (s2->name == "ff")
+                            {
+                                gt->set_base_type(gate_type::ff);
+                            }
+                            else
+                            {
+                                gt->set_base_type(gate_type::latch);
+                            }
 
                             auto tokens      = core_utils::split(s2->value, ',');
                             seq.output_state = {prepare_string(tokens[0]), prepare_string(tokens[1])};
@@ -261,9 +305,17 @@ namespace gate_library_liberty_parser
                                 {
                                     gt->add_boolean_function("clock" + s2->value, boolean_function::from_string(prepare_string(s3->value)));
                                 }
+                                else if (s3->name == "enable")
+                                {
+                                    gt->add_boolean_function("enable" + s2->value, boolean_function::from_string(prepare_string(s3->value)));
+                                }
                                 else if (s3->name == "next_state")
                                 {
-                                    seq.functions.emplace("next_state", boolean_function::from_string(prepare_string(s3->value)));
+                                    seq.functions.emplace("data_in", boolean_function::from_string(prepare_string(s3->value)));
+                                }
+                                else if (s3->name == "data_in")
+                                {
+                                    seq.functions.emplace("data_in", boolean_function::from_string(prepare_string(s3->value)));
                                 }
                                 else if (s3->name == "clear")
                                 {
@@ -275,48 +327,14 @@ namespace gate_library_liberty_parser
                                 }
                                 else if (s3->name == "clear_preset_var1")
                                 {
-                                    seq.set_rst.first = prepare_string(s3->value);
+                                    seq.set_rst.first = prepare_string(s3->value).at(0);
                                 }
                                 else if (s3->name == "clear_preset_var2")
                                 {
-                                    seq.set_rst.second = prepare_string(s3->value);
+                                    seq.set_rst.second = prepare_string(s3->value).at(0);
                                 }
                             }
                         }
-                        // TODO
-                        // else if (s2->name == "latch")
-                        // {
-                        //     c.is_latch = true;
-
-                        //     for (const auto& s3 : s2->statements)
-                        //     {
-                        //         // depth 3
-                        //         if (s3->name == "enable")
-                        //         {
-                        //             c.enable = s3->value;
-                        //         }
-                        //         else if (s3->name == "data_in")
-                        //         {
-                        //             c.data_in = s3->value;
-                        //         }
-                        //         else if (s3->name == "clear")
-                        //         {
-                        //             c.reset = s3->value;
-                        //         }
-                        //         else if (s3->name == "preset")
-                        //         {
-                        //             c.set = s3->value;
-                        //         }
-                        //         else if (s3->name == "clear_preset_var1")
-                        //         {
-                        //             c.clear_preset_var1 = s3->value;
-                        //         }
-                        //         else if (s3->name == "clear_preset_var2")
-                        //         {
-                        //             c.clear_preset_var2 = s3->value;
-                        //         }
-                        //     }
-                        // }
                     }
 
                     lib->add_gate_type(gt);
