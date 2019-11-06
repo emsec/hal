@@ -535,10 +535,11 @@ void graph_graphics_view::show_context_menu(const QPoint& pos)
                 for (auto& module : g_netlist->get_modules())
                 {
                     // don't allow a gate to be moved into its current module
+                    // && don't allow a module to be moved into its current module
                     // && don't allow a module to be moved into itself
                     // (either check automatically passes if g respective m is nullptr, so we
                     // don't have to create two loops)
-                    if (!module->contains_gate(g) && module != m)
+                    if (!module->contains_gate(g) && !module->contains_module(m) && module != m)
                     {
                         QString mod_name = QString::fromStdString(module->get_name());
                         const u32 mod_id = module->get_id();
