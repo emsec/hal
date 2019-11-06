@@ -526,10 +526,15 @@ void graph_graphics_view::show_context_menu(const QPoint& pos)
             module_submenu->addSeparator();
 
             QActionGroup* module_actions = new QActionGroup(module_submenu);
+            std::shared_ptr<gate> g = isGate ? g_netlist->get_gate_by_id(m_item->id()) : nullptr;
+            std::shared_ptr<module> m = isModule ? g_netlist->get_module_by_id(m_item->id()) : nullptr;
             for (auto& module : g_netlist->get_modules())
             {
-                std::shared_ptr<gate> g = g_netlist->get_gate_by_id(m_item->id());
-                if (!module->contains_gate(g))
+                // don't allow a gate to be moved into its current module
+                // && don't allow a module to be moved into itself
+                // (either check automatically passes if g respective m is nullptr, so we
+                // don't have to create two loops)
+                if (!module->contains_gate(g) && module != m)
                 {
                     QString mod_name = QString::fromStdString(module->get_name());
                     const u32 mod_id = module->get_id();
@@ -540,6 +545,7 @@ void graph_graphics_view::show_context_menu(const QPoint& pos)
             }
             QObject::connect(module_actions, SIGNAL(triggered(QAction*)), this, SLOT(handle_move_action(QAction*)));
         }
+
 
         if (g_selection_relay.m_selected_gates.size() + g_selection_relay.m_selected_modules.size() > 1)
         {
