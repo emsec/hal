@@ -1,6 +1,6 @@
 #include "expanding_list/expanding_list_button.h"
 
-#include "gui_utility.h"
+#include "gui_utils/graphics.h"
 
 #include <QHBoxLayout>
 #include <QLabel>

@@ -1,6 +1,6 @@
 #include "plugin_management/scheduled_plugin_item.h"
 
-#include "gui_utility.h"
+#include "gui_utils/graphics.h"
 
 #include <QApplication>
 #include <QDrag>
