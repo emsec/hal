@@ -42,6 +42,7 @@ class QTreeWidgetItem;
 class QVBoxLayout;
 class QScrollArea;
 class QModelIndex;
+class graph_navigation_widget;
 
 class gate_details_widget : public QWidget
 {
@@ -69,7 +70,7 @@ public Q_SLOTS:
     void handle_item_expanded(QTreeWidgetItem* item);
     void handle_item_collapsed(QTreeWidgetItem* item);
     void on_treewidget_item_clicked(QTreeWidgetItem* item, int column);
-    void on_gate_selected(endpoint selected);
+    void handle_navigation_jump_requested(const u32 via_net, const u32 to_gate);
     void on_general_table_item_double_clicked(const QModelIndex &index);
 
     void handle_gate_name_changed(std::shared_ptr<gate> gate);
@@ -112,6 +113,8 @@ private:
 
     // store pointer to Quine-McCluskey plugin (to display minimized Boolean function)
     std::shared_ptr<plugin_quine_mccluskey> m_qmc;
+
+    graph_navigation_widget* m_navigation_table;
 };
 
 #endif /* __HAL_GATE_DETAILS_WIDGET_H__ */

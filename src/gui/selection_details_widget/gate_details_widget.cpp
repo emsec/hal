@@ -8,7 +8,7 @@
 #include "gui_globals.h"
 
 #include "netlist/module.h"
-#include "selection_details_widget/table_selector_widget.h"
+#include "graph_widget/graph_navigation_widget.h"
 
 #include <QApplication>
 #include <QCursor>
@@ -158,6 +158,12 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
     m_table_widget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_tree_widget_container_layout->addWidget(m_table_widget);
     */
+
+    //set parent and flag so it gets shown in its own window
+    m_navigation_table = new graph_navigation_widget();
+    m_navigation_table->setWindowFlags(Qt::CustomizeWindowHint);
+    m_navigation_table->hide();
+    connect(m_navigation_table, &graph_navigation_widget::navigation_requested, this, &gate_details_widget::handle_navigation_jump_requested);
 
     m_scroll_area = new QScrollArea(this);
     m_scroll_area->setFrameStyle(QFrame::NoFrame);
@@ -500,12 +506,13 @@ void gate_details_widget::on_treewidget_item_clicked(QTreeWidgetItem* item, int 
         }
         else
         {
-            table_selector_widget* w = new table_selector_widget(destinations, this);
-            connect(w, &table_selector_widget::gateSelected, this, &gate_details_widget::on_gate_selected);
-            auto rect = QApplication::desktop()->availableGeometry(this);
-            w->move(QPoint(rect.x() + (rect.width() - w->width()) / 2, rect.y() + (rect.height() - w->height()) / 2));
-            w->show();
-            w->setFocus();
+//            auto rect = QApplication::desktop()->availableGeometry(this);
+//            w->move(QPoint(rect.x() + (rect.width() - w->width()) / 2, rect.y() + (rect.height() - w->height()) / 2));
+            m_navigation_table->setup(clicked_net);
+            m_navigation_table->move(QCursor::pos());
+            m_navigation_table->show();
+            m_navigation_table->setFocus();
+
         }
     }
     else if (m_input_pins == item->parent() && column == 2)
@@ -538,22 +545,36 @@ void gate_details_widget::on_treewidget_item_clicked(QTreeWidgetItem* item, int 
     }
 }
 
-void gate_details_widget::on_gate_selected(endpoint selected)
+//always the right-subfocus!!!!!!(the other way is handled: on_treewidget_item_clicked
+void gate_details_widget::handle_navigation_jump_requested(const u32 via_net, const u32 to_gate)
 {
+    auto n = g_netlist->get_net_by_id(via_net);
+    auto g = g_netlist->get_gate_by_id(to_gate);
+
+    if (!g || !n)
+        return;
+
+    m_navigation_table->hide();
     g_selection_relay.clear();
-    g_selection_relay.m_selected_gates.insert(selected.gate->get_id());
+    g_selection_relay.m_selected_gates.insert(to_gate);
     g_selection_relay.m_focus_type = selection_relay::item_type::gate;
-    g_selection_relay.m_focus_id   = selected.gate->get_id();
-    g_selection_relay.m_subfocus   = selection_relay::subfocus::left;
+    g_selection_relay.m_focus_id   = to_gate;
+    g_selection_relay.m_subfocus = selection_relay::subfocus::left;
 
-    auto pins                          = selected.gate->get_input_pin_types();
-    auto index                         = std::distance(pins.begin(), std::find(pins.begin(), pins.end(), selected.pin_type));
-    g_selection_relay.m_subfocus_index = index;
-    update(selected.gate->get_id());
+    u32 index_cnt = 0;
+    for(const auto& pin : g->get_input_pin_types())
+    {
+        if(g->get_fan_in_net(pin) == n)
+        {
+            g_selection_relay.m_subfocus_index = index_cnt;
+            break;
+        }
+        index_cnt++;
+    }
+
     g_selection_relay.relay_selection_changed(this);
+    m_navigation_table->hide();
 
-    if (dynamic_cast<QWidget*>(sender()))
-        static_cast<QWidget*>(sender())->close();
 }
 
 void gate_details_widget::on_general_table_item_double_clicked(const QModelIndex &index)

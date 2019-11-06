@@ -86,6 +86,17 @@ void graph_navigation_widget::setup()
     }
 }
 
+void graph_navigation_widget::setup(std::shared_ptr<net> via_net)
+{
+    clearContents();
+    fill_table(via_net);
+}
+
+void graph_navigation_widget::focusOutEvent(QFocusEvent *event)
+{
+    hide();
+}
+
 void graph_navigation_widget::keyPressEvent(QKeyEvent* event)
 {
     if (event->key() == Qt::Key_Up || event->key() == Qt::Key_Down)
