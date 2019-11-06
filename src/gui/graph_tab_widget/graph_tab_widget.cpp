@@ -14,6 +14,7 @@ graph_tab_widget::graph_tab_widget(QWidget* parent) : content_widget("Graph-View
 {
     m_content_layout->addWidget(m_tab_widget);
     m_tab_widget->setTabsClosable(true);
+    m_tab_widget->setMovable(true);
 
     connect(m_tab_widget, &QTabWidget::tabCloseRequested, this, &graph_tab_widget::handle_tab_close_requested);
     connect(m_tab_widget, &QTabWidget::currentChanged, this, &graph_tab_widget::handle_tab_changed);
