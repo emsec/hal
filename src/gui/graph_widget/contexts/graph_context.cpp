@@ -10,23 +10,25 @@
 static const bool lazy_updates = false;
 
 graph_context::graph_context(const QString& name, QObject* parent)
-    : QObject(parent), m_unhandled_changes(false), m_scene_update_required(false), m_update_requested(false), m_name(name), m_scene_available(true), m_update_in_progress(false)
+    : QObject(parent), m_name(name), m_unhandled_changes(false), m_scene_update_required(false), m_update_requested(false), m_scene_available(true), m_update_in_progress(false)
 {
-    m_user_update_cnt = 0;
+    m_user_update_count = 0;
 }
 
 void graph_context::set_layouter(graph_layouter* layouter)
 {
+    assert(layouter);
+
+    connect(layouter, qOverload<int>(&graph_layouter::status_update), this, qOverload<int>(&graph_context::handle_layouter_update), Qt::ConnectionType::QueuedConnection);
+    connect(layouter, qOverload<const QString&>(&graph_layouter::status_update), this, qOverload<const QString&>(&graph_context::handle_layouter_update), Qt::ConnectionType::QueuedConnection);
+
     m_layouter = layouter;
-    if (m_layouter)
-    {
-        connect(m_layouter, qOverload<int>(&graph_layouter::status_update), this, qOverload<int>(&graph_context::handle_layouter_update), Qt::ConnectionType::QueuedConnection);
-        connect(m_layouter, qOverload<const QString&>(&graph_layouter::status_update), this, qOverload<const QString&>(&graph_context::handle_layouter_update), Qt::ConnectionType::QueuedConnection);
-    }
 }
 
 void graph_context::set_shader(graph_shader* shader)
 {
+    assert(shader);
+
     m_shader = shader;
 }
 
@@ -47,18 +49,20 @@ void graph_context::subscribe(graph_context_subscriber* const subscriber)
 
 void graph_context::unsubscribe(graph_context_subscriber* const subscriber)
 {
+    assert(subscriber);
+
     m_subscribers.removeOne(subscriber);
 }
 
 void graph_context::begin_change()
 {
-    m_user_update_cnt++;
+    ++m_user_update_count;
 }
 
 void graph_context::end_change()
 {
-    m_user_update_cnt--;
-    if (m_user_update_cnt == 0)
+    --m_user_update_count;
+    if (m_user_update_count == 0)
     {
         evaluate_changes();
         update();
@@ -79,7 +83,7 @@ void graph_context::add(const QSet<u32>& modules, const QSet<u32>& gates)
     m_added_modules += new_modules;
     m_added_gates += new_gates;
 
-    if (m_user_update_cnt == 0)
+    if (m_user_update_count == 0)
     {
         evaluate_changes();
         update();
@@ -97,7 +101,7 @@ void graph_context::remove(const QSet<u32>& modules, const QSet<u32>& gates)
     m_added_modules -= modules;
     m_added_gates -= gates;
 
-    if (m_user_update_cnt == 0)
+    if (m_user_update_count == 0)
     {
         evaluate_changes();
         update();
@@ -112,7 +116,7 @@ void graph_context::clear()
     m_added_modules.clear();
     m_added_gates.clear();
 
-    if (m_user_update_cnt == 0)
+    if (m_user_update_count == 0)
     {
         evaluate_changes();
         update();
@@ -122,7 +126,6 @@ void graph_context::clear()
 void graph_context::fold_module_of_gate(u32 id)
 {
     auto contained_gates = m_gates + m_added_gates - m_removed_gates;
-    begin_change();
     if (contained_gates.find(id) != contained_gates.end())
     {
         auto m = g_netlist->get_gate_by_id(id)->get_module();
@@ -136,16 +139,17 @@ void graph_context::fold_module_of_gate(u32 id)
         {
             modules.insert(sm->get_id());
         }
+        begin_change();
         remove(modules, gates);
         add({m->get_id()}, {});
+        end_change();
     }
-    end_change();
 }
 
 void graph_context::unfold_module(u32 id)
 {
     auto contained_modules = m_modules + m_added_modules - m_removed_modules;
-    begin_change();
+
     if (contained_modules.find(id) != contained_modules.end())
     {
         auto m = g_netlist->get_module_by_id(id);
@@ -159,10 +163,11 @@ void graph_context::unfold_module(u32 id)
         {
             modules.insert(sm->get_id());
         }
+        begin_change();
         remove({id}, {});
         add(modules, gates);
+        end_change();
     }
-    end_change();
 }
 
 const QSet<u32>& graph_context::modules() const
@@ -198,35 +203,6 @@ bool graph_context::available() const
 bool graph_context::update_in_progress() const
 {
     return m_update_in_progress;
-}
-
-void graph_context::handle_layouter_finished()
-{
-    if (m_unhandled_changes)
-        apply_changes();
-
-    if (m_scene_update_required)
-    {
-        update_scene();
-    }
-    else
-    {
-        m_shader->update();
-        m_layouter->scene()->update_visuals(m_shader->get_shading());
-
-        m_update_in_progress = false;
-
-        m_layouter->scene()->connect_all();
-
-        for (graph_context_subscriber* s : m_subscribers)
-            s->handle_scene_available();
-    }
-}
-
-void graph_context::evaluate_changes()
-{
-    if (!m_added_gates.isEmpty() || !m_removed_gates.isEmpty() || !m_added_modules.isEmpty() || !m_removed_modules.isEmpty())
-        m_unhandled_changes = true;
 }
 
 void graph_context::update()
@@ -302,6 +278,35 @@ void graph_context::handle_layouter_update(const QString& message)
         s->handle_status_update(message);
 }
 
+void graph_context::handle_layouter_finished()
+{
+    if (m_unhandled_changes)
+        apply_changes();
+
+    if (m_scene_update_required)
+    {
+        update_scene();
+    }
+    else
+    {
+        m_shader->update();
+        m_layouter->scene()->update_visuals(m_shader->get_shading());
+
+        m_update_in_progress = false;
+
+        m_layouter->scene()->connect_all();
+
+        for (graph_context_subscriber* s : m_subscribers)
+            s->handle_scene_available();
+    }
+}
+
+void graph_context::evaluate_changes()
+{
+    if (!m_added_gates.isEmpty() || !m_removed_gates.isEmpty() || !m_added_modules.isEmpty() || !m_removed_modules.isEmpty())
+        m_unhandled_changes = true;
+}
+
 void graph_context::apply_changes()
 {
     m_modules -= m_removed_modules;
@@ -342,10 +347,11 @@ void graph_context::apply_changes()
     m_layouter->add(m_added_modules, m_added_gates, m_nets);
     m_shader->add(m_added_modules, m_added_gates, m_nets);
 
+    m_added_modules.clear();
     m_added_gates.clear();
-    m_removed_gates.clear();
-    m_added_gates.clear();
+
     m_removed_modules.clear();
+    m_removed_gates.clear();
 
     m_unhandled_changes     = false;
     m_scene_update_required = true;
@@ -361,8 +367,6 @@ void graph_context::update_scene()
     m_update_in_progress    = true;
     m_scene_update_required = false;
 
-    // m_layouter->layout();
-    // handle_layouter_finished();
     layouter_task* task = new layouter_task(m_layouter);
     connect(task, &layouter_task::finished, this, &graph_context::handle_layouter_finished, Qt::ConnectionType::QueuedConnection);
     g_thread_pool->queue_task(task);

@@ -58,34 +58,34 @@ private Q_SLOTS:
     void handle_layouter_finished();
 
 private:
-    QSet<u32> m_modules;
-    QSet<u32> m_gates;
-    QSet<u32> m_nets;
+    virtual void evaluate_changes();
+    virtual void apply_changes();
+
+    void update_scene();
+
+    QList<graph_context_subscriber*> m_subscribers;
+
+    QString m_name;
 
     graph_layouter* m_layouter;
     graph_shader* m_shader;
 
+    QSet<u32> m_modules;
+    QSet<u32> m_gates;
+    QSet<u32> m_nets;
+
+    QSet<u32> m_added_modules;
+    QSet<u32> m_added_gates;
+
+    QSet<u32> m_removed_modules;
+    QSet<u32> m_removed_gates;
+
     bool m_unhandled_changes;
     bool m_scene_update_required;
-    u32 m_user_update_cnt;
-
+    u32 m_user_update_count;
     bool m_update_requested;
-
-    virtual void evaluate_changes();
-    virtual void apply_changes();
-    void update_scene();
-
-    QString m_name;
-
-    QSet<u32> m_added_gates;
-    QSet<u32> m_removed_gates;
-    QSet<u32> m_added_modules;
-    QSet<u32> m_removed_modules;
-
-    QList<graph_context_subscriber*> m_subscribers;
-
     bool m_scene_available;
     bool m_update_in_progress;
 };
 
-#endif    // GRAPH_CONTEXT_H
+#endif // GRAPH_CONTEXT_H
