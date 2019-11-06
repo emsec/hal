@@ -44,17 +44,17 @@ library (SYNOPSYS_NAND_NOR) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(D) {
-                direction: input;
-            }
-            pin(C) {
-                direction: input;
-                clock: true;
-            }
-            pin(Q) {
-                direction: output;
-                function: "IQ";
-            }
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(C) {
+            direction: input;
+            clock: true;
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
         }
     }
     

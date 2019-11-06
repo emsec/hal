@@ -349,24 +349,24 @@ library (SYNOPSYS_90NM) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(RSTB) {
-                direction: input;
-            }
-            pin(D) {
-                direction: input;
-            }
-            pin(CLK) {
-                direction: input;
-                clock: true;
-            }
-            pin(Q) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(QN) {
-                direction: output;
-                function: "IQN";
-            }
+        }
+        pin(RSTB) {
+            direction: input;
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(CLK) {
+            direction: input;
+            clock: true;
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(QN) {
+            direction: output;
+            function: "IQN";
         }
     }
     
@@ -378,24 +378,24 @@ library (SYNOPSYS_90NM) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(RSTB) {
-                direction: input;
-            }
-            pin(D) {
-                direction: input;
-            }
-            pin(CLK) {
-                direction: input;
-                clock: true;
-            }
-            pin(Q) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(QN) {
-                direction: output;
-                function: "IQN";
-            }
+        }
+        pin(RSTB) {
+            direction: input;
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(CLK) {
+            direction: input;
+            clock: true;
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(QN) {
+            direction: output;
+            function: "IQN";
         }
     }
     
@@ -407,24 +407,24 @@ library (SYNOPSYS_90NM) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(RSTB) {
-                direction: input;
-            }
-            pin(D) {
-                direction: input;
-            }
-            pin(CLK) {
-                direction: input;
-                clock: true;
-            }
-            pin(Q) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(QN) {
-                direction: output;
-                function: "IQN";
-            }
+        }
+        pin(RSTB) {
+            direction: input;
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(CLK) {
+            direction: input;
+            clock: true;
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(QN) {
+            direction: output;
+            function: "IQN";
         }
     }
     
@@ -436,24 +436,24 @@ library (SYNOPSYS_90NM) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(RSTB) {
-                direction: input;
-            }
-            pin(D) {
-                direction: input;
-            }
-            pin(CLK) {
-                direction: input;
-                clock: true;
-            }
-            pin(Q) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(QN) {
-                direction: output;
-                function: "IQN";
-            }
+        }
+        pin(RSTB) {
+            direction: input;
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(CLK) {
+            direction: input;
+            clock: true;
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(QN) {
+            direction: output;
+            function: "IQN";
         }
     }
     
@@ -945,24 +945,24 @@ library (SYNOPSYS_90NM) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(D) {
-                direction: input;
-            }
-            pin(CLK) {
-                direction: input;
-                clock: true;
-            }
-            pin(RSTB) {
-                direction: input;
-            }
-            pin(Q) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(QN) {
-                direction: output;
-                function: "IQN";
-            }
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(CLK) {
+            direction: input;
+            clock: true;
+        }
+        pin(RSTB) {
+            direction: input;
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(QN) {
+            direction: output;
+            function: "IQN";
         }
     }
     
@@ -974,24 +974,24 @@ library (SYNOPSYS_90NM) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(D) {
-                direction: input;
-            }
-            pin(CLK) {
-                direction: input;
-                clock: true;
-            }
-            pin(RSTB) {
-                direction: input;
-            }
-            pin(Q) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(QN) {
-                direction: output;
-                function: "IQN";
-            }
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(CLK) {
+            direction: input;
+            clock: true;
+        }
+        pin(RSTB) {
+            direction: input;
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(QN) {
+            direction: output;
+            function: "IQN";
         }
     }
     
@@ -1003,27 +1003,27 @@ library (SYNOPSYS_90NM) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(D) {
-                direction: input;
-            }
-            pin(CLK) {
-                direction: input;
-                clock: true;
-            }
-            pin(RSTB) {
-                direction: input;
-            }
-            pin(SETB) {
-                direction: input;
-            }
-            pin(Q) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(QN) {
-                direction: output;
-                function: "IQN";
-            }
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(CLK) {
+            direction: input;
+            clock: true;
+        }
+        pin(RSTB) {
+            direction: input;
+        }
+        pin(SETB) {
+            direction: input;
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(QN) {
+            direction: output;
+            function: "IQN";
         }
     }
     
@@ -1035,27 +1035,27 @@ library (SYNOPSYS_90NM) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(D) {
-                direction: input;
-            }
-            pin(CLK) {
-                direction: input;
-                clock: true;
-            }
-            pin(RSTB) {
-                direction: input;
-            }
-            pin(SETB) {
-                direction: input;
-            }
-            pin(Q) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(QN) {
-                direction: output;
-                function: "IQN";
-            }
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(CLK) {
+            direction: input;
+            clock: true;
+        }
+        pin(RSTB) {
+            direction: input;
+        }
+        pin(SETB) {
+            direction: input;
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(QN) {
+            direction: output;
+            function: "IQN";
         }
     }
     
@@ -1067,24 +1067,24 @@ library (SYNOPSYS_90NM) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(D) {
-                direction: input;
-            }
-            pin(CLK) {
-                direction: input;
-                clock: true;
-            }
-            pin(SETB) {
-                direction: input;
-            }
-            pin(Q) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(QN) {
-                direction: output;
-                function: "IQN";
-            }
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(CLK) {
+            direction: input;
+            clock: true;
+        }
+        pin(SETB) {
+            direction: input;
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(QN) {
+            direction: output;
+            function: "IQN";
         }
     }
     
@@ -1096,24 +1096,24 @@ library (SYNOPSYS_90NM) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(D) {
-                direction: input;
-            }
-            pin(CLK) {
-                direction: input;
-                clock: true;
-            }
-            pin(SETB) {
-                direction: input;
-            }
-            pin(Q) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(QN) {
-                direction: output;
-                function: "IQN";
-            }
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(CLK) {
+            direction: input;
+            clock: true;
+        }
+        pin(SETB) {
+            direction: input;
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(QN) {
+            direction: output;
+            function: "IQN";
         }
     }
     
@@ -1125,24 +1125,24 @@ library (SYNOPSYS_90NM) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(D) {
-                direction: input;
-            }
-            pin(CLK) {
-                direction: input;
-                clock: true;
-            }
-            pin(RSTB) {
-                direction: input;
-            }
-            pin(Q) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(QN) {
-                direction: output;
-                function: "IQN";
-            }
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(CLK) {
+            direction: input;
+            clock: true;
+        }
+        pin(RSTB) {
+            direction: input;
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(QN) {
+            direction: output;
+            function: "IQN";
         }
     }
     
@@ -1154,24 +1154,24 @@ library (SYNOPSYS_90NM) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(D) {
-                direction: input;
-            }
-            pin(CLK) {
-                direction: input;
-                clock: true;
-            }
-            pin(RSTB) {
-                direction: input;
-            }
-            pin(Q) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(QN) {
-                direction: output;
-                function: "IQN";
-            }
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(CLK) {
+            direction: input;
+            clock: true;
+        }
+        pin(RSTB) {
+            direction: input;
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(QN) {
+            direction: output;
+            function: "IQN";
         }
     }
     
@@ -1183,23 +1183,23 @@ library (SYNOPSYS_90NM) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(D) {
-                direction: input;
-            }
-            pin(CLK) {
-                direction: input;
-                clock: true;
-            }
-            pin(RSTB) {
-                direction: input;
-            }
-            pin(SETB) {
-                direction: input;
-            }
-            pin(QN) {
-                direction: output;
-                function: "IQN";
-            }
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(CLK) {
+            direction: input;
+            clock: true;
+        }
+        pin(RSTB) {
+            direction: input;
+        }
+        pin(SETB) {
+            direction: input;
+        }
+        pin(QN) {
+            direction: output;
+            function: "IQN";
         }
     }
     
@@ -1211,23 +1211,23 @@ library (SYNOPSYS_90NM) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(D) {
-                direction: input;
-            }
-            pin(CLK) {
-                direction: input;
-                clock: true;
-            }
-            pin(RSTB) {
-                direction: input;
-            }
-            pin(SETB) {
-                direction: input;
-            }
-            pin(QN) {
-                direction: output;
-                function: "IQN";
-            }
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(CLK) {
+            direction: input;
+            clock: true;
+        }
+        pin(RSTB) {
+            direction: input;
+        }
+        pin(SETB) {
+            direction: input;
+        }
+        pin(QN) {
+            direction: output;
+            function: "IQN";
         }
     }
     
@@ -1239,23 +1239,23 @@ library (SYNOPSYS_90NM) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(D) {
-                direction: input;
-            }
-            pin(CLK) {
-                direction: input;
-                clock: true;
-            }
-            pin(RSTB) {
-                direction: input;
-            }
-            pin(SETB) {
-                direction: input;
-            }
-            pin(Q) {
-                direction: output;
-                function: "IQ";
-            }
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(CLK) {
+            direction: input;
+            clock: true;
+        }
+        pin(RSTB) {
+            direction: input;
+        }
+        pin(SETB) {
+            direction: input;
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
         }
     }
     
@@ -1267,23 +1267,23 @@ library (SYNOPSYS_90NM) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(D) {
-                direction: input;
-            }
-            pin(CLK) {
-                direction: input;
-                clock: true;
-            }
-            pin(RSTB) {
-                direction: input;
-            }
-            pin(SETB) {
-                direction: input;
-            }
-            pin(Q) {
-                direction: output;
-                function: "IQ";
-            }
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(CLK) {
+            direction: input;
+            clock: true;
+        }
+        pin(RSTB) {
+            direction: input;
+        }
+        pin(SETB) {
+            direction: input;
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
         }
     }
     
@@ -1295,27 +1295,27 @@ library (SYNOPSYS_90NM) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(D) {
-                direction: input;
-            }
-            pin(CLK) {
-                direction: input;
-                clock: true;
-            }
-            pin(RSTB) {
-                direction: input;
-            }
-            pin(SETB) {
-                direction: input;
-            }
-            pin(Q) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(QN) {
-                direction: output;
-                function: "IQN";
-            }
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(CLK) {
+            direction: input;
+            clock: true;
+        }
+        pin(RSTB) {
+            direction: input;
+        }
+        pin(SETB) {
+            direction: input;
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(QN) {
+            direction: output;
+            function: "IQN";
         }
     }
     
@@ -1327,27 +1327,27 @@ library (SYNOPSYS_90NM) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(D) {
-                direction: input;
-            }
-            pin(CLK) {
-                direction: input;
-                clock: true;
-            }
-            pin(RSTB) {
-                direction: input;
-            }
-            pin(SETB) {
-                direction: input;
-            }
-            pin(Q) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(QN) {
-                direction: output;
-                function: "IQN";
-            }
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(CLK) {
+            direction: input;
+            clock: true;
+        }
+        pin(RSTB) {
+            direction: input;
+        }
+        pin(SETB) {
+            direction: input;
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(QN) {
+            direction: output;
+            function: "IQN";
         }
     }
     
@@ -1359,24 +1359,24 @@ library (SYNOPSYS_90NM) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(D) {
-                direction: input;
-            }
-            pin(CLK) {
-                direction: input;
-                clock: true;
-            }
-            pin(SETB) {
-                direction: input;
-            }
-            pin(Q) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(QN) {
-                direction: output;
-                function: "IQN";
-            }
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(CLK) {
+            direction: input;
+            clock: true;
+        }
+        pin(SETB) {
+            direction: input;
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(QN) {
+            direction: output;
+            function: "IQN";
         }
     }
     
@@ -1388,24 +1388,24 @@ library (SYNOPSYS_90NM) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(D) {
-                direction: input;
-            }
-            pin(CLK) {
-                direction: input;
-                clock: true;
-            }
-            pin(SETB) {
-                direction: input;
-            }
-            pin(Q) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(QN) {
-                direction: output;
-                function: "IQN";
-            }
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(CLK) {
+            direction: input;
+            clock: true;
+        }
+        pin(SETB) {
+            direction: input;
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(QN) {
+            direction: output;
+            function: "IQN";
         }
     }
     
@@ -1417,21 +1417,21 @@ library (SYNOPSYS_90NM) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(D) {
-                direction: input;
-            }
-            pin(CLK) {
-                direction: input;
-                clock: true;
-            }
-            pin(Q) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(QN) {
-                direction: output;
-                function: "IQN";
-            }
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(CLK) {
+            direction: input;
+            clock: true;
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(QN) {
+            direction: output;
+            function: "IQN";
         }
     }
     
@@ -1443,21 +1443,21 @@ library (SYNOPSYS_90NM) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(D) {
-                direction: input;
-            }
-            pin(CLK) {
-                direction: input;
-                clock: true;
-            }
-            pin(Q) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(QN) {
-                direction: output;
-                function: "IQN";
-            }
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(CLK) {
+            direction: input;
+            clock: true;
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(QN) {
+            direction: output;
+            function: "IQN";
         }
     }
     
@@ -1469,27 +1469,27 @@ library (SYNOPSYS_90NM) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(D) {
-                direction: input;
-            }
-            pin(CLK) {
-                direction: input;
-                clock: true;
-            }
-            pin(RSTB) {
-                direction: input;
-            }
-            pin(SETB) {
-                direction: input;
-            }
-            pin(Q) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(QN) {
-                direction: output;
-                function: "IQN";
-            }
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(CLK) {
+            direction: input;
+            clock: true;
+        }
+        pin(RSTB) {
+            direction: input;
+        }
+        pin(SETB) {
+            direction: input;
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(QN) {
+            direction: output;
+            function: "IQN";
         }
     }
     
@@ -1501,27 +1501,27 @@ library (SYNOPSYS_90NM) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(D) {
-                direction: input;
-            }
-            pin(CLK) {
-                direction: input;
-                clock: true;
-            }
-            pin(RSTB) {
-                direction: input;
-            }
-            pin(SETB) {
-                direction: input;
-            }
-            pin(Q) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(QN) {
-                direction: output;
-                function: "IQN";
-            }
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(CLK) {
+            direction: input;
+            clock: true;
+        }
+        pin(RSTB) {
+            direction: input;
+        }
+        pin(SETB) {
+            direction: input;
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(QN) {
+            direction: output;
+            function: "IQN";
         }
     }
     
@@ -1533,21 +1533,21 @@ library (SYNOPSYS_90NM) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(D) {
-                direction: input;
-            }
-            pin(CLK) {
-                direction: input;
-                clock: true;
-            }
-            pin(Q) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(QN) {
-                direction: output;
-                function: "IQN";
-            }
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(CLK) {
+            direction: input;
+            clock: true;
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(QN) {
+            direction: output;
+            function: "IQN";
         }
     }
     
@@ -1559,21 +1559,21 @@ library (SYNOPSYS_90NM) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(D) {
-                direction: input;
-            }
-            pin(CLK) {
-                direction: input;
-                clock: true;
-            }
-            pin(Q) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(QN) {
-                direction: output;
-                function: "IQN";
-            }
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(CLK) {
+            direction: input;
+            clock: true;
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(QN) {
+            direction: output;
+            function: "IQN";
         }
     }
     
@@ -3348,24 +3348,24 @@ library (SYNOPSYS_90NM) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(RETN) {
-                direction: input;
-            }
-            pin(D) {
-                direction: input;
-            }
-            pin(CLK) {
-                direction: input;
-                clock: true;
-            }
-            pin(QN) {
-                direction: output;
-                function: "IQN";
-            }
-            pin(Q) {
-                direction: output;
-                function: "IQ";
-            }
+        }
+        pin(RETN) {
+            direction: input;
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(CLK) {
+            direction: input;
+            clock: true;
+        }
+        pin(QN) {
+            direction: output;
+            function: "IQN";
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
         }
     }
     
@@ -3377,24 +3377,24 @@ library (SYNOPSYS_90NM) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(RETN) {
-                direction: input;
-            }
-            pin(D) {
-                direction: input;
-            }
-            pin(CLK) {
-                direction: input;
-                clock: true;
-            }
-            pin(Q) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(QN) {
-                direction: output;
-                function: "IQN";
-            }
+        }
+        pin(RETN) {
+            direction: input;
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(CLK) {
+            direction: input;
+            clock: true;
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(QN) {
+            direction: output;
+            function: "IQN";
         }
     }
     
@@ -3406,14 +3406,14 @@ library (SYNOPSYS_90NM) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(QN) {
-                direction: output;
-                function: "IQN";
-            }
-            pin(Q) {
-                direction: output;
-                function: "IQ";
-            }
+        }
+        pin(QN) {
+            direction: output;
+            function: "IQN";
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
         }
     }
     
@@ -3425,14 +3425,14 @@ library (SYNOPSYS_90NM) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(Q) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(QN) {
-                direction: output;
-                function: "IQN";
-            }
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(QN) {
+            direction: output;
+            function: "IQN";
         }
     }
     
@@ -3444,30 +3444,30 @@ library (SYNOPSYS_90NM) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(RETN) {
-                direction: input;
-            }
-            pin(D) {
-                direction: input;
-            }
-            pin(SI) {
-                direction: input;
-            }
-            pin(SE) {
-                direction: input;
-            }
-            pin(CLK) {
-                direction: input;
-                clock: true;
-            }
-            pin(QN) {
-                direction: output;
-                function: "IQN";
-            }
-            pin(Q) {
-                direction: output;
-                function: "IQ";
-            }
+        }
+        pin(RETN) {
+            direction: input;
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(SI) {
+            direction: input;
+        }
+        pin(SE) {
+            direction: input;
+        }
+        pin(CLK) {
+            direction: input;
+            clock: true;
+        }
+        pin(QN) {
+            direction: output;
+            function: "IQN";
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
         }
     }
     
@@ -3479,30 +3479,30 @@ library (SYNOPSYS_90NM) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(RETN) {
-                direction: input;
-            }
-            pin(D) {
-                direction: input;
-            }
-            pin(SI) {
-                direction: input;
-            }
-            pin(SE) {
-                direction: input;
-            }
-            pin(CLK) {
-                direction: input;
-                clock: true;
-            }
-            pin(Q) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(QN) {
-                direction: output;
-                function: "IQN";
-            }
+        }
+        pin(RETN) {
+            direction: input;
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(SI) {
+            direction: input;
+        }
+        pin(SE) {
+            direction: input;
+        }
+        pin(CLK) {
+            direction: input;
+            clock: true;
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(QN) {
+            direction: output;
+            function: "IQN";
         }
     }
     
@@ -3514,30 +3514,30 @@ library (SYNOPSYS_90NM) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(RETN) {
-                direction: input;
-            }
-            pin(D) {
-                direction: input;
-            }
-            pin(SI) {
-                direction: input;
-            }
-            pin(SE) {
-                direction: input;
-            }
-            pin(CLK) {
-                direction: input;
-                clock: true;
-            }
-            pin(QN) {
-                direction: output;
-                function: "IQN";
-            }
-            pin(Q) {
-                direction: output;
-                function: "IQ";
-            }
+        }
+        pin(RETN) {
+            direction: input;
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(SI) {
+            direction: input;
+        }
+        pin(SE) {
+            direction: input;
+        }
+        pin(CLK) {
+            direction: input;
+            clock: true;
+        }
+        pin(QN) {
+            direction: output;
+            function: "IQN";
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
         }
     }
     
@@ -3549,30 +3549,30 @@ library (SYNOPSYS_90NM) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(RETN) {
-                direction: input;
-            }
-            pin(D) {
-                direction: input;
-            }
-            pin(SI) {
-                direction: input;
-            }
-            pin(SE) {
-                direction: input;
-            }
-            pin(CLK) {
-                direction: input;
-                clock: true;
-            }
-            pin(Q) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(QN) {
-                direction: output;
-                function: "IQN";
-            }
+        }
+        pin(RETN) {
+            direction: input;
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(SI) {
+            direction: input;
+        }
+        pin(SE) {
+            direction: input;
+        }
+        pin(CLK) {
+            direction: input;
+            clock: true;
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(QN) {
+            direction: output;
+            function: "IQN";
         }
     }
     
@@ -3584,30 +3584,30 @@ library (SYNOPSYS_90NM) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(D) {
-                direction: input;
-            }
-            pin(SE) {
-                direction: input;
-            }
-            pin(SI) {
-                direction: input;
-            }
-            pin(CLK) {
-                direction: input;
-                clock: true;
-            }
-            pin(RSTB) {
-                direction: input;
-            }
-            pin(Q) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(QN) {
-                direction: output;
-                function: "IQN";
-            }
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(SE) {
+            direction: input;
+        }
+        pin(SI) {
+            direction: input;
+        }
+        pin(CLK) {
+            direction: input;
+            clock: true;
+        }
+        pin(RSTB) {
+            direction: input;
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(QN) {
+            direction: output;
+            function: "IQN";
         }
     }
     
@@ -3619,30 +3619,30 @@ library (SYNOPSYS_90NM) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(D) {
-                direction: input;
-            }
-            pin(SE) {
-                direction: input;
-            }
-            pin(SI) {
-                direction: input;
-            }
-            pin(CLK) {
-                direction: input;
-                clock: true;
-            }
-            pin(RSTB) {
-                direction: input;
-            }
-            pin(Q) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(QN) {
-                direction: output;
-                function: "IQN";
-            }
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(SE) {
+            direction: input;
+        }
+        pin(SI) {
+            direction: input;
+        }
+        pin(CLK) {
+            direction: input;
+            clock: true;
+        }
+        pin(RSTB) {
+            direction: input;
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(QN) {
+            direction: output;
+            function: "IQN";
         }
     }
     
@@ -3654,37 +3654,37 @@ library (SYNOPSYS_90NM) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(D) {
-                direction: input;
-            }
-            pin(SE) {
-                direction: input;
-            }
-            pin(SI) {
-                direction: input;
-            }
-            pin(CLK) {
-                direction: input;
-                clock: true;
-            }
-            pin(RSTB) {
-                direction: input;
-            }
-            pin(SETB) {
-                direction: input;
-            }
-            pin(Q) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(QN) {
-                direction: output;
-                function: "IQN";
-            }
-            pin(S0) {
-                direction: output;
-                function: "IQ";
-            }
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(SE) {
+            direction: input;
+        }
+        pin(SI) {
+            direction: input;
+        }
+        pin(CLK) {
+            direction: input;
+            clock: true;
+        }
+        pin(RSTB) {
+            direction: input;
+        }
+        pin(SETB) {
+            direction: input;
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(QN) {
+            direction: output;
+            function: "IQN";
+        }
+        pin(S0) {
+            direction: output;
+            function: "IQ";
         }
     }
     
@@ -3696,37 +3696,37 @@ library (SYNOPSYS_90NM) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(D) {
-                direction: input;
-            }
-            pin(SE) {
-                direction: input;
-            }
-            pin(SI) {
-                direction: input;
-            }
-            pin(CLK) {
-                direction: input;
-                clock: true;
-            }
-            pin(RSTB) {
-                direction: input;
-            }
-            pin(SETB) {
-                direction: input;
-            }
-            pin(Q) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(QN) {
-                direction: output;
-                function: "IQN";
-            }
-            pin(S0) {
-                direction: output;
-                function: "IQ";
-            }
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(SE) {
+            direction: input;
+        }
+        pin(SI) {
+            direction: input;
+        }
+        pin(CLK) {
+            direction: input;
+            clock: true;
+        }
+        pin(RSTB) {
+            direction: input;
+        }
+        pin(SETB) {
+            direction: input;
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(QN) {
+            direction: output;
+            function: "IQN";
+        }
+        pin(S0) {
+            direction: output;
+            function: "IQ";
         }
     }
     
@@ -3738,33 +3738,33 @@ library (SYNOPSYS_90NM) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(D) {
-                direction: input;
-            }
-            pin(SE) {
-                direction: input;
-            }
-            pin(SI) {
-                direction: input;
-            }
-            pin(CLK) {
-                direction: input;
-                clock: true;
-            }
-            pin(RSTB) {
-                direction: input;
-            }
-            pin(SETB) {
-                direction: input;
-            }
-            pin(Q) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(QN) {
-                direction: output;
-                function: "IQN";
-            }
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(SE) {
+            direction: input;
+        }
+        pin(SI) {
+            direction: input;
+        }
+        pin(CLK) {
+            direction: input;
+            clock: true;
+        }
+        pin(RSTB) {
+            direction: input;
+        }
+        pin(SETB) {
+            direction: input;
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(QN) {
+            direction: output;
+            function: "IQN";
         }
     }
     
@@ -3776,33 +3776,33 @@ library (SYNOPSYS_90NM) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(D) {
-                direction: input;
-            }
-            pin(SE) {
-                direction: input;
-            }
-            pin(SI) {
-                direction: input;
-            }
-            pin(CLK) {
-                direction: input;
-                clock: true;
-            }
-            pin(RSTB) {
-                direction: input;
-            }
-            pin(SETB) {
-                direction: input;
-            }
-            pin(Q) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(QN) {
-                direction: output;
-                function: "IQN";
-            }
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(SE) {
+            direction: input;
+        }
+        pin(SI) {
+            direction: input;
+        }
+        pin(CLK) {
+            direction: input;
+            clock: true;
+        }
+        pin(RSTB) {
+            direction: input;
+        }
+        pin(SETB) {
+            direction: input;
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(QN) {
+            direction: output;
+            function: "IQN";
         }
     }
     
@@ -3814,30 +3814,30 @@ library (SYNOPSYS_90NM) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(D) {
-                direction: input;
-            }
-            pin(SE) {
-                direction: input;
-            }
-            pin(SI) {
-                direction: input;
-            }
-            pin(CLK) {
-                direction: input;
-                clock: true;
-            }
-            pin(SETB) {
-                direction: input;
-            }
-            pin(Q) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(QN) {
-                direction: output;
-                function: "IQN";
-            }
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(SE) {
+            direction: input;
+        }
+        pin(SI) {
+            direction: input;
+        }
+        pin(CLK) {
+            direction: input;
+            clock: true;
+        }
+        pin(SETB) {
+            direction: input;
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(QN) {
+            direction: output;
+            function: "IQN";
         }
     }
     
@@ -3849,30 +3849,30 @@ library (SYNOPSYS_90NM) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(D) {
-                direction: input;
-            }
-            pin(SE) {
-                direction: input;
-            }
-            pin(SI) {
-                direction: input;
-            }
-            pin(CLK) {
-                direction: input;
-                clock: true;
-            }
-            pin(SETB) {
-                direction: input;
-            }
-            pin(Q) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(QN) {
-                direction: output;
-                function: "IQN";
-            }
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(SE) {
+            direction: input;
+        }
+        pin(SI) {
+            direction: input;
+        }
+        pin(CLK) {
+            direction: input;
+            clock: true;
+        }
+        pin(SETB) {
+            direction: input;
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(QN) {
+            direction: output;
+            function: "IQN";
         }
     }
     
@@ -3884,30 +3884,30 @@ library (SYNOPSYS_90NM) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(D) {
-                direction: input;
-            }
-            pin(SE) {
-                direction: input;
-            }
-            pin(SI) {
-                direction: input;
-            }
-            pin(CLK) {
-                direction: input;
-                clock: true;
-            }
-            pin(RSTB) {
-                direction: input;
-            }
-            pin(Q) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(QN) {
-                direction: output;
-                function: "IQN";
-            }
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(SE) {
+            direction: input;
+        }
+        pin(SI) {
+            direction: input;
+        }
+        pin(CLK) {
+            direction: input;
+            clock: true;
+        }
+        pin(RSTB) {
+            direction: input;
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(QN) {
+            direction: output;
+            function: "IQN";
         }
     }
     
@@ -3919,30 +3919,30 @@ library (SYNOPSYS_90NM) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(D) {
-                direction: input;
-            }
-            pin(SE) {
-                direction: input;
-            }
-            pin(SI) {
-                direction: input;
-            }
-            pin(CLK) {
-                direction: input;
-                clock: true;
-            }
-            pin(RSTB) {
-                direction: input;
-            }
-            pin(Q) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(QN) {
-                direction: output;
-                function: "IQN";
-            }
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(SE) {
+            direction: input;
+        }
+        pin(SI) {
+            direction: input;
+        }
+        pin(CLK) {
+            direction: input;
+            clock: true;
+        }
+        pin(RSTB) {
+            direction: input;
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(QN) {
+            direction: output;
+            function: "IQN";
         }
     }
     
@@ -3954,33 +3954,33 @@ library (SYNOPSYS_90NM) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(D) {
-                direction: input;
-            }
-            pin(SE) {
-                direction: input;
-            }
-            pin(SI) {
-                direction: input;
-            }
-            pin(CLK) {
-                direction: input;
-                clock: true;
-            }
-            pin(RSTB) {
-                direction: input;
-            }
-            pin(SETB) {
-                direction: input;
-            }
-            pin(Q) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(QN) {
-                direction: output;
-                function: "IQN";
-            }
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(SE) {
+            direction: input;
+        }
+        pin(SI) {
+            direction: input;
+        }
+        pin(CLK) {
+            direction: input;
+            clock: true;
+        }
+        pin(RSTB) {
+            direction: input;
+        }
+        pin(SETB) {
+            direction: input;
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(QN) {
+            direction: output;
+            function: "IQN";
         }
     }
     
@@ -3992,33 +3992,33 @@ library (SYNOPSYS_90NM) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(D) {
-                direction: input;
-            }
-            pin(SE) {
-                direction: input;
-            }
-            pin(SI) {
-                direction: input;
-            }
-            pin(CLK) {
-                direction: input;
-                clock: true;
-            }
-            pin(RSTB) {
-                direction: input;
-            }
-            pin(SETB) {
-                direction: input;
-            }
-            pin(Q) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(QN) {
-                direction: output;
-                function: "IQN";
-            }
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(SE) {
+            direction: input;
+        }
+        pin(SI) {
+            direction: input;
+        }
+        pin(CLK) {
+            direction: input;
+            clock: true;
+        }
+        pin(RSTB) {
+            direction: input;
+        }
+        pin(SETB) {
+            direction: input;
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(QN) {
+            direction: output;
+            function: "IQN";
         }
     }
     
@@ -4030,30 +4030,30 @@ library (SYNOPSYS_90NM) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(D) {
-                direction: input;
-            }
-            pin(SE) {
-                direction: input;
-            }
-            pin(SI) {
-                direction: input;
-            }
-            pin(CLK) {
-                direction: input;
-                clock: true;
-            }
-            pin(SETB) {
-                direction: input;
-            }
-            pin(Q) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(QN) {
-                direction: output;
-                function: "IQN";
-            }
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(SE) {
+            direction: input;
+        }
+        pin(SI) {
+            direction: input;
+        }
+        pin(CLK) {
+            direction: input;
+            clock: true;
+        }
+        pin(SETB) {
+            direction: input;
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(QN) {
+            direction: output;
+            function: "IQN";
         }
     }
     
@@ -4065,22 +4065,22 @@ library (SYNOPSYS_90NM) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(D) {
-                direction: input;
-            }
-            pin(SE) {
-                direction: input;
-            }
-            pin(SI) {
-                direction: input;
-            }
-            pin(CLK) {
-                direction: input;
-                clock: true;
-            }
-            pin(SETB) {
-                direction: input;
-            }
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(SE) {
+            direction: input;
+        }
+        pin(SI) {
+            direction: input;
+        }
+        pin(CLK) {
+            direction: input;
+            clock: true;
+        }
+        pin(SETB) {
+            direction: input;
         }
     }
     
@@ -4092,27 +4092,27 @@ library (SYNOPSYS_90NM) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(D) {
-                direction: input;
-            }
-            pin(SE) {
-                direction: input;
-            }
-            pin(SI) {
-                direction: input;
-            }
-            pin(CLK) {
-                direction: input;
-                clock: true;
-            }
-            pin(Q) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(QN) {
-                direction: output;
-                function: "IQN";
-            }
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(SE) {
+            direction: input;
+        }
+        pin(SI) {
+            direction: input;
+        }
+        pin(CLK) {
+            direction: input;
+            clock: true;
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(QN) {
+            direction: output;
+            function: "IQN";
         }
     }
     
@@ -4124,27 +4124,27 @@ library (SYNOPSYS_90NM) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(D) {
-                direction: input;
-            }
-            pin(SE) {
-                direction: input;
-            }
-            pin(SI) {
-                direction: input;
-            }
-            pin(CLK) {
-                direction: input;
-                clock: true;
-            }
-            pin(Q) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(QN) {
-                direction: output;
-                function: "IQN";
-            }
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(SE) {
+            direction: input;
+        }
+        pin(SI) {
+            direction: input;
+        }
+        pin(CLK) {
+            direction: input;
+            clock: true;
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(QN) {
+            direction: output;
+            function: "IQN";
         }
     }
     
@@ -4156,33 +4156,33 @@ library (SYNOPSYS_90NM) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(D) {
-                direction: input;
-            }
-            pin(SE) {
-                direction: input;
-            }
-            pin(SI) {
-                direction: input;
-            }
-            pin(CLK) {
-                direction: input;
-                clock: true;
-            }
-            pin(RSTB) {
-                direction: input;
-            }
-            pin(SETB) {
-                direction: input;
-            }
-            pin(Q) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(QN) {
-                direction: output;
-                function: "IQN";
-            }
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(SE) {
+            direction: input;
+        }
+        pin(SI) {
+            direction: input;
+        }
+        pin(CLK) {
+            direction: input;
+            clock: true;
+        }
+        pin(RSTB) {
+            direction: input;
+        }
+        pin(SETB) {
+            direction: input;
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(QN) {
+            direction: output;
+            function: "IQN";
         }
     }
     
@@ -4194,33 +4194,33 @@ library (SYNOPSYS_90NM) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(D) {
-                direction: input;
-            }
-            pin(SE) {
-                direction: input;
-            }
-            pin(SI) {
-                direction: input;
-            }
-            pin(CLK) {
-                direction: input;
-                clock: true;
-            }
-            pin(RSTB) {
-                direction: input;
-            }
-            pin(SETB) {
-                direction: input;
-            }
-            pin(Q) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(QN) {
-                direction: output;
-                function: "IQN";
-            }
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(SE) {
+            direction: input;
+        }
+        pin(SI) {
+            direction: input;
+        }
+        pin(CLK) {
+            direction: input;
+            clock: true;
+        }
+        pin(RSTB) {
+            direction: input;
+        }
+        pin(SETB) {
+            direction: input;
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(QN) {
+            direction: output;
+            function: "IQN";
         }
     }
     
@@ -4232,27 +4232,27 @@ library (SYNOPSYS_90NM) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(D) {
-                direction: input;
-            }
-            pin(SE) {
-                direction: input;
-            }
-            pin(SI) {
-                direction: input;
-            }
-            pin(CLK) {
-                direction: input;
-                clock: true;
-            }
-            pin(Q) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(QN) {
-                direction: output;
-                function: "IQN";
-            }
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(SE) {
+            direction: input;
+        }
+        pin(SI) {
+            direction: input;
+        }
+        pin(CLK) {
+            direction: input;
+            clock: true;
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(QN) {
+            direction: output;
+            function: "IQN";
         }
     }
     
@@ -4264,27 +4264,27 @@ library (SYNOPSYS_90NM) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(D) {
-                direction: input;
-            }
-            pin(SE) {
-                direction: input;
-            }
-            pin(SI) {
-                direction: input;
-            }
-            pin(CLK) {
-                direction: input;
-                clock: true;
-            }
-            pin(Q) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(QN) {
-                direction: output;
-                function: "IQN";
-            }
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(SE) {
+            direction: input;
+        }
+        pin(SI) {
+            direction: input;
+        }
+        pin(CLK) {
+            direction: input;
+            clock: true;
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(QN) {
+            direction: output;
+            function: "IQN";
         }
     }
     

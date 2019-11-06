@@ -64,7 +64,7 @@ def process(file):
             lines.insert(insert_point+4, "clear               : \"!RN\";")
             lines.insert(insert_point+5, "clear_preset_var1   : L;")
             lines.insert(insert_point+6, "clear_preset_var2   : L;")
-            lines.append("}")
+            lines.insert(insert_point+7, "}")
 
         elif "LUT" in typ:
             lines.append("lut (\"lut_out\") {")

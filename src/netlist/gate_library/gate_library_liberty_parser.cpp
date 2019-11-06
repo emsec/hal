@@ -59,7 +59,19 @@ namespace gate_library_liberty_parser
         auto lib        = get_gate_library(statements);
         delete statements;
 
-
+        // if (lib->get_name() == "EXAMPLE_GATE_LIBRARY")
+        // {
+        //     for (const auto& it : lib->get_gate_types())
+        //     {
+        //         std::cout << it.first << std::endl;
+        //         auto& gt = it.second;
+        //         for (const auto& p : gt->get_output_pins())
+        //         {
+        //             std::cout << p << ",";
+        //         }
+        //         std::cout << std::endl;
+        //     }
+        // }
 
         return lib;
     }
@@ -215,6 +227,10 @@ namespace gate_library_liberty_parser
                                     if (s3->value == "input")
                                     {
                                         gt->add_input_pin(s2->value);
+                                    }
+                                    else if (s3->value == "output")
+                                    {
+                                        gt->add_output_pin(s2->value);
                                     }
                                 }
                                 else if (s3->name == "function")

@@ -274,23 +274,23 @@ library (YOSYS_MYCELL) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(C) {
-                direction: input;
-                clock: true;
-            }
-            pin(D) {
-                direction: input;
-            }
-            pin(R) {
-                direction: input;
-            }
-            pin(S) {
-                direction: input;
-            }
-            pin(Q) {
-                direction: output;
-                function: "IQ";
-            }
+        }
+        pin(C) {
+            direction: input;
+            clock: true;
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(R) {
+            direction: input;
+        }
+        pin(S) {
+            direction: input;
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
         }
     }
     

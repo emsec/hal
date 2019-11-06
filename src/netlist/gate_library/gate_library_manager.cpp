@@ -47,7 +47,7 @@ namespace gate_library_manager
                     log_info("netlist",
                              "loaded gate library '{}' from '{}' in {:2.2f} seconds.",
                              lib->get_name(),
-                             path.string().substr(path.string().find_last_of("/")),
+                             path.string().substr(path.string().find_last_of("/")+1),
                              (double)std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - begin_time).count() / 1000);
                 }
             }

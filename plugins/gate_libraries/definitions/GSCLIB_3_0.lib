@@ -183,27 +183,27 @@ library (GSCLIB_3_0) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(CK) {
-                direction: input;
-                clock: true;
-            }
-            pin(RN) {
-                direction: input;
-            }
-            pin(SN) {
-                direction: input;
-            }
-            pin(D) {
-                direction: input;
-            }
-            pin(Q) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(QN) {
-                direction: output;
-                function: "IQN";
-            }
+        }
+        pin(CK) {
+            direction: input;
+            clock: true;
+        }
+        pin(RN) {
+            direction: input;
+        }
+        pin(SN) {
+            direction: input;
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(QN) {
+            direction: output;
+            function: "IQN";
         }
     }
     
@@ -215,21 +215,21 @@ library (GSCLIB_3_0) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(CK) {
-                direction: input;
-                clock: true;
-            }
-            pin(D) {
-                direction: input;
-            }
-            pin(Q) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(QN) {
-                direction: output;
-                function: "IQN";
-            }
+        }
+        pin(CK) {
+            direction: input;
+            clock: true;
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(QN) {
+            direction: output;
+            function: "IQN";
         }
     }
     
@@ -512,33 +512,33 @@ library (GSCLIB_3_0) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(CK) {
-                direction: input;
-                clock: true;
-            }
-            pin(D) {
-                direction: input;
-            }
-            pin(RN) {
-                direction: input;
-            }
-            pin(SE) {
-                direction: input;
-            }
-            pin(SI) {
-                direction: input;
-            }
-            pin(SN) {
-                direction: input;
-            }
-            pin(Q) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(QN) {
-                direction: output;
-                function: "IQN";
-            }
+        }
+        pin(CK) {
+            direction: input;
+            clock: true;
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(RN) {
+            direction: input;
+        }
+        pin(SE) {
+            direction: input;
+        }
+        pin(SI) {
+            direction: input;
+        }
+        pin(SN) {
+            direction: input;
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(QN) {
+            direction: output;
+            function: "IQN";
         }
     }
     

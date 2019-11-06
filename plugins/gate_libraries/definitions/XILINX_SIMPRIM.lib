@@ -13043,26 +13043,26 @@ library (XILINX_SIMPRIM) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(CE) {
-                direction: input;
-            }
-            pin(CLK) {
-                direction: input;
-                clock: true;
-            }
-            pin(I) {
-                direction: input;
-            }
-            pin(RST) {
-                direction: input;
-            }
-            pin(SET) {
-                direction: input;
-            }
-            pin(O) {
-                direction: output;
-                function: "IQ";
-            }
+        }
+        pin(CE) {
+            direction: input;
+        }
+        pin(CLK) {
+            direction: input;
+            clock: true;
+        }
+        pin(I) {
+            direction: input;
+        }
+        pin(RST) {
+            direction: input;
+        }
+        pin(SET) {
+            direction: input;
+        }
+        pin(O) {
+            direction: output;
+            function: "IQ";
         }
     }
     
@@ -13074,31 +13074,31 @@ library (XILINX_SIMPRIM) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(C0) {
-                direction: input;
-            }
-            pin(C1) {
-                direction: input;
-            }
-            pin(CE) {
-                direction: input;
-            }
-            pin(CLR) {
-                direction: input;
-            }
-            pin(D0) {
-                direction: input;
-            }
-            pin(D1) {
-                direction: input;
-            }
-            pin(PRE) {
-                direction: input;
-            }
-            pin(Q) {
-                direction: output;
-                function: "IQ";
-            }
+        }
+        pin(C0) {
+            direction: input;
+        }
+        pin(C1) {
+            direction: input;
+        }
+        pin(CE) {
+            direction: input;
+        }
+        pin(CLR) {
+            direction: input;
+        }
+        pin(D0) {
+            direction: input;
+        }
+        pin(D1) {
+            direction: input;
+        }
+        pin(PRE) {
+            direction: input;
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
         }
     }
     
@@ -13110,31 +13110,31 @@ library (XILINX_SIMPRIM) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(C0) {
-                direction: input;
-            }
-            pin(C1) {
-                direction: input;
-            }
-            pin(CE) {
-                direction: input;
-            }
-            pin(D0) {
-                direction: input;
-            }
-            pin(D1) {
-                direction: input;
-            }
-            pin(R) {
-                direction: input;
-            }
-            pin(S) {
-                direction: input;
-            }
-            pin(Q) {
-                direction: output;
-                function: "IQ";
-            }
+        }
+        pin(C0) {
+            direction: input;
+        }
+        pin(C1) {
+            direction: input;
+        }
+        pin(CE) {
+            direction: input;
+        }
+        pin(D0) {
+            direction: input;
+        }
+        pin(D1) {
+            direction: input;
+        }
+        pin(R) {
+            direction: input;
+        }
+        pin(S) {
+            direction: input;
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
         }
     }
     
@@ -13146,26 +13146,26 @@ library (XILINX_SIMPRIM) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(CE) {
-                direction: input;
-            }
-            pin(CLK) {
-                direction: input;
-                clock: true;
-            }
-            pin(I) {
-                direction: input;
-            }
-            pin(RST) {
-                direction: input;
-            }
-            pin(SET) {
-                direction: input;
-            }
-            pin(O) {
-                direction: output;
-                function: "IQ";
-            }
+        }
+        pin(CE) {
+            direction: input;
+        }
+        pin(CLK) {
+            direction: input;
+            clock: true;
+        }
+        pin(I) {
+            direction: input;
+        }
+        pin(RST) {
+            direction: input;
+        }
+        pin(SET) {
+            direction: input;
+        }
+        pin(O) {
+            direction: output;
+            function: "IQ";
         }
     }
     
@@ -13177,705 +13177,705 @@ library (XILINX_SIMPRIM) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(DI(0)) {
-                direction: input;
-            }
-            pin(DI(1)) {
-                direction: input;
-            }
-            pin(DI(10)) {
-                direction: input;
-            }
-            pin(DI(11)) {
-                direction: input;
-            }
-            pin(DI(12)) {
-                direction: input;
-            }
-            pin(DI(13)) {
-                direction: input;
-            }
-            pin(DI(14)) {
-                direction: input;
-            }
-            pin(DI(15)) {
-                direction: input;
-            }
-            pin(DI(16)) {
-                direction: input;
-            }
-            pin(DI(17)) {
-                direction: input;
-            }
-            pin(DI(18)) {
-                direction: input;
-            }
-            pin(DI(19)) {
-                direction: input;
-            }
-            pin(DI(2)) {
-                direction: input;
-            }
-            pin(DI(20)) {
-                direction: input;
-            }
-            pin(DI(21)) {
-                direction: input;
-            }
-            pin(DI(22)) {
-                direction: input;
-            }
-            pin(DI(23)) {
-                direction: input;
-            }
-            pin(DI(24)) {
-                direction: input;
-            }
-            pin(DI(25)) {
-                direction: input;
-            }
-            pin(DI(26)) {
-                direction: input;
-            }
-            pin(DI(27)) {
-                direction: input;
-            }
-            pin(DI(28)) {
-                direction: input;
-            }
-            pin(DI(29)) {
-                direction: input;
-            }
-            pin(DI(3)) {
-                direction: input;
-            }
-            pin(DI(30)) {
-                direction: input;
-            }
-            pin(DI(31)) {
-                direction: input;
-            }
-            pin(DI(32)) {
-                direction: input;
-            }
-            pin(DI(33)) {
-                direction: input;
-            }
-            pin(DI(34)) {
-                direction: input;
-            }
-            pin(DI(35)) {
-                direction: input;
-            }
-            pin(DI(36)) {
-                direction: input;
-            }
-            pin(DI(37)) {
-                direction: input;
-            }
-            pin(DI(38)) {
-                direction: input;
-            }
-            pin(DI(39)) {
-                direction: input;
-            }
-            pin(DI(4)) {
-                direction: input;
-            }
-            pin(DI(40)) {
-                direction: input;
-            }
-            pin(DI(41)) {
-                direction: input;
-            }
-            pin(DI(42)) {
-                direction: input;
-            }
-            pin(DI(43)) {
-                direction: input;
-            }
-            pin(DI(44)) {
-                direction: input;
-            }
-            pin(DI(45)) {
-                direction: input;
-            }
-            pin(DI(46)) {
-                direction: input;
-            }
-            pin(DI(47)) {
-                direction: input;
-            }
-            pin(DI(48)) {
-                direction: input;
-            }
-            pin(DI(49)) {
-                direction: input;
-            }
-            pin(DI(5)) {
-                direction: input;
-            }
-            pin(DI(50)) {
-                direction: input;
-            }
-            pin(DI(51)) {
-                direction: input;
-            }
-            pin(DI(52)) {
-                direction: input;
-            }
-            pin(DI(53)) {
-                direction: input;
-            }
-            pin(DI(54)) {
-                direction: input;
-            }
-            pin(DI(55)) {
-                direction: input;
-            }
-            pin(DI(56)) {
-                direction: input;
-            }
-            pin(DI(57)) {
-                direction: input;
-            }
-            pin(DI(58)) {
-                direction: input;
-            }
-            pin(DI(59)) {
-                direction: input;
-            }
-            pin(DI(6)) {
-                direction: input;
-            }
-            pin(DI(60)) {
-                direction: input;
-            }
-            pin(DI(61)) {
-                direction: input;
-            }
-            pin(DI(62)) {
-                direction: input;
-            }
-            pin(DI(63)) {
-                direction: input;
-            }
-            pin(DI(7)) {
-                direction: input;
-            }
-            pin(DI(8)) {
-                direction: input;
-            }
-            pin(DI(9)) {
-                direction: input;
-            }
-            pin(DIP(0)) {
-                direction: input;
-            }
-            pin(DIP(1)) {
-                direction: input;
-            }
-            pin(DIP(2)) {
-                direction: input;
-            }
-            pin(DIP(3)) {
-                direction: input;
-            }
-            pin(DIP(4)) {
-                direction: input;
-            }
-            pin(DIP(5)) {
-                direction: input;
-            }
-            pin(DIP(6)) {
-                direction: input;
-            }
-            pin(DIP(7)) {
-                direction: input;
-            }
-            pin(INJECTDBITERR) {
-                direction: input;
-            }
-            pin(INJECTSBITERR) {
-                direction: input;
-            }
-            pin(RDCLK) {
-                direction: input;
-            }
-            pin(RDEN) {
-                direction: input;
-            }
-            pin(REGCE) {
-                direction: input;
-            }
-            pin(RST) {
-                direction: input;
-            }
-            pin(RSTREG) {
-                direction: input;
-            }
-            pin(WRCLK) {
-                direction: input;
-            }
-            pin(WREN) {
-                direction: input;
-            }
-            pin(ALMOSTEMPTY) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(ALMOSTFULL) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DBITERR) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(0)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(1)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(10)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(11)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(12)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(13)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(14)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(15)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(16)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(17)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(18)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(19)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(2)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(20)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(21)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(22)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(23)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(24)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(25)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(26)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(27)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(28)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(29)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(3)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(30)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(31)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(32)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(33)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(34)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(35)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(36)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(37)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(38)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(39)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(4)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(40)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(41)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(42)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(43)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(44)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(45)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(46)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(47)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(48)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(49)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(5)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(50)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(51)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(52)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(53)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(54)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(55)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(56)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(57)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(58)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(59)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(6)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(60)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(61)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(62)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(63)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(7)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(8)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(9)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DOP(0)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DOP(1)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DOP(2)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DOP(3)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DOP(4)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DOP(5)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DOP(6)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DOP(7)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(ECCPARITY(0)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(ECCPARITY(1)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(ECCPARITY(2)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(ECCPARITY(3)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(ECCPARITY(4)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(ECCPARITY(5)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(ECCPARITY(6)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(ECCPARITY(7)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(EMPTY) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(FULL) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(RDCOUNT(0)) {
-                direction: output;
-                function: "IQN";
-            }
-            pin(RDCOUNT(1)) {
-                direction: output;
-                function: "IQN";
-            }
-            pin(RDCOUNT(10)) {
-                direction: output;
-                function: "IQN";
-            }
-            pin(RDCOUNT(11)) {
-                direction: output;
-                function: "IQN";
-            }
-            pin(RDCOUNT(12)) {
-                direction: output;
-                function: "IQN";
-            }
-            pin(RDCOUNT(2)) {
-                direction: output;
-                function: "IQN";
-            }
-            pin(RDCOUNT(3)) {
-                direction: output;
-                function: "IQN";
-            }
-            pin(RDCOUNT(4)) {
-                direction: output;
-                function: "IQN";
-            }
-            pin(RDCOUNT(5)) {
-                direction: output;
-                function: "IQN";
-            }
-            pin(RDCOUNT(6)) {
-                direction: output;
-                function: "IQN";
-            }
-            pin(RDCOUNT(7)) {
-                direction: output;
-                function: "IQN";
-            }
-            pin(RDCOUNT(8)) {
-                direction: output;
-                function: "IQN";
-            }
-            pin(RDCOUNT(9)) {
-                direction: output;
-                function: "IQN";
-            }
-            pin(RDERR) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(SBITERR) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(WRCOUNT(0)) {
-                direction: output;
-                function: "IQN";
-            }
-            pin(WRCOUNT(1)) {
-                direction: output;
-                function: "IQN";
-            }
-            pin(WRCOUNT(10)) {
-                direction: output;
-                function: "IQN";
-            }
-            pin(WRCOUNT(11)) {
-                direction: output;
-                function: "IQN";
-            }
-            pin(WRCOUNT(12)) {
-                direction: output;
-                function: "IQN";
-            }
-            pin(WRCOUNT(2)) {
-                direction: output;
-                function: "IQN";
-            }
-            pin(WRCOUNT(3)) {
-                direction: output;
-                function: "IQN";
-            }
-            pin(WRCOUNT(4)) {
-                direction: output;
-                function: "IQN";
-            }
-            pin(WRCOUNT(5)) {
-                direction: output;
-                function: "IQN";
-            }
-            pin(WRCOUNT(6)) {
-                direction: output;
-                function: "IQN";
-            }
-            pin(WRCOUNT(7)) {
-                direction: output;
-                function: "IQN";
-            }
-            pin(WRCOUNT(8)) {
-                direction: output;
-                function: "IQN";
-            }
-            pin(WRCOUNT(9)) {
-                direction: output;
-                function: "IQN";
-            }
-            pin(WRERR) {
-                direction: output;
-                function: "IQ";
-            }
+        }
+        pin(DI(0)) {
+            direction: input;
+        }
+        pin(DI(1)) {
+            direction: input;
+        }
+        pin(DI(10)) {
+            direction: input;
+        }
+        pin(DI(11)) {
+            direction: input;
+        }
+        pin(DI(12)) {
+            direction: input;
+        }
+        pin(DI(13)) {
+            direction: input;
+        }
+        pin(DI(14)) {
+            direction: input;
+        }
+        pin(DI(15)) {
+            direction: input;
+        }
+        pin(DI(16)) {
+            direction: input;
+        }
+        pin(DI(17)) {
+            direction: input;
+        }
+        pin(DI(18)) {
+            direction: input;
+        }
+        pin(DI(19)) {
+            direction: input;
+        }
+        pin(DI(2)) {
+            direction: input;
+        }
+        pin(DI(20)) {
+            direction: input;
+        }
+        pin(DI(21)) {
+            direction: input;
+        }
+        pin(DI(22)) {
+            direction: input;
+        }
+        pin(DI(23)) {
+            direction: input;
+        }
+        pin(DI(24)) {
+            direction: input;
+        }
+        pin(DI(25)) {
+            direction: input;
+        }
+        pin(DI(26)) {
+            direction: input;
+        }
+        pin(DI(27)) {
+            direction: input;
+        }
+        pin(DI(28)) {
+            direction: input;
+        }
+        pin(DI(29)) {
+            direction: input;
+        }
+        pin(DI(3)) {
+            direction: input;
+        }
+        pin(DI(30)) {
+            direction: input;
+        }
+        pin(DI(31)) {
+            direction: input;
+        }
+        pin(DI(32)) {
+            direction: input;
+        }
+        pin(DI(33)) {
+            direction: input;
+        }
+        pin(DI(34)) {
+            direction: input;
+        }
+        pin(DI(35)) {
+            direction: input;
+        }
+        pin(DI(36)) {
+            direction: input;
+        }
+        pin(DI(37)) {
+            direction: input;
+        }
+        pin(DI(38)) {
+            direction: input;
+        }
+        pin(DI(39)) {
+            direction: input;
+        }
+        pin(DI(4)) {
+            direction: input;
+        }
+        pin(DI(40)) {
+            direction: input;
+        }
+        pin(DI(41)) {
+            direction: input;
+        }
+        pin(DI(42)) {
+            direction: input;
+        }
+        pin(DI(43)) {
+            direction: input;
+        }
+        pin(DI(44)) {
+            direction: input;
+        }
+        pin(DI(45)) {
+            direction: input;
+        }
+        pin(DI(46)) {
+            direction: input;
+        }
+        pin(DI(47)) {
+            direction: input;
+        }
+        pin(DI(48)) {
+            direction: input;
+        }
+        pin(DI(49)) {
+            direction: input;
+        }
+        pin(DI(5)) {
+            direction: input;
+        }
+        pin(DI(50)) {
+            direction: input;
+        }
+        pin(DI(51)) {
+            direction: input;
+        }
+        pin(DI(52)) {
+            direction: input;
+        }
+        pin(DI(53)) {
+            direction: input;
+        }
+        pin(DI(54)) {
+            direction: input;
+        }
+        pin(DI(55)) {
+            direction: input;
+        }
+        pin(DI(56)) {
+            direction: input;
+        }
+        pin(DI(57)) {
+            direction: input;
+        }
+        pin(DI(58)) {
+            direction: input;
+        }
+        pin(DI(59)) {
+            direction: input;
+        }
+        pin(DI(6)) {
+            direction: input;
+        }
+        pin(DI(60)) {
+            direction: input;
+        }
+        pin(DI(61)) {
+            direction: input;
+        }
+        pin(DI(62)) {
+            direction: input;
+        }
+        pin(DI(63)) {
+            direction: input;
+        }
+        pin(DI(7)) {
+            direction: input;
+        }
+        pin(DI(8)) {
+            direction: input;
+        }
+        pin(DI(9)) {
+            direction: input;
+        }
+        pin(DIP(0)) {
+            direction: input;
+        }
+        pin(DIP(1)) {
+            direction: input;
+        }
+        pin(DIP(2)) {
+            direction: input;
+        }
+        pin(DIP(3)) {
+            direction: input;
+        }
+        pin(DIP(4)) {
+            direction: input;
+        }
+        pin(DIP(5)) {
+            direction: input;
+        }
+        pin(DIP(6)) {
+            direction: input;
+        }
+        pin(DIP(7)) {
+            direction: input;
+        }
+        pin(INJECTDBITERR) {
+            direction: input;
+        }
+        pin(INJECTSBITERR) {
+            direction: input;
+        }
+        pin(RDCLK) {
+            direction: input;
+        }
+        pin(RDEN) {
+            direction: input;
+        }
+        pin(REGCE) {
+            direction: input;
+        }
+        pin(RST) {
+            direction: input;
+        }
+        pin(RSTREG) {
+            direction: input;
+        }
+        pin(WRCLK) {
+            direction: input;
+        }
+        pin(WREN) {
+            direction: input;
+        }
+        pin(ALMOSTEMPTY) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(ALMOSTFULL) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DBITERR) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(0)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(1)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(10)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(11)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(12)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(13)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(14)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(15)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(16)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(17)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(18)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(19)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(2)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(20)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(21)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(22)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(23)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(24)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(25)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(26)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(27)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(28)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(29)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(3)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(30)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(31)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(32)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(33)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(34)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(35)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(36)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(37)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(38)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(39)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(4)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(40)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(41)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(42)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(43)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(44)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(45)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(46)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(47)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(48)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(49)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(5)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(50)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(51)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(52)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(53)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(54)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(55)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(56)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(57)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(58)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(59)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(6)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(60)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(61)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(62)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(63)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(7)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(8)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(9)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DOP(0)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DOP(1)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DOP(2)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DOP(3)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DOP(4)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DOP(5)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DOP(6)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DOP(7)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(ECCPARITY(0)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(ECCPARITY(1)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(ECCPARITY(2)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(ECCPARITY(3)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(ECCPARITY(4)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(ECCPARITY(5)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(ECCPARITY(6)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(ECCPARITY(7)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(EMPTY) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(FULL) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(RDCOUNT(0)) {
+            direction: output;
+            function: "IQN";
+        }
+        pin(RDCOUNT(1)) {
+            direction: output;
+            function: "IQN";
+        }
+        pin(RDCOUNT(10)) {
+            direction: output;
+            function: "IQN";
+        }
+        pin(RDCOUNT(11)) {
+            direction: output;
+            function: "IQN";
+        }
+        pin(RDCOUNT(12)) {
+            direction: output;
+            function: "IQN";
+        }
+        pin(RDCOUNT(2)) {
+            direction: output;
+            function: "IQN";
+        }
+        pin(RDCOUNT(3)) {
+            direction: output;
+            function: "IQN";
+        }
+        pin(RDCOUNT(4)) {
+            direction: output;
+            function: "IQN";
+        }
+        pin(RDCOUNT(5)) {
+            direction: output;
+            function: "IQN";
+        }
+        pin(RDCOUNT(6)) {
+            direction: output;
+            function: "IQN";
+        }
+        pin(RDCOUNT(7)) {
+            direction: output;
+            function: "IQN";
+        }
+        pin(RDCOUNT(8)) {
+            direction: output;
+            function: "IQN";
+        }
+        pin(RDCOUNT(9)) {
+            direction: output;
+            function: "IQN";
+        }
+        pin(RDERR) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(SBITERR) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(WRCOUNT(0)) {
+            direction: output;
+            function: "IQN";
+        }
+        pin(WRCOUNT(1)) {
+            direction: output;
+            function: "IQN";
+        }
+        pin(WRCOUNT(10)) {
+            direction: output;
+            function: "IQN";
+        }
+        pin(WRCOUNT(11)) {
+            direction: output;
+            function: "IQN";
+        }
+        pin(WRCOUNT(12)) {
+            direction: output;
+            function: "IQN";
+        }
+        pin(WRCOUNT(2)) {
+            direction: output;
+            function: "IQN";
+        }
+        pin(WRCOUNT(3)) {
+            direction: output;
+            function: "IQN";
+        }
+        pin(WRCOUNT(4)) {
+            direction: output;
+            function: "IQN";
+        }
+        pin(WRCOUNT(5)) {
+            direction: output;
+            function: "IQN";
+        }
+        pin(WRCOUNT(6)) {
+            direction: output;
+            function: "IQN";
+        }
+        pin(WRCOUNT(7)) {
+            direction: output;
+            function: "IQN";
+        }
+        pin(WRCOUNT(8)) {
+            direction: output;
+            function: "IQN";
+        }
+        pin(WRCOUNT(9)) {
+            direction: output;
+            function: "IQN";
+        }
+        pin(WRERR) {
+            direction: output;
+            function: "IQ";
         }
     }
     
@@ -13887,705 +13887,705 @@ library (XILINX_SIMPRIM) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(DI(0)) {
-                direction: input;
-            }
-            pin(DI(1)) {
-                direction: input;
-            }
-            pin(DI(10)) {
-                direction: input;
-            }
-            pin(DI(11)) {
-                direction: input;
-            }
-            pin(DI(12)) {
-                direction: input;
-            }
-            pin(DI(13)) {
-                direction: input;
-            }
-            pin(DI(14)) {
-                direction: input;
-            }
-            pin(DI(15)) {
-                direction: input;
-            }
-            pin(DI(16)) {
-                direction: input;
-            }
-            pin(DI(17)) {
-                direction: input;
-            }
-            pin(DI(18)) {
-                direction: input;
-            }
-            pin(DI(19)) {
-                direction: input;
-            }
-            pin(DI(2)) {
-                direction: input;
-            }
-            pin(DI(20)) {
-                direction: input;
-            }
-            pin(DI(21)) {
-                direction: input;
-            }
-            pin(DI(22)) {
-                direction: input;
-            }
-            pin(DI(23)) {
-                direction: input;
-            }
-            pin(DI(24)) {
-                direction: input;
-            }
-            pin(DI(25)) {
-                direction: input;
-            }
-            pin(DI(26)) {
-                direction: input;
-            }
-            pin(DI(27)) {
-                direction: input;
-            }
-            pin(DI(28)) {
-                direction: input;
-            }
-            pin(DI(29)) {
-                direction: input;
-            }
-            pin(DI(3)) {
-                direction: input;
-            }
-            pin(DI(30)) {
-                direction: input;
-            }
-            pin(DI(31)) {
-                direction: input;
-            }
-            pin(DI(32)) {
-                direction: input;
-            }
-            pin(DI(33)) {
-                direction: input;
-            }
-            pin(DI(34)) {
-                direction: input;
-            }
-            pin(DI(35)) {
-                direction: input;
-            }
-            pin(DI(36)) {
-                direction: input;
-            }
-            pin(DI(37)) {
-                direction: input;
-            }
-            pin(DI(38)) {
-                direction: input;
-            }
-            pin(DI(39)) {
-                direction: input;
-            }
-            pin(DI(4)) {
-                direction: input;
-            }
-            pin(DI(40)) {
-                direction: input;
-            }
-            pin(DI(41)) {
-                direction: input;
-            }
-            pin(DI(42)) {
-                direction: input;
-            }
-            pin(DI(43)) {
-                direction: input;
-            }
-            pin(DI(44)) {
-                direction: input;
-            }
-            pin(DI(45)) {
-                direction: input;
-            }
-            pin(DI(46)) {
-                direction: input;
-            }
-            pin(DI(47)) {
-                direction: input;
-            }
-            pin(DI(48)) {
-                direction: input;
-            }
-            pin(DI(49)) {
-                direction: input;
-            }
-            pin(DI(5)) {
-                direction: input;
-            }
-            pin(DI(50)) {
-                direction: input;
-            }
-            pin(DI(51)) {
-                direction: input;
-            }
-            pin(DI(52)) {
-                direction: input;
-            }
-            pin(DI(53)) {
-                direction: input;
-            }
-            pin(DI(54)) {
-                direction: input;
-            }
-            pin(DI(55)) {
-                direction: input;
-            }
-            pin(DI(56)) {
-                direction: input;
-            }
-            pin(DI(57)) {
-                direction: input;
-            }
-            pin(DI(58)) {
-                direction: input;
-            }
-            pin(DI(59)) {
-                direction: input;
-            }
-            pin(DI(6)) {
-                direction: input;
-            }
-            pin(DI(60)) {
-                direction: input;
-            }
-            pin(DI(61)) {
-                direction: input;
-            }
-            pin(DI(62)) {
-                direction: input;
-            }
-            pin(DI(63)) {
-                direction: input;
-            }
-            pin(DI(7)) {
-                direction: input;
-            }
-            pin(DI(8)) {
-                direction: input;
-            }
-            pin(DI(9)) {
-                direction: input;
-            }
-            pin(DIP(0)) {
-                direction: input;
-            }
-            pin(DIP(1)) {
-                direction: input;
-            }
-            pin(DIP(2)) {
-                direction: input;
-            }
-            pin(DIP(3)) {
-                direction: input;
-            }
-            pin(DIP(4)) {
-                direction: input;
-            }
-            pin(DIP(5)) {
-                direction: input;
-            }
-            pin(DIP(6)) {
-                direction: input;
-            }
-            pin(DIP(7)) {
-                direction: input;
-            }
-            pin(INJECTDBITERR) {
-                direction: input;
-            }
-            pin(INJECTSBITERR) {
-                direction: input;
-            }
-            pin(RDCLK) {
-                direction: input;
-            }
-            pin(RDEN) {
-                direction: input;
-            }
-            pin(REGCE) {
-                direction: input;
-            }
-            pin(RST) {
-                direction: input;
-            }
-            pin(RSTREG) {
-                direction: input;
-            }
-            pin(WRCLK) {
-                direction: input;
-            }
-            pin(WREN) {
-                direction: input;
-            }
-            pin(ALMOSTEMPTY) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(ALMOSTFULL) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DBITERR) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(0)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(1)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(10)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(11)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(12)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(13)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(14)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(15)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(16)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(17)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(18)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(19)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(2)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(20)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(21)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(22)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(23)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(24)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(25)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(26)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(27)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(28)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(29)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(3)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(30)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(31)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(32)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(33)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(34)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(35)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(36)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(37)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(38)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(39)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(4)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(40)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(41)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(42)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(43)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(44)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(45)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(46)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(47)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(48)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(49)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(5)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(50)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(51)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(52)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(53)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(54)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(55)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(56)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(57)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(58)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(59)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(6)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(60)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(61)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(62)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(63)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(7)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(8)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DO(9)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DOP(0)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DOP(1)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DOP(2)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DOP(3)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DOP(4)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DOP(5)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DOP(6)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(DOP(7)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(ECCPARITY(0)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(ECCPARITY(1)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(ECCPARITY(2)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(ECCPARITY(3)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(ECCPARITY(4)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(ECCPARITY(5)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(ECCPARITY(6)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(ECCPARITY(7)) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(EMPTY) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(FULL) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(RDCOUNT(0)) {
-                direction: output;
-                function: "IQN";
-            }
-            pin(RDCOUNT(1)) {
-                direction: output;
-                function: "IQN";
-            }
-            pin(RDCOUNT(10)) {
-                direction: output;
-                function: "IQN";
-            }
-            pin(RDCOUNT(11)) {
-                direction: output;
-                function: "IQN";
-            }
-            pin(RDCOUNT(12)) {
-                direction: output;
-                function: "IQN";
-            }
-            pin(RDCOUNT(2)) {
-                direction: output;
-                function: "IQN";
-            }
-            pin(RDCOUNT(3)) {
-                direction: output;
-                function: "IQN";
-            }
-            pin(RDCOUNT(4)) {
-                direction: output;
-                function: "IQN";
-            }
-            pin(RDCOUNT(5)) {
-                direction: output;
-                function: "IQN";
-            }
-            pin(RDCOUNT(6)) {
-                direction: output;
-                function: "IQN";
-            }
-            pin(RDCOUNT(7)) {
-                direction: output;
-                function: "IQN";
-            }
-            pin(RDCOUNT(8)) {
-                direction: output;
-                function: "IQN";
-            }
-            pin(RDCOUNT(9)) {
-                direction: output;
-                function: "IQN";
-            }
-            pin(RDERR) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(SBITERR) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(WRCOUNT(0)) {
-                direction: output;
-                function: "IQN";
-            }
-            pin(WRCOUNT(1)) {
-                direction: output;
-                function: "IQN";
-            }
-            pin(WRCOUNT(10)) {
-                direction: output;
-                function: "IQN";
-            }
-            pin(WRCOUNT(11)) {
-                direction: output;
-                function: "IQN";
-            }
-            pin(WRCOUNT(12)) {
-                direction: output;
-                function: "IQN";
-            }
-            pin(WRCOUNT(2)) {
-                direction: output;
-                function: "IQN";
-            }
-            pin(WRCOUNT(3)) {
-                direction: output;
-                function: "IQN";
-            }
-            pin(WRCOUNT(4)) {
-                direction: output;
-                function: "IQN";
-            }
-            pin(WRCOUNT(5)) {
-                direction: output;
-                function: "IQN";
-            }
-            pin(WRCOUNT(6)) {
-                direction: output;
-                function: "IQN";
-            }
-            pin(WRCOUNT(7)) {
-                direction: output;
-                function: "IQN";
-            }
-            pin(WRCOUNT(8)) {
-                direction: output;
-                function: "IQN";
-            }
-            pin(WRCOUNT(9)) {
-                direction: output;
-                function: "IQN";
-            }
-            pin(WRERR) {
-                direction: output;
-                function: "IQ";
-            }
+        }
+        pin(DI(0)) {
+            direction: input;
+        }
+        pin(DI(1)) {
+            direction: input;
+        }
+        pin(DI(10)) {
+            direction: input;
+        }
+        pin(DI(11)) {
+            direction: input;
+        }
+        pin(DI(12)) {
+            direction: input;
+        }
+        pin(DI(13)) {
+            direction: input;
+        }
+        pin(DI(14)) {
+            direction: input;
+        }
+        pin(DI(15)) {
+            direction: input;
+        }
+        pin(DI(16)) {
+            direction: input;
+        }
+        pin(DI(17)) {
+            direction: input;
+        }
+        pin(DI(18)) {
+            direction: input;
+        }
+        pin(DI(19)) {
+            direction: input;
+        }
+        pin(DI(2)) {
+            direction: input;
+        }
+        pin(DI(20)) {
+            direction: input;
+        }
+        pin(DI(21)) {
+            direction: input;
+        }
+        pin(DI(22)) {
+            direction: input;
+        }
+        pin(DI(23)) {
+            direction: input;
+        }
+        pin(DI(24)) {
+            direction: input;
+        }
+        pin(DI(25)) {
+            direction: input;
+        }
+        pin(DI(26)) {
+            direction: input;
+        }
+        pin(DI(27)) {
+            direction: input;
+        }
+        pin(DI(28)) {
+            direction: input;
+        }
+        pin(DI(29)) {
+            direction: input;
+        }
+        pin(DI(3)) {
+            direction: input;
+        }
+        pin(DI(30)) {
+            direction: input;
+        }
+        pin(DI(31)) {
+            direction: input;
+        }
+        pin(DI(32)) {
+            direction: input;
+        }
+        pin(DI(33)) {
+            direction: input;
+        }
+        pin(DI(34)) {
+            direction: input;
+        }
+        pin(DI(35)) {
+            direction: input;
+        }
+        pin(DI(36)) {
+            direction: input;
+        }
+        pin(DI(37)) {
+            direction: input;
+        }
+        pin(DI(38)) {
+            direction: input;
+        }
+        pin(DI(39)) {
+            direction: input;
+        }
+        pin(DI(4)) {
+            direction: input;
+        }
+        pin(DI(40)) {
+            direction: input;
+        }
+        pin(DI(41)) {
+            direction: input;
+        }
+        pin(DI(42)) {
+            direction: input;
+        }
+        pin(DI(43)) {
+            direction: input;
+        }
+        pin(DI(44)) {
+            direction: input;
+        }
+        pin(DI(45)) {
+            direction: input;
+        }
+        pin(DI(46)) {
+            direction: input;
+        }
+        pin(DI(47)) {
+            direction: input;
+        }
+        pin(DI(48)) {
+            direction: input;
+        }
+        pin(DI(49)) {
+            direction: input;
+        }
+        pin(DI(5)) {
+            direction: input;
+        }
+        pin(DI(50)) {
+            direction: input;
+        }
+        pin(DI(51)) {
+            direction: input;
+        }
+        pin(DI(52)) {
+            direction: input;
+        }
+        pin(DI(53)) {
+            direction: input;
+        }
+        pin(DI(54)) {
+            direction: input;
+        }
+        pin(DI(55)) {
+            direction: input;
+        }
+        pin(DI(56)) {
+            direction: input;
+        }
+        pin(DI(57)) {
+            direction: input;
+        }
+        pin(DI(58)) {
+            direction: input;
+        }
+        pin(DI(59)) {
+            direction: input;
+        }
+        pin(DI(6)) {
+            direction: input;
+        }
+        pin(DI(60)) {
+            direction: input;
+        }
+        pin(DI(61)) {
+            direction: input;
+        }
+        pin(DI(62)) {
+            direction: input;
+        }
+        pin(DI(63)) {
+            direction: input;
+        }
+        pin(DI(7)) {
+            direction: input;
+        }
+        pin(DI(8)) {
+            direction: input;
+        }
+        pin(DI(9)) {
+            direction: input;
+        }
+        pin(DIP(0)) {
+            direction: input;
+        }
+        pin(DIP(1)) {
+            direction: input;
+        }
+        pin(DIP(2)) {
+            direction: input;
+        }
+        pin(DIP(3)) {
+            direction: input;
+        }
+        pin(DIP(4)) {
+            direction: input;
+        }
+        pin(DIP(5)) {
+            direction: input;
+        }
+        pin(DIP(6)) {
+            direction: input;
+        }
+        pin(DIP(7)) {
+            direction: input;
+        }
+        pin(INJECTDBITERR) {
+            direction: input;
+        }
+        pin(INJECTSBITERR) {
+            direction: input;
+        }
+        pin(RDCLK) {
+            direction: input;
+        }
+        pin(RDEN) {
+            direction: input;
+        }
+        pin(REGCE) {
+            direction: input;
+        }
+        pin(RST) {
+            direction: input;
+        }
+        pin(RSTREG) {
+            direction: input;
+        }
+        pin(WRCLK) {
+            direction: input;
+        }
+        pin(WREN) {
+            direction: input;
+        }
+        pin(ALMOSTEMPTY) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(ALMOSTFULL) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DBITERR) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(0)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(1)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(10)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(11)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(12)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(13)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(14)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(15)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(16)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(17)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(18)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(19)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(2)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(20)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(21)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(22)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(23)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(24)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(25)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(26)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(27)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(28)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(29)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(3)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(30)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(31)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(32)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(33)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(34)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(35)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(36)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(37)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(38)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(39)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(4)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(40)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(41)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(42)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(43)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(44)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(45)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(46)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(47)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(48)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(49)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(5)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(50)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(51)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(52)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(53)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(54)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(55)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(56)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(57)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(58)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(59)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(6)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(60)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(61)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(62)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(63)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(7)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(8)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DO(9)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DOP(0)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DOP(1)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DOP(2)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DOP(3)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DOP(4)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DOP(5)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DOP(6)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(DOP(7)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(ECCPARITY(0)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(ECCPARITY(1)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(ECCPARITY(2)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(ECCPARITY(3)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(ECCPARITY(4)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(ECCPARITY(5)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(ECCPARITY(6)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(ECCPARITY(7)) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(EMPTY) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(FULL) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(RDCOUNT(0)) {
+            direction: output;
+            function: "IQN";
+        }
+        pin(RDCOUNT(1)) {
+            direction: output;
+            function: "IQN";
+        }
+        pin(RDCOUNT(10)) {
+            direction: output;
+            function: "IQN";
+        }
+        pin(RDCOUNT(11)) {
+            direction: output;
+            function: "IQN";
+        }
+        pin(RDCOUNT(12)) {
+            direction: output;
+            function: "IQN";
+        }
+        pin(RDCOUNT(2)) {
+            direction: output;
+            function: "IQN";
+        }
+        pin(RDCOUNT(3)) {
+            direction: output;
+            function: "IQN";
+        }
+        pin(RDCOUNT(4)) {
+            direction: output;
+            function: "IQN";
+        }
+        pin(RDCOUNT(5)) {
+            direction: output;
+            function: "IQN";
+        }
+        pin(RDCOUNT(6)) {
+            direction: output;
+            function: "IQN";
+        }
+        pin(RDCOUNT(7)) {
+            direction: output;
+            function: "IQN";
+        }
+        pin(RDCOUNT(8)) {
+            direction: output;
+            function: "IQN";
+        }
+        pin(RDCOUNT(9)) {
+            direction: output;
+            function: "IQN";
+        }
+        pin(RDERR) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(SBITERR) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(WRCOUNT(0)) {
+            direction: output;
+            function: "IQN";
+        }
+        pin(WRCOUNT(1)) {
+            direction: output;
+            function: "IQN";
+        }
+        pin(WRCOUNT(10)) {
+            direction: output;
+            function: "IQN";
+        }
+        pin(WRCOUNT(11)) {
+            direction: output;
+            function: "IQN";
+        }
+        pin(WRCOUNT(12)) {
+            direction: output;
+            function: "IQN";
+        }
+        pin(WRCOUNT(2)) {
+            direction: output;
+            function: "IQN";
+        }
+        pin(WRCOUNT(3)) {
+            direction: output;
+            function: "IQN";
+        }
+        pin(WRCOUNT(4)) {
+            direction: output;
+            function: "IQN";
+        }
+        pin(WRCOUNT(5)) {
+            direction: output;
+            function: "IQN";
+        }
+        pin(WRCOUNT(6)) {
+            direction: output;
+            function: "IQN";
+        }
+        pin(WRCOUNT(7)) {
+            direction: output;
+            function: "IQN";
+        }
+        pin(WRCOUNT(8)) {
+            direction: output;
+            function: "IQN";
+        }
+        pin(WRCOUNT(9)) {
+            direction: output;
+            function: "IQN";
+        }
+        pin(WRERR) {
+            direction: output;
+            function: "IQ";
         }
     }
     
@@ -14597,26 +14597,26 @@ library (XILINX_SIMPRIM) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(CE) {
-                direction: input;
-            }
-            pin(CLK) {
-                direction: input;
-                clock: true;
-            }
-            pin(I) {
-                direction: input;
-            }
-            pin(RST) {
-                direction: input;
-            }
-            pin(SET) {
-                direction: input;
-            }
-            pin(O) {
-                direction: output;
-                function: "IQ";
-            }
+        }
+        pin(CE) {
+            direction: input;
+        }
+        pin(CLK) {
+            direction: input;
+            clock: true;
+        }
+        pin(I) {
+            direction: input;
+        }
+        pin(RST) {
+            direction: input;
+        }
+        pin(SET) {
+            direction: input;
+        }
+        pin(O) {
+            direction: output;
+            function: "IQ";
         }
     }
     
@@ -38223,16 +38223,16 @@ library (XILINX_SIMPRIM) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(I) {
-                direction: input;
-            }
-            pin(IB) {
-                direction: input;
-            }
-            pin(O) {
-                direction: output;
-                function: "IQ";
-            }
+        }
+        pin(I) {
+            direction: input;
+        }
+        pin(IB) {
+            direction: input;
+        }
+        pin(O) {
+            direction: output;
+            function: "IQ";
         }
     }
     
@@ -38244,23 +38244,23 @@ library (XILINX_SIMPRIM) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(I) {
-                direction: input;
-            }
-            pin(IB) {
-                direction: input;
-            }
-            pin(IBUFDISABLE) {
-                direction: input;
-            }
-            pin(O) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(OB) {
-                direction: output;
-                function: "IQ";
-            }
+        }
+        pin(I) {
+            direction: input;
+        }
+        pin(IB) {
+            direction: input;
+        }
+        pin(IBUFDISABLE) {
+            direction: input;
+        }
+        pin(O) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(OB) {
+            direction: output;
+            function: "IQ";
         }
     }
     
@@ -38272,25 +38272,25 @@ library (XILINX_SIMPRIM) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(I) {
-                direction: input;
-            }
-            pin(IB) {
-                direction: input;
-            }
-            pin(S(0)) {
-                direction: input;
-            }
-            pin(S(1)) {
-                direction: input;
-            }
-            pin(S(2)) {
-                direction: input;
-            }
-            pin(O) {
-                direction: output;
-                function: "IQ";
-            }
+        }
+        pin(I) {
+            direction: input;
+        }
+        pin(IB) {
+            direction: input;
+        }
+        pin(S(0)) {
+            direction: input;
+        }
+        pin(S(1)) {
+            direction: input;
+        }
+        pin(S(2)) {
+            direction: input;
+        }
+        pin(O) {
+            direction: output;
+            function: "IQ";
         }
     }
     
@@ -38302,23 +38302,23 @@ library (XILINX_SIMPRIM) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(CEB) {
-                direction: input;
-            }
-            pin(I) {
-                direction: input;
-            }
-            pin(IB) {
-                direction: input;
-            }
-            pin(O) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(ODIV2) {
-                direction: output;
-                function: "IQ";
-            }
+        }
+        pin(CEB) {
+            direction: input;
+        }
+        pin(I) {
+            direction: input;
+        }
+        pin(IB) {
+            direction: input;
+        }
+        pin(O) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(ODIV2) {
+            direction: output;
+            function: "IQ";
         }
     }
     
@@ -38330,16 +38330,16 @@ library (XILINX_SIMPRIM) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(I) {
-                direction: input;
-            }
-            pin(IB) {
-                direction: input;
-            }
-            pin(O) {
-                direction: output;
-                function: "IQ";
-            }
+        }
+        pin(I) {
+            direction: input;
+        }
+        pin(IB) {
+            direction: input;
+        }
+        pin(O) {
+            direction: output;
+            function: "IQ";
         }
     }
     
@@ -38351,23 +38351,23 @@ library (XILINX_SIMPRIM) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(CEB) {
-                direction: input;
-            }
-            pin(I) {
-                direction: input;
-            }
-            pin(IB) {
-                direction: input;
-            }
-            pin(O) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(ODIV2) {
-                direction: output;
-                function: "IQ";
-            }
+        }
+        pin(CEB) {
+            direction: input;
+        }
+        pin(I) {
+            direction: input;
+        }
+        pin(IB) {
+            direction: input;
+        }
+        pin(O) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(ODIV2) {
+            direction: output;
+            function: "IQ";
         }
     }
     
@@ -38379,19 +38379,19 @@ library (XILINX_SIMPRIM) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(I) {
-                direction: input;
-            }
-            pin(IB) {
-                direction: input;
-            }
-            pin(IBUFDISABLE) {
-                direction: input;
-            }
-            pin(O) {
-                direction: output;
-                function: "IQ";
-            }
+        }
+        pin(I) {
+            direction: input;
+        }
+        pin(IB) {
+            direction: input;
+        }
+        pin(IBUFDISABLE) {
+            direction: input;
+        }
+        pin(O) {
+            direction: output;
+            function: "IQ";
         }
     }
     
@@ -38403,22 +38403,22 @@ library (XILINX_SIMPRIM) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(I) {
-                direction: input;
-            }
-            pin(IB) {
-                direction: input;
-            }
-            pin(IBUFDISABLE) {
-                direction: input;
-            }
-            pin(TPWRGT) {
-                direction: input;
-            }
-            pin(O) {
-                direction: output;
-                function: "IQ";
-            }
+        }
+        pin(I) {
+            direction: input;
+        }
+        pin(IB) {
+            direction: input;
+        }
+        pin(IBUFDISABLE) {
+            direction: input;
+        }
+        pin(TPWRGT) {
+            direction: input;
+        }
+        pin(O) {
+            direction: output;
+            function: "IQ";
         }
     }
     
@@ -38430,22 +38430,22 @@ library (XILINX_SIMPRIM) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(I) {
-                direction: input;
-            }
-            pin(IB) {
-                direction: input;
-            }
-            pin(IBUFDISABLE) {
-                direction: input;
-            }
-            pin(INTERMDISABLE) {
-                direction: input;
-            }
-            pin(O) {
-                direction: output;
-                function: "IQ";
-            }
+        }
+        pin(I) {
+            direction: input;
+        }
+        pin(IB) {
+            direction: input;
+        }
+        pin(IBUFDISABLE) {
+            direction: input;
+        }
+        pin(INTERMDISABLE) {
+            direction: input;
+        }
+        pin(O) {
+            direction: output;
+            function: "IQ";
         }
     }
     
@@ -38457,25 +38457,25 @@ library (XILINX_SIMPRIM) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(I) {
-                direction: input;
-            }
-            pin(IB) {
-                direction: input;
-            }
-            pin(IBUFDISABLE) {
-                direction: input;
-            }
-            pin(INTERMDISABLE) {
-                direction: input;
-            }
-            pin(TPWRGT) {
-                direction: input;
-            }
-            pin(O) {
-                direction: output;
-                function: "IQ";
-            }
+        }
+        pin(I) {
+            direction: input;
+        }
+        pin(IB) {
+            direction: input;
+        }
+        pin(IBUFDISABLE) {
+            direction: input;
+        }
+        pin(INTERMDISABLE) {
+            direction: input;
+        }
+        pin(TPWRGT) {
+            direction: input;
+        }
+        pin(O) {
+            direction: output;
+            function: "IQ";
         }
     }
     
@@ -38506,16 +38506,16 @@ library (XILINX_SIMPRIM) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(I) {
-                direction: input;
-            }
-            pin(IBUFDISABLE) {
-                direction: input;
-            }
-            pin(O) {
-                direction: output;
-                function: "IQ";
-            }
+        }
+        pin(I) {
+            direction: input;
+        }
+        pin(IBUFDISABLE) {
+            direction: input;
+        }
+        pin(O) {
+            direction: output;
+            function: "IQ";
         }
     }
     
@@ -38527,19 +38527,19 @@ library (XILINX_SIMPRIM) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(I) {
-                direction: input;
-            }
-            pin(IBUFDISABLE) {
-                direction: input;
-            }
-            pin(TPWRGT) {
-                direction: input;
-            }
-            pin(O) {
-                direction: output;
-                function: "IQ";
-            }
+        }
+        pin(I) {
+            direction: input;
+        }
+        pin(IBUFDISABLE) {
+            direction: input;
+        }
+        pin(TPWRGT) {
+            direction: input;
+        }
+        pin(O) {
+            direction: output;
+            function: "IQ";
         }
     }
     
@@ -39964,22 +39964,22 @@ library (XILINX_SIMPRIM) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(DCITERMDISABLE) {
-                direction: input;
-            }
-            pin(I) {
-                direction: input;
-            }
-            pin(IBUFDISABLE) {
-                direction: input;
-            }
-            pin(T) {
-                direction: input;
-            }
-            pin(O) {
-                direction: output;
-                function: "IQ";
-            }
+        }
+        pin(DCITERMDISABLE) {
+            direction: input;
+        }
+        pin(I) {
+            direction: input;
+        }
+        pin(IBUFDISABLE) {
+            direction: input;
+        }
+        pin(T) {
+            direction: input;
+        }
+        pin(O) {
+            direction: output;
+            function: "IQ";
         }
     }
     
@@ -39991,29 +39991,29 @@ library (XILINX_SIMPRIM) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(DCITERMDISABLE) {
-                direction: input;
-            }
-            pin(I) {
-                direction: input;
-            }
-            pin(IBUFDISABLE) {
-                direction: input;
-            }
-            pin(TM) {
-                direction: input;
-            }
-            pin(TS) {
-                direction: input;
-            }
-            pin(O) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(OB) {
-                direction: output;
-                function: "IQ";
-            }
+        }
+        pin(DCITERMDISABLE) {
+            direction: input;
+        }
+        pin(I) {
+            direction: input;
+        }
+        pin(IBUFDISABLE) {
+            direction: input;
+        }
+        pin(TM) {
+            direction: input;
+        }
+        pin(TS) {
+            direction: input;
+        }
+        pin(O) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(OB) {
+            direction: output;
+            function: "IQ";
         }
     }
     
@@ -46040,17 +46040,17 @@ library (XILINX_SIMPRIM) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(I) {
-                direction: input;
-            }
-            pin(O) {
-                direction: output;
-                function: "IQ";
-            }
-            pin(OB) {
-                direction: output;
-                function: "IQ";
-            }
+        }
+        pin(I) {
+            direction: input;
+        }
+        pin(O) {
+            direction: output;
+            function: "IQ";
+        }
+        pin(OB) {
+            direction: output;
+            function: "IQ";
         }
     }
     
@@ -133044,32 +133044,32 @@ library (XILINX_SIMPRIM) {
             clear               : "!RN";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
-            pin(CE) {
-                direction: input;
-            }
-            pin(CLK) {
-                direction: input;
-                clock: true;
-            }
-            pin(I) {
-                direction: input;
-            }
-            pin(RST) {
-                direction: input;
-            }
-            pin(SET) {
-                direction: input;
-            }
-            pin(SRST) {
-                direction: input;
-            }
-            pin(SSET) {
-                direction: input;
-            }
-            pin(O) {
-                direction: output;
-                function: "IQ";
-            }
+        }
+        pin(CE) {
+            direction: input;
+        }
+        pin(CLK) {
+            direction: input;
+            clock: true;
+        }
+        pin(I) {
+            direction: input;
+        }
+        pin(RST) {
+            direction: input;
+        }
+        pin(SET) {
+            direction: input;
+        }
+        pin(SRST) {
+            direction: input;
+        }
+        pin(SSET) {
+            direction: input;
+        }
+        pin(O) {
+            direction: output;
+            function: "IQ";
         }
     }
     

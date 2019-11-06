@@ -29,7 +29,7 @@ bool gate_type::operator==(const gate_type& other) const
 
 bool gate_type::operator!=(const gate_type& other) const
 {
-    return !(other == m_name);
+    return !(*this == other);
 }
 
 void gate_type::set_base_type(base_type_t base_type)

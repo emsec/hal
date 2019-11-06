@@ -112,9 +112,9 @@ bool netlist_internal_manager::is_gate_type_invalid(std::shared_ptr<const gate_t
     auto it         = gate_types.find(gt->get_name());
     if (it == gate_types.end())
     {
-        return false;
+        return true;
     }
-    return *(it->second) == *gt;
+    return *(it->second) != *gt;
 }
 
 //######################################################################
