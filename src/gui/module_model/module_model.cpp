@@ -3,7 +3,7 @@
 #include "module_model/module_item.h"
 
 #include "gui/gui_globals.h"
-#include "gui/gui_utility.h"
+#include "gui/gui_utils/graphics.h"
 #include "gui/module_model/module_item.h"
 
 #include "netlist/gate.h"

@@ -1,6 +1,6 @@
 #include "searchbar/searchbar.h"
 
-#include "gui_utility.h"
+#include "gui_utils/graphics.h"
 #include "label_button/label_button.h"
 
 #include <QHBoxLayout>
