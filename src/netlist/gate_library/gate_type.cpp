@@ -23,6 +23,7 @@ bool gate_type::operator==(const gate_type& other) const
     equal &= m_input_pins == other.get_input_pins();
     equal &= m_output_pins == other.get_output_pins();
     equal &= m_functions == other.get_boolean_functions();
+    equal &= this->doCompare(other);
 
     return equal;
 }
@@ -60,11 +61,6 @@ void gate_type::add_output_pins(const std::vector<std::string>& output_pins)
 void gate_type::add_boolean_function(std::string name, boolean_function bf)
 {
     m_functions.emplace(name, bf);
-}
-
-void gate_type::add_boolean_function_map(const std::map<std::string, const boolean_function>& boolean_function_map)
-{
-    m_functions.insert(boolean_function_map.begin(), boolean_function_map.end());
 }
 
 std::string gate_type::get_name() const

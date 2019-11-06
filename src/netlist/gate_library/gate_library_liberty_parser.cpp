@@ -244,6 +244,10 @@ namespace gate_library_liberty_parser
                                         if (s3->value == seq.output_state.first)
                                         {
                                             gt->add_boolean_function(s2->value, seq.functions.at("data_in"));
+
+                                            if (lib->get_name() == "EXAMPLE_GATE_LIBRARY")
+                                                std::cout << gt->get_name() << " : " << s2->value << "   " << s3->value << std::endl;
+
                                             gt->add_boolean_function("set_" + s2->value, seq.functions.at("set"));
                                             gt->add_boolean_function("reset_" + s2->value, !seq.functions.at("reset"));
 
@@ -317,16 +321,19 @@ namespace gate_library_liberty_parser
                             auto tokens      = core_utils::split(s2->value, ',');
                             seq.output_state = {prepare_string(tokens[0]), prepare_string(tokens[1])};
 
+                            if (lib->get_name() == "EXAMPLE_GATE_LIBRARY")
+                                std::cout << "FF : " << seq.output_state.first << " : " << seq.output_state.second << std::endl;
+
                             for (const auto& s3 : s2->statements)
                             {
                                 // depth 3
                                 if (s3->name == "clocked_on")
                                 {
-                                    gt->add_boolean_function("clock" + s2->value, boolean_function::from_string(prepare_string(s3->value)));
+                                    gt->add_boolean_function("clock", boolean_function::from_string(prepare_string(s3->value)));
                                 }
                                 else if (s3->name == "enable")
                                 {
-                                    gt->add_boolean_function("enable" + s2->value, boolean_function::from_string(prepare_string(s3->value)));
+                                    gt->add_boolean_function("enable", boolean_function::from_string(prepare_string(s3->value)));
                                 }
                                 else if (s3->name == "next_state")
                                 {
