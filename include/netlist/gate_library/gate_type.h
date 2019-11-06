@@ -47,6 +47,7 @@ public:
         latch
     };
 
+    virtual ~gate_type() = default;
     gate_type(const std::string& name);
 
     gate_type(const gate_type&) = delete;               // disable copy-constructor
@@ -80,6 +81,6 @@ private:
 
     std::map<std::string, boolean_function> m_functions;
 
-    virtual bool doCompare(const gate_type& other) const = 0;
+    bool doCompare(const gate_type& other) const;
 };
 #endif    //__HAL_GATE_TYPE_H

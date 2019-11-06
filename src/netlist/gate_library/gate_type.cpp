@@ -33,6 +33,11 @@ bool gate_type::operator!=(const gate_type& other) const
     return !(*this == other);
 }
 
+bool gate_type::doCompare(const gate_type& other) const
+{
+    return true;
+}
+
 void gate_type::set_base_type(base_type_t base_type)
 {
     m_base_type = base_type;

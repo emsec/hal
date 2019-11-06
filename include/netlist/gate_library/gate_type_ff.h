@@ -23,8 +23,8 @@
 
 #include "pragma_once.h"
 
-#ifndef __HAL_GATE_TYPE_LUT_H
-#define __HAL_GATE_TYPE_LUT_H
+#ifndef __HAL_GATE_TYPE_FF_H
+#define __HAL_GATE_TYPE_FF_H
 
 #include "netlist/boolean_function.h"
 #include "netlist/gate_library/gate_type.h"
@@ -37,24 +37,39 @@
  *
  * @ingroup netlist
  */
-class gate_type_lut : public gate_type
+class gate_type_ff : public gate_type
 {
 public:
+    enum special_behavior_t
+    {
+        L,
+        H,
+        N,
+        T,
+        X
+    };
+
     using gate_type::gate_type;
 
-    void set_data_category(std::string data_category);
-    void set_data_key(std::string data_key);
-    void set_ascending(bool ascending);
+    void set_clock_function(boolean_function clock_f);
+    void set_set_function(boolean_function set_f);
+    void set_reset_function(boolean_function reset_f);
+    void set_output_pin_inverted(std::string output_pin, bool inverted);
+    void set_special_behavior(std::pair<special_behavior_t, special_behavior_t> sb);
 
-    std::string get_data_category() const;
-    std::string get_data_key() const;
-    bool is_ascending() const;
+    boolean_function get_clock_function() const;
+    boolean_function get_set_function() const;
+    boolean_function get_reset_function() const;
+    std::map<std::string, bool> get_output_pin_inverted() const;
+    std::pair<special_behavior_t, special_behavior_t> get_special_behavior() const;
 
 private:
-    std::string m_data_category;
-    std::string m_data_key;
-    bool m_ascending;
-
     bool doCompare(const gate_type& other) const;
+
+    boolean_function m_clock_f;
+    boolean_function m_set_f;
+    boolean_function m_reset_f;
+    std::map<std::string, bool> m_output_pin_inverted;
+    std::pair<special_behavior_t, special_behavior_t> m_special_behavior;
 };
 #endif    //__HAL_GATE_TYPE_LUT_H
