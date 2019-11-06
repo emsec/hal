@@ -1,7 +1,7 @@
 #include "welcome_screen/recent_file_item.h"
 
 #include "file_manager/file_manager.h"
-#include "gui_utility.h"
+#include "gui_utils/graphics.h"
 
 #include <QEvent>
 #include <QFileInfo>
