@@ -1,14 +1,14 @@
 #include "core/log.h"
 #include "core/utils.h"
+#include "def.h"
 #include "netlist/gate.h"
 #include "netlist/net.h"
 #include "netlist/netlist.h"
+#include "plugin_graph_algorithm.h"
 #include "pybind11/operators.h"
 #include "pybind11/pybind11.h"
 #include "pybind11/stl.h"
 #include "pybind11/stl_bind.h"
-#include "def.h"
-#include "plugin_graph_algorithm.h"
 
 namespace py = pybind11;
 
@@ -53,7 +53,8 @@ Get the version of the plugin.
                  auto m = a.get_communities(nl);
                  return m;
              },
-             py::arg("netlist"), R"(
+             py::arg("netlist"),
+             R"(
 Returns the map of community-IDs to communities.
 
 :param netlist: Netlist (internelly transformed to di-graph)
@@ -71,7 +72,8 @@ Returns the map of community-IDs to communities.
                  return s;
              },
              py::arg("netlist"),
-             py::arg("gates"), R"(
+             py::arg("gates"),
+             R"(
 Returns the set of strpngly connected components.
 
 :param netlist: Netlist (internelly transformed to di-graph)
@@ -89,24 +91,13 @@ Returns the shortest path distances for one gate to all other gates.
 :returns: A map of path and distance to the starting gate for all pther gates in the netlist.
 :rtype: dict[hal_py.gate, tuple(list(hal_py.gate), int)]
 )")
-        .def("get_bdds", &plugin_graph_algorithm::get_bdds, py::arg("netlist"), py::arg("gates"), py::arg("input_net_to_ids") = std::map<std::shared_ptr<net>, int>(), R"(
-Returns the BDD representation for a part of netlist.
-
-:param netlist: Netlist
-:type netlist: hal_py.netlist
-:param gates: Set of gates defining the submodule for which the BDDs are determined.
-:type gates: set(hal_py.gate)
-:param input_net_to_ids: Map of submodule input net ids (variable definition X0, X1, ...), if empty the function determines the variable assignment and returns it.
-:type input_net_to_ids: dict[hal_py.net, int]
-:returns: A tuple of a map of submodule input net to ids (variable definition X0, X1, ...) and a map of submodule output net to BDDs (function defintion f1(x0, ..., x_n), f2(x0, ... x_n), ...).
-:rtype: tuple(dict[hal_py.net, int], dict[hal_py.net, hal_py.bdd])
-)")
         .def("get_graph_cut",
              &plugin_graph_algorithm::get_graph_cut,
              py::arg("netlist"),
              py::arg("current_gate"),
              py::arg("depth")              = std::numeric_limits<u32>::max(),
-             py::arg("terminal_gate_type") = std::set<std::string>(), R"(
+             py::arg("terminal_gate_type") = std::set<std::string>(),
+             R"(
 Returns a graph cut for a specific gate and depth.
 
 :param netlist: Netlist (internally transformed to di-graph)

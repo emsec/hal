@@ -392,23 +392,6 @@ bool netlist::mark_global_output_net(std::shared_ptr<net> const n)
     return true;
 }
 
-bool netlist::mark_global_inout_net(std::shared_ptr<net> const n)
-{
-    if (!is_net_in_netlist(n))
-    {
-        return false;
-    }
-    if (m_global_inout_nets.find(n) != m_global_inout_nets.end())
-    {
-        log_debug("netlist", "net '{}' (id = {:08x}) is already registered as global inout net in netlist", n->get_name(), n->get_id());
-        return true;
-    }
-    m_global_inout_nets.insert(n);
-
-    netlist_event_handler::notify(netlist_event_handler::event::marked_global_inout, shared_from_this(), n->get_id());
-    return true;
-}
-
 bool netlist::unmark_global_input_net(std::shared_ptr<net> const n)
 {
     if (!is_net_in_netlist(n))
@@ -445,24 +428,6 @@ bool netlist::unmark_global_output_net(std::shared_ptr<net> const n)
     return true;
 }
 
-bool netlist::unmark_global_inout_net(std::shared_ptr<net> const n)
-{
-    if (!is_net_in_netlist(n))
-    {
-        return false;
-    }
-    auto it = m_global_inout_nets.find(n);
-    if (it == m_global_inout_nets.end())
-    {
-        log_debug("netlist", "net '{}' (id = {:08x}) is not registered as global inout net in netlist.", n->get_name(), n->get_id());
-        return false;
-    }
-    m_global_inout_nets.erase(it);
-
-    netlist_event_handler::notify(netlist_event_handler::event::unmarked_global_inout, shared_from_this(), n->get_id());
-    return true;
-}
-
 bool netlist::is_global_input_net(std::shared_ptr<net> const n) const
 {
     return (m_global_input_nets.find(n) != m_global_input_nets.end());
@@ -473,11 +438,6 @@ bool netlist::is_global_output_net(std::shared_ptr<net> const n) const
     return (m_global_output_nets.find(n) != m_global_output_nets.end());
 }
 
-bool netlist::is_global_inout_net(std::shared_ptr<net> const n) const
-{
-    return (m_global_inout_nets.find(n) != m_global_inout_nets.end());
-}
-
 std::set<std::shared_ptr<net>> netlist::get_global_input_nets() const
 {
     return m_global_input_nets;
@@ -486,9 +446,4 @@ std::set<std::shared_ptr<net>> netlist::get_global_input_nets() const
 std::set<std::shared_ptr<net>> netlist::get_global_output_nets() const
 {
     return m_global_output_nets;
-}
-
-std::set<std::shared_ptr<net>> netlist::get_global_inout_nets() const
-{
-    return m_global_inout_nets;
 }

@@ -80,7 +80,6 @@ private:
     graph_navigation_item* m_module_item;
     graph_navigation_item* m_global_input_item;
     graph_navigation_item* m_global_output_item;
-    graph_navigation_item* m_global_inout_item;
 };
 
 #endif    // GRAPH_NAVIGATION_MODEL_H

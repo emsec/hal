@@ -12,6 +12,7 @@
 
 #include "hdl_parser/hdl_parser.h"
 #include "hdl_parser/hdl_parser_verilog.h"
+#include "hdl_parser/hdl_parser_verilog_old.h"
 #include "hdl_parser/hdl_parser_vhdl.h"
 #include "hdl_parser/hdl_parser_vhdl_old.h"
 #include "netlist/gate_library/gate_library_manager.h"
@@ -28,7 +29,7 @@ namespace hdl_parser_dispatcher
 
     std::set<std::string> get_gui_option()
     {
-        return {"vhdl", "vhdl_old", "verilog"};
+        return {"vhdl", "vhdl_old", "verilog", "verilog_old"};
     }
 
     std::shared_ptr<netlist> parse(const hal::path& file_name, const program_arguments& args)
@@ -104,6 +105,8 @@ namespace hdl_parser_dispatcher
             g = hdl_parser_vhdl_old(ss).parse(gate_library);
         else if (language == "verilog")
             g = hdl_parser_verilog(ss).parse(gate_library);
+        else if (language == "verilog_old")
+            g = hdl_parser_verilog_old(ss).parse(gate_library);
         else
             log_error("hdl_parser", "language '{}' is unkown", language);
 

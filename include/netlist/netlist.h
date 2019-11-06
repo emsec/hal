@@ -424,14 +424,6 @@ public:
     bool mark_global_output_net(std::shared_ptr<net> const net);
 
     /**
-     * Mark a net as a global inout net.
-     *
-     * @param[in] net - The net.
-     * @returns True on success.
-     */
-    bool mark_global_inout_net(std::shared_ptr<net> const net);
-
-    /**
      * Unmark a global input net.
      *
      * @param[in] net - The net.
@@ -446,14 +438,6 @@ public:
      * @returns True on success.
      */
     bool unmark_global_output_net(std::shared_ptr<net> const net);
-
-    /**
-     * Unmark a global inout net.
-     *
-     * @param[in] net - The net.
-     * @returns True on success.
-     */
-    bool unmark_global_inout_net(std::shared_ptr<net> const net);
 
     /**
      * Checks whether a net is a global input net.
@@ -472,14 +456,6 @@ public:
     bool is_global_output_net(std::shared_ptr<net> const net) const;
 
     /**
-     * Checks whether a net is a global inout net.
-     *
-     * @param[in] net - The net to check.
-     * @returns True if the net is a global inout net.
-     */
-    bool is_global_inout_net(std::shared_ptr<net> const net) const;
-
-    /**
      * Get all global input nets.
      *
      * @returns A set of nets.
@@ -492,13 +468,6 @@ public:
      * @returns A set of nets.
      */
     std::set<std::shared_ptr<net>> get_global_output_nets() const;
-
-    /**
-     * Get all global inout nets.
-     *
-     * @returns A set of nets.
-     */
-    std::set<std::shared_ptr<net>> get_global_inout_nets() const;
 
 private:
     /** stores the pointer to the netlist internal manager */
@@ -540,8 +509,6 @@ private:
 
     /** stores the set of global gates and nets */
     std::set<std::shared_ptr<net>> m_global_input_nets;
-
-    std::set<std::shared_ptr<net>> m_global_inout_nets;
 
     std::set<std::shared_ptr<net>> m_global_output_nets;
 

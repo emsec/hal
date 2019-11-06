@@ -3,8 +3,6 @@
 
 #include "core/interface_base.h"
 
-#include <hal_bdd.h>
-
 #include <igraph/igraph.h>
 
 /* forward declaration */
@@ -59,17 +57,6 @@ public:
      * @returns A map of path and distance to the starting gate g for all other gates in the netlist.
      */
     std::map<std::shared_ptr<gate>, std::tuple<std::vector<std::shared_ptr<gate>>, int>> get_dijkstra_shortest_paths(const std::shared_ptr<gate> g);
-
-    /**
-     * Returns the BDD representation for a part of netlist.
-     *
-     * @param[in] nl - Netlist
-     * @param[in] gates - Set of gates defining the submodule for which the BDDs are determined
-     * @param[in] input_net_to_ids - Map of submodule input net ids (variable definition X0, X1, ...), if empty the function determines the variable assignment and returns it.
-     * @returns A tuple of a map of submodule input net to ids (variable definition X0, X1, ...) and a map of submodule output net to BDDs (function defintion f1(x0, ..., x_n), f2(x0, ... x_n), ...).
-     */
-    std::tuple<std::map<std::shared_ptr<net>, int>, std::map<std::shared_ptr<net>, std::shared_ptr<bdd>>>
-        get_bdds(std::shared_ptr<netlist> const nl, const std::set<std::shared_ptr<gate>> gates, const std::map<std::shared_ptr<net>, int> input_net_to_ids = std::map<std::shared_ptr<net>, int>());
 
     /**
      * Returns a graph cut for a specific gate and depth.

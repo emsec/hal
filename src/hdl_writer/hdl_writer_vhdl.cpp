@@ -115,15 +115,6 @@ void hdl_writer_vhdl::prepare_signal_names()
         m_only_wire_names.erase(it);
         m_only_wire_names_str_to_net.erase(this->get_net_name(it));
     }
-    //inout entity
-    std::set<std::shared_ptr<net>> inout_nets = m_netlist->get_global_inout_nets();
-    for (auto it : inout_nets)
-    {
-        m_inout_names[it]                                = this->get_net_name(it);
-        m_inout_names_str_to_net[this->get_net_name(it)] = it;
-        m_only_wire_names.erase(it);
-        m_only_wire_names_str_to_net.erase(this->get_net_name(it));
-    }
 
     //vcc gates
     std::set<std::shared_ptr<gate>> one_gates = m_netlist->get_gates("X_ONE");
@@ -299,19 +290,6 @@ void hdl_writer_vhdl::print_module_interface_vhdl()
         }
     }
 
-    for (auto inout_name : m_inout_names_str_to_net)
-    {
-        if (begin)
-        {
-            m_stream << inout_name.first << " : inout STD_LOGIC";
-            begin = false;
-        }
-        else
-        {
-            m_stream << "; " << std::endl << "  " << inout_name.first << " : inout STD_LOGIC";
-        }
-    }
-
     m_stream << std::endl;
     m_stream << ");" << std::endl;
     m_stream << "end " << entity_name << ";" << std::endl;
@@ -359,7 +337,7 @@ void hdl_writer_vhdl::print_gate_definitions_vhdl()
         if (gate->get_type()->get_name() == "GLOBAL_GND" || gate->get_type()->get_name() == "GLOBAL_VCC")
             continue;
         m_stream << get_gate_name(gate);
-        m_stream << " : " << gate->get_type() << std::endl;
+        m_stream << " : " << gate->get_type()->get_name() << std::endl;
 
         this->print_generic_map_vhdl(gate);
 

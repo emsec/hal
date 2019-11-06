@@ -38,7 +38,7 @@ namespace netlist_serializer
     // serializing functions
     namespace
     {
-        const int SERIALIZON_FORMAT_VERSION = 2;
+        const int SERIALIZON_FORMAT_VERSION = 3;
 
 #define JSON_STR_HELPER(x) rapidjson::Value{}.SetString(x.c_str(), x.length(), allocator)
         rapidjson::Value serialize(std::map<std::tuple<std::string, std::string>, std::tuple<std::string, std::string>> data, rapidjson::Document::AllocatorType& allocator)
@@ -69,7 +69,7 @@ namespace netlist_serializer
             rapidjson::Value val(rapidjson::kObjectType);
             val.AddMember("id", g->get_id(), allocator);
             val.AddMember("name", g->get_name(), allocator);
-            val.AddMember("type", g->get_type(), allocator);
+            val.AddMember("type", g->get_type()->get_name(), allocator);
             val.AddMember("data", serialize(g->get_data(), allocator), allocator);
             return val;
         }
@@ -167,7 +167,6 @@ namespace netlist_serializer
                 rapidjson::Value nets(rapidjson::kArrayType);
                 rapidjson::Value global_in(rapidjson::kArrayType);
                 rapidjson::Value global_out(rapidjson::kArrayType);
-                rapidjson::Value global_inout(rapidjson::kArrayType);
                 auto to_sort = nl->get_nets();
                 std::vector<std::shared_ptr<net>> sorted(to_sort.begin(), to_sort.end());
                 std::sort(sorted.begin(), sorted.end(), [](const std::shared_ptr<net>& lhs, const std::shared_ptr<net>& rhs) { return lhs->get_id() < rhs->get_id(); });
@@ -182,15 +181,10 @@ namespace netlist_serializer
                     {
                         global_out.PushBack(net->get_id(), allocator);
                     }
-                    if (nl->is_global_inout_net(net))
-                    {
-                        global_inout.PushBack(net->get_id(), allocator);
-                    }
                 }
                 root.AddMember("nets", nets, allocator);
                 root.AddMember("global_in", global_in, allocator);
                 root.AddMember("global_out", global_out, allocator);
-                root.AddMember("global_inout", global_inout, allocator);
             }
             {
                 rapidjson::Value modules(rapidjson::kArrayType);
@@ -238,10 +232,10 @@ namespace netlist_serializer
         {
             auto gt_name    = val["type"].GetString();
             auto gate_types = nl->get_gate_library()->get_gate_types();
-
-            if (gate_types.find(gt_name) != gate_types.end())
+            auto it         = gate_types.find(gt_name);
+            if (it != gate_types.end())
             {
-                auto g = nl->create_gate(val["id"].GetUint(), gate_types.at(gt_name), val["name"].GetString());
+                auto g = nl->create_gate(val["id"].GetUint(), it->second, val["name"].GetString());
 
                 if (g == nullptr)
                 {
@@ -371,12 +365,6 @@ namespace netlist_serializer
             for (const auto& net_node : root["global_out"].GetArray())
             {
                 nl->mark_global_output_net(nl->get_net_by_id(net_node.GetUint()));
-            }
-
-            assert_availablility("global_inout");
-            for (const auto& net_node : root["global_inout"].GetArray())
-            {
-                nl->mark_global_inout_net(nl->get_net_by_id(net_node.GetUint()));
             }
 
             assert_availablility("modules");

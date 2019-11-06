@@ -2,7 +2,8 @@
 
 gate_type::gate_type(const std::string& name)
 {
-    m_name = name;
+    m_name      = name;
+    m_base_type = combinatorial;
 }
 
 std::string gate_type::to_string(const gate_type& gt)
@@ -17,20 +18,16 @@ std::ostream& operator<<(std::ostream& os, const gate_type& gt)
 
 bool gate_type::operator==(const gate_type& other) const
 {
-    return m_name == other.get_name();
-}
+    bool equal = m_name == other.get_name();
+    equal &= m_base_type == other.get_base_type();
+    equal &= m_input_pins == other.get_input_pins();
+    equal &= m_output_pins == other.get_output_pins();
+    equal &= m_functions == other.get_boolean_functions();
 
-bool gate_type::operator==(const std::string& other) const
-{
-    return m_name == other;
+    return equal;
 }
 
 bool gate_type::operator!=(const gate_type& other) const
-{
-    return !(other == m_name);
-}
-
-bool gate_type::operator!=(const std::string& other) const
 {
     return !(other == m_name);
 }
@@ -40,9 +37,19 @@ void gate_type::set_base_type(base_type_t base_type)
     m_base_type = base_type;
 }
 
+void gate_type::add_input_pin(std::string input_pin)
+{
+    m_input_pins.push_back(input_pin);
+}
+
 void gate_type::add_input_pins(const std::vector<std::string>& input_pins)
 {
     m_input_pins.insert(m_input_pins.end(), input_pins.begin(), input_pins.end());
+}
+
+void gate_type::add_output_pin(std::string output_pin)
+{
+    m_output_pins.push_back(output_pin);
 }
 
 void gate_type::add_output_pins(const std::vector<std::string>& output_pins)

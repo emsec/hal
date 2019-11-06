@@ -56,13 +56,12 @@ public:
     friend std::ostream& operator<<(std::ostream& os, const gate_type& gt);
 
     bool operator==(const gate_type& other) const;
-    bool operator==(const std::string& other) const;
-
     bool operator!=(const gate_type& other) const;
-    bool operator!=(const std::string& other) const;
 
     void set_base_type(base_type_t base_type);
+    void add_input_pin(std::string input_pin);
     void add_input_pins(const std::vector<std::string>& input_pins);
+    void add_output_pin(std::string input_pin);
     void add_output_pins(const std::vector<std::string>& output_pins);
     void add_boolean_function(std::string name, boolean_function bf);
     void add_boolean_function_map(const std::map<std::string, const boolean_function>& boolean_function_map);

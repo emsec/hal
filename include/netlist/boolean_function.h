@@ -38,15 +38,6 @@
 class boolean_function
 {
 public:
-    enum class operation
-    {
-        AND,
-        OR,
-        XOR
-    };
-    static std::string to_string(const operation& op);
-    friend std::ostream& operator<<(std::ostream& os, const operation& op);
-
     enum value
     {
         X    = -1,
@@ -55,13 +46,6 @@ public:
     };
     static std::string to_string(const value& v);
     friend std::ostream& operator<<(std::ostream& os, const value& v);
-
-    /*
-     * Constructor for a function of the form "term1 op term2 op term3 op ..."
-     * Empty terms behaves like constant X.
-     * If there is only a single term, this constructor simply copies said term.
-     */
-    boolean_function(operation op, const std::vector<boolean_function>& operands, bool invert_result = false);
 
     /*
      * Constructor for a variable, usable in other functions.
@@ -73,6 +57,16 @@ public:
      * Constructor for a constant, usable in other functions.
      */
     boolean_function(value constant);
+
+    /*
+     * Substitutes a variable with another function (can again be a single variable).
+     * Applies to all instances of the variable in the function.
+     * 
+     * @param[in] variable_name - The variable to substitute
+     * @param[in] function - The function to take the place of the varible
+     * @returns The new boolean function.
+     */
+    boolean_function substitute(const std::string& variable_name, const boolean_function& function) const;
 
     /*
      * Evaluates the function on the given inputs.
@@ -110,7 +104,6 @@ public:
     friend std::ostream& operator<<(std::ostream& os, const boolean_function& f);
 
     // combine several existing functions
-    boolean_function combine(operation op, const boolean_function& other) const;
     boolean_function operator&(const boolean_function& other) const;
     boolean_function operator|(const boolean_function& other) const;
     boolean_function operator^(const boolean_function& other) const;
@@ -120,6 +113,12 @@ public:
 
     // negate function
     boolean_function operator!() const;
+
+    // compare functions
+    bool operator==(const boolean_function& other) const;
+    bool operator!=(const boolean_function& other) const;
+    bool operator<(const boolean_function& other) const;
+    bool operator>(const boolean_function& other) const;
 
     // get the DNF representation of the function
     boolean_function to_dnf() const;
@@ -139,6 +138,24 @@ public:
     std::vector<value> get_truth_table() const;
 
 private:
+    enum class operation
+    {
+        AND,
+        OR,
+        XOR
+    };
+    static std::string to_string(const operation& op);
+    friend std::ostream& operator<<(std::ostream& os, const operation& op);
+
+    /*
+     * Constructor for a function of the form "term1 op term2 op term3 op ..."
+     * Empty terms behaves like constant X.
+     * If there is only a single term, this constructor simply copies said term.
+     */
+    boolean_function(operation op, const std::vector<boolean_function>& operands, bool invert_result = false);
+
+    boolean_function combine(operation op, const boolean_function& other) const;
+
     std::string to_string_internal() const;
 
     // replaces a^b with (a & !b | (!a & b)
@@ -162,8 +179,12 @@ private:
 
     bool m_invert;
 
-    bool m_holds_variable;
-    bool m_holds_constant;
+    enum class content_type
+    {
+        VARIABLE,
+        CONSTANT,
+        TERMS
+    } m_content;
 
     std::string m_variable;
 

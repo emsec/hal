@@ -1,11 +1,11 @@
 #include "graph_navigation_widget/tree_navigation/tree_navigation_model.h"
+#include "graph_layouter/old_graphics_item_qss_adapter.h"    //for the styled icon, temporary
 #include "graph_navigation_widget/tree_navigation/tree_navigation_item.h"
 #include "gui_globals.h"
-#include "netlist/gate.h"
-#include "netlist/net.h"
-#include "netlist/module.h"
-#include "graph_layouter/old_graphics_item_qss_adapter.h"//for the styled icon, temporary
 #include "gui_utility.h"
+#include "netlist/gate.h"
+#include "netlist/module.h"
+#include "netlist/net.h"
 
 tree_navigation_model::tree_navigation_model(QObject* parent) : QAbstractItemModel(parent)
 {
@@ -136,20 +136,18 @@ QModelIndexList tree_navigation_model::get_corresponding_indexes(const QList<u32
     return list;
 }
 
-
 void tree_navigation_model::handle_module_created(std::shared_ptr<module> m)
 {
-
     m_modules_item->set_data(NAME_COLUMN, "modules : " + QString::number(g_netlist->get_modules().size()));
     dataChanged(get_modelindex(m_modules_item), get_modelindex(m_modules_item), QVector<int>() << Qt::DisplayRole);
     tree_navigation_item* module_item =
         new tree_navigation_item(QVector<QVariant>() << QString::fromStdString(m->get_name()) << (int)m->get_id() << "", tree_navigation_item::item_type::module, m_modules_item);
     module_item->insert_child(0,
-                                 new tree_navigation_item(QVector<QVariant>() << "Gates"
-                                                                              << ""
-                                                                              << "",
-                                                          tree_navigation_item::item_type::ignore,
-                                                          module_item));
+                              new tree_navigation_item(QVector<QVariant>() << "Gates"
+                                                                           << ""
+                                                                           << "",
+                                                       tree_navigation_item::item_type::ignore,
+                                                       module_item));
     /*
     module_item->insert_child(1,
                                  new tree_navigation_item(QVector<QVariant>() << "Nets"
@@ -158,8 +156,7 @@ void tree_navigation_model::handle_module_created(std::shared_ptr<module> m)
                                                           tree_navigation_item::item_type::ignore,
                                                           module_item));
     */
-insert_item(m_modules_item, m_modules_item->get_child_count(), module_item);
-
+    insert_item(m_modules_item, m_modules_item->get_child_count(), module_item);
 }
 
 void tree_navigation_model::handle_module_gate_assigned(std::shared_ptr<module> m, u32 assigned_gate)
@@ -171,11 +168,12 @@ void tree_navigation_model::handle_module_gate_assigned(std::shared_ptr<module> 
         {
             auto added_gate          = g_netlist->get_gate_by_id(assigned_gate);
             auto gate_structure_item = current_submod_item->get_child(0);
-            insert_item(gate_structure_item,
-                        gate_structure_item->get_child_count(),
-                        new tree_navigation_item(QVector<QVariant>() << QString::fromStdString(added_gate->get_name()) << added_gate->get_id() << QString::fromStdString(added_gate->get_type()),
-                                                 tree_navigation_item::item_type::gate,
-                                                 gate_structure_item));
+            insert_item(
+                gate_structure_item,
+                gate_structure_item->get_child_count(),
+                new tree_navigation_item(QVector<QVariant>() << QString::fromStdString(added_gate->get_name()) << added_gate->get_id() << QString::fromStdString(added_gate->get_type()->get_name()),
+                                         tree_navigation_item::item_type::gate,
+                                         gate_structure_item));
             break;
         }
     }
@@ -201,7 +199,6 @@ void tree_navigation_model::handle_module_gate_removed(std::shared_ptr<module> m
             break;
         }
     }
-
 }
 
 void tree_navigation_model::handle_module_name_changed(std::shared_ptr<module> m)
@@ -231,15 +228,12 @@ void tree_navigation_model::handle_module_removed(std::shared_ptr<module> m)
     }
     m_modules_item->set_data(NAME_COLUMN, "modules : " + QString::number(g_netlist->get_modules().size()));
     dataChanged(get_modelindex(m_modules_item), get_modelindex(m_modules_item), QVector<int>() << Qt::DisplayRole);
-
 }
 
 void tree_navigation_model::handle_gate_created(std::shared_ptr<gate> g)
 {
-    tree_navigation_item* new_gate_item =
-        new tree_navigation_item(QVector<QVariant>() << QString::fromStdString(g->get_name()) << (int)g->get_id() << QString::fromStdString(g->get_type()),
-                                 tree_navigation_item::item_type::gate,
-                                 m_gates_item);
+    tree_navigation_item* new_gate_item = new tree_navigation_item(
+        QVector<QVariant>() << QString::fromStdString(g->get_name()) << (int)g->get_id() << QString::fromStdString(g->get_type()->get_name()), tree_navigation_item::item_type::gate, m_gates_item);
     m_gates_item->set_data(NAME_COLUMN, "Gates : " + QString::number(g_netlist->get_gates().size()));
     dataChanged(get_modelindex(m_gates_item), get_modelindex(m_gates_item), QVector<int>() << Qt::DisplayRole);
     for (int i = 0; i < m_gates_item->get_child_count(); i++)
@@ -251,7 +245,6 @@ void tree_navigation_model::handle_gate_created(std::shared_ptr<gate> g)
         }
     }
     insert_item(m_gates_item, m_gates_item->get_child_count(), new_gate_item);
-
 }
 
 void tree_navigation_model::handle_gate_removed(std::shared_ptr<gate> g)
@@ -386,7 +379,6 @@ void tree_navigation_model::handle_net_name_changed(std::shared_ptr<net> n)
             }
         }
     }
-
 }
 
 void tree_navigation_model::setup_model_data()
@@ -414,10 +406,10 @@ void tree_navigation_model::setup_model_data()
                                                                              << "",
                                                          tree_navigation_item::item_type::structure,
                                                          m_nets_item);
-    m_modules_item         = new tree_navigation_item(QVector<QVariant>() << "modules : " + QString::number(g_netlist->get_modules().size()) << ""
-                                                                     << "",
-                                                 tree_navigation_item::item_type::structure,
-                                                 m_top_design_item);
+    m_modules_item            = new tree_navigation_item(QVector<QVariant>() << "modules : " + QString::number(g_netlist->get_modules().size()) << ""
+                                                                  << "",
+                                              tree_navigation_item::item_type::structure,
+                                              m_top_design_item);
 
     m_root_item->insert_child(0, m_top_design_item);
     m_top_design_item->insert_child(0, m_gates_item);
@@ -440,8 +432,10 @@ void tree_navigation_model::setup_model_data()
 
     for (const auto& _gate : sorted_gates)
     {
-        tree_navigation_item* gate_tree_item = new tree_navigation_item(
-            QVector<QVariant>() << QString::fromStdString(_gate->get_name()) << (int)_gate->get_id() << QString::fromStdString(_gate->get_type()), tree_navigation_item::item_type::gate, m_gates_item);
+        tree_navigation_item* gate_tree_item =
+            new tree_navigation_item(QVector<QVariant>() << QString::fromStdString(_gate->get_name()) << (int)_gate->get_id() << QString::fromStdString(_gate->get_type()->get_name()),
+                                     tree_navigation_item::item_type::gate,
+                                     m_gates_item);
         m_gates_item->insert_child(m_gates_item->get_child_count(), gate_tree_item);
     }
 
@@ -481,8 +475,8 @@ void tree_navigation_model::setup_model_data()
 
     for (const auto& _module : g_netlist->get_modules())
     {
-        tree_navigation_item* current_module_tree_item = new tree_navigation_item(
-            QVector<QVariant>() << QString::fromStdString(_module->get_name()) << (int)_module->get_id() << "", tree_navigation_item::item_type::module, m_modules_item);
+        tree_navigation_item* current_module_tree_item =
+            new tree_navigation_item(QVector<QVariant>() << QString::fromStdString(_module->get_name()) << (int)_module->get_id() << "", tree_navigation_item::item_type::module, m_modules_item);
         m_modules_item->insert_child(m_modules_item->get_child_count(), current_module_tree_item);
 
         tree_navigation_item* sub_gates_item = new tree_navigation_item(QVector<QVariant>() << "Gates"
@@ -504,7 +498,7 @@ void tree_navigation_model::setup_model_data()
         for (const auto& _gate : _module->get_gates())
         {
             tree_navigation_item* tmp_gate =
-                new tree_navigation_item(QVector<QVariant>() << QString::fromStdString(_gate->get_name()) << (int)_gate->get_id() << QString::fromStdString(_gate->get_type()),
+                new tree_navigation_item(QVector<QVariant>() << QString::fromStdString(_gate->get_name()) << (int)_gate->get_id() << QString::fromStdString(_gate->get_type()->get_name()),
                                          tree_navigation_item::item_type::gate,
                                          sub_gates_item);
             sub_gates_item->insert_child(sub_gates_item->get_child_count(), tmp_gate);
@@ -582,7 +576,8 @@ void tree_navigation_model::load_data_settings()
     m_structured_font = QFont();
     m_structured_font.setBold(true);
     m_structured_font.setPixelSize(15);
-    m_design_icon = gui_utility::get_styled_svg_icon(old_graphics_item_qss_adapter::instance()->tree_navigation_open_folder_style(), old_graphics_item_qss_adapter::instance()->tree_navigation_open_folder_path());
+    m_design_icon =
+        gui_utility::get_styled_svg_icon(old_graphics_item_qss_adapter::instance()->tree_navigation_open_folder_style(), old_graphics_item_qss_adapter::instance()->tree_navigation_open_folder_path());
     //m_design_icon = gui_utility::get_styled_svg_icon("all->#000000", ":/icons/open");
     //m_design_icon = QIcon(":/icons/open");
 }

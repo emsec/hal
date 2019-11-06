@@ -27,8 +27,11 @@
 
 #include "def.h"
 #include "hdl_parser/hdl_parser.h"
-#include "netlist/net.h"
+
 #include <map>
+#include <netlist/module.h>
+#include <netlist/net.h>
+#include <utility>
 
 /**
  * @ingroup hdl_parsers
@@ -41,7 +44,6 @@ public:
      */
     explicit hdl_parser_verilog(std::stringstream& stream);
 
-    /** destructor (= default) */
     ~hdl_parser_verilog() = default;
 
     /**
@@ -53,48 +55,70 @@ public:
     std::shared_ptr<netlist> parse(const std::string& gate_library) override;
 
 private:
-    /** stores the architecture name of the design */
-    std::string m_architecture_name;
+    struct file_line
+    {
+        u32 number;
+        std::string text;
+    };
 
-    /** stores the net names of the design */
-    std::map<std::string, std::shared_ptr<net>> m_net;
+    struct entity_definition
+    {
+        std::vector<file_line> ports;
+        std::vector<file_line> wires;
+        std::vector<file_line> assigns;
+        std::vector<file_line> instances;
+    };
 
-    /** stores the global input net names */
-    std::set<std::string> m_global_input_net;
+    struct instance
+    {
+        std::string name;
+        std::string type;
+        std::vector<std::pair<std::string, std::string>> ports;
+        std::vector<std::pair<std::string, std::string>> generics;
+    };
 
-    /** stores the global output net names */
-    std::set<std::string> m_global_output_net;
+    struct entity
+    {
+        std::string name;
+        u32 line_number;
+        entity_definition definition;
+        std::map<std::string, std::pair<std::string, std::vector<std::string>>> ports_expanded;
+        std::vector<std::string> signals_expanded;
+        std::vector<instance> instances;
+        std::map<std::string, std::string> direct_assignments;
+        std::map<std::string, std::vector<std::string>> expanded_signal_names;
+    };
 
-    /** stores the net names that have to be replace (keyword: assign) */
-    std::map<std::string, std::string> m_replace_net_name;
+    std::map<std::string, std::shared_ptr<net>> m_net_by_name;
+    std::shared_ptr<net> m_zero_net;
+    std::shared_ptr<net> m_one_net;
+    std::map<std::string, u32> m_name_occurrences;
+    std::map<std::string, u32> m_current_instance_index;
+    std::map<std::string, entity> m_entities;
+    std::map<std::string, std::string> m_attribute_types;
+    std::map<std::string, std::vector<std::string>> m_nets_to_merge;
 
-    void remove_comments(std::string& buffer, bool& multiline_comment, bool& multiline_property);
+    // parse the hdl into an intermediate format
+    bool parse_entity(entity& e);
+    bool parse_ports(entity& e);
+    bool parse_signals(entity& e);
+    bool parse_assigns(entity& e);
+    bool parse_instances(entity& e);
 
-    bool parse_module(const std::string& token, const int line);
+    // build the netlist from the intermediate format
+    bool build_netlist(const std::string& top_module);
+    std::shared_ptr<module> instantiate(const entity& e, std::shared_ptr<module> parent, std::map<std::string, std::string> port_assignments);
 
-    bool parse_architecture(const std::string& token, const std::string& identifier, const int line);
-
-    bool parse_instance(const std::string& token, const std::string& identifier, const int line);
-
-    bool parse_assign(const std::string& token, const int line);
-
-    std::vector<std::string> parse_net(const std::string& token, const int line);
-
-    std::vector<std::string> parse_net_single(const std::string& token, const int line);
-
-    std::vector<std::string> parse_pin(std::shared_ptr<gate>& new_gate, const std::string& token, const int line);
-
-    std::vector<int> get_vector_bounds(const std::string& s);
-
-    int get_idx_of_last_vector_bound(const std::string& s);
-
-    std::string get_hex_from_number_literal(const std::string& value);
-
-    std::vector<std::string> get_binary_string_from_number_literal(const std::string& value, const int line);
-
-    bool connect_net_to_pin(const std::string& net_name, std::shared_ptr<gate>& new_gate, const std::string& pin_name, const int line);
-
-    bool is_numeric(const std::string& token);
+    // helper functions
+    void remove_comments(std::string& line, bool& multi_line_comment, bool& multi_line_property);
+    void expand_signal(std::vector<std::string>& expanded_signal, std::string current_signal, std::vector<std::pair<i32, i32>> bounds, u32 dimension);
+    std::map<std::string, std::vector<std::string>> get_expanded_signals(const std::string& signal_str);
+    std::vector<std::string> get_assignment_signals(const std::string& signal_str, entity& e);
+    std::vector<std::string> get_port_signals(const std::string& port_str, const std::string& instance_name);
+    std::map<std::string, std::string> get_direct_assignments(const std::string& left, const std::string& right, entity& e);
+    std::map<std::string, std::string> get_port_assignments(const std::string& instance, const std::string& port, const std::string& assignment, entity& e);
+    std::string get_number_from_literal(const std::string& v, const u32 base);
+    std::string get_unique_alias(const std::string& name);
 };
 
 #endif /* __HAL_HDL_PARSER_VERILOG_H__ */

@@ -199,11 +199,6 @@ bool net::mark_global_output_net()
     return m_internal_manager->m_netlist->mark_global_output_net(shared_from_this());
 }
 
-bool net::mark_global_inout_net()
-{
-    return m_internal_manager->m_netlist->mark_global_inout_net(shared_from_this());
-}
-
 bool net::unmark_global_input_net()
 {
     return m_internal_manager->m_netlist->unmark_global_input_net(shared_from_this());
@@ -214,11 +209,6 @@ bool net::unmark_global_output_net()
     return m_internal_manager->m_netlist->unmark_global_output_net(shared_from_this());
 }
 
-bool net::unmark_global_inout_net()
-{
-    return m_internal_manager->m_netlist->unmark_global_inout_net(shared_from_this());
-}
-
 bool net::is_global_input_net() const
 {
     return m_internal_manager->m_netlist->is_global_input_net(const_cast<net*>(this)->shared_from_this());
@@ -227,9 +217,4 @@ bool net::is_global_input_net() const
 bool net::is_global_output_net() const
 {
     return m_internal_manager->m_netlist->is_global_output_net(const_cast<net*>(this)->shared_from_this());
-}
-
-bool net::is_global_inout_net() const
-{
-    return m_internal_manager->m_netlist->is_global_inout_net(const_cast<net*>(this)->shared_from_this());
 }

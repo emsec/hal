@@ -28,70 +28,31 @@
 
 #include "def.h"
 
+#include "netlist/boolean_function.h"
+
 class bdd;
+class gate_library;
 
 namespace gate_library_liberty_parser
 {
-    struct statement
-    {
-        statement(std::weak_ptr<statement> p_parent, bool p_is_group, std::string p_name, std::string p_value) : parent(p_parent), is_group(p_is_group), name(p_name), value(p_value)
-        {
-        }
-
-        std::weak_ptr<statement> parent;
-        bool is_group;
-        std::string name;
-        std::string value;
-        std::vector<std::shared_ptr<statement>> statements;
-    };
-
-    struct pin
-    {
-        pin(std::string p_name) : name(p_name)
-        {
-        }
-
-        std::string name;
-        std::string direction;
-        std::string function;
-        std::string three_state;
-        std::string x_function;
-    };
-
-    struct cell
-    {
-        cell(std::string p_name) : name(p_name)
-        {
-        }
-
-        std::string name;
-        bool is_ff    = false;
-        bool is_latch = false;
-        bool is_lut   = false;
-        std::vector<pin> pins;
-        std::pair<std::string, std::string> output_state;
-        std::string clocked_on;
-        std::string enable;
-        std::string data_in;
-        std::string reset;
-        std::string set;
-        std::string clear_preset_var1;
-        std::string clear_preset_var2;
-    };
-
-    struct intermediate_library
-    {
-        std::string name;
-        std::vector<cell> cells;
-    };
-
+    /*
+     * Parses a gate library from the liberty file format.
+     * In order to also support lookup tables (LUTs) the following extension is allowed:
+     * 
+     * lut(<function name>) {
+     *     data_category = <category>;
+     *     data_key = <key>;
+     *     direction = <"ascending" or "descending">;
+     * }
+     * 
+     * <category> and <key> refer to the location where the LUT configuration string is stored, for example "generic" and "init".
+     * direction describes whether the first configuration bit is the output for inputs 000... (ascending) or 111... (descending).
+     * 
+     * @param[in] ss - The string stream containing the liberty data.
+     * @returns - The parsed gate library.
+     */
     std::shared_ptr<gate_library> parse(std::stringstream& ss);
-    std::shared_ptr<statement> get_statements(std::stringstream& ss);
-    std::shared_ptr<intermediate_library> get_intermediate_library(std::shared_ptr<statement> root);
 
-    std::shared_ptr<gate_library> get_gate_library(std::shared_ptr<intermediate_library> inter_lib);
-
-    void remove_comments(std::string& line, bool& multi_line_comment);
 }    // namespace gate_library_liberty_parser
 
 #endif    //__HAL_GATE_LIBRARY_LIBERTY_PARSER_H

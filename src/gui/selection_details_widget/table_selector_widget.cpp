@@ -2,8 +2,8 @@
 #include "selection_details_widget/gate_details_widget.h"
 #include <QDebug>
 #include <QHeaderView>
-#include <QScrollBar>
 #include <QKeyEvent>
+#include <QScrollBar>
 #include <gui_globals.h>
 
 table_selector_widget::table_selector_widget(QWidget* parent) : QTableWidget(parent)
@@ -32,7 +32,7 @@ table_selector_widget::table_selector_widget(std::set<std::shared_ptr<gate>> tab
     {
         setItem(counter, 0, new QTableWidgetItem(QString::number(current_gate->get_id())));
         setItem(counter, 1, new QTableWidgetItem(QString::fromStdString(current_gate->get_name())));
-        setItem(counter, 2, new QTableWidgetItem(QString::fromStdString(current_gate->get_type())));
+        setItem(counter, 2, new QTableWidgetItem(QString::fromStdString(current_gate->get_type()->get_name())));
         counter++;
     }
 
@@ -58,15 +58,15 @@ void table_selector_widget::focusOutEvent(QFocusEvent* event)
     this->close();
 }
 
-void table_selector_widget::keyPressEvent(QKeyEvent *event)
+void table_selector_widget::keyPressEvent(QKeyEvent* event)
 {
-    if(event->key() == Qt::Key_Escape)
+    if (event->key() == Qt::Key_Escape)
         close();
 
-    if(event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return || event->key() == Qt::Key_Right)
+    if (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return || event->key() == Qt::Key_Right)
     {
         QTableWidgetItem* id_item = this->item(selectedItems().first()->row(), 0);
-        auto gate = g_netlist->get_gate_by_id(id_item->text().toInt());
+        auto gate                 = g_netlist->get_gate_by_id(id_item->text().toInt());
         Q_EMIT gateSelected(gate);
     }
 

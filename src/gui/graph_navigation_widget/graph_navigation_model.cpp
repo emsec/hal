@@ -1,8 +1,8 @@
 #include "graph_navigation_widget/graph_navigation_model.h"
 #include "gui_globals.h"
 #include "netlist/gate.h"
-#include "netlist/net.h"
 #include "netlist/module.h"
+#include "netlist/net.h"
 #include <QDebug>
 
 graph_navigation_model::graph_navigation_model(QObject* parent) : QAbstractItemModel(parent)
@@ -110,7 +110,7 @@ void graph_navigation_model::setupModelData()
     text                = "nets : " + QString::number(g_netlist->get_nets().size());
     m_net_item          = new graph_navigation_item(text, 0, graph_navigation_item::item_type::ignore, m_top_level_item);
     text                = "modules : " + QString::number(g_netlist->get_modules().size());
-    m_module_item    = new graph_navigation_item(text, 0, graph_navigation_item::item_type::ignore, m_top_level_item);
+    m_module_item       = new graph_navigation_item(text, 0, graph_navigation_item::item_type::ignore, m_top_level_item);
 
     struct less_than_gate
     {
@@ -137,7 +137,7 @@ void graph_navigation_model::setupModelData()
 
     for (auto gate : sorted_gates)
     {
-        text = QString::fromStdString(gate->get_name()) + " : " + QString::fromStdString(gate->get_type());
+        text = QString::fromStdString(gate->get_name()) + " : " + QString::fromStdString(gate->get_type()->get_name());
         new graph_navigation_item(text, gate->get_id(), graph_navigation_item::item_type::gate, m_gate_item);
     }
 
@@ -150,21 +150,15 @@ void graph_navigation_model::setupModelData()
 
     std::vector<std::shared_ptr<net>> sorted_global_input_nets;
     std::vector<std::shared_ptr<net>> sorted_global_output_nets;
-    std::vector<std::shared_ptr<net>> sorted_global_inout_nets;
 
     for (std::shared_ptr<net> net2 : sorted_nets)
     {
-        if (g_netlist->is_global_inout_net(net2))
-            sorted_global_inout_nets.push_back(net2);
+        if (g_netlist->is_global_input_net(net2))
+            sorted_global_input_nets.push_back(net2);
         else
         {
-            if (g_netlist->is_global_input_net(net2))
-                sorted_global_input_nets.push_back(net2);
-            else
-            {
-                if (g_netlist->is_global_output_net(net2))
-                    sorted_global_output_nets.push_back(net2);
-            }
+            if (g_netlist->is_global_output_net(net2))
+                sorted_global_output_nets.push_back(net2);
         }
     }
 
@@ -177,11 +171,6 @@ void graph_navigation_model::setupModelData()
     m_global_output_item = new graph_navigation_item(text, 0, graph_navigation_item::item_type::ignore, m_net_item);
     for (std::shared_ptr<net> net4 : sorted_global_output_nets)
         new graph_navigation_item(QString::fromStdString(net4->get_name()), net4->get_id(), graph_navigation_item::item_type::net, m_global_output_item);
-
-    text                = "global inouts : " + QString::number(sorted_global_inout_nets.size());
-    m_global_inout_item = new graph_navigation_item(text, 0, graph_navigation_item::item_type::ignore, m_net_item);
-    for (std::shared_ptr<net> net5 : sorted_global_inout_nets)
-        new graph_navigation_item(QString::fromStdString(net5->get_name()), net5->get_id(), graph_navigation_item::item_type::net, m_global_inout_item);
 
     std::vector<std::shared_ptr<net>> sorted_routed_nets;
 
@@ -196,10 +185,6 @@ void graph_navigation_model::setupModelData()
     for (std::shared_ptr<net> net : sorted_routed_nets)
     {
         //        QString type = "";
-        //        if (g_netlist->is_global_inout_net(net))
-        //            type = " : inout";
-        //        else
-        //        {
         //            if (g_netlist->is_global_input_net(net))
         //                type = " : input";
         //            else
@@ -207,14 +192,11 @@ void graph_navigation_model::setupModelData()
         //                if (g_netlist->is_global_output_net(net))
         //                    type = " : output";
         //            }
-        //        }
 
         //        if (g_netlist->is_global_input_net(net))
         //            type = " : input";
         //        if (g_netlist->is_global_output_net(net))
         //            type = " : output";
-        //        if (g_netlist->is_global_inout_net(net))
-        //            type = " : inout";
 
         //        text = QString::fromStdString(net->get_name()) + type;
         text = QString::fromStdString(net->get_name());
@@ -274,7 +256,7 @@ QModelIndexList graph_navigation_model::corresponding_indexes(const QList<u32>& 
 void graph_navigation_model::update_modules()
 {
     delete m_module_item;
-    QString text     = "modules : " + QString::number(g_netlist->get_modules().size());
+    QString text  = "modules : " + QString::number(g_netlist->get_modules().size());
     m_module_item = new graph_navigation_item(text, 0, graph_navigation_item::item_type::ignore, m_top_level_item);
 
     for (auto const module : g_netlist->get_modules())

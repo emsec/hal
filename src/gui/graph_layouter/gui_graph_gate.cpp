@@ -11,6 +11,7 @@
 #include <QStyleOptionGraphicsItem>
 
 #include "graph_layouter/input_dialog.h"
+#include "graph_layouter/old_graphics_item_qss_adapter.h"
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QGraphicsProxyWidget>
@@ -18,7 +19,6 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <functional>
-#include "graph_layouter/old_graphics_item_qss_adapter.h"
 
 int gui_graph_gate::MAX_HEIGHT = 0;
 
@@ -81,10 +81,10 @@ gui_graph_gate::gui_graph_gate(std::shared_ptr<gate> gate, QGraphicsItem* parent
     name_font = QFont("Iosevka", 14, QFont::Bold);
     name->setFont(name_font);
     //defaultColor = QColor(255, 255, 255);
-    defaultColor = QColor(30,30,30);
+    defaultColor = QColor(30, 30, 30);
     //gate_color   = QColor(255, 20, 20);
     defaultColor = old_graphics_item_qss_adapter::instance()->gate_default_color();
-    gate_color = QColor(30, 30, 30);
+    gate_color   = QColor(30, 30, 30);
     m_width      = fix_text_item.boundingRect().width() + input_pin_name_width + output_pin_name_width + (2 * pin_width);
     int zuviel   = m_width % 5;
     int strechy  = 0;
@@ -173,9 +173,10 @@ void gui_graph_gate::paint(QPainter* painter, const QStyleOptionGraphicsItem* op
     {
         //painter->fillRect(drawn_outer_rect, Qt::lightGray);
         painter->fillRect(drawn_outer_rect, old_graphics_item_qss_adapter::instance()->gate_background_color());
-        actually_displayed_color = (actually_displayed_color == old_graphics_item_qss_adapter::instance()->gate_default_color())
-                                       ? actually_displayed_color.darker(150)
-                                       : actually_displayed_color.darker(110);//QColor::fromHsv(actually_displayed_color.hue(), actually_displayed_color.saturation() - 100, actually_displayed_color.value());
+        actually_displayed_color =
+            (actually_displayed_color == old_graphics_item_qss_adapter::instance()->gate_default_color())
+                ? actually_displayed_color.darker(150)
+                : actually_displayed_color.darker(110);    //QColor::fromHsv(actually_displayed_color.hue(), actually_displayed_color.saturation() - 100, actually_displayed_color.value());
     }
 
     pen.setColor(actually_displayed_color);
@@ -191,9 +192,9 @@ void gui_graph_gate::paint(QPainter* painter, const QStyleOptionGraphicsItem* op
 
     QString displayed_name;
     if (text_gate_name_without_type.size() > 27)
-        displayed_name = text_gate_name_without_type.left(27) + "..." + "\n(" + QString::fromStdString(m_ref_gate->get_type()) + ", ID: " + QString::number(m_ref_gate->get_id()) + ")";
+        displayed_name = text_gate_name_without_type.left(27) + "..." + "\n(" + QString::fromStdString(m_ref_gate->get_type()->get_name()) + ", ID: " + QString::number(m_ref_gate->get_id()) + ")";
     else
-        displayed_name = text_gate_name_without_type + "\n(" + QString::fromStdString(m_ref_gate->get_type()) + ", ID: " + QString::number(m_ref_gate->get_id()) + ")";
+        displayed_name = text_gate_name_without_type + "\n(" + QString::fromStdString(m_ref_gate->get_type()->get_name()) + ", ID: " + QString::number(m_ref_gate->get_id()) + ")";
 
     painter->drawRect(drawn_outer_rect);
 
@@ -400,7 +401,7 @@ void gui_graph_gate::update_name()
 {
     text_gate_name_without_type = QString::fromStdString(m_ref_gate->get_name());
     text_gate_name              = QString::fromStdString(m_ref_gate->get_name());
-    text_gate_name              = text_gate_name + "\n(" + QString::fromStdString(m_ref_gate->get_type() + ")");
+    text_gate_name              = text_gate_name + "\n(" + QString::fromStdString(m_ref_gate->get_type()->get_name() + ")");
     if (this->scene() != nullptr)
     {
         this->scene()->update();

@@ -35,7 +35,7 @@ void module_details_widget::update(u32 module_id)
 
     //    gate *gate = g_netlist->get_gate_by_id(gate_id);
     //    QString name = QString::fromStdString(gate->get_name());
-    //    QString type = QString::fromStdString(gate->get_type());
+    //    QString type = QString::fromStdString(gate->get_type()->get_name());
     //    QString id = QString::number(gate_id);
 
     //    QString name_html = "<b>" + name + "</b>";

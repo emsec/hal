@@ -30,8 +30,6 @@
 
 #include <QWidget>
 
-#include "../plugins/quine_mccluskey/include/plugin_quine_mccluskey.h"
-
 /* forward declaration */
 class QLabel;
 class QTableWidget;
@@ -103,9 +101,6 @@ private:
     u32 m_current_id;
 
     u64 m_last_click_time;
-
-    // store pointer to Quine-McCluskey plugin (to display minimized Boolean function)
-    std::shared_ptr<plugin_quine_mccluskey> m_qmc;
 };
 
 #endif /* __HAL_GATE_DETAILS_WIDGET_H__ */

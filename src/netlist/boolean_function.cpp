@@ -28,7 +28,7 @@ std::string boolean_function::to_string(const value& v)
             return "1";
         case value::ZERO:
             return "0";
-        case value::X:
+        default:
             return "X";
     }
 }
@@ -42,9 +42,8 @@ boolean_function::boolean_function(operation op, const std::vector<boolean_funct
 {
     if (operands.empty())
     {
-        m_holds_variable = false;
-        m_holds_constant = true;
-        m_invert         = false;
+        m_content = content_type::CONSTANT;
+        m_invert  = false;
 
         m_constant = value::X;
     }
@@ -54,9 +53,8 @@ boolean_function::boolean_function(operation op, const std::vector<boolean_funct
     }
     else
     {
-        m_holds_variable = false;
-        m_holds_constant = false;
-        m_invert         = invert_result;
+        m_content = content_type::TERMS;
+        m_invert  = invert_result;
 
         m_op       = op;
         m_operands = operands;
@@ -65,9 +63,8 @@ boolean_function::boolean_function(operation op, const std::vector<boolean_funct
 
 boolean_function::boolean_function(const std::string& variable_name, bool invert_result)
 {
-    m_holds_variable = true;
-    m_holds_constant = false;
-    m_invert         = invert_result;
+    m_content = content_type::VARIABLE;
+    m_invert  = invert_result;
 
     m_variable = core_utils::trim(variable_name);
     assert(!m_variable.empty());
@@ -75,17 +72,34 @@ boolean_function::boolean_function(const std::string& variable_name, bool invert
 
 boolean_function::boolean_function(value constant)
 {
-    m_holds_variable = false;
-    m_holds_constant = true;
-    m_invert         = false;
+    m_content = content_type::CONSTANT;
+    m_invert  = false;
 
     m_constant = constant;
+}
+
+boolean_function boolean_function::substitute(const std::string& variable_name, const boolean_function& function) const
+{
+    if (m_content == content_type::VARIABLE && m_variable == variable_name)
+    {
+        return function;
+    }
+    else if (m_content == content_type::TERMS)
+    {
+        auto result = *this;
+        for (u32 i = 0; i < m_operands.size(); ++i)
+        {
+            result.m_operands[i] = result.m_operands[i].substitute(variable_name, function);
+        }
+        return result;
+    }
+    return *this;
 }
 
 boolean_function::value boolean_function::evaluate(const std::map<std::string, value>& inputs) const
 {
     value result = X;
-    if (m_holds_variable)
+    if (m_content == content_type::VARIABLE)
     {
         auto it = inputs.find(m_variable);
         if (it != inputs.end())
@@ -93,7 +107,7 @@ boolean_function::value boolean_function::evaluate(const std::map<std::string, v
             result = it->second;
         }
     }
-    else if (m_holds_constant)
+    else if (m_content == content_type::CONSTANT)
     {
         result = m_constant;
     }
@@ -167,21 +181,21 @@ boolean_function::value boolean_function::operator()(const std::map<std::string,
 
 bool boolean_function::is_constant_one() const
 {
-    return m_holds_constant && m_constant == 1;
+    return m_content == content_type::CONSTANT && m_constant == 1;
 }
 
 bool boolean_function::is_constant_zero() const
 {
-    return m_holds_constant && m_constant == 0;
+    return m_content == content_type::CONSTANT && m_constant == 0;
 }
 
 std::set<std::string> boolean_function::get_variables() const
 {
-    if (m_holds_variable)
+    if (m_content == content_type::VARIABLE)
     {
         return {m_variable};
     }
-    else if (!m_holds_constant)
+    else if (m_content == content_type::TERMS)
     {
         std::set<std::string> result;
         for (const auto& f : m_operands)
@@ -380,11 +394,11 @@ std::string boolean_function::to_string() const
 std::string boolean_function::to_string_internal() const
 {
     std::string result = to_string(value::X);
-    if (m_holds_variable)
+    if (m_content == content_type::VARIABLE)
     {
         result = m_variable;
     }
-    else if (m_holds_constant)
+    else if (m_content == content_type::CONSTANT)
     {
         result = to_string(m_constant);
     }
@@ -415,21 +429,19 @@ std::ostream& operator<<(std::ostream& os, const boolean_function& f)
 
 boolean_function boolean_function::combine(operation op, const boolean_function& other) const
 {
-    bool holds_expression       = !(m_holds_variable || m_holds_constant);
-    bool other_holds_expression = !(other.m_holds_variable || other.m_holds_constant);
-    if (holds_expression && m_op == op && !other_holds_expression && !other.m_invert)
+    if (m_content == content_type::TERMS && m_op == op && other.m_content != content_type::TERMS && !other.m_invert)
     {
         boolean_function result = *this;
         result.m_operands.push_back(other);
         return result;
     }
-    else if (other_holds_expression && other.m_op == op && !holds_expression && !m_invert)
+    else if (other.m_content == content_type::TERMS && other.m_op == op && m_content != content_type::TERMS && !m_invert)
     {
         boolean_function result = other;
         result.m_operands.insert(result.m_operands.begin(), *this);
         return result;
     }
-    else if (holds_expression && other_holds_expression && m_op == op && m_op == other.m_op && !m_invert && !other.m_invert)
+    else if (m_content == content_type::TERMS && other.m_content == content_type::TERMS && m_op == op && m_op == other.m_op && !m_invert && !other.m_invert)
     {
         auto joint_operands = m_operands;
         joint_operands.insert(joint_operands.end(), other.m_operands.begin(), other.m_operands.end());
@@ -480,9 +492,38 @@ boolean_function boolean_function::operator!() const
     return result;
 }
 
+bool boolean_function::operator==(const boolean_function& other) const
+{
+    return m_invert == other.m_invert && m_content == other.m_content && m_variable == other.m_variable && m_constant == other.m_constant && m_op == other.m_op && m_operands == other.m_operands;
+}
+bool boolean_function::operator!=(const boolean_function& other) const
+{
+    return !(*this == other);
+}
+bool boolean_function::operator<(const boolean_function& other) const
+{
+    if (m_content == content_type::VARIABLE)
+    {
+        return m_variable < other.m_variable;
+    }
+    else if (m_content == content_type::CONSTANT)
+    {
+        return m_constant < other.m_constant;
+    }
+    else
+    {    // TERMS
+        return m_operands < other.m_operands;
+    }
+}
+
+bool boolean_function::operator>(const boolean_function& other) const
+{
+    return *this != other && !(*this < other);
+}
+
 boolean_function boolean_function::replace_xors() const
 {
-    if (m_holds_constant || m_holds_variable)
+    if (m_content != content_type::TERMS)
     {
         return *this;
     }
@@ -528,7 +569,7 @@ std::vector<boolean_function> boolean_function::expand_ands_internal(const std::
 
 std::vector<boolean_function> boolean_function::get_primitives() const
 {
-    if (m_holds_constant || m_holds_variable)
+    if (m_content != content_type::TERMS)
     {
         return {*this};
     }
@@ -561,11 +602,11 @@ boolean_function boolean_function::expand_ands() const
 
 boolean_function boolean_function::optimize_constants() const
 {
-    if (m_holds_variable)
+    if (m_content == content_type::VARIABLE)
     {
         return *this;
     }
-    if (m_holds_constant)
+    if (m_content == content_type::CONSTANT)
     {
         if (m_invert)
         {
@@ -615,7 +656,7 @@ boolean_function boolean_function::optimize_constants() const
     {
         for (auto it2 = it + 1; it2 != terms.end();)
         {
-            if (it->m_holds_variable && it2->m_holds_variable && it->m_variable == it2->m_variable)
+            if (it->m_content == content_type::VARIABLE && it2->m_content == content_type::VARIABLE && it->m_variable == it2->m_variable)
             {
                 if (it->m_invert != it2->m_invert)
                 {
@@ -651,7 +692,7 @@ boolean_function boolean_function::optimize_constants() const
 
 boolean_function boolean_function::propagate_negations(bool negate_term) const
 {
-    if (m_holds_constant || m_holds_variable)
+    if (m_content != content_type::TERMS)
     {
         boolean_function result = *this;
         result.m_invert         = result.m_invert ^ negate_term;
@@ -689,7 +730,7 @@ boolean_function boolean_function::propagate_negations(bool negate_term) const
 
 boolean_function boolean_function::flatten() const
 {
-    if (m_holds_constant || m_holds_variable)
+    if (m_content != content_type::TERMS)
     {
         return *this;
     }
@@ -698,7 +739,7 @@ boolean_function boolean_function::flatten() const
     for (const auto& operand : m_operands)
     {
         auto term = operand.flatten();
-        if (!(term.m_holds_constant || term.m_holds_variable) && m_op == term.m_op)
+        if (term.m_content == content_type::TERMS && m_op == term.m_op)
         {
             for (const auto& x : term.m_operands)
             {

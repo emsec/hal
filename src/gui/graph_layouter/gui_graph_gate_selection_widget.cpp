@@ -54,7 +54,7 @@ gui_graph_gate_selection_widget::gui_graph_gate_selection_widget(QWidget* parent
         auto current_gate = tup.gate;
         setItem(counter, 0, new QTableWidgetItem(QString::number(current_gate->get_id())));
         setItem(counter, 1, new QTableWidgetItem(QString::fromStdString(current_gate->get_name())));
-        setItem(counter, 2 , new QTableWidgetItem(QString::fromStdString(current_gate->get_type())));
+        setItem(counter, 2 , new QTableWidgetItem(QString::fromStdString(current_gate->get_type()->get_name())));
         setItem(counter, 3, new QTableWidgetItem(QString::fromStdString(tup.pin_type)));
         setItem(counter, 4, new QTableWidgetItem(modules_of_gate(current_gate)));
         counter++;

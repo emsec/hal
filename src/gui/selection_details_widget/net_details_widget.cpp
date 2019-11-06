@@ -1,8 +1,8 @@
 #include "selection_details_widget/net_details_widget.h"
 #include "gui_globals.h"
 #include "netlist/gate.h"
-#include "netlist/net.h"
 #include "netlist/module.h"
+#include "netlist/net.h"
 #include <QHeaderView>
 #include <QLabel>
 #include <QScrollArea>
@@ -172,9 +172,7 @@ void net_details_widget::update(u32 net_id)
     //get net type
     QString n_type = "Standard";
 
-    if (g_netlist->is_global_inout_net(n))
-        n_type = "Inout";
-    else if (g_netlist->is_global_input_net(n))
+    if (g_netlist->is_global_input_net(n))
         n_type = "Input";
     else if (g_netlist->is_global_output_net(n))
         n_type = "Output";
@@ -219,7 +217,7 @@ void net_details_widget::update(u32 net_id)
 
     m_dst_pins->setText(0, "");
 
-    if (!g_netlist->is_global_output_net(n) && !g_netlist->is_global_inout_net(n))
+    if (!g_netlist->is_global_output_net(n))
     {
         auto dsts_pins = n->get_dsts();
 

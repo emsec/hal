@@ -5,12 +5,10 @@
 #include "gui_globals.h"
 
 #include <QHeaderView>
-#include <QScrollBar>
 #include <QKeyEvent>
+#include <QScrollBar>
 
-graph_navigation_widget::graph_navigation_widget(QWidget* parent) : QTableWidget(parent),
-    m_from_gate(0),
-    m_via_net(0)
+graph_navigation_widget::graph_navigation_widget(QWidget* parent) : QTableWidget(parent), m_from_gate(0), m_via_net(0)
 {
     setSelectionMode(QAbstractItemView::SingleSelection);
     setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -23,8 +21,8 @@ graph_navigation_widget::graph_navigation_widget(QWidget* parent) : QTableWidget
 
     verticalHeader()->setVisible(false);
 
-//    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-//    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    //    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    //    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 }
 
 void graph_navigation_widget::setup()
@@ -33,51 +31,51 @@ void graph_navigation_widget::setup()
 
     switch (g_selection_relay.m_focus_type)
     {
-    case selection_relay::item_type::none:
-    {
-        return;
-    }
-    case selection_relay::item_type::gate:
-    {
-        std::shared_ptr<gate> g = g_netlist->get_gate_by_id(g_selection_relay.m_focus_id);
-
-        if (!g)
+        case selection_relay::item_type::none:
+        {
             return;
+        }
+        case selection_relay::item_type::gate:
+        {
+            std::shared_ptr<gate> g = g_netlist->get_gate_by_id(g_selection_relay.m_focus_id);
 
-        m_from_gate = g_selection_relay.m_focus_id;
+            if (!g)
+                return;
 
-        std::string pin_type = *std::next(g->get_output_pin_types().begin(), g_selection_relay.m_subfocus_index);
-        std::shared_ptr<net> n = g->get_fan_out_net(pin_type);
+            m_from_gate = g_selection_relay.m_focus_id;
 
-        if (!n)
+            std::string pin_type   = *std::next(g->get_output_pin_types().begin(), g_selection_relay.m_subfocus_index);
+            std::shared_ptr<net> n = g->get_fan_out_net(pin_type);
+
+            if (!n)
+                return;
+
+            fill_table(n);
+
             return;
+        }
+        case selection_relay::item_type::net:
+        {
+            std::shared_ptr<net> n = g_netlist->get_net_by_id(g_selection_relay.m_focus_id);
 
-        fill_table(n);
+            if (!n)
+                return;
 
-        return;
-    }
-    case selection_relay::item_type::net:
-    {
-        std::shared_ptr<net> n = g_netlist->get_net_by_id(g_selection_relay.m_focus_id);
+            std::shared_ptr<gate> g = n->get_src().get_gate();
 
-        if (!n)
+            if (!g)
+                return;
+
+            m_from_gate = g->get_id();
+
+            fill_table(n);
+
             return;
-
-        std::shared_ptr<gate> g = n->get_src().get_gate();
-
-        if (!g)
+        }
+        case selection_relay::item_type::module:
+        {
             return;
-
-        m_from_gate = g->get_id();
-
-        fill_table(n);
-
-        return;
-    }
-    case selection_relay::item_type::module:
-    {
-        return;
-    }
+        }
     }
 }
 
@@ -128,7 +126,7 @@ void graph_navigation_widget::fill_table(std::shared_ptr<net> n)
         item->setFlags(Qt::ItemIsSelectable);
         setItem(row, 1, item);
 
-        item = new QTableWidgetItem(QString::fromStdString(e.get_gate()->get_type()));
+        item = new QTableWidgetItem(QString::fromStdString(e.get_gate()->get_type()->get_name()));
         item->setFlags(Qt::ItemIsSelectable);
         setItem(row, 2, item);
 
@@ -148,9 +146,8 @@ void graph_navigation_widget::fill_table(std::shared_ptr<net> n)
     resizeRowsToContents();
     resizeColumnsToContents();
 
-
     int scrollbar_width = verticalScrollBar()->width();
-    int total_width = 0;
+    int total_width     = 0;
 
     for (int i = 0; i < horizontalHeader()->count(); ++i)
         total_width += horizontalHeader()->sectionSize(i);
@@ -158,7 +155,7 @@ void graph_navigation_widget::fill_table(std::shared_ptr<net> n)
     setFixedWidth(total_width + scrollbar_width);
 
     int scrollbar_height = horizontalScrollBar()->height();
-    int header_height = horizontalHeader()->height();
+    int header_height    = horizontalHeader()->height();
 
     int total_height = 0;
 

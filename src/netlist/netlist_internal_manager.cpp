@@ -109,7 +109,12 @@ bool netlist_internal_manager::delete_gate(std::shared_ptr<gate> gate)
 bool netlist_internal_manager::is_gate_type_invalid(std::shared_ptr<const gate_type> gt) const
 {
     auto gate_types = m_netlist->m_gate_library->get_gate_types();
-    return std::find_if(gate_types.begin(), gate_types.end(), [&](std::shared_ptr<gate_type> const& it) { return *it == *gt; }) == gate_types.end();
+    auto it         = gate_types.find(gt->get_name());
+    if (it == gate_types.end())
+    {
+        return false;
+    }
+    return *(it->second) == *gt;
 }
 
 //######################################################################
@@ -175,10 +180,9 @@ bool netlist_internal_manager::delete_net(std::shared_ptr<net> net)
         return false;
     }
 
-    // check global_input, global_output and global_inout gates
+    // check global_input and global_output gates
     m_netlist->unmark_global_input_net(net);
     m_netlist->unmark_global_output_net(net);
-    m_netlist->unmark_global_inout_net(net);
 
     // remove net from netlist
     m_netlist->m_nets_map.erase(m_netlist->m_nets_map.find(net->get_id()));

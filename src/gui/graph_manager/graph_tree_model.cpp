@@ -107,7 +107,6 @@ void graph_tree_model::setupModelData(std::shared_ptr<netlist> g)
 {
     auto gloinput   = g->get_global_input_nets();
     auto globoutput = g->get_global_output_nets();
-    auto globInout  = g->get_global_inout_nets();
 
     /*Global-Input subtree*/
     tree_model_item* gloinputitem = new tree_model_item("Global Input", "Dummy", rootItem);
@@ -118,11 +117,6 @@ void graph_tree_model::setupModelData(std::shared_ptr<netlist> g)
     tree_model_item* glooutputitem = new tree_model_item("Global Output", "Dummy", rootItem);
     add_net_set_to_a_parent_item(globoutput, glooutputitem);
     rootItem->appendChild(glooutputitem);
-
-    /*Global Input/Output subtree*/
-    tree_model_item* gloinoutitem = new tree_model_item("Global InOut", "Dummy", rootItem);
-    add_net_set_to_a_parent_item(globInout, gloinoutitem);
-    rootItem->appendChild(gloinoutitem);
 
     /*add all nets to the rootitem*/
     auto nets = g->get_nets();

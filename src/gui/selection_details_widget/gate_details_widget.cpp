@@ -180,9 +180,6 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
     //    m_output_pins->setBackground(1, QBrush(QColor(31, 34, 35),Qt::SolidPattern));
     //    m_output_pins->setBackground(2, QBrush(QColor(31, 34, 35),Qt::SolidPattern));
 
-    // load and store quine mc cluskey plugin
-    m_qmc = plugin_manager::get_plugin_instance<plugin_quine_mccluskey>("libquine_mccluskey");
-
     connect(&g_netlist_relay, &netlist_relay::gate_event, this, &gate_details_widget::handle_gate_event);
     connect(&g_netlist_relay, &netlist_relay::module_event, this, &gate_details_widget::handle_module_event);
 }
@@ -249,7 +246,7 @@ void gate_details_widget::update(const u32 gate_id)
     auto g = g_netlist->get_gate_by_id(gate_id);
 
     m_name_item->setText(QString::fromStdString(g->get_name()));
-    m_type_item->setText(QString::fromStdString(g->get_type()));
+    m_type_item->setText(QString::fromStdString(g->get_type()->get_name()));
     m_id_item->setText(QString::number(g->get_id()));
 
     //get modules
@@ -273,22 +270,19 @@ void gate_details_widget::update(const u32 gate_id)
     }
     else
     {
-        if (m_qmc)
-        {
-            std::string description = "";
-            for (const auto& it : m_qmc->get_boolean_function_str(g, true))
-                description += " <b>Boolean Function (" + it.first + ")</b>: " + it.second + "<br>";
+        std::string description = "";
+        for (const auto& it : g->get_boolean_functions())
+            description += " <b>Boolean Function (" + it.first + ")</b>: " + it.second.to_string() + "<br>";
 
-            if (description.empty())
-            {
-                g->set_data("gui", "boolean_function", "string", "-");
-            }
-            else
-            {
-                description = description.substr(0, description.size() - 4);
-                g->set_data("gui", "boolean_function", "string", description);
-                m_boolean_function->setText(QString::fromStdString(description));
-            }
+        if (description.empty())
+        {
+            g->set_data("gui", "boolean_function", "string", "-");
+        }
+        else
+        {
+            description = description.substr(0, description.size() - 4);
+            g->set_data("gui", "boolean_function", "string", description);
+            m_boolean_function->setText(QString::fromStdString(description));
         }
     }
 
@@ -452,70 +446,70 @@ void gate_details_widget::handle_item_collapsed(QTreeWidgetItem* item)
 
 void gate_details_widget::on_treewidget_item_clicked(QTreeWidgetItem* item, int column)
 {
-        if (m_output_pins == item->parent() && column == 2)
+    if (m_output_pins == item->parent() && column == 2)
+    {
+        int id                           = item->data(2, Qt::UserRole).toInt();
+        std::shared_ptr<net> clicked_net = g_netlist->get_net_by_id(id);
+        std::vector<endpoint> successors = clicked_net->get_dsts();
+        std::set<std::shared_ptr<gate>> unique_succ;
+        for (endpoint p : successors)
+            unique_succ.insert(p.gate);
+
+        if (successors.empty())
         {
-            int id                           = item->data(2, Qt::UserRole).toInt();
-            std::shared_ptr<net> clicked_net = g_netlist->get_net_by_id(id);
-            std::vector<endpoint> successors = clicked_net->get_dsts();
-            std::set<std::shared_ptr<gate>> unique_succ;
-            for (endpoint p : successors)
-                unique_succ.insert(p.gate);
-
-            if(successors.empty())
-            {
-                QList<u32> gate_ids;
-                QList<u32> net_ids;
-                QList<u32> submod_ids;
-                net_ids.append(clicked_net->get_id());
-                g_selection_relay.relay_combined_selection(this, gate_ids,  net_ids, submod_ids);
-                g_selection_relay.relay_current_net(this, net_ids.first());
-                return;
-            }
-
-            if (unique_succ.size() == 1)
-            {
-                QList<u32> gate_id;
-                QList<u32> net_ids;
-                QList<u32> sub_ids;
-                gate_id.append((*unique_succ.begin())->get_id());
-                g_selection_relay.relay_combined_selection(this, gate_id, net_ids, sub_ids);
-                update(gate_id.first());
-                return;
-            }
-
-            table_selector_widget* w = new table_selector_widget(unique_succ, this);
-            connect(w, &table_selector_widget::gateSelected, this, &gate_details_widget::on_gate_selected);
-            auto rect = QApplication::desktop()->availableGeometry(this);
-            w->move(QPoint(rect.x() + (rect.width() - w->width()) / 2, rect.y() + (rect.height() - w->height()) / 2));
-            w->show();
-            w->setFocus();
+            QList<u32> gate_ids;
+            QList<u32> net_ids;
+            QList<u32> submod_ids;
+            net_ids.append(clicked_net->get_id());
+            g_selection_relay.relay_combined_selection(this, gate_ids, net_ids, submod_ids);
+            g_selection_relay.relay_current_net(this, net_ids.first());
+            return;
         }
-        else if (m_input_pins == item->parent() && column == 2)
+
+        if (unique_succ.size() == 1)
         {
-            int id           = item->data(2, Qt::UserRole).toInt();
-            auto clicked_net = g_netlist->get_net_by_id(id);
-
-            if (!clicked_net)
-                return;
-
-            if(!clicked_net->get_src().gate)
-            {
-                QList<u32> gate_ids;
-                QList<u32> net_ids;
-                QList<u32> submod_ids;
-                net_ids.append(clicked_net->get_id());
-                g_selection_relay.relay_combined_selection(this, gate_ids,  net_ids, submod_ids);
-                g_selection_relay.relay_current_net(this, net_ids.first());
-                return;
-            }
-
             QList<u32> gate_id;
             QList<u32> net_ids;
             QList<u32> sub_ids;
-            gate_id.append(clicked_net->get_src().gate->get_id());
+            gate_id.append((*unique_succ.begin())->get_id());
             g_selection_relay.relay_combined_selection(this, gate_id, net_ids, sub_ids);
             update(gate_id.first());
+            return;
         }
+
+        table_selector_widget* w = new table_selector_widget(unique_succ, this);
+        connect(w, &table_selector_widget::gateSelected, this, &gate_details_widget::on_gate_selected);
+        auto rect = QApplication::desktop()->availableGeometry(this);
+        w->move(QPoint(rect.x() + (rect.width() - w->width()) / 2, rect.y() + (rect.height() - w->height()) / 2));
+        w->show();
+        w->setFocus();
+    }
+    else if (m_input_pins == item->parent() && column == 2)
+    {
+        int id           = item->data(2, Qt::UserRole).toInt();
+        auto clicked_net = g_netlist->get_net_by_id(id);
+
+        if (!clicked_net)
+            return;
+
+        if (!clicked_net->get_src().gate)
+        {
+            QList<u32> gate_ids;
+            QList<u32> net_ids;
+            QList<u32> submod_ids;
+            net_ids.append(clicked_net->get_id());
+            g_selection_relay.relay_combined_selection(this, gate_ids, net_ids, submod_ids);
+            g_selection_relay.relay_current_net(this, net_ids.first());
+            return;
+        }
+
+        QList<u32> gate_id;
+        QList<u32> net_ids;
+        QList<u32> sub_ids;
+        gate_id.append(clicked_net->get_src().gate->get_id());
+        g_selection_relay.relay_combined_selection(this, gate_id, net_ids, sub_ids);
+        update(gate_id.first());
+    }
 }
 
 void gate_details_widget::on_gate_selected(std::shared_ptr<gate> selected)

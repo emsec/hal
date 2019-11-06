@@ -190,8 +190,8 @@ std::shared_ptr<netlist> hdl_parser_vhdl::parse(const std::string& gate_library)
     // add global gnd gate if required by any instance
     if (!m_zero_net->get_dsts().empty())
     {
-        auto gnd_type   = *(m_netlist->get_gate_library()->get_global_gnd_gate_types()->begin());
-        auto output_pin = m_netlist->get_output_pin_types(gnd_type).at(0);
+        auto gnd_type   = m_netlist->get_gate_library()->get_global_gnd_gate_types().begin()->second;
+        auto output_pin = gnd_type->get_output_pins().at(0);
         auto gnd        = m_netlist->create_gate(m_netlist->get_unique_gate_id(), gnd_type, "global_gnd");
         if (!m_netlist->mark_global_gnd_gate(gnd))
         {
@@ -211,8 +211,8 @@ std::shared_ptr<netlist> hdl_parser_vhdl::parse(const std::string& gate_library)
     // add global vcc gate if required by any instance
     if (!m_one_net->get_dsts().empty())
     {
-        auto vcc_type   = *(m_netlist->get_gate_library()->get_global_vcc_gate_types()->begin());
-        auto output_pin = m_netlist->get_output_pin_types(vcc_type).at(0);
+        auto vcc_type   = m_netlist->get_gate_library()->get_global_vcc_gate_types().begin()->second;
+        auto output_pin = vcc_type->get_output_pins().at(0);
         auto vcc        = m_netlist->create_gate(m_netlist->get_unique_gate_id(), vcc_type, "global_vcc");
         if (!m_netlist->mark_global_vcc_gate(vcc))
         {
@@ -231,8 +231,8 @@ std::shared_ptr<netlist> hdl_parser_vhdl::parse(const std::string& gate_library)
 
     for (const auto& net : m_netlist->get_nets())
     {
-        bool no_src = net->get_src().gate == nullptr && !net->is_global_inout_net() && !net->is_global_input_net();
-        bool no_dst = net->get_num_of_dsts() == 0 && !net->is_global_inout_net() && !net->is_global_output_net();
+        bool no_src = net->get_src().gate == nullptr && !net->is_global_input_net();
+        bool no_dst = net->get_num_of_dsts() == 0 && !net->is_global_output_net();
         if (no_src && no_dst)
         {
             m_netlist->delete_net(net);
@@ -275,6 +275,9 @@ bool hdl_parser_vhdl::parse_libraries(const std::vector<file_line>& libs)
 
 bool hdl_parser_vhdl::parse_components(const std::vector<std::vector<file_line>>& components)
 {
+    UNUSED(components);
+    // Gate library mutation not allowed
+    /*
     auto lib = m_netlist->get_gate_library();
 
     for (const auto& component : components)
@@ -323,20 +326,16 @@ bool hdl_parser_vhdl::parse_components(const std::vector<std::vector<file_line>>
                         lib->get_output_pin_types()->insert(signal);
                         (*lib->get_gate_type_map_to_output_pin_types())[new_component].push_back(signal);
                     }
-                    else if (direction == "inout")
-                    {
-                        lib->get_inout_pin_types()->insert(signal);
-                        (*lib->get_gate_type_map_to_inout_pin_types())[new_component].push_back(signal);
-                    }
                     else
                     {
-                        log_error("hdl_parser", "line {}: unknown port direction {}", line.number, direction);
+                        log_error("hdl_parser", "line {}: unknown/unsupported port direction {}", line.number, direction);
                         return false;
                     }
                 }
             }
         }
     }
+    */
     return true;
 }
 
@@ -710,7 +709,6 @@ bool hdl_parser_vhdl::build_netlist(const std::string& top_module)
     std::map<std::string, std::function<bool(std::shared_ptr<net> const)>> port_dir_function = {
         {"in", [](std::shared_ptr<net> const net) { return net->mark_global_input_net(); }},
         {"out", [](std::shared_ptr<net> const net) { return net->mark_global_output_net(); }},
-        {"inout", [](std::shared_ptr<net> const net) { return net->mark_global_inout_net(); }},
     };
 
     std::map<std::string, std::string> top_assignments;
@@ -802,7 +800,7 @@ bool hdl_parser_vhdl::build_netlist(const std::string& top_module)
                 // merge attributes etc.
                 for (const auto& it : slave_net->get_data())
                 {
-                    if(!master_net->set_data(std::get<0>(it.first), std::get<1>(it.first), std::get<0>(it.second), std::get<1>(it.second)))
+                    if (!master_net->set_data(std::get<0>(it.first), std::get<1>(it.first), std::get<0>(it.second), std::get<1>(it.second)))
                     {
                         log_error("hdl_parser", "couldn't set data");
                     }
@@ -858,7 +856,7 @@ std::shared_ptr<module> hdl_parser_vhdl::instantiate(const entity& e, std::share
         {
             for (const auto& attr : attribute_it->second)
             {
-                if(!module->set_data("vhdl_attribute", std::get<0>(attr), std::get<1>(attr), std::get<2>(attr)))
+                if (!module->set_data("vhdl_attribute", std::get<0>(attr), std::get<1>(attr), std::get<2>(attr)))
                 {
                     log_error("hdl_parser", "couldn't set data");
                 }
@@ -885,7 +883,7 @@ std::shared_ptr<module> hdl_parser_vhdl::instantiate(const entity& e, std::share
             {
                 for (const auto& attr : attribute_it->second)
                 {
-                    if(!new_net->set_data("vhdl_attribute", std::get<0>(attr), std::get<1>(attr), std::get<2>(attr)))
+                    if (!new_net->set_data("vhdl_attribute", std::get<0>(attr), std::get<1>(attr), std::get<2>(attr)))
                     {
                         log_error("hdl_parser", "couldn't set data");
                     }
@@ -902,7 +900,7 @@ std::shared_ptr<module> hdl_parser_vhdl::instantiate(const entity& e, std::share
         {
             for (const auto& attr : attribute_it->second)
             {
-                if(!m_net_by_name[assignment]->set_data("vhdl_attribute", std::get<0>(attr), std::get<1>(attr), std::get<2>(attr)))
+                if (!m_net_by_name[assignment]->set_data("vhdl_attribute", std::get<0>(attr), std::get<1>(attr), std::get<2>(attr)))
                 {
                     log_error("hdl_parser", "couldn't set data");
                 }
@@ -1000,7 +998,18 @@ std::shared_ptr<module> hdl_parser_vhdl::instantiate(const entity& e, std::share
         {
             // create the new gate
             aliases[inst.name] = get_unique_alias(inst.name);
-            auto new_gate      = m_netlist->create_gate(inst.type, aliases[inst.name]);
+
+            std::shared_ptr<gate> new_gate;
+            {
+                auto gate_types = m_netlist->get_gate_library()->get_gate_types();
+                auto it         = gate_types.find(inst.name);
+                if (it == gate_types.end())
+                {
+                    return nullptr;
+                }
+                new_gate = m_netlist->create_gate(it->second, aliases[inst.name]);
+            }
+
             if (new_gate == nullptr)
             {
                 return nullptr;
@@ -1009,11 +1018,11 @@ std::shared_ptr<module> hdl_parser_vhdl::instantiate(const entity& e, std::share
             container = new_gate.get();
 
             // if gate is a global type, register it as such
-            if (global_vcc_gate_types->find(inst.type) != global_vcc_gate_types->end() && !new_gate->mark_global_vcc_gate())
+            if (global_vcc_gate_types.find(inst.type) != global_vcc_gate_types.end() && !new_gate->mark_global_vcc_gate())
             {
                 return nullptr;
             }
-            if (global_gnd_gate_types->find(inst.type) != global_gnd_gate_types->end() && !new_gate->mark_global_gnd_gate())
+            if (global_gnd_gate_types.find(inst.type) != global_gnd_gate_types.end() && !new_gate->mark_global_gnd_gate())
             {
                 return nullptr;
             }
@@ -1021,7 +1030,6 @@ std::shared_ptr<module> hdl_parser_vhdl::instantiate(const entity& e, std::share
             // cache pin types
             auto input_pin_types  = new_gate->get_input_pin_types();
             auto output_pin_types = new_gate->get_output_pin_types();
-            auto inout_pin_types  = new_gate->get_inout_pin_types();
 
             // check for port
             for (auto [pin, net_name] : inst.ports)
@@ -1051,13 +1059,12 @@ std::shared_ptr<module> hdl_parser_vhdl::instantiate(const entity& e, std::share
                 auto current_net = it->second;
 
                 // add net src/dst by pin types
-                bool is_inout  = std::find(inout_pin_types.begin(), inout_pin_types.end(), pin) != inout_pin_types.end();
-                bool is_input  = is_inout || std::find(input_pin_types.begin(), input_pin_types.end(), pin) != input_pin_types.end();
-                bool is_output = is_inout || std::find(output_pin_types.begin(), output_pin_types.end(), pin) != output_pin_types.end();
+                bool is_input  = std::find(input_pin_types.begin(), input_pin_types.end(), pin) != input_pin_types.end();
+                bool is_output = std::find(output_pin_types.begin(), output_pin_types.end(), pin) != output_pin_types.end();
 
                 if (!is_input && !is_output)
                 {
-                    log_error("hdl_parser", "undefined pin '{}' for '{}' ({})", pin, new_gate->get_name(), new_gate->get_type());
+                    log_error("hdl_parser", "undefined pin '{}' for '{}' ({})", pin, new_gate->get_name(), new_gate->get_type()->get_name());
                     return nullptr;
                 }
 
@@ -1070,9 +1077,9 @@ std::shared_ptr<module> hdl_parser_vhdl::instantiate(const entity& e, std::share
                                   "net '{}' already has source gate '{}' (type {}), cannot assign '{}' (type {})",
                                   current_net->get_name(),
                                   src->get_name(),
-                                  src->get_type(),
+                                  src->get_type()->get_name(),
                                   new_gate->get_name(),
-                                  new_gate->get_type());
+                                  new_gate->get_type()->get_name());
                     }
                     if (!current_net->set_src(new_gate, pin))
                     {
@@ -1094,7 +1101,7 @@ std::shared_ptr<module> hdl_parser_vhdl::instantiate(const entity& e, std::share
             {
                 for (const auto& attr : attribute_it->second)
                 {
-                    if(!container->set_data("vhdl_attribute", std::get<0>(attr), std::get<1>(attr), std::get<2>(attr)))
+                    if (!container->set_data("vhdl_attribute", std::get<0>(attr), std::get<1>(attr), std::get<2>(attr)))
                     {
                         log_error("hdl_parser", "couldn't set data: key: {}, value_data_type: {}, value: {}", std::get<0>(attr), std::get<1>(attr), std::get<2>(attr));
                     }

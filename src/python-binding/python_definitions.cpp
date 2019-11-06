@@ -15,27 +15,19 @@
 #include "pybind11/stl.h"
 #include "pybind11/stl_bind.h"
 
+#include "netlist/boolean_function.h"
 #include "netlist/gate.h"
 #include "netlist/gate_library/gate_library.h"
-//#include "netlist/gate_library/gate_library_manager.h"
 #include "netlist/module.h"
 #include "netlist/net.h"
 #include "netlist/netlist.h"
 #include "netlist/netlist_factory.h"
 #include "netlist/persistent/netlist_serializer.h"
 
-//#include "hdl_parser/hdl_parser_dispatcher.h"
 #include "hdl_writer/hdl_writer_dispatcher.h"
 
-#include "gate_decorator_system/decorators/gate_decorator_bdd.h"
-#include "gate_decorator_system/decorators/gate_decorator_lut.h"
-#include "gate_decorator_system/gate_decorator_system.h"
-
-#include "hal_bdd.h"
-//#include "core/interface_cli.h"
 #include "core/interface_gui.h"
 #include "core/plugin_manager.h"
-//#include "core/program_arguments.h"
 
 typedef std::map<std::string, std::set<std::string>> map_string_to_set_of_string;
 
@@ -433,7 +425,7 @@ Gets an unoccupied gate id. The value 0 is reserved and represents an invalid id
 :returns: An unoccupied unique id.
 :rtype: int
 )")
-        .def("create_gate", py::overload_cast<const u32, const std::string&, const std::string&>(&netlist::create_gate), py::arg("id"), py::arg("gate_type"), py::arg("name"), R"(
+        .def("create_gate", py::overload_cast<const u32, std::shared_ptr<const gate_type>, const std::string&>(&netlist::create_gate), py::arg("id"), py::arg("gate_type"), py::arg("name"), R"(
 Creates and adds a new gate to the netlist.
 
 :param int id: The unique ID != 0 for the new gate.
@@ -442,7 +434,7 @@ Creates and adds a new gate to the netlist.
 :returns: The new gate on success, None on error.
 :rtype: hal_py.gate or None
 )")
-        .def("create_gate", py::overload_cast<const std::string&, const std::string&>(&netlist::create_gate), py::arg("gate_type"), py::arg("name"), R"(
+        .def("create_gate", py::overload_cast<std::shared_ptr<const gate_type>, const std::string&>(&netlist::create_gate), py::arg("gate_type"), py::arg("name"), R"(
 Creates and adds a new gate to the netlist.
 It is identifiable via its unique ID which is automatically set to the next free ID.
 
@@ -559,29 +551,6 @@ Get all global gnd gates.
 :returns: A set of gates.
 :rtype: set(hal_py.gate)
 )")
-
-        .def("get_input_pin_types", &netlist::get_input_pin_types, py::arg("gate_type"), R"(
-Get the input pin types for a gate type.
-
-:param str gate_type: The gate type.
-:returns: A List of all input pin types.
-:rtype: list(str)
-)")
-        .def("get_output_pin_types", &netlist::get_output_pin_types, py::arg("gate_type"), R"(
-Get the output pin types for a gate type.
-
-:param str gate_type: The gate type.
-:returns: A List of all output pin types.
-:rtype: list(str)
-)")
-        .def("get_inout_pin_types", &netlist::get_inout_pin_types, py::arg("gate_type"), R"(
-Get the inout pin types for a gate type.
-
-:param str gate_type: The gate type.
-:returns: A List of all inout pin types.
-:rtype: list(str)
-)")
-
         .def("get_unique_net_id", &netlist::get_unique_net_id, R"(
 Gets an unoccupied net id. The value 0 is reserved and represents an invalid id.
 
@@ -655,14 +624,6 @@ Mark a net as a global output net.
 :returns: True on success.
 :rtype: bool
 )")
-        .def("mark_global_inout_net", &netlist::mark_global_inout_net, py::arg("net"), R"(
-Mark a net as a global inout net.
-
-:param net: The net.
-:type net: hal_py.net
-:returns: True on success.
-:rtype: bool
-)")
         .def("unmark_global_input_net", &netlist::unmark_global_input_net, py::arg("net"), R"(
 Unmark a global input net.
 
@@ -673,14 +634,6 @@ Unmark a global input net.
 )")
         .def("unmark_global_output_net", &netlist::unmark_global_output_net, py::arg("net"), R"(
 Unmark a global output net.
-
-:param net: The net.
-:type net: hal_py.net
-:returns: True on success.
-:rtype: bool
-)")
-        .def("unmark_global_inout_net", &netlist::unmark_global_inout_net, py::arg("net"), R"(
-Unmark a global inout net.
 
 :param net: The net.
 :type net: hal_py.net
@@ -703,14 +656,6 @@ Checks wether a net is a global output net.
 :returns: True if the net is a global output net.
 :rtype: bool
 )")
-        .def("is_global_inout_net", &netlist::is_global_inout_net, py::arg("net"), R"(
-Checks wether a net is a global inout net.
-
-:param net: The net to check.
-:type net: hal_py.net
-:returns: True if the net is a global inout net.
-:rtype: bool
-)")
         .def_property_readonly("global_input_nets", &netlist::get_global_input_nets, R"(
 Get all global input nets.
 
@@ -731,18 +676,6 @@ Get all global output nets.
 )")
         .def("get_global_output_nets", &netlist::get_global_output_nets, R"(
 Get all global output nets.
-
-:returns: A set of nets.
-:rtype: set(hal_py.net)
-)")
-        .def_property_readonly("global_inout_nets", &netlist::get_global_inout_nets, R"(
-Get all global inout nets.
-
-:returns: A set of nets.
-:rtype: set(hal_py.net)
-)")
-        .def("get_global_inout_nets", &netlist::get_global_inout_nets, R"(
-Get all global inout nets.
 
 :returns: A set of nets.
 :rtype: set(hal_py.net)
@@ -925,18 +858,6 @@ Get all output pin types of the gate.
 Get all output pin types of the gate.
 
 :returns: A list of output pin types.
-:rtype: list(str)
-)")
-        .def_property_readonly("inout_pin_types", &gate::get_inout_pin_types, R"(
-Get all inout pin types of the gate.
-
-:returns: A list of inout pin types.
-:rtype: list(str)
-)")
-        .def("get_inout_pin_types", &gate::get_inout_pin_types, R"(
-Get all inout pin types of the gate.
-
-:returns: A list of inout pin types.
 :rtype: list(str)
 )")
         .def_property_readonly("fan_in_nets", &gate::get_fan_in_nets, R"(
@@ -1190,12 +1111,6 @@ Mark this net as a global output net.
 :returns: True on success.
 :rtype: bool
 )")
-        .def("mark_global_inout_net", &net::mark_global_inout_net, R"(
-Mark this net as a global inout net.
-
-:returns: True on success.
-:rtype: bool
-)")
         .def("unmark_global_input_net", &net::unmark_global_input_net, R"(
 Unmark this net as a global input net.
 
@@ -1204,12 +1119,6 @@ Unmark this net as a global input net.
 )")
         .def("unmark_global_output_net", &net::unmark_global_output_net, R"(
 Unmark this net as a global output net.
-
-:returns: True on success.
-:rtype: bool
-)")
-        .def("unmark_global_inout_net", &net::unmark_global_inout_net, R"(
-Unmark this net as a global inout net.
 
 :returns: True on success.
 :rtype: bool
@@ -1225,15 +1134,7 @@ Checks whether this net is a global output net.
 
 :returns: True if the net is a global output net.
 :rtype: bool
-)")
-        .def("is_global_inout_net", &net::is_global_inout_net, R"(
-Checks whether this net is a global inout net.
-
-:returns: True if the net is a global inout net.
-:rtype: bool
-)")
-
-        ;
+)");
 
     // module dir
     py::class_<module, std::shared_ptr<module>, data_container>(m, "module")
@@ -1514,284 +1415,9 @@ Generic call to run the GUI.
 :rtype: bool
 )");
 
-    py::class_<bdd, std::shared_ptr<bdd>>(m, "bdd")
-        .def(py::init<>())
-        .def(py::init<const bdd&>())
-        .def_property_readonly("id", &bdd::id)
-        .def("__str__", [](std::shared_ptr<bdd>& b) -> std::string { return std::string("bdd: ") + gate_decorator_bdd::get_bdd_str(b); })
-        .def("bdd_str", [](std::shared_ptr<bdd>& b) -> std::string { return gate_decorator_bdd::get_bdd_str(b); }, R"(
-Get a human readable string for a bdd.
-:param bdd: The bdd to represent.
-:type bdd: hal_py.bdd
-:returns: The string representation.
-:rtype: str
-)")
-        .def("bdd_clauses", [](std::shared_ptr<bdd>& b) -> std::vector<std::map<int, bool>> { return gate_decorator_bdd::get_bdd_clauses(b); }, R"(
-Turn the bdd into a list of clauses.
-:param bdd: The bdd.
-:type bdd: hal_py.bdd
-:returns: A list of dictionaries from input to boolean value.
-:rtype: list(dict[int,bool])
-)")
-        .def("is_tautology", [](std::shared_ptr<bdd>& b) -> bool { return gate_decorator_bdd::is_tautology(b); }, R"(
-Checks whether a bdd is always true.
-:param bdd: The bdd.
-:type bdd: hal_py.bdd
-:returns: True if tautology.
-:rtype: bool
-)")
-        .def("is_contradiction", [](std::shared_ptr<bdd>& b) -> bool { return gate_decorator_bdd::is_contradiction(b); }, R"(
-Checks whether a bdd is always false.
-:param bdd: The bdd.
-:type bdd: hal_py.bdd
-:returns: True if contradiction.
-:rtype: bool
-)")
-        .def(py::self & py::self)
-        .def(py::self &= py::self)
-        .def(py::self ^ py::self)
-        .def(py::self ^= py::self)
-        .def(py::self | py::self)
-        .def(py::self |= py::self)
-        .def(!py::self)
-        .def(py::self >> py::self)
-        .def(py::self >>= py::self)
-        .def(py::self - py::self)
-        .def(py::self -= py::self)
-        .def(py::self > py::self)
-        .def(py::self < py::self)
-        .def(py::self << py::self)
-        .def(py::self <<= py::self)
-        .def(py::self == py::self)
-        .def(py::self != py::self);
-
-    class Pygate_decorator final : public gate_decorator, public std::enable_shared_from_this<Pygate_decorator>
-    {
-    public:
-        using gate_decorator::gate_decorator;    // Inherit constructors
-
-        virtual gate_decorator_system::decorator_type get_type() override
-        {
-            PYBIND11_OVERLOAD_PURE(gate_decorator_system::decorator_type, gate_decorator, get_type, NULL);
-        }
-    };
-
-    m.def_submodule("gate_decorator_system")
-        .def("query_decorator", &gate_decorator_system::query_decorator, py::arg("gate"), py::arg("decorator_type"), R"(
-Queries a gate decorator.
-
-:param gate: The gate to decorate.
-:type gate: hal_py.gate
-:param decorator_type: The requested type.
-:returns: Decorator on success or None on error.
-:rtype: hal_py.gate_decorator or None
-)")
-        .def("has_decorator_type", &gate_decorator_system::has_decorator_type, py::arg("gate"), py::arg("decorator_type"), R"(
-Checks whether the system has a decorator of the desired type for the gate.
-
-:param gate: The gate to check for.
-:type gate: hal_py.gate
-:param decorator_type: The type to check for.
-:returns: True on success.
-:rtype: bool
-)");
-
-    py::enum_<gate_decorator_system::decorator_type>(m, "decorator_type").value("BDD", gate_decorator_system::BDD).value("LUT", gate_decorator_system::LUT).export_values();
-
-    py::class_<gate_decorator, Pygate_decorator, std::shared_ptr<gate_decorator>>(m, "gate_decorator")
-        .def(py::init<std::shared_ptr<gate> const>())
-        .def_property_readonly("type", &gate_decorator::get_type, R"(
-Get the type of the decorator.
-
-:returns: The type.
-:rtype: int
-)")
-        .def("get_type", &gate_decorator::get_type, R"(
-Get the type of the decorator.
-
-:returns: The type.
-:rtype: int
-)")
-        .def_property_readonly("gate", &gate_decorator::get_gate, py::return_value_policy::reference, R"(
-Get the gate this decorator is created for.
-
-:returns: The gate.
-:rtype: hal_py.gate
-)")
-        .def("get_gate", &gate_decorator::get_gate, py::return_value_policy::reference, R"(
-Get the gate this decorator is created for.
-
-:returns: The gate.
-:rtype: hal_py.gate
-)");
-
-    py::class_<gate_decorator_bdd, gate_decorator, std::shared_ptr<gate_decorator_bdd>>(m, "gate_decorator_bdd")
-        .def(py::init<std::shared_ptr<gate> const, const gate_decorator_system::bdd_decorator_generator&>())
-        .def_property_readonly("type", &gate_decorator_bdd::get_type, R"(
-Get the type of the decorator.
-
-:returns: The type.
-:rtype: int
-)")
-        .def("get_type", &gate_decorator_bdd::get_type, R"(
-Get the type of the decorator.
-
-:returns: The type.
-:rtype: int
-)")
-        .def("get_bdd", py::overload_cast<>(&gate_decorator_bdd::get_bdd), R"(
-Returns the dictionary of bdds for each output pin type.
-
-:returns: A dictionary from (output pin) to (bdd).
-:rtype: dict[str, hal_py.bdd]
-)")
-        .def("get_bdd", py::overload_cast<std::map<std::string, int>>(&gate_decorator_bdd::get_bdd), py::arg("input_pin_type_to_bdd_identifier"), R"(
-Returns the dictionary of bdds for each output pin type with user-defined bdd variable identifiers.
-
-:param input_pin_type_to_bdd_identifier: The specified variable identifiers.
-:type input_pin_type_to_bdd_identifier: dict[str, int]
-:returns: A dictionary from (output pin) to (bdd).
-:rtype: dict[str, hal_py.bdd]
-)")
-        .def("get_bdd", py::overload_cast<std::map<std::string, std::tuple<std::shared_ptr<bdd>, int>>>(&gate_decorator_bdd::get_bdd), py::arg("input_pin_type_to_bdd_or_identifier"), R"(
-Returns the dictionary of bdds for each output pin type with user-defined bdd variable identifiers or identifiers for the input pin types.
-
-:param input_pin_type_to_bdd_or_identifier: The specified variable identifiers or identifiers for the input pin types.
-:type input_pin_type_to_bdd_or_identifier: dict[str, tuple(hal_py.bdd, int)]
-:returns: A dictionary from (output pin) to (bdd).
-:rtype: dict[str, hal_py.bdd]
-)")
-        .def("get_bdd", py::overload_cast<std::map<std::string, std::shared_ptr<bdd>>>(&gate_decorator_bdd::get_bdd), py::arg("input_pin_type_to_bdd"), R"(
-Returns the map of bdds for each output pin type with user-defined bdd variable identifiers or identifiers for the input pin types.
-
-:param input_pin_type_to_bdd: The specified variables or identifiers for the input pin types.
-:type input_pin_type_to_bdd: dict[str, hal_py.bdd]
-:returns: A dictionary from (output pin) to (bdd).
-:rtype: dict[str, hal_py.bdd]
-)")
-        .def_static("is_tautology", &gate_decorator_bdd::is_tautology, py::arg("bdd"), R"(
-Checks wether a bdd is always true.
-
-:param bdd: The bdd.
-:type bdd: hal_py.bdd
-:returns: The result.
-:rtype: bool
-)")
-        .def_static("is_contradiction", &gate_decorator_bdd::is_contradiction, py::arg("bdd"), R"(
-Checks wether a bdd is always false.
-
-:param bdd: The bdd.
-:type bdd: hal_py.bdd
-:returns: The result.
-:rtype: bool
-)")
-        .def_static("get_bdd_str", &gate_decorator_bdd::get_bdd_str, py::arg("bdd"), R"(
-Creates a human-readable string for a bdd.
-
-:param bdd: The bdd to represent.
-:type bdd: hal_py.bdd
-:returns: The string representation:
-:rtype: str
-)")
-        .def_static("evaluate_bdd", py::overload_cast<std::shared_ptr<bdd>, const std::map<int, bool>&>(&gate_decorator_bdd::evaluate_bdd), py::arg("bdd"), py::arg("input_configuration"), R"(
-Creates a human-readable string for a bdd.
-:param bdd: The bdd to represent.
-:type bdd: hal_py.bdd
-:param bdd: Input configuration to evaluate.
-:type bdd: dict[int, bool]
-:returns: Evaluation of the configuration for the bdd:
-:rtype: bool
-)")
-        .def_static("get_bdd_clauses", &gate_decorator_bdd::get_bdd_clauses, py::arg("bdd"), R"(
-Turn the bdd into a list of clauses.
-
-:param bdd: The bdd.
-:type bdd: hal_py.bdd
-:returns: A list of dictionaries from input to boolean value.
-:rtype: list(dict[int,bool])
-)");
-
-    py::class_<gate_decorator_lut, gate_decorator, std::shared_ptr<gate_decorator_lut>>(m, "gate_decorator_lut")
-        .def(py::init<std::shared_ptr<gate> const, u32, u32, const std::string&>())
-        .def_property_readonly("type", &gate_decorator_lut::get_type, R"(
-Get the type of the decorator.
-
-:returns: The type.
-:rtype: int
-)")
-        .def("get_type", &gate_decorator_lut::get_type, R"(
-Get the type of the decorator.
-
-:returns: The type.
-:rtype: int
-)")
-        .def_property_readonly("input_bit_width", &gate_decorator_lut::get_input_bit_width, R"(
-Get the number of the input signals of the lut.
-
-:returns: The number of input signals.
-:rtype: int
-)")
-        .def("get_input_bit_width", &gate_decorator_lut::get_input_bit_width, R"(
-Get the number of the input signals of the lut.
-
-:returns: The number of input signals.
-:rtype: int
-)")
-        .def_property_readonly("output_bit_width", &gate_decorator_lut::get_output_bit_width, R"(
-Get the number of output signals of the lut.
-
-:returns: The number of output signals.
-:rtype: int
-)")
-        .def("get_output_bit_width", &gate_decorator_lut::get_output_bit_width, R"(
-Get the number of output signals of the lut.
-
-:returns: The number of output signals.
-:rtype: int
-)")
-        .def("get_lut_configuration", &gate_decorator_lut::get_lut_configuration, R"(
-Get the lut configuration memory.
-
-:returns: A List of output bits.
-:rtype: list(bool)
-)")
-        .def("get_lut_configuration_byte_by_index", &gate_decorator_lut::get_lut_configuration_byte_by_index, py::arg("index"), R"(
-Get a byte of the lut configuration memory.
-
-:param int index: The byte index.
-:returns: A single byte.
-:rtype: int
-)")
-        .def("get_lut_configuration", &gate_decorator_lut::get_lut_configuration, R"(
-Get the lut configuration memory.
-
-:returns: A List of output bits.
-:rtype: list(bool)
-)")
-        .def_property_readonly("lut_memory_bit_size", &gate_decorator_lut::get_lut_configuration_bit_size, R"(
-Get the size of the lut configuration in bits.
-
-:returns: The number of bits.
-:rtype: int
-)")
-        .def("get_lut_configuration_bit_size", &gate_decorator_lut::get_lut_configuration_bit_size, R"(
-Get the size of the lut configuration in bits.
-
-:returns: The number of bits.
-:rtype: int
-)")
-        .def_property_readonly("lut_memory_byte_size", &gate_decorator_lut::get_lut_configuration_byte_size, R"(
-Get the size of the lut configuration memory in bytes.
-
-:returns: The number of bytes.
-:rtype: int
-)")
-        .def("get_lut_configuration_byte_size", &gate_decorator_lut::get_lut_configuration_byte_size, R"(
-Get the size of the lut configuration memory in bytes.
-
-:returns: The number of bytes.
-:rtype: int
-)");
+    py::class_<boolean_function>(m, "boolean_function")
+        //TODO fill this class
+        ;
 
 #ifndef PYBIND11_MODULE
     return m.ptr();

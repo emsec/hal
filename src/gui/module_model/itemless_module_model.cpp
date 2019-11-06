@@ -143,11 +143,11 @@ void itemless_module_model::setupModelData()
 
     std::sort(sorted_gates.begin(), sorted_gates.end(), less_than_gate());
 
-//    for (auto gate : sorted_gates)
-//    {
-//        text = QString::fromStdString(gate->get_name()) + " : " + QString::fromStdString(gate->get_type());
-//        new module_item(text, gate->get_id(), module_item::item_type::gate, m_gate_item);
-//    }
+    //    for (auto gate : sorted_gates)
+    //    {
+    //        text = QString::fromStdString(gate->get_name()) + " : " + QString::fromStdString(gate->get_type()->get_name());
+    //        new module_item(text, gate->get_id(), module_item::item_type::gate, m_gate_item);
+    //    }
 
     std::vector<std::shared_ptr<net>> sorted_nets;
 
@@ -158,38 +158,27 @@ void itemless_module_model::setupModelData()
 
     std::vector<std::shared_ptr<net>> sorted_global_input_nets;
     std::vector<std::shared_ptr<net>> sorted_global_output_nets;
-    std::vector<std::shared_ptr<net>> sorted_global_inout_nets;
 
     for (std::shared_ptr<net> net2 : sorted_nets)
     {
-        if (g_netlist->is_global_inout_net(net2))
-            sorted_global_inout_nets.push_back(net2);
+        if (g_netlist->is_global_input_net(net2))
+            sorted_global_input_nets.push_back(net2);
         else
         {
-            if (g_netlist->is_global_input_net(net2))
-                sorted_global_input_nets.push_back(net2);
-            else
-            {
-                if (g_netlist->is_global_output_net(net2))
-                    sorted_global_output_nets.push_back(net2);
-            }
+            if (g_netlist->is_global_output_net(net2))
+                sorted_global_output_nets.push_back(net2);
         }
     }
 
-//    text                = "global inputs : " + QString::number(sorted_global_input_nets.size());
-//    m_global_input_item = new module_item(text, 0, module_item::item_type::ignore, m_net_item);
-//    for (std::shared_ptr<net> net3 : sorted_global_input_nets)
-//        new module_item(QString::fromStdString(net3->get_name()), net3->get_id(), module_item::item_type::net, m_global_input_item);
+    //    text                = "global inputs : " + QString::number(sorted_global_input_nets.size());
+    //    m_global_input_item = new module_item(text, 0, module_item::item_type::ignore, m_net_item);
+    //    for (std::shared_ptr<net> net3 : sorted_global_input_nets)
+    //        new module_item(QString::fromStdString(net3->get_name()), net3->get_id(), module_item::item_type::net, m_global_input_item);
 
-//    text                 = "global outputs : " + QString::number(sorted_global_output_nets.size());
-//    m_global_output_item = new module_item(text, 0, module_item::item_type::ignore, m_net_item);
-//    for (std::shared_ptr<net> net4 : sorted_global_output_nets)
-//        new module_item(QString::fromStdString(net4->get_name()), net4->get_id(), module_item::item_type::net, m_global_output_item);
-
-//    text                = "global inouts : " + QString::number(sorted_global_inout_nets.size());
-//    m_global_inout_item = new module_item(text, 0, module_item::item_type::ignore, m_net_item);
-//    for (std::shared_ptr<net> net5 : sorted_global_inout_nets)
-//        new module_item(QString::fromStdString(net5->get_name()), net5->get_id(), module_item::item_type::net, m_global_inout_item);
+    //    text                 = "global outputs : " + QString::number(sorted_global_output_nets.size());
+    //    m_global_output_item = new module_item(text, 0, module_item::item_type::ignore, m_net_item);
+    //    for (std::shared_ptr<net> net4 : sorted_global_output_nets)
+    //        new module_item(QString::fromStdString(net4->get_name()), net4->get_id(), module_item::item_type::net, m_global_output_item);
 
     std::vector<std::shared_ptr<net>> sorted_routed_nets;
 
@@ -204,10 +193,6 @@ void itemless_module_model::setupModelData()
     for (std::shared_ptr<net> net : sorted_routed_nets)
     {
         //        QString type = "";
-        //        if (g_netlist->is_global_inout_net(net))
-        //            type = " : inout";
-        //        else
-        //        {
         //            if (g_netlist->is_global_input_net(net))
         //                type = " : input";
         //            else
@@ -215,33 +200,30 @@ void itemless_module_model::setupModelData()
         //                if (g_netlist->is_global_output_net(net))
         //                    type = " : output";
         //            }
-        //        }
 
         //        if (g_netlist->is_global_input_net(net))
         //            type = " : input";
         //        if (g_netlist->is_global_output_net(net))
         //            type = " : output";
-        //        if (g_netlist->is_global_inout_net(net))
-        //            type = " : inout";
 
         //        text = QString::fromStdString(net->get_name()) + type;
-//        text = QString::fromStdString(net->get_name());
-//        new module_item(text, net->get_id(), module_item::item_type::net, m_net_item);
+        //        text = QString::fromStdString(net->get_name());
+        //        new module_item(text, net->get_id(), module_item::item_type::net, m_net_item);
     }
 
-//    for (auto const module : g_netlist->get_modules())
-//    {
-//        module_item* m_item =
-//            new module_item(QString::fromStdString(module->get_name()) + " [" + QString::number(module->get_id()) + "]", 0, module_item::item_type::module, m_module_item);
-//        module_item* module_gates_item = new module_item("gates", 0, module_item::item_type::ignore, m_item);
-//        module_item* module_nets_item  = new module_item("nets", 0, module_item::item_type::ignore, m_item);
+    //    for (auto const module : g_netlist->get_modules())
+    //    {
+    //        module_item* m_item =
+    //            new module_item(QString::fromStdString(module->get_name()) + " [" + QString::number(module->get_id()) + "]", 0, module_item::item_type::module, m_module_item);
+    //        module_item* module_gates_item = new module_item("gates", 0, module_item::item_type::ignore, m_item);
+    //        module_item* module_nets_item  = new module_item("nets", 0, module_item::item_type::ignore, m_item);
 
-//        for (auto const gate : module->get_gates())
-//            new module_item(QString::fromStdString(gate->get_name()), gate->get_id(), module_item::item_type::gate, module_gates_item);
+    //        for (auto const gate : module->get_gates())
+    //            new module_item(QString::fromStdString(gate->get_name()), gate->get_id(), module_item::item_type::gate, module_gates_item);
 
-//        for (auto const net : module->get_nets())
-//            new module_item(QString::fromStdString(net->get_name()), net->get_id(), module_item::item_type::net, module_nets_item);
-//    }
+    //        for (auto const net : module->get_nets())
+    //            new module_item(QString::fromStdString(net->get_name()), net->get_id(), module_item::item_type::net, module_nets_item);
+    //    }
 }
 
 QModelIndex* itemless_module_model::get_index_by_logger_name(const std::string& logger_name)
@@ -267,61 +249,61 @@ QModelIndexList itemless_module_model::corresponding_indexes(const QList<u32>& g
 
 void itemless_module_model::update_modules()
 {
-//    delete m_module_item;
-//    QString text     = "modules : " + QString::number(g_netlist->get_modules().size());
-//    m_module_item = new module_item(text, 0, module_item::item_type::ignore, m_top_level_item);
+    //    delete m_module_item;
+    //    QString text     = "modules : " + QString::number(g_netlist->get_modules().size());
+    //    m_module_item = new module_item(text, 0, module_item::item_type::ignore, m_top_level_item);
 
-//    for (auto const module : g_netlist->get_modules())
-//    {
-//        module_item* m_item =
-//            new module_item(QString::fromStdString(module->get_name()) + " [" + QString::number(module->get_id()) + "]", 0, module_item::item_type::module, m_module_item);
-//        module_item* module_gates_item = new module_item("gates", 0, module_item::item_type::ignore, m_item);
-//        module_item* module_nets_item  = new module_item("nets", 0, module_item::item_type::ignore, m_item);
+    //    for (auto const module : g_netlist->get_modules())
+    //    {
+    //        module_item* m_item =
+    //            new module_item(QString::fromStdString(module->get_name()) + " [" + QString::number(module->get_id()) + "]", 0, module_item::item_type::module, m_module_item);
+    //        module_item* module_gates_item = new module_item("gates", 0, module_item::item_type::ignore, m_item);
+    //        module_item* module_nets_item  = new module_item("nets", 0, module_item::item_type::ignore, m_item);
 
-//        for (auto const gate : module->get_gates())
-//            new module_item(QString::fromStdString(gate->get_name()), gate->get_id(), module_item::item_type::gate, module_gates_item);
+    //        for (auto const gate : module->get_gates())
+    //            new module_item(QString::fromStdString(gate->get_name()), gate->get_id(), module_item::item_type::gate, module_gates_item);
 
-//        for (auto const net : module->get_nets())
-//            new module_item(QString::fromStdString(net->get_name()), net->get_id(), module_item::item_type::net, module_nets_item);
-//    }
+    //        for (auto const net : module->get_nets())
+    //            new module_item(QString::fromStdString(net->get_name()), net->get_id(), module_item::item_type::net, module_nets_item);
+    //    }
 }
 
 void itemless_module_model::match_ids_recursive(module_item* item, QModelIndexList& list, const QList<u32>& gate_ids, const QList<u32>& net_ids, const QList<u32>& module_ids)
 {
-//    QList<u32> const* id_list = nullptr;
-//    switch (item->type())
-//    {
-//        case module_item::item_type::ignore:
-//            break;
-//        case module_item::item_type::gate:
-//            id_list = &gate_ids;
-//            break;
-//        case module_item::item_type::net:
-//            id_list = &net_ids;
-//            break;
-//        case module_item::item_type::module:
-//            id_list = &module_ids;
-//            break;
-//    }
+    //    QList<u32> const* id_list = nullptr;
+    //    switch (item->type())
+    //    {
+    //        case module_item::item_type::ignore:
+    //            break;
+    //        case module_item::item_type::gate:
+    //            id_list = &gate_ids;
+    //            break;
+    //        case module_item::item_type::net:
+    //            id_list = &net_ids;
+    //            break;
+    //        case module_item::item_type::module:
+    //            id_list = &module_ids;
+    //            break;
+    //    }
 
-//    if (id_list)
-//    {
-//        for (auto id : *id_list)
-//        {
-//            if (item->id() == id)
-//            {
-//                list.append(createIndex(item->row(), 0, item));
-//                break;
-//            }
-//        }
-//    }
+    //    if (id_list)
+    //    {
+    //        for (auto id : *id_list)
+    //        {
+    //            if (item->id() == id)
+    //            {
+    //                list.append(createIndex(item->row(), 0, item));
+    //                break;
+    //            }
+    //        }
+    //    }
 
-//    int childcount = item->childCount();
+    //    int childcount = item->childCount();
 
-//    for (int i = 0; i < childcount; i++)
-//    {
-//        match_ids_recursive(item->child(i), list, gate_ids, net_ids, module_ids);
-//    }
+    //    for (int i = 0; i < childcount; i++)
+    //    {
+    //        match_ids_recursive(item->child(i), list, gate_ids, net_ids, module_ids);
+    //    }
 }
 
 //hal_graph_navigation_item *hal_graph_navigation_model::add_item(QString name, int id, const std::string &parent_item_logger_name)

@@ -40,7 +40,7 @@ tree_model_item::tree_model_item(std::shared_ptr<gate> gate, tree_model_item* pa
     if (!std::get<1>(loc).empty())
         location = QString::fromStdString(std::get<1>(loc));
 
-    type = QString::fromStdString(gate->get_type());
+    type = QString::fromStdString(gate->get_type()->get_name());
 
     item_data.append(name);
     item_data.append("");
@@ -67,7 +67,7 @@ tree_model_item::tree_model_item(std::shared_ptr<gate> ref, item_type_tree propt
             item_data.append(location);
             break;
         case item_type_tree::type:
-            type = QString::fromStdString(ref->get_type());
+            type = QString::fromStdString(ref->get_type()->get_name());
             item_data.append("TYPE");
             item_data.append(type);
             break;

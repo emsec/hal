@@ -6,7 +6,7 @@ graph_model_item::graph_model_item(std::shared_ptr<gate> gate)
     refNet  = nullptr;
     name    = QString::fromStdString(gate->get_name());
     id      = QString::number(gate->get_id());
-    type    = QString::fromStdString(gate->get_type());
+    type    = QString::fromStdString(gate->get_type()->get_name());
     //location = QString::fromStdString(gate->get_location());
 
     auto loc = gate->get_data_by_key("generic", "LOC");
@@ -36,7 +36,7 @@ void graph_model_item::setgate(std::shared_ptr<gate> gate)
     refNet  = nullptr;
     name    = QString::fromStdString(gate->get_name());
     id      = QString::number(gate->get_id());
-    type    = QString::fromStdString(gate->get_type());
+    type    = QString::fromStdString(gate->get_type()->get_name());
     //location = QString::fromStdString(gate->get_location());
 
     auto loc = gate->get_data_by_key("generic", "LOC");
