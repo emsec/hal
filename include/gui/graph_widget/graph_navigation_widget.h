@@ -18,6 +18,7 @@ public:
 
     void setup();
     void setup(std::shared_ptr<net> via_net);
+    void hide_when_focus_lost(bool hide);
     void focusOutEvent(QFocusEvent *event);
 
 Q_SIGNALS:
@@ -34,6 +35,7 @@ private:
     void commit_selection();
     graph_graphics_view* m_view;
     u32 m_via_net;
+    bool m_hide_when_focus_lost;
 };
 
 #endif // GRAPH_NAVIGATION_WIDGET_H
