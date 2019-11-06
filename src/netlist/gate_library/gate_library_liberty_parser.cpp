@@ -45,8 +45,8 @@ namespace gate_library_liberty_parser
         std::pair<std::string, std::string> set_rst;
     };
 
-    statement get_statements(std::stringstream& ss);
-    std::shared_ptr<gate_library> get_gate_library(const statement& root);
+    statement* get_statements(std::stringstream& ss);
+    std::shared_ptr<gate_library> get_gate_library(statement* root);
     void remove_comments(std::string& line, bool& multi_line_comment);
 
     // ###########################################################################
@@ -55,13 +55,16 @@ namespace gate_library_liberty_parser
 
     std::shared_ptr<gate_library> parse(std::stringstream& ss)
     {
-        return get_gate_library(get_statements(ss));
+        auto statements = get_statements(ss);
+        auto lib        = get_gate_library(statements);
+        delete statements;
+        return lib;
     }
 
-    statement get_statements(std::stringstream& ss)
+    statement* get_statements(std::stringstream& ss)
     {
         statement* current_group = nullptr;
-        statement root;
+        statement* root          = nullptr;
 
         std::set<std::string> groups_of_interest     = {"library", "cell", "pin", "ff", "latch"};
         std::set<std::string> attributes_of_interest = {
@@ -106,7 +109,7 @@ namespace gate_library_liberty_parser
                     for (i32 i = 0; i < closing_brackets - ignore_brackets; i++)
                     {
                         // move back in tree
-                        current_group = current_group.parent;
+                        current_group = current_group->parent;
                     }
                 }
 
@@ -126,18 +129,17 @@ namespace gate_library_liberty_parser
 
                 if (groups_of_interest.find(group_name) != groups_of_interest.end())
                 {
-                    if (current_group != nullptr)
+                    auto new_group = new statement(current_group, true, group_name, name);
+                    if (root != nullptr)
                     {
-                        current_group->statements.emplace_back(current_group, true, group_name, name);
-                        current_group
+                        current_group->statements.push_back(new_group);
                     }
                     else
                     {
-                        root          = statement(current_group, true, group_name, name);
-                        current_group = &root;
+                        root = new_group;
                     }
 
-                    current_group = group;
+                    current_group = new_group;
                 }
                 else
                 {
@@ -159,7 +161,7 @@ namespace gate_library_liberty_parser
                     {
                         if (current_group != nullptr)
                         {
-                            current_group->statements.emplace_back(current_group, false, name, value);
+                            current_group->statements.push_back(new statement(current_group, false, name, value));
                         }
                     }
                 }
@@ -168,7 +170,7 @@ namespace gate_library_liberty_parser
             for (i32 i = 0; i < std::count(line.begin(), line.end(), '}'); i++)
             {
                 // move back in tree
-                current_group = current_group->parent.lock();
+                current_group = current_group->parent;
             }
         }
 
@@ -180,138 +182,138 @@ namespace gate_library_liberty_parser
         return str.substr(0, str.rfind("\"")).substr(str.find("\"") + 1);
     }
 
-    std::shared_ptr<gate_library> get_gate_library(const statement& root)
+    std::shared_ptr<gate_library> get_gate_library(statement* root)
     {
         std::shared_ptr<gate_library> lib;
 
         // depth: 0
-        if (root.name == "library")
+        if (root->name == "library")
         {
-            lib = std::make_shared<gate_library>(root.value);
+            lib = std::make_shared<gate_library>(root->value);
 
-            for (const auto& s1 : root.statements)
+            for (const auto& s1 : root->statements)
             {
                 // depth: 1
-                if (s1.name == "cell")
+                if (s1->name == "cell")
                 {
                     sequential seq;
-                    std::shared_ptr<gate_type> gt = std::make_shared<gate_type>(s1.value);
+                    std::shared_ptr<gate_type> gt = std::make_shared<gate_type>(s1->value);
 
-                    for (const auto& s2 : s1.statements)
+                    for (const auto& s2 : s1->statements)
                     {
                         // depth 2
-                        if (s2.name == "pin")
+                        if (s2->name == "pin")
                         {
-                            for (const auto& s3 : s2.statements)
+                            for (const auto& s3 : s2->statements)
                             {
                                 // depth 3
-                                if (s3.name == "direction")
+                                if (s3->name == "direction")
                                 {
-                                    if (s3.value == "input")
+                                    if (s3->value == "input")
                                     {
-                                        gt->add_input_pin(s2.value);
+                                        gt->add_input_pin(s2->value);
                                     }
                                 }
-                                else if (s3.name == "function")
+                                else if (s3->name == "function")
                                 {
                                     if (gt->get_base_type() == gate_type::combinatorial)
                                     {
-                                        gt->add_boolean_function(s2.value, boolean_function::from_string(prepare_string(s3.value)));
+                                        gt->add_boolean_function(s2->value, boolean_function::from_string(prepare_string(s3->value)));
                                     }
                                     else if (gt->get_base_type() == gate_type::ff)
                                     {
-                                        if (s3.value == seq.output_state.first)
+                                        if (s3->value == seq.output_state.first)
                                         {
-                                            gt->add_boolean_function(s2.value, seq.functions.at("next_state"));
-                                            gt->add_boolean_function("set_" + s2.value, seq.functions.at("set"));
-                                            gt->add_boolean_function("reset_" + s2.value, !seq.functions.at("reset"));
+                                            gt->add_boolean_function(s2->value, seq.functions.at("next_state"));
+                                            gt->add_boolean_function("set_" + s2->value, seq.functions.at("set"));
+                                            gt->add_boolean_function("reset_" + s2->value, !seq.functions.at("reset"));
                                         }
                                         else
                                         {
-                                            gt->add_boolean_function(s2.value, !seq.functions.at("next_state"));
-                                            gt->add_boolean_function("set_" + s2.value, !seq.functions.at("set"));
-                                            gt->add_boolean_function("reset_" + s2.value, seq.functions.at("reset"));
+                                            gt->add_boolean_function(s2->value, !seq.functions.at("next_state"));
+                                            gt->add_boolean_function("set_" + s2->value, !seq.functions.at("set"));
+                                            gt->add_boolean_function("reset_" + s2->value, seq.functions.at("reset"));
                                         }
                                     }
                                 }
-                                else if (s3.name == "three_state")
+                                else if (s3->name == "three_state")
                                 {
                                     // TODO: Tri-State
-                                    //p.three_state = prepare_string(s3.value);
+                                    //p.three_state = prepare_string(s3->value);
                                 }
-                                else if (s3.name == "x_function")
+                                else if (s3->name == "x_function")
                                 {
-                                    gt->add_boolean_function("undefined_" + s2.value, boolean_function::from_string(prepare_string(s3.value)));
+                                    gt->add_boolean_function("undefined_" + s2->value, boolean_function::from_string(prepare_string(s3->value)));
                                 }
                             }
                         }
-                        else if (s2.name == "ff")
+                        else if (s2->name == "ff")
                         {
                             gt->set_base_type(gate_type::ff);
 
-                            auto tokens      = core_utils::split(s2.value, ',');
+                            auto tokens      = core_utils::split(s2->value, ',');
                             seq.output_state = {prepare_string(tokens[0]), prepare_string(tokens[1])};
 
-                            for (const auto& s3 : s2.statements)
+                            for (const auto& s3 : s2->statements)
                             {
                                 // depth 3
-                                if (s3.name == "clocked_on")
+                                if (s3->name == "clocked_on")
                                 {
-                                    gt->add_boolean_function("clock" + s2.value, boolean_function::from_string(prepare_string(s3.value)));
+                                    gt->add_boolean_function("clock" + s2->value, boolean_function::from_string(prepare_string(s3->value)));
                                 }
-                                else if (s3.name == "next_state")
+                                else if (s3->name == "next_state")
                                 {
-                                    seq.functions.emplace("next_state", boolean_function::from_string(prepare_string(s3.value)));
+                                    seq.functions.emplace("next_state", boolean_function::from_string(prepare_string(s3->value)));
                                 }
-                                else if (s3.name == "clear")
+                                else if (s3->name == "clear")
                                 {
-                                    seq.functions.emplace("reset", boolean_function::from_string(prepare_string(s3.value)));
+                                    seq.functions.emplace("reset", boolean_function::from_string(prepare_string(s3->value)));
                                 }
-                                else if (s3.name == "preset")
+                                else if (s3->name == "preset")
                                 {
-                                    seq.functions.emplace("set", boolean_function::from_string(prepare_string(s3.value)));
+                                    seq.functions.emplace("set", boolean_function::from_string(prepare_string(s3->value)));
                                 }
-                                else if (s3.name == "clear_preset_var1")
+                                else if (s3->name == "clear_preset_var1")
                                 {
-                                    seq.set_rst.first = prepare_string(s3.value);
+                                    seq.set_rst.first = prepare_string(s3->value);
                                 }
-                                else if (s3.name == "clear_preset_var2")
+                                else if (s3->name == "clear_preset_var2")
                                 {
-                                    seq.set_rst.second = prepare_string(s3.value);
+                                    seq.set_rst.second = prepare_string(s3->value);
                                 }
                             }
                         }
                         // TODO
-                        // else if (s2.name == "latch")
+                        // else if (s2->name == "latch")
                         // {
                         //     c.is_latch = true;
 
-                        //     for (const auto& s3 : s2.statements)
+                        //     for (const auto& s3 : s2->statements)
                         //     {
                         //         // depth 3
-                        //         if (s3.name == "enable")
+                        //         if (s3->name == "enable")
                         //         {
-                        //             c.enable = s3.value;
+                        //             c.enable = s3->value;
                         //         }
-                        //         else if (s3.name == "data_in")
+                        //         else if (s3->name == "data_in")
                         //         {
-                        //             c.data_in = s3.value;
+                        //             c.data_in = s3->value;
                         //         }
-                        //         else if (s3.name == "clear")
+                        //         else if (s3->name == "clear")
                         //         {
-                        //             c.reset = s3.value;
+                        //             c.reset = s3->value;
                         //         }
-                        //         else if (s3.name == "preset")
+                        //         else if (s3->name == "preset")
                         //         {
-                        //             c.set = s3.value;
+                        //             c.set = s3->value;
                         //         }
-                        //         else if (s3.name == "clear_preset_var1")
+                        //         else if (s3->name == "clear_preset_var1")
                         //         {
-                        //             c.clear_preset_var1 = s3.value;
+                        //             c.clear_preset_var1 = s3->value;
                         //         }
-                        //         else if (s3.name == "clear_preset_var2")
+                        //         else if (s3->name == "clear_preset_var2")
                         //         {
-                        //             c.clear_preset_var2 = s3.value;
+                        //             c.clear_preset_var2 = s3->value;
                         //         }
                         //     }
                         // }

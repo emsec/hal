@@ -1,0 +1,71 @@
+library (SYNOPSYS_NAND_NOR) {
+    define(cell);
+    cell(NAND) {
+        pin(A) {
+            direction: input;
+        }
+        pin(B) {
+            direction: input;
+        }
+        pin(Y) {
+            direction: output;
+            function: "TODO";
+        }
+    }
+    
+    cell(NOT) {
+        pin(A) {
+            direction: input;
+        }
+        pin(Y) {
+            direction: output;
+            function: "TODO";
+        }
+    }
+    
+    cell(NOR) {
+        pin(A) {
+            direction: input;
+        }
+        pin(B) {
+            direction: input;
+        }
+        pin(Y) {
+            direction: output;
+            function: "TODO";
+        }
+    }
+    
+    cell(DFF) {
+        ff ("IQ" , "IQN") {
+            next_state          : "D";
+            clocked_on          : "C";
+            preset              : "!SN";
+            clear               : "!RN";
+            clear_preset_var1   : L;
+            clear_preset_var2   : L;
+            pin(D) {
+                direction: input;
+            }
+            pin(C) {
+                direction: input;
+                clock: true;
+            }
+            pin(Q) {
+                direction: output;
+                function: "IQ";
+            }
+        }
+    }
+    
+    cell(GLOBAL_GND) {
+        pin(O) {
+            direction: output;
+            function: "TODO";
+        }
+    }
+    
+    cell(GLOBAL_VCC) {
+    }
+    
+}

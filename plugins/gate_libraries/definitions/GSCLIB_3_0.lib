@@ -1,0 +1,663 @@
+library (GSCLIB_3_0) {
+    define(cell);
+    cell(ADDFX1) {
+        pin(A) {
+            direction: input;
+        }
+        pin(B) {
+            direction: input;
+        }
+        pin(CI) {
+            direction: input;
+        }
+        pin(CO) {
+            direction: output;
+            function: "TODO";
+        }
+        pin(S) {
+            direction: output;
+            function: "TODO";
+        }
+    }
+    
+    cell(ADDHX1) {
+        pin(A) {
+            direction: input;
+        }
+        pin(B) {
+            direction: input;
+        }
+        pin(CO) {
+            direction: output;
+            function: "TODO";
+        }
+        pin(S) {
+            direction: output;
+            function: "TODO";
+        }
+    }
+    
+    cell(AND2X1) {
+        pin(A) {
+            direction: input;
+        }
+        pin(B) {
+            direction: input;
+        }
+        pin(Y) {
+            direction: output;
+            function: "TODO";
+        }
+    }
+    
+    cell(AOI21X1) {
+        pin(A0) {
+            direction: input;
+        }
+        pin(A1) {
+            direction: input;
+        }
+        pin(B0) {
+            direction: input;
+        }
+        pin(Y) {
+            direction: output;
+            function: "TODO";
+        }
+    }
+    
+    cell(AOI22X1) {
+        pin(A0) {
+            direction: input;
+        }
+        pin(A1) {
+            direction: input;
+        }
+        pin(B0) {
+            direction: input;
+        }
+        pin(B1) {
+            direction: input;
+        }
+        pin(Y) {
+            direction: output;
+            function: "TODO";
+        }
+    }
+    
+    cell(BUF_INVX1) {
+        pin(A) {
+            direction: input;
+        }
+        pin(Y) {
+            direction: output;
+            function: "TODO";
+        }
+    }
+    
+    cell(BUF_INVX4) {
+        pin(A) {
+            direction: input;
+        }
+        pin(Y) {
+            direction: output;
+            function: "TODO";
+        }
+    }
+    
+    cell(BUF_INVX8) {
+        pin(A) {
+            direction: input;
+        }
+        pin(Y) {
+            direction: output;
+            function: "TODO";
+        }
+    }
+    
+    cell(BUF_ITL) {
+        pin(A) {
+            direction: input;
+        }
+        pin(Y) {
+            direction: output;
+            function: "TODO";
+        }
+    }
+    
+    cell(BUFX1) {
+        pin(A) {
+            direction: input;
+        }
+        pin(Y) {
+            direction: output;
+            function: "TODO";
+        }
+    }
+    
+    cell(BUFX3) {
+        pin(A) {
+            direction: input;
+        }
+        pin(Y) {
+            direction: output;
+            function: "TODO";
+        }
+    }
+    
+    cell(CLKBUFX1) {
+        pin(A) {
+            direction: input;
+        }
+        pin(Y) {
+            direction: output;
+            function: "TODO";
+        }
+    }
+    
+    cell(CLKBUFX2) {
+        pin(A) {
+            direction: input;
+        }
+        pin(Y) {
+            direction: output;
+            function: "TODO";
+        }
+    }
+    
+    cell(CLKBUFX3) {
+        pin(A) {
+            direction: input;
+        }
+        pin(Y) {
+            direction: output;
+            function: "TODO";
+        }
+    }
+    
+    cell(DFFSRX1) {
+        ff ("IQ" , "IQN") {
+            next_state          : "D";
+            clocked_on          : "CK";
+            preset              : "!SN";
+            clear               : "!RN";
+            clear_preset_var1   : L;
+            clear_preset_var2   : L;
+            pin(CK) {
+                direction: input;
+                clock: true;
+            }
+            pin(RN) {
+                direction: input;
+            }
+            pin(SN) {
+                direction: input;
+            }
+            pin(D) {
+                direction: input;
+            }
+            pin(Q) {
+                direction: output;
+                function: "IQ";
+            }
+            pin(QN) {
+                direction: output;
+                function: "IQN";
+            }
+        }
+    }
+    
+    cell(DFFX1) {
+        ff ("IQ" , "IQN") {
+            next_state          : "D";
+            clocked_on          : "CK";
+            preset              : "!SN";
+            clear               : "!RN";
+            clear_preset_var1   : L;
+            clear_preset_var2   : L;
+            pin(CK) {
+                direction: input;
+                clock: true;
+            }
+            pin(D) {
+                direction: input;
+            }
+            pin(Q) {
+                direction: output;
+                function: "IQ";
+            }
+            pin(QN) {
+                direction: output;
+                function: "IQN";
+            }
+        }
+    }
+    
+    cell(GLOBAL_GND) {
+        pin(O) {
+            direction: output;
+            function: "TODO";
+        }
+    }
+    
+    cell(GLOBAL_VCC) {
+        pin(O) {
+            direction: output;
+            function: "TODO";
+        }
+    }
+    
+    cell(INVX1) {
+        pin(A) {
+            direction: input;
+        }
+        pin(Y) {
+            direction: output;
+            function: "TODO";
+        }
+    }
+    
+    cell(INVX2) {
+        pin(A) {
+            direction: input;
+        }
+        pin(Y) {
+            direction: output;
+            function: "TODO";
+        }
+    }
+    
+    cell(INVX4) {
+        pin(A) {
+            direction: input;
+        }
+        pin(Y) {
+            direction: output;
+            function: "TODO";
+        }
+    }
+    
+    cell(INVX8) {
+        pin(A) {
+            direction: input;
+        }
+        pin(Y) {
+            direction: output;
+            function: "TODO";
+        }
+    }
+    
+    cell(MX2X1) {
+        pin(A) {
+            direction: input;
+        }
+        pin(B) {
+            direction: input;
+        }
+        pin(S0) {
+            direction: input;
+        }
+        pin(Y) {
+            direction: output;
+            function: "TODO";
+        }
+    }
+    
+    cell(NAND2X1) {
+        pin(A) {
+            direction: input;
+        }
+        pin(B) {
+            direction: input;
+        }
+        pin(Y) {
+            direction: output;
+            function: "TODO";
+        }
+    }
+    
+    cell(NAND2X2) {
+        pin(A) {
+            direction: input;
+        }
+        pin(B) {
+            direction: input;
+        }
+        pin(Y) {
+            direction: output;
+            function: "TODO";
+        }
+    }
+    
+    cell(NAND3X1) {
+        pin(A) {
+            direction: input;
+        }
+        pin(B) {
+            direction: input;
+        }
+        pin(C) {
+            direction: input;
+        }
+        pin(Y) {
+            direction: output;
+            function: "TODO";
+        }
+    }
+    
+    cell(NAND4X1) {
+        pin(A) {
+            direction: input;
+        }
+        pin(B) {
+            direction: input;
+        }
+        pin(C) {
+            direction: input;
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(Y) {
+            direction: output;
+            function: "TODO";
+        }
+    }
+    
+    cell(NOR2X1) {
+        pin(A) {
+            direction: input;
+        }
+        pin(B) {
+            direction: input;
+        }
+        pin(Y) {
+            direction: output;
+            function: "TODO";
+        }
+    }
+    
+    cell(NOR3X1) {
+        pin(A) {
+            direction: input;
+        }
+        pin(B) {
+            direction: input;
+        }
+        pin(C) {
+            direction: input;
+        }
+        pin(Y) {
+            direction: output;
+            function: "TODO";
+        }
+    }
+    
+    cell(NOR4X1) {
+        pin(A) {
+            direction: input;
+        }
+        pin(B) {
+            direction: input;
+        }
+        pin(C) {
+            direction: input;
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(Y) {
+            direction: output;
+            function: "TODO";
+        }
+    }
+    
+    cell(OAI21X1) {
+        pin(A0) {
+            direction: input;
+        }
+        pin(A1) {
+            direction: input;
+        }
+        pin(B0) {
+            direction: input;
+        }
+        pin(Y) {
+            direction: output;
+            function: "TODO";
+        }
+    }
+    
+    cell(OAI22X1) {
+        pin(A0) {
+            direction: input;
+        }
+        pin(A1) {
+            direction: input;
+        }
+        pin(B0) {
+            direction: input;
+        }
+        pin(B1) {
+            direction: input;
+        }
+        pin(Y) {
+            direction: output;
+            function: "TODO";
+        }
+    }
+    
+    cell(OAI33X1) {
+        pin(A0) {
+            direction: input;
+        }
+        pin(A1) {
+            direction: input;
+        }
+        pin(A2) {
+            direction: input;
+        }
+        pin(B0) {
+            direction: input;
+        }
+        pin(B1) {
+            direction: input;
+        }
+        pin(B2) {
+            direction: input;
+        }
+        pin(Y) {
+            direction: output;
+            function: "TODO";
+        }
+    }
+    
+    cell(OR2X1) {
+        pin(A) {
+            direction: input;
+        }
+        pin(B) {
+            direction: input;
+        }
+        pin(Y) {
+            direction: output;
+            function: "TODO";
+        }
+    }
+    
+    cell(OR4X1) {
+        pin(A) {
+            direction: input;
+        }
+        pin(B) {
+            direction: input;
+        }
+        pin(C) {
+            direction: input;
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(Y) {
+            direction: output;
+            function: "TODO";
+        }
+    }
+    
+    cell(SDFFSRX1) {
+        ff ("IQ" , "IQN") {
+            next_state          : "D";
+            clocked_on          : "CK";
+            preset              : "!SN";
+            clear               : "!RN";
+            clear_preset_var1   : L;
+            clear_preset_var2   : L;
+            pin(CK) {
+                direction: input;
+                clock: true;
+            }
+            pin(D) {
+                direction: input;
+            }
+            pin(RN) {
+                direction: input;
+            }
+            pin(SE) {
+                direction: input;
+            }
+            pin(SI) {
+                direction: input;
+            }
+            pin(SN) {
+                direction: input;
+            }
+            pin(Q) {
+                direction: output;
+                function: "IQ";
+            }
+            pin(QN) {
+                direction: output;
+                function: "IQN";
+            }
+        }
+    }
+    
+    cell(TBUFX1) {
+        pin(A) {
+            direction: input;
+        }
+        pin(OE) {
+            direction: input;
+        }
+        pin(Y) {
+            direction: output;
+            function: "TODO";
+        }
+    }
+    
+    cell(TBUFX2) {
+        pin(A) {
+            direction: input;
+        }
+        pin(OE) {
+            direction: input;
+        }
+        pin(Y) {
+            direction: output;
+            function: "TODO";
+        }
+    }
+    
+    cell(TBUFX4) {
+        pin(A) {
+            direction: input;
+        }
+        pin(OE) {
+            direction: input;
+        }
+        pin(Y) {
+            direction: output;
+            function: "TODO";
+        }
+    }
+    
+    cell(TBUFX8) {
+        pin(A) {
+            direction: input;
+        }
+        pin(OE) {
+            direction: input;
+        }
+        pin(Y) {
+            direction: output;
+            function: "TODO";
+        }
+    }
+    
+    cell(TINVX1) {
+        pin(A) {
+            direction: input;
+        }
+        pin(OE) {
+            direction: input;
+        }
+        pin(Y) {
+            direction: output;
+            function: "TODO";
+        }
+    }
+    
+    cell(TLATSRX1) {
+        pin(D) {
+            direction: input;
+        }
+        pin(G) {
+            direction: input;
+        }
+        pin(RN) {
+            direction: input;
+        }
+        pin(SN) {
+            direction: input;
+        }
+        pin(Q) {
+            direction: output;
+            function: "TODO";
+        }
+        pin(QN) {
+            direction: output;
+            function: "TODO";
+        }
+    }
+    
+    cell(TLATX1) {
+        pin(C) {
+            direction: input;
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(Q) {
+            direction: output;
+            function: "TODO";
+        }
+        pin(QN) {
+            direction: output;
+            function: "TODO";
+        }
+    }
+    
+    cell(XOR2X1) {
+        pin(A) {
+            direction: input;
+        }
+        pin(B) {
+            direction: input;
+        }
+        pin(Y) {
+            direction: output;
+            function: "TODO";
+        }
+    }
+    
+}
