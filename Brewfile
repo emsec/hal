@@ -1,6 +1,6 @@
 brew "pkgconfig"
 brew "lcov"
-brew "qt5"
+brew "qt"
 brew "ccache"
 brew "llvm"
 brew "libomp"
