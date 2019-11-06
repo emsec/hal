@@ -66,9 +66,6 @@ public:
 
 public Q_SLOTS:
 
-    void handle_tree_size_change(QTreeWidgetItem* item);
-    void handle_item_expanded(QTreeWidgetItem* item);
-    void handle_item_collapsed(QTreeWidgetItem* item);
     void on_treewidget_item_clicked(QTreeWidgetItem* item, int column);
     void handle_navigation_jump_requested(const u32 via_net, const u32 to_gate);
     void on_general_table_item_double_clicked(const QModelIndex &index);
