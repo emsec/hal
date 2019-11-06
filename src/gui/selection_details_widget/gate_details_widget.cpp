@@ -162,6 +162,7 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
     //set parent and flag so it gets shown in its own window
     m_navigation_table = new graph_navigation_widget();
     m_navigation_table->setWindowFlags(Qt::CustomizeWindowHint);
+    m_navigation_table->hide_when_focus_lost(true);
     m_navigation_table->hide();
     connect(m_navigation_table, &graph_navigation_widget::navigation_requested, this, &gate_details_widget::handle_navigation_jump_requested);
 
