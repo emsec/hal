@@ -73,7 +73,6 @@ namespace hdl_parser_dispatcher
             return nullptr;
         }
         std::string gate_library = args.get_parameter("--gate-library");
-        std::transform(gate_library.begin(), gate_library.end(), gate_library.begin(), ::toupper);
         return parse(gate_library, language, file_name);
     }
 
