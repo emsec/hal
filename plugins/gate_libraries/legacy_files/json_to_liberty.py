@@ -90,7 +90,7 @@ def process(file):
             for pin in outputs[typ]:
                 lines.append("pin({})".format(pin) + " {")
                 lines.append("direction: output;")
-                lines.append("function: \"TODO\";")
+                lines.append("function: \"\";")
                 lines.append("}")
         lines.append("}")
         lines.append("")
@@ -100,7 +100,7 @@ def process(file):
     # for l in lines:
     #     print(l)
 
-    with open(file.replace(".json", ".lib"), "wt") as outfile:
+    with open("../definitions/"+file.replace(".json", ".lib"), "wt") as outfile:
         indent = ""
         for l in lines:
             if "}" in l and "{" not in l:
