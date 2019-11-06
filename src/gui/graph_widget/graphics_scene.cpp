@@ -378,6 +378,7 @@ void graphics_scene::connect_all()
     connect(&g_selection_relay, &selection_relay::selection_changed, this, &graphics_scene::handle_extern_selection_changed);
     connect(&g_selection_relay, &selection_relay::subfocus_changed, this, &graphics_scene::handle_extern_subfocus_changed);
     connect(&g_netlist_relay, &netlist_relay::gate_name_changed, this, &graphics_scene::handle_gate_name_changed);
+    connect(&g_netlist_relay, &netlist_relay::module_name_changed, this, &graphics_scene::handle_module_name_changed);
 }
 
 void graphics_scene::disconnect_all()
@@ -562,6 +563,21 @@ void graphics_scene::handle_gate_name_changed(std::shared_ptr<gate> g)
             break;
         }
     }
+}
+
+void graphics_scene::handle_module_name_changed(std::shared_ptr<module> m)
+{
+    const u32 id = m->get_id();
+    std::string name = m->get_name();
+    for(auto& module : m_module_items)
+    {
+        if(module.id == id)
+        {
+            module.item->set_name(QString::fromStdString(name));
+            break;
+        }
+    }
+
 }
 
 void graphics_scene::mousePressEvent(QGraphicsSceneMouseEvent* event)

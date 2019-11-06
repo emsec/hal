@@ -184,10 +184,19 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
 
     connect(&g_netlist_relay, &netlist_relay::gate_name_changed, this, &gate_details_widget::handle_gate_name_changed);
     connect(&g_netlist_relay, &netlist_relay::gate_removed, this, &gate_details_widget::handle_gate_removed);
+
     connect(&g_netlist_relay, &netlist_relay::module_name_changed, this, &gate_details_widget::handle_module_name_changed);
     connect(&g_netlist_relay, &netlist_relay::module_removed, this, &gate_details_widget::handle_module_removed);
     connect(&g_netlist_relay, &netlist_relay::module_gate_assigned, this, &gate_details_widget::handle_module_gate_assigned);
     connect(&g_netlist_relay, &netlist_relay::module_gate_removed, this, &gate_details_widget::handle_module_gate_removed);
+
+    connect(&g_netlist_relay, &netlist_relay::net_created, this, &gate_details_widget::handle_net_created);
+    connect(&g_netlist_relay, &netlist_relay::net_removed, this, &gate_details_widget::handle_net_removed);
+    connect(&g_netlist_relay, &netlist_relay::net_name_changed, this, &gate_details_widget::handle_net_name_changed);
+    connect(&g_netlist_relay, &netlist_relay::net_src_changed, this, &gate_details_widget::handle_net_src_changed);
+    connect(&g_netlist_relay, &netlist_relay::net_dst_added, this, &gate_details_widget::handle_net_dst_added);
+    connect(&g_netlist_relay, &netlist_relay::net_dst_removed, this, &gate_details_widget::handle_net_dst_removed);
+
 
     connect(m_general_table, &QTableWidget::doubleClicked, this, &gate_details_widget::on_general_table_item_double_clicked);
 }
@@ -201,6 +210,38 @@ gate_details_widget::~gate_details_widget()
     delete m_input_pins;
     delete m_output_pins;
 }
+
+void gate_details_widget::handle_net_created(std::shared_ptr<net> net)
+{
+    update(m_current_id);
+}
+
+void gate_details_widget::handle_net_removed(std::shared_ptr<net> net)
+{
+    update(m_current_id);
+}
+
+void gate_details_widget::handle_net_name_changed(std::shared_ptr<net> net)
+{
+    update(m_current_id);
+}
+
+void gate_details_widget::handle_net_src_changed(std::shared_ptr<net> net)
+{
+    update(m_current_id);
+}
+
+void gate_details_widget::handle_net_dst_added(std::shared_ptr<net> net, const u32 dst_gate_id)
+{
+    update(m_current_id);
+
+}
+
+void gate_details_widget::handle_net_dst_removed(std::shared_ptr<net> net, const u32 dst_gate_id)
+{
+    update(m_current_id);
+}
+
 
 void gate_details_widget::handle_gate_name_changed(std::shared_ptr<gate> gate)
 {
