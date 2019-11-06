@@ -2,7 +2,7 @@
 #include "content_widget/content_widget.h"
 #include "core/log.h"
 #include "gui_globals.h"
-#include "gui_utility.h"
+#include "gui_utils/graphics.h"
 #include <QPainter>
 
 dock_button::dock_button(content_widget* widget, button_orientation orientation, QObject* eventFilter, QWidget* parent) : QToolButton(parent), m_widget(widget), m_orientation(orientation)

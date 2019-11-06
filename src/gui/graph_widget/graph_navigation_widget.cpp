@@ -11,6 +11,7 @@
 
 graph_navigation_widget::graph_navigation_widget(QWidget* parent) : QTableWidget(parent), m_via_net(0)
 {
+    m_hide_when_focus_lost = false;
     setSelectionMode(QAbstractItemView::SingleSelection);
     setSelectionBehavior(QAbstractItemView::SelectRows);
     //setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -84,6 +85,23 @@ void graph_navigation_widget::setup()
             return;
         }
     }
+}
+
+void graph_navigation_widget::setup(std::shared_ptr<net> via_net)
+{
+    clearContents();
+    fill_table(via_net);
+}
+
+void graph_navigation_widget::hide_when_focus_lost(bool hide)
+{
+    m_hide_when_focus_lost = hide;
+}
+
+void graph_navigation_widget::focusOutEvent(QFocusEvent *event)
+{
+    if(m_hide_when_focus_lost)
+        hide();
 }
 
 void graph_navigation_widget::keyPressEvent(QKeyEvent* event)

@@ -126,6 +126,10 @@ std::set<std::shared_ptr<module>> module::get_submodules(const std::string& name
 
 bool module::contains_module(const std::shared_ptr<module>& other, bool recursive) const
 {
+    if (other == nullptr)
+    {
+        return false;
+    }
     for (const auto& sm : m_submodules_set)
     {
         if (sm == other)
