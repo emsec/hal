@@ -1,10 +1,13 @@
-import os, sys
+import os
+import sys
 import json
+
 
 def process(file):
     print("processing '{}'".format(file))
 
-    with open(file, "r") as f: json_data = json.load(f)
+    with open(file, "r") as f:
+        json_data = json.load(f)
 
     json_data = json_data["library"]
     name = json_data["library_name"]
@@ -59,7 +62,8 @@ def process(file):
                 lines.append("}")
             lines.insert(insert_point, "ff (\"IQ\" , \"IQN\") {")
             lines.insert(insert_point+1, "next_state          : \"D\";")
-            lines.insert(insert_point+2, "clocked_on          : \"{}\";".format(clock_pin))
+            lines.insert(insert_point+2,
+                         "clocked_on          : \"{}\";".format(clock_pin))
             lines.insert(insert_point+3, "preset              : \"!SN\";")
             lines.insert(insert_point+4, "clear               : \"!RN\";")
             lines.insert(insert_point+5, "clear_preset_var1   : L;")
@@ -69,8 +73,8 @@ def process(file):
         elif "LUT" in typ:
             lines.append("lut (\"lut_out\") {")
             lines.append("data_category     : \"generic\";")
-            lines.append("data_key          : \"INIT\";")
-            lines.append("direction         : \"descending\";")
+            lines.append("data_identifier   : \"INIT\";")
+            lines.append("bit_order         : \"ascending\";")
             lines.append("}")
             for pin in inputs[typ]:
                 lines.append("pin({})".format(pin) + " {")
@@ -108,7 +112,6 @@ def process(file):
             outfile.write(indent+l+"\n")
             if "{" in l and "}" not in l:
                 indent += "    "
-
 
 
 for file in sorted(os.listdir(".")):

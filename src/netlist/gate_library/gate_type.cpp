@@ -3,7 +3,7 @@
 gate_type::gate_type(const std::string& name)
 {
     m_name      = name;
-    m_base_type = combinatorial;
+    m_base_type = base_type_t::combinatorial;
 }
 
 std::string gate_type::to_string(const gate_type& gt)
@@ -35,6 +35,7 @@ bool gate_type::operator!=(const gate_type& other) const
 
 bool gate_type::doCompare(const gate_type& other) const
 {
+    UNUSED(other);
     return true;
 }
 

@@ -223,8 +223,8 @@ library (YOSYS_MYCELL) {
     cell(LUT6) {
         lut ("lut_out") {
             data_category     : "generic";
-            data_key          : "INIT";
-            direction         : "descending";
+            data_identifier   : "INIT";
+            bit_order         : "ascending";
         }
         pin(I0) {
             direction: input;

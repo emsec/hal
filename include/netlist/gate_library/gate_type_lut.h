@@ -40,19 +40,20 @@
 class gate_type_lut : public gate_type
 {
 public:
-    using gate_type::gate_type;
+    gate_type_lut(const std::string& name);
+    ~gate_type_lut() override = default;
 
-    void set_data_category(std::string data_category);
-    void set_data_key(std::string data_key);
-    void set_ascending(bool ascending);
+    void set_data_category(const std::string& category);
+    void set_data_identifier(const std::string& identifier);
+    void set_data_ascending_order(bool ascending);
 
     std::string get_data_category() const;
-    std::string get_data_key() const;
-    bool is_ascending() const;
+    std::string get_data_identifier() const;
+    bool is_ascending_order() const;
 
 private:
     std::string m_data_category;
-    std::string m_data_key;
+    std::string m_data_identifier;
     bool m_ascending;
 
     bool doCompare(const gate_type& other) const;

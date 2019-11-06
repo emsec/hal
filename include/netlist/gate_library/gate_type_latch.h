@@ -40,7 +40,7 @@
 class gate_type_latch : public gate_type
 {
 public:
-    enum special_behavior_t
+    enum class special_behavior
     {
         L,
         H,
@@ -49,27 +49,32 @@ public:
         X
     };
 
-    using gate_type::gate_type;
+    gate_type_latch(const std::string& name);
+    ~gate_type_latch() override = default;
 
-    void set_enable_function(boolean_function enable_f);
-    void set_set_function(boolean_function set_f);
-    void set_reset_function(boolean_function reset_f);
-    void set_output_pin_inverted(std::string output_pin, bool inverted);
-    void set_special_behavior(std::pair<special_behavior_t, special_behavior_t> sb);
+    void set_data_in_function(const boolean_function& data_in_f);
+    void set_enable_function(const boolean_function& enable_f);
+    void set_set_function(const boolean_function& set_f);
+    void set_reset_function(const boolean_function& reset_f);
+    void set_output_pin_inverted(const std::string& output_pin, bool inverted);
+    void set_special_behavior1(special_behavior sb);
+    void set_special_behavior2(special_behavior sb);
 
+    boolean_function get_data_in_function() const;
     boolean_function get_enable_function() const;
     boolean_function get_set_function() const;
     boolean_function get_reset_function() const;
-    std::map<std::string, bool> get_output_pin_inverted() const;
-    std::pair<special_behavior_t, special_behavior_t> get_special_behavior() const;
+    std::set<std::string> get_inverted_output_pins() const;
+    std::pair<special_behavior, special_behavior> get_special_behavior() const;
 
 private:
     bool doCompare(const gate_type& other) const;
 
+    boolean_function m_data_in_f;
     boolean_function m_enable_f;
     boolean_function m_set_f;
     boolean_function m_reset_f;
-    std::map<std::string, bool> m_output_pin_inverted;
-    std::pair<special_behavior_t, special_behavior_t> m_special_behavior;
+    std::set<std::string> m_inverted_output_pins;
+    std::pair<special_behavior, special_behavior> m_special_behavior;
 };
 #endif    //__HAL_GATE_TYPE_LUT_H

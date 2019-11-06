@@ -39,7 +39,7 @@
 class gate_type
 {
 public:
-    enum base_type_t
+    enum class base_type_t
     {
         combinatorial,
         lut,
@@ -47,8 +47,8 @@ public:
         latch
     };
 
-    virtual ~gate_type() = default;
     gate_type(const std::string& name);
+    virtual ~gate_type() = default;
 
     gate_type(const gate_type&) = delete;               // disable copy-constructor
     gate_type& operator=(const gate_type&) = delete;    // disable copy-assignment
@@ -72,9 +72,11 @@ public:
     std::vector<std::string> get_output_pins() const;
     std::map<std::string, boolean_function> get_boolean_functions() const;
 
+protected:
+    base_type_t m_base_type;
+
 private:
     std::string m_name;
-    base_type_t m_base_type;
 
     std::vector<std::string> m_input_pins;
     std::vector<std::string> m_output_pins;

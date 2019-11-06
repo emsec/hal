@@ -1,5 +1,6 @@
 #include "netlist/gate.h"
 
+#include "netlist/gate_library/gate_type_lut.h"
 #include "netlist/module.h"
 #include "netlist/net.h"
 #include "netlist/netlist.h"
@@ -103,7 +104,7 @@ boolean_function gate::get_boolean_function(const std::string& name) const
         return boolean_function::X;
     }
 
-    if (m_type->get_base_type() == gate_type::lut && name == m_type->get_output_pins()[0])
+    if (m_type->get_base_type() == gate_type::base_type_t::lut && name == m_type->get_output_pins()[0])
     {
         return get_lut_function();
     }
@@ -131,7 +132,7 @@ std::map<std::string, boolean_function> gate::get_boolean_functions() const
         res.emplace(it.first, it.second);
     }
 
-    if (m_type->get_base_type() == gate_type::lut)
+    if (m_type->get_base_type() == gate_type::base_type_t::lut)
     {
         res.emplace(get_output_pins()[0], get_lut_function());
     }
@@ -141,28 +142,38 @@ std::map<std::string, boolean_function> gate::get_boolean_functions() const
 
 boolean_function gate::get_lut_function() const
 {
-    boolean_function result = boolean_function::ZERO;
+    auto lut_type = std::static_pointer_cast<const gate_type_lut>(m_type);
 
-    auto lut_type = std::static_pointer_cast<const gate_type>(m_type);
-
-    //TODO read from gate type
-    std::string category   = "generic";
-    std::string key        = "INIT";
+    std::string category   = lut_type->get_data_category();
+    std::string key        = lut_type->get_data_identifier();
     std::string config_str = std::get<1>(get_data_by_key(category, key));
-    u64 config;
-    std::stoull(config_str, &config, 16);
 
-    auto inputs = get_input_pins();
+    if (config_str.empty())
+    {
+        return boolean_function::ZERO;
+    }
+    u64 config = std::stoull(config_str, nullptr, 16);
+
+    boolean_function result;
 
     for (u32 i = 0; config != 0; i++)
     {
-        auto bit = (config & 1);
-        config >>= 1;
+        u8 bit;
+        if (lut_type->is_ascending_order())
+        {
+            bit = (config & 1);
+            config >>= 1;
+        }
+        else
+        {
+            bit = config >> 63;
+            config <<= 1;
+        }
         if (bit == 1)
         {
             boolean_function clause;
             auto input_values = i;
-            for (auto input : inputs)
+            for (auto input : get_input_pins())
             {
                 if ((input_values & 1) == 1)
                 {
@@ -183,15 +194,16 @@ boolean_function gate::get_lut_function() const
 
 void gate::set_boolean_function(const std::string& name, const boolean_function& func)
 {
-    if (m_type->get_base_type() == gate_type::lut)
+    if (m_type->get_base_type() == gate_type::base_type_t::lut)
     {
         auto output_pins = m_type->get_output_pins();
         if (!output_pins.empty() && name == output_pins[0])
         {
-            auto tt = func.get_truth_table(get_input_pins());
+            auto lut_type = std::static_pointer_cast<const gate_type_lut>(m_type);
+            auto tt       = func.get_truth_table(get_input_pins());
 
             u64 config_value = 0;
-            if (true)    //TODO read from gate type (if descending)
+            if (lut_type->is_ascending_order())
             {
                 std::reverse(tt.begin(), tt.end());
             }
@@ -206,9 +218,8 @@ void gate::set_boolean_function(const std::string& name, const boolean_function&
                 config_value <<= 1;
             }
 
-            //TODO read from gate type
-            std::string category = "generic";
-            std::string key      = "INIT";
+            std::string category = lut_type->get_data_category();
+            std::string key      = lut_type->get_data_identifier();
 
             std::stringstream stream;
             stream << std::hex << config_value;

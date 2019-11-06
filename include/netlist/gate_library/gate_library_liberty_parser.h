@@ -46,7 +46,7 @@ namespace gate_library_liberty_parser
      * }
      * 
      * <category> and <key> refer to the location where the LUT configuration string is stored, for example "generic" and "init".
-     * direction describes whether the first configuration bit is the output for inputs 000... (ascending) or 111... (descending).
+     * direction describes whether the least significant bit of the configuration is the output for inputs 000... (ascending) or 111... (descending).
      * 
      * @param[in] ss - The string stream containing the liberty data.
      * @returns - The parsed gate library.

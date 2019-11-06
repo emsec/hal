@@ -448,13 +448,13 @@ boolean_function boolean_function::combine(operation op, const boolean_function&
     {
         return *this;
     }
-    else if (m_content == content_type::TERMS && m_op == op && other.m_content != content_type::TERMS && !other.m_invert)
+    else if (m_content == content_type::TERMS && m_op == op && other.m_content != content_type::TERMS)
     {
         boolean_function result = *this;
         result.m_operands.push_back(other);
         return result;
     }
-    else if (other.m_content == content_type::TERMS && other.m_op == op && m_content != content_type::TERMS && !m_invert)
+    else if (other.m_content == content_type::TERMS && other.m_op == op && m_content != content_type::TERMS)
     {
         boolean_function result = other;
         result.m_operands.insert(result.m_operands.begin(), *this);
@@ -792,6 +792,12 @@ boolean_function boolean_function::to_dnf() const
 
     // the order of the transformation passes is important!
     return replace_xors().propagate_negations().expand_ands().flatten().optimize_constants();
+}
+
+boolean_function boolean_function::optimize() const
+{
+    //TODO perform actual optimization
+    return *this;
 }
 
 std::vector<boolean_function::value> boolean_function::get_truth_table(const std::vector<std::string>& order) const

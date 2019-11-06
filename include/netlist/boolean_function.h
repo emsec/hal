@@ -135,6 +135,10 @@ public:
     // get the DNF representation of the function
     boolean_function to_dnf() const;
 
+    // optimizes the function - maybe...
+    //TODO make sure there is no maybe
+    boolean_function optimize() const;
+
     /*
      * Get the truth table outputs of the function.
      * WARNING: Exponential runtime in the number of variables!

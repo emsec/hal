@@ -3293,8 +3293,8 @@ library (XILINX_UNISIM) {
     cell(CFGLUT5) {
         lut ("lut_out") {
             data_category     : "generic";
-            data_key          : "INIT";
-            direction         : "descending";
+            data_identifier   : "INIT";
+            bit_order         : "ascending";
         }
         pin(CDI) {
             direction: input;
@@ -53880,8 +53880,8 @@ library (XILINX_UNISIM) {
     cell(LUT1) {
         lut ("lut_out") {
             data_category     : "generic";
-            data_key          : "INIT";
-            direction         : "descending";
+            data_identifier   : "INIT";
+            bit_order         : "ascending";
         }
         pin(I0) {
             direction: input;
@@ -53895,8 +53895,8 @@ library (XILINX_UNISIM) {
     cell(LUT1_D) {
         lut ("lut_out") {
             data_category     : "generic";
-            data_key          : "INIT";
-            direction         : "descending";
+            data_identifier   : "INIT";
+            bit_order         : "ascending";
         }
         pin(I0) {
             direction: input;
@@ -53914,8 +53914,8 @@ library (XILINX_UNISIM) {
     cell(LUT1_L) {
         lut ("lut_out") {
             data_category     : "generic";
-            data_key          : "INIT";
-            direction         : "descending";
+            data_identifier   : "INIT";
+            bit_order         : "ascending";
         }
         pin(I0) {
             direction: input;
@@ -53929,8 +53929,8 @@ library (XILINX_UNISIM) {
     cell(LUT2) {
         lut ("lut_out") {
             data_category     : "generic";
-            data_key          : "INIT";
-            direction         : "descending";
+            data_identifier   : "INIT";
+            bit_order         : "ascending";
         }
         pin(I0) {
             direction: input;
@@ -53947,8 +53947,8 @@ library (XILINX_UNISIM) {
     cell(LUT2_D) {
         lut ("lut_out") {
             data_category     : "generic";
-            data_key          : "INIT";
-            direction         : "descending";
+            data_identifier   : "INIT";
+            bit_order         : "ascending";
         }
         pin(I0) {
             direction: input;
@@ -53969,8 +53969,8 @@ library (XILINX_UNISIM) {
     cell(LUT2_L) {
         lut ("lut_out") {
             data_category     : "generic";
-            data_key          : "INIT";
-            direction         : "descending";
+            data_identifier   : "INIT";
+            bit_order         : "ascending";
         }
         pin(I0) {
             direction: input;
@@ -53987,8 +53987,8 @@ library (XILINX_UNISIM) {
     cell(LUT3) {
         lut ("lut_out") {
             data_category     : "generic";
-            data_key          : "INIT";
-            direction         : "descending";
+            data_identifier   : "INIT";
+            bit_order         : "ascending";
         }
         pin(I0) {
             direction: input;
@@ -54008,8 +54008,8 @@ library (XILINX_UNISIM) {
     cell(LUT3_D) {
         lut ("lut_out") {
             data_category     : "generic";
-            data_key          : "INIT";
-            direction         : "descending";
+            data_identifier   : "INIT";
+            bit_order         : "ascending";
         }
         pin(I0) {
             direction: input;
@@ -54033,8 +54033,8 @@ library (XILINX_UNISIM) {
     cell(LUT3_L) {
         lut ("lut_out") {
             data_category     : "generic";
-            data_key          : "INIT";
-            direction         : "descending";
+            data_identifier   : "INIT";
+            bit_order         : "ascending";
         }
         pin(I0) {
             direction: input;
@@ -54054,8 +54054,8 @@ library (XILINX_UNISIM) {
     cell(LUT4) {
         lut ("lut_out") {
             data_category     : "generic";
-            data_key          : "INIT";
-            direction         : "descending";
+            data_identifier   : "INIT";
+            bit_order         : "ascending";
         }
         pin(I0) {
             direction: input;
@@ -54078,8 +54078,8 @@ library (XILINX_UNISIM) {
     cell(LUT4_D) {
         lut ("lut_out") {
             data_category     : "generic";
-            data_key          : "INIT";
-            direction         : "descending";
+            data_identifier   : "INIT";
+            bit_order         : "ascending";
         }
         pin(I0) {
             direction: input;
@@ -54106,8 +54106,8 @@ library (XILINX_UNISIM) {
     cell(LUT4_L) {
         lut ("lut_out") {
             data_category     : "generic";
-            data_key          : "INIT";
-            direction         : "descending";
+            data_identifier   : "INIT";
+            bit_order         : "ascending";
         }
         pin(I0) {
             direction: input;
@@ -54130,8 +54130,8 @@ library (XILINX_UNISIM) {
     cell(LUT5) {
         lut ("lut_out") {
             data_category     : "generic";
-            data_key          : "INIT";
-            direction         : "descending";
+            data_identifier   : "INIT";
+            bit_order         : "ascending";
         }
         pin(I0) {
             direction: input;
@@ -54157,8 +54157,8 @@ library (XILINX_UNISIM) {
     cell(LUT5_D) {
         lut ("lut_out") {
             data_category     : "generic";
-            data_key          : "INIT";
-            direction         : "descending";
+            data_identifier   : "INIT";
+            bit_order         : "ascending";
         }
         pin(I0) {
             direction: input;
@@ -54188,8 +54188,8 @@ library (XILINX_UNISIM) {
     cell(LUT5_L) {
         lut ("lut_out") {
             data_category     : "generic";
-            data_key          : "INIT";
-            direction         : "descending";
+            data_identifier   : "INIT";
+            bit_order         : "ascending";
         }
         pin(I0) {
             direction: input;
@@ -54215,8 +54215,8 @@ library (XILINX_UNISIM) {
     cell(LUT6) {
         lut ("lut_out") {
             data_category     : "generic";
-            data_key          : "INIT";
-            direction         : "descending";
+            data_identifier   : "INIT";
+            bit_order         : "ascending";
         }
         pin(I0) {
             direction: input;
@@ -54245,8 +54245,8 @@ library (XILINX_UNISIM) {
     cell(LUT6_2) {
         lut ("lut_out") {
             data_category     : "generic";
-            data_key          : "INIT";
-            direction         : "descending";
+            data_identifier   : "INIT";
+            bit_order         : "ascending";
         }
         pin(I0) {
             direction: input;
@@ -54279,8 +54279,8 @@ library (XILINX_UNISIM) {
     cell(LUT6_D) {
         lut ("lut_out") {
             data_category     : "generic";
-            data_key          : "INIT";
-            direction         : "descending";
+            data_identifier   : "INIT";
+            bit_order         : "ascending";
         }
         pin(I0) {
             direction: input;
@@ -54313,8 +54313,8 @@ library (XILINX_UNISIM) {
     cell(LUT6_L) {
         lut ("lut_out") {
             data_category     : "generic";
-            data_key          : "INIT";
-            direction         : "descending";
+            data_identifier   : "INIT";
+            bit_order         : "ascending";
         }
         pin(I0) {
             direction: input;

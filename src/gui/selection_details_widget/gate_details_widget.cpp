@@ -263,27 +263,18 @@ void gate_details_widget::update(const u32 gate_id)
     // display Boolean function (if present)
     m_boolean_function->setText("");
 
-    auto bf = std::get<1>(g->get_data_by_key("gui", "boolean_function"));
-    if (!bf.empty() && (bf != "-"))
+    std::string description = "";
+    for (const auto& it : g->get_boolean_functions())
+        description += " <b>Boolean Function (" + it.first + ")</b>: " + it.second.to_string() + "<br>";
+
+    if (description.empty())
     {
-        m_boolean_function->setText(QString::fromStdString(bf));
+        g->set_data("gui", "boolean_function", "string", "-");
     }
     else
     {
-        std::string description = "";
-        for (const auto& it : g->get_boolean_functions())
-            description += " <b>Boolean Function (" + it.first + ")</b>: " + it.second.to_string() + "<br>";
-
-        if (description.empty())
-        {
-            g->set_data("gui", "boolean_function", "string", "-");
-        }
-        else
-        {
-            description = description.substr(0, description.size() - 4);
-            g->set_data("gui", "boolean_function", "string", description);
-            m_boolean_function->setText(QString::fromStdString(description));
-        }
+        description = description.substr(0, description.size() - 4);
+        m_boolean_function->setText(QString::fromStdString(description));
     }
 
     if (m_boolean_function->text().isEmpty())

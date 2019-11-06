@@ -41079,8 +41079,8 @@ library (XILINX_SIMPRIM) {
     cell(X_LUT2) {
         lut ("lut_out") {
             data_category     : "generic";
-            data_key          : "INIT";
-            direction         : "descending";
+            data_identifier   : "INIT";
+            bit_order         : "ascending";
         }
         pin(ADR0) {
             direction: input;
@@ -41097,8 +41097,8 @@ library (XILINX_SIMPRIM) {
     cell(X_LUT3) {
         lut ("lut_out") {
             data_category     : "generic";
-            data_key          : "INIT";
-            direction         : "descending";
+            data_identifier   : "INIT";
+            bit_order         : "ascending";
         }
         pin(ADR0) {
             direction: input;
@@ -41118,8 +41118,8 @@ library (XILINX_SIMPRIM) {
     cell(X_LUT4) {
         lut ("lut_out") {
             data_category     : "generic";
-            data_key          : "INIT";
-            direction         : "descending";
+            data_identifier   : "INIT";
+            bit_order         : "ascending";
         }
         pin(ADR0) {
             direction: input;
@@ -41142,8 +41142,8 @@ library (XILINX_SIMPRIM) {
     cell(X_LUT5) {
         lut ("lut_out") {
             data_category     : "generic";
-            data_key          : "INIT";
-            direction         : "descending";
+            data_identifier   : "INIT";
+            bit_order         : "ascending";
         }
         pin(ADR0) {
             direction: input;
@@ -41169,8 +41169,8 @@ library (XILINX_SIMPRIM) {
     cell(X_LUT6) {
         lut ("lut_out") {
             data_category     : "generic";
-            data_key          : "INIT";
-            direction         : "descending";
+            data_identifier   : "INIT";
+            bit_order         : "ascending";
         }
         pin(ADR0) {
             direction: input;
@@ -41199,8 +41199,8 @@ library (XILINX_SIMPRIM) {
     cell(X_LUT6_2) {
         lut ("lut_out") {
             data_category     : "generic";
-            data_key          : "INIT";
-            direction         : "descending";
+            data_identifier   : "INIT";
+            bit_order         : "ascending";
         }
         pin(I0) {
             direction: input;
@@ -41233,8 +41233,8 @@ library (XILINX_SIMPRIM) {
     cell(X_LUT7) {
         lut ("lut_out") {
             data_category     : "generic";
-            data_key          : "INIT";
-            direction         : "descending";
+            data_identifier   : "INIT";
+            bit_order         : "ascending";
         }
         pin(ADR0) {
             direction: input;
@@ -41266,8 +41266,8 @@ library (XILINX_SIMPRIM) {
     cell(X_LUT8) {
         lut ("lut_out") {
             data_category     : "generic";
-            data_key          : "INIT";
-            direction         : "descending";
+            data_identifier   : "INIT";
+            bit_order         : "ascending";
         }
         pin(ADR0) {
             direction: input;

@@ -1,6 +1,0 @@
-#!/bin/tcsh -f
-
-foreach N ( 4 8 9 10 )
-    echo "Running with N = $N" >> result
-    ./queen $N | egrep -v '^Garbage collection' >> result
-end
