@@ -822,23 +822,12 @@ bool boolean_function::is_dnf() const
 
 boolean_function boolean_function::to_dnf() const
 {
-    // std::cout << *this << " to dnf:" << std::endl;
-    // auto f = replace_xors();
-    // std::cout << "replace_xors: " << f << std::endl;
-    // f = f.propagate_negations();
-    // std::cout << "propagate_negations: " << f << std::endl;
-    // f = f.expand_ands();
-    // std::cout << "expand_ands: " << f << std::endl;
-    // f = f.flatten();
-    // std::cout << "flatten: " << f << std::endl;
-    // f = f.optimize_constants();
-    // std::cout << "optimize_constants: " << f << std::endl;
-
-    // the order of the transformation passes is important!
     if (is_dnf())
     {
         return *this;
     }
+    // the order of the passes is important!
+    // every pass after replace_xors expects that there are no more xor operations
     return replace_xors().propagate_negations().expand_ands().flatten().optimize_constants();
 }
 
