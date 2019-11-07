@@ -251,13 +251,13 @@ Contains the library and user share directories.
     // :returns: Set of inout pin types.
     // :rtype: set(str)
     // )")
-    //         .def_property_readonly("global_gnd_gate_types", &gate_library::get_global_gnd_gate_types, R"(
+    //         .def_property_readonly("gnd_gate_types", &gate_library::get_gnd_gate_types, R"(
     // Get all global gnd gate types of the library.
 
     // :returns: Set of global gnd gate types.
     // :rtype: set(str)
     // )")
-    //         .def_property_readonly("global_vcc_gate_types", &gate_library::get_global_vcc_gate_types, R"(
+    //         .def_property_readonly("vcc_gate_types", &gate_library::get_vcc_gate_types, R"(
     // Get all global vcc gate types of the library.
 
     // :returns: Set of global vcc gate types.
@@ -480,7 +480,7 @@ Get all gates of the netlist. You can filter the set before output with the opti
 :returns: A set of gates.
 :rtype: set(hal_py.gate)
 )")
-        .def("mark_global_vcc_gate", &netlist::mark_global_vcc_gate, py::arg("gate"), R"(
+        .def("mark_vcc_gate", &netlist::mark_vcc_gate, py::arg("gate"), R"(
 Mark a gate as global vcc gate.
 
 :param gate: The new gate.
@@ -488,7 +488,7 @@ Mark a gate as global vcc gate.
 :returns: True on success.
 :rtype: bool
 )")
-        .def("mark_global_gnd_gate", &netlist::mark_global_gnd_gate, py::arg("gate"), R"(
+        .def("mark_gnd_gate", &netlist::mark_gnd_gate, py::arg("gate"), R"(
 Mark a gate as global gnd gate.
 
 :param gate: The new gate.
@@ -496,14 +496,14 @@ Mark a gate as global gnd gate.
 :returns: True on success.
 :rtype: bool
 )")
-        .def("unmark_global_vcc_gate", &netlist::unmark_global_vcc_gate, py::arg("gate"), R"(
+        .def("unmark_vcc_gate", &netlist::unmark_vcc_gate, py::arg("gate"), R"(
 Unmark a global vcc gate.
 
 :param  gate: The new gate.
 :type gate: hal_py.gate
 :rtype: bool
 )")
-        .def("unmark_global_gnd_gate", &netlist::unmark_global_gnd_gate, py::arg("gate"), R"(
+        .def("unmark_gnd_gate", &netlist::unmark_gnd_gate, py::arg("gate"), R"(
 Unmark a global gnd gate.
 
 :param gate: The new gate.
@@ -511,7 +511,7 @@ Unmark a global gnd gate.
 :returns: True on success.
 :rtype: bool
 )")
-        .def("is_global_vcc_gate", &netlist::is_global_vcc_gate, py::arg("gate"), R"(
+        .def("is_vcc_gate", &netlist::is_vcc_gate, py::arg("gate"), R"(
 Checks whether a gate is a global vcc gate.
 
 :param gate: The gate to check.
@@ -519,7 +519,7 @@ Checks whether a gate is a global vcc gate.
 :returns: True if the gate is a global vcc gate.
 :rtype: bool
 )")
-        .def("is_global_gnd_gate", &netlist::is_global_gnd_gate, py::arg("gate"), R"(
+        .def("is_gnd_gate", &netlist::is_gnd_gate, py::arg("gate"), R"(
 Checks whether a gate is a global gnd gate.
 
 :param gate: The gate to check.
@@ -527,25 +527,25 @@ Checks whether a gate is a global gnd gate.
 :returns: True if the gate is a global gnd gate.
 :rtype: bool
 )")
-        .def_property_readonly("global_vcc_gates", &netlist::get_global_vcc_gates, R"(
+        .def_property_readonly("vcc_gates", &netlist::get_vcc_gates, R"(
 Get all global vcc gates.
 
 :returns: A set of gates.
 :rtype: set(hal_py.gate)
 )")
-        .def("get_global_vcc_gates", &netlist::get_global_vcc_gates, R"(
+        .def("get_vcc_gates", &netlist::get_vcc_gates, R"(
 Get all global vcc gates.
 
 :returns: A set of gates.
 :rtype: set(hal_py.gate)
 )")
-        .def_property_readonly("global_gnd_gates", &netlist::get_global_gnd_gates, R"(
+        .def_property_readonly("gnd_gates", &netlist::get_gnd_gates, R"(
 Get all global gnd gates.
 
 :returns: A set of gates.
 :rtype: set(hal_py.gate)
 )")
-        .def("get_global_gnd_gates", &netlist::get_global_gnd_gates, R"(
+        .def("get_gnd_gates", &netlist::get_gnd_gates, R"(
 Get all global gnd gates.
 
 :returns: A set of gates.
@@ -799,37 +799,37 @@ Gets the module this gate is contained in.
 :rtype: hal_py.module
 )")
 
-        .def("mark_global_vcc_gate", &gate::mark_global_vcc_gate, R"(
+        .def("mark_vcc_gate", &gate::mark_vcc_gate, R"(
 Mark this gate as a global vcc gate.
 
 :returns: True on success.
 :rtype: bool
 )")
-        .def("mark_global_gnd_gate", &gate::mark_global_gnd_gate, R"(
+        .def("mark_gnd_gate", &gate::mark_gnd_gate, R"(
 Mark this gate as a global gnd gate.
 
 :returns: True on success.
 :rtype: bool
 )")
-        .def("unmark_global_vcc_gate", &gate::unmark_global_vcc_gate, R"(
+        .def("unmark_vcc_gate", &gate::unmark_vcc_gate, R"(
 Unmark this gate as a global vcc gate.
 
 :returns: True on success.
 :rtype: bool
 )")
-        .def("unmark_global_gnd_gate", &gate::unmark_global_gnd_gate, R"(
+        .def("unmark_gnd_gate", &gate::unmark_gnd_gate, R"(
 Unmark this gate as a global gnd gate.
 
 :returns: True on success.
 :rtype: bool
 )")
-        .def("is_global_vcc_gate", &gate::is_global_vcc_gate, R"(
+        .def("is_vcc_gate", &gate::is_vcc_gate, R"(
 Checks whether this gate is a global vcc gate.
 
 :returns: True if the gate is a global vcc gate.
 :rtype: bool
 )")
-        .def("is_global_gnd_gate", &gate::is_global_gnd_gate, R"(
+        .def("is_gnd_gate", &gate::is_gnd_gate, R"(
 Checks whether this gate is a global gnd gate.
 
 :returns: True if the gate is a global gnd gate.

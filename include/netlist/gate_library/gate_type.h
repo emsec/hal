@@ -39,7 +39,7 @@
 class gate_type
 {
 public:
-    enum class base_type_t
+    enum class base_type
     {
         combinatorial,
         lut,
@@ -59,7 +59,7 @@ public:
     bool operator==(const gate_type& other) const;
     bool operator!=(const gate_type& other) const;
 
-    void set_base_type(base_type_t base_type);
+    void set_base_type(base_type base_type);
     void add_input_pin(std::string input_pin);
     void add_input_pins(const std::vector<std::string>& input_pins);
     void add_output_pin(std::string input_pin);
@@ -67,13 +67,13 @@ public:
     void add_boolean_function(std::string name, boolean_function bf);
 
     std::string get_name() const;
-    base_type_t get_base_type() const;
+    base_type get_base_type() const;
     std::vector<std::string> get_input_pins() const;
     std::vector<std::string> get_output_pins() const;
     std::map<std::string, boolean_function> get_boolean_functions() const;
 
 protected:
-    base_type_t m_base_type;
+    base_type m_base_type;
 
 private:
     std::string m_name;

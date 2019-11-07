@@ -197,10 +197,10 @@ std::shared_ptr<netlist> hdl_parser_vhdl::parse(const std::string& gate_library)
     // add global gnd gate if required by any instance
     if (!m_zero_net->get_dsts().empty())
     {
-        auto gnd_type   = m_netlist->get_gate_library()->get_global_gnd_gate_types().begin()->second;
+        auto gnd_type   = m_netlist->get_gate_library()->get_gnd_gate_types().begin()->second;
         auto output_pin = gnd_type->get_output_pins().at(0);
         auto gnd        = m_netlist->create_gate(m_netlist->get_unique_gate_id(), gnd_type, "global_gnd");
-        if (!m_netlist->mark_global_gnd_gate(gnd))
+        if (!m_netlist->mark_gnd_gate(gnd))
         {
             return nullptr;
         }
@@ -218,10 +218,10 @@ std::shared_ptr<netlist> hdl_parser_vhdl::parse(const std::string& gate_library)
     // add global vcc gate if required by any instance
     if (!m_one_net->get_dsts().empty())
     {
-        auto vcc_type   = m_netlist->get_gate_library()->get_global_vcc_gate_types().begin()->second;
+        auto vcc_type   = m_netlist->get_gate_library()->get_vcc_gate_types().begin()->second;
         auto output_pin = vcc_type->get_output_pins().at(0);
         auto vcc        = m_netlist->create_gate(m_netlist->get_unique_gate_id(), vcc_type, "global_vcc");
-        if (!m_netlist->mark_global_vcc_gate(vcc))
+        if (!m_netlist->mark_vcc_gate(vcc))
         {
             return nullptr;
         }
@@ -973,8 +973,8 @@ std::shared_ptr<module> hdl_parser_vhdl::instantiate(const entity& e, std::share
     }
 
     // cache global vcc/gnd types
-    auto global_vcc_gate_types = m_netlist->get_gate_library()->get_global_vcc_gate_types();
-    auto global_gnd_gate_types = m_netlist->get_gate_library()->get_global_gnd_gate_types();
+    auto vcc_gate_types = m_netlist->get_gate_library()->get_vcc_gate_types();
+    auto gnd_gate_types = m_netlist->get_gate_library()->get_gnd_gate_types();
 
     // process instances i.e. gates or other entities
     for (const auto& inst : e.instances)
@@ -1047,11 +1047,11 @@ std::shared_ptr<module> hdl_parser_vhdl::instantiate(const entity& e, std::share
             container = new_gate.get();
 
             // if gate is a global type, register it as such
-            if (global_vcc_gate_types.find(inst.type) != global_vcc_gate_types.end() && !new_gate->mark_global_vcc_gate())
+            if (vcc_gate_types.find(inst.type) != vcc_gate_types.end() && !new_gate->mark_vcc_gate())
             {
                 return nullptr;
             }
-            if (global_gnd_gate_types.find(inst.type) != global_gnd_gate_types.end() && !new_gate->mark_global_gnd_gate())
+            if (gnd_gate_types.find(inst.type) != gnd_gate_types.end() && !new_gate->mark_gnd_gate())
             {
                 return nullptr;
             }

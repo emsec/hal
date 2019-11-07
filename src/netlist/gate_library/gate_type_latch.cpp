@@ -2,7 +2,7 @@
 
 gate_type_latch::gate_type_latch(const std::string& name) : gate_type(name)
 {
-    m_base_type = base_type_t::latch;
+    m_base_type = base_type::latch;
 }
 
 bool gate_type_latch::doCompare(const gate_type& other) const

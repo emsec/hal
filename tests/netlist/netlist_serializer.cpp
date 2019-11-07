@@ -309,19 +309,19 @@ protected:
         }
 
         // Check if global gates are the same
-        if (nl_0->get_global_gnd_gates().size() != nl_1->get_global_gnd_gates().size())
+        if (nl_0->get_gnd_gates().size() != nl_1->get_gnd_gates().size())
             return false;
-        for (auto gl_gnd_0 : nl_0->get_global_gnd_gates())
+        for (auto gl_gnd_0 : nl_0->get_gnd_gates())
         {
-            if (!nl_1->is_global_gnd_gate(nl_1->get_gate_by_id(gl_gnd_0->get_id())))
+            if (!nl_1->is_gnd_gate(nl_1->get_gate_by_id(gl_gnd_0->get_id())))
                 return false;
         }
 
-        if (nl_0->get_global_vcc_gates().size() != nl_1->get_global_vcc_gates().size())
+        if (nl_0->get_vcc_gates().size() != nl_1->get_vcc_gates().size())
             return false;
-        for (auto gl_vcc_0 : nl_0->get_global_vcc_gates())
+        for (auto gl_vcc_0 : nl_0->get_vcc_gates())
         {
-            if (!nl_1->is_global_vcc_gate(nl_1->get_gate_by_id(gl_vcc_0->get_id())))
+            if (!nl_1->is_vcc_gate(nl_1->get_gate_by_id(gl_vcc_0->get_id())))
                 return false;
         }
 
@@ -409,8 +409,8 @@ TEST_F(netlist_serializer_test, check_serialize_and_deserialize){
             test_m->set_data("category", "key_3", "data_type", "test_value");
 
             // Mark some gates as global gates
-            nl->mark_global_gnd_gate(nl->get_gate_by_id(MIN_GATE_ID+1));
-            nl->mark_global_vcc_gate(nl->get_gate_by_id(MIN_GATE_ID+2));
+            nl->mark_gnd_gate(nl->get_gate_by_id(MIN_GATE_ID+1));
+            nl->mark_vcc_gate(nl->get_gate_by_id(MIN_GATE_ID+2));
 
             // Mark some nets as global nets
             nl->mark_global_input_net(nl->get_net_by_id(MIN_NET_ID+13));
@@ -448,16 +448,16 @@ TEST_F(netlist_serializer_test, check_serialize_and_deserialize){
             }
 
             // -- Check if global gates are the same
-            EXPECT_EQ(nl->get_global_gnd_gates().size(), des_nl->get_global_gnd_gates().size());
-            for (auto gl_gnd_0 : nl->get_global_gnd_gates())
+            EXPECT_EQ(nl->get_gnd_gates().size(), des_nl->get_gnd_gates().size());
+            for (auto gl_gnd_0 : nl->get_gnd_gates())
             {
-                EXPECT_TRUE(des_nl->is_global_gnd_gate(des_nl->get_gate_by_id(gl_gnd_0->get_id())));
+                EXPECT_TRUE(des_nl->is_gnd_gate(des_nl->get_gate_by_id(gl_gnd_0->get_id())));
             }
 
-            EXPECT_EQ(nl->get_global_vcc_gates().size(), des_nl->get_global_vcc_gates().size());
-            for (auto gl_vcc_0 : nl->get_global_vcc_gates())
+            EXPECT_EQ(nl->get_vcc_gates().size(), des_nl->get_vcc_gates().size());
+            for (auto gl_vcc_0 : nl->get_vcc_gates())
             {
-                EXPECT_TRUE(des_nl->is_global_vcc_gate(des_nl->get_gate_by_id(gl_vcc_0->get_id())));
+                EXPECT_TRUE(des_nl->is_vcc_gate(des_nl->get_gate_by_id(gl_vcc_0->get_id())));
             }
 
             // -- Check if global nets are the same

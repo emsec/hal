@@ -3,7 +3,7 @@
 gate_type::gate_type(const std::string& name)
 {
     m_name      = name;
-    m_base_type = base_type_t::combinatorial;
+    m_base_type = base_type::combinatorial;
 }
 
 std::string gate_type::to_string(const gate_type& gt)
@@ -39,7 +39,7 @@ bool gate_type::doCompare(const gate_type& other) const
     return true;
 }
 
-void gate_type::set_base_type(base_type_t base_type)
+void gate_type::set_base_type(base_type base_type)
 {
     m_base_type = base_type;
 }
@@ -74,7 +74,7 @@ std::string gate_type::get_name() const
     return m_name;
 }
 
-gate_type::base_type_t gate_type::get_base_type() const
+gate_type::base_type gate_type::get_base_type() const
 {
     return m_base_type;
 }

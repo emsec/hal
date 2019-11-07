@@ -394,6 +394,10 @@ boolean_function boolean_function::from_string(std::string expression)
 
 std::string boolean_function::to_string() const
 {
+    if (is_empty())
+    {
+        return "<empty>"
+    }
     auto s = to_string_internal();
     if (s.front() == '(' && s.back() == ')')
     {

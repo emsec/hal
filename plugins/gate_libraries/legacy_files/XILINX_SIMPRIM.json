@@ -42278,10 +42278,10 @@
       ],
       "x_dcm_sp_maximum_period_check": []
     },
-    "global_gnd_nodes": [
+    "gnd_nodes": [
       "GLOBAL_GND"
     ],
-    "global_vcc_nodes": [
+    "vcc_nodes": [
       "GLOBAL_VCC"
     ],
     "vhdl_includes": [

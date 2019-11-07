@@ -142,10 +142,10 @@ std::shared_ptr<netlist> hdl_parser_vhdl_old::parse(const std::string& gate_libr
     // add global gnd gate if required by any instance
     if (m_net.find("'0'") != m_net.end())
     {
-        auto gnd_type   = m_netlist->get_gate_library()->get_global_gnd_gate_types().begin()->second;
+        auto gnd_type   = m_netlist->get_gate_library()->get_gnd_gate_types().begin()->second;
         auto output_pin = gnd_type->get_output_pins().at(0);
         auto gnd        = m_netlist->create_gate(m_netlist->get_unique_gate_id(), gnd_type, "global_gnd");
-        if (!m_netlist->mark_global_gnd_gate(gnd))
+        if (!m_netlist->mark_gnd_gate(gnd))
         {
             return nullptr;
         }
@@ -159,10 +159,10 @@ std::shared_ptr<netlist> hdl_parser_vhdl_old::parse(const std::string& gate_libr
     // add global vcc gate if required by any instance
     if (m_net.find("'1'") != m_net.end())
     {
-        auto vcc_type   = m_netlist->get_gate_library()->get_global_vcc_gate_types().begin()->second;
+        auto vcc_type   = m_netlist->get_gate_library()->get_vcc_gate_types().begin()->second;
         auto output_pin = vcc_type->get_output_pins().at(0);
         auto vcc        = m_netlist->create_gate(m_netlist->get_unique_gate_id(), vcc_type, "global_vcc");
-        if (!m_netlist->mark_global_vcc_gate(vcc))
+        if (!m_netlist->mark_vcc_gate(vcc))
         {
             return nullptr;
         }
@@ -415,8 +415,8 @@ bool hdl_parser_vhdl_old::parse_instances(const std::vector<std::tuple<int, std:
 bool hdl_parser_vhdl_old::parse_instance(std::string instance)
 {
     // instances contain all components with port assignments
-    auto global_vcc_gate_types = m_netlist->get_gate_library()->get_global_vcc_gate_types();
-    auto global_gnd_gate_types = m_netlist->get_gate_library()->get_global_gnd_gate_types();
+    auto vcc_gate_types = m_netlist->get_gate_library()->get_vcc_gate_types();
+    auto gnd_gate_types = m_netlist->get_gate_library()->get_gnd_gate_types();
 
     // extract name and component
     auto pos  = instance.find(':');
@@ -465,16 +465,16 @@ bool hdl_parser_vhdl_old::parse_instance(std::string instance)
     }
 
     // if gate id a global type, register it as such
-    if (global_vcc_gate_types.find(type) != global_vcc_gate_types.end())
+    if (vcc_gate_types.find(type) != vcc_gate_types.end())
     {
-        if (!m_netlist->mark_global_vcc_gate(new_gate))
+        if (!m_netlist->mark_vcc_gate(new_gate))
         {
             return false;
         }
     }
-    if (global_gnd_gate_types.find(type) != global_gnd_gate_types.end())
+    if (gnd_gate_types.find(type) != gnd_gate_types.end())
     {
-        if (!m_netlist->mark_global_gnd_gate(new_gate))
+        if (!m_netlist->mark_gnd_gate(new_gate))
         {
             return false;
         }

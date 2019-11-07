@@ -104,7 +104,7 @@ boolean_function gate::get_boolean_function(const std::string& name) const
         return boolean_function::X;
     }
 
-    if (m_type->get_base_type() == gate_type::base_type_t::lut && name == m_type->get_output_pins()[0])
+    if (m_type->get_base_type() == gate_type::base_type::lut && name == m_type->get_output_pins()[0])
     {
         return get_lut_function();
     }
@@ -132,7 +132,7 @@ std::map<std::string, boolean_function> gate::get_boolean_functions() const
         res.emplace(it.first, it.second);
     }
 
-    if (m_type->get_base_type() == gate_type::base_type_t::lut)
+    if (m_type->get_base_type() == gate_type::base_type::lut)
     {
         res.emplace(get_output_pins()[0], get_lut_function());
     }
@@ -194,7 +194,7 @@ boolean_function gate::get_lut_function() const
 
 void gate::set_boolean_function(const std::string& name, const boolean_function& func)
 {
-    if (m_type->get_base_type() == gate_type::base_type_t::lut)
+    if (m_type->get_base_type() == gate_type::base_type::lut)
     {
         auto output_pins = m_type->get_output_pins();
         if (!output_pins.empty() && name == output_pins[0])
@@ -232,34 +232,34 @@ void gate::set_boolean_function(const std::string& name, const boolean_function&
     m_functions.emplace(name, func);
 }
 
-bool gate::mark_global_vcc_gate()
+bool gate::mark_vcc_gate()
 {
-    return m_netlist->mark_global_vcc_gate(shared_from_this());
+    return m_netlist->mark_vcc_gate(shared_from_this());
 }
 
-bool gate::mark_global_gnd_gate()
+bool gate::mark_gnd_gate()
 {
-    return m_netlist->mark_global_gnd_gate(shared_from_this());
+    return m_netlist->mark_gnd_gate(shared_from_this());
 }
 
-bool gate::unmark_global_vcc_gate()
+bool gate::unmark_vcc_gate()
 {
-    return m_netlist->unmark_global_vcc_gate(shared_from_this());
+    return m_netlist->unmark_vcc_gate(shared_from_this());
 }
 
-bool gate::unmark_global_gnd_gate()
+bool gate::unmark_gnd_gate()
 {
-    return m_netlist->unmark_global_gnd_gate(shared_from_this());
+    return m_netlist->unmark_gnd_gate(shared_from_this());
 }
 
-bool gate::is_global_vcc_gate() const
+bool gate::is_vcc_gate() const
 {
-    return m_netlist->is_global_vcc_gate(const_cast<gate*>(this)->shared_from_this());
+    return m_netlist->is_vcc_gate(const_cast<gate*>(this)->shared_from_this());
 }
 
-bool gate::is_global_gnd_gate() const
+bool gate::is_gnd_gate() const
 {
-    return m_netlist->is_global_gnd_gate(const_cast<gate*>(this)->shared_from_this());
+    return m_netlist->is_gnd_gate(const_cast<gate*>(this)->shared_from_this());
 }
 
 std::vector<std::string> gate::get_input_pins() const

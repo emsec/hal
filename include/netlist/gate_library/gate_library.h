@@ -56,8 +56,6 @@ public:
     std::string get_name() const;
 
     void add_gate_type(std::shared_ptr<const gate_type> gt);
-    bool add_global_gnd_gate_type(const std::string& gt_name);
-    bool add_global_vcc_gate_type(const std::string& gt_name);
 
     /**
      * Get all gate types of the library.
@@ -71,14 +69,14 @@ public:
      *
      * @returns vector of all global vcc gate types.
      */
-    const std::map<std::string, std::shared_ptr<const gate_type>>& get_global_vcc_gate_types();
+    const std::map<std::string, std::shared_ptr<const gate_type>>& get_vcc_gate_types();
 
     /**
      * Get all global gnd gate types of the library.
      *
      * @returns vector of all global gnd gate types.
      */
-    const std::map<std::string, std::shared_ptr<const gate_type>>& get_global_gnd_gate_types();
+    const std::map<std::string, std::shared_ptr<const gate_type>>& get_gnd_gate_types();
 
     /**
      * Get the VHDL includes of the library.
@@ -91,12 +89,12 @@ private:
     std::string m_name;
 
     std::map<std::string, std::shared_ptr<const gate_type>> m_gate_type_map;
-    std::map<std::string, std::shared_ptr<const gate_type>> m_global_vcc_gate_types;
-    std::map<std::string, std::shared_ptr<const gate_type>> m_global_gnd_gate_types;
+    std::map<std::string, std::shared_ptr<const gate_type>> m_vcc_gate_types;
+    std::map<std::string, std::shared_ptr<const gate_type>> m_gnd_gate_types;
 
     std::set<std::string> m_gate_type;
-    std::set<std::string> m_global_vcc_gate_type;
-    std::set<std::string> m_global_gnd_gate_type;
+    std::set<std::string> m_vcc_gate_type;
+    std::set<std::string> m_gnd_gate_type;
 
     std::vector<std::string> m_vhdl_includes;
 };

@@ -65,8 +65,8 @@ protected:
                     "            \"VCC\" : [[], [], [\"O\"]]\n"
                     "        },\n"
                     "        \"vhdl_includes\": [],\n"
-                    "        \"global_gnd_nodes\": [\"GND\"],\n"
-                    "        \"global_vcc_nodes\": [\"VCC\"]\n"
+                    "        \"gnd_nodes\": [\"GND\"],\n"
+                    "        \"vcc_nodes\": [\"VCC\"]\n"
                     "    }\n"
                     "}";
         test_lib.close();
@@ -589,8 +589,8 @@ TEST_F(hdl_parser_vhdl_old_test, check_global_gates_implicit){
 
         ASSERT_NE(nl, nullptr);
 
-        ASSERT_NE(nl->get_global_gnd_gates().size(), 0);
-        std::shared_ptr<gate> global_gnd = *nl->get_global_gnd_gates().begin();
+        ASSERT_NE(nl->get_gnd_gates().size(), 0);
+        std::shared_ptr<gate> global_gnd = *nl->get_gnd_gates().begin();
 
         ASSERT_NE(nl->get_gates("INV").size(), 0);
         std::shared_ptr<gate> g = *nl->get_gates("INV").begin();
@@ -628,8 +628,8 @@ TEST_F(hdl_parser_vhdl_old_test, check_global_gates_implicit){
 
         ASSERT_NE(nl, nullptr);
 
-        ASSERT_NE(nl->get_global_vcc_gates().size(), 0);
-        std::shared_ptr<gate> global_vcc = *nl->get_global_vcc_gates().begin();
+        ASSERT_NE(nl->get_vcc_gates().size(), 0);
+        std::shared_ptr<gate> global_vcc = *nl->get_vcc_gates().begin();
 
         ASSERT_NE(nl->get_gates("INV").size(), 0);
         std::shared_ptr<gate> g = *nl->get_gates("INV").begin();
@@ -677,8 +677,8 @@ TEST_F(hdl_parser_vhdl_old_test, check_global_gates_explicit){
 
             ASSERT_NE(nl, nullptr);
 
-            ASSERT_NE(nl->get_global_gnd_gates().size(), 0);
-            std::shared_ptr<gate> global_gnd = *nl->get_global_gnd_gates().begin();
+            ASSERT_NE(nl->get_gnd_gates().size(), 0);
+            std::shared_ptr<gate> global_gnd = *nl->get_gnd_gates().begin();
             EXPECT_EQ(global_gnd->get_name(), "g_gnd_gate");
     }
     {
@@ -710,8 +710,8 @@ TEST_F(hdl_parser_vhdl_old_test, check_global_gates_explicit){
 
         ASSERT_NE(nl, nullptr);
 
-        ASSERT_NE(nl->get_global_vcc_gates().size(), 0);
-        std::shared_ptr<gate> global_vcc = *nl->get_global_vcc_gates().begin();
+        ASSERT_NE(nl->get_vcc_gates().size(), 0);
+        std::shared_ptr<gate> global_vcc = *nl->get_vcc_gates().begin();
         EXPECT_EQ(global_vcc->get_name(), "g_vcc_gate");
     }
 TEST_END

@@ -219,11 +219,11 @@ namespace gate_library_liberty_parser
 
                 if (s.first == "function")
                 {
-                    if (gt->get_base_type() == gate_type::base_type_t::combinatorial)
+                    if (gt->get_base_type() == gate_type::base_type::combinatorial)
                     {
                         gt->add_boolean_function(pin->value, boolean_function::from_string(prepare_string(s.second[0]->value)));
                     }
-                    else if (gt->get_base_type() == gate_type::base_type_t::ff)
+                    else if (gt->get_base_type() == gate_type::base_type::ff)
                     {
                         auto ff_ptr = std::dynamic_pointer_cast<gate_type_ff>(gt);
 
@@ -232,7 +232,7 @@ namespace gate_library_liberty_parser
                             ff_ptr->set_output_pin_inverted(pin->value, true);
                         }
                     }
-                    else if (gt->get_base_type() == gate_type::base_type_t::latch)
+                    else if (gt->get_base_type() == gate_type::base_type::latch)
                     {
                         auto latch_ptr = std::dynamic_pointer_cast<gate_type_latch>(gt);
 

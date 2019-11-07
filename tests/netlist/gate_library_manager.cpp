@@ -51,10 +51,10 @@ protected:
                     "        \"O\"\n"
                     "      ]\n"
                     "    },\n"
-                    "    \"global_gnd_nodes\": [\n"
+                    "    \"gnd_nodes\": [\n"
                     "      \"TEST_GATE\"\n"
                     "    ],\n"
-                    "    \"global_vcc_nodes\": [\n"
+                    "    \"vcc_nodes\": [\n"
                     "      \"TEST_GATE\"\n"
                     "    ],\n"
                     "    \"inout_types\": [\n"
@@ -100,8 +100,8 @@ TEST_F(gate_library_manager_test, check_load_all)
 
     EXPECT_EQ(test_lib->get_name(), "test_lib");
     EXPECT_EQ(*test_lib->get_gate_types(), std::set<std::string>({"TEST_GATE"}));
-    EXPECT_EQ(*test_lib->get_global_vcc_gate_types(), std::set<std::string>({"TEST_GATE"}));
-    EXPECT_EQ(*test_lib->get_global_gnd_gate_types(), std::set<std::string>({"TEST_GATE"}));
+    EXPECT_EQ(*test_lib->get_vcc_gate_types(), std::set<std::string>({"TEST_GATE"}));
+    EXPECT_EQ(*test_lib->get_gnd_gate_types(), std::set<std::string>({"TEST_GATE"}));
     EXPECT_EQ(*test_lib->get_input_pin_types(), std::set<std::string>({"I"}));
     EXPECT_EQ(*test_lib->get_output_pin_types(), std::set<std::string>({"O"}));
     EXPECT_EQ(*test_lib->get_inout_pin_types(), std::set<std::string>({"IO"}));

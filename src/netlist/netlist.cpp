@@ -205,90 +205,90 @@ std::set<std::shared_ptr<gate>> netlist::get_gates(const std::string& gate_type_
     return m_top_module->get_gates(gate_type_filter, name_filter, true);
 }
 
-bool netlist::mark_global_vcc_gate(const std::shared_ptr<gate> gate)
+bool netlist::mark_vcc_gate(const std::shared_ptr<gate> gate)
 {
     if (!is_gate_in_netlist(gate))
     {
         return false;
     }
-    if (m_global_vcc_gates.find(gate) != m_global_vcc_gates.end())
+    if (m_vcc_gates.find(gate) != m_vcc_gates.end())
     {
         log_debug("netlist", "gate '{}' (id = {:08x}) is already registered as global vcc gate in netlist.", gate->get_name(), gate->get_id());
         return true;
     }
-    m_global_vcc_gates.insert(gate);
+    m_vcc_gates.insert(gate);
     netlist_event_handler::notify(netlist_event_handler::event::marked_global_vcc, shared_from_this(), gate->get_id());
     return true;
 }
 
-bool netlist::mark_global_gnd_gate(const std::shared_ptr<gate> gate)
+bool netlist::mark_gnd_gate(const std::shared_ptr<gate> gate)
 {
     if (!is_gate_in_netlist(gate))
     {
         return false;
     }
-    if (m_global_gnd_gates.find(gate) != m_global_gnd_gates.end())
+    if (m_gnd_gates.find(gate) != m_gnd_gates.end())
     {
         log_debug("netlist", "gate '{}' (id = {:08x}) is already registered as global gnd gate in netlist.", gate->get_name(), gate->get_id());
         return true;
     }
-    m_global_gnd_gates.insert(gate);
+    m_gnd_gates.insert(gate);
     netlist_event_handler::notify(netlist_event_handler::event::marked_global_gnd, shared_from_this(), gate->get_id());
     return true;
 }
 
-bool netlist::unmark_global_vcc_gate(const std::shared_ptr<gate> gate)
+bool netlist::unmark_vcc_gate(const std::shared_ptr<gate> gate)
 {
     if (!is_gate_in_netlist(gate))
     {
         return false;
     }
-    auto it = m_global_vcc_gates.find(gate);
-    if (it == m_global_vcc_gates.end())
+    auto it = m_vcc_gates.find(gate);
+    if (it == m_vcc_gates.end())
     {
         log_debug("netlist", "gate '{}' (id = {:08x}) is not registered as a global vcc gate in netlist.", gate->get_name(), gate->get_id());
         return false;
     }
-    m_global_vcc_gates.erase(it);
+    m_vcc_gates.erase(it);
     netlist_event_handler::notify(netlist_event_handler::event::unmarked_global_vcc, shared_from_this(), gate->get_id());
     return true;
 }
 
-bool netlist::unmark_global_gnd_gate(const std::shared_ptr<gate> gate)
+bool netlist::unmark_gnd_gate(const std::shared_ptr<gate> gate)
 {
     if (!is_gate_in_netlist(gate))
     {
         return false;
     }
-    auto it = m_global_gnd_gates.find(gate);
-    if (it == m_global_gnd_gates.end())
+    auto it = m_gnd_gates.find(gate);
+    if (it == m_gnd_gates.end())
     {
         log_debug("netlist", "gate '{}' (id = {:08x}) is not registered as a global gnd gate in netlist.", gate->get_name(), gate->get_id());
         return false;
     }
-    m_global_gnd_gates.erase(it);
+    m_gnd_gates.erase(it);
     netlist_event_handler::notify(netlist_event_handler::event::unmarked_global_gnd, shared_from_this(), gate->get_id());
     return true;
 }
 
-bool netlist::is_global_vcc_gate(const std::shared_ptr<gate> gate) const
+bool netlist::is_vcc_gate(const std::shared_ptr<gate> gate) const
 {
-    return (m_global_vcc_gates.find(gate) != m_global_vcc_gates.end());
+    return (m_vcc_gates.find(gate) != m_vcc_gates.end());
 }
 
-bool netlist::is_global_gnd_gate(const std::shared_ptr<gate> gate) const
+bool netlist::is_gnd_gate(const std::shared_ptr<gate> gate) const
 {
-    return (m_global_gnd_gates.find(gate) != m_global_gnd_gates.end());
+    return (m_gnd_gates.find(gate) != m_gnd_gates.end());
 }
 
-std::set<std::shared_ptr<gate>> netlist::get_global_vcc_gates() const
+std::set<std::shared_ptr<gate>> netlist::get_vcc_gates() const
 {
-    return m_global_vcc_gates;
+    return m_vcc_gates;
 }
 
-std::set<std::shared_ptr<gate>> netlist::get_global_gnd_gates() const
+std::set<std::shared_ptr<gate>> netlist::get_gnd_gates() const
 {
-    return m_global_gnd_gates;
+    return m_gnd_gates;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////

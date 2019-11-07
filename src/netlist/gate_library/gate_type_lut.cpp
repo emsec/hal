@@ -2,7 +2,7 @@
 
 gate_type_lut::gate_type_lut(const std::string& name) : gate_type(name)
 {
-    m_base_type = base_type_t::lut;
+    m_base_type = base_type::lut;
     m_ascending = true;
 }
 

@@ -34,10 +34,10 @@
     },
     "library_name": "SYNOPSYS_NAND_NOR",
     "vhdl_includes": [],
-    "global_gnd_nodes": [
+    "gnd_nodes": [
       "GLOBAL_GND"
     ],
-    "global_vcc_nodes": [
+    "vcc_nodes": [
       "GLOBAL_VCC"
     ]
   }

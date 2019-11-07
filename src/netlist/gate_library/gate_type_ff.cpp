@@ -2,7 +2,7 @@
 
 gate_type_ff::gate_type_ff(const std::string& name) : gate_type(name)
 {
-    m_base_type = base_type_t::ff;
+    m_base_type = base_type::ff;
 }
 
 bool gate_type_ff::doCompare(const gate_type& other) const

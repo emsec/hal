@@ -127,42 +127,42 @@ public:
      *
      * @returns True on success.
      */
-    bool mark_global_vcc_gate();
+    bool mark_vcc_gate();
 
     /**
      * Mark this gate as a global gnd gate.
      *
      * @returns True on success.
      */
-    bool mark_global_gnd_gate();
+    bool mark_gnd_gate();
 
     /**
      * Unmark this gate as a global vcc gate.
      *
      * @returns True on success.
      */
-    bool unmark_global_vcc_gate();
+    bool unmark_vcc_gate();
 
     /**
      * Unmark this gate as a global gnd gate.
      *
      * @returns True on success.
      */
-    bool unmark_global_gnd_gate();
+    bool unmark_gnd_gate();
 
     /**
      * Checks whether this gate is a global vcc gate.
      *
      * @returns True if the gate is a global vcc gate.
      */
-    bool is_global_vcc_gate() const;
+    bool is_vcc_gate() const;
 
     /**
      * Checks whether this gate is a global gnd gate.
      *
      * @returns True if the gate is a global gnd gate.
      */
-    bool is_global_gnd_gate() const;
+    bool is_gnd_gate() const;
 
     /*
      *      pin specific functions

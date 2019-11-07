@@ -125,8 +125,8 @@ protected:
                     "            \"VCC\" : [[], [], [\"O\"]]\n"
                     "        },\n"
                     "        \"vhdl_includes\": [],\n"
-                    "        \"global_gnd_nodes\": [\"GND\"],\n"
-                    "        \"global_vcc_nodes\": [\"VCC\"]\n"
+                    "        \"gnd_nodes\": [\"GND\"],\n"
+                    "        \"vcc_nodes\": [\"VCC\"]\n"
                     "    }\n"
                     "}";
         test_lib.close();
@@ -187,8 +187,8 @@ TEST_F(hdl_parser_verilog_test, check_temporary)
             nl->get_gate_by_id(MIN_GATE_ID+1)->set_data("generic","my_key","string","test_test");
             nl->get_gate_by_id(MIN_GATE_ID+1)->set_data("generic","my_second_key","string","test_2");
 
-            nl->mark_global_gnd_gate(nl->get_gate_by_id(MIN_GATE_ID+1));
-            nl->mark_global_vcc_gate(nl->get_gate_by_id(MIN_GATE_ID+2));
+            nl->mark_gnd_gate(nl->get_gate_by_id(MIN_GATE_ID+1));
+            nl->mark_vcc_gate(nl->get_gate_by_id(MIN_GATE_ID+2));
 
             // Mark global output nets
             nl->mark_global_output_net(nl->get_net_by_id(MIN_NET_ID+400));

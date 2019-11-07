@@ -285,7 +285,7 @@ public:
      * @param[in] gate - The new gate.
      * @returns True on success.
      */
-    bool mark_global_vcc_gate(const std::shared_ptr<gate> gate);
+    bool mark_vcc_gate(const std::shared_ptr<gate> gate);
 
     /**
      * Mark a gate as a global gnd gate.
@@ -293,7 +293,7 @@ public:
      * @param[in] gate - The new gate.
      * @returns True on success.
      */
-    bool mark_global_gnd_gate(const std::shared_ptr<gate> gate);
+    bool mark_gnd_gate(const std::shared_ptr<gate> gate);
 
     /**
      * Unmark a global vcc gate.
@@ -301,7 +301,7 @@ public:
      * @param[in] gate - The new gate.
      * @returns True on success.
      */
-    bool unmark_global_vcc_gate(const std::shared_ptr<gate> gate);
+    bool unmark_vcc_gate(const std::shared_ptr<gate> gate);
 
     /**
      * Unmark a global gnd gate.
@@ -309,7 +309,7 @@ public:
      * @param[in] gate - The new gate.
      * @returns True on success.
      */
-    bool unmark_global_gnd_gate(const std::shared_ptr<gate> gate);
+    bool unmark_gnd_gate(const std::shared_ptr<gate> gate);
 
     /**
      * Checks whether a gate is a global vcc gate.
@@ -317,7 +317,7 @@ public:
      * @param[in] gate - The gate to check.
      * @returns True if the gate is a global vcc gate.
      */
-    bool is_global_vcc_gate(const std::shared_ptr<gate> gate) const;
+    bool is_vcc_gate(const std::shared_ptr<gate> gate) const;
 
     /**
      * Checks whether a gate is a global gnd gate.
@@ -325,21 +325,21 @@ public:
      * @param[in] gate - The gate to check.
      * @returns True if the gate is a global gnd gate.
      */
-    bool is_global_gnd_gate(const std::shared_ptr<gate> gate) const;
+    bool is_gnd_gate(const std::shared_ptr<gate> gate) const;
 
     /**
      * Get all global vcc gates.
      *
      * @returns A set of gates.
      */
-    std::set<std::shared_ptr<gate>> get_global_vcc_gates() const;
+    std::set<std::shared_ptr<gate>> get_vcc_gates() const;
 
     /**
      * Get all global gnd gates.
      *
      * @returns A set of gates.
      */
-    std::set<std::shared_ptr<gate>> get_global_gnd_gates() const;
+    std::set<std::shared_ptr<gate>> get_gnd_gates() const;
 
     /*
      * ################################################################
@@ -512,9 +512,9 @@ private:
 
     std::set<std::shared_ptr<net>> m_global_output_nets;
 
-    std::set<std::shared_ptr<gate>> m_global_gnd_gates;
+    std::set<std::shared_ptr<gate>> m_gnd_gates;
 
-    std::set<std::shared_ptr<gate>> m_global_vcc_gates;
+    std::set<std::shared_ptr<gate>> m_vcc_gates;
 };
 
 #endif /* __HAL_NETLIST_H__ */

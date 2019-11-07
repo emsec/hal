@@ -809,34 +809,34 @@ TEST_F(gate_test, check_get_predecessor)
 /**
  * Testing the handling of global gnd/vcc gates
  *
- * Functions: mark_global_vcc_gate, mark_global_gnd_gate,
- *            unmark_global_vcc_gate, unmark_global_gnd_gate,
- *            is_global_vcc_gate, is_global_gnd_gate
+ * Functions: mark_vcc_gate, mark_gnd_gate,
+ *            unmark_vcc_gate, unmark_gnd_gate,
+ *            is_vcc_gate, is_gnd_gate
  */
 TEST_F(gate_test, check_gnd_vcc_gate_handling){TEST_START{// Mark and unmark a global vcc gate
                                                           std::shared_ptr<netlist> nl = create_empty_netlist();
 std::shared_ptr<gate> vcc_gate = nl->create_gate(MIN_GATE_ID + 0, "VCC", "vcc_gate");
 
-vcc_gate->mark_global_vcc_gate();
-EXPECT_TRUE(vcc_gate->is_global_vcc_gate());
-EXPECT_TRUE(nl->is_global_vcc_gate(vcc_gate));
+vcc_gate->mark_vcc_gate();
+EXPECT_TRUE(vcc_gate->is_vcc_gate());
+EXPECT_TRUE(nl->is_vcc_gate(vcc_gate));
 
-vcc_gate->unmark_global_vcc_gate();
-EXPECT_FALSE(vcc_gate->is_global_vcc_gate());
-EXPECT_FALSE(nl->is_global_vcc_gate(vcc_gate));
+vcc_gate->unmark_vcc_gate();
+EXPECT_FALSE(vcc_gate->is_vcc_gate());
+EXPECT_FALSE(nl->is_vcc_gate(vcc_gate));
 }
 {
     // Mark and unmark a global gnd gate
     std::shared_ptr<netlist> nl    = create_empty_netlist();
     std::shared_ptr<gate> gnd_gate = nl->create_gate(MIN_GATE_ID + 0, "GND", "gnd_gate");
 
-    gnd_gate->mark_global_gnd_gate();
-    EXPECT_TRUE(gnd_gate->is_global_gnd_gate());
-    EXPECT_TRUE(nl->is_global_gnd_gate(gnd_gate));
+    gnd_gate->mark_gnd_gate();
+    EXPECT_TRUE(gnd_gate->is_gnd_gate());
+    EXPECT_TRUE(nl->is_gnd_gate(gnd_gate));
 
-    gnd_gate->unmark_global_gnd_gate();
-    EXPECT_FALSE(gnd_gate->is_global_gnd_gate());
-    EXPECT_FALSE(nl->is_global_gnd_gate(gnd_gate));
+    gnd_gate->unmark_gnd_gate();
+    EXPECT_FALSE(gnd_gate->is_gnd_gate());
+    EXPECT_FALSE(nl->is_gnd_gate(gnd_gate));
 }
 TEST_END
 }

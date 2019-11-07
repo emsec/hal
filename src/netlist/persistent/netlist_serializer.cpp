@@ -150,11 +150,11 @@ namespace netlist_serializer
                 for (const auto& gate : sorted)
                 {
                     gates.PushBack(serialize(gate, allocator), allocator);
-                    if (nl->is_global_gnd_gate(gate))
+                    if (nl->is_gnd_gate(gate))
                     {
                         global_gnds.PushBack(gate->get_id(), allocator);
                     }
-                    if (nl->is_global_vcc_gate(gate))
+                    if (nl->is_vcc_gate(gate))
                     {
                         global_vccs.PushBack(gate->get_id(), allocator);
                     }
@@ -337,13 +337,13 @@ namespace netlist_serializer
             assert_availablility("global_vcc");
             for (const auto& gate_node : root["global_vcc"].GetArray())
             {
-                nl->mark_global_vcc_gate(nl->get_gate_by_id(gate_node.GetUint()));
+                nl->mark_vcc_gate(nl->get_gate_by_id(gate_node.GetUint()));
             }
 
             assert_availablility("global_gnd");
             for (const auto& gate_node : root["global_gnd"].GetArray())
             {
-                nl->mark_global_gnd_gate(nl->get_gate_by_id(gate_node.GetUint()));
+                nl->mark_gnd_gate(nl->get_gate_by_id(gate_node.GetUint()));
             }
 
             assert_availablility("nets");

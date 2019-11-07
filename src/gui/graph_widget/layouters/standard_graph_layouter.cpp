@@ -301,7 +301,7 @@ void standard_graph_layouter::add(const QSet<u32> modules, const QSet<u32> gates
 }
 
 void standard_graph_layouter::remove(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets)
-{   
+{
 //    m_modules -= modules;
 //    m_gates -= gates;
 //    m_nets -= nets;
@@ -1130,8 +1130,8 @@ void standard_graph_layouter::draw_nets()
 
         if (n->get_src().gate)
         {
-            bool is_gnd = g_netlist->get_global_gnd_gates().find(n->get_src().gate) != g_netlist->get_global_gnd_gates().end();
-            bool is_vcc = g_netlist->get_global_vcc_gates().find(n->get_src().gate) != g_netlist->get_global_vcc_gates().end();
+            bool is_gnd = g_netlist->get_gnd_gates().find(n->get_src().gate) != g_netlist->get_gnd_gates().end();
+            bool is_vcc = g_netlist->get_vcc_gates().find(n->get_src().gate) != g_netlist->get_vcc_gates().end();
 
             if (is_gnd || is_vcc)
             {

@@ -21,35 +21,13 @@ void gate_library::add_gate_type(std::shared_ptr<const gate_type> gt)
 
         if (bf.is_constant_one())
         {
-            m_global_vcc_gate_types.emplace(gt->get_name(), gt);
+            m_vcc_gate_types.emplace(gt->get_name(), gt);
         }
         else if (bf.is_constant_zero())
         {
-            m_global_gnd_gate_types.emplace(gt->get_name(), gt);
+            m_gnd_gate_types.emplace(gt->get_name(), gt);
         }
     }
-}
-
-bool gate_library::add_global_gnd_gate_type(const std::string& gt_name)
-{
-    if (m_gate_type_map.find(gt_name) != m_gate_type_map.end())
-    {
-        m_global_gnd_gate_types.emplace(gt_name, m_gate_type_map.at(gt_name));
-        return true;
-    }
-
-    return false;
-}
-
-bool gate_library::add_global_vcc_gate_type(const std::string& gt_name)
-{
-    if (m_gate_type_map.find(gt_name) != m_gate_type_map.end())
-    {
-        m_global_vcc_gate_types.emplace(gt_name, m_gate_type_map.at(gt_name));
-        return true;
-    }
-
-    return false;
 }
 
 const std::map<std::string, std::shared_ptr<const gate_type>>& gate_library::get_gate_types()
@@ -57,14 +35,14 @@ const std::map<std::string, std::shared_ptr<const gate_type>>& gate_library::get
     return m_gate_type_map;
 }
 
-const std::map<std::string, std::shared_ptr<const gate_type>>& gate_library::get_global_vcc_gate_types()
+const std::map<std::string, std::shared_ptr<const gate_type>>& gate_library::get_vcc_gate_types()
 {
-    return m_global_vcc_gate_types;
+    return m_vcc_gate_types;
 }
 
-const std::map<std::string, std::shared_ptr<const gate_type>>& gate_library::get_global_gnd_gate_types()
+const std::map<std::string, std::shared_ptr<const gate_type>>& gate_library::get_gnd_gate_types()
 {
-    return m_global_gnd_gate_types;
+    return m_gnd_gate_types;
 }
 
 std::vector<std::string>* gate_library::get_vhdl_includes()

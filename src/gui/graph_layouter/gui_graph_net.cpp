@@ -61,8 +61,8 @@ gui_graph_net::gui_graph_net(std::shared_ptr<net> net, QGraphicsScene* scene, ol
     }
 
     //checking for gnd/vcc net
-    auto gnd_gates = net->get_netlist()->get_global_gnd_gates();
-    auto vcc_gates = net->get_netlist()->get_global_vcc_gates();
+    auto gnd_gates = net->get_netlist()->get_gnd_gates();
+    auto vcc_gates = net->get_netlist()->get_vcc_gates();
     for (auto g : vcc_gates)
     {
         if (src_gate == g)

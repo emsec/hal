@@ -89,8 +89,8 @@ bool netlist_internal_manager::delete_gate(std::shared_ptr<gate> gate)
     }
 
     // check global_gnd and global_vcc gates
-    m_netlist->unmark_global_gnd_gate(gate);
-    m_netlist->unmark_global_vcc_gate(gate);
+    m_netlist->unmark_gnd_gate(gate);
+    m_netlist->unmark_vcc_gate(gate);
 
     // remove gate from modules
     gate->m_module->m_gates_map.erase(gate->m_module->m_gates_map.find(gate->get_id()));

@@ -6,7 +6,7 @@ library (EXAMPLE_GATE_LIBRARY) {
         }
         pin(O) {
             direction: output;
-            function: "";
+            function: "I";
         }
     }
 
@@ -16,7 +16,7 @@ library (EXAMPLE_GATE_LIBRARY) {
         }
         pin(O) {
             direction: output;
-            function: "";
+            function: "!I";
         }
     }
 
@@ -32,7 +32,7 @@ library (EXAMPLE_GATE_LIBRARY) {
         }
         pin(O) {
             direction: output;
-            function: "";
+            function: "(!S & I0) | (S & I1)";
         }
     }
 
@@ -45,7 +45,7 @@ library (EXAMPLE_GATE_LIBRARY) {
         }
         pin(O) {
             direction: output;
-            function: "";
+            function: "I0 ^ I1";
         }
     }
 
@@ -58,7 +58,7 @@ library (EXAMPLE_GATE_LIBRARY) {
         }
         pin(O) {
             direction: output;
-            function: "";
+            function: "I0 & I1";
         }
     }
 
@@ -74,7 +74,7 @@ library (EXAMPLE_GATE_LIBRARY) {
         }
         pin(O) {
             direction: output;
-            function: "";
+            function: "I0 & I1 & I2";
         }
     }
 
@@ -93,7 +93,7 @@ library (EXAMPLE_GATE_LIBRARY) {
         }
         pin(O) {
             direction: output;
-            function: "";
+            function: "I0 & I1 & I2 & I3";
         }
     }
 
@@ -115,7 +115,7 @@ library (EXAMPLE_GATE_LIBRARY) {
         }
         pin(O) {
             direction: output;
-            function: "";
+            function: "I0 & I1 & I2 & I3 & I4";
         }
     }
 
@@ -140,7 +140,7 @@ library (EXAMPLE_GATE_LIBRARY) {
         }
         pin(O) {
             direction: output;
-            function: "";
+            function: "I0 & I1 & I2 & I3 & I4 & I5";
         }
     }
 
@@ -168,7 +168,7 @@ library (EXAMPLE_GATE_LIBRARY) {
         }
         pin(O) {
             direction: output;
-            function: "";
+            function: "I0 & I1 & I2 & I3 & I4 & I5 & I6";
         }
     }
 
@@ -199,7 +199,7 @@ library (EXAMPLE_GATE_LIBRARY) {
         }
         pin(O) {
             direction: output;
-            function: "";
+            function: "I0 & I1 & I2 & I3 & I4 & I5 & I6 & I7";
         }
     }
 
@@ -212,7 +212,7 @@ library (EXAMPLE_GATE_LIBRARY) {
         }
         pin(O) {
             direction: output;
-            function: "";
+            function: "I0 | I1";
         }
     }
 
@@ -228,7 +228,7 @@ library (EXAMPLE_GATE_LIBRARY) {
         }
         pin(O) {
             direction: output;
-            function: "";
+            function: "I0 | I1 | I2";
         }
     }
 
@@ -247,7 +247,7 @@ library (EXAMPLE_GATE_LIBRARY) {
         }
         pin(O) {
             direction: output;
-            function: "";
+            function: "I0 | I1 | I2 | I3";
         }
     }
 
@@ -269,7 +269,7 @@ library (EXAMPLE_GATE_LIBRARY) {
         }
         pin(O) {
             direction: output;
-            function: "";
+            function: "I0 | I1 | I2 | I3 | I4";
         }
     }
 
@@ -294,7 +294,7 @@ library (EXAMPLE_GATE_LIBRARY) {
         }
         pin(O) {
             direction: output;
-            function: "";
+            function: "I0 | I1 | I2 | I3 | I4 | I5";
         }
     }
 
@@ -322,7 +322,7 @@ library (EXAMPLE_GATE_LIBRARY) {
         }
         pin(O) {
             direction: output;
-            function: "";
+            function: "I0 | I1 | I2 | I3 | I4 | I5 | I6";
         }
     }
 
@@ -353,7 +353,7 @@ library (EXAMPLE_GATE_LIBRARY) {
         }
         pin(O) {
             direction: output;
-            function: "";
+            function: "I0 | I1 | I2 | I3 | I4 | I5 | I6 | I7";
         }
     }
 
@@ -496,10 +496,6 @@ library (EXAMPLE_GATE_LIBRARY) {
         ff ("IQ" , "IQN") {
             next_state          : "D";
             clocked_on          : "C";
-            preset              : "!SN";
-            clear               : "!RN";
-            clear_preset_var1   : L;
-            clear_preset_var2   : L;
             pin(C) {
                 direction: input;
                 clock: true;
@@ -521,10 +517,7 @@ library (EXAMPLE_GATE_LIBRARY) {
         ff ("IQ" , "IQN") {
             next_state          : "D";
             clocked_on          : "C";
-            preset              : "!SN";
-            clear               : "!RN";
-            clear_preset_var1   : L;
-            clear_preset_var2   : L;
+            preset              : "S";
             pin(C) {
                 direction: input;
                 clock: true;
@@ -549,10 +542,7 @@ library (EXAMPLE_GATE_LIBRARY) {
         ff ("IQ" , "IQN") {
             next_state          : "D";
             clocked_on          : "C";
-            preset              : "!SN";
-            clear               : "!RN";
-            clear_preset_var1   : L;
-            clear_preset_var2   : L;
+            clear               : "R";
         }
         pin(C) {
             direction: input;
@@ -577,8 +567,8 @@ library (EXAMPLE_GATE_LIBRARY) {
         ff ("IQ" , "IQN") {
             next_state          : "D";
             clocked_on          : "C";
-            preset              : "!SN";
-            clear               : "!RN";
+            preset              : "S";
+            clear               : "R";
             clear_preset_var1   : L;
             clear_preset_var2   : L;
         }
@@ -607,14 +597,14 @@ library (EXAMPLE_GATE_LIBRARY) {
     cell(GND) {
         pin(O) {
             direction: output;
-            function: "";
+            function: "0";
         }
     }
 
     cell(VCC) {
         pin(O) {
             direction: output;
-            function: "";
+            function: "1";
         }
     }
 

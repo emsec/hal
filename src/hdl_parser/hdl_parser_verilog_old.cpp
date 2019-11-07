@@ -111,11 +111,11 @@ std::shared_ptr<netlist> hdl_parser_verilog_old::parse(const std::string& gate_l
     std::map<std::string, std::shared_ptr<net>>::iterator it;
     if (((it = m_net.find("1'h0")) != m_net.end()) || ((it = m_net.find("1'b0")) != m_net.end()))
     {
-        auto gnd_type   = m_netlist->get_gate_library()->get_global_gnd_gate_types().begin()->second;
+        auto gnd_type   = m_netlist->get_gate_library()->get_gnd_gate_types().begin()->second;
         auto output_pin = gnd_type->get_output_pins().at(0);
         auto gnd        = m_netlist->create_gate(m_netlist->get_unique_gate_id(), gnd_type, "global_gnd");
 
-        if (!m_netlist->mark_global_gnd_gate(gnd))
+        if (!m_netlist->mark_gnd_gate(gnd))
         {
             return nullptr;
         }
@@ -129,11 +129,11 @@ std::shared_ptr<netlist> hdl_parser_verilog_old::parse(const std::string& gate_l
     }
     if (((it = m_net.find("1'h1")) != m_net.end()) || ((it = m_net.find("1'b1")) != m_net.end()))
     {
-        auto vcc_type   = m_netlist->get_gate_library()->get_global_vcc_gate_types().begin()->second;
+        auto vcc_type   = m_netlist->get_gate_library()->get_vcc_gate_types().begin()->second;
         auto output_pin = vcc_type->get_output_pins().at(0);
         auto vcc        = m_netlist->create_gate(m_netlist->get_unique_gate_id(), vcc_type, "global_vcc");
 
-        if (!m_netlist->mark_global_vcc_gate(vcc))
+        if (!m_netlist->mark_vcc_gate(vcc))
         {
             return nullptr;
         }
@@ -383,22 +383,22 @@ bool hdl_parser_verilog_old::parse_instance(const std::string& instance, const s
         return false;
     }
 
-    auto global_vcc_gate_types = m_netlist->get_gate_library()->get_global_vcc_gate_types();
+    auto vcc_gate_types = m_netlist->get_gate_library()->get_vcc_gate_types();
 
-    if (global_vcc_gate_types.find(type) != global_vcc_gate_types.end())
+    if (vcc_gate_types.find(type) != vcc_gate_types.end())
     {
-        if (!m_netlist->mark_global_vcc_gate(new_gate))
+        if (!m_netlist->mark_vcc_gate(new_gate))
         {
             log_error("hdl_parser", "cannot parse instance '{}' (line: {}).", name, line);
             return false;
         }
     }
 
-    auto global_gnd_gate_types = m_netlist->get_gate_library()->get_global_gnd_gate_types();
+    auto gnd_gate_types = m_netlist->get_gate_library()->get_gnd_gate_types();
 
-    if (global_gnd_gate_types.find(type) != global_gnd_gate_types.end())
+    if (gnd_gate_types.find(type) != gnd_gate_types.end())
     {
-        if (!m_netlist->mark_global_gnd_gate(new_gate))
+        if (!m_netlist->mark_gnd_gate(new_gate))
         {
             log_error("hdl_parser", "cannot parse instance '{}' (line: {}).", name, line);
             return false;

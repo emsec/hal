@@ -54994,11 +54994,11 @@
         "SHO"
       ]
     },
-    "global_gnd_nodes": [
+    "gnd_nodes": [
       "GLOBAL_GND",
       "GND"
     ],
-    "global_vcc_nodes": [
+    "vcc_nodes": [
       "GLOBAL_VCC",
       "VCC"
     ],

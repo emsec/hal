@@ -138,7 +138,7 @@
         "TINV_X1" : [["EN", "I"], [], ["ZN"]]
       },
       "vhdl_includes": [],
-      "global_gnd_nodes": ["LOGIC0_X1"],
-      "global_vcc_nodes": ["LOGIC1_X1"]
+      "gnd_nodes": ["LOGIC0_X1"],
+      "vcc_nodes": ["LOGIC1_X1"]
   }
 }
