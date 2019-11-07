@@ -13,12 +13,18 @@
 #include "gui/gui_globals.h"
 
 #include "qmath.h"
-#include <QSet>
-#include <QTime>
 
-#include <QDebug>
+template<typename T1, typename T2>
+static void store_max(QMap<T1, T2>& map, T1 key, T2 value)
+{
+    if (map.contains(key))
+        if (map.value(key) >= value)
+            return;
 
-static bool operator< (const QPoint &p1, const QPoint &p2)
+    map.insert(key, value);
+}
+
+static bool operator< (const QPoint& p1, const QPoint& p2)
 {
     if (p1.x() < p2.x())
         return true;
@@ -60,7 +66,7 @@ const QMap<QPoint, hal::node> graph_layouter::position_to_node_map() const
     return m_position_to_node_map;
 }
 
-void graph_layouter::set_node_position(const hal::node &n, const QPoint &p)
+void graph_layouter::set_node_position(const hal::node& n, const QPoint& p)
 {
     if (m_node_to_position_map.contains(n))
     {
@@ -74,7 +80,7 @@ void graph_layouter::set_node_position(const hal::node &n, const QPoint &p)
     //manual relayout call needed
 }
 
-void graph_layouter::remove_node_from_maps(const hal::node &n)
+void graph_layouter::remove_node_from_maps(const hal::node& n)
 {
     if (m_node_to_position_map.contains(n))
     {
@@ -103,6 +109,49 @@ void graph_layouter::layout()
     m_scene->move_nets_to_background();
     m_scene->setSceneRect(m_scene->itemsBoundingRect());
     m_scene->handle_extern_selection_changed(nullptr);
+}
+
+void graph_layouter::clear_layout_data()
+{
+    m_boxes.clear();
+
+    for (const graph_layouter::road* r : m_h_roads)
+        delete r;
+    m_h_roads.clear();
+
+    for (const graph_layouter::road* r : m_v_roads)
+        delete r;
+    m_v_roads.clear();
+
+    for (const graph_layouter::junction* j : m_junctions)
+        delete j;
+    m_junctions.clear();
+
+    m_max_node_width_for_x.clear();
+    m_max_node_height_for_y.clear();
+
+    m_max_v_channel_lanes_for_x.clear();
+    m_max_h_channel_lanes_for_y.clear();
+
+    m_max_v_channel_left_spacing_for_x.clear();
+    m_max_v_channel_right_spacing_for_x.clear();
+    m_max_h_channel_top_spacing_for_y.clear();
+    m_max_h_channel_bottom_spacing_for_y.clear();
+
+    m_max_v_channel_width_for_x.clear();
+    m_max_h_channel_height_for_y.clear();
+
+    m_node_offset_for_x.clear();
+    m_node_offset_for_y.clear();
+
+    m_max_left_junction_spacing_for_x.clear();
+    m_max_right_junction_spacing_for_x.clear();
+
+    m_max_top_junction_spacing_for_y.clear();
+    m_max_bottom_junction_spacing_for_y.clear();
+
+    m_max_left_io_padding_for_channel_x.clear();
+    m_max_right_io_padding_for_channel_x.clear();
 }
 
 void graph_layouter::create_boxes()
@@ -137,9 +186,12 @@ void graph_layouter::calculate_nets()
 
         for (node_box& box : m_boxes)
             if (box.node == node)
+            {
                 src_box = &box;
+                break;
+            }
 
-        if (!src_box)
+        if (!src_box) // ???
             continue;
 
         used_paths used;
@@ -151,13 +203,16 @@ void graph_layouter::calculate_nets()
             node_box* dst_box = nullptr;
 
             if (!m_context->node_for_gate(node, dst.get_gate()->get_id()))
-                return;
+                continue;
 
             for (node_box& box : m_boxes)
                 if (box.node == node)
+                {
                     dst_box = &box;
+                    break;
+                }
 
-            if (!dst_box)
+            if (!dst_box) // ???
                 continue;
 
             // ROAD BASED DISTANCE (x_distance - 1)
@@ -426,26 +481,79 @@ void graph_layouter::find_max_channel_lanes()
     }
 }
 
+void graph_layouter::reset_roads_and_junctions()
+{
+    for (road* r : m_h_roads)
+        r->lanes = 0;
+
+    for (road* r : m_v_roads)
+        r->lanes = 0;
+
+    for (junction* j : m_junctions)
+    {
+        // LEFT
+        unsigned int combined_lane_changes = j->close_left_lane_changes + j->far_left_lane_changes;
+        qreal spacing = 0;
+
+        if (combined_lane_changes)
+            spacing = (combined_lane_changes - 1) * lane_spacing + junction_padding;
+
+        store_max(m_max_left_junction_spacing_for_x, j->x, spacing);
+
+        // RIGHT
+        combined_lane_changes = j->close_right_lane_changes + j->far_right_lane_changes;
+        spacing = 0;
+
+        if (combined_lane_changes)
+            spacing = (combined_lane_changes - 1) * lane_spacing + junction_padding;
+
+        store_max(m_max_right_junction_spacing_for_x, j->x, spacing);
+
+        // TOP
+        combined_lane_changes = j->close_top_lane_changes + j->far_top_lane_changes;
+        spacing = 0;
+
+        if (combined_lane_changes)
+            spacing = (combined_lane_changes - 1) * lane_spacing + junction_padding;
+
+        store_max(m_max_top_junction_spacing_for_y, j->y, spacing);
+
+        // BOTTOM
+        combined_lane_changes = j->close_bottom_lane_changes + j->far_bottom_lane_changes;
+        spacing = 0;
+
+        if (combined_lane_changes)
+            spacing = (combined_lane_changes - 1) * lane_spacing + junction_padding;
+
+        store_max(m_max_bottom_junction_spacing_for_y, j->y, spacing);
+
+        j->h_lanes = 0;
+        j->v_lanes = 0;
+
+        j->close_left_lane_changes   = 0;
+        j->close_right_lane_changes  = 0;
+        j->close_top_lane_changes    = 0;
+        j->close_bottom_lane_changes = 0;
+
+        j->far_left_lane_changes   = 0;
+        j->far_right_lane_changes  = 0;
+        j->far_top_lane_changes    = 0;
+        j->far_bottom_lane_changes = 0;
+    }
+}
+
 void graph_layouter::calculate_max_channel_dimensions()
 {
     auto i = m_max_v_channel_lanes_for_x.constBegin();
     while (i != m_max_v_channel_lanes_for_x.constEnd())
     {
-        // LEFT
-        qreal spacing = std::max(v_road_padding + m_max_left_io_padding_for_channel_x.value(i.key()), m_max_left_junction_spacing_for_x.value(i.key()));
-        m_max_v_channel_left_spacing_for_x.insert(i.key(), spacing);
+        qreal left_spacing = std::max(v_road_padding + m_max_left_io_padding_for_channel_x.value(i.key()), m_max_left_junction_spacing_for_x.value(i.key()));
+        m_max_v_channel_left_spacing_for_x.insert(i.key(), left_spacing);
 
-        // RIGHT
-        spacing = std::max(v_road_padding + m_max_right_io_padding_for_channel_x.value(i.key()), m_max_right_junction_spacing_for_x.value(i.key()));
-        m_max_v_channel_right_spacing_for_x.insert(i.key(), spacing);
+        qreal right_spacing = std::max(v_road_padding + m_max_right_io_padding_for_channel_x.value(i.key()), m_max_right_junction_spacing_for_x.value(i.key()));
+        m_max_v_channel_right_spacing_for_x.insert(i.key(), right_spacing);
 
-        ++i;
-    }
-
-    i = m_max_v_channel_lanes_for_x.constBegin();
-    while (i != m_max_v_channel_lanes_for_x.constEnd())
-    {
-        qreal width = m_max_v_channel_left_spacing_for_x.value(i.key()) + m_max_v_channel_right_spacing_for_x.value(i.key());
+        qreal width = left_spacing + right_spacing;
 
         if (i.value())
             width += (i.value() - 1) * lane_spacing;
@@ -458,21 +566,13 @@ void graph_layouter::calculate_max_channel_dimensions()
     i = m_max_h_channel_lanes_for_y.constBegin();
     while (i != m_max_h_channel_lanes_for_y.constEnd())
     {
-        // TOP
-        qreal spacing = std::max(h_road_padding, m_max_top_junction_spacing_for_y.value(i.key()));
-        m_max_h_channel_top_spacing_for_y.insert(i.key(), spacing);
+        qreal top_spacing = std::max(h_road_padding, m_max_top_junction_spacing_for_y.value(i.key()));
+        m_max_h_channel_top_spacing_for_y.insert(i.key(), top_spacing);
 
-        // BOTTOM
-        spacing = std::max(h_road_padding, m_max_bottom_junction_spacing_for_y.value(i.key()));
-        m_max_h_channel_bottom_spacing_for_y.insert(i.key(), spacing);
+        qreal bottom_spacing = std::max(h_road_padding, m_max_bottom_junction_spacing_for_y.value(i.key()));
+        m_max_h_channel_bottom_spacing_for_y.insert(i.key(), bottom_spacing);
 
-        ++i;
-    }
-
-    i = m_max_h_channel_lanes_for_y.constBegin();
-    while (i != m_max_h_channel_lanes_for_y.constEnd())
-    {
-        qreal height = m_max_h_channel_top_spacing_for_y.value(i.key()) + m_max_h_channel_bottom_spacing_for_y.value(i.key());
+        qreal height = top_spacing + bottom_spacing;
 
         if (i.value())
             height += (i.value() - 1) * lane_spacing;
@@ -485,10 +585,10 @@ void graph_layouter::calculate_max_channel_dimensions()
 
 void graph_layouter::calculate_gate_offsets()
 {
-    // USE METHOD TO ACCESS MAP AND RETURN MINIMUM VALUE IF NO VALUE IS FOUND
     int min_x = 0;
     int max_x = 0;
 
+    int min_y = 0;
     int max_y = 0;
 
     for (node_box& box : m_boxes)
@@ -498,11 +598,14 @@ void graph_layouter::calculate_gate_offsets()
         else if (box.x > max_x)
             max_x = box.x;
 
-        if (box.y > max_y)
+        if (box.y < min_y)
+            min_y = box.y;
+        else if (box.y > max_y)
             max_y = box.y;
     }
 
     m_node_offset_for_x.insert(0, 0);
+    m_node_offset_for_y.insert(0, 0);
 
     if (max_x)
         for (int i = 1; i <= max_x; ++i)
@@ -518,19 +621,17 @@ void graph_layouter::calculate_gate_offsets()
             m_node_offset_for_x.insert(i, offset);
         }
 
-    m_node_offset_for_y.insert(0, 0);
-
     if (max_y)
         for (int i = 1; i <= max_y; ++i)
         {
-            qreal channel_height = 0;
+            qreal offset = m_node_offset_for_y.value(i - 1) + m_max_node_height_for_y.value(i - 1) + std::max(m_max_h_channel_height_for_y.value(i), minimum_h_channel_height);
+            m_node_offset_for_y.insert(i, offset);
+        }
 
-            if (m_max_h_channel_height_for_y.contains(i))
-                channel_height = m_max_h_channel_height_for_y.value(i);
-            else
-                channel_height = minimum_h_channel_height;
-
-            qreal offset = m_node_offset_for_y.value(i - 1) + m_max_node_height_for_y.value(i - 1) + channel_height;
+    if (min_y)
+        for (int i = -1; i >= min_y; --i)
+        {
+            qreal offset = m_node_offset_for_y.value(i + 1) + m_max_node_height_for_y.value(i) + std::max(m_max_h_channel_height_for_y.value(i + 1), minimum_h_channel_height);
             m_node_offset_for_y.insert(i, offset);
         }
 }
@@ -558,67 +659,6 @@ void graph_layouter::update_scene_rect()
     QRectF rect = m_scene->sceneRect();
     rect.adjust(-200, -200, 200, 200);
     m_scene->setSceneRect(rect);
-}
-
-void graph_layouter::reset_roads_and_junctions()
-{
-    for (road* r : m_h_roads)
-        r->lanes = 0;
-
-    for (road* r : m_v_roads)
-        r->lanes = 0;
-
-    for (junction* j : m_junctions)
-    {
-        // LEFT
-        unsigned int combined_lane_changes = j->close_left_lane_changes + j->far_left_lane_changes;
-        qreal spacing                      = 0;
-
-        if (combined_lane_changes)
-            spacing = (combined_lane_changes - 1) * lane_spacing + junction_padding;
-
-        store_max(m_max_left_junction_spacing_for_x, j->x, spacing);
-
-        // RIGHT
-        combined_lane_changes = j->close_right_lane_changes + j->far_right_lane_changes;
-        spacing               = 0;
-
-        if (combined_lane_changes)
-            spacing = (combined_lane_changes - 1) * lane_spacing + junction_padding;
-
-        store_max(m_max_right_junction_spacing_for_x, j->x, spacing);
-
-        // TOP
-        combined_lane_changes = j->close_top_lane_changes + j->far_top_lane_changes;
-        spacing               = 0;
-
-        if (combined_lane_changes)
-            spacing = (combined_lane_changes - 1) * lane_spacing + junction_padding;
-
-        store_max(m_max_top_junction_spacing_for_y, j->y, spacing);
-
-        // BOTTOM
-        combined_lane_changes = j->close_bottom_lane_changes + j->far_bottom_lane_changes;
-        spacing               = 0;
-
-        if (combined_lane_changes)
-            spacing = (combined_lane_changes - 1) * lane_spacing + junction_padding;
-
-        store_max(m_max_bottom_junction_spacing_for_y, j->y, spacing);
-
-        j->h_lanes = 0;
-        j->v_lanes = 0;
-
-        j->close_left_lane_changes   = 0;
-        j->close_right_lane_changes  = 0;
-        j->close_top_lane_changes    = 0;
-        j->close_bottom_lane_changes = 0;
-
-        j->far_left_lane_changes   = 0;
-        j->far_right_lane_changes  = 0;
-        j->far_top_lane_changes    = 0;
-        j->far_bottom_lane_changes = 0;
-    }
 }
 
 void graph_layouter::draw_nets()
@@ -652,6 +692,7 @@ void graph_layouter::draw_nets()
                     {
                         net_item->setPos(box.item->get_output_scene_position(n->get_id(), QString::fromStdString(src_end.pin_type)));
                         net_item->add_output();
+                        break;
                     }
                 }
             }
@@ -666,7 +707,10 @@ void graph_layouter::draw_nets()
                 for (const node_box& box : m_boxes)
                 {
                     if (box.node == node)
+                    {
                         net_item->add_input(box.item->get_input_scene_position(n->get_id(), QString::fromStdString(dst_end.pin_type)));
+                        break;
+                    }
                 }
             }
 
@@ -693,6 +737,7 @@ void graph_layouter::draw_nets()
                     {
                         net_item->setPos(box.item->get_output_scene_position(n->get_id(), QString::fromStdString(n->get_src().pin_type)));
                         net_item->add_output();
+                        break;
                     }
                 }
 
@@ -706,6 +751,7 @@ void graph_layouter::draw_nets()
                         if (box.node == node)
                         {
                             net_item->add_input(box.item->get_input_scene_position(n->get_id(), QString::fromStdString(dst_end.pin_type)));
+                            break;
                         }
                     }
                 }
@@ -728,9 +774,12 @@ void graph_layouter::draw_nets()
 
         for (node_box& box : m_boxes)
             if (box.node == node)
+            {
                 src_box = &box;
+                break;
+            }
 
-        if (!src_box)
+        if (!src_box) // ???
             continue;
 
         used_paths used;
@@ -753,9 +802,12 @@ void graph_layouter::draw_nets()
 
             for (node_box& box : m_boxes)
                 if (box.node == node)
+                {
                     dst_box = &box;
+                    break;
+                }
 
-            if (!dst_box)
+            if (!dst_box) // ???
                 continue;
 
             QPointF dst_pin_position = dst_box->item->get_input_scene_position(n->get_id(), QString::fromStdString(dst.pin_type));
@@ -1323,49 +1375,6 @@ void graph_layouter::draw_nets()
     }
 }
 
-void graph_layouter::clear_layout_data()
-{
-    m_boxes.clear();
-
-    for (const graph_layouter::road* r : m_h_roads)
-        delete r;
-    m_h_roads.clear();
-
-    for (const graph_layouter::road* r : m_v_roads)
-        delete r;
-    m_v_roads.clear();
-
-    for (const graph_layouter::junction* j : m_junctions)
-        delete j;
-    m_junctions.clear();
-
-    m_max_node_width_for_x.clear();
-    m_max_node_height_for_y.clear();
-
-    m_max_v_channel_lanes_for_x.clear();
-    m_max_h_channel_lanes_for_y.clear();
-
-    m_max_v_channel_left_spacing_for_x.clear();
-    m_max_v_channel_right_spacing_for_x.clear();
-    m_max_h_channel_top_spacing_for_y.clear();
-    m_max_h_channel_bottom_spacing_for_y.clear();
-
-    m_max_v_channel_width_for_x.clear();
-    m_max_h_channel_height_for_y.clear();
-
-    m_node_offset_for_x.clear();
-    m_node_offset_for_y.clear();
-
-    m_max_left_junction_spacing_for_x.clear();
-    m_max_right_junction_spacing_for_x.clear();
-
-    m_max_top_junction_spacing_for_y.clear();
-    m_max_bottom_junction_spacing_for_y.clear();
-
-    m_max_left_io_padding_for_channel_x.clear();
-    m_max_right_io_padding_for_channel_x.clear();
-}
-
 graph_layouter::node_box graph_layouter::create_box(const hal::node& node, const int x, const int y) const
 {
     node_box box;
@@ -1707,16 +1716,6 @@ qreal graph_layouter::scene_y_for_far_bottom_lane_change(const graph_layouter::j
     assert(j);
 
     return scene_y_for_far_bottom_lane_change(j->y, j->far_bottom_lane_changes);
-}
-
-template<typename T1, typename T2>
-void graph_layouter::store_max(QMap<T1, T2>& map, T1 key, T2 value)
-{
-    if (map.contains(key))
-        if (map.value(key) >= value)
-            return;
-
-    map.insert(key, value);
 }
 
 void graph_layouter::commit_used_paths(const graph_layouter::used_paths& used)

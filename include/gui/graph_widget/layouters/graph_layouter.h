@@ -159,8 +159,8 @@ public:
     const QMap<hal::node, QPoint> node_to_position_map() const;
     const QMap<QPoint, hal::node> position_to_node_map() const;
 
-    void set_node_position(const hal::node &n, const QPoint &p);
-    void remove_node_from_maps(const hal::node &n);
+    void set_node_position(const hal::node& n, const QPoint& p);
+    void remove_node_from_maps(const hal::node& n);
 
 Q_SIGNALS:
     void status_update(const int percent);
@@ -171,6 +171,7 @@ protected:
     const graph_context* const m_context;
 
 private:
+    void clear_layout_data();
     void create_boxes();
     void calculate_nets();
     void find_max_box_dimensions();
@@ -181,8 +182,6 @@ private:
     void update_scene_rect();
     void reset_roads_and_junctions();
     void draw_nets();
-
-    void clear_layout_data();
 
     node_box create_box(const hal::node& node, const int x, const int y) const;
 
@@ -227,9 +226,6 @@ private:
 
     qreal scene_y_for_close_bottom_lane_change(const junction* const j) const;
     qreal scene_y_for_far_bottom_lane_change(const junction* const j) const;
-
-    template<typename T1, typename T2>
-    void store_max(QMap<T1, T2>& map, T1 key, T2 value);
 
     void commit_used_paths(const used_paths& used);
 
