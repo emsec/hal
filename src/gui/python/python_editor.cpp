@@ -5,6 +5,7 @@
 #include "code_editor/syntax_highlighter/python_syntax_highlighter.h"
 #include "core/log.h"
 
+#include "graph_widget/contexts/graph_context.h"
 #include "gui_globals.h"
 #include "gui_utility.h"
 #include "searchbar/searchbar.h"
@@ -78,7 +79,6 @@ python_editor::python_editor(QWidget* parent)
 
     connect(m_searchbar, &searchbar::text_edited, this, &python_editor::handle_searchbar_text_edited);
     connect(m_tab_widget, &QTabWidget::currentChanged, this, &python_editor::handle_current_tab_changed);
-
 
     m_path_editor_map = QMap<QString, python_code_editor*>();
 
@@ -247,11 +247,10 @@ void python_editor::handle_text_changed()
 
         QString tab_name = m_tab_widget->tabText(m_tab_widget->indexOf(current_editor));
 
-        if(current_editor)
+        if (current_editor)
             g_file_status_manager.file_changed(current_editor->get_uuid(), "Python tab: " + tab_name);
 
-
-        if(!tab_name.endsWith("*"))
+        if (!tab_name.endsWith("*"))
             m_tab_widget->setTabText(m_tab_widget->indexOf(current_editor), tab_name + "*");
     }
 }
@@ -276,7 +275,7 @@ void python_editor::handle_current_tab_changed(int index)
     else if (!current_editor->extraSelections().isEmpty())
         current_editor->search("");
 
-    if(current_editor->is_base_file_modified())
+    if (current_editor->is_base_file_modified())
         m_file_modified_bar->setHidden(false);
     else
         m_file_modified_bar->setHidden(true);
@@ -336,7 +335,7 @@ void python_editor::handle_action_open_file()
         return;
     }
 
-    for(auto file_name : file_names)
+    for (auto file_name : file_names)
     {
         for (int i = 0; i < m_tab_widget->count(); ++i)
         {
@@ -444,7 +443,6 @@ void python_editor::save_file(const bool ask_path, int index)
     m_path_editor_map.insert(selected_file_name, current_editor);
     m_file_watcher->addPath(selected_file_name);
 
-
     QFileInfo info(selected_file_name);
     m_tab_widget->setTabText(index, info.completeBaseName() + "." + info.completeSuffix());
 }
@@ -452,7 +450,7 @@ void python_editor::save_file(const bool ask_path, int index)
 void python_editor::discard_tab(int index)
 {
     python_code_editor* editor = dynamic_cast<python_code_editor*>(m_tab_widget->widget(index));
-    QString s = editor->get_file_name();
+    QString s                  = editor->get_file_name();
     if (!s.isEmpty())
     {
         m_file_watcher->removePath(s);
@@ -468,9 +466,9 @@ void python_editor::discard_tab(int index)
 bool python_editor::confirm_discard_for_range(int start, int end, int exclude)
 {
     QString changedFiles = "The following files have not been saved yet:\n";
-    int unsaved = 0;
-    int total = end - start - (exclude == -1 ? 0 : 1);
-    for(int t = start; t < end; t++)
+    int unsaved          = 0;
+    int total            = end - start - (exclude == -1 ? 0 : 1);
+    for (int t = start; t < end; t++)
     {
         // to disable, set exclude=-1
         if (t == exclude)
@@ -480,7 +478,7 @@ bool python_editor::confirm_discard_for_range(int start, int end, int exclude)
         if (editor->document()->isModified())
         {
             QString fileName = m_tab_widget->tabText(t);
-            fileName.chop(1); // removes asterisk
+            fileName.chop(1);    // removes asterisk
             changedFiles.append("   ->  " + fileName + "\n");
             unsaved++;
         }
@@ -517,7 +515,17 @@ void python_editor::handle_action_save_file_as()
 
 void python_editor::handle_action_run()
 {
+    for (const auto& ctx : g_graph_context_manager.get_contexts())
+    {
+        ctx->begin_change();
+    }
+
     g_python_context->interpret_script(dynamic_cast<python_code_editor*>(m_tab_widget->currentWidget())->toPlainText());
+
+    for (const auto& ctx : g_graph_context_manager.get_contexts())
+    {
+        ctx->end_change();
+    }
 }
 
 void python_editor::handle_action_new_tab()
@@ -550,9 +558,9 @@ void python_editor::handle_action_tab_menu()
     connect(action, &QAction::triggered, this, &python_editor::handle_action_close_left_tabs);
 
     context_menu.addSeparator();
-    action = context_menu.addAction("Show in system explorer");
+    action                     = context_menu.addAction("Show in system explorer");
     python_code_editor* editor = dynamic_cast<python_code_editor*>(m_tab_widget->widget(m_tab_rightclicked));
-    QString s = editor->get_file_name();
+    QString s                  = editor->get_file_name();
     action->setDisabled(s.isEmpty());
     connect(action, &QAction::triggered, this, &python_editor::handle_action_show_file);
 
@@ -571,7 +579,7 @@ void python_editor::handle_action_close_all_tabs()
     int tabs = m_tab_widget->count();
     if (!this->confirm_discard_for_range(0, tabs))
         return;
-    for(int t = 0; t < tabs; t++)
+    for (int t = 0; t < tabs; t++)
     {
         this->discard_tab(0);
     }
@@ -583,8 +591,8 @@ void python_editor::handle_action_close_other_tabs()
     int tabs = m_tab_widget->count();
     if (!this->confirm_discard_for_range(0, tabs, m_tab_rightclicked))
         return;
-    int discard_id = 0; // keeps track of IDs shifting during deletion
-    for(int t = 0; t < tabs; t++)
+    int discard_id = 0;    // keeps track of IDs shifting during deletion
+    for (int t = 0; t < tabs; t++)
     {
         // don't close the right-clicked tab
         if (t == m_tab_rightclicked)
@@ -601,7 +609,7 @@ void python_editor::handle_action_close_left_tabs()
     assert(m_tab_rightclicked != -1);
     if (!this->confirm_discard_for_range(0, m_tab_rightclicked, -1))
         return;
-    for(int t = 0; t < m_tab_rightclicked; t++)
+    for (int t = 0; t < m_tab_rightclicked; t++)
     {
         // IDs shift downwards during deletion
         this->discard_tab(0);
@@ -612,18 +620,17 @@ void python_editor::handle_action_close_right_tabs()
 {
     assert(m_tab_rightclicked != -1);
     int tabs = m_tab_widget->count();
-    if (!this->confirm_discard_for_range(m_tab_rightclicked+1, tabs, -1))
+    if (!this->confirm_discard_for_range(m_tab_rightclicked + 1, tabs, -1))
         return;
-    for(int t = m_tab_rightclicked+1; t < tabs; t++)
+    for (int t = m_tab_rightclicked + 1; t < tabs; t++)
     {
         // IDs shift downwards during deletion
-        this->discard_tab(m_tab_rightclicked+1);
+        this->discard_tab(m_tab_rightclicked + 1);
     }
 }
 
 void python_editor::handle_action_show_file()
 {
-
 }
 
 void python_editor::handle_tab_file_changed(QString path)
@@ -632,14 +639,14 @@ void python_editor::handle_tab_file_changed(QString path)
     editor_with_modified_base_file->set_base_file_modified(true);
     QString tab_name = m_tab_widget->tabText(m_tab_widget->indexOf(editor_with_modified_base_file));
 
-    if(!tab_name.endsWith("*"))
+    if (!tab_name.endsWith("*"))
         m_tab_widget->setTabText(m_tab_widget->indexOf(editor_with_modified_base_file), tab_name + "*");
 
     g_file_status_manager.file_changed(editor_with_modified_base_file->get_uuid(), "Python tab: " + tab_name);
 
     python_code_editor* current_editor = dynamic_cast<python_code_editor*>(m_tab_widget->currentWidget());
 
-    if(editor_with_modified_base_file == current_editor)
+    if (editor_with_modified_base_file == current_editor)
         m_file_modified_bar->setHidden(false);
 
     m_file_watcher->addPath(path);
@@ -671,19 +678,19 @@ void python_editor::handle_base_file_modified_ok()
 
 bool python_editor::eventFilter(QObject* obj, QEvent* event)
 {
-  if (obj == m_tab_widget->tabBar() && event->type() == QEvent::MouseButtonPress)
-  {
-    QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
-    // filter for right-mouse-button-pressed events
-    if (mouseEvent->button() == Qt::MouseButton::RightButton)
+    if (obj == m_tab_widget->tabBar() && event->type() == QEvent::MouseButtonPress)
     {
-        m_tab_rightclicked = m_tab_widget->tabBar()->tabAt(mouseEvent->pos());
-        this->handle_action_tab_menu();
-        return true;
+        QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
+        // filter for right-mouse-button-pressed events
+        if (mouseEvent->button() == Qt::MouseButton::RightButton)
+        {
+            m_tab_rightclicked = m_tab_widget->tabBar()->tabAt(mouseEvent->pos());
+            this->handle_action_tab_menu();
+            return true;
+        }
     }
-  }
-  // otherwise honor default filter
-  return QObject::eventFilter(obj, event);
+    // otherwise honor default filter
+    return QObject::eventFilter(obj, event);
 }
 
 QString python_editor::open_icon_path() const
