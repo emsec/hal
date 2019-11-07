@@ -265,7 +265,7 @@ void gate_details_widget::update(const u32 gate_id)
 
     std::string description = "";
     for (const auto& it : g->get_boolean_functions())
-        description += " <b>Boolean Function (" + it.first + ")</b>: " + it.second.to_string() + "<br>";
+        description += " <b>Boolean Function</b>: " + it.first + " = " + it.second.to_string() + "<br>";
 
     if (description.empty())
     {

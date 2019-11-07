@@ -132,11 +132,12 @@ public:
     bool operator<(const boolean_function& other) const;
     bool operator>(const boolean_function& other) const;
 
+    // test whether the function is in DNF
+    bool is_dnf() const;
     // get the DNF representation of the function
     boolean_function to_dnf() const;
 
-    // optimizes the function - maybe...
-    //TODO make sure there is no maybe
+    // optimizes the function by first converting it to DNF and then applying Quine-McCluskey optimization
     boolean_function optimize() const;
 
     /*
@@ -194,6 +195,9 @@ private:
 
     // merges nested expressions of the same operands
     boolean_function flatten() const;
+
+    // merges nested expressions of the same operands
+    static std::vector<std::vector<value>> qmc(const std::vector<std::vector<value>>& terms);
 
     bool m_invert;
 

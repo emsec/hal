@@ -777,6 +777,49 @@ boolean_function boolean_function::flatten() const
     return boolean_function(m_op, terms);
 }
 
+bool boolean_function::is_dnf() const
+{
+    if (m_content != content_type::TERMS)
+    {
+        return true;
+    }
+    if (m_op == operation::AND)
+    {
+        for (const auto& subterm : m_operands)
+        {
+            if (subterm.m_content == content_type::TERMS || subterm.m_content == content_type::CONSTANT)
+            {
+                return false;
+            }
+        }
+    }
+    else if (m_op != operation::OR)
+    {
+        return false;
+    }
+    for (const auto& term : m_operands)
+    {
+        if (term.m_content == content_type::TERMS)
+        {
+            if (term.m_op == operation::AND)
+            {
+                for (const auto& subterm : term.m_operands)
+                {
+                    if (subterm.m_content == content_type::TERMS || subterm.m_content == content_type::CONSTANT)
+                    {
+                        return false;
+                    }
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
 boolean_function boolean_function::to_dnf() const
 {
     // std::cout << *this << " to dnf:" << std::endl;
@@ -792,13 +835,11 @@ boolean_function boolean_function::to_dnf() const
     // std::cout << "optimize_constants: " << f << std::endl;
 
     // the order of the transformation passes is important!
+    if (is_dnf())
+    {
+        return *this;
+    }
     return replace_xors().propagate_negations().expand_ands().flatten().optimize_constants();
-}
-
-boolean_function boolean_function::optimize() const
-{
-    //TODO perform actual optimization
-    return *this;
 }
 
 std::vector<boolean_function::value> boolean_function::get_truth_table(const std::vector<std::string>& order) const
@@ -823,5 +864,129 @@ std::vector<boolean_function::value> boolean_function::get_truth_table(const std
         }
         result.push_back(evaluate(inputs));
     }
+    return result;
+}
+
+boolean_function boolean_function::optimize() const
+{
+    if (m_content != content_type::TERMS)
+    {
+        return *this;
+    }
+
+    boolean_function result = to_dnf();
+
+    if (result.m_content != content_type::TERMS || result.m_op == operation::AND)
+    {
+        return result.optimize_constants();
+    }
+
+    // result is a OR-chain of *multiple* AND-chains of *only variables*
+    std::vector<std::vector<value>> terms;
+    auto vars_set = get_variables();
+    std::vector<std::string> vars(vars_set.begin(), vars_set.end());
+    for (const auto& or_term : result.m_operands)
+    {
+        std::vector<value> term(vars.size(), value::X);
+        for (const auto& and_term : or_term.m_operands)
+        {
+            int index   = std::distance(vars.begin(), std::find(vars.begin(), vars.end(), and_term.m_variable));
+            term[index] = and_term.m_invert ? value::ZERO : value::ONE;
+        }
+        terms.emplace_back(term);
+    }
+
+    terms = qmc(terms);
+
+    result = boolean_function();
+    for (const auto& term : terms)
+    {
+        boolean_function tmp;
+        for (u32 i = 0; i < term.size(); ++i)
+        {
+            if (term[i] == value::ONE)
+            {
+                tmp &= boolean_function(vars[i]);
+            }
+            else if (term[i] == value::ZERO)
+            {
+                tmp &= !boolean_function(vars[i]);
+            }
+        }
+        result |= tmp;
+    }
+
+    return result;
+}
+
+std::vector<std::vector<boolean_function::value>> boolean_function::qmc(const std::vector<std::vector<value>>& terms)
+{
+    std::vector<std::vector<value>> result;
+
+    if (terms.empty())
+    {
+        return result;
+    }
+
+    std::vector<std::vector<value>> im;
+    std::vector<bool> mark(terms.size(), false);
+    u32 term_size = terms[0].size();
+
+    for (u32 i = 0; i < terms.size(); ++i)
+    {
+        for (u32 j = i + 1; j < terms.size(); ++j)
+        {
+            std::vector<value> c(term_size, value::X);
+            u32 cnt = 0;
+            for (u32 k = 0; k < term_size; ++k)
+            {
+                if (terms[i][k] == terms[j][k])
+                {
+                    c[k] = terms[i][k];
+                }
+                else
+                {
+                    ++cnt;
+                }
+            }
+            if (cnt > 1)
+            {
+                continue;
+            }
+            im.push_back(c);
+            mark[i] = mark[j] = true;
+        }
+    }
+
+    for (u32 i = 0; i < terms.size(); ++i)
+    {
+        if (!mark[i])
+        {
+            result.push_back(terms[i]);
+        }
+    }
+
+    if (result.size() == terms.size() || terms.size() == 1)
+    {
+        return result;
+    }
+
+    std::vector<bool> mark2(im.size(), false);
+    for (u32 i = 0; i < im.size(); ++i)
+    {
+        for (u32 j = i + 1; j < im.size(); ++j)
+        {
+            if (!mark2[j] && im[i] == im[j])
+            {
+                mark2[j] = true;
+            }
+        }
+    }
+
+    u32 cnt = 0;
+    im.erase(std::remove_if(im.begin(), im.end(), [&](auto&) { return mark2[cnt++]; }), im.end());
+
+    im = qmc(im);
+    result.insert(result.end(), im.begin(), im.end());
     return result;
 }

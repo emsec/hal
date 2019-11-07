@@ -189,7 +189,7 @@ boolean_function gate::get_lut_function() const
         }
     }
 
-    return result;
+    return result.optimize();
 }
 
 void gate::set_boolean_function(const std::string& name, const boolean_function& func)

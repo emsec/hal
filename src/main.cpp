@@ -94,6 +94,7 @@ int cleanup(std::shared_ptr<netlist> const g = nullptr)
     return SUCCESS;
 }
 
+#include "netlist/boolean_function.h"
 int main(int argc, const char* argv[])
 {
     /* initialize and parse generic cli options */
