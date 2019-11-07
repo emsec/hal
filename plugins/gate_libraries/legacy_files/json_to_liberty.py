@@ -104,7 +104,7 @@ def process(file):
     # for l in lines:
     #     print(l)
 
-    with open("../definitions/"+file.replace(".json", ".lib"), "wt") as outfile:
+    with open(file.replace(".json", ".lib"), "wt") as outfile:
         indent = ""
         for l in lines:
             if "}" in l and "{" not in l:
@@ -114,6 +114,10 @@ def process(file):
                 indent += "    "
 
 
-for file in sorted(os.listdir(".")):
-    if file.endswith(".json"):
-        process(file)
+if len(sys.argv) > 1:
+    files = sys.argv[1:]
+else:
+    files = [f for f in sorted(os.listdir(".")) if f.endswith(".json")]
+
+for f in files:
+    process(f)
