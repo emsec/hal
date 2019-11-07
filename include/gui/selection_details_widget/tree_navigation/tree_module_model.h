@@ -28,6 +28,8 @@
 #include "netlist/event_system/gate_event_handler.h"
 #include "netlist/event_system/net_event_handler.h"
 #include "netlist/event_system/module_event_handler.h"
+#include "gui_utils/sort.h"
+
 #include <QAbstractItemModel>
 #include <QFont>
 #include <QIcon>
@@ -38,6 +40,8 @@ class tree_module_item;
 
 class tree_module_model : public QAbstractItemModel
 {
+    Q_OBJECT
+
 public:
     tree_module_model(QObject* parent = 0);
     ~tree_module_model();
@@ -60,6 +64,9 @@ public:
     static const int ID_COLUMN   = 1;
     static const int TYPE_COLUMN = 2;
 
+private Q_SLOTS:
+    void handle_global_setting_changed(void* sender, const QString& key, const QVariant& value);
+
 private:
     void setup_model_data();
 
@@ -71,12 +78,15 @@ private:
     void insert_item(tree_module_item* parent, int position, tree_module_item* item);
     void remove_item(tree_module_item* item);
 
+    void load_data_settings();
+    
     tree_module_item* m_root_item;
     tree_module_item* m_gates_item;
     tree_module_item* m_nets_item;
 
     QIcon m_design_icon;
     QFont m_structured_font;
-    void load_data_settings();
+
+    gui_utility::sort_mechanism m_sort_mechanism;
 };
 #endif    // tree_module_model_H

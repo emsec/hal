@@ -50,7 +50,6 @@ public:
     void update(u32 net_id);
 
 public Q_SLOTS:
-    void handle_tree_size_change(QTreeWidgetItem* item);
     void handle_item_expanded(QTreeWidgetItem* item);
     void handle_item_collapsed(QTreeWidgetItem* item);
 

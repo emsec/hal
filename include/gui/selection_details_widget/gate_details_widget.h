@@ -42,6 +42,7 @@ class QTreeWidgetItem;
 class QVBoxLayout;
 class QScrollArea;
 class QModelIndex;
+class graph_navigation_widget;
 
 class gate_details_widget : public QWidget
 {
@@ -65,19 +66,25 @@ public:
 
 public Q_SLOTS:
 
-    void handle_tree_size_change(QTreeWidgetItem* item);
-    void handle_item_expanded(QTreeWidgetItem* item);
-    void handle_item_collapsed(QTreeWidgetItem* item);
     void on_treewidget_item_clicked(QTreeWidgetItem* item, int column);
-    void on_gate_selected(endpoint selected);
+    void handle_navigation_jump_requested(const u32 via_net, const u32 to_gate);
     void on_general_table_item_double_clicked(const QModelIndex &index);
 
     void handle_gate_name_changed(std::shared_ptr<gate> gate);
     void handle_gate_removed(std::shared_ptr<gate> gate);
+
     void handle_module_name_changed(std::shared_ptr<module> module);
     void handle_module_removed(std::shared_ptr<module> module);
     void handle_module_gate_assigned(std::shared_ptr<module> module, u32 associated_data);
     void handle_module_gate_removed(std::shared_ptr<module> module, u32 associated_data);
+
+    void handle_net_created(std::shared_ptr<net> net);
+    void handle_net_removed(std::shared_ptr<net> net);
+    void handle_net_name_changed(std::shared_ptr<net> net);
+    void handle_net_src_changed(std::shared_ptr<net> net);
+    void handle_net_dst_added(std::shared_ptr<net> net, const u32 dst_gate_id);
+    void handle_net_dst_removed(std::shared_ptr<net> net, const u32 dst_gate_id);
+    
 
 private:
     QVBoxLayout* m_content_layout;
@@ -112,6 +119,8 @@ private:
 
     // store pointer to Quine-McCluskey plugin (to display minimized Boolean function)
     std::shared_ptr<plugin_quine_mccluskey> m_qmc;
+
+    graph_navigation_widget* m_navigation_table;
 };
 
 #endif /* __HAL_GATE_DETAILS_WIDGET_H__ */

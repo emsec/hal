@@ -11,6 +11,7 @@
 //  furnished to do so, subject to the following conditions:
 //
 //  The above copyright notice and this permission notice shall be included in all
+
 //  copies or substantial portions of the Software.
 //
 //  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
@@ -39,7 +40,7 @@ class minimal_graph_layouter : public graph_layouter
 public:
     minimal_graph_layouter(graph_context* context);
 
-    virtual void layout() Q_DECL_OVERRIDE;
+    //virtual void layout() Q_DECL_OVERRIDE;
 
     virtual void add(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets) Q_DECL_OVERRIDE;
     virtual void remove(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets) Q_DECL_OVERRIDE;

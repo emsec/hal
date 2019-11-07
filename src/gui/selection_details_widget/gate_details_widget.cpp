@@ -8,7 +8,7 @@
 #include "gui_globals.h"
 
 #include "netlist/module.h"
-#include "selection_details_widget/table_selector_widget.h"
+#include "graph_widget/graph_navigation_widget.h"
 
 #include <QApplication>
 #include <QCursor>
@@ -137,27 +137,16 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
 
     m_container_layout->addWidget(m_tree_widget);
 
-    connect(m_tree_widget, &QTreeWidget::itemExpanded, this, &gate_details_widget::handle_tree_size_change);
-    connect(m_tree_widget, &QTreeWidget::itemCollapsed, this, &gate_details_widget::handle_tree_size_change);
     connect(m_tree_widget, &QTreeWidget::itemClicked, this, &gate_details_widget::on_treewidget_item_clicked);
 
-    /*
-    m_table_widget = new QTableWidget(0, 4);
-    m_table_widget->setFrameStyle(QFrame::NoFrame);
-    m_table_widget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
-    m_table_widget->setSelectionMode(QAbstractItemView::NoSelection);
-    m_table_widget->setFocusPolicy(Qt::NoFocus);
-    m_table_widget->setHorizontalHeaderLabels(QStringList() << "category"
-                                                            << "type"
-                                                            << "key"
-                                                            << "data");
-    //m_table_widget->horizontalHeader()->hide();
-    m_table_widget->horizontalHeader()->setStyleSheet("QHeaderView::section {Background-Color: rgba(49, 51, 53, 1);}");
-    m_table_widget->verticalHeader()->hide();
-    m_table_widget->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    m_table_widget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    m_tree_widget_container_layout->addWidget(m_table_widget);
-    */
+
+
+    //set parent and flag so it gets shown in its own window
+    m_navigation_table = new graph_navigation_widget();
+    m_navigation_table->setWindowFlags(Qt::CustomizeWindowHint);
+    m_navigation_table->hide_when_focus_lost(true);
+    m_navigation_table->hide();
+    connect(m_navigation_table, &graph_navigation_widget::navigation_requested, this, &gate_details_widget::handle_navigation_jump_requested);
 
     m_scroll_area = new QScrollArea(this);
     m_scroll_area->setFrameStyle(QFrame::NoFrame);
@@ -167,27 +156,28 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
 
     m_input_pins = new QTreeWidgetItem(m_tree_widget);
     m_input_pins->setExpanded(true);
-    //    m_input_pins->setForeground(0, QBrush(QColor(114, 140, 0),Qt::SolidPattern));
-    //    m_input_pins->setBackground(0, QBrush(QColor(31, 34, 35),Qt::SolidPattern));
-    //    m_input_pins->setBackground(1, QBrush(QColor(31, 34, 35),Qt::SolidPattern));
-    //    m_input_pins->setBackground(2, QBrush(QColor(31, 34, 35),Qt::SolidPattern));
 
     m_output_pins = new QTreeWidgetItem(m_tree_widget);
     m_output_pins->setExpanded(true);
-    //    m_output_pins->setForeground(0, QBrush(QColor(114, 140, 0),Qt::SolidPattern));
-    //    m_output_pins->setBackground(0, QBrush(QColor(31, 34, 35),Qt::SolidPattern));
-    //    m_output_pins->setBackground(1, QBrush(QColor(31, 34, 35),Qt::SolidPattern));
-    //    m_output_pins->setBackground(2, QBrush(QColor(31, 34, 35),Qt::SolidPattern));
 
     // load and store quine mc cluskey plugin
     m_qmc = plugin_manager::get_plugin_instance<plugin_quine_mccluskey>("libquine_mccluskey");
 
     connect(&g_netlist_relay, &netlist_relay::gate_name_changed, this, &gate_details_widget::handle_gate_name_changed);
     connect(&g_netlist_relay, &netlist_relay::gate_removed, this, &gate_details_widget::handle_gate_removed);
+
     connect(&g_netlist_relay, &netlist_relay::module_name_changed, this, &gate_details_widget::handle_module_name_changed);
     connect(&g_netlist_relay, &netlist_relay::module_removed, this, &gate_details_widget::handle_module_removed);
     connect(&g_netlist_relay, &netlist_relay::module_gate_assigned, this, &gate_details_widget::handle_module_gate_assigned);
     connect(&g_netlist_relay, &netlist_relay::module_gate_removed, this, &gate_details_widget::handle_module_gate_removed);
+
+    connect(&g_netlist_relay, &netlist_relay::net_created, this, &gate_details_widget::handle_net_created);
+    connect(&g_netlist_relay, &netlist_relay::net_removed, this, &gate_details_widget::handle_net_removed);
+    connect(&g_netlist_relay, &netlist_relay::net_name_changed, this, &gate_details_widget::handle_net_name_changed);
+    connect(&g_netlist_relay, &netlist_relay::net_src_changed, this, &gate_details_widget::handle_net_src_changed);
+    connect(&g_netlist_relay, &netlist_relay::net_dst_added, this, &gate_details_widget::handle_net_dst_added);
+    connect(&g_netlist_relay, &netlist_relay::net_dst_removed, this, &gate_details_widget::handle_net_dst_removed);
+
 
     connect(m_general_table, &QTableWidget::doubleClicked, this, &gate_details_widget::on_general_table_item_double_clicked);
 }
@@ -201,6 +191,38 @@ gate_details_widget::~gate_details_widget()
     delete m_input_pins;
     delete m_output_pins;
 }
+
+void gate_details_widget::handle_net_created(std::shared_ptr<net> net)
+{
+    update(m_current_id);
+}
+
+void gate_details_widget::handle_net_removed(std::shared_ptr<net> net)
+{
+    update(m_current_id);
+}
+
+void gate_details_widget::handle_net_name_changed(std::shared_ptr<net> net)
+{
+    update(m_current_id);
+}
+
+void gate_details_widget::handle_net_src_changed(std::shared_ptr<net> net)
+{
+    update(m_current_id);
+}
+
+void gate_details_widget::handle_net_dst_added(std::shared_ptr<net> net, const u32 dst_gate_id)
+{
+    update(m_current_id);
+
+}
+
+void gate_details_widget::handle_net_dst_removed(std::shared_ptr<net> net, const u32 dst_gate_id)
+{
+    update(m_current_id);
+}
+
 
 void gate_details_widget::handle_gate_name_changed(std::shared_ptr<gate> gate)
 {
@@ -387,81 +409,6 @@ void gate_details_widget::update(const u32 gate_id)
 
     connect(m_tree_widget, &QTreeWidget::itemClicked, this, &gate_details_widget::on_treewidget_item_clicked);
 
-    //    std::set<std::string> inout_pins = gate->get_inout_pin_types();
-    //    QTreeWidgetItem* inout_pin_item  = new QTreeWidgetItem(m_tree_widget);
-    //    inout_pin_item->setText(0, QString::number(inout_pins.size()) + " Inout Pins");
-    //    for (std::string type4 : inout_pins)
-    //    {
-    //        QTreeWidgetItem* item = new QTreeWidgetItem(inout_pin_item);
-    //        item->setText(0, QString::fromStdString(type4));
-    //    }
-    //    std::set<net*> fan_in_nets = gate->get_fan_in_nets();
-    //    QTreeWidgetItem* fan_in_item     = new QTreeWidgetItem(m_tree_widget);
-    //    fan_in_item->setText(0, QString::number(fan_in_nets.size()) + " Fan In Nets");
-    //    for (net* net : fan_in_nets)
-    //    {
-    //        QTreeWidgetItem* item = new QTreeWidgetItem(fan_in_item);
-    //        item->setText(0, QString::fromStdString(net->get_name()));
-    //    }
-    //    std::set<net*> fan_out_nets = gate->get_fan_out_nets();
-    //    QTreeWidgetItem* fan_out_item     = new QTreeWidgetItem(m_tree_widget);
-    //    fan_out_item->setText(0, QString::number(fan_out_nets.size()) + " Fan Out Nets");
-    //    for (net* net : fan_out_nets)
-    //    {
-    //        QTreeWidgetItem* item = new QTreeWidgetItem(fan_out_item);
-    //        item->setText(0, QString::fromStdString(net->get_name()));
-    //    }
-
-    /*
-    m_table_widget->setRowCount(0);
-    std::map<std::tuple<std::string, std::string>, std::tuple<std::string, std::string>> gate_data = g->get_data();
-    m_table_widget->setRowCount(gate_data.size());
-    int i = 0;
-    for (auto value : gate_data)
-    {
-        m_table_widget->setItem(i, 0, new QTableWidgetItem(QString::fromStdString(std::get<0>(value.first))));
-        m_table_widget->setItem(i, 1, new QTableWidgetItem(QString::fromStdString(std::get<1>(value.first))));
-        m_table_widget->setItem(i, 2, new QTableWidgetItem(QString::fromStdString(std::get<0>(value.second))));
-        m_table_widget->setItem(i, 3, new QTableWidgetItem(QString::fromStdString(std::get<1>(value.second))));
-        i++;
-    }
-
-    m_tree_widget->adjustSize();
-    m_tree_widget->setColumnWidth(1, 50);
-    m_tree_height = m_tree_widget->sizeHint().height();
-    m_tree_widget->setMinimumHeight(m_tree_height);
-    m_table_height = m_table_widget->verticalHeader()->length() + m_table_widget->horizontalHeader()->height();
-    m_table_widget->setFixedHeight(m_table_height);
-    m_table_widget->updateGeometry();
-    m_tree_widget_container->setMinimumHeight(m_tree_height + m_table_height + m_spacing);
-    m_table_widget->horizontalHeader()->setStretchLastSection(false);
-    m_table_widget->resizeColumnToContents(3);
-    m_table_widget->adjustSize();
-    m_tree_widget->resizeColumnToContents(0);
-    m_tree_widget_container->setMinimumWidth(m_table_widget->horizontalHeader()->length());
-    m_table_widget->horizontalHeader()->setStretchLastSection(true);
-    */
-}
-
-void gate_details_widget::handle_tree_size_change(QTreeWidgetItem* item)
-{
-    Q_UNUSED(item)
-
-    //m_tree_widget->adjustSize();
-    //m_tree_height = m_tree_widget->sizeHint().height();
-    //m_tree_widget->setMinimumHeight(m_tree_height);
-    //m_tree_widget_container->setMinimumHeight(m_tree_height + m_table_height + m_spacing);
-    //m_tree_widget->updateGeometry();
-}
-
-void gate_details_widget::handle_item_expanded(QTreeWidgetItem* item)
-{
-    Q_UNUSED(item)
-}
-
-void gate_details_widget::handle_item_collapsed(QTreeWidgetItem* item)
-{
-    Q_UNUSED(item)
 }
 
 void gate_details_widget::on_treewidget_item_clicked(QTreeWidgetItem* item, int column)
@@ -500,12 +447,13 @@ void gate_details_widget::on_treewidget_item_clicked(QTreeWidgetItem* item, int 
         }
         else
         {
-            table_selector_widget* w = new table_selector_widget(destinations, this);
-            connect(w, &table_selector_widget::gateSelected, this, &gate_details_widget::on_gate_selected);
-            auto rect = QApplication::desktop()->availableGeometry(this);
-            w->move(QPoint(rect.x() + (rect.width() - w->width()) / 2, rect.y() + (rect.height() - w->height()) / 2));
-            w->show();
-            w->setFocus();
+//            auto rect = QApplication::desktop()->availableGeometry(this);
+//            w->move(QPoint(rect.x() + (rect.width() - w->width()) / 2, rect.y() + (rect.height() - w->height()) / 2));
+            m_navigation_table->setup(clicked_net);
+            m_navigation_table->move(QCursor::pos());
+            m_navigation_table->show();
+            m_navigation_table->setFocus();
+
         }
     }
     else if (m_input_pins == item->parent() && column == 2)
@@ -538,22 +486,36 @@ void gate_details_widget::on_treewidget_item_clicked(QTreeWidgetItem* item, int 
     }
 }
 
-void gate_details_widget::on_gate_selected(endpoint selected)
+//always the right-subfocus!!!!!!(the other way is handled: on_treewidget_item_clicked
+void gate_details_widget::handle_navigation_jump_requested(const u32 via_net, const u32 to_gate)
 {
+    auto n = g_netlist->get_net_by_id(via_net);
+    auto g = g_netlist->get_gate_by_id(to_gate);
+
+    if (!g || !n)
+        return;
+
+    m_navigation_table->hide();
     g_selection_relay.clear();
-    g_selection_relay.m_selected_gates.insert(selected.gate->get_id());
+    g_selection_relay.m_selected_gates.insert(to_gate);
     g_selection_relay.m_focus_type = selection_relay::item_type::gate;
-    g_selection_relay.m_focus_id   = selected.gate->get_id();
-    g_selection_relay.m_subfocus   = selection_relay::subfocus::left;
+    g_selection_relay.m_focus_id   = to_gate;
+    g_selection_relay.m_subfocus = selection_relay::subfocus::left;
 
-    auto pins                          = selected.gate->get_input_pin_types();
-    auto index                         = std::distance(pins.begin(), std::find(pins.begin(), pins.end(), selected.pin_type));
-    g_selection_relay.m_subfocus_index = index;
-    update(selected.gate->get_id());
+    u32 index_cnt = 0;
+    for(const auto& pin : g->get_input_pin_types())
+    {
+        if(g->get_fan_in_net(pin) == n)
+        {
+            g_selection_relay.m_subfocus_index = index_cnt;
+            break;
+        }
+        index_cnt++;
+    }
+
     g_selection_relay.relay_selection_changed(this);
+    m_navigation_table->hide();
 
-    if (dynamic_cast<QWidget*>(sender()))
-        static_cast<QWidget*>(sender())->close();
 }
 
 void gate_details_widget::on_general_table_item_double_clicked(const QModelIndex &index)
