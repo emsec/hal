@@ -396,7 +396,7 @@ std::string boolean_function::to_string() const
 {
     if (is_empty())
     {
-        return "<empty>"
+        return "<empty>";
     }
     auto s = to_string_internal();
     if (s.front() == '(' && s.back() == ')')
@@ -452,18 +452,6 @@ boolean_function boolean_function::combine(operation op, const boolean_function&
     {
         return *this;
     }
-    else if (m_content == content_type::TERMS && m_op == op && other.m_content != content_type::TERMS)
-    {
-        boolean_function result = *this;
-        result.m_operands.push_back(other);
-        return result;
-    }
-    else if (other.m_content == content_type::TERMS && other.m_op == op && m_content != content_type::TERMS)
-    {
-        boolean_function result = other;
-        result.m_operands.insert(result.m_operands.begin(), *this);
-        return result;
-    }
     else if (m_content == content_type::TERMS && other.m_content == content_type::TERMS && m_op == op && m_op == other.m_op && !m_invert && !other.m_invert)
     {
         auto joint_operands = m_operands;
@@ -471,10 +459,19 @@ boolean_function boolean_function::combine(operation op, const boolean_function&
         boolean_function result(op, joint_operands);
         return result;
     }
-    else
+    else if (m_content == content_type::TERMS && m_op == op)
     {
-        return boolean_function(op, {*this, other});
+        boolean_function result = *this;
+        result.m_operands.push_back(other);
+        return result;
     }
+    else if (other.m_content == content_type::TERMS && other.m_op == op)
+    {
+        boolean_function result = other;
+        result.m_operands.insert(result.m_operands.begin(), *this);
+        return result;
+    }
+    return boolean_function(op, {*this, other});
 }
 
 boolean_function boolean_function::operator&(const boolean_function& other) const
@@ -828,65 +825,3 @@ std::vector<boolean_function::value> boolean_function::get_truth_table(const std
     }
     return result;
 }
-
-/*
-
-Test code
-{
-    auto f = boolean_function::from_string("(A B (C |D))' ^ (D + E) ");
-    //////////////
-    auto tt1 = f.get_truth_table();
-    {
-        std::cout << f << std::endl;
-        auto variables = f.get_variables();
-        auto tt        = tt1;
-        for (const auto& var : variables)
-        {
-            std::cout << var << " ";
-        }
-        std::cout << "| result" << std::endl;
-        for (u32 i = 0; i < tt.size(); ++i)
-        {
-            for (u32 j = 0; j < variables.size(); ++j)
-            {
-                std::cout << ((i >> j) & 1) << " ";
-            }
-            std::cout << "| " << tt[i] << std::endl;
-        }
-    }
-    //////////////
-    std::cout << std::endl;
-    f = f.to_dnf();
-    //////////////
-    auto tt2 = f.get_truth_table();
-    {
-        std::cout << f << std::endl;
-        auto variables = f.get_variables();
-        auto tt        = tt2;
-        for (const auto& var : variables)
-        {
-            std::cout << var << " ";
-        }
-        std::cout << "| result" << std::endl;
-        for (u32 i = 0; i < tt.size(); ++i)
-        {
-            for (u32 j = 0; j < variables.size(); ++j)
-            {
-                std::cout << ((i >> j) & 1) << " ";
-            }
-            std::cout << "| " << tt[i] << std::endl;
-        }
-    }
-    //////////////
-    std::cout << std::endl;
-    if (tt1 == tt2)
-    {
-        std::cout << "SUCCESS: Both functions are equivalent" << std::endl;
-    }
-    else
-    {
-        std::cout << "ERROR: The functions are not equivalent!" << std::endl;
-    }
-}
-
-*/
