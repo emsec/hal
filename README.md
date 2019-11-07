@@ -16,6 +16,7 @@ Apart from multiple research projects, HAL is also used in our university lectur
 - A feature-rich GUI allowing for visual netlist inspection and interactive analysis
 - An integrated Python shell to exploratively interact with netlist elements and to interface plugins from the GUI
 - **Update v1.1.0** Support for Xilinx Unisim, Xilinx Simprim, Synopsys 90nm, GSCLIB 3.0 and UMC 0.18µm libraries is now added
+- **Update v2.0.0** Added Isolation View to view only a subset of Gates in one view.
 
 ## API Documentation
 
