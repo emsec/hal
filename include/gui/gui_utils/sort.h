@@ -21,32 +21,23 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef TABLE_SELECTOR_WIDGET_H
-#define TABLE_SELECTOR_WIDGET_H
+#ifndef SORT_UTIL_H
+#define SORT_UTIL_H
 
-#include <QSet>
-#include <QStringList>
-#include <QTableWidget>
-#include <QWidget>
-#include <netlist/gate.h>
+#include <QString>
 
-class table_selector_widget : public QTableWidget
+namespace gui_utility
 {
-    Q_OBJECT
-public:
-    table_selector_widget(QWidget* parent = nullptr);
-    table_selector_widget(std::vector<endpoint> table_data, QWidget* parent = nullptr);
+    enum sort_mechanism
+    {
+        lexical = 0,
+        natural = 1
+    };
 
-    void focusOutEvent(QFocusEvent* event);
-    void keyPressEvent(QKeyEvent *event);
+    bool natural_order_compare(const QString& a, const QString& b);
+    bool lexical_order_compare(const QString& a, const QString& b);
+    int numeric_string_compare(QString a_num, QString b_num);
 
-Q_SIGNALS:
-    void gateSelected(endpoint selected);
+} // namespace gui_utility
 
-private:
-    QSize calculate_actual_table_size();
-
-    void on_item_double_clicked(QTableWidgetItem* item);
-};
-
-#endif    // TABLE_SELECTOR_WIDGET_H
+#endif // SORT_UTIL_H
