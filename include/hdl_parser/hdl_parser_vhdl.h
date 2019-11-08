@@ -79,7 +79,8 @@ private:
         std::map<std::string, std::string> direct_assignments;
     };
 
-    token_stream m_tokens;
+    token_stream m_token_stream;
+    u32 m_last_parsed_line;
     std::string m_last_entity;
 
     std::set<std::string> m_libraries;
@@ -92,6 +93,7 @@ private:
     std::map<std::string, std::string> m_attribute_types;
     std::map<std::string, std::vector<std::string>> m_nets_to_merge;
 
+    bool tokenize();
     bool parse_tokens();
 
     // parse the hdl into an intermediate format
@@ -110,8 +112,8 @@ private:
     std::shared_ptr<module> instantiate(const entity& e, std::shared_ptr<module> parent, std::map<std::string, std::string> port_assignments);
 
     // helper functions
-    std::map<std::string, std::string> get_assignments(const token_stream& lhs, const token_stream& rhs);
-    std::vector<std::string> get_vector_signals(const std::string& base_name, const token_stream& type);
+    std::map<std::string, std::string> get_assignments(token_stream& lhs, token_stream& rhs);
+    std::vector<std::string> get_vector_signals(const std::string& base_name, token_stream& type);
     std::string get_hex_from_number_literal(const std::string& value);
     std::string get_unique_alias(const std::string& name);
 };

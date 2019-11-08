@@ -77,9 +77,7 @@ def process(file):
             lines.append("bit_order         : \"ascending\";")
             lines.append("}")
             for pin in inputs[typ]:
-                lines.append("pin({})".format(pin) + " {")
-                lines.append("direction: input;")
-                lines.append("}")
+                lines.append("pin({})".format(pin) + " { direction: input; }")
             for pin in outputs[typ]:
                 lines.append("pin({})".format(pin) + " {")
                 lines.append("direction: output;")
@@ -88,9 +86,7 @@ def process(file):
 
         else:
             for pin in inputs[typ]:
-                lines.append("pin({})".format(pin) + " {")
-                lines.append("direction: input;")
-                lines.append("}")
+                lines.append("pin({})".format(pin) + " { direction: input; }")
             for pin in outputs[typ]:
                 lines.append("pin({})".format(pin) + " {")
                 lines.append("direction: output;")
