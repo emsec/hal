@@ -15,12 +15,11 @@ void graphics_item::set_lod(const qreal lod)
 
 graphics_item::graphics_item(const hal::item_type type, const u32 id) :
     m_item_type(type),
-    m_id(id)
+    m_id(id),
+    m_color(255, 0, 230)
 {
-    m_color = Qt::lightGray;
-
+    m_color = Qt::lightGray; // REMOVE LATER
     setFlags(ItemIsSelectable);
-    //setFlags(ItemIsSelectable | ItemIsFocusable);
 }
 
 hal::item_type graphics_item::item_type() const
@@ -37,7 +36,6 @@ void graphics_item::set_color(const QColor& color)
 {
     m_color = color;
     update();
-    //update(boundingRect());
 }
 
 //void graphics_item::mousePressEvent(QGraphicsSceneMouseEvent* event)

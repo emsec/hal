@@ -21,8 +21,8 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef STANDARD_GRAPHICS_GATE_H
-#define STANDARD_GRAPHICS_GATE_H
+#ifndef MINIMAL_GRAPHICS_GATE_H
+#define MINIMAL_GRAPHICS_GATE_H
 
 #include "graphics_gate.h"
 
@@ -33,14 +33,12 @@ public:
 
     minimal_graphics_gate(const std::shared_ptr<const gate> g);
 
-    void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = nullptr) Q_DECL_OVERRIDE;
+    void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = nullptr) override;
 
-    QPainterPath shape() const Q_DECL_OVERRIDE;
+    QPointF get_input_scene_position(const u32 net_id, const QString& pin_type) const override;
+    QPointF get_output_scene_position(const u32 net_id, const QString& pin_type) const override;
 
-    QPointF get_input_scene_position(const u32 net_id, const QString& pin_type) const Q_DECL_OVERRIDE;
-    QPointF get_output_scene_position(const u32 net_id, const QString& pin_type) const Q_DECL_OVERRIDE;
-
-    virtual void set_visuals(const visuals& v) Q_DECL_OVERRIDE;
+    virtual void set_visuals(const visuals& v) override;
 
 private:
     static QPen s_pen;
@@ -77,4 +75,4 @@ private:
     QVector<QPointF> m_output_pin_positions;
 };
 
-#endif // STANDARD_GRAPHICS_GATE_H
+#endif // MINIMAL_GRAPHICS_GATE_H

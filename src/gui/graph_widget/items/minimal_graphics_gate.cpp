@@ -1,6 +1,4 @@
-#include "graph_widget/items/minimal_graphics_gate.h"
-
-#include "core/log.h"
+#include "gui/graph_widget/items/minimal_graphics_gate.h"
 
 #include "netlist/gate.h"
 
@@ -78,13 +76,6 @@ minimal_graphics_gate::minimal_graphics_gate(const std::shared_ptr<const gate> g
     format();
 }
 
-QPainterPath minimal_graphics_gate::shape() const
-{
-    QPainterPath path;
-    path.addRect(QRectF(0, 0, m_width, m_height));
-    return path;
-}
-
 void minimal_graphics_gate::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
 {
     Q_UNUSED(widget);
@@ -133,12 +124,7 @@ QPointF minimal_graphics_gate::get_input_scene_position(const u32 net_id, const 
     Q_UNUSED(net_id)
 
     int index = m_input_pins.indexOf(pin_type);
-
-    if (index == -1)
-    {
-        log_error("gui", "type not found.");
-        return mapToScene(QPointF(0, 0));
-    }
+    assert(index != -1);
 
     qreal y = s_pin_upper_vertical_spacing;
 
@@ -155,12 +141,7 @@ QPointF minimal_graphics_gate::get_output_scene_position(const u32 net_id, const
     Q_UNUSED(net_id)
 
     int index = m_output_pins.indexOf(pin_type);
-
-    if (index == -1)
-    {
-        log_error("gui", "type not found.");
-        return mapToScene(QPointF(0, 0));
-    }
+    assert(index != -1);
 
     qreal y = s_pin_upper_vertical_spacing;
 

@@ -22,34 +22,25 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef MINIMAL_GRAPH_LAYOUTER_H
-#define MINIMAL_GRAPH_LAYOUTER_H
+#ifndef PHYSICAL_GRAPH_LAYOUTER_H
+#define PHYSICAL_GRAPH_LAYOUTER_H
 
 #include "graph_widget/layouters/graph_layouter.h"
 
-class graphics_module;
-class graphics_node;
-
-namespace hal
-{
-struct node;
-}
-
-class minimal_graph_layouter : public graph_layouter
+class physical_graph_layouter final : public graph_layouter
 {
 public:
-    minimal_graph_layouter(graph_context* context);
+    physical_graph_layouter(const graph_context* const context);
 
-    //virtual void layout() Q_DECL_OVERRIDE;
+    virtual const QString name() const override;
+    virtual const QString description() const override;
 
-    virtual void add(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets) Q_DECL_OVERRIDE;
-    virtual void remove(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets) Q_DECL_OVERRIDE;
-
-    virtual const QString name() const Q_DECL_OVERRIDE;
-    virtual const QString description() const Q_DECL_OVERRIDE;
+    virtual void add(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets) override;
+    virtual void remove(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets) override;
 
 private:
-    graphics_node* item_for_node(hal::node& node, const QMap<u32, graphics_gate*>& gate_map, const QMap<u32, graphics_module*>& module_map);
+    float m_min_x_distance;
+    float m_min_y_distance;
 };
 
-#endif // MINIMAL_GRAPH_LAYOUTER_H
+#endif // PHYSICAL_GRAPH_LAYOUTER_H

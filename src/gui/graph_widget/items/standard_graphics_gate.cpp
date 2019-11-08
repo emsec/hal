@@ -1,6 +1,4 @@
-#include "graph_widget/items/standard_graphics_gate.h"
-
-#include "core/log.h"
+#include "gui/graph_widget/items/standard_graphics_gate.h"
 
 #include "netlist/gate.h"
 
@@ -16,7 +14,6 @@
 
 static const qreal baseline = 1;
 
-// MAKE FIXED VALUES CONST
 qreal standard_graphics_gate::s_alpha;
 
 QPen standard_graphics_gate::s_pen;
@@ -58,9 +55,6 @@ void standard_graphics_gate::load_settings()
     s_pen.setJoinStyle(Qt::MiterJoin);
 
     s_default_main_color = QColor(96, 110, 112);
-    //s_default_main_color = QColor(38, 70, 90, 255);
-    //s_default_main_color = QColor(191, 211, 202);
-    //s_default_main_color = QColor(138, 160, 161);
     s_text_color = QColor(160, 160, 160);
 
     QFont font = QFont("Iosevka");
@@ -115,10 +109,6 @@ void standard_graphics_gate::paint(QPainter* painter, const QStyleOptionGraphics
     }
     else
     {
-//        QLinearGradient gradient(QPointF(0, 0), QPointF(m_width, s_color_bar_height));
-//        gradient.setColorAt(0, QColor(28, 85, 0, 255));
-//        gradient.setColorAt(1, QColor(0, 0, 0, 200));
-
         painter->fillRect(QRectF(0, 0, m_width, s_color_bar_height), m_color);
         painter->fillRect(QRectF(0, s_color_bar_height, m_width, m_height - s_color_bar_height), QColor(0, 0, 0, 200));
 
@@ -204,12 +194,7 @@ QPointF standard_graphics_gate::get_input_scene_position(const u32 net_id, const
     Q_UNUSED(net_id)
 
     int index = m_input_pins.indexOf(pin_type);
-
-    if (index == -1)
-    {
-        log_error("gui", "input pin type not found.");
-        return mapToScene(QPointF(0, 0));
-    }
+    assert(index != -1);
 
     qreal y = s_color_bar_height + s_pin_upper_vertical_spacing;
     y += index * (s_pin_font_height + s_pin_inner_vertical_spacing);
@@ -223,12 +208,7 @@ QPointF standard_graphics_gate::get_output_scene_position(const u32 net_id, cons
     Q_UNUSED(net_id)
 
     int index = m_output_pins.indexOf(pin_type);
-
-    if (index == -1)
-    {
-        log_error("gui", "output pin type not found.");
-        return mapToScene(QPointF(0, 0));
-    }
+    assert(index != -1);
 
     qreal y = s_color_bar_height + s_pin_upper_vertical_spacing;
     y += index * (s_pin_font_height + s_pin_inner_vertical_spacing);

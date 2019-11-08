@@ -1,5 +1,5 @@
-#ifndef GRAPH_GRAPHICS_ITEM_H
-#define GRAPH_GRAPHICS_ITEM_H
+#ifndef GRAPHICS_ITEM_H
+#define GRAPHICS_ITEM_H
 
 #include "def.h"
 
@@ -33,4 +33,4 @@ protected:
     QColor m_color;
 };
 
-#endif // GRAPH_GRAPHICS_ITEM_H
+#endif // GRAPHICS_ITEM_H
