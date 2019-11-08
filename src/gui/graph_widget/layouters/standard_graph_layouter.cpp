@@ -23,7 +23,7 @@ const QString standard_graph_layouter::name() const
 
 const QString standard_graph_layouter::description() const
 {
-    return "<p>The standard layouting algorithm</p>";
+    return "<p>PLACEHOLDER</p>";
 }
 
 void standard_graph_layouter::add(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets)

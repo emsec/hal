@@ -5,7 +5,7 @@
 #include "netlist/netlist.h"
 
 #include "gui/graph_widget/contexts/graph_context.h"
-#include "gui/graph_widget/layouters/minimal_graph_layouter.h"
+#include "gui/graph_widget/layouters/physical_graph_layouter.h"
 #include "gui/graph_widget/layouters/standard_graph_layouter.h"
 #include "gui/graph_widget/shaders/module_shader.h"
 #include "gui/gui_globals.h"

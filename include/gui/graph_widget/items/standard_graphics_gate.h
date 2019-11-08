@@ -1,5 +1,5 @@
-#ifndef ADVANCED_GRAPHICS_GATE_H
-#define ADVANCED_GRAPHICS_GATE_H
+#ifndef STANDARD_GRAPHICS_GATE_H
+#define STANDARD_GRAPHICS_GATE_H
 
 #include "graphics_gate.h"
 
@@ -11,12 +11,12 @@ public:
 
     standard_graphics_gate(const std::shared_ptr<const gate> g, const bool adjust_size_to_grid = true);
 
-    void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = nullptr) Q_DECL_OVERRIDE;
+    void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = nullptr) override;
 
-    QPointF get_input_scene_position(const u32 net_id, const QString& pin_type) const Q_DECL_OVERRIDE;
-    QPointF get_output_scene_position(const u32 net_id, const QString& pin_type) const Q_DECL_OVERRIDE;
+    QPointF get_input_scene_position(const u32 net_id, const QString& pin_type) const override;
+    QPointF get_output_scene_position(const u32 net_id, const QString& pin_type) const override;
 
-    virtual void set_visuals(const visuals& v) Q_DECL_OVERRIDE;
+    virtual void set_visuals(const visuals& v) override;
 
 private:
     static qreal s_alpha;
@@ -63,4 +63,4 @@ private:
     QVector<QPointF> m_output_pin_positions;
 };
 
-#endif // ADVANCED_GRAPHICS_GATE_H
+#endif // STANDARD_GRAPHICS_GATE_H

@@ -25,8 +25,8 @@ public:
 
     graphics_node(const hal::item_type type, const u32 id, const QString& name);
 
-    virtual QRectF boundingRect() const Q_DECL_OVERRIDE;
-    virtual QPainterPath shape() const Q_DECL_OVERRIDE;
+    virtual QRectF boundingRect() const override;
+    virtual QPainterPath shape() const override;
 
     virtual QPointF get_input_scene_position(const u32 net_id, const QString& pin_type) const = 0;
     virtual QPointF get_output_scene_position(const u32 net_id, const QString& pin_type) const = 0;
