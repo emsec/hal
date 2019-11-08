@@ -253,6 +253,87 @@ library (XILINX_UNISIM) {
         }
     }
 
+    cell(FD) {
+        ff ("IQ" , "IQN") {
+            next_state          : "D";
+            clocked_on          : "C";
+        }
+        pin(C) {
+            direction: input;
+            clock: true;
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
+        }
+    }
+
+    cell(FDR) {
+        ff ("IQ" , "IQN") {
+            next_state          : "D & !R";
+            clocked_on          : "C";
+        }
+        pin(C) {
+            direction: input;
+            clock: true;
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(R) {
+            direction: input;
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
+        }
+    }
+
+    cell(FDS) {
+        ff ("IQ" , "IQN") {
+            next_state          : "D | S";
+            clocked_on          : "C";
+        }
+        pin(C) {
+            direction: input;
+            clock: true;
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(S) {
+            direction: input;
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
+        }
+    }
+
+    cell(FDE) {
+        ff ("IQ" , "IQN") {
+            next_state          : "D";
+            clocked_on          : "CE & C";
+        }
+        pin(C) {
+            direction: input;
+            clock: true;
+        }
+        pin(CE) {
+            direction: input;
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
+        }
+    }
+
     cell(FDCE) {
         ff ("IQ" , "IQN") {
             next_state          : "D";

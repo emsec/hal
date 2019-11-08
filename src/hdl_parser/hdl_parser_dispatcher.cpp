@@ -78,6 +78,8 @@ namespace hdl_parser_dispatcher
     {
         auto begin_time = std::chrono::high_resolution_clock::now();
 
+        log_info("hdl_parser", "parsing '{}'...", file_name.string());
+
         std::ifstream ifs;
         ifs.open(file_name.c_str(), std::ifstream::in);
         if (!ifs.is_open())
