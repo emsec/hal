@@ -141,7 +141,7 @@ public:
      *
      * All consumed tokens are returned as a new token stream.
      *
-     * Throws a std::out_of_range exception if no token matches the given string.
+     * If no token matches the given string, the entire rest of the stream is extracted and no exception is thrown.
      *
      * @param[in] match - the string on which to end.
      * @returns All consumed tokens in a new token stream.

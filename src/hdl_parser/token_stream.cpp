@@ -180,19 +180,9 @@ token token_stream::join(const std::string& joiner)
 
 token_stream token_stream::extract_until(const std::string& match)
 {
-    auto end_pos = find_next(match);
-    if (end_pos > size())
-    {
-        token_stream res;
-        res.m_data.insert(res.m_data.begin(), m_data.begin() + m_pos, m_data.end());
-        m_pos = size();
-        return res;
-    }
-    else
-    {
-        token_stream res;
-        res.m_data.insert(res.m_data.begin(), m_data.begin() + m_pos, m_data.begin() + end_pos);
-        m_pos = end_pos;
-        return res;
-    }
+    auto end_pos = std::min(size(), find_next(match));
+    token_stream res;
+    res.m_data.insert(res.m_data.begin(), m_data.begin() + m_pos, m_data.begin() + end_pos);
+    m_pos = end_pos;
+    return res;
 }
