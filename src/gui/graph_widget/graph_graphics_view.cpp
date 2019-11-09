@@ -127,10 +127,6 @@ void graph_graphics_view::handle_move_action(QAction* action)
 
 void graph_graphics_view::handle_move_new_action()
 {
-    bool ok;
-    QString name = QInputDialog::getText(nullptr, "", "Module Name:", QLineEdit::Normal, "", &ok);
-    if (!ok || name.isEmpty())
-        return;
     std::unordered_set<std::shared_ptr<gate>> gate_objs;
     std::unordered_set<std::shared_ptr<module>> module_objs;
     for (const auto& id : g_selection_relay.m_selected_gates)
@@ -141,8 +137,16 @@ void graph_graphics_view::handle_move_new_action()
     {
         module_objs.insert(g_netlist->get_module_by_id(id));
     }
-    std::shared_ptr<module> m = g_netlist->create_module(g_netlist->get_unique_module_id(), name.toStdString(),
-        gui_utility::common_ancestor(module_objs, gate_objs));
+    std::shared_ptr<module> parent = gui_utility::common_ancestor(module_objs, gate_objs);
+    QString parent_name = QString::fromStdString(parent->get_name());
+    bool ok;
+    QString name = QInputDialog::getText(nullptr, "",
+        "New module will be created under \"" + parent_name + "\"\nModule Name:",
+        QLineEdit::Normal, "", &ok);
+    if (!ok || name.isEmpty())
+        return;
+    std::shared_ptr<module> m = g_netlist->create_module(g_netlist->get_unique_module_id(),
+        name.toStdString(), parent);
 
     for (const auto& id : g_selection_relay.m_selected_gates)
     {
