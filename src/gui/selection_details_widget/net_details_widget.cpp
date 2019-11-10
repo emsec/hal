@@ -19,6 +19,10 @@ net_details_widget::net_details_widget(QWidget* parent) : QWidget(parent)
     m_content_layout->setSpacing(0);
     m_content_layout->setAlignment(Qt::AlignTop);
 
+    m_tree_row_layout = new QHBoxLayout();
+    m_content_layout->setContentsMargins(0, 0, 0, 0);
+    m_content_layout->setSpacing(0);
+
     m_general_table = new QTableWidget(this);
     m_general_table->horizontalHeader()->setStretchLastSection(true);
     m_general_table->horizontalHeader()->hide();
@@ -102,16 +106,19 @@ net_details_widget::net_details_widget(QWidget* parent) : QWidget(parent)
     m_tree_widget->header()->hide();
     m_tree_widget->setSelectionMode(QAbstractItemView::NoSelection);
     m_tree_widget->setFocusPolicy(Qt::NoFocus);
-    //    m_tree_widget->setSelectionMode(QAbstractItemView::SingleSelection);
-    m_tree_widget->setFocusPolicy(Qt::NoFocus);
     m_tree_widget->headerItem()->setText(0, "");
     m_tree_widget->headerItem()->setText(1, "");
     m_tree_widget->headerItem()->setText(2, "");
-    m_tree_widget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+    //m_tree_widget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
     m_tree_widget->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_tree_widget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_tree_widget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    m_tree_widget->header()->setStretchLastSection(false);
+    m_tree_widget->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
-    m_container_layout->addWidget(m_tree_widget);
+    m_tree_row_layout->addWidget(m_tree_widget);
+    m_tree_row_layout->addSpacerItem(new QSpacerItem(1,1, QSizePolicy::Expanding, QSizePolicy::Minimum));
+    m_container_layout->addLayout(m_tree_row_layout);
 
     connect(m_tree_widget, &QTreeWidget::itemClicked, this, &net_details_widget::on_treewidget_item_clicked);
 
@@ -247,9 +254,9 @@ void net_details_widget::update(u32 net_id)
     m_scroll_area->setHidden(false);
     m_item_deleted_label->setHidden(true);
 
-    m_tree_widget->resizeColumnToContents(0);
-    m_tree_widget->resizeColumnToContents(1);
-    m_tree_widget->resizeColumnToContents(2);
+//    m_tree_widget->resizeColumnToContents(0);
+//    m_tree_widget->resizeColumnToContents(1);
+//    m_tree_widget->resizeColumnToContents(2);
 
 }
 

@@ -31,6 +31,7 @@
 #include <QWidget>
 
 class QVBoxLayout;
+class QHBoxLayout;
 class QLabel;
 class QScrollArea;
 class QTreeWidget;
@@ -61,6 +62,7 @@ private:
     // NEW !!!!!
 
     QVBoxLayout* m_content_layout;
+    QHBoxLayout* m_tree_row_layout;
 
     QTableWidget* m_general_table;
     QTableWidgetItem* m_name_item;

@@ -40,6 +40,7 @@ class QTableWidgetItem;
 class QTreeWidget;
 class QTreeWidgetItem;
 class QVBoxLayout;
+class QHBoxLayout;
 class QScrollArea;
 class QModelIndex;
 class graph_navigation_widget;
@@ -88,6 +89,7 @@ public Q_SLOTS:
 
 private:
     QVBoxLayout* m_content_layout;
+    QHBoxLayout* m_tree_row_layout;
 
     QTableWidget* m_general_table;
     QTableWidgetItem* m_name_item;

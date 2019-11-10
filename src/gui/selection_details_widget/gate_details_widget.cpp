@@ -22,6 +22,7 @@
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
 #include <QVBoxLayout>
+#include <QHBoxLayout>
 
 gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
 {
@@ -30,6 +31,9 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
     m_content_layout = new QVBoxLayout(this);
     m_content_layout->setContentsMargins(0, 0, 0, 0);
     m_content_layout->setSpacing(0);
+
+    m_tree_row_layout = new QHBoxLayout();
+
 
     m_general_table = new QTableWidget(this);
     m_general_table->horizontalHeader()->setStretchLastSection(true);
@@ -98,6 +102,7 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
     m_general_table->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     m_general_table->setFixedHeight(m_general_table->verticalHeader()->length());
     m_content_layout->addWidget(m_general_table);
+    //m_general_table->setStyleSheet("QTableWidget{color: red;}");
 
     m_container_layout = new QVBoxLayout(this);
     m_container_layout->setContentsMargins(0, 0, 0, 0);
@@ -126,16 +131,22 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
     m_tree_widget->header()->hide();
     m_tree_widget->setSelectionMode(QAbstractItemView::NoSelection);
     m_tree_widget->setFocusPolicy(Qt::NoFocus);
-    //    m_tree_widget->setSelectionMode(QAbstractItemView::SingleSelection);
-    m_tree_widget->setFocusPolicy(Qt::NoFocus);
     m_tree_widget->headerItem()->setText(0, "");
     m_tree_widget->headerItem()->setText(1, "");
     m_tree_widget->headerItem()->setText(2, "");
-    m_tree_widget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
     m_tree_widget->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_tree_widget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-    m_container_layout->addWidget(m_tree_widget);
+
+    m_tree_widget->header()->setStretchLastSection(false);
+    //by setting this you do not need to call resizecolumntocontents every time after updating
+    m_tree_widget->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
+    m_tree_widget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+
+    m_tree_row_layout->addWidget(m_tree_widget);
+    m_tree_row_layout->addSpacerItem(new QSpacerItem(1,1,QSizePolicy::Expanding,QSizePolicy::Minimum));
+    m_tree_row_layout->addSpacing(0);
+    m_container_layout->addLayout(m_tree_row_layout);
 
     connect(m_tree_widget, &QTreeWidget::itemClicked, this, &gate_details_widget::on_treewidget_item_clicked);
 
@@ -399,13 +410,12 @@ void gate_details_widget::update(const u32 gate_id)
         }
     }
 
-    m_tree_widget->resizeColumnToContents(0);
-    m_tree_widget->resizeColumnToContents(1);
-    m_tree_widget->resizeColumnToContents(2);
-
     m_general_table->setHidden(false);
     m_scroll_area->setHidden(false);
     m_item_deleted_label->setHidden(true);
+
+
+
 
     connect(m_tree_widget, &QTreeWidget::itemClicked, this, &gate_details_widget::on_treewidget_item_clicked);
 
