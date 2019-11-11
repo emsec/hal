@@ -51,29 +51,29 @@ std::shared_ptr<netlist> hdl_parser_vhdl::parse(const std::string& gate_library)
     }
 
     // create const 0 and const 1 net, will be removed if unused
-    m_zero_net = m_netlist->create_net("'0'");
-    if (m_zero_net == nullptr)
+    auto zero_net = m_netlist->create_net("'0'");
+    if (zero_net == nullptr)
     {
         log_error("hdl_parser", "could not instantiate GND net");
         return nullptr;
     }
-    m_net_by_name[m_zero_net->get_name()] = m_zero_net;
+    m_net_by_name[zero_net->get_name()] = zero_net;
 
-    m_one_net = m_netlist->create_net("'1'");
-    if (m_one_net == nullptr)
+    auto one_net = m_netlist->create_net("'1'");
+    if (one_net == nullptr)
     {
         log_error("hdl_parser", "could not instantiate VCC net");
         return nullptr;
     }
-    m_net_by_name[m_one_net->get_name()] = m_one_net;
+    m_net_by_name[one_net->get_name()] = one_net;
 
-    m_z_net = m_netlist->create_net("'Z'");
-    if (m_z_net == nullptr)
+    auto z_net = m_netlist->create_net("'Z'");
+    if (z_net == nullptr)
     {
         log_error("hdl_parser", "could not instantiate Z net");
         return nullptr;
     }
-    m_net_by_name[m_z_net->get_name()] = m_z_net;
+    m_net_by_name[z_net->get_name()] = z_net;
 
     // build the netlist from the intermediate format
     // the last entity in the file is considered the top module
@@ -84,7 +84,7 @@ std::shared_ptr<netlist> hdl_parser_vhdl::parse(const std::string& gate_library)
     }
 
     // add global gnd gate if required by any instance
-    if (!m_zero_net->get_dsts().empty())
+    if (!zero_net->get_dsts().empty())
     {
         auto gnd_type   = m_netlist->get_gate_library()->get_gnd_gate_types().begin()->second;
         auto output_pin = gnd_type->get_output_pins().at(0);
@@ -101,11 +101,11 @@ std::shared_ptr<netlist> hdl_parser_vhdl::parse(const std::string& gate_library)
     }
     else
     {
-        m_netlist->delete_net(m_zero_net);
+        m_netlist->delete_net(zero_net);
     }
 
     // add global vcc gate if required by any instance
-    if (!m_one_net->get_dsts().empty())
+    if (!one_net->get_dsts().empty())
     {
         auto vcc_type   = m_netlist->get_gate_library()->get_vcc_gate_types().begin()->second;
         auto output_pin = vcc_type->get_output_pins().at(0);
@@ -122,7 +122,7 @@ std::shared_ptr<netlist> hdl_parser_vhdl::parse(const std::string& gate_library)
     }
     else
     {
-        m_netlist->delete_net(m_one_net);
+        m_netlist->delete_net(one_net);
     }
 
     for (const auto& net : m_netlist->get_nets())
@@ -131,6 +131,10 @@ std::shared_ptr<netlist> hdl_parser_vhdl::parse(const std::string& gate_library)
         bool no_dst = net->get_num_of_dsts() == 0 && !net->is_global_output_net();
         if (no_src && no_dst)
         {
+            if (net != z_net && net != one_net && net != zero_net)
+            {
+                log_warning("hdl_parser", "net '{}' has neither a source nor destinations and is thus removed", net->get_name());
+            }
             m_netlist->delete_net(net);
         }
     }
