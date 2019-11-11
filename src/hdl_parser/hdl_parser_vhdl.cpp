@@ -254,9 +254,9 @@ bool hdl_parser_vhdl::parse_entity_definiton()
 {
     entity e;
     e.line_number = m_token_stream.peek().number;
-    m_token_stream.consume();    // "entity"
+    m_token_stream.consume("entity");
     e.name = m_token_stream.consume();
-    m_token_stream.consume();    // "is"
+    m_token_stream.consume("is");
     while (m_token_stream.peek() != "end")
     {
         m_last_parsed_line = m_token_stream.peek().number;
