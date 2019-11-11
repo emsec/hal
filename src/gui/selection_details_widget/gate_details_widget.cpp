@@ -163,14 +163,17 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
     // load and store quine mc cluskey plugin
     m_qmc = plugin_manager::get_plugin_instance<plugin_quine_mccluskey>("libquine_mccluskey");
 
+    //handle netlist modifications regarding gates
     connect(&g_netlist_relay, &netlist_relay::gate_name_changed, this, &gate_details_widget::handle_gate_name_changed);
     connect(&g_netlist_relay, &netlist_relay::gate_removed, this, &gate_details_widget::handle_gate_removed);
 
+    //handle netlist modifications regarding modules
     connect(&g_netlist_relay, &netlist_relay::module_name_changed, this, &gate_details_widget::handle_module_name_changed);
     connect(&g_netlist_relay, &netlist_relay::module_removed, this, &gate_details_widget::handle_module_removed);
     connect(&g_netlist_relay, &netlist_relay::module_gate_assigned, this, &gate_details_widget::handle_module_gate_assigned);
     connect(&g_netlist_relay, &netlist_relay::module_gate_removed, this, &gate_details_widget::handle_module_gate_removed);
 
+    //handle netlist modifications reagarding nets
     connect(&g_netlist_relay, &netlist_relay::net_created, this, &gate_details_widget::handle_net_created);
     connect(&g_netlist_relay, &netlist_relay::net_removed, this, &gate_details_widget::handle_net_removed);
     connect(&g_netlist_relay, &netlist_relay::net_name_changed, this, &gate_details_widget::handle_net_name_changed);
@@ -199,30 +202,38 @@ void gate_details_widget::handle_net_created(std::shared_ptr<net> net)
 
 void gate_details_widget::handle_net_removed(std::shared_ptr<net> net)
 {
-    update(m_current_id);
+    Q_UNUSED(net);
+    if(g_netlist->is_gate_in_netlist(g_netlist->get_gate_by_id(m_current_id)))
+        update(m_current_id);
 }
 
 void gate_details_widget::handle_net_name_changed(std::shared_ptr<net> net)
 {
-    update(m_current_id);
+    Q_UNUSED(net);
+    if(g_netlist->is_gate_in_netlist(g_netlist->get_gate_by_id(m_current_id)))
+        update(m_current_id);
 }
 
 void gate_details_widget::handle_net_src_changed(std::shared_ptr<net> net)
 {
-    update(m_current_id);
+    Q_UNUSED(net);
+    if(g_netlist->is_gate_in_netlist(g_netlist->get_gate_by_id(m_current_id)))
+        update(m_current_id);
 }
 
 void gate_details_widget::handle_net_dst_added(std::shared_ptr<net> net, const u32 dst_gate_id)
 {
-    update(m_current_id);
-
+    Q_UNUSED(net);
+    if(g_netlist->is_gate_in_netlist(g_netlist->get_gate_by_id(m_current_id)))
+        update(m_current_id);
 }
 
 void gate_details_widget::handle_net_dst_removed(std::shared_ptr<net> net, const u32 dst_gate_id)
 {
-    update(m_current_id);
+    Q_UNUSED(net);
+    if(g_netlist->is_gate_in_netlist(g_netlist->get_gate_by_id(m_current_id)))
+        update(m_current_id);
 }
-
 
 void gate_details_widget::handle_gate_name_changed(std::shared_ptr<gate> gate)
 {

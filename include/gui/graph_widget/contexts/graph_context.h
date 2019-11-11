@@ -26,7 +26,7 @@ public:
     void end_change();
 
     void add(const QSet<u32>& modules, const QSet<u32>& gates);
-    void remove(const QSet<u32>& modules, const QSet<u32>& gates);
+    void remove(const QSet<u32>& modules, const QSet<u32>& gates, const QSet<u32>& nets);
     void clear();
 
     void fold_module_of_gate(u32 id);
@@ -57,6 +57,8 @@ private Q_SLOTS:
     void handle_layouter_update(const QString& message);
     void handle_layouter_finished();
 
+    void handle_net_removed(std::shared_ptr<net>);
+
 private:
     virtual void evaluate_changes();
     virtual void apply_changes();
@@ -76,9 +78,11 @@ private:
 
     QSet<u32> m_added_modules;
     QSet<u32> m_added_gates;
+    QSet<u32> m_added_nets;
 
     QSet<u32> m_removed_modules;
     QSet<u32> m_removed_gates;
+    QSet<u32> m_removed_nets;
 
     bool m_unhandled_changes;
     bool m_scene_update_required;
