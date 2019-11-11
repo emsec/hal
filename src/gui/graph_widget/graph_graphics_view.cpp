@@ -120,7 +120,7 @@ void graph_graphics_view::handle_move_action(QAction* action)
 
     auto context = m_graph_widget->get_context();
     context->begin_change();
-    context->remove(modules, gates);
+    context->remove(modules, gates, {});
     context->end_change();
 }
 
@@ -150,7 +150,7 @@ void graph_graphics_view::handle_move_new_action()
 
     auto context = m_graph_widget->get_context();
     context->begin_change();
-    context->remove(modules, gates);
+    context->remove(modules, gates, {});
     context->add({m->get_id()}, {});
     context->end_change();
 }

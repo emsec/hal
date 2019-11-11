@@ -23,6 +23,8 @@ void graph_context::set_layouter(graph_layouter* layouter)
     connect(layouter, qOverload<const QString&>(&graph_layouter::status_update), this, qOverload<const QString&>(&graph_context::handle_layouter_update), Qt::ConnectionType::QueuedConnection);
 
     m_layouter = layouter;
+
+    connect(&g_netlist_relay, &netlist_relay::net_removed, this, &graph_context::handle_net_removed);
 }
 
 void graph_context::set_shader(graph_shader* shader)
@@ -90,16 +92,19 @@ void graph_context::add(const QSet<u32>& modules, const QSet<u32>& gates)
     }
 }
 
-void graph_context::remove(const QSet<u32>& modules, const QSet<u32>& gates)
+void graph_context::remove(const QSet<u32>& modules, const QSet<u32>& gates, const QSet<u32>& nets)
 {
     QSet<u32> old_modules = modules & m_modules;
     QSet<u32> old_gates   = gates & m_gates;
+    QSet<u32> old_nets    = nets & m_nets;
 
     m_removed_modules += old_modules;
     m_removed_gates += old_gates;
+    m_removed_nets += old_nets;
 
     m_added_modules -= modules;
     m_added_gates -= gates;
+    m_added_nets -= nets;
 
     if (m_user_update_count == 0)
     {
@@ -140,7 +145,7 @@ void graph_context::fold_module_of_gate(u32 id)
             modules.insert(sm->get_id());
         }
         begin_change();
-        remove(modules, gates);
+        remove(modules, gates, {});
         add({m->get_id()}, {});
         end_change();
     }
@@ -164,7 +169,7 @@ void graph_context::unfold_module(u32 id)
             modules.insert(sm->get_id());
         }
         begin_change();
-        remove({id}, {});
+        remove({id}, {}, {});
         add(modules, gates);
         end_change();
     }
@@ -303,7 +308,7 @@ void graph_context::handle_layouter_finished()
 
 void graph_context::evaluate_changes()
 {
-    if (!m_added_gates.isEmpty() || !m_removed_gates.isEmpty() || !m_added_modules.isEmpty() || !m_removed_modules.isEmpty())
+    if (!m_added_gates.isEmpty() || !m_removed_gates.isEmpty() || !m_added_modules.isEmpty() || !m_removed_modules.isEmpty() || !m_added_nets.isEmpty() || !m_removed_nets.isEmpty())
         m_unhandled_changes = true;
 }
 
@@ -370,4 +375,9 @@ void graph_context::update_scene()
     layouter_task* task = new layouter_task(m_layouter);
     connect(task, &layouter_task::finished, this, &graph_context::handle_layouter_finished, Qt::ConnectionType::QueuedConnection);
     g_thread_pool->queue_task(task);
+}
+
+void graph_context::handle_net_removed(std::shared_ptr<net> n)
+{
+    remove({}, {}, {n->get_id()});
 }
