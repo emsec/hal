@@ -67,6 +67,14 @@ std::shared_ptr<netlist> hdl_parser_vhdl::parse(const std::string& gate_library)
     }
     m_net_by_name[m_one_net->get_name()] = m_one_net;
 
+    m_z_net = m_netlist->create_net("'Z'");
+    if (m_z_net == nullptr)
+    {
+        log_error("hdl_parser", "could not instantiate Z net");
+        return nullptr;
+    }
+    m_net_by_name[m_z_net->get_name()] = m_z_net;
+
     // build the netlist from the intermediate format
     // the last entity in the file is considered the top module
     if (!build_netlist(m_last_entity))
@@ -234,9 +242,9 @@ bool hdl_parser_vhdl::parse_library()
 {
     if (m_token_stream.peek() == "use")
     {
-        m_token_stream.consume("use");    // "use"
+        m_token_stream.consume("use");
         auto lib = m_token_stream.consume().string;
-        m_token_stream.consume(";");    // ";"
+        m_token_stream.consume(";");
 
         // remove specific import like ".all" but keep the "."
         lib = core_utils::trim(lib.substr(0, lib.rfind(".") + 1));
@@ -331,7 +339,7 @@ bool hdl_parser_vhdl::parse_architecture()
     m_token_stream.consume();
     m_token_stream.consume("of");
     auto& e = m_entities[m_token_stream.consume()];
-    m_token_stream.consume();    // "is"
+    m_token_stream.consume("is");
     return parse_architecture_header(e) && parse_architecture_body(e);
 }
 
@@ -342,9 +350,9 @@ bool hdl_parser_vhdl::parse_architecture_header(entity& e)
         m_last_parsed_line = m_token_stream.peek().number;
         if (m_token_stream.peek() == "signal")
         {
-            m_token_stream.consume("signal");    // "signal"
+            m_token_stream.consume("signal");
             auto name = m_token_stream.consume().string;
-            m_token_stream.consume(":");    // ":"
+            m_token_stream.consume(":");
             auto type = m_token_stream.extract_until(";");
             m_token_stream.consume(";");
 
@@ -440,7 +448,7 @@ bool hdl_parser_vhdl::parse_architecture_body(entity& e)
 bool hdl_parser_vhdl::parse_attribute(std::map<std::string, std::set<std::tuple<std::string, std::string, std::string>>>& mapping)
 {
     u32 line_number = m_token_stream.peek().number;
-    m_token_stream.consume();    // "attribute"
+    m_token_stream.consume("attribute");
     auto attr_type = m_token_stream.consume().string;
     if (m_token_stream.peek() == ":")
     {
@@ -909,7 +917,7 @@ std::shared_ptr<module> hdl_parser_vhdl::instantiate(const entity& e, std::share
                 {
                     instance_assignments[pin] = it3->second;
                 }
-                else if (signal == "'0'" || signal == "'1'")
+                else if (signal == "'0'" || signal == "'1'" || signal == "'Z'")
                 {
                     instance_assignments[pin] = signal;
                 }

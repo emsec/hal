@@ -87,6 +87,7 @@ private:
     std::map<std::string, std::shared_ptr<net>> m_net_by_name;
     std::shared_ptr<net> m_zero_net;
     std::shared_ptr<net> m_one_net;
+    std::shared_ptr<net> m_z_net;
     std::map<std::string, u32> m_name_occurrences;
     std::map<std::string, u32> m_current_instance_index;
     std::map<std::string, entity> m_entities;
