@@ -49,7 +49,7 @@ graph_widget::graph_widget(graph_context* context, QWidget* parent)
 
     m_context->subscribe(this);
 
-    if (!m_context->update_in_progress())
+    if (!m_context->scene_update_in_progress())
     {
         m_view->setScene(m_context->scene());
         m_view->centerOn(0, 0);
@@ -108,7 +108,7 @@ void graph_widget::keyPressEvent(QKeyEvent* event)
     if (!m_context)
         return;
 
-    if (!m_context->available())
+    if (m_context->scene_update_in_progress())
         return;
 
     switch (event->key())
@@ -481,7 +481,7 @@ void graph_widget::handle_enter_module_requested(const u32 id)
 
 void graph_widget::ensure_gate_visible(const u32 gate)
 {
-    if (m_context->update_in_progress())
+    if (m_context->scene_update_in_progress())
         return;
 
     const graphics_gate* itm = m_context->scene()->get_gate_item(gate);
