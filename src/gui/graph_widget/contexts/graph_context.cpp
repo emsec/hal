@@ -10,9 +10,13 @@
 static const bool lazy_updates = false;
 
 graph_context::graph_context(const QString& name, QObject* parent)
-    : QObject(parent), m_name(name), m_unhandled_changes(false), m_scene_update_required(false), m_update_requested(false), m_scene_available(true), m_update_in_progress(false)
+    : QObject(parent),
+      m_name(name),
+      m_user_update_count(0),
+      m_unapplied_changes(false),
+      m_scene_update_required(false),
+      m_scene_update_in_progress(false)
 {
-    m_user_update_count = 0;
 }
 
 void graph_context::set_layouter(graph_layouter* layouter)
@@ -195,44 +199,23 @@ QString graph_context::name() const
     return m_name;
 }
 
-bool graph_context::available() const
+bool graph_context::scene_update_in_progress() const
 {
-    return m_scene_available;
+    return m_scene_update_in_progress;
 }
 
-bool graph_context::update_in_progress() const
+void graph_context::schedule_scene_update()
 {
-    return m_update_in_progress;
-}
+    m_scene_update_required = true;
 
-void graph_context::update()
-{
-    if (m_update_in_progress)
+    if (m_scene_update_in_progress)
         return;
 
     if (lazy_updates)
         if (m_subscribers.empty())
             return;
 
-    if (m_unhandled_changes)
-        apply_changes();
-
-    if (m_scene_update_required)
-        update_scene();
-}
-
-void graph_context::request_update()
-{
-    m_update_requested = true;
-
-    if (m_update_in_progress)
-        return;
-
-    if (lazy_updates)
-        if (m_subscribers.empty())
-            return;
-
-    //update();
+    update();
 }
 
 bool graph_context::node_for_gate(hal::node& node, const u32 id) const
@@ -266,6 +249,11 @@ bool graph_context::node_for_gate(hal::node& node, const u32 id) const
     return false;
 }
 
+graph_layouter* graph_context::debug_get_layouter() const
+{
+    return m_layouter;
+}
+
 void graph_context::handle_layouter_update(const int percent)
 {
     for (graph_context_subscriber* s : m_subscribers)
@@ -280,19 +268,19 @@ void graph_context::handle_layouter_update(const QString& message)
 
 void graph_context::handle_layouter_finished()
 {
-    if (m_unhandled_changes)
+    if (m_unapplied_changes)
         apply_changes();
 
     if (m_scene_update_required)
     {
-        update_scene();
+        start_scene_update();
     }
     else
     {
         m_shader->update();
         m_layouter->scene()->update_visuals(m_shader->get_shading());
 
-        m_update_in_progress = false;
+        m_scene_update_in_progress = false;
 
         m_layouter->scene()->connect_all();
 
@@ -304,7 +292,16 @@ void graph_context::handle_layouter_finished()
 void graph_context::evaluate_changes()
 {
     if (!m_added_gates.isEmpty() || !m_removed_gates.isEmpty() || !m_added_modules.isEmpty() || !m_removed_modules.isEmpty())
-        m_unhandled_changes = true;
+        m_unapplied_changes = true;
+}
+
+void graph_context::update()
+{
+    if (m_unapplied_changes)
+        apply_changes();
+
+    if (m_scene_update_required)
+        start_scene_update();
 }
 
 void graph_context::apply_changes()
@@ -353,18 +350,19 @@ void graph_context::apply_changes()
     m_removed_modules.clear();
     m_removed_gates.clear();
 
-    m_unhandled_changes     = false;
+    m_unapplied_changes     = false;
     m_scene_update_required = true;
 }
 
-void graph_context::update_scene()
+void graph_context::start_scene_update()
 {
+    m_scene_update_in_progress    = true;
+
     for (graph_context_subscriber* s : m_subscribers)
         s->handle_scene_unavailable();
 
     m_layouter->scene()->disconnect_all();
 
-    m_update_in_progress    = true;
     m_scene_update_required = false;
 
     layouter_task* task = new layouter_task(m_layouter);
