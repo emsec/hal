@@ -43,14 +43,13 @@ public:
     void set_layouter(graph_layouter* layouter);
     void set_shader(graph_shader* shader);
 
-    bool available() const;
-    bool update_in_progress() const;
+    bool scene_update_in_progress() const;
 
-    void update();
-
-    void request_update();
+    void schedule_scene_update();
 
     bool node_for_gate(hal::node& node, const u32 id) const;
+
+    graph_layouter* debug_get_layouter() const;
 
 private Q_SLOTS:
     void handle_layouter_update(const int percent);
@@ -60,10 +59,10 @@ private Q_SLOTS:
     void handle_net_removed(std::shared_ptr<net>);
 
 private:
-    virtual void evaluate_changes();
-    virtual void apply_changes();
-
-    void update_scene();
+    void evaluate_changes();
+    void update();
+    void apply_changes();
+    void start_scene_update();
 
     QList<graph_context_subscriber*> m_subscribers;
 
@@ -84,12 +83,11 @@ private:
     QSet<u32> m_removed_gates;
     QSet<u32> m_removed_nets;
 
-    bool m_unhandled_changes;
-    bool m_scene_update_required;
     u32 m_user_update_count;
-    bool m_update_requested;
-    bool m_scene_available;
-    bool m_update_in_progress;
+
+    bool m_unapplied_changes;
+    bool m_scene_update_required;
+    bool m_scene_update_in_progress;
 };
 
 #endif // GRAPH_CONTEXT_H
