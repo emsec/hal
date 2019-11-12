@@ -110,13 +110,13 @@ boolean_function gate::get_boolean_function(const std::string& name) const
     }
 
     auto it = m_functions.find(name);
-    if (it == m_functions.end())
+    if (it != m_functions.end())
     {
         return it->second;
     }
     auto map = m_type->get_boolean_functions();
     it       = m_functions.find(name);
-    if (it == m_functions.end())
+    if (it != m_functions.end())
     {
         return it->second;
     }
