@@ -69,7 +69,7 @@ void graph_context_manager::handle_module_name_changed(const std::shared_ptr<mod
     // UPDATE DYNAMIC CONTEXTS
     for (graph_context* context : m_graph_contexts)
         if (context->modules().contains(m->get_id()))
-            context->request_update();
+            context->schedule_scene_update();
 
     // TRIGGER RESHADE FOR ALL CONTEXTS THAT RECURSIVELY CONTAIN THE MODULE
 }
@@ -103,7 +103,7 @@ void graph_context_manager::handle_gate_name_changed(const std::shared_ptr<gate>
     // IF GATE IN CONTEXT REQUEST UPDATE
     for (graph_context* context : m_graph_contexts)
         if (context->gates().contains(g->get_id()))
-            context->request_update();
+            context->schedule_scene_update();
 
     // TRIGGER RESHADE FOR ALL CONTEXTS THAT RECURSIVELY CONTAIN THE MODULE
 }
@@ -121,7 +121,7 @@ void graph_context_manager::handle_net_removed(const std::shared_ptr<net> n) con
     // IF NET IS PART OF CONTEXT UPDATE
     for (graph_context* context : m_graph_contexts)
         if (context->nets().contains(n->get_id()))
-            context->request_update();
+            context->schedule_scene_update();
 
     // TRIGGER RESHADE FOR ALL CONTEXTS THAT RECURSIVELY CONTAIN THE MODULE
 }
@@ -138,7 +138,7 @@ void graph_context_manager::handle_net_src_changed(const std::shared_ptr<net> n)
     // IF NET IS PART OF CONTEXT UPDATE
     for (graph_context* context : m_graph_contexts)
         if (context->nets().contains(n->get_id()))
-            context->request_update();
+            context->schedule_scene_update();
 
     // TRIGGER RESHADE FOR ALL CONTEXTS THAT RECURSIVELY CONTAIN THE MODULE
 }
@@ -150,7 +150,7 @@ void graph_context_manager::handle_net_dst_added(const std::shared_ptr<net> n, c
     // IF NET OR DST GATE IS PART OF CONTEXT UPDATE
     for (graph_context* context : m_graph_contexts)
         if (context->nets().contains(n->get_id()) || context->gates().contains(dst_gate_id))
-            context->request_update();
+            context->schedule_scene_update();
 
     // TRIGGER RESHADE FOR ALL CONTEXTS THAT RECURSIVELY CONTAIN THE MODULE
 }
@@ -162,7 +162,7 @@ void graph_context_manager::handle_net_dst_removed(const std::shared_ptr<net> n,
     // IF NET IS PART OF CONTEXT UPDATE
     for (graph_context* context : m_graph_contexts)
         if (context->nets().contains(n->get_id()))
-            context->request_update();
+            context->schedule_scene_update();
 
     // TRIGGER RESHADE FOR ALL CONTEXTS THAT RECURSIVELY CONTAIN THE MODULE
 }
