@@ -59,7 +59,7 @@ void graph_context_manager::handle_module_removed(const std::shared_ptr<module> 
 {
     for (graph_context* context : m_graph_contexts)
         if (context->modules().contains(m->get_id()))
-            context->remove({m->get_id()}, {}, {});
+            context->remove({m->get_id()}, {});
 
     // TRIGGER RESHADE FOR ALL CONTEXTS THAT RECURSIVELY CONTAIN THE MODULE
 }
