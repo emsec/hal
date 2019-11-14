@@ -125,10 +125,10 @@ void token_stream::set_position(u32 p)
     m_pos = p;
 }
 
-u32 token_stream::find_next(const std::string& match) const
+u32 token_stream::find_next(const std::string& match, u32 end) const
 {
     u32 level = 0;
-    for (u32 i = m_pos; i < size(); ++i)
+    for (u32 i = m_pos; i < size() && i < end; ++i)
     {
         const auto& token = at(i);
         if (level == 0 && core_utils::equals_ignore_case(token, match))
