@@ -1053,6 +1053,10 @@ std::shared_ptr<module> hdl_parser_vhdl::instantiate(const entity& e, std::share
 
                 if (!is_input && !is_output)
                 {
+                    for (const auto& pin_type : new_gate->get_type()->get_input_pins())
+                    {
+                        log_error("hdl_parser", "pin_type: {}", pin_type);
+                    }
                     log_error("hdl_parser", "undefined pin '{}' for '{}' ({})", pin, new_gate->get_name(), new_gate->get_type()->get_name());
                     return nullptr;
                 }
