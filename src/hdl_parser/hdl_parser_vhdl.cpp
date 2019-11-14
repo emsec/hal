@@ -1329,14 +1329,14 @@ std::map<std::string, std::string> hdl_parser_vhdl::get_assignments(token_stream
         int left_dir, left_start, left_end;
         if (lhs.at(3) == "downto")
         {
-            left_start = std::stoi(lhs.at(4));
-            left_end   = std::stoi(lhs.at(2));
+            left_start = std::stoi(lhs.at(2));
+            left_end   = std::stoi(lhs.at(4));
             left_dir   = -1;
         }
         else if (lhs.at(3) == "to")
         {
-            left_start = std::stoi(lhs.at(2));
-            left_end   = std::stoi(lhs.at(4));
+            left_start = std::stoi(lhs.at(4));
+            left_end   = std::stoi(lhs.at(2));
             left_dir   = 1;
         }
         else
@@ -1348,16 +1348,16 @@ std::map<std::string, std::string> hdl_parser_vhdl::get_assignments(token_stream
         if (!right_contains_range)
         {
             // case (3)
-
+            token_stream tmp(rhs);
             // right part has to be a bitvector
-            if (rhs.size() != 2 || (rhs.at(0) == "B" && rhs.at(1).string[0] == '"'))
+            if (rhs.size() != 1 || !core_utils::starts_with(rhs.at(0).string, "B\"", true))
             {
                 log_error("hdl_parser", "assignment of anything but a binary bitvector is not supported (line {})", lhs.at(0).number);
                 return {};
             }
 
             // extract value
-            auto right_values = rhs.at(1).string.substr(1, rhs.at(1).string.size() - 2);
+            std::string right_values = rhs.at(0).string.substr(2, rhs.at(0).string.size() - 3);
 
             // assemble assignment strings
             std::map<std::string, std::string> result;
@@ -1384,14 +1384,14 @@ std::map<std::string, std::string> hdl_parser_vhdl::get_assignments(token_stream
             int right_dir, right_start, right_end;
             if (rhs.at(3) == "downto")
             {
-                right_start = std::stoi(rhs.at(4));
-                right_end   = std::stoi(rhs.at(2));
+                right_start = std::stoi(rhs.at(2));
+                right_end   = std::stoi(rhs.at(4));
                 right_dir   = -1;
             }
             else if (rhs.at(3) == "to")
             {
-                right_start = std::stoi(rhs.at(2));
-                right_end   = std::stoi(rhs.at(4));
+                right_start = std::stoi(rhs.at(4));
+                right_end   = std::stoi(rhs.at(2));
                 right_dir   = 1;
             }
             else
