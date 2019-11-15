@@ -1,4 +1,4 @@
-#include "netlist/gate_library/gate_library_liberty_parser.h"
+#include "netlist/gate_library/gate_library_parser_liberty.h"
 #include "core/log.h"
 #include "core/utils.h"
 #include "netlist/boolean_function.h"
@@ -13,7 +13,7 @@
 #include <regex>
 #include <sstream>
 
-namespace gate_library_liberty_parser
+namespace gate_library_parser_liberty
 {
     struct statement
     {
@@ -603,4 +603,4 @@ namespace gate_library_liberty_parser
             }
         }
     }
-}    // namespace gate_library_liberty_parser
+}    // namespace gate_library_parser_liberty

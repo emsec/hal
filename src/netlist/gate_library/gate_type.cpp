@@ -39,11 +39,6 @@ bool gate_type::doCompare(const gate_type& other) const
     return true;
 }
 
-void gate_type::set_base_type(base_type base_type)
-{
-    m_base_type = base_type;
-}
-
 void gate_type::add_input_pin(std::string input_pin)
 {
     m_input_pins.push_back(input_pin);
@@ -64,9 +59,9 @@ void gate_type::add_output_pins(const std::vector<std::string>& output_pins)
     m_output_pins.insert(m_output_pins.end(), output_pins.begin(), output_pins.end());
 }
 
-void gate_type::add_boolean_function(std::string name, boolean_function bf)
+void gate_type::add_boolean_function(std::string pin_name, boolean_function bf)
 {
-    m_functions.emplace(name, bf);
+    m_functions.emplace(pin_name, bf);
 }
 
 std::string gate_type::get_name() const

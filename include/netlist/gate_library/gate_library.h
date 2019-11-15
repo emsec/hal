@@ -55,33 +55,38 @@ public:
      */
     std::string get_name() const;
 
+    /**
+     * Add a gate type to the gate library.
+     * 
+     * @param[in] gt - The gate type object.
+     */
     void add_gate_type(std::shared_ptr<const gate_type> gt);
 
     /**
      * Get all gate types of the library.
      *
-     * @returns vector of all gate types.
+     * @returns A map of all gate type names to gate type objects.
      */
     const std::map<std::string, std::shared_ptr<const gate_type>>& get_gate_types();
 
     /**
-     * Get all global vcc gate types of the library.
+     * Get all global VCC gate types of the library.
      *
-     * @returns vector of all global vcc gate types.
+     * @returns A map of all global VCC gate type names to gate type objects.
      */
     const std::map<std::string, std::shared_ptr<const gate_type>>& get_vcc_gate_types();
 
     /**
-     * Get all global gnd gate types of the library.
+     * Get all global GND gate types of the library.
      *
-     * @returns vector of all global gnd gate types.
+     * @returns A map of all global GND gate type names to gate type objects.
      */
     const std::map<std::string, std::shared_ptr<const gate_type>>& get_gnd_gate_types();
 
     /**
      * Get the VHDL includes of the library.
      *
-     * @returns VHDL includes to use by serializer.
+     * @returns The VHDL includes for use by the serializer.
      */
     std::vector<std::string>* get_vhdl_includes();
 

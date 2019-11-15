@@ -3,17 +3,12 @@
 #include "core/log.h"
 #include "core/utils.h"
 #include "netlist/gate_library/gate_library.h"
-#include "netlist/gate_library/gate_library_liberty_parser.h"
+#include "netlist/gate_library/gate_library_parser_liberty.h"
 
 #include <fstream>
 #include <iostream>
 #include <regex>
 #include <sstream>
-
-#define RAPIDJSON_HAS_STDSTRING 1
-#include "rapidjson/document.h"
-#include "rapidjson/filereadstream.h"
-#include "rapidjson/stringbuffer.h"
 
 namespace gate_library_manager
 {
@@ -34,7 +29,7 @@ namespace gate_library_manager
 
                 buffer << file.rdbuf();
 
-                lib = gate_library_liberty_parser::parse(buffer);
+                lib = gate_library_parser_liberty::parse(buffer);
 
                 file.close();
 
@@ -47,7 +42,7 @@ namespace gate_library_manager
                     log_info("netlist",
                              "loaded gate library '{}' from '{}' in {:2.2f} seconds.",
                              lib->get_name(),
-                             path.string().substr(path.string().find_last_of("/")+1),
+                             path.string().substr(path.string().find_last_of("/") + 1),
                              (double)std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - begin_time).count() / 1000);
                 }
             }

@@ -33,7 +33,7 @@
 class bdd;
 class gate_library;
 
-namespace gate_library_liberty_parser
+namespace gate_library_parser_liberty
 {
     /*
      * Parses a gate library from the liberty file format.
@@ -53,6 +53,6 @@ namespace gate_library_liberty_parser
      */
     std::shared_ptr<gate_library> parse(std::stringstream& ss);
 
-}    // namespace gate_library_liberty_parser
+}    // namespace gate_library_parser_liberty
 
 #endif    //__HAL_GATE_LIBRARY_LIBERTY_PARSER_H
