@@ -10,30 +10,48 @@
 #include "netlist/net.h"
 #include "netlist/netlist.h"
 
-std::tuple<igraph_t, std::map<int, std::shared_ptr<gate>>> plugin_graph_algorithm::get_igraph_directed(std::shared_ptr<netlist> nl)
+std::tuple<igraph_t, std::map<int, std::shared_ptr<gate>>> plugin_graph_algorithm::get_igraph_directed(std::shared_ptr<netlist> const nl)
 {
     igraph_t graph;
-
-    std::set<std::shared_ptr<net>> global_output_nets;
-    global_output_nets = nl->get_global_output_nets();
-
-    std::set<std::shared_ptr<net>> global_input_nets;
-    global_input_nets = nl->get_global_input_nets();
-
-
 
     // count all edges, remember in HAL one net(edge) has multiple sinks
     u32 edge_counter = 0;
     for (const auto& net : nl->get_nets())
     {
-        auto successors = net->get_dsts();
-        edge_counter += successors.size();
+        std::shared_ptr<gate> src_gate = net->get_src().gate;
+        std::vector<std::shared_ptr<gate>> dst_gates;
 
-        if (global_output_nets.find(net) != global_output_nets.end())
+        auto dst_gates_endpoints = net->get_dsts();
+
+        for (const auto& dst_gate_endpoint : dst_gates_endpoints)
+        {
+            dst_gates.push_back(dst_gate_endpoint.gate);
+        }
+
+        // if gate has no src --> add exactly one dummy node
+        if (!src_gate)
+        {
+            for (const auto& dst_gate : dst_gates)
+            {
+                edge_counter++;
+            }
+        }
+        // if gate has no dsts --> add dummy node
+        else if (dst_gates.size() == 0)
         {
             edge_counter++;
         }
+        // default mode
+        else
+        {
+            for (const auto& dst_gate : dst_gates)
+            {
+                edge_counter++;
+            }
+        }
     }
+
+    log_debug("graph_algorithm", "nets: {}, edge_counter: {}", nl->get_nets().size(), edge_counter);
 
     // initialize edge vector
     igraph_vector_t edges;
@@ -43,53 +61,53 @@ std::tuple<igraph_t, std::map<int, std::shared_ptr<gate>>> plugin_graph_algorith
     u32 dummy_gate_counter   = nl->get_gates().size() - 1;
     u32 edge_vertice_counter = 0;
 
-
     for (const auto& net : nl->get_nets())
     {
-        // if input net we need to add one dummy input gate
-        if (global_input_nets.find(net) != global_input_nets.end())
+        std::shared_ptr<gate> src_gate = net->get_src().gate;
+        std::vector<std::shared_ptr<gate>> dst_gates;
+
+        auto dst_gates_endpoints = net->get_dsts();
+
+        for (const auto& dst_gate_endpoint : dst_gates_endpoints)
+        {
+            dst_gates.push_back(dst_gate_endpoint.gate);
+        }
+
+        // if gate has no src --> add exactly one dummy node
+        if (src_gate == nullptr)
         {
             u32 dummy_gate = ++dummy_gate_counter;
-            for (const auto& successor : net->get_dsts())
+            for (const auto& dst_gate : dst_gates)
             {
                 VECTOR(edges)[edge_vertice_counter++] = dummy_gate;
-                VECTOR(edges)[edge_vertice_counter++] = successor.get_gate()->get_id() - 1;
+                VECTOR(edges)[edge_vertice_counter++] = dst_gate->get_id() - 1;
 
-                log_debug("graph_algorithm", "input_gate: {} --> {}: {}", dummy_gate, successor.get_gate()->get_id() - 1, successor.get_gate()->get_name().c_str());
+                log_debug("graph_algorithm", "input_gate: {} --> {}: {}", dummy_gate, dst_gate->get_id() - 1, dst_gate->get_name().c_str());
             }
         }
-        // if output net we need to add one dummy output gate
-        else if (global_output_nets.find(net) != global_output_nets.end())
+        // if gate has no dsts --> add dummy node
+        else if (dst_gates.size() == 0)
         {
-            auto predecessor                      = net->get_src().gate;
-            VECTOR(edges)[edge_vertice_counter++] = predecessor->get_id() - 1;
+            VECTOR(edges)[edge_vertice_counter++] = src_gate->get_id() - 1;
             VECTOR(edges)[edge_vertice_counter++] = ++dummy_gate_counter;
 
-            log_debug("graph_algorithm", "{}: {} --> {} output\n", predecessor->get_name().c_str(), predecessor->get_id() - 1, dummy_gate_counter);
-
-            for (const auto& successor : net->get_dsts())
-            {
-                VECTOR(edges)[edge_vertice_counter++] = predecessor->get_id() - 1;
-                VECTOR(edges)[edge_vertice_counter++] = successor.gate->get_id() - 1;
-
-                log_debug("graph_algorithm", "{}: {} --> {}: {}\n", predecessor->get_name().c_str(), predecessor->get_id() - 1, edge_vertice_counter, successor.get_gate()->get_name().c_str());
-            }
+            log_debug("graph_algorithm", "{}: {} --> {} output\n", src_gate->get_name().c_str(), src_gate->get_id() - 1, dummy_gate_counter);
         }
+        // default mode
         else
         {
-            auto predecessor = net->get_src().gate;
-            for (const auto& successor : net->get_dsts())
+            for (const auto& dst_gate : dst_gates)
             {
-                VECTOR(edges)[edge_vertice_counter++] = predecessor->get_id() - 1;
-                VECTOR(edges)[edge_vertice_counter++] = successor.gate->get_id() - 1;
+                VECTOR(edges)[edge_vertice_counter++] = src_gate->get_id() - 1;
+                VECTOR(edges)[edge_vertice_counter++] = dst_gate->get_id() - 1;
 
-                log_debug(
-                    "graph_algorithm", "{}: {} --> {}: {}", predecessor->get_name().c_str(), predecessor->get_id() - 1, successor.get_gate()->get_id() - 1, successor.get_gate()->get_name().c_str());
+                log_debug("graph_algorithm", "{}: {} --> {}: {}", src_gate->get_name().c_str(), src_gate->get_id() - 1, dst_gate->get_id() - 1, dst_gate->get_name().c_str());
             }
         }
     }
 
     igraph_create(&graph, &edges, 0, IGRAPH_DIRECTED);
+
 
     // map with vertice id to hal-gate
     std::map<int, std::shared_ptr<gate>> vertice_to_gate;
