@@ -35,7 +35,7 @@
 
 struct HDL_PARSER_API token
 {
-    /*
+    /**
      * Base token class that holds a string and a line number.
      * Can be set to be case insensitive in all string comparisons (default).
      *
@@ -74,33 +74,33 @@ public:
     // constant that can be returned by find next.
     static const u32 not_found = -1;
 
-    /*
+    /**
      * Constructor for an empty token stream.
      */
     token_stream();
 
-    /*
+    /**
      * Copy constructor.
      *
      * @param[in] other - the token stream to copy
      */
     token_stream(const token_stream& other);
 
-    /*
+    /**
      * Initialization constructor.
      *
      * @param[in] init - a token vector to initialize with
      */
     token_stream(const std::vector<token>& init);
 
-    /*
+    /**
      * Add a new token to the end of the stream.
      *
      * @param[in] t - the new token
      */
     void append(const token& t);
 
-    /*
+    /**
      * Consume the next token(s) in the stream.
      * Advances the stream by the given number and returns the last consumed token.
      *
@@ -111,7 +111,7 @@ public:
      */
     token consume(u32 num = 1);
 
-    /*
+    /**
      * Consume the next token in the stream *if* it matches the given expected value.
      * If the token does not match, the stream is unchanged.
      *
@@ -120,7 +120,7 @@ public:
      */
     bool consume(const std::string& expected);
 
-    /*
+    /**
      * Consume the next tokens in the stream until a token matches a given string on the same bracket level.
      * This final token is not consumed, i.e., it is now the next token in the stream.
      * Example: ending on "b" in 'a,(,b,),b,c' would consume 'a,(,b,)', leaving the stream at 'b,c'.
@@ -133,7 +133,7 @@ public:
      */
     token consume_until(const std::string& match);
 
-    /*
+    /**
      * Consume the next tokens in the stream until a token matches the given string on the same bracket level.
      * This final token is not consumed, i.e., it is now the next token in the stream.
      * Example: ending on "b" in 'a,(,b,),b,c' would consume 'a,(,b,)', leaving the stream at 'b,c'.
@@ -148,7 +148,7 @@ public:
      */
     token_stream extract_until(const std::string& match);
 
-    /*
+    /**
      * Consume the next tokens in the stream until a token matches the given string on the same bracket level.
      * This final token is not consumed, i.e., it is now the next token in the stream.
      * Example: ending on "b" in 'a,(,b,),b,c' would consume 'a,(,b,)', leaving the stream at 'b,c'.
@@ -165,7 +165,7 @@ public:
      */
     token join_until(const std::string& match, const std::string& joiner);
 
-    /*
+    /**
      * Consume all remaining tokens in the stream.
      * The strings of all consumed tokens are joined with the given joiner string and returned as a new token.
      * The returned token has the line number of the first consumed token.
@@ -175,7 +175,7 @@ public:
      */
     token join(const std::string& joiner);
 
-    /*
+    /**
      * Return a token at a *relative* position in the stream.
      * Can access tokens that have already been consumed.
      * Position 0 is the first element of the stream.
@@ -188,7 +188,7 @@ public:
     token& peek(i32 offset = 0);
     const token& peek(i32 offset = 0) const;
 
-    /*
+    /**
      * Return a token at an *absolute* position in the stream.
      * Can access tokens that have already been consumed.
      * Position 0 is the first element of the stream.
@@ -201,7 +201,7 @@ public:
     token& at(u32 position);
     const token& at(u32 position) const;
 
-    /*
+    /**
      * Get the *absolute* position in the stream of the next matching token on the same bracket level.
      * Example: matching on "b" in 'a,(,b,),b,c' would return 5.
      * Bracket level is changed by () and [].
@@ -212,35 +212,35 @@ public:
      */
     u32 find_next(const std::string& match, u32 end = -1) const;
 
-    /*
+    /**
      * Get the total number of elements in the token stream, regardless of how many have been consumed.
      *
      * @returns The total size of the token stream.
      */
     u32 size() const;
 
-    /*
+    /**
      * Get the total number of consumed elements in the token stream.
      *
      * @returns The total number of consumed tokens.
      */
     u32 consumed() const;
 
-    /*
+    /**
      * Get the total number of remaining elements in the token stream.
      *
      * @returns The number of remaining tokens.
      */
     u32 remaining() const;
 
-    /*
+    /**
      * Get the current absolute position in the token stream.
      *
      * @returns The current position.
      */
     u32 position() const;
 
-    /*
+    /**
      * Set the current absolute position in the token stream.
      *
      * @param[in] p - the new position

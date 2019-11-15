@@ -65,21 +65,21 @@ public:
     /**
      * Get all gate types of the library.
      *
-     * @returns A map of all gate type names to gate type objects.
+     * @returns A map from gate type names to gate type objects.
      */
     const std::map<std::string, std::shared_ptr<const gate_type>>& get_gate_types();
 
     /**
      * Get all global VCC gate types of the library.
      *
-     * @returns A map of all global VCC gate type names to gate type objects.
+     * @returns A map from global VCC gate type names to gate type objects.
      */
     const std::map<std::string, std::shared_ptr<const gate_type>>& get_vcc_gate_types();
 
     /**
      * Get all global GND gate types of the library.
      *
-     * @returns A map of all global GND gate type names to gate type objects.
+     * @returns A map from global GND gate type names to gate type objects.
      */
     const std::map<std::string, std::shared_ptr<const gate_type>>& get_gnd_gate_types();
 

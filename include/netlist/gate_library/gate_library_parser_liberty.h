@@ -23,8 +23,8 @@
 
 #include "pragma_once.h"
 
-#ifndef __HAL_GATE_LIBRARY_LIBERTY_PARSER_H
-#define __HAL_GATE_LIBRARY_LIBERTY_PARSER_H
+#ifndef __HAL_GATE_LIBRARY_PARSER_LIBERTY_H
+#define __HAL_GATE_LIBRARY_PARSER_LIBERTY_H
 
 #include "def.h"
 
@@ -35,7 +35,7 @@ class gate_library;
 
 namespace gate_library_parser_liberty
 {
-    /*
+    /**
      * Parses a gate library from the liberty file format.
      * In order to also support lookup tables (LUTs) the following extension is allowed:
      * 
@@ -55,4 +55,4 @@ namespace gate_library_parser_liberty
 
 }    // namespace gate_library_parser_liberty
 
-#endif    //__HAL_GATE_LIBRARY_LIBERTY_PARSER_H
+#endif    //__HAL_GATE_LIBRARY_PARSER_LIBERTY_H
