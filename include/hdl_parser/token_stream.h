@@ -207,9 +207,10 @@ public:
      * Bracket level is changed by () and [].
      *
      * @param[in] match - the string to match
+     * @
      * @returns The token at the queried position.
      */
-    u32 find_next(const std::string& match) const;
+    u32 find_next(const std::string& match, u32 end = -1) const;
 
     /*
      * Get the total number of elements in the token stream, regardless of how many have been consumed.

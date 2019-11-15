@@ -142,8 +142,14 @@ std::shared_ptr<netlist> hdl_parser_vhdl::parse(const std::string& gate_library)
     return m_netlist;
 }
 
+static bool is_digits(const std::string& str)
+{
+    return std::all_of(str.begin(), str.end(), ::isdigit);    // C++11
+}
+
 bool hdl_parser_vhdl::tokenize()
 {
+    std::vector<token> tmp_tokens;
     std::string delimiters = ",(): ;=><";
     std::string current_token;
     u32 line_number = 0;
@@ -176,33 +182,42 @@ bool hdl_parser_vhdl::tokenize()
             {
                 if (!current_token.empty())
                 {
-                    m_token_stream.append(token(line_number, current_token));
+                    if (tmp_tokens.size() > 1 && is_digits(tmp_tokens.at(tmp_tokens.size() - 2)) && tmp_tokens.at(tmp_tokens.size() - 1) == "." && is_digits(current_token))
+                    {
+                        tmp_tokens.pop_back();
+                        tmp_tokens.back() += "." + current_token;
+                    }
+                    else
+                    {
+                        tmp_tokens.push_back(token(line_number, current_token));
+                    }
                     current_token.clear();
                 }
-                if (c == '=' && m_token_stream.at(m_token_stream.size() - 1) == "<")
+                if (c == '=' && tmp_tokens.at(tmp_tokens.size() - 1) == "<")
                 {
-                    m_token_stream.at(m_token_stream.size() - 1) = "<=";
+                    tmp_tokens.at(tmp_tokens.size() - 1) = "<=";
                 }
-                else if (c == '=' && m_token_stream.at(m_token_stream.size() - 1) == ":")
+                else if (c == '=' && tmp_tokens.at(tmp_tokens.size() - 1) == ":")
                 {
-                    m_token_stream.at(m_token_stream.size() - 1) = ":=";
+                    tmp_tokens.at(tmp_tokens.size() - 1) = ":=";
                 }
-                else if (c == '>' && m_token_stream.at(m_token_stream.size() - 1) == "=")
+                else if (c == '>' && tmp_tokens.at(tmp_tokens.size() - 1) == "=")
                 {
-                    m_token_stream.at(m_token_stream.size() - 1) = "=>";
+                    tmp_tokens.at(tmp_tokens.size() - 1) = "=>";
                 }
                 else if (c != ' ')
                 {
-                    m_token_stream.append(token(line_number, std::string(1, c)));
+                    tmp_tokens.push_back(token(line_number, std::string(1, c)));
                 }
             }
         }
         if (!current_token.empty())
         {
-            m_token_stream.append(token(line_number, current_token));
+            tmp_tokens.push_back(token(line_number, current_token));
             current_token.clear();
         }
     }
+    m_token_stream = token_stream(tmp_tokens);
     return true;
 }
 
@@ -377,8 +392,10 @@ bool hdl_parser_vhdl::parse_architecture_header(entity& e)
         }
         else if (m_token_stream.peek() == "attribute")
         {
-            auto signal_pos = m_token_stream.find_next("signal");
-            if (signal_pos < m_token_stream.find_next(";") && m_token_stream.at(signal_pos + 1) == "is")
+            auto end_pos    = m_token_stream.find_next(";");
+            auto signal_pos = m_token_stream.find_next("signal", end_pos);
+
+            if (signal_pos < end_pos && m_token_stream.at(signal_pos + 1) == "is")
             {
                 parse_attribute(e.signal_attributes);
             }
@@ -572,7 +589,6 @@ bool hdl_parser_vhdl::parse_instance(entity& e)
             port_map.consume("=>");
             auto rhs = port_map.extract_until(",");
             port_map.consume(",");
-
             for (const auto& [a, b] : get_assignments(lhs, rhs))
             {
                 inst.ports.emplace_back(a, b);
@@ -1037,6 +1053,10 @@ std::shared_ptr<module> hdl_parser_vhdl::instantiate(const entity& e, std::share
 
                 if (!is_input && !is_output)
                 {
+                    for (const auto& pin_type : new_gate->get_type()->get_input_pins())
+                    {
+                        log_error("hdl_parser", "pin_type: {}", pin_type);
+                    }
                     log_error("hdl_parser", "undefined pin '{}' for '{}' ({})", pin, new_gate->get_name(), new_gate->get_type()->get_name());
                     return nullptr;
                 }
@@ -1313,14 +1333,14 @@ std::map<std::string, std::string> hdl_parser_vhdl::get_assignments(token_stream
         int left_dir, left_start, left_end;
         if (lhs.at(3) == "downto")
         {
-            left_start = std::stoi(lhs.at(4));
-            left_end   = std::stoi(lhs.at(2));
+            left_start = std::stoi(lhs.at(2));
+            left_end   = std::stoi(lhs.at(4));
             left_dir   = -1;
         }
         else if (lhs.at(3) == "to")
         {
-            left_start = std::stoi(lhs.at(2));
-            left_end   = std::stoi(lhs.at(4));
+            left_start = std::stoi(lhs.at(4));
+            left_end   = std::stoi(lhs.at(2));
             left_dir   = 1;
         }
         else
@@ -1332,16 +1352,16 @@ std::map<std::string, std::string> hdl_parser_vhdl::get_assignments(token_stream
         if (!right_contains_range)
         {
             // case (3)
-
+            token_stream tmp(rhs);
             // right part has to be a bitvector
-            if (rhs.size() != 1 || !core_utils::starts_with(rhs.at(0), "B\"", true))
+            if (rhs.size() != 1 || !core_utils::starts_with(rhs.at(0).string, "B\"", true))
             {
                 log_error("hdl_parser", "assignment of anything but a binary bitvector is not supported (line {})", lhs.at(0).number);
                 return {};
             }
 
             // extract value
-            auto right_values = rhs.at(0).string.substr(2, rhs.at(0).string.size() - 3);
+            std::string right_values = rhs.at(0).string.substr(2, rhs.at(0).string.size() - 3);
 
             // assemble assignment strings
             std::map<std::string, std::string> result;
@@ -1368,14 +1388,14 @@ std::map<std::string, std::string> hdl_parser_vhdl::get_assignments(token_stream
             int right_dir, right_start, right_end;
             if (rhs.at(3) == "downto")
             {
-                right_start = std::stoi(rhs.at(4));
-                right_end   = std::stoi(rhs.at(2));
+                right_start = std::stoi(rhs.at(2));
+                right_end   = std::stoi(rhs.at(4));
                 right_dir   = -1;
             }
             else if (rhs.at(3) == "to")
             {
-                right_start = std::stoi(rhs.at(2));
-                right_end   = std::stoi(rhs.at(4));
+                right_start = std::stoi(rhs.at(4));
+                right_end   = std::stoi(rhs.at(2));
                 right_dir   = 1;
             }
             else
