@@ -1,7 +1,6 @@
 #include "hdl_parser/hdl_parser_verilog.h"
 
 #include "core/log.h"
-#include "core/utils.h"
 
 #include "netlist/gate.h"
 #include "netlist/net.h"
@@ -30,6 +29,30 @@ std::shared_ptr<netlist> hdl_parser_verilog::parse(const std::string& gate_libra
         log_error("hdl_parser", "netlist_factory returned nullptr");
         return nullptr;
     }
+
+    // tokenize file
+    if (!tokenize())
+    {
+        return nullptr;
+    }
+
+    // parse tokens into intermediate format
+    m_last_parsed_line = 1;
+    try
+    {
+        if (!parse_tokens())
+        {
+            return nullptr;
+        }
+    }
+    catch (std::out_of_range& e)
+    {
+        log_error("hdl_parser", "parsing exceeded the end of file near line {}.", m_last_parsed_line);
+        return nullptr;
+    }
+
+    return nullptr;
+    // REMOVE
 
     // read the whole file into logical parts
     entity current_entity;
@@ -124,32 +147,32 @@ std::shared_ptr<netlist> hdl_parser_verilog::parse(const std::string& gate_libra
         return nullptr;
     }
 
-    // parse intermediate format
-    for (auto& it : m_entities)
-    {
-        if (!parse_ports(it.second))
-        {
-            return nullptr;
-        }
+    // // parse intermediate format
+    // for (auto& it : m_entities)
+    // {
+    //     if (!parse_ports(it.second))
+    //     {
+    //         return nullptr;
+    //     }
 
-        if (!parse_signals(it.second))
-        {
-            return nullptr;
-        }
-    }
+    //     if (!parse_signals(it.second))
+    //     {
+    //         return nullptr;
+    //     }
+    // }
 
-    for (auto& it : m_entities)
-    {
-        if (!parse_assigns(it.second))
-        {
-            return nullptr;
-        }
+    // for (auto& it : m_entities)
+    // {
+    //     if (!parse_assigns(it.second))
+    //     {
+    //         return nullptr;
+    //     }
 
-        if (!parse_instances(it.second))
-        {
-            return nullptr;
-        }
-    }
+    //     if (!parse_instances(it.second))
+    //     {
+    //         return nullptr;
+    //     }
+    // }
 
     // create const 0 and const 1 net, will be removed if unused
     m_zero_net = m_netlist->create_net("'0'");
@@ -234,45 +257,233 @@ std::shared_ptr<netlist> hdl_parser_verilog::parse(const std::string& gate_libra
     return m_netlist;
 }
 
-bool hdl_parser_verilog::parse_ports(entity& e)
+bool hdl_parser_verilog::tokenize()
 {
-    for (const auto& line : e.definition.ports)
-    {
-        // get port information
-        auto direction = line.text.substr(0, line.text.find(' '));
-        auto port_str  = line.text.substr(line.text.find(' ') + 1);
+    std::string delimiters = ",()[]\\#: ;=";
+    std::string current_token;
+    u32 line_number = 0;
 
-        // add all signals of that port
-        for (const auto& expanded_port : this->get_expanded_signals(port_str))
+    std::string line;
+    bool escaped             = false;
+    bool multi_line_comment  = false;
+    bool multi_line_property = false;
+
+    while (std::getline(m_fs, line))
+    {
+        line_number++;
+        this->remove_comments(line, multi_line_comment, multi_line_property);
+
+        for (char c : core_utils::trim(line))
         {
-            e.ports_expanded[expanded_port.first] = std::make_pair(direction, expanded_port.second);
-            e.expanded_signal_names[expanded_port.first].insert(e.expanded_signal_names[expanded_port.first].end(), expanded_port.second.begin(), expanded_port.second.end());
+            if (c == '\\')
+            {
+                escaped = true;
+                continue;
+            }
+            else if (escaped && std::isspace(c))
+            {
+                escaped = false;
+            }
+            if (delimiters.find(c) == std::string::npos || escaped)
+            {
+                current_token += c;
+            }
+            else
+            {
+                if (!current_token.empty())
+                {
+                    m_token_stream.append(token(line_number, current_token, true));
+                    current_token.clear();
+                }
+
+                if (c == '#' && m_token_stream.at(m_token_stream.size() - 1) == "(")
+                {
+                    m_token_stream.at(m_token_stream.size() - 1) = "#(";
+                }
+                else if (!std::isspace(c))
+                {
+                    m_token_stream.append(token(line_number, std::string(1, c)));
+                }
+            }
         }
+        if (!current_token.empty())
+        {
+            m_token_stream.append(token(line_number, current_token, true));
+            current_token.clear();
+        }
+    }
+    return true;
+}
+
+bool hdl_parser_verilog::parse_tokens()
+{
+    std::string last_entity;
+
+    while (m_token_stream.remaining() > 0)
+    {
+        m_last_parsed_line = m_token_stream.peek().number;
+
+        if (m_token_stream.peek() == "module")
+        {
+            if (!parse_entity_definiton())
+            {
+                return false;
+            }
+        }
+        else
+        {
+            log_error("hdl_parser", "unexpected token '{}' in global scope in line {}", m_token_stream.peek().string, m_token_stream.peek().number);
+            return false;
+        }
+    }
+    return true;
+}
+
+bool hdl_parser_verilog::parse_entity_definiton()
+{
+    entity e;
+    e.line_number = m_token_stream.peek().number;
+    m_token_stream.consume("module");
+    e.name = m_token_stream.consume();
+
+    if (m_token_stream.peek() == "#(")
+    {
+        // TODO generics
+        m_token_stream.consume_until(")");
+        m_token_stream.consume(")");
+    }
+    else if (m_token_stream.peek() == "(")
+    {
+        if (!parse_port_list(e))
+        {
+            return false;
+        }
+
+        m_token_stream.consume(";");
+    }
+    else
+    {
+        log_error("hdl_parser", "unexpected token '{}' in entity defintion in line {}: Expected ports or generics.", m_token_stream.peek().string, m_token_stream.peek().number);
+        return false;
+    }
+
+    while (m_token_stream.peek() != "endmodule")
+    {
+        if (m_token_stream.peek() == "input" || m_token_stream.peek() == "output")
+        {
+            if (!parse_port_definition(e))
+            {
+                return false;
+            }
+        }
+        else if (m_token_stream.peek() == "wire")
+        {
+            if (!parse_signal_definition(e))
+            {
+                return false;
+            }
+        }
+        else if (m_token_stream.peek() == "assign")
+        {
+            m_token_stream.consume();
+        }
+        else
+        {
+            m_token_stream.consume();
+        }
+    }
+
+    if (!m_token_stream.consume("endmodule"))
+    {
+        log_error("hdl_parser", "unexpected token '{}' in entity defintion in line {}: Expected 'endmodule'.", m_token_stream.peek().string, m_token_stream.peek().number);
+        return false;
+    }
+
+    if (!e.name.empty())
+    {
+        m_entities[e.name] = e;
+        m_last_entity      = e.name;
+    }
+
+    return true;
+}
+
+bool hdl_parser_verilog::parse_port_list(entity& e)
+{
+    m_token_stream.consume("(");
+    auto ports = m_token_stream.extract_until(")");
+
+    // TODO support other port declaration style
+    while (ports.remaining() > 0)
+    {
+        m_last_parsed_line = ports.peek().number;
+        e.port_names.insert(ports.consume());
+    }
+
+    m_token_stream.consume(")");
+
+    return true;
+}
+
+bool hdl_parser_verilog::parse_port_definition(entity& e)
+{
+    auto direction = m_token_stream.consume();
+    auto port_str  = m_token_stream.extract_until(";");
+
+    if (!m_token_stream.consume(";"))
+    {
+        log_error("hdl_parser", "unexpected token '{}' in entity defintion in line {}: Expected ';'.", m_token_stream.peek().string, m_token_stream.peek().number);
+        return false;
+    }
+
+    for (const auto& expanded_port : get_expanded_signals(port_str))
+    {
+        for (const auto& str : expanded_port.second)
+        {
+            std::cout << str << std::endl;
+        }
+
+        if (e.port_names.find(expanded_port.first) == e.port_names.end())
+        {
+            log_error("hdl_parser", "port name '{}' in line {} not declared in entity port list.", expanded_port.first, port_str.peek().number);
+            return false;
+        }
+
+        e.ports_expanded[expanded_port.first] = std::make_pair(direction.string, expanded_port.second);
+        e.expanded_signal_names[expanded_port.first].insert(e.expanded_signal_names[expanded_port.first].end(), expanded_port.second.begin(), expanded_port.second.end());
     }
 
     log_debug("hdl_parser", "parsed ports of '{}'.", e.name);
     return true;
 }
 
-bool hdl_parser_verilog::parse_signals(entity& e)
+bool hdl_parser_verilog::parse_signal_definition(entity& e)
 {
-    for (const auto& line : e.definition.wires)
-    {
-        // get wire information
-        auto signal_str = line.text.substr(line.text.find(' ') + 1);
+    m_token_stream.consume("wire");
+    auto signal_str = m_token_stream.extract_until(";");
 
-        // add all (sub-)signals
-        for (const auto& expanded_signal : this->get_expanded_signals(signal_str))
+    if (!m_token_stream.consume(";"))
+    {
+        log_error("hdl_parser", "unexpected token '{}' in entity defintion in line {}: Expected ';'.", m_token_stream.peek().string, m_token_stream.peek().number);
+        return false;
+    }
+
+    for (const auto& expanded_signal : get_expanded_signals(signal_str))
+    {
+        for (const auto& str : expanded_signal.second)
         {
-            e.signals_expanded.insert(e.signals_expanded.end(), expanded_signal.second.begin(), expanded_signal.second.end());
-            e.expanded_signal_names[expanded_signal.first].insert(e.expanded_signal_names[expanded_signal.first].end(), expanded_signal.second.begin(), expanded_signal.second.end());
+            std::cout << str << std::endl;
         }
+
+        e.signals_expanded.insert(e.signals_expanded.end(), expanded_signal.second.begin(), expanded_signal.second.end());
+        e.expanded_signal_names[expanded_signal.first].insert(e.expanded_signal_names[expanded_signal.first].end(), expanded_signal.second.begin(), expanded_signal.second.end());
     }
 
     log_debug("hdl_parser", "parsed signals of '{}'.", e.name);
     return true;
 }
 
+// TODO
 bool hdl_parser_verilog::parse_assigns(entity& e)
 {
     for (const auto& line : e.definition.assigns)
@@ -296,6 +507,7 @@ bool hdl_parser_verilog::parse_assigns(entity& e)
     return true;
 }
 
+// TODO
 bool hdl_parser_verilog::parse_instances(entity& e)
 {
     for (const auto& line : e.definition.instances)
@@ -968,73 +1180,60 @@ void hdl_parser_verilog::expand_signal(std::vector<std::string>& expanded_signal
     }
 }
 
-std::map<std::string, std::vector<std::string>> hdl_parser_verilog::get_expanded_signals(const std::string& signal_str)
+std::map<std::string, std::vector<std::string>> hdl_parser_verilog::get_expanded_signals(token_stream& signal_str)
 {
     std::map<std::string, std::vector<std::string>> result;
     std::vector<std::pair<std::string, std::vector<std::pair<i32, i32>>>> signals;
 
-    auto signal_colon  = signal_str.find(':');
-    auto signal_escape = signal_str.find('\\');
+    std::vector<std::pair<i32, i32>> bounds;
+    std::vector<std::string> names;
 
-    // bounds given?
-    if (signal_colon != std::string::npos)
+    // extract bounds
+    while (signal_str.peek() == "[")
     {
-        // extract signal bounds "[a:b][c:d]..."
-        std::vector<std::pair<i32, i32>> bounds;
-        auto bounds_str = signal_str.substr(0, signal_str.rfind("]", signal_escape)).substr(signal_str.find("[") + 1);
-        auto names      = core_utils::split(signal_str.substr(signal_str.rfind(']', signal_escape) + 1), ',');
+        signal_str.consume("[");
+        auto lower = signal_str.consume();
 
-        for (const auto& part : core_utils::split(bounds_str, ']'))
+        if (!signal_str.consume(":"))
         {
-            auto bound = core_utils::trim(part.substr(part.find('[') + 1));
-
-            i32 left_bound  = std::stoi(bound.substr(0, bound.find(':')));
-            i32 right_bound = std::stoi(bound.substr(bound.find(':') + 1));
-
-            bounds.emplace_back(left_bound, right_bound);
+            log_error("hdl_parser", "unexpected token '{}' in entity defintion in line {}: Expected ':'.", signal_str.peek().string, signal_str.peek().number);
+            return {};
         }
 
-        // extract signal names
-        for (const auto& name : names)
+        auto upper = signal_str.consume();
+
+        if (!signal_str.consume("]"))
         {
-            std::pair<std::string, std::vector<std::pair<i32, i32>>> s;
-            signal_escape = name.find('\\');
+            log_error("hdl_parser", "unexpected token '{}' in entity defintion in line {}: Expected ']'.", signal_str.peek().string, signal_str.peek().number);
+            return {};
+        }
 
-            if (signal_escape != std::string::npos)
-            {
-                s.first = core_utils::trim(name.substr(signal_escape + 1));
-            }
-            else
-            {
-                s.first = core_utils::trim(name);
-            }
-
-            s.second = bounds;
-
-            signals.push_back(s);
+        try
+        {
+            bounds.emplace_back(std::stoi(lower.string), std::stoi(upper.string));
+        }
+        catch (std::invalid_argument& e)
+        {
+            log_error("hdl_parser", "no integer bounds given in entity defintion in line {}: [{}:{}] .", lower.string, upper.string, signal_str.peek().number);
+            return {};
+        }
+        catch (std::out_of_range& e)
+        {
+            log_error("hdl_parser", "bounds our of range in entity defintion in line {}: [{}:{}].", lower.string, upper.string, signal_str.peek().number);
+            return {};
         }
     }
-    else
+
+    // extract names
+    names.emplace_back(signal_str.consume());
+    while (signal_str.consume(","))
     {
-        // extract signal names
-        auto names = core_utils::split(signal_str, ',');
+        names.emplace_back(signal_str.consume());
+    }
 
-        for (const auto& name : names)
-        {
-            std::pair<std::string, std::vector<std::pair<i32, i32>>> s;
-            signal_escape = name.find('\\');
-
-            if (signal_escape != std::string::npos)
-            {
-                s.first = core_utils::trim(name.substr(signal_escape + 1));
-            }
-            else
-            {
-                s.first = core_utils::trim(name);
-            }
-
-            signals.push_back(s);
-        }
+    for (const auto& name : names)
+    {
+        signals.emplace_back(name, bounds);
     }
 
     // expand signals
