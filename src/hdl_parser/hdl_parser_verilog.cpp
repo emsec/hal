@@ -51,6 +51,11 @@ std::shared_ptr<netlist> hdl_parser_verilog::parse(const std::string& gate_libra
         log_error("hdl_parser", "parsing exceeded the end of file near line {}.", m_last_parsed_line);
         return nullptr;
     }
+    catch (std::invalid_argument& e)
+    {
+        log_error("hdl_parser", "{} near line {}.", e.what(), m_last_parsed_line);
+        return nullptr;
+    }
 
     if (m_entities.empty())
     {
@@ -152,6 +157,7 @@ bool hdl_parser_verilog::tokenize()
     bool multi_line_comment  = false;
     bool multi_line_property = false;
 
+    std::vector<token> parsed_tokens;
     while (std::getline(m_fs, line))
     {
         line_number++;
@@ -176,27 +182,28 @@ bool hdl_parser_verilog::tokenize()
             {
                 if (!current_token.empty())
                 {
-                    m_token_stream.append(token(line_number, current_token, true));
+                    parsed_tokens.emplace_back(line_number, current_token);
                     current_token.clear();
                 }
 
-                if (c == '(' && m_token_stream.at(m_token_stream.size() - 1) == "#")
+                if (c == '(' && parsed_tokens.back() == "#")
                 {
-                    m_token_stream.at(m_token_stream.size() - 1) = "#(";
+                    parsed_tokens.back() = "#(";
                 }
                 else if (!std::isspace(c))
                 {
-                    m_token_stream.append(token(line_number, std::string(1, c)));
+                    parsed_tokens.emplace_back(line_number, std::string(1, c));
                 }
             }
         }
         if (!current_token.empty())
         {
-            m_token_stream.append(token(line_number, current_token, true));
+            parsed_tokens.emplace_back(line_number, current_token);
             current_token.clear();
         }
     }
 
+    m_token_stream = token_stream(parsed_tokens, {"(", "["}, {")", "]"});
     return true;
 }
 
@@ -1265,7 +1272,7 @@ std::vector<std::string> hdl_parser_verilog::get_assignment_signals(token_stream
         if (s.consume("["))
         {
             //(5) NAME[BEGIN_INDEX1:END_INDEX1][BEGIN_INDEX2:END_INDEX2]...
-            if (s.find_next(":", s.position() + 2) != token_stream::not_found)
+            if (s.find_next(":", s.position() + 2) != token_stream::END_OF_STREAM)
             {
                 std::vector<std::pair<i32, i32>> bounds;
                 std::vector<std::string> expanded_signal;

@@ -39,25 +39,25 @@ bool token::operator!=(const std::string& s) const
 ///////////////////////////////////////
 ///////////////////////////////////////
 
-token_stream::token_stream()
+token_stream::token_stream(const std::vector<std::string>& increase_level_tokens, const std::vector<std::string>& decrease_level_tokens)
 {
-    m_pos = 0;
+    m_pos                   = 0;
+    m_increase_level_tokens = increase_level_tokens;
+    m_decrease_level_tokens = decrease_level_tokens;
 }
 
 token_stream::token_stream(const token_stream& other)
 {
-    m_pos  = other.m_pos;
-    m_data = other.m_data;
+    m_pos                   = other.m_pos;
+    m_data                  = other.m_data;
+    m_increase_level_tokens = other.m_increase_level_tokens;
+    m_decrease_level_tokens = other.m_decrease_level_tokens;
 }
 
-token_stream::token_stream(const std::vector<token>& init) : token_stream()
+token_stream::token_stream(const std::vector<token>& init, const std::vector<std::string>& increase_level_tokens, const std::vector<std::string>& decrease_level_tokens)
+    : token_stream(increase_level_tokens, decrease_level_tokens)
 {
     m_data = init;
-}
-
-void token_stream::append(const token& t)
-{
-    m_data.push_back(t);
 }
 
 token& token_stream::at(u32 position)
@@ -84,22 +84,33 @@ token token_stream::consume(u32 num)
     return at(m_pos - 1);
 }
 
-bool token_stream::consume(const std::string& expected)
+bool token_stream::consume(const std::string& expected, bool throw_on_error)
 {
-    if (m_pos < size() && at(m_pos) == expected)
+    if (m_pos >= size())
     {
-        m_pos++;
-        return true;
-    }
-    else
-    {
+        if (throw_on_error)
+        {
+            throw std::invalid_argument("expected token '" + expected + "' but reached the end of the stream");
+        }
         return false;
     }
+
+    if (at(m_pos) != expected)
+    {
+        if (throw_on_error)
+        {
+            throw std::invalid_argument("expected token '" + expected + "' but got '" + at(m_pos).string + "'");
+        }
+        return false;
+    }
+
+    m_pos++;
+    return true;
 }
 
-token token_stream::consume_until(const std::string& match)
+token token_stream::consume_until(const std::string& match, u32 end, bool level_aware)
 {
-    m_pos = find_next(match);
+    m_pos = std::min(size(), find_next(match, end, level_aware));
     return at(m_pos - 1);
 }
 
@@ -125,34 +136,35 @@ void token_stream::set_position(u32 p)
     m_pos = p;
 }
 
-u32 token_stream::find_next(const std::string& match, u32 end) const
+u32 token_stream::find_next(const std::string& match, u32 end, bool level_aware) const
 {
     u32 level = 0;
     for (u32 i = m_pos; i < size() && i < end; ++i)
     {
         const auto& token = at(i);
-        if (level == 0 && core_utils::equals_ignore_case(token, match))
+        if ((!level_aware || level == 0) && core_utils::equals_ignore_case(token, match))
         {
             return i;
         }
-        else if (token == "(" || token == "[")
+        else if (level_aware && std::find_if(m_increase_level_tokens.begin(), m_increase_level_tokens.end(), [&token](const auto& x) { return token == x; }) != m_increase_level_tokens.end())
         {
             level++;
         }
-        else if (token == ")" || token == "]")
+        else if (level_aware && level > 0
+                 && std::find_if(m_decrease_level_tokens.begin(), m_decrease_level_tokens.end(), [&token](const auto& x) { return token == x; }) != m_decrease_level_tokens.end())
         {
             level--;
         }
     }
-    return not_found;
+    return end;
 }
 
-token token_stream::join_until(const std::string& match, const std::string& joiner)
+token token_stream::join_until(const std::string& match, const std::string& joiner, u32 end, bool level_aware)
 {
     u32 start_line = at(m_pos).number;
     std::string result;
-    auto end_pos = find_next(match);
-    while (m_pos < end_pos && m_pos < size())
+    auto end_pos = std::min(size(), find_next(match, end, level_aware));
+    while (m_pos < end_pos)
     {
         if (!result.empty())
         {
@@ -178,10 +190,10 @@ token token_stream::join(const std::string& joiner)
     return {start_line, result};
 }
 
-token_stream token_stream::extract_until(const std::string& match)
+token_stream token_stream::extract_until(const std::string& match, u32 end, bool level_aware)
 {
-    auto end_pos = std::min(size(), find_next(match));
-    token_stream res;
+    auto end_pos = std::min(size(), find_next(match, end, level_aware));
+    token_stream res(m_increase_level_tokens, m_decrease_level_tokens);
     res.m_data.insert(res.m_data.begin(), m_data.begin() + m_pos, m_data.begin() + end_pos);
     m_pos = end_pos;
     return res;

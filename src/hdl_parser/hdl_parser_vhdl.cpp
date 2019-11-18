@@ -49,6 +49,11 @@ std::shared_ptr<netlist> hdl_parser_vhdl::parse(const std::string& gate_library)
         log_error("hdl_parser", "parsing exceeded the end of file near line {}.", m_last_parsed_line);
         return nullptr;
     }
+    catch (std::invalid_argument& e)
+    {
+        log_error("hdl_parser", "{} near line {}.", e.what(), m_last_parsed_line);
+        return nullptr;
+    }
 
     // create const 0 and const 1 net, will be removed if unused
     auto zero_net = m_netlist->create_net("'0'");
@@ -189,7 +194,7 @@ bool hdl_parser_vhdl::tokenize()
                     }
                     else
                     {
-                        tmp_tokens.push_back(token(line_number, current_token));
+                        tmp_tokens.emplace_back(line_number, current_token, false);
                     }
                     current_token.clear();
                 }
@@ -207,17 +212,17 @@ bool hdl_parser_vhdl::tokenize()
                 }
                 else if (c != ' ')
                 {
-                    tmp_tokens.push_back(token(line_number, std::string(1, c)));
+                    tmp_tokens.emplace_back(line_number, std::string(1, c), false);
                 }
             }
         }
         if (!current_token.empty())
         {
-            tmp_tokens.push_back(token(line_number, current_token));
+            tmp_tokens.emplace_back(line_number, current_token, false);
             current_token.clear();
         }
     }
-    m_token_stream = token_stream(tmp_tokens);
+    m_token_stream = token_stream(tmp_tokens, {"("}, {")"});
     return true;
 }
 
@@ -261,9 +266,9 @@ bool hdl_parser_vhdl::parse_library()
 {
     if (m_token_stream.peek() == "use")
     {
-        m_token_stream.consume("use");
+        m_token_stream.consume("use", true);
         auto lib = m_token_stream.consume().string;
-        m_token_stream.consume(";");
+        m_token_stream.consume(";", true);
 
         // remove specific import like ".all" but keep the "."
         lib = core_utils::trim(lib.substr(0, lib.rfind(".") + 1));
@@ -272,7 +277,7 @@ bool hdl_parser_vhdl::parse_library()
     else
     {
         m_token_stream.consume_until(";");
-        m_token_stream.consume(";");
+        m_token_stream.consume(";", true);
     }
     return true;
 }
@@ -281,9 +286,9 @@ bool hdl_parser_vhdl::parse_entity_definiton()
 {
     entity e;
     e.line_number = m_token_stream.peek().number;
-    m_token_stream.consume("entity");
+    m_token_stream.consume("entity", true);
     e.name = m_token_stream.consume();
-    m_token_stream.consume("is");
+    m_token_stream.consume("is", true);
     while (m_token_stream.peek() != "end")
     {
         m_last_parsed_line = m_token_stream.peek().number;
@@ -291,7 +296,7 @@ bool hdl_parser_vhdl::parse_entity_definiton()
         {
             //TODO handle default values for generics
             m_token_stream.consume_until(";");
-            m_token_stream.consume(";");
+            m_token_stream.consume(";", true);
         }
         else if (m_token_stream.peek() == "port")
         {
@@ -313,9 +318,9 @@ bool hdl_parser_vhdl::parse_entity_definiton()
             return false;
         }
     }
-    m_token_stream.consume("end");
+    m_token_stream.consume("end", true);
     m_token_stream.consume();
-    m_token_stream.consume(";");
+    m_token_stream.consume(";", true);
 
     if (!e.name.empty())
     {
@@ -328,18 +333,18 @@ bool hdl_parser_vhdl::parse_entity_definiton()
 
 bool hdl_parser_vhdl::parse_port_definiton(entity& e)
 {
-    m_token_stream.consume("port");
-    m_token_stream.consume("(");
+    m_token_stream.consume("port", true);
+    m_token_stream.consume("(", true);
     auto ports = m_token_stream.extract_until(")");
 
     while (ports.remaining() > 0)
     {
         m_last_parsed_line = ports.peek().number;
         auto base_name     = ports.consume();
-        ports.consume(":");
+        ports.consume(":", true);
         auto direction    = ports.consume();
         token_stream type = ports.extract_until(";");
-        ports.consume(";");
+        ports.consume(";", ports.remaining() > 0);    // last entry has no semicolon, so no throw in that case
 
         for (const auto signal : get_vector_signals(base_name, type))
         {
@@ -347,18 +352,18 @@ bool hdl_parser_vhdl::parse_port_definiton(entity& e)
             e.expanded_signal_names[base_name].push_back(signal);
         }
     }
-    m_token_stream.consume(")");
-    m_token_stream.consume(";");
+    m_token_stream.consume(")", true);
+    m_token_stream.consume(";", true);
     return true;
 }
 
 bool hdl_parser_vhdl::parse_architecture()
 {
-    m_token_stream.consume("architecture");
+    m_token_stream.consume("architecture", true);
     m_token_stream.consume();
-    m_token_stream.consume("of");
+    m_token_stream.consume("of", true);
     auto& e = m_entities[m_token_stream.consume()];
-    m_token_stream.consume("is");
+    m_token_stream.consume("is", true);
     return parse_architecture_header(e) && parse_architecture_body(e);
 }
 
@@ -369,11 +374,13 @@ bool hdl_parser_vhdl::parse_architecture_header(entity& e)
         m_last_parsed_line = m_token_stream.peek().number;
         if (m_token_stream.peek() == "signal")
         {
-            m_token_stream.consume("signal");
+            // log_info("hdl_parser", "{}", token_stream(m_token_stream).extract_until(";").join("|").string);
+
+            m_token_stream.consume("signal", true);
             auto name = m_token_stream.consume().string;
-            m_token_stream.consume(":");
+            m_token_stream.consume(":", true);
             auto type = m_token_stream.extract_until(";");
-            m_token_stream.consume(";");
+            m_token_stream.consume(";", true);
 
             // add all (sub-)signals
             for (const auto signal : get_vector_signals(name, type))
@@ -386,9 +393,9 @@ bool hdl_parser_vhdl::parse_architecture_header(entity& e)
         {
             // components are ignored
             m_token_stream.consume_until("end");
-            m_token_stream.consume("end");
+            m_token_stream.consume("end", true);
             m_token_stream.consume();
-            m_token_stream.consume(";");
+            m_token_stream.consume(";", true);
         }
         else if (m_token_stream.peek() == "attribute")
         {
@@ -428,7 +435,7 @@ bool hdl_parser_vhdl::parse_architecture_header(entity& e)
 
 bool hdl_parser_vhdl::parse_architecture_body(entity& e)
 {
-    m_token_stream.consume("begin");
+    m_token_stream.consume("begin", true);
     while (m_token_stream.peek() != "end")
     {
         m_last_parsed_line = m_token_stream.peek().number;
@@ -444,9 +451,9 @@ bool hdl_parser_vhdl::parse_architecture_body(entity& e)
         else if (m_token_stream.find_next("<=") < m_token_stream.find_next(";"))
         {
             auto lhs = m_token_stream.extract_until("<=");
-            m_token_stream.consume("<=");
+            m_token_stream.consume("<=", true);
             auto rhs = m_token_stream.extract_until(";");
-            m_token_stream.consume(";");
+            m_token_stream.consume(";", true);
 
             for (const auto& [name, value] : get_assignments(lhs, rhs))
             {
@@ -460,32 +467,32 @@ bool hdl_parser_vhdl::parse_architecture_body(entity& e)
         }
     }
 
-    m_token_stream.consume("end");
+    m_token_stream.consume("end", true);
     m_token_stream.consume();
-    m_token_stream.consume(";");
+    m_token_stream.consume(";", true);
     return true;
 }
 
 bool hdl_parser_vhdl::parse_attribute(std::map<std::string, std::set<std::tuple<std::string, std::string, std::string>>>& mapping)
 {
     u32 line_number = m_token_stream.peek().number;
-    m_token_stream.consume("attribute");
+    m_token_stream.consume("attribute", true);
     auto attr_type = m_token_stream.consume().string;
     if (m_token_stream.peek() == ":")
     {
-        m_token_stream.consume(":");
+        m_token_stream.consume(":", true);
         m_attribute_types[core_utils::to_lower(attr_type)] = m_token_stream.join_until(";", " ");
-        m_token_stream.consume(";");
+        m_token_stream.consume(";", true);
     }
     else if (m_token_stream.peek() == "of" && m_token_stream.peek(2) == ":")
     {
-        m_token_stream.consume("of");
+        m_token_stream.consume("of", true);
         auto attr_target = m_token_stream.consume();
-        m_token_stream.consume(":");
+        m_token_stream.consume(":", true);
         m_token_stream.consume();
-        m_token_stream.consume("is");
+        m_token_stream.consume("is", true);
         auto value = m_token_stream.join_until(";", " ").string;
-        m_token_stream.consume(";");
+        m_token_stream.consume(";", true);
 
         if (value[0] == '"' && value.back() == '"')
         {
@@ -516,12 +523,12 @@ bool hdl_parser_vhdl::parse_instance(entity& e)
 
     // extract name and type
     inst.name = m_token_stream.consume();
-    m_token_stream.consume(":");
+    m_token_stream.consume(":", true);
 
     // remove prefix from type
     if (m_token_stream.peek() == "entity")
     {
-        m_token_stream.consume("entity");
+        m_token_stream.consume("entity", true);
         inst.type = m_token_stream.consume();
         auto pos  = inst.type.find('.');
         if (pos != std::string::npos)
@@ -531,7 +538,7 @@ bool hdl_parser_vhdl::parse_instance(entity& e)
     }
     else if (m_token_stream.peek() == "component")
     {
-        m_token_stream.consume("component");
+        m_token_stream.consume("component", true);
         inst.type = m_token_stream.consume();
     }
     else
@@ -558,18 +565,18 @@ bool hdl_parser_vhdl::parse_instance(entity& e)
 
     if (m_token_stream.peek() == "generic")
     {
-        m_token_stream.consume("generic");
-        m_token_stream.consume("map");
-        m_token_stream.consume("(");
+        m_token_stream.consume("generic", true);
+        m_token_stream.consume("map", true);
+        m_token_stream.consume("(", true);
         auto generic_map = m_token_stream.extract_until(")");
-        m_token_stream.consume(")");
+        m_token_stream.consume(")", true);
         while (generic_map.remaining() > 0)
         {
             m_last_parsed_line = generic_map.peek().number;
             auto lhs           = generic_map.join_until("=>", " ");
-            generic_map.consume("=>");
+            generic_map.consume("=>", true);
             auto rhs = generic_map.join_until(",", " ");
-            generic_map.consume(",");
+            generic_map.consume(",", generic_map.remaining() > 0);    // last entry has no comma
 
             inst.generics.emplace_back(lhs, rhs);
         }
@@ -577,18 +584,18 @@ bool hdl_parser_vhdl::parse_instance(entity& e)
 
     if (m_token_stream.peek() == "port")
     {
-        m_token_stream.consume("port");
-        m_token_stream.consume("map");
-        m_token_stream.consume("(");
+        m_token_stream.consume("port", true);
+        m_token_stream.consume("map", true);
+        m_token_stream.consume("(", true);
         auto port_map = m_token_stream.extract_until(")");
-        m_token_stream.consume(")");
+        m_token_stream.consume(")", true);
         while (port_map.remaining() > 0)
         {
             m_last_parsed_line = port_map.peek().number;
             auto lhs           = port_map.extract_until("=>");
-            port_map.consume("=>");
+            port_map.consume("=>", true);
             auto rhs = port_map.extract_until(",");
-            port_map.consume(",");
+            port_map.consume(",", port_map.remaining() > 0);    // last entry has no comma
             for (const auto& [a, b] : get_assignments(lhs, rhs))
             {
                 inst.ports.emplace_back(a, b);
@@ -596,11 +603,7 @@ bool hdl_parser_vhdl::parse_instance(entity& e)
         }
     }
 
-    if (!m_token_stream.consume(";"))
-    {
-        log_error("hdl_parser", "unexpected end of instance declaration '{}' in line {}", m_token_stream.peek().string, m_token_stream.peek().number);
-        return false;
-    }
+    m_token_stream.consume(";", true);
 
     e.instances.push_back(inst);
 

@@ -43,7 +43,7 @@ struct HDL_PARSER_API token
      * @param[in] s - the string
      * @param[in] cs - if true, string comparisons are case sensitive
      */
-    token(u32 n, const std::string s, bool cs = false);
+    token(u32 n, const std::string s, bool cs = true);
 
     // the line number
     u32 number;
@@ -72,12 +72,30 @@ class HDL_PARSER_API token_stream
 {
 public:
     // constant that can be returned by find next.
-    static const u32 not_found = -1;
+    static const u32 END_OF_STREAM = 0xFFFFFFFF;
 
     /**
      * Constructor for an empty token stream.
+     * The increase-level and decrease-level tokens are used for level-aware iteration.
+     * If active, only tokens on level 0 are matched
+     * Example: consuming until "b" in 'a,(,b,),b,c' would consume 'a,(,b,)', if "(" and ")" are level increase/decrease tokens.
+     *
+     * @param[in] decrease_level_tokens - the tokens that mark the start of a new level, i.e., increase the level.
+     * @param[in] increase_level_tokens - the tokens that mark the end of a level, i.e., decrease the level.
      */
-    token_stream();
+    token_stream(const std::vector<std::string>& increase_level_tokens = {"("}, const std::vector<std::string>& decrease_level_tokens = {")"});
+
+    /**
+     * Initialization constructor.
+     * The increase-level and decrease-level tokens are used for level-aware iteration.
+     * If active, only tokens on level 0 are matched
+     * Example: consuming until "b" in 'a,(,b,),b,c' would consume 'a,(,b,)', if "(" and ")" are level increase/decrease tokens.
+     *
+     * @param[in] init - a token vector to initialize with
+     * @param[in] decrease_level_tokens - the tokens that mark the start of a new level, i.e., increase the level.
+     * @param[in] increase_level_tokens - the tokens that mark the end of a level, i.e., decrease the level.
+     */
+    token_stream(const std::vector<token>& init, const std::vector<std::string>& increase_level_tokens = {"("}, const std::vector<std::string>& decrease_level_tokens = {")"});
 
     /**
      * Copy constructor.
@@ -85,20 +103,6 @@ public:
      * @param[in] other - the token stream to copy
      */
     token_stream(const token_stream& other);
-
-    /**
-     * Initialization constructor.
-     *
-     * @param[in] init - a token vector to initialize with
-     */
-    token_stream(const std::vector<token>& init);
-
-    /**
-     * Add a new token to the end of the stream.
-     *
-     * @param[in] t - the new token
-     */
-    void append(const token& t);
 
     /**
      * Consume the next token(s) in the stream.
@@ -116,54 +120,53 @@ public:
      * If the token does not match, the stream is unchanged.
      *
      * @param[in] expected - the expected token
+     * @param[in] throw_on_error - if true, throws an std::invalid_argument instead of returning false
      * @returns True, if the next token matches the expected string, false otherwise or if no more tokens are available.
      */
-    bool consume(const std::string& expected);
+    bool consume(const std::string& expected, bool throw_on_error = false);
 
     /**
-     * Consume the next tokens in the stream until a token matches a given string on the same bracket level.
+     * Consume the next tokens in the stream until a token matches a given string.
      * This final token is not consumed, i.e., it is now the next token in the stream.
-     * Example: ending on "b" in 'a,(,b,),b,c' would consume 'a,(,b,)', leaving the stream at 'b,c'.
-     * Bracket level is changed by () and [].
-     *
-     * Throws a std::out_of_range exception if no token matches the given string.
+     * Consumes until the given end position if no token matches the given string.
+     * Can be set to be level-aware with respect to the configured level-down and level-up tokens.
      *
      * @param[in] match - the string on which to end.
+     * @param[in] end - the absolute position in the stream on which to stop, even if match was not found until this point.
+     * @param[in] level_aware - if false, tokens are also matched if they are not at the top-level.
      * @returns The last consumed token.
      */
-    token consume_until(const std::string& match);
+    token consume_until(const std::string& match, u32 end = END_OF_STREAM, bool level_aware = true);
 
     /**
-     * Consume the next tokens in the stream until a token matches the given string on the same bracket level.
+     * Consume the next tokens in the stream until a token matches the given string.
      * This final token is not consumed, i.e., it is now the next token in the stream.
-     * Example: ending on "b" in 'a,(,b,),b,c' would consume 'a,(,b,)', leaving the stream at 'b,c'.
-     * Bracket level is changed by () and [].
-     *
      * All consumed tokens are returned as a new token stream.
-     *
-     * If no token matches the given string, the entire rest of the stream is extracted and no exception is thrown.
+     * Consumes until the given end position if no token matches the given string, i.e., the entire rest of the stream is returned as a new stream.
+     * Can be set to be level-aware with respect to the configured level-down and level-up tokens.
      *
      * @param[in] match - the string on which to end.
+     * @param[in] end - the absolute position in the stream on which to stop, even if match was not found until this point.
+     * @param[in] level_aware - if false, tokens are also matched if they are not at the top-level.
      * @returns All consumed tokens in a new token stream.
      */
-    token_stream extract_until(const std::string& match);
+    token_stream extract_until(const std::string& match, u32 end = END_OF_STREAM, bool level_aware = true);
 
     /**
-     * Consume the next tokens in the stream until a token matches the given string on the same bracket level.
+     * Consume the next tokens in the stream until a token matches the given string.
      * This final token is not consumed, i.e., it is now the next token in the stream.
-     * Example: ending on "b" in 'a,(,b,),b,c' would consume 'a,(,b,)', leaving the stream at 'b,c'.
-     * Bracket level is changed by () and [].
-     *
      * The strings of all consumed tokens are joined with the given joiner string and returned as a new token.
      * The returned token has the line number of the first consumed token.
-     *
-     * Throws a std::out_of_range exception if no token matches the given string.
+     * Joins until the given end position if no token matches the given string until that point.
+     * Can be set to be level-aware with respect to the configured level-down and level-up tokens.
      *
      * @param[in] match - the string on which to end.
      * @param[in] joiner - the string used to join consumed tokens.
+     * @param[in] end - the absolute position in the stream on which to stop, even if match was not found until this point.
+     * @param[in] level_aware - if false, tokens are also matched if they are not at the top-level.
      * @returns The joined token.
      */
-    token join_until(const std::string& match, const std::string& joiner);
+    token join_until(const std::string& match, const std::string& joiner, u32 end = END_OF_STREAM, bool level_aware = true);
 
     /**
      * Consume all remaining tokens in the stream.
@@ -202,15 +205,16 @@ public:
     const token& at(u32 position) const;
 
     /**
-     * Get the *absolute* position in the stream of the next matching token on the same bracket level.
-     * Example: matching on "b" in 'a,(,b,),b,c' would return 5.
-     * Bracket level is changed by () and [].
+     * Get the *absolute* position in the stream of the next matching token.
+     * If no token is found until the given end position, this end position is returned.
+     * Can be set to be level-aware with respect to the configured level-down and level-up tokens.
      *
      * @param[in] match - the string to match
-     * @
+     * @param[in] end - the absolute position in the stream on which to stop, even if match was not found until this point.
+     * @param[in] level_aware - if false, tokens are also matched if they are not at the top-level.
      * @returns The token at the queried position.
      */
-    u32 find_next(const std::string& match, u32 end = -1) const;
+    u32 find_next(const std::string& match, u32 end = END_OF_STREAM, bool level_aware = true) const;
 
     /**
      * Get the total number of elements in the token stream, regardless of how many have been consumed.
@@ -248,6 +252,8 @@ public:
     void set_position(u32 p);
 
 private:
+    std::vector<std::string> m_increase_level_tokens;
+    std::vector<std::string> m_decrease_level_tokens;
     std::vector<token> m_data;
     u32 m_pos;
 };
