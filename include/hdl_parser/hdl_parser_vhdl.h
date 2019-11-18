@@ -80,7 +80,6 @@ private:
     };
 
     token_stream m_token_stream;
-    u32 m_last_parsed_line;
     std::string m_last_entity;
 
     std::set<std::string> m_libraries;

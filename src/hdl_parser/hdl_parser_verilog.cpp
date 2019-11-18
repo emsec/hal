@@ -37,23 +37,23 @@ std::shared_ptr<netlist> hdl_parser_verilog::parse(const std::string& gate_libra
     }
 
     // parse tokens into intermediate format
-    m_last_parsed_line = 1;
     try
     {
         if (!parse_tokens())
         {
-            log_error("hdl_parser", "could not parse tokens in line {}.", m_last_parsed_line);
             return nullptr;
         }
     }
-    catch (std::out_of_range& e)
+    catch (token_stream::token_stream_exception& e)
     {
-        log_error("hdl_parser", "parsing exceeded the end of file near line {}.", m_last_parsed_line);
-        return nullptr;
-    }
-    catch (std::invalid_argument& e)
-    {
-        log_error("hdl_parser", "{} near line {}.", e.what(), m_last_parsed_line);
+        if (e.line_number != -1)
+        {
+            log_error("hdl_parser", "{} near line {}.", e.message, e.line_number);
+        }
+        else
+        {
+            log_error("hdl_parser", "{}.", e.message);
+        }
         return nullptr;
     }
 
@@ -213,8 +213,6 @@ bool hdl_parser_verilog::parse_tokens()
 
     while (m_token_stream.remaining() > 0)
     {
-        m_last_parsed_line = m_token_stream.peek().number;
-
         if (m_token_stream.peek() == "module")
         {
             if (!parse_entity_definiton())
@@ -320,7 +318,6 @@ bool hdl_parser_verilog::parse_port_list(entity& e)
     // TODO support other port declaration style
     while (ports.remaining() > 0)
     {
-        m_last_parsed_line = ports.peek().number;
         e.port_names.insert(ports.consume());
     }
 
