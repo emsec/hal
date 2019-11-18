@@ -244,7 +244,7 @@ public:
     bool is_dnf() const;
 
     /**
-     * Gets the DNF representation of the function.
+     * Gets the plain DNF representation of the function.
      *
      * @returns The DNF as a boolean function.
      */

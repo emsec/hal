@@ -1415,8 +1415,107 @@ Generic call to run the GUI.
 :rtype: bool
 )");
 
+    py::enum_<boolean_function::value>(m, "Value")
+        .value("X", boolean_function::value::X)
+        .value("ZERO", boolean_function::value::ZERO)
+        .value("ONE", boolean_function::value::ONE)
+        .export_values();
+
     py::class_<boolean_function>(m, "boolean_function")
-        //TODO fill this class
+        .def(py::init<>())
+        .def(py::init<const std::string&, bool>())
+        .def(py::init<boolean_function::value>())
+        .def("substitute", &boolean_function::substitute, R"(
+Substitutes a variable with another function (can again be a single variable).
+Applies to all instances of the variable in the function.
+
+:param str variable_name:  The variable to substitute
+:param boolean_function function:  The function to take the place of the varible
+:returns: The new boolean function.
+:rtype: boolean_function
+)")
+        .def("evaluate", &boolean_function::evaluate, R"(
+Evaluates the function on the given inputs and returns the result.
+
+:param map(str,value) inputs:  A map from variable names to values.
+:returns: The value that the function evaluates to.
+:rtype: value
+)")
+        .def("is_constant_one", &boolean_function::is_constant_one, R"(
+Checks whether the function constantly outputs ONE.
+
+:returns: True if function is constant ONE, false otherwise.
+:rtype: bool
+)")
+        .def("is_constant_zero", &boolean_function::is_constant_zero, R"(
+Checks whether the function constantly outputs ZERO.
+
+:returns: True if function is constant ZERO, false otherwise.
+:rtype: bool
+)")
+        .def("is_empty", &boolean_function::is_empty, R"(
+Checks whether the function is empty.
+
+:returns: True if function is empty, false otherwise.
+:rtype: bool
+)")
+        .def("get_variables", &boolean_function::get_variables, R"(
+Get all variable names used in this boolean function.
+
+:returns: A set of all variable names.
+:rtype: set(str)
+)")
+        .def_static("from_string", &boolean_function::from_string, R"(
+Returns the boolean function as a string.
+
+:param str expression: String containing a boolean function.
+:returns: The boolean function extracted from the string.
+:rtype: boolean_function
+)")
+        .def("__str__", [](const boolean_function &f) {return f.to_string();})
+        .def(py::self & py::self)
+        .def(py::self | py::self)
+        .def(py::self ^ py::self)
+        .def(py::self &= py::self)
+        .def(py::self |= py::self)
+        .def(py::self ^= py::self)
+        .def(!py::self)
+        .def("is_dnf", &boolean_function::is_dnf, R"(
+Tests whether the function is in DNF.
+
+:returns: True if in DNF, false otherwise.
+:rtype: bool
+)")
+        .def("to_dnf", &boolean_function::to_dnf, R"(
+Gets the plain DNF representation of the function.
+
+:returns: The DNF as a boolean function.
+:rtype: boolean_function
+)")
+        .def("optimize", &boolean_function::optimize, R"(
+Optimizes the function by first converting it to DNF and then applying the Quine-McCluskey algorithm.
+
+:returns: The optimized boolean function.
+:rtype: boolean_function
+)")
+        .def("get_truth_table", &boolean_function::get_truth_table, R"(
+Get the truth table outputs of the function.
+WARNING: Exponential runtime in the number of variables!
+
+Output is the vector of output values when walking the truth table in ascending order.
+The variable values are changed in order of appearance, i.e.:
+first_var second_var | output_vector_index
+    0         0      |   0
+    1         0      |   1
+    0         1      |   2
+    1         1      |   3
+
+If ordered_variables is empty, all included variables are used and ordered alphabetically.
+
+:param list(str) ordered_variables: Specific order in which the inputs shall be structured in the truth table.
+:returns: The vector of output values.
+:rtype: list(value)
+)")
         ;
 
 #ifndef PYBIND11_MODULE
