@@ -31,8 +31,8 @@
 
 namespace gui_utility
 {
-    std::shared_ptr<module> common_ancestor(std::unordered_set<std::shared_ptr<module>> modules, std::unordered_set<std::shared_ptr<gate>> gates);
-    std::shared_ptr<module> common_ancestor_two(std::shared_ptr<module> m1, std::shared_ptr<module> m2);
+    std::shared_ptr<module> lowest_common_ancestor(std::unordered_set<std::shared_ptr<module>> modules, std::unordered_set<std::shared_ptr<gate>> gates);
+    std::shared_ptr<module> lowest_common_ancestor(std::shared_ptr<module> m1, std::shared_ptr<module> m2);
 }
 
 #endif // NETLIST_UTIL_H

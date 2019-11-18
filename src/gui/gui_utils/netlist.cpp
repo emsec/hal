@@ -11,7 +11,7 @@
 namespace gui_utility
 {
 
-    std::shared_ptr<module> common_ancestor_two(std::shared_ptr<module> m1, std::shared_ptr<module> m2)
+    std::shared_ptr<module> lowest_common_ancestor(std::shared_ptr<module> m1, std::shared_ptr<module> m2)
     {
         std::unordered_set<std::shared_ptr<module>> common;
         common.insert(m1);
@@ -31,7 +31,7 @@ namespace gui_utility
         }
     }
 
-    std::shared_ptr<module> common_ancestor(std::unordered_set<std::shared_ptr<module>> modules, std::unordered_set<std::shared_ptr<gate>> gates)
+    std::shared_ptr<module> lowest_common_ancestor(std::unordered_set<std::shared_ptr<module>> modules, std::unordered_set<std::shared_ptr<gate>> gates)
     {
         if (modules.empty() && gates.empty())
         {
@@ -53,7 +53,7 @@ namespace gui_utility
             modules.erase(m1);
             std::shared_ptr<module> m2 = *modules.begin();
             modules.erase(m2);
-            std::shared_ptr<module> common = common_ancestor_two(m1, m2);
+            std::shared_ptr<module> common = lowest_common_ancestor(m1, m2);
             modules.insert(common);
         }
         // the remaining module is the lowest common ancestor of all elements
