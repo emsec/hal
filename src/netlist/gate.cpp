@@ -123,9 +123,14 @@ boolean_function gate::get_boolean_function(const std::string& name) const
     return boolean_function::X;
 }
 
-std::map<std::string, boolean_function> gate::get_boolean_functions() const
+std::map<std::string, boolean_function> gate::get_boolean_functions(bool only_custom_functions) const
 {
-    auto res = m_type->get_boolean_functions();
+    std::map<std::string, boolean_function> res;
+
+    if (!only_custom_functions)
+    {
+        res = m_type->get_boolean_functions();
+    }
 
     for (const auto& it : m_functions)
     {

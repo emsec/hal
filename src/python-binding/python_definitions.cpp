@@ -798,7 +798,27 @@ Gets the module this gate is contained in.
 :returns: The owning module.
 :rtype: hal_py.module
 )")
+        .def("get_boolean_function", &gate::get_boolean_function, py::arg("name") = "", R"(
+Get the boolean function associated with a specific name.
+This name can for example be an output pin of the gate or a defined functionality like "RESET".
 
+:param str name: The function name. If name is empty, the function of the first output pin is returned. If there is no function for the given name, the constant 'X' is returned.
+:returns: The boolean function.
+:rtype: boolean_function
+)")
+        .def("get_boolean_functions", &gate::get_boolean_functions, py::arg("only_custom_functions") = false, R"(
+Get all boolean functions associated with this gate.
+
+:param bool only_custom_functions: if true, this returns only the functions which were set via set_boolean_function
+:returns: A map from function name to function.
+:rtype: dict
+)")
+        .def("set_boolean_function", &gate::set_boolean_function, R"(
+Set the boolean function with a specific name only for this gate.
+
+:param str name:  The function name, usually an output port.
+:param boolean_function func:  The function.
+)")
         .def("mark_vcc_gate", &gate::mark_vcc_gate, R"(
 Mark this gate as a global vcc gate.
 
@@ -1434,7 +1454,7 @@ Applies to all instances of the variable in the function.
 :returns: The new boolean function.
 :rtype: boolean_function
 )")
-        .def("evaluate", &boolean_function::evaluate, R"(
+        .def("evaluate", &boolean_function::evaluate, py::arg("inputs") = std::map<std::string, boolean_function::value>(), R"(
 Evaluates the function on the given inputs and returns the result.
 
 :param map(str,value) inputs:  A map from variable names to values.
@@ -1498,7 +1518,7 @@ Optimizes the function by first converting it to DNF and then applying the Quine
 :returns: The optimized boolean function.
 :rtype: boolean_function
 )")
-        .def("get_truth_table", &boolean_function::get_truth_table, R"(
+        .def("get_truth_table", &boolean_function::get_truth_table, py::arg("ordered_variables") = std::vector<std::string>(), R"(
 Get the truth table outputs of the function.
 WARNING: Exponential runtime in the number of variables!
 
