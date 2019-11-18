@@ -1,6 +1,7 @@
 #include "graph_widget/graph_navigation_widget.h"
 
 #include "netlist/gate.h"
+#include "netlist/module.h"
 
 #include "gui_globals.h"
 
@@ -172,7 +173,7 @@ void graph_navigation_widget::fill_table(std::shared_ptr<net> n)
         setItem(row, 3, item);
 
         // ADD SPECIAL SUBMODULE ITEM HERE
-        item = new QTableWidgetItem("test");
+        item = new QTableWidgetItem(QString::fromStdString(e.get_gate()->get_module()->get_name()));
         item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
         setItem(row, 4, item);
 
