@@ -48,12 +48,14 @@ struct node
 
     bool operator<(const node& rhs) const
     {
-        return id < rhs.id;
-    }
-
-    bool operator>(const node& rhs) const
-    {
-        return id > rhs.id;
+        if (type < rhs.type)
+            return true;
+        else if (rhs.type < type)
+            return false;
+        else if (id < rhs.id)
+            return true;
+        else
+            return false;
     }
 
     bool operator==(const node& rhs) const
