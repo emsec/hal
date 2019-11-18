@@ -54,17 +54,43 @@ struct HDL_PARSER_API token
     // if true, string comparisons are case sensitive
     bool case_sensitive;
 
-    // class is implicitly cast to string if possible
+    /*
+     * A token is implicitly cast to string if possible.
+     */
     operator std::string() const;
 
-    // sets the internal string
+    /**
+     * Assigns a new string to this token.
+     *
+     * @param[in] s - the new string
+     * @returns A reference to this token.
+     */
     token& operator=(const std::string& s);
 
-    // extends the internal string
+    /**
+     * Extends the string in this token.
+     *
+     * @param[in] s - the string to add
+     * @returns A reference to this token.
+     */
     token& operator+=(const std::string& s);
 
-    // comparison operators apply only to the internal string and are case insensitive if configured
+    /**
+     * Checks if the string in this token is equal to another string.
+     * If the case_sensitive member is true, the comparison is case sensitive.
+     *
+     * @param[in] s - the string to check against
+     * @returns True if both strings are equal.
+     */
     bool operator==(const std::string& s) const;
+
+    /**
+     * Checks if the string in this token is unequal to another string.
+     * If the case_sensitive member is true, the comparison is case sensitive.
+     *
+     * @param[in] s - the string to check against
+     * @returns True if both strings are not equal.
+     */
     bool operator!=(const std::string& s) const;
 };
 
@@ -185,10 +211,13 @@ public:
      *
      * Throws a std::out_of_range exception if the position is not contained in the stream.
      *
-     * @param[in] position - the absolute position in the stream
+     * @param[in] offset - the relative offset from the current position in the stream
      * @returns The token at the queried position.
      */
     token& peek(i32 offset = 0);
+    /**
+     * @copydoc peek(i32)
+     */
     const token& peek(i32 offset = 0) const;
 
     /**
@@ -202,6 +231,9 @@ public:
      * @returns The token at the queried position.
      */
     token& at(u32 position);
+    /**
+     * @copydoc at(i32)
+     */
     const token& at(u32 position) const;
 
     /**

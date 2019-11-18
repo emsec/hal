@@ -87,7 +87,7 @@ def analyze_scope(scope):
 
             last_fragment_was_function = False
 
-            if "(" in blinded_code and not blinded_code.endswith("= default") and not ":" in blinded_code.replace("::","#"):
+            if "(" in blinded_code and ")" in blinded_code and not blinded_code.endswith("= default") and not ":" in blinded_code.replace("::","#"):
                 candidates.append((code, last_comment_block))
                 last_fragment_was_function = True
             scope = scope[next_index:]
@@ -192,6 +192,9 @@ def analyze_file(file):
 
     # check all functions of the file
     for (text, comment) in extract_functions(file):
+
+        if comment and "@copydoc" in comment: continue
+
         params = extract_params(text)
         return_type = extract_return_type(text)
         commented_params = extract_commented_params(comment)
@@ -217,8 +220,9 @@ def analyze_file(file):
 
 
         # consolidate booleans
+        valid_return_types = [None, "void", "operator"]
         wrong_commenting = len(not_commented) > 0 or len(type_missing) > 0 or len(commented_but_missing) > 0
-        return_type_problem = ((return_type in [None, "void"]) and return_type_comment != None) or ((return_type not in [None, "void"]) and return_type_comment == None) or (return_type_comment != None and return_type == return_type_comment)
+        return_type_problem = ((return_type in valid_return_types) and return_type_comment != None) or ((return_type not in valid_return_types) and return_type_comment == None) or (return_type_comment != None and return_type == return_type_comment)
         not_commented_error = comment == None and (return_type != None or len(params) > 0)
 
         # evaluate error cases
@@ -236,7 +240,7 @@ def analyze_file(file):
                     print(colors.RED + "    \"" + x + "\" is specified but not commented."+ colors.ENDC)
                 if return_type == None and return_type_comment != None:
                     print(colors.RED + "    function has no return type but one was commented."+ colors.ENDC)
-                if return_type not in [None, "void"] and return_type_comment == None:
+                if return_type not in valid_return_types and return_type_comment == None:
                     print(colors.RED + "    function has a return type but none was commented."+ colors.ENDC)
                 if return_type_comment != None and return_type == return_type_comment:
                     print(colors.RED + "    comment for return value is just the return type."+ colors.ENDC)

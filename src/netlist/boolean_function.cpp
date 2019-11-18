@@ -187,12 +187,22 @@ boolean_function::value boolean_function::operator()(const std::map<std::string,
 
 bool boolean_function::is_constant_one() const
 {
-    return m_content == content_type::CONSTANT && m_constant == 1;
+    if (m_content == content_type::CONSTANT)
+    {
+        return m_constant == ONE;
+    }
+    auto tmp = optimize();
+    return tmp.m_content == content_type::CONSTANT && tmp.m_constant == ONE;
 }
 
 bool boolean_function::is_constant_zero() const
 {
-    return m_content == content_type::CONSTANT && m_constant == 0;
+    if (m_content == content_type::CONSTANT)
+    {
+        return m_constant == ZERO;
+    }
+    auto tmp = optimize();
+    return tmp.m_content == content_type::CONSTANT && tmp.m_constant == ZERO;
 }
 
 bool boolean_function::is_empty() const
@@ -222,6 +232,11 @@ std::set<std::string> boolean_function::get_variables() const
 boolean_function boolean_function::from_string(std::string expression)
 {
     expression = core_utils::trim(expression);
+
+    if (expression.empty())
+    {
+        return boolean_function();
+    }
 
     const std::string delimiters = "!^&|'+* ";
 
@@ -523,26 +538,7 @@ bool boolean_function::operator!=(const boolean_function& other) const
 {
     return !(*this == other);
 }
-bool boolean_function::operator<(const boolean_function& other) const
-{
-    if (m_content == content_type::VARIABLE)
-    {
-        return m_variable < other.m_variable;
-    }
-    else if (m_content == content_type::CONSTANT)
-    {
-        return m_constant < other.m_constant;
-    }
-    else
-    {    // TERMS
-        return m_operands < other.m_operands;
-    }
-}
 
-bool boolean_function::operator>(const boolean_function& other) const
-{
-    return *this != other && !(*this < other);
-}
 
 boolean_function boolean_function::replace_xors() const
 {

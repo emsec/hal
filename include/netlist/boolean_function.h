@@ -47,12 +47,19 @@ public:
 
     /**
      * Returns the value as a string.
-     * 
+     *
+     * @param[in] v - the value.
      * @returns A string describing the value.
      */
     static std::string to_string(const value& v);
 
-    // TODO description
+    /**
+     * ostream operator that forwards to_string of a value.
+     *
+     * @param[in] os - the stream to write to.
+     * @param[in] v - the value.
+     * @returns A reference to os.
+     */
     friend std::ostream& operator<<(std::ostream& os, const value& v);
 
     /**
@@ -65,16 +72,16 @@ public:
     /**
      * Constructor for a variable, usable in other functions.
      * Variable name must not be empty.
-     * 
+     *
      * @param[in] variable_name - Name of the variable.
-     * @param[in] invert_result - True to invert the variable. 
+     * @param[in] invert_result - True to invert the variable.
      */
     boolean_function(const std::string& variable_name, bool invert_result = false);
 
     /**
      * Constructor for a constant, usable in other functions.
      * The constant can be either X, Zero, or ONE.
-     * 
+     *
      * @param[in] constant - A constant value.
      */
     boolean_function(value constant);
@@ -91,7 +98,7 @@ public:
 
     /**
      * Evaluates the function on the given inputs and returns the result.
-     * 
+     *
      * @param[in] inputs - A map from variable names to values.
      * @returns The value that the function evaluates to.
      */
@@ -99,36 +106,36 @@ public:
 
     /**
      * Evaluates the function on the given inputs and returns the result.
-     * 
+     *
      * @param[in] inputs - A map from variable names to values.
      * @returns The value that the function evaluates to.
      */
     value operator()(const std::map<std::string, value>& inputs = {}) const;
 
     /**
-     * Checks whether the function is the constant ONE.
-     * 
+     * Checks whether the function constantly outputs ONE.
+     *
      * @returns True if function is constant ONE, false otherwise.
      */
     bool is_constant_one() const;
 
     /**
-     * Checks whether the function is the constant ZERO.
-     * 
+     * Checks whether the function constantly outputs ZERO.
+     *
      * @returns True if function is constant ZERO, false otherwise.
      */
     bool is_constant_zero() const;
 
     /**
      * Checks whether the function is empty.
-     * 
+     *
      * @returns True if function is empty, false otherwise.
      */
     bool is_empty() const;
 
     /**
      * Get all variable names used in this boolean function.
-     * 
+     *
      * @returns A set of all variable names.
      */
     std::set<std::string> get_variables() const;
@@ -136,7 +143,7 @@ public:
     /**
      * Parse a function from a string representation.
      * Supported operators are  NOT ("!", "'"), AND ("&", "*", " "), OR ("|", "+"), XOR ("^") and brackets ("(", ")").
-     * 
+     *
      * @param[in] expression - String containing a boolean function.
      * @returns The boolean function extracted from the string.
      */
@@ -144,66 +151,78 @@ public:
 
     /**
      * Returns the boolean function as a string.
-     * 
+     *
      * @returns A string describing the boolean function.
      */
     std::string to_string() const;
 
-    // TODO description
+    /**
+     * ostream operator that forwards to_string of a boolean function.
+     *
+     * @param[in] os - the stream to write to.
+     * @param[in] f - the function.
+     * @returns A reference to os.
+     */
     friend std::ostream& operator<<(std::ostream& os, const boolean_function& f);
 
     /**
      * Combines two boolean functions using an AND operator.
-     * 
+     *
+     * @param[in] other - the other function to combine with.
      * @returns The combined boolean function.
      */
     boolean_function operator&(const boolean_function& other) const;
 
     /**
      * Combines two boolean functions using an OR operator.
-     * 
+     *
+     * @param[in] other - the other function to combine with.
      * @returns The combined boolean function.
      */
     boolean_function operator|(const boolean_function& other) const;
 
     /**
      * Combines two boolean functions using an XOR operator.
-     * 
+     *
+     * @param[in] other - the other function to combine with.
      * @returns The combined boolean function.
      */
     boolean_function operator^(const boolean_function& other) const;
 
     /**
-     * Combines two boolean functions using an AND operator.
-     * 
+     * Combines two boolean functions using an AND operator in place.
+     *
+     * @param[in] other - the other function to combine with.
      * @returns The combined boolean function.
      */
     boolean_function& operator&=(const boolean_function& other);
 
     /**
-     * Combines two boolean functions using an OR operator.
-     * 
+     * Combines two boolean functions using an OR operator in place.
+     *
+     * @param[in] other - the other function to combine with.
      * @returns The combined boolean function.
      */
     boolean_function& operator|=(const boolean_function& other);
 
     /**
-     * Combines two boolean functions using an XOR operator.
-     * 
+     * Combines two boolean functions using an XOR operator in place.
+     *
+     * @param[in] other - the other function to combine with.
      * @returns The combined boolean function.
      */
     boolean_function& operator^=(const boolean_function& other);
 
     /**
      * Negates the boolean function.
-     * 
+     *
      * @returns The negated boolean function.
      */
     boolean_function operator!() const;
 
     /**
      * Tests whether two boolean functions are equal.
-     * 
+     *
      * @param[in] other - Boolean function to compare to.
      * @returns True when both boolean functions are equal, false otherwise.
      */
@@ -211,46 +230,29 @@ public:
 
     /**
      * Tests whether two boolean functions are unequal.
-     * 
+     *
      * @param[in] other - Boolean function to compare to.
      * @returns True when both boolean functions are unequal, false otherwise.
      */
     bool operator!=(const boolean_function& other) const;
 
-    // TODO return description
-    /**
-     * Tests whether two boolean functions are equal.
-     * 
-     * @param[in] other - Boolean function to compare to.
-     * @returns 
-     */
-    bool operator<(const boolean_function& other) const;
-
-    /**
-     * Tests whether two boolean functions are equal.
-     * 
-     * @param[in] other - Boolean function to compare to.
-     * @returns 
-     */
-    bool operator>(const boolean_function& other) const;
-
     /**
      * Tests whether the function is in DNF.
-     * 
+     *
      * @returns True if in DNF, false otherwise.
      */
     bool is_dnf() const;
 
     /**
      * Gets the DNF representation of the function.
-     * 
+     *
      * @returns The DNF as a boolean function.
      */
     boolean_function to_dnf() const;
 
     /**
      * Optimizes the function by first converting it to DNF and then applying the Quine-McCluskey algorithm.
-     * 
+     *
      * @returns The optimized boolean function.
      */
     boolean_function optimize() const;
@@ -268,7 +270,7 @@ public:
      *     1         1      |   3
      *
      * If ordered_variables is empty, all included variables are used and ordered alphabetically.
-     * 
+     *
      * @param[in] ordered_variables - Specific order in which the inputs shall be structured in the truth table.
      * @returns The vector of output values.
      */

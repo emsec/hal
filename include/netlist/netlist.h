@@ -229,7 +229,7 @@ public:
      * It is identifiable via its unique ID.
      *
      * @param[in] id - The unique ID != 0 for the new gate.
-     * @param[in] gate_type - The gate type.
+     * @param[in] gt - The gate type.
      * @param[in] name - A name for the gate.
      * @returns The new gate on success, nullptr on error.
      */
@@ -239,7 +239,7 @@ public:
      * Creates and adds a new gate to the netlist.<br>
      * It is identifiable via its unique ID which is automatically set to the next free ID.
      *
-     * @param[in] gate_type - The gate type.
+     * @param[in] gt - The gate type.
      * @param[in] name - A name for the gate.
      * @returns The new gate on success, nullptr on error.
      */
