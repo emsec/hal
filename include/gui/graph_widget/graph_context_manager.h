@@ -19,6 +19,7 @@ class graph_context;
 class graph_context_manager : public QObject
 {
     Q_OBJECT
+
 public:
     graph_context_manager();
 
@@ -28,7 +29,7 @@ public:
     QVector<graph_context*> get_contexts() const;
     bool context_with_name_exists(const QString& name) const;
 
-    //void handle_module_created(const std::shared_ptr<module> m) const; // PRECACHING ???
+    //void handle_module_created(const std::shared_ptr<module> m) const;
     void handle_module_removed(const std::shared_ptr<module> m);
     void handle_module_name_changed(const std::shared_ptr<module> m) const;
     //void handle_module_parent_changed(const std::shared_ptr<module> m) const;
@@ -49,7 +50,6 @@ public:
     void handle_net_dst_removed(const std::shared_ptr<net> n, const u32 dst_gate_id) const;
 
     graph_layouter* get_default_layouter(graph_context* const context) const;
-
     graph_shader* get_default_shader(graph_context* const context) const;
 
 Q_SIGNALS:
@@ -61,4 +61,4 @@ private:
     QVector<graph_context*> m_graph_contexts;
 };
 
-#endif    // GRAPH_CONTEXT_MANAGER_H
+#endif // GRAPH_CONTEXT_MANAGER_H

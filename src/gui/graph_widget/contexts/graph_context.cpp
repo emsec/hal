@@ -127,7 +127,7 @@ void graph_context::clear()
     }
 }
 
-void graph_context::fold_module_of_gate(u32 id)
+void graph_context::fold_module_of_gate(const u32 id)
 {
     auto contained_gates = m_gates + m_added_gates - m_removed_gates;
     if (contained_gates.find(id) != contained_gates.end())
@@ -150,7 +150,7 @@ void graph_context::fold_module_of_gate(u32 id)
     }
 }
 
-void graph_context::unfold_module(u32 id)
+void graph_context::unfold_module(const u32 id)
 {
     auto contained_modules = m_modules + m_added_modules - m_removed_modules;
 
@@ -356,14 +356,13 @@ void graph_context::apply_changes()
 
 void graph_context::start_scene_update()
 {
-    m_scene_update_in_progress    = true;
+    m_scene_update_required = false;
+    m_scene_update_in_progress = true;
 
     for (graph_context_subscriber* s : m_subscribers)
         s->handle_scene_unavailable();
 
     m_layouter->scene()->disconnect_all();
-
-    m_scene_update_required = false;
 
     layouter_task* task = new layouter_task(m_layouter);
     connect(task, &layouter_task::finished, this, &graph_context::handle_layouter_finished, Qt::ConnectionType::QueuedConnection);

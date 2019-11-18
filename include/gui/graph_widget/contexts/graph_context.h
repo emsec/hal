@@ -29,8 +29,8 @@ public:
     void remove(const QSet<u32>& modules, const QSet<u32>& gates);
     void clear();
 
-    void fold_module_of_gate(u32 id);
-    void unfold_module(u32 id);
+    void fold_module_of_gate(const u32 id);
+    void unfold_module(const u32 id);
 
     const QSet<u32>& modules() const;
     const QSet<u32>& gates() const;
