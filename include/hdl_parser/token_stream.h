@@ -97,6 +97,12 @@ struct HDL_PARSER_API token
 class HDL_PARSER_API token_stream
 {
 public:
+    struct token_stream_exception
+    {
+        std::string message;
+        u32 line_number;
+    };
+
     // constant that can be returned by find next.
     static const u32 END_OF_STREAM = 0xFFFFFFFF;
 
@@ -162,7 +168,7 @@ public:
      * @param[in] level_aware - if false, tokens are also matched if they are not at the top-level.
      * @returns The last consumed token.
      */
-    token consume_until(const std::string& match, u32 end = END_OF_STREAM, bool level_aware = true);
+    token consume_until(const std::string& match, u32 end = END_OF_STREAM, bool level_aware = true, bool throw_on_error = false);
 
     /**
      * Consume the next tokens in the stream until a token matches the given string.
@@ -176,7 +182,7 @@ public:
      * @param[in] level_aware - if false, tokens are also matched if they are not at the top-level.
      * @returns All consumed tokens in a new token stream.
      */
-    token_stream extract_until(const std::string& match, u32 end = END_OF_STREAM, bool level_aware = true);
+    token_stream extract_until(const std::string& match, u32 end = END_OF_STREAM, bool level_aware = true, bool throw_on_error = false);
 
     /**
      * Consume the next tokens in the stream until a token matches the given string.
@@ -192,7 +198,7 @@ public:
      * @param[in] level_aware - if false, tokens are also matched if they are not at the top-level.
      * @returns The joined token.
      */
-    token join_until(const std::string& match, const std::string& joiner, u32 end = END_OF_STREAM, bool level_aware = true);
+    token join_until(const std::string& match, const std::string& joiner, u32 end = END_OF_STREAM, bool level_aware = true, bool throw_on_error = false);
 
     /**
      * Consume all remaining tokens in the stream.
@@ -244,7 +250,7 @@ public:
      * @param[in] match - the string to match
      * @param[in] end - the absolute position in the stream on which to stop, even if match was not found until this point.
      * @param[in] level_aware - if false, tokens are also matched if they are not at the top-level.
-     * @returns The token at the queried position.
+     * @returns The token at the queried position, or END_OF_STREAM if not found.
      */
     u32 find_next(const std::string& match, u32 end = END_OF_STREAM, bool level_aware = true) const;
 
@@ -284,6 +290,7 @@ public:
     void set_position(u32 p);
 
 private:
+    u32 get_current_line_number() const;
     std::vector<std::string> m_increase_level_tokens;
     std::vector<std::string> m_decrease_level_tokens;
     std::vector<token> m_data;

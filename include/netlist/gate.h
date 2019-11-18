@@ -110,12 +110,13 @@ public:
     /**
      * Get all boolean functions associated with this gate.
      *
+     * @param[in] only_custom_functions - if true, this returns only the functions which were set via set_boolean_function
      * @returns A map from function name to function.
      */
-    std::map<std::string, boolean_function> get_boolean_functions() const;
+    std::map<std::string, boolean_function> get_boolean_functions(bool only_custom_functions = false) const;
 
     /**
-     * Set the boolean function with a specific name for this gate.
+     * Set the boolean function with a specific name only for this gate.
      *
      * @param[in] name - The function name, usually an output port.
      * @param[in] func - The function.

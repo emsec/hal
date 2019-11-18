@@ -1,5 +1,6 @@
 #include "netlist/persistent/netlist_serializer.h"
 
+#include "netlist/boolean_function.h"
 #include "netlist/gate.h"
 #include "netlist/module.h"
 #include "netlist/net.h"
@@ -18,8 +19,8 @@
 #include "rapidjson/filereadstream.h"
 #include "rapidjson/stringbuffer.h"
 
-#define PRETTY_JSON_OUTPUT 0
-#if PRETTY_JSON_OUTPUT == 1
+#define PRETTY_JSON_OUTPUT false
+#if PRETTY_JSON_OUTPUT
 #include "rapidjson/prettywriter.h"
 #else
 #include "rapidjson/writer.h"
@@ -38,10 +39,10 @@ namespace netlist_serializer
     // serializing functions
     namespace
     {
-        const int SERIALIZON_FORMAT_VERSION = 3;
+        const int SERIALIZON_FORMAT_VERSION = 4;
 
 #define JSON_STR_HELPER(x) rapidjson::Value{}.SetString(x.c_str(), x.length(), allocator)
-        rapidjson::Value serialize(std::map<std::tuple<std::string, std::string>, std::tuple<std::string, std::string>> data, rapidjson::Document::AllocatorType& allocator)
+        rapidjson::Value serialize(const std::map<std::tuple<std::string, std::string>, std::tuple<std::string, std::string>>& data, rapidjson::Document::AllocatorType& allocator)
         {
             rapidjson::Value val(rapidjson::kArrayType);
             for (const auto& it : data)
@@ -56,7 +57,7 @@ namespace netlist_serializer
             return val;
         }
 
-        rapidjson::Value serialize(endpoint ep, rapidjson::Document::AllocatorType& allocator)
+        rapidjson::Value serialize(const endpoint& ep, rapidjson::Document::AllocatorType& allocator)
         {
             rapidjson::Value val(rapidjson::kObjectType);
             val.AddMember("gate_id", ep.gate->get_id(), allocator);
@@ -64,17 +65,33 @@ namespace netlist_serializer
             return val;
         }
 
-        rapidjson::Value serialize(std::shared_ptr<gate> g, rapidjson::Document::AllocatorType& allocator)
+        rapidjson::Value serialize(const std::shared_ptr<gate>& g, rapidjson::Document::AllocatorType& allocator)
         {
             rapidjson::Value val(rapidjson::kObjectType);
             val.AddMember("id", g->get_id(), allocator);
             val.AddMember("name", g->get_name(), allocator);
             val.AddMember("type", g->get_type()->get_name(), allocator);
-            val.AddMember("data", serialize(g->get_data(), allocator), allocator);
+            auto data_val = serialize(g->get_data(), allocator);
+            if (!data_val.Empty())
+            {
+                val.AddMember("data", data_val, allocator);
+            }
+            {
+                rapidjson::Value functions(rapidjson::kObjectType);
+                for (const auto& it : g->get_boolean_functions(true))
+                {
+                    auto s = it.second.to_string();
+                    functions.AddMember(JSON_STR_HELPER(it.first), JSON_STR_HELPER(s), allocator);
+                }
+                if (!functions.Empty())
+                {
+                    val.AddMember("custom_functions", functions, allocator);
+                }
+            }
             return val;
         }
 
-        rapidjson::Value serialize(std::shared_ptr<net> n, rapidjson::Document::AllocatorType& allocator)
+        rapidjson::Value serialize(const std::shared_ptr<net>& n, rapidjson::Document::AllocatorType& allocator)
         {
             rapidjson::Value val(rapidjson::kObjectType);
             val.AddMember("id", n->get_id(), allocator);
@@ -93,14 +110,21 @@ namespace netlist_serializer
                 {
                     dsts.PushBack(serialize(dst, allocator), allocator);
                 }
-                val.AddMember("dsts", dsts, allocator);
+                if (!dsts.Empty())
+                {
+                    val.AddMember("dsts", dsts, allocator);
+                }
             }
 
-            val.AddMember("data", serialize(n->get_data(), allocator), allocator);
+            auto data_val = serialize(n->get_data(), allocator);
+            if (!data_val.Empty())
+            {
+                val.AddMember("data", data_val, allocator);
+            }
             return val;
         }
 
-        rapidjson::Value serialize(std::shared_ptr<module> m, rapidjson::Document::AllocatorType& allocator)
+        rapidjson::Value serialize(const std::shared_ptr<module>& m, rapidjson::Document::AllocatorType& allocator)
         {
             rapidjson::Value val(rapidjson::kObjectType);
             val.AddMember("id", m->get_id(), allocator);
@@ -122,14 +146,21 @@ namespace netlist_serializer
                 {
                     gates.PushBack(g->get_id(), allocator);
                 }
-                val.AddMember("gates", gates, allocator);
+                if (!gates.Empty())
+                {
+                    val.AddMember("gates", gates, allocator);
+                }
             }
 
-            val.AddMember("data", serialize(m->get_data(), allocator), allocator);
+            auto data_val = serialize(m->get_data(), allocator);
+            if (!data_val.Empty())
+            {
+                val.AddMember("data", data_val, allocator);
+            }
             return val;
         }
 
-        void serialize(std::shared_ptr<netlist> nl, rapidjson::Document& document)
+        void serialize(const std::shared_ptr<netlist>& nl, rapidjson::Document& document)
         {
             rapidjson::Document::AllocatorType& allocator = document.GetAllocator();
             rapidjson::Value root(rapidjson::kObjectType);
@@ -242,7 +273,20 @@ namespace netlist_serializer
                     return false;
                 }
 
-                deserialize_data(g, val["data"]);
+                if (val.HasMember("data"))
+                {
+                    deserialize_data(g, val["data"]);
+                }
+
+                if (val.HasMember("custom_functions"))
+                {
+                    auto functions = val["custom_functions"].GetObject();
+                    for (auto f_it = functions.MemberBegin(); f_it != functions.MemberEnd(); ++f_it)
+                    {
+                        g->set_boolean_function(f_it->name.GetString(), boolean_function::from_string(f_it->value.GetString()));
+                    }
+                }
+
                 return true;
             }
 
@@ -261,13 +305,18 @@ namespace netlist_serializer
             {
                 n->set_src(deserialize_endpoint(nl, val["src"]));
             }
-
-            for (const auto& dst_node : val["dsts"].GetArray())
+            if (val.HasMember("dsts"))
             {
-                n->add_dst(deserialize_endpoint(nl, dst_node));
+                for (const auto& dst_node : val["dsts"].GetArray())
+                {
+                    n->add_dst(deserialize_endpoint(nl, dst_node));
+                }
             }
 
-            deserialize_data(n, val["data"]);
+            if (val.HasMember("data"))
+            {
+                deserialize_data(n, val["data"]);
+            }
 
             return true;
         }
@@ -290,7 +339,10 @@ namespace netlist_serializer
                 sm->assign_gate(nl->get_gate_by_id(gate_node.GetUint()));
             }
 
-            deserialize_data(sm, val["data"]);
+            if (val.HasMember("data"))
+            {
+                deserialize_data(sm, val["data"]);
+            }
             return true;
         }
 

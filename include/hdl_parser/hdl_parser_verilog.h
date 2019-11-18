@@ -82,7 +82,6 @@ private:
     };
 
     token_stream m_token_stream;
-    u32 m_last_parsed_line;
     std::string m_last_entity;
     std::unordered_map<std::string, std::vector<std::string>> m_gate_to_pin_map;
 

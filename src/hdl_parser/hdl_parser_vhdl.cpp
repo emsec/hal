@@ -36,7 +36,6 @@ std::shared_ptr<netlist> hdl_parser_vhdl::parse(const std::string& gate_library)
     }
 
     // parse tokens into intermediate format
-    m_last_parsed_line = 1;
     try
     {
         if (!parse_tokens())
@@ -44,14 +43,16 @@ std::shared_ptr<netlist> hdl_parser_vhdl::parse(const std::string& gate_library)
             return nullptr;
         }
     }
-    catch (std::out_of_range& e)
+    catch (token_stream::token_stream_exception& e)
     {
-        log_error("hdl_parser", "parsing exceeded the end of file near line {}.", m_last_parsed_line);
-        return nullptr;
-    }
-    catch (std::invalid_argument& e)
-    {
-        log_error("hdl_parser", "{} near line {}.", e.what(), m_last_parsed_line);
+        if (e.line_number != -1)
+        {
+            log_error("hdl_parser", "{} near line {}.", e.message, e.line_number);
+        }
+        else
+        {
+            log_error("hdl_parser", "{}.", e.message);
+        }
         return nullptr;
     }
 
@@ -231,7 +232,6 @@ bool hdl_parser_vhdl::parse_tokens()
     std::string last_entity;
     while (m_token_stream.remaining() > 0)
     {
-        m_last_parsed_line = m_token_stream.peek().number;
         if (m_token_stream.peek() == "library" || m_token_stream.peek() == "use")
         {
             if (!parse_library())
@@ -291,7 +291,6 @@ bool hdl_parser_vhdl::parse_entity_definiton()
     m_token_stream.consume("is", true);
     while (m_token_stream.peek() != "end")
     {
-        m_last_parsed_line = m_token_stream.peek().number;
         if (m_token_stream.peek() == "generic")
         {
             //TODO handle default values for generics
@@ -339,7 +338,6 @@ bool hdl_parser_vhdl::parse_port_definiton(entity& e)
 
     while (ports.remaining() > 0)
     {
-        m_last_parsed_line = ports.peek().number;
         auto base_name     = ports.consume();
         ports.consume(":", true);
         auto direction    = ports.consume();
@@ -371,11 +369,8 @@ bool hdl_parser_vhdl::parse_architecture_header(entity& e)
 {
     while (m_token_stream.peek() != "begin")
     {
-        m_last_parsed_line = m_token_stream.peek().number;
         if (m_token_stream.peek() == "signal")
         {
-            // log_info("hdl_parser", "{}", token_stream(m_token_stream).extract_until(";").join("|").string);
-
             m_token_stream.consume("signal", true);
             auto name = m_token_stream.consume().string;
             m_token_stream.consume(":", true);
@@ -438,7 +433,6 @@ bool hdl_parser_vhdl::parse_architecture_body(entity& e)
     m_token_stream.consume("begin", true);
     while (m_token_stream.peek() != "end")
     {
-        m_last_parsed_line = m_token_stream.peek().number;
         // new instance found
         if (m_token_stream.peek(1) == ":")
         {
@@ -572,7 +566,6 @@ bool hdl_parser_vhdl::parse_instance(entity& e)
         m_token_stream.consume(")", true);
         while (generic_map.remaining() > 0)
         {
-            m_last_parsed_line = generic_map.peek().number;
             auto lhs           = generic_map.join_until("=>", " ");
             generic_map.consume("=>", true);
             auto rhs = generic_map.join_until(",", " ");
@@ -591,7 +584,6 @@ bool hdl_parser_vhdl::parse_instance(entity& e)
         m_token_stream.consume(")", true);
         while (port_map.remaining() > 0)
         {
-            m_last_parsed_line = port_map.peek().number;
             auto lhs           = port_map.extract_until("=>");
             port_map.consume("=>", true);
             auto rhs = port_map.extract_until(",");
@@ -1198,8 +1190,6 @@ std::string hdl_parser_vhdl::get_hex_from_number_literal(const std::string& v)
 
 std::vector<std::string> hdl_parser_vhdl::get_vector_signals(const std::string& base_name, token_stream& type)
 {
-    // std::cout << base_name << " " << token_stream(type).join(" ").string << std::endl;
-
     // remove default assignment if available
     type = type.extract_until(":=");
 
