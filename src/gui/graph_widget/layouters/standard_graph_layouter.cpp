@@ -28,8 +28,6 @@ const QString standard_graph_layouter::description() const
 
 void standard_graph_layouter::add(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets)
 {
-    Q_UNUSED(modules)
-    Q_UNUSED(gates)
     Q_UNUSED(nets)
 
     int x = 0;
@@ -151,8 +149,6 @@ void standard_graph_layouter::add(const QSet<u32> modules, const QSet<u32> gates
 
 void standard_graph_layouter::remove(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets)
 {
-    Q_UNUSED(modules)
-    Q_UNUSED(gates)
     Q_UNUSED(nets)
 
     for (u32 id : modules)
