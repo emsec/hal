@@ -44,13 +44,6 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
     font.setBold(true);
     font.setPixelSize(13);
 
-    m_item_deleted_label = new QLabel(this);
-    m_item_deleted_label->setText("Currently selected item has been removed. Please consider relayouting the Graph.");
-    m_item_deleted_label->setWordWrap(true);
-    m_item_deleted_label->setAlignment(Qt::AlignmentFlag::AlignTop);
-    m_item_deleted_label->setHidden(true);
-    m_content_layout->addWidget(m_item_deleted_label);
-
     QTableWidgetItem* name_item = new QTableWidgetItem("Name:");
     name_item->setFlags(Qt::ItemIsEnabled);
     //    name_item->setTextColor(Qt::red);
@@ -163,6 +156,8 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
     // load and store quine mc cluskey plugin
     m_qmc = plugin_manager::get_plugin_instance<plugin_quine_mccluskey>("libquine_mccluskey");
 
+    connect(m_general_table, &QTableWidget::doubleClicked, this, &gate_details_widget::on_general_table_item_double_clicked);
+
     //handle netlist modifications regarding gates
     connect(&g_netlist_relay, &netlist_relay::gate_name_changed, this, &gate_details_widget::handle_gate_name_changed);
     connect(&g_netlist_relay, &netlist_relay::gate_removed, this, &gate_details_widget::handle_gate_removed);
@@ -175,14 +170,10 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
 
     //handle netlist modifications reagarding nets
     connect(&g_netlist_relay, &netlist_relay::net_created, this, &gate_details_widget::handle_net_created);
-    connect(&g_netlist_relay, &netlist_relay::net_removed, this, &gate_details_widget::handle_net_removed);
     connect(&g_netlist_relay, &netlist_relay::net_name_changed, this, &gate_details_widget::handle_net_name_changed);
     connect(&g_netlist_relay, &netlist_relay::net_src_changed, this, &gate_details_widget::handle_net_src_changed);
     connect(&g_netlist_relay, &netlist_relay::net_dst_added, this, &gate_details_widget::handle_net_dst_added);
     connect(&g_netlist_relay, &netlist_relay::net_dst_removed, this, &gate_details_widget::handle_net_dst_removed);
-
-
-    connect(m_general_table, &QTableWidget::doubleClicked, this, &gate_details_widget::on_general_table_item_double_clicked);
 }
 
 gate_details_widget::~gate_details_widget()
@@ -195,59 +186,90 @@ gate_details_widget::~gate_details_widget()
     delete m_output_pins;
 }
 
-void gate_details_widget::handle_net_created(std::shared_ptr<net> net)
+void gate_details_widget::handle_gate_name_changed(std::shared_ptr<gate> gate)
 {
-    update(m_current_id);
+    if(m_current_id == gate->get_id())
+        update(m_current_id);
 }
 
-void gate_details_widget::handle_net_removed(std::shared_ptr<net> net)
+void gate_details_widget::handle_gate_removed(std::shared_ptr<gate> gate)
 {
-    Q_UNUSED(net);
-    if(g_netlist->is_gate_in_netlist(g_netlist->get_gate_by_id(m_current_id)))
+    if(m_current_id == gate->get_id())
+    {
+        m_general_table->setHidden(true);
+        m_scroll_area->setHidden(true);
+    }
+}
+
+void gate_details_widget::handle_net_created(std::shared_ptr<net> net)
+{
+    bool update_needed = false;
+
+    //check if currently shown gate is src of newly created net
+    if(m_current_id == net->get_src().get_gate()->get_id())
+        update_needed = true;
+
+    //check if currently shown gate is dst of newly created net
+    if(!update_needed)
+    {
+        for(auto& e : net->get_dsts())
+        {
+            if(m_current_id == e.get_gate()->get_id())
+            {
+                update_needed = true;
+                break;
+            }
+        }
+    }
+
+    if(update_needed)
         update(m_current_id);
 }
 
 void gate_details_widget::handle_net_name_changed(std::shared_ptr<net> net)
 {
-    Q_UNUSED(net);
-    if(g_netlist->is_gate_in_netlist(g_netlist->get_gate_by_id(m_current_id)))
+    bool update_needed = false;
+
+    //check if currently shown gate is src of renamed net
+    if(m_current_id == net->get_src().get_gate()->get_id())
+        update_needed = true;
+
+    //check if currently shown gate is dst of renamed net
+    if(!update_needed)
+    {
+        for(auto& e : net->get_dsts())
+        {
+            if(m_current_id == e.get_gate()->get_id())
+            {
+                update_needed = true;
+                break;
+            }
+        }
+    }
+
+    if(update_needed)
         update(m_current_id);
 }
 
 void gate_details_widget::handle_net_src_changed(std::shared_ptr<net> net)
 {
-    Q_UNUSED(net);
     if(g_netlist->is_gate_in_netlist(g_netlist->get_gate_by_id(m_current_id)))
         update(m_current_id);
 }
 
 void gate_details_widget::handle_net_dst_added(std::shared_ptr<net> net, const u32 dst_gate_id)
 {
-    Q_UNUSED(net);
-    if(g_netlist->is_gate_in_netlist(g_netlist->get_gate_by_id(m_current_id)))
+    if(m_current_id == dst_gate_id)
         update(m_current_id);
 }
 
 void gate_details_widget::handle_net_dst_removed(std::shared_ptr<net> net, const u32 dst_gate_id)
 {
-    Q_UNUSED(net);
-    if(g_netlist->is_gate_in_netlist(g_netlist->get_gate_by_id(m_current_id)))
+    if(m_current_id == dst_gate_id)
         update(m_current_id);
 }
 
-void gate_details_widget::handle_gate_name_changed(std::shared_ptr<gate> gate)
-{
-    update(gate->get_id());
-}
-
-void gate_details_widget::handle_gate_removed(std::shared_ptr<gate> gate)
-{
-    m_general_table->setHidden(true);
-    m_item_deleted_label->setHidden(false);
-    m_scroll_area->setHidden(true);
-}
-
-void gate_details_widget::handle_module_name_changed(std::shared_ptr<module> module)
+void gate_details_widget::handle_module_removed(std::shared_ptr<module> module)
 {
     auto g = g_netlist->get_gate_by_id(m_current_id);
 
@@ -257,7 +279,7 @@ void gate_details_widget::handle_module_name_changed(std::shared_ptr<module> mod
     }
 }
 
-void gate_details_widget::handle_module_removed(std::shared_ptr<module> module)
+void gate_details_widget::handle_module_name_changed(std::shared_ptr<module> module)
 {
     auto g = g_netlist->get_gate_by_id(m_current_id);
 
@@ -277,7 +299,10 @@ void gate_details_widget::handle_module_gate_assigned(std::shared_ptr<module> mo
 
 void gate_details_widget::handle_module_gate_removed(std::shared_ptr<module> module, u32 associated_data)
 {
-    if (m_current_id == associated_data)
+    if(!g_netlist->is_gate_in_netlist(g_netlist->get_gate_by_id(associated_data)))
+        return;
+
+    if(m_current_id == associated_data)
     {
         update(m_current_id);
     }
@@ -416,7 +441,6 @@ void gate_details_widget::update(const u32 gate_id)
 
     m_general_table->setHidden(false);
     m_scroll_area->setHidden(false);
-    m_item_deleted_label->setHidden(true);
 
     connect(m_tree_widget, &QTreeWidget::itemClicked, this, &gate_details_widget::on_treewidget_item_clicked);
 
