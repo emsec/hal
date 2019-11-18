@@ -54,6 +54,9 @@ namespace gui_utility
             std::shared_ptr<module> m2 = *modules.begin();
             modules.erase(m2);
             std::shared_ptr<module> common = lowest_common_ancestor(m1, m2);
+            // if we hit the top module, we can stop searching
+            if (common->get_parent_module() == nullptr)
+                return common;
             modules.insert(common);
         }
         // the remaining module is the lowest common ancestor of all elements
