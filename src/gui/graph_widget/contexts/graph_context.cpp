@@ -208,9 +208,6 @@ void graph_context::schedule_scene_update()
 {
     m_scene_update_required = true;
 
-    if (m_scene_update_in_progress)
-        return;
-
     if (lazy_updates)
         if (m_subscribers.empty())
             return;
@@ -297,6 +294,9 @@ void graph_context::evaluate_changes()
 
 void graph_context::update()
 {
+    if (m_scene_update_in_progress)
+        return;
+
     if (m_unapplied_changes)
         apply_changes();
 
