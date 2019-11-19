@@ -174,7 +174,7 @@ bool hdl_parser_verilog::tokenize()
                 escaped = false;
             }
 
-            if (delimiters.find(c) == std::string::npos || escaped)
+            if ((!std::isspace(c) && delimiters.find(c) == std::string::npos) || escaped)
             {
                 current_token += c;
             }
