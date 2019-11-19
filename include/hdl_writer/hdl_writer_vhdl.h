@@ -94,10 +94,6 @@ private:
 
     std::map<std::string, std::shared_ptr<net>> m_out_names_str_to_net;
 
-    std::map<std::shared_ptr<net>, std::string> m_inout_names;
-
-    std::map<std::string, std::shared_ptr<net>> m_inout_names_str_to_net;
-
     std::map<std::shared_ptr<net>, std::string> m_gnd_names;
 
     std::map<std::string, std::shared_ptr<net>> m_gnd_names_str_to_net;

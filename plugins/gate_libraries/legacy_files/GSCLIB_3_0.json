@@ -1,0 +1,432 @@
+{
+  "library": {
+    "element_types": [
+      "ADDFX1",
+      "ADDHX1",
+      "AND2X1",
+      "AOI21X1",
+      "AOI22X1",
+      "BUF_INVX1",
+      "BUF_INVX4",
+      "BUF_INVX8",
+      "BUF_ITL",
+      "BUFX1",
+      "BUFX3",
+      "CLKBUFX1",
+      "CLKBUFX2",
+      "CLKBUFX3",
+      "DFFSRX1",
+      "DFFX1",
+      "GLOBAL_GND",
+      "GLOBAL_VCC",
+      "INVX1",
+      "INVX2",
+      "INVX4",
+      "INVX8",
+      "MX2X1",
+      "NAND2X1",
+      "NAND2X2",
+      "NAND3X1",
+      "NAND4X1",
+      "NOR2X1",
+      "NOR3X1",
+      "NOR4X1",
+      "OAI21X1",
+      "OAI22X1",
+      "OAI33X1",
+      "OR2X1",
+      "OR4X1",
+      "SDFFSRX1",
+      "TBUFX1",
+      "TBUFX2",
+      "TBUFX4",
+      "TBUFX8",
+      "TINVX1",
+      "TLATSRX1",
+      "TLATX1",
+      "XOR2X1"
+    ],
+    "elements_inout_types": {
+      "ADDFX1": [],
+      "ADDHX1": [],
+      "AND2X1": [],
+      "AOI21X1": [],
+      "AOI22X1": [],
+      "BUF_INVX1": [],
+      "BUF_INVX4": [],
+      "BUF_INVX8": [],
+      "BUF_ITL": [],
+      "BUFX1": [],
+      "BUFX3": [],
+      "CLKBUFX1": [],
+      "CLKBUFX2": [],
+      "CLKBUFX3": [],
+      "DFFSRX1": [],
+      "DFFX1": [],
+      "GLOBAL_GND": [],
+      "GLOBAL_VCC": [],
+      "INVX1": [],
+      "INVX2": [],
+      "INVX4": [],
+      "INVX8": [],
+      "MX2X1": [],
+      "NAND2X1": [],
+      "NAND2X2": [],
+      "NAND3X1": [],
+      "NAND4X1": [],
+      "NOR2X1": [],
+      "NOR3X1": [],
+      "NOR4X1": [],
+      "OAI21X1": [],
+      "OAI22X1": [],
+      "OAI33X1": [],
+      "OR2X1": [],
+      "OR4X1": [],
+      "SDFFSRX1": [],
+      "TBUFX1": [],
+      "TBUFX2": [],
+      "TBUFX4": [],
+      "TBUFX8": [],
+      "TINVX1": [],
+      "TLATSRX1": [],
+      "TLATX1": [],
+      "XOR2X1": []
+    },
+    "elements_input_types": {
+      "ADDHX1": [
+        "A",
+        "B"
+      ],
+      "ADDFX1": [
+        "A",
+        "B",
+        "CI"
+      ],
+      "AND2X1": [
+        "A",
+        "B"
+      ],
+      "AOI21X1": [
+        "A0",
+        "A1",
+        "B0"
+      ],
+      "AOI22X1": [
+        "A0",
+        "A1",
+        "B0",
+        "B1"
+      ],
+      "BUFX1": [
+        "A"
+      ],
+      "BUFX3": [
+        "A"
+      ],
+      "CLKBUFX1": [
+        "A"
+      ],
+      "CLKBUFX2": [
+        "A"
+      ],
+      "CLKBUFX3": [
+        "A"
+      ],
+      "DFFSRX1": [
+        "CK",
+        "RN",
+        "SN",
+        "D"
+      ],
+      "DFFX1": [
+        "CK",
+        "D"
+      ],
+      "GLOBAL_GND": [],
+      "GLOBAL_VCC": [],
+      "INVX1": [
+        "A"
+      ],
+      "INVX2": [
+        "A"
+      ],
+      "INVX4": [
+        "A"
+      ],
+      "INVX8": [
+        "A"
+      ],
+      "MX2X1": [
+        "A",
+        "B",
+        "S0"
+      ],
+      "NAND2X1": [
+        "A",
+        "B"
+      ],
+      "NAND2X2": [
+        "A",
+        "B"
+      ],
+      "NAND3X1": [
+        "A",
+        "B",
+        "C"
+      ],
+      "NAND4X1": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "NOR2X1": [
+        "A",
+        "B"
+      ],
+      "NOR3X1": [
+        "A",
+        "B",
+        "C"
+      ],
+      "NOR4X1": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "OAI21X1": [
+        "A0",
+        "A1",
+        "B0"
+      ],
+      "OAI22X1": [
+        "A0",
+        "A1",
+        "B0",
+        "B1"
+      ],
+      "OAI33X1": [
+        "A0",
+        "A1",
+        "A2",
+        "B0",
+        "B1",
+        "B2"
+      ],
+      "OR2X1": [
+        "A",
+        "B"
+      ],
+      "OR4X1": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "SDFFSRX1": [
+        "CK",
+        "D",
+        "RN",
+        "SE",
+        "SI",
+        "SN"
+      ],
+      "TBUFX1": [
+        "A",
+        "OE"
+      ],
+      "TBUFX2": [
+        "A",
+        "OE"
+      ],
+      "TBUFX4": [
+        "A",
+        "OE"
+      ],
+      "TBUFX8": [
+        "A",
+        "OE"
+      ],
+      "TINVX1": [
+        "A",
+        "OE"
+      ],
+      "TLATSRX1": [
+        "D",
+        "G",
+        "RN",
+        "SN"
+      ],
+      "TLATX1": [
+        "C",
+        "D"
+      ],
+      "XOR2X1": [
+        "A",
+        "B"
+      ],
+      "BUF_INVX1": [
+        "A"
+      ],
+      "BUF_ITL": [
+        "A"
+      ],
+      "BUF_INVX4": [
+        "A"
+      ],
+      "BUF_INVX8": [
+        "A"
+      ]
+    },
+    "elements_output_types": {
+      "ADDHX1": [
+        "CO",
+        "S"
+      ],
+      "ADDFX1": [
+        "CO",
+        "S"
+      ],
+      "AND2X1": [
+        "Y"
+      ],
+      "AOI21X1": [
+        "Y"
+      ],
+      "AOI22X1": [
+        "Y"
+      ],
+      "BUFX1": [
+        "Y"
+      ],
+      "BUFX3": [
+        "Y"
+      ],
+      "CLKBUFX1": [
+        "Y"
+      ],
+      "CLKBUFX2": [
+        "Y"
+      ],
+      "CLKBUFX3": [
+        "Y"
+      ],
+      "DFFSRX1": [
+        "Q",
+        "QN"
+      ],
+      "DFFX1": [
+        "Q",
+        "QN"
+      ],
+      "GLOBAL_GND": [
+        "O"
+      ],
+      "GLOBAL_VCC": [
+        "O"
+      ],
+      "INVX1": [
+        "Y"
+      ],
+      "INVX2": [
+        "Y"
+      ],
+      "INVX4": [
+        "Y"
+      ],
+      "INVX8": [
+        "Y"
+      ],
+      "MX2X1": [
+        "Y"
+      ],
+      "NAND2X1": [
+        "Y"
+      ],
+      "NAND2X2": [
+        "Y"
+      ],
+      "NAND3X1": [
+        "Y"
+      ],
+      "NAND4X1": [
+        "Y"
+      ],
+      "NOR2X1": [
+        "Y"
+      ],
+      "NOR3X1": [
+        "Y"
+      ],
+      "NOR4X1": [
+        "Y"
+      ],
+      "OAI21X1": [
+        "Y"
+      ],
+      "OAI22X1": [
+        "Y"
+      ],
+      "OAI33X1": [
+        "Y"
+      ],
+      "OR2X1": [
+        "Y"
+      ],
+      "OR4X1": [
+        "Y"
+      ],
+      "SDFFSRX1": [
+        "Q",
+        "QN"
+      ],
+      "TBUFX1": [
+        "Y"
+      ],
+      "TBUFX2": [
+        "Y"
+      ],
+      "TBUFX4": [
+        "Y"
+      ],
+      "TBUFX8": [
+        "Y"
+      ],
+      "TINVX1": [
+        "Y"
+      ],
+      "TLATSRX1": [
+        "Q",
+        "QN"
+      ],
+      "TLATX1": [
+        "Q",
+        "QN"
+      ],
+      "XOR2X1": [
+        "Y"
+      ],
+      "BUF_INVX1": [
+        "Y"
+      ],
+      "BUF_ITL": [
+        "Y"
+      ],
+      "BUF_INVX4": [
+        "Y"
+      ],
+      "BUF_INVX8": [
+        "Y"
+      ]
+    },
+    "library_name": "GSCLIB_3_0",
+    "vhdl_includes": [],
+    "gnd_nodes": [
+      "GLOBAL_GND"
+    ],
+    "vcc_nodes": [
+      "GLOBAL_VCC"
+    ]
+  }
+}

@@ -26,11 +26,15 @@
 #define __HAL_HDL_PARSER_VHDL_H__
 
 #include "def.h"
+
+#include "core/token_stream.h"
+
+#include "netlist/module.h"
+#include "netlist/net.h"
+
 #include "hdl_parser/hdl_parser.h"
 
 #include <map>
-#include <netlist/net.h>
-#include <netlist/module.h>
 #include <utility>
 
 /**
@@ -55,19 +59,6 @@ public:
     std::shared_ptr<netlist> parse(const std::string& gate_library) override;
 
 private:
-    struct file_line
-    {
-        u32 number;
-        std::string text;
-    };
-
-    struct entity_definition
-    {
-        std::vector<file_line> entity_header;
-        std::vector<file_line> architecture_header;
-        std::vector<file_line> architecture_body;
-    };
-
     struct instance
     {
         std::string name;
@@ -80,7 +71,6 @@ private:
     {
         std::string name;
         u32 line_number;
-        entity_definition definition;
         std::vector<std::pair<std::string, std::string>> ports;
         std::map<std::string, std::vector<std::string>> expanded_signal_names;
         std::map<std::string, std::set<std::tuple<std::string, std::string, std::string>>> entity_attributes;
@@ -91,36 +81,38 @@ private:
         std::map<std::string, std::string> direct_assignments;
     };
 
+    token_stream m_token_stream;
+    std::string m_last_entity;
+
     std::set<std::string> m_libraries;
     std::map<std::string, std::shared_ptr<net>> m_net_by_name;
-    std::shared_ptr<net> m_zero_net;
-    std::shared_ptr<net> m_one_net;
     std::map<std::string, u32> m_name_occurrences;
     std::map<std::string, u32> m_current_instance_index;
     std::map<std::string, entity> m_entities;
     std::map<std::string, std::string> m_attribute_types;
     std::map<std::string, std::vector<std::string>> m_nets_to_merge;
 
-    // parse additional information
-    bool parse_header(const std::vector<file_line>& header);
-    bool parse_libraries(const std::vector<file_line>& header);
-    bool parse_components(const std::vector<std::vector<file_line>>& components);
+    bool tokenize();
+    bool parse_tokens();
 
     // parse the hdl into an intermediate format
-    bool parse_entity(entity& e);
-    void parse_attribute(std::map<std::string, std::set<std::tuple<std::string, std::string, std::string>>>& mapping, const file_line& line);
-    bool parse_entity_header(entity& e);
+    bool parse_library();
+    bool parse_entity_definiton();
+    bool parse_port_definiton(entity& e);
+    bool parse_architecture();
     bool parse_architecture_header(entity& e);
     bool parse_architecture_body(entity& e);
-    bool parse_instance(entity& e, const std::vector<file_line>& lines);
+    bool parse_instance(entity& e);
+
+    bool parse_attribute(std::map<std::string, std::set<std::tuple<std::string, std::string, std::string>>>& mapping);
 
     // build the netlist from the intermediate format
     bool build_netlist(const std::string& top_module);
     std::shared_ptr<module> instantiate(const entity& e, std::shared_ptr<module> parent, std::map<std::string, std::string> port_assignments);
 
     // helper functions
-    std::map<std::string, std::string> get_port_assignments(const std::string& port, const std::string& assignment);
-    std::vector<std::string> get_vector_signals(const std::string& name, const std::string& type);
+    std::map<std::string, std::string> get_assignments(token_stream& lhs, token_stream& rhs);
+    std::vector<std::string> get_vector_signals(const std::string& base_name, token_stream& type);
     std::string get_hex_from_number_literal(const std::string& value);
     std::string get_unique_alias(const std::string& name);
 };

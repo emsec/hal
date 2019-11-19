@@ -9,6 +9,7 @@
 #include "core/program_arguments.h"
 #include "core/program_options.h"
 
+#include "core/interface_base.h"
 #include "core/interface_interactive_ui.h"
 
 #include "hdl_parser/hdl_parser_dispatcher.h"
@@ -26,7 +27,7 @@
 #define SUCCESS 0
 #define ERROR 1
 
-void initialize_cli_options(program_options &cli_options)
+void initialize_cli_options(program_options& cli_options)
 {
     program_options generic_options("generic options");
     /* initialize generic options */
@@ -38,7 +39,9 @@ void initialize_cli_options(program_options &cli_options)
     generic_options.add({"--licenses"}, "Shows the licenses of projects used by HAL");
 
     generic_options.add({"-i", "--input-file"}, "input file", {program_options::REQUIRED_PARAM});
+#ifdef WITH_GUI
     generic_options.add({"-g", "--gui"}, "start graphical user interface");
+#endif
     generic_options.add("--python",
                         "start python shell. To run a python script "
                         "use following syntax: --python <python3 "
@@ -55,7 +58,7 @@ void initialize_cli_options(program_options &cli_options)
     cli_options.add(generic_options);
 }
 
-int redirect_control_to_interactive_ui(const std::string &name, program_arguments &args)
+int redirect_control_to_interactive_ui(const std::string& name, program_arguments& args)
 {
     /* add timestamp to log output */
     log_manager::get_instance().set_format_pattern("[%d.%m.%Y %H:%M:%S] [%n] [%l] %v");
@@ -67,16 +70,14 @@ int redirect_control_to_interactive_ui(const std::string &name, program_argument
         return ERROR;
     }
 
-    auto factory = plugin_manager::get_plugin_factory(name);
-    if (factory == nullptr)
+    log_info("core", "Starting {}.", name);
+    auto plugin = plugin_manager::get_plugin_instance<i_interactive_ui>(name);
+    if (plugin == nullptr)
     {
         return ERROR;
     }
-    log_info("core", "Starting {}.", name);
-    auto ui = std::dynamic_pointer_cast<i_interactive_ui>(factory->query_interface(interface_type::interactive_ui));
-    ui->initialize_logging();
-    auto ret = ui->exec(args);
-    log_info("core", "Closed {}.", name);
+    auto ret = plugin->exec(args);
+    log_info("core", "Closing {}.", name);
     return ret;
 }
 
@@ -94,7 +95,8 @@ int cleanup(std::shared_ptr<netlist> const g = nullptr)
     return SUCCESS;
 }
 
-int main(int argc, const char *argv[])
+#include "netlist/boolean_function.h"
+int main(int argc, const char* argv[])
 {
     /* initialize and parse generic cli options */
     program_options cli_options("cli options");
@@ -105,7 +107,7 @@ int main(int argc, const char *argv[])
     auto args = all_options.parse(argc, argv);
 
     /* initialize logging */
-    log_manager &lm = log_manager::get_instance();
+    log_manager& lm = log_manager::get_instance();
     if (args.is_option_set("--logfile"))
     {
         lm.set_file_name(hal::path(args.get_parameter("--logfile")));
@@ -181,9 +183,9 @@ int main(int argc, const char *argv[])
 
     /* parse program options */
     bool unknown_option_exists = false;
-    args = all_options.parse(argc, argv);
+    args                       = all_options.parse(argc, argv);
     // Check for unknown options include log manager options --> use all_options
-    for (const auto &opt : all_options.get_unknown_arguments())
+    for (const auto& opt : all_options.get_unknown_arguments())
     {
         unknown_option_exists = true;
         log_error("core", "unkown command line argument '{}'", opt);
@@ -217,7 +219,7 @@ int main(int argc, const char *argv[])
     }
 
     bool volatile_mode = false;
-    if (args.is_option_set("--volatile_mode"))
+    if (args.is_option_set("--volatile-mode"))
     {
         volatile_mode = true;
         log_warning("core", "your modifications will not be written to a .hal file (--volatile-mode).");
@@ -226,7 +228,7 @@ int main(int argc, const char *argv[])
     /* parse plugin options */
     std::vector<std::string> plugins_to_execute;
     auto option_to_plugin_name = plugin_manager::get_flag_to_plugin_mapping();
-    for (const auto &option : args.get_set_options())
+    for (const auto& option : args.get_set_options())
     {
         auto it = option_to_plugin_name.find(option);
         if (it != option_to_plugin_name.end())
@@ -239,20 +241,19 @@ int main(int argc, const char *argv[])
     }
 
     bool plugins_successful = true;
-    for (const auto &plugin_name : plugins_to_execute)
+    for (const auto& plugin_name : plugins_to_execute)
     {
-        auto factory = plugin_manager::get_plugin_factory(plugin_name);
-        if (factory == nullptr)
+        auto plugin = plugin_manager::get_plugin_instance<i_cli>(plugin_name);
+        if (plugin == nullptr)
         {
             return cleanup(netlist);
         }
-        auto plugin = std::dynamic_pointer_cast<i_cli>(factory->query_interface(interface_type::cli));
 
         program_arguments plugin_args;
 
-        for (const auto &option : plugin->get_cli_options().get_options())
+        for (const auto& option : plugin->get_cli_options().get_options())
         {
-            auto flags = std::get<0>(option);
+            auto flags      = std::get<0>(option);
             auto first_flag = *flags.begin();
             if (args.is_option_set(first_flag))
             {
@@ -261,7 +262,7 @@ int main(int argc, const char *argv[])
         }
 
         log_info("core", "executing '{}' with", plugin_name);
-        for (const auto &option : plugin_args.get_set_options())
+        for (const auto& option : plugin_args.get_set_options())
         {
             log_info("core", "  '{}': {}", option, core_utils::join(",", plugin_args.get_parameters(option)));
         }

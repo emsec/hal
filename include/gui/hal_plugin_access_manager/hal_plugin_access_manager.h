@@ -29,21 +29,10 @@
 #include <memory>
 #include <string>
 
-class i_cli;
-class i_factory;
-class i_gui;
-
-class hal_plugin_access_manager
+namespace hal_plugin_access_manager
 {
-public:
-    static program_arguments request_arguments(const std::string plugin_name);
-    static int run_plugin(const std::string plugin_name, program_arguments* args);
-
-private:
-    hal_plugin_access_manager();
-    static i_factory* get_plugin_factory(std::string plugin_name);
-    static std::shared_ptr<i_cli> query_plugin_cli(i_factory* factory);
-    static std::shared_ptr<i_gui> query_plugin_gui(i_factory* factory);
-};
+    program_arguments request_arguments(const std::string plugin_name);
+    int run_plugin(const std::string plugin_name, program_arguments* args);
+};    // namespace hal_plugin_access_manager
 
 #endif    // HAL_PLUGIN_ACCESS_MANAGER_H

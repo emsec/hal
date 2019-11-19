@@ -28,172 +28,73 @@ std::shared_ptr<netlist> hdl_parser_vhdl::parse(const std::string& gate_library)
         return nullptr;
     }
 
-    // read the whole file into logical parts
-
-    std::vector<file_line> header;
-    std::vector<file_line> libraries;
-    std::vector<std::vector<file_line>> components;
-
-    std::vector<file_line> current_component;
-    entity current_entity;
-
-    std::string line;
-    u32 line_number = 0;
-
-    enum
-    {
-        NONE,
-        IN_ENTITY_HEADER,
-        IN_ARCH_HEADER,
-        IN_COMPONENT,
-        IN_ARCH_BODY
-    } state;
-
-    while (std::getline(m_fs, line))
-    {
-        line_number++;
-        line = core_utils::trim(line);
-
-        // skip empty lines
-        if (line.empty())
-        {
-            continue;
-        }
-
-        if (core_utils::starts_with(line, "--"))
-        {
-            header.push_back(file_line{line_number, line});
-        }
-        else if (core_utils::starts_with(line, "library ") || core_utils::starts_with(line, "use "))
-        {
-            libraries.push_back(file_line{line_number, line});
-        }
-        else if (core_utils::starts_with(line, "entity "))
-        {
-            if (!current_entity.name.empty())
-            {
-                m_entities[current_entity.name] = current_entity;
-            }
-
-            state = IN_ENTITY_HEADER;
-            current_entity.definition.entity_header.clear();
-            current_entity.definition.architecture_header.clear();
-            current_entity.definition.architecture_body.clear();
-            current_entity.name        = line.substr(line.find(' ') + 1);
-            current_entity.name        = current_entity.name.substr(0, current_entity.name.rfind(' '));
-            current_entity.line_number = line_number;
-        }
-        else
-        {
-            if (core_utils::starts_with(line, "architecture "))
-            {
-                state = IN_ARCH_HEADER;
-                continue;
-            }
-            else if (state == IN_ARCH_HEADER && core_utils::starts_with(line, "component "))
-            {
-                state = IN_COMPONENT;
-                // no continue, first line is already important
-            }
-            else if (state == IN_COMPONENT && core_utils::starts_with(line, "end component "))
-            {
-                components.push_back(current_component);
-                current_component.clear();
-                state = IN_ARCH_HEADER;
-                continue;
-            }
-            else if (state == IN_ARCH_HEADER && line == "begin")
-            {
-                state = IN_ARCH_BODY;
-                continue;
-            }
-            else if (core_utils::starts_with(line, "end "))
-            {
-                state = NONE;
-                continue;
-            }
-
-            if (state == IN_ENTITY_HEADER)
-            {
-                current_entity.definition.entity_header.push_back(file_line{line_number, line});
-            }
-            else if (state == IN_ARCH_HEADER)
-            {
-                current_entity.definition.architecture_header.push_back(file_line{line_number, line});
-            }
-            else if (state == IN_ARCH_BODY)
-            {
-                current_entity.definition.architecture_body.push_back(file_line{line_number, line});
-            }
-            else if (state == IN_COMPONENT)
-            {
-                current_component.push_back(file_line{line_number, line});
-            }
-        }
-    }
-    if (!current_entity.name.empty())
-    {
-        m_entities[current_entity.name] = current_entity;
-    }
-
-    if (m_entities.empty())
-    {
-        log_error("hdl_parser", "file did not contain any entities.");
-        return nullptr;
-    }
-
-    // parse additional information
-    if (!this->parse_header(header))
-    {
-        return nullptr;
-    }
-    if (!this->parse_libraries(libraries))
-    {
-        return nullptr;
-    }
-    if (!this->parse_components(components))
+    // tokenize file
+    if (!tokenize())
     {
         return nullptr;
     }
 
-    // parse intermediate format
-    for (auto& it : m_entities)
+    // parse tokens into intermediate format
+    try
     {
-        if (!this->parse_entity(it.second))
+        if (!parse_tokens())
         {
             return nullptr;
         }
     }
+    catch (token_stream::token_stream_exception& e)
+    {
+        if (e.line_number != (u32)-1)
+        {
+            log_error("hdl_parser", "{} near line {}.", e.message, e.line_number);
+        }
+        else
+        {
+            log_error("hdl_parser", "{}.", e.message);
+        }
+        return nullptr;
+    }
 
     // create const 0 and const 1 net, will be removed if unused
-    m_zero_net = m_netlist->create_net("'0'");
-    if (m_zero_net == nullptr)
+    auto zero_net = m_netlist->create_net("'0'");
+    if (zero_net == nullptr)
     {
+        log_error("hdl_parser", "could not instantiate GND net");
         return nullptr;
     }
-    m_net_by_name[m_zero_net->get_name()] = m_zero_net;
+    m_net_by_name[zero_net->get_name()] = zero_net;
 
-    m_one_net = m_netlist->create_net("'1'");
-    if (m_one_net == nullptr)
+    auto one_net = m_netlist->create_net("'1'");
+    if (one_net == nullptr)
     {
+        log_error("hdl_parser", "could not instantiate VCC net");
         return nullptr;
     }
-    m_net_by_name[m_one_net->get_name()] = m_one_net;
+    m_net_by_name[one_net->get_name()] = one_net;
+
+    auto z_net = m_netlist->create_net("'Z'");
+    if (z_net == nullptr)
+    {
+        log_error("hdl_parser", "could not instantiate Z net");
+        return nullptr;
+    }
+    m_net_by_name[z_net->get_name()] = z_net;
 
     // build the netlist from the intermediate format
     // the last entity in the file is considered the top module
-    if (!build_netlist(current_entity.name))
+    if (!build_netlist(m_last_entity))
     {
+        log_error("hdl_parser", "could not build netlist from parsed data");
         return nullptr;
     }
 
     // add global gnd gate if required by any instance
-    if (!m_zero_net->get_dsts().empty())
+    if (!zero_net->get_dsts().empty())
     {
-        auto gnd_type   = *(m_netlist->get_gate_library()->get_global_gnd_gate_types()->begin());
-        auto output_pin = m_netlist->get_output_pin_types(gnd_type).at(0);
+        auto gnd_type   = m_netlist->get_gate_library()->get_gnd_gate_types().begin()->second;
+        auto output_pin = gnd_type->get_output_pins().at(0);
         auto gnd        = m_netlist->create_gate(m_netlist->get_unique_gate_id(), gnd_type, "global_gnd");
-        if (!m_netlist->mark_global_gnd_gate(gnd))
+        if (!m_netlist->mark_gnd_gate(gnd))
         {
             return nullptr;
         }
@@ -205,16 +106,16 @@ std::shared_ptr<netlist> hdl_parser_vhdl::parse(const std::string& gate_library)
     }
     else
     {
-        m_netlist->delete_net(m_zero_net);
+        m_netlist->delete_net(zero_net);
     }
 
     // add global vcc gate if required by any instance
-    if (!m_one_net->get_dsts().empty())
+    if (!one_net->get_dsts().empty())
     {
-        auto vcc_type   = *(m_netlist->get_gate_library()->get_global_vcc_gate_types()->begin());
-        auto output_pin = m_netlist->get_output_pin_types(vcc_type).at(0);
+        auto vcc_type   = m_netlist->get_gate_library()->get_vcc_gate_types().begin()->second;
+        auto output_pin = vcc_type->get_output_pins().at(0);
         auto vcc        = m_netlist->create_gate(m_netlist->get_unique_gate_id(), vcc_type, "global_vcc");
-        if (!m_netlist->mark_global_vcc_gate(vcc))
+        if (!m_netlist->mark_vcc_gate(vcc))
         {
             return nullptr;
         }
@@ -226,15 +127,19 @@ std::shared_ptr<netlist> hdl_parser_vhdl::parse(const std::string& gate_library)
     }
     else
     {
-        m_netlist->delete_net(m_one_net);
+        m_netlist->delete_net(one_net);
     }
 
     for (const auto& net : m_netlist->get_nets())
     {
-        bool no_src = net->get_src().gate == nullptr && !net->is_global_inout_net() && !net->is_global_input_net();
-        bool no_dst = net->get_num_of_dsts() == 0 && !net->is_global_inout_net() && !net->is_global_output_net();
+        bool no_src = net->get_src().gate == nullptr && !net->is_global_input_net();
+        bool no_dst = net->get_num_of_dsts() == 0 && !net->is_global_output_net();
         if (no_src && no_dst)
         {
+            if (net != z_net && net != one_net && net != zero_net)
+            {
+                log_warning("hdl_parser", "net '{}' has neither a source nor destinations and is thus removed", net->get_name());
+            }
             m_netlist->delete_net(net);
         }
     }
@@ -242,213 +147,236 @@ std::shared_ptr<netlist> hdl_parser_vhdl::parse(const std::string& gate_library)
     return m_netlist;
 }
 
-bool hdl_parser_vhdl::parse_header(const std::vector<file_line>& header)
+static bool is_digits(const std::string& str)
 {
-    for (const auto& line : header)
-    {
-        // read out device comment
-        if (core_utils::starts_with(line.text, "-- Device"))
-        {
-            auto device_name = core_utils::trim(line.text.substr(line.text.find(':') + 1));
-            m_netlist->set_device_name(device_name);
-            break;
-        }
-    }
-    log_debug("hdl_parser", "parsed header.");
-    return true;
+    return std::all_of(str.begin(), str.end(), ::isdigit);    // C++11
 }
 
-bool hdl_parser_vhdl::parse_libraries(const std::vector<file_line>& libs)
+bool hdl_parser_vhdl::tokenize()
 {
-    for (const auto& line : libs)
+    std::vector<token> tmp_tokens;
+    std::string delimiters = ",(): ;=><";
+    std::string current_token;
+    u32 line_number = 0;
+
+    std::string line;
+    bool in_string = false;
+    bool escaped   = false;
+    while (std::getline(m_fs, line))
     {
-        if (core_utils::starts_with(line.text, "use "))
+        line_number++;
+        if (line.find("--") != std::string::npos)
         {
-            auto lib = line.text.substr(line.text.find(' '));
-            lib      = core_utils::trim(lib.substr(0, lib.rfind(".") + 1));
-            m_libraries.insert(core_utils::to_lower(lib));
+            line = line.substr(0, line.find("--"));
         }
-    }
-    log_debug("hdl_parser", "parsed header.");
-    return true;
-}
-
-bool hdl_parser_vhdl::parse_components(const std::vector<std::vector<file_line>>& components)
-{
-    auto lib = m_netlist->get_gate_library();
-
-    for (const auto& component : components)
-    {
-        std::string new_component;
-
-        bool in_port_def = false;
-
-        for (const auto& line : component)
+        for (char c : core_utils::trim(line))
         {
-            // line starts with "component" -> extract name
-            if (core_utils::starts_with(line.text, "component "))
+            if (c == '\\')
             {
-                new_component = core_utils::trim(line.text.substr(line.text.find(' ') + 1));
-                new_component = new_component.substr(0, new_component.find(' '));
-
-                lib->get_gate_types()->insert(new_component);
+                escaped = !escaped;
             }
-            else if (line.text == "port (")
+            else if (!escaped && c == '"')
             {
-                in_port_def = true;
+                in_string = !in_string;
             }
-            else if (line.text == ");")
+            if (delimiters.find(c) == std::string::npos || escaped || in_string)
             {
-                in_port_def = false;
+                current_token += c;
             }
-            else if (in_port_def)
+            else
             {
-                // get port information
-                auto token     = core_utils::split(line.text, ':');
-                auto name      = core_utils::rtrim(token[0]);
-                auto config    = core_utils::ltrim(token[1]);
-                auto direction = config.substr(0, config.find(' '));
-                auto type      = config.substr(config.find(' ') + 1);
-
-                // add all signals of that port
-                for (const auto signal : get_vector_signals(name, type))
+                if (!current_token.empty())
                 {
-                    if (direction == "in")
+                    if (tmp_tokens.size() > 1 && is_digits(tmp_tokens.at(tmp_tokens.size() - 2)) && tmp_tokens.at(tmp_tokens.size() - 1) == "." && is_digits(current_token))
                     {
-                        lib->get_input_pin_types()->insert(signal);
-                        (*lib->get_gate_type_map_to_input_pin_types())[new_component].push_back(signal);
-                    }
-                    else if (direction == "out")
-                    {
-                        lib->get_output_pin_types()->insert(signal);
-                        (*lib->get_gate_type_map_to_output_pin_types())[new_component].push_back(signal);
-                    }
-                    else if (direction == "inout")
-                    {
-                        lib->get_inout_pin_types()->insert(signal);
-                        (*lib->get_gate_type_map_to_inout_pin_types())[new_component].push_back(signal);
+                        tmp_tokens.pop_back();
+                        tmp_tokens.back() += "." + current_token;
                     }
                     else
                     {
-                        log_error("hdl_parser", "line {}: unknown port direction {}", line.number, direction);
-                        return false;
+                        tmp_tokens.emplace_back(line_number, current_token, false);
                     }
+                    current_token.clear();
+                }
+                if (c == '=' && tmp_tokens.at(tmp_tokens.size() - 1) == "<")
+                {
+                    tmp_tokens.at(tmp_tokens.size() - 1) = "<=";
+                }
+                else if (c == '=' && tmp_tokens.at(tmp_tokens.size() - 1) == ":")
+                {
+                    tmp_tokens.at(tmp_tokens.size() - 1) = ":=";
+                }
+                else if (c == '>' && tmp_tokens.at(tmp_tokens.size() - 1) == "=")
+                {
+                    tmp_tokens.at(tmp_tokens.size() - 1) = "=>";
+                }
+                else if (!std::isspace(c))
+                {
+                    tmp_tokens.emplace_back(line_number, std::string(1, c), false);
                 }
             }
         }
+        if (!current_token.empty())
+        {
+            tmp_tokens.emplace_back(line_number, current_token, false);
+            current_token.clear();
+        }
     }
+    m_token_stream = token_stream(tmp_tokens, {"("}, {")"});
     return true;
 }
 
-void hdl_parser_vhdl::parse_attribute(std::map<std::string, std::set<std::tuple<std::string, std::string, std::string>>>& mapping, const file_line& line)
+bool hdl_parser_vhdl::parse_tokens()
 {
-    auto left  = core_utils::rtrim(line.text.substr(0, line.text.find(':')));
-    auto right = core_utils::ltrim(line.text.substr(line.text.find(':') + 1));
-    right.pop_back();
+    std::string last_entity;
 
-    auto left_parts = core_utils::split(left, ' ');
-
-    if (left_parts.size() == 2)
+    while (m_token_stream.remaining() > 0)
     {
-        m_attribute_types[core_utils::to_lower(left_parts[1])] = right;
-    }
-    else if (left_parts.size() == 4 && left_parts[2] == "of")
-    {
-        std::string value = right.substr(right.find(" is ") + 4);
-        if (value[0] == '"' && value.back() == '"')
+        if (m_token_stream.peek() == "library" || m_token_stream.peek() == "use")
         {
-            value = value.substr(1, value.size() - 2);
+            if (!parse_library())
+            {
+                return false;
+            }
         }
-        auto type_it = m_attribute_types.find(core_utils::to_lower(left_parts[1]));
-        if (type_it == m_attribute_types.end())
+        else if (m_token_stream.peek() == "entity")
         {
-            log_warning("hdl_parser", "line {}: attribute {} has unknown type", line.number, left_parts[1]);
-            mapping[left_parts[3]].insert({left_parts[1], "UNKNOWN", value});
+            if (!parse_entity_definiton())
+            {
+                return false;
+            }
+        }
+        else if (m_token_stream.peek() == "architecture")
+        {
+            if (!parse_architecture())
+            {
+                return false;
+            }
         }
         else
         {
-            mapping[left_parts[3]].insert({left_parts[1], type_it->second, value});
+            log_error("hdl_parser", "unexpected token '{}' in global scope in line {}", m_token_stream.peek().string, m_token_stream.peek().number);
+            return false;
         }
+    }
+
+    return true;
+}
+
+bool hdl_parser_vhdl::parse_library()
+{
+    if (m_token_stream.peek() == "use")
+    {
+        m_token_stream.consume("use", true);
+        auto lib = m_token_stream.consume().string;
+        m_token_stream.consume(";", true);
+
+        // remove specific import like ".all" but keep the "."
+        lib = core_utils::trim(lib.substr(0, lib.rfind(".") + 1));
+        m_libraries.insert(core_utils::to_lower(lib));
     }
     else
     {
-        log_error("hdl_parser", "malformed attribute defintion '{}'", line.text);
+        m_token_stream.consume_until(";");
+        m_token_stream.consume(";", true);
     }
-}
-
-bool hdl_parser_vhdl::parse_entity(entity& e)
-{
-    if (!parse_entity_header(e))
-    {
-        return false;
-    }
-
-    if (!parse_architecture_header(e))
-    {
-        return false;
-    }
-
-    if (!parse_architecture_body(e))
-    {
-        return false;
-    }
-
     return true;
 }
 
-bool hdl_parser_vhdl::parse_entity_header(entity& e)
+bool hdl_parser_vhdl::parse_entity_definiton()
 {
-    bool in_port_def = false;
-
-    for (const auto& line : e.definition.entity_header)
+    entity e;
+    e.line_number = m_token_stream.peek().number;
+    m_token_stream.consume("entity", true);
+    e.name = m_token_stream.consume();
+    m_token_stream.consume("is", true);
+    while (m_token_stream.peek() != "end")
     {
-        // line starts with "entity" -> extract name
-        if (line.text == "port (")
+        if (m_token_stream.peek() == "generic")
         {
-            in_port_def = true;
+            //TODO handle default values for generics
+            m_token_stream.consume_until(";");
+            m_token_stream.consume(";", true);
         }
-        // line is ");" -> no more ports
-        else if (in_port_def && line.text == ");")
+        else if (m_token_stream.peek() == "port")
         {
-            in_port_def = false;
-        }
-        // we expect ports at this point
-        else if (in_port_def)
-        {
-            // get port information
-            auto token     = core_utils::split(line.text, ':');
-            auto name      = core_utils::trim(token[0]);
-            auto config    = core_utils::trim(token[1]);
-            auto direction = config.substr(0, config.find(' '));
-            auto type      = config.substr(config.find(' ') + 1);
-
-            // add all signals of that port
-            for (const auto signal : get_vector_signals(name, type))
+            if (!parse_port_definiton(e))
             {
-                e.ports.emplace_back(signal, direction);
-                e.expanded_signal_names[name].push_back(signal);
+                return false;
             }
         }
-        else if (!in_port_def && core_utils::starts_with(line.text, "attribute "))
+        else if (m_token_stream.peek() == "attribute")
         {
-            parse_attribute(e.entity_attributes, line);
+            if (!parse_attribute(e.entity_attributes))
+            {
+                return false;
+            }
+        }
+        else
+        {
+            log_error("hdl_parser", "unexpected token '{}' in entity defintion in line {}", m_token_stream.peek().string, m_token_stream.peek().number);
+            return false;
         }
     }
+    m_token_stream.consume("end", true);
+    m_token_stream.consume();
+    m_token_stream.consume(";", true);
 
-    log_debug("hdl_parser", "parsed entity header of '{}'.", e.name);
+    if (!e.name.empty())
+    {
+        m_entities[e.name] = e;
+        m_last_entity      = e.name;
+    }
+
     return true;
+}
+
+bool hdl_parser_vhdl::parse_port_definiton(entity& e)
+{
+    m_token_stream.consume("port", true);
+    m_token_stream.consume("(", true);
+    auto ports = m_token_stream.extract_until(")");
+
+    while (ports.remaining() > 0)
+    {
+        auto base_name = ports.consume();
+        ports.consume(":", true);
+        auto direction    = ports.consume();
+        token_stream type = ports.extract_until(";");
+        ports.consume(";", ports.remaining() > 0);    // last entry has no semicolon, so no throw in that case
+
+        for (const auto signal : get_vector_signals(base_name, type))
+        {
+            e.ports.emplace_back(signal, direction);
+            e.expanded_signal_names[base_name].push_back(signal);
+        }
+    }
+    m_token_stream.consume(")", true);
+    m_token_stream.consume(";", true);
+    return true;
+}
+
+bool hdl_parser_vhdl::parse_architecture()
+{
+    m_token_stream.consume("architecture", true);
+    m_token_stream.consume();
+    m_token_stream.consume("of", true);
+    auto& e = m_entities[m_token_stream.consume()];
+    m_token_stream.consume("is", true);
+    return parse_architecture_header(e) && parse_architecture_body(e);
 }
 
 bool hdl_parser_vhdl::parse_architecture_header(entity& e)
 {
-    for (const auto& line : e.definition.architecture_header)
+    while (m_token_stream.peek() != "begin")
     {
-        if (core_utils::starts_with(line.text, "signal "))
+        if (m_token_stream.peek() == "signal")
         {
-            // get signal information
-            auto items = core_utils::split(line.text, ':');
-            auto name  = core_utils::trim(items[0].substr(items[0].find(' ') + 1));
-            auto type  = core_utils::trim(items[1]);
+            m_token_stream.consume("signal", true);
+            auto name = m_token_stream.consume().string;
+            m_token_stream.consume(":", true);
+            auto type = m_token_stream.extract_until(";");
+            m_token_stream.consume(";", true);
 
             // add all (sub-)signals
             for (const auto signal : get_vector_signals(name, type))
@@ -457,20 +385,31 @@ bool hdl_parser_vhdl::parse_architecture_header(entity& e)
                 e.signals.push_back(signal);
             }
         }
-        else if (core_utils::starts_with(line.text, "attribute "))
+        else if (m_token_stream.peek() == "component")
         {
-            if (line.text.find("signal is \"") != std::string::npos)
+            // components are ignored
+            m_token_stream.consume_until("end");
+            m_token_stream.consume("end", true);
+            m_token_stream.consume();
+            m_token_stream.consume(";", true);
+        }
+        else if (m_token_stream.peek() == "attribute")
+        {
+            auto end_pos    = m_token_stream.find_next(";");
+            auto signal_pos = m_token_stream.find_next("signal", end_pos);
+
+            if (signal_pos < end_pos && m_token_stream.at(signal_pos + 1) == "is")
             {
-                parse_attribute(e.signal_attributes, line);
+                parse_attribute(e.signal_attributes);
             }
             else
             {
-                parse_attribute(e.instance_attributes, line);
+                parse_attribute(e.instance_attributes);
             }
         }
         else
         {
-            log_error("hdl_parser", "line {}: unexpected line in architecture header: '{}'", line.number, line.text);
+            log_error("hdl_parser", "unexpected token '{}' in architecture header in line {}", m_token_stream.peek().string, m_token_stream.peek().number);
             return false;
         }
     }
@@ -487,97 +426,123 @@ bool hdl_parser_vhdl::parse_architecture_header(entity& e)
         }
     }
 
-    log_debug("hdl_parser", "parsed architecture header of '{}'.", e.name);
     return true;
 }
 
 bool hdl_parser_vhdl::parse_architecture_body(entity& e)
 {
-    std::vector<file_line> instance_lines;
-
-    bool in_instance = false;
-
-    for (const auto& line : e.definition.architecture_body)
+    m_token_stream.consume("begin", true);
+    while (m_token_stream.peek() != "end")
     {
         // new instance found
-        if (!in_instance && line.text.find(':') != std::string::npos)
+        if (m_token_stream.peek(1) == ":")
         {
-            in_instance = true;
-            instance_lines.push_back(line);
-        }
-        // end of instance
-        else if (in_instance && line.text == ");")
-        {
-            if (!parse_instance(e, instance_lines))
+            if (!parse_instance(e))
             {
                 return false;
             }
-            instance_lines.clear();
-            in_instance = false;
-        }
-        // add line to instance
-        else if (in_instance)
-        {
-            instance_lines.push_back(line);
         }
         // not in instance -> has to be a direct assignment
+        else if (m_token_stream.find_next("<=") < m_token_stream.find_next(";"))
+        {
+            auto lhs = m_token_stream.extract_until("<=");
+            m_token_stream.consume("<=", true);
+            auto rhs = m_token_stream.extract_until(";");
+            m_token_stream.consume(";", true);
+
+            for (const auto& [name, value] : get_assignments(lhs, rhs))
+            {
+                e.direct_assignments[name] = value;
+            }
+        }
         else
         {
-            auto arrow_pos = line.text.find("<=");
-            if (arrow_pos != std::string::npos)
-            {
-                auto signal     = core_utils::rtrim(line.text.substr(0, arrow_pos));
-                auto assignment = line.text.substr(arrow_pos + 2);
-                assignment.pop_back();
-
-                for (const auto& [name, value] : get_port_assignments(signal, core_utils::trim(assignment)))
-                {
-                    e.direct_assignments[name] = value;
-                }
-            }
-            else
-            {
-                log_error("hdl_parser", "line {}: unexpected line in architecture body: '{}'", line.number, line.text);
-            }
+            log_error("hdl_parser", "unexpected token '{}' in architecture body in line {}", m_token_stream.peek().string, m_token_stream.peek().number);
+            return false;
         }
     }
 
-    log_debug("hdl_parser", "parsed architecture body of '{}'.", e.name);
+    m_token_stream.consume("end", true);
+    m_token_stream.consume();
+    m_token_stream.consume(";", true);
     return true;
 }
 
-bool hdl_parser_vhdl::parse_instance(entity& e, const std::vector<file_line>& lines)
+bool hdl_parser_vhdl::parse_attribute(std::map<std::string, std::set<std::tuple<std::string, std::string, std::string>>>& mapping)
+{
+    u32 line_number = m_token_stream.peek().number;
+    m_token_stream.consume("attribute", true);
+    auto attr_type = m_token_stream.consume().string;
+    if (m_token_stream.peek() == ":")
+    {
+        m_token_stream.consume(":", true);
+        m_attribute_types[core_utils::to_lower(attr_type)] = m_token_stream.join_until(";", " ");
+        m_token_stream.consume(";", true);
+    }
+    else if (m_token_stream.peek() == "of" && m_token_stream.peek(2) == ":")
+    {
+        m_token_stream.consume("of", true);
+        auto attr_target = m_token_stream.consume();
+        m_token_stream.consume(":", true);
+        m_token_stream.consume();
+        m_token_stream.consume("is", true);
+        auto value = m_token_stream.join_until(";", " ").string;
+        m_token_stream.consume(";", true);
+
+        if (value[0] == '"' && value.back() == '"')
+        {
+            value = value.substr(1, value.size() - 2);
+        }
+        auto type_it = m_attribute_types.find(core_utils::to_lower(attr_type));
+        if (type_it == m_attribute_types.end())
+        {
+            log_warning("hdl_parser", "attribute {} has unknown base type in line {}", attr_type, line_number);
+            mapping[attr_target].insert({attr_type, "UNKNOWN", value});
+        }
+        else
+        {
+            mapping[attr_target].insert({attr_type, type_it->second, value});
+        }
+    }
+    else
+    {
+        log_error("hdl_parser", "malformed attribute defintion in line {}", line_number);
+        return false;
+    }
+    return true;
+}
+
+bool hdl_parser_vhdl::parse_instance(entity& e)
 {
     instance inst;
 
-    // extract name and component
-    auto pos  = lines[0].text.find(':');
-    inst.name = core_utils::trim(lines[0].text.substr(0, pos));
-    inst.type = core_utils::trim(lines[0].text.substr(pos + 1));
+    // extract name and type
+    inst.name = m_token_stream.consume();
+    m_token_stream.consume(":", true);
 
-    // remove prefix from component
-    if (core_utils::starts_with(inst.type, "entity "))
+    // remove prefix from type
+    if (m_token_stream.peek() == "entity")
     {
-        pos = inst.type.find('.');
-        if (pos == std::string::npos)
-        {
-            inst.type = inst.type.substr(inst.type.find(' ') + 1);
-        }
-        else
+        m_token_stream.consume("entity", true);
+        inst.type = m_token_stream.consume();
+        auto pos  = inst.type.find('.');
+        if (pos != std::string::npos)
         {
             inst.type = inst.type.substr(pos + 1);
         }
     }
-    else if (core_utils::starts_with(inst.type, "component "))
+    else if (m_token_stream.peek() == "component")
     {
-        inst.type = inst.type.substr(inst.type.find(' ') + 1);
+        m_token_stream.consume("component", true);
+        inst.type = m_token_stream.consume();
     }
     else
     {
-        auto low_type      = core_utils::to_lower(inst.type);
-        std::string prefix = "";
+        inst.type     = m_token_stream.consume();
+        auto low_type = core_utils::to_lower(inst.type);
+        std::string prefix;
 
-        // find longest matching prefix
+        // find longest matching library prefix
         for (const auto& lib : m_libraries)
         {
             if (lib.size() > prefix.size() && core_utils::starts_with(low_type, lib))
@@ -593,62 +558,48 @@ bool hdl_parser_vhdl::parse_instance(entity& e, const std::vector<file_line>& li
         }
     }
 
-    // traverse content
-    enum
+    if (m_token_stream.peek() == "generic")
     {
-        NONE,
-        IN_GENERICS_MAP,
-        IN_PORT_MAP
-    } state;
+        m_token_stream.consume("generic", true);
+        m_token_stream.consume("map", true);
+        m_token_stream.consume("(", true);
+        auto generic_map = m_token_stream.extract_until(")");
+        m_token_stream.consume(")", true);
+        while (generic_map.remaining() > 0)
+        {
+            auto lhs = generic_map.join_until("=>", " ");
+            generic_map.consume("=>", true);
+            auto rhs = generic_map.join_until(",", " ");
+            generic_map.consume(",", generic_map.remaining() > 0);    // last entry has no comma
 
-    // start from second line
-    for (u32 i = 1; i < lines.size(); ++i)
+            inst.generics.emplace_back(lhs, rhs);
+        }
+    }
+
+    if (m_token_stream.peek() == "port")
     {
-        auto& line = lines[i];
-        if (core_utils::starts_with(line.text, "generic map"))
+        m_token_stream.consume("port", true);
+        m_token_stream.consume("map", true);
+        m_token_stream.consume("(", true);
+        auto port_map = m_token_stream.extract_until(")");
+        m_token_stream.consume(")", true);
+        while (port_map.remaining() > 0)
         {
-            state = IN_GENERICS_MAP;
-            continue;
-        }
-        else if (core_utils::starts_with(line.text, "port map"))
-        {
-            state = IN_PORT_MAP;
-            continue;
-        }
-        else if (core_utils::starts_with(line.text, ")"))
-        {
-            state = NONE;
-            continue;
-        }
-
-        if (state == IN_GENERICS_MAP)
-        {
-            auto key   = core_utils::rtrim(line.text.substr(0, line.text.find("=>")));
-            auto value = core_utils::ltrim(line.text.substr(line.text.find("=>") + 2));
-            if (value.back() == ',')
-            {
-                value.pop_back();
-            }
-            inst.generics.emplace_back(key, value);
-        }
-        else if (state == IN_PORT_MAP)
-        {
-            auto key   = core_utils::rtrim(line.text.substr(0, line.text.find("=>")));
-            auto value = core_utils::ltrim(line.text.substr(line.text.find("=>") + 2));
-            if (value.back() == ',')
-            {
-                value.pop_back();
-            }
-            for (const auto& [a, b] : get_port_assignments(key, value))
+            auto lhs = port_map.extract_until("=>");
+            port_map.consume("=>", true);
+            auto rhs = port_map.extract_until(",");
+            port_map.consume(",", port_map.remaining() > 0);    // last entry has no comma
+            for (const auto& [a, b] : get_assignments(lhs, rhs))
             {
                 inst.ports.emplace_back(a, b);
             }
         }
     }
 
+    m_token_stream.consume(";", true);
+
     e.instances.push_back(inst);
 
-    log_debug("hdl_parser", "parsed instance '{}' of entity '{}'.", inst.name, e.name);
     return true;
 }
 
@@ -705,37 +656,43 @@ bool hdl_parser_vhdl::build_netlist(const std::string& top_module)
         }
     }
 
-    // for the top module, generate global i/o signals for all ports
-
-    std::map<std::string, std::function<bool(std::shared_ptr<net> const)>> port_dir_function = {
-        {"in", [](std::shared_ptr<net> const net) { return net->mark_global_input_net(); }},
-        {"out", [](std::shared_ptr<net> const net) { return net->mark_global_output_net(); }},
-        {"inout", [](std::shared_ptr<net> const net) { return net->mark_global_inout_net(); }},
-    };
-
     std::map<std::string, std::string> top_assignments;
 
     for (const auto& [name, direction] : top_entity.ports)
     {
-        if (port_dir_function.find(direction) == port_dir_function.end())
-        {
-            log_error("hdl_parser", "entity {}, line {}+ : direction '{}' unkown", name, top_entity.line_number, direction);
-            return false;
-        }
-
-        auto new_net = m_netlist->create_net(name);
-        if (new_net == nullptr)
-        {
-            return false;
-        }
+        auto new_net                       = m_netlist->create_net(name);
         m_net_by_name[new_net->get_name()] = new_net;
-        if (!port_dir_function[direction](new_net))
-        {
-            return false;
-        }
 
         // for instances, point the ports to the newly generated signals
         top_assignments[new_net->get_name()] = new_net->get_name();
+
+        if (new_net == nullptr)
+        {
+            log_error("hdl_parser", "could not create new net '{}'", name);
+            return false;
+        }
+
+        if (core_utils::equals_ignore_case(direction, "in"))
+        {
+            if (!new_net->mark_global_input_net())
+            {
+                log_error("hdl_parser", "could not mark net '{}' as global input", name);
+                return false;
+            }
+        }
+        else if (core_utils::equals_ignore_case(direction, "out"))
+        {
+            if (!new_net->mark_global_output_net())
+            {
+                log_error("hdl_parser", "could not mark net '{}' as global output", name);
+                return false;
+            }
+        }
+        else
+        {
+            log_error("hdl_parser", "entity '{}', line {} : direction '{}' unkown", name, top_entity.line_number, direction);
+            return false;
+        }
     }
 
     // now create all instances of the top entity
@@ -785,6 +742,7 @@ bool hdl_parser_vhdl::build_netlist(const std::string& top_module)
                     }
                     else if (slave_src.gate != master_net->get_src().gate)
                     {
+                        log_error("hdl_parser", "could not merge nets '{}' and '{}'", slave_net->get_name(), master_net->get_name());
                         return false;
                     }
                 }
@@ -848,6 +806,7 @@ std::shared_ptr<module> hdl_parser_vhdl::instantiate(const entity& e, std::share
 
     if (module == nullptr)
     {
+        log_error("hdl_parser", "could not instantiate the module '{}'", e.name);
         return nullptr;
     }
 
@@ -874,6 +833,7 @@ std::shared_ptr<module> hdl_parser_vhdl::instantiate(const entity& e, std::share
         auto new_net  = m_netlist->create_net(aliases[name]);
         if (new_net == nullptr)
         {
+            log_error("hdl_parser", "could not instantiate the net '{}'", name);
             return nullptr;
         }
         m_net_by_name[aliases[name]] = new_net;
@@ -948,8 +908,8 @@ std::shared_ptr<module> hdl_parser_vhdl::instantiate(const entity& e, std::share
     }
 
     // cache global vcc/gnd types
-    auto global_vcc_gate_types = m_netlist->get_gate_library()->get_global_vcc_gate_types();
-    auto global_gnd_gate_types = m_netlist->get_gate_library()->get_global_gnd_gate_types();
+    auto vcc_gate_types = m_netlist->get_gate_library()->get_vcc_gate_types();
+    auto gnd_gate_types = m_netlist->get_gate_library()->get_gnd_gate_types();
 
     // process instances i.e. gates or other entities
     for (const auto& inst : e.instances)
@@ -973,13 +933,13 @@ std::shared_ptr<module> hdl_parser_vhdl::instantiate(const entity& e, std::share
                 {
                     instance_assignments[pin] = it3->second;
                 }
-                else if (signal == "'0'" || signal == "'1'")
+                else if (signal == "'0'" || signal == "'1'" || signal == "'Z'")
                 {
                     instance_assignments[pin] = signal;
                 }
                 else
                 {
-                    log_error("hdl_parser", "signal assignment \"{} => {}\" of instance {} is invalid", pin, signal, inst.name);
+                    log_error("hdl_parser", "signal assignment \"{} => {}\" of instance {} is invalid ('{}' unknown)", pin, signal, inst.name, signal);
                     return nullptr;
                 }
             }
@@ -1000,32 +960,46 @@ std::shared_ptr<module> hdl_parser_vhdl::instantiate(const entity& e, std::share
         {
             // create the new gate
             aliases[inst.name] = get_unique_alias(inst.name);
-            auto new_gate      = m_netlist->create_gate(inst.type, aliases[inst.name]);
+
+            std::shared_ptr<gate> new_gate;
+            {
+                auto gate_types = m_netlist->get_gate_library()->get_gate_types();
+                auto it         = std::find_if(gate_types.begin(), gate_types.end(), [&](auto& v) { return core_utils::equals_ignore_case(v.first, inst.type); });
+                if (it == gate_types.end())
+                {
+                    log_error("hdl_parser", "could not find gate type '{}' in gate library", inst.type);
+                    return nullptr;
+                }
+                new_gate = m_netlist->create_gate(it->second, aliases[inst.name]);
+            }
+
             if (new_gate == nullptr)
             {
+                log_error("hdl_parser", "could not instantiate gate '{}'", inst.name);
                 return nullptr;
             }
             module->assign_gate(new_gate);
             container = new_gate.get();
 
             // if gate is a global type, register it as such
-            if (global_vcc_gate_types->find(inst.type) != global_vcc_gate_types->end() && !new_gate->mark_global_vcc_gate())
+            if (vcc_gate_types.find(inst.type) != vcc_gate_types.end() && !new_gate->mark_vcc_gate())
             {
                 return nullptr;
             }
-            if (global_gnd_gate_types->find(inst.type) != global_gnd_gate_types->end() && !new_gate->mark_global_gnd_gate())
+            if (gnd_gate_types.find(inst.type) != gnd_gate_types.end() && !new_gate->mark_gnd_gate())
             {
                 return nullptr;
             }
 
             // cache pin types
-            auto input_pin_types  = new_gate->get_input_pin_types();
-            auto output_pin_types = new_gate->get_output_pin_types();
-            auto inout_pin_types  = new_gate->get_inout_pin_types();
+            auto input_pins  = new_gate->get_input_pins();
+            auto output_pins = new_gate->get_output_pins();
 
             // check for port
-            for (auto [pin, net_name] : inst.ports)
+            for (auto [pin_it, net_name] : inst.ports)
             {
+                std::string pin = pin_it;    // copy to be able to overwrite
+
                 // apply port assignments
                 {
                     auto it = instance_assignments.find(pin);
@@ -1042,22 +1016,44 @@ std::shared_ptr<module> hdl_parser_vhdl::instantiate(const entity& e, std::share
                 }
 
                 // get the respective net for the assignment
-                auto it = m_net_by_name.find(net_name);
-                if (it == m_net_by_name.end())
+                std::shared_ptr<net> current_net = nullptr;
                 {
-                    log_error("hdl_parser", "signal '{}' of {} was not previously declared", net_name, e.name);
-                    return nullptr;
+                    auto it = m_net_by_name.find(net_name);
+                    if (it == m_net_by_name.end())
+                    {
+                        log_error("hdl_parser", "signal '{}' of {} was not previously declared", net_name, e.name);
+                        return nullptr;
+                    }
+                    current_net = it->second;
                 }
-                auto current_net = it->second;
 
                 // add net src/dst by pin types
-                bool is_inout  = std::find(inout_pin_types.begin(), inout_pin_types.end(), pin) != inout_pin_types.end();
-                bool is_input  = is_inout || std::find(input_pin_types.begin(), input_pin_types.end(), pin) != input_pin_types.end();
-                bool is_output = is_inout || std::find(output_pin_types.begin(), output_pin_types.end(), pin) != output_pin_types.end();
+                bool is_input = false;
+                {
+                    auto it = std::find_if(input_pins.begin(), input_pins.end(), [&](auto& s) { return core_utils::equals_ignore_case(s, pin); });
+                    if (it != input_pins.end())
+                    {
+                        is_input = true;
+                        pin      = *it;
+                    }
+                }
+                bool is_output = false;
+                {
+                    auto it = std::find_if(output_pins.begin(), output_pins.end(), [&](auto& s) { return core_utils::equals_ignore_case(s, pin); });
+                    if (it != output_pins.end())
+                    {
+                        is_output = true;
+                        pin       = *it;
+                    }
+                }
 
                 if (!is_input && !is_output)
                 {
-                    log_error("hdl_parser", "undefined pin '{}' for '{}' ({})", pin, new_gate->get_name(), new_gate->get_type());
+                    for (const auto& pin_type : new_gate->get_type()->get_input_pins())
+                    {
+                        log_error("hdl_parser", "pin_type: {}", pin_type);
+                    }
+                    log_error("hdl_parser", "undefined pin '{}' for '{}' ({})", pin, new_gate->get_name(), new_gate->get_type()->get_name());
                     return nullptr;
                 }
 
@@ -1070,9 +1066,9 @@ std::shared_ptr<module> hdl_parser_vhdl::instantiate(const entity& e, std::share
                                   "net '{}' already has source gate '{}' (type {}), cannot assign '{}' (type {})",
                                   current_net->get_name(),
                                   src->get_name(),
-                                  src->get_type(),
+                                  src->get_type()->get_name(),
                                   new_gate->get_name(),
-                                  new_gate->get_type());
+                                  new_gate->get_type()->get_name());
                     }
                     if (!current_net->set_src(new_gate, pin))
                     {
@@ -1121,7 +1117,7 @@ std::shared_ptr<module> hdl_parser_vhdl::instantiate(const entity& e, std::share
             {
                 data_type = "floating_point";
             }
-            else if (core_utils::ends_with(value, "s") || core_utils::ends_with(value, "sec") || core_utils::ends_with(value, "min") || core_utils::ends_with(value, "hr"))
+            else if (core_utils::ends_with(value, "s", true) || core_utils::ends_with(value, "sec", true) || core_utils::ends_with(value, "min", true) || core_utils::ends_with(value, "hr", true))
             {
                 data_type = "time";
             }
@@ -1166,24 +1162,24 @@ std::string hdl_parser_vhdl::get_hex_from_number_literal(const std::string& v)
 {
     std::string value = core_utils::trim(core_utils::replace(v, "_", ""));
     value.pop_back();
-    if (core_utils::starts_with(value, "X\""))
+    if (core_utils::starts_with(value, "X\"", true))
     {
         value = value.substr(2);
         return core_utils::to_lower(value);
     }
     // Conversion required
     int radix = 10;
-    if (core_utils::starts_with(value, "D\""))
+    if (core_utils::starts_with(value, "D\"", true))
     {
         radix = 10;
         value = value.substr(2);
     }
-    if (core_utils::starts_with(value, "B\""))
+    if (core_utils::starts_with(value, "B\"", true))
     {
         radix = 2;
         value = value.substr(2);
     }
-    if (core_utils::starts_with(value, "O\""))
+    if (core_utils::starts_with(value, "O\"", true))
     {
         radix = 8;
         value = value.substr(2);
@@ -1193,39 +1189,47 @@ std::string hdl_parser_vhdl::get_hex_from_number_literal(const std::string& v)
     return ss.str();
 }
 
-std::vector<std::string> hdl_parser_vhdl::get_vector_signals(const std::string& name, const std::string& type)
+std::vector<std::string> hdl_parser_vhdl::get_vector_signals(const std::string& base_name, token_stream& type)
 {
+    // remove default assignment if available
+    type = type.extract_until(":=");
+
     // if there is no range given, the signal is just the name
-    if (type.find('(') == std::string::npos)
+    if (type.size() == 1)
     {
-        return {name};
+        type.consume("std_logic");
+        return {base_name};
     }
 
-    // extract bounds "a to/downto b, c to/downto d, ..."
-    auto bounds = type.substr(type.find("(") + 1);
-    bounds      = core_utils::trim(bounds.substr(0, bounds.find(")")));
+    auto type_name = type.consume();
+    type.consume("(");
+    auto bounds = type.extract_until(")");
+    type.consume(")");
 
     // process bounds into tuples (low, high)
-    std::vector<std::tuple<int, int>> bound_tokens;
-    for (const auto& part : core_utils::split(bounds, ','))
+    std::vector<std::tuple<int, int>> ranges;
+    while (bounds.remaining() > 0)
     {
-        std::string bound = core_utils::trim(part);
-        bool downto       = true;
-        if (bound.find(" downto ") == std::string::npos)
+        auto bound = bounds.extract_until(",");
+        bounds.consume(",");
+
+        if (bound.size() != 3)
         {
-            downto = false;
+            log_error("hdl_parser", "range '{}' could not be parsed (line {})", bound.join(" ").string, bound.at(0).number);
+            return {};
         }
-
-        int left_bound  = std::stoi(bound.substr(0, bound.find(' ')));
-        int right_bound = std::stoi(bound.substr(bound.find_last_of(' ') + 1));
-
-        if (downto)
+        if (bound.at(1) == "downto")
         {
-            bound_tokens.push_back(std::make_tuple(right_bound, left_bound));
+            ranges.emplace_back(std::stoi(bound.at(2)), std::stoi(bound.at(0)));
+        }
+        else if (bound.at(1) == "to")
+        {
+            ranges.emplace_back(std::stoi(bound.at(0)), std::stoi(bound.at(2)));
         }
         else
         {
-            bound_tokens.push_back(std::make_tuple(left_bound, right_bound));
+            log_error("hdl_parser", "range '{}' could not be parsed (line {})", bound.join(" ").string, bound.at(0).number);
+            return {};
         }
     }
 
@@ -1238,16 +1242,16 @@ std::vector<std::string> hdl_parser_vhdl::get_vector_signals(const std::string& 
     u32 dimension = 0;
     for (const auto& it : std_logic_vector_identifier_to_dimension)
     {
-        if ((type.find(it.first) != std::string::npos) && (dimension < it.second))
+        if ((core_utils::to_upper(type_name).find(it.first) != std::string::npos) && (dimension < it.second))
         {
             dimension = it.second;
         }
     }
 
     // compare expected dimension with actually found dimension
-    if (dimension != (u32)bound_tokens.size())
+    if (dimension != (u32)ranges.size())
     {
-        log_error("hdl_parser", "dimension-bound mismatch for {} : {}", name, type);
+        log_error("hdl_parser", "dimension-bound mismatch in line {} : expected {}, got {}", type_name.number, dimension, ranges.size());
         return {};
     }
 
@@ -1255,30 +1259,30 @@ std::vector<std::string> hdl_parser_vhdl::get_vector_signals(const std::string& 
     std::vector<std::string> result;
     if (dimension == 1)
     {
-        for (auto x = std::get<0>(bound_tokens[0]); x <= std::get<1>(bound_tokens[0]); x++)
+        for (auto x = std::get<0>(ranges[0]); x <= std::get<1>(ranges[0]); x++)
         {
-            result.push_back(name + "(" + std::to_string(x) + ")");
+            result.push_back(base_name + "(" + std::to_string(x) + ")");
         }
     }
     else if (dimension == 2)
     {
-        for (auto x = std::get<0>(bound_tokens[0]); x <= std::get<1>(bound_tokens[0]); x++)
+        for (auto x = std::get<0>(ranges[0]); x <= std::get<1>(ranges[0]); x++)
         {
-            for (auto y = std::get<0>(bound_tokens[1]); y <= std::get<1>(bound_tokens[1]); y++)
+            for (auto y = std::get<0>(ranges[1]); y <= std::get<1>(ranges[1]); y++)
             {
-                result.push_back(name + "(" + std::to_string(x) + ", " + std::to_string(y) + ")");
+                result.push_back(base_name + "(" + std::to_string(x) + ", " + std::to_string(y) + ")");
             }
         }
     }
     else if (dimension == 3)
     {
-        for (auto x = std::get<0>(bound_tokens[0]); x <= std::get<1>(bound_tokens[0]); x++)
+        for (auto x = std::get<0>(ranges[0]); x <= std::get<1>(ranges[0]); x++)
         {
-            for (auto y = std::get<0>(bound_tokens[1]); y <= std::get<1>(bound_tokens[1]); y++)
+            for (auto y = std::get<0>(ranges[1]); y <= std::get<1>(ranges[1]); y++)
             {
-                for (auto z = std::get<0>(bound_tokens[2]); z <= std::get<1>(bound_tokens[2]); z++)
+                for (auto z = std::get<0>(ranges[2]); z <= std::get<1>(ranges[2]); z++)
                 {
-                    result.push_back(name + "(" + std::to_string(x) + ", " + std::to_string(y) + ", " + std::to_string(z) + ")");
+                    result.push_back(base_name + "(" + std::to_string(x) + ", " + std::to_string(y) + ", " + std::to_string(z) + ")");
                 }
             }
         }
@@ -1292,7 +1296,7 @@ std::vector<std::string> hdl_parser_vhdl::get_vector_signals(const std::string& 
     return result;
 }
 
-std::map<std::string, std::string> hdl_parser_vhdl::get_port_assignments(const std::string& port, const std::string& assignment)
+std::map<std::string, std::string> hdl_parser_vhdl::get_assignments(token_stream& lhs, token_stream& rhs)
 {
     // a port may be
     // (1): a => ...
@@ -1300,119 +1304,124 @@ std::map<std::string, std::string> hdl_parser_vhdl::get_port_assignments(const s
     //      a(x, y, z) => ...
     // (3): a(x to y) => B"01010101..."
     // (4): a(x to y) => b(s to t)
+    auto left_base_name  = lhs.at(0).string;
+    auto right_base_name = rhs.at(0).string;
 
     // case (1)
-    auto open_pos = port.find('(');
-    if (open_pos == std::string::npos)
+    if (lhs.size() == 1)
     {
-        return {std::make_pair(port, assignment)};
+        return {std::make_pair(lhs.at(0), rhs.join(""))};
     }
 
-    // case (2)
+    // check left and right bounds for ranges
+    bool left_contains_range  = lhs.size() == 6 && lhs.at(1) == "(" && lhs.at(5) == ")";
+    bool right_contains_range = rhs.size() == 6 && rhs.at(1) == "(" && rhs.at(5) == ")";
 
-    // extract left bounds and the part of the line which comes before the left bounds
-    auto left_part   = port.substr(0, open_pos);
-    auto left_bounds = port.substr(open_pos + 1);
-    left_bounds      = core_utils::trim(left_bounds.substr(0, left_bounds.find(')')));
-
-    if (left_bounds.find("to") == std::string::npos)
+    if (!left_contains_range)
     {
-        return {std::make_pair(port, assignment)};
+        // case (2)
+        return {std::make_pair(lhs.join(""), rhs.join(""))};
     }
-
-    auto right_part = assignment;
-
-    // check for case (3) or (4)
-    if (right_part.find('(') == std::string::npos)
+    else    // -> left_contains_range true
     {
-        // case (3)
-        // right part has to be a bitvector
-        if (!core_utils::starts_with(right_part, "B\""))
+        int left_dir, left_start, left_end;
+        if (lhs.at(3) == "downto")
         {
-            log_error("hdl_parser", "assignment of anything but a binary bitvector is not supported ('{} => {}')", port, assignment);
+            left_start = std::stoi(lhs.at(2));
+            left_end   = std::stoi(lhs.at(4));
+            left_dir   = -1;
+        }
+        else if (lhs.at(3) == "to")
+        {
+            left_start = std::stoi(lhs.at(4));
+            left_end   = std::stoi(lhs.at(2));
+            left_dir   = 1;
+        }
+        else
+        {
+            log_error("hdl_parser", "range '{}' could not be parsed (line {})", lhs.join("").string, lhs.at(0).number);
             return {};
         }
 
-        // extract right values
-        auto right_values = right_part.substr(right_part.find('\"') + 1);
-        right_values      = right_values.substr(0, right_values.find('\"'));
-
-        // extract counting direction and min/max of left bounds
-        int left_dir = -1;
-        if (left_bounds.find(" downto ") == std::string::npos)
+        if (!right_contains_range)
         {
-            left_dir = 1;
-        }
-        int left_start = std::stoi(left_bounds.substr(0, left_bounds.find(' ')));
-        int left_end   = std::stoi(left_bounds.substr(left_bounds.find_last_of(' ') + 1));
-
-        // assemble assignment strings
-        std::map<std::string, std::string> result;
-        int l   = left_start;
-        int cnt = 0;
-        while (true)
-        {
-            result[left_part + "(" + std::to_string(l) + ")"] = std::string("'") + right_values[cnt] + "'";
-            if (l == left_end)
+            // case (3)
+            token_stream tmp(rhs);
+            // right part has to be a bitvector
+            if (rhs.size() != 1 || !core_utils::starts_with(rhs.at(0).string, "B\"", true))
             {
-                break;
+                log_error("hdl_parser", "assignment of anything but a binary bitvector is not supported (line {})", lhs.at(0).number);
+                return {};
             }
-            cnt++;
-            l += left_dir;
+
+            // extract value
+            std::string right_values = rhs.at(0).string.substr(2, rhs.at(0).string.size() - 3);
+
+            // assemble assignment strings
+            std::map<std::string, std::string> result;
+            int i   = left_start;
+            int cnt = 0;
+            while (true)
+            {
+                result.emplace(left_base_name + "(" + std::to_string(i) + ")", std::string("'") + right_values[cnt] + "'");
+                if (i == left_end)
+                {
+                    break;
+                }
+                cnt++;
+                i += left_dir;
+            }
+
+            return result;
         }
-
-        return result;
-    }
-    else
-    {
-        // case (4)
-        // right part is a range just like left part
-        auto right_bounds = right_part.substr(right_part.find('(') + 1);
-        right_bounds      = core_utils::trim(right_bounds.substr(0, right_bounds.find(')')));
-
-        right_part = right_part.substr(0, right_part.find_last_of('('));
-
-        // extract counting direction and min/max of left and right bounds
-        int left_dir = -1;
-        if (left_bounds.find(" downto ") == std::string::npos)
+        else    // -> right_contains_range true
         {
-            left_dir = 1;
+            // case (4)
+
+            // right part is a range just like left part
+            int right_dir, right_start, right_end;
+            if (rhs.at(3) == "downto")
+            {
+                right_start = std::stoi(rhs.at(2));
+                right_end   = std::stoi(rhs.at(4));
+                right_dir   = -1;
+            }
+            else if (rhs.at(3) == "to")
+            {
+                right_start = std::stoi(rhs.at(4));
+                right_end   = std::stoi(rhs.at(2));
+                right_dir   = 1;
+            }
+            else
+            {
+                log_error("hdl_parser", "range '{}' could not be parsed (line {})", rhs.join("").string, rhs.at(0).number);
+                return {};
+            }
+
+            int left_dist  = left_dir * (left_end - left_start);
+            int right_dist = right_dir * (right_end - right_start);
+
+            // check that both ranges match
+            if (left_dist != right_dist)
+            {
+                log_error("hdl_parser", "ranges on assignment '{} => {}' do not match in line {}", lhs.join("").string, rhs.join("").string, lhs.at(0).number);
+                return {};
+            }
+
+            // assemble assignment strings
+            std::map<std::string, std::string> result;
+            int l = left_start;
+            int r = right_start;
+            while (left_dist >= 0)
+            {
+                result.emplace(left_base_name + "(" + std::to_string(l) + ")", right_base_name + "(" + std::to_string(r) + ")");
+                l += left_dir;
+                r += right_dir;
+                left_dist--;
+            }
+
+            return result;
         }
-
-        int right_dir = -1;
-        if (right_bounds.find(" downto ") == std::string::npos)
-        {
-            right_dir = 1;
-        }
-
-        int left_start = std::stoi(left_bounds.substr(0, left_bounds.find(' ')));
-        int left_end   = std::stoi(left_bounds.substr(left_bounds.find_last_of(' ') + 1));
-        int dist       = left_dir * (left_end - left_start);
-
-        int right_start = std::stoi(right_bounds.substr(0, right_bounds.find(' ')));
-        int right_end   = std::stoi(right_bounds.substr(right_bounds.find_last_of(' ') + 1));
-        int dist2       = right_dir * (right_end - right_start);
-
-        // check that both ranges match
-        if (dist != dist2)
-        {
-            log_error("hdl_parser", "ranges on port assignment '{} => {}' do not match.", port, assignment);
-            return {};
-        }
-
-        // assemble assignment strings
-        std::map<std::string, std::string> result;
-        int l = left_start;
-        int r = right_start;
-        while (dist >= 0)
-        {
-            result[left_part + "(" + std::to_string(l) + ")"] = right_part + "(" + std::to_string(r) + ")";
-            l += left_dir;
-            r += right_dir;
-            dist--;
-        }
-
-        return result;
     }
 }
 

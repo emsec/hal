@@ -1,9 +1,9 @@
 #include "core/log.h"
 #include <iostream>
+#include <spdlog/fmt/fmt.h>
 #include <spdlog/sinks/basic_file_sink.h>
 #include <spdlog/sinks/null_sink.h>
 #include <spdlog/sinks/stdout_sinks.h>
-#include <spdlog/fmt/fmt.h>
 
 std::map<std::string, std::shared_ptr<log_manager::log_sink>> log_manager::m_file_sinks;
 

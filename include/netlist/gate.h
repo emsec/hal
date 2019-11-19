@@ -27,13 +27,16 @@
 
 #include "def.h"
 
+#include "netlist/boolean_function.h"
 #include "netlist/data_container.h"
 #include "netlist/endpoint.h"
+#include "netlist/gate_library/gate_type/gate_type.h"
 #include "netlist/netlist_constants.h"
 
 #include <map>
 #include <memory>
 #include <set>
+#include <unordered_map>
 #include <vector>
 
 /* forward declaration */
@@ -85,7 +88,7 @@ public:
      *
      * @returns The gate's type.
      */
-    std::string get_type() const;
+    std::shared_ptr<const gate_type> get_type() const;
 
     /**
      * Gets the physical location x-coordinate of the gate in the layout.
@@ -146,46 +149,73 @@ public:
     std::shared_ptr<module> get_module() const;
 
     /**
+     * Get the boolean function associated with a specific name.
+     * This name can for example be an output pin of the gate or a defined functionality like "RESET".
+     *
+     * @param[in] name - The function name.
+     *                   If name is empty, the function of the first output pin is returned.
+     *                   If there is no function for the given name, the constant 'X' is returned.
+     * @returns The boolean function.
+     */
+    boolean_function get_boolean_function(const std::string& name = "") const;
+
+    /**
+     * Get all boolean functions associated with this gate.
+     *
+     * @param[in] only_custom_functions - if true, this returns only the functions which were set via set_boolean_function
+     * @returns A map from function name to function.
+     */
+    std::unordered_map<std::string, boolean_function> get_boolean_functions(bool only_custom_functions = false) const;
+
+    /**
+     * Set the boolean function with a specific name only for this gate.
+     *
+     * @param[in] name - The function name, usually an output port.
+     * @param[in] func - The function.
+     */
+    void set_boolean_function(const std::string& name, const boolean_function& func);
+
+    /**
      * Mark this gate as a global vcc gate.
      *
      * @returns True on success.
      */
-    bool mark_global_vcc_gate();
+    bool mark_vcc_gate();
 
     /**
      * Mark this gate as a global gnd gate.
      *
      * @returns True on success.
      */
-    bool mark_global_gnd_gate();
+    bool mark_gnd_gate();
 
     /**
      * Unmark this gate as a global vcc gate.
      *
      * @returns True on success.
      */
-    bool unmark_global_vcc_gate();
+    bool unmark_vcc_gate();
 
     /**
      * Unmark this gate as a global gnd gate.
      *
      * @returns True on success.
      */
-    bool unmark_global_gnd_gate();
+    bool unmark_gnd_gate();
 
     /**
      * Checks whether this gate is a global vcc gate.
      *
      * @returns True if the gate is a global vcc gate.
      */
-    bool is_global_vcc_gate() const;
+    bool is_vcc_gate() const;
 
     /**
      * Checks whether this gate is a global gnd gate.
      *
      * @returns True if the gate is a global gnd gate.
      */
-    bool is_global_gnd_gate() const;
+    bool is_gnd_gate() const;
 
     /*
      *      pin specific functions
@@ -196,21 +226,14 @@ public:
      *
      * @returns A vector of input pin types.
      */
-    std::vector<std::string> get_input_pin_types() const;
+    std::vector<std::string> get_input_pins() const;
 
     /**
      * Get all output pin types of the gate.
      *
      * @returns A vector of output pin types.
      */
-    std::vector<std::string> get_output_pin_types() const;
-
-    /**
-     * Get all inout pin types of the gate.
-     *
-     * @returns A vector of inout pin types.
-     */
-    std::vector<std::string> get_inout_pin_types() const;
+    std::vector<std::string> get_output_pins() const;
 
     /**
      * Get all fan-in nets, i.e. all nets that are connected to one of the input pins.
@@ -297,10 +320,12 @@ public:
         get_successors(const std::string& this_pin_type_filter = DONT_CARE, const std::string& suc_pin_type_filter = DONT_CARE, const std::string& gate_type_filter = DONT_CARE) const;
 
 private:
-    gate(std::shared_ptr<netlist> const g, u32 id, const std::string& gate_type, const std::string& name, float x, float y);
+    gate(std::shared_ptr<netlist> const g, u32 id, std::shared_ptr<const gate_type> gt, const std::string& name, float x, float y);
 
     gate(const gate&) = delete;               //disable copy-constructor
     gate& operator=(const gate&) = delete;    //disable copy-assignment
+
+    boolean_function get_lut_function() const;
 
     /* pointer to corresponding netlist parent */
     std::shared_ptr<netlist> m_netlist;
@@ -312,7 +337,7 @@ private:
     std::string m_name;
 
     /* type of the gate */
-    std::string m_type;
+    std::shared_ptr<const gate_type> m_type;
 
     /* location */
     float m_x;
@@ -324,6 +349,9 @@ private:
     /* connected nets */
     std::map<std::string, std::shared_ptr<net>> m_in_nets;
     std::map<std::string, std::shared_ptr<net>> m_out_nets;
+
+    /* dedicated functions */
+    std::map<std::string, boolean_function> m_functions;
 };
 
 #endif /* __HAL_GATE_H__ */

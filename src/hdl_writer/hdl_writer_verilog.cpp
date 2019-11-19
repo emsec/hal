@@ -96,15 +96,6 @@ void hdl_writer_verilog::prepare_signal_names()
         m_only_wire_names.erase(it);
         m_only_wire_names_str_to_net.erase(this->get_net_name(it));
     }
-    //inout entity
-    std::set<std::shared_ptr<net>> inout_nets = m_netlist->get_global_inout_nets();
-    for (auto it : inout_nets)
-    {
-        m_inout_names[it]                                = this->get_net_name(it);
-        m_inout_names_str_to_net[this->get_net_name(it)] = it;
-        m_only_wire_names.erase(it);
-        m_only_wire_names_str_to_net.erase(this->get_net_name(it));
-    }
 
     //vcc gates
     std::set<std::shared_ptr<gate>> one_gates = m_netlist->get_gates("X_ONE");
@@ -294,19 +285,6 @@ void hdl_writer_verilog::print_module_interface_verilog()
         }
     }
 
-    for (auto inout_name : m_inout_names_str_to_net)
-    {
-        if (begin)
-        {
-            m_stream << inout_name.first.c_str();
-            begin = false;
-        }
-        else
-        {
-            m_stream << ", " << std::endl << "  " << inout_name.first.c_str();
-        }
-    }
-
     m_stream << std::endl;
     m_stream << " ) ;" << std::endl;
 }
@@ -321,10 +299,6 @@ void hdl_writer_verilog::print_signal_definition_verilog()
     for (auto out_name : m_out_names_str_to_net)
     {
         m_stream << "  output " << out_name.first << " ;" << std::endl;
-    }
-    for (auto inout_name : m_inout_names_str_to_net)
-    {
-        m_stream << "  inout " << inout_name.first << " ;" << std::endl;
     }
     for (auto name : m_only_wire_names_str_to_net)
     {
@@ -349,11 +323,12 @@ void hdl_writer_verilog::print_gate_definitions_verilog()
     std::set<std::shared_ptr<gate>> gates = m_netlist->get_gates();
     for (auto&& gate : gates)
     {
-        if (gate->get_type() == "GLOBAL_GND" || gate->get_type() == "GLOBAL_VCC")
+        // TODO ugly bad bad bad
+        if (gate->get_type()->get_name() == "GLOBAL_GND" || gate->get_type()->get_name() == "GLOBAL_VCC")
         {
             continue;
         }
-        m_stream << gate->get_type() << " ";
+        m_stream << gate->get_type()->get_name() << " ";
 
         this->print_generic_map_verilog(gate);
 
@@ -368,9 +343,8 @@ void hdl_writer_verilog::print_gate_definitions_verilog()
         m_stream << " (" << std::endl;
 
         bool begin_signal_list = true;
-        begin_signal_list      = this->print_gate_signal_list_verilog(gate, gate->get_input_pin_types(), begin_signal_list, std::bind(&gate::get_fan_in_net, gate, std::placeholders::_1));
-        begin_signal_list      = this->print_gate_signal_list_verilog(gate, gate->get_output_pin_types(), begin_signal_list, std::bind(&gate::get_fan_out_net, gate, std::placeholders::_1));
-        begin_signal_list      = this->print_gate_signal_list_verilog(gate, gate->get_inout_pin_types(), begin_signal_list, std::bind(&gate::get_fan_out_net, gate, std::placeholders::_1));
+        begin_signal_list      = this->print_gate_signal_list_verilog(gate, gate->get_input_pins(), begin_signal_list, std::bind(&gate::get_fan_in_net, gate, std::placeholders::_1));
+        begin_signal_list      = this->print_gate_signal_list_verilog(gate, gate->get_output_pins(), begin_signal_list, std::bind(&gate::get_fan_out_net, gate, std::placeholders::_1));
 
         m_stream << std::endl << " ) ;" << std::endl;
     }
@@ -512,7 +486,7 @@ bool hdl_writer_verilog::print_gate_signal_list_verilog(std::shared_ptr<gate> n,
                     log_info("hdl_writer",
                              "Verilog serializer skipped signal translation for gate {} with type {} and port {} NO EDGE available (skipping pin: {})",
                              n->get_name(),
-                             n->get_type(),
+                             n->get_type()->get_name(),
                              ptype,
                              port_type);
                 }
@@ -537,7 +511,7 @@ bool hdl_writer_verilog::print_gate_signal_list_verilog(std::shared_ptr<gate> n,
             std::shared_ptr<net> e = get_net_fkt(port_type);
             if (e == nullptr)
             {
-                log_info("hdl_writer", "Verilog serializer skipped signal translation for gate {} with type {} and port {} NO EDGE available", n->get_name(), n->get_type(), port_type);
+                log_info("hdl_writer", "Verilog serializer skipped signal translation for gate {} with type {} and port {} NO EDGE available", n->get_name(), n->get_type()->get_name(), port_type);
             }
             else
             {

@@ -31,6 +31,7 @@
 #include <QWidget>
 
 class QVBoxLayout;
+class QHBoxLayout;
 class QLabel;
 class QScrollArea;
 class QTreeWidget;
@@ -38,6 +39,7 @@ class QTreeWidgetItem;
 class QTableWidget;
 class QTableWidgetItem;
 class net;
+class gate;
 
 class net_details_widget : public QWidget
 {
@@ -63,10 +65,13 @@ public Q_SLOTS:
     void handle_net_dst_added(const std::shared_ptr<net> n, const u32 dst_gate_id);
     void handle_net_dst_removed(const std::shared_ptr<net> n, const u32 dst_gate_id);
 
+    void handle_gate_name_changed(const std::shared_ptr<gate> g);
+
 private:
     // NEW !!!!!
 
     QVBoxLayout* m_content_layout;
+    QHBoxLayout* m_tree_row_layout;
 
     QTableWidget* m_general_table;
     QTableWidgetItem* m_name_item;

@@ -86,18 +86,29 @@ namespace core_utils
      *
      * @param[in] s - The string to analyze.
      * @param[in] ending - The ending to check for.
+     * @param[in] ignore_case - If true, ignores case while comparing.
      * @returns True, if \p s ends with \p ending.
      */
-    CORE_API bool ends_with(const std::string& s, const std::string& ending);
+    CORE_API bool ends_with(const std::string& s, const std::string& ending, bool ignore_case = false);
 
     /**
      * Checks whether a string begins with another string.
      *
      * @param[in] s - The string to analyze.
      * @param[in] start - The beginning to check for.
+     * @param[in] ignore_case - If true, ignores case while comparing.
      * @returns True, if \p s begins with \p start.
      */
-    CORE_API bool starts_with(const std::string& s, const std::string& start);
+    CORE_API bool starts_with(const std::string& s, const std::string& start, bool ignore_case = false);
+
+    /**
+     * Checks whether two strings are equal while being case insensitive.
+     *
+     * @param[in] a - The first string to analyze.
+     * @param[in] b - The second string to analyze.
+     * @returns True, if lowercase(a) == lowercase(b).
+     */
+    CORE_API bool equals_ignore_case(const std::string& a, const std::string& b);
 
     /**
      * Checks whether a string represents an integer.

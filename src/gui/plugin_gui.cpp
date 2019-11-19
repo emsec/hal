@@ -196,25 +196,25 @@ bool plugin_gui::exec(program_arguments& args)
     return ret;
 }
 
-std::string plugin_gui::get_name()
+std::string plugin_gui::get_name() const
 {
     return std::string("hal_gui");
 }
 
-std::string plugin_gui::get_version()
+std::string plugin_gui::get_version() const
 {
     return std::string("0.1");
 }
 
-std::set<interface_type> plugin_gui::get_type()
-{
-    return {interface_type::base, interface_type::interactive_ui};
-}
-
-void plugin_gui::initialize_logging()
+void plugin_gui::initialize_logging() const
 {
     log_manager& l = log_manager::get_instance();
     l.add_channel("user", {log_manager::create_stdout_sink(), log_manager::create_file_sink(), log_manager::create_gui_sink()}, "info");
     l.add_channel("gui", {log_manager::create_stdout_sink(), log_manager::create_file_sink(), log_manager::create_gui_sink()}, "info");
     l.add_channel("python", {log_manager::create_stdout_sink(), log_manager::create_file_sink(), log_manager::create_gui_sink()}, "info");
+}
+
+extern std::shared_ptr<i_base> get_plugin_instance()
+{
+    return std::make_shared<plugin_gui>();
 }

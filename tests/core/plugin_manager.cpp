@@ -416,53 +416,6 @@ TEST_F(plugin_manager_test, check_cli_plugin_options)
 }
 
 /**
- * Testing the get_plugin_factory function
- *
- * Functions: get_plugin_factory
- */
-TEST_F(plugin_manager_test, check_get_plugin_factory)
-{
-    TEST_START
-    // ########################
-    // POSITIVE TESTS
-    // ########################
-
-    // Load the test_plugin
-    if (load_test_plugin())
-    {
-        i_factory* test_p_factory = plugin_manager::get_plugin_factory("libtest_plugin");
-        EXPECT_NE(test_p_factory, nullptr);
-    }
-    else
-    {
-        std::cout << "Can't load libtest_plugin. Some tests are skipped..." << std::endl;
-    }
-
-    plugin_manager::unload("libtest_plugin");
-
-    // ########################
-    // NEGATIVE TESTS
-    // ########################
-
-    {
-        // Passing an unknown plugin name
-        testing::internal::CaptureStdout();
-        i_factory* factory = plugin_manager::get_plugin_factory("unknown_plugin");
-        testing::internal::GetCapturedStdout();
-        EXPECT_EQ(factory, nullptr);
-    }
-    {
-        // Passing an empty string
-        testing::internal::CaptureStdout();
-        i_factory* factory = plugin_manager::get_plugin_factory("");
-        testing::internal::GetCapturedStdout();
-        EXPECT_EQ(factory, nullptr);
-    }
-
-    TEST_END
-}
-
-/**
  * Testing the get_plugin_instance function
  *
  * Functions: get_plugin_instance

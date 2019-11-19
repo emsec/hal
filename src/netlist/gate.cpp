@@ -1,5 +1,6 @@
 #include "netlist/gate.h"
 
+#include "netlist/gate_library/gate_type/gate_type_lut.h"
 #include "netlist/module.h"
 #include "netlist/net.h"
 #include "netlist/netlist.h"
@@ -9,13 +10,15 @@
 #include "core/log.h"
 
 #include <assert.h>
+#include <iomanip>
+#include <sstream>
 
-gate::gate(std::shared_ptr<netlist> const g, u32 id, const std::string& gate_type, const std::string& name, float x, float y)
+gate::gate(std::shared_ptr<netlist> const g, const u32 id, std::shared_ptr<const gate_type> gt, const std::string& name, float x, float y)
 {
     assert(g != nullptr);
     m_netlist = g;
     m_id      = id;
-    m_type    = gate_type;
+    m_type    = gt;
     m_name    = name;
     m_x       = x;
     m_y       = y;
@@ -24,8 +27,8 @@ gate::gate(std::shared_ptr<netlist> const g, u32 id, const std::string& gate_typ
 std::ostream& operator<<(std::ostream& os, const gate& gate)
 {
     os << "\t\'" << gate.get_name() << "\'"
-       << " (type = '" << gate.get_type() << "', id = " << gate.get_id() << ")" << std::endl;
-    for (const auto& input_pin_type : gate.get_input_pin_types())
+       << " (type = '" << gate.get_type()->get_name() << "', id = " << gate.get_id() << ")" << std::endl;
+    for (const auto& input_pin_type : gate.get_input_pins())
     {
         os << "\t\t" << input_pin_type << " => ";
         auto net = gate.get_fan_in_net(input_pin_type);
@@ -35,7 +38,7 @@ std::ostream& operator<<(std::ostream& os, const gate& gate)
             os << net->get_name();
         os << std::endl;
     }
-    for (const auto& output_pin_type : gate.get_output_pin_types())
+    for (const auto& output_pin_type : gate.get_output_pins())
     {
         os << "\t\t" << output_pin_type << " => ";
         auto net = gate.get_fan_out_net(output_pin_type);
@@ -73,7 +76,7 @@ void gate::set_name(const std::string& name)
     }
     if (name != m_name)
     {
-        log_info("netlist.internal", "changed name for gate (id = {}, type = {}) from '{}' to '{}'.", m_id, m_type, m_name, name);
+        log_info("netlist.internal", "changed name for gate (id = {}, type = {}) from '{}' to '{}'.", m_id, m_type->get_name(), m_name, name);
 
         m_name = name;
 
@@ -81,7 +84,7 @@ void gate::set_name(const std::string& name)
     }
 }
 
-std::string gate::get_type() const
+std::shared_ptr<const gate_type> gate::get_type() const
 {
     return m_type;
 }
@@ -135,90 +138,238 @@ std::shared_ptr<module> gate::get_module() const
     return m_module;
 }
 
-bool gate::mark_global_vcc_gate()
+boolean_function gate::get_boolean_function(const std::string& name) const
 {
-    return m_netlist->mark_global_vcc_gate(shared_from_this());
+    if (name.empty())
+    {
+        auto output_pins = m_type->get_output_pins();
+        if (!output_pins.empty())
+        {
+            return get_boolean_function(output_pins[0]);
+        }
+        return boolean_function::X;
+    }
+
+    if (m_type->get_base_type() == gate_type::base_type::lut && name == m_type->get_output_pins()[0])
+    {
+        return get_lut_function();
+    }
+
+    auto it = m_functions.find(name);
+    if (it != m_functions.end())
+    {
+        return it->second;
+    }
+    auto map = m_type->get_boolean_functions();
+    it       = m_functions.find(name);
+    if (it != m_functions.end())
+    {
+        return it->second;
+    }
+    return boolean_function::X;
 }
 
-bool gate::mark_global_gnd_gate()
+std::unordered_map<std::string, boolean_function> gate::get_boolean_functions(bool only_custom_functions) const
 {
-    return m_netlist->mark_global_gnd_gate(shared_from_this());
+    std::unordered_map<std::string, boolean_function> res;
+
+    if (!only_custom_functions)
+    {
+        res = m_type->get_boolean_functions();
+    }
+
+    for (const auto& it : m_functions)
+    {
+        res.emplace(it.first, it.second);
+    }
+
+    if (m_type->get_base_type() == gate_type::base_type::lut)
+    {
+        res.emplace(get_output_pins()[0], get_lut_function());
+    }
+
+    return res;
 }
 
-bool gate::unmark_global_vcc_gate()
+boolean_function gate::get_lut_function() const
 {
-    return m_netlist->unmark_global_vcc_gate(shared_from_this());
+    auto lut_type = std::static_pointer_cast<const gate_type_lut>(m_type);
+
+    std::string category   = lut_type->get_data_category();
+    std::string key        = lut_type->get_data_identifier();
+    std::string config_str = std::get<1>(get_data_by_key(category, key));
+
+    if (config_str.empty())
+    {
+        return boolean_function::ZERO;
+    }
+    u64 config = std::stoull(config_str, nullptr, 16);
+
+    boolean_function result;
+
+    for (u32 i = 0; config != 0; i++)
+    {
+        u8 bit;
+        if (lut_type->is_ascending_order())
+        {
+            bit = (config & 1);
+            config >>= 1;
+        }
+        else
+        {
+            bit = config >> 63;
+            config <<= 1;
+        }
+        if (bit == 1)
+        {
+            boolean_function clause;
+            auto input_values = i;
+            for (auto input : get_input_pins())
+            {
+                if ((input_values & 1) == 1)
+                {
+                    clause &= boolean_function(input);
+                }
+                else
+                {
+                    clause &= !boolean_function(input);
+                }
+                input_values >>= 1;
+            }
+            result |= clause;
+        }
+    }
+
+    return result.optimize();
 }
 
-bool gate::unmark_global_gnd_gate()
+void gate::set_boolean_function(const std::string& name, const boolean_function& func)
 {
-    return m_netlist->unmark_global_gnd_gate(shared_from_this());
+    if (m_type->get_base_type() == gate_type::base_type::lut)
+    {
+        auto output_pins = m_type->get_output_pins();
+        if (!output_pins.empty() && name == output_pins[0])
+        {
+            auto lut_type = std::static_pointer_cast<const gate_type_lut>(m_type);
+            auto tt       = func.get_truth_table(get_input_pins());
+
+            u64 config_value = 0;
+            if (lut_type->is_ascending_order())
+            {
+                std::reverse(tt.begin(), tt.end());
+            }
+            for (auto v : tt)
+            {
+                if (v == boolean_function::X)
+                {
+                    log_error("netlist", "function truth table contained undefined values");
+                    return;
+                }
+                config_value |= v;
+                config_value <<= 1;
+            }
+
+            std::string category = lut_type->get_data_category();
+            std::string key      = lut_type->get_data_identifier();
+
+            std::stringstream stream;
+            stream << std::hex << config_value;
+            set_data(category, key, "bit_vector", stream.str());
+
+            return;
+        }
+    }
+
+    m_functions.emplace(name, func);
 }
 
-bool gate::is_global_vcc_gate() const
+bool gate::mark_vcc_gate()
 {
-    return m_netlist->is_global_vcc_gate(const_cast<gate*>(this)->shared_from_this());
+    return m_netlist->mark_vcc_gate(shared_from_this());
 }
 
-bool gate::is_global_gnd_gate() const
+bool gate::mark_gnd_gate()
 {
-    return m_netlist->is_global_gnd_gate(const_cast<gate*>(this)->shared_from_this());
+    return m_netlist->mark_gnd_gate(shared_from_this());
 }
 
-std::vector<std::string> gate::get_input_pin_types() const
+bool gate::unmark_vcc_gate()
 {
-    return m_netlist->get_input_pin_types(m_type);
+    return m_netlist->unmark_vcc_gate(shared_from_this());
 }
 
-std::vector<std::string> gate::get_output_pin_types() const
+bool gate::unmark_gnd_gate()
 {
-    return m_netlist->get_output_pin_types(m_type);
+    return m_netlist->unmark_gnd_gate(shared_from_this());
 }
 
-std::vector<std::string> gate::get_inout_pin_types() const
+bool gate::is_vcc_gate() const
 {
-    return m_netlist->get_inout_pin_types(m_type);
+    return m_netlist->is_vcc_gate(const_cast<gate*>(this)->shared_from_this());
+}
+
+bool gate::is_gnd_gate() const
+{
+    return m_netlist->is_gnd_gate(const_cast<gate*>(this)->shared_from_this());
+}
+
+std::vector<std::string> gate::get_input_pins() const
+{
+    return m_type->get_input_pins();
+}
+
+std::vector<std::string> gate::get_output_pins() const
+{
+    return m_type->get_output_pins();
 }
 
 std::set<std::shared_ptr<net>> gate::get_fan_in_nets() const
 {
     std::set<std::shared_ptr<net>> nets;
+
     for (const auto& it : m_in_nets)
     {
         nets.insert(it.second);
     }
+
     return nets;
 }
 
 std::shared_ptr<net> gate::get_fan_in_net(const std::string& pin_type) const
 {
     auto it = m_in_nets.find(pin_type);
+
     if (it == m_in_nets.end())
     {
-        log_debug("netlist.internal", "gate ('{},  type = {}) has no net connected to input pin '{}'.", get_name(), get_type(), pin_type);
+        log_debug("netlist.internal", "gate ('{},  type = {}) has no net connected to input pin '{}'.", get_name(), get_type()->get_name(), pin_type);
         return nullptr;
     }
+
     return it->second;
 }
 
 std::set<std::shared_ptr<net>> gate::get_fan_out_nets() const
 {
     std::set<std::shared_ptr<net>> nets;
+
     for (const auto& it : m_out_nets)
     {
         nets.insert(it.second);
     }
+
     return nets;
 }
 
 std::shared_ptr<net> gate::get_fan_out_net(const std::string& pin_type) const
 {
     auto it = m_out_nets.find(pin_type);
+
     if (it == m_out_nets.end())
     {
-        log_debug("netlist.internal", "gate ('{},  type = {}) has no net connected to output pin '{}'.", get_name(), get_type(), pin_type);
+        log_debug("netlist.internal", "gate ('{},  type = {}) has no net connected to output pin '{}'.", get_name(), get_type()->get_name(), pin_type);
         return nullptr;
     }
+
     return it->second;
 }
 
@@ -249,7 +400,7 @@ std::vector<endpoint> gate::get_predecessors(const std::string& this_pin_type_fi
             log_debug("netlist", "pin type of predecessor gate '{}' (id = {:08x}) does not match", pred.gate->get_name(), pred.gate->get_id());
             return {};
         }
-        if ((gate_type_filter != DONT_CARE) && (pred.gate->get_type() != gate_type_filter))
+        if ((gate_type_filter != DONT_CARE) && (pred.gate->get_type()->get_name() != gate_type_filter))
         {
             log_debug("netlist", "type of predecessor gate '{}' (id = {:08x}) does not match", pred.gate->get_name(), pred.gate->get_id());
             return {};
@@ -275,7 +426,7 @@ std::vector<endpoint> gate::get_predecessors(const std::string& this_pin_type_fi
                 log_debug("netlist", "pin type of predecessor gate '{}' (id = {:08x}) does not match", pred.gate->get_name(), pred.gate->get_id());
                 continue;
             }
-            if ((gate_type_filter != DONT_CARE) && (pred.gate->get_type() != gate_type_filter))
+            if ((gate_type_filter != DONT_CARE) && (pred.gate->get_type()->get_name() != gate_type_filter))
             {
                 log_debug("netlist", "type of predecessor gate '{}' (id = {:08x}) does not match", pred.gate->get_name(), pred.gate->get_id());
                 continue;
@@ -330,7 +481,7 @@ std::vector<endpoint> gate::get_successors(const std::string& this_pin_type_filt
                 log_debug("netlist", "pin type of successor gate '{}' (id = {:08x}) does not match", suc.gate->get_name(), suc.gate->get_id());
                 continue;
             }
-            if ((gate_type_filter != DONT_CARE) && (suc.gate->get_type() != gate_type_filter))
+            if ((gate_type_filter != DONT_CARE) && (suc.gate->get_type()->get_name() != gate_type_filter))
             {
                 log_debug("netlist", "type of successor gate '{}' (id = {:08x}) does not match", suc.gate->get_name(), suc.gate->get_id());
                 continue;
@@ -354,7 +505,7 @@ std::vector<endpoint> gate::get_successors(const std::string& this_pin_type_filt
                     log_debug("netlist", "pin type of successor gate '{}' (id = {:08x}) does not match", suc.gate->get_name(), suc.gate->get_id());
                     continue;
                 }
-                if ((gate_type_filter != DONT_CARE) && (suc.gate->get_type() != gate_type_filter))
+                if ((gate_type_filter != DONT_CARE) && (suc.gate->get_type()->get_name() != gate_type_filter))
                 {
                     log_debug("netlist", "type of successor gate '{}' (id = {:08x}) does not match", suc.gate->get_name(), suc.gate->get_id());
                     continue;

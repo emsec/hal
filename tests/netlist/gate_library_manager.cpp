@@ -51,10 +51,10 @@ protected:
                     "        \"O\"\n"
                     "      ]\n"
                     "    },\n"
-                    "    \"global_gnd_nodes\": [\n"
+                    "    \"gnd_nodes\": [\n"
                     "      \"TEST_GATE\"\n"
                     "    ],\n"
-                    "    \"global_vcc_nodes\": [\n"
+                    "    \"vcc_nodes\": [\n"
                     "      \"TEST_GATE\"\n"
                     "    ],\n"
                     "    \"inout_types\": [\n"
@@ -100,21 +100,21 @@ TEST_F(gate_library_manager_test, check_load_all)
 
     EXPECT_EQ(test_lib->get_name(), "test_lib");
     EXPECT_EQ(*test_lib->get_gate_types(), std::set<std::string>({"TEST_GATE"}));
-    EXPECT_EQ(*test_lib->get_global_vcc_gate_types(), std::set<std::string>({"TEST_GATE"}));
-    EXPECT_EQ(*test_lib->get_global_gnd_gate_types(), std::set<std::string>({"TEST_GATE"}));
-    EXPECT_EQ(*test_lib->get_input_pin_types(), std::set<std::string>({"I"}));
-    EXPECT_EQ(*test_lib->get_output_pin_types(), std::set<std::string>({"O"}));
-    EXPECT_EQ(*test_lib->get_inout_pin_types(), std::set<std::string>({"IO"}));
+    EXPECT_EQ(*test_lib->get_vcc_gate_types(), std::set<std::string>({"TEST_GATE"}));
+    EXPECT_EQ(*test_lib->get_gnd_gate_types(), std::set<std::string>({"TEST_GATE"}));
+    EXPECT_EQ(*test_lib->get_input_pins(), std::set<std::string>({"I"}));
+    EXPECT_EQ(*test_lib->get_output_pins(), std::set<std::string>({"O"}));
+    EXPECT_EQ(*test_lib->get_inout_pins(), std::set<std::string>({"IO"}));
     EXPECT_EQ(*test_lib->get_vhdl_includes(), std::vector<std::string>({"test_vhdl_include;"}));
 
     std::map<std::string, std::vector<std::string>> exp_gate_to_input_types = {{"TEST_GATE", std::vector<std::string>({"I"})}};
-    EXPECT_EQ(*test_lib->get_gate_type_map_to_input_pin_types(), exp_gate_to_input_types);
+    EXPECT_EQ(*test_lib->get_gate_type_map_to_input_pins(), exp_gate_to_input_types);
 
     std::map<std::string, std::vector<std::string>> exp_gate_to_output_types = {{"TEST_GATE", std::vector<std::string>({"O"})}};
-    EXPECT_EQ(*test_lib->get_gate_type_map_to_output_pin_types(), exp_gate_to_output_types);
+    EXPECT_EQ(*test_lib->get_gate_type_map_to_output_pins(), exp_gate_to_output_types);
 
     std::map<std::string, std::vector<std::string>> exp_gate_to_inout_types = {{"TEST_GATE", std::vector<std::string>({"IO"})}};
-    EXPECT_EQ(*test_lib->get_gate_type_map_to_inout_pin_types(), exp_gate_to_inout_types);
+    EXPECT_EQ(*test_lib->get_gate_type_map_to_inout_pins(), exp_gate_to_inout_types);
 }
 
 /**

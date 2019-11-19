@@ -43,21 +43,14 @@ public:
      *
      * @returns Plugin name.
      */
-    std::string get_name() override;
+    std::string get_name() const override;
 
     /**
      * Get the version of the plugin.
      *
      * @returns Plugin version.
      */
-    std::string get_version() override;
-
-    /**
-     * Get the plugin types.
-     *
-     * @returns Set of types.
-     */
-    std::set<interface_type> get_type() override;
+    std::string get_version() const override;
 
     /**
      * Excutes the plugin with given command line parameters.
@@ -67,5 +60,15 @@ public:
      */
     bool exec(program_arguments& args) override;
 };
+
+/**
+ * Factory function to instantiate a new plugin.
+ *
+ * @returns A shared_ptr to the new instance.
+ */
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wreturn-type-c-linkage"
+extern "C" PLUGIN_API std::shared_ptr<i_base> get_plugin_instance();
+#pragma GCC diagnostic pop
 
 #endif /* __HAL_PLUGIN_HELLOWORLD__ */

@@ -721,7 +721,7 @@ void graph_layouter::draw_nets()
 
         if (n->get_src().gate)
         {
-            if (n->get_src().gate->is_global_gnd_gate() || n->get_src().gate->is_global_vcc_gate())
+            if (n->get_src().gate->is_gnd_gate() || n->get_src().gate->is_vcc_gate())
             {
                 // HANDLE SEPARATED NETS
                 hal::node node;

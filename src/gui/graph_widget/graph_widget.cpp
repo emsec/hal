@@ -208,7 +208,7 @@ void graph_widget::handle_navigation_jump_requested(const u32 via_net, const u32
     g_selection_relay.m_subfocus   = selection_relay::subfocus::none;
 
     u32 cnt = 0;
-    for (const auto& pin : g->get_input_pin_types())
+    for (const auto& pin : g->get_input_pins())
     {
         if (g->get_fan_in_net(pin) == n)    // input net
         {
@@ -221,7 +221,7 @@ void graph_widget::handle_navigation_jump_requested(const u32 via_net, const u32
     if (g_selection_relay.m_subfocus == selection_relay::subfocus::none)
     {
         cnt = 0;
-        for (const auto& pin : g->get_output_pin_types())
+        for (const auto& pin : g->get_output_pins())
         {
             if (g->get_fan_out_net(pin) == n)    // input net
             {
@@ -264,7 +264,7 @@ void graph_widget::handle_navigation_left_request()
 
             if (g_selection_relay.m_subfocus == selection_relay::subfocus::left)
             {
-                std::string pin_type   = g->get_input_pin_types()[g_selection_relay.m_subfocus_index];
+                std::string pin_type   = g->get_input_pins()[g_selection_relay.m_subfocus_index];
                 std::shared_ptr<net> n = g->get_fan_in_net(pin_type);
 
                 if (!n)
@@ -283,7 +283,7 @@ void graph_widget::handle_navigation_left_request()
                     handle_navigation_jump_requested(n->get_id(), n->get_src().get_gate()->get_id());
                 }
             }
-            else if (g->get_input_pin_types().size())
+            else if (g->get_input_pins().size())
             {
                 g_selection_relay.m_subfocus       = selection_relay::subfocus::left;
                 g_selection_relay.m_subfocus_index = 0;
@@ -331,7 +331,7 @@ void graph_widget::handle_navigation_right_request()
 
             if (g_selection_relay.m_subfocus == selection_relay::subfocus::right)
             {
-                auto n = g->get_fan_out_net(g->get_output_pin_types()[g_selection_relay.m_subfocus_index]);
+                auto n = g->get_fan_out_net(g->get_output_pins()[g_selection_relay.m_subfocus_index]);
                 if (n->get_num_of_dsts() == 0)
                 {
                     g_selection_relay.clear();
@@ -351,7 +351,7 @@ void graph_widget::handle_navigation_right_request()
                     m_overlay->show();
                 }
             }
-            else if (g->get_output_pin_types().size())
+            else if (g->get_output_pins().size())
             {
                 g_selection_relay.m_subfocus       = selection_relay::subfocus::right;
                 g_selection_relay.m_subfocus_index = 0;

@@ -247,8 +247,8 @@ TEST_F(hdl_writer_vhdl_test, check_write_and_parse_main_example) {
 
 
             // Mark the global gates as such
-            nl->mark_global_gnd_gate(nl->get_gate_by_id(MIN_GATE_ID+1));
-            nl->mark_global_vcc_gate(nl->get_gate_by_id(MIN_GATE_ID+2));
+            nl->mark_gnd_gate(nl->get_gate_by_id(MIN_GATE_ID+1));
+            nl->mark_vcc_gate(nl->get_gate_by_id(MIN_GATE_ID+2));
 
 
             // Write and parse the netlist now
@@ -290,14 +290,14 @@ TEST_F(hdl_writer_vhdl_test, check_write_and_parse_main_example) {
             }
 
             // -- Check if global gates are the same
-            EXPECT_EQ(nl->get_global_gnd_gates().size(), parsed_nl->get_global_gnd_gates().size());
-            for(auto gl_gnd_0 : nl->get_global_gnd_gates()){
-                EXPECT_TRUE(parsed_nl->is_global_gnd_gate(get_gate_by_subname(parsed_nl, gl_gnd_0->get_name())));
+            EXPECT_EQ(nl->get_gnd_gates().size(), parsed_nl->get_gnd_gates().size());
+            for(auto gl_gnd_0 : nl->get_gnd_gates()){
+                EXPECT_TRUE(parsed_nl->is_gnd_gate(get_gate_by_subname(parsed_nl, gl_gnd_0->get_name())));
             }
 
-            EXPECT_EQ(nl->get_global_vcc_gates().size(), parsed_nl->get_global_vcc_gates().size());
-            for(auto gl_vcc_0 : nl->get_global_vcc_gates()){
-                EXPECT_TRUE(parsed_nl->is_global_vcc_gate(get_gate_by_subname(parsed_nl, gl_vcc_0->get_name())));
+            EXPECT_EQ(nl->get_vcc_gates().size(), parsed_nl->get_vcc_gates().size());
+            for(auto gl_vcc_0 : nl->get_vcc_gates()){
+                EXPECT_TRUE(parsed_nl->is_vcc_gate(get_gate_by_subname(parsed_nl, gl_vcc_0->get_name())));
             }
         }
     TEST_END

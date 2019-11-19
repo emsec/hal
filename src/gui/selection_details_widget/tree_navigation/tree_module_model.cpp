@@ -191,7 +191,7 @@ void tree_module_model::update(u32 module_id)
 
     for(const std::shared_ptr<gate> &_g : sorted_gates)
     {
-        tree_module_item* item = new tree_module_item(QVector<QVariant>() << QString::fromStdString(_g->get_name()) << _g->get_id() << QString::fromStdString(_g->get_type()), tree_module_item::item_type::gate, m_gates_item);
+        tree_module_item* item = new tree_module_item(QVector<QVariant>() << QString::fromStdString(_g->get_name()) << _g->get_id() << QString::fromStdString(_g->get_type()->get_name()), tree_module_item::item_type::gate, m_gates_item);
         insert_item(m_gates_item, m_gates_item->get_child_count(), item);
     }
 

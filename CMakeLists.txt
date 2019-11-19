@@ -224,7 +224,7 @@ else()
     endif()
 endif()
 
-add_subdirectory(deps/buddy-2.4)
+# add_subdirectory(deps/buddy-2.4)  COMPLETELY REMOVE ONCE NEW BDD SYSTEM WORKS
 
 find_package(IGraph REQUIRED)
 if(HAVE_IGRAPH)
