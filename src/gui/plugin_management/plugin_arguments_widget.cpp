@@ -1,7 +1,6 @@
 #include "plugin_management/plugin_arguments_widget.h"
 
 #include "core/interface_cli.h"
-#include "core/interface_factory.h"
 #include "core/plugin_manager.h"
 #include "core/program_arguments.h"
 #include "plugin_management/plugin_schedule_manager.h"
@@ -119,14 +118,7 @@ void plugin_arguments_widget::setup(const QString& plugin_name)
     }
     m_vector.clear();
 
-    i_factory* factory_ptr = plugin_manager::get_plugin_factory(plugin_name.toStdString());
-    if (!factory_ptr)
-    {
-        //log_msg(l_error, "failed to get factory for plugin '%s'\n", plugin_name.c_str());
-        return;
-    }
-
-    m_plugin = std::dynamic_pointer_cast<i_cli>(factory_ptr->query_interface(interface_type::cli));
+    m_plugin = plugin_manager::get_plugin_instance<i_cli>(plugin_name.toStdString(), false);
     if (!m_plugin)
     {
         //log_msg(l_warning, "Plugin %s is not castable to i_cli!\n", plugin_name.c_str());

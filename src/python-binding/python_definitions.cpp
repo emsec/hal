@@ -36,7 +36,7 @@ class Pyi_base : public i_base
 public:
     using i_base::i_base;
 
-    std::string get_name() override
+    std::string get_name() const override
     {
         PYBIND11_OVERLOAD_PURE(std::string, /* Return type */
                                i_base,      /* Parent class */
@@ -44,27 +44,11 @@ public:
                                NULL); /* Name of function in C++ (must match Python name) */
     }
 
-    std::string get_version() override
+    std::string get_version() const override
     {
         PYBIND11_OVERLOAD_PURE(std::string, /* Return type */
                                i_base,      /* Parent class */
                                get_version,
-                               NULL); /* Name of function in C++ (must match Python name) */
-    }
-
-    std::set<interface_type> get_type() override
-    {
-        PYBIND11_OVERLOAD_PURE(std::set<interface_type>, /* Return type */
-                               i_base,                   /* Parent class */
-                               get_type,
-                               NULL); /* Name of function in C++ (must match Python name) */
-    }
-
-    void initialize_logging() override
-    {
-        PYBIND11_OVERLOAD_PURE(void,   /* Return type */
-                               i_base, /* Parent class */
-                               get_type,
                                NULL); /* Name of function in C++ (must match Python name) */
     }
 };
@@ -1375,8 +1359,7 @@ Releases all plugins and associated resources.
 :returns: True on success.
 :rtype: bool
 )")
-        //.def("get_plugin_factory", &plugin_manager::get_plugin_factory, py::arg("plugin_name"), pybind11::return_value_policy::reference)
-        .def("get_plugin_instance", &plugin_manager::get_plugin_instance<i_base>, py::arg("plugin_name"), pybind11::return_value_policy::reference, R"(
+        .def("get_plugin_instance", [](const std::string& plugin_name) -> std::shared_ptr<i_base> { return plugin_manager::get_plugin_instance<i_base>(plugin_name, true); }, py::arg("plugin_name"), R"(
 Gets the basic interface for a plugin specified by name.
 
 :param str plugin_name: The plugin name.
@@ -1408,22 +1391,6 @@ Get the version of the plugin.
 
 :returns: Plugin version.
 :rtype: str
-)")
-        .def_property_readonly("type", &i_base::get_type, R"(
-Get the plugin types.
-
-:returns: Set of types.
-:rtype: set(int)
-)")
-        .def("get_type", &i_base::get_type, R"(
-Get the plugin types.
-
-:returns: Set of types.
-:rtype: set(int)
-)")
-        .def("initialize_logging", &i_base::initialize_logging, R"(
-Initializes the logging channel(s) of a plugin. If not overwritten, a logging channel equal to the plugin name is created.
-
 )");
 
     py::class_<i_gui, std::shared_ptr<i_gui>, Pyi_gui>(m, "i_gui").def("exec", &i_gui::exec, py::arg("netlist"), R"(
@@ -1435,11 +1402,7 @@ Generic call to run the GUI.
 :rtype: bool
 )");
 
-    py::enum_<boolean_function::value>(m, "Value")
-        .value("X", boolean_function::value::X)
-        .value("ZERO", boolean_function::value::ZERO)
-        .value("ONE", boolean_function::value::ONE)
-        .export_values();
+    py::enum_<boolean_function::value>(m, "Value").value("X", boolean_function::value::X).value("ZERO", boolean_function::value::ZERO).value("ONE", boolean_function::value::ONE).export_values();
 
     py::class_<boolean_function>(m, "boolean_function")
         .def(py::init<>())
@@ -1492,7 +1455,7 @@ Returns the boolean function as a string.
 :returns: The boolean function extracted from the string.
 :rtype: boolean_function
 )")
-        .def("__str__", [](const boolean_function &f) {return f.to_string();})
+        .def("__str__", [](const boolean_function& f) { return f.to_string(); })
         .def(py::self & py::self)
         .def(py::self | py::self)
         .def(py::self ^ py::self)
@@ -1535,8 +1498,7 @@ If ordered_variables is empty, all included variables are used and ordered alpha
 :param list(str) ordered_variables: Specific order in which the inputs shall be structured in the truth table.
 :returns: The vector of output values.
 :rtype: list(value)
-)")
-        ;
+)");
 
 #ifndef PYBIND11_MODULE
     return m.ptr();

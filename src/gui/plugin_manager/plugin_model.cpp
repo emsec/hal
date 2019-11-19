@@ -1,5 +1,6 @@
 #include "plugin_manager/plugin_model.h"
 
+#include "core/interface_cli.h"
 #include "core/log.h"
 #include "core/plugin_manager.h"
 #include <QDataStream>
@@ -13,7 +14,8 @@ plugin_model::plugin_model(QObject* parent) : QAbstractItemModel(parent), model_
     {
         m_columns.append(item.first);
     }
-    model_changed_callback_id = plugin_manager::add_model_changed_callback(std::bind(&plugin_model::plugin_manager_callback, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
+    model_changed_callback_id =
+        plugin_manager::add_model_changed_callback(std::bind(&plugin_model::plugin_manager_callback, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
     connect(this, &plugin_model::load_plugin, this, &plugin_model::handle_load_plugin);
     connect(this, &plugin_model::unload_plugin, this, &plugin_model::handle_unload_plugin);
     plugin_manager::load_all_plugins();
@@ -148,13 +150,8 @@ void plugin_model::plugin_manager_callback(bool is_load, std::string const& plug
 
 void plugin_model::handle_load_plugin(QString name, QString path)
 {
-    auto factory_ptr = plugin_manager::get_plugin_factory(name.toStdString());
-    if (factory_ptr == nullptr)
-    {
-        return;
-    }
-    auto plugin_types = factory_ptr->get_plugin_types();
-    if (plugin_types.find(interface_type::cli) == plugin_types.end())
+    auto plugin = plugin_manager::get_plugin_instance<i_cli>(name.toStdString(), false);
+    if (plugin == nullptr)
     {
         return;
     }

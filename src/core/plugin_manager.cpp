@@ -19,7 +19,7 @@ namespace plugin_manager
     namespace
     {
         // stores library and factory identified by plugin name)
-        std::map<std::string, std::tuple<library_loader*, i_factory*>> m_plugin;
+        std::map<std::string, std::tuple<library_loader*, instantiate_plugin_function>> m_plugin;
 
         // stores the CLI parser option for each plugin
         std::map<std::string, std::string> m_cli_option_to_plugin_name;
@@ -126,6 +126,7 @@ namespace plugin_manager
 
     bool load(const std::string& plugin_name, const hal::path& file_name)
     {
+        log_info("core", "loading plugin '{}'...", file_name.string());
         if (plugin_name.empty())
         {
             log_error("core", "parameter 'plugin_name' is empty");
@@ -149,26 +150,28 @@ namespace plugin_manager
             return false;
 
         /* get factory of library */
-        auto get_factory_fn = (get_factory_fn_ptr_t)lib->get_function("get_factory");
-        if (get_factory_fn == nullptr)
-            return false;
-        auto factory = get_factory_fn();
+        auto factory = (instantiate_plugin_function)lib->get_function("get_plugin_instance");
         if (factory == nullptr)
+        {
+            log_error("core", "file '{}' did not contain a factory function 'get_plugin_instance'.", file_name.string());
+            return false;
+        }
+        auto instance = factory();
+        if (instance == nullptr)
         {
             log_error("core", "factory constructor for plugin '{}' returned a nullptr", plugin_name);
             return false;
         }
 
         /* solve dependencies */
-        std::set<std::string> dep_file_name = factory->get_dependencies();
+        std::set<std::string> dep_file_name = instance->get_dependencies();
         if (!solve_dependencies(plugin_name, dep_file_name))
             return false;
 
         /* add cli options */
-        auto types = factory->get_plugin_types();
-        if (types.find(interface_type::cli) != types.end())
+        if (instance->has_type(interface_type::cli))
         {
-            auto plugin = std::dynamic_pointer_cast<i_cli>(factory->query_interface(interface_type::cli));
+            auto plugin = std::dynamic_pointer_cast<i_cli>(instance);
             if (plugin == nullptr)
                 return false;
 
@@ -195,10 +198,9 @@ namespace plugin_manager
         }
         m_plugin[plugin_name] = std::make_tuple(lib, factory);
 
-        auto base_plugin = factory->query_interface(interface_type::base);
-        base_plugin->initialize_logging();
+        instance->initialize_logging();
 
-        base_plugin->on_load();
+        instance->on_load();
 
         /* notify callback that a plugin was loaded*/
         m_hook(true, plugin_name, file_name.string());
@@ -233,14 +235,15 @@ namespace plugin_manager
             return true;
         }
 
+        log_info("core", "unloading plugin '{}'...", plugin_name);
+
         /* store file name for callback notification */
         auto file_name = std::get<0>(it->second)->get_file_name();
 
         /* unload and delete factory */
         auto factory = std::get<1>(it->second);
-        factory->query_interface(interface_type::base)->on_unload();
+        factory()->on_unload();
 
-        delete factory;
         /* unload and delete library */
         auto library = std::get<0>(it->second);
         if (!library->unload_library())
@@ -257,14 +260,26 @@ namespace plugin_manager
         return true;
     }
 
-    i_factory* get_plugin_factory(const std::string& plugin_name)
+    std::shared_ptr<i_base> get_plugin_instance(const std::string& plugin_name, bool initialize)
     {
-        if (m_plugin.find(plugin_name) == m_plugin.end())
+        auto it = m_plugin.find(plugin_name);
+        if (it == m_plugin.end())
         {
             log_error("core", "plugin '{}' is not loaded", plugin_name);
             return nullptr;
         }
-        return std::get<1>(m_plugin[plugin_name]);
+
+        auto factory = std::get<1>(it->second);
+        if (factory != nullptr)
+        {
+            auto ptr = factory();
+            if (ptr != nullptr && initialize)
+            {
+                ptr->initialize();
+            }
+            return ptr;
+        }
+        return nullptr;
     }
 
     u64 add_model_changed_callback(std::function<void(bool, std::string const&, std::string const&)> callback)

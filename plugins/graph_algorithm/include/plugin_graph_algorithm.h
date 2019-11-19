@@ -24,10 +24,10 @@ public:
      */
 
     /** interface implementation: i_base */
-    std::string get_name() override;
+    std::string get_name() const override;
 
     /** interface implementation: i_base */
-    std::string get_version() override;
+    std::string get_version() const override;
 
     /*
      *      plugin specific functions
@@ -72,5 +72,11 @@ public:
                                                                const u32 depth                                = std::numeric_limits<u32>::max(),
                                                                const std::set<std::string> terminal_gate_type = std::set<std::string>());
 };
+
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wreturn-type-c-linkage"
+extern "C" PLUGIN_API std::shared_ptr<i_base> get_plugin_instance();
+#pragma GCC diagnostic pop
 
 #endif /* __HAL_PLUGIN_GRAPH_ALGORITHM_H__ */

@@ -35,9 +35,9 @@
 /**
  * Enum for all possible plugin types
  */
-enum class CORE_API interface_type : u32
+enum class CORE_API interface_type
 {
-    base = 0,
+    base,
     cli,
     interactive_ui,
     gui
@@ -53,41 +53,33 @@ public:
     virtual ~i_base() = default;
 
     /**
+     * Plugins utilize two phase construction.
+     * Always populate all members etc in the initialize function which is automatically called by
+     * plugin_manager::get_plugin_instance()
+     */
+    virtual void initialize();
+
+    /**
      * Get the name of the plugin.
      *
      * @returns Plugin name.
      */
-    virtual std::string get_name() = 0;
+    virtual std::string get_name() const = 0;
 
     /**
      * Get the version of the plugin.
      *
      * @returns Plugin version.
      */
-    virtual std::string get_version() = 0;
+    virtual std::string get_version() const = 0;
 
     /**
-     * Get the plugin types.
+     * Check whether the plugin has a specific type.
      *
-     * @returns Set of types.
+     * @param[in] t - the type to check
+     * @returns True, if the type is supported.
      */
-    virtual std::set<interface_type> get_type();
-
-    /**
-     * This function is automatically executed when the plugin is loaded by the plugin manager
-     */
-    virtual void on_load();
-
-    /**
-     * This function is automatically executed when the plugin is unloaded by the plugin manager
-     */
-    virtual void on_unload();
-
-    /**
-     * Initializes the logging channel(s) of a plugin. <br>
-     * If not overwritten, a logging channel equal to the plugin name is created.
-     */
-    virtual void initialize_logging();
+    bool has_type(interface_type t) const;
 
     /**
      * Shorthand for fast text logging.
@@ -99,6 +91,30 @@ public:
     {
         log_info(get_name(), args...);
     }
+    /**
+     * Get all plugin dependencies of this plugin.
+     *
+     * @return A set of plugins that this plugin depends on.
+     */
+    virtual std::set<std::string> get_dependencies() const;
+
+    /**
+     * This function is automatically executed when the factory is loaded by the plugin manager
+     */
+    virtual void on_load() const;
+
+    /**
+     * This function is automatically executed when the factory is unloaded by the plugin manager
+     */
+    virtual void on_unload() const;
+
+    /**
+     * Initializes the logging channel(s) of a plugin. <br>
+     * If not overwritten, a logging channel equal to the plugin name is created.
+     */
+    virtual void initialize_logging() const;
 };
+
+using instantiate_plugin_function = std::shared_ptr<i_base> (*)();
 
 #endif /* __HAL_INTERFACE_BASE_H__ */

@@ -9,6 +9,7 @@
 #include "core/program_arguments.h"
 #include "core/program_options.h"
 
+#include "core/interface_base.h"
 #include "core/interface_interactive_ui.h"
 
 #include "hdl_parser/hdl_parser_dispatcher.h"
@@ -38,7 +39,9 @@ void initialize_cli_options(program_options& cli_options)
     generic_options.add({"--licenses"}, "Shows the licenses of projects used by HAL");
 
     generic_options.add({"-i", "--input-file"}, "input file", {program_options::REQUIRED_PARAM});
+#ifdef WITH_GUI
     generic_options.add({"-g", "--gui"}, "start graphical user interface");
+#endif
     generic_options.add("--python",
                         "start python shell. To run a python script "
                         "use following syntax: --python <python3 "
@@ -67,15 +70,13 @@ int redirect_control_to_interactive_ui(const std::string& name, program_argument
         return ERROR;
     }
 
-    auto factory = plugin_manager::get_plugin_factory(name);
-    if (factory == nullptr)
+    log_info("core", "Starting {}.", name);
+    auto plugin = plugin_manager::get_plugin_instance<i_interactive_ui>(name);
+    if (plugin == nullptr)
     {
         return ERROR;
     }
-    log_info("core", "Starting {}.", name);
-    auto ui = std::dynamic_pointer_cast<i_interactive_ui>(factory->query_interface(interface_type::interactive_ui));
-    ui->initialize_logging();
-    auto ret = ui->exec(args);
+    auto ret = plugin->exec(args);
     log_info("core", "Closing {}.", name);
     return ret;
 }
@@ -218,7 +219,7 @@ int main(int argc, const char* argv[])
     }
 
     bool volatile_mode = false;
-    if (args.is_option_set("--volatile_mode"))
+    if (args.is_option_set("--volatile-mode"))
     {
         volatile_mode = true;
         log_warning("core", "your modifications will not be written to a .hal file (--volatile-mode).");
@@ -242,12 +243,11 @@ int main(int argc, const char* argv[])
     bool plugins_successful = true;
     for (const auto& plugin_name : plugins_to_execute)
     {
-        auto factory = plugin_manager::get_plugin_factory(plugin_name);
-        if (factory == nullptr)
+        auto plugin = plugin_manager::get_plugin_instance<i_cli>(plugin_name);
+        if (plugin == nullptr)
         {
             return cleanup(netlist);
         }
-        auto plugin = std::dynamic_pointer_cast<i_cli>(factory->query_interface(interface_type::cli));
 
         program_arguments plugin_args;
 

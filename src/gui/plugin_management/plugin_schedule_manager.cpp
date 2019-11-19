@@ -1,10 +1,10 @@
 #include "plugin_management/plugin_schedule_manager.h"
 
 #include "core/interface_cli.h"
-#include "core/interface_factory.h"
+#include "core/plugin_manager.h"
 #include "core/program_arguments.h"
+#include "hal_plugin_access_manager/hal_plugin_access_manager.h"
 #include "plugin_management/plugin_arguments_widget.h"
-#include "plugin_management/plugin_utility.h"
 
 plugin_schedule_manager* plugin_schedule_manager::get_instance()
 {
@@ -48,7 +48,7 @@ void plugin_schedule_manager::set_current_index(int index)
 
 void plugin_schedule_manager::add_plugin(const QString& plugin, int index)
 {
-    std::shared_ptr<i_cli> cli = plugin_utility::query_plugin_cli(plugin_utility::get_plugin_factory(plugin.toStdString()));
+    auto cli = plugin_manager::get_plugin_instance<i_cli>(plugin.toStdString(), false);
 
     if (!cli)
         return;
@@ -83,7 +83,7 @@ void plugin_schedule_manager::run_schedule()
     for (int i = 0; i < m_schedule.length(); i++)
     {
         program_arguments args = get_program_arguments(i);
-        plugin_utility::run_plugin(m_schedule.at(i).first.toStdString(), &args);
+        hal_plugin_access_manager::run_plugin(m_schedule.at(i).first.toStdString(), &args);
     }
 }
 

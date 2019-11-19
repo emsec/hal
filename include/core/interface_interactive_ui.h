@@ -38,10 +38,7 @@
 class CORE_API i_interactive_ui : virtual public i_base
 {
 public:
-    /** constructor (= default) */
     i_interactive_ui() = default;
-
-    /** virtual destructor (= default) */
     virtual ~i_interactive_ui() = default;
 
     /**

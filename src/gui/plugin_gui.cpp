@@ -7,6 +7,7 @@
 #include "netlist/gate_library/gate_library_manager.h"
 
 #include "gui/file_manager/file_manager.h"
+#include "gui/file_status_manager/file_status_manager.h"
 #include "gui/graph_widget/graph_context_manager.h"
 #include "gui/main_window/main_window.h"
 #include "gui/netlist_relay/netlist_relay.h"
@@ -14,7 +15,6 @@
 #include "gui/plugin_management/plugin_relay.h"
 #include "gui/python/python_context.h"
 #include "gui/selection_relay/selection_relay.h"
-#include "gui/file_status_manager/file_status_manager.h"
 #include "gui/settings/settings_relay.h"
 #include "gui/style/style.h"
 #include "gui/window_manager/window_manager.h"
@@ -64,7 +64,7 @@ static void handle_program_arguments(const program_arguments& args)
 static void cleanup()
 {
     delete g_notification_manager;
-//    delete g_window_manager;
+    //    delete g_window_manager;
 }
 
 bool plugin_gui::exec(program_arguments& args)
@@ -139,11 +139,11 @@ bool plugin_gui::exec(program_arguments& args)
     //TEMPORARY CODE TO CHANGE BETWEEN THE 2 STYLESHEETS WITH SETTINGS (NOT FINAL)
     //this settingsobject is currently neccessary to read from the settings from here, because the g_settings are not yet initialized(?)
     QSettings tempsettings_to_read_from(QString::fromStdString((core_utils::get_user_config_directory() / "/guisettings.ini").string()), QSettings::IniFormat);
-    QString stylesheet_to_open = ":/style/darcula"; //default style
+    QString stylesheet_to_open = ":/style/darcula";    //default style
 
-    if(tempsettings_to_read_from.value("main_style/theme","") == "" || tempsettings_to_read_from.value("main_style/theme", "") == "darcula")
+    if (tempsettings_to_read_from.value("main_style/theme", "") == "" || tempsettings_to_read_from.value("main_style/theme", "") == "darcula")
         stylesheet_to_open = ":/style/darcula";
-    else if(tempsettings_to_read_from.value("main_style/theme", "") == "sunny")
+    else if (tempsettings_to_read_from.value("main_style/theme", "") == "sunny")
         stylesheet_to_open = ":/style/sunny";
 
     QFile stylesheet(stylesheet_to_open);
@@ -156,7 +156,7 @@ bool plugin_gui::exec(program_arguments& args)
 
     qRegisterMetaType<spdlog::level::level_enum>("spdlog::level::level_enum");
 
-//    g_window_manager       = new window_manager();
+    //    g_window_manager       = new window_manager();
     g_notification_manager = new notification_manager();
 
     g_settings_relay.init_defaults();
@@ -167,25 +167,25 @@ bool plugin_gui::exec(program_arguments& args)
     return ret;
 }
 
-std::string plugin_gui::get_name()
+std::string plugin_gui::get_name() const
 {
     return std::string("hal_gui");
 }
 
-std::string plugin_gui::get_version()
+std::string plugin_gui::get_version() const
 {
     return std::string("0.1");
 }
 
-std::set<interface_type> plugin_gui::get_type()
-{
-    return {interface_type::base, interface_type::interactive_ui};
-}
-
-void plugin_gui::initialize_logging()
+void plugin_gui::initialize_logging() const
 {
     log_manager& l = log_manager::get_instance();
     l.add_channel("user", {log_manager::create_stdout_sink(), log_manager::create_file_sink(), log_manager::create_gui_sink()}, "info");
     l.add_channel("gui", {log_manager::create_stdout_sink(), log_manager::create_file_sink(), log_manager::create_gui_sink()}, "info");
     l.add_channel("python", {log_manager::create_stdout_sink(), log_manager::create_file_sink(), log_manager::create_gui_sink()}, "info");
+}
+
+extern std::shared_ptr<i_base> get_plugin_instance()
+{
+    return std::make_shared<plugin_gui>();
 }
