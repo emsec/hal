@@ -91,6 +91,7 @@ public:
     {
         log_info(get_name(), args...);
     }
+
     /**
      * Get all plugin dependencies of this plugin.
      *
