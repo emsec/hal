@@ -206,12 +206,24 @@ public:
 private:
     bool doCompare(const gate_type& other) const;
 
+    // describes the next internal state of the flipflop
     boolean_function m_next_state_f;
+
+    // describes the clock signal
     boolean_function m_clock_f;
+
+    // describes the set behavior
     boolean_function m_set_f;
+
+    // describes the reset behavior
     boolean_function m_reset_f;
+
+    // set of pins that use the internal state or inverted internal state respectively as output
     std::unordered_set<std::string> m_state_pins, m_inverted_state_pins;
+
+    // behavior when both set and reset are active
     std::pair<special_behavior, special_behavior> m_special_behavior;
+
     std::string m_data_category;
     std::string m_data_identifier;
     bool m_ascending;

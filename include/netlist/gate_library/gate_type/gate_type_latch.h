@@ -164,11 +164,22 @@ public:
 private:
     bool doCompare(const gate_type& other) const;
 
+    // describes the data input of the latch
     boolean_function m_data_in_f;
+
+    // describes the enable signal
     boolean_function m_enable_f;
+
+    // describes the set behavior
     boolean_function m_set_f;
+
+    // describes the reset behavior
     boolean_function m_reset_f;
+
+    // set of pins that use the internal state or inverted internal state respectively as output
     std::unordered_set<std::string> m_state_pins, m_inverted_state_pins;
+
+    // behavior when both set and reset are active
     std::pair<special_behavior, special_behavior> m_special_behavior;
 };
 #endif    //__HAL_GATE_TYPE_LATCH_H
