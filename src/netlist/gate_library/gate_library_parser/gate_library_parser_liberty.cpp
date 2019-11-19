@@ -513,10 +513,26 @@ std::shared_ptr<gate_type> gate_library_parser_liberty::construct_gate_type()
     {
         std::shared_ptr<gate_type_ff> gt_ff = std::make_shared<gate_type_ff>(m_current_cell.name);
 
-        gt_ff->set_next_state_function(boolean_function::from_string(m_current_cell.next_state));
-        gt_ff->set_clock_function(boolean_function::from_string(m_current_cell.clocked_on));
-        gt_ff->set_set_function(boolean_function::from_string(m_current_cell.set));
-        gt_ff->set_reset_function(boolean_function::from_string(m_current_cell.reset));
+        if (!m_current_cell.next_state.empty())
+        {
+            gt_ff->add_boolean_function("next_state", boolean_function::from_string(m_current_cell.next_state));
+        }
+
+        if (!m_current_cell.clocked_on.empty())
+        {
+            gt_ff->add_boolean_function("clock", boolean_function::from_string(m_current_cell.clocked_on));
+        }
+
+        if (!m_current_cell.set.empty())
+        {
+            gt_ff->add_boolean_function("set", boolean_function::from_string(m_current_cell.set));
+        }
+
+        if (!m_current_cell.reset.empty())
+        {
+            gt_ff->add_boolean_function("reset", boolean_function::from_string(m_current_cell.reset));
+        }
+
         gt_ff->set_special_behavior(m_current_cell.special_behavior_var1, m_current_cell.special_behavior_var2);
         gt_ff->set_data_category(m_current_cell.data_category);
         gt_ff->set_data_identifier(m_current_cell.data_identifier);
@@ -544,10 +560,26 @@ std::shared_ptr<gate_type> gate_library_parser_liberty::construct_gate_type()
     {
         std::shared_ptr<gate_type_latch> gt_latch = std::make_shared<gate_type_latch>(m_current_cell.name);
 
-        gt_latch->set_data_in_function(boolean_function::from_string(m_current_cell.next_state));
-        gt_latch->set_enable_function(boolean_function::from_string(m_current_cell.clocked_on));
-        gt_latch->set_set_function(boolean_function::from_string(m_current_cell.set));
-        gt_latch->set_reset_function(boolean_function::from_string(m_current_cell.reset));
+        if (!m_current_cell.next_state.empty())
+        {
+            gt_latch->add_boolean_function("data_in", boolean_function::from_string(m_current_cell.next_state));
+        }
+
+        if (!m_current_cell.clocked_on.empty())
+        {
+            gt_latch->add_boolean_function("enable", boolean_function::from_string(m_current_cell.clocked_on));
+        }
+
+        if (!m_current_cell.set.empty())
+        {
+            gt_latch->add_boolean_function("set", boolean_function::from_string(m_current_cell.set));
+        }
+
+        if (!m_current_cell.reset.empty())
+        {
+            gt_latch->add_boolean_function("reset", boolean_function::from_string(m_current_cell.reset));
+        }
+
         gt_latch->set_special_behavior(m_current_cell.special_behavior_var1, m_current_cell.special_behavior_var2);
 
         for (auto& [pin_name, bf] : m_current_cell.functions)

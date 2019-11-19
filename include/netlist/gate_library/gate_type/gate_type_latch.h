@@ -49,34 +49,6 @@ public:
     ~gate_type_latch() override = default;
 
     /**
-     * Sets the boolean function describing the data input of the latch.
-     * 
-     * @param[in] data_in_f - The boolean function.
-     */
-    void set_data_in_function(const boolean_function& data_in_f);
-
-    /**
-     * Sets the boolean function describing the enable input of the latch.
-     * 
-     * @param[in] enable_f - The boolean function.
-     */
-    void set_enable_function(const boolean_function& enable_f);
-
-    /**
-     * Sets the boolean function describing the set behavior of the latch.
-     * 
-     * @param[in] set_f - The boolean function.
-     */
-    void set_set_function(const boolean_function& set_f);
-
-    /**
-     * Sets the boolean function describing the reset behavior of the latch.
-     * 
-     * @param[in] reset_f - The boolean function.
-     */
-    void set_reset_function(const boolean_function& reset_f);
-
-    /**
      * Adds an output pin to the collection of output pins that generate their output from the next_state function.
      * 
      * @param[in] output_pin_name - Name of the output pin.
@@ -104,34 +76,6 @@ public:
      * @param[in] sb2 - The value specifying the behaviorfor the inverted internal state.
      */
     void set_special_behavior(special_behavior sb1, special_behavior sb2);
-
-    /**
-     * Returns the boolean function describing the data input of the latch.
-     * 
-     * @returns The boolean function.
-     */
-    boolean_function get_data_in_function() const;
-
-    /**
-     * Returns the boolean function describing the enable input of the latch.
-     * 
-     * @returns The boolean function.
-     */
-    boolean_function get_enable_function() const;
-
-    /**
-     * Returns the boolean function describing the set behavior of the latch.
-     * 
-     * @returns The boolean function.
-     */
-    boolean_function get_set_function() const;
-
-    /**
-     * Returns the boolean function describing the reset behavior of the latch.
-     * 
-     * @returns The boolean function.
-     */
-    boolean_function get_reset_function() const;
 
     /**
      * Returns the output pins that use the data_in function to generate their output.
@@ -164,11 +108,10 @@ public:
 private:
     bool doCompare(const gate_type& other) const;
 
-    boolean_function m_data_in_f;
-    boolean_function m_enable_f;
-    boolean_function m_set_f;
-    boolean_function m_reset_f;
+    // set of pins that use the internal state or inverted internal state respectively as output
     std::unordered_set<std::string> m_state_pins, m_inverted_state_pins;
+
+    // behavior when both set and reset are active
     std::pair<special_behavior, special_behavior> m_special_behavior;
 };
 #endif    //__HAL_GATE_TYPE_LATCH_H
