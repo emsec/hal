@@ -83,7 +83,7 @@ namespace netlist_serializer
                     auto s = it.second.to_string();
                     functions.AddMember(JSON_STR_HELPER(it.first), JSON_STR_HELPER(s), allocator);
                 }
-                if (!functions.Empty())
+                if (functions.MemberCount() > 0)
                 {
                     val.AddMember("custom_functions", functions, allocator);
                 }
