@@ -40,22 +40,126 @@
 class gate_type_latch : public gate_type
 {
 public:
+    /**
+     * Constructor for a latch gate type.
+     * 
+     * @param[in] name - The name of the latch gate type.
+     */
     gate_type_latch(const std::string& name);
     ~gate_type_latch() override = default;
 
+    /**
+     * Sets the boolean function describing the data input of the latch.
+     * 
+     * @param[in] data_in_f - The boolean function.
+     */
     void set_data_in_function(const boolean_function& data_in_f);
+
+    /**
+     * Sets the boolean function describing the enable input of the latch.
+     * 
+     * @param[in] enable_f - The boolean function.
+     */
     void set_enable_function(const boolean_function& enable_f);
+
+    /**
+     * Sets the boolean function describing the set behavior of the latch.
+     * 
+     * @param[in] set_f - The boolean function.
+     */
     void set_set_function(const boolean_function& set_f);
+
+    /**
+     * Sets the boolean function describing the reset behavior of the latch.
+     * 
+     * @param[in] reset_f - The boolean function.
+     */
     void set_reset_function(const boolean_function& reset_f);
+
+    /**
+     * Sets a flag indicating that the output of the given output pin shall be inverted.
+     * Used in combination with the data_in function.
+     * 
+     * @param[in] output_pin - Name of the output pin.
+     * @param[in] inverted - True if inverted, false otherwise.
+     */
     void set_output_pin_inverted(const std::string& output_pin, bool inverted);
+
+    /**
+     * Sets the behavior that describes the internal state of the latch when both set and reset are active.
+     * May be one of the following:
+     *  - U: not specified for this gate type
+     *  - L: set internal state to 0
+     *  - H: set internal state to 1
+     *  - N: keep current internal state
+     *  - T: toggle internal state
+     *  - X: undefined behavior
+     * 
+     * @param[in] sb - The value specifying the behavior.
+     */
     void set_special_behavior1(special_behavior sb);
+
+    /**
+     * Sets the behavior that describes the inverted internal state of the latch when both set and reset are active.
+     * May be one of the following:
+     *  - U: not specified for this gate type
+     *  - L: set inverted internal state to 0
+     *  - H: set inverted internal state to 1
+     *  - N: keep current inverted internal state
+     *  - T: toggle inverted internal state
+     *  - X: undefined behavior
+     * 
+     * @param[in] sb - The value specifying the behavior.
+     */
     void set_special_behavior2(special_behavior sb);
 
+    /**
+     * Returns the boolean function describing the data input of the latch.
+     * 
+     * @returns The boolean function.
+     */
     boolean_function get_data_in_function() const;
+
+    /**
+     * Returns the boolean function describing the enable input of the latch.
+     * 
+     * @returns The boolean function.
+     */
     boolean_function get_enable_function() const;
+
+    /**
+     * Returns the boolean function describing the set behavior of the latch.
+     * 
+     * @returns The boolean function.
+     */
     boolean_function get_set_function() const;
+
+    /**
+     * Returns the boolean function describing the reset behavior of the latch.
+     * 
+     * @returns The boolean function.
+     */
     boolean_function get_reset_function() const;
+
+    /**
+     * Returns a set of output pin names that shall use the inverted value of the data_in function.
+     * 
+     * @returns The set containing the output pin names.
+     */
     std::set<std::string> get_inverted_output_pins() const;
+
+    /**
+     * Returns the behavior of the internal state and the inverted internal state when both set and reset are active.
+     * May be one of the following:
+     *  - U: not specified for this gate type
+     *  - L: set (inverted) internal state to 0
+     *  - H: set (inverted) internal state to 1
+     *  - N: keep current (inverted) internal state
+     *  - T: toggle (inverted) internal state
+     *  - X: undefined behavior
+     * 
+     * @returns The boolean function.
+     */
     std::pair<special_behavior, special_behavior> get_special_behavior() const;
 
 private:

@@ -40,28 +40,168 @@
 class gate_type_ff : public gate_type
 {
 public:
+    /**
+     * Constructor for a flipflop gate type.
+     * 
+     * @param[in] name - The name of the flipflop gate type.
+     */
     gate_type_ff(const std::string& name);
     ~gate_type_ff() override = default;
 
+    /**
+     * Sets the boolean function describing the next internal state of the flipflop.
+     * 
+     * @param[in] next_state_f - The boolean function.
+     */
     void set_next_state_function(const boolean_function& next_state_f);
+
+    /**
+     * Sets the boolean function describing the clock input of the flipflop.
+     * 
+     * @param[in] clock_f - The boolean function.
+     */
     void set_clock_function(const boolean_function& clock_f);
+
+    /**
+     * Sets the boolean function describing the set behavior of the flipflop.
+     * 
+     * @param[in] set_f - The boolean function.
+     */
     void set_set_function(const boolean_function& set_f);
+
+    /**
+     * Sets the boolean function describing the reset behavior of the flipflop.
+     * 
+     * @param[in] reset_f - The boolean function.
+     */
     void set_reset_function(const boolean_function& reset_f);
+
+    /**
+     * Sets a flag indicating that the output of the given output pin shall be inverted.
+     * Used in combination with the next_state function.
+     * 
+     * @param[in] output_pin - Name of the output pin.
+     * @param[in] inverted - True if inverted, false otherwise.
+     */
     void set_output_pin_inverted(const std::string& output_pin, bool inverted);
+
+    /**
+     * Sets the behavior that describes the internal state of the flipflop when both set and reset are active.
+     * May be one of the following:
+     *  - U: not specified for this gate type
+     *  - L: set internal state to 0
+     *  - H: set internal state to 1
+     *  - N: keep current internal state
+     *  - T: toggle internal state
+     *  - X: undefined behavior
+     * 
+     * @param[in] sb - The value specifying the behavior.
+     */
     void set_special_behavior1(special_behavior sb);
+
+    /**
+     * Sets the behavior that describes the inverted internal state of the flipflop when both set and reset are active.
+     * May be one of the following:
+     *  - U: not specified for this gate type
+     *  - L: set inverted internal state to 0
+     *  - H: set inverted internal state to 1
+     *  - N: keep current inverted internal state
+     *  - T: toggle inverted internal state
+     *  - X: undefined behavior
+     * 
+     * @param[in] sb - The value specifying the behavior.
+     */
     void set_special_behavior2(special_behavior sb);
+
+    /**
+     * Describes in what part of the gate definition to find the INIT string, e.g., "generic".
+     * 
+     * @param[in] category - The category as a string.
+     */
     void set_data_category(const std::string& category);
+
+    /**
+     * Describes the identifier used to specify the INIT string.
+     * 
+     * @param[in] identifier - The identifier as a string.
+     */
     void set_data_identifier(const std::string& identifier);
+
+    /**
+     * Describes the bit-order of the INIT string.
+     * 
+     * @param[in] ascending - True if ascending bit-order, false otherwise.
+     */
     void set_data_ascending_order(bool ascending);
 
+    /**
+     * Returns the boolean function describing the next internal state of the flipflop.
+     * 
+     * @returns The boolean function.
+     */
     boolean_function get_next_state_function() const;
+
+    /**
+     * Returns the boolean function describing the clock input of the flipflop.
+     * 
+     * @returns The boolean function.
+     */
     boolean_function get_clock_function() const;
+
+    /**
+     * Returns the boolean function describing the set behavior of the flipflop.
+     * 
+     * @returns The boolean function.
+     */
     boolean_function get_set_function() const;
+
+    /**
+     * Returns the boolean function describing the reset behavior of the flipflop.
+     * 
+     * @returns The boolean function.
+     */
     boolean_function get_reset_function() const;
+
+    /**
+     * Returns a set of output pin names that shall use the inverted value of the next_state function.
+     * 
+     * @returns The set containing the output pin names.
+     */
     std::set<std::string> get_inverted_output_pins() const;
+
+    /**
+     * Returns the behavior of the internal state and the inverted internal state when both set and reset are active.
+     * May be one of the following:
+     *  - U: not specified for this gate type
+     *  - L: set (inverted) internal state to 0
+     *  - H: set (inverted) internal state to 1
+     *  - N: keep current (inverted) internal state
+     *  - T: toggle (inverted) internal state
+     *  - X: undefined behavior
+     * 
+     * @returns The boolean function.
+     */
     std::pair<special_behavior, special_behavior> get_special_behavior() const;
+
+    /**
+     * Returns the string describing in what part of the gate definition to find the INIT string, e.g., "generic".
+     * 
+     * @returns The string describing the category.
+     */
     std::string get_data_category() const;
+
+    /**
+     * Returns the string describing the identifier used to specify the INIT string.
+     * 
+     * @returns The identifier as a string.
+     */
     std::string get_data_identifier() const;
+
+    /**
+     * Returns the bit-order of the INIT string.
+     * 
+     * @returns True if ascending bit-order, false otherwise.
+     */
     bool is_ascending_order() const;
 
 private:

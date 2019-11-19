@@ -166,6 +166,7 @@ public:
      * @param[in] match - the string on which to end.
      * @param[in] end - the absolute position in the stream on which to stop, even if match was not found until this point.
      * @param[in] level_aware - if false, tokens are also matched if they are not at the top-level.
+     * @param[in] throw_on_error - if true, throws an std::invalid_argument instead of returning false
      * @returns The last consumed token.
      */
     token consume_until(const std::string& match, u32 end = END_OF_STREAM, bool level_aware = true, bool throw_on_error = false);
@@ -180,6 +181,7 @@ public:
      * @param[in] match - the string on which to end.
      * @param[in] end - the absolute position in the stream on which to stop, even if match was not found until this point.
      * @param[in] level_aware - if false, tokens are also matched if they are not at the top-level.
+     * @param[in] throw_on_error - if true, throws an std::invalid_argument instead of returning false
      * @returns All consumed tokens in a new token stream.
      */
     token_stream extract_until(const std::string& match, u32 end = END_OF_STREAM, bool level_aware = true, bool throw_on_error = false);
@@ -196,6 +198,7 @@ public:
      * @param[in] joiner - the string used to join consumed tokens.
      * @param[in] end - the absolute position in the stream on which to stop, even if match was not found until this point.
      * @param[in] level_aware - if false, tokens are also matched if they are not at the top-level.
+     * @param[in] throw_on_error - if true, throws an std::invalid_argument instead of returning false
      * @returns The joined token.
      */
     token join_until(const std::string& match, const std::string& joiner, u32 end = END_OF_STREAM, bool level_aware = true, bool throw_on_error = false);

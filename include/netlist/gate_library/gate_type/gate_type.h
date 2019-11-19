@@ -66,13 +66,20 @@ public:
     virtual ~gate_type() = default;
 
     /**
-     * Returns a string describing the gate type.
+     * Returns a string describing the given gate type object.
      * 
+     * @param[in] gt - The gate type object.
      * @returns A string describing the gate type.
      */
-    static std::string to_string(const gate_type& v);
+    static std::string to_string(const gate_type& gt);
 
-    // TODO description
+    /**
+     * Inserts the gate type object to an output stream.
+     * 
+     * @param[in] os - The output stream to insert the gate type object into.
+     * @param[in] gt - The gate type object.
+     * @returns An output stream.
+     */
     friend std::ostream& operator<<(std::ostream& os, const gate_type& gt);
 
     /**
