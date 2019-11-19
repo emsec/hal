@@ -15,6 +15,7 @@
 #include "gui/graph_widget/items/standard_graphics_net.h"
 #include "gui/graph_widget/items/utility_items/drag_shadow_gate.h"
 #include "gui/gui_globals.h"
+#include "gui/gui_utils/netlist.h"
 #include "netlist/gate.h"
 #include "netlist/module.h"
 #include "netlist/net.h"
@@ -126,13 +127,26 @@ void graph_graphics_view::handle_move_action(QAction* action)
 
 void graph_graphics_view::handle_move_new_action()
 {
+    std::unordered_set<std::shared_ptr<gate>> gate_objs;
+    std::unordered_set<std::shared_ptr<module>> module_objs;
+    for (const auto& id : g_selection_relay.m_selected_gates)
+    {
+        gate_objs.insert(g_netlist->get_gate_by_id(id));
+    }
+    for (const auto& id : g_selection_relay.m_selected_modules)
+    {
+        module_objs.insert(g_netlist->get_module_by_id(id));
+    }
+    std::shared_ptr<module> parent = gui_utility::lowest_common_ancestor(module_objs, gate_objs);
+    QString parent_name = QString::fromStdString(parent->get_name());
     bool ok;
-    QString name = QInputDialog::getText(nullptr, "", "Module Name:", QLineEdit::Normal, "", &ok);
+    QString name = QInputDialog::getText(nullptr, "",
+        "New module will be created under \"" + parent_name + "\"\nModule Name:",
+        QLineEdit::Normal, "", &ok);
     if (!ok || name.isEmpty())
         return;
-    // There is no easy way to allow the user to create a submodule on the fly here,
-    // so this creates a new module under the top-module.
-    std::shared_ptr<module> m = g_netlist->create_module(g_netlist->get_unique_module_id(), name.toStdString(), g_netlist->get_top_module());
+    std::shared_ptr<module> m = g_netlist->create_module(g_netlist->get_unique_module_id(),
+        name.toStdString(), parent);
 
     for (const auto& id : g_selection_relay.m_selected_gates)
     {
