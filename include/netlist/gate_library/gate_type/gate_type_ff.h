@@ -49,34 +49,6 @@ public:
     ~gate_type_ff() override = default;
 
     /**
-     * Sets the boolean function describing the next internal state of the flipflop.
-     * 
-     * @param[in] next_state_f - The boolean function.
-     */
-    void set_next_state_function(const boolean_function& next_state_f);
-
-    /**
-     * Sets the boolean function describing the clock input of the flipflop.
-     * 
-     * @param[in] clock_f - The boolean function.
-     */
-    void set_clock_function(const boolean_function& clock_f);
-
-    /**
-     * Sets the boolean function describing the set behavior of the flipflop.
-     * 
-     * @param[in] set_f - The boolean function.
-     */
-    void set_set_function(const boolean_function& set_f);
-
-    /**
-     * Sets the boolean function describing the reset behavior of the flipflop.
-     * 
-     * @param[in] reset_f - The boolean function.
-     */
-    void set_reset_function(const boolean_function& reset_f);
-
-    /**
      * Adds an output pin to the collection of output pins that generate their output from the next_state function.
      * 
      * @param[in] output_pin_name - Name of the output pin.
@@ -125,34 +97,6 @@ public:
      * @param[in] ascending - True if ascending bit-order, false otherwise.
      */
     void set_data_ascending_order(bool ascending);
-
-    /**
-     * Returns the boolean function describing the next internal state of the flipflop.
-     * 
-     * @returns The boolean function.
-     */
-    boolean_function get_next_state_function() const;
-
-    /**
-     * Returns the boolean function describing the clock input of the flipflop.
-     * 
-     * @returns The boolean function.
-     */
-    boolean_function get_clock_function() const;
-
-    /**
-     * Returns the boolean function describing the set behavior of the flipflop.
-     * 
-     * @returns The boolean function.
-     */
-    boolean_function get_set_function() const;
-
-    /**
-     * Returns the boolean function describing the reset behavior of the flipflop.
-     * 
-     * @returns The boolean function.
-     */
-    boolean_function get_reset_function() const;
 
     /**
      * Returns the output pins that use the next_state function to generate their output.
@@ -205,18 +149,6 @@ public:
 
 private:
     bool doCompare(const gate_type& other) const;
-
-    // describes the next internal state of the flipflop
-    boolean_function m_next_state_f;
-
-    // describes the clock signal
-    boolean_function m_clock_f;
-
-    // describes the set behavior
-    boolean_function m_set_f;
-
-    // describes the reset behavior
-    boolean_function m_reset_f;
 
     // set of pins that use the internal state or inverted internal state respectively as output
     std::unordered_set<std::string> m_state_pins, m_inverted_state_pins;
