@@ -159,6 +159,9 @@ void net_details_widget::update(u32 net_id)
 
     auto n = g_netlist->get_net_by_id(net_id);
 
+    if(!n)
+        return;
+
     //get name
     m_name_item->setText(QString::fromStdString(n->get_name()));
 
@@ -278,7 +281,6 @@ void net_details_widget::on_treewidget_item_clicked(QTreeWidgetItem* item, int c
         auto index                         = std::distance(pins.begin(), std::find(pins.begin(), pins.end(), pin));
         g_selection_relay.m_subfocus_index = index;
 
-        update(clicked_gate->get_id());
         g_selection_relay.relay_selection_changed(this);
     }
     else if (m_src_pin == item->parent() && column == 2)
@@ -298,7 +300,6 @@ void net_details_widget::on_treewidget_item_clicked(QTreeWidgetItem* item, int c
         auto index                         = std::distance(pins.begin(), std::find(pins.begin(), pins.end(), pin));
         g_selection_relay.m_subfocus_index = index;
 
-        update(clicked_gate->get_id());
         g_selection_relay.relay_selection_changed(this);
     }
 }
