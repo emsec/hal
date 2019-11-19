@@ -6,12 +6,12 @@ import logging
 NOTE: Every function is only tested once with all possible amounts of inputs,
       but NOT extensively (its already done in the c++ tests)
 '''
-
+# NOTE: gate library functions aren't tested yet
 class TestCoreUtils(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         logging.basicConfig()
-        #help(hal_py.netlist)
+        help(hal_py)
 
     @classmethod
     def tearDownClass(cls):
@@ -56,7 +56,8 @@ class TestCoreUtils(unittest.TestCase):
         self.assertEqual(nl.get_device_name(), "device_name")
         nl.set_id(123)
         self.assertEqual(nl.get_id(), 123)
-
+        nl.set_input_filename(str(hal_py.core_utils.get_binary_directory()) + "/input_filename")
+        self.assertEqual(str(nl.get_input_filename()), (str(hal_py.core_utils.get_binary_directory()) + "/input_filename"))
     # Testing the python binding for functions: create_gate, get_gate_by_id, get_gates, get_gate_by_id, delete_gate, mark_global_gnd_gate,
     #  mark_global_vcc_gate, unmark_global_vcc_gate, unmark_global_vcc_gate, is_global_gnd_gate, is_global_vcc_gate
     def test_create_gate(self):
@@ -96,14 +97,14 @@ class TestCoreUtils(unittest.TestCase):
         
 
 
-    # Testing the python binding for functions: create_module, get_modules, delete_modules
+    # Testing the python binding for functions: create_module, get_modules, delete_modules, get_module_by_id, get_top_module
     def test_create_module(self):
         # NOTE: float x, float y ?
         # Create a module (with id)
         nl = self.create_empty_netlist()
         test_module = nl.create_module(self.min_id, "test_module", nl.get_top_module())
         self.assertIsNotNone(test_module)
-        self.assertIsNotNone(nl.get_gate_by_id(123))
+        self.assertIsNotNone(nl.get_module_by_id(self.min_id))
 
         # Create a module (without (passed) id)
         test_module_no_id = nl.create_module("test_module_no_id", nl.get_top_module())
@@ -122,6 +123,7 @@ class TestCoreUtils(unittest.TestCase):
     def test_create_net(self):
         nl = self.create_empty_netlist()
         default_net_amt = len(nl.get_nets())
+        self.assertEqual(nl.get_number_of_nets(), default_net_amt)
 
         # Create a net
         test_net = nl.create_net(self.min_id, "test_net")
@@ -155,7 +157,11 @@ class TestCoreUtils(unittest.TestCase):
         self.assertEqual(len(nl.get_nets()), default_net_amt)
 
     
-
+    def test_unique_id(self):
+        nl = self.create_empty_netlist()
+        self.assertIsNotNone(nl.get_unique_module_id())
+        self.assertIsNotNone(nl.get_unique_net_id())
+        self.assertIsNotNone(nl.get_unique_gate_id())
 
 if __name__ == '__main__':
     unittest.main()
