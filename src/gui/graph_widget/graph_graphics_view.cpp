@@ -29,6 +29,7 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QMenu>
+#include <QMessageBox>
 #include <QMimeData>
 #include <QScrollBar>
 #include <QStyleOptionGraphicsItem>
@@ -119,10 +120,6 @@ void graph_graphics_view::handle_move_action(QAction* action)
     g_selection_relay.clear();
     g_selection_relay.relay_selection_changed(this);
 
-    auto context = m_graph_widget->get_context();
-    context->begin_change();
-    context->remove(modules, gates);
-    context->end_change();
 }
 
 void graph_graphics_view::handle_move_new_action()
@@ -161,12 +158,6 @@ void graph_graphics_view::handle_move_new_action()
     auto modules = g_selection_relay.m_selected_modules;
     g_selection_relay.clear();
     g_selection_relay.relay_selection_changed(this);
-
-    auto context = m_graph_widget->get_context();
-    context->begin_change();
-    context->remove(modules, gates);
-    context->add({m->get_id()}, {});
-    context->end_change();
 }
 
 void graph_graphics_view::handle_rename_action()
@@ -766,6 +757,17 @@ void graph_graphics_view::handle_fold_single_action()
 void graph_graphics_view::handle_unfold_single_action()
 {
     auto context = m_graph_widget->get_context();
+    auto m = g_netlist->get_module_by_id(m_item->id());
+    if (m->get_gates().empty() && m->get_submodules().empty())
+    {
+        QMessageBox msg;
+        msg.setText("This module is empty.\nYou can't unfold it.");
+        msg.setWindowTitle("Error");
+        msg.exec();
+        return;
+        // We would otherwise unfold the empty module into nothing, so the user
+        // would have nowhere to click to get their module back
+    }
     context->unfold_module(m_item->id());
 }
 

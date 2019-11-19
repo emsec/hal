@@ -47,7 +47,6 @@ public:
 
     QColor get_module_color(const u32 id);
 
-    module_item* get_module_item(const u32 id);
     module_model* get_module_model();
 
     void debug_change_module_name(const u32 id);
@@ -116,7 +115,6 @@ private:
     QMap<u32, QString> m_gate_aliases;
     QMap<u32, QString> m_net_aliases;
 
-    QMap<u32, module_item*> m_module_items;
     module_model* m_module_model;
 };
 
