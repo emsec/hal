@@ -142,13 +142,6 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
 
     connect(m_tree_widget, &QTreeWidget::itemClicked, this, &gate_details_widget::on_treewidget_item_clicked);
 
-    m_tree_row_layout->addWidget(m_tree_widget);
-    m_tree_row_layout->addSpacerItem(new QSpacerItem(1, 1, QSizePolicy::Expanding, QSizePolicy::Minimum));
-    m_tree_row_layout->addSpacing(0);
-    m_container_layout->addLayout(m_tree_row_layout);
-
-    connect(m_tree_widget, &QTreeWidget::itemClicked, this, &gate_details_widget::on_treewidget_item_clicked);
-
     //set parent and flag so it gets shown in its own window
     m_navigation_table = new graph_navigation_widget();
     m_navigation_table->setWindowFlags(Qt::CustomizeWindowHint);
