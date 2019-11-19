@@ -11,7 +11,6 @@ class TestCoreUtils(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         logging.basicConfig()
-        help(hal_py)
 
     @classmethod
     def tearDownClass(cls):
@@ -40,12 +39,6 @@ class TestCoreUtils(unittest.TestCase):
         return None
 
     # ========= TEST CASES ==========
-
-    # Testing the python binding for function: <name>
-    def test_template(self):
-        nl = self.create_empty_netlist()
-        nl.set_design_name("test_name")
-        self.assertEqual(nl.get_design_name(), "test_name")
 
     # Testing the python binding for function: set_design_name, set_device_name, get_design_name, get_device_name,  
     def test_identifier(self):
