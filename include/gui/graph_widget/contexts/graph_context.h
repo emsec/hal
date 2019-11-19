@@ -32,6 +32,10 @@ public:
     void fold_module_of_gate(const u32 id);
     void unfold_module(const u32 id);
 
+    bool empty() const;
+    bool is_showing_module(const u32 id) const;
+    bool is_showing_module(const u32 id, const QSet<u32>& minus_modules, const QSet<u32>& minus_gates, const QSet<u32>& plus_modules, const QSet<u32>& plus_gates) const;
+
     const QSet<u32>& modules() const;
     const QSet<u32>& gates() const;
     const QSet<u32>& nets() const;

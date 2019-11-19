@@ -34,9 +34,9 @@ public:
     void handle_module_name_changed(const std::shared_ptr<module> m) const;
     //void handle_module_parent_changed(const std::shared_ptr<module> m) const;
     void handle_module_submodule_added(const std::shared_ptr<module> m, const u32 added_module) const;
-    void handle_module_submodule_removed(const std::shared_ptr<module> m, const u32 removed_module) const;
+    void handle_module_submodule_removed(const std::shared_ptr<module> m, const u32 removed_module);
     void handle_module_gate_assigned(const std::shared_ptr<module> m, const u32 inserted_gate) const;
-    void handle_module_gate_removed(const std::shared_ptr<module> m, const u32 removed_gate) const;
+    void handle_module_gate_removed(const std::shared_ptr<module> m, const u32 removed_gate);
 
     //void handle_gate_created(const std::shared_ptr<gate> g) const;
     //void handle_gate_removed(const std::shared_ptr<gate> g) const;
