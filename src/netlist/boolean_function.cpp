@@ -63,7 +63,7 @@ boolean_function::boolean_function(operation op, const std::vector<boolean_funct
         m_invert  = invert_result;
 
         m_op = op;
-        std::copy_if(operands.begin(), operands.end(), std::back_inserter(m_operands), [](auto op) { return !op.is_empty(); });
+        std::copy_if(operands.begin(), operands.end(), std::back_inserter(m_operands), [](auto op2) { return !op2.is_empty(); });
     }
 }
 
@@ -538,7 +538,6 @@ bool boolean_function::operator!=(const boolean_function& other) const
 {
     return !(*this == other);
 }
-
 
 boolean_function boolean_function::replace_xors() const
 {

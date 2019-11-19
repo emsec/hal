@@ -28,8 +28,8 @@
 
 #include "netlist/boolean_function.h"
 
-#include <map>
 #include <string>
+#include <unordered_map>
 
 /**
  * Gate type class containing information about the internals of a specific gate type.
@@ -47,6 +47,16 @@ public:
         latch
     };
 
+    enum class special_behavior
+    {
+        U,    // not set
+        L,
+        H,
+        N,
+        T,
+        X
+    };
+
     /**
      * Constructor for a gate type.
      * 
@@ -56,13 +66,20 @@ public:
     virtual ~gate_type() = default;
 
     /**
-     * Returns a string describing the gate type.
+     * Returns a string describing the given gate type object.
      * 
+     * @param[in] gt - The gate type object.
      * @returns A string describing the gate type.
      */
-    static std::string to_string(const gate_type& v);
+    static std::string to_string(const gate_type& gt);
 
-    // TODO description
+    /**
+     * Inserts the gate type object to an output stream.
+     * 
+     * @param[in] os - The output stream to insert the gate type object into.
+     * @param[in] gt - The gate type object.
+     * @returns An output stream.
+     */
     friend std::ostream& operator<<(std::ostream& os, const gate_type& gt);
 
     /**
@@ -152,7 +169,7 @@ public:
      *
      * @returns A map of pin names to boolean functions.
      */
-    std::map<std::string, boolean_function> get_boolean_functions() const;
+    std::unordered_map<std::string, boolean_function> get_boolean_functions() const;
 
 protected:
     base_type m_base_type;
@@ -163,7 +180,7 @@ private:
     std::vector<std::string> m_input_pins;
     std::vector<std::string> m_output_pins;
 
-    std::map<std::string, boolean_function> m_functions;
+    std::unordered_map<std::string, boolean_function> m_functions;
 
     gate_type(const gate_type&) = delete;               // disable copy-constructor
     gate_type& operator=(const gate_type&) = delete;    // disable copy-assignment

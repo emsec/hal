@@ -30,12 +30,13 @@
 #include "netlist/boolean_function.h"
 #include "netlist/data_container.h"
 #include "netlist/endpoint.h"
-#include "netlist/gate_library/gate_type.h"
+#include "netlist/gate_library/gate_type/gate_type.h"
 #include "netlist/netlist_constants.h"
 
 #include <map>
 #include <memory>
 #include <set>
+#include <unordered_map>
 #include <vector>
 
 /* forward declaration */
@@ -113,7 +114,7 @@ public:
      * @param[in] only_custom_functions - if true, this returns only the functions which were set via set_boolean_function
      * @returns A map from function name to function.
      */
-    std::map<std::string, boolean_function> get_boolean_functions(bool only_custom_functions = false) const;
+    std::unordered_map<std::string, boolean_function> get_boolean_functions(bool only_custom_functions = false) const;
 
     /**
      * Set the boolean function with a specific name only for this gate.

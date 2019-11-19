@@ -22,18 +22,18 @@
 //  SOFTWARE.
 
 #include "pragma_once.h"
-#ifndef __HAL_TOKE_STREAM_H__
-#define __HAL_TOKE_STREAM_H__
+#ifndef __HAL_TOKEN_STREAM_H__
+#define __HAL_TOKEN_STREAM_H__
 
 #include "def.h"
 
 #include <map>
 
 /**
- * @ingroup hdl_parsers
+ * @ingroup core
  */
 
-struct HDL_PARSER_API token
+struct CORE_API token
 {
     /**
      * Base token class that holds a string and a line number.
@@ -94,7 +94,7 @@ struct HDL_PARSER_API token
     bool operator!=(const std::string& s) const;
 };
 
-class HDL_PARSER_API token_stream
+class NETLIST_API token_stream
 {
 public:
     struct token_stream_exception
@@ -166,6 +166,7 @@ public:
      * @param[in] match - the string on which to end.
      * @param[in] end - the absolute position in the stream on which to stop, even if match was not found until this point.
      * @param[in] level_aware - if false, tokens are also matched if they are not at the top-level.
+     * @param[in] throw_on_error - if true, throws an std::invalid_argument instead of returning false
      * @returns The last consumed token.
      */
     token consume_until(const std::string& match, u32 end = END_OF_STREAM, bool level_aware = true, bool throw_on_error = false);
@@ -180,6 +181,7 @@ public:
      * @param[in] match - the string on which to end.
      * @param[in] end - the absolute position in the stream on which to stop, even if match was not found until this point.
      * @param[in] level_aware - if false, tokens are also matched if they are not at the top-level.
+     * @param[in] throw_on_error - if true, throws an std::invalid_argument instead of returning false
      * @returns All consumed tokens in a new token stream.
      */
     token_stream extract_until(const std::string& match, u32 end = END_OF_STREAM, bool level_aware = true, bool throw_on_error = false);
@@ -196,6 +198,7 @@ public:
      * @param[in] joiner - the string used to join consumed tokens.
      * @param[in] end - the absolute position in the stream on which to stop, even if match was not found until this point.
      * @param[in] level_aware - if false, tokens are also matched if they are not at the top-level.
+     * @param[in] throw_on_error - if true, throws an std::invalid_argument instead of returning false
      * @returns The joined token.
      */
     token join_until(const std::string& match, const std::string& joiner, u32 end = END_OF_STREAM, bool level_aware = true, bool throw_on_error = false);
@@ -297,4 +300,4 @@ private:
     u32 m_pos;
 };
 
-#endif /* __HAL_HDL_PARSER_VHDL_H__ */
+#endif /* __HAL_TOKEN_STREAM_H__ */

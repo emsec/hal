@@ -1,4 +1,4 @@
-#include "netlist/gate_library/gate_type_latch.h"
+#include "netlist/gate_library/gate_type/gate_type_latch.h"
 
 gate_type_latch::gate_type_latch(const std::string& name) : gate_type(name)
 {
@@ -16,7 +16,8 @@ bool gate_type_latch::doCompare(const gate_type& other) const
         equal &= m_enable_f == gt->get_enable_function();
         equal &= m_set_f == gt->get_set_function();
         equal &= m_reset_f == gt->get_reset_function();
-        equal &= m_inverted_output_pins == gt->get_inverted_output_pins();
+        equal &= m_state_pins == gt->get_state_output_pins();
+        equal &= m_inverted_state_pins == gt->get_inverted_state_output_pins();
         equal &= m_special_behavior == gt->get_special_behavior();
     }
 
@@ -42,26 +43,19 @@ void gate_type_latch::set_reset_function(const boolean_function& reset_f)
     m_reset_f = reset_f;
 }
 
-void gate_type_latch::set_output_pin_inverted(const std::string& output_pin, bool inverted)
+void gate_type_latch::add_state_output_pin(std::string output_pin_name)
 {
-    if (inverted)
-    {
-        m_inverted_output_pins.insert(output_pin);
-    }
-    else
-    {
-        m_inverted_output_pins.erase(output_pin);
-    }
+    m_state_pins.insert(output_pin_name);
 }
 
-void gate_type_latch::set_special_behavior1(special_behavior sb)
+void gate_type_latch::add_inverted_state_output_pin(std::string output_pin_name)
 {
-    m_special_behavior.first = sb;
+    m_inverted_state_pins.insert(output_pin_name);
 }
 
-void gate_type_latch::set_special_behavior2(special_behavior sb)
+void gate_type_latch::set_special_behavior(special_behavior sb1, special_behavior sb2)
 {
-    m_special_behavior.second = sb;
+    m_special_behavior = {sb1, sb2};
 }
 
 boolean_function gate_type_latch::get_data_in_function() const
@@ -84,12 +78,17 @@ boolean_function gate_type_latch::get_reset_function() const
     return m_reset_f;
 }
 
-std::set<std::string> gate_type_latch::get_inverted_output_pins() const
+std::unordered_set<std::string> gate_type_latch::get_state_output_pins() const
 {
-    return m_inverted_output_pins;
+    return m_state_pins;
 }
 
-std::pair<gate_type_latch::special_behavior, gate_type_latch::special_behavior> gate_type_latch::get_special_behavior() const
+std::unordered_set<std::string> gate_type_latch::get_inverted_state_output_pins() const
+{
+    return m_inverted_state_pins;
+}
+
+std::pair<gate_type::special_behavior, gate_type::special_behavior> gate_type_latch::get_special_behavior() const
 {
     return m_special_behavior;
 }

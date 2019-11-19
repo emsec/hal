@@ -26,7 +26,7 @@
 #define __HAL_GATE_LIBRARY_H__
 
 #include "def.h"
-#include "gate_type.h"
+#include "netlist/gate_library/gate_type/gate_type.h"
 
 #include <map>
 #include <set>

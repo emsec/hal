@@ -1,4 +1,4 @@
-#include "hdl_parser/token_stream.h"
+#include "core/token_stream.h"
 #include "core/utils.h"
 
 token::token(u32 n, const std::string s, bool cs) : number(n), string(s), case_sensitive(cs)

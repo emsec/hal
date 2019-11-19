@@ -1,15 +1,13 @@
 #include "hdl_parser/hdl_parser_verilog.h"
 
 #include "core/log.h"
+#include "core/utils.h"
 
 #include "netlist/gate.h"
 #include "netlist/net.h"
 #include "netlist/netlist.h"
 
 #include "netlist/netlist_factory.h"
-
-#include <iomanip>
-#include <iostream>
 
 #include <queue>
 
@@ -24,6 +22,7 @@ hdl_parser_verilog::hdl_parser_verilog(std::stringstream& stream) : hdl_parser(s
 std::shared_ptr<netlist> hdl_parser_verilog::parse(const std::string& gate_library)
 {
     m_netlist = netlist_factory::create_netlist(gate_library);
+
     if (m_netlist == nullptr)
     {
         log_error("hdl_parser", "netlist_factory returned nullptr");
@@ -46,7 +45,7 @@ std::shared_ptr<netlist> hdl_parser_verilog::parse(const std::string& gate_libra
     }
     catch (token_stream::token_stream_exception& e)
     {
-        if (e.line_number != -1)
+        if (e.line_number != (u32)-1)
         {
             log_error("hdl_parser", "{} near line {}.", e.message, e.line_number);
         }
@@ -163,7 +162,7 @@ bool hdl_parser_verilog::tokenize()
         line_number++;
         this->remove_comments(line, multi_line_comment, multi_line_property);
 
-        for (char c : core_utils::trim(line))
+        for (char c : line)
         {
             if (c == '\\')
             {
@@ -174,6 +173,7 @@ bool hdl_parser_verilog::tokenize()
             {
                 escaped = false;
             }
+
             if (delimiters.find(c) == std::string::npos || escaped)
             {
                 current_token += c;
@@ -213,16 +213,8 @@ bool hdl_parser_verilog::parse_tokens()
 
     while (m_token_stream.remaining() > 0)
     {
-        if (m_token_stream.peek() == "module")
+        if (!parse_entity_definiton())
         {
-            if (!parse_entity_definiton())
-            {
-                return false;
-            }
-        }
-        else
-        {
-            log_error("hdl_parser", "unexpected token '{}' in global scope in line {}: Expected 'module'.", m_token_stream.peek().string, m_token_stream.peek().number);
             return false;
         }
     }
@@ -239,29 +231,22 @@ bool hdl_parser_verilog::parse_entity_definiton()
 {
     entity e;
     e.line_number = m_token_stream.peek().number;
-    m_token_stream.consume("module");
+    m_token_stream.consume("module", true);
     e.name = m_token_stream.consume();
 
     if (m_token_stream.peek() == "#(")
     {
         // TODO generics
-        m_token_stream.consume_until(")");
-        m_token_stream.consume(")");
+        m_token_stream.consume_until(")", token_stream::END_OF_STREAM, true, true);
+        m_token_stream.consume(")", true);
     }
-    else if (m_token_stream.peek() == "(")
-    {
-        if (!parse_port_list(e))
-        {
-            return false;
-        }
 
-        m_token_stream.consume(";");
-    }
-    else
+    if (!parse_port_list(e))
     {
-        log_error("hdl_parser", "unexpected token '{}' in entity defintion in line {}: Expected ports or generics.", m_token_stream.peek().string, m_token_stream.peek().number);
         return false;
     }
+
+    m_token_stream.consume(";", true);
 
     while (m_token_stream.peek() != "endmodule")
     {
@@ -295,11 +280,7 @@ bool hdl_parser_verilog::parse_entity_definiton()
         }
     }
 
-    if (!m_token_stream.consume("endmodule"))
-    {
-        log_error("hdl_parser", "unexpected token '{}' in entity defintion in line {}: Expected 'endmodule'.", m_token_stream.peek().string, m_token_stream.peek().number);
-        return false;
-    }
+    m_token_stream.consume("endmodule", true);
 
     if (!e.name.empty())
     {
@@ -312,16 +293,17 @@ bool hdl_parser_verilog::parse_entity_definiton()
 
 bool hdl_parser_verilog::parse_port_list(entity& e)
 {
-    m_token_stream.consume("(");
-    auto ports = m_token_stream.extract_until(")");
+    m_token_stream.consume("(", true);
+    auto ports = m_token_stream.extract_until(")", token_stream::END_OF_STREAM, true, true);
 
     // TODO support other port declaration style
     while (ports.remaining() > 0)
     {
         e.port_names.insert(ports.consume());
+        ports.consume(",", ports.remaining() > 0);
     }
 
-    m_token_stream.consume(")");
+    m_token_stream.consume(")", true);
 
     return true;
 }
@@ -329,13 +311,9 @@ bool hdl_parser_verilog::parse_port_list(entity& e)
 bool hdl_parser_verilog::parse_port_definition(entity& e)
 {
     auto direction = m_token_stream.consume();
-    auto port_str  = m_token_stream.extract_until(";");
+    auto port_str  = m_token_stream.extract_until(";", token_stream::END_OF_STREAM, true, true);
 
-    if (!m_token_stream.consume(";"))
-    {
-        log_error("hdl_parser", "unexpected token '{}' in entity defintion in line {}: Expected ';'.", m_token_stream.peek().string, m_token_stream.peek().number);
-        return false;
-    }
+    m_token_stream.consume(";", true);
 
     for (const auto& expanded_port : get_expanded_signals(port_str))
     {
@@ -345,8 +323,11 @@ bool hdl_parser_verilog::parse_port_definition(entity& e)
             return false;
         }
 
-        e.ports_expanded[expanded_port.first] = std::make_pair(direction.string, expanded_port.second);
-        e.expanded_signal_names[expanded_port.first].insert(e.expanded_signal_names[expanded_port.first].end(), expanded_port.second.begin(), expanded_port.second.end());
+        if (e.expanded_signal_names.find(expanded_port.first) == e.expanded_signal_names.end())
+        {
+            e.ports_expanded[expanded_port.first] = std::make_pair(direction.string, expanded_port.second);
+            e.expanded_signal_names[expanded_port.first].insert(e.expanded_signal_names[expanded_port.first].end(), expanded_port.second.begin(), expanded_port.second.end());
+        }
     }
 
     return true;
@@ -354,19 +335,18 @@ bool hdl_parser_verilog::parse_port_definition(entity& e)
 
 bool hdl_parser_verilog::parse_signal_definition(entity& e)
 {
-    m_token_stream.consume("wire");
+    m_token_stream.consume("wire", true);
     auto signal_str = m_token_stream.extract_until(";");
 
-    if (!m_token_stream.consume(";"))
-    {
-        log_error("hdl_parser", "unexpected token '{}' in entity defintion in line {}: Expected ';'.", m_token_stream.peek().string, m_token_stream.peek().number);
-        return false;
-    }
+    m_token_stream.consume(";", true);
 
     for (const auto& expanded_signal : get_expanded_signals(signal_str))
     {
-        e.signals_expanded.insert(e.signals_expanded.end(), expanded_signal.second.begin(), expanded_signal.second.end());
-        e.expanded_signal_names[expanded_signal.first].insert(e.expanded_signal_names[expanded_signal.first].end(), expanded_signal.second.begin(), expanded_signal.second.end());
+        if (e.expanded_signal_names.find(expanded_signal.first) == e.expanded_signal_names.end())
+        {
+            e.signals_expanded.insert(e.signals_expanded.end(), expanded_signal.second.begin(), expanded_signal.second.end());
+            e.expanded_signal_names[expanded_signal.first].insert(e.expanded_signal_names[expanded_signal.first].end(), expanded_signal.second.begin(), expanded_signal.second.end());
+        }
     }
 
     return true;
@@ -374,15 +354,15 @@ bool hdl_parser_verilog::parse_signal_definition(entity& e)
 
 bool hdl_parser_verilog::parse_assign(entity& e)
 {
-    std::map<std::string, std::string> direct_assignment;
+    std::unordered_map<std::string, std::string> direct_assignment;
 
     auto assign_line = m_token_stream.peek().number;
 
-    m_token_stream.consume("assign");
-    auto left_str = m_token_stream.extract_until("=");
-    m_token_stream.consume("=");
-    auto right_str = m_token_stream.extract_until(";");
-    m_token_stream.consume(";");
+    m_token_stream.consume("assign", true);
+    auto left_str = m_token_stream.extract_until("=", token_stream::END_OF_STREAM, true, true);
+    m_token_stream.consume("=", true);
+    auto right_str = m_token_stream.extract_until(";", token_stream::END_OF_STREAM, true, true);
+    m_token_stream.consume(";", true);
 
     auto left_parts  = get_assignment_signals(left_str, e);
     auto right_parts = get_assignment_signals(right_str, e);
@@ -418,78 +398,53 @@ bool hdl_parser_verilog::parse_instance(entity& e)
 
     if (m_token_stream.consume("#("))
     {
-        auto generic_str = m_token_stream.extract_until(")");
+        auto generic_str = m_token_stream.extract_until(")", token_stream::END_OF_STREAM, true, true);
 
         while (generic_str.remaining() > 0)
         {
-            if (!generic_str.consume("."))
-            {
-                log_error("hdl_parser", "unexpected token '{}' in entity defintion in line {}: Expected '.'.", generic_str.peek().string, generic_str.peek().number);
-                return false;
-            }
+            generic_str.consume(".", true);
 
-            auto generic_lhs = generic_str.extract_until("(");
+            auto generic_lhs = generic_str.extract_until("(", token_stream::END_OF_STREAM, true, true);
 
-            generic_str.consume("(");
+            generic_str.consume("(", true);
 
-            auto generic_rhs = generic_str.extract_until(")");
+            auto generic_rhs = generic_str.extract_until(")", token_stream::END_OF_STREAM, true, true);
 
-            generic_str.consume(")");
+            generic_str.consume(")", true);
 
             inst.generic_streams.emplace_back(generic_lhs, generic_rhs);
 
-            generic_str.consume(",");
+            generic_str.consume(",", generic_str.remaining() > 0);
         }
 
-        if (!m_token_stream.consume(")"))
-        {
-            log_error("hdl_parser", "unexpected token '{}' in entity defintion in line {}: Expected ')'.", m_token_stream.peek().string, m_token_stream.peek().number);
-            return false;
-        }
+        m_token_stream.consume(")", true);
     }
 
     inst.name = m_token_stream.consume();
 
-    if (!m_token_stream.consume("("))
-    {
-        log_error("hdl_parser", "unexpected token '{}' in entity defintion in line {}: Expected '('.", m_token_stream.peek().string, m_token_stream.peek().number);
-        return false;
-    }
+    m_token_stream.consume("(", true);
 
-    auto port_str = m_token_stream.extract_until(")");
+    auto port_str = m_token_stream.extract_until(")", token_stream::END_OF_STREAM, true, true);
 
     while (port_str.remaining() > 0)
     {
-        if (!port_str.consume("."))
-        {
-            log_error("hdl_parser", "unexpected token '{}' in entity defintion in line {}: Expected '.'.", port_str.peek().string, port_str.peek().number);
-            return false;
-        }
+        port_str.consume(".", true);
 
-        auto generic_lhs = port_str.extract_until("(");
+        auto generic_lhs = port_str.extract_until("(", token_stream::END_OF_STREAM, true, true);
 
-        port_str.consume("(");
+        port_str.consume("(", true);
 
-        auto generic_rhs = port_str.extract_until(")");
+        auto generic_rhs = port_str.extract_until(")", token_stream::END_OF_STREAM, true, true);
 
-        port_str.consume(")");
+        port_str.consume(")", true);
 
         inst.port_streams.emplace_back(generic_lhs, generic_rhs);
 
-        port_str.consume(",");
+        port_str.consume(",", port_str.remaining() > 0);
     }
 
-    if (!m_token_stream.consume(")"))
-    {
-        log_error("hdl_parser", "unexpected token '{}' in entity defintion in line {}: Expected ')'.", m_token_stream.peek().string, m_token_stream.peek().number);
-        return false;
-    }
-
-    if (!m_token_stream.consume(";"))
-    {
-        log_error("hdl_parser", "unexpected token '{}' in entity defintion in line {}: Expected ';'.", m_token_stream.peek().string, m_token_stream.peek().number);
-        return false;
-    }
+    m_token_stream.consume(")", true);
+    m_token_stream.consume(";", true);
 
     e.instances.push_back(inst);
 
@@ -511,7 +466,7 @@ bool hdl_parser_verilog::connect_instances()
 
             for (auto& port : inst.port_streams)
             {
-                std::map<std::string, std::string> port_assignments;
+                std::unordered_map<std::string, std::string> port_assignments;
 
                 auto port_line = port.first.peek().number;
 
@@ -603,10 +558,10 @@ bool hdl_parser_verilog::build_netlist(const std::string& top_module)
 
     // for the top module, generate global i/o signals for all ports
 
-    std::map<std::string, std::function<bool(std::shared_ptr<net> const)>> port_dir_function = {{"input", [](std::shared_ptr<net> const net) { return net->mark_global_input_net(); }},
-                                                                                                {"output", [](std::shared_ptr<net> const net) { return net->mark_global_output_net(); }}};
+    std::unordered_map<std::string, std::function<bool(std::shared_ptr<net> const)>> port_dir_function = {{"input", [](std::shared_ptr<net> const net) { return net->mark_global_input_net(); }},
+                                                                                                          {"output", [](std::shared_ptr<net> const net) { return net->mark_global_output_net(); }}};
 
-    std::map<std::string, std::string> top_assignments;
+    std::unordered_map<std::string, std::string> top_assignments;
 
     for (const auto& expanded_port : top_entity.ports_expanded)
     {
@@ -730,10 +685,10 @@ bool hdl_parser_verilog::build_netlist(const std::string& top_module)
     return true;
 }
 
-std::shared_ptr<module> hdl_parser_verilog::instantiate(const entity& e, std::shared_ptr<module> parent, std::map<std::string, std::string> parent_module_assignments)
+std::shared_ptr<module> hdl_parser_verilog::instantiate(const entity& e, std::shared_ptr<module> parent, std::unordered_map<std::string, std::string> parent_module_assignments)
 {
     // remember assigned aliases so they are not lost when recursively going deeper
-    std::map<std::string, std::string> aliases;
+    std::unordered_map<std::string, std::string> aliases;
 
     aliases[e.name] = get_unique_alias(e.name);
 
@@ -798,6 +753,7 @@ std::shared_ptr<module> hdl_parser_verilog::instantiate(const entity& e, std::sh
         {
             a = aliases.at(a);
         }
+
         if (parent_module_assignments.find(b) != parent_module_assignments.end())
         {
             b = parent_module_assignments.at(b);
@@ -806,6 +762,7 @@ std::shared_ptr<module> hdl_parser_verilog::instantiate(const entity& e, std::sh
         {
             b = aliases.at(b);
         }
+
         m_nets_to_merge[b].push_back(a);
     }
 
@@ -820,7 +777,8 @@ std::shared_ptr<module> hdl_parser_verilog::instantiate(const entity& e, std::sh
         data_container* container;
 
         // assign actual signal names to ports
-        std::map<std::string, std::string> instance_assignments;
+        std::unordered_map<std::string, std::string> instance_assignments;
+
         for (const auto& [pin, s] : inst.ports)
         {
             auto it2 = parent_module_assignments.find(s);
@@ -1137,9 +1095,9 @@ void hdl_parser_verilog::expand_signal(std::vector<std::string>& expanded_signal
     }
 }
 
-std::map<std::string, std::vector<std::string>> hdl_parser_verilog::get_expanded_signals(token_stream& signal_str)
+std::unordered_map<std::string, std::vector<std::string>> hdl_parser_verilog::get_expanded_signals(token_stream& signal_str)
 {
-    std::map<std::string, std::vector<std::string>> result;
+    std::unordered_map<std::string, std::vector<std::string>> result;
     std::vector<std::pair<std::string, std::vector<std::pair<i32, i32>>>> signals;
 
     std::vector<std::pair<i32, i32>> bounds;
@@ -1148,22 +1106,14 @@ std::map<std::string, std::vector<std::string>> hdl_parser_verilog::get_expanded
     // extract bounds
     while (signal_str.peek() == "[")
     {
-        signal_str.consume("[");
+        signal_str.consume("[", true);
         auto lower = signal_str.consume();
 
-        if (!signal_str.consume(":"))
-        {
-            log_error("hdl_parser", "unexpected token '{}' in entity defintion in line {}: Expected ':'.", signal_str.peek().string, signal_str.peek().number);
-            return {};
-        }
+        signal_str.consume(":", true);
 
         auto upper = signal_str.consume();
 
-        if (!signal_str.consume("]"))
-        {
-            log_error("hdl_parser", "unexpected token '{}' in entity defintion in line {}: Expected ']'.", signal_str.peek().string, signal_str.peek().number);
-            return {};
-        }
+        signal_str.consume("]", true);
 
         try
         {
@@ -1176,14 +1126,14 @@ std::map<std::string, std::vector<std::string>> hdl_parser_verilog::get_expanded
         }
         catch (std::out_of_range& e)
         {
-            log_error("hdl_parser", "bounds our of range in entity defintion in line {}: [{}:{}].", lower.string, upper.string, signal_str.peek().number);
+            log_error("hdl_parser", "bounds out of range in entity defintion in line {}: [{}:{}].", lower.string, upper.string, signal_str.peek().number);
             return {};
         }
     }
 
     // extract names
     names.emplace_back(signal_str.consume());
-    while (signal_str.consume(","))
+    while (signal_str.consume(",", false))
     {
         names.emplace_back(signal_str.consume());
     }
@@ -1223,21 +1173,17 @@ std::vector<std::string> hdl_parser_verilog::get_assignment_signals(token_stream
     // (6) {(1) - (5), (1) - (5), ...}
     if (signal_str.peek() == "{")
     {
-        signal_str.consume("{");
+        signal_str.consume("{", true);
 
-        auto assignment_list = signal_str.extract_until("}");
+        auto assignment_list = signal_str.extract_until("}", token_stream::END_OF_STREAM, true, true);
 
         while (assignment_list.remaining() > 0)
         {
-            parts.push_back(assignment_list.extract_until(","));
-            assignment_list.consume(",");
+            parts.push_back(assignment_list.extract_until(",", token_stream::END_OF_STREAM, true, false));
+            assignment_list.consume(",", false);
         }
 
-        if (!signal_str.consume("}"))
-        {
-            log_error("hdl_parser", "unexpected token '{}' in entity defintion in line {}: Expected '{}'.", m_token_stream.peek().string, m_token_stream.peek().number, "}");
-            return {};
-        }
+        signal_str.consume("}", true);
     }
     else
     {
@@ -1269,7 +1215,7 @@ std::vector<std::string> hdl_parser_verilog::get_assignment_signals(token_stream
         if (s.consume("["))
         {
             //(5) NAME[BEGIN_INDEX1:END_INDEX1][BEGIN_INDEX2:END_INDEX2]...
-            if (s.find_next(":", s.position() + 2) != token_stream::END_OF_STREAM)
+            if (s.find_next(":", s.position() + 2) != s.position() + 2)
             {
                 std::vector<std::pair<i32, i32>> bounds;
                 std::vector<std::string> expanded_signal;
@@ -1277,16 +1223,13 @@ std::vector<std::string> hdl_parser_verilog::get_assignment_signals(token_stream
                 do
                 {
                     i32 left_bound = std::stoi(s.consume());
-                    s.consume(":");
+                    s.consume(":", true);
                     i32 right_bound = std::stoi(s.consume());
 
                     bounds.emplace_back(left_bound, right_bound);
 
-                    if (!s.consume("]"))
-                    {
-                        log_error("hdl_parser", "unexpected token '{}' in entity defintion in line {}: Expected ']'.", m_token_stream.peek().string, m_token_stream.peek().number);
-                    }
-                } while (s.consume("["));
+                    s.consume("]", true);
+                } while (s.consume("[", false));
 
                 expand_signal(expanded_signal, signal_name, bounds, 0);
                 result.insert(result.end(), expanded_signal.begin(), expanded_signal.end());
@@ -1298,10 +1241,7 @@ std::vector<std::string> hdl_parser_verilog::get_assignment_signals(token_stream
                 {
                     signal_name += "(" + s.consume().string + ")";
 
-                    if (!s.consume("]"))
-                    {
-                        log_error("hdl_parser", "unexpected token '{}' in entity defintion in line {}: Expected ']'.", m_token_stream.peek().string, m_token_stream.peek().number);
-                    }
+                    s.consume("]", true);
                 } while (s.consume("["));
 
                 result.push_back(signal_name);

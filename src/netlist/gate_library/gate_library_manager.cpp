@@ -3,7 +3,7 @@
 #include "core/log.h"
 #include "core/utils.h"
 #include "netlist/gate_library/gate_library.h"
-#include "netlist/gate_library/gate_library_parser_liberty.h"
+#include "netlist/gate_library/gate_library_parser/gate_library_parser_liberty.h"
 
 #include <fstream>
 #include <iostream>
@@ -29,7 +29,8 @@ namespace gate_library_manager
 
                 buffer << file.rdbuf();
 
-                lib = gate_library_parser_liberty::parse(buffer);
+                gate_library_parser_liberty parser(buffer);
+                lib = parser.parse();
 
                 file.close();
 
