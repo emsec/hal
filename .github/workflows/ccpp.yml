@@ -2,12 +2,9 @@ name: C/C++ CI
 
 on:
   push:
-  pull_request:
   create:
     tags:
       - v*
-  release:
-    types: [published]
 
 jobs:
   build-test:
