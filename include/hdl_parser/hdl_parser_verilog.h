@@ -25,12 +25,15 @@
 #ifndef __HAL_HDL_PARSER_VERILOG_H__
 #define __HAL_HDL_PARSER_VERILOG_H__
 
-#include "core/token_stream.h"
 #include "def.h"
+
+#include "core/token_stream.h"
+
+#include "netlist/module.h"
+#include "netlist/net.h"
+
 #include "hdl_parser/hdl_parser.h"
 
-#include <netlist/module.h>
-#include <netlist/net.h>
 #include <unordered_map>
 #include <unordered_set>
 #include <utility>

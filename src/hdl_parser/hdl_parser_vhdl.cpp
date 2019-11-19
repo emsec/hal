@@ -210,7 +210,7 @@ bool hdl_parser_vhdl::tokenize()
                 {
                     tmp_tokens.at(tmp_tokens.size() - 1) = "=>";
                 }
-                else if (c != ' ')
+                else if (!std::isspace(c))
                 {
                     tmp_tokens.emplace_back(line_number, std::string(1, c), false);
                 }
@@ -229,6 +229,7 @@ bool hdl_parser_vhdl::tokenize()
 bool hdl_parser_vhdl::parse_tokens()
 {
     std::string last_entity;
+
     while (m_token_stream.remaining() > 0)
     {
         if (m_token_stream.peek() == "library" || m_token_stream.peek() == "use")
@@ -258,6 +259,7 @@ bool hdl_parser_vhdl::parse_tokens()
             return false;
         }
     }
+
     return true;
 }
 

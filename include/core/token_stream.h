@@ -22,18 +22,18 @@
 //  SOFTWARE.
 
 #include "pragma_once.h"
-#ifndef __HAL_TOKE_STREAM_H__
-#define __HAL_TOKE_STREAM_H__
+#ifndef __HAL_TOKEN_STREAM_H__
+#define __HAL_TOKEN_STREAM_H__
 
 #include "def.h"
 
 #include <map>
 
 /**
- * @ingroup hdl_parsers
+ * @ingroup core
  */
 
-struct HDL_PARSER_API token
+struct CORE_API token
 {
     /**
      * Base token class that holds a string and a line number.
@@ -94,7 +94,7 @@ struct HDL_PARSER_API token
     bool operator!=(const std::string& s) const;
 };
 
-class HDL_PARSER_API token_stream
+class NETLIST_API token_stream
 {
 public:
     struct token_stream_exception
@@ -297,4 +297,4 @@ private:
     u32 m_pos;
 };
 
-#endif /* __HAL_HDL_PARSER_VHDL_H__ */
+#endif /* __HAL_TOKEN_STREAM_H__ */

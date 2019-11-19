@@ -28,8 +28,8 @@
 
 #include "netlist/boolean_function.h"
 
-#include <map>
 #include <string>
+#include <unordered_map>
 
 /**
  * Gate type class containing information about the internals of a specific gate type.
@@ -45,6 +45,16 @@ public:
         lut,
         ff,
         latch
+    };
+
+    enum class special_behavior
+    {
+        U,    // not set
+        L,
+        H,
+        N,
+        T,
+        X
     };
 
     /**
@@ -152,7 +162,7 @@ public:
      *
      * @returns A map of pin names to boolean functions.
      */
-    std::map<std::string, boolean_function> get_boolean_functions() const;
+    std::unordered_map<std::string, boolean_function> get_boolean_functions() const;
 
 protected:
     base_type m_base_type;
@@ -163,7 +173,7 @@ private:
     std::vector<std::string> m_input_pins;
     std::vector<std::string> m_output_pins;
 
-    std::map<std::string, boolean_function> m_functions;
+    std::unordered_map<std::string, boolean_function> m_functions;
 
     gate_type(const gate_type&) = delete;               // disable copy-constructor
     gate_type& operator=(const gate_type&) = delete;    // disable copy-assignment

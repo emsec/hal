@@ -46,14 +46,20 @@ def process(file):
             insert_point = len(lines)
             clock_pin = "null"
             for pin in inputs[typ]:
-                lines.append("pin({})".format(pin) + " {")
+                if("(" in pin):
+                    lines.append("pin(\"{}\")".format(pin) + " {")
+                else:
+                    lines.append("pin({})".format(pin) + " {")
                 lines.append("direction: input;")
                 if pin in ["C", "CK", "CKB", "CLK"]:
                     clock_pin = pin
                     lines.append("clock: true;")
                 lines.append("}")
             for pin in outputs[typ]:
-                lines.append("pin({})".format(pin) + " {")
+                if("(" in pin):
+                    lines.append("pin(\"{}\")".format(pin) + " {")
+                else:
+                    lines.append("pin({})".format(pin) + " {")
                 lines.append("direction: output;")
                 if "N" in pin:
                     lines.append("function: \"IQN\";")
@@ -77,18 +83,30 @@ def process(file):
             lines.append("bit_order         : \"ascending\";")
             lines.append("}")
             for pin in inputs[typ]:
-                lines.append("pin({})".format(pin) + " { direction: input; }")
+                if("(" in pin):
+                    lines.append("pin(\"{}\”)".format(pin) + " { direction: input; }")
+                else:
+                    lines.append("pin({})".format(pin) + " { direction: input; }")
             for pin in outputs[typ]:
-                lines.append("pin({})".format(pin) + " {")
+                 if("(" in pin):
+                    lines.append("pin(\"{}\")".format(pin) + " {")
+                else:
+                    lines.append("pin({})".format(pin) + " {")
                 lines.append("direction: output;")
                 lines.append("function: \"lut_out\";")
                 lines.append("}")
 
         else:
             for pin in inputs[typ]:
-                lines.append("pin({})".format(pin) + " { direction: input; }")
+                if("(" in pin):
+                    lines.append("pin(\"{}\”)".format(pin) + " { direction: input; }")
+                else:
+                    lines.append("pin({})".format(pin) + " { direction: input; }")
             for pin in outputs[typ]:
-                lines.append("pin({})".format(pin) + " {")
+                if("(" in pin):
+                    lines.append("pin(\"{}\")".format(pin) + " {")
+                else:
+                    lines.append("pin({})".format(pin) + " {")
                 lines.append("direction: output;")
                 lines.append("function: \"\";")
                 lines.append("}")

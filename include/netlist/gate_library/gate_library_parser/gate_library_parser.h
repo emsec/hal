@@ -22,37 +22,43 @@
 //  SOFTWARE.
 
 #include "pragma_once.h"
-
-#ifndef __HAL_GATE_LIBRARY_PARSER_LIBERTY_H
-#define __HAL_GATE_LIBRARY_PARSER_LIBERTY_H
+#ifndef __HAL_GATE_LIBRARY_PARSER_H__
+#define __HAL_GATE_LIBRARY_PARSER_H__
 
 #include "def.h"
+#include "netlist/gate_library/gate_library.h"
 
-#include "netlist/boolean_function.h"
+#include <sstream>
 
-class bdd;
-class gate_library;
+/* forward declaration*/
+class netlist;
 
-namespace gate_library_parser_liberty
+/**
+ * @ingroup netlist
+ */
+class NETLIST_API gate_library_parser
 {
+public:
     /**
-     * Parses a gate library from the liberty file format.
-     * In order to also support lookup tables (LUTs) the following extension is allowed:
-     * 
-     * lut(<function name>) {
-     *     data_category = <category>;
-     *     data_key = <key>;
-     *     direction = <"ascending" or "descending">;
-     * }
-     * 
-     * <category> and <key> refer to the location where the LUT configuration string is stored, for example "generic" and "init".
-     * direction describes whether the least significant bit of the configuration is the output for inputs 000... (ascending) or 111... (descending).
-     * 
-     * @param[in] ss - The string stream containing the liberty data.
-     * @returns - The parsed gate library.
+     * @param[in] stream - The string stream filled with gate library definition.
      */
-    std::shared_ptr<gate_library> parse(std::stringstream& ss);
+    explicit gate_library_parser(std::stringstream& stream);
 
-}    // namespace gate_library_parser_liberty
+    virtual ~gate_library_parser() = default;
 
-#endif    //__HAL_GATE_LIBRARY_PARSER_LIBERTY_H
+    /**
+     * Parses the gate library definition file.
+     *
+     * @returns The gate library or a nullptr on error.
+     */
+    virtual std::shared_ptr<gate_library> parse() = 0;
+
+protected:
+    // stores the gate library
+    std::shared_ptr<gate_library> m_gate_lib;
+
+    // stores the input stream to the file
+    std::stringstream& m_fs;
+};
+
+#endif /* __HAL_GATE_LIBRARY_PARSER_H__ */

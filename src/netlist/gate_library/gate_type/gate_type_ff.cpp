@@ -1,8 +1,9 @@
-#include "netlist/gate_library/gate_type_ff.h"
+#include "netlist/gate_library/gate_type/gate_type_ff.h"
 
 gate_type_ff::gate_type_ff(const std::string& name) : gate_type(name)
 {
     m_base_type = base_type::ff;
+    m_ascending = true;
 }
 
 bool gate_type_ff::doCompare(const gate_type& other) const
@@ -18,6 +19,9 @@ bool gate_type_ff::doCompare(const gate_type& other) const
         equal &= m_reset_f == gt->get_reset_function();
         equal &= m_inverted_output_pins == gt->get_inverted_output_pins();
         equal &= m_special_behavior == gt->get_special_behavior();
+        equal = m_data_category == gt->get_data_category();
+        equal &= m_data_identifier == gt->get_data_identifier();
+        equal &= m_ascending == gt->is_ascending_order();
     }
 
     return equal;
@@ -90,7 +94,37 @@ std::set<std::string> gate_type_ff::get_inverted_output_pins() const
     return m_inverted_output_pins;
 }
 
-std::pair<gate_type_ff::special_behavior, gate_type_ff::special_behavior> gate_type_ff::get_special_behavior() const
+std::pair<gate_type::special_behavior, gate_type::special_behavior> gate_type_ff::get_special_behavior() const
 {
     return m_special_behavior;
+}
+
+void gate_type_ff::set_data_category(const std::string& category)
+{
+    m_data_category = category;
+}
+
+void gate_type_ff::set_data_identifier(const std::string& identifier)
+{
+    m_data_identifier = identifier;
+}
+
+void gate_type_ff::set_data_ascending_order(bool ascending)
+{
+    m_ascending = ascending;
+}
+
+std::string gate_type_ff::get_data_category() const
+{
+    return m_data_category;
+}
+
+std::string gate_type_ff::get_data_identifier() const
+{
+    return m_data_identifier;
+}
+
+bool gate_type_ff::is_ascending_order() const
+{
+    return m_ascending;
 }

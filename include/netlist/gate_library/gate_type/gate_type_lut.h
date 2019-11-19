@@ -27,7 +27,7 @@
 #define __HAL_GATE_TYPE_LUT_H
 
 #include "netlist/boolean_function.h"
-#include "netlist/gate_library/gate_type.h"
+#include "netlist/gate_library/gate_type/gate_type.h"
 
 #include <map>
 #include <string>

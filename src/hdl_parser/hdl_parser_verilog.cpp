@@ -22,6 +22,7 @@ hdl_parser_verilog::hdl_parser_verilog(std::stringstream& stream) : hdl_parser(s
 std::shared_ptr<netlist> hdl_parser_verilog::parse(const std::string& gate_library)
 {
     m_netlist = netlist_factory::create_netlist(gate_library);
+
     if (m_netlist == nullptr)
     {
         log_error("hdl_parser", "netlist_factory returned nullptr");
@@ -212,16 +213,8 @@ bool hdl_parser_verilog::parse_tokens()
 
     while (m_token_stream.remaining() > 0)
     {
-        if (m_token_stream.peek() == "module")
+        if (!parse_entity_definiton())
         {
-            if (!parse_entity_definiton())
-            {
-                return false;
-            }
-        }
-        else
-        {
-            log_error("hdl_parser", "unexpected token '{}' in global scope in line {}: Expected 'module'.", m_token_stream.peek().string, m_token_stream.peek().number);
             return false;
         }
     }

@@ -25,13 +25,16 @@
 #ifndef __HAL_HDL_PARSER_VHDL_H__
 #define __HAL_HDL_PARSER_VHDL_H__
 
-#include "core/token_stream.h"
 #include "def.h"
+
+#include "core/token_stream.h"
+
+#include "netlist/module.h"
+#include "netlist/net.h"
+
 #include "hdl_parser/hdl_parser.h"
 
 #include <map>
-#include <netlist/module.h>
-#include <netlist/net.h>
 #include <utility>
 
 /**

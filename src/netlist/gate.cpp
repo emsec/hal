@@ -1,6 +1,6 @@
 #include "netlist/gate.h"
 
-#include "netlist/gate_library/gate_type_lut.h"
+#include "netlist/gate_library/gate_type/gate_type_lut.h"
 #include "netlist/module.h"
 #include "netlist/net.h"
 #include "netlist/netlist.h"
@@ -123,9 +123,9 @@ boolean_function gate::get_boolean_function(const std::string& name) const
     return boolean_function::X;
 }
 
-std::map<std::string, boolean_function> gate::get_boolean_functions(bool only_custom_functions) const
+std::unordered_map<std::string, boolean_function> gate::get_boolean_functions(bool only_custom_functions) const
 {
-    std::map<std::string, boolean_function> res;
+    std::unordered_map<std::string, boolean_function> res;
 
     if (!only_custom_functions)
     {

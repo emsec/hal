@@ -482,111 +482,111 @@ library (XILINX_UNISIM) {
 
 
     cell(DSP48) {
-        pin(A(0)) { direction: input; }
-        pin(A(1)) { direction: input; }
-        pin(A(10)) { direction: input; }
-        pin(A(11)) { direction: input; }
-        pin(A(12)) { direction: input; }
-        pin(A(13)) { direction: input; }
-        pin(A(14)) { direction: input; }
-        pin(A(15)) { direction: input; }
-        pin(A(16)) { direction: input; }
-        pin(A(17)) { direction: input; }
-        pin(A(2)) { direction: input; }
-        pin(A(3)) { direction: input; }
-        pin(A(4)) { direction: input; }
-        pin(A(5)) { direction: input; }
-        pin(A(6)) { direction: input; }
-        pin(A(7)) { direction: input; }
-        pin(A(8)) { direction: input; }
-        pin(A(9)) { direction: input; }
-        pin(B(0)) { direction: input; }
-        pin(B(1)) { direction: input; }
-        pin(B(10)) { direction: input; }
-        pin(B(11)) { direction: input; }
-        pin(B(12)) { direction: input; }
-        pin(B(13)) { direction: input; }
-        pin(B(14)) { direction: input; }
-        pin(B(15)) { direction: input; }
-        pin(B(16)) { direction: input; }
-        pin(B(17)) { direction: input; }
-        pin(B(2)) { direction: input; }
-        pin(B(3)) { direction: input; }
-        pin(B(4)) { direction: input; }
-        pin(B(5)) { direction: input; }
-        pin(B(6)) { direction: input; }
-        pin(B(7)) { direction: input; }
-        pin(B(8)) { direction: input; }
-        pin(B(9)) { direction: input; }
-        pin(BCIN(0)) { direction: input; }
-        pin(BCIN(1)) { direction: input; }
-        pin(BCIN(10)) { direction: input; }
-        pin(BCIN(11)) { direction: input; }
-        pin(BCIN(12)) { direction: input; }
-        pin(BCIN(13)) { direction: input; }
-        pin(BCIN(14)) { direction: input; }
-        pin(BCIN(15)) { direction: input; }
-        pin(BCIN(16)) { direction: input; }
-        pin(BCIN(17)) { direction: input; }
-        pin(BCIN(2)) { direction: input; }
-        pin(BCIN(3)) { direction: input; }
-        pin(BCIN(4)) { direction: input; }
-        pin(BCIN(5)) { direction: input; }
-        pin(BCIN(6)) { direction: input; }
-        pin(BCIN(7)) { direction: input; }
-        pin(BCIN(8)) { direction: input; }
-        pin(BCIN(9)) { direction: input; }
-        pin(C(0)) { direction: input; }
-        pin(C(1)) { direction: input; }
-        pin(C(10)) { direction: input; }
-        pin(C(11)) { direction: input; }
-        pin(C(12)) { direction: input; }
-        pin(C(13)) { direction: input; }
-        pin(C(14)) { direction: input; }
-        pin(C(15)) { direction: input; }
-        pin(C(16)) { direction: input; }
-        pin(C(17)) { direction: input; }
-        pin(C(18)) { direction: input; }
-        pin(C(19)) { direction: input; }
-        pin(C(2)) { direction: input; }
-        pin(C(20)) { direction: input; }
-        pin(C(21)) { direction: input; }
-        pin(C(22)) { direction: input; }
-        pin(C(23)) { direction: input; }
-        pin(C(24)) { direction: input; }
-        pin(C(25)) { direction: input; }
-        pin(C(26)) { direction: input; }
-        pin(C(27)) { direction: input; }
-        pin(C(28)) { direction: input; }
-        pin(C(29)) { direction: input; }
-        pin(C(3)) { direction: input; }
-        pin(C(30)) { direction: input; }
-        pin(C(31)) { direction: input; }
-        pin(C(32)) { direction: input; }
-        pin(C(33)) { direction: input; }
-        pin(C(34)) { direction: input; }
-        pin(C(35)) { direction: input; }
-        pin(C(36)) { direction: input; }
-        pin(C(37)) { direction: input; }
-        pin(C(38)) { direction: input; }
-        pin(C(39)) { direction: input; }
-        pin(C(4)) { direction: input; }
-        pin(C(40)) { direction: input; }
-        pin(C(41)) { direction: input; }
-        pin(C(42)) { direction: input; }
-        pin(C(43)) { direction: input; }
-        pin(C(44)) { direction: input; }
-        pin(C(45)) { direction: input; }
-        pin(C(46)) { direction: input; }
-        pin(C(47)) { direction: input; }
-        pin(C(5)) { direction: input; }
-        pin(C(6)) { direction: input; }
-        pin(C(7)) { direction: input; }
-        pin(C(8)) { direction: input; }
-        pin(C(9)) { direction: input; }
+        pin("A(0)") { direction: input; }
+        pin("A(1)") { direction: input; }
+        pin("A(10)") { direction: input; }
+        pin("A(11)") { direction: input; }
+        pin("A(12)") { direction: input; }
+        pin("A(13)") { direction: input; }
+        pin("A(14)") { direction: input; }
+        pin("A(15)") { direction: input; }
+        pin("A(16)") { direction: input; }
+        pin("A(17)") { direction: input; }
+        pin("A(2)") { direction: input; }
+        pin("A(3)") { direction: input; }
+        pin("A(4)") { direction: input; }
+        pin("A(5)") { direction: input; }
+        pin("A(6)") { direction: input; }
+        pin("A(7)") { direction: input; }
+        pin("A(8)") { direction: input; }
+        pin("A(9)") { direction: input; }
+        pin("B(0)") { direction: input; }
+        pin("B(1)") { direction: input; }
+        pin("B(10)") { direction: input; }
+        pin("B(11)") { direction: input; }
+        pin("B(12)") { direction: input; }
+        pin("B(13)") { direction: input; }
+        pin("B(14)") { direction: input; }
+        pin("B(15)") { direction: input; }
+        pin("B(16)") { direction: input; }
+        pin("B(17)") { direction: input; }
+        pin("B(2)") { direction: input; }
+        pin("B(3)") { direction: input; }
+        pin("B(4)") { direction: input; }
+        pin("B(5)") { direction: input; }
+        pin("B(6)") { direction: input; }
+        pin("B(7)") { direction: input; }
+        pin("B(8)") { direction: input; }
+        pin("B(9)") { direction: input; }
+        pin("BCIN(0)") { direction: input; }
+        pin("BCIN(1)") { direction: input; }
+        pin("BCIN(10)") { direction: input; }
+        pin("BCIN(11)") { direction: input; }
+        pin("BCIN(12)") { direction: input; }
+        pin("BCIN(13)") { direction: input; }
+        pin("BCIN(14)") { direction: input; }
+        pin("BCIN(15)") { direction: input; }
+        pin("BCIN(16)") { direction: input; }
+        pin("BCIN(17)") { direction: input; }
+        pin("BCIN(2)") { direction: input; }
+        pin("BCIN(3)") { direction: input; }
+        pin("BCIN(4)") { direction: input; }
+        pin("BCIN(5)") { direction: input; }
+        pin("BCIN(6)") { direction: input; }
+        pin("BCIN(7)") { direction: input; }
+        pin("BCIN(8)") { direction: input; }
+        pin("BCIN(9)") { direction: input; }
+        pin("C(0)") { direction: input; }
+        pin("C(1)") { direction: input; }
+        pin("C(10)") { direction: input; }
+        pin("C(11)") { direction: input; }
+        pin("C(12)") { direction: input; }
+        pin("C(13)") { direction: input; }
+        pin("C(14)") { direction: input; }
+        pin("C(15)") { direction: input; }
+        pin("C(16)") { direction: input; }
+        pin("C(17)") { direction: input; }
+        pin("C(18)") { direction: input; }
+        pin("C(19)") { direction: input; }
+        pin("C(2)") { direction: input; }
+        pin("C(20)") { direction: input; }
+        pin("C(21)") { direction: input; }
+        pin("C(22)") { direction: input; }
+        pin("C(23)") { direction: input; }
+        pin("C(24)") { direction: input; }
+        pin("C(25)") { direction: input; }
+        pin("C(26)") { direction: input; }
+        pin("C(27)") { direction: input; }
+        pin("C(28)") { direction: input; }
+        pin("C(29)") { direction: input; }
+        pin("C(3)") { direction: input; }
+        pin("C(30)") { direction: input; }
+        pin("C(31)") { direction: input; }
+        pin("C(32)") { direction: input; }
+        pin("C(33)") { direction: input; }
+        pin("C(34)") { direction: input; }
+        pin("C(35)") { direction: input; }
+        pin("C(36)") { direction: input; }
+        pin("C(37)") { direction: input; }
+        pin("C(38)") { direction: input; }
+        pin("C(39)") { direction: input; }
+        pin("C(4)") { direction: input; }
+        pin("C(40)") { direction: input; }
+        pin("C(41)") { direction: input; }
+        pin("C(42)") { direction: input; }
+        pin("C(43)") { direction: input; }
+        pin("C(44)") { direction: input; }
+        pin("C(45)") { direction: input; }
+        pin("C(46)") { direction: input; }
+        pin("C(47)") { direction: input; }
+        pin("C(5)") { direction: input; }
+        pin("C(6)") { direction: input; }
+        pin("C(7)") { direction: input; }
+        pin("C(8)") { direction: input; }
+        pin("C(9)") { direction: input; }
         pin(CARRYIN) { direction: input; }
-        pin(CARRYINSEL(0)) { direction: input; }
-        pin(CARRYINSEL(1)) { direction: input; }
+        pin("CARRYINSEL(0)") { direction: input; }
+        pin("CARRYINSEL(1)") { direction: input; }
         pin(CEA) { direction: input; }
         pin(CEB) { direction: input; }
         pin(CEC) { direction: input; }
@@ -596,61 +596,61 @@ library (XILINX_UNISIM) {
         pin(CEM) { direction: input; }
         pin(CEP) { direction: input; }
         pin(CLK) { direction: input; }
-        pin(OPMODE(0)) { direction: input; }
-        pin(OPMODE(1)) { direction: input; }
-        pin(OPMODE(2)) { direction: input; }
-        pin(OPMODE(3)) { direction: input; }
-        pin(OPMODE(4)) { direction: input; }
-        pin(OPMODE(5)) { direction: input; }
-        pin(OPMODE(6)) { direction: input; }
-        pin(PCIN(0)) { direction: input; }
-        pin(PCIN(1)) { direction: input; }
-        pin(PCIN(10)) { direction: input; }
-        pin(PCIN(11)) { direction: input; }
-        pin(PCIN(12)) { direction: input; }
-        pin(PCIN(13)) { direction: input; }
-        pin(PCIN(14)) { direction: input; }
-        pin(PCIN(15)) { direction: input; }
-        pin(PCIN(16)) { direction: input; }
-        pin(PCIN(17)) { direction: input; }
-        pin(PCIN(18)) { direction: input; }
-        pin(PCIN(19)) { direction: input; }
-        pin(PCIN(2)) { direction: input; }
-        pin(PCIN(20)) { direction: input; }
-        pin(PCIN(21)) { direction: input; }
-        pin(PCIN(22)) { direction: input; }
-        pin(PCIN(23)) { direction: input; }
-        pin(PCIN(24)) { direction: input; }
-        pin(PCIN(25)) { direction: input; }
-        pin(PCIN(26)) { direction: input; }
-        pin(PCIN(27)) { direction: input; }
-        pin(PCIN(28)) { direction: input; }
-        pin(PCIN(29)) { direction: input; }
-        pin(PCIN(3)) { direction: input; }
-        pin(PCIN(30)) { direction: input; }
-        pin(PCIN(31)) { direction: input; }
-        pin(PCIN(32)) { direction: input; }
-        pin(PCIN(33)) { direction: input; }
-        pin(PCIN(34)) { direction: input; }
-        pin(PCIN(35)) { direction: input; }
-        pin(PCIN(36)) { direction: input; }
-        pin(PCIN(37)) { direction: input; }
-        pin(PCIN(38)) { direction: input; }
-        pin(PCIN(39)) { direction: input; }
-        pin(PCIN(4)) { direction: input; }
-        pin(PCIN(40)) { direction: input; }
-        pin(PCIN(41)) { direction: input; }
-        pin(PCIN(42)) { direction: input; }
-        pin(PCIN(43)) { direction: input; }
-        pin(PCIN(44)) { direction: input; }
-        pin(PCIN(45)) { direction: input; }
-        pin(PCIN(46)) { direction: input; }
-        pin(PCIN(47)) { direction: input; }
-        pin(PCIN(5)) { direction: input; }
-        pin(PCIN(6)) { direction: input; }
-        pin(PCIN(7)) { direction: input; }
-        pin(PCIN(8)) { direction: input; }
-        pin(PCIN(9)) { direction: input; }
+        pin("OPMODE(0)") { direction: input; }
+        pin("OPMODE(1)") { direction: input; }
+        pin("OPMODE(2)") { direction: input; }
+        pin("OPMODE(3)") { direction: input; }
+        pin("OPMODE(4)") { direction: input; }
+        pin("OPMODE(5)") { direction: input; }
+        pin("OPMODE(6)") { direction: input; }
+        pin("PCIN(0)") { direction: input; }
+        pin("PCIN(1)") { direction: input; }
+        pin("PCIN(10)") { direction: input; }
+        pin("PCIN(11)") { direction: input; }
+        pin("PCIN(12)") { direction: input; }
+        pin("PCIN(13)") { direction: input; }
+        pin("PCIN(14)") { direction: input; }
+        pin("PCIN(15)") { direction: input; }
+        pin("PCIN(16)") { direction: input; }
+        pin("PCIN(17)") { direction: input; }
+        pin("PCIN(18)") { direction: input; }
+        pin("PCIN(19)") { direction: input; }
+        pin("PCIN(2)") { direction: input; }
+        pin("PCIN(20)") { direction: input; }
+        pin("PCIN(21)") { direction: input; }
+        pin("PCIN(22)") { direction: input; }
+        pin("PCIN(23)") { direction: input; }
+        pin("PCIN(24)") { direction: input; }
+        pin("PCIN(25)") { direction: input; }
+        pin("PCIN(26)") { direction: input; }
+        pin("PCIN(27)") { direction: input; }
+        pin("PCIN(28)") { direction: input; }
+        pin("PCIN(29)") { direction: input; }
+        pin("PCIN(3)") { direction: input; }
+        pin("PCIN(30)") { direction: input; }
+        pin("PCIN(31)") { direction: input; }
+        pin("PCIN(32)") { direction: input; }
+        pin("PCIN(33)") { direction: input; }
+        pin("PCIN(34)") { direction: input; }
+        pin("PCIN(35)") { direction: input; }
+        pin("PCIN(36)") { direction: input; }
+        pin("PCIN(37)") { direction: input; }
+        pin("PCIN(38)") { direction: input; }
+        pin("PCIN(39)") { direction: input; }
+        pin("PCIN(4)") { direction: input; }
+        pin("PCIN(40)") { direction: input; }
+        pin("PCIN(41)") { direction: input; }
+        pin("PCIN(42)") { direction: input; }
+        pin("PCIN(43)") { direction: input; }
+        pin("PCIN(44)") { direction: input; }
+        pin("PCIN(45)") { direction: input; }
+        pin("PCIN(46)") { direction: input; }
+        pin("PCIN(47)") { direction: input; }
+        pin("PCIN(5)") { direction: input; }
+        pin("PCIN(6)") { direction: input; }
+        pin("PCIN(7)") { direction: input; }
+        pin("PCIN(8)") { direction: input; }
+        pin("PCIN(9)") { direction: input; }
         pin(RSTA) { direction: input; }
         pin(RSTB) { direction: input; }
         pin(RSTC) { direction: input; }
@@ -659,549 +659,435 @@ library (XILINX_UNISIM) {
         pin(RSTM) { direction: input; }
         pin(RSTP) { direction: input; }
         pin(SUBTRACT) { direction: input; }
-        pin(BCOUT(0)) {
-            direction: output;
-            function: "";
-        }
-        pin(BCOUT(1)) {
-            direction: output;
-            function: "";
-        }
-        pin(BCOUT(10)) {
-            direction: output;
-            function: "";
-        }
-        pin(BCOUT(11)) {
-            direction: output;
-            function: "";
-        }
-        pin(BCOUT(12)) {
-            direction: output;
-            function: "";
-        }
-        pin(BCOUT(13)) {
-            direction: output;
-            function: "";
-        }
-        pin(BCOUT(14)) {
-            direction: output;
-            function: "";
-        }
-        pin(BCOUT(15)) {
-            direction: output;
-            function: "";
-        }
-        pin(BCOUT(16)) {
-            direction: output;
-            function: "";
-        }
-        pin(BCOUT(17)) {
-            direction: output;
-            function: "";
-        }
-        pin(BCOUT(2)) {
-            direction: output;
-            function: "";
-        }
-        pin(BCOUT(3)) {
-            direction: output;
-            function: "";
-        }
-        pin(BCOUT(4)) {
-            direction: output;
-            function: "";
-        }
-        pin(BCOUT(5)) {
-            direction: output;
-            function: "";
-        }
-        pin(BCOUT(6)) {
-            direction: output;
-            function: "";
-        }
-        pin(BCOUT(7)) {
-            direction: output;
-            function: "";
-        }
-        pin(BCOUT(8)) {
-            direction: output;
-            function: "";
-        }
-        pin(BCOUT(9)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(0)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(1)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(10)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(11)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(12)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(13)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(14)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(15)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(16)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(17)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(18)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(19)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(2)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(20)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(21)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(22)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(23)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(24)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(25)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(26)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(27)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(28)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(29)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(3)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(30)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(31)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(32)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(33)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(34)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(35)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(36)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(37)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(38)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(39)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(4)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(40)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(41)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(42)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(43)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(44)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(45)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(46)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(47)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(5)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(6)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(7)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(8)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(9)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(0)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(1)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(10)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(11)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(12)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(13)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(14)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(15)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(16)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(17)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(18)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(19)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(2)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(20)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(21)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(22)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(23)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(24)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(25)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(26)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(27)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(28)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(29)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(3)) {
+        pin("BCOUT(0)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(30)) {
+                    }
+        pin("BCOUT(1)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(31)) {
+                    }
+        pin("BCOUT(10)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(32)) {
+                    }
+        pin("BCOUT(11)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(33)) {
+                    }
+        pin("BCOUT(12)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(34)) {
+                    }
+        pin("BCOUT(13)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(35)) {
+                    }
+        pin("BCOUT(14)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(36)) {
+                    }
+        pin("BCOUT(15)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(37)) {
+                    }
+        pin("BCOUT(16)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(38)) {
+                    }
+        pin("BCOUT(17)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(39)) {
+                    }
+        pin("BCOUT(2)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(4)) {
+                    }
+        pin("BCOUT(3)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(40)) {
+                    }
+        pin("BCOUT(4)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(41)) {
+                    }
+        pin("BCOUT(5)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(42)) {
+                    }
+        pin("BCOUT(6)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(43)) {
+                    }
+        pin("BCOUT(7)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(44)) {
+                    }
+        pin("BCOUT(8)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(45)) {
+                    }
+        pin("BCOUT(9)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(46)) {
+                    }
+        pin("P(0)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(47)) {
+                    }
+        pin("P(1)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(5)) {
+                    }
+        pin("P(10)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(6)) {
+                    }
+        pin("P(11)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(7)) {
+                    }
+        pin("P(12)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(8)) {
+                    }
+        pin("P(13)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(9)) {
+                    }
+        pin("P(14)") {
             direction: output;
-            function: "";
-        }
+                    }
+        pin("P(15)") {
+            direction: output;
+                    }
+        pin("P(16)") {
+            direction: output;
+                    }
+        pin("P(17)") {
+            direction: output;
+                    }
+        pin("P(18)") {
+            direction: output;
+                    }
+        pin("P(19)") {
+            direction: output;
+                    }
+        pin("P(2)") {
+            direction: output;
+                    }
+        pin("P(20)") {
+            direction: output;
+                    }
+        pin("P(21)") {
+            direction: output;
+                    }
+        pin("P(22)") {
+            direction: output;
+                    }
+        pin("P(23)") {
+            direction: output;
+                    }
+        pin("P(24)") {
+            direction: output;
+                    }
+        pin("P(25)") {
+            direction: output;
+                    }
+        pin("P(26)") {
+            direction: output;
+                    }
+        pin("P(27)") {
+            direction: output;
+                    }
+        pin("P(28)") {
+            direction: output;
+                    }
+        pin("P(29)") {
+            direction: output;
+                    }
+        pin("P(3)") {
+            direction: output;
+                    }
+        pin("P(30)") {
+            direction: output;
+                    }
+        pin("P(31)") {
+            direction: output;
+                    }
+        pin("P(32)") {
+            direction: output;
+                    }
+        pin("P(33)") {
+            direction: output;
+                    }
+        pin("P(34)") {
+            direction: output;
+                    }
+        pin("P(35)") {
+            direction: output;
+                    }
+        pin("P(36)") {
+            direction: output;
+                    }
+        pin("P(37)") {
+            direction: output;
+                    }
+        pin("P(38)") {
+            direction: output;
+                    }
+        pin("P(39)") {
+            direction: output;
+                    }
+        pin("P(4)") {
+            direction: output;
+                    }
+        pin("P(40)") {
+            direction: output;
+                    }
+        pin("P(41)") {
+            direction: output;
+                    }
+        pin("P(42)") {
+            direction: output;
+                    }
+        pin("P(43)") {
+            direction: output;
+                    }
+        pin("P(44)") {
+            direction: output;
+                    }
+        pin("P(45)") {
+            direction: output;
+                    }
+        pin("P(46)") {
+            direction: output;
+                    }
+        pin("P(47)") {
+            direction: output;
+                    }
+        pin("P(5)") {
+            direction: output;
+                    }
+        pin("P(6)") {
+            direction: output;
+                    }
+        pin("P(7)") {
+            direction: output;
+                    }
+        pin("P(8)") {
+            direction: output;
+                    }
+        pin("P(9)") {
+            direction: output;
+                    }
+        pin("PCOUT(0)") {
+            direction: output;
+                    }
+        pin("PCOUT(1)") {
+            direction: output;
+                    }
+        pin("PCOUT(10)") {
+            direction: output;
+                    }
+        pin("PCOUT(11)") {
+            direction: output;
+                    }
+        pin("PCOUT(12)") {
+            direction: output;
+                    }
+        pin("PCOUT(13)") {
+            direction: output;
+                    }
+        pin("PCOUT(14)") {
+            direction: output;
+                    }
+        pin("PCOUT(15)") {
+            direction: output;
+                    }
+        pin("PCOUT(16)") {
+            direction: output;
+                    }
+        pin("PCOUT(17)") {
+            direction: output;
+                    }
+        pin("PCOUT(18)") {
+            direction: output;
+                    }
+        pin("PCOUT(19)") {
+            direction: output;
+                    }
+        pin("PCOUT(2)") {
+            direction: output;
+                    }
+        pin("PCOUT(20)") {
+            direction: output;
+                    }
+        pin("PCOUT(21)") {
+            direction: output;
+                    }
+        pin("PCOUT(22)") {
+            direction: output;
+                    }
+        pin("PCOUT(23)") {
+            direction: output;
+                    }
+        pin("PCOUT(24)") {
+            direction: output;
+                    }
+        pin("PCOUT(25)") {
+            direction: output;
+                    }
+        pin("PCOUT(26)") {
+            direction: output;
+                    }
+        pin("PCOUT(27)") {
+            direction: output;
+                    }
+        pin("PCOUT(28)") {
+            direction: output;
+                    }
+        pin("PCOUT(29)") {
+            direction: output;
+                    }
+        pin("PCOUT(3)") {
+            direction: output;
+                    }
+        pin("PCOUT(30)") {
+            direction: output;
+                    }
+        pin("PCOUT(31)") {
+            direction: output;
+                    }
+        pin("PCOUT(32)") {
+            direction: output;
+                    }
+        pin("PCOUT(33)") {
+            direction: output;
+                    }
+        pin("PCOUT(34)") {
+            direction: output;
+                    }
+        pin("PCOUT(35)") {
+            direction: output;
+                    }
+        pin("PCOUT(36)") {
+            direction: output;
+                    }
+        pin("PCOUT(37)") {
+            direction: output;
+                    }
+        pin("PCOUT(38)") {
+            direction: output;
+                    }
+        pin("PCOUT(39)") {
+            direction: output;
+                    }
+        pin("PCOUT(4)") {
+            direction: output;
+                    }
+        pin("PCOUT(40)") {
+            direction: output;
+                    }
+        pin("PCOUT(41)") {
+            direction: output;
+                    }
+        pin("PCOUT(42)") {
+            direction: output;
+                    }
+        pin("PCOUT(43)") {
+            direction: output;
+                    }
+        pin("PCOUT(44)") {
+            direction: output;
+                    }
+        pin("PCOUT(45)") {
+            direction: output;
+                    }
+        pin("PCOUT(46)") {
+            direction: output;
+                    }
+        pin("PCOUT(47)") {
+            direction: output;
+                    }
+        pin("PCOUT(5)") {
+            direction: output;
+                    }
+        pin("PCOUT(6)") {
+            direction: output;
+                    }
+        pin("PCOUT(7)") {
+            direction: output;
+                    }
+        pin("PCOUT(8)") {
+            direction: output;
+                    }
+        pin("PCOUT(9)") {
+            direction: output;
+                    }
     }
 
     cell(DSP48A) {
-        pin(A(0)) { direction: input; }
-        pin(A(1)) { direction: input; }
-        pin(A(10)) { direction: input; }
-        pin(A(11)) { direction: input; }
-        pin(A(12)) { direction: input; }
-        pin(A(13)) { direction: input; }
-        pin(A(14)) { direction: input; }
-        pin(A(15)) { direction: input; }
-        pin(A(16)) { direction: input; }
-        pin(A(17)) { direction: input; }
-        pin(A(2)) { direction: input; }
-        pin(A(3)) { direction: input; }
-        pin(A(4)) { direction: input; }
-        pin(A(5)) { direction: input; }
-        pin(A(6)) { direction: input; }
-        pin(A(7)) { direction: input; }
-        pin(A(8)) { direction: input; }
-        pin(A(9)) { direction: input; }
-        pin(B(0)) { direction: input; }
-        pin(B(1)) { direction: input; }
-        pin(B(10)) { direction: input; }
-        pin(B(11)) { direction: input; }
-        pin(B(12)) { direction: input; }
-        pin(B(13)) { direction: input; }
-        pin(B(14)) { direction: input; }
-        pin(B(15)) { direction: input; }
-        pin(B(16)) { direction: input; }
-        pin(B(17)) { direction: input; }
-        pin(B(2)) { direction: input; }
-        pin(B(3)) { direction: input; }
-        pin(B(4)) { direction: input; }
-        pin(B(5)) { direction: input; }
-        pin(B(6)) { direction: input; }
-        pin(B(7)) { direction: input; }
-        pin(B(8)) { direction: input; }
-        pin(B(9)) { direction: input; }
-        pin(C(0)) { direction: input; }
-        pin(C(1)) { direction: input; }
-        pin(C(10)) { direction: input; }
-        pin(C(11)) { direction: input; }
-        pin(C(12)) { direction: input; }
-        pin(C(13)) { direction: input; }
-        pin(C(14)) { direction: input; }
-        pin(C(15)) { direction: input; }
-        pin(C(16)) { direction: input; }
-        pin(C(17)) { direction: input; }
-        pin(C(18)) { direction: input; }
-        pin(C(19)) { direction: input; }
-        pin(C(2)) { direction: input; }
-        pin(C(20)) { direction: input; }
-        pin(C(21)) { direction: input; }
-        pin(C(22)) { direction: input; }
-        pin(C(23)) { direction: input; }
-        pin(C(24)) { direction: input; }
-        pin(C(25)) { direction: input; }
-        pin(C(26)) { direction: input; }
-        pin(C(27)) { direction: input; }
-        pin(C(28)) { direction: input; }
-        pin(C(29)) { direction: input; }
-        pin(C(3)) { direction: input; }
-        pin(C(30)) { direction: input; }
-        pin(C(31)) { direction: input; }
-        pin(C(32)) { direction: input; }
-        pin(C(33)) { direction: input; }
-        pin(C(34)) { direction: input; }
-        pin(C(35)) { direction: input; }
-        pin(C(36)) { direction: input; }
-        pin(C(37)) { direction: input; }
-        pin(C(38)) { direction: input; }
-        pin(C(39)) { direction: input; }
-        pin(C(4)) { direction: input; }
-        pin(C(40)) { direction: input; }
-        pin(C(41)) { direction: input; }
-        pin(C(42)) { direction: input; }
-        pin(C(43)) { direction: input; }
-        pin(C(44)) { direction: input; }
-        pin(C(45)) { direction: input; }
-        pin(C(46)) { direction: input; }
-        pin(C(47)) { direction: input; }
-        pin(C(5)) { direction: input; }
-        pin(C(6)) { direction: input; }
-        pin(C(7)) { direction: input; }
-        pin(C(8)) { direction: input; }
-        pin(C(9)) { direction: input; }
+        pin("A(0)") { direction: input; }
+        pin("A(1)") { direction: input; }
+        pin("A(10)") { direction: input; }
+        pin("A(11)") { direction: input; }
+        pin("A(12)") { direction: input; }
+        pin("A(13)") { direction: input; }
+        pin("A(14)") { direction: input; }
+        pin("A(15)") { direction: input; }
+        pin("A(16)") { direction: input; }
+        pin("A(17)") { direction: input; }
+        pin("A(2)") { direction: input; }
+        pin("A(3)") { direction: input; }
+        pin("A(4)") { direction: input; }
+        pin("A(5)") { direction: input; }
+        pin("A(6)") { direction: input; }
+        pin("A(7)") { direction: input; }
+        pin("A(8)") { direction: input; }
+        pin("A(9)") { direction: input; }
+        pin("B(0)") { direction: input; }
+        pin("B(1)") { direction: input; }
+        pin("B(10)") { direction: input; }
+        pin("B(11)") { direction: input; }
+        pin("B(12)") { direction: input; }
+        pin("B(13)") { direction: input; }
+        pin("B(14)") { direction: input; }
+        pin("B(15)") { direction: input; }
+        pin("B(16)") { direction: input; }
+        pin("B(17)") { direction: input; }
+        pin("B(2)") { direction: input; }
+        pin("B(3)") { direction: input; }
+        pin("B(4)") { direction: input; }
+        pin("B(5)") { direction: input; }
+        pin("B(6)") { direction: input; }
+        pin("B(7)") { direction: input; }
+        pin("B(8)") { direction: input; }
+        pin("B(9)") { direction: input; }
+        pin("C(0)") { direction: input; }
+        pin("C(1)") { direction: input; }
+        pin("C(10)") { direction: input; }
+        pin("C(11)") { direction: input; }
+        pin("C(12)") { direction: input; }
+        pin("C(13)") { direction: input; }
+        pin("C(14)") { direction: input; }
+        pin("C(15)") { direction: input; }
+        pin("C(16)") { direction: input; }
+        pin("C(17)") { direction: input; }
+        pin("C(18)") { direction: input; }
+        pin("C(19)") { direction: input; }
+        pin("C(2)") { direction: input; }
+        pin("C(20)") { direction: input; }
+        pin("C(21)") { direction: input; }
+        pin("C(22)") { direction: input; }
+        pin("C(23)") { direction: input; }
+        pin("C(24)") { direction: input; }
+        pin("C(25)") { direction: input; }
+        pin("C(26)") { direction: input; }
+        pin("C(27)") { direction: input; }
+        pin("C(28)") { direction: input; }
+        pin("C(29)") { direction: input; }
+        pin("C(3)") { direction: input; }
+        pin("C(30)") { direction: input; }
+        pin("C(31)") { direction: input; }
+        pin("C(32)") { direction: input; }
+        pin("C(33)") { direction: input; }
+        pin("C(34)") { direction: input; }
+        pin("C(35)") { direction: input; }
+        pin("C(36)") { direction: input; }
+        pin("C(37)") { direction: input; }
+        pin("C(38)") { direction: input; }
+        pin("C(39)") { direction: input; }
+        pin("C(4)") { direction: input; }
+        pin("C(40)") { direction: input; }
+        pin("C(41)") { direction: input; }
+        pin("C(42)") { direction: input; }
+        pin("C(43)") { direction: input; }
+        pin("C(44)") { direction: input; }
+        pin("C(45)") { direction: input; }
+        pin("C(46)") { direction: input; }
+        pin("C(47)") { direction: input; }
+        pin("C(5)") { direction: input; }
+        pin("C(6)") { direction: input; }
+        pin("C(7)") { direction: input; }
+        pin("C(8)") { direction: input; }
+        pin("C(9)") { direction: input; }
         pin(CARRYIN) { direction: input; }
         pin(CEA) { direction: input; }
         pin(CEB) { direction: input; }
@@ -1212,80 +1098,80 @@ library (XILINX_UNISIM) {
         pin(CEOPMODE) { direction: input; }
         pin(CEP) { direction: input; }
         pin(CLK) { direction: input; }
-        pin(D(0)) { direction: input; }
-        pin(D(1)) { direction: input; }
-        pin(D(10)) { direction: input; }
-        pin(D(11)) { direction: input; }
-        pin(D(12)) { direction: input; }
-        pin(D(13)) { direction: input; }
-        pin(D(14)) { direction: input; }
-        pin(D(15)) { direction: input; }
-        pin(D(16)) { direction: input; }
-        pin(D(17)) { direction: input; }
-        pin(D(2)) { direction: input; }
-        pin(D(3)) { direction: input; }
-        pin(D(4)) { direction: input; }
-        pin(D(5)) { direction: input; }
-        pin(D(6)) { direction: input; }
-        pin(D(7)) { direction: input; }
-        pin(D(8)) { direction: input; }
-        pin(D(9)) { direction: input; }
-        pin(OPMODE(0)) { direction: input; }
-        pin(OPMODE(1)) { direction: input; }
-        pin(OPMODE(2)) { direction: input; }
-        pin(OPMODE(3)) { direction: input; }
-        pin(OPMODE(4)) { direction: input; }
-        pin(OPMODE(5)) { direction: input; }
-        pin(OPMODE(6)) { direction: input; }
-        pin(OPMODE(7)) { direction: input; }
-        pin(PCIN(0)) { direction: input; }
-        pin(PCIN(1)) { direction: input; }
-        pin(PCIN(10)) { direction: input; }
-        pin(PCIN(11)) { direction: input; }
-        pin(PCIN(12)) { direction: input; }
-        pin(PCIN(13)) { direction: input; }
-        pin(PCIN(14)) { direction: input; }
-        pin(PCIN(15)) { direction: input; }
-        pin(PCIN(16)) { direction: input; }
-        pin(PCIN(17)) { direction: input; }
-        pin(PCIN(18)) { direction: input; }
-        pin(PCIN(19)) { direction: input; }
-        pin(PCIN(2)) { direction: input; }
-        pin(PCIN(20)) { direction: input; }
-        pin(PCIN(21)) { direction: input; }
-        pin(PCIN(22)) { direction: input; }
-        pin(PCIN(23)) { direction: input; }
-        pin(PCIN(24)) { direction: input; }
-        pin(PCIN(25)) { direction: input; }
-        pin(PCIN(26)) { direction: input; }
-        pin(PCIN(27)) { direction: input; }
-        pin(PCIN(28)) { direction: input; }
-        pin(PCIN(29)) { direction: input; }
-        pin(PCIN(3)) { direction: input; }
-        pin(PCIN(30)) { direction: input; }
-        pin(PCIN(31)) { direction: input; }
-        pin(PCIN(32)) { direction: input; }
-        pin(PCIN(33)) { direction: input; }
-        pin(PCIN(34)) { direction: input; }
-        pin(PCIN(35)) { direction: input; }
-        pin(PCIN(36)) { direction: input; }
-        pin(PCIN(37)) { direction: input; }
-        pin(PCIN(38)) { direction: input; }
-        pin(PCIN(39)) { direction: input; }
-        pin(PCIN(4)) { direction: input; }
-        pin(PCIN(40)) { direction: input; }
-        pin(PCIN(41)) { direction: input; }
-        pin(PCIN(42)) { direction: input; }
-        pin(PCIN(43)) { direction: input; }
-        pin(PCIN(44)) { direction: input; }
-        pin(PCIN(45)) { direction: input; }
-        pin(PCIN(46)) { direction: input; }
-        pin(PCIN(47)) { direction: input; }
-        pin(PCIN(5)) { direction: input; }
-        pin(PCIN(6)) { direction: input; }
-        pin(PCIN(7)) { direction: input; }
-        pin(PCIN(8)) { direction: input; }
-        pin(PCIN(9)) { direction: input; }
+        pin("D(0)") { direction: input; }
+        pin("D(1)") { direction: input; }
+        pin("D(10)") { direction: input; }
+        pin("D(11)") { direction: input; }
+        pin("D(12)") { direction: input; }
+        pin("D(13)") { direction: input; }
+        pin("D(14)") { direction: input; }
+        pin("D(15)") { direction: input; }
+        pin("D(16)") { direction: input; }
+        pin("D(17)") { direction: input; }
+        pin("D(2)") { direction: input; }
+        pin("D(3)") { direction: input; }
+        pin("D(4)") { direction: input; }
+        pin("D(5)") { direction: input; }
+        pin("D(6)") { direction: input; }
+        pin("D(7)") { direction: input; }
+        pin("D(8)") { direction: input; }
+        pin("D(9)") { direction: input; }
+        pin("OPMODE(0)") { direction: input; }
+        pin("OPMODE(1)") { direction: input; }
+        pin("OPMODE(2)") { direction: input; }
+        pin("OPMODE(3)") { direction: input; }
+        pin("OPMODE(4)") { direction: input; }
+        pin("OPMODE(5)") { direction: input; }
+        pin("OPMODE(6)") { direction: input; }
+        pin("OPMODE(7)") { direction: input; }
+        pin("PCIN(0)") { direction: input; }
+        pin("PCIN(1)") { direction: input; }
+        pin("PCIN(10)") { direction: input; }
+        pin("PCIN(11)") { direction: input; }
+        pin("PCIN(12)") { direction: input; }
+        pin("PCIN(13)") { direction: input; }
+        pin("PCIN(14)") { direction: input; }
+        pin("PCIN(15)") { direction: input; }
+        pin("PCIN(16)") { direction: input; }
+        pin("PCIN(17)") { direction: input; }
+        pin("PCIN(18)") { direction: input; }
+        pin("PCIN(19)") { direction: input; }
+        pin("PCIN(2)") { direction: input; }
+        pin("PCIN(20)") { direction: input; }
+        pin("PCIN(21)") { direction: input; }
+        pin("PCIN(22)") { direction: input; }
+        pin("PCIN(23)") { direction: input; }
+        pin("PCIN(24)") { direction: input; }
+        pin("PCIN(25)") { direction: input; }
+        pin("PCIN(26)") { direction: input; }
+        pin("PCIN(27)") { direction: input; }
+        pin("PCIN(28)") { direction: input; }
+        pin("PCIN(29)") { direction: input; }
+        pin("PCIN(3)") { direction: input; }
+        pin("PCIN(30)") { direction: input; }
+        pin("PCIN(31)") { direction: input; }
+        pin("PCIN(32)") { direction: input; }
+        pin("PCIN(33)") { direction: input; }
+        pin("PCIN(34)") { direction: input; }
+        pin("PCIN(35)") { direction: input; }
+        pin("PCIN(36)") { direction: input; }
+        pin("PCIN(37)") { direction: input; }
+        pin("PCIN(38)") { direction: input; }
+        pin("PCIN(39)") { direction: input; }
+        pin("PCIN(4)") { direction: input; }
+        pin("PCIN(40)") { direction: input; }
+        pin("PCIN(41)") { direction: input; }
+        pin("PCIN(42)") { direction: input; }
+        pin("PCIN(43)") { direction: input; }
+        pin("PCIN(44)") { direction: input; }
+        pin("PCIN(45)") { direction: input; }
+        pin("PCIN(46)") { direction: input; }
+        pin("PCIN(47)") { direction: input; }
+        pin("PCIN(5)") { direction: input; }
+        pin("PCIN(6)") { direction: input; }
+        pin("PCIN(7)") { direction: input; }
+        pin("PCIN(8)") { direction: input; }
+        pin("PCIN(9)") { direction: input; }
         pin(RSTA) { direction: input; }
         pin(RSTB) { direction: input; }
         pin(RSTC) { direction: input; }
@@ -1294,553 +1180,438 @@ library (XILINX_UNISIM) {
         pin(RSTM) { direction: input; }
         pin(RSTOPMODE) { direction: input; }
         pin(RSTP) { direction: input; }
-        pin(BCOUT(0)) {
+        pin("BCOUT(0)") {
             direction: output;
-            function: "";
-        }
-        pin(BCOUT(1)) {
+                    }
+        pin("BCOUT(1)") {
             direction: output;
-            function: "";
-        }
-        pin(BCOUT(10)) {
+                    }
+        pin("BCOUT(10)") {
             direction: output;
-            function: "";
-        }
-        pin(BCOUT(11)) {
+                    }
+        pin("BCOUT(11)") {
             direction: output;
-            function: "";
-        }
-        pin(BCOUT(12)) {
+                    }
+        pin("BCOUT(12)") {
             direction: output;
-            function: "";
-        }
-        pin(BCOUT(13)) {
+                    }
+        pin("BCOUT(13)") {
             direction: output;
-            function: "";
-        }
-        pin(BCOUT(14)) {
+                    }
+        pin("BCOUT(14)") {
             direction: output;
-            function: "";
-        }
-        pin(BCOUT(15)) {
+                    }
+        pin("BCOUT(15)") {
             direction: output;
-            function: "";
-        }
-        pin(BCOUT(16)) {
+                    }
+        pin("BCOUT(16)") {
             direction: output;
-            function: "";
-        }
-        pin(BCOUT(17)) {
+                    }
+        pin("BCOUT(17)") {
             direction: output;
-            function: "";
-        }
-        pin(BCOUT(2)) {
+                    }
+        pin("BCOUT(2)") {
             direction: output;
-            function: "";
-        }
-        pin(BCOUT(3)) {
+                    }
+        pin("BCOUT(3)") {
             direction: output;
-            function: "";
-        }
-        pin(BCOUT(4)) {
+                    }
+        pin("BCOUT(4)") {
             direction: output;
-            function: "";
-        }
-        pin(BCOUT(5)) {
+                    }
+        pin("BCOUT(5)") {
             direction: output;
-            function: "";
-        }
-        pin(BCOUT(6)) {
+                    }
+        pin("BCOUT(6)") {
             direction: output;
-            function: "";
-        }
-        pin(BCOUT(7)) {
+                    }
+        pin("BCOUT(7)") {
             direction: output;
-            function: "";
-        }
-        pin(BCOUT(8)) {
+                    }
+        pin("BCOUT(8)") {
             direction: output;
-            function: "";
-        }
-        pin(BCOUT(9)) {
+                    }
+        pin("BCOUT(9)") {
             direction: output;
-            function: "";
-        }
+                    }
         pin(CARRYOUT) {
             direction: output;
-            function: "";
-        }
-        pin(P(0)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(1)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(10)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(11)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(12)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(13)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(14)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(15)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(16)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(17)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(18)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(19)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(2)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(20)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(21)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(22)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(23)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(24)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(25)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(26)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(27)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(28)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(29)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(3)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(30)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(31)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(32)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(33)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(34)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(35)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(36)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(37)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(38)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(39)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(4)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(40)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(41)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(42)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(43)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(44)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(45)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(46)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(47)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(5)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(6)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(7)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(8)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(9)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(0)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(1)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(10)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(11)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(12)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(13)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(14)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(15)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(16)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(17)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(18)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(19)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(2)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(20)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(21)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(22)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(23)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(24)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(25)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(26)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(27)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(28)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(29)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(3)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(30)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(31)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(32)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(33)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(34)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(35)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(36)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(37)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(38)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(39)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(4)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(40)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(41)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(42)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(43)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(44)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(45)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(46)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(47)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(5)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(6)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(7)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(8)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(9)) {
-            direction: output;
-            function: "";
-        }
+                    }
+        pin("P(0)") {
+            direction: output;
+                    }
+        pin("P(1)") {
+            direction: output;
+                    }
+        pin("P(10)") {
+            direction: output;
+                    }
+        pin("P(11)") {
+            direction: output;
+                    }
+        pin("P(12)") {
+            direction: output;
+                    }
+        pin("P(13)") {
+            direction: output;
+                    }
+        pin("P(14)") {
+            direction: output;
+                    }
+        pin("P(15)") {
+            direction: output;
+                    }
+        pin("P(16)") {
+            direction: output;
+                    }
+        pin("P(17)") {
+            direction: output;
+                    }
+        pin("P(18)") {
+            direction: output;
+                    }
+        pin("P(19)") {
+            direction: output;
+                    }
+        pin("P(2)") {
+            direction: output;
+                    }
+        pin("P(20)") {
+            direction: output;
+                    }
+        pin("P(21)") {
+            direction: output;
+                    }
+        pin("P(22)") {
+            direction: output;
+                    }
+        pin("P(23)") {
+            direction: output;
+                    }
+        pin("P(24)") {
+            direction: output;
+                    }
+        pin("P(25)") {
+            direction: output;
+                    }
+        pin("P(26)") {
+            direction: output;
+                    }
+        pin("P(27)") {
+            direction: output;
+                    }
+        pin("P(28)") {
+            direction: output;
+                    }
+        pin("P(29)") {
+            direction: output;
+                    }
+        pin("P(3)") {
+            direction: output;
+                    }
+        pin("P(30)") {
+            direction: output;
+                    }
+        pin("P(31)") {
+            direction: output;
+                    }
+        pin("P(32)") {
+            direction: output;
+                    }
+        pin("P(33)") {
+            direction: output;
+                    }
+        pin("P(34)") {
+            direction: output;
+                    }
+        pin("P(35)") {
+            direction: output;
+                    }
+        pin("P(36)") {
+            direction: output;
+                    }
+        pin("P(37)") {
+            direction: output;
+                    }
+        pin("P(38)") {
+            direction: output;
+                    }
+        pin("P(39)") {
+            direction: output;
+                    }
+        pin("P(4)") {
+            direction: output;
+                    }
+        pin("P(40)") {
+            direction: output;
+                    }
+        pin("P(41)") {
+            direction: output;
+                    }
+        pin("P(42)") {
+            direction: output;
+                    }
+        pin("P(43)") {
+            direction: output;
+                    }
+        pin("P(44)") {
+            direction: output;
+                    }
+        pin("P(45)") {
+            direction: output;
+                    }
+        pin("P(46)") {
+            direction: output;
+                    }
+        pin("P(47)") {
+            direction: output;
+                    }
+        pin("P(5)") {
+            direction: output;
+                    }
+        pin("P(6)") {
+            direction: output;
+                    }
+        pin("P(7)") {
+            direction: output;
+                    }
+        pin("P(8)") {
+            direction: output;
+                    }
+        pin("P(9)") {
+            direction: output;
+                    }
+        pin("PCOUT(0)") {
+            direction: output;
+                    }
+        pin("PCOUT(1)") {
+            direction: output;
+                    }
+        pin("PCOUT(10)") {
+            direction: output;
+                    }
+        pin("PCOUT(11)") {
+            direction: output;
+                    }
+        pin("PCOUT(12)") {
+            direction: output;
+                    }
+        pin("PCOUT(13)") {
+            direction: output;
+                    }
+        pin("PCOUT(14)") {
+            direction: output;
+                    }
+        pin("PCOUT(15)") {
+            direction: output;
+                    }
+        pin("PCOUT(16)") {
+            direction: output;
+                    }
+        pin("PCOUT(17)") {
+            direction: output;
+                    }
+        pin("PCOUT(18)") {
+            direction: output;
+                    }
+        pin("PCOUT(19)") {
+            direction: output;
+                    }
+        pin("PCOUT(2)") {
+            direction: output;
+                    }
+        pin("PCOUT(20)") {
+            direction: output;
+                    }
+        pin("PCOUT(21)") {
+            direction: output;
+                    }
+        pin("PCOUT(22)") {
+            direction: output;
+                    }
+        pin("PCOUT(23)") {
+            direction: output;
+                    }
+        pin("PCOUT(24)") {
+            direction: output;
+                    }
+        pin("PCOUT(25)") {
+            direction: output;
+                    }
+        pin("PCOUT(26)") {
+            direction: output;
+                    }
+        pin("PCOUT(27)") {
+            direction: output;
+                    }
+        pin("PCOUT(28)") {
+            direction: output;
+                    }
+        pin("PCOUT(29)") {
+            direction: output;
+                    }
+        pin("PCOUT(3)") {
+            direction: output;
+                    }
+        pin("PCOUT(30)") {
+            direction: output;
+                    }
+        pin("PCOUT(31)") {
+            direction: output;
+                    }
+        pin("PCOUT(32)") {
+            direction: output;
+                    }
+        pin("PCOUT(33)") {
+            direction: output;
+                    }
+        pin("PCOUT(34)") {
+            direction: output;
+                    }
+        pin("PCOUT(35)") {
+            direction: output;
+                    }
+        pin("PCOUT(36)") {
+            direction: output;
+                    }
+        pin("PCOUT(37)") {
+            direction: output;
+                    }
+        pin("PCOUT(38)") {
+            direction: output;
+                    }
+        pin("PCOUT(39)") {
+            direction: output;
+                    }
+        pin("PCOUT(4)") {
+            direction: output;
+                    }
+        pin("PCOUT(40)") {
+            direction: output;
+                    }
+        pin("PCOUT(41)") {
+            direction: output;
+                    }
+        pin("PCOUT(42)") {
+            direction: output;
+                    }
+        pin("PCOUT(43)") {
+            direction: output;
+                    }
+        pin("PCOUT(44)") {
+            direction: output;
+                    }
+        pin("PCOUT(45)") {
+            direction: output;
+                    }
+        pin("PCOUT(46)") {
+            direction: output;
+                    }
+        pin("PCOUT(47)") {
+            direction: output;
+                    }
+        pin("PCOUT(5)") {
+            direction: output;
+                    }
+        pin("PCOUT(6)") {
+            direction: output;
+                    }
+        pin("PCOUT(7)") {
+            direction: output;
+                    }
+        pin("PCOUT(8)") {
+            direction: output;
+                    }
+        pin("PCOUT(9)") {
+            direction: output;
+                    }
     }
 
     cell(DSP48A1) {
-        pin(A(0)) { direction: input; }
-        pin(A(1)) { direction: input; }
-        pin(A(10)) { direction: input; }
-        pin(A(11)) { direction: input; }
-        pin(A(12)) { direction: input; }
-        pin(A(13)) { direction: input; }
-        pin(A(14)) { direction: input; }
-        pin(A(15)) { direction: input; }
-        pin(A(16)) { direction: input; }
-        pin(A(17)) { direction: input; }
-        pin(A(2)) { direction: input; }
-        pin(A(3)) { direction: input; }
-        pin(A(4)) { direction: input; }
-        pin(A(5)) { direction: input; }
-        pin(A(6)) { direction: input; }
-        pin(A(7)) { direction: input; }
-        pin(A(8)) { direction: input; }
-        pin(A(9)) { direction: input; }
-        pin(B(0)) { direction: input; }
-        pin(B(1)) { direction: input; }
-        pin(B(10)) { direction: input; }
-        pin(B(11)) { direction: input; }
-        pin(B(12)) { direction: input; }
-        pin(B(13)) { direction: input; }
-        pin(B(14)) { direction: input; }
-        pin(B(15)) { direction: input; }
-        pin(B(16)) { direction: input; }
-        pin(B(17)) { direction: input; }
-        pin(B(2)) { direction: input; }
-        pin(B(3)) { direction: input; }
-        pin(B(4)) { direction: input; }
-        pin(B(5)) { direction: input; }
-        pin(B(6)) { direction: input; }
-        pin(B(7)) { direction: input; }
-        pin(B(8)) { direction: input; }
-        pin(B(9)) { direction: input; }
-        pin(C(0)) { direction: input; }
-        pin(C(1)) { direction: input; }
-        pin(C(10)) { direction: input; }
-        pin(C(11)) { direction: input; }
-        pin(C(12)) { direction: input; }
-        pin(C(13)) { direction: input; }
-        pin(C(14)) { direction: input; }
-        pin(C(15)) { direction: input; }
-        pin(C(16)) { direction: input; }
-        pin(C(17)) { direction: input; }
-        pin(C(18)) { direction: input; }
-        pin(C(19)) { direction: input; }
-        pin(C(2)) { direction: input; }
-        pin(C(20)) { direction: input; }
-        pin(C(21)) { direction: input; }
-        pin(C(22)) { direction: input; }
-        pin(C(23)) { direction: input; }
-        pin(C(24)) { direction: input; }
-        pin(C(25)) { direction: input; }
-        pin(C(26)) { direction: input; }
-        pin(C(27)) { direction: input; }
-        pin(C(28)) { direction: input; }
-        pin(C(29)) { direction: input; }
-        pin(C(3)) { direction: input; }
-        pin(C(30)) { direction: input; }
-        pin(C(31)) { direction: input; }
-        pin(C(32)) { direction: input; }
-        pin(C(33)) { direction: input; }
-        pin(C(34)) { direction: input; }
-        pin(C(35)) { direction: input; }
-        pin(C(36)) { direction: input; }
-        pin(C(37)) { direction: input; }
-        pin(C(38)) { direction: input; }
-        pin(C(39)) { direction: input; }
-        pin(C(4)) { direction: input; }
-        pin(C(40)) { direction: input; }
-        pin(C(41)) { direction: input; }
-        pin(C(42)) { direction: input; }
-        pin(C(43)) { direction: input; }
-        pin(C(44)) { direction: input; }
-        pin(C(45)) { direction: input; }
-        pin(C(46)) { direction: input; }
-        pin(C(47)) { direction: input; }
-        pin(C(5)) { direction: input; }
-        pin(C(6)) { direction: input; }
-        pin(C(7)) { direction: input; }
-        pin(C(8)) { direction: input; }
-        pin(C(9)) { direction: input; }
+        pin("A(0)") { direction: input; }
+        pin("A(1)") { direction: input; }
+        pin("A(10)") { direction: input; }
+        pin("A(11)") { direction: input; }
+        pin("A(12)") { direction: input; }
+        pin("A(13)") { direction: input; }
+        pin("A(14)") { direction: input; }
+        pin("A(15)") { direction: input; }
+        pin("A(16)") { direction: input; }
+        pin("A(17)") { direction: input; }
+        pin("A(2)") { direction: input; }
+        pin("A(3)") { direction: input; }
+        pin("A(4)") { direction: input; }
+        pin("A(5)") { direction: input; }
+        pin("A(6)") { direction: input; }
+        pin("A(7)") { direction: input; }
+        pin("A(8)") { direction: input; }
+        pin("A(9)") { direction: input; }
+        pin("B(0)") { direction: input; }
+        pin("B(1)") { direction: input; }
+        pin("B(10)") { direction: input; }
+        pin("B(11)") { direction: input; }
+        pin("B(12)") { direction: input; }
+        pin("B(13)") { direction: input; }
+        pin("B(14)") { direction: input; }
+        pin("B(15)") { direction: input; }
+        pin("B(16)") { direction: input; }
+        pin("B(17)") { direction: input; }
+        pin("B(2)") { direction: input; }
+        pin("B(3)") { direction: input; }
+        pin("B(4)") { direction: input; }
+        pin("B(5)") { direction: input; }
+        pin("B(6)") { direction: input; }
+        pin("B(7)") { direction: input; }
+        pin("B(8)") { direction: input; }
+        pin("B(9)") { direction: input; }
+        pin("C(0)") { direction: input; }
+        pin("C(1)") { direction: input; }
+        pin("C(10)") { direction: input; }
+        pin("C(11)") { direction: input; }
+        pin("C(12)") { direction: input; }
+        pin("C(13)") { direction: input; }
+        pin("C(14)") { direction: input; }
+        pin("C(15)") { direction: input; }
+        pin("C(16)") { direction: input; }
+        pin("C(17)") { direction: input; }
+        pin("C(18)") { direction: input; }
+        pin("C(19)") { direction: input; }
+        pin("C(2)") { direction: input; }
+        pin("C(20)") { direction: input; }
+        pin("C(21)") { direction: input; }
+        pin("C(22)") { direction: input; }
+        pin("C(23)") { direction: input; }
+        pin("C(24)") { direction: input; }
+        pin("C(25)") { direction: input; }
+        pin("C(26)") { direction: input; }
+        pin("C(27)") { direction: input; }
+        pin("C(28)") { direction: input; }
+        pin("C(29)") { direction: input; }
+        pin("C(3)") { direction: input; }
+        pin("C(30)") { direction: input; }
+        pin("C(31)") { direction: input; }
+        pin("C(32)") { direction: input; }
+        pin("C(33)") { direction: input; }
+        pin("C(34)") { direction: input; }
+        pin("C(35)") { direction: input; }
+        pin("C(36)") { direction: input; }
+        pin("C(37)") { direction: input; }
+        pin("C(38)") { direction: input; }
+        pin("C(39)") { direction: input; }
+        pin("C(4)") { direction: input; }
+        pin("C(40)") { direction: input; }
+        pin("C(41)") { direction: input; }
+        pin("C(42)") { direction: input; }
+        pin("C(43)") { direction: input; }
+        pin("C(44)") { direction: input; }
+        pin("C(45)") { direction: input; }
+        pin("C(46)") { direction: input; }
+        pin("C(47)") { direction: input; }
+        pin("C(5)") { direction: input; }
+        pin("C(6)") { direction: input; }
+        pin("C(7)") { direction: input; }
+        pin("C(8)") { direction: input; }
+        pin("C(9)") { direction: input; }
         pin(CARRYIN) { direction: input; }
         pin(CEA) { direction: input; }
         pin(CEB) { direction: input; }
@@ -1851,80 +1622,80 @@ library (XILINX_UNISIM) {
         pin(CEOPMODE) { direction: input; }
         pin(CEP) { direction: input; }
         pin(CLK) { direction: input; }
-        pin(D(0)) { direction: input; }
-        pin(D(1)) { direction: input; }
-        pin(D(10)) { direction: input; }
-        pin(D(11)) { direction: input; }
-        pin(D(12)) { direction: input; }
-        pin(D(13)) { direction: input; }
-        pin(D(14)) { direction: input; }
-        pin(D(15)) { direction: input; }
-        pin(D(16)) { direction: input; }
-        pin(D(17)) { direction: input; }
-        pin(D(2)) { direction: input; }
-        pin(D(3)) { direction: input; }
-        pin(D(4)) { direction: input; }
-        pin(D(5)) { direction: input; }
-        pin(D(6)) { direction: input; }
-        pin(D(7)) { direction: input; }
-        pin(D(8)) { direction: input; }
-        pin(D(9)) { direction: input; }
-        pin(OPMODE(0)) { direction: input; }
-        pin(OPMODE(1)) { direction: input; }
-        pin(OPMODE(2)) { direction: input; }
-        pin(OPMODE(3)) { direction: input; }
-        pin(OPMODE(4)) { direction: input; }
-        pin(OPMODE(5)) { direction: input; }
-        pin(OPMODE(6)) { direction: input; }
-        pin(OPMODE(7)) { direction: input; }
-        pin(PCIN(0)) { direction: input; }
-        pin(PCIN(1)) { direction: input; }
-        pin(PCIN(10)) { direction: input; }
-        pin(PCIN(11)) { direction: input; }
-        pin(PCIN(12)) { direction: input; }
-        pin(PCIN(13)) { direction: input; }
-        pin(PCIN(14)) { direction: input; }
-        pin(PCIN(15)) { direction: input; }
-        pin(PCIN(16)) { direction: input; }
-        pin(PCIN(17)) { direction: input; }
-        pin(PCIN(18)) { direction: input; }
-        pin(PCIN(19)) { direction: input; }
-        pin(PCIN(2)) { direction: input; }
-        pin(PCIN(20)) { direction: input; }
-        pin(PCIN(21)) { direction: input; }
-        pin(PCIN(22)) { direction: input; }
-        pin(PCIN(23)) { direction: input; }
-        pin(PCIN(24)) { direction: input; }
-        pin(PCIN(25)) { direction: input; }
-        pin(PCIN(26)) { direction: input; }
-        pin(PCIN(27)) { direction: input; }
-        pin(PCIN(28)) { direction: input; }
-        pin(PCIN(29)) { direction: input; }
-        pin(PCIN(3)) { direction: input; }
-        pin(PCIN(30)) { direction: input; }
-        pin(PCIN(31)) { direction: input; }
-        pin(PCIN(32)) { direction: input; }
-        pin(PCIN(33)) { direction: input; }
-        pin(PCIN(34)) { direction: input; }
-        pin(PCIN(35)) { direction: input; }
-        pin(PCIN(36)) { direction: input; }
-        pin(PCIN(37)) { direction: input; }
-        pin(PCIN(38)) { direction: input; }
-        pin(PCIN(39)) { direction: input; }
-        pin(PCIN(4)) { direction: input; }
-        pin(PCIN(40)) { direction: input; }
-        pin(PCIN(41)) { direction: input; }
-        pin(PCIN(42)) { direction: input; }
-        pin(PCIN(43)) { direction: input; }
-        pin(PCIN(44)) { direction: input; }
-        pin(PCIN(45)) { direction: input; }
-        pin(PCIN(46)) { direction: input; }
-        pin(PCIN(47)) { direction: input; }
-        pin(PCIN(5)) { direction: input; }
-        pin(PCIN(6)) { direction: input; }
-        pin(PCIN(7)) { direction: input; }
-        pin(PCIN(8)) { direction: input; }
-        pin(PCIN(9)) { direction: input; }
+        pin("D(0)") { direction: input; }
+        pin("D(1)") { direction: input; }
+        pin("D(10)") { direction: input; }
+        pin("D(11)") { direction: input; }
+        pin("D(12)") { direction: input; }
+        pin("D(13)") { direction: input; }
+        pin("D(14)") { direction: input; }
+        pin("D(15)") { direction: input; }
+        pin("D(16)") { direction: input; }
+        pin("D(17)") { direction: input; }
+        pin("D(2)") { direction: input; }
+        pin("D(3)") { direction: input; }
+        pin("D(4)") { direction: input; }
+        pin("D(5)") { direction: input; }
+        pin("D(6)") { direction: input; }
+        pin("D(7)") { direction: input; }
+        pin("D(8)") { direction: input; }
+        pin("D(9)") { direction: input; }
+        pin("OPMODE(0)") { direction: input; }
+        pin("OPMODE(1)") { direction: input; }
+        pin("OPMODE(2)") { direction: input; }
+        pin("OPMODE(3)") { direction: input; }
+        pin("OPMODE(4)") { direction: input; }
+        pin("OPMODE(5)") { direction: input; }
+        pin("OPMODE(6)") { direction: input; }
+        pin("OPMODE(7)") { direction: input; }
+        pin("PCIN(0)") { direction: input; }
+        pin("PCIN(1)") { direction: input; }
+        pin("PCIN(10)") { direction: input; }
+        pin("PCIN(11)") { direction: input; }
+        pin("PCIN(12)") { direction: input; }
+        pin("PCIN(13)") { direction: input; }
+        pin("PCIN(14)") { direction: input; }
+        pin("PCIN(15)") { direction: input; }
+        pin("PCIN(16)") { direction: input; }
+        pin("PCIN(17)") { direction: input; }
+        pin("PCIN(18)") { direction: input; }
+        pin("PCIN(19)") { direction: input; }
+        pin("PCIN(2)") { direction: input; }
+        pin("PCIN(20)") { direction: input; }
+        pin("PCIN(21)") { direction: input; }
+        pin("PCIN(22)") { direction: input; }
+        pin("PCIN(23)") { direction: input; }
+        pin("PCIN(24)") { direction: input; }
+        pin("PCIN(25)") { direction: input; }
+        pin("PCIN(26)") { direction: input; }
+        pin("PCIN(27)") { direction: input; }
+        pin("PCIN(28)") { direction: input; }
+        pin("PCIN(29)") { direction: input; }
+        pin("PCIN(3)") { direction: input; }
+        pin("PCIN(30)") { direction: input; }
+        pin("PCIN(31)") { direction: input; }
+        pin("PCIN(32)") { direction: input; }
+        pin("PCIN(33)") { direction: input; }
+        pin("PCIN(34)") { direction: input; }
+        pin("PCIN(35)") { direction: input; }
+        pin("PCIN(36)") { direction: input; }
+        pin("PCIN(37)") { direction: input; }
+        pin("PCIN(38)") { direction: input; }
+        pin("PCIN(39)") { direction: input; }
+        pin("PCIN(4)") { direction: input; }
+        pin("PCIN(40)") { direction: input; }
+        pin("PCIN(41)") { direction: input; }
+        pin("PCIN(42)") { direction: input; }
+        pin("PCIN(43)") { direction: input; }
+        pin("PCIN(44)") { direction: input; }
+        pin("PCIN(45)") { direction: input; }
+        pin("PCIN(46)") { direction: input; }
+        pin("PCIN(47)") { direction: input; }
+        pin("PCIN(5)") { direction: input; }
+        pin("PCIN(6)") { direction: input; }
+        pin("PCIN(7)") { direction: input; }
+        pin("PCIN(8)") { direction: input; }
+        pin("PCIN(9)") { direction: input; }
         pin(RSTA) { direction: input; }
         pin(RSTB) { direction: input; }
         pin(RSTC) { direction: input; }
@@ -1933,770 +1704,618 @@ library (XILINX_UNISIM) {
         pin(RSTM) { direction: input; }
         pin(RSTOPMODE) { direction: input; }
         pin(RSTP) { direction: input; }
-        pin(BCOUT(0)) {
+        pin("BCOUT(0)") {
             direction: output;
-            function: "";
-        }
-        pin(BCOUT(1)) {
+                    }
+        pin("BCOUT(1)") {
             direction: output;
-            function: "";
-        }
-        pin(BCOUT(10)) {
+                    }
+        pin("BCOUT(10)") {
             direction: output;
-            function: "";
-        }
-        pin(BCOUT(11)) {
+                    }
+        pin("BCOUT(11)") {
             direction: output;
-            function: "";
-        }
-        pin(BCOUT(12)) {
+                    }
+        pin("BCOUT(12)") {
             direction: output;
-            function: "";
-        }
-        pin(BCOUT(13)) {
+                    }
+        pin("BCOUT(13)") {
             direction: output;
-            function: "";
-        }
-        pin(BCOUT(14)) {
+                    }
+        pin("BCOUT(14)") {
             direction: output;
-            function: "";
-        }
-        pin(BCOUT(15)) {
+                    }
+        pin("BCOUT(15)") {
             direction: output;
-            function: "";
-        }
-        pin(BCOUT(16)) {
+                    }
+        pin("BCOUT(16)") {
             direction: output;
-            function: "";
-        }
-        pin(BCOUT(17)) {
+                    }
+        pin("BCOUT(17)") {
             direction: output;
-            function: "";
-        }
-        pin(BCOUT(2)) {
+                    }
+        pin("BCOUT(2)") {
             direction: output;
-            function: "";
-        }
-        pin(BCOUT(3)) {
+                    }
+        pin("BCOUT(3)") {
             direction: output;
-            function: "";
-        }
-        pin(BCOUT(4)) {
+                    }
+        pin("BCOUT(4)") {
             direction: output;
-            function: "";
-        }
-        pin(BCOUT(5)) {
+                    }
+        pin("BCOUT(5)") {
             direction: output;
-            function: "";
-        }
-        pin(BCOUT(6)) {
+                    }
+        pin("BCOUT(6)") {
             direction: output;
-            function: "";
-        }
-        pin(BCOUT(7)) {
+                    }
+        pin("BCOUT(7)") {
             direction: output;
-            function: "";
-        }
-        pin(BCOUT(8)) {
+                    }
+        pin("BCOUT(8)") {
             direction: output;
-            function: "";
-        }
-        pin(BCOUT(9)) {
+                    }
+        pin("BCOUT(9)") {
             direction: output;
-            function: "";
-        }
+                    }
         pin(CARRYOUT) {
             direction: output;
-            function: "";
-        }
+                    }
         pin(CARRYOUTF) {
             direction: output;
-            function: "";
-        }
-        pin(M(0)) {
-            direction: output;
-            function: "";
-        }
-        pin(M(1)) {
-            direction: output;
-            function: "";
-        }
-        pin(M(10)) {
-            direction: output;
-            function: "";
-        }
-        pin(M(11)) {
-            direction: output;
-            function: "";
-        }
-        pin(M(12)) {
-            direction: output;
-            function: "";
-        }
-        pin(M(13)) {
-            direction: output;
-            function: "";
-        }
-        pin(M(14)) {
-            direction: output;
-            function: "";
-        }
-        pin(M(15)) {
-            direction: output;
-            function: "";
-        }
-        pin(M(16)) {
-            direction: output;
-            function: "";
-        }
-        pin(M(17)) {
-            direction: output;
-            function: "";
-        }
-        pin(M(18)) {
-            direction: output;
-            function: "";
-        }
-        pin(M(19)) {
-            direction: output;
-            function: "";
-        }
-        pin(M(2)) {
-            direction: output;
-            function: "";
-        }
-        pin(M(20)) {
-            direction: output;
-            function: "";
-        }
-        pin(M(21)) {
-            direction: output;
-            function: "";
-        }
-        pin(M(22)) {
-            direction: output;
-            function: "";
-        }
-        pin(M(23)) {
-            direction: output;
-            function: "";
-        }
-        pin(M(24)) {
-            direction: output;
-            function: "";
-        }
-        pin(M(25)) {
-            direction: output;
-            function: "";
-        }
-        pin(M(26)) {
-            direction: output;
-            function: "";
-        }
-        pin(M(27)) {
-            direction: output;
-            function: "";
-        }
-        pin(M(28)) {
-            direction: output;
-            function: "";
-        }
-        pin(M(29)) {
-            direction: output;
-            function: "";
-        }
-        pin(M(3)) {
-            direction: output;
-            function: "";
-        }
-        pin(M(30)) {
-            direction: output;
-            function: "";
-        }
-        pin(M(31)) {
-            direction: output;
-            function: "";
-        }
-        pin(M(32)) {
-            direction: output;
-            function: "";
-        }
-        pin(M(33)) {
-            direction: output;
-            function: "";
-        }
-        pin(M(34)) {
-            direction: output;
-            function: "";
-        }
-        pin(M(35)) {
-            direction: output;
-            function: "";
-        }
-        pin(M(4)) {
-            direction: output;
-            function: "";
-        }
-        pin(M(5)) {
-            direction: output;
-            function: "";
-        }
-        pin(M(6)) {
-            direction: output;
-            function: "";
-        }
-        pin(M(7)) {
-            direction: output;
-            function: "";
-        }
-        pin(M(8)) {
-            direction: output;
-            function: "";
-        }
-        pin(M(9)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(0)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(1)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(10)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(11)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(12)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(13)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(14)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(15)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(16)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(17)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(18)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(19)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(2)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(20)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(21)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(22)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(23)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(24)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(25)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(26)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(27)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(28)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(29)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(3)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(30)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(31)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(32)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(33)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(34)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(35)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(36)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(37)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(38)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(39)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(4)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(40)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(41)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(42)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(43)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(44)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(45)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(46)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(47)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(5)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(6)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(7)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(8)) {
-            direction: output;
-            function: "";
-        }
-        pin(P(9)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(0)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(1)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(10)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(11)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(12)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(13)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(14)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(15)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(16)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(17)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(18)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(19)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(2)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(20)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(21)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(22)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(23)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(24)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(25)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(26)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(27)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(28)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(29)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(3)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(30)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(31)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(32)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(33)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(34)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(35)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(36)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(37)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(38)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(39)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(4)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(40)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(41)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(42)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(43)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(44)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(45)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(46)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(47)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(5)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(6)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(7)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(8)) {
-            direction: output;
-            function: "";
-        }
-        pin(PCOUT(9)) {
-            direction: output;
-            function: "";
-        }
+                    }
+        pin("M(0)") {
+            direction: output;
+                    }
+        pin("M(1)") {
+            direction: output;
+                    }
+        pin("M(10)") {
+            direction: output;
+                    }
+        pin("M(11)") {
+            direction: output;
+                    }
+        pin("M(12)") {
+            direction: output;
+                    }
+        pin("M(13)") {
+            direction: output;
+                    }
+        pin("M(14)") {
+            direction: output;
+                    }
+        pin("M(15)") {
+            direction: output;
+                    }
+        pin("M(16)") {
+            direction: output;
+                    }
+        pin("M(17)") {
+            direction: output;
+                    }
+        pin("M(18)") {
+            direction: output;
+                    }
+        pin("M(19)") {
+            direction: output;
+                    }
+        pin("M(2)") {
+            direction: output;
+                    }
+        pin("M(20)") {
+            direction: output;
+                    }
+        pin("M(21)") {
+            direction: output;
+                    }
+        pin("M(22)") {
+            direction: output;
+                    }
+        pin("M(23)") {
+            direction: output;
+                    }
+        pin("M(24)") {
+            direction: output;
+                    }
+        pin("M(25)") {
+            direction: output;
+                    }
+        pin("M(26)") {
+            direction: output;
+                    }
+        pin("M(27)") {
+            direction: output;
+                    }
+        pin("M(28)") {
+            direction: output;
+                    }
+        pin("M(29)") {
+            direction: output;
+                    }
+        pin("M(3)") {
+            direction: output;
+                    }
+        pin("M(30)") {
+            direction: output;
+                    }
+        pin("M(31)") {
+            direction: output;
+                    }
+        pin("M(32)") {
+            direction: output;
+                    }
+        pin("M(33)") {
+            direction: output;
+                    }
+        pin("M(34)") {
+            direction: output;
+                    }
+        pin("M(35)") {
+            direction: output;
+                    }
+        pin("M(4)") {
+            direction: output;
+                    }
+        pin("M(5)") {
+            direction: output;
+                    }
+        pin("M(6)") {
+            direction: output;
+                    }
+        pin("M(7)") {
+            direction: output;
+                    }
+        pin("M(8)") {
+            direction: output;
+                    }
+        pin("M(9)") {
+            direction: output;
+                    }
+        pin("P(0)") {
+            direction: output;
+                    }
+        pin("P(1)") {
+            direction: output;
+                    }
+        pin("P(10)") {
+            direction: output;
+                    }
+        pin("P(11)") {
+            direction: output;
+                    }
+        pin("P(12)") {
+            direction: output;
+                    }
+        pin("P(13)") {
+            direction: output;
+                    }
+        pin("P(14)") {
+            direction: output;
+                    }
+        pin("P(15)") {
+            direction: output;
+                    }
+        pin("P(16)") {
+            direction: output;
+                    }
+        pin("P(17)") {
+            direction: output;
+                    }
+        pin("P(18)") {
+            direction: output;
+                    }
+        pin("P(19)") {
+            direction: output;
+                    }
+        pin("P(2)") {
+            direction: output;
+                    }
+        pin("P(20)") {
+            direction: output;
+                    }
+        pin("P(21)") {
+            direction: output;
+                    }
+        pin("P(22)") {
+            direction: output;
+                    }
+        pin("P(23)") {
+            direction: output;
+                    }
+        pin("P(24)") {
+            direction: output;
+                    }
+        pin("P(25)") {
+            direction: output;
+                    }
+        pin("P(26)") {
+            direction: output;
+                    }
+        pin("P(27)") {
+            direction: output;
+                    }
+        pin("P(28)") {
+            direction: output;
+                    }
+        pin("P(29)") {
+            direction: output;
+                    }
+        pin("P(3)") {
+            direction: output;
+                    }
+        pin("P(30)") {
+            direction: output;
+                    }
+        pin("P(31)") {
+            direction: output;
+                    }
+        pin("P(32)") {
+            direction: output;
+                    }
+        pin("P(33)") {
+            direction: output;
+                    }
+        pin("P(34)") {
+            direction: output;
+                    }
+        pin("P(35)") {
+            direction: output;
+                    }
+        pin("P(36)") {
+            direction: output;
+                    }
+        pin("P(37)") {
+            direction: output;
+                    }
+        pin("P(38)") {
+            direction: output;
+                    }
+        pin("P(39)") {
+            direction: output;
+                    }
+        pin("P(4)") {
+            direction: output;
+                    }
+        pin("P(40)") {
+            direction: output;
+                    }
+        pin("P(41)") {
+            direction: output;
+                    }
+        pin("P(42)") {
+            direction: output;
+                    }
+        pin("P(43)") {
+            direction: output;
+                    }
+        pin("P(44)") {
+            direction: output;
+                    }
+        pin("P(45)") {
+            direction: output;
+                    }
+        pin("P(46)") {
+            direction: output;
+                    }
+        pin("P(47)") {
+            direction: output;
+                    }
+        pin("P(5)") {
+            direction: output;
+                    }
+        pin("P(6)") {
+            direction: output;
+                    }
+        pin("P(7)") {
+            direction: output;
+                    }
+        pin("P(8)") {
+            direction: output;
+                    }
+        pin("P(9)") {
+            direction: output;
+                    }
+        pin("PCOUT(0)") {
+            direction: output;
+                    }
+        pin("PCOUT(1)") {
+            direction: output;
+                    }
+        pin("PCOUT(10)") {
+            direction: output;
+                    }
+        pin("PCOUT(11)") {
+            direction: output;
+                    }
+        pin("PCOUT(12)") {
+            direction: output;
+                    }
+        pin("PCOUT(13)") {
+            direction: output;
+                    }
+        pin("PCOUT(14)") {
+            direction: output;
+                    }
+        pin("PCOUT(15)") {
+            direction: output;
+                    }
+        pin("PCOUT(16)") {
+            direction: output;
+                    }
+        pin("PCOUT(17)") {
+            direction: output;
+                    }
+        pin("PCOUT(18)") {
+            direction: output;
+                    }
+        pin("PCOUT(19)") {
+            direction: output;
+                    }
+        pin("PCOUT(2)") {
+            direction: output;
+                    }
+        pin("PCOUT(20)") {
+            direction: output;
+                    }
+        pin("PCOUT(21)") {
+            direction: output;
+                    }
+        pin("PCOUT(22)") {
+            direction: output;
+                    }
+        pin("PCOUT(23)") {
+            direction: output;
+                    }
+        pin("PCOUT(24)") {
+            direction: output;
+                    }
+        pin("PCOUT(25)") {
+            direction: output;
+                    }
+        pin("PCOUT(26)") {
+            direction: output;
+                    }
+        pin("PCOUT(27)") {
+            direction: output;
+                    }
+        pin("PCOUT(28)") {
+            direction: output;
+                    }
+        pin("PCOUT(29)") {
+            direction: output;
+                    }
+        pin("PCOUT(3)") {
+            direction: output;
+                    }
+        pin("PCOUT(30)") {
+            direction: output;
+                    }
+        pin("PCOUT(31)") {
+            direction: output;
+                    }
+        pin("PCOUT(32)") {
+            direction: output;
+                    }
+        pin("PCOUT(33)") {
+            direction: output;
+                    }
+        pin("PCOUT(34)") {
+            direction: output;
+                    }
+        pin("PCOUT(35)") {
+            direction: output;
+                    }
+        pin("PCOUT(36)") {
+            direction: output;
+                    }
+        pin("PCOUT(37)") {
+            direction: output;
+                    }
+        pin("PCOUT(38)") {
+            direction: output;
+                    }
+        pin("PCOUT(39)") {
+            direction: output;
+                    }
+        pin("PCOUT(4)") {
+            direction: output;
+                    }
+        pin("PCOUT(40)") {
+            direction: output;
+                    }
+        pin("PCOUT(41)") {
+            direction: output;
+                    }
+        pin("PCOUT(42)") {
+            direction: output;
+                    }
+        pin("PCOUT(43)") {
+            direction: output;
+                    }
+        pin("PCOUT(44)") {
+            direction: output;
+                    }
+        pin("PCOUT(45)") {
+            direction: output;
+                    }
+        pin("PCOUT(46)") {
+            direction: output;
+                    }
+        pin("PCOUT(47)") {
+            direction: output;
+                    }
+        pin("PCOUT(5)") {
+            direction: output;
+                    }
+        pin("PCOUT(6)") {
+            direction: output;
+                    }
+        pin("PCOUT(7)") {
+            direction: output;
+                    }
+        pin("PCOUT(8)") {
+            direction: output;
+                    }
+        pin("PCOUT(9)") {
+            direction: output;
+                    }
     }
 
     cell(DSP48E) {
-        pin(A(0)) { direction: input; }
-        pin(A(1)) { direction: input; }
-        pin(A(10)) { direction: input; }
-        pin(A(11)) { direction: input; }
-        pin(A(12)) { direction: input; }
-        pin(A(13)) { direction: input; }
-        pin(A(14)) { direction: input; }
-        pin(A(15)) { direction: input; }
-        pin(A(16)) { direction: input; }
-        pin(A(17)) { direction: input; }
-        pin(A(18)) { direction: input; }
-        pin(A(19)) { direction: input; }
-        pin(A(2)) { direction: input; }
-        pin(A(20)) { direction: input; }
-        pin(A(21)) { direction: input; }
-        pin(A(22)) { direction: input; }
-        pin(A(23)) { direction: input; }
-        pin(A(24)) { direction: input; }
-        pin(A(25)) { direction: input; }
-        pin(A(26)) { direction: input; }
-        pin(A(27)) { direction: input; }
-        pin(A(28)) { direction: input; }
-        pin(A(29)) { direction: input; }
-        pin(A(3)) { direction: input; }
-        pin(A(4)) { direction: input; }
-        pin(A(5)) { direction: input; }
-        pin(A(6)) { direction: input; }
-        pin(A(7)) { direction: input; }
-        pin(A(8)) { direction: input; }
-        pin(A(9)) { direction: input; }
-        pin(ACIN(0)) { direction: input; }
-        pin(ACIN(1)) { direction: input; }
-        pin(ACIN(10)) { direction: input; }
-        pin(ACIN(11)) { direction: input; }
-        pin(ACIN(12)) { direction: input; }
-        pin(ACIN(13)) { direction: input; }
-        pin(ACIN(14)) { direction: input; }
-        pin(ACIN(15)) { direction: input; }
-        pin(ACIN(16)) { direction: input; }
-        pin(ACIN(17)) { direction: input; }
-        pin(ACIN(18)) { direction: input; }
-        pin(ACIN(19)) { direction: input; }
-        pin(ACIN(2)) { direction: input; }
-        pin(ACIN(20)) { direction: input; }
-        pin(ACIN(21)) { direction: input; }
-        pin(ACIN(22)) { direction: input; }
-        pin(ACIN(23)) { direction: input; }
-        pin(ACIN(24)) { direction: input; }
-        pin(ACIN(25)) { direction: input; }
-        pin(ACIN(26)) { direction: input; }
-        pin(ACIN(27)) { direction: input; }
-        pin(ACIN(28)) { direction: input; }
-        pin(ACIN(29)) { direction: input; }
-        pin(ACIN(3)) { direction: input; }
-        pin(ACIN(4)) { direction: input; }
-        pin(ACIN(5)) { direction: input; }
-        pin(ACIN(6)) { direction: input; }
-        pin(ACIN(7)) { direction: input; }
-        pin(ACIN(8)) { direction: input; }
-        pin(ACIN(9)) { direction: input; }
-        pin(ALUMODE(0)) { direction: input; }
-        pin(ALUMODE(1)) { direction: input; }
-        pin(ALUMODE(2)) { direction: input; }
-        pin(ALUMODE(3)) { direction: input; }
-        pin(B(0)) { direction: input; }
-        pin(B(1)) { direction: input; }
-        pin(B(10)) { direction: input; }
-        pin(B(11)) { direction: input; }
-        pin(B(12)) { direction: input; }
-        pin(B(13)) { direction: input; }
-        pin(B(14)) { direction: input; }
-        pin(B(15)) { direction: input; }
-        pin(B(16)) { direction: input; }
-        pin(B(17)) { direction: input; }
-        pin(B(2)) { direction: input; }
-        pin(B(3)) { direction: input; }
-        pin(B(4)) { direction: input; }
-        pin(B(5)) { direction: input; }
-        pin(B(6)) { direction: input; }
-        pin(B(7)) { direction: input; }
-        pin(B(8)) { direction: input; }
-        pin(B(9)) { direction: input; }
-        pin(BCIN(0)) { direction: input; }
-        pin(BCIN(1)) { direction: input; }
-        pin(BCIN(10)) { direction: input; }
-        pin(BCIN(11)) { direction: input; }
-        pin(BCIN(12)) { direction: input; }
-        pin(BCIN(13)) { direction: input; }
-        pin(BCIN(14)) { direction: input; }
-        pin(BCIN(15)) { direction: input; }
-        pin(BCIN(16)) { direction: input; }
-        pin(BCIN(17)) { direction: input; }
-        pin(BCIN(2)) { direction: input; }
-        pin(BCIN(3)) { direction: input; }
-        pin(BCIN(4)) { direction: input; }
-        pin(BCIN(5)) { direction: input; }
-        pin(BCIN(6)) { direction: input; }
-        pin(BCIN(7)) { direction: input; }
-        pin(BCIN(8)) { direction: input; }
-        pin(BCIN(9)) { direction: input; }
-        pin(C(0)) { direction: input; }
-        pin(C(1)) { direction: input; }
-        pin(C(10)) { direction: input; }
-        pin(C(11)) { direction: input; }
-        pin(C(12)) { direction: input; }
-        pin(C(13)) { direction: input; }
-        pin(C(14)) { direction: input; }
-        pin(C(15)) { direction: input; }
-        pin(C(16)) { direction: input; }
-        pin(C(17)) { direction: input; }
-        pin(C(18)) { direction: input; }
-        pin(C(19)) { direction: input; }
-        pin(C(2)) { direction: input; }
-        pin(C(20)) { direction: input; }
-        pin(C(21)) { direction: input; }
-        pin(C(22)) { direction: input; }
-        pin(C(23)) { direction: input; }
-        pin(C(24)) { direction: input; }
-        pin(C(25)) { direction: input; }
-        pin(C(26)) { direction: input; }
-        pin(C(27)) { direction: input; }
-        pin(C(28)) { direction: input; }
-        pin(C(29)) { direction: input; }
-        pin(C(3)) { direction: input; }
-        pin(C(30)) { direction: input; }
-        pin(C(31)) { direction: input; }
-        pin(C(32)) { direction: input; }
-        pin(C(33)) { direction: input; }
-        pin(C(34)) { direction: input; }
-        pin(C(35)) { direction: input; }
-        pin(C(36)) { direction: input; }
-        pin(C(37)) { direction: input; }
-        pin(C(38)) { direction: input; }
-        pin(C(39)) { direction: input; }
-        pin(C(4)) { direction: input; }
-        pin(C(40)) { direction: input; }
-        pin(C(41)) { direction: input; }
-        pin(C(42)) { direction: input; }
-        pin(C(43)) { direction: input; }
-        pin(C(44)) { direction: input; }
-        pin(C(45)) { direction: input; }
-        pin(C(46)) { direction: input; }
-        pin(C(47)) { direction: input; }
-        pin(C(5)) { direction: input; }
-        pin(C(6)) { direction: input; }
-        pin(C(7)) { direction: input; }
-        pin(C(8)) { direction: input; }
-        pin(C(9)) { direction: input; }
+        pin("A(0)") { direction: input; }
+        pin("A(1)") { direction: input; }
+        pin("A(10)") { direction: input; }
+        pin("A(11)") { direction: input; }
+        pin("A(12)") { direction: input; }
+        pin("A(13)") { direction: input; }
+        pin("A(14)") { direction: input; }
+        pin("A(15)") { direction: input; }
+        pin("A(16)") { direction: input; }
+        pin("A(17)") { direction: input; }
+        pin("A(18)") { direction: input; }
+        pin("A(19)") { direction: input; }
+        pin("A(2)") { direction: input; }
+        pin("A(20)") { direction: input; }
+        pin("A(21)") { direction: input; }
+        pin("A(22)") { direction: input; }
+        pin("A(23)") { direction: input; }
+        pin("A(24)") { direction: input; }
+        pin("A(25)") { direction: input; }
+        pin("A(26)") { direction: input; }
+        pin("A(27)") { direction: input; }
+        pin("A(28)") { direction: input; }
+        pin("A(29)") { direction: input; }
+        pin("A(3)") { direction: input; }
+        pin("A(4)") { direction: input; }
+        pin("A(5)") { direction: input; }
+        pin("A(6)") { direction: input; }
+        pin("A(7)") { direction: input; }
+        pin("A(8)") { direction: input; }
+        pin("A(9)") { direction: input; }
+        pin("ACIN(0)") { direction: input; }
+        pin("ACIN(1)") { direction: input; }
+        pin("ACIN(10)") { direction: input; }
+        pin("ACIN(11)") { direction: input; }
+        pin("ACIN(12)") { direction: input; }
+        pin("ACIN(13)") { direction: input; }
+        pin("ACIN(14)") { direction: input; }
+        pin("ACIN(15)") { direction: input; }
+        pin("ACIN(16)") { direction: input; }
+        pin("ACIN(17)") { direction: input; }
+        pin("ACIN(18)") { direction: input; }
+        pin("ACIN(19)") { direction: input; }
+        pin("ACIN(2)") { direction: input; }
+        pin("ACIN(20)") { direction: input; }
+        pin("ACIN(21)") { direction: input; }
+        pin("ACIN(22)") { direction: input; }
+        pin("ACIN(23)") { direction: input; }
+        pin("ACIN(24)") { direction: input; }
+        pin("ACIN(25)") { direction: input; }
+        pin("ACIN(26)") { direction: input; }
+        pin("ACIN(27)") { direction: input; }
+        pin("ACIN(28)") { direction: input; }
+        pin("ACIN(29)") { direction: input; }
+        pin("ACIN(3)") { direction: input; }
+        pin("ACIN(4)") { direction: input; }
+        pin("ACIN(5)") { direction: input; }
+        pin("ACIN(6)") { direction: input; }
+        pin("ACIN(7)") { direction: input; }
+        pin("ACIN(8)") { direction: input; }
+        pin("ACIN(9)") { direction: input; }
+        pin("ALUMODE(0)") { direction: input; }
+        pin("ALUMODE(1)") { direction: input; }
+        pin("ALUMODE(2)") { direction: input; }
+        pin("ALUMODE(3)") { direction: input; }
+        pin("B(0)") { direction: input; }
+        pin("B(1)") { direction: input; }
+        pin("B(10)") { direction: input; }
+        pin("B(11)") { direction: input; }
+        pin("B(12)") { direction: input; }
+        pin("B(13)") { direction: input; }
+        pin("B(14)") { direction: input; }
+        pin("B(15)") { direction: input; }
+        pin("B(16)") { direction: input; }
+        pin("B(17)") { direction: input; }
+        pin("B(2)") { direction: input; }
+        pin("B(3)") { direction: input; }
+        pin("B(4)") { direction: input; }
+        pin("B(5)") { direction: input; }
+        pin("B(6)") { direction: input; }
+        pin("B(7)") { direction: input; }
+        pin("B(8)") { direction: input; }
+        pin("B(9)") { direction: input; }
+        pin("BCIN(0)") { direction: input; }
+        pin("BCIN(1)") { direction: input; }
+        pin("BCIN(10)") { direction: input; }
+        pin("BCIN(11)") { direction: input; }
+        pin("BCIN(12)") { direction: input; }
+        pin("BCIN(13)") { direction: input; }
+        pin("BCIN(14)") { direction: input; }
+        pin("BCIN(15)") { direction: input; }
+        pin("BCIN(16)") { direction: input; }
+        pin("BCIN(17)") { direction: input; }
+        pin("BCIN(2)") { direction: input; }
+        pin("BCIN(3)") { direction: input; }
+        pin("BCIN(4)") { direction: input; }
+        pin("BCIN(5)") { direction: input; }
+        pin("BCIN(6)") { direction: input; }
+        pin("BCIN(7)") { direction: input; }
+        pin("BCIN(8)") { direction: input; }
+        pin("BCIN(9)") { direction: input; }
+        pin("C(0)") { direction: input; }
+        pin("C(1)") { direction: input; }
+        pin("C(10)") { direction: input; }
+        pin("C(11)") { direction: input; }
+        pin("C(12)") { direction: input; }
+        pin("C(13)") { direction: input; }
+        pin("C(14)") { direction: input; }
+        pin("C(15)") { direction: input; }
+        pin("C(16)") { direction: input; }
+        pin("C(17)") { direction: input; }
+        pin("C(18)") { direction: input; }
+        pin("C(19)") { direction: input; }
+        pin("C(2)") { direction: input; }
+        pin("C(20)") { direction: input; }
+        pin("C(21)") { direction: input; }
+        pin("C(22)") { direction: input; }
+        pin("C(23)") { direction: input; }
+        pin("C(24)") { direction: input; }
+        pin("C(25)") { direction: input; }
+        pin("C(26)") { direction: input; }
+        pin("C(27)") { direction: input; }
+        pin("C(28)") { direction: input; }
+        pin("C(29)") { direction: input; }
+        pin("C(3)") { direction: input; }
+        pin("C(30)") { direction: input; }
+        pin("C(31)") { direction: input; }
+        pin("C(32)") { direction: input; }
+        pin("C(33)") { direction: input; }
+        pin("C(34)") { direction: input; }
+        pin("C(35)") { direction: input; }
+        pin("C(36)") { direction: input; }
+        pin("C(37)") { direction: input; }
+        pin("C(38)") { direction: input; }
+        pin("C(39)") { direction: input; }
+        pin("C(4)") { direction: input; }
+        pin("C(40)") { direction: input; }
+        pin("C(41)") { direction: input; }
+        pin("C(42)") { direction: input; }
+        pin("C(43)") { direction: input; }
+        pin("C(44)") { direction: input; }
+        pin("C(45)") { direction: input; }
+        pin("C(46)") { direction: input; }
+        pin("C(47)") { direction: input; }
+        pin("C(5)") { direction: input; }
+        pin("C(6)") { direction: input; }
+        pin("C(7)") { direction: input; }
+        pin("C(8)") { direction: input; }
+        pin("C(9)") { direction: input; }
         pin(CARRYCASCIN) { direction: input; }
         pin(CARRYIN) { direction: input; }
-        pin(CARRYINSEL(0)) { direction: input; }
-        pin(CARRYINSEL(1)) { direction: input; }
-        pin(CARRYINSEL(2)) { direction: input; }
+        pin("CARRYINSEL(0)") { direction: input; }
+        pin("CARRYINSEL(1)") { direction: input; }
+        pin("CARRYINSEL(2)") { direction: input; }
         pin(CEA1) { direction: input; }
         pin(CEA2) { direction: input; }
         pin(CEALUMODE) { direction: input; }
@@ -2710,61 +2329,61 @@ library (XILINX_UNISIM) {
         pin(CEP) { direction: input; }
         pin(CLK) { direction: input; }
         pin(MULTSIGNIN) { direction: input; }
-        pin(OPMODE(0)) { direction: input; }
-        pin(OPMODE(1)) { direction: input; }
-        pin(OPMODE(2)) { direction: input; }
-        pin(OPMODE(3)) { direction: input; }
-        pin(OPMODE(4)) { direction: input; }
-        pin(OPMODE(5)) { direction: input; }
-        pin(OPMODE(6)) { direction: input; }
-        pin(PCIN(0)) { direction: input; }
-        pin(PCIN(1)) { direction: input; }
-        pin(PCIN(10)) { direction: input; }
-        pin(PCIN(11)) { direction: input; }
-        pin(PCIN(12)) { direction: input; }
-        pin(PCIN(13)) { direction: input; }
-        pin(PCIN(14)) { direction: input; }
-        pin(PCIN(15)) { direction: input; }
-        pin(PCIN(16)) { direction: input; }
-        pin(PCIN(17)) { direction: input; }
-        pin(PCIN(18)) { direction: input; }
-        pin(PCIN(19)) { direction: input; }
-        pin(PCIN(2)) { direction: input; }
-        pin(PCIN(20)) { direction: input; }
-        pin(PCIN(21)) { direction: input; }
-        pin(PCIN(22)) { direction: input; }
-        pin(PCIN(23)) { direction: input; }
-        pin(PCIN(24)) { direction: input; }
-        pin(PCIN(25)) { direction: input; }
-        pin(PCIN(26)) { direction: input; }
-        pin(PCIN(27)) { direction: input; }
-        pin(PCIN(28)) { direction: input; }
-        pin(PCIN(29)) { direction: input; }
-        pin(PCIN(3)) { direction: input; }
-        pin(PCIN(30)) { direction: input; }
-        pin(PCIN(31)) { direction: input; }
-        pin(PCIN(32)) { direction: input; }
-        pin(PCIN(33)) { direction: input; }
-        pin(PCIN(34)) { direction: input; }
-        pin(PCIN(35)) { direction: input; }
-        pin(PCIN(36)) { direction: input; }
-        pin(PCIN(37)) { direction: input; }
-        pin(PCIN(38)) { direction: input; }
-        pin(PCIN(39)) { direction: input; }
-        pin(PCIN(4)) { direction: input; }
-        pin(PCIN(40)) { direction: input; }
-        pin(PCIN(41)) { direction: input; }
-        pin(PCIN(42)) { direction: input; }
-        pin(PCIN(43)) { direction: input; }
-        pin(PCIN(44)) { direction: input; }
-        pin(PCIN(45)) { direction: input; }
-        pin(PCIN(46)) { direction: input; }
-        pin(PCIN(47)) { direction: input; }
-        pin(PCIN(5)) { direction: input; }
-        pin(PCIN(6)) { direction: input; }
-        pin(PCIN(7)) { direction: input; }
-        pin(PCIN(8)) { direction: input; }
-        pin(PCIN(9)) { direction: input; }
+        pin("OPMODE(0)") { direction: input; }
+        pin("OPMODE(1)") { direction: input; }
+        pin("OPMODE(2)") { direction: input; }
+        pin("OPMODE(3)") { direction: input; }
+        pin("OPMODE(4)") { direction: input; }
+        pin("OPMODE(5)") { direction: input; }
+        pin("OPMODE(6)") { direction: input; }
+        pin("PCIN(0)") { direction: input; }
+        pin("PCIN(1)") { direction: input; }
+        pin("PCIN(10)") { direction: input; }
+        pin("PCIN(11)") { direction: input; }
+        pin("PCIN(12)") { direction: input; }
+        pin("PCIN(13)") { direction: input; }
+        pin("PCIN(14)") { direction: input; }
+        pin("PCIN(15)") { direction: input; }
+        pin("PCIN(16)") { direction: input; }
+        pin("PCIN(17)") { direction: input; }
+        pin("PCIN(18)") { direction: input; }
+        pin("PCIN(19)") { direction: input; }
+        pin("PCIN(2)") { direction: input; }
+        pin("PCIN(20)") { direction: input; }
+        pin("PCIN(21)") { direction: input; }
+        pin("PCIN(22)") { direction: input; }
+        pin("PCIN(23)") { direction: input; }
+        pin("PCIN(24)") { direction: input; }
+        pin("PCIN(25)") { direction: input; }
+        pin("PCIN(26)") { direction: input; }
+        pin("PCIN(27)") { direction: input; }
+        pin("PCIN(28)") { direction: input; }
+        pin("PCIN(29)") { direction: input; }
+        pin("PCIN(3)") { direction: input; }
+        pin("PCIN(30)") { direction: input; }
+        pin("PCIN(31)") { direction: input; }
+        pin("PCIN(32)") { direction: input; }
+        pin("PCIN(33)") { direction: input; }
+        pin("PCIN(34)") { direction: input; }
+        pin("PCIN(35)") { direction: input; }
+        pin("PCIN(36)") { direction: input; }
+        pin("PCIN(37)") { direction: input; }
+        pin("PCIN(38)") { direction: input; }
+        pin("PCIN(39)") { direction: input; }
+        pin("PCIN(4)") { direction: input; }
+        pin("PCIN(40)") { direction: input; }
+        pin("PCIN(41)") { direction: input; }
+        pin("PCIN(42)") { direction: input; }
+        pin("PCIN(43)") { direction: input; }
+        pin("PCIN(44)") { direction: input; }
+        pin("PCIN(45)") { direction: input; }
+        pin("PCIN(46)") { direction: input; }
+        pin("PCIN(47)") { direction: input; }
+        pin("PCIN(5)") { direction: input; }
+        pin("PCIN(6)") { direction: input; }
+        pin("PCIN(7)") { direction: input; }
+        pin("PCIN(8)") { direction: input; }
+        pin("PCIN(9)") { direction: input; }
         pin(RSTA) { direction: input; }
         pin(RSTALLCARRYIN) { direction: input; }
         pin(RSTALUMODE) { direction: input; }
@@ -2773,778 +2392,624 @@ library (XILINX_UNISIM) {
         pin(RSTCTRL) { direction: input; }
         pin(RSTM) { direction: input; }
         pin(RSTP) { direction: input; }
-        pin(ACOUT(0)) {
+        pin("ACOUT(0)") {
             direction: output;
-            function: "";
-        }
-        pin(ACOUT(1)) {
+                    }
+        pin("ACOUT(1)") {
             direction: output;
-            function: "";
-        }
-        pin(ACOUT(10)) {
+                    }
+        pin("ACOUT(10)") {
             direction: output;
-            function: "";
-        }
-        pin(ACOUT(11)) {
+                    }
+        pin("ACOUT(11)") {
             direction: output;
-            function: "";
-        }
-        pin(ACOUT(12)) {
+                    }
+        pin("ACOUT(12)") {
             direction: output;
-            function: "";
-        }
-        pin(ACOUT(13)) {
+                    }
+        pin("ACOUT(13)") {
             direction: output;
-            function: "";
-        }
-        pin(ACOUT(14)) {
+                    }
+        pin("ACOUT(14)") {
             direction: output;
-            function: "";
-        }
-        pin(ACOUT(15)) {
+                    }
+        pin("ACOUT(15)") {
             direction: output;
-            function: "";
-        }
-        pin(ACOUT(16)) {
+                    }
+        pin("ACOUT(16)") {
             direction: output;
-            function: "";
-        }
-        pin(ACOUT(17)) {
+                    }
+        pin("ACOUT(17)") {
             direction: output;
-            function: "";
-        }
-        pin(ACOUT(18)) {
+                    }
+        pin("ACOUT(18)") {
             direction: output;
-            function: "";
-        }
-        pin(ACOUT(19)) {
+                    }
+        pin("ACOUT(19)") {
             direction: output;
-            function: "";
-        }
-        pin(ACOUT(2)) {
+                    }
+        pin("ACOUT(2)") {
             direction: output;
-            function: "";
-        }
-        pin(ACOUT(20)) {
+                    }
+        pin("ACOUT(20)") {
             direction: output;
-            function: "";
-        }
-        pin(ACOUT(21)) {
+                    }
+        pin("ACOUT(21)") {
             direction: output;
-            function: "";
-        }
-        pin(ACOUT(22)) {
+                    }
+        pin("ACOUT(22)") {
             direction: output;
-            function: "";
-        }
-        pin(ACOUT(23)) {
+                    }
+        pin("ACOUT(23)") {
             direction: output;
-            function: "";
-        }
-        pin(ACOUT(24)) {
+                    }
+        pin("ACOUT(24)") {
             direction: output;
-            function: "";
-        }
-        pin(ACOUT(25)) {
+                    }
+        pin("ACOUT(25)") {
             direction: output;
-            function: "";
-        }
-        pin(ACOUT(26)) {
+                    }
+        pin("ACOUT(26)") {
             direction: output;
-            function: "";
-        }
-        pin(ACOUT(27)) {
+                    }
+        pin("ACOUT(27)") {
             direction: output;
-            function: "";
-        }
-        pin(ACOUT(28)) {
+                    }
+        pin("ACOUT(28)") {
             direction: output;
-            function: "";
-        }
-        pin(ACOUT(29)) {
+                    }
+        pin("ACOUT(29)") {
             direction: output;
-            function: "";
-        }
-        pin(ACOUT(3)) {
+                    }
+        pin("ACOUT(3)") {
             direction: output;
-            function: "";
-        }
-        pin(ACOUT(4)) {
+                    }
+        pin("ACOUT(4)") {
             direction: output;
-            function: "";
-        }
-        pin(ACOUT(5)) {
+                    }
+        pin("ACOUT(5)") {
             direction: output;
-            function: "";
-        }
-        pin(ACOUT(6)) {
+                    }
+        pin("ACOUT(6)") {
             direction: output;
-            function: "";
-        }
-        pin(ACOUT(7)) {
+                    }
+        pin("ACOUT(7)") {
             direction: output;
-            function: "";
-        }
-        pin(ACOUT(8)) {
+                    }
+        pin("ACOUT(8)") {
             direction: output;
-            function: "";
-        }
-        pin(ACOUT(9)) {
+                    }
+        pin("ACOUT(9)") {
             direction: output;
-            function: "";
-        }
-        pin(BCOUT(0)) {
+                    }
+        pin("BCOUT(0)") {
             direction: output;
-            function: "";
-        }
-        pin(BCOUT(1)) {
+                    }
+        pin("BCOUT(1)") {
             direction: output;
-            function: "";
-        }
-        pin(BCOUT(10)) {
+                    }
+        pin("BCOUT(10)") {
             direction: output;
-            function: "";
-        }
-        pin(BCOUT(11)) {
+                    }
+        pin("BCOUT(11)") {
             direction: output;
-            function: "";
-        }
-        pin(BCOUT(12)) {
+                    }
+        pin("BCOUT(12)") {
             direction: output;
-            function: "";
-        }
-        pin(BCOUT(13)) {
+                    }
+        pin("BCOUT(13)") {
             direction: output;
-            function: "";
-        }
-        pin(BCOUT(14)) {
+                    }
+        pin("BCOUT(14)") {
             direction: output;
-            function: "";
-        }
-        pin(BCOUT(15)) {
+                    }
+        pin("BCOUT(15)") {
             direction: output;
-            function: "";
-        }
-        pin(BCOUT(16)) {
+                    }
+        pin("BCOUT(16)") {
             direction: output;
-            function: "";
-        }
-        pin(BCOUT(17)) {
+                    }
+        pin("BCOUT(17)") {
             direction: output;
-            function: "";
-        }
-        pin(BCOUT(2)) {
+                    }
+        pin("BCOUT(2)") {
             direction: output;
-            function: "";
-        }
-        pin(BCOUT(3)) {
+                    }
+        pin("BCOUT(3)") {
             direction: output;
-            function: "";
-        }
-        pin(BCOUT(4)) {
+                    }
+        pin("BCOUT(4)") {
             direction: output;
-            function: "";
-        }
-        pin(BCOUT(5)) {
+                    }
+        pin("BCOUT(5)") {
             direction: output;
-            function: "";
-        }
-        pin(BCOUT(6)) {
+                    }
+        pin("BCOUT(6)") {
             direction: output;
-            function: "";
-        }
-        pin(BCOUT(7)) {
+                    }
+        pin("BCOUT(7)") {
             direction: output;
-            function: "";
-        }
-        pin(BCOUT(8)) {
+                    }
+        pin("BCOUT(8)") {
             direction: output;
-            function: "";
-        }
-        pin(BCOUT(9)) {
+                    }
+        pin("BCOUT(9)") {
             direction: output;
-            function: "";
-        }
+                    }
         pin(CARRYCASCOUT) {
             direction: output;
-            function: "";
-        }
-        pin(CARRYOUT(0)) {
+                    }
+        pin("CARRYOUT(0)") {
             direction: output;
-            function: "";
-        }
-        pin(CARRYOUT(1)) {
+                    }
+        pin("CARRYOUT(1)") {
             direction: output;
-            function: "";
-        }
-        pin(CARRYOUT(2)) {
+                    }
+        pin("CARRYOUT(2)") {
             direction: output;
-            function: "";
-        }
-        pin(CARRYOUT(3)) {
+                    }
+        pin("CARRYOUT(3)") {
             direction: output;
-            function: "";
-        }
+                    }
         pin(MULTSIGNOUT) {
             direction: output;
-            function: "";
-        }
+                    }
         pin(OVERFLOW) {
             direction: output;
-            function: "";
-        }
-        pin(P(0)) {
+                    }
+        pin("P(0)") {
             direction: output;
-            function: "";
-        }
-        pin(P(1)) {
+                    }
+        pin("P(1)") {
             direction: output;
-            function: "";
-        }
-        pin(P(10)) {
+                    }
+        pin("P(10)") {
             direction: output;
-            function: "";
-        }
-        pin(P(11)) {
+                    }
+        pin("P(11)") {
             direction: output;
-            function: "";
-        }
-        pin(P(12)) {
+                    }
+        pin("P(12)") {
             direction: output;
-            function: "";
-        }
-        pin(P(13)) {
+                    }
+        pin("P(13)") {
             direction: output;
-            function: "";
-        }
-        pin(P(14)) {
+                    }
+        pin("P(14)") {
             direction: output;
-            function: "";
-        }
-        pin(P(15)) {
+                    }
+        pin("P(15)") {
             direction: output;
-            function: "";
-        }
-        pin(P(16)) {
+                    }
+        pin("P(16)") {
             direction: output;
-            function: "";
-        }
-        pin(P(17)) {
+                    }
+        pin("P(17)") {
             direction: output;
-            function: "";
-        }
-        pin(P(18)) {
+                    }
+        pin("P(18)") {
             direction: output;
-            function: "";
-        }
-        pin(P(19)) {
+                    }
+        pin("P(19)") {
             direction: output;
-            function: "";
-        }
-        pin(P(2)) {
+                    }
+        pin("P(2)") {
             direction: output;
-            function: "";
-        }
-        pin(P(20)) {
+                    }
+        pin("P(20)") {
             direction: output;
-            function: "";
-        }
-        pin(P(21)) {
+                    }
+        pin("P(21)") {
             direction: output;
-            function: "";
-        }
-        pin(P(22)) {
+                    }
+        pin("P(22)") {
             direction: output;
-            function: "";
-        }
-        pin(P(23)) {
+                    }
+        pin("P(23)") {
             direction: output;
-            function: "";
-        }
-        pin(P(24)) {
+                    }
+        pin("P(24)") {
             direction: output;
-            function: "";
-        }
-        pin(P(25)) {
+                    }
+        pin("P(25)") {
             direction: output;
-            function: "";
-        }
-        pin(P(26)) {
+                    }
+        pin("P(26)") {
             direction: output;
-            function: "";
-        }
-        pin(P(27)) {
+                    }
+        pin("P(27)") {
             direction: output;
-            function: "";
-        }
-        pin(P(28)) {
+                    }
+        pin("P(28)") {
             direction: output;
-            function: "";
-        }
-        pin(P(29)) {
+                    }
+        pin("P(29)") {
             direction: output;
-            function: "";
-        }
-        pin(P(3)) {
+                    }
+        pin("P(3)") {
             direction: output;
-            function: "";
-        }
-        pin(P(30)) {
+                    }
+        pin("P(30)") {
             direction: output;
-            function: "";
-        }
-        pin(P(31)) {
+                    }
+        pin("P(31)") {
             direction: output;
-            function: "";
-        }
-        pin(P(32)) {
+                    }
+        pin("P(32)") {
             direction: output;
-            function: "";
-        }
-        pin(P(33)) {
+                    }
+        pin("P(33)") {
             direction: output;
-            function: "";
-        }
-        pin(P(34)) {
+                    }
+        pin("P(34)") {
             direction: output;
-            function: "";
-        }
-        pin(P(35)) {
+                    }
+        pin("P(35)") {
             direction: output;
-            function: "";
-        }
-        pin(P(36)) {
+                    }
+        pin("P(36)") {
             direction: output;
-            function: "";
-        }
-        pin(P(37)) {
+                    }
+        pin("P(37)") {
             direction: output;
-            function: "";
-        }
-        pin(P(38)) {
+                    }
+        pin("P(38)") {
             direction: output;
-            function: "";
-        }
-        pin(P(39)) {
+                    }
+        pin("P(39)") {
             direction: output;
-            function: "";
-        }
-        pin(P(4)) {
+                    }
+        pin("P(4)") {
             direction: output;
-            function: "";
-        }
-        pin(P(40)) {
+                    }
+        pin("P(40)") {
             direction: output;
-            function: "";
-        }
-        pin(P(41)) {
+                    }
+        pin("P(41)") {
             direction: output;
-            function: "";
-        }
-        pin(P(42)) {
+                    }
+        pin("P(42)") {
             direction: output;
-            function: "";
-        }
-        pin(P(43)) {
+                    }
+        pin("P(43)") {
             direction: output;
-            function: "";
-        }
-        pin(P(44)) {
+                    }
+        pin("P(44)") {
             direction: output;
-            function: "";
-        }
-        pin(P(45)) {
+                    }
+        pin("P(45)") {
             direction: output;
-            function: "";
-        }
-        pin(P(46)) {
+                    }
+        pin("P(46)") {
             direction: output;
-            function: "";
-        }
-        pin(P(47)) {
+                    }
+        pin("P(47)") {
             direction: output;
-            function: "";
-        }
-        pin(P(5)) {
+                    }
+        pin("P(5)") {
             direction: output;
-            function: "";
-        }
-        pin(P(6)) {
+                    }
+        pin("P(6)") {
             direction: output;
-            function: "";
-        }
-        pin(P(7)) {
+                    }
+        pin("P(7)") {
             direction: output;
-            function: "";
-        }
-        pin(P(8)) {
+                    }
+        pin("P(8)") {
             direction: output;
-            function: "";
-        }
-        pin(P(9)) {
+                    }
+        pin("P(9)") {
             direction: output;
-            function: "";
-        }
+                    }
         pin(PATTERNBDETECT) {
             direction: output;
-            function: "";
-        }
+                    }
         pin(PATTERNDETECT) {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(0)) {
+                    }
+        pin("PCOUT(0)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(1)) {
+                    }
+        pin("PCOUT(1)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(10)) {
+                    }
+        pin("PCOUT(10)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(11)) {
+                    }
+        pin("PCOUT(11)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(12)) {
+                    }
+        pin("PCOUT(12)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(13)) {
+                    }
+        pin("PCOUT(13)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(14)) {
+                    }
+        pin("PCOUT(14)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(15)) {
+                    }
+        pin("PCOUT(15)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(16)) {
+                    }
+        pin("PCOUT(16)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(17)) {
+                    }
+        pin("PCOUT(17)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(18)) {
+                    }
+        pin("PCOUT(18)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(19)) {
+                    }
+        pin("PCOUT(19)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(2)) {
+                    }
+        pin("PCOUT(2)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(20)) {
+                    }
+        pin("PCOUT(20)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(21)) {
+                    }
+        pin("PCOUT(21)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(22)) {
+                    }
+        pin("PCOUT(22)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(23)) {
+                    }
+        pin("PCOUT(23)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(24)) {
+                    }
+        pin("PCOUT(24)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(25)) {
+                    }
+        pin("PCOUT(25)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(26)) {
+                    }
+        pin("PCOUT(26)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(27)) {
+                    }
+        pin("PCOUT(27)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(28)) {
+                    }
+        pin("PCOUT(28)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(29)) {
+                    }
+        pin("PCOUT(29)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(3)) {
+                    }
+        pin("PCOUT(3)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(30)) {
+                    }
+        pin("PCOUT(30)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(31)) {
+                    }
+        pin("PCOUT(31)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(32)) {
+                    }
+        pin("PCOUT(32)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(33)) {
+                    }
+        pin("PCOUT(33)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(34)) {
+                    }
+        pin("PCOUT(34)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(35)) {
+                    }
+        pin("PCOUT(35)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(36)) {
+                    }
+        pin("PCOUT(36)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(37)) {
+                    }
+        pin("PCOUT(37)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(38)) {
+                    }
+        pin("PCOUT(38)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(39)) {
+                    }
+        pin("PCOUT(39)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(4)) {
+                    }
+        pin("PCOUT(4)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(40)) {
+                    }
+        pin("PCOUT(40)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(41)) {
+                    }
+        pin("PCOUT(41)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(42)) {
+                    }
+        pin("PCOUT(42)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(43)) {
+                    }
+        pin("PCOUT(43)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(44)) {
+                    }
+        pin("PCOUT(44)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(45)) {
+                    }
+        pin("PCOUT(45)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(46)) {
+                    }
+        pin("PCOUT(46)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(47)) {
+                    }
+        pin("PCOUT(47)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(5)) {
+                    }
+        pin("PCOUT(5)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(6)) {
+                    }
+        pin("PCOUT(6)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(7)) {
+                    }
+        pin("PCOUT(7)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(8)) {
+                    }
+        pin("PCOUT(8)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(9)) {
+                    }
+        pin("PCOUT(9)") {
             direction: output;
-            function: "";
-        }
+                    }
         pin(UNDERFLOW) {
             direction: output;
-            function: "";
-        }
+                    }
     }
 
     cell(DSP48E1) {
-        pin(A(0)) { direction: input; }
-        pin(A(1)) { direction: input; }
-        pin(A(10)) { direction: input; }
-        pin(A(11)) { direction: input; }
-        pin(A(12)) { direction: input; }
-        pin(A(13)) { direction: input; }
-        pin(A(14)) { direction: input; }
-        pin(A(15)) { direction: input; }
-        pin(A(16)) { direction: input; }
-        pin(A(17)) { direction: input; }
-        pin(A(18)) { direction: input; }
-        pin(A(19)) { direction: input; }
-        pin(A(2)) { direction: input; }
-        pin(A(20)) { direction: input; }
-        pin(A(21)) { direction: input; }
-        pin(A(22)) { direction: input; }
-        pin(A(23)) { direction: input; }
-        pin(A(24)) { direction: input; }
-        pin(A(25)) { direction: input; }
-        pin(A(26)) { direction: input; }
-        pin(A(27)) { direction: input; }
-        pin(A(28)) { direction: input; }
-        pin(A(29)) { direction: input; }
-        pin(A(3)) { direction: input; }
-        pin(A(4)) { direction: input; }
-        pin(A(5)) { direction: input; }
-        pin(A(6)) { direction: input; }
-        pin(A(7)) { direction: input; }
-        pin(A(8)) { direction: input; }
-        pin(A(9)) { direction: input; }
-        pin(ACIN(0)) { direction: input; }
-        pin(ACIN(1)) { direction: input; }
-        pin(ACIN(10)) { direction: input; }
-        pin(ACIN(11)) { direction: input; }
-        pin(ACIN(12)) { direction: input; }
-        pin(ACIN(13)) { direction: input; }
-        pin(ACIN(14)) { direction: input; }
-        pin(ACIN(15)) { direction: input; }
-        pin(ACIN(16)) { direction: input; }
-        pin(ACIN(17)) { direction: input; }
-        pin(ACIN(18)) { direction: input; }
-        pin(ACIN(19)) { direction: input; }
-        pin(ACIN(2)) { direction: input; }
-        pin(ACIN(20)) { direction: input; }
-        pin(ACIN(21)) { direction: input; }
-        pin(ACIN(22)) { direction: input; }
-        pin(ACIN(23)) { direction: input; }
-        pin(ACIN(24)) { direction: input; }
-        pin(ACIN(25)) { direction: input; }
-        pin(ACIN(26)) { direction: input; }
-        pin(ACIN(27)) { direction: input; }
-        pin(ACIN(28)) { direction: input; }
-        pin(ACIN(29)) { direction: input; }
-        pin(ACIN(3)) { direction: input; }
-        pin(ACIN(4)) { direction: input; }
-        pin(ACIN(5)) { direction: input; }
-        pin(ACIN(6)) { direction: input; }
-        pin(ACIN(7)) { direction: input; }
-        pin(ACIN(8)) { direction: input; }
-        pin(ACIN(9)) { direction: input; }
-        pin(ALUMODE(0)) { direction: input; }
-        pin(ALUMODE(1)) { direction: input; }
-        pin(ALUMODE(2)) { direction: input; }
-        pin(ALUMODE(3)) { direction: input; }
-        pin(B(0)) { direction: input; }
-        pin(B(1)) { direction: input; }
-        pin(B(10)) { direction: input; }
-        pin(B(11)) { direction: input; }
-        pin(B(12)) { direction: input; }
-        pin(B(13)) { direction: input; }
-        pin(B(14)) { direction: input; }
-        pin(B(15)) { direction: input; }
-        pin(B(16)) { direction: input; }
-        pin(B(17)) { direction: input; }
-        pin(B(2)) { direction: input; }
-        pin(B(3)) { direction: input; }
-        pin(B(4)) { direction: input; }
-        pin(B(5)) { direction: input; }
-        pin(B(6)) { direction: input; }
-        pin(B(7)) { direction: input; }
-        pin(B(8)) { direction: input; }
-        pin(B(9)) { direction: input; }
-        pin(BCIN(0)) { direction: input; }
-        pin(BCIN(1)) { direction: input; }
-        pin(BCIN(10)) { direction: input; }
-        pin(BCIN(11)) { direction: input; }
-        pin(BCIN(12)) { direction: input; }
-        pin(BCIN(13)) { direction: input; }
-        pin(BCIN(14)) { direction: input; }
-        pin(BCIN(15)) { direction: input; }
-        pin(BCIN(16)) { direction: input; }
-        pin(BCIN(17)) { direction: input; }
-        pin(BCIN(2)) { direction: input; }
-        pin(BCIN(3)) { direction: input; }
-        pin(BCIN(4)) { direction: input; }
-        pin(BCIN(5)) { direction: input; }
-        pin(BCIN(6)) { direction: input; }
-        pin(BCIN(7)) { direction: input; }
-        pin(BCIN(8)) { direction: input; }
-        pin(BCIN(9)) { direction: input; }
-        pin(C(0)) { direction: input; }
-        pin(C(1)) { direction: input; }
-        pin(C(10)) { direction: input; }
-        pin(C(11)) { direction: input; }
-        pin(C(12)) { direction: input; }
-        pin(C(13)) { direction: input; }
-        pin(C(14)) { direction: input; }
-        pin(C(15)) { direction: input; }
-        pin(C(16)) { direction: input; }
-        pin(C(17)) { direction: input; }
-        pin(C(18)) { direction: input; }
-        pin(C(19)) { direction: input; }
-        pin(C(2)) { direction: input; }
-        pin(C(20)) { direction: input; }
-        pin(C(21)) { direction: input; }
-        pin(C(22)) { direction: input; }
-        pin(C(23)) { direction: input; }
-        pin(C(24)) { direction: input; }
-        pin(C(25)) { direction: input; }
-        pin(C(26)) { direction: input; }
-        pin(C(27)) { direction: input; }
-        pin(C(28)) { direction: input; }
-        pin(C(29)) { direction: input; }
-        pin(C(3)) { direction: input; }
-        pin(C(30)) { direction: input; }
-        pin(C(31)) { direction: input; }
-        pin(C(32)) { direction: input; }
-        pin(C(33)) { direction: input; }
-        pin(C(34)) { direction: input; }
-        pin(C(35)) { direction: input; }
-        pin(C(36)) { direction: input; }
-        pin(C(37)) { direction: input; }
-        pin(C(38)) { direction: input; }
-        pin(C(39)) { direction: input; }
-        pin(C(4)) { direction: input; }
-        pin(C(40)) { direction: input; }
-        pin(C(41)) { direction: input; }
-        pin(C(42)) { direction: input; }
-        pin(C(43)) { direction: input; }
-        pin(C(44)) { direction: input; }
-        pin(C(45)) { direction: input; }
-        pin(C(46)) { direction: input; }
-        pin(C(47)) { direction: input; }
-        pin(C(5)) { direction: input; }
-        pin(C(6)) { direction: input; }
-        pin(C(7)) { direction: input; }
-        pin(C(8)) { direction: input; }
-        pin(C(9)) { direction: input; }
+        pin("A(0)") { direction: input; }
+        pin("A(1)") { direction: input; }
+        pin("A(10)") { direction: input; }
+        pin("A(11)") { direction: input; }
+        pin("A(12)") { direction: input; }
+        pin("A(13)") { direction: input; }
+        pin("A(14)") { direction: input; }
+        pin("A(15)") { direction: input; }
+        pin("A(16)") { direction: input; }
+        pin("A(17)") { direction: input; }
+        pin("A(18)") { direction: input; }
+        pin("A(19)") { direction: input; }
+        pin("A(2)") { direction: input; }
+        pin("A(20)") { direction: input; }
+        pin("A(21)") { direction: input; }
+        pin("A(22)") { direction: input; }
+        pin("A(23)") { direction: input; }
+        pin("A(24)") { direction: input; }
+        pin("A(25)") { direction: input; }
+        pin("A(26)") { direction: input; }
+        pin("A(27)") { direction: input; }
+        pin("A(28)") { direction: input; }
+        pin("A(29)") { direction: input; }
+        pin("A(3)") { direction: input; }
+        pin("A(4)") { direction: input; }
+        pin("A(5)") { direction: input; }
+        pin("A(6)") { direction: input; }
+        pin("A(7)") { direction: input; }
+        pin("A(8)") { direction: input; }
+        pin("A(9)") { direction: input; }
+        pin("ACIN(0)") { direction: input; }
+        pin("ACIN(1)") { direction: input; }
+        pin("ACIN(10)") { direction: input; }
+        pin("ACIN(11)") { direction: input; }
+        pin("ACIN(12)") { direction: input; }
+        pin("ACIN(13)") { direction: input; }
+        pin("ACIN(14)") { direction: input; }
+        pin("ACIN(15)") { direction: input; }
+        pin("ACIN(16)") { direction: input; }
+        pin("ACIN(17)") { direction: input; }
+        pin("ACIN(18)") { direction: input; }
+        pin("ACIN(19)") { direction: input; }
+        pin("ACIN(2)") { direction: input; }
+        pin("ACIN(20)") { direction: input; }
+        pin("ACIN(21)") { direction: input; }
+        pin("ACIN(22)") { direction: input; }
+        pin("ACIN(23)") { direction: input; }
+        pin("ACIN(24)") { direction: input; }
+        pin("ACIN(25)") { direction: input; }
+        pin("ACIN(26)") { direction: input; }
+        pin("ACIN(27)") { direction: input; }
+        pin("ACIN(28)") { direction: input; }
+        pin("ACIN(29)") { direction: input; }
+        pin("ACIN(3)") { direction: input; }
+        pin("ACIN(4)") { direction: input; }
+        pin("ACIN(5)") { direction: input; }
+        pin("ACIN(6)") { direction: input; }
+        pin("ACIN(7)") { direction: input; }
+        pin("ACIN(8)") { direction: input; }
+        pin("ACIN(9)") { direction: input; }
+        pin("ALUMODE(0)") { direction: input; }
+        pin("ALUMODE(1)") { direction: input; }
+        pin("ALUMODE(2)") { direction: input; }
+        pin("ALUMODE(3)") { direction: input; }
+        pin("B(0)") { direction: input; }
+        pin("B(1)") { direction: input; }
+        pin("B(10)") { direction: input; }
+        pin("B(11)") { direction: input; }
+        pin("B(12)") { direction: input; }
+        pin("B(13)") { direction: input; }
+        pin("B(14)") { direction: input; }
+        pin("B(15)") { direction: input; }
+        pin("B(16)") { direction: input; }
+        pin("B(17)") { direction: input; }
+        pin("B(2)") { direction: input; }
+        pin("B(3)") { direction: input; }
+        pin("B(4)") { direction: input; }
+        pin("B(5)") { direction: input; }
+        pin("B(6)") { direction: input; }
+        pin("B(7)") { direction: input; }
+        pin("B(8)") { direction: input; }
+        pin("B(9)") { direction: input; }
+        pin("BCIN(0)") { direction: input; }
+        pin("BCIN(1)") { direction: input; }
+        pin("BCIN(10)") { direction: input; }
+        pin("BCIN(11)") { direction: input; }
+        pin("BCIN(12)") { direction: input; }
+        pin("BCIN(13)") { direction: input; }
+        pin("BCIN(14)") { direction: input; }
+        pin("BCIN(15)") { direction: input; }
+        pin("BCIN(16)") { direction: input; }
+        pin("BCIN(17)") { direction: input; }
+        pin("BCIN(2)") { direction: input; }
+        pin("BCIN(3)") { direction: input; }
+        pin("BCIN(4)") { direction: input; }
+        pin("BCIN(5)") { direction: input; }
+        pin("BCIN(6)") { direction: input; }
+        pin("BCIN(7)") { direction: input; }
+        pin("BCIN(8)") { direction: input; }
+        pin("BCIN(9)") { direction: input; }
+        pin("C(0)") { direction: input; }
+        pin("C(1)") { direction: input; }
+        pin("C(10)") { direction: input; }
+        pin("C(11)") { direction: input; }
+        pin("C(12)") { direction: input; }
+        pin("C(13)") { direction: input; }
+        pin("C(14)") { direction: input; }
+        pin("C(15)") { direction: input; }
+        pin("C(16)") { direction: input; }
+        pin("C(17)") { direction: input; }
+        pin("C(18)") { direction: input; }
+        pin("C(19)") { direction: input; }
+        pin("C(2)") { direction: input; }
+        pin("C(20)") { direction: input; }
+        pin("C(21)") { direction: input; }
+        pin("C(22)") { direction: input; }
+        pin("C(23)") { direction: input; }
+        pin("C(24)") { direction: input; }
+        pin("C(25)") { direction: input; }
+        pin("C(26)") { direction: input; }
+        pin("C(27)") { direction: input; }
+        pin("C(28)") { direction: input; }
+        pin("C(29)") { direction: input; }
+        pin("C(3)") { direction: input; }
+        pin("C(30)") { direction: input; }
+        pin("C(31)") { direction: input; }
+        pin("C(32)") { direction: input; }
+        pin("C(33)") { direction: input; }
+        pin("C(34)") { direction: input; }
+        pin("C(35)") { direction: input; }
+        pin("C(36)") { direction: input; }
+        pin("C(37)") { direction: input; }
+        pin("C(38)") { direction: input; }
+        pin("C(39)") { direction: input; }
+        pin("C(4)") { direction: input; }
+        pin("C(40)") { direction: input; }
+        pin("C(41)") { direction: input; }
+        pin("C(42)") { direction: input; }
+        pin("C(43)") { direction: input; }
+        pin("C(44)") { direction: input; }
+        pin("C(45)") { direction: input; }
+        pin("C(46)") { direction: input; }
+        pin("C(47)") { direction: input; }
+        pin("C(5)") { direction: input; }
+        pin("C(6)") { direction: input; }
+        pin("C(7)") { direction: input; }
+        pin("C(8)") { direction: input; }
+        pin("C(9)") { direction: input; }
         pin(CARRYCASCIN) { direction: input; }
         pin(CARRYIN) { direction: input; }
-        pin(CARRYINSEL(0)) { direction: input; }
-        pin(CARRYINSEL(1)) { direction: input; }
-        pin(CARRYINSEL(2)) { direction: input; }
+        pin("CARRYINSEL(0)") { direction: input; }
+        pin("CARRYINSEL(1)") { direction: input; }
+        pin("CARRYINSEL(2)") { direction: input; }
         pin(CEA1) { direction: input; }
         pin(CEA2) { direction: input; }
         pin(CEAD) { direction: input; }
@@ -3559,92 +3024,92 @@ library (XILINX_UNISIM) {
         pin(CEM) { direction: input; }
         pin(CEP) { direction: input; }
         pin(CLK) { direction: input; }
-        pin(D(0)) { direction: input; }
-        pin(D(1)) { direction: input; }
-        pin(D(10)) { direction: input; }
-        pin(D(11)) { direction: input; }
-        pin(D(12)) { direction: input; }
-        pin(D(13)) { direction: input; }
-        pin(D(14)) { direction: input; }
-        pin(D(15)) { direction: input; }
-        pin(D(16)) { direction: input; }
-        pin(D(17)) { direction: input; }
-        pin(D(18)) { direction: input; }
-        pin(D(19)) { direction: input; }
-        pin(D(2)) { direction: input; }
-        pin(D(20)) { direction: input; }
-        pin(D(21)) { direction: input; }
-        pin(D(22)) { direction: input; }
-        pin(D(23)) { direction: input; }
-        pin(D(24)) { direction: input; }
-        pin(D(3)) { direction: input; }
-        pin(D(4)) { direction: input; }
-        pin(D(5)) { direction: input; }
-        pin(D(6)) { direction: input; }
-        pin(D(7)) { direction: input; }
-        pin(D(8)) { direction: input; }
-        pin(D(9)) { direction: input; }
-        pin(INMODE(0)) { direction: input; }
-        pin(INMODE(1)) { direction: input; }
-        pin(INMODE(2)) { direction: input; }
-        pin(INMODE(3)) { direction: input; }
-        pin(INMODE(4)) { direction: input; }
+        pin("D(0)") { direction: input; }
+        pin("D(1)") { direction: input; }
+        pin("D(10)") { direction: input; }
+        pin("D(11)") { direction: input; }
+        pin("D(12)") { direction: input; }
+        pin("D(13)") { direction: input; }
+        pin("D(14)") { direction: input; }
+        pin("D(15)") { direction: input; }
+        pin("D(16)") { direction: input; }
+        pin("D(17)") { direction: input; }
+        pin("D(18)") { direction: input; }
+        pin("D(19)") { direction: input; }
+        pin("D(2)") { direction: input; }
+        pin("D(20)") { direction: input; }
+        pin("D(21)") { direction: input; }
+        pin("D(22)") { direction: input; }
+        pin("D(23)") { direction: input; }
+        pin("D(24)") { direction: input; }
+        pin("D(3)") { direction: input; }
+        pin("D(4)") { direction: input; }
+        pin("D(5)") { direction: input; }
+        pin("D(6)") { direction: input; }
+        pin("D(7)") { direction: input; }
+        pin("D(8)") { direction: input; }
+        pin("D(9)") { direction: input; }
+        pin("INMODE(0)") { direction: input; }
+        pin("INMODE(1)") { direction: input; }
+        pin("INMODE(2)") { direction: input; }
+        pin("INMODE(3)") { direction: input; }
+        pin("INMODE(4)") { direction: input; }
         pin(MULTSIGNIN) { direction: input; }
-        pin(OPMODE(0)) { direction: input; }
-        pin(OPMODE(1)) { direction: input; }
-        pin(OPMODE(2)) { direction: input; }
-        pin(OPMODE(3)) { direction: input; }
-        pin(OPMODE(4)) { direction: input; }
-        pin(OPMODE(5)) { direction: input; }
-        pin(OPMODE(6)) { direction: input; }
-        pin(PCIN(0)) { direction: input; }
-        pin(PCIN(1)) { direction: input; }
-        pin(PCIN(10)) { direction: input; }
-        pin(PCIN(11)) { direction: input; }
-        pin(PCIN(12)) { direction: input; }
-        pin(PCIN(13)) { direction: input; }
-        pin(PCIN(14)) { direction: input; }
-        pin(PCIN(15)) { direction: input; }
-        pin(PCIN(16)) { direction: input; }
-        pin(PCIN(17)) { direction: input; }
-        pin(PCIN(18)) { direction: input; }
-        pin(PCIN(19)) { direction: input; }
-        pin(PCIN(2)) { direction: input; }
-        pin(PCIN(20)) { direction: input; }
-        pin(PCIN(21)) { direction: input; }
-        pin(PCIN(22)) { direction: input; }
-        pin(PCIN(23)) { direction: input; }
-        pin(PCIN(24)) { direction: input; }
-        pin(PCIN(25)) { direction: input; }
-        pin(PCIN(26)) { direction: input; }
-        pin(PCIN(27)) { direction: input; }
-        pin(PCIN(28)) { direction: input; }
-        pin(PCIN(29)) { direction: input; }
-        pin(PCIN(3)) { direction: input; }
-        pin(PCIN(30)) { direction: input; }
-        pin(PCIN(31)) { direction: input; }
-        pin(PCIN(32)) { direction: input; }
-        pin(PCIN(33)) { direction: input; }
-        pin(PCIN(34)) { direction: input; }
-        pin(PCIN(35)) { direction: input; }
-        pin(PCIN(36)) { direction: input; }
-        pin(PCIN(37)) { direction: input; }
-        pin(PCIN(38)) { direction: input; }
-        pin(PCIN(39)) { direction: input; }
-        pin(PCIN(4)) { direction: input; }
-        pin(PCIN(40)) { direction: input; }
-        pin(PCIN(41)) { direction: input; }
-        pin(PCIN(42)) { direction: input; }
-        pin(PCIN(43)) { direction: input; }
-        pin(PCIN(44)) { direction: input; }
-        pin(PCIN(45)) { direction: input; }
-        pin(PCIN(46)) { direction: input; }
-        pin(PCIN(47)) { direction: input; }
-        pin(PCIN(5)) { direction: input; }
-        pin(PCIN(6)) { direction: input; }
-        pin(PCIN(7)) { direction: input; }
-        pin(PCIN(8)) { direction: input; }
-        pin(PCIN(9)) { direction: input; }
+        pin("OPMODE(0)") { direction: input; }
+        pin("OPMODE(1)") { direction: input; }
+        pin("OPMODE(2)") { direction: input; }
+        pin("OPMODE(3)") { direction: input; }
+        pin("OPMODE(4)") { direction: input; }
+        pin("OPMODE(5)") { direction: input; }
+        pin("OPMODE(6)") { direction: input; }
+        pin("PCIN(0)") { direction: input; }
+        pin("PCIN(1)") { direction: input; }
+        pin("PCIN(10)") { direction: input; }
+        pin("PCIN(11)") { direction: input; }
+        pin("PCIN(12)") { direction: input; }
+        pin("PCIN(13)") { direction: input; }
+        pin("PCIN(14)") { direction: input; }
+        pin("PCIN(15)") { direction: input; }
+        pin("PCIN(16)") { direction: input; }
+        pin("PCIN(17)") { direction: input; }
+        pin("PCIN(18)") { direction: input; }
+        pin("PCIN(19)") { direction: input; }
+        pin("PCIN(2)") { direction: input; }
+        pin("PCIN(20)") { direction: input; }
+        pin("PCIN(21)") { direction: input; }
+        pin("PCIN(22)") { direction: input; }
+        pin("PCIN(23)") { direction: input; }
+        pin("PCIN(24)") { direction: input; }
+        pin("PCIN(25)") { direction: input; }
+        pin("PCIN(26)") { direction: input; }
+        pin("PCIN(27)") { direction: input; }
+        pin("PCIN(28)") { direction: input; }
+        pin("PCIN(29)") { direction: input; }
+        pin("PCIN(3)") { direction: input; }
+        pin("PCIN(30)") { direction: input; }
+        pin("PCIN(31)") { direction: input; }
+        pin("PCIN(32)") { direction: input; }
+        pin("PCIN(33)") { direction: input; }
+        pin("PCIN(34)") { direction: input; }
+        pin("PCIN(35)") { direction: input; }
+        pin("PCIN(36)") { direction: input; }
+        pin("PCIN(37)") { direction: input; }
+        pin("PCIN(38)") { direction: input; }
+        pin("PCIN(39)") { direction: input; }
+        pin("PCIN(4)") { direction: input; }
+        pin("PCIN(40)") { direction: input; }
+        pin("PCIN(41)") { direction: input; }
+        pin("PCIN(42)") { direction: input; }
+        pin("PCIN(43)") { direction: input; }
+        pin("PCIN(44)") { direction: input; }
+        pin("PCIN(45)") { direction: input; }
+        pin("PCIN(46)") { direction: input; }
+        pin("PCIN(47)") { direction: input; }
+        pin("PCIN(5)") { direction: input; }
+        pin("PCIN(6)") { direction: input; }
+        pin("PCIN(7)") { direction: input; }
+        pin("PCIN(8)") { direction: input; }
+        pin("PCIN(9)") { direction: input; }
         pin(RSTA) { direction: input; }
         pin(RSTALLCARRYIN) { direction: input; }
         pin(RSTALUMODE) { direction: input; }
@@ -3655,753 +3120,567 @@ library (XILINX_UNISIM) {
         pin(RSTINMODE) { direction: input; }
         pin(RSTM) { direction: input; }
         pin(RSTP) { direction: input; }
-        pin(ACOUT(0)) {
+        pin("ACOUT(0)") {
             direction: output;
-            function: "";
-        }
-        pin(ACOUT(1)) {
+                    }
+        pin("ACOUT(1)") {
             direction: output;
-            function: "";
-        }
-        pin(ACOUT(10)) {
+                    }
+        pin("ACOUT(10)") {
             direction: output;
-            function: "";
-        }
-        pin(ACOUT(11)) {
+                    }
+        pin("ACOUT(11)") {
             direction: output;
-            function: "";
-        }
-        pin(ACOUT(12)) {
+                    }
+        pin("ACOUT(12)") {
             direction: output;
-            function: "";
-        }
-        pin(ACOUT(13)) {
+                    }
+        pin("ACOUT(13)") {
             direction: output;
-            function: "";
-        }
-        pin(ACOUT(14)) {
+                    }
+        pin("ACOUT(14)") {
             direction: output;
-            function: "";
-        }
-        pin(ACOUT(15)) {
+                    }
+        pin("ACOUT(15)") {
             direction: output;
-            function: "";
-        }
-        pin(ACOUT(16)) {
+                    }
+        pin("ACOUT(16)") {
             direction: output;
-            function: "";
-        }
-        pin(ACOUT(17)) {
+                    }
+        pin("ACOUT(17)") {
             direction: output;
-            function: "";
-        }
-        pin(ACOUT(18)) {
+                    }
+        pin("ACOUT(18)") {
             direction: output;
-            function: "";
-        }
-        pin(ACOUT(19)) {
+                    }
+        pin("ACOUT(19)") {
             direction: output;
-            function: "";
-        }
-        pin(ACOUT(2)) {
+                    }
+        pin("ACOUT(2)") {
             direction: output;
-            function: "";
-        }
-        pin(ACOUT(20)) {
+                    }
+        pin("ACOUT(20)") {
             direction: output;
-            function: "";
-        }
-        pin(ACOUT(21)) {
+                    }
+        pin("ACOUT(21)") {
             direction: output;
-            function: "";
-        }
-        pin(ACOUT(22)) {
+                    }
+        pin("ACOUT(22)") {
             direction: output;
-            function: "";
-        }
-        pin(ACOUT(23)) {
+                    }
+        pin("ACOUT(23)") {
             direction: output;
-            function: "";
-        }
-        pin(ACOUT(24)) {
+                    }
+        pin("ACOUT(24)") {
             direction: output;
-            function: "";
-        }
-        pin(ACOUT(25)) {
+                    }
+        pin("ACOUT(25)") {
             direction: output;
-            function: "";
-        }
-        pin(ACOUT(26)) {
+                    }
+        pin("ACOUT(26)") {
             direction: output;
-            function: "";
-        }
-        pin(ACOUT(27)) {
+                    }
+        pin("ACOUT(27)") {
             direction: output;
-            function: "";
-        }
-        pin(ACOUT(28)) {
+                    }
+        pin("ACOUT(28)") {
             direction: output;
-            function: "";
-        }
-        pin(ACOUT(29)) {
+                    }
+        pin("ACOUT(29)") {
             direction: output;
-            function: "";
-        }
-        pin(ACOUT(3)) {
+                    }
+        pin("ACOUT(3)") {
             direction: output;
-            function: "";
-        }
-        pin(ACOUT(4)) {
+                    }
+        pin("ACOUT(4)") {
             direction: output;
-            function: "";
-        }
-        pin(ACOUT(5)) {
+                    }
+        pin("ACOUT(5)") {
             direction: output;
-            function: "";
-        }
-        pin(ACOUT(6)) {
+                    }
+        pin("ACOUT(6)") {
             direction: output;
-            function: "";
-        }
-        pin(ACOUT(7)) {
+                    }
+        pin("ACOUT(7)") {
             direction: output;
-            function: "";
-        }
-        pin(ACOUT(8)) {
+                    }
+        pin("ACOUT(8)") {
             direction: output;
-            function: "";
-        }
-        pin(ACOUT(9)) {
+                    }
+        pin("ACOUT(9)") {
             direction: output;
-            function: "";
-        }
-        pin(BCOUT(0)) {
+                    }
+        pin("BCOUT(0)") {
             direction: output;
-            function: "";
-        }
-        pin(BCOUT(1)) {
+                    }
+        pin("BCOUT(1)") {
             direction: output;
-            function: "";
-        }
-        pin(BCOUT(10)) {
+                    }
+        pin("BCOUT(10)") {
             direction: output;
-            function: "";
-        }
-        pin(BCOUT(11)) {
+                    }
+        pin("BCOUT(11)") {
             direction: output;
-            function: "";
-        }
-        pin(BCOUT(12)) {
+                    }
+        pin("BCOUT(12)") {
             direction: output;
-            function: "";
-        }
-        pin(BCOUT(13)) {
+                    }
+        pin("BCOUT(13)") {
             direction: output;
-            function: "";
-        }
-        pin(BCOUT(14)) {
+                    }
+        pin("BCOUT(14)") {
             direction: output;
-            function: "";
-        }
-        pin(BCOUT(15)) {
+                    }
+        pin("BCOUT(15)") {
             direction: output;
-            function: "";
-        }
-        pin(BCOUT(16)) {
+                    }
+        pin("BCOUT(16)") {
             direction: output;
-            function: "";
-        }
-        pin(BCOUT(17)) {
+                    }
+        pin("BCOUT(17)") {
             direction: output;
-            function: "";
-        }
-        pin(BCOUT(2)) {
+                    }
+        pin("BCOUT(2)") {
             direction: output;
-            function: "";
-        }
-        pin(BCOUT(3)) {
+                    }
+        pin("BCOUT(3)") {
             direction: output;
-            function: "";
-        }
-        pin(BCOUT(4)) {
+                    }
+        pin("BCOUT(4)") {
             direction: output;
-            function: "";
-        }
-        pin(BCOUT(5)) {
+                    }
+        pin("BCOUT(5)") {
             direction: output;
-            function: "";
-        }
-        pin(BCOUT(6)) {
+                    }
+        pin("BCOUT(6)") {
             direction: output;
-            function: "";
-        }
-        pin(BCOUT(7)) {
+                    }
+        pin("BCOUT(7)") {
             direction: output;
-            function: "";
-        }
-        pin(BCOUT(8)) {
+                    }
+        pin("BCOUT(8)") {
             direction: output;
-            function: "";
-        }
-        pin(BCOUT(9)) {
+                    }
+        pin("BCOUT(9)") {
             direction: output;
-            function: "";
-        }
+                    }
         pin(CARRYCASCOUT) {
             direction: output;
-            function: "";
-        }
-        pin(CARRYOUT(0)) {
+                    }
+        pin("CARRYOUT(0)") {
             direction: output;
-            function: "";
-        }
-        pin(CARRYOUT(1)) {
+                    }
+        pin("CARRYOUT(1)") {
             direction: output;
-            function: "";
-        }
-        pin(CARRYOUT(2)) {
+                    }
+        pin("CARRYOUT(2)") {
             direction: output;
-            function: "";
-        }
-        pin(CARRYOUT(3)) {
+                    }
+        pin("CARRYOUT(3)") {
             direction: output;
-            function: "";
-        }
+                    }
         pin(MULTSIGNOUT) {
             direction: output;
-            function: "";
-        }
+                    }
         pin(OVERFLOW) {
             direction: output;
-            function: "";
-        }
-        pin(P(0)) {
+                    }
+        pin("P(0)") {
             direction: output;
-            function: "";
-        }
-        pin(P(1)) {
+                    }
+        pin("P(1)") {
             direction: output;
-            function: "";
-        }
-        pin(P(10)) {
+                    }
+        pin("P(10)") {
             direction: output;
-            function: "";
-        }
-        pin(P(11)) {
+                    }
+        pin("P(11)") {
             direction: output;
-            function: "";
-        }
-        pin(P(12)) {
+                    }
+        pin("P(12)") {
             direction: output;
-            function: "";
-        }
-        pin(P(13)) {
+                    }
+        pin("P(13)") {
             direction: output;
-            function: "";
-        }
-        pin(P(14)) {
+                    }
+        pin("P(14)") {
             direction: output;
-            function: "";
-        }
-        pin(P(15)) {
+                    }
+        pin("P(15)") {
             direction: output;
-            function: "";
-        }
-        pin(P(16)) {
+                    }
+        pin("P(16)") {
             direction: output;
-            function: "";
-        }
-        pin(P(17)) {
+                    }
+        pin("P(17)") {
             direction: output;
-            function: "";
-        }
-        pin(P(18)) {
+                    }
+        pin("P(18)") {
             direction: output;
-            function: "";
-        }
-        pin(P(19)) {
+                    }
+        pin("P(19)") {
             direction: output;
-            function: "";
-        }
-        pin(P(2)) {
+                    }
+        pin("P(2)") {
             direction: output;
-            function: "";
-        }
-        pin(P(20)) {
+                    }
+        pin("P(20)") {
             direction: output;
-            function: "";
-        }
-        pin(P(21)) {
+                    }
+        pin("P(21)") {
             direction: output;
-            function: "";
-        }
-        pin(P(22)) {
+                    }
+        pin("P(22)") {
             direction: output;
-            function: "";
-        }
-        pin(P(23)) {
+                    }
+        pin("P(23)") {
             direction: output;
-            function: "";
-        }
-        pin(P(24)) {
+                    }
+        pin("P(24)") {
             direction: output;
-            function: "";
-        }
-        pin(P(25)) {
+                    }
+        pin("P(25)") {
             direction: output;
-            function: "";
-        }
-        pin(P(26)) {
+                    }
+        pin("P(26)") {
             direction: output;
-            function: "";
-        }
-        pin(P(27)) {
+                    }
+        pin("P(27)") {
             direction: output;
-            function: "";
-        }
-        pin(P(28)) {
+                    }
+        pin("P(28)") {
             direction: output;
-            function: "";
-        }
-        pin(P(29)) {
+                    }
+        pin("P(29)") {
             direction: output;
-            function: "";
-        }
-        pin(P(3)) {
+                    }
+        pin("P(3)") {
             direction: output;
-            function: "";
-        }
-        pin(P(30)) {
+                    }
+        pin("P(30)") {
             direction: output;
-            function: "";
-        }
-        pin(P(31)) {
+                    }
+        pin("P(31)") {
             direction: output;
-            function: "";
-        }
-        pin(P(32)) {
+                    }
+        pin("P(32)") {
             direction: output;
-            function: "";
-        }
-        pin(P(33)) {
+                    }
+        pin("P(33)") {
             direction: output;
-            function: "";
-        }
-        pin(P(34)) {
+                    }
+        pin("P(34)") {
             direction: output;
-            function: "";
-        }
-        pin(P(35)) {
+                    }
+        pin("P(35)") {
             direction: output;
-            function: "";
-        }
-        pin(P(36)) {
+                    }
+        pin("P(36)") {
             direction: output;
-            function: "";
-        }
-        pin(P(37)) {
+                    }
+        pin("P(37)") {
             direction: output;
-            function: "";
-        }
-        pin(P(38)) {
+                    }
+        pin("P(38)") {
             direction: output;
-            function: "";
-        }
-        pin(P(39)) {
+                    }
+        pin("P(39)") {
             direction: output;
-            function: "";
-        }
-        pin(P(4)) {
+                    }
+        pin("P(4)") {
             direction: output;
-            function: "";
-        }
-        pin(P(40)) {
+                    }
+        pin("P(40)") {
             direction: output;
-            function: "";
-        }
-        pin(P(41)) {
+                    }
+        pin("P(41)") {
             direction: output;
-            function: "";
-        }
-        pin(P(42)) {
+                    }
+        pin("P(42)") {
             direction: output;
-            function: "";
-        }
-        pin(P(43)) {
+                    }
+        pin("P(43)") {
             direction: output;
-            function: "";
-        }
-        pin(P(44)) {
+                    }
+        pin("P(44)") {
             direction: output;
-            function: "";
-        }
-        pin(P(45)) {
+                    }
+        pin("P(45)") {
             direction: output;
-            function: "";
-        }
-        pin(P(46)) {
+                    }
+        pin("P(46)") {
             direction: output;
-            function: "";
-        }
-        pin(P(47)) {
+                    }
+        pin("P(47)") {
             direction: output;
-            function: "";
-        }
-        pin(P(5)) {
+                    }
+        pin("P(5)") {
             direction: output;
-            function: "";
-        }
-        pin(P(6)) {
+                    }
+        pin("P(6)") {
             direction: output;
-            function: "";
-        }
-        pin(P(7)) {
+                    }
+        pin("P(7)") {
             direction: output;
-            function: "";
-        }
-        pin(P(8)) {
+                    }
+        pin("P(8)") {
             direction: output;
-            function: "";
-        }
-        pin(P(9)) {
+                    }
+        pin("P(9)") {
             direction: output;
-            function: "";
-        }
+                    }
         pin(PATTERNBDETECT) {
             direction: output;
-            function: "";
-        }
+                    }
         pin(PATTERNDETECT) {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(0)) {
+                    }
+        pin("PCOUT(0)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(1)) {
+                    }
+        pin("PCOUT(1)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(10)) {
+                    }
+        pin("PCOUT(10)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(11)) {
+                    }
+        pin("PCOUT(11)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(12)) {
+                    }
+        pin("PCOUT(12)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(13)) {
+                    }
+        pin("PCOUT(13)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(14)) {
+                    }
+        pin("PCOUT(14)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(15)) {
+                    }
+        pin("PCOUT(15)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(16)) {
+                    }
+        pin("PCOUT(16)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(17)) {
+                    }
+        pin("PCOUT(17)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(18)) {
+                    }
+        pin("PCOUT(18)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(19)) {
+                    }
+        pin("PCOUT(19)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(2)) {
+                    }
+        pin("PCOUT(2)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(20)) {
+                    }
+        pin("PCOUT(20)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(21)) {
+                    }
+        pin("PCOUT(21)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(22)) {
+                    }
+        pin("PCOUT(22)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(23)) {
+                    }
+        pin("PCOUT(23)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(24)) {
+                    }
+        pin("PCOUT(24)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(25)) {
+                    }
+        pin("PCOUT(25)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(26)) {
+                    }
+        pin("PCOUT(26)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(27)) {
+                    }
+        pin("PCOUT(27)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(28)) {
+                    }
+        pin("PCOUT(28)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(29)) {
+                    }
+        pin("PCOUT(29)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(3)) {
+                    }
+        pin("PCOUT(3)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(30)) {
+                    }
+        pin("PCOUT(30)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(31)) {
+                    }
+        pin("PCOUT(31)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(32)) {
+                    }
+        pin("PCOUT(32)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(33)) {
+                    }
+        pin("PCOUT(33)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(34)) {
+                    }
+        pin("PCOUT(34)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(35)) {
+                    }
+        pin("PCOUT(35)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(36)) {
+                    }
+        pin("PCOUT(36)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(37)) {
+                    }
+        pin("PCOUT(37)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(38)) {
+                    }
+        pin("PCOUT(38)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(39)) {
+                    }
+        pin("PCOUT(39)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(4)) {
+                    }
+        pin("PCOUT(4)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(40)) {
+                    }
+        pin("PCOUT(40)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(41)) {
+                    }
+        pin("PCOUT(41)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(42)) {
+                    }
+        pin("PCOUT(42)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(43)) {
+                    }
+        pin("PCOUT(43)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(44)) {
+                    }
+        pin("PCOUT(44)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(45)) {
+                    }
+        pin("PCOUT(45)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(46)) {
+                    }
+        pin("PCOUT(46)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(47)) {
+                    }
+        pin("PCOUT(47)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(5)) {
+                    }
+        pin("PCOUT(5)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(6)) {
+                    }
+        pin("PCOUT(6)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(7)) {
+                    }
+        pin("PCOUT(7)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(8)) {
+                    }
+        pin("PCOUT(8)") {
             direction: output;
-            function: "";
-        }
-        pin(PCOUT(9)) {
+                    }
+        pin("PCOUT(9)") {
             direction: output;
-            function: "";
-        }
+                    }
         pin(UNDERFLOW) {
             direction: output;
-            function: "";
-        }
+                    }
     }
 
     cell(EFUSE_USR) {
-        pin(EFUSEUSR(0)) {
+        pin("EFUSEUSR(0)") {
             direction: output;
-            function: "";
-        }
-        pin(EFUSEUSR(1)) {
+                    }
+        pin("EFUSEUSR(1)") {
             direction: output;
-            function: "";
-        }
-        pin(EFUSEUSR(10)) {
+                    }
+        pin("EFUSEUSR(10)") {
             direction: output;
-            function: "";
-        }
-        pin(EFUSEUSR(11)) {
+                    }
+        pin("EFUSEUSR(11)") {
             direction: output;
-            function: "";
-        }
-        pin(EFUSEUSR(12)) {
+                    }
+        pin("EFUSEUSR(12)") {
             direction: output;
-            function: "";
-        }
-        pin(EFUSEUSR(13)) {
+                    }
+        pin("EFUSEUSR(13)") {
             direction: output;
-            function: "";
-        }
-        pin(EFUSEUSR(14)) {
+                    }
+        pin("EFUSEUSR(14)") {
             direction: output;
-            function: "";
-        }
-        pin(EFUSEUSR(15)) {
+                    }
+        pin("EFUSEUSR(15)") {
             direction: output;
-            function: "";
-        }
-        pin(EFUSEUSR(16)) {
+                    }
+        pin("EFUSEUSR(16)") {
             direction: output;
-            function: "";
-        }
-        pin(EFUSEUSR(17)) {
+                    }
+        pin("EFUSEUSR(17)") {
             direction: output;
-            function: "";
-        }
-        pin(EFUSEUSR(18)) {
+                    }
+        pin("EFUSEUSR(18)") {
             direction: output;
-            function: "";
-        }
-        pin(EFUSEUSR(19)) {
+                    }
+        pin("EFUSEUSR(19)") {
             direction: output;
-            function: "";
-        }
-        pin(EFUSEUSR(2)) {
+                    }
+        pin("EFUSEUSR(2)") {
             direction: output;
-            function: "";
-        }
-        pin(EFUSEUSR(20)) {
+                    }
+        pin("EFUSEUSR(20)") {
             direction: output;
-            function: "";
-        }
-        pin(EFUSEUSR(21)) {
+                    }
+        pin("EFUSEUSR(21)") {
             direction: output;
-            function: "";
-        }
-        pin(EFUSEUSR(22)) {
+                    }
+        pin("EFUSEUSR(22)") {
             direction: output;
-            function: "";
-        }
-        pin(EFUSEUSR(23)) {
+                    }
+        pin("EFUSEUSR(23)") {
             direction: output;
-            function: "";
-        }
-        pin(EFUSEUSR(24)) {
+                    }
+        pin("EFUSEUSR(24)") {
             direction: output;
-            function: "";
-        }
-        pin(EFUSEUSR(25)) {
+                    }
+        pin("EFUSEUSR(25)") {
             direction: output;
-            function: "";
-        }
-        pin(EFUSEUSR(26)) {
+                    }
+        pin("EFUSEUSR(26)") {
             direction: output;
-            function: "";
-        }
-        pin(EFUSEUSR(27)) {
+                    }
+        pin("EFUSEUSR(27)") {
             direction: output;
-            function: "";
-        }
-        pin(EFUSEUSR(28)) {
+                    }
+        pin("EFUSEUSR(28)") {
             direction: output;
-            function: "";
-        }
-        pin(EFUSEUSR(29)) {
+                    }
+        pin("EFUSEUSR(29)") {
             direction: output;
-            function: "";
-        }
-        pin(EFUSEUSR(3)) {
+                    }
+        pin("EFUSEUSR(3)") {
             direction: output;
-            function: "";
-        }
-        pin(EFUSEUSR(30)) {
+                    }
+        pin("EFUSEUSR(30)") {
             direction: output;
-            function: "";
-        }
-        pin(EFUSEUSR(31)) {
+                    }
+        pin("EFUSEUSR(31)") {
             direction: output;
-            function: "";
-        }
-        pin(EFUSEUSR(4)) {
+                    }
+        pin("EFUSEUSR(4)") {
             direction: output;
-            function: "";
-        }
-        pin(EFUSEUSR(5)) {
+                    }
+        pin("EFUSEUSR(5)") {
             direction: output;
-            function: "";
-        }
-        pin(EFUSEUSR(6)) {
+                    }
+        pin("EFUSEUSR(6)") {
             direction: output;
-            function: "";
-        }
-        pin(EFUSEUSR(7)) {
+                    }
+        pin("EFUSEUSR(7)") {
             direction: output;
-            function: "";
-        }
-        pin(EFUSEUSR(8)) {
+                    }
+        pin("EFUSEUSR(8)") {
             direction: output;
-            function: "";
-        }
-        pin(EFUSEUSR(9)) {
+                    }
+        pin("EFUSEUSR(9)") {
             direction: output;
-            function: "";
-        }
+                    }
     }
 
 }

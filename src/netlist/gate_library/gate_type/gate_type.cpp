@@ -1,4 +1,4 @@
-#include "netlist/gate_library/gate_type.h"
+#include "netlist/gate_library/gate_type/gate_type.h"
 
 gate_type::gate_type(const std::string& name)
 {
@@ -84,7 +84,7 @@ std::vector<std::string> gate_type::get_output_pins() const
     return m_output_pins;
 }
 
-std::map<std::string, boolean_function> gate_type::get_boolean_functions() const
+std::unordered_map<std::string, boolean_function> gate_type::get_boolean_functions() const
 {
     return m_functions;
 }

@@ -3,7 +3,7 @@
 #include "core/log.h"
 
 #include "netlist/gate.h"
-#include "netlist/gate_library/gate_type.h"
+#include "netlist/gate_library/gate_type/gate_type.h"
 #include "netlist/module.h"
 #include "netlist/net.h"
 #include "netlist/netlist.h"

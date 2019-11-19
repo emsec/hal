@@ -1,4 +1,4 @@
-#include "netlist/gate_library/gate_type_lut.h"
+#include "netlist/gate_library/gate_type/gate_type_lut.h"
 
 gate_type_lut::gate_type_lut(const std::string& name) : gate_type(name)
 {

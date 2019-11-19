@@ -1,4 +1,4 @@
-#include "netlist/gate_library/gate_type_latch.h"
+#include "netlist/gate_library/gate_type/gate_type_latch.h"
 
 gate_type_latch::gate_type_latch(const std::string& name) : gate_type(name)
 {
@@ -89,7 +89,7 @@ std::set<std::string> gate_type_latch::get_inverted_output_pins() const
     return m_inverted_output_pins;
 }
 
-std::pair<gate_type_latch::special_behavior, gate_type_latch::special_behavior> gate_type_latch::get_special_behavior() const
+std::pair<gate_type::special_behavior, gate_type::special_behavior> gate_type_latch::get_special_behavior() const
 {
     return m_special_behavior;
 }
