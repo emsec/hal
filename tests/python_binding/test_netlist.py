@@ -47,7 +47,17 @@ class TestCoreUtils(unittest.TestCase):
         nl.set_design_name("test_name")
         self.assertEqual(nl.get_design_name(), "test_name")
 
-    # Testing the python binding for functions: create_gate, get_gates, delete_gate, mark_global_gnd_gate,
+    # Testing the python binding for function: set_design_name, set_device_name, get_design_name, get_device_name,  
+    def test_identifier(self):
+        nl = self.create_empty_netlist()
+        nl.set_design_name("design_name")
+        self.assertEqual(nl.get_design_name(), "design_name")
+        nl.set_device_name("device_name")
+        self.assertEqual(nl.get_device_name(), "device_name")
+        nl.set_id(123)
+        self.assertEqual(nl.get_id(), 123)
+
+    # Testing the python binding for functions: create_gate, get_gate_by_id, get_gates, get_gate_by_id, delete_gate, mark_global_gnd_gate,
     #  mark_global_vcc_gate, unmark_global_vcc_gate, unmark_global_vcc_gate, is_global_gnd_gate, is_global_vcc_gate
     def test_create_gate(self):
         # NOTE: float x, float y ?
@@ -57,6 +67,7 @@ class TestCoreUtils(unittest.TestCase):
         self.assertIsNotNone(test_gate)
         self.assertEqual(len(nl.get_gates("INV", "test_gate")), 1)
         self.assertEqual(test_gate.get_id(), self.min_id)
+        self.assertIsNotNone(nl.get_gate_by_id(self.min_id))
 
         # Create a gate (without (passed) id)
         test_gate_no_id = nl.create_gate("INV", "test_gate_no_id")
@@ -66,12 +77,14 @@ class TestCoreUtils(unittest.TestCase):
         # Mark and unmark a global gnd_gate 
         nl.mark_global_gnd_gate(test_gate)
         self.assertTrue(nl.is_global_gnd_gate(test_gate))
+        self.assertEqual(len(nl.get_global_gnd_gates()) , 1)
         nl.unmark_global_gnd_gate(test_gate)
         self.assertFalse(nl.is_global_gnd_gate(test_gate))
 
         # Mark and unmark a global vcc_gate 
         nl.mark_global_vcc_gate(test_gate)
         self.assertTrue(nl.is_global_vcc_gate(test_gate))
+        self.assertEqual(len(nl.get_global_vcc_gates()) , 1)
         nl.unmark_global_vcc_gate(test_gate)
         self.assertFalse(nl.is_global_vcc_gate(test_gate))
 
@@ -83,13 +96,14 @@ class TestCoreUtils(unittest.TestCase):
         
 
 
-    # Testing the python binding for functions: create_module, get_modules, delete modules 
+    # Testing the python binding for functions: create_module, get_modules, delete_modules
     def test_create_module(self):
         # NOTE: float x, float y ?
         # Create a module (with id)
         nl = self.create_empty_netlist()
         test_module = nl.create_module(self.min_id, "test_module", nl.get_top_module())
         self.assertIsNotNone(test_module)
+        self.assertIsNotNone(nl.get_gate_by_id(123))
 
         # Create a module (without (passed) id)
         test_module_no_id = nl.create_module("test_module_no_id", nl.get_top_module())
@@ -103,7 +117,8 @@ class TestCoreUtils(unittest.TestCase):
         self.assertIsNone(self.get_module_by_name(nl.get_modules(), "test_module"))
 
     # Testing the python binding for functions: create_net, get_nets, delete_net, mark_global_input_net, mark_global_output_net,
-    #                                           unmark_global_input_net, unmark_global_output_net, is_global_input_net, is_global_output_net
+    #                                           unmark_global_input_net, unmark_global_output_net, is_global_input_net, is_global_output_net,
+    #                                           get_number_of_nets
     def test_create_net(self):
         nl = self.create_empty_netlist()
         default_net_amt = len(nl.get_nets())
@@ -114,20 +129,29 @@ class TestCoreUtils(unittest.TestCase):
         self.assertIsNotNone(nl.get_net_by_id(self.min_id))
         self.assertEqual(len(nl.get_nets()), default_net_amt+1)
 
+        # Create a net without passing an id
+        test_net_no_id = nl.create_net("test_net")
+        self.assertIsNotNone(test_net_no_id)
+        self.assertIsNotNone(nl.get_net_by_id(self.min_id))
+        self.assertEqual(len(nl.get_nets()), default_net_amt+2)
+
         # Mark and unmark a global_input_net
         nl.mark_global_input_net(test_net)
         self.assertTrue(nl.is_global_input_net(test_net))
+        self.assertEqual(len(nl.get_global_input_nets()), 1)
         nl.unmark_global_input_net(test_net)
         self.assertFalse(nl.is_global_input_net(test_net))
 
         # Mark and unmark a global_output_net
         nl.mark_global_output_net(test_net)
         self.assertTrue(nl.is_global_output_net(test_net))
+        self.assertEqual(len(nl.get_global_output_nets()), 1)
         nl.unmark_global_output_net(test_net)
         self.assertFalse(nl.is_global_output_net(test_net))
 
         # Delete the net
         nl.delete_net(test_net)
+        nl.delete_net(test_net_no_id)
         self.assertEqual(len(nl.get_nets()), default_net_amt)
 
     
