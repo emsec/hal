@@ -330,6 +330,9 @@ void gate_details_widget::update(const u32 gate_id)
 
     auto g = g_netlist->get_gate_by_id(gate_id);
 
+    if(!g)
+        return;
+
     m_name_item->setText(QString::fromStdString(g->get_name()));
     m_type_item->setText(QString::fromStdString(g->get_type()));
     m_id_item->setText(QString::number(g->get_id()));
