@@ -10,7 +10,7 @@
 
 #include <igraph/igraph.h>
 
-std::map<int, std::set<std::shared_ptr<gate>>> plugin_graph_algorithm::get_communities_spinglass(std::shared_ptr<netlist> nl, u32 spins)
+std::map<int, std::set<std::shared_ptr<gate>>> plugin_graph_algorithm::get_communities_spinglass(std::shared_ptr<netlist> const nl, u32 const spins)
 {
     if (nl == nullptr)
     {
@@ -18,7 +18,10 @@ std::map<int, std::set<std::shared_ptr<gate>>> plugin_graph_algorithm::get_commu
         return std::map<int, std::set<std::shared_ptr<gate>>>();
     }
 
+    log_info("graph_algorithm", "netlist has {} gates and {} nets", nl->get_gates().size(), nl->get_nets().size());
+
     std::tuple<igraph_t, std::map<int, std::shared_ptr<gate>>> igraph_tuple = get_igraph_directed(nl);
+
     igraph_t graph                                                          = std::get<0>(igraph_tuple);
     std::map<int, std::shared_ptr<gate>> vertex_to_gate                     = std::get<1>(igraph_tuple);
 

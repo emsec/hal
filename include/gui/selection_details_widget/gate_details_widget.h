@@ -80,7 +80,6 @@ public Q_SLOTS:
     void handle_module_gate_removed(std::shared_ptr<module> module, u32 associated_data);
 
     void handle_net_created(std::shared_ptr<net> net);
-    void handle_net_removed(std::shared_ptr<net> net);
     void handle_net_name_changed(std::shared_ptr<net> net);
     void handle_net_src_changed(std::shared_ptr<net> net);
     void handle_net_dst_added(std::shared_ptr<net> net, const u32 dst_gate_id);
@@ -105,8 +104,6 @@ private:
     QTreeWidgetItem* m_input_pins;
     // stores output pin tree view
     QTreeWidgetItem* m_output_pins;
-
-    QLabel* m_item_deleted_label;
 
     // stores utility objects for input/output pin tree view
     QScrollArea* m_scroll_area;

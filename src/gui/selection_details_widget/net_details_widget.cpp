@@ -12,6 +12,11 @@
 #include <QTreeWidgetItem>
 #include <QVBoxLayout>
 
+#include <QDebug>
+
+#include <functional>
+
+
 net_details_widget::net_details_widget(QWidget* parent) : QWidget(parent)
 {
     m_content_layout = new QVBoxLayout(this);
@@ -36,12 +41,12 @@ net_details_widget::net_details_widget(QWidget* parent) : QWidget(parent)
     font.setBold(true);
     font.setPixelSize(13);
 
-    m_item_deleted_label = new QLabel(this);
-    m_item_deleted_label->setText("Currently selected item has been removed. Please consider relayouting the Graph.");
-    m_item_deleted_label->setWordWrap(true);
-    m_item_deleted_label->setAlignment(Qt::AlignmentFlag::AlignTop);
-    m_item_deleted_label->setHidden(true);
-    m_content_layout->addWidget(m_item_deleted_label);
+    //m_item_deleted_label = new QLabel(this);
+    //m_item_deleted_label->setText("Currently selected item has been removed. Please consider relayouting the Graph.");
+    //m_item_deleted_label->setWordWrap(true);
+    //m_item_deleted_label->setAlignment(Qt::AlignmentFlag::AlignTop);
+    //m_item_deleted_label->setHidden(true);
+    //m_content_layout->addWidget(m_item_deleted_label);
 
     QTableWidgetItem* name_item = new QTableWidgetItem("Name:");
     name_item->setFlags(Qt::ItemIsEnabled);
@@ -134,7 +139,24 @@ net_details_widget::net_details_widget(QWidget* parent) : QWidget(parent)
     m_dst_pins = new QTreeWidgetItem(m_tree_widget);
     m_dst_pins->setExpanded(true);
 
-    connect(&g_netlist_relay, &netlist_relay::net_event, this, &net_details_widget::handle_net_event);
+    //DIRECT CONNECTION TO CORE BLOCKS REMOVAL OF NET IN GRAPH
+    /*
+    net_event_handler::register_callback("relay",
+                                         std::function<void(net_event_handler::event, std::shared_ptr<net>, u32)>(
+                                             std::bind(&net_details_widget::handle_net_event, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)));
+    */
+    
+
+    //connect(&g_netlist_relay, &netlist_relay::net_event, this, &net_details_widget::handle_net_event);
+
+    //THREAD ERRORS
+    /*
+    connect(&g_netlist_relay, &netlist_relay::net_removed, this, &net_details_widget::handle_net_removed);
+    connect(&g_netlist_relay, &netlist_relay::net_name_changed, this, &net_details_widget::handle_net_name_changed);
+    connect(&g_netlist_relay, &netlist_relay::net_src_changed, this, &net_details_widget::handle_net_src_changed);
+    connect(&g_netlist_relay, &netlist_relay::net_dst_added, this, &net_details_widget::handle_net_dst_added);
+    connect(&g_netlist_relay, &netlist_relay::net_dst_removed, this, &net_details_widget::handle_net_dst_removed);
+    */
 }
 
 net_details_widget::~net_details_widget()
@@ -146,6 +168,7 @@ net_details_widget::~net_details_widget()
     delete m_dst_pins;
 }
 
+/*
 void net_details_widget::handle_net_event(net_event_handler::event ev, std::shared_ptr<net> net, u32 associated_data)
 {
     Q_UNUSED(associated_data)
@@ -165,7 +188,7 @@ void net_details_widget::handle_net_event(net_event_handler::event ev, std::shar
         }
     }
 }
-
+*/
 void net_details_widget::update(u32 net_id)
 {
     m_current_id = net_id;
@@ -252,7 +275,7 @@ void net_details_widget::update(u32 net_id)
 
     m_general_table->setHidden(false);
     m_scroll_area->setHidden(false);
-    m_item_deleted_label->setHidden(true);
+    //m_item_deleted_label->setHidden(true);
 
 //    m_tree_widget->resizeColumnToContents(0);
 //    m_tree_widget->resizeColumnToContents(1);
@@ -314,4 +337,67 @@ void net_details_widget::on_treewidget_item_clicked(QTreeWidgetItem* item, int c
         update(clicked_gate->get_id());
         g_selection_relay.relay_selection_changed(this);
     }
+}
+
+void net_details_widget::handle_net_event(net_event_handler::event ev, std::shared_ptr<net> net, u32 associated_data)
+{
+    Q_UNUSED(associated_data);
+
+    qDebug() << "m_current_id " + m_current_id;
+    qDebug() << "net_id " + net->get_id();
+
+    if(m_current_id == net->get_id())
+    {
+        if(ev == net_event_handler::event::removed)
+        {
+            m_general_table->setHidden(true);
+            m_scroll_area->setHidden(true); 
+        }
+        else if(ev == net_event_handler::event::name_changed)
+        {
+            m_name_item->setText(QString::fromStdString(net->get_name()));
+        }
+        else
+        {
+            update(m_current_id);
+        }
+    }
+}
+
+void net_details_widget::handle_net_removed(const std::shared_ptr<net> n)
+{
+    if(m_current_id == n->get_id())
+    {
+        m_general_table->setHidden(true);
+        m_scroll_area->setHidden(true);
+    }
+}
+
+void net_details_widget::handle_net_name_changed(const std::shared_ptr<net> n)
+{
+    if(m_current_id == n->get_id())
+        m_name_item->setText(QString::fromStdString(n->get_name()));
+
+}
+
+void net_details_widget::handle_net_src_changed(const std::shared_ptr<net> n)
+{
+    if(m_current_id == n->get_id() && g_netlist->is_net_in_netlist(n))
+        update(m_current_id);
+}
+
+void net_details_widget::handle_net_dst_added(const std::shared_ptr<net> n, const u32 dst_gate_id)
+{
+    Q_UNUSED(dst_gate_id);
+
+    if(m_current_id == n->get_id() && g_netlist->is_net_in_netlist(n))
+        update(m_current_id);
+}
+
+void net_details_widget::handle_net_dst_removed(const std::shared_ptr<net> n, const u32 dst_gate_id)
+{
+    Q_UNUSED(dst_gate_id);
+
+    if(m_current_id == n->get_id() && g_netlist->is_net_in_netlist(n))
+        update(m_current_id);
 }
