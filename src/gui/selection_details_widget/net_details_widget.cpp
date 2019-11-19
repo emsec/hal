@@ -12,11 +12,6 @@
 #include <QTreeWidgetItem>
 #include <QVBoxLayout>
 
-#include <QDebug>
-
-#include <functional>
-
-
 net_details_widget::net_details_widget(QWidget* parent) : QWidget(parent)
 {
     m_content_layout = new QVBoxLayout(this);
@@ -139,24 +134,14 @@ net_details_widget::net_details_widget(QWidget* parent) : QWidget(parent)
     m_dst_pins = new QTreeWidgetItem(m_tree_widget);
     m_dst_pins->setExpanded(true);
 
-    //DIRECT CONNECTION TO CORE BLOCKS REMOVAL OF NET IN GRAPH
-    /*
-    net_event_handler::register_callback("relay",
-                                         std::function<void(net_event_handler::event, std::shared_ptr<net>, u32)>(
-                                             std::bind(&net_details_widget::handle_net_event, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)));
-    */
-    
 
-    //connect(&g_netlist_relay, &netlist_relay::net_event, this, &net_details_widget::handle_net_event);
-
-    //THREAD ERRORS
-    /*
     connect(&g_netlist_relay, &netlist_relay::net_removed, this, &net_details_widget::handle_net_removed);
     connect(&g_netlist_relay, &netlist_relay::net_name_changed, this, &net_details_widget::handle_net_name_changed);
     connect(&g_netlist_relay, &netlist_relay::net_src_changed, this, &net_details_widget::handle_net_src_changed);
     connect(&g_netlist_relay, &netlist_relay::net_dst_added, this, &net_details_widget::handle_net_dst_added);
     connect(&g_netlist_relay, &netlist_relay::net_dst_removed, this, &net_details_widget::handle_net_dst_removed);
-    */
+
+    connect(&g_netlist_relay, &netlist_relay::gate_name_changed, this, &net_details_widget::handle_gate_name_changed);
 }
 
 net_details_widget::~net_details_widget()
@@ -168,27 +153,6 @@ net_details_widget::~net_details_widget()
     delete m_dst_pins;
 }
 
-/*
-void net_details_widget::handle_net_event(net_event_handler::event ev, std::shared_ptr<net> net, u32 associated_data)
-{
-    Q_UNUSED(associated_data)
-
-    //check if details widget currently show the affected net
-    if (m_current_id == net->get_id())
-    {
-        if (ev == net_event_handler::event::removed)
-        {
-            m_general_table->setHidden(true);
-            m_scroll_area->setHidden(true);
-            m_item_deleted_label->setHidden(false);
-        }
-        else
-        {
-            update(net->get_id());
-        }
-    }
-}
-*/
 void net_details_widget::update(u32 net_id)
 {
     m_current_id = net_id;
@@ -339,31 +303,6 @@ void net_details_widget::on_treewidget_item_clicked(QTreeWidgetItem* item, int c
     }
 }
 
-void net_details_widget::handle_net_event(net_event_handler::event ev, std::shared_ptr<net> net, u32 associated_data)
-{
-    Q_UNUSED(associated_data);
-
-    qDebug() << "m_current_id " + m_current_id;
-    qDebug() << "net_id " + net->get_id();
-
-    if(m_current_id == net->get_id())
-    {
-        if(ev == net_event_handler::event::removed)
-        {
-            m_general_table->setHidden(true);
-            m_scroll_area->setHidden(true); 
-        }
-        else if(ev == net_event_handler::event::name_changed)
-        {
-            m_name_item->setText(QString::fromStdString(net->get_name()));
-        }
-        else
-        {
-            update(m_current_id);
-        }
-    }
-}
-
 void net_details_widget::handle_net_removed(const std::shared_ptr<net> n)
 {
     if(m_current_id == n->get_id())
@@ -382,7 +321,7 @@ void net_details_widget::handle_net_name_changed(const std::shared_ptr<net> n)
 
 void net_details_widget::handle_net_src_changed(const std::shared_ptr<net> n)
 {
-    if(m_current_id == n->get_id() && g_netlist->is_net_in_netlist(n))
+    if(m_current_id == n->get_id())
         update(m_current_id);
 }
 
@@ -390,7 +329,7 @@ void net_details_widget::handle_net_dst_added(const std::shared_ptr<net> n, cons
 {
     Q_UNUSED(dst_gate_id);
 
-    if(m_current_id == n->get_id() && g_netlist->is_net_in_netlist(n))
+    if(m_current_id == n->get_id())
         update(m_current_id);
 }
 
@@ -398,6 +337,40 @@ void net_details_widget::handle_net_dst_removed(const std::shared_ptr<net> n, co
 {
     Q_UNUSED(dst_gate_id);
 
-    if(m_current_id == n->get_id() && g_netlist->is_net_in_netlist(n))
+    if(m_current_id == n->get_id())
+        update(m_current_id);
+}
+
+void net_details_widget::handle_gate_name_changed(const std::shared_ptr<gate> g)
+{
+    Q_UNUSED(g)
+
+    bool update_needed = false;
+
+    //current net
+    auto n = g_netlist->get_net_by_id(m_current_id);
+
+    //check if current net is in netlist (m_current_id is unassigned if netlist details widget hasn't been shown once)
+    if(!g_netlist->is_net_in_netlist(n))
+        return;
+
+    //check if renamed gate is src of the currently shown net
+    if(n->get_src().get_gate()->get_id() == m_current_id)
+        update_needed = true;
+
+    //check if renamed gate is a dst of the currently shown net
+    if(!update_needed)
+    {
+        for(auto e : n->get_dsts())
+        {
+            if(e.get_gate()->get_id() == m_current_id)
+            {
+                update_needed = true;
+                break;
+            }
+        }
+    }
+
+    if(update_needed)
         update(m_current_id);
 }

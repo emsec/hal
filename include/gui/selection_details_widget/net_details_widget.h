@@ -39,6 +39,7 @@ class QTreeWidgetItem;
 class QTableWidget;
 class QTableWidgetItem;
 class net;
+class gate;
 
 class net_details_widget : public QWidget
 {
@@ -63,6 +64,8 @@ public Q_SLOTS:
     void handle_net_src_changed(const std::shared_ptr<net> n);
     void handle_net_dst_added(const std::shared_ptr<net> n, const u32 dst_gate_id);
     void handle_net_dst_removed(const std::shared_ptr<net> n, const u32 dst_gate_id);
+
+    void handle_gate_name_changed(const std::shared_ptr<gate> g);
 
 private:
     // NEW !!!!!
