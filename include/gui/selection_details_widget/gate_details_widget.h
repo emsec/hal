@@ -31,8 +31,6 @@
 
 #include <QWidget>
 
-#include "../plugins/quine_mccluskey/include/plugin_quine_mccluskey.h"
-
 /* forward declaration */
 class QLabel;
 class QTableWidget;
@@ -40,6 +38,7 @@ class QTableWidgetItem;
 class QTreeWidget;
 class QTreeWidgetItem;
 class QVBoxLayout;
+class QHBoxLayout;
 class QScrollArea;
 class QModelIndex;
 class graph_navigation_widget;
@@ -83,10 +82,11 @@ public Q_SLOTS:
     void handle_net_src_changed(std::shared_ptr<net> net);
     void handle_net_dst_added(std::shared_ptr<net> net, const u32 dst_gate_id);
     void handle_net_dst_removed(std::shared_ptr<net> net, const u32 dst_gate_id);
-    
+
 
 private:
     QVBoxLayout* m_content_layout;
+    QHBoxLayout* m_tree_row_layout;
 
     QTableWidget* m_general_table;
     QTableWidgetItem* m_name_item;
@@ -113,9 +113,6 @@ private:
     u32 m_current_id;
 
     u64 m_last_click_time;
-
-    // store pointer to Quine-McCluskey plugin (to display minimized Boolean function)
-    std::shared_ptr<plugin_quine_mccluskey> m_qmc;
 
     graph_navigation_widget* m_navigation_table;
 };

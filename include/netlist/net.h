@@ -235,13 +235,6 @@ public:
     bool mark_global_output_net();
 
     /**
-     * Mark this net as a global inout net.
-     *
-     * @returns True on success.
-     */
-    bool mark_global_inout_net();
-
-    /**
      * Unmark this net as a global input net.
      *
      * @returns True on success.
@@ -256,13 +249,6 @@ public:
     bool unmark_global_output_net();
 
     /**
-     * Unmark this net as a global inout net.
-     *
-     * @returns True on success.
-     */
-    bool unmark_global_inout_net();
-
-    /**
      * Checks whether this net is a global input net.
      *
      * @returns True if the net is a global input net.
@@ -275,13 +261,6 @@ public:
      * @returns True if the net is a global output net.
      */
     bool is_global_output_net() const;
-
-    /**
-     * Checks whether this net is a global inout net.
-     *
-     * @returns True if the net is a global inout net.
-     */
-    bool is_global_inout_net() const;
 
 private:
     /**

@@ -41,7 +41,7 @@ qm_plugin = libquine_mccluskey.quine_mccluskey()
 for gate in netlist.get_gates():
     if "LUT" in gate.type:
         print(gate.name + " (id "+str(gate.id) + ", type " + gate.type + ")")
-        print("  " + str(len(gate.input_pin_types)) + "-to-" + str(len(gate.output_pin_types)) + " LUT")
+        print("  " + str(len(gate.input_pins)) + "-to-" + str(len(gate.output_pins)) + " LUT")
         boolean_functions = qm_plugin.get_boolean_function_str(gate, False)
         for pin in boolean_functions:
             print("  " + pin + ": "+boolean_functions[pin])

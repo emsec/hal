@@ -3,14 +3,14 @@
 #include "core/log.h"
 
 #include "netlist/gate.h"
+#include "netlist/module.h"
 #include "netlist/net.h"
 #include "netlist/netlist.h"
-#include "netlist/module.h"
 
 #include "netlist/event_system/gate_event_handler.h"
+#include "netlist/event_system/module_event_handler.h"
 #include "netlist/event_system/net_event_handler.h"
 #include "netlist/event_system/netlist_event_handler.h"
-#include "netlist/event_system/module_event_handler.h"
 
 namespace event_log
 {
@@ -21,11 +21,11 @@ namespace event_log
             UNUSED(associated_data);
             if (event == gate_event_handler::event::created)
             {
-                log_info("event", "created new gate '{}' (type '{}', id {:08x})", gate->get_name(), gate->get_type(), gate->get_id());
+                log_info("event", "created new gate '{}' (type '{}', id {:08x})", gate->get_name(), gate->get_type()->get_name(), gate->get_id());
             }
             else if (event == gate_event_handler::event::removed)
             {
-                log_info("event", "deleted gate '{}' (type '{}', id {:08x})", gate->get_name(), gate->get_type(), gate->get_id());
+                log_info("event", "deleted gate '{}' (type '{}', id {:08x})", gate->get_name(), gate->get_type()->get_name(), gate->get_id());
             }
             else if (event == gate_event_handler::event::name_changed)
             {
@@ -168,11 +168,21 @@ namespace event_log
             }
             else if (event == module_event_handler::event::parent_changed)
             {
-                log_info("event", "changed parent of submodule '{}' (id {:08x}) to submodule '{}' (id {:08x})", submodule->get_name(), submodule->get_id(), submodule->get_parent_module()->get_name(), submodule->get_parent_module()->get_id());
+                log_info("event",
+                         "changed parent of submodule '{}' (id {:08x}) to submodule '{}' (id {:08x})",
+                         submodule->get_name(),
+                         submodule->get_id(),
+                         submodule->get_parent_module()->get_name(),
+                         submodule->get_parent_module()->get_id());
             }
             else if (event == module_event_handler::event::submodule_added)
             {
-                log_info("event", "added submodule '{}' (id {:08x}) to submodule '{}' (id {:08x})", submodule->get_netlist()->get_module_by_id(associated_data)->get_name(), associated_data, submodule->get_name(), submodule->get_id());
+                log_info("event",
+                         "added submodule '{}' (id {:08x}) to submodule '{}' (id {:08x})",
+                         submodule->get_netlist()->get_module_by_id(associated_data)->get_name(),
+                         associated_data,
+                         submodule->get_name(),
+                         submodule->get_id());
             }
             else if (event == module_event_handler::event::submodule_removed)
             {

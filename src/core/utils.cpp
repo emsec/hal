@@ -2,8 +2,8 @@
 
 #include "core/log.h"
 
-#include <sstream>
 #include <fstream>
+#include <sstream>
 
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
@@ -31,14 +31,33 @@
 
 namespace core_utils
 {
-    bool ends_with(const std::string& full_string, const std::string& ending)
+    bool ends_with(const std::string& full_string, const std::string& ending, bool ignore_case)
     {
-        return boost::algorithm::ends_with(full_string, ending);
+        if (ignore_case)
+        {
+            return boost::algorithm::iends_with(full_string, ending);
+        }
+        else
+        {
+            return boost::algorithm::ends_with(full_string, ending);
+        }
     }
 
-    bool starts_with(const std::string& full_string, const std::string& start)
+    bool starts_with(const std::string& full_string, const std::string& start, bool ignore_case)
     {
-        return boost::algorithm::starts_with(full_string, start);
+        if (ignore_case)
+        {
+            return boost::algorithm::istarts_with(full_string, start);
+        }
+        else
+        {
+            return boost::algorithm::starts_with(full_string, start);
+        }
+    }
+
+    bool equals_ignore_case(const std::string& a, const std::string& b)
+    {
+        return boost::algorithm::iequals(a, b);
     }
 
     bool is_integer(const std::string& s)
@@ -142,7 +161,7 @@ namespace core_utils
 
     std::string rtrim(const std::string& line, const char* to_remove)
     {
-        size_t end            = line.find_last_not_of(to_remove);
+        size_t end = line.find_last_not_of(to_remove);
         if (end != std::string::npos)
         {
             return line.substr(0, end + 1);
@@ -206,29 +225,24 @@ namespace core_utils
 
     std::string to_upper(const std::string& s)
     {
-        std::string result = "";
-        for (size_t i = 0; i < s.size(); i++)
-        {
-            result += toupper(s[i]);
-        }
+        std::string result = s;
+        std::transform(result.begin(), result.end(), result.begin(), [](char c) { return std::toupper(c); });
         return result;
     }
 
     std::string to_lower(const std::string& s)
     {
-        std::string result = "";
-        for (size_t i = 0; i < s.size(); i++)
-        {
-            result += tolower(s[i]);
-        }
+        std::string result = s;
+        std::transform(result.begin(), result.end(), result.begin(), [](char c) { return std::tolower(c); });
         return result;
     }
 
     u32 num_of_occurrences(const std::string& str, const std::string& substr)
     {
         u32 num_of_occurrences = 0;
-        auto position = str.find(substr, 0);
-        while (position != std::string::npos) {
+        auto position          = str.find(substr, 0);
+        while (position != std::string::npos)
+        {
             num_of_occurrences++;
             position = str.find(substr, position + 1);
         }

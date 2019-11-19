@@ -115,15 +115,6 @@ void hdl_writer_vhdl::prepare_signal_names()
         m_only_wire_names.erase(it);
         m_only_wire_names_str_to_net.erase(this->get_net_name(it));
     }
-    //inout entity
-    std::set<std::shared_ptr<net>> inout_nets = m_netlist->get_global_inout_nets();
-    for (auto it : inout_nets)
-    {
-        m_inout_names[it]                                = this->get_net_name(it);
-        m_inout_names_str_to_net[this->get_net_name(it)] = it;
-        m_only_wire_names.erase(it);
-        m_only_wire_names_str_to_net.erase(this->get_net_name(it));
-    }
 
     //vcc gates
     std::set<std::shared_ptr<gate>> one_gates = m_netlist->get_gates("X_ONE");
@@ -299,19 +290,6 @@ void hdl_writer_vhdl::print_module_interface_vhdl()
         }
     }
 
-    for (auto inout_name : m_inout_names_str_to_net)
-    {
-        if (begin)
-        {
-            m_stream << inout_name.first << " : inout STD_LOGIC";
-            begin = false;
-        }
-        else
-        {
-            m_stream << "; " << std::endl << "  " << inout_name.first << " : inout STD_LOGIC";
-        }
-    }
-
     m_stream << std::endl;
     m_stream << ");" << std::endl;
     m_stream << "end " << entity_name << ";" << std::endl;
@@ -356,19 +334,18 @@ void hdl_writer_vhdl::print_gate_definitions_vhdl()
 
     for (auto&& gate : gates)
     {
-        if (gate->get_type() == "GLOBAL_GND" || gate->get_type() == "GLOBAL_VCC")
+        if (gate->get_type()->get_name() == "GLOBAL_GND" || gate->get_type()->get_name() == "GLOBAL_VCC")
             continue;
         m_stream << get_gate_name(gate);
-        m_stream << " : " << gate->get_type() << std::endl;
+        m_stream << " : " << gate->get_type()->get_name() << std::endl;
 
         this->print_generic_map_vhdl(gate);
 
         m_stream << " port map (" << std::endl;
 
         bool begin_signal_list = true;
-        begin_signal_list      = this->print_gate_signal_list_vhdl(gate, gate->get_input_pin_types(), begin_signal_list, std::bind(&gate::get_fan_in_net, gate, std::placeholders::_1));
-        begin_signal_list      = this->print_gate_signal_list_vhdl(gate, gate->get_output_pin_types(), begin_signal_list, std::bind(&gate::get_fan_out_net, gate, std::placeholders::_1));
-        begin_signal_list      = this->print_gate_signal_list_vhdl(gate, gate->get_inout_pin_types(), begin_signal_list, std::bind(&gate::get_fan_out_net, gate, std::placeholders::_1));
+        begin_signal_list      = this->print_gate_signal_list_vhdl(gate, gate->get_input_pins(), begin_signal_list, std::bind(&gate::get_fan_in_net, gate, std::placeholders::_1));
+        begin_signal_list      = this->print_gate_signal_list_vhdl(gate, gate->get_output_pins(), begin_signal_list, std::bind(&gate::get_fan_out_net, gate, std::placeholders::_1));
 
         m_stream << std::endl << ");" << std::endl;
     }
@@ -491,7 +468,7 @@ bool hdl_writer_vhdl::print_gate_signal_list_vhdl(std::shared_ptr<gate> n, std::
         std::shared_ptr<net> e = get_net_fkt(port_type);
         if (e == nullptr)
         {
-            log_info("hdl_writer", "VHDL serializer skipped signal translation for gate {} with type {} and port {} NO EDGE available", n->get_name(), n->get_type(), port_type);
+            log_info("hdl_writer", "VHDL serializer skipped signal translation for gate {} with type {} and port {} NO EDGE available", n->get_name(), n->get_type()->get_name(), port_type);
         }
         else
         {

@@ -49,7 +49,7 @@ void graph_navigation_widget::setup()
                 return;
             }
 
-            std::string pin_type   = g->get_output_pin_types()[g_selection_relay.m_subfocus_index];
+            std::string pin_type   = g->get_output_pins()[g_selection_relay.m_subfocus_index];
             std::shared_ptr<net> n = g->get_fan_out_net(pin_type);
 
             if (!n)
@@ -164,7 +164,7 @@ void graph_navigation_widget::fill_table(std::shared_ptr<net> n)
         item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
         setItem(row, 1, item);
 
-        item = new QTableWidgetItem(QString::fromStdString(e.get_gate()->get_type()));
+        item = new QTableWidgetItem(QString::fromStdString(e.get_gate()->get_type()->get_name()));
         item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
         setItem(row, 2, item);
 

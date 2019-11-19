@@ -25,7 +25,7 @@ bool library_loader::load_library(const std::string& file_name)
 #ifdef _WIN32
     m_handle = LoadLibrary(file_name.c_str());
 #else
-    m_handle = dlopen((file_name).c_str(), RTLD_GLOBAL | RTLD_LAZY);
+    m_handle      = dlopen((file_name).c_str(), RTLD_GLOBAL | RTLD_LAZY);
 #endif
 
     if (m_handle != NULL)

@@ -3,7 +3,6 @@
 
 #include "core/interface_base.h"
 
-#include <hal_bdd.h>
 #include <igraph/igraph.h>
 
 /* forward declaration */
@@ -25,10 +24,10 @@ public:
      */
 
     /** interface implementation: i_base */
-    std::string get_name() override;
+    std::string get_name() const override;
 
     /** interface implementation: i_base */
-    std::string get_version() override;
+    std::string get_version() const override;
 
     /*
      *      clustering function
@@ -46,7 +45,7 @@ public:
      * Returns map of community-IDs to communities running the spinglass clustering.
      *
      * @param[in] nl - Netlist (internally transformed to di-graph)
-     * @param[in] spin - 
+     * @param[in] spin -
      * @returns A map of community-IDs to sets of gates belonging to the communities
      */
     std::map<int, std::set<std::shared_ptr<gate>>> get_communities_spinglass(std::shared_ptr<netlist> const nl, u32 const spins);
@@ -55,7 +54,7 @@ public:
      * Returns map of community-IDs to communities running the fast greedy clustering from igraph.
      *
      * @param[in] nl - Netlist (internally transformed to di-graph)
-     * @param[in] spin - 
+     * @param[in] spin -
      * @returns A map of community-IDs to sets of gates belonging to the communities
      */
     std::map<int, std::set<std::shared_ptr<gate>>> get_communities_fast_greedy(std::shared_ptr<netlist> const nl);
@@ -64,7 +63,7 @@ public:
      * Returns map of community-IDs to communities running the multilevel clustering from igraph.
      *
      * @param[in] nl - Netlist (internally transformed to di-graph)
-     * @param[in] spin - 
+     * @param[in] spin -
      * @returns A map of community-IDs to sets of gates belonging to the communities
      */
     std::map<int, std::set<std::shared_ptr<gate>>> get_communities_multilevel(std::shared_ptr<netlist> nl);
@@ -100,17 +99,6 @@ public:
     std::map<std::shared_ptr<gate>, std::tuple<std::vector<std::shared_ptr<gate>>, int>> get_dijkstra_shortest_paths(const std::shared_ptr<gate> g);
 
     /**
-      * Returns the BDD representation for a part of netlist.
-      *
-      * @param[in] nl - Netlist
-      * @param[in] gates - Set of gates defining the submodule for which the BDDs are determined
-      * @param[in] input_net_to_ids - Map of submodule input net ids (variable definition X0, X1, ...), if empty the function determines the variable assignment and returns it.
-      * @returns A tuple of a map of submodule input net to ids (variable definition X0, X1, ...) and a map of submodule output net to BDDs (function defintion f1(x0, ..., x_n), f2(x0, ... x_n), ...).
-      */
-    std::tuple<std::map<std::shared_ptr<net>, int>, std::map<std::shared_ptr<net>, std::shared_ptr<bdd>>>
-        get_bdds(std::shared_ptr<netlist> const nl, const std::set<std::shared_ptr<gate>> gates, const std::map<std::shared_ptr<net>, int> input_net_to_ids = std::map<std::shared_ptr<net>, int>());
-    
-    /**
      * Returns a graph cut for a specific gate and depth.
      *
      * @param[in] nl - Netlist (internally transformed to di-graph)
@@ -145,5 +133,11 @@ public:
      */
     std::tuple<igraph_t, std::map<int, std::shared_ptr<gate>>> get_igraph_directed(std::shared_ptr<netlist> const nl);
 };
+
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wreturn-type-c-linkage"
+extern "C" PLUGIN_API std::shared_ptr<i_base> get_plugin_instance();
+#pragma GCC diagnostic pop
 
 #endif /* __HAL_PLUGIN_GRAPH_ALGORITHM_H__ */

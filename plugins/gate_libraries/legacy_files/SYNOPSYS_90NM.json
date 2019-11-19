@@ -1,0 +1,2448 @@
+{
+  "library": {
+    "element_types": [
+      "AND2X1",
+      "AND2X2",
+      "AND2X4",
+      "AND3X1",
+      "AND3X2",
+      "AND3X4",
+      "AND4X1",
+      "AND4X2",
+      "AND4X4",
+      "ANTENNA",
+      "AO21X1",
+      "AO21X2",
+      "AO221X1",
+      "AO221X2",
+      "AO222X1",
+      "AO222X2",
+      "AO22X1",
+      "AO22X2",
+      "AOBUFX1",
+      "AOBUFX2",
+      "AOBUFX4",
+      "AODFFARX1",
+      "AODFFARX2",
+      "AODFFNARX1",
+      "AODFFNARX2",
+      "AOI21X1",
+      "AOI21X2",
+      "AOI221X1",
+      "AOI221X2",
+      "AOI222X1",
+      "AOI222X2",
+      "AOI22X1",
+      "AOI22X2",
+      "AOINVX1",
+      "AOINVX2",
+      "AOINVX4",
+      "BSLEX1",
+      "BSLEX2",
+      "BSLEX4",
+      "BUSKP",
+      "CGLNPRX2",
+      "CGLNPRX8",
+      "CGLNPSX16",
+      "CGLNPSX2",
+      "CGLNPSX4",
+      "CGLNPSX8",
+      "CGLPPRX2",
+      "CGLPPRX8",
+      "CGLPPSX16",
+      "CGLPPSX2",
+      "CGLPPSX4",
+      "CGLPPSX8",
+      "CLOAD1",
+      "DCAP",
+      "DEC24X2",
+      "DEC42X1",
+      "DELLN1X2",
+      "DELLN2X2",
+      "DELLN3X2",
+      "DFFARX1",
+      "DFFARX2",
+      "DFFASRX1",
+      "DFFASRX2",
+      "DFFASX1",
+      "DFFASX2",
+      "DFFNARX1",
+      "DFFNARX2",
+      "DFFNASRNX1",
+      "DFFNASRNX2",
+      "DFFNASRQX1",
+      "DFFNASRQX2",
+      "DFFNASRX1",
+      "DFFNASRX2",
+      "DFFNASX1",
+      "DFFNASX2",
+      "DFFNX1",
+      "DFFNX2",
+      "DFFSSRX1",
+      "DFFSSRX2",
+      "DFFX1",
+      "DFFX2",
+      "DHFILLHLH2",
+      "DHFILLHLHLS11",
+      "DHFILLLHL2",
+      "FADDX1",
+      "FADDX2",
+      "GLOBAL_GND",
+      "GLOBAL_VCC",
+      "HADDX1",
+      "HADDX2",
+      "HEADX16",
+      "HEADX2",
+      "HEADX32",
+      "HEADX4",
+      "HEADX8",
+      "IBUFFX16",
+      "IBUFFX2",
+      "IBUFFX32",
+      "IBUFFX4",
+      "IBUFFX8",
+      "INVX0",
+      "INVX1",
+      "INVX16",
+      "INVX2",
+      "INVX32",
+      "INVX4",
+      "INVX8",
+      "ISOLANDX1",
+      "ISOLANDX2",
+      "ISOLANDX4",
+      "ISOLANDX8",
+      "ISOLORX1",
+      "ISOLORX2",
+      "ISOLORX4",
+      "ISOLORX8",
+      "LARX1",
+      "LARX2",
+      "LASRNX1",
+      "LASRNX2",
+      "LASRQX1",
+      "LASRQX2",
+      "LASRX1",
+      "LASRX2",
+      "LASX1",
+      "LASX2",
+      "LATCHX1",
+      "LATCHX2",
+      "LNANDX1",
+      "LNANDX2",
+      "LSDNENX1",
+      "LSDNENX2",
+      "LSDNENX4",
+      "LSDNENX8",
+      "LSDNX1",
+      "LSDNX2",
+      "LSDNX4",
+      "LSDNX8",
+      "LSUPENX1",
+      "LSUPENX2",
+      "LSUPENX4",
+      "LSUPENX8",
+      "LSUPX1",
+      "LSUPX2",
+      "LSUPX4",
+      "LSUPX8",
+      "MUX21X1",
+      "MUX21X2",
+      "MUX411",
+      "MUX41X2",
+      "NAND2X0",
+      "NAND2X1",
+      "NAND2X2",
+      "NAND2X4",
+      "NAND3X0",
+      "NAND3X1",
+      "NAND3X2",
+      "NAND3X4",
+      "NAND4X0",
+      "NAND4X1",
+      "NBUFFX16",
+      "NBUFFX2",
+      "NBUFFX32",
+      "NBUFFX4",
+      "NBUFFX8",
+      "NMT1",
+      "NMT2",
+      "NMT3",
+      "NOR2X0",
+      "NOR2X1",
+      "NOR2X2",
+      "NOR2X4",
+      "NOR3X0",
+      "NOR3X1",
+      "NOR3X2",
+      "NOR3X4",
+      "NOR4X0",
+      "NOR4X1",
+      "OA21X1",
+      "OA21X2",
+      "OA221X1",
+      "OA221X2",
+      "OA222X1",
+      "OA222X2",
+      "OA22X1",
+      "OA22X2",
+      "OAI21X1",
+      "OAI21X2",
+      "OAI221X1",
+      "OAI221X2",
+      "OAI222X1",
+      "OAI222X2",
+      "OAI22X1",
+      "OAI22X2",
+      "OR2X1",
+      "OR2X2",
+      "OR2X4",
+      "OR3X1",
+      "OR3X2",
+      "OR3X4",
+      "OR4X1",
+      "OR4X2",
+      "OR4X4",
+      "PGX1",
+      "PGX2",
+      "PGX4",
+      "PMT1",
+      "PMT2",
+      "PMT3",
+      "RDFFNX1",
+      "RDFFNX2",
+      "RDFFX1",
+      "RDFFX2",
+      "RSDFFNX1",
+      "RSDFFNX2",
+      "RSDFFX1",
+      "RSDFFX2",
+      "SDFFARX1",
+      "SDFFARX2",
+      "SDFFASRSX1",
+      "SDFFASRSX2",
+      "SDFFASRX1",
+      "SDFFASRX2",
+      "SDFFASX1",
+      "SDFFASX2",
+      "SDFFNARX1",
+      "SDFFNARX2",
+      "SDFFNASRX1",
+      "SDFFNASRX2",
+      "SDFFNASX1",
+      "SDFFNASX2",
+      "SDFFNX1",
+      "SDFFNX2",
+      "SDFFSSRX1",
+      "SDFFSSRX2",
+      "SDFFX1",
+      "SDFFX2",
+      "SHFILL2",
+      "TIEH",
+      "TIEL",
+      "TNBUFFX16",
+      "TNBUFFX2",
+      "TNBUFFX32",
+      "TNBUFFX4",
+      "TNBUFFX8",
+      "XNOR2X1",
+      "XNOR2X2",
+      "XNOR3X1",
+      "XNOR3X2",
+      "XOR2X1",
+      "XOR2X2",
+      "XOR3X1",
+      "XOR3X2"
+    ],
+    "elements_inout_types": {
+      "AND2X1": [],
+      "AND2X2": [],
+      "AND2X4": [],
+      "AND3X1": [],
+      "AND3X2": [],
+      "AND3X4": [],
+      "AND4X1": [],
+      "AND4X2": [],
+      "AND4X4": [],
+      "ANTENNA": [],
+      "AO21X1": [],
+      "AO21X2": [],
+      "AO221X1": [],
+      "AO221X2": [],
+      "AO222X1": [],
+      "AO222X2": [],
+      "AO22X1": [],
+      "AO22X2": [],
+      "AOBUFX1": [],
+      "AOBUFX2": [],
+      "AOBUFX4": [],
+      "AODFFARX1": [],
+      "AODFFARX2": [],
+      "AODFFNARX1": [],
+      "AODFFNARX2": [],
+      "AOI21X1": [],
+      "AOI21X2": [],
+      "AOI221X1": [],
+      "AOI221X2": [],
+      "AOI222X1": [],
+      "AOI222X2": [],
+      "AOI22X1": [],
+      "AOI22X2": [],
+      "AOINVX1": [],
+      "AOINVX2": [],
+      "AOINVX4": [],
+      "BSLEX1": [],
+      "BSLEX2": [],
+      "BSLEX4": [],
+      "BUSKP": [],
+      "CGLNPRX2": [],
+      "CGLNPRX8": [],
+      "CGLNPSX16": [],
+      "CGLNPSX2": [],
+      "CGLNPSX4": [],
+      "CGLNPSX8": [],
+      "CGLPPRX2": [],
+      "CGLPPRX8": [],
+      "CGLPPSX16": [],
+      "CGLPPSX2": [],
+      "CGLPPSX4": [],
+      "CGLPPSX8": [],
+      "CLOAD1": [],
+      "DCAP": [],
+      "DEC24X2": [],
+      "DEC42X1": [],
+      "DELLN1X2": [],
+      "DELLN2X2": [],
+      "DELLN3X2": [],
+      "DFFARX1": [],
+      "DFFARX2": [],
+      "DFFASRX1": [],
+      "DFFASRX2": [],
+      "DFFASX1": [],
+      "DFFASX2": [],
+      "DFFNARX1": [],
+      "DFFNARX2": [],
+      "DFFNASRNX1": [],
+      "DFFNASRNX2": [],
+      "DFFNASRQX1": [],
+      "DFFNASRQX2": [],
+      "DFFNASRX1": [],
+      "DFFNASRX2": [],
+      "DFFNASX1": [],
+      "DFFNASX2": [],
+      "DFFNX1": [],
+      "DFFNX2": [],
+      "DFFSSRX1": [],
+      "DFFSSRX2": [],
+      "DFFX1": [],
+      "DFFX2": [],
+      "DHFILLHLH2": [],
+      "DHFILLHLHLS11": [],
+      "DHFILLLHL2": [],
+      "FADDX1": [],
+      "FADDX2": [],
+      "GLOBAL_GND": [],
+      "GLOBAL_VCC": [],
+      "HADDX1": [],
+      "HADDX2": [],
+      "HEADX16": [],
+      "HEADX2": [],
+      "HEADX32": [],
+      "HEADX4": [],
+      "HEADX8": [],
+      "IBUFFX16": [],
+      "IBUFFX2": [],
+      "IBUFFX32": [],
+      "IBUFFX4": [],
+      "IBUFFX8": [],
+      "INVX0": [],
+      "INVX1": [],
+      "INVX16": [],
+      "INVX2": [],
+      "INVX32": [],
+      "INVX4": [],
+      "INVX8": [],
+      "ISOLANDX1": [],
+      "ISOLANDX2": [],
+      "ISOLANDX4": [],
+      "ISOLANDX8": [],
+      "ISOLORX1": [],
+      "ISOLORX2": [],
+      "ISOLORX4": [],
+      "ISOLORX8": [],
+      "LARX1": [],
+      "LARX2": [],
+      "LASRNX1": [],
+      "LASRNX2": [],
+      "LASRQX1": [],
+      "LASRQX2": [],
+      "LASRX1": [],
+      "LASRX2": [],
+      "LASX1": [],
+      "LASX2": [],
+      "LATCHX1": [],
+      "LATCHX2": [],
+      "LNANDX1": [],
+      "LNANDX2": [],
+      "LSDNENX1": [],
+      "LSDNENX2": [],
+      "LSDNENX4": [],
+      "LSDNENX8": [],
+      "LSDNX1": [],
+      "LSDNX2": [],
+      "LSDNX4": [],
+      "LSDNX8": [],
+      "LSUPENX1": [],
+      "LSUPENX2": [],
+      "LSUPENX4": [],
+      "LSUPENX8": [],
+      "LSUPX1": [],
+      "LSUPX2": [],
+      "LSUPX4": [],
+      "LSUPX8": [],
+      "MUX21X1": [],
+      "MUX21X2": [],
+      "MUX411": [],
+      "MUX41X2": [],
+      "NAND2X0": [],
+      "NAND2X1": [],
+      "NAND2X2": [],
+      "NAND2X4": [],
+      "NAND3X0": [],
+      "NAND3X1": [],
+      "NAND3X2": [],
+      "NAND3X4": [],
+      "NAND4X0": [],
+      "NAND4X1": [],
+      "NBUFFX16": [],
+      "NBUFFX2": [],
+      "NBUFFX32": [],
+      "NBUFFX4": [],
+      "NBUFFX8": [],
+      "NMT1": [],
+      "NMT2": [],
+      "NMT3": [],
+      "NOR2X0": [],
+      "NOR2X1": [],
+      "NOR2X2": [],
+      "NOR2X4": [],
+      "NOR3X0": [],
+      "NOR3X1": [],
+      "NOR3X2": [],
+      "NOR3X4": [],
+      "NOR4X0": [],
+      "NOR4X1": [],
+      "OA21X1": [],
+      "OA21X2": [],
+      "OA221X1": [],
+      "OA221X2": [],
+      "OA222X1": [],
+      "OA222X2": [],
+      "OA22X1": [],
+      "OA22X2": [],
+      "OAI21X1": [],
+      "OAI21X2": [],
+      "OAI221X1": [],
+      "OAI221X2": [],
+      "OAI222X1": [],
+      "OAI222X2": [],
+      "OAI22X1": [],
+      "OAI22X2": [],
+      "OR2X1": [],
+      "OR2X2": [],
+      "OR2X4": [],
+      "OR3X1": [],
+      "OR3X2": [],
+      "OR3X4": [],
+      "OR4X1": [],
+      "OR4X2": [],
+      "OR4X4": [],
+      "PGX1": [],
+      "PGX2": [],
+      "PGX4": [],
+      "PMT1": [],
+      "PMT2": [],
+      "PMT3": [],
+      "RDFFNX1": [],
+      "RDFFNX2": [],
+      "RDFFX1": [],
+      "RDFFX2": [],
+      "RSDFFNX1": [],
+      "RSDFFNX2": [],
+      "RSDFFX1": [],
+      "RSDFFX2": [],
+      "SDFFARX1": [],
+      "SDFFARX2": [],
+      "SDFFASRSX1": [],
+      "SDFFASRSX2": [],
+      "SDFFASRX1": [],
+      "SDFFASRX2": [],
+      "SDFFASX1": [],
+      "SDFFASX2": [],
+      "SDFFNARX1": [],
+      "SDFFNARX2": [],
+      "SDFFNASRX1": [],
+      "SDFFNASRX2": [],
+      "SDFFNASX1": [],
+      "SDFFNASX2": [],
+      "SDFFNX1": [],
+      "SDFFNX2": [],
+      "SDFFSSRX1": [],
+      "SDFFSSRX2": [],
+      "SDFFX1": [],
+      "SDFFX2": [],
+      "SHFILL2": [],
+      "TIEH": [],
+      "TIEL": [],
+      "TNBUFFX16": [],
+      "TNBUFFX2": [],
+      "TNBUFFX32": [],
+      "TNBUFFX4": [],
+      "TNBUFFX8": [],
+      "XNOR2X1": [],
+      "XNOR2X2": [],
+      "XNOR3X1": [],
+      "XNOR3X2": [],
+      "XOR2X1": [],
+      "XOR2X2": [],
+      "XOR3X1": [],
+      "XOR3X2": []
+    },
+    "elements_input_types": {
+      "AND2X1": [
+        "IN1",
+        "IN2"
+      ],
+      "AND2X2": [
+        "IN1",
+        "IN2"
+      ],
+      "AND2X4": [
+        "IN1",
+        "IN2"
+      ],
+      "AND3X1": [
+        "IN1",
+        "IN2",
+        "IN3"
+      ],
+      "AND3X2": [
+        "IN1",
+        "IN2",
+        "IN3"
+      ],
+      "AND3X4": [
+        "IN1",
+        "IN2",
+        "IN3"
+      ],
+      "AND4X1": [
+        "IN1",
+        "IN2",
+        "IN3",
+        "IN4"
+      ],
+      "AND4X2": [
+        "IN1",
+        "IN2",
+        "IN3",
+        "IN4"
+      ],
+      "AND4X4": [
+        "IN1",
+        "IN2",
+        "IN3",
+        "IN4"
+      ],
+      "AO21X1": [
+        "IN1",
+        "IN2",
+        "IN3"
+      ],
+      "AO21X2": [
+        "IN1",
+        "IN2",
+        "IN3"
+      ],
+      "AO221X1": [
+        "IN1",
+        "IN2",
+        "IN3",
+        "IN4",
+        "IN5"
+      ],
+      "AO221X2": [
+        "IN1",
+        "IN2",
+        "IN3",
+        "IN4",
+        "IN5"
+      ],
+      "AO222X1": [
+        "IN1",
+        "IN2",
+        "IN3",
+        "IN4",
+        "IN5",
+        "IN6"
+      ],
+      "AO222X2": [
+        "IN1",
+        "IN2",
+        "IN3",
+        "IN4",
+        "IN5",
+        "IN6"
+      ],
+      "AO22X1": [
+        "IN1",
+        "IN2",
+        "IN3",
+        "IN4"
+      ],
+      "AO22X2": [
+        "IN1",
+        "IN2",
+        "IN3",
+        "IN4"
+      ],
+      "AOBUFX1": [
+        "IN"
+      ],
+      "AOBUFX2": [
+        "IN"
+      ],
+      "AOBUFX4": [
+        "IN"
+      ],
+      "AODFFARX1": [
+        "RSTB",
+        "D",
+        "CLK"
+      ],
+      "AODFFARX2": [
+        "RSTB",
+        "D",
+        "CLK"
+      ],
+      "AODFFNARX1": [
+        "RSTB",
+        "D",
+        "CLK"
+      ],
+      "AODFFNARX2": [
+        "RSTB",
+        "D",
+        "CLK"
+      ],
+      "AOI21X1": [
+        "IN1",
+        "IN2",
+        "IN3"
+      ],
+      "AOI21X2": [
+        "IN1",
+        "IN2",
+        "IN3"
+      ],
+      "AOI221X1": [
+        "IN1",
+        "IN2",
+        "IN3",
+        "IN4",
+        "IN5"
+      ],
+      "AOI221X2": [
+        "IN1",
+        "IN2",
+        "IN3",
+        "IN4",
+        "IN5"
+      ],
+      "AOI222X1": [
+        "IN1",
+        "IN2",
+        "IN3",
+        "IN4",
+        "IN5",
+        "IN6"
+      ],
+      "AOI222X2": [
+        "IN1",
+        "IN2",
+        "IN3",
+        "IN4",
+        "IN5",
+        "IN6"
+      ],
+      "AOI22X1": [
+        "IN1",
+        "IN2",
+        "IN3",
+        "IN4"
+      ],
+      "AOI22X2": [
+        "IN1",
+        "IN2",
+        "IN3",
+        "IN4"
+      ],
+      "AOINVX1": [
+        "IN"
+      ],
+      "AOINVX2": [
+        "IN"
+      ],
+      "AOINVX4": [
+        "IN"
+      ],
+      "BSLEX1": [
+        "ENB",
+        "INOUT1"
+      ],
+      "BSLEX2": [
+        "ENB",
+        "INOUT1"
+      ],
+      "BSLEX4": [
+        "ENB",
+        "INOUT1"
+      ],
+      "CGLNPRX2": [
+        "SE",
+        "EN",
+        "CLK"
+      ],
+      "CGLNPRX8": [
+        "SE",
+        "EN",
+        "CLK"
+      ],
+      "CGLNPSX16": [
+        "SE",
+        "EN",
+        "CLK"
+      ],
+      "CGLNPSX2": [
+        "SE",
+        "EN",
+        "CLK"
+      ],
+      "CGLNPSX4": [
+        "SE",
+        "EN",
+        "CLK"
+      ],
+      "CGLNPSX8": [
+        "SE",
+        "EN",
+        "CLK"
+      ],
+      "CGLPPRX2": [
+        "SE",
+        "EN",
+        "CLK"
+      ],
+      "CGLPPRX8": [
+        "SE",
+        "EN",
+        "CLK"
+      ],
+      "CGLPPSX16": [
+        "SE",
+        "EN",
+        "CLK"
+      ],
+      "CGLPPSX2": [
+        "SE",
+        "EN",
+        "CLK"
+      ],
+      "CGLPPSX4": [
+        "SE",
+        "EN",
+        "CLK"
+      ],
+      "CGLPPSX8": [
+        "SE",
+        "EN",
+        "CLK"
+      ],
+      "DEC24X1": [
+        "IN1",
+        "IN2"
+      ],
+      "DEC24X2": [
+        "IN1",
+        "IN2"
+      ],
+      "DELLN1X2": [
+        "IN"
+      ],
+      "DELLN2X2": [
+        "IN"
+      ],
+      "DELLN3X2": [
+        "IN"
+      ],
+      "DFFARX1": [
+        "D",
+        "CLK",
+        "RSTB"
+      ],
+      "DFFARX2": [
+        "D",
+        "CLK",
+        "RSTB"
+      ],
+      "DFFASRX1": [
+        "D",
+        "CLK",
+        "RSTB",
+        "SETB"
+      ],
+      "DFFASRX2": [
+        "D",
+        "CLK",
+        "RSTB",
+        "SETB"
+      ],
+      "DFFASX1": [
+        "D",
+        "CLK",
+        "SETB"
+      ],
+      "DFFASX2": [
+        "D",
+        "CLK",
+        "SETB"
+      ],
+      "DFFNARX1": [
+        "D",
+        "CLK",
+        "RSTB"
+      ],
+      "DFFNARX2": [
+        "D",
+        "CLK",
+        "RSTB"
+      ],
+      "DFFNASRNX1": [
+        "D",
+        "CLK",
+        "RSTB",
+        "SETB"
+      ],
+      "DFFNASRNX2": [
+        "D",
+        "CLK",
+        "RSTB",
+        "SETB"
+      ],
+      "DFFNASRQX1": [
+        "D",
+        "CLK",
+        "RSTB",
+        "SETB"
+      ],
+      "DFFNASRQX2": [
+        "D",
+        "CLK",
+        "RSTB",
+        "SETB"
+      ],
+      "DFFNASRX1": [
+        "D",
+        "CLK",
+        "RSTB",
+        "SETB"
+      ],
+      "DFFNASRX2": [
+        "D",
+        "CLK",
+        "RSTB",
+        "SETB"
+      ],
+      "DFFNASX1": [
+        "D",
+        "CLK",
+        "SETB"
+      ],
+      "DFFNASX2": [
+        "D",
+        "CLK",
+        "SETB"
+      ],
+      "DFFNX1": [
+        "D",
+        "CLK"
+      ],
+      "DFFNX2": [
+        "D",
+        "CLK"
+      ],
+      "DFFSSRX1": [
+        "D",
+        "CLK",
+        "RSTB",
+        "SETB"
+      ],
+      "DFFSSRX2": [
+        "D",
+        "CLK",
+        "RSTB",
+        "SETB"
+      ],
+      "DFFX1": [
+        "D",
+        "CLK"
+      ],
+      "DFFX2": [
+        "D",
+        "CLK"
+      ],
+      "GLOBAL_GND": [],
+      "GLOBAL_VCC": [],
+      "HADDX1": [
+        "A",
+        "B",
+        "CI"
+      ],
+      "HADDX2": [
+        "A",
+        "B",
+        "CI"
+      ],
+      "HEADX16": [
+        "SLEEP"
+      ],
+      "HEADX2": [
+        "SLEEP"
+      ],
+      "HEADX32": [
+        "SLEEP"
+      ],
+      "HEADX4": [
+        "SLEEP"
+      ],
+      "HEADX8": [
+        "SLEEP"
+      ],
+      "IBUFFX16": [
+        "IN"
+      ],
+      "IBUFFX2": [
+        "IN"
+      ],
+      "IBUFFX32": [
+        "IN"
+      ],
+      "IBUFFX4": [
+        "IN"
+      ],
+      "IBUFFX8": [
+        "IN"
+      ],
+      "INVX0": [
+        "IN"
+      ],
+      "INVX1": [
+        "IN"
+      ],
+      "INVX16": [
+        "IN"
+      ],
+      "INVX2": [
+        "IN"
+      ],
+      "INVX32": [
+        "IN"
+      ],
+      "INVX4": [
+        "IN"
+      ],
+      "INVX8": [
+        "IN"
+      ],
+      "ISOLANDX1": [
+        "D",
+        "ISO"
+      ],
+      "ISOLANDX2": [
+        "D",
+        "ISO"
+      ],
+      "ISOLANDX4": [
+        "D",
+        "ISO"
+      ],
+      "ISOLANDX8": [
+        "D",
+        "ISO"
+      ],
+      "ISOLORX1": [
+        "D",
+        "ISO"
+      ],
+      "ISOLORX2": [
+        "D",
+        "ISO"
+      ],
+      "ISOLORX4": [
+        "D",
+        "ISO"
+      ],
+      "ISOLORX8": [
+        "D",
+        "ISO"
+      ],
+      "LARX1": [
+        "D",
+        "CLK",
+        "RSTB"
+      ],
+      "LARX2": [
+        "D",
+        "CLK",
+        "RSTB"
+      ],
+      "LASRNX1": [
+        "D",
+        "CLK",
+        "RSTB",
+        "SETB"
+      ],
+      "LASRNX2": [
+        "D",
+        "CLK",
+        "RSTB",
+        "SETB"
+      ],
+      "LASRQX1": [
+        "D",
+        "CLK",
+        "RSTB",
+        "SETB"
+      ],
+      "LASRQX2": [
+        "D",
+        "CLK",
+        "RSTB",
+        "SETB"
+      ],
+      "LASRX1": [
+        "D",
+        "CLK",
+        "RSTB",
+        "SETB"
+      ],
+      "LASRX2": [
+        "D",
+        "CLK",
+        "RSTB",
+        "SETB"
+      ],
+      "LASX1": [
+        "D",
+        "CLK",
+        "SETB"
+      ],
+      "LASX2": [
+        "D",
+        "CLK",
+        "SETB"
+      ],
+      "LATCHX1": [
+        "D",
+        "CLK"
+      ],
+      "LNANDX1": [
+        "RIN",
+        "SIN"
+      ],
+      "LNANDX2": [
+        "RIN",
+        "SIN"
+      ],
+      "LSDNENX1": [
+        "ENB",
+        "D"
+      ],
+      "LSDNENX2": [
+        "ENB",
+        "D"
+      ],
+      "LSDNENX4": [
+        "ENB",
+        "D"
+      ],
+      "LSDNENX8": [
+        "ENB",
+        "D"
+      ],
+      "LSDNX1": [
+        "D"
+      ],
+      "LSDNX2": [
+        "D"
+      ],
+      "LSDNX4": [
+        "D"
+      ],
+      "LSDNX8": [
+        "D"
+      ],
+      "LSUPENX1": [
+        "ENB",
+        "D"
+      ],
+      "LSUPENX2": [
+        "ENB",
+        "D"
+      ],
+      "LSUPENX4": [
+        "ENB",
+        "D"
+      ],
+      "LSUPENX8": [
+        "ENB",
+        "D"
+      ],
+      "LSUPX1": [
+        "D"
+      ],
+      "LSUPX2": [
+        "D"
+      ],
+      "LSUPX4": [
+        "D"
+      ],
+      "LSUPX8": [
+        "D"
+      ],
+      "MUX21X1": [
+        "IN1",
+        "IN2",
+        "S"
+      ],
+      "MUX21X2": [
+        "IN1",
+        "IN2",
+        "S"
+      ],
+      "MUX41X1": [
+        "IN1",
+        "IN2",
+        "IN3",
+        "IN4",
+        "S0",
+        "S1"
+      ],
+      "MUX41X2": [
+        "IN1",
+        "IN2",
+        "IN3",
+        "IN4",
+        "S0",
+        "S1"
+      ],
+      "NAND2X0": [
+        "IN1",
+        "IN2"
+      ],
+      "NAND2X1": [
+        "IN1",
+        "IN2"
+      ],
+      "NAND2X2": [
+        "IN1",
+        "IN2"
+      ],
+      "NAND2X4": [
+        "IN1",
+        "IN2"
+      ],
+      "NAND3X0": [
+        "IN1",
+        "IN2",
+        "IN3"
+      ],
+      "NAND3X1": [
+        "IN1",
+        "IN2",
+        "IN3"
+      ],
+      "NAND3X2": [
+        "IN1",
+        "IN2",
+        "IN3"
+      ],
+      "NAND3X4": [
+        "IN1",
+        "IN2",
+        "IN3"
+      ],
+      "NAND4X0": [
+        "IN1",
+        "IN2",
+        "IN3",
+        "IN4"
+      ],
+      "NAND4X1": [
+        "IN1",
+        "IN2",
+        "IN3",
+        "IN4"
+      ],
+      "NBUFFX16": [
+        "IN"
+      ],
+      "NBUFFX2": [
+        "IN"
+      ],
+      "NBUFFX32": [
+        "IN"
+      ],
+      "NBUFFX4": [
+        "IN"
+      ],
+      "NBUFFX8": [
+        "IN"
+      ],
+      "NOR2X0": [
+        "IN1",
+        "IN2"
+      ],
+      "NOR2X1": [
+        "IN1",
+        "IN2"
+      ],
+      "NOR2X2": [
+        "IN1",
+        "IN2"
+      ],
+      "NOR2X4": [
+        "IN1",
+        "IN2"
+      ],
+      "NOR3X0": [
+        "IN1",
+        "IN2",
+        "IN3"
+      ],
+      "NOR3X1": [
+        "IN1",
+        "IN2",
+        "IN3"
+      ],
+      "NOR3X2": [
+        "IN1",
+        "IN2",
+        "IN3"
+      ],
+      "NOR3X4": [
+        "IN1",
+        "IN2",
+        "IN3"
+      ],
+      "NOR4X0": [
+        "IN1",
+        "IN2",
+        "IN3",
+        "IN4"
+      ],
+      "NOR4X1": [
+        "IN1",
+        "IN2",
+        "IN3",
+        "IN4"
+      ],
+      "OA21X1": [
+        "IN1",
+        "IN2",
+        "IN3"
+      ],
+      "OA21X2": [
+        "IN1",
+        "IN2",
+        "IN3"
+      ],
+      "OA221X1": [
+        "IN1",
+        "IN2",
+        "IN3",
+        "IN4",
+        "IN5"
+      ],
+      "OA221X2": [
+        "IN1",
+        "IN2",
+        "IN3",
+        "IN4",
+        "IN5"
+      ],
+      "OA222X1": [
+        "IN1",
+        "IN2",
+        "IN3",
+        "IN4",
+        "IN5",
+        "IN6"
+      ],
+      "OA222X2": [
+        "IN1",
+        "IN2",
+        "IN3",
+        "IN4",
+        "IN5",
+        "IN6"
+      ],
+      "OA22X1": [
+        "IN1",
+        "IN2",
+        "IN3",
+        "IN4"
+      ],
+      "OA22X2": [
+        "IN1",
+        "IN2",
+        "IN3",
+        "IN4"
+      ],
+      "OAI21X1": [
+        "IN1",
+        "IN2",
+        "IN3"
+      ],
+      "OAI21X2": [
+        "IN1",
+        "IN2",
+        "IN3"
+      ],
+      "OAI221X1": [
+        "IN1",
+        "IN2",
+        "IN3",
+        "IN4",
+        "IN5"
+      ],
+      "OAI221X2": [
+        "IN1",
+        "IN2",
+        "IN3",
+        "IN4",
+        "IN5"
+      ],
+      "OAI222X1": [
+        "IN1",
+        "IN2",
+        "IN3",
+        "IN4",
+        "IN5",
+        "IN6"
+      ],
+      "OAI222X2": [
+        "IN1",
+        "IN2",
+        "IN3",
+        "IN4",
+        "IN5",
+        "IN6"
+      ],
+      "OAI22X1": [
+        "IN1",
+        "IN2",
+        "IN3",
+        "IN4"
+      ],
+      "OAI22X2": [
+        "IN1",
+        "IN2",
+        "IN3",
+        "IN4"
+      ],
+      "OR2X1": [
+        "IN1",
+        "IN2"
+      ],
+      "OR2X2": [
+        "IN1",
+        "IN2"
+      ],
+      "OR2X4": [
+        "IN1",
+        "IN2"
+      ],
+      "OR3X1": [
+        "IN1",
+        "IN2",
+        "IN3"
+      ],
+      "OR3X2": [
+        "IN1",
+        "IN2",
+        "IN3"
+      ],
+      "OR3X4": [
+        "IN1",
+        "IN2",
+        "IN3"
+      ],
+      "OR4X1": [
+        "IN1",
+        "IN2",
+        "IN3",
+        "IN4"
+      ],
+      "OR4X2": [
+        "IN1",
+        "IN2",
+        "IN3",
+        "IN4"
+      ],
+      "OR4X4": [
+        "IN1",
+        "IN2",
+        "IN3",
+        "IN4"
+      ],
+      "PGX1": [
+        "INP",
+        "INQ1",
+        "INN"
+      ],
+      "PGX2": [
+        "INP",
+        "INQ1",
+        "INN"
+      ],
+      "PGX4": [
+        "INP",
+        "INQ1",
+        "INN"
+      ],
+      "RDFFNX1": [
+        "RETN",
+        "D",
+        "CLK"
+      ],
+      "RDFFNX2": [
+        "RETN",
+        "D",
+        "CLK"
+      ],
+      "RSDFFNX1": [
+        "RETN",
+        "D",
+        "SI",
+        "SE",
+        "CLK"
+      ],
+      "RSDFFNX2": [
+        "RETN",
+        "D",
+        "SI",
+        "SE",
+        "CLK"
+      ],
+      "RSDFFX1": [
+        "RETN",
+        "D",
+        "SI",
+        "SE",
+        "CLK"
+      ],
+      "RSDFFX2": [
+        "RETN",
+        "D",
+        "SI",
+        "SE",
+        "CLK"
+      ],
+      "SDFFARX1": [
+        "D",
+        "SE",
+        "SI",
+        "CLK",
+        "RSTB"
+      ],
+      "SDFFARX2": [
+        "D",
+        "SE",
+        "SI",
+        "CLK",
+        "RSTB"
+      ],
+      "SDFFASRSX1": [
+        "D",
+        "SE",
+        "SI",
+        "CLK",
+        "RSTB",
+        "SETB"
+      ],
+      "SDFFASRSX2": [
+        "D",
+        "SE",
+        "SI",
+        "CLK",
+        "RSTB",
+        "SETB"
+      ],
+      "SDFFASRX1": [
+        "D",
+        "SE",
+        "SI",
+        "CLK",
+        "RSTB",
+        "SETB"
+      ],
+      "SDFFASRX2": [
+        "D",
+        "SE",
+        "SI",
+        "CLK",
+        "RSTB",
+        "SETB"
+      ],
+      "SDFFASX1": [
+        "D",
+        "SE",
+        "SI",
+        "CLK",
+        "SETB"
+      ],
+      "SDFFASX2": [
+        "D",
+        "SE",
+        "SI",
+        "CLK",
+        "SETB"
+      ],
+      "SDFFNARX1": [
+        "D",
+        "SE",
+        "SI",
+        "CLK",
+        "RSTB"
+      ],
+      "SDFFNARX2": [
+        "D",
+        "SE",
+        "SI",
+        "CLK",
+        "RSTB"
+      ],
+      "SDFFNASRX1": [
+        "D",
+        "SE",
+        "SI",
+        "CLK",
+        "RSTB",
+        "SETB"
+      ],
+      "SDFFNASRX2": [
+        "D",
+        "SE",
+        "SI",
+        "CLK",
+        "RSTB",
+        "SETB"
+      ],
+      "SDFFNASX1": [
+        "D",
+        "SE",
+        "SI",
+        "CLK",
+        "SETB"
+      ],
+      "SDFFNASX2": [
+        "D",
+        "SE",
+        "SI",
+        "CLK",
+        "SETB"
+      ],
+      "SDFFNX1": [
+        "D",
+        "SE",
+        "SI",
+        "CLK"
+      ],
+      "SDFFNX2": [
+        "D",
+        "SE",
+        "SI",
+        "CLK"
+      ],
+      "SDFFSSRX1": [
+        "D",
+        "SE",
+        "SI",
+        "CLK",
+        "RSTB",
+        "SETB"
+      ],
+      "SDFFSSRX2": [
+        "D",
+        "SE",
+        "SI",
+        "CLK",
+        "RSTB",
+        "SETB"
+      ],
+      "SDFFX1": [
+        "D",
+        "SE",
+        "SI",
+        "CLK"
+      ],
+      "SDFFX2": [
+        "D",
+        "SE",
+        "SI",
+        "CLK"
+      ],
+      "TNBUFFX1": [
+        "ENB",
+        "IN"
+      ],
+      "TNBUFFX16": [
+        "ENB",
+        "IN"
+      ],
+      "TNBUFFX2": [
+        "ENB",
+        "IN"
+      ],
+      "TNBUFFX32": [
+        "ENB",
+        "IN"
+      ],
+      "TNBUFFX4": [
+        "ENB",
+        "IN"
+      ],
+      "TNBUFFX8": [
+        "ENB",
+        "IN"
+      ],
+      "XNOR2X1": [
+        "IN1",
+        "IN2"
+      ],
+      "XNOR2X2": [
+        "IN1",
+        "IN2"
+      ],
+      "XNOR3X1": [
+        "IN1",
+        "IN2",
+        "IN3"
+      ],
+      "XNOR3X2": [
+        "IN1",
+        "IN2",
+        "IN3"
+      ],
+      "XOR2X1": [
+        "IN1",
+        "IN2"
+      ],
+      "XOR2X2": [
+        "IN1",
+        "IN2"
+      ],
+      "XOR3X1": [
+        "IN1",
+        "IN2",
+        "IN3"
+      ],
+      "XOR3X2": [
+        "IN1",
+        "IN2",
+        "IN3"
+      ]
+    },
+    "elements_output_types": {
+      "AND2X1": [
+        "Q"
+      ],
+      "AND2X2": [
+        "Q"
+      ],
+      "AND2X4": [
+        "Q"
+      ],
+      "AND3X1": [
+        "Q"
+      ],
+      "AND3X2": [
+        "Q"
+      ],
+      "AND3X4": [
+        "Q"
+      ],
+      "AND4X1": [
+        "Q"
+      ],
+      "AND4X2": [
+        "Q"
+      ],
+      "AND4X4": [
+        "Q"
+      ],
+      "AO21X1": [
+        "Q"
+      ],
+      "AO21X2": [
+        "Q"
+      ],
+      "AO221X1": [
+        "Q"
+      ],
+      "AO221X2": [
+        "Q"
+      ],
+      "AO222X1": [
+        "Q"
+      ],
+      "AO222X2": [
+        "Q"
+      ],
+      "AO22X1": [
+        "Q"
+      ],
+      "AO22X2": [
+        "Q"
+      ],
+      "AOBUFX1": [
+        "Q"
+      ],
+      "AOBUFX2": [
+        "Q"
+      ],
+      "AOBUFX4": [
+        "Q"
+      ],
+      "AODFFARX1": [
+        "Q",
+        "QN"
+      ],
+      "AODFFARX2": [
+        "Q",
+        "QN"
+      ],
+      "AODFFNARX1": [
+        "Q",
+        "QN"
+      ],
+      "AODFFNARX2": [
+        "Q",
+        "QN"
+      ],
+      "AOI21X1": [
+        "QN"
+      ],
+      "AOI21X2": [
+        "QN"
+      ],
+      "AOI221X1": [
+        "QN"
+      ],
+      "AOI221X2": [
+        "QN"
+      ],
+      "AOI222X1": [
+        "QN"
+      ],
+      "AOI222X2": [
+        "QN"
+      ],
+      "AOI22X1": [
+        "QN"
+      ],
+      "AOI22X2": [
+        "QN"
+      ],
+      "AOINVX1": [
+        "Q"
+      ],
+      "AOINVX2": [
+        "Q"
+      ],
+      "AOINVX4": [
+        "Q"
+      ],
+      "CGLNPRX2": [
+        "GCLK"
+      ],
+      "CGLNPRX8": [
+        "GCLK"
+      ],
+      "CGLNPSX16": [
+        "GCLK"
+      ],
+      "CGLNPSX2": [
+        "GCLK"
+      ],
+      "CGLNPSX4": [
+        "GCLK"
+      ],
+      "CGLNPSX8": [
+        "GCLK"
+      ],
+      "CGLPPRX2": [
+        "GCLK"
+      ],
+      "CGLPPRX8": [
+        "GCLK"
+      ],
+      "CGLPPSX16": [
+        "GCLK"
+      ],
+      "CGLPPSX2": [
+        "GCLK"
+      ],
+      "CGLPPSX4": [
+        "GCLK"
+      ],
+      "CGLPPSX8": [
+        "GCLK"
+      ],
+      "DEC24X1": [
+        "Q0",
+        "Q1",
+        "Q2",
+        "Q3"
+      ],
+      "DEC24X2": [
+        "Q0",
+        "Q1",
+        "Q2",
+        "Q3"
+      ],
+      "DELLN1X2": [
+        "Q"
+      ],
+      "DELLN2X2": [
+        "Q"
+      ],
+      "DELLN3X2": [
+        "Q"
+      ],
+      "DFFARX1": [
+        "Q",
+        "QN"
+      ],
+      "DFFARX2": [
+        "Q",
+        "QN"
+      ],
+      "DFFASRX1": [
+        "Q",
+        "QN"
+      ],
+      "DFFASRX2": [
+        "Q",
+        "QN"
+      ],
+      "DFFASX1": [
+        "Q",
+        "QN"
+      ],
+      "DFFASX2": [
+        "Q",
+        "QN"
+      ],
+      "DFFNARX1": [
+        "Q",
+        "QN"
+      ],
+      "DFFNARX2": [
+        "Q",
+        "QN"
+      ],
+      "DFFNASRNX1": [
+        "QN"
+      ],
+      "DFFNASRNX2": [
+        "QN"
+      ],
+      "DFFNASRQX1": [
+        "Q"
+      ],
+      "DFFNASRQX2": [
+        "Q"
+      ],
+      "DFFNASRX1": [
+        "Q",
+        "QN"
+      ],
+      "DFFNASRX2": [
+        "Q",
+        "QN"
+      ],
+      "DFFNASX1": [
+        "Q",
+        "QN"
+      ],
+      "DFFNASX2": [
+        "Q",
+        "QN"
+      ],
+      "DFFNX1": [
+        "Q",
+        "QN"
+      ],
+      "DFFNX2": [
+        "Q",
+        "QN"
+      ],
+      "DFFSSRX1": [
+        "Q",
+        "QN"
+      ],
+      "DFFSSRX2": [
+        "Q",
+        "QN"
+      ],
+      "DFFX1": [
+        "Q",
+        "QN"
+      ],
+      "DFFX2": [
+        "Q",
+        "QN"
+      ],
+      "FADDX1": [
+        "S",
+        "CO"
+      ],
+      "FADDX2": [
+        "S",
+        "CO"
+      ],
+      "GLOBAL_GND": [
+        "O"
+      ],
+      "GLOBAL_VCC": [
+        "O"
+      ],
+      "HADDX1": [
+        "S0",
+        "C1"
+      ],
+      "HADDX2": [
+        "S0",
+        "C1"
+      ],
+      "HEADX16": [
+        "VDD"
+      ],
+      "HEADX2": [
+        "VDD"
+      ],
+      "HEADX32": [
+        "VDD"
+      ],
+      "HEADX4": [
+        "VDD"
+      ],
+      "HEADX8": [
+        "VDD"
+      ],
+      "IBUFFX16": [
+        "QN"
+      ],
+      "IBUFFX2": [
+        "QN"
+      ],
+      "IBUFFX32": [
+        "QN"
+      ],
+      "IBUFFX4": [
+        "QN"
+      ],
+      "IBUFFX8": [
+        "QN"
+      ],
+      "INVX0": [
+        "QN"
+      ],
+      "INVX1": [
+        "QN"
+      ],
+      "INVX16": [
+        "QN"
+      ],
+      "INVX2": [
+        "QN"
+      ],
+      "INVX32": [
+        "QN"
+      ],
+      "INVX4": [
+        "QN"
+      ],
+      "INVX8": [
+        "QN"
+      ],
+      "ISOLANDX1": [
+        "Q"
+      ],
+      "ISOLANDX2": [
+        "Q"
+      ],
+      "ISOLANDX4": [
+        "Q"
+      ],
+      "ISOLANDX8": [
+        "Q"
+      ],
+      "ISOLORX1": [
+        "Q"
+      ],
+      "ISOLORX2": [
+        "Q"
+      ],
+      "ISOLORX4": [
+        "Q"
+      ],
+      "ISOLORX8": [
+        "Q"
+      ],
+      "LARX1": [
+        "Q",
+        "QN"
+      ],
+      "LARX2": [
+        "Q",
+        "QN"
+      ],
+      "LASRNX1": [
+        "QN"
+      ],
+      "LASRNX2": [
+        "QN"
+      ],
+      "LASRQX1": [
+        "Q"
+      ],
+      "LASRQX2": [
+        "Q"
+      ],
+      "LASRX1": [
+        "Q",
+        "QN"
+      ],
+      "LASRX2": [
+        "Q",
+        "QN"
+      ],
+      "LASX1": [
+        "Q",
+        "QN"
+      ],
+      "LASX2": [
+        "Q",
+        "QN"
+      ],
+      "LATCHX1": [
+        "Q",
+        "QN"
+      ],
+      "LATCHX2": [
+        "Q",
+        "QN"
+      ],
+      "LNANDX1": [
+        "Q",
+        "QN"
+      ],
+      "LNANDX2": [
+        "Q",
+        "QN"
+      ],
+      "LSDNENX1": [
+        "Q"
+      ],
+      "LSDNENX2": [
+        "Q"
+      ],
+      "LSDNENX4": [
+        "Q"
+      ],
+      "LSDNENX8": [
+        "Q"
+      ],
+      "LSDNX1": [
+        "Q"
+      ],
+      "LSDNX2": [
+        "Q"
+      ],
+      "LSDNX4": [
+        "Q"
+      ],
+      "LSDNX8": [
+        "Q"
+      ],
+      "LSUPENX1": [
+        "Q"
+      ],
+      "LSUPENX2": [
+        "Q"
+      ],
+      "LSUPENX4": [
+        "Q"
+      ],
+      "LSUPENX8": [
+        "Q"
+      ],
+      "LSUPX1": [
+        "Q"
+      ],
+      "LSUPX2": [
+        "Q"
+      ],
+      "LSUPX4": [
+        "Q"
+      ],
+      "LSUPX8": [
+        "Q"
+      ],
+      "MUX21X1": [
+        "Q"
+      ],
+      "MUX21X2": [
+        "Q"
+      ],
+      "MUX41X1": [
+        "Q"
+      ],
+      "MUX41X2": [
+        "Q"
+      ],
+      "NAND2X0": [
+        "QN"
+      ],
+      "NAND2X1": [
+        "QN"
+      ],
+      "NAND2X2": [
+        "QN"
+      ],
+      "NAND2X4": [
+        "QN"
+      ],
+      "NAND3X0": [
+        "QN"
+      ],
+      "NAND3X1": [
+        "QN"
+      ],
+      "NAND3X2": [
+        "QN"
+      ],
+      "NAND3X4": [
+        "QN"
+      ],
+      "NAND4X0": [
+        "QN"
+      ],
+      "NAND4X1": [
+        "QN"
+      ],
+      "NBUFFX16": [
+        "Q"
+      ],
+      "NBUFFX2": [
+        "Q"
+      ],
+      "NBUFFX32": [
+        "Q"
+      ],
+      "NBUFFX4": [
+        "Q"
+      ],
+      "NBUFFX8": [
+        "Q"
+      ],
+      "NOR2X0": [
+        "QN"
+      ],
+      "NOR2X1": [
+        "QN"
+      ],
+      "NOR2X2": [
+        "QN"
+      ],
+      "NOR2X4": [
+        "QN"
+      ],
+      "NOR3X0": [
+        "QN"
+      ],
+      "NOR3X1": [
+        "QN"
+      ],
+      "NOR3X2": [
+        "QN"
+      ],
+      "NOR3X4": [
+        "QN"
+      ],
+      "NOR4X0": [
+        "QN"
+      ],
+      "NOR4X1": [
+        "QN"
+      ],
+      "OA21X1": [
+        "Q"
+      ],
+      "OA21X2": [
+        "Q"
+      ],
+      "OA221X1": [
+        "Q"
+      ],
+      "OA221X2": [
+        "Q"
+      ],
+      "OA222X1": [
+        "Q"
+      ],
+      "OA222X2": [
+        "Q"
+      ],
+      "OA22X1": [
+        "Q"
+      ],
+      "OA22X2": [
+        "Q"
+      ],
+      "OAI21X1": [
+        "QN"
+      ],
+      "OAI21X2": [
+        "QN"
+      ],
+      "OAI221X1": [
+        "QN"
+      ],
+      "OAI221X2": [
+        "QN"
+      ],
+      "OAI222X1": [
+        "QN"
+      ],
+      "OAI222X2": [
+        "QN"
+      ],
+      "OAI22X1": [
+        "QN"
+      ],
+      "OAI22X2": [
+        "QN"
+      ],
+      "OR2X1": [
+        "Q"
+      ],
+      "OR2X2": [
+        "Q"
+      ],
+      "OR2X4": [
+        "Q"
+      ],
+      "OR3X1": [
+        "Q"
+      ],
+      "OR3X2": [
+        "Q"
+      ],
+      "OR3X4": [
+        "Q"
+      ],
+      "OR4X1": [
+        "Q"
+      ],
+      "OR4X2": [
+        "Q"
+      ],
+      "OR4X4": [
+        "Q"
+      ],
+      "PGX1": [
+        "INQ2"
+      ],
+      "PGX2": [
+        "INQ2"
+      ],
+      "PGX4": [
+        "INQ2"
+      ],
+      "RDFFNX1": [
+        "QN",
+        "Q"
+      ],
+      "RDFFNX2": [
+        "Q",
+        "QN"
+      ],
+      "RDFFX1": [
+        "QN",
+        "Q"
+      ],
+      "RDFFX2": [
+        "Q",
+        "QN"
+      ],
+      "RSDFFNX1": [
+        "QN",
+        "Q"
+      ],
+      "RSDFFNX2": [
+        "Q",
+        "QN"
+      ],
+      "RSDFFX1": [
+        "QN",
+        "Q"
+      ],
+      "RSDFFX2": [
+        "Q",
+        "QN"
+      ],
+      "SDFFARX1": [
+        "Q",
+        "QN"
+      ],
+      "SDFFARX2": [
+        "Q",
+        "QN"
+      ],
+      "SDFFASRSX1": [
+        "Q",
+        "QN",
+        "S0"
+      ],
+      "SDFFASRSX2": [
+        "Q",
+        "QN",
+        "S0"
+      ],
+      "SDFFASRX1": [
+        "Q",
+        "QN"
+      ],
+      "SDFFASRX2": [
+        "Q",
+        "QN"
+      ],
+      "SDFFASX1": [
+        "Q",
+        "QN"
+      ],
+      "SDFFASX2": [
+        "Q",
+        "QN"
+      ],
+      "SDFFNARX1": [
+        "Q",
+        "QN"
+      ],
+      "SDFFNARX2": [
+        "Q",
+        "QN"
+      ],
+      "SDFFNASRX1": [
+        "Q",
+        "QN"
+      ],
+      "SDFFNASRX2": [
+        "Q",
+        "QN"
+      ],
+      "SDFFNASX1": [
+        "Q",
+        "QN"
+      ],
+      "SDFFNX1": [
+        "Q",
+        "QN"
+      ],
+      "SDFFNX2": [
+        "Q",
+        "QN"
+      ],
+      "SDFFSSRX1": [
+        "Q",
+        "QN"
+      ],
+      "SDFFSSRX2": [
+        "Q",
+        "QN"
+      ],
+      "SDFFX1": [
+        "Q",
+        "QN"
+      ],
+      "SDFFX2": [
+        "Q",
+        "QN"
+      ],
+      "TNBUFFX1": [
+        "Q"
+      ],
+      "TNBUFFX16": [
+        "Q"
+      ],
+      "TNBUFFX2": [
+        "Q"
+      ],
+      "TNBUFFX32": [
+        "Q"
+      ],
+      "TNBUFFX4": [
+        "Q"
+      ],
+      "TNBUFFX8": [
+        "Q"
+      ],
+      "XNOR2X1": [
+        "Q"
+      ],
+      "XNOR2X2": [
+        "Q"
+      ],
+      "XNOR3X1": [
+        "Q"
+      ],
+      "XNOR3X2": [
+        "Q"
+      ],
+      "XOR2X1": [
+        "Q"
+      ],
+      "XOR2X2": [
+        "Q"
+      ],
+      "XOR3X1": [
+        "Q"
+      ],
+      "XOR3X2": [
+        "Q"
+      ]
+    },
+    "library_name": "SYNOPSYS_90NM",
+    "vhdl_includes": [],
+    "gnd_nodes": [
+      "GLOBAL_GND"
+    ],
+    "vcc_nodes": [
+      "GLOBAL_VCC"
+    ]
+  }
+}

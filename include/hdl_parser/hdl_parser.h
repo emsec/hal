@@ -54,7 +54,7 @@ public:
      * Parses hdl code for a specific netlist library.
      *
      * @param[in] gate_library - The gate library name.
-     * @returns The netlist representation of the hdl code or a nullpointer on error.
+     * @returns The netlist representation of the hdl code or a nullptr on error.
      */
     virtual std::shared_ptr<netlist> parse(const std::string& gate_library) = 0;
 

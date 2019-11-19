@@ -7,13 +7,14 @@
 
 #include "gui_globals.h"
 
-#include "netlist/module.h"
 #include "graph_widget/graph_navigation_widget.h"
+#include "netlist/module.h"
 
 #include <QApplication>
 #include <QCursor>
 #include <QDateTime>
 #include <QDesktopWidget>
+#include <QHBoxLayout>
 #include <QHeaderView>
 #include <QLabel>
 #include <QResizeEvent>
@@ -30,6 +31,8 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
     m_content_layout = new QVBoxLayout(this);
     m_content_layout->setContentsMargins(0, 0, 0, 0);
     m_content_layout->setSpacing(0);
+
+    m_tree_row_layout = new QHBoxLayout();
 
     m_general_table = new QTableWidget(this);
     m_general_table->horizontalHeader()->setStretchLastSection(true);
@@ -91,6 +94,7 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
     m_general_table->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     m_general_table->setFixedHeight(m_general_table->verticalHeader()->length());
     m_content_layout->addWidget(m_general_table);
+    //m_general_table->setStyleSheet("QTableWidget{color: red;}");
 
     m_container_layout = new QVBoxLayout(this);
     m_container_layout->setContentsMargins(0, 0, 0, 0);
@@ -119,20 +123,23 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
     m_tree_widget->header()->hide();
     m_tree_widget->setSelectionMode(QAbstractItemView::NoSelection);
     m_tree_widget->setFocusPolicy(Qt::NoFocus);
-    //    m_tree_widget->setSelectionMode(QAbstractItemView::SingleSelection);
-    m_tree_widget->setFocusPolicy(Qt::NoFocus);
     m_tree_widget->headerItem()->setText(0, "");
     m_tree_widget->headerItem()->setText(1, "");
     m_tree_widget->headerItem()->setText(2, "");
-    m_tree_widget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
     m_tree_widget->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_tree_widget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-    m_container_layout->addWidget(m_tree_widget);
+    m_tree_widget->header()->setStretchLastSection(false);
+    //by setting this you do not need to call resizecolumntocontents every time after updating
+    m_tree_widget->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
+    m_tree_widget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+
+    m_tree_row_layout->addWidget(m_tree_widget);
+    m_tree_row_layout->addSpacerItem(new QSpacerItem(1, 1, QSizePolicy::Expanding, QSizePolicy::Minimum));
+    m_tree_row_layout->addSpacing(0);
+    m_container_layout->addLayout(m_tree_row_layout);
 
     connect(m_tree_widget, &QTreeWidget::itemClicked, this, &gate_details_widget::on_treewidget_item_clicked);
-
-
 
     //set parent and flag so it gets shown in its own window
     m_navigation_table = new graph_navigation_widget();
@@ -152,9 +159,6 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
 
     m_output_pins = new QTreeWidgetItem(m_tree_widget);
     m_output_pins->setExpanded(true);
-
-    // load and store quine mc cluskey plugin
-    m_qmc = plugin_manager::get_plugin_instance<plugin_quine_mccluskey>("libquine_mccluskey");
 
     connect(m_general_table, &QTableWidget::doubleClicked, this, &gate_details_widget::on_general_table_item_double_clicked);
 
@@ -188,13 +192,13 @@ gate_details_widget::~gate_details_widget()
 
 void gate_details_widget::handle_gate_name_changed(std::shared_ptr<gate> gate)
 {
-    if(m_current_id == gate->get_id())
+    if (m_current_id == gate->get_id())
         update(m_current_id);
 }
 
 void gate_details_widget::handle_gate_removed(std::shared_ptr<gate> gate)
 {
-    if(m_current_id == gate->get_id())
+    if (m_current_id == gate->get_id())
     {
         m_general_table->setHidden(true);
         m_scroll_area->setHidden(true);
@@ -206,15 +210,15 @@ void gate_details_widget::handle_net_created(std::shared_ptr<net> net)
     bool update_needed = false;
 
     //check if currently shown gate is src of newly created net
-    if(m_current_id == net->get_src().get_gate()->get_id())
+    if (m_current_id == net->get_src().get_gate()->get_id())
         update_needed = true;
 
     //check if currently shown gate is dst of newly created net
-    if(!update_needed)
+    if (!update_needed)
     {
-        for(auto& e : net->get_dsts())
+        for (auto& e : net->get_dsts())
         {
-            if(m_current_id == e.get_gate()->get_id())
+            if (m_current_id == e.get_gate()->get_id())
             {
                 update_needed = true;
                 break;
@@ -222,7 +226,7 @@ void gate_details_widget::handle_net_created(std::shared_ptr<net> net)
         }
     }
 
-    if(update_needed)
+    if (update_needed)
         update(m_current_id);
 }
 
@@ -231,15 +235,15 @@ void gate_details_widget::handle_net_name_changed(std::shared_ptr<net> net)
     bool update_needed = false;
 
     //check if currently shown gate is src of renamed net
-    if(m_current_id == net->get_src().get_gate()->get_id())
+    if (m_current_id == net->get_src().get_gate()->get_id())
         update_needed = true;
 
     //check if currently shown gate is dst of renamed net
-    if(!update_needed)
+    if (!update_needed)
     {
-        for(auto& e : net->get_dsts())
+        for (auto& e : net->get_dsts())
         {
-            if(m_current_id == e.get_gate()->get_id())
+            if (m_current_id == e.get_gate()->get_id())
             {
                 update_needed = true;
                 break;
@@ -247,25 +251,25 @@ void gate_details_widget::handle_net_name_changed(std::shared_ptr<net> net)
         }
     }
 
-    if(update_needed)
+    if (update_needed)
         update(m_current_id);
 }
 
 void gate_details_widget::handle_net_src_changed(std::shared_ptr<net> net)
 {
-    if(g_netlist->is_gate_in_netlist(g_netlist->get_gate_by_id(m_current_id)))
+    if (g_netlist->is_gate_in_netlist(g_netlist->get_gate_by_id(m_current_id)))
         update(m_current_id);
 }
 
 void gate_details_widget::handle_net_dst_added(std::shared_ptr<net> net, const u32 dst_gate_id)
 {
-    if(m_current_id == dst_gate_id)
+    if (m_current_id == dst_gate_id)
         update(m_current_id);
 }
 
 void gate_details_widget::handle_net_dst_removed(std::shared_ptr<net> net, const u32 dst_gate_id)
 {
-    if(m_current_id == dst_gate_id)
+    if (m_current_id == dst_gate_id)
         update(m_current_id);
 }
 
@@ -299,10 +303,10 @@ void gate_details_widget::handle_module_gate_assigned(std::shared_ptr<module> mo
 
 void gate_details_widget::handle_module_gate_removed(std::shared_ptr<module> module, u32 associated_data)
 {
-    if(!g_netlist->is_gate_in_netlist(g_netlist->get_gate_by_id(associated_data)))
+    if (!g_netlist->is_gate_in_netlist(g_netlist->get_gate_by_id(associated_data)))
         return;
 
-    if(m_current_id == associated_data)
+    if (m_current_id == associated_data)
     {
         update(m_current_id);
     }
@@ -319,8 +323,11 @@ void gate_details_widget::update(const u32 gate_id)
 
     auto g = g_netlist->get_gate_by_id(gate_id);
 
+    if (!g)
+        return;
+
     m_name_item->setText(QString::fromStdString(g->get_name()));
-    m_type_item->setText(QString::fromStdString(g->get_type()));
+    m_type_item->setText(QString::fromStdString(g->get_type()->get_name()));
     m_id_item->setText(QString::number(g->get_id()));
 
     //get modules
@@ -338,30 +345,18 @@ void gate_details_widget::update(const u32 gate_id)
     // display Boolean function (if present)
     m_boolean_function->setText("");
 
-    auto bf = std::get<1>(g->get_data_by_key("gui", "boolean_function"));
-    if (!bf.empty() && (bf != "-"))
+    std::string description = "";
+    for (const auto& it : g->get_boolean_functions())
+        description += " <b>Boolean Function</b>: " + it.first + " = " + it.second.to_string() + "<br>";
+
+    if (description.empty())
     {
-        m_boolean_function->setText(QString::fromStdString(bf));
+        g->set_data("gui", "boolean_function", "string", "-");
     }
     else
     {
-        if (m_qmc)
-        {
-            std::string description = "";
-            for (const auto& it : m_qmc->get_boolean_function_str(g, true))
-                description += " <b>Boolean Function (" + it.first + ")</b>: " + it.second + "<br>";
-
-            if (description.empty())
-            {
-                g->set_data("gui", "boolean_function", "string", "-");
-            }
-            else
-            {
-                description = description.substr(0, description.size() - 4);
-                g->set_data("gui", "boolean_function", "string", description);
-                m_boolean_function->setText(QString::fromStdString(description));
-            }
-        }
+        description = description.substr(0, description.size() - 4);
+        m_boolean_function->setText(QString::fromStdString(description));
     }
 
     if (m_boolean_function->text().isEmpty())
@@ -388,7 +383,7 @@ void gate_details_widget::update(const u32 gate_id)
     for (auto item : m_input_pins->takeChildren())
         delete item;
 
-    auto input_pins = g_netlist->get_gate_by_id(gate_id)->get_input_pin_types();
+    auto input_pins = g_netlist->get_gate_by_id(gate_id)->get_input_pins();
     if (input_pins.size() == 1)
         m_input_pins->setText(0, "1 Input Pin");
     else
@@ -413,7 +408,7 @@ void gate_details_widget::update(const u32 gate_id)
     for (auto item : m_output_pins->takeChildren())
         delete item;
 
-    auto output_pins = g_netlist->get_gate_by_id(gate_id)->get_output_pin_types();
+    auto output_pins = g_netlist->get_gate_by_id(gate_id)->get_output_pins();
     if (output_pins.size() == 1)
         m_output_pins->setText(0, "1 Output Pin");
     else
@@ -435,15 +430,10 @@ void gate_details_widget::update(const u32 gate_id)
         }
     }
 
-    m_tree_widget->resizeColumnToContents(0);
-    m_tree_widget->resizeColumnToContents(1);
-    m_tree_widget->resizeColumnToContents(2);
-
     m_general_table->setHidden(false);
     m_scroll_area->setHidden(false);
 
     connect(m_tree_widget, &QTreeWidget::itemClicked, this, &gate_details_widget::on_treewidget_item_clicked);
-
 }
 
 void gate_details_widget::on_treewidget_item_clicked(QTreeWidgetItem* item, int column)
@@ -458,7 +448,7 @@ void gate_details_widget::on_treewidget_item_clicked(QTreeWidgetItem* item, int 
 
         auto destinations = clicked_net->get_dsts();
 
-        if (destinations.empty() || clicked_net->is_global_output_net() || clicked_net->is_global_inout_net())
+        if (destinations.empty() || clicked_net->is_global_output_net())
         {
             g_selection_relay.clear();
             g_selection_relay.m_selected_nets.insert(clicked_net->get_id());
@@ -473,7 +463,7 @@ void gate_details_widget::on_treewidget_item_clicked(QTreeWidgetItem* item, int 
             g_selection_relay.m_focus_id   = ep.gate->get_id();
             g_selection_relay.m_subfocus   = selection_relay::subfocus::left;
 
-            auto pins                          = ep.gate->get_input_pin_types();
+            auto pins                          = ep.gate->get_input_pins();
             auto index                         = std::distance(pins.begin(), std::find(pins.begin(), pins.end(), ep.pin_type));
             g_selection_relay.m_subfocus_index = index;
 
@@ -482,13 +472,12 @@ void gate_details_widget::on_treewidget_item_clicked(QTreeWidgetItem* item, int 
         }
         else
         {
-//            auto rect = QApplication::desktop()->availableGeometry(this);
-//            w->move(QPoint(rect.x() + (rect.width() - w->width()) / 2, rect.y() + (rect.height() - w->height()) / 2));
+            //            auto rect = QApplication::desktop()->availableGeometry(this);
+            //            w->move(QPoint(rect.x() + (rect.width() - w->width()) / 2, rect.y() + (rect.height() - w->height()) / 2));
             m_navigation_table->setup(clicked_net);
             m_navigation_table->move(QCursor::pos());
             m_navigation_table->show();
             m_navigation_table->setFocus();
-
         }
     }
     else if (m_input_pins == item->parent() && column == 2)
@@ -499,7 +488,7 @@ void gate_details_widget::on_treewidget_item_clicked(QTreeWidgetItem* item, int 
             return;
 
         g_selection_relay.clear();
-        if (clicked_net->get_src().gate == nullptr || clicked_net->is_global_input_net() || clicked_net->is_global_inout_net())
+        if (clicked_net->get_src().gate == nullptr || clicked_net->is_global_input_net())
         {
             g_selection_relay.m_selected_nets.insert(clicked_net->get_id());
         }
@@ -512,7 +501,7 @@ void gate_details_widget::on_treewidget_item_clicked(QTreeWidgetItem* item, int 
             g_selection_relay.m_focus_id   = ep.gate->get_id();
             g_selection_relay.m_subfocus   = selection_relay::subfocus::right;
 
-            auto pins                          = ep.gate->get_output_pin_types();
+            auto pins                          = ep.gate->get_output_pins();
             auto index                         = std::distance(pins.begin(), std::find(pins.begin(), pins.end(), ep.pin_type));
             g_selection_relay.m_subfocus_index = index;
             update(gate_id);
@@ -535,12 +524,12 @@ void gate_details_widget::handle_navigation_jump_requested(const u32 via_net, co
     g_selection_relay.m_selected_gates.insert(to_gate);
     g_selection_relay.m_focus_type = selection_relay::item_type::gate;
     g_selection_relay.m_focus_id   = to_gate;
-    g_selection_relay.m_subfocus = selection_relay::subfocus::left;
+    g_selection_relay.m_subfocus   = selection_relay::subfocus::left;
 
     u32 index_cnt = 0;
-    for(const auto& pin : g->get_input_pin_types())
+    for (const auto& pin : g->get_input_pins())
     {
-        if(g->get_fan_in_net(pin) == n)
+        if (g->get_fan_in_net(pin) == n)
         {
             g_selection_relay.m_subfocus_index = index_cnt;
             break;
@@ -550,17 +539,16 @@ void gate_details_widget::handle_navigation_jump_requested(const u32 via_net, co
 
     g_selection_relay.relay_selection_changed(this);
     m_navigation_table->hide();
-
 }
 
-void gate_details_widget::on_general_table_item_double_clicked(const QModelIndex &index)
+void gate_details_widget::on_general_table_item_double_clicked(const QModelIndex& index)
 {
-    if(!index.isValid())
+    if (!index.isValid())
         return;
 
     //cant get the item from the index (static_cast<QTableWidgetItem*>(index.internalPointer()) fails),
     //so ask the item QTableWidgetItem directly
-    if(index.row() == m_module_item->row() && index.column() == m_module_item->column())
+    if (index.row() == m_module_item->row() && index.column() == m_module_item->column())
     {
         g_selection_relay.clear();
         g_selection_relay.m_selected_modules.insert(m_module_item->data(Qt::UserRole).toInt());

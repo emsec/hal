@@ -138,7 +138,7 @@ net_details_widget::net_details_widget(QWidget* parent) : QWidget(parent)
                                          std::function<void(net_event_handler::event, std::shared_ptr<net>, u32)>(
                                              std::bind(&net_details_widget::handle_net_event, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)));
     */
-    
+
 
     //connect(&g_netlist_relay, &netlist_relay::net_event, this, &net_details_widget::handle_net_event);
 
@@ -194,9 +194,7 @@ void net_details_widget::update(u32 net_id)
     //get net type
     QString n_type = "Standard";
 
-    if (g_netlist->is_global_inout_net(n))
-        n_type = "Inout";
-    else if (g_netlist->is_global_input_net(n))
+    if (g_netlist->is_global_input_net(n))
         n_type = "Input";
     else if (g_netlist->is_global_output_net(n))
         n_type = "Output";
@@ -242,7 +240,7 @@ void net_details_widget::update(u32 net_id)
 
     m_dst_pins->setText(0, "");
 
-    if (!g_netlist->is_global_output_net(n) && !g_netlist->is_global_inout_net(n))
+    if (!g_netlist->is_global_output_net(n))
     {
         auto dsts_pins = n->get_dsts();
 
@@ -303,7 +301,7 @@ void net_details_widget::on_treewidget_item_clicked(QTreeWidgetItem* item, int c
         g_selection_relay.m_focus_id   = clicked_gate->get_id();
         g_selection_relay.m_subfocus   = selection_relay::subfocus::left;
 
-        auto pins                          = clicked_gate->get_input_pin_types();
+        auto pins                          = clicked_gate->get_input_pins();
         auto index                         = std::distance(pins.begin(), std::find(pins.begin(), pins.end(), pin));
         g_selection_relay.m_subfocus_index = index;
 
@@ -323,7 +321,7 @@ void net_details_widget::on_treewidget_item_clicked(QTreeWidgetItem* item, int c
         g_selection_relay.m_focus_id   = clicked_gate->get_id();
         g_selection_relay.m_subfocus   = selection_relay::subfocus::right;
 
-        auto pins                          = clicked_gate->get_output_pin_types();
+        auto pins                          = clicked_gate->get_output_pins();
         auto index                         = std::distance(pins.begin(), std::find(pins.begin(), pins.end(), pin));
         g_selection_relay.m_subfocus_index = index;
 
@@ -344,7 +342,7 @@ void net_details_widget::handle_net_event(net_event_handler::event ev, std::shar
         if(ev == net_event_handler::event::removed)
         {
             m_general_table->setHidden(true);
-            m_scroll_area->setHidden(true); 
+            m_scroll_area->setHidden(true);
         }
         else if(ev == net_event_handler::event::name_changed)
         {

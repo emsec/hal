@@ -229,25 +229,25 @@ public:
      * It is identifiable via its unique ID.
      *
      * @param[in] id - The unique ID != 0 for the new gate.
-     * @param[in] gate_type - The gate type.
+     * @param[in] gt - The gate type.
      * @param[in] name - A name for the gate.
      * @param[in] x - The x-coordinate of the gate.
      * @param[in] y - The y-coordinate of the gate.
      * @returns The new gate on success, nullptr on error.
      */
-    std::shared_ptr<gate> create_gate(const u32 id, const std::string& gate_type, const std::string& name = "", float x = -1, float y = -1);
+    std::shared_ptr<gate> create_gate(const u32 id, std::shared_ptr<const gate_type> gt, const std::string& name = "", float x = -1, float y = -1);
 
     /**
      * Creates and adds a new gate to the netlist.<br>
      * It is identifiable via its unique ID which is automatically set to the next free ID.
      *
-     * @param[in] gate_type - The gate type.
+     * @param[in] gt - The gate type.
      * @param[in] name - A name for the gate.
      * @param[in] x - The x-coordinate of the gate.
      * @param[in] y - The y-coordinate of the gate.
      * @returns The new gate on success, nullptr on error.
      */
-    std::shared_ptr<gate> create_gate(const std::string& gate_type, const std::string& name = "", float x = -1, float y = -1);
+    std::shared_ptr<gate> create_gate(std::shared_ptr<const gate_type> gt, const std::string& name = "", float x = -1, float y = -1);
 
     /**
      * Removes a gate from the netlist.
@@ -296,7 +296,7 @@ public:
      * @param[in] gate - The new gate.
      * @returns True on success.
      */
-    bool mark_global_vcc_gate(const std::shared_ptr<gate> gate);
+    bool mark_vcc_gate(const std::shared_ptr<gate> gate);
 
     /**
      * Mark a gate as a global gnd gate.
@@ -304,7 +304,7 @@ public:
      * @param[in] gate - The new gate.
      * @returns True on success.
      */
-    bool mark_global_gnd_gate(const std::shared_ptr<gate> gate);
+    bool mark_gnd_gate(const std::shared_ptr<gate> gate);
 
     /**
      * Unmark a global vcc gate.
@@ -312,7 +312,7 @@ public:
      * @param[in] gate - The new gate.
      * @returns True on success.
      */
-    bool unmark_global_vcc_gate(const std::shared_ptr<gate> gate);
+    bool unmark_vcc_gate(const std::shared_ptr<gate> gate);
 
     /**
      * Unmark a global gnd gate.
@@ -320,7 +320,7 @@ public:
      * @param[in] gate - The new gate.
      * @returns True on success.
      */
-    bool unmark_global_gnd_gate(const std::shared_ptr<gate> gate);
+    bool unmark_gnd_gate(const std::shared_ptr<gate> gate);
 
     /**
      * Checks whether a gate is a global vcc gate.
@@ -328,7 +328,7 @@ public:
      * @param[in] gate - The gate to check.
      * @returns True if the gate is a global vcc gate.
      */
-    bool is_global_vcc_gate(const std::shared_ptr<gate> gate) const;
+    bool is_vcc_gate(const std::shared_ptr<gate> gate) const;
 
     /**
      * Checks whether a gate is a global gnd gate.
@@ -336,45 +336,21 @@ public:
      * @param[in] gate - The gate to check.
      * @returns True if the gate is a global gnd gate.
      */
-    bool is_global_gnd_gate(const std::shared_ptr<gate> gate) const;
+    bool is_gnd_gate(const std::shared_ptr<gate> gate) const;
 
     /**
      * Get all global vcc gates.
      *
      * @returns A set of gates.
      */
-    std::set<std::shared_ptr<gate>> get_global_vcc_gates() const;
+    std::set<std::shared_ptr<gate>> get_vcc_gates() const;
 
     /**
      * Get all global gnd gates.
      *
      * @returns A set of gates.
      */
-    std::set<std::shared_ptr<gate>> get_global_gnd_gates() const;
-
-    /**
-     * Get the input pin types for a gate type.
-     *
-     * @param[in] gate_type - The gate type.
-     * @returns A vector of all input pin types.
-     */
-    std::vector<std::string> get_input_pin_types(const std::string& gate_type) const;
-
-    /**
-     * Get the output pin types for a gate type.
-     *
-     * @param[in] gate_type - The gate type.
-     * @returns A vector of all output pin types.
-     */
-    std::vector<std::string> get_output_pin_types(const std::string& gate_type) const;
-
-    /**
-     * Get the inout pin types for a gate type.
-     *
-     * @param[in] gate_type - The gate type.
-     * @returns A vector of all inout pin types.
-     */
-    std::vector<std::string> get_inout_pin_types(const std::string& gate_type) const;
+    std::set<std::shared_ptr<gate>> get_gnd_gates() const;
 
     /*
      * ################################################################
@@ -466,14 +442,6 @@ public:
     bool mark_global_output_net(std::shared_ptr<net> const net);
 
     /**
-     * Mark a net as a global inout net.
-     *
-     * @param[in] net - The net.
-     * @returns True on success.
-     */
-    bool mark_global_inout_net(std::shared_ptr<net> const net);
-
-    /**
      * Unmark a global input net.
      *
      * @param[in] net - The net.
@@ -488,14 +456,6 @@ public:
      * @returns True on success.
      */
     bool unmark_global_output_net(std::shared_ptr<net> const net);
-
-    /**
-     * Unmark a global inout net.
-     *
-     * @param[in] net - The net.
-     * @returns True on success.
-     */
-    bool unmark_global_inout_net(std::shared_ptr<net> const net);
 
     /**
      * Checks whether a net is a global input net.
@@ -514,14 +474,6 @@ public:
     bool is_global_output_net(std::shared_ptr<net> const net) const;
 
     /**
-     * Checks whether a net is a global inout net.
-     *
-     * @param[in] net - The net to check.
-     * @returns True if the net is a global inout net.
-     */
-    bool is_global_inout_net(std::shared_ptr<net> const net) const;
-
-    /**
      * Get all global input nets.
      *
      * @returns A set of nets.
@@ -534,13 +486,6 @@ public:
      * @returns A set of nets.
      */
     std::set<std::shared_ptr<net>> get_global_output_nets() const;
-
-    /**
-     * Get all global inout nets.
-     *
-     * @returns A set of nets.
-     */
-    std::set<std::shared_ptr<net>> get_global_inout_nets() const;
 
 private:
     /** stores the pointer to the netlist internal manager */
@@ -583,13 +528,11 @@ private:
     /** stores the set of global gates and nets */
     std::set<std::shared_ptr<net>> m_global_input_nets;
 
-    std::set<std::shared_ptr<net>> m_global_inout_nets;
-
     std::set<std::shared_ptr<net>> m_global_output_nets;
 
-    std::set<std::shared_ptr<gate>> m_global_gnd_gates;
+    std::set<std::shared_ptr<gate>> m_gnd_gates;
 
-    std::set<std::shared_ptr<gate>> m_global_vcc_gates;
+    std::set<std::shared_ptr<gate>> m_vcc_gates;
 };
 
 #endif /* __HAL_NETLIST_H__ */

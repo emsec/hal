@@ -50,7 +50,7 @@ public:
      *
      * @returns The program options description.
      */
-    virtual program_options get_cli_options() = 0;
+    virtual program_options get_cli_options() const = 0;
 
     /**
      * Entry point to handle command line interface call

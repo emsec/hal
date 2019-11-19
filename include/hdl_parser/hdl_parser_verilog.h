@@ -26,11 +26,16 @@
 #define __HAL_HDL_PARSER_VERILOG_H__
 
 #include "def.h"
+
+#include "core/token_stream.h"
+
+#include "netlist/module.h"
+#include "netlist/net.h"
+
 #include "hdl_parser/hdl_parser.h"
 
-#include <map>
-#include <netlist/module.h>
-#include <netlist/net.h>
+#include <unordered_map>
+#include <unordered_set>
 #include <utility>
 
 /**
@@ -55,24 +60,12 @@ public:
     std::shared_ptr<netlist> parse(const std::string& gate_library) override;
 
 private:
-    struct file_line
-    {
-        u32 number;
-        std::string text;
-    };
-
-    struct entity_definition
-    {
-        std::vector<file_line> ports;
-        std::vector<file_line> wires;
-        std::vector<file_line> assigns;
-        std::vector<file_line> instances;
-    };
-
     struct instance
     {
         std::string name;
         std::string type;
+        std::vector<std::pair<token_stream, token_stream>> port_streams;
+        std::vector<std::pair<token_stream, token_stream>> generic_streams;
         std::vector<std::pair<std::string, std::string>> ports;
         std::vector<std::pair<std::string, std::string>> generics;
     };
@@ -81,42 +74,48 @@ private:
     {
         std::string name;
         u32 line_number;
-        entity_definition definition;
-        std::map<std::string, std::pair<std::string, std::vector<std::string>>> ports_expanded;
+        std::unordered_set<std::string> port_names;
+        std::unordered_map<std::string, std::pair<std::string, std::vector<std::string>>> ports_expanded;
         std::vector<std::string> signals_expanded;
         std::vector<instance> instances;
-        std::map<std::string, std::string> direct_assignments;
-        std::map<std::string, std::vector<std::string>> expanded_signal_names;
+        std::unordered_map<std::string, std::string> direct_assignments;
+        std::unordered_map<std::string, std::vector<std::string>> expanded_signal_names;
     };
+
+    token_stream m_token_stream;
+    std::string m_last_entity;
+    std::unordered_map<std::string, std::vector<std::string>> m_gate_to_pin_map;
 
     std::map<std::string, std::shared_ptr<net>> m_net_by_name;
     std::shared_ptr<net> m_zero_net;
     std::shared_ptr<net> m_one_net;
-    std::map<std::string, u32> m_name_occurrences;
-    std::map<std::string, u32> m_current_instance_index;
-    std::map<std::string, entity> m_entities;
-    std::map<std::string, std::string> m_attribute_types;
-    std::map<std::string, std::vector<std::string>> m_nets_to_merge;
+    std::unordered_map<std::string, u32> m_name_occurrences;
+    std::unordered_map<std::string, u32> m_current_instance_index;
+    std::unordered_map<std::string, entity> m_entities;
+    std::unordered_map<std::string, std::vector<std::string>> m_nets_to_merge;
+
+    bool tokenize();
+    bool parse_tokens();
 
     // parse the hdl into an intermediate format
-    bool parse_entity(entity& e);
-    bool parse_ports(entity& e);
-    bool parse_signals(entity& e);
-    bool parse_assigns(entity& e);
-    bool parse_instances(entity& e);
+    bool parse_entity_definiton();
+    bool parse_port_list(entity& e);
+    bool parse_port_definition(entity& e);
+    bool parse_signal_definition(entity& e);
+    bool parse_assign(entity& e);
+    bool parse_instance(entity& e);
+    bool connect_instances();
 
     // build the netlist from the intermediate format
     bool build_netlist(const std::string& top_module);
-    std::shared_ptr<module> instantiate(const entity& e, std::shared_ptr<module> parent, std::map<std::string, std::string> port_assignments);
+    std::shared_ptr<module> instantiate(const entity& e, std::shared_ptr<module> parent, std::unordered_map<std::string, std::string> port_assignments);
 
     // helper functions
     void remove_comments(std::string& line, bool& multi_line_comment, bool& multi_line_property);
     void expand_signal(std::vector<std::string>& expanded_signal, std::string current_signal, std::vector<std::pair<i32, i32>> bounds, u32 dimension);
-    std::map<std::string, std::vector<std::string>> get_expanded_signals(const std::string& signal_str);
-    std::vector<std::string> get_assignment_signals(const std::string& signal_str, entity& e);
-    std::vector<std::string> get_port_signals(const std::string& port_str, const std::string& instance_name);
-    std::map<std::string, std::string> get_direct_assignments(const std::string& left, const std::string& right, entity& e);
-    std::map<std::string, std::string> get_port_assignments(const std::string& instance, const std::string& port, const std::string& assignment, entity& e);
+    std::unordered_map<std::string, std::vector<std::string>> get_expanded_signals(token_stream& signal_str);
+    std::vector<std::string> get_assignment_signals(token_stream& signal_str, entity& e);
+    std::vector<std::string> get_port_signals(token_stream& port_str, const std::string& instance_type);
     std::string get_number_from_literal(const std::string& v, const u32 base);
     std::string get_unique_alias(const std::string& name);
 };

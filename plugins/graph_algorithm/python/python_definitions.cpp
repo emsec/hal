@@ -23,7 +23,6 @@ PYBIND11_PLUGIN(libgraph_algorithm)
 #endif    // ifdef PYBIND11_MODULE
 
     py::class_<plugin_graph_algorithm, std::shared_ptr<plugin_graph_algorithm>>(m, "graph_algorithm")
-        .def(py::init<>())
         .def_property_readonly("name", &plugin_graph_algorithm::get_name, R"(
 Get the name of the plugin.
 

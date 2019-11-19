@@ -29,23 +29,17 @@
 class plugin_gui : public i_interactive_ui
 {
 public:
-    /** constructor (= default) */
-    plugin_gui() = default;
-    /** destructor (= default) */
-    ~plugin_gui() = default;
+    std::string get_name() const override;
+    std::string get_version() const override;
 
-    /** interface implementation: i_base */
-    std::string get_name() override;
-    /** interface implementation: i_base */
-    std::string get_version() override;
-    /** interface implementation: i_base */
-    std::set<interface_type> get_type() override;
+    void initialize_logging() const override;
 
-    /** interface implementation: i_base */
-    void initialize_logging() override;
-
-    /** interface implementation: i_interactive_ui */
     bool exec(program_arguments& args) override;
 };
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wreturn-type-c-linkage"
+extern "C" PLUGIN_API std::shared_ptr<i_base> get_plugin_instance();
+#pragma GCC diagnostic pop
 
 #endif /* __HAL_PLUGIN_GUI_H__ */

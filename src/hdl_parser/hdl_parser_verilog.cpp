@@ -9,9 +9,6 @@
 
 #include "netlist/netlist_factory.h"
 
-#include <iomanip>
-#include <iostream>
-
 #include <queue>
 
 hdl_parser_verilog::hdl_parser_verilog(std::stringstream& stream) : hdl_parser(stream)
@@ -25,130 +22,44 @@ hdl_parser_verilog::hdl_parser_verilog(std::stringstream& stream) : hdl_parser(s
 std::shared_ptr<netlist> hdl_parser_verilog::parse(const std::string& gate_library)
 {
     m_netlist = netlist_factory::create_netlist(gate_library);
+
     if (m_netlist == nullptr)
     {
         log_error("hdl_parser", "netlist_factory returned nullptr");
         return nullptr;
     }
 
-    // read the whole file into logical parts
-    entity current_entity;
-
-    std::string line, token;
-
-    u32 line_number          = 0;
-    i32 token_begin          = -1;
-    bool multi_line_comment  = false;
-    bool multi_line_property = false;
-
-    while (std::getline(m_fs, line))
+    // tokenize file
+    if (!tokenize())
     {
-        line_number++;
+        return nullptr;
+    }
 
-        // remove single-line and multi-line comments
-        this->remove_comments(line, multi_line_comment, multi_line_property);
-
-        line = core_utils::trim(line);
-
-        // skip empty lines
-        if (line.empty())
+    // parse tokens into intermediate format
+    try
+    {
+        if (!parse_tokens())
         {
-            continue;
+            return nullptr;
         }
-
-        // build tokens
-        token += line;
-        if (token_begin == -1)
+    }
+    catch (token_stream::token_stream_exception& e)
+    {
+        if (e.line_number != (u32)-1)
         {
-            token_begin = line_number;
+            log_error("hdl_parser", "{} near line {}.", e.message, e.line_number);
         }
-
-        // tokens end with ";"
-        if (core_utils::ends_with(token, ";"))
+        else
         {
-            token = core_utils::trim(token.substr(0, token.find(';')));
-
-            if (core_utils::starts_with(token, "module "))
-            {
-                // reset current_entity
-                current_entity.name = core_utils::trim(token.substr(0, token.find('(')).substr(token.find(' ') + 1));
-
-                if (current_entity.name.empty())
-                {
-                    log_error("hdl_parser", "Verilog module must have a name.");
-                    return nullptr;
-                }
-
-                current_entity.line_number = static_cast<u32>(token_begin);
-                current_entity.definition.ports.clear();
-                current_entity.definition.wires.clear();
-                current_entity.definition.instances.clear();
-            }
-            else if (core_utils::starts_with(token, "input ") || core_utils::starts_with(token, "output ") || core_utils::starts_with(token, "inout "))
-            {
-                // collect port declarations
-                current_entity.definition.ports.push_back(file_line{static_cast<u32>(token_begin), token});
-            }
-            else if (core_utils::starts_with(token, "wire "))
-            {
-                // collect wire declarations
-                current_entity.definition.wires.push_back(file_line{static_cast<u32>(token_begin), token});
-            }
-            else if (core_utils::starts_with(token, "assign "))
-            {
-                // collect assign statements
-                current_entity.definition.assigns.push_back(file_line{static_cast<u32>(token_begin), token});
-            }
-            else
-            {
-                // collect instance declarations
-                current_entity.definition.instances.push_back(file_line{static_cast<u32>(token_begin), token});
-            }
-
-            token_begin = -1;
-            token.clear();
+            log_error("hdl_parser", "{}.", e.message);
         }
-        else if (core_utils::starts_with(token, "endmodule"))
-        {
-            // add entity to set of entities
-            m_entities[current_entity.name] = current_entity;
-
-            token_begin = -1;
-            token.clear();
-        }
+        return nullptr;
     }
 
     if (m_entities.empty())
     {
         log_error("hdl_parser", "file did not contain any entities.");
         return nullptr;
-    }
-
-    // parse intermediate format
-    for (auto& it : m_entities)
-    {
-        if (!parse_ports(it.second))
-        {
-            return nullptr;
-        }
-
-        if (!parse_signals(it.second))
-        {
-            return nullptr;
-        }
-    }
-
-    for (auto& it : m_entities)
-    {
-        if (!parse_assigns(it.second))
-        {
-            return nullptr;
-        }
-
-        if (!parse_instances(it.second))
-        {
-            return nullptr;
-        }
     }
 
     // create const 0 and const 1 net, will be removed if unused
@@ -168,7 +79,7 @@ std::shared_ptr<netlist> hdl_parser_verilog::parse(const std::string& gate_libra
 
     // build the netlist from the intermediate format
     // the last entity in the file is considered the top module
-    if (!build_netlist(current_entity.name))
+    if (!build_netlist(m_last_entity))
     {
         return nullptr;
     }
@@ -176,14 +87,17 @@ std::shared_ptr<netlist> hdl_parser_verilog::parse(const std::string& gate_libra
     // add global gnd gate if required by any instance
     if (!m_zero_net->get_dsts().empty())
     {
-        auto gnd_type   = *(m_netlist->get_gate_library()->get_global_gnd_gate_types()->begin());
-        auto output_pin = m_netlist->get_output_pin_types(gnd_type).at(0);
+        auto gnd_type   = m_netlist->get_gate_library()->get_gnd_gate_types().begin()->second;
+        auto output_pin = gnd_type->get_output_pins().at(0);
         auto gnd        = m_netlist->create_gate(m_netlist->get_unique_gate_id(), gnd_type, "global_gnd");
-        if (!m_netlist->mark_global_gnd_gate(gnd))
+
+        if (!m_netlist->mark_gnd_gate(gnd))
         {
             return nullptr;
         }
+
         auto gnd_net = m_net_by_name.find("'0'")->second;
+
         if (!gnd_net->set_src(gnd, output_pin))
         {
             return nullptr;
@@ -197,14 +111,17 @@ std::shared_ptr<netlist> hdl_parser_verilog::parse(const std::string& gate_libra
     // add global vcc gate if required by any instance
     if (!m_one_net->get_dsts().empty())
     {
-        auto vcc_type   = *(m_netlist->get_gate_library()->get_global_vcc_gate_types()->begin());
-        auto output_pin = m_netlist->get_output_pin_types(vcc_type).at(0);
+        auto vcc_type   = m_netlist->get_gate_library()->get_vcc_gate_types().begin()->second;
+        auto output_pin = vcc_type->get_output_pins().at(0);
         auto vcc        = m_netlist->create_gate(m_netlist->get_unique_gate_id(), vcc_type, "global_vcc");
-        if (!m_netlist->mark_global_vcc_gate(vcc))
+
+        if (!m_netlist->mark_vcc_gate(vcc))
         {
             return nullptr;
         }
+
         auto vcc_net = m_net_by_name.find("'1'")->second;
+
         if (!vcc_net->set_src(vcc, output_pin))
         {
             return nullptr;
@@ -217,8 +134,8 @@ std::shared_ptr<netlist> hdl_parser_verilog::parse(const std::string& gate_libra
 
     for (const auto& net : m_netlist->get_nets())
     {
-        bool no_src = net->get_src().gate == nullptr && !net->is_global_inout_net() && !net->is_global_input_net();
-        bool no_dst = net->get_num_of_dsts() == 0 && !net->is_global_inout_net() && !net->is_global_output_net();
+        bool no_src = net->get_src().gate == nullptr && !net->is_global_input_net();
+        bool no_dst = net->get_num_of_dsts() == 0 && !net->is_global_output_net();
         if (no_src && no_dst)
         {
             m_netlist->delete_net(net);
@@ -228,143 +145,356 @@ std::shared_ptr<netlist> hdl_parser_verilog::parse(const std::string& gate_libra
     return m_netlist;
 }
 
-bool hdl_parser_verilog::parse_ports(entity& e)
+bool hdl_parser_verilog::tokenize()
 {
-    for (const auto& line : e.definition.ports)
-    {
-        // get port information
-        auto direction = line.text.substr(0, line.text.find(' '));
-        auto port_str  = line.text.substr(line.text.find(' ') + 1);
+    std::string delimiters = ",()[]\\#: ;=.";
+    std::string current_token;
+    u32 line_number = 0;
 
-        // add all signals of that port
-        for (const auto& expanded_port : this->get_expanded_signals(port_str))
+    std::string line;
+    bool escaped             = false;
+    bool multi_line_comment  = false;
+    bool multi_line_property = false;
+
+    std::vector<token> parsed_tokens;
+    while (std::getline(m_fs, line))
+    {
+        line_number++;
+        this->remove_comments(line, multi_line_comment, multi_line_property);
+
+        for (char c : line)
         {
-            e.ports_expanded[expanded_port.first] = std::make_pair(direction, expanded_port.second);
+            if (c == '\\')
+            {
+                escaped = true;
+                continue;
+            }
+            else if (escaped && std::isspace(c))
+            {
+                escaped = false;
+            }
+
+            if (delimiters.find(c) == std::string::npos || escaped)
+            {
+                current_token += c;
+            }
+            else
+            {
+                if (!current_token.empty())
+                {
+                    parsed_tokens.emplace_back(line_number, current_token);
+                    current_token.clear();
+                }
+
+                if (c == '(' && parsed_tokens.back() == "#")
+                {
+                    parsed_tokens.back() = "#(";
+                }
+                else if (!std::isspace(c))
+                {
+                    parsed_tokens.emplace_back(line_number, std::string(1, c));
+                }
+            }
+        }
+        if (!current_token.empty())
+        {
+            parsed_tokens.emplace_back(line_number, current_token);
+            current_token.clear();
+        }
+    }
+
+    m_token_stream = token_stream(parsed_tokens, {"(", "["}, {")", "]"});
+    return true;
+}
+
+bool hdl_parser_verilog::parse_tokens()
+{
+    std::string last_entity;
+
+    while (m_token_stream.remaining() > 0)
+    {
+        if (!parse_entity_definiton())
+        {
+            return false;
+        }
+    }
+
+    if (!connect_instances())
+    {
+        return false;
+    }
+
+    return true;
+}
+
+bool hdl_parser_verilog::parse_entity_definiton()
+{
+    entity e;
+    e.line_number = m_token_stream.peek().number;
+    m_token_stream.consume("module", true);
+    e.name = m_token_stream.consume();
+
+    if (m_token_stream.peek() == "#(")
+    {
+        // TODO generics
+        m_token_stream.consume_until(")", token_stream::END_OF_STREAM, true, true);
+        m_token_stream.consume(")", true);
+    }
+
+    if (!parse_port_list(e))
+    {
+        return false;
+    }
+
+    m_token_stream.consume(";", true);
+
+    while (m_token_stream.peek() != "endmodule")
+    {
+        if (m_token_stream.peek() == "input" || m_token_stream.peek() == "output")
+        {
+            if (!parse_port_definition(e))
+            {
+                return false;
+            }
+        }
+        else if (m_token_stream.peek() == "wire")
+        {
+            if (!parse_signal_definition(e))
+            {
+                return false;
+            }
+        }
+        else if (m_token_stream.peek() == "assign")
+        {
+            if (!parse_assign(e))
+            {
+                return false;
+            }
+        }
+        else
+        {
+            if (!parse_instance(e))
+            {
+                return false;
+            }
+        }
+    }
+
+    m_token_stream.consume("endmodule", true);
+
+    if (!e.name.empty())
+    {
+        m_entities[e.name] = e;
+        m_last_entity      = e.name;
+    }
+
+    return true;
+}
+
+bool hdl_parser_verilog::parse_port_list(entity& e)
+{
+    m_token_stream.consume("(", true);
+    auto ports = m_token_stream.extract_until(")", token_stream::END_OF_STREAM, true, true);
+
+    // TODO support other port declaration style
+    while (ports.remaining() > 0)
+    {
+        e.port_names.insert(ports.consume());
+        ports.consume(",", ports.remaining() > 0);
+    }
+
+    m_token_stream.consume(")", true);
+
+    return true;
+}
+
+bool hdl_parser_verilog::parse_port_definition(entity& e)
+{
+    auto direction = m_token_stream.consume();
+    auto port_str  = m_token_stream.extract_until(";", token_stream::END_OF_STREAM, true, true);
+
+    m_token_stream.consume(";", true);
+
+    for (const auto& expanded_port : get_expanded_signals(port_str))
+    {
+        if (e.port_names.find(expanded_port.first) == e.port_names.end())
+        {
+            log_error("hdl_parser", "port name '{}' in line {} has not been declared in entity port list.", expanded_port.first, port_str.peek().number);
+            return false;
+        }
+
+        if (e.expanded_signal_names.find(expanded_port.first) == e.expanded_signal_names.end())
+        {
+            e.ports_expanded[expanded_port.first] = std::make_pair(direction.string, expanded_port.second);
             e.expanded_signal_names[expanded_port.first].insert(e.expanded_signal_names[expanded_port.first].end(), expanded_port.second.begin(), expanded_port.second.end());
         }
     }
 
-    log_debug("hdl_parser", "parsed ports of '{}'.", e.name);
     return true;
 }
 
-bool hdl_parser_verilog::parse_signals(entity& e)
+bool hdl_parser_verilog::parse_signal_definition(entity& e)
 {
-    for (const auto& line : e.definition.wires)
-    {
-        // get wire information
-        auto signal_str = line.text.substr(line.text.find(' ') + 1);
+    m_token_stream.consume("wire", true);
+    auto signal_str = m_token_stream.extract_until(";");
 
-        // add all (sub-)signals
-        for (const auto& expanded_signal : this->get_expanded_signals(signal_str))
+    m_token_stream.consume(";", true);
+
+    for (const auto& expanded_signal : get_expanded_signals(signal_str))
+    {
+        if (e.expanded_signal_names.find(expanded_signal.first) == e.expanded_signal_names.end())
         {
             e.signals_expanded.insert(e.signals_expanded.end(), expanded_signal.second.begin(), expanded_signal.second.end());
             e.expanded_signal_names[expanded_signal.first].insert(e.expanded_signal_names[expanded_signal.first].end(), expanded_signal.second.begin(), expanded_signal.second.end());
         }
     }
 
-    log_debug("hdl_parser", "parsed signals of '{}'.", e.name);
     return true;
 }
 
-bool hdl_parser_verilog::parse_assigns(entity& e)
+bool hdl_parser_verilog::parse_assign(entity& e)
 {
-    for (const auto& line : e.definition.assigns)
+    std::unordered_map<std::string, std::string> direct_assignment;
+
+    auto assign_line = m_token_stream.peek().number;
+
+    m_token_stream.consume("assign", true);
+    auto left_str = m_token_stream.extract_until("=", token_stream::END_OF_STREAM, true, true);
+    m_token_stream.consume("=", true);
+    auto right_str = m_token_stream.extract_until(";", token_stream::END_OF_STREAM, true, true);
+    m_token_stream.consume(";", true);
+
+    auto left_parts  = get_assignment_signals(left_str, e);
+    auto right_parts = get_assignment_signals(right_str, e);
+
+    if (left_parts.size() != right_parts.size())
     {
-        auto left  = core_utils::trim(line.text.substr(6, line.text.find('=') - 6));
-        auto right = core_utils::trim(line.text.substr(line.text.find('=') + 1));
+        log_error("hdl_parser", "cannot parse direct assignment in line {} due to width mismatch.", assign_line);
+        return false;
+    }
 
-        auto direct_assignment = this->get_direct_assignments(left, right, e);
+    for (u32 i = 0; i < right_parts.size(); i++)
+    {
+        direct_assignment[left_parts[i]] = right_parts[i];
+    }
 
-        if (direct_assignment.empty() == true)
-        {
-            return false;
-        }
+    if (direct_assignment.empty())
+    {
+        return false;
+    }
 
-        for (const auto& a : direct_assignment)
-        {
-            e.direct_assignments.emplace(a);
-        }
+    for (const auto& a : direct_assignment)
+    {
+        e.direct_assignments.emplace(a);
     }
 
     return true;
 }
 
-bool hdl_parser_verilog::parse_instances(entity& e)
+bool hdl_parser_verilog::parse_instance(entity& e)
 {
-    for (const auto& line : e.definition.instances)
+    instance inst;
+    inst.type = m_token_stream.consume();
+
+    if (m_token_stream.consume("#("))
     {
-        instance inst;
-        std::vector<std::string> generic_map, port_map;
-        auto generic_pos = line.text.find("#(");
+        auto generic_str = m_token_stream.extract_until(")", token_stream::END_OF_STREAM, true, true);
 
-        if (generic_pos == std::string::npos)
+        while (generic_str.remaining() > 0)
         {
-            // TYPE NAME (PORT_MAP)
-            inst.type = line.text.substr(0, line.text.find('('));
-            inst.name = core_utils::trim(inst.type.substr(inst.type.find(' ') + 1));
-            inst.type = core_utils::trim(inst.type.substr(0, inst.type.find(' ')));
-            port_map  = core_utils::split(line.text.substr(0, line.text.rfind(')')).substr(line.text.find('(') + 1), ',', true);
-        }
-        else
-        {
-            // TYPE #(GENERIC_MAP) NAME (PORT_MAP)
-            auto substr = line.text.substr(line.text.find('#') + 1);
-            auto token  = core_utils::split(substr, ')', true);
+            generic_str.consume(".", true);
 
-            inst.type   = core_utils::trim(line.text.substr(0, line.text.find("#(")));
-            inst.name   = core_utils::trim(token[1].substr(0, token[1].find('(')));
-            generic_map = core_utils::split(token[0].substr(1), ',', true);
-            port_map    = core_utils::split(token[1].substr(token[1].find('(') + 1), ',', true);
+            auto generic_lhs = generic_str.extract_until("(", token_stream::END_OF_STREAM, true, true);
+
+            generic_str.consume("(", true);
+
+            auto generic_rhs = generic_str.extract_until(")", token_stream::END_OF_STREAM, true, true);
+
+            generic_str.consume(")", true);
+
+            inst.generic_streams.emplace_back(generic_lhs, generic_rhs);
+
+            generic_str.consume(",", generic_str.remaining() > 0);
         }
 
-        auto inst_escape = inst.name.find('\\');
+        m_token_stream.consume(")", true);
+    }
 
-        if (inst_escape != std::string::npos)
-        {
-            inst.name = inst.name.substr(inst_escape + 1);
-        }
+    inst.name = m_token_stream.consume();
 
-        for (const auto& p : port_map)
+    m_token_stream.consume("(", true);
+
+    auto port_str = m_token_stream.extract_until(")", token_stream::END_OF_STREAM, true, true);
+
+    while (port_str.remaining() > 0)
+    {
+        port_str.consume(".", true);
+
+        auto generic_lhs = port_str.extract_until("(", token_stream::END_OF_STREAM, true, true);
+
+        port_str.consume("(", true);
+
+        auto generic_rhs = port_str.extract_until(")", token_stream::END_OF_STREAM, true, true);
+
+        port_str.consume(")", true);
+
+        inst.port_streams.emplace_back(generic_lhs, generic_rhs);
+
+        port_str.consume(",", port_str.remaining() > 0);
+    }
+
+    m_token_stream.consume(")", true);
+    m_token_stream.consume(";", true);
+
+    e.instances.push_back(inst);
+
+    return true;
+}
+
+bool hdl_parser_verilog::connect_instances()
+{
+    for (auto& [name, e] : m_entities)
+    {
+        UNUSED(name);
+
+        for (auto& inst : e.instances)
         {
-            if (p.empty())
+            for (auto& generic : inst.generic_streams)
             {
-                continue;
+                inst.generics.emplace_back(generic.first.consume().string, generic.second.consume().string);
             }
 
-            // .KEY(VALUE)
-            auto port       = core_utils::trim(p.substr(0, p.find('('))).substr(1);
-            auto assignment = core_utils::trim(p.substr(0, p.find(')')).substr(p.find('(') + 1));
-
-            auto port_assignments = this->get_port_assignments(inst.type, port, assignment, e);
-
-            if (port_assignments.empty() == true)
+            for (auto& port : inst.port_streams)
             {
-                return false;
-            }
+                std::unordered_map<std::string, std::string> port_assignments;
 
-            for (const auto& a : port_assignments)
-            {
-                inst.ports.push_back(a);
+                auto port_line = port.first.peek().number;
+
+                auto port_lhs = get_port_signals(port.first, inst.type);
+                auto port_rhs = get_assignment_signals(port.second, e);
+
+                if (port_lhs.size() != port_rhs.size())
+                {
+                    log_error("hdl_parser", "cannot parse port assignment in line '{}' due to width mismatch.", port_line);
+                    return {};
+                }
+
+                for (u32 i = 0; i < port_rhs.size(); i++)
+                {
+                    port_assignments[port_lhs[i]] = port_rhs[i];
+                }
+
+                if (port_assignments.empty() == true)
+                {
+                    return false;
+                }
+
+                for (const auto& a : port_assignments)
+                {
+                    inst.ports.push_back(a);
+                }
             }
         }
-
-        for (const auto& g : generic_map)
-        {
-            if (g.empty())
-            {
-                continue;
-            }
-
-            // .KEY(VALUE)
-            auto generic    = core_utils::trim(g.substr(0, g.find('('))).substr(1);
-            auto assignment = core_utils::trim(g.substr(0, g.find(')')).substr(g.find('(') + 1));
-
-            inst.generics.emplace_back(generic, assignment);
-        }
-
-        e.instances.push_back(inst);
-        log_debug("hdl_parser", "parsed instance '{}' of entity '{}'.", inst.name, e.name);
     }
 
     return true;
@@ -428,13 +558,10 @@ bool hdl_parser_verilog::build_netlist(const std::string& top_module)
 
     // for the top module, generate global i/o signals for all ports
 
-    std::map<std::string, std::function<bool(std::shared_ptr<net> const)>> port_dir_function = {
-        {"input", [](std::shared_ptr<net> const net) { return net->mark_global_input_net(); }},
-        {"output", [](std::shared_ptr<net> const net) { return net->mark_global_output_net(); }},
-        {"inout", [](std::shared_ptr<net> const net) { return net->mark_global_inout_net(); }},
-    };
+    std::unordered_map<std::string, std::function<bool(std::shared_ptr<net> const)>> port_dir_function = {{"input", [](std::shared_ptr<net> const net) { return net->mark_global_input_net(); }},
+                                                                                                          {"output", [](std::shared_ptr<net> const net) { return net->mark_global_output_net(); }}};
 
-    std::map<std::string, std::string> top_assignments;
+    std::unordered_map<std::string, std::string> top_assignments;
 
     for (const auto& expanded_port : top_entity.ports_expanded)
     {
@@ -558,10 +685,10 @@ bool hdl_parser_verilog::build_netlist(const std::string& top_module)
     return true;
 }
 
-std::shared_ptr<module> hdl_parser_verilog::instantiate(const entity& e, std::shared_ptr<module> parent, std::map<std::string, std::string> parent_module_assignments)
+std::shared_ptr<module> hdl_parser_verilog::instantiate(const entity& e, std::shared_ptr<module> parent, std::unordered_map<std::string, std::string> parent_module_assignments)
 {
     // remember assigned aliases so they are not lost when recursively going deeper
-    std::map<std::string, std::string> aliases;
+    std::unordered_map<std::string, std::string> aliases;
 
     aliases[e.name] = get_unique_alias(e.name);
 
@@ -626,6 +753,7 @@ std::shared_ptr<module> hdl_parser_verilog::instantiate(const entity& e, std::sh
         {
             a = aliases.at(a);
         }
+
         if (parent_module_assignments.find(b) != parent_module_assignments.end())
         {
             b = parent_module_assignments.at(b);
@@ -634,12 +762,13 @@ std::shared_ptr<module> hdl_parser_verilog::instantiate(const entity& e, std::sh
         {
             b = aliases.at(b);
         }
+
         m_nets_to_merge[b].push_back(a);
     }
 
     // cache global vcc/gnd types
-    auto global_vcc_gate_types = m_netlist->get_gate_library()->get_global_vcc_gate_types();
-    auto global_gnd_gate_types = m_netlist->get_gate_library()->get_global_gnd_gate_types();
+    auto vcc_gate_types = m_netlist->get_gate_library()->get_vcc_gate_types();
+    auto gnd_gate_types = m_netlist->get_gate_library()->get_gnd_gate_types();
 
     // process instances i.e. gates or other entities
     for (const auto& inst : e.instances)
@@ -648,7 +777,8 @@ std::shared_ptr<module> hdl_parser_verilog::instantiate(const entity& e, std::sh
         data_container* container;
 
         // assign actual signal names to ports
-        std::map<std::string, std::string> instance_assignments;
+        std::unordered_map<std::string, std::string> instance_assignments;
+
         for (const auto& [pin, s] : inst.ports)
         {
             auto it2 = parent_module_assignments.find(s);
@@ -690,28 +820,39 @@ std::shared_ptr<module> hdl_parser_verilog::instantiate(const entity& e, std::sh
         {
             // create the new gate
             aliases[inst.name] = get_unique_alias(inst.name);
-            auto new_gate      = m_netlist->create_gate(inst.type, aliases[inst.name]);
+
+            std::shared_ptr<gate> new_gate;
+            {
+                auto gate_types = m_netlist->get_gate_library()->get_gate_types();
+                auto it         = gate_types.find(inst.type);
+                if (it == gate_types.end())
+                {
+                    return nullptr;
+                }
+                new_gate = m_netlist->create_gate(it->second, aliases[inst.name]);
+            }
+
             if (new_gate == nullptr)
             {
                 return nullptr;
             }
+
             module->assign_gate(new_gate);
             container = new_gate.get();
 
             // if gate is a global type, register it as such
-            if (global_vcc_gate_types->find(inst.type) != global_vcc_gate_types->end() && !new_gate->mark_global_vcc_gate())
+            if (vcc_gate_types.find(inst.type) != vcc_gate_types.end() && !new_gate->mark_vcc_gate())
             {
                 return nullptr;
             }
-            if (global_gnd_gate_types->find(inst.type) != global_gnd_gate_types->end() && !new_gate->mark_global_gnd_gate())
+            if (gnd_gate_types.find(inst.type) != gnd_gate_types.end() && !new_gate->mark_gnd_gate())
             {
                 return nullptr;
             }
 
             // cache pin types
-            auto input_pin_types  = new_gate->get_input_pin_types();
-            auto output_pin_types = new_gate->get_output_pin_types();
-            auto inout_pin_types  = new_gate->get_inout_pin_types();
+            auto input_pins  = new_gate->get_input_pins();
+            auto output_pins = new_gate->get_output_pins();
 
             // check for port
             for (auto [pin, net_name] : inst.ports)
@@ -742,13 +883,12 @@ std::shared_ptr<module> hdl_parser_verilog::instantiate(const entity& e, std::sh
                 auto current_net = it->second;
 
                 // add net src/dst by pin types
-                bool is_inout  = std::find(inout_pin_types.begin(), inout_pin_types.end(), pin) != inout_pin_types.end();
-                bool is_input  = is_inout || std::find(input_pin_types.begin(), input_pin_types.end(), pin) != input_pin_types.end();
-                bool is_output = is_inout || std::find(output_pin_types.begin(), output_pin_types.end(), pin) != output_pin_types.end();
+                bool is_input  = std::find(input_pins.begin(), input_pins.end(), pin) != input_pins.end();
+                bool is_output = std::find(output_pins.begin(), output_pins.end(), pin) != output_pins.end();
 
                 if (!is_input && !is_output)
                 {
-                    log_error("hdl_parser", "undefined pin '{}' for '{}' ({})", pin, new_gate->get_name(), new_gate->get_type());
+                    log_error("hdl_parser", "undefined pin '{}' for '{}' ({})", pin, new_gate->get_name(), new_gate->get_type()->get_name());
                     return nullptr;
                 }
 
@@ -761,9 +901,9 @@ std::shared_ptr<module> hdl_parser_verilog::instantiate(const entity& e, std::sh
                                   "net '{}' already has source gate '{}' (type {}), cannot assign '{}' (type {})",
                                   current_net->get_name(),
                                   src->get_name(),
-                                  src->get_type(),
+                                  src->get_type()->get_name(),
                                   new_gate->get_name(),
-                                  new_gate->get_type());
+                                  new_gate->get_type()->get_name());
                     }
                     if (!current_net->set_src(new_gate, pin))
                     {
@@ -955,73 +1095,52 @@ void hdl_parser_verilog::expand_signal(std::vector<std::string>& expanded_signal
     }
 }
 
-std::map<std::string, std::vector<std::string>> hdl_parser_verilog::get_expanded_signals(const std::string& signal_str)
+std::unordered_map<std::string, std::vector<std::string>> hdl_parser_verilog::get_expanded_signals(token_stream& signal_str)
 {
-    std::map<std::string, std::vector<std::string>> result;
+    std::unordered_map<std::string, std::vector<std::string>> result;
     std::vector<std::pair<std::string, std::vector<std::pair<i32, i32>>>> signals;
 
-    auto signal_colon  = signal_str.find(':');
-    auto signal_escape = signal_str.find('\\');
+    std::vector<std::pair<i32, i32>> bounds;
+    std::vector<std::string> names;
 
-    // bounds given?
-    if (signal_colon != std::string::npos)
+    // extract bounds
+    while (signal_str.peek() == "[")
     {
-        // extract signal bounds "[a:b][c:d]..."
-        std::vector<std::pair<i32, i32>> bounds;
-        auto bounds_str = signal_str.substr(0, signal_str.rfind("]", signal_escape)).substr(signal_str.find("[") + 1);
-        auto names      = core_utils::split(signal_str.substr(signal_str.rfind(']', signal_escape) + 1), ',');
+        signal_str.consume("[", true);
+        auto lower = signal_str.consume();
 
-        for (const auto& part : core_utils::split(bounds_str, ']'))
+        signal_str.consume(":", true);
+
+        auto upper = signal_str.consume();
+
+        signal_str.consume("]", true);
+
+        try
         {
-            auto bound = core_utils::trim(part.substr(part.find('[') + 1));
-
-            i32 left_bound  = std::stoi(bound.substr(0, bound.find(':')));
-            i32 right_bound = std::stoi(bound.substr(bound.find(':') + 1));
-
-            bounds.emplace_back(left_bound, right_bound);
+            bounds.emplace_back(std::stoi(lower.string), std::stoi(upper.string));
         }
-
-        // extract signal names
-        for (const auto& name : names)
+        catch (std::invalid_argument& e)
         {
-            std::pair<std::string, std::vector<std::pair<i32, i32>>> s;
-            signal_escape = name.find('\\');
-
-            if (signal_escape != std::string::npos)
-            {
-                s.first = core_utils::trim(name.substr(signal_escape + 1));
-            }
-            else
-            {
-                s.first = core_utils::trim(name);
-            }
-
-            s.second = bounds;
-
-            signals.push_back(s);
+            log_error("hdl_parser", "no integer bounds given in entity defintion in line {}: [{}:{}] .", lower.string, upper.string, signal_str.peek().number);
+            return {};
+        }
+        catch (std::out_of_range& e)
+        {
+            log_error("hdl_parser", "bounds out of range in entity defintion in line {}: [{}:{}].", lower.string, upper.string, signal_str.peek().number);
+            return {};
         }
     }
-    else
+
+    // extract names
+    names.emplace_back(signal_str.consume());
+    while (signal_str.consume(",", false))
     {
-        // extract signal names
-        auto names = core_utils::split(signal_str, ',');
+        names.emplace_back(signal_str.consume());
+    }
 
-        for (const auto& name : names)
-        {
-            std::pair<std::string, std::vector<std::pair<i32, i32>>> s;
-            signal_escape = name.find('\\');
-
-            if (signal_escape != std::string::npos)
-            {
-                s.first = core_utils::trim(name.substr(signal_escape + 1));
-            }
-            else
-            {
-                s.first = core_utils::trim(name);
-            }
-
-            signals.push_back(s);
-        }
+    for (const auto& name : names)
+    {
+        signals.emplace_back(name, bounds);
     }
 
     // expand signals
@@ -1037,10 +1156,8 @@ std::map<std::string, std::vector<std::string>> hdl_parser_verilog::get_expanded
     return result;
 }
 
-std::vector<std::string> hdl_parser_verilog::get_assignment_signals(const std::string& signal_str, entity& e)
+std::vector<std::string> hdl_parser_verilog::get_assignment_signals(token_stream& signal_str, entity& e)
 {
-    std::vector<std::string> result, signal_list;
-
     // PARSE ASSIGNMENT
     //   assignment can currently be one of the following:
     //   (1) NAME *single*
@@ -1050,68 +1167,42 @@ std::vector<std::string> hdl_parser_verilog::get_assignment_signals(const std::s
     //   (5) NAME[BEGIN_INDEX1:END_INDEX1][BEGIN_INDEX2:END_INDEX2]...
     //   (6) {(1) - (5), (1) - (5), ...}
 
-    auto signal_curly = signal_str.find('{');
+    std::vector<std::string> result;
+    std::vector<token_stream> parts;
 
-    // (6)
-    if (signal_curly == std::string::npos)
+    // (6) {(1) - (5), (1) - (5), ...}
+    if (signal_str.peek() == "{")
     {
-        signal_list.push_back(signal_str);
+        signal_str.consume("{", true);
+
+        auto assignment_list = signal_str.extract_until("}", token_stream::END_OF_STREAM, true, true);
+
+        while (assignment_list.remaining() > 0)
+        {
+            parts.push_back(assignment_list.extract_until(",", token_stream::END_OF_STREAM, true, false));
+            assignment_list.consume(",", false);
+        }
+
+        signal_str.consume("}", true);
     }
     else
     {
-        signal_list = core_utils::split(signal_str.substr(0, signal_str.find('}')).substr(signal_curly + 1), ',');
+        parts.push_back(signal_str);
     }
 
-    for (auto s : signal_list)
+    for (auto& s : parts)
     {
-        std::string signal_name;
+        auto signal_name = s.consume().string;
 
-        s = core_utils::trim(s);
-
-        auto signal_escape     = s.find('\\');
-        auto signal_bracket    = s.find('[');
-        auto signal_apostrophe = s.find('\'');
-
-        // extract signal name
-        if (signal_escape != std::string::npos)
+        // (3) NUMBER
+        if (isdigit(signal_name[0]) || signal_name[0] == '\'')
         {
-            auto signal_space = s.find(' ', signal_escape);
+            for (auto bit : get_number_from_literal(signal_name, 2))
+            {
+                result.push_back("'" + std::to_string(bit - 48) + "'");
+            }
 
-            if (signal_space != std::string::npos)
-            {
-                signal_name = core_utils::trim(s.substr(0, signal_space).substr(signal_escape + 1));
-                s           = s.substr(signal_space + 1);
-            }
-            else
-            {
-                signal_name = core_utils::trim(s.substr(signal_escape + 1));
-                s           = "";
-            }
-        }
-        else
-        {
-            if (signal_bracket != std::string::npos)
-            {
-                // (4), (5) part 1
-                signal_name = core_utils::trim(s.substr(0, signal_bracket));
-                s           = s.substr(signal_bracket);
-            }
-            else if (signal_apostrophe != std::string::npos)
-            {
-                // (3)
-                for (auto bit : get_number_from_literal(s, 2))
-                {
-                    result.push_back("'" + std::to_string(bit - 48) + "'");
-                }
-
-                continue;
-            }
-            else
-            {
-                // (1), (2) part 1
-                signal_name = s;
-                s           = "";
-            }
+            continue;
         }
 
         // valid signal/port name?
@@ -1121,52 +1212,45 @@ std::vector<std::string> hdl_parser_verilog::get_assignment_signals(const std::s
             return {};
         }
 
-        signal_bracket = s.find('[');
-
-        // bounds given?
-        if (signal_bracket != std::string::npos)
+        if (s.consume("["))
         {
-            // (4), (5) part 2
-            auto assignment_colon = s.find(':');
-
-            if (assignment_colon == std::string::npos)
+            //(5) NAME[BEGIN_INDEX1:END_INDEX1][BEGIN_INDEX2:END_INDEX2]...
+            if (s.find_next(":", s.position() + 2) != s.position() + 2)
             {
-                // (4)
-                auto bounds_str = s.substr(0, s.rfind(']')).substr(signal_bracket + 1);
-
-                for (const auto& part : core_utils::split(bounds_str, ']'))
-                {
-                    auto index = std::stoi(core_utils::trim(part.substr(part.find('[') + 1)));
-                    signal_name += "(" + std::to_string(index) + ")";
-                }
-
-                result.push_back(signal_name);
-            }
-            else
-            {
-                // (5)
-                auto bounds_str = s.substr(0, s.rfind(']')).substr(signal_bracket + 1);
                 std::vector<std::pair<i32, i32>> bounds;
                 std::vector<std::string> expanded_signal;
 
-                for (const auto& part : core_utils::split(bounds_str, ']'))
+                do
                 {
-                    auto bound = core_utils::trim(part.substr(part.find('[') + 1));
-
-                    i32 left_bound  = std::stoi(bound.substr(0, bound.find(':')));
-                    i32 right_bound = std::stoi(bound.substr(bound.find(':') + 1));
+                    i32 left_bound = std::stoi(s.consume());
+                    s.consume(":", true);
+                    i32 right_bound = std::stoi(s.consume());
 
                     bounds.emplace_back(left_bound, right_bound);
-                }
+
+                    s.consume("]", true);
+                } while (s.consume("[", false));
 
                 expand_signal(expanded_signal, signal_name, bounds, 0);
-
                 result.insert(result.end(), expanded_signal.begin(), expanded_signal.end());
+            }
+            //(4) NAME[INDEX1][INDEX2]...
+            else
+            {
+                do
+                {
+                    signal_name += "(" + s.consume().string + ")";
+
+                    s.consume("]", true);
+                } while (s.consume("["));
+
+                result.push_back(signal_name);
             }
         }
         else
         {
-            // (1), (2) part 2
+            //   (1) NAME *single*
+            //   (2) NAME *multi-dimensional*
             result.insert(result.end(), e.expanded_signal_names[signal_name].begin(), e.expanded_signal_names[signal_name].end());
         }
     }
@@ -1174,99 +1258,53 @@ std::vector<std::string> hdl_parser_verilog::get_assignment_signals(const std::s
     return result;
 }
 
-std::vector<std::string> hdl_parser_verilog::get_port_signals(const std::string& port_str, const std::string& instance_name)
+std::vector<std::string> hdl_parser_verilog::get_port_signals(token_stream& port_str, const std::string& instance_type)
 {
     std::vector<std::string> result;
+    auto gate_types = m_netlist->get_gate_library()->get_gate_types();
 
-    std::string port_name;
+    auto port_name = port_str.consume();
 
-    auto signal_escape = port_str.find('\\');
-
-    // extract port name
-    if (signal_escape != std::string::npos)
-    {
-        auto signal_space = port_str.find(' ', signal_escape);
-
-        port_name = core_utils::trim(port_str.substr(0, signal_space).substr(signal_escape + 1));
-    }
-    else
-    {
-        port_name = port_str;
-    }
-
-    // try to validate port name
-    if (m_entities.find(instance_name) != m_entities.end())
+    if (m_entities.find(instance_type) != m_entities.end())
     {
         // is instance a valid entity within netlist?
-        if (m_entities[instance_name].ports_expanded.find(port_name) != m_entities[instance_name].ports_expanded.end())
+        if (m_entities[instance_type].ports_expanded.find(port_name.string) != m_entities[instance_type].ports_expanded.end())
         {
             // is port valid for given entity
-            result.insert(result.end(), m_entities[instance_name].ports_expanded[port_name].second.begin(), m_entities[instance_name].ports_expanded[port_name].second.end());
+            result.insert(result.end(), m_entities[instance_type].ports_expanded[port_name.string].second.begin(), m_entities[instance_type].ports_expanded[port_name.string].second.end());
         }
         else
         {
-            log_error("hdl_parser", "no port '{}' within entity '{}'.", port_name, instance_name);
+            log_error("hdl_parser", "invalid port '{}' for entity '{}' in line {}.", port_name.string, instance_type, port_name.number);
+            return {};
+        }
+    }
+    else if (gate_types.find(instance_type) != gate_types.end())
+    {
+        auto gt = gate_types.at(instance_type);
+
+        if (m_gate_to_pin_map.find(instance_type) == m_gate_to_pin_map.end())
+        {
+            auto ipins                       = gt->get_input_pins();
+            auto opins                       = gt->get_output_pins();
+            m_gate_to_pin_map[instance_type] = ipins;
+            m_gate_to_pin_map[instance_type].insert(m_gate_to_pin_map[instance_type].end(), opins.begin(), opins.end());
+        }
+
+        if (std::find(m_gate_to_pin_map[instance_type].begin(), m_gate_to_pin_map[instance_type].end(), port_name.string) != m_gate_to_pin_map[instance_type].end())
+        {
+            result.push_back(port_name.string);
+        }
+        else
+        {
+            log_error("hdl_parser", "invalid port '{}' for gate '{}' in line {}.", port_name.string, instance_type, port_name.number);
             return {};
         }
     }
     else
     {
-        // assume port is valid port for gate of given gate library
-        result.push_back(port_name);
-    }
-
-    return result;
-}
-
-std::map<std::string, std::string> hdl_parser_verilog::get_direct_assignments(const std::string& left, const std::string& right, entity& e)
-{
-    std::map<std::string, std::string> result;
-
-    auto left_parts  = get_assignment_signals(left, e);
-    auto right_parts = get_assignment_signals(right, e);
-
-    if (left_parts.empty() || right_parts.empty())
-    {
-        log_error("hdl_parser", "cannot parse direct assignment '{}'.", left + " = " + right);
+        log_error("hdl_parser", "invalid entity or port '{}' in line {}.", instance_type, port_name.number);
         return {};
-    }
-
-    if (left_parts.size() != right_parts.size())
-    {
-        log_error("hdl_parser", "cannot parse direct assignment '{}' due to width mismatch.", left + " = " + right);
-        return {};
-    }
-
-    for (u32 i = 0; i < right_parts.size(); i++)
-    {
-        result[left_parts[i]] = right_parts[i];
-    }
-
-    return result;
-}
-
-std::map<std::string, std::string> hdl_parser_verilog::get_port_assignments(const std::string& inst, const std::string& port, const std::string& assignment, entity& e)
-{
-    std::map<std::string, std::string> result;
-
-    auto left_parts  = get_port_signals(port, inst);
-    auto right_parts = get_assignment_signals(assignment, e);
-
-    if (left_parts.empty() || right_parts.empty())
-    {
-        log_error("hdl_parser", "cannot parse port assignment '{}'.", port + "(" + assignment + ")");
-        return {};
-    }
-
-    if (left_parts.size() != right_parts.size())
-    {
-        log_error("hdl_parser", "cannot parse port assignment '{}' due to width mismatch.", port + "(" + assignment + ")");
-        return {};
-    }
-
-    for (u32 i = 0; i < right_parts.size(); i++)
-    {
-        result[left_parts[i]] = right_parts[i];
     }
 
     return result;

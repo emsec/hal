@@ -1,6 +1,3 @@
-#include "gate_decorator_system/decorators/gate_decorator_bdd.h"
-#include "gate_decorator_system/gate_decorator_system.h"
-
 #include "netlist/gate.h"
 #include "netlist/gate_library/gate_library.h"
 #include "netlist/gate_library/gate_library_liberty_parser.h"
@@ -324,12 +321,12 @@ namespace gate_library_liberty_parser
         std::shared_ptr<gate_library> lib = std::make_shared<gate_library>(inter_lib->name);
 
         auto gate_types          = lib->get_gate_types();
-        auto input_pin_types     = lib->get_input_pin_types();
-        auto inout_pin_types     = lib->get_inout_pin_types();
-        auto output_pin_types    = lib->get_output_pin_types();
-        auto& gate_to_input_map  = *lib->get_gate_type_map_to_input_pin_types();
-        auto& gate_to_inout_map  = *lib->get_gate_type_map_to_inout_pin_types();
-        auto& gate_to_output_map = *lib->get_gate_type_map_to_output_pin_types();
+        auto input_pins     = lib->get_input_pins();
+        auto inout_pins     = lib->get_inout_pins();
+        auto output_pins    = lib->get_output_pins();
+        auto& gate_to_input_map  = *lib->get_gate_type_map_to_input_pins();
+        auto& gate_to_inout_map  = *lib->get_gate_type_map_to_inout_pins();
+        auto& gate_to_output_map = *lib->get_gate_type_map_to_output_pins();
         auto global_gnd_types    = lib->get_global_gnd_gate_types();
         auto global_vcc_types    = lib->get_global_vcc_gate_types();
 
@@ -341,17 +338,17 @@ namespace gate_library_liberty_parser
             {
                 if (pin.direction == "input")
                 {
-                    input_pin_types->insert(pin.name);
+                    input_pins->insert(pin.name);
                     gate_to_input_map[cell.name].push_back(pin.name);
                 }
                 else if (pin.direction == "inout")
                 {
-                    inout_pin_types->insert(pin.name);
+                    inout_pins->insert(pin.name);
                     gate_to_inout_map[cell.name].push_back(pin.name);
                 }
                 else if (pin.direction == "output")
                 {
-                    output_pin_types->insert(pin.name);
+                    output_pins->insert(pin.name);
                     gate_to_output_map[cell.name].push_back(pin.name);
 
                     if (pin.function == "0")
@@ -370,14 +367,14 @@ namespace gate_library_liberty_parser
         {
             global_gnd_types->insert("GLOBAL_GND");
             gate_types->insert("GLOBAL_GND");
-            output_pin_types->insert("O");
+            output_pins->insert("O");
             gate_to_output_map["GLOBAL_GND"].push_back("O");
         }
         else if (global_vcc_types->empty())
         {
             global_vcc_types->insert("GLOBAL_VCC");
             gate_types->insert("GLOBAL_VCC");
-            output_pin_types->insert("O");
+            output_pins->insert("O");
             gate_to_output_map["GLOBAL_VCC"].push_back("O");
         }
 

@@ -112,7 +112,7 @@ std::shared_ptr<netlist> hdl_parser_verilog_old::parse(const std::string& gate_l
     if (((it = m_net.find("1'h0")) != m_net.end()) || ((it = m_net.find("1'b0")) != m_net.end()))
     {
         auto gnd_type   = *(m_netlist->get_gate_library()->get_global_gnd_gate_types()->begin());
-        auto output_pin = m_netlist->get_output_pin_types(gnd_type).at(0);
+        auto output_pin = m_netlist->get_output_pins(gnd_type).at(0);
         auto gnd        = m_netlist->create_gate(m_netlist->get_unique_gate_id(), gnd_type, "global_gnd");
         if (!m_netlist->mark_global_gnd_gate(gnd))
         {
@@ -127,7 +127,7 @@ std::shared_ptr<netlist> hdl_parser_verilog_old::parse(const std::string& gate_l
     if (((it = m_net.find("1'h1")) != m_net.end()) || ((it = m_net.find("1'b1")) != m_net.end()))
     {
         auto vcc_type   = *(m_netlist->get_gate_library()->get_global_vcc_gate_types()->begin());
-        auto output_pin = m_netlist->get_output_pin_types(vcc_type).at(0);
+        auto output_pin = m_netlist->get_output_pins(vcc_type).at(0);
         auto vcc        = m_netlist->create_gate(m_netlist->get_unique_gate_id(), vcc_type, "global_vcc");
         if (!m_netlist->mark_global_vcc_gate(vcc))
         {
@@ -496,9 +496,9 @@ bool hdl_parser_verilog_old::connect_net_to_pin(const std::string& net_name, std
         return true;
     }
 
-    auto input_pin_types  = new_gate->get_input_pin_types();
-    auto output_pin_types = new_gate->get_output_pin_types();
-    auto inout_pin_types  = new_gate->get_inout_pin_types();
+    auto input_pins  = new_gate->get_input_pins();
+    auto output_pins = new_gate->get_output_pins();
+    auto inout_pins  = new_gate->get_inout_pins();
     // add non-registered signal
     if (m_net.find(net_name) == m_net.end())
     {
@@ -516,24 +516,24 @@ bool hdl_parser_verilog_old::connect_net_to_pin(const std::string& net_name, std
     }
     auto current_net = m_net[net_name];
 
-    if ((std::find(input_pin_types.begin(), input_pin_types.end(), pin_name) == inout_pin_types.end())
-        && (std::find(output_pin_types.begin(), output_pin_types.end(), pin_name) == output_pin_types.end())
-        && (std::find(inout_pin_types.begin(), inout_pin_types.end(), pin_name) == inout_pin_types.end()))
+    if ((std::find(input_pins.begin(), input_pins.end(), pin_name) == inout_pins.end())
+        && (std::find(output_pins.begin(), output_pins.end(), pin_name) == output_pins.end())
+        && (std::find(inout_pins.begin(), inout_pins.end(), pin_name) == inout_pins.end()))
     {
         log_error("hdl_parser", "undefined pin '{}' for '{}' (line: {}).", pin_name, new_gate->get_name(), line);
         return false;
     }
 
-    if ((std::find(input_pin_types.begin(), input_pin_types.end(), pin_name) != input_pin_types.end())
-        || (std::find(inout_pin_types.begin(), inout_pin_types.end(), pin_name) != inout_pin_types.end()))
+    if ((std::find(input_pins.begin(), input_pins.end(), pin_name) != input_pins.end())
+        || (std::find(inout_pins.begin(), inout_pins.end(), pin_name) != inout_pins.end()))
     {
         if (!current_net->add_dst(new_gate, pin_name))
         {
             return false;
         }
     }
-    if ((std::find(output_pin_types.begin(), output_pin_types.end(), pin_name) != output_pin_types.end())
-        || (std::find(inout_pin_types.begin(), inout_pin_types.end(), pin_name) != inout_pin_types.end()))
+    if ((std::find(output_pins.begin(), output_pins.end(), pin_name) != output_pins.end())
+        || (std::find(inout_pins.begin(), inout_pins.end(), pin_name) != inout_pins.end()))
     {
         if (!current_net->set_src(new_gate, pin_name))
         {
@@ -816,9 +816,9 @@ std::vector<std::string> hdl_parser_verilog_old::parse_pin(std::shared_ptr<gate>
 
     std::vector<std::string> pins;
 
-    auto input_pins  = new_gate->get_input_pin_types();
-    auto inout_pins  = new_gate->get_inout_pin_types();
-    auto output_pins = new_gate->get_output_pin_types();
+    auto input_pins  = new_gate->get_input_pins();
+    auto inout_pins  = new_gate->get_inout_pins();
+    auto output_pins = new_gate->get_output_pins();
 
     if (std::find(input_pins.begin(), input_pins.end(), t) != input_pins.end() || std::find(inout_pins.begin(), inout_pins.end(), t) != inout_pins.end()
         || std::find(output_pins.begin(), output_pins.end(), t) != output_pins.end())

@@ -28,7 +28,7 @@
 #include "def.h"
 
 #include "core/callback_hook.h"
-#include "core/interface_factory.h"
+#include "core/interface_base.h"
 #include "core/library_loader.h"
 #include "core/program_options.h"
 
@@ -108,28 +108,27 @@ namespace plugin_manager
     bool unload(const std::string& plugin_name);
 
     /**
-     * Gets the interface factory for a plugin specified by name.
+     * Gets the basic interface for a plugin specified by name.
+     * By default calls the initialize() function of the plugin.
      *
      * @param[in] plugin_name - The plugin name.
-     * @returns The factory for the plugin.
+     * @param[in] initialize - If false, the plugin's initialize function is not called.
+     * @returns A plugin instance.
      */
-    i_factory* get_plugin_factory(const std::string& plugin_name);
+    std::shared_ptr<i_base> get_plugin_instance(const std::string& plugin_name, bool initialize = true);
 
     /**
-     * Gets the basic interface for a plugin specified by name.
+     * Gets a specific interface for a plugin specified by name.
+     * By default calls the initialize() function of the plugin.
      *
      * @param[in] plugin_name - The plugin name.
-     * @returns The interface base for the plugin.
+     * @param[in] initialize - If false, the plugin's initialize function is not called.
+     * @returns A plugin instance.
      */
     template<typename T>
-    std::shared_ptr<T> get_plugin_instance(const std::string& plugin_name)
+    std::shared_ptr<T> get_plugin_instance(const std::string& plugin_name, bool initialize = true)
     {
-        auto factory = get_plugin_factory(plugin_name);
-        if (factory == nullptr)
-        {
-            return nullptr;
-        }
-        return std::dynamic_pointer_cast<T>(factory->query_interface(interface_type::base));
+        return std::dynamic_pointer_cast<T>(get_plugin_instance(plugin_name, initialize));
     }
 
     /**
@@ -142,7 +141,7 @@ namespace plugin_manager
      * @returns The id of the registered callback.
     */
     u64 add_model_changed_callback(std::function<void(bool, std::string const&, std::string const&)> callback);
-    
+
     /**
      * Remove a registered callback.
      *
