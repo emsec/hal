@@ -167,11 +167,58 @@ void graph_context::unfold_module(const u32 id)
         {
             modules.insert(sm->get_id());
         }
+
+        // That would unfold the empty module into nothing, meaning there would
+        // be no way back
+        assert(!gates.empty() || !modules.empty());
+
         begin_change();
         remove({id}, {});
         add(modules, gates);
         end_change();
     }
+}
+
+bool graph_context::empty() const
+{
+    return m_gates.empty() && m_modules.empty();
+}
+
+bool graph_context::is_showing_module(const u32 id) const
+{
+    return is_showing_module(id, {}, {}, {}, {});
+}
+
+bool graph_context::is_showing_module(const u32 id, const QSet<u32>& minus_modules, const QSet<u32>& minus_gates, const QSet<u32>& plus_modules, const QSet<u32>& plus_gates) const
+{
+    // There are all sorts of problems when we allow this, since now any empty
+    // module thinks that it is every other empty module. Blocking this,
+    // however, essentially means that we must destroy all empty contexts:
+    // With the block in place, a context won't recognize it's module anymore
+    // once the last gate has removed, so adding a new gate won't update the
+    // context.
+    if (empty())
+    {
+        return false;
+    }
+
+    auto m = g_netlist->get_module_by_id(id);
+    // TODO deduplicate
+    QSet<u32> gates;
+    QSet<u32> modules;
+    for (const auto& g : m->get_gates())
+    {
+        gates.insert(g->get_id());
+    }
+    for (const auto& sm : m->get_submodules())
+    {
+        modules.insert(sm->get_id());
+    }
+    // qDebug() << "GATES" << gates;
+    // qDebug() << "MINUS_GATES" << minus_gates;
+    // qDebug() << "PLUS_GATES" << plus_gates;
+    // qDebug() << "MGATES" << m_gates;
+    return (m_gates - m_removed_gates) + m_added_gates == (gates - minus_gates) + plus_gates && (m_modules - m_removed_modules) + m_added_modules == (modules - minus_modules) + plus_modules;
 }
 
 const QSet<u32>& graph_context::modules() const

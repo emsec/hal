@@ -21,6 +21,7 @@
 #include <QDebug>
 #include <QInputDialog>
 #include <QKeyEvent>
+#include <QMessageBox>
 #include <QToolButton>
 #include <QVBoxLayout>
 #include <QVariantAnimation>
@@ -448,13 +449,25 @@ void graph_widget::handle_history_step_back_request()
 
 void graph_widget::handle_enter_module_requested(const u32 id)
 {
+    auto m = g_netlist->get_module_by_id(id);
+    if (m->get_gates().empty() && m->get_submodules().empty())
+    {
+        QMessageBox msg;
+        msg.setText("This module is empty.\nYou can't enter it.");
+        msg.setWindowTitle("Error");
+        msg.exec();
+        return;
+        // We would otherwise allow creation of a context with no gates, which
+        // is bad because that context won't react to any updates since empty
+        // contexts can't infer their corresponding module from their contents
+    }
+    
     if (m_context->gates().isEmpty() && m_context->modules() == QSet<u32>({id}))
     {
         m_context->unfold_module(id);
         return;
     }
 
-    auto m = g_netlist->get_module_by_id(id);
     QSet<u32> gate_ids;
     QSet<u32> module_ids;
     for (const auto& g : m->get_gates())

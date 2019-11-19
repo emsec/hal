@@ -71,26 +71,44 @@ void graph_context_manager::handle_module_name_changed(const std::shared_ptr<mod
 
 void graph_context_manager::handle_module_submodule_added(const std::shared_ptr<module> m, const u32 added_module) const
 {
-    Q_UNUSED(m)
-    Q_UNUSED(added_module)
+    for (graph_context* context : m_graph_contexts)
+        if (context->is_showing_module(m->get_id(), {added_module}, {}, {}, {}))
+            context->add({added_module}, {});
 }
 
-void graph_context_manager::handle_module_submodule_removed(const std::shared_ptr<module> m, const u32 removed_module) const
+void graph_context_manager::handle_module_submodule_removed(const std::shared_ptr<module> m, const u32 removed_module)
 {
-    Q_UNUSED(m)
-    Q_UNUSED(removed_module)
+    // FIXME this also triggers on module deletion (not only moving)
+    // and collides with handle_module_removed
+    for (graph_context* context : m_graph_contexts)
+        if (context->is_showing_module(m->get_id(), {}, {}, {removed_module}, {}))
+        {
+            context->remove({removed_module}, {});
+            if (context->empty())
+            {
+                delete_graph_context(context);
+            }
+        }
 }
 
 void graph_context_manager::handle_module_gate_assigned(const std::shared_ptr<module> m, const u32 inserted_gate) const
 {
-    Q_UNUSED(m)
-    Q_UNUSED(inserted_gate)
+    for (graph_context* context : m_graph_contexts)
+        if (context->is_showing_module(m->get_id(), {}, {inserted_gate}, {}, {}))
+            context->add({}, {inserted_gate});
 }
 
-void graph_context_manager::handle_module_gate_removed(const std::shared_ptr<module> m, const u32 removed_gate) const
+void graph_context_manager::handle_module_gate_removed(const std::shared_ptr<module> m, const u32 removed_gate)
 {
-    Q_UNUSED(m)
-    Q_UNUSED(removed_gate)
+    for (graph_context* context : m_graph_contexts)
+        if (context->is_showing_module(m->get_id(), {}, {}, {}, {removed_gate}))
+        {
+            context->remove({}, {removed_gate});
+            if (context->empty())
+            {
+                delete_graph_context(context);
+            }
+        }
 }
 
 void graph_context_manager::handle_gate_name_changed(const std::shared_ptr<gate> g) const
