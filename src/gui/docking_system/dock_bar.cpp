@@ -92,7 +92,7 @@ void dock_bar::dragMoveEvent(QDragMoveEvent* event)
         bool already_executed    = false;
         bool move_marker_reached = false;
 
-        for (button_iterator = m_buttons.begin(); button_iterator != m_buttons.end(); button_iterator++)
+        for (button_iterator = m_buttons.begin(); button_iterator != m_buttons.end(); ++button_iterator)
         {
             if ((*button_iterator)->available())
             {

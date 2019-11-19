@@ -91,6 +91,10 @@ log_info("Calling function get_predecessors")
 test_gate.get_predecessors()
 log_info("--------------------------------------------")
 
+log_info("Calling function get_predecessor")
+test_gate.get_predecessor("I0")
+log_info("--------------------------------------------")
+
 log_info("Calling function get_successors")
 test_gate.get_successors()
 log_info("--------------------------------------------")
@@ -135,4 +139,13 @@ log_info("--------------------------------------------")
 
 log_info("Calling function gates")
 test_module.get_gates()
+log_info("--------------------------------------------")
+
+log_info("#############################################")
+log_info("ENDPOINT FUNCTION TESTING")
+log_info("#############################################\n")
+endpoint = test_gate.get_successors()[0]
+
+log_info("Calling function get_gate")
+endpoint.get_gate()
 log_info("--------------------------------------------")

@@ -23,6 +23,7 @@
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
 #include <QVBoxLayout>
+#include <QHBoxLayout>
 
 gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
 {
@@ -133,6 +134,13 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
     //by setting this you do not need to call resizecolumntocontents every time after updating
     m_tree_widget->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
     m_tree_widget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+
+    m_tree_row_layout->addWidget(m_tree_widget);
+    m_tree_row_layout->addSpacerItem(new QSpacerItem(1,1,QSizePolicy::Expanding,QSizePolicy::Minimum));
+    m_tree_row_layout->addSpacing(0);
+    m_container_layout->addLayout(m_tree_row_layout);
+
+    connect(m_tree_widget, &QTreeWidget::itemClicked, this, &gate_details_widget::on_treewidget_item_clicked);
 
     m_tree_row_layout->addWidget(m_tree_widget);
     m_tree_row_layout->addSpacerItem(new QSpacerItem(1, 1, QSizePolicy::Expanding, QSizePolicy::Minimum));
@@ -432,6 +440,9 @@ void gate_details_widget::update(const u32 gate_id)
 
     m_general_table->setHidden(false);
     m_scroll_area->setHidden(false);
+
+
+
 
     connect(m_tree_widget, &QTreeWidget::itemClicked, this, &gate_details_widget::on_treewidget_item_clicked);
 }

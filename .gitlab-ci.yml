@@ -87,56 +87,31 @@ compile:test:ubuntu:
     - ccache/
     - build/
 
-compile:package:macos:
-  stage: compile
-  script:
-    - export LDFLAGS="-L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib"
-    - export CPPFLAGS="-I/usr/local/opt/llvm/include"
-    - rm -rf build
-    - mkdir -p build
-    - cd build
-    - export HAL_BASE_PATH=$(pwd)
-    - cmake -G Ninja .. -DCMAKE_BUILD_TYPE=MinSizeRel -DBUILD_ALL_PLUGINS=OFF -DBUILD_TESTS=OFF -DWITH_GUI=ON -DBUILD_DOCUMENTATION=ON -DCMAKE_INSTALL_PREFIX=/usr/ -DPACKAGE_MACOS=ON -DCMAKE_C_COMPILER=/usr/local/opt/llvm/bin/clang -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm/bin/clang++
-    - cmake --build . --target all --clean-first -- -j4
-    - du -h .
-  cache:
-    key: build-cache-macos
-    policy: push
-    paths:
-      - ccache/
-      - build/
-  only:
-    - master
-    - triggers
-    - /^v.*$/ #For aptly deployment
-    - web #Triggered by run pipeline
-  tags:
-    - macOS
-
-compile:test:macos:
-  stage: compile
-  script:
-    - export LDFLAGS="-L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib"
-    - export CPPFLAGS="-I/usr/local/opt/llvm/include"
-    - rm -rf build
-    - mkdir -p build
-    - cd build
-    - export HAL_BASE_PATH=$(pwd)
-    - cmake -G Ninja .. -DCMAKE_BUILD_TYPE=Debug -DBUILD_ALL_PLUGINS=ON -DBUILD_TESTS=ON -DBUILD_COVERAGE=ON -DWITH_GUI=ON -DBUILD_DOCUMENTATION=ON -DCMAKE_INSTALL_PREFIX=/usr/ -DPACKAGE_MACOS=ON -DCMAKE_C_COMPILER=/usr/local/opt/llvm/bin/clang -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm/bin/clang++
-    - cmake --build . --target all --clean-first -- -j4
-  cache:
-    key: test-build-cache-macos
-    paths:
-      - ccache/
-      - build/
-  only:
-    - master
-    - triggers
-    - /^mac.*$/ #For mac deployment
-    - web #Triggered by run pipeline
-    - tags
-  tags:
-    - macOS
+#compile:package:macos:
+#  stage: compile
+#  script:
+#    - export LDFLAGS="-L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib"
+#    - export CPPFLAGS="-I/usr/local/opt/llvm/include"
+#    - rm -rf build
+#    - mkdir -p build
+#    - cd build
+#    - export HAL_BASE_PATH=$(pwd)
+#    - cmake -G Ninja .. -DCMAKE_BUILD_TYPE=MinSizeRel -DBUILD_ALL_PLUGINS=OFF -DBUILD_TESTS=OFF -DWITH_GUI=ON -DBUILD_DOCUMENTATION=ON -DCMAKE_INSTALL_PREFIX=/usr/ -DPACKAGE_MACOS=ON -DCMAKE_C_COMPILER=/usr/local/opt/llvm/bin/clang -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm/bin/clang++
+#    - cmake --build . --target all --clean-first -- -j4
+#    - du -h .
+#  cache:
+#    key: build-cache-macos
+#    policy: push
+#    paths:
+#      - ccache/
+#      - build/
+#  only:
+#    - master
+#    - triggers
+#    - /^v.*$/ #For aptly deployment
+#    - web #Triggered by run pipeline
+#  tags:
+#    - macOS
 
 compile:doc:doxygen:
   stage: compile
@@ -217,44 +192,6 @@ test:ubuntu:
       - build/
   coverage: '/^\s*Total:\|(-|[\d.]*%?)\s*[\d\w]+\s*\|\s*(?:-|[\d.]*%?)\s*[\d\w]+\s*\|\s*(?:-|[\d.]*%?)\s*[\d\w]+\s*$/'
 
-test:macos:
-  stage: test
-  script:
-    - export LDFLAGS="-L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib"
-    - export CPPFLAGS="-I/usr/local/opt/llvm/include"
-    - rm -rf build
-    - mkdir -p build
-    - cd build
-    - export HAL_BASE_PATH=$(pwd)
-    - cmake -G Ninja .. -DCMAKE_BUILD_TYPE=MinSizeRel -DBUILD_ALL_PLUGINS=ON -DBUILD_TESTS=ON -DBUILD_COVERAGE=ON -DWITH_GUI=ON -DBUILD_DOCUMENTATION=ON -DCMAKE_INSTALL_PREFIX=/usr/ -DCMAKE_C_COMPILER=/usr/local/opt/llvm/bin/clang -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm/bin/clang++
-    - cmake --build . --target all --clean-first -- -j4
-    - ninja hal_coverage
-    - bash <(curl -s https://codecov.io/bash) -f hal_coverage.info.cleaned || echo "Codecov did not collect coverage reports"
-#    - curl -s https://report.ci/upload.py | python - --include='*.xml' --framework=gtest # Upload not working
-  artifacts:
-    paths:
-      - build/gtestresult*
-      - build/hal_coverage.xml
-      - build/hal_coverage/*
-    expire_in: 1 week
-  dependencies:
-    - compile:test:macos
-  cache:
-    key: test-build-cache-macos
-    policy: pull
-    paths:
-      - ccache/
-      - build/
-  coverage: '/^\s*Total:\|(-|[\d.]*%?)\s*[\d\w]+\s*\|\s*(?:-|[\d.]*%?)\s*[\d\w]+\s*\|\s*(?:-|[\d.]*%?)\s*[\d\w]+\s*$/'
-  only:
-    - master
-    - triggers
-    - /^mac.*$/ #For mac deployment
-    - web #Triggered by run pipeline
-    - tags
-  tags:
-    - macOS
-
 test:package:ubuntu:
   stage: test
   image: ubuntu:latest
@@ -279,35 +216,6 @@ test:check-core-documentation:
   script:
     - python3 tools/check_documentation.py include/ -ignore include/gui/
   cache: {}
-
-deploy-homebrew:
-  stage: deploy
-  only:
-    - /^v.*$/
-  except:
-    - branches
-  script:
-    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
-    - mkdir -p ~/.ssh
-    - eval $(ssh-agent -s)
-    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
-    - mkfifo -m 600 fifo
-    - (echo "$HAL_DEPLOYMENT_KEY")> fifo | ssh-add fifo
-    - rm fifo
-    - 'ssh-keyscan github.com > ~/.ssh/known_hosts'
-    - rm -rf build
-    - mkdir -p build
-    - cd build
-    - git clone git@github.com:emsec/homebrew-hal.git
-    - cd homebrew-hal
-    - brew bump-formula-pr --dry-run --write --tag=$CI_COMMIT_TAG --revision=$CI_COMMIT_SHA hal.rb
-    - git add hal.rb
-    - git commit --author="GitlabCI <ci@gitlabci.local>" -m "Update to version $CI_COMMIT_TAG"
-    - git tag $CI_COMMIT_TAG
-    - git push origin $CI_COMMIT_TAG
-    - git push origin master
-  tags:
-    - macOS
 
 deploy-ppa:
   stage: deploy
