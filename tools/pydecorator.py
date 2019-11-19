@@ -134,6 +134,18 @@ if "__decorated__" not in dir():
 			return result
 		return decorated
 
+	def gate_get_predecessor(message, f):
+		@wraps(f)
+		def decorated(*args, **kwargs):
+			result = f(*args, **kwargs)
+			result_gate = result.gate
+			if result_gate is not None:
+				hal_py.log_info("Function: {}, Gate-ID: {}, Predecessor-ID: {}".format(message, str(args[0].id), result_gate.id))
+			else:
+				hal_py.log_info("Function: {}, Gate-ID: {}, Predecessor-ID: -1".format(message, str(args[0].id)))
+			return result
+		return decorated
+
 
 	########## Net Decorator
 
@@ -189,6 +201,19 @@ if "__decorated__" not in dir():
 			return  result
 		return decorated
 
+	######### Endpoint Decorator
+
+	def endpoint_get_gate(message, f):
+		@wraps(f)
+		def decorated(*args, **kwargs):
+			result = f(*args, **kwargs)
+			if result is not None:
+				hal_py.log_info("Function: {}, Gate-ID: {}".format(message, result.id))
+			else:
+				hal_py.log_info("Function: {}, Gate-ID: -1".format(message))
+			return result
+		return decorated
+
 
 	##### Decorate actual functions
 
@@ -211,18 +236,22 @@ if "__decorated__" not in dir():
 	hal_py.gate.set_name = generic_decorator("gate.set_name", "Gate", hal_py.gate.set_name)
 	hal_py.gate.get_predecessors = gate_get_predecessors_or_successors("gate.get_predecessors", "Predecessor", hal_py.gate.get_predecessors)
 	hal_py.gate.get_successors = gate_get_predecessors_or_successors("gate.get_successors", "Successor", hal_py.gate.get_successors)
+	hal_py.gate.get_predecessor = gate_get_predecessor("gate.get_predecessor", hal_py.gate.get_predecessor)
 
 	####### Net Functions
 	hal_py.net.get_id = generic_decorator("net.get_id", "Net", hal_py.net.get_id)
 	hal_py.net.get_name = generic_decorator("net.get_name", "Net", hal_py.net.get_name)
 	hal_py.net.set_data = generic_decorator("net.set_data", "Net", hal_py.net.set_data)
-	hal_py.net.set_nama = generic_decorator("net.set_name", "Net", hal_py.net.set_name)
+	hal_py.net.set_name = generic_decorator("net.set_name", "Net", hal_py.net.set_name)
 	hal_py.net.get_src = net_get_src("net.get_src", hal_py.net.get_src)
 	hal_py.net.get_dsts = net_get_dests("net.get_dsts", hal_py.net.get_dsts)
 
 	####### Module Functions
 	hal_py.module.assign_gate = module_assign_gate("module.assign_gate", hal_py.module.assign_gate)
 	hal_py.module.get_gates = module_gates("module.gates", hal_py.module.get_gates)
+
+	###### Endpoint Functions
+	hal_py.endpoint.get_gate = endpoint_get_gate("endpoint.get_gate", hal_py.endpoint.get_gate)
 
 else:
 	hal_py.log_info("Already decorated. Not applying again.")
