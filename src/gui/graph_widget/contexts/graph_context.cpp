@@ -411,7 +411,10 @@ void graph_context::start_scene_update()
 
     m_layouter->scene()->disconnect_all();
 
-    layouter_task* task = new layouter_task(m_layouter);
-    connect(task, &layouter_task::finished, this, &graph_context::handle_layouter_finished, Qt::ConnectionType::QueuedConnection);
-    g_thread_pool->queue_task(task);
+//    layouter_task* task = new layouter_task(m_layouter);
+//    connect(task, &layouter_task::finished, this, &graph_context::handle_layouter_finished, Qt::ConnectionType::QueuedConnection);
+//    g_thread_pool->queue_task(task);
+
+    m_layouter->layout();
+    handle_layouter_finished();
 }
