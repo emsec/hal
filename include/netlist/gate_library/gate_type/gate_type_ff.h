@@ -29,8 +29,8 @@
 #include "netlist/boolean_function.h"
 #include "netlist/gate_library/gate_type/gate_type.h"
 
-#include <map>
 #include <string>
+#include <unordered_set>
 
 /**
  *  gate type class
@@ -77,17 +77,22 @@ public:
     void set_reset_function(const boolean_function& reset_f);
 
     /**
-     * Sets a flag indicating that the output of the given output pin shall be inverted.
-     * Used in combination with the next_state function.
+     * Adds an output pin to the collection of output pins that generate their output from the next_state function.
      * 
-     * @param[in] output_pin - Name of the output pin.
-     * @param[in] inverted - True if inverted, false otherwise.
+     * @param[in] output_pin_name - Name of the output pin.
      */
-    void set_output_pin_inverted(const std::string& output_pin, bool inverted);
+    void add_state_output_pin(std::string output_pin_name);
+
+    /**
+     * Adds an output pin to the collection of output pins that generate their output from the inverted next_state function.
+     * 
+     * @param[in] output_pin_name - Name of the output pin.
+     */
+    void add_inverted_state_output_pin(std::string output_pin_name);
 
     /**
      * Sets the behavior that describes the internal state of the flipflop when both set and reset are active.
-     * May be one of the following:
+     * Each may be one of the following:
      *  - U: not specified for this gate type
      *  - L: set internal state to 0
      *  - H: set internal state to 1
@@ -95,23 +100,10 @@ public:
      *  - T: toggle internal state
      *  - X: undefined behavior
      * 
-     * @param[in] sb - The value specifying the behavior.
+     * @param[in] sb1 - The value specifying the behavior for the internal state.
+     * @param[in] sb2 - The value specifying the behaviorfor the inverted internal state.
      */
-    void set_special_behavior1(special_behavior sb);
-
-    /**
-     * Sets the behavior that describes the inverted internal state of the flipflop when both set and reset are active.
-     * May be one of the following:
-     *  - U: not specified for this gate type
-     *  - L: set inverted internal state to 0
-     *  - H: set inverted internal state to 1
-     *  - N: keep current inverted internal state
-     *  - T: toggle inverted internal state
-     *  - X: undefined behavior
-     * 
-     * @param[in] sb - The value specifying the behavior.
-     */
-    void set_special_behavior2(special_behavior sb);
+    void set_special_behavior(special_behavior sb1, special_behavior sb2);
 
     /**
      * Describes in what part of the gate definition to find the INIT string, e.g., "generic".
@@ -163,11 +155,18 @@ public:
     boolean_function get_reset_function() const;
 
     /**
-     * Returns a set of output pin names that shall use the inverted value of the next_state function.
+     * Returns the output pins that use the next_state function to generate their output.
      * 
-     * @returns The set containing the output pin names.
+     * @returns The set of output pin names.
      */
-    std::set<std::string> get_inverted_output_pins() const;
+    std::unordered_set<std::string> get_state_output_pins() const;
+
+    /**
+     * Returns the output pins that use the inverted next_state function to generate their output.
+     * 
+     * @returns The set of output pin names.
+     */
+    std::unordered_set<std::string> get_inverted_state_output_pins() const;
 
     /**
      * Returns the behavior of the internal state and the inverted internal state when both set and reset are active.
@@ -211,7 +210,7 @@ private:
     boolean_function m_clock_f;
     boolean_function m_set_f;
     boolean_function m_reset_f;
-    std::set<std::string> m_inverted_output_pins;
+    std::unordered_set<std::string> m_state_pins, m_inverted_state_pins;
     std::pair<special_behavior, special_behavior> m_special_behavior;
     std::string m_data_category;
     std::string m_data_identifier;

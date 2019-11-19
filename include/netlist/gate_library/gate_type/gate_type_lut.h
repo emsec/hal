@@ -29,8 +29,9 @@
 #include "netlist/boolean_function.h"
 #include "netlist/gate_library/gate_type/gate_type.h"
 
-#include <map>
 #include <string>
+#include <unordered_map>
+#include <unordered_set>
 
 /**
  *  gate type class
@@ -47,6 +48,13 @@ public:
      */
     gate_type_lut(const std::string& name);
     ~gate_type_lut() override = default;
+
+    /**
+     * Adds an output pin to the collection of output pins that generate their output not from a boolean function but an initialization string.
+     * 
+     * @param[in] output_pin_name - The name of the output string.
+     */
+    void add_output_from_init_string_pin(const std::string& output_pin_name);
 
     /**
      * Describes in what part of the gate definition to find the INIT string, e.g., "generic".
@@ -70,6 +78,13 @@ public:
     void set_data_ascending_order(bool ascending);
 
     /**
+     * Returns the output pins that generate their output not from a boolean function but an initialization string.
+     * 
+     * @returns Set of oputput pin names.
+     */
+    std::unordered_set<std::string> get_output_from_init_string_pins() const;
+
+    /**
      * Returns the string describing in what part of the gate definition to find the INIT string, e.g., "generic".
      * 
      * @returns The string describing the category.
@@ -91,6 +106,7 @@ public:
     bool is_ascending_order() const;
 
 private:
+    std::unordered_set<std::string> m_output_from_init_string_pins;
     std::string m_data_category;
     std::string m_data_identifier;
     bool m_ascending;

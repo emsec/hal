@@ -513,15 +513,24 @@ std::shared_ptr<gate_type> gate_library_parser_liberty::construct_gate_type()
     {
         std::shared_ptr<gate_type_ff> gt_ff = std::make_shared<gate_type_ff>(m_current_cell.name);
 
+        gt_ff->set_next_state_function(m_current_cell.next_state);
+        gt_ff->set_clock_function(m_current_cell.clocked_on);
+        gt_ff->set_set_function(m_current_cell.set);
+        gt_ff->set_reset_function(m_current_cell.reset);
+        gt_ff->set_special_behavior(m_current_cell.special_behavior_var1, m_current_cell.special_behavior_var2);
+        gt_ff->set_data_category(m_current_cell.data_category);
+        gt_ff->set_data_identifier(m_current_cell.data_identifier);
+        gt_ff->set_data_ascending_order(m_current_cell.data_direction == "ascending");
+
         for (auto& [pin_name, bf] : m_current_cell.functions)
         {
             if (bf == m_current_cell.state1)
             {
-                gt_ff->set_output_pin_inverted(pin_name, false);
+                gt_ff->add_state_output_pin(pin_name);
             }
             else if (bf == m_current_cell.state2)
             {
-                gt_ff->set_output_pin_inverted(pin_name, true);
+                gt_ff->add_inverted_state_output_pin(pin_name);
             }
             else
             {
@@ -529,31 +538,27 @@ std::shared_ptr<gate_type> gate_library_parser_liberty::construct_gate_type()
             }
         }
 
-        gt_ff->set_next_state_function(m_current_cell.next_state);
-        gt_ff->set_clock_function(m_current_cell.clocked_on);
-        gt_ff->set_set_function(m_current_cell.set);
-        gt_ff->set_reset_function(m_current_cell.reset);
-        gt_ff->set_special_behavior1(m_current_cell.special_behavior_var1);
-        gt_ff->set_special_behavior2(m_current_cell.special_behavior_var2);
-        gt_ff->set_data_category(m_current_cell.data_category);
-        gt_ff->set_data_identifier(m_current_cell.data_identifier);
-        gt_ff->set_data_ascending_order(m_current_cell.data_direction == "ascending");
-
         gt = gt_ff;
     }
     else if (m_current_cell.type == gate_type::base_type::latch)
     {
         std::shared_ptr<gate_type_latch> gt_latch = std::make_shared<gate_type_latch>(m_current_cell.name);
 
+        gt_latch->set_data_in_function(m_current_cell.next_state);
+        gt_latch->set_enable_function(m_current_cell.clocked_on);
+        gt_latch->set_set_function(m_current_cell.set);
+        gt_latch->set_reset_function(m_current_cell.reset);
+        gt_latch->set_special_behavior(m_current_cell.special_behavior_var1, m_current_cell.special_behavior_var2);
+
         for (auto& [pin_name, bf] : m_current_cell.functions)
         {
             if (bf == m_current_cell.state1)
             {
-                gt_latch->set_output_pin_inverted(pin_name, false);
+                gt_latch->add_state_output_pin(pin_name);
             }
             else if (bf == m_current_cell.state2)
             {
-                gt_latch->set_output_pin_inverted(pin_name, true);
+                gt_latch->add_inverted_state_output_pin(pin_name);
             }
             else
             {
@@ -561,30 +566,27 @@ std::shared_ptr<gate_type> gate_library_parser_liberty::construct_gate_type()
             }
         }
 
-        gt_latch->set_data_in_function(m_current_cell.next_state);
-        gt_latch->set_enable_function(m_current_cell.clocked_on);
-        gt_latch->set_set_function(m_current_cell.set);
-        gt_latch->set_reset_function(m_current_cell.reset);
-        gt_latch->set_special_behavior1(m_current_cell.special_behavior_var1);
-        gt_latch->set_special_behavior2(m_current_cell.special_behavior_var2);
-
         gt = gt_latch;
     }
     else if (m_current_cell.type == gate_type::base_type::lut)
     {
         std::shared_ptr<gate_type_lut> gt_lut = std::make_shared<gate_type_lut>(m_current_cell.name);
 
+        gt_lut->set_data_category(m_current_cell.data_category);
+        gt_lut->set_data_identifier(m_current_cell.data_identifier);
+        gt_lut->set_data_ascending_order(m_current_cell.data_direction == "ascending");
+
         for (auto& [pin_name, bf] : m_current_cell.functions)
         {
-            if (bf != m_current_cell.state1)
+            if (bf == m_current_cell.state1)
+            {
+                gt_lut->add_output_from_init_string_pin(pin_name);
+            }
+            else
             {
                 gt_lut->add_boolean_function(pin_name, boolean_function::from_string(bf));
             }
         }
-
-        gt_lut->set_data_category(m_current_cell.data_category);
-        gt_lut->set_data_identifier(m_current_cell.data_identifier);
-        gt_lut->set_data_ascending_order(m_current_cell.data_direction == "ascending");
 
         gt = gt_lut;
     }
