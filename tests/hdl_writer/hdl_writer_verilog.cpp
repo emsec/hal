@@ -8,67 +8,99 @@
 #include "netlist/gate_library/gate_library_manager.h"
 #include "netlist/netlist_factory.h"
 #include "netlist/netlist.h"
-//#include "hdl_parser/hdl_parser_vhdl_old.h"
-#include "hdl_writer/hdl_writer_vhdl.h"
+#include "hdl_parser/hdl_parser_verilog.h"
+#include "hdl_writer/hdl_writer_verilog.h"
 
 #ifdef DONT_USE_ME
 
 using namespace test_utils;
 
-class hdl_writer_vhdl_test : public ::testing::Test
+class hdl_writer_verilog_test : public ::testing::Test
 {
 protected:
-   const std::string GATE_SUFFIX = "";
+    const std::string pseudo_simprim_lib_name = "PSEUDO_SIMPRIM_GATE_LIBRARY";
+    const std::string GATE_SUFFIX = "_inst";
+    hal::path pseudo_simprim_lib_path;
 
-    virtual void SetUp() {
+    virtual void SetUp()
+    {
         NO_COUT_BLOCK;
+        pseudo_simprim_lib_path = core_utils::get_gate_library_directories()[0] / "pseudo_simprim_lib.json";
         gate_library_manager::load_all();
     }
 
     virtual void TearDown() {
 
     }
+    /*
+     * Gate library that only contains a very small set of gates of the xilinx simprim gate library, for testing simprim exclusive behaviour
+     */
+    void create_pseudo_simprim_gate_lib()
+    {
+        NO_COUT_BLOCK;
+        std::ofstream test_lib(pseudo_simprim_lib_path.string());
+        test_lib << "{\n"
+                    "    \"library\": {\n"
+                    "        \"library_name\": \"PSEUDO_SIMPRIM_GATE_LIBRARY\",\n"
+                    "        \"elements\": {\n"
+                    "            \"X_INV\" : [[\"I\"], [], [\"O\"]],\n"
+                    "            \"X_AND4\" : [[\"I0\",\"I1\",\"I2\",\"I3\"], [], [\"O\"]],\n"
+                    "            \"X_ZERO\" : [[], [], [\"O\"]],\n"
+                    "            \"X_ONE\" : [[], [], [\"O\"]],\n"
+                    "\n"
+                    "            \"GLOBAL_GND\" : [[], [], [\"O\"]],\n"
+                    "            \"GLOBAL_VCC\" : [[], [], [\"O\"]]\n"
+                    "        },\n"
+                    "        \"vhdl_includes\": [],\n"
+                    "        \"global_gnd_nodes\": [\"GLOBAL_GND\"],\n"
+                    "        \"global_vcc_nodes\": [\"GLOBAL_VCC\"]\n"
+                    "    }\n"
+                    "}";
+        test_lib.close();
+
+        gate_library_manager::load_all();
+    }
 };
 
 
 /**
  * Testing to write a given netlist in a sstream and parses it after, with
- * the hdl_parser_vhdl.
- * IMPORTANT: If an error occurs, first run the hdl_parser_vhdl_old test to check, that
+ * the hdl_parse_verilog.
+ * IMPORTANT: If an error occurs, first run the hdl_parser_verilog test to check, that
  * the issue isn't within the parser, but in the writer...
  *
  * Functions: write, parse
  */
-TEST_F(hdl_writer_vhdl_test, check_write_and_parse_main_example) {
+TEST_F(hdl_writer_verilog_test, check_write_and_parse_main_example) {
     TEST_START
-        { //NOTE: Fails because of an issue in the parser (empty 'port map' can't be parsed)
+        {
             // Write and parse the example netlist (with some additions) and compare the result with the original netlist
             std::shared_ptr<netlist> nl = create_example_parse_netlist(0);
 
 
             // Mark the global gates as such
-            nl->mark_gnd_gate(nl->get_gate_by_id(MIN_GATE_ID+1));
-            nl->mark_vcc_gate(nl->get_gate_by_id(MIN_GATE_ID+2));
+            nl->mark_global_gnd_gate(nl->get_gate_by_id(MIN_GATE_ID+1));
+            nl->mark_global_vcc_gate(nl->get_gate_by_id(MIN_GATE_ID+2));
 
 
             // Write and parse the netlist now
             test_def::capture_stdout();
             std::stringstream parser_input;
-            hdl_writer_vhdl vhdl_writer(parser_input);
+            hdl_writer_verilog verilog_writer(parser_input);
 
 
             // Writes the netlist in the sstream
-            bool writer_suc = vhdl_writer.write(nl);
+            bool writer_suc = verilog_writer.write(nl);
 
             if(!writer_suc){
                 std::cout << test_def::get_captured_stdout() << std::endl;
             }
             ASSERT_TRUE(writer_suc);
 
-            hdl_parser_vhdl_old vhdl_parser(parser_input);
+            hdl_parser_verilog verilog_parser(parser_input);
 
-            // Parse the .vhdl file
-            std::shared_ptr<netlist> parsed_nl = vhdl_parser.parse(g_lib_name);
+            // Parse the .verilog file
+            std::shared_ptr<netlist> parsed_nl = verilog_parser.parse(g_lib_name);
 
             if(parsed_nl == nullptr){
                 std::cout << test_def::get_captured_stdout() << std::endl;
@@ -81,7 +113,7 @@ TEST_F(hdl_writer_vhdl_test, check_write_and_parse_main_example) {
             // -- Check if gates and nets are the same
             EXPECT_EQ(nl->get_gates().size(), parsed_nl->get_gates().size());
             for(auto g_0 : nl->get_gates()){
-                EXPECT_TRUE(gates_are_equal(g_0, get_gate_by_subname(parsed_nl, g_0->get_name()),true, true));
+                EXPECT_TRUE(gates_are_equal(g_0, get_gate_by_subname(parsed_nl, g_0->get_name()),true,true));
             }
 
             EXPECT_EQ(nl->get_nets().size(), parsed_nl->get_nets().size());
@@ -91,29 +123,28 @@ TEST_F(hdl_writer_vhdl_test, check_write_and_parse_main_example) {
             }
 
             // -- Check if global gates are the same
-            EXPECT_EQ(nl->get_gnd_gates().size(), parsed_nl->get_gnd_gates().size());
-            for(auto gl_gnd_0 : nl->get_gnd_gates()){
-                EXPECT_TRUE(parsed_nl->is_gnd_gate(get_gate_by_subname(parsed_nl, gl_gnd_0->get_name())));
+            EXPECT_EQ(nl->get_global_gnd_gates().size(), parsed_nl->get_global_gnd_gates().size());
+            for(auto gl_gnd_0 : nl->get_global_gnd_gates()){
+                EXPECT_TRUE(parsed_nl->is_global_gnd_gate(get_gate_by_subname(parsed_nl, gl_gnd_0->get_name())));
             }
 
-            EXPECT_EQ(nl->get_vcc_gates().size(), parsed_nl->get_vcc_gates().size());
-            for(auto gl_vcc_0 : nl->get_vcc_gates()){
-                EXPECT_TRUE(parsed_nl->is_vcc_gate(get_gate_by_subname(parsed_nl, gl_vcc_0->get_name())));
+            EXPECT_EQ(nl->get_global_vcc_gates().size(), parsed_nl->get_global_vcc_gates().size());
+            for(auto gl_vcc_0 : nl->get_global_vcc_gates()){
+                EXPECT_TRUE(parsed_nl->is_global_vcc_gate(get_gate_by_subname(parsed_nl, gl_vcc_0->get_name())));
             }
         }
     TEST_END
 }
 
-
 /**
  * Testing the writing of global input/output/inout nets
  *
- * IMPORTANT: If an error occurs, first run the hdl_parser_vhdl_old test to check, that
+ * IMPORTANT: If an error occurs, first run the hdl_parser_verilog test to check, that
  * the issue isn't within the parser, but in the writer...
  *
  * Functions: write, parse
  */
-TEST_F(hdl_writer_vhdl_test, check_global_nets) {
+TEST_F(hdl_writer_verilog_test, check_global_nets) {
     TEST_START
         {
             // Add 2 global input nets to an empty netlist
@@ -128,18 +159,18 @@ TEST_F(hdl_writer_vhdl_test, check_global_nets) {
             // Write and parse the netlist now
             test_def::capture_stdout();
             std::stringstream parser_input;
-            hdl_writer_vhdl vhdl_writer(parser_input);
+            hdl_writer_verilog verilog_writer(parser_input);
 
             // Writes the netlist in the sstream
-            bool writer_suc = vhdl_writer.write(nl);
+            bool writer_suc = verilog_writer.write(nl);
             if (!writer_suc) {
                 std::cout << test_def::get_captured_stdout() << std::endl;
             }
             ASSERT_TRUE(writer_suc);
 
-            hdl_parser_vhdl_old vhdl_parser(parser_input);
-            // Parse the .vhdl file
-            std::shared_ptr<netlist> parsed_nl = vhdl_parser.parse(g_lib_name);
+            hdl_parser_verilog verilog_parser(parser_input);
+            // Parse the .verilog file
+            std::shared_ptr<netlist> parsed_nl = verilog_parser.parse(g_lib_name);
 
             if (parsed_nl == nullptr) {
                 std::cout << test_def::get_captured_stdout() << std::endl;
@@ -171,18 +202,18 @@ TEST_F(hdl_writer_vhdl_test, check_global_nets) {
             // Write and parse the netlist now
             test_def::capture_stdout();
             std::stringstream parser_input;
-            hdl_writer_vhdl vhdl_writer(parser_input);
+            hdl_writer_verilog verilog_writer(parser_input);
 
             // Writes the netlist in the sstream
-            bool writer_suc = vhdl_writer.write(nl);
+            bool writer_suc = verilog_writer.write(nl);
             if (!writer_suc) {
                 std::cout << test_def::get_captured_stdout() << std::endl;
             }
             ASSERT_TRUE(writer_suc);
 
-            hdl_parser_vhdl_old vhdl_parser(parser_input);
-            // Parse the .vhdl file
-            std::shared_ptr<netlist> parsed_nl = vhdl_parser.parse(g_lib_name);
+            hdl_parser_verilog verilog_parser(parser_input);
+            // Parse the .verilog file
+            std::shared_ptr<netlist> parsed_nl = verilog_parser.parse(g_lib_name);
 
             if (parsed_nl == nullptr) {
                 std::cout << test_def::get_captured_stdout() << std::endl;
@@ -200,7 +231,7 @@ TEST_F(hdl_writer_vhdl_test, check_global_nets) {
             EXPECT_TRUE(parsed_nl->is_global_output_net(p_global_out_1));
 
         }
-        {
+        /*{ // NOTE: Inout nets are not handled by the parser currently
             // Add 2 global inout nets to an empty netlist
             std::shared_ptr<netlist> nl = create_empty_netlist(0);
 
@@ -213,18 +244,18 @@ TEST_F(hdl_writer_vhdl_test, check_global_nets) {
             // Write and parse the netlist now
             test_def::capture_stdout();
             std::stringstream parser_input;
-            hdl_writer_vhdl vhdl_writer(parser_input);
+            hdl_writer_verilog verilog_writer(parser_input);
 
             // Writes the netlist in the sstream
-            bool writer_suc = vhdl_writer.write(nl);
+            bool writer_suc = verilog_writer.write(nl);
             if (!writer_suc) {
                 std::cout << test_def::get_captured_stdout() << std::endl;
             }
             ASSERT_TRUE(writer_suc);
 
-            hdl_parser_vhdl_old vhdl_parser(parser_input);
-            // Parse the .vhdl file
-            std::shared_ptr<netlist> parsed_nl = vhdl_parser.parse(g_lib_name);
+            hdl_parser_verilog verilog_parser(parser_input);
+            // Parse the .verilog file
+            std::shared_ptr<netlist> parsed_nl = verilog_parser.parse(g_lib_name);
 
             if (parsed_nl == nullptr) {
                 std::cout << test_def::get_captured_stdout() << std::endl;
@@ -241,21 +272,21 @@ TEST_F(hdl_writer_vhdl_test, check_global_nets) {
             ASSERT_NE(p_global_inout_1, nullptr);
             EXPECT_TRUE(parsed_nl->is_global_inout_net(p_global_inout_1));
 
-        }
+        }*/
     TEST_END
 }
 
 /**
  * Testing the storage of generic data within gates
  *
- * IMPORTANT: If an error occurs, first run the hdl_parser_vhdl_old test to check, that
+ * IMPORTANT: If an error occurs, first run the hdl_parser_verilog test to check, that
  * the issue isn't within the parser, but in the writer...
  *
  * Functions: write, parse
  */
-TEST_F(hdl_writer_vhdl_test, check_generic_data_storage) {
+TEST_F(hdl_writer_verilog_test, check_generic_data_storage) {
     TEST_START
-        { //NOTE: Need to assure that the nl is valid. by passing output nets
+        /*{ //NOTE: generic data isn't handled correctly in this version (parser issue)
             // Add a gate to the netlist and store some data
             std::shared_ptr<netlist> nl = create_empty_netlist(0);
 
@@ -314,20 +345,20 @@ TEST_F(hdl_writer_vhdl_test, check_generic_data_storage) {
             // Write and parse the netlist now
             test_def::capture_stdout();
             std::stringstream parser_input;
-            hdl_writer_vhdl vhdl_writer(parser_input);
+            hdl_writer_verilog verilog_writer(parser_input);
 
             // Writes the netlist in the sstream
-            bool writer_suc = vhdl_writer.write(nl);
+            bool writer_suc = verilog_writer.write(nl);
             if (!writer_suc) {
                 std::cout << test_def::get_captured_stdout() << std::endl;
             }
             ASSERT_TRUE(writer_suc);
 
             std::cout << parser_input.str() << std::endl;
-            hdl_parser_vhdl_old vhdl_parser(parser_input);
+            hdl_parser_verilog verilog_parser(parser_input);
 
-            // Parse the .vhdl file
-            std::shared_ptr<netlist> parsed_nl = vhdl_parser.parse(g_lib_name);
+            // Parse the .verilog file
+            std::shared_ptr<netlist> parsed_nl = verilog_parser.parse(g_lib_name);
 
             if (parsed_nl == nullptr) {
                 std::cout << test_def::get_captured_stdout() << std::endl;
@@ -338,7 +369,7 @@ TEST_F(hdl_writer_vhdl_test, check_generic_data_storage) {
             // Check if the data is written/parsed correctly
             std::shared_ptr<gate> p_test_gate_0 = get_gate_by_subname(parsed_nl, "test_gate_0");
             ASSERT_NE(p_test_gate_0, nullptr);
-            //EXPECT_EQ(p_test_gate_0->get_data(), test_gate_0->get_data()); //NOTE: generic, time can't be used
+            EXPECT_EQ(p_test_gate_0->get_data(), test_gate_0->get_data());
 
             std::shared_ptr<gate> p_test_gate_1 = get_gate_by_subname(parsed_nl, "test_gate_1");
             ASSERT_NE(p_test_gate_1, nullptr);
@@ -354,7 +385,7 @@ TEST_F(hdl_writer_vhdl_test, check_generic_data_storage) {
 
             std::shared_ptr<gate> p_test_gate_4 = get_gate_by_subname(parsed_nl, "test_gate_4");
             ASSERT_NE(p_test_gate_4, nullptr);
-            //EXPECT_EQ(p_test_gate_4->get_data(), test_gate_4->get_data()); //NOTE: generic, time can't be used
+            EXPECT_EQ(p_test_gate_4->get_data(), test_gate_4->get_data());
 
             std::shared_ptr<gate> p_test_gate_5 = get_gate_by_subname(parsed_nl, "test_gate_5");
             ASSERT_NE(p_test_gate_5, nullptr);
@@ -365,19 +396,19 @@ TEST_F(hdl_writer_vhdl_test, check_generic_data_storage) {
             std::shared_ptr<gate> p_test_gate_6 = get_gate_by_subname(parsed_nl, "test_gate_6");
             ASSERT_NE(p_test_gate_6, nullptr);
             EXPECT_EQ(p_test_gate_6->get_data(), test_gate_6->get_data());
-        }
+        }*/
     TEST_END
 }
 
 /**
  * Testing the handling of net names which contains only digits (i.e. 123 should become NET_123)
  *
- * IMPORTANT: If an error occurs, first run the hdl_parser_vhdl_old test to check, that
+ * IMPORTANT: If an error occurs, first run the hdl_parser_verilog test to check, that
  * the issue isn't within the parser, but in the writer...
  *
  * Functions: write, parse
  */
-TEST_F(hdl_writer_vhdl_test, check_digit_net_name) {
+TEST_F(hdl_writer_verilog_test, check_digit_net_name) {
     TEST_START
         {
             // Add a gate to the netlist and store some data
@@ -390,19 +421,19 @@ TEST_F(hdl_writer_vhdl_test, check_digit_net_name) {
             // Write and parse the netlist now
             test_def::capture_stdout();
             std::stringstream parser_input;
-            hdl_writer_vhdl vhdl_writer(parser_input);
+            hdl_writer_verilog verilog_writer(parser_input);
 
             // Writes the netlist in the sstream
-            bool writer_suc = vhdl_writer.write(nl);
+            bool writer_suc = verilog_writer.write(nl);
             if (!writer_suc) {
                 std::cout << test_def::get_captured_stdout() << std::endl;
             }
             ASSERT_TRUE(writer_suc);
 
-            hdl_parser_vhdl_old vhdl_parser(parser_input);
+            hdl_parser_verilog verilog_parser(parser_input);
 
-            // Parse the .vhdl file
-            std::shared_ptr<netlist> parsed_nl = vhdl_parser.parse(g_lib_name);
+            // Parse the .verilog file
+            std::shared_ptr<netlist> parsed_nl = verilog_parser.parse(g_lib_name);
 
             if (parsed_nl == nullptr) {
                 std::cout << test_def::get_captured_stdout() << std::endl;
@@ -419,151 +450,17 @@ TEST_F(hdl_writer_vhdl_test, check_digit_net_name) {
     TEST_END
 }
 
-
-/*
- *    ONE =---=
- *               AND2 =---
- *   ZERO =---=
- */
-/**
- * Testing the handling of vcc and gnd gates (ONE and ZERO)
- *
- * IMPORTANT: If an error occurs, first run the hdl_parser_vhdl_old test to check, that
- * the issue isn't within the parser, but in the writer...
- *
- * Functions: write, parse
- */
-TEST_F(hdl_writer_vhdl_test, check_vcc_and_gnd_gates) {
-    TEST_START
-        /*{ // NOTE: X_ONE, X_ZERO are no gate types in the example gate library...
-            // Two nets with individual names connect a test_gate with a gnd/vcc gate
-            std::shared_ptr<netlist> nl = create_empty_netlist(0);
-
-            // Add the gates
-            std::shared_ptr<gate> gnd_gate = nl->create_gate( MIN_GATE_ID+0, "ZERO", "gnd_gate");
-            std::shared_ptr<gate> vcc_gate = nl->create_gate( MIN_GATE_ID+1, "ONE", "vcc_gate");
-            std::shared_ptr<gate> test_gate = nl->create_gate( MIN_GATE_ID+2, "AND2", "test_gate");
-
-
-            // Add and connect the nets
-            std::shared_ptr<net> zero_net = nl->create_net(MIN_GATE_ID+0,"zero_net");
-            std::shared_ptr<net> one_net = nl->create_net(MIN_GATE_ID+1,"one_net");
-
-
-            zero_net->set_src(gnd_gate, "O");
-            zero_net->add_dst(test_gate, "I0");
-
-            one_net->set_src(vcc_gate, "O");
-            one_net->add_dst(test_gate, "I1");
-
-
-            // Write and parse the netlist now
-            test_def::capture_stdout();
-            std::stringstream parser_input;
-            hdl_writer_vhdl vhdl_writer(parser_input);
-
-            // Writes the netlist in the sstream
-            bool writer_suc = vhdl_writer.write(nl);
-            if (!writer_suc) {
-                std::cout << test_def::get_captured_stdout() << std::endl;
-            }
-            ASSERT_TRUE(writer_suc);
-
-            hdl_parser_vhdl_old vhdl_parser(parser_input);
-            // Parse the .vhdl file
-            std::shared_ptr<netlist> parsed_nl = vhdl_parser.parse(g_lib_name);
-
-            if (parsed_nl == nullptr) {
-                std::cout << test_def::get_captured_stdout() << std::endl;
-            }
-            ASSERT_NE(parsed_nl, nullptr);
-            test_def::get_captured_stdout();
-
-            // Check if the GND/VCC gates and nets are written/parsed correctly
-            std::shared_ptr<gate> p_vcc_gate = get_gate_by_name(parsed_nl,  "vcc_gate");
-            std::shared_ptr<gate> p_gnd_gate = get_gate_by_name(parsed_nl,  "gnd_gate");
-            std::shared_ptr<gate> p_test_gate = get_gate_by_subname(parsed_nl,  "test_gate");
-
-            ASSERT_NE(vcc_gate, nullptr);
-            ASSERT_NE(gnd_gate, nullptr);
-            ASSERT_NE(test_gate, nullptr);
-
-            ASSERT_EQ(parsed_nl->get_nets().size(), (size_t)2);
-            std::shared_ptr<net> p_zero_net = get_net_by_name(parsed_nl,  "zero_net");
-            std::shared_ptr<net> p_one_net = get_net_by_subname(parsed_nl,  "one_net");
-            ASSERT_NE(zero_net, nullptr);
-            ASSERT_NE(one_net, nullptr);
-
-            EXPECT_EQ(p_zero_net->get_src(), get_endpoint(p_gnd_gate, "O"));
-            EXPECT_EQ(p_one_net->get_src(), get_endpoint(p_vcc_gate, "O"));
-
-            EXPECT_TRUE(p_zero_net->is_a_dst(get_endpoint(p_test_gate, "I0")));
-            EXPECT_TRUE(p_one_net->is_a_dst(get_endpoint(p_test_gate, "I1")));
-
-
-        }
-        {
-            // Two nets ('0' and '1') connect a test_gate with a gnd/vcc gate. Here the gates are substituted
-            // by GLOBAL_GND/VCC gates
-            std::shared_ptr<netlist> nl = create_empty_netlist(0);
-
-            // Add the gates
-            std::shared_ptr<gate> gnd_gate = nl->create_gate( MIN_GATE_ID+0, "ZERO", "gnd_gate");
-            std::shared_ptr<gate> vcc_gate = nl->create_gate( MIN_GATE_ID+1, "ONE", "vcc_gate");
-            std::shared_ptr<gate> test_gate = nl->create_gate( MIN_GATE_ID+2, "AND2", "test_gate");
-
-
-            // Add and connect the nets
-            std::shared_ptr<net> zero_net = nl->create_net(MIN_NET_ID+0,"'0'");
-            std::shared_ptr<net> one_net = nl->create_net(MIN_NET_ID+1,"'1'");
-
-            zero_net->set_src(gnd_gate, "O");
-            zero_net->add_dst(test_gate, "I0");
-
-            one_net->set_src(vcc_gate, "O");
-            one_net->add_dst(test_gate, "I1");
-
-
-            // Write and parse the netlist now
-            test_def::capture_stdout();
-            std::stringstream parser_input;
-            hdl_writer_vhdl vhdl_writer(parser_input);
-
-            // Writes the netlist in the sstream
-            bool writer_suc = vhdl_writer.write(nl);
-            if (!writer_suc) {
-                std::cout << test_def::get_captured_stdout() << std::endl;
-            }
-            ASSERT_TRUE(writer_suc);
-
-            hdl_parser_vhdl_old vhdl_parser(parser_input);
-            // Parse the .vhdl file
-            std::shared_ptr<netlist> parsed_nl = vhdl_parser.parse(g_lib_name);
-
-            if (parsed_nl == nullptr) {
-                std::cout << test_def::get_captured_stdout() << std::endl;
-            }
-            ASSERT_NE(parsed_nl, nullptr);
-            test_def::get_captured_stdout();
-
-            // NOTE: Requirements?
-
-        }*/
-    TEST_END
-}
-
-
 /**
  * Testing the handling of net/gate names with special characters and their translation.
  * Special characters: '(', ')', ',', ', ', '/', '\', '[', ']', '<', '>', '__', '_'
  * Other special cases: only digits, '_' at the beginning or at the end
  *
- * IMPORTANT: If an error occurs, first run the hdl_parser_vhdl_old test to check, that
+ * IMPORTANT: If an error occurs, first run the hdl_parser_verilog test to check, that
  * the issue isn't within the parser, but in the writer...
  *
  * Functions: write, parse
  */
-TEST_F(hdl_writer_vhdl_test, check_special_net_names) {
+TEST_F(hdl_writer_verilog_test, check_special_net_names) {
     TEST_START
         {
             // Testing the handling of special net names
@@ -583,18 +480,18 @@ TEST_F(hdl_writer_vhdl_test, check_special_net_names) {
             // Write and parse the netlist now
             test_def::capture_stdout();
             std::stringstream parser_input;
-            hdl_writer_vhdl vhdl_writer(parser_input);
+            hdl_writer_verilog verilog_writer(parser_input);
 
             // Writes the netlist in the sstream
-            bool writer_suc = vhdl_writer.write(nl);
+            bool writer_suc = verilog_writer.write(nl);
             if (!writer_suc) {
                 std::cout << test_def::get_captured_stdout() << std::endl;
             }
             ASSERT_TRUE(writer_suc);
 
-            hdl_parser_vhdl_old vhdl_parser(parser_input);
-            // Parse the .vhdl file
-            std::shared_ptr<netlist> parsed_nl = vhdl_parser.parse(g_lib_name);
+            hdl_parser_verilog verilog_parser(parser_input);
+            // Parse the .verilog file
+            std::shared_ptr<netlist> parsed_nl = verilog_parser.parse(g_lib_name);
 
             if (parsed_nl == nullptr) {
                 std::cout << test_def::get_captured_stdout() << std::endl;
@@ -641,18 +538,19 @@ TEST_F(hdl_writer_vhdl_test, check_special_net_names) {
             // Write and parse the netlist now
             test_def::capture_stdout();
             std::stringstream parser_input;
-            hdl_writer_vhdl vhdl_writer(parser_input);
+            hdl_writer_verilog verilog_writer(parser_input);
+
 
             // Writes the netlist in the sstream
-            bool writer_suc = vhdl_writer.write(nl);
+            bool writer_suc = verilog_writer.write(nl);
             if (!writer_suc) {
                 std::cout << test_def::get_captured_stdout() << std::endl;
             }
             ASSERT_TRUE(writer_suc);
 
-            hdl_parser_vhdl_old vhdl_parser(parser_input);
-            // Parse the .vhdl file
-            std::shared_ptr<netlist> parsed_nl = vhdl_parser.parse(g_lib_name);
+            hdl_parser_verilog verilog_parser(parser_input);
+            // Parse the .verilog file
+            std::shared_ptr<netlist> parsed_nl = verilog_parser.parse(g_lib_name);
 
             if (parsed_nl == nullptr) {
                 std::cout << test_def::get_captured_stdout() << std::endl;
@@ -675,19 +573,21 @@ TEST_F(hdl_writer_vhdl_test, check_special_net_names) {
     TEST_END
 }
 
+
 /**
  * Testing the handling of collisions with gate and net names
  *
- * IMPORTANT: If an error occurs, first run the hdl_parser_vhdl_old test to check, that
+ * IMPORTANT: If an error occurs, first run the hdl_parser_verilog test to check, that
  * the issue isn't within the parser, but in the writer...
  *
  * Functions: write, parse
  */
-TEST_F(hdl_writer_vhdl_test, check_gate_net_name_collision) {
+TEST_F(hdl_writer_verilog_test, check_gate_net_name_collision) {
     TEST_START
         {
             // Testing the handling of two gates with the same name
             std::shared_ptr<netlist> nl = create_empty_netlist(0);
+            nl->set_design_name("design_name");
 
             std::shared_ptr<net> test_net = nl->create_net( MIN_NET_ID+0, "gate_net_name");
             std::shared_ptr<gate> test_gate = nl->create_gate( MIN_GATE_ID+0, "INV", "gate_net_name");
@@ -697,71 +597,19 @@ TEST_F(hdl_writer_vhdl_test, check_gate_net_name_collision) {
             // Write and parse the netlist now
             test_def::capture_stdout();
             std::stringstream parser_input;
-            hdl_writer_vhdl vhdl_writer(parser_input);
+            hdl_writer_verilog verilog_writer(parser_input);
 
             // Writes the netlist in the sstream
-            bool writer_suc = vhdl_writer.write(nl);
+            bool writer_suc = verilog_writer.write(nl);
             if (!writer_suc) {
                 std::cout << test_def::get_captured_stdout() << std::endl;
             }
             ASSERT_TRUE(writer_suc);
 
-            hdl_parser_vhdl_old vhdl_parser(parser_input);
+            hdl_parser_verilog verilog_parser(parser_input);
 
-            // Parse the .vhdl file
-            std::shared_ptr<netlist> parsed_nl = vhdl_parser.parse(g_lib_name);
-
-            if (parsed_nl == nullptr) {
-                std::cout << test_def::get_captured_stdout() << std::endl;
-            }
-            ASSERT_NE(parsed_nl, nullptr);
-            test_def::get_captured_stdout();
-
-            // Check if the gate name was added a "_inst"
-            EXPECT_NE(get_net_by_subname(parsed_nl, "gate_net_name"), nullptr);
-            //EXPECT_NE(get_gate_by_subname(parsed_nl, "gate_net_name_inst"), nullptr);
-
-        }
-    TEST_END
-}
-
-/**
- * Testing the translation of net names, that contain only digits
- *
- * IMPORTANT: If an error occurs, first run the hdl_parser_vhdl_old test to check, that
- * the issue isn't within the parser, but in the writer...
- *
- * Functions: write, parse
- */
- /*
-TEST_F(hdl_writer_vhdl_test, check_digit_net_name) {
-    TEST_START
-        {
-            // Add a gate to the netlist and store some data
-            std::shared_ptr<netlist> nl = create_empty_netlist(0);
-
-            std::shared_ptr<gate> test_gate = nl->create_gate( MIN_GATE_ID+0, "INV", "gate_net_name");
-            std::shared_ptr<net> test_net_0 = nl->create_net( MIN_NET_ID+0, "0");
-            std::shared_ptr<net> test_net_1 = nl->create_net( MIN_NET_ID+1, "1");
-
-            test_net_0->add_dst(test_gate, "I");
-            test_net_1->set_src(test_gate, "O");
-
-            // Write and parse the netlist now
-            test_def::capture_stdout();
-            std::stringstream parser_input;
-            hdl_writer_vhdl vhdl_writer(parser_input);
-
-            // Writes the netlist in the sstream
-            bool writer_suc = vhdl_writer.write(nl);
-            if (!writer_suc) {
-                std::cout << test_def::get_captured_stdout() << std::endl;
-            }
-            ASSERT_TRUE(writer_suc);
-
-            hdl_parser_vhdl_old vhdl_parser(parser_input);
-            // Parse the .vhdl file
-            std::shared_ptr<netlist> parsed_nl = vhdl_parser.parse(g_lib_name);
+            // Parse the .verilog file
+            std::shared_ptr<netlist> parsed_nl = verilog_parser.parse(g_lib_name);
 
             if (parsed_nl == nullptr) {
                 std::cout << test_def::get_captured_stdout() << std::endl;
@@ -773,8 +621,261 @@ TEST_F(hdl_writer_vhdl_test, check_digit_net_name) {
             EXPECT_NE(get_net_by_subname(parsed_nl, "gate_net_name"), nullptr);
             EXPECT_NE(get_gate_by_subname(parsed_nl, "gate_net_name_inst"), nullptr);
 
+            std::cout << "\n============\n" << parser_input.str() << "\n============\n";
+
         }
     TEST_END
-}*/
+}
 
-#endif //DONT_USE_ME
+/**
+ * Testing translation of '0' and '1' net names in the verilog standard (1'b0 and 1'b1).
+ *
+ * IMPORTANT: If an error occurs, first run the hdl_parser_verilog test to check, that
+ * the issue isn't within the parser, but in the writer...
+ *
+ * Functions: write, parse
+ */
+TEST_F(hdl_writer_verilog_test, check_constant_nets) {
+    TEST_START
+        {
+            // Testing the net name translation of a '0' net
+            std::shared_ptr<netlist> nl = create_empty_netlist(0);
+
+            std::shared_ptr<gate> gnd_gate = nl->create_gate(MIN_GATE_ID+0, "GND", "gnd_gate");
+            std::shared_ptr<net> global_out = nl->create_net(MIN_NET_ID+0, "global_out");
+            nl->mark_global_output_net(global_out);
+            std::shared_ptr<gate> test_gate = nl->create_gate( MIN_GATE_ID+1, "INV", "test_gate");
+            global_out->set_src(test_gate, "O");
+
+            std::shared_ptr<net> gnd_net = nl->create_net(MIN_NET_ID+1, "'0'");
+            gnd_net->set_src(gnd_gate, "O");
+            gnd_net->add_dst(test_gate, "I");
+
+            // Write and parse the netlist now
+            test_def::capture_stdout();
+            std::stringstream parser_input;
+            hdl_writer_verilog verilog_writer(parser_input);
+
+            // Writes the netlist in the sstream
+            bool writer_suc = verilog_writer.write(nl);
+            if (!writer_suc) {
+                std::cout << test_def::get_captured_stdout() << std::endl;
+            }
+            ASSERT_TRUE(writer_suc);
+
+            hdl_parser_verilog verilog_parser(parser_input);
+
+            // Parse the .verilog file
+            std::shared_ptr<netlist> parsed_nl = verilog_parser.parse(g_lib_name);
+
+            if (parsed_nl == nullptr) {
+                std::cout << test_def::get_captured_stdout() << std::endl;
+            }
+            ASSERT_NE(parsed_nl, nullptr);
+            test_def::get_captured_stdout();
+
+            // Check if a net name is correctly translated
+            ASSERT_EQ(parsed_nl->get_nets("1'b0").size(), 1);
+            std::shared_ptr<net> gnd_net_translated = *parsed_nl->get_nets("1'b0").begin();
+            ASSERT_NE(gnd_net_translated->get_src().get_gate(), nullptr);
+            EXPECT_EQ(gnd_net_translated->get_src().get_gate()->get_type(), "GND");
+            ASSERT_EQ(gnd_net_translated->get_dsts().size(), 1);
+            EXPECT_EQ((*gnd_net_translated->get_dsts().begin()).get_gate()->get_name(), "test_gate" + GATE_SUFFIX);
+        }
+        {
+            // Testing the net name translation of a '0' net
+            std::shared_ptr<netlist> nl = create_empty_netlist(0);
+
+            std::shared_ptr<gate> vcc_gate = nl->create_gate(MIN_GATE_ID+0, "VCC", "vcc_gate");
+            std::shared_ptr<net> global_out = nl->create_net(MIN_NET_ID+0, "global_out");
+            nl->mark_global_output_net(global_out);
+            std::shared_ptr<gate> test_gate = nl->create_gate( MIN_GATE_ID+1, "INV", "test_gate");
+            global_out->set_src(test_gate, "O");
+
+            std::shared_ptr<net> vcc_net = nl->create_net(MIN_NET_ID+1, "'1'");
+            vcc_net->set_src(vcc_gate, "O");
+            vcc_net->add_dst(test_gate, "I");
+
+            // Write and parse the netlist now
+            test_def::capture_stdout();
+            std::stringstream parser_input;
+            hdl_writer_verilog verilog_writer(parser_input);
+
+            // Writes the netlist in the sstream
+            bool writer_suc = verilog_writer.write(nl);
+            if (!writer_suc) {
+                std::cout << test_def::get_captured_stdout() << std::endl;
+            }
+            ASSERT_TRUE(writer_suc);
+
+            hdl_parser_verilog verilog_parser(parser_input);
+
+            // Parse the .verilog file
+            std::shared_ptr<netlist> parsed_nl = verilog_parser.parse(g_lib_name);
+
+            if (parsed_nl == nullptr) {
+                std::cout << test_def::get_captured_stdout() << std::endl;
+            }
+            ASSERT_NE(parsed_nl, nullptr);
+            test_def::get_captured_stdout();
+
+            // Check if a net name is correctly translated
+            ASSERT_EQ(parsed_nl->get_nets("1'b1").size(), 1);
+            std::shared_ptr<net> vcc_net_translated = *parsed_nl->get_nets("1'b1").begin();
+            ASSERT_NE(vcc_net_translated->get_src().get_gate(), nullptr);
+            EXPECT_EQ(vcc_net_translated->get_src().get_gate()->get_type(), "VCC");
+            ASSERT_EQ(vcc_net_translated->get_dsts().size(), 1);
+            EXPECT_EQ((*vcc_net_translated->get_dsts().begin()).get_gate()->get_name(), "test_gate" + GATE_SUFFIX);
+        }
+    TEST_END
+}
+
+/**
+ * Testing the correct handling of pin vectors (e.g. I(0), I(1), I(2), I(3)).
+ *
+ * IMPORTANT: If an error occurs, first run the hdl_parser_verilog test to check, that
+ * the issue isn't within the parser, but in the writer...
+ *
+ * Functions: write, parse
+ */
+TEST_F(hdl_writer_verilog_test, check_pin_vector) {
+    TEST_START
+        {
+            /*                      .-------------------.
+             *    test_gnd_net ----=|I(0)               |
+             *    test_vcc_net ----=|I(1)  test_gate   O|=---- global_out
+             *    test_gnd_net ----=|I(2)               |
+             *    test_vcc_net ----=|I(3)               |
+             *                      '-------------------'
+             */
+            /*
+             * ISSUE: reversed order of input nets (parser or writer issue?)
+             * create_temp_gate_lib();
+            // Testing the usage of a pin vector using the temp gate library
+            std::shared_ptr<gate_library> gl = gate_library_manager::get_gate_library(temp_lib_name);
+            std::shared_ptr<netlist> nl(new netlist(gl));
+
+            std::shared_ptr<gate> gnd_gate = nl->create_gate(MIN_GATE_ID + 0, "GND", "gnd_gate");
+            std::shared_ptr<gate> vcc_gate = nl->create_gate(MIN_GATE_ID + 1, "VCC", "vcc_gate");
+            std::shared_ptr<net> global_out = nl->create_net(MIN_NET_ID + 0, "global_out");
+            nl->mark_global_output_net(global_out);
+            std::shared_ptr<gate> test_gate = nl->create_gate(MIN_GATE_ID + 2, "GATE_4^1_IN_1^0_OUT", "test_gate");
+            global_out->set_src(test_gate, "O");
+
+            std::shared_ptr<net> gnd_net = nl->create_net(MIN_NET_ID + 2, "test_gnd_net");
+            std::shared_ptr<net> vcc_net = nl->create_net(MIN_NET_ID + 3, "test_vcc_net");
+
+            gnd_net->set_src(gnd_gate, "O");
+            vcc_net->set_src(vcc_gate, "O");
+
+            gnd_net->add_dst(test_gate, "I(0)");
+            vcc_net->add_dst(test_gate, "I(1)");
+            gnd_net->add_dst(test_gate, "I(2)");
+            vcc_net->add_dst(test_gate, "I(3)");
+
+            // Write and parse the netlist now
+            test_def::capture_stdout();
+            std::stringstream parser_input;
+            hdl_writer_verilog verilog_writer(parser_input);
+
+            // Writes the netlist in the sstream
+            bool writer_suc = verilog_writer.write(nl);
+            if (!writer_suc) {
+                std::cout << test_def::get_captured_stdout() << std::endl;
+            }
+            ASSERT_TRUE(writer_suc);
+
+            hdl_parser_verilog verilog_parser(parser_input);
+
+            // Parse the .verilog file
+            std::shared_ptr<netlist> parsed_nl = verilog_parser.parse(temp_lib_name);
+
+            if (parsed_nl == nullptr) {
+                std::cout << test_def::get_captured_stdout() << std::endl;
+            }
+            ASSERT_NE(parsed_nl, nullptr);
+            test_def::get_captured_stdout();
+
+            ASSERT_EQ(parsed_nl->get_nets("test_gnd_net").size(), 1);
+            ASSERT_EQ(parsed_nl->get_nets("test_vcc_net").size(), 1);
+            std::shared_ptr<net> test_gnd_net_ref = *parsed_nl->get_nets("test_gnd_net").begin();
+            std::shared_ptr<net> test_vcc_net_ref = *parsed_nl->get_nets("test_vcc_net").begin();
+
+            ASSERT_EQ(parsed_nl->get_gates("GATE_4^1_IN_1^0_OUT").size(), 1);
+            std::shared_ptr<gate> test_gate_ref = *parsed_nl->get_gates("GATE_4^1_IN_1^0_OUT").begin();
+            EXPECT_EQ(test_gate_ref->get_fan_in_net("I(0)"), test_gnd_net_ref);
+            EXPECT_EQ(test_gate_ref->get_fan_in_net("I(1)"), test_vcc_net_ref);
+            EXPECT_EQ(test_gate_ref->get_fan_in_net("I(2)"), test_gnd_net_ref);
+            EXPECT_EQ(test_gate_ref->get_fan_in_net("I(3)"), test_vcc_net_ref);
+             */
+        }
+    TEST_END
+}
+
+/**
+ * Testing the correct handling of the simprim exclusive X_ZERO and X_ONE gates, as well as the usage of GLOBAL_GND
+ * and GLOBAL_VCC gates.
+ *
+ * IMPORTANT: If an error occurs, first run the hdl_parser_verilog test to check, that
+ * the issue isn't within the parser, but in the writer...
+ *
+ * Functions: write, parse
+ */
+TEST_F(hdl_writer_verilog_test, check_simprim_exclusive_behaviour) {
+    TEST_START
+        create_pseudo_simprim_gate_lib();
+        { // ISSUE: net definition: "wire net_zero_gate_0 = 1'h0" is created, but can't be interpreted by the parser (stoi failure) (parser or writer issue?)
+            // NOTE: GLOBAL_GND / GLOBAL_VCC gates are removed. Why?
+/*
+            // Testing the usage of nets connected to a X_ZERO gate
+            std::shared_ptr<gate_library> gl = gate_library_manager::get_gate_library(pseudo_simprim_lib_name);
+            std::shared_ptr<netlist> nl(new netlist(gl));
+
+            std::shared_ptr<gate> x_zero_gate_0 = nl->create_gate("X_ZERO", "x_zero_gate_0");
+            std::shared_ptr<gate> x_zero_gate_1 = nl->create_gate("X_ZERO", "x_zero_gate_1");
+            std::shared_ptr<gate> test_gate = nl->create_gate("X_AND4", "test_gate");
+
+            std::shared_ptr<net> global_out_net = nl->create_net("global_out");
+            global_out_net->set_src(test_gate, "O");
+            nl->mark_global_output_net(global_out_net);
+
+            std::shared_ptr<net> x_zero_net_0 = nl->create_net("x_zero_net_0");
+            std::shared_ptr<net> x_zero_net_1 = nl->create_net("x_zero_net_1");
+
+            x_zero_net_0->set_src(x_zero_gate_0, "O");
+            x_zero_net_1->set_src(x_zero_gate_1, "O");
+
+            x_zero_net_0->add_dst(test_gate, "I0");
+            x_zero_net_1->add_dst(test_gate, "I1");
+
+            // Write and parse the netlist now
+            //test_def::capture_stdout();
+            std::stringstream parser_input;
+            hdl_writer_verilog verilog_writer(parser_input);
+
+
+
+            // Writes the netlist in the sstream
+            bool writer_suc = verilog_writer.write(nl);
+            if (!writer_suc) {
+                //std::cout << test_def::get_captured_stdout() << std::endl;
+            }
+            ASSERT_TRUE(writer_suc);
+
+            hdl_parser_verilog verilog_parser(parser_input);
+
+            // Parse the .verilog file
+            std::shared_ptr<netlist> parsed_nl = verilog_parser.parse(pseudo_simprim_lib_name);
+
+            if (parsed_nl == nullptr) {
+                //std::cout << test_def::get_captured_stdout() << std::endl;
+            }
+            ASSERT_NE(parsed_nl, nullptr);
+            //test_def::get_captured_stdout();
+
+*/
+        }
+    TEST_END
+}
+
+#endif // DONT_USE_ME

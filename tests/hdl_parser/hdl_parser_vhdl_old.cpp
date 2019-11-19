@@ -1,119 +1,29 @@
+#include "netlist_test_utils.h"
 #include "netlist/gate.h"
 #include "netlist/gate_library/gate_library_manager.h"
 #include "netlist/netlist.h"
 #include "netlist/netlist_factory.h"
 #include "netlist/persistent/netlist_serializer.h"
-#include "test_def.h"
 #include "gtest/gtest.h"
-#include <core/log.h>
-#include "hdl_parser/hdl_parser_vhdl_old.h"
+//#include "hdl_parser/hdl_parser_vhdl_old.h"
 #include <iostream>
 #include <sstream>
 #include <boost/filesystem.hpp>
 
+#ifdef DONT_USE_ME
+using namespace test_utils;
+
 class hdl_parser_vhdl_old_test : public ::testing::Test
 {
 protected:
-    const std::string g_lib_name = "EXAMPLE_GATE_LIBRARY";
-    const std::string temp_lib_name = "TEMP_GATE_LIBRARY";
-    // Path used, to create a custom gate library (used to test certain behaviour of input and output vectors)
-    hal::path temp_lib_path;
-
     virtual void SetUp()
     {
         NO_COUT_BLOCK;
-        temp_lib_path = core_utils::get_gate_library_directories()[0] / "temp_lib.json";
         gate_library_manager::load_all();
     }
 
     virtual void TearDown()
     {
-        boost::filesystem::remove(temp_lib_path);
-    }
-
-    // unused
-    // creates a subset with the elements which fulfill a certain condition
-    template<typename T>
-    std::set<T> create_sub_set(std::set<T> p_set, const std::function<bool(T)>& condition)
-    {
-        std::set<T> res_set;
-        for (auto el : p_set)
-        {
-            if (condition(el))
-            {
-                res_set.insert(el);
-            }
-        }
-        return res_set;
-    }
-
-    // Create and load temporarily a custom gate library, which contains gates with input and output vectors up to dimension 3
-    void create_temp_gate_lib()
-    {
-        NO_COUT_BLOCK;
-        std::ofstream test_lib(temp_lib_path.string());
-        test_lib << "{\n"
-                    "    \"library\": {\n"
-                    "        \"library_name\": \"TEMP_GATE_LIBRARY\",\n"
-                    "        \"elements\": {\n"
-                    "\t    \"GATE0\" : [[\"I\"], [], [\"O\"]],\n"
-                    "            \"GATE1\" : [[\"I(0)\",\"I(1)\",\"I(2)\",\"I(3)\",\"I(4)\"], [], [\"O(0)\",\"O(1)\",\"O(2)\",\"O(3)\", \"O(4)\"]],\n"
-                    "            \"GATE2\" : [[\"I(0, 0)\",\"I(0, 1)\",\"I(1, 0)\",\"I(1, 1)\"], [], [\"O(0, 0)\",\"O(0, 1)\",\"O(1, 0)\",\"O(1, 1)\"]],\n"
-                    "            \"GATE3\" : [[\"I(0, 0, 0)\",\"I(0, 0, 1)\",\"I(0, 1, 0)\",\"I(0, 1, 1)\",\"I(1, 0, 0)\",\"I(1, 0, 1)\",\"I(1, 1, 0)\",\"I(1, 1, 1)\"], [], [\"O(0, 0, 0)\",\"O(0, 0, 1)\",\"O(0, 1, 0)\",\"O(0, 1, 1)\",\"O(1, 0, 0)\",\"O(1, 0, 1)\",\"O(1, 1, 0)\",\"O(1, 1, 1)\"]],\n"
-                    "\n"
-                    "            \"GND\" : [[], [], [\"O\"]],\n"
-                    "            \"VCC\" : [[], [], [\"O\"]]\n"
-                    "        },\n"
-                    "        \"vhdl_includes\": [],\n"
-                    "        \"gnd_nodes\": [\"GND\"],\n"
-                    "        \"vcc_nodes\": [\"VCC\"]\n"
-                    "    }\n"
-                    "}";
-        test_lib.close();
-
-        gate_library_manager::load_all();
-    }
-
-    // Creates an endpoint from a gate and a pin_type
-    endpoint get_endpoint(std::shared_ptr<gate> g, std::string pin_type)
-    {
-        endpoint ep;
-        ep.gate     = g;
-        ep.pin_type = pin_type;
-        return ep;
-    }
-
-    // Checks if two vectors have the same content regardless of their order
-    template<typename T>
-    bool vectors_have_same_content(std::vector<T> vec_1, std::vector<T> vec_2)
-    {
-        if (vec_1.size() != vec_2.size())
-        {
-            return false;
-        }
-
-        // Each element of vec_1 must be found in vec_2
-        while (vec_1.size() > 0)
-        {
-            auto it_1       = vec_1.begin();
-            bool found_elem = false;
-            for (auto it_2 = vec_2.begin(); it_2 != vec_2.end(); it_2++)
-            {
-                if (*it_1 == *it_2)
-                {
-                    found_elem = true;
-                    vec_2.erase(it_2);
-                    break;
-                }
-            }
-            if (!found_elem)
-            {
-                return false;
-            }
-            vec_1.erase(it_1);
-        }
-
-        return true;
     }
 };
 
@@ -280,6 +190,7 @@ TEST_START
                                    "      I => net_global_inout\n"
                                    "    );\n"
                                        "end STRUCTURE;");
+        std::cout<<"\n=====\n"<< input.str() << "\n=====\n";           // remove me
         test_def::capture_stdout();
         hdl_parser_vhdl_old vhdl_parser(input);
         std::shared_ptr<netlist> nl = vhdl_parser.parse(g_lib_name);
@@ -589,8 +500,8 @@ TEST_F(hdl_parser_vhdl_old_test, check_global_gates_implicit){
 
         ASSERT_NE(nl, nullptr);
 
-        ASSERT_NE(nl->get_gnd_gates().size(), 0);
-        std::shared_ptr<gate> global_gnd = *nl->get_gnd_gates().begin();
+        ASSERT_NE(nl->get_global_gnd_gates().size(), 0);
+        std::shared_ptr<gate> global_gnd = *nl->get_global_gnd_gates().begin();
 
         ASSERT_NE(nl->get_gates("INV").size(), 0);
         std::shared_ptr<gate> g = *nl->get_gates("INV").begin();
@@ -628,8 +539,8 @@ TEST_F(hdl_parser_vhdl_old_test, check_global_gates_implicit){
 
         ASSERT_NE(nl, nullptr);
 
-        ASSERT_NE(nl->get_vcc_gates().size(), 0);
-        std::shared_ptr<gate> global_vcc = *nl->get_vcc_gates().begin();
+        ASSERT_NE(nl->get_global_vcc_gates().size(), 0);
+        std::shared_ptr<gate> global_vcc = *nl->get_global_vcc_gates().begin();
 
         ASSERT_NE(nl->get_gates("INV").size(), 0);
         std::shared_ptr<gate> g = *nl->get_gates("INV").begin();
@@ -677,8 +588,8 @@ TEST_F(hdl_parser_vhdl_old_test, check_global_gates_explicit){
 
             ASSERT_NE(nl, nullptr);
 
-            ASSERT_NE(nl->get_gnd_gates().size(), 0);
-            std::shared_ptr<gate> global_gnd = *nl->get_gnd_gates().begin();
+            ASSERT_NE(nl->get_global_gnd_gates().size(), 0);
+            std::shared_ptr<gate> global_gnd = *nl->get_global_gnd_gates().begin();
             EXPECT_EQ(global_gnd->get_name(), "g_gnd_gate");
     }
     {
@@ -710,8 +621,8 @@ TEST_F(hdl_parser_vhdl_old_test, check_global_gates_explicit){
 
         ASSERT_NE(nl, nullptr);
 
-        ASSERT_NE(nl->get_vcc_gates().size(), 0);
-        std::shared_ptr<gate> global_vcc = *nl->get_vcc_gates().begin();
+        ASSERT_NE(nl->get_global_vcc_gates().size(), 0);
+        std::shared_ptr<gate> global_vcc = *nl->get_global_vcc_gates().begin();
         EXPECT_EQ(global_vcc->get_name(), "g_vcc_gate");
     }
 TEST_END
@@ -1121,7 +1032,7 @@ TEST_F(hdl_parser_vhdl_old_test, check_port_assignment) {
                                     "  signal net_0 : STD_LOGIC;\n"
                                     "  signal net_1 : STD_LOGIC;\n"
                                     "begin\n"
-                                    "  gate_0 : GATE1\n"
+                                    "  gate_0 : GATE_4^1_IN_4^1_OUT\n"
                                     "    port map (\n"
                                     "      O(0) => net_0,\n"
                                     "      O(1) => net_1\n"
@@ -1140,8 +1051,8 @@ TEST_F(hdl_parser_vhdl_old_test, check_port_assignment) {
             }
 
             ASSERT_NE(nl, nullptr);
-            ASSERT_FALSE(nl->get_gates("GATE1", "gate_0").empty());
-            std::shared_ptr<gate> gate_0 = *(nl->get_gates("GATE1" ,"gate_0").begin());
+            ASSERT_FALSE(nl->get_gates("GATE_4^1_IN_4^1_OUT", "gate_0").empty());
+            std::shared_ptr<gate> gate_0 = *(nl->get_gates("GATE_4^1_IN_4^1_OUT" ,"gate_0").begin());
 
             std::shared_ptr<net> net_0 = gate_0->get_fan_out_net("O(0)");
             ASSERT_NE(net_0, nullptr);
@@ -1161,7 +1072,7 @@ TEST_F(hdl_parser_vhdl_old_test, check_port_assignment) {
                                     "architecture STRUCTURE of TEST_Comp is\n"
                                     "  signal net_0 : STD_LOGIC;\n"
                                     "begin\n"
-                                    "  gate_0 : GATE2\n"
+                                    "  gate_0 : GATE_2^2_IN_2^2_OUT\n"
                                     "    port map (\n"
                                     "      I(0, 1) => net_0\n" // <- connect I(0,1) to net_0
                                     "    );\n"
@@ -1176,8 +1087,8 @@ TEST_F(hdl_parser_vhdl_old_test, check_port_assignment) {
             }
 
             ASSERT_NE(nl, nullptr);
-            ASSERT_FALSE(nl->get_gates("GATE2", "gate_0").empty());
-            std::shared_ptr<gate> gate_0 = *(nl->get_gates("GATE2", "gate_0").begin());
+            ASSERT_FALSE(nl->get_gates("GATE_2^2_IN_2^2_OUT", "gate_0").empty());
+            std::shared_ptr<gate> gate_0 = *(nl->get_gates("GATE_2^2_IN_2^2_OUT", "gate_0").begin());
 
             std::shared_ptr<net> net_i_0 = gate_0->get_fan_in_net("I(0, 1)");
             ASSERT_NE(net_i_0, nullptr);
@@ -1192,7 +1103,7 @@ TEST_F(hdl_parser_vhdl_old_test, check_port_assignment) {
                                     "end TEST_Comp;\n"
                                     "architecture STRUCTURE of TEST_Comp is\n"
                                     "begin\n"
-                                    "  gate_0 : GATE1\n"
+                                    "  gate_0 : GATE_4^1_IN_4^1_OUT\n"
                                     "    port map (\n"
                                     "      I(1 to 3) => B\"101\"\n"
                                     "    );\n"
@@ -1210,8 +1121,8 @@ TEST_F(hdl_parser_vhdl_old_test, check_port_assignment) {
             }
 
             ASSERT_NE(nl, nullptr);
-            ASSERT_FALSE(nl->get_gates("GATE1", "gate_0").empty());
-            std::shared_ptr<gate> gate_0 = *(nl->get_gates("GATE1" ,"gate_0").begin());
+            ASSERT_FALSE(nl->get_gates("GATE_4^1_IN_4^1_OUT", "gate_0").empty());
+            std::shared_ptr<gate> gate_0 = *(nl->get_gates("GATE_4^1_IN_4^1_OUT" ,"gate_0").begin());
 
             EXPECT_EQ(gate_0->get_fan_in_nets().size(), 2);
 
@@ -1237,7 +1148,7 @@ TEST_F(hdl_parser_vhdl_old_test, check_port_assignment) {
                                     "architecture STRUCTURE of TEST_Comp is\n"
                                     "  signal l_vec : STD_LOGIC_VECTOR ( 0 to 3 );\n"
                                     "begin\n"
-                                    "  gate_0 : GATE1\n"
+                                    "  gate_0 : GATE_4^1_IN_4^1_OUT\n"
                                     "    port map (\n"
                                     "      O(1 to 3) => l_vec(0 to 2)\n"
                                     "    );\n"
@@ -1255,8 +1166,8 @@ TEST_F(hdl_parser_vhdl_old_test, check_port_assignment) {
             }
 
             ASSERT_NE(nl, nullptr);
-            ASSERT_FALSE(nl->get_gates("GATE1", "gate_0").empty());
-            std::shared_ptr<gate> gate_0 = *(nl->get_gates("GATE1" ,"gate_0").begin());
+            ASSERT_FALSE(nl->get_gates("GATE_4^1_IN_4^1_OUT", "gate_0").empty());
+            std::shared_ptr<gate> gate_0 = *(nl->get_gates("GATE_4^1_IN_4^1_OUT" ,"gate_0").begin());
 
             EXPECT_EQ(gate_0->get_fan_out_nets().size(), 3);
 
@@ -1282,7 +1193,7 @@ TEST_F(hdl_parser_vhdl_old_test, check_port_assignment) {
                                     "architecture STRUCTURE of TEST_Comp is\n"
                                     "  signal l_vec : STD_LOGIC_VECTOR ( 0 to 3 );\n"
                                     "begin\n"
-                                    "  gate_0 : GATE1\n"
+                                    "  gate_0 : GATE_4^1_IN_4^1_OUT\n"
                                     "    port map (\n"
                                     "      O(3 downto 2) => l_vec(2 downto 1)\n"
                                     "    );\n"
@@ -1300,8 +1211,8 @@ TEST_F(hdl_parser_vhdl_old_test, check_port_assignment) {
             }
 
             ASSERT_NE(nl, nullptr);
-            ASSERT_FALSE(nl->get_gates("GATE1", "gate_0").empty());
-            std::shared_ptr<gate> gate_0 = *(nl->get_gates("GATE1" ,"gate_0").begin());
+            ASSERT_FALSE(nl->get_gates("GATE_4^1_IN_4^1_OUT", "gate_0").empty());
+            std::shared_ptr<gate> gate_0 = *(nl->get_gates("GATE_4^1_IN_4^1_OUT" ,"gate_0").begin());
 
             EXPECT_EQ(gate_0->get_fan_out_nets().size(), 2);
 
@@ -1323,7 +1234,7 @@ TEST_F(hdl_parser_vhdl_old_test, check_port_assignment) {
                                     "architecture STRUCTURE of TEST_Comp is\n"
                                     "  signal l_vec : STD_LOGIC_VECTOR ( 0 to 3 );\n"
                                     "begin\n"
-                                    "  gate_0 : GATE1\n"
+                                    "  gate_0 : GATE_4^1_IN_4^1_OUT\n"
                                     "    port map (\n"
                                     "      O(2 to 3) => l_vec(2 downto 1)\n"
                                     "    );\n"
@@ -1341,8 +1252,8 @@ TEST_F(hdl_parser_vhdl_old_test, check_port_assignment) {
             }
 
             ASSERT_NE(nl, nullptr);
-            ASSERT_FALSE(nl->get_gates("GATE1", "gate_0").empty());
-            std::shared_ptr<gate> gate_0 = *(nl->get_gates("GATE1" ,"gate_0").begin());
+            ASSERT_FALSE(nl->get_gates("GATE_4^1_IN_4^1_OUT", "gate_0").empty());
+            std::shared_ptr<gate> gate_0 = *(nl->get_gates("GATE_4^1_IN_4^1_OUT" ,"gate_0").begin());
 
             EXPECT_EQ(gate_0->get_fan_out_nets().size(), 2);
 
@@ -1365,7 +1276,7 @@ TEST_F(hdl_parser_vhdl_old_test, check_port_assignment) {
                                     "architecture STRUCTURE of TEST_Comp is\n"
                                     "  signal l_vec : STD_LOGIC_VECTOR ( 0 to 3 );\n"
                                     "begin\n"
-                                    "  gate_0 : GATE1\n"
+                                    "  gate_0 : GATE_4^1_IN_4^1_OUT\n"
                                     "    port map (\n"
                                     "      O(0 to 2) => l_vec(0 to 3)\n"
                                     "    );\n"
@@ -1383,8 +1294,8 @@ TEST_F(hdl_parser_vhdl_old_test, check_port_assignment) {
             }
 
             ASSERT_NE(nl, nullptr);
-            ASSERT_FALSE(nl->get_gates("GATE1", "gate_0").empty());
-            std::shared_ptr<gate> gate_0 = *(nl->get_gates("GATE1" ,"gate_0").begin());
+            ASSERT_FALSE(nl->get_gates("GATE_4^1_IN_4^1_OUT", "gate_0").empty());
+            std::shared_ptr<gate> gate_0 = *(nl->get_gates("GATE_4^1_IN_4^1_OUT" ,"gate_0").begin());
 
             EXPECT_EQ(gate_0->get_fan_out_nets().size(), 0);
         }
@@ -1397,7 +1308,7 @@ TEST_F(hdl_parser_vhdl_old_test, check_port_assignment) {
                                     "end TEST_Comp;\n"
                                     "architecture STRUCTURE of TEST_Comp is\n"
                                     "begin\n"
-                                    "  gate_0 : GATE1\n"
+                                    "  gate_0 : GATE_4^1_IN_4^1_OUT\n"
                                     "    port map (\n"
                                     "      I(1 to 3) => Unkn0wn_Format\n" // <- unknown format
                                     "    );\n"
@@ -1415,12 +1326,13 @@ TEST_F(hdl_parser_vhdl_old_test, check_port_assignment) {
             }
 
             ASSERT_NE(nl, nullptr);
-            ASSERT_FALSE(nl->get_gates("GATE1", "gate_0").empty());
-            std::shared_ptr<gate> gate_0 = *(nl->get_gates("GATE1" ,"gate_0").begin());
+            ASSERT_FALSE(nl->get_gates("GATE_4^1_IN_4^1_OUT", "gate_0").empty());
+            std::shared_ptr<gate> gate_0 = *(nl->get_gates("GATE_4^1_IN_4^1_OUT" ,"gate_0").begin());
 
             EXPECT_EQ(gate_0->get_fan_in_nets().size(), 0);
 
         }
+        remove_temp_gate_lib();
     TEST_END
 }
 
@@ -1564,7 +1476,7 @@ TEST_F(hdl_parser_vhdl_old_test, check_invalid_input)
         }*/
         { //NOTE: Fails because of mistype issue line 108: (inout_pin_type.end() <-> input_pin_type.end())
             // Try to connect to a pin, which does not exist
-            //NO_COUT_TEST_BLOCK;
+            NO_COUT_TEST_BLOCK;
             std::stringstream input("-- Device\t: device_name\n"
                                     "entity TEST_Comp is\n"
                                     "  port (\n"
@@ -1590,3 +1502,4 @@ TEST_F(hdl_parser_vhdl_old_test, check_invalid_input)
 }
 
 
+#endif // DONT_USE_ME
