@@ -1,15 +1,13 @@
 #include "hdl_parser/hdl_parser_verilog.h"
 
 #include "core/log.h"
+#include "core/utils.h"
 
 #include "netlist/gate.h"
 #include "netlist/net.h"
 #include "netlist/netlist.h"
 
 #include "netlist/netlist_factory.h"
-
-#include <iomanip>
-#include <iostream>
 
 #include <queue>
 
@@ -334,7 +332,6 @@ bool hdl_parser_verilog::parse_port_definition(entity& e)
 
         if (e.expanded_signal_names.find(expanded_port.first) == e.expanded_signal_names.end())
         {
-            // TODO clean this up: remove from signals and add to ports when found in signals
             e.ports_expanded[expanded_port.first] = std::make_pair(direction.string, expanded_port.second);
             e.expanded_signal_names[expanded_port.first].insert(e.expanded_signal_names[expanded_port.first].end(), expanded_port.second.begin(), expanded_port.second.end());
         }
@@ -354,7 +351,6 @@ bool hdl_parser_verilog::parse_signal_definition(entity& e)
     {
         if (e.expanded_signal_names.find(expanded_signal.first) == e.expanded_signal_names.end())
         {
-            // TODO set for signals_expanded?
             e.signals_expanded.insert(e.signals_expanded.end(), expanded_signal.second.begin(), expanded_signal.second.end());
             e.expanded_signal_names[expanded_signal.first].insert(e.expanded_signal_names[expanded_signal.first].end(), expanded_signal.second.begin(), expanded_signal.second.end());
         }
@@ -365,7 +361,7 @@ bool hdl_parser_verilog::parse_signal_definition(entity& e)
 
 bool hdl_parser_verilog::parse_assign(entity& e)
 {
-    std::map<std::string, std::string> direct_assignment;
+    std::unordered_map<std::string, std::string> direct_assignment;
 
     auto assign_line = m_token_stream.peek().number;
 
@@ -477,7 +473,7 @@ bool hdl_parser_verilog::connect_instances()
 
             for (auto& port : inst.port_streams)
             {
-                std::map<std::string, std::string> port_assignments;
+                std::unordered_map<std::string, std::string> port_assignments;
 
                 auto port_line = port.first.peek().number;
 
@@ -486,14 +482,6 @@ bool hdl_parser_verilog::connect_instances()
 
                 if (port_lhs.size() != port_rhs.size())
                 {
-                    for (auto t : port_lhs)
-                    {
-                        std::cout << "lhs: " << t << std::endl;
-                    }
-                    for (auto t : port_rhs)
-                    {
-                        std::cout << "rhs: " << t << std::endl;
-                    }
                     log_error("hdl_parser", "cannot parse port assignment in line '{}' due to width mismatch.", port_line);
                     return {};
                 }
@@ -577,10 +565,10 @@ bool hdl_parser_verilog::build_netlist(const std::string& top_module)
 
     // for the top module, generate global i/o signals for all ports
 
-    std::map<std::string, std::function<bool(std::shared_ptr<net> const)>> port_dir_function = {{"input", [](std::shared_ptr<net> const net) { return net->mark_global_input_net(); }},
-                                                                                                {"output", [](std::shared_ptr<net> const net) { return net->mark_global_output_net(); }}};
+    std::unordered_map<std::string, std::function<bool(std::shared_ptr<net> const)>> port_dir_function = {{"input", [](std::shared_ptr<net> const net) { return net->mark_global_input_net(); }},
+                                                                                                          {"output", [](std::shared_ptr<net> const net) { return net->mark_global_output_net(); }}};
 
-    std::map<std::string, std::string> top_assignments;
+    std::unordered_map<std::string, std::string> top_assignments;
 
     for (const auto& expanded_port : top_entity.ports_expanded)
     {
@@ -704,10 +692,10 @@ bool hdl_parser_verilog::build_netlist(const std::string& top_module)
     return true;
 }
 
-std::shared_ptr<module> hdl_parser_verilog::instantiate(const entity& e, std::shared_ptr<module> parent, std::map<std::string, std::string> parent_module_assignments)
+std::shared_ptr<module> hdl_parser_verilog::instantiate(const entity& e, std::shared_ptr<module> parent, std::unordered_map<std::string, std::string> parent_module_assignments)
 {
     // remember assigned aliases so they are not lost when recursively going deeper
-    std::map<std::string, std::string> aliases;
+    std::unordered_map<std::string, std::string> aliases;
 
     aliases[e.name] = get_unique_alias(e.name);
 
@@ -772,6 +760,7 @@ std::shared_ptr<module> hdl_parser_verilog::instantiate(const entity& e, std::sh
         {
             a = aliases.at(a);
         }
+
         if (parent_module_assignments.find(b) != parent_module_assignments.end())
         {
             b = parent_module_assignments.at(b);
@@ -780,6 +769,7 @@ std::shared_ptr<module> hdl_parser_verilog::instantiate(const entity& e, std::sh
         {
             b = aliases.at(b);
         }
+
         m_nets_to_merge[b].push_back(a);
     }
 
@@ -794,7 +784,8 @@ std::shared_ptr<module> hdl_parser_verilog::instantiate(const entity& e, std::sh
         data_container* container;
 
         // assign actual signal names to ports
-        std::map<std::string, std::string> instance_assignments;
+        std::unordered_map<std::string, std::string> instance_assignments;
+
         for (const auto& [pin, s] : inst.ports)
         {
             auto it2 = parent_module_assignments.find(s);
@@ -1111,9 +1102,9 @@ void hdl_parser_verilog::expand_signal(std::vector<std::string>& expanded_signal
     }
 }
 
-std::map<std::string, std::vector<std::string>> hdl_parser_verilog::get_expanded_signals(token_stream& signal_str)
+std::unordered_map<std::string, std::vector<std::string>> hdl_parser_verilog::get_expanded_signals(token_stream& signal_str)
 {
-    std::map<std::string, std::vector<std::string>> result;
+    std::unordered_map<std::string, std::vector<std::string>> result;
     std::vector<std::pair<std::string, std::vector<std::pair<i32, i32>>>> signals;
 
     std::vector<std::pair<i32, i32>> bounds;

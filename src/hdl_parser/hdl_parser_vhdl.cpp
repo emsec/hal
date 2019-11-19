@@ -9,7 +9,6 @@
 
 #include "netlist/netlist_factory.h"
 
-#include <iostream>    //TODO remove
 #include <queue>
 
 hdl_parser_vhdl::hdl_parser_vhdl(std::stringstream& stream) : hdl_parser(stream)
@@ -45,7 +44,7 @@ std::shared_ptr<netlist> hdl_parser_vhdl::parse(const std::string& gate_library)
     }
     catch (token_stream::token_stream_exception& e)
     {
-        if (e.line_number != -1)
+        if (e.line_number != (u32)-1)
         {
             log_error("hdl_parser", "{} near line {}.", e.message, e.line_number);
         }
@@ -338,7 +337,7 @@ bool hdl_parser_vhdl::parse_port_definiton(entity& e)
 
     while (ports.remaining() > 0)
     {
-        auto base_name     = ports.consume();
+        auto base_name = ports.consume();
         ports.consume(":", true);
         auto direction    = ports.consume();
         token_stream type = ports.extract_until(";");
@@ -566,7 +565,7 @@ bool hdl_parser_vhdl::parse_instance(entity& e)
         m_token_stream.consume(")", true);
         while (generic_map.remaining() > 0)
         {
-            auto lhs           = generic_map.join_until("=>", " ");
+            auto lhs = generic_map.join_until("=>", " ");
             generic_map.consume("=>", true);
             auto rhs = generic_map.join_until(",", " ");
             generic_map.consume(",", generic_map.remaining() > 0);    // last entry has no comma
@@ -584,7 +583,7 @@ bool hdl_parser_vhdl::parse_instance(entity& e)
         m_token_stream.consume(")", true);
         while (port_map.remaining() > 0)
         {
-            auto lhs           = port_map.extract_until("=>");
+            auto lhs = port_map.extract_until("=>");
             port_map.consume("=>", true);
             auto rhs = port_map.extract_until(",");
             port_map.consume(",", port_map.remaining() > 0);    // last entry has no comma
