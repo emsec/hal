@@ -21,10 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#include "pragma_once.h"
-
-#ifndef __HAL_GATE_TYPE_H
-#define __HAL_GATE_TYPE_H
+#pragma once
 
 #include "netlist/boolean_function.h"
 
@@ -59,7 +56,7 @@ public:
 
     /**
      * Constructor for a gate type.
-     * 
+     *
      * @param[in] name - The name of the gate type.
      */
     gate_type(const std::string& name);
@@ -67,7 +64,7 @@ public:
 
     /**
      * Returns a string describing the given gate type object.
-     * 
+     *
      * @param[in] gt - The gate type object.
      * @returns A string describing the gate type.
      */
@@ -75,7 +72,7 @@ public:
 
     /**
      * Inserts the gate type object to an output stream.
-     * 
+     *
      * @param[in] os - The output stream to insert the gate type object into.
      * @param[in] gt - The gate type object.
      * @returns An output stream.
@@ -84,7 +81,7 @@ public:
 
     /**
      * Tests whether two gate type objects are equal.
-     * 
+     *
      * @param[in] other - Gate type object to compare to.
      * @returns True when both gate type objects are equal, false otherwise.
      */
@@ -92,7 +89,7 @@ public:
 
     /**
      * Tests whether two gate type objects are unequal.
-     * 
+     *
      * @param[in] other - Gate type object to compare to.
      * @returns True when both gate type objects are unequal, false otherwise.
      */
@@ -187,4 +184,3 @@ private:
 
     bool doCompare(const gate_type& other) const;
 };
-#endif    //__HAL_GATE_TYPE_H

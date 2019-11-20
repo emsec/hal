@@ -21,9 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#include "pragma_once.h"
-#ifndef __ARCH_WIN_H__
-#define __ARCH_WIN_H__
+#pragma once
 
 #define CORE_API IMPORT
 
@@ -53,5 +51,3 @@
 #undef PLUGIN_API
 #define PLUGIN_API EXPORT
 #endif
-
-#endif /* __ARCH_WIN_H__ */

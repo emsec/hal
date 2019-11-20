@@ -25,10 +25,7 @@
  * @file
  */
 
-#include "pragma_once.h"
-
-#ifndef __HAL_UTILS_H__
-#define __HAL_UTILS_H__
+#pragma once
 
 #include "def.h"
 
@@ -423,5 +420,3 @@ namespace core_utils
         hal::path p_;
     };
 }    // namespace core_utils
-
-#endif    //__HAL_UTILS_H__

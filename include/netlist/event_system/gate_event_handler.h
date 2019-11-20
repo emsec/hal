@@ -21,9 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#include "pragma_once.h"
-#ifndef __HAL_GATE_HANDLER_H__
-#define __HAL_GATE_HANDLER_H__
+#pragma once
 
 #include "core/callback_hook.h"
 
@@ -76,5 +74,3 @@ namespace gate_event_handler
      */
     NETLIST_API void unregister_callback(const std::string& name);
 }    // namespace gate_event_handler
-
-#endif /* __HAL_GATE_HANDLER_H__ */

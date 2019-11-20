@@ -21,9 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#include "pragma_once.h"
-#ifndef __HAL_GATE_LIBRARY_H__
-#define __HAL_GATE_LIBRARY_H__
+#pragma once
 
 #include "def.h"
 #include "netlist/gate_library/gate_type/gate_type.h"
@@ -106,5 +104,3 @@ private:
 
     std::vector<std::string> m_includes;
 };
-
-#endif

@@ -21,9 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#include "pragma_once.h"
-#ifndef __HAL_HDL_WRITER_H__
-#define __HAL_HDL_WRITER_H__
+#pragma once
 
 #include "def.h"
 
@@ -65,5 +63,3 @@ protected:
     // holds the output stream to the file
     std::stringstream& m_stream;
 };
-
-#endif /* __HAL_hdl_writer_H__ */

@@ -21,9 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#include "pragma_once.h"
-#ifndef __HAL_PLUGIN_MANAGER_H__
-#define __HAL_PLUGIN_MANAGER_H__
+#pragma once
 
 #include "def.h"
 
@@ -149,5 +147,3 @@ namespace plugin_manager
     */
     void remove_model_changed_callback(u64 id);
 }    // namespace plugin_manager
-
-#endif /* __HAL_PLUGIN_MANAGER_H__ */

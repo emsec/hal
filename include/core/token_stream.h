@@ -21,9 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#include "pragma_once.h"
-#ifndef __HAL_TOKEN_STREAM_H__
-#define __HAL_TOKEN_STREAM_H__
+#pragma once
 
 #include "def.h"
 
@@ -299,5 +297,3 @@ private:
     std::vector<token> m_data;
     u32 m_pos;
 };
-
-#endif /* __HAL_TOKEN_STREAM_H__ */

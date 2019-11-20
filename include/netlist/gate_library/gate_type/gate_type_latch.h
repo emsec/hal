@@ -21,10 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#include "pragma_once.h"
-
-#ifndef __HAL_GATE_TYPE_LATCH_H
-#define __HAL_GATE_TYPE_LATCH_H
+#pragma once
 
 #include "netlist/boolean_function.h"
 #include "netlist/gate_library/gate_type/gate_type.h"
@@ -42,7 +39,7 @@ class gate_type_latch : public gate_type
 public:
     /**
      * Constructor for a latch gate type.
-     * 
+     *
      * @param[in] name - The name of the latch gate type.
      */
     gate_type_latch(const std::string& name);
@@ -50,14 +47,14 @@ public:
 
     /**
      * Adds an output pin to the collection of output pins that generate their output from the next_state function.
-     * 
+     *
      * @param[in] output_pin_name - Name of the output pin.
      */
     void add_state_output_pin(std::string output_pin_name);
 
     /**
      * Adds an output pin to the collection of output pins that generate their output from the inverted next_state function.
-     * 
+     *
      * @param[in] output_pin_name - Name of the output pin.
      */
     void add_inverted_state_output_pin(std::string output_pin_name);
@@ -71,7 +68,7 @@ public:
      *  - N: keep current internal state
      *  - T: toggle internal state
      *  - X: undefined behavior
-     * 
+     *
      * @param[in] sb1 - The value specifying the behavior for the internal state.
      * @param[in] sb2 - The value specifying the behaviorfor the inverted internal state.
      */
@@ -79,14 +76,14 @@ public:
 
     /**
      * Returns the output pins that use the data_in function to generate their output.
-     * 
+     *
      * @returns The set of output pin names.
      */
     std::unordered_set<std::string> get_state_output_pins() const;
 
     /**
      * Returns the output pins that use the inverted data_in function to generate their output.
-     * 
+     *
      * @returns The set of output pin names.
      */
     std::unordered_set<std::string> get_inverted_state_output_pins() const;
@@ -100,7 +97,7 @@ public:
      *  - N: keep current (inverted) internal state
      *  - T: toggle (inverted) internal state
      *  - X: undefined behavior
-     * 
+     *
      * @returns The boolean function.
      */
     std::pair<special_behavior, special_behavior> get_special_behavior() const;
@@ -114,4 +111,3 @@ private:
     // behavior when both set and reset are active
     std::pair<special_behavior, special_behavior> m_special_behavior;
 };
-#endif    //__HAL_GATE_TYPE_LATCH_H

@@ -18,7 +18,7 @@ elseif(CMAKE_BUILD_TYPE STREQUAL "MinSizeRel")
 elseif(CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
     message(STATUS "selected build type: ${CMAKE_BUILD_TYPE}")
 else()
-    message(FATAL_ERROR "unsupported build type: ${CMAKE_BUILD_TYPE}")
+    message(FATAL_ERROR "unsupported build type: ${CMAKE_BUILD_TYPE}, supported are: Debug, MinSizeRel, RelWithDebInfo, Release")
 endif ()
 
 if(UNIX AND NOT APPLE)

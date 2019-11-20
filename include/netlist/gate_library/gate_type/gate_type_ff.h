@@ -21,10 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#include "pragma_once.h"
-
-#ifndef __HAL_GATE_TYPE_FF_H
-#define __HAL_GATE_TYPE_FF_H
+#pragma once
 
 #include "netlist/boolean_function.h"
 #include "netlist/gate_library/gate_type/gate_type.h"
@@ -42,7 +39,7 @@ class gate_type_ff : public gate_type
 public:
     /**
      * Constructor for a flipflop gate type.
-     * 
+     *
      * @param[in] name - The name of the flipflop gate type.
      */
     gate_type_ff(const std::string& name);
@@ -50,14 +47,14 @@ public:
 
     /**
      * Adds an output pin to the collection of output pins that generate their output from the next_state function.
-     * 
+     *
      * @param[in] output_pin_name - Name of the output pin.
      */
     void add_state_output_pin(std::string output_pin_name);
 
     /**
      * Adds an output pin to the collection of output pins that generate their output from the inverted next_state function.
-     * 
+     *
      * @param[in] output_pin_name - Name of the output pin.
      */
     void add_inverted_state_output_pin(std::string output_pin_name);
@@ -71,7 +68,7 @@ public:
      *  - N: keep current internal state
      *  - T: toggle internal state
      *  - X: undefined behavior
-     * 
+     *
      * @param[in] sb1 - The value specifying the behavior for the internal state.
      * @param[in] sb2 - The value specifying the behaviorfor the inverted internal state.
      */
@@ -79,35 +76,35 @@ public:
 
     /**
      * Describes in what part of the gate definition to find the INIT string, e.g., "generic".
-     * 
+     *
      * @param[in] category - The category as a string.
      */
     void set_data_category(const std::string& category);
 
     /**
      * Describes the identifier used to specify the INIT string.
-     * 
+     *
      * @param[in] identifier - The identifier as a string.
      */
     void set_data_identifier(const std::string& identifier);
 
     /**
      * Describes the bit-order of the INIT string.
-     * 
+     *
      * @param[in] ascending - True if ascending bit-order, false otherwise.
      */
     void set_data_ascending_order(bool ascending);
 
     /**
      * Returns the output pins that use the next_state function to generate their output.
-     * 
+     *
      * @returns The set of output pin names.
      */
     std::unordered_set<std::string> get_state_output_pins() const;
 
     /**
      * Returns the output pins that use the inverted next_state function to generate their output.
-     * 
+     *
      * @returns The set of output pin names.
      */
     std::unordered_set<std::string> get_inverted_state_output_pins() const;
@@ -121,28 +118,28 @@ public:
      *  - N: keep current (inverted) internal state
      *  - T: toggle (inverted) internal state
      *  - X: undefined behavior
-     * 
+     *
      * @returns The boolean function.
      */
     std::pair<special_behavior, special_behavior> get_special_behavior() const;
 
     /**
      * Returns the string describing in what part of the gate definition to find the INIT string, e.g., "generic".
-     * 
+     *
      * @returns The string describing the category.
      */
     std::string get_data_category() const;
 
     /**
      * Returns the string describing the identifier used to specify the INIT string.
-     * 
+     *
      * @returns The identifier as a string.
      */
     std::string get_data_identifier() const;
 
     /**
      * Returns the bit-order of the INIT string.
-     * 
+     *
      * @returns True if ascending bit-order, false otherwise.
      */
     bool is_ascending_order() const;
@@ -160,4 +157,3 @@ private:
     std::string m_data_identifier;
     bool m_ascending;
 };
-#endif    //__HAL_GATE_TYPE_FF_H

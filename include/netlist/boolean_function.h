@@ -21,9 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#include "pragma_once.h"
-#ifndef __HAL_BOOLEAN_FUNCTION_H__
-#define __HAL_BOOLEAN_FUNCTION_H__
+#pragma once
 
 #include "def.h"
 #include <map>
@@ -335,5 +333,3 @@ private:
     operation m_op;
     std::vector<boolean_function> m_operands;
 };
-
-#endif

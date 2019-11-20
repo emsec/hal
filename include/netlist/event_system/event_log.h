@@ -21,9 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#include "pragma_once.h"
-#ifndef __HAL_EVENT_LOG_H__
-#define __HAL_EVENT_LOG_H__
+#pragma once
 
 #include "def.h"
 
@@ -37,5 +35,3 @@ namespace event_log
     */
     NETLIST_API void initialize();
 }    // namespace event_log
-
-#endif /* __HAL_GATE_HANDLER_H__ */

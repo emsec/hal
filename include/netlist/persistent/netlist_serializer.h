@@ -21,9 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#include "pragma_once.h"
-#ifndef __HAL_NETLIST_SERIALIZER_H__
-#define __HAL_NETLIST_SERIALIZER_H__
+#pragma once
 
 #include "def.h"
 
@@ -54,5 +52,3 @@ namespace netlist_serializer
      */
     NETLIST_API std::shared_ptr<netlist> deserialize_from_file(const hal::path& hal_file);
 }    // namespace netlist_serializer
-
-#endif /* __HAL_NETLIST_SERIALIZER_H__ */

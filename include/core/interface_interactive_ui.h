@@ -21,9 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#include "pragma_once.h"
-#ifndef __HAL_INTERFACE_GUI_H__
-#define __HAL_INTERFACE_GUI_H__
+#pragma once
 
 #include "def.h"
 
@@ -49,5 +47,3 @@ public:
      */
     virtual bool exec(program_arguments& args) = 0;
 };
-
-#endif /* __HAL_INTERFACE_GUI_H__ */

@@ -21,9 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#include "pragma_once.h"
-#ifndef __HAL_NET_H__
-#define __HAL_NET_H__
+#pragma once
 
 #include "def.h"
 
@@ -290,5 +288,3 @@ private:
     /** stores the dst gate and pin id of the dst gate*/
     std::vector<endpoint> m_dsts;
 };
-
-#endif /* __HAL_NET_H__ */

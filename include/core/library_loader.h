@@ -21,9 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#include "pragma_once.h"
-#ifndef __HAL_LIBRARY_LOADER_H__
-#define __HAL_LIBRARY_LOADER_H__
+#pragma once
 
 #include "def.h"
 
@@ -87,5 +85,3 @@ private:
     // stores the handle_ptr_t to the library
     handle_ptr_t m_handle;
 };
-
-#endif /* __HAL_LIBRARY_LOADER_H__ */

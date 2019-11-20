@@ -21,9 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#include "pragma_once.h"
-#ifndef __HAL_HDL_WRITER_VERILOG_H__
-#define __HAL_HDL_WRITER_VERILOG_H__
+#pragma once
 
 #include "def.h"
 #include "hdl_writer/hdl_writer.h"
@@ -104,5 +102,3 @@ private:
 
     std::map<std::string, std::shared_ptr<net>> m_vcc_names_str_to_net;
 };
-
-#endif /* __HAL_HDL_WRITER_VERILOG_H__ */

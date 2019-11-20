@@ -21,9 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#include "pragma_once.h"
-#ifndef __HAL_HDL_PARSER_VHDL_H__
-#define __HAL_HDL_PARSER_VHDL_H__
+#pragma once
 
 #include "def.h"
 
@@ -117,5 +115,3 @@ private:
     std::string get_hex_from_number_literal(const std::string& value);
     std::string get_unique_alias(const std::string& name);
 };
-
-#endif /* __HAL_HDL_PARSER_VHDL_H__ */

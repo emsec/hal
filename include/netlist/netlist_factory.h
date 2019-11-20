@@ -21,9 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#include "pragma_once.h"
-#ifndef __HAL_NETLIST_FACTORY_H__
-#define __HAL_NETLIST_FACTORY_H__
+#pragma once
 
 #include "def.h"
 
@@ -78,5 +76,3 @@ namespace netlist_factory
      */
     NETLIST_API std::shared_ptr<netlist> load_netlist(const program_arguments& args);
 }    // namespace netlist_factory
-
-#endif /* __HAL_NETLIST_FACTORY_H__ */

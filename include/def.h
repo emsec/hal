@@ -21,9 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#include "pragma_once.h"
-#ifndef __DEF_H__
-#define __DEF_H__
+#pragma once
 
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
@@ -79,5 +77,3 @@ namespace hal
 #else
 #define COMPILER_OTHER
 #endif
-
-#endif /* __DEF_H__ */

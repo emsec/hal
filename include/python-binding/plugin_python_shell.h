@@ -21,9 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#include "pragma_once.h"
-#ifndef __HAL_PLUGIN_PYTHON_SHELL_H__
-#define __HAL_PLUGIN_PYTHON_SHELL_H__
+#pragma once
 
 #include "core/interface_interactive_ui.h"
 
@@ -70,5 +68,3 @@ public:
 #pragma GCC diagnostic ignored "-Wreturn-type-c-linkage"
 extern "C" PLUGIN_API std::shared_ptr<i_base> get_plugin_instance();
 #pragma GCC diagnostic pop
-
-#endif /* __HAL_PLUGIN_HELLOWORLD__ */
