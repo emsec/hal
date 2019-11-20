@@ -5,11 +5,21 @@ message(STATUS "cmake version: ${CMAKE_VERSION}")
 include(CMakeDependentOption)
 
 if(NOT CMAKE_BUILD_TYPE)
-    message(STATUS "Setting build type to 'Release' as none was specified.")
     set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Choose the type of build." FORCE)
-    # Set the possible values of build type for cmake-gui
     set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
 endif()
+
+if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+    message(STATUS "selected build type: ${CMAKE_BUILD_TYPE}")
+elseif(CMAKE_BUILD_TYPE STREQUAL "Release")
+    message(STATUS "selected build type: ${CMAKE_BUILD_TYPE}")
+elseif(CMAKE_BUILD_TYPE STREQUAL "MinSizeRel")
+    message(STATUS "selected build type: ${CMAKE_BUILD_TYPE}")
+elseif(CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
+    message(STATUS "selected build type: ${CMAKE_BUILD_TYPE}")
+else()
+    message(FATAL_ERROR "unsupported build type: ${CMAKE_BUILD_TYPE}")
+endif ()
 
 if(UNIX AND NOT APPLE)
     set(LINUX TRUE)
