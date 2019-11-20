@@ -23,14 +23,14 @@
 
 #pragma once
 
-#if defined(__GNUC__)
-#include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/path.hpp>
-// #include <experimental/filesystem>
+#if defined(__GNUC__) && ((__GNUC__ == 7 && __GNUC_MINOR__ >= 4))
+#include <experimental/filesystem>
 #else
 #include <filesystem>
 #endif
 
+#include <boost/filesystem/operations.hpp>
+#include <boost/filesystem/path.hpp>
 
 #include <inttypes.h>
 #include <stdexcept>
@@ -54,15 +54,13 @@ typedef uint64_t u64;
 
 namespace hal
 {
-#if defined(__GNUC__)
-    namespace fs = boost::filesystem;
-    //    namespace fs = std::experimental::filesystem;
-    
-    typedef boost::system::error_code error_code;
+#if defined(__GNUC__) && ((__GNUC__ == 7 && __GNUC_MINOR__ >= 4))
+    namespace fs = std::experimental::filesystem;
 #else
     namespace fs = std::filesystem;
-    typedef std::error_code error_code;
 #endif
+    typedef std::error_code error_code;
+    
     typedef fs::path path;
 }    // namespace hal
 
