@@ -252,7 +252,7 @@ endif(HAVE_IGRAPH)
 find_package(Filesystem REQUIRED Final Experimental)
 
 set(Boost_USE_MULTITHREADED ON)
-find_package(Boost 1.58.0 COMPONENTS system filesystem graph REQUIRED)
+find_package(Boost 1.58.0 COMPONENTS system REQUIRED)
 if(Boost_FOUND)
     message(STATUS "Boost_INCLUDE_DIRS: ${Boost_INCLUDE_DIRS}")
     message(STATUS "Boost_LIBRARIES: ${Boost_LIBRARIES}")
