@@ -23,26 +23,46 @@
 
 #pragma once
 
+#if defined(__GNUC__)
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
+// #include <experimental/filesystem>
+#else
+#include <filesystem>
+#endif
+
+
 #include <inttypes.h>
 #include <stdexcept>
 #include <stdlib.h>
 
 typedef int8_t i8;
+
 typedef int16_t i16;
+
 typedef int32_t i32;
+
 typedef int64_t i64;
 
 typedef uint8_t u8;
+
 typedef uint16_t u16;
+
 typedef uint32_t u32;
+
 typedef uint64_t u64;
 
 namespace hal
 {
+#if defined(__GNUC__)
     namespace fs = boost::filesystem;
+    //    namespace fs = std::experimental::filesystem;
+    
     typedef boost::system::error_code error_code;
+#else
+    namespace fs = std::filesystem;
+    typedef std::error_code error_code;
+#endif
     typedef fs::path path;
 }    // namespace hal
 
@@ -54,6 +74,7 @@ namespace hal
 #include "arch_win.h"
 #elif __APPLE__ && __MACH__
 #include "arch_mac.h"
+
 #elif __linux__
 #include "arch_linux.h"
 #endif
@@ -66,8 +87,8 @@ namespace hal
 /* other */
 #define EXPORTED __attribute__((visibility("default")))
 #define NOT_EXPORTED __attribute__((visibility("hidden")))
-#define PROTECTED  __attribute__((visibility("protected")))
-#define INTERNAL  __attribute__((visibility("internal")))
+#define PROTECTED __attribute__((visibility("protected")))
+#define INTERNAL __attribute__((visibility("internal")))
 #endif
 
 #if defined(__clang__)
