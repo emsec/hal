@@ -249,7 +249,7 @@ if(HAVE_IGRAPH)
     add_definitions(-DIGRAPH_VERSION_PATCH_GUESS=${IGRAPH_VERSION_PATCH_GUESS})
 endif(HAVE_IGRAPH)
 
-find_package(Filesystem REQUIRED)
+find_package(Filesystem REQUIRED Final Experimental)
 
 set(Boost_USE_MULTITHREADED ON)
 find_package(Boost 1.58.0 COMPONENTS system filesystem graph REQUIRED)
