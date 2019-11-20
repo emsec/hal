@@ -458,7 +458,7 @@ void main_window::handle_action_new()
 
     if (ok)
     {
-        g_netlist = netlist_factory::create_netlist(selected.toStdString());
+        g_netlist = netlist_factory::make_empty_netlist(selected.toStdString());
         Q_EMIT file_manager::get_instance()->file_opened("new netlist");
     }
 }

@@ -8,6 +8,8 @@
 #include "netlist/netlist.h"
 #include "netlist/persistent/netlist_serializer.h"
 
+#include "netlist/event_system/event_controls.h"
+
 #include <fstream>
 #include <iostream>
 
@@ -22,6 +24,14 @@ namespace netlist_factory
             return nullptr;
         }
         return std::make_shared<netlist>(lib);
+    }
+
+    std::shared_ptr<netlist> make_empty_netlist(const std::string& gate_library)
+    {
+        event_controls::enable_all(false);
+        std::shared_ptr<netlist> nl = create_netlist(gate_library);
+        event_controls::enable_all(true);
+        return nl;
     }
 
     std::shared_ptr<netlist> load_netlist(const hal::path& hdl_file, const std::string& language, const std::string& gate_library_name)
