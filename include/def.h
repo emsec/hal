@@ -48,7 +48,6 @@ using u64 = uint64_t;
 
 namespace hal
 {
-<<<<<<< HEAD
 #if defined(__GNUC__) && ((__GNUC__ == 7 && __GNUC_MINOR__ >= 4))
     namespace fs = std::experimental::filesystem;
 #else
@@ -57,18 +56,6 @@ namespace hal
     typedef std::error_code error_code;
     
     typedef fs::path path;
-=======
-#if defined(__GNUC__)
-    namespace fs = boost::filesystem;
-    //    namespace fs = std::experimental::filesystem;
-
-    using error_code = boost::system::error_code;
-#else
-    namespace fs     = std::filesystem;
-    using error_code = std::error_code;
-#endif
-    using path = fs::path;
->>>>>>> integrate-new-graph-features
 }    // namespace hal
 
 #define UNUSED(expr) (void)expr
