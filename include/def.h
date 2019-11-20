@@ -31,39 +31,38 @@
 #include <filesystem>
 #endif
 
-
 #include <inttypes.h>
 #include <stdexcept>
 #include <stdlib.h>
 
-typedef int8_t i8;
+using i8 = int8_t;
 
-typedef int16_t i16;
+using i16 = int16_t;
 
-typedef int32_t i32;
+using i32 = int32_t;
 
-typedef int64_t i64;
+using i64 = int64_t;
 
-typedef uint8_t u8;
+using u8 = uint8_t;
 
-typedef uint16_t u16;
+using u16 = uint16_t;
 
-typedef uint32_t u32;
+using u32 = uint32_t;
 
-typedef uint64_t u64;
+using u64 = uint64_t;
 
 namespace hal
 {
 #if defined(__GNUC__)
     namespace fs = boost::filesystem;
     //    namespace fs = std::experimental::filesystem;
-    
-    typedef boost::system::error_code error_code;
+
+    using error_code = boost::system::error_code;
 #else
-    namespace fs = std::filesystem;
-    typedef std::error_code error_code;
+    namespace fs     = std::filesystem;
+    using error_code = std::error_code;
 #endif
-    typedef fs::path path;
+    using path = fs::path;
 }    // namespace hal
 
 #define DEBUG

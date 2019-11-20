@@ -29,7 +29,7 @@
 #include "core/interface_gui.h"
 #include "core/plugin_manager.h"
 
-typedef std::map<std::string, std::set<std::string>> map_string_to_set_of_string;
+using map_string_to_set_of_string = std::map<std::string, std::set<std::string>>;
 
 class Pyi_base : public i_base
 {
@@ -409,12 +409,14 @@ Gets an unoccupied gate id. The value 0 is reserved and represents an invalid id
 :returns: An unoccupied unique id.
 :rtype: int
 )")
-        .def("create_gate", py::overload_cast<u32, std::shared_ptr<const gate_type>, const std::string&, float, float>(&netlist::create_gate),
-                py::arg("id"),
-                py::arg("gate_type"),
-                py::arg("name"),
-                py::arg("x") = -1,
-                py::arg("y") = -1, R"(
+        .def("create_gate",
+             py::overload_cast<u32, std::shared_ptr<const gate_type>, const std::string&, float, float>(&netlist::create_gate),
+             py::arg("id"),
+             py::arg("gate_type"),
+             py::arg("name"),
+             py::arg("x") = -1,
+             py::arg("y") = -1,
+             R"(
 Creates and adds a new gate to the netlist.
 
 :param int id: The unique ID != 0 for the new gate.
@@ -425,11 +427,13 @@ Creates and adds a new gate to the netlist.
 :returns: The new gate on success, None on error.
 :rtype: hal_py.gate or None
 )")
-        .def("create_gate", py::overload_cast<std::shared_ptr<const gate_type>, const std::string&, float, float>(&netlist::create_gate),
-                py::arg("gate_type"),
-                py::arg("name"),
-                py::arg("x") = -1,
-                py::arg("y") = -1, R"(
+        .def("create_gate",
+             py::overload_cast<std::shared_ptr<const gate_type>, const std::string&, float, float>(&netlist::create_gate),
+             py::arg("gate_type"),
+             py::arg("name"),
+             py::arg("x") = -1,
+             py::arg("y") = -1,
+             R"(
 Creates and adds a new gate to the netlist.
 It is identifiable via its unique ID which is automatically set to the next free ID.
 
@@ -1446,7 +1450,8 @@ Releases all plugins and associated resources.
 :returns: True on success.
 :rtype: bool
 )")
-        .def("get_plugin_instance", [](const std::string& plugin_name) -> std::shared_ptr<i_base> { return plugin_manager::get_plugin_instance<i_base>(plugin_name, true); }, py::arg("plugin_name"), R"(
+        .def(
+            "get_plugin_instance", [](const std::string& plugin_name) -> std::shared_ptr<i_base> { return plugin_manager::get_plugin_instance<i_base>(plugin_name, true); }, py::arg("plugin_name"), R"(
 Gets the basic interface for a plugin specified by name.
 
 :param str plugin_name: The plugin name.

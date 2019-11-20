@@ -39,7 +39,7 @@ struct argument
 
 class plugin_schedule_manager : public QObject
 {
-    typedef QList<QPair<QString, QList<argument>>> schedule;
+    using schedule = QList<QPair<QString, QList<argument>>>;
 
     Q_OBJECT
 
