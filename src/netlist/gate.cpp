@@ -195,8 +195,8 @@ boolean_function gate::get_lut_function() const
 {
     auto lut_type = std::static_pointer_cast<const gate_type_lut>(m_type);
 
-    std::string category   = lut_type->get_data_category();
-    std::string key        = lut_type->get_data_identifier();
+    std::string category   = lut_type->get_config_data_category();
+    std::string key        = lut_type->get_config_data_identifier();
     std::string config_str = std::get<1>(get_data_by_key(category, key));
 
     if (config_str.empty())
@@ -269,8 +269,8 @@ void gate::set_boolean_function(const std::string& name, const boolean_function&
                 config_value <<= 1;
             }
 
-            std::string category = lut_type->get_data_category();
-            std::string key      = lut_type->get_data_identifier();
+            std::string category = lut_type->get_config_data_category();
+            std::string key      = lut_type->get_config_data_identifier();
 
             std::stringstream stream;
             stream << std::hex << config_value;

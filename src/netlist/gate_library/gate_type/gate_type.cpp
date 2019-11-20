@@ -23,7 +23,7 @@ bool gate_type::operator==(const gate_type& other) const
     equal &= m_input_pins == other.get_input_pins();
     equal &= m_output_pins == other.get_output_pins();
     equal &= m_functions == other.get_boolean_functions();
-    equal &= this->doCompare(other);
+    equal &= this->do_compare(other);
 
     return equal;
 }
@@ -33,7 +33,7 @@ bool gate_type::operator!=(const gate_type& other) const
     return !(*this == other);
 }
 
-bool gate_type::doCompare(const gate_type& other) const
+bool gate_type::do_compare(const gate_type& other) const
 {
     UNUSED(other);
     return true;
