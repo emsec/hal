@@ -251,6 +251,22 @@ endif(HAVE_IGRAPH)
 
 find_package(Filesystem REQUIRED)
 
+set(Boost_USE_MULTITHREADED ON)
+find_package(Boost 1.58.0 COMPONENTS system filesystem graph REQUIRED)
+if(Boost_FOUND)
+    message(STATUS "Boost_INCLUDE_DIRS: ${Boost_INCLUDE_DIRS}")
+    message(STATUS "Boost_LIBRARIES: ${Boost_LIBRARIES}")
+    message(STATUS "Boost_VERSION: ${Boost_VERSION}")
+
+    include_directories(${Boost_INCLUDE_DIRS} ${PYTHON_INCLUDE_DIRS})
+elseif(NOT Boost_FOUND)
+    set(Missing_package "TRUE")
+    if(APPLE AND CMAKE_HOST_APPLE)
+        message(STATUS "To install boost on MacOS using homebrew run following command:")
+        message(STATUS "    brew install boost --c++11")
+    endif(APPLE AND CMAKE_HOST_APPLE)
+endif(Boost_FOUND)
+
 #find_package(Threads REQUIRED)
 
 find_package(RapidJSON REQUIRED)

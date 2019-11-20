@@ -6,7 +6,6 @@
 #include "netlist/persistent/netlist_serializer.h"
 #include "test_def.h"
 #include "gtest/gtest.h"
-#include <boost/filesystem.hpp>
 #include <core/log.h>
 #include <fstream>
 #include <iostream>
