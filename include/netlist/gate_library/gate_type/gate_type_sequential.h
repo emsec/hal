@@ -34,16 +34,16 @@
  *
  * @ingroup netlist
  */
-class gate_type_latch : public gate_type
+class gate_type_sequential : public gate_type
 {
 public:
     /**
-     * Constructor for a latch gate type.
+     * Constructor for a flipflop gate type.
      *
-     * @param[in] name - The name of the latch gate type.
+     * @param[in] name - The name of the flipflop gate type.
      */
-    gate_type_latch(const std::string& name);
-    ~gate_type_latch() override = default;
+    gate_type_sequential(const std::string& name, base_type bt);
+    ~gate_type_sequential() override = default;
 
     /**
      * Adds an output pin to the collection of output pins that generate their output from the next_state function.
@@ -53,11 +53,25 @@ public:
     void add_state_output_pin(std::string output_pin_name);
 
     /**
+     * Returns the output pins that use the next_state function to generate their output.
+     *
+     * @returns The set of output pin names.
+     */
+    std::unordered_set<std::string> get_state_output_pins() const;
+
+    /**
      * Adds an output pin to the collection of output pins that generate their output from the inverted next_state function.
      *
      * @param[in] output_pin_name - Name of the output pin.
      */
     void add_inverted_state_output_pin(std::string output_pin_name);
+
+    /**
+     * Returns the output pins that use the inverted next_state function to generate their output.
+     *
+     * @returns The set of output pin names.
+     */
+    std::unordered_set<std::string> get_inverted_state_output_pins() const;
 
     /**
      * Sets the behavior that describes the internal state of the flipflop when both set and reset are active.
@@ -75,20 +89,6 @@ public:
     void set_special_behavior(special_behavior sb1, special_behavior sb2);
 
     /**
-     * Returns the output pins that use the data_in function to generate their output.
-     *
-     * @returns The set of output pin names.
-     */
-    std::unordered_set<std::string> get_state_output_pins() const;
-
-    /**
-     * Returns the output pins that use the inverted data_in function to generate their output.
-     *
-     * @returns The set of output pin names.
-     */
-    std::unordered_set<std::string> get_inverted_state_output_pins() const;
-
-    /**
      * Returns the behavior of the internal state and the inverted internal state when both set and reset are active.
      * May be one of the following:
      *  - U: not specified for this gate type
@@ -102,12 +102,43 @@ public:
      */
     std::pair<special_behavior, special_behavior> get_special_behavior() const;
 
+    /**
+     * Describes in what part of the gate definition to find the INIT string, e.g., "generic".
+     *
+     * @param[in] category - The category as a string.
+     */
+    void set_init_data_category(const std::string& category);
+
+    /**
+     * Returns the string describing in what part of the gate definition to find the INIT string, e.g., "generic".
+     *
+     * @returns The string describing the category.
+     */
+    std::string get_init_data_category() const;
+
+    /**
+     * Describes the identifier used to specify the INIT string.
+     *
+     * @param[in] identifier - The identifier as a string.
+     */
+    void set_init_data_identifier(const std::string& identifier);
+
+    /**
+     * Returns the string describing the identifier used to specify the INIT string.
+     *
+     * @returns The identifier as a string.
+     */
+    std::string get_init_data_identifier() const;
+
 private:
-    bool doCompare(const gate_type& other) const;
+    bool do_compare(const gate_type& other) const override;
 
     // set of pins that use the internal state or inverted internal state respectively as output
     std::unordered_set<std::string> m_state_pins, m_inverted_state_pins;
 
     // behavior when both set and reset are active
     std::pair<special_behavior, special_behavior> m_special_behavior;
+
+    std::string m_init_data_category;
+    std::string m_init_data_identifier;
 };

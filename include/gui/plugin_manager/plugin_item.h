@@ -38,7 +38,7 @@ public:
         path = 1
     };
 
-    typedef std::underlying_type<column_t>::type column_utype;
+    using column_utype = std::underlying_type<column_t>::type;
     static QVector<QPair<QString, column_t>> get_column_description();
     explicit plugin_item();
     explicit plugin_item(QString plugin_name, QString plugin_path);

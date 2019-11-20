@@ -36,24 +36,19 @@
 #include <stdexcept>
 #include <stdlib.h>
 
-typedef int8_t i8;
+using i8  = int8_t;
+using i16 = int16_t;
+using i32 = int32_t;
+using i64 = int64_t;
 
-typedef int16_t i16;
-
-typedef int32_t i32;
-
-typedef int64_t i64;
-
-typedef uint8_t u8;
-
-typedef uint16_t u16;
-
-typedef uint32_t u32;
-
-typedef uint64_t u64;
+using u8  = uint8_t;
+using u16 = uint16_t;
+using u32 = uint32_t;
+using u64 = uint64_t;
 
 namespace hal
 {
+<<<<<<< HEAD
 #if defined(__GNUC__) && ((__GNUC__ == 7 && __GNUC_MINOR__ >= 4))
     namespace fs = std::experimental::filesystem;
 #else
@@ -62,9 +57,19 @@ namespace hal
     typedef std::error_code error_code;
     
     typedef fs::path path;
-}    // namespace hal
+=======
+#if defined(__GNUC__)
+    namespace fs = boost::filesystem;
+    //    namespace fs = std::experimental::filesystem;
 
-#define DEBUG
+    using error_code = boost::system::error_code;
+#else
+    namespace fs     = std::filesystem;
+    using error_code = std::error_code;
+#endif
+    using path = fs::path;
+>>>>>>> integrate-new-graph-features
+}    // namespace hal
 
 #define UNUSED(expr) (void)expr
 

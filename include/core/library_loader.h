@@ -30,12 +30,12 @@
 // operating systems independent type definitions for function and handle access
 #ifdef _WIN32
 #include <windows.h>
-typedef FARPROC lib_fn_ptr_t;
-typedef HINSTANCE handle_ptr_t;
+using lib_fn_ptr_t = FARPROC;
+using handle_ptr_t = HINSTANCE;
 #else
 #include <dlfcn.h>
-typedef void (*lib_fn_ptr_t)();
-typedef void* handle_ptr_t;
+using lib_fn_ptr_t = void (*)();
+using handle_ptr_t = void*;
 #endif
 
 /**

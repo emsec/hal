@@ -58,21 +58,21 @@ public:
      *
      * @param[in] category - The category as a string.
      */
-    void set_data_category(const std::string& category);
+    void set_config_data_category(const std::string& category);
 
     /**
      * Describes the identifier used to specify the INIT string.
      *
      * @param[in] identifier - The identifier as a string.
      */
-    void set_data_identifier(const std::string& identifier);
+    void set_config_data_identifier(const std::string& identifier);
 
     /**
      * Describes the bit-order of the INIT string.
      *
      * @param[in] ascending - True if ascending bit-order, false otherwise.
      */
-    void set_data_ascending_order(bool ascending);
+    void set_config_data_ascending_order(bool ascending);
 
     /**
      * Returns the output pins that generate their output not from a boolean function but an initialization string.
@@ -86,14 +86,14 @@ public:
      *
      * @returns The string describing the category.
      */
-    std::string get_data_category() const;
+    std::string get_config_data_category() const;
 
     /**
      * Returns the string describing the identifier used to specify the INIT string.
      *
      * @returns The identifier as a string.
      */
-    std::string get_data_identifier() const;
+    std::string get_config_data_identifier() const;
 
     /**
      * Returns the bit-order of the INIT string.
@@ -104,9 +104,9 @@ public:
 
 private:
     std::unordered_set<std::string> m_output_from_init_string_pins;
-    std::string m_data_category;
-    std::string m_data_identifier;
+    std::string m_config_data_category;
+    std::string m_config_data_identifier;
     bool m_ascending;
 
-    bool doCompare(const gate_type& other) const;
+    bool do_compare(const gate_type& other) const override;
 };

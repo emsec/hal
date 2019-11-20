@@ -348,7 +348,7 @@ namespace core_utils
     class CORE_API recursive_directory_range
     {
     public:
-        typedef hal::fs::recursive_directory_iterator iterator;
+        using iterator = hal::fs::recursive_directory_iterator;
 
         /**
         * @param[in] p - The top level directory.
@@ -385,7 +385,7 @@ namespace core_utils
     class CORE_API directory_range
     {
     public:
-        typedef hal::fs::directory_iterator iterator;
+        using iterator = hal::fs::directory_iterator;
 
         /**
         * @param[in] p - The top level directory.
