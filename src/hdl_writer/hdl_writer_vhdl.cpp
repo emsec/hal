@@ -20,16 +20,16 @@ bool hdl_writer_vhdl::write(std::shared_ptr<netlist> const g)
 
     this->prepare_signal_names();
 
-    auto vhdl_library_includes = m_netlist->get_gate_library()->get_vhdl_includes();
+    auto library_includes = m_netlist->get_gate_library()->get_includes();
 
-    for (auto&& vhdl_library_include : *vhdl_library_includes)
+    m_stream << "library IEEE;" << std::endl;
+    m_stream << "use IEEE.STD_LOGIC_1164.all;" << std::endl;
+    m_stream << "use IEEE.NUMERIC_STD.all;" << std::endl;
+    m_stream << std::endl;
+    for (const auto& inc : library_includes)
     {
-        m_stream << vhdl_library_include << std::endl;
+        m_stream << "use " << inc << "all;" << std::endl;
     }
-    m_stream << "library IEEE;\n";
-    m_stream << "use IEEE.STD_LOGIC_1164.all;\n";
-    m_stream << "use IEEE.NUMERIC_STD.all;\n";
-    m_stream << "\n";
 
     this->print_module_interface_vhdl();
 

@@ -105,7 +105,7 @@ TEST_F(gate_library_manager_test, check_load_all)
     EXPECT_EQ(*test_lib->get_input_pins(), std::set<std::string>({"I"}));
     EXPECT_EQ(*test_lib->get_output_pins(), std::set<std::string>({"O"}));
     EXPECT_EQ(*test_lib->get_inout_pins(), std::set<std::string>({"IO"}));
-    EXPECT_EQ(*test_lib->get_vhdl_includes(), std::vector<std::string>({"test_vhdl_include;"}));
+    EXPECT_EQ(*test_lib->get_includes(), std::vector<std::string>({"test_vhdl_include;"}));
 
     std::map<std::string, std::vector<std::string>> exp_gate_to_input_types = {{"TEST_GATE", std::vector<std::string>({"I"})}};
     EXPECT_EQ(*test_lib->get_gate_type_map_to_input_pins(), exp_gate_to_input_types);

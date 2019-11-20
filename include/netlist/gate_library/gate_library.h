@@ -57,7 +57,7 @@ public:
 
     /**
      * Add a gate type to the gate library.
-     * 
+     *
      * @param[in] gt - The gate type object.
      */
     void add_gate_type(std::shared_ptr<const gate_type> gt);
@@ -84,11 +84,18 @@ public:
     const std::map<std::string, std::shared_ptr<const gate_type>>& get_gnd_gate_types();
 
     /**
-     * Get the VHDL includes of the library.
+     * Get necessary includes of the library, e.g., VHDL libraries.
      *
-     * @returns The VHDL includes for use by the serializer.
+     * @returns The includes of the library
      */
-    std::vector<std::string>* get_vhdl_includes();
+    std::vector<std::string> get_includes() const;
+
+    /**
+     * Add a necessary includes of the library, e.g., VHDL libraries.
+     *
+     * @param[in] inc - the include to add
+     */
+    void add_include(const std::string& inc);
 
 private:
     std::string m_name;
@@ -97,11 +104,7 @@ private:
     std::map<std::string, std::shared_ptr<const gate_type>> m_vcc_gate_types;
     std::map<std::string, std::shared_ptr<const gate_type>> m_gnd_gate_types;
 
-    std::set<std::string> m_gate_type;
-    std::set<std::string> m_vcc_gate_type;
-    std::set<std::string> m_gnd_gate_type;
-
-    std::vector<std::string> m_vhdl_includes;
+    std::vector<std::string> m_includes;
 };
 
 #endif

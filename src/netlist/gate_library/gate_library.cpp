@@ -15,17 +15,22 @@ void gate_library::add_gate_type(std::shared_ptr<const gate_type> gt)
 
     auto out_pins = gt->get_output_pins();
 
-    if ((gt->get_input_pins().empty() == true) && (out_pins.size() == 1))
+    if (gt->get_input_pins().empty() && (out_pins.size() == 1))
     {
-        auto bf = gt->get_boolean_functions().at(out_pins[0]);
+        auto functions = gt->get_boolean_functions();
+        auto it        = functions.find(out_pins[0]);
+        if (it != functions.end())
+        {
+            auto bf = it->second;
 
-        if (bf.is_constant_one())
-        {
-            m_vcc_gate_types.emplace(gt->get_name(), gt);
-        }
-        else if (bf.is_constant_zero())
-        {
-            m_gnd_gate_types.emplace(gt->get_name(), gt);
+            if (bf.is_constant_one())
+            {
+                m_vcc_gate_types.emplace(gt->get_name(), gt);
+            }
+            else if (bf.is_constant_zero())
+            {
+                m_gnd_gate_types.emplace(gt->get_name(), gt);
+            }
         }
     }
 }
@@ -45,7 +50,12 @@ const std::map<std::string, std::shared_ptr<const gate_type>>& gate_library::get
     return m_gnd_gate_types;
 }
 
-std::vector<std::string>* gate_library::get_vhdl_includes()
+std::vector<std::string> gate_library::get_includes() const
 {
-    return &m_vhdl_includes;
+    return m_includes;
+}
+
+void gate_library::add_include(const std::string& inc)
+{
+    m_includes.push_back(inc);
 }
