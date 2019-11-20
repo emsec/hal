@@ -1,0 +1,156 @@
+name: C/C++ CI
+
+on:
+  push:
+  create:
+    tags:
+      - v*
+
+jobs:
+  build-test:
+    name: Build
+
+    strategy:
+      matrix:
+        #        runs-on: [ubuntu-latest, macOS-latest]
+        runs-on: [macOS-latest]
+      fail-fast: false
+
+    runs-on: ${{ matrix.runs-on }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: Clean Brew
+        run: brew cleanup
+
+      - name: Cache pip Linux
+        uses: actions/cache@v1
+        if: startsWith(runner.os, 'Linux')
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Cache pip macOS
+        uses: actions/cache@v1
+        if: startsWith(runner.os, 'macOS')
+        with:
+          path: ~/Library/Caches/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Cache Homebrew Downloads
+        uses: actions/cache@v1
+        with:
+          path: ~/Library/Caches/Homebrew
+          #        key: ${{ runner.OS }}-build-downloads-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.OS }}-build-downloads
+          restore-keys: |
+            ${{ runner.OS }}-build-downloads-${{ env.cache-name }}-
+            ${{ runner.OS }}-build-downloads-
+
+      - name: Cache Homebrew
+        uses: actions/cache@v1
+        with:
+          path: /usr/local/Homebrew
+          #        key: ${{ runner.OS }}-build-localbrew-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.OS }}-build-localbrew
+          restore-keys: |
+            ${{ runner.OS }}-build-localbrew-${{ env.cache-name }}-
+            ${{ runner.OS }}-build-localbrew-
+
+      - name: Install Dependencies
+        run: ./install_dependencies.sh
+
+      - name: Create Build Environment
+        # Some projects don't allow in-source building, so create a separate build directory
+        # We'll use this as our working directory for all subsequent commands
+        run: cmake -E make_directory ${{runner.workspace}}/build
+
+      - name: Cache CCache
+        uses: actions/cache@v1
+        with:
+          path: ~/.ccache
+          #        key: ${{ runner.OS }}-build-ccache-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.OS }}-build-ccache
+          restore-keys: |
+            ${{ runner.OS }}-build-ccache-${{ env.cache-name }}-
+            ${{ runner.OS }}-build-ccache-
+
+      - name: Configure CMake
+        if: startsWith(runner.os, 'macOS')
+        # Use a bash shell so we can use the same syntax for environment variable
+        # access regardless of the host operating system
+        shell: bash
+        working-directory: ${{runner.workspace}}/build
+        # Note the current convention is to use the -S and -B options here to specify source
+        # and build directories, but this is only available with CMake 3.13 and higher.
+        # The CMake binaries on the Github Actions machines are (as of this writing) 3.12
+        run: |
+          export PATH="/usr/local/opt/qt/bin:$PATH"
+          ls ..
+          cmake -G Ninja $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCMAKE_BUILD_TYPE=Debug -DBUILD_ALL_PLUGINS=ON -DBUILD_TESTS=ON -DBUILD_COVERAGE=ON -DWITH_GUI=ON -DBUILD_DOCUMENTATION=ON -DCMAKE_INSTALL_PREFIX=/usr/ -DPACKAGE_MACOS=ON -DCMAKE_C_COMPILER=/usr/local/opt/llvm/bin/clang -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm/bin/clang++
+        env:
+          LDFLAGS: "-L/usr/local/opt/qt/lib -L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib"
+          CPPFLAGS: "-I/usr/local/opt/qt/include -I/usr/local/opt/llvm/include"
+          HAL_BASE_PATH: ${{runner.workspace}}/build
+
+      - name: Build
+        if: startsWith(runner.os, 'macOS')
+        working-directory: ${{runner.workspace}}/build
+        shell: bash
+        # Execute the build.  You can specify a specific target with "--target <NAME>"
+        run: |
+          export PATH="/usr/local/opt/qt/bin:$PATH"
+          cmake --build . --target all --clean-first --config $BUILD_TYPE
+        env:
+          LDFLAGS: "-L/usr/local/opt/qt/lib -L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib"
+          CPPFLAGS: "-I/usr/local/opt/qt/include -I/usr/local/opt/llvm/include"
+          HAL_BASE_PATH: ${{runner.workspace}}/build
+
+
+      - name: Test
+        working-directory: ${{runner.workspace}}/build
+        shell: bash
+        # Execute tests defined by the CMake configuration.
+        # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
+        run: |
+          ninja hal_coverage
+          bash <(curl -s https://codecov.io/bash) -f hal_coverage.info.cleaned || echo "Codecov did not collect coverage reports"
+        env:
+          LDFLAGS: "-L/usr/local/opt/qt/lib -L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib"
+          CPPFLAGS: "-I/usr/local/opt/qt/include -I/usr/local/opt/llvm/include"
+          HAL_BASE_PATH: ${{runner.workspace}}/build
+
+      - name: Publish New Homebrew Version
+        if: startsWith(runner.os, 'macOS') && github.event_name == 'create' && startsWith(github.ref, 'refs/tags/v')
+#        if: startsWith(runner.os, 'macOS')
+        run: |
+          export CI_COMMIT_TAG=$(git describe --abbrev=0 --tags)
+          export CI_COMMIT_SHA=$(git rev-parse --verify HEAD)
+          mkdir -p ~/.ssh
+          eval $(ssh-agent -s)
+          mkfifo -m 600 fifo
+          (echo "$HAL_DEPLOYMENT_KEY")> fifo | ssh-add fifo
+          rm fifo
+          mkdir -p ~/.ssh
+          touch ~/.ssh/known_hosts
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+          rm -rf build
+          mkdir -p build
+          cd build
+          git clone git@github.com:emsec/homebrew-hal.git
+          cd homebrew-hal
+          brew bump-formula-pr --dry-run --write --tag=$CI_COMMIT_TAG --revision=$CI_COMMIT_SHA hal.rb
+          git add hal.rb
+          git commit --author="GitlabCI <ci@gitlabci.local>" -m "Update to version $CI_COMMIT_TAG"
+          git tag $CI_COMMIT_TAG
+          git push origin $CI_COMMIT_TAG
+          git push origin master
+        env:
+          HAL_DEPLOYMENT_KEY: ${{ secrets.HAL_DEPLOYMENT_KEY }}
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
