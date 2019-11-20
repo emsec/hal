@@ -30,9 +30,9 @@
 #include "netlist/gate_library/gate_library.h"
 #include "netlist/netlist_constants.h"
 
-#include <map>
+#include <unordered_map>
 #include <memory>
-#include <set>
+#include <unordered_set>
 #include <string>
 #include <tuple>
 #include <type_traits>
@@ -423,7 +423,7 @@ public:
      * @param[in] name_filter - Filter for the name
      * @return A set of nets.
      */
-    std::set<std::shared_ptr<net>> get_nets(const std::string& name_filter = DONT_CARE) const;
+    std::unordered_set<std::shared_ptr<net>> get_nets(const std::string& name_filter = DONT_CARE) const;
 
     /**
      * Mark a net as a global input net.
@@ -519,11 +519,11 @@ private:
 
     /** stores the modules */
     std::shared_ptr<module> m_top_module;
-    std::map<u32, std::shared_ptr<module>> m_modules;
+    std::unordered_map<u32, std::shared_ptr<module>> m_modules;
 
     /** stores the nets */
-    std::map<u32, std::shared_ptr<net>> m_nets_map;
-    std::set<std::shared_ptr<net>> m_nets_set;
+    std::unordered_map<u32, std::shared_ptr<net>> m_nets_map;
+    std::unordered_set<std::shared_ptr<net>> m_nets_set;
 
     /** stores the set of global gates and nets */
     std::set<std::shared_ptr<net>> m_global_input_nets;

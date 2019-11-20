@@ -598,7 +598,7 @@ Get a net specified by id.
 :returns: The net or None.
 :rtype: hal_py.net or None
 )")
-        .def_property_readonly("nets", [](netlist& n) -> std::set<std::shared_ptr<net>> { return n.get_nets(); }, R"(
+        .def_property_readonly("nets", [](netlist& n) -> std::unordered_set<std::shared_ptr<net>> { return n.get_nets(); }, R"(
 Get all nets of the netlist.
 
 :returns: A set of nets.

@@ -345,13 +345,13 @@ std::shared_ptr<net> netlist::get_net_by_id(u32 net_id) const
     return it->second;
 }
 
-std::set<std::shared_ptr<net>> netlist::get_nets(const std::string& name_filter) const
+std::unordered_set<std::shared_ptr<net>> netlist::get_nets(const std::string& name_filter) const
 {
     if (name_filter == DONT_CARE)
     {
         return m_nets_set;
     }
-    std::set<std::shared_ptr<net>> res;
+    std::unordered_set<std::shared_ptr<net>> res;
     for (const auto& x : m_nets_set)
     {
         if (x->get_name() != name_filter)

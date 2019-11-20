@@ -34,7 +34,7 @@ void hdl_writer_verilog::prepare_signal_names()
 {
     //Generate all signal names
 
-    std::set<std::shared_ptr<net>> nets = m_netlist->get_nets();
+    auto nets = m_netlist->get_nets();
     for (auto e : nets)
     {
         std::string name_tmp                          = this->get_net_name(e);

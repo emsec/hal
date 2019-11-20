@@ -468,7 +468,7 @@ bool hdl_parser_vhdl::parse_architecture_body(entity& e)
     return true;
 }
 
-bool hdl_parser_vhdl::parse_attribute(std::map<std::string, std::set<std::tuple<std::string, std::string, std::string>>>& mapping)
+bool hdl_parser_vhdl::parse_attribute(std::unordered_map<std::string, std::set<std::tuple<std::string, std::string, std::string>>>& mapping)
 {
     u32 line_number = m_token_stream.peek().number;
     m_token_stream.consume("attribute", true);
@@ -656,7 +656,7 @@ bool hdl_parser_vhdl::build_netlist(const std::string& top_module)
         }
     }
 
-    std::map<std::string, std::string> top_assignments;
+    std::unordered_map<std::string, std::string> top_assignments;
 
     for (const auto& [name, direction] : top_entity.ports)
     {
@@ -785,10 +785,10 @@ bool hdl_parser_vhdl::build_netlist(const std::string& top_module)
     return true;
 }
 
-std::shared_ptr<module> hdl_parser_vhdl::instantiate(const entity& e, std::shared_ptr<module> parent, std::map<std::string, std::string> parent_module_assignments)
+std::shared_ptr<module> hdl_parser_vhdl::instantiate(const entity& e, std::shared_ptr<module> parent, std::unordered_map<std::string, std::string> parent_module_assignments)
 {
     // remember assigned aliases so they are not lost when recursively going deeper
-    std::map<std::string, std::string> aliases;
+    std::unordered_map<std::string, std::string> aliases;
 
     aliases[e.name] = get_unique_alias(e.name);
 
@@ -870,8 +870,8 @@ std::shared_ptr<module> hdl_parser_vhdl::instantiate(const entity& e, std::share
         }
     }
 
-    std::set<std::string> output_ports;
-    std::set<std::string> input_ports;
+    std::unordered_set<std::string> output_ports;
+    std::unordered_set<std::string> input_ports;
     for (const auto& [port, dir] : e.ports)
     {
         if (dir == "in")
@@ -918,7 +918,7 @@ std::shared_ptr<module> hdl_parser_vhdl::instantiate(const entity& e, std::share
         data_container* container;
 
         // assign actual signal names to ports
-        std::map<std::string, std::string> instance_assignments;
+        std::unordered_map<std::string, std::string> instance_assignments;
         for (const auto& [pin, signal] : inst.ports)
         {
             auto it2 = parent_module_assignments.find(signal);
@@ -1234,7 +1234,7 @@ std::vector<std::string> hdl_parser_vhdl::get_vector_signals(const std::string& 
     }
 
     // find the best matching supported vector type
-    std::map<std::string, u32> std_logic_vector_identifier_to_dimension = {
+    std::unordered_map<std::string, u32> std_logic_vector_identifier_to_dimension = {
         {"STD_LOGIC_VECTOR", 1},
         {"STD_LOGIC_VECTOR2", 2},
         {"STD_LOGIC_VECTOR3", 3},
@@ -1296,7 +1296,7 @@ std::vector<std::string> hdl_parser_vhdl::get_vector_signals(const std::string& 
     return result;
 }
 
-std::map<std::string, std::string> hdl_parser_vhdl::get_assignments(token_stream& lhs, token_stream& rhs)
+std::unordered_map<std::string, std::string> hdl_parser_vhdl::get_assignments(token_stream& lhs, token_stream& rhs)
 {
     // a port may be
     // (1): a => ...
@@ -1358,7 +1358,7 @@ std::map<std::string, std::string> hdl_parser_vhdl::get_assignments(token_stream
             std::string right_values = rhs.at(0).string.substr(2, rhs.at(0).string.size() - 3);
 
             // assemble assignment strings
-            std::map<std::string, std::string> result;
+            std::unordered_map<std::string, std::string> result;
             int i   = left_start;
             int cnt = 0;
             while (true)
@@ -1409,7 +1409,7 @@ std::map<std::string, std::string> hdl_parser_vhdl::get_assignments(token_stream
             }
 
             // assemble assignment strings
-            std::map<std::string, std::string> result;
+            std::unordered_map<std::string, std::string> result;
             int l = left_start;
             int r = right_start;
             while (left_dist >= 0)
