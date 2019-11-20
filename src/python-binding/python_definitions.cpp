@@ -1,19 +1,13 @@
 #include "def.h"
-#include <hdl_parser/hdl_parser_dispatcher.h>
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wshadow"
-#ifdef COMPILER_CLANG
-#pragma clang diagnostic ignored "-Wself-assign-overloaded"
-#pragma clang diagnostic ignored "-Wnested-anon-types"
-#pragma clang diagnostic ignored "-Wshadow-field-in-constructor-modified"
-#endif
 
+#include "core/interface_gui.h"
 #include "core/log.h"
+#include "core/plugin_manager.h"
 #include "core/utils.h"
-#include "pybind11/operators.h"
-#include "pybind11/pybind11.h"
-#include "pybind11/stl.h"
-#include "pybind11/stl_bind.h"
+
+#include "hdl_parser/hdl_parser_dispatcher.h"
+
+#include "hdl_writer/hdl_writer_dispatcher.h"
 
 #include "netlist/boolean_function.h"
 #include "netlist/gate.h"
@@ -24,10 +18,18 @@
 #include "netlist/netlist_factory.h"
 #include "netlist/persistent/netlist_serializer.h"
 
-#include "hdl_writer/hdl_writer_dispatcher.h"
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wshadow"
+#ifdef COMPILER_CLANG
+#pragma clang diagnostic ignored "-Wself-assign-overloaded"
+#pragma clang diagnostic ignored "-Wnested-anon-types"
+#pragma clang diagnostic ignored "-Wshadow-field-in-constructor-modified"
+#endif
 
-#include "core/interface_gui.h"
-#include "core/plugin_manager.h"
+#include "pybind11/operators.h"
+#include "pybind11/pybind11.h"
+#include "pybind11/stl.h"
+#include "pybind11/stl_bind.h"
 
 using map_string_to_set_of_string = std::map<std::string, std::set<std::string>>;
 
