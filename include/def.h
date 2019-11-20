@@ -29,9 +29,6 @@
 #include <filesystem>
 #endif
 
-#include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/path.hpp>
-
 #include <inttypes.h>
 #include <stdexcept>
 #include <stdlib.h>

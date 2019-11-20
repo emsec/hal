@@ -25,7 +25,9 @@
 
 #include "def.h"
 
+#include <algorithm>
 #include <map>
+#include <vector>
 
 /**
  * @ingroup core

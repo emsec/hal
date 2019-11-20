@@ -26,6 +26,7 @@
 #include "netlist/boolean_function.h"
 #include "netlist/gate_library/gate_type/gate_type.h"
 
+#include <cassert>
 #include <string>
 #include <unordered_set>
 

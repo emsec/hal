@@ -181,7 +181,8 @@ if(APPLE AND CMAKE_HOST_APPLE)
     find_package(OpenMP)
 
     if(OPENMP_FOUND OR OPENMP_CXX_FOUND)
-        message(STATUS "Found libomp without any special flags")
+        message(STATUS "Found li
+        mp without any special flags")
     endif()
 
     # If OpenMP wasn't found, try if we can find it in the default Macports location
@@ -249,23 +250,6 @@ if(HAVE_IGRAPH)
 endif(HAVE_IGRAPH)
 
 find_package(Filesystem REQUIRED)
-#if(NOT (CMAKE_CXX_COMPILER_ID STREQUAL "Clang"))
-#    set(Boost_USE_MULTITHREADED ON)
-#    find_package(Boost 1.58.0 COMPONENTS system filesystem graph REQUIRED)
-#    if(Boost_FOUND)
-#        message(STATUS "Boost_INCLUDE_DIRS: ${Boost_INCLUDE_DIRS}")
-#        message(STATUS "Boost_LIBRARIES: ${Boost_LIBRARIES}")
-#        message(STATUS "Boost_VERSION: ${Boost_VERSION}")
-#
-#        include_directories(${Boost_INCLUDE_DIRS} ${PYTHON_INCLUDE_DIRS})
-#    elseif(NOT Boost_FOUND)
-#        set(Missing_package "TRUE")
-#        if(APPLE AND CMAKE_HOST_APPLE)
-#            message(STATUS "To install boost on MacOS using homebrew run following command:")
-#            message(STATUS "    brew install boost --c++11")
-#        endif(APPLE AND CMAKE_HOST_APPLE)
-#    endif(Boost_FOUND)
-#endif()
 
 #find_package(Threads REQUIRED)
 
@@ -350,7 +334,6 @@ option(WITH_GUI "WITH_GUI" ON)
 set(LINK_LIBS ${CMAKE_DL_LIBS}
     ${NETLIST_LIB}
     ${CORE_LIB}
-    ${Boost_LIBRARIES}
     )
 
 set(GRAPH_ALGORITHM_LIB graph_algorithm)

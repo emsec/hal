@@ -26,6 +26,7 @@
 #include "def.h"
 #include "hdl_writer/hdl_writer.h"
 
+#include <functional>
 #include <map>
 
 /* forward declaration */
