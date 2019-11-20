@@ -45,7 +45,7 @@ if [[ "$platform" == 'macOS' ]]; then
        if ! [[ $?  -eq 0 ]]; then
             echo 'export PATH="/usr/local/opt/bison/bin:$PATH"' >> ~/.bash_profile
        fi
-       source >> ~/.bash_profile
+       source ~/.bash_profile
     else
        echo "Unknown User Shell: abort!"
        exit 255

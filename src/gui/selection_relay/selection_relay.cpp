@@ -252,7 +252,7 @@ void selection_relay::relay_combined_selection(void* sender, QList<u32>& gate_id
         while (i)
         {
             string += QString::number(*iterator) + ", ";
-            iterator++;
+            ++iterator;
             i--;
         }
         string += QString::number(*iterator) + ")";

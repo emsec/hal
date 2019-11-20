@@ -97,7 +97,6 @@ QVariant module_model::data(const QModelIndex& index, int role) const
     case Qt::DisplayRole:
     {
         return item->data(index.column());
-        break;
     }
     default: return QVariant();
     }
