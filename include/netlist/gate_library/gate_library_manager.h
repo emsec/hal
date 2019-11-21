@@ -21,10 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#include "pragma_once.h"
-
-#ifndef __HAL_GATE_LIBRARY_MANAGER_H
-#define __HAL_GATE_LIBRARY_MANAGER_H
+#pragma once
 
 #include "def.h"
 #include <map>
@@ -57,5 +54,3 @@ namespace gate_library_manager
      */
     NETLIST_API std::map<std::string, std::shared_ptr<gate_library>> get_gate_libraries();
 }    // namespace gate_library_manager
-
-#endif    //__HAL_GATE_LIBRARY_MANAGER_H

@@ -21,9 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#include "pragma_once.h"
-#ifndef __HAL_LIBRARY_LOADER_H__
-#define __HAL_LIBRARY_LOADER_H__
+#pragma once
 
 #include "def.h"
 
@@ -32,12 +30,12 @@
 // operating systems independent type definitions for function and handle access
 #ifdef _WIN32
 #include <windows.h>
-typedef FARPROC lib_fn_ptr_t;
-typedef HINSTANCE handle_ptr_t;
+using lib_fn_ptr_t = FARPROC;
+using handle_ptr_t = HINSTANCE;
 #else
 #include <dlfcn.h>
-typedef void (*lib_fn_ptr_t)();
-typedef void* handle_ptr_t;
+using lib_fn_ptr_t = void (*)();
+using handle_ptr_t = void*;
 #endif
 
 /**
@@ -87,5 +85,3 @@ private:
     // stores the handle_ptr_t to the library
     handle_ptr_t m_handle;
 };
-
-#endif /* __HAL_LIBRARY_LOADER_H__ */

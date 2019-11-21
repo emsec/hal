@@ -21,9 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#include "pragma_once.h"
-#ifndef __HAL_DATA_CONTAINER__
-#define __HAL_DATA_CONTAINER__
+#pragma once
 
 #include "def.h"
 
@@ -99,5 +97,3 @@ protected:
 
     std::map<std::tuple<std::string, std::string>, std::tuple<std::string, std::string>> m_data;
 };
-
-#endif /* __HAL_DATA_CONTAINER__ */

@@ -21,9 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#include "pragma_once.h"
-#ifndef __HAL_NETLIST_INTERNAL_MANAGER_H__
-#define __HAL_NETLIST_INTERNAL_MANAGER_H__
+#pragma once
 
 #include "def.h"
 #include "netlist/netlist_constants.h"
@@ -77,5 +75,3 @@ private:
     bool module_assign_gate(std::shared_ptr<module> m, std::shared_ptr<gate> g);
     bool module_remove_gate(std::shared_ptr<module> m, std::shared_ptr<gate> g);
 };
-
-#endif /* __HAL_NETLIST_INTERNAL_MANAGER_H__ */

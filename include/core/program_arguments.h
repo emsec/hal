@@ -21,9 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#include "pragma_once.h"
-#ifndef __PROGRAM_ARGUMENTS_H__
-#define __PROGRAM_ARGUMENTS_H__
+#pragma once
 
 #include "def.h"
 
@@ -125,5 +123,3 @@ private:
     std::map<std::set<std::string>, std::vector<std::string>> m_set_options;
     std::vector<std::string> m_given_flags;
 };
-
-#endif /* __PROGRAM_ARGUMENTS_H__ */

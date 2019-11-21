@@ -21,9 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#include "pragma_once.h"
-#ifndef __HAL_HDL_PARSER_DISPATCHER_H__
-#define __HAL_HDL_PARSER_DISPATCHER_H__
+#pragma once
 
 #include "def.h"
 
@@ -86,4 +84,3 @@ namespace hdl_parser_dispatcher
     std::shared_ptr<netlist> parse(const std::string& gate_library, const std::string& parser_name, const std::string& file_name);
 }    // namespace hdl_parser_dispatcher
 
-#endif /* __HAL_HDL_PARSER_DISPATCHER_H__ */

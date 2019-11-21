@@ -21,9 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#include "pragma_once.h"
-#ifndef __HAL_GATE_LIBRARY_PARSER_LIBERTY_H
-#define __HAL_GATE_LIBRARY_PARSER_LIBERTY_H
+#pragma once
 
 #include "def.h"
 
@@ -51,13 +49,13 @@ public:
     /**
      * Deserializes a gate library in Liberty format from the internal string stream into a gate library object.
      * In order to also support lookup tables (LUTs) the following extension is allowed:
-     * 
+     *
      * lut(<function name>) {
      *     data_category = <category>;
      *     data_identifier = <identifier>;
      *     direction = <"ascending" or "descending">;
      * }
-     * 
+     *
      * <category> and <identifier> refer to the location where the LUT configuration string is stored, for example "generic" and "init".
      * direction describes whether the least significant bit of the configuration is the output for inputs 000... (ascending) or 111... (descending).
      *
@@ -112,5 +110,3 @@ private:
 
     void remove_comments(std::string& line, bool& multi_line_comment);
 };
-
-#endif    //__HAL_GATE_LIBRARY_PARSER_LIBERTY_H

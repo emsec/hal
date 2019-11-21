@@ -21,9 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#include "pragma_once.h"
-#ifndef __HAL_LOG_H__
-#define __HAL_LOG_H__
+#pragma once
 
 #include "core/callback_hook.h"
 #include "core/program_arguments.h"
@@ -292,5 +290,3 @@ protected:
     void sink_it_(const spdlog::details::log_msg& msg) override;
     void flush_() override;
 };
-
-#endif /* __HAL_LOG_H__ */

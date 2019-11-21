@@ -21,9 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#include "pragma_once.h"
-#ifndef __HAL_INTERFACE_BASE_H__
-#define __HAL_INTERFACE_BASE_H__
+#pragma once
 
 #include "def.h"
 
@@ -117,5 +115,3 @@ public:
 };
 
 using instantiate_plugin_function = std::shared_ptr<i_base> (*)();
-
-#endif /* __HAL_INTERFACE_BASE_H__ */

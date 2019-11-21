@@ -21,9 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#include "pragma_once.h"
-#ifndef __HAL_HDL_WRITER_DISPATCHER_H__
-#define __HAL_HDL_WRITER_DISPATCHER_H__
+#pragma once
 
 #include "def.h"
 
@@ -65,5 +63,3 @@ namespace hdl_writer_dispatcher
      */
     bool write(std::shared_ptr<netlist> g, const std::string& format, const hal::path& file_name);
 }    // namespace hdl_writer_dispatcher
-
-#endif /* __HAL_HDL_WRITER_DISPATCHER_H__ */

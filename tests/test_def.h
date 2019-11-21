@@ -1,6 +1,4 @@
-#include "pragma_once.h"
-#ifndef __HAL_TEST_DEF_H__
-#define __HAL_TEST_DEF_H__
+#pragma once
 #include "pragma_once.h"
 #include "gtest/gtest.h"
 #include <sstream>

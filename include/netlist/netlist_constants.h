@@ -21,9 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#include "pragma_once.h"
-#ifndef __HAL_NETLIST_CONSTANTS_H__
-#define __HAL_NETLIST_CONSTANTS_H__
+#pragma once
 
 /**
  * @file
@@ -37,5 +35,3 @@
 #define DONT_CARE "__DONT_CARE__"
 
 ///@}
-
-#endif /* __HAL_NETLIST_CONSTANTS_H__ */

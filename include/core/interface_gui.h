@@ -21,9 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#include "pragma_once.h"
-#ifndef __HAL_INTERFACE_GUI_PLUGIN_H__
-#define __HAL_INTERFACE_GUI_PLUGIN_H__
+#pragma once
 
 #include "core/interface_base.h"
 #include "def.h"
@@ -48,5 +46,3 @@ public:
      */
     virtual bool exec(std::shared_ptr<netlist> netlist) = 0;
 };
-
-#endif /* __HAL_INTERFACE_GUI_PLUGIN_H__ */

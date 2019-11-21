@@ -21,9 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#include "pragma_once.h"
-#ifndef __HAL_CALLBACK_HOOK_H__
-#define __HAL_CALLBACK_HOOK_H__
+#pragma once
 
 #include "def.h"
 
@@ -242,5 +240,3 @@ private:
 
     std::map<std::string, u64> m_name_to_id_map;
 };
-
-#endif /* __HAL_CALLBACK_HOOK_H__ */
