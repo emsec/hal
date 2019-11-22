@@ -35,8 +35,8 @@
 #include <QString>
 #include <gui/focus_logger/focus_logger.h>
 
-QSettings g_settings(QString::fromStdString((core_utils::get_user_config_directory() / "/guisettings.ini").string()), QSettings::IniFormat);
-QSettings g_gui_state(QString::fromStdString((core_utils::get_user_config_directory() / "/guistate.ini").string()), QSettings::IniFormat);
+QSettings g_settings(QString::fromStdString((core_utils::get_user_config_directory() / "guisettings.ini").string()), QSettings::IniFormat);
+QSettings g_gui_state(QString::fromStdString((core_utils::get_user_config_directory() / "guistate.ini").string()), QSettings::IniFormat);
 
 settings_manager g_settings_manager;
 // this relay MUST be initialized before everything else since other components
@@ -164,7 +164,7 @@ bool plugin_gui::exec(program_arguments& args)
 
     //TEMPORARY CODE TO CHANGE BETWEEN THE 2 STYLESHEETS WITH SETTINGS (NOT FINAL)
     //this settingsobject is currently neccessary to read from the settings from here, because the g_settings are not yet initialized(?)
-    QSettings tempsettings_to_read_from(QString::fromStdString((core_utils::get_user_config_directory() / "/guisettings.ini").string()), QSettings::IniFormat);
+    QSettings tempsettings_to_read_from(QString::fromStdString((core_utils::get_user_config_directory() / "guisettings.ini").string()), QSettings::IniFormat);
     QString stylesheet_to_open = ":/style/darcula";    //default style
 
     if (tempsettings_to_read_from.value("main_style/theme", "") == "" || tempsettings_to_read_from.value("main_style/theme", "") == "darcula")
