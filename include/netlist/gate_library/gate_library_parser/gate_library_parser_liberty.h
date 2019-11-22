@@ -30,6 +30,7 @@
 #include "netlist/boolean_function.h"
 #include "netlist/gate_library/gate_library_parser/gate_library_parser.h"
 #include "netlist/gate_library/gate_type/gate_type.h"
+#include "netlist/gate_library/gate_type/gate_type_sequential.h"
 
 #include <unordered_map>
 
@@ -71,7 +72,7 @@ private:
         std::vector<std::string> input_pins, output_pins;
         std::unordered_map<std::string, token> functions;
         std::string next_state, clocked_on, reset, set;
-        gate_type::special_behavior special_behavior_var1, special_behavior_var2;
+        gate_type_sequential::set_reset_behavior special_behavior_var1, special_behavior_var2;
         std::string data_category, data_identifier, data_direction;
         std::string state1, state2;
 
@@ -86,8 +87,8 @@ private:
             clocked_on            = "";
             reset                 = "";
             set                   = "";
-            special_behavior_var1 = gate_type::special_behavior::U;
-            special_behavior_var2 = gate_type::special_behavior::U;
+            special_behavior_var1 = gate_type_sequential::set_reset_behavior::U;
+            special_behavior_var2 = gate_type_sequential::set_reset_behavior::U;
             data_category         = "";
             data_identifier       = "";
             data_direction        = "";

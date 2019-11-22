@@ -1,7 +1,7 @@
-Gate
+Gate Type LUT
 ==========================
 
-.. autoclass:: hal_py.gate
+.. autoclass:: hal_py.gate_type_lut
    :members:
    :inherited-members:
    :show-inheritance:

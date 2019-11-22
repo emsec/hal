@@ -285,7 +285,7 @@ bool gate_library_parser_liberty::parse_ff(token_stream& cell_stream)
 
             if (pos != std::string::npos)
             {
-                m_current_cell.special_behavior_var1 = gate_type::special_behavior(pos);
+                m_current_cell.special_behavior_var1 = gate_type_sequential::set_reset_behavior(pos);
             }
             else
             {
@@ -304,7 +304,7 @@ bool gate_library_parser_liberty::parse_ff(token_stream& cell_stream)
 
             if (pos != std::string::npos)
             {
-                m_current_cell.special_behavior_var2 = gate_type::special_behavior(pos);
+                m_current_cell.special_behavior_var2 = gate_type_sequential::set_reset_behavior(pos);
             }
             else
             {
@@ -400,7 +400,7 @@ bool gate_library_parser_liberty::parse_latch(token_stream& cell_stream)
 
             if (pos != std::string::npos)
             {
-                m_current_cell.special_behavior_var1 = gate_type::special_behavior(pos);
+                m_current_cell.special_behavior_var1 = gate_type_sequential::set_reset_behavior(pos);
             }
             else
             {
@@ -419,7 +419,7 @@ bool gate_library_parser_liberty::parse_latch(token_stream& cell_stream)
 
             if (pos != std::string::npos)
             {
-                m_current_cell.special_behavior_var2 = gate_type::special_behavior(pos);
+                m_current_cell.special_behavior_var2 = gate_type_sequential::set_reset_behavior(pos);
             }
             else
             {
@@ -526,7 +526,7 @@ std::shared_ptr<gate_type> gate_library_parser_liberty::construct_gate_type()
             seq_gt->add_boolean_function("reset", boolean_function::from_string(m_current_cell.reset));
         }
 
-        seq_gt->set_special_behavior(m_current_cell.special_behavior_var1, m_current_cell.special_behavior_var2);
+        seq_gt->set_set_reset_behavior(m_current_cell.special_behavior_var1, m_current_cell.special_behavior_var2);
         seq_gt->set_init_data_category(m_current_cell.data_category);
         seq_gt->set_init_data_identifier(m_current_cell.data_identifier);
 

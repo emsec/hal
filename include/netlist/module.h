@@ -52,6 +52,7 @@ class NETLIST_API module : public data_container, public std::enable_shared_from
 {
     friend class netlist_internal_manager;
     friend class netlist;
+
 public:
     /**
      * Get the module's id.
@@ -145,7 +146,6 @@ public:
      * @returns The set of module input nets.
      */
     std::set<std::shared_ptr<net>> get_internal_nets(const std::string& name_filter = DONT_CARE) const;
-
 
     /*
      * ################################################################

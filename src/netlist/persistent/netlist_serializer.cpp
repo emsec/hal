@@ -283,7 +283,7 @@ namespace netlist_serializer
                     auto functions = val["custom_functions"].GetObject();
                     for (auto f_it = functions.MemberBegin(); f_it != functions.MemberEnd(); ++f_it)
                     {
-                        g->set_boolean_function(f_it->name.GetString(), boolean_function::from_string(f_it->value.GetString()));
+                        g->add_boolean_function(f_it->name.GetString(), boolean_function::from_string(f_it->value.GetString()));
                     }
                 }
 

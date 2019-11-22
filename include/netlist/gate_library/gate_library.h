@@ -47,9 +47,9 @@ public:
     ~gate_library() = default;
 
     /**
-     * Returns the library name.
+     * Get the name of the library.
      *
-     * @returns The library's name.
+     * @returns The name.
      */
     std::string get_name() const;
 
@@ -68,32 +68,32 @@ public:
     const std::map<std::string, std::shared_ptr<const gate_type>>& get_gate_types();
 
     /**
-     * Get all global VCC gate types of the library.
+     * Get all VCC gate types of the library.
      *
-     * @returns A map from global VCC gate type names to gate type objects.
+     * @returns A map from VCC gate type names to gate type objects.
      */
     const std::map<std::string, std::shared_ptr<const gate_type>>& get_vcc_gate_types();
 
     /**
-     * Get all global GND gate types of the library.
+     * Get all GND gate types of the library.
      *
-     * @returns A map from global GND gate type names to gate type objects.
+     * @returns A map from GND gate type names to gate type objects.
      */
     const std::map<std::string, std::shared_ptr<const gate_type>>& get_gnd_gate_types();
 
     /**
-     * Get necessary includes of the library, e.g., VHDL libraries.
+     * Add a necessary includes of the gate library, e.g., VHDL libraries.
      *
-     * @returns The includes of the library
-     */
-    std::vector<std::string> get_includes() const;
-
-    /**
-     * Add a necessary includes of the library, e.g., VHDL libraries.
-     *
-     * @param[in] inc - the include to add
+     * @param[in] inc - The include to add.
      */
     void add_include(const std::string& inc);
+
+    /**
+     * Get a vector of necessary includes of the gate library, e.g., VHDL libraries.
+     *
+     * @returns A vector of includes.
+     */
+    std::vector<std::string> get_includes() const;
 
 private:
     std::string m_name;

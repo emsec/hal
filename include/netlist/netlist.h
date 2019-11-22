@@ -28,12 +28,12 @@
 #include "netlist/gate_library/gate_library.h"
 #include "netlist/netlist_constants.h"
 
-#include <unordered_map>
 #include <memory>
-#include <unordered_set>
 #include <string>
 #include <tuple>
 #include <type_traits>
+#include <unordered_map>
+#include <unordered_set>
 
 /** forward declaration */
 class netlist_internal_manager;
@@ -98,7 +98,7 @@ public:
      */
     void set_input_filename(const hal::path& input_filename);
 
-    /*
+    /**
      * Get the design name,
      *
      * @returns The design name.
@@ -140,7 +140,7 @@ public:
      */
 
     /**
-     * Gets an unoccupied module id. <br>
+     * Gets an unoccupied module id.<br>
      * The value 0 is reserved and represents an invalid id.
      *
      * @returns An unoccupied unique id.
@@ -193,8 +193,7 @@ public:
     std::shared_ptr<module> get_module_by_id(u32 id) const;
 
     /**
-     * Get all modules of the netlist.<br>
-     * The top module is included!
+     * Get a set of all modules of the netlist including the top module.
      *
      * @returns The modules of the netlist.
      */
@@ -282,16 +281,9 @@ public:
     std::set<std::shared_ptr<gate>> get_gates(const std::string& gate_type_filter = DONT_CARE, const std::string& name_filter = DONT_CARE) const;
 
     /**
-     * Get number/amounts of gates in netlist. <br>
-     *
-     * @return Number of gates.
-     */
-    u32 get_number_of_gates();
-
-    /**
      * Mark a gate as a global vcc gate.
      *
-     * @param[in] gate - The new gate.
+     * @param[in] gate - The gate.
      * @returns True on success.
      */
     bool mark_vcc_gate(const std::shared_ptr<gate> gate);
@@ -299,7 +291,7 @@ public:
     /**
      * Mark a gate as a global gnd gate.
      *
-     * @param[in] gate - The new gate.
+     * @param[in] gate - The negate.
      * @returns True on success.
      */
     bool mark_gnd_gate(const std::shared_ptr<gate> gate);
@@ -307,13 +299,13 @@ public:
     /**
      * Unmark a global vcc gate.
      *
-     * @param[in] gate - The new gate.
+     * @param[in] gate - The gate.
      * @returns True on success.
      */
     bool unmark_vcc_gate(const std::shared_ptr<gate> gate);
 
     /**
-     * Unmark a global gnd gate.
+     * Unmark a global gate.
      *
      * @param[in] gate - The new gate.
      * @returns True on success.
@@ -363,13 +355,6 @@ public:
      * @returns An unoccupied unique id.
      */
     u32 get_unique_net_id();
-
-    /**
-     * Get number/amounts of nets in netlist. <br>
-     *
-     * @return Number of nets.
-     */
-    u32 get_number_of_nets();
 
     /**
      * Creates and adds a new net to the netlist.<br>

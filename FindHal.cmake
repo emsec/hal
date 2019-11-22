@@ -20,12 +20,7 @@ find_library(hal_netlist_LIBRARY
              PATHS ${hal_PKGCONF_LIBRARY_DIRS}
              )
 
-find_library(hal_hdl_bdd_LIBRARY
-             NAMES hal_bdd
-             PATHS ${hal_PKGCONF_LIBRARY_DIRS}
-             )
-
-set(HAL_LIBRARIES ${hal_core_LIBRARY} ${hal_graph_LIBRARY} ${hal_hdl_bdd_LIBRARY})
+set(HAL_LIBRARIES ${hal_core_LIBRARY} ${hal_graph_LIBRARY})
 
 message(STATUS "HAL_LIBRARIES: ${HAL_LIBRARIES}")
 
@@ -36,5 +31,4 @@ mark_as_advanced(
         Hal_INCLUDE_DIR
         hal_core_LIBRARY
         hal_graph_LIBRARY
-        hal_hdl_bdd_LIBRARY
 )

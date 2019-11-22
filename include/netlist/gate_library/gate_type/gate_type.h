@@ -44,16 +44,6 @@ public:
         latch
     };
 
-    enum class special_behavior
-    {
-        U,    // not set
-        L,
-        H,
-        N,
-        T,
-        X
-    };
-
     /**
      * Constructor for a gate type.
      *
@@ -63,15 +53,14 @@ public:
     virtual ~gate_type() = default;
 
     /**
-     * Returns a string describing the given gate type object.
+     * Get a string describing the given gate type object.
      *
-     * @param[in] gt - The gate type object.
      * @returns A string describing the gate type.
      */
-    static std::string to_string(const gate_type& gt);
+    std::string to_string() const;
 
     /**
-     * Inserts the gate type object to an output stream.
+     * Insert the gate type object to an output stream.
      *
      * @param[in] os - The output stream to insert the gate type object into.
      * @param[in] gt - The gate type object.
@@ -80,7 +69,7 @@ public:
     friend std::ostream& operator<<(std::ostream& os, const gate_type& gt);
 
     /**
-     * Tests whether two gate type objects are equal.
+     * Test whether two gate type objects are equal.
      *
      * @param[in] other - Gate type object to compare to.
      * @returns True when both gate type objects are equal, false otherwise.
@@ -88,7 +77,7 @@ public:
     bool operator==(const gate_type& other) const;
 
     /**
-     * Tests whether two gate type objects are unequal.
+     * Test whether two gate type objects are unequal.
      *
      * @param[in] other - Gate type object to compare to.
      * @returns True when both gate type objects are unequal, false otherwise.
@@ -96,7 +85,22 @@ public:
     bool operator!=(const gate_type& other) const;
 
     /**
-     * Adds an input pin to the gate type.
+     * Get the name of the gate type.
+     *
+     * @returns The name of the gate type.
+     */
+    std::string get_name() const;
+
+    /**
+     * Get the base type of the gate type.
+     * The base type can be either combinatorial, lut, ff, or latch.
+     *
+     * @returns The base type of the gate type.
+     */
+    base_type get_base_type() const;
+
+    /**
+     * Add an input pin to the gate type.
      *
      * @param[in] input_pin - The name of an input pin.
      */
@@ -110,7 +114,14 @@ public:
     void add_input_pins(const std::vector<std::string>& input_pins);
 
     /**
-     * Adds an output pin to the gate type.
+     * Get a vector of input pins of the gate type.
+     *
+     * @returns A vector of input pins of the gate type.
+     */
+    std::vector<std::string> get_input_pins() const;
+
+    /**
+     * Add an output pin to the gate type.
      *
      * @param[in] output_pin - The name of an output pin.
      */
@@ -124,47 +135,24 @@ public:
     void add_output_pins(const std::vector<std::string>& output_pins);
 
     /**
-     * Adds a boolean function describing the behaviour of the specified pin to the gate type.
-     *
-     * @param[in] pin_name - The name of the pin that the boolean function corresponds to.
-     * @param[in] bf - A boolean function object.
-     */
-    void add_boolean_function(std::string pin_name, boolean_function bf);
-
-    /**
-     * Returns the name of the gate type.
-     *
-     * @returns The name of the gate type.
-     */
-    std::string get_name() const;
-
-    /**
-     * Returns the base type of the gate type.
-     * The base type can be either combinatorial, lut, ff, or latch.
-     *
-     * @returns The base type of the gate type.
-     */
-    base_type get_base_type() const;
-
-    /**
-     * Returns a vector of input pins of the gate type.
-     *
-     * @returns A vector of input pins of the gate type.
-     */
-    std::vector<std::string> get_input_pins() const;
-
-    /**
-     * Returns a vector of output pins of the gate type.
+     * Get a vector of output pins of the gate type.
      *
      * @returns A vector of output pins of the gate type..
      */
     std::vector<std::string> get_output_pins() const;
 
     /**
-     * Returns a map containing the boolean functions of the gate type.
-     * The map can be accessed using the names of the respective pins.
+     * Add a boolean function with the specified name to the gate type.
      *
-     * @returns A map of pin names to boolean functions.
+     * @param[in] name - The name of the boolean function.
+     * @param[in] bf - A boolean function object.
+     */
+    void add_boolean_function(std::string pin_name, boolean_function bf);
+
+    /**
+     * Get a map containing the boolean functions of the gate type.
+     *
+     * @returns A map from function names to boolean functions.
      */
     std::unordered_map<std::string, boolean_function> get_boolean_functions() const;
 

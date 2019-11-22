@@ -6,14 +6,14 @@ gate_type::gate_type(const std::string& name)
     m_base_type = base_type::combinatorial;
 }
 
-std::string gate_type::to_string(const gate_type& gt)
+std::string gate_type::to_string() const
 {
-    return gt.get_name();
+    return m_name;
 }
 
 std::ostream& operator<<(std::ostream& os, const gate_type& gt)
 {
-    return os << gate_type::to_string(gt);
+    return os << gt.to_string();
 }
 
 bool gate_type::operator==(const gate_type& other) const

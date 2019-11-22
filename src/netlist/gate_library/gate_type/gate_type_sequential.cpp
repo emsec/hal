@@ -15,7 +15,7 @@ bool gate_type_sequential::do_compare(const gate_type& other) const
     {
         equal = m_state_pins == gt->get_state_output_pins();
         equal &= m_inverted_state_pins == gt->get_inverted_state_output_pins();
-        equal &= m_special_behavior == gt->get_special_behavior();
+        equal &= m_set_reset_behavior == gt->get_set_reset_behavior();
         equal &= m_init_data_category == gt->get_init_data_category();
         equal &= m_init_data_identifier == gt->get_init_data_identifier();
     }
@@ -43,14 +43,14 @@ std::unordered_set<std::string> gate_type_sequential::get_inverted_state_output_
     return m_inverted_state_pins;
 }
 
-void gate_type_sequential::set_special_behavior(special_behavior sb1, special_behavior sb2)
+void gate_type_sequential::set_set_reset_behavior(set_reset_behavior sb1, set_reset_behavior sb2)
 {
-    m_special_behavior = {sb1, sb2};
+    m_set_reset_behavior = {sb1, sb2};
 }
 
-std::pair<gate_type::special_behavior, gate_type::special_behavior> gate_type_sequential::get_special_behavior() const
+std::pair<gate_type_sequential::set_reset_behavior, gate_type_sequential::set_reset_behavior> gate_type_sequential::get_set_reset_behavior() const
 {
-    return m_special_behavior;
+    return m_set_reset_behavior;
 }
 
 void gate_type_sequential::set_init_data_category(const std::string& category)

@@ -66,21 +66,21 @@ public:
     u32 get_id() const;
 
     /**
-     * Gets the parent netlist of the net.
+     * Get the parent netlist of the net.
      *
      * @returns The netlist.
      */
     std::shared_ptr<netlist> get_netlist() const;
 
     /**
-     * Gets the net's name.
+     * Get the name of the net.
      *
      * @returns The name.
      */
     std::string get_name() const;
 
     /**
-     * Sets the net's name.
+     * Set the name of the net.
      *
      * @param[in] name - The new name.
      */

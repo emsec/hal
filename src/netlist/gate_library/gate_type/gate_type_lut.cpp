@@ -15,7 +15,7 @@ bool gate_type_lut::do_compare(const gate_type& other) const
     {
         equal = m_config_data_category == gt->get_config_data_category();
         equal &= m_config_data_identifier == gt->get_config_data_identifier();
-        equal &= m_ascending == gt->is_ascending_order();
+        equal &= m_ascending == gt->is_config_data_ascending_order();
     }
 
     return equal;
@@ -56,7 +56,7 @@ std::string gate_type_lut::get_config_data_identifier() const
     return m_config_data_identifier;
 }
 
-bool gate_type_lut::is_ascending_order() const
+bool gate_type_lut::is_config_data_ascending_order() const
 {
     return m_ascending;
 }

@@ -309,11 +309,6 @@ u32 netlist::get_unique_net_id()
     return m_next_net_id;
 }
 
-u32 netlist::get_number_of_nets()
-{
-    return m_nets_set.size();
-}
-
 std::shared_ptr<net> netlist::create_net(const u32 id, const std::string& name)
 {
     return m_manager->create_net(id, name);

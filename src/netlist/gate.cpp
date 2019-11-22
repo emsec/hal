@@ -210,7 +210,7 @@ boolean_function gate::get_lut_function() const
     for (u32 i = 0; config != 0; i++)
     {
         u8 bit;
-        if (lut_type->is_ascending_order())
+        if (lut_type->is_config_data_ascending_order())
         {
             bit = (config & 1);
             config >>= 1;
@@ -243,7 +243,7 @@ boolean_function gate::get_lut_function() const
     return result.optimize();
 }
 
-void gate::set_boolean_function(const std::string& name, const boolean_function& func)
+void gate::add_boolean_function(const std::string& name, const boolean_function& func)
 {
     if (m_type->get_base_type() == gate_type::base_type::lut)
     {
@@ -254,7 +254,7 @@ void gate::set_boolean_function(const std::string& name, const boolean_function&
             auto tt       = func.get_truth_table(get_input_pins());
 
             u64 config_value = 0;
-            if (lut_type->is_ascending_order())
+            if (lut_type->is_config_data_ascending_order())
             {
                 std::reverse(tt.begin(), tt.end());
             }

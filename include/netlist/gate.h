@@ -89,30 +89,9 @@ public:
     std::shared_ptr<const gate_type> get_type() const;
 
     /**
-     * Gets the physical location x-coordinate of the gate in the layout.
-     *
-     * @returns The gate's x-coordinate.
-     */
-    float get_location_x() const;
-
-    /**
-     * Gets the physical location y-coordinate of the gate in the layout.
-     *
-     * @returns The gate's y-coordinate.
-     */
-    float get_location_y() const;
-
-    /**
-     * Gets the physical location of the gate in the layout.
-     *
-     * @returns A pair <x-coordinate, y-coordinate>.
-     */
-    std::pair<float, float> get_location() const;
-
-    /**
      * Checks whether the gate's location in the layout is available.
      *
-     * @returns Whether valid location data is available.
+     * @returns True if valid location data is available, false otherwise.
      */
     bool has_location() const;
 
@@ -125,12 +104,26 @@ public:
     void set_location_x(float x);
 
     /**
+     * Gets the physical location x-coordinate of the gate in the layout.
+     *
+     * @returns The gate's x-coordinate.
+     */
+    float get_location_x() const;
+
+    /**
      * Sets the physical location y-coordinate of the gate in the layout.
      * Only positive values are valid, negative values will be regarded as no location assigned.
      *
      * @param[in] y - The gate's y-coordinate.
      */
     void set_location_y(float y);
+
+    /**
+     * Gets the physical location y-coordinate of the gate in the layout.
+     *
+     * @returns The gate's y-coordinate.
+     */
+    float get_location_y() const;
 
     /**
      * Sets the physical location of the gate in the layout.
@@ -140,38 +133,45 @@ public:
     void set_location(const std::pair<float, float>& location);
 
     /**
-     * Gets the module this gate is contained in.
+     * Gets the physical location of the gate in the layout.
      *
-     * @returns The owning module.
+     * @returns A pair <x-coordinate, y-coordinate>.
+     */
+    std::pair<float, float> get_location() const;
+
+    /**
+     * Gets the module in which this gate is contained.
+     *
+     * @returns The module.
      */
     std::shared_ptr<module> get_module() const;
 
     /**
      * Get the boolean function associated with a specific name.
-     * This name can for example be an output pin of the gate or a defined functionality like "RESET".
+     * This name can for example be an output pin of the gate or a defined functionality like "reset".
+     * If name is empty, the function of the first output pin is returned.
+     * If there is no function for the given name, the constant 'X' is returned.
      *
      * @param[in] name - The function name.
-     *                   If name is empty, the function of the first output pin is returned.
-     *                   If there is no function for the given name, the constant 'X' is returned.
      * @returns The boolean function.
      */
     boolean_function get_boolean_function(const std::string& name = "") const;
 
     /**
-     * Get all boolean functions associated with this gate.
+     * Get a map from function name to boolean function for all boolean functions associated with this gate.
      *
-     * @param[in] only_custom_functions - if true, this returns only the functions which were set via set_boolean_function
+     * @param[in] only_custom_functions - If true, this returns only the functions which were set via add_boolean_function.
      * @returns A map from function name to function.
      */
     std::unordered_map<std::string, boolean_function> get_boolean_functions(bool only_custom_functions = false) const;
 
     /**
-     * Set the boolean function with a specific name only for this gate.
+     * Add the boolean function with the specified name only for this gate.
      *
      * @param[in] name - The function name, usually an output port.
      * @param[in] func - The function.
      */
-    void set_boolean_function(const std::string& name, const boolean_function& func);
+    void add_boolean_function(const std::string& name, const boolean_function& func);
 
     /**
      * Mark this gate as a global vcc gate.
@@ -220,21 +220,21 @@ public:
      */
 
     /**
-     * Get all input pin types of the gate.
+     * Get a list of all input pin types of the gate.
      *
      * @returns A vector of input pin types.
      */
     std::vector<std::string> get_input_pins() const;
 
     /**
-     * Get all output pin types of the gate.
+     * Get a list of all output pin types of the gate.
      *
      * @returns A vector of output pin types.
      */
     std::vector<std::string> get_output_pins() const;
 
     /**
-     * Get all fan-in nets, i.e. all nets that are connected to one of the input pins.
+     * Get a set of all fan-in nets of the gate, i.e. all nets that are connected to one of the input pins.
      *
      * @returns A set of all connected input nets.
      */
@@ -249,7 +249,7 @@ public:
     std::shared_ptr<net> get_fan_in_net(const std::string& pin_type) const;
 
     /**
-     * Get all fan-out nets, i.e. all nets that are connected to one of the output pins.
+     * Get a set of all fan-out nets of the gate, i.e. all nets that are connected to one of the output pins.
      *
      * @returns A set of all connected output nets.
      */
@@ -264,7 +264,7 @@ public:
     std::shared_ptr<net> get_fan_out_net(const std::string& pin_type) const;
 
     /**
-     * Get all unique predecessors of a gate filterable by the gate's input pin and a specific gate type.
+     * Get a set of all unique predecessor endpoints of the gate filterable by the gate's input pin and a specific gate type.
      *
      * @param[in] this_pin_type_filter - The filter for the input pin type of the this gate. DONT_CARE for no filtering.
      * @param[in] pred_pin_type_filter - The filter for the output pin type of the predecessor gate. DONT_CARE for no filtering.
@@ -275,7 +275,7 @@ public:
         get_unique_predecessors(const std::string& this_pin_type_filter = DONT_CARE, const std::string& pred_pin_type_filter = DONT_CARE, const std::string& gate_type_filter = DONT_CARE) const;
 
     /**
-     * Get all direct predecessors of a gate filterable by the gate's input pin and a specific gate type.
+     * Get a vector of all direct predecessor endpoints of the gate filterable by the gate's input pin and a specific gate type.
      *
      * @param[in] this_pin_type_filter - The filter for the input pin type of the this gate. DONT_CARE for no filtering.
      * @param[in] pred_pin_type_filter - The filter for the output pin type of the predecessor gate. DONT_CARE for no filtering.
@@ -286,7 +286,7 @@ public:
         get_predecessors(const std::string& this_pin_type_filter = DONT_CARE, const std::string& pred_pin_type_filter = DONT_CARE, const std::string& gate_type_filter = DONT_CARE) const;
 
     /**
-     * Get the direct predecessor of a gate connected to a specific input pin and filterable by a specific gate type.
+     * Get the direct predecessor endpoint of the gate connected to a specific input pin and filterable by a specific gate type.
      *
      * @param[in] this_pin_type_filter - The input pin type of the this gate. DONT_CARE for no filtering.
      * @param[in] pred_pin_type_filter - The filter for the output pin type of the predecessor gate. DONT_CARE for no filtering.
@@ -296,7 +296,7 @@ public:
     endpoint get_predecessor(const std::string& this_pin_type_filter, const std::string& pred_pin_type_filter = DONT_CARE, const std::string& gate_type_filter = DONT_CARE) const;
 
     /**
-     * Get all direct unique successors of a gate filterable by the gate's output pin and a specific gate type.
+     * Get a set of all unique successor endpoints of the gate filterable by the gate's output pin and a specific gate type.
      *
      * @param[in] this_pin_type_filter - The output pin type of the this gate. DONT_CARE for no filtering.
      * @param[in] suc_pin_type_filter - The filter for the input pin type of the successor gate. DONT_CARE for no filtering.
@@ -307,7 +307,7 @@ public:
         get_unique_successors(const std::string& this_pin_type_filter = DONT_CARE, const std::string& suc_pin_type_filter = DONT_CARE, const std::string& gate_type_filter = DONT_CARE) const;
 
     /**
-     * Get all direct successors of a gate filterable by the gate's output pin and a specific gate type.
+     * Get a vector of all direct successor endpoints of the gate filterable by the gate's output pin and a specific gate type.
      *
      * @param[in] this_pin_type_filter - The output pin type of the this gate. DONT_CARE for no filtering.
      * @param[in] suc_pin_type_filter - The filter for the input pin type of the successor gate. DONT_CARE for no filtering.
