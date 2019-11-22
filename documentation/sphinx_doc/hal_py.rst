@@ -13,6 +13,7 @@ hal_py Documentation
    gate_type
    gate_type_lut
    gate_type_sequential
+   set_reset_behaviour
    gate
    net
    module

@@ -5,3 +5,5 @@ Gate Type Sequential
    :members:
    :inherited-members:
    :show-inheritance:
+
+   .. automethod:: __init__
