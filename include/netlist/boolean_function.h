@@ -24,9 +24,12 @@
 #pragma once
 
 #include "def.h"
+#include <algorithm>
+#include <cassert>
 #include <map>
 #include <ostream>
 #include <set>
+#include <vector>
 
 /**
  * Boolean function class.

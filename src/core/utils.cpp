@@ -5,8 +5,6 @@
 #include <fstream>
 #include <sstream>
 
-#include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/path.hpp>
 #include <boost/predef.h>
 
 #include <boost/algorithm/string/predicate.hpp>

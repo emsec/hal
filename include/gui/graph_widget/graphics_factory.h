@@ -6,6 +6,7 @@
 
 #include <QStringList>
 
+#include <cassert>
 #include <memory>
 
 //class gate;

@@ -4,7 +4,6 @@
 #include "netlist/netlist_factory.h"
 #include "test_def.h"
 #include "gtest/gtest.h"
-#include <boost/filesystem.hpp>
 #include <core/log.h>
 #include <core/utils.h>
 #include <iostream>
@@ -39,7 +38,7 @@ protected:
 
     virtual void TearDown()
     {
-        boost::filesystem::remove(test_hal_file_path);
+        std::filesystem::remove(test_hal_file_path);
     }
 
     // Creates an empty netlist with a certain id if passed

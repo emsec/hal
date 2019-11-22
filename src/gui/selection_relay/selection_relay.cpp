@@ -28,6 +28,12 @@ void selection_relay::clear()
     m_focus_id                   = 0;
 }
 
+void selection_relay::clear_and_update()
+{
+    clear();
+    Q_EMIT selection_changed(nullptr);
+}
+
 void selection_relay::register_sender(void* sender, QString name)
 {
     m_sender_register.append(QPair<void*, QString>(sender, name));

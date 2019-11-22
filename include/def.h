@@ -23,10 +23,8 @@
 
 #pragma once
 
-#if defined(__GNUC__)
-#include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/path.hpp>
-// #include <experimental/filesystem>
+#if defined(__GNUC__) && ((__GNUC__ == 7 && __GNUC_MINOR__ >= 4))
+#include <experimental/filesystem>
 #else
 #include <filesystem>
 #endif
@@ -35,37 +33,27 @@
 #include <stdexcept>
 #include <stdlib.h>
 
-using i8 = int8_t;
-
+using i8  = int8_t;
 using i16 = int16_t;
-
 using i32 = int32_t;
-
 using i64 = int64_t;
 
-using u8 = uint8_t;
-
+using u8  = uint8_t;
 using u16 = uint16_t;
-
 using u32 = uint32_t;
-
 using u64 = uint64_t;
 
 namespace hal
 {
-#if defined(__GNUC__)
-    namespace fs = boost::filesystem;
-    //    namespace fs = std::experimental::filesystem;
-
-    using error_code = boost::system::error_code;
+#if defined(__GNUC__) && ((__GNUC__ == 7 && __GNUC_MINOR__ >= 4))
+    namespace fs = std::experimental::filesystem;
 #else
-    namespace fs     = std::filesystem;
-    using error_code = std::error_code;
+    namespace fs = std::filesystem;
 #endif
-    using path = fs::path;
+    typedef std::error_code error_code;
+    
+    typedef fs::path path;
 }    // namespace hal
-
-#define DEBUG
 
 #define UNUSED(expr) (void)expr
 

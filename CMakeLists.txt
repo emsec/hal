@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.15)
 
 message(STATUS "cmake version: ${CMAKE_VERSION}")
 
@@ -9,7 +9,7 @@ if(NOT CMAKE_BUILD_TYPE)
     set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
 endif()
 
-if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     message(STATUS "selected build type: ${CMAKE_BUILD_TYPE}")
 elseif(CMAKE_BUILD_TYPE STREQUAL "Release")
     message(STATUS "selected build type: ${CMAKE_BUILD_TYPE}")
@@ -19,7 +19,7 @@ elseif(CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
     message(STATUS "selected build type: ${CMAKE_BUILD_TYPE}")
 else()
     message(FATAL_ERROR "unsupported build type: ${CMAKE_BUILD_TYPE}, supported are: Debug, MinSizeRel, RelWithDebInfo, Release")
-endif ()
+endif()
 
 if(UNIX AND NOT APPLE)
     set(LINUX TRUE)
@@ -181,7 +181,8 @@ if(APPLE AND CMAKE_HOST_APPLE)
     find_package(OpenMP)
 
     if(OPENMP_FOUND OR OPENMP_CXX_FOUND)
-        message(STATUS "Found libomp without any special flags")
+        message(STATUS "Found li
+        mp without any special flags")
     endif()
 
     # If OpenMP wasn't found, try if we can find it in the default Macports location
@@ -246,8 +247,10 @@ if(HAVE_IGRAPH)
     add_definitions(-DIGRAPH_VERSION_PATCH_GUESS=${IGRAPH_VERSION_PATCH_GUESS})
 endif(HAVE_IGRAPH)
 
+find_package(Filesystem REQUIRED Final Experimental)
+
 set(Boost_USE_MULTITHREADED ON)
-find_package(Boost 1.58.0 COMPONENTS system filesystem graph REQUIRED)
+find_package(Boost 1.58.0 COMPONENTS system REQUIRED)
 if(Boost_FOUND)
     message(STATUS "Boost_INCLUDE_DIRS: ${Boost_INCLUDE_DIRS}")
     message(STATUS "Boost_LIBRARIES: ${Boost_LIBRARIES}")
@@ -345,7 +348,6 @@ option(WITH_GUI "WITH_GUI" ON)
 set(LINK_LIBS ${CMAKE_DL_LIBS}
     ${NETLIST_LIB}
     ${CORE_LIB}
-    ${Boost_LIBRARIES}
     )
 
 set(GRAPH_ALGORITHM_LIB graph_algorithm)

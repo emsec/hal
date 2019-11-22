@@ -6,8 +6,6 @@
 #include "netlist/net.h"
 #include "netlist/netlist.h"
 
-#include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/path.hpp>
 #include <fstream>
 
 hdl_writer_vhdl::hdl_writer_vhdl(std::stringstream& stream) : hdl_writer(stream)

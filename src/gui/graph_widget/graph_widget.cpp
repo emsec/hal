@@ -142,6 +142,11 @@ void graph_widget::keyPressEvent(QKeyEvent* event)
             }
             break;
         }
+        case Qt::Key_Escape:
+        {
+            g_selection_relay.clear_and_update();
+            break;
+        }
         default:
             break;
     }
