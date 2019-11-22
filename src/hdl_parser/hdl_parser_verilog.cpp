@@ -367,6 +367,12 @@ bool hdl_parser_verilog::parse_assign(entity& e)
     auto left_parts  = get_assignment_signals(left_str, e);
     auto right_parts = get_assignment_signals(right_str, e);
 
+    if (left_parts.empty() || right_parts.empty())
+    {
+        // error already printed in subfunction
+        return {};
+    }
+
     if (left_parts.size() != right_parts.size())
     {
         log_error("hdl_parser", "cannot parse direct assignment in line {} due to width mismatch.", assign_line);
@@ -472,6 +478,12 @@ bool hdl_parser_verilog::connect_instances()
 
                 auto port_lhs = get_port_signals(port.first, inst.type);
                 auto port_rhs = get_assignment_signals(port.second, e);
+
+                if (port_lhs.empty() || port_rhs.empty())
+                {
+                    // error already printed in subfunction
+                    return {};
+                }
 
                 if (port_lhs.size() != port_rhs.size())
                 {
@@ -1192,7 +1204,8 @@ std::vector<std::string> hdl_parser_verilog::get_assignment_signals(token_stream
 
     for (auto& s : parts)
     {
-        auto signal_name = s.consume().string;
+        auto stream_backup = s;
+        auto signal_name   = s.consume().string;
 
         // (3) NUMBER
         if (isdigit(signal_name[0]) || signal_name[0] == '\'')
@@ -1203,13 +1216,6 @@ std::vector<std::string> hdl_parser_verilog::get_assignment_signals(token_stream
             }
 
             continue;
-        }
-
-        // valid signal/port name?
-        if (e.expanded_signal_names.find(signal_name) == e.expanded_signal_names.end())
-        {
-            log_error("hdl_parser", "no wire or port '{}' within entity '{}'.", signal_name, e.name);
-            return {};
         }
 
         if (s.consume("["))
@@ -1249,6 +1255,17 @@ std::vector<std::string> hdl_parser_verilog::get_assignment_signals(token_stream
         }
         else
         {
+            if (e.expanded_signal_names.find(signal_name) == e.expanded_signal_names.end())
+            {
+                log_warning("hdl_parser", "creating previously undeclared signal '{}' (line {})", signal_name, stream_backup.peek().number);
+
+                for (const auto& it : get_expanded_signals(stream_backup))
+                {
+                    e.signals_expanded.insert(e.signals_expanded.end(), it.second.begin(), it.second.end());
+                    e.expanded_signal_names[it.first].insert(e.expanded_signal_names[it.first].end(), it.second.begin(), it.second.end());
+                }
+            }
+
             //   (1) NAME *single*
             //   (2) NAME *multi-dimensional*
             result.insert(result.end(), e.expanded_signal_names[signal_name].begin(), e.expanded_signal_names[signal_name].end());
@@ -1303,7 +1320,7 @@ std::vector<std::string> hdl_parser_verilog::get_port_signals(token_stream& port
     }
     else
     {
-        log_error("hdl_parser", "invalid entity or port '{}' in line {}.", instance_type, port_name.number);
+        log_error("hdl_parser", "'{}' is neither an entity nor a gate type (line {}).", instance_type, port_name.number);
         return {};
     }
 

@@ -517,7 +517,8 @@ bool hdl_parser_vhdl::parse_instance(entity& e)
     instance inst;
 
     // extract name and type
-    inst.name = m_token_stream.consume();
+    inst.line_number = m_token_stream.peek().number;
+    inst.name        = m_token_stream.consume();
     m_token_stream.consume(":", true);
 
     // remove prefix from type
@@ -933,14 +934,9 @@ std::shared_ptr<module> hdl_parser_vhdl::instantiate(const entity& e, std::share
                 {
                     instance_assignments[pin] = it3->second;
                 }
-                else if (signal == "'0'" || signal == "'1'" || signal == "'Z'")
-                {
-                    instance_assignments[pin] = signal;
-                }
                 else
                 {
-                    log_error("hdl_parser", "signal assignment \"{} => {}\" of instance {} is invalid ('{}' unknown)", pin, signal, inst.name, signal);
-                    return nullptr;
+                    instance_assignments[pin] = signal;
                 }
             }
         }
@@ -1021,10 +1017,15 @@ std::shared_ptr<module> hdl_parser_vhdl::instantiate(const entity& e, std::share
                     auto it = m_net_by_name.find(net_name);
                     if (it == m_net_by_name.end())
                     {
-                        log_error("hdl_parser", "signal '{}' of {} was not previously declared", net_name, e.name);
-                        return nullptr;
+                        log_warning("hdl_parser", "creating undeclared signal '{}' assigned to port '{}' of instance '{}' (starting at line {})", net_name, pin, inst.name, inst.line_number);
+
+                        current_net                            = m_netlist->create_net(net_name);
+                        m_net_by_name[current_net->get_name()] = current_net;
                     }
-                    current_net = it->second;
+                    else
+                    {
+                        current_net = it->second;
+                    }
                 }
 
                 // add net src/dst by pin types
