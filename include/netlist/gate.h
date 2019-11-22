@@ -44,7 +44,7 @@ class module;
 struct endpoint;
 
 /**
- *  Graph gate data structure for hardware netlists
+ * Gate class containing information about a gate including its location, functions, and module.
  *
  * @ingroup netlist
  */
