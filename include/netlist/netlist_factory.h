@@ -51,7 +51,7 @@ namespace netlist_factory
     NETLIST_API std::shared_ptr<netlist> create_netlist(const std::string& gate_library_name);
 
     /**
-     * Creates a new netlist for a specific gate library.
+     * Creates a new netlist for a specific gate library.<br>
      * All events are suppressed during creation.
      *
      * @param[in] gate_library_name - Name of hardware gate library.
@@ -60,7 +60,7 @@ namespace netlist_factory
     NETLIST_API std::shared_ptr<netlist> make_empty_netlist(const std::string& gate_library_name);
 
     /**
-     * Creates a new netlist for a specific file.
+     * Creates a new netlist for a specific file.<br>
      * All events are suppressed during creation.
      *
      * @param[in] hdl_file - Name of the hdl file.
@@ -71,7 +71,7 @@ namespace netlist_factory
     NETLIST_API std::shared_ptr<netlist> load_netlist(const hal::path& hdl_file, const std::string& language, const std::string& gate_library_name);
 
     /**
-     * Creates a new netlist for a specific '.hal' file.
+     * Creates a new netlist for a specific '.hal' file.<br>
      * All events are suppressed during creation.
      *
      * @param[in] hal_file - Name of the '.hal' file.
@@ -82,7 +82,7 @@ namespace netlist_factory
 
     /**
      * Creates a new netlist entirely from program options.<br>
-     * Invokes parsers or serializers as needed.
+     * Invokes parsers or serializers as needed.<br>
      * All events are suppressed during creation.
      *
      * @param[in] args - Command line options.
