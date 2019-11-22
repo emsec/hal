@@ -60,6 +60,7 @@ public:
 private:
     struct instance
     {
+        u32 line_number;
         std::string name;
         std::string type;
         std::vector<std::pair<std::string, std::string>> generics;
