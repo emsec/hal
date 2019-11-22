@@ -93,6 +93,9 @@ PYBIND11_PLUGIN(hal_py)
     py::implicitly_convertible<std::string, hal::path>();
 
     py::class_<data_container, std::shared_ptr<data_container>>(m, "data_container")
+        .def(py::init<>(), R"(
+Construct a new data container.
+)")
         .def("set_data", &data_container::set_data, py::arg("category"), py::arg("key"), py::arg("value_data_type"), py::arg("value"), py::arg("log_with_info_level") = false, R"(
 Sets a custom data entry
 If it does not exist yet, it is added.
@@ -202,7 +205,9 @@ Contains the library and user share directories.
 :returns: A vector of paths.
 )");
 
-    py::enum_<gate_type::base_type>(m, "base_type")
+    py::enum_<gate_type::base_type>(m, "base_type", R"(
+Represents the base type of a gate type. Available are: combinatorial, lut, ff, and latch.
+)")
         .value("combinatorial", gate_type::base_type::combinatorial)
         .value("lut", gate_type::base_type::lut)
         .value("ff", gate_type::base_type::ff)
@@ -213,7 +218,7 @@ Contains the library and user share directories.
 Gate type class containing information about the internals of a specific gate type.
 )")
         .def(py::init<const std::string&>(), py::arg("name"), R"(
-Constructor for a gate type.
+Construct a new gate type.
 
 :param str name: The name of the gate type.
 )")
@@ -319,7 +324,7 @@ Get a map containing the boolean functions of the gate type.
 LUT gate type class containing information about the internals of a specific LUT gate type.
 )")
         .def(py::init<const std::string&>(), py::arg("name"), R"(
-Constructor for a LUT gate type.
+Construct a new LUT gate type.
 
 :param str name: The name of the LUT gate type.
 )")
@@ -388,7 +393,9 @@ Get the bit-order of the INIT string.
 :rtype: bool
 )");
 
-    py::enum_<gate_type_sequential::set_reset_behavior>(m, "set_reset_behavior")
+    py::enum_<gate_type_sequential::set_reset_behavior>(m, "set_reset_behavior", R"(
+Represents the behavior that a sequential cell shows when both set and reset are active. Available are: U (not specified for gate type), L (set to ZERO), H (set to ONE), N (no change), T (toggle), and X (undefined).
+)")
         .value("U", gate_type_sequential::set_reset_behavior::U)
         .value("L", gate_type_sequential::set_reset_behavior::L)
         .value("H", gate_type_sequential::set_reset_behavior::H)
@@ -401,7 +408,7 @@ Get the bit-order of the INIT string.
 Sequential gate type class containing information about the internals of a specific sequential gate type.
 )")
         .def(py::init<const std::string&, gate_type::base_type>(), py::arg("name"), py::arg("bt"), R"(
-Constructor for a sequential gate type.
+Construct a new sequential gate type.
 
 :param str name: The name of the sequential gate type.
 :param hal_py.base_type bt: The base type of the sequential gate type.
@@ -443,10 +450,8 @@ Set the behavior that describes the internal state when both set and reset are a
 Get the behavior that describes the internal state when both set
 and reset are active.
 
-: returns
-: A tuple of values specifying the behavior of the internal state and the inverted internal state.
-: rytpe
-: tuple(hal_py.set_reset_behavior, hal_py.set_reset_behavior)
+:returns: A tuple of values specifying the behavior of the internal state and the inverted internal state.
+:rytpe: tuple(hal_py.set_reset_behavior, hal_py.set_reset_behavior)
 )")
         .def_property("init_data_category", &gate_type_sequential::get_init_data_category, &gate_type_sequential::set_init_data_category, R"(
 The category in which to find the INIT string.
@@ -458,7 +463,7 @@ Set the category in which to find the INIT string.
 
 :param str category: The category as a string.
 )")
-        .def("get_config_init_category", &gate_type_sequential::get_init_data_category, R"(
+        .def("get_init_data_category", &gate_type_sequential::get_init_data_category, R"(
 Get the category in which to find the INIT string.
 
 :returns: The category as a string.
@@ -469,21 +474,23 @@ The identifier used to specify the INIT string.
 
 :type: str
 )")
-        .def("set_config_data_identifier", &gate_type_sequential::set_init_data_identifier, py::arg("identifier"), R"(
+        .def("set_init_data_identifier", &gate_type_sequential::set_init_data_identifier, py::arg("identifier"), R"(
 Set the identifier used to specify the INIT string.
 
 :param str identifier: The identifier as a string.
 )")
-        .def("get_config_data_identifier", &gate_type_sequential::get_init_data_identifier, R"(
+        .def("get_init_data_identifier", &gate_type_sequential::get_init_data_identifier, R"(
 Get the identifier used to specify the INIT string.
 
 :returns: The identifier as a string.
 :rtype: str
 )");
 
-    py::class_<gate_library, std::shared_ptr<gate_library>>(m, "gate_library")
+    py::class_<gate_library, std::shared_ptr<gate_library>>(m, "gate_library", R"(
+Gate library class containing information about the gates contained in the library.
+)")
         .def(py::init<const std::string&>(), py::arg("name"), R"(
-Constructor.
+Construct a new gate library.
 
 :param str name: Name of the gate library.
 )")
@@ -556,7 +563,7 @@ Get a list of necessary includes of the gate library, e.g., VHDL libraries.
 
     py::class_<endpoint, std::shared_ptr<endpoint>>(m, "endpoint")
         .def(py::init<>(), R"(
-Constructor.
+Construct a new endpoint.
 )")
         .def(py::self < py::self, R"(
 Standard "less than". Required for searching through sets.
@@ -610,8 +617,14 @@ Returns the pin type of the current endpoint.
    :param str type: Pin type to be set.
 )");
 
-    py::class_<netlist, std::shared_ptr<netlist>>(m, "netlist")
-        .def(py::init<std::shared_ptr<gate_library>>())
+    py::class_<netlist, std::shared_ptr<netlist>>(m, "netlist", R"(
+Netlist class containing information about the netlist including its gates, modules, and nets, as well as the underlying gate library.
+)")
+        .def(py::init<std::shared_ptr<gate_library>>(), R"(
+Construct a new netlist for a specified gate library.
+
+:param hal_py.gate_library library: The gate library.
+)")
         .def_property("id", &netlist::get_id, &netlist::set_id, R"(
 The netlist's id. If not changed via set_id() the id is zero.
 
@@ -1027,7 +1040,7 @@ Get all global output nets.
 )");
 
     py::class_<gate, data_container, std::shared_ptr<gate>>(m, "gate", R"(
-HAL Gate functions.
+Gate class containing information about a gate including its location, functions, and module.
 )")
         .def_property_readonly("id", &gate::get_id, R"(
 The unique ID of the gate.
@@ -1338,10 +1351,8 @@ Get a list of all direct successor endpoints of the gate filterable by the gate'
 :rtype: list[hal_py.endpoint]
 )");
 
-    // TODO cleanup beyond this point
-
     py::class_<net, data_container, std::shared_ptr<net>>(m, "net", R"(
-HAL Net functions.
+Net class containing information about a net including its source and destination.
 )")
         .def_property_readonly("id", &net::get_id, R"(
 The unique id of the net.
@@ -1526,8 +1537,9 @@ Checks whether this net is a global output net.
 :rtype: bool
 )");
 
-    // module dir
-    py::class_<module, std::shared_ptr<module>, data_container>(m, "module")
+    py::class_<module, std::shared_ptr<module>, data_container>(m, "module", R"(
+Module class containing information about a module including its gates, submodules, and parent module.
+)")
         .def_property_readonly("id", &module::get_id, R"(
 The unique ID of the module object.
 
@@ -1588,7 +1600,6 @@ If recursive parameter is true, all indirect submodules are also included.
 :returns: The set of submodules:
 :rtype: set[hal_py.module]
 )")
-
         .def("contains_module", &module::contains_module, py::arg("other"), py::arg("recusive") = false, R"(
 Checks whether another module is a submodule of this module. If \p recursive is true, all indirect submodules are also included.
 
@@ -1824,12 +1835,35 @@ Generic call to run the GUI.
 :rtype: bool
 )");
 
-    py::enum_<boolean_function::value>(m, "value").value("X", boolean_function::value::X).value("ZERO", boolean_function::value::ZERO).value("ONE", boolean_function::value::ONE).export_values();
+    py::enum_<boolean_function::value>(m, "value", R"(
+Represents the logic value that a boolean function operates on. Available are: X, ZERO, and ONE.
+)")
+        .value("X", boolean_function::value::X)
+        .value("ZERO", boolean_function::value::ZERO)
+        .value("ONE", boolean_function::value::ONE)
+        .export_values();
 
-    py::class_<boolean_function>(m, "boolean_function")
-        .def(py::init<>())
-        .def(py::init<const std::string&, bool>())
-        .def(py::init<boolean_function::value>())
+    py::class_<boolean_function>(m, "boolean_function", R"(
+Boolean function class.
+)")
+        .def(py::init<>(), R"(
+Constructor for an empty function.
+Evaluates to X (undefined).
+Combining a function with an empty function leaves the other one unchanged.
+)")
+        .def(py::init<const std::string&, bool>(), R"(
+Constructor for a variable, usable in other functions.
+Variable name must not be empty.
+
+:param str variable_name: Name of the variable.
+:param bool invert_result: True to invert the variable.
+)")
+        .def(py::init<boolean_function::value>(), R"(
+Constructor for a constant, usable in other functions.
+The constant can be either X, Zero, or ONE.
+
+:param hal_py.value constant: A constant value.
+)")
         .def("substitute", &boolean_function::substitute, py::arg("variable_name"), py::arg("function"), R"(
 Substitutes a variable with another function (can again be a single variable).
 Applies to all instances of the variable in the function.

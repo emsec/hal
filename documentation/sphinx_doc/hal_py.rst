@@ -13,7 +13,6 @@ hal_py Documentation
    gate_type
    gate_type_lut
    gate_type_sequential
-   set_reset_behaviour
    gate
    net
    module
@@ -24,3 +23,6 @@ hal_py Documentation
    netlist_factory
    hdl_writer_dispatcher
    graph_algorithm
+   value
+   base_type
+   set_reset_behaviour

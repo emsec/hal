@@ -43,7 +43,7 @@ class module;
 struct endpoint;
 
 /**
- * /class netlist
+ * Netlist class containing information about the netlist including its gates, modules, and nets, as well as the underlying gate library.
  *
  * @ingroup netlist
  */
