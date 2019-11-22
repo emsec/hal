@@ -67,6 +67,7 @@ public:
     explicit selection_relay(QObject* parent = nullptr);
 
     void clear(); // does not emit the "update" signal!
+    void clear_and_update();
 
     void register_sender(void* sender, QString name);
     void remove_sender(void* sender);
