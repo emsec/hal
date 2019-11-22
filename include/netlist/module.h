@@ -44,7 +44,7 @@ class net;
 class gate;
 
 /**
- * /class module
+ * Module class containing information about a module including its gates, submodules, and parent module.
  *
  * @ingroup module
  */
