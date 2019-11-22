@@ -64,7 +64,6 @@ endif()
 
 if(NOT PYTHONINTERP_FOUND)
     set(PYTHONLIBS_FOUND FALSE)
-    set(PythonLibsNew_FOUND FALSE)
     return()
 endif()
 
@@ -97,14 +96,10 @@ if(NOT _PYTHON_SUCCESS MATCHES 0)
             "Python config failure:\n${_PYTHON_ERROR_VALUE}")
     endif()
     set(PYTHONLIBS_FOUND FALSE)
-    set(PythonLibsNew_FOUND FALSE)
     return()
 endif()
 
 # Convert the process output into a list
-if(WIN32)
-    string(REGEX REPLACE "\\\\" "/" _PYTHON_VALUES ${_PYTHON_VALUES})
-endif()
 string(REGEX REPLACE ";" "\\\\;" _PYTHON_VALUES ${_PYTHON_VALUES})
 string(REGEX REPLACE "\n" ";" _PYTHON_VALUES ${_PYTHON_VALUES})
 list(GET _PYTHON_VALUES 0 _PYTHON_VERSION_LIST)
@@ -129,7 +124,6 @@ if(CMAKE_SIZEOF_VOID_P AND (NOT "${PYTHON_SIZEOF_VOID_P}" STREQUAL "${CMAKE_SIZE
             "chosen compiler is  ${_CMAKE_BITS}-bit")
     endif()
     set(PYTHONLIBS_FOUND FALSE)
-    set(PythonLibsNew_FOUND FALSE)
     return()
 endif()
 
@@ -144,7 +138,7 @@ string(REGEX REPLACE "\\\\" "/" PYTHON_PREFIX ${PYTHON_PREFIX})
 string(REGEX REPLACE "\\\\" "/" PYTHON_INCLUDE_DIR ${PYTHON_INCLUDE_DIR})
 string(REGEX REPLACE "\\\\" "/" PYTHON_SITE_PACKAGES ${PYTHON_SITE_PACKAGES})
 
-if(CMAKE_HOST_WIN32 AND NOT (MSYS OR MINGW))
+if(CMAKE_HOST_WIN32)
     set(PYTHON_LIBRARY
         "${PYTHON_PREFIX}/libs/Python${PYTHON_LIBRARY_SUFFIX}.lib")
 
@@ -199,4 +193,3 @@ find_package_message(PYTHON
     "${PYTHON_EXECUTABLE}${PYTHON_VERSION}")
 
 set(PYTHONLIBS_FOUND TRUE)
-set(PythonLibsNew_FOUND TRUE)

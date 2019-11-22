@@ -129,7 +129,6 @@ private:
 
 class NCVirt {
 public:
-    virtual ~NCVirt() { }
     virtual NonCopyable get_noncopyable(int a, int b) { return NonCopyable(a, b); }
     virtual Movable get_movable(int a, int b) = 0;
 
@@ -231,9 +230,7 @@ TEST_SUBMODULE(virtual_functions, m) {
 
         void f() override {
             py::print("PyA.f()");
-            // This convolution just gives a `void`, but tests that PYBIND11_TYPE() works to protect
-            // a type containing a ,
-            PYBIND11_OVERLOAD(PYBIND11_TYPE(typename std::enable_if<true, void>::type), A, f);
+            PYBIND11_OVERLOAD(void, A, f);
         }
     };
 
