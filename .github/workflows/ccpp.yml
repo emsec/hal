@@ -1,4 +1,4 @@
-name: c_cxx_build
+name: Github CI
 
 on:
   push:
