@@ -1,4 +1,3 @@
-#include "gate_decorator_system/gate_decorator.h"
 #include "netlist/gate_library/gate_library_manager.h"
 #include "netlist/netlist.h"
 #include "netlist/netlist_factory.h"

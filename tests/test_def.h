@@ -1,5 +1,4 @@
 #pragma once
-#include "pragma_once.h"
 #include "gtest/gtest.h"
 #include <sstream>
 
@@ -148,5 +147,3 @@ namespace test_def
     };
 
 }    // namespace test_def
-
-#endif /* __HAL_TEST_DEF_H__ */
