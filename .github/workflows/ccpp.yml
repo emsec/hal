@@ -1,5 +1,4 @@
-name: C/C++ CI
-
+name: c_cxx_build
 on:
   push:
   create:
