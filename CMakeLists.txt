@@ -272,13 +272,13 @@ message(STATUS "Found rapidjson ${RAPIDJSON_INCLUDEDIR}")
 include_directories(${RAPIDJSON_INCLUDEDIR})
 
 # Need Version 2.2.4 Not available in ubuntu bionic
-find_package(pybind11 2.2.4 CONFIG)
+find_package(pybind11 2.4.3 CONFIG)
 if(${pybind11_FOUND})
    message(STATUS "Found pybind11 v${pybind11_VERSION}: ${pybind11_INCLUDE_DIRS}")
-   message(STATUS "Found pybind11 >= 2.2.4")
+   message(STATUS "Found pybind11 >= 2.4.3")
    include_directories(pybind11_INCLIDE_DIRS)
 else()
-    message(STATUS "pybind11 >= 2.2.4 not found")
+    message(STATUS "pybind11 >= 2.4.3 not found")
     add_subdirectory(deps/pybind11)
 endif()
 
@@ -291,6 +291,8 @@ else()
     include_directories(${include_directories} "${CMAKE_CURRENT_SOURCE_DIR}/deps/spdlog-1.4.2/include")
     set(spdlog_VERSION 1.4.2)
 endif()
+
+option(USE_LIBCXX "USE_LIBCXX" FALSE)
 
 #Set UNIX (macOS or Linux) compiler flags (clang or gcc). Set optimization level for debug or release.
 if(UNIX)
@@ -329,6 +331,15 @@ if(UNIX)
 
     #set(CMAKE_C_FLAGS${build_type} "${CMAKE_C_FLAGS${build_type}} -Werror")
     #set(CMAKE_CXX_FLAGS${build_type} "${CMAKE_CXX_FLAGS${build_type}} -Werror")
+
+    
+    if (USE_LIBCXX)
+        enable_cxx_compiler_flag_if_supported("-stdlib=libc++" "")
+        enable_c_compiler_flag_if_supported("-stdlib=libc++" "")
+        set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -stdlib=libc++ -lc++abi")
+    endif()
+
+
     message(STATUS "C flags: ${CMAKE_C_FLAGS${build_type}}")
     message(STATUS "CXX flags: ${CMAKE_CXX_FLAGS${build_type}}")
     message(STATUS " ")
