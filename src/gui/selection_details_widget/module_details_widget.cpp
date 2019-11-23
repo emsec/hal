@@ -72,21 +72,21 @@ module_details_widget::module_details_widget(QWidget* parent) : QWidget(parent),
 //    QShortcut* resize_shortcut = new QShortcut(QKeySequence("Ctrl+b"), this);
 //    connect(resize_shortcut, &QShortcut::activated, this, &module_details_widget::toggle_resize_columns);
 
-    connect(&g_netlist_relay, &netlist_relay::module_event, this, &module_details_widget::handle_module_event);
+
+    connect(&g_netlist_relay, &netlist_relay::module_name_changed, this, &module_details_widget::handle_module_name_changed);
+    connect(&g_netlist_relay, &netlist_relay::module_gate_assigned, this, &module_details_widget::handle_module_gate_assigned);
+    connect(&g_netlist_relay, &netlist_relay::module_gate_removed, this, &module_details_widget::handle_module_gate_removed);
+
+    connect(&g_netlist_relay, &netlist_relay::gate_name_changed, this, &module_details_widget::handle_gate_name_changed);
+    connect(&g_netlist_relay, &netlist_relay::gate_removed, this, &module_details_widget::handle_gate_removed);
+
+    connect(&g_netlist_relay, &netlist_relay::net_removed, this, &module_details_widget::handle_net_removed);
+    connect(&g_netlist_relay, &netlist_relay::net_name_changed, this, &module_details_widget::handle_net_name_changed);
+
 
     //g_selection_relay.register_sender(this, "module_details_widget");
     connect(m_treeview, &QTreeView::doubleClicked, this, &module_details_widget::handle_tree_double_clicked);
     connect(&g_selection_relay, &selection_relay::selection_changed, this, &module_details_widget::handle_selection_changed);
-}
-
-void module_details_widget::handle_module_event(module_event_handler::event ev, std::shared_ptr<module> module, u32 associated_data)
-{
-    Q_UNUSED(ev)
-    Q_UNUSED(associated_data)
-    if (m_current_id == module->get_id())
-    {
-        update(module->get_id());
-    }
 }
 
 void module_details_widget::handle_selection_changed(void *sender)
@@ -130,6 +130,70 @@ void module_details_widget::handle_searchbar_text_edited(const QString &text)
         m_tree_module_proxy_model->setFilterRegExp(*regex);
 }
 
+void module_details_widget::handle_module_name_changed(const std::shared_ptr<module> m)
+{
+    if(m_current_id == m->get_id())
+        this->update(m->get_id());
+
+}
+
+void module_details_widget::handle_module_gate_assigned(const std::shared_ptr<module> m, const u32 assigned_gate)
+{
+    Q_UNUSED(assigned_gate)
+
+    if(m_current_id == m->get_id())
+        update(m_current_id);
+
+}
+
+void module_details_widget::handle_module_gate_removed(const std::shared_ptr<module> m, const u32 removed_gate)
+{
+    Q_UNUSED(removed_gate)
+
+    if(m_current_id == m->get_id())
+        update(m_current_id);
+
+}
+
+void module_details_widget::handle_gate_name_changed(const std::shared_ptr<gate> g)
+{
+    auto mod = g_netlist->get_module_by_id(m_current_id);
+    if(!mod)
+        return;
+
+    if(mod->contains_gate(g))
+        update(m_current_id);
+
+}
+
+void module_details_widget::handle_gate_removed(const std::shared_ptr<gate> g)
+{
+    Q_UNUSED(g)
+    //dont know if the module_gate_removed event is emitted if the gate is deleted while being in a module,
+    //so just react and update
+    update(m_current_id);
+}
+
+void module_details_widget::handle_net_removed(const std::shared_ptr<net> n)
+{
+    Q_UNUSED(n)
+    //see handle_gate_removed above
+    update(m_current_id);
+}
+
+void module_details_widget::handle_net_name_changed(const std::shared_ptr<net> n)
+{
+    auto mod = g_netlist->get_module_by_id(m_current_id);
+    if(!mod)
+        return;
+
+    if(mod->get_input_nets().find(n) != mod->get_input_nets().end() ||
+       mod->get_internal_nets().find(n) != mod->get_internal_nets().end() ||
+       mod->get_output_nets().find(n) != mod->get_output_nets().end())
+        update(m_current_id);
+
+}
+
 void module_details_widget::handle_tree_double_clicked(const QModelIndex &index)
 {
     if(!index.isValid())
@@ -168,6 +232,9 @@ void module_details_widget::toggle_resize_columns()
 
 void module_details_widget::update(u32 module_id)
 {
+    if(!(g_netlist->get_module_by_id(module_id)))
+        return;
+
     m_current_id = module_id;
     m_tree_module_model->update(module_id);
     toggle_resize_columns();

@@ -49,9 +49,20 @@ public:
     void update(u32 module_id);
 
 public Q_SLOTS:
-    void handle_module_event(module_event_handler::event ev, std::shared_ptr<module> module, u32 associated_data);
+
     void handle_selection_changed(void* sender);
     void handle_searchbar_text_edited(const QString &text);
+
+    //relevant handler methods for net relay
+    void handle_module_name_changed(const std::shared_ptr<module> m);
+    void handle_module_gate_assigned(const std::shared_ptr<module> m, const u32 assigned_gate);
+    void handle_module_gate_removed(const std::shared_ptr<module> m, const u32 removed_gate);
+
+    void handle_gate_name_changed(const std::shared_ptr<gate> g);
+    void handle_gate_removed(const std::shared_ptr<gate> g);
+
+    void handle_net_removed(const std::shared_ptr<net> n);
+    void handle_net_name_changed(const std::shared_ptr<net> n);
 
 private:
 
