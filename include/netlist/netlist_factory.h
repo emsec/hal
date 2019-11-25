@@ -49,17 +49,7 @@ namespace netlist_factory
     NETLIST_API std::shared_ptr<netlist> create_netlist(const std::string& gate_library_name);
 
     /**
-     * Creates a new netlist for a specific gate library.<br>
-     * All events are suppressed during creation.
-     *
-     * @param[in] gate_library_name - Name of hardware gate library.
-     * @returns The new netlist.
-     */
-    NETLIST_API std::shared_ptr<netlist> make_empty_netlist(const std::string& gate_library_name);
-
-    /**
-     * Creates a new netlist for a specific file.<br>
-     * All events are suppressed during creation.
+     * Creates a new netlist for a specific file.
      *
      * @param[in] hdl_file - Name of the hdl file.
      * @param[in] language - Programming language used in \p file_name.
@@ -69,8 +59,7 @@ namespace netlist_factory
     NETLIST_API std::shared_ptr<netlist> load_netlist(const hal::path& hdl_file, const std::string& language, const std::string& gate_library_name);
 
     /**
-     * Creates a new netlist for a specific '.hal' file.<br>
-     * All events are suppressed during creation.
+     * Creates a new netlist for a specific '.hal' file.
      *
      * @param[in] hal_file - Name of the '.hal' file.
      * file.
@@ -79,9 +68,8 @@ namespace netlist_factory
     NETLIST_API std::shared_ptr<netlist> load_netlist(const hal::path& hal_file);
 
     /**
-     * Creates a new netlist entirely from program options.<br>
+     * Creates a new netlist entirely from program options.
      * Invokes parsers or serializers as needed.<br>
-     * All events are suppressed during creation.
      *
      * @param[in] args - Command line options.
      * @returns The new netlist.
