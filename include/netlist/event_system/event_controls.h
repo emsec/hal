@@ -21,9 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#include "pragma_once.h"
-#ifndef __HAL_EVENT_CONTROLS_H__
-#define __HAL_EVENT_CONTROLS_H__
+#pragma once
 
 #include "def.h"
 
@@ -41,5 +39,3 @@ namespace event_controls
     NETLIST_API void enable_all(bool flag);
 
 }    // namespace event_controls
-
-#endif /* __HAL_EVENT_CONTROLS_H__ */
