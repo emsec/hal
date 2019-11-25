@@ -21,9 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#include "pragma_once.h"
-#ifndef __HAL_GATE_LIBRARY_PARSER_H__
-#define __HAL_GATE_LIBRARY_PARSER_H__
+#pragma once
 
 #include "def.h"
 #include "netlist/gate_library/gate_library.h"
@@ -60,5 +58,3 @@ protected:
     // stores the input stream to the file
     std::stringstream& m_fs;
 };
-
-#endif /* __HAL_GATE_LIBRARY_PARSER_H__ */

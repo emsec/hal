@@ -21,9 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#include "pragma_once.h"
-#ifndef __HAL_FACTORY_PYTHON_SHELL_H__
-#define __HAL_FACTORY_PYTHON_SHELL_H__
+#pragma once
 
 #include "core/interface_factory.h"
 
@@ -44,5 +42,3 @@ public:
  * @returns The factory instance.
  */
 extern "C" PLUGIN_API i_factory* get_factory();
-
-#endif /* __HAL_FACTORY_HELLOWORLD_H__ */

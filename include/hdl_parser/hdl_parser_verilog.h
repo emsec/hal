@@ -21,9 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#include "pragma_once.h"
-#ifndef __HAL_HDL_PARSER_VERILOG_H__
-#define __HAL_HDL_PARSER_VERILOG_H__
+#pragma once
 
 #include "def.h"
 
@@ -119,5 +117,3 @@ private:
     std::string get_number_from_literal(const std::string& v, const u32 base);
     std::string get_unique_alias(const std::string& name);
 };
-
-#endif /* __HAL_HDL_PARSER_VERILOG_H__ */

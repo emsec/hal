@@ -21,9 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#include "pragma_once.h"
-#ifndef __PROGRAM_OPTIONS_H__
-#define __PROGRAM_OPTIONS_H__
+#pragma once
 
 #include "def.h"
 
@@ -166,5 +164,3 @@ private:
 
     std::vector<std::string> m_unknown_options;
 };
-
-#endif /* __PROGRAM_OPTIONS_H__ */

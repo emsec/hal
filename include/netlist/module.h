@@ -21,9 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#include "pragma_once.h"
-#ifndef __HAL_MODULE_H__
-#define __HAL_MODULE_H__
+#pragma once
 
 #include "def.h"
 
@@ -224,5 +222,3 @@ private:
     std::map<u32, std::shared_ptr<gate>> m_gates_map;
     std::set<std::shared_ptr<gate>> m_gates_set;
 };
-
-#endif /* __HAL_MODULE_H__ */

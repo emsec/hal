@@ -5,8 +5,6 @@
 #include <fstream>
 #include <sstream>
 
-#include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/path.hpp>
 #include <boost/predef.h>
 
 #include <boost/algorithm/string/predicate.hpp>
@@ -299,13 +297,13 @@ namespace core_utils
         }
 
         hal::error_code ec;
-        hal::path p(hal::fs::canonical(buf, hal::fs::current_path(), ec));
+        hal::path p(hal::fs::canonical(buf, ec));
         return p.parent_path().make_preferred();
 #elif __linux__
         ssize_t size = readlink("/proc/self/exe", buf, sizeof(buf));
         std::string path(buf, size);
         hal::error_code ec;
-        hal::path p(hal::fs::canonical(path, hal::fs::current_path(), ec));
+        hal::path p(hal::fs::canonical(path, ec));
         return p.make_preferred().parent_path();
 #endif
     }

@@ -67,6 +67,74 @@ namespace gate_library_manager
 
             return false;
         }
+
+        bool prepare_library(std::shared_ptr<gate_library>& lib)
+        {
+            auto types = lib->get_gate_types();
+
+            if (lib->get_gnd_gate_types().empty())
+            {
+                std::string name = "GND";
+                if (types.find(name) != types.end())
+                {
+                    name += " (auto generated)";
+                }
+                if (types.find(name) != types.end())
+                {
+                    log_error("netlist", "no GND gate found in parsed library but gate types 'GND' and '{}' already exist.", name);
+                    return false;
+                }
+                auto gt = std::make_shared<gate_type>(name);
+                gt->add_output_pin("O");
+                gt->add_boolean_function("O", boolean_function::ZERO);
+                lib->add_gate_type(gt);
+                log_info("netlist", "gate library did not contain a GND gate, auto-generated type '{}'", name);
+            }
+
+            if (lib->get_vcc_gate_types().empty())
+            {
+                std::string name = "VCC";
+                if (types.find(name) != types.end())
+                {
+                    name += " (auto generated)";
+                }
+                if (types.find(name) != types.end())
+                {
+                    log_error("netlist", "no VCC gate found in parsed library but gate types 'VCC' and '{}' already exist.", name);
+                    return false;
+                }
+                auto gt = std::make_shared<gate_type>(name);
+                gt->add_output_pin("O");
+                gt->add_boolean_function("O", boolean_function::ONE);
+                lib->add_gate_type(gt);
+                log_info("netlist", "gate library did not contain a VCC gate, auto-generated type '{}'", name);
+            }
+
+            return true;
+        }
+
+        std::shared_ptr<gate_library> load(const hal::path& path)
+        {
+            std::shared_ptr<gate_library> lib;
+
+            if (core_utils::ends_with(path.string(), ".lib"))
+            {
+                lib = load_liberty(path);
+            }
+            else
+            {
+                log_error("netlist", "no gate library parser found for '{}'.", path.string());
+            }
+
+            if (lib == nullptr || is_duplicate(lib) || !prepare_library(lib))
+            {
+                return nullptr;
+            }
+
+            m_gate_libraries[lib->get_name()] = lib;
+
+            return lib;
+        }
     }    // namespace
 
     std::shared_ptr<gate_library> get_gate_library(const std::string& name)
@@ -84,23 +152,12 @@ namespace gate_library_manager
 
             if (!path_liberty.empty())
             {
-                lib = load_liberty(path_liberty);
+                lib = load(path_liberty);
             }
             else
             {
                 log_error("netlist", "could not find gate library file '{}'.", name + ".lib");
                 return nullptr;
-            }
-
-            if (lib != nullptr)
-            {
-                if (is_duplicate(lib))
-                {
-                    log_error("netlist", "a gate library with the name '{}' already exists, discarding current one.", lib->get_name());
-                    return nullptr;
-                }
-
-                m_gate_libraries[name] = lib;
             }
 
             return lib;
@@ -122,23 +179,7 @@ namespace gate_library_manager
 
             for (const auto& lib_path : core_utils::recursive_directory_range(lib_dir))
             {
-                std::shared_ptr<gate_library> lib;
-
-                if (core_utils::ends_with(lib_path.path().string(), ".lib"))
-                {
-                    lib = load_liberty(lib_path.path());
-                }
-
-                if (lib != nullptr)
-                {
-                    if (is_duplicate(lib))
-                    {
-                        log_error("netlist", "a gate library with the name '{}' already exists, discarding current one.", lib->get_name());
-                        continue;
-                    }
-
-                    m_gate_libraries[lib->get_name()] = lib;
-                }
+                load(lib_path.path());
             }
         }
     }

@@ -21,34 +21,39 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#include "pragma_once.h"
-#ifndef __DEF_H__
-#define __DEF_H__
+#pragma once
 
-#include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/path.hpp>
+#if defined(__GNUC__) && ((__GNUC__ == 7 && __GNUC_MINOR__ >= 4))
+#include <experimental/filesystem>
+#else
+#include <filesystem>
+#endif
+
 #include <inttypes.h>
 #include <stdexcept>
 #include <stdlib.h>
 
-typedef int8_t i8;
-typedef int16_t i16;
-typedef int32_t i32;
-typedef int64_t i64;
+using i8  = int8_t;
+using i16 = int16_t;
+using i32 = int32_t;
+using i64 = int64_t;
 
-typedef uint8_t u8;
-typedef uint16_t u16;
-typedef uint32_t u32;
-typedef uint64_t u64;
+using u8  = uint8_t;
+using u16 = uint16_t;
+using u32 = uint32_t;
+using u64 = uint64_t;
 
 namespace hal
 {
-    namespace fs = boost::filesystem;
-    typedef boost::system::error_code error_code;
+#if defined(__GNUC__) && ((__GNUC__ == 7 && __GNUC_MINOR__ >= 4))
+    namespace fs = std::experimental::filesystem;
+#else
+    namespace fs = std::filesystem;
+#endif
+    typedef std::error_code error_code;
+    
     typedef fs::path path;
 }    // namespace hal
-
-#define DEBUG
 
 #define UNUSED(expr) (void)expr
 
@@ -56,6 +61,7 @@ namespace hal
 #include "arch_win.h"
 #elif __APPLE__ && __MACH__
 #include "arch_mac.h"
+
 #elif __linux__
 #include "arch_linux.h"
 #endif
@@ -68,8 +74,8 @@ namespace hal
 /* other */
 #define EXPORTED __attribute__((visibility("default")))
 #define NOT_EXPORTED __attribute__((visibility("hidden")))
-#define PROTECTED  __attribute__((visibility("protected")))
-#define INTERNAL  __attribute__((visibility("internal")))
+#define PROTECTED __attribute__((visibility("protected")))
+#define INTERNAL __attribute__((visibility("internal")))
 #endif
 
 #if defined(__clang__)
@@ -79,5 +85,3 @@ namespace hal
 #else
 #define COMPILER_OTHER
 #endif
-
-#endif /* __DEF_H__ */
