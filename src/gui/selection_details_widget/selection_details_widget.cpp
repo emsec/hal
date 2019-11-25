@@ -64,6 +64,13 @@ void selection_details_widget::handle_selection_update(void* sender)
         return;
     }
 
+    if(g_selection_relay.m_selected_gates.isEmpty() &&
+       g_selection_relay.m_selected_modules.isEmpty() &&
+       g_selection_relay.m_selected_nets.isEmpty())
+    {
+        m_stacked_widget->setCurrentWidget(m_empty_widget);
+    }
+
     if (!g_selection_relay.m_selected_modules.isEmpty())
     {
         m_module_details->update(*g_selection_relay.m_selected_modules.begin());
