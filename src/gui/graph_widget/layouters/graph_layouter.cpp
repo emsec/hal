@@ -90,6 +90,36 @@ void graph_layouter::remove_node_from_maps(const hal::node& n)
     }
 }
 
+int graph_layouter::min_x_index()
+{
+    return m_min_x_index;
+}
+
+int graph_layouter::min_y_index()
+{
+    return m_min_y_index;
+}
+
+QVector<qreal> graph_layouter::x_values() const
+{
+    return m_x_values;
+}
+
+QVector<qreal> graph_layouter::y_values() const
+{
+    return m_y_values;
+}
+
+qreal graph_layouter::max_node_width() const
+{
+    return m_max_node_width;
+}
+
+qreal graph_layouter::max_node_height() const
+{
+    return m_max_node_height;
+}
+
 void graph_layouter::layout()
 {
     m_scene->delete_all_items();
@@ -152,6 +182,18 @@ void graph_layouter::clear_layout_data()
 
     m_max_left_io_padding_for_channel_x.clear();
     m_max_right_io_padding_for_channel_x.clear();
+
+    m_min_x_index = 0;
+    m_min_y_index = 0;
+
+    m_max_x_index = 0;
+    m_max_y_index = 0;
+
+    m_x_values.clear();
+    m_y_values.clear();
+
+    m_max_node_width = 0;
+    m_max_node_height = 0;
 }
 
 void graph_layouter::create_boxes()
@@ -458,6 +500,22 @@ void graph_layouter::find_max_box_dimensions()
 {
     for (const node_box& box : m_boxes)
     {
+        if (box.x < m_min_x_index)
+            m_min_x_index = box.x;
+        else if (box.x > m_max_x_index)
+            m_max_x_index = box.x;
+
+        if (box.y < m_min_y_index)
+            m_min_y_index = box.y;
+        else if (box.y > m_max_y_index)
+            m_max_y_index = box.y;
+
+        if (m_max_node_width < box.item->width())
+            m_max_node_width = box.item->width();
+
+        if (m_max_node_height < box.item->height())
+            m_max_node_height = box.item->height();
+
         store_max(m_max_node_width_for_x, box.x, box.item->width());
         store_max(m_max_node_height_for_y, box.y, box.item->height());
 
@@ -585,54 +643,42 @@ void graph_layouter::calculate_max_channel_dimensions()
 
 void graph_layouter::calculate_gate_offsets()
 {
-    int min_x = 0;
-    int max_x = 0;
-
-    int min_y = 0;
-    int max_y = 0;
-
-    for (node_box& box : m_boxes)
-    {
-        if (box.x < min_x)
-            min_x = box.x;
-        else if (box.x > max_x)
-            max_x = box.x;
-
-        if (box.y < min_y)
-            min_y = box.y;
-        else if (box.y > max_y)
-            max_y = box.y;
-    }
-
     m_node_offset_for_x.insert(0, 0);
     m_node_offset_for_y.insert(0, 0);
 
-    if (max_x)
-        for (int i = 1; i <= max_x; ++i)
+    m_x_values.append(0);
+    m_y_values.append(0);
+
+    if (m_max_x_index)
+        for (int i = 1; i <= m_max_x_index; ++i)
         {
             qreal offset = m_node_offset_for_x.value(i - 1) + m_max_node_width_for_x.value(i - 1) + std::max(m_max_v_channel_width_for_x.value(i), minimum_v_channel_width);
             m_node_offset_for_x.insert(i, offset);
+            m_x_values.append(offset);
         }
 
-    if (min_x)
-        for (int i = -1; i >= min_x; --i)
+    if (m_min_x_index)
+        for (int i = -1; i >= m_min_x_index; --i)
         {
             qreal offset = m_node_offset_for_x.value(i + 1) - m_max_node_width_for_x.value(i) - std::max(m_max_v_channel_width_for_x.value(i + 1), minimum_v_channel_width);
             m_node_offset_for_x.insert(i, offset);
+            m_x_values.prepend(offset);
         }
 
-    if (max_y)
-        for (int i = 1; i <= max_y; ++i)
+    if (m_max_y_index)
+        for (int i = 1; i <= m_max_y_index; ++i)
         {
             qreal offset = m_node_offset_for_y.value(i - 1) + m_max_node_height_for_y.value(i - 1) + std::max(m_max_h_channel_height_for_y.value(i), minimum_h_channel_height);
             m_node_offset_for_y.insert(i, offset);
+            m_y_values.append(offset);
         }
 
-    if (min_y)
-        for (int i = -1; i >= min_y; --i)
+    if (m_min_y_index)
+        for (int i = -1; i >= m_min_y_index; --i)
         {
             qreal offset = m_node_offset_for_y.value(i + 1) + m_max_node_height_for_y.value(i) + std::max(m_max_h_channel_height_for_y.value(i + 1), minimum_h_channel_height);
             m_node_offset_for_y.insert(i, offset);
+            m_y_values.prepend(offset);
         }
 }
 

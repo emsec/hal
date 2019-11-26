@@ -162,6 +162,15 @@ public:
     void set_node_position(const hal::node& n, const QPoint& p);
     void remove_node_from_maps(const hal::node& n);
 
+    int min_x_index();
+    int min_y_index();
+
+    QVector<qreal> x_values() const;
+    QVector<qreal> y_values() const;
+
+    qreal max_node_width() const;
+    qreal max_node_height() const;
+
 Q_SIGNALS:
     void status_update(const int percent);
     void status_update(const QString& message);
@@ -263,6 +272,18 @@ private:
 
     QMap<hal::node, QPoint> m_node_to_position_map;
     QMap<QPoint, hal::node> m_position_to_node_map;
+
+    int m_min_x_index;
+    int m_min_y_index;
+
+    int m_max_x_index;
+    int m_max_y_index;
+
+    QVector<qreal> m_x_values;
+    QVector<qreal> m_y_values;
+
+    qreal m_max_node_width;
+    qreal m_max_node_height;
 };
 
 #endif // GRAPH_LAYOUTER_H
