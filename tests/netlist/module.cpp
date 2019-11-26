@@ -3,22 +3,18 @@
 #include "netlist/gate_library/gate_library_manager.h"
 #include "netlist/netlist.h"
 #include "netlist/netlist_factory.h"
-#include "test_def.h"
+#include "netlist_test_utils.h"
 #include "gtest/gtest.h"
 #include <core/log.h>
 #include <iostream>
 #include <netlist/gate.h>
 #include <netlist/net.h>
 
+using namespace test_utils;
+
 class module_test : public ::testing::Test
 {
 protected:
-    const std::string g_lib_name = "EXAMPLE_GATE_LIBRARY";
-    const u32 MIN_MODULE_ID = 2;
-    //const u32 MIN_NL_ID = 1;
-    const u32 MIN_GATE_ID = 1;
-    const u32 MIN_NET_ID = 1;
-
     virtual void SetUp()
     {
         NO_COUT_BLOCK;
@@ -27,83 +23,6 @@ protected:
 
     virtual void TearDown()
     {
-    }
-
-    // Creates an empty netlist with a certain id if passed
-    std::shared_ptr<netlist> create_empty_netlist(const int id = -1)
-    {
-        NO_COUT_BLOCK;
-        std::shared_ptr<gate_library> gl = gate_library_manager::get_gate_library(g_lib_name);
-        std::shared_ptr<netlist> nl(new netlist(gl));
-
-        if (id >= 0)
-        {
-            nl->set_id(id);
-        }
-        return nl;
-    }
-
-    /*
-     *      Example netlist circuit diagram (Id in brackets). Used for get fan in and
-     *      out nets.
-     *
-     *
-     *      GND (1) =-= INV (3) =--=             .------= INV (4) =
-     *                                 AND2 (0) =-
-     *      VCC (2) =--------------=             '------=
-     *                                                     AND2 (5) =
-     *                                                  =
-     *
-     *     =                       =           =----------=           =
-     *       BUF (6)              ... OR2 (7)             ... OR2 (8)
-     *     =                       =           =          =           =
-     */
-
-    // Creates a simple netlist shown in the diagram above
-    std::shared_ptr<netlist> create_example_netlist(int id = -1)
-    {
-        NO_COUT_BLOCK;
-        std::shared_ptr<gate_library> gl = gate_library_manager::get_gate_library(g_lib_name);
-        std::shared_ptr<netlist> nl      = std::make_shared<netlist>(gl);
-        if (id >= 0)
-        {
-            nl->set_id(id);
-        }
-
-        // Create the gates
-        std::shared_ptr<gate> gate_0 = nl->create_gate(MIN_GATE_ID+0, "AND2", "gate_0");
-        std::shared_ptr<gate> gate_1 = nl->create_gate(MIN_GATE_ID+1, "GND", "gate_1");
-        std::shared_ptr<gate> gate_2 = nl->create_gate(MIN_GATE_ID+2, "VCC", "gate_2");
-        std::shared_ptr<gate> gate_3 = nl->create_gate(MIN_GATE_ID+3, "INV", "gate_3");
-        std::shared_ptr<gate> gate_4 = nl->create_gate(MIN_GATE_ID+4, "INV", "gate_4");
-        std::shared_ptr<gate> gate_5 = nl->create_gate(MIN_GATE_ID+5, "AND2", "gate_5");
-        std::shared_ptr<gate> gate_6 = nl->create_gate(MIN_GATE_ID+6, "BUF", "gate_6");
-        std::shared_ptr<gate> gate_7 = nl->create_gate(MIN_GATE_ID+7, "OR2", "gate_7");
-        std::shared_ptr<gate> gate_8 = nl->create_gate(MIN_GATE_ID+8, "OR2", "gate_8");
-
-        // Add the nets (net_x_y1_y2... := net between the gate with id x and the gates y1,y2,...)
-        std::shared_ptr<net> net_1_3 = nl->create_net(MIN_NET_ID+13, "net_1_3");
-        net_1_3->set_src(gate_1, "O");
-        net_1_3->add_dst(gate_3, "I");
-
-        std::shared_ptr<net> net_3_0 = nl->create_net(MIN_NET_ID+30, "net_3_0");
-        net_3_0->set_src(gate_3, "O");
-        net_3_0->add_dst(gate_0, "I0");
-
-        std::shared_ptr<net> net_2_0 = nl->create_net(MIN_NET_ID+20, "net_2_0");
-        net_2_0->set_src(gate_2, "O");
-        net_2_0->add_dst(gate_0, "I1");
-
-        std::shared_ptr<net> net_0_4_5 = nl->create_net(MIN_NET_ID+045, "net_0_4_5");
-        net_0_4_5->set_src(gate_0, "O");
-        net_0_4_5->add_dst(gate_4, "I");
-        net_0_4_5->add_dst(gate_5, "I0");
-
-        std::shared_ptr<net> net_7_8 = nl->create_net(MIN_NET_ID+78, "net_7_8");
-        net_7_8->set_src(gate_7, "O");
-        net_7_8->add_dst(gate_8, "I0");
-
-        return nl;
     }
 };
 

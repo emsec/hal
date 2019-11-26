@@ -1,11 +1,11 @@
 #include "test_def.h"
 #include "gtest/gtest.h"
+#include <boost/filesystem.hpp>
 #include <core/log.h>
 #include <core/utils.h>
 #include <cstdio>
 #include <fstream>
 #include <iostream>
-#include <filesystem>
 
 using namespace core_utils;
 
@@ -454,7 +454,7 @@ TEST_F(utils_test, check_folder_exists_and_is_accessible)
     // Create a temporary directory for testing
     hal::path tmp_dir_path = get_binary_directory().string() + "/tmp_test";
 
-    std::filesystem::create_directory(tmp_dir_path);
+    boost::filesystem::create_directory(tmp_dir_path);
 
     // ########################
     // POSITIVE TESTS
@@ -468,9 +468,9 @@ TEST_F(utils_test, check_folder_exists_and_is_accessible)
 
     TEST_END
     // removes the temporary directories and files
-    if (std::filesystem::is_directory(get_binary_directory().string() + "/tmp_test"))
+    if (boost::filesystem::is_directory(get_binary_directory().string() + "/tmp_test"))
     {
-        std::filesystem::remove_all(get_binary_directory().string() + "/tmp_test");
+        boost::filesystem::remove_all(get_binary_directory().string() + "/tmp_test");
     }
 }
 
@@ -493,13 +493,13 @@ TEST_F(utils_test, check_to_directory_functions)
     // POSITIVE TESTS
     // ########################
 
-    EXPECT_TRUE(std::filesystem::is_directory(get_binary_directory()));
-    EXPECT_TRUE(std::filesystem::is_directory(get_base_directory()));
-    EXPECT_TRUE(std::filesystem::is_directory(get_library_directory()));
-    EXPECT_TRUE(std::filesystem::is_directory(get_share_directory()));
-    EXPECT_TRUE(std::filesystem::is_directory(get_user_share_directory()));
-    EXPECT_TRUE(std::filesystem::is_directory(get_user_config_directory()));
-    EXPECT_TRUE(std::filesystem::is_directory(get_default_log_directory()));
+    EXPECT_TRUE(boost::filesystem::is_directory(get_binary_directory()));
+    EXPECT_TRUE(boost::filesystem::is_directory(get_base_directory()));
+    EXPECT_TRUE(boost::filesystem::is_directory(get_library_directory()));
+    EXPECT_TRUE(boost::filesystem::is_directory(get_share_directory()));
+    EXPECT_TRUE(boost::filesystem::is_directory(get_user_share_directory()));
+    EXPECT_TRUE(boost::filesystem::is_directory(get_user_config_directory()));
+    EXPECT_TRUE(boost::filesystem::is_directory(get_default_log_directory()));
 
     get_gate_library_directories();
     get_plugin_directories();
@@ -569,11 +569,11 @@ TEST_F(utils_test, check_get_file)
     // Create a temporary directory for testing
     hal::path tmp_dir_path = get_binary_directory().string() + "/tmp_test";
 
-    std::filesystem::create_directory(tmp_dir_path);
-    std::filesystem::create_directory(tmp_dir_path.string() + "/dir_1");
-    std::filesystem::create_directory(tmp_dir_path.string() + "/dir_2");
-    std::filesystem::create_directory(tmp_dir_path.string() + "/dir_empty_1");
-    std::filesystem::create_directory(tmp_dir_path.string() + "/dir_empty_2");
+    boost::filesystem::create_directory(tmp_dir_path);
+    boost::filesystem::create_directory(tmp_dir_path.string() + "/dir_1");
+    boost::filesystem::create_directory(tmp_dir_path.string() + "/dir_2");
+    boost::filesystem::create_directory(tmp_dir_path.string() + "/dir_empty_1");
+    boost::filesystem::create_directory(tmp_dir_path.string() + "/dir_empty_2");
 
     std::ofstream outfile_1(get_binary_directory().string() + "/tmp_test/dir_1/tmp.txt");
     std::ofstream outfile_2(get_binary_directory().string() + "/tmp_test/dir_2/tmp.txt");
@@ -627,9 +627,9 @@ TEST_F(utils_test, check_get_file)
     TEST_END
 
     // removes the temporary directories and files
-    if (std::filesystem::is_directory(get_binary_directory().string() + "/tmp_test"))
+    if (boost::filesystem::is_directory(get_binary_directory().string() + "/tmp_test"))
     {
-        std::filesystem::remove_all(get_binary_directory().string() + "/tmp_test");
+        boost::filesystem::remove_all(get_binary_directory().string() + "/tmp_test");
     }
 }
 
@@ -648,9 +648,9 @@ TEST_F(utils_test, check_which)
     // Create a temporary directory for testing
     hal::path tmp_dir_path = get_binary_directory().string() + "/tmp_test";
 
-    std::filesystem::create_directory(tmp_dir_path);
-    std::filesystem::create_directory(tmp_dir_path.string() + "/dir_txt");
-    std::filesystem::create_directory(tmp_dir_path.string() + "/dir_empty");
+    boost::filesystem::create_directory(tmp_dir_path);
+    boost::filesystem::create_directory(tmp_dir_path.string() + "/dir_txt");
+    boost::filesystem::create_directory(tmp_dir_path.string() + "/dir_empty");
 
     // Creates a file within a directory, which is not executable
     std::ofstream outfile_1(get_binary_directory().string() + "/tmp_test/dir_txt/tmp.txt");
@@ -664,7 +664,7 @@ TEST_F(utils_test, check_which)
     // ########################
 
     // This test are only valid if an executable hal exists within the bin folder
-    if (std::filesystem::exists(get_binary_directory().string() + "/hal"))
+    if (boost::filesystem::exists(get_binary_directory().string() + "/hal"))
     {
         {
             // Directory exists and contains the given executable
@@ -706,9 +706,9 @@ TEST_F(utils_test, check_which)
     TEST_END
 
     // removes the temporary directories and files
-    if (std::filesystem::is_directory(get_binary_directory().string() + "/tmp_test"))
+    if (boost::filesystem::is_directory(get_binary_directory().string() + "/tmp_test"))
     {
-        std::filesystem::remove_all(get_binary_directory().string() + "/tmp_test");
+        boost::filesystem::remove_all(get_binary_directory().string() + "/tmp_test");
     }
 }
 
