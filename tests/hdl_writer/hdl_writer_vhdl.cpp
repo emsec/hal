@@ -8,10 +8,8 @@
 #include "netlist/gate_library/gate_library_manager.h"
 #include "netlist/netlist_factory.h"
 #include "netlist/netlist.h"
-//#include "hdl_parser/hdl_parser_vhdl_old.h"
+#include "hdl_parser/hdl_parser_vhdl.h"
 #include "hdl_writer/hdl_writer_vhdl.h"
-
-#ifdef DONT_USE_ME
 
 using namespace test_utils;
 
@@ -65,7 +63,7 @@ TEST_F(hdl_writer_vhdl_test, check_write_and_parse_main_example) {
             }
             ASSERT_TRUE(writer_suc);
 
-            hdl_parser_vhdl_old vhdl_parser(parser_input);
+            hdl_parser_vhdl vhdl_parser(parser_input);
 
             // Parse the .vhdl file
             std::shared_ptr<netlist> parsed_nl = vhdl_parser.parse(g_lib_name);
@@ -106,7 +104,7 @@ TEST_F(hdl_writer_vhdl_test, check_write_and_parse_main_example) {
 
 
 /**
- * Testing the writing of global input/output/inout nets
+ * Testing the writing of global input/output nets
  *
  * IMPORTANT: If an error occurs, first run the hdl_parser_vhdl_old test to check, that
  * the issue isn't within the parser, but in the writer...
@@ -137,7 +135,7 @@ TEST_F(hdl_writer_vhdl_test, check_global_nets) {
             }
             ASSERT_TRUE(writer_suc);
 
-            hdl_parser_vhdl_old vhdl_parser(parser_input);
+            hdl_parser_vhdl vhdl_parser(parser_input);
             // Parse the .vhdl file
             std::shared_ptr<netlist> parsed_nl = vhdl_parser.parse(g_lib_name);
 
@@ -180,7 +178,7 @@ TEST_F(hdl_writer_vhdl_test, check_global_nets) {
             }
             ASSERT_TRUE(writer_suc);
 
-            hdl_parser_vhdl_old vhdl_parser(parser_input);
+            hdl_parser_vhdl vhdl_parser(parser_input);
             // Parse the .vhdl file
             std::shared_ptr<netlist> parsed_nl = vhdl_parser.parse(g_lib_name);
 
@@ -200,55 +198,13 @@ TEST_F(hdl_writer_vhdl_test, check_global_nets) {
             EXPECT_TRUE(parsed_nl->is_global_output_net(p_global_out_1));
 
         }
-        {
-            // Add 2 global inout nets to an empty netlist
-            std::shared_ptr<netlist> nl = create_empty_netlist(0);
-
-            std::shared_ptr<net> global_inout_0 = nl->create_net( MIN_NET_ID+0, "0_global_inout");
-            std::shared_ptr<net> global_inout_1 = nl->create_net( MIN_NET_ID+1, "1_global_inout");
-
-            nl->mark_global_inout_net(global_inout_0);
-            nl->mark_global_inout_net(global_inout_1);
-
-            // Write and parse the netlist now
-            test_def::capture_stdout();
-            std::stringstream parser_input;
-            hdl_writer_vhdl vhdl_writer(parser_input);
-
-            // Writes the netlist in the sstream
-            bool writer_suc = vhdl_writer.write(nl);
-            if (!writer_suc) {
-                std::cout << test_def::get_captured_stdout() << std::endl;
-            }
-            ASSERT_TRUE(writer_suc);
-
-            hdl_parser_vhdl_old vhdl_parser(parser_input);
-            // Parse the .vhdl file
-            std::shared_ptr<netlist> parsed_nl = vhdl_parser.parse(g_lib_name);
-
-            if (parsed_nl == nullptr) {
-                std::cout << test_def::get_captured_stdout() << std::endl;
-            }
-            ASSERT_NE(parsed_nl, nullptr);
-            test_def::get_captured_stdout();
-
-            // Check if the nets are written/parsed correctly
-            std::shared_ptr<net> p_global_inout_0 = get_net_by_subname(parsed_nl, "0_global_inout");
-            ASSERT_NE(p_global_inout_0, nullptr);
-            EXPECT_TRUE(parsed_nl->is_global_inout_net(p_global_inout_0));
-
-            std::shared_ptr<net> p_global_inout_1 = get_net_by_subname(parsed_nl, "1_global_inout");
-            ASSERT_NE(p_global_inout_1, nullptr);
-            EXPECT_TRUE(parsed_nl->is_global_inout_net(p_global_inout_1));
-
-        }
     TEST_END
 }
 
 /**
  * Testing the storage of generic data within gates
  *
- * IMPORTANT: If an error occurs, first run the hdl_parser_vhdl_old test to check, that
+ * IMPORTANT: If an error occurs, first run the hdl_parser_vhdl test to check, that
  * the issue isn't within the parser, but in the writer...
  *
  * Functions: write, parse
@@ -262,13 +218,13 @@ TEST_F(hdl_writer_vhdl_test, check_generic_data_storage) {
             std::shared_ptr<net> global_in = nl->create_net( MIN_NET_ID+0, "global_in");
             nl->mark_global_input_net(global_in);
 
-            std::shared_ptr<gate> test_gate_0 = nl->create_gate( MIN_GATE_ID+0, "INV", "test_gate_0");
-            std::shared_ptr<gate> test_gate_1 = nl->create_gate( MIN_GATE_ID+1, "INV", "test_gate_1");
-            std::shared_ptr<gate> test_gate_2 = nl->create_gate( MIN_GATE_ID+2, "INV", "test_gate_2");
-            std::shared_ptr<gate> test_gate_3 = nl->create_gate( MIN_GATE_ID+3, "INV", "test_gate_3");
-            std::shared_ptr<gate> test_gate_4 = nl->create_gate( MIN_GATE_ID+4, "INV", "test_gate_4");
-            std::shared_ptr<gate> test_gate_5 = nl->create_gate( MIN_GATE_ID+5, "INV", "test_gate_5");
-            std::shared_ptr<gate> test_gate_6 = nl->create_gate( MIN_GATE_ID+6, "INV", "test_gate_6");
+            std::shared_ptr<gate> test_gate_0 = nl->create_gate( MIN_GATE_ID+0, get_gate_type_by_name("INV"), "test_gate_0");
+            std::shared_ptr<gate> test_gate_1 = nl->create_gate( MIN_GATE_ID+1, get_gate_type_by_name("INV"), "test_gate_1");
+            std::shared_ptr<gate> test_gate_2 = nl->create_gate( MIN_GATE_ID+2, get_gate_type_by_name("INV"), "test_gate_2");
+            std::shared_ptr<gate> test_gate_3 = nl->create_gate( MIN_GATE_ID+3, get_gate_type_by_name("INV"), "test_gate_3");
+            std::shared_ptr<gate> test_gate_4 = nl->create_gate( MIN_GATE_ID+4, get_gate_type_by_name("INV"), "test_gate_4");
+            std::shared_ptr<gate> test_gate_5 = nl->create_gate( MIN_GATE_ID+5, get_gate_type_by_name("INV"), "test_gate_5");
+            std::shared_ptr<gate> test_gate_6 = nl->create_gate( MIN_GATE_ID+6, get_gate_type_by_name("INV"), "test_gate_6");
 
             // Create output nets for all gates to create a valid netlist
             unsigned int idx = 0;
@@ -324,7 +280,7 @@ TEST_F(hdl_writer_vhdl_test, check_generic_data_storage) {
             ASSERT_TRUE(writer_suc);
 
             std::cout << parser_input.str() << std::endl;
-            hdl_parser_vhdl_old vhdl_parser(parser_input);
+            hdl_parser_vhdl vhdl_parser(parser_input);
 
             // Parse the .vhdl file
             std::shared_ptr<netlist> parsed_nl = vhdl_parser.parse(g_lib_name);
@@ -372,7 +328,7 @@ TEST_F(hdl_writer_vhdl_test, check_generic_data_storage) {
 /**
  * Testing the handling of net names which contains only digits (i.e. 123 should become NET_123)
  *
- * IMPORTANT: If an error occurs, first run the hdl_parser_vhdl_old test to check, that
+ * IMPORTANT: If an error occurs, first run the hdl_parser_vhdl test to check, that
  * the issue isn't within the parser, but in the writer...
  *
  * Functions: write, parse
@@ -399,7 +355,7 @@ TEST_F(hdl_writer_vhdl_test, check_digit_net_name) {
             }
             ASSERT_TRUE(writer_suc);
 
-            hdl_parser_vhdl_old vhdl_parser(parser_input);
+            hdl_parser_vhdl vhdl_parser(parser_input);
 
             // Parse the .vhdl file
             std::shared_ptr<netlist> parsed_nl = vhdl_parser.parse(g_lib_name);
@@ -428,7 +384,7 @@ TEST_F(hdl_writer_vhdl_test, check_digit_net_name) {
 /**
  * Testing the handling of vcc and gnd gates (ONE and ZERO)
  *
- * IMPORTANT: If an error occurs, first run the hdl_parser_vhdl_old test to check, that
+ * IMPORTANT: If an error occurs, first run the hdl_parser_vhdl test to check, that
  * the issue isn't within the parser, but in the writer...
  *
  * Functions: write, parse
@@ -469,7 +425,7 @@ TEST_F(hdl_writer_vhdl_test, check_vcc_and_gnd_gates) {
             }
             ASSERT_TRUE(writer_suc);
 
-            hdl_parser_vhdl_old vhdl_parser(parser_input);
+            hdl_parser_vhdl vhdl_parser(parser_input);
             // Parse the .vhdl file
             std::shared_ptr<netlist> parsed_nl = vhdl_parser.parse(g_lib_name);
 
@@ -536,7 +492,7 @@ TEST_F(hdl_writer_vhdl_test, check_vcc_and_gnd_gates) {
             }
             ASSERT_TRUE(writer_suc);
 
-            hdl_parser_vhdl_old vhdl_parser(parser_input);
+            hdl_parser_vhdl vhdl_parser(parser_input);
             // Parse the .vhdl file
             std::shared_ptr<netlist> parsed_nl = vhdl_parser.parse(g_lib_name);
 
@@ -558,7 +514,7 @@ TEST_F(hdl_writer_vhdl_test, check_vcc_and_gnd_gates) {
  * Special characters: '(', ')', ',', ', ', '/', '\', '[', ']', '<', '>', '__', '_'
  * Other special cases: only digits, '_' at the beginning or at the end
  *
- * IMPORTANT: If an error occurs, first run the hdl_parser_vhdl_old test to check, that
+ * IMPORTANT: If an error occurs, first run the hdl_parser_vhdl test to check, that
  * the issue isn't within the parser, but in the writer...
  *
  * Functions: write, parse
@@ -592,7 +548,7 @@ TEST_F(hdl_writer_vhdl_test, check_special_net_names) {
             }
             ASSERT_TRUE(writer_suc);
 
-            hdl_parser_vhdl_old vhdl_parser(parser_input);
+            hdl_parser_vhdl vhdl_parser(parser_input);
             // Parse the .vhdl file
             std::shared_ptr<netlist> parsed_nl = vhdl_parser.parse(g_lib_name);
 
@@ -602,6 +558,7 @@ TEST_F(hdl_writer_vhdl_test, check_special_net_names) {
             ASSERT_NE(parsed_nl, nullptr);
             test_def::get_captured_stdout();
 
+            /* FIXME: Connect nets (unconnected nets are removed by the parser/writer)
             // Check if the net_name is translated correctly
             EXPECT_FALSE(parsed_nl->get_nets("net_0").empty());
             EXPECT_FALSE(parsed_nl->get_nets("net_1").empty());
@@ -612,23 +569,23 @@ TEST_F(hdl_writer_vhdl_test, check_special_net_names) {
             EXPECT_FALSE(parsed_nl->get_nets("net_6").empty());
             EXPECT_FALSE(parsed_nl->get_nets("net_7").empty());
             EXPECT_FALSE(parsed_nl->get_nets("net_8").empty());
-            EXPECT_FALSE(parsed_nl->get_nets("NET_9").empty());
+            EXPECT_FALSE(parsed_nl->get_nets("NET_9").empty());*/
         }
         {
             // Testing the handling of special gate names
             std::shared_ptr<netlist> nl = create_empty_netlist(0);
 
             // Create various gates with special gate name characters
-            std::shared_ptr<gate> bracket_gate = nl->create_gate( MIN_GATE_ID+0, "INV", "gate(0)");
-            std::shared_ptr<gate> comma_gate = nl->create_gate( MIN_GATE_ID+1, "INV", "gate,1");
-            std::shared_ptr<gate> comma_space_gate = nl->create_gate( MIN_GATE_ID+2, "INV", "gate, 2");
-            std::shared_ptr<gate> slash_gate = nl->create_gate( MIN_GATE_ID+3, "INV", "gate/_3");
-            std::shared_ptr<gate> backslash_gate = nl->create_gate( MIN_GATE_ID+4, "INV", "gate\\_4");
-            std::shared_ptr<gate> curly_bracket_gate = nl->create_gate( MIN_GATE_ID+5, "INV", "gate[5]");
-            std::shared_ptr<gate> angle_bracket_gate = nl->create_gate( MIN_GATE_ID+6, "INV", "gate<6>");
-            std::shared_ptr<gate> double_underscore_gate = nl->create_gate( MIN_GATE_ID+7, "INV", "gate__7");
-            std::shared_ptr<gate> edges_underscore_gate = nl->create_gate( MIN_GATE_ID+8, "INV", "_gate_8_");
-            std::shared_ptr<gate> digit_only_gate = nl->create_gate( MIN_GATE_ID+9, "INV", "9"); // should be converted to GATE_9
+            std::shared_ptr<gate> bracket_gate = nl->create_gate( MIN_GATE_ID+0, get_gate_type_by_name("INV"), "gate(0)");
+            std::shared_ptr<gate> comma_gate = nl->create_gate( MIN_GATE_ID+1, get_gate_type_by_name("INV"), "gate,1");
+            std::shared_ptr<gate> comma_space_gate = nl->create_gate( MIN_GATE_ID+2, get_gate_type_by_name("INV"), "gate, 2");
+            std::shared_ptr<gate> slash_gate = nl->create_gate( MIN_GATE_ID+3, get_gate_type_by_name("INV"), "gate/_3");
+            std::shared_ptr<gate> backslash_gate = nl->create_gate( MIN_GATE_ID+4, get_gate_type_by_name("INV"), "gate\\_4");
+            std::shared_ptr<gate> curly_bracket_gate = nl->create_gate( MIN_GATE_ID+5, get_gate_type_by_name("INV"), "gate[5]");
+            std::shared_ptr<gate> angle_bracket_gate = nl->create_gate( MIN_GATE_ID+6, get_gate_type_by_name("INV"), "gate<6>");
+            std::shared_ptr<gate> double_underscore_gate = nl->create_gate( MIN_GATE_ID+7, get_gate_type_by_name("INV"), "gate__7");
+            std::shared_ptr<gate> edges_underscore_gate = nl->create_gate( MIN_GATE_ID+8, get_gate_type_by_name("INV"), "_gate_8_");
+            std::shared_ptr<gate> digit_only_gate = nl->create_gate( MIN_GATE_ID+9, get_gate_type_by_name("INV"), "9"); // should be converted to GATE_9
 
             // Create output nets for all gates to create a valid netlist
             unsigned int idx = 0;
@@ -650,7 +607,7 @@ TEST_F(hdl_writer_vhdl_test, check_special_net_names) {
             }
             ASSERT_TRUE(writer_suc);
 
-            hdl_parser_vhdl_old vhdl_parser(parser_input);
+            hdl_parser_vhdl vhdl_parser(parser_input);
             // Parse the .vhdl file
             std::shared_ptr<netlist> parsed_nl = vhdl_parser.parse(g_lib_name);
 
@@ -678,7 +635,7 @@ TEST_F(hdl_writer_vhdl_test, check_special_net_names) {
 /**
  * Testing the handling of collisions with gate and net names
  *
- * IMPORTANT: If an error occurs, first run the hdl_parser_vhdl_old test to check, that
+ * IMPORTANT: If an error occurs, first run the hdl_parser_vhdl test to check, that
  * the issue isn't within the parser, but in the writer...
  *
  * Functions: write, parse
@@ -690,7 +647,7 @@ TEST_F(hdl_writer_vhdl_test, check_gate_net_name_collision) {
             std::shared_ptr<netlist> nl = create_empty_netlist(0);
 
             std::shared_ptr<net> test_net = nl->create_net( MIN_NET_ID+0, "gate_net_name");
-            std::shared_ptr<gate> test_gate = nl->create_gate( MIN_GATE_ID+0, "INV", "gate_net_name");
+            std::shared_ptr<gate> test_gate = nl->create_gate( MIN_GATE_ID+0, get_gate_type_by_name("INV"), "gate_net_name");
 
             test_net->add_dst(test_gate, "I");
 
@@ -706,7 +663,7 @@ TEST_F(hdl_writer_vhdl_test, check_gate_net_name_collision) {
             }
             ASSERT_TRUE(writer_suc);
 
-            hdl_parser_vhdl_old vhdl_parser(parser_input);
+            hdl_parser_vhdl vhdl_parser(parser_input);
 
             // Parse the .vhdl file
             std::shared_ptr<netlist> parsed_nl = vhdl_parser.parse(g_lib_name);
@@ -728,7 +685,7 @@ TEST_F(hdl_writer_vhdl_test, check_gate_net_name_collision) {
 /**
  * Testing the translation of net names, that contain only digits
  *
- * IMPORTANT: If an error occurs, first run the hdl_parser_vhdl_old test to check, that
+ * IMPORTANT: If an error occurs, first run the hdl_parser_vhdl test to check, that
  * the issue isn't within the parser, but in the writer...
  *
  * Functions: write, parse
@@ -759,7 +716,7 @@ TEST_F(hdl_writer_vhdl_test, check_digit_net_name) {
             }
             ASSERT_TRUE(writer_suc);
 
-            hdl_parser_vhdl_old vhdl_parser(parser_input);
+            hdl_parser_vhdl vhdl_parser(parser_input);
             // Parse the .vhdl file
             std::shared_ptr<netlist> parsed_nl = vhdl_parser.parse(g_lib_name);
 
@@ -777,4 +734,3 @@ TEST_F(hdl_writer_vhdl_test, check_digit_net_name) {
     TEST_END
 }*/
 
-#endif //DONT_USE_ME

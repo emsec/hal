@@ -77,9 +77,18 @@ namespace test_utils
      * Checks if an endpoint is empty (i.e. (nullptr, ""))
      *
      * @param[in] ep - endpoint
-     * @return
+     * @return true, if the endpoint is the empty endpoint
      */
     bool is_empty(const endpoint ep);
+
+    /**
+     * Get a gate type by its name
+     *
+     * @param name - the name of the gate_type
+     * @param gate_library_name - the name of the gate library, the gate_type can be found. If empty, the example gate library (g_lib_name) is taken.
+     * @return the gate_type pointer if found. If no gate type matches, return nullptr
+     */
+    std::shared_ptr<const gate_type> get_gate_type_by_name(std::string name, std::string gate_library_name = "");
 
     /**
      * Given a vector of endpoints. Returns the first endpoint that has a certain pin type

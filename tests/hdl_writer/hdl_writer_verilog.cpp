@@ -11,7 +11,6 @@
 #include "hdl_parser/hdl_parser_verilog.h"
 #include "hdl_writer/hdl_writer_verilog.h"
 
-#ifdef DONT_USE_ME
 
 using namespace test_utils;
 
@@ -37,6 +36,7 @@ protected:
      */
     void create_pseudo_simprim_gate_lib()
     {
+        // FIXME
         NO_COUT_BLOCK;
         std::ofstream test_lib(pseudo_simprim_lib_path.string());
         test_lib << "{\n"
@@ -79,12 +79,11 @@ TEST_F(hdl_writer_verilog_test, check_write_and_parse_main_example) {
 
 
             // Mark the global gates as such
-            nl->mark_global_gnd_gate(nl->get_gate_by_id(MIN_GATE_ID+1));
-            nl->mark_global_vcc_gate(nl->get_gate_by_id(MIN_GATE_ID+2));
-
+            nl->mark_gnd_gate(nl->get_gate_by_id(MIN_GATE_ID+1));
+            nl->mark_vcc_gate(nl->get_gate_by_id(MIN_GATE_ID+2));
 
             // Write and parse the netlist now
-            test_def::capture_stdout();
+            //test_def::capture_stdout();
             std::stringstream parser_input;
             hdl_writer_verilog verilog_writer(parser_input);
 
@@ -105,8 +104,17 @@ TEST_F(hdl_writer_verilog_test, check_write_and_parse_main_example) {
             if(parsed_nl == nullptr){
                 std::cout << test_def::get_captured_stdout() << std::endl;
             }
+            std::cout << parser_input.str() << std::endl;
             ASSERT_NE(parsed_nl, nullptr);
-            test_def::get_captured_stdout();
+
+            // These are added by the parser in every netlist
+            nl->create_gate(MIN_GATE_ID+101, get_gate_type_by_name("GND"), "global_gnd");
+            nl->create_gate(MIN_GATE_ID+102, get_gate_type_by_name("VCC"), "global_vcc");
+
+            nl->mark_gnd_gate(nl->get_gate_by_id(MIN_GATE_ID+101));
+            nl->mark_vcc_gate(nl->get_gate_by_id(MIN_GATE_ID+102));
+
+            //test_def::get_captured_stdout();
 
             // Check if the original netlist and the parsed one are equal
 
@@ -117,20 +125,20 @@ TEST_F(hdl_writer_verilog_test, check_write_and_parse_main_example) {
             }
 
             EXPECT_EQ(nl->get_nets().size(), parsed_nl->get_nets().size());
-
-            for(auto n_0 : nl->get_nets()){
+            // FIXME
+            /*for(auto n_0 : nl->get_nets()){
                 EXPECT_TRUE(nets_are_equal(n_0, get_net_by_subname(parsed_nl, n_0->get_name()), true, true));
-            }
+            }*/
 
             // -- Check if global gates are the same
-            EXPECT_EQ(nl->get_global_gnd_gates().size(), parsed_nl->get_global_gnd_gates().size());
-            for(auto gl_gnd_0 : nl->get_global_gnd_gates()){
-                EXPECT_TRUE(parsed_nl->is_global_gnd_gate(get_gate_by_subname(parsed_nl, gl_gnd_0->get_name())));
+            EXPECT_EQ(nl->get_gnd_gates().size(), parsed_nl->get_gnd_gates().size());
+            for(auto gl_gnd_0 : nl->get_gnd_gates()){
+                EXPECT_TRUE(parsed_nl->is_gnd_gate(get_gate_by_subname(parsed_nl, gl_gnd_0->get_name())));
             }
 
-            EXPECT_EQ(nl->get_global_vcc_gates().size(), parsed_nl->get_global_vcc_gates().size());
-            for(auto gl_vcc_0 : nl->get_global_vcc_gates()){
-                EXPECT_TRUE(parsed_nl->is_global_vcc_gate(get_gate_by_subname(parsed_nl, gl_vcc_0->get_name())));
+            EXPECT_EQ(nl->get_vcc_gates().size(), parsed_nl->get_vcc_gates().size());
+            for(auto gl_vcc_0 : nl->get_vcc_gates()){
+                EXPECT_TRUE(parsed_nl->is_vcc_gate(get_gate_by_subname(parsed_nl, gl_vcc_0->get_name())));
             }
         }
     TEST_END
@@ -499,8 +507,10 @@ TEST_F(hdl_writer_verilog_test, check_special_net_names) {
             ASSERT_NE(parsed_nl, nullptr);
             test_def::get_captured_stdout();
 
+            // FIXME: Nets must be connected. Otherwise they are removed...
+
             // Check if the net_name is translated correctly
-            EXPECT_FALSE(parsed_nl->get_nets("net_0").empty());
+            /*EXPECT_FALSE(parsed_nl->get_nets("net_0").empty());
             EXPECT_FALSE(parsed_nl->get_nets("net_1").empty());
             EXPECT_FALSE(parsed_nl->get_nets("net_2").empty());
             EXPECT_FALSE(parsed_nl->get_nets("net_3").empty());
@@ -509,23 +519,24 @@ TEST_F(hdl_writer_verilog_test, check_special_net_names) {
             EXPECT_FALSE(parsed_nl->get_nets("net_6").empty());
             EXPECT_FALSE(parsed_nl->get_nets("net_7").empty());
             EXPECT_FALSE(parsed_nl->get_nets("net_8").empty());
-            EXPECT_FALSE(parsed_nl->get_nets("NET_9").empty());
+            EXPECT_FALSE(parsed_nl->get_nets("NET_9").empty());*/
         }
         {
             // Testing the handling of special gate names
             std::shared_ptr<netlist> nl = create_empty_netlist(0);
+            std::shared_ptr<gate_library> gl = gate_library_manager::get_gate_library(g_lib_name);
 
             // Create various gates with special gate name characters
-            std::shared_ptr<gate> bracket_gate = nl->create_gate( MIN_GATE_ID+0, "INV", "gate(0)");
-            std::shared_ptr<gate> comma_gate = nl->create_gate( MIN_GATE_ID+1, "INV", "gate,1");
-            std::shared_ptr<gate> comma_space_gate = nl->create_gate( MIN_GATE_ID+2, "INV", "gate, 2");
-            std::shared_ptr<gate> slash_gate = nl->create_gate( MIN_GATE_ID+3, "INV", "gate/_3");
-            std::shared_ptr<gate> backslash_gate = nl->create_gate( MIN_GATE_ID+4, "INV", "gate\\_4");
-            std::shared_ptr<gate> curly_bracket_gate = nl->create_gate( MIN_GATE_ID+5, "INV", "gate[5]");
-            std::shared_ptr<gate> angle_bracket_gate = nl->create_gate( MIN_GATE_ID+6, "INV", "gate<6>");
-            std::shared_ptr<gate> double_underscore_gate = nl->create_gate( MIN_GATE_ID+7, "INV", "gate__7");
-            std::shared_ptr<gate> edges_underscore_gate = nl->create_gate( MIN_GATE_ID+8, "INV", "_gate_8_");
-            std::shared_ptr<gate> digit_only_gate = nl->create_gate( MIN_GATE_ID+9, "INV", "9"); // should be converted to GATE_9
+            std::shared_ptr<gate> bracket_gate = nl->create_gate( MIN_GATE_ID+0, gl->get_gate_types().at("INV"), "gate(0)");
+            std::shared_ptr<gate> comma_gate = nl->create_gate( MIN_GATE_ID+1, gl->get_gate_types().at("INV"), "gate,1");
+            std::shared_ptr<gate> comma_space_gate = nl->create_gate( MIN_GATE_ID+2, gl->get_gate_types().at("INV"), "gate, 2");
+            std::shared_ptr<gate> slash_gate = nl->create_gate( MIN_GATE_ID+3, gl->get_gate_types().at("INV"), "gate/_3");
+            std::shared_ptr<gate> backslash_gate = nl->create_gate( MIN_GATE_ID+4, gl->get_gate_types().at("INV"), "gate\\_4");
+            std::shared_ptr<gate> curly_bracket_gate = nl->create_gate( MIN_GATE_ID+5, gl->get_gate_types().at("INV"), "gate[5]");
+            std::shared_ptr<gate> angle_bracket_gate = nl->create_gate( MIN_GATE_ID+6, gl->get_gate_types().at("INV"), "gate<6>");
+            std::shared_ptr<gate> double_underscore_gate = nl->create_gate( MIN_GATE_ID+7, gl->get_gate_types().at("INV"), "gate__7");
+            std::shared_ptr<gate> edges_underscore_gate = nl->create_gate( MIN_GATE_ID+8, gl->get_gate_types().at("INV"), "_gate_8_");
+            std::shared_ptr<gate> digit_only_gate = nl->create_gate( MIN_GATE_ID+9, gl->get_gate_types().at("INV"), "9"); // should be converted to GATE_9
 
             // Create output nets for all gates to create a valid netlist
             unsigned int idx = 0;
@@ -587,10 +598,9 @@ TEST_F(hdl_writer_verilog_test, check_gate_net_name_collision) {
         {
             // Testing the handling of two gates with the same name
             std::shared_ptr<netlist> nl = create_empty_netlist(0);
-            nl->set_design_name("design_name");
 
             std::shared_ptr<net> test_net = nl->create_net( MIN_NET_ID+0, "gate_net_name");
-            std::shared_ptr<gate> test_gate = nl->create_gate( MIN_GATE_ID+0, "INV", "gate_net_name");
+            std::shared_ptr<gate> test_gate = nl->create_gate( MIN_GATE_ID+0, get_gate_type_by_name("INV"), "gate_net_name");
 
             test_net->add_dst(test_gate, "I");
 
@@ -621,7 +631,6 @@ TEST_F(hdl_writer_verilog_test, check_gate_net_name_collision) {
             EXPECT_NE(get_net_by_subname(parsed_nl, "gate_net_name"), nullptr);
             EXPECT_NE(get_gate_by_subname(parsed_nl, "gate_net_name_inst"), nullptr);
 
-            std::cout << "\n============\n" << parser_input.str() << "\n============\n";
 
         }
     TEST_END
@@ -637,14 +646,14 @@ TEST_F(hdl_writer_verilog_test, check_gate_net_name_collision) {
  */
 TEST_F(hdl_writer_verilog_test, check_constant_nets) {
     TEST_START
-        {
+        /*{ FIXME, NOTE: GND/VCC gates are replaced (but not deleted) by global_gnd/global_vcc
             // Testing the net name translation of a '0' net
             std::shared_ptr<netlist> nl = create_empty_netlist(0);
 
-            std::shared_ptr<gate> gnd_gate = nl->create_gate(MIN_GATE_ID+0, "GND", "gnd_gate");
+            std::shared_ptr<gate> gnd_gate = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("GND"), "gnd_gate");
             std::shared_ptr<net> global_out = nl->create_net(MIN_NET_ID+0, "global_out");
             nl->mark_global_output_net(global_out);
-            std::shared_ptr<gate> test_gate = nl->create_gate( MIN_GATE_ID+1, "INV", "test_gate");
+            std::shared_ptr<gate> test_gate = nl->create_gate( MIN_GATE_ID+1, get_gate_type_by_name("INV"), "test_gate");
             global_out->set_src(test_gate, "O");
 
             std::shared_ptr<net> gnd_net = nl->create_net(MIN_NET_ID+1, "'0'");
@@ -678,7 +687,7 @@ TEST_F(hdl_writer_verilog_test, check_constant_nets) {
             ASSERT_EQ(parsed_nl->get_nets("1'b0").size(), 1);
             std::shared_ptr<net> gnd_net_translated = *parsed_nl->get_nets("1'b0").begin();
             ASSERT_NE(gnd_net_translated->get_src().get_gate(), nullptr);
-            EXPECT_EQ(gnd_net_translated->get_src().get_gate()->get_type(), "GND");
+            EXPECT_EQ(gnd_net_translated->get_src().get_gate()->get_type()->get_name(), "GND");
             ASSERT_EQ(gnd_net_translated->get_dsts().size(), 1);
             EXPECT_EQ((*gnd_net_translated->get_dsts().begin()).get_gate()->get_name(), "test_gate" + GATE_SUFFIX);
         }
@@ -686,10 +695,10 @@ TEST_F(hdl_writer_verilog_test, check_constant_nets) {
             // Testing the net name translation of a '0' net
             std::shared_ptr<netlist> nl = create_empty_netlist(0);
 
-            std::shared_ptr<gate> vcc_gate = nl->create_gate(MIN_GATE_ID+0, "VCC", "vcc_gate");
+            std::shared_ptr<gate> vcc_gate = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("VCC"), "vcc_gate");
             std::shared_ptr<net> global_out = nl->create_net(MIN_NET_ID+0, "global_out");
             nl->mark_global_output_net(global_out);
-            std::shared_ptr<gate> test_gate = nl->create_gate( MIN_GATE_ID+1, "INV", "test_gate");
+            std::shared_ptr<gate> test_gate = nl->create_gate( MIN_GATE_ID+1, get_gate_type_by_name("INV"), "test_gate");
             global_out->set_src(test_gate, "O");
 
             std::shared_ptr<net> vcc_net = nl->create_net(MIN_NET_ID+1, "'1'");
@@ -723,10 +732,10 @@ TEST_F(hdl_writer_verilog_test, check_constant_nets) {
             ASSERT_EQ(parsed_nl->get_nets("1'b1").size(), 1);
             std::shared_ptr<net> vcc_net_translated = *parsed_nl->get_nets("1'b1").begin();
             ASSERT_NE(vcc_net_translated->get_src().get_gate(), nullptr);
-            EXPECT_EQ(vcc_net_translated->get_src().get_gate()->get_type(), "VCC");
+            EXPECT_EQ(vcc_net_translated->get_src().get_gate()->get_type()->get_name(), "VCC");
             ASSERT_EQ(vcc_net_translated->get_dsts().size(), 1);
             EXPECT_EQ((*vcc_net_translated->get_dsts().begin()).get_gate()->get_name(), "test_gate" + GATE_SUFFIX);
-        }
+        }*/
     TEST_END
 }
 
@@ -823,7 +832,7 @@ TEST_F(hdl_writer_verilog_test, check_pin_vector) {
  */
 TEST_F(hdl_writer_verilog_test, check_simprim_exclusive_behaviour) {
     TEST_START
-        create_pseudo_simprim_gate_lib();
+        //create_pseudo_simprim_gate_lib();
         { // ISSUE: net definition: "wire net_zero_gate_0 = 1'h0" is created, but can't be interpreted by the parser (stoi failure) (parser or writer issue?)
             // NOTE: GLOBAL_GND / GLOBAL_VCC gates are removed. Why?
 /*
@@ -877,5 +886,3 @@ TEST_F(hdl_writer_verilog_test, check_simprim_exclusive_behaviour) {
         }
     TEST_END
 }
-
-#endif // DONT_USE_ME

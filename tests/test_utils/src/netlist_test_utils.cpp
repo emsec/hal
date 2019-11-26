@@ -8,13 +8,16 @@ std::shared_ptr<netlist> test_utils::create_empty_netlist(const int id)
 {
     NO_COUT_BLOCK;
     std::shared_ptr<gate_library> gl = gate_library_manager::get_gate_library(g_lib_name);
-    std::shared_ptr<netlist> g_obj   = std::make_shared<netlist>(gl);
+    std::shared_ptr<netlist> nl   = std::make_shared<netlist>(gl);
 
     if (id >= 0)
     {
-        g_obj->set_id(id);
+        nl->set_id(id);
     }
-    return g_obj;
+    nl->set_device_name("device_name");
+    nl->set_design_name("design_name");
+
+    return nl;
 }
 
 endpoint test_utils::get_endpoint(const std::shared_ptr<gate> g, const std::string pin_type)
@@ -37,6 +40,32 @@ endpoint test_utils::get_endpoint(const std::shared_ptr<netlist> nl, const int g
 bool test_utils::is_empty(const endpoint ep)
 {
     return ((ep.gate == nullptr) && (ep.pin_type == ""));
+}
+
+std::shared_ptr<const gate_type> test_utils::get_gate_type_by_name(std::string name, std::string gate_library_name)
+{
+    std::shared_ptr<gate_library> gl;
+    if (gate_library_name == ""){
+        gl = gate_library_manager::get_gate_library(g_lib_name);
+    }
+    else {
+        gl = gate_library_manager::get_gate_library(gate_library_name);
+    }
+    // If the gl can't be found, return a nullptr
+    if (gl == nullptr){
+        std::cerr << "gate library \'"<< gl->get_name() <<"\'" << " couldn't be found" << std::endl;
+        return nullptr;
+    }
+    auto names_to_type = gl->get_gate_types();
+    // If the gate type isn't found in the gate library
+    if (names_to_type.find(name) == names_to_type.end()) {
+        std::cerr << "gate type: \'" << name << "\' can't be found in the gate library \'"<< gl->get_name() <<"\'" << std::endl;
+        return nullptr;
+    }
+    else {
+        return names_to_type.at(name);
+    }
+
 }
 
 bool test_utils::string_contains_substring(const std::string str, const std::string sub_str)
@@ -298,7 +327,7 @@ std::shared_ptr<netlist> test_utils::create_example_netlist(const int id)
 {
     NO_COUT_BLOCK;
     std::shared_ptr<gate_library> gl = gate_library_manager::get_gate_library(g_lib_name);
-    std::shared_ptr<netlist> nl      = std::make_shared<netlist>(gl);
+    std::shared_ptr<netlist> nl      = create_empty_netlist(id);
     if (id >= 0)
     {
         nl->set_id(id);
@@ -345,11 +374,7 @@ std::shared_ptr<netlist> test_utils::create_example_netlist_2(const int id)
 {
     NO_COUT_BLOCK;
     std::shared_ptr<gate_library> gl = gate_library_manager::get_gate_library(g_lib_name);
-    std::shared_ptr<netlist> nl      = std::make_shared<netlist>(gl);
-    if (id >= 0)
-    {
-        nl->set_id(id);
-    }
+    std::shared_ptr<netlist> nl      = create_empty_netlist(id);
 
     // Create the gates
     std::shared_ptr<gate> gate_0 = nl->create_gate(MIN_GATE_ID+0, gl->get_gate_types().at("AND4"), "gate_0");
@@ -377,11 +402,7 @@ std::shared_ptr<netlist> test_utils::create_example_netlist_negative(const int i
 {
     NO_COUT_BLOCK;
     std::shared_ptr<gate_library> gl = gate_library_manager::get_gate_library(g_lib_name);
-    std::shared_ptr<netlist> nl(new netlist(gl));
-    if (id >= 0)
-    {
-        nl->set_id(id);
-    }
+    std::shared_ptr<netlist> nl = create_empty_netlist(id);
 
     // Create the gate
     std::shared_ptr<gate> gate_0 = nl->create_gate(MIN_GATE_ID+0, gl->get_gate_types().at("INV"), "gate_0");
@@ -401,11 +422,8 @@ std::shared_ptr<netlist> test_utils::create_example_parse_netlist(int id)
 {
     NO_COUT_BLOCK;
     std::shared_ptr<gate_library> gl = gate_library_manager::get_gate_library(g_lib_name);
-    std::shared_ptr<netlist> nl      = std::make_shared<netlist>(gl);
-    if (id >= 0)
-    {
-        nl->set_id(id);
-    }
+    std::shared_ptr<netlist> nl      = create_empty_netlist(id);
+
 
     // Create the gates
     std::shared_ptr<gate> gate_0 = nl->create_gate(MIN_GATE_ID+0, gl->get_gate_types().at("AND2"), "gate_0");
