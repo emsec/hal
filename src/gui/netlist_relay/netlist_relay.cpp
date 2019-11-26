@@ -233,8 +233,12 @@ void netlist_relay::relay_module_event(module_event_handler::event ev, std::shar
         {
             //< no associated_data
 
-            m_module_colors.insert(object->get_id(), gui_utility::get_random_color());
-            m_module_model->add_module(object->get_id(), object->get_parent_module()->get_id());
+            // suppress actions if we receive this for the top module
+            if (object->get_parent_module() != nullptr)
+            {
+                m_module_colors.insert(object->get_id(), gui_utility::get_random_color());
+                m_module_model->add_module(object->get_id(), object->get_parent_module()->get_id());
+            }
 
             Q_EMIT module_created(object);
             break;

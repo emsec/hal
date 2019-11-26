@@ -5,6 +5,7 @@
 #include "core/log.h"
 
 #include "hdl_parser/hdl_parser_dispatcher.h"
+#include "netlist/event_system/event_controls.h"
 #include "netlist/gate.h"
 #include "netlist/gate_library/gate_library_manager.h"
 #include "netlist/net.h"
@@ -458,7 +459,11 @@ void main_window::handle_action_new()
 
     if (ok)
     {
+        // DEBUG -- REMOVE WHEN GUI CAN HANDLE EVENTS DURING CREATION
+        event_controls::enable_all(false);
         g_netlist = netlist_factory::create_netlist(selected.toStdString());
+        // DEBUG -- REMOVE WHEN GUI CAN HANDLE EVENTS DURING CREATION
+        event_controls::enable_all(true);
         Q_EMIT file_manager::get_instance()->file_opened("new netlist");
     }
 }
@@ -485,7 +490,11 @@ void main_window::handle_action_open()
 
     if (!file_name.isNull())
     {
+        // DEBUG -- REMOVE WHEN GUI CAN HANDLE EVENTS DURING CREATION
+        event_controls::enable_all(false);
         file_manager::get_instance()->open_file(file_name);
+        // DEBUG -- REMOVE WHEN GUI CAN HANDLE EVENTS DURING CREATION
+        event_controls::enable_all(true);
     }
 }
 

@@ -475,7 +475,7 @@ namespace netlist_serializer
     {
         auto begin_time = std::chrono::high_resolution_clock::now();
 
-        event_controls::enable_all(false);
+        // event_controls::enable_all(false);
 
         FILE* pFile = fopen(hal_file.string().c_str(), "rb");
         if (pFile == NULL)
@@ -521,7 +521,7 @@ namespace netlist_serializer
             return nullptr;
         }
 
-        event_controls::enable_all(true);
+        // event_controls::enable_all(true);
 
         log_info("netlist.persistent", "deserialized '{}' in {:2.2f} seconds", hal_file.string(), DURATION(begin_time));
         return netlist;

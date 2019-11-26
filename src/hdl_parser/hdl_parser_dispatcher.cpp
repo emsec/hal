@@ -89,7 +89,7 @@ namespace hdl_parser_dispatcher
 
         std::shared_ptr<netlist> g = nullptr;
 
-        event_controls::enable_all(false);
+        // event_controls::enable_all(false);
 
         if (parser_name == "vhdl")
             g = hdl_parser_vhdl(ss).parse(gate_library);
@@ -103,7 +103,7 @@ namespace hdl_parser_dispatcher
             g->set_input_filename(file_name.string());
         }
 
-        event_controls::enable_all(true);
+        // event_controls::enable_all(true);
 
         if (g == nullptr)
         {
