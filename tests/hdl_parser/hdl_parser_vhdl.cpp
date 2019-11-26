@@ -999,7 +999,7 @@ TEST_F(hdl_parser_vhdl_test, check_logic_vectors)
                 EXPECT_EQ(nl->get_nets().size(), 1);
             }
         }
-        //remove_temp_gate_lib();
+        remove_temp_gate_lib();
     TEST_END
 }
 
@@ -2013,10 +2013,6 @@ TEST_F(hdl_parser_vhdl_test, check_invalid_input)
             hdl_parser_vhdl vhdl_parser(input);
             std::shared_ptr<netlist> nl = vhdl_parser.parse(g_lib_name);
             ASSERT_EQ(nl, nullptr);
-        }
-
-        {
-            // NOTE: Almost infinite other edge cases (not based on code-coverage)
         }
     TEST_END
 }
