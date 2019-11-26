@@ -47,7 +47,7 @@ bool test_utils::string_contains_substring(const std::string str, const std::str
 std::shared_ptr<net> test_utils::get_net_by_subname(std::shared_ptr<netlist> nl, const std::string subname){
     if(nl == nullptr)
         return nullptr;
-    std::set<std::shared_ptr<net>> nets = nl->get_nets();
+    std::unordered_set<std::shared_ptr<net>> nets = nl->get_nets();
     std::shared_ptr<net> res = nullptr;
     for (auto n : nets){
         std::string n_name = n->get_name();
@@ -82,40 +82,218 @@ std::shared_ptr<gate> test_utils::get_gate_by_subname(std::shared_ptr<netlist> n
 
 void test_utils::create_temp_gate_lib()
 {
-    NO_COUT_BLOCK;
+    //NO_COUT_BLOCK;
 
-    hal::path lol (core_utils::get_gate_library_directories()[0]);
-    hal::path temp_lib_path = (lol) / "temp_lib.json";
+    hal::path dir (core_utils::get_gate_library_directories()[0]);
+    hal::path temp_lib_path = (dir) / "TEMP_GATE_LIBRARY.lib";
     std::ofstream test_lib(temp_lib_path.string());
-    test_lib << "{\n"
-                "    \"library\": {\n"
-                "        \"library_name\": \"TEMP_GATE_LIBRARY\",\n"
-                "        \"elements\": {\"GATE_1^0_IN_1^0_OUT\" : [[\"I\"], [], [\"O\"]],\n"
-                "            \"GATE_4^1_IN_4^1_OUT\" : [[\"I(0)\",\"I(1)\",\"I(2)\",\"I(3)\"], [], [\"O(0)\",\"O(1)\",\"O(2)\",\"O(3)\"]],\n"
-                "            \"GATE_4^1_IN_1^0_OUT\" : [[\"I(0)\",\"I(1)\",\"I(2)\",\"I(3)\"], [], [\"O\"]],\n"
-                "            \"GATE_1^0_IN_4^1_OUT\" : [[\"I\"], [], [\"O(0)\",\"O(1)\",\"O(2)\",\"O(3)\"]],\n"
-                "            \"GATE_2^2_IN_2^2_OUT\" : [[\"I(0, 0)\",\"I(0, 1)\",\"I(1, 0)\",\"I(1, 1)\"], [], [\"O(0, 0)\",\"O(0, 1)\",\"O(1, 0)\",\"O(1, 1)\"]],\n"
-                "            \"GATE_2^3_IN_2^3_OUT\" : [[\"I(0, 0, 0)\",\"I(0, 0, 1)\",\"I(0, 1, 0)\",\"I(0, 1, 1)\",\"I(1, 0, 0)\",\"I(1, 0, 1)\",\"I(1, 1, 0)\",\"I(1, 1, 1)\"], [], [\"O(0, 0, 0)\",\"O(0, 0, 1)\",\"O(0, 1, 0)\",\"O(0, 1, 1)\",\"O(1, 0, 0)\",\"O(1, 0, 1)\",\"O(1, 1, 0)\",\"O(1, 1, 1)\"]],\n"
-                "            \"GATE_2^3_IN_1^0_OUT\" : [[\"I(0, 0, 0)\",\"I(0, 0, 1)\",\"I(0, 1, 0)\",\"I(0, 1, 1)\",\"I(1, 0, 0)\",\"I(1, 0, 1)\",\"I(1, 1, 0)\",\"I(1, 1, 1)\"], [], [\"O\"]],\n"
-                "            \"GATE_1^0_IN_2^3_OUT\" : [[\"I\"], [], [\"O(0, 0, 0)\",\"O(0, 0, 1)\",\"O(0, 1, 0)\",\"O(0, 1, 1)\",\"O(1, 0, 0)\",\"O(1, 0, 1)\",\"O(1, 1, 0)\",\"O(1, 1, 1)\"]],\n"
-                "\n"
-                "            \"GND\" : [[], [], [\"O\"]],\n"
-                "            \"VCC\" : [[], [], [\"O\"]]\n"
-                "        },\n"
-                "        \"vhdl_includes\": [],\n"
-                "        \"global_gnd_nodes\": [\"GND\"],\n"
-                "        \"global_vcc_nodes\": [\"VCC\"]\n"
+    //std::stringstream test_lib(temp_lib_path.string());
+    test_lib << "library (TEMP_GATE_LIBRARY) {\n"
+                "    define(cell);\n"
+                "    cell(GATE_1^0_IN_1^0_OUT) {\n"
+                "        pin(I) { direction: input; }\n"
+                "        pin(O) {\n"
+                "            direction: output;\n"
+                "            function: \"I\";\n"
+                "        }\n"
                 "    }\n"
+                "    \n"
+                "    cell(GATE_4^1_IN_4^1_OUT) {\n"
+                "        pin(\"I(0)\") { direction: input; }\n"
+                "        pin(\"I(1)\") { direction: input; }\n"
+                "        pin(\"I(2)\") { direction: input; }\n"
+                "        pin(\"I(3)\") { direction: input; }\n"
+                "        pin(\"O(0)\") {\n"
+                "            direction: output;\n"
+                "            function: \"I(0)\";\n"
+                "        }\n"
+                "        pin(\"O(1)\") {\n"
+                "            direction: output;\n"
+                "            function: \"I(1)\";\n"
+                "        }\n"
+                "        pin(\"O(2)\") {\n"
+                "            direction: output;\n"
+                "            function: \"I(2)\";\n"
+                "        }\n"
+                "        pin(\"O(3)\") {\n"
+                "            direction: output;\n"
+                "            function: \"I(3)\";\n"
+                "        }\n"
+                "    }\n"
+                "    \n"
+                "    cell(GATE_4^1_IN_1^0_OUT) {\n"
+                "        pin(\"I(0)\") { direction: input; }\n"
+                "        pin(\"I(1)\") { direction: input; }\n"
+                "        pin(\"I(2)\") { direction: input; }\n"
+                "        pin(\"I(3)\") { direction: input; }\n"
+                "        pin(O) {\n"
+                "            direction: output;\n"
+                "            function: \"I(0)\";\n"
+                "        }\n"
+                "    }\n"
+                "    \n"
+                "    cell(GATE_1^0_IN_4^1_OUT) {\n"
+                "        pin(I) { direction: input; }\n"
+                "        pin(\"O(0)\") {\n"
+                "            direction: output;\n"
+                "            function: \"I(0)\";\n"
+                "        }\n"
+                "        pin(\"O(1)\") {\n"
+                "            direction: output;\n"
+                "            function: \"I(1)\";\n"
+                "        }\n"
+                "        pin(\"O(2)\") {\n"
+                "            direction: output;\n"
+                "            function: \"I(2)\";\n"
+                "        }\n"
+                "        pin(\"O(3)\") {\n"
+                "            direction: output;\n"
+                "            function: \"I(3)\";\n"
+                "        }\n"
+                "    }\n"
+                "    \n"
+                "    cell(GATE_2^2_IN_2^2_OUT) {\n"
+                "        pin(\"I(0, 0)\") { direction: input; }\n"
+                "        pin(\"I(0, 1)\") { direction: input; }\n"
+                "        pin(\"I(1, 0)\") { direction: input; }\n"
+                "        pin(\"I(1, 1)\") { direction: input; }\n"
+                "        pin(\"O(0, 0)\") {\n"
+                "            direction: output;\n"
+                "            function: \"I(0, 0)\";\n"
+                "        }\n"
+                "        pin(\"O(0, 1)\") {\n"
+                "            direction: output;\n"
+                "            function: \"I(0, 1)\";\n"
+                "        }\n"
+                "        pin(\"O(1, 0)\") {\n"
+                "            direction: output;\n"
+                "            function: \"I(1, 0)\";\n"
+                "        }\n"
+                "        pin(\"O(1, 1)\") {\n"
+                "            direction: output;\n"
+                "            function: \"I(1, 1)\";\n"
+                "        }\n"
+                "    }\n"
+                "    \n"
+                "    cell(GATE_2^3_IN_2^3_OUT) {\n"
+                "        pin(\"I(0, 0, 0)\") { direction: input; }\n"
+                "        pin(\"I(0, 0, 1)\") { direction: input; }\n"
+                "        pin(\"I(0, 1, 0)\") { direction: input; }\n"
+                "        pin(\"I(0, 1, 1)\") { direction: input; }\n"
+                "        pin(\"I(1, 0, 0)\") { direction: input; }\n"
+                "        pin(\"I(1, 0, 1)\") { direction: input; }\n"
+                "        pin(\"I(1, 1, 0)\") { direction: input; }\n"
+                "        pin(\"I(1, 1, 1)\") { direction: input; }\n"
+                "        pin(\"O(0, 0, 0)\") {\n"
+                "            direction: output;\n"
+                "            function: \"I(0, 0, 0)\";\n"
+                "        }\n"
+                "        pin(\"O(0, 0, 1)\") {\n"
+                "            direction: output;\n"
+                "            function: \"I(0, 0, 1)\";\n"
+                "        }\n"
+                "        pin(\"O(0, 1, 0)\") {\n"
+                "            direction: output;\n"
+                "            function: \"I(0, 1, 0)\";\n"
+                "        }\n"
+                "        pin(\"O(0, 1, 1)\") {\n"
+                "            direction: output;\n"
+                "            function: \"I(0, 1, 1)\";\n"
+                "        }\n"
+                "        pin(\"O(1, 0, 0)\") {\n"
+                "            direction: output;\n"
+                "            function: \"I(1, 0, 0)\";\n"
+                "        }\n"
+                "        pin(\"O(1, 0, 1)\") {\n"
+                "            direction: output;\n"
+                "            function: \"I(1, 0, 1)\";\n"
+                "        }\n"
+                "        pin(\"O(1, 1, 0)\") {\n"
+                "            direction: output;\n"
+                "            function: \"I(1, 1, 0)\";\n"
+                "        }\n"
+                "        pin(\"O(1, 1, 1)\") {\n"
+                "            direction: output;\n"
+                "            function: \"I(1, 1, 1)\";\n"
+                "        }\n"
+                "    }\n"
+                "    \n"
+                "    cell(GATE_2^3_IN_1^0_OUT) {\n"
+                "        pin(\"I(0, 0, 0)\") { direction: input; }\n"
+                "        pin(\"I(0, 0, 1)\") { direction: input; }\n"
+                "        pin(\"I(0, 1, 0)\") { direction: input; }\n"
+                "        pin(\"I(0, 1, 1)\") { direction: input; }\n"
+                "        pin(\"I(1, 0, 0)\") { direction: input; }\n"
+                "        pin(\"I(1, 0, 1)\") { direction: input; }\n"
+                "        pin(\"I(1, 1, 0)\") { direction: input; }\n"
+                "        pin(\"I(1, 1, 1)\") { direction: input; }\n"
+                "        pin(O) {\n"
+                "            direction: output;\n"
+                "            function: \"I(0, 0, 0)\";\n"
+                "        }\n"
+                "    }\n"
+                "    \n"
+                "    cell(GATE_1^0_IN_2^3_OUT) {\n"
+                "        pin(I) { direction: input; }\n"
+                "        pin(\"O(0, 0, 0)\") {\n"
+                "            direction: output;\n"
+                "            function: \"I\";\n"
+                "        }\n"
+                "        pin(\"O(0, 0, 1)\") {\n"
+                "            direction: output;\n"
+                "            function: \"I\";\n"
+                "        }\n"
+                "        pin(\"O(0, 1, 0)\") {\n"
+                "            direction: output;\n"
+                "            function: \"I\";\n"
+                "        }\n"
+                "        pin(\"O(0, 1, 1)\") {\n"
+                "            direction: output;\n"
+                "            function: \"I\";\n"
+                "        }\n"
+                "        pin(\"O(1, 0, 0)\") {\n"
+                "            direction: output;\n"
+                "            function: \"I\";\n"
+                "        }\n"
+                "        pin(\"O(1, 0, 1)\") {\n"
+                "            direction: output;\n"
+                "            function: \"I\";\n"
+                "        }\n"
+                "        pin(\"O(1, 1, 0)\") {\n"
+                "            direction: output;\n"
+                "            function: \"I\";\n"
+                "        }\n"
+                "        pin(\"O(1, 1, 1)\") {\n"
+                "            direction: output;\n"
+                "            function: \"I\";\n"
+                "        }\n"
+                "    }\n"
+                "    \n"
+                "    cell(GND) {\n"
+                "        pin(O) {\n"
+                "            direction: output;\n"
+                "            function: \"0\";\n"
+                "        }\n"
+                "    }\n"
+                "    \n"
+                "    cell(VCC) {\n"
+                "        pin(O) {\n"
+                "            direction: output;\n"
+                "            function: \"1\";\n"
+                "        }\n"
+                "    }\n"
+                "    \n"
                 "}";
     test_lib.close();
+    //std::cout << "=============" << test_lib.str() << "=============" << std::endl;
 
-    gate_library_manager::load_all();
+    //gate_library_manager::load_all();
 }
 
 void test_utils::remove_temp_gate_lib() {
-    boost::filesystem::remove(((core_utils::get_gate_library_directories()[0]) / "temp_lib.json").string());
+    fs::remove(((core_utils::get_gate_library_directories()[0]) / "temp_lib.json").string());
 }
-/*
+
 std::shared_ptr<netlist> test_utils::create_example_netlist(const int id)
 {
     NO_COUT_BLOCK;
@@ -127,16 +305,16 @@ std::shared_ptr<netlist> test_utils::create_example_netlist(const int id)
     }
 
     // Create the gates
+    std::shared_ptr<gate> gate_0 = nl->create_gate(MIN_GATE_ID+0, gl->get_gate_types().at("AND2"), "gate_0");
+    std::shared_ptr<gate> gate_1 = nl->create_gate(MIN_GATE_ID+1, gl->get_gate_types().at("GND"), "gate_1");
+    std::shared_ptr<gate> gate_2 = nl->create_gate(MIN_GATE_ID+2, gl->get_gate_types().at("VCC"), "gate_2");
+    std::shared_ptr<gate> gate_3 = nl->create_gate(MIN_GATE_ID+3, gl->get_gate_types().at("INV"), "gate_3");
+    std::shared_ptr<gate> gate_4 = nl->create_gate(MIN_GATE_ID+4, gl->get_gate_types().at("INV"), "gate_4");
+    std::shared_ptr<gate> gate_5 = nl->create_gate(MIN_GATE_ID+5, gl->get_gate_types().at("AND2"), "gate_5");
+    std::shared_ptr<gate> gate_6 = nl->create_gate(MIN_GATE_ID+6, gl->get_gate_types().at("BUF"), "gate_6");
+    std::shared_ptr<gate> gate_7 = nl->create_gate(MIN_GATE_ID+7, gl->get_gate_types().at("OR2"), "gate_7");
+    std::shared_ptr<gate> gate_8 = nl->create_gate(MIN_GATE_ID+8, gl->get_gate_types().at("OR2"), "gate_8");
 
-    std::shared_ptr<gate> gate_0 = nl->create_gate(MIN_GATE_ID+0, "AND2", "gate_0");
-    std::shared_ptr<gate> gate_1 = nl->create_gate(MIN_GATE_ID+1, "GND", "gate_1");
-    std::shared_ptr<gate> gate_2 = nl->create_gate(MIN_GATE_ID+2, "VCC", "gate_2");
-    std::shared_ptr<gate> gate_3 = nl->create_gate(MIN_GATE_ID+3, "INV", "gate_3");
-    std::shared_ptr<gate> gate_4 = nl->create_gate(MIN_GATE_ID+4, "INV", "gate_4");
-    std::shared_ptr<gate> gate_5 = nl->create_gate(MIN_GATE_ID+5, "AND2", "gate_5");
-    std::shared_ptr<gate> gate_6 = nl->create_gate(MIN_GATE_ID+6, "BUF", "gate_6");
-    std::shared_ptr<gate> gate_7 = nl->create_gate(MIN_GATE_ID+7, "OR2", "gate_7");
-    std::shared_ptr<gate> gate_8 = nl->create_gate(MIN_GATE_ID+8, "OR2", "gate_8");
 
     // Add the nets (net_x_y1_y2... := net between the gate with id x and the gates y1,y2,...)
     std::shared_ptr<net> net_1_3 = nl->create_net(MIN_NET_ID+13, "net_1_3");
@@ -174,10 +352,10 @@ std::shared_ptr<netlist> test_utils::create_example_netlist_2(const int id)
     }
 
     // Create the gates
-    std::shared_ptr<gate> gate_0 = nl->create_gate(MIN_GATE_ID+0, "AND4", "gate_0");
-    std::shared_ptr<gate> gate_1 = nl->create_gate(MIN_GATE_ID+1, "AND4", "gate_1");
-    std::shared_ptr<gate> gate_2 = nl->create_gate(MIN_GATE_ID+2, "AND4", "gate_2");
-    std::shared_ptr<gate> gate_3 = nl->create_gate(MIN_GATE_ID+3, "AND4", "gate_3");
+    std::shared_ptr<gate> gate_0 = nl->create_gate(MIN_GATE_ID+0, gl->get_gate_types().at("AND4"), "gate_0");
+    std::shared_ptr<gate> gate_1 = nl->create_gate(MIN_GATE_ID+1, gl->get_gate_types().at("AND4"), "gate_1");
+    std::shared_ptr<gate> gate_2 = nl->create_gate(MIN_GATE_ID+2, gl->get_gate_types().at("AND4"), "gate_2");
+    std::shared_ptr<gate> gate_3 = nl->create_gate(MIN_GATE_ID+3, gl->get_gate_types().at("AND4"), "gate_3");
 
     // Add the nets (net_x_y1_y2... := net between the gate with id x and the gates y1,y2,...)
 
@@ -206,7 +384,7 @@ std::shared_ptr<netlist> test_utils::create_example_netlist_negative(const int i
     }
 
     // Create the gate
-    std::shared_ptr<gate> gate_0 = nl->create_gate(MIN_GATE_ID+0, "INV", "gate_0");
+    std::shared_ptr<gate> gate_0 = nl->create_gate(MIN_GATE_ID+0, gl->get_gate_types().at("INV"), "gate_0");
 
     // net connected to the input pin
     std::shared_ptr<net> net_X_1 = nl->create_net(MIN_GATE_ID+0, "net_X_1");
@@ -230,14 +408,14 @@ std::shared_ptr<netlist> test_utils::create_example_parse_netlist(int id)
     }
 
     // Create the gates
-    std::shared_ptr<gate> gate_0 = nl->create_gate(MIN_GATE_ID+0, "AND2", "gate_0");
-    std::shared_ptr<gate> gate_1 = nl->create_gate(MIN_GATE_ID+1, "GND", "gate_1");
-    std::shared_ptr<gate> gate_2 = nl->create_gate(MIN_GATE_ID+2, "VCC", "gate_2");
-    std::shared_ptr<gate> gate_3 = nl->create_gate(MIN_GATE_ID+3, "INV", "gate_3");
-    std::shared_ptr<gate> gate_4 = nl->create_gate(MIN_GATE_ID+4, "INV", "gate_4");
-    std::shared_ptr<gate> gate_5 = nl->create_gate(MIN_GATE_ID+5, "AND2", "gate_5");
-    std::shared_ptr<gate> gate_6 = nl->create_gate(MIN_GATE_ID+6, "OR2", "gate_6");
-    std::shared_ptr<gate> gate_7 = nl->create_gate(MIN_GATE_ID+7, "OR2", "gate_7");
+    std::shared_ptr<gate> gate_0 = nl->create_gate(MIN_GATE_ID+0, gl->get_gate_types().at("AND2"), "gate_0");
+    std::shared_ptr<gate> gate_1 = nl->create_gate(MIN_GATE_ID+1, gl->get_gate_types().at("GND"), "gate_1");
+    std::shared_ptr<gate> gate_2 = nl->create_gate(MIN_GATE_ID+2, gl->get_gate_types().at("VCC"), "gate_2");
+    std::shared_ptr<gate> gate_3 = nl->create_gate(MIN_GATE_ID+3, gl->get_gate_types().at("INV"), "gate_3");
+    std::shared_ptr<gate> gate_4 = nl->create_gate(MIN_GATE_ID+4, gl->get_gate_types().at("INV"), "gate_4");
+    std::shared_ptr<gate> gate_5 = nl->create_gate(MIN_GATE_ID+5, gl->get_gate_types().at("AND2"), "gate_5");
+    std::shared_ptr<gate> gate_6 = nl->create_gate(MIN_GATE_ID+6, gl->get_gate_types().at("OR2"), "gate_6");
+    std::shared_ptr<gate> gate_7 = nl->create_gate(MIN_GATE_ID+7, gl->get_gate_types().at("OR2"), "gate_7");
 
     // Add the nets (net_x_y1_y2... := net between the gate with id x and the gates y1,y2,...)
     std::shared_ptr<net> net_1_3 = nl->create_net(MIN_NET_ID+13, "0_net");
@@ -275,10 +453,12 @@ std::shared_ptr<netlist> test_utils::create_example_parse_netlist(int id)
 
 std::shared_ptr<gate> test_utils::create_test_gate(std::shared_ptr<netlist> nl, const u32 id)
 {
-    std::shared_ptr<gate> res_gate = nl->create_gate(id, "AND3", "gate_" + std::to_string(id));
+    std::shared_ptr<gate_library> gl = gate_library_manager::get_gate_library(g_lib_name);
+    std::shared_ptr<gate> res_gate = nl->create_gate(id, gl->get_gate_types().at("AND3"), "gate_" + std::to_string(id));
 
     return res_gate;
-}*/
+}
+
 
 endpoint test_utils::get_dst_by_pin_type(const std::vector<endpoint> dsts, const std::string pin_type)
 {

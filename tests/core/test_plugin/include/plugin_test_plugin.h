@@ -19,6 +19,8 @@ class netlist;
 class gate;
 class net;
 
+#ifdef FIXME
+
 class PLUGIN_API plugin_test_plugin : virtual public i_cli
 {
 public:
@@ -51,5 +53,6 @@ public:
     bool handle_cli_call(std::shared_ptr<netlist> nl, program_arguments& args) override;
 
 };
+#endif // FIXME
 
 #endif //HAL_PLUGIN_TEST_PLUGIN_H

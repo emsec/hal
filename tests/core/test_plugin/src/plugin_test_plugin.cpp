@@ -1,6 +1,6 @@
 #include "plugin_test_plugin.h"
 #include "core/log.h"
-
+/* FIXME
 std::string plugin_test_plugin::get_name()
 {
     return std::string("test_plugin");
@@ -31,3 +31,4 @@ bool plugin_test_plugin::handle_cli_call(std::shared_ptr<netlist> nl, program_ar
     UNUSED(args);
     return true;
 }
+*/

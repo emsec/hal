@@ -1,5 +1,4 @@
 
-#include "pragma_once.h"
 #ifndef HAL_NETLIST_TEST_UTILS_H
 #define HAL_NETLIST_TEST_UTILS_H
 
@@ -13,7 +12,9 @@
 #include "netlist/net.h"
 #include "netlist/module.h"
 #include "netlist/endpoint.h"
-#include <boost/filesystem.hpp>
+#include <experimental/filesystem>
+
+namespace fs = std::experimental::filesystem;
 
 namespace test_utils
 {
@@ -97,7 +98,7 @@ namespace test_utils
      * @param[in] id - id of the gate
      * @returns an already created AND3 gate
      */
-    //std::shared_ptr<gate> create_test_gate(std::shared_ptr<netlist> nl, const u32 id);
+    std::shared_ptr<gate> create_test_gate(std::shared_ptr<netlist> nl, const u32 id);
     /**
      * Checks if two vectors have the same content regardless of their order. Shouldn't be used for
      * large vectors, since it isn't really efficient.
@@ -206,7 +207,7 @@ namespace test_utils
      * @param[in] id - id of the netlist
      * @returns the created netlist object
      */
-    //std::shared_ptr<netlist> create_example_netlist(const int id = -1);
+    std::shared_ptr<netlist> create_example_netlist(const int id = -1);
 
 
     /*
@@ -231,7 +232,7 @@ namespace test_utils
      * @param[in] id - id of the netlist
      * @returns the created netlist object
      */
-    //std::shared_ptr<netlist> create_example_netlist_2(const int id = -1);
+    std::shared_ptr<netlist> create_example_netlist_2(const int id = -1);
 
 
     /*
@@ -246,7 +247,7 @@ namespace test_utils
      * @param[in] id - id of the netlist
      * @returns the created netlist object
      */
-    //std::shared_ptr<netlist> create_example_netlist_negative(const int id = -1);
+    std::shared_ptr<netlist> create_example_netlist_negative(const int id = -1);
 
 
     /*
@@ -273,7 +274,7 @@ namespace test_utils
      * @param[in] id - id of the netlist
      * @returns the created netlist object
      */
-    //std::shared_ptr<netlist> create_example_parse_netlist(int id = -1);
+    std::shared_ptr<netlist> create_example_parse_netlist(int id = -1);
 
 
     // ===== Netlist Comparison Functions (mainly used to test parser and writer) =====

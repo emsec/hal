@@ -8,9 +8,9 @@
 #include "hdl_parser/hdl_parser_vhdl.h"
 #include <iostream>
 #include <sstream>
-#include <boost/filesystem.hpp>
+#include <experimental/filesystem>
 
-#ifdef DONT_USE_ME
+
 using namespace test_utils;
 
 class hdl_parser_vhdl_test : public ::testing::Test
@@ -60,7 +60,7 @@ TEST_F(hdl_parser_vhdl_test, check_main_example)
                                 "  port (\n"
                                 "    net_global_in : in STD_LOGIC := 'X';\n"
                                 "    net_global_out : out STD_LOGIC := 'X';\n"
-                                //"    net_global_inout : inout STD_LOGIC := 'X';\n"
+                                //"    net_global_input : in STD_LOGIC := 'X';\n"
                                 "  );\n"
                                 "end AES_Comp;\n"
                                 "\n"
@@ -103,7 +103,7 @@ TEST_F(hdl_parser_vhdl_test, check_main_example)
         ASSERT_NE(nl, nullptr);
 
         // Check if the device name is parsed correctly
-        EXPECT_EQ(nl->get_device_name(), "device_name");
+        EXPECT_EQ(nl->get_design_name(), "TEST_Comp");
 
         // Check if the gates are parsed correctly
         ASSERT_EQ(nl->get_gates("INV").size(), 1);
@@ -127,7 +127,6 @@ TEST_F(hdl_parser_vhdl_test, check_main_example)
         std::shared_ptr<net> vec_net_2        = *(nl->get_nets("vec_net(2)").begin());
         std::shared_ptr<net> net_global_in    = *(nl->get_nets("net_global_in").begin());
         std::shared_ptr<net> net_global_out   = *(nl->get_nets("net_global_out").begin());
-        std::shared_ptr<net> net_global_inout = *(nl->get_nets("net_global_inout").begin());
 
         ASSERT_NE(net_0, nullptr);
         EXPECT_EQ(net_0->get_name(), "net_0");
@@ -152,15 +151,8 @@ TEST_F(hdl_parser_vhdl_test, check_main_example)
         EXPECT_TRUE(net_global_out->get_dsts().empty());
         EXPECT_TRUE(nl->is_global_output_net(net_global_out));
 
-        /*ASSERT_NE(net_global_inout, nullptr);
-        EXPECT_EQ(net_global_inout->get_name(), "net_global_inout");
-        EXPECT_EQ(net_global_inout->get_src(), get_endpoint(nullptr, ""));
-        EXPECT_TRUE(net_global_inout->get_dsts().empty());
-        EXPECT_TRUE(nl->is_global_inout_net(net_global_inout));*/
-
         EXPECT_EQ(nl->get_global_input_nets().size(), 1);
         EXPECT_EQ(nl->get_global_output_nets().size(), 1);
-        //EXPECT_EQ(nl->get_global_inout_nets().size(), 1);
 
     TEST_END
 }
@@ -177,7 +169,7 @@ TEST_F(hdl_parser_vhdl_test, check_generic_map){
             std::stringstream input("-- Device\t: device_name\n"
                                     "entity TEST_Comp is\n"
                                     "  port (\n"
-                                    "    net_global_inout : inout STD_LOGIC := 'X';\n"
+                                    "    net_global_input : in STD_LOGIC := 'X';\n"
                                     "  );\n"
                                     "end TEST_Comp;\n"
                                     "architecture STRUCTURE of TEST_Comp is\n"
@@ -187,7 +179,7 @@ TEST_F(hdl_parser_vhdl_test, check_generic_map){
                                     "      key_bool => true\n"
                                     "    )\n"
                                     "    port map (\n"
-                                    "      I => net_global_inout\n"
+                                    "      I => net_global_input\n"
                                     "    );\n"
                                     "end STRUCTURE;");
             test_def::capture_stdout();
@@ -212,7 +204,7 @@ TEST_F(hdl_parser_vhdl_test, check_generic_map){
             std::stringstream input("-- Device\t: device_name\n"
                                     "entity TEST_Comp is\n"
                                     "  port (\n"
-                                    "    net_global_inout : inout STD_LOGIC := 'X';\n"
+                                    "    net_global_input : in STD_LOGIC := 'X';\n"
                                     "  );\n"
                                     "end TEST_Comp;\n"
                                     "architecture STRUCTURE of TEST_Comp is\n"
@@ -222,7 +214,7 @@ TEST_F(hdl_parser_vhdl_test, check_generic_map){
                                     "      key_integer => 123\n"
                                     "    )\n"
                                     "    port map (\n"
-                                    "      I => net_global_inout\n"
+                                    "      I => net_global_input\n"
                                     "    );\n"
                                     "end STRUCTURE;");
             test_def::capture_stdout();
@@ -247,7 +239,7 @@ TEST_F(hdl_parser_vhdl_test, check_generic_map){
             std::stringstream input("-- Device\t: device_name\n"
                                     "entity TEST_Comp is\n"
                                     "  port (\n"
-                                    "    net_global_inout : inout STD_LOGIC := 'X';\n"
+                                    "    net_global_input : in STD_LOGIC := 'X';\n"
                                     "  );\n"
                                     "end TEST_Comp;\n"
                                     "architecture STRUCTURE of TEST_Comp is\n"
@@ -257,7 +249,7 @@ TEST_F(hdl_parser_vhdl_test, check_generic_map){
                                     "      key_floating_point => 1.23\n"
                                     "    )\n"
                                     "    port map (\n"
-                                    "      I => net_global_inout\n"
+                                    "      I => net_global_input\n"
                                     "    );\n"
                                     "end STRUCTURE;");
             test_def::capture_stdout();
@@ -282,7 +274,7 @@ TEST_F(hdl_parser_vhdl_test, check_generic_map){
             std::stringstream input("-- Device\t: device_name\n"
                                     "entity TEST_Comp is\n"
                                     "  port (\n"
-                                    "    net_global_inout : inout STD_LOGIC := 'X';\n"
+                                    "    net_global_input : in STD_LOGIC := 'X';\n"
                                     "  );\n"
                                     "end TEST_Comp;\n"
                                     "architecture STRUCTURE of TEST_Comp is\n"
@@ -292,7 +284,7 @@ TEST_F(hdl_parser_vhdl_test, check_generic_map){
                                     "      key_time => 1.23sec\n"
                                     "    )\n"
                                     "    port map (\n"
-                                    "      I => net_global_inout\n"
+                                    "      I => net_global_input\n"
                                     "    );\n"
                                     "end STRUCTURE;");
             test_def::capture_stdout();
@@ -317,7 +309,7 @@ TEST_F(hdl_parser_vhdl_test, check_generic_map){
             std::stringstream input("-- Device\t: device_name\n"
                                     "entity TEST_Comp is\n"
                                     "  port (\n"
-                                    "    net_global_inout : inout STD_LOGIC := 'X';\n"
+                                    "    net_global_input : in STD_LOGIC := 'X';\n"
                                     "  );\n"
                                     "end TEST_Comp;\n"
                                     "architecture STRUCTURE of TEST_Comp is\n"
@@ -327,7 +319,7 @@ TEST_F(hdl_parser_vhdl_test, check_generic_map){
                                     "      key_bit_vector => B\"0000_1111_0000\"\n"
                                     "    )\n"
                                     "    port map (\n"
-                                    "      I => net_global_inout\n"
+                                    "      I => net_global_input\n"
                                     "    );\n"
                                     "end STRUCTURE;");
             test_def::capture_stdout();
@@ -352,7 +344,7 @@ TEST_F(hdl_parser_vhdl_test, check_generic_map){
             std::stringstream input("-- Device\t: device_name\n"
                                     "entity TEST_Comp is\n"
                                     "  port (\n"
-                                    "    net_global_inout : inout STD_LOGIC := 'X';\n"
+                                    "    net_global_input : in STD_LOGIC := 'X';\n"
                                     "  );\n"
                                     "end TEST_Comp;\n"
                                     "architecture STRUCTURE of TEST_Comp is\n"
@@ -365,7 +357,7 @@ TEST_F(hdl_parser_vhdl_test, check_generic_map){
                                     "      key_bit_vector_3 => D\"11259375\"\n" // <- decimal: 'abcdef' in hex
                                     "    )\n"
                                     "    port map (\n"
-                                    "      I => net_global_inout\n"
+                                    "      I => net_global_input\n"
                                     "    );\n"
                                     "end STRUCTURE;");
             test_def::capture_stdout();
@@ -393,7 +385,7 @@ TEST_F(hdl_parser_vhdl_test, check_generic_map){
             std::stringstream input("-- Device\t: device_name\n"
                                     "entity TEST_Comp is\n"
                                     "  port (\n"
-                                    "    net_global_inout : inout STD_LOGIC := 'X';\n"
+                                    "    net_global_input : in STD_LOGIC := 'X';\n"
                                     "  );\n"
                                     "end TEST_Comp;\n"
                                     "architecture STRUCTURE of TEST_Comp is\n"
@@ -403,7 +395,7 @@ TEST_F(hdl_parser_vhdl_test, check_generic_map){
                                     "      key_string => \"one_two_three\"\n"
                                     "    )\n"
                                     "    port map (\n"
-                                    "      I => net_global_inout\n"
+                                    "      I => net_global_input\n"
                                     "    );\n"
                                     "end STRUCTURE;");
             test_def::capture_stdout();
@@ -428,7 +420,7 @@ TEST_F(hdl_parser_vhdl_test, check_generic_map){
             std::stringstream input("-- Device\t: device_name\n"
                                     "entity TEST_Comp is\n"
                                     "  port (\n"
-                                    "    net_global_inout : inout STD_LOGIC := 'X';\n"
+                                    "    net_global_input : in STD_LOGIC := 'X';\n"
                                     "  );\n"
                                     "end TEST_Comp;\n"
                                     "architecture STRUCTURE of TEST_Comp is\n"
@@ -438,7 +430,7 @@ TEST_F(hdl_parser_vhdl_test, check_generic_map){
                                     "      key_bit_value => \'11001010\'\n"
                                     "    )\n"
                                     "    port map (\n"
-                                    "      I => net_global_inout\n"
+                                    "      I => net_global_input\n"
                                     "    );\n"
                                     "end STRUCTURE;");
             test_def::capture_stdout();
@@ -475,7 +467,7 @@ TEST_F(hdl_parser_vhdl_test, check_global_gates_implicit){
             std::stringstream input("-- Device\t: device_name\n"
                                     "entity TEST_Comp is\n"
                                     "  port (\n"
-                                    "    net_global_inout : inout STD_LOGIC := 'X';\n"
+                                    "    net_global_input : in STD_LOGIC := 'X';\n"
                                     "  );\n"
                                     "end TEST_Comp;\n"
                                     "architecture STRUCTURE of TEST_Comp is\n"
@@ -499,8 +491,8 @@ TEST_F(hdl_parser_vhdl_test, check_global_gates_implicit){
 
             ASSERT_NE(nl, nullptr);
 
-            ASSERT_NE(nl->get_global_gnd_gates().size(), 0);
-            std::shared_ptr<gate> global_gnd = *nl->get_global_gnd_gates().begin();
+            ASSERT_NE(nl->get_gnd_gates().size(), 0);
+            std::shared_ptr<gate> global_gnd = *nl->get_gnd_gates().begin();
 
             ASSERT_NE(nl->get_gates("INV").size(), 0);
             std::shared_ptr<gate> g = *nl->get_gates("INV").begin();
@@ -514,7 +506,7 @@ TEST_F(hdl_parser_vhdl_test, check_global_gates_implicit){
             std::stringstream input("-- Device\t: device_name\n"
                                     "entity TEST_Comp is\n"
                                     "  port (\n"
-                                    "    net_global_inout : inout STD_LOGIC := 'X';\n"
+                                    "    net_global_input : in STD_LOGIC := 'X';\n"
                                     "  );\n"
                                     "end TEST_Comp;\n"
                                     "architecture STRUCTURE of TEST_Comp is\n"
@@ -538,8 +530,8 @@ TEST_F(hdl_parser_vhdl_test, check_global_gates_implicit){
 
             ASSERT_NE(nl, nullptr);
 
-            ASSERT_NE(nl->get_global_vcc_gates().size(), 0);
-            std::shared_ptr<gate> global_vcc = *nl->get_global_vcc_gates().begin();
+            ASSERT_NE(nl->get_vcc_gates().size(), 0);
+            std::shared_ptr<gate> global_vcc = *nl->get_vcc_gates().begin();
 
             ASSERT_NE(nl->get_gates("INV").size(), 0);
             std::shared_ptr<gate> g = *nl->get_gates("INV").begin();
@@ -563,14 +555,14 @@ TEST_F(hdl_parser_vhdl_test, check_global_gates_explicit){
             std::stringstream input("-- Device\t: device_name\n"
                                     "entity TEST_Comp is\n"
                                     "  port (\n"
-                                    "    net_global_inout : inout STD_LOGIC := 'X';\n"
+                                    "    net_global_input : in STD_LOGIC := 'X';\n"
                                     "  );\n"
                                     "end TEST_Comp;\n"
                                     "architecture STRUCTURE of TEST_Comp is\n"
                                     "begin\n"
                                     "  g_gnd_gate : GND\n"
                                     "    port map (\n"
-                                    "      O => net_global_inout\n"
+                                    "      O => net_global_input\n"
                                     "    );\n"
                                     "end STRUCTURE;");
             test_def::capture_stdout();
@@ -587,8 +579,8 @@ TEST_F(hdl_parser_vhdl_test, check_global_gates_explicit){
 
             ASSERT_NE(nl, nullptr);
 
-            ASSERT_NE(nl->get_global_gnd_gates().size(), 0);
-            std::shared_ptr<gate> global_gnd = *nl->get_global_gnd_gates().begin();
+            ASSERT_NE(nl->get_gnd_gates().size(), 0);
+            std::shared_ptr<gate> global_gnd = *nl->get_gnd_gates().begin();
             EXPECT_EQ(global_gnd->get_name(), "g_gnd_gate");
         }
         {
@@ -596,14 +588,14 @@ TEST_F(hdl_parser_vhdl_test, check_global_gates_explicit){
             std::stringstream input("-- Device\t: device_name\n"
                                     "entity TEST_Comp is\n"
                                     "  port (\n"
-                                    "    net_global_inout : inout STD_LOGIC := 'X';\n"
+                                    "    net_global_input : in STD_LOGIC := 'X';\n"
                                     "  );\n"
                                     "end TEST_Comp;\n"
                                     "architecture STRUCTURE of TEST_Comp is\n"
                                     "begin\n"
                                     "  g_vcc_gate : VCC\n"
                                     "    port map (\n"
-                                    "      O => net_global_inout\n"
+                                    "      O => net_global_input\n"
                                     "    );\n"
                                     "end STRUCTURE;");
             test_def::capture_stdout();
@@ -620,8 +612,8 @@ TEST_F(hdl_parser_vhdl_test, check_global_gates_explicit){
 
             ASSERT_NE(nl, nullptr);
 
-            ASSERT_NE(nl->get_global_vcc_gates().size(), 0);
-            std::shared_ptr<gate> global_vcc = *nl->get_global_vcc_gates().begin();
+            ASSERT_NE(nl->get_vcc_gates().size(), 0);
+            std::shared_ptr<gate> global_vcc = *nl->get_vcc_gates().begin();
             EXPECT_EQ(global_vcc->get_name(), "g_vcc_gate");
         }
     TEST_END
@@ -641,14 +633,14 @@ TEST_F(hdl_parser_vhdl_test, check_lib_prefix)
                                 "use SIMPRIM.VCOMPONENTS.ALL;\n"
                                 "entity TEST_Comp is\n"
                                 "  port (\n"
-                                "    net_global_inout : inout STD_LOGIC := 'X';\n"
+                                "    net_global_input : in STD_LOGIC := 'X';\n"
                                 "  );\n"
                                 "end TEST_Comp;\n"
                                 "architecture STRUCTURE of TEST_Comp is\n"
                                 "begin\n"
                                 "  gate_0 : SIMPRIM.VCOMPONENTS.INV\n"
                                 "    port map (\n"
-                                "      I => net_global_inout\n"
+                                "      I => net_global_input\n"
                                 "    );\n"
                                 "end STRUCTURE;");
         test_def::capture_stdout();
@@ -681,7 +673,7 @@ TEST_F(hdl_parser_vhdl_test, check_lib_prefix)
         std::stringstream input("-- Device\t: device_name\n"
                                 "entity TEST_Comp is\n"
                                 "  port (\n"
-                                "    net_global_inout : inout STD_LOGIC := 'X';\n"
+                                "    net_global_input : in STD_LOGIC := 'X';\n"
                                 "  );\n"
                                 "end TEST_Comp;\n"
                                 "architecture STRUCTURE of TEST_Comp is\n"
@@ -728,7 +720,7 @@ TEST_F(hdl_parser_vhdl_test, check_lib_prefix)
                                     "  port (\n"
                                     "    first_entity_in  : in STD_LOGIC := 'X';\n"
                                     "    first_entity_out : out STD_LOGIC := 'X';\n"
-                                    "    first_entity_inout : inout STD_LOGIC := 'X';\n"
+                                    "    first_entity_inout : in STD_LOGIC := 'X';\n"
                                     "\n"
                                     "  );\n"
                                     "end TEST_Comp_1;\n"
@@ -737,13 +729,13 @@ TEST_F(hdl_parser_vhdl_test, check_lib_prefix)
                                     "begin\n"
                                     "  gate_0 : INV\n"
                                     "    port map (\n"
-                                    "      O => net_global_inout\n"
+                                    "      O => net_global_input\n"
                                     "    );\n"
                                     "end STRUCTURE;\n"
                                     "\n"
                                     "entity TEST_Comp_2 is\n"
                                     "  port(\n"
-                                    "    net_global_inout : inout STD_LOGIC := 'X';    \n"
+                                    "    net_global_input : in STD_LOGIC := 'X';    \n"
                                     "  );\n"
                                     "end TEST_Comp_2;\n"
                                     "\n"
@@ -751,7 +743,7 @@ TEST_F(hdl_parser_vhdl_test, check_lib_prefix)
                                     "begin\n"
                                     "  gate_1 : INV\n"
                                     "    port map (\n"
-                                    "      O => net_global_inout\n"
+                                    "      O => net_global_input\n"
                                     "    );\n"
                                     "end STRUCTURE;");
             test_def::capture_stdout();
@@ -771,14 +763,14 @@ TEST_F(hdl_parser_vhdl_test, check_lib_prefix)
             std::stringstream input("-- Device\t: device_name\n"
                                     "entity TEST_Comp is\n"
                                     "  port (\n"
-                                    "    net_global_inout : inout STD_LOGIC := 'X';\n"
+                                    "    net_global_input : in STD_LOGIC := 'X';\n"
                                     "  );\n"
                                     "end TEST_Comp;\n"
                                     "architecture STRUCTURE of TEST_Comp is\n"
                                     "begin\n"
                                     "  gate_0 : entity INV\n" // <- usage of the 'entity' keyword
                                     "    port map (\n"
-                                    "      O => net_global_inout\n"
+                                    "      O => net_global_input\n"
                                     "    );\n"
                                     "end STRUCTURE;");
             test_def::capture_stdout();
@@ -921,7 +913,7 @@ TEST_F(hdl_parser_vhdl_test, check_logic_vectors)
 
             ASSERT_NE(nl, nullptr);
             EXPECT_EQ(nl->get_nets().size(), 6); // net_global_in + global_out + 4 nets in l_vec
-            for(auto net_name : std::set<std::string>({"l_vec(0, 2)","l_vec(0, 3)","l_vec(1, 2)","l_vec(1, 3)"})){
+            for(auto net_name : std::set<std::string>({"l_vec(0,2)","l_vec(0,3)","l_vec(1,2)","l_vec(1,3)"})){
                 EXPECT_FALSE(nl->get_nets(net_name).empty());
             }
 
@@ -977,8 +969,8 @@ TEST_F(hdl_parser_vhdl_test, check_logic_vectors)
             }
             ASSERT_NE(nl, nullptr);
             EXPECT_EQ(nl->get_nets().size(), 10); // net_global_in + net_global_out + 8 nets in l_vec
-            for(auto net_name : std::set<std::string>({"l_vec(0, 0, 0)","l_vec(0, 0, 1)","l_vec(0, 1, 0)","l_vec(0, 1, 1)",
-                                                       "l_vec(1, 0, 0)","l_vec(1, 0, 1)","l_vec(1, 1, 0)","l_vec(1, 1, 1)"})){
+            for(auto net_name : std::set<std::string>({"l_vec(0,0,0)","l_vec(0,0,1)","l_vec(0,1,0)","l_vec(0,1,1)",
+                                                       "l_vec(1,0,0)","l_vec(1,0,1)","l_vec(1,1,0)","l_vec(1,1,1)"})){
                 EXPECT_FALSE(nl->get_nets(net_name).empty());
             }
 
@@ -990,7 +982,7 @@ TEST_F(hdl_parser_vhdl_test, check_logic_vectors)
             std::stringstream input("-- Device\t: device_name\n"
                                     "entity TEST_Comp is\n"
                                     "  port (\n"
-                                    "    net_global_inout : inout STD_LOGIC := 'X';\n"
+                                    "    net_global_input : in STD_LOGIC := 'X';\n"
                                     "  );\n"
                                     "end TEST_Comp;\n"
                                     "architecture STRUCTURE of TEST_Comp is\n"
@@ -998,7 +990,7 @@ TEST_F(hdl_parser_vhdl_test, check_logic_vectors)
                                     "begin\n"
                                     "  gate_0 : INV\n"
                                     "    port map (\n"
-                                    "      O => net_global_inout\n"
+                                    "      O => net_global_input\n"
                                     "    );\n"
                                     "end STRUCTURE;");
             hdl_parser_vhdl vhdl_parser(input);
@@ -1007,7 +999,7 @@ TEST_F(hdl_parser_vhdl_test, check_logic_vectors)
                 EXPECT_EQ(nl->get_nets().size(), 1);
             }
         }
-        remove_temp_gate_lib();
+        //remove_temp_gate_lib();
     TEST_END
 }
 
@@ -1061,11 +1053,12 @@ TEST_F(hdl_parser_vhdl_test, check_port_assignment) {
             ASSERT_NE(net_1, nullptr);
             EXPECT_EQ(net_1->get_name(), "net_1");
         }
-        {
+        /*{
             // Connect two dimensional ports
             std::stringstream input("-- Device\t: device_name\n"
                                     "entity TEST_Comp is\n"
                                     "  port (\n"
+                                    "    net_0 : in STD_LOGIC := 'X';\n"
                                     "  );\n"
                                     "end TEST_Comp;\n"
                                     "architecture STRUCTURE of TEST_Comp is\n"
@@ -1092,8 +1085,8 @@ TEST_F(hdl_parser_vhdl_test, check_port_assignment) {
             std::shared_ptr<net> net_i_0 = gate_0->get_fan_in_net("I(0, 1)");
             ASSERT_NE(net_i_0, nullptr);
             EXPECT_EQ(net_i_0->get_name(), "net_0");
-        }
-        {
+        }*/
+        /*{
             // Connect a vector of output pins with global input nets by using a binary string (B"10101010")
             std::stringstream input("-- Device\t: device_name\n"
                                     "entity TEST_Comp is\n"
@@ -1136,8 +1129,8 @@ TEST_F(hdl_parser_vhdl_test, check_port_assignment) {
             std::shared_ptr<net> net_2 = gate_0->get_fan_in_net("I(3)");
             ASSERT_NE(net_2, nullptr);
             EXPECT_EQ(net_2->get_name(), "'1'");
-        }
-        {
+        }*/
+        /*{
             // Connect a vector of output pins with a vector of nets (O(1)=>l_vec(0), O(2)=>l_vec(1), O(3)=>l_vec(2))
             std::stringstream input("-- Device\t: device_name\n"
                                     "entity TEST_Comp is\n"
@@ -1181,8 +1174,8 @@ TEST_F(hdl_parser_vhdl_test, check_port_assignment) {
             std::shared_ptr<net> net_2 = gate_0->get_fan_out_net("O(3)");
             ASSERT_NE(net_2, nullptr);
             EXPECT_EQ(net_2->get_name(), "l_vec(2)");
-        }
-        {
+        }*/
+        /*{
             // Connect a vector of output pins with a vector of nets, but using downto statements
             std::stringstream input("-- Device\t: device_name\n"
                                     "entity TEST_Comp is\n"
@@ -1222,8 +1215,8 @@ TEST_F(hdl_parser_vhdl_test, check_port_assignment) {
             std::shared_ptr<net> net_2 = gate_0->get_fan_out_net("O(3)");
             ASSERT_NE(net_2, nullptr);
             EXPECT_EQ(net_2->get_name(), "l_vec(2)");
-        }
-        {
+        }*/
+        /*{
             // Connect a vector of output pins with a vector of nets, but using a mix of to and downto statements
             std::stringstream input("-- Device\t: device_name\n"
                                     "entity TEST_Comp is\n"
@@ -1263,9 +1256,9 @@ TEST_F(hdl_parser_vhdl_test, check_port_assignment) {
             std::shared_ptr<net> net_2 = gate_0->get_fan_out_net("O(3)");
             ASSERT_NE(net_2, nullptr);
             EXPECT_EQ(net_2->get_name(), "l_vec(1)");
-        }
+        }*/
         // NEGATIVE
-        {
+        /*{
             // The range of the vectors does not match in size
             std::stringstream input("-- Device\t: device_name\n"
                                     "entity TEST_Comp is\n"
@@ -1297,8 +1290,8 @@ TEST_F(hdl_parser_vhdl_test, check_port_assignment) {
             std::shared_ptr<gate> gate_0 = *(nl->get_gates("GATE_4^1_IN_4^1_OUT" ,"gate_0").begin());
 
             EXPECT_EQ(gate_0->get_fan_out_nets().size(), 0);
-        }
-        {
+        }*/
+        /*{
             // The right side does no match any vector format
             std::stringstream input("-- Device\t: device_name\n"
                                     "entity TEST_Comp is\n"
@@ -1330,7 +1323,7 @@ TEST_F(hdl_parser_vhdl_test, check_port_assignment) {
 
             EXPECT_EQ(gate_0->get_fan_in_nets().size(), 0);
 
-        }
+        }*/
         remove_temp_gate_lib();
     TEST_END
 }
@@ -1344,7 +1337,7 @@ TEST_F(hdl_parser_vhdl_test, check_port_assignment) {
 TEST_F(hdl_parser_vhdl_test, check_component)
 {
     TEST_START
-        {
+        /*{
             // Add a component in the architecture header and instantiate a gate of it
             std::stringstream input("-- Device\t: device_name\n"
                                     "entity TEST_Comp is\n"
@@ -1358,7 +1351,7 @@ TEST_F(hdl_parser_vhdl_test, check_component)
                                     "    port (\n"
                                     "      COMP_IN : in STD_LOGIC;\n"
                                     "      COMP_OUT : out STD_LOGIC;\n"
-                                    "      COMP_INOUT : inout STD_LOGIC;\n"
+                                    "      COMP_INOUT : in STD_LOGIC;\n"
                                     "    );\n"
                                     "  end component ;\n"
                                     "begin\n"
@@ -1381,8 +1374,8 @@ TEST_F(hdl_parser_vhdl_test, check_component)
             std::shared_ptr<gate> comp_gate = *nl->get_gates("COMP_GATE").begin();
             EXPECT_NE(comp_gate->get_fan_in_net("COMP_IN"), nullptr);
             EXPECT_NE(comp_gate->get_fan_out_net("COMP_OUT"), nullptr);
-            EXPECT_EQ(comp_gate->get_inout_pin_types(), std::vector<std::string>({"COMP_INOUT"}));
-        }
+            // EXPECT_EQ(comp_gate->get_inout_pin_types(), std::vector<std::string>({"COMP_INOUT"})); FIXME
+        }*/
     TEST_END
 }
 
@@ -1664,8 +1657,6 @@ TEST_F(hdl_parser_vhdl_test, check_multiple_entities)
             hdl_parser_vhdl vhdl_parser(input);
             std::shared_ptr<netlist> nl = vhdl_parser.parse(g_lib_name);
 
-            std::cout << input.str() << std::endl;
-
             // Test that all gates are created
             ASSERT_NE(nl, nullptr);
             ASSERT_EQ(nl->get_gates("INV", "gate_0").size(), 1);
@@ -1856,14 +1847,14 @@ TEST_F(hdl_parser_vhdl_test, check_multiple_entities)
             std::stringstream input("-- Device\t: device_name\n"
                                     "entity TEST_Comp is\n"
                                     "  port (\n"
-                                    "    net_global_inout : inout STD_LOGIC := 'X';\n"
+                                    "    net_global_input : in STD_LOGIC := 'X';\n"
                                     "  );\n"
                                     "end TEST_Comp;\n"
                                     "architecture STRUCTURE of TEST_Comp is\n"
                                     "begin\n"
                                     "  gate_0 : entity INV\n" // <- usage of the 'entity' keyword
                                     "    port map (\n"
-                                    "      O => net_global_inout\n"
+                                    "      O => net_global_input\n"
                                     "    );\n"
                                     "end STRUCTURE;");
             test_def::capture_stdout();
@@ -1899,14 +1890,14 @@ TEST_F(hdl_parser_vhdl_test, check_invalid_input)
             std::stringstream input("-- Device\t: device_name\n"
                                     "entity TEST_Comp is\n"
                                     "  port (\n"
-                                    "    net_global_inout : invalid_direction STD_LOGIC := 'X';\n" // <- invalid direction
+                                    "    net_global_input : invalid_direction STD_LOGIC := 'X';\n" // <- invalid direction
                                     "  );\n"
                                     "end TEST_Comp;\n"
                                     "architecture STRUCTURE of TEST_Comp is\n"
                                     "begin\n"
                                     "  gate_0 : INV\n"
                                     "    port map (\n"
-                                    "      O => net_global_inout\n"
+                                    "      O => net_global_input\n"
                                     "    );\n"
                                     "end STRUCTURE;");
             hdl_parser_vhdl vhdl_parser(input);
@@ -1920,7 +1911,7 @@ TEST_F(hdl_parser_vhdl_test, check_invalid_input)
             std::stringstream input("-- Device\t: device_name\n"
                                     "entity TEST_Comp is\n"
                                     "  port (\n"
-                                    "    net_global_inout : inout STD_LOGIC := 'X';\n"
+                                    "    net_global_input : in STD_LOGIC := 'X';\n"
                                     "  );\n"
                                     "end TEST_Comp;\n"
                                     "architecture STRUCTURE of TEST_Comp is\n"
@@ -1928,7 +1919,7 @@ TEST_F(hdl_parser_vhdl_test, check_invalid_input)
                                     "begin\n"
                                     "  gate_0 : INV\n"
                                     "    port map (\n"
-                                    "      O => net_global_inout\n"
+                                    "      O => net_global_input\n"
                                     "    );\n"
                                     "end STRUCTURE;");
             hdl_parser_vhdl vhdl_parser(input);
@@ -1942,14 +1933,14 @@ TEST_F(hdl_parser_vhdl_test, check_invalid_input)
             std::stringstream input("-- Device\t: device_name\n"
                                     "entity TEST_Comp is\n"
                                     "  port (\n"
-                                    "    net_global_inout : inout STD_LOGIC := 'X';\n"
+                                    "    net_global_input : in STD_LOGIC := 'X';\n"
                                     "  );\n"
                                     "end TEST_Comp;\n"
                                     "architecture STRUCTURE of TEST_Comp is\n"
                                     "begin\n"
                                     "  gate_0 : INV\n"
                                     "    port map (\n"
-                                    "      O => net_global_inout\n"
+                                    "      O => net_global_input\n"
                                     "    );\n"
                                     "end STRUCTURE;");                      // <- no 'end STRUCTURE;'
             hdl_parser_vhdl vhdl_parser(input);
@@ -1963,7 +1954,7 @@ TEST_F(hdl_parser_vhdl_test, check_invalid_input)
             std::stringstream input("-- Device\t: device_name\n"
                                     "entity TEST_Comp is\n"
                                     "  port (\n"
-                                    "    net_global_inout : inout STD_LOGIC := 'X';\n"
+                                    "    net_global_input : in STD_LOGIC := 'X';\n"
                                     "  );\n"
                                     "end TEST_Comp;\n"
                                     "architecture STRUCTURE of TEST_Comp is\n"
@@ -1973,7 +1964,7 @@ TEST_F(hdl_parser_vhdl_test, check_invalid_input)
                                     "      key_invalid_type => Inv4lid_type\n"        // <- The format of 'Inv4lid_type' matches with no data_type
                                     "    )\n"
                                     "    port map (\n"
-                                    "      I => net_global_inout\n"
+                                    "      I => net_global_input\n"
                                     "    );\n"
                                     "end STRUCTURE;");
             hdl_parser_vhdl vhdl_parser(input);
@@ -1986,7 +1977,7 @@ TEST_F(hdl_parser_vhdl_test, check_invalid_input)
             std::stringstream input("-- Device\t: device_name\n"
                                     "entity TEST_Comp is\n"
                                     "  port (\n"
-                                    "    net_global_inout : inout STD_LOGIC := 'X';\n"
+                                    "    net_global_input : in STD_LOGIC := 'X';\n"
                                     "  );\n"
                                     "end TEST_Comp;\n"
                                     "architecture STRUCTURE of TEST_Comp is\n"
@@ -2009,14 +2000,14 @@ TEST_F(hdl_parser_vhdl_test, check_invalid_input)
             std::stringstream input("-- Device\t: device_name\n"
                                     "entity TEST_Comp is\n"
                                     "  port (\n"
-                                    "    net_global_inout : inout STD_LOGIC := 'X';\n"
+                                    "    net_global_input : in STD_LOGIC := 'X';\n"
                                     "  );\n"
                                     "end TEST_Comp;\n"
                                     "architecture STRUCTURE of TEST_Comp is\n"
                                     "begin\n"
                                     "  gate_0 : INV\n"
                                     "    port map (\n"
-                                    "      NOT_EXISTING_PIN => net_global_inout\n"
+                                    "      NOT_EXISTING_PIN => net_global_input\n"
                                     "    );\n"
                                     "end STRUCTURE;");
             hdl_parser_vhdl vhdl_parser(input);
@@ -2029,5 +2020,3 @@ TEST_F(hdl_parser_vhdl_test, check_invalid_input)
         }
     TEST_END
 }
-
-#endif // DONT_USE_ME

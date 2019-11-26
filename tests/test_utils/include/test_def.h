@@ -1,4 +1,3 @@
-#include "pragma_once.h"
 #ifndef HAL_TEST_DEF_H_
 #define HAL_TEST_DEF_H_
 
