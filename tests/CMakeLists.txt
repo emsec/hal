@@ -31,6 +31,6 @@ endif()
 #add_subdirectory(basic_tests)
 add_subdirectory(test_utils) # new
 add_subdirectory(core)
-#add_subdirectory(netlist) temporary
+add_subdirectory(netlist) #temporary
 add_subdirectory(hdl_parser)
 add_subdirectory(hdl_writer)

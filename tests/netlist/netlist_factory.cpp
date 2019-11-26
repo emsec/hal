@@ -6,7 +6,7 @@
 #include "netlist/persistent/netlist_serializer.h"
 #include "netlist_test_utils.h"
 #include "gtest/gtest.h"
-#include <boost/filesystem.hpp>
+#include <experimental/filesystem>
 #include <core/log.h>
 #include <fstream>
 #include <iostream>
@@ -16,7 +16,11 @@
  * any errors, it can be an issue of the vhdl parser as well...
  */
 
+#ifdef DONT_BUILD
+
 using namespace test_utils;
+
+namespace fs = std::experimental::filesystem ;
 
 class netlist_factory_test : public ::testing::Test
 {
@@ -124,7 +128,7 @@ TEST_F(netlist_factory_test, check_load_netlist_by_hdl_file)
             ASSERT_NE(nl, nullptr);
             EXPECT_EQ(nl->get_gate_library()->get_name(), test_utils::g_lib_name);
 
-            boost::filesystem::remove(tmp_hdl_file_path);
+            fs::remove(tmp_hdl_file_path);
         }
         {
             // Try to create a netlist by a non-accessible (non-existing) file
@@ -146,7 +150,7 @@ TEST_F(netlist_factory_test, check_load_netlist_by_hdl_file)
 
             EXPECT_EQ(nl, nullptr);
 
-            boost::filesystem::remove(tmp_hdl_file_path);
+            fs::remove(tmp_hdl_file_path);
         }
 
     TEST_END
@@ -175,7 +179,7 @@ TEST_F(netlist_factory_test, check_load_netlist_by_hal_file)
 
                 EXPECT_NE(nl, nullptr);
 
-                boost::filesystem::remove(tmp_hal_file_path);
+               fs::remove(tmp_hal_file_path);
             }
             {
                 // Pass an invalid file path
@@ -206,11 +210,12 @@ TEST_F(netlist_factory_test, check_load_netlist_by_hal_file)
 
                 EXPECT_EQ(nl, nullptr);
 
-                boost::filesystem::remove(tmp_hal_file_path);
+                fs::remove(tmp_hal_file_path);
             }
         }
 
     TEST_END
+
 }
 
 /**
@@ -239,7 +244,7 @@ TEST_F(netlist_factory_test, check_create_netlist_by_program_args)
 
                 EXPECT_NE(nl, nullptr);
 
-                boost::filesystem::remove(tmp_hal_file_path);
+                fs::remove(tmp_hal_file_path);
             }
             {
                 // Create a netlist by passing a .hal file-path via program arguments. Set volatile-mode
@@ -274,7 +279,7 @@ TEST_F(netlist_factory_test, check_create_netlist_by_program_args)
 
                 EXPECT_NE(nl, nullptr);
 
-                boost::filesystem::remove(tmp_hdl_file_path);
+               fs::remove(tmp_hdl_file_path);
             }
             {
                 // Create a netlist but leaving out the input path
@@ -308,9 +313,11 @@ TEST_F(netlist_factory_test, check_create_netlist_by_program_args)
 
                 EXPECT_EQ(nl, nullptr);
 
-                boost::filesystem::remove(tmp_hdl_file_path);
+                fs::remove(tmp_hdl_file_path);
             }
         }
 
     TEST_END
 }
+
+#endif //DONT_BUILD

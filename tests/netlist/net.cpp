@@ -268,7 +268,7 @@ TEST_F(net_test, check_add_remove_dst){
         NO_COUT_TEST_BLOCK;
         std::shared_ptr<netlist> nl   = create_empty_netlist(MIN_NETLIST_ID+0);
         std::shared_ptr<net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
-        std::shared_ptr<gate> t_gate  = nl->create_gate(MIN_GATE_ID+0, "INV", "t_gate");
+        std::shared_ptr<gate> t_gate  = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("INV"), "t_gate");
 
         bool suc = test_net->remove_dst(t_gate, "I0");
 
@@ -329,7 +329,7 @@ TEST_F(net_test, check_add_dst){
             NO_COUT_TEST_BLOCK;
             std::shared_ptr<netlist> nl   = create_empty_netlist(MIN_NETLIST_ID+0);
             std::shared_ptr<net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
-            std::shared_ptr<gate> t_gate  = nl->create_gate(MIN_GATE_ID+0, "INV", "t_gate");
+            std::shared_ptr<gate> t_gate  = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("INV"), "t_gate");
             // gate isn't added
             bool suc = test_net->add_dst(t_gate, "I0");
 
@@ -438,7 +438,7 @@ TEST_F(net_test, check_get_dsts)
         std::shared_ptr<netlist> nl    = create_empty_netlist(MIN_NETLIST_ID+0);
         std::shared_ptr<net> test_net  = nl->create_net(MIN_NET_ID+1, "test_net");
         auto mult_gate                 = create_test_gate(nl, MIN_GATE_ID+1);
-        std::shared_ptr<gate> inv_gate = nl->create_gate(MIN_GATE_ID+2, "INV", "gate_1");
+        std::shared_ptr<gate> inv_gate = nl->create_gate(MIN_GATE_ID+2, get_gate_type_by_name("INV"), "gate_1");
         test_net->add_dst(mult_gate, "I0");
         test_net->add_dst(inv_gate, "I");
 
@@ -536,19 +536,6 @@ TEST_F(net_test, check_global_nets)
             test_net->unmark_global_output_net();
             EXPECT_FALSE(test_net->is_global_output_net());
             EXPECT_FALSE(nl->is_global_output_net(test_net));
-        }
-        {
-            // mark and unmark a global inout net
-            std::shared_ptr<netlist> nl   = create_empty_netlist(MIN_NETLIST_ID+0);
-            std::shared_ptr<net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
-
-            test_net->mark_global_inout_net();
-            EXPECT_TRUE(test_net->is_global_inout_net());
-            EXPECT_TRUE(nl->is_global_inout_net(test_net));
-
-            test_net->unmark_global_inout_net();
-            EXPECT_FALSE(test_net->is_global_inout_net());
-            EXPECT_FALSE(nl->is_global_inout_net(test_net));
         }
 
     TEST_END

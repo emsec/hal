@@ -186,7 +186,7 @@ TEST_F(module_test, check_contains_gate){
             // Check a gate, that is part of the module (not recursive)
             std::shared_ptr<netlist> nl = create_empty_netlist();
             std::shared_ptr<module> m_0 = nl->create_module(MIN_MODULE_ID+0, "test_module", nl->get_top_module());
-            std::shared_ptr<gate> gate_0 = nl->create_gate(MIN_GATE_ID+0, "INV", "gate_0");
+            std::shared_ptr<gate> gate_0 = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("INV"), "gate_0");
             m_0->assign_gate(gate_0);
 
             EXPECT_TRUE(m_0->contains_gate(gate_0));
@@ -195,7 +195,7 @@ TEST_F(module_test, check_contains_gate){
             // Check a gate, that isn't part of the module (not recursive)
             std::shared_ptr<netlist> nl = create_empty_netlist();
             std::shared_ptr<module> m_0 = nl->create_module(MIN_MODULE_ID+0, "test_module", nl->get_top_module());
-            std::shared_ptr<gate> gate_0 = nl->create_gate(MIN_GATE_ID+0, "INV", "gate_0");
+            std::shared_ptr<gate> gate_0 = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("INV"), "gate_0");
 
             EXPECT_FALSE(m_0->contains_gate(gate_0));
         }
@@ -205,7 +205,7 @@ TEST_F(module_test, check_contains_gate){
             std::shared_ptr<module> m_0 = nl->create_module(MIN_MODULE_ID+0, "test_module", nl->get_top_module());
             std::shared_ptr<module> submodule = nl->create_module(MIN_MODULE_ID+1, "test_module", m_0);
             ASSERT_NE(submodule, nullptr);
-            std::shared_ptr<gate> gate_0 = nl->create_gate(MIN_GATE_ID+0, "INV", "gate_0");
+            std::shared_ptr<gate> gate_0 = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("INV"), "gate_0");
             submodule->assign_gate(gate_0);
 
             EXPECT_FALSE(m_0->contains_gate(gate_0));
@@ -216,7 +216,7 @@ TEST_F(module_test, check_contains_gate){
             std::shared_ptr<module> m_0 = nl->create_module(MIN_MODULE_ID+0, "test_module", nl->get_top_module());
             std::shared_ptr<module> submodule = nl->create_module(MIN_MODULE_ID+1, "test_module", m_0);
             ASSERT_NE(submodule, nullptr);
-            std::shared_ptr<gate> gate_0 = nl->create_gate(MIN_GATE_ID+0, "INV", "gate_0");
+            std::shared_ptr<gate> gate_0 = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("INV"), "gate_0");
             submodule->assign_gate(gate_0);
 
             EXPECT_TRUE(m_0->contains_gate(gate_0, true));
@@ -235,10 +235,10 @@ TEST_F(module_test, check_assign_gate){
         {
             // Add some gates to the module
             std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::shared_ptr<gate> gate_0 = nl->create_gate(MIN_GATE_ID+0, "INV", "gate_0");
-            std::shared_ptr<gate> gate_1 = nl->create_gate(MIN_GATE_ID+1, "INV", "gate_1");
+            std::shared_ptr<gate> gate_0 = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("INV"), "gate_0");
+            std::shared_ptr<gate> gate_1 = nl->create_gate(MIN_GATE_ID+1, get_gate_type_by_name("INV"), "gate_1");
             // this gate is not part of the module
-            std::shared_ptr<gate> gate_not_in_m = nl->create_gate(MIN_GATE_ID+2, "INV", "gate_not_in_m");
+            std::shared_ptr<gate> gate_not_in_m = nl->create_gate(MIN_GATE_ID+2, get_gate_type_by_name("INV"), "gate_not_in_m");
 
             // Add gate_0 and gate_1 to a module
             std::shared_ptr<module> test_module = nl->create_module(MIN_MODULE_ID+0, "test module", nl->get_top_module());
@@ -256,7 +256,7 @@ TEST_F(module_test, check_assign_gate){
             // Add the same gate twice to the module
             NO_COUT_TEST_BLOCK;
             std::shared_ptr<netlist> nl  = create_empty_netlist();
-            std::shared_ptr<gate> gate_0 = nl->create_gate(MIN_GATE_ID+0, "INV", "gate_0");
+            std::shared_ptr<gate> gate_0 = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("INV"), "gate_0");
 
             // Add gate_0 twice
             std::shared_ptr<module> test_module = nl->create_module(MIN_MODULE_ID+0, "test module", nl->get_top_module());
@@ -274,7 +274,7 @@ TEST_F(module_test, check_assign_gate){
             // Insert a gate owned by a submodule
             NO_COUT_TEST_BLOCK;
             std::shared_ptr<netlist> nl  = create_empty_netlist();
-            std::shared_ptr<gate> gate_0 = nl->create_gate(MIN_GATE_ID+0, "INV", "gate_0");
+            std::shared_ptr<gate> gate_0 = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("INV"), "gate_0");
 
             std::shared_ptr<module> test_module = nl->create_module(MIN_MODULE_ID+0, "test module", nl->get_top_module());
             std::shared_ptr<module> submodule = nl->create_module(MIN_MODULE_ID+1, "submodule", test_module);
@@ -315,7 +315,7 @@ TEST_F(module_test, check_remove_gate){
             // Delete a gate from a module (gate owned by the modules)
             std::shared_ptr<netlist> nl = create_empty_netlist();
             std::shared_ptr<module> m_0 = nl->create_module(MIN_MODULE_ID+0, "test_module", nl->get_top_module());
-            std::shared_ptr<gate> gate_0 = nl->create_gate(MIN_GATE_ID+0, "INV", "gate_0");
+            std::shared_ptr<gate> gate_0 = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("INV"), "gate_0");
             m_0->assign_gate(gate_0);
 
             ASSERT_TRUE(m_0->contains_gate(gate_0));
@@ -328,7 +328,7 @@ TEST_F(module_test, check_remove_gate){
             std::shared_ptr<netlist> nl = create_empty_netlist();
             std::shared_ptr<module> m_0 = nl->create_module(MIN_MODULE_ID+0, "test_module", nl->get_top_module());
             std::shared_ptr<module> m_other = nl->create_module(MIN_MODULE_ID+1, "other_test_module", nl->get_top_module());
-            std::shared_ptr<gate> gate_0 = nl->create_gate(MIN_GATE_ID+0, "INV", "gate_0");
+            std::shared_ptr<gate> gate_0 = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("INV"), "gate_0");
             m_other->assign_gate(gate_0);
 
             m_0->remove_gate(gate_0);
@@ -340,7 +340,7 @@ TEST_F(module_test, check_remove_gate){
             // Try to delete a gate from the top-module (should change nothing)
             NO_COUT_TEST_BLOCK;
             std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::shared_ptr<gate> gate_0 = nl->create_gate(MIN_GATE_ID+0, "INV", "gate_0");
+            std::shared_ptr<gate> gate_0 = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("INV"), "gate_0");
             std::shared_ptr<module> tm =  nl->get_top_module();
 
             ASSERT_TRUE(tm->contains_gate(gate_0));
@@ -370,7 +370,7 @@ TEST_F(module_test, check_get_gate_by_id){
             // get a gate by its id (gate owned by module)(not recursive)
             std::shared_ptr<netlist> nl = create_empty_netlist();
             std::shared_ptr<module> m_0 = nl->create_module(MIN_MODULE_ID+0, "test_module", nl->get_top_module());
-            std::shared_ptr<gate> gate_123 = nl->create_gate(MIN_GATE_ID+123, "INV", "gate_123");
+            std::shared_ptr<gate> gate_123 = nl->create_gate(MIN_GATE_ID+123, get_gate_type_by_name("INV"), "gate_123");
             m_0->assign_gate(gate_123);
 
             ASSERT_TRUE(m_0->contains_gate(gate_123));
@@ -381,7 +381,7 @@ TEST_F(module_test, check_get_gate_by_id){
             std::shared_ptr<netlist> nl = create_empty_netlist();
             std::shared_ptr<module> m_0 = nl->create_module(MIN_MODULE_ID+0, "test_module", nl->get_top_module());
             std::shared_ptr<module> submodule = nl->create_module(MIN_MODULE_ID+1, "other_module", m_0);
-            std::shared_ptr<gate> gate_123 = nl->create_gate(MIN_GATE_ID+123, "INV", "gate_123");
+            std::shared_ptr<gate> gate_123 = nl->create_gate(MIN_GATE_ID+123, get_gate_type_by_name("INV"), "gate_123");
             submodule->assign_gate(gate_123);
 
             EXPECT_EQ(m_0->get_gate_by_id(MIN_GATE_ID+123), nullptr);
@@ -391,7 +391,7 @@ TEST_F(module_test, check_get_gate_by_id){
             std::shared_ptr<netlist> nl = create_empty_netlist();
             std::shared_ptr<module> m_0 = nl->create_module(MIN_MODULE_ID+0, "test_module", nl->get_top_module());
             std::shared_ptr<module> submodule = nl->create_module(MIN_MODULE_ID+1, "other_module", m_0);
-            std::shared_ptr<gate> gate_123 = nl->create_gate(MIN_GATE_ID+123, "INV", "gate_123");
+            std::shared_ptr<gate> gate_123 = nl->create_gate(MIN_GATE_ID+123, get_gate_type_by_name("INV"), "gate_123");
             submodule->assign_gate(gate_123);
 
             EXPECT_EQ(m_0->get_gate_by_id(MIN_GATE_ID+123, true), gate_123);
@@ -739,12 +739,12 @@ TEST_F(module_test, check_get_input_nets){
         std::shared_ptr<netlist> nl = create_empty_netlist();
 
         // Add the gates
-        std::shared_ptr<gate> gate_0 = nl->create_gate(MIN_GATE_ID+0, "INV" , "gate_0");
-        std::shared_ptr<gate> gate_1 = nl->create_gate(MIN_GATE_ID+1, "INV" , "gate_1");
-        std::shared_ptr<gate> gate_2 = nl->create_gate(MIN_GATE_ID+2, "AND2", "gate_2");
-        std::shared_ptr<gate> gate_3 = nl->create_gate(MIN_GATE_ID+3, "INV" , "gate_3");
-        std::shared_ptr<gate> gate_4 = nl->create_gate(MIN_GATE_ID+4, "INV" , "gate_4");
-        std::shared_ptr<gate> gate_5 = nl->create_gate(MIN_GATE_ID+5, "INV" , "gate_5");
+        std::shared_ptr<gate> gate_0 = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("INV") , "gate_0");
+        std::shared_ptr<gate> gate_1 = nl->create_gate(MIN_GATE_ID+1, get_gate_type_by_name("INV") , "gate_1");
+        std::shared_ptr<gate> gate_2 = nl->create_gate(MIN_GATE_ID+2, get_gate_type_by_name("AND2"), "gate_2");
+        std::shared_ptr<gate> gate_3 = nl->create_gate(MIN_GATE_ID+3, get_gate_type_by_name("INV") , "gate_3");
+        std::shared_ptr<gate> gate_4 = nl->create_gate(MIN_GATE_ID+4, get_gate_type_by_name("INV") , "gate_4");
+        std::shared_ptr<gate> gate_5 = nl->create_gate(MIN_GATE_ID+5, get_gate_type_by_name("INV") , "gate_5");
 
         // Add the nets (net_x_y1_y2_... is net from x to y1,y2,... (g = global input/output))
         std::shared_ptr<net> net_g_0   = nl->create_net(MIN_NET_ID+0, "name_0");

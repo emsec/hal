@@ -1,4 +1,3 @@
-#include "gate_decorator_system/gate_decorator.h"
 #include "netlist/gate_library/gate_library_manager.h"
 #include "netlist/netlist.h"
 #include "netlist/netlist_factory.h"
@@ -38,11 +37,11 @@ TEST_F(gate_test, check_constructor)
     TEST_START
         // Create a gate (id = 100) and append it to its netlist
         std::shared_ptr<netlist> nl     = create_empty_netlist();
-        std::shared_ptr<gate> test_gate = nl->create_gate(MIN_GATE_ID+100, "AND2", "gate_name");
+        std::shared_ptr<gate> test_gate = nl->create_gate(MIN_GATE_ID+100, get_gate_type_by_name("AND2"), "gate_name");
 
         ASSERT_NE(test_gate, nullptr);
         EXPECT_EQ(test_gate->get_id(), (u32)(MIN_GATE_ID+100));
-        EXPECT_EQ(test_gate->get_type(), "AND2");
+        EXPECT_EQ(test_gate->get_type()->get_name(), "AND2");
         EXPECT_EQ(test_gate->get_name(), "gate_name");
         EXPECT_EQ(test_gate->get_netlist(), nl);
 
@@ -83,7 +82,7 @@ TEST_F(gate_test, check_set_and_get_name)
         // ########################
         // Create a gate and append it to its netlist
         std::shared_ptr<netlist> nl     = create_empty_netlist();
-        std::shared_ptr<gate> test_gate = nl->create_gate(MIN_GATE_ID+0, "AND2", "gate_name");
+        std::shared_ptr<gate> test_gate = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("AND2"), "gate_name");
 
         EXPECT_EQ(test_gate->get_name(), "gate_name");
 
@@ -120,11 +119,10 @@ TEST_F(gate_test, check_pin_types)
     TEST_START
     // Create a gate and append it to its netlist
     std::shared_ptr<netlist> nl     = create_empty_netlist();
-    std::shared_ptr<gate> test_gate = nl->create_gate(MIN_GATE_ID+0, "AND2", "gate_name");
+    std::shared_ptr<gate> test_gate = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("AND2"), "gate_name");
 
-    EXPECT_EQ(test_gate->get_input_pin_types(), std::vector<std::string>({"I0", "I1"}));
-    EXPECT_EQ(test_gate->get_output_pin_types(), std::vector<std::string>({"O"}));
-    EXPECT_EQ(test_gate->get_inout_pin_types(), std::vector<std::string>({}));
+    EXPECT_EQ(test_gate->get_input_pins(), std::vector<std::string>({"I0", "I1"}));
+    EXPECT_EQ(test_gate->get_output_pins(), std::vector<std::string>({"O"}));
 
     TEST_END
 }
@@ -602,28 +600,28 @@ TEST_F(gate_test, check_gnd_vcc_gate_handling)
         {
             // Mark and unmark a global vcc gate
             std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::shared_ptr<gate> vcc_gate = nl->create_gate(MIN_GATE_ID+0, "VCC", "vcc_gate");
+            std::shared_ptr<gate> vcc_gate = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("VCC"), "vcc_gate");
 
-            vcc_gate->mark_global_vcc_gate();
-            EXPECT_TRUE(vcc_gate->is_global_vcc_gate());
-            EXPECT_TRUE(nl->is_global_vcc_gate(vcc_gate));
+            vcc_gate->mark_vcc_gate();
+            EXPECT_TRUE(vcc_gate->is_vcc_gate());
+            EXPECT_TRUE(nl->is_vcc_gate(vcc_gate));
 
-            vcc_gate->unmark_global_vcc_gate();
-            EXPECT_FALSE(vcc_gate->is_global_vcc_gate());
-            EXPECT_FALSE(nl->is_global_vcc_gate(vcc_gate));
+            vcc_gate->unmark_vcc_gate();
+            EXPECT_FALSE(vcc_gate->is_vcc_gate());
+            EXPECT_FALSE(nl->is_vcc_gate(vcc_gate));
         }
         {
             // Mark and unmark a global gnd gate
             std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::shared_ptr<gate> gnd_gate = nl->create_gate(MIN_GATE_ID+0, "GND", "gnd_gate");
+            std::shared_ptr<gate> gnd_gate = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("GND"), "gnd_gate");
 
-            gnd_gate->mark_global_gnd_gate();
-            EXPECT_TRUE(gnd_gate->is_global_gnd_gate());
-            EXPECT_TRUE(nl->is_global_gnd_gate(gnd_gate));
+            gnd_gate->mark_gnd_gate();
+            EXPECT_TRUE(gnd_gate->is_gnd_gate());
+            EXPECT_TRUE(nl->is_gnd_gate(gnd_gate));
 
-            gnd_gate->unmark_global_gnd_gate();
-            EXPECT_FALSE(gnd_gate->is_global_gnd_gate());
-            EXPECT_FALSE(nl->is_global_gnd_gate(gnd_gate));
+            gnd_gate->unmark_gnd_gate();
+            EXPECT_FALSE(gnd_gate->is_gnd_gate());
+            EXPECT_FALSE(nl->is_gnd_gate(gnd_gate));
         }
     TEST_END
 }
@@ -640,7 +638,7 @@ TEST_F(gate_test, check_get_module)
             // get the module of a gate (the top_module), then add it to another module and check again
             // -- create the gate at the top_module
             std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::shared_ptr<gate> test_gate = nl->create_gate(MIN_GATE_ID+0, "INV", "test_gate");
+            std::shared_ptr<gate> test_gate = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("INV"), "test_gate");
 
             EXPECT_EQ(test_gate->get_module(), nl->get_top_module());
 

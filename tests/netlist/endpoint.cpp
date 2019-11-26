@@ -35,7 +35,7 @@ TEST_F(endpoint_test, check_set_get_gate)
     TEST_START
     std::shared_ptr<netlist> nl = create_empty_netlist(0);
     endpoint ep;
-    std::shared_ptr<gate> test_gate = nl->create_gate(123, "INV", "test_gate");
+    std::shared_ptr<gate> test_gate = nl->create_gate(123, get_gate_type_by_name("INV"), "test_gate");
     ep.set_gate(test_gate);
     EXPECT_EQ(ep.get_gate(), test_gate);
     EXPECT_EQ(ep.gate, test_gate);
@@ -67,7 +67,7 @@ TEST_F(endpoint_test, check_copy_operator)
     TEST_START
     std::shared_ptr<netlist> nl = create_empty_netlist(0);
     endpoint ep;
-    std::shared_ptr<gate> test_gate = nl->create_gate(123, "INV", "test_gate");
+    std::shared_ptr<gate> test_gate = nl->create_gate(123, get_gate_type_by_name("INV"), "test_gate");
     ep.set_gate(test_gate);
     ep.set_pin_type("O");
 
@@ -88,8 +88,8 @@ TEST_F(endpoint_test, check_comparison_operators)
 {
     TEST_START
     std::shared_ptr<netlist> nl       = create_empty_netlist(0);
-    std::shared_ptr<gate> test_gate_0 = nl->create_gate(1, "INV", "test_gate_0");
-    std::shared_ptr<gate> test_gate_1 = nl->create_gate(2, "INV", "test_gate_1");
+    std::shared_ptr<gate> test_gate_0 = nl->create_gate(1, get_gate_type_by_name("INV"), "test_gate_0");
+    std::shared_ptr<gate> test_gate_1 = nl->create_gate(2, get_gate_type_by_name("INV"), "test_gate_1");
 
     // Create some endpoints
     endpoint ep_0 = get_endpoint(test_gate_0, "I");
@@ -127,7 +127,7 @@ TEST_F(endpoint_test, check_unequal_operator)
 {
     TEST_START
     std::shared_ptr<netlist> nl     = create_empty_netlist(0);
-    std::shared_ptr<gate> test_gate = nl->create_gate(123, "INV", "test_gate");
+    std::shared_ptr<gate> test_gate = nl->create_gate(123, get_gate_type_by_name("INV"), "test_gate");
 
     endpoint ep       = get_endpoint(test_gate, "O");
     endpoint other_ep = get_endpoint(test_gate, "O");

@@ -89,8 +89,6 @@ TEST_F(netlist_test, check_design_access)
     TEST_START
         // Create an empty netlist
         std::shared_ptr<netlist> nl = create_empty_netlist();
-        // The design should be empty initially
-        EXPECT_EQ(nl->get_design_name(), "");
         // Set a design name
         nl->set_design_name("design_name");
         EXPECT_EQ(nl->get_design_name(), "design_name");
@@ -110,8 +108,6 @@ TEST_F(netlist_test, check_device_access)
     TEST_START
         // Create an empty netlist
         std::shared_ptr<netlist> nl = create_empty_netlist();
-        // The design should be empty initially
-        EXPECT_EQ(nl->get_device_name(), "");
         // Set a design name
         nl->set_device_name("device_name");
         EXPECT_EQ(nl->get_device_name(), "device_name");
@@ -147,9 +143,9 @@ TEST_F(netlist_test, check_get_unique_gate_id)
     TEST_START
         // Create an empty netlist with some gates
         std::shared_ptr<netlist> nl = create_empty_netlist();
-        std::shared_ptr<gate> g_0   = nl->create_gate(MIN_GATE_ID+0, "INV", "gate_0");
-        std::shared_ptr<gate> g_1   = nl->create_gate(MIN_GATE_ID+1, "INV", "gate_1");
-        std::shared_ptr<gate> g_2   = nl->create_gate(MIN_GATE_ID+3, "INV", "gate_2");
+        std::shared_ptr<gate> g_0   = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("INV"), "gate_0");
+        std::shared_ptr<gate> g_1   = nl->create_gate(MIN_GATE_ID+1, get_gate_type_by_name("INV"), "gate_1");
+        std::shared_ptr<gate> g_2   = nl->create_gate(MIN_GATE_ID+3, get_gate_type_by_name("INV"), "gate_2");
         std::set<u32> used_ids = {MIN_GATE_ID+0,MIN_GATE_ID+1,MIN_GATE_ID+3};
 
         // Get a unique id
@@ -158,7 +154,7 @@ TEST_F(netlist_test, check_get_unique_gate_id)
         EXPECT_NE(unique_id, INVALID_GATE_ID);
 
         // Insert the unique id gate and get a new unique id
-        std::shared_ptr<gate> g_new   = nl->create_gate(unique_id, "INV", "gate_2");
+        std::shared_ptr<gate> g_new   = nl->create_gate(unique_id, get_gate_type_by_name("INV"), "gate_2");
         used_ids.insert(unique_id);
 
         unique_id = nl->get_unique_gate_id();
@@ -186,10 +182,10 @@ TEST_F(netlist_test, check_get_num_of_gates)
     TEST_START
         // Create an empty netlist with 4 gates
         std::shared_ptr<netlist> nl = create_empty_netlist();
-        std::shared_ptr<gate> g_0   = nl->create_gate(nl->get_unique_gate_id(), "INV", "gate_0");
-        std::shared_ptr<gate> g_1   = nl->create_gate(nl->get_unique_gate_id(), "INV", "gate_1");
-        std::shared_ptr<gate> g_2   = nl->create_gate(nl->get_unique_gate_id(), "INV", "gate_2");
-        std::shared_ptr<gate> g_3   = nl->create_gate(nl->get_unique_gate_id(), "INV", "gate_4");
+        std::shared_ptr<gate> g_0   = nl->create_gate(nl->get_unique_gate_id(), get_gate_type_by_name("INV"), "gate_0");
+        std::shared_ptr<gate> g_1   = nl->create_gate(nl->get_unique_gate_id(), get_gate_type_by_name("INV"), "gate_1");
+        std::shared_ptr<gate> g_2   = nl->create_gate(nl->get_unique_gate_id(), get_gate_type_by_name("INV"), "gate_2");
+        std::shared_ptr<gate> g_3   = nl->create_gate(nl->get_unique_gate_id(), get_gate_type_by_name("INV"), "gate_4");
 
         EXPECT_EQ(nl->get_gates().size(), (size_t)4);
 
@@ -206,15 +202,15 @@ TEST_F(netlist_test, check_add_gate){
         {
             // Add a gate the normal way
             std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::shared_ptr<gate> g_0 = nl->create_gate(MIN_GATE_ID+0, "INV", "gate_0");
+            std::shared_ptr<gate> g_0 = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("INV"), "gate_0");
             EXPECT_TRUE(nl->is_gate_in_netlist(g_0));
         }
         {
             // Add a gate, remove it afterwards and add it again (used to test the free_ids logic)
             std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::shared_ptr<gate> g_0 = nl->create_gate(MIN_GATE_ID+0, "INV", "gate_0");
+            std::shared_ptr<gate> g_0 = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("INV"), "gate_0");
             nl->delete_gate(g_0);
-            std::shared_ptr<gate> g_new = nl->create_gate("INV", "gate_0");
+            std::shared_ptr<gate> g_new = nl->create_gate(get_gate_type_by_name("INV"), "gate_0");
             EXPECT_TRUE(nl->is_gate_in_netlist(g_new));
         }
         // NEGATIVE
@@ -222,8 +218,8 @@ TEST_F(netlist_test, check_add_gate){
             // Try to add the same gate twice
             NO_COUT_TEST_BLOCK;
             std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::shared_ptr<gate> g_0   = nl->create_gate(MIN_GATE_ID+0, "INV", "gate_0");
-            std::shared_ptr<gate> g_1   = nl->create_gate(MIN_GATE_ID+0, "INV", "gate_0");
+            std::shared_ptr<gate> g_0   = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("INV"), "gate_0");
+            std::shared_ptr<gate> g_1   = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("INV"), "gate_0");
             EXPECT_NE(g_0, nullptr);
             EXPECT_EQ(g_1, nullptr);
         }
@@ -231,29 +227,22 @@ TEST_F(netlist_test, check_add_gate){
             // Try to add two gates with the same id
             NO_COUT_TEST_BLOCK;
             std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::shared_ptr<gate> g_0 = nl->create_gate(MIN_GATE_ID+0, "INV", "gate_0");
-            std::shared_ptr<gate> g_0_other = nl->create_gate(MIN_GATE_ID+0, "INV", "gate_0_other");
+            std::shared_ptr<gate> g_0 = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("INV"), "gate_0");
+            std::shared_ptr<gate> g_0_other = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("INV"), "gate_0_other");
             EXPECT_EQ(g_0_other, nullptr);
-        }
-        {
-            // Try to add a gate with an invalid gate_type
-            NO_COUT_TEST_BLOCK;
-            std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::shared_ptr<gate> g_0   = nl->create_gate(MIN_GATE_ID+0, "invalid_type", "gate_0");
-            EXPECT_EQ(g_0, nullptr);
         }
         {
             // Try to add a gate with an invalid id
             NO_COUT_TEST_BLOCK;
             std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::shared_ptr<gate> g_invalid   = nl->create_gate(INVALID_GATE_ID, "INV", "gate_0");
+            std::shared_ptr<gate> g_invalid   = nl->create_gate(INVALID_GATE_ID, get_gate_type_by_name("INV"), "gate_0");
             EXPECT_EQ(g_invalid, nullptr);
         }
         {
             // Try to add a gate with an invalid name (empty string)
             NO_COUT_TEST_BLOCK;
             std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::shared_ptr<gate> g_0   = nl->create_gate(MIN_GATE_ID+0, "INV", "");
+            std::shared_ptr<gate> g_0   = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("INV"), "");
             EXPECT_EQ(g_0, nullptr);
         }
     TEST_END
@@ -270,7 +259,7 @@ TEST_F(netlist_test, check_delete_gate){
         {
             // Add and delete an unconnected gate in a normal way
             std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::shared_ptr<gate> g_0 = nl->create_gate(MIN_GATE_ID+0, "INV", "gate_0");
+            std::shared_ptr<gate> g_0 = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("INV"), "gate_0");
             bool suc                  = nl->delete_gate(g_0);
             EXPECT_TRUE(suc);
             EXPECT_FALSE(nl->is_gate_in_netlist(g_0));
@@ -290,22 +279,22 @@ TEST_F(netlist_test, check_delete_gate){
         {
             // Add and delete global_gnd gate
             std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::shared_ptr<gate> g_0   = nl->create_gate(MIN_GATE_ID+0, "GND", "gate_0");
-            nl->mark_global_gnd_gate(g_0);
+            std::shared_ptr<gate> g_0   = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("GND"), "gate_0");
+            nl->mark_gnd_gate(g_0);
             bool suc = nl->delete_gate(g_0);
             EXPECT_TRUE(suc);
             EXPECT_FALSE(nl->is_gate_in_netlist(g_0));
-            EXPECT_TRUE(nl->get_global_gnd_gates().empty());
+            EXPECT_TRUE(nl->get_gnd_gates().empty());
         }
         {
             // Add and delete global_vcc gate
             std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::shared_ptr<gate> g_0   = nl->create_gate(MIN_GATE_ID+0, "VCC", "gate_0");
-            nl->mark_global_vcc_gate(g_0);
+            std::shared_ptr<gate> g_0   = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("VCC"), "gate_0");
+            nl->mark_vcc_gate(g_0);
             bool suc = nl->delete_gate(g_0);
             EXPECT_TRUE(suc);
             EXPECT_FALSE(nl->is_gate_in_netlist(g_0));
-            EXPECT_TRUE(nl->get_global_vcc_gates().empty());
+            EXPECT_TRUE(nl->get_vcc_gates().empty());
         }
         // NEGATIVE
         {
@@ -319,7 +308,7 @@ TEST_F(netlist_test, check_delete_gate){
             // Try to delete a gate which is not part of the netlist
             NO_COUT_TEST_BLOCK;
             std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::shared_ptr<gate> g_0   = nl->create_gate(MIN_GATE_ID+0, "INV", "gate_0");
+            std::shared_ptr<gate> g_0   = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("INV"), "gate_0");
             bool suc                    = nl->delete_gate(g_0);
             EXPECT_TRUE(suc);
         }
@@ -337,13 +326,13 @@ TEST_F(netlist_test, check_is_gate_in_netlist){
         {
             // Gate is part of the netlist
             std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::shared_ptr<gate> g_0 = nl->create_gate(MIN_GATE_ID+0, "INV", "gate_0");
+            std::shared_ptr<gate> g_0 = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("INV"), "gate_0");
             EXPECT_TRUE(nl->is_gate_in_netlist(g_0));
         }
         {
             // Gate is not part of the netlist
             std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::shared_ptr<gate> g_0   = nl->create_gate(MIN_GATE_ID+0, "INV", "gate_0");
+            std::shared_ptr<gate> g_0   = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("INV"), "gate_0");
             nl->delete_gate(g_0);
             // Gate isn't added
             EXPECT_FALSE(nl->is_gate_in_netlist(g_0));
@@ -367,7 +356,7 @@ TEST_F(netlist_test, check_get_gate_by_id){
         {
             // Get (existing) gate with id 3
             std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::shared_ptr<gate> g_0 = nl->create_gate(MIN_GATE_ID+3, "INV", "gate_0");
+            std::shared_ptr<gate> g_0 = nl->create_gate(MIN_GATE_ID+3, get_gate_type_by_name("INV"), "gate_0");
             EXPECT_EQ(nl->get_gate_by_id(MIN_GATE_ID+3), g_0);
         }
         {
@@ -438,65 +427,65 @@ TEST_F(netlist_test, check_get_gates){
 }
 
 /**
- * Testing the addition and deletion of global vcc and global gnd gates. The success is
- * verified via the functions get_global_vcc_gates, get_global_gnd_gates,
- * is_global_vcc_gate, is_global_gnd_gate
+ * Testing the addition and deletion of vcc and gnd gates. The success is
+ * verified via the functions get_vcc_gates, get_gnd_gates,
+ * is_vcc_gate, is_gnd_gate
  *
- * Functions: mark_global_vcc_gate, mark_global_gnd_gate, is_global_vcc_gate
- *           ,is_global_gnd_gate, get_global_vcc_gates, get_global_gnd_gates
+ * Functions: mark_vcc_gate, mark_gnd_gate, is_vcc_gate
+ *           ,is_gnd_gate, get_vcc_gates, get_gnd_gates
  */
-TEST_F(netlist_test, check_mark_global_vcc_gate){
+TEST_F(netlist_test, check_mark_vcc_gate){
     TEST_START
         {
             // Add a global vcc gate which wasn't added to the netlist before and unmark it after
             std::shared_ptr<netlist> nl = create_empty_netlist();
 
-            std::shared_ptr<gate> vcc_gate = nl->create_gate(MIN_GATE_ID+0, "VCC", "gate_vcc");
-            bool suc_mark                       = nl->mark_global_vcc_gate(vcc_gate);
+            std::shared_ptr<gate> vcc_gate = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("VCC"), "gate_vcc");
+            bool suc_mark                       = nl->mark_vcc_gate(vcc_gate);
             EXPECT_TRUE(suc_mark);
-            EXPECT_TRUE(nl->is_global_vcc_gate(vcc_gate));
-            EXPECT_EQ(nl->get_global_vcc_gates(), std::set<std::shared_ptr<gate>>({vcc_gate}));
+            EXPECT_TRUE(nl->is_vcc_gate(vcc_gate));
+            EXPECT_EQ(nl->get_vcc_gates(), std::set<std::shared_ptr<gate>>({vcc_gate}));
 
-            bool suc_unmark = nl->unmark_global_vcc_gate(vcc_gate);
+            bool suc_unmark = nl->unmark_vcc_gate(vcc_gate);
             EXPECT_TRUE(suc_unmark);
-            EXPECT_FALSE(nl->is_global_vcc_gate(vcc_gate));
+            EXPECT_FALSE(nl->is_vcc_gate(vcc_gate));
         }
 
         {
             // Add a global gnd gate which which wasn't added to the netlist before and unmark it after
             std::shared_ptr<netlist> nl = create_empty_netlist();
 
-            std::shared_ptr<gate> gnd_gate = nl->create_gate(MIN_GATE_ID+0, "GND", "gate_gnd");
-            bool suc_mark                       = nl->mark_global_gnd_gate(gnd_gate);
+            std::shared_ptr<gate> gnd_gate = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("GND"), "gate_gnd");
+            bool suc_mark                       = nl->mark_gnd_gate(gnd_gate);
             EXPECT_TRUE(suc_mark);
-            EXPECT_TRUE(nl->is_global_gnd_gate(gnd_gate));
-            EXPECT_EQ(nl->get_global_gnd_gates(), std::set<std::shared_ptr<gate>>({gnd_gate}));
+            EXPECT_TRUE(nl->is_gnd_gate(gnd_gate));
+            EXPECT_EQ(nl->get_gnd_gates(), std::set<std::shared_ptr<gate>>({gnd_gate}));
 
-            bool suc_unmark = nl->unmark_global_gnd_gate(gnd_gate);
+            bool suc_unmark = nl->unmark_gnd_gate(gnd_gate);
             EXPECT_TRUE(suc_unmark);
-            EXPECT_FALSE(nl->is_global_gnd_gate(gnd_gate));
+            EXPECT_FALSE(nl->is_gnd_gate(gnd_gate));
         }
         {
             // Add the same global vcc gate twice
             std::shared_ptr<netlist> nl = create_empty_netlist();
 
-            std::shared_ptr<gate> vcc_gate = nl->create_gate(MIN_GATE_ID+0, "VCC", "gate_vcc");
-            nl->mark_global_vcc_gate(vcc_gate);
-            bool suc = nl->mark_global_vcc_gate(vcc_gate);
+            std::shared_ptr<gate> vcc_gate = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("VCC"), "gate_vcc");
+            nl->mark_vcc_gate(vcc_gate);
+            bool suc = nl->mark_vcc_gate(vcc_gate);
             EXPECT_TRUE(suc);
-            EXPECT_TRUE(nl->is_global_vcc_gate(vcc_gate));
-            EXPECT_EQ(nl->get_global_vcc_gates(), std::set<std::shared_ptr<gate>>({vcc_gate}));
+            EXPECT_TRUE(nl->is_vcc_gate(vcc_gate));
+            EXPECT_EQ(nl->get_vcc_gates(), std::set<std::shared_ptr<gate>>({vcc_gate}));
         }
         {
             // Add the same global gnd gate twice
             std::shared_ptr<netlist> nl = create_empty_netlist();
 
-            std::shared_ptr<gate> gnd_gate = nl->create_gate(MIN_GATE_ID+0, "GND", "gate_gnd");
-            nl->mark_global_gnd_gate(gnd_gate);
-            bool suc = nl->mark_global_gnd_gate(gnd_gate);
+            std::shared_ptr<gate> gnd_gate = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("GND"), "gate_gnd");
+            nl->mark_gnd_gate(gnd_gate);
+            bool suc = nl->mark_gnd_gate(gnd_gate);
             EXPECT_TRUE(suc);
-            EXPECT_TRUE(nl->is_global_gnd_gate(gnd_gate));
-            EXPECT_EQ(nl->get_global_gnd_gates(), std::set<std::shared_ptr<gate>>({gnd_gate}));
+            EXPECT_TRUE(nl->is_gnd_gate(gnd_gate));
+            EXPECT_EQ(nl->get_gnd_gates(), std::set<std::shared_ptr<gate>>({gnd_gate}));
         }
 
         // NEGATIVE
@@ -505,9 +494,9 @@ TEST_F(netlist_test, check_mark_global_vcc_gate){
             NO_COUT_TEST_BLOCK;
             std::shared_ptr<netlist> nl = create_empty_netlist();
             std::shared_ptr<netlist> nl_other = create_empty_netlist();
-            std::shared_ptr<gate> gnd_gate  = nl_other->create_gate(MIN_GATE_ID+0, "GND", "gate_0");
+            std::shared_ptr<gate> gnd_gate  = nl_other->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("GND"), "gate_0");
 
-            bool suc = nl->mark_global_gnd_gate(gnd_gate);
+            bool suc = nl->mark_gnd_gate(gnd_gate);
 
             EXPECT_FALSE(suc);
         }
@@ -516,9 +505,9 @@ TEST_F(netlist_test, check_mark_global_vcc_gate){
             NO_COUT_TEST_BLOCK;
             std::shared_ptr<netlist> nl = create_empty_netlist();
             std::shared_ptr<netlist> nl_other = create_empty_netlist();
-            std::shared_ptr<gate> vcc_gate  = nl_other->create_gate(MIN_GATE_ID+0, "VCC", "gate_0");
+            std::shared_ptr<gate> vcc_gate  = nl_other->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("VCC"), "gate_0");
 
-            bool suc = nl->mark_global_vcc_gate(vcc_gate);
+            bool suc = nl->mark_vcc_gate(vcc_gate);
 
             EXPECT_FALSE(suc);
         }
@@ -527,93 +516,24 @@ TEST_F(netlist_test, check_mark_global_vcc_gate){
             NO_COUT_TEST_BLOCK;
             std::shared_ptr<netlist> nl = create_empty_netlist();
             std::shared_ptr<netlist> nl_other = create_empty_netlist();
-            std::shared_ptr<gate> gnd_gate  = nl_other->create_gate(MIN_GATE_ID+0, "GND", "gate_0");
-            nl_other->mark_global_gnd_gate(gnd_gate);
+            std::shared_ptr<gate> gnd_gate  = nl_other->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("GND"), "gate_0");
+            nl_other->mark_gnd_gate(gnd_gate);
 
-            nl->unmark_global_gnd_gate(gnd_gate);
+            nl->unmark_gnd_gate(gnd_gate);
 
-            EXPECT_TRUE(nl_other->is_global_gnd_gate(gnd_gate));
+            EXPECT_TRUE(nl_other->is_gnd_gate(gnd_gate));
         }
         {
             // Unmark a global_vcc gate, which is not part of the netlist (part of another netlist)
             NO_COUT_TEST_BLOCK;
             std::shared_ptr<netlist> nl = create_empty_netlist();
             std::shared_ptr<netlist> nl_other = create_empty_netlist();
-            std::shared_ptr<gate> vcc_gate  = nl_other->create_gate(MIN_GATE_ID+0, "VCC", "gate_0");
-            nl_other->mark_global_vcc_gate(vcc_gate);
+            std::shared_ptr<gate> vcc_gate  = nl_other->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("VCC"), "gate_0");
+            nl_other->mark_vcc_gate(vcc_gate);
 
-            nl->unmark_global_vcc_gate(vcc_gate);
+            nl->unmark_vcc_gate(vcc_gate);
 
-            EXPECT_TRUE(nl_other->is_global_vcc_gate(vcc_gate));
-        }
-
-    TEST_END
-}
-
-/**
- * Testing the function get_input_pin_types
- *
- * Functions: get_input_pin_types
- */
-TEST_F(netlist_test, check_get_input_pin_types){
-    TEST_START
-        {
-            // Get input pin types of an existing gate type (AND2)
-            std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::vector<std::string> exp_pin_types = {"I0", "I1"};
-            EXPECT_EQ(nl->get_input_pin_types("AND2"), exp_pin_types);
-        }
-        {
-            // Get input type on an non existing gate_type
-            std::shared_ptr<netlist> nl            = create_empty_netlist();
-            std::vector<std::string> exp_pin_types = {};
-            EXPECT_EQ(nl->get_input_pin_types("NEx_GATE_TYPE"), exp_pin_types);
-        }
-
-    TEST_END
-}
-
-/**
- * Testing the function get_output_pin_types
- *
- * Functions: get_output_pin_types
- */
-TEST_F(netlist_test, check_get_output_pin_types){
-    TEST_START
-        {
-            // Get output pin types of an existing gate type (OR2)
-            std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::vector<std::string> exp_pin_types = {"Q"};
-            EXPECT_EQ(nl->get_output_pin_types("FF"), exp_pin_types);
-        }
-        {
-            // Get output type on an non existing gate_type
-            std::shared_ptr<netlist> nl            = create_empty_netlist();
-            std::vector<std::string> exp_pin_types = {};
-            EXPECT_EQ(nl->get_output_pin_types("NEx_GATE_TYPE"), exp_pin_types);
-        }
-
-    TEST_END
-}
-
-/**
- * Testing the function get_inout_pin_types
- *
- * Functions: get_inout_pin_types
- */
-TEST_F(netlist_test, check_get_inout_pin_types){
-    TEST_START
-        {
-            // Get inout pin types of an existing gate type (AND2 <- has no INOUT pin_types)
-            std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::vector<std::string> exp_pin_types = {};
-            EXPECT_EQ(nl->get_inout_pin_types("AND2"), exp_pin_types);
-        }
-        {
-            // Get input type on an non existing gate_type
-            std::shared_ptr<netlist> nl            = create_empty_netlist();
-            std::vector<std::string> exp_pin_types = {};
-            EXPECT_EQ(nl->get_inout_pin_types("NEx_GATE_TYPE"), exp_pin_types);
+            EXPECT_TRUE(nl_other->is_vcc_gate(vcc_gate));
         }
 
     TEST_END
@@ -779,17 +699,6 @@ TEST_F(netlist_test, check_delete_net){
             EXPECT_FALSE(nl->is_net_in_netlist(net_0));
             EXPECT_FALSE(nl->is_global_output_net(net_0));
         }
-        {
-            // Delete a global inout net
-            std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::shared_ptr<net> net_0  = nl->create_net(MIN_NET_ID+0, "net_0");
-            nl->mark_global_inout_net(net_0);
-            bool suc = nl->delete_net(net_0);
-
-            EXPECT_TRUE(suc);
-            EXPECT_FALSE(nl->is_net_in_netlist(net_0));
-            EXPECT_FALSE(nl->is_global_inout_net(net_0));
-        }
         // NEGATIVE
         {
             // Try to delete a nullptr
@@ -849,7 +758,7 @@ TEST_F(netlist_test, check_get_nets){
             // Get all nets of the example netlist
             std::shared_ptr<netlist> nl = create_example_netlist();
             // The expected result
-            std::set<std::shared_ptr<net>> ex_nets;
+            std::unordered_set<std::shared_ptr<net>> ex_nets;
             for (int id : std::set<int>({(int) MIN_NET_ID+13, (int) MIN_NET_ID+30,(int) MIN_NET_ID+20, (int) MIN_NET_ID+045, (int) MIN_NET_ID+78}))
             {
                 ex_nets.insert(nl->get_net_by_id(id));
@@ -896,25 +805,25 @@ TEST_F(netlist_test, check_get_nets_by_name){
             std::shared_ptr<net> net_0 = nl->create_net(MIN_NET_ID+0, "net_name");
             std::shared_ptr<net> net_1 = nl->create_net(MIN_NET_ID+1, "other_net_name");
 
-            EXPECT_EQ(nl->get_nets(), std::set<std::shared_ptr<net>>({net_0, net_1}));
-            EXPECT_EQ(nl->get_nets("net_name"), std::set<std::shared_ptr<net>>({net_0}));
+            EXPECT_EQ(nl->get_nets(), std::unordered_set<std::shared_ptr<net>>({net_0, net_1}));
+            EXPECT_EQ(nl->get_nets("net_name"), std::unordered_set<std::shared_ptr<net>>({net_0}));
         }
         {
             // Call with an non existing net name
             NO_COUT_TEST_BLOCK;
             std::shared_ptr<netlist> nl = create_empty_netlist();
-            EXPECT_EQ(nl->get_nets("not_existing_net"), std::set<std::shared_ptr<net>>());
+            EXPECT_EQ(nl->get_nets("not_existing_net"), std::unordered_set<std::shared_ptr<net>>());
         }
 
     TEST_END
 }
 
 /**
- * Testing the addition of global input/output/inout nets. For verification
- * the function is_global_input/output/inout_net is called
+ * Testing the addition of global input/output nets. For verification
+ * the function is_global_input/output_net is called
  *
- * Functions: mark_global_input_net, mark_global_output_net, mark_global_inout_net,
- *            unmark_global_input_net, unmark_global_output_net, unmark_global_inout_net
+ * Functions: mark_global_input_net, mark_global_output_net,
+ *            unmark_global_input_net, unmark_global_output_net
  */
 TEST_F(netlist_test, check_add_global_net){
     TEST_START
@@ -936,15 +845,6 @@ TEST_F(netlist_test, check_add_global_net){
 
             EXPECT_TRUE(suc);
             EXPECT_TRUE(nl->is_global_output_net(net_0));
-        }
-        {
-            // Add a global inout net which isn't part of the netlist yet
-            std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::shared_ptr<net> net_0  = nl->create_net(MIN_NET_ID+0, "net_0");
-            bool suc                    = nl->mark_global_inout_net(net_0);
-
-            EXPECT_TRUE(suc);
-            EXPECT_TRUE(nl->is_global_inout_net(net_0));
         }
         // Unmark functions (normal usage)
         {
@@ -974,21 +874,6 @@ TEST_F(netlist_test, check_add_global_net){
             ASSERT_FALSE(nl->is_global_output_net(net_0));
         }
         {
-            // Mark and unmark a global inout net
-            std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::shared_ptr<net> net_0 = nl->create_net(MIN_NET_ID+0, "net_0");
-            bool suc_mark              = nl->mark_global_inout_net(net_0);
-
-            ASSERT_TRUE(suc_mark);
-            ASSERT_TRUE(nl->is_global_inout_net(net_0));
-
-            bool suc_unmark = nl->unmark_global_inout_net(net_0);
-            ASSERT_TRUE(suc_unmark);
-            ASSERT_FALSE(nl->is_global_inout_net(net_0));
-        }
-
-
-        {
             // Add a global input net which was already added (as normal net)
             std::shared_ptr<netlist> nl = create_empty_netlist();
             std::shared_ptr<net> net_0  = nl->create_net(MIN_NET_ID+0, "net_0");
@@ -1005,15 +890,6 @@ TEST_F(netlist_test, check_add_global_net){
 
             EXPECT_TRUE(suc);
             EXPECT_TRUE(nl->is_global_output_net(net_0));
-        }
-        {
-            // Add a global inout net which was already added (as normal net)
-            std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::shared_ptr<net> net_0  = nl->create_net(MIN_NET_ID+0, "net_0");
-            bool suc                    = nl->mark_global_inout_net(net_0);
-
-            EXPECT_TRUE(suc);
-            EXPECT_TRUE(nl->is_global_inout_net(net_0));
         }
         {
             // Add the same global input net twice
@@ -1035,16 +911,6 @@ TEST_F(netlist_test, check_add_global_net){
             EXPECT_TRUE(suc);
             EXPECT_TRUE(nl->is_global_output_net(net_0));
         }
-        {
-            // Add the same global inout net twice
-            std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::shared_ptr<net> net_0  = nl->create_net(MIN_NET_ID+0, "net_0");
-            nl->mark_global_inout_net(net_0);
-            bool suc = nl->mark_global_inout_net(net_0);
-
-            EXPECT_TRUE(suc);
-            EXPECT_TRUE(nl->is_global_inout_net(net_0));
-        }
         // NEGATIVE
         // Mark functions
         {
@@ -1052,12 +918,11 @@ TEST_F(netlist_test, check_add_global_net){
             NO_COUT_TEST_BLOCK;
             std::shared_ptr<netlist> nl = create_empty_netlist();
             std::shared_ptr<netlist> nl_other = create_empty_netlist();
-            std::shared_ptr<net> net_0  = nl_other->create_net(MIN_NET_ID+0, "net_0");
+            std::shared_ptr<net> net_0 = nl_other->create_net(MIN_NET_ID + 0, "net_0");
 
             bool suc = nl->mark_global_input_net(net_0);
 
             EXPECT_FALSE(suc);
-            EXPECT_FALSE(nl->is_global_inout_net(net_0));
         }
         {
             // Mark an output-net, which is not part of the netlist (part of another netlist)
@@ -1070,18 +935,6 @@ TEST_F(netlist_test, check_add_global_net){
 
             EXPECT_FALSE(suc);
             EXPECT_FALSE(nl->is_global_output_net(net_0));
-        }
-        {
-            // Mark an inout-net, which is not part of the netlist (part of another netlist)
-            NO_COUT_TEST_BLOCK;
-            std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::shared_ptr<netlist> nl_other = create_empty_netlist();
-            std::shared_ptr<net> net_0  = nl_other->create_net(MIN_NET_ID+0, "net_0");
-
-            bool suc = nl->mark_global_inout_net(net_0);
-
-            EXPECT_FALSE(suc);
-            EXPECT_FALSE(nl->is_global_inout_net(net_0));
         }
         // Unmark functions
         {
@@ -1101,16 +954,6 @@ TEST_F(netlist_test, check_add_global_net){
             std::shared_ptr<net> net_0  = nl->create_net(MIN_NET_ID+0, "net_0");
 
             bool suc = nl->unmark_global_output_net(net_0);
-
-            EXPECT_FALSE(suc);
-        }
-        {
-            // Unmark a global inout-net, which isn't marked as such
-            NO_COUT_TEST_BLOCK;
-            std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::shared_ptr<net> net_0  = nl->create_net(MIN_NET_ID+0, "net_0");
-
-            bool suc = nl->unmark_global_inout_net(net_0);
 
             EXPECT_FALSE(suc);
         }
@@ -1140,27 +983,14 @@ TEST_F(netlist_test, check_add_global_net){
             EXPECT_FALSE(suc);
             EXPECT_TRUE(nl_other->is_global_output_net(net_0));
         }
-        {
-            // Unmark a global inout-net, which is part of another netlist
-            NO_COUT_TEST_BLOCK;
-            std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::shared_ptr<netlist> nl_other = create_empty_netlist();
-            std::shared_ptr<net> net_0  = nl_other->create_net(MIN_NET_ID+0, "net_0");
-            nl_other->mark_global_inout_net(net_0);
-
-            bool suc = nl->unmark_global_inout_net(net_0);
-
-            EXPECT_FALSE(suc);
-            EXPECT_TRUE(nl_other->is_global_inout_net(net_0));
-        }
     TEST_END
 }
 
 /**
- * Testing the functions is_global_input/output/inout_net. Also tests the access via
- * get_global_input/output/inout_nets
+ * Testing the functions is_global_input/output_net. Also tests the access via
+ * get_global_input/output_nets
  *
- * Functions: is_global_input_net, is_global_output_net, is_global_inout_net,
+ * Functions: is_global_input_net, is_global_output_net, is_global_net,
  *            get_global_input_nets, get_global_out_nets, get_global_out_nets
  */
 TEST_F(netlist_test, check_is_global_net)
@@ -1185,15 +1015,6 @@ TEST_F(netlist_test, check_is_global_net)
             EXPECT_EQ(nl->get_global_output_nets(), std::set<std::shared_ptr<net>>({net_0}));
         }
         {
-            // The net is a global inout net
-            std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::shared_ptr<net> net_0  = nl->create_net(MIN_NET_ID+0, "net_0");
-            nl->mark_global_inout_net(net_0);
-
-            EXPECT_TRUE(nl->is_global_inout_net(net_0));
-            EXPECT_EQ(nl->get_global_inout_nets(), std::set<std::shared_ptr<net>>({net_0}));
-        }
-        {
             // The net isn't a global input net
             std::shared_ptr<netlist> nl = create_empty_netlist();
             std::shared_ptr<net> net_0  = nl->create_net(MIN_NET_ID+0, "net_0");
@@ -1208,14 +1029,6 @@ TEST_F(netlist_test, check_is_global_net)
 
             EXPECT_FALSE(nl->is_global_output_net(net_0));
             EXPECT_TRUE(nl->get_global_output_nets().empty());
-        }
-        {
-            // The net isn't a global output net
-            std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::shared_ptr<net> net_0  = nl->create_net(MIN_NET_ID+1, "net_0");
-
-            EXPECT_FALSE(nl->is_global_inout_net(net_0));
-            EXPECT_TRUE(nl->get_global_inout_nets().empty());
         }
     TEST_END
 }
@@ -1245,11 +1058,11 @@ TEST_F(netlist_test, check_get_top_module)
     TEST_END
 }
 
- /**
- * Testing the creation of a module
- *
- * Functions: create_module
- */
+/**
+* Testing the creation of a module
+*
+* Functions: create_module
+*/
 TEST_F(netlist_test, check_create_module)
 {
     TEST_START
@@ -1391,7 +1204,7 @@ TEST_F(netlist_test, check_delete_module)
             std::shared_ptr<module> child = nl->create_module(MIN_MODULE_ID+2, "module_2", test_module);
 
             // Add a net and a gate to the test_module
-            std::shared_ptr<gate> gate_0 = nl->create_gate("INV", "gate_0");
+            std::shared_ptr<gate> gate_0 = nl->create_gate(get_gate_type_by_name("INV"), "gate_0");
             std::shared_ptr<net> net_0 = nl->create_net("net_0");
             test_module->assign_gate(gate_0);
             //test_module->assign_net(net_0);
@@ -1511,10 +1324,4 @@ TEST_F(netlist_test, check_get_unique_module_id) {
         }
     TEST_END
 }
-
-
-
-
-
-
 
