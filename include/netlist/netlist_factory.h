@@ -68,8 +68,8 @@ namespace netlist_factory
     NETLIST_API std::shared_ptr<netlist> load_netlist(const hal::path& hal_file);
 
     /**
-     * Creates a new netlist entirely from program options.<br>
-     * Invokes parsers or serializers as needed.
+     * Creates a new netlist entirely from program options.
+     * Invokes parsers or serializers as needed.<br>
      *
      * @param[in] args - Command line options.
      * @returns The new netlist.

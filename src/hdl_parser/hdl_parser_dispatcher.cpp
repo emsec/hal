@@ -5,10 +5,7 @@
 #include "netlist/netlist.h"
 #include "netlist/netlist_factory.h"
 
-#include "netlist/event_system/gate_event_handler.h"
-#include "netlist/event_system/module_event_handler.h"
-#include "netlist/event_system/net_event_handler.h"
-#include "netlist/event_system/netlist_event_handler.h"
+#include "netlist/event_system/event_controls.h"
 
 #include "hdl_parser/hdl_parser.h"
 #include "hdl_parser/hdl_parser_verilog.h"
@@ -92,10 +89,7 @@ namespace hdl_parser_dispatcher
 
         std::shared_ptr<netlist> g = nullptr;
 
-        netlist_event_handler::enable(false);
-        gate_event_handler::enable(false);
-        net_event_handler::enable(false);
-        module_event_handler::enable(false);
+        // event_controls::enable_all(false);
 
         if (parser_name == "vhdl")
             g = hdl_parser_vhdl(ss).parse(gate_library);
@@ -109,10 +103,7 @@ namespace hdl_parser_dispatcher
             g->set_input_filename(file_name.string());
         }
 
-        netlist_event_handler::enable(true);
-        gate_event_handler::enable(true);
-        net_event_handler::enable(true);
-        module_event_handler::enable(true);
+        // event_controls::enable_all(true);
 
         if (g == nullptr)
         {

@@ -8,6 +8,8 @@
 #include "netlist/netlist.h"
 #include "netlist/persistent/netlist_serializer.h"
 
+#include "netlist/event_system/event_controls.h"
+
 #include <fstream>
 #include <iostream>
 

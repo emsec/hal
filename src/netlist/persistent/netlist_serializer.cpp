@@ -6,10 +6,7 @@
 #include "netlist/net.h"
 #include "netlist/netlist.h"
 
-#include "netlist/event_system/gate_event_handler.h"
-#include "netlist/event_system/module_event_handler.h"
-#include "netlist/event_system/net_event_handler.h"
-#include "netlist/event_system/netlist_event_handler.h"
+#include "netlist/event_system/event_controls.h"
 
 #include "netlist/gate_library/gate_library_manager.h"
 
@@ -478,10 +475,7 @@ namespace netlist_serializer
     {
         auto begin_time = std::chrono::high_resolution_clock::now();
 
-        netlist_event_handler::enable(false);
-        gate_event_handler::enable(false);
-        net_event_handler::enable(false);
-        module_event_handler::enable(false);
+        // event_controls::enable_all(false);
 
         FILE* pFile = fopen(hal_file.string().c_str(), "rb");
         if (pFile == NULL)
@@ -527,10 +521,7 @@ namespace netlist_serializer
             return nullptr;
         }
 
-        netlist_event_handler::enable(true);
-        gate_event_handler::enable(true);
-        net_event_handler::enable(true);
-        module_event_handler::enable(true);
+        // event_controls::enable_all(true);
 
         log_info("netlist.persistent", "deserialized '{}' in {:2.2f} seconds", hal_file.string(), DURATION(begin_time));
         return netlist;
