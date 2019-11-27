@@ -22,7 +22,7 @@
 #include <QVBoxLayout>
 
 module_widget::module_widget(QWidget* parent) : content_widget("Modules", parent),
-    m_tree_view(new QTreeView(this)),
+    m_tree_view(new module_tree_view(this)),
     m_module_proxy_model(new module_proxy_model(this))
 {
     connect(m_tree_view, &QTreeView::customContextMenuRequested, this, &module_widget::handle_tree_view_context_menu_requested);

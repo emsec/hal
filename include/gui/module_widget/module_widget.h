@@ -39,6 +39,7 @@
 #include <QList>
 #include <QObject>
 #include <QSortFilterProxyModel>
+#include "module_tree_view.h"
 
 class module_proxy_model;
 
@@ -61,7 +62,7 @@ public Q_SLOTS:
     void handle_tree_selection_changed(const QItemSelection& selected, const QItemSelection& deselected);
 
 private:
-    QTreeView* m_tree_view;
+    module_tree_view* m_tree_view;
     searchbar m_searchbar;
 
     QAction* m_filter_action;
