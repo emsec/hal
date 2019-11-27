@@ -114,8 +114,10 @@ void module_widget::handle_tree_view_context_menu_requested(const QPoint& point)
     if (clicked == &add_selection_action)
         g_netlist_relay.debug_add_selection_to_module(g_netlist_relay.get_module_model()->get_item(m_module_proxy_model->mapToSource(index))->id());
 
-    if (clicked == &add_child_action)
+    if (clicked == &add_child_action){
         g_netlist_relay.debug_add_child_module(g_netlist_relay.get_module_model()->get_item(m_module_proxy_model->mapToSource(index))->id());
+        m_tree_view->setExpanded(index, true);
+    }
 
     if (clicked == &change_name_action)
         g_netlist_relay.debug_change_module_name(g_netlist_relay.get_module_model()->get_item(m_module_proxy_model->mapToSource(index))->id());
@@ -125,6 +127,7 @@ void module_widget::handle_tree_view_context_menu_requested(const QPoint& point)
 
     if (clicked == &delete_action)
         g_netlist_relay.debug_delete_module(g_netlist_relay.get_module_model()->get_item(m_module_proxy_model->mapToSource(index))->id());
+
 }
 
 void module_widget::handle_tree_selection_changed(const QItemSelection& selected, const QItemSelection& deselected)
