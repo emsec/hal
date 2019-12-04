@@ -68,20 +68,19 @@ private Q_SLOTS:
     void handle_global_setting_changed(void* sender, const QString& key, const QVariant& value);
 
 private:
-    void paintEvent(QPaintEvent* event) Q_DECL_OVERRIDE;
-    void drawForeground(QPainter* painter, const QRectF& rect) Q_DECL_OVERRIDE;
-    void mousePressEvent(QMouseEvent* event) Q_DECL_OVERRIDE;
-    void mouseReleaseEvent(QMouseEvent* event) Q_DECL_OVERRIDE;
-    void mouseMoveEvent(QMouseEvent* event) Q_DECL_OVERRIDE;
-    void mouseDoubleClickEvent(QMouseEvent* event) Q_DECL_OVERRIDE;
-    void dragEnterEvent(QDragEnterEvent *event) Q_DECL_OVERRIDE;
-    void dragLeaveEvent(QDragLeaveEvent *event) Q_DECL_OVERRIDE;
-    void dragMoveEvent(QDragMoveEvent *event) Q_DECL_OVERRIDE;
-    void dropEvent(QDropEvent *event) Q_DECL_OVERRIDE;
-//    void wheelEvent(QWheelEvent* event) Q_DECL_OVERRIDE;
-    void keyPressEvent(QKeyEvent* event) Q_DECL_OVERRIDE;
-    void keyReleaseEvent(QKeyEvent* event) Q_DECL_OVERRIDE;
-    void resizeEvent(QResizeEvent* event) Q_DECL_OVERRIDE;
+    void paintEvent(QPaintEvent* event) override;
+    void drawForeground(QPainter* painter, const QRectF& rect) override;
+    void mousePressEvent(QMouseEvent* event) override;
+    void mouseMoveEvent(QMouseEvent* event) override;
+    void mouseDoubleClickEvent(QMouseEvent* event) override;
+    void dragEnterEvent(QDragEnterEvent *event) override;
+    void dragLeaveEvent(QDragLeaveEvent *event) override;
+    void dragMoveEvent(QDragMoveEvent *event) override;
+    void dropEvent(QDropEvent *event) override;
+    void wheelEvent(QWheelEvent* event) override;
+    void keyPressEvent(QKeyEvent* event) override;
+    void keyReleaseEvent(QKeyEvent* event) override;
+    void resizeEvent(QResizeEvent* event) override;
 
     void initialize_settings();
 
@@ -93,14 +92,13 @@ private:
 
     bool item_draggable(graphics_item* item);
 
+    void gentle_zoom(const qreal factor);
+
     graph_widget* m_graph_widget;
 
     graphics_item* m_item;
 
     bool m_minimap_enabled;
-
-    bool m_antialiasing_enabled;
-    bool m_cosmetic_nets_enabled;
 
     bool m_grid_enabled;
     bool m_grid_clusters_enabled;
@@ -113,10 +111,13 @@ private:
 
     QPoint m_move_position;
     Qt::KeyboardModifier m_move_modifier;
-    QPointF m_zoom_scene_position;
-    qreal m_min_scale;
 
-    int m_zoom;
+    Qt::KeyboardModifier m_zoom_modifier;
+    qreal m_zoom_factor_base;
+    QPointF target_scene_pos;
+    QPointF target_viewport_pos;
+
+    qreal m_min_scale;
 };
 
 #endif // GRAPH_GRAPHICS_VIEW_H
