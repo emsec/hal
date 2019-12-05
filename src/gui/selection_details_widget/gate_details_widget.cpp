@@ -174,7 +174,6 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
     connect(&g_netlist_relay, &netlist_relay::module_gate_removed, this, &gate_details_widget::handle_module_gate_removed);
 
     //handle netlist modifications reagarding nets
-    connect(&g_netlist_relay, &netlist_relay::net_created, this, &gate_details_widget::handle_net_created);
     connect(&g_netlist_relay, &netlist_relay::net_name_changed, this, &gate_details_widget::handle_net_name_changed);
     connect(&g_netlist_relay, &netlist_relay::net_src_changed, this, &gate_details_widget::handle_net_src_changed);
     connect(&g_netlist_relay, &netlist_relay::net_dst_added, this, &gate_details_widget::handle_net_dst_added);
@@ -204,31 +203,6 @@ void gate_details_widget::handle_gate_removed(std::shared_ptr<gate> gate)
         m_general_table->setHidden(true);
         m_scroll_area->setHidden(true);
     }
-}
-
-void gate_details_widget::handle_net_created(std::shared_ptr<net> net)
-{
-    bool update_needed = false;
-
-    //check if currently shown gate is src of newly created net
-    if (m_current_id == net->get_src().get_gate()->get_id())
-        update_needed = true;
-
-    //check if currently shown gate is dst of newly created net
-    if (!update_needed)
-    {
-        for (auto& e : net->get_dsts())
-        {
-            if (m_current_id == e.get_gate()->get_id())
-            {
-                update_needed = true;
-                break;
-            }
-        }
-    }
-
-    if (update_needed)
-        update(m_current_id);
 }
 
 void gate_details_widget::handle_net_name_changed(std::shared_ptr<net> net)

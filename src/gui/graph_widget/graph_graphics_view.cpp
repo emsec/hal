@@ -1,11 +1,15 @@
 #include "graph_widget/graph_graphics_view.h"
 
 #include "core/log.h"
+
+#include "netlist/gate.h"
+#include "netlist/module.h"
+#include "netlist/net.h"
+
 #include "gui/graph_widget/contexts/graph_context.h"
 #include "gui/graph_widget/graph_widget.h"
 #include "gui/graph_widget/graph_widget_constants.h"
 #include "gui/graph_widget/graphics_scene.h"
-#include "gui/graph_widget/graphics_view_zoom.h"
 #include "gui/graph_widget/items/graphics_gate.h"
 #include "gui/graph_widget/items/graphics_item.h"
 #include "gui/graph_widget/items/io_graphics_net.h"
@@ -16,14 +20,10 @@
 #include "gui/graph_widget/items/utility_items/drag_shadow_gate.h"
 #include "gui/gui_globals.h"
 #include "gui/gui_utils/netlist.h"
-#include "netlist/gate.h"
-#include "netlist/module.h"
-#include "netlist/net.h"
 
 #include <QApplication>
 #include <QAction>
 #include <QColorDialog>
-#include <QDebug>
 #include <QDrag>
 #include <QInputDialog>
 #include <QLabel>
@@ -37,12 +37,15 @@
 #include <QWidgetAction>
 #include <qmath.h>
 
-graph_graphics_view::graph_graphics_view(graph_widget* parent)
-    : QGraphicsView(parent), m_minimap_enabled(false), m_antialiasing_enabled(false), m_cosmetic_nets_enabled(false), m_grid_enabled(true), m_grid_clusters_enabled(true),
-      m_grid_type(graph_widget_constants::grid_type::lines)
+graph_graphics_view::graph_graphics_view(graph_widget* parent) : QGraphicsView(parent),
+    m_graph_widget(parent),
+    m_minimap_enabled(false),
+    m_grid_enabled(true),
+    m_grid_clusters_enabled(true),
+    m_grid_type(graph_widget_constants::grid_type::lines),
+    m_zoom_modifier(Qt::NoModifier),
+    m_zoom_factor_base(1.0015)
 {
-    m_graph_widget = parent;
-
     connect(&g_selection_relay, &selection_relay::subfocus_changed, this, &graph_graphics_view::conditional_update);
     connect(this, &graph_graphics_view::customContextMenuRequested, this, &graph_graphics_view::show_context_menu);
     connect(&g_settings_relay, &settings_relay::setting_changed, this, &graph_graphics_view::handle_global_setting_changed);
@@ -54,9 +57,7 @@ graph_graphics_view::graph_graphics_view(graph_widget* parent)
     setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
 
     setAcceptDrops(true);
-
-    graphics_view_zoom* z = new graphics_view_zoom(this);
-    z->set_modifiers(Qt::NoModifier);
+    setMouseTracking(true);
 }
 
 void graph_graphics_view::initialize_settings()
@@ -96,11 +97,6 @@ void graph_graphics_view::handle_isolation_view_action()
         }
     }
 }
-
-//////////
-// If we have time:
-// This class should NOT directly perform any of these actions.
-// There should be a global manager for this.
 
 void graph_graphics_view::handle_move_action(QAction* action)
 {
@@ -185,7 +181,6 @@ void graph_graphics_view::handle_rename_action()
         }
     }
 }
-//////////
 
 void graph_graphics_view::adjust_min_scale()
 {
@@ -250,18 +245,6 @@ void graph_graphics_view::mousePressEvent(QMouseEvent* event)
         if (event->button() == Qt::LeftButton)
             m_move_position = event->pos();
     }
-    else if (event->button() == Qt::MidButton)
-    {
-        m_zoom_scene_position = mapToScene(event->pos());
-        // HIDE CURSOR
-        // SHOW DUMMY ???
-        // ZOOM
-        // MOVE ACTUAL CURSOR TO FINAL POSITION
-        // SHOW ACTUAL CURSOR
-
-        QCursor cursor(Qt::BlankCursor);
-        setCursor(cursor);
-    }
     else if (event->button() == Qt::LeftButton)
     {
         graphics_item* item = static_cast<graphics_item*>(itemAt(event->pos()));
@@ -283,22 +266,18 @@ void graph_graphics_view::mousePressEvent(QMouseEvent* event)
         QGraphicsView::mousePressEvent(event);
 }
 
-void graph_graphics_view::mouseReleaseEvent(QMouseEvent* event)
-{
-    if (event->button() == Qt::MidButton)
-    {
-        QCursor cursor;
-        cursor.setPos(mapToGlobal(mapFromScene(m_zoom_scene_position)));
-        setCursor(cursor);
-    }
-    else
-        QGraphicsView::mouseReleaseEvent(event);
-}
-
 void graph_graphics_view::mouseMoveEvent(QMouseEvent* event)
 {
     if (!scene())
         return;
+
+    QPointF delta = target_viewport_pos - event->pos();
+
+    if (qAbs(delta.x()) > 5 || qAbs(delta.y()) > 5)
+    {
+        target_viewport_pos = event->pos();
+        target_scene_pos = mapToScene(event->pos());
+    }
 
     if (event->buttons().testFlag(Qt::LeftButton))
     {
@@ -409,6 +388,19 @@ void graph_graphics_view::dropEvent(QDropEvent *event)
     else
     {
         QGraphicsView::dropEvent(event);
+    }
+}
+
+void graph_graphics_view::wheelEvent(QWheelEvent* event)
+{
+    if (QApplication::keyboardModifiers() == m_zoom_modifier)
+    {
+        if (event->orientation() == Qt::Vertical)
+        {
+            qreal angle = event->angleDelta().y();
+            qreal factor = qPow(m_zoom_factor_base, angle);
+            gentle_zoom(factor);
+        }
     }
 }
 
@@ -614,6 +606,15 @@ bool graph_graphics_view::item_draggable(graphics_item* item)
 {
     hal::item_type type = item->item_type();
     return type == hal::item_type::gate || type == hal::item_type::module;
+}
+
+void graph_graphics_view::gentle_zoom(const qreal factor)
+{
+    scale(factor, factor);
+    centerOn(target_scene_pos);
+    QPointF delta_viewport_pos = target_viewport_pos - QPointF(viewport()->width() / 2.0, viewport()->height() / 2.0);
+    QPointF viewport_center = mapFromScene(target_scene_pos) - delta_viewport_pos;
+    centerOn(mapToScene(viewport_center.toPoint()));
 }
 
 void graph_graphics_view::handle_select_outputs()

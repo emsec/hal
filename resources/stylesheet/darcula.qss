@@ -1475,6 +1475,11 @@ QTreeView::item:selected {
     border: none;
 }
 
+QMenu::item:disabled{
+    /*background: #ffffff;*/
+    color: #777777;
+}
+
 /*
 COLOR CONTRASTS
 BACKGROUND #090b0d
