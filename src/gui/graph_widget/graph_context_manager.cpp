@@ -162,28 +162,26 @@ void graph_context_manager::handle_net_name_changed(const std::shared_ptr<net> n
 
 void graph_context_manager::handle_net_src_changed(const std::shared_ptr<net> n) const
 {
-    if(n->is_unrouted())
-        return;
-
     for(graph_context* context : m_graph_contexts)
-        if(context->gates().contains(n->get_src().get_gate()->get_id()))
+    {
+        if(context->nets().contains(n->get_id()) || (context->is_showing_net_src(n->get_id()) && (n->is_global_output_net() || context->is_showing_net_dst(n->get_id()))))
         {
             context->apply_changes();
             context->schedule_scene_update();
         }
+    }
 }
 
 void graph_context_manager::handle_net_dst_added(const std::shared_ptr<net> n, const u32 dst_gate_id) const
 {
-    if(n->is_unrouted())
-        return;
-
     for(graph_context* context : m_graph_contexts)
-        if(context->gates().contains(n->get_src().get_gate()->get_id()))
+    {
+        if(context->nets().contains(n->get_id()) || (context->is_showing_net_dst(n->get_id()) && (n->is_global_input_net() || context->is_showing_net_src(n->get_id()))))
         {
             context->apply_changes();
-            context->schedule_scene_update();
+            context->schedule_scene_update();  
         }
+    }
 }
 
 void graph_context_manager::handle_net_dst_removed(const std::shared_ptr<net> n, const u32 dst_gate_id) const
