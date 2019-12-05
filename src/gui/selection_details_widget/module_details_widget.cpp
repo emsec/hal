@@ -219,7 +219,9 @@ void module_details_widget::handle_net_dst_added(const std::shared_ptr<net> n, c
 
 void module_details_widget::handle_net_dst_removed(const std::shared_ptr<net> n, const u32 dst_gate_id)
 {
-    update(m_current_id);
+    auto g = g_netlist->get_gate_by_id(dst_gate_id);
+    if(g_netlist->get_module_by_id(m_current_id)->contains_gate(g))
+        update(m_current_id);
 }
 
 void module_details_widget::handle_tree_double_clicked(const QModelIndex &index)
