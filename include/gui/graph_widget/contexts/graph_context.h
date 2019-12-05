@@ -36,6 +36,9 @@ public:
     bool is_showing_module(const u32 id) const;
     bool is_showing_module(const u32 id, const QSet<u32>& minus_modules, const QSet<u32>& minus_gates, const QSet<u32>& plus_modules, const QSet<u32>& plus_gates) const;
 
+    bool is_showing_net_src(const u32 net_id) const;
+    bool is_showing_net_dst(const u32 net_id) const;
+
     const QSet<u32>& modules() const;
     const QSet<u32>& gates() const;
     const QSet<u32>& nets() const;

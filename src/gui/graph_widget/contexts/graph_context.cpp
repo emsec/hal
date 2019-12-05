@@ -221,6 +221,37 @@ bool graph_context::is_showing_module(const u32 id, const QSet<u32>& minus_modul
     return (m_gates - m_removed_gates) + m_added_gates == (gates - minus_gates) + plus_gates && (m_modules - m_removed_modules) + m_added_modules == (modules - minus_modules) + plus_modules;
 }
 
+bool graph_context::is_showing_net_src(const u32 net_id) const
+{
+    auto net = g_netlist->get_net_by_id(net_id);
+    auto src_gate = net->get_src().get_gate();
+
+    if(src_gate != nullptr)
+    {
+        if(m_gates.contains(src_gate->get_id()))
+            return true;
+    }
+
+    return false;
+}
+
+bool graph_context::is_showing_net_dst(const u32 net_id) const
+{
+    auto net = g_netlist->get_net_by_id(net_id);
+    auto dst_pins = net->get_dsts();
+
+    for(auto pin : dst_pins)
+    {
+        if(pin.get_gate() != nullptr)
+        {
+            if(m_gates.contains(pin.get_gate()->get_id()))
+                return true;
+        }
+    }
+
+    return false;
+}
+
 const QSet<u32>& graph_context::modules() const
 {
     return m_modules;
