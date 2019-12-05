@@ -1,3 +1,4 @@
+/*
 #include "netlist/gate_library/gate_library_manager.h"
 #include "netlist/netlist.h"
 #include "netlist/netlist_factory.h"
@@ -10,8 +11,8 @@
 #include <iostream>
 #include <netlist/gate.h>
 #include <netlist/net.h>
-
-using namespace test_utils;
+*/
+//using namespace test_utils;
 
 // NOTE, FIXME: The gate library must tests must be updated, due to the changes of the gate library system
 #ifdef DONT_BUILD
