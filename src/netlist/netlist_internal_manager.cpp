@@ -419,10 +419,12 @@ bool netlist_internal_manager::delete_module(std::shared_ptr<module> to_remove)
         to_remove->m_parent->m_submodules_map[sm->get_id()] = sm;
         to_remove->m_parent->m_submodules_set.insert(sm);
 
+        module_event_handler::notify(module_event_handler::event::submodule_removed, sm->get_parent_module(), sm->get_id());
+
         sm->m_parent = to_remove->m_parent;
 
-        module_event_handler::notify(module_event_handler::event::submodule_added, to_remove->m_parent, sm->get_id());
         module_event_handler::notify(module_event_handler::event::parent_changed, sm, 0);
+        module_event_handler::notify(module_event_handler::event::submodule_added, to_remove->m_parent, sm->get_id());
     }
 
     // remove module from parent
