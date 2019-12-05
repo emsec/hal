@@ -10,6 +10,7 @@
 #include <QTableWidget>
 #include <QTableWidgetItem>
 #include <QHeaderView>
+#include <QQueue>
 
 #include "selection_details_widget/tree_navigation/tree_module_item.h"
 
@@ -18,7 +19,7 @@ module_details_widget::module_details_widget(QWidget* parent) : QWidget(parent),
 {
     m_content_layout = new QVBoxLayout(this);
     m_content_layout->setContentsMargins(0, 0, 0, 0);
-    m_content_layout->setSpacing(0);
+    m_content_layout->setSpacing(20);
     m_content_layout->setAlignment(Qt::AlignTop);
 
     m_treeview->setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -27,7 +28,7 @@ module_details_widget::module_details_widget(QWidget* parent) : QWidget(parent),
     m_treeview->setModel(m_tree_module_proxy_model);
     m_treeview->setExpanded(m_tree_module_proxy_model->index(0, 0, m_treeview->rootIndex()), true);
 
-    m_general_table = new QTableWidget(2,2, this);
+    m_general_table = new QTableWidget(3,2, this);
     m_general_table->horizontalHeader()->setStretchLastSection(true);
     m_general_table->horizontalHeader()->hide();
     m_general_table->verticalHeader()->hide();
@@ -53,6 +54,15 @@ module_details_widget::module_details_widget(QWidget* parent) : QWidget(parent),
     m_id_item = new QTableWidgetItem();
     m_id_item->setFlags(Qt::ItemIsEnabled);
     m_general_table->setItem(1, 1, m_id_item);
+
+    QTableWidgetItem* gates_count_item = new QTableWidgetItem("Total Number of Gates:");
+    gates_count_item->setFont(font);
+    gates_count_item->setFlags(Qt::ItemIsEnabled);
+    m_general_table->setItem(2,0, gates_count_item);
+
+    m_gates_count_item = new QTableWidgetItem();
+    m_gates_count_item->setFlags(Qt::ItemIsEnabled);
+    m_general_table->setItem(2,1, m_gates_count_item);
 
     m_general_table->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
     m_general_table->verticalHeader()->setDefaultSectionSize(16);
@@ -230,6 +240,28 @@ void module_details_widget::toggle_resize_columns()
         m_treeview->resizeColumnToContents(i);
 }
 
+int module_details_widget::compute_overall_number_of_gates()
+{
+    auto curr_mod = g_netlist->get_module_by_id(m_current_id);
+    int overall_gates = 0;
+
+    QQueue<std::shared_ptr<module>> queue;
+    queue.enqueue(curr_mod);
+
+    //standard BFS
+    while(!queue.isEmpty())
+    {
+        auto mod = queue.dequeue();
+        overall_gates += mod->get_gates().size();
+
+        for(const auto &modu : mod->get_submodules())
+            queue.enqueue(modu);
+    }
+
+    return overall_gates;
+
+}
+
 void module_details_widget::update(u32 module_id)
 {
     if(!(g_netlist->get_module_by_id(module_id)))
@@ -245,4 +277,7 @@ void module_details_widget::update(u32 module_id)
 
     m_id_item->setText(QString::number(module_id));
     m_name_item->setText(QString::fromStdString(g_netlist->get_module_by_id(module_id)->get_name()));
+
+    int number_of_gates = compute_overall_number_of_gates();
+    m_gates_count_item->setText(QString::number(number_of_gates));
 }
