@@ -27,6 +27,7 @@ module_details_widget::module_details_widget(QWidget* parent) : QWidget(parent),
     m_tree_module_proxy_model->setFilterKeyColumn(-1);
     m_treeview->setModel(m_tree_module_proxy_model);
     m_treeview->setExpanded(m_tree_module_proxy_model->index(0, 0, m_treeview->rootIndex()), true);
+    m_treeview->setExpanded(m_tree_module_proxy_model->index(1, 0, m_treeview->rootIndex()), true);
 
     m_general_table = new QTableWidget(3,2, this);
     m_general_table->horizontalHeader()->setStretchLastSection(true);
