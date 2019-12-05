@@ -2,11 +2,14 @@ import unittest
 import hal_py
 import logging
 
+# Testing the binding of the classes, that are part of the netlist data structure (netlist, gate, net, module) 
+
 '''
 NOTE: Every function is only tested once with all possible amounts of inputs,
       but NOT extensively (its already done in the c++ tests)
 '''
 # NOTE: gate library functions aren't tested yet
+
 class TestCoreUtils(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -39,6 +42,8 @@ class TestCoreUtils(unittest.TestCase):
         return None
 
     # ========= TEST CASES ==========
+
+    # ======= NETLIST TESTS =========
 
     # Testing the python binding for function: set_design_name, set_device_name, get_design_name, get_device_name,  
     def test_identifier(self):
