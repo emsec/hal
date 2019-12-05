@@ -89,6 +89,10 @@ void netlist_relay::debug_change_module_color(const u32 id)
     m_module_colors.insert(id, color);
     m_module_model->update_module(id);
 
+    // Since color is our overlay over the netlist data, no event is
+    // automatically fired. We need to take care of that ourselves here.
+    g_graph_context_manager.handle_module_color_changed(m);
+
     Q_EMIT module_color_changed(m);
 }
 
