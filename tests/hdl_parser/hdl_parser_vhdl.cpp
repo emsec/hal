@@ -934,23 +934,23 @@ TEST_F(hdl_parser_vhdl_test, check_port_assignment) {
                                     "begin\n"
                                     "  gate_0 : GATE_2^2_IN_2^2_OUT\n"
                                     "    port map (\n"
-                                    "      I(0, 1) => net_0\n" // <- connect I(0,1) to net_0
+                                    "      I(0,1) => net_0\n" // <- connect I(0,1) to net_0
                                     "    );\n"
                                     "end STRUCTURE;");
-            test_def::capture_stdout();
+            //test_def::capture_stdout();
             hdl_parser_vhdl vhdl_parser(input);
             std::shared_ptr<netlist> nl = vhdl_parser.parse(temp_lib_name);
             if (nl == nullptr) {
-                std::cout << test_def::get_captured_stdout();
+                //std::cout << test_def::get_captured_stdout();
             } else {
-                test_def::get_captured_stdout();
+                //test_def::get_captured_stdout();
             }
 
             ASSERT_NE(nl, nullptr);
             ASSERT_FALSE(nl->get_gates("GATE_2^2_IN_2^2_OUT", "gate_0").empty());
             std::shared_ptr<gate> gate_0 = *(nl->get_gates("GATE_2^2_IN_2^2_OUT", "gate_0").begin());
 
-            std::shared_ptr<net> net_i_0 = gate_0->get_fan_in_net("I(0, 1)");
+            std::shared_ptr<net> net_i_0 = gate_0->get_fan_in_net("I(0,1)");
             ASSERT_NE(net_i_0, nullptr);
             EXPECT_EQ(net_i_0->get_name(), "net_0");
         }*/
@@ -1043,7 +1043,7 @@ TEST_F(hdl_parser_vhdl_test, check_port_assignment) {
             ASSERT_NE(net_2, nullptr);
             EXPECT_EQ(net_2->get_name(), "l_vec(2)");
         }*/
-        /*{
+        {
             // Connect a vector of output pins with a vector of nets, but using downto statements
             std::stringstream input("-- Device\t: device_name\n"
                                     "entity TEST_Comp is\n"
@@ -1083,7 +1083,7 @@ TEST_F(hdl_parser_vhdl_test, check_port_assignment) {
             std::shared_ptr<net> net_2 = gate_0->get_fan_out_net("O(3)");
             ASSERT_NE(net_2, nullptr);
             EXPECT_EQ(net_2->get_name(), "l_vec(2)");
-        }*/
+        }
         /*{
             // Connect a vector of output pins with a vector of nets, but using a mix of to and downto statements
             std::stringstream input("-- Device\t: device_name\n"
@@ -1126,7 +1126,7 @@ TEST_F(hdl_parser_vhdl_test, check_port_assignment) {
             EXPECT_EQ(net_2->get_name(), "l_vec(1)");
         }*/
         // NEGATIVE
-        /*{
+        {
             // The range of the vectors does not match in size
             std::stringstream input("-- Device\t: device_name\n"
                                     "entity TEST_Comp is\n"
@@ -1158,8 +1158,8 @@ TEST_F(hdl_parser_vhdl_test, check_port_assignment) {
             std::shared_ptr<gate> gate_0 = *(nl->get_gates("GATE_4^1_IN_4^1_OUT" ,"gate_0").begin());
 
             EXPECT_EQ(gate_0->get_fan_out_nets().size(), 0);
-        }*/
-        /*{
+        }
+        {
             // The right side does no match any vector format
             std::stringstream input("-- Device\t: device_name\n"
                                     "entity TEST_Comp is\n"
@@ -1191,14 +1191,14 @@ TEST_F(hdl_parser_vhdl_test, check_port_assignment) {
 
             EXPECT_EQ(gate_0->get_fan_in_nets().size(), 0);
 
-        }*/
+        }
         remove_temp_gate_lib();
     TEST_END
 }
 
 /**
  * Testing the usage of components, which should define new gate types with custom input/output/inout pins.
- * ISSUE: l.98: "end component " needs a SPACE at the end...
+ * (currently unsupported...)
  *
  * Functions: parse
  */
