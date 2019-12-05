@@ -436,15 +436,15 @@ bool hdl_parser_verilog::parse_instance(entity& e)
     {
         port_str.consume(".", true);
 
-        auto generic_lhs = port_str.extract_until("(", token_stream::END_OF_STREAM, true, true);
+        auto port_lhs = port_str.extract_until("(", token_stream::END_OF_STREAM, true, true);
 
         port_str.consume("(", true);
 
-        auto generic_rhs = port_str.extract_until(")", token_stream::END_OF_STREAM, true, true);
+        auto port_rhs = port_str.extract_until(")", token_stream::END_OF_STREAM, true, true);
 
         port_str.consume(")", true);
 
-        inst.port_streams.emplace_back(generic_lhs, generic_rhs);
+        inst.port_streams.emplace_back(port_lhs, port_rhs);
 
         port_str.consume(",", port_str.remaining() > 0);
     }
