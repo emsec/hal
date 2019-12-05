@@ -16,7 +16,7 @@
  * any errors, it can be an issue of the vhdl parser as well...
  */
 
-#ifdef DONT_BUILD
+
 
 using namespace test_utils;
 
@@ -248,7 +248,7 @@ TEST_F(netlist_factory_test, check_create_netlist_by_program_args)
             }
             {
                 // Create a netlist by passing a .hal file-path via program arguments. Set volatile-mode
-                std::string tmp_hdl_file_path = core_utils::get_binary_directory().string() + "/tmp.vdl";
+                std::string tmp_hdl_file_path = core_utils::get_binary_directory().string() + "/tmp.vhdl";
                 std::ofstream hdl_file(tmp_hdl_file_path);    // create a temporary hdl file
                 hdl_file << "-- Device\t: device_name\n"
                             "entity TEST_Comp is\n"
@@ -319,5 +319,3 @@ TEST_F(netlist_factory_test, check_create_netlist_by_program_args)
 
     TEST_END
 }
-
-#endif //DONT_BUILD
