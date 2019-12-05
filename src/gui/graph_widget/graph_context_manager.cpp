@@ -69,6 +69,20 @@ void graph_context_manager::handle_module_name_changed(const std::shared_ptr<mod
             context->schedule_scene_update();
 }
 
+void graph_context_manager::handle_module_color_changed(const std::shared_ptr<module> m) const
+{
+    auto gates = m->get_gates();
+    QSet<u32> gateIDs;
+    for (auto g : gates)
+        gateIDs.insert(g->get_id());
+    for (graph_context* context : m_graph_contexts)
+        if (context->modules().contains(m->get_id()) // contains module
+            || context->gates().intersects(gateIDs)) // contains gate from module
+            context->schedule_scene_update();
+    // a context can contain a gate from a module if it is showing the module
+    // or if it's showing a parent and the module is unfolded
+}
+
 void graph_context_manager::handle_module_submodule_added(const std::shared_ptr<module> m, const u32 added_module) const
 {
     for (graph_context* context : m_graph_contexts)
@@ -101,6 +115,7 @@ void graph_context_manager::handle_module_gate_assigned(const std::shared_ptr<mo
 void graph_context_manager::handle_module_gate_removed(const std::shared_ptr<module> m, const u32 removed_gate)
 {
     for (graph_context* context : m_graph_contexts)
+    {
         if (context->is_showing_module(m->get_id(), {}, {}, {}, {removed_gate}))
         {
             context->remove({}, {removed_gate});
@@ -109,6 +124,11 @@ void graph_context_manager::handle_module_gate_removed(const std::shared_ptr<mod
                 delete_graph_context(context);
             }
         }
+        // if a module is unfolded, then the gate is not deleted from the view
+        // but the color of the gate changes to its new parent's color
+        else if (context->gates().contains(removed_gate))
+            context->schedule_scene_update();
+    }
 }
 
 void graph_context_manager::handle_gate_name_changed(const std::shared_ptr<gate> g) const

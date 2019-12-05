@@ -32,6 +32,7 @@ public:
     //void handle_module_created(const std::shared_ptr<module> m) const;
     void handle_module_removed(const std::shared_ptr<module> m);
     void handle_module_name_changed(const std::shared_ptr<module> m) const;
+    void handle_module_color_changed(const std::shared_ptr<module> m) const;
     //void handle_module_parent_changed(const std::shared_ptr<module> m) const;
     void handle_module_submodule_added(const std::shared_ptr<module> m, const u32 added_module) const;
     void handle_module_submodule_removed(const std::shared_ptr<module> m, const u32 removed_module);
