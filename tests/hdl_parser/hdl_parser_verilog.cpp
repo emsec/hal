@@ -136,12 +136,6 @@ TEST_F(hdl_parser_verilog_test, check_main_example)
             EXPECT_EQ(net_global_out->get_src(), get_endpoint(gate_2, "O"));
             EXPECT_TRUE(net_global_out->get_dsts().empty());
             EXPECT_TRUE(nl->is_global_output_net(net_global_out));
-            /* FIXME
-            ASSERT_NE(net_global_inout, nullptr);
-            EXPECT_EQ(net_global_inout->get_name(), "global_inout");
-            EXPECT_EQ(net_global_inout->get_src(), get_endpoint(nullptr, ""));
-            EXPECT_EQ(net_global_inout->get_dsts().size(), 1);
-            EXPECT_TRUE(nl->is_global_inout_net(net_global_inout)); */
 
             EXPECT_EQ(nl->get_global_input_nets().size(), 2);
             EXPECT_EQ(nl->get_global_output_nets().size(), 1);
@@ -159,9 +153,10 @@ TEST_F(hdl_parser_verilog_test, check_main_example)
 TEST_F(hdl_parser_verilog_test, check_whitespace_chaos)
 {
     TEST_START
-         /*{
+         {  
              std::stringstream input("module top (\n"
-                                     "  global_in, global_out, \n"
+                                     "  global_in, \n"
+                                     " global_out, "
                                      "global_inout\n"
                                      " ) ;\n"
                                      "  input global_in ;\n"
@@ -175,79 +170,73 @@ TEST_F(hdl_parser_verilog_test, check_whitespace_chaos)
                                      "(net_0)\n"
                                      " ) ;\n"
                                      "AND2 gate_1 (\n"
-                                     "  .\\I0 (global_inout ),\n"
-                                     ".\\I1     (global_input ), .\\O (net_1 )\n"
+                                     "  .\\I0 (global_in ),\n"
+                                     ".\\I1     (global_inout ), .\\O (net_1 )\n"
                                      " ) ;\n"
                                      "AND3 gate_2 (.\\I0 ( net_0 ), .\\I1 (net_1 ),.\\O (global_out));\n"
                                      "endmodule");
-             hdl_parser_verilog verilog_parser(input);
-             std::shared_ptr<netlist> nl = verilog_parser.parse(g_lib_name);
+            hdl_parser_verilog verilog_parser(input);
+            std::shared_ptr<netlist> nl = verilog_parser.parse(g_lib_name);
 
-             ASSERT_NE(nl, nullptr);
+            ASSERT_NE(nl, nullptr);
 
 
-             // Check if the gates are parsed correctly
-             ASSERT_EQ(nl->get_gates("INV").size(), 1);
-             std::shared_ptr<gate> gate_0 = *(nl->get_gates("INV").begin());
-             ASSERT_EQ(nl->get_gates("AND2").size(), 1);
-             std::shared_ptr<gate> gate_1 = *(nl->get_gates("AND2").begin());
-             ASSERT_EQ(nl->get_gates("AND3").size(), 1);
-             std::shared_ptr<gate> gate_2 = *(nl->get_gates("AND3").begin());
+            // Check if the gates are parsed correctly
+            ASSERT_EQ(nl->get_gates("INV").size(), 1);
+            std::shared_ptr<gate> gate_0 = *(nl->get_gates("INV").begin());
+            ASSERT_EQ(nl->get_gates("AND2").size(), 1);
+            std::shared_ptr<gate> gate_1 = *(nl->get_gates("AND2").begin());
+            ASSERT_EQ(nl->get_gates("AND3").size(), 1);
+            std::shared_ptr<gate> gate_2 = *(nl->get_gates("AND3").begin());
 
-             ASSERT_NE(gate_0, nullptr);
-             EXPECT_EQ(gate_0->get_name(), "gate_0");
+            ASSERT_NE(gate_0, nullptr);
+            EXPECT_EQ(gate_0->get_name(), "gate_0");
 
-             ASSERT_NE(gate_1, nullptr);
-             EXPECT_EQ(gate_1->get_name(), "gate_1");
+            ASSERT_NE(gate_1, nullptr);
+            EXPECT_EQ(gate_1->get_name(), "gate_1");
 
-             ASSERT_NE(gate_2, nullptr);
-             EXPECT_EQ(gate_2->get_name(), "gate_2");
+            ASSERT_NE(gate_2, nullptr);
+            EXPECT_EQ(gate_2->get_name(), "gate_2");
 
-             // Check if the nets are parsed correctly
-             ASSERT_FALSE(nl->get_nets("net_0").empty());
-             std::shared_ptr<net> net_0            = *(nl->get_nets("net_0").begin());
-             ASSERT_FALSE(nl->get_nets("net_1").empty());
-             std::shared_ptr<net> net_1            = *(nl->get_nets("net_1").begin());
-             ASSERT_FALSE(nl->get_nets("global_in").empty());
-             std::shared_ptr<net> net_global_in    = *(nl->get_nets("global_in").begin());
-             ASSERT_FALSE(nl->get_nets("global_out").empty());
-             std::shared_ptr<net> net_global_out   = *(nl->get_nets("global_out").begin());
-             ASSERT_FALSE(nl->get_nets("global_inout").empty());
-             std::shared_ptr<net> net_global_inout = *(nl->get_nets("global_inout").begin());
+            // Check if the nets are parsed correctly
+            ASSERT_FALSE(nl->get_nets("net_0").empty());
+            std::shared_ptr<net> net_0            = *(nl->get_nets("net_0").begin());
+            ASSERT_FALSE(nl->get_nets("net_1").empty());
+            std::shared_ptr<net> net_1            = *(nl->get_nets("net_1").begin());
+            ASSERT_FALSE(nl->get_nets("global_in").empty());
+            std::shared_ptr<net> net_global_in    = *(nl->get_nets("global_in").begin());
+            ASSERT_FALSE(nl->get_nets("global_out").empty());
+            std::shared_ptr<net> net_global_out   = *(nl->get_nets("global_out").begin());
+            ASSERT_FALSE(nl->get_nets("global_inout").empty());
+            std::shared_ptr<net> net_global_inout = *(nl->get_nets("global_inout").begin());
 
-             ASSERT_NE(net_0, nullptr);
-             EXPECT_EQ(net_0->get_name(), "net_0");
-             EXPECT_EQ(net_0->get_src(), get_endpoint(gate_0, "O"));
-             std::vector<endpoint> exp_net_0_dsts = {get_endpoint(gate_2, "I0")};
-             EXPECT_TRUE(vectors_have_same_content(net_0->get_dsts(), std::vector<endpoint>({get_endpoint(gate_2, "I0")})));
+            ASSERT_NE(net_0, nullptr);
+            EXPECT_EQ(net_0->get_name(), "net_0");
+            EXPECT_EQ(net_0->get_src(), get_endpoint(gate_0, "O"));
+            std::vector<endpoint> exp_net_0_dsts = {get_endpoint(gate_2, "I0")};
+            EXPECT_TRUE(vectors_have_same_content(net_0->get_dsts(), std::vector<endpoint>({get_endpoint(gate_2, "I0")})));
 
-             ASSERT_NE(net_1, nullptr);
-             EXPECT_EQ(net_1->get_name(), "net_1");
-             EXPECT_EQ(net_1->get_src(), get_endpoint(gate_1, "O"));
-             EXPECT_TRUE(vectors_have_same_content(net_1->get_dsts(), std::vector<endpoint>({get_endpoint(gate_2, "I1")})));
+            ASSERT_NE(net_1, nullptr);
+            EXPECT_EQ(net_1->get_name(), "net_1");
+            EXPECT_EQ(net_1->get_src(), get_endpoint(gate_1, "O"));
+            EXPECT_TRUE(vectors_have_same_content(net_1->get_dsts(), std::vector<endpoint>({get_endpoint(gate_2, "I1")})));
 
-             ASSERT_NE(net_global_in, nullptr);
-             EXPECT_EQ(net_global_in->get_name(), "global_in");
-             EXPECT_EQ(net_global_in->get_src(), get_endpoint(nullptr, ""));
-             EXPECT_TRUE(vectors_have_same_content(net_global_in->get_dsts(), std::vector<endpoint>({get_endpoint(gate_0, "I"), get_endpoint(gate_1, "I0")})));
-             EXPECT_TRUE(nl->is_global_input_net(net_global_in));
+            ASSERT_NE(net_global_in, nullptr);
+            EXPECT_EQ(net_global_in->get_name(), "global_in");
+            EXPECT_EQ(net_global_in->get_src(), get_endpoint(nullptr, ""));
+            EXPECT_TRUE(vectors_have_same_content(net_global_in->get_dsts(), std::vector<endpoint>({get_endpoint(gate_0, "I"), get_endpoint(gate_1, "I0")})));
+            EXPECT_TRUE(nl->is_global_input_net(net_global_in));
 
-             ASSERT_NE(net_global_out, nullptr);
-             EXPECT_EQ(net_global_out->get_name(), "global_out");
-             EXPECT_EQ(net_global_out->get_src(), get_endpoint(gate_2, "O"));
-             EXPECT_TRUE(net_global_out->get_dsts().empty());
-             EXPECT_TRUE(nl->is_global_output_net(net_global_out));
+            ASSERT_NE(net_global_out, nullptr);
+            EXPECT_EQ(net_global_out->get_name(), "global_out");
+            EXPECT_EQ(net_global_out->get_src(), get_endpoint(gate_2, "O"));
+            EXPECT_TRUE(net_global_out->get_dsts().empty());
+            EXPECT_TRUE(nl->is_global_output_net(net_global_out));
 
-             ASSERT_NE(net_global_inout, nullptr);
-             EXPECT_EQ(net_global_inout->get_name(), "global_inout");
-             EXPECT_EQ(net_global_inout->get_src(), get_endpoint(nullptr, ""));
-             EXPECT_EQ(net_global_inout->get_dsts().size(), 1);
-             EXPECT_TRUE(nl->is_global_inout_net(net_global_inout));
-
-             EXPECT_EQ(nl->get_global_input_nets().size(), 2);
-             EXPECT_EQ(nl->get_global_output_nets().size(), 1);
-             //EXPECT_EQ(nl->get_global_inout_nets().size(), 1);
-         }*/
+            EXPECT_EQ(nl->get_global_input_nets().size(), 2);
+            EXPECT_EQ(nl->get_global_output_nets().size(), 1);
+            //EXPECT_EQ(nl->get_global_inout_nets().size(), 1);
+         }
     TEST_END
 }
 
@@ -687,17 +676,17 @@ TEST_F(hdl_parser_verilog_test, check_assign)
                                     " ) ;\n"
                                     "  input global_in ;\n"
                                     "  output global_out ;\n"
-                                    "  wire [0:3] bit_vector;\n"
-                                    "  assign bit_vector = 4'hA;\n"
+                                    "  wire [0:3] bit_vector ;\n"
+                                    "  assign bit_vector = 4'hA ;\n"
                                     "\n"
-                                    "GATE_1^0_IN_1^0_OUT test_gate (\n"
+                                    "  INV test_gate (\n"
                                     "  .\\I (bit_vector[0] ),\n"
                                     "  .\\O (global_out )\n"
                                     " ) ;\n"
                                     "endmodule");
             //test_def::capture_stdout();
             hdl_parser_verilog verilog_parser(input);
-            std::shared_ptr<netlist> nl = verilog_parser.parse(temp_lib_name);
+            std::shared_ptr<netlist> nl = verilog_parser.parse(g_lib_name);
             if (nl == nullptr)
             {
                 //std::cout << test_def::get_captured_stdout();
@@ -772,30 +761,32 @@ TEST_F(hdl_parser_verilog_test, check_assign)
 
             // NOTE: Test me, pls :)
         }*/
-         /*{
+        {
              // NOTE: stoi failure (l.978)
              // Testing assignments, where escaped identifiers are used (e.g. \net[1:3][2:3] stands for a net, literally named "net[1:3][2:3]")
+
              std::stringstream input("module top (\n"
-                                     "  global_out\n"
-                                     " ) ;\n"
-                                     "  output global_out ;\n"
-                                     "  wire \\escaped_net_range[0:3] ;\n"
-                                     "  wire [0:3] escaped_net_range ;\n"
-                                     "  wire \\escaped_net[0] ;\n"
-                                     "  wire [0:1] net_vector_master ;\n"
-                                     "  assign { \\escaped_net_range[0:3] , \\escaped_net[0] } = net_vector_master;\n"
-                                     "AND test_gate (\n"
-                                     "  .\\I0 ( \\escaped_net_range[0:3] ),\n"
-                                     "  .\\I1 ( \\escaped_net[0] ),\n"
-                                     "  .\\O (global_out )\n"
-                                     " ) ;\n"
-                                     "endmodule");
+                                    "    global_out\n"
+                                    ") ;\n"
+                                    "    output global_out ;\n"
+                                    "    wire \\escaped_net_range[0:3] ;\n"
+                                    "    wire [0:3] escaped_net_range ;\n"
+                                    "    wire \\escaped_net[0] ;\n"
+                                    "    wire [0:1] net_vector_master ;\n"
+                                    "    assign { \\escaped_net_range[0:3] , \\escaped_net[0] } = net_vector_master;\n"
+                                    "    AND2 test_gate (\n"
+                                    "        .\\I0 ( \\escaped_net_range[0:3] ),\n"
+                                    "        .\\I1 ( \\escaped_net[0] ),\n"
+                                    "        .\\O (global_out )\n"
+                                    "    ) ;\n"
+                                    "endmodule");
+                                     
              hdl_parser_verilog verilog_parser(input);
              std::shared_ptr<netlist> nl = verilog_parser.parse(g_lib_name);
 
              ASSERT_NE(nl, nullptr);
 
-         }*/
+         }
         remove_temp_gate_lib();
     TEST_END
 }
