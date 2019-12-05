@@ -2,13 +2,16 @@ include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR} ${CMAKE_SOUR
 
 add_executable(runTest-hdl_parser_vhdl_old
         hdl_parser_vhdl_old.cpp)
-add_executable(runTest-hdl_parser_verilog_old
-        hdl_parser_verilog_old.cpp)
+add_executable(runTest-hdl_parser_vhdl
+        hdl_parser_vhdl.cpp)
+add_executable(runTest-hdl_parser_verilog
+        hdl_parser_verilog.cpp)
 
-
-target_link_libraries(runTest-hdl_parser_vhdl_old    gtest gtest_main ${LINK_LIBS})
-target_link_libraries(runTest-hdl_parser_verilog_old gtest gtest_main ${LINK_LIBS})
+target_link_libraries(runTest-hdl_parser_vhdl_old   gtest gtest_main ${LINK_LIBS} test_utils)
+target_link_libraries(runTest-hdl_parser_vhdl   gtest gtest_main ${LINK_LIBS} test_utils)
+target_link_libraries(runTest-hdl_parser_verilog   gtest gtest_main ${LINK_LIBS} test_utils)
 
 
 add_test(runTest-hdl_parser_vhdl_old ${CMAKE_BINARY_DIR}/bin/runTest-hdl_parser_vhdl_old --gtest_output=xml:${CMAKE_BINARY_DIR}/gtestresults-runBasicTests.xml)
-add_test(runTest-hdl_parser_verilog_old ${CMAKE_BINARY_DIR}/bin/runTest-hdl_parser_verilog_old --gtest_output=xml:${CMAKE_BINARY_DIR}/gtestresults-runBasicTests.xml)
+add_test(runTest-hdl_parser_vhdl_old ${CMAKE_BINARY_DIR}/bin/runTest-hdl_parser_vhdl --gtest_output=xml:${CMAKE_BINARY_DIR}/gtestresults-runBasicTests.xml)
+add_test(runTest-hdl_parser_verilog ${CMAKE_BINARY_DIR}/bin/runTest-hdl_parser_verilog --gtest_output=xml:${CMAKE_BINARY_DIR}/gtestresults-runBasicTests.xml)
