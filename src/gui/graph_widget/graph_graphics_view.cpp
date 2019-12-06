@@ -37,6 +37,9 @@
 #include <QWidgetAction>
 #include <qmath.h>
 
+//temporarily added so that the view puts the top-moudle at the start in the middle, further details in the resizeEvent
+bool graph_graphics_view::m_first_time_constructed = true;
+
 graph_graphics_view::graph_graphics_view(graph_widget* parent) : QGraphicsView(parent),
     m_graph_widget(parent),
     m_minimap_enabled(false),
@@ -435,6 +438,15 @@ void graph_graphics_view::keyReleaseEvent(QKeyEvent* event)
 void graph_graphics_view::resizeEvent(QResizeEvent* event)
 {
     Q_UNUSED(event)
+
+    //a very, very hacky way to put the initial top module in the middle of the view(error only occurs when the first view is instantly shown when constructed, because
+    //the viwe does not know how big it is). The 100 are the default size-values from the view that are changed after a random number of resizeEvents.
+    //Because centerOn() and other different functions with different params do not seem to work, a zoom-out and zoom-in is simulated, but there has to be a more elegant way to do this...
+    if(size().width() != 100 && size().width() != 100 && m_first_time_constructed){
+        gentle_zoom(0.5);
+        gentle_zoom(2);
+        m_first_time_constructed = false;
+    }
 
     adjust_min_scale();
 }

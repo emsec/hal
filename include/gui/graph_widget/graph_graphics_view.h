@@ -102,6 +102,7 @@ private:
 
     bool m_grid_enabled;
     bool m_grid_clusters_enabled;
+    static bool m_first_time_constructed;
     graph_widget_constants::grid_type m_grid_type;
 
     QPoint m_drag_mousedown_position;
