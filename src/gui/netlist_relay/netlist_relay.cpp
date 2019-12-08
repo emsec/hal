@@ -193,11 +193,13 @@ void netlist_relay::relay_netlist_event(netlist_event_handler::event ev, std::sh
         case netlist_event_handler::event::marked_global_input:
         {
             ///< associated_data = id of net
+            g_graph_context_manager.handle_marked_global_input(associated_data);
             break;
         }
         case netlist_event_handler::event::marked_global_output:
         {
             ///< associated_data = id of net
+            g_graph_context_manager.handle_marked_global_output(associated_data);
             break;
         }
         case netlist_event_handler::event::marked_global_inout:
@@ -208,11 +210,13 @@ void netlist_relay::relay_netlist_event(netlist_event_handler::event ev, std::sh
         case netlist_event_handler::event::unmarked_global_input:
         {
             ///< associated_data = id of net
+            g_graph_context_manager.handle_unmarked_global_input(associated_data);
             break;
         }
         case netlist_event_handler::event::unmarked_global_output:
         {
             ///< associated_data = id of net
+            g_graph_context_manager.handle_unmarked_global_output(associated_data);
             break;
         }
         case netlist_event_handler::event::unmarked_global_inout:

@@ -49,6 +49,10 @@ public:
     void handle_net_src_changed(const std::shared_ptr<net> n) const;
     void handle_net_dst_added(const std::shared_ptr<net> n, const u32 dst_gate_id) const;
     void handle_net_dst_removed(const std::shared_ptr<net> n, const u32 dst_gate_id) const;
+    void handle_marked_global_input(u32 net_id);
+    void handle_marked_global_output(u32 net_id);
+    void handle_unmarked_global_input(u32 net_id);
+    void handle_unmarked_global_output(u32 net_id);
 
     graph_layouter* get_default_layouter(graph_context* const context) const;
     graph_shader* get_default_shader(graph_context* const context) const;

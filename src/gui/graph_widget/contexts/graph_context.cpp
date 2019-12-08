@@ -398,12 +398,14 @@ void graph_context::apply_changes()
     {
         auto g = g_netlist->get_gate_by_id(id);
         for (const auto& net : g->get_fan_in_nets())
-        {
-            m_nets.insert(net->get_id());
+        {   
+            if(!net->is_unrouted() || net->is_global_input_net() || net->is_global_output_net())
+                m_nets.insert(net->get_id());
         }
         for (const auto& net : g->get_fan_out_nets())
         {
-            m_nets.insert(net->get_id());
+            if(!net->is_unrouted() || net->is_global_input_net() || net->is_global_output_net())
+                m_nets.insert(net->get_id());
         }
     }
     for (const auto& id : m_modules)

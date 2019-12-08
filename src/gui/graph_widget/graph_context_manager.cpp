@@ -193,6 +193,50 @@ void graph_context_manager::handle_net_dst_removed(const std::shared_ptr<net> n,
             context->schedule_scene_update();
 }
 
+void graph_context_manager::handle_marked_global_input(u32 net_id)
+{
+    for(graph_context* context : m_graph_contexts)
+    {
+        if(context->nets().contains(net_id) || context->is_showing_net_dst(net_id))
+        {
+            context->apply_changes();
+            context->schedule_scene_update();  
+        }
+    }
+}
+
+void graph_context_manager::handle_marked_global_output(u32 net_id)
+{
+    for(graph_context* context : m_graph_contexts)
+    {
+        if(context->nets().contains(net_id) || context->is_showing_net_src(net_id))
+        {
+            context->apply_changes();
+            context->schedule_scene_update();  
+        }
+    }
+}
+
+void graph_context_manager::handle_unmarked_global_input(u32 net_id)
+{
+    for (graph_context* context : m_graph_contexts)
+        if (context->nets().contains(net_id))
+        {
+            context->apply_changes();
+            context->schedule_scene_update();
+        }
+}
+
+void graph_context_manager::handle_unmarked_global_output(u32 net_id)
+{
+    for (graph_context* context : m_graph_contexts)
+        if (context->nets().contains(net_id))
+        {
+            context->apply_changes();
+            context->schedule_scene_update();
+        }
+}
+
 graph_layouter* graph_context_manager::get_default_layouter(graph_context* const context) const
 {
     // USE SETTINGS + FACTORY
