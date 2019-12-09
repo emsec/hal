@@ -439,12 +439,23 @@ void graph_graphics_view::resizeEvent(QResizeEvent* event)
 {
     Q_UNUSED(event)
 
-    //a very, very hacky way to put the initial top module in the middle of the view(error only occurs when the first view is instantly shown when constructed, because
-    //the viwe does not know how big it is). The 100 are the default size-values from the view that are changed after a random number of resizeEvents.
-    //Because centerOn() and other different functions with different params do not seem to work, a zoom-out and zoom-in is simulated, but there has to be a more elegant way to do this...
-    if(size().width() != 100 && size().width() != 100 && m_first_time_constructed){
-        gentle_zoom(0.5);
-        gentle_zoom(2);
+    if(m_first_time_constructed && size().width() != 100 && size().width() != 100)
+    {
+        //Version 1
+        //gentle_zoom(0.5);
+        //gentle_zoom(2);
+
+        //Version 2, should be faster to check a list with only a few entries than to transform the whole scenerect
+        QGraphicsView::resizeEvent(event);
+        for(const auto &item : scene()->items())
+        {
+            auto casted_item = dynamic_cast<graphics_node*>(item);
+            if(casted_item && casted_item->item_type() == hal::item_type::module)
+            {
+                centerOn(item);
+                break;
+            }
+        }
         m_first_time_constructed = false;
     }
 
