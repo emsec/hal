@@ -260,46 +260,52 @@ void module_details_widget::toggle_resize_columns()
         m_treeview->resizeColumnToContents(i);
 }
 
-int module_details_widget::compute_overall_number_of_gates()
-{
-    auto curr_mod     = g_netlist->get_module_by_id(m_current_id);
-    int overall_gates = 0;
-
-    QQueue<std::shared_ptr<module>> queue;
-    queue.enqueue(curr_mod);
-
-    //standard BFS
-    while (!queue.isEmpty())
-    {
-        auto mod = queue.dequeue();
-        overall_gates += mod->get_gates().size();
-
-        for (const auto& modu : mod->get_submodules())
-            queue.enqueue(modu);
-    }
-
-    return overall_gates;
-}
-
 void module_details_widget::update(u32 module_id)
 {
     m_current_id = module_id;
 
     if (m_current_id == 0)
+    {
         return;
-    if (!(g_netlist->get_module_by_id(module_id)))
+    }
+
+    auto module = g_netlist->get_module_by_id(module_id);
+
+    if (!module)
+    {
         return;
+    }
 
     m_tree_module_model->update(module_id);
     toggle_resize_columns();
 
     if (!m_treeview->selectionModel()->selectedIndexes().isEmpty())
+    {
         m_ignore_selection_change = true;
+    }
+
     m_treeview->clearSelection();
 
     m_id_item->setText(QString::number(module_id));
-    m_name_item->setText(QString::fromStdString(g_netlist->get_module_by_id(module_id)->get_name()));
+    m_name_item->setText(QString::fromStdString(module->get_name()));
 
-    int number_of_gates = compute_overall_number_of_gates();
-    m_gates_count_item->setText(QString::number(number_of_gates));
+    auto total_number_of_gates  = module->get_gates(DONT_CARE, DONT_CARE, true).size();
+    auto direct_number_of_gates = module->get_gates(DONT_CARE, DONT_CARE, false).size();
+    auto gate_count_text        = QString::number(total_number_of_gates);
+    if (total_number_of_gates > 0)
+    {
+        if (total_number_of_gates == direct_number_of_gates)
+        {
+            gate_count_text += " (all direct members)";
+        }
+        else if (direct_number_of_gates == 0)
+        {
+            gate_count_text += " (all in submodules)";
+        }
+        else
+        {
+            gate_count_text += " (" + QString::number(direct_number_of_gates) + " direct members and " + QString::number(total_number_of_gates - direct_number_of_gates) + " in submodules)";
+        }
+    }
+    m_gates_count_item->setText(gate_count_text);
 }

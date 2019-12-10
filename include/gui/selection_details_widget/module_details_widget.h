@@ -73,8 +73,6 @@ private:
     void handle_tree_double_clicked(const QModelIndex &index);
     void toggle_resize_columns();
 
-    int compute_overall_number_of_gates();
-
     QVBoxLayout* m_content_layout;
 
     u32 m_current_id;
