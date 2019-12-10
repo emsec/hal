@@ -43,7 +43,7 @@ class netlist_internal_manager;
 
 /**
  * Net class containing information about a net including its source and destination.
- * 
+ *
  * @ingroup netlist
  */
 class NETLIST_API net : public data_container, public std::enable_shared_from_this<net>
@@ -51,15 +51,6 @@ class NETLIST_API net : public data_container, public std::enable_shared_from_th
     friend class netlist_internal_manager;
 
 public:
-    /**
-     * Overloaded operator
-     *
-     * @param[in] os - Output stream
-     * @param[in] n - Graph net reference
-     * @returns A standard output stream.
-     */
-    friend std::ostream& operator<<(std::ostream& os, const net& n);
-
     /**
      * Gets the unique id of the net.
      *

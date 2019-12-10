@@ -20,29 +20,6 @@ net::net(netlist_internal_manager* internal_manager, const u32 id, const std::st
     m_src              = {nullptr, ""};
 }
 
-std::ostream& operator<<(std::ostream& os, const net& net)
-{
-    os << "\t\'" << net.m_name << "\'"
-       << " (id = " << net.m_id << ")" << std::endl;
-
-    os << "\t\t src : ";
-    if (net.m_src.gate == nullptr)
-    {
-        os << "nullptr" << std::endl;
-    }
-    else
-    {
-        os << "'" << net.m_src.gate->get_name() << "' : " << net.m_src.pin_type << std::endl;
-    }
-
-    for (const auto& dst : net.m_dsts)
-    {
-        os << "\t\t dst : '" << dst.gate->get_name() << "' : " << dst.pin_type << std::endl;
-    }
-
-    return os;
-}
-
 u32 net::get_id() const
 {
     return m_id;

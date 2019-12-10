@@ -24,34 +24,6 @@ gate::gate(std::shared_ptr<netlist> const g, const u32 id, std::shared_ptr<const
     m_y       = y;
 }
 
-std::ostream& operator<<(std::ostream& os, const gate& gate)
-{
-    os << "\t\'" << gate.get_name() << "\'"
-       << " (type = '" << gate.get_type()->get_name() << "', id = " << gate.get_id() << ")" << std::endl;
-    for (const auto& input_pin_type : gate.get_input_pins())
-    {
-        os << "\t\t" << input_pin_type << " => ";
-        auto net = gate.get_fan_in_net(input_pin_type);
-        if (net == nullptr)
-            os << "nullptr";
-        else
-            os << net->get_name();
-        os << std::endl;
-    }
-    for (const auto& output_pin_type : gate.get_output_pins())
-    {
-        os << "\t\t" << output_pin_type << " => ";
-        auto net = gate.get_fan_out_net(output_pin_type);
-        if (net == nullptr)
-            os << "nullptr";
-        else
-            os << net->get_name();
-        os << std::endl;
-    }
-
-    return os;
-}
-
 u32 gate::get_id() const
 {
     return m_id;
