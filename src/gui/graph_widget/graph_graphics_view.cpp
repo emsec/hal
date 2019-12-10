@@ -133,7 +133,7 @@ void graph_graphics_view::handle_move_new_action()
     {
         module_objs.insert(g_netlist->get_module_by_id(id));
     }
-    std::shared_ptr<module> parent = gui_utility::lowest_common_ancestor(module_objs, gate_objs);
+    std::shared_ptr<module> parent = gui_utility::first_common_ancestor(module_objs, gate_objs);
     QString parent_name = QString::fromStdString(parent->get_name());
     bool ok;
     QString name = QInputDialog::getText(nullptr, "",
@@ -593,7 +593,7 @@ void graph_graphics_view::show_context_menu(const QPoint& pos)
             }
         }
     }
-    
+
     if (!item || isNet)
     {
         QAction* antialiasing_action = context_menu.addAction("Antialiasing");
