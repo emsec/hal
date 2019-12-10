@@ -283,12 +283,13 @@ int module_details_widget::compute_overall_number_of_gates()
 
 void module_details_widget::update(u32 module_id)
 {
+    m_current_id = module_id;
+
     if (m_current_id == 0)
         return;
     if (!(g_netlist->get_module_by_id(module_id)))
         return;
 
-    m_current_id = module_id;
     m_tree_module_model->update(module_id);
     toggle_resize_columns();
 
