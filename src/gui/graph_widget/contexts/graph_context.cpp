@@ -135,11 +135,11 @@ void graph_context::fold_module_of_gate(const u32 id)
         auto m = g_netlist->get_gate_by_id(id)->get_module();
         QSet<u32> gates;
         QSet<u32> modules;
-        for (const auto& g : m->get_gates(DONT_CARE, DONT_CARE, true))
+        for (const auto& g : m->get_gates(nullptr, true))
         {
             gates.insert(g->get_id());
         }
-        for (const auto& sm : m->get_submodules(DONT_CARE, true))
+        for (const auto& sm : m->get_submodules(nullptr, true))
         {
             modules.insert(sm->get_id());
         }
@@ -398,7 +398,7 @@ void graph_context::apply_changes()
     {
         auto g = g_netlist->get_gate_by_id(id);
         for (const auto& net : g->get_fan_in_nets())
-        {   
+        {
             if(!net->is_unrouted() || net->is_global_input_net() || net->is_global_output_net())
                 m_nets.insert(net->get_id());
         }

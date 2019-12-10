@@ -27,7 +27,6 @@
 
 #include "netlist/data_container.h"
 #include "netlist/endpoint.h"
-#include "netlist/netlist_constants.h"
 
 #include <map>
 #include <memory>
@@ -35,6 +34,7 @@
 #include <string>
 #include <tuple>
 #include <vector>
+#include <functional>
 
 /* forward declaration */
 class netlist;
@@ -90,7 +90,7 @@ public:
      * @param[in] pin_type - The pin of the source gate.
      * @returns True on success.
      **/
-    bool set_src(std::shared_ptr<gate> const gate, const std::string& pin_type);
+    bool set_src(const std::shared_ptr<gate>& gate, const std::string& pin_type);
 
     /**
      * Set the source of this net to a gate's output pin.
@@ -98,7 +98,7 @@ public:
      * @param[in] src - The source endpoint.
      * @returns True on success.
      **/
-    bool set_src(endpoint src);
+    bool set_src(const endpoint& src);
 
     /**
      * Remove the source of the net.
@@ -108,22 +108,12 @@ public:
     bool remove_src();
 
     /**
-     * Get the src of the net specified by type.<br>
-     * If the specifications don't match the actual source, the gate element of the returned endpoint is a nullptr.
+     * Get the src of the net.
+     * If there was no src assigned, the gate element of the returned endpoint is a nullptr.
      *
-     * @param[in] gate_type - The desired source gate type.
      * @returns The source endpoint.
      */
-    endpoint get_src(const std::string& gate_type = DONT_CARE) const;
-
-    /**
-     * Get the src of the net specified by type.<br>
-     * If the specifications don't match the actual source, the gate element of the returned endpoint is a nullptr.
-     *
-     * @param[in] gate_type - The desired source gate type.
-     * @returns The source endpoint.
-     */
-    endpoint get_src_by_type(const std::string& gate_type) const;
+    endpoint get_src() const;
 
     /**
      *      dst specific functions
@@ -136,7 +126,7 @@ public:
      * @param[in] pin_type - The input pin of the gate.
      * @returns True on success.
      **/
-    bool add_dst(std::shared_ptr<gate> const gate, const std::string& pin_type);
+    bool add_dst(const std::shared_ptr<gate>& gate, const std::string& pin_type);
 
     /**
      * Add a destination to this net.
@@ -144,7 +134,7 @@ public:
      * @param[in] dst - The destination endpoint.
      * @returns True on success.
      **/
-    bool add_dst(endpoint dst);
+    bool add_dst(const endpoint& dst);
 
     /**
      * Remove a destination from this net.
@@ -153,7 +143,7 @@ public:
      * @param[in] pin_type - The input pin of the gate.
      * @returns True on success.
      **/
-    bool remove_dst(std::shared_ptr<gate> const gate, const std::string& pin_type);
+    bool remove_dst(const std::shared_ptr<gate>& gate, const std::string& pin_type);
 
     /**
      * Remove a destination from this net.
@@ -161,16 +151,15 @@ public:
      * @param[in] dst - The destination endpoint.
      * @returns True on success.
      **/
-    bool remove_dst(endpoint dst);
+    bool remove_dst(const endpoint& dst);
 
     /**
-     * Check whether a gate's input pin is a destination of this net.
+     * Check whether a gate is a destination of this net.
      *
      * @param[in] gate - The destination gate.
-     * @param[in] pin_type - The input pin of the gate. DONT_CARE if the pin does not matter.
      * @returns True if the input's pin is a destination.
      **/
-    bool is_a_dst(std::shared_ptr<gate> const gate, const std::string& pin_type = DONT_CARE) const;
+    bool is_a_dst(const std::shared_ptr<gate>& gate) const;
 
     /**
      * Check whether a gate's input pin is a destination of this net.
@@ -178,7 +167,7 @@ public:
      * @param[in] ep - The input endpoint.
      * @returns True if the input's pin is a destination.
      **/
-    bool is_a_dst(endpoint ep) const;
+    bool is_a_dst(const endpoint& ep) const;
 
     /**
      * Get the number of destinations.<br>
@@ -189,20 +178,12 @@ public:
     u32 get_num_of_dsts() const;
 
     /**
-     * Get the vector of destinations of the net specified by type.
+     * Get the vector of destinations of the net.
      *
-     * @param[in] gate_type - The desired destination gate type.
+     * @param[in] filter - a filter for endpoints.
      * @returns A vector of destination endpoints.
      */
-    std::vector<endpoint> get_dsts(const std::string& gate_type = DONT_CARE) const;
-
-    /**
-     * Get the vector of destinations of the net specified by type.
-     *
-     * @param[in] gate_type - The desired destination gate type.
-     * @returns A vector of tdestination endpoints.
-     */
-    std::vector<endpoint> get_dsts_by_type(const std::string& gate_type) const;
+    std::vector<endpoint> get_dsts(const std::function<bool(const endpoint& ep)>& filter = nullptr) const;
 
     /**
      * Check whether the net is routed, i.e. it has no source or the no destinations.

@@ -27,6 +27,25 @@ protected:
     }
 };
 
+
+static std::function<bool(const std::shared_ptr<net>&)> net_name_filter(const std::string& name){
+    return [name](auto& n){return n->get_name() == name;};
+}
+
+static std::function<bool(const std::shared_ptr<gate>&)> gate_name_filter(const std::string& name){
+    return [name](auto& g){return g->get_name() == name;};
+}
+
+static std::function<bool(const std::shared_ptr<gate>&)> gate_type_filter(const std::string& type){
+    return [type](auto& g){return g->get_type()->get_name() == type;};
+}
+
+static std::function<bool(const std::shared_ptr<gate>&)> gate_filter(const std::string& type, const std::string& name){
+    return [name, type](auto& g){return g->get_name() == name && g->get_type()->get_name() == type;};
+}
+
+
+
 /*                                    net_0
  *                  .--= INV (0) =----.
  *  global_in       |                   '-=                     global_out
@@ -106,12 +125,12 @@ TEST_F(hdl_parser_vhdl_test, check_main_example)
         EXPECT_EQ(nl->get_design_name(), "TEST_Comp");
 
         // Check if the gates are parsed correctly
-        ASSERT_EQ(nl->get_gates("INV").size(), 1);
-        std::shared_ptr<gate> gate_0 = *(nl->get_gates("INV").begin());
-        ASSERT_EQ(nl->get_gates("AND2").size(), 1);
-        std::shared_ptr<gate> gate_1 = *(nl->get_gates("AND2").begin());
-        ASSERT_EQ(nl->get_gates("AND3").size(), 1);
-        std::shared_ptr<gate> gate_2 = *(nl->get_gates("AND3").begin());
+        ASSERT_EQ(nl->get_gates(gate_type_filter("INV")).size(), 1);
+        std::shared_ptr<gate> gate_0 = *(nl->get_gates(gate_type_filter("INV")).begin());
+        ASSERT_EQ(nl->get_gates(gate_type_filter("AND2")).size(), 1);
+        std::shared_ptr<gate> gate_1 = *(nl->get_gates(gate_type_filter("AND2")).begin());
+        ASSERT_EQ(nl->get_gates(gate_type_filter("AND3")).size(), 1);
+        std::shared_ptr<gate> gate_2 = *(nl->get_gates(gate_type_filter("AND3")).begin());
 
         ASSERT_NE(gate_0, nullptr);
         EXPECT_EQ(gate_0->get_name(), "gate_0");
@@ -123,10 +142,10 @@ TEST_F(hdl_parser_vhdl_test, check_main_example)
         EXPECT_EQ(gate_2->get_name(), "gate_2");
 
         // Check if the nets are parsed correctly
-        std::shared_ptr<net> net_0            = *(nl->get_nets("net_0").begin());
-        std::shared_ptr<net> vec_net_2        = *(nl->get_nets("vec_net(2)").begin());
-        std::shared_ptr<net> net_global_in    = *(nl->get_nets("net_global_in").begin());
-        std::shared_ptr<net> net_global_out   = *(nl->get_nets("net_global_out").begin());
+        std::shared_ptr<net> net_0            = *(nl->get_nets(net_name_filter("net_0")).begin());
+        std::shared_ptr<net> vec_net_2        = *(nl->get_nets(net_name_filter("vec_net(2)")).begin());
+        std::shared_ptr<net> net_global_in    = *(nl->get_nets(net_name_filter("net_global_in")).begin());
+        std::shared_ptr<net> net_global_out   = *(nl->get_nets(net_name_filter("net_global_out")).begin());
 
         ASSERT_NE(net_0, nullptr);
         EXPECT_EQ(net_0->get_name(), "net_0");
@@ -195,8 +214,8 @@ TEST_F(hdl_parser_vhdl_test, check_generic_map){
             }
 
             ASSERT_NE(nl, nullptr);
-            ASSERT_NE(nl->get_gates("INV").size(), 0);
-            std::shared_ptr<gate> g = *nl->get_gates("INV").begin();
+            ASSERT_NE(nl->get_gates(gate_type_filter("INV")).size(), 0);
+            std::shared_ptr<gate> g = *nl->get_gates(gate_type_filter("INV")).begin();
             EXPECT_EQ(g->get_data_by_key("generic", "key_bool"), std::make_tuple("boolean", "true"));
         }
         {
@@ -230,8 +249,8 @@ TEST_F(hdl_parser_vhdl_test, check_generic_map){
             }
 
             ASSERT_NE(nl, nullptr);
-            ASSERT_NE(nl->get_gates("INV").size(), 0);
-            std::shared_ptr<gate> g = *nl->get_gates("INV").begin();
+            ASSERT_NE(nl->get_gates(gate_type_filter("INV")).size(), 0);
+            std::shared_ptr<gate> g = *nl->get_gates(gate_type_filter("INV")).begin();
             EXPECT_EQ(g->get_data_by_key("generic", "key_integer"), std::make_tuple("integer", "123"));
         }
         {
@@ -265,8 +284,8 @@ TEST_F(hdl_parser_vhdl_test, check_generic_map){
             }
 
             ASSERT_NE(nl, nullptr);
-            ASSERT_NE(nl->get_gates("INV").size(), 0);
-            std::shared_ptr<gate> g = *nl->get_gates("INV").begin();
+            ASSERT_NE(nl->get_gates(gate_type_filter("INV")).size(), 0);
+            std::shared_ptr<gate> g = *nl->get_gates(gate_type_filter("INV")).begin();
             EXPECT_EQ(g->get_data_by_key("generic", "key_floating_point"), std::make_tuple("floating_point", "1.23"));
         }
         {
@@ -300,8 +319,8 @@ TEST_F(hdl_parser_vhdl_test, check_generic_map){
             }
 
             ASSERT_NE(nl, nullptr);
-            ASSERT_NE(nl->get_gates("INV").size(), 0);
-            std::shared_ptr<gate> g = *nl->get_gates("INV").begin();
+            ASSERT_NE(nl->get_gates(gate_type_filter("INV")).size(), 0);
+            std::shared_ptr<gate> g = *nl->get_gates(gate_type_filter("INV")).begin();
             EXPECT_EQ(g->get_data_by_key("generic", "key_time"), std::make_tuple("time", "1.23sec"));
         }
         {
@@ -335,8 +354,8 @@ TEST_F(hdl_parser_vhdl_test, check_generic_map){
             }
 
             ASSERT_NE(nl, nullptr);
-            ASSERT_NE(nl->get_gates("INV").size(), 0);
-            std::shared_ptr<gate> g = *nl->get_gates("INV").begin();
+            ASSERT_NE(nl->get_gates(gate_type_filter("INV")).size(), 0);
+            std::shared_ptr<gate> g = *nl->get_gates(gate_type_filter("INV")).begin();
             EXPECT_EQ(g->get_data_by_key("generic", "key_bit_vector"), std::make_tuple("bit_vector", "f0"));
         }
         {
@@ -373,8 +392,8 @@ TEST_F(hdl_parser_vhdl_test, check_generic_map){
             }
 
             ASSERT_NE(nl, nullptr);
-            ASSERT_NE(nl->get_gates("INV").size(), 0);
-            std::shared_ptr<gate> g = *nl->get_gates("INV").begin();
+            ASSERT_NE(nl->get_gates(gate_type_filter("INV")).size(), 0);
+            std::shared_ptr<gate> g = *nl->get_gates(gate_type_filter("INV")).begin();
             EXPECT_EQ(g->get_data_by_key("generic", "key_bit_vector_0"), std::make_tuple("bit_vector", "abcdef"));
             EXPECT_EQ(g->get_data_by_key("generic", "key_bit_vector_1"), std::make_tuple("bit_vector", "abcdef"));
             EXPECT_EQ(g->get_data_by_key("generic", "key_bit_vector_2"), std::make_tuple("bit_vector", "abcdef"));
@@ -411,8 +430,8 @@ TEST_F(hdl_parser_vhdl_test, check_generic_map){
             }
 
             ASSERT_NE(nl, nullptr);
-            ASSERT_NE(nl->get_gates("INV").size(), 0);
-            std::shared_ptr<gate> g = *nl->get_gates("INV").begin();
+            ASSERT_NE(nl->get_gates(gate_type_filter("INV")).size(), 0);
+            std::shared_ptr<gate> g = *nl->get_gates(gate_type_filter("INV")).begin();
             EXPECT_EQ(g->get_data_by_key("generic", "key_string"), std::make_tuple("string", "one_two_three"));
         }
         {
@@ -446,8 +465,8 @@ TEST_F(hdl_parser_vhdl_test, check_generic_map){
             }
 
             ASSERT_NE(nl, nullptr);
-            ASSERT_NE(nl->get_gates("INV").size(), 0);
-            std::shared_ptr<gate> g = *nl->get_gates("INV").begin();
+            ASSERT_NE(nl->get_gates(gate_type_filter("INV")).size(), 0);
+            std::shared_ptr<gate> g = *nl->get_gates(gate_type_filter("INV")).begin();
             EXPECT_EQ(g->get_data_by_key("generic", "key_bit_value"), std::make_tuple("bit_value", "11001010"));
         }
 
@@ -494,8 +513,8 @@ TEST_F(hdl_parser_vhdl_test, check_global_gates_implicit){
             ASSERT_NE(nl->get_gnd_gates().size(), 0);
             std::shared_ptr<gate> global_gnd = *nl->get_gnd_gates().begin();
 
-            ASSERT_NE(nl->get_gates("INV").size(), 0);
-            std::shared_ptr<gate> g = *nl->get_gates("INV").begin();
+            ASSERT_NE(nl->get_gates(gate_type_filter("INV")).size(), 0);
+            std::shared_ptr<gate> g = *nl->get_gates(gate_type_filter("INV")).begin();
 
             ASSERT_NE(g->get_predecessors().size(), 0);
             endpoint pred = *g->get_predecessors().begin();
@@ -533,8 +552,8 @@ TEST_F(hdl_parser_vhdl_test, check_global_gates_implicit){
             ASSERT_NE(nl->get_vcc_gates().size(), 0);
             std::shared_ptr<gate> global_vcc = *nl->get_vcc_gates().begin();
 
-            ASSERT_NE(nl->get_gates("INV").size(), 0);
-            std::shared_ptr<gate> g = *nl->get_gates("INV").begin();
+            ASSERT_NE(nl->get_gates(gate_type_filter("INV")).size(), 0);
+            std::shared_ptr<gate> g = *nl->get_gates(gate_type_filter("INV")).begin();
 
             ASSERT_NE(g->get_predecessors().size(), 0);
             endpoint pred = *g->get_predecessors().begin();
@@ -657,7 +676,7 @@ TEST_F(hdl_parser_vhdl_test, check_lib_prefix)
 
         ASSERT_NE(nl, nullptr);
 
-        EXPECT_EQ(nl->get_gates("INV").size(), 1);
+        EXPECT_EQ(nl->get_gates(gate_type_filter("INV")).size(), 1);
     TEST_END
 }
 
@@ -735,7 +754,7 @@ TEST_F(hdl_parser_vhdl_test, check_logic_vectors)
             ASSERT_NE(nl, nullptr);
             EXPECT_EQ(nl->get_nets().size(), 10); // net_global_in + net_global_out + 4 nets in l_vec_1 + 4 nets in l_vec_2
             for(auto net_name : std::set<std::string>({"l_vec_1(0)","l_vec_1(1)","l_vec_1(2)","l_vec_1(3)","l_vec_2(0)","l_vec_2(1)","l_vec_2(2)","l_vec_2(3)"})){
-                EXPECT_FALSE(nl->get_nets(net_name).empty());
+                EXPECT_FALSE(nl->get_nets(net_name_filter(net_name)).empty());
             }
         }
         {
@@ -782,7 +801,7 @@ TEST_F(hdl_parser_vhdl_test, check_logic_vectors)
             ASSERT_NE(nl, nullptr);
             EXPECT_EQ(nl->get_nets().size(), 6); // net_global_in + global_out + 4 nets in l_vec
             for(auto net_name : std::set<std::string>({"l_vec(0,2)","l_vec(0,3)","l_vec(1,2)","l_vec(1,3)"})){
-                EXPECT_FALSE(nl->get_nets(net_name).empty());
+                EXPECT_FALSE(nl->get_nets(net_name_filter(net_name)).empty());
             }
 
 
@@ -839,7 +858,7 @@ TEST_F(hdl_parser_vhdl_test, check_logic_vectors)
             EXPECT_EQ(nl->get_nets().size(), 10); // net_global_in + net_global_out + 8 nets in l_vec
             for(auto net_name : std::set<std::string>({"l_vec(0,0,0)","l_vec(0,0,1)","l_vec(0,1,0)","l_vec(0,1,1)",
                                                        "l_vec(1,0,0)","l_vec(1,0,1)","l_vec(1,1,0)","l_vec(1,1,1)"})){
-                EXPECT_FALSE(nl->get_nets(net_name).empty());
+                EXPECT_FALSE(nl->get_nets(net_name_filter(net_name)).empty());
             }
 
         }
@@ -910,8 +929,8 @@ TEST_F(hdl_parser_vhdl_test, check_port_assignment) {
             }
 
             ASSERT_NE(nl, nullptr);
-            ASSERT_FALSE(nl->get_gates("GATE_4^1_IN_4^1_OUT", "gate_0").empty());
-            std::shared_ptr<gate> gate_0 = *(nl->get_gates("GATE_4^1_IN_4^1_OUT" ,"gate_0").begin());
+            ASSERT_FALSE(nl->get_gates(gate_filter("GATE_4^1_IN_4^1_OUT", "gate_0")).empty());
+            std::shared_ptr<gate> gate_0 = *(nl->get_gates(gate_filter("GATE_4^1_IN_4^1_OUT" ,"gate_0")).begin());
 
             std::shared_ptr<net> net_0 = gate_0->get_fan_out_net("O(0)");
             ASSERT_NE(net_0, nullptr);
@@ -947,8 +966,8 @@ TEST_F(hdl_parser_vhdl_test, check_port_assignment) {
             }
 
             ASSERT_NE(nl, nullptr);
-            ASSERT_FALSE(nl->get_gates("GATE_2^2_IN_2^2_OUT", "gate_0").empty());
-            std::shared_ptr<gate> gate_0 = *(nl->get_gates("GATE_2^2_IN_2^2_OUT", "gate_0").begin());
+            ASSERT_FALSE(nl->get_gates(gate_filter("GATE_2^2_IN_2^2_OUT", "gate_0")).empty());
+            std::shared_ptr<gate> gate_0 = *(nl->get_gates(gate_filter("GATE_2^2_IN_2^2_OUT", "gate_0")).begin());
 
             std::shared_ptr<net> net_i_0 = gate_0->get_fan_in_net("I(0, 1)");
             ASSERT_NE(net_i_0, nullptr);
@@ -981,8 +1000,8 @@ TEST_F(hdl_parser_vhdl_test, check_port_assignment) {
             }
 
             ASSERT_NE(nl, nullptr);
-            ASSERT_FALSE(nl->get_gates("GATE_4^1_IN_4^1_OUT", "gate_0").empty());
-            std::shared_ptr<gate> gate_0 = *(nl->get_gates("GATE_4^1_IN_4^1_OUT" ,"gate_0").begin());
+            ASSERT_FALSE(nl->get_gates(gate_filter("GATE_4^1_IN_4^1_OUT", "gate_0")).empty());
+            std::shared_ptr<gate> gate_0 = *(nl->get_gates(gate_filter("GATE_4^1_IN_4^1_OUT" ,"gate_0")).begin());
 
             EXPECT_EQ(gate_0->get_fan_in_nets().size(), 2);
 
@@ -1026,8 +1045,8 @@ TEST_F(hdl_parser_vhdl_test, check_port_assignment) {
             }
 
             ASSERT_NE(nl, nullptr);
-            ASSERT_FALSE(nl->get_gates("GATE_4^1_IN_4^1_OUT", "gate_0").empty());
-            std::shared_ptr<gate> gate_0 = *(nl->get_gates("GATE_4^1_IN_4^1_OUT" ,"gate_0").begin());
+            ASSERT_FALSE(nl->get_gates(gate_filter("GATE_4^1_IN_4^1_OUT", "gate_0")).empty());
+            std::shared_ptr<gate> gate_0 = *(nl->get_gates(gate_filter("GATE_4^1_IN_4^1_OUT" ,"gate_0")).begin());
 
             EXPECT_EQ(gate_0->get_fan_out_nets().size(), 3);
 
@@ -1071,8 +1090,8 @@ TEST_F(hdl_parser_vhdl_test, check_port_assignment) {
             }
 
             ASSERT_NE(nl, nullptr);
-            ASSERT_FALSE(nl->get_gates("GATE_4^1_IN_4^1_OUT", "gate_0").empty());
-            std::shared_ptr<gate> gate_0 = *(nl->get_gates("GATE_4^1_IN_4^1_OUT" ,"gate_0").begin());
+            ASSERT_FALSE(nl->get_gates(gate_filter("GATE_4^1_IN_4^1_OUT", "gate_0")).empty());
+            std::shared_ptr<gate> gate_0 = *(nl->get_gates(gate_filter("GATE_4^1_IN_4^1_OUT" ,"gate_0")).begin());
 
             EXPECT_EQ(gate_0->get_fan_out_nets().size(), 2);
 
@@ -1112,8 +1131,8 @@ TEST_F(hdl_parser_vhdl_test, check_port_assignment) {
             }
 
             ASSERT_NE(nl, nullptr);
-            ASSERT_FALSE(nl->get_gates("GATE_4^1_IN_4^1_OUT", "gate_0").empty());
-            std::shared_ptr<gate> gate_0 = *(nl->get_gates("GATE_4^1_IN_4^1_OUT" ,"gate_0").begin());
+            ASSERT_FALSE(nl->get_gates(gate_filter("GATE_4^1_IN_4^1_OUT", "gate_0")).empty());
+            std::shared_ptr<gate> gate_0 = *(nl->get_gates(gate_filter("GATE_4^1_IN_4^1_OUT" ,"gate_0")).begin());
 
             EXPECT_EQ(gate_0->get_fan_out_nets().size(), 2);
 
@@ -1154,8 +1173,8 @@ TEST_F(hdl_parser_vhdl_test, check_port_assignment) {
             }
 
             ASSERT_NE(nl, nullptr);
-            ASSERT_FALSE(nl->get_gates("GATE_4^1_IN_4^1_OUT", "gate_0").empty());
-            std::shared_ptr<gate> gate_0 = *(nl->get_gates("GATE_4^1_IN_4^1_OUT" ,"gate_0").begin());
+            ASSERT_FALSE(nl->get_gates(gate_filter("GATE_4^1_IN_4^1_OUT", "gate_0")).empty());
+            std::shared_ptr<gate> gate_0 = *(nl->get_gates(gate_filter("GATE_4^1_IN_4^1_OUT" ,"gate_0")).begin());
 
             EXPECT_EQ(gate_0->get_fan_out_nets().size(), 0);
         }*/
@@ -1186,8 +1205,8 @@ TEST_F(hdl_parser_vhdl_test, check_port_assignment) {
             }
 
             ASSERT_NE(nl, nullptr);
-            ASSERT_FALSE(nl->get_gates("GATE_4^1_IN_4^1_OUT", "gate_0").empty());
-            std::shared_ptr<gate> gate_0 = *(nl->get_gates("GATE_4^1_IN_4^1_OUT" ,"gate_0").begin());
+            ASSERT_FALSE(nl->get_gates(gate_filter("GATE_4^1_IN_4^1_OUT", "gate_0")).empty());
+            std::shared_ptr<gate> gate_0 = *(nl->get_gates(gate_filter("GATE_4^1_IN_4^1_OUT" ,"gate_0")).begin());
 
             EXPECT_EQ(gate_0->get_fan_in_nets().size(), 0);
 
@@ -1238,8 +1257,8 @@ TEST_F(hdl_parser_vhdl_test, check_component)
                 test_def::get_captured_stdout();
             }
             ASSERT_NE(nl, nullptr);
-            ASSERT_EQ(nl->get_gates("COMP_GATE").size(), 1);
-            std::shared_ptr<gate> comp_gate = *nl->get_gates("COMP_GATE").begin();
+            ASSERT_EQ(nl->get_gates(gate_type_filter("COMP_GATE")).size(), 1);
+            std::shared_ptr<gate> comp_gate = *nl->get_gates(gate_type_filter("COMP_GATE")).begin();
             EXPECT_NE(comp_gate->get_fan_in_net("COMP_IN"), nullptr);
             EXPECT_NE(comp_gate->get_fan_out_net("COMP_OUT"), nullptr);
             // EXPECT_EQ(comp_gate->get_inout_pin_types(), std::vector<std::string>({"COMP_INOUT"})); FIXME
@@ -1278,8 +1297,8 @@ TEST_F(hdl_parser_vhdl_test, check_attributes)
             std::shared_ptr<netlist> nl = vhdl_parser.parse(g_lib_name);
 
             ASSERT_NE(nl, nullptr);
-            ASSERT_EQ(nl->get_gates("INV").size(), 1);
-            std::shared_ptr<gate> attri_gate = *nl->get_gates("INV").begin();
+            ASSERT_EQ(nl->get_gates(gate_type_filter("INV")).size(), 1);
+            std::shared_ptr<gate> attri_gate = *nl->get_gates(gate_type_filter("INV")).begin();
             EXPECT_EQ(attri_gate->get_data_by_key("vhdl_attribute", "attri_name"), std::make_tuple("attri_type", "attri_value"));
         }
         {
@@ -1311,8 +1330,8 @@ TEST_F(hdl_parser_vhdl_test, check_attributes)
             std::shared_ptr<netlist> nl = vhdl_parser.parse(g_lib_name);
 
             ASSERT_NE(nl, nullptr);
-            ASSERT_EQ(nl->get_nets("net_0").size(), 1);
-            std::shared_ptr<net> attri_net = *nl->get_nets("net_0").begin();
+            ASSERT_EQ(nl->get_nets(net_name_filter("net_0")).size(), 1);
+            std::shared_ptr<net> attri_net = *nl->get_nets(net_name_filter("net_0")).begin();
             EXPECT_NE(attri_net, nullptr);
             EXPECT_EQ(attri_net->get_data_by_key("vhdl_attribute", "attri_name"), std::make_tuple("attri_type", "attri_value"));
         }
@@ -1357,14 +1376,14 @@ TEST_F(hdl_parser_vhdl_test, check_direct_assignment)
             std::shared_ptr<netlist> nl = vhdl_parser.parse(g_lib_name);
 
             ASSERT_NE(nl, nullptr);
-            ASSERT_EQ(nl->get_nets("net_1").size(), 1);
-            std::shared_ptr<net> dir_ass_net = *nl->get_nets("net_1").begin();
+            ASSERT_EQ(nl->get_nets(net_name_filter("net_1")).size(), 1);
+            std::shared_ptr<net> dir_ass_net = *nl->get_nets(net_name_filter("net_1")).begin();
 
-            ASSERT_EQ(nl->get_gates("INV","gate_0").size(), 1);
-            ASSERT_EQ(nl->get_gates("INV","gate_1").size(), 1);
+            ASSERT_EQ(nl->get_gates(gate_filter("INV","gate_0")).size(), 1);
+            ASSERT_EQ(nl->get_gates(gate_filter("INV","gate_1")).size(), 1);
 
-            std::shared_ptr<gate> g_0 = *nl->get_gates("INV","gate_0").begin();
-            std::shared_ptr<gate> g_1 = *nl->get_gates("INV","gate_1").begin();
+            std::shared_ptr<gate> g_0 = *nl->get_gates(gate_filter("INV","gate_0")).begin();
+            std::shared_ptr<gate> g_1 = *nl->get_gates(gate_filter("INV","gate_1")).begin();
 
             EXPECT_EQ(g_0->get_fan_out_net("O"), dir_ass_net);
             EXPECT_EQ(g_1->get_fan_in_net("I"), dir_ass_net);
@@ -1421,14 +1440,14 @@ TEST_F(hdl_parser_vhdl_test, check_direct_assignment)
 
             ASSERT_NE(nl, nullptr);
             EXPECT_EQ(nl->get_nets().size(), 3); // global_in + global_out + net_master
-            ASSERT_EQ(nl->get_nets("net_master").size(), 1);
-            std::shared_ptr<net> net_master = *nl->get_nets("net_master").begin();
+            ASSERT_EQ(nl->get_nets(net_name_filter("net_master")).size(), 1);
+            std::shared_ptr<net> net_master = *nl->get_nets(net_name_filter("net_master")).begin();
 
-            ASSERT_EQ(nl->get_gates("INV","gate_0").size(), 1);
-            ASSERT_EQ(nl->get_gates("AND3","gate_1").size(), 1);
+            ASSERT_EQ(nl->get_gates(gate_filter("INV","gate_0")).size(), 1);
+            ASSERT_EQ(nl->get_gates(gate_filter("AND3","gate_1")).size(), 1);
 
-            std::shared_ptr<gate> g_0 = *nl->get_gates("INV","gate_0").begin();
-            std::shared_ptr<gate> g_1 = *nl->get_gates("AND3","gate_1").begin();
+            std::shared_ptr<gate> g_0 = *nl->get_gates(gate_filter("INV","gate_0")).begin();
+            std::shared_ptr<gate> g_1 = *nl->get_gates(gate_filter("AND3","gate_1")).begin();
 
             // Check the connections
             EXPECT_EQ(g_0->get_fan_out_net("O"), net_master);
@@ -1527,26 +1546,26 @@ TEST_F(hdl_parser_vhdl_test, check_multiple_entities)
 
             // Test that all gates are created
             ASSERT_NE(nl, nullptr);
-            ASSERT_EQ(nl->get_gates("INV", "gate_0").size(), 1);
-            ASSERT_EQ(nl->get_gates("INV", "gate_1").size(), 1);
-            ASSERT_EQ(nl->get_gates("INV", "gate_0_child").size(), 1);
-            ASSERT_EQ(nl->get_gates("INV", "gate_1_child").size(), 1);
-            std::shared_ptr<gate> gate_0 = *nl->get_gates("INV", "gate_0").begin();
-            std::shared_ptr<gate> gate_1 = *nl->get_gates("INV", "gate_1").begin();
-            std::shared_ptr<gate> gate_0_child = *nl->get_gates("INV", "gate_0_child").begin();
-            std::shared_ptr<gate> gate_1_child = *nl->get_gates("INV", "gate_1_child").begin();
+            ASSERT_EQ(nl->get_gates(gate_filter("INV", "gate_0")).size(), 1);
+            ASSERT_EQ(nl->get_gates(gate_filter("INV", "gate_1")).size(), 1);
+            ASSERT_EQ(nl->get_gates(gate_filter("INV", "gate_0_child")).size(), 1);
+            ASSERT_EQ(nl->get_gates(gate_filter("INV", "gate_1_child")).size(), 1);
+            std::shared_ptr<gate> gate_0 = *nl->get_gates(gate_filter("INV", "gate_0")).begin();
+            std::shared_ptr<gate> gate_1 = *nl->get_gates(gate_filter("INV", "gate_1")).begin();
+            std::shared_ptr<gate> gate_0_child = *nl->get_gates(gate_filter("INV", "gate_0_child")).begin();
+            std::shared_ptr<gate> gate_1_child = *nl->get_gates(gate_filter("INV", "gate_1_child")).begin();
 
             // Test that all nets are created
-            ASSERT_EQ(nl->get_nets("net_0").size(), 1);
-            ASSERT_EQ(nl->get_nets("net_1").size(), 1);
-            ASSERT_EQ(nl->get_nets("net_global_in").size(), 1);
-            ASSERT_EQ(nl->get_nets("net_global_out").size(), 1);
-            ASSERT_EQ(nl->get_nets("net_0_child").size(), 1);
-            std::shared_ptr<net> net_0 = *nl->get_nets("net_0").begin();
-            std::shared_ptr<net> net_1 = *nl->get_nets("net_1").begin();
-            std::shared_ptr<net> net_global_in= *nl->get_nets("net_global_in").begin();
-            std::shared_ptr<net> net_global_out= *nl->get_nets("net_global_out").begin();
-            std::shared_ptr<net> net_0_child= *nl->get_nets("net_0_child").begin();
+            ASSERT_EQ(nl->get_nets(net_name_filter("net_0")).size(), 1);
+            ASSERT_EQ(nl->get_nets(net_name_filter("net_1")).size(), 1);
+            ASSERT_EQ(nl->get_nets(net_name_filter("net_global_in")).size(), 1);
+            ASSERT_EQ(nl->get_nets(net_name_filter("net_global_out")).size(), 1);
+            ASSERT_EQ(nl->get_nets(net_name_filter("net_0_child")).size(), 1);
+            std::shared_ptr<net> net_0 = *nl->get_nets(net_name_filter("net_0")).begin();
+            std::shared_ptr<net> net_1 = *nl->get_nets(net_name_filter("net_1")).begin();
+            std::shared_ptr<net> net_global_in= *nl->get_nets(net_name_filter("net_global_in")).begin();
+            std::shared_ptr<net> net_global_out= *nl->get_nets(net_name_filter("net_global_out")).begin();
+            std::shared_ptr<net> net_0_child= *nl->get_nets(net_name_filter("net_0_child")).begin();
 
             // Test that all nets are connected correctly
             EXPECT_EQ(gate_0->get_fan_in_net("I"), net_global_in);
@@ -1738,7 +1757,7 @@ TEST_F(hdl_parser_vhdl_test, check_multiple_entities)
             }
 
             ASSERT_NE(nl, nullptr);
-            ASSERT_FALSE(nl->get_gates("INV", "gate_0").empty());
+            ASSERT_FALSE(nl->get_gates(gate_filter("INV", "gate_0")).empty());
 
         }
     TEST_END
@@ -1857,8 +1876,8 @@ TEST_F(hdl_parser_vhdl_test, check_invalid_input)
             hdl_parser_vhdl vhdl_parser(input);
             std::shared_ptr<netlist> nl = vhdl_parser.parse(g_lib_name);
             ASSERT_NE(nl, nullptr);
-            ASSERT_FALSE(nl->get_gates("INV", "gate_0").empty());
-            std::shared_ptr<gate> gate_0 = *nl->get_gates("INV", "gate_0").begin();
+            ASSERT_FALSE(nl->get_gates(gate_filter("INV", "gate_0")).empty());
+            std::shared_ptr<gate> gate_0 = *nl->get_gates(gate_filter("INV", "gate_0")).begin();
             EXPECT_TRUE(gate_0->get_fan_out_nets().empty());
             EXPECT_TRUE(gate_0->get_fan_in_nets().empty());
         }*/

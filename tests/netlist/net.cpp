@@ -161,28 +161,9 @@ TEST_F(net_test, check_get_src){
             EXPECT_EQ(test_net->get_src(), get_endpoint(t_gate, "O"));
         }
         {
-            // Get the source (pass a connected gate type)
-            std::shared_ptr<netlist> nl   = create_empty_netlist(MIN_NETLIST_ID+0);
-            std::shared_ptr<net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
-            auto t_gate                   = create_test_gate(nl, MIN_GATE_ID+1);
-            test_net->set_src(t_gate, "O");
-            EXPECT_EQ(test_net->get_src("AND3"), get_endpoint(t_gate, "O"));
-            EXPECT_EQ(test_net->get_src_by_type("AND3"), get_endpoint(t_gate, "O"));
-        }
-        {
-            // Get the source (pass a not connected gate type)
-            std::shared_ptr<netlist> nl   = create_empty_netlist(MIN_NETLIST_ID+0);
-            std::shared_ptr<net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
-            auto t_gate                   = create_test_gate(nl, MIN_GATE_ID+1);
-            test_net->set_src(t_gate, "O");
-            EXPECT_TRUE(is_empty(test_net->get_src("INV")));    //t_gate has type AND3 not x_INV
-            EXPECT_TRUE(is_empty(test_net->get_src_by_type("INV")));
-        }
-        {
             // Get the source if the gate has no source
             std::shared_ptr<netlist> nl   = create_empty_netlist(MIN_NETLIST_ID+0);
             std::shared_ptr<net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
-            EXPECT_TRUE(is_empty(test_net->get_src()));
             EXPECT_TRUE(is_empty(test_net->get_src()));
         }
     TEST_END
@@ -393,7 +374,8 @@ TEST_F(net_test, check_is_a_dst){
             std::shared_ptr<net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
             auto t_gate                   = create_test_gate(nl, MIN_GATE_ID+1);
             test_net->add_dst(t_gate, "I2");
-            EXPECT_TRUE(test_net->is_a_dst(t_gate, "I2"));
+            EXPECT_TRUE(test_net->is_a_dst(t_gate));
+            EXPECT_TRUE(test_net->is_a_dst({t_gate, "I2"}));
         }
         {
             // Gate is a destination but the pin type doesn't match
@@ -401,7 +383,8 @@ TEST_F(net_test, check_is_a_dst){
             std::shared_ptr<net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
             auto t_gate                   = create_test_gate(nl, MIN_GATE_ID+1);
             test_net->add_dst(t_gate, "I2");
-            EXPECT_FALSE(test_net->is_a_dst(t_gate, "A(4)"));
+            EXPECT_TRUE(test_net->is_a_dst(t_gate));
+            EXPECT_FALSE(test_net->is_a_dst({t_gate, "A(4)"}));
         }
         {
             // Gate is a destination but the pin type doesn't exist
@@ -409,7 +392,8 @@ TEST_F(net_test, check_is_a_dst){
             std::shared_ptr<net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
             auto t_gate                   = create_test_gate(nl, MIN_GATE_ID+1);
             test_net->add_dst(t_gate, "I2");
-            EXPECT_FALSE(test_net->is_a_dst(t_gate, "NEx_PIN"));
+            EXPECT_TRUE(test_net->is_a_dst(t_gate));
+            EXPECT_FALSE(test_net->is_a_dst({t_gate, "NEx_PIN"}));
         }
 
         // NEGATIVE
@@ -451,8 +435,7 @@ TEST_F(net_test, check_get_dsts)
         {
             // Get the destinations by passing a gate type
             std::vector<endpoint> dsts = {get_endpoint(inv_gate, "I")};
-            EXPECT_TRUE(vectors_have_same_content(test_net->get_dsts("INV"), dsts));
-            EXPECT_TRUE(vectors_have_same_content(test_net->get_dsts_by_type("INV"), dsts));
+            EXPECT_TRUE(vectors_have_same_content(test_net->get_dsts([](auto ep){return ep.gate->get_type()->get_name() == "INV";}), dsts));
         }
     TEST_END
 }

@@ -29,6 +29,25 @@ protected:
     }
 };
 
+static std::function<bool(const std::shared_ptr<net>&)> net_name_filter(const std::string& name){
+    return [name](auto& n){return n->get_name() == name;};
+}
+
+static std::function<bool(const std::shared_ptr<gate>&)> gate_name_filter(const std::string& name){
+    return [name](auto& g){return g->get_name() == name;};
+}
+
+static std::function<bool(const std::shared_ptr<gate>&)> gate_type_filter(const std::string& type){
+    return [type](auto& g){return g->get_type()->get_name() == type;};
+}
+
+static std::function<bool(const std::shared_ptr<gate>&)> gate_filter(const std::string& type, const std::string& name){
+    return [name, type](auto& g){return g->get_name() == name && g->get_type()->get_name() == type;};
+}
+
+static std::function<bool(const endpoint&)> endpoint_type_filter(const std::string& type){
+    return [type](auto& ep){return ep.gate->get_type()->get_name() == type;};
+}
 
 
 /*                                    net_0
@@ -86,12 +105,12 @@ TEST_F(hdl_parser_verilog_test, check_main_example)
 
 
             // Check if the gates are parsed correctly
-            ASSERT_EQ(nl->get_gates("INV").size(), 1);
-            std::shared_ptr<gate> gate_0 = *(nl->get_gates("INV").begin());
-            ASSERT_EQ(nl->get_gates("AND2").size(), 1);
-            std::shared_ptr<gate> gate_1 = *(nl->get_gates("AND2").begin());
-            ASSERT_EQ(nl->get_gates("AND3").size(), 1);
-            std::shared_ptr<gate> gate_2 = *(nl->get_gates("AND3").begin());
+            ASSERT_EQ(nl->get_gates(gate_type_filter("INV")).size(), 1);
+            std::shared_ptr<gate> gate_0 = *(nl->get_gates(gate_type_filter("INV")).begin());
+            ASSERT_EQ(nl->get_gates(gate_type_filter("AND2")).size(), 1);
+            std::shared_ptr<gate> gate_1 = *(nl->get_gates(gate_type_filter("AND2")).begin());
+            ASSERT_EQ(nl->get_gates(gate_type_filter("AND3")).size(), 1);
+            std::shared_ptr<gate> gate_2 = *(nl->get_gates(gate_type_filter("AND3")).begin());
 
             ASSERT_NE(gate_0, nullptr);
             EXPECT_EQ(gate_0->get_name(), "gate_0");
@@ -103,16 +122,16 @@ TEST_F(hdl_parser_verilog_test, check_main_example)
             EXPECT_EQ(gate_2->get_name(), "gate_2");
 
             // Check if the nets are parsed correctly
-            ASSERT_FALSE(nl->get_nets("net_0").empty());
-            std::shared_ptr<net> net_0            = *(nl->get_nets("net_0").begin());
-            ASSERT_FALSE(nl->get_nets("net_1").empty());
-            std::shared_ptr<net> net_1            = *(nl->get_nets("net_1").begin());
-            ASSERT_FALSE(nl->get_nets("global_in").empty());
-            std::shared_ptr<net> net_global_in    = *(nl->get_nets("global_in").begin());
-            ASSERT_FALSE(nl->get_nets("global_out").empty());
-            std::shared_ptr<net> net_global_out   = *(nl->get_nets("global_out").begin());
-            ASSERT_FALSE(nl->get_nets("global_inout").empty());
-            std::shared_ptr<net> net_global_inout = *(nl->get_nets("global_inout").begin());
+            ASSERT_FALSE(nl->get_nets(net_name_filter("net_0")).empty());
+            std::shared_ptr<net> net_0            = *(nl->get_nets(net_name_filter("net_0")).begin());
+            ASSERT_FALSE(nl->get_nets(net_name_filter("net_1")).empty());
+            std::shared_ptr<net> net_1            = *(nl->get_nets(net_name_filter("net_1")).begin());
+            ASSERT_FALSE(nl->get_nets(net_name_filter("global_in")).empty());
+            std::shared_ptr<net> net_global_in    = *(nl->get_nets(net_name_filter("global_in")).begin());
+            ASSERT_FALSE(nl->get_nets(net_name_filter("global_out")).empty());
+            std::shared_ptr<net> net_global_out   = *(nl->get_nets(net_name_filter("global_out")).begin());
+            ASSERT_FALSE(nl->get_nets(net_name_filter("global_inout")).empty());
+            std::shared_ptr<net> net_global_inout = *(nl->get_nets(net_name_filter("global_inout")).begin());
 
             ASSERT_NE(net_0, nullptr);
             EXPECT_EQ(net_0->get_name(), "net_0");
@@ -153,7 +172,7 @@ TEST_F(hdl_parser_verilog_test, check_main_example)
 TEST_F(hdl_parser_verilog_test, check_whitespace_chaos)
 {
     TEST_START
-         {  
+         {
              std::stringstream input("module top (\n"
                                      "  global_in, \n"
                                      " global_out, "
@@ -182,12 +201,12 @@ TEST_F(hdl_parser_verilog_test, check_whitespace_chaos)
 
 
             // Check if the gates are parsed correctly
-            ASSERT_EQ(nl->get_gates("INV").size(), 1);
-            std::shared_ptr<gate> gate_0 = *(nl->get_gates("INV").begin());
-            ASSERT_EQ(nl->get_gates("AND2").size(), 1);
-            std::shared_ptr<gate> gate_1 = *(nl->get_gates("AND2").begin());
-            ASSERT_EQ(nl->get_gates("AND3").size(), 1);
-            std::shared_ptr<gate> gate_2 = *(nl->get_gates("AND3").begin());
+            ASSERT_EQ(nl->get_gates(gate_type_filter("INV")).size(), 1);
+            std::shared_ptr<gate> gate_0 = *(nl->get_gates(gate_type_filter("INV")).begin());
+            ASSERT_EQ(nl->get_gates(gate_type_filter("AND2")).size(), 1);
+            std::shared_ptr<gate> gate_1 = *(nl->get_gates(gate_type_filter("AND2")).begin());
+            ASSERT_EQ(nl->get_gates(gate_type_filter("AND3")).size(), 1);
+            std::shared_ptr<gate> gate_2 = *(nl->get_gates(gate_type_filter("AND3")).begin());
 
             ASSERT_NE(gate_0, nullptr);
             EXPECT_EQ(gate_0->get_name(), "gate_0");
@@ -199,16 +218,16 @@ TEST_F(hdl_parser_verilog_test, check_whitespace_chaos)
             EXPECT_EQ(gate_2->get_name(), "gate_2");
 
             // Check if the nets are parsed correctly
-            ASSERT_FALSE(nl->get_nets("net_0").empty());
-            std::shared_ptr<net> net_0            = *(nl->get_nets("net_0").begin());
-            ASSERT_FALSE(nl->get_nets("net_1").empty());
-            std::shared_ptr<net> net_1            = *(nl->get_nets("net_1").begin());
-            ASSERT_FALSE(nl->get_nets("global_in").empty());
-            std::shared_ptr<net> net_global_in    = *(nl->get_nets("global_in").begin());
-            ASSERT_FALSE(nl->get_nets("global_out").empty());
-            std::shared_ptr<net> net_global_out   = *(nl->get_nets("global_out").begin());
-            ASSERT_FALSE(nl->get_nets("global_inout").empty());
-            std::shared_ptr<net> net_global_inout = *(nl->get_nets("global_inout").begin());
+            ASSERT_FALSE(nl->get_nets(net_name_filter("net_0")).empty());
+            std::shared_ptr<net> net_0            = *(nl->get_nets(net_name_filter("net_0")).begin());
+            ASSERT_FALSE(nl->get_nets(net_name_filter("net_1")).empty());
+            std::shared_ptr<net> net_1            = *(nl->get_nets(net_name_filter("net_1")).begin());
+            ASSERT_FALSE(nl->get_nets(net_name_filter("global_in")).empty());
+            std::shared_ptr<net> net_global_in    = *(nl->get_nets(net_name_filter("global_in")).begin());
+            ASSERT_FALSE(nl->get_nets(net_name_filter("global_out")).empty());
+            std::shared_ptr<net> net_global_out   = *(nl->get_nets(net_name_filter("global_out")).begin());
+            ASSERT_FALSE(nl->get_nets(net_name_filter("global_inout")).empty());
+            std::shared_ptr<net> net_global_inout = *(nl->get_nets(net_name_filter("global_inout")).begin());
 
             ASSERT_NE(net_0, nullptr);
             EXPECT_EQ(net_0->get_name(), "net_0");
@@ -291,8 +310,8 @@ TEST_F(hdl_parser_verilog_test, check_comment_detection){
             }
 
             ASSERT_NE(nl, nullptr);
-            ASSERT_EQ(nl->get_gates("INV", "test_gate").size(), 1);
-            std::shared_ptr<gate> test_gate = *nl->get_gates("INV", "test_gate").begin();
+            ASSERT_EQ(nl->get_gates(gate_filter("INV", "test_gate")).size(), 1);
+            std::shared_ptr<gate> test_gate = *nl->get_gates(gate_filter("INV", "test_gate")).begin();
 
             // Test that the comments did not removed other parts (all no_comment_n generics should be created)
             for (std::string key : std::set<std::string>({"no_comment_0", "no_comment_1", "no_comment_2",
@@ -365,8 +384,8 @@ TEST_F(hdl_parser_verilog_test, check_generic_map){
 
             ASSERT_NE(nl, nullptr);
 
-            ASSERT_EQ(nl->get_gates("INV","gate_0").size(), 1);
-            std::shared_ptr<gate> gate_0 = *nl->get_gates("INV","gate_0").begin();
+            ASSERT_EQ(nl->get_gates(gate_filter("INV","gate_0")).size(), 1);
+            std::shared_ptr<gate> gate_0 = *nl->get_gates(gate_filter("INV","gate_0")).begin();
 
             // Integers are stored in their hex representation
             EXPECT_EQ(gate_0->get_data_by_key("generic","key_integer"), std::make_tuple("integer", "1234"));
@@ -430,22 +449,22 @@ TEST_F(hdl_parser_verilog_test, check_vector_bounds){
 
             ASSERT_NE(nl, nullptr);
             EXPECT_EQ(nl->get_nets().size(), 5); // 3 of the net_vector + global_in + global_out
-            ASSERT_EQ(nl->get_nets("net_vec(1)").size(), 1);
-            ASSERT_EQ(nl->get_nets("net_vec(2)").size(), 1);
-            ASSERT_EQ(nl->get_nets("net_vec(3)").size(), 1);
+            ASSERT_EQ(nl->get_nets(net_name_filter("net_vec(1)")).size(), 1);
+            ASSERT_EQ(nl->get_nets(net_name_filter("net_vec(2)")).size(), 1);
+            ASSERT_EQ(nl->get_nets(net_name_filter("net_vec(3)")).size(), 1);
 
-            std::shared_ptr<net> net_vec_1 = *nl->get_nets("net_vec(1)").begin();
-            std::shared_ptr<net> net_vec_2 = *nl->get_nets("net_vec(2)").begin();
-            std::shared_ptr<net> net_vec_3 = *nl->get_nets("net_vec(3)").begin();
+            std::shared_ptr<net> net_vec_1 = *nl->get_nets(net_name_filter("net_vec(1)")).begin();
+            std::shared_ptr<net> net_vec_2 = *nl->get_nets(net_name_filter("net_vec(2)")).begin();
+            std::shared_ptr<net> net_vec_3 = *nl->get_nets(net_name_filter("net_vec(3)")).begin();
 
             // Check if all gates are created
             for (std::string g_name : std::set<std::string>({"gate_0", "gate_1", "gate_2", "gate_3"})){
-                ASSERT_EQ(nl->get_gates(DONT_CARE, g_name).size(), 1);
+                ASSERT_EQ(nl->get_gates(gate_name_filter(g_name)).size(), 1);
             }
 
-            EXPECT_EQ(net_vec_1->get_src().get_gate(), *nl->get_gates(DONT_CARE, "gate_1").begin());
+            EXPECT_EQ(net_vec_1->get_src().get_gate(), *nl->get_gates(gate_name_filter("gate_1")).begin());
             ASSERT_EQ(net_vec_1->get_dsts().size(), 1);
-            EXPECT_EQ((*net_vec_1->get_dsts().begin()).get_gate(), *nl->get_gates(DONT_CARE, "gate_0").begin());
+            EXPECT_EQ((*net_vec_1->get_dsts().begin()).get_gate(), *nl->get_gates(gate_name_filter("gate_0")).begin());
         }
         {
             // Declare multiple wire vectors in one line
@@ -494,10 +513,10 @@ TEST_F(hdl_parser_verilog_test, check_vector_bounds){
 
             ASSERT_NE(nl, nullptr);
             EXPECT_EQ(nl->get_nets().size(), 6); // 3 of the net_vector + global_in + global_out
-            ASSERT_EQ(nl->get_nets("net_vec_0(0)").size(), 1);
-            ASSERT_EQ(nl->get_nets("net_vec_0(1)").size(), 1);
-            ASSERT_EQ(nl->get_nets("net_vec_0(0)").size(), 1);
-            ASSERT_EQ(nl->get_nets("net_vec_0(1)").size(), 1);
+            ASSERT_EQ(nl->get_nets(net_name_filter("net_vec_0(0)")).size(), 1);
+            ASSERT_EQ(nl->get_nets(net_name_filter("net_vec_0(1)")).size(), 1);
+            ASSERT_EQ(nl->get_nets(net_name_filter("net_vec_0(0)")).size(), 1);
+            ASSERT_EQ(nl->get_nets(net_name_filter("net_vec_0(1)")).size(), 1);
         }
     TEST_END
 }
@@ -565,20 +584,20 @@ TEST_F(hdl_parser_verilog_test, check_assign)
 
             ASSERT_NE(nl, nullptr);
 
-            ASSERT_EQ(nl->get_gates(DONT_CARE,"gate_0").size(), 1);
-            ASSERT_EQ(nl->get_gates(DONT_CARE,"gate_1").size(), 1);
-            ASSERT_EQ(nl->get_gates(DONT_CARE,"gate_2").size(), 1);
-            std::shared_ptr<gate> gate_0 = *nl->get_gates(DONT_CARE,"gate_0").begin();
-            std::shared_ptr<gate> gate_1 = *nl->get_gates(DONT_CARE,"gate_1").begin();
-            std::shared_ptr<gate> gate_2 = *nl->get_gates(DONT_CARE,"gate_2").begin();
+            ASSERT_EQ(nl->get_gates(gate_name_filter("gate_0")).size(), 1);
+            ASSERT_EQ(nl->get_gates(gate_name_filter("gate_1")).size(), 1);
+            ASSERT_EQ(nl->get_gates(gate_name_filter("gate_2")).size(), 1);
+            std::shared_ptr<gate> gate_0 = *nl->get_gates(gate_name_filter("gate_0")).begin();
+            std::shared_ptr<gate> gate_1 = *nl->get_gates(gate_name_filter("gate_1")).begin();
+            std::shared_ptr<gate> gate_2 = *nl->get_gates(gate_name_filter("gate_2")).begin();
 
-            ASSERT_EQ(nl->get_nets("net_0").size(), 1);
-            std::shared_ptr<net> net_0 = *nl->get_nets("net_0").begin();
+            ASSERT_EQ(nl->get_nets(net_name_filter("net_0")).size(), 1);
+            std::shared_ptr<net> net_0 = *nl->get_nets(net_name_filter("net_0")).begin();
 
             EXPECT_EQ(net_0->get_src().get_gate(), gate_0);
-            ASSERT_EQ(net_0->get_dsts("INV").size(), 2);
+            ASSERT_EQ(net_0->get_dsts(endpoint_type_filter("INV")).size(), 2);
             std::vector<std::shared_ptr<gate>> net_exp_dsts = {gate_1, gate_2};
-            std::vector<std::shared_ptr<gate>> net_0_dsts = {net_0->get_dsts("INV")[0].get_gate(), net_0->get_dsts("INV")[1].get_gate()};
+            std::vector<std::shared_ptr<gate>> net_0_dsts = {net_0->get_dsts(endpoint_type_filter("INV"))[0].get_gate(), net_0->get_dsts(endpoint_type_filter("INV"))[1].get_gate()};
             EXPECT_TRUE(vectors_have_same_content(net_0_dsts, net_exp_dsts));
         }
         {
@@ -652,13 +671,13 @@ TEST_F(hdl_parser_verilog_test, check_assign)
                 for (u64 i = 0; i < (1 << dim); i++){
                     ASSERT_NE(nl, nullptr);
 
-                    ASSERT_EQ(nl->get_nets("net_master_vector("+std::to_string(i)+")").size(), 1);
-                    std::shared_ptr<net> net_i = *nl->get_nets("net_master_vector(" + std::to_string(i) + ")").begin();
+                    ASSERT_EQ(nl->get_nets(net_name_filter("net_master_vector("+std::to_string(i)+")")).size(), 1);
+                    std::shared_ptr<net> net_i = *nl->get_nets(net_name_filter("net_master_vector(" + std::to_string(i) + ")")).begin();
 
-                    ASSERT_EQ(nl->get_gates("INV","in_gate_"+std::to_string(i)).size(), 1);
-                    ASSERT_EQ(nl->get_gates("INV","out_gate_"+std::to_string(i)).size(), 1);
-                    std::shared_ptr<gate> in_gate_i = *nl->get_gates("INV","in_gate_"+std::to_string(i)).begin();
-                    std::shared_ptr<gate> out_gate_i = *nl->get_gates("INV","out_gate_"+std::to_string(i)).begin();
+                    ASSERT_EQ(nl->get_gates(gate_filter("INV","in_gate_"+std::to_string(i))).size(), 1);
+                    ASSERT_EQ(nl->get_gates(gate_filter("INV","out_gate_"+std::to_string(i))).size(), 1);
+                    std::shared_ptr<gate> in_gate_i = *nl->get_gates(gate_filter("INV","in_gate_"+std::to_string(i))).begin();
+                    std::shared_ptr<gate> out_gate_i = *nl->get_gates(gate_filter("INV","out_gate_"+std::to_string(i))).begin();
 
                     EXPECT_EQ(in_gate_i->get_fan_out_net("O"), net_i);
                     EXPECT_EQ(out_gate_i->get_fan_in_net("I"), net_i);
@@ -698,8 +717,8 @@ TEST_F(hdl_parser_verilog_test, check_assign)
 
             ASSERT_NE(nl, nullptr);
 
-            ASSERT_EQ(nl->get_gates(DONT_CARE,"test_gate").size(), 1);
-            std::shared_ptr<gate> test_gate = *nl->get_gates(DONT_CARE,"test_gate").begin();
+            ASSERT_EQ(nl->get_gates(gate_name_filter("test_gate")).size(), 1);
+            std::shared_ptr<gate> test_gate = *nl->get_gates(gate_name_filter("test_gate")).begin();
 
         }*/
         /*{
@@ -780,7 +799,7 @@ TEST_F(hdl_parser_verilog_test, check_assign)
                                     "        .\\O (global_out )\n"
                                     "    ) ;\n"
                                     "endmodule");
-                                     
+
              hdl_parser_verilog verilog_parser(input);
              std::shared_ptr<netlist> nl = verilog_parser.parse(g_lib_name);
 
@@ -823,8 +842,8 @@ TEST_F(hdl_parser_verilog_test, check_global_gnd_vcc_gates)
             }
 
             ASSERT_NE(nl, nullptr);
-            ASSERT_EQ(nl->get_gates("VCC","gate_0").size(), 1);
-            std::shared_ptr<gate> gate_0 = *nl->get_gates("VCC","gate_0").begin();
+            ASSERT_EQ(nl->get_gates(gate_filter("VCC","gate_0")).size(), 1);
+            std::shared_ptr<gate> gate_0 = *nl->get_gates(gate_filter("VCC","gate_0")).begin();
             /* FIXME
             EXPECT_FALSE(gate_0->is_global_gnd_gate());
             EXPECT_TRUE(gate_0->is_global_vcc_gate());*/
@@ -852,8 +871,8 @@ TEST_F(hdl_parser_verilog_test, check_global_gnd_vcc_gates)
             }
 
             ASSERT_NE(nl, nullptr);
-            ASSERT_EQ(nl->get_gates("GND","gate_0").size(), 1);
-            std::shared_ptr<gate> gate_0 = *nl->get_gates("GND","gate_0").begin();
+            ASSERT_EQ(nl->get_gates(gate_filter("GND","gate_0")).size(), 1);
+            std::shared_ptr<gate> gate_0 = *nl->get_gates(gate_filter("GND","gate_0")).begin();
             /* FIXME
             EXPECT_TRUE(gate_0->is_global_gnd_gate());
             EXPECT_FALSE(gate_0->is_global_vcc_gate()); */
@@ -925,26 +944,26 @@ TEST_F(hdl_parser_verilog_test, check_multiple_entities)
 
             // Test that all gates are created
             ASSERT_NE(nl, nullptr);
-            ASSERT_EQ(nl->get_gates("INV", "gate_0").size(), 1);
-            ASSERT_EQ(nl->get_gates("INV", "gate_1").size(), 1);
-            ASSERT_EQ(nl->get_gates("INV", "gate_0_child").size(), 1);
-            ASSERT_EQ(nl->get_gates("INV", "gate_1_child").size(), 1);
-            std::shared_ptr<gate> gate_0 = *nl->get_gates("INV", "gate_0").begin();
-            std::shared_ptr<gate> gate_1 = *nl->get_gates("INV", "gate_1").begin();
-            std::shared_ptr<gate> gate_0_child = *nl->get_gates("INV", "gate_0_child").begin();
-            std::shared_ptr<gate> gate_1_child = *nl->get_gates("INV", "gate_1_child").begin();
+            ASSERT_EQ(nl->get_gates(gate_filter("INV", "gate_0")).size(), 1);
+            ASSERT_EQ(nl->get_gates(gate_filter("INV", "gate_1")).size(), 1);
+            ASSERT_EQ(nl->get_gates(gate_filter("INV", "gate_0_child")).size(), 1);
+            ASSERT_EQ(nl->get_gates(gate_filter("INV", "gate_1_child")).size(), 1);
+            std::shared_ptr<gate> gate_0 = *nl->get_gates(gate_filter("INV", "gate_0")).begin();
+            std::shared_ptr<gate> gate_1 = *nl->get_gates(gate_filter("INV", "gate_1")).begin();
+            std::shared_ptr<gate> gate_0_child = *nl->get_gates(gate_filter("INV", "gate_0_child")).begin();
+            std::shared_ptr<gate> gate_1_child = *nl->get_gates(gate_filter("INV", "gate_1_child")).begin();
 
             // Test that all nets are created
-            ASSERT_EQ(nl->get_nets("net_0").size(), 1);
-            ASSERT_EQ(nl->get_nets("net_1").size(), 1);
-            ASSERT_EQ(nl->get_nets("net_global_in").size(), 1);
-            ASSERT_EQ(nl->get_nets("net_global_out").size(), 1);
-            ASSERT_EQ(nl->get_nets("net_0_child").size(), 1);
-            std::shared_ptr<net> net_0 = *nl->get_nets("net_0").begin();
-            std::shared_ptr<net> net_1 = *nl->get_nets("net_1").begin();
-            std::shared_ptr<net> net_global_in= *nl->get_nets("net_global_in").begin();
-            std::shared_ptr<net> net_global_out= *nl->get_nets("net_global_out").begin();
-            std::shared_ptr<net> net_0_child= *nl->get_nets("net_0_child").begin();
+            ASSERT_EQ(nl->get_nets(net_name_filter("net_0")).size(), 1);
+            ASSERT_EQ(nl->get_nets(net_name_filter("net_1")).size(), 1);
+            ASSERT_EQ(nl->get_nets(net_name_filter("net_global_in")).size(), 1);
+            ASSERT_EQ(nl->get_nets(net_name_filter("net_global_out")).size(), 1);
+            ASSERT_EQ(nl->get_nets(net_name_filter("net_0_child")).size(), 1);
+            std::shared_ptr<net> net_0 = *nl->get_nets(net_name_filter("net_0")).begin();
+            std::shared_ptr<net> net_1 = *nl->get_nets(net_name_filter("net_1")).begin();
+            std::shared_ptr<net> net_global_in= *nl->get_nets(net_name_filter("net_global_in")).begin();
+            std::shared_ptr<net> net_global_out= *nl->get_nets(net_name_filter("net_global_out")).begin();
+            std::shared_ptr<net> net_0_child= *nl->get_nets(net_name_filter("net_0_child")).begin();
 
             // Test that all nets are connected correctly
             EXPECT_EQ(gate_0->get_fan_in_net("I"), net_global_in);
@@ -1128,10 +1147,10 @@ TEST_F(hdl_parser_verilog_test, check_zero_and_one_nets)
             hdl_parser_verilog verilog_parser(input);
             std::shared_ptr<netlist> nl = verilog_parser.parse(g_lib_name);
             EXPECT_NE(nl, nullptr);
-            ASSERT_EQ(nl->get_gates("INV", "gate_0").size(), 1);
-            ASSERT_EQ(nl->get_gates("INV", "gate_1").size(), 1);
-            std::shared_ptr<gate> gate_0 = *nl->get_gates("INV", "gate_0").begin();
-            std::shared_ptr<gate> gate_1 = *nl->get_gates("INV", "gate_1").begin();
+            ASSERT_EQ(nl->get_gates(gate_filter("INV", "gate_0")).size(), 1);
+            ASSERT_EQ(nl->get_gates(gate_filter("INV", "gate_1")).size(), 1);
+            std::shared_ptr<gate> gate_0 = *nl->get_gates(gate_filter("INV", "gate_0")).begin();
+            std::shared_ptr<gate> gate_1 = *nl->get_gates(gate_filter("INV", "gate_1")).begin();
             // Test that the nets '0' and '1' are created and connected
             std::shared_ptr<net> net_gnd = gate_0->get_fan_in_net("I");
             std::shared_ptr<net> net_vcc = gate_1->get_fan_in_net("I");
@@ -1140,8 +1159,8 @@ TEST_F(hdl_parser_verilog_test, check_zero_and_one_nets)
             EXPECT_EQ(net_gnd->get_name(), "\'0\'");
             EXPECT_EQ(net_vcc->get_name(), "\'1\'");
             // Test that the nets '0' and '1' are connected to a created global gnd/vcc gate
-            ASSERT_NE(net_gnd->get_src_by_type("GND").get_gate(), nullptr);
-            ASSERT_NE(net_vcc->get_src_by_type("VCC").get_gate(), nullptr);
+            ASSERT_NE(net_gnd->get_src().get_gate(), nullptr);
+            ASSERT_NE(net_vcc->get_src().get_gate(), nullptr);
             /* FIXME
             EXPECT_TRUE(net_gnd->get_src_by_type("GND").get_gate()->is_global_gnd_gate());
             EXPECT_TRUE(net_vcc->get_src_by_type("VCC").get_gate()->is_global_vcc_gate());

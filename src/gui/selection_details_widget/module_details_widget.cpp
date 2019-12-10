@@ -289,8 +289,8 @@ void module_details_widget::update(u32 module_id)
     m_id_item->setText(QString::number(module_id));
     m_name_item->setText(QString::fromStdString(module->get_name()));
 
-    auto total_number_of_gates  = module->get_gates(DONT_CARE, DONT_CARE, true).size();
-    auto direct_number_of_gates = module->get_gates(DONT_CARE, DONT_CARE, false).size();
+    auto total_number_of_gates  = module->get_gates(nullptr, true).size();
+    auto direct_number_of_gates = module->get_gates(nullptr, false).size();
     auto gate_count_text        = QString::number(total_number_of_gates);
     if (total_number_of_gates > 0)
     {

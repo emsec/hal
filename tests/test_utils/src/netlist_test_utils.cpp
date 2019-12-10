@@ -578,9 +578,9 @@ bool test_utils::modules_are_equal(const std::shared_ptr<module> m_0, const std:
         if (m_0->get_parent_module() != m_1->get_parent_module())
             return false;
     }
-    if (m_0->get_submodules(DONT_CARE,true).size() != m_1->get_submodules(DONT_CARE,true).size())
+    if (m_0->get_submodules(nullptr,true).size() != m_1->get_submodules(nullptr,true).size())
         return false;
-    for (auto sm_0 : m_0->get_submodules(DONT_CARE,true)){
+    for (auto sm_0 : m_0->get_submodules(nullptr,true)){
         if(sm_0 == nullptr) continue;
         if(m_1->get_netlist()->get_module_by_id(sm_0->get_id()) == nullptr){
             return false;

@@ -12,6 +12,8 @@ std::string boolean_function::to_string(const operation& op)
             return "|";
         case operation::XOR:
             return "^";
+        default:
+            return "?";
     }
 }
 

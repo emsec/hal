@@ -3,7 +3,6 @@
 #include "netlist/gate.h"
 #include "netlist/module.h"
 #include "netlist/net.h"
-#include "netlist/netlist_constants.h"
 #include "netlist/netlist_internal_manager.h"
 
 #include "netlist/event_system/netlist_event_handler.h"
@@ -200,9 +199,9 @@ std::shared_ptr<gate> netlist::get_gate_by_id(const u32 gate_id) const
     return m_top_module->get_gate_by_id(gate_id, true);
 }
 
-std::set<std::shared_ptr<gate>> netlist::get_gates(const std::string& gate_type_filter, const std::string& name_filter) const
+std::set<std::shared_ptr<gate>> netlist::get_gates(const std::function<bool(const std::shared_ptr<gate>&)>& filter) const
 {
-    return m_top_module->get_gates(gate_type_filter, name_filter, true);
+    return m_top_module->get_gates(filter, true);
 }
 
 bool netlist::mark_vcc_gate(const std::shared_ptr<gate> gate)
@@ -340,20 +339,20 @@ std::shared_ptr<net> netlist::get_net_by_id(u32 net_id) const
     return it->second;
 }
 
-std::unordered_set<std::shared_ptr<net>> netlist::get_nets(const std::string& name_filter) const
+std::unordered_set<std::shared_ptr<net>> netlist::get_nets(const std::function<bool(const std::shared_ptr<net>&)>& filter) const
 {
-    if (name_filter == DONT_CARE)
+    if (!filter)
     {
         return m_nets_set;
     }
     std::unordered_set<std::shared_ptr<net>> res;
-    for (const auto& x : m_nets_set)
+    for (const auto& net : m_nets_set)
     {
-        if (x->get_name() != name_filter)
+        if (!filter(net))
         {
             continue;
         }
-        res.insert(x);
+        res.insert(net);
     }
     return res;
 }
