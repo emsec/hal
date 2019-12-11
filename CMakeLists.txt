@@ -235,18 +235,6 @@ else()
     endif()
 endif()
 
-find_package(IGraph REQUIRED)
-if(HAVE_IGRAPH)
-    message(STATUS "Found following IGRAPH Libraries")
-    message(STATUS "    IGRAPH_INCLUDE_DIRS: ${IGRAPH_INCLUDES}")
-    message(STATUS "    IGRAPH_LIBRARIES: ${IGRAPH_LIBRARIES}")
-    include_directories(${IGRAPH_INCLUDES})
-
-    add_definitions(-DIGRAPH_VERSION_MAJOR_GUESS=${IGRAPH_VERSION_MAJOR_GUESS})
-    add_definitions(-DIGRAPH_VERSION_MINOR_GUESS=${IGRAPH_VERSION_MINOR_GUESS})
-    add_definitions(-DIGRAPH_VERSION_PATCH_GUESS=${IGRAPH_VERSION_PATCH_GUESS})
-endif(HAVE_IGRAPH)
-
 find_package(Filesystem REQUIRED Final Experimental)
 
 set(Boost_USE_MULTITHREADED ON)
@@ -313,6 +301,7 @@ if(UNIX)
     enable_cxx_compiler_flag_if_supported("-Wno-undef" "")
     enable_cxx_compiler_flag_if_supported("-fcolor-diagnostics" "")
     enable_cxx_compiler_flag_if_supported("-fdiagnostics-color=always" "")
+    enable_cxx_compiler_flag_if_supported("-fsized-deallocation" "")
 
     enable_cxx_compiler_flag_if_supported("-O0" "_DEBUG")
     enable_cxx_compiler_flag_if_supported("-g" "_DEBUG")
@@ -332,7 +321,7 @@ if(UNIX)
     #set(CMAKE_C_FLAGS${build_type} "${CMAKE_C_FLAGS${build_type}} -Werror")
     #set(CMAKE_CXX_FLAGS${build_type} "${CMAKE_CXX_FLAGS${build_type}} -Werror")
 
-    
+
     if (USE_LIBCXX)
         enable_cxx_compiler_flag_if_supported("-stdlib=libc++" "")
         enable_c_compiler_flag_if_supported("-stdlib=libc++" "")
