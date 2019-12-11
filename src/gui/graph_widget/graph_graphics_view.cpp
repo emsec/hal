@@ -340,6 +340,7 @@ void graph_graphics_view::dragEnterEvent(QDragEnterEvent *event)
 
 void graph_graphics_view::dragLeaveEvent(QDragLeaveEvent *event)
 {
+    Q_UNUSED(event)
     static_cast<graphics_scene*>(scene())->stop_drag_shadow();
 }
 
@@ -434,8 +435,6 @@ void graph_graphics_view::keyReleaseEvent(QKeyEvent* event)
 
 void graph_graphics_view::resizeEvent(QResizeEvent* event)
 {
-    Q_UNUSED(event)
-
     QGraphicsView::resizeEvent(event);
     adjust_min_scale();
 }
