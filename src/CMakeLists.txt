@@ -1,6 +1,5 @@
 include_directories(${include_directories}
                     ${CMAKE_SOURCE_DIR}/include
-                    ${BUDDY_INCLUDE_DIR}
                     SYSTEM ${Boost_INCLUDE_DIR})
 
 #
@@ -61,7 +60,6 @@ endif()
     endif(PythonInterp_FOUND)
 
     include_directories(${include_directories}
-                        ${BUDDY_INCLUDE_DIR}
                         ${CMAKE_SOURCE_DIR}/include
                         SYSTEM ${Boost_INCLUDE_DIR}
                         SYSTEM ${PYBIND11_INCLUDE_DIR}
@@ -86,7 +84,7 @@ endif()
 
     add_library(${PYTHON_PLUGIN_LIB} SHARED ${PYTHON_PLUGIN_LIB_HDR} ${PYTHON_PLUGIN_LIB_SRC})
     set_target_properties(${PYTHON_PLUGIN_LIB} PROPERTIES DEFINE_SYMBOL API_PYTHON_PLUGIN)
-    target_link_libraries(${PYTHON_PLUGIN_LIB} ${LINK_LIBS} ${PYTHON_LIBRARIES} ${BUDDY_LIBRARY})
+    target_link_libraries(${PYTHON_PLUGIN_LIB} ${LINK_LIBS} ${PYTHON_LIBRARIES})
     install(TARGETS ${PYTHON_PLUGIN_LIB} LIBRARY DESTINATION ${LIBRARY_INSTALL_DIRECTORY} PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE INCLUDES DESTINATION ${INCLUDE_INSTALL_DIRECTORY})
     if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
         add_sanitizers(${PYTHON_PLUGIN_LIB})

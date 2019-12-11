@@ -9,7 +9,6 @@ include_directories(${include_directories}
                     ${CMAKE_SOURCE_DIR}/include
                     ${CMAKE_SOURCE_DIR}/hal_plugins
                     SYSTEM ${Boost_INCLUDE_DIR}
-                    SYSTEM${BUDDY_INCLUDE_DIR}
                     SYSTEM ${KYOTO_INCLUDE_DIR})
 
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/lib/hal_plugins/)
