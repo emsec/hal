@@ -47,6 +47,7 @@ project(hal)
 include(HalUtils) # Version helper
 include(DetectDistro) # Detect distribution helper
 include(Subdirs) # Get a lost of all subdirs in specific directory
+include(find_packages)
 
 # Common Project Information
 set(PROJECT_VENDOR "hal")
@@ -94,17 +95,9 @@ setup_output_directories()
 # For all ExternalProject_ADD handle configure build and test as different stages
 set_property(DIRECTORY PROPERTY EP_STEP_TARGETS configure build test)
 
-# Enable test collection
-if(BUILD_TESTS)
-    enable_testing()
-    include(CTest)
-endif()
-
 ################################
 #####   Find depending packages
 ################################
-
-set(missing_package "FALSE")
 
 # PkgConfig
 find_package(PkgConfig REQUIRED)
@@ -121,69 +114,10 @@ elseif(NOT PkgConfig_FOUND)
     endif(APPLE AND CMAKE_HOST_APPLE)
 endif(PkgConfig_FOUND)
 
-# Sanitizers
 find_package(Sanitizers)
 
-## Find OpenMP
-if(APPLE AND CMAKE_HOST_APPLE)
-    find_package(OpenMP)
-
-    if(OPENMP_FOUND OR OPENMP_CXX_FOUND)
-        message(STATUS "Found li
-        mp without any special flags")
-    endif()
-
-    # If OpenMP wasn't found, try if we can find it in the default Macports location
-    if((NOT OPENMP_FOUND) AND (NOT OPENMP_CXX_FOUND) AND EXISTS "/opt/local/lib/libomp/libomp.dylib") # older cmake uses OPENMP_FOUND, newer cmake also sets OPENMP_CXX_FOUND, homebrew installations seem only to get the latter set.
-        set(OpenMP_CXX_FLAGS "-Xpreprocessor -fopenmp -I/opt/local/include/libomp/")
-        set(OpenMP_CXX_LIB_NAMES omp)
-        set(OpenMP_omp_LIBRARY /opt/local/lib/libomp/libomp.dylib)
-
-        find_package(OpenMP)
-        if(OPENMP_FOUND OR OPENMP_CXX_FOUND)
-            message(STATUS "Found libomp in macports default location.")
-        else()
-            message(FATAL_ERROR "Didn't find libomp. Tried macports default location but also didn't find it.")
-        endif()
-    endif()
-
-    # If OpenMP wasn't found, try if we can find it in the default Homebrew location
-    if((NOT OPENMP_FOUND) AND (NOT OPENMP_CXX_FOUND) AND EXISTS "/usr/local/opt/libomp/lib/libomp.dylib")
-        set(OpenMP_CXX_FLAGS "-Xpreprocessor -fopenmp -I/usr/local/opt/libomp/include")
-        set(OpenMP_CXX_LIB_NAMES omp)
-        set(OpenMP_omp_LIBRARY /usr/local/opt/libomp/lib/libomp.dylib)
-
-        find_package(OpenMP)
-        if(OPENMP_FOUND OR OPENMP_CXX_FOUND)
-            message(STATUS "Found libomp in homebrew default location.")
-        else()
-            message(FATAL_ERROR "Didn't find libomp. Tried homebrew default location but also didn't find it.")
-        endif()
-    endif()
-
-    set(Additional_OpenMP_Libraries_Workaround "")
-
-    # Workaround because older cmake on apple doesn't support FindOpenMP
-    if((NOT OPENMP_FOUND) AND (NOT OPENMP_CXX_FOUND))
-        if((APPLE AND ((CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang") OR (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")))
-            AND ((CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL "7.0") AND (CMAKE_VERSION VERSION_LESS "3.12.0")))
-            message(STATUS "Applying workaround for OSX OpenMP with old cmake that doesn't have FindOpenMP")
-            set(OpenMP_CXX_FLAGS "-Xclang -fopenmp")
-            set(Additional_OpenMP_Libraries_Workaround "-lomp")
-        else()
-            message(FATAL_ERROR "Did not find OpenMP. Build with -DDISABLE_OPENMP=ON if you want to allow this and are willing to take the performance hit.")
-        endif()
-    endif()
-else()
-    find_package(OpenMP REQUIRED)
-    if(OpenMP_FOUND)
-        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
-        set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
-    endif()
-endif()
-
-
+# See cmake/find_packages.cmake
+find_openmp()
 
 find_package(Filesystem REQUIRED Final Experimental)
 
@@ -202,8 +136,6 @@ elseif(NOT Boost_FOUND)
         message(STATUS "    brew install boost --c++11")
     endif(APPLE AND CMAKE_HOST_APPLE)
 endif(Boost_FOUND)
-
-#find_package(Threads REQUIRED)
 
 find_package(RapidJSON REQUIRED)
 message(STATUS "Found rapidjson ${RAPIDJSON_INCLUDEDIR}")
@@ -230,6 +162,9 @@ else()
     set(spdlog_VERSION 1.4.2)
 endif()
 
+################################
+#####   Manage Compiler Flags
+################################
 
 #Set UNIX (macOS or Linux) compiler flags (clang or gcc). Set optimization level for debug or release.
 if(UNIX)
@@ -267,29 +202,27 @@ if(UNIX)
     enable_cxx_compiler_flag_if_supported("-g" "_RELWITHDEBINFO")
     #enable_cxx_compiler_flag_if_supported("-flto" "_RELWITHDEBINFO")
 
-    #set(CMAKE_C_FLAGS${build_type} "${CMAKE_C_FLAGS${build_type}} -Werror")
-    #set(CMAKE_CXX_FLAGS${build_type} "${CMAKE_CXX_FLAGS${build_type}} -Werror")
-
-
     if(USE_LIBCXX)
         enable_cxx_compiler_flag_if_supported("-stdlib=libc++" "")
         enable_c_compiler_flag_if_supported("-stdlib=libc++" "")
         set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -stdlib=libc++ -lc++abi")
     endif()
 
-
-    message(STATUS "C flags: ${CMAKE_C_FLAGS${build_type}}")
-    message(STATUS "CXX flags: ${CMAKE_CXX_FLAGS${build_type}}")
-    message(STATUS " ")
+    message(VERBOSE "C flags: ${CMAKE_C_FLAGS${build_type}}")
+    message(VERBOSE "CXX flags: ${CMAKE_CXX_FLAGS${build_type}}")
+    message(VERBOSE " ")
 endif(UNIX)
 
+# Enable Debug Symbols for Libcpp on macOS
 if(${CMAKE_BUILD_TYPE} EQUAL "Debug" AND APPLE AND CMAKE_HOST_APPLE)
     add_definitions(-D_LIBCPP_DEBUG)
 endif(${CMAKE_BUILD_TYPE} EQUAL "Debug" AND APPLE AND CMAKE_HOST_APPLE)
 
-#set names for core libraries
+#set names for major libraries
 set(NETLIST_LIB hal_netlist)
 set(CORE_LIB hal_core)
+set(GRAPH_ALGORITHM_LIB graph_algorithm)
+set(QUINE_MCCLUSKY_LIB quine_mccluskey)
 
 #define default linker target
 set(LINK_LIBS ${CMAKE_DL_LIBS}
@@ -297,30 +230,44 @@ set(LINK_LIBS ${CMAKE_DL_LIBS}
     ${CORE_LIB}
     )
 
-set(GRAPH_ALGORITHM_LIB graph_algorithm)
-set(QUINE_MCCLUSKY_LIB quine_mccluskey)
+################################
+#####   Enable Testing
+################################
 
-if(${BUILD_TESTS} AND ${BUILD_COVERAGE})
-    include(CodeCoverage)
-    append_coverage_compiler_flags()
-    set(COVERAGE_EXCLUDES '/usr/*' '${CMAKE_SOURCE_DIR}/tests/lib/googletest/*' '${CMAKE_SOURCE_DIR}/plugins/*' '${CMAKE_SOURCE_DIR}/deps/*' '${CMAKE_BINARY_DIR}/*' '${CMAKE_CURRENT_BINARY_DIR}/*' '${CMAKE_SOURCE_DIR}/include/gui/*' '${CMAKE_SOURCE_DIR}/src/gui/*')
-    message(STATUS "COVERAGE_EXCLUDES: ${COVERAGE_EXCLUDES}")
-    setup_target_for_coverage(NAME ${PROJECT_NAME}_coverage EXECUTABLE ctest DEPENDENCY runTest-log runTest-program_arguments runTest-program_options)
-endif(${BUILD_TESTS} AND ${BUILD_COVERAGE})
+# Enable test collection
+if(BUILD_TESTS)
+    enable_testing()
+    include(CTest)
 
+    # Setuo Codse Coverage
+    if(${BUILD_COVERAGE})
+        include(CodeCoverage)
+        append_coverage_compiler_flags()
+        set(COVERAGE_EXCLUDES '/usr/*' '${CMAKE_SOURCE_DIR}/tests/lib/googletest/*' '${CMAKE_SOURCE_DIR}/plugins/*' '${CMAKE_SOURCE_DIR}/deps/*' '${CMAKE_BINARY_DIR}/*' '${CMAKE_CURRENT_BINARY_DIR}/*' '${CMAKE_SOURCE_DIR}/include/gui/*' '${CMAKE_SOURCE_DIR}/src/gui/*')
+        message(STATUS "COVERAGE_EXCLUDES: ${COVERAGE_EXCLUDES}")
+        setup_target_for_coverage(NAME ${PROJECT_NAME}_coverage EXECUTABLE ctest DEPENDENCY runTest-log runTest-program_arguments runTest-program_options)
+    endif()
+endif()
+
+##################################
+#####   Include Code Directories
+##################################
 add_subdirectory("src")
 add_subdirectory("plugins")
 if(${BUILD_TESTS})
     add_subdirectory("tests")
 endif(${BUILD_TESTS})
 
+####################################
+#####   Configure Pkgconfig for HAL
+####################################
+
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/hal.pc.in ${CMAKE_BINARY_DIR}/hal.pc @ONLY)
 
-if(missing_package)
-    message(WARNING "In case of missing packages make sure that following dependencies are installed: pkgconfig, python3, qt5")
-endif(missing_package)
+#########################################
+#####   Install Header + Auxilary  files
+#########################################
 
-#install header
 install(DIRECTORY ${CMAKE_SOURCE_DIR}/include/ DESTINATION ${INCLUDE_INSTALL_DIRECTORY})
 install(DIRECTORY ${CMAKE_BINARY_DIR}/share/hal/gate_libraries DESTINATION ${SHARE_INSTALL_DIRECTORY} PATTERN "*.json")
 configure_file("defaults/guidefaults.ini" ${CMAKE_BINARY_DIR}/share/hal/defaults/guidefaults.ini @ONLY)
@@ -328,6 +275,7 @@ install(DIRECTORY ${CMAKE_BINARY_DIR}/share/hal/defaults DESTINATION ${SHARE_INS
 install(FILES ${CMAKE_BINARY_DIR}/hal.pc DESTINATION "${PKGCONFIG_INSTALL_DIRECTORY}")
 message(STATUS "PKGCONFIG_INSTALL_DIRECTORY ${PKGCONFIG_INSTALL_DIRECTORY}")
 
+# Configure LDCONFIG for HAL plugins
 if(LINUX)
     configure_file(
             "installer/deb/hal.conf.in"
@@ -335,6 +283,26 @@ if(LINUX)
             @ONLY)
     install(FILES "${CMAKE_BINARY_DIR}/hal.conf" DESTINATION "${SHARE_INSTALL_DIRECTORY}/ld_conf/")
 endif()
+
+# on make/ninja install run configure and run ldconfig
+if(ENABLE_INSTALL_LDCONFIG AND LINUX)
+        configure_file(
+                "cmake/post_install.cmake.in"
+                "${CMAKE_BINARY_DIR}/post_install.cmake"
+                @ONLY)
+        install(SCRIPT "${CMAKE_BINARY_DIR}/post_install.cmake")
+endif()
+
+# add uninstall target
+configure_file(
+        "cmake/uninstall.cmake.in"
+        "${CMAKE_BINARY_DIR}/uninstall.cmake"
+        @ONLY)
+add_custom_target(uninstall "${CMAKE_COMMAND}" -P "${CMAKE_BINARY_DIR}/uninstall.cmake")
+
+################################
+#####   Packaging
+################################
 
 if(UPLOAD_PPA)
     set(PACKAGE_DEB ON)
@@ -381,9 +349,9 @@ if(CPACK_GENERATORS)
     add_subdirectory(installer)
 endif(CPACK_GENERATORS)
 
-#Documentation settings Add the End to solve conflict between FindSphinx and Python bindings
-
-
+################################
+#####   Documentation
+################################
 if(BUILD_DOCUMENTATION)
     find_package(Doxygen REQUIRED)
 
@@ -396,8 +364,6 @@ if(BUILD_DOCUMENTATION)
                       WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
                       COMMENT "Generating API documentation with Doxygen"
                       VERBATIM)
-
-    #install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html DESTINATION share/doc)
 
     find_package(Sphinx REQUIRED)
     if(NOT DEFINED SPHINX_THEME)
@@ -436,21 +402,3 @@ if(BUILD_DOCUMENTATION)
                       DEPENDS hal_py graph_algorithm ${SPHINX_DOC_FILES})
 
 endif()
-
-# on make/ninja install run configure and run ldconfig
-if(ENABLE_INSTALL_LDCONFIG)
-    if(LINUX)
-        configure_file(
-                "cmake/post_install.cmake.in"
-                "${CMAKE_BINARY_DIR}/post_install.cmake"
-                @ONLY)
-        install(SCRIPT "${CMAKE_BINARY_DIR}/post_install.cmake")
-    endif(LINUX)
-endif(ENABLE_INSTALL_LDCONFIG)
-
-# add uninstall target
-configure_file(
-        "cmake/uninstall.cmake.in"
-        "${CMAKE_BINARY_DIR}/uninstall.cmake"
-        @ONLY)
-add_custom_target(uninstall "${CMAKE_COMMAND}" -P "${CMAKE_BINARY_DIR}/uninstall.cmake")
