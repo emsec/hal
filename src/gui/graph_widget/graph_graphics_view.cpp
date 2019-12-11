@@ -37,9 +37,6 @@
 #include <QWidgetAction>
 #include <qmath.h>
 
-//temporarily added so that the view puts the top-moudle at the start in the middle, further details in the resizeEvent
-bool graph_graphics_view::m_first_time_constructed = true;
-
 graph_graphics_view::graph_graphics_view(graph_widget* parent) : QGraphicsView(parent),
     m_graph_widget(parent),
     m_minimap_enabled(false),
@@ -438,26 +435,6 @@ void graph_graphics_view::keyReleaseEvent(QKeyEvent* event)
 void graph_graphics_view::resizeEvent(QResizeEvent* event)
 {
     Q_UNUSED(event)
-
-    if(m_first_time_constructed && size().width() != 100 && size().width() != 100)
-    {
-        //Version 1
-        //gentle_zoom(0.5);
-        //gentle_zoom(2);
-
-        //Version 2, should be faster to check a list with only a few entries than to transform the whole scenerect
-        QGraphicsView::resizeEvent(event);
-        for(const auto &item : scene()->items())
-        {
-            auto casted_item = dynamic_cast<graphics_node*>(item);
-            if(casted_item && casted_item->item_type() == hal::item_type::module)
-            {
-                centerOn(item);
-                break;
-            }
-        }
-        m_first_time_constructed = false;
-    }
 
     QGraphicsView::resizeEvent(event);
     adjust_min_scale();
