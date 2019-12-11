@@ -459,6 +459,7 @@ void graph_graphics_view::resizeEvent(QResizeEvent* event)
         m_first_time_constructed = false;
     }
 
+    QGraphicsView::resizeEvent(event);
     adjust_min_scale();
 }
 
