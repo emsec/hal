@@ -1,40 +1,21 @@
-cmake_minimum_required(VERSION 3.13)
+cmake_minimum_required(VERSION 3.15)
 
-message(STATUS "cmake version: ${CMAKE_VERSION}")
-
+# Include common CMake modules
 include(CMakeDependentOption)
+include(CMakeToolsHelpers OPTIONAL)
+include(CMakePrintHelpers)
 
+# Detect Build Type
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Choose the type of build." FORCE)
     set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
 endif()
-
-if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-    message(STATUS "selected build type: ${CMAKE_BUILD_TYPE}")
-elseif(CMAKE_BUILD_TYPE STREQUAL "Release")
-    message(STATUS "selected build type: ${CMAKE_BUILD_TYPE}")
-elseif(CMAKE_BUILD_TYPE STREQUAL "MinSizeRel")
-    message(STATUS "selected build type: ${CMAKE_BUILD_TYPE}")
-elseif(CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
-    message(STATUS "selected build type: ${CMAKE_BUILD_TYPE}")
+set(AVAILABLE_BUILD_TYPES "Release" "MinSizeRel" "RelWithDebInfo" "Debug")
+if(CMAKE_BUILD_TYPE IN_LIST AVAILABLE_BUILD_TYPES)
+    message(VERBOSE "Selected build type: ${CMAKE_BUILD_TYPE}")
 else()
-    message(FATAL_ERROR "unsupported build type: ${CMAKE_BUILD_TYPE}, supported are: Debug, MinSizeRel, RelWithDebInfo, Release")
+    message(FATAL_ERROR "Unsupported build type: ${CMAKE_BUILD_TYPE}, supported are: Debug, MinSizeRel, RelWithDebInfo, Release")
 endif()
-
-if(UNIX AND NOT APPLE)
-    set(LINUX TRUE)
-endif()
-
-#Change Compiler on macOS to one that supports OpenMP
-if(APPLE AND CMAKE_HOST_APPLE)
-    #Needs to be set before project(hal)!
-    message(STATUS "You need to install a compiler with OpenMP support:")
-    message(STATUS "You need to install a compiler with OpenMP support:")
-    message(STATUS "    brew install llvm")
-    message(STATUS "    Set Environment Variable:")
-    message(STATUS "    LDFLAGS=\"-L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib\"")
-    message(STATUS "    CPPFLAGS=\"-I/usr/local/opt/llvm/include\"")
-endif(APPLE AND CMAKE_HOST_APPLE)
 
 # Configure CCache if available
 find_program(CCACHE_FOUND ccache)
@@ -44,9 +25,15 @@ if(CCACHE_FOUND)
     message(STATUS "ccache found!")
 endif(CCACHE_FOUND)
 
-#Add path to CMake script files
+# Create LINUX variable if needed ToDo
+if(UNIX AND NOT APPLE)
+    set(LINUX TRUE)
+endif()
+
+#Add path to CMake script files and include Helper
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/" "${CMAKE_SOURCE_DIR}/deps/sanitizers-cmake/cmake/")
-include(CMakeToolsHelpers OPTIONAL)
+
+# Check for valid Changelog file ToDo
 set(DEB_CHANGELOG_REQUIRED ON)
 set(DEB_CHANGELOG "${CMAKE_CURRENT_SOURCE_DIR}/Changelog")
 unset(CHANGELOG_LAST_VERSION)
@@ -56,6 +43,12 @@ include(DebChangelog)
 #Set the project name
 project(hal)
 
+# Include Helper Modules
+include(HalUtils) # Version helper
+include(DetectDistro) # Detect distribution helper
+include(Subdirs) # Get a lost of all subdirs in specific directory
+
+# Common Project Information
 set(PROJECT_VENDOR "hal")
 set(PROJECT_WEBSITE "https://github.com/emsec/hal")
 set(PROJECT_MAINTAINER "Sebastian Wallat <sebastian.wallat@rub.de>")
@@ -65,104 +58,60 @@ set(CHANGELOG_MESSAGE ${CHANGELOG_LAST_MESSAGE})
 set(PROJECT_PPA "ppa:sebastian-wallat/hal")
 set(PROJECT_PPA_USER "sebastian-wallat")
 
-#Use C11 and C++17 as minimum standard
+# Use C11 and C++17 as minimum standard
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED on)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED on)
 
-option(USE_VERSION_FROM_OPTION "USE_VERSION_FROM_OPTION" FALSE)
-include(HalUtils)
-include(DetectDistro)
-if(NOT ${USE_VERSION_FROM_OPTION})
+# Define Options
+option(HAL_VERSION_MAJOR "Pass major version via cmake options" "")
+option(HAL_VERSION_MINOR "Pass minor version via cmake options" "")
+option(HAL_VERSION_PATCH "Pass patch version via cmake options" "")
+option(USE_LIBCXX "Force the use of LIBCXX for e.g. gcc" FALSE)
+option(WITH_GUI "Enable GUI build" ON)
+option(BUILD_ALL_PLUGINS "Build all available plugins" OFF)
+option(BUILD_TESTS "Enable test builds" OFF)
+option(BUILD_COVERAGE "Enable code coverage build" OFF)
+option(BUILD_DOCUMENTATION "Create and install the HTML based API documentation")
+option(ENABLE_INSTALL_LDCONFIG "When installing via make/ninja install, also install and run the LDCONFIG post_install scripts" ON)
+
+# Detect Version Information
+if((NOT ${HAL_VERSION_MAJOR}) AND ((NOT ${HAL_VERSION_MINOR}) AND (NOT ${HAL_VERSION_PATCH})))
     hal_get_version()
 else()
     set(HAL_VERSION_RETURN ${HAL_VERSION_MAJOR}.${HAL_VERSION_MINOR}.${HAL_VERSION_PATCH})
 endif()
 unset(HAL_VERSION_MAJOR_SELF CACHE)
-
-string(TIMESTAMP BUILD_TIMESTAMP UTC)
 message(STATUS "HAL_VERSION: ${HAL_VERSION_RETURN}")
 
-# declare project output binary path
-file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/bin")
-foreach(i IN ITEMS "RUNTIME" "ARCHIVE" "LIBRARY")
-    #    if(LINUX)
-    set(appendix "/lib")
-    if(i STREQUAL "RUNTIME")
-        set(appendix "/bin")
-    endif(i STREQUAL "RUNTIME")
-    #    elseif(APPLE)
-    #        set(appendix "/bin")
-    #    endif(LINUX)
-    if(NOT CMAKE_${i}_OUTPUT_DIRECTORY)
-        set(CMAKE_${i}_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}${appendix}")
-    elseif()
-        set(CMAKE_${i}_OUTPUT_DIRECTORY "${CMAKE_${i}_OUTPUT_DIRECTORY}${appendix}")
-    endif()
-endforeach()
+# Set Build Timestamp (used in configured file)
+string(TIMESTAMP BUILD_TIMESTAMP UTC)
 
-foreach(i IN ITEMS "_DEBUG" "_RELEASE" "_MINSIZEREL" "_RELWITHDEBINFO")
-    foreach(j IN ITEMS "RUNTIME" "ARCHIVE" "LIBRARY")
-        if(NOT CMAKE_${j}_OUTPUT_DIRECTORY${i})
-            set(CMAKE_${j}_OUTPUT_DIRECTORY${i} ${CMAKE_${j}_OUTPUT_DIRECTORY})
-        endif()
-    endforeach()
-endforeach()
+# Setup Directories, e.g. CMAKE_LIBRARY_OUTPUT_DIRECTOR, INCLUDE_INSTALL_DIRECTORY, ...
+setup_output_directories()
 
-#Install Directive target directiories
-message(STATUS "")
-include(GNUInstallDirs)
-set(INCLUDE_INSTALL_DIRECTORY ${CMAKE_INSTALL_INCLUDEDIR}/hal)
-message(STATUS "INCLUDE_INSTALL_DIRECTORY: ${INCLUDE_INSTALL_DIRECTORY}")
-
-set(INCLUDE_INSTALL_DIRECTORY_FULL ${CMAKE_INSTALL_FULL_INCLUDEDIR}/hal)
-message(STATUS "INCLUDE_INSTALL_DIRECTORY_FULL: ${INCLUDE_INSTALL_DIRECTORY_FULL}")
-
-set(SHARE_INSTALL_DIRECTORY ${CMAKE_INSTALL_DATADIR}/hal)
-message(STATUS "SHARE_INSTALL_DIRECTORY: ${SHARE_INSTALL_DIRECTORY}")
-
-set(SHARE_INSTALL_DIRECTORY_FULL ${CMAKE_INSTALL_FULL_DATADIR}/hal)
-message(STATUS "SHARE_INSTALL_DIRECTORY_FULL: ${SHARE_INSTALL_DIRECTORY_FULL}")
-
-set(PKGCONFIG_INSTALL_DIRECTORY ${CMAKE_INSTALL_DATADIR}/pkgconfig)
-message(STATUS "PKGCONFIG_INSTALL_DIRECTORY: ${PKGCONFIG_INSTALL_DIRECTORY}")
-
-set(BINARY_INSTALL_DIRECTORY ${CMAKE_INSTALL_BINDIR})
-message(STATUS "BINARY_INSTALL_DIRECTORY: ${BINARY_INSTALL_DIRECTORY}")
-
-set(BINARY_INSTALL_DIRECTORY_FULL ${CMAKE_INSTALL_FULL_BINDIR})
-message(STATUS "BINARY_INSTALL_DIRECTORY_FULL: ${BINARY_INSTALL_DIRECTORY_FULL}")
-
-set(LIBRARY_INSTALL_DIRECTORY ${CMAKE_INSTALL_LIBDIR})
-message(STATUS "LIBRARY_INSTALL_DIRECTORY: ${LIBRARY_INSTALL_DIRECTORY}")
-
-set(LIBRARY_INSTALL_DIRECTORY_FULL ${CMAKE_INSTALL_FULL_LIBDIR})
-message(STATUS "LIBRARY_INSTALL_DIRECTORY_FULL: ${LIBRARY_INSTALL_DIRECTORY_FULL}")
-
-set(PLUGIN_INCLUDE_INSTALL_DIRECTORY ${INCLUDE_INSTALL_DIRECTORY}/hal_plugins)
-message(STATUS "PLUGIN_INCLUDE_INSTALL_DIRECTORY: ${PLUGIN_INCLUDE_INSTALL_DIRECTORY}")
-set(PLUGIN_BINARY_INSTALL_DIRECTORY ${BINARY_INSTALL_DIRECTORY})
-message(STATUS "PLUGIN_BINARY_INSTALL_DIRECTORY: ${PLUGIN_BINARY_INSTALL_DIRECTORY}")
-set(PLUGIN_LIBRARY_INSTALL_DIRECTORY ${LIBRARY_INSTALL_DIRECTORY}/hal_plugins)
-message(STATUS "PLUGIN_LIBRARY_INSTALL_DIRECTORY: ${PLUGIN_LIBRARY_INSTALL_DIRECTORY}")
-message(STATUS "")
-
-#For all ExternalProject_ADD handle configure build and test as different stages
+# For all ExternalProject_ADD handle configure build and test as different stages
 set_property(DIRECTORY PROPERTY EP_STEP_TARGETS configure build test)
 
-#Enable test collection
-enable_testing()
-include(CTest)
+# Enable test collection
+if(BUILD_TESTS)
+    enable_testing()
+    include(CTest)
+endif()
 
-set(Missing_package "FALSE")
+################################
+#####   Find depending packages
+################################
 
-#Search or build project dependencies and if necessary setup parameters
+set(missing_package "FALSE")
+
+# PkgConfig
 find_package(PkgConfig REQUIRED)
 if(PkgConfig_FOUND)
     message(STATUS "PKG_CONFIG_EXECUTABLE: ${PKG_CONFIG_EXECUTABLE}")
 elseif(NOT PkgConfig_FOUND)
-    set(Missing_package "TRUE")
+    set(missing_package "TRUE")
     if(LINUX)
         message(STATUS "Please install PkgConfig (https://linux.die.net/man/1/pkg-config)")
     endif(LINUX)
@@ -172,8 +121,7 @@ elseif(NOT PkgConfig_FOUND)
     endif(APPLE AND CMAKE_HOST_APPLE)
 endif(PkgConfig_FOUND)
 
-include(Subdirs)
-
+# Sanitizers
 find_package(Sanitizers)
 
 ## Find OpenMP
@@ -235,6 +183,8 @@ else()
     endif()
 endif()
 
+
+
 find_package(Filesystem REQUIRED Final Experimental)
 
 set(Boost_USE_MULTITHREADED ON)
@@ -246,7 +196,7 @@ if(Boost_FOUND)
 
     include_directories(${Boost_INCLUDE_DIRS} ${PYTHON_INCLUDE_DIRS})
 elseif(NOT Boost_FOUND)
-    set(Missing_package "TRUE")
+    set(missing_package "TRUE")
     if(APPLE AND CMAKE_HOST_APPLE)
         message(STATUS "To install boost on MacOS using homebrew run following command:")
         message(STATUS "    brew install boost --c++11")
@@ -262,9 +212,9 @@ include_directories(${RAPIDJSON_INCLUDEDIR})
 # Need Version 2.2.4 Not available in ubuntu bionic
 find_package(pybind11 2.4.3 CONFIG)
 if(${pybind11_FOUND})
-   message(STATUS "Found pybind11 v${pybind11_VERSION}: ${pybind11_INCLUDE_DIRS}")
-   message(STATUS "Found pybind11 >= 2.4.3")
-   include_directories(pybind11_INCLIDE_DIRS)
+    message(STATUS "Found pybind11 v${pybind11_VERSION}: ${pybind11_INCLUDE_DIRS}")
+    message(STATUS "Found pybind11 >= 2.4.3")
+    include_directories(pybind11_INCLIDE_DIRS)
 else()
     message(STATUS "pybind11 >= 2.4.3 not found")
     add_subdirectory(deps/pybind11)
@@ -280,7 +230,6 @@ else()
     set(spdlog_VERSION 1.4.2)
 endif()
 
-option(USE_LIBCXX "USE_LIBCXX" FALSE)
 
 #Set UNIX (macOS or Linux) compiler flags (clang or gcc). Set optimization level for debug or release.
 if(UNIX)
@@ -322,7 +271,7 @@ if(UNIX)
     #set(CMAKE_CXX_FLAGS${build_type} "${CMAKE_CXX_FLAGS${build_type}} -Werror")
 
 
-    if (USE_LIBCXX)
+    if(USE_LIBCXX)
         enable_cxx_compiler_flag_if_supported("-stdlib=libc++" "")
         enable_c_compiler_flag_if_supported("-stdlib=libc++" "")
         set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -stdlib=libc++ -lc++abi")
@@ -342,8 +291,6 @@ endif(${CMAKE_BUILD_TYPE} EQUAL "Debug" AND APPLE AND CMAKE_HOST_APPLE)
 set(NETLIST_LIB hal_netlist)
 set(CORE_LIB hal_core)
 
-option(WITH_GUI "WITH_GUI" ON)
-
 #define default linker target
 set(LINK_LIBS ${CMAKE_DL_LIBS}
     ${NETLIST_LIB}
@@ -352,10 +299,6 @@ set(LINK_LIBS ${CMAKE_DL_LIBS}
 
 set(GRAPH_ALGORITHM_LIB graph_algorithm)
 set(QUINE_MCCLUSKY_LIB quine_mccluskey)
-
-option(BUILD_ALL_PLUGINS "BUILD_ALL_PLUGINS" OFF)
-option(BUILD_TESTS "BUILD_TESTS" OFF)
-option(BUILD_COVERAGE "BUILD_COVERAGE" OFF)
 
 if(${BUILD_TESTS} AND ${BUILD_COVERAGE})
     include(CodeCoverage)
@@ -373,9 +316,9 @@ endif(${BUILD_TESTS})
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/hal.pc.in ${CMAKE_BINARY_DIR}/hal.pc @ONLY)
 
-if(Missing_package)
+if(missing_package)
     message(WARNING "In case of missing packages make sure that following dependencies are installed: pkgconfig, python3, qt5")
-endif(Missing_package)
+endif(missing_package)
 
 #install header
 install(DIRECTORY ${CMAKE_SOURCE_DIR}/include/ DESTINATION ${INCLUDE_INSTALL_DIRECTORY})
@@ -440,7 +383,7 @@ endif(CPACK_GENERATORS)
 
 #Documentation settings Add the End to solve conflict between FindSphinx and Python bindings
 
-option(BUILD_DOCUMENTATION "Create and install the HTML based API documentation")
+
 if(BUILD_DOCUMENTATION)
     find_package(Doxygen REQUIRED)
 
@@ -495,8 +438,6 @@ if(BUILD_DOCUMENTATION)
 endif()
 
 # on make/ninja install run configure and run ldconfig
-option(ENABLE_INSTALL_LDCONFIG "ENABLE_INSTALL_LDCONFIG" ON)
-
 if(ENABLE_INSTALL_LDCONFIG)
     if(LINUX)
         configure_file(
