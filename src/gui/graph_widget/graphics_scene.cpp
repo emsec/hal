@@ -18,6 +18,8 @@
 #include <QPainter>
 #include <QString>
 
+#include <QDebug>
+
 qreal graphics_scene::s_lod = 0;
 
 const qreal graphics_scene::s_grid_fade_start = 0.4;
@@ -115,6 +117,10 @@ graphics_scene::graphics_scene(QObject* parent) : QGraphicsScene(parent),
 //    QGraphicsScene::addItem(m_left_gate_navigation_popup);
 
     QGraphicsScene::addItem(m_drag_shadow_gate);
+
+    #ifdef GUI_DEBUG_GRID
+    m_debug_grid_enable = g_settings_manager.get("debug/grid").toBool();
+    #endif
 }
 
 void graphics_scene::start_drag_shadow(const QPointF& posF, const QSizeF& sizeF, graphics_item* sourceItem)
@@ -125,12 +131,13 @@ void graphics_scene::start_drag_shadow(const QPointF& posF, const QSizeF& sizeF,
 void graphics_scene::move_drag_shadow(const QPointF& posF, const drag_mode mode)
 {
     QPointF oldPos = m_drag_shadow_gate->pos();
-    QPointF newPos = snap_to_grid(posF);
     // only recalculate intersecting items when position actually changes
-    if (oldPos == newPos)
+    if (oldPos == posF)
         return;
 
-    m_drag_shadow_gate->setPos(newPos);
+    // TODO do collision detection against layouter database, and do it in
+    // the view, not the scene
+    m_drag_shadow_gate->setPos(posF);
     auto colliding = m_drag_shadow_gate->collidingItems();
     bool placeable;
     switch (mode)
@@ -158,7 +165,7 @@ void graphics_scene::move_drag_shadow(const QPointF& posF, const drag_mode mode)
         case drag_mode::swap: {
             // placeable only on gate or module
             QSizeF shadowSize = m_drag_shadow_gate->size();
-            QPointF dragCenter = QPointF(newPos.x() + shadowSize.width()/2, newPos.y() + shadowSize.height()/2);
+            QPointF dragCenter = QPointF(posF.x() + shadowSize.width()/2, posF.y() + shadowSize.height()/2);
             placeable = false;
             for (auto itm : colliding)
             {
@@ -373,6 +380,8 @@ const graphics_gate* graphics_scene::get_gate_item(const u32 id) const
 
 void graphics_scene::connect_all()
 {
+    connect(&g_settings_relay, &settings_relay::setting_changed, this, &graphics_scene::handle_global_setting_changed);
+
     connect(this, &graphics_scene::selectionChanged, this, &graphics_scene::handle_intern_selection_changed);
 
     connect(&g_selection_relay, &selection_relay::selection_changed, this, &graphics_scene::handle_extern_selection_changed);
@@ -383,6 +392,8 @@ void graphics_scene::connect_all()
 
 void graphics_scene::disconnect_all()
 {
+    disconnect(&g_settings_relay, &settings_relay::setting_changed, this, &graphics_scene::handle_global_setting_changed);
+
     disconnect(this, &graphics_scene::selectionChanged, this, &graphics_scene::handle_intern_selection_changed);
 
     disconnect(&g_selection_relay, &selection_relay::selection_changed, this, &graphics_scene::handle_extern_selection_changed);
@@ -594,6 +605,16 @@ void graphics_scene::mousePressEvent(QGraphicsSceneMouseEvent* event)
     QGraphicsScene::mousePressEvent(event);
 }
 
+void graphics_scene::handle_global_setting_changed(void* sender, const QString& key, const QVariant& value)
+{
+    #ifdef GUI_DEBUG_GRID
+    if (key == "debug/grid")
+    {
+        m_debug_grid_enable = value.toBool();
+    }
+    #endif
+}
+
 void graphics_scene::drawBackground(QPainter* painter, const QRectF& rect)
 {
     if (!s_grid_enabled)
@@ -690,5 +711,62 @@ void graphics_scene::drawBackground(QPainter* painter, const QRectF& rect)
     }
     }
 
+    #ifdef GUI_DEBUG_GRID
+    if (m_debug_grid_enable)
+        debug_draw_layouter_grid(painter, rect, x_from, x_to, y_from, y_to);
+    #endif
+
     painter->setRenderHints(original_flags); // UNNECESSARY ?
 }
+
+#ifdef GUI_DEBUG_GRID
+void graphics_scene::debug_set_layouter_grid(QVector<qreal>& debug_x_lines, QVector<qreal>& debug_y_lines, qreal debug_default_height, qreal debug_default_width)
+{
+    m_debug_x_lines = debug_x_lines;
+    m_debug_y_lines = debug_y_lines;
+    m_debug_default_height = debug_default_height;
+    m_debug_default_width = debug_default_width;
+}
+
+void graphics_scene::debug_draw_layouter_grid(QPainter* painter, const QRectF& rect, const int x_from, const int x_to, const int y_from, const int y_to)
+{   
+    painter->setPen(QPen(Qt::magenta));
+    for (qreal x : m_debug_x_lines) {
+        QLine line(x, y_from, x, y_to);
+        painter->drawLine(line);
+    }
+    for (qreal y : m_debug_y_lines) {
+        QLine line(x_from, y, x_to, y);
+        painter->drawLine(line);
+    }
+    painter->setPen(QPen(Qt::green));
+    int x = m_debug_x_lines.last() + m_debug_default_width;
+    while (x <= x_to)
+    {
+        QLine line(x, y_from, x, y_to);
+        painter->drawLine(line);
+        x += m_debug_default_width;
+    }
+    x = m_debug_x_lines.first() - m_debug_default_width;
+    while (x >= x_from)
+    {
+        QLine line(x, y_from, x, y_to);
+        painter->drawLine(line);
+        x -= m_debug_default_width;
+    }
+    int y = m_debug_y_lines.last() + m_debug_default_height;
+    while (y <= y_to)
+    {
+        QLine line(x_from, y, x_to, y);
+        painter->drawLine(line);
+        y += m_debug_default_height;
+    }
+    y = m_debug_y_lines.first() - m_debug_default_height;
+    while (y >= y_from)
+    {
+        QLine line(x_from, y, x_to, y);
+        painter->drawLine(line);
+        y -= m_debug_default_height;
+    }
+}
+#endif

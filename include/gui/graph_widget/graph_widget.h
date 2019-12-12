@@ -26,6 +26,7 @@
 
 #include "def.h"
 
+#include "gui/gui_globals.h"
 #include "gui/content_widget/content_widget.h"
 #include "gui/graph_widget/contexts/graph_context_subscriber.h"
 
@@ -77,6 +78,10 @@ private:
     void handle_enter_module_requested(const u32 id);
 
     void ensure_gate_visible(const u32 gate);
+
+    #ifdef GUI_DEBUG_GRID
+    void debug_draw_layouter_grid();
+    #endif
 
     struct context_history_entry
     {

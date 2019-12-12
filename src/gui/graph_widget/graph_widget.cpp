@@ -74,6 +74,10 @@ void graph_widget::handle_scene_available()
 
     if (hasFocus())
         m_view->setFocus();
+
+    #ifdef GUI_DEBUG_GRID
+    debug_draw_layouter_grid();
+    #endif
 }
 
 void graph_widget::handle_scene_unavailable()
@@ -566,3 +570,16 @@ graph_graphics_view* graph_widget::view()
 {
     return m_view;
 }
+
+#ifdef GUI_DEBUG_GRID
+void graph_widget::debug_draw_layouter_grid()
+{
+    graph_layouter* layouter = m_context->debug_get_layouter();
+    int default_width = layouter->default_grid_width();
+    int default_height = layouter->default_grid_height();
+    QVector<qreal> x_vals = layouter->x_values();
+    QVector<qreal> y_vals = layouter->y_values();
+    graphics_scene* s = static_cast<graphics_scene*>(m_context->scene());
+    s->debug_set_layouter_grid(x_vals, y_vals, default_height, default_width);
+}
+#endif

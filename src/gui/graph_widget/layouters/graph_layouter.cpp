@@ -46,7 +46,7 @@ const static qreal minimum_gate_io_padding  = 40;
 
 graph_layouter::graph_layouter(const graph_context* const context, QObject* parent) : QObject(parent),
     m_scene(new graphics_scene(this)),
-    m_context(context)
+    m_context(context), m_done(false)
 {
 
 }
@@ -90,14 +90,19 @@ void graph_layouter::remove_node_from_maps(const hal::node& n)
     }
 }
 
-int graph_layouter::min_x_index()
+int graph_layouter::min_x_index() const
 {
     return m_min_x_index;
 }
 
-int graph_layouter::min_y_index()
+int graph_layouter::min_y_index() const
 {
     return m_min_y_index;
+}
+
+bool graph_layouter::done() const
+{
+    return m_done;
 }
 
 QVector<qreal> graph_layouter::x_values() const
@@ -120,6 +125,16 @@ qreal graph_layouter::max_node_height() const
     return m_max_node_height;
 }
 
+qreal graph_layouter::default_grid_width() const
+{
+    return m_max_node_width + minimum_v_channel_width;
+}
+
+qreal graph_layouter::default_grid_height() const
+{
+    return m_max_node_height + minimum_h_channel_height;
+}
+
 void graph_layouter::layout()
 {
     m_scene->delete_all_items();
@@ -133,6 +148,9 @@ void graph_layouter::layout()
     calculate_max_channel_dimensions();
     calculate_gate_offsets();
     place_gates();
+
+    m_done = true;
+
     update_scene_rect();
     draw_nets();
 
@@ -143,6 +161,8 @@ void graph_layouter::layout()
 
 void graph_layouter::clear_layout_data()
 {
+    m_done = false;
+
     m_boxes.clear();
 
     for (const graph_layouter::road* r : m_h_roads)
