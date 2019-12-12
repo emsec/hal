@@ -622,3 +622,51 @@ TEST_F(gate_test, check_get_module)
     TEST_END
 }
 
+/**
+ * Testing storage and access of gate locations
+ *
+ * Functions: get_location_x, get_location_y, get_location, has_location, set_location_x, set_location_y, set_location
+ */
+TEST_F(gate_test, check_location_storage)
+{
+    TEST_START
+        {
+            // Create a gate with a location and change it afterwards
+            std::shared_ptr<netlist> nl = create_empty_netlist();
+            std::shared_ptr<gate> test_gate = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("INV"), "test_gate", 1.11f, 2.22f);
+            EXPECT_EQ(test_gate->get_location_x(), 1.11f);
+            EXPECT_EQ(test_gate->get_location_y(), 2.22f);
+            EXPECT_EQ(test_gate->get_location(), std::make_pair(1.11f, 2.22f));
+            // -- set a new x location
+            test_gate->set_location_x(3.33f);
+            EXPECT_EQ(test_gate->get_location(), std::make_pair(3.33f, 2.22f));
+            // -- set a new y location
+            test_gate->set_location_y(4.44f);
+            EXPECT_EQ(test_gate->get_location(), std::make_pair(3.33f, 4.44f));
+            // -- set a new location
+            test_gate->set_location(std::make_pair(5.55f, 6.66f));
+            EXPECT_EQ(test_gate->get_location(), std::make_pair(5.55f, 6.66f));
+            // -- set the same location again
+            test_gate->set_location(std::make_pair(5.55f, 6.66f));
+            EXPECT_EQ(test_gate->get_location(), std::make_pair(5.55f, 6.66f));
+        }
+        {
+            // Test the has_location function
+            std::shared_ptr<netlist> nl = create_empty_netlist();
+            std::shared_ptr<gate> test_gate = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("INV"), "test_gate", 1.11f, 2.22f);
+            // -- both coordinates are >= 0
+            test_gate->set_location(std::make_pair(1.11f, 2.22f));
+            EXPECT_TRUE(test_gate->has_location());
+            test_gate->set_location(std::make_pair(0.0f, 0.0f));
+            EXPECT_TRUE(test_gate->has_location());
+            // -- not both coordinates are >= 0
+            test_gate->set_location(std::make_pair(-1.11f, 2.22f));
+            EXPECT_FALSE(test_gate->has_location());
+            test_gate->set_location(std::make_pair(1.11f, -2.22f));
+            EXPECT_FALSE(test_gate->has_location());
+            test_gate->set_location(std::make_pair(-1.11f, -2.22f));
+            EXPECT_FALSE(test_gate->has_location());
+        }
+    TEST_END
+}
+
