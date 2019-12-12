@@ -1,5 +1,18 @@
 option(PL_GRAPH_ALGORITHM "PL_GRAPH_ALGORITHM" ON)
 if(PL_GRAPH_ALGORITHM OR BUILD_ALL_PLUGINS)
+
+    find_package(IGraph REQUIRED)
+    if(HAVE_IGRAPH)
+        message(STATUS "Found following IGRAPH Libraries")
+        message(STATUS "    IGRAPH_INCLUDE_DIRS: ${IGRAPH_INCLUDES}")
+        message(STATUS "    IGRAPH_LIBRARIES: ${IGRAPH_LIBRARIES}")
+        include_directories(${IGRAPH_INCLUDES})
+
+        add_definitions(-DIGRAPH_VERSION_MAJOR_GUESS=${IGRAPH_VERSION_MAJOR_GUESS})
+        add_definitions(-DIGRAPH_VERSION_MINOR_GUESS=${IGRAPH_VERSION_MINOR_GUESS})
+        add_definitions(-DIGRAPH_VERSION_PATCH_GUESS=${IGRAPH_VERSION_PATCH_GUESS})
+    endif(HAVE_IGRAPH)
+
     include_directories(${IGRAPH_INCLUDES})
     include_directories(${BUDDY_INCLUDE_DIR})
     include_directories(SYSTEM ${PYBIND11_INCLUDE_DIR} SYSTEM ${PYTHON_INCLUDE_DIRS})

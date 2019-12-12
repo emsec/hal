@@ -32,6 +32,7 @@ public:
     //void handle_module_created(const std::shared_ptr<module> m) const;
     void handle_module_removed(const std::shared_ptr<module> m);
     void handle_module_name_changed(const std::shared_ptr<module> m) const;
+    void handle_module_color_changed(const std::shared_ptr<module> m) const;
     //void handle_module_parent_changed(const std::shared_ptr<module> m) const;
     void handle_module_submodule_added(const std::shared_ptr<module> m, const u32 added_module) const;
     void handle_module_submodule_removed(const std::shared_ptr<module> m, const u32 removed_module);
@@ -48,6 +49,10 @@ public:
     void handle_net_src_changed(const std::shared_ptr<net> n) const;
     void handle_net_dst_added(const std::shared_ptr<net> n, const u32 dst_gate_id) const;
     void handle_net_dst_removed(const std::shared_ptr<net> n, const u32 dst_gate_id) const;
+    void handle_marked_global_input(u32 net_id);
+    void handle_marked_global_output(u32 net_id);
+    void handle_unmarked_global_input(u32 net_id);
+    void handle_unmarked_global_output(u32 net_id);
 
     graph_layouter* get_default_layouter(graph_context* const context) const;
     graph_shader* get_default_shader(graph_context* const context) const;

@@ -26,7 +26,6 @@
 #include "def.h"
 
 #include "netlist/gate_library/gate_library.h"
-#include "netlist/netlist_constants.h"
 
 #include <memory>
 #include <string>
@@ -34,6 +33,7 @@
 #include <type_traits>
 #include <unordered_map>
 #include <unordered_set>
+#include <functional>
 
 /** forward declaration */
 class netlist_internal_manager;
@@ -154,9 +154,10 @@ public:
      * @param[in] id - The unique ID != 0 for the new module.
      * @param[in] name - A name for the module.
      * @param[in] parent - The parent module.
+     * @param[in] gates - Gates to assign to the new gate.
      * @returns The new module on success, nullptr on error.
      */
-    std::shared_ptr<module> create_module(const u32 id, const std::string& name, std::shared_ptr<module> parent);
+    std::shared_ptr<module> create_module(const u32 id, const std::string& name, std::shared_ptr<module> parent, const std::vector<std::shared_ptr<gate>>& gates = {});
 
     /**
      * Creates and adds a new module to the netlist.<br>
@@ -164,9 +165,10 @@ public:
      *
      * @param[in] name - A name for the module.
      * @param[in] parent - The parent module.
+     * @param[in] gates - Gates to assign to the new gate.
      * @returns The new module on success, nullptr on error.
      */
-    std::shared_ptr<module> create_module(const std::string& name, std::shared_ptr<module> parent);
+    std::shared_ptr<module> create_module(const std::string& name, std::shared_ptr<module> parent, const std::vector<std::shared_ptr<gate>>& gates = {});
 
     /**
      * Removes and a module from the netlist.
@@ -278,7 +280,7 @@ public:
      * @param[in] name_filter - Filter for the name
      * @return A set of gates.
      */
-    std::set<std::shared_ptr<gate>> get_gates(const std::string& gate_type_filter = DONT_CARE, const std::string& name_filter = DONT_CARE) const;
+    std::set<std::shared_ptr<gate>> get_gates(const std::function<bool(const std::shared_ptr<gate>&)>& filter = nullptr) const;
 
     /**
      * Mark a gate as a global vcc gate.
@@ -403,10 +405,10 @@ public:
      * Get all nets of the netlist regardless of the module they are in. <br>
      * You can filter the set before output with the optional parameter.
      *
-     * @param[in] name_filter - Filter for the name
+     * @param[in] filter - Filter for the nets
      * @return A set of nets.
      */
-    std::unordered_set<std::shared_ptr<net>> get_nets(const std::string& name_filter = DONT_CARE) const;
+    std::unordered_set<std::shared_ptr<net>> get_nets(const std::function<bool(const std::shared_ptr<net>&)>& filter = nullptr) const;
 
     /**
      * Mark a net as a global input net.

@@ -96,8 +96,7 @@ void hdl_writer_verilog::prepare_signal_names()
     }
 
     //vcc gates
-    std::set<std::shared_ptr<gate>> one_gates = m_netlist->get_gates("X_ONE");
-    for (auto n : one_gates)
+    for (auto n : m_netlist->get_vcc_gates())
     {
         std::set<std::shared_ptr<net>> o_nets = n->get_fan_out_nets();
         for (auto e : o_nets)
@@ -113,8 +112,7 @@ void hdl_writer_verilog::prepare_signal_names()
         }
     }
     //gnd gates
-    std::set<std::shared_ptr<gate>> zero_gates = m_netlist->get_gates("X_ZERO");
-    for (auto n : zero_gates)
+    for (auto n : m_netlist->get_gnd_gates())
     {
         std::set<std::shared_ptr<net>> o_nets = n->get_fan_out_nets();
         for (auto e : o_nets)

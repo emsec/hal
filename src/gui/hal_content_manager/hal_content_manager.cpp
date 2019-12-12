@@ -68,8 +68,8 @@ context_manager_widget* hal_content_manager::get_context_manager_widget()
 void hal_content_manager::handle_open_document(const QString& file_name)
 {
     m_graph_tab_wid        = new graph_tab_widget(nullptr);
-    vhdl_editor* code_edit = new vhdl_editor();
-    m_graph_tab_wid->addTab(code_edit, "Source");
+//    vhdl_editor* code_edit = new vhdl_editor();
+//    m_graph_tab_wid->addTab(code_edit, "Source");
     m_main_window->add_content(m_graph_tab_wid, 2, content_anchor::center);
 
     module_widget* m = new module_widget();
@@ -91,7 +91,7 @@ void hal_content_manager::handle_open_document(const QString& file_name)
     details->open();
     logger_widget->open();
 
-    m_content.append(code_edit);
+    //m_content.append(code_edit);
     //m_content.append(navigation);
     m_content.append(details);
     m_content.append(logger_widget);

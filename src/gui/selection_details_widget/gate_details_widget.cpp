@@ -27,6 +27,8 @@
 
 gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
 {
+    m_current_id = 0;
+
     m_last_click_time = 0;
 
     m_content_layout = new QVBoxLayout(this);
@@ -232,6 +234,7 @@ void gate_details_widget::handle_net_name_changed(std::shared_ptr<net> net)
 
 void gate_details_widget::handle_net_src_changed(std::shared_ptr<net> net)
 {
+    if (m_current_id == 0) return;
     if (g_netlist->is_gate_in_netlist(g_netlist->get_gate_by_id(m_current_id)))
         update(m_current_id);
 }
@@ -250,6 +253,7 @@ void gate_details_widget::handle_net_dst_removed(std::shared_ptr<net> net, const
 
 void gate_details_widget::handle_module_removed(std::shared_ptr<module> module)
 {
+    if (m_current_id == 0) return;
     auto g = g_netlist->get_gate_by_id(m_current_id);
 
     if (module->contains_gate(g))
@@ -260,6 +264,7 @@ void gate_details_widget::handle_module_removed(std::shared_ptr<module> module)
 
 void gate_details_widget::handle_module_name_changed(std::shared_ptr<module> module)
 {
+    if (m_current_id == 0) return;
     auto g = g_netlist->get_gate_by_id(m_current_id);
 
     if (module->contains_gate(g))
@@ -295,6 +300,8 @@ void gate_details_widget::resizeEvent(QResizeEvent* event)
 void gate_details_widget::update(const u32 gate_id)
 {
     m_current_id = gate_id;
+
+    if (m_current_id == 0) return;
 
     auto g = g_netlist->get_gate_by_id(gate_id);
 

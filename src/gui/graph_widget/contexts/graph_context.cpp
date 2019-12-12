@@ -135,11 +135,11 @@ void graph_context::fold_module_of_gate(const u32 id)
         auto m = g_netlist->get_gate_by_id(id)->get_module();
         QSet<u32> gates;
         QSet<u32> modules;
-        for (const auto& g : m->get_gates(DONT_CARE, DONT_CARE, true))
+        for (const auto& g : m->get_gates(nullptr, true))
         {
             gates.insert(g->get_id());
         }
-        for (const auto& sm : m->get_submodules(DONT_CARE, true))
+        for (const auto& sm : m->get_submodules(nullptr, true))
         {
             modules.insert(sm->get_id());
         }
@@ -219,6 +219,37 @@ bool graph_context::is_showing_module(const u32 id, const QSet<u32>& minus_modul
     // qDebug() << "PLUS_GATES" << plus_gates;
     // qDebug() << "MGATES" << m_gates;
     return (m_gates - m_removed_gates) + m_added_gates == (gates - minus_gates) + plus_gates && (m_modules - m_removed_modules) + m_added_modules == (modules - minus_modules) + plus_modules;
+}
+
+bool graph_context::is_showing_net_src(const u32 net_id) const
+{
+    auto net = g_netlist->get_net_by_id(net_id);
+    auto src_gate = net->get_src().get_gate();
+
+    if(src_gate != nullptr)
+    {
+        if(m_gates.contains(src_gate->get_id()))
+            return true;
+    }
+
+    return false;
+}
+
+bool graph_context::is_showing_net_dst(const u32 net_id) const
+{
+    auto net = g_netlist->get_net_by_id(net_id);
+    auto dst_pins = net->get_dsts();
+
+    for(auto pin : dst_pins)
+    {
+        if(pin.get_gate() != nullptr)
+        {
+            if(m_gates.contains(pin.get_gate()->get_id()))
+                return true;
+        }
+    }
+
+    return false;
 }
 
 const QSet<u32>& graph_context::modules() const
@@ -368,11 +399,13 @@ void graph_context::apply_changes()
         auto g = g_netlist->get_gate_by_id(id);
         for (const auto& net : g->get_fan_in_nets())
         {
-            m_nets.insert(net->get_id());
+            if(!net->is_unrouted() || net->is_global_input_net() || net->is_global_output_net())
+                m_nets.insert(net->get_id());
         }
         for (const auto& net : g->get_fan_out_nets())
         {
-            m_nets.insert(net->get_id());
+            if(!net->is_unrouted() || net->is_global_input_net() || net->is_global_output_net())
+                m_nets.insert(net->get_id());
         }
     }
     for (const auto& id : m_modules)

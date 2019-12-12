@@ -26,6 +26,21 @@ protected:
     }
 };
 
+
+
+static std::function<bool(const std::shared_ptr<net>&)> net_name_filter(const std::string& name){
+    return [name](auto& n){return n->get_name() == name;};
+}
+
+static std::function<bool(const std::shared_ptr<gate>&)> gate_name_filter(const std::string& name){
+    return [name](auto& g){return g->get_name() == name;};
+}
+
+static std::function<bool(const std::shared_ptr<gate>&)> gate_type_filter(const std::string& type){
+    return [type](auto& g){return g->get_type()->get_name() == type;};
+}
+
+
 /**
  * Testing the get_shared function which returns a shared_ptr on itselves
  *
@@ -381,14 +396,14 @@ TEST_F(netlist_test, check_get_gates_by_name){
             std::shared_ptr<netlist> nl = create_example_netlist();
             std::shared_ptr<gate> g_0 = nl->get_gate_by_id(MIN_GATE_ID+0);
             std::shared_ptr<gate> g_5 = nl->get_gate_by_id(MIN_GATE_ID+5);
-            EXPECT_EQ(nl->get_gates(DONT_CARE, "gate_0"), std::set<std::shared_ptr<gate>>({g_0}));
-            EXPECT_EQ(nl->get_gates(DONT_CARE, "gate_5"), std::set<std::shared_ptr<gate>>({g_5}));
+            EXPECT_EQ(nl->get_gates(gate_name_filter("gate_0")), std::set<std::shared_ptr<gate>>({g_0}));
+            EXPECT_EQ(nl->get_gates(gate_name_filter("gate_5")), std::set<std::shared_ptr<gate>>({g_5}));
         }
         {
             // Call with an non existing gate name
             NO_COUT_TEST_BLOCK;
             std::shared_ptr<netlist> nl = create_empty_netlist();
-            EXPECT_EQ(nl->get_gates(DONT_CARE, "not_existing_gate"), std::set<std::shared_ptr<gate>>());
+            EXPECT_EQ(nl->get_gates(gate_name_filter("not_existing_gate")), std::set<std::shared_ptr<gate>>());
         }
     TEST_END
 }
@@ -420,8 +435,8 @@ TEST_F(netlist_test, check_get_gates){
             // The expected result
             std::set<std::shared_ptr<gate>> ex_gates = {nl->get_gate_by_id(MIN_GATE_ID+3), nl->get_gate_by_id(MIN_GATE_ID+4)};
 
-            EXPECT_EQ(nl->get_gates("INV"), ex_gates);
-            EXPECT_EQ(nl->get_gates("INV"), ex_gates);
+            EXPECT_EQ(nl->get_gates(gate_type_filter("INV")), ex_gates);
+            EXPECT_EQ(nl->get_gates(gate_type_filter("INV")), ex_gates);
         }
     TEST_END
 }
@@ -806,13 +821,13 @@ TEST_F(netlist_test, check_get_nets_by_name){
             std::shared_ptr<net> net_1 = nl->create_net(MIN_NET_ID+1, "other_net_name");
 
             EXPECT_EQ(nl->get_nets(), std::unordered_set<std::shared_ptr<net>>({net_0, net_1}));
-            EXPECT_EQ(nl->get_nets("net_name"), std::unordered_set<std::shared_ptr<net>>({net_0}));
+            EXPECT_EQ(nl->get_nets(net_name_filter("net_name")), std::unordered_set<std::shared_ptr<net>>({net_0}));
         }
         {
             // Call with an non existing net name
             NO_COUT_TEST_BLOCK;
             std::shared_ptr<netlist> nl = create_empty_netlist();
-            EXPECT_EQ(nl->get_nets("not_existing_net"), std::unordered_set<std::shared_ptr<net>>());
+            EXPECT_EQ(nl->get_nets(net_name_filter("not_existing_net")), std::unordered_set<std::shared_ptr<net>>());
         }
 
     TEST_END

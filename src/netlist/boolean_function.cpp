@@ -12,6 +12,8 @@ std::string boolean_function::to_string(const operation& op)
             return "|";
         case operation::XOR:
             return "^";
+        default:
+            return "?";
     }
 }
 
@@ -67,10 +69,10 @@ boolean_function::boolean_function(operation op, const std::vector<boolean_funct
     }
 }
 
-boolean_function::boolean_function(const std::string& variable_name, bool invert_result)
+boolean_function::boolean_function(const std::string& variable_name)
 {
     m_content = content_type::VARIABLE;
-    m_invert  = invert_result;
+    m_invert  = false;
 
     m_variable = core_utils::trim(variable_name);
     assert(!m_variable.empty());
@@ -88,7 +90,14 @@ boolean_function boolean_function::substitute(const std::string& variable_name, 
 {
     if (m_content == content_type::VARIABLE && m_variable == variable_name)
     {
-        return function;
+        if (m_invert)
+        {
+            return !function;
+        }
+        else
+        {
+            return function;
+        }
     }
     else if (m_content == content_type::TERMS)
     {

@@ -10,57 +10,50 @@
 
 namespace gui_utility
 {
-
-    std::shared_ptr<module> lowest_common_ancestor(std::shared_ptr<module> m1, std::shared_ptr<module> m2)
+    std::shared_ptr<module> first_common_ancestor(std::shared_ptr<module> m1, std::shared_ptr<module> m2)
     {
-        std::unordered_set<std::shared_ptr<module>> common;
-        common.insert(m1);
-        common.insert(m2);
-        while (true)
+        std::unordered_set<u32> parents_m1;
+        while (m1 != nullptr)
         {
-            std::shared_ptr<module> p1 = m1->get_parent_module();
-            if (common.find(p1) != common.end())
-                return p1;
-            common.insert(p1);
-            m1 = p1;
-            std::shared_ptr<module> p2 = m2->get_parent_module();
-            if (common.find(p2) != common.end())
-                return p2;
-            common.insert(p2);
-            m2 = p2;
+            parents_m1.insert(m1->get_id());
+            m1 = m1->get_parent_module();
         }
+        while (m2 != nullptr)
+        {
+            if (parents_m1.find(m2->get_id()) != parents_m1.end())
+            {
+                return m2;
+            }
+            m2 = m2->get_parent_module();
+        }
+        return nullptr;
     }
 
-    std::shared_ptr<module> lowest_common_ancestor(std::unordered_set<std::shared_ptr<module>> modules, std::unordered_set<std::shared_ptr<gate>> gates)
+    std::shared_ptr<module> first_common_ancestor(std::unordered_set<std::shared_ptr<module>> modules, const std::unordered_set<std::shared_ptr<gate>>& gates)
     {
         if (modules.empty() && gates.empty())
         {
             return nullptr;
         }
         // resolve all gates to their parent modules, since we don't want to work with gates
-        while(!gates.empty())
+        for (const auto& g : gates)
         {
-            std::shared_ptr<gate> g = *gates.begin();
-            gates.erase(g);
-            std::shared_ptr<module> m = g->get_module();
-            modules.insert(m);
+            modules.insert(g->get_module());
         }
-        // pick two modules and resolve them to their lowest common ancestor,
-        // insert that back into the set and loop until only 1 module remains
-        while(modules.size() >= 2)
+        // pick two modules and resolve them to their first common ancestor,
+        auto module_list = std::vector<std::shared_ptr<module>>(modules.begin(), modules.end());
+        auto result      = module_list[0];
+        for (u32 i = 1; i < module_list.size(); ++i)
         {
-            std::shared_ptr<module> m1 = *modules.begin();
-            modules.erase(m1);
-            std::shared_ptr<module> m2 = *modules.begin();
-            modules.erase(m2);
-            std::shared_ptr<module> common = lowest_common_ancestor(m1, m2);
-            // if we hit the top module, we can stop searching
-            if (common->get_parent_module() == nullptr)
-                return common;
-            modules.insert(common);
+            // if the top module is the first common ancestor at any time, we can stop searching (early exit)
+            if (result->get_parent_module() == nullptr)
+            {
+                break;
+            }
+            result = first_common_ancestor(result, module_list[i]);
         }
-        // the remaining module is the lowest common ancestor of all elements
-        return *modules.begin();
+        // the final module is the first common ancestor of all elements
+        return result;
     }
 
-} // namespace gui_utility
+}    // namespace gui_utility

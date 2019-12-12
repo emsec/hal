@@ -39,6 +39,8 @@ void initialize_cli_options(program_options& cli_options)
     generic_options.add({"--licenses"}, "Shows the licenses of projects used by HAL");
 
     generic_options.add({"-i", "--input-file"}, "input file", {program_options::REQUIRED_PARAM});
+    generic_options.add({"-gl", "--gate-library"}, "used gate-library of the netlist", {program_options::REQUIRED_PARAM});
+    generic_options.add({"-e", "--empty-netlist"}, "create a new empty netlist, requires a gate library to be specified");
 #ifdef WITH_GUI
     generic_options.add({"-g", "--gui"}, "start graphical user interface");
 #endif
@@ -197,16 +199,39 @@ int main(int argc, const char* argv[])
 
     /* handle input file */
     gate_library_manager::load_all();
-    auto netlist = netlist_factory::load_netlist(args);
+
+    if (args.is_option_set("--empty-netlist") && args.is_option_set("--input-file"))
+    {
+        log_error("core", "Found --empty-netlist and --input-file!");
+        return cleanup();
+    }
+
+    if (args.is_option_set("--empty-netlist") && !args.is_option_set("--gate-library"))
+    {
+        log_error("core", "Found --empty-netlist but --gate-library is missing!");
+        return cleanup();
+    }
+
+    hal::path file_name;
+    std::shared_ptr<netlist> netlist;
+
+    if (args.is_option_set("--empty-netlist"))
+    {
+        netlist  = netlist_factory::create_netlist(args.get_parameter("--gate-library"));
+        file_name = hal::path("./empty_netlist.hal");
+    }
+    else
+    {
+        netlist  = netlist_factory::load_netlist(args);
+        file_name = hal::path(args.get_parameter("--input-file"));
+    }
+
     if (netlist == nullptr)
     {
         cleanup();
         return -1;
     }
-    auto file_name = hal::path(args.get_parameter("--input-file"));
 
-    /* handle database configuration */
-    hal::path log_path = file_name;
     if (args.is_option_set("--no-log"))
     {
         log_warning("core",
@@ -215,6 +240,7 @@ int main(int argc, const char* argv[])
     }
     else if (!args.is_option_set("--logfile"))
     {
+        auto log_path = file_name;
         lm.set_file_name(log_path.replace_extension(".log"));
     }
 
@@ -281,7 +307,7 @@ int main(int argc, const char* argv[])
 
     if (!volatile_mode)
     {
-        hal::path path = file_name;
+        auto path = file_name;
         path.replace_extension(".hal");
         netlist_serializer::serialize_to_file(netlist, path);
     }

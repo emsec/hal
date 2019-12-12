@@ -24,7 +24,6 @@
 #pragma once
 
 #include "def.h"
-#include "netlist/netlist_constants.h"
 
 // forward declaration
 class netlist;
@@ -52,26 +51,26 @@ private:
 
     // gate functions
 
-    std::shared_ptr<gate> create_gate(u32 id, std::shared_ptr<const gate_type> gt, const std::string& name, float x, float y);
+    std::shared_ptr<gate> create_gate(u32 id, const std::shared_ptr<const gate_type>& gt, const std::string& name, float x, float y);
     bool delete_gate(std::shared_ptr<gate> gate);
 
-    bool is_gate_type_invalid(std::shared_ptr<const gate_type> gt) const;
+    bool is_gate_type_invalid(const std::shared_ptr<const gate_type>& gt) const;
 
     // net functions
 
     std::shared_ptr<net> create_net(u32 id, const std::string& name);
-    bool delete_net(std::shared_ptr<net> net);
+    bool delete_net(const std::shared_ptr<net>& net);
 
-    bool net_set_src(std::shared_ptr<net> const net, endpoint src);
-    bool net_remove_src(std::shared_ptr<net> const net);
-    bool net_add_dst(std::shared_ptr<net> const net, endpoint dst);
-    bool net_remove_dst(std::shared_ptr<net> const net, endpoint dst);
+    bool net_set_src(const std::shared_ptr<net>& net, const endpoint& src);
+    bool net_remove_src(const std::shared_ptr<net>& net);
+    bool net_add_dst(const std::shared_ptr<net>& net, const endpoint& dst);
+    bool net_remove_dst(const std::shared_ptr<net>& net, const endpoint& dst);
 
     // module functions
 
-    std::shared_ptr<module> create_module(u32 id, std::shared_ptr<module> parent, const std::string& name);
-    bool delete_module(std::shared_ptr<module> module);
+    std::shared_ptr<module> create_module(u32 id, const  std::shared_ptr<module>& parent, const std::string& name);
+    bool delete_module(const std::shared_ptr<module>& module);
 
-    bool module_assign_gate(std::shared_ptr<module> m, std::shared_ptr<gate> g);
-    bool module_remove_gate(std::shared_ptr<module> m, std::shared_ptr<gate> g);
+    bool module_assign_gate(const std::shared_ptr<module>& m, const std::shared_ptr<gate>& g);
+    bool module_remove_gate(const std::shared_ptr<module>& m, const std::shared_ptr<gate>& g);
 };

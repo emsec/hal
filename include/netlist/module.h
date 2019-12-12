@@ -26,7 +26,6 @@
 #include "def.h"
 
 #include "netlist/gate_library/gate_library.h"
-#include "netlist/netlist_constants.h"
 
 #include "netlist/data_container.h"
 
@@ -36,6 +35,7 @@
 #include <string>
 #include <tuple>
 #include <type_traits>
+#include <functional>
 
 /** forward declaration */
 class netlist;
@@ -96,11 +96,11 @@ public:
      * Get all direct submodules of this module.<br>
      * If \p recursive is true, all indirect submodules are also included.
      *
-     * @param[in] name_filter - Filter for the name
+     * @param[in] filter - Filter for the modules
      * @param[in] recursive - Look into submodules as well
      * @returns The set of submodules
      */
-    std::set<std::shared_ptr<module>> get_submodules(const std::string& name_filter = DONT_CARE, bool recursive = false) const;
+    std::set<std::shared_ptr<module>> get_submodules(const std::function<bool(const std::shared_ptr<module>&)>& filter = nullptr, bool recursive = false) const;
 
     /**
      * Checks whether another module is a submodule of this module.<br>
@@ -123,29 +123,26 @@ public:
      * Get the input nets to this module.<br>
      * A module input net is either a global input to the netlist or has a source outside of the module.
      *
-     * @param[in] name_filter - Filter for the name
      * @returns The set of module input nets.
      */
-    std::set<std::shared_ptr<net>> get_input_nets(const std::string& name_filter = DONT_CARE) const;
+    std::set<std::shared_ptr<net>> get_input_nets() const;
 
     /**
      * Get the output nets of this module.<br>
      * A module output net is either a global output of the netlist or has a destination outside of the module.
      *
-     * @param[in] name_filter - Filter for the name
      * @returns The set of module output nets.
      */
-    std::set<std::shared_ptr<net>> get_output_nets(const std::string& name_filter = DONT_CARE) const;
+    std::set<std::shared_ptr<net>> get_output_nets() const;
 
     /**
      * Get the internal nets of this module.<br>
      * A net is internal if its source and at least one output are inside the module.<br>
      * Therefore it may contain some nets that are also regarded as output nets.
      *
-     * @param[in] name_filter - Filter for the name
      * @returns The set of module input nets.
      */
-    std::set<std::shared_ptr<net>> get_internal_nets(const std::string& name_filter = DONT_CARE) const;
+    std::set<std::shared_ptr<net>> get_internal_nets() const;
 
     /*
      * ################################################################
@@ -196,12 +193,11 @@ public:
      * You can filter the set before output with the optional parameters.<br>
      * If \p recursive is true, all submodules are searched as well.
      *
-     * @param[in] gate_type_filter - Filter for the gate type
-     * @param[in] name_filter - Filter for the name
+     * @param[in] filter - Filter for the returned gates
      * @param[in] recursive - Look into submodules too
      * @return A set of gates.
      */
-    std::set<std::shared_ptr<gate>> get_gates(const std::string& gate_type_filter = DONT_CARE, const std::string& name_filter = DONT_CARE, bool recursive = false) const;
+    std::set<std::shared_ptr<gate>> get_gates(const std::function<bool(const std::shared_ptr<gate>&)>& filter = nullptr, bool recursive = false) const;
 
 private:
     module(u32 id, std::shared_ptr<module> parent, const std::string& name, netlist_internal_manager* internal_manager);

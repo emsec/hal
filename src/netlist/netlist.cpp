@@ -3,7 +3,6 @@
 #include "netlist/gate.h"
 #include "netlist/module.h"
 #include "netlist/net.h"
-#include "netlist/netlist_constants.h"
 #include "netlist/netlist_internal_manager.h"
 
 #include "netlist/event_system/netlist_event_handler.h"
@@ -111,14 +110,19 @@ u32 netlist::get_unique_module_id()
     return m_next_module_id;
 }
 
-std::shared_ptr<module> netlist::create_module(const u32 id, const std::string& name, std::shared_ptr<module> parent)
+std::shared_ptr<module> netlist::create_module(const u32 id, const std::string& name, std::shared_ptr<module> parent, const std::vector<std::shared_ptr<gate>>& gates)
 {
-    return m_manager->create_module(id, parent, name);
+    auto m = m_manager->create_module(id, parent, name);
+    for (const auto& g : gates)
+    {
+        m->assign_gate(g);
+    }
+    return m;
 }
 
-std::shared_ptr<module> netlist::create_module(const std::string& name, std::shared_ptr<module> parent)
+std::shared_ptr<module> netlist::create_module(const std::string& name, std::shared_ptr<module> parent, const std::vector<std::shared_ptr<gate>>& gates)
 {
-    return create_module(get_unique_module_id(), name, parent);
+    return create_module(get_unique_module_id(), name, parent, gates);
 }
 
 bool netlist::delete_module(const std::shared_ptr<module> module)
@@ -200,9 +204,9 @@ std::shared_ptr<gate> netlist::get_gate_by_id(const u32 gate_id) const
     return m_top_module->get_gate_by_id(gate_id, true);
 }
 
-std::set<std::shared_ptr<gate>> netlist::get_gates(const std::string& gate_type_filter, const std::string& name_filter) const
+std::set<std::shared_ptr<gate>> netlist::get_gates(const std::function<bool(const std::shared_ptr<gate>&)>& filter) const
 {
-    return m_top_module->get_gates(gate_type_filter, name_filter, true);
+    return m_top_module->get_gates(filter, true);
 }
 
 bool netlist::mark_vcc_gate(const std::shared_ptr<gate> gate)
@@ -340,20 +344,20 @@ std::shared_ptr<net> netlist::get_net_by_id(u32 net_id) const
     return it->second;
 }
 
-std::unordered_set<std::shared_ptr<net>> netlist::get_nets(const std::string& name_filter) const
+std::unordered_set<std::shared_ptr<net>> netlist::get_nets(const std::function<bool(const std::shared_ptr<net>&)>& filter) const
 {
-    if (name_filter == DONT_CARE)
+    if (!filter)
     {
         return m_nets_set;
     }
     std::unordered_set<std::shared_ptr<net>> res;
-    for (const auto& x : m_nets_set)
+    for (const auto& net : m_nets_set)
     {
-        if (x->get_name() != name_filter)
+        if (!filter(net))
         {
             continue;
         }
-        res.insert(x);
+        res.insert(net);
     }
     return res;
 }
@@ -368,6 +372,11 @@ bool netlist::mark_global_input_net(std::shared_ptr<net> const n)
     {
         log_debug("netlist", "net '{}' (id = {:08x}) is already registered as global input net in netlist.", n->get_name(), n->get_id());
         return true;
+    }
+    if (n->get_src().get_gate() != nullptr)
+    {
+        log_error("netlist", "net '{}' (id = {:08x}) has a source, so it cannot be marked as a global input net.", n->get_name(), n->get_id());
+        return false;
     }
     m_global_input_nets.insert(n);
 
@@ -385,6 +394,11 @@ bool netlist::mark_global_output_net(std::shared_ptr<net> const n)
     {
         log_debug("netlist", "net '{}' (id = {:08x}) is already registered as global output net in netlist", n->get_name(), n->get_id());
         return true;
+    }
+    if (n->get_num_of_dsts() != 0)
+    {
+        log_error("netlist", "net '{}' (id = {:08x}) has destinations, so it cannot be marked as a global output net.", n->get_name(), n->get_id());
+        return false;
     }
     m_global_output_nets.insert(n);
 

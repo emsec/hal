@@ -29,8 +29,8 @@
 #include "netlist/data_container.h"
 #include "netlist/endpoint.h"
 #include "netlist/gate_library/gate_type/gate_type.h"
-#include "netlist/netlist_constants.h"
 
+#include <functional>
 #include <map>
 #include <memory>
 #include <set>
@@ -264,58 +264,48 @@ public:
     std::shared_ptr<net> get_fan_out_net(const std::string& pin_type) const;
 
     /**
-     * Get a set of all unique predecessor endpoints of the gate filterable by the gate's input pin and a specific gate type.
+     * Get a set of all unique predecessor endpoints of the gate.
+     * A filter can be supplied which filters out all potential values that return false.
      *
-     * @param[in] this_pin_type_filter - The filter for the input pin type of the this gate. DONT_CARE for no filtering.
-     * @param[in] pred_pin_type_filter - The filter for the output pin type of the predecessor gate. DONT_CARE for no filtering.
-     * @param[in] gate_type_filter - The filter for target gate types. DONT_CARE for no filtering.
+     * @param[in] filter - a function to filter the output. Leave empty for no filtering.
      * @returns A set of unique predecessor endpoints.
      */
-    std::set<endpoint>
-        get_unique_predecessors(const std::string& this_pin_type_filter = DONT_CARE, const std::string& pred_pin_type_filter = DONT_CARE, const std::string& gate_type_filter = DONT_CARE) const;
+    std::set<endpoint> get_unique_predecessors(const std::function<bool(const std::string& starting_pin, const endpoint& ep)>& filter = nullptr) const;
 
     /**
-     * Get a vector of all direct predecessor endpoints of the gate filterable by the gate's input pin and a specific gate type.
+     * Get a vector of all direct predecessor endpoints of the gate.
+     * A filter can be supplied which filters out all potential values that return false.
      *
-     * @param[in] this_pin_type_filter - The filter for the input pin type of the this gate. DONT_CARE for no filtering.
-     * @param[in] pred_pin_type_filter - The filter for the output pin type of the predecessor gate. DONT_CARE for no filtering.
-     * @param[in] gate_type_filter - The filter for target gate types. DONT_CARE for no filtering.
+     * @param[in] filter - a function to filter the output. Leave empty for no filtering.
      * @returns A vector of predecessor endpoints.
      */
-    std::vector<endpoint>
-        get_predecessors(const std::string& this_pin_type_filter = DONT_CARE, const std::string& pred_pin_type_filter = DONT_CARE, const std::string& gate_type_filter = DONT_CARE) const;
+    std::vector<endpoint> get_predecessors(const std::function<bool(const std::string& starting_pin, const endpoint& ep)>& filter = nullptr) const;
 
     /**
-     * Get the direct predecessor endpoint of the gate connected to a specific input pin and filterable by a specific gate type.
+     * Get the direct predecessor endpoint of the gate connected to a specific input pin.
      *
-     * @param[in] this_pin_type_filter - The input pin type of the this gate. DONT_CARE for no filtering.
-     * @param[in] pred_pin_type_filter - The filter for the output pin type of the predecessor gate. DONT_CARE for no filtering.
-     * @param[in] gate_type_filter - The filter for target gate types. DONT_CARE for no filtering.
+     * @param[in] which_pin - the pin of this gate to get the predecessor from.
      * @returns The predecessor endpoint.
      */
-    endpoint get_predecessor(const std::string& this_pin_type_filter, const std::string& pred_pin_type_filter = DONT_CARE, const std::string& gate_type_filter = DONT_CARE) const;
+    endpoint get_predecessor(const std::string& which_pin) const;
 
     /**
-     * Get a set of all unique successor endpoints of the gate filterable by the gate's output pin and a specific gate type.
+     * Get a set of all unique successor endpoints of the gate.
+     * A filter can be supplied which filters out all potential values that return false.
      *
-     * @param[in] this_pin_type_filter - The output pin type of the this gate. DONT_CARE for no filtering.
-     * @param[in] suc_pin_type_filter - The filter for the input pin type of the successor gate. DONT_CARE for no filtering.
-     * @param[in] gate_type_filter - The filter for target gate types. DONT_CARE for no filtering.
+     * @param[in] filter - a function to filter the output. Leave empty for no filtering.
      * @returns A set of unique successor endpoints.
      */
-    std::set<endpoint>
-        get_unique_successors(const std::string& this_pin_type_filter = DONT_CARE, const std::string& suc_pin_type_filter = DONT_CARE, const std::string& gate_type_filter = DONT_CARE) const;
+    std::set<endpoint> get_unique_successors(const std::function<bool(const std::string& starting_pin, const endpoint& ep)>& filter = nullptr) const;
 
     /**
-     * Get a vector of all direct successor endpoints of the gate filterable by the gate's output pin and a specific gate type.
+     * Get a vector of all direct successor endpoints of the gate.
+     * A filter can be supplied which filters out all potential values that return false.
      *
-     * @param[in] this_pin_type_filter - The output pin type of the this gate. DONT_CARE for no filtering.
-     * @param[in] suc_pin_type_filter - The filter for the input pin type of the successor gate. DONT_CARE for no filtering.
-     * @param[in] gate_type_filter - The filter for target gate types. DONT_CARE for no filtering.
+     * @param[in] filter - a function to filter the output. Leave empty for no filtering.
      * @returns A vector of successor endpoints.
      */
-    std::vector<endpoint>
-        get_successors(const std::string& this_pin_type_filter = DONT_CARE, const std::string& suc_pin_type_filter = DONT_CARE, const std::string& gate_type_filter = DONT_CARE) const;
+    std::vector<endpoint> get_successors(const std::function<bool(const std::string& starting_pin, const endpoint& ep)>& filter = nullptr) const;
 
 private:
     gate(std::shared_ptr<netlist> const g, u32 id, std::shared_ptr<const gate_type> gt, const std::string& name, float x, float y);

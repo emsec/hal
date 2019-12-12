@@ -73,8 +73,6 @@ public Q_SLOTS:
     void handle_intern_selection_changed();
     void handle_extern_selection_changed(void* sender);
     void handle_extern_subfocus_changed(void* sender);
-    void handle_gate_name_changed(std::shared_ptr<gate> g);
-    void handle_module_name_changed(std::shared_ptr<module> m);
 
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent* event) Q_DECL_OVERRIDE;

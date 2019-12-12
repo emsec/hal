@@ -69,6 +69,20 @@ void graph_context_manager::handle_module_name_changed(const std::shared_ptr<mod
             context->schedule_scene_update();
 }
 
+void graph_context_manager::handle_module_color_changed(const std::shared_ptr<module> m) const
+{
+    auto gates = m->get_gates();
+    QSet<u32> gateIDs;
+    for (auto g : gates)
+        gateIDs.insert(g->get_id());
+    for (graph_context* context : m_graph_contexts)
+        if (context->modules().contains(m->get_id()) // contains module
+            || context->gates().intersects(gateIDs)) // contains gate from module
+            context->schedule_scene_update();
+    // a context can contain a gate from a module if it is showing the module
+    // or if it's showing a parent and the module is unfolded
+}
+
 void graph_context_manager::handle_module_submodule_added(const std::shared_ptr<module> m, const u32 added_module) const
 {
     for (graph_context* context : m_graph_contexts)
@@ -101,6 +115,7 @@ void graph_context_manager::handle_module_gate_assigned(const std::shared_ptr<mo
 void graph_context_manager::handle_module_gate_removed(const std::shared_ptr<module> m, const u32 removed_gate)
 {
     for (graph_context* context : m_graph_contexts)
+    {
         if (context->is_showing_module(m->get_id(), {}, {}, {}, {removed_gate}))
         {
             context->remove({}, {removed_gate});
@@ -109,6 +124,11 @@ void graph_context_manager::handle_module_gate_removed(const std::shared_ptr<mod
                 delete_graph_context(context);
             }
         }
+        // if a module is unfolded, then the gate is not deleted from the view
+        // but the color of the gate changes to its new parent's color
+        else if (context->gates().contains(removed_gate))
+            context->schedule_scene_update();
+    }
 }
 
 void graph_context_manager::handle_gate_name_changed(const std::shared_ptr<gate> g) const
@@ -142,28 +162,26 @@ void graph_context_manager::handle_net_name_changed(const std::shared_ptr<net> n
 
 void graph_context_manager::handle_net_src_changed(const std::shared_ptr<net> n) const
 {
-    if(n->is_unrouted())
-        return;
-
     for(graph_context* context : m_graph_contexts)
-        if(context->gates().contains(n->get_src().get_gate()->get_id()))
+    {
+        if(context->nets().contains(n->get_id()) || (context->is_showing_net_src(n->get_id()) && (n->is_global_output_net() || context->is_showing_net_dst(n->get_id()))))
         {
             context->apply_changes();
             context->schedule_scene_update();
         }
+    }
 }
 
 void graph_context_manager::handle_net_dst_added(const std::shared_ptr<net> n, const u32 dst_gate_id) const
 {
-    if(n->is_unrouted())
-        return;
-
     for(graph_context* context : m_graph_contexts)
-        if(context->gates().contains(n->get_src().get_gate()->get_id()))
+    {
+        if(context->nets().contains(n->get_id()) || (context->is_showing_net_dst(n->get_id()) && (n->is_global_input_net() || context->is_showing_net_src(n->get_id()))))
         {
             context->apply_changes();
-            context->schedule_scene_update();
+            context->schedule_scene_update();  
         }
+    }
 }
 
 void graph_context_manager::handle_net_dst_removed(const std::shared_ptr<net> n, const u32 dst_gate_id) const
@@ -173,6 +191,50 @@ void graph_context_manager::handle_net_dst_removed(const std::shared_ptr<net> n,
     for (graph_context* context : m_graph_contexts)
         if (context->nets().contains(n->get_id()))
             context->schedule_scene_update();
+}
+
+void graph_context_manager::handle_marked_global_input(u32 net_id)
+{
+    for(graph_context* context : m_graph_contexts)
+    {
+        if(context->nets().contains(net_id) || context->is_showing_net_dst(net_id))
+        {
+            context->apply_changes();
+            context->schedule_scene_update();  
+        }
+    }
+}
+
+void graph_context_manager::handle_marked_global_output(u32 net_id)
+{
+    for(graph_context* context : m_graph_contexts)
+    {
+        if(context->nets().contains(net_id) || context->is_showing_net_src(net_id))
+        {
+            context->apply_changes();
+            context->schedule_scene_update();  
+        }
+    }
+}
+
+void graph_context_manager::handle_unmarked_global_input(u32 net_id)
+{
+    for (graph_context* context : m_graph_contexts)
+        if (context->nets().contains(net_id))
+        {
+            context->apply_changes();
+            context->schedule_scene_update();
+        }
+}
+
+void graph_context_manager::handle_unmarked_global_output(u32 net_id)
+{
+    for (graph_context* context : m_graph_contexts)
+        if (context->nets().contains(net_id))
+        {
+            context->apply_changes();
+            context->schedule_scene_update();
+        }
 }
 
 graph_layouter* graph_context_manager::get_default_layouter(graph_context* const context) const

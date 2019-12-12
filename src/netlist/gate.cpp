@@ -24,34 +24,6 @@ gate::gate(std::shared_ptr<netlist> const g, const u32 id, std::shared_ptr<const
     m_y       = y;
 }
 
-std::ostream& operator<<(std::ostream& os, const gate& gate)
-{
-    os << "\t\'" << gate.get_name() << "\'"
-       << " (type = '" << gate.get_type()->get_name() << "', id = " << gate.get_id() << ")" << std::endl;
-    for (const auto& input_pin_type : gate.get_input_pins())
-    {
-        os << "\t\t" << input_pin_type << " => ";
-        auto net = gate.get_fan_in_net(input_pin_type);
-        if (net == nullptr)
-            os << "nullptr";
-        else
-            os << net->get_name();
-        os << std::endl;
-    }
-    for (const auto& output_pin_type : gate.get_output_pins())
-    {
-        os << "\t\t" << output_pin_type << " => ";
-        auto net = gate.get_fan_out_net(output_pin_type);
-        if (net == nullptr)
-            os << "nullptr";
-        else
-            os << net->get_name();
-        os << std::endl;
-    }
-
-    return os;
-}
-
 u32 gate::get_id() const
 {
     return m_id;
@@ -183,7 +155,7 @@ std::unordered_map<std::string, boolean_function> gate::get_boolean_functions(bo
         res.emplace(it.first, it.second);
     }
 
-    if (m_type->get_base_type() == gate_type::base_type::lut)
+    if (!only_custom_functions && m_type->get_base_type() == gate_type::base_type::lut)
     {
         res.emplace(get_output_pins()[0], get_lut_function());
     }
@@ -204,6 +176,7 @@ boolean_function gate::get_lut_function() const
         return boolean_function::ZERO;
     }
     u64 config = std::stoull(config_str, nullptr, 16);
+    u32 config_size = 1 << get_input_pins().size();
 
     boolean_function result;
 
@@ -212,13 +185,13 @@ boolean_function gate::get_lut_function() const
         u8 bit;
         if (lut_type->is_config_data_ascending_order())
         {
-            bit = (config & 1);
-            config >>= 1;
+            bit = (config >> (config_size - 1)) & 1;
+            config <<= 1;
         }
         else
         {
-            bit = config >> 63;
-            config <<= 1;
+            bit = (config & 1);
+            config >>= 1;
         }
         if (bit == 1)
         {
@@ -265,8 +238,8 @@ void gate::add_boolean_function(const std::string& name, const boolean_function&
                     log_error("netlist", "function truth table contained undefined values");
                     return;
                 }
-                config_value |= v;
                 config_value <<= 1;
+                config_value |= v;
             }
 
             std::string category = lut_type->get_config_data_category();
@@ -373,146 +346,76 @@ std::shared_ptr<net> gate::get_fan_out_net(const std::string& pin_type) const
     return it->second;
 }
 
-std::set<endpoint> gate::get_unique_predecessors(const std::string& this_pin_type_filter, const std::string& pred_pin_type_filter, const std::string& gate_type_filter) const
+std::set<endpoint> gate::get_unique_predecessors(const std::function<bool(const std::string& starting_pin, const endpoint&)>& filter) const
 {
-    auto predecessors = this->get_predecessors(this_pin_type_filter, pred_pin_type_filter, gate_type_filter);
+    auto predecessors = this->get_predecessors(filter);
     return std::set<endpoint>(predecessors.begin(), predecessors.end());
 }
 
-std::vector<endpoint> gate::get_predecessors(const std::string& this_pin_type_filter, const std::string& pred_pin_type_filter, const std::string& gate_type_filter) const
+std::vector<endpoint> gate::get_predecessors(const std::function<bool(const std::string& starting_pin, const endpoint&)>& filter) const
 {
-    if (this_pin_type_filter != DONT_CARE)
+    std::vector<endpoint> result;
+    for (const auto& it : m_in_nets)
     {
-        auto it = m_in_nets.find(this_pin_type_filter);
-        if (it == m_in_nets.end())
-        {
-            return {};
-        }
-        auto net  = it->second;
+        auto& net = it.second;
+        auto& pin = it.first;
         auto pred = net->get_src();
         if (pred.gate == nullptr)
         {
-            log_debug("netlist", "predecessor on pin '{}' of gate '{}' (id = {:08x}) is unrouted.", this_pin_type_filter, this->get_name(), this->get_id());
-            return {};
+            log_debug("netlist", "predecessor on pin '{}' of gate '{}' (id = {:08x}) is unrouted.", pin, this->get_name(), this->get_id());
+            continue;
         }
-        if ((pred_pin_type_filter != DONT_CARE) && (pred.pin_type != pred_pin_type_filter))
+        if (filter && !filter(pin, pred))
         {
-            log_debug("netlist", "pin type of predecessor gate '{}' (id = {:08x}) does not match", pred.gate->get_name(), pred.gate->get_id());
-            return {};
+            continue;
         }
-        if ((gate_type_filter != DONT_CARE) && (pred.gate->get_type()->get_name() != gate_type_filter))
-        {
-            log_debug("netlist", "type of predecessor gate '{}' (id = {:08x}) does not match", pred.gate->get_name(), pred.gate->get_id());
-            return {};
-        }
-        log_debug(
-            "netlist", "predecessor of ('{}', {}) is ('{}', {}) in net '{}' (id = {:08x})", get_name(), pred_pin_type_filter, pred.gate->get_name(), pred.pin_type, net->get_name(), net->get_id());
-        return {pred};
+        result.push_back(pred);
     }
-    else
-    {
-        std::vector<endpoint> result;
-        for (const auto& it : m_in_nets)
-        {
-            auto net  = it.second;
-            auto pred = net->get_src();
-            if (pred.gate == nullptr)
-            {
-                log_debug("netlist", "predecessor on pin '{}' of gate '{}' (id = {:08x}) is unrouted.", it.first, this->get_name(), this->get_id());
-                continue;
-            }
-            if ((pred_pin_type_filter != DONT_CARE) && (pred.pin_type != pred_pin_type_filter))
-            {
-                log_debug("netlist", "pin type of predecessor gate '{}' (id = {:08x}) does not match", pred.gate->get_name(), pred.gate->get_id());
-                continue;
-            }
-            if ((gate_type_filter != DONT_CARE) && (pred.gate->get_type()->get_name() != gate_type_filter))
-            {
-                log_debug("netlist", "type of predecessor gate '{}' (id = {:08x}) does not match", pred.gate->get_name(), pred.gate->get_id());
-                continue;
-            }
-
-            log_debug(
-                "netlist", "predecessor of ('{}', {}) is ('{}', {}) in net '{}' (id = {:08x})", get_name(), pred_pin_type_filter, pred.gate->get_name(), pred.pin_type, net->get_name(), net->get_id());
-            result.push_back(pred);
-        }
-        return result;
-    }
+    return result;
 }
 
-endpoint gate::get_predecessor(const std::string& this_pin_type_filter, const std::string& pred_pin_type_filter, const std::string& gate_type_filter) const
+endpoint gate::get_predecessor(const std::string& which_pin) const
 {
-    auto predecessors = this->get_predecessors(this_pin_type_filter, pred_pin_type_filter, gate_type_filter);
+    auto predecessors = this->get_predecessors([&which_pin](auto& starting_pin, auto&) -> bool { return starting_pin == which_pin; });
     if (predecessors.size() == 0)
     {
         return {nullptr, ""};
     }
     if (predecessors.size() > 1)
     {
-        log_error("netlist", "internal error: multiple predecessors for '{}' at pin '{}'.", get_name(), pred_pin_type_filter);
+        log_error("netlist", "internal error: multiple predecessors for '{}' at pin '{}'.", get_name(), which_pin);
         return {nullptr, ""};
     }
 
-    return *(predecessors.begin());
+    return predecessors[0];
 }
 
-std::set<endpoint> gate::get_unique_successors(const std::string& this_pin_type_filter, const std::string& suc_pin_type_filter, const std::string& gate_type_filter) const
+std::set<endpoint> gate::get_unique_successors(const std::function<bool(const std::string& starting_pin, const endpoint&)>& filter) const
 {
-    auto successors = this->get_successors(this_pin_type_filter, suc_pin_type_filter, gate_type_filter);
+    auto successors = this->get_successors(filter);
     return std::set<endpoint>(successors.begin(), successors.end());
 }
 
-std::vector<endpoint> gate::get_successors(const std::string& this_pin_type_filter, const std::string& suc_pin_type_filter, const std::string& gate_type_filter) const
+std::vector<endpoint> gate::get_successors(const std::function<bool(const std::string& starting_pin, const endpoint&)>& filter) const
 {
     std::vector<endpoint> result;
-    if (this_pin_type_filter != DONT_CARE)
+    for (const auto& it : m_out_nets)
     {
-        auto it = m_out_nets.find(this_pin_type_filter);
-        if (it == m_out_nets.end())
-        {
-            return result;
-        }
-        auto net        = it->second;
+        auto& pin       = it.first;
+        auto& net       = it.second;
         auto successors = net->get_dsts();
-        for (const auto& suc : successors)
+        if (!filter)
         {
-            if ((suc_pin_type_filter != DONT_CARE) && (suc.pin_type != suc_pin_type_filter))
-            {
-                log_debug("netlist", "pin type of successor gate '{}' (id = {:08x}) does not match", suc.gate->get_name(), suc.gate->get_id());
-                continue;
-            }
-            if ((gate_type_filter != DONT_CARE) && (suc.gate->get_type()->get_name() != gate_type_filter))
-            {
-                log_debug("netlist", "type of successor gate '{}' (id = {:08x}) does not match", suc.gate->get_name(), suc.gate->get_id());
-                continue;
-            }
-
-            log_debug(
-                "netlist", "successor of ('{}', {}) is ('{}', {}) in net '{}' (id = {:08x})", get_name(), suc_pin_type_filter, suc.gate->get_name(), suc.pin_type, net->get_name(), net->get_id());
-            result.push_back(suc);
+            result.insert(result.end(), successors.begin(), successors.end());
         }
-    }
-    else
-    {
-        for (const auto& it : m_out_nets)
+        else
         {
-            auto net        = it.second;
-            auto successors = net->get_dsts();
             for (const auto& suc : successors)
             {
-                if ((suc_pin_type_filter != DONT_CARE) && (suc.pin_type != suc_pin_type_filter))
+                if (!filter(pin, suc))
                 {
-                    log_debug("netlist", "pin type of successor gate '{}' (id = {:08x}) does not match", suc.gate->get_name(), suc.gate->get_id());
                     continue;
                 }
-                if ((gate_type_filter != DONT_CARE) && (suc.gate->get_type()->get_name() != gate_type_filter))
-                {
-                    log_debug("netlist", "type of successor gate '{}' (id = {:08x}) does not match", suc.gate->get_name(), suc.gate->get_id());
-                    continue;
-                }
-
-                log_debug(
-                    "netlist", "successor of ('{}', {}) is ('{}', {}) in net '{}' (id = {:08x})", get_name(), suc_pin_type_filter, suc.gate->get_name(), suc.pin_type, net->get_name(), net->get_id());
                 result.push_back(suc);
             }
         }

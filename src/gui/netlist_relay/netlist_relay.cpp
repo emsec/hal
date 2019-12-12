@@ -89,6 +89,10 @@ void netlist_relay::debug_change_module_color(const u32 id)
     m_module_colors.insert(id, color);
     m_module_model->update_module(id);
 
+    // Since color is our overlay over the netlist data, no event is
+    // automatically fired. We need to take care of that ourselves here.
+    g_graph_context_manager.handle_module_color_changed(m);
+
     Q_EMIT module_color_changed(m);
 }
 
@@ -189,11 +193,13 @@ void netlist_relay::relay_netlist_event(netlist_event_handler::event ev, std::sh
         case netlist_event_handler::event::marked_global_input:
         {
             ///< associated_data = id of net
+            g_graph_context_manager.handle_marked_global_input(associated_data);
             break;
         }
         case netlist_event_handler::event::marked_global_output:
         {
             ///< associated_data = id of net
+            g_graph_context_manager.handle_marked_global_output(associated_data);
             break;
         }
         case netlist_event_handler::event::marked_global_inout:
@@ -204,11 +210,13 @@ void netlist_relay::relay_netlist_event(netlist_event_handler::event ev, std::sh
         case netlist_event_handler::event::unmarked_global_input:
         {
             ///< associated_data = id of net
+            g_graph_context_manager.handle_unmarked_global_input(associated_data);
             break;
         }
         case netlist_event_handler::event::unmarked_global_output:
         {
             ///< associated_data = id of net
+            g_graph_context_manager.handle_unmarked_global_output(associated_data);
             break;
         }
         case netlist_event_handler::event::unmarked_global_inout:
@@ -237,7 +245,6 @@ void netlist_relay::relay_module_event(module_event_handler::event ev, std::shar
             if (object->get_parent_module() != nullptr)
             {
                 m_module_colors.insert(object->get_id(), gui_utility::get_random_color());
-                m_module_model->add_module(object->get_id(), object->get_parent_module()->get_id());
             }
 
             Q_EMIT module_created(object);
@@ -270,9 +277,6 @@ void netlist_relay::relay_module_event(module_event_handler::event ev, std::shar
         {
             //< no associated_data
 
-            m_module_model->remove_module(object->get_id());
-            m_module_model->add_module(object->get_id(), object->get_parent_module()->get_id());
-
             Q_EMIT module_parent_changed(object);
             break;
         }
@@ -280,7 +284,7 @@ void netlist_relay::relay_module_event(module_event_handler::event ev, std::shar
         {
             //< associated_data = id of added module
 
-            //m_module_model->add_module(associated_data, object->get_id());
+            m_module_model->add_module(associated_data, object->get_id());
 
             g_graph_context_manager.handle_module_submodule_added(object, associated_data);
 
