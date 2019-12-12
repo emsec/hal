@@ -21,6 +21,8 @@
 #include "gui/gui_globals.h"
 #include "gui/gui_utils/netlist.h"
 
+#include <algorithm>
+
 #include <QApplication>
 #include <QAction>
 #include <QColorDialog>
@@ -913,15 +915,9 @@ graph_graphics_view::layouter_point graph_graphics_view::closest_layouter_point(
     else
     {
         qreal posThis = 0;
-        int i = 0;
-        for(; i < sections.size(); i++)
-        {
-            posThis = sections[i];
-            if (posThis >= scene_pos)
-            {
-                break;
-            }
-        }
+        // binary search for first value in sections larger than or equal to scene_pos
+        const qreal* needle = std::lower_bound(sections.constBegin(), sections.constEnd(), scene_pos);
+        int i = needle - sections.begin(); // position of needle in the vector
         index += i;
         // check if we're closer to this or the next position
         qreal distThis = qAbs(scene_pos - posThis);
