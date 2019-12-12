@@ -16,7 +16,7 @@ using namespace test_utils;
 class hdl_writer_vhdl_test : public ::testing::Test
 {
 protected:
-   const std::string GATE_SUFFIX = "";
+    const std::string GATE_SUFFIX = "";
 
     virtual void SetUp() {
         NO_COUT_BLOCK;
@@ -27,10 +27,6 @@ protected:
 
     }
 };
-
-static std::function<bool(const std::shared_ptr<gate>&)> name_filter(const std::string& name){
-    return [name](auto& g){return g->get_name() == name;};
-}
 
 /**
  * Testing to write a given netlist in a sstream and parses it after, with
@@ -621,16 +617,16 @@ TEST_F(hdl_writer_vhdl_test, check_special_net_names) {
             test_def::get_captured_stdout();
 
             // Check if the gate_name is translated correctly
-            EXPECT_FALSE(parsed_nl->get_gates(name_filter("gate_0" + GATE_SUFFIX)).empty());
-            EXPECT_FALSE(parsed_nl->get_gates(name_filter("gate_1" + GATE_SUFFIX)).empty());
-            EXPECT_FALSE(parsed_nl->get_gates(name_filter("gate_2" + GATE_SUFFIX)).empty());
-            EXPECT_FALSE(parsed_nl->get_gates(name_filter("gate_3" + GATE_SUFFIX)).empty());
-            EXPECT_FALSE(parsed_nl->get_gates(name_filter("gate_4" + GATE_SUFFIX)).empty());
-            EXPECT_FALSE(parsed_nl->get_gates(name_filter("gate_5" + GATE_SUFFIX)).empty());
-            EXPECT_FALSE(parsed_nl->get_gates(name_filter("gate_6" + GATE_SUFFIX)).empty());
-            EXPECT_FALSE(parsed_nl->get_gates(name_filter("gate_7" + GATE_SUFFIX)).empty());
-            EXPECT_FALSE(parsed_nl->get_gates(name_filter("gate_8" + GATE_SUFFIX)).empty());
-            EXPECT_FALSE(parsed_nl->get_gates(name_filter("GATE_9" + GATE_SUFFIX)).empty());
+            EXPECT_FALSE(parsed_nl->get_gates(gate_name_filter("gate_0" + GATE_SUFFIX)).empty());
+            EXPECT_FALSE(parsed_nl->get_gates(gate_name_filter("gate_1" + GATE_SUFFIX)).empty());
+            EXPECT_FALSE(parsed_nl->get_gates(gate_name_filter("gate_2" + GATE_SUFFIX)).empty());
+            EXPECT_FALSE(parsed_nl->get_gates(gate_name_filter("gate_3" + GATE_SUFFIX)).empty());
+            EXPECT_FALSE(parsed_nl->get_gates(gate_name_filter("gate_4" + GATE_SUFFIX)).empty());
+            EXPECT_FALSE(parsed_nl->get_gates(gate_name_filter("gate_5" + GATE_SUFFIX)).empty());
+            EXPECT_FALSE(parsed_nl->get_gates(gate_name_filter("gate_6" + GATE_SUFFIX)).empty());
+            EXPECT_FALSE(parsed_nl->get_gates(gate_name_filter("gate_7" + GATE_SUFFIX)).empty());
+            EXPECT_FALSE(parsed_nl->get_gates(gate_name_filter("gate_8" + GATE_SUFFIX)).empty());
+            EXPECT_FALSE(parsed_nl->get_gates(gate_name_filter("GATE_9" + GATE_SUFFIX)).empty());
         }
     TEST_END
 }
@@ -693,47 +689,47 @@ TEST_F(hdl_writer_vhdl_test, check_gate_net_name_collision) {
  *
  * Functions: write, parse
  */
- /*
+/*
 TEST_F(hdl_writer_vhdl_test, check_digit_net_name) {
-    TEST_START
-        {
-            // Add a gate to the netlist and store some data
-            std::shared_ptr<netlist> nl = create_empty_netlist(0);
+   TEST_START
+       {
+           // Add a gate to the netlist and store some data
+           std::shared_ptr<netlist> nl = create_empty_netlist(0);
 
-            std::shared_ptr<gate> test_gate = nl->create_gate( MIN_GATE_ID+0, "INV", "gate_net_name");
-            std::shared_ptr<net> test_net_0 = nl->create_net( MIN_NET_ID+0, "0");
-            std::shared_ptr<net> test_net_1 = nl->create_net( MIN_NET_ID+1, "1");
+           std::shared_ptr<gate> test_gate = nl->create_gate( MIN_GATE_ID+0, "INV", "gate_net_name");
+           std::shared_ptr<net> test_net_0 = nl->create_net( MIN_NET_ID+0, "0");
+           std::shared_ptr<net> test_net_1 = nl->create_net( MIN_NET_ID+1, "1");
 
-            test_net_0->add_dst(test_gate, "I");
-            test_net_1->set_src(test_gate, "O");
+           test_net_0->add_dst(test_gate, "I");
+           test_net_1->set_src(test_gate, "O");
 
-            // Write and parse the netlist now
-            test_def::capture_stdout();
-            std::stringstream parser_input;
-            hdl_writer_vhdl vhdl_writer(parser_input);
+           // Write and parse the netlist now
+           test_def::capture_stdout();
+           std::stringstream parser_input;
+           hdl_writer_vhdl vhdl_writer(parser_input);
 
-            // Writes the netlist in the sstream
-            bool writer_suc = vhdl_writer.write(nl);
-            if (!writer_suc) {
-                std::cout << test_def::get_captured_stdout() << std::endl;
-            }
-            ASSERT_TRUE(writer_suc);
+           // Writes the netlist in the sstream
+           bool writer_suc = vhdl_writer.write(nl);
+           if (!writer_suc) {
+               std::cout << test_def::get_captured_stdout() << std::endl;
+           }
+           ASSERT_TRUE(writer_suc);
 
-            hdl_parser_vhdl vhdl_parser(parser_input);
-            // Parse the .vhdl file
-            std::shared_ptr<netlist> parsed_nl = vhdl_parser.parse(g_lib_name);
+           hdl_parser_vhdl vhdl_parser(parser_input);
+           // Parse the .vhdl file
+           std::shared_ptr<netlist> parsed_nl = vhdl_parser.parse(g_lib_name);
 
-            if (parsed_nl == nullptr) {
-                std::cout << test_def::get_captured_stdout() << std::endl;
-            }
-            ASSERT_NE(parsed_nl, nullptr);
-            test_def::get_captured_stdout();
+           if (parsed_nl == nullptr) {
+               std::cout << test_def::get_captured_stdout() << std::endl;
+           }
+           ASSERT_NE(parsed_nl, nullptr);
+           test_def::get_captured_stdout();
 
-            // Check if the gate name was added a "_inst"
-            EXPECT_NE(get_net_by_subname(parsed_nl, "gate_net_name"), nullptr);
-            EXPECT_NE(get_gate_by_subname(parsed_nl, "gate_net_name_inst"), nullptr);
+           // Check if the gate name was added a "_inst"
+           EXPECT_NE(get_net_by_subname(parsed_nl, "gate_net_name"), nullptr);
+           EXPECT_NE(get_gate_by_subname(parsed_nl, "gate_net_name_inst"), nullptr);
 
-        }
-    TEST_END
+       }
+   TEST_END
 }*/
 

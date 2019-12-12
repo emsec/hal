@@ -29,27 +29,6 @@ protected:
     }
 };
 
-static std::function<bool(const std::shared_ptr<net>&)> net_name_filter(const std::string& name){
-    return [name](auto& n){return n->get_name() == name;};
-}
-
-static std::function<bool(const std::shared_ptr<gate>&)> gate_name_filter(const std::string& name){
-    return [name](auto& g){return g->get_name() == name;};
-}
-
-static std::function<bool(const std::shared_ptr<gate>&)> gate_type_filter(const std::string& type){
-    return [type](auto& g){return g->get_type()->get_name() == type;};
-}
-
-static std::function<bool(const std::shared_ptr<gate>&)> gate_filter(const std::string& type, const std::string& name){
-    return [name, type](auto& g){return g->get_name() == name && g->get_type()->get_name() == type;};
-}
-
-static std::function<bool(const endpoint&)> endpoint_type_filter(const std::string& type){
-    return [type](auto& ep){return ep.gate->get_type()->get_name() == type;};
-}
-
-
 /*                                    net_0
  *                  .--= INV (0) =------.
  *  global_in       |                   '-=                     global_out

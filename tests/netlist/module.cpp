@@ -26,12 +26,6 @@ protected:
     }
 };
 
-
-static std::function<bool(const std::shared_ptr<module>&)> name_filter(const std::string& name){
-    return [name](auto& m){return m->get_name() == name;};
-}
-
-
 /**
  * Testing the access on the id, the type and the stored netlist after calling the constructor
  *
@@ -112,9 +106,9 @@ TEST_F(module_test, check_set_parent_module){
 
             m_0->set_parent_module(m_1);
             EXPECT_EQ(m_0->get_parent_module(), m_1);
-            EXPECT_FALSE(m_1->get_submodules(name_filter("test_module_0"),false).empty());
-            EXPECT_FALSE(m_1->get_submodules(name_filter("test_module_2"),true).empty());
-            EXPECT_FALSE(m_1->get_submodules(name_filter("test_module_3"),true).empty());
+            EXPECT_FALSE(m_1->get_submodules(module_name_filter("test_module_0"),false).empty());
+            EXPECT_FALSE(m_1->get_submodules(module_name_filter("test_module_2"),true).empty());
+            EXPECT_FALSE(m_1->get_submodules(module_name_filter("test_module_3"),true).empty());
         }
         {
             /*  Hang m_0 to one of its childs (m_1). m_1 should be connected to the top_module afterwards
@@ -659,7 +653,7 @@ TEST_F(module_test, check_get_submodules){
         std::shared_ptr<module> m_3 = nl->create_module(MIN_MODULE_ID+3, "odd_module", m_1);
         ASSERT_NE(m_3, nullptr);
         {
-            // Testing the access on submodules (no name_filter, not recursive)
+            // Testing the access on submodules (no module_name_filter, not recursive)
             {
                 // Submodules of TOP_MODULE;
                 std::set<std::shared_ptr<module>> exp_result = {m_0, m_1};
@@ -677,21 +671,21 @@ TEST_F(module_test, check_get_submodules){
             }
         }
         {
-            // Testing the access on submodules (name_filter set, not recursive)
+            // Testing the access on submodules (module_name_filter set, not recursive)
             {
                 // Submodules of TOP_MODULE;
                 std::set<std::shared_ptr<module>> exp_result = {m_0};
-                EXPECT_EQ(tm->get_submodules(name_filter("even_module"), false), exp_result);
+                EXPECT_EQ(tm->get_submodules(module_name_filter("even_module"), false), exp_result);
             }
             {
                 // Submodules of MODULE_1;
                 std::set<std::shared_ptr<module>> exp_result = {m_2};
-                EXPECT_EQ(m_1->get_submodules(name_filter("even_module"), false), exp_result);
+                EXPECT_EQ(m_1->get_submodules(module_name_filter("even_module"), false), exp_result);
             }
             {
                 // Submodules of TOP_MODULE (name does not exists);
                 std::set<std::shared_ptr<module>> exp_result = {};
-                EXPECT_EQ(tm->get_submodules(name_filter("non_existing_name"), false), exp_result);
+                EXPECT_EQ(tm->get_submodules(module_name_filter("non_existing_name"), false), exp_result);
             }
         }
         {
@@ -702,9 +696,9 @@ TEST_F(module_test, check_get_submodules){
                 EXPECT_EQ(tm->get_submodules(nullptr, true), exp_result);
             }
             {
-                // Submodules of TOP_MODULE (with name_filter);
+                // Submodules of TOP_MODULE (with module_name_filter);
                 std::set<std::shared_ptr<module>> exp_result = {m_0,m_2};
-                EXPECT_EQ(tm->get_submodules(name_filter("even_module"), true), exp_result);
+                EXPECT_EQ(tm->get_submodules(module_name_filter("even_module"), true), exp_result);
             }
             {
                 // Submodules of MODULE_0

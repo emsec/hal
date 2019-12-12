@@ -27,16 +27,6 @@ protected:
 
 };
 
-static std::function<bool(const std::string&, const endpoint&)> type_filter(const std::string& type){
-    return [type](auto&, auto& ep){return ep.gate->get_type()->get_name() == type;};
-}
-static std::function<bool(const std::string&, const endpoint&)> endpoint_pin_filter(const std::string& pin){
-    return [pin](auto&, auto& ep){return ep.pin_type == pin;};
-}
-static std::function<bool(const std::string&, const endpoint&)> starting_pin_filter(const std::string& pin){
-    return [pin](auto& starting_pin, auto&){return starting_pin == pin;};
-}
-
 /**
  * Testing the constructor as well as the copy constructor of the gate
  *

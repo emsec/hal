@@ -351,6 +351,90 @@ namespace test_utils
     bool netlists_are_equal(const std::shared_ptr<netlist> nl_0, const std::shared_ptr<netlist> nl_1, const bool ignore_id = false, const bool ignore_name = false);
 
 
+    // ===== Filter Factory Functions (used in module::get_gates, netlist::get_nets, moduleget_submodules, gate::get_sucessors, gate::get_predecessors) =====
+
+    // +++ Module Filter +++
+
+    /**
+     * Filter returns true for modules with the name 'name'
+     *
+     * @param name - the name of the modules the filter is searching for
+     * @return the std::function object of the filter function
+     */
+    std::function<bool(const std::shared_ptr<module>&)> module_name_filter(const std::string& name);
+
+    // +++ Gate Filter +++
+
+    /**
+     * Filter only returns true, if the gate is of type 'type' AND has the name 'name'
+     *
+     * @param type - the type of the gates the filter is searching for
+     * @param name - the name of the gates the filter is searching for
+     * @return the std::function object of the filter function
+     */
+    std::function<bool(const std::shared_ptr<gate>&)> gate_filter(const std::string& type, const std::string& name);
+
+    /**
+     * Filter returns true for gates with the name 'name'
+     *
+     * @param name - the name of the gates the filter is searching for
+     * @return the std::function object of the filter function
+     */
+    std::function<bool(const std::shared_ptr<gate>&)> gate_name_filter(const std::string& name);
+
+    /**
+     * Filter returns true for gates of type 'type'
+     *
+     * @param type - the type of the gates the filter is searching for
+     * @return the std::function object of the filter function
+     */
+    std::function<bool(const std::shared_ptr<gate>&)> gate_type_filter(const std::string& type);
+
+    // +++ Net Filter +++
+
+    /**
+     * Filter returns true for nets with the name 'name'
+     *
+     * @param name - the name of the nets the filter is searching for
+     * @return the std::function object of the filter function
+     */
+    std::function<bool(const std::shared_ptr<net>&)> net_name_filter(const std::string& name);
+
+    // +++ Endpoint Filter +++
+
+    /**
+     * Filter returns true, if the type of the gate, the endpoint is connected to, is of type 'type'
+     *
+     * @param type - the type of the gates the filter is searching for
+     * @return the std::function object of the filter function
+     */
+    std::function<bool(const endpoint&)> endpoint_type_filter(const std::string& type);
+
+    /**
+     * Filter returns true, for all connected endpoint (of adjacent gates) of type 'pin'
+     *
+     * @param type - the type of the endpoints the filter is searching for
+     * @return the std::function object of the filter function
+     */
+    std::function<bool(const std::string&, const endpoint&)> endpoint_pin_filter(const std::string& pin);
+
+    /**
+     * Filter returns true for all endpoints, that are connected to the pin of pintype 'pin' of the calling gate
+     *
+     * @param pin - the pin of the gate, calling the get_predecessors/sucesseors function
+     * @return the std::function object of the filter function
+     */
+    std::function<bool(const std::string&, const endpoint&)> starting_pin_filter(const std::string& pin);
+
+    /**
+     * Filter returns true for all endpoints of adjacent gates of gate type 'type'
+     *
+     * @param type - the type of adjacent gates, the filter is searching for
+     * @return the std::function object of the filter function
+     */
+    std::function<bool(const std::string&, const endpoint&)> type_filter(const std::string& type);
+
+
 }    // namespace test_utils
 
 

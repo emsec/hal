@@ -675,6 +675,48 @@ bool test_utils::modules_are_equal(const std::shared_ptr<module> m_0, const std:
     return true;
 }*/
 
+// Filter Functions
+
+std::function<bool(const std::shared_ptr<module>&)> test_utils::module_name_filter(const std::string& name){
+    return [name](auto& m){return m->get_name() == name;};
+}
+
+std::function<bool(const std::shared_ptr<gate>&)> test_utils::gate_filter(const std::string& type, const std::string& name){
+    return [name, type](auto& g){return g->get_name() == name && g->get_type()->get_name() == type;};
+}
+
+std::function<bool(const std::shared_ptr<gate>&)> test_utils::gate_name_filter(const std::string& name){
+    return [name](auto& g){return g->get_name() == name;};
+}
+
+std::function<bool(const std::shared_ptr<gate>&)> test_utils::gate_type_filter(const std::string& type){
+    return [type](auto& g){return g->get_type()->get_name() == type;};
+}
+
+std::function<bool(const std::shared_ptr<net>&)> test_utils::net_name_filter(const std::string& name){
+    return [name](auto& n){return n->get_name() == name;};
+}
+
+std::function<bool(const endpoint&)> test_utils::endpoint_type_filter(const std::string& type){
+    return [type](auto& ep){return ep.gate->get_type()->get_name() == type;};
+}
+
+std::function<bool(const std::string&, const endpoint&)> test_utils::endpoint_pin_filter(const std::string& pin){
+    return [pin](auto&, auto& ep){return ep.pin_type == pin;};
+}
+std::function<bool(const std::string&, const endpoint&)> test_utils::starting_pin_filter(const std::string& pin){
+    return [pin](auto& starting_pin, auto&){return starting_pin == pin;};
+}
+
+std::function<bool(const std::string&, const endpoint&)> test_utils::type_filter(const std::string& type){
+    return [type](auto&, auto& ep){return ep.gate->get_type()->get_name() == type;};
+}
+
+
+
+
+
+
 
 
 
