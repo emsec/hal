@@ -155,7 +155,7 @@ std::unordered_map<std::string, boolean_function> gate::get_boolean_functions(bo
         res.emplace(it.first, it.second);
     }
 
-    if (m_type->get_base_type() == gate_type::base_type::lut)
+    if (!only_custom_functions && m_type->get_base_type() == gate_type::base_type::lut)
     {
         res.emplace(get_output_pins()[0], get_lut_function());
     }
@@ -237,8 +237,8 @@ void gate::add_boolean_function(const std::string& name, const boolean_function&
                     log_error("netlist", "function truth table contained undefined values");
                     return;
                 }
-                config_value |= v;
                 config_value <<= 1;
+                config_value |= v;
             }
 
             std::string category = lut_type->get_config_data_category();

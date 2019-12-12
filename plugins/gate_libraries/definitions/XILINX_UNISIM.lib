@@ -257,6 +257,8 @@ library (XILINX_UNISIM) {
         ff ("IQ" , "IQN") {
             next_state          : "D";
             clocked_on          : "C";
+            data_category       : "generic";
+            data_key            : "INIT";
         }
         pin(C) {
             direction: input;
@@ -275,6 +277,8 @@ library (XILINX_UNISIM) {
         ff ("IQ" , "IQN") {
             next_state          : "D & !R";
             clocked_on          : "C";
+            data_category       : "generic";
+            data_key            : "INIT";
         }
         pin(C) {
             direction: input;
@@ -296,6 +300,8 @@ library (XILINX_UNISIM) {
         ff ("IQ" , "IQN") {
             next_state          : "D | S";
             clocked_on          : "C";
+            data_category       : "generic";
+            data_key            : "INIT";
         }
         pin(C) {
             direction: input;
@@ -317,6 +323,8 @@ library (XILINX_UNISIM) {
         ff ("IQ" , "IQN") {
             next_state          : "D";
             clocked_on          : "CE & C";
+            data_category       : "generic";
+            data_key            : "INIT";
         }
         pin(C) {
             direction: input;
@@ -339,6 +347,8 @@ library (XILINX_UNISIM) {
             next_state          : "D";
             clocked_on          : "CE & C";
             clear               : "CLR";
+            data_category       : "generic";
+            data_key            : "INIT";
         }
         pin(C) {
             direction: input;
@@ -364,6 +374,8 @@ library (XILINX_UNISIM) {
             next_state          : "D";
             clocked_on          : "CE & C";
             preset              : "PRE";
+            data_category       : "generic";
+            data_key            : "INIT";
         }
         pin(C) {
             direction: input;
@@ -388,6 +400,8 @@ library (XILINX_UNISIM) {
         ff ("IQ" , "IQN") {
             next_state          : "D & !R";
             clocked_on          : "CE & C";
+            data_category       : "generic";
+            data_key            : "INIT";
         }
         pin(C) {
             direction: input;
@@ -412,6 +426,8 @@ library (XILINX_UNISIM) {
         ff ("IQ" , "IQN") {
             next_state          : "D | S";
             clocked_on          : "CE & C";
+            data_category       : "generic";
+            data_key            : "INIT";
         }
         pin(C) {
             direction: input;
@@ -442,6 +458,15 @@ library (XILINX_UNISIM) {
         }
     }
     cell(BUFG) {
+        pin(I) {
+            direction: input;
+        }
+        pin(O) {
+            direction: output;
+            function: "I";
+        }
+    }
+    cell(BUFGP) {
         pin(I) {
             direction: input;
         }
@@ -1182,7 +1207,7 @@ library (XILINX_UNISIM) {
         pin(RSTP) { direction: input; }
         pin("BCOUT(0)") {
             direction: output;
-            
+
         }
         pin("BCOUT(1)") {
             direction: output;
@@ -3723,100 +3748,100 @@ library (XILINX_UNISIM) {
 
 
     cell(PLLE2_ADV) {
-        pin(CLKFBIN) { 
+        pin(CLKFBIN) {
             direction: input;
             }
-        pin(CLKIN1) { 
+        pin(CLKIN1) {
             direction: input;
             }
-        pin(CLKIN2) { 
+        pin(CLKIN2) {
             direction: input;
             }
-        pin(CLKINSEL) { 
+        pin(CLKINSEL) {
             direction: input;
             }
-        pin("DADDR(0)") { 
+        pin("DADDR(0)") {
             direction: input;
             }
-        pin("DADDR(1)") { 
+        pin("DADDR(1)") {
             direction: input;
             }
-        pin("DADDR(2)") { 
+        pin("DADDR(2)") {
             direction: input;
             }
-        pin("DADDR(3)") { 
+        pin("DADDR(3)") {
             direction: input;
             }
-        pin("DADDR(4)") { 
+        pin("DADDR(4)") {
             direction: input;
             }
-        pin("DADDR(5)") { 
+        pin("DADDR(5)") {
             direction: input;
             }
-        pin("DADDR(6)") { 
+        pin("DADDR(6)") {
             direction: input;
             }
-        pin(DCLK) { 
+        pin(DCLK) {
             direction: input;
             }
-        pin(DEN) { 
+        pin(DEN) {
             direction: input;
             }
-        pin("DI(0)") { 
+        pin("DI(0)") {
             direction: input;
             }
-        pin("DI(1)") { 
+        pin("DI(1)") {
             direction: input;
             }
-        pin("DI(10)") { 
+        pin("DI(10)") {
             direction: input;
             }
-        pin("DI(11)") { 
+        pin("DI(11)") {
             direction: input;
             }
-        pin("DI(12)") { 
+        pin("DI(12)") {
             direction: input;
             }
-        pin("DI(13)") { 
+        pin("DI(13)") {
             direction: input;
             }
-        pin("DI(14)") { 
+        pin("DI(14)") {
             direction: input;
             }
-        pin("DI(15)") { 
+        pin("DI(15)") {
             direction: input;
             }
-        pin("DI(2)") { 
+        pin("DI(2)") {
             direction: input;
             }
-        pin("DI(3)") { 
+        pin("DI(3)") {
             direction: input;
             }
-        pin("DI(4)") { 
+        pin("DI(4)") {
             direction: input;
             }
-        pin("DI(5)") { 
+        pin("DI(5)") {
             direction: input;
             }
-        pin("DI(6)") { 
+        pin("DI(6)") {
             direction: input;
             }
-        pin("DI(7)") { 
+        pin("DI(7)") {
             direction: input;
             }
-        pin("DI(8)") { 
+        pin("DI(8)") {
             direction: input;
             }
-        pin("DI(9)") { 
+        pin("DI(9)") {
             direction: input;
             }
-        pin(DWE) { 
+        pin(DWE) {
             direction: input;
             }
-        pin(PWRDWN) { 
+        pin(PWRDWN) {
             direction: input;
             }
-        pin(RST) { 
+        pin(RST) {
             direction: input;
             }
         pin(CLKFBOUT) {

@@ -33,6 +33,7 @@
 #include "pybind11/pybind11.h"
 #include "pybind11/stl.h"
 #include "pybind11/stl_bind.h"
+#include "pybind11/functional.h"
 
 using map_string_to_set_of_string = std::map<std::string, std::set<std::string>>;
 
@@ -706,20 +707,22 @@ Gets an unoccupied module id. The value of 0 is reserved and represents an inval
 :returns: An unoccupied id.
 :rtype: int
 )")
-        .def("create_module", py::overload_cast<const u32, const std::string&, std::shared_ptr<module>>(&netlist::create_module), py::arg("id"), py::arg("name"), py::arg("parent"), R"(
+        .def("create_module", py::overload_cast<const u32, const std::string&, std::shared_ptr<module>, const std::vector<std::shared_ptr<gate>>&>(&netlist::create_module), py::arg("id"), py::arg("name"), py::arg("parent"), py::arg("gates") = {}, R"(
 Creates and adds a new module to the netlist. It is identifiable via its unique id.
 
 :param int id: The unique id != 0 for the new module.
 :param str name: A name for the module.
 :param hal_py.module parent: The parent module.
+:param list gates: Gates to add to the module.
 :returns: The new module on succes, None on error.
 :rtype: hal_py.module or None
 )")
-        .def("create_module", py::overload_cast<const std::string&, std::shared_ptr<module>>(&netlist::create_module), py::arg("name"), py::arg("parent"), R"(
+        .def("create_module", py::overload_cast<const std::string&, std::shared_ptr<module>, const std::vector<std::shared_ptr<gate>>&>(&netlist::create_module), py::arg("name"), py::arg("parent"), py::arg("gates") = {}, R"(
 Creates and adds a new module to the netlist. It is identifiable via its unique ID which is automatically set to the next free ID.
 
 :param str name: A name for the module.
 :param hal_py.module parent: The parent module.
+:param list gates: Gates to add to the module.
 :returns: The new module on succes, None on error.
 :rtype: hal_py.module or None
 )")
@@ -1284,7 +1287,7 @@ Get the fan-out net which is connected to a specific output pin.
 :returns: The connected output net.
 :rtype: hal_py.net
 )")
-        .def_property_readonly("unique_predecessors", &gate::get_unique_predecessors, R"(
+        .def_property_readonly("unique_predecessors", [](const std::shared_ptr<gate>& g){ return g->get_unique_predecessors();}, R"(
 A set of all unique predecessor endpoints of the gate.
 
 :type: set[hal_py.endpoint]
@@ -1296,7 +1299,7 @@ Get a set of all unique predecessor endpoints of the gate filterable by the gate
 :returns: A set of unique predecessors endpoints.
 :rtype: set[hal_py.endpoint]
 )")
-        .def_property_readonly("predecessors", &gate::get_predecessors, R"(
+        .def_property_readonly("predecessors", [](const std::shared_ptr<gate>& g){ return g->get_predecessors();}, R"(
 A list of all all direct predecessor endpoints of the gate.
 
 :type: list[hal_py.endpoint]
@@ -1315,7 +1318,7 @@ Get the direct predecessor endpoint of the gate connected to a specific input pi
 :returns: The predecessor endpoint.
 :rtype: hal_py.endpoint
 )")
-        .def_property_readonly("unique_successors", &gate::get_unique_successors, R"(
+        .def_property_readonly("unique_successors", [](const std::shared_ptr<gate>& g){ return g->get_unique_successors();}, R"(
 A set of all unique successor endpoints of the gate.
 
 :type: set[hal_py.endpoint]
@@ -1327,7 +1330,7 @@ Get a set of all unique successors of the gate filterable by the gate's output p
 :returns: A set of unique successor endpoints.
 :rtype: set[hal_py.endpoint]
 )")
-        .def_property_readonly("successors", &gate::get_successors, R"(
+        .def_property_readonly("successors", [](const std::shared_ptr<gate>& g){ return g->get_successors();}, R"(
 A list of all direct successor endpoints of the gate.
 
 :type: list[hal_py.endpoint]
@@ -1821,12 +1824,11 @@ Constructor for an empty function.
 Evaluates to X (undefined).
 Combining a function with an empty function leaves the other one unchanged.
 )")
-        .def(py::init<const std::string&, bool>(), R"(
+        .def(py::init<const std::string&>(), py::arg("variable"), R"(
 Constructor for a variable, usable in other functions.
 Variable name must not be empty.
 
 :param str variable_name: Name of the variable.
-:param bool invert_result: True to invert the variable.
 )")
         .def(py::init<boolean_function::value>(), R"(
 Constructor for a constant, usable in other functions.

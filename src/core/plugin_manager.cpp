@@ -153,7 +153,7 @@ namespace plugin_manager
         auto factory = (instantiate_plugin_function)lib->get_function("get_plugin_instance");
         if (factory == nullptr)
         {
-            log_error("core", "file '{}' did not contain a factory function 'get_plugin_instance'.", file_name.string());
+            log_error("core", "file does not seem to be a HAL plugin since it does not contain a factory function 'get_plugin_instance'.");
             return false;
         }
         auto instance = factory();
