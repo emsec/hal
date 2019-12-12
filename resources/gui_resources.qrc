@@ -81,6 +81,7 @@
         <file alias="tree-arrow-down">icons/arrow-down.svg</file>
         <file alias="tree-arrow-right">icons/arrow-right.svg</file>
         <file alias="placeholder">icons/0154-bug.svg</file>
+        <file alias="bug">icons/0154-bug.svg</file>
         <file alias="circle">icons/circle.svg</file>
         <file alias="filled-circle">icons/filled circle.svg</file>
         <file alias="github4">icons/0437-github4.svg</file>

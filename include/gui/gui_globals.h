@@ -69,4 +69,8 @@ extern thread_pool* g_thread_pool;
 
 extern std::unique_ptr<python_context> g_python_context;
 
+// Comment this out to not compile the debug code for the graph grid.
+// This will also hide the respective debug setting from the settings page.
+#define GUI_DEBUG_GRID
+
 #endif    // GUI_GLOBALS_H
