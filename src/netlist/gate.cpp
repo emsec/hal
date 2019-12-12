@@ -176,6 +176,7 @@ boolean_function gate::get_lut_function() const
         return boolean_function::ZERO;
     }
     u64 config = std::stoull(config_str, nullptr, 16);
+    u32 config_size = 1 << get_input_pins().size();
 
     boolean_function result;
 
@@ -184,13 +185,13 @@ boolean_function gate::get_lut_function() const
         u8 bit;
         if (lut_type->is_config_data_ascending_order())
         {
-            bit = (config & 1);
-            config >>= 1;
+            bit = (config >> (config_size - 1)) & 1;
+            config <<= 1;
         }
         else
         {
-            bit = config >> 63;
-            config <<= 1;
+            bit = (config & 1);
+            config >>= 1;
         }
         if (bit == 1)
         {

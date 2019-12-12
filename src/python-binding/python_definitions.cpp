@@ -707,7 +707,7 @@ Gets an unoccupied module id. The value of 0 is reserved and represents an inval
 :returns: An unoccupied id.
 :rtype: int
 )")
-        .def("create_module", py::overload_cast<const u32, const std::string&, std::shared_ptr<module>, const std::vector<std::shared_ptr<gate>>&>(&netlist::create_module), py::arg("id"), py::arg("name"), py::arg("parent"), py::arg("gates") = {}, R"(
+        .def("create_module", py::overload_cast<const u32, const std::string&, std::shared_ptr<module>, const std::vector<std::shared_ptr<gate>>&>(&netlist::create_module), py::arg("id"), py::arg("name"), py::arg("parent"), py::arg("gates") = std::vector<std::shared_ptr<gate>>(), R"(
 Creates and adds a new module to the netlist. It is identifiable via its unique id.
 
 :param int id: The unique id != 0 for the new module.
@@ -717,7 +717,7 @@ Creates and adds a new module to the netlist. It is identifiable via its unique 
 :returns: The new module on succes, None on error.
 :rtype: hal_py.module or None
 )")
-        .def("create_module", py::overload_cast<const std::string&, std::shared_ptr<module>, const std::vector<std::shared_ptr<gate>>&>(&netlist::create_module), py::arg("name"), py::arg("parent"), py::arg("gates") = {}, R"(
+        .def("create_module", py::overload_cast<const std::string&, std::shared_ptr<module>, const std::vector<std::shared_ptr<gate>>&>(&netlist::create_module), py::arg("name"), py::arg("parent"), py::arg("gates") = std::vector<std::shared_ptr<gate>>(), R"(
 Creates and adds a new module to the netlist. It is identifiable via its unique ID which is automatically set to the next free ID.
 
 :param str name: A name for the module.
