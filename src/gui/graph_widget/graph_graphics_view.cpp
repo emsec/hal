@@ -398,12 +398,10 @@ void graph_graphics_view::dropEvent(QDropEvent *event)
         if (success)
         {
             bool modifierPressed = event->keyboardModifiers() == m_drag_modifier;
-            // TODO: Once the layouter data structures are defined & stable,
-            // add code to move the gates to the correct layouter boxes
-            // TODO: Also add a mechanism to insert rows and columns of boxes,
-            // like in a table calculation software
+            // TODO refactor
             if (modifierPressed)
             {
+                // TODO rewrite this for the relayout mechanism
                 // swap mode; swap gates
                 QPointF targetPos = s->drop_target_item()->pos();
                 s->drop_target_item()->setPos(m_drag_item->pos());
@@ -412,8 +410,43 @@ void graph_graphics_view::dropEvent(QDropEvent *event)
             else
             {
                 // move mode; move gate to the selected location
-                m_drag_item->setPos(s->drop_target());
+                QPointF targetPos = s->drop_target();
+
+                QVector<QPoint> target = closest_layouter_pos(targetPos);
+                QPoint targetLayouterPos = target[0];
+                #ifdef GUI_DEBUG_GRID
+                qDebug() << "target" << target;
+                #endif
+
+                QPoint sourceLayouterPos = closest_layouter_pos(m_drag_item->pos())[0];
+                auto context = m_graph_widget->get_context();
+                graph_layouter* layouter = context->debug_get_layouter();
+                assert(layouter->done()); // ensure grid stable
+                
+                // FIXME compile error
+                //hal::node node = layouter->position_to_node_map().value(sourceLayouterPos);
+
+                // so we're forced to do slow hacky linear search
+                // FIXME get rid of this
+                QMap<QPoint, hal::node>::const_iterator iter = layouter->position_to_node_map().constBegin();
+                hal::node node;
+                bool found = false;
+                while (iter != layouter->position_to_node_map().constEnd())
+                {
+                    if (iter.key() == sourceLayouterPos)
+                    {
+                        node = iter.value();
+                        found = true;
+                        break;
+                    }
+                    ++iter;
+                }
+                assert(found);
+
+                // TODO check that value exists
+                layouter->set_node_position(node, targetLayouterPos);
             }
+            layouter->layout();
             // TODO: Once available, trigger a re-layout of all nets here
         }
     }
