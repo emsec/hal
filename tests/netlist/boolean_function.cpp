@@ -88,6 +88,8 @@ TEST_F(boolean_function_test, check_){
             boolean_function a("A");
             boolean_function b("B");
 
+            boolean_function::from_string("1 & 1 & 1").to_dnf();
+
             EXPECT_TRUE(true);
         }
 
@@ -147,18 +149,18 @@ TEST_F(boolean_function_test, check_is_constant){
         {
             // Some samples that are constant zero
             EXPECT_TRUE(( _0 ).is_constant_zero());
-            //EXPECT_TRUE(( !_1 ).is_constant_zero());    // <- fails
-            //EXPECT_TRUE(( a^a ).is_constant_zero());    // <- fails
+            EXPECT_TRUE(( !_1 ).is_constant_zero());    // <- fails
+            EXPECT_TRUE(( a^a ).is_constant_zero());    // <- fails
             EXPECT_TRUE(( a&(!a) ).is_constant_zero());
-            //EXPECT_TRUE(( _0|_0 ).is_constant_zero());  // <- fails
+            EXPECT_TRUE(( _0|_0 ).is_constant_zero());  // <- fails
         }
         {
             // Some samples that are constant one
             EXPECT_TRUE(( _1 ).is_constant_one());
-            //EXPECT_TRUE(( !_0 ).is_constant_one());    // <- fails
+            EXPECT_TRUE(( !_0 ).is_constant_one());    // <- fails
             EXPECT_TRUE(( a^(!a) ).is_constant_one());
-            //EXPECT_TRUE(( a|(!a) ).is_constant_one()); // <- fails
-            //EXPECT_TRUE(( _1&_1 ).is_constant_one());  // <- fails
+            EXPECT_TRUE(( a|(!a) ).is_constant_one()); // <- fails
+            EXPECT_TRUE(( _1&_1 ).is_constant_one());  // <- fails
         }
         {
             // Some samples that are NOT constant zero

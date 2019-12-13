@@ -10,7 +10,7 @@
 using std::cout;
 using std::endl;
 
-namespace fs = std::experimental::filesystem;
+namespace fs = std::filesystem;
 
 // Counts the calls of the test_callback hook
 static int callback_hooks_called;

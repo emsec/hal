@@ -2,6 +2,8 @@
 
 #include "core/utils.h"
 
+// #include <iostream>
+
 std::string boolean_function::to_string(const operation& op)
 {
     switch (op)
@@ -532,9 +534,16 @@ boolean_function& boolean_function::operator^=(const boolean_function& other)
 boolean_function boolean_function::operator!() const
 {
     auto result = *this;
-    if (!(m_content == content_type::TERMS && m_operands.empty()))
+    if ((m_content == content_type::TERMS && !m_operands.empty()) || m_content == content_type::VARIABLE)
     {
         result.m_invert = !result.m_invert;
+    }
+    else if (m_content == content_type::CONSTANT)
+    {
+        if (m_constant == ZERO)
+            result.m_constant = ONE;
+        else if (m_constant == ONE)
+            result.m_constant = ZERO;
     }
     return result;
 }
@@ -581,7 +590,7 @@ std::vector<boolean_function> boolean_function::expand_ands_internal(const std::
 {
     if (i >= sub_primitives.size())
     {
-        return {boolean_function::ONE};
+        return {boolean_function()};
     }
     std::vector<boolean_function> result;
     for (const auto& x : sub_primitives[i])
@@ -629,23 +638,8 @@ boolean_function boolean_function::expand_ands() const
 
 boolean_function boolean_function::optimize_constants() const
 {
-    if (m_content == content_type::VARIABLE)
+    if (is_empty() || m_content == content_type::VARIABLE || m_content == content_type::CONSTANT)
     {
-        return *this;
-    }
-    if (m_content == content_type::CONSTANT)
-    {
-        if (m_invert)
-        {
-            if (m_constant == 0)
-            {
-                return boolean_function::ONE;
-            }
-            else if (m_constant == 1)
-            {
-                return boolean_function::ZERO;
-            }
-        }
         return *this;
     }
 
@@ -678,14 +672,26 @@ boolean_function boolean_function::optimize_constants() const
         terms.push_back(term);
     }
 
-    // remove contradictions etc
-    for (auto it = terms.begin(); it != terms.end(); ++it)
+    if (terms.empty())
     {
-        for (auto it2 = it + 1; it2 != terms.end();)
+        if (m_op == operation::OR)
         {
-            if (it->m_content == content_type::VARIABLE && it2->m_content == content_type::VARIABLE && it->m_variable == it2->m_variable)
+            return boolean_function::ZERO;
+        }
+        else if (m_op == operation::AND)
+        {
+            return boolean_function::ONE;
+        }
+    }
+
+    // remove contradictions etc
+    for (u32 i = 0; i < terms.size(); ++i)
+    {
+        for (u32 j = i + 1; j < terms.size(); ++j)
+        {
+            if (terms[i].m_content == content_type::VARIABLE && terms[j].m_content == content_type::VARIABLE && terms[i].m_variable == terms[j].m_variable)
             {
-                if (it->m_invert != it2->m_invert)
+                if (terms[i].m_invert != terms[j].m_invert)
                 {
                     if (m_op == operation::AND)
                     {
@@ -698,19 +704,14 @@ boolean_function boolean_function::optimize_constants() const
                 }
                 else
                 {
-                    if (m_op == operation::AND)
+                    if (m_op == operation::AND || m_op == operation::OR)
                     {
-                        it2 = terms.erase(it2);
-                        continue;
-                    }
-                    else if (m_op == operation::OR)
-                    {
-                        it2 = terms.erase(it2);
+                        terms.erase(terms.begin() + j);
+                        j--;
                         continue;
                     }
                 }
             }
-            ++it2;
         }
     }
 
@@ -830,6 +831,19 @@ boolean_function boolean_function::to_dnf() const
     {
         return *this;
     }
+
+    // std::cout << "transforming " << *this << std::endl;
+    // auto x = replace_xors();
+    // std::cout << "  replace_xors " << x << std::endl;
+    // x = x.propagate_negations();
+    // std::cout << "  propagate_negations " << x << std::endl;
+    // x = x.expand_ands();
+    // std::cout << "  expand_ands " << x << std::endl;
+    // x = x.flatten();
+    // std::cout << "  flatten " << x << std::endl;
+    // x = x.optimize_constants();
+    // std::cout << "  optimize_constants " << x << std::endl;
+
     // the order of the passes is important!
     // every pass after replace_xors expects that there are no more xor operations
     return replace_xors().propagate_negations().expand_ands().flatten().optimize_constants();
@@ -867,11 +881,11 @@ boolean_function boolean_function::optimize() const
         return *this;
     }
 
-    boolean_function result = to_dnf();
+    boolean_function result = to_dnf().optimize_constants();
 
     if (result.m_content != content_type::TERMS || result.m_op == operation::AND)
     {
-        return result.optimize_constants();
+        return result;
     }
 
     // result is a OR-chain of *multiple* AND-chains of *only variables*

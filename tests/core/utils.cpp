@@ -9,7 +9,7 @@
 
 using namespace core_utils;
 
-namespace fs = std::experimental::filesystem;
+namespace fs = std::filesystem;
 
 class utils_test : public ::testing::Test
 {
