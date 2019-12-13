@@ -24,7 +24,7 @@
 #pragma once
 
 #include "def.h"
-#include "hdl_writer/hdl_writer.h"
+#include "hdl_writer.h"
 
 #include <functional>
 #include <map>
@@ -37,18 +37,18 @@ class gate;
 /**
  * @ingroup hdl_writers
  */
-class HDL_FILE_WRITER_API hdl_writer_verilog : public hdl_writer
+class HDL_FILE_WRITER_API hdl_writer_vhdl : public hdl_writer
 {
 public:
     /**
      * @param[out] stream - The string stream which will be filled with the hdl code.
      */
-    explicit hdl_writer_verilog(std::stringstream& stream);
+    explicit hdl_writer_vhdl(std::stringstream& stream);
 
-    ~hdl_writer_verilog() = default;
+    ~hdl_writer_vhdl() = default;
 
     /**
-     * Serializes a netlist into the internal string stream in Verilog format.
+     * Serializes a netlist into the internal string stream in VHDL format.
      *
      * @param[in] g - The netlist to serialize.
      * @returns True on success.
@@ -56,15 +56,15 @@ public:
     bool write(std::shared_ptr<netlist> const g) override;
 
 private:
-    void print_module_interface_verilog();
+    void print_module_interface_vhdl();
 
-    void print_signal_definition_verilog();
+    void print_signal_definition_vhdl();
 
-    void print_gate_definitions_verilog();
+    void print_gate_definitions_vhdl();
 
-    void print_generic_map_verilog(const std::shared_ptr<gate> n);
+    void print_generic_map_vhdl(std::shared_ptr<gate> const& n);
 
-    bool print_gate_signal_list_verilog(std::shared_ptr<gate> n, std::vector<std::string> port_types, bool is_first, std::function<std::shared_ptr<net>(std::string)> get_net_fkt);
+    bool print_gate_signal_list_vhdl(std::shared_ptr<gate> n, std::vector<std::string> port_types, bool is_first, std::function<std::shared_ptr<net>(std::string)> get_net_fkt);
 
     void prepare_signal_names();
 
@@ -73,8 +73,6 @@ private:
     std::string get_gate_name(const std::shared_ptr<gate> g);
 
     std::string get_port_name(std::string pin);
-
-    std::map<std::string, std::vector<std::string>> get_gate_signal_buses_verilog(std::vector<std::string> port_types);
 
     /**
      * Following maps saves prepared net names used internally.

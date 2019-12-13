@@ -5,6 +5,7 @@
 #include <spdlog/sinks/basic_file_sink.h>
 #include <spdlog/sinks/null_sink.h>
 #include <spdlog/sinks/stdout_sinks.h>
+#include <spdlog/sinks/ansicolor_sink.h>
 
 std::map<std::string, std::shared_ptr<log_manager::log_sink>> log_manager::m_file_sinks;
 

@@ -12,6 +12,7 @@
 
 #include <fstream>
 #include <iostream>
+#include <unistd.h>
 
 namespace netlist_factory
 {

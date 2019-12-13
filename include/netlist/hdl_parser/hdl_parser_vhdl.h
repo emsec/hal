@@ -30,7 +30,7 @@
 #include "netlist/module.h"
 #include "netlist/net.h"
 
-#include "hdl_parser/hdl_parser.h"
+#include "hdl_parser.h"
 
 #include <unordered_map>
 #include <unordered_set>

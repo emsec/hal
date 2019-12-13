@@ -115,6 +115,14 @@ setup_output_directories()
 # For all ExternalProject_ADD handle configure build and test as different stages
 set_property(DIRECTORY PROPERTY EP_STEP_TARGETS configure build test)
 
+#---Enable Folders in IDE like Visual Studio----------------------------------------------------
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+
+####################################################################
+#####   Setup main target to hold all build definitions and options
+####################################################################
+
+
 ################################
 #####   Find depending packages
 ################################
@@ -157,6 +165,12 @@ endif()
 
 find_package(RapidJSON REQUIRED)
 message(STATUS "Found rapidjson ${RAPIDJSON_INCLUDEDIR}")
+if(RapidJSON_FOUND AND NOT TARGET RapidJSON::RapidJSON)
+    add_library(RapidJSON::RapidJSON INTERFACE IMPORTED)
+    set_target_properties(RapidJSON::RapidJSON PROPERTIES
+                          INTERFACE_INCLUDE_DIRECTORIES "${RAPIDJSON_INCLUDEDIR}"
+                          )
+endif()
 
 # Need Version 2.2.4 Not available in ubuntu bionic
 find_package(pybind11 2.4.3 CONFIG)
@@ -169,13 +183,16 @@ else()
 endif()
 
 find_package(spdlog 1.4.2 EXACT CONFIG)
-message(STATUS "Found spdlog v${spdlog_VERSION}")
 if(${spdlog_FOUND})
     message(STATUS "Found spdlog >= 1.4.2")
 else()
     message(STATUS "spdlog >= 1.4.2 not found")
     #    include_directories(${include_directories} "${CMAKE_CURRENT_SOURCE_DIR}/deps/spdlog-1.4.2/include")
     set(spdlog_VERSION 1.4.2)
+    add_library(spdlog::spdlog INTERFACE IMPORTED)
+    set_target_properties(spdlog::spdlog PROPERTIES
+                          INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_SOURCE_DIR}/deps/spdlog-1.4.2/include"
+                          )
 endif()
 
 #Python support
@@ -283,15 +300,15 @@ if(${CMAKE_BUILD_TYPE} EQUAL "Debug" AND APPLE AND CMAKE_HOST_APPLE)
 endif(${CMAKE_BUILD_TYPE} EQUAL "Debug" AND APPLE AND CMAKE_HOST_APPLE)
 
 #set names for major libraries
-set(NETLIST_LIB hal_netlist)
-set(CORE_LIB hal_core)
+#set(NETLIST_LIB hal_netlist)
+#set(CORE_LIB hal_core)
 set(GRAPH_ALGORITHM_LIB graph_algorithm)
 set(QUINE_MCCLUSKY_LIB quine_mccluskey)
 
 #define default linker target
 set(LINK_LIBS ${CMAKE_DL_LIBS}
-    ${NETLIST_LIB}
-    ${CORE_LIB}
+#    ${NETLIST_LIB}
+#    ${CORE_LIB}
     )
 
 ################################
@@ -307,9 +324,22 @@ if(BUILD_TESTS)
     if(${BUILD_COVERAGE})
         include(CodeCoverage)
         append_coverage_compiler_flags()
-        set(COVERAGE_EXCLUDES '/usr/*' '${CMAKE_SOURCE_DIR}/tests/lib/googletest/*' '${CMAKE_SOURCE_DIR}/plugins/*' '${CMAKE_SOURCE_DIR}/deps/*' '${CMAKE_BINARY_DIR}/*' '${CMAKE_CURRENT_BINARY_DIR}/*' '${CMAKE_SOURCE_DIR}/include/gui/*' '${CMAKE_SOURCE_DIR}/src/gui/*')
+        set(COVERAGE_EXCLUDES
+            '/usr/*'
+            '${CMAKE_SOURCE_DIR}/tests/lib/googletest/*'
+            '${CMAKE_SOURCE_DIR}/plugins/*'
+            '${CMAKE_SOURCE_DIR}/deps/*'
+            '${CMAKE_BINARY_DIR}/*'
+            '${CMAKE_CURRENT_BINARY_DIR}/*'
+            '${CMAKE_SOURCE_DIR}/include/gui/*'
+            '${CMAKE_SOURCE_DIR}/src/gui/*'
+            )
+
         message(STATUS "COVERAGE_EXCLUDES: ${COVERAGE_EXCLUDES}")
-        setup_target_for_coverage(NAME ${PROJECT_NAME}_coverage EXECUTABLE ctest DEPENDENCY runTest-log runTest-program_arguments runTest-program_options)
+        setup_target_for_coverage(NAME ${PROJECT_NAME}_coverage
+                                  EXECUTABLE ctest
+                                  DEPENDENCY runTest-*
+                                  )
     endif()
 endif()
 
@@ -317,6 +347,7 @@ endif()
 #####   Include Code Directories
 ##################################
 add_subdirectory("src")
+add_subdirectory("app")
 add_subdirectory("plugins")
 if(${BUILD_TESTS})
     add_subdirectory("tests")
@@ -332,6 +363,8 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/hal.pc.in ${CMAKE_BINARY_DIR}/hal.pc 
 #####   Install Header + Auxilary  files
 #########################################
 
+set(HAL_CMAKECONFIG_INSTALL_DIR "share/cmake/${PROJECT_NAME}" CACHE STRING "install path for halConfig.cmake")
+
 install(DIRECTORY ${CMAKE_SOURCE_DIR}/include/ DESTINATION ${INCLUDE_INSTALL_DIRECTORY})
 install(DIRECTORY ${CMAKE_BINARY_DIR}/share/hal/gate_libraries DESTINATION ${SHARE_INSTALL_DIRECTORY} PATTERN "*.json")
 install(DIRECTORY ${CMAKE_BINARY_DIR}/share/hal/gate_libraries DESTINATION ${SHARE_INSTALL_DIRECTORY} PATTERN "*.lib")
@@ -339,6 +372,24 @@ configure_file("defaults/guidefaults.ini" ${CMAKE_BINARY_DIR}/share/hal/defaults
 install(DIRECTORY ${CMAKE_BINARY_DIR}/share/hal/defaults DESTINATION ${SHARE_INSTALL_DIRECTORY} PATTERN "*.ini")
 install(FILES ${CMAKE_BINARY_DIR}/hal.pc DESTINATION "${PKGCONFIG_INSTALL_DIRECTORY}")
 message(STATUS "PKGCONFIG_INSTALL_DIRECTORY ${PKGCONFIG_INSTALL_DIRECTORY}")
+
+write_basic_package_version_file(
+        halConfigVersion.cmake
+        VERSION ${HAL_VERSION_RETURN}
+        COMPATIBILITY AnyNewerVersion
+)
+configure_file(cmake/halConfig.cmake.in halConfig.cmake @ONLY)
+
+install(EXPORT hal
+        FILE halTargets.cmake
+        NAMESPACE hal::
+        DESTINATION ${HAL_CMAKECONFIG_INSTALL_DIR}
+        )
+
+install(FILES "${CMAKE_BINARY_DIR}/halConfig.cmake"
+        "${CMAKE_BINARY_DIR}/halConfigVersion.cmake"
+        DESTINATION ${HAL_CMAKECONFIG_INSTALL_DIR}
+        )
 
 # Configure LDCONFIG for HAL plugins
 if(LINUX)

@@ -1,9 +1,3 @@
-write_basic_package_version_file(
-        HalConfigVersion.cmake
-        VERSION ${HAL_VERSION_RETURN}
-        COMPATIBILITY AnyNewerVersion
-)
-
 set(CPACK_GENERATORS)
 if(PACKAGE_TGZ)
     list(APPEND CPACK_GENERATORS "TGZ")
