@@ -914,12 +914,12 @@ graph_graphics_view::layouter_point graph_graphics_view::closest_layouter_point(
     }
     else
     {
-        qreal posThis = 0;
         // binary search for first value in sections larger than or equal to scene_pos
         const qreal* needle = std::lower_bound(sections.constBegin(), sections.constEnd(), scene_pos);
         int i = needle - sections.begin(); // position of needle in the vector
         index += i;
         // check if we're closer to this or the next position
+        qreal posThis = *needle;
         qreal distThis = qAbs(scene_pos - posThis);
         qreal posPrev = (i > 0) ? sections[i-1] : (sections.first() - default_spacing);
         qreal distPrev = qAbs(scene_pos - posPrev);
