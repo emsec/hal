@@ -32,11 +32,6 @@ if(CCACHE_FOUND)
     message(STATUS "ccache found!")
 endif(CCACHE_FOUND)
 
-# Create LINUX variable if needed ToDo
-if(UNIX AND NOT APPLE)
-    set(LINUX TRUE)
-endif()
-
 #Add path to CMake script files and include Helper
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/" "${CMAKE_SOURCE_DIR}/deps/sanitizers-cmake/cmake/")
 
@@ -60,10 +55,14 @@ option(PACKAGE_RPM "Package RPM package" OFF)
 option(PACKAGE_MACOS "Package for macOS" OFF)
 
 # Include Helper Modules
-include(HalUtils) # Version helper
-include(DetectDistro) # Detect distribution helper
-include(Subdirs) # Get a lost of all subdirs in specific directory
-include(find_packages)
+include(hal_cmake_tools) # Version helper
+include(find_openmp)
+
+# Create LINUX variable if needed ToDo
+if(UNIX AND NOT APPLE)
+    set(LINUX TRUE)
+    detect_distro()
+endif()
 
 # Check for valid Changelog file ToDo
 set(DEB_CHANGELOG_REQUIRED ON)
@@ -137,7 +136,7 @@ endif(PkgConfig_FOUND)
 
 find_package(Sanitizers)
 
-# See cmake/find_packages.cmake
+# See cmake/find_openmp.cmake
 find_openmp()
 
 find_package(Filesystem REQUIRED Final Experimental)
@@ -236,7 +235,6 @@ endif()
 if(UNIX)
     message(STATUS "Checking supported compiler flags...")
 
-    include(CompilerFlagsCheck)
     enable_c_compiler_flag_if_supported("-Wall" "")
     enable_c_compiler_flag_if_supported("-Wextra" "")
     enable_c_compiler_flag_if_supported("-pedantic" "")

@@ -131,3 +131,83 @@ function(setup_output_directories)
     message(VERBOSE "PLUGIN_LIBRARY_INSTALL_DIRECTORY: ${PLUGIN_LIBRARY_INSTALL_DIRECTORY}")
     message(STATUS "")
 endfunction()
+
+include(CheckCXXCompilerFlag)
+function(enable_cxx_compiler_flag_if_supported flag build_type)
+    string(FIND "${CMAKE_CXX_FLAGS}" "${flag}" flag_already_set)
+    if(flag_already_set EQUAL -1)
+        check_cxx_compiler_flag("${flag}" supports_${flag})
+        if(supports_${flag})
+            set(CMAKE_CXX_FLAGS${build_type} "${CMAKE_CXX_FLAGS${build_type}} ${flag}" PARENT_SCOPE)
+        endif()
+        unset(supports_${flag} CACHE)
+    endif()
+    unset(flag_already_set CACHE)
+endfunction()
+
+include(CheckCCompilerFlag)
+function(enable_c_compiler_flag_if_supported flag build_type)
+    string(FIND "${CMAKE_C_FLAGS}" "${flag}" flag_already_set)
+    if(flag_already_set EQUAL -1)
+        check_c_compiler_flag("${flag}" supports_${flag})
+        if(supports_${flag})
+            set(CMAKE_C_FLAGS${build_type} "${CMAKE_C_FLAGS${build_type}} ${flag}" PARENT_SCOPE)
+        endif()
+        unset(supports_${flag} CACHE)
+    endif()
+    unset(flag_already_set CACHE)
+endfunction()
+
+# DetectDistro.cmake -- Detect Linux distribution
+function(detect_distro)
+    message(STATUS "System is: ${CMAKE_SYSTEM_NAME}")
+    set(LINUX_DISTRO "" CACHE INTERNAL "")
+    set(LINUX_DISTRO_VERSION_NAME "" CACHE INTERNAL "")
+    if(LINUX)
+        # Detect Linux distribution (if possible)
+        execute_process(COMMAND "/usr/bin/lsb_release" "-is"
+                        TIMEOUT 4
+                        OUTPUT_VARIABLE LINUX_DISTRO
+                        ERROR_QUIET
+                        OUTPUT_STRIP_TRAILING_WHITESPACE)
+        message(STATUS "Linux distro is: ${LINUX_DISTRO}")
+
+        # Detect Linux distribution (if possible)
+        execute_process(COMMAND "/usr/bin/lsb_release" "-cs"
+                        TIMEOUT 4
+                        OUTPUT_VARIABLE LINUX_DISTRO_VERSION_NAME
+                        ERROR_QUIET
+                        OUTPUT_STRIP_TRAILING_WHITESPACE)
+        message(STATUS "Linux Distro version name is: ${LINUX_DISTRO_VERSION_NAME}")
+    endif()
+    execute_process(COMMAND uname -m COMMAND tr -d '\n' OUTPUT_VARIABLE ARCHITECTURE)
+    message(STATUS "System Arch is: ${ARCHITECTURE}")
+endfunction()
+
+MACRO(SUBDIRLIST result curdir)
+    FILE(GLOB children RELATIVE ${curdir} ${curdir}/*)
+    SET(dirlist "")
+    FOREACH(child ${children})
+        IF(IS_DIRECTORY ${curdir}/${child})
+            LIST(APPEND dirlist ${child})
+        ENDIF()
+    ENDFOREACH()
+    SET(${result} ${dirlist})
+ENDMACRO()
+
+macro(configure_files src_dir dst_dir extension)
+    message(STATUS "Configuring directory ${dst_dir}")
+    make_directory(${dst_dir})
+
+    file(GLOB files_to_copy RELATIVE ${src_dir} ${src_dir}/*.${extension})
+    foreach(file_to_copy ${files_to_copy})
+        set(file_path_to_copy ${src_dir}/${file_to_copy})
+        if(NOT IS_DIRECTORY ${file_path_to_copy})
+            message(STATUS "Configuring file ${file_to_copy}")
+            configure_file(
+                    ${file_path_to_copy}
+                    ${dst_dir}/${file_to_copy}
+                    @ONLY)
+        endif(NOT IS_DIRECTORY ${file_path_to_copy})
+    endforeach(file_to_copy)
+endmacro(configure_files)
