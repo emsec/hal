@@ -119,7 +119,7 @@ boolean_function gate::get_boolean_function(const std::string& name) const
         {
             return get_boolean_function(output_pins[0]);
         }
-        return boolean_function::X;
+        return boolean_function();
     }
 
     if (m_type->get_base_type() == gate_type::base_type::lut && name == m_type->get_output_pins()[0])
@@ -138,7 +138,7 @@ boolean_function gate::get_boolean_function(const std::string& name) const
     {
         return it->second;
     }
-    return boolean_function::X;
+    return boolean_function();
 }
 
 std::unordered_map<std::string, boolean_function> gate::get_boolean_functions(bool only_custom_functions) const
@@ -155,7 +155,7 @@ std::unordered_map<std::string, boolean_function> gate::get_boolean_functions(bo
         res.emplace(it.first, it.second);
     }
 
-    if (m_type->get_base_type() == gate_type::base_type::lut)
+    if (!only_custom_functions && m_type->get_base_type() == gate_type::base_type::lut)
     {
         res.emplace(get_output_pins()[0], get_lut_function());
     }
@@ -176,6 +176,7 @@ boolean_function gate::get_lut_function() const
         return boolean_function::ZERO;
     }
     u64 config = std::stoull(config_str, nullptr, 16);
+    u32 config_size = 1 << get_input_pins().size();
 
     boolean_function result;
 
@@ -184,13 +185,13 @@ boolean_function gate::get_lut_function() const
         u8 bit;
         if (lut_type->is_config_data_ascending_order())
         {
-            bit = (config & 1);
-            config >>= 1;
+            bit = (config >> (config_size - 1)) & 1;
+            config <<= 1;
         }
         else
         {
-            bit = config >> 63;
-            config <<= 1;
+            bit = (config & 1);
+            config >>= 1;
         }
         if (bit == 1)
         {
@@ -237,8 +238,8 @@ void gate::add_boolean_function(const std::string& name, const boolean_function&
                     log_error("netlist", "function truth table contained undefined values");
                     return;
                 }
-                config_value |= v;
                 config_value <<= 1;
+                config_value |= v;
             }
 
             std::string category = lut_type->get_config_data_category();

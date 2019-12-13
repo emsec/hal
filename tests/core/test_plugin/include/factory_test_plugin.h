@@ -1,7 +1,9 @@
 
 #ifndef HAL_FACTORY_TEST_PLUGIN_H
 #define HAL_FACTORY_TEST_PLUGIN_H
-/* FIXME
+
+#ifdef REMOVE_ME
+
 #include "core/interface_factory.h"
 
 class PLUGIN_API factory_test_plugin : public i_factory
@@ -16,6 +18,7 @@ public:
 };
 
 extern "C" PLUGIN_API i_factory* get_factory();
-*/
+
+#endif // REMOVE_ME
 
 #endif //HAL_FACTORY_TEST_PLUGIN_H

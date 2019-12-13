@@ -110,14 +110,19 @@ u32 netlist::get_unique_module_id()
     return m_next_module_id;
 }
 
-std::shared_ptr<module> netlist::create_module(const u32 id, const std::string& name, std::shared_ptr<module> parent)
+std::shared_ptr<module> netlist::create_module(const u32 id, const std::string& name, std::shared_ptr<module> parent, const std::vector<std::shared_ptr<gate>>& gates)
 {
-    return m_manager->create_module(id, parent, name);
+    auto m = m_manager->create_module(id, parent, name);
+    for (const auto& g : gates)
+    {
+        m->assign_gate(g);
+    }
+    return m;
 }
 
-std::shared_ptr<module> netlist::create_module(const std::string& name, std::shared_ptr<module> parent)
+std::shared_ptr<module> netlist::create_module(const std::string& name, std::shared_ptr<module> parent, const std::vector<std::shared_ptr<gate>>& gates)
 {
-    return create_module(get_unique_module_id(), name, parent);
+    return create_module(get_unique_module_id(), name, parent, gates);
 }
 
 bool netlist::delete_module(const std::shared_ptr<module> module)

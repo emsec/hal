@@ -154,9 +154,10 @@ public:
      * @param[in] id - The unique ID != 0 for the new module.
      * @param[in] name - A name for the module.
      * @param[in] parent - The parent module.
+     * @param[in] gates - Gates to assign to the new gate.
      * @returns The new module on success, nullptr on error.
      */
-    std::shared_ptr<module> create_module(const u32 id, const std::string& name, std::shared_ptr<module> parent);
+    std::shared_ptr<module> create_module(const u32 id, const std::string& name, std::shared_ptr<module> parent, const std::vector<std::shared_ptr<gate>>& gates = {});
 
     /**
      * Creates and adds a new module to the netlist.<br>
@@ -164,9 +165,10 @@ public:
      *
      * @param[in] name - A name for the module.
      * @param[in] parent - The parent module.
+     * @param[in] gates - Gates to assign to the new gate.
      * @returns The new module on success, nullptr on error.
      */
-    std::shared_ptr<module> create_module(const std::string& name, std::shared_ptr<module> parent);
+    std::shared_ptr<module> create_module(const std::string& name, std::shared_ptr<module> parent, const std::vector<std::shared_ptr<gate>>& gates = {});
 
     /**
      * Removes and a module from the netlist.
