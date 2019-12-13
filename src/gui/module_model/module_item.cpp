@@ -17,15 +17,15 @@ module_item::module_item(const u32 id) :
 
 module_item::module_item(const QString& name, const u32 id) :
     m_parent(nullptr),
-    m_name(name),
     m_id(id),
+    m_name(name),
     m_color(g_netlist_relay.get_module_color(id)),
     m_highlighted(false)
 {
 }
 
 void module_item::insert_child(int row, module_item* child)
-{   
+{
     m_child_items.insert(row, child);
 }
 

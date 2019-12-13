@@ -204,6 +204,7 @@ void tree_module_model::update(u32 module_id)
 
 void tree_module_model::handle_global_setting_changed(void* sender, const QString& key, const QVariant& value)
 {
+    Q_UNUSED(sender);
     if (key == "navigation/sort_mechanism")
     {
         m_sort_mechanism = gui_utility::sort_mechanism(value.toInt());

@@ -187,6 +187,7 @@ void context_manager_widget::setup_toolbar(toolbar* toolbar)
 
 void context_manager_widget::handle_item_double_clicked(QListWidgetItem* clicked)
 {
+    Q_UNUSED(clicked);
     graph_context* clicked_context = m_assigned_pointers[m_list_widget->currentItem()];
     m_tab_view->show_context(clicked_context);
 }

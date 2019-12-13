@@ -5,15 +5,15 @@
 #include "gui_globals.h"
 #include "gui_utils/sort.h"
 #include "searchbar/searchbar.h"
-#include "settings/settings_display.h"
-#include "settings/settings_widget.h"
 #include "settings/checkbox_setting.h"
 #include "settings/dropdown_setting.h"
+#include "settings/fontsize_preview_widget.h"
 #include "settings/keybind_setting.h"
+#include "settings/settings_display.h"
+#include "settings/settings_widget.h"
 #include "settings/slider_setting.h"
 #include "settings/spinbox_setting.h"
 #include "settings/text_setting.h"
-#include "settings/fontsize_preview_widget.h"
 
 #include <QDebug>
 #include <QFrame>
@@ -31,9 +31,9 @@
 
 main_settings_widget::main_settings_widget(QWidget* parent)
     : QWidget(parent), m_layout(new QHBoxLayout()), m_expanding_list_widget(new expanding_list_widget()), m_vertical_layout(new QVBoxLayout()), m_scrollbar(new QScrollBar()),
-      m_searchbar_container(new QFrame()), m_searchbar_layout(new QHBoxLayout()), m_searchbar(new searchbar()), m_scroll_area(new QScrollArea()),
-      m_content(new QFrame()), m_content_layout(new QHBoxLayout()), m_settings_container(new QFrame()), m_container_layout(new QVBoxLayout()), m_button_layout(new QHBoxLayout()),
-      m_restore_defaults(new QPushButton()), m_cancel(new QPushButton()), m_ok(new QPushButton())
+      m_searchbar_container(new QFrame()), m_searchbar_layout(new QHBoxLayout()), m_searchbar(new searchbar()), m_scroll_area(new QScrollArea()), m_content(new QFrame()),
+      m_content_layout(new QHBoxLayout()), m_settings_container(new QFrame()), m_container_layout(new QVBoxLayout()), m_button_layout(new QHBoxLayout()), m_restore_defaults(new QPushButton()),
+      m_cancel(new QPushButton()), m_ok(new QPushButton())
 {
     setWindowModality(Qt::ApplicationModal);
 
@@ -107,15 +107,14 @@ main_settings_widget::main_settings_widget(QWidget* parent)
     connect(m_expanding_list_widget, &expanding_list_widget::button_selected, this, &main_settings_widget::handle_button_selected);
     connect(m_searchbar, &searchbar::text_edited, this, &main_settings_widget::handle_text_edited);
 
-    #ifndef ENABLE_OK_BUTTON
+#ifndef ENABLE_OK_BUTTON
     m_ok->hide();
-    #endif
+#endif
 
     init_widgets();
 
     m_expanding_list_widget->select_item(0);
     m_expanding_list_widget->repolish();
-
 }
 
 void main_settings_widget::init_widgets()
@@ -167,7 +166,7 @@ void main_settings_widget::init_widgets()
 
     make_section("Python editor", "python-item", ":/icons/python");
 
-    slider_setting* py_font_size_setting = new slider_setting("python/font_size", "Font Size", 6, 40, "pt", this);
+    slider_setting* py_font_size_setting          = new slider_setting("python/font_size", "Font Size", 6, 40, "pt", this);
     fontsize_preview_widget* py_font_size_preview = new fontsize_preview_widget("foobar", font());
     py_font_size_preview->setMinimumSize(QSize(220, 85));
     py_font_size_setting->set_preview_widget(py_font_size_preview);
@@ -234,7 +233,6 @@ void main_settings_widget::init_widgets()
 
     // text_setting* py_interpreter_setting = new text_setting("python/interpreter", "Python Interpreter", "will be used after restart", "/path/to/python");
     // register_widget("advanced-item", py_interpreter_setting);
-
 }
 
 void main_settings_widget::make_section(const QString& label, const QString& name, const QString& icon_path)
@@ -258,7 +256,7 @@ bool main_settings_widget::check_conflict(settings_widget* widget, const QVarian
     // iterate over each member of the exclusive group and check that none
     // have the same value
     QList<settings_widget*>* widgets_in_group = m_exclusive_g2w.value(group_name);
-    bool conflict = false;
+    bool conflict                             = false;
     for (settings_widget* w : *widgets_in_group)
     {
         if (w != widget)
@@ -328,7 +326,7 @@ void main_settings_widget::handle_restore_defaults_clicked()
     {
         // clear the setting and sync the widget to the default value of its
         // connected setting
-        QString key = widget->key();
+        QString key          = widget->key();
         QVariant default_val = g_settings_manager.reset(key);
         widget->prepare(default_val, default_val);
         check_conflict(widget, widget->value());
@@ -346,7 +344,7 @@ void main_settings_widget::handle_cancel_clicked()
 
 void main_settings_widget::handle_ok_clicked()
 {
-    #ifdef ENABLE_OK_BUTTON
+#ifdef ENABLE_OK_BUTTON
     for (settings_widget* widget : m_all_settings)
     {
         if (widget->conflicts())
@@ -354,7 +352,7 @@ void main_settings_widget::handle_ok_clicked()
             QMessageBox msg;
             msg.setText("Please resolve all conflicts first");
             msg.setDetailedText("You have settings that collide with each other.\n"
-                    "Settings can't be saved while conflicts exist.");
+                                "Settings can't be saved while conflicts exist.");
             msg.setWindowTitle("Settings Manager");
             msg.exec();
             return;
@@ -364,13 +362,13 @@ void main_settings_widget::handle_ok_clicked()
     {
         if (widget->dirty())
         {
-            QString key = widget->key();
+            QString key    = widget->key();
             QVariant value = widget->value();
             widget->mark_saved();
             g_settings_manager.update(key, value);
         }
     }
-    #endif
+#endif
     Q_EMIT close();
 }
 
@@ -386,8 +384,8 @@ void main_settings_widget::handle_button_selected(expanding_list_button* button)
         return;
     }
     // TODO check performance of this reverse lookup
-    QString section_name = m_sections.key(button);
-    m_active_section = section_name;
+    QString section_name                 = m_sections.key(button);
+    m_active_section                     = section_name;
     QList<settings_widget*>* widget_list = m_map.value(section_name, nullptr);
 
     if (!widget_list)
@@ -398,10 +396,11 @@ void main_settings_widget::handle_button_selected(expanding_list_button* button)
 
     for (settings_widget* widget : *widget_list)
     {
-        if (widget) {
+        if (widget)
+        {
             // sync the widget to the current value of its connected setting
-            QString key = widget->key();
-            QVariant val = g_settings_manager.get(key);
+            QString key          = widget->key();
+            QVariant val         = g_settings_manager.get(key);
             QVariant default_val = g_settings_manager.get_default(key);
             widget->prepare(val, default_val);
             // then display
@@ -435,13 +434,15 @@ void main_settings_widget::handle_text_edited(const QString& text)
 void main_settings_widget::handle_setting_updated(settings_widget* sender, const QString& key, const QVariant& value)
 {
     Q_UNUSED(key);
+    Q_UNUSED(sender);
+    Q_UNUSED(value);
+#ifdef SETTINGS_UPDATE_IMMEDIATELY
     bool conflicts = check_conflict(sender, value);
-    #ifdef SETTINGS_UPDATE_IMMEDIATELY
     if (!conflicts)
     {
         g_settings_manager.update(key, value);
     }
-    #endif
+#endif
 }
 
 void main_settings_widget::hide_all_settings()

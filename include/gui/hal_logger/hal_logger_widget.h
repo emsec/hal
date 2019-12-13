@@ -61,7 +61,7 @@ public:
 
     void reload_log_content();
 
-    void resizeEvent(QResizeEvent* event);
+    void resizeEvent(QResizeEvent* event) override;
 
 Q_SIGNALS:
     void queue_log_update(spdlog::level::level_enum t, QString const& msg, hal_filter_item* filter);

@@ -31,10 +31,7 @@ std::tuple<igraph_t, std::map<int, std::shared_ptr<gate>>> plugin_graph_algorith
         // if gate has no src --> add exactly one dummy node
         if (!src_gate)
         {
-            for (const auto& dst_gate : dst_gates)
-            {
-                edge_counter++;
-            }
+            edge_counter += dst_gates.size();
         }
         // if gate has no dsts --> add dummy node
         else if (dst_gates.size() == 0)
@@ -44,10 +41,7 @@ std::tuple<igraph_t, std::map<int, std::shared_ptr<gate>>> plugin_graph_algorith
         // default mode
         else
         {
-            for (const auto& dst_gate : dst_gates)
-            {
-                edge_counter++;
-            }
+            edge_counter += dst_gates.size();
         }
     }
 
@@ -107,7 +101,6 @@ std::tuple<igraph_t, std::map<int, std::shared_ptr<gate>>> plugin_graph_algorith
     }
 
     igraph_create(&graph, &edges, 0, IGRAPH_DIRECTED);
-
 
     // map with vertice id to hal-gate
     std::map<int, std::shared_ptr<gate>> vertice_to_gate;

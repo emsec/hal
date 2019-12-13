@@ -345,6 +345,7 @@ void file_manager::handle_directory_changed(const QString& path)
 
 void file_manager::handle_global_setting_changed(void* sender, const QString& key, const QVariant& value)
 {
+    Q_UNUSED(sender);
     if (key == "advanced/autosave")
     {
         m_autosave_enabled = value.toBool();

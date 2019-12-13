@@ -234,6 +234,7 @@ void gate_details_widget::handle_net_name_changed(std::shared_ptr<net> net)
 
 void gate_details_widget::handle_net_src_changed(std::shared_ptr<net> net)
 {
+    Q_UNUSED(net);
     if (m_current_id == 0) return;
     if (g_netlist->is_gate_in_netlist(g_netlist->get_gate_by_id(m_current_id)))
         update(m_current_id);
@@ -241,12 +242,14 @@ void gate_details_widget::handle_net_src_changed(std::shared_ptr<net> net)
 
 void gate_details_widget::handle_net_dst_added(std::shared_ptr<net> net, const u32 dst_gate_id)
 {
+    Q_UNUSED(net);
     if (m_current_id == dst_gate_id)
         update(m_current_id);
 }
 
 void gate_details_widget::handle_net_dst_removed(std::shared_ptr<net> net, const u32 dst_gate_id)
 {
+    Q_UNUSED(net);
     if (m_current_id == dst_gate_id)
         update(m_current_id);
 }
@@ -275,6 +278,7 @@ void gate_details_widget::handle_module_name_changed(std::shared_ptr<module> mod
 
 void gate_details_widget::handle_module_gate_assigned(std::shared_ptr<module> module, u32 associated_data)
 {
+    Q_UNUSED(module);
     if (m_current_id == associated_data)
     {
         update(m_current_id);
@@ -283,6 +287,7 @@ void gate_details_widget::handle_module_gate_assigned(std::shared_ptr<module> mo
 
 void gate_details_widget::handle_module_gate_removed(std::shared_ptr<module> module, u32 associated_data)
 {
+    Q_UNUSED(module);
     if (!g_netlist->is_gate_in_netlist(g_netlist->get_gate_by_id(associated_data)))
         return;
 

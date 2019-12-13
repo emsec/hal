@@ -318,9 +318,8 @@ if(UNIX)
     enable_cxx_compiler_flag_if_supported("-g" "_RELWITHDEBINFO")
     #enable_cxx_compiler_flag_if_supported("-flto" "_RELWITHDEBINFO")
 
-    #set(CMAKE_C_FLAGS${build_type} "${CMAKE_C_FLAGS${build_type}} -Werror")
-    #set(CMAKE_CXX_FLAGS${build_type} "${CMAKE_CXX_FLAGS${build_type}} -Werror")
-
+    # set(CMAKE_C_FLAGS${build_type} "${CMAKE_C_FLAGS${build_type}} -Werror")
+    # set(CMAKE_CXX_FLAGS${build_type} "${CMAKE_CXX_FLAGS${build_type}} -Werror")
 
     if (USE_LIBCXX)
         enable_cxx_compiler_flag_if_supported("-stdlib=libc++" "")

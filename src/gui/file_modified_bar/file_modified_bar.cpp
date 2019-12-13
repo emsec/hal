@@ -4,6 +4,7 @@
 
 file_modified_bar::file_modified_bar(QWidget* parent)
 {
+    Q_UNUSED(parent);
     m_layout = new QHBoxLayout();
     setLayout(m_layout);
 
