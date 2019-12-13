@@ -152,8 +152,8 @@ void graphics_scene::move_drag_shadow(const QPointF& posF, const drag_mode mode)
                 #else
                 hal::item_type type = static_cast<graphics_item*>(itm)->item_type();
                 if (itm != m_drag_source_item
-                    && type == hal::item_type::gate
-                    || type == hal::item_type::module)
+                    && (type == hal::item_type::gate
+                    || type == hal::item_type::module))
                 #endif
                 {
                     placeable = false;
@@ -720,7 +720,7 @@ void graphics_scene::drawBackground(QPainter* painter, const QRectF& rect)
 }
 
 #ifdef GUI_DEBUG_GRID
-void graphics_scene::debug_set_layouter_grid(QVector<qreal>& debug_x_lines, QVector<qreal>& debug_y_lines, qreal debug_default_height, qreal debug_default_width)
+void graphics_scene::debug_set_layouter_grid(const QVector<qreal>& debug_x_lines, const QVector<qreal>& debug_y_lines, qreal debug_default_height, qreal debug_default_width)
 {
     m_debug_x_lines = debug_x_lines;
     m_debug_y_lines = debug_y_lines;

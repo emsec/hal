@@ -69,7 +69,7 @@ public:
     const graphics_gate* get_gate_item(const u32 id) const;
 
     #ifdef GUI_DEBUG_GRID
-    void debug_set_layouter_grid(QVector<qreal>& debug_x_lines, QVector<qreal>& debug_y_lines, qreal debug_default_height, qreal debug_default_width);
+    void debug_set_layouter_grid(const QVector<qreal>& debug_x_lines, const QVector<qreal>& debug_y_lines, qreal debug_default_height, qreal debug_default_width);
     #endif
 
 //    void update_utility_items();

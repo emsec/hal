@@ -79,10 +79,6 @@ private:
 
     void ensure_gate_visible(const u32 gate);
 
-    #ifdef GUI_DEBUG_GRID
-    void debug_draw_layouter_grid();
-    #endif
-
     struct context_history_entry
     {
         QSet<u32> m_modules;

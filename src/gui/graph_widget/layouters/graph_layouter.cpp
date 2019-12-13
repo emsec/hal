@@ -157,6 +157,10 @@ void graph_layouter::layout()
     m_scene->move_nets_to_background();
     m_scene->setSceneRect(m_scene->itemsBoundingRect());
     m_scene->handle_extern_selection_changed(nullptr);
+
+    #ifdef GUI_DEBUG_GRID
+    m_scene->debug_set_layouter_grid(x_values(), y_values(), default_grid_height(), default_grid_width());
+    #endif
 }
 
 void graph_layouter::clear_layout_data()
