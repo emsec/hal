@@ -1,4 +1,4 @@
-#include "hdl_parser/hdl_parser_verilog.h"
+#include "netlist/hdl_parser/hdl_parser_verilog.h"
 
 #include "core/log.h"
 #include "core/utils.h"

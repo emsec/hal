@@ -12,8 +12,8 @@
 #include "core/interface_base.h"
 #include "core/interface_interactive_ui.h"
 
-#include "hdl_parser/hdl_parser_dispatcher.h"
-#include "hdl_writer/hdl_writer_dispatcher.h"
+#include "netlist/hdl_parser/hdl_parser_dispatcher.h"
+#include "netlist/hdl_writer/hdl_writer_dispatcher.h"
 #include "netlist/event_system/event_log.h"
 #include "netlist/gate_library/gate_library_manager.h"
 #include "netlist/netlist.h"

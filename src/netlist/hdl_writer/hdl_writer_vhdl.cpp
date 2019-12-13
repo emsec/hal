@@ -1,4 +1,4 @@
-#include "hdl_writer/hdl_writer_vhdl.h"
+#include "netlist/hdl_writer/hdl_writer_vhdl.h"
 
 #include "core/log.h"
 

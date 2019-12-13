@@ -1,4 +1,4 @@
-#include "hdl_parser/hdl_parser_dispatcher.h"
+#include "netlist/hdl_parser/hdl_parser_dispatcher.h"
 
 #include "core/log.h"
 
@@ -7,9 +7,9 @@
 
 #include "netlist/event_system/event_controls.h"
 
-#include "hdl_parser/hdl_parser.h"
-#include "hdl_parser/hdl_parser_verilog.h"
-#include "hdl_parser/hdl_parser_vhdl.h"
+#include "netlist/hdl_parser/hdl_parser.h"
+#include "netlist/hdl_parser/hdl_parser_verilog.h"
+#include "netlist/hdl_parser/hdl_parser_vhdl.h"
 #include "netlist/gate_library/gate_library_manager.h"
 
 namespace hdl_parser_dispatcher

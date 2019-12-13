@@ -1,4 +1,4 @@
-#include "hdl_writer/hdl_writer_verilog.h"
+#include "netlist/hdl_writer/hdl_writer_verilog.h"
 
 #include "core/log.h"
 

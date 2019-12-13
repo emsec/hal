@@ -1,13 +1,13 @@
-#include "hdl_writer/hdl_writer_dispatcher.h"
+#include "netlist/hdl_writer/hdl_writer_dispatcher.h"
 
 #include "core/log.h"
 
 #include "netlist/netlist.h"
 #include "netlist/netlist_factory.h"
 
-#include "hdl_writer/hdl_writer.h"
-#include "hdl_writer/hdl_writer_verilog.h"
-#include "hdl_writer/hdl_writer_vhdl.h"
+#include "netlist/hdl_writer/hdl_writer.h"
+#include "netlist/hdl_writer/hdl_writer_verilog.h"
+#include "netlist/hdl_writer/hdl_writer_vhdl.h"
 
 #include <chrono>
 
