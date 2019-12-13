@@ -62,10 +62,6 @@ protected:
     }
 };
 
-static std::function<bool(const std::shared_ptr<gate>&)> name_filter(const std::string& name){
-    return [name](auto& g){return g->get_name() == name;};
-}
-
 /**
  * Testing to write a given netlist in a sstream and parses it after, with
  * the hdl_parse_verilog.
@@ -573,16 +569,16 @@ TEST_F(hdl_writer_verilog_test, check_special_net_names) {
             test_def::get_captured_stdout();
 
             // Check if the gate_name is translated correctly
-            EXPECT_FALSE(parsed_nl->get_gates(name_filter("gate_0" + GATE_SUFFIX)).empty());
-            EXPECT_FALSE(parsed_nl->get_gates(name_filter("gate_1" + GATE_SUFFIX)).empty());
-            EXPECT_FALSE(parsed_nl->get_gates(name_filter("gate_2" + GATE_SUFFIX)).empty());
-            EXPECT_FALSE(parsed_nl->get_gates(name_filter("gate_3" + GATE_SUFFIX)).empty());
-            EXPECT_FALSE(parsed_nl->get_gates(name_filter("gate_4" + GATE_SUFFIX)).empty());
-            EXPECT_FALSE(parsed_nl->get_gates(name_filter("gate_5" + GATE_SUFFIX)).empty());
-            EXPECT_FALSE(parsed_nl->get_gates(name_filter("gate_6" + GATE_SUFFIX)).empty());
-            EXPECT_FALSE(parsed_nl->get_gates(name_filter("gate_7" + GATE_SUFFIX)).empty());
-            EXPECT_FALSE(parsed_nl->get_gates(name_filter("gate_8" + GATE_SUFFIX)).empty());
-            EXPECT_FALSE(parsed_nl->get_gates(name_filter("GATE_9" + GATE_SUFFIX)).empty());
+            EXPECT_FALSE(parsed_nl->get_gates(gate_name_filter("gate_0" + GATE_SUFFIX)).empty());
+            EXPECT_FALSE(parsed_nl->get_gates(gate_name_filter("gate_1" + GATE_SUFFIX)).empty());
+            EXPECT_FALSE(parsed_nl->get_gates(gate_name_filter("gate_2" + GATE_SUFFIX)).empty());
+            EXPECT_FALSE(parsed_nl->get_gates(gate_name_filter("gate_3" + GATE_SUFFIX)).empty());
+            EXPECT_FALSE(parsed_nl->get_gates(gate_name_filter("gate_4" + GATE_SUFFIX)).empty());
+            EXPECT_FALSE(parsed_nl->get_gates(gate_name_filter("gate_5" + GATE_SUFFIX)).empty());
+            EXPECT_FALSE(parsed_nl->get_gates(gate_name_filter("gate_6" + GATE_SUFFIX)).empty());
+            EXPECT_FALSE(parsed_nl->get_gates(gate_name_filter("gate_7" + GATE_SUFFIX)).empty());
+            EXPECT_FALSE(parsed_nl->get_gates(gate_name_filter("gate_8" + GATE_SUFFIX)).empty());
+            EXPECT_FALSE(parsed_nl->get_gates(gate_name_filter("GATE_9" + GATE_SUFFIX)).empty());
         }
     TEST_END
 }

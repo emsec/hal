@@ -26,12 +26,6 @@ protected:
     }
 };
 
-
-static std::function<bool(const std::shared_ptr<module>&)> name_filter(const std::string& name){
-    return [name](auto& m){return m->get_name() == name;};
-}
-
-
 /**
  * Testing the access on the id, the type and the stored netlist after calling the constructor
  *
@@ -112,9 +106,9 @@ TEST_F(module_test, check_set_parent_module){
 
             m_0->set_parent_module(m_1);
             EXPECT_EQ(m_0->get_parent_module(), m_1);
-            EXPECT_FALSE(m_1->get_submodules(name_filter("test_module_0"),false).empty());
-            EXPECT_FALSE(m_1->get_submodules(name_filter("test_module_2"),true).empty());
-            EXPECT_FALSE(m_1->get_submodules(name_filter("test_module_3"),true).empty());
+            EXPECT_FALSE(m_1->get_submodules(module_name_filter("test_module_0"),false).empty());
+            EXPECT_FALSE(m_1->get_submodules(module_name_filter("test_module_2"),true).empty());
+            EXPECT_FALSE(m_1->get_submodules(module_name_filter("test_module_3"),true).empty());
         }
         {
             /*  Hang m_0 to one of its childs (m_1). m_1 should be connected to the top_module afterwards
@@ -406,231 +400,7 @@ TEST_F(module_test, check_get_gate_by_id){
 }
 
 /**
- * Testing the contains_net function
- *
- * Functions: contains_net
- */
-/*TEST_F(module_test, check_contains_net){
-    TEST_START
-        // POSITIVE
-        {
-            // Check a net, that is part of the module (not recursive)
-            std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::shared_ptr<module> m_0 = nl->create_module(MIN_MODULE_ID+0, "test_module", nl->get_top_module());
-            std::shared_ptr<net> net_0 = nl->create_net(MIN_NET_ID+0, "net_0");
-            //m_0->assign_net(net_0);
-
-            EXPECT_TRUE(m_0->contains_net(net_0));
-        }
-        {
-            // Check a net, that isn't part of the module (not recursive)
-            std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::shared_ptr<module> m_0 = nl->create_module(MIN_MODULE_ID+0, "test_module", nl->get_top_module());
-            std::shared_ptr<net> net_0 = nl->create_net(MIN_NET_ID+0, "net_0");
-
-            EXPECT_FALSE(m_0->contains_net(net_0));
-        }
-        {
-            // Check a net, that isn't part of the module, but of a submodule (not recursive)
-            std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::shared_ptr<module> m_0 = nl->create_module(MIN_MODULE_ID+0, "test_module", nl->get_top_module());
-            std::shared_ptr<module> submodule = nl->create_module(MIN_MODULE_ID+1, "test_module", m_0);
-            ASSERT_NE(submodule, nullptr);
-            std::shared_ptr<net> net_0 = nl->create_net(MIN_NET_ID+0, "net_0");
-            submodule->assign_net(net_0);
-
-            EXPECT_FALSE(m_0->contains_net(net_0));
-        }
-        {
-            // Check a net, that isn't part of the module, but of a submodule (recursive)
-            std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::shared_ptr<module> m_0 = nl->create_module(MIN_MODULE_ID+0, "test_module", nl->get_top_module());
-            std::shared_ptr<module> submodule = nl->create_module(MIN_MODULE_ID+1, "test_module", m_0);
-            ASSERT_NE(submodule, nullptr);
-            std::shared_ptr<net> net_0 = nl->create_net(MIN_NET_ID+0, "net_0");
-            submodule->assign_net(net_0);
-
-            EXPECT_TRUE(m_0->contains_net(net_0, true));
-        }
-    TEST_END
-}*/
-
-/**
- * Testing the addition of nets to the module. Verify the addition by call the
- * get_nets function and the contains_net and get_nets function
- *
- * Functions: assign_net
- */
-/*TEST_F(module_test, check_assign_net){
-    TEST_START
-        {
-            // Add some nets to the module
-            std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::shared_ptr<net> net_0 = nl->create_net(MIN_NET_ID+0, "net_0");
-            std::shared_ptr<net> net_1 = nl->create_net(MIN_NET_ID+1, "net_1");
-            // this net is not part of the module
-            std::shared_ptr<net> net_not_in_m = nl->create_net(MIN_NET_ID+2, "net_not_in_m");
-
-            // Add net_0 and net_1 to a module
-            std::shared_ptr<module> test_module = nl->create_module(MIN_MODULE_ID+1, "test module", nl->get_top_module());
-            test_module->assign_net(net_0);
-            test_module->assign_net(net_1);
-
-            std::set<std::shared_ptr<net>> expRes = {net_0, net_1};
-
-            EXPECT_EQ(test_module->get_nets(), expRes);
-        }
-        {
-            NO_COUT_TEST_BLOCK;
-            // Add the same net twice to the module
-            std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::shared_ptr<net> net_0  = nl->create_net(MIN_NET_ID+0, "net_0");
-
-            // Add net_0 twice
-            std::shared_ptr<module> test_module = nl->create_module(MIN_MODULE_ID+0, "test module", nl->get_top_module());
-            test_module->assign_net(net_0);
-            test_module->assign_net(net_0);
-
-            std::set<std::shared_ptr<net>> expRes = {
-                    net_0,
-            };
-
-            EXPECT_EQ(test_module->get_nets(), expRes);
-            EXPECT_TRUE(test_module->contains_net(net_0));
-        }
-        {
-            // Insert a net owned by a submodule
-            NO_COUT_TEST_BLOCK;
-            std::shared_ptr<netlist> nl  = create_empty_netlist();
-            std::shared_ptr<net> net_0 = nl->create_net(MIN_NET_ID+0, "net_0");
-
-            std::shared_ptr<module> test_module = nl->create_module(MIN_MODULE_ID+0, "test module", nl->get_top_module());
-            std::shared_ptr<module> submodule = nl->create_module(MIN_MODULE_ID+1, "submodule", test_module);
-            submodule->assign_net(net_0);
-            ASSERT_TRUE(submodule->contains_net(net_0));
-            ASSERT_FALSE(test_module->contains_net(net_0));
-
-            test_module->assign_net(net_0);
-
-            std::set<std::shared_ptr<net>> expRes = {
-                    net_0
-            };
-
-            EXPECT_EQ(test_module->get_nets(), expRes);
-            EXPECT_FALSE(submodule->contains_net(net_0));
-        }
-
-        // NEGATIVE
-        {
-            // Net is a nullptr
-            NO_COUT_TEST_BLOCK;
-            std::shared_ptr<netlist> nl   = create_empty_netlist();
-            std::shared_ptr<module> test_module = nl->create_module(MIN_MODULE_ID+0, "test module", nl->get_top_module());
-            test_module->assign_net(nullptr);
-            EXPECT_TRUE(test_module->get_nets().empty());
-        }
-
-    TEST_END
-}*/
-
-/**
- * Testing the deletion of nets from modules
- *
- * Functions: remove_net
- */
-/*TEST_F(module_test, check_remove_net){
-    TEST_START
-        {
-            // Delete a net from a module (net owned by the modules)
-            std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::shared_ptr<module> m_0 = nl->create_module(MIN_MODULE_ID+0, "test_module", nl->get_top_module());
-            std::shared_ptr<net> net_0 = nl->create_net(MIN_NET_ID+0, "net_0");
-            m_0->assign_net(net_0);
-
-            ASSERT_TRUE(m_0->contains_net(net_0));
-            m_0->remove_net(net_0);
-            EXPECT_FALSE(m_0->contains_net(net_0));
-        }
-        {
-            // Try to delete a net from a module (net owned by another module)
-            NO_COUT_TEST_BLOCK;
-            std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::shared_ptr<module> m_0 = nl->create_module(MIN_MODULE_ID+0, "test_module", nl->get_top_module());
-            std::shared_ptr<module> m_other = nl->create_module(MIN_MODULE_ID+1, "other_test_module", nl->get_top_module());
-            std::shared_ptr<net> net_0 = nl->create_net(MIN_NET_ID+0, "net_0");
-            m_other->assign_net(net_0);
-
-            m_0->remove_net(net_0);
-            EXPECT_FALSE(m_0->contains_net(net_0));
-            EXPECT_TRUE(m_other->contains_net(net_0));
-        }
-        // NEGATIVE
-        {
-            // Try to delete a net from the top-module (should change nothing)
-            NO_COUT_TEST_BLOCK;
-            std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::shared_ptr<net> net_0 = nl->create_net(MIN_NET_ID+0, "net_0");
-            std::shared_ptr<module> tm =  nl->get_top_module();
-
-            ASSERT_TRUE(tm->contains_net(net_0));
-            tm->remove_net(net_0);
-            EXPECT_TRUE(tm->contains_net(net_0));
-        }
-        {
-            // Try to delete a nullptr (should not crash)
-            NO_COUT_TEST_BLOCK;
-            std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::shared_ptr<module> m_0 = nl->create_module(MIN_MODULE_ID+0, "test_module", nl->get_top_module());
-
-            m_0->remove_net(nullptr);
-        }
-    TEST_END
-}*/
-
-/**
- * Testing the get_net_by_id function
- *
- * Functions: get_net_by_id
- */
-/*TEST_F(module_test, check_get_net_by_id){
-    TEST_START
-        // POSITIVE
-        {
-            // get a net by its id (net owned by module)(not recursive)
-            std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::shared_ptr<module> m_0 = nl->create_module(MIN_MODULE_ID+0, "test_module", nl->get_top_module());
-            std::shared_ptr<net> net_123 = nl->create_net(MIN_NET_ID+123, "net_123");
-            m_0->assign_net(net_123);
-
-            ASSERT_TRUE(m_0->contains_net(net_123));
-            EXPECT_EQ(m_0->get_net_by_id(MIN_NET_ID+123), net_123);
-        }
-        {
-            // get a net by its id (not owned by a submodule)(not recursive)
-            std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::shared_ptr<module> m_0 = nl->create_module(MIN_MODULE_ID+0, "test_module", nl->get_top_module());
-            std::shared_ptr<module> submodule = nl->create_module(MIN_MODULE_ID+1, "other_module", m_0);
-            std::shared_ptr<net> net_123 = nl->create_net(MIN_NET_ID+123, "net_123");
-            submodule->assign_net(net_123);
-
-            EXPECT_EQ(m_0->get_net_by_id(MIN_NET_ID+123), nullptr);
-        }
-        {
-            // get a net by its id (not owned by a submodule)(recursive)
-            std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::shared_ptr<module> m_0 = nl->create_module(MIN_MODULE_ID+0, "test_module", nl->get_top_module());
-            std::shared_ptr<module> submodule = nl->create_module(MIN_MODULE_ID+1, "other_module", m_0);
-            std::shared_ptr<net> net_123 = nl->create_net(MIN_NET_ID+123, "net_123");
-            submodule->assign_net(net_123);
-
-            EXPECT_EQ(m_0->get_net_by_id(MIN_NET_ID+123, true), net_123);
-        }
-    TEST_END
-}*/
-
-
-/**
- * Testing the access on submodules. Therefore we build up a module tree like this:
+ * Testing the access on submodules as well as the contains module function. Therefore we build up a module tree like this:
  *
  *               .----> MODULE_0
  *               |
@@ -642,7 +412,7 @@ TEST_F(module_test, check_get_gate_by_id){
  *
  *   (Remark: MODULE_0 and MODULE_2 are both named "even_module", while MODULE_1 and MODULE_3 are named "odd_module")
  *
- * Functions: get_submodules
+ * Functions: get_submodules, contains_module
  */
 TEST_F(module_test, check_get_submodules){
     TEST_START
@@ -659,11 +429,15 @@ TEST_F(module_test, check_get_submodules){
         std::shared_ptr<module> m_3 = nl->create_module(MIN_MODULE_ID+3, "odd_module", m_1);
         ASSERT_NE(m_3, nullptr);
         {
-            // Testing the access on submodules (no name_filter, not recursive)
+            // Testing the access on submodules (no module_name_filter, not recursive)
             {
                 // Submodules of TOP_MODULE;
                 std::set<std::shared_ptr<module>> exp_result = {m_0, m_1};
                 EXPECT_EQ(tm->get_submodules(nullptr, false), exp_result);
+                EXPECT_TRUE(tm->contains_module(m_0, false));
+                EXPECT_TRUE(tm->contains_module(m_1, false));
+                EXPECT_FALSE(tm->contains_module(m_2, false));
+                EXPECT_FALSE(tm->contains_module(m_3, false));
             }
             {
                 // Submodules of MODULE_1;
@@ -677,21 +451,21 @@ TEST_F(module_test, check_get_submodules){
             }
         }
         {
-            // Testing the access on submodules (name_filter set, not recursive)
+            // Testing the access on submodules (module_name_filter set, not recursive)
             {
                 // Submodules of TOP_MODULE;
                 std::set<std::shared_ptr<module>> exp_result = {m_0};
-                EXPECT_EQ(tm->get_submodules(name_filter("even_module"), false), exp_result);
+                EXPECT_EQ(tm->get_submodules(module_name_filter("even_module"), false), exp_result);
             }
             {
                 // Submodules of MODULE_1;
                 std::set<std::shared_ptr<module>> exp_result = {m_2};
-                EXPECT_EQ(m_1->get_submodules(name_filter("even_module"), false), exp_result);
+                EXPECT_EQ(m_1->get_submodules(module_name_filter("even_module"), false), exp_result);
             }
             {
                 // Submodules of TOP_MODULE (name does not exists);
                 std::set<std::shared_ptr<module>> exp_result = {};
-                EXPECT_EQ(tm->get_submodules(name_filter("non_existing_name"), false), exp_result);
+                EXPECT_EQ(tm->get_submodules(module_name_filter("non_existing_name"), false), exp_result);
             }
         }
         {
@@ -700,17 +474,31 @@ TEST_F(module_test, check_get_submodules){
                 // Submodules of TOP_MODULE;
                 std::set<std::shared_ptr<module>> exp_result = {m_0,m_1,m_2,m_3};
                 EXPECT_EQ(tm->get_submodules(nullptr, true), exp_result);
+                EXPECT_TRUE(tm->contains_module(m_0, true));
+                EXPECT_TRUE(tm->contains_module(m_1, true));
+                EXPECT_TRUE(tm->contains_module(m_2, true));
+                EXPECT_TRUE(tm->contains_module(m_3, true));
             }
             {
-                // Submodules of TOP_MODULE (with name_filter);
+                // Submodules of TOP_MODULE (with module_name_filter);
                 std::set<std::shared_ptr<module>> exp_result = {m_0,m_2};
-                EXPECT_EQ(tm->get_submodules(name_filter("even_module"), true), exp_result);
+                EXPECT_EQ(tm->get_submodules(module_name_filter("even_module"), true), exp_result);
             }
             {
                 // Submodules of MODULE_0
                 std::set<std::shared_ptr<module>> exp_result = {};
                 EXPECT_EQ(m_0->get_submodules(nullptr, true), exp_result);
             }
+        }
+        {
+            // Testing edge cases of contains_module
+
+            // -- the passed module is a nullptr
+            EXPECT_FALSE(tm->contains_module(nullptr, false));
+            // -- the calling module is a leave
+            EXPECT_FALSE(m_2->contains_module(tm, false));
+            // -- the passed module is the same as the calling one
+            EXPECT_FALSE(m_2->contains_module(m_2, false));
         }
     TEST_END
 }
@@ -802,4 +590,5 @@ TEST_F(module_test, check_get_input_nets){
 
     TEST_END
 }
+
 

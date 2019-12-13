@@ -5,7 +5,6 @@
 #include <core/plugin_manager.h>
 #include <iostream>
 
-
 #ifdef FIXME
 
 using std::cout;
@@ -328,7 +327,7 @@ TEST_F(plugin_manager_test, check_cli_plugin_options)
  *
  * Functions: get_plugin_factory
  */
-TEST_F(plugin_manager_test, check_get_plugin_factory)
+/*TEST_F(plugin_manager_test, check_get_plugin_factory)
 {
     TEST_START
     // ########################
@@ -366,7 +365,7 @@ TEST_F(plugin_manager_test, check_get_plugin_factory)
 
     TEST_END
 }
-
+*/
 /**
  * Testing the get_plugin_instance function
  *
