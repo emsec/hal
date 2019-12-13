@@ -4,7 +4,7 @@ include(CMakeFindDependencyMacro)
 set(my-config-var @my-config-var@)
 
 # Same syntax as find_package
-find_dependency(MYDEP REQUIRED)
+find_dependency(Boost 1.58.0 REQUIRED COMPONENTS system)
 
 # Any extra setup
 

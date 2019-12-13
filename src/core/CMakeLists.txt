@@ -38,6 +38,7 @@ set(CORE_LIB_SRC
     )
 
 add_library(core SHARED ${CORE_LIB_HDR} ${CORE_LIB_SRC} ${CMAKE_BINARY_DIR}/hal_version.h)
+set_target_properties(core PROPERTIES OUTPUT_NAME "hal_core")
 add_library(hal::core ALIAS core)
 target_include_directories(core
                            PUBLIC

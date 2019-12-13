@@ -15,8 +15,14 @@ add_library(netlist
                 ${GATE_TYPE_SYSTEM_SRC}
                 ${GATE_TYPE_SYSTEM_INC}
             )
+set_target_properties(netlist PROPERTIES OUTPUT_NAME "hal_netlist")
 add_library(hal::netlist ALIAS netlist)
-
+target_include_directories(netlist
+                           PUBLIC
+                           $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
+                           $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}>
+                           $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+                           )
 set_target_properties(netlist PROPERTIES DEFINE_SYMBOL API_NETLIST)
 target_link_libraries(netlist
                       PUBLIC
