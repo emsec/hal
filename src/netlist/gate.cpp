@@ -119,7 +119,7 @@ boolean_function gate::get_boolean_function(const std::string& name) const
         {
             return get_boolean_function(output_pins[0]);
         }
-        return boolean_function::X;
+        return boolean_function();
     }
 
     if (m_type->get_base_type() == gate_type::base_type::lut && name == m_type->get_output_pins()[0])
@@ -138,7 +138,7 @@ boolean_function gate::get_boolean_function(const std::string& name) const
     {
         return it->second;
     }
-    return boolean_function::X;
+    return boolean_function();
 }
 
 std::unordered_map<std::string, boolean_function> gate::get_boolean_functions(bool only_custom_functions) const

@@ -150,7 +150,7 @@ public:
      * Get the boolean function associated with a specific name.
      * This name can for example be an output pin of the gate or a defined functionality like "reset".
      * If name is empty, the function of the first output pin is returned.
-     * If there is no function for the given name, the constant 'X' is returned.
+     * If there is no function for the given name, an empty function is returned.
      *
      * @param[in] name - The function name.
      * @returns The boolean function.

@@ -841,7 +841,7 @@ Get a gate specified by id.
 :returns: The gate or None.
 :rtype: hal_py.gate or None
 )")
-        .def_property_readonly("gates", &netlist::get_gates, R"(
+        .def_property_readonly("gates", [](const std::shared_ptr<netlist>& n){return n->get_gates();}, R"(
 A set containing all gates of the netlist.
 
 :type: set[hal_py.gate]
@@ -964,7 +964,7 @@ Get a net specified by id.
 :returns: The net or None.
 :rtype: hal_py.net or None
 )")
-        .def_property_readonly("nets", &netlist::get_nets, R"(
+        .def_property_readonly("nets", [](const std::shared_ptr<netlist>& n){return n->get_nets();}, R"(
 A set containing all nets of the netlist.
 
 :type: set[hal_py.net]
@@ -1174,7 +1174,7 @@ If there is no function for the given name, the constant 'X' is returned.
 :returns: The boolean function.
 :rtype: hal_py.boolean_function
 )")
-        .def_property_readonly("boolean_functions", &gate::get_boolean_functions, R"(
+        .def_property_readonly("boolean_functions", [](const std::shared_ptr<gate>& g){return g->get_boolean_functions();}, R"(
 A map from function name to boolean function for all boolean functions associated with this gate.
 
 :rtype: dict[str,hal_py.boolean_function]
@@ -1463,6 +1463,11 @@ Get the number of destinations.
 :returns: The number of destinations of this net.
 :rtype: int
 )")
+        .def_property_readonly("dsts", [](const std::shared_ptr<net>& n){return n->get_dsts();}, R"(
+Get the vector of destinations of the net.
+
+:type: set[hal_py.net]
+)")
         .def("get_dsts", &net::get_dsts, py::arg("filter") = nullptr, R"(
 Get the vector of destinations of the net.
 
@@ -1563,7 +1568,7 @@ If the new parent is a submodule of this module, the new parent is added as a di
 :returns: True if the parent was changed
 :rtype: bool
 )")
-        .def_property_readonly("submodules", &module::get_submodules, R"(
+        .def_property_readonly("submodules", [](const std::shared_ptr<module>& m){return m->get_submodules();}, R"(
 A set of all direct submodules of this module.
 
 :type: set[hal_py.module]
@@ -1635,7 +1640,7 @@ Therefore it may contain some nets that are also regarded as output nets.
 :returns: The set of internal nets.
 :rtype: set[hal_py.net]
 )")
-        .def_property_readonly("gates", &module::get_gates, R"(
+        .def_property_readonly("gates", [](const std::shared_ptr<module>& m){return m->get_gates();}, R"(
 The set of all gates belonging to the module.
 
 :type: set[hal_py.gate]
@@ -1852,6 +1857,7 @@ Evaluates the function on the given inputs and returns the result.
 :returns: The value that the function evaluates to.
 :rtype: hal_py.value
 )")
+        .def("__call__", [](const boolean_function& f, const std::map<std::string, boolean_function::value>& values) { return f(values); })
         .def("is_constant_one", &boolean_function::is_constant_one, R"(
 Checks whether the function constantly outputs ONE.
 
