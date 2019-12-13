@@ -132,7 +132,7 @@ void graphics_scene::move_drag_shadow(const QPointF& posF, const drag_mode mode)
 
     m_drag_shadow_gate->setPos(newPos);
     auto colliding = m_drag_shadow_gate->collidingItems();
-    bool placeable;
+    bool placeable = false;
     switch (mode)
     {
         case drag_mode::move: {

@@ -438,13 +438,15 @@ void graph_graphics_view::show_context_menu(const QPoint& pos)
     QAction* action;
 
     QGraphicsItem* item = itemAt(pos);
-    bool isGate = false, isModule = false, isNet = false;
+    bool isGate         = false;
+    bool isModule       = false;
+    // bool isNet = false;
     if (item)
     {
         m_item   = static_cast<graphics_item*>(item);
         isGate   = m_item->item_type() == hal::item_type::gate;
         isModule = m_item->item_type() == hal::item_type::module;
-        isNet    = m_item->item_type() == hal::item_type::net;
+        // isNet    = m_item->item_type() == hal::item_type::net;
 
         if (isGate)
         {
@@ -560,15 +562,15 @@ void graph_graphics_view::show_context_menu(const QPoint& pos)
 
     // if (!item || isNet)
     // {
-        // QAction* antialiasing_action = context_menu.addAction("Antialiasing");
-        // QAction* cosmetic_action     = context_menu.addAction("Cosmetic Nets");
-        // QMenu* grid_menu = context_menu.addMenu("Grid");
-        // QMenu* type_menu = grid_menu->addMenu("Type");
-        // QMenu* cluster_menu          = grid_menu->addMenu("Clustering");
-        // QAction* lines_action        = type_menu->addAction("Lines");
-        // QAction* dots_action         = type_menu->addAction("Dots");
-        // QAction* none_action         = type_menu->addAction("None");
-        // connect(action, &QAction::triggered, this, SLOT);
+    // QAction* antialiasing_action = context_menu.addAction("Antialiasing");
+    // QAction* cosmetic_action     = context_menu.addAction("Cosmetic Nets");
+    // QMenu* grid_menu = context_menu.addMenu("Grid");
+    // QMenu* type_menu = grid_menu->addMenu("Type");
+    // QMenu* cluster_menu          = grid_menu->addMenu("Clustering");
+    // QAction* lines_action        = type_menu->addAction("Lines");
+    // QAction* dots_action         = type_menu->addAction("Dots");
+    // QAction* none_action         = type_menu->addAction("None");
+    // connect(action, &QAction::triggered, this, SLOT);
     // }
 
     context_menu.exec(mapToGlobal(pos));

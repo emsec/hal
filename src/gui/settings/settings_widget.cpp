@@ -1,18 +1,17 @@
 #include "settings/settings_widget.h"
 
+#include <QBoxLayout>
 #include <QLabel>
 #include <QRegularExpression>
 #include <QRegularExpressionMatch>
 #include <QStyle>
-#include <QBoxLayout>
 
 // enable this to apply all settings as they are modified
 //#define SETTINGS_UPDATE_IMMEDIATELY
 
-settings_widget::settings_widget(const QString& key, QWidget* parent) : QFrame(parent),
-    m_layout(new QVBoxLayout()), m_container(new QBoxLayout(QBoxLayout::TopToBottom)),
-    m_top_bar(new QHBoxLayout()), m_name(new QLabel()), m_revert(new QToolButton()),
-    m_default(new QToolButton()), m_highlight_color(52, 56, 57), m_key(key)
+settings_widget::settings_widget(const QString& key, QWidget* parent)
+    : QFrame(parent), m_layout(new QVBoxLayout()), m_container(new QBoxLayout(QBoxLayout::TopToBottom)), m_top_bar(new QHBoxLayout()), m_name(new QLabel()), m_revert(new QToolButton()),
+      m_default(new QToolButton()), m_highlight_color(52, 56, 57), m_key(key)
 {
     setFrameStyle(QFrame::NoFrame);
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
@@ -38,7 +37,7 @@ settings_widget::settings_widget(const QString& key, QWidget* parent) : QFrame(p
     m_top_bar->addWidget(m_default);
     m_layout->addLayout(m_top_bar);
     m_layout->addLayout(m_container);
-    
+
     hide();
 }
 
@@ -62,7 +61,7 @@ void settings_widget::reset_labels()
     for (QPair<QLabel*, QString>& pair : m_labels)
     {
         pair.first->setText(pair.second);
-        if(pair.second.isEmpty())
+        if (pair.second.isEmpty())
         {
             pair.first->hide();
         }
@@ -119,9 +118,9 @@ void settings_widget::trigger_setting_updated()
     if (m_signals_enabled)
     {
         Q_EMIT setting_updated(this, key(), val);
-        #ifndef SETTINGS_UPDATE_IMMEDIATELY
+#ifndef SETTINGS_UPDATE_IMMEDIATELY
         set_dirty(m_loaded_value != val);
-        #endif
+#endif
     }
 }
 
@@ -131,9 +130,9 @@ void settings_widget::handle_reset()
     {
         load(m_default_value);
         Q_EMIT setting_updated(this, key(), m_loaded_value);
-        #ifndef SETTINGS_UPDATE_IMMEDIATELY
+#ifndef SETTINGS_UPDATE_IMMEDIATELY
         set_dirty(m_loaded_value != m_default_value);
-        #endif
+#endif
     }
 }
 
@@ -143,15 +142,15 @@ void settings_widget::handle_rollback()
     {
         load(m_loaded_value);
         Q_EMIT setting_updated(this, key(), m_loaded_value);
-        #ifndef SETTINGS_UPDATE_IMMEDIATELY
+#ifndef SETTINGS_UPDATE_IMMEDIATELY
         set_dirty(false);
-        #endif
+#endif
     }
 }
 
 void settings_widget::set_dirty(bool dirty)
 {
-    m_dirty = dirty;
+    m_dirty   = dirty;
     QStyle* s = style();
     s->unpolish(this);
     s->polish(this);
@@ -166,10 +165,10 @@ void settings_widget::prepare(const QVariant& value, const QVariant& default_val
 {
     m_signals_enabled = false;
     load(value);
-    m_loaded_value = value;
-    m_default_value = default_value;
+    m_loaded_value    = value;
+    m_default_value   = default_value;
     m_signals_enabled = true;
-    m_prepared = true;
+    m_prepared        = true;
     set_dirty(false);
 }
 
@@ -182,7 +181,7 @@ void settings_widget::mark_saved()
 void settings_widget::set_conflicts(bool conflicts)
 {
     m_conflicts = conflicts;
-    QStyle* s = style();
+    QStyle* s   = style();
     s->unpolish(this);
     s->polish(this);
 }
@@ -209,10 +208,16 @@ void settings_widget::set_preview_widget(preview_widget* widget)
 void settings_widget::set_preview_position(preview_position position)
 {
     QBoxLayout::Direction direction;
-    switch(position)
+    switch (position)
     {
-        case preview_position::bottom : direction = QBoxLayout::TopToBottom; break;
-        case preview_position::right  : direction = QBoxLayout::LeftToRight; break;
+        case preview_position::bottom:
+            direction = QBoxLayout::TopToBottom;
+            break;
+        case preview_position::right:
+            direction = QBoxLayout::LeftToRight;
+            break;
+        default:
+            return;
     }
     m_container->setDirection(direction);
 }
