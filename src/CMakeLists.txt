@@ -12,7 +12,7 @@ file(GLOB_RECURSE CORE_LIB_HDR ${CMAKE_SOURCE_DIR}/include/core/*.h)
 file(GLOB_RECURSE CORE_LIB_SRC ${CMAKE_SOURCE_DIR}/src/core/*.cpp)
 
 add_library(${CORE_LIB} SHARED ${CORE_LIB_HDR} ${CORE_LIB_HDR} ${CORE_LIB_SRC} ${CMAKE_BINARY_DIR}/hal_version.h)
-set_target_properties( PROPERTIES DEFINE_SYMBOL BUILDING_CORE)
+set_target_properties(PROPERTIES DEFINE_SYMBOL BUILDING_CORE)
 target_link_libraries(${CORE_LIB} ${CMAKE_DL_LIBS} std::filesystem)
 install(TARGETS ${CORE_LIB} LIBRARY DESTINATION ${LIBRARY_INSTALL_DIRECTORY} PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
@@ -41,89 +41,42 @@ if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
     add_sanitizers(${NETLIST_LIB})
 endif()
 
-    set(PYTHON_BINDING_LIB hal_py)
-    set(PYTHON_PLUGIN_LIB hal_python)
-    #Python support
-    set(Python_ADDITIONAL_VERSIONS 3.5 3.6)
-    find_package(PythonInterp 3.5 REQUIRED)
-    if(PythonInterp_FOUND)
-        message(STATUS "PYTHON_INCLUDE_DIRS: ${PYTHON_INCLUDE_DIRS}")
-        message(STATUS "PYTHON_LIBRARIES: ${PYTHON_LIBRARIES}")
-        message(STATUS "PYTHON_MODULE_PREFIX: ${PYTHON_MODULE_PREFIX}")
-        message(STATUS "PYTHON_MODULE_EXTENSION: ${PYTHON_MODULE_EXTENSION}")
-    elseif(NOT PythonInterp_FOUND)
-        set(Missing_package "TRUE")
-        if(APPLE AND CMAKE_HOST_APPLE)
-            message(STATUS "To install python3 on MacOS using homebrew run following command:")
-            message(STATUS "    brew install python3")
-        endif(APPLE AND CMAKE_HOST_APPLE)
-    endif(PythonInterp_FOUND)
+set(PYTHON_BINDING_LIB hal_py)
+set(PYTHON_PLUGIN_LIB hal_python)
 
-    include_directories(${include_directories}
-                        ${CMAKE_SOURCE_DIR}/include
-                        SYSTEM ${Boost_INCLUDE_DIR}
-                        SYSTEM ${PYBIND11_INCLUDE_DIR}
-                        SYSTEM ${PYTHON_INCLUDE_DIRS})
+include_directories(${include_directories}
+                    ${CMAKE_SOURCE_DIR}/include
+                    SYSTEM ${Boost_INCLUDE_DIR}
+                    SYSTEM ${PYBIND11_INCLUDE_DIR}
+                    SYSTEM ${PYTHON_INCLUDE_DIRS})
 
-    file(GLOB_RECURSE PYTHON_BINDING_LIB_SRC ${CMAKE_SOURCE_DIR}/src/python-binding/python_definitions.cpp)
+file(GLOB_RECURSE PYTHON_BINDING_LIB_SRC ${CMAKE_SOURCE_DIR}/src/python-binding/python_definitions.cpp)
 
-    add_library(${PYTHON_BINDING_LIB} SHARED ${PYTHON_BINDING_LIB_SRC})
-    #Set shared library suffix for MacOS; Used for boost_python support
-    set_target_properties(${PYTHON_BINDING_LIB} PROPERTIES PREFIX "")
-    if(APPLE AND CMAKE_HOST_APPLE)
-        set_target_properties(${PYTHON_BINDING_LIB} PROPERTIES SUFFIX ".so")
-    endif(APPLE AND CMAKE_HOST_APPLE)
-    target_link_libraries(${PYTHON_BINDING_LIB} ${LINK_LIBS} ${PYTHON_LIBRARIES} pybind11::module)
-    install(TARGETS ${PYTHON_BINDING_LIB} LIBRARY DESTINATION ${LIBRARY_INSTALL_DIRECTORY} PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE INCLUDES DESTINATION ${INCLUDE_INSTALL_DIRECTORY})
-    if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
-        add_sanitizers(${PYTHON_BINDING_LIB})
-    endif()
+add_library(${PYTHON_BINDING_LIB} SHARED ${PYTHON_BINDING_LIB_SRC})
+#Set shared library suffix for MacOS; Used for boost_python support
+set_target_properties(${PYTHON_BINDING_LIB} PROPERTIES PREFIX "")
+if(APPLE AND CMAKE_HOST_APPLE)
+    set_target_properties(${PYTHON_BINDING_LIB} PROPERTIES SUFFIX ".so")
+endif(APPLE AND CMAKE_HOST_APPLE)
+target_link_libraries(${PYTHON_BINDING_LIB} ${LINK_LIBS} ${PYTHON_LIBRARIES} pybind11::module)
+install(TARGETS ${PYTHON_BINDING_LIB} LIBRARY DESTINATION ${LIBRARY_INSTALL_DIRECTORY} PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE INCLUDES DESTINATION ${INCLUDE_INSTALL_DIRECTORY})
+if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
+    add_sanitizers(${PYTHON_BINDING_LIB})
+endif()
 
-    file(GLOB_RECURSE PYTHON_PLUGIN_LIB_HDR ${CMAKE_SOURCE_DIR}/include/python-binding/*.h)
-    file(GLOB_RECURSE PYTHON_PLUGIN_LIB_SRC ${CMAKE_SOURCE_DIR}/src/python-binding/factory_python_shell.cpp ${CMAKE_SOURCE_DIR}/src/python-binding/plugin_python_shell.cpp)
+file(GLOB_RECURSE PYTHON_PLUGIN_LIB_HDR ${CMAKE_SOURCE_DIR}/include/python-binding/*.h)
+file(GLOB_RECURSE PYTHON_PLUGIN_LIB_SRC ${CMAKE_SOURCE_DIR}/src/python-binding/factory_python_shell.cpp ${CMAKE_SOURCE_DIR}/src/python-binding/plugin_python_shell.cpp)
 
-    add_library(${PYTHON_PLUGIN_LIB} SHARED ${PYTHON_PLUGIN_LIB_HDR} ${PYTHON_PLUGIN_LIB_SRC})
-    set_target_properties(${PYTHON_PLUGIN_LIB} PROPERTIES DEFINE_SYMBOL API_PYTHON_PLUGIN)
-    target_link_libraries(${PYTHON_PLUGIN_LIB} ${LINK_LIBS} ${PYTHON_LIBRARIES})
-    install(TARGETS ${PYTHON_PLUGIN_LIB} LIBRARY DESTINATION ${LIBRARY_INSTALL_DIRECTORY} PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE INCLUDES DESTINATION ${INCLUDE_INSTALL_DIRECTORY})
-    if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
-        add_sanitizers(${PYTHON_PLUGIN_LIB})
-    endif()
+add_library(${PYTHON_PLUGIN_LIB} SHARED ${PYTHON_PLUGIN_LIB_HDR} ${PYTHON_PLUGIN_LIB_SRC})
+set_target_properties(${PYTHON_PLUGIN_LIB} PROPERTIES DEFINE_SYMBOL API_PYTHON_PLUGIN)
+target_link_libraries(${PYTHON_PLUGIN_LIB} ${LINK_LIBS} ${PYTHON_LIBRARIES})
+install(TARGETS ${PYTHON_PLUGIN_LIB} LIBRARY DESTINATION ${LIBRARY_INSTALL_DIRECTORY} PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE INCLUDES DESTINATION ${INCLUDE_INSTALL_DIRECTORY})
+if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
+    add_sanitizers(${PYTHON_PLUGIN_LIB})
+endif()
 
 if(WITH_GUI)
-    set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} ${QT5_CMAKE_PATH})
     set(GUI_NAME "hal_gui")
-
-    # We require qt5 widgets
-    find_package(Qt5Widgets)
-    if(Qt5Widgets_FOUND)
-        message(STATUS "Qt5Widgets_INCLUDE_DIRS: ${Qt5Widgets_INCLUDE_DIRS}")
-        message(STATUS "Qt5Widgets_LIBRARIES: ${Qt5Widgets_LIBRARIES}")
-    elseif(NOT Qt5Widgets_FOUND)
-        set(Missing_package "TRUE")
-        if(APPLE AND CMAKE_HOST_APPLE)
-            message(STATUS "To install qt5 on MacOS using homebrew run following command:")
-            message(STATUS "    brew install qt")
-        endif(APPLE AND CMAKE_HOST_APPLE)
-    endif(Qt5Widgets_FOUND)
-    find_package(Qt5Concurrent)
-    if(Qt5Concurrent_FOUND)
-        message(STATUS "Qt5Concurrent_INCLUDE_DIRS: ${Qt5Concurrent_INCLUDE_DIRS}")
-        message(STATUS "Qt5Concurrent_LIBRARIES: ${Qt5Concurrent_LIBRARIES}")
-    elseif(NOT Qt5Concurrent_FOUND)
-        set(Missing_package "TRUE")
-        if(APPLE AND CMAKE_HOST_APPLE)
-            message(STATUS "To install qt5 on MacOS using homebrew run following command:")
-            message(STATUS "    brew install qt5")
-        endif(APPLE AND CMAKE_HOST_APPLE)
-    endif(Qt5Concurrent_FOUND)
-    find_package(Qt5Svg)
-    if(Qt5Svg_FOUND)
-        message(STATUS "Qt5Svg_INCLUDE_DIRS: ${Qt5Svg_INCLUDE_DIRS}")
-        message(STATUS "Qt5Svg_LIBRARIES: ${Qt5Svg_LIBRARIES}")
-    elseif(NOT Qt5Svg_FOUND)
-        set(Missing_package "TRUE")
-    endif(Qt5Svg_FOUND)
 
     set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -136,6 +89,7 @@ if(WITH_GUI)
                         ${CMAKE_SOURCE_DIR}/include
                         SYSTEM ${INCROOT}
                         )
+
 
     file(GLOB_RECURSE HDR ${INCROOT}/*.h)
     file(GLOB_RECURSE SRC ${SRCROOT}/*.cpp)
