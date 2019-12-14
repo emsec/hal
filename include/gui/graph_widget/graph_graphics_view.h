@@ -105,7 +105,7 @@ private:
 
     #ifdef GUI_DEBUG_GRID
     void debug_show_layouter_gridpos(const QPoint& mouse_pos);
-    void debug_draw_layouter_gridpos(QPainter* painter, const QRectF& rect);
+    void debug_draw_layouter_gridpos(QPainter* painter);
     QPoint m_debug_gridpos = QPoint(0,0);
     bool m_debug_gridpos_enable;
     #endif
@@ -121,8 +121,12 @@ private:
     graph_widget_constants::grid_type m_grid_type;
 
     QPoint m_drag_mousedown_position;
-    //QPoint m_drag_cursor_offset;
+    QPoint m_drag_start_gridpos;
     graphics_gate* m_drag_item;
+    QPoint m_drag_current_gridpos;
+    bool m_drag_current_modifier;
+    bool m_drop_allowed;
+
     Qt::KeyboardModifier m_drag_modifier;
 
     QPoint m_move_position;

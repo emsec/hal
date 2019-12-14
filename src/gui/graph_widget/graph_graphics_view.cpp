@@ -231,7 +231,7 @@ void graph_graphics_view::drawForeground(QPainter* painter, const QRectF& rect)
 
     #ifdef GUI_DEBUG_GRID
     if (m_debug_gridpos_enable)
-        debug_draw_layouter_gridpos(painter, rect);
+        debug_draw_layouter_gridpos(painter);
     #endif
 
     if (!m_minimap_enabled)
@@ -243,7 +243,7 @@ void graph_graphics_view::drawForeground(QPainter* painter, const QRectF& rect)
 }
 
 #ifdef GUI_DEBUG_GRID
-void graph_graphics_view::debug_draw_layouter_gridpos(QPainter* painter, const QRectF& rect)
+void graph_graphics_view::debug_draw_layouter_gridpos(QPainter* painter)
 {
     painter->resetTransform();
     painter->setPen(QPen(Qt::magenta));
@@ -266,7 +266,7 @@ void graph_graphics_view::mousePressEvent(QMouseEvent* event)
         {
             m_drag_item               = static_cast<graphics_gate*>(item);
             m_drag_mousedown_position = event->pos();
-            //m_drag_cursor_offset    = m_drag_mousedown_position - mapFromScene(item->pos());
+            m_drag_start_gridpos      = closest_layouter_pos(mapToScene(m_drag_mousedown_position))[0];
         }
         else
         {
@@ -335,7 +335,7 @@ void graph_graphics_view::dragEnterEvent(QDragEnterEvent* event)
         event->acceptProposedAction();
         QSizeF size(m_drag_item->width(), m_drag_item->height());
         QPointF mouse = event->posF();
-        QPointF pos   = mapToScene(mouse.x(), mouse.y());// - m_drag_cursor_offset;
+        QPointF snap  = closest_layouter_pos(mapToScene(mouse.x(), mouse.y()))[1];
         if (g_selection_relay.m_selected_gates.size() > 1)
         {
             // if we are in multi-select mode, reduce the selection to the
@@ -347,7 +347,7 @@ void graph_graphics_view::dragEnterEvent(QDragEnterEvent* event)
             g_selection_relay.m_subfocus   = selection_relay::subfocus::none;
             g_selection_relay.relay_selection_changed(nullptr);
         }
-        static_cast<graphics_scene*>(scene())->start_drag_shadow(pos, size, m_drag_item);
+        static_cast<graphics_scene*>(scene())->start_drag_shadow(snap, size, drag_shadow_gate::drag_cue::rejected);
     }
     else
     {
@@ -365,16 +365,45 @@ void graph_graphics_view::dragMoveEvent(QDragMoveEvent* event)
 {
     if (event->source() == this && event->proposedAction() == Qt::MoveAction)
     {
-        QPoint mouse         = event->pos();
-        bool modifierPressed = event->keyboardModifiers() == m_drag_modifier;
-        QPoint shadow        = mouse ;//- m_drag_cursor_offset;
-        QVector<QPoint> snap = closest_layouter_pos(mapToScene(shadow.x(), shadow.y()));
+        bool swapModifier    = event->keyboardModifiers() == m_drag_modifier;
+        QVector<QPoint> snap = closest_layouter_pos(mapToScene(event->pos()));
 
-        #ifdef GUI_DEBUG_GRID
-        qDebug() << snap;
-        #endif
+        if (snap[0] == m_drag_current_gridpos && swapModifier == m_drag_current_modifier)
+        {
+            return;
+        }
+        m_drag_current_gridpos  = snap[0];
+        m_drag_current_modifier = swapModifier;
+
+        auto context = m_graph_widget->get_context();
+        graph_layouter* layouter = context->debug_get_layouter();
+        assert(layouter->done()); // ensure grid stable
+        QMap<QPoint, hal::node>::const_iterator node_iter = layouter->position_to_node_map().find(snap[0]);
+
+        drag_shadow_gate::drag_cue cue = drag_shadow_gate::drag_cue::rejected;
+        // disallow dropping an item on itself
+        if (snap[0] != m_drag_start_gridpos)
+        {
+            if (swapModifier)
+            {
+                if (node_iter != layouter->position_to_node_map().end())
+                {
+                    // allow move only on empty cells
+                    cue = drag_shadow_gate::drag_cue::swappable;
+                }
+            }
+            else
+            {
+                if (node_iter == layouter->position_to_node_map().end())
+                {
+                    // allow move only on empty cells
+                    cue = drag_shadow_gate::drag_cue::movable;
+                }
+            }
+        }
+        m_drop_allowed = (cue != drag_shadow_gate::drag_cue::rejected);
         
-        static_cast<graphics_scene*>(scene())->move_drag_shadow(snap[1], modifierPressed ? graphics_scene::drag_mode::swap : graphics_scene::drag_mode::move);
+        static_cast<graphics_scene*>(scene())->move_drag_shadow(snap[1], cue);
     }
 }
 
@@ -384,8 +413,8 @@ void graph_graphics_view::dropEvent(QDropEvent* event)
     {
         event->acceptProposedAction();
         graphics_scene* s = static_cast<graphics_scene*>(scene());
-        bool success      = s->stop_drag_shadow();
-        if (success)
+        s->stop_drag_shadow();
+        if (m_drop_allowed)
         {
             auto context = m_graph_widget->get_context();
             graph_layouter* layouter = context->debug_get_layouter();
@@ -396,11 +425,7 @@ void graph_graphics_view::dropEvent(QDropEvent* event)
             QPoint targetLayouterPos = closest_layouter_pos(targetPos)[0];
             QPoint sourceLayouterPos = closest_layouter_pos(m_drag_item->pos())[0];
 
-            if (targetLayouterPos == sourceLayouterPos)
-            {
-                // Cancel if an item is dropped onto itself
-                return;
-            }
+            assert(targetLayouterPos != sourceLayouterPos);
 
             bool modifierPressed = event->keyboardModifiers() == m_drag_modifier;
             if (modifierPressed)

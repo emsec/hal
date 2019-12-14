@@ -29,10 +29,6 @@ class graphics_scene : public QGraphicsScene
     Q_OBJECT
 
 public:
-    enum class drag_mode {
-        move,
-        swap
-    };
 
     static void set_lod(const qreal& lod);
     static void set_grid_enabled(const bool& value);
@@ -44,13 +40,13 @@ public:
     static void set_grid_base_dot_color(const QColor& color);
     static void set_grid_cluster_dot_color(const QColor& color);
 
-    static QPointF snap_to_grid(const QPointF& pos);
+    static QPointF snap_to_grid(const QPointF& pos) Q_DECL_DEPRECATED;
 
     graphics_scene(QObject* parent = nullptr);
 
-    void start_drag_shadow(const QPointF& posF, const QSizeF& sizeF, graphics_item* sourceItem);
-    void move_drag_shadow(const QPointF& posF, const drag_mode mode);
-    bool stop_drag_shadow();
+    void start_drag_shadow(const QPointF& posF, const QSizeF& sizeF, const drag_shadow_gate::drag_cue cue);
+    void move_drag_shadow(const QPointF& posF, const drag_shadow_gate::drag_cue cue);
+    void stop_drag_shadow();
     QPointF drop_target();
 
     void add_item(graphics_item* item);
@@ -125,7 +121,6 @@ private:
     void drawBackground(QPainter* painter, const QRectF& rect) Q_DECL_OVERRIDE;
 
     drag_shadow_gate* m_drag_shadow_gate;
-    graphics_item* m_drag_source_item;
     
     QVector<module_data> m_module_items;
     QVector<gate_data> m_gate_items;
