@@ -364,8 +364,8 @@ bool hdl_parser_verilog::parse_assign(entity& e)
     auto right_str = m_token_stream.extract_until(";", token_stream::END_OF_STREAM, true, true);
     m_token_stream.consume(";", true);
 
-    auto left_parts  = get_assignment_signals(left_str, e);
-    auto right_parts = get_assignment_signals(right_str, e);
+    auto left_parts  = get_assignment_signals(left_str, e, false);
+    auto right_parts = get_assignment_signals(right_str, e, false);
 
     if (left_parts.empty() || right_parts.empty())
     {
@@ -436,15 +436,15 @@ bool hdl_parser_verilog::parse_instance(entity& e)
     {
         port_str.consume(".", true);
 
-        auto generic_lhs = port_str.extract_until("(", token_stream::END_OF_STREAM, true, true);
+        auto port_lhs = port_str.extract_until("(", token_stream::END_OF_STREAM, true, true);
 
         port_str.consume("(", true);
 
-        auto generic_rhs = port_str.extract_until(")", token_stream::END_OF_STREAM, true, true);
+        auto port_rhs = port_str.extract_until(")", token_stream::END_OF_STREAM, true, true);
 
         port_str.consume(")", true);
 
-        inst.port_streams.emplace_back(generic_lhs, generic_rhs);
+        inst.port_streams.emplace_back(port_lhs, port_rhs);
 
         port_str.consume(",", port_str.remaining() > 0);
     }
@@ -477,7 +477,7 @@ bool hdl_parser_verilog::connect_instances()
                 auto port_line = port.first.peek().number;
 
                 auto port_lhs = get_port_signals(port.first, inst.type);
-                auto port_rhs = get_assignment_signals(port.second, e);
+                auto port_rhs = get_assignment_signals(port.second, e, true);
 
                 if (port_lhs.empty() || port_rhs.empty())
                 {
@@ -1168,7 +1168,7 @@ std::unordered_map<std::string, std::vector<std::string>> hdl_parser_verilog::ge
     return result;
 }
 
-std::vector<std::string> hdl_parser_verilog::get_assignment_signals(token_stream& signal_str, entity& e)
+std::vector<std::string> hdl_parser_verilog::get_assignment_signals(token_stream& signal_str, entity& e, bool allow_numerics)
 {
     // PARSE ASSIGNMENT
     //   assignment can currently be one of the following:
@@ -1210,6 +1210,13 @@ std::vector<std::string> hdl_parser_verilog::get_assignment_signals(token_stream
         // (3) NUMBER
         if (isdigit(signal_name[0]) || signal_name[0] == '\'')
         {
+            if (!allow_numerics)
+            {
+                log_error("hdl_parser", "direct assignment of numeric values is not currently supported near line {}", stream_backup.peek().number);
+
+                return {};
+            }
+
             for (auto bit : get_number_from_literal(signal_name, 2))
             {
                 result.push_back("'" + std::to_string(bit - 48) + "'");

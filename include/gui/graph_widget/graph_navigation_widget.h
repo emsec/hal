@@ -19,7 +19,7 @@ public:
     void setup();
     void setup(std::shared_ptr<net> via_net);
     void hide_when_focus_lost(bool hide);
-    void focusOutEvent(QFocusEvent *event);
+    void focusOutEvent(QFocusEvent *event) override;
 
 Q_SIGNALS:
     void navigation_requested(const u32 via_net, const u32 to_gate);

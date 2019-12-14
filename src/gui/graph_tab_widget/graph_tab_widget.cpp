@@ -10,7 +10,7 @@
 
 #include <QDebug>
 
-graph_tab_widget::graph_tab_widget(QWidget* parent) : content_widget("Graph-Views", parent), m_layout(new QVBoxLayout()), m_tab_widget(new QTabWidget())
+graph_tab_widget::graph_tab_widget(QWidget* parent) : content_widget("Graph-Views", parent), m_tab_widget(new QTabWidget()), m_layout(new QVBoxLayout())
 {
     m_content_layout->addWidget(m_tab_widget);
     m_tab_widget->setTabsClosable(true);

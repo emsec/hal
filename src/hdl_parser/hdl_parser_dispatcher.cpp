@@ -18,7 +18,6 @@ namespace hdl_parser_dispatcher
     {
         program_options description;
         description.add("--parser", "use a specific parser (optional, normally determined by file name extension)", {program_options::REQUIRED_PARAM});
-        description.add("--gate-library", "used gate-library", {program_options::REQUIRED_PARAM});
         return description;
     }
 

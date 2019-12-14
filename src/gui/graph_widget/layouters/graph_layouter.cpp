@@ -11,6 +11,7 @@
 #include "gui/graph_widget/items/separated_graphics_net.h"
 #include "gui/graph_widget/items/standard_graphics_net.h"
 #include "gui/gui_globals.h"
+#include "gui/implementations/qpoint_extension.h"
 
 #include "qmath.h"
 
@@ -24,18 +25,6 @@ static void store_max(QMap<T1, T2>& map, T1 key, T2 value)
     map.insert(key, value);
 }
 
-static bool operator< (const QPoint& p1, const QPoint& p2)
-{
-    if (p1.x() < p2.x())
-        return true;
-    else if (p2.x() < p1.x())
-        return false;
-    else if (p1.y() < p2.y())
-        return true;
-    else
-        return false;
-}
-
 const static qreal lane_spacing             = 10;
 const static qreal junction_padding         = 10;
 const static qreal h_road_padding           = 10;
@@ -44,11 +33,8 @@ const static qreal minimum_v_channel_width  = 20;
 const static qreal minimum_h_channel_height = 20;
 const static qreal minimum_gate_io_padding  = 40;
 
-graph_layouter::graph_layouter(const graph_context* const context, QObject* parent) : QObject(parent),
-    m_scene(new graphics_scene(this)),
-    m_context(context), m_done(false)
+graph_layouter::graph_layouter(const graph_context* const context, QObject* parent) : QObject(parent), m_scene(new graphics_scene(this)), m_context(context), m_done(false)
 {
-
 }
 
 graphics_scene* graph_layouter::scene() const
@@ -216,7 +202,7 @@ void graph_layouter::clear_layout_data()
     m_x_values.clear();
     m_y_values.clear();
 
-    m_max_node_width = 0;
+    m_max_node_width  = 0;
     m_max_node_height = 0;
 }
 
@@ -257,7 +243,7 @@ void graph_layouter::calculate_nets()
                 break;
             }
 
-        if (!src_box) // ???
+        if (!src_box)    // ???
             continue;
 
         used_paths used;
@@ -278,7 +264,7 @@ void graph_layouter::calculate_nets()
                     break;
                 }
 
-            if (!dst_box) // ???
+            if (!dst_box)    // ???
                 continue;
 
             // ROAD BASED DISTANCE (x_distance - 1)
@@ -575,7 +561,7 @@ void graph_layouter::reset_roads_and_junctions()
     {
         // LEFT
         unsigned int combined_lane_changes = j->close_left_lane_changes + j->far_left_lane_changes;
-        qreal spacing = 0;
+        qreal spacing                      = 0;
 
         if (combined_lane_changes)
             spacing = (combined_lane_changes - 1) * lane_spacing + junction_padding;
@@ -584,7 +570,7 @@ void graph_layouter::reset_roads_and_junctions()
 
         // RIGHT
         combined_lane_changes = j->close_right_lane_changes + j->far_right_lane_changes;
-        spacing = 0;
+        spacing               = 0;
 
         if (combined_lane_changes)
             spacing = (combined_lane_changes - 1) * lane_spacing + junction_padding;
@@ -593,7 +579,7 @@ void graph_layouter::reset_roads_and_junctions()
 
         // TOP
         combined_lane_changes = j->close_top_lane_changes + j->far_top_lane_changes;
-        spacing = 0;
+        spacing               = 0;
 
         if (combined_lane_changes)
             spacing = (combined_lane_changes - 1) * lane_spacing + junction_padding;
@@ -602,7 +588,7 @@ void graph_layouter::reset_roads_and_junctions()
 
         // BOTTOM
         combined_lane_changes = j->close_bottom_lane_changes + j->far_bottom_lane_changes;
-        spacing = 0;
+        spacing               = 0;
 
         if (combined_lane_changes)
             spacing = (combined_lane_changes - 1) * lane_spacing + junction_padding;
@@ -836,20 +822,20 @@ void graph_layouter::draw_nets()
         // HANDLE NORMAL NETS
         // FIND SRC BOX
         node_box* src_box = nullptr;
+        {
+            hal::node node;
 
-        hal::node node;
+            if (!m_context->node_for_gate(node, n->get_src().get_gate()->get_id()))
+                continue;
 
-        if (!m_context->node_for_gate(node, n->get_src().get_gate()->get_id()))
-            continue;
-
-        for (node_box& box : m_boxes)
-            if (box.node == node)
-            {
-                src_box = &box;
-                break;
-            }
-
-        if (!src_box) // ???
+            for (node_box& box : m_boxes)
+                if (box.node == node)
+                {
+                    src_box = &box;
+                    break;
+                }
+        }
+        if (!src_box)    // ???
             continue;
 
         used_paths used;
@@ -877,7 +863,7 @@ void graph_layouter::draw_nets()
                     break;
                 }
 
-            if (!dst_box) // ???
+            if (!dst_box)    // ???
                 continue;
 
             QPointF dst_pin_position = dst_box->item->get_input_scene_position(n->get_id(), QString::fromStdString(dst.pin_type));
@@ -1015,15 +1001,17 @@ void graph_layouter::draw_nets()
 
             if (x_distance)
             {
-                qreal y = scene_y_for_h_channel_lane(initial_junction->y, initial_junction->h_lanes);
+                {
+                    qreal y = scene_y_for_h_channel_lane(initial_junction->y, initial_junction->h_lanes);
 
-                if (current_position.y() < y)
-                    lines.v_lines.append(standard_graphics_net::v_line{current_position.x(), current_position.y(), y});
-                else
-                    lines.v_lines.append(standard_graphics_net::v_line{current_position.x(), y, current_position.y()});
+                    if (current_position.y() < y)
+                        lines.v_lines.append(standard_graphics_net::v_line{current_position.x(), current_position.y(), y});
+                    else
+                        lines.v_lines.append(standard_graphics_net::v_line{current_position.x(), y, current_position.y()});
 
-                current_position.setY(y);
-                used.h_junctions.insert(initial_junction);
+                    current_position.setY(y);
+                    used.h_junctions.insert(initial_junction);
+                }
 
                 int remaining_x_distance = x_distance;
 

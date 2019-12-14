@@ -67,9 +67,9 @@ void graph_layout_progress_widget::stop()
     m_animation_group->stop();
 }
 
-void graph_layout_progress_widget::set_direction(const direction direction)
+void graph_layout_progress_widget::set_direction(const direction d)
 {
-    m_direction = direction;
+    m_direction = d;
 }
 
 int graph_layout_progress_widget::arrow_offset() const

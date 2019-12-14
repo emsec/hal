@@ -65,13 +65,6 @@ public:
 
     void initialize() override;
 };
-
-// suppress warning about incomplete type "shared_ptr" for C
-// required so that "get_plugin_instance" can be found by name in the dynamic library
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wreturn-type-c-linkage"
-extern "C" PLUGIN_API std::shared_ptr<i_base> get_plugin_instance();
-#pragma GCC diagnostic pop
 """
 
 #################################################################

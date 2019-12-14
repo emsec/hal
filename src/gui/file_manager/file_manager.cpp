@@ -6,6 +6,7 @@
 #include "netlist/netlist.h"
 #include "netlist/netlist_factory.h"
 #include "netlist/persistent/netlist_serializer.h"
+#include "netlist/event_system/event_controls.h"
 
 #include "gui/gui_globals.h"
 
@@ -216,7 +217,9 @@ void file_manager::open_file(QString file_name)
 
     if (file_name.endsWith(".hal"))
     {
+        event_controls::enable_all(false);
         std::shared_ptr<netlist> netlist = netlist_factory::load_netlist(file_name.toStdString());
+        event_controls::enable_all(true);
         if (netlist)
         {
             g_netlist = netlist;
@@ -253,7 +256,9 @@ void file_manager::open_file(QString file_name)
         std::string lib = key.first;
 
         log_info("gui", "Trying to use gate library '{}'...", lib);
+        event_controls::enable_all(false);
         std::shared_ptr<netlist> netlist = netlist_factory::load_netlist(file_name.toStdString(), language.toStdString(), lib);
+        event_controls::enable_all(true);
 
         if (netlist)
         {
@@ -340,6 +345,7 @@ void file_manager::handle_directory_changed(const QString& path)
 
 void file_manager::handle_global_setting_changed(void* sender, const QString& key, const QVariant& value)
 {
+    Q_UNUSED(sender);
     if (key == "advanced/autosave")
     {
         m_autosave_enabled = value.toBool();

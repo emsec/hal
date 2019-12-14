@@ -75,9 +75,8 @@ public:
      * Variable name must not be empty.
      *
      * @param[in] variable_name - Name of the variable.
-     * @param[in] invert_result - True to invert the variable.
      */
-    boolean_function(const std::string& variable_name, bool invert_result = false);
+    boolean_function(const std::string& variable_name);
 
     /**
      * Constructor for a constant, usable in other functions.

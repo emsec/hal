@@ -12,6 +12,8 @@ module_relay::module_relay(QObject* parent) : QObject(parent),
 
 void module_relay::set_module_color(const u32 id, const QColor& color)
 {
+    Q_UNUSED(id);
+    Q_UNUSED(color);
 //    if (!m_module_extensions.contains(id))
 //        return;
 
@@ -23,6 +25,8 @@ void module_relay::set_module_color(const u32 id, const QColor& color)
 
 void module_relay::set_module_compressed(const u32 id, const bool compressed)
 {
+    Q_UNUSED(id);
+    Q_UNUSED(compressed);
 //    if (!m_module_extensions.contains(id))
 //        return;
 
@@ -34,6 +38,8 @@ void module_relay::set_module_compressed(const u32 id, const bool compressed)
 
 void module_relay::set_module_hidden(const u32 id, const bool hidden)
 {
+    Q_UNUSED(id);
+    Q_UNUSED(hidden);
 //    if (!m_module_extensions.contains(id))
 //        return;
 
@@ -45,6 +51,7 @@ void module_relay::set_module_hidden(const u32 id, const bool hidden)
 
 void module_relay::handle_module_event(module_event_handler::event ev, std::shared_ptr<module> object, u32 associated_data)
 {
+    Q_UNUSED(associated_data);
     switch (ev)
     {
     case module_event_handler::event::created:

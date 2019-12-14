@@ -57,8 +57,7 @@ std::map<int, std::set<std::shared_ptr<gate>>> plugin_graph_algorithm::get_commu
     }
 
     // map back to HAL structures
-    int vertices_num                                              = (int)igraph_vcount(&graph);
-    std::map<int, std::set<std::shared_ptr<gate>>> community_sets = get_memberships_for_hal(graph, membership, vertex_to_gate);
+    auto community_sets = get_memberships_for_hal(graph, membership, vertex_to_gate);
 
     igraph_destroy(&graph);
     igraph_vector_destroy(&membership);

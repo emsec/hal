@@ -139,7 +139,7 @@ void graphics_scene::move_drag_shadow(const QPointF& posF, const drag_mode mode)
     // the view, not the scene
     m_drag_shadow_gate->setPos(posF);
     auto colliding = m_drag_shadow_gate->collidingItems();
-    bool placeable;
+    bool placeable = false;
     switch (mode)
     {
         case drag_mode::move: {
@@ -189,7 +189,7 @@ void graphics_scene::move_drag_shadow(const QPointF& posF, const drag_mode mode)
             break;
         }
     }
-    
+
     m_drag_shadow_gate->set_fits(placeable);
 }
 
@@ -386,8 +386,6 @@ void graphics_scene::connect_all()
 
     connect(&g_selection_relay, &selection_relay::selection_changed, this, &graphics_scene::handle_extern_selection_changed);
     connect(&g_selection_relay, &selection_relay::subfocus_changed, this, &graphics_scene::handle_extern_subfocus_changed);
-    connect(&g_netlist_relay, &netlist_relay::gate_name_changed, this, &graphics_scene::handle_gate_name_changed);
-    connect(&g_netlist_relay, &netlist_relay::module_name_changed, this, &graphics_scene::handle_module_name_changed);
 }
 
 void graphics_scene::disconnect_all()
@@ -398,9 +396,6 @@ void graphics_scene::disconnect_all()
 
     disconnect(&g_selection_relay, &selection_relay::selection_changed, this, &graphics_scene::handle_extern_selection_changed);
     disconnect(&g_selection_relay, &selection_relay::subfocus_changed, this, &graphics_scene::handle_extern_subfocus_changed);
-    disconnect(&g_netlist_relay, &netlist_relay::gate_name_changed, this, &graphics_scene::handle_gate_name_changed);
-    disconnect(&g_netlist_relay, &netlist_relay::module_name_changed, this, &graphics_scene::handle_module_name_changed);
-
 }
 
 void graphics_scene::delete_all_items()
@@ -562,35 +557,6 @@ void graphics_scene::handle_extern_subfocus_changed(void* sender)
     Q_UNUSED(sender)
 
     //update_utility_items();
-}
-
-void graphics_scene::handle_gate_name_changed(std::shared_ptr<gate> g)
-{
-    const u32 id = g->get_id();
-    std::string name = g->get_name();
-    for (auto& gate : m_gate_items)
-    {
-        if (gate.id == id)
-        {
-            gate.item->set_name(QString::fromStdString(name));
-            break;
-        }
-    }
-}
-
-void graphics_scene::handle_module_name_changed(std::shared_ptr<module> m)
-{
-    const u32 id = m->get_id();
-    std::string name = m->get_name();
-    for(auto& module : m_module_items)
-    {
-        if(module.id == id)
-        {
-            module.item->set_name(QString::fromStdString(name));
-            break;
-        }
-    }
-
 }
 
 void graphics_scene::mousePressEvent(QGraphicsSceneMouseEvent* event)

@@ -1,5 +1,5 @@
 #include "settings/settings_relay.h"
- #include <QDebug> 
+ #include <QDebug>
 
 settings_relay::settings_relay(QObject* parent) : QObject(parent)
 {
@@ -9,6 +9,7 @@ settings_relay::settings_relay(QObject* parent) : QObject(parent)
 
 void settings_relay::debug(void* sender, const QString& key, const QVariant& val)
 {
+    Q_UNUSED(sender);
     qDebug() << "Setting updated: " << key << " = " << val;
 }
 

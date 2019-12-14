@@ -14,6 +14,8 @@
 
 net_details_widget::net_details_widget(QWidget* parent) : QWidget(parent)
 {
+    m_current_id = 0;
+
     m_content_layout = new QVBoxLayout(this);
     m_content_layout->setContentsMargins(0, 0, 0, 0);
     m_content_layout->setSpacing(0);
@@ -156,6 +158,9 @@ net_details_widget::~net_details_widget()
 void net_details_widget::update(u32 net_id)
 {
     m_current_id = net_id;
+
+    if (m_current_id == 0)
+        return;
 
     auto n = g_netlist->get_net_by_id(net_id);
 
@@ -343,6 +348,9 @@ void net_details_widget::handle_net_dst_removed(const std::shared_ptr<net> n, co
 void net_details_widget::handle_gate_name_changed(const std::shared_ptr<gate> g)
 {
     Q_UNUSED(g)
+
+    if (m_current_id == 0)
+        return;
 
     bool update_needed = false;
 

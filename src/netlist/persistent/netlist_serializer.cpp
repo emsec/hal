@@ -136,7 +136,7 @@ namespace netlist_serializer
             }
             {
                 rapidjson::Value gates(rapidjson::kArrayType);
-                auto to_sort = m->get_gates(DONT_CARE, DONT_CARE, false);
+                auto to_sort = m->get_gates(nullptr, false);
                 std::vector<std::shared_ptr<gate>> sorted(to_sort.begin(), to_sort.end());
                 std::sort(sorted.begin(), sorted.end(), [](const std::shared_ptr<gate>& lhs, const std::shared_ptr<gate>& rhs) { return lhs->get_id() < rhs->get_id(); });
                 for (const auto& g : sorted)

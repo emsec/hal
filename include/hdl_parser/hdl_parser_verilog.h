@@ -112,7 +112,7 @@ private:
     void remove_comments(std::string& line, bool& multi_line_comment, bool& multi_line_property);
     void expand_signal(std::vector<std::string>& expanded_signal, std::string current_signal, std::vector<std::pair<i32, i32>> bounds, u32 dimension);
     std::unordered_map<std::string, std::vector<std::string>> get_expanded_signals(token_stream& signal_str);
-    std::vector<std::string> get_assignment_signals(token_stream& signal_str, entity& e);
+    std::vector<std::string> get_assignment_signals(token_stream& signal_str, entity& e, bool allow_numerics);
     std::vector<std::string> get_port_signals(token_stream& port_str, const std::string& instance_type);
     std::string get_number_from_literal(const std::string& v, const u32 base);
     std::string get_unique_alias(const std::string& name);

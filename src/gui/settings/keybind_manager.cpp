@@ -58,6 +58,7 @@ QShortcut* keybind_manager::make_shortcut(QWidget* parent, const QString& key)
 
 void keybind_manager::handle_global_setting_changed(void* sender, const QString& key, const QVariant& value)
 {
+    Q_UNUSED(sender);
     QKeySequence seq = value.toString();
     QList<hal_action*> affected_actions = m_bindings_actions.values(key);
     for (hal_action* a : affected_actions)
