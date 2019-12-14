@@ -20,6 +20,7 @@
 #include "gui/graph_widget/items/utility_items/drag_shadow_gate.h"
 #include "gui/gui_globals.h"
 #include "gui/gui_utils/netlist.h"
+#include "gui/implementations/qpoint_extension.h"
 
 #include <algorithm>
 
@@ -413,31 +414,12 @@ void graph_graphics_view::dropEvent(QDropEvent* event)
 
                 QPoint sourceLayouterPos = closest_layouter_pos(m_drag_item->pos())[0];
                 
-                // FIXME compile error
-                //hal::node node = layouter->position_to_node_map().value(sourceLayouterPos);
-
-                // so we're forced to do slow hacky linear search
-                // FIXME get rid of this
-                QMap<QPoint, hal::node>::const_iterator iter = layouter->position_to_node_map().constBegin();
-                hal::node node;
-                bool found = false;
-                while (iter != layouter->position_to_node_map().constEnd())
-                {
-                    if (iter.key() == sourceLayouterPos)
-                    {
-                        node = iter.value();
-                        found = true;
-                        break;
-                    }
-                    ++iter;
-                }
-                assert(found);
-
+                hal::node node = layouter->position_to_node_map().value(sourceLayouterPos);
                 // TODO check that value exists
+
                 layouter->set_node_position(node, targetLayouterPos);
             }
             layouter->layout();
-            // TODO: Once available, trigger a re-layout of all nets here
         }
     }
     else
