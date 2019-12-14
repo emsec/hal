@@ -181,7 +181,6 @@ void graphics_scene::move_drag_shadow(const QPointF& posF, const drag_mode mode)
                     if(distance < graph_widget_constants::drag_swap_sensitivity_distance)
                     {
                         placeable = true;
-                        m_drop_target_item = graphicsItem;
                         break;
                     }
                 }
@@ -202,11 +201,6 @@ bool graphics_scene::stop_drag_shadow()
 QPointF graphics_scene::drop_target()
 {
     return m_drag_shadow_gate->pos();
-}
-
-graphics_item* graphics_scene::drop_target_item() const
-{
-    return m_drop_target_item;
 }
 
 void graphics_scene::add_item(graphics_item* item)

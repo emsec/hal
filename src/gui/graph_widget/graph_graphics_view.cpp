@@ -391,34 +391,36 @@ void graph_graphics_view::dropEvent(QDropEvent* event)
             graph_layouter* layouter = context->debug_get_layouter();
             assert(layouter->done()); // ensure grid stable
 
+            // convert scene coordinates into layouter grid coordinates
+            QPointF targetPos = s->drop_target();
+            QPoint targetLayouterPos = closest_layouter_pos(targetPos)[0];
+            QPoint sourceLayouterPos = closest_layouter_pos(m_drag_item->pos())[0];
+
+            if (targetLayouterPos == sourceLayouterPos)
+            {
+                // Cancel if an item is dropped onto itself
+                return;
+            }
+
             bool modifierPressed = event->keyboardModifiers() == m_drag_modifier;
-            // TODO refactor
             if (modifierPressed)
             {
-                // TODO rewrite this for the relayout mechanism
                 // swap mode; swap gates
-                QPointF targetPos = s->drop_target_item()->pos();
-                s->drop_target_item()->setPos(m_drag_item->pos());
-                m_drag_item->setPos(targetPos);
+                
+                hal::node nodeFrom = layouter->position_to_node_map().value(sourceLayouterPos);
+                hal::node nodeTo = layouter->position_to_node_map().value(targetLayouterPos);
+                // TODO check that values exist
+                layouter->swap_node_positions(nodeFrom, nodeTo);
             }
             else
             {
                 // move mode; move gate to the selected location
-                QPointF targetPos = s->drop_target();
-
-                QVector<QPoint> target = closest_layouter_pos(targetPos);
-                QPoint targetLayouterPos = target[0];
-                #ifdef GUI_DEBUG_GRID
-                qDebug() << "target" << target;
-                #endif
-
-                QPoint sourceLayouterPos = closest_layouter_pos(m_drag_item->pos())[0];
                 
-                hal::node node = layouter->position_to_node_map().value(sourceLayouterPos);
+                hal::node nodeTo = layouter->position_to_node_map().value(sourceLayouterPos);
                 // TODO check that value exists
-
-                layouter->set_node_position(node, targetLayouterPos);
+                layouter->set_node_position(nodeTo, targetLayouterPos);
             }
+            // re-layout the nets
             layouter->layout();
         }
     }

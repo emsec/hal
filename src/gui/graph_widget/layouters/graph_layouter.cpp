@@ -66,6 +66,21 @@ void graph_layouter::set_node_position(const hal::node& n, const QPoint& p)
     //manual relayout call needed
 }
 
+void graph_layouter::swap_node_positions(const hal::node& n1, const hal::node& n2)
+{
+    assert(m_node_to_position_map.contains(n1));
+    assert(m_node_to_position_map.contains(n2));
+
+    QPoint p1 = m_node_to_position_map.value(n1);
+    QPoint p2 = m_node_to_position_map.value(n2);
+
+    m_node_to_position_map.insert(n1, p2); // implicit replace
+    m_node_to_position_map.insert(n2, p1);
+
+    m_position_to_node_map.insert(p1, n2);
+    m_position_to_node_map.insert(p2, n1);
+}
+
 void graph_layouter::remove_node_from_maps(const hal::node& n)
 {
     if (m_node_to_position_map.contains(n))

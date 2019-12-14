@@ -160,6 +160,7 @@ public:
     const QMap<QPoint, hal::node> position_to_node_map() const;
 
     void set_node_position(const hal::node& n, const QPoint& p);
+    void swap_node_positions(const hal::node& n1, const hal::node& n2);
     void remove_node_from_maps(const hal::node& n);
 
     int min_x_index() const;
