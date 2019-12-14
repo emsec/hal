@@ -434,7 +434,8 @@ void graph_graphics_view::dropEvent(QDropEvent* event)
                 
                 hal::node nodeFrom = layouter->position_to_node_map().value(sourceLayouterPos);
                 hal::node nodeTo = layouter->position_to_node_map().value(targetLayouterPos);
-                // TODO check that values exist
+                assert(nodeFrom != hal::node()); // assert that value was found
+                assert(nodeTo != hal::node());
                 layouter->swap_node_positions(nodeFrom, nodeTo);
             }
             else
@@ -442,7 +443,7 @@ void graph_graphics_view::dropEvent(QDropEvent* event)
                 // move mode; move gate to the selected location
                 
                 hal::node nodeTo = layouter->position_to_node_map().value(sourceLayouterPos);
-                // TODO check that value exists
+                assert(nodeTo != hal::node());
                 layouter->set_node_position(nodeTo, targetLayouterPos);
             }
             // re-layout the nets

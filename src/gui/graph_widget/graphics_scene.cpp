@@ -615,7 +615,7 @@ void graphics_scene::drawBackground(QPainter* painter, const QRectF& rect)
 
     #ifdef GUI_DEBUG_GRID
     if (m_debug_grid_enable)
-        debug_draw_layouter_grid(painter, rect, x_from, x_to, y_from, y_to);
+        debug_draw_layouter_grid(painter, x_from, x_to, y_from, y_to);
     #endif
 
     painter->setRenderHints(original_flags); // UNNECESSARY ?
@@ -630,7 +630,7 @@ void graphics_scene::debug_set_layouter_grid(const QVector<qreal>& debug_x_lines
     m_debug_default_width = debug_default_width;
 }
 
-void graphics_scene::debug_draw_layouter_grid(QPainter* painter, const QRectF& rect, const int x_from, const int x_to, const int y_from, const int y_to)
+void graphics_scene::debug_draw_layouter_grid(QPainter* painter, const int x_from, const int x_to, const int y_from, const int y_to)
 {   
     painter->setPen(QPen(Qt::magenta));
     for (qreal x : m_debug_x_lines) {

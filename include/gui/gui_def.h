@@ -62,6 +62,11 @@ struct node
     {
         return type == rhs.type && id == rhs.id;
     }
+
+    bool operator!=(const node& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 }
 

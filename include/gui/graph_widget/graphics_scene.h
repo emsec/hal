@@ -127,7 +127,7 @@ private:
     QVector<net_data> m_net_items;
 
     #ifdef GUI_DEBUG_GRID
-    void debug_draw_layouter_grid(QPainter* painter, const QRectF& rect, const int x_from, const int x_to, const int y_from, const int y_to);
+    void debug_draw_layouter_grid(QPainter* painter, const int x_from, const int x_to, const int y_from, const int y_to);
     QVector<qreal> m_debug_x_lines;
     QVector<qreal> m_debug_y_lines;
     qreal m_debug_default_width;
