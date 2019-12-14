@@ -11,6 +11,7 @@
 #include "gui/graph_widget/items/separated_graphics_net.h"
 #include "gui/graph_widget/items/standard_graphics_net.h"
 #include "gui/gui_globals.h"
+#include "gui/implementations/qpoint_extension.h"
 
 #include "qmath.h"
 
@@ -22,18 +23,6 @@ static void store_max(QMap<T1, T2>& map, T1 key, T2 value)
             return;
 
     map.insert(key, value);
-}
-
-static bool operator<(const QPoint& p1, const QPoint& p2)
-{
-    if (p1.x() < p2.x())
-        return true;
-    else if (p2.x() < p1.x())
-        return false;
-    else if (p1.y() < p2.y())
-        return true;
-    else
-        return false;
 }
 
 const static qreal lane_spacing             = 10;
