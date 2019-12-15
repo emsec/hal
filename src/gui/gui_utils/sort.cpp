@@ -2,7 +2,7 @@
 
 #include "def.h"
 
-#include <QDebug>
+#include <assert.h>
 
 namespace gui_utility
 {
@@ -92,6 +92,18 @@ namespace gui_utility
             b_num = b_num.rightJustified(a_num.size(), '0');
         }
         return a_num.compare(b_num);
+    }
+
+    int compare(sort_mechanism mechanism, QString a, QString b)
+    {
+        switch(mechanism)
+        {
+        case lexical:
+            return lexical_order_compare(a, b);
+        case natural:
+            return natural_order_compare(a, b);
+        }
+        assert(false);
     }
 
 
