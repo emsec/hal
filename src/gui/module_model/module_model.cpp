@@ -239,7 +239,7 @@ void module_model::add_module(const u32 id, const u32 parent_module)
 
     while (row < parent->childCount())
     {
-        if (!gui_utility::compare(m_sort_mechanism, item->name(), parent->child(row)->name()))
+        if (gui_utility::compare(m_sort_mechanism, item->name(), parent->child(row)->name()))
             break;
         else
             ++row;

@@ -164,12 +164,12 @@ void tree_module_model::update(u32 module_id)
     {
         case gui_utility::sort_mechanism::lexical:
             std::sort(sorted_gates.begin(), sorted_gates.end(), [](std::shared_ptr<gate> g1, std::shared_ptr<gate> g2){
-                return (!gui_utility::lexical_order_compare(QString::fromStdString(g1->get_name()).toLower(), QString::fromStdString(g2->get_name()).toLower()));
+                return (gui_utility::lexical_order_compare(QString::fromStdString(g1->get_name()).toLower(), QString::fromStdString(g2->get_name()).toLower()));
             });
             break;
         case gui_utility::sort_mechanism::natural:
             std::sort(sorted_gates.begin(), sorted_gates.end(), [](std::shared_ptr<gate> g1, std::shared_ptr<gate> g2){
-                return (!gui_utility::natural_order_compare(QString::fromStdString(g1->get_name()).toLower(), QString::fromStdString(g2->get_name()).toLower()));
+                return (gui_utility::natural_order_compare(QString::fromStdString(g1->get_name()).toLower(), QString::fromStdString(g2->get_name()).toLower()));
             });
             break;
     }
@@ -179,12 +179,12 @@ void tree_module_model::update(u32 module_id)
     {
         case gui_utility::sort_mechanism::lexical:
             std::sort(sorted_nets.begin(), sorted_nets.end(), [](std::shared_ptr<net> n1, std::shared_ptr<net> n2){
-                return (!gui_utility::lexical_order_compare(QString::fromStdString(n1->get_name()).toLower(), QString::fromStdString(n2->get_name()).toLower()));
+                return (gui_utility::lexical_order_compare(QString::fromStdString(n1->get_name()).toLower(), QString::fromStdString(n2->get_name()).toLower()));
             });
             break;
         case gui_utility::sort_mechanism::natural:
             std::sort(sorted_nets.begin(), sorted_nets.end(), [](std::shared_ptr<net> n1, std::shared_ptr<net> n2){
-                return (!gui_utility::natural_order_compare(QString::fromStdString(n1->get_name()).toLower(), QString::fromStdString(n2->get_name()).toLower()));
+                return (gui_utility::natural_order_compare(QString::fromStdString(n1->get_name()).toLower(), QString::fromStdString(n2->get_name()).toLower()));
             });
             break;
     }
