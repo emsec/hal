@@ -28,6 +28,9 @@
 #include "def.h"
 
 #include "gui/gui_utils/sort.h"
+#include "netlist/module.h"
+
+#include <set>
 
 #include <QAbstractItemModel>
 #include <QModelIndex>
@@ -60,6 +63,7 @@ public:
     void clear();
 
     void add_module(const u32 id, const u32 parent_module);
+    void add_recursively(std::set<std::shared_ptr<module>> modules);
     void remove_module(const u32 id);
     void update_module(const u32 id);
 

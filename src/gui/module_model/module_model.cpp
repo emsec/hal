@@ -7,7 +7,6 @@
 #include "gui/module_model/module_item.h"
 
 #include "netlist/gate.h"
-#include "netlist/module.h"
 #include "netlist/net.h"
 
 module_model::module_model(QObject* parent) : QAbstractItemModel(parent), m_top_module_item(nullptr)
@@ -198,14 +197,19 @@ void module_model::init()
     m_top_module_item = item;
     endInsertRows();
 
-    std::set<std::shared_ptr<module>> s = g_netlist->get_modules();
-    s.erase(g_netlist->get_top_module());
+    // This is broken because it can attempt to insert a child before its parent
+    // which will cause an assertion failure and then crash
 
-    // Quadratic run time since this is basically insertion sort.
-    // If this ever bottlenecks us, pre-sort here using std::sort and put in a
-    // way to disable sorting in add_module during that time.
-    for (std::shared_ptr<module> m : s)
-        add_module(m->get_id(), m->get_parent_module()->get_id());
+    // std::set<std::shared_ptr<module>> s = g_netlist->get_modules();
+    // s.erase(g_netlist->get_top_module());
+    // for (std::shared_ptr<module> m : s)
+    //     add_module(m->get_id(), m->get_parent_module()->get_id());
+
+    // This works
+
+    // recursively insert modules
+    std::shared_ptr<module> m = g_netlist->get_top_module();
+    add_recursively(m->get_submodules());
 }
 
 void module_model::clear()
@@ -248,6 +252,15 @@ void module_model::add_module(const u32 id, const u32 parent_module)
     beginInsertRows(index, row, row);
     parent->insert_child(row, item);
     endInsertRows();
+}
+
+void module_model::add_recursively(std::set<std::shared_ptr<module>> modules)
+{
+    for (auto &m : modules)
+    {
+        add_module(m->get_id(), m->get_parent_module()->get_id());
+        add_recursively(m->get_submodules());
+    }
 }
 
 void module_model::remove_module(const u32 id)
