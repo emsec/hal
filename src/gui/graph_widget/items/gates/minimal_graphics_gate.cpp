@@ -1,4 +1,4 @@
-#include "gui/graph_widget/items/minimal_graphics_gate.h"
+#include "gui/graph_widget/items/gates/minimal_graphics_gate.h"
 
 #include "netlist/gate.h"
 

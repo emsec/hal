@@ -1,7 +1,7 @@
 #ifndef STANDARD_GRAPHICS_GATE_H
 #define STANDARD_GRAPHICS_GATE_H
 
-#include "graphics_gate.h"
+#include "gui/graph_widget/items/graphics_gate.h"
 
 class standard_graphics_gate : public graphics_gate
 {

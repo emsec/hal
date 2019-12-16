@@ -7,9 +7,9 @@
 #include "gui/graph_widget/contexts/graph_context.h"
 #include "gui/graph_widget/graphics_factory.h"
 #include "gui/graph_widget/graphics_scene.h"
-#include "gui/graph_widget/items/io_graphics_net.h"
-#include "gui/graph_widget/items/separated_graphics_net.h"
-#include "gui/graph_widget/items/standard_graphics_net.h"
+#include "gui/graph_widget/items/nets/io_graphics_net.h"
+#include "gui/graph_widget/items/nets/separated_graphics_net.h"
+#include "gui/graph_widget/items/nets/standard_graphics_net.h"
 #include "gui/gui_globals.h"
 #include "gui/implementations/qpoint_extension.h"
 
