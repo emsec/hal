@@ -447,7 +447,7 @@ void graph_graphics_view::dropEvent(QDropEvent* event)
                 layouter->set_node_position(nodeTo, targetLayouterPos);
             }
             // re-layout the nets
-            layouter->layout();
+            context->schedule_scene_update();
         }
     }
     else
