@@ -7,8 +7,8 @@
 #include "gui/graph_widget/contexts/graph_context.h"
 #include "gui/graph_widget/graphics_factory.h"
 #include "gui/graph_widget/graphics_scene.h"
-#include "gui/graph_widget/items/nets/io_graphics_net.h"
-#include "gui/graph_widget/items/nets/separated_graphics_net.h"
+#include "gui/graph_widget/items/nets/circle_separated_net.h"
+#include "gui/graph_widget/items/nets/labeled_separated_net.h"
 #include "gui/graph_widget/items/nets/standard_graphics_net.h"
 #include "gui/gui_globals.h"
 #include "gui/implementations/qpoint_extension.h"
@@ -707,7 +707,7 @@ void graph_layouter::draw_nets()
         if (n->is_unrouted())
         {
             // HANDLE GLOBAL NETS
-            io_graphics_net* net_item = new io_graphics_net(n);
+            circle_separated_net* net_item = new circle_separated_net(n);
 
             endpoint src_end = n->get_src();
 
@@ -761,7 +761,7 @@ void graph_layouter::draw_nets()
                 if (!m_context->node_for_gate(node, n->get_src().get_gate()->get_id()))
                     continue;
 
-                separated_graphics_net* net_item = new separated_graphics_net(n, QString::fromStdString(n->get_name()));
+                labeled_separated_net* net_item = new labeled_separated_net(n, QString::fromStdString(n->get_name()));
 
                 for (const node_box& box : m_boxes)
                 {
