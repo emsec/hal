@@ -119,11 +119,10 @@ void graph_layouter::layout()
     calculate_max_channel_dimensions();
     calculate_gate_offsets();
     place_gates();
-    update_scene_rect();
     draw_nets();
+    update_scene_rect();
 
     m_scene->move_nets_to_background();
-    m_scene->setSceneRect(m_scene->itemsBoundingRect());
     m_scene->handle_extern_selection_changed(nullptr);
 }
 
@@ -675,22 +674,6 @@ void graph_layouter::place_gates()
         box.item->setPos(m_node_offset_for_x.value(box.x), m_node_offset_for_y.value(box.y));
         m_scene->add_item(box.item);
     }
-}
-
-void graph_layouter::update_scene_rect()
-{
-    // SCENE RECT STUFF BEHAVES WEIRDLY, FURTHER RESEARCH REQUIRED
-
-    //    QRectF rect = m_graphics_scene->sceneRect();
-    //    rect.adjust(-100, -100, 100, 100);
-    //    m_graphics_scene->setSceneRect(rect);
-
-    //    QRectF rect(m_graphics_scene->itemsBoundingRect());
-
-    m_scene->setSceneRect(QRectF());
-    QRectF rect = m_scene->sceneRect();
-    rect.adjust(-200, -200, 200, 200);
-    m_scene->setSceneRect(rect);
 }
 
 void graph_layouter::draw_nets()
@@ -1407,6 +1390,16 @@ void graph_layouter::draw_nets()
 
         commit_used_paths(used);
     }
+}
+
+void graph_layouter::update_scene_rect()
+{
+    // SCENE RECT STUFF BEHAVES WEIRDLY, FURTHER RESEARCH REQUIRED
+    //QRectF rect = m_scene->sceneRect();
+
+    QRectF rect(m_scene->itemsBoundingRect());
+    rect.adjust(-200, -200, 200, 200);
+    m_scene->setSceneRect(rect);
 }
 
 graph_layouter::node_box graph_layouter::create_box(const hal::node& node, const int x, const int y) const
