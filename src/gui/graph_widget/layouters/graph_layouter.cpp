@@ -7,6 +7,7 @@
 #include "gui/graph_widget/contexts/graph_context.h"
 #include "gui/graph_widget/graphics_factory.h"
 #include "gui/graph_widget/graphics_scene.h"
+#include "gui/graph_widget/items/nets/arrow_separated_net.h"
 #include "gui/graph_widget/items/nets/circle_separated_net.h"
 #include "gui/graph_widget/items/nets/labeled_separated_net.h"
 #include "gui/graph_widget/items/nets/standard_graphics_net.h"
@@ -775,6 +776,69 @@ void graph_layouter::draw_nets()
                 m_scene->add_item(net_item);
 
                 continue;
+            }
+
+            //TEMPORARY IMPLEMENTATION
+            hal::node tmp;
+            if (!m_context->node_for_gate(tmp, n->get_src().gate->get_id()))
+            {
+                arrow_separated_net* net_item = new arrow_separated_net(n);
+
+                for (endpoint& dst_end : n->get_dsts())
+                {
+                    hal::node node;
+                    if (!m_context->node_for_gate(node, dst_end.get_gate()->get_id()))
+                        continue;
+
+                    for (const node_box& box : m_boxes)
+                    {
+                        if (box.node == node)
+                        {
+                            net_item->add_input(box.item->get_input_scene_position(n->get_id(), QString::fromStdString(dst_end.pin_type)));
+                            break;
+                        }
+                    }
+                }
+
+                // POTENTIALLY ADDS EMPTY NETS, DOESNT MATTER RIGHT NOW FIX LATER
+                net_item->finalize();
+                m_scene->add_item(net_item);
+
+                continue;
+            }
+            else
+            {
+                bool contains_dst = false;
+
+                for (endpoint& dst_end : n->get_dsts())
+                {
+                    hal::node node;
+                    if (m_context->node_for_gate(node, dst_end.get_gate()->get_id()))
+                    {
+                        contains_dst = true;
+                        break;
+                    }
+                }
+
+                if (!contains_dst)
+                {
+                    arrow_separated_net* net_item = new arrow_separated_net(n);
+
+                    for (const node_box& box : m_boxes)
+                    {
+                        if (box.node == tmp)
+                        {
+                            net_item->add_output();
+                            net_item->setPos(box.item->get_output_scene_position(n->get_id(), QString::fromStdString(n->get_src().get_pin_type())));
+                            break;
+                        }
+                    }
+
+                    net_item->finalize();
+                    m_scene->add_item(net_item);
+
+                    continue;
+                }
             }
         }
 
