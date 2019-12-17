@@ -19,7 +19,7 @@ set_target_properties(py PROPERTIES PREFIX "")
 if(APPLE AND CMAKE_HOST_APPLE)
     set_target_properties(py PROPERTIES SUFFIX ".so")
 endif(APPLE AND CMAKE_HOST_APPLE)
-target_link_libraries(py PUBLIC hal::core hal::netlist ${PYTHON_LIBRARIES} PRIVATE pybind11::module Boost::system)
+target_link_libraries(py PUBLIC hal::core hal::netlist PRIVATE ${PYTHON_LIBRARIES} pybind11::module Boost::system)
 install(TARGETS py
         EXPORT hal
         LIBRARY DESTINATION ${LIBRARY_INSTALL_DIRECTORY}
