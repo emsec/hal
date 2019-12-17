@@ -118,11 +118,6 @@ set_property(DIRECTORY PROPERTY EP_STEP_TARGETS configure build test)
 #---Enable Folders in IDE like Visual Studio----------------------------------------------------
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
-####################################################################
-#####   Setup main target to hold all build definitions and options
-####################################################################
-
-
 ################################
 #####   Find depending packages
 ################################
@@ -130,7 +125,7 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 # PkgConfig
 find_package(PkgConfig REQUIRED)
 if(PkgConfig_FOUND)
-    message(STATUS "PKG_CONFIG_EXECUTABLE: ${PKG_CONFIG_EXECUTABLE}")
+    message(VERBOSE "PKG_CONFIG_EXECUTABLE: ${PKG_CONFIG_EXECUTABLE}")
 elseif(NOT PkgConfig_FOUND)
     set(missing_package "TRUE")
     if(LINUX)
@@ -153,7 +148,7 @@ set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_RUNTIME OFF)
 find_package(Boost 1.58.0 REQUIRED COMPONENTS system)
-message(STATUS "Boost version: ${Boost_VERSION}")
+message(VERBOSE "Boost version: ${Boost_VERSION}")
 
 if(NOT TARGET Boost::system)
     add_library(Boost::system IMPORTED INTERFACE)
@@ -164,7 +159,7 @@ if(NOT TARGET Boost::system)
 endif()
 
 find_package(RapidJSON REQUIRED)
-message(STATUS "Found rapidjson ${RAPIDJSON_INCLUDEDIR}")
+message(VERBOSE "Found rapidjson ${RAPIDJSON_INCLUDEDIR}")
 if(RapidJSON_FOUND AND NOT TARGET RapidJSON::RapidJSON)
     add_library(RapidJSON::RapidJSON INTERFACE IMPORTED)
     set_target_properties(RapidJSON::RapidJSON PROPERTIES
@@ -175,8 +170,8 @@ endif()
 # Need Version 2.2.4 Not available in ubuntu bionic
 find_package(pybind11 2.4.3 CONFIG)
 if(${pybind11_FOUND})
-    message(STATUS "Found pybind11 v${pybind11_VERSION}: ${pybind11_INCLUDE_DIRS}")
-    message(STATUS "Found pybind11 >= 2.4.3")
+    message(VERBOSE "Found pybind11 v${pybind11_VERSION}: ${pybind11_INCLUDE_DIRS}")
+    message(VERBOSE "Found pybind11 >= 2.4.3")
 else()
     message(STATUS "pybind11 >= 2.4.3 not found")
     add_subdirectory(deps/pybind11)
@@ -184,7 +179,7 @@ endif()
 
 find_package(spdlog 1.4.2 EXACT CONFIG)
 if(${spdlog_FOUND})
-    message(STATUS "Found spdlog >= 1.4.2")
+    message(VERBOSE "Found spdlog >= 1.4.2")
 else()
     message(STATUS "spdlog >= 1.4.2 not found")
     #    include_directories(${include_directories} "${CMAKE_CURRENT_SOURCE_DIR}/deps/spdlog-1.4.2/include")
@@ -199,10 +194,10 @@ endif()
 set(Python_ADDITIONAL_VERSIONS 3.5 3.6)
 find_package(PythonInterp 3.5 REQUIRED)
 if(PythonInterp_FOUND)
-    message(STATUS "PYTHON_INCLUDE_DIRS: ${PYTHON_INCLUDE_DIRS}")
-    message(STATUS "PYTHON_LIBRARIES: ${PYTHON_LIBRARIES}")
-    message(STATUS "PYTHON_MODULE_PREFIX: ${PYTHON_MODULE_PREFIX}")
-    message(STATUS "PYTHON_MODULE_EXTENSION: ${PYTHON_MODULE_EXTENSION}")
+    message(VERBOSE "PYTHON_INCLUDE_DIRS: ${PYTHON_INCLUDE_DIRS}")
+    message(VERBOSE "PYTHON_LIBRARIES: ${PYTHON_LIBRARIES}")
+    message(VERBOSE "PYTHON_MODULE_PREFIX: ${PYTHON_MODULE_PREFIX}")
+    message(VERBOSE "PYTHON_MODULE_EXTENSION: ${PYTHON_MODULE_EXTENSION}")
 elseif(NOT PythonInterp_FOUND)
     set(Missing_package "TRUE")
     if(APPLE AND CMAKE_HOST_APPLE)
@@ -215,8 +210,8 @@ if(WITH_GUI)
     # We require qt5 widgets
     find_package(Qt5Widgets)
     if(Qt5Widgets_FOUND)
-        message(STATUS "Qt5Widgets_INCLUDE_DIRS: ${Qt5Widgets_INCLUDE_DIRS}")
-        message(STATUS "Qt5Widgets_LIBRARIES: ${Qt5Widgets_LIBRARIES}")
+        message(VERBOSE "Qt5Widgets_INCLUDE_DIRS: ${Qt5Widgets_INCLUDE_DIRS}")
+        message(VERBOSE "Qt5Widgets_LIBRARIES: ${Qt5Widgets_LIBRARIES}")
     elseif(NOT Qt5Widgets_FOUND)
         set(Missing_package "TRUE")
         if(APPLE AND CMAKE_HOST_APPLE)
@@ -226,8 +221,8 @@ if(WITH_GUI)
     endif(Qt5Widgets_FOUND)
     find_package(Qt5Concurrent)
     if(Qt5Concurrent_FOUND)
-        message(STATUS "Qt5Concurrent_INCLUDE_DIRS: ${Qt5Concurrent_INCLUDE_DIRS}")
-        message(STATUS "Qt5Concurrent_LIBRARIES: ${Qt5Concurrent_LIBRARIES}")
+        message(VERBOSE "Qt5Concurrent_INCLUDE_DIRS: ${Qt5Concurrent_INCLUDE_DIRS}")
+        message(VERBOSE "Qt5Concurrent_LIBRARIES: ${Qt5Concurrent_LIBRARIES}")
     elseif(NOT Qt5Concurrent_FOUND)
         set(Missing_package "TRUE")
         if(APPLE AND CMAKE_HOST_APPLE)
@@ -237,8 +232,8 @@ if(WITH_GUI)
     endif(Qt5Concurrent_FOUND)
     find_package(Qt5Svg)
     if(Qt5Svg_FOUND)
-        message(STATUS "Qt5Svg_INCLUDE_DIRS: ${Qt5Svg_INCLUDE_DIRS}")
-        message(STATUS "Qt5Svg_LIBRARIES: ${Qt5Svg_LIBRARIES}")
+        message(VERBOSE "Qt5Svg_INCLUDE_DIRS: ${Qt5Svg_INCLUDE_DIRS}")
+        message(VERBOSE "Qt5Svg_LIBRARIES: ${Qt5Svg_LIBRARIES}")
     elseif(NOT Qt5Svg_FOUND)
         set(Missing_package "TRUE")
     endif(Qt5Svg_FOUND)
@@ -247,10 +242,6 @@ endif()
 ################################
 #####   Manage Compiler Flags
 ################################
-
-set(COMPILE_OPTIONS_PRIVATE)
-set(COMPILE_OPTIONS_PUBLIC)
-set(COMPILE_OPTIONS_INTERFACE)
 
 #Set UNIX (macOS or Linux) compiler flags (clang or gcc). Set optimization level for debug or release.
 if(UNIX)
@@ -303,17 +294,11 @@ if(${CMAKE_BUILD_TYPE} EQUAL "Debug" AND APPLE AND CMAKE_HOST_APPLE)
     add_definitions(-D_LIBCPP_DEBUG)
 endif(${CMAKE_BUILD_TYPE} EQUAL "Debug" AND APPLE AND CMAKE_HOST_APPLE)
 
-#set names for major libraries
-#set(NETLIST_LIB hal_netlist)
-#set(CORE_LIB hal_core)
-set(GRAPH_ALGORITHM_LIB graph_algorithm)
-set(QUINE_MCCLUSKY_LIB quine_mccluskey)
+####################################################################
+#####   Setup main target to hold all build definitions and options
+####################################################################
 
-#define default linker target
-set(LINK_LIBS ${CMAKE_DL_LIBS}
-#    ${NETLIST_LIB}
-#    ${CORE_LIB}
-    )
+
 
 ################################
 #####   Enable Testing
@@ -339,7 +324,7 @@ if(BUILD_TESTS)
             '${CMAKE_SOURCE_DIR}/src/gui/*'
             )
 
-        message(STATUS "COVERAGE_EXCLUDES: ${COVERAGE_EXCLUDES}")
+        message(VERBOSE "COVERAGE_EXCLUDES: ${COVERAGE_EXCLUDES}")
         setup_target_for_coverage(NAME ${PROJECT_NAME}_coverage
                                   EXECUTABLE ctest
                                   DEPENDENCY runTest-*
@@ -375,7 +360,7 @@ install(DIRECTORY ${CMAKE_BINARY_DIR}/share/hal/gate_libraries DESTINATION ${SHA
 configure_file("defaults/guidefaults.ini" ${CMAKE_BINARY_DIR}/share/hal/defaults/guidefaults.ini @ONLY)
 install(DIRECTORY ${CMAKE_BINARY_DIR}/share/hal/defaults DESTINATION ${SHARE_INSTALL_DIRECTORY} PATTERN "*.ini")
 install(FILES ${CMAKE_BINARY_DIR}/hal.pc DESTINATION "${PKGCONFIG_INSTALL_DIRECTORY}")
-message(STATUS "PKGCONFIG_INSTALL_DIRECTORY ${PKGCONFIG_INSTALL_DIRECTORY}")
+message(VERBOSE "PKGCONFIG_INSTALL_DIRECTORY ${PKGCONFIG_INSTALL_DIRECTORY}")
 
 write_basic_package_version_file(
         halConfigVersion.cmake

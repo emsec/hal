@@ -12,7 +12,7 @@ function(hal_get_version)
 
     if(VERSION_LIST STREQUAL "")
         file(READ ${CMAKE_SOURCE_DIR}/CURRENT_VERSION VERSION_FILE)
-        message(STATUS "VERSION_FILE: ${VERSION_FILE}")
+        message(VERBOSE "VERSION_FILE: ${VERSION_FILE}")
         string(REGEX MATCHALL "v([0-9]+)\.([0-9]+)\.([0-9]+)" match ${VERSION_FILE})
         if(NOT ${match} EQUAL "")
             set(HAL_VERSION_RETURN ${VERSION_FILE} PARENT_SCOPE)
@@ -51,7 +51,6 @@ function(hal_get_version)
 endfunction()
 
 function(setup_output_directories)
-    message(STATUS "")
     # Declare and setup project output directories
     file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
     foreach(i IN ITEMS "RUNTIME" "ARCHIVE" "LIBRARY")
@@ -114,7 +113,6 @@ function(setup_output_directories)
 
     set(PLUGIN_LIBRARY_INSTALL_DIRECTORY ${LIBRARY_INSTALL_DIRECTORY}/hal_plugins CACHE INTERNAL "")
     message(VERBOSE "PLUGIN_LIBRARY_INSTALL_DIRECTORY: ${PLUGIN_LIBRARY_INSTALL_DIRECTORY}")
-    message(STATUS "")
 endfunction()
 
 include(CheckCXXCompilerFlag)
@@ -228,8 +226,6 @@ function(hal_add_plugin target_name)
     endif()
 
     add_library(${target_name} ${lib_type} ${exclude_from_all} ${ARG_HEADER} ${ARG_SOURCES} ${ARG_PY_SOURCES})
-
-    message("CMAKE_CURRENT_LIST_DIR is ${CMAKE_CURRENT_LIST_DIR}")
 
     target_include_directories(${target_name}
                                PUBLIC
