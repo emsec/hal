@@ -367,7 +367,7 @@ write_basic_package_version_file(
         VERSION ${HAL_VERSION_RETURN}
         COMPATIBILITY AnyNewerVersion
 )
-configure_file(cmake/halConfig.cmake.in halConfig.cmake @ONLY)
+configure_file(cmake/HalConfig.cmake.in halConfig.cmake @ONLY)
 
 install(EXPORT hal
         FILE halTargets.cmake
