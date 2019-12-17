@@ -13,6 +13,7 @@
 #include "gui/graph_widget/graph_navigation_widget.h"
 #include "gui/graph_widget/graphics_scene.h"
 #include "gui/graph_widget/items/graphics_gate.h"
+#include "gui/gui_def.h"
 #include "gui/gui_globals.h"
 #include "gui/hal_content_manager/hal_content_manager.h"
 #include "gui/overlay/dialog_overlay.h"
@@ -152,17 +153,23 @@ void graph_widget::keyPressEvent(QKeyEvent* event)
     }
 }
 
-void graph_widget::handle_navigation_jump_requested(const u32 via_net, const u32 to_gate)
+void graph_widget::handle_navigation_jump_requested(const u32 via_net, const QSet<u32>& to_gates)
 {
     setFocus();
     // ASSERT INPUTS ARE VALID ?
     auto n = g_netlist->get_net_by_id(via_net);
-    auto g = g_netlist->get_gate_by_id(to_gate);
-
-    if (!g || !n)
+    if (!n || to_gates.isEmpty())
         return;
+    QList<std::shared_ptr<gate>> gates;
+    for (u32 id : to_gates)
+    {
+        auto g = g_netlist->get_gate_by_id(id);
+        if (!g)
+            return;
+        gates.append(g);
+    }
 
-    if (!m_context->gates().contains(to_gate))
+    if (!m_context->gates().contains(to_gates))
     {
         for (const auto& m : g_netlist->get_modules())
         {
@@ -196,7 +203,12 @@ void graph_widget::handle_navigation_jump_requested(const u32 via_net, const u32
             }
         }
 
-        m_context->add({}, {to_gate});
+        // If we don't have all the gates in the current context, we need to
+        // insert them
+
+        bool netIsInput = n->is_a_dst(*gates.constBegin()); // either they're all inputs or all outputs, so just check the first one
+        hal::placement_hint placement = netIsInput ? hal::placement_hint::prefer_right : hal::placement_hint::prefer_left;
+        m_context->add({}, to_gates, placement);
     }
     else
     {
@@ -207,41 +219,47 @@ void graph_widget::handle_navigation_jump_requested(const u32 via_net, const u32
 
     // SELECT IN RELAY
     g_selection_relay.clear();
-    g_selection_relay.m_selected_gates.insert(to_gate);
-    g_selection_relay.m_focus_type = selection_relay::item_type::gate;
-    g_selection_relay.m_focus_id   = to_gate;
-    g_selection_relay.m_subfocus   = selection_relay::subfocus::none;
+    g_selection_relay.m_selected_gates = to_gates;
+    if (to_gates.size() == 1)
+    {
+        // subfocus only possible when just one gate selected
 
-    u32 cnt = 0;
-    for (const auto& pin : g->get_input_pins())
-    {
-        if (g->get_fan_in_net(pin) == n)    // input net
+        auto g = *gates.constBegin();
+        g_selection_relay.m_focus_type = selection_relay::item_type::gate;
+        g_selection_relay.m_focus_id   = g->get_id();
+        g_selection_relay.m_subfocus   = selection_relay::subfocus::none;
+
+        u32 cnt = 0;
+        for (const auto& pin : g->get_input_pins())
         {
-            g_selection_relay.m_subfocus       = selection_relay::subfocus::left;
-            g_selection_relay.m_subfocus_index = cnt;
-            break;
-        }
-        cnt++;
-    }
-    if (g_selection_relay.m_subfocus == selection_relay::subfocus::none)
-    {
-        cnt = 0;
-        for (const auto& pin : g->get_output_pins())
-        {
-            if (g->get_fan_out_net(pin) == n)    // input net
+            if (g->get_fan_in_net(pin) == n)    // input net
             {
-                g_selection_relay.m_subfocus       = selection_relay::subfocus::right;
+                g_selection_relay.m_subfocus       = selection_relay::subfocus::left;
                 g_selection_relay.m_subfocus_index = cnt;
                 break;
             }
             cnt++;
+        }
+        if (g_selection_relay.m_subfocus == selection_relay::subfocus::none)
+        {
+            cnt = 0;
+            for (const auto& pin : g->get_output_pins())
+            {
+                if (g->get_fan_out_net(pin) == n)    // input net
+                {
+                    g_selection_relay.m_subfocus       = selection_relay::subfocus::right;
+                    g_selection_relay.m_subfocus_index = cnt;
+                    break;
+                }
+                cnt++;
+            }
         }
     }
 
     g_selection_relay.relay_selection_changed(nullptr);
 
     // JUMP TO THE GATE
-    ensure_gate_visible(to_gate);
+    ensure_gates_visible(to_gates);
 }
 
 void graph_widget::handle_module_double_clicked(const u32 id)
@@ -285,7 +303,7 @@ void graph_widget::handle_navigation_left_request()
                 }
                 else
                 {
-                    handle_navigation_jump_requested(n->get_id(), n->get_src().get_gate()->get_id());
+                    handle_navigation_jump_requested(n->get_id(), {n->get_src().get_gate()->get_id()});
                 }
             }
             else if (g->get_input_pins().size())
@@ -307,7 +325,7 @@ void graph_widget::handle_navigation_left_request()
 
             if (n->get_src().gate != nullptr)
             {
-                handle_navigation_jump_requested(n->get_id(), n->get_src().get_gate()->get_id());
+                handle_navigation_jump_requested(n->get_id(), {n->get_src().get_gate()->get_id()});
             }
 
             return;
@@ -347,7 +365,7 @@ void graph_widget::handle_navigation_right_request()
                 }
                 else if (n->get_num_of_dsts() == 1)
                 {
-                    handle_navigation_jump_requested(n->get_id(), n->get_dsts()[0].get_gate()->get_id());
+                    handle_navigation_jump_requested(n->get_id(), {n->get_dsts()[0].get_gate()->get_id()});
                 }
                 else
                 {
@@ -378,7 +396,7 @@ void graph_widget::handle_navigation_right_request()
 
             if (n->get_num_of_dsts() == 1)
             {
-                handle_navigation_jump_requested(n->get_id(), n->get_dsts()[0].get_gate()->get_id());
+                handle_navigation_jump_requested(n->get_id(), {n->get_dsts()[0].get_gate()->get_id()});
             }
             else
             {
@@ -514,6 +532,68 @@ void graph_widget::ensure_gate_visible(const u32 gate)
     connect(anim, &QVariantAnimation::valueChanged, [=](const QVariant& value) { m_view->centerOn(value.toPoint()); });
 
     anim->start(QAbstractAnimation::DeleteWhenStopped);
+}
+
+void graph_widget::ensure_gates_visible(const QSet<u32> gates)
+{
+    if (m_context->scene_update_in_progress())
+        return;
+
+    int min_x = INT_MAX;
+    int min_y = INT_MAX;
+    int max_x = INT_MIN;
+    int max_y = INT_MIN;
+    for (u32 g : gates)
+    {
+        auto itm = m_context->scene()->get_gate_item(g);
+
+        QRectF rect = itm->boundingRect();
+        // Qt... y u do dis?
+        rect.moveTopLeft(itm->pos());
+
+        if (rect.left() < min_x)
+        {
+            min_x = rect.left();
+        }
+        if (rect.right() > max_x)
+        {
+            max_x = rect.right();
+        }
+        if (rect.top() < min_y)
+        {
+            min_y = rect.top();
+        }
+        if (rect.bottom() > max_y)
+        {
+            max_y = rect.bottom();
+        }
+    }
+    int targetWidth = max_x-min_x;
+    int targetHeight = max_y-min_y;
+    QRectF targetRect = QRectF(min_x, min_y, targetWidth, targetHeight).marginsAdded(QMarginsF(20,20,20,20));
+    
+    QRectF currentRect = m_view->mapToScene(m_view->viewport()->geometry()).boundingRect();
+    
+    QPointF centerFix = targetRect.center();
+    if (targetRect.width() < currentRect.width())
+    {
+        targetRect.setWidth(currentRect.width());
+    }
+    if (targetRect.height() < currentRect.height())
+    {
+        targetRect.setHeight(currentRect.height());
+    }
+    targetRect.moveCenter(centerFix);
+
+    auto anim = new QVariantAnimation();
+    anim->setDuration(1000);
+    anim->setStartValue(currentRect);
+    anim->setEndValue(targetRect);
+    connect(anim, &QVariantAnimation::valueChanged, [=](const QVariant& value) { m_view->fitInView(value.toRectF(), Qt::KeepAspectRatio); });
+    anim->start(QAbstractAnimation::DeleteWhenStopped);
+
+    // comment the above and uncomment this if you don't want the animation
+    //m_view->fitInView(targetRect, Qt::KeepAspectRatio);
 }
 
 void graph_widget::add_context_to_history()

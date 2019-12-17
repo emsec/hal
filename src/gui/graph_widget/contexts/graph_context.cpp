@@ -7,6 +7,8 @@
 #include "gui/graph_widget/layouters/layouter_task.h"
 #include "gui/gui_globals.h"
 
+#include <QVector>
+
 static const bool lazy_updates = false;
 
 graph_context::graph_context(const QString& name, QObject* parent)
@@ -73,7 +75,7 @@ void graph_context::end_change()
     }
 }
 
-void graph_context::add(const QSet<u32>& modules, const QSet<u32>& gates)
+void graph_context::add(const QSet<u32>& modules, const QSet<u32>& gates, hal::placement_hint placement)
 {
     QSet<u32> new_modules = modules - m_modules;
     QSet<u32> new_gates   = gates - m_gates;
@@ -81,11 +83,23 @@ void graph_context::add(const QSet<u32>& modules, const QSet<u32>& gates)
     QSet<u32> old_modules = m_removed_modules & modules;
     QSet<u32> old_gates   = m_removed_gates & gates;
 
+    // if we have a placement hint for the added nodes, we ignore it and leave
+    // the nodes where they are (i.e. we just deschedule their removal and not
+    // re-run the placement algo on them)
     m_removed_modules -= old_modules;
     m_removed_gates -= old_gates;
 
     m_added_modules += new_modules;
     m_added_gates += new_gates;
+
+    for (const u32 m : new_modules)
+    {
+        m_module_hints.insert(placement, m);
+    }
+    for (const u32 g : new_gates)
+    {
+        m_gate_hints.insert(placement, g);
+    }
 
     if (m_user_update_count == 0)
     {
@@ -105,6 +119,11 @@ void graph_context::remove(const QSet<u32>& modules, const QSet<u32>& gates)
     m_added_modules -= modules;
     m_added_gates -= gates;
 
+    // We don't update m_module_hints and m_gate_hints here. Keeping elements
+    // in memory is less of an issue than finding the modules/gates _by value_
+    // in the maps and removing them. At the end of apply_changes() the maps are
+    // cleared anyway.
+
     if (m_user_update_count == 0)
     {
         evaluate_changes();
@@ -119,6 +138,9 @@ void graph_context::clear()
 
     m_added_modules.clear();
     m_added_gates.clear();
+
+    m_module_hints.clear();
+    m_gate_hints.clear();
 
     if (m_user_update_count == 0)
     {
@@ -421,7 +443,29 @@ void graph_context::apply_changes()
         }
     }
 
-    m_layouter->add(m_added_modules, m_added_gates, m_nets);
+    // number of placement hints is small, not performance critical
+    QVector<hal::placement_hint> queued_hints;
+    queued_hints.append(m_module_hints.uniqueKeys().toVector());
+    // we can't use QSet for enum class
+    for (auto h : m_gate_hints.uniqueKeys())
+    {
+        if (!queued_hints.contains(h))
+        {
+            queued_hints.append(h);
+        }
+    }
+
+    for (hal::placement_hint h : queued_hints)
+    {
+        // call the placer once for each placement hint
+
+        QSet<u32> modules_for_hint = QSet<u32>::fromList(m_module_hints.values(h));
+        modules_for_hint &= m_added_modules; // may contain obsolete entries that we must filter out
+        QSet<u32> gates_for_hint = QSet<u32>::fromList(m_gate_hints.values(h));
+        gates_for_hint &= m_added_gates;
+        m_layouter->add(modules_for_hint, gates_for_hint, m_nets, h);
+    }
+
     m_shader->add(m_added_modules, m_added_gates, m_nets);
 
     m_added_modules.clear();
@@ -429,6 +473,9 @@ void graph_context::apply_changes()
 
     m_removed_modules.clear();
     m_removed_gates.clear();
+
+    m_module_hints.clear();
+    m_gate_hints.clear();
 
     m_unapplied_changes     = false;
     m_scene_update_required = true;

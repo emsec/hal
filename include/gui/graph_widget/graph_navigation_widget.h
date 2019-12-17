@@ -22,7 +22,7 @@ public:
     void focusOutEvent(QFocusEvent *event) override;
 
 Q_SIGNALS:
-    void navigation_requested(const u32 via_net, const u32 to_gate);
+    void navigation_requested(const u32 via_net, const QSet<u32>& to_gates);
     void close_requested();
     void reset_focus();
 

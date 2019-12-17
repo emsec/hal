@@ -16,8 +16,27 @@ const QString standard_graph_layouter::description() const
     return "<p>PLACEHOLDER</p>";
 }
 
-void standard_graph_layouter::add(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets)
+void standard_graph_layouter::add(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets, hal::placement_hint placement)
 {
+    switch(placement)
+    {
+    case hal::placement_hint::standard: {
+        add_compact(modules, gates, nets);
+        break;
+    }
+    case hal::placement_hint::prefer_left: {
+        add_vertical(modules, gates, nets, true);
+        break;
+    }
+    case hal::placement_hint::prefer_right: {
+        add_vertical(modules, gates, nets, false);
+        break;
+    }
+    }
+}
+
+void standard_graph_layouter::add_compact(const QSet<u32>& modules, const QSet<u32>& gates, const QSet<u32>& nets)
+{  
     Q_UNUSED(nets)
 
     int x = 0;
@@ -136,6 +155,31 @@ void standard_graph_layouter::add(const QSet<u32> modules, const QSet<u32> gates
             goto gate_position_loop;
     }
 }
+
+void standard_graph_layouter::add_vertical(const QSet<u32>& modules, const QSet<u32>& gates, const QSet<u32>& nets, bool left) {
+    Q_UNUSED(nets);
+
+    int x = left ? min_x_index() - 1 : min_x_index() + x_values().size();
+
+    // TODO add starting position to placement hint and place accordingly
+    //int total_nodes = modules.size() + gates.size();
+
+    int y = 0;
+
+    for (const u32 m : modules)
+    {
+        hal::node n{hal::node_type::module, m};
+        QPoint p(x,y++);
+        set_node_position(n, p);
+    }
+    for (const u32 g : gates)
+    {
+        hal::node n{hal::node_type::gate, g};
+        QPoint p(x,y++);
+        set_node_position(n, p);
+    }
+}
+
 
 void standard_graph_layouter::remove(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets)
 {

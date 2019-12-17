@@ -66,7 +66,7 @@ public:
 public Q_SLOTS:
 
     void on_treewidget_item_clicked(QTreeWidgetItem* item, int column);
-    void handle_navigation_jump_requested(const u32 via_net, const u32 to_gate);
+    void handle_navigation_jump_requested(const u32 via_net, const QSet<u32>& to_gates);
     void on_general_table_item_double_clicked(const QModelIndex &index);
 
     void handle_gate_name_changed(std::shared_ptr<gate> gate);

@@ -28,6 +28,13 @@
 
 namespace hal
 {
+enum class placement_hint
+{
+    standard = 0,
+    prefer_left = 1,
+    prefer_right = 2
+};
+
 enum class item_type
 {
     module,

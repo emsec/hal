@@ -63,7 +63,7 @@ protected:
     void keyPressEvent(QKeyEvent* event) Q_DECL_OVERRIDE;
 
 private Q_SLOTS:
-    void handle_navigation_jump_requested(const u32 via_net, const u32 to_gate);
+    void handle_navigation_jump_requested(const u32 via_net, const QSet<u32>& to_gates);
     void handle_module_double_clicked(const u32 id);
     void reset_focus();
 
@@ -77,6 +77,7 @@ private:
     void handle_enter_module_requested(const u32 id);
 
     void ensure_gate_visible(const u32 gate);
+    void ensure_gates_visible(const QSet<u32> gates);
 
     struct context_history_entry
     {
