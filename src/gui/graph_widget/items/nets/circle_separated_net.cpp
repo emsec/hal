@@ -2,6 +2,8 @@
 
 #include "graph_widget/graph_widget_constants.h"
 
+#include <assert.h>
+
 #include <QPainter>
 #include <QPen>
 #include <QStyleOptionGraphicsItem>
