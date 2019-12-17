@@ -51,7 +51,7 @@ class context_manager_widget : public content_widget
 
 public:
     context_manager_widget(graph_tab_widget* tab_view, QWidget* parent = nullptr);
-    void resizeEvent(QResizeEvent* event);
+    void resizeEvent(QResizeEvent* event) override;
     void handle_create_context_clicked();
 
     void select_view_context(graph_context* context);

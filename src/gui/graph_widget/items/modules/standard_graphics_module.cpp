@@ -1,4 +1,4 @@
-#include "gui/graph_widget/items/standard_graphics_module.h"
+#include "gui/graph_widget/items/modules/standard_graphics_module.h"
 
 #include "core/log.h"
 

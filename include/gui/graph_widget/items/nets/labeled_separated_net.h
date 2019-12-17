@@ -21,64 +21,39 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef STANDARD_GRAPHICS_NET_H
-#define STANDARD_GRAPHICS_NET_H
+#ifndef LABELED_SEPARATED_NET_H
+#define LABELED_SEPARATED_NET_H
 
-#include "graphics_net.h"
+#include "graph_widget/items/nets/separated_graphics_net.h"
 
-#include <QLineF>
-#include <QVector>
-
-class net;
-
-class standard_graphics_net : public graphics_net
+class labeled_separated_net : public separated_graphics_net
 {
 public:
-    struct h_line
-    {
-        qreal small_x;
-        qreal big_x;
-        qreal y;
-    };
-
-    struct v_line
-    {
-        qreal x;
-        qreal small_y;
-        qreal big_y;
-    };
-
-    struct lines
-    {
-        qreal src_x;
-        qreal src_y;
-
-        QVector<h_line> h_lines;
-        QVector<v_line> v_lines;
-
-//        void remove_zero_length_lines();
-//        void fix_order();
-//        void move(qreal x, qreal y);
-    };
-
     static void load_settings();
-    static void update_alpha();
 
-    //standard_graphics_net(const std::shared_ptr<const net> n, const lines& l);
-    standard_graphics_net(const std::shared_ptr<const net> n, lines& l);
+    labeled_separated_net(const std::shared_ptr<const net> n, const QString& text);
 
-    virtual void set_visuals(const visuals& v) Q_DECL_OVERRIDE;
-    virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) Q_DECL_OVERRIDE;
+    virtual void set_visuals(const visuals& v) override;
+    virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override;
+
+    virtual void add_output() override;
+    virtual void add_input(const QPointF& scene_position) override;
+
+    virtual void finalize() override;
+
+    virtual qreal input_width() const override;
+    virtual qreal output_width() const override;
 
 private:
-    static qreal s_alpha;
-    static qreal s_radius;
-    static QBrush s_brush;
+    static qreal s_wire_length;
+    static qreal s_text_offset;
 
-    QVector<QLineF> m_lines;
-    QVector<QPointF> m_splits;
+    static QFont s_font;
+    static qreal s_font_height;
+    static qreal s_font_ascend;
 
-    line_style m_line_style;
+    QString m_text;
+    qreal m_text_width;
 };
 
-#endif // STANDARD_GRAPHICS_NET_H
+#endif // LABELED_SEPARATED_NET_H

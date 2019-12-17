@@ -21,40 +21,32 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#pragma once
+#ifndef SEPARATED_GRAPHICS_NET_H
+#define SEPARATED_GRAPHICS_NET_H
 
-#include "core/interface_interactive_ui.h"
+#include "graph_widget/items/graphics_net.h"
 
-class plugin_python_shell : virtual public i_interactive_ui
+class separated_graphics_net : public graphics_net
 {
 public:
-    plugin_python_shell() = default;
+    static void update_alpha();
 
-    ~plugin_python_shell() = default;
+    separated_graphics_net(const std::shared_ptr<const net> n);
 
-    /*
-     *      interface implementations
-     */
+    virtual void add_output() = 0;
+    virtual void add_input(const QPointF& scene_position) = 0;
 
-    /**
-     * Get the name of the plugin.
-     *
-     * @returns Plugin name.
-     */
-    std::string get_name() const override;
+    virtual void finalize() = 0;
 
-    /**
-     * Get the version of the plugin.
-     *
-     * @returns Plugin version.
-     */
-    std::string get_version() const override;
+    virtual qreal input_width() const = 0;
+    virtual qreal output_width() const = 0;
 
-    /**
-     * Excutes the plugin with given command line parameters.
-     *
-     * @param[in] args - The command line parameters.
-     * @returns True on success.
-     */
-    bool exec(program_arguments& args) override;
+protected:
+    static qreal s_alpha;
+
+    QVector<QPointF> m_input_wires;
+    line_style m_line_style;
+    bool m_draw_output;
 };
+
+#endif // SEPARATED_GRAPHICS_NET_H

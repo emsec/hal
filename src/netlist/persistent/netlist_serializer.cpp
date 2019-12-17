@@ -331,9 +331,12 @@ namespace netlist_serializer
                 }
             }
 
-            for (const auto& gate_node : val["gates"].GetArray())
+            if (val.HasMember("gates"))
             {
-                sm->assign_gate(nl->get_gate_by_id(gate_node.GetUint()));
+                for (const auto& gate_node : val["gates"].GetArray())
+                {
+                    sm->assign_gate(nl->get_gate_by_id(gate_node.GetUint()));
+                }
             }
 
             if (val.HasMember("data"))

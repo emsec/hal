@@ -10,6 +10,8 @@
 #include "gui/module_model/module_proxy_model.h"
 #include "gui/module_relay/module_relay.h"
 
+#include "gui/graph_widget/contexts/graph_context.h"
+
 #include <QHeaderView>
 #include <QItemSelectionModel>
 #include <QMenu>
@@ -45,6 +47,7 @@ module_widget::module_widget(QWidget* parent) : content_widget("Modules", parent
 
     connect(&m_searchbar, &searchbar::text_edited, this, &module_widget::filter);
     connect(m_tree_view->selectionModel(), &QItemSelectionModel::selectionChanged, this, &module_widget::handle_tree_selection_changed);
+    connect(m_tree_view, &module_tree_view::doubleClicked, this, &module_widget::handle_item_double_clicked);
 }
 
 void module_widget::setup_toolbar(toolbar* toolbar)
@@ -152,4 +155,15 @@ void module_widget::handle_tree_selection_changed(const QItemSelection& selected
     g_selection_relay.m_focus_id = selected_module;
 
     g_selection_relay.relay_selection_changed(this);
+}
+
+void module_widget::handle_item_double_clicked(const QModelIndex &index)
+{
+    auto module = g_netlist->get_module_by_id(g_netlist_relay.get_module_model()->get_item(m_module_proxy_model->mapToSource(index))->id());
+    if(!module)
+        return;
+
+    graph_context* new_context = nullptr;
+    new_context = g_graph_context_manager.create_new_context(QString::fromStdString(module->get_name()));
+    new_context->add({module->get_id()}, {});
 }

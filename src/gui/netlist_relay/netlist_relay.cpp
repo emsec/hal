@@ -105,9 +105,9 @@ void netlist_relay::debug_add_selection_to_module(const u32 id)
 
     assert(m);
 
-    for (auto id : g_selection_relay.m_selected_gates)
+    for (auto sel_id : g_selection_relay.m_selected_gates)
     {
-        std::shared_ptr<gate> g = g_netlist->get_gate_by_id(id);
+        std::shared_ptr<gate> g = g_netlist->get_gate_by_id(sel_id);
 
         if (g)
             m->assign_gate(g);
@@ -325,6 +325,7 @@ void netlist_relay::relay_module_event(module_event_handler::event ev, std::shar
 
 void netlist_relay::relay_gate_event(gate_event_handler::event ev, std::shared_ptr<gate> object, u32 associated_data)
 {
+    UNUSED(associated_data);
     if (!object)
         return;    // SHOULD NEVER BE REACHED
 
@@ -358,6 +359,8 @@ void netlist_relay::relay_gate_event(gate_event_handler::event ev, std::shared_p
             Q_EMIT gate_name_changed(object);
             break;
         }
+        default:
+            break;
     }
 }
 
@@ -432,7 +435,7 @@ void netlist_relay::relay_net_event(net_event_handler::event ev, std::shared_ptr
 void netlist_relay::debug_handle_file_opened()
 {
     for (std::shared_ptr<module> m : g_netlist->get_modules())
-            m_module_colors.insert(m->get_id(), gui_utility::get_random_color());
+        m_module_colors.insert(m->get_id(), gui_utility::get_random_color());
 
     m_module_colors.insert(1, QColor(96, 110, 112));
 

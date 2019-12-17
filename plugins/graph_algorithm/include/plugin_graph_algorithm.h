@@ -1,5 +1,4 @@
-#ifndef __HAL_PLUGIN_GRAPH_ALGORITHM_H__
-#define __HAL_PLUGIN_GRAPH_ALGORITHM_H__
+#pragma once
 
 #include "core/interface_base.h"
 
@@ -133,11 +132,3 @@ public:
      */
     std::tuple<igraph_t, std::map<int, std::shared_ptr<gate>>> get_igraph_directed(std::shared_ptr<netlist> const nl);
 };
-
-
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wreturn-type-c-linkage"
-extern "C" PLUGIN_API std::shared_ptr<i_base> get_plugin_instance();
-#pragma GCC diagnostic pop
-
-#endif /* __HAL_PLUGIN_GRAPH_ALGORITHM_H__ */

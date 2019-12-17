@@ -1,4 +1,4 @@
-#include "graph_widget/items/separated_graphics_net.h"
+#include "graph_widget/items/nets/labeled_separated_net.h"
 
 #include "graph_widget/graph_widget_constants.h"
 
@@ -8,16 +8,14 @@
 
 static const qreal baseline = 1;
 
-qreal separated_graphics_net::s_alpha;
+qreal labeled_separated_net::s_wire_length;
+qreal labeled_separated_net::s_text_offset;
 
-qreal separated_graphics_net::s_wire_length;
-qreal separated_graphics_net::s_text_offset;
+QFont labeled_separated_net::s_font;
+qreal labeled_separated_net::s_font_height;
+qreal labeled_separated_net::s_font_ascend;
 
-QFont separated_graphics_net::s_font;
-qreal separated_graphics_net::s_font_height;
-qreal separated_graphics_net::s_font_ascend;
-
-void separated_graphics_net::load_settings()
+void labeled_separated_net::load_settings()
 {
     s_wire_length = 20;
     s_text_offset = 2.4;
@@ -31,31 +29,21 @@ void separated_graphics_net::load_settings()
     s_pen.setColor(QColor(160, 160, 160)); // USE STYLESHEETS
 }
 
-void separated_graphics_net::update_alpha()
-{
-    if (s_lod >= graph_widget_constants::net_fade_in_lod && s_lod <= graph_widget_constants::net_fade_out_lod)
-        s_alpha = (s_lod - graph_widget_constants::net_fade_in_lod) / (graph_widget_constants::net_fade_out_lod - graph_widget_constants::net_fade_in_lod);
-    else
-        s_alpha = 1;
-}
-
-separated_graphics_net::separated_graphics_net(const std::shared_ptr<const net> n, const QString& text) : graphics_net(n),
-  m_text(text),
-  m_line_style(line_style::solid),
-  m_draw_output(false)
+labeled_separated_net::labeled_separated_net(const std::shared_ptr<const net> n, const QString& text) : separated_graphics_net(n),
+  m_text(text)
 {
     QFontMetricsF fm(s_font);
     m_text_width = fm.width(m_text);
 }
 
-void separated_graphics_net::set_visuals(const graphics_net::visuals& v)
+void labeled_separated_net::set_visuals(const graphics_net::visuals& v)
 {
     setVisible(v.visible);
     m_color = v.color;
     m_line_style = v.style;
 }
 
-void separated_graphics_net::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
+void labeled_separated_net::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
 {
     Q_UNUSED(widget);
 
@@ -90,25 +78,36 @@ void separated_graphics_net::paint(QPainter* painter, const QStyleOptionGraphics
 #endif
 }
 
-void separated_graphics_net::add_output()
+void labeled_separated_net::add_output()
 {
     if (m_draw_output)
         return;
 
     m_draw_output = true;
 
-    m_shape.moveTo(QPointF(0, -s_stroke_width / 2));
-    m_shape.lineTo(QPointF(m_shape.currentPosition().x() + s_wire_length + s_text_offset, m_shape.currentPosition().y()));
-    m_shape.lineTo(QPointF(m_shape.currentPosition().x(), m_shape.currentPosition().y() - QFontMetricsF(s_font).height() / 2 + s_stroke_width / 2));
-    m_shape.lineTo(QPointF(m_shape.currentPosition().x() + m_text_width, m_shape.currentPosition().y()));
-    m_shape.lineTo(QPointF(m_shape.currentPosition().x(), m_shape.currentPosition().y() + QFontMetricsF(s_font).height()));
-    m_shape.lineTo(QPointF(m_shape.currentPosition().x() - m_text_width, m_shape.currentPosition().y()));
-    m_shape.lineTo(QPointF(m_shape.currentPosition().x(), m_shape.currentPosition().y() - QFontMetricsF(s_font).height() / 2 + s_stroke_width / 2));
-    m_shape.lineTo(QPointF(m_shape.currentPosition().x() - s_wire_length - s_text_offset, m_shape.currentPosition().y()));
+    // 1 SUBPATH
+
+    // 2 SUBPATHS
+    m_shape.moveTo(QPointF(-s_stroke_width, -s_stroke_width));
+    m_shape.lineTo(QPointF(s_wire_length + s_stroke_width, -s_stroke_width));
+    m_shape.lineTo(QPointF(s_wire_length + s_stroke_width, s_stroke_width));
+    m_shape.lineTo(QPointF(-s_stroke_width, s_stroke_width));
     m_shape.closeSubpath();
+
+    // TBC...
+
+//    m_shape.moveTo(QPointF(0, -s_stroke_width / 2));
+//    m_shape.lineTo(QPointF(m_shape.currentPosition().x() + s_wire_length + s_text_offset, m_shape.currentPosition().y()));
+//    m_shape.lineTo(QPointF(m_shape.currentPosition().x(), m_shape.currentPosition().y() - QFontMetricsF(s_font).height() / 2 + s_stroke_width / 2));
+//    m_shape.lineTo(QPointF(m_shape.currentPosition().x() + m_text_width, m_shape.currentPosition().y()));
+//    m_shape.lineTo(QPointF(m_shape.currentPosition().x(), m_shape.currentPosition().y() + QFontMetricsF(s_font).height()));
+//    m_shape.lineTo(QPointF(m_shape.currentPosition().x() - m_text_width, m_shape.currentPosition().y()));
+//    m_shape.lineTo(QPointF(m_shape.currentPosition().x(), m_shape.currentPosition().y() - QFontMetricsF(s_font).height() / 2 + s_stroke_width / 2));
+//    m_shape.lineTo(QPointF(m_shape.currentPosition().x() - s_wire_length - s_text_offset, m_shape.currentPosition().y()));
+//    m_shape.closeSubpath();
 }
 
-void separated_graphics_net::add_input(const QPointF& scene_position)
+void labeled_separated_net::add_input(const QPointF& scene_position)
 {
     QPointF mapped_position = mapFromScene(scene_position);
     m_input_wires.append(mapped_position);
@@ -124,8 +123,18 @@ void separated_graphics_net::add_input(const QPointF& scene_position)
     m_shape.closeSubpath();
 }
 
-void separated_graphics_net::finalize()
+void labeled_separated_net::finalize()
 {
     m_rect = m_shape.boundingRect();
     m_rect.adjust(-1, -1, 1, 1);
+}
+
+qreal labeled_separated_net::input_width() const
+{
+    return s_wire_length + s_text_offset + m_text_width;
+}
+
+qreal labeled_separated_net::output_width() const
+{
+    return s_wire_length + s_text_offset + m_text_width;
 }

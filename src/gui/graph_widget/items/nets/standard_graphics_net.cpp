@@ -1,4 +1,4 @@
-#include "graph_widget/items/standard_graphics_net.h"
+#include "graph_widget/items/nets/standard_graphics_net.h"
 
 #include "graph_widget/graph_widget_constants.h"
 

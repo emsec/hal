@@ -1,16 +1,6 @@
-#include "graph_widget/layouters/standard_graph_layouter.h"
+#include "gui/graph_widget/layouters/standard_graph_layouter.h"
 
-static bool operator< (const QPoint &p1, const QPoint &p2)
-{
-    if (p1.x() < p2.x())
-        return true;
-    else if (p2.x() < p1.x())
-        return false;
-    else if (p1.y() < p2.y())
-        return true;
-    else
-        return false;
-}
+#include "gui/implementations/qpoint_extension.h"
 
 standard_graph_layouter::standard_graph_layouter(const graph_context* const context) : graph_layouter(context)
 {

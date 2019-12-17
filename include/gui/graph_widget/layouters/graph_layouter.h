@@ -188,9 +188,9 @@ private:
     void calculate_max_channel_dimensions();
     void calculate_gate_offsets();
     void place_gates();
-    void update_scene_rect();
     void reset_roads_and_junctions();
     void draw_nets();
+    void update_scene_rect();
 
     node_box create_box(const hal::node& node, const int x, const int y) const;
 

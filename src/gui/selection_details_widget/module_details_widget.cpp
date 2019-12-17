@@ -15,7 +15,7 @@
 #include "selection_details_widget/tree_navigation/tree_module_item.h"
 
 module_details_widget::module_details_widget(QWidget* parent)
-    : QWidget(parent), m_treeview(new QTreeView(this)), m_tree_module_model(new tree_module_model(this)), m_tree_module_proxy_model(new tree_module_proxy_model(this)), m_ignore_selection_change(false)
+    : QWidget(parent), m_ignore_selection_change(false), m_treeview(new QTreeView(this)), m_tree_module_model(new tree_module_model(this)), m_tree_module_proxy_model(new tree_module_proxy_model(this))
 {
     m_current_id = 0;
 
@@ -207,17 +207,20 @@ void module_details_widget::handle_net_name_changed(const std::shared_ptr<net> n
 
 void module_details_widget::handle_net_src_changed(const std::shared_ptr<net> n)
 {
+    Q_UNUSED(n);
     update(m_current_id);
 }
 
 void module_details_widget::handle_net_dst_added(const std::shared_ptr<net> n, const u32 dst_gate_id)
 {
+    Q_UNUSED(dst_gate_id);
     //would have written the same logic in this funtion, so just use the function below
     handle_net_name_changed(n);
 }
 
 void module_details_widget::handle_net_dst_removed(const std::shared_ptr<net> n, const u32 dst_gate_id)
 {
+    Q_UNUSED(n);
     if (m_current_id == 0)
         return;
     auto g = g_netlist->get_gate_by_id(dst_gate_id);

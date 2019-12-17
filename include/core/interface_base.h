@@ -30,6 +30,22 @@
 #include <set>
 #include <string>
 
+
+/**
+ * Automatically declares a factory function when including this header.
+ * Has to be implemented in the plugin.
+ */
+#ifdef COMPILER_CLANG
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wreturn-type-c-linkage"
+#endif
+class i_base;
+extern "C" PLUGIN_API std::shared_ptr<i_base> get_plugin_instance();
+#ifdef COMPILER_CLANG
+#pragma clang diagnostic pop
+#endif
+
+
 /**
  * Enum for all possible plugin types
  */

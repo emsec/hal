@@ -1,18 +1,18 @@
 #include "validator/stacked_validator.h"
 
 stacked_validator::stacked_validator() : m_validators(QList<validator*>())
-{  
-    
+{
+
 }
 
-void stacked_validator::add_validator(validator* validator)
+void stacked_validator::add_validator(validator* v)
 {
-    m_validators.append(validator);
+    m_validators.append(v);
 }
 
-void stacked_validator::remove_validator(validator* validator)
+void stacked_validator::remove_validator(validator* v)
 {
-    m_validators.removeAll(validator);
+    m_validators.removeAll(v);
 }
 
 void stacked_validator::clear_validators()
@@ -22,7 +22,7 @@ void stacked_validator::clear_validators()
 
 bool stacked_validator::validate(const QString &input)
 {
-    for(validator* v : m_validators)
+    for(const auto& v : m_validators)
     {
         if(v != nullptr && !v->validate(input))
         {
@@ -30,6 +30,6 @@ bool stacked_validator::validate(const QString &input)
             return false;
         }
     }
-    
+
     return true;
 }

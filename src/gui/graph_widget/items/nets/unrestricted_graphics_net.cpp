@@ -1,4 +1,4 @@
-#include "graph_widget/items/unrestricted_graphics_net.h"
+#include "graph_widget/items/nets/unrestricted_graphics_net.h"
 
 //#include "gui_globals.h"
 

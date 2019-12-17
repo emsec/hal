@@ -21,40 +21,48 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#pragma once
+#ifndef ARROW_SEPARATED_NET_H
+#define ARROW_SEPARATED_NET_H
 
-#include "core/interface_interactive_ui.h"
+#include "graph_widget/items/nets/separated_graphics_net.h"
 
-class plugin_python_shell : virtual public i_interactive_ui
+class arrow_separated_net : public separated_graphics_net
 {
 public:
-    plugin_python_shell() = default;
+    static void load_settings();
 
-    ~plugin_python_shell() = default;
+    arrow_separated_net(const std::shared_ptr<const net> n);
 
-    /*
-     *      interface implementations
-     */
+    virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override;
+    virtual void set_visuals(const visuals& v) override;
 
-    /**
-     * Get the name of the plugin.
-     *
-     * @returns Plugin name.
-     */
-    std::string get_name() const override;
+    virtual void add_output() override;
+    virtual void add_input(const QPointF& scene_position) override;
 
-    /**
-     * Get the version of the plugin.
-     *
-     * @returns Plugin version.
-     */
-    std::string get_version() const override;
+    virtual void finalize() override;
 
-    /**
-     * Excutes the plugin with given command line parameters.
-     *
-     * @param[in] args - The command line parameters.
-     * @returns True on success.
-     */
-    bool exec(program_arguments& args) override;
+    virtual qreal input_width() const override;
+    virtual qreal output_width() const override;
+
+private:
+    static qreal s_wire_length;
+    static qreal s_input_arrow_offset;
+    static qreal s_output_arrow_offset;
+
+    // FIND BETTER NAMES
+    static qreal s_arrow_length;
+    static qreal s_arrow_height;
+    static qreal s_arrow_left_outward_x_shift;
+    static qreal s_arrow_right_outward_x_shift;
+
+    static qreal s_input_offset;
+
+    static qreal s_input_width;
+    static qreal s_output_width;
+
+    static QPainterPath s_arrow;
+
+    static QBrush s_brush;
 };
+
+#endif // ARROW_SEPARATED_NET_H

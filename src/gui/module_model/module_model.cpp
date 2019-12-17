@@ -10,10 +10,8 @@
 #include "netlist/module.h"
 #include "netlist/net.h"
 
-module_model::module_model(QObject* parent) : QAbstractItemModel(parent),
-    m_top_module_item(nullptr)
+module_model::module_model(QObject* parent) : QAbstractItemModel(parent), m_top_module_item(nullptr)
 {
-
 }
 
 QModelIndex module_model::index(int row, int column, const QModelIndex& parent) const
@@ -40,20 +38,20 @@ QModelIndex module_model::index(int row, int column, const QModelIndex& parent) 
     return createIndex(row, column, child_item);
 
     // NECESSARY ???
-//    if (column != 0)
-//        return QModelIndex();
+    //    if (column != 0)
+    //        return QModelIndex();
 
-//    // PROBABLY REDUNDANT
-//    if (parent.isValid() && parent.column() != 0)
-//        return QModelIndex();
+    //    // PROBABLY REDUNDANT
+    //    if (parent.isValid() && parent.column() != 0)
+    //        return QModelIndex();
 
-//    module_item* parent_item = get_item(parent);
-//    module_item* child_item = parent_item->child(row);
+    //    module_item* parent_item = get_item(parent);
+    //    module_item* child_item = parent_item->child(row);
 
-//    if (child_item)
-//        return createIndex(row, column, child_item);
-//    else
-//        return QModelIndex();
+    //    if (child_item)
+    //        return createIndex(row, column, child_item);
+    //    else
+    //        return QModelIndex();
 }
 
 QModelIndex module_model::parent(const QModelIndex& index) const
@@ -61,7 +59,7 @@ QModelIndex module_model::parent(const QModelIndex& index) const
     if (!index.isValid())
         return QModelIndex();
 
-    module_item* item  = get_item(index);
+    module_item* item = get_item(index);
 
     if (item == m_top_module_item)
         return QModelIndex();
@@ -69,21 +67,21 @@ QModelIndex module_model::parent(const QModelIndex& index) const
     module_item* parent_item = item->parent();
     return createIndex(parent_item->row(), 0, parent_item);
 
-//    if (!index.isValid())
-//        return QModelIndex();
+    //    if (!index.isValid())
+    //        return QModelIndex();
 
-//    module_item* child_item  = get_item(index);
-//    module_item* parent_item = child_item->parent();
+    //    module_item* child_item  = get_item(index);
+    //    module_item* parent_item = child_item->parent();
 
-//    if (parent_item == m_root_item)
-//        return QModelIndex();
+    //    if (parent_item == m_root_item)
+    //        return QModelIndex();
 
-//    return createIndex(parent_item->row(), 0, parent_item);
+    //    return createIndex(parent_item->row(), 0, parent_item);
 }
 
 int module_model::rowCount(const QModelIndex& parent) const
 {
-    if (!parent.isValid()) // ??
+    if (!parent.isValid())    // ??
         return 1;
 
     if (parent.column() != 0)
@@ -113,30 +111,32 @@ QVariant module_model::data(const QModelIndex& index, int role) const
 
     switch (role)
     {
-    case Qt::DecorationRole:
-    {
-        if (index.column() == 0)
+        case Qt::DecorationRole:
         {
-            QString run_icon_style = "all->" + item->color().name();
-            QString run_icon_path  = ":/icons/filled-circle";
+            if (index.column() == 0)
+            {
+                QString run_icon_style = "all->" + item->color().name();
+                QString run_icon_path  = ":/icons/filled-circle";
 
-            return gui_utility::get_styled_svg_icon(run_icon_style, run_icon_path);
+                return gui_utility::get_styled_svg_icon(run_icon_style, run_icon_path);
+            }
+            break;
         }
-        break;
+        case Qt::DisplayRole:
+        {
+            return item->data(index.column());
+        }
+        case Qt::ForegroundRole:
+        {
+            if (item->highlighted())
+                return QColor(QColor(255, 221, 0));    // USE STYLESHEETS
+            else
+                return QColor(QColor(255, 255, 255));    // USE STYLESHEETS
+        }
+        default:
+            return QVariant();
     }
-    case Qt::DisplayRole:
-    {
-        return item->data(index.column());
-    }
-    case Qt::ForegroundRole:
-    {
-        if (item->highlighted())
-            return QColor(QColor(255, 221, 0)); // USE STYLESHEETS
-        else
-            return QColor(QColor(255, 255, 255)); // USE STYLESHEETS
-    }
-    default: return QVariant();
-    }
+    return QVariant();
 }
 
 Qt::ItemFlags module_model::flags(const QModelIndex& index) const
@@ -199,7 +199,7 @@ void module_model::init()
     s.erase(g_netlist->get_top_module());
 
     for (std::shared_ptr<module> m : s)
-        add_module(m->get_id(), m->get_parent_module()->get_id()); // MODULES NOT NECESSARILY IN RIGHT ORDER, FIX
+        add_module(m->get_id(), m->get_parent_module()->get_id());    // MODULES NOT NECESSARILY IN RIGHT ORDER, FIX
 }
 
 void module_model::clear()
@@ -221,7 +221,7 @@ void module_model::add_module(const u32 id, const u32 parent_module)
     assert(!m_module_items.contains(id));
     assert(m_module_items.contains(parent_module));
 
-    module_item* item = new module_item(id);
+    module_item* item   = new module_item(id);
     module_item* parent = m_module_items.value(parent_module);
 
     item->set_parent(parent);
@@ -250,7 +250,7 @@ void module_model::remove_module(const u32 id)
     assert(g_netlist->get_module_by_id(id));
     assert(m_module_items.contains(id));
 
-    module_item* item = m_module_items.value(id);
+    module_item* item   = m_module_items.value(id);
     module_item* parent = item->parent();
     assert(item);
     assert(parent);
@@ -267,7 +267,7 @@ void module_model::remove_module(const u32 id)
     delete item;
 }
 
-void module_model::update_module(const u32 id) // SPLIT ???
+void module_model::update_module(const u32 id)    // SPLIT ???
 {
     assert(g_netlist->get_module_by_id(id));
     assert(m_module_items.contains(id));
@@ -275,7 +275,7 @@ void module_model::update_module(const u32 id) // SPLIT ???
     module_item* item = m_module_items.value(id);
     assert(item);
 
-    item->set_name(QString::fromStdString(g_netlist->get_module_by_id(id)->get_name())); // REMOVE & ADD AGAIN
+    item->set_name(QString::fromStdString(g_netlist->get_module_by_id(id)->get_name()));    // REMOVE & ADD AGAIN
     item->set_color(g_netlist_relay.get_module_color(id));
 
     QModelIndex index = get_index(item);

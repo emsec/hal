@@ -50,5 +50,6 @@ QVariant dropdown_setting::value()
 
 void dropdown_setting::on_index_changed(QString text)
 {
+    Q_UNUSED(text);
     this->trigger_setting_updated();
 }

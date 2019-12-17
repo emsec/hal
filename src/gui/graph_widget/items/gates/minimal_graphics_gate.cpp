@@ -1,4 +1,4 @@
-#include "gui/graph_widget/items/minimal_graphics_gate.h"
+#include "gui/graph_widget/items/gates/minimal_graphics_gate.h"
 
 #include "netlist/gate.h"
 
@@ -155,7 +155,7 @@ QPointF minimal_graphics_gate::get_output_scene_position(const u32 net_id, const
 
 void minimal_graphics_gate::set_visuals(const graphics_node::visuals& v)
 {
-
+Q_UNUSED(v);
 }
 
 void minimal_graphics_gate::format()

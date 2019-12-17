@@ -69,6 +69,7 @@ void graph_layouter_selection_widget::cancel_clicked(bool checked)
 
 void graph_layouter_selection_widget::current_selection_changed(QString layouter)
 {
+    Q_UNUSED(layouter);
     QString text = "<H1>";
     //text += graph_layouter_manager::get_instance().get_name(layouter);
     text += "</H1>";

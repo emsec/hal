@@ -47,8 +47,7 @@ Get the version of the plugin.
 )")
         .def("get_communities_fast_greedy",
              [](plugin_graph_algorithm& a, std::shared_ptr<netlist> const nl) -> std::map<int, std::set<std::shared_ptr<gate>>> {
-                 auto m = a.get_communities_fast_greedy(nl);
-                 return m;
+                 return a.get_communities_fast_greedy(nl);
              },
              py::arg("netlist"),
              R"(
@@ -61,8 +60,7 @@ Returns the map of community-IDs to communities running the fast-greedy clusteri
 )")
         .def("get_communities_multilevel",
              [](plugin_graph_algorithm& a, std::shared_ptr<netlist> const nl) -> std::map<int, std::set<std::shared_ptr<gate>>> {
-                 auto m = a.get_communities_multilevel(nl);
-                 return m;
+                 return a.get_communities_multilevel(nl);
              },
              py::arg("netlist"),
              R"(

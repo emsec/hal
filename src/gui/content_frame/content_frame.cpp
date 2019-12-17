@@ -73,12 +73,12 @@ void content_frame::childEvent(QChildEvent* event)
         deleteLater();
     }
 
-    if ((bool) event->FocusIn)
+    if (event->FocusIn != 0)
     {
         // add debug code to show focus
     }
 
-    if ((bool) event->FocusOut)
+    if (event->FocusOut != 0)
     {
         // add debug code to show focus
     }

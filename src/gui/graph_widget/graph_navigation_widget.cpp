@@ -99,9 +99,10 @@ void graph_navigation_widget::hide_when_focus_lost(bool hide)
     m_hide_when_focus_lost = hide;
 }
 
-void graph_navigation_widget::focusOutEvent(QFocusEvent *event)
+void graph_navigation_widget::focusOutEvent(QFocusEvent* event)
 {
-    if(m_hide_when_focus_lost)
+    Q_UNUSED(event);
+    if (m_hide_when_focus_lost)
         hide();
 }
 
@@ -221,7 +222,7 @@ void graph_navigation_widget::fill_table(std::shared_ptr<net> n)
     setFixedHeight((height > MAXIMUM_ALLOWED_HEIGHT) ? MAXIMUM_ALLOWED_HEIGHT : height);
 }
 
-void graph_navigation_widget::handle_item_double_clicked(QTableWidgetItem *item)
+void graph_navigation_widget::handle_item_double_clicked(QTableWidgetItem* item)
 {
     Q_UNUSED(item)
     commit_selection();
@@ -238,7 +239,7 @@ void graph_navigation_widget::commit_selection()
     {
         // "select all" was chosen
         QSet<u32> gates;
-        for (u32 row = 1; row < rowCount(); ++row)
+        for (u32 row = 1; row < (u32)rowCount(); ++row)
         {
             std::shared_ptr<gate> g = g_netlist->get_gate_by_id(item(row, 0)->text().toLong());
             if (g)
@@ -262,5 +263,4 @@ void graph_navigation_widget::commit_selection()
 
     Q_EMIT navigation_requested(m_via_net, g->get_id());
     return;
-
 }

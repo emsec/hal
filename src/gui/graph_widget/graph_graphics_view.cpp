@@ -12,17 +12,16 @@
 #include "gui/graph_widget/graphics_scene.h"
 #include "gui/graph_widget/items/graphics_gate.h"
 #include "gui/graph_widget/items/graphics_item.h"
-#include "gui/graph_widget/items/io_graphics_net.h"
-#include "gui/graph_widget/items/separated_graphics_net.h"
-#include "gui/graph_widget/items/standard_graphics_gate.h"
-#include "gui/graph_widget/items/standard_graphics_module.h"
-#include "gui/graph_widget/items/standard_graphics_net.h"
+#include "gui/graph_widget/items/nets/separated_graphics_net.h"
+#include "gui/graph_widget/items/gates/standard_graphics_gate.h"
+#include "gui/graph_widget/items/modules/standard_graphics_module.h"
+#include "gui/graph_widget/items/nets/standard_graphics_net.h"
 #include "gui/graph_widget/items/utility_items/drag_shadow_gate.h"
 #include "gui/gui_globals.h"
 #include "gui/gui_utils/netlist.h"
 
-#include <QApplication>
 #include <QAction>
+#include <QApplication>
 #include <QColorDialog>
 #include <QDrag>
 #include <QInputDialog>
@@ -37,14 +36,9 @@
 #include <QWidgetAction>
 #include <qmath.h>
 
-graph_graphics_view::graph_graphics_view(graph_widget* parent) : QGraphicsView(parent),
-    m_graph_widget(parent),
-    m_minimap_enabled(false),
-    m_grid_enabled(true),
-    m_grid_clusters_enabled(true),
-    m_grid_type(graph_widget_constants::grid_type::lines),
-    m_zoom_modifier(Qt::NoModifier),
-    m_zoom_factor_base(1.0015)
+graph_graphics_view::graph_graphics_view(graph_widget* parent)
+    : QGraphicsView(parent), m_graph_widget(parent), m_minimap_enabled(false), m_grid_enabled(true), m_grid_clusters_enabled(true), m_grid_type(graph_widget_constants::grid_type::lines),
+      m_zoom_modifier(Qt::NoModifier), m_zoom_factor_base(1.0015)
 {
     connect(&g_selection_relay, &selection_relay::subfocus_changed, this, &graph_graphics_view::conditional_update);
     connect(this, &graph_graphics_view::customContextMenuRequested, this, &graph_graphics_view::show_context_menu);
@@ -63,9 +57,9 @@ graph_graphics_view::graph_graphics_view(graph_widget* parent) : QGraphicsView(p
 void graph_graphics_view::initialize_settings()
 {
     unsigned int drag_modifier_setting = g_settings_manager.get("graph_view/drag_mode_modifier").toUInt();
-    m_drag_modifier = Qt::KeyboardModifier(drag_modifier_setting);
+    m_drag_modifier                    = Qt::KeyboardModifier(drag_modifier_setting);
     unsigned int move_modifier_setting = g_settings_manager.get("graph_view/move_modifier").toUInt();
-    m_move_modifier = Qt::KeyboardModifier(move_modifier_setting);
+    m_move_modifier                    = Qt::KeyboardModifier(move_modifier_setting);
 }
 
 void graph_graphics_view::conditional_update()
@@ -115,7 +109,6 @@ void graph_graphics_view::handle_move_action(QAction* action)
     auto modules = g_selection_relay.m_selected_modules;
     g_selection_relay.clear();
     g_selection_relay.relay_selection_changed(this);
-
 }
 
 void graph_graphics_view::handle_move_new_action()
@@ -131,15 +124,12 @@ void graph_graphics_view::handle_move_new_action()
         module_objs.insert(g_netlist->get_module_by_id(id));
     }
     std::shared_ptr<module> parent = gui_utility::first_common_ancestor(module_objs, gate_objs);
-    QString parent_name = QString::fromStdString(parent->get_name());
+    QString parent_name            = QString::fromStdString(parent->get_name());
     bool ok;
-    QString name = QInputDialog::getText(nullptr, "",
-        "New module will be created under \"" + parent_name + "\"\nModule Name:",
-        QLineEdit::Normal, "", &ok);
+    QString name = QInputDialog::getText(nullptr, "", "New module will be created under \"" + parent_name + "\"\nModule Name:", QLineEdit::Normal, "", &ok);
     if (!ok || name.isEmpty())
         return;
-    std::shared_ptr<module> m = g_netlist->create_module(g_netlist->get_unique_module_id(),
-        name.toStdString(), parent);
+    std::shared_ptr<module> m = g_netlist->create_module(g_netlist->get_unique_module_id(), name.toStdString(), parent);
 
     for (const auto& id : g_selection_relay.m_selected_gates)
     {
@@ -207,7 +197,6 @@ void graph_graphics_view::paintEvent(QPaintEvent* event)
     standard_graphics_gate::update_alpha();
     standard_graphics_net::update_alpha();
     separated_graphics_net::update_alpha();
-    io_graphics_net::update_alpha();
 
     QGraphicsView::paintEvent(event);
 }
@@ -250,9 +239,9 @@ void graph_graphics_view::mousePressEvent(QMouseEvent* event)
         graphics_item* item = static_cast<graphics_item*>(itemAt(event->pos()));
         if (item && item_draggable(item))
         {
-            m_drag_item = static_cast<graphics_gate*>(item);
+            m_drag_item               = static_cast<graphics_gate*>(item);
             m_drag_mousedown_position = event->pos();
-            m_drag_cursor_offset = m_drag_mousedown_position - mapFromScene(item->pos());
+            m_drag_cursor_offset      = m_drag_mousedown_position - mapFromScene(item->pos());
         }
         else
         {
@@ -276,26 +265,26 @@ void graph_graphics_view::mouseMoveEvent(QMouseEvent* event)
     if (qAbs(delta.x()) > 5 || qAbs(delta.y()) > 5)
     {
         target_viewport_pos = event->pos();
-        target_scene_pos = mapToScene(event->pos());
+        target_scene_pos    = mapToScene(event->pos());
     }
 
     if (event->buttons().testFlag(Qt::LeftButton))
     {
         if (event->modifiers() == m_move_modifier)
         {
-            QScrollBar* hBar = horizontalScrollBar();
-            QScrollBar* vBar = verticalScrollBar();
-            QPoint delta     = event->pos() - m_move_position;
-            m_move_position  = event->pos();
-            hBar->setValue(hBar->value() + (isRightToLeft() ? delta.x() : -delta.x()));
-            vBar->setValue(vBar->value() - delta.y());
+            QScrollBar* hBar  = horizontalScrollBar();
+            QScrollBar* vBar  = verticalScrollBar();
+            QPoint delta_move = event->pos() - m_move_position;
+            m_move_position   = event->pos();
+            hBar->setValue(hBar->value() + (isRightToLeft() ? delta_move.x() : -delta_move.x()));
+            vBar->setValue(vBar->value() - delta_move.y());
         }
         else
         {
             if (m_drag_item && (event->pos() - m_drag_mousedown_position).manhattanLength() >= QApplication::startDragDistance())
             {
-                QDrag *drag = new QDrag(this);
-                QMimeData *mimeData = new QMimeData;
+                QDrag* drag         = new QDrag(this);
+                QMimeData* mimeData = new QMimeData;
 
                 // TODO set MIME type and icon
                 mimeData->setText("dragTest");
@@ -310,14 +299,14 @@ void graph_graphics_view::mouseMoveEvent(QMouseEvent* event)
     QGraphicsView::mouseMoveEvent(event);
 }
 
-void graph_graphics_view::dragEnterEvent(QDragEnterEvent *event)
+void graph_graphics_view::dragEnterEvent(QDragEnterEvent* event)
 {
     if (event->source() == this && event->proposedAction() == Qt::MoveAction)
     {
         event->acceptProposedAction();
         QSizeF size(m_drag_item->width(), m_drag_item->height());
         QPointF mouse = event->posF();
-        QPointF pos = mapToScene(mouse.x(), mouse.y()) - m_drag_cursor_offset;
+        QPointF pos   = mapToScene(mouse.x(), mouse.y()) - m_drag_cursor_offset;
         if (g_selection_relay.m_selected_gates.size() > 1)
         {
             // if we are in multi-select mode, reduce the selection to the
@@ -329,8 +318,7 @@ void graph_graphics_view::dragEnterEvent(QDragEnterEvent *event)
             g_selection_relay.m_subfocus   = selection_relay::subfocus::none;
             g_selection_relay.relay_selection_changed(nullptr);
         }
-        static_cast<graphics_scene*>(scene())
-            ->start_drag_shadow(pos, size, m_drag_item);
+        static_cast<graphics_scene*>(scene())->start_drag_shadow(pos, size, m_drag_item);
     }
     else
     {
@@ -338,32 +326,30 @@ void graph_graphics_view::dragEnterEvent(QDragEnterEvent *event)
     }
 }
 
-void graph_graphics_view::dragLeaveEvent(QDragLeaveEvent *event)
+void graph_graphics_view::dragLeaveEvent(QDragLeaveEvent* event)
 {
     Q_UNUSED(event)
     static_cast<graphics_scene*>(scene())->stop_drag_shadow();
 }
 
-void graph_graphics_view::dragMoveEvent(QDragMoveEvent *event)
+void graph_graphics_view::dragMoveEvent(QDragMoveEvent* event)
 {
     if (event->source() == this && event->proposedAction() == Qt::MoveAction)
     {
-        QPoint mouse = event->pos();
+        QPoint mouse         = event->pos();
         bool modifierPressed = event->keyboardModifiers() == m_drag_modifier;
-        QPoint shadow = mouse - m_drag_cursor_offset;
-        static_cast<graphics_scene*>(scene())
-            ->move_drag_shadow(mapToScene(shadow.x(), shadow.y()),
-            modifierPressed ? graphics_scene::drag_mode::swap : graphics_scene::drag_mode::move);
+        QPoint shadow        = mouse - m_drag_cursor_offset;
+        static_cast<graphics_scene*>(scene())->move_drag_shadow(mapToScene(shadow.x(), shadow.y()), modifierPressed ? graphics_scene::drag_mode::swap : graphics_scene::drag_mode::move);
     }
 }
 
-void graph_graphics_view::dropEvent(QDropEvent *event)
+void graph_graphics_view::dropEvent(QDropEvent* event)
 {
     if (event->source() == this && event->proposedAction() == Qt::MoveAction)
     {
         event->acceptProposedAction();
         graphics_scene* s = static_cast<graphics_scene*>(scene());
-        bool success = s->stop_drag_shadow();
+        bool success      = s->stop_drag_shadow();
         if (success)
         {
             bool modifierPressed = event->keyboardModifiers() == m_drag_modifier;
@@ -398,7 +384,7 @@ void graph_graphics_view::wheelEvent(QWheelEvent* event)
     {
         if (event->orientation() == Qt::Vertical)
         {
-            qreal angle = event->angleDelta().y();
+            qreal angle  = event->angleDelta().y();
             qreal factor = qPow(m_zoom_factor_base, angle);
             gentle_zoom(factor);
         }
@@ -450,13 +436,15 @@ void graph_graphics_view::show_context_menu(const QPoint& pos)
     QAction* action;
 
     QGraphicsItem* item = itemAt(pos);
-    bool isGate = false, isModule = false, isNet = false;
+    bool isGate         = false;
+    bool isModule       = false;
+    // bool isNet = false;
     if (item)
     {
-        m_item = static_cast<graphics_item*>(item);
-        isGate = m_item->item_type() == hal::item_type::gate;
+        m_item   = static_cast<graphics_item*>(item);
+        isGate   = m_item->item_type() == hal::item_type::gate;
         isModule = m_item->item_type() == hal::item_type::module;
-        isNet = m_item->item_type() == hal::item_type::net;
+        // isNet    = m_item->item_type() == hal::item_type::net;
 
         if (isGate)
         {
@@ -516,7 +504,7 @@ void graph_graphics_view::show_context_menu(const QPoint& pos)
             action = context_menu.addAction("  Add predecessors to view");
             connect(action, &QAction::triggered, this, &graph_graphics_view::handle_select_inputs);
 
-            std::shared_ptr<gate> g = isGate ? g_netlist->get_gate_by_id(m_item->id()) : nullptr;
+            std::shared_ptr<gate> g   = isGate ? g_netlist->get_gate_by_id(m_item->id()) : nullptr;
             std::shared_ptr<module> m = isModule ? g_netlist->get_module_by_id(m_item->id()) : nullptr;
 
             // only allow move actions on anything that is not the top module
@@ -549,7 +537,6 @@ void graph_graphics_view::show_context_menu(const QPoint& pos)
             }
         }
 
-
         if (g_selection_relay.m_selected_gates.size() + g_selection_relay.m_selected_modules.size() > 1)
         {
             if (!g_selection_relay.m_selected_gates.empty())
@@ -571,18 +558,18 @@ void graph_graphics_view::show_context_menu(const QPoint& pos)
         }
     }
 
-    if (!item || isNet)
-    {
-        QAction* antialiasing_action = context_menu.addAction("Antialiasing");
-        QAction* cosmetic_action     = context_menu.addAction("Cosmetic Nets");
-        QMenu* grid_menu             = context_menu.addMenu("Grid");
-        QMenu* type_menu             = grid_menu->addMenu("Type");
-        QMenu* cluster_menu          = grid_menu->addMenu("Clustering");
-        QAction* lines_action        = type_menu->addAction("Lines");
-        QAction* dots_action         = type_menu->addAction("Dots");
-        QAction* none_action         = type_menu->addAction("None");
-        //connect(action, &QAction::triggered, this, SLOT);
-    }
+    // if (!item || isNet)
+    // {
+    // QAction* antialiasing_action = context_menu.addAction("Antialiasing");
+    // QAction* cosmetic_action     = context_menu.addAction("Cosmetic Nets");
+    // QMenu* grid_menu = context_menu.addMenu("Grid");
+    // QMenu* type_menu = grid_menu->addMenu("Type");
+    // QMenu* cluster_menu          = grid_menu->addMenu("Clustering");
+    // QAction* lines_action        = type_menu->addAction("Lines");
+    // QAction* dots_action         = type_menu->addAction("Dots");
+    // QAction* none_action         = type_menu->addAction("None");
+    // connect(action, &QAction::triggered, this, SLOT);
+    // }
 
     context_menu.exec(mapToGlobal(pos));
     update();
@@ -613,7 +600,7 @@ void graph_graphics_view::gentle_zoom(const qreal factor)
     scale(factor, factor);
     centerOn(target_scene_pos);
     QPointF delta_viewport_pos = target_viewport_pos - QPointF(viewport()->width() / 2.0, viewport()->height() / 2.0);
-    QPointF viewport_center = mapFromScene(target_scene_pos) - delta_viewport_pos;
+    QPointF viewport_center    = mapFromScene(target_scene_pos) - delta_viewport_pos;
     centerOn(mapToScene(viewport_center.toPoint()));
 }
 
@@ -624,9 +611,9 @@ void graph_graphics_view::handle_select_outputs()
     if (sender_action)
     {
         QSet<u32> gates;
-        for (auto id : g_selection_relay.m_selected_gates)
+        for (auto sel_id : g_selection_relay.m_selected_gates)
         {
-            auto gate = g_netlist->get_gate_by_id(id);
+            auto gate = g_netlist->get_gate_by_id(sel_id);
             for (const auto& net : gate->get_fan_out_nets())
             {
                 for (const auto& suc : net->get_dsts())
@@ -648,9 +635,9 @@ void graph_graphics_view::handle_select_outputs()
                 }
             }
         }
-        for (auto id : g_selection_relay.m_selected_modules)
+        for (auto sel_id : g_selection_relay.m_selected_modules)
         {
-            auto module = g_netlist->get_module_by_id(id);
+            auto module = g_netlist->get_module_by_id(sel_id);
             for (const auto& net : module->get_output_nets())
             {
                 for (const auto& suc : net->get_dsts())
@@ -683,9 +670,9 @@ void graph_graphics_view::handle_select_inputs()
     if (sender_action)
     {
         QSet<u32> gates;
-        for (auto id : g_selection_relay.m_selected_gates)
+        for (auto sel_id : g_selection_relay.m_selected_gates)
         {
-            auto gate = g_netlist->get_gate_by_id(id);
+            auto gate = g_netlist->get_gate_by_id(sel_id);
             for (const auto& net : gate->get_fan_in_nets())
             {
                 if (net->get_src().gate != nullptr)
@@ -707,9 +694,9 @@ void graph_graphics_view::handle_select_inputs()
                 }
             }
         }
-        for (auto id : g_selection_relay.m_selected_modules)
+        for (auto sel_id : g_selection_relay.m_selected_modules)
         {
-            auto module = g_netlist->get_module_by_id(id);
+            auto module = g_netlist->get_module_by_id(sel_id);
             for (const auto& net : module->get_input_nets())
             {
                 if (net->get_src().gate != nullptr)
@@ -737,15 +724,16 @@ void graph_graphics_view::handle_select_inputs()
 
 void graph_graphics_view::handle_global_setting_changed(void* sender, const QString& key, const QVariant& value)
 {
+    UNUSED(sender);
     if (key == "graph_view/drag_mode_modifier")
     {
         unsigned int modifier = value.toUInt();
-        m_drag_modifier = Qt::KeyboardModifier(modifier);
+        m_drag_modifier       = Qt::KeyboardModifier(modifier);
     }
     else if (key == "graph_view/move_modifier")
     {
         unsigned int modifier = value.toUInt();
-        m_move_modifier = Qt::KeyboardModifier(modifier);
+        m_move_modifier       = Qt::KeyboardModifier(modifier);
     }
 }
 
@@ -758,7 +746,7 @@ void graph_graphics_view::handle_fold_single_action()
 void graph_graphics_view::handle_unfold_single_action()
 {
     auto context = m_graph_widget->get_context();
-    auto m = g_netlist->get_module_by_id(m_item->id());
+    auto m       = g_netlist->get_module_by_id(m_item->id());
     if (m->get_gates().empty() && m->get_submodules().empty())
     {
         QMessageBox msg;

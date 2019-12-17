@@ -29,7 +29,9 @@ void i_base::initialize_logging() const
 
 bool i_base::has_type(interface_type t) const
 {
-    return (t == interface_type::base && dynamic_cast<const i_base*>(this)) || (t == interface_type::cli && dynamic_cast<const i_cli*>(this))
-           || (t == interface_type::interactive_ui && dynamic_cast<const i_interactive_ui*>(this)) || (t == interface_type::gui && dynamic_cast<const i_gui*>(this));
+    return (t == interface_type::base)
+           || (t == interface_type::cli && dynamic_cast<const i_cli*>(this))
+           || (t == interface_type::interactive_ui && dynamic_cast<const i_interactive_ui*>(this))
+           || (t == interface_type::gui && dynamic_cast<const i_gui*>(this));
     return false;
 }

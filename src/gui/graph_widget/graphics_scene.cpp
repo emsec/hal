@@ -132,7 +132,7 @@ void graphics_scene::move_drag_shadow(const QPointF& posF, const drag_mode mode)
 
     m_drag_shadow_gate->setPos(newPos);
     auto colliding = m_drag_shadow_gate->collidingItems();
-    bool placeable;
+    bool placeable = false;
     switch (mode)
     {
         case drag_mode::move: {
@@ -145,8 +145,8 @@ void graphics_scene::move_drag_shadow(const QPointF& posF, const drag_mode mode)
                 #else
                 hal::item_type type = static_cast<graphics_item*>(itm)->item_type();
                 if (itm != m_drag_source_item
-                    && type == hal::item_type::gate
-                    || type == hal::item_type::module)
+                    && (type == hal::item_type::gate
+                    || type == hal::item_type::module))
                 #endif
                 {
                     placeable = false;
@@ -182,7 +182,7 @@ void graphics_scene::move_drag_shadow(const QPointF& posF, const drag_mode mode)
             break;
         }
     }
-    
+
     m_drag_shadow_gate->set_fits(placeable);
 }
 
