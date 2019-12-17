@@ -23,6 +23,10 @@ target_include_directories(netlist
                            $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}>
                            $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
                            )
+target_compile_options(netlist
+                       PUBLIC ${COMPILE_OPTIONS_PUBLIC}
+                       PRIVATE ${COMPILE_OPTIONS_PRIVATE}
+                       INTERFACE ${COMPILE_OPTIONS_INTERFACE})
 set_target_properties(netlist PROPERTIES DEFINE_SYMBOL API_NETLIST)
 target_link_libraries(netlist
                       PUBLIC

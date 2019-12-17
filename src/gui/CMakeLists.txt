@@ -37,7 +37,11 @@ if(WITH_GUI)
                                $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}>
                                $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
                                )
-    add_definitions(-DQT_NO_KEYWORDS)
+    target_compile_options(hal_gui
+                           PUBLIC ${COMPILE_OPTIONS_PUBLIC}
+                           PRIVATE ${COMPILE_OPTIONS_PRIVATE}
+                           INTERFACE ${COMPILE_OPTIONS_INTERFACE})
+    target_compile_definitions(hal_gui PUBLIC QT_NO_KEYWORDS)
     target_link_libraries(hal_gui PUBLIC hal::core hal::netlist ${GRAPHVIZ_LIBRARIES} ${PYTHON_LIBRARIES} pybind11::embed Qt5::Widgets Qt5::Concurrent Qt5::Svg)
 
     install(TARGETS hal_gui LIBRARY DESTINATION ${LIBRARY_INSTALL_DIRECTORY} PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE INCLUDES DESTINATION ${INCLUDE_INSTALL_DIRECTORY})

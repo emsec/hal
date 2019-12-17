@@ -10,6 +10,10 @@ target_include_directories(py
                            $<BUILD_INTERFACE:${PYTHON_INCLUDE_DIRS}>
                            $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
                            )
+target_compile_options(py
+                       PUBLIC ${COMPILE_OPTIONS_PUBLIC}
+                       PRIVATE ${COMPILE_OPTIONS_PRIVATE}
+                       INTERFACE ${COMPILE_OPTIONS_INTERFACE})
 #Set shared library suffix for MacOS; Used for boost_python support
 set_target_properties(py PROPERTIES PREFIX "")
 if(APPLE AND CMAKE_HOST_APPLE)
@@ -43,6 +47,10 @@ target_include_directories(hal_python
                            $<BUILD_INTERFACE:${PYTHON_INCLUDE_DIRS}>
                            $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
                            )
+target_compile_options(hal_python
+                       PUBLIC ${COMPILE_OPTIONS_PUBLIC}
+                       PRIVATE ${COMPILE_OPTIONS_PRIVATE}
+                       INTERFACE ${COMPILE_OPTIONS_INTERFACE})
 set_target_properties(hal_python PROPERTIES DEFINE_SYMBOL API_PYTHON_PLUGIN)
 target_link_libraries(hal_python PUBLIC hal::core hal::netlist PRIVATE ${PYTHON_LIBRARIES})
 install(TARGETS hal_python

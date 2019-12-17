@@ -46,6 +46,10 @@ target_include_directories(core
                            $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}>
                            $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
                            )
+target_compile_options(core
+                       PUBLIC ${COMPILE_OPTIONS_PUBLIC}
+                       PRIVATE ${COMPILE_OPTIONS_PRIVATE}
+                       INTERFACE ${COMPILE_OPTIONS_INTERFACE})
 set_target_properties(PROPERTIES DEFINE_SYMBOL BUILDING_CORE)
 target_link_libraries(core
                       PUBLIC
