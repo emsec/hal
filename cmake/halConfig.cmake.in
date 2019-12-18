@@ -1,16 +1,13 @@
 # halConfig.cmake
 # --------------------
 #
-# PYBIND11 cmake module.
+# HAL cmake module.
 # This module sets the following variables in your project::
 #
 #   hal_FOUND - true if hal and all required components found on the system
 #   hal_VERSION - hal version in format Major.Minor.Release
-#   hal_INCLUDE_DIRS - Directories where hal and python headers are located.
 #   hal_INCLUDE_DIR - Directory where hal headers are located.
-#   hal_DEFINITIONS - Definitions necessary to use hal, namely USING_hal.
 #   hal_LIBRARIES - compile flags and python libraries (as needed) to link against.
-#   hal_LIBRARY - empty.
 #   CMAKE_MODULE_PATH - appends location of accompanying FindPythonLibsNew.cmake and
 #                       halTools.cmake modules.
 #
@@ -24,14 +21,16 @@
 # interface library targets::
 #
 #   hal::core -
-#   hal::embed -
+#   hal::netlist -
 
 
 @package_init@
 
 set(PN hal)
 
-set(${PN}_INCLUDE_DIR "${PACKAGE_PREFIX_DIR}/@CMAKE_INSTALL_INCLUDEDIR@")
+set(${PN}_VERSION @HAL_VERSION_MAJOR@.@HAL_VERSION_MINOR@.@HAL_VERSION_PATCH@)
+
+set_and_check(${PN}_INCLUDE_DIR "${PACKAGE_PREFIX_DIR}/@CMAKE_INSTALL_INCLUDEDIR@")
 
 set(${PN}_LIBRARY "")
 set(${PN}_DEFINITIONS USING_${PN})
@@ -51,3 +50,5 @@ if(NOT (CMAKE_VERSION VERSION_LESS 3.0))
         include("${CMAKE_CURRENT_LIST_DIR}/${PN}Targets.cmake")
     endif()
 endif()
+
+set(${PN}_FOUND true)
