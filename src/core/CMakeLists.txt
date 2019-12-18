@@ -53,7 +53,7 @@ target_compile_options(core
 set_target_properties(PROPERTIES DEFINE_SYMBOL BUILDING_CORE)
 target_link_libraries(core
                       PUBLIC
-                        std::filesystem
+                        ${CXX_FILESYSTEM_LIB}
                         spdlog::spdlog
                         RapidJSON::RapidJSON
                         ${CMAKE_DL_LIBS}

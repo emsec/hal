@@ -173,6 +173,7 @@ set(CXX_FILESYSTEM_HEADER ${_fs_header} CACHE STRING "The header that should be 
 set(CXX_FILESYSTEM_NAMESPACE ${_fs_namespace} CACHE STRING "The C++ namespace that contains the filesystem APIs")
 
 set(_found FALSE)
+set(CXX_FILESYSTEM_LIB "")
 
 if(CXX_FILESYSTEM_HAVE_FS)
     # We have some filesystem library available. Do link checks
@@ -206,15 +207,17 @@ if(CXX_FILESYSTEM_HAVE_FS)
 
     if(can_link)
         add_library(std::filesystem INTERFACE IMPORTED)
-        target_compile_features(std::filesystem INTERFACE cxx_std_17)
+        #target_compile_features(std::filesystem INTERFACE cxx_std_17)
         set(_found TRUE)
 
         if(CXX_FILESYSTEM_NO_LINK_NEEDED)
             # Nothing to add...
         elseif(CXX_FILESYSTEM_STDCPPFS_NEEDED)
-            target_link_libraries(std::filesystem INTERFACE -lstdc++fs)
+            #target_link_libraries(std::filesystem INTERFACE -lstdc++fs)
+            set(CXX_FILESYSTEM_LIB -lstdc++fs)
         elseif(CXX_FILESYSTEM_CPPFS_NEEDED)
-            target_link_libraries(std::filesystem INTERFACE -lc++fs)
+            #target_link_libraries(std::filesystem INTERFACE -lc++fs)
+            set(CXX_FILESYSTEM_LIB -lc++fs)
         endif()
     endif()
 endif()
