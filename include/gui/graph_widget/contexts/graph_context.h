@@ -25,7 +25,7 @@ public:
     void begin_change();
     void end_change();
 
-    void add(const QSet<u32>& modules, const QSet<u32>& gates, hal::placement_hint placement = hal::placement_hint::standard);
+    void add(const QSet<u32>& modules, const QSet<u32>& gates, hal::placement_hint placement = hal::placement_hint{hal::placement_mode::standard, hal::node()});
     void remove(const QSet<u32>& modules, const QSet<u32>& gates);
     void clear();
 

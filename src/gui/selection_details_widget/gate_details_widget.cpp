@@ -464,7 +464,7 @@ void gate_details_widget::on_treewidget_item_clicked(QTreeWidgetItem* item, int 
         {
             //            auto rect = QApplication::desktop()->availableGeometry(this);
             //            w->move(QPoint(rect.x() + (rect.width() - w->width()) / 2, rect.y() + (rect.height() - w->height()) / 2));
-            m_navigation_table->setup(clicked_net);
+            m_navigation_table->setup(hal::node{hal::node_type::none, 0}, clicked_net);
             m_navigation_table->move(QCursor::pos());
             m_navigation_table->show();
             m_navigation_table->setFocus();
@@ -501,8 +501,10 @@ void gate_details_widget::on_treewidget_item_clicked(QTreeWidgetItem* item, int 
 }
 
 //always the right-subfocus!!!!!!(the other way is handled: on_treewidget_item_clicked
-void gate_details_widget::handle_navigation_jump_requested(const u32 via_net, const QSet<u32>& to_gates)
+void gate_details_widget::handle_navigation_jump_requested(const hal::node origin, const u32 via_net, const QSet<u32>& to_gates)
 {
+    Q_UNUSED(origin);
+    
     auto n = g_netlist->get_net_by_id(via_net);
 
     if (to_gates.isEmpty() || !n)

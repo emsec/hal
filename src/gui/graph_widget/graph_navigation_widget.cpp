@@ -49,6 +49,8 @@ void graph_navigation_widget::setup()
                 return;
             }
 
+            m_origin = hal::node{hal::node_type::gate, g->get_id()};
+
             std::string pin_type   = g->get_output_pins()[g_selection_relay.m_subfocus_index];
             std::shared_ptr<net> n = g->get_fan_out_net(pin_type);
 
@@ -70,6 +72,8 @@ void graph_navigation_widget::setup()
                 return;
             }
 
+            m_origin = hal::node{hal::node_type::none, 0};
+
             std::shared_ptr<gate> g = n->get_src().get_gate();
 
             if (!g)
@@ -83,15 +87,17 @@ void graph_navigation_widget::setup()
         }
         case selection_relay::item_type::module:
         {
+            // TODO ???
             return;
         }
     }
 }
 
-void graph_navigation_widget::setup(std::shared_ptr<net> via_net)
+void graph_navigation_widget::setup(hal::node origin, std::shared_ptr<net> via_net)
 {
     clearContents();
     fill_table(via_net);
+    m_origin = origin;
 }
 
 void graph_navigation_widget::hide_when_focus_lost(bool hide)
@@ -249,7 +255,7 @@ void graph_navigation_widget::commit_selection()
                 gates.insert(g->get_id());
             }
         }
-        Q_EMIT navigation_requested(m_via_net, gates);
+        Q_EMIT navigation_requested(m_origin, m_via_net, gates);
         return;
     }
 
@@ -260,6 +266,6 @@ void graph_navigation_widget::commit_selection()
         return;
     }
 
-    Q_EMIT navigation_requested(m_via_net, {g->get_id()});
+    Q_EMIT navigation_requested(m_origin, m_via_net, {g->get_id()});
     return;
 }

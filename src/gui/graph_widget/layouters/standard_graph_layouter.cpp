@@ -18,18 +18,18 @@ const QString standard_graph_layouter::description() const
 
 void standard_graph_layouter::add(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets, hal::placement_hint placement)
 {
-    switch(placement)
+    switch(placement.mode)
     {
-    case hal::placement_hint::standard: {
+    case hal::placement_mode::standard: {
         add_compact(modules, gates, nets);
         break;
     }
-    case hal::placement_hint::prefer_left: {
-        add_vertical(modules, gates, nets, true);
+    case hal::placement_mode::prefer_left: {
+        add_vertical(modules, gates, nets, true, placement.preferred_origin);
         break;
     }
-    case hal::placement_hint::prefer_right: {
-        add_vertical(modules, gates, nets, false);
+    case hal::placement_mode::prefer_right: {
+        add_vertical(modules, gates, nets, false, placement.preferred_origin);
         break;
     }
     }
@@ -156,26 +156,39 @@ void standard_graph_layouter::add_compact(const QSet<u32>& modules, const QSet<u
     }
 }
 
-void standard_graph_layouter::add_vertical(const QSet<u32>& modules, const QSet<u32>& gates, const QSet<u32>& nets, bool left) {
+void standard_graph_layouter::add_vertical(const QSet<u32>& modules, const QSet<u32>& gates, const QSet<u32>& nets, bool left, const hal::node& preferred_origin) {
     Q_UNUSED(nets);
 
     int x = left ? min_x_index() - 1 : min_x_index() + x_values().size();
-
-    // TODO add starting position to placement hint and place accordingly
-    //int total_nodes = modules.size() + gates.size();
+    if (node_to_position_map().contains(preferred_origin))
+    {
+        QPoint originPoint = node_to_position_map().value(preferred_origin);
+        x = originPoint.x() + (left ? -1 : 1);
+    }
 
     int y = 0;
 
     for (const u32 m : modules)
     {
         hal::node n{hal::node_type::module, m};
-        QPoint p(x,y++);
+        QPoint p;
+        do
+        {
+            p = QPoint(x,y++);
+        }
+        while(position_to_node_map().contains(p));
         set_node_position(n, p);
     }
     for (const u32 g : gates)
     {
         hal::node n{hal::node_type::gate, g};
-        QPoint p(x,y++);
+        QPoint p;
+        do
+        {
+            p = QPoint(x,y++);
+        }
+        while(position_to_node_map().contains(p));
+
         set_node_position(n, p);
     }
 }

@@ -153,7 +153,7 @@ void graph_widget::keyPressEvent(QKeyEvent* event)
     }
 }
 
-void graph_widget::handle_navigation_jump_requested(const u32 via_net, const QSet<u32>& to_gates)
+void graph_widget::handle_navigation_jump_requested(const hal::node origin, const u32 via_net, const QSet<u32>& to_gates)
 {
     setFocus();
     // ASSERT INPUTS ARE VALID ?
@@ -207,8 +207,8 @@ void graph_widget::handle_navigation_jump_requested(const u32 via_net, const QSe
         // insert them
 
         bool netIsInput = n->is_a_dst(*gates.constBegin()); // either they're all inputs or all outputs, so just check the first one
-        hal::placement_hint placement = netIsInput ? hal::placement_hint::prefer_right : hal::placement_hint::prefer_left;
-        m_context->add({}, to_gates, placement);
+        hal::placement_mode placement = netIsInput ? hal::placement_mode::prefer_right : hal::placement_mode::prefer_left;
+        m_context->add({}, to_gates, hal::placement_hint{placement, origin});
     }
     else
     {
@@ -303,7 +303,7 @@ void graph_widget::handle_navigation_left_request()
                 }
                 else
                 {
-                    handle_navigation_jump_requested(n->get_id(), {n->get_src().get_gate()->get_id()});
+                    handle_navigation_jump_requested(hal::node{hal::node_type::gate, g->get_id()}, n->get_id(), {n->get_src().get_gate()->get_id()});
                 }
             }
             else if (g->get_input_pins().size())
@@ -325,7 +325,7 @@ void graph_widget::handle_navigation_left_request()
 
             if (n->get_src().gate != nullptr)
             {
-                handle_navigation_jump_requested(n->get_id(), {n->get_src().get_gate()->get_id()});
+                handle_navigation_jump_requested(hal::node{hal::node_type::none, 0}, n->get_id(), {n->get_src().get_gate()->get_id()});
             }
 
             return;
@@ -365,7 +365,7 @@ void graph_widget::handle_navigation_right_request()
                 }
                 else if (n->get_num_of_dsts() == 1)
                 {
-                    handle_navigation_jump_requested(n->get_id(), {n->get_dsts()[0].get_gate()->get_id()});
+                    handle_navigation_jump_requested(hal::node{hal::node_type::gate, g->get_id()}, n->get_id(), {n->get_dsts()[0].get_gate()->get_id()});
                 }
                 else
                 {
@@ -396,7 +396,7 @@ void graph_widget::handle_navigation_right_request()
 
             if (n->get_num_of_dsts() == 1)
             {
-                handle_navigation_jump_requested(n->get_id(), {n->get_dsts()[0].get_gate()->get_id()});
+                handle_navigation_jump_requested(hal::node{hal::node_type::none, 0}, n->get_id(), {n->get_dsts()[0].get_gate()->get_id()});
             }
             else
             {

@@ -26,6 +26,7 @@
 
 #include "def.h"
 
+#include "gui/gui_def.h"
 #include "gui/content_widget/content_widget.h"
 #include "gui/graph_widget/contexts/graph_context_subscriber.h"
 
@@ -63,7 +64,7 @@ protected:
     void keyPressEvent(QKeyEvent* event) Q_DECL_OVERRIDE;
 
 private Q_SLOTS:
-    void handle_navigation_jump_requested(const u32 via_net, const QSet<u32>& to_gates);
+    void handle_navigation_jump_requested(const hal::node origin, const u32 via_net, const QSet<u32>& to_gates);
     void handle_module_double_clicked(const u32 id);
     void reset_focus();
 

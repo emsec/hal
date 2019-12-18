@@ -28,12 +28,6 @@
 
 namespace hal
 {
-enum class placement_hint
-{
-    standard = 0,
-    prefer_left = 1,
-    prefer_right = 2
-};
 
 enum class item_type
 {
@@ -45,7 +39,8 @@ enum class item_type
 enum class node_type
 {
     module,
-    gate
+    gate,
+    none
 };
 
 struct node
@@ -70,6 +65,37 @@ struct node
         return type == rhs.type && id == rhs.id;
     }
 };
+
+enum class placement_mode
+{
+    standard = 0,
+    prefer_left = 1,
+    prefer_right = 2
+};
+
+struct placement_hint
+{
+    placement_mode mode;
+    node preferred_origin;
+
+    bool operator<(const placement_hint& rhs) const
+    {
+        if (mode < rhs.mode)
+            return true;
+        else if (rhs.mode < mode)
+            return false;
+        else if (preferred_origin < rhs.preferred_origin)
+            return true;
+        else
+            return false;
+    }
+
+    bool operator==(const placement_hint& rhs) const
+    {
+        return mode == rhs.mode && preferred_origin == rhs.preferred_origin;
+    }
+};
+
 }
 
 #endif // HAL_GUI_DEF_H
