@@ -207,20 +207,15 @@ if(CXX_FILESYSTEM_HAVE_FS)
 
     if(can_link)
         add_library(std::filesystem INTERFACE IMPORTED)
-        # For cmake >= 3.11; use following
-        #target_compile_features(std::filesystem INTERFACE cxx_std_17)
+        set_property(TARGET std::filesystem APPEND PROPERTY INTERFACE_COMPILE_FEATURES cxx_std_17)
         set(_found TRUE)
 
         if(CXX_FILESYSTEM_NO_LINK_NEEDED)
             # Nothing to add...
         elseif(CXX_FILESYSTEM_STDCPPFS_NEEDED)
-            # For cmake >= 3.11; use following
-            #target_link_libraries(std::filesystem INTERFACE -lstdc++fs)
-            set(CXX_FILESYSTEM_LIB -lstdc++fs)
+            set_property(TARGET std::filesystem APPEND PROPERTY INTERFACE_LINK_LIBRARIES -lstdc++fs)
         elseif(CXX_FILESYSTEM_CPPFS_NEEDED)
-            # For cmake >= 3.11; use following
-            #target_link_libraries(std::filesystem INTERFACE -lc++fs)
-            set(CXX_FILESYSTEM_LIB -lc++fs)
+            set_property(TARGET std::filesystem APPEND PROPERTY INTERFACE_LINK_LIBRARIES -lc++fs)
         endif()
     endif()
 endif()
