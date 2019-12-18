@@ -742,18 +742,18 @@ void graph_layouter::draw_nets()
                 // HANDLE SEPARATED NETS
                 hal::node node;
 
-                if (!m_context->node_for_gate(node, n->get_src().get_gate()->get_id()))
-                    continue;
-
                 labeled_separated_net* net_item = new labeled_separated_net(n, QString::fromStdString(n->get_name()));
 
-                for (const node_box& box : m_boxes)
+                if (m_context->node_for_gate(node, n->get_src().get_gate()->get_id()))
                 {
-                    if (box.node == node)
+                    for (const node_box& box : m_boxes)
                     {
-                        net_item->setPos(box.item->get_output_scene_position(n->get_id(), QString::fromStdString(n->get_src().pin_type)));
-                        net_item->add_output();
-                        break;
+                        if (box.node == node)
+                        {
+                            net_item->setPos(box.item->get_output_scene_position(n->get_id(), QString::fromStdString(n->get_src().pin_type)));
+                            net_item->add_output();
+                            break;
+                        }
                     }
                 }
 

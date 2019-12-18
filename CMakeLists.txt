@@ -4,7 +4,7 @@
 #
 # All rights reserved. Use of this source code is governed by a
 # MIT-style license that can be found in the LICENSE file.
-cmake_minimum_required(VERSION 3.15)
+cmake_minimum_required(VERSION 3.10)
 
 # Include common CMake modules
 include(CMakeDependentOption)
@@ -87,7 +87,7 @@ message(STATUS "HAL_VERSION: ${HAL_VERSION_RETURN}")
 project(hal
         VERSION ${HAL_VERSION_MAJOR}.${HAL_VERSION_MINOR}.${HAL_VERSION_PATCH}
         DESCRIPTION "HAL - the hardware analyzer"
-        HOMEPAGE_URL https://github.com/emsec/hal
+        #HOMEPAGE_URL https://github.com/emsec/hal # not supported in cmake 3.10
         LANGUAGES CXX C)
 
 # Common Project Information
