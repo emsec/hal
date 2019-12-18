@@ -56,7 +56,6 @@ option(PACKAGE_MACOS "Package for macOS" OFF)
 
 # Include Helper Modules
 include(hal_cmake_tools) # Version helper
-include(find_openmp)
 
 # Create LINUX variable if needed ToDo
 if(UNIX AND NOT APPLE)
@@ -118,126 +117,11 @@ set_property(DIRECTORY PROPERTY EP_STEP_TARGETS configure build test)
 #---Enable Folders in IDE like Visual Studio----------------------------------------------------
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
-################################
-#####   Find depending packages
-################################
+#####################################################################
+#####   Find depending packages (See cmake/detect_dependencies.cmake)
+#####################################################################
 
-# PkgConfig
-find_package(PkgConfig REQUIRED)
-if(PkgConfig_FOUND)
-    message(VERBOSE "PKG_CONFIG_EXECUTABLE: ${PKG_CONFIG_EXECUTABLE}")
-elseif(NOT PkgConfig_FOUND)
-    set(missing_package "TRUE")
-    if(LINUX)
-        message(STATUS "Please install PkgConfig (https://linux.die.net/man/1/pkg-config)")
-    endif(LINUX)
-    if(APPLE AND CMAKE_HOST_APPLE)
-        message(STATUS "To install pkgconfig on MacOS using homebrew run following command:")
-        message(STATUS "    brew install pkgconfig")
-    endif(APPLE AND CMAKE_HOST_APPLE)
-endif(PkgConfig_FOUND)
-
-find_package(Sanitizers)
-
-# See cmake/find_openmp.cmake
-find_openmp()
-
-find_package(Filesystem REQUIRED Final Experimental)
-
-set(Boost_USE_STATIC_LIBS OFF)
-set(Boost_USE_MULTITHREADED ON)
-set(Boost_USE_STATIC_RUNTIME OFF)
-find_package(Boost 1.58.0 REQUIRED COMPONENTS system)
-message(VERBOSE "Boost version: ${Boost_VERSION}")
-
-if(NOT TARGET Boost::system)
-    add_library(Boost::system IMPORTED INTERFACE)
-    set_property(TARGET Boost::filesystem PROPERTY
-                 INTERFACE_INCLUDE_DIRECTORIES ${Boost_INCLUDE_DIR})
-    set_property(TARGET Boost::system PROPERTY
-                 INTERFACE_LINK_LIBRARIES ${Boost_LIBRARIES})
-endif()
-
-find_package(RapidJSON REQUIRED)
-message(VERBOSE "Found rapidjson ${RAPIDJSON_INCLUDEDIR}")
-if(RapidJSON_FOUND AND NOT TARGET RapidJSON::RapidJSON)
-    add_library(RapidJSON::RapidJSON INTERFACE IMPORTED)
-    set_target_properties(RapidJSON::RapidJSON PROPERTIES
-                          INTERFACE_INCLUDE_DIRECTORIES "${RAPIDJSON_INCLUDEDIR}"
-                          )
-endif()
-
-# Need Version 2.2.4 Not available in ubuntu bionic
-find_package(pybind11 2.4.3 CONFIG)
-if(${pybind11_FOUND})
-    message(VERBOSE "Found pybind11 v${pybind11_VERSION}: ${pybind11_INCLUDE_DIRS}")
-    message(VERBOSE "Found pybind11 >= 2.4.3")
-else()
-    message(STATUS "pybind11 >= 2.4.3 not found")
-    add_subdirectory(deps/pybind11)
-endif()
-
-find_package(spdlog 1.4.2 EXACT CONFIG)
-if(${spdlog_FOUND})
-    message(VERBOSE "Found spdlog >= 1.4.2")
-else()
-    message(STATUS "spdlog >= 1.4.2 not found")
-    #    include_directories(${include_directories} "${CMAKE_CURRENT_SOURCE_DIR}/deps/spdlog-1.4.2/include")
-    set(spdlog_VERSION 1.4.2)
-    add_library(spdlog::spdlog INTERFACE IMPORTED)
-    set_target_properties(spdlog::spdlog PROPERTIES
-                          INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_SOURCE_DIR}/deps/spdlog-1.4.2/include"
-                          )
-endif()
-
-#Python support
-set(Python_ADDITIONAL_VERSIONS 3.5 3.6)
-find_package(PythonInterp 3.5 REQUIRED)
-if(PythonInterp_FOUND)
-    message(VERBOSE "PYTHON_INCLUDE_DIRS: ${PYTHON_INCLUDE_DIRS}")
-    message(VERBOSE "PYTHON_LIBRARIES: ${PYTHON_LIBRARIES}")
-    message(VERBOSE "PYTHON_MODULE_PREFIX: ${PYTHON_MODULE_PREFIX}")
-    message(VERBOSE "PYTHON_MODULE_EXTENSION: ${PYTHON_MODULE_EXTENSION}")
-elseif(NOT PythonInterp_FOUND)
-    set(Missing_package "TRUE")
-    if(APPLE AND CMAKE_HOST_APPLE)
-        message(STATUS "To install python3 on MacOS using homebrew run following command:")
-        message(STATUS "    brew install python3")
-    endif(APPLE AND CMAKE_HOST_APPLE)
-endif(PythonInterp_FOUND)
-
-if(WITH_GUI)
-    # We require qt5 widgets
-    find_package(Qt5Widgets)
-    if(Qt5Widgets_FOUND)
-        message(VERBOSE "Qt5Widgets_INCLUDE_DIRS: ${Qt5Widgets_INCLUDE_DIRS}")
-        message(VERBOSE "Qt5Widgets_LIBRARIES: ${Qt5Widgets_LIBRARIES}")
-    elseif(NOT Qt5Widgets_FOUND)
-        set(Missing_package "TRUE")
-        if(APPLE AND CMAKE_HOST_APPLE)
-            message(STATUS "To install qt5 on MacOS using homebrew run following command:")
-            message(STATUS "    brew install qt")
-        endif(APPLE AND CMAKE_HOST_APPLE)
-    endif(Qt5Widgets_FOUND)
-    find_package(Qt5Concurrent)
-    if(Qt5Concurrent_FOUND)
-        message(VERBOSE "Qt5Concurrent_INCLUDE_DIRS: ${Qt5Concurrent_INCLUDE_DIRS}")
-        message(VERBOSE "Qt5Concurrent_LIBRARIES: ${Qt5Concurrent_LIBRARIES}")
-    elseif(NOT Qt5Concurrent_FOUND)
-        set(Missing_package "TRUE")
-        if(APPLE AND CMAKE_HOST_APPLE)
-            message(STATUS "To install qt5 on MacOS using homebrew run following command:")
-            message(STATUS "    brew install qt5")
-        endif(APPLE AND CMAKE_HOST_APPLE)
-    endif(Qt5Concurrent_FOUND)
-    find_package(Qt5Svg)
-    if(Qt5Svg_FOUND)
-        message(VERBOSE "Qt5Svg_INCLUDE_DIRS: ${Qt5Svg_INCLUDE_DIRS}")
-        message(VERBOSE "Qt5Svg_LIBRARIES: ${Qt5Svg_LIBRARIES}")
-    elseif(NOT Qt5Svg_FOUND)
-        set(Missing_package "TRUE")
-    endif(Qt5Svg_FOUND)
-endif()
+include(detect_dependencies)
 
 ################################
 #####   Manage Compiler Flags
