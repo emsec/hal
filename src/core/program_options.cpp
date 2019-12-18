@@ -4,6 +4,7 @@
 #include "core/program_arguments.h"
 
 #include <algorithm>
+#include <unistd.h>
 
 #if __linux__ || __APPLE__
 #include <sys/ioctl.h>

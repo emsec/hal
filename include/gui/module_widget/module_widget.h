@@ -60,6 +60,7 @@ public Q_SLOTS:
     void filter(const QString& text);
     void handle_tree_view_context_menu_requested(const QPoint& point);
     void handle_tree_selection_changed(const QItemSelection& selected, const QItemSelection& deselected);
+    void handle_item_double_clicked(const QModelIndex &index);
 
 private:
     module_tree_view* m_tree_view;

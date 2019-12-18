@@ -1,5 +1,5 @@
 set(TEST_PLUGIN_LIB "test_plugin")
-include_directories(${BUDDY_INCLUDE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/include)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 include_directories(SYSTEM ${PYBIND11_INCLUDE_DIR} SYSTEM ${PYTHON_INCLUDE_DIRS})
 
 

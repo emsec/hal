@@ -5,9 +5,9 @@
 #include "core/plugin_manager.h"
 #include "core/utils.h"
 
-#include "hdl_parser/hdl_parser_dispatcher.h"
+#include "netlist/hdl_parser/hdl_parser_dispatcher.h"
 
-#include "hdl_writer/hdl_writer_dispatcher.h"
+#include "netlist/hdl_writer/hdl_writer_dispatcher.h"
 
 #include "netlist/boolean_function.h"
 #include "netlist/gate.h"

@@ -7,9 +7,10 @@
 #include "gui/graph_widget/contexts/graph_context.h"
 #include "gui/graph_widget/graphics_factory.h"
 #include "gui/graph_widget/graphics_scene.h"
-#include "gui/graph_widget/items/io_graphics_net.h"
-#include "gui/graph_widget/items/separated_graphics_net.h"
-#include "gui/graph_widget/items/standard_graphics_net.h"
+#include "gui/graph_widget/items/nets/arrow_separated_net.h"
+#include "gui/graph_widget/items/nets/circle_separated_net.h"
+#include "gui/graph_widget/items/nets/labeled_separated_net.h"
+#include "gui/graph_widget/items/nets/standard_graphics_net.h"
 #include "gui/gui_globals.h"
 #include "gui/implementations/qpoint_extension.h"
 
@@ -149,14 +150,11 @@ void graph_layouter::layout()
     calculate_max_channel_dimensions();
     calculate_gate_offsets();
     place_gates();
-
     m_done = true;
-
-    update_scene_rect();
     draw_nets();
+    update_scene_rect();
 
     m_scene->move_nets_to_background();
-    m_scene->setSceneRect(m_scene->itemsBoundingRect());
     m_scene->handle_extern_selection_changed(nullptr);
 
     #ifdef GUI_DEBUG_GRID
@@ -716,22 +714,6 @@ void graph_layouter::place_gates()
     }
 }
 
-void graph_layouter::update_scene_rect()
-{
-    // SCENE RECT STUFF BEHAVES WEIRDLY, FURTHER RESEARCH REQUIRED
-
-    //    QRectF rect = m_graphics_scene->sceneRect();
-    //    rect.adjust(-100, -100, 100, 100);
-    //    m_graphics_scene->setSceneRect(rect);
-
-    //    QRectF rect(m_graphics_scene->itemsBoundingRect());
-
-    m_scene->setSceneRect(QRectF());
-    QRectF rect = m_scene->sceneRect();
-    rect.adjust(-200, -200, 200, 200);
-    m_scene->setSceneRect(rect);
-}
-
 void graph_layouter::draw_nets()
 {
     // ROADS AND JUNCTIONS FILLED LEFT TO RIGHT, TOP TO BOTTOM
@@ -746,7 +728,7 @@ void graph_layouter::draw_nets()
         if (n->is_unrouted())
         {
             // HANDLE GLOBAL NETS
-            io_graphics_net* net_item = new io_graphics_net(n);
+            circle_separated_net* net_item = new circle_separated_net(n);
 
             endpoint src_end = n->get_src();
 
@@ -797,18 +779,18 @@ void graph_layouter::draw_nets()
                 // HANDLE SEPARATED NETS
                 hal::node node;
 
-                if (!m_context->node_for_gate(node, n->get_src().get_gate()->get_id()))
-                    continue;
+                labeled_separated_net* net_item = new labeled_separated_net(n, QString::fromStdString(n->get_name()));
 
-                separated_graphics_net* net_item = new separated_graphics_net(n, QString::fromStdString(n->get_name()));
-
-                for (const node_box& box : m_boxes)
+                if (m_context->node_for_gate(node, n->get_src().get_gate()->get_id()))
                 {
-                    if (box.node == node)
+                    for (const node_box& box : m_boxes)
                     {
-                        net_item->setPos(box.item->get_output_scene_position(n->get_id(), QString::fromStdString(n->get_src().pin_type)));
-                        net_item->add_output();
-                        break;
+                        if (box.node == node)
+                        {
+                            net_item->setPos(box.item->get_output_scene_position(n->get_id(), QString::fromStdString(n->get_src().pin_type)));
+                            net_item->add_output();
+                            break;
+                        }
                     }
                 }
 
@@ -831,6 +813,69 @@ void graph_layouter::draw_nets()
                 m_scene->add_item(net_item);
 
                 continue;
+            }
+
+            //TEMPORARY IMPLEMENTATION
+            hal::node tmp;
+            if (!m_context->node_for_gate(tmp, n->get_src().gate->get_id()))
+            {
+                arrow_separated_net* net_item = new arrow_separated_net(n);
+
+                for (endpoint& dst_end : n->get_dsts())
+                {
+                    hal::node node;
+                    if (!m_context->node_for_gate(node, dst_end.get_gate()->get_id()))
+                        continue;
+
+                    for (const node_box& box : m_boxes)
+                    {
+                        if (box.node == node)
+                        {
+                            net_item->add_input(box.item->get_input_scene_position(n->get_id(), QString::fromStdString(dst_end.pin_type)));
+                            break;
+                        }
+                    }
+                }
+
+                // POTENTIALLY ADDS EMPTY NETS, DOESNT MATTER RIGHT NOW FIX LATER
+                net_item->finalize();
+                m_scene->add_item(net_item);
+
+                continue;
+            }
+            else
+            {
+                bool contains_dst = false;
+
+                for (endpoint& dst_end : n->get_dsts())
+                {
+                    hal::node node;
+                    if (m_context->node_for_gate(node, dst_end.get_gate()->get_id()))
+                    {
+                        contains_dst = true;
+                        break;
+                    }
+                }
+
+                if (!contains_dst)
+                {
+                    arrow_separated_net* net_item = new arrow_separated_net(n);
+
+                    for (const node_box& box : m_boxes)
+                    {
+                        if (box.node == tmp)
+                        {
+                            net_item->add_output();
+                            net_item->setPos(box.item->get_output_scene_position(n->get_id(), QString::fromStdString(n->get_src().get_pin_type())));
+                            break;
+                        }
+                    }
+
+                    net_item->finalize();
+                    m_scene->add_item(net_item);
+
+                    continue;
+                }
             }
         }
 
@@ -1446,6 +1491,16 @@ void graph_layouter::draw_nets()
 
         commit_used_paths(used);
     }
+}
+
+void graph_layouter::update_scene_rect()
+{
+    // SCENE RECT STUFF BEHAVES WEIRDLY, FURTHER RESEARCH REQUIRED
+    //QRectF rect = m_scene->sceneRect();
+
+    QRectF rect(m_scene->itemsBoundingRect());
+    rect.adjust(-200, -200, 200, 200);
+    m_scene->setSceneRect(rect);
 }
 
 graph_layouter::node_box graph_layouter::create_box(const hal::node& node, const int x, const int y) const
