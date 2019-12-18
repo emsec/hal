@@ -159,14 +159,26 @@ void standard_graph_layouter::add_compact(const QSet<u32>& modules, const QSet<u
 void standard_graph_layouter::add_vertical(const QSet<u32>& modules, const QSet<u32>& gates, const QSet<u32>& nets, bool left, const hal::node& preferred_origin) {
     Q_UNUSED(nets);
 
-    int x = left ? min_x_index() - 1 : min_x_index() + x_values().size();
+    int x;
+    int y;
+
     if (node_to_position_map().contains(preferred_origin))
     {
+        // place all new nodes right respectively left of the origin node
         QPoint originPoint = node_to_position_map().value(preferred_origin);
         x = originPoint.x() + (left ? -1 : 1);
+        // vertically center the column of new nodes relative to the origin node
+        int totalNodes = modules.size() + gates.size();
+        y = originPoint.y() - (totalNodes-1)/2;
     }
-
-    int y = 0;
+    else
+    {
+        // create a new column right- respectively leftmost of all current nodes
+        x = left ? min_x_index() - 1 : min_x_index() + x_values().size();
+        // center column of new ndoes vertically relative to the entire grid
+        y = min_y_index() + (y_values().size()-1) / 2;
+    }
+    
 
     for (const u32 m : modules)
     {
@@ -174,6 +186,7 @@ void standard_graph_layouter::add_vertical(const QSet<u32>& modules, const QSet<
         QPoint p;
         do
         {
+            // skip over positions that are already taken
             p = QPoint(x,y++);
         }
         while(position_to_node_map().contains(p));
@@ -185,10 +198,10 @@ void standard_graph_layouter::add_vertical(const QSet<u32>& modules, const QSet<
         QPoint p;
         do
         {
+            // skip over positions that are already taken
             p = QPoint(x,y++);
         }
         while(position_to_node_map().contains(p));
-
         set_node_position(n, p);
     }
 }
