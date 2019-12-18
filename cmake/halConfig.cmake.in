@@ -1,0 +1,53 @@
+# halConfig.cmake
+# --------------------
+#
+# PYBIND11 cmake module.
+# This module sets the following variables in your project::
+#
+#   hal_FOUND - true if hal and all required components found on the system
+#   hal_VERSION - hal version in format Major.Minor.Release
+#   hal_INCLUDE_DIRS - Directories where hal and python headers are located.
+#   hal_INCLUDE_DIR - Directory where hal headers are located.
+#   hal_DEFINITIONS - Definitions necessary to use hal, namely USING_hal.
+#   hal_LIBRARIES - compile flags and python libraries (as needed) to link against.
+#   hal_LIBRARY - empty.
+#   CMAKE_MODULE_PATH - appends location of accompanying FindPythonLibsNew.cmake and
+#                       halTools.cmake modules.
+#
+#
+# Available components: None
+#
+#
+# Exported targets::
+#
+# If hal is found, this module defines the following :prop_tgt:`IMPORTED`
+# interface library targets::
+#
+#   hal::core -
+#   hal::embed -
+
+
+@package_init@
+
+set(PN hal)
+
+set(${PN}_INCLUDE_DIR "${PACKAGE_PREFIX_DIR}/@CMAKE_INSTALL_INCLUDEDIR@")
+
+set(${PN}_LIBRARY "")
+set(${PN}_DEFINITIONS USING_${PN})
+
+check_required_components(${PN})
+
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR})
+
+include(hal_plugin)
+
+if(NOT (CMAKE_VERSION VERSION_LESS 3.0))
+#-----------------------------------------------------------------------------
+# Don't include targets if this file is being picked up by another
+# project which has already built this as a subproject
+#-----------------------------------------------------------------------------
+    if(NOT TARGET ${PN}::core)
+        include("${CMAKE_CURRENT_LIST_DIR}/${PN}Targets.cmake")
+    endif()
+endif()

@@ -56,6 +56,7 @@ option(PACKAGE_MACOS "Package for macOS" OFF)
 
 # Include Helper Modules
 include(hal_cmake_tools) # Version helper
+include(hal_plugin) # Definition of hal_add_plugin
 
 # Create LINUX variable if needed ToDo
 if(UNIX AND NOT APPLE)
@@ -183,7 +184,6 @@ endif(${CMAKE_BUILD_TYPE} EQUAL "Debug" AND APPLE AND CMAKE_HOST_APPLE)
 ####################################################################
 
 
-
 ################################
 #####   Enable Testing
 ################################
@@ -246,23 +246,29 @@ install(DIRECTORY ${CMAKE_BINARY_DIR}/share/hal/defaults DESTINATION ${SHARE_INS
 install(FILES ${CMAKE_BINARY_DIR}/hal.pc DESTINATION "${PKGCONFIG_INSTALL_DIRECTORY}")
 message(VERBOSE "PKGCONFIG_INSTALL_DIRECTORY ${PKGCONFIG_INSTALL_DIRECTORY}")
 
+configure_package_config_file(cmake/halConfig.cmake.in
+                              "${CMAKE_CURRENT_BINARY_DIR}/halConfig.cmake"
+                              INSTALL_DESTINATION ${HAL_CMAKECONFIG_INSTALL_DIR})
+
 write_basic_package_version_file(
         halConfigVersion.cmake
         VERSION ${HAL_VERSION_RETURN}
         COMPATIBILITY AnyNewerVersion
 )
-configure_file(cmake/HalConfig.cmake.in halConfig.cmake @ONLY)
 
-install(EXPORT hal
-        FILE halTargets.cmake
-        NAMESPACE hal::
-        DESTINATION ${HAL_CMAKECONFIG_INSTALL_DIR}
-        )
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/halConfig.cmake
+        ${CMAKE_CURRENT_BINARY_DIR}/halConfigVersion.cmake
+        cmake/hal_plugin.cmake
+        DESTINATION ${HAL_CMAKECONFIG_INSTALL_DIR})
 
-install(FILES "${CMAKE_BINARY_DIR}/halConfig.cmake"
-        "${CMAKE_BINARY_DIR}/halConfigVersion.cmake"
-        DESTINATION ${HAL_CMAKECONFIG_INSTALL_DIR}
-        )
+if(NOT (CMAKE_VERSION VERSION_LESS 3.0))
+    install(EXPORT hal
+            FILE halTargets.cmake
+            NAMESPACE hal::
+            DESTINATION ${HAL_CMAKECONFIG_INSTALL_DIR}
+            )
+endif()
+
 
 # Configure LDCONFIG for HAL plugins
 if(LINUX)
