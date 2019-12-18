@@ -126,3 +126,5 @@ CMakeLists.txt.user*
 
 Testing
 tools/__pycache__/
+
+.envrc

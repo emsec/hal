@@ -259,6 +259,7 @@ write_basic_package_version_file(
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/halConfig.cmake
         ${CMAKE_CURRENT_BINARY_DIR}/halConfigVersion.cmake
         cmake/hal_plugin.cmake
+        cmake/hal_cmake_tools.cmake
         DESTINATION ${HAL_CMAKECONFIG_INSTALL_DIR})
 
 if(NOT (CMAKE_VERSION VERSION_LESS 3.0))
