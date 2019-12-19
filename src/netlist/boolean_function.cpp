@@ -2,8 +2,6 @@
 
 #include "core/utils.h"
 
-// #include <iostream>
-
 std::string boolean_function::to_string(const operation& op)
 {
     switch (op)
@@ -485,13 +483,13 @@ boolean_function boolean_function::combine(operation op, const boolean_function&
         boolean_function result(op, joint_operands);
         return result;
     }
-    else if (m_content == content_type::TERMS && m_op == op)
+    else if (m_content == content_type::TERMS && m_op == op && !m_invert)
     {
         boolean_function result = *this;
         result.m_operands.push_back(other);
         return result;
     }
-    else if (other.m_content == content_type::TERMS && other.m_op == op)
+    else if (other.m_content == content_type::TERMS && other.m_op == op && !other.m_invert)
     {
         boolean_function result = other;
         result.m_operands.insert(result.m_operands.begin(), *this);
@@ -579,11 +577,12 @@ boolean_function boolean_function::replace_xors() const
     }
 
     // actually replace the current xors
-    auto result = (terms[0] & !terms[1]) | ((!terms[0]) & terms[1]);
+    auto result = (terms[0] & (!terms[1])) | ((!terms[0]) & terms[1]);
     for (u32 i = 2; i < terms.size(); ++i)
     {
-        result = (result & !terms[i]) | ((!result) & terms[i]);
+        result = (result & (!terms[i])) | ((!result) & terms[i]);
     }
+
     if (m_invert)
     {
         result = !result;
@@ -727,9 +726,11 @@ boolean_function boolean_function::propagate_negations(bool negate_term) const
 {
     if (m_content != content_type::TERMS)
     {
-        boolean_function result = *this;
-        result.m_invert         = result.m_invert ^ negate_term;
-        return result;
+        if (negate_term)
+        {
+            return !(*this);
+        }
+        return *this;
     }
 
     bool use_de_morgan = m_invert ^ negate_term;
@@ -837,17 +838,29 @@ boolean_function boolean_function::to_dnf() const
         return *this;
     }
 
+    // auto init_tt = get_truth_table();
     // std::cout << "transforming " << *this << std::endl;
     // auto x = replace_xors();
     // std::cout << "  replace_xors " << x << std::endl;
+    // if (x.get_truth_table() != init_tt)
+    //     std::cout << "FUNCTIONS DONT MATCH" << std::endl;
     // x = x.propagate_negations();
     // std::cout << "  propagate_negations " << x << std::endl;
+    // if (x.get_truth_table() != init_tt)
+    //     std::cout << "FUNCTIONS DONT MATCH" << std::endl;
     // x = x.expand_ands();
     // std::cout << "  expand_ands " << x << std::endl;
+    // if (x.get_truth_table() != init_tt)
+    //     std::cout << "FUNCTIONS DONT MATCH" << std::endl;
     // x = x.flatten();
     // std::cout << "  flatten " << x << std::endl;
+    // if (x.get_truth_table() != init_tt)
+    //     std::cout << "FUNCTIONS DONT MATCH" << std::endl;
     // x = x.optimize_constants();
     // std::cout << "  optimize_constants " << x << std::endl;
+    // if (x.get_truth_table() != init_tt)
+    //     std::cout << "FUNCTIONS DONT MATCH" << std::endl;
+    // return x;
 
     // the order of the passes is important!
     // every pass after replace_xors expects that there are no more xor operations
@@ -886,15 +899,12 @@ boolean_function boolean_function::optimize() const
         return *this;
     }
 
-    boolean_function result = to_dnf().optimize_constants();
+    boolean_function result = to_dnf().propagate_negations().optimize_constants();
 
     if (result.m_content != content_type::TERMS || result.m_op == operation::AND)
     {
         return result;
     }
-
-    // std::cout << "optimizing " << *this << std::endl;
-    // std::cout << "starting qmc on " << result << std::endl;
 
     // result is a OR-chain of *multiple* AND-chains of *only variables*
     std::vector<std::vector<value>> terms;
@@ -938,8 +948,6 @@ boolean_function boolean_function::optimize() const
         }
         result |= tmp;
     }
-
-    // std::cout << "after qmc " << result << std::endl;
 
     return result;
 }
