@@ -3,6 +3,7 @@ import re
 import subprocess
 import shlex
 import sys
+import os
 
 def _execute_git_describe(cmd, regex_str, workdir):
     p = subprocess.Popen(shlex.split(cmd), stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, cwd=workdir)

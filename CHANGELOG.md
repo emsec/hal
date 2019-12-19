@@ -6,14 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [1.1.8] - 2019-09-19 14:23:59+02:00
+# [1.1.8] - 2019-09-19 14:23:59+02:00 (urgency: medium)
 
 * Fix command line parsing
 * Fix parse all_options from main
 * Fixed set log option as command line parameter without stopping execution
 * Fixed assign parsing for yosys verilog output
 
-## [1.1.7] - 2019-08-26 10:41:58-04:00
+## [1.1.7] - 2019-08-26 10:41:58-04:00 (urgency: medium)
 
 * Changed myself library to synopsys_nand_nor
 * Fixed bug in bdd gen
@@ -23,11 +23,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Fixes #179. Parse yosys netlist correct. (#181)
 * Set new vhdl parser as default, keep old one as fallback (#180)
 
-## [1.1.6] - 2019-08-05 15:55:18+02:00
+## [1.1.6] - 2019-08-05 15:55:18+02:00 (urgency: medium)
 
 * Fixed ubuntu ppa build
 
-## [1.1.5] - 2019-08-05 15:14:35+02:00
+## [1.1.5] - 2019-08-05 15:14:35+02:00 (urgency: medium)
 
 * Added uninstall target and fixed make/ninja install on linux with correct ldconfig settings
 * Test/test update (#176)
@@ -60,7 +60,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * bug in hdl writer - backslashes are being removed
 * fixxed naming for modules
 
-## [1.1.4] - 2019-07-15 14:53:49+02:00
+## [1.1.4] - 2019-07-15 14:53:49+02:00 (urgency: medium)
 
 * Remember py path for last 'saved as'
 * Fix several bugs regarding file modified state
@@ -82,21 +82,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Fix errors after master merge
 * Add ability to reload pyscript if modified on disk
 
-## [1.1.3] - 2019-07-03 10:10:12+02:00
+## [1.1.3] - 2019-07-03 10:10:12+02:00 (urgency: medium)
 
 * Remember last opened path for python scripts
 * Add multi file selection for python scripts
 
-## [1.1.2] - 2019-06-27 14:21:03+02:00
+## [1.1.2] - 2019-06-27 14:21:03+02:00 (urgency: medium)
 
 * Add hint to gate_libraries to README.md
 * Changes to the global state can be handled via hal_content_manager
 
-## [1.1.1] - 2019-06-27 14:21:03+02:00
+## [1.1.1] - 2019-06-27 14:21:03+02:00 (urgency: medium)
 
 * Quickfix for Xilinx Simprim gate library
 
-## [1.1.0] - 2019-06-27 12:28:36+02:00
+## [1.1.0] - 2019-06-27 12:28:36+02:00 (urgency: medium)
 
 * Added Support for Xilinx Unisim gate library
 * Added Support for Xilinx Simprim gate library
@@ -106,6 +106,104 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Added VHDL and Verilog parser fixes
 * Fixeds issue #143
 * Fixed static lint issues
+
+## [1.0.24] - 2019-06-21 15:36:52+02:00 (urgency: medium)
+
+* Testing new CI deployment
+
+## [1.0.23] - 2019-06-21 10:36:36+02:00 (urgency: medium)
+
+* Automated homebrew deployment
+* Testing new CI deployment
+
+## [1.0.22] - 2019-06-19 16:48:41+02:00 (urgency: medium)
+
+* Fixed showing message box for error while opening file
+* Fixed plugin generator for new EXPORT definition
+* Fixed Visibility of shared Libraries (#121)
+* Fixed bug in callback hook, optimized json output
+* Added pybind for bdd evaluate
+* Added python editor tabs in hal file manager
+* Remove plugin manager callback hook while closing GUI. Fixes #88
+
+## [1.0.21] - 2019-06-13 17:17:28+02:00 (urgency: medium)
+
+* Fixes in python editor
+* Fixes in core (Closes issue #98 and #96)
+
+## [1.0.20] - 2019-06-06 11:56:36+02:00 (urgency: medium)
+
+* Added python editor tabs to have multiple documents open at the same time
+
+## [1.0.19] - 2019-05-30 21:45:18+02:00 (urgency: high)
+
+* Remove dirty flag from genversion.py
+* Remove kernel.h dependency in include/gate_decorator_system/decorators/gate_decorator_bdd.h for plugin repositoriese
+
+## [1.0.18] - 2019-05-30 19:44:48+02:00 (urgency: high)
+
+* Fix un-indent of single line failing on specific cursor positions
+* fixed bug in parsers: added a GLOBAL_GND instead of a GLOBAL_VCC gate
+
+## [1.0.17] - 2019-05-29 14:52:07+02:00 (urgency: medium)
+
+* Fixed correct python binding of data container and added documentation for it. Closes #78
+* Rename add_net and insert_gate to assign_net and assign_gate in module class. Closes #85
+* Fix cursor position upon stdout and stderr text output
+* Fix build instructions for macOS and import of OpenMP
+* fixxed documentation
+* added new features to gate_decorator_bdd:       - generate truth table  - evaluate bdd
+* python context is no longer printed before each script execution
+* Hardcode returns from python editor
+* Display prompt before closing application
+* Added first issue templates
+
+## [1.0.16] - 2019-05-23 10:20:12+02:00 (urgency: high)
+
+* Allow changing parent module (#84)
+* navigation expands the file-name-index when gui starts (#83)
+* Feature/selection history (#82)
+* Move to spdlog 1.3.1 (#80)
+* new tool for generating new plugins (#81)
+* Fixed homebrew install command in README.md
+* Fixes for out of source plugin builds
+
+## [1.0.15] - 2019-05-16 14:42:58+02:00 (urgency: high)
+
+* Fixed install include path of plugins
+* Include information about homebrew tap in README.md
+
+## [1.0.14] - 2019-05-16 10:41:27+02:00 (urgency: high)
+
+* Fix install rpath on macOS
+* Update genversion.py
+* netlist creation now correctly fires module created event for topmodule
+* Fix bad python binding for gates property of module
+* Fix disabled arrow keys in navigation view
+
+## [1.0.13] - 2019-05-13 12:53:46+02:00 (urgency: high)
+
+* Fix auto-scrolling in the python editor
+* Add indent/unindent for multi-line selections in python editor
+* Fixed python shell to properly support global keyword
+
+## [1.0.12] - 2019-05-13 12:53:46+02:00 (urgency: high)
+
+* Fixed global and local in python context
+* Cleanup .gitignore and .gitattributes
+* Added .brew_home to .gitignore for homebrew builds
+* Move from gitter to discord in README.md
+
+## [1.0.11] - 2019-04-30 19:46:40+02:00 (urgency: high)
+
+* Minor fixes
+
+## [1.0.10] - 2019-04-30 19:46:40+02:00 (urgency: high)
+
+* Add python editor save-as button and fix load/save logic (#55)
+* Add shift-tab unindent in python editor (#51)
+* fixed readme not showing screenshot
+* updated readme, fixed gui log not showing multiple spaces, added python bindings for quine mccluskey plugin
 
 ## [1.0.8] - 2019-04-30 19:46:40+02:00 (urgency: high)
 
@@ -157,6 +255,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [1.1.2]: https://github.com/emsec/hal/compare/v1.1.1...v1.1.2
 [1.1.1]: https://github.com/emsec/hal/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/emsec/hal/compare/v1.0.8...v1.1.0
+[1.0.24]: https://github.com/emsec/hal/compare/v1.0.23...v1.0.24
+[1.0.23]: https://github.com/emsec/hal/compare/v1.0.22...v1.0.23
+[1.0.22]: https://github.com/emsec/hal/compare/v1.0.21...v1.0.22
+[1.0.21]: https://github.com/emsec/hal/compare/v1.0.20...v1.0.21
+[1.0.20]: https://github.com/emsec/hal/compare/v1.0.19...v1.0.20
+[1.0.19]: https://github.com/emsec/hal/compare/v1.0.18...v1.0.19
+[1.0.18]: https://github.com/emsec/hal/compare/v1.0.17...v1.0.18
+[1.0.17]: https://github.com/emsec/hal/compare/v1.0.16...v1.0.17
+[1.0.16]: https://github.com/emsec/hal/compare/v1.0.15...v1.0.16
+[1.0.15]: https://github.com/emsec/hal/compare/v1.0.14...v1.0.15
+[1.0.14]: https://github.com/emsec/hal/compare/v1.0.13...v1.0.14
+[1.0.13]: https://github.com/emsec/hal/compare/v1.0.12...v1.0.13
+[1.0.12]: https://github.com/emsec/hal/compare/v1.0.11...v1.0.12
+[1.0.11]: https://github.com/emsec/hal/compare/v1.0.10...v1.0.11
+[1.0.10]: https://github.com/emsec/hal/compare/v1.0.8...v1.0.10
 [1.0.8]: https://github.com/emsec/hal/compare/v1.0.7...v1.0.8
 [1.0.7]: https://github.com/emsec/hal/compare/v1.0.6...v1.0.7
 [1.0.6]: https://github.com/emsec/hal/compare/v1.0.5...v1.0.6
