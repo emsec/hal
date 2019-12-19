@@ -102,8 +102,10 @@ namespace gui_utility
             return lexical_order_compare(a, b);
         case natural:
             return natural_order_compare(a, b);
+        default:
+            assert(false);
         }
-        assert(false);
+        return 0;
     }
 
 
