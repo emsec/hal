@@ -550,7 +550,12 @@ boolean_function boolean_function::operator!() const
 
 bool boolean_function::operator==(const boolean_function& other) const
 {
-    return m_invert == other.m_invert && m_content == other.m_content && m_variable == other.m_variable && m_constant == other.m_constant && m_op == other.m_op && m_operands == other.m_operands;
+    if (m_content != other.m_content)
+        return false;
+    if (m_invert != other.m_invert)
+        return false;
+    return (m_content == content_type::VARIABLE && m_variable == other.m_variable) || (m_content == content_type::CONSTANT && m_constant == other.m_constant)
+           || (m_content == content_type::TERMS && m_op == other.m_op && m_operands == other.m_operands);
 }
 bool boolean_function::operator!=(const boolean_function& other) const
 {

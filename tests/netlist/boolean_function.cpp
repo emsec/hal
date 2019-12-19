@@ -210,7 +210,7 @@ TEST_F(boolean_function_test, check_is_empty){
 TEST_F(boolean_function_test, check_get_variables){
     TEST_START
         {
-            // Get variables 
+            // Get variables
             boolean_function a("A");
             boolean_function b("B");
             boolean_function c("C");
@@ -228,15 +228,15 @@ TEST_F(boolean_function_test, check_get_variables){
 TEST_F(boolean_function_test, check_compare_operator){
     TEST_START
         {
-            // The boolean functions are equivalent in syntax 
+            // The boolean functions are equivalent in syntax
             boolean_function a("A");
             EXPECT_TRUE((a == a));
         }
         {
-            // The boolean functions are equivalent in syntax 
+            // The boolean functions are equivalent in syntax
             boolean_function a("A");
             boolean_function b("B");
-            //EXPECT_TRUE(((a|b) == (a|b)));
+            EXPECT_TRUE(((a|b) == (a|b)));
         }
     TEST_END
 }
