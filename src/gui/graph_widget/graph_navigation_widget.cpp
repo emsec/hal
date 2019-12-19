@@ -49,6 +49,8 @@ void graph_navigation_widget::setup()
                 return;
             }
 
+            m_origin = hal::node{hal::node_type::gate, g->get_id()};
+
             std::string pin_type   = g->get_output_pins()[g_selection_relay.m_subfocus_index];
             std::shared_ptr<net> n = g->get_fan_out_net(pin_type);
 
@@ -70,6 +72,8 @@ void graph_navigation_widget::setup()
                 return;
             }
 
+            m_origin = hal::node{hal::node_type::none, 0};
+
             std::shared_ptr<gate> g = n->get_src().get_gate();
 
             if (!g)
@@ -83,15 +87,17 @@ void graph_navigation_widget::setup()
         }
         case selection_relay::item_type::module:
         {
+            // TODO ???
             return;
         }
     }
 }
 
-void graph_navigation_widget::setup(std::shared_ptr<net> via_net)
+void graph_navigation_widget::setup(hal::node origin, std::shared_ptr<net> via_net)
 {
     clearContents();
     fill_table(via_net);
+    m_origin = origin;
 }
 
 void graph_navigation_widget::hide_when_focus_lost(bool hide)
@@ -140,12 +146,14 @@ void graph_navigation_widget::fill_table(std::shared_ptr<net> n)
         QTableWidgetItem* item = new QTableWidgetItem("");
         item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
         setItem(0, 0, item);
-        setItem(0, 2, item);
-        setItem(0, 3, item);
-        setItem(0, 4, item);
+        setItem(0, 2, item->clone());
+        setItem(0, 3, item->clone());
+        setItem(0, 4, item->clone());
         item = new QTableWidgetItem("Select All");
         item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
         setItem(0, 1, item);
+
+        // TODO are these items ever deleted or is this a memory leak?
     }
 
     int row = 1;
@@ -245,12 +253,9 @@ void graph_navigation_widget::commit_selection()
             if (g)
             {
                 gates.insert(g->get_id());
-                Q_EMIT navigation_requested(m_via_net, g->get_id());
             }
         }
-        g_selection_relay.clear();
-        g_selection_relay.m_selected_gates = gates;
-        g_selection_relay.relay_selection_changed(this);
+        Q_EMIT navigation_requested(m_origin, m_via_net, gates);
         return;
     }
 
@@ -261,6 +266,6 @@ void graph_navigation_widget::commit_selection()
         return;
     }
 
-    Q_EMIT navigation_requested(m_via_net, g->get_id());
+    Q_EMIT navigation_requested(m_origin, m_via_net, {g->get_id()});
     return;
 }

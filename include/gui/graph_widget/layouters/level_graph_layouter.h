@@ -13,7 +13,7 @@ public:
     virtual const QString name() const override;
     virtual const QString description() const override;
 
-    virtual void add(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets) override;
+    virtual void add(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets, hal::placement_hint placement) override;
     virtual void remove(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets) override;
 
 private:

@@ -13,6 +13,7 @@
 #include "gui/graph_widget/graph_navigation_widget.h"
 #include "gui/graph_widget/graphics_scene.h"
 #include "gui/graph_widget/items/graphics_gate.h"
+#include "gui/gui_def.h"
 #include "gui/gui_globals.h"
 #include "gui/hal_content_manager/hal_content_manager.h"
 #include "gui/overlay/dialog_overlay.h"
@@ -25,6 +26,7 @@
 #include <QToolButton>
 #include <QVBoxLayout>
 #include <QVariantAnimation>
+#include <QTimer>
 
 graph_widget::graph_widget(graph_context* context, QWidget* parent)
     : content_widget("Graph", parent), m_view(new graph_graphics_view(this)), m_context(context), m_overlay(new dialog_overlay(this)), m_navigation_widget(new graph_navigation_widget(nullptr)),
@@ -152,17 +154,26 @@ void graph_widget::keyPressEvent(QKeyEvent* event)
     }
 }
 
-void graph_widget::handle_navigation_jump_requested(const u32 via_net, const u32 to_gate)
+void graph_widget::handle_navigation_jump_requested(const hal::node origin, const u32 via_net, const QSet<u32>& to_gates)
 {
+    bool bail_animation = false;
+
     setFocus();
+
     // ASSERT INPUTS ARE VALID ?
     auto n = g_netlist->get_net_by_id(via_net);
-    auto g = g_netlist->get_gate_by_id(to_gate);
-
-    if (!g || !n)
+    if (!n || to_gates.isEmpty())
         return;
+    QList<std::shared_ptr<gate>> gates;
+    for (u32 id : to_gates)
+    {
+        auto g = g_netlist->get_gate_by_id(id);
+        if (!g)
+            return;
+        gates.append(g);
+    }
 
-    if (!m_context->gates().contains(to_gate))
+    if (!m_context->gates().contains(to_gates))
     {
         for (const auto& m : g_netlist->get_modules())
         {
@@ -196,7 +207,16 @@ void graph_widget::handle_navigation_jump_requested(const u32 via_net, const u32
             }
         }
 
-        m_context->add({}, {to_gate});
+        // If we don't have all the gates in the current context, we need to
+        // insert them
+
+        bool netIsInput = n->is_a_dst(*gates.constBegin()); // either they're all inputs or all outputs, so just check the first one
+        hal::placement_mode placement = netIsInput ? hal::placement_mode::prefer_right : hal::placement_mode::prefer_left;
+        m_context->add({}, to_gates, hal::placement_hint{placement, origin});
+
+        // If we have added any gates, the scene may have resized. In that case, the animation can be erratic,
+        // so we set a flag here that we can't run the animation. See end of this method for more details.
+        bail_animation = true;
     }
     else
     {
@@ -207,41 +227,53 @@ void graph_widget::handle_navigation_jump_requested(const u32 via_net, const u32
 
     // SELECT IN RELAY
     g_selection_relay.clear();
-    g_selection_relay.m_selected_gates.insert(to_gate);
-    g_selection_relay.m_focus_type = selection_relay::item_type::gate;
-    g_selection_relay.m_focus_id   = to_gate;
-    g_selection_relay.m_subfocus   = selection_relay::subfocus::none;
+    g_selection_relay.m_selected_gates = to_gates;
+    if (to_gates.size() == 1)
+    {
+        // subfocus only possible when just one gate selected
 
-    u32 cnt = 0;
-    for (const auto& pin : g->get_input_pins())
-    {
-        if (g->get_fan_in_net(pin) == n)    // input net
+        auto g = *gates.constBegin();
+        g_selection_relay.m_focus_type = selection_relay::item_type::gate;
+        g_selection_relay.m_focus_id   = g->get_id();
+        g_selection_relay.m_subfocus   = selection_relay::subfocus::none;
+
+        u32 cnt = 0;
+        for (const auto& pin : g->get_input_pins())
         {
-            g_selection_relay.m_subfocus       = selection_relay::subfocus::left;
-            g_selection_relay.m_subfocus_index = cnt;
-            break;
-        }
-        cnt++;
-    }
-    if (g_selection_relay.m_subfocus == selection_relay::subfocus::none)
-    {
-        cnt = 0;
-        for (const auto& pin : g->get_output_pins())
-        {
-            if (g->get_fan_out_net(pin) == n)    // input net
+            if (g->get_fan_in_net(pin) == n)    // input net
             {
-                g_selection_relay.m_subfocus       = selection_relay::subfocus::right;
+                g_selection_relay.m_subfocus       = selection_relay::subfocus::left;
                 g_selection_relay.m_subfocus_index = cnt;
                 break;
             }
             cnt++;
         }
+        if (g_selection_relay.m_subfocus == selection_relay::subfocus::none)
+        {
+            cnt = 0;
+            for (const auto& pin : g->get_output_pins())
+            {
+                if (g->get_fan_out_net(pin) == n)    // input net
+                {
+                    g_selection_relay.m_subfocus       = selection_relay::subfocus::right;
+                    g_selection_relay.m_subfocus_index = cnt;
+                    break;
+                }
+                cnt++;
+            }
+        }
     }
 
     g_selection_relay.relay_selection_changed(nullptr);
 
+    // FIXME If the scene has been resized during this method, the animation triggered by
+    // ensure_gates_visible is broken. Thus, if that is the case, we bail out here and not
+    // trigger the animation.
+    if (bail_animation)
+        return;
+
     // JUMP TO THE GATE
-    ensure_gate_visible(to_gate);
+    ensure_gates_visible(to_gates);
 }
 
 void graph_widget::handle_module_double_clicked(const u32 id)
@@ -285,7 +317,7 @@ void graph_widget::handle_navigation_left_request()
                 }
                 else
                 {
-                    handle_navigation_jump_requested(n->get_id(), n->get_src().get_gate()->get_id());
+                    handle_navigation_jump_requested(hal::node{hal::node_type::gate, g->get_id()}, n->get_id(), {n->get_src().get_gate()->get_id()});
                 }
             }
             else if (g->get_input_pins().size())
@@ -307,7 +339,7 @@ void graph_widget::handle_navigation_left_request()
 
             if (n->get_src().gate != nullptr)
             {
-                handle_navigation_jump_requested(n->get_id(), n->get_src().get_gate()->get_id());
+                handle_navigation_jump_requested(hal::node{hal::node_type::none, 0}, n->get_id(), {n->get_src().get_gate()->get_id()});
             }
 
             return;
@@ -347,7 +379,7 @@ void graph_widget::handle_navigation_right_request()
                 }
                 else if (n->get_num_of_dsts() == 1)
                 {
-                    handle_navigation_jump_requested(n->get_id(), n->get_dsts()[0].get_gate()->get_id());
+                    handle_navigation_jump_requested(hal::node{hal::node_type::gate, g->get_id()}, n->get_id(), {n->get_dsts()[0].get_gate()->get_id()});
                 }
                 else
                 {
@@ -378,7 +410,7 @@ void graph_widget::handle_navigation_right_request()
 
             if (n->get_num_of_dsts() == 1)
             {
-                handle_navigation_jump_requested(n->get_id(), n->get_dsts()[0].get_gate()->get_id());
+                handle_navigation_jump_requested(hal::node{hal::node_type::none, 0}, n->get_id(), {n->get_dsts()[0].get_gate()->get_id()});
             }
             else
             {
@@ -497,21 +529,46 @@ void graph_widget::handle_enter_module_requested(const u32 id)
     ctx->add(module_ids, gate_ids);
 }
 
-void graph_widget::ensure_gate_visible(const u32 gate)
+void graph_widget::ensure_gates_visible(const QSet<u32> gates)
 {
     if (m_context->scene_update_in_progress())
         return;
 
-    const graphics_gate* itm = m_context->scene()->get_gate_item(gate);
+    int min_x = INT_MAX;
+    int min_y = INT_MAX;
+    int max_x = INT_MIN;
+    int max_y = INT_MIN;
+    for (auto id : gates)
+    {
+        auto rect = m_context->scene()->get_gate_item(id)->sceneBoundingRect();
+
+        min_x = std::min(min_x, (int)rect.left());
+        max_x = std::max(max_x, (int)rect.right());
+        min_y = std::min(min_y, (int)rect.top());
+
+        max_y = std::max(max_y, (int)rect.bottom());
+    }
+    auto targetRect = QRectF(min_x, min_y, max_x-min_x, max_y-min_y).marginsAdded(QMarginsF(20,20,20,20));
+    
+    // FIXME This breaks as soon as the layouter call that preceded the call to this function
+    // changed the scene size. If that happens, mapToScene thinks that the view is looking at (0,0)
+    // and the animation jumps to (0,0) before moving to the correct target.
+    auto currentRect = m_view->mapToScene(m_view->viewport()->geometry()).boundingRect(); // this has incorrect coordinates
+    
+    auto centerFix = targetRect.center();
+    targetRect.setWidth(std::max(targetRect.width(), currentRect.width()));
+    targetRect.setHeight(std::max(targetRect.height(), currentRect.height()));
+    targetRect.moveCenter(centerFix);
+
+    //qDebug() << currentRect;
 
     auto anim = new QVariantAnimation();
     anim->setDuration(1000);
-
-    QPointF center = m_view->mapToScene(QRect(0, 0, m_view->viewport()->width(), m_view->viewport()->height())).boundingRect().center();
-    anim->setStartValue(center);
-    anim->setEndValue(itm->pos());
-
-    connect(anim, &QVariantAnimation::valueChanged, [=](const QVariant& value) { m_view->centerOn(value.toPoint()); });
+    anim->setStartValue(currentRect);
+    anim->setEndValue(targetRect);
+    // FIXME fitInView miscalculates the scale required to actually fit the rect into the viewport,
+    // so that every time fitInView is called this will cause the scene to scale down by a very tiny amount.
+    connect(anim, &QVariantAnimation::valueChanged, [=](const QVariant& value) { m_view->fitInView(value.toRectF(), Qt::KeepAspectRatio); });
 
     anim->start(QAbstractAnimation::DeleteWhenStopped);
 }

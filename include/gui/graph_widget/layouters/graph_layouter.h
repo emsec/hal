@@ -146,7 +146,7 @@ class graph_layouter : public QObject
 public:
     explicit graph_layouter(const graph_context* const context, QObject* parent = nullptr);
 
-    virtual void add(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets)    = 0;
+    virtual void add(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets, hal::placement_hint placement = hal::placement_hint{hal::placement_mode::standard, hal::node()})    = 0;
     virtual void remove(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets) = 0;
 
     virtual const QString name() const        = 0;
@@ -160,16 +160,22 @@ public:
     const QMap<QPoint, hal::node> position_to_node_map() const;
 
     void set_node_position(const hal::node& n, const QPoint& p);
+    void swap_node_positions(const hal::node& n1, const hal::node& n2);
     void remove_node_from_maps(const hal::node& n);
 
-    int min_x_index();
-    int min_y_index();
+    int min_x_index() const;
+    int min_y_index() const;
+
+    bool done() const;
 
     QVector<qreal> x_values() const;
     QVector<qreal> y_values() const;
 
     qreal max_node_width() const;
     qreal max_node_height() const;
+
+    qreal default_grid_width() const;
+    qreal default_grid_height() const;
 
 Q_SIGNALS:
     void status_update(const int percent);
@@ -284,6 +290,8 @@ private:
 
     qreal m_max_node_width;
     qreal m_max_node_height;
+    
+    bool m_done;
 };
 
 #endif // GRAPH_LAYOUTER_H

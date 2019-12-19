@@ -231,6 +231,13 @@ void main_settings_widget::init_widgets()
     register_widget("keybind-item", everywhere_search_keybind);
     assign_exclusive_group("keybinds", everywhere_search_keybind);
 
+    make_section("Debug", "debug-item", ":/icons/bug");
+
+    #ifdef GUI_DEBUG_GRID
+    checkbox_setting* grid_debug_setting = new checkbox_setting("debug/grid", "Show grid debug overlay", "enabled", "<-- shows you how the layouter sees the graph", this);
+    register_widget("debug-item", grid_debug_setting);
+    #endif
+
     // text_setting* py_interpreter_setting = new text_setting("python/interpreter", "Python Interpreter", "will be used after restart", "/path/to/python");
     // register_widget("advanced-item", py_interpreter_setting);
 }

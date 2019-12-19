@@ -3,6 +3,7 @@
 
 #include "def.h"
 
+#include "gui/gui_globals.h"
 #include "gui/graph_widget/shaders/graph_shader.h"
 #include "items/utility_items/drag_shadow_gate.h"
 #include "netlist/gate.h"
@@ -28,10 +29,6 @@ class graphics_scene : public QGraphicsScene
     Q_OBJECT
 
 public:
-    enum class drag_mode {
-        move,
-        swap
-    };
 
     static void set_lod(const qreal& lod);
     static void set_grid_enabled(const bool& value);
@@ -43,15 +40,14 @@ public:
     static void set_grid_base_dot_color(const QColor& color);
     static void set_grid_cluster_dot_color(const QColor& color);
 
-    static QPointF snap_to_grid(const QPointF& pos);
+    static QPointF snap_to_grid(const QPointF& pos) Q_DECL_DEPRECATED;
 
     graphics_scene(QObject* parent = nullptr);
 
-    void start_drag_shadow(const QPointF& posF, const QSizeF& sizeF, graphics_item* sourceItem);
-    void move_drag_shadow(const QPointF& posF, const drag_mode mode);
-    bool stop_drag_shadow();
+    void start_drag_shadow(const QPointF& posF, const QSizeF& sizeF, const drag_shadow_gate::drag_cue cue);
+    void move_drag_shadow(const QPointF& posF, const drag_shadow_gate::drag_cue cue);
+    void stop_drag_shadow();
     QPointF drop_target();
-    graphics_item* drop_target_item() const;
 
     void add_item(graphics_item* item);
     void remove_item(graphics_item* item);
@@ -67,6 +63,10 @@ public:
 
     const graphics_gate* get_gate_item(const u32 id) const;
 
+    #ifdef GUI_DEBUG_GRID
+    void debug_set_layouter_grid(const QVector<qreal>& debug_x_lines, const QVector<qreal>& debug_y_lines, qreal debug_default_height, qreal debug_default_width);
+    #endif
+
 //    void update_utility_items();
 
 public Q_SLOTS:
@@ -76,6 +76,9 @@ public Q_SLOTS:
 
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent* event) Q_DECL_OVERRIDE;
+
+private Q_SLOTS:
+    void handle_global_setting_changed(void* sender, const QString& key, const QVariant& value);
 
 private:
     struct module_data
@@ -118,12 +121,19 @@ private:
     void drawBackground(QPainter* painter, const QRectF& rect) Q_DECL_OVERRIDE;
 
     drag_shadow_gate* m_drag_shadow_gate;
-    graphics_item* m_drag_source_item;
-    graphics_item* m_drop_target_item;
-
+    
     QVector<module_data> m_module_items;
     QVector<gate_data> m_gate_items;
     QVector<net_data> m_net_items;
+
+    #ifdef GUI_DEBUG_GRID
+    void debug_draw_layouter_grid(QPainter* painter, const int x_from, const int x_to, const int y_from, const int y_to);
+    QVector<qreal> m_debug_x_lines;
+    QVector<qreal> m_debug_y_lines;
+    qreal m_debug_default_width;
+    qreal m_debug_default_height;
+    bool m_debug_grid_enable;
+    #endif
 
 //    gate_navigation_popup* m_left_gate_navigation_popup;
 //    gate_navigation_popup* m_right_gate_navigation_popup;

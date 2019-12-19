@@ -13,6 +13,12 @@ class drag_shadow_gate : public QGraphicsObject
     Q_OBJECT
 
 public:
+    enum class drag_cue {
+        movable = 0,
+        swappable = 1,
+        rejected = 2
+    };
+
     explicit drag_shadow_gate();
 
     void start(const QPointF& posF, const QSizeF& sizeF);
@@ -25,8 +31,7 @@ public:
     void set_width(const qreal width);
     void set_height(const qreal height);
 
-    void set_fits(const bool fits);
-    bool fits() const;
+    void set_visual_cue(const drag_cue cue);
 
     static void set_lod(const qreal lod);
     static void load_settings();
@@ -44,7 +49,7 @@ private:
     static QColor s_color_solid[];
     static QColor s_color_translucent[];
 
-    bool m_fits;
+    drag_cue m_cue;
 
     qreal m_width;
     qreal m_height;

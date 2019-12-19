@@ -19,6 +19,9 @@
 #include "gui/graph_widget/items/utility_items/drag_shadow_gate.h"
 #include "gui/gui_globals.h"
 #include "gui/gui_utils/netlist.h"
+#include "gui/implementations/qpoint_extension.h"
+
+#include <algorithm>
 
 #include <QAction>
 #include <QApplication>
@@ -35,6 +38,8 @@
 #include <QWheelEvent>
 #include <QWidgetAction>
 #include <qmath.h>
+
+#include <QDebug>
 
 graph_graphics_view::graph_graphics_view(graph_widget* parent)
     : QGraphicsView(parent), m_graph_widget(parent), m_minimap_enabled(false), m_grid_enabled(true), m_grid_clusters_enabled(true), m_grid_type(graph_widget_constants::grid_type::lines),
@@ -60,6 +65,9 @@ void graph_graphics_view::initialize_settings()
     m_drag_modifier                    = Qt::KeyboardModifier(drag_modifier_setting);
     unsigned int move_modifier_setting = g_settings_manager.get("graph_view/move_modifier").toUInt();
     m_move_modifier                    = Qt::KeyboardModifier(move_modifier_setting);
+    #ifdef GUI_DEBUG_GRID
+    m_debug_gridpos_enable = g_settings_manager.get("debug/grid").toBool();
+    #endif
 }
 
 void graph_graphics_view::conditional_update()
@@ -219,6 +227,11 @@ void graph_graphics_view::drawForeground(QPainter* painter, const QRectF& rect)
 {
     Q_UNUSED(rect)
 
+    #ifdef GUI_DEBUG_GRID
+    if (m_debug_gridpos_enable)
+        debug_draw_layouter_gridpos(painter);
+    #endif
+
     if (!m_minimap_enabled)
         return;
 
@@ -226,6 +239,16 @@ void graph_graphics_view::drawForeground(QPainter* painter, const QRectF& rect)
     painter->resetTransform();
     painter->fillRect(map, QColor(0, 0, 0, 170));
 }
+
+#ifdef GUI_DEBUG_GRID
+void graph_graphics_view::debug_draw_layouter_gridpos(QPainter* painter)
+{
+    painter->resetTransform();
+    painter->setPen(QPen(Qt::magenta));
+    QString pos_str = QString("(%1, %2)").arg(m_debug_gridpos.x()).arg(m_debug_gridpos.y());
+    painter->drawText(QPoint(25, 25), pos_str);
+}
+#endif
 
 void graph_graphics_view::mousePressEvent(QMouseEvent* event)
 {
@@ -241,7 +264,7 @@ void graph_graphics_view::mousePressEvent(QMouseEvent* event)
         {
             m_drag_item               = static_cast<graphics_gate*>(item);
             m_drag_mousedown_position = event->pos();
-            m_drag_cursor_offset      = m_drag_mousedown_position - mapFromScene(item->pos());
+            m_drag_start_gridpos      = closest_layouter_pos(mapToScene(m_drag_mousedown_position))[0];
         }
         else
         {
@@ -296,6 +319,10 @@ void graph_graphics_view::mouseMoveEvent(QMouseEvent* event)
             }
         }
     }
+    #ifdef GUI_DEBUG_GRID
+    debug_show_layouter_gridpos(event->pos());
+    #endif
+
     QGraphicsView::mouseMoveEvent(event);
 }
 
@@ -306,7 +333,7 @@ void graph_graphics_view::dragEnterEvent(QDragEnterEvent* event)
         event->acceptProposedAction();
         QSizeF size(m_drag_item->width(), m_drag_item->height());
         QPointF mouse = event->posF();
-        QPointF pos   = mapToScene(mouse.x(), mouse.y()) - m_drag_cursor_offset;
+        QPointF snap  = closest_layouter_pos(mapToScene(mouse.x(), mouse.y()))[1];
         if (g_selection_relay.m_selected_gates.size() > 1)
         {
             // if we are in multi-select mode, reduce the selection to the
@@ -318,7 +345,8 @@ void graph_graphics_view::dragEnterEvent(QDragEnterEvent* event)
             g_selection_relay.m_subfocus   = selection_relay::subfocus::none;
             g_selection_relay.relay_selection_changed(nullptr);
         }
-        static_cast<graphics_scene*>(scene())->start_drag_shadow(pos, size, m_drag_item);
+        m_drop_allowed = false;
+        static_cast<graphics_scene*>(scene())->start_drag_shadow(snap, size, drag_shadow_gate::drag_cue::rejected);
     }
     else
     {
@@ -336,10 +364,45 @@ void graph_graphics_view::dragMoveEvent(QDragMoveEvent* event)
 {
     if (event->source() == this && event->proposedAction() == Qt::MoveAction)
     {
-        QPoint mouse         = event->pos();
-        bool modifierPressed = event->keyboardModifiers() == m_drag_modifier;
-        QPoint shadow        = mouse - m_drag_cursor_offset;
-        static_cast<graphics_scene*>(scene())->move_drag_shadow(mapToScene(shadow.x(), shadow.y()), modifierPressed ? graphics_scene::drag_mode::swap : graphics_scene::drag_mode::move);
+        bool swapModifier    = event->keyboardModifiers() == m_drag_modifier;
+        QVector<QPoint> snap = closest_layouter_pos(mapToScene(event->pos()));
+
+        if (snap[0] == m_drag_current_gridpos && swapModifier == m_drag_current_modifier)
+        {
+            return;
+        }
+        m_drag_current_gridpos  = snap[0];
+        m_drag_current_modifier = swapModifier;
+
+        auto context = m_graph_widget->get_context();
+        graph_layouter* layouter = context->debug_get_layouter();
+        assert(layouter->done()); // ensure grid stable
+        QMap<QPoint, hal::node>::const_iterator node_iter = layouter->position_to_node_map().find(snap[0]);
+
+        drag_shadow_gate::drag_cue cue = drag_shadow_gate::drag_cue::rejected;
+        // disallow dropping an item on itself
+        if (snap[0] != m_drag_start_gridpos)
+        {
+            if (swapModifier)
+            {
+                if (node_iter != layouter->position_to_node_map().end())
+                {
+                    // allow move only on empty cells
+                    cue = drag_shadow_gate::drag_cue::swappable;
+                }
+            }
+            else
+            {
+                if (node_iter == layouter->position_to_node_map().end())
+                {
+                    // allow move only on empty cells
+                    cue = drag_shadow_gate::drag_cue::movable;
+                }
+            }
+        }
+        m_drop_allowed = (cue != drag_shadow_gate::drag_cue::rejected);
+        
+        static_cast<graphics_scene*>(scene())->move_drag_shadow(snap[1], cue);
     }
 }
 
@@ -349,27 +412,46 @@ void graph_graphics_view::dropEvent(QDropEvent* event)
     {
         event->acceptProposedAction();
         graphics_scene* s = static_cast<graphics_scene*>(scene());
-        bool success      = s->stop_drag_shadow();
-        if (success)
+        s->stop_drag_shadow();
+        if (m_drop_allowed)
         {
+            auto context = m_graph_widget->get_context();
+            graph_layouter* layouter = context->debug_get_layouter();
+            assert(layouter->done()); // ensure grid stable
+
+            // convert scene coordinates into layouter grid coordinates
+            QPointF targetPos = s->drop_target();
+            QPoint targetLayouterPos = closest_layouter_pos(targetPos)[0];
+            QPoint sourceLayouterPos = closest_layouter_pos(m_drag_item->pos())[0];
+
+            if (targetLayouterPos == sourceLayouterPos)
+            {
+                qDebug() << "Attempted to drop gate onto itself, this should never happen!";
+                return;
+            }
+            // assert(targetLayouterPos != sourceLayouterPos);
+
             bool modifierPressed = event->keyboardModifiers() == m_drag_modifier;
-            // TODO: Once the layouter data structures are defined & stable,
-            // add code to move the gates to the correct layouter boxes
-            // TODO: Also add a mechanism to insert rows and columns of boxes,
-            // like in a table calculation software
             if (modifierPressed)
             {
                 // swap mode; swap gates
-                QPointF targetPos = s->drop_target_item()->pos();
-                s->drop_target_item()->setPos(m_drag_item->pos());
-                m_drag_item->setPos(targetPos);
+                
+                hal::node nodeFrom = layouter->position_to_node_map().value(sourceLayouterPos);
+                hal::node nodeTo = layouter->position_to_node_map().value(targetLayouterPos);
+                assert(nodeFrom != hal::node()); // assert that value was found
+                assert(nodeTo != hal::node());
+                layouter->swap_node_positions(nodeFrom, nodeTo);
             }
             else
             {
                 // move mode; move gate to the selected location
-                m_drag_item->setPos(s->drop_target());
+                
+                hal::node nodeTo = layouter->position_to_node_map().value(sourceLayouterPos);
+                assert(nodeTo != hal::node());
+                layouter->set_node_position(nodeTo, targetLayouterPos);
             }
-            // TODO: Once available, trigger a re-layout of all nets here
+            // re-layout the nets
+            context->schedule_scene_update();
         }
     }
     else
@@ -735,6 +817,12 @@ void graph_graphics_view::handle_global_setting_changed(void* sender, const QStr
         unsigned int modifier = value.toUInt();
         m_move_modifier       = Qt::KeyboardModifier(modifier);
     }
+    #ifdef GUI_DEBUG_GRID
+    else if (key == "debug/grid")
+    {
+        m_debug_gridpos_enable = value.toBool();
+    }
+    #endif
 }
 
 void graph_graphics_view::handle_fold_single_action()
@@ -782,4 +870,106 @@ void graph_graphics_view::handle_unfold_all_action()
         context->unfold_module(id);
     }
     context->end_change();
+}
+
+#ifdef GUI_DEBUG_GRID
+void graph_graphics_view::debug_show_layouter_gridpos(const QPoint& mouse_pos)
+{
+    auto context = m_graph_widget->get_context();
+    if (!context)
+        return;
+
+    graph_layouter* layouter = context->debug_get_layouter();
+    if (!(layouter->done()))
+        return;
+
+    QPointF scene_mouse_pos = mapToScene(mouse_pos);
+    QPoint layouter_pos = closest_layouter_pos(scene_mouse_pos)[0];
+    m_debug_gridpos = layouter_pos;
+}
+#endif
+
+QVector<QPoint> graph_graphics_view::closest_layouter_pos(const QPointF& scene_pos) const
+{
+    auto context = m_graph_widget->get_context();
+    assert(context);
+
+    graph_layouter* layouter = context->debug_get_layouter();
+    assert(layouter->done()); // ensure grid stable
+
+    int default_width = layouter->default_grid_width();
+    int default_height = layouter->default_grid_height();
+    int min_x = layouter->min_x_index();
+    int min_y = layouter->min_y_index();
+    QVector<qreal> x_vals = layouter->x_values();
+    QVector<qreal> y_vals = layouter->y_values();
+    layouter_point x_point = closest_layouter_point(scene_pos.x(), default_width, min_x, x_vals);
+    layouter_point y_point = closest_layouter_point(scene_pos.y(), default_height, min_y, y_vals);
+    return  QVector({QPoint(x_point.index, y_point.index), QPoint(x_point.pos, y_point.pos)});
+}
+
+graph_graphics_view::layouter_point graph_graphics_view::closest_layouter_point(qreal scene_pos, int default_spacing, int min_index, QVector<qreal> sections) const
+{
+    int index = min_index;
+    qreal pos = 0;
+    if (sections.first() > scene_pos)
+    {
+        int distance = sections.first() - scene_pos;
+        int nSections = distance / default_spacing; // this rounds down
+        qreal posThis = sections.first() - nSections * default_spacing;
+        qreal distThis = qAbs(scene_pos - posThis);
+        qreal posPrev = posThis - default_spacing;
+        qreal distPrev = qAbs(scene_pos - posPrev);
+        if (distPrev < distThis)
+        {
+            index -= nSections+1;
+            pos = posPrev;
+        }
+        else
+        {
+            index -= nSections;
+            pos = posThis;
+        }
+    }
+    else if (sections.last() < scene_pos)
+    {
+        int distance = scene_pos - sections.last();
+        int nSections = distance / default_spacing; // this rounds down
+        qreal posThis = sections.last() + nSections * default_spacing;
+        qreal distThis = qAbs(scene_pos - posThis);
+        qreal posNext = posThis + default_spacing;
+        qreal distNext = qAbs(scene_pos - posNext);
+        if (distNext < distThis)
+        {
+            index += nSections + sections.size();
+            pos = posNext;
+        }
+        else
+        {
+            index += nSections + sections.size()-1;
+            pos = posThis;
+        }
+    }
+    else
+    {
+        // binary search for first value in sections larger than or equal to scene_pos
+        const qreal* needle = std::lower_bound(sections.constBegin(), sections.constEnd(), scene_pos);
+        int i = needle - sections.begin(); // position of needle in the vector
+        index += i;
+        // check if we're closer to this or the next position
+        qreal posThis = *needle;
+        qreal distThis = qAbs(scene_pos - posThis);
+        qreal posPrev = (i > 0) ? sections[i-1] : (sections.first() - default_spacing);
+        qreal distPrev = qAbs(scene_pos - posPrev);
+        if (distPrev < distThis)
+        {
+            index--;
+            pos = posPrev;
+        }
+        else
+        {
+            pos = posThis;
+        }
+    }
+    return layouter_point{index, pos};
 }

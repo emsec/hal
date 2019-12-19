@@ -19,11 +19,12 @@ const QString level_graph_layouter::description() const
     return "<p>PLACEHOLDER</p>";
 }
 
-void level_graph_layouter::add(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets)
+void level_graph_layouter::add(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets, hal::placement_hint placement)
 {
     Q_UNUSED(modules)
     Q_UNUSED(gates)
     Q_UNUSED(nets)
+    Q_UNUSED(placement);
 
     //    // ZERO GATES
     //    int level_x = 0;

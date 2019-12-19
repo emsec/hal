@@ -464,7 +464,7 @@ void gate_details_widget::on_treewidget_item_clicked(QTreeWidgetItem* item, int 
         {
             //            auto rect = QApplication::desktop()->availableGeometry(this);
             //            w->move(QPoint(rect.x() + (rect.width() - w->width()) / 2, rect.y() + (rect.height() - w->height()) / 2));
-            m_navigation_table->setup(clicked_net);
+            m_navigation_table->setup(hal::node{hal::node_type::none, 0}, clicked_net);
             m_navigation_table->move(QCursor::pos());
             m_navigation_table->show();
             m_navigation_table->setFocus();
@@ -501,34 +501,46 @@ void gate_details_widget::on_treewidget_item_clicked(QTreeWidgetItem* item, int 
 }
 
 //always the right-subfocus!!!!!!(the other way is handled: on_treewidget_item_clicked
-void gate_details_widget::handle_navigation_jump_requested(const u32 via_net, const u32 to_gate)
+void gate_details_widget::handle_navigation_jump_requested(const hal::node origin, const u32 via_net, const QSet<u32>& to_gates)
 {
+    Q_UNUSED(origin);
+    
     auto n = g_netlist->get_net_by_id(via_net);
-    auto g = g_netlist->get_gate_by_id(to_gate);
 
-    if (!g || !n)
+    if (to_gates.isEmpty() || !n)
         return;
+    for (u32 id : to_gates)
+    {
+        if (!g_netlist->get_gate_by_id(id))
+            return;
+    }
 
     m_navigation_table->hide();
     g_selection_relay.clear();
-    g_selection_relay.m_selected_gates.insert(to_gate);
-    g_selection_relay.m_focus_type = selection_relay::item_type::gate;
-    g_selection_relay.m_focus_id   = to_gate;
-    g_selection_relay.m_subfocus   = selection_relay::subfocus::left;
-
-    u32 index_cnt = 0;
-    for (const auto& pin : g->get_input_pins())
+    g_selection_relay.m_selected_gates = to_gates;
+    if (to_gates.size() == 1)
     {
-        if (g->get_fan_in_net(pin) == n)
-        {
-            g_selection_relay.m_subfocus_index = index_cnt;
-            break;
-        }
-        index_cnt++;
-    }
+        g_selection_relay.m_focus_type = selection_relay::item_type::gate;
+        auto g = g_netlist->get_gate_by_id(*to_gates.constBegin());
+        g_selection_relay.m_focus_id   = g->get_id();
+        g_selection_relay.m_subfocus   = selection_relay::subfocus::left;
 
-    g_selection_relay.relay_selection_changed(this);
+        u32 index_cnt = 0;
+        for (const auto& pin : g->get_input_pins())
+        {
+            if (g->get_fan_in_net(pin) == n)
+            {
+                g_selection_relay.m_subfocus_index = index_cnt;
+                break;
+            }
+            index_cnt++;
+        }
+
+        g_selection_relay.relay_selection_changed(this);
+    }
     m_navigation_table->hide();
+
+    // TODO ensure gates visible in graph
 }
 
 void gate_details_widget::on_general_table_item_double_clicked(const QModelIndex& index)
