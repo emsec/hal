@@ -156,6 +156,8 @@ void graph_widget::keyPressEvent(QKeyEvent* event)
 
 void graph_widget::handle_navigation_jump_requested(const hal::node origin, const u32 via_net, const QSet<u32>& to_gates)
 {
+    bool bail_animation = false;
+
     setFocus();
 
     // ASSERT INPUTS ARE VALID ?
@@ -211,6 +213,10 @@ void graph_widget::handle_navigation_jump_requested(const hal::node origin, cons
         bool netIsInput = n->is_a_dst(*gates.constBegin()); // either they're all inputs or all outputs, so just check the first one
         hal::placement_mode placement = netIsInput ? hal::placement_mode::prefer_right : hal::placement_mode::prefer_left;
         m_context->add({}, to_gates, hal::placement_hint{placement, origin});
+
+        // If we have added any gates, the scene may have resized. In that case, the animation can be erratic,
+        // so we set a flag here that we can't run the animation. See end of this method for more details.
+        bail_animation = true;
     }
     else
     {
@@ -259,6 +265,12 @@ void graph_widget::handle_navigation_jump_requested(const hal::node origin, cons
     }
 
     g_selection_relay.relay_selection_changed(nullptr);
+
+    // FIXME If the scene has been resized during this method, the animation triggered by
+    // ensure_gates_visible is broken. Thus, if that is the case, we bail out here and not
+    // trigger the animation.
+    if (bail_animation)
+        return;
 
     // JUMP TO THE GATE
     ensure_gates_visible(to_gates);
@@ -538,6 +550,9 @@ void graph_widget::ensure_gates_visible(const QSet<u32> gates)
     }
     auto targetRect = QRectF(min_x, min_y, max_x-min_x, max_y-min_y).marginsAdded(QMarginsF(20,20,20,20));
     
+    // FIXME This breaks as soon as the layouter call that preceded the call to this function
+    // changed the scene size. If that happens, mapToScene thinks that the view is looking at (0,0)
+    // and the animation jumps to (0,0) before moving to the correct target.
     auto currentRect = m_view->mapToScene(m_view->viewport()->geometry()).boundingRect(); // this has incorrect coordinates
     
     auto centerFix = targetRect.center();
@@ -545,16 +560,17 @@ void graph_widget::ensure_gates_visible(const QSet<u32> gates)
     targetRect.setHeight(std::max(targetRect.height(), currentRect.height()));
     targetRect.moveCenter(centerFix);
 
+    //qDebug() << currentRect;
+
     auto anim = new QVariantAnimation();
     anim->setDuration(1000);
     anim->setStartValue(currentRect);
     anim->setEndValue(targetRect);
+    // FIXME fitInView miscalculates the scale required to actually fit the rect into the viewport,
+    // so that every time fitInView is called this will cause the scene to scale down by a very tiny amount.
     connect(anim, &QVariantAnimation::valueChanged, [=](const QVariant& value) { m_view->fitInView(value.toRectF(), Qt::KeepAspectRatio); });
 
     anim->start(QAbstractAnimation::DeleteWhenStopped);
-
-    // comment the above and uncomment this if you don't want the animation
-    // m_view->fitInView(targetRect, Qt::KeepAspectRatio);
 }
 
 void graph_widget::add_context_to_history()
