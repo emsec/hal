@@ -38,6 +38,9 @@ namespace gui_utility
     bool lexical_order_compare(const QString& a, const QString& b);
     int numeric_string_compare(QString a_num, QString b_num);
 
+    // convenience method to select an algoritm
+    int compare(sort_mechanism mechanism, QString a, QString b);
+
 } // namespace gui_utility
 
 #endif // SORT_UTIL_H

@@ -27,6 +27,11 @@
 
 #include "def.h"
 
+#include "gui/gui_utils/sort.h"
+#include "netlist/module.h"
+
+#include <set>
+
 #include <QAbstractItemModel>
 #include <QModelIndex>
 #include <QVariant>
@@ -58,13 +63,19 @@ public:
     void clear();
 
     void add_module(const u32 id, const u32 parent_module);
+    void add_recursively(std::set<std::shared_ptr<module>> modules);
     void remove_module(const u32 id);
     void update_module(const u32 id);
+
+private Q_SLOTS:
+    void handle_global_setting_changed(void* sender, const QString& key, const QVariant& value);
 
 private:
     module_item* m_top_module_item;
 
     QMap<u32, module_item*> m_module_items;
+
+    gui_utility::sort_mechanism m_sort_mechanism;
 };
 
 #endif // MODULE_MODEL_H
