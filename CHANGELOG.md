@@ -6,7 +6,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-# [1.1.8] - 2019-09-19 14:23:59+02:00 (urgency: medium)
+## [2.0.0] - 2019-12-19 22:00:00+02:00 (urgency: medium)
+Note: This is an API breaking release.
+
+
+* Heavily improved VHDL and Verilog parsers
+* Updated CMake build system to use target-based configurations
+* Changes to gate library system
+  * Replaced BDDs with Boolean functions
+  * Major changes to internal representation of gate types
+  * Allows for differentiation between LUTs, flip-flops, latches and combinational gate types
+  * Flip-flops and latches may now specify special sequential inputs such as enable, clock, set, and reset
+  * Replaced JSON gate libraries with liberty files
+* Simplified plugin system
+* Included igraph library
+* Major GUI revision
+  * Added isolation view/cone view feature
+  * New layouting system
+  * Added support for hierarchization/modularization
+* Tons of bug fixes and smaller issues ...
+
+## [1.1.8] - 2019-09-19 14:23:59+02:00 (urgency: medium)
 
 * Fix command line parsing
 * Fix parse all_options from main
@@ -246,6 +266,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 [//]: # (Hyperlink section)
 [Unreleased]: https://github.com/emsec/hal/compare/v1.1.8...HEAD
+[2.0.0]: https://github.com/emsec/hal/compare/v1.1.8...v2.0.0
 [1.1.8]: https://github.com/emsec/hal/compare/v1.1.7...v1.1.8
 [1.1.7]: https://github.com/emsec/hal/compare/v1.1.6...v1.1.7
 [1.1.6]: https://github.com/emsec/hal/compare/v1.1.5...v1.1.6

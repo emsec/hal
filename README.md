@@ -16,7 +16,22 @@ Apart from multiple research projects, HAL is also used in our university lectur
 - A feature-rich GUI allowing for visual netlist inspection and interactive analysis
 - An integrated Python shell to exploratively interact with netlist elements and to interface plugins from the GUI
 - **Update v1.1.0** Support for Xilinx Unisim, Xilinx Simprim, Synopsys 90nm, GSCLIB 3.0 and UMC 0.18µm libraries is now added
-- **Update v2.0.0** Added Isolation View to view only a subset of Gates in one view.
+- **Update v2.0.0**:
+  -  Heavily improved VHDL and Verilog parsers
+  - Updated CMake build system to use target-based configurations
+   - Changes to gate library system
+     - Replaced BDDs with Boolean functions
+     - Major changes to internal representation of gate types
+     - Allows for differentiation between LUTs, flip-flops, latches and combinational gate types
+     - Flip-flops and latches may now specify special sequential inputs such as enable, clock, set, and reset
+     - Replaced JSON gate libraries with liberty files
+  - Simplified plugin system
+  - Included igraph library
+  - Major GUI revision
+    - Added isolation view/cone view feature
+    - New layouting system
+    - Added support for hierarchization/modularization
+  - Tons of bug fixes and smaller issues ...
 
 ## API Documentation
 
