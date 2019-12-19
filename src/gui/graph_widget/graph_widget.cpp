@@ -158,8 +158,6 @@ void graph_widget::handle_navigation_jump_requested(const hal::node origin, cons
 {
     setFocus();
 
-    qDebug() << "corner: "<< m_view->mapToScene(0,0);
-
     // ASSERT INPUTS ARE VALID ?
     auto n = g_netlist->get_net_by_id(via_net);
     if (!n || to_gates.isEmpty())
