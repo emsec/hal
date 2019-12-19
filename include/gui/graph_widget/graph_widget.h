@@ -77,7 +77,6 @@ private:
     void handle_history_step_back_request();
     void handle_enter_module_requested(const u32 id);
 
-    void ensure_gate_visible(const u32 gate);
     void ensure_gates_visible(const QSet<u32> gates);
 
     struct context_history_entry

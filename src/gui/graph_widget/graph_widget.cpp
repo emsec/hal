@@ -26,6 +26,7 @@
 #include <QToolButton>
 #include <QVBoxLayout>
 #include <QVariantAnimation>
+#include <QTimer>
 
 graph_widget::graph_widget(graph_context* context, QWidget* parent)
     : content_widget("Graph", parent), m_view(new graph_graphics_view(this)), m_context(context), m_overlay(new dialog_overlay(this)), m_navigation_widget(new graph_navigation_widget(nullptr)),
@@ -156,6 +157,9 @@ void graph_widget::keyPressEvent(QKeyEvent* event)
 void graph_widget::handle_navigation_jump_requested(const hal::node origin, const u32 via_net, const QSet<u32>& to_gates)
 {
     setFocus();
+
+    qDebug() << "corner: "<< m_view->mapToScene(0,0);
+
     // ASSERT INPUTS ARE VALID ?
     auto n = g_netlist->get_net_by_id(via_net);
     if (!n || to_gates.isEmpty())
@@ -515,25 +519,6 @@ void graph_widget::handle_enter_module_requested(const u32 id)
     ctx->add(module_ids, gate_ids);
 }
 
-void graph_widget::ensure_gate_visible(const u32 gate)
-{
-    if (m_context->scene_update_in_progress())
-        return;
-
-    const graphics_gate* itm = m_context->scene()->get_gate_item(gate);
-
-    auto anim = new QVariantAnimation();
-    anim->setDuration(1000);
-
-    QPointF center = m_view->mapToScene(QRect(0, 0, m_view->viewport()->width(), m_view->viewport()->height())).boundingRect().center();
-    anim->setStartValue(center);
-    anim->setEndValue(itm->pos());
-
-    connect(anim, &QVariantAnimation::valueChanged, [=](const QVariant& value) { m_view->centerOn(value.toPoint()); });
-
-    anim->start(QAbstractAnimation::DeleteWhenStopped);
-}
-
 void graph_widget::ensure_gates_visible(const QSet<u32> gates)
 {
     if (m_context->scene_update_in_progress())
@@ -543,46 +528,23 @@ void graph_widget::ensure_gates_visible(const QSet<u32> gates)
     int min_y = INT_MAX;
     int max_x = INT_MIN;
     int max_y = INT_MIN;
-    for (u32 g : gates)
+    for (auto id : gates)
     {
-        auto itm = m_context->scene()->get_gate_item(g);
+        auto rect = m_context->scene()->get_gate_item(id)->sceneBoundingRect();
 
-        QRectF rect = itm->boundingRect();
-        // Qt... y u do dis?
-        rect.moveTopLeft(itm->pos());
+        min_x = std::min(min_x, (int)rect.left());
+        max_x = std::max(max_x, (int)rect.right());
+        min_y = std::min(min_y, (int)rect.top());
 
-        if (rect.left() < min_x)
-        {
-            min_x = rect.left();
-        }
-        if (rect.right() > max_x)
-        {
-            max_x = rect.right();
-        }
-        if (rect.top() < min_y)
-        {
-            min_y = rect.top();
-        }
-        if (rect.bottom() > max_y)
-        {
-            max_y = rect.bottom();
-        }
+        max_y = std::max(max_y, (int)rect.bottom());
     }
-    int targetWidth = max_x-min_x;
-    int targetHeight = max_y-min_y;
-    QRectF targetRect = QRectF(min_x, min_y, targetWidth, targetHeight).marginsAdded(QMarginsF(20,20,20,20));
+    auto targetRect = QRectF(min_x, min_y, max_x-min_x, max_y-min_y).marginsAdded(QMarginsF(20,20,20,20));
     
-    QRectF currentRect = m_view->mapToScene(m_view->viewport()->geometry()).boundingRect();
+    auto currentRect = m_view->mapToScene(m_view->viewport()->geometry()).boundingRect(); // this has incorrect coordinates
     
-    QPointF centerFix = targetRect.center();
-    if (targetRect.width() < currentRect.width())
-    {
-        targetRect.setWidth(currentRect.width());
-    }
-    if (targetRect.height() < currentRect.height())
-    {
-        targetRect.setHeight(currentRect.height());
-    }
+    auto centerFix = targetRect.center();
+    targetRect.setWidth(std::max(targetRect.width(), currentRect.width()));
+    targetRect.setHeight(std::max(targetRect.height(), currentRect.height()));
     targetRect.moveCenter(centerFix);
 
     auto anim = new QVariantAnimation();
@@ -590,10 +552,11 @@ void graph_widget::ensure_gates_visible(const QSet<u32> gates)
     anim->setStartValue(currentRect);
     anim->setEndValue(targetRect);
     connect(anim, &QVariantAnimation::valueChanged, [=](const QVariant& value) { m_view->fitInView(value.toRectF(), Qt::KeepAspectRatio); });
+
     anim->start(QAbstractAnimation::DeleteWhenStopped);
 
     // comment the above and uncomment this if you don't want the animation
-    //m_view->fitInView(targetRect, Qt::KeepAspectRatio);
+    // m_view->fitInView(targetRect, Qt::KeepAspectRatio);
 }
 
 void graph_widget::add_context_to_history()
