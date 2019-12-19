@@ -6,6 +6,7 @@ from os import path
 import re
 from enum import Enum
 import datetime
+import copy
 
 class release_info:
 
@@ -23,9 +24,9 @@ class release_info:
     def __str__(self):
         return "entry: version: v{}.{}.{} release: {} urgency: {} date: {} author: {} email: {} description {}".format(self.major, self.minor, self.patch, self.release, self.urgency, self.date, self.author, self.email, self.description)
 
-def to_debian(input, release = 'bionic'):
+def parse_markdown(input, release = 'bionic'):
     token = [i.strip() for i in input.split("\n")]
-    regex_start = r"\#\#\s+\[(?P<major>\d).(?P<minor>\d).(?P<patch>\d)\]\s+-\s+(?P<date>(?P<year>\d{4})-(?P<month>\d{2})-(?P<day>\d{2}) (\d{2}):(\d{2}):(\d{2})(\+|\-)(\d{2}):(\d{2}))\s*(\(urgency: (?P<urgency>low|medium|high)\))?"
+    regex_start = r"\#\#\s+\[(?P<major>\d+).(?P<minor>\d+).(?P<patch>\d+)\]\s+-\s+(?P<date>(?P<year>\d{4})-(?P<month>\d{2})-(?P<day>\d{2}) (\d{2}):(\d{2}):(\d{2})(\+|\-)(\d{2}):(\d{2}))\s*(\(urgency: (?P<urgency>low|medium|high)\))?"
     regex_hyperlink_section = r"\[//\]:\s+#\s+\(Hyperlink section\)"
     entries = []
     current_entry = None
@@ -55,7 +56,16 @@ def to_debian(input, release = 'bionic'):
         else:
             if current_entry != None and not in_hyperlink_section:
                 current_entry.description.append(line)
+    return entries
 
+def to_debian(input, release = 'bionic', for_ppa_debian_dir = False, ppa_version = "ppa1"):
+    entries = parse_markdown(input, release)
+
+    if for_ppa_debian_dir:
+        last_entry = entries[0]
+        new_entry = copy.deepcopy(last_entry)
+        new_entry.patch = "{}-{}~{}1".format(last_entry.patch, ppa_version, release)
+        entries.insert(0, new_entry)
     # Write output
     output_lines = []
     for entry in entries:
@@ -76,6 +86,19 @@ def to_debian(input, release = 'bionic'):
 
     return "\n".join(output_lines)
 
+def print_last_entry_info(input, release = 'bionic'):
+    entries = parse_markdown(input, release)
+    ret_val = []
+    entry = entries[0]
+    ret_val.append("CHANGELOG_LAST_VERSION: {}.{}.{}".format(entry.major, entry.minor, entry.patch))
+    ret_val.append("CHANGELOG_LAST_VERSION_MAJOR: {}".format(entry.major))
+    ret_val.append("CHANGELOG_LAST_VERSION_MINOR: {}".format(entry.minor))
+    ret_val.append("CHANGELOG_LAST_VERSION_PATCH: {}".format(entry.patch))
+    ret_val.append("CHANGELOG_LAST_MESSAGE:")
+    for line in entry.description:
+        ret_val.append(line)
+    print("\n".join(ret_val))
+
 class parse_debian_states(Enum):
     read_start = 1
     read_end = 2
@@ -83,7 +106,7 @@ class parse_debian_states(Enum):
 
 def to_markdown(input):
     token = [i.strip() for i in input.split("\n")]
-    regex_start = r"hal-reverse\s+\((?P<major>\d).(?P<minor>\d).(?P<patch>\d)\)\s+(?P<release>[\w]+);\s+urgency=(?P<urgency>[\w]+)"
+    regex_start = r"hal-reverse\s+\((?P<major>\d+).(?P<minor>\d+).(?P<patch>\d+)\)\s+(?P<release>[\w]+);\s+urgency=(?P<urgency>[\w]+)"
     regex_end = r"\-\-\s+(?P<author>[\w ]+)\s+\<(?P<email>[\w.@]+)\>\s+(?P<date>(?P<day_of_week>Mon|Tue|Wed|Thu|Fri|Sat|Sun),\s+(?P<day>\d{2})\s+(?P<month>Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(?P<year>\d{4})\s+(?P<hour>\d{2}):(?P<minute>\d{2}):(?P<second>\d{2})\s+(?P<time_shisht>(\+|\-)?\d{4}))"
 
     entries = []
@@ -124,8 +147,7 @@ def to_markdown(input):
             output_lines.append("")
         line = "## [{}.{}.{}] - {}".format(entry.major, entry.minor, entry.patch, entry.date.isoformat(' '))
 
-        if entry.urgency != 'medium':
-            line = "{} (urgency: {})".format(line, entry.urgency)
+        line = "{} (urgency: {})".format(line, entry.urgency)
         output_lines.append(line)
         output_lines.append("")
         output_lines += entry.description
@@ -141,7 +163,10 @@ if __name__ == '__main__':
     parser.add_argument('--verbose', '-v', action='count')
     parser.add_argument('--force-write', '-f', action='store_true', default=False, help="Overwrite exiting file?")
     parser.add_argument('-r', '--release', type=str, default='bionic', help="Specify Ubuntu release to use!")
-
+    parser.add_argument('--last-message', action='store_true', help="Print last entry info")
+    parser.add_argument('--ppa-version', type=str, default='ppa1', help="The ppa version for upload to ubuntu")
+    parser.add_argument('--for-ppa-debian-dir', action='store_true')
+    parser.add_argument('-p', '--just-print', action='store_true', help="Just print! Do not write to file!")
     args = parser.parse_args()
     input = ""
     if args.input_file:
@@ -151,10 +176,18 @@ if __name__ == '__main__':
         input = args.input
 
     result = ""
+    if args.last_message:
+        print_last_entry_info(input, args.release)
+        exit(0)
+        
     if args.to == 'markdown':
         result = to_markdown(input)
     elif args.to == 'debian':
-        result = to_debian(input, args.release)
+        result = to_debian(input, args.release, args.for_ppa_debian_dir, args.ppa_version)
+
+    if args.just_print:
+        print(result)
+        exit(0)
 
     output_filename = args.output_file
     if output_filename != '':

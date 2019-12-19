@@ -20,8 +20,6 @@
 
 using namespace test_utils;
 
-namespace fs = std::filesystem ;
-
 class netlist_factory_test : public ::testing::Test
 {
 protected:

@@ -12,9 +12,8 @@
 #include "netlist/net.h"
 #include "netlist/module.h"
 #include "netlist/endpoint.h"
-#include <experimental/filesystem>
 
-namespace fs = std::filesystem;
+namespace fs = hal::fs;
 
 namespace test_utils
 {
