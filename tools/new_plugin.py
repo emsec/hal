@@ -24,28 +24,15 @@ def print_usage():
 
 CMAKE_TEMPLATE ="""option(PL_##UPPER## "PL_##UPPER##" OFF)
 if(PL_##UPPER## OR BUILD_ALL_PLUGINS)
-    include_directories(SYSTEM ${PYBIND11_INCLUDE_DIR} SYSTEM ${PYTHON_INCLUDE_DIRS})
-    include_directories(AFTER "${CMAKE_CURRENT_SOURCE_DIR}/include")
-
     file(GLOB_RECURSE ##UPPER##_INC ${CMAKE_CURRENT_SOURCE_DIR}/include/*.h)
     file(GLOB_RECURSE ##UPPER##_SRC ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
     file(GLOB_RECURSE ##UPPER##_PYTHON_SRC ${CMAKE_CURRENT_SOURCE_DIR}/python/*.cpp)
-
-    add_library(##LOWER## SHARED ${##UPPER##_SRC} ${##UPPER##_PYTHON_SRC} ${##UPPER##_INC})
-
-    if(APPLE AND CMAKE_HOST_APPLE)
-        set_target_properties(##LOWER## PROPERTIES SUFFIX ".so")
-        set_target_properties(##LOWER## PROPERTIES INSTALL_NAME_DIR ${PLUGIN_LIBRARY_INSTALL_DIRECTORY})
-    endif(APPLE AND CMAKE_HOST_APPLE)
-
-    target_link_libraries(##LOWER## ${LINK_LIBS} ${PYTHON_LIBRARIES} pybind11::module)
-
-    install(TARGETS ##LOWER## LIBRARY DESTINATION ${LIBRARY_INSTALL_DIRECTORY} PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE INCLUDES DESTINATION ${INCLUDE_INSTALL_DIRECTORY})
-    install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/ DESTINATION ${PLUGIN_INCLUDE_INSTALL_DIRECTORY}/##LOWER##/include/)
-
-    if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
-        add_sanitizers(##LOWER##)
-    endif()
+    
+    hal_add_plugin(##LOWER##
+                   SHARED
+                   HEADER ${##UPPER##_INC}
+                   SOURCES ${##UPPER##_SRC} ${##UPPER##_PYTHON_SRC}
+                   )
 endif()
 """
 

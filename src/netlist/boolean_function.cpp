@@ -550,7 +550,12 @@ boolean_function boolean_function::operator!() const
 
 bool boolean_function::operator==(const boolean_function& other) const
 {
-    return m_invert == other.m_invert && m_content == other.m_content && m_variable == other.m_variable && m_constant == other.m_constant && m_op == other.m_op && m_operands == other.m_operands;
+    if (m_content != other.m_content)
+        return false;
+    if (m_invert != other.m_invert)
+        return false;
+    return (m_content == content_type::VARIABLE && m_variable == other.m_variable) || (m_content == content_type::CONSTANT && m_constant == other.m_constant)
+           || (m_content == content_type::TERMS && m_op == other.m_op && m_operands == other.m_operands);
 }
 bool boolean_function::operator!=(const boolean_function& other) const
 {
@@ -888,6 +893,9 @@ boolean_function boolean_function::optimize() const
         return result;
     }
 
+    // std::cout << "optimizing " << *this << std::endl;
+    // std::cout << "starting qmc on " << result << std::endl;
+
     // result is a OR-chain of *multiple* AND-chains of *only variables*
     std::vector<std::vector<value>> terms;
     auto vars_set = get_variables();
@@ -895,10 +903,18 @@ boolean_function boolean_function::optimize() const
     for (const auto& or_term : result.m_operands)
     {
         std::vector<value> term(vars.size(), value::X);
-        for (const auto& and_term : or_term.m_operands)
+        if (or_term.m_content == content_type::TERMS)
         {
-            int index   = std::distance(vars.begin(), std::find(vars.begin(), vars.end(), and_term.m_variable));
-            term[index] = and_term.m_invert ? value::ZERO : value::ONE;
+            for (const auto& and_term : or_term.m_operands)
+            {
+                int index   = std::distance(vars.begin(), std::find(vars.begin(), vars.end(), and_term.m_variable));
+                term[index] = and_term.m_invert ? value::ZERO : value::ONE;
+            }
+        }
+        else
+        {
+            int index   = std::distance(vars.begin(), std::find(vars.begin(), vars.end(), or_term.m_variable));
+            term[index] = or_term.m_invert ? value::ZERO : value::ONE;
         }
         terms.emplace_back(term);
     }
@@ -922,6 +938,8 @@ boolean_function boolean_function::optimize() const
         }
         result |= tmp;
     }
+
+    // std::cout << "after qmc " << result << std::endl;
 
     return result;
 }

@@ -5,7 +5,7 @@
 #include "netlist/netlist_factory.h"
 #include "netlist/persistent/netlist_serializer.h"
 #include "gtest/gtest.h"
-#include "hdl_parser/hdl_parser_vhdl.h"
+#include "netlist/hdl_parser/hdl_parser_vhdl.h"
 #include <iostream>
 #include <sstream>
 #include <experimental/filesystem>

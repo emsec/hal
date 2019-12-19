@@ -37,6 +37,7 @@ module_widget::module_widget(QWidget* parent) : content_widget("Modules", parent
     m_tree_view->setEditTriggers(QAbstractItemView::NoEditTriggers);
     m_tree_view->setFrameStyle(QFrame::NoFrame);
     m_tree_view->header()->close();
+    m_tree_view->setExpandsOnDoubleClick(false);
     m_content_layout->addWidget(m_tree_view);
     m_content_layout->addWidget(&m_searchbar);
     m_searchbar.hide();

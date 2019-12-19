@@ -2,7 +2,7 @@
 
 #include "def.h"
 
-#include <QDebug>
+#include <assert.h>
 
 namespace gui_utility
 {
@@ -36,9 +36,9 @@ namespace gui_utility
                 if (number_mode)
                 {
                     int diff = numeric_string_compare(a_num, b_num);
-                    if (diff) // keep looking if both numbers are equal
+                    if (diff != 0) // keep looking if both numbers are equal
                     {
-                        return diff > 0;
+                        return diff < 0;
                     }
                     // reset number cache
                     a_num.clear();
@@ -49,7 +49,7 @@ namespace gui_utility
                 }
                 else if (*a_it != *b_it)
                 {
-                    return *a_it > *b_it;
+                    return *a_it < *b_it;
                 }
                 else
                 {
@@ -65,15 +65,15 @@ namespace gui_utility
             int diff = numeric_string_compare(a_num, b_num);
             if (diff) // keep looking if both numbers are equal
             {
-                return diff > 0;
+                return diff < 0;
             }
         }
-        return b_it->isNull(); // is b shorter than a?
+        return a_it->isNull(); // is a shorter than b?
     }
 
     bool lexical_order_compare(const QString& a, const QString& b)
     {
-        return a > b;
+        return a < b;
     }
 
     int numeric_string_compare(QString a_num, QString b_num)
@@ -92,6 +92,18 @@ namespace gui_utility
             b_num = b_num.rightJustified(a_num.size(), '0');
         }
         return a_num.compare(b_num);
+    }
+
+    int compare(sort_mechanism mechanism, QString a, QString b)
+    {
+        switch(mechanism)
+        {
+        case lexical:
+            return lexical_order_compare(a, b);
+        case natural:
+            return natural_order_compare(a, b);
+        }
+        assert(false);
     }
 
 

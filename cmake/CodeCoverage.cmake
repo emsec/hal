@@ -87,7 +87,7 @@
      message(FATAL_ERROR "Compiler is not GNU gcc! Aborting...")
  endif()
 
- include(CompilerFlagsCheck)
+ include(hal_cmake_tools)
 
  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --coverage")
  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} --coverage")
