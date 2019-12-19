@@ -21,11 +21,13 @@ const QString physical_graph_layouter::description() const
     return "<p>PLACEHOLDER</p>";
 }
 
-void physical_graph_layouter::add(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets)
+void physical_graph_layouter::add(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets, hal::placement_hint placement)
 {
     Q_UNUSED(modules)
     Q_UNUSED(gates)
     Q_UNUSED(nets)
+    // TODO is it OK to ignore the placement hint in this layouter?
+    Q_UNUSED(placement)
 
     // DOES THE CORE GUARANTEE UNIQUE LOCATION DATA ???
     // COLLAPSE / ALIGN
