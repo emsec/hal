@@ -345,6 +345,7 @@ void graph_graphics_view::dragEnterEvent(QDragEnterEvent* event)
             g_selection_relay.m_subfocus   = selection_relay::subfocus::none;
             g_selection_relay.relay_selection_changed(nullptr);
         }
+        m_drop_allowed = false;
         static_cast<graphics_scene*>(scene())->start_drag_shadow(snap, size, drag_shadow_gate::drag_cue::rejected);
     }
     else
@@ -423,7 +424,12 @@ void graph_graphics_view::dropEvent(QDropEvent* event)
             QPoint targetLayouterPos = closest_layouter_pos(targetPos)[0];
             QPoint sourceLayouterPos = closest_layouter_pos(m_drag_item->pos())[0];
 
-            assert(targetLayouterPos != sourceLayouterPos);
+            if (targetLayouterPos == sourceLayouterPos)
+            {
+                qDebug() << "Attempted to drop gate onto itself, this should never happen!";
+                return;
+            }
+            // assert(targetLayouterPos != sourceLayouterPos);
 
             bool modifierPressed = event->keyboardModifiers() == m_drag_modifier;
             if (modifierPressed)
