@@ -210,12 +210,33 @@ TEST_F(boolean_function_test, check_is_empty){
 TEST_F(boolean_function_test, check_get_variables){
     TEST_START
         {
-            // The boolean function is not empty
+            // Get variables 
             boolean_function a("A");
             boolean_function b("B");
             boolean_function c("C");
             boolean_function a_2("A");
-            EXPECT_EQ((a|b|c).get_variables(), std::set<std::string>({"A","B","C"}));
+            EXPECT_EQ((a|b|c|a_2).get_variables(), std::set<std::string>({"A","B","C"}));
+        }
+    TEST_END
+}
+
+/**
+ * Testing comparation operator
+ *
+ * Functions: operator==, operator!=
+ */
+TEST_F(boolean_function_test, check_compare_operator){
+    TEST_START
+        {
+            // The boolean functions are equivalent in syntax 
+            boolean_function a("A");
+            EXPECT_TRUE((a == a));
+        }
+        {
+            // The boolean functions are equivalent in syntax 
+            boolean_function a("A");
+            boolean_function b("B");
+            //EXPECT_TRUE(((a|b) == (a|b)));
         }
     TEST_END
 }
