@@ -60,19 +60,20 @@ bool module::set_parent_module(const std::shared_ptr<module>& new_parent)
         log_error("module", "no parent can be assigned to the top module");
         return false;
     }
-    
+
     if (new_parent == nullptr)
     {
         log_error("module", "cannot reassign top module");
         return false;
     }
-    
-    if (!get_netlist()->is_module_in_netlist(new_parent)) {
+
+    if (!get_netlist()->is_module_in_netlist(new_parent))
+    {
         log_error("module", "module must be in the current netlist");
         return false;
     }
 
-    auto children = get_submodules(DONT_CARE, true);
+    auto children = get_submodules(nullptr, true);
     if (children.find(new_parent) != children.end())
     {
         new_parent->set_parent_module(m_parent);
@@ -94,10 +95,10 @@ bool module::set_parent_module(const std::shared_ptr<module>& new_parent)
     return true;
 }
 
-std::set<std::shared_ptr<module>> module::get_submodules(const std::string& name_filter, bool recursive) const
+std::set<std::shared_ptr<module>> module::get_submodules(const std::function<bool(const std::shared_ptr<module>&)>& filter, bool recursive) const
 {
     std::set<std::shared_ptr<module>> res;
-    if (name_filter == DONT_CARE)
+    if (!filter)
     {
         res = m_submodules_set;
     }
@@ -105,7 +106,7 @@ std::set<std::shared_ptr<module>> module::get_submodules(const std::string& name
     {
         for (const auto& sm : m_submodules_set)
         {
-            if (sm->m_name == name_filter)
+            if (filter(sm))
             {
                 res.insert(sm);
             }
@@ -116,11 +117,32 @@ std::set<std::shared_ptr<module>> module::get_submodules(const std::string& name
     {
         for (const auto& sm : m_submodules_set)
         {
-            auto more = sm->get_submodules(name_filter, true);
+            auto more = sm->get_submodules(filter, true);
             res.insert(more.begin(), more.end());
         }
     }
     return res;
+}
+
+bool module::contains_module(const std::shared_ptr<module>& other, bool recursive) const
+{
+    if (other == nullptr)
+    {
+        return false;
+    }
+    for (const auto& sm : m_submodules_set)
+    {
+        if (sm == other)
+        {
+            return true;
+        }
+        else if (recursive && sm->contains_module(other, true))
+        {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 std::shared_ptr<netlist> module::get_netlist() const
@@ -179,10 +201,10 @@ std::shared_ptr<gate> module::get_gate_by_id(const u32 gate_id, bool recursive) 
     return it->second;
 }
 
-std::set<std::shared_ptr<gate>> module::get_gates(const std::string& gate_type_filter, const std::string& name_filter, bool recursive) const
+std::set<std::shared_ptr<gate>> module::get_gates(const std::function<bool(const std::shared_ptr<gate>&)>& filter, bool recursive) const
 {
     std::set<std::shared_ptr<gate>> res;
-    if (gate_type_filter == DONT_CARE && name_filter == DONT_CARE)
+    if (!filter)
     {
         res = m_gates_set;
     }
@@ -191,15 +213,8 @@ std::set<std::shared_ptr<gate>> module::get_gates(const std::string& gate_type_f
         for (const auto& it : m_gates_map)
         {
             auto current_gate = it.second;
-            if ((gate_type_filter != DONT_CARE) && (current_gate->get_type() != gate_type_filter))
+            if (!filter(current_gate))
             {
-                log_debug(
-                    "module", "type of gate '{}' (id = {:08x}, type: '{}') does not match type '{}'.", current_gate->get_name(), current_gate->get_id(), current_gate->get_type(), gate_type_filter);
-                continue;
-            }
-            if ((name_filter != DONT_CARE) && (current_gate->get_name() != name_filter))
-            {
-                log_debug("module", "name of gate '{}' (id = {:08x}, type: '{}') does not match name '{}'.", current_gate->get_name(), current_gate->get_id(), current_gate->get_type(), name_filter);
                 continue;
             }
             res.insert(current_gate);
@@ -210,7 +225,7 @@ std::set<std::shared_ptr<gate>> module::get_gates(const std::string& gate_type_f
     {
         for (const auto& sm : m_submodules_set)
         {
-            auto more = sm->get_gates(gate_type_filter, name_filter, true);
+            auto more = sm->get_gates(filter, true);
             res.insert(more.begin(), more.end());
         }
     }
@@ -218,29 +233,52 @@ std::set<std::shared_ptr<gate>> module::get_gates(const std::string& gate_type_f
     return res;
 }
 
-std::set<std::shared_ptr<net>> module::get_input_nets(const std::string& name_filter) const
+std::set<std::shared_ptr<net>> module::get_input_nets() const
 {
     std::set<std::shared_ptr<net>> res;
-    auto gates = get_gates(DONT_CARE, DONT_CARE, true);
+    auto gates = get_gates(nullptr, true);
     std::set<std::shared_ptr<net>> seen;
     for (const auto& gate : gates)
     {
         for (const auto& net : gate->get_fan_in_nets())
         {
-            if (name_filter == DONT_CARE || net->get_name() == name_filter)
+            if (seen.find(net) != seen.end())
             {
-                if (seen.find(net) != seen.end())
-                {
-                    continue;
-                }
-                seen.insert(net);
-                if (m_internal_manager->m_netlist->is_global_input_net(net))
+                continue;
+            }
+            seen.insert(net);
+            if (m_internal_manager->m_netlist->is_global_input_net(net))
+            {
+                res.insert(net);
+            }
+            else if (gates.find(net->get_src().gate) == gates.end())
+            {
+                res.insert(net);
+            }
+        }
+    }
+    return res;
+}
+
+std::set<std::shared_ptr<net>> module::get_output_nets() const
+{
+    std::set<std::shared_ptr<net>> res;
+    auto gates = get_gates(nullptr, true);
+    for (const auto& gate : gates)
+    {
+        for (const auto& net : gate->get_fan_out_nets())
+        {
+            if (m_internal_manager->m_netlist->is_global_output_net(net))
+            {
+                res.insert(net);
+                continue;
+            }
+            for (const auto& dst : net->get_dsts())
+            {
+                if (gates.find(dst.gate) == gates.end())
                 {
                     res.insert(net);
-                }
-                else if (gates.find(net->get_src().gate) == gates.end())
-                {
-                    res.insert(net);
+                    break;
                 }
             }
         }
@@ -248,52 +286,20 @@ std::set<std::shared_ptr<net>> module::get_input_nets(const std::string& name_fi
     return res;
 }
 
-std::set<std::shared_ptr<net>> module::get_output_nets(const std::string& name_filter) const
+std::set<std::shared_ptr<net>> module::get_internal_nets() const
 {
     std::set<std::shared_ptr<net>> res;
-    auto gates = get_gates(DONT_CARE, DONT_CARE, true);
+    auto gates = get_gates(nullptr, true);
     for (const auto& gate : gates)
     {
         for (const auto& net : gate->get_fan_out_nets())
         {
-            if (name_filter == DONT_CARE || net->get_name() == name_filter)
+            for (const auto& dst : net->get_dsts())
             {
-                if (m_internal_manager->m_netlist->is_global_output_net(net))
+                if (gates.find(dst.gate) != gates.end())
                 {
                     res.insert(net);
-                    continue;
-                }
-                for (const auto& dst : net->get_dsts())
-                {
-                    if (gates.find(dst.gate) == gates.end())
-                    {
-                        res.insert(net);
-                        break;
-                    }
-                }
-            }
-        }
-    }
-    return res;
-}
-
-std::set<std::shared_ptr<net>> module::get_internal_nets(const std::string& name_filter) const
-{
-    std::set<std::shared_ptr<net>> res;
-    auto gates = get_gates(DONT_CARE, DONT_CARE, true);
-    for (const auto& gate : gates)
-    {
-        for (const auto& net : gate->get_fan_out_nets())
-        {
-            if (name_filter == DONT_CARE || net->get_name() == name_filter)
-            {
-                for (const auto& dst : net->get_dsts())
-                {
-                    if (gates.find(dst.gate) != gates.end())
-                    {
-                        res.insert(net);
-                        break;
-                    }
+                    break;
                 }
             }
         }

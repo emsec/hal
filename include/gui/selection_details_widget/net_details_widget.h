@@ -31,6 +31,7 @@
 #include <QWidget>
 
 class QVBoxLayout;
+class QHBoxLayout;
 class QLabel;
 class QScrollArea;
 class QTreeWidget;
@@ -38,6 +39,7 @@ class QTreeWidgetItem;
 class QTableWidget;
 class QTableWidgetItem;
 class net;
+class gate;
 
 class net_details_widget : public QWidget
 {
@@ -50,16 +52,24 @@ public:
     void update(u32 net_id);
 
 public Q_SLOTS:
-    void handle_tree_size_change(QTreeWidgetItem* item);
     void handle_item_expanded(QTreeWidgetItem* item);
     void handle_item_collapsed(QTreeWidgetItem* item);
 
-    void handle_net_event(net_event_handler::event ev, std::shared_ptr<net> net, u32 associated_data);
+    void on_treewidget_item_clicked(QTreeWidgetItem* item, int column);
+    
+    void handle_net_removed(const std::shared_ptr<net> n);
+    void handle_net_name_changed(const std::shared_ptr<net> n);
+    void handle_net_src_changed(const std::shared_ptr<net> n);
+    void handle_net_dst_added(const std::shared_ptr<net> n, const u32 dst_gate_id);
+    void handle_net_dst_removed(const std::shared_ptr<net> n, const u32 dst_gate_id);
+
+    void handle_gate_name_changed(const std::shared_ptr<gate> g);
 
 private:
     // NEW !!!!!
 
     QVBoxLayout* m_content_layout;
+    QHBoxLayout* m_tree_row_layout;
 
     QTableWidget* m_general_table;
     QTableWidgetItem* m_name_item;
@@ -79,7 +89,7 @@ private:
     QVBoxLayout* m_container_layout;
     QWidget* m_container;
 
-    QLabel* m_item_deleted_label;
+    //QLabel* m_item_deleted_label;
 
     // NEW !!!!!;
     QLabel* m_label;

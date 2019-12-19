@@ -9,18 +9,20 @@ hal_py Documentation
    gate_library
    endpoint
    netlist
+   boolean_function
+   gate_type
+   gate_type_lut
+   gate_type_sequential
    gate
    net
    module
    path
    i_base
    i_gui
-   bdd
-   gate_decorator
-   gate_decorator_bdd
-   gate_decorator_lut
-   gate_decorator_system
    plugin_manager
    netlist_factory
    hdl_writer_dispatcher
    graph_algorithm
+   value
+   base_type
+   set_reset_behaviour

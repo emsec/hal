@@ -3,6 +3,7 @@
 #include "core/log.h"
 
 #include "netlist/gate.h"
+#include "netlist/gate_library/gate_type/gate_type.h"
 #include "netlist/module.h"
 #include "netlist/net.h"
 #include "netlist/netlist.h"
@@ -20,7 +21,7 @@ netlist_internal_manager::netlist_internal_manager(netlist* nl) : m_netlist(nl)
 //###                      gates                                     ###
 //######################################################################
 
-std::shared_ptr<gate> netlist_internal_manager::create_gate(const u32 id, const std::string& gate_type, const std::string& name)
+std::shared_ptr<gate> netlist_internal_manager::create_gate(const u32 id, const std::shared_ptr<const gate_type>& gt, const std::string& name, float x, float y)
 {
     if (id == 0)
     {
@@ -32,9 +33,9 @@ std::shared_ptr<gate> netlist_internal_manager::create_gate(const u32 id, const 
         log_error("netlist.internal", "netlist::create_gate: gate id {:08x} is already taken.", id);
         return nullptr;
     }
-    if (this->is_gate_type_invalid(gate_type))
+    if (this->is_gate_type_invalid(gt))
     {
-        log_error("netlist.internal", "netlist::create_gate: gate type '{}' is invalid.", gate_type);
+        log_error("netlist.internal", "netlist::create_gate: gate type '{}' is invalid.", gt->get_name());
         return nullptr;
     }
     if (core_utils::trim(name).empty())
@@ -43,7 +44,7 @@ std::shared_ptr<gate> netlist_internal_manager::create_gate(const u32 id, const 
         return nullptr;
     }
 
-    auto new_gate = std::shared_ptr<gate>(new gate(m_netlist->get_shared(), id, gate_type, name));
+    auto new_gate = std::shared_ptr<gate>(new gate(m_netlist->get_shared(), id, gt, name, x, y));
 
     auto free_id_it = m_netlist->m_free_gate_ids.find(id);
     if (free_id_it != m_netlist->m_free_gate_ids.end())
@@ -74,22 +75,25 @@ bool netlist_internal_manager::delete_gate(std::shared_ptr<gate> gate)
 
     for (const auto& fan_in_net : gate->get_fan_in_nets())
     {
-        if (fan_in_net->is_a_dst({gate, DONT_CARE}) && !this->net_remove_dst(fan_in_net, {gate, DONT_CARE}))
+        for (const auto& dst : fan_in_net->get_dsts())
         {
-            return false;
+            if (dst.gate == gate && !this->net_remove_dst(fan_in_net, dst))
+            {
+                return false;
+            }
         }
     }
     for (const auto& fan_out_net : gate->get_fan_out_nets())
     {
-        if (fan_out_net->m_src.gate != nullptr && !this->net_remove_src(fan_out_net))
+        if (!this->net_remove_src(fan_out_net))
         {
             return false;
         }
     }
 
     // check global_gnd and global_vcc gates
-    m_netlist->unmark_global_gnd_gate(gate);
-    m_netlist->unmark_global_vcc_gate(gate);
+    m_netlist->unmark_gnd_gate(gate);
+    m_netlist->unmark_vcc_gate(gate);
 
     // remove gate from modules
     gate->m_module->m_gates_map.erase(gate->m_module->m_gates_map.find(gate->get_id()));
@@ -105,10 +109,15 @@ bool netlist_internal_manager::delete_gate(std::shared_ptr<gate> gate)
     return true;
 }
 
-bool netlist_internal_manager::is_gate_type_invalid(const std::string& gate_type) const
+bool netlist_internal_manager::is_gate_type_invalid(const std::shared_ptr<const gate_type>& gt) const
 {
     auto gate_types = m_netlist->m_gate_library->get_gate_types();
-    return gate_types->find(gate_type) == gate_types->end();
+    auto it         = gate_types.find(gt->get_name());
+    if (it == gate_types.end())
+    {
+        return true;
+    }
+    return *(it->second) != *gt;
 }
 
 //######################################################################
@@ -153,7 +162,7 @@ std::shared_ptr<net> netlist_internal_manager::create_net(const u32 id, const st
     return new_net;
 }
 
-bool netlist_internal_manager::delete_net(std::shared_ptr<net> net)
+bool netlist_internal_manager::delete_net(const std::shared_ptr<net>& net)
 {
     if (!m_netlist->is_net_in_netlist(net))
     {
@@ -174,10 +183,9 @@ bool netlist_internal_manager::delete_net(std::shared_ptr<net> net)
         return false;
     }
 
-    // check global_input, global_output and global_inout gates
+    // check global_input and global_output gates
     m_netlist->unmark_global_input_net(net);
     m_netlist->unmark_global_output_net(net);
-    m_netlist->unmark_global_inout_net(net);
 
     // remove net from netlist
     m_netlist->m_nets_map.erase(m_netlist->m_nets_map.find(net->get_id()));
@@ -191,7 +199,7 @@ bool netlist_internal_manager::delete_net(std::shared_ptr<net> net)
     return true;
 }
 
-bool netlist_internal_manager::net_set_src(std::shared_ptr<net> const net, endpoint src)
+bool netlist_internal_manager::net_set_src(const std::shared_ptr<net>& net, const endpoint& src)
 {
     if (!m_netlist->is_net_in_netlist(net) || !m_netlist->is_gate_in_netlist(src.gate))
     {
@@ -199,12 +207,10 @@ bool netlist_internal_manager::net_set_src(std::shared_ptr<net> const net, endpo
     }
 
     // check whether pin is valid for this gate
-    auto output_pin_types = m_netlist->get_output_pin_types(src.gate->get_type());
-    auto inout_pin_types  = m_netlist->get_inout_pin_types(src.gate->get_type());
-    if ((std::find(output_pin_types.begin(), output_pin_types.end(), src.pin_type) == output_pin_types.end())
-        && (std::find(inout_pin_types.begin(), inout_pin_types.end(), src.pin_type) == inout_pin_types.end()))
+    auto output_pins = src.gate->get_type()->get_output_pins();
+    if ((std::find(output_pins.begin(), output_pins.end(), src.pin_type) == output_pins.end()))
     {
-        log_error("netlist.internal", "net::set_src: src gate ('{}, type = {}) has no output type '{}'.", src.gate->get_name(), src.gate->get_type(), src.pin_type);
+        log_error("netlist.internal", "net::set_src: src gate ('{}, type = {}) has no output type '{}'.", src.gate->get_name(), src.gate->get_type()->get_name(), src.pin_type);
         return false;
     }
 
@@ -237,7 +243,7 @@ bool netlist_internal_manager::net_set_src(std::shared_ptr<net> const net, endpo
     return true;
 }
 
-bool netlist_internal_manager::net_remove_src(std::shared_ptr<net> const net)
+bool netlist_internal_manager::net_remove_src(const std::shared_ptr<net>& net)
 {
     if (!m_netlist->is_net_in_netlist(net))
     {
@@ -260,27 +266,25 @@ bool netlist_internal_manager::net_remove_src(std::shared_ptr<net> const net)
     return true;
 }
 
-bool netlist_internal_manager::net_add_dst(std::shared_ptr<net> const net, endpoint dst)
+bool netlist_internal_manager::net_add_dst(const std::shared_ptr<net>& net, const endpoint& dst)
 {
     if (!m_netlist->is_net_in_netlist(net) || !m_netlist->is_gate_in_netlist(dst.gate))
     {
         return false;
     }
 
-    if (net->is_a_dst(dst.gate, dst.pin_type))
+    if (net->is_a_dst(dst))
     {
-        log_error("netlist.internal", "net::add_dst: dst gate ('{}',  type = {}) is already added to net '{}'.", dst.gate->get_name(), dst.gate->get_type(), net->get_name());
+        log_error("netlist.internal", "net::add_dst: dst gate ('{}',  type = {}) is already added to net '{}'.", dst.gate->get_name(), dst.gate->get_type()->get_name(), net->get_name());
         return false;
     }
 
     // check whether pin id is valid for this gate
-    auto input_pin_types = m_netlist->get_input_pin_types(dst.gate->get_type());
-    auto inout_pin_types = m_netlist->get_inout_pin_types(dst.gate->get_type());
+    auto input_pins = dst.gate->get_type()->get_input_pins();
 
-    if ((std::find(input_pin_types.begin(), input_pin_types.end(), dst.pin_type) == input_pin_types.end())
-        && (std::find(inout_pin_types.begin(), inout_pin_types.end(), dst.pin_type) == inout_pin_types.end()))
+    if ((std::find(input_pins.begin(), input_pins.end(), dst.pin_type) == input_pins.end()))
     {
-        log_error("netlist.internal", "net::add_dst: dst gate ('{}',  type = {}) has no input type '{}'.", dst.gate->get_name(), dst.gate->get_type(), dst.pin_type);
+        log_error("netlist.internal", "net::add_dst: dst gate ('{}',  type = {}) has no input type '{}'.", dst.gate->get_name(), dst.gate->get_type()->get_name(), dst.pin_type);
         return false;
     }
 
@@ -290,7 +294,7 @@ bool netlist_internal_manager::net_add_dst(std::shared_ptr<net> const net, endpo
         log_error("netlist.internal",
                   "net::add_dst: dst gate ('{}', type = {}) has already an assigned net '{}' for pin '{}' (new_net: {}).",
                   dst.gate->get_name(),
-                  dst.gate->get_type(),
+                  dst.gate->get_type()->get_name(),
                   dst.gate->get_fan_in_net(dst.pin_type)->get_name(),
                   dst.pin_type,
                   net->get_name());
@@ -305,28 +309,21 @@ bool netlist_internal_manager::net_add_dst(std::shared_ptr<net> const net, endpo
     return true;
 }
 
-bool netlist_internal_manager::net_remove_dst(std::shared_ptr<net> const net, endpoint dst)
+bool netlist_internal_manager::net_remove_dst(const std::shared_ptr<net>& net, const endpoint& dst)
 {
-    if (!m_netlist->is_net_in_netlist(net) || !m_netlist->is_gate_in_netlist(dst.gate) || !net->is_a_dst(dst.gate, dst.pin_type))
+    if (!m_netlist->is_net_in_netlist(net) || !m_netlist->is_gate_in_netlist(dst.gate) || !net->is_a_dst(dst))
     {
         return false;
     }
 
-    for (auto it = net->m_dsts.begin(); it != net->m_dsts.end();)
-    {
-        auto net_dst = *it;
-        if ((net_dst.gate == dst.gate) && ((dst.pin_type == DONT_CARE) || (dst.pin_type == net_dst.pin_type)))
-        {
-            net_dst.gate->m_in_nets.erase(net_dst.pin_type);
-            it = net->m_dsts.erase(it);
-        }
-        else
-        {
-            ++it;
-        }
-    }
+    auto it = std::find(net->m_dsts.begin(), net->m_dsts.end(), dst);
 
-    net_event_handler::notify(net_event_handler::event::dst_removed, net, dst.gate->get_id());
+    if (it != net->m_dsts.end())
+    {
+        (*it).gate->m_in_nets.erase((*it).pin_type);
+        net->m_dsts.erase(it);
+        net_event_handler::notify(net_event_handler::event::dst_removed, net, dst.gate->get_id());
+    }
 
     return true;
 }
@@ -335,7 +332,7 @@ bool netlist_internal_manager::net_remove_dst(std::shared_ptr<net> const net, en
 //###                       modules                               ###
 //######################################################################
 
-std::shared_ptr<module> netlist_internal_manager::create_module(const u32 id, std::shared_ptr<module> parent, const std::string& name)
+std::shared_ptr<module> netlist_internal_manager::create_module(const u32 id, const std::shared_ptr<module>& parent, const std::string& name)
 {
     if (id == 0)
     {
@@ -382,12 +379,16 @@ std::shared_ptr<module> netlist_internal_manager::create_module(const u32 id, st
     }
 
     module_event_handler::notify(module_event_handler::event::created, m);
-    module_event_handler::notify(module_event_handler::event::submodule_added, parent, id);
+
+    if (parent != nullptr)
+    {
+        module_event_handler::notify(module_event_handler::event::submodule_added, parent, id);
+    }
 
     return m;
 }
 
-bool netlist_internal_manager::delete_module(std::shared_ptr<module> to_remove)
+bool netlist_internal_manager::delete_module(const std::shared_ptr<module>& to_remove)
 {
     if (!m_netlist->is_module_in_netlist(to_remove))
     {
@@ -414,10 +415,12 @@ bool netlist_internal_manager::delete_module(std::shared_ptr<module> to_remove)
         to_remove->m_parent->m_submodules_map[sm->get_id()] = sm;
         to_remove->m_parent->m_submodules_set.insert(sm);
 
+        module_event_handler::notify(module_event_handler::event::submodule_removed, sm->get_parent_module(), sm->get_id());
+
         sm->m_parent = to_remove->m_parent;
 
-        module_event_handler::notify(module_event_handler::event::submodule_added, to_remove->m_parent, sm->get_id());
         module_event_handler::notify(module_event_handler::event::parent_changed, sm, 0);
+        module_event_handler::notify(module_event_handler::event::submodule_added, to_remove->m_parent, sm->get_id());
     }
 
     // remove module from parent
@@ -434,7 +437,7 @@ bool netlist_internal_manager::delete_module(std::shared_ptr<module> to_remove)
     return true;
 }
 
-bool netlist_internal_manager::module_assign_gate(std::shared_ptr<module> m, std::shared_ptr<gate> g)
+bool netlist_internal_manager::module_assign_gate(const std::shared_ptr<module>& m, const std::shared_ptr<gate>& g)
 {
     if (g == nullptr)
     {
@@ -459,7 +462,7 @@ bool netlist_internal_manager::module_assign_gate(std::shared_ptr<module> m, std
     return true;
 }
 
-bool netlist_internal_manager::module_remove_gate(std::shared_ptr<module> m, std::shared_ptr<gate> g)
+bool netlist_internal_manager::module_remove_gate(const std::shared_ptr<module>& m, const std::shared_ptr<gate>& g)
 {
     if (g == nullptr)
     {

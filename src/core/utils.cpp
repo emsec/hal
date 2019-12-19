@@ -2,11 +2,9 @@
 
 #include "core/log.h"
 
-#include <sstream>
 #include <fstream>
+#include <sstream>
 
-#include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/path.hpp>
 #include <boost/predef.h>
 
 #include <boost/algorithm/string/predicate.hpp>
@@ -31,14 +29,33 @@
 
 namespace core_utils
 {
-    bool ends_with(const std::string& full_string, const std::string& ending)
+    bool ends_with(const std::string& full_string, const std::string& ending, bool ignore_case)
     {
-        return boost::algorithm::ends_with(full_string, ending);
+        if (ignore_case)
+        {
+            return boost::algorithm::iends_with(full_string, ending);
+        }
+        else
+        {
+            return boost::algorithm::ends_with(full_string, ending);
+        }
     }
 
-    bool starts_with(const std::string& full_string, const std::string& start)
+    bool starts_with(const std::string& full_string, const std::string& start, bool ignore_case)
     {
-        return boost::algorithm::starts_with(full_string, start);
+        if (ignore_case)
+        {
+            return boost::algorithm::istarts_with(full_string, start);
+        }
+        else
+        {
+            return boost::algorithm::starts_with(full_string, start);
+        }
+    }
+
+    bool equals_ignore_case(const std::string& a, const std::string& b)
+    {
+        return boost::algorithm::iequals(a, b);
     }
 
     bool is_integer(const std::string& s)
@@ -142,7 +159,7 @@ namespace core_utils
 
     std::string rtrim(const std::string& line, const char* to_remove)
     {
-        size_t end            = line.find_last_not_of(to_remove);
+        size_t end = line.find_last_not_of(to_remove);
         if (end != std::string::npos)
         {
             return line.substr(0, end + 1);
@@ -206,29 +223,24 @@ namespace core_utils
 
     std::string to_upper(const std::string& s)
     {
-        std::string result = "";
-        for (size_t i = 0; i < s.size(); i++)
-        {
-            result += toupper(s[i]);
-        }
+        std::string result = s;
+        std::transform(result.begin(), result.end(), result.begin(), [](char c) { return std::toupper(c); });
         return result;
     }
 
     std::string to_lower(const std::string& s)
     {
-        std::string result = "";
-        for (size_t i = 0; i < s.size(); i++)
-        {
-            result += tolower(s[i]);
-        }
+        std::string result = s;
+        std::transform(result.begin(), result.end(), result.begin(), [](char c) { return std::tolower(c); });
         return result;
     }
 
     u32 num_of_occurrences(const std::string& str, const std::string& substr)
     {
         u32 num_of_occurrences = 0;
-        auto position = str.find(substr, 0);
-        while (position != std::string::npos) {
+        auto position          = str.find(substr, 0);
+        while (position != std::string::npos)
+        {
             num_of_occurrences++;
             position = str.find(substr, position + 1);
         }
@@ -285,13 +297,13 @@ namespace core_utils
         }
 
         hal::error_code ec;
-        hal::path p(hal::fs::canonical(buf, hal::fs::current_path(), ec));
+        hal::path p(hal::fs::canonical(buf, ec));
         return p.parent_path().make_preferred();
 #elif __linux__
         ssize_t size = readlink("/proc/self/exe", buf, sizeof(buf));
         std::string path(buf, size);
         hal::error_code ec;
-        hal::path p(hal::fs::canonical(path, hal::fs::current_path(), ec));
+        hal::path p(hal::fs::canonical(path, ec));
         return p.make_preferred().parent_path();
 #endif
     }
@@ -341,6 +353,14 @@ namespace core_utils
         hal::path dir = hal::path(getenv("HOME")) / ".local/share/hal";
         hal::fs::create_directories(dir);
         return dir;
+    }
+
+    hal::path get_config_directory()
+    {
+        std::vector<hal::path> path_hints = {
+            get_base_directory() / "share/hal/defaults",
+        };
+        return get_first_directory_exists(path_hints);
     }
 
     hal::path get_user_config_directory()
@@ -449,61 +469,7 @@ namespace core_utils
 
     std::string get_open_source_licenses()
     {
-        return R"(buddy 2.4 (https://github.com/jgcoded/BuDDy):
-               Copyright (C) 1996-2002 by Jorn Lind-Nielsen
-                            All rights reserved
-
-    Permission is hereby granted, without written agreement and without
-    license or royalty fees, to use, reproduce, prepare derivative
-    works, distribute, and display this software and its documentation
-    for any purpose, provided that (1) the above copyright notice and
-    the following two paragraphs appear in all copies of the source code
-    and (2) redistributions, including without limitation binaries,
-    reproduce these notices in the supporting documentation. Substantial
-    modifications to this software may be copyrighted by their authors
-    and need not follow the licensing terms described here, provided
-    that the new terms are clearly indicated in all files where they apply.
-
-    IN NO EVENT SHALL JORN LIND-NIELSEN, OR DISTRIBUTORS OF THIS
-    SOFTWARE BE LIABLE TO ANY PARTY FOR DIRECT, INDIRECT, SPECIAL,
-    INCIDENTAL, OR CONSEQUENTIAL DAMAGES ARISING OUT OF THE USE OF THIS
-    SOFTWARE AND ITS DOCUMENTATION, EVEN IF THE AUTHORS OR ANY OF THE
-    ABOVE PARTIES HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-    JORN LIND-NIELSEN SPECIFICALLY DISCLAIM ANY WARRANTIES, INCLUDING,
-    BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
-    FITNESS FOR A PARTICULAR PURPOSE. THE SOFTWARE PROVIDED HEREUNDER IS
-    ON AN "AS IS" BASIS, AND THE AUTHORS AND DISTRIBUTORS HAVE NO
-    OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR
-    MODIFICATIONS.
-
-=================================================================================
-
-libvcdparse (https://github.com/kmurray/libvcdparse): The MIT License (MIT)
-
-Copyright (c) 2016 Kevin E. Murray
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-
-=================================================================================
-
-pybind11 (https://github.com/pybind/pybind11):
+        return R"(pybind11 (https://github.com/pybind/pybind11):
 Copyright (c) 2016 Wenzel Jakob <wenzel.jakob@epfl.ch>, All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -690,6 +656,211 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
+
+=================================================================================
+
+Boost (https://www.boost.org/)
+Boost Software License - Version 1.0 - August 17th, 2003
+
+Permission is hereby granted, free of charge, to any person or organization
+obtaining a copy of the software and accompanying documentation covered by
+this license (the "Software") to use, reproduce, display, distribute,
+execute, and transmit the Software, and to prepare derivative works of the
+Software, and to permit third-parties to whom the Software is furnished to
+do so, all subject to the following:
+
+The copyright notices in the Software and this entire statement, including
+the above license grant, this restriction and the following disclaimer,
+must be included in all copies of the Software, in whole or in part, and
+all derivative works of the Software, unless such copies or derivative
+works are solely in the form of machine-executable object code generated by
+a source language processor.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE, TITLE AND NON-INFRINGEMENT. IN NO EVENT
+SHALL THE COPYRIGHT HOLDERS OR ANYONE DISTRIBUTING THE SOFTWARE BE LIABLE
+FOR ANY DAMAGES OR OTHER LIABILITY, WHETHER IN CONTRACT, TORT OR OTHERWISE,
+ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+DEALINGS IN THE SOFTWARE.
+
+=================================================================================
+
+Qt (https://www.qt.io/)
+            GNU LESSER GENERAL PUBLIC LICENSE
+
+ The Qt Toolkit is Copyright (C) 2015 The Qt Company Ltd.
+ Contact: http://www.qt.io/licensing/
+
+ You may use, distribute and copy the Qt Toolkit under the terms of
+ GNU Lesser General Public License version 3, which is displayed below.
+ This license makes reference to the version 3 of the GNU General
+ Public License, which you can find in the LICENSE.GPLv3 file.
+
+-------------------------------------------------------------------------
+
+            GNU LESSER GENERAL PUBLIC LICENSE
+                Version 3, 29 June 2007
+
+ Copyright © 2007 Free Software Foundation, Inc. <http://fsf.org/>
+Everyone is permitted to copy and distribute verbatim copies of this
+licensedocument, but changing it is not allowed.
+
+This version of the GNU Lesser General Public License incorporates
+the terms and conditions of version 3 of the GNU General Public
+License, supplemented by the additional permissions listed below.
+
+0. Additional Definitions.
+
+ As used herein, “this License” refers to version 3 of the GNU Lesser
+General Public License, and the “GNU GPL” refers to version 3 of the
+GNU General Public License.
+
+ “The Library” refers to a covered work governed by this License,
+other than an Application or a Combined Work as defined below.
+
+ An “Application” is any work that makes use of an interface provided
+by the Library, but which is not otherwise based on the Library.
+Defining a subclass of a class defined by the Library is deemed a mode
+of using an interface provided by the Library.
+
+ A “Combined Work” is a work produced by combining or linking an
+Application with the Library. The particular version of the Library
+with which the Combined Work was made is also called the “Linked
+Version”.
+
+ The “Minimal Corresponding Source” for a Combined Work means the
+Corresponding Source for the Combined Work, excluding any source code
+for portions of the Combined Work that, considered in isolation, are
+based on the Application, and not on the Linked Version.
+
+ The “Corresponding Application Code” for a Combined Work means the
+object code and/or source code for the Application, including any data
+and utility programs needed for reproducing the Combined Work from the
+Application, but excluding the System Libraries of the Combined Work.
+
+1. Exception to Section 3 of the GNU GPL.
+
+ You may convey a covered work under sections 3 and 4 of this License
+without being bound by section 3 of the GNU GPL.
+
+2. Conveying Modified Versions.
+
+ If you modify a copy of the Library, and, in your modifications, a
+facility refers to a function or data to be supplied by an Application
+that uses the facility (other than as an argument passed when the
+facility is invoked), then you may convey a copy of the modified
+version:
+
+    a) under this License, provided that you make a good faith effort
+    to ensure that, in the event an Application does not supply the
+    function or data, the facility still operates, and performs
+    whatever part of its purpose remains meaningful, or
+
+    b) under the GNU GPL, with none of the additional permissions of
+    this License applicable to that copy.
+
+3. Object Code Incorporating Material from Library Header Files.
+
+ The object code form of an Application may incorporate material from
+a header file that is part of the Library. You may convey such object
+code under terms of your choice, provided that, if the incorporated
+material is not limited to numerical parameters, data structure
+layouts and accessors, or small macros, inline functions and templates
+(ten or fewer lines in length), you do both of the following:
+
+    a) Give prominent notice with each copy of the object code that
+    the Library is used in it and that the Library and its use are
+    covered by this License.
+
+    b) Accompany the object code with a copy of the GNU GPL and this
+    license document.
+
+4. Combined Works.
+
+ You may convey a Combined Work under terms of your choice that, taken
+together, effectively do not restrict modification of the portions of
+the Library contained in the Combined Work and reverse engineering for
+debugging such modifications, if you also do each of the following:
+
+    a) Give prominent notice with each copy of the Combined Work that
+    the Library is used in it and that the Library and its use are
+    covered by this License.
+
+    b) Accompany the Combined Work with a copy of the GNU GPL and this
+    license document.
+
+    c) For a Combined Work that displays copyright notices during
+    execution, include the copyright notice for the Library among
+    these notices, as well as a reference directing the user to the
+    copies of the GNU GPL and this license document.
+
+    d) Do one of the following:
+
+        0) Convey the Minimal Corresponding Source under the terms of
+        this License, and the Corresponding Application Code in a form
+        suitable for, and under terms that permit, the user to
+        recombine or relink the Application with a modified version of
+        the Linked Version to produce a modified Combined Work, in the
+        manner specified by section 6 of the GNU GPL for conveying
+        Corresponding Source.
+
+        1) Use a suitable shared library mechanism for linking with
+        the Library. A suitable mechanism is one that (a) uses at run
+        time a copy of the Library already present on the user's
+        computer system, and (b) will operate properly with a modified
+        version of the Library that is interface-compatible with the
+        Linked Version.
+
+    e) Provide Installation Information, but only if you would
+    otherwise be required to provide such information under section 6
+    of the GNU GPL, and only to the extent that such information is
+    necessary to install and execute a modified version of the
+    Combined Work produced by recombining or relinking the Application
+    with a modified version of the Linked Version. (If you use option
+    4d0, the Installation Information must accompany the Minimal
+    Corresponding Source and Corresponding Application Code. If you
+    use option 4d1, you must provide the Installation Information in
+    the manner specified by section 6 of the GNU GPL for conveying
+    Corresponding Source.)
+
+5. Combined Libraries.
+
+ You may place library facilities that are a work based on the Library
+side by side in a single library together with other library
+facilities that are not Applications and are not covered by this
+License, and convey such a combined library under terms of your
+choice, if you do both of the following:
+
+    a) Accompany the combined library with a copy of the same work
+    based on the Library, uncombined with any other library
+    facilities, conveyed under the terms of this License.
+
+    b) Give prominent notice with the combined library that part of
+    it is a work based on the Library, and explaining where to find
+    the accompanying uncombined form of the same work.
+
+6. Revised Versions of the GNU Lesser General Public License.
+
+ The Free Software Foundation may publish revised and/or new versions
+of the GNU Lesser General Public License from time to time. Such new
+versions will be similar in spirit to the present version, but may
+differ in detail to address new problems or concerns.
+
+Each version is given a distinguishing version number. If the Library
+as you received it specifies that a certain numbered version of the
+GNU Lesser General Public License “or any later version” applies to
+it, you have the option of following the terms and conditions either
+of that published version or of any later version published by the
+Free Software Foundation. If the Library as you received it does not
+specify a version number of the GNU Lesser General Public License,
+you may choose any version of the GNU Lesser General Public License
+ever published by the Free Software Foundation.
+
+If the Library as you received it specifies that a proxy can decide
+whether future versions of the GNU Lesser General Public License shall
+apply, that proxy's public statement of acceptance of any version is
+permanent authorization for you to choose that version for the Library.
 )";
     }
 }    // namespace core_utils

@@ -29,6 +29,7 @@
 #include <QObject>
 #include <QPair>
 #include <QVector>
+#include <QSet>
 
 class gate;
 class net;
@@ -65,9 +66,8 @@ public:
 
     explicit selection_relay(QObject* parent = nullptr);
 
-    void init();
-    void reset();
-    void sort();
+    void clear(); // does not emit the "update" signal!
+    void clear_and_update();
 
     void register_sender(void* sender, QString name);
     void remove_sender(void* sender);
@@ -77,39 +77,13 @@ public:
     void relay_selection_changed(void* sender);
     void relay_subfocus_changed(void* sender);
 
-    // DEPRECATED LEGACY METHODS
-    void relay_gate_selection(void* sender, QList<u32>& gate_ids, Mode mode = Mode::override);
-    void relay_net_selection(void* sender, QList<u32>& net_ids, Mode mode = Mode::override);
-    void relay_module_selection(void* sender, QList<u32>& module_ids, Mode mode = Mode::override);
-    void relay_combined_selection(void* sender, QList<u32>& gate_ids, QList<u32>& net_ids, QList<u32>& module_ids, Mode mode = Mode::override);
-
-    void relay_current_gate(void* sender, u32 gate_id);
-    void relay_current_net(void* sender, u32 net_id);
-    void relay_current_module(void* sender, u32 module_id);
-    void relay_current_cleared(void* sender);
-    void relay_current_deleted(void* sender);
-
-    void relay_jump_gate(void* sender, u32 gate_id);
-    void relay_jump_net(void* sender, u32 net_id);
-    void relay_jump_module(void* sender, u32 module_id);
-    void relay_jump_selection(void* sender);
-
-    void relay_gate_highlight(void* sender, QList<u32>& ids, Mode mode = Mode::override, u32 channel = 0);
-    void relay_net_highlight(void* sender, QList<u32>& ids, Mode mode = Mode::override, u32 channel = 0);
-    void relay_module_highlight(void* sender, QList<u32>& ids, Mode mode = Mode::override, u32 channel = 0);
-    void relay_combined_highlight(void* sender, QList<u32>& gate_ids, QList<u32>& net_ids, QList<u32>& module_ids, Mode mode = Mode::override, u32 channel = 0);
-    // END OF DEPRECATED LEGACY METHODS
-
     void navigate_up();
     void navigate_down();
     void navigate_left();
     void navigate_right();
 
-    void handle_module_created();
     void handle_module_removed(const u32 id);
-    void handle_gate_created();
     void handle_gate_removed(const u32 id);
-    void handle_net_created();
     void handle_net_removed(const u32 id);
 
 Q_SIGNALS:
@@ -120,40 +94,10 @@ Q_SIGNALS:
     //void focus_changed(void* sender); // UNCERTAIN
     void subfocus_changed(void* sender);
 
-    // DEPRECATED LEGACY METHODS
-    void gate_selection_update(void* sender, const QList<u32>& gate_ids, Mode mode);
-    void net_selection_update(void* sender, const QList<u32>& net_ids, Mode mode);
-    void module_selection_update(void* sender, const QList<u32>& module_ids, Mode mode);
-    void combined_selection_update(void* sender, const QList<u32>& gate_ids, const QList<u32>& net_ids, const QList<u32>& module_ids, Mode mode);
-
-    void current_gate_update(void* sender, u32 id);
-    void current_net_update(void* sender, u32 id);
-    void current_module_update(void* sender, u32 id);
-    void current_cleared_update(void* sender);
-    void current_deleted_update(void* sender);
-
-    void jump_gate_update(void* sender, u32 id);
-    void jump_net_update(void* sender, u32 id);
-    void jump_module_update(void* sender, u32 id);
-    void jump_selection_update(void* sender);
-
-    void gate_highlight_update(void* sender, QList<u32>& ids, Mode mode, u32 channel);
-    void net_highlight_update(void* sender, QList<u32>& ids, Mode mode, u32 channel);
-    void module_highlight_update(void* sender, QList<u32>& ids, Mode mode, u32 channel);
-    void combined_highlight_update(void* sender, QList<u32>& gate_ids, QList<u32>& net_ids, QList<u32>& module_ids, Mode mode, u32 channel);
-
 public:
-    u32* m_selected_gates;
-    u32* m_selected_nets;
-    u32* m_selected_modules;
-
-    u32 m_size_of_selected_gates;
-    u32 m_size_of_selected_nets;
-    u32 m_size_of_selected_modules;
-
-    u32 m_number_of_selected_gates;
-    u32 m_number_of_selected_nets;
-    u32 m_number_of_selected_modules;
+    QSet<u32> m_selected_gates;
+    QSet<u32> m_selected_nets;
+    QSet<u32> m_selected_modules;
 
     // MAYBE UNNECESSARY
     item_type m_current_type;

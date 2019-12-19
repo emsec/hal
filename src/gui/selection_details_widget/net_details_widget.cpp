@@ -1,8 +1,8 @@
 #include "selection_details_widget/net_details_widget.h"
 #include "gui_globals.h"
 #include "netlist/gate.h"
-#include "netlist/net.h"
 #include "netlist/module.h"
+#include "netlist/net.h"
 #include <QHeaderView>
 #include <QLabel>
 #include <QScrollArea>
@@ -14,17 +14,23 @@
 
 net_details_widget::net_details_widget(QWidget* parent) : QWidget(parent)
 {
+    m_current_id = 0;
+
     m_content_layout = new QVBoxLayout(this);
     m_content_layout->setContentsMargins(0, 0, 0, 0);
     m_content_layout->setSpacing(0);
     m_content_layout->setAlignment(Qt::AlignTop);
+
+    m_tree_row_layout = new QHBoxLayout();
+    m_content_layout->setContentsMargins(0, 0, 0, 0);
+    m_content_layout->setSpacing(0);
 
     m_general_table = new QTableWidget(this);
     m_general_table->horizontalHeader()->setStretchLastSection(true);
     m_general_table->horizontalHeader()->hide();
     m_general_table->verticalHeader()->hide();
     m_general_table->setColumnCount(2);
-    m_general_table->setRowCount(4);
+    m_general_table->setRowCount(3);//removed modules item temporary, may even be final
 
     //m_general_table->setStyleSheet("QTableWidget {background-color : rgb(31, 34, 35);}");
 
@@ -32,12 +38,12 @@ net_details_widget::net_details_widget(QWidget* parent) : QWidget(parent)
     font.setBold(true);
     font.setPixelSize(13);
 
-    m_item_deleted_label = new QLabel(this);
-    m_item_deleted_label->setText("Currently selected item has been removed. Please consider relayouting the Graph.");
-    m_item_deleted_label->setWordWrap(true);
-    m_item_deleted_label->setAlignment(Qt::AlignmentFlag::AlignTop);
-    m_item_deleted_label->setHidden(true);
-    m_content_layout->addWidget(m_item_deleted_label);
+    //m_item_deleted_label = new QLabel(this);
+    //m_item_deleted_label->setText("Currently selected item has been removed. Please consider relayouting the Graph.");
+    //m_item_deleted_label->setWordWrap(true);
+    //m_item_deleted_label->setAlignment(Qt::AlignmentFlag::AlignTop);
+    //m_item_deleted_label->setHidden(true);
+    //m_content_layout->addWidget(m_item_deleted_label);
 
     QTableWidgetItem* name_item = new QTableWidgetItem("Name:");
     name_item->setFlags(Qt::ItemIsEnabled);
@@ -55,10 +61,10 @@ net_details_widget::net_details_widget(QWidget* parent) : QWidget(parent)
     id_item->setFont(font);
     m_general_table->setItem(2, 0, id_item);
 
-    QTableWidgetItem* module_item = new QTableWidgetItem("modules:");
+    //QTableWidgetItem* module_item = new QTableWidgetItem("modules:");
     id_item->setFlags(Qt::ItemIsEnabled);
     id_item->setFont(font);
-    m_general_table->setItem(3, 0, module_item);
+    //m_general_table->setItem(3, 0, module_item);
 
     m_name_item = new QTableWidgetItem();
     m_name_item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsEditable);
@@ -102,19 +108,21 @@ net_details_widget::net_details_widget(QWidget* parent) : QWidget(parent)
     m_tree_widget->header()->hide();
     m_tree_widget->setSelectionMode(QAbstractItemView::NoSelection);
     m_tree_widget->setFocusPolicy(Qt::NoFocus);
-    //    m_tree_widget->setSelectionMode(QAbstractItemView::SingleSelection);
-    m_tree_widget->setFocusPolicy(Qt::NoFocus);
     m_tree_widget->headerItem()->setText(0, "");
     m_tree_widget->headerItem()->setText(1, "");
     m_tree_widget->headerItem()->setText(2, "");
-    m_tree_widget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+    //m_tree_widget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
     m_tree_widget->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_tree_widget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_tree_widget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    m_tree_widget->header()->setStretchLastSection(false);
+    m_tree_widget->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
-    m_container_layout->addWidget(m_tree_widget);
+    m_tree_row_layout->addWidget(m_tree_widget);
+    m_tree_row_layout->addSpacerItem(new QSpacerItem(1,1, QSizePolicy::Expanding, QSizePolicy::Minimum));
+    m_container_layout->addLayout(m_tree_row_layout);
 
-    connect(m_tree_widget, &QTreeWidget::itemExpanded, this, &net_details_widget::handle_tree_size_change);
-    connect(m_tree_widget, &QTreeWidget::itemCollapsed, this, &net_details_widget::handle_tree_size_change);
+    connect(m_tree_widget, &QTreeWidget::itemClicked, this, &net_details_widget::on_treewidget_item_clicked);
 
     m_scroll_area = new QScrollArea(this);
     m_scroll_area->setFrameStyle(QFrame::NoFrame);
@@ -128,7 +136,14 @@ net_details_widget::net_details_widget(QWidget* parent) : QWidget(parent)
     m_dst_pins = new QTreeWidgetItem(m_tree_widget);
     m_dst_pins->setExpanded(true);
 
-    connect(&g_netlist_relay, &netlist_relay::net_event, this, &net_details_widget::handle_net_event);
+
+    connect(&g_netlist_relay, &netlist_relay::net_removed, this, &net_details_widget::handle_net_removed);
+    connect(&g_netlist_relay, &netlist_relay::net_name_changed, this, &net_details_widget::handle_net_name_changed);
+    connect(&g_netlist_relay, &netlist_relay::net_src_changed, this, &net_details_widget::handle_net_src_changed);
+    connect(&g_netlist_relay, &netlist_relay::net_dst_added, this, &net_details_widget::handle_net_dst_added);
+    connect(&g_netlist_relay, &netlist_relay::net_dst_removed, this, &net_details_widget::handle_net_dst_removed);
+
+    connect(&g_netlist_relay, &netlist_relay::gate_name_changed, this, &net_details_widget::handle_gate_name_changed);
 }
 
 net_details_widget::~net_details_widget()
@@ -140,31 +155,17 @@ net_details_widget::~net_details_widget()
     delete m_dst_pins;
 }
 
-void net_details_widget::handle_net_event(net_event_handler::event ev, std::shared_ptr<net> net, u32 associated_data)
-{
-    Q_UNUSED(associated_data)
-
-    //check if details widget currently show the affected net
-    if (m_current_id == net->get_id())
-    {
-        if (ev == net_event_handler::event::removed)
-        {
-            m_general_table->setHidden(true);
-            m_scroll_area->setHidden(true);
-            m_item_deleted_label->setHidden(false);
-        }
-        else
-        {
-            update(net->get_id());
-        }
-    }
-}
-
 void net_details_widget::update(u32 net_id)
 {
     m_current_id = net_id;
 
+    if (m_current_id == 0)
+        return;
+
     auto n = g_netlist->get_net_by_id(net_id);
+
+    if(!n)
+        return;
 
     //get name
     m_name_item->setText(QString::fromStdString(n->get_name()));
@@ -172,9 +173,7 @@ void net_details_widget::update(u32 net_id)
     //get net type
     QString n_type = "Standard";
 
-    if (g_netlist->is_global_inout_net(n))
-        n_type = "Inout";
-    else if (g_netlist->is_global_input_net(n))
+    if (g_netlist->is_global_input_net(n))
         n_type = "Input";
     else if (g_netlist->is_global_output_net(n))
         n_type = "Output";
@@ -206,6 +205,7 @@ void net_details_widget::update(u32 net_id)
             item->setText(1, QChar(0x2b05));
             item->setForeground(1, QBrush(QColor(114, 140, 0), Qt::SolidPattern));
             item->setText(2, QString::fromStdString(src_pin.get_gate()->get_name()));
+            item->setData(2, Qt::UserRole, src_pin.get_gate()->get_id());
         }
     }
     else
@@ -219,7 +219,7 @@ void net_details_widget::update(u32 net_id)
 
     m_dst_pins->setText(0, "");
 
-    if (!g_netlist->is_global_output_net(n) && !g_netlist->is_global_inout_net(n))
+    if (!g_netlist->is_global_output_net(n))
     {
         auto dsts_pins = n->get_dsts();
 
@@ -239,184 +239,18 @@ void net_details_widget::update(u32 net_id)
             item->setText(1, QChar(0x27a1));
             item->setForeground(1, QBrush(QColor(114, 140, 0), Qt::SolidPattern));
             item->setText(2, QString::fromStdString(dst_pin.get_gate()->get_name()));
+            item->setData(2, Qt::UserRole, dst_pin.get_gate()->get_id());
         }
     }
 
     m_general_table->setHidden(false);
     m_scroll_area->setHidden(false);
-    m_item_deleted_label->setHidden(true);
+    //m_item_deleted_label->setHidden(true);
 
-    //    for (auto item : m_src_pin->takeChildren())
-    //        delete item;
+//    m_tree_widget->resizeColumnToContents(0);
+//    m_tree_widget->resizeColumnToContents(1);
+//    m_tree_widget->resizeColumnToContents(2);
 
-    //    std::set<std::string> src_pins = g_netlist->get_gate_by_id(gate_id)->get_input_pin_types();
-    //    if (src_pins.size() == 1)
-    //        m_src_pin->setText(0, "1 Source Pin");
-    //    else
-    //        m_src_pin->setText(0, QString::number(src_pins.size()) + " Source Pins");
-    //    for (const auto& pin : src_pins)
-    //    {
-    //        QTreeWidgetItem* item = new QTreeWidgetItem(m_src_pin);
-    //        item->setText(0, QString::fromStdString(pin));
-    //        item->setText(1, QChar(0x2b05));
-    //        item->setForeground(1, QBrush(QColor(114, 140, 0),Qt::SolidPattern));
-
-    //        auto input_net = g_netlist->get_gate_by_id(gate_id)->get_fan_in_net(pin);
-    //        if (input_net == nullptr)
-    //            item->setText(2, "unconnected");
-    //        else
-    //            item->setText(2, QString::fromStdString(input_net->get_name()));
-    //    }
-
-    //    for (auto item : m_output_pins->takeChildren())
-    //        delete item;
-
-    //    std::set<std::string> output_pins = g_netlist->get_gate_by_id(gate_id)->get_output_pin_types();
-    //    if (output_pins.size() == 1)
-    //        m_output_pins->setText(0, "1 Output Pin");
-    //    else
-    //        m_output_pins->setText(0, QString::number(output_pins.size()) + " Output Pins");
-    //    for (const auto& pin : output_pins)
-    //    {
-    //        QTreeWidgetItem* item = new QTreeWidgetItem(m_output_pins);
-    //        item->setText(0, QString::fromStdString(pin));
-    //        item->setText(1, QChar(0x27a1));
-    //        item->setForeground(1, QBrush(QColor(114, 140, 0),Qt::SolidPattern));
-
-    //        auto output_net = g_netlist->get_gate_by_id(gate_id)->get_fan_out_net(pin);
-    //        if (output_net == nullptr)
-    //            item->setText(2, "unconnected");
-    //        else
-    //            item->setText(2, QString::fromStdString(output_net->get_name()));
-    //    }
-
-    m_tree_widget->resizeColumnToContents(0);
-    m_tree_widget->resizeColumnToContents(1);
-    m_tree_widget->resizeColumnToContents(2);
-
-    //    //    m_tree_widget->clear();
-    //    //    auto tupel = net->get_src();
-    //    //    QTreeWidgetItem* src_item = new QTreeWidgetItem(m_tree_widget);
-    //    //    gate* gate          = tupel.gate;
-    //    //    QString gate_name;
-    //    //    QString pin;
-    //    //    if (gate)
-    //    //    {
-    //    //        gate_name = QString::fromStdString(gate->get_name());
-    //    //        pin       = "(" + QString::fromStdString(tupel.pin_type) + ")";
-    //    //    }
-    //    //    else
-    //    //    {
-    //    //        gate_name = "Nullptr :(";
-    //    //        pin       = "";
-    //    //    }
-    //    //    src_item->setText(0, "1 Source gate (Pin)");
-    //    //    QTreeWidgetItem* item = new QTreeWidgetItem(src_item);
-    //    //    item->setText(0, gate_name + " " + pin);
-
-    //    //    QTreeWidgetItem* dsts_item = new QTreeWidgetItem(m_tree_widget);
-    //    //    for (const auto& tupel2 : net->get_dsts())
-    //    //    {
-    //    //        gate = tupel2.gate;
-    //    //        if (gate)
-    //    //        {
-    //    //            gate_name = QString::fromStdString(gate->get_name());
-    //    //            pin       = "(" + QString::fromStdString(tupel2.pin_type) + ")";
-    //    //        }
-    //    //        else
-    //    //        {
-    //    //            gate_name = "Returned Nullptr :(";
-    //    //            pin       = "";
-    //    //        }
-    //    //        QTreeWidgetItem* item2 = new QTreeWidgetItem(dsts_item);
-    //    //        item2->setText(0, gate_name + " " + pin);
-    //    //    }
-
-    //    //    dsts_item->setText(0, QString::number(net->get_num_of_dsts()) + " Destination gates (Pin)");
-
-    //    QList<QTreeWidgetItem*> list = m_src_item->takeChildren();
-    //    for (QTreeWidgetItem* item : list)
-    //        delete item;
-    //    auto src_tupel = net->get_src();
-    //    auto gate      = src_tupel.gate;
-    //    QString gate_name;
-    //    QString pin;
-    //    if (gate)
-    //    {
-    //        gate_name = QString::fromStdString(gate->get_name());
-    //        pin       = "(" + QString::fromStdString(src_tupel.pin_type) + ")";
-    //    }
-    //    else
-    //    {
-    //        gate_name = "Nullptr :(";
-    //        pin       = "";
-    //    }
-    //    m_src_item->setText(0, "1 Source gate (Pin)");
-    //    QTreeWidgetItem* item = new QTreeWidgetItem(m_src_item);
-    //    item->setText(0, gate_name);
-    //    //item->setText(1, QChar(0x2b05));
-    //    item->setText(1, pin);
-
-    //    list = m_dst_item->takeChildren();
-    //    for (QTreeWidgetItem* item2 : list)
-    //        delete item2;
-    //    m_dst_item->setText(0, QString::number(net->get_num_of_dsts()) + " Destination gates (Pin)");
-    //    for (const auto& dst_tupel : net->get_dsts())
-    //    {
-    //        gate = dst_tupel.gate;
-    //        if (gate)
-    //        {
-    //            gate_name = QString::fromStdString(gate->get_name());
-    //            pin       = "(" + QString::fromStdString(dst_tupel.pin_type) + ")";
-    //        }
-    //        else
-    //        {
-    //            gate_name = "Returned Nullptr :(";
-    //            pin       = "";
-    //        }
-    //        QTreeWidgetItem* item3 = new QTreeWidgetItem(m_dst_item);
-    //        item3->setText(0, gate_name);
-    //        //item->setText(1, QChar(0x2b05));
-    //        item3->setText(1, pin);
-    //    }
-
-    //    m_table_widget->setRowCount(0);
-    //    auto net_data = net->get_data();
-    //    m_table_widget->setRowCount(net_data.size());
-    //    int i = 0;
-    //    for (auto value : net_data)
-    //    {
-    //        m_table_widget->setItem(i, 0, new QTableWidgetItem(QString::fromStdString(std::get<0>(value.first))));
-    //        m_table_widget->setItem(i, 1, new QTableWidgetItem(QString::fromStdString(std::get<1>(value.first))));
-    //        m_table_widget->setItem(i, 2, new QTableWidgetItem(QString::fromStdString(std::get<0>(value.second))));
-    //        m_table_widget->setItem(i, 3, new QTableWidgetItem(QString::fromStdString(std::get<1>(value.second))));
-    //        i++;
-    //    }
-
-    //    m_tree_widget->adjustSize();
-    //    m_tree_height = m_tree_widget->sizeHint().height();
-    //    m_tree_widget->setMinimumHeight(m_tree_height);
-    //    m_table_height = m_table_widget->verticalHeader()->length();
-    //    m_table_widget->setFixedHeight(m_table_height);
-    //    m_table_widget->updateGeometry();
-    //    m_container->setMinimumHeight(m_tree_height + m_table_height + m_spacing);
-    //    m_table_widget->horizontalHeader()->setStretchLastSection(false);
-    //    m_table_widget->resizeColumnToContents(3);
-    //    m_table_widget->adjustSize();
-    //    m_tree_widget->resizeColumnToContents(0);
-    //    m_container->setMinimumWidth(m_table_widget->horizontalHeader()->length());
-    //    m_table_widget->horizontalHeader()->setStretchLastSection(true);
-}
-
-void net_details_widget::handle_tree_size_change(QTreeWidgetItem* item)
-{
-    Q_UNUSED(item)
-
-    //    m_tree_widget->adjustSize();
-    //    m_tree_height = m_tree_widget->sizeHint().height();
-    //    m_tree_widget->setMinimumHeight(m_tree_height);
-    //    m_container->setMinimumHeight(m_tree_height + m_table_height + m_spacing);
-    //    m_tree_widget->updateGeometry();
 }
 
 void net_details_widget::handle_item_expanded(QTreeWidgetItem* item)
@@ -427,4 +261,123 @@ void net_details_widget::handle_item_expanded(QTreeWidgetItem* item)
 void net_details_widget::handle_item_collapsed(QTreeWidgetItem* item)
 {
     Q_UNUSED(item)
+}
+
+void net_details_widget::on_treewidget_item_clicked(QTreeWidgetItem* item, int column)
+{
+    auto gate_id = item->data(2, Qt::UserRole).toInt();
+    auto pin     = item->text(0).toStdString();
+    if (m_dst_pins == item->parent() && column == 2)
+    {
+        std::shared_ptr<gate> clicked_gate = g_netlist->get_gate_by_id(gate_id);
+
+        if (!clicked_gate)
+            return;
+
+        g_selection_relay.clear();
+        g_selection_relay.m_selected_gates.insert(clicked_gate->get_id());
+        g_selection_relay.m_focus_type = selection_relay::item_type::gate;
+        g_selection_relay.m_focus_id   = clicked_gate->get_id();
+        g_selection_relay.m_subfocus   = selection_relay::subfocus::left;
+
+        auto pins                          = clicked_gate->get_input_pins();
+        auto index                         = std::distance(pins.begin(), std::find(pins.begin(), pins.end(), pin));
+        g_selection_relay.m_subfocus_index = index;
+
+        g_selection_relay.relay_selection_changed(this);
+    }
+    else if (m_src_pin == item->parent() && column == 2)
+    {
+        std::shared_ptr<gate> clicked_gate = g_netlist->get_gate_by_id(gate_id);
+
+        if (!clicked_gate)
+            return;
+
+        g_selection_relay.clear();
+        g_selection_relay.m_selected_gates.insert(clicked_gate->get_id());
+        g_selection_relay.m_focus_type = selection_relay::item_type::gate;
+        g_selection_relay.m_focus_id   = clicked_gate->get_id();
+        g_selection_relay.m_subfocus   = selection_relay::subfocus::right;
+
+        auto pins                          = clicked_gate->get_output_pins();
+        auto index                         = std::distance(pins.begin(), std::find(pins.begin(), pins.end(), pin));
+        g_selection_relay.m_subfocus_index = index;
+
+        g_selection_relay.relay_selection_changed(this);
+    }
+}
+
+void net_details_widget::handle_net_removed(const std::shared_ptr<net> n)
+{
+    if(m_current_id == n->get_id())
+    {
+        m_general_table->setHidden(true);
+        m_scroll_area->setHidden(true);
+    }
+}
+
+void net_details_widget::handle_net_name_changed(const std::shared_ptr<net> n)
+{
+    if(m_current_id == n->get_id())
+        m_name_item->setText(QString::fromStdString(n->get_name()));
+
+}
+
+void net_details_widget::handle_net_src_changed(const std::shared_ptr<net> n)
+{
+    if(m_current_id == n->get_id())
+        update(m_current_id);
+}
+
+void net_details_widget::handle_net_dst_added(const std::shared_ptr<net> n, const u32 dst_gate_id)
+{
+    Q_UNUSED(dst_gate_id);
+
+    if(m_current_id == n->get_id())
+        update(m_current_id);
+}
+
+void net_details_widget::handle_net_dst_removed(const std::shared_ptr<net> n, const u32 dst_gate_id)
+{
+    Q_UNUSED(dst_gate_id);
+
+    if(m_current_id == n->get_id())
+        update(m_current_id);
+}
+
+void net_details_widget::handle_gate_name_changed(const std::shared_ptr<gate> g)
+{
+    Q_UNUSED(g)
+
+    if (m_current_id == 0)
+        return;
+
+    bool update_needed = false;
+
+    //current net
+    auto n = g_netlist->get_net_by_id(m_current_id);
+
+    //check if current net is in netlist (m_current_id is unassigned if netlist details widget hasn't been shown once)
+    if(!g_netlist->is_net_in_netlist(n))
+        return;
+
+    //check if renamed gate is src of the currently shown net
+    if(n->get_src().get_gate()->get_id() == m_current_id)
+        update_needed = true;
+
+    //check if renamed gate is a dst of the currently shown net
+    if(!update_needed)
+    {
+        for(auto e : n->get_dsts())
+        {
+            if(e.get_gate()->get_id() == m_current_id)
+            {
+                update_needed = true;
+                break;
+            }
+        }
+    }
+
+    if(update_needed)
+        update(m_current_id);
 }

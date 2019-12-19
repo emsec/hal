@@ -3,8 +3,8 @@
 
 #include "def.h"
 
-#include "gui/graph_widget/graphics_items/graphics_net.h"
-#include "gui/graph_widget/graphics_items/graphics_node.h"
+#include "gui/graph_widget/items/graphics_net.h"
+#include "gui/graph_widget/items/graphics_node.h"
 
 #include <QColor>
 #include <QMap>

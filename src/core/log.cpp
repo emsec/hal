@@ -1,9 +1,11 @@
 #include "core/log.h"
 #include <iostream>
+#include <spdlog/fmt/fmt.h>
+#include <spdlog/common.h>
 #include <spdlog/sinks/basic_file_sink.h>
 #include <spdlog/sinks/null_sink.h>
 #include <spdlog/sinks/stdout_sinks.h>
-#include <spdlog/fmt/fmt.h>
+#include <spdlog/sinks/ansicolor_sink.h>
 
 std::map<std::string, std::shared_ptr<log_manager::log_sink>> log_manager::m_file_sinks;
 
@@ -179,7 +181,7 @@ std::shared_ptr<log_manager::log_sink> log_manager::create_stdout_sink(const boo
         stdout_sink->set_color(spdlog::level::info, stdout_sink->reset);
         stdout_sink->set_color(spdlog::level::warn, stdout_sink->yellow);
         stdout_sink->set_color(spdlog::level::err, stdout_sink->red);
-        stdout_sink->set_color(spdlog::level::critical, stdout_sink->bold + stdout_sink->red);
+        stdout_sink->set_color(spdlog::level::critical, stdout_sink->red_bold);
         sink->spdlog_sink = stdout_sink;
 #endif
     }
@@ -365,9 +367,9 @@ callback_hook<void(const spdlog::level::level_enum&, const std::string&, const s
  */
 void log_gui_sink::sink_it_(const spdlog::details::log_msg& msg)
 {
-    fmt::memory_buffer formatted;
+    spdlog::memory_buf_t formatted;
     formatter_->format(msg, formatted);
-    log_manager::get_instance().get_gui_callback()(msg.level, *msg.logger_name, std::string(formatted.data(), formatted.size()));
+    log_manager::get_instance().get_gui_callback()(msg.level, std::string(msg.logger_name.data()), std::string(formatted.data(), formatted.size()));
 }
 
 void log_gui_sink::flush_()

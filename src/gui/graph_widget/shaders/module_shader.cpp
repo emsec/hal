@@ -1,12 +1,14 @@
 #include "gui/graph_widget/shaders/module_shader.h"
 
-#include "gui/gui_globals.h"
 #include "gui/graph_widget/contexts/graph_context.h"
+#include "gui/gui_globals.h"
 #include "gui/module_model/module_item.h"
+#include "netlist/module.h"
+
+bool module_shader::s_color_gates = true;    // SET VIA SETTING
 
 module_shader::module_shader(const graph_context* const context) : graph_shader(context)
 {
-
 }
 
 void module_shader::add(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets)
@@ -29,19 +31,27 @@ void module_shader::update()
     m_shading.gate_visuals.clear();
     m_shading.net_visuals.clear();
 
-    // IDS TECHNICALLY DONT NEED TO BE CHECKED BECAUSE THE CONTEXT ENSURES VALIDITY
-    // OPTIMIZE OUT ???
-
     for (u32 id : m_context->modules())
     {
-        module_item* item = g_netlist_relay.get_module_item(id);
-
-        if (!item)
-            continue;
-
         graphics_node::visuals v;
-        v.main_color = item->color();
+        v.main_color = g_netlist_relay.get_module_color(id);
         m_shading.module_visuals.insert(id, v);
+    }
+
+    for (u32 id : m_context->gates())
+    {
+        std::shared_ptr<gate> g = g_netlist->get_gate_by_id(id);
+        assert(g);
+
+        std::shared_ptr<module> m = g->get_module();
+        assert(m);
+
+        if (m->get_id())
+        {
+            graphics_node::visuals v;
+            v.main_color = g_netlist_relay.get_module_color(m->get_id());
+            m_shading.gate_visuals.insert(id, v);
+        }
     }
 }
 

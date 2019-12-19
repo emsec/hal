@@ -199,19 +199,6 @@ foreach(DISTRI ${PROJECT_PPA_DISTRIB_TARGET})
     # debian/rules
     set(debian_rules ${DEBIAN_SOURCE_DIR}/debian/rules)
 
-    #    file(WRITE ${debian_rules}
-    #         "#!/usr/bin/make -f\n"
-    #         "\nexport DH_VERBOSE=1"
-    #         "\n\n%:\n"
-    #         "\tdh  $@ --buildsystem=cmake\n"
-    #         "\noverride_dh_auto_configure:\n"
-    #         "\tDESTDIR=\"$(CURDIR)/debian/${CPACK_DEBIAN_PACKAGE_NAME}\" dh_auto_configure -- -DCMAKE_BUILD_TYPE=MinSizeRel -DBUILD_ALL_PLUGINS=OFF -DBUILD_TESTS=OFF -DWITH_GUI=ON -DUSE_VERSION_FROM_OPTION=ON -DDHAL_VERSION_RETURN=\"${DHAL_VERSION_RETURN}\" -DHAL_VERSION_MAJOR=\"${HAL_VERSION_MAJOR}\" -DHAL_VERSION_MINOR=\"${HAL_VERSION_MINOR}\" -DHAL_VERSION_PATCH=\"${HAL_VERSION_PATCH}\" -DHAL_VERSION_TWEAK=\"${HAL_VERSION_TWEAK}\" -DHAL_VERSION_ADDITIONAL_COMMITS=\"${HAL_VERSION_ADDITIONAL_COMMITS}\" -DHAL_VERSION_HASH=\"${HAL_VERSION_HASH}\" -DHAL_VERSION_DIRTY=\"${HAL_VERSION_DIRTY}\"-DHAL_VERSION_BROKEN=\"${HAL_VERSION_BROKEN}\""
-    #                  "\n\noverride_dh_auto_install:\n"
-    #                  "\tdh_auto_install --destdir=\"$(CURDIR)/debian/${CPACK_DEBIAN_PACKAGE_NAME}\" --buildsystem=cmake"
-    #         "\n\noverride_dh_strip:\n"
-    #         "\tdh_strip --dbg-package=${CPACK_DEBIAN_PACKAGE_NAME}-dbg"
-    #         )
-
     file(WRITE ${debian_rules}
          "#!/usr/bin/make -f\n"
          "\nexport DH_VERBOSE=1"
@@ -240,46 +227,12 @@ foreach(DISTRI ${PROJECT_PPA_DISTRIB_TARGET})
 
     # debian/changelog
     set(debian_changelog ${DEBIAN_SOURCE_DIR}/debian/changelog)
-    if(NOT CPACK_DEBIAN_RESOURCE_FILE_CHANGELOG)
-        set(CPACK_DEBIAN_RESOURCE_FILE_CHANGELOG ${CMAKE_SOURCE_DIR}/debian/changelog)
-    endif()
 
-    # TODO add support for git dch (git-buildpackage)
-    if(CHANGELOG_MESSAGE)
-        set(output_changelog_msg ${CHANGELOG_MESSAGE})
-    else()
-        set(output_changelog_msg "* Package created with CMake")
-    endif(CHANGELOG_MESSAGE)
-    message(STATUS "Changelog message : \"${output_changelog_msg}\"")
-    if(EXISTS ${CPACK_DEBIAN_RESOURCE_FILE_CHANGELOG})
-        configure_file(${CPACK_DEBIAN_RESOURCE_FILE_CHANGELOG} ${debian_changelog} COPYONLY)
-
-        if(CPACK_DEBIAN_UPDATE_CHANGELOG)
-            file(READ ${debian_changelog} debian_changelog_content)
-            execute_process(
-                    COMMAND date -R
-                    OUTPUT_VARIABLE DATE_TIME
-                    OUTPUT_STRIP_TRAILING_WHITESPACE)
-            file(WRITE ${debian_changelog}
-                 "${CPACK_DEBIAN_PACKAGE_NAME} (${DEBIAN_PACKAGE_VERSION}) ${DISTRI}; urgency=low\n\n"
-                 "  ${output_changelog_msg}\n\n"
-                 " -- ${CPACK_DEBIAN_PACKAGE_MAINTAINER}  ${DATE_TIME}\n\n"
-                 )
-            file(APPEND ${debian_changelog} ${debian_changelog_content})
-        endif()
-
-    else()
-        execute_process(
-                COMMAND date -R
-                OUTPUT_VARIABLE DATE_TIME
-                OUTPUT_STRIP_TRAILING_WHITESPACE)
-        file(WRITE ${debian_changelog}
-             "${CPACK_DEBIAN_PACKAGE_NAME} (${DEBIAN_PACKAGE_VERSION}) ${DISTRI}; urgency=low\n\n"
-             "  ${output_changelog_msg}\n\n"
-             " -- ${CPACK_DEBIAN_PACKAGE_MAINTAINER}  ${DATE_TIME}\n"
-             )
-        #configure_file(${debian_changelog} ${CPACK_DEBIAN_RESOURCE_FILE_CHANGELOG}  COPYONLY)
-    endif()
+    execute_process(
+        COMMAND ${CMAKE_SOURCE_DIR}/tools/changelog_converter.py -i CHANGELOG.md --to debian -o ${debian_changelog} --for-ppa-debian-dir --ppa-version ${PPA_DEBIAN_VERSION} -r ${DISTRI}
+        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+        RESULTS_VARIABLE OUTPUT_CHANGELOG
+    )
 
 
     ##########################################################################

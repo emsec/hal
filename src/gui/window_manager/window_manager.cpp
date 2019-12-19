@@ -126,6 +126,7 @@ void window_manager::unlock_all()
 
 void window_manager::handle_window_close_request(hal_window* window)
 {
+    Q_UNUSED(window);
     if (m_static_windows)
     {
         // ASK FOR CONFIRMATION / FORWARD TO WINDOW MANAGER WIDGET

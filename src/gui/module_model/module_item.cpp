@@ -1,23 +1,31 @@
 #include "module_model/module_item.h"
 
-#include "gui/gui_utility.h"
+#include "netlist/module.h"
 
-module_item::module_item(const QString& name, const int id) :
+#include "gui/gui_globals.h"
+#include "gui/gui_utils/graphics.h"
+
+module_item::module_item(const u32 id) :
     m_parent(nullptr),
-    m_name(name),
     m_id(id),
-    m_color(gui_utility::get_random_color()) // UNSURE, MAYBE A FIXED COLOR PALETTE OR DEFAULT COLOR IS BETTER
+    m_name(QString::fromStdString(g_netlist->get_module_by_id(id)->get_name())),
+    m_color(g_netlist_relay.get_module_color(id)),
+    m_highlighted(false)
 {
+
 }
 
-module_item::~module_item()
+module_item::module_item(const QString& name, const u32 id) :
+    m_parent(nullptr),
+    m_id(id),
+    m_name(name),
+    m_color(g_netlist_relay.get_module_color(id)),
+    m_highlighted(false)
 {
-    for (const module_item* const& item : m_child_items)
-        delete item;
 }
 
 void module_item::insert_child(int row, module_item* child)
-{   
+{
     m_child_items.insert(row, child);
 }
 
@@ -94,6 +102,11 @@ QColor module_item::color() const
     return m_color;
 }
 
+bool module_item::highlighted() const
+{
+    return m_highlighted;
+}
+
 void module_item::set_parent(module_item* parent)
 {
     m_parent = parent;
@@ -107,4 +120,9 @@ void module_item::set_name(const QString& name)
 void module_item::set_color(const QColor& color)
 {
     m_color = color;
+}
+
+void module_item::set_highlighted(const bool highlighted)
+{
+    m_highlighted = highlighted;
 }

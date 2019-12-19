@@ -21,9 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#include "pragma_once.h"
-#ifndef __ARCH_MAC_H__
-#define __ARCH_MAC_H__
+#pragma once
 
 #define CORE_API EXPORTED
 
@@ -36,5 +34,3 @@
 #define PLUGIN_API EXPORTED
 
 #define LIBRARY_FILE_EXTENSION "dylib"
-
-#endif /* __ARCH_MAC_H__ */

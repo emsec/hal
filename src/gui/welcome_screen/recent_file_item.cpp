@@ -1,7 +1,9 @@
 #include "welcome_screen/recent_file_item.h"
 
+#include "netlist/event_system/event_controls.h"
+
 #include "file_manager/file_manager.h"
-#include "gui_utility.h"
+#include "gui_utils/graphics.h"
 
 #include <QEvent>
 #include <QFileInfo>
@@ -82,8 +84,15 @@ void recent_file_item::mousePressEvent(QMouseEvent* event)
     if(m_disabled)
         return;
 
-    file_manager::get_instance()->open_file(m_file);
-    event->accept();
+    if(event->button() == Qt::MouseButton::LeftButton)
+    {
+        // DEBUG -- REMOVE WHEN GUI CAN HANDLE EVENTS DURING CREATION
+        event_controls::enable_all(false);
+        file_manager::get_instance()->open_file(m_file);
+        // DEBUG -- REMOVE WHEN GUI CAN HANDLE EVENTS DURING CREATION
+        event_controls::enable_all(true);
+        event->accept();
+    }
 }
 
 QSize recent_file_item::sizeHint() const

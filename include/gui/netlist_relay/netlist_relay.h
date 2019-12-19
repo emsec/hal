@@ -45,12 +45,15 @@ public:
 
     void register_callbacks();
 
-    module_item* get_module_item(const u32 id);
+    QColor get_module_color(const u32 id);
+
     module_model* get_module_model();
 
-    void debug_change_module_color(module_item* item);
-    void debug_add_selection_to_module(module_item* item);
-    void debug_add_child_module(module_item* item);
+    void debug_change_module_name(const u32 id);
+    void debug_change_module_color(const u32 id);
+    void debug_add_selection_to_module(const u32 id);
+    void debug_add_child_module(const u32 id);
+    void debug_delete_module(const u32 id);
 
 Q_SIGNALS:
     // PROBABLY OBSOLETE
@@ -82,8 +85,6 @@ Q_SIGNALS:
     void module_submodule_removed(const std::shared_ptr<module> m, const u32 removed_module) const;
     void module_gate_assigned(const std::shared_ptr<module> m, const u32 assigned_gate) const;
     void module_gate_removed(const std::shared_ptr<module> m, const u32 removed_gate) const;
-    void module_net_assigned(const std::shared_ptr<module> m, const u32 assigned_net) const;
-    void module_net_removed(const std::shared_ptr<module> m, const u32 removed_net) const;
 
     void gate_created(const std::shared_ptr<gate> g) const;
     void gate_removed(const std::shared_ptr<gate> g) const;
@@ -96,8 +97,12 @@ Q_SIGNALS:
     void net_dst_added(const std::shared_ptr<net> n, const u32 dst_gate_id) const;
     void net_dst_removed(const std::shared_ptr<net> n, const u32 dst_gate_id) const;
 
+    // GUI
+    void module_color_changed(const std::shared_ptr<module> m) const;
+
 private Q_SLOTS:
     void debug_handle_file_opened();
+    void debug_handle_file_closed();
 
 private:
     void relay_netlist_event(netlist_event_handler::event ev, std::shared_ptr<netlist> object, u32 associated_data);
@@ -105,10 +110,11 @@ private:
     void relay_gate_event(gate_event_handler::event ev, std::shared_ptr<gate> object, u32 associated_data);
     void relay_net_event(net_event_handler::event ev, std::shared_ptr<net> object, u32 associated_data);
 
+    QMap<u32, QColor> m_module_colors;
+
     QMap<u32, QString> m_gate_aliases;
     QMap<u32, QString> m_net_aliases;
 
-    QMap<u32, module_item*> m_module_items;
     module_model* m_module_model;
 };
 

@@ -21,11 +21,10 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#include "pragma_once.h"
-#ifndef __HAL_GATE_LIBRARY_H__
-#define __HAL_GATE_LIBRARY_H__
+#pragma once
 
 #include "def.h"
+#include "netlist/gate_library/gate_type/gate_type.h"
 
 #include <map>
 #include <set>
@@ -33,6 +32,8 @@
 #include <vector>
 
 /**
+ * Gate library class containing information about the gates contained in the library.
+ * 
  * @ingroup netlist
  */
 class NETLIST_API gate_library
@@ -48,104 +49,60 @@ public:
     ~gate_library() = default;
 
     /**
-     * Returns the library name.
+     * Get the name of the library.
      *
-     * @returns The library's name.
+     * @returns The name.
      */
     std::string get_name() const;
 
     /**
+     * Add a gate type to the gate library.
+     *
+     * @param[in] gt - The gate type object.
+     */
+    void add_gate_type(std::shared_ptr<const gate_type> gt);
+
+    /**
      * Get all gate types of the library.
      *
-     * @returns pointer to set of gate types.
+     * @returns A map from gate type names to gate type objects.
      */
-    std::set<std::string>* get_gate_types();
+    const std::map<std::string, std::shared_ptr<const gate_type>>& get_gate_types();
 
     /**
-     * Get all global vcc gate types of the library.
+     * Get all VCC gate types of the library.
      *
-     * @returns pointer to set of global vcc gate types.
+     * @returns A map from VCC gate type names to gate type objects.
      */
-    std::set<std::string>* get_global_vcc_gate_types();
+    const std::map<std::string, std::shared_ptr<const gate_type>>& get_vcc_gate_types();
 
     /**
-     * Get all global gnd gate types of the library.
+     * Get all GND gate types of the library.
      *
-     * @returns pointer to set of global gnd gate types.
+     * @returns A map from GND gate type names to gate type objects.
      */
-    std::set<std::string>* get_global_gnd_gate_types();
+    const std::map<std::string, std::shared_ptr<const gate_type>>& get_gnd_gate_types();
 
     /**
-     * Get all input pin types of the library.
+     * Add a necessary includes of the gate library, e.g., VHDL libraries.
      *
-     * @returns pointer to set of input pin types.
+     * @param[in] inc - The include to add.
      */
-    std::set<std::string>* get_input_pin_types();
+    void add_include(const std::string& inc);
 
     /**
-     * Get all output pin types of the library.
+     * Get a vector of necessary includes of the gate library, e.g., VHDL libraries.
      *
-     * @returns pointer to set of output pin types.
+     * @returns A vector of includes.
      */
-    std::set<std::string>* get_output_pin_types();
-
-    /**
-     * Get all inout pin types of the library.
-     *
-     * @returns pointer to set of inout pin types.
-     */
-    std::set<std::string>* get_inout_pin_types();
-
-    /**
-     * Get all input pin types for all gate types of the library.
-     *
-     * @returns pointer to map of gate type to input pin types.
-     */
-    std::map<std::string, std::vector<std::string>>* get_gate_type_map_to_input_pin_types();
-
-    /**
-     * Get all output pin types for all gate types of the library.
-     *
-     * @returns pointer to map of gate type to output pin types.
-     */
-    std::map<std::string, std::vector<std::string>>* get_gate_type_map_to_output_pin_types();
-
-    /**
-     * Get all inout pin types for all gate types of the library.
-     *
-     * @returns pointer to map of gate type to inout pin types.
-     */
-    std::map<std::string, std::vector<std::string>>* get_gate_type_map_to_inout_pin_types();
-
-    /**
-     * Get the VHDL includes of the library.
-     *
-     * @returns VHDL includes to use by serializer.
-     */
-    std::vector<std::string>* get_vhdl_includes();
+    std::vector<std::string> get_includes() const;
 
 private:
     std::string m_name;
 
-    std::set<std::string> m_gate_type;
+    std::map<std::string, std::shared_ptr<const gate_type>> m_gate_type_map;
+    std::map<std::string, std::shared_ptr<const gate_type>> m_vcc_gate_types;
+    std::map<std::string, std::shared_ptr<const gate_type>> m_gnd_gate_types;
 
-    std::set<std::string> m_global_vcc_gate_type;
-
-    std::set<std::string> m_global_gnd_gate_type;
-
-    std::set<std::string> m_input_pin_type;
-
-    std::set<std::string> m_output_pin_type;
-
-    std::set<std::string> m_inout_pin_type;
-
-    std::map<std::string, std::vector<std::string>> m_gate_type_to_input_pin_types;
-
-    std::map<std::string, std::vector<std::string>> m_gate_type_to_output_pin_types;
-
-    std::map<std::string, std::vector<std::string>> m_gate_type_to_inout_pin_types;
-
-    std::vector<std::string> m_vhdl_includes;
+    std::vector<std::string> m_includes;
 };
-
-#endif

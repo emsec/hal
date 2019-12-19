@@ -24,6 +24,7 @@
 #ifndef MAIN_SETTINGS_WIDGET_H
 #define MAIN_SETTINGS_WIDGET_H
 
+#include "expanding_list/expanding_list_button.h"
 #include <QList>
 #include <QMap>
 #include <QWidget>
@@ -56,10 +57,18 @@ public Q_SLOTS:
     void handle_restore_defaults_clicked();
     void handle_cancel_clicked();
     void handle_ok_clicked();
-    void handel_button_selected(expanding_list_button* button);
+    void handle_button_selected(expanding_list_button* button);
     void handle_text_edited(const QString& text);
+    void handle_setting_updated(settings_widget* sender, const QString& key, const QVariant& value);
 
 private:
+    void init_widgets();
+    void make_section(const QString& label, const QString& name, const QString& icon_path);
+    void register_widget(const QString& section_name, settings_widget* widget);
+    bool check_conflict(settings_widget* widget, const QVariant& value) const;
+    void make_exclusive_group(const QString& name);
+    void assign_exclusive_group(const QString& group_name, settings_widget* widget);
+    void release_exclusive_group(const QString& group_name, settings_widget* widget);
     void hide_all_settings();
     void show_all_settings();
     void remove_all_highlights();
@@ -73,7 +82,6 @@ private:
     QHBoxLayout* m_searchbar_layout;
     searchbar* m_searchbar;
 
-    settings_display* m_settings_display;
     QScrollArea* m_scroll_area;
     QFrame* m_content;
     QHBoxLayout* m_content_layout;
@@ -86,16 +94,15 @@ private:
     QPushButton* m_cancel;
     QPushButton* m_ok;
 
-    QMap<expanding_list_button*, QList<settings_widget*>*> m_map;
+    QMap<QString, QList<settings_widget*>*> m_map;
+    QMap<QString, expanding_list_button*> m_sections;
+    QString m_active_section;
 
     QList<settings_widget*> m_all_settings;
-
-    QList<settings_widget*> m_general_settings;
-    QList<settings_widget*> m_content_settings;
-    QList<settings_widget*> m_plugins_settings;
-    QList<settings_widget*> m_style_settings;
-    QList<settings_widget*> m_notifications_settings;
-    QList<settings_widget*> m_debug_settings;
+    
+    QList<QString> m_exclusive_groups;
+    QMap<settings_widget*, QString> m_exclusive_w2g;
+    QMap<QString, QList<settings_widget*>*> m_exclusive_g2w;
 };
 
 #endif    // MAIN_SETTINGS_WIDGET_H

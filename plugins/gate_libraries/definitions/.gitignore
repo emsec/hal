@@ -1,0 +1,2 @@
+# require explicit add of unfinished libraries
+*.lib

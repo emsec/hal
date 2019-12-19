@@ -2,20 +2,23 @@
 
 #include "netlist/gate.h"
 #include "netlist/net.h"
+#include "core/log.h"
 
 #include "gui/graph_widget/graph_widget_constants.h"
-#include "gui/graph_widget/graphics_gate_factory.h"
-#include "gui/graph_widget/graphics_items/graphics_gate.h"
-#include "gui/graph_widget/graphics_items/graphics_item.h"
-#include "gui/graph_widget/graphics_items/graphics_module.h"
-#include "gui/graph_widget/graphics_items/graphics_net.h"
-#include "gui/graph_widget/graphics_items/utility_items/gate_navigation_popup.h"
+#include "gui/graph_widget/graphics_factory.h"
+#include "gui/graph_widget/items/graphics_gate.h"
+#include "gui/graph_widget/items/graphics_item.h"
+#include "gui/graph_widget/items/graphics_module.h"
+#include "gui/graph_widget/items/graphics_net.h"
+#include "netlist/gate.h"
+//#include "gui/graph_widget/graphics_items/utility_items/gate_navigation_popup.h"
 #include "gui/gui_globals.h"
 
 #include <QGraphicsSceneMouseEvent>
 #include <QPainter>
+#include <QString>
 
-#include <QDebug> // REMOVE THIS LATER
+#include <QDebug>
 
 qreal graphics_scene::s_lod = 0;
 
@@ -75,6 +78,7 @@ void graphics_scene::set_grid_type(const graph_widget_constants::grid_type& grid
 
 void graphics_scene::set_grid_base_line_color(const QColor& color)
 {
+    // ALTERNATIVELY ADRESS ADAPTER MEMBERS DIRECTLY
     s_grid_base_line_color = color;
 }
 
@@ -93,23 +97,55 @@ void graphics_scene::set_grid_cluster_dot_color(const QColor& color)
     s_grid_cluster_dot_color = color;
 }
 
+QPointF graphics_scene::snap_to_grid(const QPointF& pos)
+{
+    int adjusted_x = qRound(pos.x() / graph_widget_constants::grid_size) * graph_widget_constants::grid_size;
+    int adjusted_y = qRound(pos.y() / graph_widget_constants::grid_size) * graph_widget_constants::grid_size;
+    return QPoint(adjusted_x, adjusted_y);
+}
+
 graphics_scene::graphics_scene(QObject* parent) : QGraphicsScene(parent),
-    m_left_gate_navigation_popup(new gate_navigation_popup(gate_navigation_popup::type::left)),
-    m_right_gate_navigation_popup(new gate_navigation_popup(gate_navigation_popup::type::right))
+    m_drag_shadow_gate(new drag_shadow_gate())
+//    m_left_gate_navigation_popup(new gate_navigation_popup(gate_navigation_popup::type::left)),
+//    m_right_gate_navigation_popup(new gate_navigation_popup(gate_navigation_popup::type::right))
 {
     // FIND OUT IF MANUAL CHANGE TO DEPTH IS NECESSARY / INCREASES PERFORMANCE
     //m_scene.setBspTreeDepth(10);
 
-    connect(this, &graphics_scene::selectionChanged, this, &graphics_scene::handle_intern_selection_changed);
-//    connect(this, &graph_scene::focusItemChanged, this, &graph_scene::handle_focus_item_changed);
+    connect_all();
 
-    connect(&g_selection_relay, &selection_relay::selection_changed, this, &graphics_scene::handle_extern_selection_changed);
-    connect(&g_selection_relay, &selection_relay::subfocus_changed, this, &graphics_scene::handle_extern_subfocus_changed);
+//    QGraphicsScene::addItem(m_left_gate_navigation_popup);
 
-    QGraphicsScene::addItem(m_left_gate_navigation_popup);
+    QGraphicsScene::addItem(m_drag_shadow_gate);
+
+    #ifdef GUI_DEBUG_GRID
+    m_debug_grid_enable = g_settings_manager.get("debug/grid").toBool();
+    #endif
 }
 
-void graphics_scene::addItem(graphics_item* item)
+void graphics_scene::start_drag_shadow(const QPointF& posF, const QSizeF& sizeF, const drag_shadow_gate::drag_cue cue)
+{
+    m_drag_shadow_gate->set_visual_cue(cue);
+    m_drag_shadow_gate->start(posF, sizeF);
+}
+
+void graphics_scene::move_drag_shadow(const QPointF& posF, const drag_shadow_gate::drag_cue cue)
+{
+    m_drag_shadow_gate->setPos(posF);
+    m_drag_shadow_gate->set_visual_cue(cue);
+}
+
+void graphics_scene::stop_drag_shadow()
+{
+    m_drag_shadow_gate->stop();
+}
+
+QPointF graphics_scene::drop_target()
+{
+    return m_drag_shadow_gate->pos();
+}
+
+void graphics_scene::add_item(graphics_item* item)
 {
     // SELECTION HAS TO BE UPDATED MANUALLY AFTER ADDING / REMOVING ITEMS
 
@@ -118,9 +154,9 @@ void graphics_scene::addItem(graphics_item* item)
 
     QGraphicsScene::addItem(item);
 
-    switch (item->get_item_type())
+    switch (item->item_type())
     {
-    case graphics_item::item_type::gate:
+    case hal::item_type::gate:
     {
         graphics_gate* g = static_cast<graphics_gate*>(item);
         int i = 0;
@@ -134,7 +170,7 @@ void graphics_scene::addItem(graphics_item* item)
         m_gate_items.insert(i, gate_data{g->id(), g});
         return;
     }
-    case graphics_item::item_type::net:
+    case hal::item_type::net:
     {
         graphics_net* n = static_cast<graphics_net*>(item);
         int i = 0;
@@ -148,7 +184,7 @@ void graphics_scene::addItem(graphics_item* item)
         m_net_items.insert(i, net_data{n->id(), n});
         return;
     }
-    case graphics_item::item_type::module:
+    case hal::item_type::module:
     {
         graphics_module* m = static_cast<graphics_module*>(item);
         int i = 0;
@@ -165,7 +201,7 @@ void graphics_scene::addItem(graphics_item* item)
     }
 }
 
-void graphics_scene::removeItem(graphics_item* item)
+void graphics_scene::remove_item(graphics_item* item)
 {
     // SELECTION HAS TO BE UPDATED MANUALLY AFTER ADDING / REMOVING ITEMS
 
@@ -174,9 +210,9 @@ void graphics_scene::removeItem(graphics_item* item)
 
     QGraphicsScene::removeItem(item);
 
-    switch (item->get_item_type())
+    switch (item->item_type())
     {
-    case graphics_item::item_type::gate:
+    case hal::item_type::gate:
     {
         graphics_gate* g = static_cast<graphics_gate*>(item);
         u32 id = g->id();
@@ -196,7 +232,7 @@ void graphics_scene::removeItem(graphics_item* item)
 
         return;
     }
-    case graphics_item::item_type::net:
+    case hal::item_type::net:
     {
         graphics_net* n = static_cast<graphics_net*>(item);
         u32 id = n->id();
@@ -216,7 +252,7 @@ void graphics_scene::removeItem(graphics_item* item)
 
         return;
     }
-    case graphics_item::item_type::module:
+    case hal::item_type::module:
     {
         graphics_module* m = static_cast<graphics_module*>(item);
         u32 id = m->id();
@@ -253,35 +289,36 @@ const graphics_gate* graphics_scene::get_gate_item(const u32 id) const
     return nullptr;
 }
 
-void graphics_scene::update_utility_items()
-{
-    // TEST IMPLEMENTATION
-    // EXPAND WITH MORE ITEMS
+//void graphics_scene::update_utility_items()
+//{
+//    // TEST IMPLEMENTATION
+//    // EXPAND WITH MORE ITEMS
 
-    if (g_selection_relay.m_focus_type == selection_relay::item_type::gate)
-    {
-        for (gate_data& d : m_gate_items)
-        {
-            if (d.id == g_selection_relay.m_selected_gates[0])
-            {
-                graphics_gate* g = d.item;
+//    if (g_selection_relay.m_focus_type == selection_relay::item_type::gate)
+//    {
+//        for (gate_data& d : m_gate_items)
+//        {
+//            if (d.id == g_selection_relay.m_selected_gates[0])
+//            {
+//                graphics_gate* g = d.item;
 
-                // IF (ANIMATE) ANIMATE ELSE DONT
-                // ALTERNATIVELY ANIMATE IF SCENE HAS LESS THAN X ITEMS
-                m_left_gate_navigation_popup->stop();
-                m_left_gate_navigation_popup->set_height(g->height());
-                m_left_gate_navigation_popup->start(QPointF(g->pos().x() - 120, g->pos().y()));
-            }
-        }
-    }
-    else
-        m_left_gate_navigation_popup->stop();
-}
+//                // IF (ANIMATE) ANIMATE ELSE DONT
+//                // ALTERNATIVELY ANIMATE IF SCENE HAS LESS THAN X ITEMS
+//                m_left_gate_navigation_popup->stop();
+//                m_left_gate_navigation_popup->set_height(g->height());
+//                m_left_gate_navigation_popup->start(QPointF(g->pos().x() - 120, g->pos().y()));
+//            }
+//        }
+//    }
+//    else
+//        m_left_gate_navigation_popup->stop();
+//}
 
 void graphics_scene::connect_all()
 {
+    connect(&g_settings_relay, &settings_relay::setting_changed, this, &graphics_scene::handle_global_setting_changed);
+
     connect(this, &graphics_scene::selectionChanged, this, &graphics_scene::handle_intern_selection_changed);
-//    connect(this, &graph_scene::focusItemChanged, this, &graph_scene::handle_focus_item_changed);
 
     connect(&g_selection_relay, &selection_relay::selection_changed, this, &graphics_scene::handle_extern_selection_changed);
     connect(&g_selection_relay, &selection_relay::subfocus_changed, this, &graphics_scene::handle_extern_subfocus_changed);
@@ -289,8 +326,9 @@ void graphics_scene::connect_all()
 
 void graphics_scene::disconnect_all()
 {
+    disconnect(&g_settings_relay, &settings_relay::setting_changed, this, &graphics_scene::handle_global_setting_changed);
+
     disconnect(this, &graphics_scene::selectionChanged, this, &graphics_scene::handle_intern_selection_changed);
-//    disconnect(this, &graph_scene::focusItemChanged, this, &graph_scene::handle_focus_item_changed);
 
     disconnect(&g_selection_relay, &selection_relay::selection_changed, this, &graphics_scene::handle_extern_selection_changed);
     disconnect(&g_selection_relay, &selection_relay::subfocus_changed, this, &graphics_scene::handle_extern_subfocus_changed);
@@ -298,16 +336,21 @@ void graphics_scene::disconnect_all()
 
 void graphics_scene::delete_all_items()
 {
-    clear();
+    // this breaks the m_drag_shadow_gate
+    // clear();
+    // so we do this instead
+    // TODO check performance hit
+    for (auto item : items())
+    {
+        if (item != m_drag_shadow_gate)
+        {
+            removeItem(item);
+        }
+    }
+
     m_module_items.clear();
     m_gate_items.clear();
     m_net_items.clear();
-}
-
-void graphics_scene::handle_module_doubleclicked(u32 id)
-{
-    qDebug() << "module " + QString::number(id) + " clicked";
-    // VIEW IS AMBIGUOUS
 }
 
 void graphics_scene::update_visuals(const graph_shader::shading& s)
@@ -316,44 +359,51 @@ void graphics_scene::update_visuals(const graph_shader::shading& s)
     {
         m.item->set_visuals(s.module_visuals.value(m.id));
     }
+
+    for (gate_data g : m_gate_items)
+    {
+        g.item->set_visuals(s.gate_visuals.value(g.id));
+    }
+}
+
+void graphics_scene::move_nets_to_background()
+{
+    for (net_data d : m_net_items)
+        d.item->setZValue(-1);
 }
 
 void graphics_scene::handle_intern_selection_changed()
 {
+    g_selection_relay.clear();
+
     int gates = 0;
     int nets = 0;
     int modules = 0;
 
     for (const QGraphicsItem* const item : selectedItems())
     {
-        switch (static_cast<const graphics_item* const>(item)->get_item_type())
+        switch (static_cast<const graphics_item* const>(item)->item_type())
         {
-        case graphics_item::item_type::gate:
+        case hal::item_type::gate:
         {
-            g_selection_relay.m_selected_gates[gates] = static_cast<const graphics_item* const>(item)->id();
+            g_selection_relay.m_selected_gates.insert(static_cast<const graphics_item* const>(item)->id());
             ++gates;
             break;
         }
-        case graphics_item::item_type::net:
+        case hal::item_type::net:
         {
-            g_selection_relay.m_selected_nets[nets] = static_cast<const graphics_item* const>(item)->id();
+            g_selection_relay.m_selected_nets.insert(static_cast<const graphics_item* const>(item)->id());
             ++nets;
             break;
         }
-        case graphics_item::item_type::module:
+        case hal::item_type::module:
         {
-            g_selection_relay.m_selected_modules[modules] = static_cast<const graphics_item* const>(item)->id();
+            g_selection_relay.m_selected_modules.insert(static_cast<const graphics_item* const>(item)->id());
             ++modules;
             break;
         }
         }
     }
-
-    // CHANGE SELECTION RELAY MEMEBERS DIRECTLY ?
-    // FIND OUT WHATS FASTER
-    g_selection_relay.m_number_of_selected_gates = gates;
-    g_selection_relay.m_number_of_selected_nets = nets;
-    g_selection_relay.m_number_of_selected_modules = modules;
 
     // TEST CODE
     // ADD FOCUS DEDUCTION INTO RELAY ???
@@ -362,17 +412,17 @@ void graphics_scene::handle_intern_selection_changed()
         if (gates)
         {
             g_selection_relay.m_focus_type = selection_relay::item_type::gate;
-            g_selection_relay.m_focus_id = g_selection_relay.m_selected_gates[0]; // UNNECESSARY ??? USE ARRAY[0] INSTEAD OF MEMBER VARIABLE ???
+            g_selection_relay.m_focus_id = *g_selection_relay.m_selected_gates.begin(); // UNNECESSARY ??? USE ARRAY[0] INSTEAD OF MEMBER VARIABLE ???
         }
         else if (nets)
         {
             g_selection_relay.m_focus_type = selection_relay::item_type::net;
-            g_selection_relay.m_focus_id = g_selection_relay.m_selected_nets[0]; // UNNECESSARY ??? USE ARRAY[0] INSTEAD OF MEMBER VARIABLE ???
+            g_selection_relay.m_focus_id = *g_selection_relay.m_selected_nets.begin(); // UNNECESSARY ??? USE ARRAY[0] INSTEAD OF MEMBER VARIABLE ???
         }
         else
         {
             g_selection_relay.m_focus_type = selection_relay::item_type::module;
-            g_selection_relay.m_focus_id = g_selection_relay.m_selected_modules[0]; // UNNECESSARY ??? USE ARRAY[0] INSTEAD OF MEMBER VARIABLE ???
+            g_selection_relay.m_focus_id = *g_selection_relay.m_selected_modules.begin(); // UNNECESSARY ??? USE ARRAY[0] INSTEAD OF MEMBER VARIABLE ???
         }
     }
     else
@@ -382,7 +432,6 @@ void graphics_scene::handle_intern_selection_changed()
     g_selection_relay.m_subfocus = selection_relay::subfocus::none;
     // END OF TEST CODE
 
-    g_selection_relay.sort();
     g_selection_relay.relay_selection_changed(this);
 }
 
@@ -398,39 +447,38 @@ void graphics_scene::handle_extern_selection_changed(void* sender)
 
     clearSelection();
 
-    if (g_selection_relay.m_number_of_selected_modules)
+    if (!g_selection_relay.m_selected_modules.isEmpty())
     {
-        // ACTIONS HERE ARE DEPENDENT ON WHICH DATA APPROACH WILL ULTIMATELY BE USED IN THE SELECTION RELAY
-    }
-
-    if (g_selection_relay.m_number_of_selected_gates)
-    {
-        u32 index = 0;
-
-        for (auto& element : m_gate_items)
+        for (auto& element : m_module_items)
         {
-            if (element.id == g_selection_relay.m_selected_gates[index])
+            if (g_selection_relay.m_selected_modules.find(element.id) != g_selection_relay.m_selected_modules.end())
             {
                 element.item->setSelected(true);
-
-                if (++index == g_selection_relay.m_number_of_selected_gates)
-                    break;
+                element.item->update();
             }
         }
     }
 
-    if (g_selection_relay.m_number_of_selected_nets)
+    if (!g_selection_relay.m_selected_gates.isEmpty())
     {
-        u32 index = 0;
-
-        for (auto& element : m_net_items)
+        for (auto& element : m_gate_items)
         {
-            if (element.id == g_selection_relay.m_selected_nets[index])
+            if (g_selection_relay.m_selected_gates.find(element.id) != g_selection_relay.m_selected_gates.end())
             {
                 element.item->setSelected(true);
+                element.item->update();
+            }
+        }
+    }
 
-                if (++index == g_selection_relay.m_number_of_selected_nets)
-                    break;
+    if (!g_selection_relay.m_selected_nets.isEmpty())
+    {
+        for (auto& element : m_net_items)
+        {
+            if (g_selection_relay.m_selected_nets.find(element.id) != g_selection_relay.m_selected_nets.end())
+            {
+                element.item->setSelected(true);
+                element.item->update();
             }
         }
     }
@@ -449,6 +497,7 @@ void graphics_scene::handle_extern_subfocus_changed(void* sender)
 
 void graphics_scene::mousePressEvent(QGraphicsSceneMouseEvent* event)
 {
+    // CONTEXT MENU CLEARING SELECTION WORKAROUND
     if (event->button() == Qt::RightButton)
     {
         event->accept();
@@ -458,39 +507,15 @@ void graphics_scene::mousePressEvent(QGraphicsSceneMouseEvent* event)
     QGraphicsScene::mousePressEvent(event);
 }
 
-//void graph_scene::handle_focus_item_changed(QGraphicsItem* new_focus_item, QGraphicsItem* old_focus_item, Qt::FocusReason reason)
-//{
-//    Q_UNUSED(old_focus_item)
-//    Q_UNUSED(reason)
-
-//    graphics_item* item = dynamic_cast<graphics_item*>(new_focus_item);
-
-//    if (item)
-//    {
-//        switch (item->get_item_class())
-//        {
-//        case item_class::gate:
-//        {
-//            // SET CURRENT TO GATE ID AND CALL RELAY
-//            qDebug() << "gate selected: " << item->id();
-//            break;
-//        }
-//        case item_class::net:
-//        {
-//            // SET CURRENT TO NET ID AND CALL RELAY
-//            break;
-//        }
-//        case item_class::submodule:
-//        {
-//            // SET CURRENT TO SUBMODULE ID AND CALL RELAY
-//            break;
-//        }
-//        }
-//    }
-//    else
-//        // CLEAR FOCUS
-//        ;
-//}
+void graphics_scene::handle_global_setting_changed(void* sender, const QString& key, const QVariant& value)
+{
+    #ifdef GUI_DEBUG_GRID
+    if (key == "debug/grid")
+    {
+        m_debug_grid_enable = value.toBool();
+    }
+    #endif
+}
 
 void graphics_scene::drawBackground(QPainter* painter, const QRectF& rect)
 {
@@ -588,5 +613,62 @@ void graphics_scene::drawBackground(QPainter* painter, const QRectF& rect)
     }
     }
 
+    #ifdef GUI_DEBUG_GRID
+    if (m_debug_grid_enable)
+        debug_draw_layouter_grid(painter, x_from, x_to, y_from, y_to);
+    #endif
+
     painter->setRenderHints(original_flags); // UNNECESSARY ?
 }
+
+#ifdef GUI_DEBUG_GRID
+void graphics_scene::debug_set_layouter_grid(const QVector<qreal>& debug_x_lines, const QVector<qreal>& debug_y_lines, qreal debug_default_height, qreal debug_default_width)
+{
+    m_debug_x_lines = debug_x_lines;
+    m_debug_y_lines = debug_y_lines;
+    m_debug_default_height = debug_default_height;
+    m_debug_default_width = debug_default_width;
+}
+
+void graphics_scene::debug_draw_layouter_grid(QPainter* painter, const int x_from, const int x_to, const int y_from, const int y_to)
+{   
+    painter->setPen(QPen(Qt::magenta));
+    for (qreal x : m_debug_x_lines) {
+        QLine line(x, y_from, x, y_to);
+        painter->drawLine(line);
+    }
+    for (qreal y : m_debug_y_lines) {
+        QLine line(x_from, y, x_to, y);
+        painter->drawLine(line);
+    }
+    painter->setPen(QPen(Qt::green));
+    int x = m_debug_x_lines.last() + m_debug_default_width;
+    while (x <= x_to)
+    {
+        QLine line(x, y_from, x, y_to);
+        painter->drawLine(line);
+        x += m_debug_default_width;
+    }
+    x = m_debug_x_lines.first() - m_debug_default_width;
+    while (x >= x_from)
+    {
+        QLine line(x, y_from, x, y_to);
+        painter->drawLine(line);
+        x -= m_debug_default_width;
+    }
+    int y = m_debug_y_lines.last() + m_debug_default_height;
+    while (y <= y_to)
+    {
+        QLine line(x_from, y, x_to, y);
+        painter->drawLine(line);
+        y += m_debug_default_height;
+    }
+    y = m_debug_y_lines.first() - m_debug_default_height;
+    while (y >= y_from)
+    {
+        QLine line(x_from, y, x_to, y);
+        painter->drawLine(line);
+        y -= m_debug_default_height;
+    }
+}
+#endif

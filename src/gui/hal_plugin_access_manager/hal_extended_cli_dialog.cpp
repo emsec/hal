@@ -1,6 +1,5 @@
 #include "hal_plugin_access_manager/hal_extended_cli_dialog.h"
 #include "core/interface_cli.h"
-#include "core/interface_factory.h"
 #include "core/interface_gui.h"
 #include "core/plugin_manager.h"
 #include <QChar>
@@ -120,18 +119,9 @@ void hal_extended_cli_dialog::parse_arguments()
 
 void hal_extended_cli_dialog::setup(std::string plugin_name)
 {
-    i_factory* factory_ptr = plugin_manager::get_plugin_factory(plugin_name);
-    if (factory_ptr == nullptr)
-    {
-        //log_msg(l_error, "failed to get factory for plugin '%s'\n", plugin_name.c_str());
-        return;
-    }
-
-    auto pl1 = factory_ptr->query_interface(interface_type::cli);
-    m_plugin = std::dynamic_pointer_cast<i_cli>(pl1);
+    m_plugin = plugin_manager::get_plugin_instance<i_cli>(plugin_name, false);
     if (m_plugin == nullptr)
     {
-        //log_msg(l_warning, "Plugin %s is not castable to i_cli!\n", plugin_name.c_str());
         return;
     }
 

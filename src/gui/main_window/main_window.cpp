@@ -4,10 +4,13 @@
 
 #include "core/log.h"
 
-#include "hdl_parser/hdl_parser_dispatcher.h"
+#include "netlist/hdl_parser/hdl_parser_dispatcher.h"
+#include "netlist/event_system/event_controls.h"
 #include "netlist/gate.h"
+#include "netlist/gate_library/gate_library_manager.h"
 #include "netlist/net.h"
 #include "netlist/netlist.h"
+#include "netlist/netlist_factory.h"
 #include "netlist/persistent/netlist_serializer.h"
 
 #include "gui/gui_def.h"
@@ -16,8 +19,8 @@
 
 #include "gui/docking_system/dock_bar.h"
 #include "gui/file_manager/file_manager.h"
-#include "gui/graph_navigation_widget/old_graph_navigation_widget.h"
 #include "gui/gui_globals.h"
+#include "gui/hal_action/hal_action.h"
 #include "gui/hal_content_manager/hal_content_manager.h"
 #include "gui/hal_logger/hal_logger_widget.h"
 #include "gui/plugin_management/plugin_schedule_manager.h"
@@ -32,6 +35,7 @@
 #include <QDesktopWidget>
 #include <QFileDialog>
 #include <QFuture>
+#include <QInputDialog>
 #include <QMessageBox>
 #include <QPushButton>
 #include <QSettings>
@@ -43,7 +47,7 @@
 #include "overlay/reminder_overlay.h"
 #include "plugin_manager/plugin_manager_widget.h"
 
-main_window::main_window(QWidget* parent) : QWidget(parent), m_schedule_widget(new plugin_schedule_widget()), m_action_schedule(new QAction(this)), m_action_content(new QAction(this))
+main_window::main_window(QWidget* parent) : QWidget(parent), m_schedule_widget(new plugin_schedule_widget()), m_action_schedule(new hal_action(this)), m_action_content(new hal_action(this))
 {
     ensurePolished();    // ADD REPOLISH METHOD
     connect(file_manager::get_instance(), &file_manager::file_opened, this, &main_window::handle_file_opened);
@@ -115,14 +119,15 @@ main_window::main_window(QWidget* parent) : QWidget(parent), m_schedule_widget(n
 
     setLocale(QLocale(QLocale::English, QLocale::UnitedStates));
 
-    m_action_open         = new QAction(this);
-    m_action_save         = new QAction(this);
-    m_action_about        = new QAction(this);
-    m_action_run_schedule = new QAction(this);
-    //m_action_content      = new QAction(this);
-    m_action_settings = new QAction(this);
-    m_action_close    = new QAction(this);
-    m_action_content  = new QAction(this);
+    m_action_new          = new hal_action(this);
+    m_action_open         = new hal_action(this);
+    m_action_save         = new hal_action(this);
+    m_action_about        = new hal_action(this);
+    m_action_run_schedule = new hal_action(this);
+    //m_action_content      = new hal_action(this);
+    m_action_settings = new hal_action(this);
+    m_action_close    = new hal_action(this);
+    m_action_content  = new hal_action(this);
 
     //    //m_open_icon_style = "all->#fcfcb0";
     //    //m_open_icon_style = "all->#f2e4a4";
@@ -147,6 +152,8 @@ main_window::main_window(QWidget* parent) : QWidget(parent), m_schedule_widget(n
     //    m_settings_icon_style = "all->#AFB1B3";
     //    m_settings_icon_path  = ":/icons/settings";
 
+    m_action_new->setIcon(gui_utility::get_styled_svg_icon(m_new_file_icon_style, m_new_file_icon_path));
+    //m_action_new->setIcon(gui_utility::get_styled_svg_icon(m_open_icon_style, m_open_icon_path));
     m_action_open->setIcon(gui_utility::get_styled_svg_icon(m_open_icon_style, m_open_icon_path));
     m_action_save->setIcon(gui_utility::get_styled_svg_icon(m_save_icon_style, m_save_icon_path));
     m_action_schedule->setIcon(gui_utility::get_styled_svg_icon(m_schedule_icon_style, m_schedule_icon_path));
@@ -161,11 +168,13 @@ main_window::main_window(QWidget* parent) : QWidget(parent), m_schedule_widget(n
     m_menu_bar->addAction(m_menu_file->menuAction());
     m_menu_bar->addAction(m_menu_edit->menuAction());
     m_menu_bar->addAction(m_menu_help->menuAction());
+    m_menu_file->addAction(m_action_new);
     m_menu_file->addAction(m_action_open);
     //m_menu_file->addAction(m_action_close);
     m_menu_file->addAction(m_action_save);
     m_menu_edit->addAction(m_action_settings);
     m_menu_help->addAction(m_action_about);
+    m_left_tool_bar->addAction(m_action_new);
     m_left_tool_bar->addAction(m_action_open);
     m_left_tool_bar->addAction(m_action_save);
     //    m_left_tool_bar->addSeparator();
@@ -176,16 +185,18 @@ main_window::main_window(QWidget* parent) : QWidget(parent), m_schedule_widget(n
     //    m_right_tool_bar->addSeparator();
     m_right_tool_bar->addAction(m_action_settings);
 
-    m_action_open->setShortcut(QKeySequence("Ctrl+O"));
-    m_action_save->setShortcut(QKeySequence("Ctrl+S"));
-    m_action_run_schedule->setShortcut(QKeySequence("Ctrl+Shift+R"));
+    g_keybind_manager.bind(m_action_new, "keybinds/project_create_file");
+    g_keybind_manager.bind(m_action_open, "keybinds/project_open_file");
+    g_keybind_manager.bind(m_action_save, "keybinds/project_save_file");
+    g_keybind_manager.bind(m_action_run_schedule, "keybinds/schedule_run");
 
     setWindowTitle("HAL");
-    m_action_open->setText("Open '" + m_action_open->shortcut().toString(QKeySequence::NativeText) + "'");
-    m_action_save->setText("Save '" + m_action_save->shortcut().toString(QKeySequence::NativeText) + "'");
+    m_action_new->setText("New Netlist");
+    m_action_open->setText("Open");
+    m_action_save->setText("Save");
     m_action_about->setText("About");
     m_action_schedule->setText("Edit Schedule");
-    m_action_run_schedule->setText("Run Schedule '" + m_action_run_schedule->shortcut().toString(QKeySequence::NativeText) + "'");
+    m_action_run_schedule->setText("Run Schedule");
     m_action_content->setText("Content (Disabled)");
     m_action_settings->setText("Settings");
     m_action_close->setText("Close Document");
@@ -195,31 +206,24 @@ main_window::main_window(QWidget* parent) : QWidget(parent), m_schedule_widget(n
 
     m_about_dialog = new about_dialog(this);
     m_plugin_model = new plugin_model(this);
-    m_content_manager = new hal_content_manager(this);
 
-    connect(m_action_open, &QAction::triggered, this, &main_window::handle_action_open);
-    connect(m_action_about, &QAction::triggered, m_about_dialog, &about_dialog::exec);
-    connect(m_action_schedule, &QAction::triggered, this, &main_window::toggle_schedule);
-    connect(m_action_settings, &QAction::triggered, this, &main_window::toggle_settings);
-    connect(m_settings, &main_settings_widget::close, this, &main_window::show_layout_area);
-    connect(m_action_save, &QAction::triggered, this, &main_window::handle_save_triggered);
+    g_python_context = std::make_unique<python_context>();
+
+    g_content_manager = new hal_content_manager(this);
+
+    connect(m_action_new, &hal_action::triggered, this, &main_window::handle_action_new);
+    connect(m_action_open, &hal_action::triggered, this, &main_window::handle_action_open);
+    connect(m_action_about, &hal_action::triggered, m_about_dialog, &about_dialog::exec);
+    connect(m_action_schedule, &hal_action::triggered, this, &main_window::toggle_schedule);
+    connect(m_action_settings, &hal_action::triggered, this, &main_window::toggle_settings);
+    connect(m_settings, &main_settings_widget::close, this, &main_window::close_settings);
+    connect(m_action_save, &hal_action::triggered, this, &main_window::handle_save_triggered);
     //debug
-    connect(m_action_close, &QAction::triggered, this, &main_window::handle_action_closed);
+    connect(m_action_close, &hal_action::triggered, this, &main_window::handle_action_closed);
 
-    connect(m_action_run_schedule, &QAction::triggered, plugin_schedule_manager::get_instance(), &plugin_schedule_manager::run_schedule);
+    connect(m_action_run_schedule, &hal_action::triggered, plugin_schedule_manager::get_instance(), &plugin_schedule_manager::run_schedule);
 
-    connect(this, &main_window::save_triggered, m_content_manager, &hal_content_manager::handle_save_triggered);
-
-    //test stuff
-    //    hal_plugin_access_manager *manager = hal_plugin_access_manager::get_instance();
-    //    QShortcut* debug_shortcut = new QShortcut(QKeySequence(tr("Ctrl+f")), this);
-    //    connect(debug_shortcut, SIGNAL(activated()), this, SLOT(debug_stuff()));
-
-    QShortcut* debug_shortcut2 = new QShortcut(QKeySequence(tr("Ctrl+g")), this);
-    connect(debug_shortcut2, SIGNAL(activated()), this, SLOT(debug_stuff2()));
-
-    //    QShortcut* debug_shortcut3 = new QShortcut(QKeySequence(tr("Ctrl+n")), this);
-    //    connect(debug_shortcut3, SIGNAL(activated()), this, SLOT(debug_stuff3()));
+    connect(this, &main_window::save_triggered, g_content_manager, &hal_content_manager::handle_save_triggered);
 
     restore_state();
 
@@ -231,6 +235,16 @@ main_window::main_window(QWidget* parent) : QWidget(parent), m_schedule_widget(n
 
     //reminder_overlay* o = new reminder_overlay(this);
     //Q_UNUSED(o)
+}
+
+QString main_window::new_file_icon_path() const
+{
+    return m_new_file_icon_path;
+}
+
+QString main_window::new_file_icon_style() const
+{
+    return m_new_file_icon_style;
 }
 
 QString main_window::open_icon_path() const
@@ -291,6 +305,16 @@ QString main_window::settings_icon_path() const
 QString main_window::settings_icon_style() const
 {
     return m_settings_icon_style;
+}
+
+void main_window::set_new_file_icon_path(const QString& path)
+{
+    m_new_file_icon_path = path;
+}
+
+void main_window::set_new_file_icon_style(const QString& style)
+{
+    m_new_file_icon_style = style;
 }
 
 void main_window::set_open_icon_path(const QString& path)
@@ -371,50 +395,6 @@ void main_window::run_plugin_triggered(const QString& name)
     QFuture<void> future = QtConcurrent::run(hal_plugin_access_manager::run_plugin, name.toStdString(), &args);
 }
 
-void main_window::debug_stuff()
-{
-    g_netlist->get_gate_by_id(1)->set_name("debug");
-}
-
-void main_window::debug_stuff2()
-{
-    static int counter = 0;
-
-    switch (counter % 3)
-    {
-        case 0:
-        {
-            QList<u32> list{3, 4, 5, 6};
-            QList<u32> empty, empty2;
-            qDebug() << "läuft";
-            g_selection_relay.relay_combined_selection(this, list, empty, empty2, selection_relay::Mode::override);
-            break;
-        }
-        case 1:
-        {
-            QList<u32> list{7, 8, 9};
-            QList<u32> empty, empty2;
-            qDebug() << "läuft";
-            g_selection_relay.relay_combined_selection(this, list, empty, empty2, selection_relay::Mode::add);
-            break;
-        }
-        case 2:
-        {
-            QList<u32> list{3, 4, 5};
-            QList<u32> empty, empty2;
-            qDebug() << "läuft";
-            g_selection_relay.relay_combined_selection(this, list, empty, empty2, selection_relay::Mode::remove);
-            break;
-        }
-    }
-    counter++;
-}
-
-void main_window::debug_stuff3()
-{
-    g_notification_manager->debug_add_notification();
-}
-
 // GENERALIZE TOGGLE METHODS
 void main_window::toggle_schedule()
 {
@@ -438,18 +418,54 @@ void main_window::toggle_settings()
 {
     if (m_stacked_widget->currentWidget() == m_settings)
     {
-        if (file_manager::get_instance()->file_open())
-            m_stacked_widget->setCurrentWidget(m_layout_area);
-        else
-            m_stacked_widget->setCurrentWidget(m_welcome_screen);
+        close_settings();
     }
     else
         m_stacked_widget->setCurrentWidget(m_settings);
 }
 
-void main_window::show_layout_area()
+void main_window::close_settings()
 {
-    m_stacked_widget->setCurrentWidget(m_layout_area);
+    if (file_manager::get_instance()->file_open())
+        m_stacked_widget->setCurrentWidget(m_layout_area);
+    else
+        m_stacked_widget->setCurrentWidget(m_welcome_screen);
+}
+
+void main_window::handle_action_new()
+{
+    if (g_netlist != nullptr)
+    {
+        QMessageBox msgBox;
+        msgBox.setText("Error");
+        msgBox.setInformativeText("You are already working on a file. Restart HAL to switch to a different file.");
+        msgBox.setStyleSheet("QLabel{min-width: 600px;}");
+        msgBox.setStandardButtons(QMessageBox::Ok);
+        msgBox.setDefaultButton(QMessageBox::Ok);
+        msgBox.exec();
+        return;
+    }
+
+    QString title = "Create New Netlist";
+    QString text  = "Please select a gate library";
+
+    QStringList items;
+    for (const auto& it : gate_library_manager::get_gate_libraries())
+    {
+        items.append(QString::fromStdString(it.first));
+    }
+    bool ok          = false;
+    QString selected = QInputDialog::getItem(this, title, text, items, 0, false, &ok);
+
+    if (ok)
+    {
+        // DEBUG -- REMOVE WHEN GUI CAN HANDLE EVENTS DURING CREATION
+        event_controls::enable_all(false);
+        g_netlist = netlist_factory::create_netlist(selected.toStdString());
+        // DEBUG -- REMOVE WHEN GUI CAN HANDLE EVENTS DURING CREATION
+        event_controls::enable_all(true);
+        Q_EMIT file_manager::get_instance()->file_opened("new netlist");
+    }
 }
 
 void main_window::handle_action_open()
@@ -472,7 +488,14 @@ void main_window::handle_action_open()
     // Non native dialogs does not work on macOS. Therefore do net set DontUseNativeDialog!
     QString file_name = QFileDialog::getOpenFileName(nullptr, title, QDir::currentPath(), text, nullptr);
 
-    file_manager::get_instance()->open_file(file_name);
+    if (!file_name.isNull())
+    {
+        // DEBUG -- REMOVE WHEN GUI CAN HANDLE EVENTS DURING CREATION
+        event_controls::enable_all(false);
+        file_manager::get_instance()->open_file(file_name);
+        // DEBUG -- REMOVE WHEN GUI CAN HANDLE EVENTS DURING CREATION
+        event_controls::enable_all(true);
+    }
 }
 
 void main_window::handle_file_opened(const QString& file_name)
@@ -483,6 +506,7 @@ void main_window::handle_file_opened(const QString& file_name)
         m_stacked_widget->setCurrentWidget(m_layout_area);
         m_welcome_screen->close();
     }
+    g_python_context->update_netlist();
 }
 
 void main_window::handle_save_triggered()
@@ -490,10 +514,30 @@ void main_window::handle_save_triggered()
     if (g_netlist)
     {
         hal::path path = file_manager::get_instance()->file_name().toStdString();
+
+        if (path.empty())
+        {
+            QString title = "Save File";
+            QString text  = "HAL Progress Files (*.hal)";
+
+            // Non native dialogs does not work on macOS. Therefore do net set DontUseNativeDialog!
+            QString file_name = QFileDialog::getSaveFileName(nullptr, title, QDir::currentPath(), text, nullptr);
+            if (!file_name.isNull())
+            {
+                path = file_name.toStdString();
+            }
+            else
+            {
+                return;
+            }
+        }
+
         path.replace_extension(".hal");
         netlist_serializer::serialize_to_file(g_netlist, path);
 
         g_file_status_manager.flush_unsaved_changes();
+        file_manager::get_instance()->watch_file(QString::fromStdString(path.string()));
+
         Q_EMIT save_triggered();
     }
 }
@@ -510,7 +554,7 @@ void main_window::on_action_quit_triggered()
 void main_window::closeEvent(QCloseEvent* event)
 {
     //check for unsaved changes and show confirmation dialog
-    if(g_file_status_manager.modified_files_existing())
+    if (g_file_status_manager.modified_files_existing())
     {
         QMessageBox msgBox;
         msgBox.setStyleSheet("QLabel{min-width: 600px;}");
@@ -521,7 +565,7 @@ void main_window::closeEvent(QCloseEvent* event)
 
         msgBox.setText("There are unsaved modifications.");
         QString detailed_text = "The following modifications have not been saved yet:\n";
-        for(const auto&s : g_file_status_manager.get_unsaved_change_descriptors())
+        for (const auto& s : g_file_status_manager.get_unsaved_change_descriptors())
             detailed_text.append("   ->  " + s + "\n");
         msgBox.setDetailedText(detailed_text);
 
@@ -549,16 +593,16 @@ void main_window::closeEvent(QCloseEvent* event)
     save_state();
     event->accept();
     // hack, remove later
-    m_content_manager->hack_delete_content();
+    g_content_manager->hack_delete_content();
     qApp->quit();
 }
 
 void main_window::restore_state()
 {
-    QPoint pos = g_settings.value("main_window/position", QPoint(0, 0)).toPoint();
+    QPoint pos = g_settings_manager.get("main_window/position", QPoint(0, 0)).toPoint();
     move(pos);
     QRect rect = QApplication::desktop()->screenGeometry();
-    QSize size = g_settings.value("main_window/size", QSize(rect.width(), rect.height())).toSize();
+    QSize size = g_settings_manager.get("main_window/size", QSize(rect.width(), rect.height())).toSize();
     resize(size);
     //restore state of all subwindows
     m_layout_area->init_splitter_size(size);
@@ -566,10 +610,10 @@ void main_window::restore_state()
 
 void main_window::save_state()
 {
-    g_settings.setValue("main_window/position", pos());
-    g_settings.setValue("main_window/size", size());
+    g_settings_manager.update("main_window/position", pos());
+    g_settings_manager.update("main_window/size", size());
     //save state of all subwindows and everything else that might need to be restored on the next program start
-    g_settings.sync();
+    g_settings_manager.sync();
 }
 
 void main_window::add_content(content_widget* widget, int index, content_anchor anchor)

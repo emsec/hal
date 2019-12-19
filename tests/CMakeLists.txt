@@ -1,4 +1,4 @@
-project(tests)
+#project(tests)
 
 # Download and unpack googletest at configure time
 configure_file(googletest-CMakeLists.txt.in "${CMAKE_BINARY_DIR}/googletest-download/CMakeLists.txt")
@@ -29,7 +29,8 @@ endif()
 # etc. as appropriate
 
 #add_subdirectory(basic_tests)
+add_subdirectory(test_utils) # new
 add_subdirectory(core)
-add_subdirectory(netlist)
+add_subdirectory(netlist) #temporary
 add_subdirectory(hdl_parser)
 add_subdirectory(hdl_writer)

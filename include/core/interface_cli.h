@@ -21,9 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#include "pragma_once.h"
-#ifndef __HAL_INTERFACE_CLI_H__
-#define __HAL_INTERFACE_CLI_H__
+#pragma once
 
 #include "def.h"
 
@@ -50,7 +48,7 @@ public:
      *
      * @returns The program options description.
      */
-    virtual program_options get_cli_options() = 0;
+    virtual program_options get_cli_options() const = 0;
 
     /**
      * Entry point to handle command line interface call
@@ -61,5 +59,3 @@ public:
      */
     virtual bool handle_cli_call(std::shared_ptr<netlist> netlist, program_arguments& args) = 0;
 };
-
-#endif /* __HAL_INTERFACE_CLI_H__ */

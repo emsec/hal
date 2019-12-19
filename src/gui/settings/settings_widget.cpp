@@ -1,11 +1,17 @@
 #include "settings/settings_widget.h"
 
+#include <QBoxLayout>
 #include <QLabel>
 #include <QRegularExpression>
 #include <QRegularExpressionMatch>
-#include <QVBoxLayout>
+#include <QStyle>
 
-settings_widget::settings_widget(QWidget* parent) : QFrame(parent), m_layout(new QVBoxLayout()), m_name(new QLabel()), m_unsaved_changes(false), m_highlight_color(52, 56, 57)
+// enable this to apply all settings as they are modified
+//#define SETTINGS_UPDATE_IMMEDIATELY
+
+settings_widget::settings_widget(const QString& key, QWidget* parent)
+    : QFrame(parent), m_layout(new QVBoxLayout()), m_container(new QBoxLayout(QBoxLayout::TopToBottom)), m_top_bar(new QHBoxLayout()), m_name(new QLabel()), m_revert(new QToolButton()),
+      m_default(new QToolButton()), m_highlight_color(52, 56, 57), m_key(key)
 {
     setFrameStyle(QFrame::NoFrame);
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
@@ -16,7 +22,22 @@ settings_widget::settings_widget(QWidget* parent) : QFrame(parent), m_layout(new
     m_name->setObjectName("name-label");
 
     setLayout(m_layout);
-    m_layout->addWidget(m_name);
+
+    m_revert->setText("R");
+    m_revert->setToolTip("Revert your last change");
+    m_revert->setMaximumWidth(20);
+    connect(m_revert, &QToolButton::clicked, this, &settings_widget::handle_rollback);
+    m_default->setText("D");
+    m_default->setToolTip("Load the default value");
+    m_default->setMaximumWidth(20);
+    connect(m_default, &QToolButton::clicked, this, &settings_widget::handle_reset);
+    m_top_bar->addWidget(m_name);
+    m_top_bar->addStretch();
+    m_top_bar->addWidget(m_revert);
+    m_top_bar->addWidget(m_default);
+    m_layout->addLayout(m_top_bar);
+    m_layout->addLayout(m_container);
+
     hide();
 }
 
@@ -25,9 +46,9 @@ QColor settings_widget::highlight_color()
     return m_highlight_color;
 }
 
-bool settings_widget::unsaved_changes()
+QString settings_widget::key()
 {
-    return m_unsaved_changes;
+    return m_key;
 }
 
 void settings_widget::set_highlight_color(const QColor& color)
@@ -40,6 +61,14 @@ void settings_widget::reset_labels()
     for (QPair<QLabel*, QString>& pair : m_labels)
     {
         pair.first->setText(pair.second);
+        if (pair.second.isEmpty())
+        {
+            pair.first->hide();
+        }
+        else
+        {
+            pair.first->show();
+        }
     }
 }
 
@@ -77,4 +106,118 @@ bool settings_widget::match_labels(const QString& string)
         }
     }
     return match_found;
+}
+
+void settings_widget::trigger_setting_updated()
+{
+    QVariant val = value();
+    if (m_preview)
+    {
+        m_preview->update(val);
+    }
+    if (m_signals_enabled)
+    {
+        Q_EMIT setting_updated(this, key(), val);
+#ifndef SETTINGS_UPDATE_IMMEDIATELY
+        set_dirty(m_loaded_value != val);
+#endif
+    }
+}
+
+void settings_widget::handle_reset()
+{
+    if (m_prepared)
+    {
+        load(m_default_value);
+        Q_EMIT setting_updated(this, key(), m_loaded_value);
+#ifndef SETTINGS_UPDATE_IMMEDIATELY
+        set_dirty(m_loaded_value != m_default_value);
+#endif
+    }
+}
+
+void settings_widget::handle_rollback()
+{
+    if (m_prepared)
+    {
+        load(m_loaded_value);
+        Q_EMIT setting_updated(this, key(), m_loaded_value);
+#ifndef SETTINGS_UPDATE_IMMEDIATELY
+        set_dirty(false);
+#endif
+    }
+}
+
+void settings_widget::set_dirty(bool dirty)
+{
+    m_dirty   = dirty;
+    QStyle* s = style();
+    s->unpolish(this);
+    s->polish(this);
+}
+
+bool settings_widget::dirty() const
+{
+    return m_dirty;
+}
+
+void settings_widget::prepare(const QVariant& value, const QVariant& default_value)
+{
+    m_signals_enabled = false;
+    load(value);
+    m_loaded_value    = value;
+    m_default_value   = default_value;
+    m_signals_enabled = true;
+    m_prepared        = true;
+    set_dirty(false);
+}
+
+void settings_widget::mark_saved()
+{
+    set_dirty(false);
+    m_loaded_value = value();
+}
+
+void settings_widget::set_conflicts(bool conflicts)
+{
+    m_conflicts = conflicts;
+    QStyle* s   = style();
+    s->unpolish(this);
+    s->polish(this);
+}
+
+bool settings_widget::conflicts() const
+{
+    return m_conflicts;
+}
+
+void settings_widget::set_preview_widget(preview_widget* widget)
+{
+    if (m_preview)
+    {
+        m_container->removeWidget(m_preview);
+    }
+    m_preview = widget;
+    m_container->addWidget(m_preview);
+    if (m_prepared)
+    {
+        m_preview->update(value());
+    }
+}
+
+void settings_widget::set_preview_position(preview_position position)
+{
+    QBoxLayout::Direction direction;
+    switch (position)
+    {
+        case preview_position::bottom:
+            direction = QBoxLayout::TopToBottom;
+            break;
+        case preview_position::right:
+            direction = QBoxLayout::LeftToRight;
+            break;
+        default:
+            return;
+    }
+    m_container->setDirection(direction);
 }

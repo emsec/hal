@@ -27,7 +27,7 @@
 #include "channel_manager/channel_item.h"
 #include "content_widget/content_widget.h"
 #include "core/log.h"
-#include "gui_utility.h"
+#include "gui_utils/graphics.h"
 #include <QLabel>
 #include <QMenu>
 #include <QPlainTextEdit>
@@ -61,7 +61,7 @@ public:
 
     void reload_log_content();
 
-    void resizeEvent(QResizeEvent* event);
+    void resizeEvent(QResizeEvent* event) override;
 
 Q_SIGNALS:
     void queue_log_update(spdlog::level::level_enum t, QString const& msg, hal_filter_item* filter);

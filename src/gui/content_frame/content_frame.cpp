@@ -1,7 +1,7 @@
 #include "content_frame/content_frame.h"
 
 #include "content_widget/content_widget.h"
-#include "gui_utility.h"
+#include "gui_utils/graphics.h"
 #include "toolbar/toolbar.h"
 
 #include <QAction>
@@ -73,12 +73,12 @@ void content_frame::childEvent(QChildEvent* event)
         deleteLater();
     }
 
-    if ((bool) event->FocusIn)
+    if (event->FocusIn != 0)
     {
         // add debug code to show focus
     }
 
-    if ((bool) event->FocusOut)
+    if (event->FocusOut != 0)
     {
         // add debug code to show focus
     }

@@ -1,19 +1,20 @@
 #include "docking_system/dock_button.h"
 #include "content_widget/content_widget.h"
+#include "core/log.h"
 #include "gui_globals.h"
-#include "gui_utility.h"
+#include "gui_utils/graphics.h"
 #include <QPainter>
 
 dock_button::dock_button(content_widget* widget, button_orientation orientation, QObject* eventFilter, QWidget* parent) : QToolButton(parent), m_widget(widget), m_orientation(orientation)
 {
     setText(m_widget->name());
     setCheckable(true);
-    setStyleSheet("QToolButton { padding: 0; margin: 0; }");
+    setStyleSheet("QToolButton { font-family                : \"Iosevka\";padding: 0; margin: 0; }");
     setIcon(m_widget->icon());
     installEventFilter(eventFilter);
 
     m_icon_size       = 14;
-    m_width_padding   = 8;
+    m_width_padding   = 16;
     m_height_padding  = 0;
     m_relative_height = 18;
     adjust_size();
@@ -24,7 +25,7 @@ dock_button::dock_button(content_widget* widget, button_orientation orientation,
 void dock_button::paintEvent(QPaintEvent* event)
 {
     Q_UNUSED(event)
-    QFont font(g_settings.value("font/family").toString(), 11, QFont::Bold);    //, QFont::PreferAntialias);
+    auto font = property("font").value<QFont>();
     QPainter painter(this);
     painter.setFont(font);
     painter.setPen(Qt::white);
@@ -57,7 +58,8 @@ void dock_button::paintEvent(QPaintEvent* event)
 
 void dock_button::adjust_size()
 {
-    QFont font(g_settings.value("font/family").toString(), 11, QFont::Bold);    //, QFont::PreferAntialias);
+    auto font = property("font").value<QFont>();
+    //, QFont::PreferAntialias);
     QFontMetrics fm(font);
     int textwidth    = fm.width(text());
     m_relative_width = m_icon_size + textwidth + m_width_padding;

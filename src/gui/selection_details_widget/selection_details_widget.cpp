@@ -4,6 +4,7 @@
 #include "netlist/gate.h"
 #include "netlist/net.h"
 #include "netlist/netlist.h"
+#include "searchbar/searchbar.h"
 
 #include <QHeaderView>
 #include <QLabel>
@@ -11,6 +12,7 @@
 #include <QStackedWidget>
 #include <QTableWidget>
 #include <QVBoxLayout>
+#include <QShortcut>
 
 selection_details_widget::selection_details_widget(QWidget* parent) : content_widget("Details", parent)
 {
@@ -36,7 +38,11 @@ selection_details_widget::selection_details_widget(QWidget* parent) : content_wi
 
     m_stacked_widget->setCurrentWidget(m_empty_widget);
 
+    m_searchbar = new searchbar(this);
+    m_searchbar->hide();
+
     m_content_layout->addWidget(m_stacked_widget);
+    m_content_layout->addWidget(m_searchbar);
 
     //    m_table_widget->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     //    m_table_widget->setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -47,47 +53,64 @@ selection_details_widget::selection_details_widget(QWidget* parent) : content_wi
     //    m_table_widget->horizontalHeader()->setStretchLastSection(true);
     //    m_table_widget->viewport()->setFocusPolicy(Qt::NoFocus);
 
-    connect(&g_selection_relay, &selection_relay::current_gate_update, this, &selection_details_widget::handle_current_gate_update);
-    connect(&g_selection_relay, &selection_relay::current_net_update, this, &selection_details_widget::handle_current_net_update);
-    connect(&g_selection_relay, &selection_relay::current_module_update, this, &selection_details_widget::handle_current_module_update);
-    connect(&g_selection_relay, &selection_relay::current_cleared_update, this, &selection_details_widget::handle_current_cleared_update);
-    connect(&g_selection_relay, &selection_relay::current_deleted_update, this, &selection_details_widget::handle_current_deleted_update);
+    connect(&g_selection_relay, &selection_relay::selection_changed, this, &selection_details_widget::handle_selection_update);
+    connect(m_searchbar, &searchbar::text_edited, m_module_details, &module_details_widget::handle_searchbar_text_edited);
 }
 
-void selection_details_widget::handle_current_gate_update(void* sender, u32 id)
+void selection_details_widget::handle_selection_update(void* sender)
 {
-    Q_UNUSED(sender)
+    if (sender == this)
+    {
+        return;
+    }
 
-    m_gate_details->update(id);
-    m_stacked_widget->setCurrentWidget(m_gate_details);
+    if(g_selection_relay.m_selected_gates.isEmpty() &&
+       g_selection_relay.m_selected_modules.isEmpty() &&
+       g_selection_relay.m_selected_nets.isEmpty())
+    {
+        m_stacked_widget->setCurrentWidget(m_empty_widget);
+    }
+
+    if (!g_selection_relay.m_selected_modules.isEmpty())
+    {
+        m_module_details->update(*g_selection_relay.m_selected_modules.begin());
+        m_stacked_widget->setCurrentWidget(m_module_details);
+    }
+    else if (!g_selection_relay.m_selected_gates.isEmpty())
+    {
+        m_searchbar->hide();
+        m_gate_details->update(*g_selection_relay.m_selected_gates.begin());
+        m_stacked_widget->setCurrentWidget(m_gate_details);
+    }
+    else if (!g_selection_relay.m_selected_nets.isEmpty())
+    {
+        m_searchbar->hide();
+        m_net_details->update(*g_selection_relay.m_selected_nets.begin());
+        m_stacked_widget->setCurrentWidget(m_net_details);
+    }
 }
 
-void selection_details_widget::handle_current_net_update(void* sender, u32 id)
+QList<QShortcut *> selection_details_widget::create_shortcuts()
 {
-    Q_UNUSED(sender)
+    QShortcut* search_shortcut = new QShortcut(QKeySequence("Ctrl+f"),this);
+    connect(search_shortcut, &QShortcut::activated, this, &selection_details_widget::toggle_searchbar);
 
-    m_net_details->update(id);
-    m_stacked_widget->setCurrentWidget(m_net_details);
+    return (QList<QShortcut*>() << search_shortcut);
 }
 
-void selection_details_widget::handle_current_module_update(void* sender, u32 id)
+void selection_details_widget::toggle_searchbar()
 {
-    Q_UNUSED(sender)
+    if(m_stacked_widget->currentWidget() != m_module_details)
+        return;
 
-    m_module_details->update(id);
-    m_stacked_widget->setCurrentWidget(m_module_details);
-}
-
-void selection_details_widget::handle_current_cleared_update(void* sender)
-{
-    Q_UNUSED(sender)
-
-    m_stacked_widget->setCurrentWidget(m_empty_widget);
-}
-
-void selection_details_widget::handle_current_deleted_update(void* sender)
-{
-    Q_UNUSED(sender)
-
-    m_stacked_widget->setCurrentWidget(m_item_deleted_label);
+    if(m_searchbar->isHidden())
+    {
+        m_searchbar->show();
+        m_searchbar->setFocus();
+    }
+    else
+    {
+        m_searchbar->hide();
+        setFocus();
+    }
 }

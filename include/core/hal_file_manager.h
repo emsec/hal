@@ -21,9 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#include "pragma_once.h"
-#ifndef __HAL_FILE_MANAGER_H__
-#define __HAL_FILE_MANAGER_H__
+#pragma once
 
 #include "def.h"
 
@@ -98,5 +96,3 @@ namespace hal_file_manager
     void unregister_on_deserialize_callback(const std::string& identifier);
 
 }    // namespace hal_file_manager
-
-#endif /* __HAL_FILE_MANAGER_H__ */

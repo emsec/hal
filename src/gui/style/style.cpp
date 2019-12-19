@@ -2,14 +2,17 @@
 
 #include "core/log.h"
 
-#include "gui/graph_widget/graphics_items/global_graphics_net.h"
-#include "gui/graph_widget/graphics_items/graphics_item.h"
-#include "gui/graph_widget/graphics_items/graphics_net.h"
-#include "gui/graph_widget/graphics_items/minimal_graphics_gate.h"
-#include "gui/graph_widget/graphics_items/separated_graphics_net.h"
-#include "gui/graph_widget/graphics_items/standard_graphics_gate.h"
-#include "gui/graph_widget/graphics_items/standard_graphics_module.h"
-#include "gui/graph_widget/graphics_items/standard_graphics_net.h"
+#include "gui/graph_widget/items/graphics_item.h"
+#include "gui/graph_widget/items/graphics_net.h"
+#include "gui/graph_widget/items/gates/minimal_graphics_gate.h"
+#include "gui/graph_widget/items/gates/standard_graphics_gate.h"
+#include "gui/graph_widget/items/modules/standard_graphics_module.h"
+#include "gui/graph_widget/items/nets/arrow_separated_net.h"
+#include "gui/graph_widget/items/nets/circle_separated_net.h"
+#include "gui/graph_widget/items/nets/labeled_separated_net.h"
+#include "gui/graph_widget/items/nets/separated_graphics_net.h"
+#include "gui/graph_widget/items/nets/standard_graphics_net.h"
+#include "gui/graph_widget/items/utility_items/drag_shadow_gate.h"
 #include "gui/gui_globals.h"
 #include "gui/svg_icon_engine/svg_icon_engine.h"
 
@@ -41,7 +44,7 @@ namespace style
     {
         QString stylesheet;
         {
-            QString path = g_settings.value("stylesheet/base").toString();
+            QString path = g_settings_manager.get("stylesheet/base").toString();
             QFile file(path);
 
             if (!file.exists())
@@ -60,7 +63,7 @@ namespace style
             file.close();
         }
 
-        QString path = g_settings.value("stylesheet/definitions").toString();
+        QString path = g_settings_manager.get("stylesheet/definitions").toString();
 
         if (path.isEmpty())
             return stylesheet;
@@ -201,8 +204,12 @@ namespace style
         minimal_graphics_gate::load_settings();
 
         graphics_net::load_settings();
-        global_graphics_net::load_settings();
+        standard_graphics_net::load_settings();
         separated_graphics_net::load_settings();
+        arrow_separated_net::load_settings();
+        circle_separated_net::load_settings();
+        labeled_separated_net::load_settings();
+        drag_shadow_gate::load_settings();
     }
 
 } // namespace style

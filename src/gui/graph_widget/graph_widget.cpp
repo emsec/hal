@@ -4,32 +4,37 @@
 #include "netlist/module.h"
 #include "netlist/net.h"
 
-#include "gui/graph_widget/contexts/dynamic_context.h"
-#include "gui/graph_widget/contexts/module_context.h"
+#include "gui/graph_tab_widget/graph_tab_widget.h"
+#include "gui/graph_widget/contexts/graph_context.h"
 #include "gui/graph_widget/graph_context_manager.h"
 #include "gui/graph_widget/graph_graphics_view.h"
-#include "gui/graph_widget/graph_navigation_widget.h"
 #include "gui/graph_widget/graph_layout_progress_widget.h"
+#include "gui/graph_widget/graph_layout_spinner_widget.h"
+#include "gui/graph_widget/graph_navigation_widget.h"
 #include "gui/graph_widget/graphics_scene.h"
+#include "gui/graph_widget/items/graphics_gate.h"
+#include "gui/gui_def.h"
 #include "gui/gui_globals.h"
+#include "gui/hal_content_manager/hal_content_manager.h"
 #include "gui/overlay/dialog_overlay.h"
 #include "gui/toolbar/toolbar.h"
 
+#include <QDebug>
 #include <QInputDialog>
+#include <QKeyEvent>
+#include <QMessageBox>
 #include <QToolButton>
 #include <QVBoxLayout>
-#include <QKeyEvent>
+#include <QVariantAnimation>
+#include <QTimer>
 
-graph_widget::graph_widget(QWidget* parent) : content_widget("Graph", parent),
-    m_view(new graph_graphics_view(this)),
-    m_context(nullptr),
-    m_overlay(new dialog_overlay(this)),
-    m_navigation_widget(new graph_navigation_widget(this)),
-    m_progress_widget(new graph_layout_progress_widget(this)),
-    m_current_expansion(0)
+graph_widget::graph_widget(graph_context* context, QWidget* parent)
+    : content_widget("Graph", parent), m_view(new graph_graphics_view(this)), m_context(context), m_overlay(new dialog_overlay(this)), m_navigation_widget(new graph_navigation_widget(nullptr)),
+      m_progress_widget(new graph_layout_progress_widget(this)), m_spinner_widget(new graph_layout_spinner_widget(this)), m_current_expansion(0)
 {
     connect(m_navigation_widget, &graph_navigation_widget::navigation_requested, this, &graph_widget::handle_navigation_jump_requested);
     connect(m_navigation_widget, &graph_navigation_widget::close_requested, m_overlay, &dialog_overlay::hide);
+    connect(m_navigation_widget, &graph_navigation_widget::close_requested, this, &graph_widget::reset_focus);
 
     connect(m_overlay, &dialog_overlay::clicked, m_overlay, &dialog_overlay::hide);
 
@@ -37,37 +42,26 @@ graph_widget::graph_widget(QWidget* parent) : content_widget("Graph", parent),
 
     m_overlay->hide();
     m_overlay->set_widget(m_navigation_widget);
-
+    m_spinner_widget->hide();
     m_content_layout->addWidget(m_view);
 
     m_view->setFrameStyle(QFrame::NoFrame);
     m_view->setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
     m_view->setRenderHint(QPainter::Antialiasing, false);
     m_view->setDragMode(QGraphicsView::RubberBandDrag);
+
+    m_context->subscribe(this);
+
+    if (!m_context->scene_update_in_progress())
+    {
+        m_view->setScene(m_context->scene());
+        m_view->centerOn(0, 0);
+    }
 }
 
-void graph_widget::setup_toolbar(toolbar* toolbar)
+graph_context* graph_widget::get_context() const
 {
-    Q_UNUSED(toolbar)
-    // DEPRECATED
-    // DELETE THIS METHOD AFTER CONTENT WIDGET REFACTOR
-
-    QToolButton* context_one_button = new QToolButton();
-    context_one_button->setText("Context 1");
-
-    QToolButton* create_context_button = new QToolButton();
-    create_context_button->setText("Create Context");
-
-    QToolButton* change_context_button = new QToolButton();
-    change_context_button->setText("Change Context");
-
-    connect(context_one_button, &QToolButton::clicked, this, &graph_widget::debug_module_one);
-    connect(create_context_button, &QToolButton::clicked, this, &graph_widget::debug_create_context);
-    connect(change_context_button, &QToolButton::clicked, this, &graph_widget::debug_change_context);
-
-    toolbar->addWidget(context_one_button);
-    toolbar->addWidget(create_context_button);
-    toolbar->addWidget(change_context_button);
+    return m_context;
 }
 
 void graph_widget::handle_scene_available()
@@ -77,25 +71,11 @@ void graph_widget::handle_scene_available()
     connect(m_overlay, &dialog_overlay::clicked, m_overlay, &dialog_overlay::hide);
 
     m_overlay->hide();
-    m_progress_widget->stop();
+    m_spinner_widget->hide();
     m_overlay->set_widget(m_navigation_widget);
 
     if (hasFocus())
         m_view->setFocus();
-
-    // FIND BETTER WAY TO DO THIS
-    g_selection_relay.m_selected_gates[0] = m_current_expansion;
-    g_selection_relay.m_number_of_selected_gates = 1;
-    g_selection_relay.m_focus_type = selection_relay::item_type::gate;
-    g_selection_relay.m_focus_id = m_current_expansion;
-    // SET CORRECT SUBSELECTION
-    g_selection_relay.m_subfocus = selection_relay::subfocus::none;
-    g_selection_relay.relay_selection_changed(nullptr);
-
-    // JUMP TO THE GATE
-    // JUMP SHOULD BE HANDLED SEPARATELY
-//    if (item)
-    //        m_graphics_widget->view()->ensureVisible(item);
 }
 
 void graph_widget::handle_scene_unavailable()
@@ -104,11 +84,7 @@ void graph_widget::handle_scene_unavailable()
 
     disconnect(m_overlay, &dialog_overlay::clicked, m_overlay, &dialog_overlay::hide);
 
-    m_progress_widget->set_direction(graph_layout_progress_widget::direction::right);
-    //m_progress_widget->set_direction(graph_layout_progress_widget::direction::left);
-
-    m_overlay->set_widget(m_progress_widget);
-    m_progress_widget->start();
+    m_overlay->set_widget(m_spinner_widget);
 
     if (m_overlay->isHidden())
         m_overlay->show();
@@ -118,9 +94,16 @@ void graph_widget::handle_context_about_to_be_deleted()
 {
     m_view->setScene(nullptr);
     m_context = nullptr;
+}
 
-    // SHOW SOME KIND OF "NO CONTEXT SELECTED" WIDGET
-    // UPDATE OTHER DATA, LIKE TOOLBUTTONS
+void graph_widget::handle_status_update(const int percent)
+{
+    Q_UNUSED(percent)
+}
+
+void graph_widget::handle_status_update(const QString& message)
+{
+    Q_UNUSED(message)
 }
 
 void graph_widget::keyPressEvent(QKeyEvent* event)
@@ -128,127 +111,176 @@ void graph_widget::keyPressEvent(QKeyEvent* event)
     if (!m_context)
         return;
 
-    if (!m_context->available())
+    if (m_context->scene_update_in_progress())
         return;
-
-    //if (m_context && m_context->available())
 
     switch (event->key())
     {
-    case Qt::Key_Left:
-    {
-        handle_navigation_left_request();
-        break;
-    }
-    case Qt::Key_Right:
-    {
-        handle_navigation_right_request();
-        break;
-    }
-    case Qt::Key_Up:
-    {
-        handle_navigation_up_request();
-        break;
-    }
-    case Qt::Key_Down:
-    {
-        handle_navigation_down_request();
-        break;
-    }
-    case Qt::Key_Backspace:
-    {
-        handle_module_up_request();
-        break;
-    }
-    default: break;
+        case Qt::Key_Left:
+        {
+            handle_navigation_left_request();
+            break;
+        }
+        case Qt::Key_Right:
+        {
+            handle_navigation_right_request();
+            break;
+        }
+        case Qt::Key_Up:
+        {
+            handle_navigation_up_request();
+            break;
+        }
+        case Qt::Key_Down:
+        {
+            handle_navigation_down_request();
+            break;
+        }
+        case Qt::Key_Z:
+        {
+            if (event->modifiers() & Qt::ControlModifier)    // modifiers are set as bitmasks
+            {
+                handle_history_step_back_request();
+            }
+            break;
+        }
+        case Qt::Key_Escape:
+        {
+            g_selection_relay.clear_and_update();
+            break;
+        }
+        default:
+            break;
     }
 }
 
-void graph_widget::handle_navigation_jump_requested(const u32 from_gate, const u32 via_net, const u32 to_gate)
+void graph_widget::handle_navigation_jump_requested(const hal::node origin, const u32 via_net, const QSet<u32>& to_gates)
 {
+    bool bail_animation = false;
+
+    setFocus();
+
     // ASSERT INPUTS ARE VALID ?
-    std::shared_ptr<gate> g = g_netlist->get_gate_by_id(from_gate);
-
-    if (!g)
+    auto n = g_netlist->get_net_by_id(via_net);
+    if (!n || to_gates.isEmpty())
         return;
-
-    std::shared_ptr<net> n = g_netlist->get_net_by_id(via_net);
-
-    if (!n)
-        return;
-
-    g = g_netlist->get_gate_by_id(to_gate);
-
-    if (!g)
-        return;
-
-    bool contains_net = false;
-    bool contains_gate = false;
-
-    if (m_context->nets().contains(via_net))
-        contains_net = true;
-
-    if (m_context->gates().contains(to_gate))
-        contains_gate = true;
-
-    bool update_necessary = false;
-
-    if (!contains_net || !contains_gate)
+    QList<std::shared_ptr<gate>> gates;
+    for (u32 id : to_gates)
     {
-        // THIS HAS TO BE DELEGATED TO THE CONTEXT
-//        if (m_context->scope())
-//        {
-//            // DRAW NON MEMBER NETS AND GATES AND SHADE THEM DIFFERENTLY ?
-//            std::shared_ptr<module> m = g_netlist->get_module_by_id(m_context->scope());
+        auto g = g_netlist->get_gate_by_id(id);
+        if (!g)
+            return;
+        gates.append(g);
+    }
 
-//            if (!m)
-//                return; // INVALID SCOPE
+    if (!m_context->gates().contains(to_gates))
+    {
+        for (const auto& m : g_netlist->get_modules())
+        {
+            if (m->get_name() == m_context->name().toStdString())
+            {
+                u32 cnt = 0;
+                while (true)
+                {
+                    ++cnt;
+                    QString new_name = m_context->name() + " modified";
+                    if (cnt > 1)
+                    {
+                        new_name += " (" + QString::number(cnt) + ")";
+                    }
+                    bool found = false;
+                    for (const auto& ctx : g_graph_context_manager.get_contexts())
+                    {
+                        if (ctx->name() == new_name)
+                        {
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found)
+                    {
+                        g_graph_context_manager.rename_graph_context(m_context, new_name);
+                        break;
+                    }
+                }
+                break;
+            }
+        }
 
-//            if (!m->contains_net(n, true))
-//                return; // NET OUT OF SCOPE
+        // If we don't have all the gates in the current context, we need to
+        // insert them
 
-//            if (!m->contains_gate(g, true))
-//                return; // GATE OUT OF SCOPE
-//        }
+        bool netIsInput = n->is_a_dst(*gates.constBegin()); // either they're all inputs or all outputs, so just check the first one
+        hal::placement_mode placement = netIsInput ? hal::placement_mode::prefer_right : hal::placement_mode::prefer_left;
+        m_context->add({}, to_gates, hal::placement_hint{placement, origin});
 
-        QSet<u32> gates;
-        QSet<u32> nets;
-
-        if (!contains_net)
-            nets.insert(via_net);
-
-        if (!contains_gate)
-            gates.insert(to_gate);
-
-        // ADD TO CONTEXT
-        m_context->add(QSet<u32>(), gates, nets); // EMPTY SET DEBUG CODE
-        update_necessary = true;
+        // If we have added any gates, the scene may have resized. In that case, the animation can be erratic,
+        // so we set a flag here that we can't run the animation. See end of this method for more details.
+        bail_animation = true;
     }
     else
     {
         m_overlay->hide();
         //if (hasFocus())
-            m_view->setFocus();
+        m_view->setFocus();
     }
 
     // SELECT IN RELAY
-    g_selection_relay.m_selected_gates[0] = to_gate;
-    g_selection_relay.m_number_of_selected_gates = 1;
-    g_selection_relay.m_focus_type = selection_relay::item_type::gate;
-    g_selection_relay.m_focus_id = to_gate;
-    g_selection_relay.m_subfocus = selection_relay::subfocus::left;
-    g_selection_relay.m_subfocus_index = 0;
+    g_selection_relay.clear();
+    g_selection_relay.m_selected_gates = to_gates;
+    if (to_gates.size() == 1)
+    {
+        // subfocus only possible when just one gate selected
+
+        auto g = *gates.constBegin();
+        g_selection_relay.m_focus_type = selection_relay::item_type::gate;
+        g_selection_relay.m_focus_id   = g->get_id();
+        g_selection_relay.m_subfocus   = selection_relay::subfocus::none;
+
+        u32 cnt = 0;
+        for (const auto& pin : g->get_input_pins())
+        {
+            if (g->get_fan_in_net(pin) == n)    // input net
+            {
+                g_selection_relay.m_subfocus       = selection_relay::subfocus::left;
+                g_selection_relay.m_subfocus_index = cnt;
+                break;
+            }
+            cnt++;
+        }
+        if (g_selection_relay.m_subfocus == selection_relay::subfocus::none)
+        {
+            cnt = 0;
+            for (const auto& pin : g->get_output_pins())
+            {
+                if (g->get_fan_out_net(pin) == n)    // input net
+                {
+                    g_selection_relay.m_subfocus       = selection_relay::subfocus::right;
+                    g_selection_relay.m_subfocus_index = cnt;
+                    break;
+                }
+                cnt++;
+            }
+        }
+    }
 
     g_selection_relay.relay_selection_changed(nullptr);
 
+    // FIXME If the scene has been resized during this method, the animation triggered by
+    // ensure_gates_visible is broken. Thus, if that is the case, we bail out here and not
+    // trigger the animation.
+    if (bail_animation)
+        return;
+
     // JUMP TO THE GATE
+    ensure_gates_visible(to_gates);
 }
 
 void graph_widget::handle_module_double_clicked(const u32 id)
 {
     // CONNECT DIRECTLY TO HANDLE ???
     // MAYBE ADDITIONAL CODE NECESSARY HERE...
-    handle_module_down_requested(id);
+    handle_enter_module_requested(id);
 }
 
 // ADD SOUND OR ERROR MESSAGE TO FAILED NAVIGATION ATTEMPTS
@@ -256,106 +288,66 @@ void graph_widget::handle_navigation_left_request()
 {
     switch (g_selection_relay.m_focus_type)
     {
-    case selection_relay::item_type::none:
-    {
-        return;
-    }
-    case selection_relay::item_type::gate:
-    {
-        std::shared_ptr<gate> g = g_netlist->get_gate_by_id(g_selection_relay.m_focus_id);
-
-        if (!g)
-            return;
-
-        if (g->get_input_pin_types().size())
+        case selection_relay::item_type::none:
         {
+            return;
+        }
+        case selection_relay::item_type::gate:
+        {
+            std::shared_ptr<gate> g = g_netlist->get_gate_by_id(g_selection_relay.m_focus_id);
+
+            if (!g)
+                return;
+
             if (g_selection_relay.m_subfocus == selection_relay::subfocus::left)
             {
-                std::string pin_type = *std::next(g->get_input_pin_types().begin(), g_selection_relay.m_subfocus_index);
+                std::string pin_type   = g->get_input_pins()[g_selection_relay.m_subfocus_index];
                 std::shared_ptr<net> n = g->get_fan_in_net(pin_type);
 
                 if (!n)
                     return;
 
-                if (!n->get_src().gate)
-                    return;
-
-                bool contains_net = false;
-                bool contains_gate = false;
-
-                if (m_context->nets().contains(n->get_id()))
-                    contains_net = true;
-
-                if (m_context->gates().contains(n->get_src().get_gate()->get_id()))
-                    contains_gate = true;
-
-                bool update_necessary = false;
-
-                if (!contains_net || !contains_gate)
+                if (n->get_src().gate == nullptr)
                 {
-                    // THIS HAS TO BE DELEGATED TO THE CONTEXT
-//                    if (m_context->scope())
-//                    {
-//                        // DRAW NON MEMBER NETS AND GATES AND SHADE THEM DIFFERENTLY ?
-//                        std::shared_ptr<module> m = g_netlist->get_module_by_id(m_context->scope());
-
-//                        if (!m)
-//                            return; // INVALID SCOPE
-
-//                        if (!m->contains_net(n, true))
-//                            return; // NET OUT OF SCOPE
-
-//                        if (!m->contains_gate(n->get_src().gate, true))
-//                            return; // GATE OUT OF SCOPE
-//                    }
-
-                    QSet<u32> gates;
-                    QSet<u32> nets;
-
-                    if (!contains_net)
-                        nets.insert(n->get_id());
-
-                    if (!contains_gate)
-                        gates.insert(n->get_src().get_gate()->get_id());
-
-                    // ADD TO CONTEXT
-                    m_context->add(QSet<u32>(), gates, nets); // EMPTY SET DEBUG CODE
-                    update_necessary = true;
+                    g_selection_relay.clear();
+                    g_selection_relay.m_selected_nets.insert(n->get_id());
+                    g_selection_relay.m_focus_type = selection_relay::item_type::net;
+                    g_selection_relay.m_focus_id   = n->get_id();
+                    g_selection_relay.relay_selection_changed(nullptr);
                 }
-                // SELECT IN RELAY
-                g_selection_relay.m_selected_gates[0] = n->get_src().get_gate()->get_id();
-                g_selection_relay.m_number_of_selected_gates = 1;
-                g_selection_relay.m_focus_id = n->get_src().get_gate()->get_id();
-                g_selection_relay.m_focus_type = selection_relay::item_type::gate;
-                g_selection_relay.m_subfocus = selection_relay::subfocus::right;
-                g_selection_relay.m_subfocus_index = 0;
-
-                g_selection_relay.relay_selection_changed(nullptr);
+                else
+                {
+                    handle_navigation_jump_requested(hal::node{hal::node_type::gate, g->get_id()}, n->get_id(), {n->get_src().get_gate()->get_id()});
+                }
             }
-            else
+            else if (g->get_input_pins().size())
             {
-                g_selection_relay.m_subfocus = selection_relay::subfocus::left;
+                g_selection_relay.m_subfocus       = selection_relay::subfocus::left;
                 g_selection_relay.m_subfocus_index = 0;
 
                 g_selection_relay.relay_subfocus_changed(nullptr);
             }
-        }
 
-        return;
-    }
-    case selection_relay::item_type::net:
-    {
-        std::shared_ptr<net> n = g_netlist->get_net_by_id(g_selection_relay.m_focus_id);
-
-        if (!n)
             return;
+        }
+        case selection_relay::item_type::net:
+        {
+            std::shared_ptr<net> n = g_netlist->get_net_by_id(g_selection_relay.m_focus_id);
 
-        return;
-    }
-    case selection_relay::item_type::module:
-    {
-        return;
-    }
+            if (!n)
+                return;
+
+            if (n->get_src().gate != nullptr)
+            {
+                handle_navigation_jump_requested(hal::node{hal::node_type::none, 0}, n->get_id(), {n->get_src().get_gate()->get_id()});
+            }
+
+            return;
+        }
+        case selection_relay::item_type::module:
+        {
+            return;
+        }
     }
 }
 
@@ -363,46 +355,76 @@ void graph_widget::handle_navigation_right_request()
 {
     switch (g_selection_relay.m_focus_type)
     {
-    case selection_relay::item_type::none:
-    {
-        return;
-    }
-    case selection_relay::item_type::gate:
-    {
-        std::shared_ptr<gate> g = g_netlist->get_gate_by_id(g_selection_relay.m_focus_id);
-
-        if (!g)
-            return;
-
-        if (g_selection_relay.m_subfocus == selection_relay::subfocus::right)
+        case selection_relay::item_type::none:
         {
-            m_navigation_widget->setup();
-            m_navigation_widget->setFocus();
-            m_overlay->show();
-        }
-        else
-        {
-            g_selection_relay.m_subfocus = selection_relay::subfocus::right;
-            g_selection_relay.m_subfocus_index = 0;
-
-            g_selection_relay.relay_subfocus_changed(nullptr);
-        }
-
-        return;
-    }
-    case selection_relay::item_type::net:
-    {
-        std::shared_ptr<net> n = g_netlist->get_net_by_id(g_selection_relay.m_focus_id);
-
-        if (!n)
             return;
+        }
+        case selection_relay::item_type::gate:
+        {
+            std::shared_ptr<gate> g = g_netlist->get_gate_by_id(g_selection_relay.m_focus_id);
 
-        return;
-    }
-    case selection_relay::item_type::module:
-    {
-        return;
-    }
+            if (!g)
+                return;
+
+            if (g_selection_relay.m_subfocus == selection_relay::subfocus::right)
+            {
+                auto n = g->get_fan_out_net(g->get_output_pins()[g_selection_relay.m_subfocus_index]);
+                if (n->get_num_of_dsts() == 0)
+                {
+                    g_selection_relay.clear();
+                    g_selection_relay.m_selected_nets.insert(n->get_id());
+                    g_selection_relay.m_focus_type = selection_relay::item_type::net;
+                    g_selection_relay.m_focus_id   = n->get_id();
+                    g_selection_relay.relay_selection_changed(nullptr);
+                }
+                else if (n->get_num_of_dsts() == 1)
+                {
+                    handle_navigation_jump_requested(hal::node{hal::node_type::gate, g->get_id()}, n->get_id(), {n->get_dsts()[0].get_gate()->get_id()});
+                }
+                else
+                {
+                    m_navigation_widget->setup();
+                    m_navigation_widget->setFocus();
+                    m_overlay->show();
+                }
+            }
+            else if (g->get_output_pins().size())
+            {
+                g_selection_relay.m_subfocus       = selection_relay::subfocus::right;
+                g_selection_relay.m_subfocus_index = 0;
+
+                g_selection_relay.relay_subfocus_changed(nullptr);
+            }
+
+            return;
+        }
+        case selection_relay::item_type::net:
+        {
+            std::shared_ptr<net> n = g_netlist->get_net_by_id(g_selection_relay.m_focus_id);
+
+            if (!n)
+                return;
+
+            if (n->get_num_of_dsts() == 0)
+                return;
+
+            if (n->get_num_of_dsts() == 1)
+            {
+                handle_navigation_jump_requested(hal::node{hal::node_type::none, 0}, n->get_id(), {n->get_dsts()[0].get_gate()->get_id()});
+            }
+            else
+            {
+                m_navigation_widget->setup();
+                m_navigation_widget->setFocus();
+                m_overlay->show();
+            }
+
+            return;
+        }
+        case selection_relay::item_type::module:
+        {
+            return;
+        }
     }
 }
 
@@ -420,97 +442,184 @@ void graph_widget::handle_navigation_down_request()
             g_selection_relay.navigate_down();
 }
 
-void graph_widget::handle_module_up_request()
+void graph_widget::handle_history_step_back_request()
 {
-    if (!m_context)
+    /*
+    if (m_context_history.empty())
         return;
 
-    // UNCERTAIN HOW TO HANDLE DYNAMIC CONTEXTS
-    u32 id = static_cast<module_context*>(m_context)->get_id();
-    std::shared_ptr<module> m = g_netlist->get_module_by_id(id);
+    auto entry = m_context_history.back();
+    m_context_history.pop_back();
 
-    if (!m)
-        return;
+    m_context->begin_change();
+    m_context->clear();
+    m_context->add(entry.m_modules, entry.m_gates);
+    m_context->end_change();
 
-    std::shared_ptr<module> p = m->get_parent_module();
+    qDebug() << "REMOVED context to history, full history:";
+    int i = 0;
 
-    if (!p)
-        return;
-
-    graph_context* context = g_graph_context_manager.get_module_context(p->get_id());
-
-    if (context)
-        change_context(context);
-}
-
-void graph_widget::handle_module_down_requested(const u32 id)
-{
-    graph_context* context = g_graph_context_manager.get_module_context(id);
-
-    if (context)
-        change_context(context);
-}
-
-void graph_widget::debug_module_one()
-{
-    // UNSUB FROM OLD CONTEXT
-    //disconnect(m_context, &graph_context::updating_scene, this, &graph_widget::handle_updating_scene);
-    //disconnect(m_context, &graph_context::scene_available, this, &graph_widget::handle_scene_available);
-
-    // SUB TO NEW CONTEXT
-    //connect(m_context, &graph_context::updating_scene, this, &graph_widget::handle_updating_scene);
-    //connect(m_context, &graph_context::scene_available, this, &graph_widget::handle_scene_available);
-
-    graph_context* context = g_graph_context_manager.get_module_context(1);
-
-    if (context)
-        change_context(context);
-}
-
-void graph_widget::debug_create_context()
-{
-    dynamic_context* context = g_graph_context_manager.add_dynamic_context("Debug", 1);
-
-    QSet<u32> gates;
-    QSet<u32> nets;
-
-    for (u32 i = 0; i < g_selection_relay.m_number_of_selected_gates; ++i)
-        gates.insert(g_selection_relay.m_selected_gates[i]);
-
-    for (u32 i = 0; i < g_selection_relay.m_number_of_selected_nets; ++i)
-        nets.insert(g_selection_relay.m_selected_nets[i]);
-
-    context->add(QSet<u32>(), gates, nets); // EMPTY SET DEBUG CODE
-}
-
-void graph_widget::debug_change_context()
-{
-    bool ok;
-    QString item = QInputDialog::getItem(this, "Debug", "Context:", g_graph_context_manager.dynamic_context_list(), 0, false, &ok);
-
-    if (ok && !item.isEmpty())
+    for (const context_history_entry& e : m_context_history)
     {
-        m_context = g_graph_context_manager.get_dynamic_context(item);
+        qDebug() << "Entry " + QString::number(i);
 
-        if (!m_context)
-            return;
+        QString modules = "Modules: " + QString::number(e.m_modules.size());
+        //        QString modules = "Modules: ";
+        //        for (u32 id : e.m_modules)
+        //            modules.append(QString::number(id) + ", ");
 
-        if (m_context->available())
-            m_view->setScene(m_context->scene());
+        qDebug() << modules;
+
+        QString gates = "Gates: " + QString::number(e.m_gates.size());
+        //        QString gates = "Gates: ";
+        //        for (u32 id : e.m_gates)
+        //            gates.append(QString::number(id) + ", ");
+
+        qDebug() << gates;
+
+        ++i;
     }
+
+    qDebug() << "-------------------------------------";
+    */
 }
 
-void graph_widget::change_context(graph_context* const context)
+void graph_widget::handle_enter_module_requested(const u32 id)
 {
-    if (!context)
-        return; // SHOULD NEVER BE REACHED
+    auto m = g_netlist->get_module_by_id(id);
+    if (m->get_gates().empty() && m->get_submodules().empty())
+    {
+        QMessageBox msg;
+        msg.setText("This module is empty.\nYou can't enter it.");
+        msg.setWindowTitle("Error");
+        msg.exec();
+        return;
+        // We would otherwise allow creation of a context with no gates, which
+        // is bad because that context won't react to any updates since empty
+        // contexts can't infer their corresponding module from their contents
+    }
+    
+    if (m_context->gates().isEmpty() && m_context->modules() == QSet<u32>({id}))
+    {
+        m_context->unfold_module(id);
+        return;
+    }
 
-    if (m_context)
-        m_context->unsubscribe(this);
+    QSet<u32> gate_ids;
+    QSet<u32> module_ids;
+    for (const auto& g : m->get_gates())
+    {
+        gate_ids.insert(g->get_id());
+    }
+    for (const auto& sm : m->get_submodules())
+    {
+        module_ids.insert(sm->get_id());
+    }
 
-    m_context = context;
-    m_context->subscribe(this);
+    for (const auto& ctx : g_graph_context_manager.get_contexts())
+    {
+        if ((ctx->gates().isEmpty() && ctx->modules() == QSet<u32>({id})) || (ctx->modules() == module_ids && ctx->gates() == gate_ids))
+        {
+            g_content_manager->get_graph_tab_widget()->show_context(ctx);
+            return;
+        }
+    }
 
-    if (!m_context->update_in_progress())
-        m_view->setScene(m_context->scene());
+    auto ctx = g_graph_context_manager.create_new_context(QString::fromStdString(m->get_name()));
+    ctx->add(module_ids, gate_ids);
+}
+
+void graph_widget::ensure_gates_visible(const QSet<u32> gates)
+{
+    if (m_context->scene_update_in_progress())
+        return;
+
+    int min_x = INT_MAX;
+    int min_y = INT_MAX;
+    int max_x = INT_MIN;
+    int max_y = INT_MIN;
+    for (auto id : gates)
+    {
+        auto rect = m_context->scene()->get_gate_item(id)->sceneBoundingRect();
+
+        min_x = std::min(min_x, (int)rect.left());
+        max_x = std::max(max_x, (int)rect.right());
+        min_y = std::min(min_y, (int)rect.top());
+
+        max_y = std::max(max_y, (int)rect.bottom());
+    }
+    auto targetRect = QRectF(min_x, min_y, max_x-min_x, max_y-min_y).marginsAdded(QMarginsF(20,20,20,20));
+    
+    // FIXME This breaks as soon as the layouter call that preceded the call to this function
+    // changed the scene size. If that happens, mapToScene thinks that the view is looking at (0,0)
+    // and the animation jumps to (0,0) before moving to the correct target.
+    auto currentRect = m_view->mapToScene(m_view->viewport()->geometry()).boundingRect(); // this has incorrect coordinates
+    
+    auto centerFix = targetRect.center();
+    targetRect.setWidth(std::max(targetRect.width(), currentRect.width()));
+    targetRect.setHeight(std::max(targetRect.height(), currentRect.height()));
+    targetRect.moveCenter(centerFix);
+
+    //qDebug() << currentRect;
+
+    auto anim = new QVariantAnimation();
+    anim->setDuration(1000);
+    anim->setStartValue(currentRect);
+    anim->setEndValue(targetRect);
+    // FIXME fitInView miscalculates the scale required to actually fit the rect into the viewport,
+    // so that every time fitInView is called this will cause the scene to scale down by a very tiny amount.
+    connect(anim, &QVariantAnimation::valueChanged, [=](const QVariant& value) { m_view->fitInView(value.toRectF(), Qt::KeepAspectRatio); });
+
+    anim->start(QAbstractAnimation::DeleteWhenStopped);
+}
+
+void graph_widget::add_context_to_history()
+{
+    /*context_history_entry entry;
+
+    entry.m_modules = m_context->modules();
+    entry.m_gates   = m_context->gates();
+
+    m_context_history.push_back(entry);
+
+    while (m_context_history.size() > 10)
+    {
+        m_context_history.pop_front();
+    }
+
+    qDebug() << "ADDED context to history, full history:";
+    int i = 0;
+
+    for (const context_history_entry& e : m_context_history)
+    {
+        qDebug() << "Entry " + QString::number(i);
+
+        QString modules = "Modules: " + QString::number(e.m_modules.size());
+        //        QString modules = "Modules: ";
+        //        for (u32 id : e.m_modules)
+        //            modules.append(QString::number(id) + ", ");
+
+        qDebug() << modules;
+
+        QString gates = "Gates: " + QString::number(e.m_gates.size());
+        //        QString gates = "Gates: ";
+        //        for (u32 id : e.m_gates)
+        //            gates.append(QString::number(id) + ", ");
+
+        qDebug() << gates;
+
+        ++i;
+    }
+
+    qDebug() << "-------------------------------------";*/
+}
+
+void graph_widget::reset_focus()
+{
+    m_view->setFocus();
+}
+
+graph_graphics_view* graph_widget::view()
+{
+    return m_view;
 }

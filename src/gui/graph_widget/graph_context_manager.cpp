@@ -1,125 +1,251 @@
 #include "gui/graph_widget/graph_context_manager.h"
 
-#include "gui/graph_widget/contexts/dynamic_context.h"
-#include "gui/graph_widget/contexts/module_context.h"
-#include "gui/gui_globals.h"
+#include "netlist/gate.h"
+#include "netlist/module.h"
+#include "netlist/netlist.h"
 
-static const int max_module_contexts = 10; // USE SETTINGS FOR THIS
+#include "gui/graph_widget/contexts/graph_context.h"
+#include "gui/graph_widget/layouters/physical_graph_layouter.h"
+#include "gui/graph_widget/layouters/standard_graph_layouter.h"
+#include "gui/graph_widget/shaders/module_shader.h"
+#include "gui/gui_globals.h"
 
 graph_context_manager::graph_context_manager()
 {
-
 }
 
-module_context* graph_context_manager::get_module_context(const u32 id)
+graph_context* graph_context_manager::create_new_context(const QString& name)
 {
-    for (module_context* c : m_module_contexts)
-        if (c->get_id() == id)
-            return c;
-
-    std::shared_ptr<module> m = g_netlist->get_module_by_id(id);
-    if (!m)
-        return nullptr;
-
-    module_context* c = new module_context(m);
-    m_module_contexts.append(c); // USE LRU
-    return c;
-}
-
-dynamic_context* graph_context_manager::add_dynamic_context(const QString& name, const u32 scope)
-{
-    dynamic_context* context = new dynamic_context(name, scope);
-    m_dynamic_contexts.append(context);
+    graph_context* context = new graph_context(name);
+    context->set_layouter(get_default_layouter(context));
+    context->set_shader(get_default_shader(context));
+    m_graph_contexts.append(context);
+    Q_EMIT context_created(context);
     return context;
 }
 
-dynamic_context* graph_context_manager::get_dynamic_context(const QString& name)
+void graph_context_manager::rename_graph_context(graph_context* ctx, const QString& new_name)
 {
-    for (dynamic_context* context : m_dynamic_contexts)
-        if (context->name() == name)
-            return context;
+    ctx->m_name = new_name;
 
-    return nullptr;
+    Q_EMIT context_renamed(ctx);
 }
 
-QStringList graph_context_manager::dynamic_context_list() const
+void graph_context_manager::delete_graph_context(graph_context* ctx)
 {
-    QStringList list;
+    Q_EMIT deleting_context(ctx);
+    m_graph_contexts.remove(m_graph_contexts.indexOf(ctx));
+    delete ctx;
+}
 
-    for (dynamic_context* context : m_dynamic_contexts)
-        list.append(context->name());
+QVector<graph_context*> graph_context_manager::get_contexts() const
+{
+    return m_graph_contexts;
+}
 
-    return list;
+bool graph_context_manager::context_with_name_exists(const QString& name) const
+{
+    for (const auto& ctx : m_graph_contexts)
+    {
+        if (ctx->name() == name)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+void graph_context_manager::handle_module_removed(const std::shared_ptr<module> m)
+{
+    for (graph_context* context : m_graph_contexts)
+        if (context->modules().contains(m->get_id()))
+            context->remove({m->get_id()}, {});
+}
+
+void graph_context_manager::handle_module_name_changed(const std::shared_ptr<module> m) const
+{
+    for (graph_context* context : m_graph_contexts)
+        if (context->modules().contains(m->get_id()))
+            context->schedule_scene_update();
+}
+
+void graph_context_manager::handle_module_color_changed(const std::shared_ptr<module> m) const
+{
+    auto gates = m->get_gates();
+    QSet<u32> gateIDs;
+    for (auto g : gates)
+        gateIDs.insert(g->get_id());
+    for (graph_context* context : m_graph_contexts)
+        if (context->modules().contains(m->get_id()) // contains module
+            || context->gates().intersects(gateIDs)) // contains gate from module
+            context->schedule_scene_update();
+    // a context can contain a gate from a module if it is showing the module
+    // or if it's showing a parent and the module is unfolded
 }
 
 void graph_context_manager::handle_module_submodule_added(const std::shared_ptr<module> m, const u32 added_module) const
 {
-    // DEBUG IMPLEMENTATION
+    for (graph_context* context : m_graph_contexts)
+        if (context->is_showing_module(m->get_id(), {added_module}, {}, {}, {}))
+            context->add({added_module}, {});
+}
 
-    for (module_context* context : m_module_contexts)
-        if (context->get_id() == m->get_id())
+void graph_context_manager::handle_module_submodule_removed(const std::shared_ptr<module> m, const u32 removed_module)
+{
+    // FIXME this also triggers on module deletion (not only moving)
+    // and collides with handle_module_removed
+    for (graph_context* context : m_graph_contexts)
+        if (context->is_showing_module(m->get_id(), {}, {}, {removed_module}, {}))
         {
-            context->add(QSet<u32>{added_module}, QSet<u32>(), QSet<u32>());
-            break;
+            context->remove({removed_module}, {});
+            if (context->empty())
+            {
+                delete_graph_context(context);
+            }
         }
 }
 
-void graph_context_manager::handle_module_submodule_removed(const std::shared_ptr<module> m, const u32 removed_module) const
+void graph_context_manager::handle_module_gate_assigned(const std::shared_ptr<module> m, const u32 inserted_gate) const
 {
-    // DEBUG IMPLEMENTATION
+    for (graph_context* context : m_graph_contexts)
+        if (context->is_showing_module(m->get_id(), {}, {inserted_gate}, {}, {}))
+            context->add({}, {inserted_gate});
+}
 
-    for (module_context* context : m_module_contexts)
-        if (context->get_id() == m->get_id())
+void graph_context_manager::handle_module_gate_removed(const std::shared_ptr<module> m, const u32 removed_gate)
+{
+    for (graph_context* context : m_graph_contexts)
+    {
+        if (context->is_showing_module(m->get_id(), {}, {}, {}, {removed_gate}))
         {
-            context->remove(QSet<u32>{removed_module}, QSet<u32>(), QSet<u32>());
-            break;
+            context->remove({}, {removed_gate});
+            if (context->empty())
+            {
+                delete_graph_context(context);
+            }
+        }
+        // if a module is unfolded, then the gate is not deleted from the view
+        // but the color of the gate changes to its new parent's color
+        else if (context->gates().contains(removed_gate))
+            context->schedule_scene_update();
+    }
+}
+
+void graph_context_manager::handle_gate_name_changed(const std::shared_ptr<gate> g) const
+{
+    for (graph_context* context : m_graph_contexts)
+        if (context->gates().contains(g->get_id()))
+            context->schedule_scene_update();
+}
+
+void graph_context_manager::handle_net_created(const std::shared_ptr<net> n) const
+{
+    Q_UNUSED(n)
+
+    // CAN NETS BE CREATED WITH SRC AND DST INFORMATION ?
+    // IF NOT THIS EVENT DOESNT NEED TO BE HANDLED
+}
+
+void graph_context_manager::handle_net_removed(const std::shared_ptr<net> n) const
+{
+    for (graph_context* context : m_graph_contexts)
+        if (context->nets().contains(n->get_id()))
+            context->schedule_scene_update();
+}
+
+void graph_context_manager::handle_net_name_changed(const std::shared_ptr<net> n) const
+{
+    Q_UNUSED(n)
+
+    // TRIGGER RESHADE FOR ALL CONTEXTS THAT RECURSIVELY CONTAIN THE NET
+}
+
+void graph_context_manager::handle_net_src_changed(const std::shared_ptr<net> n) const
+{
+    for(graph_context* context : m_graph_contexts)
+    {
+        if(context->nets().contains(n->get_id()) || (context->is_showing_net_src(n->get_id()) && (n->is_global_output_net() || context->is_showing_net_dst(n->get_id()))))
+        {
+            context->apply_changes();
+            context->schedule_scene_update();
+        }
+    }
+}
+
+void graph_context_manager::handle_net_dst_added(const std::shared_ptr<net> n, const u32 dst_gate_id) const
+{
+    Q_UNUSED(dst_gate_id);
+    for(graph_context* context : m_graph_contexts)
+    {
+        if(context->nets().contains(n->get_id()) || (context->is_showing_net_dst(n->get_id()) && (n->is_global_input_net() || context->is_showing_net_src(n->get_id()))))
+        {
+            context->apply_changes();
+            context->schedule_scene_update();
+        }
+    }
+}
+
+void graph_context_manager::handle_net_dst_removed(const std::shared_ptr<net> n, const u32 dst_gate_id) const
+{
+    Q_UNUSED(dst_gate_id)
+
+    for (graph_context* context : m_graph_contexts)
+        if (context->nets().contains(n->get_id()))
+            context->schedule_scene_update();
+}
+
+void graph_context_manager::handle_marked_global_input(u32 net_id)
+{
+    for(graph_context* context : m_graph_contexts)
+    {
+        if(context->nets().contains(net_id) || context->is_showing_net_dst(net_id))
+        {
+            context->apply_changes();
+            context->schedule_scene_update();
+        }
+    }
+}
+
+void graph_context_manager::handle_marked_global_output(u32 net_id)
+{
+    for(graph_context* context : m_graph_contexts)
+    {
+        if(context->nets().contains(net_id) || context->is_showing_net_src(net_id))
+        {
+            context->apply_changes();
+            context->schedule_scene_update();
+        }
+    }
+}
+
+void graph_context_manager::handle_unmarked_global_input(u32 net_id)
+{
+    for (graph_context* context : m_graph_contexts)
+        if (context->nets().contains(net_id))
+        {
+            context->apply_changes();
+            context->schedule_scene_update();
         }
 }
 
-void graph_context_manager::handle_module_gate_inserted(const std::shared_ptr<module> m, const u32 inserted_gate) const
+void graph_context_manager::handle_unmarked_global_output(u32 net_id)
 {
-    // DEBUG IMPLEMENTATION
-
-    for (module_context* context : m_module_contexts)
-        if (context->get_id() == m->get_id())
+    for (graph_context* context : m_graph_contexts)
+        if (context->nets().contains(net_id))
         {
-            context->add(QSet<u32>(), QSet<u32>{inserted_gate}, QSet<u32>());
-            break;
+            context->apply_changes();
+            context->schedule_scene_update();
         }
 }
 
-void graph_context_manager::handle_module_gate_removed(const std::shared_ptr<module> m, const u32 removed_gate) const
+graph_layouter* graph_context_manager::get_default_layouter(graph_context* const context) const
 {
-    // DEBUG IMPLEMENTATION
-
-    for (module_context* context : m_module_contexts)
-        if (context->get_id() == m->get_id())
-        {
-            context->remove(QSet<u32>(), QSet<u32>{removed_gate}, QSet<u32>());
-            break;
-        }
+    // USE SETTINGS + FACTORY
+    return new standard_graph_layouter(context);
 }
 
-void graph_context_manager::handle_module_net_inserted(const std::shared_ptr<module> m, const u32 inserted_net) const
+graph_shader* graph_context_manager::get_default_shader(graph_context* const context) const
 {
-    // DEBUG IMPLEMENTATION
-
-    for (module_context* context : m_module_contexts)
-        if (context->get_id() == m->get_id())
-        {
-            context->add(QSet<u32>(), QSet<u32>(), QSet<u32>{inserted_net});
-            break;
-        }
-}
-
-void graph_context_manager::handle_module_net_removed(const std::shared_ptr<module> m, const u32 removed_net) const
-{
-    // DEBUG IMPLEMENTATION
-
-    for (module_context* context : m_module_contexts)
-        if (context->get_id() == m->get_id())
-        {
-            context->remove(QSet<u32>(), QSet<u32>(), QSet<u32>{removed_net});
-            break;
-        }
+    // USE SETTINGS + FACTORY
+    return new module_shader(context);
 }

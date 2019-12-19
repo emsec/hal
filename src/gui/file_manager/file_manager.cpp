@@ -6,6 +6,7 @@
 #include "netlist/netlist.h"
 #include "netlist/netlist_factory.h"
 #include "netlist/persistent/netlist_serializer.h"
+#include "netlist/event_system/event_controls.h"
 
 #include "gui/gui_globals.h"
 
@@ -13,12 +14,21 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QFileSystemWatcher>
+#include <QGridLayout>
 #include <QInputDialog>
 #include <QMessageBox>
+#include <QPushButton>
+#include <QSpacerItem>
 #include <QTextStream>
 
 file_manager::file_manager(QObject* parent) : QObject(parent), m_file_watcher(new QFileSystemWatcher(this)), m_file_open(false)
 {
+    m_autosave_enabled  = g_settings_manager.get("advanced/autosave").toBool();
+    m_autosave_interval = g_settings_manager.get("advanced/autosave_interval").toInt();
+    if (m_autosave_interval < 30) // failsafe in case somebody sets "0" in the .ini
+        m_autosave_interval = 30;
+    connect(&g_settings_relay, &settings_relay::setting_changed, this, &file_manager::handle_global_setting_changed);
+
     connect(m_file_watcher, &QFileSystemWatcher::fileChanged, this, &file_manager::handle_file_changed);
     connect(m_file_watcher, &QFileSystemWatcher::directoryChanged, this, &file_manager::handle_directory_changed);
     m_timer = new QTimer(this);
@@ -48,9 +58,11 @@ bool file_manager::file_open() const
 
 void file_manager::autosave()
 {
-    log_info("gui", "saving a backup in case something goes wrong...");
-
-    netlist_serializer::serialize_to_file(g_netlist, m_shadow_file_name.toStdString());
+    if (!m_shadow_file_name.isEmpty() && m_autosave_enabled)
+    {
+        log_info("gui", "saving a backup in case something goes wrong...");
+        netlist_serializer::serialize_to_file(g_netlist, m_shadow_file_name.toStdString());
+    }
 }
 
 QString file_manager::file_name() const
@@ -61,19 +73,51 @@ QString file_manager::file_name() const
     return QString();
 }
 
+void file_manager::watch_file(const QString& file_name)
+{
+    if (file_name == m_file_name)
+    {
+        return;
+    }
+
+    if (!m_file_name.isEmpty())
+    {
+        m_file_watcher->removePath(m_file_name);
+        remove_shadow_file();
+    }
+
+    m_timer->stop();
+
+    if (!file_name.isEmpty())
+    {
+        log_info("gui", "watching current file '{}'", file_name.toStdString());
+
+        // autosave periodically
+        // (we also start the timer if autosave is disabled since it's way
+        // easier to just do nothing when the timer fires instead of messing
+        // with complicated start/stop conditions)
+        m_timer->start(m_autosave_interval * 1000);
+
+        m_file_name        = file_name;
+        m_shadow_file_name = get_shadow_file(file_name);
+        m_file_watcher->addPath(m_file_name);
+        m_file_open = true;
+        update_recent_files(m_file_name);
+    }
+}
+
 void file_manager::file_successfully_loaded(QString file_name)
 {
-    // autosave every 60s
-    m_timer->start(60 * 1000);
-
-    m_file_name        = file_name;
-    m_shadow_file_name = get_shadow_file(file_name);
-    m_file_watcher->addPath(m_file_name);
-    m_file_open = true;
-    update_recent_files(m_file_name);
-    g_python_context = std::make_unique<python_context>();    // HANDLE PYTHON CONTEXT SEPARATELY
-    g_selection_relay.init();
+    watch_file(file_name);
     Q_EMIT file_opened(m_file_name);
+}
+
+void file_manager::remove_shadow_file()
+{
+    if (QFileInfo::exists(m_shadow_file_name) && QFileInfo(m_shadow_file_name).isFile())
+    {
+        QFile(m_shadow_file_name).remove();
+    }
 }
 
 QString file_manager::get_shadow_file(QString file)
@@ -115,15 +159,28 @@ void file_manager::open_file(QString file_name)
 
         if (QFileInfo::exists(hal_file_name) && QFileInfo(hal_file_name).isFile())
         {
-            QMessageBox msgBox(QMessageBox::Question, "Resume previous work", "A .hal file exists for the selected netlist.", QMessageBox::Ok | QMessageBox::Close);
+            QMessageBox msgBox;
+            msgBox.setIcon(QMessageBox::Question);
+            msgBox.setWindowTitle("Resume previous work");
+            msgBox.setText("A .hal file exists for the selected netlist.");
+            auto parse_hal_btn = msgBox.addButton("Load .hal file", QMessageBox::ActionRole);
+            auto parse_hdl_btn = msgBox.addButton("Parse " + extension + " file", QMessageBox::ActionRole);
+            msgBox.addButton("Abort", QMessageBox::RejectRole);
 
-            msgBox.setButtonText(QMessageBox::Ok, "Load .hal file");
-            msgBox.setButtonText(QMessageBox::Close, "Parse " + extension + " file");
+            QSpacerItem* horizontalSpacer = new QSpacerItem(500, 0, QSizePolicy::Minimum, QSizePolicy::Expanding);
+            QGridLayout* layout           = (QGridLayout*)msgBox.layout();
+            layout->addItem(horizontalSpacer, layout->rowCount(), 0, 1, layout->columnCount());
 
-            if (msgBox.exec() == QMessageBox::Ok)
+            msgBox.exec();
+
+            if (msgBox.clickedButton() == (QAbstractButton*)parse_hal_btn)
             {
                 file_name         = hal_file_name;
                 logical_file_name = hal_file_name;
+            }
+            else if (msgBox.clickedButton() != (QAbstractButton*)parse_hdl_btn)
+            {
+                return;
             }
         }
     }
@@ -160,7 +217,9 @@ void file_manager::open_file(QString file_name)
 
     if (file_name.endsWith(".hal"))
     {
+        event_controls::enable_all(false);
         std::shared_ptr<netlist> netlist = netlist_factory::load_netlist(file_name.toStdString());
+        event_controls::enable_all(true);
         if (netlist)
         {
             g_netlist = netlist;
@@ -197,7 +256,9 @@ void file_manager::open_file(QString file_name)
         std::string lib = key.first;
 
         log_info("gui", "Trying to use gate library '{}'...", lib);
+        event_controls::enable_all(false);
         std::shared_ptr<netlist> netlist = netlist_factory::load_netlist(file_name.toStdString(), language.toStdString(), lib);
+        event_controls::enable_all(true);
 
         if (netlist)
         {
@@ -267,10 +328,7 @@ void file_manager::close_file()
     m_file_name = "";
     m_file_open = false;
 
-    if (QFileInfo::exists(m_shadow_file_name) && QFileInfo(m_shadow_file_name).isFile())
-    {
-        QFile(m_shadow_file_name).remove();
-    }
+    remove_shadow_file();
 
     Q_EMIT file_closed();
 }
@@ -283,6 +341,29 @@ void file_manager::handle_file_changed(const QString& path)
 void file_manager::handle_directory_changed(const QString& path)
 {
     Q_EMIT file_directory_changed(path);
+}
+
+void file_manager::handle_global_setting_changed(void* sender, const QString& key, const QVariant& value)
+{
+    Q_UNUSED(sender);
+    if (key == "advanced/autosave")
+    {
+        m_autosave_enabled = value.toBool();
+        if (m_timer->isActive())
+        {
+            // restart timer so the interval starts NOW
+            m_timer->start(m_autosave_interval * 1000);
+        }
+    }
+    else if (key == "advanced/autosave_interval")
+    {
+        m_autosave_interval = value.toInt();
+        if (m_timer->isActive())
+        {
+            // restart timer with new interval
+            m_timer->start(m_autosave_interval * 1000);
+        }
+    }
 }
 
 void file_manager::update_recent_files(const QString& file) const

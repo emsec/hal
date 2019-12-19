@@ -21,9 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#include "pragma_once.h"
-#ifndef __HAL_ENDPOINT_H__
-#define __HAL_ENDPOINT_H__
+#pragma once
 
 #include "def.h"
 
@@ -128,5 +126,3 @@ struct endpoint
         endpoint::pin_type = type;
     }
 };
-
-#endif /* __HAL_ENDPOINT_H__ */

@@ -21,9 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#include "pragma_once.h"
-#ifndef __HAL_INTERFACE_GUI_H__
-#define __HAL_INTERFACE_GUI_H__
+#pragma once
 
 #include "def.h"
 
@@ -38,10 +36,7 @@
 class CORE_API i_interactive_ui : virtual public i_base
 {
 public:
-    /** constructor (= default) */
     i_interactive_ui() = default;
-
-    /** virtual destructor (= default) */
     virtual ~i_interactive_ui() = default;
 
     /**
@@ -52,5 +47,3 @@ public:
      */
     virtual bool exec(program_arguments& args) = 0;
 };
-
-#endif /* __HAL_INTERFACE_GUI_H__ */

@@ -21,9 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#include "pragma_once.h"
-#ifndef __HAL_PLUGIN_PYTHON_SHELL_H__
-#define __HAL_PLUGIN_PYTHON_SHELL_H__
+#pragma once
 
 #include "core/interface_interactive_ui.h"
 
@@ -43,21 +41,14 @@ public:
      *
      * @returns Plugin name.
      */
-    std::string get_name() override;
+    std::string get_name() const override;
 
     /**
      * Get the version of the plugin.
      *
      * @returns Plugin version.
      */
-    std::string get_version() override;
-
-    /**
-     * Get the plugin types.
-     *
-     * @returns Set of types.
-     */
-    std::set<interface_type> get_type() override;
+    std::string get_version() const override;
 
     /**
      * Excutes the plugin with given command line parameters.
@@ -67,5 +58,3 @@ public:
      */
     bool exec(program_arguments& args) override;
 };
-
-#endif /* __HAL_PLUGIN_HELLOWORLD__ */

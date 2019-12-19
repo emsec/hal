@@ -51,7 +51,7 @@ public:
     void forward_error(const QString& output);
 
     void forward_clear();
-    
+
     void forward_reset();
 
     void set_console(python_console* console);
@@ -71,16 +71,18 @@ public:
     //    void write_history_file(const QString& file);
     void init_python();
     void close_python();
+    
+    void update_netlist();
 
 private:
-    void initialize_context(py::dict *context);
-    
+    void initialize_context(py::dict* context);
+
     void handle_reset();
 
     // these have to be pointers, otherwise they are destructed after py::finalize_interpreter and segfault
     // only one object for global and local is needed, as for the console we run it always in global scope wher globals() == locals()
     py::dict* m_context;
-    
+
     python_context_subscriber* m_sender;
 
     std::string m_history_file;

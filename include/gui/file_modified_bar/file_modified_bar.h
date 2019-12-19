@@ -1,6 +1,8 @@
 #ifndef FILE_MODIFIED_BAR_H
 #define FILE_MODIFIED_BAR_H
 
+#include "gui_def.h"
+
 #include <QFrame>
 #include <QHBoxLayout>
 #include <QLabel>

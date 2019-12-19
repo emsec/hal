@@ -26,14 +26,19 @@
 
 #include "def.h"
 
+#include "gui/gui_globals.h"
+#include "gui/gui_def.h"
 #include "gui/content_widget/content_widget.h"
 #include "gui/graph_widget/contexts/graph_context_subscriber.h"
+
+#include <deque>
 
 class dialog_overlay;
 class cone_layouter;
 class graph_context;
 class graph_graphics_view;
 class graph_layout_progress_widget;
+class graph_layout_spinner_widget;
 class graph_navigation_widget;
 
 class graph_widget : public content_widget, public graph_context_subscriber
@@ -41,20 +46,28 @@ class graph_widget : public content_widget, public graph_context_subscriber
     Q_OBJECT
 
 public:
-    graph_widget(QWidget* parent = nullptr);
+    graph_widget(graph_context* context, QWidget* parent = nullptr);
 
-    virtual void setup_toolbar(toolbar* toolbar) Q_DECL_OVERRIDE;
+    graph_context* get_context() const;
 
     virtual void handle_scene_available() Q_DECL_OVERRIDE;
     virtual void handle_scene_unavailable() Q_DECL_OVERRIDE;
     virtual void handle_context_about_to_be_deleted() Q_DECL_OVERRIDE;
 
+    virtual void handle_status_update(const int percent) Q_DECL_OVERRIDE;
+    virtual void handle_status_update(const QString& message) Q_DECL_OVERRIDE;
+
+    graph_graphics_view* view();
+
+    void add_context_to_history();
+
 protected:
     void keyPressEvent(QKeyEvent* event) Q_DECL_OVERRIDE;
 
 private Q_SLOTS:
-    void handle_navigation_jump_requested(const u32 from_gate, const u32 via_net, const u32 to_gate);
+    void handle_navigation_jump_requested(const hal::node origin, const u32 via_net, const QSet<u32>& to_gates);
     void handle_module_double_clicked(const u32 id);
+    void reset_focus();
 
 private:
     void handle_navigation_left_request();
@@ -62,17 +75,18 @@ private:
     void handle_navigation_up_request();
     void handle_navigation_down_request();
 
-    void handle_module_up_request();
-    void handle_module_down_requested(const u32 id);
+    void handle_history_step_back_request();
+    void handle_enter_module_requested(const u32 id);
 
-    void debug_module_one();
-    void debug_create_context();
-    void debug_change_context();
+    void ensure_gates_visible(const QSet<u32> gates);
 
-    void change_context(graph_context* const context);
+    struct context_history_entry
+    {
+        QSet<u32> m_modules;
+        QSet<u32> m_gates;
+    };
 
-    void handle_updating_scene();
-    //void handle_scene_available();
+    std::deque<context_history_entry> m_context_history;
 
     graph_graphics_view* m_view;
     graph_context* m_context;
@@ -80,8 +94,9 @@ private:
     dialog_overlay* m_overlay;
     graph_navigation_widget* m_navigation_widget;
     graph_layout_progress_widget* m_progress_widget;
+    graph_layout_spinner_widget* m_spinner_widget;
 
     u32 m_current_expansion;
 };
 
-#endif // GRAPH_WIDGET_H
+#endif    // GRAPH_WIDGET_H

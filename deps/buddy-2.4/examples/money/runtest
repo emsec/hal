@@ -1,3 +1,0 @@
-#!/bin/tcsh -f
-
-./money | egrep -v '^Garbage collection' >> result

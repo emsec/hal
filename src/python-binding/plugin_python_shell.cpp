@@ -7,20 +7,19 @@
 #include <Python.h>
 #include <cstring>
 
-std::string plugin_python_shell::get_name()
+extern std::shared_ptr<i_base> get_plugin_instance()
+{
+    return std::dynamic_pointer_cast<i_base>(std::make_shared<plugin_python_shell>());
+}
+
+std::string plugin_python_shell::get_name() const
 {
     return std::string("python shell");
 }
 
-std::string plugin_python_shell::get_version()
+std::string plugin_python_shell::get_version() const
 {
     return std::string("0.1");
-}
-
-std::set<interface_type> plugin_python_shell::get_type()
-{
-    std::set<interface_type> types = {interface_type::base, interface_type::interactive_ui};
-    return types;
 }
 
 bool plugin_python_shell::exec(program_arguments& args)

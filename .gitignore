@@ -123,3 +123,8 @@ ui_*.h
 
 # QtCtreator CMake
 CMakeLists.txt.user*
+
+Testing
+tools/__pycache__/
+
+.envrc

@@ -43,6 +43,9 @@ public:
     QString file_name() const;
     bool file_open() const;
 
+    void watch_file(const QString& file_name);
+
+
 Q_SIGNALS:
     void file_opened(const QString& file_name);
     void file_changed(const QString& path);
@@ -57,6 +60,7 @@ public Q_SLOTS:
 private Q_SLOTS:
     void handle_file_changed(const QString& path);
     void handle_directory_changed(const QString& path);
+    void handle_global_setting_changed(void* sender, const QString& key, const QVariant& value);
 
 private:
     file_manager(QObject* parent = nullptr);
@@ -64,12 +68,15 @@ private:
     void update_recent_files(const QString& file) const;
     void display_error_message(QString error_message);
     QString get_shadow_file(QString file);
+    void remove_shadow_file();
 
     QString m_file_name;
     QString m_shadow_file_name;
     QFileSystemWatcher* m_file_watcher;
     bool m_file_open;
     QTimer* m_timer;
+    bool m_autosave_enabled;
+    int m_autosave_interval;
 };
 
 #endif // FILE_MANAGER_H

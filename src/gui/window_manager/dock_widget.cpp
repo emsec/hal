@@ -81,6 +81,7 @@ void dock_widget::init_drag(const QPoint& pos, bool nca)
 
 void dock_widget::start_drag(bool group)
 {
+    Q_UNUSED(group);
     if (!m_drag_state || m_drag_state->dragging)
         return;
 
@@ -99,6 +100,7 @@ void dock_widget::start_drag(bool group)
 
 void dock_widget::end_drag(bool abort)
 {
+    Q_UNUSED(abort);
     releaseMouse();
 
 //    if (m_drag_state->dragging)

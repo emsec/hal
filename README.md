@@ -16,6 +16,7 @@ Apart from multiple research projects, HAL is also used in our university lectur
 - A feature-rich GUI allowing for visual netlist inspection and interactive analysis
 - An integrated Python shell to exploratively interact with netlist elements and to interface plugins from the GUI
 - **Update v1.1.0** Support for Xilinx Unisim, Xilinx Simprim, Synopsys 90nm, GSCLIB 3.0 and UMC 0.18µm libraries is now added
+- **Update v2.0.0** Added Isolation View to view only a subset of Gates in one view.
 
 ## API Documentation
 
@@ -40,7 +41,7 @@ qm_plugin = libquine_mccluskey.quine_mccluskey()
 for gate in netlist.get_gates():
     if "LUT" in gate.type:
         print(gate.name + " (id "+str(gate.id) + ", type " + gate.type + ")")
-        print("  " + str(len(gate.input_pin_types)) + "-to-" + str(len(gate.output_pin_types)) + " LUT")
+        print("  " + str(len(gate.input_pins)) + "-to-" + str(len(gate.output_pins)) + " LUT")
         boolean_functions = qm_plugin.get_boolean_function_str(gate, False)
         for pin in boolean_functions:
             print("  " + pin + ": "+boolean_functions[pin])

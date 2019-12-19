@@ -29,11 +29,16 @@
 #include "netlist_relay/netlist_relay.h"
 
 #include <QWidget>
+#include <QTreeView>
+#include "selection_details_widget/tree_navigation/tree_module_model.h"
+#include "selection_details_widget/tree_navigation/tree_module_proxy_model.h"
 
 class module;
 
 class QVBoxLayout;
 class QLabel;
+class QTableWidget;
+class QTableWidgetItem;
 
 class module_details_widget : public QWidget
 {
@@ -44,13 +49,43 @@ public:
     void update(u32 module_id);
 
 public Q_SLOTS:
-    void handle_module_event(module_event_handler::event ev, std::shared_ptr<module> module, u32 associated_data);
+
+    void handle_selection_changed(void* sender);
+    void handle_searchbar_text_edited(const QString &text);
+
+    //relevant handler methods for net relay
+    void handle_module_name_changed(const std::shared_ptr<module> m);
+    void handle_module_gate_assigned(const std::shared_ptr<module> m, const u32 assigned_gate);
+    void handle_module_gate_removed(const std::shared_ptr<module> m, const u32 removed_gate);
+
+    void handle_gate_name_changed(const std::shared_ptr<gate> g);
+    void handle_gate_removed(const std::shared_ptr<gate> g);
+
+    void handle_net_removed(const std::shared_ptr<net> n);
+    void handle_net_name_changed(const std::shared_ptr<net> n);
+    void handle_net_src_changed(const std::shared_ptr<net> n);
+    void handle_net_dst_added(const std::shared_ptr<net> n, const u32 dst_gate_id);
+    void handle_net_dst_removed(const std::shared_ptr<net> n, const u32 dst_gate_id);
 
 private:
+
+    void toggle_searchbar();
+    void handle_tree_double_clicked(const QModelIndex &index);
+    void toggle_resize_columns();
+
     QVBoxLayout* m_content_layout;
-    QLabel* m_label;
 
     u32 m_current_id;
+    bool m_ignore_selection_change;
+
+    QTableWidget* m_general_table;
+    QTableWidgetItem* m_name_item;
+    QTableWidgetItem* m_id_item;
+    QTableWidgetItem* m_gates_count_item;
+
+    QTreeView* m_treeview;
+    tree_module_model* m_tree_module_model;
+    tree_module_proxy_model* m_tree_module_proxy_model;
 };
 
 #endif // MODULE_DETAILS_WIDGET_H

@@ -401,9 +401,18 @@ settings_widget {
     /*border-left : 5px solid #232ed1;*/
 }
 
+settings_widget[conflicts=true] {
+    border-left      : 5px solid #A61F1F;
+    background-color : rgb(70, 35, 35);
+}
+
+settings_widget[dirty=true][conflicts=false] {
+    border-left      : 5px solid rgb(73, 200, 76);
+}
+
 settings_widget QLabel {
     color            : #D3DCE6;
-    background-color : #25292D;
+    background-color : rgba(255, 255, 255, 0);
     margin-right     : 10px;
 }
 
@@ -424,6 +433,21 @@ settings_widget label_button {
     padding-left   : 14px;
     padding-right  : 14px;
     min-width      : 50px;
+}
+
+/* KEYBIND_EDIT */
+
+settings_widget keybind_edit QLineEdit {
+    border-radius: 2px;
+    margin-top: 8px;
+    margin-left: 0px;
+    padding: 4px;
+}
+
+settings_widget keybind_edit[validated=false] QLineEdit {
+    border: 1px solid red;
+    background-color: rgba(255, 13, 13, 0.281);
+    /*color: red;*/
 }
 
 /* MAIN_SETTINGS_WIDGET */
@@ -454,12 +478,24 @@ main_settings_widget settings_display * {
     border           : 1px solid #A9B7C6;
 }
 
+main_settings_widget preview_widget {
+    background-color: rgb(9, 11, 13);
+    border          : 2px solid rgb(73, 74, 76);
+    border-radius   : 8px;
+    margin-top      : 8px;
+    padding         : 5px 0;
+}
+
+main_settings_widget preview_widget *{
+    background-color: rgba(255, 255, 255, 0);
+}
+
 /* EXPANDING_LIST_WIDGET */
 
 main_settings_widget expanding_list_widget {
     border-right : 1px solid rgb(23, 26, 26);
-    min-width    : 200px;
-    max-width    : 200px;
+    min-width    : 250px;
+    max-width    : 250px;
 }
 
 main_settings_widget expanding_list_widget #content {
@@ -1295,7 +1331,7 @@ qproperty-save_icon_path: ":/icons/folder-down";
 qproperty-save_as_icon_style: "all->#3192C5";
 qproperty-save_as_icon_path: ":/icons/save-as";
 
-qproperty-run_icon_style: "all->#2BAD4A";
+qproperty-run_icon_style: "all->#30AC4F";
 qproperty-run_icon_path: ":/icons/run";
 
 qproperty-toggle_minimap_icon_style: "all->#FFDD00";
@@ -1306,17 +1342,34 @@ qproperty-new_file_icon_style: "";
 qproperty-new_file_icon_path: ":/icons/new-file";
 }
 
+context_manager_widget {
+qproperty-new_view_icon_style: "all->#30AC4F";
+qproperty-new_view_icon_path: ":/icons/plus";
+
+qproperty-rename_icon_style: "all->#3192C5";
+qproperty-rename_icon_path: ":/icons/pen";
+
+qproperty-duplicate_icon_style: "all->#30AC4F";
+qproperty-duplicate_icon_path: ":/icons/content";
+
+qproperty-delete_icon_style: "all->#A61F1F";
+qproperty-delete_icon_path: ":/icons/trashcan";
+}
+
 main_window {
+qproperty-new_file_icon_style: "";
+qproperty-new_file_icon_path: ":/icons/new-file";
+
 qproperty-open_icon_style: "all->#3192C5";
 qproperty-open_icon_path: ":/icons/folder";
 
 qproperty-save_icon_style: "all->#3192C5";
 qproperty-save_icon_path: ":/icons/folder-down";
 
-qproperty-schedule_icon_style: "all->#2BAD4A";
+qproperty-schedule_icon_style: "all->#30AC4F";
 qproperty-schedule_icon_path: ":/icons/list";
 
-qproperty-run_icon_style: "all->#2BAD4A";
+qproperty-run_icon_style: "all->#30AC4F";
 qproperty-run_icon_path: ":/icons/run";
 
 qproperty-content_icon_style: "all->#AFB1B3";
@@ -1420,6 +1473,11 @@ QTreeView::item:selected {
     background-color: green; /* Used on Windows ? TEST*/
     color: white;
     border: none;
+}
+
+QMenu::item:disabled{
+    /*background: #ffffff;*/
+    color: #777777;
 }
 
 /*

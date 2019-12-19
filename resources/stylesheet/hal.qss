@@ -367,6 +367,14 @@ settings_widget {
     /*border-left : 5px solid #232ed1;*/
 }
 
+settings_widget[conflicts=true] {
+    border-left      : 5px solid #A61F1F;
+}
+
+settings_widget[dirty=true][conflicts=false] {
+    border-left      : 5px solid rgb(73, 200, 76);
+}
+
 settings_widget QLabel {
     color            : #D3DCE6;
     background-color : #25292D;
@@ -390,6 +398,21 @@ settings_widget label_button {
     padding-left   : 14px;
     padding-right  : 14px;
     min-width      : 50px;
+}
+
+/* KEYBIND_EDIT */
+
+settings_widget keybind_edit QLineEdit {
+    border-radius: 2px;
+    margin-top: 8px;
+    margin-left: 0px;
+    padding: 4px;
+}
+
+settings_widget keybind_edit[validated=false] QLineEdit {
+    border: 1px solid red;
+    background-color: rgba(255, 13, 13, 0.281);
+    /*color: red;*/
 }
 
 /* MAIN_SETTINGS_WIDGET */
@@ -420,12 +443,22 @@ main_settings_widget settings_display * {
     border           : 1px solid green;
 }
 
+main_settings_widget preview_widget {
+    background-color: rgb(9, 11, 13);
+    border          : 5px solid rgb(13, 15, 17);
+    border-radius   : 15px;
+}
+
+main_settings_widget preview_widget *{
+    background-color: rgba(255, 255, 255, 0);
+}
+
 /* EXPANDING_LIST_WIDGET */
 
 main_settings_widget expanding_list_widget {
     border-right : 1px solid rgb(23, 26, 26);
-    min-width    : 200px;
-    max-width    : 200px;
+    min-width    : 250px;
+    max-width    : 250px;
 }
 
 main_settings_widget expanding_list_widget #content {

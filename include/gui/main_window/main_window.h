@@ -26,6 +26,7 @@
 
 #include "content_layout_area/content_layout_area.h"
 #include "core/program_options.h"
+#include "hal_action/hal_action.h"
 #include "plugin_manager/plugin_manager_widget.h"
 #include "plugin_manager/plugin_model.h"
 #include "settings/main_settings_widget.h"
@@ -51,6 +52,8 @@ class welcome_screen;
 class main_window : public QWidget
 {
     Q_OBJECT
+    Q_PROPERTY(QString new_file_icon_path READ new_file_icon_path WRITE set_new_file_icon_path)
+    Q_PROPERTY(QString new_file_icon_style READ new_file_icon_style WRITE set_new_file_icon_style)
     Q_PROPERTY(QString open_icon_path READ open_icon_path WRITE set_open_icon_path)
     Q_PROPERTY(QString open_icon_style READ open_icon_style WRITE set_open_icon_style)
     Q_PROPERTY(QString save_icon_path READ save_icon_path WRITE set_save_icon_path)
@@ -67,6 +70,9 @@ class main_window : public QWidget
 public:
     explicit main_window(QWidget* parent = nullptr);
     void add_content(content_widget* widget, int index, content_anchor anchor);
+
+    QString new_file_icon_path() const;
+    QString new_file_icon_style() const;
 
     QString open_icon_path() const;
     QString open_icon_style() const;
@@ -85,6 +91,10 @@ public:
 
     QString settings_icon_path() const;
     QString settings_icon_style() const;
+
+
+    void set_new_file_icon_path(const QString& path);
+    void set_new_file_icon_style(const QString &style);
 
     void set_open_icon_path(const QString& path);
     void set_open_icon_style(const QString& style);
@@ -111,12 +121,11 @@ public Q_SLOTS:
     void on_action_quit_triggered();
     void on_action_close_document_triggered();
     void run_plugin_triggered(const QString& name);
-    void debug_stuff();
-    void debug_stuff2();
-    void debug_stuff3();
     void toggle_schedule();
     void toggle_settings();
-    void show_layout_area();
+    void close_settings();
+
+    void handle_action_new();
     void handle_action_open();
     void handle_file_opened(const QString& file_name);
     void handle_save_triggered();
@@ -139,15 +148,16 @@ private:
     QToolBar* m_right_tool_bar;
     content_layout_area* m_layout_area;
 
-    QAction* m_action_open;
-    QAction* m_action_save;
-    QAction* m_action_save_as;
-    QAction* m_action_about;
-    QAction* m_action_schedule;
-    QAction* m_action_run_schedule;
-    QAction* m_action_content;
-    QAction* m_action_settings;
-    QAction* m_action_close;
+    hal_action* m_action_new;
+    hal_action* m_action_open;
+    hal_action* m_action_save;
+    hal_action* m_action_save_as;
+    hal_action* m_action_about;
+    hal_action* m_action_schedule;
+    hal_action* m_action_run_schedule;
+    hal_action* m_action_content;
+    hal_action* m_action_settings;
+    hal_action* m_action_close;
 
     QMenu* m_menu_file;
     QMenu* m_menu_edit;
@@ -157,7 +167,8 @@ private:
 
     plugin_model* m_plugin_model;
 
-    hal_content_manager* m_content_manager;
+    QString m_new_file_icon_style;
+    QString m_new_file_icon_path;
 
     QString m_open_icon_path;
     QString m_open_icon_style;

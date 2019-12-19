@@ -27,10 +27,10 @@
 #include "def.h"
 
 #include "netlist_relay/netlist_relay.h"
+#include "netlist/endpoint.h"
+#include "gui/gui_def.h"
 
 #include <QWidget>
-
-#include "../plugins/quine_mccluskey/include/plugin_quine_mccluskey.h"
 
 /* forward declaration */
 class QLabel;
@@ -39,8 +39,10 @@ class QTableWidgetItem;
 class QTreeWidget;
 class QTreeWidgetItem;
 class QVBoxLayout;
+class QHBoxLayout;
 class QScrollArea;
-class gate;
+class QModelIndex;
+class graph_navigation_widget;
 
 class gate_details_widget : public QWidget
 {
@@ -64,17 +66,27 @@ public:
 
 public Q_SLOTS:
 
-    void handle_tree_size_change(QTreeWidgetItem* item);
-    void handle_item_expanded(QTreeWidgetItem* item);
-    void handle_item_collapsed(QTreeWidgetItem* item);
     void on_treewidget_item_clicked(QTreeWidgetItem* item, int column);
-    void on_gate_selected(std::shared_ptr<gate> selected);
+    void handle_navigation_jump_requested(const hal::node origin, const u32 via_net, const QSet<u32>& to_gates);
+    void on_general_table_item_double_clicked(const QModelIndex &index);
 
-    void handle_gate_event(gate_event_handler::event ev, std::shared_ptr<gate> object, u32 associated_data);
-    void handle_module_event(module_event_handler::event ev, std::shared_ptr<module> module, u32 associated_data);
+    void handle_gate_name_changed(std::shared_ptr<gate> gate);
+    void handle_gate_removed(std::shared_ptr<gate> gate);
+
+    void handle_module_name_changed(std::shared_ptr<module> module);
+    void handle_module_removed(std::shared_ptr<module> module);
+    void handle_module_gate_assigned(std::shared_ptr<module> module, u32 associated_data);
+    void handle_module_gate_removed(std::shared_ptr<module> module, u32 associated_data);
+
+    void handle_net_name_changed(std::shared_ptr<net> net);
+    void handle_net_src_changed(std::shared_ptr<net> net);
+    void handle_net_dst_added(std::shared_ptr<net> net, const u32 dst_gate_id);
+    void handle_net_dst_removed(std::shared_ptr<net> net, const u32 dst_gate_id);
+
 
 private:
     QVBoxLayout* m_content_layout;
+    QHBoxLayout* m_tree_row_layout;
 
     QTableWidget* m_general_table;
     QTableWidgetItem* m_name_item;
@@ -91,8 +103,6 @@ private:
     // stores output pin tree view
     QTreeWidgetItem* m_output_pins;
 
-    QLabel* m_item_deleted_label;
-
     // stores utility objects for input/output pin tree view
     QScrollArea* m_scroll_area;
     QTreeWidget* m_tree_widget;
@@ -104,8 +114,7 @@ private:
 
     u64 m_last_click_time;
 
-    // store pointer to Quine-McCluskey plugin (to display minimized Boolean function)
-    std::shared_ptr<plugin_quine_mccluskey> m_qmc;
+    graph_navigation_widget* m_navigation_table;
 };
 
 #endif /* __HAL_GATE_DETAILS_WIDGET_H__ */
