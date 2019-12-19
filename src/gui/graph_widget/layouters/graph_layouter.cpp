@@ -662,7 +662,7 @@ void graph_layouter::calculate_gate_offsets()
     if (m_min_y_index)
         for (int i = -1; i >= m_min_y_index; --i)
         {
-            qreal offset = m_node_offset_for_y.value(i + 1) + m_max_node_height_for_y.value(i) + std::max(m_max_h_channel_height_for_y.value(i + 1), minimum_h_channel_height);
+            qreal offset = m_node_offset_for_y.value(i + 1) - m_max_node_height_for_y.value(i) - std::max(m_max_h_channel_height_for_y.value(i + 1), minimum_h_channel_height);
             m_node_offset_for_y.insert(i, offset);
             m_y_values.prepend(offset);
         }

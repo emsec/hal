@@ -7,11 +7,13 @@
 #include "gui/module_model/module_item.h"
 
 #include "netlist/gate.h"
-#include "netlist/module.h"
 #include "netlist/net.h"
 
 module_model::module_model(QObject* parent) : QAbstractItemModel(parent), m_top_module_item(nullptr)
 {
+    m_sort_mechanism = gui_utility::sort_mechanism(
+        g_settings_manager.get("navigation/sort_mechanism").toInt());
+    connect(&g_settings_relay, &settings_relay::setting_changed, this, &module_model::handle_global_setting_changed);
 }
 
 QModelIndex module_model::index(int row, int column, const QModelIndex& parent) const
@@ -195,11 +197,19 @@ void module_model::init()
     m_top_module_item = item;
     endInsertRows();
 
-    std::set<std::shared_ptr<module>> s = g_netlist->get_modules();
-    s.erase(g_netlist->get_top_module());
+    // This is broken because it can attempt to insert a child before its parent
+    // which will cause an assertion failure and then crash
 
-    for (std::shared_ptr<module> m : s)
-        add_module(m->get_id(), m->get_parent_module()->get_id());    // MODULES NOT NECESSARILY IN RIGHT ORDER, FIX
+    // std::set<std::shared_ptr<module>> s = g_netlist->get_modules();
+    // s.erase(g_netlist->get_top_module());
+    // for (std::shared_ptr<module> m : s)
+    //     add_module(m->get_id(), m->get_parent_module()->get_id());
+
+    // This works
+
+    // recursively insert modules
+    std::shared_ptr<module> m = g_netlist->get_top_module();
+    add_recursively(m->get_submodules());
 }
 
 void module_model::clear()
@@ -233,7 +243,7 @@ void module_model::add_module(const u32 id, const u32 parent_module)
 
     while (row < parent->childCount())
     {
-        if (item->name() < parent->child(row)->name())
+        if (gui_utility::compare(m_sort_mechanism, item->name(), parent->child(row)->name()))
             break;
         else
             ++row;
@@ -242,6 +252,15 @@ void module_model::add_module(const u32 id, const u32 parent_module)
     beginInsertRows(index, row, row);
     parent->insert_child(row, item);
     endInsertRows();
+}
+
+void module_model::add_recursively(std::set<std::shared_ptr<module>> modules)
+{
+    for (auto &m : modules)
+    {
+        add_module(m->get_id(), m->get_parent_module()->get_id());
+        add_recursively(m->get_submodules());
+    }
 }
 
 void module_model::remove_module(const u32 id)
@@ -280,4 +299,18 @@ void module_model::update_module(const u32 id)    // SPLIT ???
 
     QModelIndex index = get_index(item);
     Q_EMIT dataChanged(index, index);
+}
+
+void module_model::handle_global_setting_changed(void* sender, const QString& key, const QVariant& value)
+{
+    Q_UNUSED(sender);
+    if (key == "navigation/sort_mechanism")
+    {
+        m_sort_mechanism = gui_utility::sort_mechanism(value.toInt());
+
+        // re-sort
+        // FIXME this crashes
+        /*clear();
+        init();*/
+    }
 }
