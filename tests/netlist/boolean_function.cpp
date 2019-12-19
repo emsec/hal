@@ -109,201 +109,201 @@ protected:
 
 };
 
-/**
- * Testing template
- *
- * Functions: <functions>
- */
-TEST_F(boolean_function_test, check_){
-    TEST_START
-        {
-            // Set multiple data with different keys and categories
-            boolean_function a("A");
-            boolean_function b("B");
+// /**
+//  * Testing template
+//  *
+//  * Functions: <functions>
+//  */
+// TEST_F(boolean_function_test, check_){
+//     TEST_START
+//         {
+//             // Set multiple data with different keys and categories
+//             boolean_function a("A");
+//             boolean_function b("B");
 
-            boolean_function::from_string("1 & 1 & 1").to_dnf();
+//             boolean_function::from_string("1 & 1 & 1").to_dnf();
 
-            EXPECT_TRUE(true);
-        }
+//             EXPECT_TRUE(true);
+//         }
 
-    TEST_END
-}
+//     TEST_END
+// }
 
-/**
- * Testing the different constructors and the main functionality, by implement the following boolean function:
- *
- *  f(A,B,C) = ( (A AND B) OR C ) XOR 1
- *
- * Functions: constructor, evaluate, get_truth_table, AND, XOR, OR
- */
-TEST_F(boolean_function_test, check_main_example){
-    TEST_START
-        {
-            // Constuctor with variables
-            boolean_function a("A");
-            boolean_function b("B");
-            boolean_function c("C");
-            // Constructor with constant
-            boolean_function _1(ONE);
+// /**
+//  * Testing the different constructors and the main functionality, by implement the following boolean function:
+//  *
+//  *  f(A,B,C) = ( (A AND B) OR C ) XOR 1
+//  *
+//  * Functions: constructor, evaluate, get_truth_table, AND, XOR, OR
+//  */
+// TEST_F(boolean_function_test, check_main_example){
+//     TEST_START
+//         {
+//             // Constuctor with variables
+//             boolean_function a("A");
+//             boolean_function b("B");
+//             boolean_function c("C");
+//             // Constructor with constant
+//             boolean_function _1(ONE);
 
-            // Combining them
-            boolean_function r = ( (a & b) | c ) ^ _1;
+//             // Combining them
+//             boolean_function r = ( (a & b) | c ) ^ _1;
 
-            EXPECT_EQ(r(create_input_map("ABC", "000")), ONE );
-            EXPECT_EQ(r(create_input_map("ABC", "001")), ZERO);
-            EXPECT_EQ(r(create_input_map("ABC", "010")), ONE );
-            EXPECT_EQ(r(create_input_map("ABC", "011")), ZERO);
+//             EXPECT_EQ(r(create_input_map("ABC", "000")), ONE );
+//             EXPECT_EQ(r(create_input_map("ABC", "001")), ZERO);
+//             EXPECT_EQ(r(create_input_map("ABC", "010")), ONE );
+//             EXPECT_EQ(r(create_input_map("ABC", "011")), ZERO);
 
-            EXPECT_EQ(r(create_input_map("ABC", "100")), ONE );
-            EXPECT_EQ(r(create_input_map("ABC", "101")), ZERO);
-            EXPECT_EQ(r(create_input_map("ABC", "110")), ZERO);
-            EXPECT_EQ(r(create_input_map("ABC", "111")), ZERO);
+//             EXPECT_EQ(r(create_input_map("ABC", "100")), ONE );
+//             EXPECT_EQ(r(create_input_map("ABC", "101")), ZERO);
+//             EXPECT_EQ(r(create_input_map("ABC", "110")), ZERO);
+//             EXPECT_EQ(r(create_input_map("ABC", "111")), ZERO);
 
-            std::vector<boolean_function::value> truth_table = r.get_truth_table(std::vector<std::string>({"C","B","A"}));
+//             std::vector<boolean_function::value> truth_table = r.get_truth_table(std::vector<std::string>({"C","B","A"}));
 
-            EXPECT_EQ(truth_table, std::vector<boolean_function::value>({ONE, ZERO, ONE, ZERO, ONE, ZERO, ZERO, ZERO}));
-        }
+//             EXPECT_EQ(truth_table, std::vector<boolean_function::value>({ONE, ZERO, ONE, ZERO, ONE, ZERO, ZERO, ZERO}));
+//         }
 
-    TEST_END
-}
+//     TEST_END
+// }
 
-/**
- * Testing the functions is_constant_one and is_constant_zero, by passing some sample inputs
- *
- * Functions: is_constant_one, is_constant_zero
- */
-TEST_F(boolean_function_test, check_is_constant){
-    TEST_START
-        boolean_function a("A");
-        boolean_function b("B");
-        boolean_function c("C");
-        boolean_function _0(ZERO);
-        boolean_function _1(ONE);
-        {
-            // Some samples that are constant zero
-            EXPECT_TRUE(( _0 ).is_constant_zero());
-            EXPECT_TRUE(( !_1 ).is_constant_zero());
-            EXPECT_TRUE(( a^a ).is_constant_zero());
-            EXPECT_TRUE(( a&(!a) ).is_constant_zero());
-            EXPECT_TRUE(( _0|_0 ).is_constant_zero());
-        }
-        {
-            // Some samples that are constant one
-            EXPECT_TRUE(( _1 ).is_constant_one());
-            EXPECT_TRUE(( !_0 ).is_constant_one());
-            EXPECT_TRUE(( a^(!a) ).is_constant_one());
-            EXPECT_TRUE(( a|(!a) ).is_constant_one());
-            EXPECT_TRUE(( _1&_1 ).is_constant_one());
-        }
-        {
-            // Some samples that are NOT constant zero
-            EXPECT_FALSE(( _1 ).is_constant_zero());
-            EXPECT_FALSE(( a ).is_constant_zero());
-            EXPECT_FALSE(( a^a^b ).is_constant_zero());
-            EXPECT_FALSE(( a&b ).is_constant_zero());
-            EXPECT_FALSE(( _0|_1 ).is_constant_zero());
-        }
-        {
-            // Some samples that are NOT constant one
-            EXPECT_FALSE(( _0 ).is_constant_one());
-            EXPECT_FALSE(( a ).is_constant_one());
-            EXPECT_FALSE(( a^b^c ).is_constant_one());
-            EXPECT_FALSE(( a&b ).is_constant_one());
-            EXPECT_FALSE(( _0&_1 ).is_constant_one());
-        }
+// /**
+//  * Testing the functions is_constant_one and is_constant_zero, by passing some sample inputs
+//  *
+//  * Functions: is_constant_one, is_constant_zero
+//  */
+// TEST_F(boolean_function_test, check_is_constant){
+//     TEST_START
+//         boolean_function a("A");
+//         boolean_function b("B");
+//         boolean_function c("C");
+//         boolean_function _0(ZERO);
+//         boolean_function _1(ONE);
+//         {
+//             // Some samples that are constant zero
+//             EXPECT_TRUE(( _0 ).is_constant_zero());
+//             EXPECT_TRUE(( !_1 ).is_constant_zero());
+//             EXPECT_TRUE(( a^a ).is_constant_zero());
+//             EXPECT_TRUE(( a&(!a) ).is_constant_zero());
+//             EXPECT_TRUE(( _0|_0 ).is_constant_zero());
+//         }
+//         {
+//             // Some samples that are constant one
+//             EXPECT_TRUE(( _1 ).is_constant_one());
+//             EXPECT_TRUE(( !_0 ).is_constant_one());
+//             EXPECT_TRUE(( a^(!a) ).is_constant_one());
+//             EXPECT_TRUE(( a|(!a) ).is_constant_one());
+//             EXPECT_TRUE(( _1&_1 ).is_constant_one());
+//         }
+//         {
+//             // Some samples that are NOT constant zero
+//             EXPECT_FALSE(( _1 ).is_constant_zero());
+//             EXPECT_FALSE(( a ).is_constant_zero());
+//             EXPECT_FALSE(( a^a^b ).is_constant_zero());
+//             EXPECT_FALSE(( a&b ).is_constant_zero());
+//             EXPECT_FALSE(( _0|_1 ).is_constant_zero());
+//         }
+//         {
+//             // Some samples that are NOT constant one
+//             EXPECT_FALSE(( _0 ).is_constant_one());
+//             EXPECT_FALSE(( a ).is_constant_one());
+//             EXPECT_FALSE(( a^b^c ).is_constant_one());
+//             EXPECT_FALSE(( a&b ).is_constant_one());
+//             EXPECT_FALSE(( _0&_1 ).is_constant_one());
+//         }
 
-    TEST_END
-}
+//     TEST_END
+// }
 
-/**
- * Testing the is_empty function
- *
- * Functions: is_empty
- */
-TEST_F(boolean_function_test, check_is_empty){
-    TEST_START
-        {
-            // The boolean function is not empty
-            boolean_function not_empty("A");
-            EXPECT_FALSE(not_empty.is_empty());
-        }
-        {
-            // The boolean function is empty
-            boolean_function empty;
-            EXPECT_TRUE(empty.is_empty());
-        }
-    TEST_END
-}
+// /**
+//  * Testing the is_empty function
+//  *
+//  * Functions: is_empty
+//  */
+// TEST_F(boolean_function_test, check_is_empty){
+//     TEST_START
+//         {
+//             // The boolean function is not empty
+//             boolean_function not_empty("A");
+//             EXPECT_FALSE(not_empty.is_empty());
+//         }
+//         {
+//             // The boolean function is empty
+//             boolean_function empty;
+//             EXPECT_TRUE(empty.is_empty());
+//         }
+//     TEST_END
+// }
 
-/**
- * Testing the get_variables function
- *
- * Functions: get_variables
- */
-TEST_F(boolean_function_test, check_get_variables){
-    TEST_START
-        {
-            // Get variables
-            boolean_function a("A");
-            boolean_function b("B");
-            boolean_function c("C");
-            boolean_function a_2("A");
-            EXPECT_EQ((a|b|c|a_2).get_variables(), std::set<std::string>({"A","B","C"}));
-        }
-    TEST_END
-}
+// /**
+//  * Testing the get_variables function
+//  *
+//  * Functions: get_variables
+//  */
+// TEST_F(boolean_function_test, check_get_variables){
+//     TEST_START
+//         {
+//             // Get variables
+//             boolean_function a("A");
+//             boolean_function b("B");
+//             boolean_function c("C");
+//             boolean_function a_2("A");
+//             EXPECT_EQ((a|b|c|a_2).get_variables(), std::set<std::string>({"A","B","C"}));
+//         }
+//     TEST_END
+// }
 
-/**
- * Testing comparation operator
- *
- * Functions: operator==, operator!=
- */
-TEST_F(boolean_function_test, check_compare_operator){
-    TEST_START
-        // Tests for ==
-        {
-            // Compare the same object
-            boolean_function a("A");
-            EXPECT_TRUE((a == a));
-        }
-        {
-            // The boolean functions are equivalent in syntax
-            boolean_function a("A");
-            boolean_function b("B");
-            EXPECT_TRUE(((a|b) == (a|b)));
-        }
-        {
-            // The boolean functions are equivalent in semantic (but not in syntax)
-            boolean_function a("A");
-            boolean_function b("B");
-            // EXPECT_TRUE(((a|b|b) == (a|b)));
-        }
-        // Tests for !=
-        {
-            // The boolean function are equivalent in semantic, but do not share the same variable
-            boolean_function a("A");
-            boolean_function b("B");
-            EXPECT_TRUE((a != b));
-        }
-        {
-            // Compare boolean functions of different types (constant, variable, expression)
-            boolean_function a("A");
-            boolean_function b("B");
-            boolean_function _1(ONE);
-            EXPECT_TRUE((a != (a|(b&_1)))); // variable - expression
-            EXPECT_TRUE((a != _1 )); // variable - constant
-            EXPECT_TRUE(((a|(b&_1)) != _1 )); // expression - constant
-        }
-        {
-            // Compare semantically different expressions
-            boolean_function a("A");
-            boolean_function b("B");
-            EXPECT_TRUE(((a&b) != (a|b)));
-            EXPECT_TRUE(((a^b) != (a&b)));
-            EXPECT_TRUE(((a^b) != ((!a)&b)));
-        }
-    TEST_END
-}
+// /**
+//  * Testing comparation operator
+//  *
+//  * Functions: operator==, operator!=
+//  */
+// TEST_F(boolean_function_test, check_compare_operator){
+//     TEST_START
+//         // Tests for ==
+//         {
+//             // Compare the same object
+//             boolean_function a("A");
+//             EXPECT_TRUE((a == a));
+//         }
+//         {
+//             // The boolean functions are equivalent in syntax
+//             boolean_function a("A");
+//             boolean_function b("B");
+//             EXPECT_TRUE(((a|b) == (a|b)));
+//         }
+//         {
+//             // The boolean functions are equivalent in semantic (but not in syntax)
+//             boolean_function a("A");
+//             boolean_function b("B");
+//             // EXPECT_TRUE(((a|b|b) == (a|b)));
+//         }
+//         // Tests for !=
+//         {
+//             // The boolean function are equivalent in semantic, but do not share the same variable
+//             boolean_function a("A");
+//             boolean_function b("B");
+//             EXPECT_TRUE((a != b));
+//         }
+//         {
+//             // Compare boolean functions of different types (constant, variable, expression)
+//             boolean_function a("A");
+//             boolean_function b("B");
+//             boolean_function _1(ONE);
+//             EXPECT_TRUE((a != (a|(b&_1)))); // variable - expression
+//             EXPECT_TRUE((a != _1 )); // variable - constant
+//             EXPECT_TRUE(((a|(b&_1)) != _1 )); // expression - constant
+//         }
+//         {
+//             // Compare semantically different expressions
+//             boolean_function a("A");
+//             boolean_function b("B");
+//             EXPECT_TRUE(((a&b) != (a|b)));
+//             EXPECT_TRUE(((a^b) != (a&b)));
+//             EXPECT_TRUE(((a^b) != ((!a)&b)));
+//         }
+//     TEST_END
+// }
 
 /**
  * Testing the integrity of the optimize function
@@ -320,17 +320,17 @@ TEST_F(boolean_function_test, check_optimize){
         {
             // Optimize some boolean functions and compare their truth_table
             boolean_function bf = (!(a^b&c)|(b|c&_1))^((a&b) | (a|b|c));
-            //EXPECT_EQ(bf.get_truth_table(std::vector<std::string>({"C","B","A"})), bf.optimize().get_truth_table(std::vector<std::string>({"C","B","A"}))); // <- fails
+            EXPECT_EQ(bf.get_truth_table(std::vector<std::string>({"C","B","A"})), bf.optimize().get_truth_table(std::vector<std::string>({"C","B","A"}))); // <- fails
         }
         {
             // Optimize some boolean functions and compare their truth_table
             boolean_function bf = (a|b|c);
-            //EXPECT_EQ(bf.get_truth_table(std::vector<std::string>({"C","B","A"})), bf.optimize().get_truth_table(std::vector<std::string>({"C","B","A"}))); // <- fails
-            
+            EXPECT_EQ(bf.get_truth_table(std::vector<std::string>({"C","B","A"})), bf.optimize().get_truth_table(std::vector<std::string>({"C","B","A"}))); // <- fails
+
             // +++ DEBUG OUTPUT +++
             //printTruthTable(bf, std::vector<std::string>({"C","B","A"}));
             //printTruthTable(bf.optimize(), std::vector<std::string>({"C","B","A"}));
-            //std::cout << "Variables: amount = " << bf.optimize().get_variables().size() << std::endl; 
+            //std::cout << "Variables: amount = " << bf.optimize().get_variables().size() << std::endl;
             //for (auto v : bf.optimize().get_variables())
                 //std::cout << v << ",";
             //std::cout << std::endl;
