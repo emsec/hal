@@ -3,6 +3,7 @@
 #include <netlist/boolean_function.h>
 #include <iostream>
 
+
 using namespace test_utils;
 
 
@@ -22,10 +23,14 @@ protected:
     {
     }
 
+
+
     // Test Debug only
     void print_bf(boolean_function bf){
         std::cout << "\n-------------\n" << bf << "\n-------------\n";
     }
+
+    //void printTruthTable(boolean_function bf)
 
     /**
      * Create a string to value map, that can be used by the evaluate function. Each variable MUST be one character long.
@@ -149,18 +154,18 @@ TEST_F(boolean_function_test, check_is_constant){
         {
             // Some samples that are constant zero
             EXPECT_TRUE(( _0 ).is_constant_zero());
-            EXPECT_TRUE(( !_1 ).is_constant_zero());    // <- fails
-            EXPECT_TRUE(( a^a ).is_constant_zero());    // <- fails
+            EXPECT_TRUE(( !_1 ).is_constant_zero());    
+            EXPECT_TRUE(( a^a ).is_constant_zero());    
             EXPECT_TRUE(( a&(!a) ).is_constant_zero());
-            EXPECT_TRUE(( _0|_0 ).is_constant_zero());  // <- fails
+            EXPECT_TRUE(( _0|_0 ).is_constant_zero());  
         }
         {
             // Some samples that are constant one
             EXPECT_TRUE(( _1 ).is_constant_one());
-            EXPECT_TRUE(( !_0 ).is_constant_one());    // <- fails
+            EXPECT_TRUE(( !_0 ).is_constant_one());    
             EXPECT_TRUE(( a^(!a) ).is_constant_one());
-            EXPECT_TRUE(( a|(!a) ).is_constant_one()); // <- fails
-            EXPECT_TRUE(( _1&_1 ).is_constant_one());  // <- fails
+            EXPECT_TRUE(( a|(!a) ).is_constant_one()); 
+            EXPECT_TRUE(( _1&_1 ).is_constant_one());  
         }
         {
             // Some samples that are NOT constant zero
@@ -181,3 +186,121 @@ TEST_F(boolean_function_test, check_is_constant){
 
     TEST_END
 }
+
+/**
+ * Testing the is_empty function
+ *
+ * Functions: is_empty
+ */
+TEST_F(boolean_function_test, check_is_empty){
+    TEST_START
+        {
+            // The boolean function is not empty
+            boolean_function not_empty("A");
+            EXPECT_FALSE(not_empty.is_empty());
+        }
+        {
+            // The boolean function is empty
+            boolean_function empty;
+            EXPECT_TRUE(empty.is_empty());
+        }
+    TEST_END
+}
+
+/**
+ * Testing the get_variables function
+ *
+ * Functions: get_variables
+ */
+TEST_F(boolean_function_test, check_get_variables){
+    TEST_START
+        {
+            // Get variables
+            boolean_function a("A");
+            boolean_function b("B");
+            boolean_function c("C");
+            boolean_function a_2("A");
+            EXPECT_EQ((a|b|c|a_2).get_variables(), std::set<std::string>({"A","B","C"}));
+        }
+    TEST_END
+}
+
+/**
+ * Testing comparation operator
+ *
+ * Functions: operator==, operator!=
+ */
+TEST_F(boolean_function_test, check_compare_operator){
+    TEST_START
+        // Tests for ==
+        {
+            // Compare the same object
+            boolean_function a("A");
+            EXPECT_TRUE((a == a));
+        }
+        {
+            // The boolean functions are equivalent in syntax
+            boolean_function a("A");
+            boolean_function b("B");
+            EXPECT_TRUE(((a|b) == (a|b)));
+        }
+        {
+            // The boolean functions are equivalent in semantic (but not in syntax)
+            boolean_function a("A");
+            boolean_function b("B");
+            //EXPECT_TRUE(((a|b|b) == (a|b)));
+        }
+        // Tests for !=
+        {
+            // The boolean function are equivalent in semantic, but do not share the same variable
+            boolean_function a("A");
+            boolean_function b("B");
+            EXPECT_TRUE((a != b));
+        }
+        {
+            // Compare boolean functions of different types (constant, variable, expression)
+            boolean_function a("A");
+            boolean_function b("B");
+            boolean_function _1(ONE);
+            EXPECT_TRUE((a != (a|(b&_1)))); // variable - expression
+            EXPECT_TRUE((a != _1 )); // variable - constant
+            EXPECT_TRUE(((a|(b&_1)) != _1 )); // expression - constant
+        }
+        {
+            // Compare semantically different expressions
+            boolean_function a("A");
+            boolean_function b("B");
+            EXPECT_TRUE(((a&b) != (a|b)));
+            EXPECT_TRUE(((a^b) != (a&b)));
+            EXPECT_TRUE(((a^b) != ((!a)&b)));
+        }
+    TEST_END
+}
+
+/**
+ * Testing the integrity of the optimize function
+ *
+ * Functions: optimize
+ */
+TEST_F(boolean_function_test, check_optimize){
+    TEST_START
+        boolean_function a("A");
+        boolean_function b("B");
+        boolean_function c("C");
+        boolean_function _0(ZERO);
+        boolean_function _1(ONE);
+        {
+            // Optimize some boolean functions and compare their truth_table
+            boolean_function bf = (!(a^b&c)|(b|c&_1))^((a&b) | (a|b|c));
+            EXPECT_EQ(bf.get_truth_table(std::vector<std::string>({"C","B","A"})), bf.optimize().get_truth_table(std::vector<std::string>({"C","B","A"})));
+        }
+        {
+            // Optimize some boolean functions and compare their truth_table
+            boolean_function bf = (a^b^c);
+            EXPECT_EQ(bf.get_truth_table(std::vector<std::string>({"C","B","A"})), bf.optimize().get_truth_table(std::vector<std::string>({"C","B","A"})));
+        }
+        
+    TEST_END
+}
+
+
