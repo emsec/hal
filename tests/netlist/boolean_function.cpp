@@ -182,18 +182,18 @@ TEST_F(boolean_function_test, check_is_constant){
         {
             // Some samples that are constant zero
             EXPECT_TRUE(( _0 ).is_constant_zero());
-            EXPECT_TRUE(( !_1 ).is_constant_zero());    
-            EXPECT_TRUE(( a^a ).is_constant_zero());    
+            EXPECT_TRUE(( !_1 ).is_constant_zero());
+            EXPECT_TRUE(( a^a ).is_constant_zero());
             EXPECT_TRUE(( a&(!a) ).is_constant_zero());
-            EXPECT_TRUE(( _0|_0 ).is_constant_zero());  
+            EXPECT_TRUE(( _0|_0 ).is_constant_zero());
         }
         {
             // Some samples that are constant one
             EXPECT_TRUE(( _1 ).is_constant_one());
-            EXPECT_TRUE(( !_0 ).is_constant_one());    
+            EXPECT_TRUE(( !_0 ).is_constant_one());
             EXPECT_TRUE(( a^(!a) ).is_constant_one());
-            EXPECT_TRUE(( a|(!a) ).is_constant_one()); 
-            EXPECT_TRUE(( _1&_1 ).is_constant_one());  
+            EXPECT_TRUE(( a|(!a) ).is_constant_one());
+            EXPECT_TRUE(( _1&_1 ).is_constant_one());
         }
         {
             // Some samples that are NOT constant zero
@@ -335,7 +335,7 @@ TEST_F(boolean_function_test, check_optimize){
                 //std::cout << v << ",";
             //std::cout << std::endl;
         }
-        
+
     TEST_END
 }
 

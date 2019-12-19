@@ -1,5 +1,6 @@
 #include "test_def.h"
 #include "gtest/gtest.h"
+#include "netlist_test_utils.h"
 #include <experimental/filesystem>
 #include <core/log.h>
 #include <core/utils.h>
@@ -8,8 +9,6 @@
 #include <iostream>
 
 using namespace core_utils;
-
-namespace fs = std::experimental::filesystem;
 
 class utils_test : public ::testing::Test
 {
