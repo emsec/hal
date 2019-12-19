@@ -181,3 +181,41 @@ TEST_F(boolean_function_test, check_is_constant){
 
     TEST_END
 }
+
+/**
+ * Testing the is_empty function
+ *
+ * Functions: is_empty
+ */
+TEST_F(boolean_function_test, check_is_empty){
+    TEST_START
+        {
+            // The boolean function is not empty
+            boolean_function not_empty("A");
+            EXPECT_FALSE(not_empty.is_empty());
+        }
+        {
+            // The boolean function is empty
+            boolean_function empty;
+            EXPECT_TRUE(empty.is_empty());
+        }
+    TEST_END
+}
+
+/**
+ * Testing the get_variables function
+ *
+ * Functions: get_variables
+ */
+TEST_F(boolean_function_test, check_get_variables){
+    TEST_START
+        {
+            // The boolean function is not empty
+            boolean_function a("A");
+            boolean_function b("B");
+            boolean_function c("C");
+            boolean_function a_2("A");
+            EXPECT_EQ((a|b|c).get_variables(), std::set<std::string>({"A","B","C"}));
+        }
+    TEST_END
+}

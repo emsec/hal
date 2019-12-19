@@ -8,8 +8,8 @@
 #include "netlist/gate_library/gate_library_manager.h"
 #include "netlist/netlist_factory.h"
 #include "netlist/netlist.h"
-#include "hdl_parser/hdl_parser_vhdl.h"
-#include "hdl_writer/hdl_writer_vhdl.h"
+#include "netlist/hdl_parser/hdl_parser_vhdl.h"
+#include "netlist/hdl_writer/hdl_writer_vhdl.h"
 
 using namespace test_utils;
 

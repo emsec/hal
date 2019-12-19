@@ -6,7 +6,7 @@
 #include "netlist_test_utils.h"
 #include "gtest/gtest.h"
 #include <core/log.h>
-#include <hdl_parser/hdl_parser_verilog.h>
+#include "netlist/hdl_parser/hdl_parser_verilog.h"
 #include <iostream>
 #include <sstream>
 #include <experimental/filesystem>
