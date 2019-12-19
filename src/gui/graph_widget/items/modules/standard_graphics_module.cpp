@@ -128,7 +128,7 @@ void standard_graphics_module::paint(QPainter* painter, const QStyleOptionGraphi
         for (int i = 0; i < m_output_pins.size(); ++i)
             painter->drawText(m_output_pin_positions.at(i), m_output_pins.at(i).pin_type);
 
-        if (g_selection_relay.m_focus_type == selection_relay::item_type::gate)
+        if (g_selection_relay.m_focus_type == selection_relay::item_type::module)
             if (g_selection_relay.m_focus_id == m_id)
             {
                 s_pen.setColor(s_selection_color);
