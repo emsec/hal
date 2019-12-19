@@ -60,7 +60,7 @@ public:
     /**
      * Add an output pin to the collection of output pins that generate their output from the next_state function.
      *
-     * @param[in] output_pin_name - Name of the output pin.
+     * @param[in] output_pin - Name of the output pin.
      */
     void add_state_output_pin(std::string output_pin);
 
@@ -74,7 +74,7 @@ public:
     /**
      * Add an output pin to the collection of output pins that generate their output from the inverted next_state function.
      *
-     * @param[in] output_pin_name - Name of the output pin.
+     * @param[in] output_pin - Name of the output pin.
      */
     void add_inverted_state_output_pin(std::string output_pin);
 

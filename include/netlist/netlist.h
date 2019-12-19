@@ -276,9 +276,8 @@ public:
      * Get all gates of the netlist regardless of the module they are in. <br>
      * You can filter the set before output with the optional parameters.
      *
-     * @param[in] gate_type_filter - Filter for the gate type
-     * @param[in] name_filter - Filter for the name
-     * @return A set of gates.
+     * @param[in] filter - Filter for the gates
+     * @returns A set of gates.
      */
     std::set<std::shared_ptr<gate>> get_gates(const std::function<bool(const std::shared_ptr<gate>&)>& filter = nullptr) const;
 

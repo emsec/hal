@@ -147,7 +147,7 @@ public:
      * @param[in] name - The name of the boolean function.
      * @param[in] bf - A boolean function object.
      */
-    void add_boolean_function(std::string pin_name, boolean_function bf);
+    void add_boolean_function(std::string name, boolean_function bf);
 
     /**
      * Get a map containing the boolean functions of the gate type.
