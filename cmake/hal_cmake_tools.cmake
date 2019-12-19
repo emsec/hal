@@ -4,7 +4,7 @@
 function(hal_get_version)
     message(STATUS "Extracting Version Information")
     execute_process(
-            COMMAND ${CMAKE_SOURCE_DIR}/tools/genversion.py
+            COMMAND ${hal_GENVERSION_PATH}/genversion.py ${CMAKE_SOURCE_DIR}
             OUTPUT_VARIABLE VERSION_LIST
             OUTPUT_STRIP_TRAILING_WHITESPACE
             WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
@@ -54,11 +54,12 @@ endfunction()
 # Get version
 #-------------------------------------------------------------------------------
 function(hal_plugins_get_version)
+    message(STATUS "hal_GENVERSION_PATH: ${hal_GENVERSION_PATH}")
     execute_process(
-            COMMAND ${CMAKE_SOURCE_DIR}/tools/genversion.py
+            COMMAND ${hal_GENVERSION_PATH}/genversion.py ${CMAKE_SOURCE_DIR}
             OUTPUT_VARIABLE VERSION_LIST
             OUTPUT_STRIP_TRAILING_WHITESPACE
-            WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+            WORKING_DIRECTORY ${hal_GENVERSION_PATH}
     )
     message(STATUS "VERSION_LIST: ${VERSION_LIST}")
     list(GET VERSION_LIST 0 RETURN              )

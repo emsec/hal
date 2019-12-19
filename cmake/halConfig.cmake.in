@@ -7,9 +7,8 @@
 #   hal_FOUND - true if hal and all required components found on the system
 #   hal_VERSION - hal version in format Major.Minor.Release
 #   hal_INCLUDE_DIR - Directory where hal headers are located.
-#   hal_LIBRARIES - compile flags and python libraries (as needed) to link against.
-#   CMAKE_MODULE_PATH - appends location of accompanying FindPythonLibsNew.cmake and
-#                       halTools.cmake modules.
+#   CMAKE_MODULE_PATH - appends location of accompanying FindFilesystem.cmake and
+#                       hal_cmake_tools.cmake modules.
 #
 #
 # Available components: None
@@ -24,7 +23,7 @@
 #   hal::netlist -
 
 
-@package_init@
+@PACKAGE_INIT@
 
 set(PN hal)
 
@@ -41,6 +40,16 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR})
 
 include(hal_plugin)
 
+find_package(Filesystem REQUIRED Final Experimental)
+
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/pybind11 ${CMAKE_BINARY_DIR}/deps/pybind11)
+
+set(spdlog_VERSION 1.4.2)
+        add_library(spdlog::spdlog INTERFACE IMPORTED)
+        set_target_properties(spdlog::spdlog PROPERTIES
+                            INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_LIST_DIR}/spdlog-1.4.2/include"
+                            )
+set_and_check(${PN}_GENVERSION_PATH "${CMAKE_CURRENT_LIST_DIR}")
 if(NOT (CMAKE_VERSION VERSION_LESS 3.0))
 #-----------------------------------------------------------------------------
 # Don't include targets if this file is being picked up by another

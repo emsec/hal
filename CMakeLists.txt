@@ -72,6 +72,7 @@ unset(CHANGELOG_LAST_MESSAGE)
 include(DebChangelog)
 
 # Detect Version Information
+set(hal_GENVERSION_PATH "${CMAKE_SOURCE_DIR}/tools")
 if((NOT ${HAL_VERSION_MAJOR}) AND ((NOT ${HAL_VERSION_MINOR}) AND (NOT ${HAL_VERSION_PATCH})))
     hal_get_version()
 else()
@@ -260,7 +261,22 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/halConfig.cmake
         ${CMAKE_CURRENT_BINARY_DIR}/halConfigVersion.cmake
         cmake/hal_plugin.cmake
         cmake/hal_cmake_tools.cmake
+        cmake/FindFilesystem.cmake
+        tools/genversion.py
         DESTINATION ${HAL_CMAKECONFIG_INSTALL_DIR})
+
+install(FILES tools/genversion.py
+        DESTINATION ${HAL_CMAKECONFIG_INSTALL_DIR}
+        PERMISSIONS
+            OWNER_READ
+            OWNER_WRITE
+            OWNER_EXECUTE
+            GROUP_READ
+            GROUP_EXECUTE
+            WORLD_READ
+            WORLD_EXECUTE)
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/deps/pybind11 DESTINATION ${HAL_CMAKECONFIG_INSTALL_DIR})
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/deps/spdlog-1.4.2 DESTINATION ${HAL_CMAKECONFIG_INSTALL_DIR})
 
 if(NOT (CMAKE_VERSION VERSION_LESS 3.0))
     install(EXPORT hal
