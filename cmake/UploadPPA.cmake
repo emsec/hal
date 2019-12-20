@@ -261,7 +261,6 @@ foreach(DISTRI ${PROJECT_PPA_DISTRIB_TARGET})
         "/Testing/"
         "/test/"
         "/tmp/"
-        "/packaging/"
         "/debian/"
         "/\\\\.git.*"
         "/\\\\.idea/"
