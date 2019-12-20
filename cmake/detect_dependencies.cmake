@@ -102,7 +102,7 @@ message(VERBOSE "Boost version: ${Boost_VERSION}")
 
 if(NOT TARGET Boost::system)
     add_library(Boost::system IMPORTED INTERFACE)
-    set_property(TARGET Boost::filesystem PROPERTY
+    set_property(TARGET Boost::system PROPERTY
                  INTERFACE_INCLUDE_DIRECTORIES ${Boost_INCLUDE_DIR})
     set_property(TARGET Boost::system PROPERTY
                  INTERFACE_LINK_LIBRARIES ${Boost_LIBRARIES})
