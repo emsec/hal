@@ -34,7 +34,7 @@ if(BUILD_DOCUMENTATION)
             "${BINARY_BUILD_DIR}/conf.py"
             @ONLY)
 
-    file(GLOB_RECURSE SPHINX_DOC_FILES ${CMAKE_SOURCE_DIR}/documentation/sphinx_doc/*.rst)
+    file(GLOB_RECURSE SPHINX_DOC_FILES ${CMAKE_CURRENT_SOURCE_DIR}/sphinx_doc/*.rst)
     message(STATUS "SPHINX_DOC_FILES: ${SPHINX_DOC_FILES}")
 
     add_custom_target(hal_py_docs ALL
