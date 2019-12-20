@@ -117,7 +117,7 @@ message(VERBOSE "Found rapidjson ${RAPIDJSON_INCLUDEDIR}")
 if(RapidJSON_FOUND AND NOT TARGET RapidJSON::RapidJSON)
     add_library(RapidJSON::RapidJSON INTERFACE IMPORTED)
     set_target_properties(RapidJSON::RapidJSON PROPERTIES
-                          INTERFACE_INCLUDE_DIRECTORIES "${RAPIDJSON_INCLUDEDIR}"
+                          INTERFACE_INCLUDE_DIRECTORIES "${RAPIDJSON_INCLUDE_DIRS}"
                           )
 endif()
 
