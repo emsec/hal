@@ -56,7 +56,6 @@ target_link_libraries(core
                         std::filesystem
                         spdlog::spdlog
                         ${CMAKE_DL_LIBS}
-                      PRIVATE
                         RapidJSON::RapidJSON
                       )
 install(TARGETS core
