@@ -2,9 +2,9 @@ name: Github CI
 
 on:
   push:
-  create:
-    tags:
-      - v*
+#  create:
+#    tags:
+#      - v*
 
 jobs:
   build-test:
