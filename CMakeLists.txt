@@ -64,14 +64,6 @@ if(UNIX AND NOT APPLE)
     detect_distro()
 endif()
 
-# # Check for valid Changelog file ToDo
-# set(DEB_CHANGELOG_REQUIRED ON)
-# set(DEB_CHANGELOG "${CMAKE_CURRENT_SOURCE_DIR}/Changelog")
-# unset(CHANGELOG_LAST_VERSION)
-# unset(CHANGELOG_LAST_MESSAGE)
-# include(DebChangelog)
-# include(Changelog)
-
 # Detect Version Information
 set(hal_GENVERSION_PATH "${CMAKE_SOURCE_DIR}/tools")
 if((NOT ${HAL_VERSION_MAJOR}) AND ((NOT ${HAL_VERSION_MINOR}) AND (NOT ${HAL_VERSION_PATCH})))
@@ -79,6 +71,7 @@ if((NOT ${HAL_VERSION_MAJOR}) AND ((NOT ${HAL_VERSION_MINOR}) AND (NOT ${HAL_VER
 else()
     set(HAL_VERSION_RETURN ${HAL_VERSION_MAJOR}.${HAL_VERSION_MINOR}.${HAL_VERSION_PATCH})
 endif()
+configure_file(${CMAKE_SOURCE_DIR}/CURRENT_VERSION.in ${CMAKE_SOURCE_DIR}/CURRENT_VERSION @ONLY)
 unset(HAL_VERSION_MAJOR_SELF CACHE)
 message(STATUS "HAL_VERSION: ${HAL_VERSION_RETURN}")
 
