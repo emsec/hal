@@ -98,6 +98,7 @@ main_window::main_window(QWidget* parent) : QWidget(parent), m_schedule_widget(n
     //    m_stacked_widget->addWidget(m_container);
 
     //    m_container_layout = new QVBoxLayout(m_container);
+
     //    m_container_layout->setContentsMargins(0, 0, 0, 0);
     //    m_container_layout->setSpacing(0);
 
@@ -152,8 +153,9 @@ main_window::main_window(QWidget* parent) : QWidget(parent), m_schedule_widget(n
     //    m_settings_icon_style = "all->#AFB1B3";
     //    m_settings_icon_path  = ":/icons/settings";
 
+    setWindowIcon(gui_utility::get_styled_svg_icon(m_hal_icon_style, m_hal_icon_path));
+
     m_action_new->setIcon(gui_utility::get_styled_svg_icon(m_new_file_icon_style, m_new_file_icon_path));
-    //m_action_new->setIcon(gui_utility::get_styled_svg_icon(m_open_icon_style, m_open_icon_path));
     m_action_open->setIcon(gui_utility::get_styled_svg_icon(m_open_icon_style, m_open_icon_path));
     m_action_save->setIcon(gui_utility::get_styled_svg_icon(m_save_icon_style, m_save_icon_path));
     m_action_schedule->setIcon(gui_utility::get_styled_svg_icon(m_schedule_icon_style, m_schedule_icon_path));
@@ -237,6 +239,16 @@ main_window::main_window(QWidget* parent) : QWidget(parent), m_schedule_widget(n
     //Q_UNUSED(o)
 }
 
+QString main_window::hal_icon_path() const
+{
+    return m_hal_icon_path;
+}
+
+QString main_window::hal_icon_style() const
+{
+    return m_hal_icon_style;
+}
+
 QString main_window::new_file_icon_path() const
 {
     return m_new_file_icon_path;
@@ -305,6 +317,16 @@ QString main_window::settings_icon_path() const
 QString main_window::settings_icon_style() const
 {
     return m_settings_icon_style;
+}
+
+void main_window::set_hal_icon_path(const QString& path)
+{
+    m_hal_icon_path = path;
+}
+
+void main_window::set_hal_icon_style(const QString& style)
+{
+    m_hal_icon_style = style;
 }
 
 void main_window::set_new_file_icon_path(const QString& path)

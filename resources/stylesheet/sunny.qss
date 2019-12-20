@@ -1383,6 +1383,9 @@ qproperty-delete_icon_path: ":/icons/trashcan";
 }
 
 main_window {
+qproperty-hal_icon_style: "";
+qproperty-hal_icon_path: ":/icons/hal";
+
 qproperty-new_file_icon_style: "";
 qproperty-new_file_icon_path: ":/icons/new-file";
 

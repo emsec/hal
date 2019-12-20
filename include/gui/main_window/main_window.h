@@ -52,6 +52,9 @@ class welcome_screen;
 class main_window : public QWidget
 {
     Q_OBJECT
+    Q_PROPERTY(QString hal_icon_path READ hal_icon_path WRITE set_hal_icon_path)
+    Q_PROPERTY(QString hal_icon_style READ hal_icon_style WRITE set_hal_icon_style)
+
     Q_PROPERTY(QString new_file_icon_path READ new_file_icon_path WRITE set_new_file_icon_path)
     Q_PROPERTY(QString new_file_icon_style READ new_file_icon_style WRITE set_new_file_icon_style)
     Q_PROPERTY(QString open_icon_path READ open_icon_path WRITE set_open_icon_path)
@@ -70,6 +73,9 @@ class main_window : public QWidget
 public:
     explicit main_window(QWidget* parent = nullptr);
     void add_content(content_widget* widget, int index, content_anchor anchor);
+
+    QString hal_icon_path() const;
+    QString hal_icon_style() const;
 
     QString new_file_icon_path() const;
     QString new_file_icon_style() const;
@@ -92,6 +98,9 @@ public:
     QString settings_icon_path() const;
     QString settings_icon_style() const;
 
+
+    void set_hal_icon_path(const QString& path);
+    void set_hal_icon_style(const QString &style);
 
     void set_new_file_icon_path(const QString& path);
     void set_new_file_icon_style(const QString &style);
@@ -166,6 +175,9 @@ private:
     about_dialog* m_about_dialog;
 
     plugin_model* m_plugin_model;
+
+    QString m_hal_icon_style;
+    QString m_hal_icon_path;
 
     QString m_new_file_icon_style;
     QString m_new_file_icon_path;

@@ -49,44 +49,40 @@ Use the integrated Python shell or the Python script window to interact. Both fe
 
 Let's list all lookup tables and print their Boolean functions:
 ```python
-from hal_plugins import libquine_mccluskey
-
-qm_plugin = libquine_mccluskey.quine_mccluskey()
-
 for gate in netlist.get_gates():
-    if "LUT" in gate.type:
-        print(gate.name + " (id "+str(gate.id) + ", type " + gate.type + ")")
-        print("  " + str(len(gate.input_pins)) + "-to-" + str(len(gate.output_pins)) + " LUT")
-        boolean_functions = qm_plugin.get_boolean_function_str(gate, False)
-        for pin in boolean_functions:
-            print("  " + pin + ": "+boolean_functions[pin])
+    if "LUT" in gate.type.name:
+        print("{} (id {}, type {})".format(gate.name, gate.id, gate.type.name))
+        print("  {}-to-{} LUT".format(len(gate.input_pins), len(gate.output_pins)))
+        boolean_functions = gate.boolean_functions
+        for name in boolean_functions:
+            print("  {}: {}".format(name, boolean_functions[name]))
         print("")
 ```
 For the example netlist `fsm.vhd` this prints:
 ```text
-FSM_sequential_STATE_REG_1_i_2_inst (id 5, type LUT6)
+FSM_sequential_STATE_REG_0_i_3_inst (id 4, type LUT6)
   6-to-1 LUT
-  O: (~I0 I1 ~I2 I3 I4 ~I5) + (I0 ~I2 I3 I4 I5)
+  O: (!I1 & !I2 & I3 & !I4 & I5) | (I0 & !I2) | (I0 & I1) | (I0 & I3) | (I0 & I4) | (I0 & I5)
 
 FSM_sequential_STATE_REG_0_i_2_inst (id 3, type LUT6)
   6-to-1 LUT
-  O: (I2 I3 I4 ~I5) + (I1 I2) + (I0 I1) + (I1 ~I3) + (I1 ~I4) + (I1 ~I5)
-
-FSM_sequential_STATE_REG_0_i_3_inst (id 4, type LUT6)
-  6-to-1 LUT
-  O: (~I1 ~I2 I3 ~I4 I5) + (I0 I5) + (I0 I4) + (I0 I3) + (I0 I1) + (I0 ~I2)
-
-OUTPUT_BUF_0_inst_i_1_inst (id 18, type LUT1)
-  1-to-1 LUT
-  O: (~I0)
-
-OUTPUT_BUF_1_inst_i_1_inst (id 20, type LUT2)
-  2-to-1 LUT
-  O: (~I0 I1) + (I0 ~I1)
+  O: (I2 & I3 & I4 & !I5) | (I1 & !I5) | (I1 & !I4) | (I1 & !I3) | (I0 & I1) | (I1 & I2)
 
 FSM_sequential_STATE_REG_1_i_3_inst (id 6, type LUT6)
   6-to-1 LUT
-  O: (I0 I2 I4) + (~I1 I2 I4) + (I0 ~I3 I4) + (~I1 ~I3 I4) + (I0 I4 ~I5) + (~I1 I4 ~I5) + (I2 I5) + (I2 I3) + (I1 I5) + (I1 I3) + (I0 I1) + (~I0 I5) + (~I0 I3) + (~I0 ~I1) + (I1 ~I2) + (~I0 ~I2) + (~I3 I5) + (~I2 ~I3) + (~I4 I5) + (I3 ~I4) + (I1 ~I4)
+  O: (!I1 & I4 & !I5) | (!I1 & !I3 & I4) | (I0 & I4 & !I5) | (I0 & !I3 & I4) | (!I1 & I2 & I4) | (I0 & I2 & I4) | (!I2 & !I5) | (!I2 & !I4) | (!I2 & !I3) | (!I0 & !I4) | (!I0 & !I2) | (!I0 & !I1) | (I1 & !I4) | (I1 & !I2) | (I0 & I1) | (I3 & !I5) | (I3 & !I4) | (!I0 & I3) | (I1 & I3) | (I2 & I3) | (!I4 & I5) | (!I3 & I5) | (!I0 & I5) | (I1 & I5) | (I2 & I5)
+
+FSM_sequential_STATE_REG_1_i_2_inst (id 5, type LUT6)
+  6-to-1 LUT
+  O: (!I0 & I1 & !I2 & I3 & I4 & !I5) | (I0 & !I2 & I3 & I4 & I5)
+
+OUTPUT_BUF_0_inst_i_1_inst (id 18, type LUT1)
+  1-to-1 LUT
+  O: !I0
+
+OUTPUT_BUF_1_inst_i_1_inst (id 20, type LUT2)
+  2-to-1 LUT
+  O: (I0 & !I1) | (!I0 & I1)
 ```
 
 ## Citation
@@ -94,7 +90,7 @@ FSM_sequential_STATE_REG_1_i_3_inst (id 6, type LUT6)
 If you use HAL in an academic context, please cite the framework using the reference below:
 ```latex
 @misc{hal,
-    author = {{EmSec Chair for Embedded Security}},
+    author = {{Chair for Embedded Security}},
     publisher = {{Ruhr University Bochum}},
     title = {{HAL - The Hardware Analyzer}},
     year = {2019},
