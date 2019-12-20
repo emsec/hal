@@ -2,8 +2,6 @@
 # core library
 #
 
-configure_file(${CMAKE_SOURCE_DIR}/include/hal_version.h.in ${CMAKE_BINARY_DIR}/hal_version.h @ONLY)
-
 set(CORE_LIB_HDR
     ${CMAKE_SOURCE_DIR}/include/core/callback_hook.h
     ${CMAKE_SOURCE_DIR}/include/core/hal_file_manager.h
@@ -23,6 +21,7 @@ set(CORE_LIB_HDR
     ${CMAKE_SOURCE_DIR}/include/arch_win.h
     ${CMAKE_SOURCE_DIR}/include/def.h
     ${CMAKE_SOURCE_DIR}/include/doxy_groups.h
+    ${CMAKE_SOURCE_DIR}/include/hal_version.h
     )
 
 set(CORE_LIB_SRC
