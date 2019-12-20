@@ -80,9 +80,12 @@ def to_debian(input, release = 'bionic', for_ppa_debian_dir = False, ppa_version
         if entry.description and entry.description[-1] == "":
             entry.description.pop()
 
+        from email import utils
+        import time
+        timestmp = time.mktime(entry.date.timetuple())
         output_lines += entry.description
         output_lines.append("")
-        output_lines.append(" -- {} <{}> {}".format(entry.author, entry.email,entry.date))
+        output_lines.append(" -- {} <{}> {}".format(entry.author, entry.email,utils.formatdate(timestmp)))
 
     return "\n".join(output_lines)
 
