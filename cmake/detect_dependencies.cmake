@@ -95,8 +95,7 @@ find_package(Filesystem REQUIRED Final Experimental)
 ################################
 
 set(Boost_USE_STATIC_LIBS OFF)
-set(Boost_USE_MULTITHREADED ON)
-set(Boost_USE_STATIC_RUNTIME OFF)
+set(Boost_USE_MULTITHREADED)
 find_package(Boost 1.58.0 REQUIRED COMPONENTS system)
 message(VERBOSE "Boost version: ${Boost_VERSION}")
 
