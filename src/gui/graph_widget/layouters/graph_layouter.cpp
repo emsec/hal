@@ -9,6 +9,7 @@
 #include "gui/graph_widget/graphics_scene.h"
 #include "gui/graph_widget/items/nets/arrow_separated_net.h"
 #include "gui/graph_widget/items/nets/circle_separated_net.h"
+#include "gui/graph_widget/items/nets/hollow_arrow_separated_net.h"
 #include "gui/graph_widget/items/nets/labeled_separated_net.h"
 #include "gui/graph_widget/items/nets/standard_graphics_net.h"
 #include "gui/gui_globals.h"
@@ -728,7 +729,7 @@ void graph_layouter::draw_nets()
         if (n->is_unrouted())
         {
             // HANDLE GLOBAL NETS
-            circle_separated_net* net_item = new circle_separated_net(n);
+            hollow_arrow_separated_net* net_item = new hollow_arrow_separated_net(n);
 
             endpoint src_end = n->get_src();
 

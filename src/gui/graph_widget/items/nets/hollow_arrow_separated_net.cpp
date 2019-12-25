@@ -61,7 +61,7 @@ void hollow_arrow_separated_net::load_settings()
     s_arrow.lineTo(QPointF(s_arrow_left_outward_x_shift, -s_arrow_height / 2));
     s_arrow.closeSubpath();
 
-    s_brush.setStyle(Qt::SolidPattern);
+    s_brush.setStyle(Qt::NoBrush);
     s_pen.setColor(QColor(160, 160, 160)); // USE STYLESHEETS
 }
 
