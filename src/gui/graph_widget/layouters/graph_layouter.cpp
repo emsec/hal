@@ -33,7 +33,7 @@ const static qreal h_road_padding           = 10;
 const static qreal v_road_padding           = 10;
 const static qreal minimum_v_channel_width  = 20;
 const static qreal minimum_h_channel_height = 20;
-const static qreal minimum_gate_io_padding  = 40;
+const static qreal minimum_gate_io_padding  = 60;
 
 graph_layouter::graph_layouter(const graph_context* const context, QObject* parent) : QObject(parent), m_scene(new graphics_scene(this)), m_context(context), m_done(false)
 {
@@ -773,6 +773,8 @@ void graph_layouter::draw_nets()
             continue;
         }
 
+        bool dst_missing = false;
+
         if (n->get_src().gate)
         {
             if (n->get_src().gate->is_gnd_gate() || n->get_src().gate->is_vcc_gate())
@@ -852,10 +854,9 @@ void graph_layouter::draw_nets()
                 {
                     hal::node node;
                     if (m_context->node_for_gate(node, dst_end.get_gate()->get_id()))
-                    {
                         contains_dst = true;
-                        break;
-                    }
+                    else
+                        dst_missing = true;
                 }
 
                 if (!contains_dst)
@@ -1486,7 +1487,7 @@ void graph_layouter::draw_nets()
             current_position = src_pin_position;
         }
 
-        standard_graphics_net* graphics_net = new standard_graphics_net(n, lines);
+        standard_graphics_net* graphics_net = new standard_graphics_net(n, lines, dst_missing);
         graphics_net->setPos(src_pin_position);
         m_scene->add_item(graphics_net);
 
