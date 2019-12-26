@@ -35,6 +35,8 @@
 #include "pybind11/stl_bind.h"
 #include "pybind11/functional.h"
 
+#pragma GCC diagnostic pop
+
 using map_string_to_set_of_string = std::map<std::string, std::set<std::string>>;
 
 class Pyi_base : public i_base
@@ -1568,7 +1570,7 @@ If the new parent is a submodule of this module, the new parent is added as a di
 :returns: True if the parent was changed
 :rtype: bool
 )")
-        .def_property_readonly("submodules", [](const std::shared_ptr<module>& m){return m->get_submodules();}, R"(
+        .def_property_readonly("submodules", [](const std::shared_ptr<module>& mod){return mod->get_submodules();}, R"(
 A set of all direct submodules of this module.
 
 :type: set[hal_py.module]
@@ -1640,7 +1642,7 @@ Therefore it may contain some nets that are also regarded as output nets.
 :returns: The set of internal nets.
 :rtype: set[hal_py.net]
 )")
-        .def_property_readonly("gates", [](const std::shared_ptr<module>& m){return m->get_gates();}, R"(
+        .def_property_readonly("gates", [](const std::shared_ptr<module>& mod){return mod->get_gates();}, R"(
 The set of all gates belonging to the module.
 
 :type: set[hal_py.gate]
@@ -1984,5 +1986,3 @@ If ordered_variables is empty, all included variables are used and ordered alpha
     return m.ptr();
 #endif    // PYBIND11_MODULE
 }
-
-#pragma GCC diagnostic pop
