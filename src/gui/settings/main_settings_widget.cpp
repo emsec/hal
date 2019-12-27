@@ -319,6 +319,30 @@ void main_settings_widget::register_widget(const QString& section_name, settings
     connect(widget, &settings_widget::setting_updated, this, &main_settings_widget::handle_setting_updated);
 }
 
+bool main_settings_widget::handle_about_to_close()
+{
+    bool dirty = false;
+    for (settings_widget* widget : m_all_settings)
+    {
+        if (widget->dirty())
+        {
+            dirty = true;
+            break;
+        }
+    }
+    if (dirty)
+    {
+        QMessageBox::StandardButton input = QMessageBox::question(this, "Unsaved settings", "You have unsaved settings that would be discarded.\nSave before leaving the settings page?", QMessageBox::Yes|QMessageBox::No|QMessageBox::Cancel);
+        if (input == QMessageBox::Cancel)
+            return false;
+        if (input == QMessageBox::Yes)
+            return save_settings();
+        if (input == QMessageBox::No)
+            rollback_settings();
+    }
+    return true;
+}
+
 void main_settings_widget::handle_restore_defaults_clicked()
 {
     QList<settings_widget*>* widget_list = m_map.value(m_active_section, nullptr);
@@ -342,39 +366,14 @@ void main_settings_widget::handle_restore_defaults_clicked()
 
 void main_settings_widget::handle_cancel_clicked()
 {
-    for (settings_widget* widget : m_all_settings)
-    {
-        widget->handle_rollback();
-    }
+    rollback_settings();
     Q_EMIT close();
 }
 
 void main_settings_widget::handle_ok_clicked()
 {
 #ifdef ENABLE_OK_BUTTON
-    for (settings_widget* widget : m_all_settings)
-    {
-        if (widget->conflicts())
-        {
-            QMessageBox msg;
-            msg.setText("Please resolve all conflicts first");
-            msg.setDetailedText("You have settings that collide with each other.\n"
-                                "Settings can't be saved while conflicts exist.");
-            msg.setWindowTitle("Settings Manager");
-            msg.exec();
-            return;
-        }
-    }
-    for (settings_widget* widget : m_all_settings)
-    {
-        if (widget->dirty())
-        {
-            QString key    = widget->key();
-            QVariant value = widget->value();
-            widget->mark_saved();
-            g_settings_manager.update(key, value);
-        }
-    }
+    save_settings();
 #endif
     Q_EMIT close();
 }
@@ -468,4 +467,40 @@ void main_settings_widget::remove_all_highlights()
 {
     for (settings_widget* widget : m_all_settings)
         widget->reset_labels();
+}
+
+bool main_settings_widget::save_settings()
+{
+    for (settings_widget* widget : m_all_settings)
+    {
+        if (widget->conflicts())
+        {
+            QMessageBox msg;
+            msg.setText("Please resolve all conflicts first");
+            msg.setDetailedText("You have settings that collide with each other.\n"
+                                "Settings can't be saved while conflicts exist.");
+            msg.setWindowTitle("Settings Manager");
+            msg.exec();
+            return false;
+        }
+    }
+    for (settings_widget* widget : m_all_settings)
+    {
+        if (widget->dirty())
+        {
+            QString key    = widget->key();
+            QVariant value = widget->value();
+            widget->mark_saved();
+            g_settings_manager.update(key, value);
+        }
+    }
+    return true;
+}
+
+void main_settings_widget::rollback_settings()
+{
+    for (settings_widget* widget : m_all_settings)
+    {
+        widget->handle_rollback();
+    }
 }
