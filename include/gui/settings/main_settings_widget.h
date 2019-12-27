@@ -49,6 +49,7 @@ class main_settings_widget : public QWidget
 
 public:
     explicit main_settings_widget(QWidget* parent = 0);
+    bool handle_about_to_close();
 
 Q_SIGNALS:
     void close();
@@ -72,6 +73,8 @@ private:
     void hide_all_settings();
     void show_all_settings();
     void remove_all_highlights();
+    bool save_settings();
+    void rollback_settings();
 
     QHBoxLayout* m_layout;
     expanding_list_widget* m_expanding_list_widget;

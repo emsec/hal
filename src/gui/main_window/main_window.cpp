@@ -448,6 +448,8 @@ void main_window::toggle_settings()
 
 void main_window::close_settings()
 {
+    if (!m_settings->handle_about_to_close())
+        return;
     if (file_manager::get_instance()->file_open())
         m_stacked_widget->setCurrentWidget(m_layout_area);
     else
