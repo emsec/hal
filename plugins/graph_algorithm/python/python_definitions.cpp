@@ -5,10 +5,21 @@
 #include "netlist/net.h"
 #include "netlist/netlist.h"
 #include "plugin_graph_algorithm.h"
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wshadow"
+#ifdef COMPILER_CLANG
+#pragma clang diagnostic ignored "-Wself-assign-overloaded"
+#pragma clang diagnostic ignored "-Wnested-anon-types"
+#pragma clang diagnostic ignored "-Wshadow-field-in-constructor-modified"
+#endif
+
 #include "pybind11/operators.h"
 #include "pybind11/pybind11.h"
 #include "pybind11/stl.h"
 #include "pybind11/stl_bind.h"
+
+#pragma GCC diagnostic pop
 
 namespace py = pybind11;
 
