@@ -1,21 +1,20 @@
-/*
+
 #include "netlist/gate_library/gate_library_manager.h"
 #include "netlist/netlist.h"
 #include "netlist/netlist_factory.h"
 #include "netlist_test_utils.h"
 #include "gtest/gtest.h"
-#include <boost/filesystem.hpp>
 #include <core/log.h>
 #include <core/utils.h>
 #include <fstream>
 #include <iostream>
 #include <netlist/gate.h>
 #include <netlist/net.h>
-*/
+
 //using namespace test_utils;
 
-// NOTE, FIXME: The gate library must tests must be updated, due to the changes of the gate library system
-#ifdef DONT_BUILD
+// NOTE, FIXME: The gate library tests must be updated, due to the changes of the gate library system
+
 
 class gate_library_manager_test : public ::testing::Test
 {
@@ -26,12 +25,12 @@ protected:
     virtual void SetUp()
     {
         NO_COUT_BLOCK;
-        test_lib_path = core_utils::get_gate_library_directories()[0] / "test_lib.json";
+        //test_lib_path = core_utils::get_gate_library_directories()[0] / "test_lib.json";
     }
 
     virtual void TearDown()
     {
-        boost::filesystem::remove(test_lib_path);
+        //boost::filesystem::remove(test_lib_path);
     }
 
     /**
@@ -85,7 +84,7 @@ protected:
         test_lib.close();
     }
 };
-
+#ifdef DONT_BUILD
 /**
  * Testing the loading of gate libraries. Since a test library is added at the start of the test
  * to the searching path of the load_all function, this library should be found always. Also
