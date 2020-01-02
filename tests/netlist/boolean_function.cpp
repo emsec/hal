@@ -315,28 +315,144 @@ TEST_F(boolean_function_test, check_optimize){
         boolean_function a("A");
         boolean_function b("B");
         boolean_function c("C");
+        boolean_function d("D");
         boolean_function _0(ZERO);
         boolean_function _1(ONE);
         {
-            // Optimize some boolean functions and compare their truth_table
+            // Optimize a complex boolean function and compare their truth table
             boolean_function bf = (!(a^b&c)|(b|c&_1))^((a&b) | (a|b|c));
             EXPECT_EQ(bf.get_truth_table(std::vector<std::string>({"C","B","A"})), bf.optimize().get_truth_table(std::vector<std::string>({"C","B","A"}))); // <- fails
         }
         {
-            // Optimize some boolean functions and compare their truth_table
-            boolean_function bf = (a|b|c);
-            EXPECT_EQ(bf.get_truth_table(std::vector<std::string>({"C","B","A"})), bf.optimize().get_truth_table(std::vector<std::string>({"C","B","A"}))); // <- fails
-
-            // +++ DEBUG OUTPUT +++
-            //printTruthTable(bf, std::vector<std::string>({"C","B","A"}));
-            //printTruthTable(bf.optimize(), std::vector<std::string>({"C","B","A"}));
-            //std::cout << "Variables: amount = " << bf.optimize().get_variables().size() << std::endl;
-            //for (auto v : bf.optimize().get_variables())
-                //std::cout << v << ",";
-            //std::cout << std::endl;
+            // Optimize a boolean function in dnf
+            boolean_function bf = (!a & !b & !c & !d) | (a & !b & !c & !d)|
+                                  (!a & !b & c & !d)  | (a & !b & c & !d) |
+                                  (!a & b & c & !d)   | (a & b & c & !d)  |
+                                  (!a & !b & !c & d)  | (a & !b & !c & d) |
+                                  (a & b & !c & d)    | (a & b & c & d);
+            EXPECT_EQ(bf.get_truth_table(std::vector<std::string>({"D","C","B","A"})), bf.optimize().get_truth_table(std::vector<std::string>({"D","C","B","A"})));
         }
 
     TEST_END
 }
 
+/**
+ * Testing the integrity and the logic of the to dnf function
+ *
+ * Functions: to_dnf, is_dnf
+ */
+TEST_F(boolean_function_test, check_to_dnf){
+    TEST_START
+        boolean_function empty_bf;
+        boolean_function a("A");
+        boolean_function b("B");
+        boolean_function c("C");
+        boolean_function d("D");
+        boolean_function _0(ZERO);
+        boolean_function _1(ONE);
+        {
+            // Convert a boolean function to dnf and check its integrity and its format
+            boolean_function bf = (!(a^b&c)|(b|c&_1))^((a&b) | (a|b|c));
+            EXPECT_EQ(bf.get_truth_table(std::vector<std::string>({"C","B","A"})), bf.to_dnf().get_truth_table(std::vector<std::string>({"C","B","A"})));
+            EXPECT_FALSE(bf.is_dnf());
+            EXPECT_TRUE(bf.to_dnf().is_dnf());
+            for (char c : bf.to_dnf().to_string()){ // No XOR in a dnf
+                EXPECT_NE(c, '^');
+            }
+        }
+        {
+            // Test the is_dnf function for boolean functions that are in dnf
+            EXPECT_TRUE( ( (a & b & c)|(!a & b & c)|d ).is_dnf() );
+            EXPECT_TRUE( ( a & b | c ).is_dnf() );
+            EXPECT_TRUE( ( a & b ).is_dnf() );
+            EXPECT_TRUE( ( a | b ).is_dnf() );
+            EXPECT_TRUE( ( a ).is_dnf() );
+            EXPECT_TRUE( ( _0 ).is_dnf() );
+            EXPECT_TRUE( ( _1 ).is_dnf() );
+            EXPECT_TRUE( ( empty_bf ).is_dnf() );
+        }
+        {
+            // Test the is_dnf function for boolean functions that are NOT in dnf
+            EXPECT_FALSE( ( a^b ).is_dnf() );
+            //EXPECT_FALSE( ( !(a & b) | c ).is_dnf() );      // <- fails
+            EXPECT_FALSE( ( a | (b & (c | d)) ).is_dnf() );
 
+        }
+
+    TEST_END
+}
+
+/**
+ * Testing the substitution of variables
+ *
+ * Functions: substitute
+ */
+TEST_F(boolean_function_test, check_substitute){
+    TEST_START
+        boolean_function empty_bf;
+        boolean_function a("A");
+        boolean_function b("B");
+        boolean_function c("C");
+        boolean_function d("D");
+        boolean_function _0(ZERO);
+        boolean_function _1(ONE);
+        {
+            // Convert a boolean function to dnf and check its integrity and its format
+            boolean_function bf = a & c;
+            boolean_function a_func = a | b;
+            boolean_function new_bf = bf.substitute("A", a_func);
+            EXPECT_EQ(new_bf.get_truth_table(std::vector<std::string>({"C","B","A"})), ( (a | b) & c ).get_truth_table(std::vector<std::string>({"C","B","A"})));
+        }
+        {
+            // The boolean function is of type 'variable'
+            boolean_function bf("V");
+            boolean_function v_func = a | b;
+            boolean_function new_bf = bf.substitute("V", v_func);
+            EXPECT_EQ(new_bf.get_truth_table(std::vector<std::string>({"C","B","A"})), ( v_func ).get_truth_table(std::vector<std::string>({"C","B","A"})));
+        }
+
+
+    TEST_END
+}
+
+/**
+ * NOTE: Support of 0,1 ? Operator predence depends on order?
+ * Testing the creation of a boolean function by passing a string
+ *
+ * Functions: from_string
+ */
+TEST_F(boolean_function_test, check_from_string){
+    TEST_START
+        boolean_function empty_bf;
+        boolean_function a("A");
+        boolean_function b("B");
+        boolean_function c("C");
+        boolean_function d("D");
+        //boolean_function _0(ZERO);
+        //boolean_function _1(ONE);
+        {
+            // Convert a boolean function to dnf and check its integrity and its format
+            boolean_function bf = (!((a^b)&c)|(b|c))^((a&b) | (a|b|c));
+            boolean_function bf_from_str = boolean_function::from_string("(!((A^B)&C)|(B|C))^((A&B) | (A|B|C))");
+            EXPECT_EQ(bf.get_truth_table(std::vector<std::string>({"C","B","A"})), bf_from_str.get_truth_table(std::vector<std::string>({"C","B","A"})));
+        }
+        // Testing the operator precedence of the from_string function (assuming transitivity) (from high to low priority (C++): NOT > AND > XOR > OR)
+        {
+            // NOT > AND
+            boolean_function bf = ( (!a) & b );
+            boolean_function bf_from_str = boolean_function::from_string("( !A & B )");
+            EXPECT_EQ(bf.get_truth_table(std::vector<std::string>({"B","A"})), bf_from_str.get_truth_table(std::vector<std::string>({"B","A"})));
+        }
+        {
+            // AND > XOR
+            boolean_function bf = ( a & b ^ b );
+            boolean_function bf_from_str = boolean_function::from_string("(  B ^ B & A)");
+            EXPECT_EQ(bf.get_truth_table(std::vector<std::string>({"B","A"})), bf_from_str.get_truth_table(std::vector<std::string>({"B","A"})));
+        }
+        {
+            // IN PROGRESS...
+        }
+
+
+    TEST_END
+}
