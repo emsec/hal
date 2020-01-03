@@ -123,26 +123,6 @@ protected:
 };
 
 /**
- * Testing template
- *
- * Functions: <functions>
- */
-TEST_F(boolean_function_test, check_){
-    TEST_START
-        {
-            // Set multiple data with different keys and categories
-            boolean_function a("A");
-            boolean_function b("B");
-
-            boolean_function::from_string("1 & 1 & 1").to_dnf();
-
-            EXPECT_TRUE(true);
-        }
-
-    TEST_END
-}
-
-/**
  * Testing the different constructors and the main functionality, by implement the following boolean function:
  *
  *  f(A,B,C) = ( (A AND B) OR C ) XOR 1
