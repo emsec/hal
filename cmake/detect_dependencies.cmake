@@ -102,7 +102,7 @@ message(VERBOSE "Boost version: ${Boost_VERSION}")
 
 if(NOT TARGET Boost::system)
     add_library(Boost::system IMPORTED INTERFACE)
-    set_property(TARGET Boost::filesystem PROPERTY
+    set_property(TARGET Boost::system PROPERTY
                  INTERFACE_INCLUDE_DIRECTORIES ${Boost_INCLUDE_DIR})
     set_property(TARGET Boost::system PROPERTY
                  INTERFACE_LINK_LIBRARIES ${Boost_LIBRARIES})
@@ -117,7 +117,7 @@ message(VERBOSE "Found rapidjson ${RAPIDJSON_INCLUDEDIR}")
 if(RapidJSON_FOUND AND NOT TARGET RapidJSON::RapidJSON)
     add_library(RapidJSON::RapidJSON INTERFACE IMPORTED)
     set_target_properties(RapidJSON::RapidJSON PROPERTIES
-                          INTERFACE_INCLUDE_DIRECTORIES "${RAPIDJSON_INCLUDEDIR}"
+                          INTERFACE_INCLUDE_DIRECTORIES "${RAPIDJSON_INCLUDE_DIRS}"
                           )
 endif()
 

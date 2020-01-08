@@ -254,12 +254,11 @@ deploy-doc:
     - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
     - ssh-add <(echo "$HAL_DEPLOYMENT_KEY")
     - 'ssh-keyscan fs.emsec.rub.de > ~/.ssh/known_hosts'
-    - cd build/documentation/
+    - cd build/documentation/documentation/
     - tar cvfz documentation.tgz --strip-components=1 html
-    - ssh $HAL_DOCUMENTATION_SERVER rm -rf /srv/data/doc-server/data/*
+    - ssh $HAL_DOCUMENTATION_SERVER 'rm -rf /srv/data/doc-server/data/*'
     - scp -r documentation.tgz $HAL_DOCUMENTATION_SERVER:/srv/data/doc-server/data/
     - ssh $HAL_DOCUMENTATION_SERVER tar xvfz /srv/data/doc-server/data/documentation.tgz -C /srv/data/doc-server/data/
-    - ssh $HAL_DOCUMENTATION_SERVER mv /srv/data/doc-server/data/html/* /srv/data/doc-server/data/
     - ssh $HAL_DOCUMENTATION_SERVER rm -f /srv/data/doc-server/data/documentation.tgz
   dependencies:
     - compile:doc:doxygen
@@ -282,10 +281,9 @@ deploy-py-doc:
     - 'ssh-keyscan fs.emsec.rub.de > ~/.ssh/known_hosts'
     - cd build/python-doc/
     - tar cvfz documentation.tgz --strip-components=1 html
-    - ssh $HAL_DOCUMENTATION_SERVER rm -rf /srv/data/doc-server-py/data/*
+    - ssh $HAL_DOCUMENTATION_SERVER 'rm -rf /srv/data/doc-server-py/data/*'
     - scp -r documentation.tgz $HAL_DOCUMENTATION_SERVER:/srv/data/doc-server-py/data/
     - ssh $HAL_DOCUMENTATION_SERVER tar xvfz /srv/data/doc-server-py/data/documentation.tgz -C /srv/data/doc-server-py/data/
-    - ssh $HAL_DOCUMENTATION_SERVER mv /srv/data/doc-server-py/data/html/* /srv/data/doc-server-py/data/
     - ssh $HAL_DOCUMENTATION_SERVER rm -f /srv/data/doc-server-py/data/documentation.tgz
   dependencies:
     - compile:doc:python

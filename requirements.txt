@@ -1,4 +1,4 @@
 jedi
 sphinx
 sphinx-rtd-theme
-dateutil
+python-dateutil
