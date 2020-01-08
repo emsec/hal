@@ -71,7 +71,6 @@ private:
     module_item* m_top_module_item;
 
     QMap<u32, module_item*> m_module_items;
-
 };
 
 #endif // MODULE_MODEL_H

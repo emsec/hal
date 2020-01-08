@@ -44,7 +44,6 @@ private Q_SLOTS:
 
 private:
     gui_utility::sort_mechanism m_sort_mechanism;
-
 };
 
 #endif // MODULE_PROXY_MODEL_H

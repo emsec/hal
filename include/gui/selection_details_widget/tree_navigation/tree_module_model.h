@@ -83,6 +83,5 @@ private:
 
     QIcon m_design_icon;
     QFont m_structured_font;
-
 };
 #endif    // tree_module_model_H
