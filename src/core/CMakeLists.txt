@@ -57,6 +57,7 @@ target_link_libraries(core
                         spdlog::spdlog
                         ${CMAKE_DL_LIBS}
                         RapidJSON::RapidJSON
+                      PRIVATE
                         Boost::system
                       )
 install(TARGETS core
