@@ -3,9 +3,6 @@
 
 #include "gui/gui_globals.h"
 
-#include <QDebug>
-#include <assert.h>
-
 tree_module_proxy_model::tree_module_proxy_model(QObject* parent) : QSortFilterProxyModel(parent)
 {
     m_sort_mechanism = gui_utility::sort_mechanism(g_settings_manager.get("navigation/sort_mechanism").toInt());
@@ -60,6 +57,6 @@ void tree_module_proxy_model::handle_global_setting_changed(void* sender, const 
     {
         m_sort_mechanism = gui_utility::sort_mechanism(value.toInt());
         // force re-sort
-        this->invalidate();
+        invalidate();
     }
 }

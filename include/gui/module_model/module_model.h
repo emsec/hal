@@ -67,15 +67,11 @@ public:
     void remove_module(const u32 id);
     void update_module(const u32 id);
 
-private Q_SLOTS:
-    void handle_global_setting_changed(void* sender, const QString& key, const QVariant& value);
-
 private:
     module_item* m_top_module_item;
 
     QMap<u32, module_item*> m_module_items;
 
-    gui_utility::sort_mechanism m_sort_mechanism;
 };
 
 #endif // MODULE_MODEL_H
