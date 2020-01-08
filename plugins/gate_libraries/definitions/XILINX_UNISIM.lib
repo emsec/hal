@@ -4033,7 +4033,7 @@ library (XILINX_UNISIM) {
     }
 
 
-        cell(RAMB36E1) {
+    cell(RAMB36E1) {
         pin("ADDRARDADDR(0)") {
             direction: input;
         }
@@ -4705,4 +4705,354 @@ library (XILINX_UNISIM) {
         }
     }
 
+    cell(RAMB18E1) {
+        pin("ADDRARDADDR(0)") { 
+            direction: input;
+        }
+        pin("ADDRARDADDR(1)") { 
+            direction: input;
+        }
+        pin("ADDRARDADDR(10)") { 
+            direction: input;
+        }
+        pin("ADDRARDADDR(11)") { 
+            direction: input;
+        }
+        pin("ADDRARDADDR(12)") { 
+            direction: input;
+        }
+        pin("ADDRARDADDR(13)") { 
+            direction: input;
+        }
+        pin("ADDRARDADDR(2)") { 
+            direction: input;
+        }
+        pin("ADDRARDADDR(3)") { 
+            direction: input;
+        }
+        pin("ADDRARDADDR(4)") { 
+            direction: input;
+        }
+        pin("ADDRARDADDR(5)") { 
+            direction: input;
+        }
+        pin("ADDRARDADDR(6)") { 
+            direction: input;
+        }
+        pin("ADDRARDADDR(7)") { 
+            direction: input;
+        }
+        pin("ADDRARDADDR(8)") { 
+            direction: input;
+        }
+        pin("ADDRARDADDR(9)") { 
+            direction: input;
+        }
+        pin("ADDRBWRADDR(0)") { 
+            direction: input;
+        }
+        pin("ADDRBWRADDR(1)") { 
+            direction: input;
+        }
+        pin("ADDRBWRADDR(10)") { 
+            direction: input;
+        }
+        pin("ADDRBWRADDR(11)") { 
+            direction: input;
+        }
+        pin("ADDRBWRADDR(12)") { 
+            direction: input;
+        }
+        pin("ADDRBWRADDR(13)") { 
+            direction: input;
+        }
+        pin("ADDRBWRADDR(2)") { 
+            direction: input;
+        }
+        pin("ADDRBWRADDR(3)") { 
+            direction: input;
+        }
+        pin("ADDRBWRADDR(4)") { 
+            direction: input;
+        }
+        pin("ADDRBWRADDR(5)") { 
+            direction: input;
+        }
+        pin("ADDRBWRADDR(6)") { 
+            direction: input;
+        }
+        pin("ADDRBWRADDR(7)") { 
+            direction: input;
+        }
+        pin("ADDRBWRADDR(8)") { 
+            direction: input;
+        }
+        pin("ADDRBWRADDR(9)") { 
+            direction: input;
+        }
+        pin(CLKARDCLK) { 
+            direction: input;
+        }
+        pin(CLKBWRCLK) { 
+            direction: input;
+        }
+        pin("DIADI(0)") { 
+            direction: input;
+        }
+        pin("DIADI(1)") { 
+            direction: input;
+        }
+        pin("DIADI(10)") { 
+            direction: input;
+        }
+        pin("DIADI(11)") { 
+            direction: input;
+        }
+        pin("DIADI(12)") { 
+            direction: input;
+        }
+        pin("DIADI(13)") { 
+            direction: input;
+        }
+        pin("DIADI(14)") { 
+            direction: input;
+        }
+        pin("DIADI(15)") { 
+            direction: input;
+        }
+        pin("DIADI(2)") { 
+            direction: input;
+        }
+        pin("DIADI(3)") { 
+            direction: input;
+        }
+        pin("DIADI(4)") { 
+            direction: input;
+        }
+        pin("DIADI(5)") { 
+            direction: input;
+        }
+        pin("DIADI(6)") { 
+            direction: input;
+        }
+        pin("DIADI(7)") { 
+            direction: input;
+        }
+        pin("DIADI(8)") { 
+            direction: input;
+        }
+        pin("DIADI(9)") { 
+            direction: input;
+        }
+        pin("DIBDI(0)") { 
+            direction: input;
+        }
+        pin("DIBDI(1)") { 
+            direction: input;
+        }
+        pin("DIBDI(10)") { 
+            direction: input;
+        }
+        pin("DIBDI(11)") { 
+            direction: input;
+        }
+        pin("DIBDI(12)") { 
+            direction: input;
+        }
+        pin("DIBDI(13)") { 
+            direction: input;
+        }
+        pin("DIBDI(14)") { 
+            direction: input;
+        }
+        pin("DIBDI(15)") { 
+            direction: input;
+        }
+        pin("DIBDI(2)") { 
+            direction: input;
+        }
+        pin("DIBDI(3)") { 
+            direction: input;
+        }
+        pin("DIBDI(4)") { 
+            direction: input;
+        }
+        pin("DIBDI(5)") { 
+            direction: input;
+        }
+        pin("DIBDI(6)") { 
+            direction: input;
+        }
+        pin("DIBDI(7)") { 
+            direction: input;
+        }
+        pin("DIBDI(8)") { 
+            direction: input;
+        }
+        pin("DIBDI(9)") { 
+            direction: input;
+        }
+        pin("DIPADIP(0)") { 
+            direction: input;
+        }
+        pin("DIPADIP(1)") { 
+            direction: input;
+        }
+        pin("DIPBDIP(0)") { 
+            direction: input;
+        }
+        pin("DIPBDIP(1)") { 
+            direction: input;
+        }
+        pin(ENARDEN) { 
+            direction: input;
+        }
+        pin(ENBWREN) { 
+            direction: input;
+        }
+        pin(REGCEAREGCE) { 
+            direction: input;
+        }
+        pin(REGCEB) { 
+            direction: input;
+        }
+        pin(RSTRAMARSTRAM) { 
+            direction: input;
+        }
+        pin(RSTRAMB) { 
+            direction: input;
+        }
+        pin(RSTREGARSTREG) { 
+            direction: input;
+        }
+        pin(RSTREGB) { 
+            direction: input;
+        }
+        pin("WEA(0)") { 
+            direction: input;
+        }
+        pin("WEA(1)") { 
+            direction: input;
+        }
+        pin("WEBWE(0)") { 
+            direction: input;
+        }
+        pin("WEBWE(1)") { 
+            direction: input;
+        }
+        pin("WEBWE(2)") { 
+            direction: input;
+        }
+        pin("WEBWE(3)") { 
+            direction: input;
+        }
+        pin("DOADO(0)") {
+            direction: output;
+        }
+        pin("DOADO(1)") {
+            direction: output;
+        }
+        pin("DOADO(10)") {
+            direction: output;
+        }
+        pin("DOADO(11)") {
+            direction: output;
+        }
+        pin("DOADO(12)") {
+            direction: output;
+        }
+        pin("DOADO(13)") {
+            direction: output;
+        }
+        pin("DOADO(14)") {
+            direction: output;
+        }
+        pin("DOADO(15)") {
+            direction: output;
+        }
+        pin("DOADO(2)") {
+            direction: output;
+        }
+        pin("DOADO(3)") {
+            direction: output;
+        }
+        pin("DOADO(4)") {
+            direction: output;
+        }
+        pin("DOADO(5)") {
+            direction: output;
+        }
+        pin("DOADO(6)") {
+            direction: output;
+        }
+        pin("DOADO(7)") {
+            direction: output;
+        }
+        pin("DOADO(8)") {
+            direction: output;
+        }
+        pin("DOADO(9)") {
+            direction: output;
+        }
+        pin("DOBDO(0)") {
+            direction: output;
+        }
+        pin("DOBDO(1)") {
+            direction: output;
+        }
+        pin("DOBDO(10)") {
+            direction: output;
+        }
+        pin("DOBDO(11)") {
+            direction: output;
+        }
+        pin("DOBDO(12)") {
+            direction: output;
+        }
+        pin("DOBDO(13)") {
+            direction: output;
+        }
+        pin("DOBDO(14)") {
+            direction: output;
+        }
+        pin("DOBDO(15)") {
+            direction: output;
+        }
+        pin("DOBDO(2)") {
+            direction: output;
+        }
+        pin("DOBDO(3)") {
+            direction: output;
+        }
+        pin("DOBDO(4)") {
+            direction: output;
+        }
+        pin("DOBDO(5)") {
+            direction: output;
+        }
+        pin("DOBDO(6)") {
+            direction: output;
+        }
+        pin("DOBDO(7)") {
+            direction: output;
+        }
+        pin("DOBDO(8)") {
+            direction: output;
+        }
+        pin("DOBDO(9)") {
+            direction: output;
+        }
+        pin("DOPADOP(0)") {
+            direction: output;
+        }
+        pin("DOPADOP(1)") {
+            direction: output;
+        }
+        pin("DOPBDOP(0)") {
+            direction: output;
+        }
+        pin("DOPBDOP(1)") {
+            direction: output;
+        }
+    }
 }
