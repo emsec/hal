@@ -64,9 +64,6 @@ public:
     static const int ID_COLUMN   = 1;
     static const int TYPE_COLUMN = 2;
 
-private Q_SLOTS:
-    void handle_global_setting_changed(void* sender, const QString& key, const QVariant& value);
-
 private:
     void setup_model_data();
 
@@ -87,6 +84,5 @@ private:
     QIcon m_design_icon;
     QFont m_structured_font;
 
-    gui_utility::sort_mechanism m_sort_mechanism;
 };
 #endif    // tree_module_model_H

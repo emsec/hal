@@ -24,6 +24,8 @@
 #ifndef tree_module_proxy_model_H
 #define tree_module_proxy_model_H
 
+#include "gui/gui_utils/sort.h"
+
 #include <QSortFilterProxyModel>
 
 class tree_module_proxy_model : public QSortFilterProxyModel
@@ -34,6 +36,13 @@ public:
 
 protected:
     bool filterAcceptsRow(int source_row, const QModelIndex& source_parent) const override;
+    bool lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const override;
+
+private Q_SLOTS:
+    void handle_global_setting_changed(void* sender, const QString& key, const QVariant& value);
+
+private:
+    gui_utility::sort_mechanism m_sort_mechanism;
 };
 
 #endif    // tree_module_proxy_model_H
