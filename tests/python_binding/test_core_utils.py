@@ -1,12 +1,38 @@
+import sys
+import os
+
+### Automatically searches for the hal_py.so file and adds its path to the environment variables
+
+dirname = os.path.dirname(__file__)
+hal_path = os.path.join(dirname, '../../')
+hal_py_path = None
+hal_base_path = None
+
+for p in os.listdir(hal_path):
+    build_path = os.path.join(hal_path, p)
+    if not os.path.isfile(build_path):
+        if os.path.exists(os.path.join(hal_path, p + '/lib/hal_py.so')):
+            hal_base_path = build_path
+            hal_py_path = os.path.join(hal_path, p + '/lib/')
+            break
+
+if not hal_py_path is None:
+    sys.path.append(hal_py_path)
+    os.environ["HAL_BASE_PATH"] = str(build_path)
+else:
+    print("Can't find hal_py.so instance. Did you build it? If it can't be found anyway, make sure its directory is added to your PYTHONPATH and your HAL_BASE_PATH to your environment variables.")
+
+###
+
 import unittest
 import hal_py
 import logging
-import os
 
 '''
 NOTE: Every function is only tested once with all possible amounts of inputs,
       but NOT extensively (its already done in the c++ tests)
 '''
+
 
 class TestCoreUtils(unittest.TestCase):
     @classmethod
