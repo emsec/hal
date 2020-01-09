@@ -72,7 +72,7 @@ void graph_navigation_widget::setup()
                 return;
             }
 
-            m_origin = hal::node{hal::node_type::none, 0};
+            m_origin = hal::node{hal::node_type::gate, 0};
 
             std::shared_ptr<gate> g = n->get_src().get_gate();
 

@@ -28,11 +28,15 @@ QVariant tree_module_model::data(const QModelIndex& index, int role) const
     if (!index.isValid())
         return QVariant();
 
+    // UserRole is mapped to "is a structure element?"
+    if (role == Qt::UserRole)
+        return get_item(index)->get_type() == tree_module_item::item_type::structure;
+
     if (get_item(index)->get_type() == tree_module_item::item_type::structure && index.column() == 0)
     {
         if (role == Qt::FontRole)
             return m_structured_font;
-
+        
 //        if(get_item(index) == m_gates_item && role == Qt::DecorationRole)
 //            return m_design_icon;
     }
@@ -159,56 +163,16 @@ void tree_module_model::update(u32 module_id)
     m_gates_item->set_data(NAME_COLUMN, "Gates (" + QString::number(gates.size()) + ")");
     m_nets_item->set_data(NAME_COLUMN, "Nets (" + QString::number(nets.size()) + ")");
 
-    std::vector<std::shared_ptr<gate>> sorted_gates(gates.begin(), gates.end());
-    switch(m_sort_mechanism)
-    {
-        case gui_utility::sort_mechanism::lexical:
-            std::sort(sorted_gates.begin(), sorted_gates.end(), [](std::shared_ptr<gate> g1, std::shared_ptr<gate> g2){
-                return (gui_utility::lexical_order_compare(QString::fromStdString(g1->get_name()).toLower(), QString::fromStdString(g2->get_name()).toLower()));
-            });
-            break;
-        case gui_utility::sort_mechanism::natural:
-            std::sort(sorted_gates.begin(), sorted_gates.end(), [](std::shared_ptr<gate> g1, std::shared_ptr<gate> g2){
-                return (gui_utility::natural_order_compare(QString::fromStdString(g1->get_name()).toLower(), QString::fromStdString(g2->get_name()).toLower()));
-            });
-            break;
-    }
-
-    std::vector<std::shared_ptr<net>> sorted_nets(nets.begin(), nets.end());
-    switch(m_sort_mechanism)
-    {
-        case gui_utility::sort_mechanism::lexical:
-            std::sort(sorted_nets.begin(), sorted_nets.end(), [](std::shared_ptr<net> n1, std::shared_ptr<net> n2){
-                return (gui_utility::lexical_order_compare(QString::fromStdString(n1->get_name()).toLower(), QString::fromStdString(n2->get_name()).toLower()));
-            });
-            break;
-        case gui_utility::sort_mechanism::natural:
-            std::sort(sorted_nets.begin(), sorted_nets.end(), [](std::shared_ptr<net> n1, std::shared_ptr<net> n2){
-                return (gui_utility::natural_order_compare(QString::fromStdString(n1->get_name()).toLower(), QString::fromStdString(n2->get_name()).toLower()));
-            });
-            break;
-    }
-
-    for(const std::shared_ptr<gate> &_g : sorted_gates)
+    for(const std::shared_ptr<gate> &_g : gates)
     {
         tree_module_item* item = new tree_module_item(QVector<QVariant>() << QString::fromStdString(_g->get_name()) << _g->get_id() << QString::fromStdString(_g->get_type()->get_name()), tree_module_item::item_type::gate, m_gates_item);
         insert_item(m_gates_item, m_gates_item->get_child_count(), item);
     }
 
-    for(const std::shared_ptr<net> &_n : sorted_nets)
+    for(const std::shared_ptr<net> &_n : nets)
     {
         tree_module_item* item = new tree_module_item(QVector<QVariant>() << QString::fromStdString(_n->get_name()) << _n->get_id() << "", tree_module_item::item_type::net, m_nets_item);
         insert_item(m_nets_item, m_nets_item->get_child_count(), item);
-    }
-}
-
-void tree_module_model::handle_global_setting_changed(void* sender, const QString& key, const QVariant& value)
-{
-    Q_UNUSED(sender);
-    if (key == "navigation/sort_mechanism")
-    {
-        m_sort_mechanism = gui_utility::sort_mechanism(value.toInt());
-        // TODO re-sort the list
     }
 }
 
@@ -282,8 +246,4 @@ void tree_module_model::load_data_settings()
     m_structured_font.setBold(true);
     m_structured_font.setPixelSize(15);
     m_design_icon = gui_utility::get_styled_svg_icon("all->#888888", ":/icons/open");
-
-    m_sort_mechanism = gui_utility::sort_mechanism(
-        g_settings_manager.get("navigation/sort_mechanism").toInt());
-    connect(&g_settings_relay, &settings_relay::setting_changed, this, &tree_module_model::handle_global_setting_changed);
 }

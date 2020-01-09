@@ -2,19 +2,23 @@
 // Created by Sebastian Wallat on 2019-04-16.
 //
 
-#include <QWidget>
-#include "core/log.h"
 #include "gui/focus_logger/focus_logger.h"
+#include "core/log.h"
+#include <QWidget>
 
-focus_logger::focus_logger(QApplication* app, QObject *parent) : QObject(parent)
+focus_logger::focus_logger(QApplication* app, QObject* parent) : QObject(parent)
 {
     connect(app, &QApplication::focusChanged, this, &focus_logger::handle_focus_change);
 }
 
-void focus_logger::handle_focus_change(QWidget *old, QWidget *new_obj)
+void focus_logger::handle_focus_change(QWidget* old, QWidget* new_obj)
 {
     if (old == nullptr && new_obj != nullptr)
+    {
         log_info("gui", "GUI gained focus.");
-    else if(old != nullptr && new_obj == nullptr)
+    }
+    else if (old != nullptr && new_obj == nullptr)
+    {
         log_info("gui", "GUI lost focus.");
+    }
 }
