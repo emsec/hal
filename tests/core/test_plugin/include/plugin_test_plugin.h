@@ -11,7 +11,7 @@ class gate;
 class net;
 
 
-class PLUGIN_API plugin_test_plugin : virtual public i_cli
+class PLUGIN_API plugin_test_plugin : virtual public i_cli //i_cli
 {
 public:
     /** constructor (= default) */
@@ -30,11 +30,8 @@ public:
     /** interface implementation: i_base */
     std::string get_version() const override;
 
-
     /** interface implementation: i_cli */
     program_options get_cli_options() const override;
-
-
 
     /** interface implementation: i_cli */
     bool handle_cli_call(std::shared_ptr<netlist> nl, program_arguments& args) override;
