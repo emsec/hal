@@ -137,7 +137,7 @@ public:
      * @param[in] channel_name - Name of the channel.
      * @returns The channel.
      */
-    std::shared_ptr<spdlog::logger> get_channel(const std::string& channel_name = "stdout");
+    spdlog::logger* get_channel(const std::string& channel_name = "stdout") const;
 
     /**
      * Returns all channels' names.

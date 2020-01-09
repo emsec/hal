@@ -175,7 +175,7 @@ boolean_function gate::get_lut_function() const
     {
         return boolean_function::ZERO;
     }
-    u64 config = std::stoull(config_str, nullptr, 16);
+    u64 config      = std::stoull(config_str, nullptr, 16);
     u32 config_size = 1 << get_input_pins().size();
 
     boolean_function result;
@@ -307,6 +307,7 @@ std::set<std::shared_ptr<net>> gate::get_fan_in_nets() const
 
     return nets;
 }
+
 
 std::shared_ptr<net> gate::get_fan_in_net(const std::string& pin_type) const
 {
