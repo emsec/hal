@@ -39,8 +39,7 @@ enum class item_type
 enum class node_type
 {
     module,
-    gate,
-    none
+    gate
 };
 
 struct node

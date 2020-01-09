@@ -162,7 +162,7 @@ void standard_graph_layouter::add_vertical(const QSet<u32>& modules, const QSet<
     int x;
     int y;
 
-    if (node_to_position_map().contains(preferred_origin))
+    if (preferred_origin.id != 0 && node_to_position_map().contains(preferred_origin))
     {
         // place all new nodes right respectively left of the origin node
         QPoint originPoint = node_to_position_map().value(preferred_origin);
