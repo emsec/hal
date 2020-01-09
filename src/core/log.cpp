@@ -73,15 +73,15 @@ void log_manager::set_format_pattern(const std::string& format)
     spdlog::set_pattern(format);
 }
 
-std::shared_ptr<spdlog::logger> log_manager::get_channel(const std::string& channel)
+spdlog::logger* log_manager::get_channel(const std::string& channel) const
 {
-    auto it = m_logger.find(channel);
+    const auto& it = m_logger.find(channel);
     if (it == m_logger.end())
     {
         log_error("stdout", "channel '{}' was not registered so far.", channel);
-        return this->m_logger["null"];
+        return this->m_logger.at("null").get();
     }
-    return it->second;
+    return it->second.get();
 }
 
 std::set<std::string> log_manager::get_channels() const
