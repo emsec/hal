@@ -867,6 +867,53 @@ boolean_function boolean_function::to_dnf() const
     return replace_xors().propagate_negations().expand_ands().flatten().optimize_constants();
 }
 
+std::vector<std::vector<std::pair<std::string, bool>>> boolean_function::get_dnf_clauses() const
+{
+    auto dnf = to_dnf();
+
+    std::vector<std::vector<std::pair<std::string, bool>>> result;
+
+    if (dnf.m_content == content_type::VARIABLE)
+    {
+        result.push_back({std::make_pair(dnf.m_variable, !dnf.m_invert)});
+        return result;
+    }
+    else if (dnf.m_content == content_type::CONSTANT)
+    {
+        result.push_back({std::make_pair(to_string(dnf.m_constant), true)});
+        return result;
+    }
+    if (dnf.m_op == operation::OR)
+    {
+        for (const auto& term : dnf.m_operands)
+        {
+            std::vector<std::pair<std::string, bool>> clause;
+            if (term.m_content == content_type::TERMS)
+            {
+                for (const auto& value : term.m_operands)
+                {
+                    clause.push_back(std::make_pair(value.m_variable, !value.m_invert));
+                }
+            }
+            else
+            {
+                clause.push_back(std::make_pair(term.m_variable, !term.m_invert));
+            }
+            result.push_back(clause);
+        }
+    }
+    else
+    {
+        std::vector<std::pair<std::string, bool>> clause;
+        for (const auto& value : dnf.m_operands)
+        {
+            clause.push_back(std::make_pair(value.m_variable, !value.m_invert));
+        }
+        result.push_back(clause);
+    }
+    return result;
+}
+
 std::vector<boolean_function::value> boolean_function::get_truth_table(const std::vector<std::string>& order) const
 {
     std::vector<value> result;

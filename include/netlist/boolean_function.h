@@ -251,6 +251,19 @@ public:
     boolean_function to_dnf() const;
 
     /**
+     * Gets the DNF clauses of the function.
+     * Useful for parsing into other formats etc.
+     *
+     * Returns all clauses that are OR-ed together.
+     * Each clause is a vector of pairs <variable name, boolean value>.
+     * Example:
+     * [[("a", true), ("b", false)], [("c", true)]] -> (a & !b) | c
+     *
+     * @returns The DNF clauses as a vector of vectors of pairs <string, bool>.
+     */
+    std::vector<std::vector<std::pair<std::string, bool>>> get_dnf_clauses() const;
+
+    /**
      * Optimizes the function by first converting it to DNF and then applying the Quine-McCluskey algorithm.
      *
      * @returns The optimized boolean function.
