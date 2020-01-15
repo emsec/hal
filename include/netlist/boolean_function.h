@@ -87,6 +87,18 @@ public:
     boolean_function(value constant);
 
     /**
+     * Substitutes a variable with another variable (i.e., variable renaming).
+     * Applies to all instances of the variable in the function.
+     *
+     * This is just a shorthand for the generic substitute function.
+     *
+     * @param[in] old_variable_name - The old variable to substitute
+     * @param[in] new_variable_name - The new variable name
+     * @returns The new boolean function.
+     */
+    boolean_function substitute(const std::string& old_variable_name, const std::string& new_variable_name) const;
+
+    /**
      * Substitutes a variable with another function (can again be a single variable).
      * Applies to all instances of the variable in the function.
      *
@@ -143,6 +155,9 @@ public:
     /**
      * Parse a function from a string representation.
      * Supported operators are  NOT ("!", "'"), AND ("&", "*", " "), OR ("|", "+"), XOR ("^") and brackets ("(", ")").
+     * Operator precedence is ! > & > ^ > |
+     *
+     * If there is an error during bracket matching, X is returned for that part.
      *
      * @param[in] expression - String containing a boolean function.
      * @returns The boolean function extracted from the string.

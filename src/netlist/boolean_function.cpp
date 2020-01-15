@@ -86,6 +86,11 @@ boolean_function::boolean_function(value constant)
     m_constant = constant;
 }
 
+boolean_function boolean_function::substitute(const std::string& old_variable_name, const std::string& new_variable_name) const
+{
+    return substitute(old_variable_name, boolean_function(new_variable_name));
+}
+
 boolean_function boolean_function::substitute(const std::string& variable_name, const boolean_function& function) const
 {
     if (m_content == content_type::VARIABLE && m_variable == variable_name)
@@ -271,12 +276,35 @@ boolean_function boolean_function::from_string(std::string expression)
             if (expression.find(d) != std::string::npos)
             {
                 is_term = true;
+                break;
             }
         }
         if (!is_term)
         {
             return boolean_function(expression);
         }
+    }
+
+    // simple bracket check
+    i32 level = 0;
+    for (const auto& c : expression)
+    {
+        if (c == '(')
+        {
+            level += 1;
+        }
+        else if (c == ')')
+        {
+            level -= 1;
+            if (level < 0)
+            {
+                return value::X;
+            }
+        }
+    }
+    if (level != 0)
+    {
+        return value::X;
     }
 
     // parse expression
@@ -353,67 +381,114 @@ boolean_function boolean_function::from_string(std::string expression)
         return from_string(terms[0].substr(1, terms[0].size() - 2));
     }
 
+
+    // small mutable datastructure for parsing
+    struct op_term
+    {
+        operation op;
+        boolean_function term;
+    };
+    std::vector<op_term> parsed_terms;
+
+
     bool negate_next  = false;
     operation next_op = operation::AND;
 
-    // multiple terms available -> initialize return value with first term
-    u32 i = 0;
-    while (terms[i] == "!")
     {
-        negate_next = !negate_next;
-        ++i;
-    }
-    boolean_function result = from_string(terms[i]);
-    while (i + 1 < terms.size() && terms[i + 1] == "'")
-    {
-        negate_next = !negate_next;
-        ++i;
-    }
-    if (negate_next)
-    {
-        result      = !result;
-        negate_next = false;
-    }
-
-    // process the remaining terms and update the result function
-    while (++i < terms.size())
-    {
-        if (terms[i] == "!")
+        // multiple terms available -> initialize return value with first term
+        u32 i = 0;
+        while (terms[i] == "!")
         {
             negate_next = !negate_next;
+            ++i;
         }
-        else if (terms[i] == "&" || terms[i] == "*")
+        boolean_function first_term = from_string(terms[i]);
+        while (i + 1 < terms.size() && terms[i + 1] == "'")
         {
-            next_op = operation::AND;
+            negate_next = !negate_next;
+            ++i;
         }
-        else if (terms[i] == "|" || terms[i] == "+")
+        if (negate_next)
         {
-            next_op = operation::OR;
+            first_term  = !first_term;
+            negate_next = false;
         }
-        else if (terms[i] == "^")
+
+        parsed_terms.push_back({operation::AND, first_term});
+
+        // process the remaining terms
+        while (++i < terms.size())
         {
-            next_op = operation::XOR;
-        }
-        else
-        {
-            auto next_term = from_string(terms[i]);
-            while (i + 1 < terms.size() && terms[i + 1] == "'")
+            if (terms[i] == "!")
             {
                 negate_next = !negate_next;
-                ++i;
             }
-            if (negate_next)
+            else if (terms[i] == "&" || terms[i] == "*")
             {
-                next_term = !next_term;
+                next_op = operation::AND;
             }
-            result = result.combine(next_op, next_term);
+            else if (terms[i] == "|" || terms[i] == "+")
+            {
+                next_op = operation::OR;
+            }
+            else if (terms[i] == "^")
+            {
+                next_op = operation::XOR;
+            }
+            else
+            {
+                auto next_term = from_string(terms[i]);
+                while (i + 1 < terms.size() && terms[i + 1] == "'")
+                {
+                    negate_next = !negate_next;
+                    ++i;
+                }
+                if (negate_next)
+                {
+                    next_term = !next_term;
+                }
 
-            negate_next = false;
-            next_op     = operation::AND;
+                parsed_terms.push_back({next_op, next_term});
+
+                negate_next = false;
+                next_op     = operation::AND;
+            }
         }
     }
 
-    return result;
+    // assemble terms in order of operator precedence
+
+    for (u32 i = 1; i < parsed_terms.size(); ++i)
+    {
+        if (parsed_terms[i].op == operation::AND)
+        {
+            parsed_terms[i - 1].term = parsed_terms[i - 1].term & parsed_terms[i].term;
+            parsed_terms.erase(parsed_terms.begin() + i);
+            --i;
+        }
+    }
+
+    for (u32 i = 1; i < parsed_terms.size(); ++i)
+    {
+        if (parsed_terms[i].op == operation::XOR)
+        {
+            parsed_terms[i - 1].term = parsed_terms[i - 1].term ^ parsed_terms[i].term;
+            parsed_terms.erase(parsed_terms.begin() + i);
+            --i;
+        }
+    }
+
+    for (u32 i = 1; i < parsed_terms.size(); ++i)
+    {
+        if (parsed_terms[i].op == operation::OR)
+        {
+            parsed_terms[i - 1].term = parsed_terms[i - 1].term | parsed_terms[i].term;
+            parsed_terms.erase(parsed_terms.begin() + i);
+            --i;
+        }
+    }
+
+    return parsed_terms[0].term;
 }
 
 std::string boolean_function::to_string() const
