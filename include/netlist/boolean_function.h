@@ -334,7 +334,7 @@ private:
     // expands ands, i.e., a & (b | c) -> a&b | a&c
     boolean_function expand_ands() const;
     // helper function 1
-    std::vector<boolean_function> expand_ands_internal(const std::vector<std::vector<boolean_function>>& sub_primitives, u32 i) const;
+    std::vector<boolean_function> expand_ands_internal(const std::vector<std::vector<boolean_function>>& sub_primitives) const;
     // helper function 2
     std::vector<boolean_function> get_primitives() const;
 

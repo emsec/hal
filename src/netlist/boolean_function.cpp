@@ -657,7 +657,7 @@ boolean_function boolean_function::replace_xors() const
     return result;
 }
 
-std::vector<boolean_function> boolean_function::expand_ands_internal(const std::vector<std::vector<boolean_function>>& sub_primitives, u32 i) const
+std::vector<boolean_function> boolean_function::expand_ands_internal(const std::vector<std::vector<boolean_function>>& sub_primitives) const
 {
     std::vector<boolean_function> result = sub_primitives[0];
 
@@ -728,7 +728,7 @@ std::vector<boolean_function> boolean_function::get_primitives() const
         {
             sub_primitives.push_back(operand.get_primitives());
         }
-        return expand_ands_internal(sub_primitives, 0);
+        return expand_ands_internal(sub_primitives);
     }
 }
 
