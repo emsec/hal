@@ -67,7 +67,7 @@ bool gate_library_parser_liberty::tokenize()
                 continue;
             }
 
-            if (std::isspace(c))
+            if (std::isspace(c) && !in_string)
             {
                 continue;
             }
@@ -124,6 +124,10 @@ bool gate_library_parser_liberty::parse_tokens()
             }
 
             auto gt = construct_gate_type();
+            if (gt == nullptr)
+            {
+                return false;
+            }
 
             m_gate_lib->add_gate_type(gt);
         }
@@ -495,14 +499,34 @@ std::shared_ptr<gate_type> gate_library_parser_liberty::construct_gate_type()
     {
         gt = std::make_shared<gate_type>(m_current_cell.name);
 
+        gt->add_input_pins(m_current_cell.input_pins);
+        gt->add_output_pins(m_current_cell.output_pins);
+
         for (auto& [pin_name, bf] : m_current_cell.functions)
         {
-            gt->add_boolean_function(pin_name, boolean_function::from_string(bf));
+            auto func = boolean_function::from_string(bf);
+            auto pins = gt->get_input_pins();
+            auto vars = func.get_variables();
+
+            // verify that all variables correspond to actual input pins
+            for (const auto& var : vars)
+            {
+                if (std::find(pins.begin(), pins.end(), var) == pins.end())
+                {
+                    log_error("netlist", "variable '{}' of boolean function '{}' of gate type '{}' does not match any input pin.", var, func.to_string(), gt->get_name());
+                    return nullptr;
+                }
+            }
+
+            gt->add_boolean_function(pin_name, func);
         }
     }
     else if (m_current_cell.type == gate_type::base_type::ff || m_current_cell.type == gate_type::base_type::latch)
     {
         auto seq_gt = std::make_shared<gate_type_sequential>(m_current_cell.name, m_current_cell.type);
+
+        seq_gt->add_input_pins(m_current_cell.input_pins);
+        seq_gt->add_output_pins(m_current_cell.output_pins);
 
         bool is_ff = (m_current_cell.type == gate_type::base_type::ff);
 
@@ -552,6 +576,9 @@ std::shared_ptr<gate_type> gate_library_parser_liberty::construct_gate_type()
     {
         auto lut_gt = std::make_shared<gate_type_lut>(m_current_cell.name);
 
+        lut_gt->add_input_pins(m_current_cell.input_pins);
+        lut_gt->add_output_pins(m_current_cell.output_pins);
+
         lut_gt->set_config_data_category(m_current_cell.data_category);
         lut_gt->set_config_data_identifier(m_current_cell.data_identifier);
         lut_gt->set_config_data_ascending_order(m_current_cell.data_direction == "ascending");
@@ -570,9 +597,6 @@ std::shared_ptr<gate_type> gate_library_parser_liberty::construct_gate_type()
 
         gt = lut_gt;
     }
-
-    gt->add_input_pins(m_current_cell.input_pins);
-    gt->add_output_pins(m_current_cell.output_pins);
 
     return gt;
 }
