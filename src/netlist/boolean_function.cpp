@@ -46,13 +46,11 @@ boolean_function::boolean_function()
     m_invert  = false;
 }
 
-boolean_function::boolean_function(operation op, const std::vector<boolean_function>& operands, bool invert_result)
+boolean_function::boolean_function(operation op, const std::vector<boolean_function>& operands, bool invert_result) : boolean_function()
 {
     if (operands.empty())
     {
-        m_content = content_type::CONSTANT;
-        m_invert  = false;
-
+        m_content  = content_type::CONSTANT;
         m_constant = value::X;
     }
     else if (operands.size() == 1)
@@ -69,20 +67,16 @@ boolean_function::boolean_function(operation op, const std::vector<boolean_funct
     }
 }
 
-boolean_function::boolean_function(const std::string& variable_name)
+boolean_function::boolean_function(const std::string& variable_name) : boolean_function()
 {
-    m_content = content_type::VARIABLE;
-    m_invert  = false;
-
+    m_content  = content_type::VARIABLE;
     m_variable = core_utils::trim(variable_name);
     assert(!m_variable.empty());
 }
 
-boolean_function::boolean_function(value constant)
+boolean_function::boolean_function(value constant) : boolean_function()
 {
-    m_content = content_type::CONSTANT;
-    m_invert  = false;
-
+    m_content  = content_type::CONSTANT;
     m_constant = constant;
 }
 
@@ -381,7 +375,6 @@ boolean_function boolean_function::from_string(std::string expression)
         return from_string(terms[0].substr(1, terms[0].size() - 2));
     }
 
-
     // small mutable datastructure for parsing
     struct op_term
     {
@@ -389,7 +382,6 @@ boolean_function boolean_function::from_string(std::string expression)
         boolean_function term;
     };
     std::vector<op_term> parsed_terms;
-
 
     bool negate_next  = false;
     operation next_op = operation::AND;
@@ -667,18 +659,48 @@ boolean_function boolean_function::replace_xors() const
 
 std::vector<boolean_function> boolean_function::expand_ands_internal(const std::vector<std::vector<boolean_function>>& sub_primitives, u32 i) const
 {
-    if (i >= sub_primitives.size())
-    {
-        return {boolean_function()};
-    }
-    std::vector<boolean_function> result;
-    for (const auto& x : sub_primitives[i])
-    {
-        for (const auto& y : expand_ands_internal(sub_primitives, i + 1))
+    std::vector<boolean_function> result = sub_primitives[0];
+
+    auto set_identifier = [](const boolean_function& f) -> std::string {
+        std::string result;
+        for (const auto& var : f.m_operands)
         {
-            result.push_back(x & y);
+            if (var.m_invert)
+                result += "!";
+            result += var.m_variable;
+            result += " ";
         }
+        return result;
+    };
+
+    for (u32 i = 1; i < sub_primitives.size(); ++i)
+    {
+        std::set<std::string> seen;
+        std::vector<boolean_function> tmp;
+        tmp.reserve(sub_primitives[i].size() * result.size());
+        for (const auto& bf : sub_primitives[i])
+        {
+            for (const auto& bf2 : result)
+            {
+                auto combined = (bf2 & bf).optimize_constants();
+                if (!(combined.m_content == content_type::CONSTANT && combined.m_constant == value::ZERO))
+                {
+                    if (combined.m_content == content_type::TERMS)
+                    {
+                        std::sort(combined.m_operands.begin(), combined.m_operands.end(), [](const auto& f1, const auto& f2) { return f1.m_variable < f2.m_variable; });
+                    }
+                    auto s = set_identifier(combined);
+                    if (seen.find(s) == seen.end())
+                    {
+                        seen.insert(s);
+                        tmp.push_back(combined);
+                    }
+                }
+            }
+        }
+        result = tmp;
     }
+
     return result;
 }
 
@@ -699,7 +721,7 @@ std::vector<boolean_function> boolean_function::get_primitives() const
         }
         return primitives;
     }
-    else
+    else    // m_op == AND
     {
         std::vector<std::vector<boolean_function>> sub_primitives;
         for (const auto& operand : m_operands)
@@ -712,7 +734,12 @@ std::vector<boolean_function> boolean_function::get_primitives() const
 
 boolean_function boolean_function::expand_ands() const
 {
-    return boolean_function(operation::OR, get_primitives());
+    auto primitives = get_primitives();
+    if (primitives.empty())
+    {
+        return value::ZERO;
+    }
+    return boolean_function(operation::OR, primitives);
 }
 
 boolean_function boolean_function::optimize_constants() const
@@ -913,27 +940,29 @@ boolean_function boolean_function::to_dnf() const
         return *this;
     }
 
-    // auto init_tt = get_truth_table();
+    // auto tmp_vars = get_variables();
+    // std::vector<std::string> init_vars(tmp_vars.begin(), tmp_vars.end());
+    // auto init_tt = get_truth_table(init_vars);
     // std::cout << "transforming " << *this << std::endl;
     // auto x = replace_xors();
     // std::cout << "  replace_xors " << x << std::endl;
-    // if (x.get_truth_table() != init_tt)
+    // if (x.get_truth_table(init_vars) != init_tt)
     //     std::cout << "FUNCTIONS DONT MATCH" << std::endl;
     // x = x.propagate_negations();
     // std::cout << "  propagate_negations " << x << std::endl;
-    // if (x.get_truth_table() != init_tt)
+    // if (x.get_truth_table(init_vars) != init_tt)
     //     std::cout << "FUNCTIONS DONT MATCH" << std::endl;
     // x = x.expand_ands();
     // std::cout << "  expand_ands " << x << std::endl;
-    // if (x.get_truth_table() != init_tt)
+    // if (x.get_truth_table(init_vars) != init_tt)
     //     std::cout << "FUNCTIONS DONT MATCH" << std::endl;
     // x = x.flatten();
     // std::cout << "  flatten " << x << std::endl;
-    // if (x.get_truth_table() != init_tt)
+    // if (x.get_truth_table(init_vars) != init_tt)
     //     std::cout << "FUNCTIONS DONT MATCH" << std::endl;
     // x = x.optimize_constants();
     // std::cout << "  optimize_constants " << x << std::endl;
-    // if (x.get_truth_table() != init_tt)
+    // if (x.get_truth_table(init_vars) != init_tt)
     //     std::cout << "FUNCTIONS DONT MATCH" << std::endl;
     // return x;
 
