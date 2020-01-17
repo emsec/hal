@@ -517,6 +517,7 @@ TEST_F(hdl_parser_verilog_test, check_assign)
 {
     TEST_START
         create_temp_gate_lib();
+
         {
             // Use the assign statement where one wire is assigned to another. The netlist should be created like this:
             /*
@@ -666,7 +667,7 @@ TEST_F(hdl_parser_verilog_test, check_assign)
             }
         }
         /*{
-            // NOTE: fails with map::at (l. 635)
+            // NOTE: currently not supported
             // Assign constants ('b0 and 'b1)
             std::stringstream input("module top ("
                                     "  global_in,"
@@ -700,9 +701,9 @@ TEST_F(hdl_parser_verilog_test, check_assign)
             std::shared_ptr<gate> test_gate = *nl->get_gates(gate_name_filter("test_gate")).begin();
 
         }*/
-        /*{
-            // NOTE: fails currently (bc for example .\I(0) (single_net) is interpreted as "I" => "0")(wrong escaped?)
-            // Assign constants a set of wires (single AND vectors) to a vector
+
+        {
+            // Assign a set of wires to a single vector
             std::stringstream input("module top ("
                                     "  global_out_0,"
                                     "  global_out_1,"
@@ -713,11 +714,11 @@ TEST_F(hdl_parser_verilog_test, check_assign)
                                     "  output global_out_2 ;"
                                     ""
                                     "  wire single_net ;"
-                                    "  wire [0:2][0:2] 2_d_vector_0;"
-                                    "  wire [0:2][0:1] 2_d_vector_1;"
+                                    "  wire [0:2][0:2] _2_d_vector_0;"
+                                    "  wire [0:2][0:1] _2_d_vector_1;"
                                     "  wire [0:15] big_vector;"
                                     "  wire [0:11] net_vector_master;"
-                                    "  assign {single_net, big_vector[3], big_vector[0:1], 2_d_vector_0[0:1][0:1], 2_d_vector_1[1:0][0:1]} = net_vector_master;"
+                                    "  assign {single_net, big_vector[3], big_vector[0:1], _2_d_vector_0[0:1][0:1], _2_d_vector_1[1:0][0:1]} = net_vector_master;"
                                     ""
                                     "GATE_4^1_IN_1^0_OUT test_gate_0 ("
                                     "  .\\I(0) (single_net ),"
@@ -728,18 +729,17 @@ TEST_F(hdl_parser_verilog_test, check_assign)
                                     " ) ;"
                                     ""
                                     "GATE_4^1_IN_1^0_OUT test_gate_1 ("
-                                    "  .\\I(0) (2_d_vector_0[0][0] ),"
-                                    "  .\\I(1) (2_d_vector_0[0][1] ),"
-                                    "  .\\I(2) (2_d_vector_0[1][0] ),"
-                                    "  .\\I(3) (2_d_vector_0[1][1] ),"
+                                    "  .\\I(0) (_2_d_vector_0[0][0] ),"
+                                    "  .\\I(1) (_2_d_vector_0[0][1] ),"
+                                    "  .\\I(2) (_2_d_vector_0[1][0] ),"
+                                    "  .\\I(3) (_2_d_vector_0[1][1] ),"
                                     "  .\\O (global_out_1 )"
                                     " ) ;"
-                                    "// Not sure..."
                                     "GATE_4^1_IN_1^0_OUT test_gate_2 ("
-                                    "  .\\I(0) (2_d_vector_1[1][0] ),"
-                                    "  .\\I(1) (2_d_vector_1[1][0] ),"
-                                    "  .\\I(2) (2_d_vector_1[0][1] ),"
-                                    "  .\\I(3) (2_d_vector_1[0][1] ),"
+                                    "  .\\I(0) (_2_d_vector_1[1][0] ),"
+                                    "  .\\I(1) (_2_d_vector_1[1][1] ),"
+                                    "  .\\I(2) (_2_d_vector_1[0][0] ),"
+                                    "  .\\I(3) (_2_d_vector_1[0][1] ),"
                                     "  .\\O (global_out_2 )"
                                     " ) ;"
                                     "endmodule");
@@ -748,19 +748,60 @@ TEST_F(hdl_parser_verilog_test, check_assign)
             std::shared_ptr<netlist> nl = verilog_parser.parse(temp_lib_name);
             if (nl == nullptr)
             {
-                //std::cout << test_def::get_captured_stdout();
+                std::cout << test_def::get_captured_stdout();
             }
             else
             {
-                //test_def::get_captured_stdout();
+                test_def::get_captured_stdout();
             }
 
             ASSERT_NE(nl, nullptr);
-
-            // NOTE: Test me, pls :)
-        }*/
+            std::vector<std::shared_ptr<net>> net_master_vector(12);
+            for (int i = 0; i<12; i++){
+                ASSERT_EQ(nl->get_nets(net_name_filter("net_vector_master(" + std::to_string(i) + ")")).size(), 1);
+                net_master_vector[i] = *nl->get_nets(net_name_filter("net_vector_master(" + std::to_string(i) + ")")).begin();
+            }
+            for (int i = 0; i<12; i++){
+                ASSERT_EQ(net_master_vector[i]->get_dsts().size(), 1);
+                endpoint ep = *net_master_vector[i]->get_dsts().begin();
+                EXPECT_EQ(ep.get_gate()->get_name(), "test_gate_" + std::to_string(i/4));
+                EXPECT_EQ(ep.get_pin_type(), "I(" + std::to_string(i%4) + ")");
+            }
+        }
         {
-             // NOTE: stoi failure (l.978)
+            // Assign a 2 bit vector to a set of 1 bit vectors
+
+            std::stringstream input("module top ("
+                                    "    global_out"
+                                    ") ;"
+                                    "    output global_out ;"
+                                    "    wire net_master_0 ;"
+                                    "    wire net_master_1 ;"
+                                    "    wire [0:1] net_vector_slave;"
+                                    "    assign net_vector_slave = { net_master_0, net_master_1 };"
+                                    "    AND2 test_gate ("
+                                    "        .\\I0 ( net_vector_slave[0] ),"
+                                    "        .\\I1 ( net_vector_slave[1] ),"
+                                    "        .\\O (global_out )"
+                                    "    ) ;"
+                                    "endmodule");
+
+            hdl_parser_verilog verilog_parser(input);
+            std::shared_ptr<netlist> nl = verilog_parser.parse(g_lib_name);
+
+            ASSERT_NE(nl, nullptr);
+
+            ASSERT_EQ(nl->get_nets(net_name_filter("net_master_0")).size(), 1);
+            ASSERT_EQ(nl->get_nets(net_name_filter("net_master_1")).size(), 1);
+            std::shared_ptr<net> net_vector_master_0 = *nl->get_nets(net_name_filter("net_master_0")).begin();
+            std::shared_ptr<net> net_vector_master_1 = *nl->get_nets(net_name_filter("net_master_1")).begin();
+            ASSERT_EQ(net_vector_master_0->get_dsts().size(), 1);
+            ASSERT_EQ(net_vector_master_1->get_dsts().size(), 1);
+            EXPECT_EQ((*net_vector_master_0->get_dsts().begin()).get_pin_type(), "I0");
+            EXPECT_EQ((*net_vector_master_1->get_dsts().begin()).get_pin_type(), "I1");
+
+        }
+        {
              // Testing assignments, where escaped identifiers are used (e.g. et[1:3][2:3] stands for a net, literally named "net[1:3][2:3]")
 
              std::stringstream input("module top ("
@@ -785,6 +826,7 @@ TEST_F(hdl_parser_verilog_test, check_assign)
              ASSERT_NE(nl, nullptr);
 
          }
+
         remove_temp_gate_lib();
     TEST_END
 }
