@@ -325,8 +325,6 @@ class TestCoreUtils(unittest.TestCase):
     def test_gate_adjacent_functions(self):
         nl = self.create_empty_netlist()
         test_gate = nl.create_gate(self.min_id, self.get_gate_type_by_name("AND3", nl.gate_library), "test_gate")
-        self.assertIsNotNone(nl)
-        self.assertIsNotNone(test_gate)
 
         # Create some adjacent gates
         suc_0 = nl.create_gate(self.min_id+1, self.get_gate_type_by_name("AND2", nl.gate_library), "suc_0")
@@ -367,13 +365,52 @@ class TestCoreUtils(unittest.TestCase):
         # Note: Set comparison?
         #self.assertEqual(test_gate.get_unique_successors(), {self.get_endpoint(suc_0, "I0"), self.get_endpoint(suc_0, "I1"), self.get_endpoint(suc_1, "I")})
 
+# -------- net tests --------
+
+    # Testing the python binding for functions:
+    def test_gate2_adjacent_functions(self):
+        nl = self.create_empty_netlist()
+        src_gate = nl.create_gate(self.min_id, self.get_gate_type_by_name("INV", nl.gate_library), "src_gate")
+        dst_gate = nl.create_gate(self.min_id+1, self.get_gate_type_by_name("AND3", nl.gate_library), "test_gate")
+        test_net = nl.create_net(self.min_id+123, "test_net")
+
+        # Identifier
+        self.assertEqual(test_net.get_id(), self.min_id+123)
+        self.assertEqual(test_net.get_name(), "test_net")
+        test_net.set_name("new_name")
+        self.assertEqual(test_net.get_name(), "new_name")
+
+        # Destination
+        test_net.add_dst(dst_gate, "I0")
+        test_net.add_dst(self.get_endpoint(dst_gate, "I1"))
+        self.assertEqual(test_net.get_dsts(), [self.get_endpoint(dst_gate, "I0"), self.get_endpoint(dst_gate, "I1")])
+        self.assertEqual(test_net.get_num_of_dsts(), 2)
+        self.assertTrue(test_net.is_a_dst, dst_gate)
+        self.assertTrue(test_net.is_a_dst(self.get_endpoint(dst_gate, "I0")))
+        test_net.remove_dst(self.get_endpoint(dst_gate, "I0"))
+        self.assertEqual(test_net.get_dsts(), [self.get_endpoint(dst_gate, "I1")])
+        test_net.remove_dst(dst_gate, "I1")
+        self.assertEqual(test_net.get_dsts(), [])
+
+        # Source
+        test_net.set_src(src_gate, "O")
+        self.assertEqual(test_net.get_src(), self.get_endpoint(src_gate, "O"))
+        test_net.remove_src()
+        self.assertEqual(test_net.get_src(), self.get_endpoint(None, ""))
+        test_net.set_src(self.get_endpoint(src_gate, "O"))
+        self.assertEqual(test_net.get_src(), self.get_endpoint(src_gate, "O"))
+
+        # IN PROGRESS: global in/out, unrouted
+
+
 
     def test_tryout(self):
         nl = self.create_empty_netlist()
         test_gate = nl.create_gate(self.min_id, self.get_gate_type_by_name("INV", nl.gate_library), "test_gate")
+        in_net = nl.create_net(self.min_id, "in_net_0")
         self.assertIsNotNone(nl)
         #help(test_gate)
-        #help(hal_py)
+        help(in_net)
 
 
 
