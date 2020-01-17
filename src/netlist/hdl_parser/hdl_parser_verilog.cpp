@@ -147,7 +147,7 @@ std::shared_ptr<netlist> hdl_parser_verilog::parse(const std::string& gate_libra
 
 bool hdl_parser_verilog::tokenize()
 {
-    std::string delimiters = ",()[]\\#: ;=.";
+    std::string delimiters = ",()[]{}\\#: ;=.";
     std::string current_token;
     u32 line_number = 0;
 

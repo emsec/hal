@@ -504,16 +504,16 @@ std::shared_ptr<gate_type> gate_library_parser_liberty::construct_gate_type()
 
         for (auto& [pin_name, bf] : m_current_cell.functions)
         {
-            auto func = boolean_function::from_string(bf);
-            auto pins = gt->get_input_pins();
-            auto vars = func.get_variables();
+            auto func       = boolean_function::from_string(bf);
+            auto input_pins = gt->get_input_pins();
+            auto vars       = func.get_variables();
 
             // verify that all variables correspond to actual input pins
             for (const auto& var : vars)
             {
-                if (std::find(pins.begin(), pins.end(), var) == pins.end())
+                if (std::find(input_pins.begin(), input_pins.end(), var) == input_pins.end())
                 {
-                    log_error("netlist", "variable '{}' of boolean function '{}' of gate type '{}' does not match any input pin.", var, func.to_string(), gt->get_name());
+                    log_error("netlist", "variable '{}' of boolean function '{}' for pin '{}' of gate type '{}' does not match any input pin.", var, func.to_string(), pin_name, gt->get_name());
                     return nullptr;
                 }
             }
