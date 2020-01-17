@@ -1843,7 +1843,18 @@ The constant can be either X, Zero, or ONE.
 
 :param hal_py.value constant: A constant value.
 )")
-        .def("substitute", &boolean_function::substitute, py::arg("variable_name"), py::arg("function"), R"(
+        .def("substitute", py::overload_cast<const std::string&, const std::string&>(&boolean_function::substitute, py::const_), py::arg("old_variable_name"), py::arg("new_variable_name"), R"(
+Substitutes a variable with another variable (i.e., variable renaming).
+Applies to all instances of the variable in the function.
+
+This is just a shorthand for the generic substitute function.
+
+:param str old_variable_name:  The old variable to substitute
+:param str new_variable_name:  The new variable name
+:returns: The new boolean function.
+:rtype: hal_py.boolean_function
+)")
+        .def("substitute", py::overload_cast<const std::string&, const boolean_function&>(&boolean_function::substitute, py::const_), py::arg("variable_name"), py::arg("function"), R"(
 Substitutes a variable with another function (can again be a single variable).
 Applies to all instances of the variable in the function.
 
@@ -1890,7 +1901,11 @@ Get all variable names used in this boolean function.
 :rtype: set[str]
 )")
         .def_static("from_string", &boolean_function::from_string, py::arg("expression"), R"(
-Returns the boolean function as a string.
+Parse a function from a string representation.
+Supported operators are  NOT (\"!\", \"'\"), AND (\"&\", \"*\", \" \"), OR (\"|\", \"+\"), XOR (\"^\") and brackets (\"(\", \")\").
+Operator precedence is ! > & > ^ > |
+
+If there is an error during bracket matching, X is returned for that part.
 
 :param str expression: String containing a boolean function.
 :returns: The boolean function extracted from the string.

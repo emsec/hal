@@ -87,6 +87,18 @@ public:
     boolean_function(value constant);
 
     /**
+     * Substitutes a variable with another variable (i.e., variable renaming).
+     * Applies to all instances of the variable in the function.
+     *
+     * This is just a shorthand for the generic substitute function.
+     *
+     * @param[in] old_variable_name - The old variable to substitute
+     * @param[in] new_variable_name - The new variable name
+     * @returns The new boolean function.
+     */
+    boolean_function substitute(const std::string& old_variable_name, const std::string& new_variable_name) const;
+
+    /**
      * Substitutes a variable with another function (can again be a single variable).
      * Applies to all instances of the variable in the function.
      *
@@ -143,6 +155,9 @@ public:
     /**
      * Parse a function from a string representation.
      * Supported operators are  NOT ("!", "'"), AND ("&", "*", " "), OR ("|", "+"), XOR ("^") and brackets ("(", ")").
+     * Operator precedence is ! > & > ^ > |
+     *
+     * If there is an error during bracket matching, X is returned for that part.
      *
      * @param[in] expression - String containing a boolean function.
      * @returns The boolean function extracted from the string.
@@ -251,6 +266,19 @@ public:
     boolean_function to_dnf() const;
 
     /**
+     * Gets the DNF clauses of the function.
+     * Useful for parsing into other formats etc.
+     *
+     * Returns all clauses that are OR-ed together.
+     * Each clause is a vector of pairs <variable name, boolean value>.
+     * Example:
+     * [[("a", true), ("b", false)], [("c", true)]] -> (a & !b) | c
+     *
+     * @returns The DNF clauses as a vector of vectors of pairs <string, bool>.
+     */
+    std::vector<std::vector<std::pair<std::string, bool>>> get_dnf_clauses() const;
+
+    /**
      * Optimizes the function by first converting it to DNF and then applying the Quine-McCluskey algorithm.
      *
      * @returns The optimized boolean function.
@@ -306,7 +334,7 @@ private:
     // expands ands, i.e., a & (b | c) -> a&b | a&c
     boolean_function expand_ands() const;
     // helper function 1
-    std::vector<boolean_function> expand_ands_internal(const std::vector<std::vector<boolean_function>>& sub_primitives, u32 i) const;
+    std::vector<boolean_function> expand_ands_internal(const std::vector<std::vector<boolean_function>>& sub_primitives) const;
     // helper function 2
     std::vector<boolean_function> get_primitives() const;
 
