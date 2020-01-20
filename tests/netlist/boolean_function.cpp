@@ -340,6 +340,48 @@ TEST_F(boolean_function_test, check_optimize){
 }
 
 
+/**
+ * Testing the integrity of the from_string function
+ *
+ * Functions: from_string
+ */
+TEST_F(boolean_function_test, check_from_string){
+    TEST_START
+        std::string f_str = "A B C D(1)";
+        {
+            // Check default case
+            auto bf = boolean_function::from_string(f_str);
+            EXPECT_EQ(bf.get_variables(), std::set<std::string>({"A", "B", "C", "D"}));
+        }
+        {
+            // Declare existing variable
+            auto bf = boolean_function::from_string(f_str, {"A"});
+            EXPECT_EQ(bf.get_variables(), std::set<std::string>({"A", "B", "C", "D"}));
+        }
+        {
+            // Declare custom variable
+            auto bf = boolean_function::from_string(f_str, {"A B"});
+            EXPECT_EQ(bf.get_variables(), std::set<std::string>({"A B", "C", "D"}));
+        }
+        {
+            // Declare custom variable
+            auto bf = boolean_function::from_string(f_str, {"A B C D"});
+            EXPECT_EQ(bf.get_variables(), std::set<std::string>({"A B C D"}));
+        }
+        {
+            // Declare custom variable
+            auto bf = boolean_function::from_string(f_str, {"D(1)"});
+            EXPECT_EQ(bf.get_variables(), std::set<std::string>({"A", "B", "C", "D(1)"}));
+        }
+        {
+            // Declare non-existing custom variable
+            auto bf = boolean_function::from_string(f_str, {"X"});
+            EXPECT_EQ(bf.get_variables(), std::set<std::string>({"A", "B", "C", "D"}));
+        }
+
+    TEST_END
+}
+
 
 /**
  * Test string parsing, dnf, and optimization for a collection of functions
