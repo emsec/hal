@@ -513,7 +513,7 @@ std::shared_ptr<gate_type> gate_library_parser_liberty::construct_gate_type()
             {
                 if (std::find(pins.begin(), pins.end(), var) == pins.end())
                 {
-                    log_error("netlist", "variable '{}' of boolean function '{}' of gate type '{}' does not match any input pin.", var, func.to_string(), gt->get_name());
+                    log_error("netlist", "variable '{}' of boolean function '{}' for pin '{}' of gate type '{}' does not match any input pin.", var, func.to_string(), pin_name, gt->get_name());
                     return nullptr;
                 }
             }
