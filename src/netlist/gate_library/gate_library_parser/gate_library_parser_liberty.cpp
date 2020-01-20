@@ -504,14 +504,14 @@ std::shared_ptr<gate_type> gate_library_parser_liberty::construct_gate_type()
 
         for (auto& [pin_name, bf] : m_current_cell.functions)
         {
-            auto func       = boolean_function::from_string(bf);
-            auto input_pins = gt->get_input_pins();
-            auto vars       = func.get_variables();
+            auto func = boolean_function::from_string(bf, gt->get_input_pins());
+            auto pins = gt->get_input_pins();
+            auto vars = func.get_variables();
 
             // verify that all variables correspond to actual input pins
             for (const auto& var : vars)
             {
-                if (std::find(input_pins.begin(), input_pins.end(), var) == input_pins.end())
+                if (std::find(pins.begin(), pins.end(), var) == pins.end())
                 {
                     log_error("netlist", "variable '{}' of boolean function '{}' for pin '{}' of gate type '{}' does not match any input pin.", var, func.to_string(), pin_name, gt->get_name());
                     return nullptr;
@@ -532,22 +532,22 @@ std::shared_ptr<gate_type> gate_library_parser_liberty::construct_gate_type()
 
         if (!m_current_cell.next_state.empty())
         {
-            seq_gt->add_boolean_function(is_ff ? "next_state" : "data_in", boolean_function::from_string(m_current_cell.next_state));
+            seq_gt->add_boolean_function(is_ff ? "next_state" : "data_in", boolean_function::from_string(m_current_cell.next_state, seq_gt->get_input_pins()));
         }
 
         if (!m_current_cell.clocked_on.empty())
         {
-            seq_gt->add_boolean_function(is_ff ? "clock" : "enable", boolean_function::from_string(m_current_cell.clocked_on));
+            seq_gt->add_boolean_function(is_ff ? "clock" : "enable", boolean_function::from_string(m_current_cell.clocked_on, seq_gt->get_input_pins()));
         }
 
         if (!m_current_cell.set.empty())
         {
-            seq_gt->add_boolean_function("set", boolean_function::from_string(m_current_cell.set));
+            seq_gt->add_boolean_function("set", boolean_function::from_string(m_current_cell.set, seq_gt->get_input_pins()));
         }
 
         if (!m_current_cell.reset.empty())
         {
-            seq_gt->add_boolean_function("reset", boolean_function::from_string(m_current_cell.reset));
+            seq_gt->add_boolean_function("reset", boolean_function::from_string(m_current_cell.reset, seq_gt->get_input_pins()));
         }
 
         seq_gt->set_set_reset_behavior(m_current_cell.special_behavior_var1, m_current_cell.special_behavior_var2);
@@ -566,7 +566,7 @@ std::shared_ptr<gate_type> gate_library_parser_liberty::construct_gate_type()
             }
             else
             {
-                seq_gt->add_boolean_function(pin_name, boolean_function::from_string(bf_string));
+                seq_gt->add_boolean_function(pin_name, boolean_function::from_string(bf_string, seq_gt->get_input_pins()));
             }
         }
 
@@ -591,7 +591,7 @@ std::shared_ptr<gate_type> gate_library_parser_liberty::construct_gate_type()
             }
             else
             {
-                lut_gt->add_boolean_function(pin_name, boolean_function::from_string(bf_string));
+                lut_gt->add_boolean_function(pin_name, boolean_function::from_string(bf_string, lut_gt->get_input_pins()));
             }
         }
 

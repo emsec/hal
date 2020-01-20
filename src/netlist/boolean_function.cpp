@@ -237,7 +237,24 @@ std::set<std::string> boolean_function::get_variables() const
     return {};
 }
 
-boolean_function boolean_function::from_string(std::string expression)
+boolean_function boolean_function::from_string(std::string expression, const std::vector<std::string>& variable_names)
+{
+    auto sorted_variable_names = variable_names;
+    std::sort(sorted_variable_names.begin(), sorted_variable_names.end(), [](const auto& a, const auto& b) { return a.size() > b.size(); });
+
+    for (u32 i = 0; i < sorted_variable_names.size(); ++i)
+    {
+        auto pos = expression.find(sorted_variable_names[i]);
+        if (pos != std::string::npos)
+        {
+            expression.replace(pos, sorted_variable_names[i].size(), "__v_" + std::to_string(i));
+        }
+    }
+
+    return from_string_internal(expression, sorted_variable_names);
+}
+
+boolean_function boolean_function::from_string_internal(std::string expression, const std::vector<std::string>& variable_names)
 {
     expression = core_utils::trim(expression);
 
@@ -275,6 +292,12 @@ boolean_function boolean_function::from_string(std::string expression)
         }
         if (!is_term)
         {
+            if (core_utils::starts_with(expression, "__v_"))
+            {
+                u32 idx    = std::stoul(expression.substr(4));
+                expression = variable_names[idx];
+            }
+
             return boolean_function(expression);
         }
     }
@@ -372,7 +395,7 @@ boolean_function boolean_function::from_string(std::string expression)
     {
         // only a single term but not filtered before?
         // -> was of the form "(...)" so remove the outer brackets and repeat
-        return from_string(terms[0].substr(1, terms[0].size() - 2));
+        return from_string_internal(terms[0].substr(1, terms[0].size() - 2), variable_names);
     }
 
     // small mutable datastructure for parsing
@@ -394,7 +417,7 @@ boolean_function boolean_function::from_string(std::string expression)
             negate_next = !negate_next;
             ++i;
         }
-        boolean_function first_term = from_string(terms[i]);
+        boolean_function first_term = from_string_internal(terms[i], variable_names);
         while (i + 1 < terms.size() && terms[i + 1] == "'")
         {
             negate_next = !negate_next;
@@ -429,7 +452,7 @@ boolean_function boolean_function::from_string(std::string expression)
             }
             else
             {
-                auto next_term = from_string(terms[i]);
+                auto next_term = from_string_internal(terms[i], variable_names);
                 while (i + 1 < terms.size() && terms[i + 1] == "'")
                 {
                     negate_next = !negate_next;
