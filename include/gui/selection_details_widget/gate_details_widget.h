@@ -26,9 +26,9 @@
 
 #include "def.h"
 
-#include "netlist_relay/netlist_relay.h"
-#include "netlist/endpoint.h"
 #include "gui/gui_def.h"
+#include "netlist/endpoint.h"
+#include "netlist_relay/netlist_relay.h"
 
 #include <QWidget>
 
@@ -68,7 +68,7 @@ public Q_SLOTS:
 
     void on_treewidget_item_clicked(QTreeWidgetItem* item, int column);
     void handle_navigation_jump_requested(const hal::node origin, const u32 via_net, const QSet<u32>& to_gates);
-    void on_general_table_item_double_clicked(const QModelIndex &index);
+    void on_general_table_item_double_clicked(const QModelIndex& index);
 
     void handle_gate_name_changed(std::shared_ptr<gate> gate);
     void handle_gate_removed(std::shared_ptr<gate> gate);
@@ -83,7 +83,6 @@ public Q_SLOTS:
     void handle_net_dst_added(std::shared_ptr<net> net, const u32 dst_gate_id);
     void handle_net_dst_removed(std::shared_ptr<net> net, const u32 dst_gate_id);
 
-
 private:
     QVBoxLayout* m_content_layout;
     QHBoxLayout* m_tree_row_layout;
@@ -97,7 +96,7 @@ private:
     // stores Boolean function
     QLabel* m_boolean_function;
     //stores the initial lut value
-    QLabel* m_init_value;
+    QLabel* m_data_fields;
     // stores input pin tree view
     QTreeWidgetItem* m_input_pins;
     // stores output pin tree view
