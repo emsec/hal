@@ -157,12 +157,16 @@ public:
      * Supported operators are  NOT ("!", "'"), AND ("&", "*", " "), OR ("|", "+"), XOR ("^") and brackets ("(", ")").
      * Operator precedence is ! > & > ^ > |
      *
+     * Since, for example, '(' is interpreted as a new term, but might also be an intended part of a variable,
+     * a vector of known variable names can be supplied, which are extracted before parsing.
+     *
      * If there is an error during bracket matching, X is returned for that part.
      *
      * @param[in] expression - String containing a boolean function.
+     * @param[in] variable_names - Names of variables to help resolve problematic functions
      * @returns The boolean function extracted from the string.
      */
-    static boolean_function from_string(std::string expression);
+    static boolean_function from_string(std::string expression, const std::vector<std::string>& variable_names = {});
 
     /**
      * Returns the boolean function as a string.
@@ -313,6 +317,8 @@ private:
     };
     static std::string to_string(const operation& op);
     friend std::ostream& operator<<(std::ostream& os, const operation& op);
+
+    static boolean_function from_string_internal(std::string expression, const std::vector<std::string>& variable_names);
 
     /*
      * Constructor for a function of the form "term1 op term2 op term3 op ..."

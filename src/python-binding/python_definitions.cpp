@@ -23,8 +23,8 @@
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wshadow"
+#pragma GCC diagnostic ignored "-Wself-assign-overloaded"
 #ifdef COMPILER_CLANG
-#pragma clang diagnostic ignored "-Wself-assign-overloaded"
 #pragma clang diagnostic ignored "-Wnested-anon-types"
 #pragma clang diagnostic ignored "-Wshadow-field-in-constructor-modified"
 #endif
@@ -1900,14 +1900,18 @@ Get all variable names used in this boolean function.
 :returns: A set of all variable names.
 :rtype: set[str]
 )")
-        .def_static("from_string", &boolean_function::from_string, py::arg("expression"), R"(
+        .def_static("from_string", &boolean_function::from_string, py::arg("expression"), py::arg("variable_names"), R"(
 Parse a function from a string representation.
 Supported operators are  NOT (\"!\", \"'\"), AND (\"&\", \"*\", \" \"), OR (\"|\", \"+\"), XOR (\"^\") and brackets (\"(\", \")\").
 Operator precedence is ! > & > ^ > |
 
+Since, for example, '(' is interpreted as a new term, but might also be an intended part of a variable,
+a vector of known variable names can be supplied, which are extracted before parsing.
+
 If there is an error during bracket matching, X is returned for that part.
 
 :param str expression: String containing a boolean function.
+:param str variable_names: Names of variables to help resolve problematic functions
 :returns: The boolean function extracted from the string.
 :rtype: hal_py.boolean_function
 )")

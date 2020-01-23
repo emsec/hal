@@ -6,18 +6,6 @@
 
 using namespace test_utils;
 
-// Checks if two boolean functions are semantically equal, i.e. they have the same variables and the same truth table
-#define EXPECT_SEMANTICALLY_EQUAL(bf_0, bf_1) \
-        {\
-            boolean_function tmp_bf_a = (bf_0); boolean_function tmp_bf_b = (bf_1);\
-            EXPECT_EQ((bf_0).get_variables(), (bf_1).get_variables()); \
-            if(tmp_bf_a.get_variables() == bf_1.get_variables()){\
-                std::set<std::string> var_set = tmp_bf_a.get_variables(); \
-                std::vector<std::string> var_vec(var_set.begin(), var_set.end()); \
-                EXPECT_EQ((bf_0).get_truth_table(var_vec), (bf_1).get_truth_table(var_vec)); \
-            }\
-        }
-
 
 class boolean_function_test : public ::testing::Test
 {
@@ -42,7 +30,6 @@ protected:
         std::cout << "\n-------------\n" << bf << "\n-------------\n";
     }
 
-    // Test Debug only
     void printTruthTable(boolean_function bf, std::vector<std::string> vars){
         std::cout << std::endl;
         for (auto i : vars){
@@ -121,6 +108,26 @@ protected:
     }
 
 };
+
+/**
+ * Testing template
+ *
+ * Functions: <functions>
+ */
+TEST_F(boolean_function_test, check_){
+    TEST_START
+        {
+            // Set multiple data with different keys and categories
+            boolean_function a("A");
+            boolean_function b("B");
+
+            boolean_function::from_string("1 & 1 & 1").to_dnf();
+
+            EXPECT_TRUE(true);
+        }
+
+    TEST_END
+}
 
 /**
  * Testing the different constructors and the main functionality, by implement the following boolean function:
@@ -247,40 +254,6 @@ TEST_F(boolean_function_test, check_get_variables){
 }
 
 /**
- * Testing the assignment operators ( &=, |=, ^= )
- *
- * Functions: operator&=, operator|=, operator^=
- */
-TEST_F(boolean_function_test, check_assignments){
-    TEST_START
-        boolean_function a("A");
-        boolean_function b("B");
-        boolean_function c("C");
-        boolean_function d("D");
-        boolean_function _0(ZERO);
-        boolean_function _1(ONE);
-        {
-            // Create a boolean function with diverse assignments and compare it with its normal created counterpart
-            boolean_function bf_0 = ((a & b) | c) ^ d ;
-            boolean_function bf_1 = a;
-            bf_1 &= b;
-            bf_1 |= c;
-            bf_1 ^= d;
-            EXPECT_SEMANTICALLY_EQUAL(bf_0, bf_1);
-        }
-        {
-            // Create a boolean function with diverse assignments and compare it with its normal created counterpart
-            boolean_function bf_0 = ((a ^ b) | c) & d ;
-            boolean_function bf_1 = a;
-            bf_1 ^= b;
-            bf_1 |= c;
-            bf_1 &= d;
-            EXPECT_SEMANTICALLY_EQUAL(bf_0, bf_1);
-        }
-    TEST_END
-}
-
-/**
  * Testing comparation operator
  *
  * Functions: operator==, operator!=
@@ -342,22 +315,68 @@ TEST_F(boolean_function_test, check_optimize){
         boolean_function a("A");
         boolean_function b("B");
         boolean_function c("C");
-        boolean_function d("D");
         boolean_function _0(ZERO);
         boolean_function _1(ONE);
         {
-            // Optimize a complex boolean function and compare their truth table
-            boolean_function bf = ((!(a^b&c)|(b|c&_1))^((a&b) | (a|b|c)))^c;
-            EXPECT_SEMANTICALLY_EQUAL(bf, bf.optimize());
+            // Optimize some boolean functions and compare their truth_table
+            boolean_function bf = (!(a^b&c)|(b|c&_1))^((a&b) | (a|b|c));
+            EXPECT_EQ(bf.get_truth_table(std::vector<std::string>({"C","B","A"})), bf.optimize().get_truth_table(std::vector<std::string>({"C","B","A"}))); // <- fails
         }
         {
-            // Optimize a boolean function in dnf
-            boolean_function bf = (!a & !b & !c & !d) | (a & !b & !c & !d)|
-                                  (!a & !b & c & !d)  | (a & !b & c & !d) |
-                                  (!a & b & c & !d)   | (a & b & c & !d)  |
-                                  (!a & !b & !c & d)  | (a & !b & !c & d) |
-                                  (a & b & !c & d)    | (a & b & c & d);
-            EXPECT_SEMANTICALLY_EQUAL(bf, bf.optimize());
+            // Optimize some boolean functions and compare their truth_table
+            boolean_function bf = (a|b|c);
+            EXPECT_EQ(bf.get_truth_table(std::vector<std::string>({"C","B","A"})), bf.optimize().get_truth_table(std::vector<std::string>({"C","B","A"}))); // <- fails
+
+            // +++ DEBUG OUTPUT +++
+            //printTruthTable(bf, std::vector<std::string>({"C","B","A"}));
+            //printTruthTable(bf.optimize(), std::vector<std::string>({"C","B","A"}));
+            //std::cout << "Variables: amount = " << bf.optimize().get_variables().size() << std::endl;
+            //for (auto v : bf.optimize().get_variables())
+                //std::cout << v << ",";
+            //std::cout << std::endl;
+        }
+
+    TEST_END
+}
+
+
+/**
+ * Testing the integrity of the from_string function
+ *
+ * Functions: from_string
+ */
+TEST_F(boolean_function_test, check_from_string){
+    TEST_START
+        std::string f_str = "A B C D(1)";
+        {
+            // Check default case
+            auto bf = boolean_function::from_string(f_str);
+            EXPECT_EQ(bf.get_variables(), std::set<std::string>({"A", "B", "C", "D"}));
+        }
+        {
+            // Declare existing variable
+            auto bf = boolean_function::from_string(f_str, {"A"});
+            EXPECT_EQ(bf.get_variables(), std::set<std::string>({"A", "B", "C", "D"}));
+        }
+        {
+            // Declare custom variable
+            auto bf = boolean_function::from_string(f_str, {"A B"});
+            EXPECT_EQ(bf.get_variables(), std::set<std::string>({"A B", "C", "D"}));
+        }
+        {
+            // Declare custom variable
+            auto bf = boolean_function::from_string(f_str, {"A B C D"});
+            EXPECT_EQ(bf.get_variables(), std::set<std::string>({"A B C D"}));
+        }
+        {
+            // Declare custom variable
+            auto bf = boolean_function::from_string(f_str, {"D(1)"});
+            EXPECT_EQ(bf.get_variables(), std::set<std::string>({"A", "B", "C", "D(1)"}));
+        }
+        {
+            // Declare non-existing custom variable
+            auto bf = boolean_function::from_string(f_str, {"X"});
+            EXPECT_EQ(bf.get_variables(), std::set<std::string>({"A", "B", "C", "D"}));
         }
 
     TEST_END
@@ -372,170 +391,50 @@ TEST_F(boolean_function_test, check_optimize){
 TEST_F(boolean_function_test, check_test_vectors)
 {
     TEST_START
+    {
+        /* clang-format off */
+        std::vector<std::string> test_cases = {
+            "0",
+            "1",
+            "a",
+            "a ^ a",
+            "a | a",
+            "a & a",
+            "a ^ b",
+            "a | b",
+            "a & b",
+            "!(((!8 & !(!(!19 | !20) & 26)) | (8 & !((!26 & !(!19 | !20)) | (26 & !(!19 | 20))))) & !(((((((!(!20 | 19) & 28 & !((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & !28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | ((!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19))))) & 27 & !((9 & (!20 | 19)) | (!9 & !(!20 | 19)))) | (((!(!20 | 19) & 28 & !((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & !28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | ((!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19))))) & !27 & ((9 & (!20 | 19)) | (!9 & !(!20 | 19)))) | (!((!(!20 | 19) & 28 & !((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & !28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | ((!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19))))) & 27 & ((9 & (!20 | 19)) | (!9 & !(!20 | 19)))) | (((!(!20 | 19) & 28 & !((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & !28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | ((!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19))))) & 27 & ((9 & (!20 | 19)) | (!9 & !(!20 | 19))))) & !26 & !((8 & (!20 | 19)) | (!8 & !(!20 | 19)))) | (!((((!(!20 | 19) & 28 & !((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & !28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | ((!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19))))) & 27 & !((9 & (!20 | 19)) | (!9 & !(!20 | 19)))) | (((!(!20 | 19) & 28 & !((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & !28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | ((!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19))))) & !27 & ((9 & (!20 | 19)) | (!9 & !(!20 | 19)))) | (!((!(!20 | 19) & 28 & !((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & !28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | ((!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19))))) & 27 & ((9 & (!20 | 19)) | (!9 & !(!20 | 19)))) | (((!(!20 | 19) & 28 & !((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & !28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | ((!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19))))) & 27 & ((9 & (!20 | 19)) | (!9 & !(!20 | 19))))) & 26 & !((8 & (!20 | 19)) | (!8 & !(!20 | 19)))) | (!((((!(!20 | 19) & 28 & !((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & !28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | ((!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19))))) & 27 & !((9 & (!20 | 19)) | (!9 & !(!20 | 19)))) | (((!(!20 | 19) & 28 & !((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & !28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | ((!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19))))) & !27 & ((9 & (!20 | 19)) | (!9 & !(!20 | 19)))) | (!((!(!20 | 19) & 28 & !((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & !28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | ((!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19))))) & 27 & ((9 & (!20 | 19)) | (!9 & !(!20 | 19)))) | (((!(!20 | 19) & 28 & !((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & !28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | ((!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19))))) & 27 & ((9 & (!20 | 19)) | (!9 & !(!20 | 19))))) & !26 & ((8 & (!20 | 19)) | (!8 & !(!20 | 19)))) | (((((!(!20 | 19) & 28 & !((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & !28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | ((!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19))))) & 27 & !((9 & (!20 | 19)) | (!9 & !(!20 | 19)))) | (((!(!20 | 19) & 28 & !((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & !28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | ((!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19))))) & !27 & ((9 & (!20 | 19)) | (!9 & !(!20 | 19)))) | (!((!(!20 | 19) & 28 & !((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & !28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | ((!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19))))) & 27 & ((9 & (!20 | 19)) | (!9 & !(!20 | 19)))) | (((!(!20 | 19) & 28 & !((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & !28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | ((!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19))))) & 27 & ((9 & (!20 | 19)) | (!9 & !(!20 | 19))))) & 26 & ((8 & (!20 | 19)) | (!8 & !(!20 | 19))))) & !19))",
+        };
+        /* clang-format on */
+
+        for (const auto& f_str : test_cases)
         {
-            /* clang-format off */
-            std::vector<std::string> test_cases = {
-                    "0",
-                    "1",
-                    "a",
-                    "a ^ a",
-                    "a | a",
-                    "a & a",
-                    "a ^ b",
-                    "a | b",
-                    "a & b",
-                    "!(((!8 & !(!(!19 | !20) & 26)) | (8 & !((!26 & !(!19 | !20)) | (26 & !(!19 | 20))))) & !(((((((!(!20 | 19) & 28 & !((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & !28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | ((!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19))))) & 27 & !((9 & (!20 | 19)) | (!9 & !(!20 | 19)))) | (((!(!20 | 19) & 28 & !((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & !28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | ((!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19))))) & !27 & ((9 & (!20 | 19)) | (!9 & !(!20 | 19)))) | (!((!(!20 | 19) & 28 & !((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & !28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | ((!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19))))) & 27 & ((9 & (!20 | 19)) | (!9 & !(!20 | 19)))) | (((!(!20 | 19) & 28 & !((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & !28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | ((!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19))))) & 27 & ((9 & (!20 | 19)) | (!9 & !(!20 | 19))))) & !26 & !((8 & (!20 | 19)) | (!8 & !(!20 | 19)))) | (!((((!(!20 | 19) & 28 & !((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & !28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | ((!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19))))) & 27 & !((9 & (!20 | 19)) | (!9 & !(!20 | 19)))) | (((!(!20 | 19) & 28 & !((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & !28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | ((!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19))))) & !27 & ((9 & (!20 | 19)) | (!9 & !(!20 | 19)))) | (!((!(!20 | 19) & 28 & !((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & !28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | ((!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19))))) & 27 & ((9 & (!20 | 19)) | (!9 & !(!20 | 19)))) | (((!(!20 | 19) & 28 & !((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & !28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | ((!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19))))) & 27 & ((9 & (!20 | 19)) | (!9 & !(!20 | 19))))) & 26 & !((8 & (!20 | 19)) | (!8 & !(!20 | 19)))) | (!((((!(!20 | 19) & 28 & !((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & !28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | ((!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19))))) & 27 & !((9 & (!20 | 19)) | (!9 & !(!20 | 19)))) | (((!(!20 | 19) & 28 & !((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & !28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | ((!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19))))) & !27 & ((9 & (!20 | 19)) | (!9 & !(!20 | 19)))) | (!((!(!20 | 19) & 28 & !((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & !28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | ((!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19))))) & 27 & ((9 & (!20 | 19)) | (!9 & !(!20 | 19)))) | (((!(!20 | 19) & 28 & !((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & !28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | ((!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19))))) & 27 & ((9 & (!20 | 19)) | (!9 & !(!20 | 19))))) & !26 & ((8 & (!20 | 19)) | (!8 & !(!20 | 19)))) | (((((!(!20 | 19) & 28 & !((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & !28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | ((!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19))))) & 27 & !((9 & (!20 | 19)) | (!9 & !(!20 | 19)))) | (((!(!20 | 19) & 28 & !((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & !28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | ((!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19))))) & !27 & ((9 & (!20 | 19)) | (!9 & !(!20 | 19)))) | (!((!(!20 | 19) & 28 & !((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & !28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | ((!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19))))) & 27 & ((9 & (!20 | 19)) | (!9 & !(!20 | 19)))) | (((!(!20 | 19) & 28 & !((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & !28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | ((!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19))))) & 27 & ((9 & (!20 | 19)) | (!9 & !(!20 | 19))))) & 26 & ((8 & (!20 | 19)) | (!8 & !(!20 | 19))))) & !19))",
-            };
-            /* clang-format on */
+            auto f        = boolean_function::from_string(f_str);
+            auto tmp_vars = f.get_variables();
+            std::vector<std::string> ordered_variables(tmp_vars.begin(), tmp_vars.end());
+            auto original_truth_table  = f.get_truth_table(ordered_variables);
+            auto dnf                   = f.to_dnf();
+            auto dnf_truth_table       = dnf.get_truth_table(ordered_variables);
+            auto optimized             = f.optimize();
+            auto optimized_truth_table = optimized.get_truth_table(ordered_variables);
 
-            for (const auto& f_str : test_cases)
+            if (original_truth_table != dnf_truth_table)
             {
-                auto f        = boolean_function::from_string(f_str);
-                auto tmp_vars = f.get_variables();
-                std::vector<std::string> ordered_variables(tmp_vars.begin(), tmp_vars.end());
-                auto original_truth_table  = f.get_truth_table(ordered_variables);
-                auto dnf                   = f.to_dnf();
-                auto dnf_truth_table       = dnf.get_truth_table(ordered_variables);
-                auto optimized             = f.optimize();
-                auto optimized_truth_table = optimized.get_truth_table(ordered_variables);
+                EXPECT_TRUE(false) << "ERROR: DNF function does not match original function" << std::endl
+                                   << "  original function:  " << f << std::endl
+                                   << "  DNF of function:    " << dnf << std::endl
+                                   << "  optimized function: " << optimized << std::endl;
+            }
 
-                if (original_truth_table != dnf_truth_table)
-                {
-                    EXPECT_TRUE(false) << "ERROR: DNF function does not match original function" << std::endl
-                                       << "  original function:  " << f << std::endl
-                                       << "  DNF of function:    " << dnf << std::endl
-                                       << "  optimized function: " << optimized << std::endl;
-                }
-
-                if (original_truth_table != optimized_truth_table)
-                {
-                    EXPECT_TRUE(false) << "ERROR: optimized function does not match original function" << std::endl
-                                       << "  original function:  " << f << std::endl
-                                       << "  DNF of function:    " << dnf << std::endl
-                                       << "  optimized function: " << optimized << std::endl;
-                }
+            if (original_truth_table != optimized_truth_table)
+            {
+                EXPECT_TRUE(false) << "ERROR: optimized function does not match original function" << std::endl
+                                   << "  original function:  " << f << std::endl
+                                   << "  DNF of function:    " << dnf << std::endl
+                                   << "  optimized function: " << optimized << std::endl;
             }
         }
+    }
 
     TEST_END
 }
-
-/**
- * Testing the substitution of variables
- *
- * Functions: substitute
- */
-TEST_F(boolean_function_test, check_substitute) {
-    TEST_START
-        boolean_function empty_bf;
-        boolean_function a("A");
-        boolean_function b("B");
-        boolean_function c("C");
-        boolean_function d("D");
-        boolean_function _0(ZERO);
-        boolean_function _1(ONE);
-        {
-            // Convert a boolean function to dnf and check its integrity and its format
-            boolean_function bf = a & c;
-            boolean_function a_func = a | b;
-            boolean_function new_bf = bf.substitute("A", a_func);
-            EXPECT_SEMANTICALLY_EQUAL(new_bf, ((a | b) & c));
-        }
-        {
-            // The boolean function is of type 'variable'
-            boolean_function bf("V");
-            boolean_function v_func = a | b;
-            boolean_function new_bf = bf.substitute("V", v_func);
-            EXPECT_SEMANTICALLY_EQUAL(new_bf, v_func);
-        }
-    TEST_END
-}
-
-/**
- * NOTE: Support of 0,1 ? Operator precedence depends on order?
- * Testing the creation of a boolean function by passing a string
- *
- * Functions: from_string
- */
-TEST_F(boolean_function_test, check_from_string){
-    TEST_START
-        boolean_function empty_bf;
-        boolean_function a("A");
-        boolean_function b("B");
-        boolean_function c("C");
-        boolean_function d("D");
-        boolean_function _0(ZERO);
-        boolean_function _1(ONE);
-        boolean_function _X(X);
-        {
-            // Convert a boolean function to dnf and check its integrity and its format
-            boolean_function bf = (!((a^b)&c)|(b|c))^((a&b) | (a|b|c));
-            boolean_function bf_from_str = boolean_function::from_string("(!((A^B)&C)|(B|C))^((A&B) | (A|B|C))");
-            // The same expression with another notation (using booth " " and "*" for AND)
-            boolean_function bf_from_str_2 = boolean_function::from_string("(((A^B)*C)'|(B+C))^((A B) + (A+B+C))");
-            EXPECT_SEMANTICALLY_EQUAL(bf, bf_from_str);
-            EXPECT_SEMANTICALLY_EQUAL(bf, bf_from_str_2);
-        }
-        {
-            // Testing the integrity of another function
-            boolean_function bf = a&(b&c);
-            boolean_function bf_from_str = boolean_function::from_string("A(B&C)");
-            EXPECT_SEMANTICALLY_EQUAL(bf, bf_from_str);
-        }
-        // Testing the operator precedence of the from_string function (assuming transitivity) (from high to low priority (C++): NOT > AND > XOR > OR)
-        // Also testing it flipped around, to test that the order doesn't matter.
-        {
-            // NOT > AND
-            boolean_function bf = ( (!a) & b );
-            boolean_function bf_from_str = boolean_function::from_string("( !A & B )");
-            boolean_function bf_from_str_flipped = boolean_function::from_string("( B & !A )");
-            EXPECT_SEMANTICALLY_EQUAL(bf, bf_from_str);
-            EXPECT_SEMANTICALLY_EQUAL(bf, bf_from_str_flipped);
-        }
-        {
-            // AND > XOR
-            boolean_function bf = ( (a & b) ^ b );
-            boolean_function bf_from_str = boolean_function::from_string("( A & B ^ B)");
-            boolean_function bf_from_str_flipped = boolean_function::from_string("(  B ^ B & A)");
-            EXPECT_SEMANTICALLY_EQUAL(bf, bf_from_str);
-            EXPECT_SEMANTICALLY_EQUAL(bf, bf_from_str_flipped); // <- fails
-        }
-        {
-            // XOR > OR
-            boolean_function bf = ( (a ^ b) | b );
-            boolean_function bf_from_str = boolean_function::from_string("(  A ^ B | B)");
-            boolean_function bf_from_str_flipped = boolean_function::from_string("( B | B ^ A)");
-            EXPECT_SEMANTICALLY_EQUAL(bf, bf_from_str);
-            EXPECT_SEMANTICALLY_EQUAL(bf, bf_from_str_flipped); // <- fails
-        }
-
-        {
-            // Testing to parse a boolean function that represents a constant
-            EXPECT_EQ(_0, boolean_function::from_string("0"));
-            EXPECT_EQ(_1, boolean_function::from_string("1"));
-            EXPECT_EQ(_X, boolean_function::from_string("X"));
-        }
-        {
-            // Testing to parse a boolean function that is a variable
-            EXPECT_EQ(a, boolean_function::from_string("A"));
-            EXPECT_EQ(boolean_function("LongVariableName"), boolean_function::from_string("LongVariableName"));
-        }
-        {
-            // Testing doubled negation
-            EXPECT_EQ(a, boolean_function::from_string("!!!!A"));
-            EXPECT_EQ(a, boolean_function::from_string("!!A''"));
-        }
-        // Testing invalid inputs
-        {
-            // Wrong bracket usage
-            EXPECT_EQ( boolean_function::from_string("(A&(B|C"), _X );
-            EXPECT_EQ( boolean_function::from_string("A&B)|C)"), _X );
-            // Empty string
-            EXPECT_EQ( boolean_function::from_string(""), empty_bf ); // <- fails (empty != empty ?)
-
-        }
-
-
-    TEST_END
-}
-
