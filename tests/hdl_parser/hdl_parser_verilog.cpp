@@ -921,7 +921,6 @@ TEST_F(hdl_parser_verilog_test, check_multiple_entities)
              *                              |                                             |
              *                              '---------------------------------------------'
              */
-            // NOTE: Data propagation?
             std::stringstream input("module ENT_CHILD ("
                                     "  child_in,"
                                     "  child_out"
@@ -1135,6 +1134,80 @@ TEST_F(hdl_parser_verilog_test, check_multiple_entities)
 
             // Test the creation on generic data of the module child_one_mod
             EXPECT_EQ(top_child_one->get_data_by_key("generic","child_one_mod_key"), std::make_tuple("integer", "1234"));
+        }
+        {
+            // Create a netlist as follows and test its creation:
+
+             /*                     - - - - - - - - - - - - - - - - - - - - - - .
+              *                    ' mod                                        '
+              *                    '                       mod_inner/mod_out    '
+              *                    '                     .------------------.   '
+              *                    'mod_in               |                  |   'net_0
+              *  net_global_in ----=------=| gate_a |=---+---=| gate_b |=   '---=----=| gate_top |=---- net_global_out
+              *                    '                                            '
+              *                    '                                            '
+              *                    '- - - - - - - - - - - - - - - - - - - - - - '
+             */
+
+            std::stringstream input("module ENT_MODULE (\n"
+                                    "  mod_in,\n"
+                                    "  mod_out\n"
+                                    " ) ;\n"
+                                    "  input mod_in ;\n"
+                                    "  output mod_out ;\n"
+                                    "  wire mod_inner ;\n"
+                                    "  assign mod_out = mod_inner ;\n"
+                                    "INV gate_a (\n"
+                                    "  .\\I (mod_in ),\n"
+                                    "  .\\O (mod_inner )\n"
+                                    " ) ;\n"
+                                    "INV gate_b (\n"
+                                    "  .\\I (mod_inner )\n"
+                                    " ) ;\n"
+                                    "endmodule\n"
+                                    "\n"
+                                    "\n"
+                                    "module ENT_TOP (\n"
+                                    "  net_global_in,\n"
+                                    "  net_global_out\n"
+                                    " ) ;\n"
+                                    "  input net_global_in ;\n"
+                                    "  output net_global_out ;\n"
+                                    "  wire net_0 ;\n"
+                                    "ENT_MODULE mod (\n"
+                                    "  .\\mod_in (net_global_in ),\n"
+                                    "  .\\mod_out (net_0 )\n"
+                                    " ) ;\n"
+                                    "INV gate_top (\n"
+                                    "  .\\I (net_0 ),\n"
+                                    "  .\\O (net_global_out )\n"
+                                    " ) ;\n"
+                                    "endmodule");
+            hdl_parser_verilog verilog_parser(input);
+            std::shared_ptr<netlist> nl = verilog_parser.parse(g_lib_name);
+
+            // Test if all modules are created and assigned correctly
+            ASSERT_NE(nl, nullptr);
+            EXPECT_EQ(nl->get_gates().size(), 3); // 1 in top + 2 in mod
+            EXPECT_EQ(nl->get_modules().size(), 2); // top + mod
+            std::shared_ptr<module> top_module = nl->get_top_module();
+
+            ASSERT_EQ(top_module->get_submodules().size(), 1);
+            std::shared_ptr<module> mod = *top_module->get_submodules().begin();
+
+            ASSERT_EQ(mod->get_gates(gate_name_filter("gate_a")).size(), 1);
+            ASSERT_EQ(mod->get_gates(gate_name_filter("gate_b")).size(), 1);
+            ASSERT_EQ(nl->get_gates(gate_name_filter("gate_top")).size(), 1);
+            std::shared_ptr<gate> gate_a = *mod->get_gates(gate_name_filter("gate_a")).begin();
+            std::shared_ptr<gate> gate_b = *mod->get_gates(gate_name_filter("gate_b")).begin();
+            std::shared_ptr<gate> gate_top = *nl->get_gates(gate_name_filter("gate_top")).begin();
+
+            std::shared_ptr<net> mod_out = gate_a->get_fan_out_net("O");
+            ASSERT_NE(mod_out, nullptr);
+            ASSERT_EQ(mod->get_output_nets().size(), 1);
+            EXPECT_EQ(*mod->get_output_nets().begin(), mod_out);
+
+            EXPECT_TRUE(vectors_have_same_content(mod_out->get_dsts(), std::vector<endpoint>({get_endpoint(gate_b, "I"), get_endpoint(gate_top, "I")})));
         }
     TEST_END
 }
