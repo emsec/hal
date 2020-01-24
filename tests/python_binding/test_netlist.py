@@ -30,13 +30,13 @@ import logging
 from functools import partial
 import time
 
-# Testing the binding of the classes, that are part of the netlist data structure (netlist, gate, net, module) 
+# Testing the binding of the classes, that are part of the netlist data structure(in that order):
+# netlist, gate, net, module, endpoint
 
 '''
 NOTE: Every function is only tested once with all possible amounts of inputs,
       but NOT extensively (its already done in the c++ tests)
 '''
-# NOTE: gate library functions aren't tested yet
 
 
 def gate_type_filter(gate_type, gate):
@@ -49,9 +49,12 @@ def gate_type_and_name_filter(gate_type, gate_name, gate):
 def gate_pin_type_filter(pin_type_fixed, pin_type_param, endpoint_param):
     return pin_type_param == pin_type_fixed
 
+def module_name_filter(name_fixed, module_param):
+    return module_param.get_name() == name_fixed
 
 
-class TestCoreUtils(unittest.TestCase):
+
+class TestNetlist(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         logging.basicConfig()
@@ -66,7 +69,6 @@ class TestCoreUtils(unittest.TestCase):
         self.log = logging.getLogger("LOG")
         self.netlist = hal_py.netlist
         self.g_lib_name = "EXAMPLE_GATE_LIBRARY"
-        time.sleep(1)
 
     def tearDown(self):
         pass
@@ -102,6 +104,9 @@ class TestCoreUtils(unittest.TestCase):
     def create_gate_pin_type_filter(self, pin_type):
         return partial(gate_pin_type_filter, pin_type)
 
+    def create_module_name_filter(self, module_name):
+        return partial(module_name_filter, module_name)
+
     # creates an endpoint by gate and pin_type
     def get_endpoint(self, gate, pin_type):
         ep = hal_py.endpoint()
@@ -111,16 +116,11 @@ class TestCoreUtils(unittest.TestCase):
 
 
 
-
-
-
-
-
 # ========= TEST CASES ==========
 
 # -------- netlist tests --------
 
-    # Testing the python binding for function: set_design_name, set_device_name, get_design_name, get_device_name, get_id
+    # Testing the python binding for netlist function: set_design_name, set_device_name, get_design_name, get_device_name, get_id
     def test_netlist_identifier(self):
         nl = self.create_empty_netlist()
         nl.set_design_name("design_name")
@@ -133,10 +133,9 @@ class TestCoreUtils(unittest.TestCase):
         self.assertEqual(str(nl.get_input_filename()), (str(hal_py.core_utils.get_binary_directory()) + "/input_filename"))
         self.assertEqual(nl.get_gate_library().get_name(), self.g_lib_name)
 
-    # Testing the python binding for functions: create_gate, get_gate_by_id, get_gates, get_gate_by_id, delete_gate, mark_gnd_gate,
+    # Testing the python binding for netlist functions: create_gate, get_gate_by_id, get_gates, get_gate_by_id, delete_gate, mark_gnd_gate,
     #  mark_vcc_gate, unmark_vcc_gate, unmark_vcc_gate, is_gnd_gate, is_vcc_gate, is_gate_in_netlist
     def test_netlist_create_gate(self):
-        # NOTE: float x, float y ?
         # Create a gate (with id)
         nl = self.create_empty_netlist()
         test_gate = nl.create_gate(self.min_id, self.get_gate_type_by_name("INV", nl.gate_library), "test_gate")
@@ -174,7 +173,7 @@ class TestCoreUtils(unittest.TestCase):
         
 
 
-    # Testing the python binding for functions: create_module, get_modules, delete_modules, get_module_by_id,
+    # Testing the python binding for netlist functions: create_module, get_modules, delete_modules, get_module_by_id,
     #                                           get_top_module, is_module_in_netlist
     def test_netlist_create_module(self):
         # Create a module (with id)
@@ -195,7 +194,7 @@ class TestCoreUtils(unittest.TestCase):
         self.assertIsNone(self.get_module_by_name(nl.get_modules(), "test_module_no_id"))
         self.assertIsNone(self.get_module_by_name(nl.get_modules(), "test_module"))
 
-    # Testing the python binding for functions: create_net, get_nets, delete_net, mark_global_input_net, mark_global_output_net,
+    # Testing the python binding for netlist functions: create_net, get_nets, delete_net, mark_global_input_net, mark_global_output_net,
     #                                           unmark_global_input_net, unmark_global_output_net, is_global_input_net, is_global_output_net,
     #                                           get_numnets, is_net_in_netlist
     def test_netlist_create_net(self):
@@ -244,7 +243,7 @@ class TestCoreUtils(unittest.TestCase):
 
 # -------- gate tests --------
 
-    # Testing the python binding for functions: add_boolean_function, get_boolean_function, get_fan_in_net,
+    # Testing the python binding for gate functions: add_boolean_function, get_boolean_function, get_fan_in_net,
     #     get_fan_in_nets, get_fan_out_net, get_fan_out_nets, get_id, get_input_pins, get_location, get_location_x,
     #     get_location_y, get_module, get_name, get_netlist, get_output_pins, get_type, has_location, is_gnd_gate,
     #     is_vcc_gate, mark_gnd_gate, mark_vcc_gate, set_location, set_location_x, set_location_y, set_name
@@ -367,12 +366,16 @@ class TestCoreUtils(unittest.TestCase):
 
 # -------- net tests --------
 
-    # Testing the python binding for functions:
-    def test_gate2_adjacent_functions(self):
+    # Testing the python binding for net functions: add_dst, get_dsts, get_id, get_name, get_num_of_dsts, get_src,
+    #    is_a_dst, is_global_input_net, is_global_output_net, is_unrouted, mark_global_input_net,
+    #    mark_global_output_net, remove_dst, remove_src, set_name, set_src, unmark_global_input_net,
+    #    unmark_global_output_net
+    def test_net_functions(self):
         nl = self.create_empty_netlist()
         src_gate = nl.create_gate(self.min_id, self.get_gate_type_by_name("INV", nl.gate_library), "src_gate")
         dst_gate = nl.create_gate(self.min_id+1, self.get_gate_type_by_name("AND3", nl.gate_library), "test_gate")
         test_net = nl.create_net(self.min_id+123, "test_net")
+        unrouted_net = nl.create_net(self.min_id+321, "unrouted_net")
 
         # Identifier
         self.assertEqual(test_net.get_id(), self.min_id+123)
@@ -385,7 +388,7 @@ class TestCoreUtils(unittest.TestCase):
         test_net.add_dst(self.get_endpoint(dst_gate, "I1"))
         self.assertEqual(test_net.get_dsts(), [self.get_endpoint(dst_gate, "I0"), self.get_endpoint(dst_gate, "I1")])
         self.assertEqual(test_net.get_num_of_dsts(), 2)
-        self.assertTrue(test_net.is_a_dst, dst_gate)
+        self.assertTrue(test_net.is_a_dst(dst_gate))
         self.assertTrue(test_net.is_a_dst(self.get_endpoint(dst_gate, "I0")))
         test_net.remove_dst(self.get_endpoint(dst_gate, "I0"))
         self.assertEqual(test_net.get_dsts(), [self.get_endpoint(dst_gate, "I1")])
@@ -400,18 +403,106 @@ class TestCoreUtils(unittest.TestCase):
         test_net.set_src(self.get_endpoint(src_gate, "O"))
         self.assertEqual(test_net.get_src(), self.get_endpoint(src_gate, "O"))
 
-        # IN PROGRESS: global in/out, unrouted
+        # Global Net
+        unrouted_net.mark_global_output_net()
+        self.assertTrue(unrouted_net.is_global_output_net())
+        unrouted_net.unmark_global_output_net()
+        self.assertFalse(unrouted_net.is_global_output_net())
+        unrouted_net.mark_global_input_net()
+        self.assertTrue(unrouted_net.is_global_input_net())
+        unrouted_net.unmark_global_input_net()
+        self.assertFalse(unrouted_net.is_global_input_net())
 
+        # Is Unrouted
+        test_net.add_dst(self.get_endpoint(dst_gate, "I1"))
+        test_net.set_src(self.get_endpoint(src_gate, "O"))
+        self.assertFalse(test_net.is_unrouted())
+        self.assertTrue(unrouted_net.is_unrouted())
 
+# ------ module tests -------
 
-    def test_tryout(self):
+    # Testing the python binding for module functions: assign_gate, contains_gate, contains_module, get_gate_by_id,
+    #    get_gates, get_id, get_input_nets, get_internal_nets, get_name, get_netlist, get_output_nets,
+    #    get_parent_module, get_submodules, remove_gate, set_name, set_parent_module
+    def test_module_functions(self):
         nl = self.create_empty_netlist()
-        test_gate = nl.create_gate(self.min_id, self.get_gate_type_by_name("INV", nl.gate_library), "test_gate")
-        in_net = nl.create_net(self.min_id, "in_net_0")
-        self.assertIsNotNone(nl)
-        #help(test_gate)
-        help(in_net)
 
+        # Build up a module hierarchy as follows:
+        #
+        #          .--- mod_0
+        #   top ---+
+        #          '--- mod_1
+        #
+
+        # Create some gates
+        gate_mod_0 = nl.create_gate(self.min_id+1, self.get_gate_type_by_name("INV", nl.gate_library), "gate_mod_0")
+        gate_mod_1 = nl.create_gate(self.min_id+2, self.get_gate_type_by_name("INV", nl.gate_library), "gate_mod_1")
+        top_mod = nl.get_top_module()
+        mod_0 = nl.create_module(self.min_id+1, "mod_0", nl.get_top_module(), [gate_mod_0, gate_mod_1])
+        mod_1 = nl.create_module(self.min_id+2, "mod_1", nl.get_top_module())
+
+        # Identifier
+        self.assertEqual(mod_0.get_id(), self.min_id+1)
+        self.assertEqual(mod_0.get_name(), "mod_0")
+        mod_0.set_name("new_name")
+        self.assertEqual(mod_0.get_name(), "new_name")
+        self.assertEqual(mod_0.get_netlist(), nl)
+
+
+        # Gates
+        self.assertTrue(mod_0.contains_gate(gate_mod_0))
+        mod_0.remove_gate(gate_mod_0)
+        self.assertFalse(mod_0.contains_gate(gate_mod_0))
+        mod_0.assign_gate(gate_mod_0)
+        self.assertTrue(mod_0.contains_gate(gate_mod_0))
+        self.assertEqual(mod_0.get_gate_by_id(self.min_id+1), gate_mod_0)
+        self.assertEqual(mod_0.get_gates(), {gate_mod_0, gate_mod_1})
+        self.assertEqual(mod_0.get_gates(self.create_gate_type_and_name_filter("INV", "gate_mod_0")), {gate_mod_0})
+
+        # Submodules
+        self.assertEqual(top_mod.get_submodules(), {mod_0, mod_1})
+        self.assertEqual(top_mod.get_submodules(self.create_module_name_filter("mod_1")), {mod_1})
+        self.assertTrue(top_mod.contains_module(mod_0))
+
+        # Parent Module
+        self.assertEqual(mod_0.get_parent_module(), top_mod)
+        mod_0.set_parent_module(mod_1)
+        self.assertEqual(mod_0.get_parent_module(), mod_1)
+        mod_0.set_parent_module(top_mod)
+
+        # Module Nets
+        # --- create some nets
+        inner_net = nl.create_net(self.min_id+1, "inner_net")
+        input_net = nl.create_net(self.min_id+2, "input_net")
+        output_net = nl.create_net(self.min_id+3, "output_net")
+        # --- connect the nets
+        inner_net.set_src(self.get_endpoint(gate_mod_0, "O"))
+        inner_net.add_dst(self.get_endpoint(gate_mod_1, "I"))
+        input_net.add_dst(self.get_endpoint(gate_mod_0, "I"))
+        input_net.mark_global_input_net()
+        output_net.set_src(self.get_endpoint(gate_mod_1, "O"))
+        output_net.mark_global_output_net()
+        # --- tests
+        self.assertEqual(mod_0.get_internal_nets(), {inner_net})
+        self.assertEqual(mod_0.get_input_nets(), {input_net})
+        self.assertEqual(mod_0.get_output_nets(), {output_net})
+
+# ------ endpoint tests -------
+
+    # Testing the python binding for endpoint functions: get_gate, get_pin_type, set_gate, set_pin_type
+    def test_endpoint_functions(self):
+        nl = self.create_empty_netlist()
+        gate_0 = nl.create_gate(self.min_id+1, self.get_gate_type_by_name("INV", nl.gate_library), "gate_0")
+        ep = hal_py.endpoint()
+        ep_i = self.get_endpoint(gate_0, "I")
+        ep_o = self.get_endpoint(gate_0, "O")
+        # Tests
+        self.assertEqual(ep_i.get_gate(), gate_0)
+        self.assertEqual(ep_i.get_pin_type(), "I")
+        ep.set_gate(gate_0)
+        ep.set_pin_type("I")
+        self.assertTrue(ep == ep_i)
+        self.assertFalse(ep != ep_i)
 
 
 if __name__ == '__main__':
