@@ -157,6 +157,9 @@ if(UNIX)
     enable_cxx_compile_option_if_supported("-O2" "RelWithDebInfo" "PUBLIC")
     enable_cxx_compile_option_if_supported("-g" "RelWithDebInfo" "PUBLIC")
 
+    SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -pthread")
+    SET(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -pthread")
+
     if(USE_LIBCXX)
         enable_cxx_compile_option_if_supported("-stdlib=libc++" "" "PUBLIC")
         enable_c_compile_option_if_supported("-stdlib=libc++" "" "PUBLIC")
