@@ -206,3 +206,23 @@ if(WITH_GUI)
         set(Missing_package "TRUE")
     endif(Qt5Svg_FOUND)
 endif()
+
+################################
+#####   Graphviz
+################################
+find_package(Graphviz)
+if(${graphviz_FOUND})
+    add_library(graphviz::graphviz INTERFACE IMPORTED)
+    set_target_properties(graphviz::graphviz PROPERTIES
+                          INTERFACE_INCLUDE_DIRECTORIES ${GRAPHVIZ_INCLUDE_DIR}
+                          )
+    set_target_properties(graphviz::graphviz PROPERTIES
+                          INTERFACE_LINK_LIBRARIES ${GRAPHVIZ_LIBRARIES}
+                          )
+
+    # Use graphviz via:
+    #   target_link_libraries(xxx PUBLIC ... graphviz::graphviz ... )
+    # or in plugins:
+    #   add_custom_target( ...
+    #                      LINK_LIBRARIES ... graphviz::graphviz)
+endif()
