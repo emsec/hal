@@ -1,7 +1,7 @@
 import sys
 import os
 
-### Automatically searches for the hal_py.so file and adds its path to the environment variables
+# Automatically searches for the hal_py.so file and adds its path to the environment variables
 
 dirname = os.path.dirname(__file__)
 hal_path = os.path.join(dirname, '../../')
@@ -22,7 +22,6 @@ if not hal_py_path is None:
 else:
     print("Can't find hal_py.so instance. Did you build it? If it can't be found anyway, make sure its directory is added to your PYTHONPATH and your HAL_BASE_PATH to your environment variables.")
 
-###
 
 import unittest
 import hal_py
@@ -32,6 +31,8 @@ import logging
 NOTE: Every function is only tested once with all possible amounts of inputs,
       but NOT extensively (its already done in the c++ tests)
 '''
+
+
 class TestDataContainer(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -65,8 +66,7 @@ class TestDataContainer(unittest.TestCase):
 
     # ========= TEST CASES ==========
 
-    # Testing the python binding for function: <name>
-    def test_data_container(self):
+    # Testing the python binding for the data_container class
         nl = self.create_empty_netlist()
         test_gate = nl.create_net(self.min_id, "test_net")
         test_gate.set_data("category", "key", "data_type", "value")

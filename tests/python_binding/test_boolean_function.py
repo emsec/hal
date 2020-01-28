@@ -52,6 +52,7 @@ class TestBooleanFunction(unittest.TestCase):
         pass
 
     # ====== HELPER FUNCTIONS =======
+
     def are_equal(self, bf_0, bf_1):
         if bf_0.get_variables() != bf_1.get_variables():
             print ("NOT EQUAL: Not the same variable set!")
@@ -59,11 +60,9 @@ class TestBooleanFunction(unittest.TestCase):
         var_list = list(bf_0.get_variables())
         return bf_0.get_truth_table(var_list) == bf_1.get_truth_table(var_list)
 
-
     # ========= TEST CASES ==========
 
-    # Main boolean function test
-    # NOTE: ~ operator isn't implemented yet
+    # Test the boolean function class with all its functions
     def test_boolean_function(self):
         a = hal_py.boolean_function("A")
         b = hal_py.boolean_function("B")

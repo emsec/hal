@@ -1,7 +1,7 @@
 import sys
 import os
 
-### Automatically searches for the hal_py.so file and adds its path to the environment variables
+# Automatically searches for the hal_py.so file and adds its path to the environment variables
 
 dirname = os.path.dirname(__file__)
 hal_path = os.path.join(dirname, '../../')
@@ -22,7 +22,6 @@ if not hal_py_path is None:
 else:
     print("Can't find hal_py.so instance. Did you build it? If it can't be found anyway, make sure its directory is added to your PYTHONPATH and your HAL_BASE_PATH to your environment variables.")
 
-###
 
 import unittest
 import hal_py
@@ -50,7 +49,7 @@ class TestCoreUtils(unittest.TestCase):
     def tearDown(self):
         pass
 
-    ######## TEST CASES ########
+    # ====== TEST CASES =======
 
     # Testing the python binding for function: get_binary_directory()
     def test_get_binary_directory(self):
