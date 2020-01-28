@@ -656,6 +656,7 @@ bool hdl_parser_verilog::build_netlist(const std::string& top_module)
                     }
                     else if (slave_src.gate != master_net->get_src().gate)
                     {
+                        log_error("hdl_parser", "could not merge nets '{}' and '{}'", slave_net->get_name(), master_net->get_name());
                         return false;
                     }
                 }
