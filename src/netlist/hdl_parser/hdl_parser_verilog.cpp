@@ -649,20 +649,28 @@ bool hdl_parser_verilog::build_netlist(const std::string& top_module)
                 if (slave_src.gate != nullptr)
                 {
                     slave_net->remove_src();
+
                     if (master_net->get_src().gate == nullptr)
                     {
                         master_net->set_src(slave_src);
                     }
                     else if (slave_src.gate != master_net->get_src().gate)
                     {
+                        log_error("hdl_parser", "could not merge nets '{}' and '{}'", slave_net->get_name(), master_net->get_name());
                         return false;
                     }
                 }
 
                 // merge destinations
+                if (slave_net->is_global_output_net())
+                {
+                    master_net->mark_global_output_net();
+                }
+
                 for (const auto& dst : slave_net->get_dsts())
                 {
                     slave_net->remove_dst(dst);
+
                     if (!master_net->is_a_dst(dst))
                     {
                         master_net->add_dst(dst);

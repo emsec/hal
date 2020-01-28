@@ -395,11 +395,11 @@ bool netlist::mark_global_output_net(std::shared_ptr<net> const n)
         log_debug("netlist", "net '{}' (id = {:08x}) is already registered as global output net in netlist", n->get_name(), n->get_id());
         return true;
     }
-    if (n->get_num_of_dsts() != 0)
-    {
-        log_error("netlist", "net '{}' (id = {:08x}) has destinations, so it cannot be marked as a global output net.", n->get_name(), n->get_id());
-        return false;
-    }
+    // if (n->get_num_of_dsts() != 0)
+    // {
+    //     log_error("netlist", "net '{}' (id = {:08x}) has destinations, so it cannot be marked as a global output net.", n->get_name(), n->get_id());
+    //     return false;
+    // }
     m_global_output_nets.insert(n);
 
     netlist_event_handler::notify(netlist_event_handler::event::marked_global_output, shared_from_this(), n->get_id());
