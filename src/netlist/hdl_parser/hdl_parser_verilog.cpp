@@ -248,23 +248,29 @@ bool hdl_parser_verilog::parse_entity_definiton()
 
     m_token_stream.consume(";", true);
 
-    while (m_token_stream.peek() != "endmodule")
+    auto next_token = m_token_stream.peek();
+    while (next_token != "endmodule")
     {
-        if (m_token_stream.peek() == "input" || m_token_stream.peek() == "output")
+        if (next_token == "input" || next_token == "output")
         {
             if (!parse_port_definition(e))
             {
                 return false;
             }
         }
-        else if (m_token_stream.peek() == "wire")
+        else if (next_token == "inout")
+        {
+            log_error("hdl_parser", "entity '{}', line {} : direction 'inout' unkown", e.name, e.line_number);
+            return false;
+        }
+        else if (next_token == "wire")
         {
             if (!parse_signal_definition(e))
             {
                 return false;
             }
         }
-        else if (m_token_stream.peek() == "assign")
+        else if (next_token == "assign")
         {
             if (!parse_assign(e))
             {
@@ -278,6 +284,8 @@ bool hdl_parser_verilog::parse_entity_definiton()
                 return false;
             }
         }
+
+        next_token = m_token_stream.peek();
     }
 
     m_token_stream.consume("endmodule", true);
@@ -365,7 +373,7 @@ bool hdl_parser_verilog::parse_assign(entity& e)
     m_token_stream.consume(";", true);
 
     auto left_parts  = get_assignment_signals(left_str, e, false);
-    auto right_parts = get_assignment_signals(right_str, e, false);
+    auto right_parts = get_assignment_signals(right_str, e, true);
 
     if (left_parts.empty() || right_parts.empty())
     {
@@ -649,20 +657,28 @@ bool hdl_parser_verilog::build_netlist(const std::string& top_module)
                 if (slave_src.gate != nullptr)
                 {
                     slave_net->remove_src();
+
                     if (master_net->get_src().gate == nullptr)
                     {
                         master_net->set_src(slave_src);
                     }
                     else if (slave_src.gate != master_net->get_src().gate)
                     {
+                        log_error("hdl_parser", "could not merge nets '{}' and '{}'", slave_net->get_name(), master_net->get_name());
                         return false;
                     }
                 }
 
                 // merge destinations
+                if (slave_net->is_global_output_net())
+                {
+                    master_net->mark_global_output_net();
+                }
+
                 for (const auto& dst : slave_net->get_dsts())
                 {
                     slave_net->remove_dst(dst);
+
                     if (!master_net->is_a_dst(dst))
                     {
                         master_net->add_dst(dst);

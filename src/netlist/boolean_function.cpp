@@ -685,15 +685,15 @@ std::vector<boolean_function> boolean_function::expand_ands_internal(const std::
     std::vector<boolean_function> result = sub_primitives[0];
 
     auto set_identifier = [](const boolean_function& f) -> std::string {
-        std::string result;
+        std::string id;
         for (const auto& var : f.m_operands)
         {
             if (var.m_invert)
-                result += "!";
-            result += var.m_variable;
-            result += " ";
+                id += "!";
+            id += var.m_variable;
+            id += " ";
         }
-        return result;
+        return id;
     };
 
     for (u32 i = 1; i < sub_primitives.size(); ++i)
@@ -991,7 +991,7 @@ boolean_function boolean_function::to_dnf() const
 
     // the order of the passes is important!
     // every pass after replace_xors expects that there are no more xor operations
-    return replace_xors().propagate_negations().expand_ands().flatten().optimize_constants();
+    return replace_xors().propagate_negations().expand_ands()/*.flatten()*/.optimize_constants();
 }
 
 std::vector<std::vector<std::pair<std::string, bool>>> boolean_function::get_dnf_clauses() const
@@ -1017,9 +1017,9 @@ std::vector<std::vector<std::pair<std::string, bool>>> boolean_function::get_dnf
             std::vector<std::pair<std::string, bool>> clause;
             if (term.m_content == content_type::TERMS)
             {
-                for (const auto& value : term.m_operands)
+                for (const auto& v : term.m_operands)
                 {
-                    clause.push_back(std::make_pair(value.m_variable, !value.m_invert));
+                    clause.push_back(std::make_pair(v.m_variable, !v.m_invert));
                 }
             }
             else
@@ -1032,9 +1032,9 @@ std::vector<std::vector<std::pair<std::string, bool>>> boolean_function::get_dnf
     else
     {
         std::vector<std::pair<std::string, bool>> clause;
-        for (const auto& value : dnf.m_operands)
+        for (const auto& v : dnf.m_operands)
         {
-            clause.push_back(std::make_pair(value.m_variable, !value.m_invert));
+            clause.push_back(std::make_pair(v.m_variable, !v.m_invert));
         }
         result.push_back(clause);
     }
