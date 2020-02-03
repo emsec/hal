@@ -12,7 +12,7 @@ class graphics_module : public graphics_node
 public:
     graphics_module(const std::shared_ptr<const module> m);
 
-    virtual void set_visuals(const visuals& v) Q_DECL_OVERRIDE;
+    virtual void set_visuals(const visuals& v) override;
 
 protected:
     struct module_pin
