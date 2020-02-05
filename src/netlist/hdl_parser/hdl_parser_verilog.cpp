@@ -260,6 +260,7 @@ bool hdl_parser_verilog::parse_entity_definiton()
         }
         else if (next_token == "inout")
         {
+            // not yet supported
             log_error("hdl_parser", "entity '{}', line {} : direction 'inout' unkown", e.name, e.line_number);
             return false;
         }
@@ -304,7 +305,6 @@ bool hdl_parser_verilog::parse_port_list(entity& e)
     m_token_stream.consume("(", true);
     auto ports = m_token_stream.extract_until(")", token_stream::END_OF_STREAM, true, true);
 
-    // TODO support other port declaration style
     while (ports.remaining() > 0)
     {
         e.port_names.insert(ports.consume());
@@ -323,14 +323,17 @@ bool hdl_parser_verilog::parse_port_definition(entity& e)
 
     m_token_stream.consume(";", true);
 
+    // expand port on bit-level
     for (const auto& expanded_port : get_expanded_signals(port_str))
     {
+        // verify correctness
         if (e.port_names.find(expanded_port.first) == e.port_names.end())
         {
             log_error("hdl_parser", "port name '{}' in line {} has not been declared in entity port list.", expanded_port.first, port_str.peek().number);
             return false;
         }
 
+        // insert to ports/signals belonging to this entity
         if (e.expanded_signal_names.find(expanded_port.first) == e.expanded_signal_names.end())
         {
             e.ports_expanded[expanded_port.first] = std::make_pair(direction.string, expanded_port.second);
@@ -348,8 +351,10 @@ bool hdl_parser_verilog::parse_signal_definition(entity& e)
 
     m_token_stream.consume(";", true);
 
+    // expand wire on bit-level
     for (const auto& expanded_signal : get_expanded_signals(signal_str))
     {
+        // insert to signals belonging to this entity
         if (e.expanded_signal_names.find(expanded_signal.first) == e.expanded_signal_names.end())
         {
             e.signals_expanded.insert(e.signals_expanded.end(), expanded_signal.second.begin(), expanded_signal.second.end());
@@ -372,9 +377,11 @@ bool hdl_parser_verilog::parse_assign(entity& e)
     auto right_str = m_token_stream.extract_until(";", token_stream::END_OF_STREAM, true, true);
     m_token_stream.consume(";", true);
 
+    // extract assignments for each bit
     auto left_parts  = get_assignment_signals(left_str, e, false);
     auto right_parts = get_assignment_signals(right_str, e, true);
 
+    // verify correctness
     if (left_parts.empty() || right_parts.empty())
     {
         // error already printed in subfunction
@@ -387,16 +394,19 @@ bool hdl_parser_verilog::parse_assign(entity& e)
         return false;
     }
 
+    // create assignments
     for (u32 i = 0; i < right_parts.size(); i++)
     {
         direct_assignment[left_parts[i]] = right_parts[i];
     }
 
+    // verify correctness
     if (direct_assignment.empty())
     {
         return false;
     }
 
+    // add to assignments of current entity
     for (const auto& a : direct_assignment)
     {
         e.direct_assignments.emplace(a);
@@ -410,6 +420,7 @@ bool hdl_parser_verilog::parse_instance(entity& e)
     instance inst;
     inst.type = m_token_stream.consume();
 
+    // parse generics map
     if (m_token_stream.consume("#("))
     {
         auto generic_str = m_token_stream.extract_until(")", token_stream::END_OF_STREAM, true, true);
@@ -434,10 +445,11 @@ bool hdl_parser_verilog::parse_instance(entity& e)
         m_token_stream.consume(")", true);
     }
 
+    // parse instance name
     inst.name = m_token_stream.consume();
 
+    // parse port map
     m_token_stream.consume("(", true);
-
     auto port_str = m_token_stream.extract_until(")", token_stream::END_OF_STREAM, true, true);
 
     while (port_str.remaining() > 0)
@@ -460,6 +472,7 @@ bool hdl_parser_verilog::parse_instance(entity& e)
     m_token_stream.consume(")", true);
     m_token_stream.consume(";", true);
 
+    // add to vector of instances of current entity
     e.instances.push_back(inst);
 
     return true;
@@ -757,42 +770,25 @@ std::shared_ptr<module> hdl_parser_verilog::instantiate(const entity& e, std::sh
         m_net_by_name[aliases[name]] = new_net;
     }
 
-    std::set<std::string> output_ports;
-    std::set<std::string> input_ports;
-
-    for (const auto& expanded_port : e.ports_expanded)
-    {
-        auto direction = expanded_port.second.first;
-
-        if (direction == "input")
-        {
-            std::copy(expanded_port.second.second.begin(), expanded_port.second.second.end(), std::inserter(input_ports, input_ports.end()));
-        }
-        if (direction == "output")
-        {
-            std::copy(expanded_port.second.second.begin(), expanded_port.second.second.end(), std::inserter(output_ports, output_ports.end()));
-        }
-    }
-
     for (const auto& [s, assignment] : e.direct_assignments)
     {
         std::string a = s;
         std::string b = assignment;
 
-        if (parent_module_assignments.find(a) != parent_module_assignments.end())
+        if (auto it = parent_module_assignments.find(a); it != parent_module_assignments.end())
         {
-            a = parent_module_assignments.at(a);
+            a = it->second;
         }
         else
         {
             a = aliases.at(a);
         }
 
-        if (parent_module_assignments.find(b) != parent_module_assignments.end())
+        if (auto it = parent_module_assignments.find(b); it != parent_module_assignments.end())
         {
-            b = parent_module_assignments.at(b);
+            b = it->second;
         }
-        else
+        else if (b != "'0'" && b != "'1'")
         {
             b = aliases.at(b);
         }
@@ -815,17 +811,15 @@ std::shared_ptr<module> hdl_parser_verilog::instantiate(const entity& e, std::sh
 
         for (const auto& [pin, s] : inst.ports)
         {
-            auto it2 = parent_module_assignments.find(s);
-            if (it2 != parent_module_assignments.end())
+            if (auto it = parent_module_assignments.find(s); it != parent_module_assignments.end())
             {
-                instance_assignments[pin] = it2->second;
+                instance_assignments[pin] = it->second;
             }
             else
             {
-                auto it3 = aliases.find(s);
-                if (it3 != aliases.end())
+                if (auto alias_it = aliases.find(s); alias_it != aliases.end())
                 {
-                    instance_assignments[pin] = it3->second;
+                    instance_assignments[pin] = alias_it->second;
                 }
                 else if (s == "'0'" || s == "'1'")
                 {
@@ -840,10 +834,9 @@ std::shared_ptr<module> hdl_parser_verilog::instantiate(const entity& e, std::sh
         }
 
         // if the instance is another entity, recursively instantiate it
-        auto entity_it = m_entities.find(inst.type);
-        if (entity_it != m_entities.end())
+        if (auto it = m_entities.find(inst.type); it != m_entities.end())
         {
-            container = instantiate(entity_it->second, module, instance_assignments).get();
+            container = instantiate(it->second, module, instance_assignments).get();
             if (container == nullptr)
             {
                 return nullptr;
@@ -856,14 +849,15 @@ std::shared_ptr<module> hdl_parser_verilog::instantiate(const entity& e, std::sh
             aliases[inst.name] = get_unique_alias(inst.name);
 
             std::shared_ptr<gate> new_gate;
+            auto gate_types = m_netlist->get_gate_library()->get_gate_types();
+
+            if (auto gate_type_it = gate_types.find(inst.type); gate_type_it == gate_types.end())
             {
-                auto gate_types = m_netlist->get_gate_library()->get_gate_types();
-                auto it         = gate_types.find(inst.type);
-                if (it == gate_types.end())
-                {
-                    return nullptr;
-                }
-                new_gate = m_netlist->create_gate(it->second, aliases[inst.name]);
+                return nullptr;
+            }
+            else
+            {
+                new_gate = m_netlist->create_gate(gate_type_it->second, aliases[inst.name]);
             }
 
             if (new_gate == nullptr)
@@ -892,12 +886,9 @@ std::shared_ptr<module> hdl_parser_verilog::instantiate(const entity& e, std::sh
             for (auto [pin, net_name] : inst.ports)
             {
                 // apply port assignments
+                if (auto instance_it = instance_assignments.find(pin); instance_it != instance_assignments.end())
                 {
-                    auto it = instance_assignments.find(pin);
-                    if (it != instance_assignments.end())
-                    {
-                        net_name = it->second;
-                    }
+                    net_name = instance_it->second;
                 }
 
                 // if the net is an internal signal, use its alias
@@ -907,47 +898,48 @@ std::shared_ptr<module> hdl_parser_verilog::instantiate(const entity& e, std::sh
                 }
 
                 // get the respective net for the assignment
-                auto it = m_net_by_name.find(net_name);
-
-                if (it == m_net_by_name.end())
+                if (auto net_it = m_net_by_name.find(net_name); net_it == m_net_by_name.end())
                 {
                     log_error("hdl_parser", "signal '{}' of {} was not previously declared", net_name, e.name);
                     return nullptr;
                 }
-                auto current_net = it->second;
-
-                // add net src/dst by pin types
-                bool is_input  = std::find(input_pins.begin(), input_pins.end(), pin) != input_pins.end();
-                bool is_output = std::find(output_pins.begin(), output_pins.end(), pin) != output_pins.end();
-
-                if (!is_input && !is_output)
+                else
                 {
-                    log_error("hdl_parser", "undefined pin '{}' for '{}' ({})", pin, new_gate->get_name(), new_gate->get_type()->get_name());
-                    return nullptr;
-                }
+                    auto current_net = net_it->second;
 
-                if (is_output)
-                {
-                    if (current_net->get_src().gate != nullptr)
+                    // add net src/dst by pin types
+                    bool is_input  = std::find(input_pins.begin(), input_pins.end(), pin) != input_pins.end();
+                    bool is_output = std::find(output_pins.begin(), output_pins.end(), pin) != output_pins.end();
+
+                    if (!is_input && !is_output)
                     {
-                        auto src = current_net->get_src().gate;
-                        log_error("hdl_parser",
-                                  "net '{}' already has source gate '{}' (type {}), cannot assign '{}' (type {})",
-                                  current_net->get_name(),
-                                  src->get_name(),
-                                  src->get_type()->get_name(),
-                                  new_gate->get_name(),
-                                  new_gate->get_type()->get_name());
+                        log_error("hdl_parser", "undefined pin '{}' for '{}' ({})", pin, new_gate->get_name(), new_gate->get_type()->get_name());
+                        return nullptr;
                     }
-                    if (!current_net->set_src(new_gate, pin))
+
+                    if (is_output)
+                    {
+                        if (current_net->get_src().gate != nullptr)
+                        {
+                            auto src = current_net->get_src().gate;
+                            log_error("hdl_parser",
+                                      "net '{}' already has source gate '{}' (type {}), cannot assign '{}' (type {})",
+                                      current_net->get_name(),
+                                      src->get_name(),
+                                      src->get_type()->get_name(),
+                                      new_gate->get_name(),
+                                      new_gate->get_type()->get_name());
+                        }
+                        if (!current_net->set_src(new_gate, pin))
+                        {
+                            return nullptr;
+                        }
+                    }
+
+                    if (is_input && !current_net->add_dst(new_gate, pin))
                     {
                         return nullptr;
                     }
-                }
-
-                if (is_input && !current_net->add_dst(new_gate, pin))
-                {
-                    return nullptr;
                 }
             }
         }
