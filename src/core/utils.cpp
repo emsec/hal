@@ -221,6 +221,11 @@ namespace core_utils
         return join(joiner, std::vector<std::string>(items.begin(), items.end()));
     }
 
+    std::string join(const std::string& joiner, const std::unordered_set<std::string>& items)
+    {
+        return join(joiner, std::vector<std::string>(items.begin(), items.end()));
+    }
+
     std::string to_upper(const std::string& s)
     {
         std::string result = s;

@@ -30,6 +30,7 @@
 #include "def.h"
 
 #include <set>
+#include <unordered_set>
 #include <string>
 #include <vector>
 
@@ -188,6 +189,15 @@ namespace core_utils
      * @returns The combined string.
      */
     CORE_API std::string join(const std::string& joiner, const std::set<std::string>& items);
+
+    /**
+     * Joins all elements of a set with a joiner-string.
+     *
+     * @param[in] joiner - The string to put between the elements.
+     * @param[in] items - The set of elements to join.
+     * @returns The combined string.
+     */
+    CORE_API std::string join(const std::string& joiner, const std::unordered_set<std::string>& items);
 
     /**
      * Convert a string to upper case.
