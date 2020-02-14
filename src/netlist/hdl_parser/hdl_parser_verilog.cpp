@@ -437,9 +437,12 @@ bool hdl_parser_verilog::parse_instance(entity& e)
 
             generic_str.consume(")", true);
 
-            inst.generic_streams.emplace_back(generic_lhs, generic_rhs);
-
             generic_str.consume(",", generic_str.remaining() > 0);
+
+            if (generic_rhs.size() != 0)
+            {
+                inst.generic_streams.emplace_back(generic_lhs, generic_rhs);
+            }
         }
 
         m_token_stream.consume(")", true);
@@ -464,9 +467,12 @@ bool hdl_parser_verilog::parse_instance(entity& e)
 
         port_str.consume(")", true);
 
-        inst.port_streams.emplace_back(port_lhs, port_rhs);
-
         port_str.consume(",", port_str.remaining() > 0);
+
+        if (port_rhs.size() != 0)
+        {
+            inst.port_streams.emplace_back(port_lhs, port_rhs);
+        }
     }
 
     m_token_stream.consume(")", true);
