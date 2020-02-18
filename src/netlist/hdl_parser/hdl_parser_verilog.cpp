@@ -499,6 +499,12 @@ bool hdl_parser_verilog::connect_instances()
 
             for (auto& port : inst.port_streams)
             {
+                if (port.second.remaining() == 0)
+                {
+                    // unconnected
+                    continue;
+                }
+
                 std::unordered_map<std::string, std::string> port_assignments;
 
                 auto port_line = port.first.peek().number;

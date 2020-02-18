@@ -127,17 +127,17 @@ boolean_function gate::get_boolean_function(const std::string& name) const
         return get_lut_function();
     }
 
-    auto it = m_functions.find(name);
-    if (it != m_functions.end())
+    if (auto it = m_functions.find(name); it != m_functions.end())
     {
         return it->second;
     }
+
     auto map = m_type->get_boolean_functions();
-    it       = m_functions.find(name);
-    if (it != m_functions.end())
+    if (auto it = map.find(name); it != map.end())
     {
         return it->second;
     }
+
     return boolean_function();
 }
 
@@ -307,7 +307,6 @@ std::set<std::shared_ptr<net>> gate::get_fan_in_nets() const
 
     return nets;
 }
-
 
 std::shared_ptr<net> gate::get_fan_in_net(const std::string& pin_type) const
 {
