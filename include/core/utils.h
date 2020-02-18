@@ -30,8 +30,9 @@
 #include "def.h"
 
 #include <set>
-#include <unordered_set>
+#include <sstream>
 #include <string>
+#include <unordered_set>
 #include <vector>
 
 /**
@@ -179,25 +180,21 @@ namespace core_utils
      * @param[in] items - The vector of elements to join.
      * @returns The combined string.
      */
-    CORE_API std::string join(const std::string& joiner, const std::vector<std::string>& items);
-
-    /**
-     * Joins all elements of a set with a joiner-string.
-     *
-     * @param[in] joiner - The string to put between the elements.
-     * @param[in] items - The set of elements to join.
-     * @returns The combined string.
-     */
-    CORE_API std::string join(const std::string& joiner, const std::set<std::string>& items);
-
-    /**
-     * Joins all elements of a set with a joiner-string.
-     *
-     * @param[in] joiner - The string to put between the elements.
-     * @param[in] items - The set of elements to join.
-     * @returns The combined string.
-     */
-    CORE_API std::string join(const std::string& joiner, const std::unordered_set<std::string>& items);
+    template<typename T>
+    CORE_API std::string join(const std::string& joiner, const T& items)
+    {
+        std::stringstream ss;
+        bool first = true;
+        for (auto it = items.begin(); it != items.end(); ++it)
+        {
+            if (!first)
+            {
+                ss << joiner;
+            }
+            ss << *it;
+        }
+        return ss.str();
+    }
 
     /**
      * Convert a string to upper case.
