@@ -130,24 +130,24 @@ TEST_F(hdl_parser_vhdl_test, check_main_example)
 
         ASSERT_NE(net_0, nullptr);
         EXPECT_EQ(net_0->get_name(), "net_0");
-        EXPECT_EQ(net_0->get_src(), get_endpoint(gate_0, "O"));
-        std::vector<endpoint> exp_net_0_dsts = {get_endpoint(gate_2, "I0")};
-        EXPECT_TRUE(vectors_have_same_content(net_0->get_dsts(), std::vector<endpoint>({get_endpoint(gate_2, "I0")})));
+        EXPECT_EQ(net_0->get_src(), endpoint(gate_0, "O", false));
+        std::vector<endpoint> exp_net_0_dsts = {endpoint(gate_2, "I0", true)};
+        EXPECT_TRUE(vectors_have_same_content(net_0->get_dsts(), std::vector<endpoint>({endpoint(gate_2, "I0", true)})));
 
         ASSERT_NE(vec_net_2, nullptr);
         EXPECT_EQ(vec_net_2->get_name(), "vec_net(2)");
-        EXPECT_EQ(vec_net_2->get_src(), get_endpoint(gate_1, "O"));
-        EXPECT_TRUE(vectors_have_same_content(vec_net_2->get_dsts(), std::vector<endpoint>({get_endpoint(gate_2, "I1")})));
+        EXPECT_EQ(vec_net_2->get_src(), endpoint(gate_1, "O", false));
+        EXPECT_TRUE(vectors_have_same_content(vec_net_2->get_dsts(), std::vector<endpoint>({endpoint(gate_2, "I1", true)})));
 
         ASSERT_NE(net_global_in, nullptr);
         EXPECT_EQ(net_global_in->get_name(), "net_global_in");
-        EXPECT_EQ(net_global_in->get_src(), get_endpoint(nullptr, ""));
-        EXPECT_TRUE(vectors_have_same_content(net_global_in->get_dsts(), std::vector<endpoint>({get_endpoint(gate_0, "I"), get_endpoint(gate_1, "I0"), get_endpoint(gate_1, "I1")})));
+        EXPECT_EQ(net_global_in->get_src(), endpoint(nullptr, "", false));
+        EXPECT_TRUE(vectors_have_same_content(net_global_in->get_dsts(), std::vector<endpoint>({endpoint(gate_0, "I", true), endpoint(gate_1, "I0", true), endpoint(gate_1, "I1", true)})));
         EXPECT_TRUE(nl->is_global_input_net(net_global_in));
 
         ASSERT_NE(net_global_out, nullptr);
         EXPECT_EQ(net_global_out->get_name(), "net_global_out");
-        EXPECT_EQ(net_global_out->get_src(), get_endpoint(gate_2, "O"));
+        EXPECT_EQ(net_global_out->get_src(), endpoint(gate_2, "O", false));
         EXPECT_TRUE(net_global_out->get_dsts().empty());
         EXPECT_TRUE(nl->is_global_output_net(net_global_out));
 

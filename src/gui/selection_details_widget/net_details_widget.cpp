@@ -195,7 +195,7 @@ void net_details_widget::update(u32 net_id)
 
     if (src_pin.get_gate() != nullptr)
     {
-        auto src_pin_type = src_pin.get_pin_type();
+        auto src_pin_type = src_pin.get_pin();
 
         if (!src_pin_type.empty())
         {
@@ -232,7 +232,7 @@ void net_details_widget::update(u32 net_id)
 
         for (auto dst_pin : dsts_pins)
         {
-            auto dst_pin_type = dst_pin.get_pin_type();
+            auto dst_pin_type = dst_pin.get_pin();
 
             QTreeWidgetItem* item = new QTreeWidgetItem(m_dst_pins);
             item->setText(0, QString::fromStdString(dst_pin_type));

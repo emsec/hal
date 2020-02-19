@@ -123,10 +123,10 @@ void standard_graphics_module::paint(QPainter* painter, const QStyleOptionGraphi
         painter->setFont(s_pin_font);
 
         for (int i = 0; i < m_input_pins.size(); ++i)
-            painter->drawText(m_input_pin_positions.at(i), m_input_pins.at(i).pin_type);
+            painter->drawText(m_input_pin_positions.at(i), m_input_pins.at(i).get_pin());
 
         for (int i = 0; i < m_output_pins.size(); ++i)
-            painter->drawText(m_output_pin_positions.at(i), m_output_pins.at(i).pin_type);
+            painter->drawText(m_output_pin_positions.at(i), m_output_pins.at(i).get_pin());
 
         if (g_selection_relay.m_focus_type == selection_relay::item_type::module)
             if (g_selection_relay.m_focus_id == m_id)
@@ -145,21 +145,21 @@ void standard_graphics_module::paint(QPainter* painter, const QStyleOptionGraphi
                     painter->setFont(s_pin_font);
 
                     for (int i = 0; i < m_input_pins.size(); ++i)
-                        painter->drawText(m_input_pin_positions.at(i), m_input_pins.at(i).pin_type);
+                        painter->drawText(m_input_pin_positions.at(i), m_input_pins.at(i).get_pin());
 
                     for (int i = 0; i < m_output_pins.size(); ++i)
-                        painter->drawText(m_output_pin_positions.at(i), m_output_pins.at(i).pin_type);
+                        painter->drawText(m_output_pin_positions.at(i), m_output_pins.at(i).get_pin());
 
                     break;
                 }
                 case selection_relay::subfocus::left:
                 {
-                    painter->drawText(m_input_pin_positions.at(g_selection_relay.m_subfocus_index), m_input_pins.at(g_selection_relay.m_subfocus_index).pin_type);
+                    painter->drawText(m_input_pin_positions.at(g_selection_relay.m_subfocus_index), m_input_pins.at(g_selection_relay.m_subfocus_index).get_pin());
                     break;
                 }
                 case selection_relay::subfocus::right:
                 {
-                    painter->drawText(m_output_pin_positions.at(g_selection_relay.m_subfocus_index), m_output_pins.at(g_selection_relay.m_subfocus_index).pin_type);
+                    painter->drawText(m_output_pin_positions.at(g_selection_relay.m_subfocus_index), m_output_pins.at(g_selection_relay.m_subfocus_index).get_pin());
                     break;
                 }
                 }
@@ -252,14 +252,14 @@ void standard_graphics_module::format(const bool& adjust_size_to_grid)
 
     for (const module_pin& input_pin : m_input_pins)
     {
-        qreal width = pin_fm.width(input_pin.pin_type);
+        qreal width = pin_fm.width(input_pin.get_pin());
         if (width > max_pin_width)
             max_pin_width = width;
     }
 
     for (const module_pin& output_pin : m_output_pins)
     {
-        qreal width = pin_fm.width(output_pin.pin_type);
+        qreal width = pin_fm.width(output_pin.get_pin());
         if (width > max_pin_width)
             max_pin_width = width;
     }
@@ -325,7 +325,7 @@ void standard_graphics_module::format(const bool& adjust_size_to_grid)
 
     for (const module_pin& output_pin : m_output_pins)
     {
-        qreal x = m_width - (pin_fm.size(0, output_pin.pin_type).rwidth() + s_pin_outer_horizontal_spacing);
+        qreal x = m_width - (pin_fm.size(0, output_pin.get_pin()).rwidth() + s_pin_outer_horizontal_spacing);
         m_output_pin_positions.append(QPointF(x, y));
         y += (s_pin_font_height + s_pin_inner_vertical_spacing);
     }

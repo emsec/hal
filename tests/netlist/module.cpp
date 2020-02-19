@@ -550,16 +550,16 @@ TEST_F(module_test, check_get_input_nets){
         // Connect the nets
         net_g_0->add_dst(gate_0, "I");
 
-        net_0_g->set_src(gate_0, "O");
+        net_0_g->add_src(gate_0, "O");
 
-        net_4_1_2->set_src(gate_4, "O");
+        net_4_1_2->add_src(gate_4, "O");
         net_4_1_2->add_dst(gate_1, "I");
         net_4_1_2->add_dst(gate_2, "I1");
 
-        net_1_2->set_src(gate_1, "O");
+        net_1_2->add_src(gate_1, "O");
         net_1_2->add_dst(gate_2, "I0");
 
-        net_2_3_5->set_src(gate_2, "O");
+        net_2_3_5->add_src(gate_2, "O");
         net_2_3_5->add_dst(gate_3, "I");
         net_2_3_5->add_dst(gate_5, "I");
 

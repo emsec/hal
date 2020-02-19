@@ -31,7 +31,7 @@ class gate;
 class gate_type;
 class net;
 class module;
-struct endpoint;
+class endpoint;
 
 /**
  * @ingroup netlist
@@ -61,10 +61,10 @@ private:
     std::shared_ptr<net> create_net(u32 id, const std::string& name);
     bool delete_net(const std::shared_ptr<net>& net);
 
-    bool net_set_src(const std::shared_ptr<net>& net, const endpoint& src);
-    bool net_remove_src(const std::shared_ptr<net>& net);
-    bool net_add_dst(const std::shared_ptr<net>& net, const endpoint& dst);
-    bool net_remove_dst(const std::shared_ptr<net>& net, const endpoint& dst);
+    bool net_add_src(const std::shared_ptr<net>& net, const endpoint& ep);
+    bool net_remove_src(const std::shared_ptr<net>& net, const endpoint& ep);
+    bool net_add_dst(const std::shared_ptr<net>& net, const endpoint& ep);
+    bool net_remove_dst(const std::shared_ptr<net>& net, const endpoint& ep);
 
     // module functions
 

@@ -40,7 +40,7 @@ class netlist_internal_manager;
 class net;
 class gate;
 class module;
-struct endpoint;
+class endpoint;
 
 /**
  * Netlist class containing information about the netlist including its gates, modules, and nets, as well as the underlying gate library.

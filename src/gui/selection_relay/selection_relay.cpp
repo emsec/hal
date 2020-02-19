@@ -373,7 +373,7 @@ void selection_relay::follow_gate_input_pin(std::shared_ptr<gate> g, u32 input_p
         int i = 0;
         for (endpoint& e : n->get_dsts())
         {
-            if (e.get_gate() == g && e.get_pin_type() == pin_type)
+            if (e.get_gate() == g && e.get_pin() == pin_type)
                 break;
 
             ++i;
@@ -436,7 +436,7 @@ void selection_relay::follow_net_to_src(std::shared_ptr<net> n)
         int i = 0;
         for (const std::string& pin_type: g->get_output_pins())
         {
-            if (pin_type == e.get_pin_type())
+            if (pin_type == e.get_pin())
                 break;
 
             ++i;
@@ -474,7 +474,7 @@ void selection_relay::follow_net_to_dst(std::shared_ptr<net> n, u32 dst_index)
         int i = 0;
         for (const std::string& pin_type: g->get_input_pins())
         {
-            if (pin_type == e.get_pin_type())
+            if (pin_type == e.get_pin())
                 break;
 
             ++i;

@@ -210,14 +210,13 @@ std::set<std::shared_ptr<gate>> module::get_gates(const std::function<bool(const
     }
     else
     {
-        for (const auto& it : m_gates_map)
+        for (const auto& g : m_gates_set)
         {
-            auto current_gate = it.second;
-            if (!filter(current_gate))
+            if (!filter(g))
             {
                 continue;
             }
-            res.insert(current_gate);
+            res.insert(g);
         }
     }
 
@@ -251,7 +250,7 @@ std::set<std::shared_ptr<net>> module::get_input_nets() const
             {
                 res.insert(net);
             }
-            else if (gates.find(net->get_src().gate) == gates.end())
+            else if (gates.find(net->get_src().get_gate()) == gates.end())
             {
                 res.insert(net);
             }
@@ -275,7 +274,7 @@ std::set<std::shared_ptr<net>> module::get_output_nets() const
             }
             for (const auto& dst : net->get_dsts())
             {
-                if (gates.find(dst.gate) == gates.end())
+                if (gates.find(dst.get_gate()) == gates.end())
                 {
                     res.insert(net);
                     break;
@@ -296,7 +295,7 @@ std::set<std::shared_ptr<net>> module::get_internal_nets() const
         {
             for (const auto& dst : net->get_dsts())
             {
-                if (gates.find(dst.gate) != gates.end())
+                if (gates.find(dst.get_gate()) != gates.end())
                 {
                     res.insert(net);
                     break;

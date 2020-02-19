@@ -401,7 +401,7 @@ void graph_graphics_view::dragMoveEvent(QDragMoveEvent* event)
             }
         }
         m_drop_allowed = (cue != drag_shadow_gate::drag_cue::rejected);
-        
+
         static_cast<graphics_scene*>(scene())->move_drag_shadow(snap[1], cue);
     }
 }
@@ -435,7 +435,7 @@ void graph_graphics_view::dropEvent(QDropEvent* event)
             if (modifierPressed)
             {
                 // swap mode; swap gates
-                
+
                 hal::node nodeFrom = layouter->position_to_node_map().value(sourceLayouterPos);
                 hal::node nodeTo = layouter->position_to_node_map().value(targetLayouterPos);
                 assert(nodeFrom != hal::node()); // assert that value was found
@@ -445,7 +445,7 @@ void graph_graphics_view::dropEvent(QDropEvent* event)
             else
             {
                 // move mode; move gate to the selected location
-                
+
                 hal::node nodeTo = layouter->position_to_node_map().value(sourceLayouterPos);
                 assert(nodeTo != hal::node());
                 layouter->set_node_position(nodeTo, targetLayouterPos);
@@ -704,7 +704,7 @@ void graph_graphics_view::handle_select_outputs()
                     for (const auto& id : context->modules())
                     {
                         auto m = g_netlist->get_module_by_id(id);
-                        if (m->contains_gate(suc.gate, true))
+                        if (m->contains_gate(suc.get_gate(), true))
                         {
                             found = true;
                             break;
@@ -712,7 +712,7 @@ void graph_graphics_view::handle_select_outputs()
                     }
                     if (!found)
                     {
-                        gates.insert(suc.gate->get_id());
+                        gates.insert(suc.get_gate()->get_id());
                     }
                 }
             }
@@ -728,7 +728,7 @@ void graph_graphics_view::handle_select_outputs()
                     for (const auto& id : context->modules())
                     {
                         auto m = g_netlist->get_module_by_id(id);
-                        if (m->contains_gate(suc.gate, true))
+                        if (m->contains_gate(suc.get_gate(), true))
                         {
                             found = true;
                             break;
@@ -736,7 +736,7 @@ void graph_graphics_view::handle_select_outputs()
                     }
                     if (!found)
                     {
-                        gates.insert(suc.gate->get_id());
+                        gates.insert(suc.get_gate()->get_id());
                     }
                 }
             }
@@ -757,13 +757,13 @@ void graph_graphics_view::handle_select_inputs()
             auto gate = g_netlist->get_gate_by_id(sel_id);
             for (const auto& net : gate->get_fan_in_nets())
             {
-                if (net->get_src().gate != nullptr)
+                if (net->get_src().get_gate() != nullptr)
                 {
                     bool found = false;
                     for (const auto& id : context->modules())
                     {
                         auto m = g_netlist->get_module_by_id(id);
-                        if (m->contains_gate(net->get_src().gate, true))
+                        if (m->contains_gate(net->get_src().get_gate(), true))
                         {
                             found = true;
                             break;
@@ -771,7 +771,7 @@ void graph_graphics_view::handle_select_inputs()
                     }
                     if (!found)
                     {
-                        gates.insert(net->get_src().gate->get_id());
+                        gates.insert(net->get_src().get_gate()->get_id());
                     }
                 }
             }
@@ -781,13 +781,13 @@ void graph_graphics_view::handle_select_inputs()
             auto module = g_netlist->get_module_by_id(sel_id);
             for (const auto& net : module->get_input_nets())
             {
-                if (net->get_src().gate != nullptr)
+                if (net->get_src().get_gate() != nullptr)
                 {
                     bool found = false;
                     for (const auto& id : context->modules())
                     {
                         auto m = g_netlist->get_module_by_id(id);
-                        if (m->contains_gate(net->get_src().gate, true))
+                        if (m->contains_gate(net->get_src().get_gate(), true))
                         {
                             found = true;
                             break;
@@ -795,7 +795,7 @@ void graph_graphics_view::handle_select_inputs()
                     }
                     if (!found)
                     {
-                        gates.insert(net->get_src().gate->get_id());
+                        gates.insert(net->get_src().get_gate()->get_id());
                     }
                 }
             }

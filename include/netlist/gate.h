@@ -41,7 +41,7 @@
 class netlist;
 class net;
 class module;
-struct endpoint;
+class endpoint;
 
 /**
  * Gate class containing information about a gate including its location, functions, and module.

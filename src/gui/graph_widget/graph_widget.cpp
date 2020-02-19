@@ -307,7 +307,7 @@ void graph_widget::handle_navigation_left_request()
                 if (!n)
                     return;
 
-                if (n->get_src().gate == nullptr)
+                if (n->get_src().get_gate() == nullptr)
                 {
                     g_selection_relay.clear();
                     g_selection_relay.m_selected_nets.insert(n->get_id());
@@ -337,7 +337,7 @@ void graph_widget::handle_navigation_left_request()
             if (!n)
                 return;
 
-            if (n->get_src().gate != nullptr)
+            if (n->get_src().get_gate() != nullptr)
             {
                 handle_navigation_jump_requested(hal::node{hal::node_type::gate, 0}, n->get_id(), {n->get_src().get_gate()->get_id()});
             }
@@ -498,7 +498,7 @@ void graph_widget::handle_enter_module_requested(const u32 id)
         // is bad because that context won't react to any updates since empty
         // contexts can't infer their corresponding module from their contents
     }
-    
+
     if (m_context->gates().isEmpty() && m_context->modules() == QSet<u32>({id}))
     {
         m_context->unfold_module(id);
@@ -549,12 +549,12 @@ void graph_widget::ensure_gates_visible(const QSet<u32> gates)
         max_y = std::max(max_y, (int)rect.bottom());
     }
     auto targetRect = QRectF(min_x, min_y, max_x-min_x, max_y-min_y).marginsAdded(QMarginsF(20,20,20,20));
-    
+
     // FIXME This breaks as soon as the layouter call that preceded the call to this function
     // changed the scene size. If that happens, mapToScene thinks that the view is looking at (0,0)
     // and the animation jumps to (0,0) before moving to the correct target.
     auto currentRect = m_view->mapToScene(m_view->viewport()->geometry()).boundingRect(); // this has incorrect coordinates
-    
+
     auto centerFix = targetRect.center();
     targetRect.setWidth(std::max(targetRect.width(), currentRect.width()));
     targetRect.setHeight(std::max(targetRect.height(), currentRect.height()));

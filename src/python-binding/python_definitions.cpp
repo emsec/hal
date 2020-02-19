@@ -565,7 +565,7 @@ Get a list of necessary includes of the gate library, e.g., VHDL libraries.
 )");
 
     py::class_<endpoint, std::shared_ptr<endpoint>>(m, "endpoint")
-        .def(py::init<>(), R"(
+        .def(py::init<const std::shared_ptr<gate>&, const std::string&, bool>(), py::arg("gate"), py::arg("pin"), py::arg("is_a_dst"), R"(
 Construct a new endpoint.
 )")
         .def(py::self < py::self, R"(
@@ -586,38 +586,49 @@ Standard "unequal".
 :returns: True if endpoint is unequal to compare target.
 :rtype: bool
 )")
-        .def_property("gate", &endpoint::get_gate, &endpoint::set_gate, R"(
+        .def_property_readonly("gate", &endpoint::get_gate, R"(
 The endpoint's gate.
 
-:type: hal_py.gate
+:type: hal_py.get_gate()
 )")
         .def("get_gate", &endpoint::get_gate, R"(
 Returns the gate of the current endpoint.
 
 :returns: The gate.
-:rtype: hal_py.gate
+:rtype: hal_py.get_gate()
 )")
-        .def("set_gate", &endpoint::set_gate, py::arg("gate"), R"(
-   Sets the gate of the endpoint.
-
-:param gate: Gate to be set.
-:type gate: hal_py.gate
-)")
-        .def_property("pin_type", &endpoint::get_pin_type, &endpoint::set_pin_type, R"(
+        .def_property_readonly("pin", &endpoint::get_pin, R"(
 The pin type of the current endpoint.
 
 :type: str
 )")
-        .def("get_pin_type", &endpoint::get_pin_type, R"(
+        .def("get_pin", &endpoint::get_pin, R"(
 Returns the pin type of the current endpoint.
 
 :returns: The pin type.
 :rtype: str
 )")
-        .def("set_pin_type", &endpoint::set_pin_type, py::arg("type"), R"(
-   Sets the pin type of the current endpoint.
+        .def_property_readonly("is_src", &endpoint::is_src_pin, R"(
+Checks the pin type of the current endpoint.
 
-   :param str type: Pin type to be set.
+:type: bool
+)")
+        .def("is_src_pin", &endpoint::is_src_pin, R"(
+Checks the pin type of the current endpoint.
+
+:returns: The pin type.
+:rtype: bool
+)")
+        .def_property_readonly("is_dst", &endpoint::is_dst_pin, R"(
+Checks the pin type of the current endpoint.
+
+:type: bool
+)")
+        .def("is_dst_pin", &endpoint::is_dst_pin, R"(
+Checks the pin type of the current endpoint.
+
+:returns: The pin type.
+:rtype: bool
 )");
 
     py::class_<netlist, std::shared_ptr<netlist>>(m, "netlist", R"(
@@ -801,7 +812,7 @@ Creates and adds a new gate to the netlist.
 :param float x: The x-coordinate of the game.
 :param float y: The y-coordinate of the game.
 :returns: The new gate on success, None on error.
-:rtype: hal_py.gate or None
+:rtype: hal_py.get_gate() or None
 )")
         .def("create_gate",
              py::overload_cast<std::shared_ptr<const gate_type>, const std::string&, float, float>(&netlist::create_gate),
@@ -818,13 +829,13 @@ It is identifiable via its unique ID which is automatically set to the next free
 :param float x: The x-coordinate of the game.
 :param float y: The y-coordinate of the game.
 :returns: The new gate on success, None on error.
-:rtype: hal_py.gate or None
+:rtype: hal_py.get_gate() or None
 )")
         .def("delete_gate", &netlist::delete_gate, py::arg("gate"), R"(
 Removes a gate from the netlist.
 
 :param gate: The gate to be removed.
-:type gate: hal_py.gate
+:type gate: hal_py.get_gate()
 :returns: True on success.
 :rtype: bool
 )")
@@ -832,7 +843,7 @@ Removes a gate from the netlist.
 Check wether a gate is registered in the netlist.
 
 :param gate: The gate to check.
-:type gate: hal_py.gate
+:type gate: hal_py.get_gate()
 :returns: True if the gate is in netlist.
 :rtype: bool
 )")
@@ -841,25 +852,25 @@ Get a gate specified by id.
 
 :param int gate_id: The gate's id.
 :returns: The gate or None.
-:rtype: hal_py.gate or None
+:rtype: hal_py.get_gate() or None
 )")
         .def_property_readonly("gates", [](const std::shared_ptr<netlist>& n){return n->get_gates();}, R"(
 A set containing all gates of the netlist.
 
-:type: set[hal_py.gate]
+:type: set[hal_py.get_gate()]
 )")
         .def("get_gates", &netlist::get_gates, py::arg("filter") = nullptr, R"(
 Get all gates of the netlist. You can filter the set before output with the optional parameters.
 
 :param lambda filter: Filter for the gates.
 :returns: A set of gates.
-:rtype: set[hal_py.gate]
+:rtype: set[hal_py.get_gate()]
 )")
         .def("mark_vcc_gate", &netlist::mark_vcc_gate, py::arg("gate"), R"(
 Mark a gate as global vcc gate.
 
 :param gate: The gate.
-:type gate: hal_py.gate
+:type gate: hal_py.get_gate()
 :returns: True on success.
 :rtype: bool
 )")
@@ -867,7 +878,7 @@ Mark a gate as global vcc gate.
 Mark a gate as global gnd gate.
 
 :param gate: The gate.
-:type gate: hal_py.gate
+:type gate: hal_py.get_gate()
 :returns: True on success.
 :rtype: bool
 )")
@@ -875,14 +886,14 @@ Mark a gate as global gnd gate.
 Unmark a global vcc gate.
 
 :param  gate: The gate.
-:type gate: hal_py.gate
+:type gate: hal_py.get_gate()
 :rtype: bool
 )")
         .def("unmark_gnd_gate", &netlist::unmark_gnd_gate, py::arg("gate"), R"(
 Unmark a global gnd gate.
 
 :param gate: The gate.
-:type gate: hal_py.gate
+:type gate: hal_py.get_gate()
 :returns: True on success.
 :rtype: bool
 )")
@@ -890,7 +901,7 @@ Unmark a global gnd gate.
 Checks whether a gate is a global vcc gate.
 
 :param gate: The gate to check.
-:type gate: hal_py.gate
+:type gate: hal_py.get_gate()
 :returns: True if the gate is a global vcc gate.
 :rtype: bool
 )")
@@ -898,31 +909,31 @@ Checks whether a gate is a global vcc gate.
 Checks whether a gate is a global gnd gate.
 
 :param gate: The gate to check.
-:type gate: hal_py.gate
+:type gate: hal_py.get_gate()
 :returns: True if the gate is a global gnd gate.
 :rtype: bool
 )")
         .def_property_readonly("vcc_gates", &netlist::get_vcc_gates, R"(
 A set containing all global vcc gates.
 
-:type: set[hal_py.gate]
+:type: set[hal_py.get_gate()]
 )")
         .def("get_vcc_gates", &netlist::get_vcc_gates, R"(
 Get all global vcc gates.
 
 :returns: A set of gates.
-:rtype: set[hal_py.gate]
+:rtype: set[hal_py.get_gate()]
 )")
         .def_property_readonly("gnd_gates", &netlist::get_gnd_gates, R"(
 A set containing all global gnd gates.
 
-:type: set[hal_py.gate]
+:type: set[hal_py.get_gate()]
 )")
         .def("get_gnd_gates", &netlist::get_gnd_gates, R"(
 Get all global gnd gates.
 
 :returns: A set of gates.
-:rtype: set[hal_py.gate]
+:rtype: set[hal_py.get_gate()]
 )")
         .def("get_unique_net_id", &netlist::get_unique_net_id, R"(
 Gets an unoccupied net id. The value 0 is reserved and represents an invalid id.
@@ -1375,40 +1386,90 @@ Set the name of the net.
 
 :param str name: The new name.
 )")
-        .def("set_src", py::overload_cast<const std::shared_ptr<gate>&, const std::string&>(&net::set_src), py::arg("gate"), py::arg("pin_type"), R"(
+        .def("add_src", py::overload_cast<const std::shared_ptr<gate>&, const std::string&>(&net::add_src), py::arg("gate"), py::arg("pin"), R"(
 Sets the source of this net to a gate's output pin.
 
-:param hal_py.gate gate: The source gate.
-:param str pin_type: THe pin of the source gate.
+:param hal_py.get_gate() gate: The source gate.
+:param str pin: The pin of the source gate.
 :returns: True on succes.
 :rtype: bool
 )")
-        .def("set_src", py::overload_cast<const endpoint&>(&net::set_src), py::arg("endpoint"), R"(
+        .def("add_src", py::overload_cast<const endpoint&>(&net::add_src), py::arg("endpoint"), R"(
 Sets the source of this net to a gate's output pin.
 
 :param hal_py.endpoint endpoint: The source endpoint.
 :returns: True on success.
 :rtype: bool
 )")
-        .def("remove_src", &net::remove_src, R"(
+        .def("remove_src", py::overload_cast<const std::shared_ptr<gate>&, const std::string&>(&net::remove_src), py::arg("gate"), py::arg("pin"), R"(
 Removes the source of the net.
 
+:param hal_py.get_gate() gate: The source gate.
+:param str pin: The pin of the source gate.
+:returns: True on succes.
+:rtype: bool
+)")
+        .def("remove_src", py::overload_cast<const endpoint&>(&net::remove_src), py::arg("endpoint"), R"(
+Removes the source of the net.
+
+:param hal_py.endpoint endpoint: The source endpoint.
 :returns: True on success.
 :rtype: bool
 )")
+        .def("is_a_src", py::overload_cast<const std::shared_ptr<gate>&, const std::string&>(&net::is_a_src, py::const_), py::arg("gate"), py::arg("pin"), R"(
+Check whether a gate's input pin is a source of this net.
+
+:param gate: The source gate.
+:type gate: hal_py.get_gate()
+:param str pin: The input pin of the gate. Leave empty if the pin does not matter.
+:returns: True if the input's pin is a source.
+:rtype: bool
+)")
+        .def("is_a_src", py::overload_cast<const endpoint&>(&net::is_a_src, py::const_), py::arg("endpoint"), R"(
+Check whether a gate's input pin is a source of this net.
+
+:param endpoint: The input endpoint.
+:type endpoint: hal_py.endpoint
+:returns: True if the input's pin is a source.
+:rtype: bool
+)")
+        .def_property_readonly("num_of_srcs", &net::get_num_of_srcs, R"(
+The number of sources of the net.
+
+:type: int
+)")
+        .def("get_num_of_srcs", &net::get_num_of_srcs, R"(
+Get the number of sources.
+
+:returns: The number of sources of this net.
+:rtype: int
+)")
+        .def_property_readonly("srcs", [](const std::shared_ptr<net>& n){return n->get_srcs();}, R"(
+Get the vector of sources of the net.
+
+:type: set[hal_py.net]
+)")
+        .def("get_srcs", &net::get_srcs, py::arg("filter") = nullptr, R"(
+Get the vector of sources of the net.
+
+:param filter: a filter for endpoints.
+:returns: A list of source endpoints.
+:rtype: list[hal_py.endpoint]
+)")
         .def("get_src", &net::get_src, R"(
-Get the src of the net specified by type. If the specifications don't match the actual source, the gate element of the returned endpoint is None.
+Get the (first) src of the net specified by type.
+If there is no source, the gate of the returned endpoint is null.
 
 :param str gate_type: The desired source gate type.
 :returns: The source endpoint.
 :rtype: hal_py.endpoint
 )")
-        .def("add_dst", py::overload_cast<const std::shared_ptr<gate>&, const std::string&>(&net::add_dst), py::arg("gate"), py::arg("pin_type"), R"(
+        .def("add_dst", py::overload_cast<const std::shared_ptr<gate>&, const std::string&>(&net::add_dst), py::arg("gate"), py::arg("pin"), R"(
 Add a destination to this net.
 
 :param gate: The destination gate.
-:type gate: hal_py.gate
-:param str pin_type: The input pin of the gate.
+:type gate: hal_py.get_gate()
+:param str pin: The input pin of the gate.
 :returns: True on succes
 :rtype: bool
 )")
@@ -1420,12 +1481,12 @@ Add a destination to this net.
 :returns: True on succes.
 :rtype: bool
 )")
-        .def("remove_dst", py::overload_cast<const std::shared_ptr<gate>&, const std::string&>(&net::remove_dst), py::arg("gate"), py::arg("pin_type"), R"(
+        .def("remove_dst", py::overload_cast<const std::shared_ptr<gate>&, const std::string&>(&net::remove_dst), py::arg("gate"), py::arg("pin"), R"(
 Remove a destination from this net.
 
 :param gate: The destination gate.
-:type gate: hal_py.gate
-:param str pin_type: The input pin of the gate. Leave empty if the pin does not matter.
+:type gate: hal_py.get_gate()
+:param str pin: The input pin of the gate. Leave empty if the pin does not matter.
 :returns: True on succes
 :rtype: bool
 )")
@@ -1437,12 +1498,12 @@ Remove a destination from this net.
 :returns: True on succes.
 :rtype: bool
 )")
-        .def("is_a_dst", py::overload_cast<const std::shared_ptr<gate>&>(&net::is_a_dst, py::const_), py::arg("gate"), R"(
+        .def("is_a_dst", py::overload_cast<const std::shared_ptr<gate>&, const std::string&>(&net::is_a_dst, py::const_), py::arg("gate"), py::arg("pin"), R"(
 Check whether a gate's input pin is a destination of this net.
 
 :param gate: The destination gate.
-:type gate: hal_py.gate
-:param str pin_type: The input pin of the gate. Leave empty if the pin does not matter.
+:type gate: hal_py.get_gate()
+:param str pin: The input pin of the gate. Leave empty if the pin does not matter.
 :returns: True if the input's pin is a destination.
 :rtype: bool
 )")
@@ -1645,7 +1706,7 @@ Therefore it may contain some nets that are also regarded as output nets.
         .def_property_readonly("gates", [](const std::shared_ptr<module>& mod){return mod->get_gates();}, R"(
 The set of all gates belonging to the module.
 
-:type: set[hal_py.gate]
+:type: set[hal_py.get_gate()]
 )")
         .def("get_gates", &module::get_gates, py::arg("filter") = nullptr, py::arg("recursive") = false, R"(
 Returns all associated gates.
@@ -1655,7 +1716,7 @@ If the parameter recursive is true, all submodules are searched aswell.
 :param lambda filter: Filter for the gates.
 :param bool recursive: Look into submodules too.
 :returns: A set of gates.
-:rtype: set[hal_py.gate]
+:rtype: set[hal_py.get_gate()]
 )")
         .def("get_gate_by_id", &module::get_gate_by_id, py::arg("id"), py::arg("recursive") = false, R"(
 Get a gate specified by id. If recursive parameter is true, all submodule are searched aswell.
@@ -1663,26 +1724,26 @@ Get a gate specified by id. If recursive parameter is true, all submodule are se
 :param int id: The gate's id.
 :param bool recursive: Look into submodules too.
 :returns: The gate or None.
-:rtype: hal_py.gate or None
+:rtype: hal_py.get_gate() or None
 )")
         .def("assign_gate", &module::assign_gate, py::arg("gate"), R"(
 Moves a gate into this module. The gate is removed from its previous module in the process.
 
-:param hal_py.gate gate: The gate to add.
+:param hal_py.get_gate() gate: The gate to add.
 :returns: True on success.
 :rtype: bool
 )")
         .def("remove_gate", &module::remove_gate, py::arg("gate"), R"(
 Removes a gate from the module object.
 
-:param hal_py.gate gate: The gate to remove.
+:param hal_py.get_gate() gate: The gate to remove.
 :returns: True on success.
 :rtype: bool
 )")
         .def("contains_gate", &module::contains_gate, py::arg("gate"), py::arg("recusive") = false, R"(
 Checks whether a gate is in the module. If \p recursive is true, all submodules are searched as well.
 
-:param hal_py.gate gate: The gate to search for.
+:param hal_py.get_gate() gate: The gate to search for.
 :param bool recursive: Look into submodules too
 :returns: True if the gate is in the object.
 :rtype: bool

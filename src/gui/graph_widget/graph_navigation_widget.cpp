@@ -160,7 +160,7 @@ void graph_navigation_widget::fill_table(std::shared_ptr<net> n)
 
     for (const endpoint& e : n->get_dsts())
     {
-        if (!e.gate)
+        if (!e.get_gate())
         {
             continue;
         }
@@ -177,7 +177,7 @@ void graph_navigation_widget::fill_table(std::shared_ptr<net> n)
         item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
         setItem(row, 2, item);
 
-        item = new QTableWidgetItem(QString::fromStdString(e.get_pin_type()));
+        item = new QTableWidgetItem(QString::fromStdString(e.get_pin()));
         item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
         setItem(row, 3, item);
 

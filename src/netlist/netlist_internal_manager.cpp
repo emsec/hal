@@ -73,21 +73,34 @@ bool netlist_internal_manager::delete_gate(std::shared_ptr<gate> gate)
         return false;
     }
 
-    for (const auto& fan_in_net : gate->get_fan_in_nets())
+    for (const auto& pin : gate->get_input_pins())
     {
-        for (const auto& dst : fan_in_net->get_dsts())
+        auto net = gate->get_fan_in_net(pin);
+        if (net == nullptr)
         {
-            if (dst.gate == gate && !this->net_remove_dst(fan_in_net, dst))
+            continue;
+        }
+        for (const auto& ep : net->get_dsts())
+        {
+            if (ep.get_gate() == gate && ep.get_pin() == pin && !this->net_remove_dst(net, ep))
             {
                 return false;
             }
         }
     }
-    for (const auto& fan_out_net : gate->get_fan_out_nets())
+    for (const auto& pin : gate->get_output_pins())
     {
-        if (!this->net_remove_src(fan_out_net))
+        auto net = gate->get_fan_out_net(pin);
+        if (net == nullptr)
         {
-            return false;
+            continue;
+        }
+        for (const auto& ep : net->get_srcs())
+        {
+            if (ep.get_gate() == gate && ep.get_pin() == pin && !this->net_remove_src(net, ep))
+            {
+                return false;
+            }
         }
     }
 
@@ -178,9 +191,13 @@ bool netlist_internal_manager::delete_net(const std::shared_ptr<net>& net)
         }
     }
 
-    if (net->m_src.gate != nullptr && !this->net_remove_src(net))
+    auto srcs = net->m_srcs;
+    for (const auto& src : srcs)
     {
-        return false;
+        if (net->is_a_src(src) && !this->net_remove_src(net, src))
+        {
+            return false;
+        }
     }
 
     // check global_input and global_output gates
@@ -199,130 +216,131 @@ bool netlist_internal_manager::delete_net(const std::shared_ptr<net>& net)
     return true;
 }
 
-bool netlist_internal_manager::net_set_src(const std::shared_ptr<net>& net, const endpoint& src)
+bool netlist_internal_manager::net_add_src(const std::shared_ptr<net>& net, const endpoint& ep)
 {
-    if (!m_netlist->is_net_in_netlist(net) || !m_netlist->is_gate_in_netlist(src.gate))
+    if (!m_netlist->is_net_in_netlist(net) || !m_netlist->is_gate_in_netlist(ep.get_gate()))
     {
         return false;
     }
 
-    // check whether pin is valid for this gate
-    auto output_pins = src.gate->get_type()->get_output_pins();
-    if ((std::find(output_pins.begin(), output_pins.end(), src.pin_type) == output_pins.end()))
+    if (net->is_a_src(ep.get_gate(), ep.get_pin()))
     {
-        log_error("netlist.internal", "net::set_src: src gate ('{}, type = {}) has no output type '{}'.", src.gate->get_name(), src.gate->get_type()->get_name(), src.pin_type);
-        return false;
-    }
-
-    // check whether src already belongs to other net
-    for (const auto& out_net : src.gate->get_fan_out_nets())
-    {
-        if ((out_net->get_src() == src) && (net != out_net))
-        {
-            log_error("netlist.internal",
-                      "net::set_src: src gate ('{}', {}) has already associated net '{}'. Cannot assign {} as new src.",
-                      src.gate->get_name(),
-                      src.pin_type,
-                      out_net->get_name(),
-                      net->get_name());
-            return false;
-        }
-    }
-
-    // check whether net has already assigned src (if so remove it first)
-    if (net->m_src.gate != nullptr && !this->net_remove_src(net))
-    {
-        return false;
-    }
-
-    net->m_src                         = src;
-    src.gate->m_out_nets[src.pin_type] = net;
-
-    net_event_handler::notify(net_event_handler::event::src_changed, net);
-
-    return true;
-}
-
-bool netlist_internal_manager::net_remove_src(const std::shared_ptr<net>& net)
-{
-    if (!m_netlist->is_net_in_netlist(net))
-    {
-        return false;
-    }
-
-    if (net->m_src.gate == nullptr)
-    {
-        log_error("netlist.internal", "net::remove_src: src of net '{}' is already empty.", net->get_name());
-        return false;
-    }
-
-    auto old_src = net->m_src;
-
-    net->m_src.gate->m_out_nets.erase(net->m_src.pin_type);
-    net->m_src = {nullptr, ""};
-
-    net_event_handler::notify(net_event_handler::event::src_changed, net);
-
-    return true;
-}
-
-bool netlist_internal_manager::net_add_dst(const std::shared_ptr<net>& net, const endpoint& dst)
-{
-    if (!m_netlist->is_net_in_netlist(net) || !m_netlist->is_gate_in_netlist(dst.gate))
-    {
-        return false;
-    }
-
-    if (net->is_a_dst(dst))
-    {
-        log_error("netlist.internal", "net::add_dst: dst gate ('{}',  type = {}) is already added to net '{}'.", dst.gate->get_name(), dst.gate->get_type()->get_name(), net->get_name());
+        log_error("netlist.internal", "net::add_src: src gate ('{}',  type = {}) is already added to net '{}'.", ep.get_gate()->get_name(), ep.get_gate()->get_type()->get_name(), net->get_name());
         return false;
     }
 
     // check whether pin id is valid for this gate
-    auto input_pins = dst.gate->get_type()->get_input_pins();
+    auto output_pins = ep.get_gate()->get_type()->get_output_pins();
 
-    if ((std::find(input_pins.begin(), input_pins.end(), dst.pin_type) == input_pins.end()))
+    if ((std::find(output_pins.begin(), output_pins.end(), ep.get_pin()) == output_pins.end()))
     {
-        log_error("netlist.internal", "net::add_dst: dst gate ('{}',  type = {}) has no input type '{}'.", dst.gate->get_name(), dst.gate->get_type()->get_name(), dst.pin_type);
+        log_error("netlist.internal", "net::add_src: src gate ('{}',  type = {}) has no output type '{}'.", ep.get_gate()->get_name(), ep.get_gate()->get_type()->get_name(), ep.get_pin());
         return false;
     }
 
-    // check whether dst has already assigned src
-    if (dst.gate->get_fan_in_net(dst.pin_type) != nullptr)
+    // check whether src has already an assigned net
+    if (ep.get_gate()->get_fan_out_net(ep.get_pin()) != nullptr)
     {
         log_error("netlist.internal",
-                  "net::add_dst: dst gate ('{}', type = {}) has already an assigned net '{}' for pin '{}' (new_net: {}).",
-                  dst.gate->get_name(),
-                  dst.gate->get_type()->get_name(),
-                  dst.gate->get_fan_in_net(dst.pin_type)->get_name(),
-                  dst.pin_type,
+                  "net::add_src: gate '{}' already has an assigned net '{}' for output pin '{}', cannot assign new net '{}'.",
+                  ep.get_gate()->get_name(),
+                  ep.get_gate()->get_fan_out_net(ep.get_pin())->get_name(),
+                  ep.get_pin(),
                   net->get_name());
         return false;
     }
 
-    net->m_dsts.push_back(dst);
-    dst.gate->m_in_nets[dst.pin_type] = net;
+    net->m_srcs.push_back(ep);
+    ep.get_gate()->m_out_nets[ep.get_pin()] = net;
 
-    net_event_handler::notify(net_event_handler::event::dst_added, net, dst.gate->get_id());
+    net_event_handler::notify(net_event_handler::event::src_added, net, ep.get_gate()->get_id());
 
     return true;
 }
 
-bool netlist_internal_manager::net_remove_dst(const std::shared_ptr<net>& net, const endpoint& dst)
+bool netlist_internal_manager::net_remove_src(const std::shared_ptr<net>& net, const endpoint& ep)
 {
-    if (!m_netlist->is_net_in_netlist(net) || !m_netlist->is_gate_in_netlist(dst.gate) || !net->is_a_dst(dst))
+    if (!m_netlist->is_net_in_netlist(net) || !m_netlist->is_gate_in_netlist(ep.get_gate()) || !net->is_a_src(ep))
     {
         return false;
     }
 
-    auto it = std::find(net->m_dsts.begin(), net->m_dsts.end(), dst);
+    auto it = std::find(net->m_srcs.begin(), net->m_srcs.end(), ep);
+
+    if (it != net->m_srcs.end())
+    {
+        (*it).get_gate()->m_out_nets.erase((*it).get_pin());
+        net->m_srcs.erase(it);
+        net_event_handler::notify(net_event_handler::event::src_removed, net, ep.get_gate()->get_id());
+    }
+    else
+    {
+        log_warning("nelist.internal", "net::remove_src: net '{}' has no src gate '{}' at pin '{}'", net->get_name(), ep.get_gate()->get_name(), ep.get_pin());
+    }
+
+    return true;
+}
+
+bool netlist_internal_manager::net_add_dst(const std::shared_ptr<net>& net, const endpoint& ep)
+{
+    if (!m_netlist->is_net_in_netlist(net) || !m_netlist->is_gate_in_netlist(ep.get_gate()))
+    {
+        return false;
+    }
+
+    if (net->is_a_dst(ep.get_gate(), ep.get_pin()))
+    {
+        log_error("netlist.internal", "net::add_dst: dst gate ('{}',  type = {}) is already added to net '{}'.", ep.get_gate()->get_name(), ep.get_gate()->get_type()->get_name(), net->get_name());
+        return false;
+    }
+
+    // check whether pin id is valid for this gate
+    auto input_pins = ep.get_gate()->get_type()->get_input_pins();
+
+    if ((std::find(input_pins.begin(), input_pins.end(), ep.get_pin()) == input_pins.end()))
+    {
+        log_error("netlist.internal", "net::add_dst: dst gate ('{}',  type = {}) has no input type '{}'.", ep.get_gate()->get_name(), ep.get_gate()->get_type()->get_name(), ep.get_pin());
+        return false;
+    }
+
+    // check whether dst has already an assigned net
+    if (ep.get_gate()->get_fan_in_net(ep.get_pin()) != nullptr)
+    {
+        log_error("netlist.internal",
+                  "net::add_dst: gate '{}' already has an assigned net '{}' for input pin '{}', cannot assign new net '{}'.",
+                  ep.get_gate()->get_name(),
+                  ep.get_gate()->get_fan_in_net(ep.get_pin())->get_name(),
+                  ep.get_pin(),
+                  net->get_name());
+        return false;
+    }
+
+    net->m_dsts.push_back(ep);
+    ep.get_gate()->m_in_nets[ep.get_pin()] = net;
+
+    net_event_handler::notify(net_event_handler::event::dst_added, net, ep.get_gate()->get_id());
+
+    return true;
+}
+
+bool netlist_internal_manager::net_remove_dst(const std::shared_ptr<net>& net, const endpoint& ep)
+{
+    if (!m_netlist->is_net_in_netlist(net) || !m_netlist->is_gate_in_netlist(ep.get_gate()) || !net->is_a_dst(ep))
+    {
+        return false;
+    }
+
+    auto it = std::find(net->m_dsts.begin(), net->m_dsts.end(), ep);
 
     if (it != net->m_dsts.end())
     {
-        (*it).gate->m_in_nets.erase((*it).pin_type);
+        (*it).get_gate()->m_in_nets.erase((*it).get_pin());
         net->m_dsts.erase(it);
-        net_event_handler::notify(net_event_handler::event::dst_removed, net, dst.gate->get_id());
+        net_event_handler::notify(net_event_handler::event::dst_removed, net, ep.get_gate()->get_id());
+    }
+    else
+    {
+        log_warning("nelist.internal", "net::remove_dst: net '{}' has no dst gate '{}' at pin '{}'", net->get_name(), ep.get_gate()->get_name(), ep.get_pin());
     }
 
     return true;

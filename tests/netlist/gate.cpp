@@ -337,8 +337,8 @@ TEST_F(gate_test, check_get_predecessors)
     {
         // Get predecessors for a gate with multiple predecessors (some of them are the same gate)
         std::shared_ptr<gate> gate_1 = nl_2->get_gate_by_id(MIN_GATE_ID+1);
-        std::vector<endpoint> pred   = {get_endpoint(nl_2, MIN_GATE_ID+0, "O"), get_endpoint(nl_2, MIN_GATE_ID+0, "O"),
-                                        get_endpoint(nl_2, MIN_GATE_ID+0, "O"), get_endpoint(nl_2, MIN_GATE_ID+2, "O")};
+        std::vector<endpoint> pred   = {get_endpoint(nl_2, MIN_GATE_ID+0, "O", false), get_endpoint(nl_2, MIN_GATE_ID+0, "O", false),
+                                        get_endpoint(nl_2, MIN_GATE_ID+0, "O", false), get_endpoint(nl_2, MIN_GATE_ID+2, "O", false)};
         EXPECT_TRUE(vectors_have_same_content(gate_1->get_predecessors(), pred));
         EXPECT_EQ(gate_1->get_predecessors().size(), (size_t)4);
     }
@@ -350,7 +350,7 @@ TEST_F(gate_test, check_get_predecessors)
     {
         // Get predecessors for a given (existing) output pin type
         std::shared_ptr<gate> gate_3 = nl_2->get_gate_by_id(MIN_GATE_ID+3);
-        std::vector<endpoint> pred   = {get_endpoint(nl_2, MIN_GATE_ID+0, "O")};
+        std::vector<endpoint> pred   = {get_endpoint(nl_2, MIN_GATE_ID+0, "O", false)};
         EXPECT_TRUE(vectors_have_same_content(gate_3->get_predecessors(endpoint_pin_filter("O")), pred));
     }
     {
@@ -362,7 +362,7 @@ TEST_F(gate_test, check_get_predecessors)
     {
         // Get predecessors for a given (existing) input pin type
         std::shared_ptr<gate> gate_3 = nl_2->get_gate_by_id(MIN_GATE_ID+3);
-        std::vector<endpoint> pred   = {get_endpoint(nl_2, MIN_GATE_ID+0, "O")};
+        std::vector<endpoint> pred   = {get_endpoint(nl_2, MIN_GATE_ID+0, "O", false)};
         EXPECT_TRUE(vectors_have_same_content(gate_3->get_predecessors(starting_pin_filter("I0")), pred));
     }
     {
@@ -380,7 +380,7 @@ TEST_F(gate_test, check_get_predecessors)
     {
         // Get predecessors for a given (existing) gate type
         std::shared_ptr<gate> gate_0 = nl_1->get_gate_by_id(MIN_GATE_ID+0);
-        std::vector<endpoint> pred   = {get_endpoint(nl_1, MIN_GATE_ID+3, "O")};
+        std::vector<endpoint> pred   = {get_endpoint(nl_1, MIN_GATE_ID+3, "O", false)};
         EXPECT_TRUE(vectors_have_same_content(gate_0->get_predecessors(type_filter("INV")), pred));
         EXPECT_EQ(gate_0->get_predecessors(type_filter("INV")).size(), (size_t)1);
     }
@@ -427,8 +427,8 @@ TEST_F(gate_test, check_get_successors)
     {
         // Get successors for a gate with multiple successors (some of them are the same gate)
         std::shared_ptr<gate> gate_0 = nl_2->get_gate_by_id(MIN_GATE_ID+0);
-        std::vector<endpoint> succ   = {get_endpoint(nl_2, MIN_GATE_ID+1, "I0"), get_endpoint(nl_2, MIN_GATE_ID+1, "I1"),
-                                        get_endpoint(nl_2, MIN_GATE_ID+1, "I2"), get_endpoint(nl_2, MIN_GATE_ID+3, "I0")};
+        std::vector<endpoint> succ   = {get_endpoint(nl_2, MIN_GATE_ID+1, "I0", true), get_endpoint(nl_2, MIN_GATE_ID+1, "I1", true),
+                                        get_endpoint(nl_2, MIN_GATE_ID+1, "I2", true), get_endpoint(nl_2, MIN_GATE_ID+3, "I0", true)};
         EXPECT_TRUE(vectors_have_same_content(gate_0->get_successors(), succ));
         EXPECT_EQ(gate_0->get_successors().size(), (size_t)4);
     }
@@ -440,7 +440,7 @@ TEST_F(gate_test, check_get_successors)
     {
         // Get successors for a given (existing) input pin type
         std::shared_ptr<gate> gate_0 = nl_2->get_gate_by_id(MIN_GATE_ID+0);
-        std::vector<endpoint> succ   = {get_endpoint(nl_2, MIN_GATE_ID+1, "I0"), get_endpoint(nl_2, MIN_GATE_ID+3, "I0")};
+        std::vector<endpoint> succ   = {get_endpoint(nl_2, MIN_GATE_ID+1, "I0", true), get_endpoint(nl_2, MIN_GATE_ID+3, "I0", true)};
         EXPECT_TRUE(vectors_have_same_content(gate_0->get_successors(endpoint_pin_filter("I0")), succ));
         EXPECT_EQ(gate_0->get_successors(endpoint_pin_filter("I0")).size(), (size_t)2);
     }
@@ -453,8 +453,8 @@ TEST_F(gate_test, check_get_successors)
     {
         // Get successors for a given (existing) output pin type
         std::shared_ptr<gate> gate_0 = nl_2->get_gate_by_id(MIN_GATE_ID+0);
-        std::vector<endpoint> succ   = {get_endpoint(nl_2, MIN_GATE_ID+1, "I0"), get_endpoint(nl_2, MIN_GATE_ID+1, "I1"),
-                                        get_endpoint(nl_2, MIN_GATE_ID+1, "I2"), get_endpoint(nl_2, MIN_GATE_ID+3, "I0")};
+        std::vector<endpoint> succ   = {get_endpoint(nl_2, MIN_GATE_ID+1, "I0", true), get_endpoint(nl_2, MIN_GATE_ID+1, "I1", true),
+                                        get_endpoint(nl_2, MIN_GATE_ID+1, "I2", true), get_endpoint(nl_2, MIN_GATE_ID+3, "I0", true)};
         EXPECT_TRUE(vectors_have_same_content(gate_0->get_successors(starting_pin_filter("O")), succ));
         EXPECT_EQ(gate_0->get_successors(starting_pin_filter("O")).size(), (size_t)4);
     }
@@ -471,7 +471,7 @@ TEST_F(gate_test, check_get_successors)
     {
         // Get successors for a given (existing) gate type
         std::shared_ptr<gate> gate_0 = nl_1->get_gate_by_id(MIN_GATE_ID+0);
-        std::vector<endpoint> succ   = {get_endpoint(nl_1, MIN_GATE_ID+4, "I")};
+        std::vector<endpoint> succ   = {get_endpoint(nl_1, MIN_GATE_ID+4, "I", true)};
         EXPECT_TRUE(vectors_have_same_content(gate_0->get_successors(type_filter("INV")), succ));
         EXPECT_EQ(gate_0->get_successors(type_filter("INV")).size(), (size_t)1);
     }
@@ -510,14 +510,14 @@ TEST_F(gate_test, check_get_unique_predecessors_and_successors)
     {
         // Get the unique predecessors
         std::shared_ptr<gate> gate_1 = nl_2->get_gate_by_id(MIN_GATE_ID+1);
-        std::set<endpoint> pred      = {get_endpoint(nl_2, MIN_GATE_ID+0, "O"), get_endpoint(nl_2, MIN_GATE_ID+0, "O"),
-                                        get_endpoint(nl_2, MIN_GATE_ID+2, "O")};
+        std::set<endpoint> pred      = {get_endpoint(nl_2, MIN_GATE_ID+0, "O", false), get_endpoint(nl_2, MIN_GATE_ID+0, "O", false),
+                                        get_endpoint(nl_2, MIN_GATE_ID+2, "O", false)};
         EXPECT_TRUE((gate_1->get_unique_predecessors() == pred));
     }
     {
         // Get the unique successors
         std::shared_ptr<gate> gate_0 = nl_2->get_gate_by_id(MIN_GATE_ID+0);
-        std::set<endpoint> succ      = {get_endpoint(nl_2, MIN_GATE_ID+1, "I0"), get_endpoint(nl_2, MIN_GATE_ID+1, "I1"), get_endpoint(nl_2, MIN_GATE_ID+1, "I2"), get_endpoint(nl_2, MIN_GATE_ID+3, "I0")};
+        std::set<endpoint> succ      = {get_endpoint(nl_2, MIN_GATE_ID+1, "I0", true), get_endpoint(nl_2, MIN_GATE_ID+1, "I1", true), get_endpoint(nl_2, MIN_GATE_ID+1, "I2", true), get_endpoint(nl_2, MIN_GATE_ID+3, "I0", true)};
         EXPECT_TRUE((gate_0->get_unique_successors() == succ));
     }
     TEST_END
@@ -540,13 +540,13 @@ TEST_F(gate_test, check_get_predecessor)
         {
             // Get predecessor for a given (existing) input pin type
             std::shared_ptr<gate> gate_3 = nl_2->get_gate_by_id(MIN_GATE_ID+3);
-            endpoint pred   = get_endpoint(nl_2, MIN_GATE_ID+0, "O");
+            endpoint pred   = get_endpoint(nl_2, MIN_GATE_ID+0, "O", false);
             EXPECT_TRUE(gate_3->get_predecessor("I0") == pred);
         }
         {
             // Get predecessor for a given (existing) input pin type with no predecessors
             std::shared_ptr<gate> gate_0 = nl_2->get_gate_by_id(MIN_GATE_ID+0);
-            endpoint pred   = {nullptr, ""};
+            endpoint pred   = endpoint(nullptr, "", false);
             EXPECT_TRUE(gate_0->get_predecessor("I0") == pred);
         }
 

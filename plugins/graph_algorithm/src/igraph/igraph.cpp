@@ -18,14 +18,14 @@ std::tuple<igraph_t, std::map<int, std::shared_ptr<gate>>> plugin_graph_algorith
     u32 edge_counter = 0;
     for (const auto& net : nl->get_nets())
     {
-        std::shared_ptr<gate> src_gate = net->get_src().gate;
+        std::shared_ptr<gate> src_gate = net->get_src().get_gate();
         std::vector<std::shared_ptr<gate>> dst_gates;
 
         auto dst_gates_endpoints = net->get_dsts();
 
         for (const auto& dst_gate_endpoint : dst_gates_endpoints)
         {
-            dst_gates.push_back(dst_gate_endpoint.gate);
+            dst_gates.push_back(dst_gate_endpoint.get_gate());
         }
 
         // if gate has no src --> add exactly one dummy node
@@ -57,14 +57,14 @@ std::tuple<igraph_t, std::map<int, std::shared_ptr<gate>>> plugin_graph_algorith
 
     for (const auto& net : nl->get_nets())
     {
-        std::shared_ptr<gate> src_gate = net->get_src().gate;
+        std::shared_ptr<gate> src_gate = net->get_src().get_gate();
         std::vector<std::shared_ptr<gate>> dst_gates;
 
         auto dst_gates_endpoints = net->get_dsts();
 
         for (const auto& dst_gate_endpoint : dst_gates_endpoints)
         {
-            dst_gates.push_back(dst_gate_endpoint.gate);
+            dst_gates.push_back(dst_gate_endpoint.get_gate());
         }
 
         // if gate has no src --> add exactly one dummy node

@@ -33,24 +33,19 @@ class gate;
  *
  * @ingroup netlist
  */
-struct endpoint
+class endpoint
 {
-    std::shared_ptr<::gate> gate;
-
-    std::string pin_type;
-
-    /**
-    * Copies the value of an endpoint over to another endpoint.
-    *
-    * @param[in] copy - The endpoint to copy.
-    * @returns The target endpoint.
-    */
-    endpoint& operator=(const endpoint& copy)
+public:
+    endpoint(const std::shared_ptr<gate>& gate, const std::string& pin, bool is_a_dst)
     {
-        this->gate     = copy.gate;
-        this->pin_type = copy.pin_type;
-        return *this;
+        m_gate     = gate;
+        m_pin      = pin;
+        m_is_a_dst = is_a_dst;
     }
+    endpoint(const endpoint&) = default;
+    endpoint(endpoint&&)      = default;
+    endpoint& operator=(const endpoint&) = default;
+    endpoint& operator=(endpoint&&) = default;
 
     /**
     * Standard "less than". <br>
@@ -61,7 +56,15 @@ struct endpoint
     */
     bool operator<(const endpoint& rhs) const
     {
-        return (this->gate < rhs.gate) || ((this->gate == rhs.gate) && (this->pin_type < rhs.pin_type));
+        if (this->m_gate != rhs.m_gate)
+        {
+            return (this->m_gate < rhs.m_gate);
+        }
+        if (this->m_pin != rhs.m_pin)
+        {
+            return (this->m_pin < rhs.m_pin);
+        }
+        return (this->m_is_a_dst < rhs.m_is_a_dst);
     }
 
     /**
@@ -73,7 +76,7 @@ struct endpoint
     */
     bool operator==(const endpoint& rhs) const
     {
-        return (this->gate == rhs.gate) && (this->pin_type == rhs.pin_type);
+        return (this->m_gate == rhs.m_gate) && (this->m_pin == rhs.m_pin) && (this->m_is_a_dst == rhs.m_is_a_dst);
     }
 
     /**
@@ -94,35 +97,41 @@ struct endpoint
     */
     const std::shared_ptr<::gate>& get_gate() const
     {
-        return gate;
+        return m_gate;
     }
 
     /**
-     * Sets the gate of the endpoint/
-     * @param[in] g gate to be set
-     */
-    void set_gate(const std::shared_ptr<::gate>& g)
-    {
-        endpoint::gate = g;
-    }
-
-    /**
-     * Returns the pin type of the current endpoint
+     * Returns the pin of the current endpoint
      *
-     * @returns pin_type as std::string
+     * @returns pin as std::string
      */
-    const std::string& get_pin_type() const
+    const std::string& get_pin() const
     {
-        return pin_type;
+        return m_pin;
     }
 
     /**
-     * Sets the pin type of the current endpoint
+     * Checks the pin type of the current endpoint.
      *
-     * @param[in] type to be set
+     * @returns True, if the endpoint is an input pin.
      */
-    void set_pin_type(const std::string& type)
+    bool is_dst_pin() const
     {
-        endpoint::pin_type = type;
+        return m_is_a_dst;
     }
+
+    /**
+     * Checks the pin type of the current endpoint.
+     *
+     * @returns True, if the endpoint is an output pin.
+     */
+    bool is_src_pin() const
+    {
+        return !m_is_a_dst;
+    }
+
+private:
+    std::shared_ptr<gate> m_gate;
+    std::string m_pin;
+    bool m_is_a_dst;
 };

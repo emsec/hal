@@ -51,16 +51,15 @@ namespace event_log
             {
                 log_info("event", "changed name of net with id {:08x} to '{}'", net->get_id(), net->get_name());
             }
-            else if (event == net_event_handler::event::src_changed)
+            else if (event == net_event_handler::event::src_added)
             {
-                if (net->get_src().gate == nullptr)
-                {
-                    log_info("event", "removed src of net '{}' (id {:08x})", net->get_name(), net->get_id());
-                }
-                else
-                {
-                    log_info("event", "src of net '{}' (id {:08x}) set to gate '{}' (id {:08x})", net->get_name(), net->get_id(), net->get_src().gate->get_name(), net->get_src().gate->get_id());
-                }
+                auto gate = net->get_netlist()->get_gate_by_id(associated_data);
+                log_info("event", "added gate '{}' (id {:08x}) as a source for net '{}' (id {:08x})", gate->get_name(), gate->get_id(), net->get_name(), net->get_id());
+            }
+            else if (event == net_event_handler::event::src_removed)
+            {
+                auto gate = net->get_netlist()->get_gate_by_id(associated_data);
+                log_info("event", "removed source gate '{}' (id {:08x}) from net '{}' (id {:08x})", gate->get_name(), gate->get_id(), net->get_name(), net->get_id());
             }
             else if (event == net_event_handler::event::dst_added)
             {

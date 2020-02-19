@@ -312,7 +312,7 @@ TEST_F(hdl_writer_verilog_test, check_generic_data_storage) {
             unsigned int idx = 0;
             for (auto g : nl->get_gates()){
                 std::shared_ptr<net> out_net = nl->create_net("net_" + std::to_string(idx));
-                out_net->set_src(g,"O");
+                out_net->add_src(g,"O");
                 idx++;
             }
 
@@ -541,7 +541,7 @@ TEST_F(hdl_writer_verilog_test, check_special_net_names) {
             unsigned int idx = 0;
             for (auto g : nl->get_gates()){
                 std::shared_ptr<net> out_net = nl->create_net("net_" + std::to_string(idx));
-                out_net->set_src(g,"O");
+                out_net->add_src(g,"O");
                 idx++;
             }
 
@@ -653,10 +653,10 @@ TEST_F(hdl_writer_verilog_test, check_constant_nets) {
             std::shared_ptr<net> global_out = nl->create_net(MIN_NET_ID+0, "global_out");
             nl->mark_global_output_net(global_out);
             std::shared_ptr<gate> test_gate = nl->create_gate( MIN_GATE_ID+1, get_gate_type_by_name("INV"), "test_gate");
-            global_out->set_src(test_gate, "O");
+            global_out->add_src(test_gate, "O");
 
             std::shared_ptr<net> gnd_net = nl->create_net(MIN_NET_ID+1, "'0'");
-            gnd_net->set_src(gnd_gate, "O");
+            gnd_net->add_src(gnd_gate, "O");
             gnd_net->add_dst(test_gate, "I");
 
             // Write and parse the netlist now
@@ -698,10 +698,10 @@ TEST_F(hdl_writer_verilog_test, check_constant_nets) {
             std::shared_ptr<net> global_out = nl->create_net(MIN_NET_ID+0, "global_out");
             nl->mark_global_output_net(global_out);
             std::shared_ptr<gate> test_gate = nl->create_gate( MIN_GATE_ID+1, get_gate_type_by_name("INV"), "test_gate");
-            global_out->set_src(test_gate, "O");
+            global_out->add_src(test_gate, "O");
 
             std::shared_ptr<net> vcc_net = nl->create_net(MIN_NET_ID+1, "'1'");
-            vcc_net->set_src(vcc_gate, "O");
+            vcc_net->add_src(vcc_gate, "O");
             vcc_net->add_dst(test_gate, "I");
 
             // Write and parse the netlist now
@@ -768,13 +768,13 @@ TEST_F(hdl_writer_verilog_test, check_pin_vector) {
             std::shared_ptr<net> global_out = nl->create_net(MIN_NET_ID + 0, "global_out");
             nl->mark_global_output_net(global_out);
             std::shared_ptr<gate> test_gate = nl->create_gate(MIN_GATE_ID + 2, "GATE_4^1_IN_1^0_OUT", "test_gate");
-            global_out->set_src(test_gate, "O");
+            global_out->add_src(test_gate, "O");
 
             std::shared_ptr<net> gnd_net = nl->create_net(MIN_NET_ID + 2, "test_gnd_net");
             std::shared_ptr<net> vcc_net = nl->create_net(MIN_NET_ID + 3, "test_vcc_net");
 
-            gnd_net->set_src(gnd_gate, "O");
-            vcc_net->set_src(vcc_gate, "O");
+            gnd_net->add_src(gnd_gate, "O");
+            vcc_net->add_src(vcc_gate, "O");
 
             gnd_net->add_dst(test_gate, "I(0)");
             vcc_net->add_dst(test_gate, "I(1)");
@@ -844,14 +844,14 @@ TEST_F(hdl_writer_verilog_test, check_simprim_exclusive_behaviour) {
             std::shared_ptr<gate> test_gate = nl->create_gate("X_AND4", "test_gate");
 
             std::shared_ptr<net> global_out_net = nl->create_net("global_out");
-            global_out_net->set_src(test_gate, "O");
+            global_out_net->add_src(test_gate, "O");
             nl->mark_global_output_net(global_out_net);
 
             std::shared_ptr<net> x_zero_net_0 = nl->create_net("x_zero_net_0");
             std::shared_ptr<net> x_zero_net_1 = nl->create_net("x_zero_net_1");
 
-            x_zero_net_0->set_src(x_zero_gate_0, "O");
-            x_zero_net_1->set_src(x_zero_gate_1, "O");
+            x_zero_net_0->add_src(x_zero_gate_0, "O");
+            x_zero_net_1->add_src(x_zero_gate_1, "O");
 
             x_zero_net_0->add_dst(test_gate, "I0");
             x_zero_net_1->add_dst(test_gate, "I1");

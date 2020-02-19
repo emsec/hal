@@ -229,7 +229,7 @@ TEST_F(hdl_writer_vhdl_test, check_generic_data_storage) {
             unsigned int idx = 0;
             for (auto g : nl->get_gates()){
                 std::shared_ptr<net> out_net = nl->create_net("net_" + std::to_string(idx));
-                out_net->set_src(g,"O");
+                out_net->add_src(g,"O");
                 idx++;
             }
 
@@ -405,10 +405,10 @@ TEST_F(hdl_writer_vhdl_test, check_vcc_and_gnd_gates) {
             std::shared_ptr<net> one_net = nl->create_net(MIN_GATE_ID+1,"one_net");
 
 
-            zero_net->set_src(gnd_gate, "O");
+            zero_net->add_src(gnd_gate, "O");
             zero_net->add_dst(test_gate, "I0");
 
-            one_net->set_src(vcc_gate, "O");
+            one_net->add_src(vcc_gate, "O");
             one_net->add_dst(test_gate, "I1");
 
 
@@ -472,10 +472,10 @@ TEST_F(hdl_writer_vhdl_test, check_vcc_and_gnd_gates) {
             std::shared_ptr<net> zero_net = nl->create_net(MIN_NET_ID+0,"'0'");
             std::shared_ptr<net> one_net = nl->create_net(MIN_NET_ID+1,"'1'");
 
-            zero_net->set_src(gnd_gate, "O");
+            zero_net->add_src(gnd_gate, "O");
             zero_net->add_dst(test_gate, "I0");
 
-            one_net->set_src(vcc_gate, "O");
+            one_net->add_src(vcc_gate, "O");
             one_net->add_dst(test_gate, "I1");
 
 
@@ -590,7 +590,7 @@ TEST_F(hdl_writer_vhdl_test, check_special_net_names) {
             unsigned int idx = 0;
             for (auto g : nl->get_gates()){
                 std::shared_ptr<net> out_net = nl->create_net("net_" + std::to_string(idx));
-                out_net->set_src(g,"O");
+                out_net->add_src(g,"O");
                 idx++;
             }
 
@@ -701,7 +701,7 @@ TEST_F(hdl_writer_vhdl_test, check_digit_net_name) {
            std::shared_ptr<net> test_net_1 = nl->create_net( MIN_NET_ID+1, "1");
 
            test_net_0->add_dst(test_gate, "I");
-           test_net_1->set_src(test_gate, "O");
+           test_net_1->add_src(test_gate, "O");
 
            // Write and parse the netlist now
            test_def::capture_stdout();

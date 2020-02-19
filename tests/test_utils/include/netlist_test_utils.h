@@ -53,24 +53,16 @@ namespace test_utils
     std::shared_ptr<netlist> create_empty_netlist(const int id = -1);
 
     /**
-     * Creates an endpoint object from a passed gate and pin type
-     *
-     * @param[in] g - gate
-     * @param[in] pin_type - pin type
-     * @returns the endpoint object
-     */
-    endpoint get_endpoint(const std::shared_ptr<gate> g, const std::string pin_type);
-
-    /**
      * Creating an endpoint object by passing the netlist, the id of the gate and the pin type.
      * if there is no gate with the passed id, it returns (nullptr, "")
      *
      * @param[in] nl - netlist
      * @param[in] gate_id - id of the gate
      * @param[in] pin_type - pin type
+     * @param[in] is_dst - direction of endpoint
      * @returns the endpoint object
      */
-    endpoint get_endpoint(const std::shared_ptr<netlist> nl, const int gate_id, const std::string pin_type);
+    endpoint get_endpoint(const std::shared_ptr<netlist>& nl, const int gate_id, const std::string& pin_type, bool is_dst);
 
     /**
      * Checks if an endpoint is empty (i.e. (nullptr, ""))
@@ -78,7 +70,7 @@ namespace test_utils
      * @param[in] ep - endpoint
      * @return true, if the endpoint is the empty endpoint
      */
-    bool is_empty(const endpoint ep);
+    bool is_empty(const endpoint& ep);
 
     /**
      * Get a gate type by its name

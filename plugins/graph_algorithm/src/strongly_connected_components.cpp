@@ -58,15 +58,15 @@ std::set<std::set<std::shared_ptr<gate>>> plugin_graph_algorithm::get_strongly_c
     for (auto it_net : ordered_nets)
     {
         auto src = it_net.second->get_src();
-        if (src.gate == nullptr)
+        if (src.get_gate() == nullptr)
             continue;
 
         std::set<u32> dst_ids;
         for (auto dst : it_net.second->get_dsts())
-            dst_ids.insert(dst.gate->get_id());
+            dst_ids.insert(dst.get_gate()->get_id());
 
         for (const auto& dst_id : dst_ids)
-            boost::add_edge(gate_id_to_vertex[src.gate->get_id()], gate_id_to_vertex[dst_id], boost_graph);
+            boost::add_edge(gate_id_to_vertex[src.get_gate()->get_id()], gate_id_to_vertex[dst_id], boost_graph);
     }
 
     /* initialize parameters for strong_components() */
@@ -79,7 +79,7 @@ std::set<std::set<std::shared_ptr<gate>>> plugin_graph_algorithm::get_strongly_c
                                 root_map(make_iterator_property_map(root.begin(), boost::get(boost::vertex_index, boost_graph)))
                                     .color_map(make_iterator_property_map(color.begin(), boost::get(boost::vertex_index, boost_graph)))
                                     .discover_time_map(make_iterator_property_map(discover_time.begin(), boost::get(boost::vertex_index, boost_graph))));
-    
+
     log("SCC BOOST: {}", num);
 
     /* post process boost result */

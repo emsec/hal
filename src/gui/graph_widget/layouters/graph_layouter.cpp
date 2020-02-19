@@ -744,7 +744,7 @@ void graph_layouter::draw_nets()
                 {
                     if (box.node == node)
                     {
-                        net_item->setPos(box.item->get_output_scene_position(n->get_id(), QString::fromStdString(src_end.pin_type)));
+                        net_item->setPos(box.item->get_output_scene_position(n->get_id(), QString::fromStdString(src_end.get_pin())));
                         net_item->add_output();
                         break;
                     }
@@ -762,7 +762,7 @@ void graph_layouter::draw_nets()
                 {
                     if (box.node == node)
                     {
-                        net_item->add_input(box.item->get_input_scene_position(n->get_id(), QString::fromStdString(dst_end.pin_type)));
+                        net_item->add_input(box.item->get_input_scene_position(n->get_id(), QString::fromStdString(dst_end.get_pin())));
                         break;
                     }
                 }
@@ -775,9 +775,9 @@ void graph_layouter::draw_nets()
 
         bool dst_missing = false;
 
-        if (n->get_src().gate)
+        if (n->get_src().get_gate())
         {
-            if (n->get_src().gate->is_gnd_gate() || n->get_src().gate->is_vcc_gate())
+            if (n->get_src().get_gate()->is_gnd_gate() || n->get_src().get_gate()->is_vcc_gate())
             {
                 // HANDLE SEPARATED NETS
                 hal::node node;
@@ -790,7 +790,7 @@ void graph_layouter::draw_nets()
                     {
                         if (box.node == node)
                         {
-                            net_item->setPos(box.item->get_output_scene_position(n->get_id(), QString::fromStdString(n->get_src().pin_type)));
+                            net_item->setPos(box.item->get_output_scene_position(n->get_id(), QString::fromStdString(n->get_src().get_pin())));
                             net_item->add_output();
                             break;
                         }
@@ -806,7 +806,7 @@ void graph_layouter::draw_nets()
                     {
                         if (box.node == node)
                         {
-                            net_item->add_input(box.item->get_input_scene_position(n->get_id(), QString::fromStdString(dst_end.pin_type)));
+                            net_item->add_input(box.item->get_input_scene_position(n->get_id(), QString::fromStdString(dst_end.get_pin())));
                             break;
                         }
                     }
@@ -820,7 +820,7 @@ void graph_layouter::draw_nets()
 
             //TEMPORARY IMPLEMENTATION
             hal::node tmp;
-            if (!m_context->node_for_gate(tmp, n->get_src().gate->get_id()))
+            if (!m_context->node_for_gate(tmp, n->get_src().get_gate()->get_id()))
             {
                 arrow_separated_net* net_item = new arrow_separated_net(n);
 
@@ -834,7 +834,7 @@ void graph_layouter::draw_nets()
                     {
                         if (box.node == node)
                         {
-                            net_item->add_input(box.item->get_input_scene_position(n->get_id(), QString::fromStdString(dst_end.pin_type)));
+                            net_item->add_input(box.item->get_input_scene_position(n->get_id(), QString::fromStdString(dst_end.get_pin())));
                             break;
                         }
                     }
@@ -868,7 +868,7 @@ void graph_layouter::draw_nets()
                         if (box.node == tmp)
                         {
                             net_item->add_output();
-                            net_item->setPos(box.item->get_output_scene_position(n->get_id(), QString::fromStdString(n->get_src().get_pin_type())));
+                            net_item->setPos(box.item->get_output_scene_position(n->get_id(), QString::fromStdString(n->get_src().get_pin())));
                             break;
                         }
                     }
@@ -902,7 +902,7 @@ void graph_layouter::draw_nets()
 
         used_paths used;
 
-        const QPointF src_pin_position = src_box->item->get_output_scene_position(n->get_id(), QString::fromStdString(n->get_src().pin_type));
+        const QPointF src_pin_position = src_box->item->get_output_scene_position(n->get_id(), QString::fromStdString(n->get_src().get_pin()));
         standard_graphics_net::lines lines;
         lines.src_x = src_pin_position.x();
         lines.src_y = src_pin_position.y();
@@ -928,7 +928,7 @@ void graph_layouter::draw_nets()
             if (!dst_box)    // ???
                 continue;
 
-            QPointF dst_pin_position = dst_box->item->get_input_scene_position(n->get_id(), QString::fromStdString(dst.pin_type));
+            QPointF dst_pin_position = dst_box->item->get_input_scene_position(n->get_id(), QString::fromStdString(dst.get_pin()));
 
             // ROAD BASED DISTANCE (x_distance - 1)
             const int x_distance = dst_box->x - src_box->x - 1;

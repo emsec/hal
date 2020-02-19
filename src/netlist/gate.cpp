@@ -346,6 +346,7 @@ std::shared_ptr<net> gate::get_fan_out_net(const std::string& pin_type) const
     return it->second;
 }
 
+
 std::set<endpoint> gate::get_unique_predecessors(const std::function<bool(const std::string& starting_pin, const endpoint&)>& filter) const
 {
     auto predecessors = this->get_predecessors(filter);
@@ -357,19 +358,24 @@ std::vector<endpoint> gate::get_predecessors(const std::function<bool(const std:
     std::vector<endpoint> result;
     for (const auto& it : m_in_nets)
     {
-        auto& net = it.second;
-        auto& pin = it.first;
-        auto pred = net->get_src();
-        if (pred.gate == nullptr)
+        auto& pin       = it.first;
+        auto& net       = it.second;
+        auto predecessors = net->get_srcs();
+        if (!filter)
         {
-            log_debug("netlist", "predecessor on pin '{}' of gate '{}' (id = {:08x}) is unrouted.", pin, this->get_name(), this->get_id());
-            continue;
+            result.insert(result.end(), predecessors.begin(), predecessors.end());
         }
-        if (filter && !filter(pin, pred))
+        else
         {
-            continue;
+            for (const auto& pre : predecessors)
+            {
+                if (!filter(pin, pre))
+                {
+                    continue;
+                }
+                result.push_back(pre);
+            }
         }
-        result.push_back(pred);
     }
     return result;
 }
@@ -379,12 +385,12 @@ endpoint gate::get_predecessor(const std::string& which_pin) const
     auto predecessors = this->get_predecessors([&which_pin](auto& starting_pin, auto&) -> bool { return starting_pin == which_pin; });
     if (predecessors.size() == 0)
     {
-        return {nullptr, ""};
+        return endpoint(nullptr, "", false);
     }
     if (predecessors.size() > 1)
     {
         log_error("netlist", "internal error: multiple predecessors for '{}' at pin '{}'.", get_name(), which_pin);
-        return {nullptr, ""};
+        return endpoint(nullptr, "", false);
     }
 
     return predecessors[0];

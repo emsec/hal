@@ -463,16 +463,16 @@ void gate_details_widget::on_treewidget_item_clicked(QTreeWidgetItem* item, int 
         {
             auto ep = *destinations.begin();
             g_selection_relay.clear();
-            g_selection_relay.m_selected_gates.insert(ep.gate->get_id());
+            g_selection_relay.m_selected_gates.insert(ep.get_gate()->get_id());
             g_selection_relay.m_focus_type = selection_relay::item_type::gate;
-            g_selection_relay.m_focus_id   = ep.gate->get_id();
+            g_selection_relay.m_focus_id   = ep.get_gate()->get_id();
             g_selection_relay.m_subfocus   = selection_relay::subfocus::left;
 
-            auto pins                          = ep.gate->get_input_pins();
-            auto index                         = std::distance(pins.begin(), std::find(pins.begin(), pins.end(), ep.pin_type));
+            auto pins                          = ep.get_gate()->get_input_pins();
+            auto index                         = std::distance(pins.begin(), std::find(pins.begin(), pins.end(), ep.get_pin()));
             g_selection_relay.m_subfocus_index = index;
 
-            update(ep.gate->get_id());
+            update(ep.get_gate()->get_id());
             g_selection_relay.relay_selection_changed(this);
         }
         else
@@ -493,21 +493,21 @@ void gate_details_widget::on_treewidget_item_clicked(QTreeWidgetItem* item, int 
             return;
 
         g_selection_relay.clear();
-        if (clicked_net->get_src().gate == nullptr || clicked_net->is_global_input_net())
+        if (clicked_net->get_src().get_gate() == nullptr || clicked_net->is_global_input_net())
         {
             g_selection_relay.m_selected_nets.insert(clicked_net->get_id());
         }
         else
         {
             endpoint ep  = clicked_net->get_src();
-            auto gate_id = ep.gate->get_id();
+            auto gate_id = ep.get_gate()->get_id();
             g_selection_relay.m_selected_gates.insert(gate_id);
             g_selection_relay.m_focus_type = selection_relay::item_type::gate;
-            g_selection_relay.m_focus_id   = ep.gate->get_id();
+            g_selection_relay.m_focus_id   = ep.get_gate()->get_id();
             g_selection_relay.m_subfocus   = selection_relay::subfocus::right;
 
-            auto pins                          = ep.gate->get_output_pins();
-            auto index                         = std::distance(pins.begin(), std::find(pins.begin(), pins.end(), ep.pin_type));
+            auto pins                          = ep.get_gate()->get_output_pins();
+            auto index                         = std::distance(pins.begin(), std::find(pins.begin(), pins.end(), ep.get_pin()));
             g_selection_relay.m_subfocus_index = index;
             update(gate_id);
         }

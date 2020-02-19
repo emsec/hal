@@ -227,7 +227,7 @@ void level_graph_layouter::recalculate_levels()
                         if (n->is_unrouted())
                             continue;
 
-                        if (!m_context->node_for_gate(src_node, n->get_src().gate->get_id()))
+                        if (!m_context->node_for_gate(src_node, n->get_src().get_gate()->get_id()))
                             continue;
 
                         if (m_node_levels.contains(src_node))
@@ -250,7 +250,7 @@ void level_graph_layouter::recalculate_levels()
                         if (n->is_unrouted())
                             continue;
 
-                        if (!m_context->node_for_gate(src_node, n->get_src().gate->get_id()))
+                        if (!m_context->node_for_gate(src_node, n->get_src().get_gate()->get_id()))
                             continue;
 
                         if (m_node_levels.contains(src_node))

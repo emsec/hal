@@ -47,7 +47,8 @@ namespace net_event_handler
         created,         ///< no associated_data
         removed,         ///< no associated_data
         name_changed,    ///< no associated_data
-        src_changed,     ///< no associated_data
+        src_added,       ///< associated_data = id of src gate
+        src_removed,     ///< associated_data = id of src gate
         dst_added,       ///< associated_data = id of dst gate
         dst_removed      ///< associated_data = id of dst gate
     };

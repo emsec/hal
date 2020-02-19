@@ -39,9 +39,9 @@ std::vector<std::set<std::shared_ptr<gate>>>
         {
             for (const auto& predecessor : it->get_predecessors())
             {
-                if (terminal_gate_type.find(predecessor.gate->get_type()->get_name()) == terminal_gate_type.end())
+                if (terminal_gate_type.find(predecessor.get_gate()->get_type()->get_name()) == terminal_gate_type.end())
                 {
-                    next_state.insert(predecessor.gate);
+                    next_state.insert(predecessor.get_gate());
                 }
             }
         }

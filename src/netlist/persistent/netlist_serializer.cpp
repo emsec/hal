@@ -36,7 +36,7 @@ namespace netlist_serializer
     // serializing functions
     namespace
     {
-        const int SERIALIZON_FORMAT_VERSION = 4;
+        const int SERIALIZON_FORMAT_VERSION = 5;
 
 #define JSON_STR_HELPER(x) rapidjson::Value{}.SetString(x.c_str(), x.length(), allocator)
         rapidjson::Value serialize(const std::map<std::tuple<std::string, std::string>, std::tuple<std::string, std::string>>& data, rapidjson::Document::AllocatorType& allocator)
@@ -57,8 +57,9 @@ namespace netlist_serializer
         rapidjson::Value serialize(const endpoint& ep, rapidjson::Document::AllocatorType& allocator)
         {
             rapidjson::Value val(rapidjson::kObjectType);
-            val.AddMember("gate_id", ep.gate->get_id(), allocator);
-            val.AddMember("pin_type", ep.pin_type, allocator);
+            val.AddMember("gate_id", ep.get_gate()->get_id(), allocator);
+            val.AddMember("pin_type", ep.get_pin(), allocator);
+            val.AddMember("is_dst", ep.is_dst_pin(), allocator);
             return val;
         }
 
@@ -94,7 +95,7 @@ namespace netlist_serializer
             val.AddMember("id", n->get_id(), allocator);
             val.AddMember("name", n->get_name(), allocator);
 
-            if (n->get_src().gate != nullptr)
+            if (n->get_src().get_gate() != nullptr)
             {
                 val.AddMember("src", serialize(n->get_src(), allocator), allocator);
             }
@@ -102,7 +103,7 @@ namespace netlist_serializer
             {
                 rapidjson::Value dsts(rapidjson::kArrayType);
                 auto sorted = n->get_dsts();
-                std::sort(sorted.begin(), sorted.end(), [](const endpoint& lhs, const endpoint& rhs) { return lhs.gate->get_id() < rhs.gate->get_id(); });
+                std::sort(sorted.begin(), sorted.end(), [](const endpoint& lhs, const endpoint& rhs) { return lhs.get_gate()->get_id() < rhs.get_gate()->get_id(); });
                 for (const auto& dst : sorted)
                 {
                     dsts.PushBack(serialize(dst, allocator), allocator);
@@ -245,7 +246,7 @@ namespace netlist_serializer
 
         endpoint deserialize_endpoint(std::shared_ptr<netlist> nl, const rapidjson::Value& val)
         {
-            return {nl->get_gate_by_id(val["gate_id"].GetUint()), val["pin_type"].GetString()};
+            return endpoint(nl->get_gate_by_id(val["gate_id"].GetUint()), val["pin_type"].GetString(), val["is_dst"].GetBool());
         }
 
         void deserialize_data(std::shared_ptr<data_container> c, const rapidjson::Value& val)
@@ -300,7 +301,7 @@ namespace netlist_serializer
 
             if (val.HasMember("src"))
             {
-                n->set_src(deserialize_endpoint(nl, val["src"]));
+                n->add_src(deserialize_endpoint(nl, val["src"]));
             }
             if (val.HasMember("dsts"))
             {

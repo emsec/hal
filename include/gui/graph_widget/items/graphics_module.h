@@ -22,7 +22,7 @@ protected:
 
         bool operator==(const module_pin& rhs) const
         {
-            return this->net_id == rhs.net_id && this->pin_type == rhs.pin_type;
+            return this->net_id == rhs.net_id && this->pin_type == rhs.get_pin();
         }
     };
 
