@@ -53,12 +53,12 @@ namespace hdl_parser_dispatcher
         if (!args.is_option_set("--gate-library"))
         {
             log_warning("hdl_parser", "no gate library specified. trying to auto-detect gate library...");
-            for (const auto& it : gate_library_manager::get_gate_libraries())
+            for (const auto& lib : gate_library_manager::get_gate_libraries())
             {
-                std::shared_ptr<netlist> netlist = parse(it.first, parser_name, file_name);
+                std::shared_ptr<netlist> netlist = parse(lib->get_name(), parser_name, file_name);
                 if (netlist != nullptr)
                 {
-                    log_info("hdl_parser", "auto-selected '{}' for this netlist.", it.first);
+                    log_info("hdl_parser", "auto-selected '{}' for this netlist.", lib->get_name());
                     return netlist;
                 }
             }

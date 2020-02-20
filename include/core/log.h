@@ -133,11 +133,12 @@ public:
 
     /**
      * Get a channel specified by name.
+     * Creates the channel if it does not exist yet.
      *
      * @param[in] channel_name - Name of the channel.
      * @returns The channel.
      */
-    spdlog::logger* get_channel(const std::string& channel_name = "stdout") const;
+    std::shared_ptr<spdlog::logger> get_channel(const std::string& channel_name = "stdout");
 
     /**
      * Returns all channels' names.
@@ -153,7 +154,7 @@ public:
      * @param[in] sinks - All sinks connected to this channel.
      * @param[in] level - The severity level of that channel.
      */
-    void add_channel(const std::string& channel_name, std::vector<std::shared_ptr<log_sink>> sinks, const std::string& level = "info");
+    std::shared_ptr<spdlog::logger> add_channel(const std::string& channel_name, std::vector<std::shared_ptr<log_sink>> sinks, const std::string& level = "info");
 
     /**
      * Remove a channel from the log manager.
@@ -263,8 +264,6 @@ private:
     log_manager& operator=(const log_manager&) = delete;
 
     hal::path m_file_path;
-
-    bool m_initialized;
 
     std::map<std::string, spdlog::level::level_enum> m_level;
 

@@ -30,11 +30,11 @@ std::shared_ptr<gate_library> gate_library_parser_liberty::parse()
     {
         if (e.line_number != (u32)-1)
         {
-            log_error("netlist", "{} near line {}.", e.message, e.line_number);
+            log_error("liberty_parser", "{} near line {}.", e.message, e.line_number);
         }
         else
         {
-            log_error("netlist", "{}.", e.message);
+            log_error("liberty_parser", "{}.", e.message);
         }
         return nullptr;
     }
@@ -50,6 +50,7 @@ bool gate_library_parser_liberty::tokenize()
 
     std::string line;
     bool in_string          = false;
+    bool was_in_string      = false;
     bool multi_line_comment = false;
 
     std::vector<token> parsed_tokens;
@@ -63,6 +64,7 @@ bool gate_library_parser_liberty::tokenize()
         {
             if (c == '\"')
             {
+                was_in_string = true;
                 in_string = !in_string;
                 continue;
             }
@@ -78,10 +80,11 @@ bool gate_library_parser_liberty::tokenize()
             }
             else
             {
-                if (!current_token.empty())
+                if (was_in_string || !current_token.empty())
                 {
                     parsed_tokens.emplace_back(line_number, current_token);
                     current_token.clear();
+                    was_in_string = false;
                 }
 
                 if (!std::isspace(c))
@@ -109,8 +112,8 @@ bool gate_library_parser_liberty::parse_tokens()
     m_token_stream.consume(")", true);
     m_token_stream.consume("{", true);
     m_gate_lib          = std::make_shared<gate_library>(lib_name.string);
-    auto library_stream = m_token_stream.extract_until("}", token_stream::END_OF_STREAM, true, true);
-    m_token_stream.consume("}", true);
+    auto library_stream = m_token_stream.extract_until("}", token_stream::END_OF_STREAM, true, false);
+    m_token_stream.consume("}", false);
 
     while (library_stream.remaining() > 0)
     {
@@ -137,7 +140,7 @@ bool gate_library_parser_liberty::parse_tokens()
         }
     }
 
-    return true;
+    return m_token_stream.remaining() == 0;
 }
 
 bool gate_library_parser_liberty::parse_cell(token_stream& library_stream)
@@ -194,45 +197,71 @@ bool gate_library_parser_liberty::parse_pin(token_stream& cell_stream)
 {
     cell_stream.consume("pin", true);
     cell_stream.consume("(", true);
-    auto pin_name = cell_stream.consume().string;
+    auto pin_names_stream = cell_stream.extract_until(")", token_stream::END_OF_STREAM, true, true);
     cell_stream.consume(")", true);
     cell_stream.consume("{", true);
-    auto pin_stream = cell_stream.extract_until("}", token_stream::END_OF_STREAM, true, true);
+    auto pin_description_stream = cell_stream.extract_until("}", token_stream::END_OF_STREAM, true, true);
     cell_stream.consume("}", true);
 
-    while (pin_stream.remaining() > 0)
+    std::string pin_direction;
+    std::vector<token> functions;
+    std::vector<token> undefined_functions;
+
+    while (pin_description_stream.remaining() > 0)
     {
-        if (pin_stream.consume("direction", false))
+        if (pin_description_stream.consume("direction", false))
         {
-            pin_stream.consume(":", true);
-            auto pin_direction = pin_stream.consume();
-
-            if (pin_direction == "input")
-            {
-                m_current_cell.input_pins.push_back(pin_name);
-            }
-            else if (pin_direction == "output")
-            {
-                m_current_cell.output_pins.push_back(pin_name);
-            }
-
-            pin_stream.consume(";", true);
+            pin_description_stream.consume(":", true);
+            pin_direction = pin_description_stream.consume();
+            pin_description_stream.consume(";", true);
         }
-        else if (pin_stream.consume("function", false))
+        else if (pin_description_stream.consume("function", false))
         {
-            pin_stream.consume(":", true);
-            m_current_cell.functions.emplace(pin_name, pin_stream.consume());
-            pin_stream.consume(";", true);
+            pin_description_stream.consume(":", true);
+            functions.push_back(pin_description_stream.consume());
+            pin_description_stream.consume(";", true);
         }
-        else if (pin_stream.consume("x_function", false))
+        else if (pin_description_stream.consume("x_function", false))
         {
-            pin_stream.consume(":", true);
-            m_current_cell.functions.emplace(pin_name + "_undefined", pin_stream.consume());
-            pin_stream.consume(";", true);
+            pin_description_stream.consume(":", true);
+            undefined_functions.push_back(pin_description_stream.consume());
+            pin_description_stream.consume(";", true);
         }
         else
         {
-            pin_stream.consume();
+            pin_description_stream.consume();
+        }
+    }
+
+    while (pin_names_stream.remaining() > 0)
+    {
+        auto pin_name = pin_names_stream.consume().string;
+        if (pin_names_stream.remaining() > 0)
+        {
+            pin_names_stream.consume(",", true);
+        }
+
+        if (pin_direction == "input")
+        {
+            m_current_cell.input_pins.push_back(pin_name);
+        }
+        else if (pin_direction == "output")
+        {
+            m_current_cell.output_pins.push_back(pin_name);
+        }
+        else if (pin_direction == "inout")
+        {
+            m_current_cell.input_pins.push_back(pin_name);
+            m_current_cell.output_pins.push_back(pin_name);
+        }
+
+        for (const auto& token : functions)
+        {
+            m_current_cell.functions.emplace(pin_name, token);
+        }
+        for (const auto& token : undefined_functions)
+        {
+            m_current_cell.functions.emplace(pin_name + "_undefined", token);
         }
     }
 
@@ -293,7 +322,7 @@ bool gate_library_parser_liberty::parse_ff(token_stream& cell_stream)
             }
             else
             {
-                log_error("netlist", "invalid clear_preset behavior '{}' near line {}.", behav.string, behav.number);
+                log_error("liberty_parser", "invalid clear_preset behavior '{}' near line {}.", behav.string, behav.number);
                 return false;
             }
         }
@@ -312,7 +341,7 @@ bool gate_library_parser_liberty::parse_ff(token_stream& cell_stream)
             }
             else
             {
-                log_error("netlist", "invalid clear_preset behavior '{}' near line {}.", behav.string, behav.number);
+                log_error("liberty_parser", "invalid clear_preset behavior '{}' near line {}.", behav.string, behav.number);
                 return false;
             }
         }
@@ -339,7 +368,7 @@ bool gate_library_parser_liberty::parse_ff(token_stream& cell_stream)
             }
             else
             {
-                log_error("netlist", "invalid data direction '{}' near line {}.", direction.string, direction.number);
+                log_error("liberty_parser", "invalid data direction '{}' near line {}.", direction.string, direction.number);
                 return false;
             }
 
@@ -408,7 +437,7 @@ bool gate_library_parser_liberty::parse_latch(token_stream& cell_stream)
             }
             else
             {
-                log_error("netlist", "invalid clear_preset behavior '{}' near line {}.", behav.string, behav.number);
+                log_error("liberty_parser", "invalid clear_preset behavior '{}' near line {}.", behav.string, behav.number);
                 return false;
             }
         }
@@ -427,7 +456,7 @@ bool gate_library_parser_liberty::parse_latch(token_stream& cell_stream)
             }
             else
             {
-                log_error("netlist", "invalid clear_preset behavior '{}' near line {}.", behav.string, behav.number);
+                log_error("liberty_parser", "invalid clear_preset behavior '{}' near line {}.", behav.string, behav.number);
                 return false;
             }
         }
@@ -476,7 +505,7 @@ bool gate_library_parser_liberty::parse_lut(token_stream& cell_stream)
             }
             else
             {
-                log_error("netlist", "invalid data direction '{}' near line {}.", direction.string, direction.number);
+                log_error("liberty_parser", "invalid data direction '{}' near line {}.", direction.string, direction.number);
                 return false;
             }
 
@@ -513,7 +542,7 @@ std::shared_ptr<gate_type> gate_library_parser_liberty::construct_gate_type()
             {
                 if (std::find(pins.begin(), pins.end(), var) == pins.end())
                 {
-                    log_error("netlist", "variable '{}' of boolean function '{}' for pin '{}' of gate type '{}' does not match any input pin.", var, func.to_string(), pin_name, gt->get_name());
+                    log_error("liberty_parser", "variable '{}' of boolean function '{}' for pin '{}' of gate type '{}' does not match any input pin.", var, func.to_string(), pin_name, gt->get_name());
                     return nullptr;
                 }
             }

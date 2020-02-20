@@ -35,6 +35,20 @@ class gate_library;
 namespace gate_library_manager
 {
     /**
+     * Loads all gate libraries which are available.
+     *
+     * @param[in] reload_if_existing - If true, reloads all libraries that are already loaded.
+     */
+    NETLIST_API std::shared_ptr<gate_library> load(const hal::path& path, bool reload_if_existing = false);
+
+    /**
+     * Loads all gate libraries which are available.
+     *
+     * @param[in] reload_if_existing - If true, reloads all libraries that are already loaded.
+     */
+    NETLIST_API void load_all(bool reload_if_existing = false);
+
+    /**
      * Get a gate library object by name.
      *
      * @param[in] name - Name of the gate library.
@@ -43,14 +57,9 @@ namespace gate_library_manager
     NETLIST_API std::shared_ptr<gate_library> get_gate_library(const std::string& name);
 
     /**
-     * Loads all gate libraries which are available.
-     */
-    NETLIST_API void load_all();
-
-    /**
      * Get all gate libraries together with the associated name.
      *
      * @returns A map from library name to pointer to the gate library object.
      */
-    NETLIST_API std::map<std::string, std::shared_ptr<gate_library>> get_gate_libraries();
+    NETLIST_API std::vector<std::shared_ptr<gate_library>> get_gate_libraries();
 }    // namespace gate_library_manager

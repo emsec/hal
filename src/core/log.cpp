@@ -1,11 +1,11 @@
 #include "core/log.h"
 #include <iostream>
-#include <spdlog/fmt/fmt.h>
 #include <spdlog/common.h>
+#include <spdlog/fmt/fmt.h>
+#include <spdlog/sinks/ansicolor_sink.h>
 #include <spdlog/sinks/basic_file_sink.h>
 #include <spdlog/sinks/null_sink.h>
 #include <spdlog/sinks/stdout_sinks.h>
-#include <spdlog/sinks/ansicolor_sink.h>
 
 std::map<std::string, std::shared_ptr<log_manager::log_sink>> log_manager::m_file_sinks;
 
@@ -53,18 +53,6 @@ log_manager::~log_manager()
 log_manager& log_manager::get_instance(const hal::path& file_name)
 {
     static log_manager l(file_name);
-    if (!l.m_initialized)
-    {
-        l.m_initialized = true;
-        l.add_channel("core", {log_manager::create_stdout_sink(), log_manager::create_file_sink(), log_manager::create_gui_sink()}, "info");
-        l.add_channel("netlist", {log_manager::create_stdout_sink(), log_manager::create_file_sink(), log_manager::create_gui_sink()}, "info");
-        l.add_channel("module", {log_manager::create_stdout_sink(), log_manager::create_file_sink(), log_manager::create_gui_sink()}, "info");
-        l.add_channel("netlist.internal", {log_manager::create_stdout_sink(), log_manager::create_file_sink(), log_manager::create_gui_sink()}, "info");
-        l.add_channel("netlist.persistent", {log_manager::create_stdout_sink(), log_manager::create_file_sink(), log_manager::create_gui_sink()}, "info");
-        l.add_channel("hdl_parser", {log_manager::create_stdout_sink(), log_manager::create_file_sink(), log_manager::create_gui_sink()}, "info");
-        l.add_channel("hdl_writer", {log_manager::create_stdout_sink(), log_manager::create_file_sink(), log_manager::create_gui_sink()}, "info");
-        l.add_channel("python_context", {log_manager::create_stdout_sink(), log_manager::create_file_sink(), log_manager::create_gui_sink()}, "info");
-    }
     return l;
 }
 
@@ -73,15 +61,16 @@ void log_manager::set_format_pattern(const std::string& format)
     spdlog::set_pattern(format);
 }
 
-spdlog::logger* log_manager::get_channel(const std::string& channel) const
+std::shared_ptr<spdlog::logger> log_manager::get_channel(const std::string& channel)
 {
-    const auto& it = m_logger.find(channel);
+    auto it = m_logger.find(channel);
     if (it == m_logger.end())
     {
-        log_error("stdout", "channel '{}' was not registered so far.", channel);
-        return this->m_logger.at("null").get();
+        log_warning("stdout", "log channel '{}' was not registered so far, creating default channel.", channel);
+        return add_channel(channel, {log_manager::create_stdout_sink(), log_manager::create_file_sink(), log_manager::create_gui_sink()}, "info");
     }
-    return it->second.get();
+
+    return it->second;
 }
 
 std::set<std::string> log_manager::get_channels() const
@@ -92,21 +81,26 @@ std::set<std::string> log_manager::get_channels() const
     return channels;
 }
 
-void log_manager::add_channel(const std::string& channel_name, std::vector<std::shared_ptr<log_sink>> sinks, const std::string& level)
+std::shared_ptr<spdlog::logger> log_manager::add_channel(const std::string& channel_name, std::vector<std::shared_ptr<log_sink>> sinks, const std::string& level)
 {
-    if (m_logger.find(channel_name) != m_logger.end())
-        return;
+    if (auto it = m_logger.find(channel_name); it != m_logger.end())
+    {
+        return it->second;
+    }
 
     std::vector<std::shared_ptr<spdlog::sinks::sink>> vec;
     for (const auto& sink : sinks)
         vec.push_back(sink->spdlog_sink);
-    m_logger[channel_name] = std::make_shared<spdlog::logger>(channel_name, vec.begin(), vec.end());
+    auto channel           = std::make_shared<spdlog::logger>(channel_name, vec.begin(), vec.end());
+    m_logger[channel_name] = channel;
     m_logger[channel_name]->flush_on(spdlog::level::info);
 
     spdlog::details::registry::instance().initialize_logger(m_logger.at(channel_name));
 
     m_logger_sinks[channel_name] = sinks;
     this->set_level_of_channel(channel_name, level);
+
+    return channel;
 }
 
 void log_manager::remove_channel(const std::string& channel_name)

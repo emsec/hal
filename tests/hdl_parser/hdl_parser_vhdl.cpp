@@ -157,6 +157,122 @@ TEST_F(hdl_parser_vhdl_test, check_main_example)
     TEST_END
 }
 
+
+/**
+ * Testing the correct parsing of nets with multiple sources shown above.
+ *
+ * Functions: parse
+ */
+TEST_F(hdl_parser_vhdl_test, check_multi_driven_nets)
+{
+    TEST_START
+        std::stringstream input("-- Device\t: device_name\n"
+                                "library IEEE;\n"
+                                "use IEEE.STD_LOGIC_1164.ALL;\n"
+                                "library SIMPRIM;\n"
+                                "use SIMPRIM.VCOMPONENTS.ALL;\n"
+                                "use SIMPRIM.VPKG.ALL;\n"
+                                "\n"
+                                "entity TEST_Comp is\n"
+                                "  port (\n"
+                                "    net_global_in : in STD_LOGIC := 'X';\n"
+                                "    net_global_out : out STD_LOGIC := 'X';\n"
+                                //"    net_global_input : in STD_LOGIC := 'X';\n"
+                                "  );\n"
+                                "end TEST_Comp;\n"
+                                "\n"
+                                "architecture STRUCTURE of TEST_Comp is\n"
+                                "  signal net_0 : STD_LOGIC;\n"
+                                "  signal vec_net : STD_LOGIC_VECTOR ( 2 downto 0 );\n"
+                                "  attribute PTYPE: IGNORE_ME;\n"
+                                "begin\n"
+                                "  gate_0 : INV\n"
+                                "    port map (\n"
+                                "      I => net_global_in,\n"
+                                "      O => net_0\n"
+                                "    );\n"
+                                "  gate_1 : AND2\n"
+                                "    port map (\n"
+                                "      I0 => net_global_in,\n"
+                                "      I1 => net_global_in,\n"
+                                "      O => net_0\n"
+                                "    );\n"
+                                "  gate_2 : AND3\n"
+                                "    port map (\n"
+                                "      I0 => net_0,\n"
+                                "      I1 => vec_net(2),\n"
+                                "      O => net_global_out\n"
+                                "    );\n"
+                                "end STRUCTURE;\n"
+                                "");
+        test_def::capture_stdout();
+        hdl_parser_vhdl vhdl_parser(input);
+        std::shared_ptr<netlist> nl = vhdl_parser.parse(g_lib_name);
+        if (nl == nullptr)
+        {
+            std::cout << test_def::get_captured_stdout();
+        }
+        else
+        {
+            test_def::get_captured_stdout();
+        }
+
+        ASSERT_NE(nl, nullptr);
+
+        // Check if the device name is parsed correctly
+        EXPECT_EQ(nl->get_design_name(), "TEST_Comp");
+
+        // Check if the gates are parsed correctly
+        ASSERT_EQ(nl->get_gates(gate_type_filter("INV")).size(), 1);
+        std::shared_ptr<gate> gate_0 = *(nl->get_gates(gate_type_filter("INV")).begin());
+        ASSERT_EQ(nl->get_gates(gate_type_filter("AND2")).size(), 1);
+        std::shared_ptr<gate> gate_1 = *(nl->get_gates(gate_type_filter("AND2")).begin());
+        ASSERT_EQ(nl->get_gates(gate_type_filter("AND3")).size(), 1);
+        std::shared_ptr<gate> gate_2 = *(nl->get_gates(gate_type_filter("AND3")).begin());
+
+        ASSERT_NE(gate_0, nullptr);
+        EXPECT_EQ(gate_0->get_name(), "gate_0");
+
+        ASSERT_NE(gate_1, nullptr);
+        EXPECT_EQ(gate_1->get_name(), "gate_1");
+
+        ASSERT_NE(gate_2, nullptr);
+        EXPECT_EQ(gate_2->get_name(), "gate_2");
+
+        // Check if the nets are parsed correctly
+        std::shared_ptr<net> net_0            = *(nl->get_nets(net_name_filter("net_0")).begin());
+        std::shared_ptr<net> vec_net_2        = *(nl->get_nets(net_name_filter("vec_net(2)")).begin());
+        std::shared_ptr<net> net_global_in    = *(nl->get_nets(net_name_filter("net_global_in")).begin());
+        std::shared_ptr<net> net_global_out   = *(nl->get_nets(net_name_filter("net_global_out")).begin());
+
+        ASSERT_NE(net_0, nullptr);
+        EXPECT_EQ(net_0->get_name(), "net_0");
+        EXPECT_TRUE(vectors_have_same_content(net_0->get_srcs(), {endpoint(gate_0, "O", false), endpoint(gate_1, "O", false)}));
+        EXPECT_TRUE(vectors_have_same_content(net_0->get_dsts(), std::vector<endpoint>({endpoint(gate_2, "I0", true)})));
+
+        ASSERT_NE(vec_net_2, nullptr);
+        EXPECT_EQ(vec_net_2->get_name(), "vec_net(2)");
+        EXPECT_TRUE(vec_net_2->get_srcs().empty());
+        EXPECT_TRUE(vectors_have_same_content(vec_net_2->get_dsts(), std::vector<endpoint>({endpoint(gate_2, "I1", true)})));
+
+        ASSERT_NE(net_global_in, nullptr);
+        EXPECT_EQ(net_global_in->get_name(), "net_global_in");
+        EXPECT_EQ(net_global_in->get_src(), endpoint(nullptr, "", false));
+        EXPECT_TRUE(vectors_have_same_content(net_global_in->get_dsts(), std::vector<endpoint>({endpoint(gate_0, "I", true), endpoint(gate_1, "I0", true), endpoint(gate_1, "I1", true)})));
+        EXPECT_TRUE(nl->is_global_input_net(net_global_in));
+
+        ASSERT_NE(net_global_out, nullptr);
+        EXPECT_EQ(net_global_out->get_name(), "net_global_out");
+        EXPECT_EQ(net_global_out->get_src(), endpoint(gate_2, "O", false));
+        EXPECT_TRUE(net_global_out->get_dsts().empty());
+        EXPECT_TRUE(nl->is_global_output_net(net_global_out));
+
+        EXPECT_EQ(nl->get_global_input_nets().size(), 1);
+        EXPECT_EQ(nl->get_global_output_nets().size(), 1);
+
+    TEST_END
+}
+
 /**
  * Testing the correct storage of data, passed by the "generic map" keyword
  *
@@ -1196,6 +1312,51 @@ TEST_F(hdl_parser_vhdl_test, check_port_assignment) {
     TEST_END
 }
 
+
+/**
+ * Testing the usage of inout ports
+ *
+ * Functions: parse
+ */
+TEST_F(hdl_parser_vhdl_test, check_inout_port)
+{
+    TEST_START
+        {
+            // Add a custom attribute for a gate
+            std::stringstream input("-- Device\t: device_name\n"
+                                    "entity TEST_Comp is\n"
+                                    "  port (\n"
+                                    "    net_global_input : in STD_LOGIC := 'X';\n"
+                                    "    net_global_output : out STD_LOGIC := 'X';\n"
+                                    "    net_global_inout : inout STD_LOGIC := 'X';\n"
+                                    "  );\n"
+                                    "end TEST_Comp;\n"
+                                    "architecture STRUCTURE of TEST_Comp is\n"
+                                    "begin\n"
+                                    "    inst : TBUF\n"
+                                    "    port map (\n"
+                                    "      I => net_global_input,\n"
+                                    "      T => net_global_input,\n"
+                                    "      O => net_global_output,\n"
+                                    "      IO => net_global_inout,\n"
+                                    "    );\n"
+                                    "end STRUCTURE;");
+            hdl_parser_vhdl vhdl_parser(input);
+            std::shared_ptr<netlist> nl = vhdl_parser.parse(g_lib_name);
+            auto g = *nl->get_gates().begin();
+            auto i_net = *nl->get_nets([](const auto& n){return n->get_name() == "net_global_input";}).begin();
+            auto o_net = *nl->get_nets([](const auto& n){return n->get_name() == "net_global_output";}).begin();
+            auto io_net = *nl->get_nets([](const auto& n){return n->get_name() == "net_global_inout";}).begin();
+
+            ASSERT_NE(nl, nullptr);
+            ASSERT_EQ(nl->get_nets().size(), 3);
+            ASSERT_EQ(nl->get_global_input_nets(), std::set<std::shared_ptr<net>>({i_net, io_net}));
+            ASSERT_EQ(nl->get_global_output_nets(), std::set<std::shared_ptr<net>>({o_net, io_net}));
+            ASSERT_EQ(g->get_fan_in_net("IO"), g->get_fan_out_net("IO"));
+        }
+    TEST_END
+}
+
 /**
  * Testing the usage of components, which should define new gate types with custom input/output/inout pins.
  * (currently unsupported...)
@@ -1862,7 +2023,7 @@ TEST_F(hdl_parser_vhdl_test, check_invalid_input)
             EXPECT_TRUE(gate_0->get_fan_out_nets().empty());
             EXPECT_TRUE(gate_0->get_fan_in_nets().empty());
         }*/
-        { //NOTE: Fails because of mistype issue line 108: (inout_pin_type.end() <-> input_pin_type.end())
+        {
             // Try to connect to a pin, which does not exist
             NO_COUT_TEST_BLOCK;
             std::stringstream input("-- Device\t: device_name\n"

@@ -109,6 +109,18 @@ int main(int argc, const char* argv[])
 
     /* initialize logging */
     log_manager& lm = log_manager::get_instance();
+
+    lm.add_channel("core", {log_manager::create_stdout_sink(), log_manager::create_file_sink(), log_manager::create_gui_sink()}, "info");
+    lm.add_channel("gate_library_manager", {log_manager::create_stdout_sink(), log_manager::create_file_sink(), log_manager::create_gui_sink()}, "info");
+    lm.add_channel("liberty_parser", {log_manager::create_stdout_sink(), log_manager::create_file_sink(), log_manager::create_gui_sink()}, "info");
+    lm.add_channel("netlist", {log_manager::create_stdout_sink(), log_manager::create_file_sink(), log_manager::create_gui_sink()}, "info");
+    lm.add_channel("module", {log_manager::create_stdout_sink(), log_manager::create_file_sink(), log_manager::create_gui_sink()}, "info");
+    lm.add_channel("netlist.internal", {log_manager::create_stdout_sink(), log_manager::create_file_sink(), log_manager::create_gui_sink()}, "info");
+    lm.add_channel("netlist.persistent", {log_manager::create_stdout_sink(), log_manager::create_file_sink(), log_manager::create_gui_sink()}, "info");
+    lm.add_channel("hdl_parser", {log_manager::create_stdout_sink(), log_manager::create_file_sink(), log_manager::create_gui_sink()}, "info");
+    lm.add_channel("hdl_writer", {log_manager::create_stdout_sink(), log_manager::create_file_sink(), log_manager::create_gui_sink()}, "info");
+    lm.add_channel("python_context", {log_manager::create_stdout_sink(), log_manager::create_file_sink(), log_manager::create_gui_sink()}, "info");
+
     if (args.is_option_set("--logfile"))
     {
         lm.set_file_name(hal::path(args.get_parameter("--logfile")));

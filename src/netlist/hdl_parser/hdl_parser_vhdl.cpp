@@ -673,7 +673,7 @@ bool hdl_parser_vhdl::build_netlist(const std::string& top_module)
             return false;
         }
 
-        if (core_utils::equals_ignore_case(direction, "in"))
+        if (core_utils::equals_ignore_case(direction, "in") || core_utils::equals_ignore_case(direction, "inout"))
         {
             if (!new_net->mark_global_input_net())
             {
@@ -681,7 +681,7 @@ bool hdl_parser_vhdl::build_netlist(const std::string& top_module)
                 return false;
             }
         }
-        else if (core_utils::equals_ignore_case(direction, "out"))
+        if (core_utils::equals_ignore_case(direction, "out") || core_utils::equals_ignore_case(direction, "inout"))
         {
             if (!new_net->mark_global_output_net())
             {
@@ -689,9 +689,9 @@ bool hdl_parser_vhdl::build_netlist(const std::string& top_module)
                 return false;
             }
         }
-        else
+        if (!core_utils::equals_ignore_case(direction, "in") && !core_utils::equals_ignore_case(direction, "out") && !core_utils::equals_ignore_case(direction, "inout"))
         {
-            log_error("hdl_parser", "entity '{}', line {} : direction '{}' unkown", name, top_entity.line_number, direction);
+            log_error("hdl_parser", "entity '{}', line {} : unkown direction '{}'", name, top_entity.line_number, direction);
             return false;
         }
     }
@@ -878,20 +878,6 @@ std::shared_ptr<module> hdl_parser_vhdl::instantiate(const entity& e, std::share
         }
     }
 
-    std::unordered_set<std::string> output_ports;
-    std::unordered_set<std::string> input_ports;
-    for (const auto& [port, dir] : e.ports)
-    {
-        if (dir == "in")
-        {
-            input_ports.insert(port);
-        }
-        if (dir == "out")
-        {
-            output_ports.insert(port);
-        }
-    }
-
     for (const auto& [signal, assignment] : e.direct_assignments)
     {
         std::string a = signal;
@@ -915,9 +901,10 @@ std::shared_ptr<module> hdl_parser_vhdl::instantiate(const entity& e, std::share
         m_nets_to_merge[b].push_back(a);
     }
 
-    // cache global vcc/gnd types
+    // caches
     auto vcc_gate_types = m_netlist->get_gate_library()->get_vcc_gate_types();
     auto gnd_gate_types = m_netlist->get_gate_library()->get_gnd_gate_types();
+    auto gate_types     = m_netlist->get_gate_library()->get_gate_types();
 
     // process instances i.e. gates or other entities
     for (const auto& inst : e.instances)
@@ -966,11 +953,10 @@ std::shared_ptr<module> hdl_parser_vhdl::instantiate(const entity& e, std::share
 
             std::shared_ptr<gate> new_gate;
             {
-                auto gate_types = m_netlist->get_gate_library()->get_gate_types();
-                auto it         = std::find_if(gate_types.begin(), gate_types.end(), [&](auto& v) { return core_utils::equals_ignore_case(v.first, inst.type); });
+                auto it = std::find_if(gate_types.begin(), gate_types.end(), [&](auto& v) { return core_utils::equals_ignore_case(v.first, inst.type); });
                 if (it == gate_types.end())
                 {
-                    log_error("hdl_parser", "could not find gate type '{}' in gate library", inst.type);
+                    log_error("hdl_parser", "could not find gate type '{}' in gate library '{}'", inst.type, m_netlist->get_gate_library()->get_name());
                     return nullptr;
                 }
                 new_gate = m_netlist->create_gate(it->second, aliases[inst.name]);

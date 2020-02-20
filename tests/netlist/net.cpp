@@ -74,11 +74,11 @@ TEST_F(net_test, check_set_and_get_name)
 }
 
 /**
- * Testing the function set_src
+ * Testing the function add_src
  *
- * Functions: set_src
+ * Functions: add_src
  */
-TEST_F(net_test, check_set_src){
+TEST_F(net_test, check_add_src){
     TEST_START
     {
         // Set the source of the net (valid gate and pin_type)
@@ -89,17 +89,27 @@ TEST_F(net_test, check_set_src){
         EXPECT_TRUE(suc);
         EXPECT_EQ(test_net->get_src(), endpoint(t_gate, "O", false));
     }
-    // {
-    //     // Change the source of the net (valid gate and pin_type)
-    //     std::shared_ptr<netlist> nl   = create_empty_netlist(MIN_NETLIST_ID+0);
-    //     std::shared_ptr<net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
-    //     auto t_gate_0                 = create_test_gate(nl, MIN_GATE_ID+1);
-    //     auto t_gate_1                 = create_test_gate(nl, MIN_GATE_ID+2);
-    //     test_net->add_src(t_gate_0, "O");
-    //     bool suc = test_net->add_src(t_gate_1, "O");
-    //     EXPECT_TRUE(suc);
-    //     EXPECT_EQ(test_net->get_src(), endpoint(t_gate_1, "O", false));
-    // }
+    {
+        // Multiple sources of the net
+        std::shared_ptr<netlist> nl   = create_empty_netlist(MIN_NETLIST_ID+0);
+        std::shared_ptr<net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
+        auto t_gate_0                 = create_test_gate(nl, MIN_GATE_ID+1);
+        auto t_gate_1                 = create_test_gate(nl, MIN_GATE_ID+2);
+        EXPECT_TRUE(test_net->add_src(t_gate_0, "O"));
+        EXPECT_TRUE(test_net->add_src(t_gate_1, "O"));
+        EXPECT_TRUE(vectors_have_same_content(test_net->get_srcs(), {endpoint(t_gate_0, "O", false), endpoint(t_gate_1, "O", false)}));
+    }
+    {
+        // Change the source of the net (valid gate and pin_type)
+        std::shared_ptr<netlist> nl   = create_empty_netlist(MIN_NETLIST_ID+0);
+        std::shared_ptr<net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
+        auto t_gate_0                 = create_test_gate(nl, MIN_GATE_ID+1);
+        auto t_gate_1                 = create_test_gate(nl, MIN_GATE_ID+2);
+        test_net->add_src(t_gate_0, "O");
+        EXPECT_TRUE(test_net->remove_src(t_gate_0, "O"));
+        EXPECT_TRUE(test_net->add_src(t_gate_1, "O"));
+        EXPECT_EQ(test_net->get_src(), endpoint(t_gate_1, "O", false));
+    }
 
     // Negative
     {
