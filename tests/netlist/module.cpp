@@ -548,20 +548,20 @@ TEST_F(module_test, check_get_input_nets){
         std::shared_ptr<net> net_2_3_5 = nl->create_net(MIN_NET_ID+5, "name_1");
 
         // Connect the nets
-        net_g_0->add_dst(gate_0, "I");
+        net_g_0->add_destination(gate_0, "I");
 
-        net_0_g->add_src(gate_0, "O");
+        net_0_g->add_source(gate_0, "O");
 
-        net_4_1_2->add_src(gate_4, "O");
-        net_4_1_2->add_dst(gate_1, "I");
-        net_4_1_2->add_dst(gate_2, "I1");
+        net_4_1_2->add_source(gate_4, "O");
+        net_4_1_2->add_destination(gate_1, "I");
+        net_4_1_2->add_destination(gate_2, "I1");
 
-        net_1_2->add_src(gate_1, "O");
-        net_1_2->add_dst(gate_2, "I0");
+        net_1_2->add_source(gate_1, "O");
+        net_1_2->add_destination(gate_2, "I0");
 
-        net_2_3_5->add_src(gate_2, "O");
-        net_2_3_5->add_dst(gate_3, "I");
-        net_2_3_5->add_dst(gate_5, "I");
+        net_2_3_5->add_source(gate_2, "O");
+        net_2_3_5->add_destination(gate_3, "I");
+        net_2_3_5->add_destination(gate_5, "I");
 
         // Mark global nets
         nl->mark_global_input_net(net_g_0);

@@ -16,7 +16,7 @@ if(WITH_GUI)
     file(GLOB_RECURSE UI ${UIROOT}/*.ui)
     file(GLOB_RECURSE RSRC ${RSRCROOT}/*.qrc)
 
-    qt5_wrap_cpp(MOC_SRC ${SRC})
+    qt5_wrap_cpp(MOC_source ${SRC})
     qt5_wrap_cpp(MOC_HDR ${HDR})
     qt5_wrap_ui(MOC_UI ${UI})
     qt5_add_resources(MOC_RSRC ${RSRC})
@@ -24,7 +24,7 @@ if(WITH_GUI)
     add_library(hal_gui SHARED
                 ${HDR}
                 ${SRC}
-                #${MOC_SRC}
+                #${MOC_source}
                 ${MOC_HDR}
                 ${MOC_UI}
                 ${RSRC}

@@ -243,10 +243,10 @@ bool graph_context::is_showing_module(const u32 id, const QSet<u32>& minus_modul
     return (m_gates - m_removed_gates) + m_added_gates == (gates - minus_gates) + plus_gates && (m_modules - m_removed_modules) + m_added_modules == (modules - minus_modules) + plus_modules;
 }
 
-bool graph_context::is_showing_net_src(const u32 net_id) const
+bool graph_context::is_showing_net_source(const u32 net_id) const
 {
     auto net = g_netlist->get_net_by_id(net_id);
-    auto src_gate = net->get_src().get_gate();
+    auto src_gate = net->get_source().get_gate();
 
     if(src_gate != nullptr)
     {
@@ -257,10 +257,10 @@ bool graph_context::is_showing_net_src(const u32 net_id) const
     return false;
 }
 
-bool graph_context::is_showing_net_dst(const u32 net_id) const
+bool graph_context::is_showing_net_destination(const u32 net_id) const
 {
     auto net = g_netlist->get_net_by_id(net_id);
-    auto dst_pins = net->get_dsts();
+    auto dst_pins = net->get_destinations();
 
     for(auto pin : dst_pins)
     {

@@ -57,12 +57,12 @@ std::set<std::set<std::shared_ptr<gate>>> plugin_graph_algorithm::get_strongly_c
 
     for (auto it_net : ordered_nets)
     {
-        auto src = it_net.second->get_src();
+        auto src = it_net.second->get_source();
         if (src.get_gate() == nullptr)
             continue;
 
         std::set<u32> dst_ids;
-        for (auto dst : it_net.second->get_dsts())
+        for (auto dst : it_net.second->get_destinations())
             dst_ids.insert(dst.get_gate()->get_id());
 
         for (const auto& dst_id : dst_ids)

@@ -176,9 +176,9 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
 
     //handle netlist modifications reagarding nets
     connect(&g_netlist_relay, &netlist_relay::net_name_changed, this, &gate_details_widget::handle_net_name_changed);
-    connect(&g_netlist_relay, &netlist_relay::net_src_changed, this, &gate_details_widget::handle_net_src_changed);
-    connect(&g_netlist_relay, &netlist_relay::net_dst_added, this, &gate_details_widget::handle_net_dst_added);
-    connect(&g_netlist_relay, &netlist_relay::net_dst_removed, this, &gate_details_widget::handle_net_dst_removed);
+    connect(&g_netlist_relay, &netlist_relay::net_source_changed, this, &gate_details_widget::handle_net_source_changed);
+    connect(&g_netlist_relay, &netlist_relay::net_destination_added, this, &gate_details_widget::handle_net_destination_added);
+    connect(&g_netlist_relay, &netlist_relay::net_destination_removed, this, &gate_details_widget::handle_net_destination_removed);
 }
 
 gate_details_widget::~gate_details_widget()
@@ -211,13 +211,13 @@ void gate_details_widget::handle_net_name_changed(std::shared_ptr<net> net)
     bool update_needed = false;
 
     //check if currently shown gate is src of renamed net
-    if (m_current_id == net->get_src().get_gate()->get_id())
+    if (m_current_id == net->get_source().get_gate()->get_id())
         update_needed = true;
 
     //check if currently shown gate is dst of renamed net
     if (!update_needed)
     {
-        for (auto& e : net->get_dsts())
+        for (auto& e : net->get_destinations())
         {
             if (m_current_id == e.get_gate()->get_id())
             {
@@ -231,7 +231,7 @@ void gate_details_widget::handle_net_name_changed(std::shared_ptr<net> net)
         update(m_current_id);
 }
 
-void gate_details_widget::handle_net_src_changed(std::shared_ptr<net> net)
+void gate_details_widget::handle_net_source_changed(std::shared_ptr<net> net)
 {
     Q_UNUSED(net);
     if (m_current_id == 0)
@@ -240,14 +240,14 @@ void gate_details_widget::handle_net_src_changed(std::shared_ptr<net> net)
         update(m_current_id);
 }
 
-void gate_details_widget::handle_net_dst_added(std::shared_ptr<net> net, const u32 dst_gate_id)
+void gate_details_widget::handle_net_destination_added(std::shared_ptr<net> net, const u32 dst_gate_id)
 {
     Q_UNUSED(net);
     if (m_current_id == dst_gate_id)
         update(m_current_id);
 }
 
-void gate_details_widget::handle_net_dst_removed(std::shared_ptr<net> net, const u32 dst_gate_id)
+void gate_details_widget::handle_net_destination_removed(std::shared_ptr<net> net, const u32 dst_gate_id)
 {
     Q_UNUSED(net);
     if (m_current_id == dst_gate_id)
@@ -451,7 +451,7 @@ void gate_details_widget::on_treewidget_item_clicked(QTreeWidgetItem* item, int 
         if (!clicked_net)
             return;
 
-        auto destinations = clicked_net->get_dsts();
+        auto destinations = clicked_net->get_destinations();
 
         if (destinations.empty() || clicked_net->is_global_output_net())
         {
@@ -493,13 +493,13 @@ void gate_details_widget::on_treewidget_item_clicked(QTreeWidgetItem* item, int 
             return;
 
         g_selection_relay.clear();
-        if (clicked_net->get_src().get_gate() == nullptr || clicked_net->is_global_input_net())
+        if (clicked_net->get_source().get_gate() == nullptr || clicked_net->is_global_input_net())
         {
             g_selection_relay.m_selected_nets.insert(clicked_net->get_id());
         }
         else
         {
-            endpoint ep  = clicked_net->get_src();
+            endpoint ep  = clicked_net->get_source();
             auto gate_id = ep.get_gate()->get_id();
             g_selection_relay.m_selected_gates.insert(gate_id);
             g_selection_relay.m_focus_type = selection_relay::item_type::gate;

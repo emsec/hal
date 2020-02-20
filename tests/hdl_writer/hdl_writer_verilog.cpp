@@ -312,17 +312,17 @@ TEST_F(hdl_writer_verilog_test, check_generic_data_storage) {
             unsigned int idx = 0;
             for (auto g : nl->get_gates()){
                 std::shared_ptr<net> out_net = nl->create_net("net_" + std::to_string(idx));
-                out_net->add_src(g,"O");
+                out_net->add_source(g,"O");
                 idx++;
             }
 
-            global_in->add_dst(test_gate_0, "I");
-            global_in->add_dst(test_gate_1, "I");
-            global_in->add_dst(test_gate_2, "I");
-            global_in->add_dst(test_gate_3, "I");
-            global_in->add_dst(test_gate_4, "I");
-            global_in->add_dst(test_gate_5, "I");
-            global_in->add_dst(test_gate_6, "I");
+            global_in->add_destination(test_gate_0, "I");
+            global_in->add_destination(test_gate_1, "I");
+            global_in->add_destination(test_gate_2, "I");
+            global_in->add_destination(test_gate_3, "I");
+            global_in->add_destination(test_gate_4, "I");
+            global_in->add_destination(test_gate_5, "I");
+            global_in->add_destination(test_gate_6, "I");
 
             // Store some data in the test_gate
             test_gate_0->set_data("generic", "0_key_time", "time", "123s");
@@ -541,7 +541,7 @@ TEST_F(hdl_writer_verilog_test, check_special_net_names) {
             unsigned int idx = 0;
             for (auto g : nl->get_gates()){
                 std::shared_ptr<net> out_net = nl->create_net("net_" + std::to_string(idx));
-                out_net->add_src(g,"O");
+                out_net->add_source(g,"O");
                 idx++;
             }
 
@@ -601,7 +601,7 @@ TEST_F(hdl_writer_verilog_test, check_gate_net_name_collision) {
             std::shared_ptr<net> test_net = nl->create_net( MIN_NET_ID+0, "gate_net_name");
             std::shared_ptr<gate> test_gate = nl->create_gate( MIN_GATE_ID+0, get_gate_type_by_name("INV"), "gate_net_name");
 
-            test_net->add_dst(test_gate, "I");
+            test_net->add_destination(test_gate, "I");
 
             // Write and parse the netlist now
             test_def::capture_stdout();
@@ -653,11 +653,11 @@ TEST_F(hdl_writer_verilog_test, check_constant_nets) {
             std::shared_ptr<net> global_out = nl->create_net(MIN_NET_ID+0, "global_out");
             nl->mark_global_output_net(global_out);
             std::shared_ptr<gate> test_gate = nl->create_gate( MIN_GATE_ID+1, get_gate_type_by_name("INV"), "test_gate");
-            global_out->add_src(test_gate, "O");
+            global_out->add_source(test_gate, "O");
 
             std::shared_ptr<net> gnd_net = nl->create_net(MIN_NET_ID+1, "'0'");
-            gnd_net->add_src(gnd_gate, "O");
-            gnd_net->add_dst(test_gate, "I");
+            gnd_net->add_source(gnd_gate, "O");
+            gnd_net->add_destination(test_gate, "I");
 
             // Write and parse the netlist now
             test_def::capture_stdout();
@@ -685,10 +685,10 @@ TEST_F(hdl_writer_verilog_test, check_constant_nets) {
             // Check if a net name is correctly translated
             ASSERT_EQ(parsed_nl->get_nets("1'b0").size(), 1);
             std::shared_ptr<net> gnd_net_translated = *parsed_nl->get_nets("1'b0").begin();
-            ASSERT_NE(gnd_net_translated->get_src().get_gate(), nullptr);
-            EXPECT_EQ(gnd_net_translated->get_src().get_gate()->get_type()->get_name(), "GND");
-            ASSERT_EQ(gnd_net_translated->get_dsts().size(), 1);
-            EXPECT_EQ((*gnd_net_translated->get_dsts().begin()).get_gate()->get_name(), "test_gate" + GATE_SUFFIX);
+            ASSERT_NE(gnd_net_translated->get_source().get_gate(), nullptr);
+            EXPECT_EQ(gnd_net_translated->get_source().get_gate()->get_type()->get_name(), "GND");
+            ASSERT_EQ(gnd_net_translated->get_destinations().size(), 1);
+            EXPECT_EQ((*gnd_net_translated->get_destinations().begin()).get_gate()->get_name(), "test_gate" + GATE_SUFFIX);
         }
         {
             // Testing the net name translation of a '0' net
@@ -698,11 +698,11 @@ TEST_F(hdl_writer_verilog_test, check_constant_nets) {
             std::shared_ptr<net> global_out = nl->create_net(MIN_NET_ID+0, "global_out");
             nl->mark_global_output_net(global_out);
             std::shared_ptr<gate> test_gate = nl->create_gate( MIN_GATE_ID+1, get_gate_type_by_name("INV"), "test_gate");
-            global_out->add_src(test_gate, "O");
+            global_out->add_source(test_gate, "O");
 
             std::shared_ptr<net> vcc_net = nl->create_net(MIN_NET_ID+1, "'1'");
-            vcc_net->add_src(vcc_gate, "O");
-            vcc_net->add_dst(test_gate, "I");
+            vcc_net->add_source(vcc_gate, "O");
+            vcc_net->add_destination(test_gate, "I");
 
             // Write and parse the netlist now
             test_def::capture_stdout();
@@ -730,10 +730,10 @@ TEST_F(hdl_writer_verilog_test, check_constant_nets) {
             // Check if a net name is correctly translated
             ASSERT_EQ(parsed_nl->get_nets("1'b1").size(), 1);
             std::shared_ptr<net> vcc_net_translated = *parsed_nl->get_nets("1'b1").begin();
-            ASSERT_NE(vcc_net_translated->get_src().get_gate(), nullptr);
-            EXPECT_EQ(vcc_net_translated->get_src().get_gate()->get_type()->get_name(), "VCC");
-            ASSERT_EQ(vcc_net_translated->get_dsts().size(), 1);
-            EXPECT_EQ((*vcc_net_translated->get_dsts().begin()).get_gate()->get_name(), "test_gate" + GATE_SUFFIX);
+            ASSERT_NE(vcc_net_translated->get_source().get_gate(), nullptr);
+            EXPECT_EQ(vcc_net_translated->get_source().get_gate()->get_type()->get_name(), "VCC");
+            ASSERT_EQ(vcc_net_translated->get_destinations().size(), 1);
+            EXPECT_EQ((*vcc_net_translated->get_destinations().begin()).get_gate()->get_name(), "test_gate" + GATE_SUFFIX);
         }*/
     TEST_END
 }
@@ -768,18 +768,18 @@ TEST_F(hdl_writer_verilog_test, check_pin_vector) {
             std::shared_ptr<net> global_out = nl->create_net(MIN_NET_ID + 0, "global_out");
             nl->mark_global_output_net(global_out);
             std::shared_ptr<gate> test_gate = nl->create_gate(MIN_GATE_ID + 2, "GATE_4^1_IN_1^0_OUT", "test_gate");
-            global_out->add_src(test_gate, "O");
+            global_out->add_source(test_gate, "O");
 
             std::shared_ptr<net> gnd_net = nl->create_net(MIN_NET_ID + 2, "test_gnd_net");
             std::shared_ptr<net> vcc_net = nl->create_net(MIN_NET_ID + 3, "test_vcc_net");
 
-            gnd_net->add_src(gnd_gate, "O");
-            vcc_net->add_src(vcc_gate, "O");
+            gnd_net->add_source(gnd_gate, "O");
+            vcc_net->add_source(vcc_gate, "O");
 
-            gnd_net->add_dst(test_gate, "I(0)");
-            vcc_net->add_dst(test_gate, "I(1)");
-            gnd_net->add_dst(test_gate, "I(2)");
-            vcc_net->add_dst(test_gate, "I(3)");
+            gnd_net->add_destination(test_gate, "I(0)");
+            vcc_net->add_destination(test_gate, "I(1)");
+            gnd_net->add_destination(test_gate, "I(2)");
+            vcc_net->add_destination(test_gate, "I(3)");
 
             // Write and parse the netlist now
             test_def::capture_stdout();
@@ -844,17 +844,17 @@ TEST_F(hdl_writer_verilog_test, check_simprim_exclusive_behaviour) {
             std::shared_ptr<gate> test_gate = nl->create_gate("X_AND4", "test_gate");
 
             std::shared_ptr<net> global_out_net = nl->create_net("global_out");
-            global_out_net->add_src(test_gate, "O");
+            global_out_net->add_source(test_gate, "O");
             nl->mark_global_output_net(global_out_net);
 
             std::shared_ptr<net> x_zero_net_0 = nl->create_net("x_zero_net_0");
             std::shared_ptr<net> x_zero_net_1 = nl->create_net("x_zero_net_1");
 
-            x_zero_net_0->add_src(x_zero_gate_0, "O");
-            x_zero_net_1->add_src(x_zero_gate_1, "O");
+            x_zero_net_0->add_source(x_zero_gate_0, "O");
+            x_zero_net_1->add_source(x_zero_gate_1, "O");
 
-            x_zero_net_0->add_dst(test_gate, "I0");
-            x_zero_net_1->add_dst(test_gate, "I1");
+            x_zero_net_0->add_destination(test_gate, "I0");
+            x_zero_net_1->add_destination(test_gate, "I1");
 
             // Write and parse the netlist now
             //test_def::capture_stdout();

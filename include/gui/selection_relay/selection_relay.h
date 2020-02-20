@@ -117,8 +117,8 @@ private:
     void follow_gate_input_pin(std::shared_ptr<gate> g, u32 input_pin_index);
     void follow_gate_output_pin(std::shared_ptr<gate> g, u32 output_pin_index);
 
-    void follow_net_to_src(std::shared_ptr<net> n);
-    void follow_net_to_dst(std::shared_ptr<net> n, u32 dst_index);
+    void follow_net_to_source(std::shared_ptr<net> n);
+    void follow_net_to_destination(std::shared_ptr<net> n, u32 dst_index);
 
     void subfocus_none();
     void subfocus_left();

@@ -698,7 +698,7 @@ void graph_graphics_view::handle_select_outputs()
             auto gate = g_netlist->get_gate_by_id(sel_id);
             for (const auto& net : gate->get_fan_out_nets())
             {
-                for (const auto& suc : net->get_dsts())
+                for (const auto& suc : net->get_destinations())
                 {
                     bool found = false;
                     for (const auto& id : context->modules())
@@ -722,7 +722,7 @@ void graph_graphics_view::handle_select_outputs()
             auto module = g_netlist->get_module_by_id(sel_id);
             for (const auto& net : module->get_output_nets())
             {
-                for (const auto& suc : net->get_dsts())
+                for (const auto& suc : net->get_destinations())
                 {
                     bool found = false;
                     for (const auto& id : context->modules())
@@ -757,13 +757,13 @@ void graph_graphics_view::handle_select_inputs()
             auto gate = g_netlist->get_gate_by_id(sel_id);
             for (const auto& net : gate->get_fan_in_nets())
             {
-                if (net->get_src().get_gate() != nullptr)
+                if (net->get_source().get_gate() != nullptr)
                 {
                     bool found = false;
                     for (const auto& id : context->modules())
                     {
                         auto m = g_netlist->get_module_by_id(id);
-                        if (m->contains_gate(net->get_src().get_gate(), true))
+                        if (m->contains_gate(net->get_source().get_gate(), true))
                         {
                             found = true;
                             break;
@@ -771,7 +771,7 @@ void graph_graphics_view::handle_select_inputs()
                     }
                     if (!found)
                     {
-                        gates.insert(net->get_src().get_gate()->get_id());
+                        gates.insert(net->get_source().get_gate()->get_id());
                     }
                 }
             }
@@ -781,13 +781,13 @@ void graph_graphics_view::handle_select_inputs()
             auto module = g_netlist->get_module_by_id(sel_id);
             for (const auto& net : module->get_input_nets())
             {
-                if (net->get_src().get_gate() != nullptr)
+                if (net->get_source().get_gate() != nullptr)
                 {
                     bool found = false;
                     for (const auto& id : context->modules())
                     {
                         auto m = g_netlist->get_module_by_id(id);
-                        if (m->contains_gate(net->get_src().get_gate(), true))
+                        if (m->contains_gate(net->get_source().get_gate(), true))
                         {
                             found = true;
                             break;
@@ -795,7 +795,7 @@ void graph_graphics_view::handle_select_inputs()
                     }
                     if (!found)
                     {
-                        gates.insert(net->get_src().get_gate()->get_id());
+                        gates.insert(net->get_source().get_gate()->get_id());
                     }
                 }
             }

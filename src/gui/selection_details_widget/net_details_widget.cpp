@@ -130,18 +130,18 @@ net_details_widget::net_details_widget(QWidget* parent) : QWidget(parent)
     m_scroll_area->setWidget(m_container);
     m_content_layout->addWidget(m_scroll_area);
 
-    m_src_pin = new QTreeWidgetItem(m_tree_widget);
-    m_src_pin->setExpanded(true);
+    m_source_pin = new QTreeWidgetItem(m_tree_widget);
+    m_source_pin->setExpanded(true);
 
-    m_dst_pins = new QTreeWidgetItem(m_tree_widget);
-    m_dst_pins->setExpanded(true);
+    m_destination_pins = new QTreeWidgetItem(m_tree_widget);
+    m_destination_pins->setExpanded(true);
 
 
     connect(&g_netlist_relay, &netlist_relay::net_removed, this, &net_details_widget::handle_net_removed);
     connect(&g_netlist_relay, &netlist_relay::net_name_changed, this, &net_details_widget::handle_net_name_changed);
-    connect(&g_netlist_relay, &netlist_relay::net_src_changed, this, &net_details_widget::handle_net_src_changed);
-    connect(&g_netlist_relay, &netlist_relay::net_dst_added, this, &net_details_widget::handle_net_dst_added);
-    connect(&g_netlist_relay, &netlist_relay::net_dst_removed, this, &net_details_widget::handle_net_dst_removed);
+    connect(&g_netlist_relay, &netlist_relay::net_source_changed, this, &net_details_widget::handle_net_source_changed);
+    connect(&g_netlist_relay, &netlist_relay::net_destination_added, this, &net_details_widget::handle_net_destination_added);
+    connect(&g_netlist_relay, &netlist_relay::net_destination_removed, this, &net_details_widget::handle_net_destination_removed);
 
     connect(&g_netlist_relay, &netlist_relay::gate_name_changed, this, &net_details_widget::handle_gate_name_changed);
 }
@@ -151,8 +151,8 @@ net_details_widget::~net_details_widget()
     delete m_name_item;
     delete m_type_item;
     delete m_id_item;
-    delete m_src_pin;
-    delete m_dst_pins;
+    delete m_source_pin;
+    delete m_destination_pins;
 }
 
 void net_details_widget::update(u32 net_id)
@@ -188,10 +188,10 @@ void net_details_widget::update(u32 net_id)
     m_module_item->setText(module_text);
 
     //get src pin
-    for (auto item : m_src_pin->takeChildren())
+    for (auto item : m_source_pin->takeChildren())
         delete item;
 
-    auto src_pin = n->get_src();
+    auto src_pin = n->get_source();
 
     if (src_pin.get_gate() != nullptr)
     {
@@ -199,8 +199,8 @@ void net_details_widget::update(u32 net_id)
 
         if (!src_pin_type.empty())
         {
-            QTreeWidgetItem* item = new QTreeWidgetItem(m_src_pin);
-            m_src_pin->setText(0, "1 Source Pin");
+            QTreeWidgetItem* item = new QTreeWidgetItem(m_source_pin);
+            m_source_pin->setText(0, "1 Source Pin");
             item->setText(0, QString::fromStdString(src_pin_type));
             item->setText(1, QChar(0x2b05));
             item->setForeground(1, QBrush(QColor(114, 140, 0), Qt::SolidPattern));
@@ -210,31 +210,31 @@ void net_details_widget::update(u32 net_id)
     }
     else
     {
-        m_src_pin->setText(0, "No Source Pin");
+        m_source_pin->setText(0, "No Source Pin");
     }
 
     //get destination pins
-    for (auto item : m_dst_pins->takeChildren())
+    for (auto item : m_destination_pins->takeChildren())
         delete item;
 
-    m_dst_pins->setText(0, "");
+    m_destination_pins->setText(0, "");
 
     if (!g_netlist->is_global_output_net(n))
     {
-        auto dsts_pins = n->get_dsts();
+        auto dsts_pins = n->get_destinations();
 
         QString dst_text = QString::number(dsts_pins.size()) + " Destination Pins";
 
         if (dsts_pins.size() == 1)
             dst_text.chop(1);
 
-        m_dst_pins->setText(0, dst_text);
+        m_destination_pins->setText(0, dst_text);
 
         for (auto dst_pin : dsts_pins)
         {
             auto dst_pin_type = dst_pin.get_pin();
 
-            QTreeWidgetItem* item = new QTreeWidgetItem(m_dst_pins);
+            QTreeWidgetItem* item = new QTreeWidgetItem(m_destination_pins);
             item->setText(0, QString::fromStdString(dst_pin_type));
             item->setText(1, QChar(0x27a1));
             item->setForeground(1, QBrush(QColor(114, 140, 0), Qt::SolidPattern));
@@ -267,7 +267,7 @@ void net_details_widget::on_treewidget_item_clicked(QTreeWidgetItem* item, int c
 {
     auto gate_id = item->data(2, Qt::UserRole).toInt();
     auto pin     = item->text(0).toStdString();
-    if (m_dst_pins == item->parent() && column == 2)
+    if (m_destination_pins == item->parent() && column == 2)
     {
         std::shared_ptr<gate> clicked_gate = g_netlist->get_gate_by_id(gate_id);
 
@@ -286,7 +286,7 @@ void net_details_widget::on_treewidget_item_clicked(QTreeWidgetItem* item, int c
 
         g_selection_relay.relay_selection_changed(this);
     }
-    else if (m_src_pin == item->parent() && column == 2)
+    else if (m_source_pin == item->parent() && column == 2)
     {
         std::shared_ptr<gate> clicked_gate = g_netlist->get_gate_by_id(gate_id);
 
@@ -323,13 +323,13 @@ void net_details_widget::handle_net_name_changed(const std::shared_ptr<net> n)
 
 }
 
-void net_details_widget::handle_net_src_changed(const std::shared_ptr<net> n)
+void net_details_widget::handle_net_source_changed(const std::shared_ptr<net> n)
 {
     if(m_current_id == n->get_id())
         update(m_current_id);
 }
 
-void net_details_widget::handle_net_dst_added(const std::shared_ptr<net> n, const u32 dst_gate_id)
+void net_details_widget::handle_net_destination_added(const std::shared_ptr<net> n, const u32 dst_gate_id)
 {
     Q_UNUSED(dst_gate_id);
 
@@ -337,7 +337,7 @@ void net_details_widget::handle_net_dst_added(const std::shared_ptr<net> n, cons
         update(m_current_id);
 }
 
-void net_details_widget::handle_net_dst_removed(const std::shared_ptr<net> n, const u32 dst_gate_id)
+void net_details_widget::handle_net_destination_removed(const std::shared_ptr<net> n, const u32 dst_gate_id)
 {
     Q_UNUSED(dst_gate_id);
 
@@ -362,13 +362,13 @@ void net_details_widget::handle_gate_name_changed(const std::shared_ptr<gate> g)
         return;
 
     //check if renamed gate is src of the currently shown net
-    if(n->get_src().get_gate()->get_id() == m_current_id)
+    if(n->get_source().get_gate()->get_id() == m_current_id)
         update_needed = true;
 
     //check if renamed gate is a dst of the currently shown net
     if(!update_needed)
     {
-        for(auto e : n->get_dsts())
+        for(auto e : n->get_destinations())
         {
             if(e.get_gate()->get_id() == m_current_id)
             {

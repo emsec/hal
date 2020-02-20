@@ -247,7 +247,7 @@ void graph_layouter::calculate_nets()
 
         hal::node node;
 
-        if (!m_context->node_for_gate(node, n->get_src().get_gate()->get_id()))
+        if (!m_context->node_for_gate(node, n->get_source().get_gate()->get_id()))
             continue;
 
         for (node_box& box : m_boxes)
@@ -263,7 +263,7 @@ void graph_layouter::calculate_nets()
         used_paths used;
 
         // FOR EVERY DST
-        for (const endpoint& dst : n->get_dsts())
+        for (const endpoint& dst : n->get_destinations())
         {
             // FIND DST BOX
             node_box* dst_box = nullptr;
@@ -731,7 +731,7 @@ void graph_layouter::draw_nets()
             // HANDLE GLOBAL NETS
             hollow_arrow_separated_net* net_item = new hollow_arrow_separated_net(n);
 
-            endpoint src_end = n->get_src();
+            endpoint src_end = n->get_source();
 
             if (src_end.get_gate())
             {
@@ -751,7 +751,7 @@ void graph_layouter::draw_nets()
                 }
             }
 
-            for (const endpoint& dst_end : n->get_dsts())
+            for (const endpoint& dst_end : n->get_destinations())
             {
                 hal::node node;
 
@@ -775,29 +775,29 @@ void graph_layouter::draw_nets()
 
         bool dst_missing = false;
 
-        if (n->get_src().get_gate())
+        if (n->get_source().get_gate())
         {
-            if (n->get_src().get_gate()->is_gnd_gate() || n->get_src().get_gate()->is_vcc_gate())
+            if (n->get_source().get_gate()->is_gnd_gate() || n->get_source().get_gate()->is_vcc_gate())
             {
                 // HANDLE SEPARATED NETS
                 hal::node node;
 
                 labeled_separated_net* net_item = new labeled_separated_net(n, QString::fromStdString(n->get_name()));
 
-                if (m_context->node_for_gate(node, n->get_src().get_gate()->get_id()))
+                if (m_context->node_for_gate(node, n->get_source().get_gate()->get_id()))
                 {
                     for (const node_box& box : m_boxes)
                     {
                         if (box.node == node)
                         {
-                            net_item->setPos(box.item->get_output_scene_position(n->get_id(), QString::fromStdString(n->get_src().get_pin())));
+                            net_item->setPos(box.item->get_output_scene_position(n->get_id(), QString::fromStdString(n->get_source().get_pin())));
                             net_item->add_output();
                             break;
                         }
                     }
                 }
 
-                for (endpoint& dst_end : n->get_dsts())
+                for (endpoint& dst_end : n->get_destinations())
                 {
                     if (!m_context->node_for_gate(node, dst_end.get_gate()->get_id()))
                         continue;
@@ -820,11 +820,11 @@ void graph_layouter::draw_nets()
 
             //TEMPORARY IMPLEMENTATION
             hal::node tmp;
-            if (!m_context->node_for_gate(tmp, n->get_src().get_gate()->get_id()))
+            if (!m_context->node_for_gate(tmp, n->get_source().get_gate()->get_id()))
             {
                 arrow_separated_net* net_item = new arrow_separated_net(n);
 
-                for (endpoint& dst_end : n->get_dsts())
+                for (endpoint& dst_end : n->get_destinations())
                 {
                     hal::node node;
                     if (!m_context->node_for_gate(node, dst_end.get_gate()->get_id()))
@@ -848,18 +848,18 @@ void graph_layouter::draw_nets()
             }
             else
             {
-                bool contains_dst = false;
+                bool contains_destination = false;
 
-                for (endpoint& dst_end : n->get_dsts())
+                for (endpoint& dst_end : n->get_destinations())
                 {
                     hal::node node;
                     if (m_context->node_for_gate(node, dst_end.get_gate()->get_id()))
-                        contains_dst = true;
+                        contains_destination = true;
                     else
                         dst_missing = true;
                 }
 
-                if (!contains_dst)
+                if (!contains_destination)
                 {
                     arrow_separated_net* net_item = new arrow_separated_net(n);
 
@@ -868,7 +868,7 @@ void graph_layouter::draw_nets()
                         if (box.node == tmp)
                         {
                             net_item->add_output();
-                            net_item->setPos(box.item->get_output_scene_position(n->get_id(), QString::fromStdString(n->get_src().get_pin())));
+                            net_item->setPos(box.item->get_output_scene_position(n->get_id(), QString::fromStdString(n->get_source().get_pin())));
                             break;
                         }
                     }
@@ -887,7 +887,7 @@ void graph_layouter::draw_nets()
         {
             hal::node node;
 
-            if (!m_context->node_for_gate(node, n->get_src().get_gate()->get_id()))
+            if (!m_context->node_for_gate(node, n->get_source().get_gate()->get_id()))
                 continue;
 
             for (node_box& box : m_boxes)
@@ -902,13 +902,13 @@ void graph_layouter::draw_nets()
 
         used_paths used;
 
-        const QPointF src_pin_position = src_box->item->get_output_scene_position(n->get_id(), QString::fromStdString(n->get_src().get_pin()));
+        const QPointF src_pin_position = src_box->item->get_output_scene_position(n->get_id(), QString::fromStdString(n->get_source().get_pin()));
         standard_graphics_net::lines lines;
         lines.src_x = src_pin_position.x();
         lines.src_y = src_pin_position.y();
 
         // FOR EVERY DST
-        for (const endpoint& dst : n->get_dsts())
+        for (const endpoint& dst : n->get_destinations())
         {
             // FIND DST BOX
             node_box* dst_box = nullptr;

@@ -93,9 +93,9 @@ Q_SIGNALS:
     void net_created(const std::shared_ptr<net> n) const;
     void net_removed(const std::shared_ptr<net> n) const;
     void net_name_changed(const std::shared_ptr<net> n) const;
-    void net_src_changed(const std::shared_ptr<net> n) const;
-    void net_dst_added(const std::shared_ptr<net> n, const u32 dst_gate_id) const;
-    void net_dst_removed(const std::shared_ptr<net> n, const u32 dst_gate_id) const;
+    void net_source_changed(const std::shared_ptr<net> n) const;
+    void net_destination_added(const std::shared_ptr<net> n, const u32 dst_gate_id) const;
+    void net_destination_removed(const std::shared_ptr<net> n, const u32 dst_gate_id) const;
 
     // GUI
     void module_color_changed(const std::shared_ptr<module> m) const;

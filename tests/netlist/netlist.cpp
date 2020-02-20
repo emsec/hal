@@ -272,9 +272,9 @@ TEST_F(netlist_test, check_delete_gate){
             bool suc                     = nl->delete_gate(gate_0);
             EXPECT_TRUE(suc);
             NO_COUT_TEST_BLOCK;
-            EXPECT_FALSE(nl->get_net_by_id(MIN_NET_ID+30)->is_a_dst(gate_0, "I0"));
-            EXPECT_FALSE(nl->get_net_by_id(MIN_NET_ID+20)->is_a_dst(gate_0, "I1"));
-            EXPECT_EQ(nl->get_net_by_id(MIN_NET_ID+045)->get_src(), endpoint(nullptr, "", false));
+            EXPECT_FALSE(nl->get_net_by_id(MIN_NET_ID+30)->is_a_destination(gate_0, "I0"));
+            EXPECT_FALSE(nl->get_net_by_id(MIN_NET_ID+20)->is_a_destination(gate_0, "I1"));
+            EXPECT_EQ(nl->get_net_by_id(MIN_NET_ID+045)->get_source(), endpoint(nullptr, "", false));
         }
         {
             // Add and delete global_gnd gate

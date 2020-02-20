@@ -80,9 +80,9 @@ bool netlist_internal_manager::delete_gate(std::shared_ptr<gate> gate)
         {
             continue;
         }
-        for (const auto& ep : net->get_dsts())
+        for (const auto& ep : net->get_destinations())
         {
-            if (ep.get_gate() == gate && ep.get_pin() == pin && !this->net_remove_dst(net, ep))
+            if (ep.get_gate() == gate && ep.get_pin() == pin && !this->net_remove_destination(net, ep))
             {
                 return false;
             }
@@ -95,9 +95,9 @@ bool netlist_internal_manager::delete_gate(std::shared_ptr<gate> gate)
         {
             continue;
         }
-        for (const auto& ep : net->get_srcs())
+        for (const auto& ep : net->get_sources())
         {
-            if (ep.get_gate() == gate && ep.get_pin() == pin && !this->net_remove_src(net, ep))
+            if (ep.get_gate() == gate && ep.get_pin() == pin && !this->net_remove_source(net, ep))
             {
                 return false;
             }
@@ -182,19 +182,19 @@ bool netlist_internal_manager::delete_net(const std::shared_ptr<net>& net)
         return false;
     }
 
-    auto dsts = net->m_dsts;
+    auto dsts = net->m_destinations;
     for (const auto& dst : dsts)
     {
-        if (net->is_a_dst(dst) && !this->net_remove_dst(net, dst))
+        if (net->is_a_destination(dst) && !this->net_remove_destination(net, dst))
         {
             return false;
         }
     }
 
-    auto srcs = net->m_srcs;
+    auto srcs = net->m_sources;
     for (const auto& src : srcs)
     {
-        if (net->is_a_src(src) && !this->net_remove_src(net, src))
+        if (net->is_a_source(src) && !this->net_remove_source(net, src))
         {
             return false;
         }
@@ -216,16 +216,16 @@ bool netlist_internal_manager::delete_net(const std::shared_ptr<net>& net)
     return true;
 }
 
-bool netlist_internal_manager::net_add_src(const std::shared_ptr<net>& net, const endpoint& ep)
+bool netlist_internal_manager::net_add_source(const std::shared_ptr<net>& net, const endpoint& ep)
 {
     if (!m_netlist->is_net_in_netlist(net) || !m_netlist->is_gate_in_netlist(ep.get_gate()))
     {
         return false;
     }
 
-    if (net->is_a_src(ep.get_gate(), ep.get_pin()))
+    if (net->is_a_source(ep.get_gate(), ep.get_pin()))
     {
-        log_error("netlist.internal", "net::add_src: src gate ('{}',  type = {}) is already added to net '{}'.", ep.get_gate()->get_name(), ep.get_gate()->get_type()->get_name(), net->get_name());
+        log_error("netlist.internal", "net::add_source: src gate ('{}',  type = {}) is already added to net '{}'.", ep.get_gate()->get_name(), ep.get_gate()->get_type()->get_name(), net->get_name());
         return false;
     }
 
@@ -234,7 +234,7 @@ bool netlist_internal_manager::net_add_src(const std::shared_ptr<net>& net, cons
 
     if ((std::find(output_pins.begin(), output_pins.end(), ep.get_pin()) == output_pins.end()))
     {
-        log_error("netlist.internal", "net::add_src: src gate ('{}',  type = {}) has no output type '{}'.", ep.get_gate()->get_name(), ep.get_gate()->get_type()->get_name(), ep.get_pin());
+        log_error("netlist.internal", "net::add_source: src gate ('{}',  type = {}) has no output type '{}'.", ep.get_gate()->get_name(), ep.get_gate()->get_type()->get_name(), ep.get_pin());
         return false;
     }
 
@@ -242,7 +242,7 @@ bool netlist_internal_manager::net_add_src(const std::shared_ptr<net>& net, cons
     if (ep.get_gate()->get_fan_out_net(ep.get_pin()) != nullptr)
     {
         log_error("netlist.internal",
-                  "net::add_src: gate '{}' already has an assigned net '{}' for output pin '{}', cannot assign new net '{}'.",
+                  "net::add_source: gate '{}' already has an assigned net '{}' for output pin '{}', cannot assign new net '{}'.",
                   ep.get_gate()->get_name(),
                   ep.get_gate()->get_fan_out_net(ep.get_pin())->get_name(),
                   ep.get_pin(),
@@ -250,7 +250,7 @@ bool netlist_internal_manager::net_add_src(const std::shared_ptr<net>& net, cons
         return false;
     }
 
-    net->m_srcs.push_back(ep);
+    net->m_sources.push_back(ep);
     ep.get_gate()->m_out_nets[ep.get_pin()] = net;
 
     net_event_handler::notify(net_event_handler::event::src_added, net, ep.get_gate()->get_id());
@@ -258,39 +258,39 @@ bool netlist_internal_manager::net_add_src(const std::shared_ptr<net>& net, cons
     return true;
 }
 
-bool netlist_internal_manager::net_remove_src(const std::shared_ptr<net>& net, const endpoint& ep)
+bool netlist_internal_manager::net_remove_source(const std::shared_ptr<net>& net, const endpoint& ep)
 {
-    if (!m_netlist->is_net_in_netlist(net) || !m_netlist->is_gate_in_netlist(ep.get_gate()) || !net->is_a_src(ep))
+    if (!m_netlist->is_net_in_netlist(net) || !m_netlist->is_gate_in_netlist(ep.get_gate()) || !net->is_a_source(ep))
     {
         return false;
     }
 
-    auto it = std::find(net->m_srcs.begin(), net->m_srcs.end(), ep);
+    auto it = std::find(net->m_sources.begin(), net->m_sources.end(), ep);
 
-    if (it != net->m_srcs.end())
+    if (it != net->m_sources.end())
     {
         (*it).get_gate()->m_out_nets.erase((*it).get_pin());
-        net->m_srcs.erase(it);
+        net->m_sources.erase(it);
         net_event_handler::notify(net_event_handler::event::src_removed, net, ep.get_gate()->get_id());
     }
     else
     {
-        log_warning("nelist.internal", "net::remove_src: net '{}' has no src gate '{}' at pin '{}'", net->get_name(), ep.get_gate()->get_name(), ep.get_pin());
+        log_warning("nelist.internal", "net::remove_source: net '{}' has no src gate '{}' at pin '{}'", net->get_name(), ep.get_gate()->get_name(), ep.get_pin());
     }
 
     return true;
 }
 
-bool netlist_internal_manager::net_add_dst(const std::shared_ptr<net>& net, const endpoint& ep)
+bool netlist_internal_manager::net_add_destination(const std::shared_ptr<net>& net, const endpoint& ep)
 {
     if (!m_netlist->is_net_in_netlist(net) || !m_netlist->is_gate_in_netlist(ep.get_gate()))
     {
         return false;
     }
 
-    if (net->is_a_dst(ep.get_gate(), ep.get_pin()))
+    if (net->is_a_destination(ep.get_gate(), ep.get_pin()))
     {
-        log_error("netlist.internal", "net::add_dst: dst gate ('{}',  type = {}) is already added to net '{}'.", ep.get_gate()->get_name(), ep.get_gate()->get_type()->get_name(), net->get_name());
+        log_error("netlist.internal", "net::add_destination: dst gate ('{}',  type = {}) is already added to net '{}'.", ep.get_gate()->get_name(), ep.get_gate()->get_type()->get_name(), net->get_name());
         return false;
     }
 
@@ -299,7 +299,7 @@ bool netlist_internal_manager::net_add_dst(const std::shared_ptr<net>& net, cons
 
     if ((std::find(input_pins.begin(), input_pins.end(), ep.get_pin()) == input_pins.end()))
     {
-        log_error("netlist.internal", "net::add_dst: dst gate ('{}',  type = {}) has no input type '{}'.", ep.get_gate()->get_name(), ep.get_gate()->get_type()->get_name(), ep.get_pin());
+        log_error("netlist.internal", "net::add_destination: dst gate ('{}',  type = {}) has no input type '{}'.", ep.get_gate()->get_name(), ep.get_gate()->get_type()->get_name(), ep.get_pin());
         return false;
     }
 
@@ -307,7 +307,7 @@ bool netlist_internal_manager::net_add_dst(const std::shared_ptr<net>& net, cons
     if (ep.get_gate()->get_fan_in_net(ep.get_pin()) != nullptr)
     {
         log_error("netlist.internal",
-                  "net::add_dst: gate '{}' already has an assigned net '{}' for input pin '{}', cannot assign new net '{}'.",
+                  "net::add_destination: gate '{}' already has an assigned net '{}' for input pin '{}', cannot assign new net '{}'.",
                   ep.get_gate()->get_name(),
                   ep.get_gate()->get_fan_in_net(ep.get_pin())->get_name(),
                   ep.get_pin(),
@@ -315,7 +315,7 @@ bool netlist_internal_manager::net_add_dst(const std::shared_ptr<net>& net, cons
         return false;
     }
 
-    net->m_dsts.push_back(ep);
+    net->m_destinations.push_back(ep);
     ep.get_gate()->m_in_nets[ep.get_pin()] = net;
 
     net_event_handler::notify(net_event_handler::event::dst_added, net, ep.get_gate()->get_id());
@@ -323,24 +323,24 @@ bool netlist_internal_manager::net_add_dst(const std::shared_ptr<net>& net, cons
     return true;
 }
 
-bool netlist_internal_manager::net_remove_dst(const std::shared_ptr<net>& net, const endpoint& ep)
+bool netlist_internal_manager::net_remove_destination(const std::shared_ptr<net>& net, const endpoint& ep)
 {
-    if (!m_netlist->is_net_in_netlist(net) || !m_netlist->is_gate_in_netlist(ep.get_gate()) || !net->is_a_dst(ep))
+    if (!m_netlist->is_net_in_netlist(net) || !m_netlist->is_gate_in_netlist(ep.get_gate()) || !net->is_a_destination(ep))
     {
         return false;
     }
 
-    auto it = std::find(net->m_dsts.begin(), net->m_dsts.end(), ep);
+    auto it = std::find(net->m_destinations.begin(), net->m_destinations.end(), ep);
 
-    if (it != net->m_dsts.end())
+    if (it != net->m_destinations.end())
     {
         (*it).get_gate()->m_in_nets.erase((*it).get_pin());
-        net->m_dsts.erase(it);
+        net->m_destinations.erase(it);
         net_event_handler::notify(net_event_handler::event::dst_removed, net, ep.get_gate()->get_id());
     }
     else
     {
-        log_warning("nelist.internal", "net::remove_dst: net '{}' has no dst gate '{}' at pin '{}'", net->get_name(), ep.get_gate()->get_name(), ep.get_pin());
+        log_warning("nelist.internal", "net::remove_destination: net '{}' has no dst gate '{}' at pin '{}'", net->get_name(), ep.get_gate()->get_name(), ep.get_pin());
     }
 
     return true;

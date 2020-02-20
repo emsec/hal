@@ -1,6 +1,6 @@
-file(GLOB_RECURSE PYTHON_BINDING_LIB_SRC ${CMAKE_SOURCE_DIR}/src/python-binding/python_definitions.cpp)
+file(GLOB_RECURSE PYTHON_BINDING_LIB_source ${CMAKE_SOURCE_DIR}/src/python-binding/python_definitions.cpp)
 
-add_library(py SHARED ${PYTHON_BINDING_LIB_SRC})
+add_library(py SHARED ${PYTHON_BINDING_LIB_source})
 set_target_properties(py PROPERTIES OUTPUT_NAME "hal_py")
 add_library(hal::py ALIAS py)
 target_include_directories(py
@@ -37,9 +37,9 @@ if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
 endif()
 
 file(GLOB_RECURSE PYTHON_PLUGIN_LIB_HDR ${CMAKE_SOURCE_DIR}/include/python-binding/*.h)
-file(GLOB_RECURSE PYTHON_PLUGIN_LIB_SRC ${CMAKE_SOURCE_DIR}/src/python-binding/factory_python_shell.cpp ${CMAKE_SOURCE_DIR}/src/python-binding/plugin_python_shell.cpp)
+file(GLOB_RECURSE PYTHON_PLUGIN_LIB_source ${CMAKE_SOURCE_DIR}/src/python-binding/factory_python_shell.cpp ${CMAKE_SOURCE_DIR}/src/python-binding/plugin_python_shell.cpp)
 
-add_library(hal_python SHARED ${PYTHON_PLUGIN_LIB_HDR} ${PYTHON_PLUGIN_LIB_SRC})
+add_library(hal_python SHARED ${PYTHON_PLUGIN_LIB_HDR} ${PYTHON_PLUGIN_LIB_source})
 target_include_directories(hal_python
                            PUBLIC
                            $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>

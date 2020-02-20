@@ -250,7 +250,7 @@ std::set<std::shared_ptr<net>> module::get_input_nets() const
             {
                 res.insert(net);
             }
-            else if (gates.find(net->get_src().get_gate()) == gates.end())
+            else if (gates.find(net->get_source().get_gate()) == gates.end())
             {
                 res.insert(net);
             }
@@ -272,7 +272,7 @@ std::set<std::shared_ptr<net>> module::get_output_nets() const
                 res.insert(net);
                 continue;
             }
-            for (const auto& dst : net->get_dsts())
+            for (const auto& dst : net->get_destinations())
             {
                 if (gates.find(dst.get_gate()) == gates.end())
                 {
@@ -293,7 +293,7 @@ std::set<std::shared_ptr<net>> module::get_internal_nets() const
     {
         for (const auto& net : gate->get_fan_out_nets())
         {
-            for (const auto& dst : net->get_dsts())
+            for (const auto& dst : net->get_destinations())
             {
                 if (gates.find(dst.get_gate()) != gates.end())
                 {

@@ -89,7 +89,7 @@ std::shared_ptr<netlist> hdl_parser_vhdl::parse(const std::string& gate_library)
     }
 
     // add global gnd gate if required by any instance
-    if (!zero_net->get_dsts().empty())
+    if (!zero_net->get_destinations().empty())
     {
         auto gnd_type   = m_netlist->get_gate_library()->get_gnd_gate_types().begin()->second;
         auto output_pin = gnd_type->get_output_pins().at(0);
@@ -99,7 +99,7 @@ std::shared_ptr<netlist> hdl_parser_vhdl::parse(const std::string& gate_library)
             return nullptr;
         }
         auto gnd_net = m_net_by_name.find("'0'")->second;
-        if (!gnd_net->add_src(gnd, output_pin))
+        if (!gnd_net->add_source(gnd, output_pin))
         {
             return nullptr;
         }
@@ -110,7 +110,7 @@ std::shared_ptr<netlist> hdl_parser_vhdl::parse(const std::string& gate_library)
     }
 
     // add global vcc gate if required by any instance
-    if (!one_net->get_dsts().empty())
+    if (!one_net->get_destinations().empty())
     {
         auto vcc_type   = m_netlist->get_gate_library()->get_vcc_gate_types().begin()->second;
         auto output_pin = vcc_type->get_output_pins().at(0);
@@ -120,7 +120,7 @@ std::shared_ptr<netlist> hdl_parser_vhdl::parse(const std::string& gate_library)
             return nullptr;
         }
         auto vcc_net = m_net_by_name.find("'1'")->second;
-        if (!vcc_net->add_src(vcc, output_pin))
+        if (!vcc_net->add_source(vcc, output_pin))
         {
             return nullptr;
         }
@@ -132,9 +132,9 @@ std::shared_ptr<netlist> hdl_parser_vhdl::parse(const std::string& gate_library)
 
     for (const auto& net : m_netlist->get_nets())
     {
-        bool no_src = net->get_src().get_gate() == nullptr && !net->is_global_input_net();
-        bool no_dst = net->get_num_of_dsts() == 0 && !net->is_global_output_net();
-        if (no_src && no_dst)
+        bool no_source = net->get_source().get_gate() == nullptr && !net->is_global_input_net();
+        bool no_destination = net->get_num_of_destinations() == 0 && !net->is_global_output_net();
+        if (no_source && no_destination)
         {
             if (net != z_net && net != one_net && net != zero_net)
             {
@@ -733,16 +733,16 @@ bool hdl_parser_vhdl::build_netlist(const std::string& top_module)
                 auto slave_net = m_net_by_name.at(slave);
 
                 // merge source
-                auto slave_src = slave_net->get_src();
-                if (slave_src.get_gate() != nullptr)
+                auto slave_source = slave_net->get_source();
+                if (slave_source.get_gate() != nullptr)
                 {
-                    slave_net->remove_src(slave_src);
+                    slave_net->remove_source(slave_source);
 
-                    if (master_net->get_src().get_gate() == nullptr)
+                    if (master_net->get_source().get_gate() == nullptr)
                     {
-                        master_net->add_src(slave_src);
+                        master_net->add_source(slave_source);
                     }
-                    else if (slave_src.get_gate() != master_net->get_src().get_gate())
+                    else if (slave_source.get_gate() != master_net->get_source().get_gate())
                     {
                         log_error("hdl_parser", "could not merge nets '{}' and '{}'", slave_net->get_name(), master_net->get_name());
                         return false;
@@ -755,13 +755,13 @@ bool hdl_parser_vhdl::build_netlist(const std::string& top_module)
                     master_net->mark_global_output_net();
                 }
 
-                for (const auto& dst : slave_net->get_dsts())
+                for (const auto& dst : slave_net->get_destinations())
                 {
-                    slave_net->remove_dst(dst);
+                    slave_net->remove_destination(dst);
 
-                    if (!master_net->is_a_dst(dst))
+                    if (!master_net->is_a_destination(dst))
                     {
-                        master_net->add_dst(dst);
+                        master_net->add_destination(dst);
                     }
                 }
 
@@ -1051,9 +1051,9 @@ std::shared_ptr<module> hdl_parser_vhdl::instantiate(const entity& e, std::share
 
                 if (is_output)
                 {
-                    if (current_net->get_src().get_gate() != nullptr)
+                    if (current_net->get_source().get_gate() != nullptr)
                     {
-                        auto src = current_net->get_src().get_gate();
+                        auto src = current_net->get_source().get_gate();
                         log_error("hdl_parser",
                                   "net '{}' already has source gate '{}' (type {}), cannot assign '{}' (type {})",
                                   current_net->get_name(),
@@ -1062,13 +1062,13 @@ std::shared_ptr<module> hdl_parser_vhdl::instantiate(const entity& e, std::share
                                   new_gate->get_name(),
                                   new_gate->get_type()->get_name());
                     }
-                    if (!current_net->add_src(new_gate, pin))
+                    if (!current_net->add_source(new_gate, pin))
                     {
                         return nullptr;
                     }
                 }
 
-                if (is_input && !current_net->add_dst(new_gate, pin))
+                if (is_input && !current_net->add_destination(new_gate, pin))
                 {
                     return nullptr;
                 }

@@ -59,10 +59,10 @@ namespace test_utils
      * @param[in] nl - netlist
      * @param[in] gate_id - id of the gate
      * @param[in] pin_type - pin type
-     * @param[in] is_dst - direction of endpoint
+     * @param[in] is_destination - direction of endpoint
      * @returns the endpoint object
      */
-    endpoint get_endpoint(const std::shared_ptr<netlist>& nl, const int gate_id, const std::string& pin_type, bool is_dst);
+    endpoint get_endpoint(const std::shared_ptr<netlist>& nl, const int gate_id, const std::string& pin_type, bool is_destination);
 
     /**
      * Checks if an endpoint is empty (i.e. (nullptr, ""))
@@ -88,7 +88,7 @@ namespace test_utils
      * @param[in] pin_type - pin type
      * @returns the first endpoint of a certain pin type. (nullptr, "") if no endpoint matches.
      */
-    endpoint get_dst_by_pin_type(const std::vector<endpoint> dsts, const std::string pin_type);
+    endpoint get_destination_by_pin_type(const std::vector<endpoint> dsts, const std::string pin_type);
 
     // NOTE: Using create_test_gate is messy. It should not exist. Will be removed someday...
     /**

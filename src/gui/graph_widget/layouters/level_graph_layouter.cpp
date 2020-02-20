@@ -169,10 +169,10 @@ void level_graph_layouter::recalculate_levels()
         std::shared_ptr<net> n = g_netlist->get_net_by_id(id);
         assert(n);
 
-        if (n->get_src().get_gate())
-            level_zero_gates.insert(n->get_src().get_gate()->get_id());
+        if (n->get_source().get_gate())
+            level_zero_gates.insert(n->get_source().get_gate()->get_id());
 
-        for (const endpoint& e : n->get_dsts())
+        for (const endpoint& e : n->get_destinations())
             if (e.get_gate())
                 level_zero_gates.remove(e.get_gate()->get_id());
     }
@@ -184,7 +184,7 @@ void level_graph_layouter::recalculate_levels()
         assert(n);
 
         if (n->is_unrouted())
-            for (const endpoint& e : n->get_dsts())
+            for (const endpoint& e : n->get_destinations())
                 if (e.get_gate())
                     level_zero_gates.insert(e.get_gate()->get_id());
     }
@@ -227,7 +227,7 @@ void level_graph_layouter::recalculate_levels()
                         if (n->is_unrouted())
                             continue;
 
-                        if (!m_context->node_for_gate(src_node, n->get_src().get_gate()->get_id()))
+                        if (!m_context->node_for_gate(src_node, n->get_source().get_gate()->get_id()))
                             continue;
 
                         if (m_node_levels.contains(src_node))
@@ -250,7 +250,7 @@ void level_graph_layouter::recalculate_levels()
                         if (n->is_unrouted())
                             continue;
 
-                        if (!m_context->node_for_gate(src_node, n->get_src().get_gate()->get_id()))
+                        if (!m_context->node_for_gate(src_node, n->get_source().get_gate()->get_id()))
                             continue;
 
                         if (m_node_levels.contains(src_node))

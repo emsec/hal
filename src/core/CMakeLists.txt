@@ -25,7 +25,7 @@ set(CORE_LIB_HDR
     ${CMAKE_SOURCE_DIR}/include/doxy_groups.h
     )
 
-set(CORE_LIB_SRC
+set(CORE_LIB_source
     hal_file_manager.cpp
     interface_base.cpp
     library_loader.cpp
@@ -37,7 +37,7 @@ set(CORE_LIB_SRC
     utils.cpp
     )
 
-add_library(core SHARED ${CORE_LIB_HDR} ${CORE_LIB_SRC} ${CMAKE_BINARY_DIR}/hal_version.h)
+add_library(core SHARED ${CORE_LIB_HDR} ${CORE_LIB_source} ${CMAKE_BINARY_DIR}/hal_version.h)
 set_target_properties(core PROPERTIES OUTPUT_NAME "hal_core")
 add_library(hal::core ALIAS core)
 target_include_directories(core

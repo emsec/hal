@@ -61,10 +61,10 @@ private:
     std::shared_ptr<net> create_net(u32 id, const std::string& name);
     bool delete_net(const std::shared_ptr<net>& net);
 
-    bool net_add_src(const std::shared_ptr<net>& net, const endpoint& ep);
-    bool net_remove_src(const std::shared_ptr<net>& net, const endpoint& ep);
-    bool net_add_dst(const std::shared_ptr<net>& net, const endpoint& ep);
-    bool net_remove_dst(const std::shared_ptr<net>& net, const endpoint& ep);
+    bool net_add_source(const std::shared_ptr<net>& net, const endpoint& ep);
+    bool net_remove_source(const std::shared_ptr<net>& net, const endpoint& ep);
+    bool net_add_destination(const std::shared_ptr<net>& net, const endpoint& ep);
+    bool net_remove_destination(const std::shared_ptr<net>& net, const endpoint& ep);
 
     // module functions
 

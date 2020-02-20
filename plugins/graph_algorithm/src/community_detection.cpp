@@ -55,10 +55,10 @@ std::map<int, std::set<std::shared_ptr<gate>>> plugin_graph_algorithm::get_commu
     u32 edge_counter = 0;
     for (const auto& net : nl->get_nets())
     {
-        if (net->get_src().get_gate() == nullptr)
+        if (net->get_source().get_gate() == nullptr)
             continue;
 
-        for (const auto& successor : net->get_dsts())
+        for (const auto& successor : net->get_destinations())
         {
             if (successor.get_gate() == nullptr)
                 continue;
@@ -71,12 +71,12 @@ std::map<int, std::set<std::shared_ptr<gate>>> plugin_graph_algorithm::get_commu
     u32 edge_vertice_counter = 0;
     for (const auto& net : nl->get_nets())
     {
-        auto predecessor = net->get_src().get_gate();
+        auto predecessor = net->get_source().get_gate();
         if (predecessor == nullptr)
             continue;
         auto predecessor_id = nl_igraph_id_match[predecessor->get_id()];
 
-        for (const auto& successor : net->get_dsts())
+        for (const auto& successor : net->get_destinations())
         {
             if (successor.get_gate() == nullptr)
                 continue;

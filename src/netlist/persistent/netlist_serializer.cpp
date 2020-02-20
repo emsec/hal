@@ -59,7 +59,7 @@ namespace netlist_serializer
             rapidjson::Value val(rapidjson::kObjectType);
             val.AddMember("gate_id", ep.get_gate()->get_id(), allocator);
             val.AddMember("pin_type", ep.get_pin(), allocator);
-            val.AddMember("is_dst", ep.is_dst_pin(), allocator);
+            val.AddMember("is_destination", ep.is_destination_pin(), allocator);
             return val;
         }
 
@@ -95,14 +95,14 @@ namespace netlist_serializer
             val.AddMember("id", n->get_id(), allocator);
             val.AddMember("name", n->get_name(), allocator);
 
-            if (n->get_src().get_gate() != nullptr)
+            if (n->get_source().get_gate() != nullptr)
             {
-                val.AddMember("src", serialize(n->get_src(), allocator), allocator);
+                val.AddMember("src", serialize(n->get_source(), allocator), allocator);
             }
 
             {
                 rapidjson::Value dsts(rapidjson::kArrayType);
-                auto sorted = n->get_dsts();
+                auto sorted = n->get_destinations();
                 std::sort(sorted.begin(), sorted.end(), [](const endpoint& lhs, const endpoint& rhs) { return lhs.get_gate()->get_id() < rhs.get_gate()->get_id(); });
                 for (const auto& dst : sorted)
                 {
@@ -246,7 +246,7 @@ namespace netlist_serializer
 
         endpoint deserialize_endpoint(std::shared_ptr<netlist> nl, const rapidjson::Value& val)
         {
-            return endpoint(nl->get_gate_by_id(val["gate_id"].GetUint()), val["pin_type"].GetString(), val["is_dst"].GetBool());
+            return endpoint(nl->get_gate_by_id(val["gate_id"].GetUint()), val["pin_type"].GetString(), val["is_destination"].GetBool());
         }
 
         void deserialize_data(std::shared_ptr<data_container> c, const rapidjson::Value& val)
@@ -301,13 +301,13 @@ namespace netlist_serializer
 
             if (val.HasMember("src"))
             {
-                n->add_src(deserialize_endpoint(nl, val["src"]));
+                n->add_source(deserialize_endpoint(nl, val["src"]));
             }
             if (val.HasMember("dsts"))
             {
                 for (const auto& dst_node : val["dsts"].GetArray())
                 {
-                    n->add_dst(deserialize_endpoint(nl, dst_node));
+                    n->add_destination(deserialize_endpoint(nl, dst_node));
                 }
             }
 

@@ -229,17 +229,17 @@ TEST_F(hdl_writer_vhdl_test, check_generic_data_storage) {
             unsigned int idx = 0;
             for (auto g : nl->get_gates()){
                 std::shared_ptr<net> out_net = nl->create_net("net_" + std::to_string(idx));
-                out_net->add_src(g,"O");
+                out_net->add_source(g,"O");
                 idx++;
             }
 
-            global_in->add_dst(test_gate_0, "I");
-            global_in->add_dst(test_gate_1, "I");
-            global_in->add_dst(test_gate_2, "I");
-            global_in->add_dst(test_gate_3, "I");
-            global_in->add_dst(test_gate_4, "I");
-            global_in->add_dst(test_gate_5, "I");
-            global_in->add_dst(test_gate_6, "I");
+            global_in->add_destination(test_gate_0, "I");
+            global_in->add_destination(test_gate_1, "I");
+            global_in->add_destination(test_gate_2, "I");
+            global_in->add_destination(test_gate_3, "I");
+            global_in->add_destination(test_gate_4, "I");
+            global_in->add_destination(test_gate_5, "I");
+            global_in->add_destination(test_gate_6, "I");
 
             // Store some data in the test_gate
             test_gate_0->set_data("generic", "0_key_time", "time", "123s");
@@ -405,11 +405,11 @@ TEST_F(hdl_writer_vhdl_test, check_vcc_and_gnd_gates) {
             std::shared_ptr<net> one_net = nl->create_net(MIN_GATE_ID+1,"one_net");
 
 
-            zero_net->add_src(gnd_gate, "O");
-            zero_net->add_dst(test_gate, "I0");
+            zero_net->add_source(gnd_gate, "O");
+            zero_net->add_destination(test_gate, "I0");
 
-            one_net->add_src(vcc_gate, "O");
-            one_net->add_dst(test_gate, "I1");
+            one_net->add_source(vcc_gate, "O");
+            one_net->add_destination(test_gate, "I1");
 
 
             // Write and parse the netlist now
@@ -449,11 +449,11 @@ TEST_F(hdl_writer_vhdl_test, check_vcc_and_gnd_gates) {
             ASSERT_NE(zero_net, nullptr);
             ASSERT_NE(one_net, nullptr);
 
-            EXPECT_EQ(p_zero_net->get_src(), get_endpoint(p_gnd_gate, "O"));
-            EXPECT_EQ(p_one_net->get_src(), get_endpoint(p_vcc_gate, "O"));
+            EXPECT_EQ(p_zero_net->get_source(), get_endpoint(p_gnd_gate, "O"));
+            EXPECT_EQ(p_one_net->get_source(), get_endpoint(p_vcc_gate, "O"));
 
-            EXPECT_TRUE(p_zero_net->is_a_dst(get_endpoint(p_test_gate, "I0")));
-            EXPECT_TRUE(p_one_net->is_a_dst(get_endpoint(p_test_gate, "I1")));
+            EXPECT_TRUE(p_zero_net->is_a_destination(get_endpoint(p_test_gate, "I0")));
+            EXPECT_TRUE(p_one_net->is_a_destination(get_endpoint(p_test_gate, "I1")));
 
 
         }
@@ -472,11 +472,11 @@ TEST_F(hdl_writer_vhdl_test, check_vcc_and_gnd_gates) {
             std::shared_ptr<net> zero_net = nl->create_net(MIN_NET_ID+0,"'0'");
             std::shared_ptr<net> one_net = nl->create_net(MIN_NET_ID+1,"'1'");
 
-            zero_net->add_src(gnd_gate, "O");
-            zero_net->add_dst(test_gate, "I0");
+            zero_net->add_source(gnd_gate, "O");
+            zero_net->add_destination(test_gate, "I0");
 
-            one_net->add_src(vcc_gate, "O");
-            one_net->add_dst(test_gate, "I1");
+            one_net->add_source(vcc_gate, "O");
+            one_net->add_destination(test_gate, "I1");
 
 
             // Write and parse the netlist now
@@ -590,7 +590,7 @@ TEST_F(hdl_writer_vhdl_test, check_special_net_names) {
             unsigned int idx = 0;
             for (auto g : nl->get_gates()){
                 std::shared_ptr<net> out_net = nl->create_net("net_" + std::to_string(idx));
-                out_net->add_src(g,"O");
+                out_net->add_source(g,"O");
                 idx++;
             }
 
@@ -648,7 +648,7 @@ TEST_F(hdl_writer_vhdl_test, check_gate_net_name_collision) {
             std::shared_ptr<net> test_net = nl->create_net( MIN_NET_ID+0, "gate_net_name");
             std::shared_ptr<gate> test_gate = nl->create_gate( MIN_GATE_ID+0, get_gate_type_by_name("INV"), "gate_net_name");
 
-            test_net->add_dst(test_gate, "I");
+            test_net->add_destination(test_gate, "I");
 
             // Write and parse the netlist now
             test_def::capture_stdout();
@@ -700,8 +700,8 @@ TEST_F(hdl_writer_vhdl_test, check_digit_net_name) {
            std::shared_ptr<net> test_net_0 = nl->create_net( MIN_NET_ID+0, "0");
            std::shared_ptr<net> test_net_1 = nl->create_net( MIN_NET_ID+1, "1");
 
-           test_net_0->add_dst(test_gate, "I");
-           test_net_1->add_src(test_gate, "O");
+           test_net_0->add_destination(test_gate, "I");
+           test_net_1->add_source(test_gate, "O");
 
            // Write and parse the netlist now
            test_def::capture_stdout();

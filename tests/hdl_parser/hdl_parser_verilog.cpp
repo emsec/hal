@@ -114,24 +114,24 @@ TEST_F(hdl_parser_verilog_test, check_main_example)
 
             ASSERT_NE(net_0, nullptr);
             EXPECT_EQ(net_0->get_name(), "net_0");
-            EXPECT_EQ(net_0->get_src(), endpoint(gate_0, "O", false));
-            EXPECT_TRUE(vectors_have_same_content(net_0->get_dsts(), std::vector<endpoint>({endpoint(gate_2, "I0", true)})));
+            EXPECT_EQ(net_0->get_source(), endpoint(gate_0, "O", false));
+            EXPECT_TRUE(vectors_have_same_content(net_0->get_destinations(), std::vector<endpoint>({endpoint(gate_2, "I0", true)})));
 
             ASSERT_NE(net_1, nullptr);
             EXPECT_EQ(net_1->get_name(), "net_1");
-            EXPECT_EQ(net_1->get_src(), endpoint(gate_1, "O", false));
-            EXPECT_TRUE(vectors_have_same_content(net_1->get_dsts(), std::vector<endpoint>({endpoint(gate_2, "I1", true)})));
+            EXPECT_EQ(net_1->get_source(), endpoint(gate_1, "O", false));
+            EXPECT_TRUE(vectors_have_same_content(net_1->get_destinations(), std::vector<endpoint>({endpoint(gate_2, "I1", true)})));
 
             ASSERT_NE(net_global_in, nullptr);
             EXPECT_EQ(net_global_in->get_name(), "global_in");
-            EXPECT_EQ(net_global_in->get_src(), endpoint(nullptr, "", false));
-            EXPECT_TRUE(vectors_have_same_content(net_global_in->get_dsts(), std::vector<endpoint>({endpoint(gate_0, "I", true), endpoint(gate_1, "I0", true)})));
+            EXPECT_EQ(net_global_in->get_source(), endpoint(nullptr, "", false));
+            EXPECT_TRUE(vectors_have_same_content(net_global_in->get_destinations(), std::vector<endpoint>({endpoint(gate_0, "I", true), endpoint(gate_1, "I0", true)})));
             EXPECT_TRUE(nl->is_global_input_net(net_global_in));
 
             ASSERT_NE(net_global_out, nullptr);
             EXPECT_EQ(net_global_out->get_name(), "global_out");
-            EXPECT_EQ(net_global_out->get_src(), endpoint(gate_2, "O", false));
-            EXPECT_TRUE(net_global_out->get_dsts().empty());
+            EXPECT_EQ(net_global_out->get_source(), endpoint(gate_2, "O", false));
+            EXPECT_TRUE(net_global_out->get_destinations().empty());
             EXPECT_TRUE(nl->is_global_output_net(net_global_out));
 
             EXPECT_EQ(nl->get_global_input_nets().size(), 2);
@@ -209,24 +209,24 @@ TEST_F(hdl_parser_verilog_test, check_whitespace_chaos)
 
             ASSERT_NE(net_0, nullptr);
             EXPECT_EQ(net_0->get_name(), "net_0");
-            EXPECT_EQ(net_0->get_src(), endpoint(gate_0, "O", false));
-            EXPECT_TRUE(vectors_have_same_content(net_0->get_dsts(), std::vector<endpoint>({endpoint(gate_2, "I0", true)})));
+            EXPECT_EQ(net_0->get_source(), endpoint(gate_0, "O", false));
+            EXPECT_TRUE(vectors_have_same_content(net_0->get_destinations(), std::vector<endpoint>({endpoint(gate_2, "I0", true)})));
 
             ASSERT_NE(net_1, nullptr);
             EXPECT_EQ(net_1->get_name(), "net_1");
-            EXPECT_EQ(net_1->get_src(), endpoint(gate_1, "O", false));
-            EXPECT_TRUE(vectors_have_same_content(net_1->get_dsts(), std::vector<endpoint>({endpoint(gate_2, "I1", true)})));
+            EXPECT_EQ(net_1->get_source(), endpoint(gate_1, "O", false));
+            EXPECT_TRUE(vectors_have_same_content(net_1->get_destinations(), std::vector<endpoint>({endpoint(gate_2, "I1", true)})));
 
             ASSERT_NE(net_global_in, nullptr);
             EXPECT_EQ(net_global_in->get_name(), "global_in");
-            EXPECT_EQ(net_global_in->get_src(), endpoint(nullptr, "", false));
-            EXPECT_TRUE(vectors_have_same_content(net_global_in->get_dsts(), std::vector<endpoint>({endpoint(gate_0, "I", true), endpoint(gate_1, "I0", true)})));
+            EXPECT_EQ(net_global_in->get_source(), endpoint(nullptr, "", false));
+            EXPECT_TRUE(vectors_have_same_content(net_global_in->get_destinations(), std::vector<endpoint>({endpoint(gate_0, "I", true), endpoint(gate_1, "I0", true)})));
             EXPECT_TRUE(nl->is_global_input_net(net_global_in));
 
             ASSERT_NE(net_global_out, nullptr);
             EXPECT_EQ(net_global_out->get_name(), "global_out");
-            EXPECT_EQ(net_global_out->get_src(), endpoint(gate_2, "O", false));
-            EXPECT_TRUE(net_global_out->get_dsts().empty());
+            EXPECT_EQ(net_global_out->get_source(), endpoint(gate_2, "O", false));
+            EXPECT_TRUE(net_global_out->get_destinations().empty());
             EXPECT_TRUE(nl->is_global_output_net(net_global_out));
 
             EXPECT_EQ(nl->get_global_input_nets().size(), 2);
@@ -439,9 +439,9 @@ TEST_F(hdl_parser_verilog_test, check_vector_bounds){
                 ASSERT_EQ(nl->get_gates(gate_name_filter(g_name)).size(), 1);
             }
 
-            EXPECT_EQ(net_vec_1->get_src().get_gate(), *nl->get_gates(gate_name_filter("gate_1")).begin());
-            ASSERT_EQ(net_vec_1->get_dsts().size(), 1);
-            EXPECT_EQ((*net_vec_1->get_dsts().begin()).get_gate(), *nl->get_gates(gate_name_filter("gate_0")).begin());
+            EXPECT_EQ(net_vec_1->get_source().get_gate(), *nl->get_gates(gate_name_filter("gate_1")).begin());
+            ASSERT_EQ(net_vec_1->get_destinations().size(), 1);
+            EXPECT_EQ((*net_vec_1->get_destinations().begin()).get_gate(), *nl->get_gates(gate_name_filter("gate_0")).begin());
         }
         {
             // Declare multiple wire vectors in one line
@@ -571,11 +571,11 @@ TEST_F(hdl_parser_verilog_test, check_assign)
             ASSERT_EQ(nl->get_nets(net_name_filter("net_0")).size(), 1);
             std::shared_ptr<net> net_0 = *nl->get_nets(net_name_filter("net_0")).begin();
 
-            EXPECT_EQ(net_0->get_src().get_gate(), gate_0);
-            ASSERT_EQ(net_0->get_dsts(endpoint_type_filter("INV")).size(), 2);
-            std::vector<std::shared_ptr<gate>> net_exp_dsts = {gate_1, gate_2};
-            std::vector<std::shared_ptr<gate>> net_0_dsts = {net_0->get_dsts(endpoint_type_filter("INV"))[0].get_gate(), net_0->get_dsts(endpoint_type_filter("INV"))[1].get_gate()};
-            EXPECT_TRUE(vectors_have_same_content(net_0_dsts, net_exp_dsts));
+            EXPECT_EQ(net_0->get_source().get_gate(), gate_0);
+            ASSERT_EQ(net_0->get_destinations(endpoint_type_filter("INV")).size(), 2);
+            std::vector<std::shared_ptr<gate>> net_exp_destinations = {gate_1, gate_2};
+            std::vector<std::shared_ptr<gate>> net_0_destinations = {net_0->get_destinations(endpoint_type_filter("INV"))[0].get_gate(), net_0->get_destinations(endpoint_type_filter("INV"))[1].get_gate()};
+            EXPECT_TRUE(vectors_have_same_content(net_0_destinations, net_exp_destinations));
         }
         {
             // Testing assignments with logic vectors (assign wires 0 and 1 of each dimension)
@@ -1136,11 +1136,11 @@ TEST_F(hdl_parser_verilog_test, check_zero_and_one_nets)
             EXPECT_EQ(net_gnd->get_name(), "\'0\'");
             EXPECT_EQ(net_vcc->get_name(), "\'1\'");
             // Test that the nets '0' and '1' are connected to a created global gnd/vcc gate
-            ASSERT_NE(net_gnd->get_src().get_gate(), nullptr);
-            ASSERT_NE(net_vcc->get_src().get_gate(), nullptr);
+            ASSERT_NE(net_gnd->get_source().get_gate(), nullptr);
+            ASSERT_NE(net_vcc->get_source().get_gate(), nullptr);
             /* FIXME
-            EXPECT_TRUE(net_gnd->get_src_by_type("GND").get_gate()->is_global_gnd_gate());
-            EXPECT_TRUE(net_vcc->get_src_by_type("VCC").get_gate()->is_global_vcc_gate());
+            EXPECT_TRUE(net_gnd->get_source_by_type("GND").get_gate()->is_global_gnd_gate());
+            EXPECT_TRUE(net_vcc->get_source_by_type("VCC").get_gate()->is_global_vcc_gate());
              */
         }
     TEST_END

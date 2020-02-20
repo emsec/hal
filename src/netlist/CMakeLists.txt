@@ -2,17 +2,17 @@
 # netlist + hdl parser + hdl file writer library
 #
 file(GLOB_RECURSE NETLIST_LIB_HDR CONFIGURE_DEPENDS ${CMAKE_SOURCE_DIR}/include/netlist/*.h)
-file(GLOB_RECURSE NETLIST_LIB_SRC CONFIGURE_DEPENDS ${CMAKE_SOURCE_DIR}/src/netlist/*.cpp)
+file(GLOB_RECURSE NETLIST_LIB_source CONFIGURE_DEPENDS ${CMAKE_SOURCE_DIR}/src/netlist/*.cpp)
 
 add_library(netlist
             SHARED
                 ${NETLIST_LIB_HDR}
                 ${HDL_PARSER_LIB_HDR}
                 ${HDL_WRITER_LIB_HDR}
-                ${NETLIST_LIB_SRC}
-                ${HDL_PARSER_LIB_SRC}
-                ${HDL_WRITER_LIB_SRC}
-                ${GATE_TYPE_SYSTEM_SRC}
+                ${NETLIST_LIB_source}
+                ${HDL_PARSER_LIB_source}
+                ${HDL_WRITER_LIB_source}
+                ${GATE_TYPE_SYSTEM_source}
                 ${GATE_TYPE_SYSTEM_INC}
             )
 set_target_properties(netlist PROPERTIES OUTPUT_NAME "hal_netlist")

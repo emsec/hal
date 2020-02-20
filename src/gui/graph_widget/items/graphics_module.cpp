@@ -13,7 +13,7 @@ graphics_module::graphics_module(const std::shared_ptr<const module> m) : graphi
     {
         QVector<std::string> pin_types;
 
-        for (const endpoint& e : n->get_dsts())
+        for (const endpoint& e : n->get_destinations())
         {
             if (e.get_gate())
                 if (m->contains_gate(e.get_gate(), true) && !pin_types.contains(e.get_pin()))
@@ -27,7 +27,7 @@ graphics_module::graphics_module(const std::shared_ptr<const module> m) : graphi
 
     for (const std::shared_ptr<net>& n : m->get_output_nets())
     {
-        endpoint e = n->get_src();
+        endpoint e = n->get_source();
 
         if (e.get_gate())
             m_output_pins.append(module_pin{n->get_id(), QString::fromStdString(e.get_pin())});

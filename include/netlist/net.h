@@ -90,7 +90,7 @@ public:
      * @param[in] pin - The input pin of the gate.
      * @returns True on success.
      **/
-    bool add_src(const std::shared_ptr<gate>& gate, const std::string& pin);
+    bool add_source(const std::shared_ptr<gate>& gate, const std::string& pin);
 
     /**
      * Add a source to this net by endpoint.
@@ -99,7 +99,7 @@ public:
      * @param[in] ep - The endpoint.
      * @returns True on success.
      **/
-    bool add_src(const endpoint& ep);
+    bool add_source(const endpoint& ep);
 
     /**
      * Remove a source from this net.
@@ -108,7 +108,7 @@ public:
      * @param[in] pin - The input pin of the gate.
      * @returns True on success.
      **/
-    bool remove_src(const std::shared_ptr<gate>& gate, const std::string& pin);
+    bool remove_source(const std::shared_ptr<gate>& gate, const std::string& pin);
 
     /**
      * Remove a source from this net by endpoint.
@@ -117,7 +117,7 @@ public:
      * @param[in] ep - The endoint.
      * @returns True on success.
      **/
-    bool remove_src(const endpoint& ep);
+    bool remove_source(const endpoint& ep);
 
     /**
      * Check whether a gate is a source of this net.
@@ -126,7 +126,7 @@ public:
      * @param[in] pin - The source output pin.
      * @returns True if the gate's pin is a source of this net.
      **/
-    bool is_a_src(const std::shared_ptr<gate>& gate, const std::string& pin) const;
+    bool is_a_source(const std::shared_ptr<gate>& gate, const std::string& pin) const;
 
     /**
      * Check whether an endpoint is a source of this net.
@@ -135,15 +135,15 @@ public:
      * @param[in] ep - The endpoint.
      * @returns True if the endpoint is a source of this net.
      **/
-    bool is_a_src(const endpoint& ep) const;
+    bool is_a_source(const endpoint& ep) const;
 
     /**
      * Get the number of sources.<br>
-     * Faster than get_srcs().size().
+     * Faster than get_sources().size().
      *
      * @returns The number of sources of this net.
      */
-    u32 get_num_of_srcs() const;
+    u32 get_num_of_sources() const;
 
     /**
      * Get the vector of sources of the net.
@@ -151,7 +151,7 @@ public:
      * @param[in] filter - a filter for endpoints.
      * @returns A vector of source endpoints.
      */
-    std::vector<endpoint> get_srcs(const std::function<bool(const endpoint& ep)>& filter = nullptr) const;
+    std::vector<endpoint> get_sources(const std::function<bool(const endpoint& ep)>& filter = nullptr) const;
 
     /**
      * Get the (first) src of the net.
@@ -160,7 +160,7 @@ public:
      *
      * @returns The (first) source endpoint.
      */
-    endpoint get_src() const;
+    endpoint get_source() const;
 
     /**
      *      dst specific functions
@@ -173,7 +173,7 @@ public:
      * @param[in] pin - The input pin of the gate.
      * @returns True on success.
      **/
-    bool add_dst(const std::shared_ptr<gate>& gate, const std::string& pin);
+    bool add_destination(const std::shared_ptr<gate>& gate, const std::string& pin);
 
     /**
      * Add a destination to this net by endpoint.
@@ -181,7 +181,7 @@ public:
      * @param[in] ep - The endpoint.
      * @returns True on success.
      **/
-    bool add_dst(const endpoint& ep);
+    bool add_destination(const endpoint& ep);
 
     /**
      * Remove a destination from this net.
@@ -191,7 +191,7 @@ public:
      * @param[in] pin - The input pin of the gate.
      * @returns True on success.
      **/
-    bool remove_dst(const std::shared_ptr<gate>& gate, const std::string& pin);
+    bool remove_destination(const std::shared_ptr<gate>& gate, const std::string& pin);
 
     /**
      * Remove a destination from this net by endpoint.
@@ -200,7 +200,7 @@ public:
      * @param[in] ep - The endoint.
      * @returns True on success.
      **/
-    bool remove_dst(const endpoint& ep);
+    bool remove_destination(const endpoint& ep);
 
     /**
      * Check whether a gate is a destination of this net.
@@ -209,7 +209,7 @@ public:
      * @param[in] pin - The destination output pin.
      * @returns True if the gate's pin is a destination of this net.
      **/
-    bool is_a_dst(const std::shared_ptr<gate>& gate, const std::string& pin) const;
+    bool is_a_destination(const std::shared_ptr<gate>& gate, const std::string& pin) const;
 
     /**
      * Check whether an endpoint is a destination of this net.
@@ -218,15 +218,15 @@ public:
      * @param[in] ep - The endpoint.
      * @returns True if the endpoint is a destination of this net.
      **/
-    bool is_a_dst(const endpoint& ep) const;
+    bool is_a_destination(const endpoint& ep) const;
 
     /**
      * Get the number of destinations.<br>
-     * Faster than get_dsts().size().
+     * Faster than get_destinations().size().
      *
      * @returns The number of destinations of this net.
      */
-    u32 get_num_of_dsts() const;
+    u32 get_num_of_destinations() const;
 
     /**
      * Get the vector of destinations of the net.
@@ -234,7 +234,7 @@ public:
      * @param[in] filter - a filter for endpoints.
      * @returns A vector of destination endpoints.
      */
-    std::vector<endpoint> get_dsts(const std::function<bool(const endpoint& ep)>& filter = nullptr) const;
+    std::vector<endpoint> get_destinations(const std::function<bool(const endpoint& ep)>& filter = nullptr) const;
 
     /**
      * Check whether the net is routed, i.e. it has no source or the no destinations.
@@ -308,6 +308,6 @@ private:
     std::string m_name;
 
     /** stores the dst gate and pin id of the dst gate*/
-    std::vector<endpoint> m_dsts;
-    std::vector<endpoint> m_srcs;
+    std::vector<endpoint> m_destinations;
+    std::vector<endpoint> m_sources;
 };

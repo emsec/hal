@@ -106,7 +106,7 @@ void selection_relay::navigate_up()
 
             if (m_subfocus == subfocus::right)
             {
-                size = n->get_dsts().size();
+                size = n->get_destinations().size();
 
                 if (!size)     // CHECK NECESSARY ???
                     return;    // INVALID STATE, FIX OR IGNORE ???
@@ -178,7 +178,7 @@ void selection_relay::navigate_down()
 
             if (m_subfocus == subfocus::right)
             {
-                size = n->get_dsts().size();
+                size = n->get_destinations().size();
 
                 if (!size)     // CHECK NECESSARY ???
                     return;    // INVALID STATE, FIX OR IGNORE ???
@@ -240,11 +240,11 @@ void selection_relay::navigate_left()
                 return;
 
             if (m_subfocus == subfocus::left)
-                follow_net_to_src(n);
+                follow_net_to_source(n);
             else
             {
-                if (s_navigation_skips_enabled && n->get_dsts().size() == 1)
-                    follow_net_to_src(n);
+                if (s_navigation_skips_enabled && n->get_destinations().size() == 1)
+                    follow_net_to_source(n);
                 else
                     subfocus_left();
             }
@@ -294,12 +294,12 @@ void selection_relay::navigate_right()
 
             if (m_subfocus == subfocus::right)
             {
-                follow_net_to_dst(n, m_subfocus_index);
+                follow_net_to_destination(n, m_subfocus_index);
                 return;
             }
 
-            if (s_navigation_skips_enabled && n->get_dsts().size() == 1)
-                follow_net_to_dst(n, 0);
+            if (s_navigation_skips_enabled && n->get_destinations().size() == 1)
+                follow_net_to_destination(n, 0);
             else
                 subfocus_right();
 
@@ -359,7 +359,7 @@ void selection_relay::follow_gate_input_pin(std::shared_ptr<gate> g, u32 input_p
     m_focus_type = item_type::net;
     m_focus_id   = n->get_id();
 
-    if (n->get_dsts().size() == 1)
+    if (n->get_destinations().size() == 1)
     {
         if (s_navigation_skips_enabled)
             m_subfocus = subfocus::none;
@@ -371,7 +371,7 @@ void selection_relay::follow_gate_input_pin(std::shared_ptr<gate> g, u32 input_p
     else
     {
         int i = 0;
-        for (endpoint& e : n->get_dsts())
+        for (endpoint& e : n->get_destinations())
         {
             if (e.get_gate() == g && e.get_pin() == pin_type)
                 break;
@@ -411,9 +411,9 @@ void selection_relay::follow_gate_output_pin(std::shared_ptr<gate> g, u32 output
     Q_EMIT selection_changed(nullptr);
 }
 
-void selection_relay::follow_net_to_src(std::shared_ptr<net> n)
+void selection_relay::follow_net_to_source(std::shared_ptr<net> n)
 {
-    endpoint e              = n->get_src();
+    endpoint e              = n->get_source();
     std::shared_ptr<gate> g = e.get_gate();
 
     if (!g)
@@ -449,9 +449,9 @@ void selection_relay::follow_net_to_src(std::shared_ptr<net> n)
     Q_EMIT selection_changed(nullptr);
 }
 
-void selection_relay::follow_net_to_dst(std::shared_ptr<net> n, u32 dst_index)
+void selection_relay::follow_net_to_destination(std::shared_ptr<net> n, u32 dst_index)
 {
-    endpoint e              = n->get_dsts().at(dst_index);
+    endpoint e              = n->get_destinations().at(dst_index);
     std::shared_ptr<gate> g = e.get_gate();
 
     if (!g)

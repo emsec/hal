@@ -67,7 +67,7 @@ TEST_F(endpoint_test, check_copy_operator)
     endpoint other_ep = ep;
     EXPECT_EQ(other_ep.get_gate(), test_gate);
     EXPECT_EQ(other_ep.get_pin(), "O");
-    EXPECT_TRUE(other_ep.is_dst_pin());
+    EXPECT_TRUE(other_ep.is_destination_pin());
     TEST_END
 }
 

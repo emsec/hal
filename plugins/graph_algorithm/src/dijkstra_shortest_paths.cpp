@@ -62,15 +62,15 @@ std::map<std::shared_ptr<gate>, std::tuple<std::vector<std::shared_ptr<gate>>, i
 
     for (const auto& it : ordered_nets)
     {
-        if (it.second->get_src().get_gate() == nullptr)
+        if (it.second->get_source().get_gate() == nullptr)
             continue;
 
         std::set<u32> dst_ids;
-        for (auto dst : it.second->get_dsts())
+        for (auto dst : it.second->get_destinations())
             dst_ids.insert(dst.get_gate()->get_id());
 
         for (const auto& dst_id : dst_ids)
-            boost::add_edge(gate_id_to_vertex[it.second->get_src().get_gate()->get_id()], gate_id_to_vertex[dst_id], 1, boost_graph);
+            boost::add_edge(gate_id_to_vertex[it.second->get_source().get_gate()->get_id()], gate_id_to_vertex[dst_id], 1, boost_graph);
     }
 
     // initialize parameters for dijkstra_shortest_paths()

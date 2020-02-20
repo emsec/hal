@@ -360,7 +360,7 @@ std::vector<endpoint> gate::get_predecessors(const std::function<bool(const std:
     {
         auto& pin       = it.first;
         auto& net       = it.second;
-        auto predecessors = net->get_srcs();
+        auto predecessors = net->get_sources();
         if (!filter)
         {
             result.insert(result.end(), predecessors.begin(), predecessors.end());
@@ -409,7 +409,7 @@ std::vector<endpoint> gate::get_successors(const std::function<bool(const std::s
     {
         auto& pin       = it.first;
         auto& net       = it.second;
-        auto successors = net->get_dsts();
+        auto successors = net->get_destinations();
         if (!filter)
         {
             result.insert(result.end(), successors.begin(), successors.end());

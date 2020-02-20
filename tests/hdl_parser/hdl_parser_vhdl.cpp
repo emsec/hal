@@ -130,25 +130,25 @@ TEST_F(hdl_parser_vhdl_test, check_main_example)
 
         ASSERT_NE(net_0, nullptr);
         EXPECT_EQ(net_0->get_name(), "net_0");
-        EXPECT_EQ(net_0->get_src(), endpoint(gate_0, "O", false));
-        std::vector<endpoint> exp_net_0_dsts = {endpoint(gate_2, "I0", true)};
-        EXPECT_TRUE(vectors_have_same_content(net_0->get_dsts(), std::vector<endpoint>({endpoint(gate_2, "I0", true)})));
+        EXPECT_EQ(net_0->get_source(), endpoint(gate_0, "O", false));
+        std::vector<endpoint> exp_net_0_destinations = {endpoint(gate_2, "I0", true)};
+        EXPECT_TRUE(vectors_have_same_content(net_0->get_destinations(), std::vector<endpoint>({endpoint(gate_2, "I0", true)})));
 
         ASSERT_NE(vec_net_2, nullptr);
         EXPECT_EQ(vec_net_2->get_name(), "vec_net(2)");
-        EXPECT_EQ(vec_net_2->get_src(), endpoint(gate_1, "O", false));
-        EXPECT_TRUE(vectors_have_same_content(vec_net_2->get_dsts(), std::vector<endpoint>({endpoint(gate_2, "I1", true)})));
+        EXPECT_EQ(vec_net_2->get_source(), endpoint(gate_1, "O", false));
+        EXPECT_TRUE(vectors_have_same_content(vec_net_2->get_destinations(), std::vector<endpoint>({endpoint(gate_2, "I1", true)})));
 
         ASSERT_NE(net_global_in, nullptr);
         EXPECT_EQ(net_global_in->get_name(), "net_global_in");
-        EXPECT_EQ(net_global_in->get_src(), endpoint(nullptr, "", false));
-        EXPECT_TRUE(vectors_have_same_content(net_global_in->get_dsts(), std::vector<endpoint>({endpoint(gate_0, "I", true), endpoint(gate_1, "I0", true), endpoint(gate_1, "I1", true)})));
+        EXPECT_EQ(net_global_in->get_source(), endpoint(nullptr, "", false));
+        EXPECT_TRUE(vectors_have_same_content(net_global_in->get_destinations(), std::vector<endpoint>({endpoint(gate_0, "I", true), endpoint(gate_1, "I0", true), endpoint(gate_1, "I1", true)})));
         EXPECT_TRUE(nl->is_global_input_net(net_global_in));
 
         ASSERT_NE(net_global_out, nullptr);
         EXPECT_EQ(net_global_out->get_name(), "net_global_out");
-        EXPECT_EQ(net_global_out->get_src(), endpoint(gate_2, "O", false));
-        EXPECT_TRUE(net_global_out->get_dsts().empty());
+        EXPECT_EQ(net_global_out->get_source(), endpoint(gate_2, "O", false));
+        EXPECT_TRUE(net_global_out->get_destinations().empty());
         EXPECT_TRUE(nl->is_global_output_net(net_global_out));
 
         EXPECT_EQ(nl->get_global_input_nets().size(), 1);
@@ -247,24 +247,24 @@ TEST_F(hdl_parser_vhdl_test, check_multi_driven_nets)
 
         ASSERT_NE(net_0, nullptr);
         EXPECT_EQ(net_0->get_name(), "net_0");
-        EXPECT_TRUE(vectors_have_same_content(net_0->get_srcs(), {endpoint(gate_0, "O", false), endpoint(gate_1, "O", false)}));
-        EXPECT_TRUE(vectors_have_same_content(net_0->get_dsts(), std::vector<endpoint>({endpoint(gate_2, "I0", true)})));
+        EXPECT_TRUE(vectors_have_same_content(net_0->get_sources(), {endpoint(gate_0, "O", false), endpoint(gate_1, "O", false)}));
+        EXPECT_TRUE(vectors_have_same_content(net_0->get_destinations(), std::vector<endpoint>({endpoint(gate_2, "I0", true)})));
 
         ASSERT_NE(vec_net_2, nullptr);
         EXPECT_EQ(vec_net_2->get_name(), "vec_net(2)");
-        EXPECT_TRUE(vec_net_2->get_srcs().empty());
-        EXPECT_TRUE(vectors_have_same_content(vec_net_2->get_dsts(), std::vector<endpoint>({endpoint(gate_2, "I1", true)})));
+        EXPECT_TRUE(vec_net_2->get_sources().empty());
+        EXPECT_TRUE(vectors_have_same_content(vec_net_2->get_destinations(), std::vector<endpoint>({endpoint(gate_2, "I1", true)})));
 
         ASSERT_NE(net_global_in, nullptr);
         EXPECT_EQ(net_global_in->get_name(), "net_global_in");
-        EXPECT_EQ(net_global_in->get_src(), endpoint(nullptr, "", false));
-        EXPECT_TRUE(vectors_have_same_content(net_global_in->get_dsts(), std::vector<endpoint>({endpoint(gate_0, "I", true), endpoint(gate_1, "I0", true), endpoint(gate_1, "I1", true)})));
+        EXPECT_EQ(net_global_in->get_source(), endpoint(nullptr, "", false));
+        EXPECT_TRUE(vectors_have_same_content(net_global_in->get_destinations(), std::vector<endpoint>({endpoint(gate_0, "I", true), endpoint(gate_1, "I0", true), endpoint(gate_1, "I1", true)})));
         EXPECT_TRUE(nl->is_global_input_net(net_global_in));
 
         ASSERT_NE(net_global_out, nullptr);
         EXPECT_EQ(net_global_out->get_name(), "net_global_out");
-        EXPECT_EQ(net_global_out->get_src(), endpoint(gate_2, "O", false));
-        EXPECT_TRUE(net_global_out->get_dsts().empty());
+        EXPECT_EQ(net_global_out->get_source(), endpoint(gate_2, "O", false));
+        EXPECT_TRUE(net_global_out->get_destinations().empty());
         EXPECT_TRUE(nl->is_global_output_net(net_global_out));
 
         EXPECT_EQ(nl->get_global_input_nets().size(), 1);

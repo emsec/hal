@@ -98,9 +98,9 @@ module_details_widget::module_details_widget(QWidget* parent)
 
     connect(&g_netlist_relay, &netlist_relay::net_removed, this, &module_details_widget::handle_net_removed);
     connect(&g_netlist_relay, &netlist_relay::net_name_changed, this, &module_details_widget::handle_net_name_changed);
-    connect(&g_netlist_relay, &netlist_relay::net_src_changed, this, &module_details_widget::handle_net_src_changed);
-    connect(&g_netlist_relay, &netlist_relay::net_dst_added, this, &module_details_widget::handle_net_dst_added);
-    connect(&g_netlist_relay, &netlist_relay::net_dst_removed, this, &module_details_widget::handle_net_dst_removed);
+    connect(&g_netlist_relay, &netlist_relay::net_source_changed, this, &module_details_widget::handle_net_source_changed);
+    connect(&g_netlist_relay, &netlist_relay::net_destination_added, this, &module_details_widget::handle_net_destination_added);
+    connect(&g_netlist_relay, &netlist_relay::net_destination_removed, this, &module_details_widget::handle_net_destination_removed);
 
     //g_selection_relay.register_sender(this, "module_details_widget");
     connect(m_treeview, &QTreeView::doubleClicked, this, &module_details_widget::handle_tree_double_clicked);
@@ -209,20 +209,20 @@ void module_details_widget::handle_net_name_changed(const std::shared_ptr<net> n
         update(m_current_id);
 }
 
-void module_details_widget::handle_net_src_changed(const std::shared_ptr<net> n)
+void module_details_widget::handle_net_source_changed(const std::shared_ptr<net> n)
 {
     Q_UNUSED(n);
     update(m_current_id);
 }
 
-void module_details_widget::handle_net_dst_added(const std::shared_ptr<net> n, const u32 dst_gate_id)
+void module_details_widget::handle_net_destination_added(const std::shared_ptr<net> n, const u32 dst_gate_id)
 {
     Q_UNUSED(dst_gate_id);
     //would have written the same logic in this funtion, so just use the function below
     handle_net_name_changed(n);
 }
 
-void module_details_widget::handle_net_dst_removed(const std::shared_ptr<net> n, const u32 dst_gate_id)
+void module_details_widget::handle_net_destination_removed(const std::shared_ptr<net> n, const u32 dst_gate_id)
 {
     Q_UNUSED(n);
     if (m_current_id == 0)

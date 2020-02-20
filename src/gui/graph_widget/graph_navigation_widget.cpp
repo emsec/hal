@@ -74,7 +74,7 @@ void graph_navigation_widget::setup()
 
             m_origin = hal::node{hal::node_type::gate, 0};
 
-            std::shared_ptr<gate> g = n->get_src().get_gate();
+            std::shared_ptr<gate> g = n->get_source().get_gate();
 
             if (!g)
             {
@@ -140,7 +140,7 @@ void graph_navigation_widget::fill_table(std::shared_ptr<net> n)
 
     m_via_net = n->get_id();
 
-    setRowCount(n->get_dsts().size() + 1);
+    setRowCount(n->get_destinations().size() + 1);
 
     {
         QTableWidgetItem* item = new QTableWidgetItem("");
@@ -158,7 +158,7 @@ void graph_navigation_widget::fill_table(std::shared_ptr<net> n)
 
     int row = 1;
 
-    for (const endpoint& e : n->get_dsts())
+    for (const endpoint& e : n->get_destinations())
     {
         if (!e.get_gate())
         {

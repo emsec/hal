@@ -36,11 +36,11 @@ class gate;
 class endpoint
 {
 public:
-    endpoint(const std::shared_ptr<gate>& gate, const std::string& pin, bool is_a_dst)
+    endpoint(const std::shared_ptr<gate>& gate, const std::string& pin, bool is_a_destination)
     {
         m_gate     = gate;
         m_pin      = pin;
-        m_is_a_dst = is_a_dst;
+        m_is_a_destination = is_a_destination;
     }
     endpoint(const endpoint&) = default;
     endpoint(endpoint&&)      = default;
@@ -64,7 +64,7 @@ public:
         {
             return (this->m_pin < rhs.m_pin);
         }
-        return (this->m_is_a_dst < rhs.m_is_a_dst);
+        return (this->m_is_a_destination < rhs.m_is_a_destination);
     }
 
     /**
@@ -76,7 +76,7 @@ public:
     */
     bool operator==(const endpoint& rhs) const
     {
-        return (this->m_gate == rhs.m_gate) && (this->m_pin == rhs.m_pin) && (this->m_is_a_dst == rhs.m_is_a_dst);
+        return (this->m_gate == rhs.m_gate) && (this->m_pin == rhs.m_pin) && (this->m_is_a_destination == rhs.m_is_a_destination);
     }
 
     /**
@@ -115,9 +115,9 @@ public:
      *
      * @returns True, if the endpoint is an input pin.
      */
-    bool is_dst_pin() const
+    bool is_destination_pin() const
     {
-        return m_is_a_dst;
+        return m_is_a_destination;
     }
 
     /**
@@ -125,13 +125,13 @@ public:
      *
      * @returns True, if the endpoint is an output pin.
      */
-    bool is_src_pin() const
+    bool is_source_pin() const
     {
-        return !m_is_a_dst;
+        return !m_is_a_destination;
     }
 
 private:
     std::shared_ptr<gate> m_gate;
     std::string m_pin;
-    bool m_is_a_dst;
+    bool m_is_a_destination;
 };

@@ -210,7 +210,7 @@ void graph_widget::handle_navigation_jump_requested(const hal::node origin, cons
         // If we don't have all the gates in the current context, we need to
         // insert them
 
-        bool netIsInput = n->is_a_dst(*gates.constBegin()); // either they're all inputs or all outputs, so just check the first one
+        bool netIsInput = n->is_a_destination(*gates.constBegin()); // either they're all inputs or all outputs, so just check the first one
         hal::placement_mode placement = netIsInput ? hal::placement_mode::prefer_right : hal::placement_mode::prefer_left;
         m_context->add({}, to_gates, hal::placement_hint{placement, origin});
 
@@ -307,7 +307,7 @@ void graph_widget::handle_navigation_left_request()
                 if (!n)
                     return;
 
-                if (n->get_src().get_gate() == nullptr)
+                if (n->get_source().get_gate() == nullptr)
                 {
                     g_selection_relay.clear();
                     g_selection_relay.m_selected_nets.insert(n->get_id());
@@ -317,7 +317,7 @@ void graph_widget::handle_navigation_left_request()
                 }
                 else
                 {
-                    handle_navigation_jump_requested(hal::node{hal::node_type::gate, g->get_id()}, n->get_id(), {n->get_src().get_gate()->get_id()});
+                    handle_navigation_jump_requested(hal::node{hal::node_type::gate, g->get_id()}, n->get_id(), {n->get_source().get_gate()->get_id()});
                 }
             }
             else if (g->get_input_pins().size())
@@ -337,9 +337,9 @@ void graph_widget::handle_navigation_left_request()
             if (!n)
                 return;
 
-            if (n->get_src().get_gate() != nullptr)
+            if (n->get_source().get_gate() != nullptr)
             {
-                handle_navigation_jump_requested(hal::node{hal::node_type::gate, 0}, n->get_id(), {n->get_src().get_gate()->get_id()});
+                handle_navigation_jump_requested(hal::node{hal::node_type::gate, 0}, n->get_id(), {n->get_source().get_gate()->get_id()});
             }
 
             return;
@@ -369,7 +369,7 @@ void graph_widget::handle_navigation_right_request()
             if (g_selection_relay.m_subfocus == selection_relay::subfocus::right)
             {
                 auto n = g->get_fan_out_net(g->get_output_pins()[g_selection_relay.m_subfocus_index]);
-                if (n->get_num_of_dsts() == 0)
+                if (n->get_num_of_destinations() == 0)
                 {
                     g_selection_relay.clear();
                     g_selection_relay.m_selected_nets.insert(n->get_id());
@@ -377,9 +377,9 @@ void graph_widget::handle_navigation_right_request()
                     g_selection_relay.m_focus_id   = n->get_id();
                     g_selection_relay.relay_selection_changed(nullptr);
                 }
-                else if (n->get_num_of_dsts() == 1)
+                else if (n->get_num_of_destinations() == 1)
                 {
-                    handle_navigation_jump_requested(hal::node{hal::node_type::gate, g->get_id()}, n->get_id(), {n->get_dsts()[0].get_gate()->get_id()});
+                    handle_navigation_jump_requested(hal::node{hal::node_type::gate, g->get_id()}, n->get_id(), {n->get_destinations()[0].get_gate()->get_id()});
                 }
                 else
                 {
@@ -405,12 +405,12 @@ void graph_widget::handle_navigation_right_request()
             if (!n)
                 return;
 
-            if (n->get_num_of_dsts() == 0)
+            if (n->get_num_of_destinations() == 0)
                 return;
 
-            if (n->get_num_of_dsts() == 1)
+            if (n->get_num_of_destinations() == 1)
             {
-                handle_navigation_jump_requested(hal::node{hal::node_type::gate, 0}, n->get_id(), {n->get_dsts()[0].get_gate()->get_id()});
+                handle_navigation_jump_requested(hal::node{hal::node_type::gate, 0}, n->get_id(), {n->get_destinations()[0].get_gate()->get_id()});
             }
             else
             {

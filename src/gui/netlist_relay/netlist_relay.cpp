@@ -406,27 +406,27 @@ void netlist_relay::relay_net_event(net_event_handler::event ev, std::shared_ptr
         {
             //< no associated_data
 
-            g_graph_context_manager.handle_net_src_changed(object);
+            g_graph_context_manager.handle_net_source_changed(object);
 
-            Q_EMIT net_src_changed(object);
+            Q_EMIT net_source_changed(object);
             break;
         }
         case net_event_handler::event::dst_added:
         {
             //< associated_data = id of dst gate
 
-            g_graph_context_manager.handle_net_dst_added(object, associated_data);
+            g_graph_context_manager.handle_net_destination_added(object, associated_data);
 
-            Q_EMIT net_dst_added(object, associated_data);
+            Q_EMIT net_destination_added(object, associated_data);
             break;
         }
         case net_event_handler::event::dst_removed:
         {
             //< associated_data = id of dst gate
 
-            g_graph_context_manager.handle_net_dst_removed(object, associated_data);
+            g_graph_context_manager.handle_net_destination_removed(object, associated_data);
 
-            Q_EMIT net_dst_removed(object, associated_data);
+            Q_EMIT net_destination_removed(object, associated_data);
             break;
         }
     }

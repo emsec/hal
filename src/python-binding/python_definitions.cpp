@@ -565,7 +565,7 @@ Get a list of necessary includes of the gate library, e.g., VHDL libraries.
 )");
 
     py::class_<endpoint, std::shared_ptr<endpoint>>(m, "endpoint")
-        .def(py::init<const std::shared_ptr<gate>&, const std::string&, bool>(), py::arg("gate"), py::arg("pin"), py::arg("is_a_dst"), R"(
+        .def(py::init<const std::shared_ptr<gate>&, const std::string&, bool>(), py::arg("gate"), py::arg("pin"), py::arg("is_a_destination"), R"(
 Construct a new endpoint.
 )")
         .def(py::self < py::self, R"(
@@ -608,23 +608,23 @@ Returns the pin type of the current endpoint.
 :returns: The pin type.
 :rtype: str
 )")
-        .def_property_readonly("is_src", &endpoint::is_src_pin, R"(
+        .def_property_readonly("is_source", &endpoint::is_source_pin, R"(
 Checks the pin type of the current endpoint.
 
 :type: bool
 )")
-        .def("is_src_pin", &endpoint::is_src_pin, R"(
+        .def("is_source_pin", &endpoint::is_source_pin, R"(
 Checks the pin type of the current endpoint.
 
 :returns: The pin type.
 :rtype: bool
 )")
-        .def_property_readonly("is_dst", &endpoint::is_dst_pin, R"(
+        .def_property_readonly("is_destination", &endpoint::is_destination_pin, R"(
 Checks the pin type of the current endpoint.
 
 :type: bool
 )")
-        .def("is_dst_pin", &endpoint::is_dst_pin, R"(
+        .def("is_destination_pin", &endpoint::is_destination_pin, R"(
 Checks the pin type of the current endpoint.
 
 :returns: The pin type.
@@ -1386,7 +1386,7 @@ Set the name of the net.
 
 :param str name: The new name.
 )")
-        .def("add_src", py::overload_cast<const std::shared_ptr<gate>&, const std::string&>(&net::add_src), py::arg("gate"), py::arg("pin"), R"(
+        .def("add_source", py::overload_cast<const std::shared_ptr<gate>&, const std::string&>(&net::add_source), py::arg("gate"), py::arg("pin"), R"(
 Sets the source of this net to a gate's output pin.
 
 :param hal_py.get_gate() gate: The source gate.
@@ -1394,14 +1394,14 @@ Sets the source of this net to a gate's output pin.
 :returns: True on succes.
 :rtype: bool
 )")
-        .def("add_src", py::overload_cast<const endpoint&>(&net::add_src), py::arg("endpoint"), R"(
+        .def("add_source", py::overload_cast<const endpoint&>(&net::add_source), py::arg("endpoint"), R"(
 Sets the source of this net to a gate's output pin.
 
 :param hal_py.endpoint endpoint: The source endpoint.
 :returns: True on success.
 :rtype: bool
 )")
-        .def("remove_src", py::overload_cast<const std::shared_ptr<gate>&, const std::string&>(&net::remove_src), py::arg("gate"), py::arg("pin"), R"(
+        .def("remove_source", py::overload_cast<const std::shared_ptr<gate>&, const std::string&>(&net::remove_source), py::arg("gate"), py::arg("pin"), R"(
 Removes the source of the net.
 
 :param hal_py.get_gate() gate: The source gate.
@@ -1409,14 +1409,14 @@ Removes the source of the net.
 :returns: True on succes.
 :rtype: bool
 )")
-        .def("remove_src", py::overload_cast<const endpoint&>(&net::remove_src), py::arg("endpoint"), R"(
+        .def("remove_source", py::overload_cast<const endpoint&>(&net::remove_source), py::arg("endpoint"), R"(
 Removes the source of the net.
 
 :param hal_py.endpoint endpoint: The source endpoint.
 :returns: True on success.
 :rtype: bool
 )")
-        .def("is_a_src", py::overload_cast<const std::shared_ptr<gate>&, const std::string&>(&net::is_a_src, py::const_), py::arg("gate"), py::arg("pin"), R"(
+        .def("is_a_source", py::overload_cast<const std::shared_ptr<gate>&, const std::string&>(&net::is_a_source, py::const_), py::arg("gate"), py::arg("pin"), R"(
 Check whether a gate's input pin is a source of this net.
 
 :param gate: The source gate.
@@ -1425,7 +1425,7 @@ Check whether a gate's input pin is a source of this net.
 :returns: True if the input's pin is a source.
 :rtype: bool
 )")
-        .def("is_a_src", py::overload_cast<const endpoint&>(&net::is_a_src, py::const_), py::arg("endpoint"), R"(
+        .def("is_a_source", py::overload_cast<const endpoint&>(&net::is_a_source, py::const_), py::arg("endpoint"), R"(
 Check whether a gate's input pin is a source of this net.
 
 :param endpoint: The input endpoint.
@@ -1433,38 +1433,38 @@ Check whether a gate's input pin is a source of this net.
 :returns: True if the input's pin is a source.
 :rtype: bool
 )")
-        .def_property_readonly("num_of_srcs", &net::get_num_of_srcs, R"(
+        .def_property_readonly("num_of_sources", &net::get_num_of_sources, R"(
 The number of sources of the net.
 
 :type: int
 )")
-        .def("get_num_of_srcs", &net::get_num_of_srcs, R"(
+        .def("get_num_of_sources", &net::get_num_of_sources, R"(
 Get the number of sources.
 
 :returns: The number of sources of this net.
 :rtype: int
 )")
-        .def_property_readonly("srcs", [](const std::shared_ptr<net>& n){return n->get_srcs();}, R"(
+        .def_property_readonly("sources", [](const std::shared_ptr<net>& n){return n->get_sources();}, R"(
 Get the vector of sources of the net.
 
 :type: set[hal_py.net]
 )")
-        .def("get_srcs", &net::get_srcs, py::arg("filter") = nullptr, R"(
+        .def("get_sources", &net::get_sources, py::arg("filter") = nullptr, R"(
 Get the vector of sources of the net.
 
 :param filter: a filter for endpoints.
 :returns: A list of source endpoints.
 :rtype: list[hal_py.endpoint]
 )")
-        .def("get_src", &net::get_src, R"(
-Get the (first) src of the net specified by type.
+        .def("get_source", &net::get_source, R"(
+Get the (first) source of the net specified by type.
 If there is no source, the gate of the returned endpoint is null.
 
 :param str gate_type: The desired source gate type.
 :returns: The source endpoint.
 :rtype: hal_py.endpoint
 )")
-        .def("add_dst", py::overload_cast<const std::shared_ptr<gate>&, const std::string&>(&net::add_dst), py::arg("gate"), py::arg("pin"), R"(
+        .def("add_destination", py::overload_cast<const std::shared_ptr<gate>&, const std::string&>(&net::add_destination), py::arg("gate"), py::arg("pin"), R"(
 Add a destination to this net.
 
 :param gate: The destination gate.
@@ -1473,15 +1473,15 @@ Add a destination to this net.
 :returns: True on succes
 :rtype: bool
 )")
-        .def("add_dst", py::overload_cast<const endpoint&>(&net::add_dst), py::arg("dst"), R"(
+        .def("add_destination", py::overload_cast<const endpoint&>(&net::add_destination), py::arg("destination"), R"(
 Add a destination to this net.
 
-:param dst: The destination endpoint.
-:type dst: hal_py.endpoint
+:param destination: The destination endpoint.
+:type destination: hal_py.endpoint
 :returns: True on succes.
 :rtype: bool
 )")
-        .def("remove_dst", py::overload_cast<const std::shared_ptr<gate>&, const std::string&>(&net::remove_dst), py::arg("gate"), py::arg("pin"), R"(
+        .def("remove_destination", py::overload_cast<const std::shared_ptr<gate>&, const std::string&>(&net::remove_destination), py::arg("gate"), py::arg("pin"), R"(
 Remove a destination from this net.
 
 :param gate: The destination gate.
@@ -1490,15 +1490,15 @@ Remove a destination from this net.
 :returns: True on succes
 :rtype: bool
 )")
-        .def("remove_dst", py::overload_cast<const endpoint&>(&net::remove_dst), py::arg("dst"), R"(
+        .def("remove_destination", py::overload_cast<const endpoint&>(&net::remove_destination), py::arg("destination"), R"(
 Remove a destination from this net.
 
-:param dst: The destination endpoint.
-:type dst: hal_py.endpoint
+:param destination: The destination endpoint.
+:type destination: hal_py.endpoint
 :returns: True on succes.
 :rtype: bool
 )")
-        .def("is_a_dst", py::overload_cast<const std::shared_ptr<gate>&, const std::string&>(&net::is_a_dst, py::const_), py::arg("gate"), py::arg("pin"), R"(
+        .def("is_a_destination", py::overload_cast<const std::shared_ptr<gate>&, const std::string&>(&net::is_a_destination, py::const_), py::arg("gate"), py::arg("pin"), R"(
 Check whether a gate's input pin is a destination of this net.
 
 :param gate: The destination gate.
@@ -1507,7 +1507,7 @@ Check whether a gate's input pin is a destination of this net.
 :returns: True if the input's pin is a destination.
 :rtype: bool
 )")
-        .def("is_a_dst", py::overload_cast<const endpoint&>(&net::is_a_dst, py::const_), py::arg("endpoint"), R"(
+        .def("is_a_destination", py::overload_cast<const endpoint&>(&net::is_a_destination, py::const_), py::arg("endpoint"), R"(
 Check whether a gate's input pin is a destination of this net.
 
 :param endpoint: The input endpoint.
@@ -1515,23 +1515,23 @@ Check whether a gate's input pin is a destination of this net.
 :returns: True if the input's pin is a destination.
 :rtype: bool
 )")
-        .def_property_readonly("num_of_dsts", &net::get_num_of_dsts, R"(
+        .def_property_readonly("num_of_destinations", &net::get_num_of_destinations, R"(
 The number of destinations of the net.
 
 :type: int
 )")
-        .def("get_num_of_dsts", &net::get_num_of_dsts, R"(
+        .def("get_num_of_destinations", &net::get_num_of_destinations, R"(
 Get the number of destinations.
 
 :returns: The number of destinations of this net.
 :rtype: int
 )")
-        .def_property_readonly("dsts", [](const std::shared_ptr<net>& n){return n->get_dsts();}, R"(
+        .def_property_readonly("destinations", [](const std::shared_ptr<net>& n){return n->get_destinations();}, R"(
 Get the vector of destinations of the net.
 
 :type: set[hal_py.net]
 )")
-        .def("get_dsts", &net::get_dsts, py::arg("filter") = nullptr, R"(
+        .def("get_destinations", &net::get_destinations, py::arg("filter") = nullptr, R"(
 Get the vector of destinations of the net.
 
 :param filter: a filter for endpoints.

@@ -56,12 +56,12 @@ public Q_SLOTS:
     void handle_item_collapsed(QTreeWidgetItem* item);
 
     void on_treewidget_item_clicked(QTreeWidgetItem* item, int column);
-    
+
     void handle_net_removed(const std::shared_ptr<net> n);
     void handle_net_name_changed(const std::shared_ptr<net> n);
-    void handle_net_src_changed(const std::shared_ptr<net> n);
-    void handle_net_dst_added(const std::shared_ptr<net> n, const u32 dst_gate_id);
-    void handle_net_dst_removed(const std::shared_ptr<net> n, const u32 dst_gate_id);
+    void handle_net_source_changed(const std::shared_ptr<net> n);
+    void handle_net_destination_added(const std::shared_ptr<net> n, const u32 dst_gate_id);
+    void handle_net_destination_removed(const std::shared_ptr<net> n, const u32 dst_gate_id);
 
     void handle_gate_name_changed(const std::shared_ptr<gate> g);
 
@@ -78,9 +78,9 @@ private:
     QTableWidgetItem* m_module_item;
 
     // stores input pin tree view
-    QTreeWidgetItem* m_src_pin;
+    QTreeWidgetItem* m_source_pin;
     // stores output pin tree view
-    QTreeWidgetItem* m_dst_pins;
+    QTreeWidgetItem* m_destination_pins;
 
     // stores utility objects for input/output pin tree view
     QScrollArea* m_scroll_area;
@@ -101,8 +101,8 @@ private:
 
     u32 m_current_id;
 
-    QTreeWidgetItem* m_src_item;
-    QTreeWidgetItem* m_dst_item;
+    QTreeWidgetItem* m_source_item;
+    QTreeWidgetItem* m_destination_item;
 };
 
 #endif    // NET_DETAILS_WIDGET_H
