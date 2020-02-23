@@ -512,11 +512,11 @@ py_gate_type_sequential.def("get_inverted_state_output_pins", &gate_type_sequent
         :rtype: set[str]
 )");
 
-py_gate_type_sequential.def_property("set_reset_behavior", &gate_type_sequential::get_set_reset_behavior, &gate_type_sequential::set_set_reset_behavior, R"(
+/*py_gate_type_sequential.def_property("set_reset_behavior", &gate_type_sequential::get_set_reset_behavior, &gate_type_sequential::set_set_reset_behavior, R"(
         Set the behavior that describes the internal state when both set and reset are active.
 
         :type: tuple(hal_py.set_reset_behavior, hal_py.set_reset_behavior)
-)");
+)");*/
 
 py_gate_type_sequential.def("set_set_reset_behavior", &gate_type_sequential::set_set_reset_behavior, py::arg("sb1"), py::arg("sb2"), R"(
         Set the behavior that describes the internal state when both set and reset are active.
