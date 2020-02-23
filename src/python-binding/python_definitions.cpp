@@ -2072,17 +2072,14 @@ py_i_gui.def("exec", &i_gui::exec, py::arg("netlist"), R"(
         :rtype: bool
 )");
 
-/*
-    py::enum_<boolean_function::value>(m, "value", R"(
-Represents the logic value that a boolean function operates on. Available are: X, ZERO, and ONE.
-)")
+py::class_<boolean_function> py_boolean_function(m, "boolean_function", R"(Boolean function class.)");
+
+py::enum_<boolean_function::value>(py_boolean_function, "value", R"(
+        Represents the logic value that a boolean function operates on. Available are: X, ZERO, and ONE.)")
         .value("X", boolean_function::value::X)
         .value("ZERO", boolean_function::value::ZERO)
         .value("ONE", boolean_function::value::ONE)
         .export_values();
-*/
-
-py::class_<boolean_function> py_boolean_function(m, "boolean_function", R"(Boolean function class.)");
 
 py_boolean_function.def(py::init<>(), R"(
         Constructor for an empty function. Evaluates to X (undefined). Combining a function with an empty function leaves the other one unchanged.
