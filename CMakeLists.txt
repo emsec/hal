@@ -15,13 +15,13 @@ include(CMakePackageConfigHelpers)
 # Detect Build Type
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Choose the type of build." FORCE)
-    set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
+    set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel" "RelWithDebInfo" "Perf")
 endif()
-set(AVAILABLE_BUILD_TYPES "Release" "MinSizeRel" "RelWithDebInfo" "Debug")
+set(AVAILABLE_BUILD_TYPES "Release" "MinSizeRel" "RelWithDebInfo" "Debug" "Perf")
 if(CMAKE_BUILD_TYPE IN_LIST AVAILABLE_BUILD_TYPES)
     message(VERBOSE "Selected build type: ${CMAKE_BUILD_TYPE}")
 else()
-    message(FATAL_ERROR "Unsupported build type: ${CMAKE_BUILD_TYPE}, supported are: Debug, MinSizeRel, RelWithDebInfo, Release")
+    message(FATAL_ERROR "Unsupported build type: ${CMAKE_BUILD_TYPE}, supported are: Debug, Perf, MinSizeRel, RelWithDebInfo, Release")
 endif()
 
 # Configure CCache if available
@@ -156,6 +156,16 @@ if(UNIX)
 
     enable_cxx_compile_option_if_supported("-O2" "RelWithDebInfo" "PUBLIC")
     enable_cxx_compile_option_if_supported("-g" "RelWithDebInfo" "PUBLIC")
+
+    enable_cxx_compile_option_if_supported("-O1" "Perf" "PUBLIC")
+    enable_cxx_compile_option_if_supported("-g" "Perf" "PUBLIC")
+    enable_cxx_compile_option_if_supported("-pg" "Perf" "PUBLIC")
+    enable_cxx_compile_option_if_supported("-fno-inline-functions" "Perf" "PUBLIC")
+    enable_cxx_compile_option_if_supported("-fno-inline-functions-called-once" "Perf" "PUBLIC")
+    enable_cxx_compile_option_if_supported("-fno-optimize-sibling-calls" "Perf" "PUBLIC")
+
+    SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -pthread")
+    SET(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -pthread")
 
     if(USE_LIBCXX)
         enable_cxx_compile_option_if_supported("-stdlib=libc++" "" "PUBLIC")

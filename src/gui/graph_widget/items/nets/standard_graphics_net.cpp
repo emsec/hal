@@ -8,30 +8,35 @@
 #include <QStyleOptionGraphicsItem>
 
 qreal standard_graphics_net::s_alpha;
-qreal standard_graphics_net::s_radius; // STATIC CONST ?
+qreal standard_graphics_net::s_radius;
 QBrush standard_graphics_net::s_brush;
+QPainterPath standard_graphics_net::s_arrow;
 
 void standard_graphics_net::load_settings()
 {
     s_radius = 3;
     s_brush.setStyle(Qt::SolidPattern);
+
+    s_arrow.lineTo(QPointF(0, 6 / 2));
+    s_arrow.lineTo(QPointF(0 + 12, 6 / 2));
+    s_arrow.lineTo(QPointF(0 + 12 - -3, 0));
+    s_arrow.lineTo(QPointF(0 + 12, -6 / 2));
+    s_arrow.lineTo(QPointF(0, -6 / 2));
+    s_arrow.closeSubpath();
 }
 
 void standard_graphics_net::update_alpha()
 {
     if (s_lod >= graph_widget_constants::net_fade_in_lod && s_lod <= graph_widget_constants::net_fade_out_lod)
-    {
-        const qreal difference = graph_widget_constants::net_fade_out_lod - graph_widget_constants::net_fade_in_lod;
-
-        s_alpha = (s_lod - graph_widget_constants::net_fade_in_lod) / difference;
-    }
+        s_alpha = (s_lod - graph_widget_constants::net_fade_in_lod) / (graph_widget_constants::net_fade_out_lod - graph_widget_constants::net_fade_in_lod);
     else
         s_alpha = 1;
 }
 
 //standard_graphics_net::standard_graphics_net(const std::shared_ptr<const net> n, const lines& l) : graphics_net(n),
-standard_graphics_net::standard_graphics_net(const std::shared_ptr<const net> n, lines& l) : graphics_net(n),
-    m_line_style(line_style::solid)
+standard_graphics_net::standard_graphics_net(const std::shared_ptr<const net> n, lines& l, bool draw_arrow) : graphics_net(n),
+    m_line_style(line_style::solid),
+    m_draw_arrow(draw_arrow)
 {    
     QVector<h_line> collapsed_h;
     QVector<v_line> collapsed_v;
@@ -285,6 +290,12 @@ void standard_graphics_net::paint(QPainter* painter, const QStyleOptionGraphicsI
 
         for (const QPointF& point : m_splits)
             painter->drawEllipse(point, s_radius, s_radius);
+
+        if (m_draw_arrow)
+        {
+            painter->translate(QPointF(26 + 3, 0));
+            painter->drawPath(s_arrow);
+        }
 
         painter->setRenderHint(QPainter::Antialiasing, original_value);
     }

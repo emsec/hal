@@ -46,13 +46,11 @@ boolean_function::boolean_function()
     m_invert  = false;
 }
 
-boolean_function::boolean_function(operation op, const std::vector<boolean_function>& operands, bool invert_result)
+boolean_function::boolean_function(operation op, const std::vector<boolean_function>& operands, bool invert_result) : boolean_function()
 {
     if (operands.empty())
     {
-        m_content = content_type::CONSTANT;
-        m_invert  = false;
-
+        m_content  = content_type::CONSTANT;
         m_constant = value::X;
     }
     else if (operands.size() == 1)
@@ -69,21 +67,22 @@ boolean_function::boolean_function(operation op, const std::vector<boolean_funct
     }
 }
 
-boolean_function::boolean_function(const std::string& variable_name)
+boolean_function::boolean_function(const std::string& variable_name) : boolean_function()
 {
-    m_content = content_type::VARIABLE;
-    m_invert  = false;
-
+    m_content  = content_type::VARIABLE;
     m_variable = core_utils::trim(variable_name);
     assert(!m_variable.empty());
 }
 
-boolean_function::boolean_function(value constant)
+boolean_function::boolean_function(value constant) : boolean_function()
 {
-    m_content = content_type::CONSTANT;
-    m_invert  = false;
-
+    m_content  = content_type::CONSTANT;
     m_constant = constant;
+}
+
+boolean_function boolean_function::substitute(const std::string& old_variable_name, const std::string& new_variable_name) const
+{
+    return substitute(old_variable_name, boolean_function(new_variable_name));
 }
 
 boolean_function boolean_function::substitute(const std::string& variable_name, const boolean_function& function) const
@@ -238,7 +237,24 @@ std::set<std::string> boolean_function::get_variables() const
     return {};
 }
 
-boolean_function boolean_function::from_string(std::string expression)
+boolean_function boolean_function::from_string(std::string expression, const std::vector<std::string>& variable_names)
+{
+    auto sorted_variable_names = variable_names;
+    std::sort(sorted_variable_names.begin(), sorted_variable_names.end(), [](const auto& a, const auto& b) { return a.size() > b.size(); });
+
+    for (u32 i = 0; i < sorted_variable_names.size(); ++i)
+    {
+        auto pos = expression.find(sorted_variable_names[i]);
+        if (pos != std::string::npos)
+        {
+            expression.replace(pos, sorted_variable_names[i].size(), "__v_" + std::to_string(i));
+        }
+    }
+
+    return from_string_internal(expression, sorted_variable_names);
+}
+
+boolean_function boolean_function::from_string_internal(std::string expression, const std::vector<std::string>& variable_names)
 {
     expression = core_utils::trim(expression);
 
@@ -271,12 +287,41 @@ boolean_function boolean_function::from_string(std::string expression)
             if (expression.find(d) != std::string::npos)
             {
                 is_term = true;
+                break;
             }
         }
         if (!is_term)
         {
+            if (core_utils::starts_with(expression, "__v_"))
+            {
+                u32 idx    = std::stoul(expression.substr(4));
+                expression = variable_names[idx];
+            }
+
             return boolean_function(expression);
         }
+    }
+
+    // simple bracket check
+    i32 level = 0;
+    for (const auto& c : expression)
+    {
+        if (c == '(')
+        {
+            level += 1;
+        }
+        else if (c == ')')
+        {
+            level -= 1;
+            if (level < 0)
+            {
+                return value::X;
+            }
+        }
+    }
+    if (level != 0)
+    {
+        return value::X;
     }
 
     // parse expression
@@ -350,70 +395,115 @@ boolean_function boolean_function::from_string(std::string expression)
     {
         // only a single term but not filtered before?
         // -> was of the form "(...)" so remove the outer brackets and repeat
-        return from_string(terms[0].substr(1, terms[0].size() - 2));
+        return from_string_internal(terms[0].substr(1, terms[0].size() - 2), variable_names);
     }
+
+    // small mutable datastructure for parsing
+    struct op_term
+    {
+        operation op;
+        boolean_function term;
+    };
+    std::vector<op_term> parsed_terms;
 
     bool negate_next  = false;
     operation next_op = operation::AND;
 
-    // multiple terms available -> initialize return value with first term
-    u32 i = 0;
-    while (terms[i] == "!")
     {
-        negate_next = !negate_next;
-        ++i;
-    }
-    boolean_function result = from_string(terms[i]);
-    while (i + 1 < terms.size() && terms[i + 1] == "'")
-    {
-        negate_next = !negate_next;
-        ++i;
-    }
-    if (negate_next)
-    {
-        result      = !result;
-        negate_next = false;
-    }
-
-    // process the remaining terms and update the result function
-    while (++i < terms.size())
-    {
-        if (terms[i] == "!")
+        // multiple terms available -> initialize return value with first term
+        u32 i = 0;
+        while (terms[i] == "!")
         {
             negate_next = !negate_next;
+            ++i;
         }
-        else if (terms[i] == "&" || terms[i] == "*")
+        boolean_function first_term = from_string_internal(terms[i], variable_names);
+        while (i + 1 < terms.size() && terms[i + 1] == "'")
         {
-            next_op = operation::AND;
+            negate_next = !negate_next;
+            ++i;
         }
-        else if (terms[i] == "|" || terms[i] == "+")
+        if (negate_next)
         {
-            next_op = operation::OR;
+            first_term  = !first_term;
+            negate_next = false;
         }
-        else if (terms[i] == "^")
+
+        parsed_terms.push_back({operation::AND, first_term});
+
+        // process the remaining terms
+        while (++i < terms.size())
         {
-            next_op = operation::XOR;
-        }
-        else
-        {
-            auto next_term = from_string(terms[i]);
-            while (i + 1 < terms.size() && terms[i + 1] == "'")
+            if (terms[i] == "!")
             {
                 negate_next = !negate_next;
-                ++i;
             }
-            if (negate_next)
+            else if (terms[i] == "&" || terms[i] == "*")
             {
-                next_term = !next_term;
+                next_op = operation::AND;
             }
-            result = result.combine(next_op, next_term);
+            else if (terms[i] == "|" || terms[i] == "+")
+            {
+                next_op = operation::OR;
+            }
+            else if (terms[i] == "^")
+            {
+                next_op = operation::XOR;
+            }
+            else
+            {
+                auto next_term = from_string_internal(terms[i], variable_names);
+                while (i + 1 < terms.size() && terms[i + 1] == "'")
+                {
+                    negate_next = !negate_next;
+                    ++i;
+                }
+                if (negate_next)
+                {
+                    next_term = !next_term;
+                }
 
-            negate_next = false;
-            next_op     = operation::AND;
+                parsed_terms.push_back({next_op, next_term});
+
+                negate_next = false;
+                next_op     = operation::AND;
+            }
         }
     }
 
-    return result;
+    // assemble terms in order of operator precedence
+
+    for (u32 i = 1; i < parsed_terms.size(); ++i)
+    {
+        if (parsed_terms[i].op == operation::AND)
+        {
+            parsed_terms[i - 1].term = parsed_terms[i - 1].term & parsed_terms[i].term;
+            parsed_terms.erase(parsed_terms.begin() + i);
+            --i;
+        }
+    }
+
+    for (u32 i = 1; i < parsed_terms.size(); ++i)
+    {
+        if (parsed_terms[i].op == operation::XOR)
+        {
+            parsed_terms[i - 1].term = parsed_terms[i - 1].term ^ parsed_terms[i].term;
+            parsed_terms.erase(parsed_terms.begin() + i);
+            --i;
+        }
+    }
+
+    for (u32 i = 1; i < parsed_terms.size(); ++i)
+    {
+        if (parsed_terms[i].op == operation::OR)
+        {
+            parsed_terms[i - 1].term = parsed_terms[i - 1].term | parsed_terms[i].term;
+            parsed_terms.erase(parsed_terms.begin() + i);
+            --i;
+        }
+    }
+
+    return parsed_terms[0].term;
 }
 
 std::string boolean_function::to_string() const
@@ -590,20 +680,50 @@ boolean_function boolean_function::replace_xors() const
     return result;
 }
 
-std::vector<boolean_function> boolean_function::expand_ands_internal(const std::vector<std::vector<boolean_function>>& sub_primitives, u32 i) const
+std::vector<boolean_function> boolean_function::expand_ands_internal(const std::vector<std::vector<boolean_function>>& sub_primitives) const
 {
-    if (i >= sub_primitives.size())
-    {
-        return {boolean_function()};
-    }
-    std::vector<boolean_function> result;
-    for (const auto& x : sub_primitives[i])
-    {
-        for (const auto& y : expand_ands_internal(sub_primitives, i + 1))
+    std::vector<boolean_function> result = sub_primitives[0];
+
+    auto set_identifier = [](const boolean_function& f) -> std::string {
+        std::string id;
+        for (const auto& var : f.m_operands)
         {
-            result.push_back(x & y);
+            if (var.m_invert)
+                id += "!";
+            id += var.m_variable;
+            id += " ";
         }
+        return id;
+    };
+
+    for (u32 i = 1; i < sub_primitives.size(); ++i)
+    {
+        std::set<std::string> seen;
+        std::vector<boolean_function> tmp;
+        tmp.reserve(sub_primitives[i].size() * result.size());
+        for (const auto& bf : sub_primitives[i])
+        {
+            for (const auto& bf2 : result)
+            {
+                auto combined = (bf2 & bf).optimize_constants();
+                if (!(combined.m_content == content_type::CONSTANT && combined.m_constant == value::ZERO))
+                {
+                    if (combined.m_content == content_type::TERMS)
+                    {
+                        std::sort(combined.m_operands.begin(), combined.m_operands.end(), [](const auto& f1, const auto& f2) { return f1.m_variable < f2.m_variable; });
+                    }
+                    auto s = set_identifier(combined);
+                    if (seen.find(s) == seen.end())
+                    {
+                        seen.insert(s);
+                        tmp.push_back(combined);
+                    }
+                }
+            }
+        }
+        result = tmp;
     }
+
     return result;
 }
 
@@ -624,20 +744,25 @@ std::vector<boolean_function> boolean_function::get_primitives() const
         }
         return primitives;
     }
-    else
+    else    // m_op == AND
     {
         std::vector<std::vector<boolean_function>> sub_primitives;
         for (const auto& operand : m_operands)
         {
             sub_primitives.push_back(operand.get_primitives());
         }
-        return expand_ands_internal(sub_primitives, 0);
+        return expand_ands_internal(sub_primitives);
     }
 }
 
 boolean_function boolean_function::expand_ands() const
 {
-    return boolean_function(operation::OR, get_primitives());
+    auto primitives = get_primitives();
+    if (primitives.empty())
+    {
+        return value::ZERO;
+    }
+    return boolean_function(operation::OR, primitives);
 }
 
 boolean_function boolean_function::optimize_constants() const
@@ -838,33 +963,82 @@ boolean_function boolean_function::to_dnf() const
         return *this;
     }
 
-    // auto init_tt = get_truth_table();
+    // auto tmp_vars = get_variables();
+    // std::vector<std::string> init_vars(tmp_vars.begin(), tmp_vars.end());
+    // auto init_tt = get_truth_table(init_vars);
     // std::cout << "transforming " << *this << std::endl;
     // auto x = replace_xors();
     // std::cout << "  replace_xors " << x << std::endl;
-    // if (x.get_truth_table() != init_tt)
+    // if (x.get_truth_table(init_vars) != init_tt)
     //     std::cout << "FUNCTIONS DONT MATCH" << std::endl;
     // x = x.propagate_negations();
     // std::cout << "  propagate_negations " << x << std::endl;
-    // if (x.get_truth_table() != init_tt)
+    // if (x.get_truth_table(init_vars) != init_tt)
     //     std::cout << "FUNCTIONS DONT MATCH" << std::endl;
     // x = x.expand_ands();
     // std::cout << "  expand_ands " << x << std::endl;
-    // if (x.get_truth_table() != init_tt)
+    // if (x.get_truth_table(init_vars) != init_tt)
     //     std::cout << "FUNCTIONS DONT MATCH" << std::endl;
     // x = x.flatten();
     // std::cout << "  flatten " << x << std::endl;
-    // if (x.get_truth_table() != init_tt)
+    // if (x.get_truth_table(init_vars) != init_tt)
     //     std::cout << "FUNCTIONS DONT MATCH" << std::endl;
     // x = x.optimize_constants();
     // std::cout << "  optimize_constants " << x << std::endl;
-    // if (x.get_truth_table() != init_tt)
+    // if (x.get_truth_table(init_vars) != init_tt)
     //     std::cout << "FUNCTIONS DONT MATCH" << std::endl;
     // return x;
 
     // the order of the passes is important!
     // every pass after replace_xors expects that there are no more xor operations
-    return replace_xors().propagate_negations().expand_ands().flatten().optimize_constants();
+    return replace_xors().propagate_negations().expand_ands()/*.flatten()*/.optimize_constants();
+}
+
+std::vector<std::vector<std::pair<std::string, bool>>> boolean_function::get_dnf_clauses() const
+{
+    auto dnf = to_dnf();
+
+    std::vector<std::vector<std::pair<std::string, bool>>> result;
+
+    if (dnf.m_content == content_type::VARIABLE)
+    {
+        result.push_back({std::make_pair(dnf.m_variable, !dnf.m_invert)});
+        return result;
+    }
+    else if (dnf.m_content == content_type::CONSTANT)
+    {
+        result.push_back({std::make_pair(to_string(dnf.m_constant), true)});
+        return result;
+    }
+    if (dnf.m_op == operation::OR)
+    {
+        for (const auto& term : dnf.m_operands)
+        {
+            std::vector<std::pair<std::string, bool>> clause;
+            if (term.m_content == content_type::TERMS)
+            {
+                for (const auto& v : term.m_operands)
+                {
+                    clause.push_back(std::make_pair(v.m_variable, !v.m_invert));
+                }
+            }
+            else
+            {
+                clause.push_back(std::make_pair(term.m_variable, !term.m_invert));
+            }
+            result.push_back(clause);
+        }
+    }
+    else
+    {
+        std::vector<std::pair<std::string, bool>> clause;
+        for (const auto& v : dnf.m_operands)
+        {
+            clause.push_back(std::make_pair(v.m_variable, !v.m_invert));
+        }
+        result.push_back(clause);
+    }
+    return result;
 }
 
 std::vector<boolean_function::value> boolean_function::get_truth_table(const std::vector<std::string>& order) const

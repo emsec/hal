@@ -14,9 +14,13 @@ bool data_container::set_data(const std::string& category, const std::string& ke
     //notify_updated();
 
     if (log_with_info_level)
+    {
         log_info("netlist", "added {} data '{}' ({}, {}).", value_data_type, value, category, key);
+    }
     else
+    {
         log_debug("netlist", "added {} data '{}' ({}, {}).", value_data_type, value, category, key);
+    }
 
     return true;
 }
@@ -42,9 +46,13 @@ bool data_container::delete_data(const std::string& category, const std::string&
     //notify_updated();
 
     if (log_with_info_level)
+    {
         log_info("netlist", "removed data '{}' ({}, {}).", deleted_value, category, key);
+    }
     else
+    {
         log_debug("netlist", "removed data '{}' ({}, {}).", deleted_value, category, key);
+    }
     return true;
 }
 

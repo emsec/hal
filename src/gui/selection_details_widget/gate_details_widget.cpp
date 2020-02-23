@@ -23,7 +23,6 @@
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
 #include <QVBoxLayout>
-#include <QHBoxLayout>
 
 gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
 {
@@ -111,10 +110,10 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
     //    m_boolean_function->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
     m_container_layout->addWidget(m_boolean_function);
 
-    m_init_value = new QLabel(this);
+    m_data_fields = new QLabel(this);
     //    m_init_value->setMargin(4);
-    m_init_value->setWordWrap(true);
-    m_container_layout->addWidget(m_init_value);
+    m_data_fields->setWordWrap(true);
+    m_container_layout->addWidget(m_data_fields);
 
     m_container = new QWidget(this);
     m_container->setLayout(m_container_layout);
@@ -138,7 +137,7 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
     m_tree_widget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 
     m_tree_row_layout->addWidget(m_tree_widget);
-    m_tree_row_layout->addSpacerItem(new QSpacerItem(1,1,QSizePolicy::Expanding,QSizePolicy::Minimum));
+    m_tree_row_layout->addSpacerItem(new QSpacerItem(1, 1, QSizePolicy::Expanding, QSizePolicy::Minimum));
     m_tree_row_layout->addSpacing(0);
     m_container_layout->addLayout(m_tree_row_layout);
 
@@ -235,7 +234,8 @@ void gate_details_widget::handle_net_name_changed(std::shared_ptr<net> net)
 void gate_details_widget::handle_net_src_changed(std::shared_ptr<net> net)
 {
     Q_UNUSED(net);
-    if (m_current_id == 0) return;
+    if (m_current_id == 0)
+        return;
     if (g_netlist->is_gate_in_netlist(g_netlist->get_gate_by_id(m_current_id)))
         update(m_current_id);
 }
@@ -256,7 +256,8 @@ void gate_details_widget::handle_net_dst_removed(std::shared_ptr<net> net, const
 
 void gate_details_widget::handle_module_removed(std::shared_ptr<module> module)
 {
-    if (m_current_id == 0) return;
+    if (m_current_id == 0)
+        return;
     auto g = g_netlist->get_gate_by_id(m_current_id);
 
     if (module->contains_gate(g))
@@ -267,7 +268,8 @@ void gate_details_widget::handle_module_removed(std::shared_ptr<module> module)
 
 void gate_details_widget::handle_module_name_changed(std::shared_ptr<module> module)
 {
-    if (m_current_id == 0) return;
+    if (m_current_id == 0)
+        return;
     auto g = g_netlist->get_gate_by_id(m_current_id);
 
     if (module->contains_gate(g))
@@ -306,7 +308,8 @@ void gate_details_widget::update(const u32 gate_id)
 {
     m_current_id = gate_id;
 
-    if (m_current_id == 0) return;
+    if (m_current_id == 0)
+        return;
 
     auto g = g_netlist->get_gate_by_id(gate_id);
 
@@ -351,19 +354,34 @@ void gate_details_widget::update(const u32 gate_id)
     else
         m_boolean_function->show();
 
-    //display initial value if possible
-    m_init_value->setText("");
-    QString init_value_text = "";
-    if (!std::get<1>(g->get_data_by_key("generic", "INIT")).empty())
+    // display all data fields
+    m_data_fields->setText("");
+    std::string data_str = "";
+    auto data_fields     = g->get_data();
+
+    for (const auto& [key, value] : data_fields)
     {
-        init_value_text += "<b>INIT: </b>" + QString::fromStdString(std::get<1>(g->get_data_by_key("generic", "INIT")));
-        m_init_value->setText(init_value_text);
+        data_str += "<b>" + std::get<1>(key) + ": </b>" + std::get<1>(value) + "<br>";
     }
 
-    if (m_init_value->text().isEmpty())
-        m_init_value->hide();
+    if (!data_str.empty())
+    {
+        data_str = data_str.substr(0, data_str.size() - 4);
+        m_data_fields->setText(QString::fromStdString(data_str));
+
+        if (m_data_fields->text().isEmpty())
+        {
+            m_data_fields->hide();
+        }
+        else
+        {
+            m_data_fields->show();
+        }
+    }
     else
-        m_init_value->show();
+    {
+        m_data_fields->hide();
+    }
 
     disconnect(m_tree_widget, &QTreeWidget::itemClicked, this, 0);
 
@@ -420,9 +438,6 @@ void gate_details_widget::update(const u32 gate_id)
     m_general_table->setHidden(false);
     m_scroll_area->setHidden(false);
 
-
-
-
     connect(m_tree_widget, &QTreeWidget::itemClicked, this, &gate_details_widget::on_treewidget_item_clicked);
 }
 
@@ -464,7 +479,7 @@ void gate_details_widget::on_treewidget_item_clicked(QTreeWidgetItem* item, int 
         {
             //            auto rect = QApplication::desktop()->availableGeometry(this);
             //            w->move(QPoint(rect.x() + (rect.width() - w->width()) / 2, rect.y() + (rect.height() - w->height()) / 2));
-            m_navigation_table->setup(hal::node{hal::node_type::none, 0}, clicked_net);
+            m_navigation_table->setup(hal::node{hal::node_type::gate, 0}, clicked_net);
             m_navigation_table->move(QCursor::pos());
             m_navigation_table->show();
             m_navigation_table->setFocus();
@@ -504,7 +519,7 @@ void gate_details_widget::on_treewidget_item_clicked(QTreeWidgetItem* item, int 
 void gate_details_widget::handle_navigation_jump_requested(const hal::node origin, const u32 via_net, const QSet<u32>& to_gates)
 {
     Q_UNUSED(origin);
-    
+
     auto n = g_netlist->get_net_by_id(via_net);
 
     if (to_gates.isEmpty() || !n)
@@ -521,7 +536,7 @@ void gate_details_widget::handle_navigation_jump_requested(const hal::node origi
     if (to_gates.size() == 1)
     {
         g_selection_relay.m_focus_type = selection_relay::item_type::gate;
-        auto g = g_netlist->get_gate_by_id(*to_gates.constBegin());
+        auto g                         = g_netlist->get_gate_by_id(*to_gates.constBegin());
         g_selection_relay.m_focus_id   = g->get_id();
         g_selection_relay.m_subfocus   = selection_relay::subfocus::left;
 

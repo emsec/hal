@@ -23,8 +23,8 @@
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wshadow"
+#pragma GCC diagnostic ignored "-Wself-assign-overloaded"
 #ifdef COMPILER_CLANG
-#pragma clang diagnostic ignored "-Wself-assign-overloaded"
 #pragma clang diagnostic ignored "-Wnested-anon-types"
 #pragma clang diagnostic ignored "-Wshadow-field-in-constructor-modified"
 #endif
@@ -2101,8 +2101,20 @@ py_boolean_function.def(py::init<boolean_function::value>(), R"(
         :param hal_py.value constant: A constant value.
 )");
 
-py_boolean_function.def("substitute", &boolean_function::substitute, py::arg("variable_name"), py::arg("function"), R"(
-        Substitutes a variable with another function (can again be a single variable). Applies to all instances of the variable in the function.
+py_boolean_function.def("substitute", py::overload_cast<const std::string&, const std::string&>(&boolean_function::substitute, py::const_), py::arg("old_variable_name"), py::arg("new_variable_name"), R"(
+        Substitutes a variable with another variable (i.e., variable renaming).
+        Applies to all instances of the variable in the function.
+        This is just a shorthand for the generic substitute function.
+
+        :param str old_variable_name:  The old variable to substitute
+        :param str new_variable_name:  The new variable name
+        :returns: The new boolean function.
+        :rtype: hal_py.boolean_function
+)");
+
+py_boolean_function.def("substitute", py::overload_cast<const std::string&, const boolean_function&>(&boolean_function::substitute, py::const_), py::arg("variable_name"), py::arg("function"), R"(
+        Substitutes a variable with another function (can again be a single variable).
+        Applies to all instances of the variable in the function.
 
         :param str variable_name:  The variable to substitute
         :param hal_py.boolean_function function:  The function to take the place of the varible
@@ -2154,10 +2166,17 @@ py_boolean_function.def("get_variables", &boolean_function::get_variables, R"(
         :rtype: set[str]
 )");
 
-py_boolean_function.def_static("from_string", &boolean_function::from_string, py::arg("expression"), R"(
-        Returns the boolean function as a string.
+py_boolean_function.def_static("from_string", &boolean_function::from_string, py::arg("expression"), py::arg("variable_names"), R"(
+        Parse a function from a string representation.
+        Supported operators are  NOT (\"!\", \"'\"), AND (\"&\", \"*\", \" \"), OR (\"|\", \"+\"), XOR (\"^\") and brackets (\"(\", \")\").
+        Operator precedence is ! > & > ^ > |
+
+        Since, for example, '(' is interpreted as a new term, but might also be an intended part of a variable,
+        a vector of known variable names can be supplied, which are extracted before parsing.
+        If there is an error during bracket matching, X is returned for that part.
 
         :param str expression: String containing a boolean function.
+        :param str variable_names: Names of variables to help resolve problematic functions
         :returns: The boolean function extracted from the string.
         :rtype: hal_py.boolean_function
 )");

@@ -737,6 +737,7 @@ bool hdl_parser_vhdl::build_netlist(const std::string& top_module)
                 if (slave_src.gate != nullptr)
                 {
                     slave_net->remove_src();
+
                     if (master_net->get_src().gate == nullptr)
                     {
                         master_net->set_src(slave_src);
@@ -749,9 +750,15 @@ bool hdl_parser_vhdl::build_netlist(const std::string& top_module)
                 }
 
                 // merge destinations
+                if (slave_net->is_global_output_net())
+                {
+                    master_net->mark_global_output_net();
+                }
+
                 for (const auto& dst : slave_net->get_dsts())
                 {
                     slave_net->remove_dst(dst);
+
                     if (!master_net->is_a_dst(dst))
                     {
                         master_net->add_dst(dst);
@@ -1050,11 +1057,9 @@ std::shared_ptr<module> hdl_parser_vhdl::instantiate(const entity& e, std::share
 
                 if (!is_input && !is_output)
                 {
-                    for (const auto& pin_type : new_gate->get_type()->get_input_pins())
-                    {
-                        log_error("hdl_parser", "pin_type: {}", pin_type);
-                    }
-                    log_error("hdl_parser", "undefined pin '{}' for '{}' ({})", pin, new_gate->get_name(), new_gate->get_type()->get_name());
+                    log_error("hdl_parser", "gate '{}' ({}) has no pin '{}'", new_gate->get_name(), new_gate->get_type()->get_name(), pin);
+                    log_error("hdl_parser", "  available input pins: {}", core_utils::join(", ", new_gate->get_type()->get_input_pins()));
+                    log_error("hdl_parser", "  available output pins: {}", core_utils::join(", ", new_gate->get_type()->get_output_pins()));
                     return nullptr;
                 }
 

@@ -12,10 +12,10 @@
 #include "core/interface_base.h"
 #include "core/interface_interactive_ui.h"
 
-#include "netlist/hdl_parser/hdl_parser_dispatcher.h"
-#include "netlist/hdl_writer/hdl_writer_dispatcher.h"
 #include "netlist/event_system/event_log.h"
 #include "netlist/gate_library/gate_library_manager.h"
+#include "netlist/hdl_parser/hdl_parser_dispatcher.h"
+#include "netlist/hdl_writer/hdl_writer_dispatcher.h"
 #include "netlist/netlist.h"
 #include "netlist/netlist_factory.h"
 #include "netlist/persistent/netlist_serializer.h"
@@ -97,7 +97,6 @@ int cleanup(std::shared_ptr<netlist> const g = nullptr)
     return SUCCESS;
 }
 
-#include "netlist/boolean_function.h"
 int main(int argc, const char* argv[])
 {
     /* initialize and parse generic cli options */
@@ -217,12 +216,12 @@ int main(int argc, const char* argv[])
 
     if (args.is_option_set("--empty-netlist"))
     {
-        netlist  = netlist_factory::create_netlist(args.get_parameter("--gate-library"));
+        netlist   = netlist_factory::create_netlist(args.get_parameter("--gate-library"));
         file_name = hal::path("./empty_netlist.hal");
     }
     else
     {
-        netlist  = netlist_factory::load_netlist(args);
+        netlist   = netlist_factory::load_netlist(args);
         file_name = hal::path(args.get_parameter("--input-file"));
     }
 

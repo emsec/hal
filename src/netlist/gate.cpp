@@ -127,17 +127,17 @@ boolean_function gate::get_boolean_function(const std::string& name) const
         return get_lut_function();
     }
 
-    auto it = m_functions.find(name);
-    if (it != m_functions.end())
+    if (auto it = m_functions.find(name); it != m_functions.end())
     {
         return it->second;
     }
+
     auto map = m_type->get_boolean_functions();
-    it       = m_functions.find(name);
-    if (it != m_functions.end())
+    if (auto it = map.find(name); it != map.end())
     {
         return it->second;
     }
+
     return boolean_function();
 }
 
@@ -175,7 +175,7 @@ boolean_function gate::get_lut_function() const
     {
         return boolean_function::ZERO;
     }
-    u64 config = std::stoull(config_str, nullptr, 16);
+    u64 config      = std::stoull(config_str, nullptr, 16);
     u32 config_size = 1 << get_input_pins().size();
 
     boolean_function result;

@@ -25,9 +25,13 @@ module_details_widget::module_details_widget(QWidget* parent)
     m_content_layout->setAlignment(Qt::AlignTop);
 
     m_treeview->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    m_tree_module_proxy_model->setDynamicSortFilter(true);
     m_tree_module_proxy_model->setSourceModel(m_tree_module_model);
+    m_tree_module_proxy_model->setSortCaseSensitivity(Qt::CaseInsensitive);
     m_tree_module_proxy_model->setFilterKeyColumn(-1);
     m_treeview->setModel(m_tree_module_proxy_model);
+    m_treeview->setSortingEnabled(true);
+    m_treeview->sortByColumn(0, Qt::AscendingOrder);
     m_treeview->setExpanded(m_tree_module_proxy_model->index(0, 0, m_treeview->rootIndex()), true);
     m_treeview->setExpanded(m_tree_module_proxy_model->index(1, 0, m_treeview->rootIndex()), true);
 

@@ -30,9 +30,13 @@ module_widget::module_widget(QWidget* parent) : content_widget("Modules", parent
     connect(m_tree_view, &QTreeView::customContextMenuRequested, this, &module_widget::handle_tree_view_context_menu_requested);
 
     m_module_proxy_model->setFilterKeyColumn(-1);
+    m_module_proxy_model->setDynamicSortFilter(true);
     m_module_proxy_model->setSourceModel(g_netlist_relay.get_module_model());
     //m_module_proxy_model->setRecursiveFilteringEnabled(true);
+    m_module_proxy_model->setSortCaseSensitivity(Qt::CaseInsensitive);
     m_tree_view->setModel(m_module_proxy_model);
+    m_tree_view->setSortingEnabled(true);
+    m_tree_view->sortByColumn(0, Qt::AscendingOrder);
     m_tree_view->setContextMenuPolicy(Qt::CustomContextMenu);
     m_tree_view->setEditTriggers(QAbstractItemView::NoEditTriggers);
     m_tree_view->setFrameStyle(QFrame::NoFrame);
