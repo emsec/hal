@@ -13,7 +13,7 @@
 #include "gui/graph_widget/items/nets/labeled_separated_net.h"
 #include "gui/graph_widget/items/nets/separated_graphics_net.h"
 #include "gui/graph_widget/items/nets/standard_graphics_net.h"
-#include "gui/graph_widget/items/utility_items/drag_shadow_gate.h"
+#include "gui/graph_widget/items/utility_items/node_drag_shadow.h"
 #include "gui/gui_globals.h"
 #include "gui/svg_icon_engine/svg_icon_engine.h"
 
@@ -211,7 +211,7 @@ namespace style
         circle_separated_net::load_settings();
         hollow_arrow_separated_net::load_settings();
         labeled_separated_net::load_settings();
-        drag_shadow_gate::load_settings();
+        node_drag_shadow::load_settings();
     }
 
 } // namespace style
