@@ -12,7 +12,7 @@
 #include "gui/graph_widget/graph_layout_spinner_widget.h"
 #include "gui/graph_widget/graph_navigation_widget.h"
 #include "gui/graph_widget/graphics_scene.h"
-#include "gui/graph_widget/items/graphics_gate.h"
+#include "gui/graph_widget/items/nodes/gates/graphics_gate.h"
 #include "gui/gui_def.h"
 #include "gui/gui_globals.h"
 #include "gui/hal_content_manager/hal_content_manager.h"

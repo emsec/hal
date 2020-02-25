@@ -1,8 +1,8 @@
 #include "gui/graph_widget/graphics_factory.h"
 
-#include "gui/graph_widget/items/gates/standard_graphics_gate.h"
-#include "gui/graph_widget/items/gates/minimal_graphics_gate.h"
-#include "gui/graph_widget/items/modules/standard_graphics_module.h"
+#include "gui/graph_widget/items/nodes/gates/standard_graphics_gate.h"
+#include "gui/graph_widget/items/nodes/gates/minimal_graphics_gate.h"
+#include "gui/graph_widget/items/nodes/modules/standard_graphics_module.h"
 
 namespace graphics_factory
 {

@@ -1,6 +1,6 @@
 #include "graph_widget/items/utility_items/node_drag_shadow.h"
 
-#include "graph_widget/items/graphics_gate.h"
+#include "graph_widget/items/nodes/gates/graphics_gate.h"
 
 #include <assert.h>
 

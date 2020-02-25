@@ -24,7 +24,7 @@
 #ifndef UNRESTRICTED_GRAPHICS_NET_H
 #define UNRESTRICTED_GRAPHICS_NET_H
 
-#include "gui/graph_widget/items/graphics_net.h"
+#include "gui/graph_widget/items/nets/graphics_net.h"
 
 #include <QLineF>
 #include <QVector>

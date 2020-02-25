@@ -24,7 +24,7 @@
 #ifndef MINIMAL_GRAPHICS_GATE_H
 #define MINIMAL_GRAPHICS_GATE_H
 
-#include "gui/graph_widget/items/graphics_gate.h"
+#include "gui/graph_widget/items/nodes/gates/graphics_gate.h"
 
 class minimal_graphics_gate : public graphics_gate
 {

@@ -1,4 +1,4 @@
-#include "gui/graph_widget/items/graphics_module.h"
+#include "gui/graph_widget/items/nodes/modules/graphics_module.h"
 
 #include "netlist/module.h"
 #include "netlist/net.h"
