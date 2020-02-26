@@ -3,16 +3,12 @@
 #include "netlist/module.h"
 #include "netlist/net.h"
 
-#include "gui/graph_widget/graphics_scene.h"
-
 bool graphics_module::s_sort_pins = true;
 bool graphics_module::s_show_differentiation_number = true;
 bool graphics_module::s_show_occurence_number = true;
 
 graphics_module::graphics_module(const std::shared_ptr<const module> m) : graphics_node(hal::item_type::module, m->get_id(), QString::fromStdString(m->get_name()))
 {
-    assert(m);
-
     for (const std::shared_ptr<net>& n : m->get_input_nets())
     {
         QMap<std::string, int> occurrence_map;
@@ -42,11 +38,4 @@ graphics_module::graphics_module(const std::shared_ptr<const module> m) : graphi
         if (e.gate)
             m_output_pins.append(module_pin{n->get_id(), QString::fromStdString(e.pin_type), "", ""});
     }
-}
-
-void graphics_module::set_visuals(const graphics_node::visuals& v)
-{
-    setVisible(v.visible);
-
-    m_color = v.main_color;
 }

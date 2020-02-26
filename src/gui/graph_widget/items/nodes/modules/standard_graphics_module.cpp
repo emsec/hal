@@ -224,11 +224,6 @@ QPointF standard_graphics_module::get_output_scene_position(const u32 net_id, co
     return mapToScene(QPointF(m_width, y));
 }
 
-void standard_graphics_module::set_visuals(const graphics_node::visuals& v)
-{
-    m_color = v.main_color;
-}
-
 void standard_graphics_module::format(const bool& adjust_size_to_grid)
 {
     QFontMetricsF name_fm(s_name_font);

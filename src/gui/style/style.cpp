@@ -4,7 +4,6 @@
 
 #include "gui/graph_widget/items/graphics_item.h"
 #include "gui/graph_widget/items/nets/graphics_net.h"
-#include "gui/graph_widget/items/nodes/gates/minimal_graphics_gate.h"
 #include "gui/graph_widget/items/nodes/gates/standard_graphics_gate.h"
 #include "gui/graph_widget/items/nodes/modules/standard_graphics_module.h"
 #include "gui/graph_widget/items/nets/arrow_separated_net.h"
@@ -200,9 +199,7 @@ namespace style
 
         standard_graphics_module::load_settings();
 
-        //graphics_gate::load_settings();
         standard_graphics_gate::load_settings();
-        minimal_graphics_gate::load_settings();
 
         graphics_net::load_settings();
         standard_graphics_net::load_settings();
@@ -211,6 +208,7 @@ namespace style
         circle_separated_net::load_settings();
         hollow_arrow_separated_net::load_settings();
         labeled_separated_net::load_settings();
+
         node_drag_shadow::load_settings();
     }
 

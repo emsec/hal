@@ -24,6 +24,13 @@ QPainterPath graphics_node::shape() const
     return path;
 }
 
+void graphics_node::set_visuals(const graphics_node::visuals& v)
+{
+    setVisible(v.visible);
+
+    m_color = v.main_color;
+}
+
 qreal graphics_node::width() const
 {
     return m_width;
