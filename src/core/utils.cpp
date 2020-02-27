@@ -198,29 +198,6 @@ namespace core_utils
         return s;
     }
 
-    std::string join(const std::string& joiner, const std::vector<std::string>& items)
-    {
-        if (items.empty())
-        {
-            return "";
-        }
-        std::string s = items[0];
-        if (items.size() == 1)
-        {
-            return s;
-        }
-        for (size_t i = 1; i < items.size(); ++i)
-        {
-            s += joiner + items[i];
-        }
-        return s;
-    }
-
-    std::string join(const std::string& joiner, const std::set<std::string>& items)
-    {
-        return join(joiner, std::vector<std::string>(items.begin(), items.end()));
-    }
-
     std::string to_upper(const std::string& s)
     {
         std::string result = s;
