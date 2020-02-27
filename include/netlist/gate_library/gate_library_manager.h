@@ -26,6 +26,7 @@
 #include "def.h"
 #include <map>
 #include <memory>
+#include <vector>
 
 class gate_library;
 
