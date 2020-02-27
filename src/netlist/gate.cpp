@@ -346,11 +346,16 @@ std::shared_ptr<net> gate::get_fan_out_net(const std::string& pin_type) const
     return it->second;
 }
 
-
-std::set<endpoint> gate::get_unique_predecessors(const std::function<bool(const std::string& starting_pin, const endpoint&)>& filter) const
+std::vector<std::shared_ptr<gate>> gate::get_unique_predecessors(const std::function<bool(const std::string& starting_pin, const endpoint&)>& filter) const
 {
-    auto predecessors = this->get_predecessors(filter);
-    return std::set<endpoint>(predecessors.begin(), predecessors.end());
+    std::vector<std::shared_ptr<gate>> res;
+    auto endpoints = this->get_predecessors(filter);
+    res.reserve(endpoints.size());
+    for (const auto& ep : endpoints)
+    {
+        res.push_back(ep.get_gate());
+    }
+    return res;
 }
 
 std::vector<endpoint> gate::get_predecessors(const std::function<bool(const std::string& starting_pin, const endpoint&)>& filter) const
@@ -358,8 +363,8 @@ std::vector<endpoint> gate::get_predecessors(const std::function<bool(const std:
     std::vector<endpoint> result;
     for (const auto& it : m_in_nets)
     {
-        auto& pin       = it.first;
-        auto& net       = it.second;
+        auto& pin         = it.first;
+        auto& net         = it.second;
         auto predecessors = net->get_sources();
         if (!filter)
         {
@@ -396,10 +401,16 @@ endpoint gate::get_predecessor(const std::string& which_pin) const
     return predecessors[0];
 }
 
-std::set<endpoint> gate::get_unique_successors(const std::function<bool(const std::string& starting_pin, const endpoint&)>& filter) const
+std::vector<std::shared_ptr<gate>> gate::get_unique_successors(const std::function<bool(const std::string& starting_pin, const endpoint&)>& filter) const
 {
-    auto successors = this->get_successors(filter);
-    return std::set<endpoint>(successors.begin(), successors.end());
+    std::vector<std::shared_ptr<gate>> res;
+    auto endpoints = this->get_successors(filter);
+    res.reserve(endpoints.size());
+    for (const auto& ep : endpoints)
+    {
+        res.push_back(ep.get_gate());
+    }
+    return res;
 }
 
 std::vector<endpoint> gate::get_successors(const std::function<bool(const std::string& starting_pin, const endpoint&)>& filter) const

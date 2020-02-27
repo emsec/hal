@@ -154,7 +154,7 @@ public:
      * @param[in] sinks - All sinks connected to this channel.
      * @param[in] level - The severity level of that channel.
      */
-    std::shared_ptr<spdlog::logger> add_channel(const std::string& channel_name, std::vector<std::shared_ptr<log_sink>> sinks, const std::string& level = "info");
+    std::shared_ptr<spdlog::logger> add_channel(const std::string& channel_name, const std::vector<std::shared_ptr<log_sink>>& sinks, const std::string& level = "info");
 
     /**
      * Remove a channel from the log manager.

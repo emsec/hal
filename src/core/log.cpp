@@ -81,7 +81,7 @@ std::set<std::string> log_manager::get_channels() const
     return channels;
 }
 
-std::shared_ptr<spdlog::logger> log_manager::add_channel(const std::string& channel_name, std::vector<std::shared_ptr<log_sink>> sinks, const std::string& level)
+std::shared_ptr<spdlog::logger> log_manager::add_channel(const std::string& channel_name, const std::vector<std::shared_ptr<log_sink>>& sinks, const std::string& level)
 {
     if (auto it = m_logger.find(channel_name); it != m_logger.end())
     {
@@ -90,7 +90,10 @@ std::shared_ptr<spdlog::logger> log_manager::add_channel(const std::string& chan
 
     std::vector<std::shared_ptr<spdlog::sinks::sink>> vec;
     for (const auto& sink : sinks)
+    {
         vec.push_back(sink->spdlog_sink);
+    }
+
     auto channel           = std::make_shared<spdlog::logger>(channel_name, vec.begin(), vec.end());
     m_logger[channel_name] = channel;
     m_logger[channel_name]->flush_on(spdlog::level::info);
@@ -106,7 +109,9 @@ std::shared_ptr<spdlog::logger> log_manager::add_channel(const std::string& chan
 void log_manager::remove_channel(const std::string& channel_name)
 {
     if (m_logger.find(channel_name) == m_logger.end())
+    {
         return;
+    }
     m_logger[channel_name]->flush();
     spdlog::drop(channel_name);
     m_logger.erase(channel_name);
@@ -117,12 +122,16 @@ std::string log_manager::get_level_of_channel(const std::string& channel_name) c
 {
     auto it_channel = m_logger.find(channel_name);
     if (it_channel == m_logger.end())
+    {
         return std::string("");
+    }
 
     for (const auto& it_level : m_level)
     {
         if (it_level.second == it_channel->second->level())
+        {
             return it_level.first;
+        }
     }
 
     return std::string("");
@@ -130,16 +139,15 @@ std::string log_manager::get_level_of_channel(const std::string& channel_name) c
 
 void log_manager::set_level_of_channel(const std::string& channel_name, const std::string& level)
 {
-    auto it = m_logger.find(channel_name);
-    if (it == m_logger.end())
+    auto it_channel = m_logger.find(channel_name);
+    auto it_level   = m_level.find(level);
+    if (it_channel == m_logger.end() || it_level == m_level.end())
+    {
         return;
+    }
 
-    auto it_level = m_level.find(level);
-    if (it_level == m_level.end())
-        return;
-
-    auto channel = it->second;
-    channel->set_level(m_level[level]);
+    auto& channel = it_channel->second;
+    channel->set_level(it_level->second);
     m_logger[channel_name] = channel;
 }
 

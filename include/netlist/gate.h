@@ -264,13 +264,13 @@ public:
     std::shared_ptr<net> get_fan_out_net(const std::string& pin_type) const;
 
     /**
-     * Get a set of all unique predecessor endpoints of the gate.
+     * Get a set of all unique predecessor gates of the gate.
      * A filter can be supplied which filters out all potential values that return false.
      *
      * @param[in] filter - a function to filter the output. Leave empty for no filtering.
-     * @returns A set of unique predecessor endpoints.
+     * @returns A vector of unique predecessor gates.
      */
-    std::set<endpoint> get_unique_predecessors(const std::function<bool(const std::string& starting_pin, const endpoint& ep)>& filter = nullptr) const;
+    std::vector<std::shared_ptr<gate>> get_unique_predecessors(const std::function<bool(const std::string& starting_pin, const endpoint& ep)>& filter = nullptr) const;
 
     /**
      * Get a vector of all direct predecessor endpoints of the gate.
@@ -290,13 +290,13 @@ public:
     endpoint get_predecessor(const std::string& which_pin) const;
 
     /**
-     * Get a set of all unique successor endpoints of the gate.
+     * Get a set of all unique successor gates of the gate.
      * A filter can be supplied which filters out all potential values that return false.
      *
      * @param[in] filter - a function to filter the output. Leave empty for no filtering.
-     * @returns A set of unique successor endpoints.
+     * @returns A vector of unique successor gates.
      */
-    std::set<endpoint> get_unique_successors(const std::function<bool(const std::string& starting_pin, const endpoint& ep)>& filter = nullptr) const;
+    std::vector<std::shared_ptr<gate>> get_unique_successors(const std::function<bool(const std::string& starting_pin, const endpoint& ep)>& filter = nullptr) const;
 
     /**
      * Get a vector of all direct successor endpoints of the gate.

@@ -1301,9 +1301,9 @@ Get the fan-out net which is connected to a specific output pin.
 :rtype: hal_py.net
 )")
         .def_property_readonly("unique_predecessors", [](const std::shared_ptr<gate>& g){ return g->get_unique_predecessors();}, R"(
-A set of all unique predecessor endpoints of the gate.
+A set of all unique predecessor gates of the gate.
 
-:type: set[hal_py.endpoint]
+:type: list[hal_py.gate]
 )")
         .def("get_unique_predecessors", &gate::get_unique_predecessors, py::arg("filter") = nullptr, R"(
 Get a set of all unique predecessor endpoints of the gate filterable by the gate's input pin and a specific gate type.
@@ -1332,9 +1332,9 @@ Get the direct predecessor endpoint of the gate connected to a specific input pi
 :rtype: hal_py.endpoint
 )")
         .def_property_readonly("unique_successors", [](const std::shared_ptr<gate>& g){ return g->get_unique_successors();}, R"(
-A set of all unique successor endpoints of the gate.
+A set of all unique successor gates of the gate.
 
-:type: set[hal_py.endpoint]
+:type: list[hal_py.gate]
 )")
         .def("get_unique_successors", &gate::get_unique_successors, py::arg("filter") = nullptr, R"(
 Get a set of all unique successors of the gate filterable by the gate's output pin and a specific gate type.
