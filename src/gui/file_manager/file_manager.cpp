@@ -251,13 +251,13 @@ void file_manager::open_file(QString file_name)
 
     QList<QPair<std::string, std::shared_ptr<netlist>>> list;
 
-    for (const auto& key : gate_library_manager::get_gate_libraries())
+    for (const auto& lib : gate_library_manager::get_gate_libraries())
     {
-        std::string lib = key.first;
+        std::string name = lib->get_name();
 
-        log_info("gui", "Trying to use gate library '{}'...", lib);
+        log_info("gui", "Trying to use gate library '{}'...", name);
         event_controls::enable_all(false);
-        std::shared_ptr<netlist> netlist = netlist_factory::load_netlist(file_name.toStdString(), language.toStdString(), lib);
+        std::shared_ptr<netlist> netlist = netlist_factory::load_netlist(file_name.toStdString(), language.toStdString(), name);
         event_controls::enable_all(true);
 
         if (netlist)
