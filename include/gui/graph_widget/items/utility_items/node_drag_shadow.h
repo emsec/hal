@@ -1,25 +1,21 @@
-#ifndef DRAG_SHADOW_GATE_H
-#define DRAG_SHADOW_GATE_H
+#ifndef NODE_DRAG_SHADOW_H
+#define NODE_DRAG_SHADOW_H
 
 #include <QGraphicsObject>
 
-class graphics_gate;
-
-class QParallelAnimationGroup;
-class QPropertyAnimation;
-
-class drag_shadow_gate : public QGraphicsObject
+class node_drag_shadow : public QGraphicsObject
 {
     Q_OBJECT
 
 public:
-    enum class drag_cue {
+    enum class drag_cue
+    {
         movable = 0,
         swappable = 1,
         rejected = 2
     };
 
-    explicit drag_shadow_gate();
+    node_drag_shadow();
 
     void start(const QPointF& posF, const QSizeF& sizeF);
     void stop();
@@ -37,12 +33,11 @@ public:
     static void load_settings();
 
 protected:
-    void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = nullptr) Q_DECL_OVERRIDE;
-    virtual QRectF boundingRect() const Q_DECL_OVERRIDE;
-    virtual QPainterPath shape() const Q_DECL_OVERRIDE;
+    void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = nullptr) override;
+    QRectF boundingRect() const override;
+    QPainterPath shape() const override;
 
 private:
-    // static bool s_delegate_paint;
     static qreal s_lod;
     static QPen s_pen;
     static QColor s_color_pen[];
@@ -55,4 +50,4 @@ private:
     qreal m_height;
 };
 
-#endif // DRAG_SHADOW_GATE_H
+#endif // NODE_DRAG_SHADOW_H

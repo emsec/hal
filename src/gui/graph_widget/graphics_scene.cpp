@@ -6,10 +6,10 @@
 
 #include "gui/graph_widget/graph_widget_constants.h"
 #include "gui/graph_widget/graphics_factory.h"
-#include "gui/graph_widget/items/graphics_gate.h"
+#include "gui/graph_widget/items/nodes/gates/graphics_gate.h"
 #include "gui/graph_widget/items/graphics_item.h"
-#include "gui/graph_widget/items/graphics_module.h"
-#include "gui/graph_widget/items/graphics_net.h"
+#include "gui/graph_widget/items/nodes/modules/graphics_module.h"
+#include "gui/graph_widget/items/nets/graphics_net.h"
 #include "netlist/gate.h"
 //#include "gui/graph_widget/graphics_items/utility_items/gate_navigation_popup.h"
 #include "gui/gui_globals.h"
@@ -105,7 +105,7 @@ QPointF graphics_scene::snap_to_grid(const QPointF& pos)
 }
 
 graphics_scene::graphics_scene(QObject* parent) : QGraphicsScene(parent),
-    m_drag_shadow_gate(new drag_shadow_gate())
+    m_drag_shadow_gate(new node_drag_shadow())
 //    m_left_gate_navigation_popup(new gate_navigation_popup(gate_navigation_popup::type::left)),
 //    m_right_gate_navigation_popup(new gate_navigation_popup(gate_navigation_popup::type::right))
 {
@@ -123,13 +123,13 @@ graphics_scene::graphics_scene(QObject* parent) : QGraphicsScene(parent),
     #endif
 }
 
-void graphics_scene::start_drag_shadow(const QPointF& posF, const QSizeF& sizeF, const drag_shadow_gate::drag_cue cue)
+void graphics_scene::start_drag_shadow(const QPointF& posF, const QSizeF& sizeF, const node_drag_shadow::drag_cue cue)
 {
     m_drag_shadow_gate->set_visual_cue(cue);
     m_drag_shadow_gate->start(posF, sizeF);
 }
 
-void graphics_scene::move_drag_shadow(const QPointF& posF, const drag_shadow_gate::drag_cue cue)
+void graphics_scene::move_drag_shadow(const QPointF& posF, const node_drag_shadow::drag_cue cue)
 {
     m_drag_shadow_gate->setPos(posF);
     m_drag_shadow_gate->set_visual_cue(cue);

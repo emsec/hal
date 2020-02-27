@@ -1,6 +1,4 @@
-#include "gui/graph_widget/items/modules/standard_graphics_module.h"
-
-#include "core/log.h"
+#include "gui/graph_widget/items/nodes/modules/standard_graphics_module.h"
 
 #include "netlist/gate.h"
 
@@ -196,11 +194,7 @@ QPointF standard_graphics_module::get_input_scene_position(const u32 net_id, con
 
     int index = m_input_pins.indexOf(module_pin{net_id, pin_type});
 
-    if (index == -1)
-    {
-        log_error("gui", "input pin type not found.");
-        return mapToScene(QPointF(0, 0));
-    }
+    assert(index != -1);
 
     qreal y = s_color_bar_height + s_pin_upper_vertical_spacing;
 
@@ -218,11 +212,7 @@ QPointF standard_graphics_module::get_output_scene_position(const u32 net_id, co
 
     int index = m_output_pins.indexOf(module_pin{net_id, pin_type});
 
-    if (index == -1)
-    {
-        log_error("gui", "output pin type not found.");
-        return mapToScene(QPointF(0, 0));
-    }
+    assert(index != -1);
 
     qreal y = s_color_bar_height + s_pin_upper_vertical_spacing;
 
@@ -232,11 +222,6 @@ QPointF standard_graphics_module::get_output_scene_position(const u32 net_id, co
     y += s_pin_font_height / 2;
 
     return mapToScene(QPointF(m_width, y));
-}
-
-void standard_graphics_module::set_visuals(const graphics_node::visuals& v)
-{
-    m_color = v.main_color;
 }
 
 void standard_graphics_module::format(const bool& adjust_size_to_grid)

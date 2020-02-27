@@ -5,7 +5,7 @@
 
 #include "gui/gui_globals.h"
 #include "gui/graph_widget/shaders/graph_shader.h"
-#include "items/utility_items/drag_shadow_gate.h"
+#include "items/utility_items/node_drag_shadow.h"
 #include "netlist/gate.h"
 #include "netlist/module.h"
 
@@ -44,8 +44,8 @@ public:
 
     graphics_scene(QObject* parent = nullptr);
 
-    void start_drag_shadow(const QPointF& posF, const QSizeF& sizeF, const drag_shadow_gate::drag_cue cue);
-    void move_drag_shadow(const QPointF& posF, const drag_shadow_gate::drag_cue cue);
+    void start_drag_shadow(const QPointF& posF, const QSizeF& sizeF, const node_drag_shadow::drag_cue cue);
+    void move_drag_shadow(const QPointF& posF, const node_drag_shadow::drag_cue cue);
     void stop_drag_shadow();
     QPointF drop_target();
 
@@ -120,7 +120,7 @@ private:
 
     void drawBackground(QPainter* painter, const QRectF& rect) Q_DECL_OVERRIDE;
 
-    drag_shadow_gate* m_drag_shadow_gate;
+    node_drag_shadow* m_drag_shadow_gate;
     
     QVector<module_data> m_module_items;
     QVector<gate_data> m_gate_items;

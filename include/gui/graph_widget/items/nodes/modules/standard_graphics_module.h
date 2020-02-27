@@ -1,9 +1,9 @@
 #ifndef STANDARD_GRAPHICS_MODULE_H
 #define STANDARD_GRAPHICS_MODULE_H
 
-#include "gui/graph_widget/items/graphics_module.h"
+#include "gui/graph_widget/items/nodes/modules/graphics_module.h"
 
-class standard_graphics_module : public graphics_module
+class standard_graphics_module final : public graphics_module
 {   
 public:
     static void load_settings();
@@ -11,12 +11,10 @@ public:
 
     standard_graphics_module(const std::shared_ptr<const module> m, bool adjust_size_to_grid = true);
 
-    void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = nullptr) Q_DECL_OVERRIDE;
+    void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = nullptr) override;
 
-    QPointF get_input_scene_position(const u32 net_id, const QString& pin_type) const Q_DECL_OVERRIDE;
-    QPointF get_output_scene_position(const u32 net_id, const QString& pin_type) const Q_DECL_OVERRIDE;
-
-    virtual void set_visuals(const visuals& v) Q_DECL_OVERRIDE;
+    QPointF get_input_scene_position(const u32 net_id, const QString& pin_type) const override;
+    QPointF get_output_scene_position(const u32 net_id, const QString& pin_type) const override;
 
 private:
     static qreal s_alpha;

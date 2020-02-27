@@ -6,7 +6,7 @@
 class graph_context_subscriber
 {
 public:
-    //virtual ~graph_context_subscriber() = 0;
+    virtual ~graph_context_subscriber() = default;
 
     virtual void handle_scene_available() = 0;
     virtual void handle_scene_unavailable() = 0;
