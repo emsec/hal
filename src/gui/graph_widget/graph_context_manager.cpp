@@ -160,11 +160,25 @@ void graph_context_manager::handle_net_name_changed(const std::shared_ptr<net> n
     // TRIGGER RESHADE FOR ALL CONTEXTS THAT RECURSIVELY CONTAIN THE NET
 }
 
-void graph_context_manager::handle_net_source_changed(const std::shared_ptr<net> n) const
+void graph_context_manager::handle_net_source_added(const std::shared_ptr<net> n, const u32 src_gate_id) const
 {
     for(graph_context* context : m_graph_contexts)
     {
-        if(context->nets().contains(n->get_id()) || (context->is_showing_net_source(n->get_id()) && (n->is_global_output_net() || context->is_showing_net_destination(n->get_id()))))
+        // FIXME
+        // if(context->nets().contains(n->get_id()) || (context->is_showing_net_source(n->get_id()) && (n->is_global_output_net() || context->is_showing_net_destination(n->get_id()))))
+        {
+            context->apply_changes();
+            context->schedule_scene_update();
+        }
+    }
+}
+
+void graph_context_manager::handle_net_source_removed(const std::shared_ptr<net> n, const u32 src_gate_id) const
+{
+    for(graph_context* context : m_graph_contexts)
+    {
+        // FIXME
+        // if(context->nets().contains(n->get_id()) || (context->is_showing_net_source(n->get_id()) && (n->is_global_output_net() || context->is_showing_net_destination(n->get_id()))))
         {
             context->apply_changes();
             context->schedule_scene_update();

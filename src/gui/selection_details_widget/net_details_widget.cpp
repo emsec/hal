@@ -139,7 +139,8 @@ net_details_widget::net_details_widget(QWidget* parent) : QWidget(parent)
 
     connect(&g_netlist_relay, &netlist_relay::net_removed, this, &net_details_widget::handle_net_removed);
     connect(&g_netlist_relay, &netlist_relay::net_name_changed, this, &net_details_widget::handle_net_name_changed);
-    connect(&g_netlist_relay, &netlist_relay::net_source_changed, this, &net_details_widget::handle_net_source_changed);
+    // FIXME change to source_added, source_removed
+    // connect(&g_netlist_relay, &netlist_relay::net_source_changed, this, &net_details_widget::handle_net_source_changed);
     connect(&g_netlist_relay, &netlist_relay::net_destination_added, this, &net_details_widget::handle_net_destination_added);
     connect(&g_netlist_relay, &netlist_relay::net_destination_removed, this, &net_details_widget::handle_net_destination_removed);
 
@@ -323,11 +324,12 @@ void net_details_widget::handle_net_name_changed(const std::shared_ptr<net> n)
 
 }
 
-void net_details_widget::handle_net_source_changed(const std::shared_ptr<net> n)
-{
-    if(m_current_id == n->get_id())
-        update(m_current_id);
-}
+// FIXME change to source_added, source_removed
+// void net_details_widget::handle_net_source_changed(const std::shared_ptr<net> n)
+// {
+//     if(m_current_id == n->get_id())
+//         update(m_current_id);
+// }
 
 void net_details_widget::handle_net_destination_added(const std::shared_ptr<net> n, const u32 dst_gate_id)
 {

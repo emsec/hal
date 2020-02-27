@@ -402,13 +402,32 @@ void netlist_relay::relay_net_event(net_event_handler::event ev, std::shared_ptr
             Q_EMIT net_name_changed(object);
             break;
         }
-        case net_event_handler::event::src_changed:
+        // FIXME add src_added, src_removed
+        // case net_event_handler::event::src_changed:
+        // {
+        //     //< no associated_data
+
+        //     g_graph_context_manager.handle_net_source_changed(object);
+
+        //     Q_EMIT net_source_changed(object);
+        //     break;
+        // }
+        case net_event_handler::event::src_added:
         {
-            //< no associated_data
+            //< associated_data = id of src gate
 
-            g_graph_context_manager.handle_net_source_changed(object);
+            g_graph_context_manager.handle_net_source_added(object, associated_data);
 
-            Q_EMIT net_source_changed(object);
+            Q_EMIT net_source_added(object, associated_data);
+            break;
+        }
+        case net_event_handler::event::src_removed:
+        {
+            //< associated_data = id of src gate
+
+            g_graph_context_manager.handle_net_source_removed(object, associated_data);
+
+            Q_EMIT net_source_removed(object, associated_data);
             break;
         }
         case net_event_handler::event::dst_added:

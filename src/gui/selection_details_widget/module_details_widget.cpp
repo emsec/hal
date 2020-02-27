@@ -98,7 +98,8 @@ module_details_widget::module_details_widget(QWidget* parent)
 
     connect(&g_netlist_relay, &netlist_relay::net_removed, this, &module_details_widget::handle_net_removed);
     connect(&g_netlist_relay, &netlist_relay::net_name_changed, this, &module_details_widget::handle_net_name_changed);
-    connect(&g_netlist_relay, &netlist_relay::net_source_changed, this, &module_details_widget::handle_net_source_changed);
+    // FIXME change to source_added, source_removed
+    // connect(&g_netlist_relay, &netlist_relay::net_source_changed, this, &module_details_widget::handle_net_source_changed);
     connect(&g_netlist_relay, &netlist_relay::net_destination_added, this, &module_details_widget::handle_net_destination_added);
     connect(&g_netlist_relay, &netlist_relay::net_destination_removed, this, &module_details_widget::handle_net_destination_removed);
 
@@ -209,11 +210,12 @@ void module_details_widget::handle_net_name_changed(const std::shared_ptr<net> n
         update(m_current_id);
 }
 
-void module_details_widget::handle_net_source_changed(const std::shared_ptr<net> n)
-{
-    Q_UNUSED(n);
-    update(m_current_id);
-}
+// FIXME change to source_added, source_removed
+// void module_details_widget::handle_net_source_changed(const std::shared_ptr<net> n)
+// {
+//     Q_UNUSED(n);
+//     update(m_current_id);
+// }
 
 void module_details_widget::handle_net_destination_added(const std::shared_ptr<net> n, const u32 dst_gate_id)
 {
