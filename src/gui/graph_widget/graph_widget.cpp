@@ -210,7 +210,8 @@ void graph_widget::handle_navigation_jump_requested(const hal::node origin, cons
         // If we don't have all the gates in the current context, we need to
         // insert them
 
-        bool netIsInput = n->is_a_destination(*gates.constBegin()); // either they're all inputs or all outputs, so just check the first one
+        auto in_nets = gates.constBegin()->get()->get_fan_in_nets(); // either they're all inputs or all outputs, so just check the first one
+        bool netIsInput = in_nets.find(n) != in_nets.cend();
         hal::placement_mode placement = netIsInput ? hal::placement_mode::prefer_right : hal::placement_mode::prefer_left;
         m_context->add({}, to_gates, hal::placement_hint{placement, origin});
 
