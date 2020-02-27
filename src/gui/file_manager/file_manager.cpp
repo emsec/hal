@@ -262,7 +262,7 @@ void file_manager::open_file(QString file_name)
 
         if (netlist)
         {
-            list.append(QPair(lib, netlist));
+            list.append(QPair(name, netlist));
         }
         else
         {

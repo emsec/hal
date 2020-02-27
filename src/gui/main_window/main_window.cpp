@@ -476,7 +476,7 @@ void main_window::handle_action_new()
     QStringList items;
     for (const auto& it : gate_library_manager::get_gate_libraries())
     {
-        items.append(QString::fromStdString(it.first));
+        items.append(QString::fromStdString(it->get_name()));
     }
     bool ok          = false;
     QString selected = QInputDialog::getItem(this, title, text, items, 0, false, &ok);
