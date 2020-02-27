@@ -191,6 +191,7 @@ namespace core_utils
             {
                 ss << joiner;
             }
+            first = false;
             ss << *it;
         }
         return ss.str();
