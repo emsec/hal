@@ -134,7 +134,7 @@ std::shared_ptr<netlist> hdl_parser_verilog::parse(const std::string& gate_libra
 
     for (const auto& net : m_netlist->get_nets())
     {
-        bool no_source = net->get_source().get_gate() == nullptr && !net->is_global_input_net();
+        bool no_source      = net->get_source().get_gate() == nullptr && !net->is_global_input_net();
         bool no_destination = net->get_num_of_destinations() == 0 && !net->is_global_output_net();
         if (no_source && no_destination)
         {
@@ -251,18 +251,12 @@ bool hdl_parser_verilog::parse_entity_definiton()
     auto next_token = m_token_stream.peek();
     while (next_token != "endmodule")
     {
-        if (next_token == "input" || next_token == "output")
+        if (next_token == "input" || next_token == "output" || next_token == "inout")
         {
             if (!parse_port_definition(e))
             {
                 return false;
             }
-        }
-        else if (next_token == "inout")
-        {
-            // not yet supported
-            log_error("hdl_parser", "entity '{}', line {} : direction 'inout' unkown", e.name, e.line_number);
-            return false;
         }
         else if (next_token == "wire")
         {
@@ -602,37 +596,42 @@ bool hdl_parser_verilog::build_netlist(const std::string& top_module)
     }
 
     // for the top module, generate global i/o signals for all ports
-
-    std::unordered_map<std::string, std::function<bool(std::shared_ptr<net> const)>> port_dir_function = {{"input", [](std::shared_ptr<net> const net) { return net->mark_global_input_net(); }},
-                                                                                                          {"output", [](std::shared_ptr<net> const net) { return net->mark_global_output_net(); }}};
-
     std::unordered_map<std::string, std::string> top_assignments;
 
     for (const auto& expanded_port : top_entity.ports_expanded)
     {
         auto direction = expanded_port.second.first;
 
-        for (const auto& expanded_port_name : expanded_port.second.second)
+        for (const auto& name : expanded_port.second.second)
         {
-            if (port_dir_function.find(direction) == port_dir_function.end())
-            {
-                log_error("hdl_parser", "entity {}, line {}+ : direction '{}' unknown", expanded_port_name, top_entity.line_number, direction);
-                return false;
-            }
-
-            auto new_net = m_netlist->create_net(expanded_port_name);
-            if (new_net == nullptr)
-            {
-                return false;
-            }
+            auto new_net                       = m_netlist->create_net(name);
             m_net_by_name[new_net->get_name()] = new_net;
-            if (!port_dir_function[direction](new_net))
-            {
-                return false;
-            }
 
             // for instances, point the ports to the newly generated signals
             top_assignments[new_net->get_name()] = new_net->get_name();
+
+            if (new_net == nullptr)
+            {
+                log_error("hdl_parser", "could not create new net '{}'", name);
+                return false;
+            }
+
+            if (direction == "input" || direction == "inout")
+            {
+                if (!new_net->mark_global_input_net())
+                {
+                    log_error("hdl_parser", "could not mark net '{}' as global input", name);
+                    return false;
+                }
+            }
+            if (direction == "output" || direction == "inout")
+            {
+                if (!new_net->mark_global_output_net())
+                {
+                    log_error("hdl_parser", "could not mark net '{}' as global output", name);
+                    return false;
+                }
+            }
         }
     }
 
@@ -805,6 +804,7 @@ std::shared_ptr<module> hdl_parser_verilog::instantiate(const entity& e, std::sh
     // cache global vcc/gnd types
     auto vcc_gate_types = m_netlist->get_gate_library()->get_vcc_gate_types();
     auto gnd_gate_types = m_netlist->get_gate_library()->get_gnd_gate_types();
+    auto gate_types     = m_netlist->get_gate_library()->get_gate_types();
 
     // process instances i.e. gates or other entities
     for (const auto& inst : e.instances)
@@ -855,10 +855,10 @@ std::shared_ptr<module> hdl_parser_verilog::instantiate(const entity& e, std::sh
             aliases[inst.name] = get_unique_alias(inst.name);
 
             std::shared_ptr<gate> new_gate;
-            auto gate_types = m_netlist->get_gate_library()->get_gate_types();
 
             if (auto gate_type_it = gate_types.find(inst.type); gate_type_it == gate_types.end())
             {
+                log_error("hdl_parser", "could not find gate type '{}' in gate library '{}'", inst.type, m_netlist->get_gate_library()->get_name());
                 return nullptr;
             }
             else
