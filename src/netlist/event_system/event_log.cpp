@@ -196,6 +196,14 @@ namespace event_log
             {
                 log_info("event", "removed gate with id {:08x} from submodule '{}' (id {:08x})", associated_data, submodule->get_name(), submodule->get_id());
             }
+            else if (event == module_event_handler::event::input_port_name_changed)
+            {
+                log_info("event", "changed input port name of net with id {:08x} from submodule '{}' (id {:08x})", associated_data, submodule->get_name(), submodule->get_id());
+            }
+            else if (event == module_event_handler::event::output_port_name_changed)
+            {
+                log_info("event", "changed output port name of net with id {:08x} from submodule '{}' (id {:08x})", associated_data, submodule->get_name(), submodule->get_id());
+            }
             else
             {
                 log_error("event", "unknown submodule event");
