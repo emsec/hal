@@ -44,14 +44,16 @@ namespace module_event_handler
 
     enum event
     {
-        created,                ///< no associated_data
-        removed,                ///< no associated_data
-        name_changed,           ///< no associated_data
-        parent_changed,         ///< no associated_data
-        submodule_added,        ///< associated_data = id of added module
-        submodule_removed,      ///< associated_data = id of removed module
-        gate_assigned,          ///< associated_data = id of inserted gate
-        gate_removed,           ///< associated_data = id of removed gate
+        created,                     ///< no associated_data
+        removed,                     ///< no associated_data
+        name_changed,                ///< no associated_data
+        parent_changed,              ///< no associated_data
+        submodule_added,             ///< associated_data = id of added module
+        submodule_removed,           ///< associated_data = id of removed module
+        gate_assigned,               ///< associated_data = id of inserted gate
+        gate_removed,                ///< associated_data = id of removed gate
+        input_port_name_changed,     ///< associated_data = id of respective net
+        output_port_name_changed,    ///< associated_data = id of respective net
     };
 
     /**

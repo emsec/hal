@@ -305,3 +305,135 @@ std::set<std::shared_ptr<net>> module::get_internal_nets() const
     }
     return res;
 }
+
+void module::set_input_port_name(const std::shared_ptr<net>& input_net, std::string port_name)
+{
+    auto input_nets = get_input_nets();
+
+    if (auto it = input_nets.find(input_net); it == input_nets.end())
+    {
+        log_error("module", "net {} with ID {} is not an input net of module {} with ID.", input_net->get_name(), input_net->get_id(), this->get_name(), this->get_id());
+        return;
+    }
+
+    m_input_net_to_port_name.insert_or_assign(input_net, port_name);
+
+    module_event_handler::notify(module_event_handler::event::input_port_name_changed, shared_from_this(), input_net->get_id());
+}
+
+void module::set_output_port_name(const std::shared_ptr<net>& output_net, std::string port_name)
+{
+    auto output_nets = get_output_nets();
+
+    if (auto it = output_nets.find(output_net); it == output_nets.end())
+    {
+        log_error("module", "net {} with ID {} is not an output net of module {} with ID.", output_net->get_name(), output_net->get_id(), this->get_name(), this->get_id());
+        return;
+    }
+
+    m_output_net_to_port_name.insert_or_assign(output_net, port_name);
+
+    module_event_handler::notify(module_event_handler::event::output_port_name_changed, shared_from_this(), output_net->get_id());
+}
+
+std::string module::get_input_port_name(const std::shared_ptr<net>& input_net)
+{
+    std::string port_name;
+    auto input_nets = get_input_nets();
+
+    if (auto it = input_nets.find(input_net); it == input_nets.end())
+    {
+        log_error("module", "net {} with ID {} is not an input net of module {} with ID.", input_net->get_name(), input_net->get_id(), this->get_name(), this->get_id());
+        return "";
+    }
+
+    if (auto it = m_input_net_to_port_name.find(input_net); it != m_input_net_to_port_name.end())
+    {
+        port_name = it->second;
+    }
+    else
+    {
+        port_name = "I(" + std::to_string(m_next_input_port_id++) + ")";
+        m_named_input_nets.insert(input_net);
+        m_input_net_to_port_name.emplace(input_net, port_name);
+    }
+
+    return port_name;
+}
+
+std::string module::get_output_port_name(const std::shared_ptr<net>& output_net)
+{
+    std::string port_name;
+    auto output_nets = get_input_nets();
+
+    if (auto it = output_nets.find(output_net); it == output_nets.end())
+    {
+        log_error("module", "net {} with ID {} is not an output net of module {} with ID.", output_net->get_name(), output_net->get_id(), this->get_name(), this->get_id());
+        return "";
+    }
+
+    if (auto it = m_output_net_to_port_name.find(output_net); it != m_output_net_to_port_name.end())
+    {
+        port_name = it->second;
+    }
+    else
+    {
+        port_name = "I(" + std::to_string(m_next_input_port_id++) + ")";
+        m_named_output_nets.insert(output_net);
+        m_output_net_to_port_name.emplace(output_net, port_name);
+    }
+
+    return port_name;
+}
+
+std::map<std::shared_ptr<net>, std::string> module::get_input_port_names()
+{
+    auto input_nets = get_input_nets();
+    std::set<std::shared_ptr<net>> diff;
+
+    // find nets that are still in the port map but no longer an input net
+    std::set_difference(m_named_input_nets.begin(), m_named_input_nets.end(), input_nets.begin(), input_nets.end(), std::inserter(diff, diff.begin()));
+    for (const auto& net : diff)
+    {
+        m_named_input_nets.erase(net);
+        m_input_net_to_port_name.erase(net);
+    }
+
+    diff.clear();
+
+    // find nets that are input nets but have not yet been assigned a port name
+    std::set_difference(input_nets.begin(), input_nets.end(), m_named_input_nets.begin(), m_named_input_nets.end(), std::inserter(diff, diff.begin()));
+    for (const auto& net : diff)
+    {
+        m_named_input_nets.insert(net);
+        m_input_net_to_port_name.emplace(net, "I(" + std::to_string(m_next_input_port_id++) + ")");
+    }
+
+    return m_input_net_to_port_name;
+}
+
+std::map<std::shared_ptr<net>, std::string> module::get_output_port_names()
+{
+    auto output_nets = get_output_nets();
+    std::set<std::shared_ptr<net>> diff;
+
+    // find nets that are still in the port map but no longer an input net
+    std::set_difference(m_named_output_nets.begin(), m_named_output_nets.end(), output_nets.begin(), output_nets.end(), std::inserter(diff, diff.begin()));
+    for (const auto& net : diff)
+    {
+        m_named_output_nets.erase(net);
+        m_output_net_to_port_name.erase(net);
+    }
+
+    diff.clear();
+
+    // find nets that are input nets but have not yet been assigned a port name
+    std::set_difference(output_nets.begin(), output_nets.end(), m_named_output_nets.begin(), m_named_output_nets.end(), std::inserter(diff, diff.begin()));
+    for (const auto& net : diff)
+    {
+        m_named_output_nets.insert(net);
+        m_output_net_to_port_name.emplace(net, "I(" + std::to_string(m_next_input_port_id++) + ")");
+    }
+
+    return m_output_net_to_port_name;
+}

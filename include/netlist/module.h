@@ -29,13 +29,13 @@
 
 #include "netlist/data_container.h"
 
+#include <functional>
 #include <map>
 #include <memory>
 #include <set>
 #include <string>
 #include <tuple>
 #include <type_traits>
-#include <functional>
 
 /** forward declaration */
 class netlist;
@@ -144,6 +144,52 @@ public:
      */
     std::set<std::shared_ptr<net>> get_internal_nets() const;
 
+    /**
+     * Set the name of the port corresponding to the specified input net to the given string.
+     * 
+     * @param[in] input_net - The input net.
+     * @param[in] port_name - The port name.
+     */
+    void set_input_port_name(const std::shared_ptr<net>& input_net, std::string port_name);
+
+    /**
+     * Set the name of the port corresponding to the specified output net to the given string.
+     * 
+     * @param[in] output_net - The output net.
+     * @param[in] port_name - The port name.
+     */
+    void set_output_port_name(const std::shared_ptr<net>& output_net, std::string port_name);
+
+    /**
+     * Get the name of the port corresponding to the specified input net.
+     * 
+     * @param[in] input_net - The input net.
+     * @returns The port name.
+     */
+    std::string get_input_port_name(const std::shared_ptr<net>& input_net);
+
+    /**
+     * Get the name of the port corresponding to the specified output net.
+     * 
+     * @param[in] output_net - The output net.
+     * @returns The port name.
+     */
+    std::string get_output_port_name(const std::shared_ptr<net>& output_net);
+
+    /**
+     * Get the mapping of all input nets to their corresponding port names.
+     * 
+     * @returns The map from input net to port name.
+     */
+    std::map<std::shared_ptr<net>, std::string> get_input_port_names();
+
+    /**
+     * Get the mapping of all output nets to their corresponding port names.
+     * 
+     * @returns The map from output net to port name.
+     */
+    std::map<std::shared_ptr<net>, std::string> get_output_port_names();
+
     /*
      * ################################################################
      *      gate functions
@@ -213,6 +259,14 @@ private:
     std::shared_ptr<module> m_parent;
     std::map<u32, std::shared_ptr<module>> m_submodules_map;
     std::set<std::shared_ptr<module>> m_submodules_set;
+
+    // port names
+    u32 m_next_input_port_id;
+    u32 m_next_output_port_id;
+    std::set<std::shared_ptr<net>> m_named_input_nets;
+    std::set<std::shared_ptr<net>> m_named_output_nets;
+    std::map<std::shared_ptr<net>, std::string> m_input_net_to_port_name;
+    std::map<std::shared_ptr<net>, std::string> m_output_net_to_port_name;
 
     /** stores gates sorted by id*/
     std::map<u32, std::shared_ptr<gate>> m_gates_map;

@@ -1631,7 +1631,7 @@ If the new parent is a submodule of this module, the new parent is added as a di
 :returns: True if the parent was changed
 :rtype: bool
 )")
-        .def_property_readonly("submodules", [](const std::shared_ptr<module>& mod){return mod->get_submodules();}, R"(
+        .def_property_readonly("submodules", [](const std::shared_ptr<module>& mod) { return mod->get_submodules(); }, R"(
 A set of all direct submodules of this module.
 
 :type: set[hal_py.module]
@@ -1703,7 +1703,7 @@ Therefore it may contain some nets that are also regarded as output nets.
 :returns: The set of internal nets.
 :rtype: set[hal_py.net]
 )")
-        .def_property_readonly("gates", [](const std::shared_ptr<module>& mod){return mod->get_gates();}, R"(
+        .def_property_readonly("gates", [](const std::shared_ptr<module>& mod) { return mod->get_gates(); }, R"(
 The set of all gates belonging to the module.
 
 :type: set[hal_py.get_gate()]
@@ -1747,6 +1747,49 @@ Checks whether a gate is in the module. If \p recursive is true, all submodules 
 :param bool recursive: Look into submodules too
 :returns: True if the gate is in the object.
 :rtype: bool
+)")
+        .def("set_input_port_name", &module::set_input_port_name, py::arg("input_net"), py::arg("port_name"), R"(
+Set the name of the port corresponding to the specified input net to the given string.
+
+:param hal_py.net input_net: The input net.
+:param str port_name: The port name.
+)")
+
+        .def("set_output_port_name", &module::set_output_port_name, py::arg("output_net"), py::arg("port_name"), R"(
+Set the name of the port corresponding to the specified output net to the given string.
+
+:param hal_py.net output_net: The output net.
+:param str port_name: The port name.
+)")
+
+        .def("get_input_port_name", &module::get_input_port_name, py::arg("input_net"), R"(
+Get the name of the port corresponding to the specified input net.
+     
+:param hal_py.net input_net: The input net.
+:returns: The port name.
+:rtype: str
+)")
+
+        .def("get_output_port_name", &module::get_output_port_name, py::arg("output_net"), R"(
+Get the name of the port corresponding to the specified output net.
+     
+:param hal_py.net output_net: The output net.
+:returns: The port name.
+:rtype: str
+)")
+
+.def("get_input_port_names", &module::get_input_port_names, R"(
+Get the mapping of all input nets to their corresponding port names.
+     
+:returns: The map from input net to port name.
+:rtype: dict[hal_py.net,str]
+)")
+
+.def("get_output_port_names", &module::get_output_port_names, R"(
+Get the mapping of all output nets to their corresponding port names.
+     
+:returns: The map from output net to port name.
+:rtype: dict[hal_py.net,str]
 )");
 
     m.def_submodule("netlist_factory")
