@@ -29,13 +29,13 @@
 
 #include "netlist/data_container.h"
 
+#include <functional>
 #include <map>
 #include <memory>
 #include <set>
 #include <string>
 #include <tuple>
 #include <type_traits>
-#include <functional>
 
 /** forward declaration */
 class netlist;
@@ -144,6 +144,12 @@ public:
      */
     std::set<std::shared_ptr<net>> get_internal_nets() const;
 
+    void set_input_ports(std::map<std::shared_ptr<net>, std::string> input_map);
+    void set_output_ports(std::map<std::shared_ptr<net>, std::string> output_map);
+
+    std::map<std::shared_ptr<net>, std::string> get_input_ports() const;
+    std::map<std::shared_ptr<net>, std::string> get_output_ports() const;
+
     /*
      * ################################################################
      *      gate functions
@@ -213,6 +219,9 @@ private:
     std::shared_ptr<module> m_parent;
     std::map<u32, std::shared_ptr<module>> m_submodules_map;
     std::set<std::shared_ptr<module>> m_submodules_set;
+
+    std::map<std::shared_ptr<net>, std::string> m_input_net_to_port_name;
+    std::map<std::shared_ptr<net>, std::string> m_output_net_to_port_name;
 
     /** stores gates sorted by id*/
     std::map<u32, std::shared_ptr<gate>> m_gates_map;

@@ -305,3 +305,8 @@ std::set<std::shared_ptr<net>> module::get_internal_nets() const
     }
     return res;
 }
+
+void module::set_input_ports(std::map<std::shared_ptr<net>, std::string> input_map)
+{
+    module_event_handler::notify(module_event_handler::event::input_ports_changed);
+}
