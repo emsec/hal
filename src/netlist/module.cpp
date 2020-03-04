@@ -308,6 +308,14 @@ std::set<std::shared_ptr<net>> module::get_internal_nets() const
 
 void module::set_input_port_name(const std::shared_ptr<net>& input_net, std::string port_name)
 {
+    auto input_nets = get_input_nets();
+
+    if (auto it = input_nets.find(input_net); it == input_nets.end())
+    {
+        log_error("module", "net {} with ID {} is not an input net of module {} with ID.", input_net->get_name(), input_net->get_id(), this->get_name(), this->get_id());
+        return;
+    }
+
     m_input_net_to_port_name.insert_or_assign(input_net, port_name);
 
     module_event_handler::notify(module_event_handler::event::input_port_name_changed, shared_from_this(), input_net->get_id());
@@ -315,6 +323,14 @@ void module::set_input_port_name(const std::shared_ptr<net>& input_net, std::str
 
 void module::set_output_port_name(const std::shared_ptr<net>& output_net, std::string port_name)
 {
+    auto output_nets = get_output_nets();
+
+    if (auto it = output_nets.find(output_net); it == output_nets.end())
+    {
+        log_error("module", "net {} with ID {} is not an output net of module {} with ID.", output_net->get_name(), output_net->get_id(), this->get_name(), this->get_id());
+        return;
+    }
+
     m_output_net_to_port_name.insert_or_assign(output_net, port_name);
 
     module_event_handler::notify(module_event_handler::event::output_port_name_changed, shared_from_this(), output_net->get_id());
@@ -327,6 +343,7 @@ std::string module::get_input_port_name(const std::shared_ptr<net>& input_net)
 
     if (auto it = input_nets.find(input_net); it == input_nets.end())
     {
+        log_error("module", "net {} with ID {} is not an input net of module {} with ID.", input_net->get_name(), input_net->get_id(), this->get_name(), this->get_id());
         return "";
     }
 
@@ -351,6 +368,7 @@ std::string module::get_output_port_name(const std::shared_ptr<net>& output_net)
 
     if (auto it = output_nets.find(output_net); it == output_nets.end())
     {
+        log_error("module", "net {} with ID {} is not an output net of module {} with ID.", output_net->get_name(), output_net->get_id(), this->get_name(), this->get_id());
         return "";
     }
 
