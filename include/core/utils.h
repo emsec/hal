@@ -34,6 +34,7 @@
 #include <string>
 #include <unordered_set>
 #include <vector>
+#include <functional>
 
 /**
  * @ingroup core
@@ -174,14 +175,16 @@ namespace core_utils
     CORE_API std::string replace(const std::string& str, const std::string& search, const std::string& replace);
 
     /**
-     * Joins all elements of a vector with a joiner-string.
+     * Joins all elements of a collection with a joiner-string.
+     * Every element is transformed before being printed.
      *
      * @param[in] joiner - The string to put between the elements.
-     * @param[in] items - The vector of elements to join.
+     * @param[in] items - The collection of elements to join.
+     * @param[in] transform - The transformation function for each element.
      * @returns The combined string.
      */
-    template<typename T>
-    CORE_API std::string join(const std::string& joiner, const T& items)
+    template<typename T, class Transform>
+    CORE_API std::string join(const std::string& joiner, const T& items, const Transform& transform)
     {
         std::stringstream ss;
         bool first = true;
@@ -192,10 +195,41 @@ namespace core_utils
                 ss << joiner;
             }
             first = false;
-            ss << *it;
+            ss << transform(*it);
         }
         return ss.str();
     }
+
+    /**
+     * Joins all elements of a collection with a joiner-string.
+     *
+     * @param[in] joiner - The string to put between the elements.
+     * @param[in] items - The collection of elements to join.
+     * @returns The combined string.
+     */
+    template<typename T>
+    CORE_API std::string join(const std::string& joiner, const T& items)
+    {
+        return join(joiner, items, [](const auto& v) {return v;});
+    }
+
+    /**
+     * Maps all elements of a collection via a transform function.
+     * template parameters FROM_TYPE and TO_TYPE have to be specified.
+     *
+     * Example: map_values<int, float>(int_vector, [](auto i){return (float)i;})
+     *
+     * @param[in] items - The collection of elements to map.
+     * @param[in] transform - The function that maps each value.
+     * @returns A vector of mapped values.
+     */
+    // template<class R, class T, class UnaryOperation>
+    // CORE_API std::vector<R> map_values(const T& items, UnaryOperation transform)
+    // {
+    //     std::vector<R> res;
+    //     std::transform(items.begin(), items.end(), res.begin(), transform});
+    //     return res;
+    // }
 
     /**
      * Convert a string to upper case.
