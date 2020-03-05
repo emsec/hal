@@ -261,8 +261,8 @@ private:
     std::set<std::shared_ptr<module>> m_submodules_set;
 
     // port names
-    u32 m_next_input_port_id;
-    u32 m_next_output_port_id;
+    u32 m_next_input_port_id  = 0;
+    u32 m_next_output_port_id = 0;
     std::set<std::shared_ptr<net>> m_named_input_nets;
     std::set<std::shared_ptr<net>> m_named_output_nets;
     std::map<std::shared_ptr<net>, std::string> m_input_net_to_port_name;

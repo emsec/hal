@@ -312,7 +312,7 @@ void module::set_input_port_name(const std::shared_ptr<net>& input_net, std::str
 
     if (auto it = input_nets.find(input_net); it == input_nets.end())
     {
-        log_error("module", "net {} with ID {} is not an input net of module {} with ID.", input_net->get_name(), input_net->get_id(), this->get_name(), this->get_id());
+        log_error("module", "net '{}' with id {} is not an input net of module '{}' with id {}.", input_net->get_name(), input_net->get_id(), this->get_name(), this->get_id());
         return;
     }
 
@@ -327,7 +327,7 @@ void module::set_output_port_name(const std::shared_ptr<net>& output_net, std::s
 
     if (auto it = output_nets.find(output_net); it == output_nets.end())
     {
-        log_error("module", "net {} with ID {} is not an output net of module {} with ID.", output_net->get_name(), output_net->get_id(), this->get_name(), this->get_id());
+        log_error("module", "net '{}' with id {} is not an output net of module '{}' with id {}.", output_net->get_name(), output_net->get_id(), this->get_name(), this->get_id());
         return;
     }
 
@@ -343,7 +343,7 @@ std::string module::get_input_port_name(const std::shared_ptr<net>& input_net)
 
     if (auto it = input_nets.find(input_net); it == input_nets.end())
     {
-        log_error("module", "net {} with ID {} is not an input net of module {} with ID.", input_net->get_name(), input_net->get_id(), this->get_name(), this->get_id());
+        log_error("module", "net '{}' with id {} is not an input net of module '{}' with id {}.", input_net->get_name(), input_net->get_id(), this->get_name(), this->get_id());
         return "";
     }
 
@@ -368,7 +368,7 @@ std::string module::get_output_port_name(const std::shared_ptr<net>& output_net)
 
     if (auto it = output_nets.find(output_net); it == output_nets.end())
     {
-        log_error("module", "net {} with ID {} is not an output net of module {} with ID.", output_net->get_name(), output_net->get_id(), this->get_name(), this->get_id());
+        log_error("module", "net '{}' with id {} is not an output net of module '{}' with id {}.", output_net->get_name(), output_net->get_id(), this->get_name(), this->get_id());
         return "";
     }
 
@@ -378,7 +378,7 @@ std::string module::get_output_port_name(const std::shared_ptr<net>& output_net)
     }
     else
     {
-        port_name = "I(" + std::to_string(m_next_input_port_id++) + ")";
+        port_name = "O(" + std::to_string(m_next_input_port_id++) + ")";
         m_named_output_nets.insert(output_net);
         m_output_net_to_port_name.emplace(output_net, port_name);
     }
@@ -432,7 +432,7 @@ std::map<std::shared_ptr<net>, std::string> module::get_output_port_names()
     for (const auto& net : diff)
     {
         m_named_output_nets.insert(net);
-        m_output_net_to_port_name.emplace(net, "I(" + std::to_string(m_next_input_port_id++) + ")");
+        m_output_net_to_port_name.emplace(net, "O(" + std::to_string(m_next_input_port_id++) + ")");
     }
 
     return m_output_net_to_port_name;
