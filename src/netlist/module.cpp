@@ -150,17 +150,17 @@ std::shared_ptr<netlist> module::get_netlist() const
     return m_internal_manager->m_netlist->get_shared();
 }
 
-bool module::assign_gate(std::shared_ptr<gate> gate)
+bool module::assign_gate(const std::shared_ptr<gate>& gate)
 {
     return m_internal_manager->module_assign_gate(shared_from_this(), gate);
 }
 
-bool module::remove_gate(std::shared_ptr<gate> gate)
+bool module::remove_gate(const std::shared_ptr<gate>& gate)
 {
     return m_internal_manager->module_remove_gate(shared_from_this(), gate);
 }
 
-bool module::contains_gate(std::shared_ptr<gate> const gate, bool recursive) const
+bool module::contains_gate(const std::shared_ptr<gate>& gate, bool recursive) const
 {
     if (gate == nullptr)
     {
@@ -306,7 +306,7 @@ std::set<std::shared_ptr<net>> module::get_internal_nets() const
     return res;
 }
 
-void module::set_input_port_name(const std::shared_ptr<net>& input_net, std::string port_name)
+void module::set_input_port_name(const std::shared_ptr<net>& input_net, const std::string& port_name)
 {
     auto input_nets = get_input_nets();
 
@@ -321,7 +321,7 @@ void module::set_input_port_name(const std::shared_ptr<net>& input_net, std::str
     module_event_handler::notify(module_event_handler::event::input_port_name_changed, shared_from_this(), input_net->get_id());
 }
 
-void module::set_output_port_name(const std::shared_ptr<net>& output_net, std::string port_name)
+void module::set_output_port_name(const std::shared_ptr<net>& output_net, const std::string& port_name)
 {
     auto output_nets = get_output_nets();
 

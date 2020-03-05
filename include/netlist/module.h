@@ -150,7 +150,7 @@ public:
      * @param[in] input_net - The input net.
      * @param[in] port_name - The port name.
      */
-    void set_input_port_name(const std::shared_ptr<net>& input_net, std::string port_name);
+    void set_input_port_name(const std::shared_ptr<net>& input_net, const std::string& port_name);
 
     /**
      * Set the name of the port corresponding to the specified output net to the given string.
@@ -158,7 +158,7 @@ public:
      * @param[in] output_net - The output net.
      * @param[in] port_name - The port name.
      */
-    void set_output_port_name(const std::shared_ptr<net>& output_net, std::string port_name);
+    void set_output_port_name(const std::shared_ptr<net>& output_net, const std::string& port_name);
 
     /**
      * Get the name of the port corresponding to the specified input net.
@@ -203,7 +203,7 @@ public:
      * @param[in] gate - The gate to move.
      * @returns True on success.
      */
-    bool assign_gate(std::shared_ptr<gate> gate);
+    bool assign_gate(const std::shared_ptr<gate>& gate);
 
     /**
      * Removes a gate from the module.<br>
@@ -212,7 +212,7 @@ public:
      * @param[in] gate - Pointer to the gate pointer.
      * @returns True on success.
      */
-    bool remove_gate(std::shared_ptr<gate> gate);
+    bool remove_gate(const std::shared_ptr<gate>& gate);
 
     /**
      * Checks whether a gate is in the module.<br>
@@ -222,7 +222,7 @@ public:
      * @param[in] recursive - Look into submodules too
      * @returns True if the gate is in module
      */
-    bool contains_gate(const std::shared_ptr<gate> gate, bool recursive = false) const;
+    bool contains_gate(const std::shared_ptr<gate>& gate, bool recursive = false) const;
 
     /**
      * Get a gate specified by id.<br>
