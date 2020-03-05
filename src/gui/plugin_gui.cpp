@@ -22,6 +22,7 @@
 #include "gui/style/style.h"
 #include "gui/thread_pool/thread_pool.h"
 #include "gui/window_manager/window_manager.h"
+#include "gui/gui_api/gui_api.h"
 
 #include <signal.h>
 
@@ -63,6 +64,8 @@ thread_pool* g_thread_pool;
 graph_context_manager g_graph_context_manager;
 
 std::unique_ptr<python_context> g_python_context = nullptr;
+
+gui_api g_gui_api;
 
 // NOTE
 // ORDER = LOGGER -> SETTINGS -> (STYLE / RELAYS / OTHER STUFF) -> MAINWINDOW (= EVERYTHING ELSE & DATA)

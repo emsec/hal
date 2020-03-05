@@ -82,6 +82,7 @@ void python_context::initialize_context(py::dict* context)
              *context);
 
     (*context)["netlist"] = g_netlist;
+    (*context)["gui"] = g_gui_api;
 }
 
 void python_context::init_python()
