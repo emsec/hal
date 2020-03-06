@@ -364,7 +364,7 @@ std::string module::get_input_port_name(const std::shared_ptr<net>& input_net)
 std::string module::get_output_port_name(const std::shared_ptr<net>& output_net)
 {
     std::string port_name;
-    auto output_nets = get_input_nets();
+    auto output_nets = get_output_nets();
 
     if (auto it = output_nets.find(output_net); it == output_nets.end())
     {
