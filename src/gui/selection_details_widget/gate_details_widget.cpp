@@ -30,12 +30,15 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
 
     m_last_click_time = 0;
 
+    //The most top-level layout for the gate-details-widget
     m_content_layout = new QVBoxLayout(this);
     m_content_layout->setContentsMargins(0, 0, 0, 0);
     m_content_layout->setSpacing(0);
 
+    //layout for the treewidget (to add additional spacing), is added to the container_layout (and ultimately to the scrollarea)
     m_tree_row_layout = new QHBoxLayout();
 
+    // General table at the top with name, id, etc...
     m_general_table = new QTableWidget(this);
     m_general_table->horizontalHeader()->setStretchLastSection(true);
     m_general_table->horizontalHeader()->hide();
@@ -43,15 +46,13 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
     m_general_table->setColumnCount(2);
     m_general_table->setRowCount(4);
 
-    //m_general_table->setStyleSheet("QTableWidget {background-color : rgb(31, 34, 35);}");
-
     QFont font("Iosevka");
     font.setBold(true);
     font.setPixelSize(13);
 
+    // Start of fixed table items
     QTableWidgetItem* name_item = new QTableWidgetItem("Name:");
     name_item->setFlags(Qt::ItemIsEnabled);
-    //    name_item->setTextColor(Qt::red);
     name_item->setFont(font);
     m_general_table->setItem(0, 0, name_item);
 
@@ -70,6 +71,7 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
     module_item->setFont(font);
     m_general_table->setItem(3, 0, module_item);
 
+    // Start of dynamic table items
     m_name_item = new QTableWidgetItem();
     m_name_item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsEditable);
     m_general_table->setItem(0, 1, m_name_item);
@@ -88,15 +90,14 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
 
     m_general_table->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
     m_general_table->verticalHeader()->setDefaultSectionSize(16);
-    //    m_general_table->resizeRowsToContents();
     m_general_table->resizeColumnToContents(0);
     m_general_table->setShowGrid(false);
     m_general_table->setFocusPolicy(Qt::NoFocus);
     m_general_table->setFrameStyle(QFrame::NoFrame);
     m_general_table->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     m_general_table->setFixedHeight(m_general_table->verticalHeader()->length());
+
     m_content_layout->addWidget(m_general_table);
-    //m_general_table->setStyleSheet("QTableWidget{color: red;}");
 
     m_container_layout = new QVBoxLayout(this);
     m_container_layout->setContentsMargins(0, 0, 0, 0);
@@ -104,21 +105,16 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
     m_container_layout->setAlignment(Qt::AlignTop);
 
     m_boolean_function = new QLabel(this);
-    //    m_boolean_function->setMargin(4);
     m_boolean_function->setWordWrap(true);
-    //    m_boolean_function->setStyleSheet("* {background : red;}");
-    //    m_boolean_function->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
-    m_container_layout->addWidget(m_boolean_function);
 
     m_data_fields = new QLabel(this);
-    //    m_init_value->setMargin(4);
     m_data_fields->setWordWrap(true);
-    m_container_layout->addWidget(m_data_fields);
 
     m_container = new QWidget(this);
     m_container->setLayout(m_container_layout);
     m_container->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 
+    // TreeWidget for input/output pins
     m_tree_widget = new QTreeWidget(this);
     m_tree_widget->setFrameStyle(QFrame::NoFrame);
     m_tree_widget->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
@@ -139,7 +135,11 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
     m_tree_row_layout->addWidget(m_tree_widget);
     m_tree_row_layout->addSpacerItem(new QSpacerItem(1, 1, QSizePolicy::Expanding, QSizePolicy::Minimum));
     m_tree_row_layout->addSpacing(0);
+
+    //add items to the container layout that is later added to the content layout(ultimately the scrollarea)
     m_container_layout->addLayout(m_tree_row_layout);
+    m_container_layout->addWidget(m_boolean_function);
+    m_container_layout->addWidget(m_data_fields);
 
     connect(m_tree_widget, &QTreeWidget::itemClicked, this, &gate_details_widget::on_treewidget_item_clicked);
 
@@ -517,7 +517,7 @@ void gate_details_widget::on_treewidget_item_clicked(QTreeWidgetItem* item, int 
     }
 }
 
-//always the right-subfocus!!!!!!(the other way is handled: on_treewidget_item_clicked
+//always the right-subfocus!!!!!!(the other way is handled: on_treewidget_item_clicked)
 void gate_details_widget::handle_navigation_jump_requested(const hal::node origin, const u32 via_net, const QSet<u32>& to_gates)
 {
     Q_UNUSED(origin);
