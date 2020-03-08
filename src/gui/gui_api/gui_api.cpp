@@ -126,7 +126,7 @@ void gui_api::print_selected_items() const
 }
 */
 
-void gui_api::select_gate(const std::shared_ptr<gate> gate, bool clear_current_selection)
+void gui_api::select_gate(const std::shared_ptr<gate>& gate, bool clear_current_selection)
 {
     if(!g_netlist->is_gate_in_netlist(gate))
         return;
@@ -169,7 +169,7 @@ void gui_api::select_gate(const std::vector<u32>& gate_ids, bool clear_current_s
     select_gate(gates, clear_current_selection);
 }
 
-void gui_api::select_net(const std::shared_ptr<net> net, bool clear_current_selection)
+void gui_api::select_net(const std::shared_ptr<net>& net, bool clear_current_selection)
 {
     if(!g_netlist->is_net_in_netlist(net))
         return;
@@ -212,7 +212,7 @@ void gui_api::select_net(const std::vector<u32>& net_ids, bool clear_current_sel
     select_net(nets, clear_current_selection);
 }
 
-void gui_api::select_module(const std::shared_ptr<module> module, bool clear_current_selection)
+void gui_api::select_module(const std::shared_ptr<module>& module, bool clear_current_selection)
 {
     if(!g_netlist->is_module_in_netlist(module))
         return;
@@ -255,16 +255,16 @@ void gui_api::select_module(const std::vector<u32>& module_ids, bool clear_curre
     select_module(modules, clear_current_selection);
 }
 
-void gui_api::select(std::shared_ptr<gate> gate, bool clear_current_selection)
+void gui_api::select(const std::shared_ptr<gate>& gate, bool clear_current_selection)
 {
     select_gate(gate, clear_current_selection);
 }
 
-void gui_api::select(std::shared_ptr<net> net, bool clear_current_selection)
+void gui_api::select(const std::shared_ptr<net>& net, bool clear_current_selection)
 {
     select_net(net, clear_current_selection);
 }
-void gui_api::select(std::shared_ptr<module> module, bool clear_current_selection)
+void gui_api::select(const std::shared_ptr<module>& module, bool clear_current_selection)
 {
     select_module(module, clear_current_selection);
 }
@@ -303,7 +303,7 @@ void gui_api::select(const std::vector<std::shared_ptr<gate>>& gates, const std:
     select_module(modules, false);
 }
 
-void gui_api::deselect_gate(const std::shared_ptr<gate> gate)
+void gui_api::deselect_gate(const std::shared_ptr<gate>& gate)
 {
     if(!g_netlist->is_gate_in_netlist(gate))
         return;
@@ -340,7 +340,7 @@ void gui_api::deselect_gate(const std::vector<u32>& gate_ids)
     deselect_gate(gates);
 }
 
-void gui_api::deselect_net(const std::shared_ptr<net> net)
+void gui_api::deselect_net(const std::shared_ptr<net>& net)
 {
     if(!g_netlist->is_net_in_netlist(net))
         return;
@@ -377,7 +377,7 @@ void gui_api::deselect_net(const std::vector<u32>& net_ids)
     deselect_net(nets);
 }
 
-void gui_api::deselect_module(const std::shared_ptr<module> module)
+void gui_api::deselect_module(const std::shared_ptr<module>& module)
 {
     if(!g_netlist->is_module_in_netlist(module))
         return;
@@ -414,16 +414,16 @@ void gui_api::deselect_module(const std::vector<u32>& module_ids)
     deselect_module(modules);
 }
 
-void gui_api::deselect(const std::shared_ptr<gate> gate)
+void gui_api::deselect(const std::shared_ptr<gate>& gate)
 {
     deselect_gate(gate);
 }
 
-void gui_api::deselect(const std::shared_ptr<net> net)
+void gui_api::deselect(const std::shared_ptr<net>& net)
 {
     deselect_net(net);
 }
-void gui_api::deselect(std::shared_ptr<module> module)
+void gui_api::deselect(const std::shared_ptr<module>& module)
 {
     deselect_module(module);
 }
