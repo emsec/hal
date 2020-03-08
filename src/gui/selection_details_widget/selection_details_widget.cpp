@@ -64,11 +64,12 @@ void selection_details_widget::handle_selection_update(void* sender)
         return;
     }
 
-    if(g_selection_relay.m_selected_gates.isEmpty() &&
-       g_selection_relay.m_selected_modules.isEmpty() &&
-       g_selection_relay.m_selected_nets.isEmpty())
+    unsigned int number_selected_items = g_selection_relay.m_selected_gates.size() + g_selection_relay.m_selected_modules.size() + g_selection_relay.m_selected_nets.size();
+
+    if(number_selected_items != 1)
     {
         m_stacked_widget->setCurrentWidget(m_empty_widget);
+        return;
     }
 
     if (!g_selection_relay.m_selected_modules.isEmpty())
