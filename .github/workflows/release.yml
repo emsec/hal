@@ -30,8 +30,8 @@ jobs:
         uses: webfactory/ssh-agent@v0.2.0
         with:
           ssh-private-key: |
-            ${{ secrets.GH_PAGES_KEY }}
             ${{ secrets.GH_PAGES_PY_KEY }}
+            ${{ secrets.GH_PAGES_KEY }}
 
       - name: Cache pip Linux
         uses: actions/cache@v1
