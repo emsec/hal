@@ -97,24 +97,20 @@ jobs:
         env:
           HAL_BASE_PATH: ${{runner.workspace}}/build
 
-
-
       - name: Deploy Doxygen
-        working-directory: ${{runner.workspace}}/build
         uses: peaceiris/actions-gh-pages@v3
         with:
           external_repository: emsec/hal-doc
           github_token: ${{ secrets.GH_PAGES_KEY }}
-          publish_dir: ./documentation/documentation/
+          publish_dir: ${{runner.workspace}}/build/documentation/documentation/
           publish_branch: master  # deploying branch
           enable_jekyll: false
 
       - name: Deploy Sphinx
-        working-directory: ${{runner.workspace}}/build
         uses: peaceiris/actions-gh-pages@v3
         with:
           external_repository: emsec/hal-pydoc
           github_token: ${{ secrets.GH_PAGES_PY_KEY }}
-          publish_dir: ./python-doc/
+          publish_dir: ${{runner.workspace}}/build/python-doc/
           publish_branch: master  # deploying branch
           enable_jekyll: false
