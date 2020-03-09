@@ -101,16 +101,20 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           external_repository: emsec/hal-doc
-          github_token: ${{ secrets.GH_PAGES_KEY }}
+          deploy_key: ${{ secrets.GH_PAGES_KEY }}
           publish_dir: ${{runner.workspace}}/build/documentation/documentation/
           publish_branch: master  # deploying branch
           enable_jekyll: false
+          user_name: 'github-actions[bot]'
+          user_email: 'github-actions[bot]@users.noreply.github.com'
 
       - name: Deploy Sphinx
         uses: peaceiris/actions-gh-pages@v3
         with:
           external_repository: emsec/hal-pydoc
-          github_token: ${{ secrets.GH_PAGES_PY_KEY }}
+          deploy_key: ${{ secrets.GH_PAGES_PY_KEY }}
           publish_dir: ${{runner.workspace}}/build/python-doc/
           publish_branch: master  # deploying branch
           enable_jekyll: false
+          user_name: 'github-actions[bot]'
+          user_email: 'github-actions[bot]@users.noreply.github.com'
