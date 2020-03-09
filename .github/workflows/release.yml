@@ -103,13 +103,12 @@ jobs:
         with:
           external_repository: emsec/hal-pydoc
           deploy_key: ${{ secrets.GH_PAGES_PY_KEY }}
-          publish_dir: python-doc
+          publish_dir: build/python-doc
           publish_branch: master  # deploying branch
           enable_jekyll: false
           user_name: 'github-actions[bot]'
           user_email: 'github-actions[bot]@users.noreply.github.com'
           force_orphan: true
-        working-directory: ${{runner.workspace}}/build
 
 
       - name: Deploy Doxygen
@@ -117,12 +116,11 @@ jobs:
         with:
           external_repository: emsec/hal-doc
           deploy_key: ${{ secrets.GH_PAGES_KEY }}
-          publish_dir: documentation/documentation
+          publish_dir: build/documentation/documentation
           publish_branch: master  # deploying branch
           enable_jekyll: false
           user_name: 'github-actions[bot]'
           user_email: 'github-actions[bot]@users.noreply.github.com'
           force_orphan: true
-        working-directory: ${{runner.workspace}}/build
 
 
