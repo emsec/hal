@@ -67,7 +67,9 @@ jobs:
         # and build directories, but this is only available with CMake 3.13 and higher.
         # The CMake binaries on the Github Actions machines are (as of this writing) 3.12
         run: |
-          ls ..
+          ls -lah
+          pwd
+          ls -lah ..
           cmake -G Ninja .. -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_ALL_PLUGINS=ON -DBUILD_TESTS=ON -DBUILD_COVERAGE=ON -DWITH_GUI=ON -DBUILD_DOCUMENTATION=ON -DPACKAGE_DEB=OFF -DCMAKE_INSTALL_PREFIX=/usr/
         env:
           HAL_BASE_PATH: ${{runner.workspace}}/build
