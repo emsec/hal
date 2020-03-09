@@ -1,4 +1,4 @@
-name: C/C++ CI
+name: Release
 
 on:
   push:
@@ -23,7 +23,7 @@ jobs:
 
       - name: Cache pip Linux
         uses: actions/cache@v1
-        if: startsWith(runner.os, 'ubuntu')
+        if: startsWith(runner.os, 'Linux')
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
@@ -58,7 +58,7 @@ jobs:
             ${{ runner.OS }}-build-ccache-
 
       - name: Configure CMake
-        if: startsWith(runner.os, 'ubuntu')
+        if: startsWith(runner.os, 'Linux')
         # Use a bash shell so we can use the same syntax for environment variable
         # access regardless of the host operating system
         shell: bash
@@ -73,7 +73,7 @@ jobs:
           HAL_BASE_PATH: ${{runner.workspace}}/build
 
       - name: Build Doxygen
-        if: startsWith(runner.os, 'ubuntu')
+        if: startsWith(runner.os, 'Linux')
         working-directory: ${{runner.workspace}}/build
         shell: bash
         # Execute the build.  You can specify a specific target with "--target <NAME>"
@@ -83,7 +83,7 @@ jobs:
           HAL_BASE_PATH: ${{runner.workspace}}/build
 
       - name: Build Sphinx
-        if: startsWith(runner.os, 'ubuntu')
+        if: startsWith(runner.os, 'Linux')
         working-directory: ${{runner.workspace}}/build
         shell: bash
         # Execute the build.  You can specify a specific target with "--target <NAME>"
