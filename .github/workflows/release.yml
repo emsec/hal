@@ -89,6 +89,18 @@ jobs:
           cmake --build . --target doc --clean-first --config $BUILD_TYPE
         env:
           HAL_BASE_PATH: ${{runner.workspace}}/hal/build
+          
+      - name: Deploy Doxygen
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          external_repository: emsec/hal-doc
+          deploy_key: ${{ secrets.GH_PAGES_KEY }}
+          publish_dir: build/documentation/documentation
+          publish_branch: master  # deploying branch
+          enable_jekyll: false
+          user_name: 'github-actions[bot]'
+          user_email: 'github-actions[bot]@users.noreply.github.com'
+          force_orphan: true
 
       - name: Build Sphinx
         if: startsWith(runner.os, 'Linux')
@@ -106,20 +118,7 @@ jobs:
         with:
           external_repository: emsec/hal-pydoc
           deploy_key: ${{ secrets.GH_PAGES_PY_KEY }}
-          publish_dir: build/python-doc
-          publish_branch: master  # deploying branch
-          enable_jekyll: false
-          user_name: 'github-actions[bot]'
-          user_email: 'github-actions[bot]@users.noreply.github.com'
-          force_orphan: true
-
-
-      - name: Deploy Doxygen
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          external_repository: emsec/hal-doc
-          deploy_key: ${{ secrets.GH_PAGES_KEY }}
-          publish_dir: build/documentation/documentation
+          publish_dir: build/python-doc/html
           publish_branch: master  # deploying branch
           enable_jekyll: false
           user_name: 'github-actions[bot]'
