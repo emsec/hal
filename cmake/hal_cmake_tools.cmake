@@ -2,7 +2,7 @@
 # Get version
 #-------------------------------------------------------------------------------
 function(hal_get_version)
-    message(STATUS "Extracting Version Information")
+    message(STATUS "Extracting Version Information in PATH: ${CMAKE_SOURCE_DIR}")
     execute_process(
             COMMAND ${hal_GENVERSION_PATH}/genversion.py ${CMAKE_SOURCE_DIR}
             OUTPUT_VARIABLE VERSION_LIST
