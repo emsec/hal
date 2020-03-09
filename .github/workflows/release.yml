@@ -1,0 +1,93 @@
+name: C/C++ CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  release-doc:
+    name: release-doc
+
+    strategy:
+      matrix:
+        #        runs-on: [ubuntu-latest, macOS-latest]
+        runs-on: [ubuntu-latest]
+      fail-fast: false
+
+    runs-on: ${{ matrix.runs-on }}
+    
+    steps:
+    - uses: actions/checkout@v2
+      
+    - name: Cache pip Linux
+        uses: actions/cache@v1
+        if: startsWith(runner.os, 'ubuntu')
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Cache pip macOS
+        uses: actions/cache@v1
+        if: startsWith(runner.os, 'macOS')
+        with:
+          path: ~/Library/Caches/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+            
+      - name: Install Dependencies
+        run: ./install_dependencies.sh
+
+      - name: Create Build Environment
+        # Some projects don't allow in-source building, so create a separate build directory
+        # We'll use this as our working directory for all subsequent commands
+        run: cmake -E make_directory ${{runner.workspace}}/build
+
+      - name: Cache CCache
+        uses: actions/cache@v1
+        with:
+          path: ~/.ccache
+          #        key: ${{ runner.OS }}-build-ccache-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.OS }}-build-ccache
+          restore-keys: |
+            ${{ runner.OS }}-build-ccache-${{ env.cache-name }}-
+            ${{ runner.OS }}-build-ccache-
+
+      - name: Configure CMake
+        if: startsWith(runner.os, 'ubuntu')
+        # Use a bash shell so we can use the same syntax for environment variable
+        # access regardless of the host operating system
+        shell: bash
+        working-directory: ${{runner.workspace}}/build
+        # Note the current convention is to use the -S and -B options here to specify source
+        # and build directories, but this is only available with CMake 3.13 and higher.
+        # The CMake binaries on the Github Actions machines are (as of this writing) 3.12
+        run: |
+          ls ..
+          cmake -G Ninja .. -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_ALL_PLUGINS=ON -DBUILD_TESTS=ON -DBUILD_COVERAGE=ON -DWITH_GUI=ON -DBUILD_DOCUMENTATION=ON -DPACKAGE_DEB=OFF -DCMAKE_INSTALL_PREFIX=/usr/
+        env:
+          HAL_BASE_PATH: ${{runner.workspace}}/build
+
+      - name: Build Doxygen
+        if: startsWith(runner.os, 'ubuntu')
+        working-directory: ${{runner.workspace}}/build
+        shell: bash
+        # Execute the build.  You can specify a specific target with "--target <NAME>"
+        run: |
+          cmake --build . --target doc --clean-first --config $BUILD_TYPE
+        env:
+          HAL_BASE_PATH: ${{runner.workspace}}/build
+          
+      - name: Build Sphinx
+        if: startsWith(runner.os, 'ubuntu')
+        working-directory: ${{runner.workspace}}/build
+        shell: bash
+        # Execute the build.  You can specify a specific target with "--target <NAME>"
+        run: |
+          cmake --build . --target hal_py_docs --clean-first --config $BUILD_TYPE
+        env:
+          HAL_BASE_PATH: ${{runner.workspace}}/build
