@@ -20,6 +20,7 @@ jobs:
     
     steps:
       - uses: actions/checkout@v2
+      - run: git fetch --depth=1 origin +refs/tags/*:refs/tags/*
 
       - name: Cache pip Linux
         uses: actions/cache@v1
@@ -67,11 +68,6 @@ jobs:
         # and build directories, but this is only available with CMake 3.13 and higher.
         # The CMake binaries on the Github Actions machines are (as of this writing) 3.12
         run: |
-          ls -lah
-          pwd
-          ls -lah ..
-          cd $GITHUB_WORKSPACE
-          git describe --tags --match "v[0-9]*" --broken --dirty="" --always --abbrev=9
           $GITHUB_WORKSPACE/tools/genversion.py $GITHUB_WORKSPACE
           cmake -G Ninja $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_ALL_PLUGINS=ON -DBUILD_TESTS=ON -DBUILD_COVERAGE=ON -DWITH_GUI=ON -DBUILD_DOCUMENTATION=ON -DPACKAGE_DEB=OFF -DCMAKE_INSTALL_PREFIX=/usr/
         env:
