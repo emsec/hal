@@ -100,13 +100,14 @@ jobs:
       - name: Deploy Doxygen
         uses: JamesIves/github-pages-deploy-action@releases/v3
         with:
-          REPOSITORY_NAME: emsec/hal-doc
+          BRANCH: gh-pages
           ACCESS_TOKEN: ${{ secrets.GH_PAGES_TOKEN}}
           BRANCH: master
           FOLDER: build/documentation/documentation/html
           GIT_CONFIG_NAME: 'github-actions[bot]'
           GIT_CONFIG_EMAIL: 'github-actions[bot]@users.noreply.github.com'
           DEBUG: true
+          TARGET_FOLDER: doc/
 
       - name: Build Sphinx
         if: startsWith(runner.os, 'Linux')
@@ -122,11 +123,12 @@ jobs:
       - name: Deploy Sphinx
         uses: JamesIves/github-pages-deploy-action@releases/v3
         with:
-          REPOSITORY_NAME: emsec/hal-pydoc
+          BRANCH: gh-pages
           ACCESS_TOKEN: ${{ secrets.GH_PAGES_TOKEN}}
           BRANCH: master
           FOLDER: build/python-doc/html
           GIT_CONFIG_NAME: 'github-actions[bot]'
           GIT_CONFIG_EMAIL: 'github-actions[bot]@users.noreply.github.com'
           DEBUG: true
+          TARGET_FOLDER: pydoc/
 
