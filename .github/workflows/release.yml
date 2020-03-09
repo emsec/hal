@@ -21,6 +21,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: git fetch --depth=1 origin +refs/tags/*:refs/tags/*
+      - run: |
+          git fetch --no-tags --prune --depth=1 origin +refs/heads/*:refs/remotes/origin/*
+      - run: |
+          git fetch --prune --unshallow
 
       - name: Cache pip Linux
         uses: actions/cache@v1
