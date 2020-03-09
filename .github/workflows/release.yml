@@ -26,6 +26,13 @@ jobs:
       - run: |
           git fetch --prune --unshallow
 
+      - name: Install SSH Client 🔑
+        uses: webfactory/ssh-agent@v0.2.0
+        with:
+          ssh-private-key: |
+            ${{ secrets.GH_PAGES_KEY }}
+            ${{ secrets.GH_PAGES_PY_KEY }}
+
       - name: Cache pip Linux
         uses: actions/cache@v1
         if: startsWith(runner.os, 'Linux')
@@ -91,16 +98,14 @@ jobs:
           HAL_BASE_PATH: ${{runner.workspace}}/hal/build
 
       - name: Deploy Doxygen
-        uses: peaceiris/actions-gh-pages@v3
+        uses: JamesIves/github-pages-deploy-action@releases/v3
         with:
-          external_repository: emsec/hal-doc
-          deploy_key: ${{ secrets.GH_PAGES_KEY }}
-          publish_dir: build/documentation/documentation/html
-          publish_branch: master  # deploying branch
-          enable_jekyll: false
-          user_name: 'github-actions[bot]'
-          user_email: 'github-actions[bot]@users.noreply.github.com'
-          force_orphan: true
+          REPOSITORY_NAME: emsec/hal-doc
+          SSH: true
+          BRANCH: master
+          FOLDER: build/documentation/documentation/html
+          GIT_CONFIG_NAME: 'github-actions[bot]'
+          GIT_CONFIG_EMAIL: 'github-actions[bot]@users.noreply.github.com'
 
       - name: Build Sphinx
         if: startsWith(runner.os, 'Linux')
@@ -114,15 +119,12 @@ jobs:
 
 
       - name: Deploy Sphinx
-        uses: peaceiris/actions-gh-pages@v3
+        uses: JamesIves/github-pages-deploy-action@releases/v3
         with:
-          external_repository: emsec/hal-pydoc
-          deploy_key: ${{ secrets.GH_PAGES_PY_KEY }}
-          publish_dir: build/python-doc/html
-          publish_branch: master  # deploying branch
-          enable_jekyll: false
-          user_name: 'github-actions[bot]'
-          user_email: 'github-actions[bot]@users.noreply.github.com'
-          force_orphan: true
-
+          REPOSITORY_NAME: emsec/hal-pydoc
+          SSH: true
+          BRANCH: master
+          FOLDER: build/python-doc/html
+          GIT_CONFIG_NAME: 'github-actions[bot]'
+          GIT_CONFIG_EMAIL: 'github-actions[bot]@users.noreply.github.com'
 
