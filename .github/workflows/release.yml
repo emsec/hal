@@ -106,6 +106,7 @@ jobs:
           FOLDER: build/documentation/documentation/html
           GIT_CONFIG_NAME: 'github-actions[bot]'
           GIT_CONFIG_EMAIL: 'github-actions[bot]@users.noreply.github.com'
+          DEBUG: true
 
       - name: Build Sphinx
         if: startsWith(runner.os, 'Linux')
@@ -127,4 +128,5 @@ jobs:
           FOLDER: build/python-doc/html
           GIT_CONFIG_NAME: 'github-actions[bot]'
           GIT_CONFIG_EMAIL: 'github-actions[bot]@users.noreply.github.com'
+          DEBUG: true
 
