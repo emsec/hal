@@ -102,7 +102,6 @@ jobs:
         with:
           BRANCH: gh-pages
           ACCESS_TOKEN: ${{ secrets.GH_PAGES_TOKEN}}
-          BRANCH: master
           FOLDER: build/documentation/documentation/html
           GIT_CONFIG_NAME: 'github-actions[bot]'
           GIT_CONFIG_EMAIL: 'github-actions[bot]@users.noreply.github.com'
@@ -125,7 +124,6 @@ jobs:
         with:
           BRANCH: gh-pages
           ACCESS_TOKEN: ${{ secrets.GH_PAGES_TOKEN}}
-          BRANCH: master
           FOLDER: build/python-doc/html
           GIT_CONFIG_NAME: 'github-actions[bot]'
           GIT_CONFIG_EMAIL: 'github-actions[bot]@users.noreply.github.com'
