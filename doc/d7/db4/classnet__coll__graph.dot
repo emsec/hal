@@ -1,0 +1,10 @@
+digraph "net"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node0 [label="{net\n||+ get_id()\l+ get_netlist()\l+ get_name()\l+ set_name()\l+ set_src()\l+ set_src()\l+ remove_src()\l+ get_src()\l+ add_dst()\l+ add_dst()\l+ remove_dst()\l+ remove_dst()\l+ is_a_dst()\l+ is_a_dst()\l+ get_num_of_dsts()\l+ get_dsts()\l+ is_unrouted()\l+ mark_global_input_net()\l+ mark_global_output_net()\l+ unmark_global_input_net()\l+ unmark_global_output_net()\l+ is_global_input_net()\l+ is_global_output_net()\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node1 -> Node0 [dir="back",color="midnightblue",fontsize="10",style="solid",arrowtail="onormal",fontname="Helvetica"];
+  Node1 [label="{data_container\n||+ data_container()\l+ ~data_container()\l+ set_data()\l+ delete_data()\l+ get_data()\l+ get_data_by_key()\l+ get_data_keys()\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$df/d2c/classdata__container.html"];
+  Node2 -> Node0 [dir="back",color="midnightblue",fontsize="10",style="solid",arrowtail="onormal",fontname="Helvetica"];
+  Node2 [label="{std::enable_shared\l_from_this\< net \>\n||}",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
+}

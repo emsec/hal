@@ -1,0 +1,6 @@
+digraph "token_stream"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node0 [label="{token_stream\n|+ END_OF_STREAM\l|+ token_stream()\l+ token_stream()\l+ token_stream()\l+ consume()\l+ consume()\l+ consume_until()\l+ extract_until()\l+ join_until()\l+ join()\l+ peek()\l+ peek()\l+ at()\l+ at()\l+ find_next()\l+ size()\l+ consumed()\l+ remaining()\l+ position()\l+ set_position()\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+}

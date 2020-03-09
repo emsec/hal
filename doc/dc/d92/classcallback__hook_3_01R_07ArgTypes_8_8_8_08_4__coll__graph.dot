@@ -1,0 +1,6 @@
+digraph "callback_hook&lt; R(ArgTypes...)&gt;"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node0 [label="{callback_hook\< R(ArgTypes...)\>\n||+ add_callback()\l+ add_callback()\l+ remove_callback()\l+ remove_callback()\l+ operator()()\l+ call()\l+ call()\l+ is_callback_registered()\l+ is_callback_registered()\l+ size()\l+ get_ids()\l+ get_name()\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+}

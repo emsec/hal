@@ -1,0 +1,6 @@
+digraph "log_manager"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node0 [label="{log_manager\n||+ set_file_name()\l+ set_format_pattern()\l+ get_channel()\l+ get_channels()\l+ add_channel()\l+ remove_channel()\l+ get_level_of_channel()\l+ set_level_of_channel()\l+ get_available_log_levels()\l+ activate_channel()\l+ deactivate_channel()\l+ get_gui_callback()\l+ get_option_descriptions()\l+ handle_options()\l+ get_instance()\l+ create_stdout_sink()\l+ create_file_sink()\l+ create_gui_sink()\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+}

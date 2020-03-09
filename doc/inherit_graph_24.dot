@@ -1,0 +1,7 @@
+digraph "Graphical Class Hierarchy"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node0 [label="token_stream::token\l_stream_exception",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$d3/d86/structtoken__stream_1_1token__stream__exception.html"];
+}
