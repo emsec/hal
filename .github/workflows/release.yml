@@ -99,15 +99,15 @@ jobs:
 
 
       - name: Deploy Sphinx
-          uses: peaceiris/actions-gh-pages@v3
-          with:
-            external_repository: emsec/hal-pydoc
-            deploy_key: ${{ secrets.GH_PAGES_PY_KEY }}
-            publish_dir: ${{runner.workspace}}/build/python-doc/
-            publish_branch: master  # deploying branch
-            enable_jekyll: false
-            user_name: 'github-actions[bot]'
-            user_email: 'github-actions[bot]@users.noreply.github.com'
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          external_repository: emsec/hal-pydoc
+          deploy_key: ${{ secrets.GH_PAGES_PY_KEY }}
+          publish_dir: ${{runner.workspace}}/build/python-doc/
+          publish_branch: master  # deploying branch
+          enable_jekyll: false
+          user_name: 'github-actions[bot]'
+          user_email: 'github-actions[bot]@users.noreply.github.com'
             force_orphan: true
 
       - name: Deploy Doxygen
