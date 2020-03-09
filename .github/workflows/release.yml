@@ -101,7 +101,7 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@releases/v3
         with:
           REPOSITORY_NAME: emsec/hal-doc
-          SSH: true
+          ACCESS_TOKEN: ${{ secrets.GH_PAGES_TOKEN}}
           BRANCH: master
           FOLDER: build/documentation/documentation/html
           GIT_CONFIG_NAME: 'github-actions[bot]'
@@ -122,7 +122,7 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@releases/v3
         with:
           REPOSITORY_NAME: emsec/hal-pydoc
-          SSH: true
+          ACCESS_TOKEN: ${{ secrets.GH_PAGES_TOKEN}}
           BRANCH: master
           FOLDER: build/python-doc/html
           GIT_CONFIG_NAME: 'github-actions[bot]'
