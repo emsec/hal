@@ -19,9 +19,9 @@ jobs:
     runs-on: ${{ matrix.runs-on }}
     
     steps:
-    - uses: actions/checkout@v2
-      
-    - name: Cache pip Linux
+      - uses: actions/checkout@v2
+
+      - name: Cache pip Linux
         uses: actions/cache@v1
         if: startsWith(runner.os, 'ubuntu')
         with:
@@ -38,7 +38,7 @@ jobs:
           key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-
-            
+
       - name: Install Dependencies
         run: ./install_dependencies.sh
 
@@ -81,7 +81,7 @@ jobs:
           cmake --build . --target doc --clean-first --config $BUILD_TYPE
         env:
           HAL_BASE_PATH: ${{runner.workspace}}/build
-          
+
       - name: Build Sphinx
         if: startsWith(runner.os, 'ubuntu')
         working-directory: ${{runner.workspace}}/build
