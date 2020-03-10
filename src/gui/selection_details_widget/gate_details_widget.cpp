@@ -138,8 +138,12 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
 
     //add items to the container layout that is later added to the content layout(ultimately the scrollarea)
     m_container_layout->addLayout(m_tree_row_layout);
-    m_container_layout->addWidget(m_boolean_function);
     m_container_layout->addWidget(m_data_fields);
+    //Add an additional layout to the container-layout to manage the boolean functions (//TEST nested-layouts and word wrapping)
+    QVBoxLayout* boolean_functions_layout = new QVBoxLayout(this);
+    boolean_functions_layout->addWidget(m_boolean_function);
+    m_container_layout->addLayout(boolean_functions_layout);
+    //m_container_layout->addWidget(m_boolean_function);
 
     connect(m_tree_widget, &QTreeWidget::itemClicked, this, &gate_details_widget::on_treewidget_item_clicked);
 
