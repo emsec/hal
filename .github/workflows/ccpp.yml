@@ -123,8 +123,9 @@ jobs:
         # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
         run: |
           cd build
-          ninja hal_coverage
+          ctest
           ls -lah
+          ninja hal_coverage
           bash <(curl -s https://codecov.io/bash) -f hal_coverage.info.cleaned || echo "Codecov did not collect coverage reports"
         env:
           LDFLAGS: "-L/usr/local/opt/qt/lib -L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib"
