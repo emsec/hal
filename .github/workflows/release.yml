@@ -121,5 +121,3 @@ jobs:
           GIT_CONFIG_NAME: 'github-actions[bot]'
           GIT_CONFIG_EMAIL: 'github-actions[bot]@users.noreply.github.com'
           DEBUG: true
-          TARGET_FOLDER: pydoc/
-
