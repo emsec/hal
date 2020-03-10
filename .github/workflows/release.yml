@@ -78,7 +78,7 @@ jobs:
         # and build directories, but this is only available with CMake 3.13 and higher.
         # The CMake binaries on the Github Actions machines are (as of this writing) 3.12
         run: |
-          mkdir -p build
+          mkdir -p build/doc
           cd build
           pwd
           ls $GITHUB_WORKSPACE
@@ -93,20 +93,11 @@ jobs:
         # Execute the build.  You can specify a specific target with "--target <NAME>"
         run: |
           cd build
+          mkdir -p doc/doc
           cmake --build . --target doc --clean-first --config $BUILD_TYPE
+          cp -R documentation/documentation/html/* doc/doc/
         env:
           HAL_BASE_PATH: ${{runner.workspace}}/hal/build
-
-      - name: Deploy Doxygen
-        uses: JamesIves/github-pages-deploy-action@releases/v3
-        with:
-          BRANCH: gh-pages
-          ACCESS_TOKEN: ${{ secrets.GH_PAGES_TOKEN}}
-          FOLDER: build/documentation/documentation/html
-          GIT_CONFIG_NAME: 'github-actions[bot]'
-          GIT_CONFIG_EMAIL: 'github-actions[bot]@users.noreply.github.com'
-          DEBUG: true
-          TARGET_FOLDER: doc/
 
       - name: Build Sphinx
         if: startsWith(runner.os, 'Linux')
@@ -114,17 +105,19 @@ jobs:
         # Execute the build.  You can specify a specific target with "--target <NAME>"
         run: |
           cd build
+          mkdir -p doc/pydoc
           cmake --build . --target hal_py_docs --clean-first --config $BUILD_TYPE
+          cp -R python-doc/html/* doc/pydoc/
         env:
           HAL_BASE_PATH: ${{runner.workspace}}/hal/build
 
 
-      - name: Deploy Sphinx
+      - name: Deploy Doc
         uses: JamesIves/github-pages-deploy-action@releases/v3
         with:
           BRANCH: gh-pages
           ACCESS_TOKEN: ${{ secrets.GH_PAGES_TOKEN}}
-          FOLDER: build/python-doc/html
+          FOLDER: build/doc
           GIT_CONFIG_NAME: 'github-actions[bot]'
           GIT_CONFIG_EMAIL: 'github-actions[bot]@users.noreply.github.com'
           DEBUG: true
