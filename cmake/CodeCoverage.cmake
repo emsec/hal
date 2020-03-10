@@ -213,7 +213,7 @@
                        COMMAND ls -lah ${CMAKE_BINARY_DIR}
                        COMMAND ls -lah ${CMAKE_CURRENT_BINARY_DIR}
                        COMMAND ls -lah bin/
-                       COMMAND find . -name "${Coverage_NAME}.base"
+
 
                        # COMMAND ${CMAKE_COMMAND} -E remove ${Coverage_NAME}.base ${Coverage_NAME}.total ${PROJECT_BINARY_DIR}/${Coverage_NAME}.info.cleaned
 
