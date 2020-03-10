@@ -34,8 +34,8 @@ Apart from multiple research projects, HAL is also used in our university lectur
 
 ## API Documentation
 
-The C++ documentation is available [here](https://doc.hal.emsec.rub.de/).
-The Python documentation can be found [here](https://py-doc.hal.emsec.rub.de/).
+The C++ documentation is available [here](https://emsec.github.io/hal/doc/).
+The Python documentation can be found [here](https://emsec.github.io/hal/pydoc/).
 
 ## Quick Start
 

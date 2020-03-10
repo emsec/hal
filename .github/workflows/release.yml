@@ -81,8 +81,6 @@ jobs:
           mkdir -p build/doc
           cd build
           cp $GITHUB_WORKSPACE/documentation/index.html doc/
-          pwd
-          ls $GITHUB_WORKSPACE
           $GITHUB_WORKSPACE/tools/genversion.py $GITHUB_WORKSPACE
           cmake -G Ninja $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_ALL_PLUGINS=ON -DBUILD_TESTS=ON -DBUILD_COVERAGE=ON -DWITH_GUI=ON -DBUILD_DOCUMENTATION=ON -DPACKAGE_DEB=OFF -DCMAKE_INSTALL_PREFIX=/usr/
         env:
@@ -108,7 +106,6 @@ jobs:
           cd build
           mkdir -p doc/pydoc
           cmake --build . --target pydoc --clean-first --config $BUILD_TYPE
-          cat python-doc/_build/conf.py
           cp -R python-doc/html/* doc/pydoc/
         env:
           HAL_BASE_PATH: ${{runner.workspace}}/hal/build
