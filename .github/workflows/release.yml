@@ -80,6 +80,7 @@ jobs:
         run: |
           mkdir -p build/doc
           cd build
+          cp $GITHUB_WORKSPACE/documentation/index.html doc/
           pwd
           ls $GITHUB_WORKSPACE
           $GITHUB_WORKSPACE/tools/genversion.py $GITHUB_WORKSPACE
@@ -120,4 +121,3 @@ jobs:
           FOLDER: build/doc
           GIT_CONFIG_NAME: 'github-actions[bot]'
           GIT_CONFIG_EMAIL: 'github-actions[bot]@users.noreply.github.com'
-          DEBUG: true
