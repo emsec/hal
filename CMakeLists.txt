@@ -103,6 +103,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED on)
 
 # Set Build Timestamp (used in configured file)
 string(TIMESTAMP BUILD_TIMESTAMP UTC)
+string(TIMESTAMP CURRENT_YEAR "%Y")
 
 # Setup Directories, e.g. CMAKE_LIBRARY_OUTPUT_DIRECTOR, INCLUDE_INSTALL_DIRECTORY, ...
 setup_output_directories()

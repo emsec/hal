@@ -21,6 +21,7 @@ import os
 import sys
 
 sys.path.insert(0, os.path.abspath('@CMAKE_CURRENT_BINARY_DIR@/lib'))
+# sys.path.insert(0, os.path.relpath('@CMAKE_CURRENT_BINARY_DIR@/lib', os.getcwd()))
 
 # -- General configuration ------------------------------------------------
 
@@ -54,7 +55,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'hal_py'
-copyright = '2018, Marc Fyrbiak, Sebastian Wallat, Max Hoffmann'
+copyright = '@CURRENT_YEAR@, Marc Fyrbiak, Sebastian Wallat, Max Hoffmann'
 author = 'Marc Fyrbiak, Sebastian Wallat, Max Hoffmann'
 
 # The version info for the project you're documenting, acts as replacement for

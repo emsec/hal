@@ -37,7 +37,7 @@ if(BUILD_DOCUMENTATION)
     file(GLOB_RECURSE SPHINX_DOC_FILES ${CMAKE_CURRENT_SOURCE_DIR}/sphinx_doc/*.rst)
     message(STATUS "SPHINX_DOC_FILES: ${SPHINX_DOC_FILES}")
 
-    add_custom_target(hal_py_docs ALL
+    add_custom_target(pydoc ALL
                       ${SPHINX_EXECUTABLE}
                       -q -b html
                       -c "${BINARY_BUILD_DIR}"

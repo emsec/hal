@@ -146,7 +146,7 @@ compile:doc:python:
     - cd build
     - export HAL_BASE_PATH=$(pwd)
     - cmake -G Ninja .. -DCMAKE_BUILD_TYPE=Debug -DBUILD_ALL_PLUGINS=ON -DBUILD_TESTS=ON -DBUILD_COVERAGE=ON -DWITH_GUI=ON -DBUILD_DOCUMENTATION=ON -DPACKAGE_DEB=OFF -DCMAKE_INSTALL_PREFIX=/usr/
-    - cmake --build . --target hal_py_docs --clean-first -- -j4
+    - cmake --build . --target pydoc --clean-first -- -j4
   artifacts:
     paths:
       - build/python-doc/*

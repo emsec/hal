@@ -107,7 +107,7 @@ jobs:
         run: |
           cd build
           mkdir -p doc/pydoc
-          cmake --build . --target hal_py_docs --clean-first --config $BUILD_TYPE
+          cmake --build . --target pydoc --clean-first --config $BUILD_TYPE
           cp -R python-doc/html/* doc/pydoc/
         env:
           HAL_BASE_PATH: ${{runner.workspace}}/hal/build
