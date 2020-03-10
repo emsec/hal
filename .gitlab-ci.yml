@@ -131,12 +131,6 @@ compile:doc:doxygen:
     paths:
       - ccache/
       - build/
-  only:
-    - master
-    - triggers
-    - /^mac.*$/ #For mac deployment
-    - web #Triggered by run pipeline
-    - tags
 
 compile:doc:python:
   stage: compile
@@ -156,12 +150,6 @@ compile:doc:python:
     paths:
       - ccache/
       - build/
-  only:
-    - master
-    - triggers
-    - /^mac.*$/ #For mac deployment
-    - web #Triggered by run pipeline
-    - tags
 
 test:ubuntu:
   stage: test
@@ -241,51 +229,51 @@ deploy-ppa:
     - make dput_$(lsb_release -c -s)
     - rm $PW_FILE_NAME
 
-deploy-doc:
-  stage: deploy
-  only:
-    - /^v.*$/
-  except:
-    - branches
-  script:
-    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
-    - mkdir -p ~/.ssh
-    - eval $(ssh-agent -s)
-    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
-    - ssh-add <(echo "$HAL_DEPLOYMENT_KEY")
-    - 'ssh-keyscan fs.emsec.rub.de > ~/.ssh/known_hosts'
-    - cd build/documentation/documentation/
-    - tar cvfz documentation.tgz --strip-components=1 html
-    - ssh $HAL_DOCUMENTATION_SERVER 'rm -rf /srv/data/doc-server/data/*'
-    - scp -r documentation.tgz $HAL_DOCUMENTATION_SERVER:/srv/data/doc-server/data/
-    - ssh $HAL_DOCUMENTATION_SERVER tar xvfz /srv/data/doc-server/data/documentation.tgz -C /srv/data/doc-server/data/
-    - ssh $HAL_DOCUMENTATION_SERVER rm -f /srv/data/doc-server/data/documentation.tgz
-  dependencies:
-    - compile:doc:doxygen
-  cache:
-    key: doc-build-cache
-
-
-deploy-py-doc:
-  stage: deploy
-  only:
-    - /^v.*$/
-  except:
-    - branches
-  script:
-    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
-    - mkdir -p ~/.ssh
-    - eval $(ssh-agent -s)
-    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
-    - ssh-add <(echo "$HAL_DEPLOYMENT_KEY")
-    - 'ssh-keyscan fs.emsec.rub.de > ~/.ssh/known_hosts'
-    - cd build/python-doc/
-    - tar cvfz documentation.tgz --strip-components=1 html
-    - ssh $HAL_DOCUMENTATION_SERVER 'rm -rf /srv/data/doc-server-py/data/*'
-    - scp -r documentation.tgz $HAL_DOCUMENTATION_SERVER:/srv/data/doc-server-py/data/
-    - ssh $HAL_DOCUMENTATION_SERVER tar xvfz /srv/data/doc-server-py/data/documentation.tgz -C /srv/data/doc-server-py/data/
-    - ssh $HAL_DOCUMENTATION_SERVER rm -f /srv/data/doc-server-py/data/documentation.tgz
-  dependencies:
-    - compile:doc:python
-  cache:
-    key: doc-build-cache
+#deploy-doc:
+#  stage: deploy
+#  only:
+#    - /^v.*$/
+#  except:
+#    - branches
+#  script:
+#    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+#    - mkdir -p ~/.ssh
+#    - eval $(ssh-agent -s)
+#    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+#    - ssh-add <(echo "$HAL_DEPLOYMENT_KEY")
+#    - 'ssh-keyscan fs.emsec.rub.de > ~/.ssh/known_hosts'
+#    - cd build/documentation/documentation/
+#    - tar cvfz documentation.tgz --strip-components=1 html
+#    - ssh $HAL_DOCUMENTATION_SERVER 'rm -rf /srv/data/doc-server/data/*'
+#    - scp -r documentation.tgz $HAL_DOCUMENTATION_SERVER:/srv/data/doc-server/data/
+#    - ssh $HAL_DOCUMENTATION_SERVER tar xvfz /srv/data/doc-server/data/documentation.tgz -C /srv/data/doc-server/data/
+#    - ssh $HAL_DOCUMENTATION_SERVER rm -f /srv/data/doc-server/data/documentation.tgz
+#  dependencies:
+#    - compile:doc:doxygen
+#  cache:
+#    key: doc-build-cache
+#
+#
+#deploy-py-doc:
+#  stage: deploy
+#  only:
+#    - /^v.*$/
+#  except:
+#    - branches
+#  script:
+#    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+#    - mkdir -p ~/.ssh
+#    - eval $(ssh-agent -s)
+#    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+#    - ssh-add <(echo "$HAL_DEPLOYMENT_KEY")
+#    - 'ssh-keyscan fs.emsec.rub.de > ~/.ssh/known_hosts'
+#    - cd build/python-doc/
+#    - tar cvfz documentation.tgz --strip-components=1 html
+#    - ssh $HAL_DOCUMENTATION_SERVER 'rm -rf /srv/data/doc-server-py/data/*'
+#    - scp -r documentation.tgz $HAL_DOCUMENTATION_SERVER:/srv/data/doc-server-py/data/
+#    - ssh $HAL_DOCUMENTATION_SERVER tar xvfz /srv/data/doc-server-py/data/documentation.tgz -C /srv/data/doc-server-py/data/
+#    - ssh $HAL_DOCUMENTATION_SERVER rm -f /srv/data/doc-server-py/data/documentation.tgz
+#  dependencies:
+#    - compile:doc:python
+#  cache:
+#    key: doc-build-cache
