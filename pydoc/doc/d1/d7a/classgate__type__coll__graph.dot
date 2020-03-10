@@ -1,0 +1,6 @@
+digraph "gate_type"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node0 [label="{gate_type\n||+ gate_type()\l+ ~gate_type()\l+ to_string()\l+ operator==()\l+ operator!=()\l+ get_name()\l+ get_base_type()\l+ add_input_pin()\l+ add_input_pins()\l+ get_input_pins()\l+ add_output_pin()\l+ add_output_pins()\l+ get_output_pins()\l+ add_boolean_function()\l+ get_boolean_functions()\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+}

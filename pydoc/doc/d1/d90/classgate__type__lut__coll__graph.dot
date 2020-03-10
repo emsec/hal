@@ -1,0 +1,8 @@
+digraph "gate_type_lut"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node0 [label="{gate_type_lut\n||+ gate_type_lut()\l+ ~gate_type_lut()\l+ add_output_from_init\l_string_pin()\l+ get_output_from_init\l_string_pins()\l+ set_config_data_category()\l+ get_config_data_category()\l+ set_config_data_identifier()\l+ get_config_data_identifier()\l+ set_config_data_ascending\l_order()\l+ is_config_data_ascending\l_order()\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node1 -> Node0 [dir="back",color="midnightblue",fontsize="10",style="solid",arrowtail="onormal",fontname="Helvetica"];
+  Node1 [label="{gate_type\n||+ gate_type()\l+ ~gate_type()\l+ to_string()\l+ operator==()\l+ operator!=()\l+ get_name()\l+ get_base_type()\l+ add_input_pin()\l+ add_input_pins()\l+ get_input_pins()\l+ add_output_pin()\l+ add_output_pins()\l+ get_output_pins()\l+ add_boolean_function()\l+ get_boolean_functions()\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$d0/d31/classgate__type.html"];
+}
