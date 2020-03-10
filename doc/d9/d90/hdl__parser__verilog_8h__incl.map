@@ -1,0 +1,12 @@
+<map id="netlist/hdl_parser/hdl_parser_verilog.h" name="netlist/hdl_parser/hdl_parser_verilog.h">
+<area shape="rect" id="node2" href="$d4/da4/def_8h.html" title="def.h" alt="" coords="364,423,415,449"/>
+<area shape="rect" id="node7" href="$d6/d87/token__stream_8h.html" title="core/token_stream.h" alt="" coords="973,348,1115,375"/>
+<area shape="rect" id="node11" href="$d5/d16/module_8h.html" title="netlist/module.h" alt="" coords="828,95,943,121"/>
+<area shape="rect" id="node25" href="$d7/d97/net_8h.html" title="netlist/net.h" alt="" coords="541,266,632,293"/>
+<area shape="rect" id="node27" href="$d9/d93/hdl__parser_8h.html" title="hdl_parser.h" alt="" coords="1840,266,1933,293"/>
+<area shape="rect" id="node12" href="$de/d88/gate__library_8h.html" title="netlist/gate_library\l/gate_library.h" alt="" coords="1079,169,1207,211"/>
+<area shape="rect" id="node20" href="$d1/df3/data__container_8h.html" title="netlist/data_container.h" alt="" coords="195,348,352,375"/>
+<area shape="rect" id="node13" href="$db/dd6/gate__type_8h.html" title="netlist/gate_library\l/gate_type/gate_type.h" alt="" coords="1231,259,1385,300"/>
+<area shape="rect" id="node14" href="$dc/d6d/boolean__function_8h.html" title="netlist/boolean_function.h" alt="" coords="1507,348,1677,375"/>
+<area shape="rect" id="node26" href="$d5/d97/endpoint_8h.html" title="netlist/endpoint.h" alt="" coords="427,348,549,375"/>
+</map>
