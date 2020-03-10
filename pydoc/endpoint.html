@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Endpoint &mdash; hal_py v2.0.0-117-g677aeb364 documentation</title>
+  <title>Endpoint &mdash; hal_py v2.0.0-118-g651ef29d2 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="hal_py v2.0.0-117-g677aeb364 documentation" href="index.html"/>
+    <link rel="top" title="hal_py v2.0.0-118-g651ef29d2 documentation" href="index.html"/>
         <link rel="up" title="hal_py Documentation" href="hal_py.html"/>
         <link rel="next" title="Netlist" href="netlist.html"/>
         <link rel="prev" title="Gate Library" href="gate_library.html"/> 
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                v2.0.0-117-g677aeb364
+                v2.0.0-118-g651ef29d2
               </div>
             
           
@@ -181,6 +181,105 @@
             
   <div class="section" id="endpoint">
 <h1>Endpoint<a class="headerlink" href="#endpoint" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="hal_py.endpoint">
+<em class="property">class </em><code class="descclassname">hal_py.</code><code class="descname">endpoint</code><a class="headerlink" href="#hal_py.endpoint" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="hal_py.endpoint.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>self: hal_py.endpoint</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.endpoint.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Construct a new endpoint.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.endpoint.gate">
+<code class="descname">gate</code><a class="headerlink" href="#hal_py.endpoint.gate" title="Permalink to this definition">¶</a></dt>
+<dd><p>The endpoint’s gate.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">hal_py.gate</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.endpoint.get_gate">
+<code class="descname">get_gate</code><span class="sig-paren">(</span><em>self: hal_py.endpoint</em><span class="sig-paren">)</span> &#x2192; gate<a class="headerlink" href="#hal_py.endpoint.get_gate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the gate of the current endpoint.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The gate.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="gate.html#hal_py.gate" title="hal_py.gate">hal_py.gate</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.endpoint.get_pin_type">
+<code class="descname">get_pin_type</code><span class="sig-paren">(</span><em>self: hal_py.endpoint</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#hal_py.endpoint.get_pin_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the pin type of the current endpoint.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The pin type.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.endpoint.pin_type">
+<code class="descname">pin_type</code><a class="headerlink" href="#hal_py.endpoint.pin_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>The pin type of the current endpoint.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.endpoint.set_gate">
+<code class="descname">set_gate</code><span class="sig-paren">(</span><em>self: hal_py.endpoint</em>, <em>gate: gate</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.endpoint.set_gate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the gate of the endpoint.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>gate</strong> (<a class="reference internal" href="gate.html#hal_py.gate" title="hal_py.gate"><em>hal_py.gate</em></a>) – Gate to be set.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.endpoint.set_pin_type">
+<code class="descname">set_pin_type</code><span class="sig-paren">(</span><em>self: hal_py.endpoint</em>, <em>type: str</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.endpoint.set_pin_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the pin type of the current endpoint.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – Pin type to be set.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 
 
@@ -227,7 +326,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'v2.0.0-117-g677aeb364',
+            VERSION:'v2.0.0-118-g651ef29d2',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
