@@ -156,6 +156,9 @@
          message(FATAL_ERROR "genhtml not found! Aborting...")
      endif() # NOT GENHTML_PATH
 
+     message(STATUS "@@@@ CMAKE_BINARY_DIR ${CMAKE_BINARY_DIR} @@@@")
+     message(STATUS "@@@@ CMAKE_CURRENT_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR} @@@@")
+
      # Setup target
      add_custom_target(${Coverage_NAME}
 
