@@ -160,9 +160,9 @@
      add_custom_target(${Coverage_NAME}
 
                        # Cleanup lcov
-                       COMMAND ${LCOV_PATH} -v --directory ${CMAKE_BINARY_DIR} --zerocounters
+                       COMMAND ${LCOV_PATH} --directory ${CMAKE_BINARY_DIR} --zerocounters
                        # Create baseline to make sure untouched files show up in the report
-                       COMMAND ${LCOV_PATH} -v -c -i -d  ${CMAKE_BINARY_DIR} -o ${CMAKE_BINARY_DIR}/${Coverage_NAME}.base
+                       COMMAND ${LCOV_PATH} -c -i -d  ${CMAKE_BINARY_DIR} -o ${CMAKE_BINARY_DIR}/${Coverage_NAME}.base
 
                        COMMAND ls -lah ${CMAKE_BINARY_DIR}
                        COMMAND ls -lah ${CMAKE_CURRENT_BINARY_DIR}
@@ -173,7 +173,7 @@
                        COMMAND ${Coverage_EXECUTABLE}
 
                        # Capturing lcov counters and generating report
-                       COMMAND ${LCOV_PATH} -v --directory ${CMAKE_BINARY_DIR}/${CMAKE_BINARY_DIR} --capture --output-file ${CMAKE_BINARY_DIR}/${Coverage_NAME}.info
+                       COMMAND ${LCOV_PATH} --directory ${CMAKE_BINARY_DIR}/${CMAKE_BINARY_DIR} --capture --output-file ${CMAKE_BINARY_DIR}/${Coverage_NAME}.info
 
                        COMMAND ls -lah ${CMAKE_BINARY_DIR}
                        COMMAND ls -lah ${CMAKE_CURRENT_BINARY_DIR}
@@ -181,7 +181,7 @@
                        COMMAND find . -name "${Coverage_NAME}.base"
 
                        # add baseline counters
-                       COMMAND ${LCOV_PATH} -v -a ${CMAKE_BINARY_DIR}/${Coverage_NAME}.base -a ${CMAKE_BINARY_DIR}/${Coverage_NAME}.info --output-file ${CMAKE_BINARY_DIR}/${Coverage_NAME}.total
+                       COMMAND ${LCOV_PATH} -a ${CMAKE_BINARY_DIR}/${Coverage_NAME}.base -a ${CMAKE_BINARY_DIR}/${Coverage_NAME}.info --output-file ${CMAKE_BINARY_DIR}/${Coverage_NAME}.total
 
                        COMMAND ls -lah ${CMAKE_BINARY_DIR}
                        COMMAND ls -lah ${CMAKE_CURRENT_BINARY_DIR}
@@ -189,7 +189,7 @@
                        COMMAND find . -name "${Coverage_NAME}.base"
 
 #                       COMMAND ${LCOV_PATH} --remove ${Coverage_NAME}.total ${COVERAGE_EXCLUDES} --output-file ${PROJECT_BINARY_DIR}/${Coverage_NAME}.info.cleaned
-                       COMMAND ${LCOV_PATH} -v --remove ${CMAKE_BINARY_DIR}/${Coverage_NAME}.total ${COVERAGE_EXCLUDES} --output-file ${CMAKE_BINARY_DIR}/${Coverage_NAME}.info.cleaned
+                       COMMAND ${LCOV_PATH} --remove ${CMAKE_BINARY_DIR}/${Coverage_NAME}.total ${COVERAGE_EXCLUDES} --output-file ${CMAKE_BINARY_DIR}/${Coverage_NAME}.info.cleaned
 
                        COMMAND ls -lah ${CMAKE_BINARY_DIR}
                        COMMAND ls -lah ${CMAKE_CURRENT_BINARY_DIR}
@@ -197,7 +197,7 @@
                        COMMAND find . -name "${Coverage_NAME}.base"
 
 #                       COMMAND ${LCOV_PATH} --list ${PROJECT_BINARY_DIR}/${Coverage_NAME}.info.cleaned
-                       COMMAND ${LCOV_PATH} -v --list ${CMAKE_BINARY_DIR}/${Coverage_NAME}.info.cleaned
+                       COMMAND ${LCOV_PATH} --list ${CMAKE_BINARY_DIR}/${Coverage_NAME}.info.cleaned
 
                        COMMAND ls -lah ${CMAKE_BINARY_DIR}
                        COMMAND ls -lah ${CMAKE_CURRENT_BINARY_DIR}
