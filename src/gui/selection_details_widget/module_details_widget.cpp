@@ -98,8 +98,8 @@ module_details_widget::module_details_widget(QWidget* parent)
 
     connect(&g_netlist_relay, &netlist_relay::net_removed, this, &module_details_widget::handle_net_removed);
     connect(&g_netlist_relay, &netlist_relay::net_name_changed, this, &module_details_widget::handle_net_name_changed);
-    // FIXME change to source_added, source_removed
-    // connect(&g_netlist_relay, &netlist_relay::net_source_changed, this, &module_details_widget::handle_net_source_changed);
+    connect(&g_netlist_relay, &netlist_relay::net_source_added, this, &module_details_widget::handle_net_source_added);
+    connect(&g_netlist_relay, &netlist_relay::net_source_removed, this, &module_details_widget::handle_net_source_removed);
     connect(&g_netlist_relay, &netlist_relay::net_destination_added, this, &module_details_widget::handle_net_destination_added);
     connect(&g_netlist_relay, &netlist_relay::net_destination_removed, this, &module_details_widget::handle_net_destination_removed);
 
@@ -205,23 +205,38 @@ void module_details_widget::handle_net_name_changed(const std::shared_ptr<net> n
     if (!mod)
         return;
 
-    if (mod->get_input_nets().find(n) != mod->get_input_nets().end() || mod->get_internal_nets().find(n) != mod->get_internal_nets().end()
-        || mod->get_output_nets().find(n) != mod->get_output_nets().end())
+    if (mod->get_internal_nets().find(n) != mod->get_internal_nets().end())
         update(m_current_id);
 }
 
-// FIXME change to source_added, source_removed
-// void module_details_widget::handle_net_source_changed(const std::shared_ptr<net> n)
-// {
-//     Q_UNUSED(n);
-//     update(m_current_id);
-// }
+void module_details_widget::handle_net_source_added(const std::shared_ptr<net> n, const u32 src_gate_id)
+{
+    Q_UNUSED(n);
+    if (m_current_id == 0)
+        return;
+    auto g = g_netlist->get_gate_by_id(src_gate_id);
+    if (g_netlist->get_module_by_id(m_current_id)->contains_gate(g))
+        update(m_current_id);
+}
+
+void module_details_widget::handle_net_source_removed(const std::shared_ptr<net> n, const u32 src_gate_id)
+{
+    Q_UNUSED(n);
+    if (m_current_id == 0)
+        return;
+    auto g = g_netlist->get_gate_by_id(src_gate_id);
+    if (g_netlist->get_module_by_id(m_current_id)->contains_gate(g))
+        update(m_current_id);
+}
 
 void module_details_widget::handle_net_destination_added(const std::shared_ptr<net> n, const u32 dst_gate_id)
 {
-    Q_UNUSED(dst_gate_id);
-    //would have written the same logic in this funtion, so just use the function below
-    handle_net_name_changed(n);
+    Q_UNUSED(n);
+    if (m_current_id == 0)
+        return;
+    auto g = g_netlist->get_gate_by_id(dst_gate_id);
+    if (g_netlist->get_module_by_id(m_current_id)->contains_gate(g))
+        update(m_current_id);
 }
 
 void module_details_widget::handle_net_destination_removed(const std::shared_ptr<net> n, const u32 dst_gate_id)
