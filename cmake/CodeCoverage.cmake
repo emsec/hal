@@ -169,6 +169,8 @@
                        COMMAND ls -lah bin/
                        COMMAND find . -name "${Coverage_NAME}.base"
 
+                       COMMAND [ -f ${CMAKE_BINARY_DIR}/${Coverage_NAME}.base ] || exit -1
+
                        # Run tests
                        COMMAND ${Coverage_EXECUTABLE}
 
