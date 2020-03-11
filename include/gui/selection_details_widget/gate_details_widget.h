@@ -41,6 +41,7 @@ class QTreeWidgetItem;
 class QVBoxLayout;
 class QHBoxLayout;
 class QScrollArea;
+class QGridLayout;
 class QModelIndex;
 class graph_navigation_widget;
 
@@ -86,6 +87,7 @@ public Q_SLOTS:
 private:
     QVBoxLayout* m_content_layout;
     QHBoxLayout* m_tree_row_layout;
+    QGridLayout* m_boolean_functions_layout;
 
     QTableWidget* m_general_table;
     QTableWidgetItem* m_name_item;
@@ -114,6 +116,9 @@ private:
     u64 m_last_click_time;
 
     graph_navigation_widget* m_navigation_table;
+
+    //temporary utility function to have a better understanding
+    void update_boolean_function();
 };
 
 #endif /* __HAL_GATE_DETAILS_WIDGET_H__ */
