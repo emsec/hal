@@ -114,6 +114,7 @@ jobs:
         env:
           LDFLAGS: "-L/usr/local/opt/qt/lib -L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib"
           CPPFLAGS: "-I/usr/local/opt/qt/include -I/usr/local/opt/llvm/include"
+#          HAL_BASE_PATH: ${{runner.workspace}}/hal/build
           HAL_BASE_PATH: ${{runner.workspace}}/hal/build
 
 
@@ -124,6 +125,9 @@ jobs:
         run: |
           cd build
           ctest
+          ls -lah
+          /usr/local/bin/lcov --directory . --zerocounters
+          /usr/local/bin/lcov -c -i -d . -o hal_coverage.base
           ls -lah
           ninja -v hal_coverage
           bash <(curl -s https://codecov.io/bash) -f hal_coverage.info.cleaned || echo "Codecov did not collect coverage reports"
