@@ -117,6 +117,8 @@ jobs:
 #          HAL_BASE_PATH: ${{runner.workspace}}/hal/build
           HAL_BASE_PATH: ${{runner.workspace}}/hal/build
 
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v1
 
       - name: Test
         shell: bash
