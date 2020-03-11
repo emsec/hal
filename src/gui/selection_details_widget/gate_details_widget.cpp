@@ -485,7 +485,7 @@ void gate_details_widget::on_treewidget_item_clicked(QTreeWidgetItem* item, int 
         {
             //            auto rect = QApplication::desktop()->availableGeometry(this);
             //            w->move(QPoint(rect.x() + (rect.width() - w->width()) / 2, rect.y() + (rect.height() - w->height()) / 2));
-            m_navigation_table->setup(hal::node{hal::node_type::gate, 0}, clicked_net);
+            m_navigation_table->setup(hal::node{hal::node_type::gate, 0}, clicked_net, true);
             m_navigation_table->move(QCursor::pos());
             m_navigation_table->show();
             m_navigation_table->setFocus();
@@ -498,16 +498,19 @@ void gate_details_widget::on_treewidget_item_clicked(QTreeWidgetItem* item, int 
         if (!clicked_net)
             return;
 
-        g_selection_relay.clear();
-        if (clicked_net->get_source().get_gate() == nullptr || clicked_net->is_global_input_net())
+        auto sources = clicked_net->get_sources();
+
+        if (sources.empty() || clicked_net->is_global_input_net())
         {
+            g_selection_relay.clear();
             g_selection_relay.m_selected_nets.insert(clicked_net->get_id());
+            g_selection_relay.relay_selection_changed(this);
         }
-        else
+        else if (sources.size() == 1)
         {
-            endpoint ep  = clicked_net->get_source();
-            auto gate_id = ep.get_gate()->get_id();
-            g_selection_relay.m_selected_gates.insert(gate_id);
+            auto ep = *sources.begin();
+            g_selection_relay.clear();
+            g_selection_relay.m_selected_gates.insert(ep.get_gate()->get_id());
             g_selection_relay.m_focus_type = selection_relay::item_type::gate;
             g_selection_relay.m_focus_id   = ep.get_gate()->get_id();
             g_selection_relay.m_subfocus   = selection_relay::subfocus::right;
@@ -515,9 +518,19 @@ void gate_details_widget::on_treewidget_item_clicked(QTreeWidgetItem* item, int 
             auto pins                          = ep.get_gate()->get_output_pins();
             auto index                         = std::distance(pins.begin(), std::find(pins.begin(), pins.end(), ep.get_pin()));
             g_selection_relay.m_subfocus_index = index;
-            update(gate_id);
+
+            update(ep.get_gate()->get_id());
+            g_selection_relay.relay_selection_changed(this);
         }
-        g_selection_relay.relay_selection_changed(this);
+        else
+        {
+            //            auto rect = QApplication::desktop()->availableGeometry(this);
+            //            w->move(QPoint(rect.x() + (rect.width() - w->width()) / 2, rect.y() + (rect.height() - w->height()) / 2));
+            m_navigation_table->setup(hal::node{hal::node_type::gate, 0}, clicked_net, false);
+            m_navigation_table->move(QCursor::pos());
+            m_navigation_table->show();
+            m_navigation_table->setFocus();
+        }
     }
 }
 
