@@ -25,6 +25,7 @@
 #include <QVBoxLayout>
 #include <QGridLayout>
 #include <QPushButton>
+#include "toggleable_label/toggleable_label.h"
 
 gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
 {
@@ -290,10 +291,13 @@ void gate_details_widget::update_boolean_function()
 
     QPushButton* button = new QPushButton("HIDE/SHOW");
     button->setMaximumWidth(100);
+    button->setMinimumHeight(22);
+    button->setMaximumHeight(22);
     //button->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     QLabel* bruh = new QLabel("HUHU");
-    QLabel* span = new QLabel("SPAAAAAN AAAAAAa AAAAAAAA AAAAA bbbbb bbbb bbbbbbb bbbbbbb bbb");
+    toggleable_label* span = new toggleable_label("SPAAAAAN AAAAAAa AAAAAAAA AAAAA bbbbb bbbb bbbbbbb bbbbbbb bbb");
     span->setWordWrap(true);
+    connect(button, &QPushButton::clicked, span, &toggleable_label::toggle_visible);
     m_boolean_functions_layout->addWidget(button, 0,0);
     m_boolean_functions_layout->addWidget(bruh, 0, 1);
     m_boolean_functions_layout->addWidget(span, 1, 0, 1, 2);
