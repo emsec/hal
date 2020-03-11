@@ -176,8 +176,8 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
 
     //handle netlist modifications reagarding nets
     connect(&g_netlist_relay, &netlist_relay::net_name_changed, this, &gate_details_widget::handle_net_name_changed);
-    // FIXME change to source_added, source_removed
-    // connect(&g_netlist_relay, &netlist_relay::net_source_changed, this, &gate_details_widget::handle_net_source_changed);
+    connect(&g_netlist_relay, &netlist_relay::net_source_added, this, &gate_details_widget::handle_net_source_added);
+    connect(&g_netlist_relay, &netlist_relay::net_source_removed, this, &gate_details_widget::handle_net_source_removed);
     connect(&g_netlist_relay, &netlist_relay::net_destination_added, this, &gate_details_widget::handle_net_destination_added);
     connect(&g_netlist_relay, &netlist_relay::net_destination_removed, this, &gate_details_widget::handle_net_destination_removed);
 }
@@ -232,15 +232,19 @@ void gate_details_widget::handle_net_name_changed(std::shared_ptr<net> net)
         update(m_current_id);
 }
 
-// FIXME change to source_added, source_removed
-// void gate_details_widget::handle_net_source_changed(std::shared_ptr<net> net)
-// {
-//     Q_UNUSED(net);
-//     if (m_current_id == 0)
-//         return;
-//     if (g_netlist->is_gate_in_netlist(g_netlist->get_gate_by_id(m_current_id)))
-//         update(m_current_id);
-// }
+void gate_details_widget::handle_net_source_added(std::shared_ptr<net> net, const u32 src_gate_id)
+{
+    Q_UNUSED(net);
+    if (m_current_id == src_gate_id)
+        update(m_current_id);
+}
+
+void gate_details_widget::handle_net_source_removed(std::shared_ptr<net> net, const u32 src_gate_id)
+{
+    Q_UNUSED(net);
+    if (m_current_id == src_gate_id)
+        update(m_current_id);
+}
 
 void gate_details_widget::handle_net_destination_added(std::shared_ptr<net> net, const u32 dst_gate_id)
 {

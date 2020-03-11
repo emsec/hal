@@ -79,7 +79,8 @@ public Q_SLOTS:
     void handle_module_gate_removed(std::shared_ptr<module> module, u32 associated_data);
 
     void handle_net_name_changed(std::shared_ptr<net> net);
-    void handle_net_source_changed(std::shared_ptr<net> net);
+    void handle_net_source_added(std::shared_ptr<net> net, const u32 src_gate_id);
+    void handle_net_source_removed(std::shared_ptr<net> net, const u32 src_gate_id);
     void handle_net_destination_added(std::shared_ptr<net> net, const u32 dst_gate_id);
     void handle_net_destination_removed(std::shared_ptr<net> net, const u32 dst_gate_id);
 
