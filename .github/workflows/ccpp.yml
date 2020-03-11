@@ -124,8 +124,6 @@ jobs:
         # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
         run: |
           cd build
-          ctest
-          ls -lah
           /usr/local/bin/lcov -v --directory . --zerocounters
           /usr/local/bin/lcov -v -c -i -d . -o hal_coverage.base
           ls -lah
