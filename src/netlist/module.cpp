@@ -236,23 +236,24 @@ std::set<std::shared_ptr<net>> module::get_input_nets() const
 {
     std::set<std::shared_ptr<net>> res;
     auto gates = get_gates(nullptr, true);
-    std::set<std::shared_ptr<net>> seen;
     for (const auto& gate : gates)
     {
         for (const auto& net : gate->get_fan_in_nets())
         {
-            if (seen.find(net) != seen.end())
-            {
-                continue;
-            }
-            seen.insert(net);
             if (m_internal_manager->m_netlist->is_global_input_net(net))
             {
                 res.insert(net);
+                continue;
             }
-            else if (gates.find(net->get_source().get_gate()) == gates.end())
+            for (const auto& src : net->get_sources())
             {
-                res.insert(net);
+                // mark as input net if at least one source is not within the
+                // module
+                if (gates.find(src.get_gate()) == gates.end())
+                {
+                    res.insert(net);
+                    break;
+                }
             }
         }
     }
@@ -274,6 +275,8 @@ std::set<std::shared_ptr<net>> module::get_output_nets() const
             }
             for (const auto& dst : net->get_destinations())
             {
+                // mark as output net if at least one destination is not
+                // within the module
                 if (gates.find(dst.get_gate()) == gates.end())
                 {
                     res.insert(net);
