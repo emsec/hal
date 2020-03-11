@@ -291,4 +291,7 @@
 
  function(APPEND_COVERAGE_COMPILER_FLAGS)
      message(STATUS "Appending code coverage compiler flags: ${COVERAGE_COMPILER_FLAGS}")
+     enable_cxx_compile_option_if_supported("--coverage" "" "PRIVATE")
+     enable_cxx_compile_option_if_supported("-fprofile-arcs" "" "PRIVATE")
+     enable_cxx_compile_option_if_supported("-ftest-coverage" "" "PRIVATE")
  endfunction() # APPEND_COVERAGE_COMPILER_FLAGS
