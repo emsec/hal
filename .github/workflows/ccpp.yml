@@ -97,7 +97,7 @@ jobs:
           cd build
           export PATH="/usr/local/opt/qt/bin:$PATH"
           ls ..
-          cmake -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON -G Ninja $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCMAKE_BUILD_TYPE=Debug -DBUILD_ALL_PLUGINS=ON -DBUILD_TESTS=ON -DBUILD_COVERAGE=ON -DWITH_GUI=ON -DBUILD_DOCUMENTATION=ON -DCMAKE_INSTALL_PREFIX=/usr/ -DPACKAGE_MACOS=ON -DCMAKE_C_COMPILER=/usr/local/opt/llvm/bin/clang -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm/bin/clang++
+          cmake -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON -G Ninja .. -DCMAKE_BUILD_TYPE=Debug -DBUILD_ALL_PLUGINS=ON -DBUILD_TESTS=ON -DBUILD_COVERAGE=ON -DWITH_GUI=ON -DBUILD_DOCUMENTATION=ON -DCMAKE_INSTALL_PREFIX=/usr/ -DPACKAGE_MACOS=ON -DCMAKE_C_COMPILER=/usr/local/opt/llvm/bin/clang -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm/bin/clang++
         env:
           LDFLAGS: "-L/usr/local/opt/qt/lib -L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib"
           CPPFLAGS: "-I/usr/local/opt/qt/include -I/usr/local/opt/llvm/include"
