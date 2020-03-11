@@ -211,11 +211,17 @@ void gate_details_widget::handle_net_name_changed(std::shared_ptr<net> net)
 {
     bool update_needed = false;
 
-    //check if currently shown gate is src of renamed net
-    if (m_current_id == net->get_source().get_gate()->get_id())
-        update_needed = true;
+    //check if currently shown gate is a src of renamed net
+    for (auto& e : net->get_sources())
+    {
+        if (m_current_id == e.get_gate()->get_id())
+        {
+            update_needed = true;
+            break;
+        }
+    }
 
-    //check if currently shown gate is dst of renamed net
+    //check if currently shown gate is a dst of renamed net
     if (!update_needed)
     {
         for (auto& e : net->get_destinations())

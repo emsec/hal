@@ -376,9 +376,15 @@ void net_details_widget::handle_gate_name_changed(const std::shared_ptr<gate> g)
     if(!g_netlist->is_net_in_netlist(n))
         return;
 
-    //check if renamed gate is src of the currently shown net
-    if(n->get_source().get_gate()->get_id() == m_current_id)
-        update_needed = true;
+    //check if renamed gate is a src of the currently shown net
+    for(auto e : n->get_sources())
+    {
+        if(e.get_gate()->get_id() == m_current_id)
+        {
+            update_needed = true;
+            break;
+        }
+    }
 
     //check if renamed gate is a dst of the currently shown net
     if(!update_needed)
