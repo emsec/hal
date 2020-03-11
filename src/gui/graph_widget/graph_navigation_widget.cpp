@@ -10,6 +10,8 @@
 #include <QKeyEvent>
 #include <QScrollBar>
 
+#include <assert.h>
+
 graph_navigation_widget::graph_navigation_widget(QWidget* parent) : QTableWidget(parent), m_via_net(0)
 {
     m_hide_when_focus_lost = false;
@@ -44,20 +46,14 @@ void graph_navigation_widget::setup(bool direction)
         {
             std::shared_ptr<gate> g = g_netlist->get_gate_by_id(g_selection_relay.m_focus_id);
 
-            if (!g)
-            {
-                return;
-            }
+            assert(g);
 
             m_origin = hal::node{hal::node_type::gate, g->get_id()};
 
             std::string pin_type   = (direction ? g->get_output_pins() : g->get_input_pins())[g_selection_relay.m_subfocus_index];
             std::shared_ptr<net> n = (direction ? g->get_fan_out_net(pin_type) : g->get_fan_in_net(pin_type));
 
-            if (!n)
-            {
-                return;
-            }
+            assert(n);
 
             fill_table(n, direction);
 
@@ -67,20 +63,11 @@ void graph_navigation_widget::setup(bool direction)
         {
             std::shared_ptr<net> n = g_netlist->get_net_by_id(g_selection_relay.m_focus_id);
 
-            if (!n)
-            {
-                return;
-            }
+            assert(n);
+            assert(n->get_num_of_sources());
 
             m_origin = hal::node{hal::node_type::gate, 0};
-
-            std::shared_ptr<gate> g = n->get_source().get_gate();
-
-            if (!g)
-            {
-                return;
-            }
-
+            
             fill_table(n, direction);
 
             return;
@@ -133,10 +120,7 @@ void graph_navigation_widget::keyPressEvent(QKeyEvent* event)
 
 void graph_navigation_widget::fill_table(std::shared_ptr<net> n, bool direction)
 {
-    if (!n)
-    {
-        return;
-    }
+    assert(n);
 
     m_via_net = n->get_id();
 
