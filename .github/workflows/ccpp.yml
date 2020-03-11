@@ -126,8 +126,8 @@ jobs:
           cd build
           ctest
           ls -lah
-          /usr/local/bin/lcov --directory . --zerocounters
-          /usr/local/bin/lcov -c -i -d . -o hal_coverage.base
+          /usr/local/bin/lcov -v --directory . --zerocounters
+          /usr/local/bin/lcov -v -c -i -d . -o hal_coverage.base
           ls -lah
           find ../../ -name "hal_coverage.base"
           ninja -v hal_coverage
