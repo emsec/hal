@@ -18,12 +18,6 @@ jobs:
 
     runs-on: ${{ matrix.runs-on }}
 
-    env:
-      CCACHE_DIR: ${{github.workspace}}/.ccache
-      CCACHE_COMPRESS: true
-      CCACHE_COMPRESSLEVEL: 6
-      CCACHE_MAXSIZE: 400M
-
     steps:
       - name: Checkout
         uses: actions/checkout@v1
@@ -113,6 +107,10 @@ jobs:
           LDFLAGS: "-L/usr/local/opt/qt/lib -L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib"
           CPPFLAGS: "-I/usr/local/opt/qt/include -I/usr/local/opt/llvm/include"
           HAL_BASE_PATH: ${{runner.workspace}}/hal/build
+          CCACHE_DIR: ${{runner.workspace}}/.ccache
+          CCACHE_COMPRESS: true
+          CCACHE_COMPRESSLEVEL: 6
+          CCACHE_MAXSIZE: 400M
 
       - name: Build
         if: startsWith(runner.os, 'macOS')
@@ -126,6 +124,10 @@ jobs:
           LDFLAGS: "-L/usr/local/opt/qt/lib -L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib"
           CPPFLAGS: "-I/usr/local/opt/qt/include -I/usr/local/opt/llvm/include"
           HAL_BASE_PATH: ${{runner.workspace}}/hal/build
+          CCACHE_DIR: ${{runner.workspace}}/.ccache
+          CCACHE_COMPRESS: true
+          CCACHE_COMPRESSLEVEL: 6
+          CCACHE_MAXSIZE: 400M
 
 #      - name: Setup tmate session
 #        uses: mxschmitt/action-tmate@v1
@@ -142,6 +144,10 @@ jobs:
           LDFLAGS: "-L/usr/local/opt/qt/lib -L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib"
           CPPFLAGS: "-I/usr/local/opt/qt/include -I/usr/local/opt/llvm/include"
           HAL_BASE_PATH: ${{runner.workspace}}/hal/build
+          CCACHE_DIR: ${{runner.workspace}}/.ccache
+          CCACHE_COMPRESS: true
+          CCACHE_COMPRESSLEVEL: 6
+          CCACHE_MAXSIZE: 400M
 
 
       - name: Publish New Homebrew Version

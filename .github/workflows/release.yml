@@ -17,13 +17,6 @@ jobs:
       fail-fast: false
 
     runs-on: ${{ matrix.runs-on }}
-
-    env:
-      CCACHE_DIR: ${{github.workspace}}/.ccache
-      CCACHE_COMPRESS: true
-      CCACHE_COMPRESSLEVEL: 6
-      CCACHE_MAXSIZE: 400M
-      HAL_BASE_PATH: ${{runner.workspace}}/hal/build
     
     steps:
       - uses: actions/checkout@v2
@@ -91,6 +84,11 @@ jobs:
           cp $GITHUB_WORKSPACE/documentation/index.html doc/
           $GITHUB_WORKSPACE/tools/genversion.py $GITHUB_WORKSPACE
           cmake -G Ninja $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_ALL_PLUGINS=ON -DBUILD_TESTS=ON -DBUILD_COVERAGE=ON -DWITH_GUI=ON -DBUILD_DOCUMENTATION=ON -DPACKAGE_DEB=OFF -DCMAKE_INSTALL_PREFIX=/usr/
+        env:
+          CCACHE_DIR: ${{runner.workspace}}/.ccache
+          CCACHE_COMPRESS: true
+          CCACHE_COMPRESSLEVEL: 6
+          CCACHE_MAXSIZE: 400M
 
 
       - name: Build Doxygen
@@ -102,6 +100,11 @@ jobs:
           mkdir -p doc/doc
           cmake --build . --target doc --clean-first --config $BUILD_TYPE
           cp -R documentation/documentation/html/* doc/doc/
+        env:
+          CCACHE_DIR: ${{runner.workspace}}/.ccache
+          CCACHE_COMPRESS: true
+          CCACHE_COMPRESSLEVEL: 6
+          CCACHE_MAXSIZE: 400M
 
       - name: Build Sphinx
         if: startsWith(runner.os, 'Linux')
@@ -112,6 +115,11 @@ jobs:
           mkdir -p doc/pydoc
           cmake --build . --target pydoc --clean-first --config $BUILD_TYPE
           cp -R python-doc/html/* doc/pydoc/
+        env:
+          CCACHE_DIR: ${{runner.workspace}}/.ccache
+          CCACHE_COMPRESS: true
+          CCACHE_COMPRESSLEVEL: 6
+          CCACHE_MAXSIZE: 400M
 
 
       - name: Deploy Doc
