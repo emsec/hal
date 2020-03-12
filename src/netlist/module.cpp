@@ -234,12 +234,18 @@ std::set<std::shared_ptr<gate>> module::get_gates(const std::function<bool(const
 
 std::set<std::shared_ptr<net>> module::get_input_nets() const
 {
+    std::unordered_set<u32> seen;
     std::set<std::shared_ptr<net>> res;
     auto gates = get_gates(nullptr, true);
     for (const auto& gate : gates)
     {
         for (const auto& net : gate->get_fan_in_nets())
         {
+            if (seen.find(net->get_id()) != seen.end())
+            {
+                continue;
+            }
+            seen.insert(net->get_id());
             if (m_internal_manager->m_netlist->is_global_input_net(net))
             {
                 res.insert(net);
@@ -257,12 +263,18 @@ std::set<std::shared_ptr<net>> module::get_input_nets() const
 
 std::set<std::shared_ptr<net>> module::get_output_nets() const
 {
+    std::unordered_set<u32> seen;
     std::set<std::shared_ptr<net>> res;
     auto gates = get_gates(nullptr, true);
     for (const auto& gate : gates)
     {
         for (const auto& net : gate->get_fan_out_nets())
         {
+            if (seen.find(net->get_id()) != seen.end())
+            {
+                continue;
+            }
+            seen.insert(net->get_id());
             if (m_internal_manager->m_netlist->is_global_output_net(net))
             {
                 res.insert(net);
@@ -280,12 +292,18 @@ std::set<std::shared_ptr<net>> module::get_output_nets() const
 
 std::set<std::shared_ptr<net>> module::get_internal_nets() const
 {
+    std::unordered_set<u32> seen;
     std::set<std::shared_ptr<net>> res;
     auto gates = get_gates(nullptr, true);
     for (const auto& gate : gates)
     {
         for (const auto& net : gate->get_fan_out_nets())
         {
+            if (seen.find(net->get_id()) != seen.end())
+            {
+                continue;
+            }
+            seen.insert(net->get_id());
             auto destinations = net->get_destinations();
             if (std::any_of(destinations.begin(), destinations.end(), [gates](endpoint dst){return gates.find(dst.get_gate()) != gates.end();}))
             {
