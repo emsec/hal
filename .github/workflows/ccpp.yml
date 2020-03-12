@@ -77,9 +77,9 @@ jobs:
         uses: actions/cache@v1.1.0
         with:
           path: ${{runner.workspace}}/.ccache
-          key: ${ { matrix.config.name } }-ccache-${ { steps.ccache_cache_timestamp.outputs.timestamp } }
+          key: ${{ runner.OS }}-ccache-${{ steps.ccache_cache_timestamp.outputs.timestamp }}
           restore-keys: |
-            ${ { matrix.config.name } }-ccache-
+            ${{ runner.OS }}-ccache-
 
       - name: Install Dependencies
         run: ./install_dependencies.sh
