@@ -89,15 +89,6 @@ jobs:
         # We'll use this as our working directory for all subsequent commands
         run: cmake -E make_directory ${{runner.workspace}}/build
 
-      - name: Cache CCache
-        uses: actions/cache@v1
-        with:
-          path: ~/.ccache
-          key: ${{ runner.OS }}-build-ccache-
-          restore-keys: |
-            ${{ runner.OS }}-build-ccache-${{ env.cache-name }}-
-            ${{ runner.OS }}-build-ccache-
-
       - name: Configure CMake
         if: startsWith(runner.os, 'macOS')
         # Use a bash shell so we can use the same syntax for environment variable
