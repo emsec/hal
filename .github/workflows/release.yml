@@ -19,7 +19,7 @@ jobs:
     runs-on: ${{ matrix.runs-on }}
 
     env:
-      CCACHE_DIR: ${{runner.workspace}}/.ccache
+      CCACHE_DIR: ${{github.workspace}}/.ccache
       CCACHE_COMPRESS: true
       CCACHE_COMPRESSLEVEL: 6
       CCACHE_MAXSIZE: 400M
