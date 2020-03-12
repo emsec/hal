@@ -245,15 +245,10 @@ std::set<std::shared_ptr<net>> module::get_input_nets() const
                 res.insert(net);
                 continue;
             }
-            for (const auto& src : net->get_sources())
+            auto sources = net->get_sources();
+            if (std::any_of(sources.begin(), sources.end(), [gates](endpoint src){return gates.find(src.get_gate()) == gates.end();}))
             {
-                // mark as input net if at least one source is not within the
-                // module
-                if (gates.find(src.get_gate()) == gates.end())
-                {
-                    res.insert(net);
-                    break;
-                }
+                res.insert(net);
             }
         }
     }
@@ -273,15 +268,10 @@ std::set<std::shared_ptr<net>> module::get_output_nets() const
                 res.insert(net);
                 continue;
             }
-            for (const auto& dst : net->get_destinations())
+            auto destinations = net->get_destinations();
+            if (std::any_of(destinations.begin(), destinations.end(), [gates](endpoint dst){return gates.find(dst.get_gate()) == gates.end();}))
             {
-                // mark as output net if at least one destination is not
-                // within the module
-                if (gates.find(dst.get_gate()) == gates.end())
-                {
-                    res.insert(net);
-                    break;
-                }
+                res.insert(net);
             }
         }
     }
@@ -296,13 +286,10 @@ std::set<std::shared_ptr<net>> module::get_internal_nets() const
     {
         for (const auto& net : gate->get_fan_out_nets())
         {
-            for (const auto& dst : net->get_destinations())
+            auto destinations = net->get_destinations();
+            if (std::any_of(destinations.begin(), destinations.end(), [gates](endpoint dst){return gates.find(dst.get_gate()) != gates.end();}))
             {
-                if (gates.find(dst.get_gate()) != gates.end())
-                {
-                    res.insert(net);
-                    break;
-                }
+                res.insert(net);
             }
         }
     }
