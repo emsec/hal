@@ -143,9 +143,14 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
     m_container_layout->addLayout(m_tree_row_layout);
     m_container_layout->addWidget(m_data_fields);
     //Add an additional layout to the container-layout to manage the boolean functions (//TEST nested-layouts and word wrapping)
-    m_boolean_functions_layout = new QGridLayout(this);
-    m_boolean_functions_layout->setHorizontalSpacing(10);
-    m_boolean_functions_layout->addWidget(m_boolean_function);
+    m_boolean_functions_layout = new QVBoxLayout(this);
+    m_boolean_functions_layout->setSpacing(5);
+    //m_boolean_function->setText("<b>Boolean Function(s):</b");
+    m_container_layout->addWidget(m_boolean_function);
+//    QWidget* spacer = new QWidget(this);
+//    spacer->setMinimumHeight(10);
+//    spacer->setMaximumHeight(10);
+//    m_container_layout->addWidget(spacer);
     m_container_layout->addLayout(m_boolean_functions_layout);
     //m_container_layout->addWidget(m_boolean_function);
 
@@ -289,34 +294,85 @@ void gate_details_widget::update_boolean_function()
 //    else
 //        m_boolean_function->show();
 
-    QPushButton* button = new QPushButton("HIDE/SHOW");
-    button->setMaximumWidth(100);
-    button->setMinimumHeight(22);
-    button->setMaximumHeight(22);
-    //button->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-    QLabel* bruh = new QLabel("HUHU");
-    toggleable_label* span = new toggleable_label("SPAAAAAN AAAAAAa AAAAAAAA AAAAA bbbbb bbbb bbbbbbb bbbbbbb bbb");
-    span->setWordWrap(true);
-    connect(button, &QPushButton::clicked, span, &toggleable_label::toggle_visible);
-    m_boolean_functions_layout->addWidget(button, 0,0);
-    m_boolean_functions_layout->addWidget(bruh, 0, 1);
-    m_boolean_functions_layout->addWidget(span, 1, 0, 1, 2);
-    //m_boolean_functions_layout->setColumnStretch(0, m_boolean_functions_layout->columnMinimumWidth(0));
-    QWidget* spacer = new QWidget();
-    spacer->setMinimumHeight(10);
-    spacer->setMaximumHeight(10);
-    m_boolean_functions_layout->addWidget(spacer, 2, 0, 1, 2);
+    //delete items in layout:
+    while(m_boolean_functions_layout->itemAt(0) != 0)
+    {
+        QLayoutItem* i = m_boolean_functions_layout->takeAt(0);
+        delete i->widget();
+        delete i;
+    }
 
-    QPushButton* button2 = new QPushButton("HIDE/SHOW");
-    button->setMaximumWidth(100);
-    //button->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-    QLabel* bruh2 = new QLabel("HUHU");
-    QLabel* span2 = new QLabel("SPAAAAAN AAAAAAa AAAAAAAA AAAAA bbbbb bbbb bbbbbbb bbbbbbb bbb");
-    span2->setWordWrap(true);
-    m_boolean_functions_layout->addWidget(button2, 3,0);
-    m_boolean_functions_layout->addWidget(bruh2, 3, 1);
-    m_boolean_functions_layout->addWidget(span2, 4, 0, 1, 2);
-    //m_boolean_functions_layout->setColumnStretch(0, m_boolean_functions_layout->columnMinimumWidth(0));
+    if(g->get_boolean_functions().size() == 0)
+        m_boolean_function->setText("<b>Boolean Function(s): -<b>");
+    else
+        m_boolean_function->setText("<b>Boolean Function(s):" + QString::number(g->get_boolean_functions().size()) + "</b");
+
+    int index = 0;
+    for(const auto& it : g->get_boolean_functions())
+    {
+        QPushButton* button = new QPushButton("Hide/Show");
+        button->setMaximumWidth(100);
+        button->setMinimumHeight(22);
+        button->setMaximumHeight(22);
+        toggleable_label* fnct = new toggleable_label(QString::fromStdString(it.first) + " = " + QString::fromStdString(it.second.to_string()));
+        fnct->setWordWrap(true);
+        connect(button, &QPushButton::clicked, fnct, &toggleable_label::toggle_visible);
+        QWidget* spacer = new QWidget();
+        spacer->setMinimumHeight(10);
+        spacer->setMaximumHeight(10);
+        m_boolean_functions_layout->addWidget(button);
+        m_boolean_functions_layout->addWidget(fnct);
+        m_boolean_functions_layout->addWidget(spacer);
+        index+=3;
+    }
+
+//    QPushButton* button = new QPushButton("HIDE/SHOW");
+//    button->setMaximumWidth(100);
+//    button->setMinimumHeight(22);
+//    button->setMaximumHeight(22);
+//    //button->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+//    QLabel* bruh = new QLabel("HUHU");
+//    toggleable_label* span = new toggleable_label("SPAAAAAN AAAAAAa AAAAAAAA AAAAA bbbbb bbbb bbbbbbb bbbbbbb bbb");
+//    span->setWordWrap(true);
+//    connect(button, &QPushButton::clicked, span, &toggleable_label::toggle_visible);
+//    m_boolean_functions_layout->addWidget(button, 0,0);
+//    m_boolean_functions_layout->addWidget(bruh, 0, 1);
+//    m_boolean_functions_layout->addWidget(span, 1, 0, 1, 2);
+//    QWidget* spacer = new QWidget();
+//    spacer->setMinimumHeight(10);
+//    spacer->setMaximumHeight(10);
+//    m_boolean_functions_layout->addWidget(spacer, 2, 0, 1, 2);
+
+//    QPushButton* button2 = new QPushButton("HIDE/SHOW");
+//    button->setMaximumWidth(100);
+//    //button->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+//    QLabel* bruh2 = new QLabel("HUHU");
+//    QLabel* span2 = new QLabel("SPAAAAAN AAAAAAa AAAAAAAA AAAAA bbbbb bbbb bbbbbbb bbbbbbb bbb");
+//    span2->setWordWrap(true);
+//    m_boolean_functions_layout->addWidget(button2, 3,0);
+//    m_boolean_functions_layout->addWidget(bruh2, 3, 1);
+//    m_boolean_functions_layout->addWidget(span2, 4, 0, 1, 2);
+//    m_boolean_functions_layout->setColumnStretch(0, m_boolean_functions_layout->columnMinimumWidth(0));
+
+      // ###### Version with TreeWidget
+//    QTreeWidget* tmp = new QTreeWidget(this);
+//    tmp->setFrameStyle(QFrame::NoFrame);
+//    tmp->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
+//    tmp->header()->hide();
+//    tmp->setSelectionMode(QAbstractItemView::NoSelection);
+//    tmp->setFocusPolicy(Qt::NoFocus);
+//    tmp->headerItem()->setText(0, "");
+//    tmp->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+//    tmp->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+//    QTreeWidgetItem* item = new QTreeWidgetItem(tmp);
+//    item->setText(0, "HAHAHASSAEDAS");
+//    QTreeWidgetItem* child = new QTreeWidgetItem(item);
+//    QLabel* txt = new QLabel("asdas fdsfsdfsd asdasd gdfgfdsf asdas gfgsfg asdad gdfsdf dfgdfgfsdg asdasd sdgfsdfsdf fssd");
+//    txt->setWordWrap(true);
+//    tmp->setItemWidget(child, 0, txt);
+
+//    m_boolean_functions_layout->addWidget(tmp);
 
 }
 

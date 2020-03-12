@@ -87,7 +87,7 @@ public Q_SLOTS:
 private:
     QVBoxLayout* m_content_layout;
     QHBoxLayout* m_tree_row_layout;
-    QGridLayout* m_boolean_functions_layout;
+    QVBoxLayout* m_boolean_functions_layout;
 
     QTableWidget* m_general_table;
     QTableWidgetItem* m_name_item;
