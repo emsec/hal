@@ -2278,49 +2278,49 @@ py_boolean_function.def("get_truth_table", &boolean_function::get_truth_table, p
         :rtype: list[value]
 )");
 
-//py::class_<gui_api> py_gui_api(m, "gui", R"(Boolean function class.)");
-//
-//py_gui_api.def("get_selected_gate_ids", &gui_api::get_selected_gate_ids, R"(
-//        Get the gate ids of currently selected gates in the graph view of the GUI.
-//
-//        :returns: List of the ids of the currently selected gates.
-//        :rtype: list[int]
-//)");
-//
-//py_gui_api.def("get_selected_net_ids", &gui_api::get_selected_net_ids, R"(
-//        Get the net ids of currently selected nets in the graph view of the GUI.
-//
-//        :returns: List of the ids of the currently selected nets.
-//        :rtype: list[int]
-//)");
-//
-//py_gui_api.def("get_selected_module_ids", &gui_api::get_selected_module_ids, R"(
-//        Get the module ids of currently selected modules in the graph view of the GUI.
-//
-//        :returns: List of the ids of the currently selected modules.
-//        :rtype: list[int]
-//)");
-//
-//py_gui_api.def("get_selected_item_ids", &gui_api::get_selected_item_ids, R"(
-//        Get all item ids of the currently selected items in the graph view of the GUI.
-//
-//        :returns: Tuple of lists of the currently selected items.
-//        :rtype: tuple(int, int, int)
-//)");
-//
-//py_gui_api.def("get_selected_gates", &gui_api::get_selected_gates, R"(
-//        Get the gates which are currently selected in the graph view of the GUI.
-//
-//        :returns: List of currently selected gates.
-//        :rtype: list[hal_py.gate]
-//)");
-//
-//py_gui_api.def("get_selected_nets", &gui_api::get_selected_nets, R"(
-//        Get the nets which are currently selected in the graph view of the GUI.
-//
-//        :returns: List of currently selected nets.
-//        :rtype: list[hal_py.net]
-//)");
+py::class_<gui_api> py_gui_api(m, "gui", R"(Boolean function class.)");
+
+py_gui_api.def("get_selected_gate_ids", &gui_api::get_selected_gate_ids, R"(
+        Get the gate ids of currently selected gates in the graph view of the GUI.
+
+        :returns: List of the ids of the currently selected gates.
+        :rtype: list[int]
+)");
+
+py_gui_api.def("get_selected_net_ids", &gui_api::get_selected_net_ids, R"(
+        Get the net ids of currently selected nets in the graph view of the GUI.
+
+        :returns: List of the ids of the currently selected nets.
+        :rtype: list[int]
+)");
+
+py_gui_api.def("get_selected_module_ids", &gui_api::get_selected_module_ids, R"(
+        Get the module ids of currently selected modules in the graph view of the GUI.
+
+        :returns: List of the ids of the currently selected modules.
+        :rtype: list[int]
+)");
+
+py_gui_api.def("get_selected_item_ids", &gui_api::get_selected_item_ids, R"(
+        Get all item ids of the currently selected items in the graph view of the GUI.
+
+        :returns: Tuple of lists of the currently selected items.
+        :rtype: tuple(int, int, int)
+)");
+
+py_gui_api.def("get_selected_gates", &gui_api::get_selected_gates, R"(
+        Get the gates which are currently selected in the graph view of the GUI.
+
+        :returns: List of currently selected gates.
+        :rtype: list[hal_py.gate]
+)");
+
+py_gui_api.def("get_selected_nets", &gui_api::get_selected_nets, R"(
+        Get the nets which are currently selected in the graph view of the GUI.
+
+        :returns: List of currently selected nets.
+        :rtype: list[hal_py.net]
+)");
 //
 //py_gui_api.def("get_selected_modules", &gui_api::get_selected_modules, R"(
 //        Get the modules which are currently selected in the graph view of the GUI.

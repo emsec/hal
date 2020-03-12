@@ -10,6 +10,7 @@
 
 #include "gui/python/python_context_suberscriber.h"
 #include "gui_globals.h"
+#include "gui_api/gui_api.h"
 
 // Following is needed for python_context::check_complete_statement
 #include <Python.h>
@@ -31,6 +32,54 @@ PYBIND11_EMBEDDED_MODULE(console, m)
     py::module m2 = m.def_submodule("redirector", "redirector");
     m2.def("write_stdout", [](std::string s) -> void { g_python_context->forward_stdout(QString::fromStdString(s)); });
     m2.def("write_stderr", [](std::string s) -> void { g_python_context->forward_error(QString::fromStdString(s)); });
+    
+}
+
+PYBIND11_EMBEDDED_MODULE(gui_api, m)
+{
+//    py::class_<gui_api> py_gui_api(m, "gui", R"(Boolean function class.)");
+    
+    m.def("get_selected_gate_ids", &gui_api::get_selected_gate_ids, R"(
+        Get the gate ids of currently selected gates in the graph view of the GUI.
+
+        :returns: List of the ids of the currently selected gates.
+        :rtype: list[int]
+)");
+    
+    m.def("get_selected_net_ids", &gui_api::get_selected_net_ids, R"(
+        Get the net ids of currently selected nets in the graph view of the GUI.
+
+        :returns: List of the ids of the currently selected nets.
+        :rtype: list[int]
+)");
+    
+    m.def("get_selected_module_ids", &gui_api::get_selected_module_ids, R"(
+        Get the module ids of currently selected modules in the graph view of the GUI.
+
+        :returns: List of the ids of the currently selected modules.
+        :rtype: list[int]
+)");
+    
+    m.def("get_selected_item_ids", &gui_api::get_selected_item_ids, R"(
+        Get all item ids of the currently selected items in the graph view of the GUI.
+
+        :returns: Tuple of lists of the currently selected items.
+        :rtype: tuple(int, int, int)
+)");
+    
+    m.def("get_selected_gates", &gui_api::get_selected_gates, R"(
+        Get the gates which are currently selected in the graph view of the GUI.
+
+        :returns: List of currently selected gates.
+        :rtype: list[hal_py.gate]
+)");
+    
+    m.def("get_selected_nets", &gui_api::get_selected_nets, R"(
+        Get the nets which are currently selected in the graph view of the GUI.
+
+        :returns: List of currently selected nets.
+        :rtype: list[hal_py.net]
+)");
 }
 
 python_context::python_context()
@@ -94,6 +143,7 @@ void python_context::init_python()
 
     initialize_context(m_context);
     (*m_context)["console"] = py::module::import("console");
+    (*m_context)["gui_api"] = py::module::import("gui_api");
 }
 
 void python_context::close_python()
