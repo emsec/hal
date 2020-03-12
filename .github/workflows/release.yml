@@ -89,6 +89,7 @@ jobs:
           CCACHE_COMPRESS: true
           CCACHE_COMPRESSLEVEL: 6
           CCACHE_MAXSIZE: 400M
+          HAL_BASE_PATH: ${{runner.workspace}}/hal/build
 
 
       - name: Build Doxygen
@@ -105,6 +106,7 @@ jobs:
           CCACHE_COMPRESS: true
           CCACHE_COMPRESSLEVEL: 6
           CCACHE_MAXSIZE: 400M
+          HAL_BASE_PATH: ${{runner.workspace}}/hal/build
 
       - name: Build Sphinx
         if: startsWith(runner.os, 'Linux')
@@ -120,6 +122,7 @@ jobs:
           CCACHE_COMPRESS: true
           CCACHE_COMPRESSLEVEL: 6
           CCACHE_MAXSIZE: 400M
+          HAL_BASE_PATH: ${{runner.workspace}}/hal/build
 
 
       - name: Deploy Doc
