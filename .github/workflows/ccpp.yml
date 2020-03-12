@@ -93,8 +93,7 @@ jobs:
         uses: actions/cache@v1
         with:
           path: ~/.ccache
-          #        key: ${{ runner.OS }}-build-ccache-${{ hashFiles('**/package-lock.json') }}
-          key: ${{ runner.OS }}-build-ccache
+          key: ${{ runner.OS }}-build-ccache-
           restore-keys: |
             ${{ runner.OS }}-build-ccache-${{ env.cache-name }}-
             ${{ runner.OS }}-build-ccache-
