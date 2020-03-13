@@ -246,12 +246,15 @@ bool graph_context::is_showing_module(const u32 id, const QSet<u32>& minus_modul
 bool graph_context::is_showing_net_source(const u32 net_id) const
 {
     auto net = g_netlist->get_net_by_id(net_id);
-    auto src_gate = net->get_source().get_gate();
+    auto src_pins = net->get_sources();
 
-    if(src_gate != nullptr)
+    for(auto pin : src_pins)
     {
-        if(m_gates.contains(src_gate->get_id()))
-            return true;
+        if(pin.get_gate() != nullptr)
+        {
+            if(m_gates.contains(pin.get_gate()->get_id()))
+                return true;
+        }
     }
 
     return false;

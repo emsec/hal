@@ -18,8 +18,9 @@ class graph_navigation_widget : public QTableWidget
 public:
     explicit graph_navigation_widget(QWidget *parent = nullptr);
 
-    void setup();
-    void setup(hal::node origin, std::shared_ptr<net> via_net);
+    // right = true
+    void setup(bool direction);
+    void setup(hal::node origin, std::shared_ptr<net> via_net, bool direction);
     void hide_when_focus_lost(bool hide);
     void focusOutEvent(QFocusEvent *event) override;
 
@@ -32,7 +33,7 @@ protected:
     void keyPressEvent(QKeyEvent* event) Q_DECL_OVERRIDE;
 
 private:
-    void fill_table(std::shared_ptr<net> n);
+    void fill_table(std::shared_ptr<net> n, bool direction);
     void handle_item_double_clicked(QTableWidgetItem* item);
     void commit_selection();
     graph_graphics_view* m_view;
