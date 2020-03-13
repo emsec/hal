@@ -31,12 +31,10 @@ PYBIND11_EMBEDDED_MODULE(console, m)
     py::module m2 = m.def_submodule("redirector", "redirector");
     m2.def("write_stdout", [](std::string s) -> void { g_python_context->forward_stdout(QString::fromStdString(s)); });
     m2.def("write_stderr", [](std::string s) -> void { g_python_context->forward_error(QString::fromStdString(s)); });
-    
 }
 
 PYBIND11_EMBEDDED_MODULE(gui, py_gui_api)
 {
-
 py_gui_api.def("get_selected_gate_ids", gui_api::get_selected_gate_ids, R"(
         Get the gate ids of currently selected gates in the graph view of the GUI.
 
