@@ -17,8 +17,9 @@ class graph_tab_widget : public content_widget
 public:
     graph_tab_widget(QWidget* parent = nullptr);
 
-    int addTab(QWidget* tab, QString tab_name = "default");
+    virtual QList<QShortcut*> create_shortcuts() override;
 
+    int addTab(QWidget* tab, QString tab_name = "default");
     void show_context(graph_context* context);
 
 public Q_SLOTS:
@@ -32,6 +33,8 @@ private:
     QTabWidget* m_tab_widget;
     QVBoxLayout* m_layout;
 
+    float m_zoom_factor;
+
     QMap<graph_context*, QWidget*> m_context_widget_map;
 
     int get_context_tab_index(graph_context* context) const;
@@ -40,6 +43,9 @@ private:
     void handle_tab_close_requested(int index);
 
     void add_graph_widget_tab(graph_context* context);
+
+    void zoom_in_shortcut();
+    void zoom_out_shortcut();
 };
 
 #endif    //GRAPH_TAB_WIDGET

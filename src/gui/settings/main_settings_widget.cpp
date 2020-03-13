@@ -226,6 +226,14 @@ void main_settings_widget::init_widgets()
     register_widget("keybind-item", schedule_run_keybind);
     assign_exclusive_group("keybinds", schedule_run_keybind);
 
+    keybind_setting* graph_view_zoom_in_keybind = new keybind_setting("keybinds/graph_view_zoom_in", "Grapview: Zoom in", "", this);
+    register_widget("keybind-item", graph_view_zoom_in_keybind);
+    assign_exclusive_group("keybinds", graph_view_zoom_in_keybind);
+
+    keybind_setting* graph_view_zoom_out_keybind = new keybind_setting("keybinds/graph_view_zoom_out", "Grapview: Zoom out", "", this);
+    register_widget("keybind-item", graph_view_zoom_out_keybind);
+    assign_exclusive_group("keybinds", graph_view_zoom_out_keybind);
+
     // this keybind is used in several locations, depending on which widget has focus
     keybind_setting* everywhere_search_keybind = new keybind_setting("keybinds/searchbar_toggle", "Search", "opens/closes the search bar", this);
     register_widget("keybind-item", everywhere_search_keybind);
