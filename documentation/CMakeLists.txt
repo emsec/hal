@@ -45,5 +45,5 @@ if(BUILD_DOCUMENTATION)
                       "${CMAKE_CURRENT_SOURCE_DIR}/sphinx_doc/"
                       "${SPHINX_HTML_DIR}"
                       COMMENT "Building HTML documentation with Sphinx" VERBATIM
-                      DEPENDS hal::py graph_algorithm ${SPHINX_DOC_FILES})
+                      DEPENDS hal::py hal::gui graph_algorithm ${SPHINX_DOC_FILES})
 endif()
