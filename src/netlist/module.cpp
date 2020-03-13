@@ -252,7 +252,7 @@ std::set<std::shared_ptr<net>> module::get_input_nets() const
                 continue;
             }
             auto sources = net->get_sources();
-            if (std::any_of(sources.begin(), sources.end(), [gates](endpoint src){return gates.find(src.get_gate()) == gates.end();}))
+            if (std::any_of(sources.begin(), sources.end(), [&gates](endpoint src){return gates.find(src.get_gate()) == gates.end();}))
             {
                 res.insert(net);
             }
@@ -281,7 +281,7 @@ std::set<std::shared_ptr<net>> module::get_output_nets() const
                 continue;
             }
             auto destinations = net->get_destinations();
-            if (std::any_of(destinations.begin(), destinations.end(), [gates](endpoint dst){return gates.find(dst.get_gate()) == gates.end();}))
+            if (std::any_of(destinations.begin(), destinations.end(), [&gates](endpoint dst){return gates.find(dst.get_gate()) == gates.end();}))
             {
                 res.insert(net);
             }
@@ -305,7 +305,7 @@ std::set<std::shared_ptr<net>> module::get_internal_nets() const
             }
             seen.insert(net->get_id());
             auto destinations = net->get_destinations();
-            if (std::any_of(destinations.begin(), destinations.end(), [gates](endpoint dst){return gates.find(dst.get_gate()) != gates.end();}))
+            if (std::any_of(destinations.begin(), destinations.end(), [&gates](endpoint dst){return gates.find(dst.get_gate()) != gates.end();}))
             {
                 res.insert(net);
             }
