@@ -9,7 +9,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Index &mdash; hal_py v2.0.0-135-g7473e0729 documentation</title>
+  <title>Index &mdash; hal_py v2.0.0-136-g9fa8b6a7d documentation</title>
   
 
   
@@ -36,7 +36,7 @@
         <link rel="index" title="Index"
               href="#"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="hal_py v2.0.0-135-g7473e0729 documentation" href="index.html"/> 
+    <link rel="top" title="hal_py v2.0.0-136-g9fa8b6a7d documentation" href="index.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -65,7 +65,7 @@
             
             
               <div class="version">
-                v2.0.0-135-g7473e0729
+                v2.0.0-136-g9fa8b6a7d
               </div>
             
           
@@ -91,6 +91,7 @@
             
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="hal_py.html">hal_py Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hal_gui.html">hal_gui Documentation</a></li>
 </ul>
 
             
@@ -336,8 +337,6 @@
         <li><a href="net.html#hal_py.net.data_keys">(hal_py.net attribute)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="data_container.html#hal_py.data_container.delete_data">delete_data() (hal_py.data_container method)</a>
 
       <ul>
@@ -348,11 +347,23 @@
         <li><a href="net.html#hal_py.net.delete_data">(hal_py.net method)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="netlist.html#hal_py.netlist.delete_gate">delete_gate() (hal_py.netlist method)</a>
 </li>
       <li><a href="netlist.html#hal_py.netlist.delete_module">delete_module() (hal_py.netlist method)</a>
 </li>
       <li><a href="netlist.html#hal_py.netlist.delete_net">delete_net() (hal_py.netlist method)</a>
+</li>
+      <li><a href="gui.html#hal_gui.gui.deselect">deselect() (in module hal_gui.gui)</a>
+</li>
+      <li><a href="gui.html#hal_gui.gui.deselect_all_items">deselect_all_items() (in module hal_gui.gui)</a>
+</li>
+      <li><a href="gui.html#hal_gui.gui.deselect_gate">deselect_gate() (in module hal_gui.gui)</a>
+</li>
+      <li><a href="gui.html#hal_gui.gui.deselect_module">deselect_module() (in module hal_gui.gui)</a>
+</li>
+      <li><a href="gui.html#hal_gui.gui.deselect_net">deselect_net() (in module hal_gui.gui)</a>
 </li>
       <li><a href="netlist.html#hal_py.netlist.design_name">design_name (hal_py.netlist attribute)</a>
 </li>
@@ -552,10 +563,10 @@
         <li><a href="gate_type_sequential.html#hal_py.gate_type_sequential.get_input_pins">(hal_py.gate_type_sequential method)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module.html#hal_py.module.get_internal_nets">get_internal_nets() (hal_py.module method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="gate_type_sequential.html#hal_py.gate_type_sequential.get_inverted_state_output_pins">get_inverted_state_output_pins() (hal_py.gate_type_sequential method)</a>
 </li>
       <li><a href="core_utils.html#hal_py.core_utils.get_library_directory">get_library_directory() (in module hal_py.core_utils)</a>
@@ -632,6 +643,22 @@
 </li>
       <li><a href="gate.html#hal_py.gate.get_predecessors">get_predecessors() (hal_py.gate method)</a>
 </li>
+      <li><a href="gui.html#hal_gui.gui.get_selected_gate_ids">get_selected_gate_ids() (in module hal_gui.gui)</a>
+</li>
+      <li><a href="gui.html#hal_gui.gui.get_selected_gates">get_selected_gates() (in module hal_gui.gui)</a>
+</li>
+      <li><a href="gui.html#hal_gui.gui.get_selected_item_ids">get_selected_item_ids() (in module hal_gui.gui)</a>
+</li>
+      <li><a href="gui.html#hal_gui.gui.get_selected_items">get_selected_items() (in module hal_gui.gui)</a>
+</li>
+      <li><a href="gui.html#hal_gui.gui.get_selected_module_ids">get_selected_module_ids() (in module hal_gui.gui)</a>
+</li>
+      <li><a href="gui.html#hal_gui.gui.get_selected_modules">get_selected_modules() (in module hal_gui.gui)</a>
+</li>
+      <li><a href="gui.html#hal_gui.gui.get_selected_net_ids">get_selected_net_ids() (in module hal_gui.gui)</a>
+</li>
+      <li><a href="gui.html#hal_gui.gui.get_selected_nets">get_selected_nets() (in module hal_gui.gui)</a>
+</li>
       <li><a href="gate_type_sequential.html#hal_py.gate_type_sequential.get_set_reset_behavior">get_set_reset_behavior() (hal_py.gate_type_sequential method)</a>
 </li>
       <li><a href="core_utils.html#hal_py.core_utils.get_share_directory">get_share_directory() (in module hal_py.core_utils)</a>
@@ -694,14 +721,16 @@
 <h2 id="H">H</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="gui.html#module-hal_gui.gui">hal_gui.gui (module)</a>
+</li>
       <li><a href="path.html#hal_py.hal_path">hal_path (class in hal_py)</a>
 </li>
       <li><a href="core_utils.html#module-hal_py.core_utils">hal_py.core_utils (module)</a>
 </li>
-      <li><a href="hdl_writer_dispatcher.html#module-hal_py.hdl_writer_dispatcher">hal_py.hdl_writer_dispatcher (module)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="hdl_writer_dispatcher.html#module-hal_py.hdl_writer_dispatcher">hal_py.hdl_writer_dispatcher (module)</a>
+</li>
       <li><a href="netlist_factory.html#module-hal_py.netlist_factory">hal_py.netlist_factory (module)</a>
 </li>
       <li><a href="plugin_manager.html#module-hal_py.plugin_manager">hal_py.plugin_manager (module)</a>
@@ -966,6 +995,14 @@
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="gui.html#hal_gui.gui.select">select() (in module hal_gui.gui)</a>
+</li>
+      <li><a href="gui.html#hal_gui.gui.select_gate">select_gate() (in module hal_gui.gui)</a>
+</li>
+      <li><a href="gui.html#hal_gui.gui.select_module">select_module() (in module hal_gui.gui)</a>
+</li>
+      <li><a href="gui.html#hal_gui.gui.select_net">select_net() (in module hal_gui.gui)</a>
+</li>
       <li><a href="gate_type_lut.html#hal_py.gate_type_lut.set_config_data_ascending_order">set_config_data_ascending_order() (hal_py.gate_type_lut method)</a>
 </li>
       <li><a href="gate_type_lut.html#hal_py.gate_type_lut.set_config_data_category">set_config_data_category() (hal_py.gate_type_lut method)</a>
@@ -990,12 +1027,12 @@
 </li>
       <li><a href="netlist.html#hal_py.netlist.set_id">set_id() (hal_py.netlist method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="gate_type_sequential.html#hal_py.gate_type_sequential.set_init_data_category">set_init_data_category() (hal_py.gate_type_sequential method)</a>
 </li>
       <li><a href="gate_type_sequential.html#hal_py.gate_type_sequential.set_init_data_identifier">set_init_data_identifier() (hal_py.gate_type_sequential method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="netlist.html#hal_py.netlist.set_input_filename">set_input_filename() (hal_py.netlist method)</a>
 </li>
       <li><a href="gate.html#hal_py.gate.set_location">set_location() (hal_py.gate method)</a>
@@ -1145,7 +1182,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'v2.0.0-135-g7473e0729',
+            VERSION:'v2.0.0-136-g9fa8b6a7d',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
