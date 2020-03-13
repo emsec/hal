@@ -33,6 +33,10 @@ if(WITH_GUI)
                 )
     add_library(hal::gui ALIAS gui)
     set_target_properties(gui PROPERTIES OUTPUT_NAME "hal_gui")
+    set_target_properties(gui PROPERTIES PREFIX "")
+    if(APPLE AND CMAKE_HOST_APPLE)
+        set_target_properties(gui PROPERTIES SUFFIX ".so")
+    endif(APPLE AND CMAKE_HOST_APPLE)
     target_include_directories(gui
                                PUBLIC
                                $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>

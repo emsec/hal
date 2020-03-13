@@ -39,7 +39,6 @@
 #include "gui/settings/settings_manager.h"
 #include "gui/thread_pool/thread_pool.h"
 #include "gui/window_manager/window_manager.h"
-#include "gui/gui_api/gui_api.h"
 
 #include <QSettings>
 
@@ -69,8 +68,6 @@ extern graph_context_manager g_graph_context_manager;
 extern thread_pool* g_thread_pool;
 
 extern std::unique_ptr<python_context> g_python_context;
-
-extern gui_api g_gui_api;
 
 // Comment this out to not compile the debug code for the graph grid.
 // This will also hide the respective debug setting from the settings page.
