@@ -39,7 +39,6 @@
 #include "gui/settings/settings_manager.h"
 #include "gui/thread_pool/thread_pool.h"
 #include "gui/window_manager/window_manager.h"
-//#include "gui/gui_api/gui_api.h"
 
 #include <QSettings>
 
