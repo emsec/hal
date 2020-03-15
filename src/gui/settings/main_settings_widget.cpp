@@ -226,11 +226,11 @@ void main_settings_widget::init_widgets()
     register_widget("keybind-item", schedule_run_keybind);
     assign_exclusive_group("keybinds", schedule_run_keybind);
 
-    keybind_setting* graph_view_zoom_in_keybind = new keybind_setting("keybinds/graph_view_zoom_in", "Grapview: Zoom in", "", this);
+    keybind_setting* graph_view_zoom_in_keybind = new keybind_setting("keybinds/graph_view_zoom_in", "Graphview: Zoom in", "", this);
     register_widget("keybind-item", graph_view_zoom_in_keybind);
     assign_exclusive_group("keybinds", graph_view_zoom_in_keybind);
 
-    keybind_setting* graph_view_zoom_out_keybind = new keybind_setting("keybinds/graph_view_zoom_out", "Grapview: Zoom out", "", this);
+    keybind_setting* graph_view_zoom_out_keybind = new keybind_setting("keybinds/graph_view_zoom_out", "Graphview: Zoom out", "", this);
     register_widget("keybind-item", graph_view_zoom_out_keybind);
     assign_exclusive_group("keybinds", graph_view_zoom_out_keybind);
 
