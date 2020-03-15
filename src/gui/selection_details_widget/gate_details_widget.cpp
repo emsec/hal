@@ -189,8 +189,8 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
 
     //handle netlist modifications reagarding nets
     connect(&g_netlist_relay, &netlist_relay::net_name_changed, this, &gate_details_widget::handle_net_name_changed);
-    // FIXME change to source_added, source_removed
-    // connect(&g_netlist_relay, &netlist_relay::net_source_changed, this, &gate_details_widget::handle_net_source_changed);
+    connect(&g_netlist_relay, &netlist_relay::net_source_added, this, &gate_details_widget::handle_net_source_added);
+    connect(&g_netlist_relay, &netlist_relay::net_source_removed, this, &gate_details_widget::handle_net_source_removed);
     connect(&g_netlist_relay, &netlist_relay::net_destination_added, this, &gate_details_widget::handle_net_destination_added);
     connect(&g_netlist_relay, &netlist_relay::net_destination_removed, this, &gate_details_widget::handle_net_destination_removed);
 }
@@ -224,11 +224,17 @@ void gate_details_widget::handle_net_name_changed(std::shared_ptr<net> net)
 {
     bool update_needed = false;
 
-    //check if currently shown gate is src of renamed net
-    if (m_current_id == net->get_source().get_gate()->get_id())
-        update_needed = true;
+    //check if currently shown gate is a src of renamed net
+    for (auto& e : net->get_sources())
+    {
+        if (m_current_id == e.get_gate()->get_id())
+        {
+            update_needed = true;
+            break;
+        }
+    }
 
-    //check if currently shown gate is dst of renamed net
+    //check if currently shown gate is a dst of renamed net
     if (!update_needed)
     {
         for (auto& e : net->get_destinations())
@@ -245,15 +251,19 @@ void gate_details_widget::handle_net_name_changed(std::shared_ptr<net> net)
         update(m_current_id);
 }
 
-// FIXME change to source_added, source_removed
-// void gate_details_widget::handle_net_source_changed(std::shared_ptr<net> net)
-// {
-//     Q_UNUSED(net);
-//     if (m_current_id == 0)
-//         return;
-//     if (g_netlist->is_gate_in_netlist(g_netlist->get_gate_by_id(m_current_id)))
-//         update(m_current_id);
-// }
+void gate_details_widget::handle_net_source_added(std::shared_ptr<net> net, const u32 src_gate_id)
+{
+    Q_UNUSED(net);
+    if (m_current_id == src_gate_id)
+        update(m_current_id);
+}
+
+void gate_details_widget::handle_net_source_removed(std::shared_ptr<net> net, const u32 src_gate_id)
+{
+    Q_UNUSED(net);
+    if (m_current_id == src_gate_id)
+        update(m_current_id);
+}
 
 void gate_details_widget::handle_net_destination_added(std::shared_ptr<net> net, const u32 dst_gate_id)
 {
@@ -602,7 +612,7 @@ void gate_details_widget::on_treewidget_item_clicked(QTreeWidgetItem* item, int 
         {
             //            auto rect = QApplication::desktop()->availableGeometry(this);
             //            w->move(QPoint(rect.x() + (rect.width() - w->width()) / 2, rect.y() + (rect.height() - w->height()) / 2));
-            m_navigation_table->setup(hal::node{hal::node_type::gate, 0}, clicked_net);
+            m_navigation_table->setup(hal::node{hal::node_type::gate, 0}, clicked_net, true);
             m_navigation_table->move(QCursor::pos());
             m_navigation_table->show();
             m_navigation_table->setFocus();
@@ -615,16 +625,19 @@ void gate_details_widget::on_treewidget_item_clicked(QTreeWidgetItem* item, int 
         if (!clicked_net)
             return;
 
-        g_selection_relay.clear();
-        if (clicked_net->get_source().get_gate() == nullptr || clicked_net->is_global_input_net())
+        auto sources = clicked_net->get_sources();
+
+        if (sources.empty() || clicked_net->is_global_input_net())
         {
+            g_selection_relay.clear();
             g_selection_relay.m_selected_nets.insert(clicked_net->get_id());
+            g_selection_relay.relay_selection_changed(this);
         }
-        else
+        else if (sources.size() == 1)
         {
-            endpoint ep  = clicked_net->get_source();
-            auto gate_id = ep.get_gate()->get_id();
-            g_selection_relay.m_selected_gates.insert(gate_id);
+            auto ep = *sources.begin();
+            g_selection_relay.clear();
+            g_selection_relay.m_selected_gates.insert(ep.get_gate()->get_id());
             g_selection_relay.m_focus_type = selection_relay::item_type::gate;
             g_selection_relay.m_focus_id   = ep.get_gate()->get_id();
             g_selection_relay.m_subfocus   = selection_relay::subfocus::right;
@@ -632,9 +645,19 @@ void gate_details_widget::on_treewidget_item_clicked(QTreeWidgetItem* item, int 
             auto pins                          = ep.get_gate()->get_output_pins();
             auto index                         = std::distance(pins.begin(), std::find(pins.begin(), pins.end(), ep.get_pin()));
             g_selection_relay.m_subfocus_index = index;
-            update(gate_id);
+
+            update(ep.get_gate()->get_id());
+            g_selection_relay.relay_selection_changed(this);
         }
-        g_selection_relay.relay_selection_changed(this);
+        else
+        {
+            //            auto rect = QApplication::desktop()->availableGeometry(this);
+            //            w->move(QPoint(rect.x() + (rect.width() - w->width()) / 2, rect.y() + (rect.height() - w->height()) / 2));
+            m_navigation_table->setup(hal::node{hal::node_type::gate, 0}, clicked_net, false);
+            m_navigation_table->move(QCursor::pos());
+            m_navigation_table->show();
+            m_navigation_table->setFocus();
+        }
     }
 }
 

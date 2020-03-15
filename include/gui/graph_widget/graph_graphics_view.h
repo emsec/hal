@@ -46,6 +46,11 @@ class graph_graphics_view : public QGraphicsView
 public:
     graph_graphics_view(graph_widget* parent);
 
+    //zooms into the mouse position
+    void gentle_zoom(const qreal factor);
+    //zooms into the center of the viewport
+    void viewport_center_zoom(const qreal factor);
+
 Q_SIGNALS:
     void module_double_clicked(u32 id);
 
@@ -92,8 +97,6 @@ private:
     void toggle_antialiasing();
 
     bool item_draggable(graphics_item* item);
-
-    void gentle_zoom(const qreal factor);
 
     struct layouter_point
     {

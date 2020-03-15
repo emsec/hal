@@ -308,7 +308,7 @@ void graph_widget::handle_navigation_left_request()
                 if (!n)
                     return;
 
-                if (n->get_source().get_gate() == nullptr)
+                if (n->get_num_of_sources() == 0)
                 {
                     g_selection_relay.clear();
                     g_selection_relay.m_selected_nets.insert(n->get_id());
@@ -316,9 +316,15 @@ void graph_widget::handle_navigation_left_request()
                     g_selection_relay.m_focus_id   = n->get_id();
                     g_selection_relay.relay_selection_changed(nullptr);
                 }
-                else
+                else if (n->get_num_of_sources() == 1)
                 {
                     handle_navigation_jump_requested(hal::node{hal::node_type::gate, g->get_id()}, n->get_id(), {n->get_source().get_gate()->get_id()});
+                }
+                else
+                {
+                    m_navigation_widget->setup(false);
+                    m_navigation_widget->setFocus();
+                    m_overlay->show();
                 }
             }
             else if (g->get_input_pins().size())
@@ -338,9 +344,18 @@ void graph_widget::handle_navigation_left_request()
             if (!n)
                 return;
 
-            if (n->get_source().get_gate() != nullptr)
+            if (n->get_num_of_sources() == 0)
+                return;
+
+            if (n->get_num_of_sources() == 1)
             {
-                handle_navigation_jump_requested(hal::node{hal::node_type::gate, 0}, n->get_id(), {n->get_source().get_gate()->get_id()});
+                handle_navigation_jump_requested(hal::node{hal::node_type::gate, 0}, n->get_id(), {n->get_sources()[0].get_gate()->get_id()});
+            }
+            else
+            {
+                m_navigation_widget->setup(false);
+                m_navigation_widget->setFocus();
+                m_overlay->show();
             }
 
             return;
@@ -384,7 +399,7 @@ void graph_widget::handle_navigation_right_request()
                 }
                 else
                 {
-                    m_navigation_widget->setup();
+                    m_navigation_widget->setup(true);
                     m_navigation_widget->setFocus();
                     m_overlay->show();
                 }
@@ -415,7 +430,7 @@ void graph_widget::handle_navigation_right_request()
             }
             else
             {
-                m_navigation_widget->setup();
+                m_navigation_widget->setup(true);
                 m_navigation_widget->setFocus();
                 m_overlay->show();
             }

@@ -686,6 +686,13 @@ void graph_graphics_view::gentle_zoom(const qreal factor)
     centerOn(mapToScene(viewport_center.toPoint()));
 }
 
+void graph_graphics_view::viewport_center_zoom(const qreal factor)
+{
+    QPointF target_pos = mapToScene(viewport()->rect().center());
+    scale(factor, factor);
+    centerOn(target_pos.toPoint());
+}
+
 void graph_graphics_view::handle_select_outputs()
 {
     auto context           = m_graph_widget->get_context();

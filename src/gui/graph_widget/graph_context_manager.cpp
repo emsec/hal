@@ -164,9 +164,9 @@ void graph_context_manager::handle_net_source_added(const std::shared_ptr<net> n
 {
     for(graph_context* context : m_graph_contexts)
     {
-        // FIXME
-        // if(context->nets().contains(n->get_id()) || (context->is_showing_net_source(n->get_id()) && (n->is_global_output_net() || context->is_showing_net_destination(n->get_id()))))
+        if(context->nets().contains(n->get_id()) || context->gates().contains(src_gate_id))
         {
+            // forcibly apply changes since nets need to be recalculated
             context->apply_changes();
             context->schedule_scene_update();
         }
@@ -177,9 +177,9 @@ void graph_context_manager::handle_net_source_removed(const std::shared_ptr<net>
 {
     for(graph_context* context : m_graph_contexts)
     {
-        // FIXME
-        // if(context->nets().contains(n->get_id()) || (context->is_showing_net_source(n->get_id()) && (n->is_global_output_net() || context->is_showing_net_destination(n->get_id()))))
+        if(context->nets().contains(n->get_id()))
         {
+            // forcibly apply changes since nets need to be recalculated
             context->apply_changes();
             context->schedule_scene_update();
         }
@@ -188,11 +188,11 @@ void graph_context_manager::handle_net_source_removed(const std::shared_ptr<net>
 
 void graph_context_manager::handle_net_destination_added(const std::shared_ptr<net> n, const u32 dst_gate_id) const
 {
-    Q_UNUSED(dst_gate_id);
     for(graph_context* context : m_graph_contexts)
     {
-        if(context->nets().contains(n->get_id()) || (context->is_showing_net_destination(n->get_id()) && (n->is_global_input_net() || context->is_showing_net_source(n->get_id()))))
+        if(context->nets().contains(n->get_id()) || context->gates().contains(dst_gate_id))
         {
+            // forcibly apply changes since nets need to be recalculated
             context->apply_changes();
             context->schedule_scene_update();
         }
@@ -201,11 +201,15 @@ void graph_context_manager::handle_net_destination_added(const std::shared_ptr<n
 
 void graph_context_manager::handle_net_destination_removed(const std::shared_ptr<net> n, const u32 dst_gate_id) const
 {
-    Q_UNUSED(dst_gate_id)
-
     for (graph_context* context : m_graph_contexts)
+    {
         if (context->nets().contains(n->get_id()))
+        {
+            // forcibly apply changes since nets need to be recalculated
+            context->apply_changes();
             context->schedule_scene_update();
+        }
+    }
 }
 
 void graph_context_manager::handle_marked_global_input(u32 net_id)
