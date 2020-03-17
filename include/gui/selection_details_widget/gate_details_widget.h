@@ -45,6 +45,8 @@ class QGridLayout;
 class QModelIndex;
 class graph_navigation_widget;
 
+class QPushButton;
+
 class gate_details_widget : public QWidget
 {
     Q_OBJECT
@@ -86,15 +88,54 @@ public Q_SLOTS:
     void handle_net_destination_removed(std::shared_ptr<net> net, const u32 dst_gate_id);
 
 private:
-    QVBoxLayout* m_content_layout;
-    QHBoxLayout* m_tree_row_layout;
-    QVBoxLayout* m_boolean_functions_layout;
+    //NEW CODE
 
+    //All sections together are encapsulated in a container to make it scrollable
+    QScrollArea* m_scroll_area;
+    QWidget* m_top_lvl_container;
+    QVBoxLayout* m_top_lvl_layout;
+
+    // buttons to fold/unfold corresponding sections
+    QPushButton* m_general_info_button;//(1)
+    QPushButton* m_input_pins_button;//(2)
+    QPushButton* m_output_pins_button;//(3)
+    QPushButton* m_data_fields_button;//(4)
+    QPushButton* m_boolean_functions_button;//(5)
+
+    // widgets / sections to be unfold (not all structures are sections in itself, it may be a container necessary)
+
+    //(1) general-information section ("static" information)
     QTableWidget* m_general_table;
     QTableWidgetItem* m_name_item;
     QTableWidgetItem* m_type_item;
     QTableWidgetItem* m_id_item;
     QTableWidgetItem* m_module_item;
+
+    //(2) input-pins section
+    QTableWidget* m_input_pins_table;
+
+    //(3) output-pins section
+    QTableWidget* m_output_pins_table;
+
+    //(4) data-fields section (label or also table? if table: maybe tooltip if data is too long)
+    QTableWidget* m_data_fields_table;
+
+    //(5) boolean-function section (consisting of a container that encapsulates multiple labels and design structures)
+    QWidget* m_boolean_functions_container;
+    QVBoxLayout* m_boolean_functions_container_layout;
+
+
+
+    //OLD CODE
+    QVBoxLayout* m_content_layout;
+    QHBoxLayout* m_tree_row_layout;
+    QVBoxLayout* m_boolean_functions_layout;
+
+//    QTableWidget* m_general_table;
+//    QTableWidgetItem* m_name_item;
+//    QTableWidgetItem* m_type_item;
+//    QTableWidgetItem* m_id_item;
+//    QTableWidgetItem* m_module_item;
 
     // stores Boolean function
     QLabel* m_boolean_function;
@@ -106,7 +147,7 @@ private:
     QTreeWidgetItem* m_output_pins;
 
     // stores utility objects for input/output pin tree view
-    QScrollArea* m_scroll_area;
+    //QScrollArea* m_scroll_area;
     QTreeWidget* m_tree_widget;
     QVBoxLayout* m_scroll_area_layout;
     QVBoxLayout* m_container_layout;
