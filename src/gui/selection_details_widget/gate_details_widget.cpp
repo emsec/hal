@@ -29,6 +29,91 @@
 
 gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
 {
+    //NEW
+    // general initializations
+//    m_current_id = 0;
+//    m_last_click_time = 0;
+//    m_scroll_area = new QScrollArea(this);
+//    m_top_lvl_container = new QWidget(this);
+//    m_top_lvl_layout = new QVBoxLayout(this);
+
+
+//    // buttons
+//    m_general_info_button = new QPushButton("General Information", this);
+//    m_input_pins_button = new QPushButton("Input Pins", this);
+//    m_output_pins_button = new QPushButton("Output Pins", this);
+//    m_data_fields_button = new QPushButton("Data Fields", this);
+//    m_boolean_functions_button = new QPushButton("Boolean Functions", this);
+
+//    //(1) general info section
+//    m_general_table = new QTableWidget(this);
+//    m_general_table->setColumnCount(2);
+//    m_general_table->setRowCount(4);
+//    m_general_table->horizontalHeader()->setStretchLastSection(true);
+//    m_general_table->horizontalHeader()->hide();
+//    m_general_table->verticalHeader()->hide();
+//    m_general_table->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
+//    m_general_table->verticalHeader()->setDefaultSectionSize(16);
+//    m_general_table->resizeColumnToContents(0);
+//    m_general_table->setShowGrid(false);
+//    m_general_table->setFocusPolicy(Qt::NoFocus);
+//    m_general_table->setFrameStyle(QFrame::NoFrame);
+//    m_general_table->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+//    m_general_table->setFixedHeight(m_general_table->verticalHeader()->length());
+
+//    //create static items and iterate over them (minimize code, compiler most likely unrolls the loop)
+//    QFont font("Iosevka");//through stylesheets?
+//    font.setBold(true);
+//    font.setPixelSize(13);
+
+//    QList<QTableWidgetItem*> tmp_general_info_list = {new QTableWidgetItem("Name:"), new QTableWidgetItem("Type:"),
+//                                                      new QTableWidgetItem("ID:"), new QTableWidgetItem("Module:")};
+//    for(int i = 0; i < tmp_general_info_list.size(); i++)
+//    {
+//        auto item = tmp_general_info_list.at(i);
+//        item->setFlags(Qt::ItemIsEnabled);
+//        item->setFont(font);
+//        m_general_table->setItem(i, 0, item);
+//    }
+
+//    //create dynamic items that change when gate is changed
+//    m_name_item = new QTableWidgetItem();
+//    m_name_item->setFlags(Qt::ItemIsEnabled);
+//    m_general_table->setItem(0, 1, m_name_item);
+
+//    m_type_item = new QTableWidgetItem();
+//    m_type_item->setFlags(Qt::ItemIsEnabled);
+//    m_general_table->setItem(1, 1, m_type_item);
+
+//    m_id_item = new QTableWidgetItem();
+//    m_id_item->setFlags(Qt::ItemIsEnabled);
+//    m_general_table->setItem(2, 1, m_id_item);
+
+//    m_module_item = new QTableWidgetItem();
+//    m_module_item->setFlags(Qt::ItemIsEnabled);
+//    m_general_table->setItem(3, 1, m_module_item);
+
+//    //(2) Input Pin section
+//    m_input_pins_table = new QTableWidget(this);
+//    m_input_pins_table->setColumnCount(3);
+//    m_input_pins_table->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+//    m_input_pins_table->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+//    //(3) Output Pin section
+//    m_output_pins_table = new QTableWidget(this);
+//    m_output_pins_table->setColumnCount(3);
+//    m_output_pins_table->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+//    m_output_pins_table->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+//    //(4) Data Field section
+//    m_data_fields_table = new QTableWidget(this);
+//    m_data_fields_table->setColumnCount(2);
+//    m_data_fields_table->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+//    m_data_fields_table->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+    //(5) Boolean Function section
+
+    //OLD
     m_current_id = 0;
 
     m_last_click_time = 0;
