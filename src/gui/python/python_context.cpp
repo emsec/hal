@@ -426,6 +426,9 @@ void python_context::initialize_context(py::dict* context)
 {
     py::exec("import __main__\n"
              "import io, sys\n"
+             "sys.path.append('"
+                 + core_utils::get_library_directory().string()
+                 + "')\n"
              "from hal_gui.console import reset\n"
              "from hal_gui.console import clear\n"
              "class StdOutCatcher(io.TextIOBase):\n"
@@ -444,10 +447,7 @@ void python_context::initialize_context(py::dict* context)
              "sys.__stdout__ = sys.stdout\n"
              "sys.stderr = StdErrCatcher()\n"
              "sys.__stderr__ = sys.stderr\n"
-             "sys.path.append('"
-                 + core_utils::get_library_directory().string()
-                 + "')\n"
-                   "import hal_py\n"
+             "import hal_py\n"
              "from hal_gui import gui\n",
              *context,
              *context);
