@@ -66,6 +66,7 @@ public:
      * @returns void
      */
     void update(const u32 gate_id);
+    void update2(const u32 gate_id);
 
 public Q_SLOTS:
 
@@ -94,6 +95,7 @@ private:
     QScrollArea* m_scroll_area;
     QWidget* m_top_lvl_container;
     QVBoxLayout* m_top_lvl_layout;
+    QVBoxLayout* m_content_layout;
 
     // buttons to fold/unfold corresponding sections
     QPushButton* m_general_info_button;//(1)
@@ -127,31 +129,31 @@ private:
 
 
     //OLD CODE
-    QVBoxLayout* m_content_layout;
-    QHBoxLayout* m_tree_row_layout;
-    QVBoxLayout* m_boolean_functions_layout;
+//    QVBoxLayout* m_content_layout;
+//    QHBoxLayout* m_tree_row_layout;
+//    QVBoxLayout* m_boolean_functions_layout;
 
-//    QTableWidget* m_general_table;
-//    QTableWidgetItem* m_name_item;
-//    QTableWidgetItem* m_type_item;
-//    QTableWidgetItem* m_id_item;
-//    QTableWidgetItem* m_module_item;
+////    QTableWidget* m_general_table;
+////    QTableWidgetItem* m_name_item;
+////    QTableWidgetItem* m_type_item;
+////    QTableWidgetItem* m_id_item;
+////    QTableWidgetItem* m_module_item;
 
-    // stores Boolean function
-    QLabel* m_boolean_function;
-    //stores the initial lut value
-    QLabel* m_data_fields;
-    // stores input pin tree view
-    QTreeWidgetItem* m_input_pins;
-    // stores output pin tree view
-    QTreeWidgetItem* m_output_pins;
+//    // stores Boolean function
+//    QLabel* m_boolean_function;
+//    //stores the initial lut value
+//    QLabel* m_data_fields;
+//    // stores input pin tree view
+//    QTreeWidgetItem* m_input_pins;
+//    // stores output pin tree view
+//    QTreeWidgetItem* m_output_pins;
 
-    // stores utility objects for input/output pin tree view
-    //QScrollArea* m_scroll_area;
-    QTreeWidget* m_tree_widget;
-    QVBoxLayout* m_scroll_area_layout;
-    QVBoxLayout* m_container_layout;
-    QWidget* m_container;
+//    // stores utility objects for input/output pin tree view
+//    //QScrollArea* m_scroll_area;
+//    QTreeWidget* m_tree_widget;
+//    QVBoxLayout* m_scroll_area_layout;
+//    QVBoxLayout* m_container_layout;
+//    QWidget* m_container;
 
     u32 m_current_id;
 
