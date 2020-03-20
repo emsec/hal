@@ -348,14 +348,14 @@ std::shared_ptr<net> gate::get_fan_out_net(const std::string& pin_type) const
 
 std::vector<std::shared_ptr<gate>> gate::get_unique_predecessors(const std::function<bool(const std::string& starting_pin, const endpoint&)>& filter) const
 {
-    std::vector<std::shared_ptr<gate>> res;
+    std::unordered_set<std::shared_ptr<gate>> res;
     auto endpoints = this->get_predecessors(filter);
     res.reserve(endpoints.size());
     for (const auto& ep : endpoints)
     {
-        res.push_back(ep.get_gate());
+        res.insert(ep.get_gate());
     }
-    return res;
+    return std::vector<std::shared_ptr<gate>>(res.begin(), res.end());
 }
 
 std::vector<endpoint> gate::get_predecessors(const std::function<bool(const std::string& starting_pin, const endpoint&)>& filter) const
@@ -403,14 +403,14 @@ endpoint gate::get_predecessor(const std::string& which_pin) const
 
 std::vector<std::shared_ptr<gate>> gate::get_unique_successors(const std::function<bool(const std::string& starting_pin, const endpoint&)>& filter) const
 {
-    std::vector<std::shared_ptr<gate>> res;
+    std::unordered_set<std::shared_ptr<gate>> res;
     auto endpoints = this->get_successors(filter);
     res.reserve(endpoints.size());
     for (const auto& ep : endpoints)
     {
-        res.push_back(ep.get_gate());
+        res.insert(ep.get_gate());
     }
-    return res;
+    return std::vector<std::shared_ptr<gate>>(res.begin(), res.end());
 }
 
 std::vector<endpoint> gate::get_successors(const std::function<bool(const std::string& starting_pin, const endpoint&)>& filter) const

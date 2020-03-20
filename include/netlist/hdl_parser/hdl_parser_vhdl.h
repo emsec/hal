@@ -77,6 +77,7 @@ private:
         std::unordered_map<std::string, std::set<std::tuple<std::string, std::string, std::string>>> instance_attributes;
         std::unordered_map<std::string, std::set<std::tuple<std::string, std::string, std::string>>> signal_attributes;
         std::vector<std::string> signals;
+        std::unordered_map<std::string, token_stream> type_of_signal;
         std::vector<instance> instances;
         std::unordered_map<std::string, std::string> direct_assignments;
     };
@@ -111,8 +112,9 @@ private:
     std::shared_ptr<module> instantiate(const entity& e, std::shared_ptr<module> parent, std::unordered_map<std::string, std::string> port_assignments);
 
     // helper functions
-    std::unordered_map<std::string, std::string> get_assignments(token_stream& lhs, token_stream& rhs);
-    std::vector<std::string> get_vector_signals(const std::string& base_name, token_stream& type);
+    std::unordered_map<std::string, std::string> get_assignments(entity& e, token_stream& lhs, token_stream& rhs);
+    std::vector<std::string> get_vector_signals(const std::string& base_name, token_stream type);
     std::string get_hex_from_number_literal(const std::string& value);
     std::string get_unique_alias(const std::string& name);
+    std::vector<u32> parse_range(token_stream& range);
 };
