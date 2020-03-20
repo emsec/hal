@@ -234,23 +234,25 @@ std::set<std::shared_ptr<gate>> module::get_gates(const std::function<bool(const
 
 std::set<std::shared_ptr<net>> module::get_input_nets() const
 {
+    std::unordered_set<u32> seen;
     std::set<std::shared_ptr<net>> res;
     auto gates = get_gates(nullptr, true);
-    std::set<std::shared_ptr<net>> seen;
     for (const auto& gate : gates)
     {
         for (const auto& net : gate->get_fan_in_nets())
         {
-            if (seen.find(net) != seen.end())
+            if (seen.find(net->get_id()) != seen.end())
             {
                 continue;
             }
-            seen.insert(net);
+            seen.insert(net->get_id());
             if (m_internal_manager->m_netlist->is_global_input_net(net))
             {
                 res.insert(net);
+                continue;
             }
-            else if (gates.find(net->get_source().get_gate()) == gates.end())
+            auto sources = net->get_sources();
+            if (std::any_of(sources.begin(), sources.end(), [&gates](endpoint src){return gates.find(src.get_gate()) == gates.end();}))
             {
                 res.insert(net);
             }
@@ -261,24 +263,27 @@ std::set<std::shared_ptr<net>> module::get_input_nets() const
 
 std::set<std::shared_ptr<net>> module::get_output_nets() const
 {
+    std::unordered_set<u32> seen;
     std::set<std::shared_ptr<net>> res;
     auto gates = get_gates(nullptr, true);
     for (const auto& gate : gates)
     {
         for (const auto& net : gate->get_fan_out_nets())
         {
+            if (seen.find(net->get_id()) != seen.end())
+            {
+                continue;
+            }
+            seen.insert(net->get_id());
             if (m_internal_manager->m_netlist->is_global_output_net(net))
             {
                 res.insert(net);
                 continue;
             }
-            for (const auto& dst : net->get_destinations())
+            auto destinations = net->get_destinations();
+            if (std::any_of(destinations.begin(), destinations.end(), [&gates](endpoint dst){return gates.find(dst.get_gate()) == gates.end();}))
             {
-                if (gates.find(dst.get_gate()) == gates.end())
-                {
-                    res.insert(net);
-                    break;
-                }
+                res.insert(net);
             }
         }
     }
@@ -287,19 +292,22 @@ std::set<std::shared_ptr<net>> module::get_output_nets() const
 
 std::set<std::shared_ptr<net>> module::get_internal_nets() const
 {
+    std::unordered_set<u32> seen;
     std::set<std::shared_ptr<net>> res;
     auto gates = get_gates(nullptr, true);
     for (const auto& gate : gates)
     {
         for (const auto& net : gate->get_fan_out_nets())
         {
-            for (const auto& dst : net->get_destinations())
+            if (seen.find(net->get_id()) != seen.end())
             {
-                if (gates.find(dst.get_gate()) != gates.end())
-                {
-                    res.insert(net);
-                    break;
-                }
+                continue;
+            }
+            seen.insert(net->get_id());
+            auto destinations = net->get_destinations();
+            if (std::any_of(destinations.begin(), destinations.end(), [&gates](endpoint dst){return gates.find(dst.get_gate()) != gates.end();}))
+            {
+                res.insert(net);
             }
         }
     }
