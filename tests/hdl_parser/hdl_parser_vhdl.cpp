@@ -241,7 +241,8 @@ TEST_F(hdl_parser_vhdl_test, check_whitespace_chaos_)
  *
  * Functions: parse
  */
-TEST_F(hdl_parser_vhdl_test, check_generic_map){
+TEST_F(hdl_parser_vhdl_test, check_generic_map)
+{
     TEST_START
         {
             // Store an instance of all possible data types in one gate
@@ -262,7 +263,7 @@ TEST_F(hdl_parser_vhdl_test, check_generic_map){
                                     "      key_bit_vector_dec => D\"2748\","
                                     "      key_bit_vector_oct => O\"5274\","
                                     "      key_bit_vector_bin => B\"1010_1011_1100\","
-                                    // -- Non-Verilog Data Types:
+                                    // -- VHDL specific Data Types:
                                     "      key_boolean => true,"
                                     "      key_time => 1.234sec,"
                                     "      key_bit_value => '101010111100'"
@@ -296,7 +297,7 @@ TEST_F(hdl_parser_vhdl_test, check_generic_map){
             EXPECT_EQ(gate_0->get_data_by_key("generic","key_bit_vector_dec"), std::make_tuple("bit_vector", "abc"));
             EXPECT_EQ(gate_0->get_data_by_key("generic","key_bit_vector_oct"), std::make_tuple("bit_vector", "abc"));
             EXPECT_EQ(gate_0->get_data_by_key("generic","key_bit_vector_bin"), std::make_tuple("bit_vector", "abc"));
-            // -- Non-Verilog Data Types:
+            // -- VHDL specific Data Types:
             EXPECT_EQ(gate_0->get_data_by_key("generic","key_boolean"), std::make_tuple("boolean", "true"));
             EXPECT_EQ(gate_0->get_data_by_key("generic","key_time"), std::make_tuple("time", "1.234sec"));
             EXPECT_EQ(gate_0->get_data_by_key("generic","key_bit_value"), std::make_tuple("bit_value", "101010111100"));
@@ -537,11 +538,12 @@ TEST_F(hdl_parser_vhdl_test, check_net_vectors)
 }
 
 /**
- * Testing the addition of a global gnd and vcc gates
+ * Testing the addition of a gnd and vcc gates
  *
  * Functions: parse
  */
-TEST_F(hdl_parser_vhdl_test, check_global_gnd_vcc_gates){
+TEST_F(hdl_parser_vhdl_test, check_gnd_vcc_gates)
+{
     TEST_START
         {
             // Add a global_gnd
@@ -620,7 +622,7 @@ TEST_F(hdl_parser_vhdl_test, check_global_gnd_vcc_gates){
 TEST_F(hdl_parser_vhdl_test, check_zero_and_one_nets){
     TEST_START
         {
-            // Port map gets multiple nets
+            // Use zero and one as inputs (via '0' and '1')
             std::stringstream input("-- Device\t: device_name\n"
                                     "entity TEST_Comp is "
                                     "  port ( "
@@ -938,7 +940,6 @@ TEST_F(hdl_parser_vhdl_test, check_multiple_entities)
              *                    '                                            '
              *                    '- - - - - - - - - - - - - - - - - - - - - - '
             */
-            /* FIXME: crash with net assignment (mod_inner <= mod_our (or flipped around))
              std::stringstream input("-- Device\t: device_name\n"
                                     "entity ENT_MODULE is "
                                     "  port ( "
@@ -949,7 +950,7 @@ TEST_F(hdl_parser_vhdl_test, check_multiple_entities)
                                     "architecture STRUCTURE_MODULE of ENT_MODULE is "
                                     "  signal mod_inner : STD_LOGIC; "
                                     "begin "
-                                    "  mod_inner <= mod_out "
+                                    "  mod_inner <= mod_out; "
                                     "  gate_a : INV "
                                     "    port map ( "
                                     "      I => mod_in, "
@@ -1005,8 +1006,9 @@ TEST_F(hdl_parser_vhdl_test, check_multiple_entities)
             ASSERT_EQ(mod->get_output_nets().size(), 1);
             EXPECT_EQ(*mod->get_output_nets().begin(), mod_out);
 
-            EXPECT_TRUE(vectors_have_same_content(mod_out->get_dsts(), std::vector<endpoint>({get_endpoint(gate_b, "I"), get_endpoint(gate_top, "I")})));*/
+            EXPECT_TRUE(vectors_have_same_content(mod_out->get_dsts(), std::vector<endpoint>({get_endpoint(gate_b, "I"), get_endpoint(gate_top, "I")})));
         }
+
         {
             // Use the 'entity'-keyword in the context of a gate type (should be ignored) (vhdl specific)
             std::stringstream input("-- Device\t: device_name\n"
@@ -1038,38 +1040,168 @@ TEST_F(hdl_parser_vhdl_test, check_multiple_entities)
             ASSERT_FALSE(nl->get_gates(gate_filter("INV", "gate_0")).empty());
 
         }
+
     TEST_END
 }
 
-/** NOTE: old? (But port vector assaignment)
- * Testing the different ways of port assignments
+/**
+ * NOTE: Are multi dim assignments supported?
+ * Testing the correct handling of direct assignment (e.g. 'net_slave = net_master;'), where two
+ * (signal-)identifiers address the same net. The net (signal) at the left side of the expression is mapped to the net
+ * at the right side, so only the net with the right identifier will be created.
+ *
+ * However, logic expressions like 'A <= B*C' are NOT supported.
  *
  * Functions: parse
  */
-TEST_F(hdl_parser_vhdl_test, check_port_assignment) {
+TEST_F(hdl_parser_vhdl_test, check_direct_assignment)
+{
     TEST_START
-        // We need to create another gate library with multiple output ports
-        create_temp_gate_lib();
         {
-            // Connect a single set with a single output pin
+            // Build up a master-slave hierarchy as follows:
+            /*                                  .--- net_slave_1 (is global input)
+             *   net_master <--- net_slave_0 <--+
+             *                                  '--- net_slave_2
+             */
+            // Testing the correct creation of the master net by considering the inheritance of the attributes and connections
+            // of its slaves (vhdl specific) (ISSUE: global input property is not propagated to net_master)
             std::stringstream input("-- Device\t: device_name\n"
-                                    "entity TEST_Comp is\n"
-                                    "  port (\n"
-                                    "  );\n"
-                                    "end TEST_Comp;\n"
-                                    "architecture STRUCTURE of TEST_Comp is\n"
-                                    "  signal net_0 : STD_LOGIC;\n"
-                                    "  signal net_1 : STD_LOGIC;\n"
-                                    "begin\n"
-                                    "  gate_0 : GATE_4^1_IN_4^1_OUT\n"
-                                    "    port map (\n"
-                                    "      O(0) => net_0,\n"
-                                    "      O(1) => net_1\n"
-                                    "    );\n"
+                                    "entity TEST_Comp is "
+                                    "  port ( "
+                                    "    net_global_in : in STD_LOGIC := 'X'; "
+                                    "    net_global_out : out STD_LOGIC := 'X'; "
+                                    "    net_slave_1: in STD_LOGIC := 'X'; "
+                                    "  ); "
+                                    "end TEST_Comp; "
+                                    "architecture STRUCTURE of TEST_Comp is "
+                                    "  signal net_slave_0 : STD_LOGIC; "
+                                    "  signal net_slave_2 : STD_LOGIC; "
+                                    "  signal net_master : STD_LOGIC; "
+                                    "  attribute slave_0_attr : string; "   // <- signal attributes are vhdl specific
+                                    "  attribute slave_0_attr of net_slave_0 : signal is \"slave_0_attr\"; "
+                                    "  attribute slave_1_attr : string; "
+                                    "  attribute slave_1_attr of net_slave_1 : signal is \"slave_1_attr\"; "
+                                    "  attribute slave_2_attr : string; "
+                                    "  attribute slave_2_attr of net_slave_2 : signal is \"slave_2_attr\"; "
+                                    "  attribute master_attr : string; "
+                                    "  attribute master_attr of net_master : signal is \"master_attr\"; "
+                                    "begin "
+                                    "  net_slave_1 <= net_slave_0;  "
+                                    "  net_slave_0 <= net_master; "
+                                    "  net_slave_2 <= net_slave_0; "
+                                    "  gate_0 : INV "
+                                    "    port map ( "
+                                    "      I => net_global_in, "
+                                    "      O => net_slave_0 "
+                                    "    ); "
+                                    "  gate_1 : AND3 "
+                                    "    port map ( "
+                                    "      I0 => net_master, "
+                                    "      I1 => net_slave_1, "
+                                    "      I2 => net_slave_2, "
+                                    "      O => net_global_out "
+                                    "    ); "
+                                    "end STRUCTURE;");
+            hdl_parser_vhdl vhdl_parser(input);
+            std::shared_ptr<netlist> nl = vhdl_parser.parse(g_lib_name);
+
+            ASSERT_NE(nl, nullptr);
+            EXPECT_EQ(nl->get_nets().size(), 3); // global_in + global_out + net_master
+            ASSERT_EQ(nl->get_nets(net_name_filter("net_master")).size(), 1);
+            std::shared_ptr<net> net_master = *nl->get_nets(net_name_filter("net_master")).begin();
+
+            ASSERT_EQ(nl->get_gates(gate_filter("INV","gate_0")).size(), 1);
+            ASSERT_EQ(nl->get_gates(gate_filter("AND3","gate_1")).size(), 1);
+
+            std::shared_ptr<gate> g_0 = *nl->get_gates(gate_filter("INV","gate_0")).begin();
+            std::shared_ptr<gate> g_1 = *nl->get_gates(gate_filter("AND3","gate_1")).begin();
+
+            // Check the connections
+            EXPECT_EQ(g_0->get_fan_out_net("O"), net_master);
+            EXPECT_EQ(g_1->get_fan_in_net("I0"), net_master);
+            EXPECT_EQ(g_1->get_fan_in_net("I1"), net_master);
+            EXPECT_EQ(g_1->get_fan_in_net("I2"), net_master);
+
+            // Check that net_master becomes also a global input (ISSUE: global input property is not propagated to net_master)
+            //EXPECT_TRUE(net_master->is_global_input_net());
+
+            // VHDL specific: Check the net attribute propagation
+            EXPECT_EQ(net_master->get_data_by_key("vhdl_attribute", "master_attr"), std::make_tuple("string", "master_attr"));
+            EXPECT_EQ(net_master->get_data_by_key("vhdl_attribute", "slave_0_attr"), std::make_tuple("string", "slave_0_attr"));
+            EXPECT_EQ(net_master->get_data_by_key("vhdl_attribute", "slave_1_attr"), std::make_tuple("string", "slave_1_attr"));
+            EXPECT_EQ(net_master->get_data_by_key("vhdl_attribute", "slave_2_attr"), std::make_tuple("string", "slave_2_attr"));
+        }
+        /*{
+            // Testing the assignment of logic vectors (ISSUE: map::at failure l.905)
+            std::stringstream input("-- Device\t: device_name\n"
+                                    "entity TEST_Comp is "
+                                    "  port ( "
+                                    "    net_global_in : in STD_LOGIC := 'X'; "
+                                    "    net_global_out : out STD_LOGIC := 'X'; "
+                                    "    net_slave_1: out STD_LOGIC := 'X'; "
+                                    "  ); "
+                                    "end TEST_Comp; "
+                                    "architecture STRUCTURE of TEST_Comp is "
+                                    "  signal net_slave : STD_LOGIC_VECTOR ( 0 to 3 ); "
+                                    "  signal net_master : STD_LOGIC_VECTOR ( 0 to 3 ); "
+                                    "begin "
+                                    "  net_slave <= net_master; "
+                                    "  gate_0 : INV "
+                                    "    port map ( "
+                                    "      I => net_global_in, "
+                                    "      O => net_slave(0) "
+                                    "    ); "
+                                    "  gate_1 : AND3 "
+                                    "    port map ( "
+                                    "      I0 => net_master(0), "
+                                    "      I1 => net_slave(0), "
+                                    "      I2 => net_slave(0), "
+                                    "      O => net_global_out "
+                                    "    ); "
+                                    "end STRUCTURE;");
+            hdl_parser_vhdl vhdl_parser(input);
+            std::shared_ptr<netlist> nl = vhdl_parser.parse(g_lib_name);
+
+            ASSERT_NE(nl, nullptr);
+        }*/
+    TEST_END
+}
+
+/*#########################################################################
+   VHDL Specific Tests (Tests that can not be directly applied to Verilog)
+  #########################################################################*/
+
+/**
+ * Testing the correct detection of single line comments (initiated with '--') within the vhdl file.
+ *
+ * Functions: parse
+ */
+TEST_F(hdl_parser_vhdl_test, check_comments){
+    TEST_START
+        {
+            // Store an instance of all possible data types in one gate
+            std::stringstream input("-- Device\t: device_name\n"
+                                    "entity TEST_Comp is "
+                                    "  port ( "
+                                    "    net_global_input : in STD_LOGIC := 'X'; "
+                                    "  ); "
+                                    "end TEST_Comp; "
+                                    "architecture STRUCTURE of TEST_Comp is "
+                                    "begin"
+                                    "  test_gate : INV"
+                                    "    generic map(\n"
+                                    "      no_comment_0 => 123, -- comment_0 => 123, \t --comment_1 => 123\n"
+                                    "      no_comment_1 => 123,\n"
+                                    "      -- comment_2 => 123,\n"
+                                    "      no_comment_2 => 123\n"
+                                    "    )\n"
+                                    "    port map ( "
+                                    "      I => net_global_input "
+                                    "    ); "
                                     "end STRUCTURE;");
             test_def::capture_stdout();
             hdl_parser_vhdl vhdl_parser(input);
-            std::shared_ptr<netlist> nl = vhdl_parser.parse(temp_lib_name);
+            std::shared_ptr<netlist> nl = vhdl_parser.parse(g_lib_name);
             if (nl == nullptr)
             {
                 std::cout << test_def::get_captured_stdout();
@@ -1080,18 +1212,155 @@ TEST_F(hdl_parser_vhdl_test, check_port_assignment) {
             }
 
             ASSERT_NE(nl, nullptr);
-            ASSERT_FALSE(nl->get_gates(gate_filter("GATE_4^1_IN_4^1_OUT", "gate_0")).empty());
-            std::shared_ptr<gate> gate_0 = *(nl->get_gates(gate_filter("GATE_4^1_IN_4^1_OUT" ,"gate_0")).begin());
+            ASSERT_EQ(nl->get_gates(gate_filter("INV", "test_gate")).size(), 1);
+            std::shared_ptr<gate> test_gate = *nl->get_gates(gate_filter("INV", "test_gate")).begin();
 
-            std::shared_ptr<net> net_0 = gate_0->get_fan_out_net("O(0)");
-            ASSERT_NE(net_0, nullptr);
-            EXPECT_EQ(net_0->get_name(), "net_0");
+            // Test that the comments did not removed other parts (all no_comment_n generics should be created)
+            for (std::string key : std::set<std::string>({"no_comment_0", "no_comment_1", "no_comment_2"}))
+            {
+                EXPECT_NE(test_gate->get_data_by_key("generic", key), std::make_tuple("", ""));
+                if (test_gate->get_data_by_key("generic", key) == std::make_tuple("", "")){
+                    std::cout << "comment test failed for: " << key << std::endl;
+                }
+            }
 
-            std::shared_ptr<net> net_1 = gate_0->get_fan_out_net("O(1)");
-            ASSERT_NE(net_1, nullptr);
-            EXPECT_EQ(net_1->get_name(), "net_1");
+            // Test that the comments are not interpreted (all comment_n generics shouldn't be created)
+            for (std::string key : std::set<std::string>({"comment_0", "comment_1", "comment_2"}))
+            {
+                EXPECT_EQ(test_gate->get_data_by_key("generic", key), std::make_tuple("", ""));
+                if (test_gate->get_data_by_key("generic", key) != std::make_tuple("", "")){
+                    std::cout << "comment failed for: " << key << std::endl;
+                }
+            }
         }
-        /*{
+    TEST_END
+}
+
+/**
+ * Testing the usage of user-defined attributes within the architecture and the entity header.
+ *
+ * Functions: parse
+ */
+TEST_F(hdl_parser_vhdl_test, check_attributes)
+{
+    TEST_START
+        {
+            // Add a custom attribute for a gate
+            std::stringstream input("-- Device\t: device_name\n"
+                                    "entity TEST_Comp is\n"
+                                    "  port (\n"
+                                    "    net_global_in : in STD_LOGIC := 'X';\n"
+                                    "    net_global_out : out STD_LOGIC := 'X';\n"
+                                    "  );\n"
+                                    "end TEST_Comp;\n"
+                                    "architecture STRUCTURE of TEST_Comp is\n"
+                                    "  attribute attri_name : attri_type;\n"
+                                    "  attribute attri_name of gate_0 : item_class is attri_value;\n"
+                                    "begin\n"
+                                    "  gate_0 : INV\n"
+                                    "    port map (\n"
+                                    "      I => net_global_in,\n"
+                                    "      O => net_global_out\n"
+                                    "    );\n"
+                                    "end STRUCTURE;");
+            hdl_parser_vhdl vhdl_parser(input);
+            std::shared_ptr<netlist> nl = vhdl_parser.parse(g_lib_name);
+
+            ASSERT_NE(nl, nullptr);
+            ASSERT_EQ(nl->get_gates(gate_type_filter("INV")).size(), 1);
+            std::shared_ptr<gate> attri_gate = *nl->get_gates(gate_type_filter("INV")).begin();
+            EXPECT_EQ(attri_gate->get_data_by_key("vhdl_attribute", "attri_name"), std::make_tuple("attri_type", "attri_value"));
+        }
+        {
+            // Add a custom attribute for a net
+            std::stringstream input("-- Device\t: device_name\n"
+                                    "entity TEST_Comp is\n"
+                                    "  port (\n"
+                                    "    net_global_in : in STD_LOGIC := 'X';\n"
+                                    "    net_global_out : out STD_LOGIC := 'X';\n"
+                                    "  );\n"
+                                    "end TEST_Comp;\n"
+                                    "architecture STRUCTURE of TEST_Comp is\n"
+                                    "  signal net_0 : STD_LOGIC;\n"
+                                    "  attribute attri_name : attri_type;\n"
+                                    "  attribute attri_name of net_0 : signal is \"attri_value\";\n"
+                                    "begin\n"
+                                    "  gate_0 : INV\n"
+                                    "    port map (\n"
+                                    "      I => net_global_in,\n"
+                                    "      O => net_0\n"
+                                    "    );\n"
+                                    "  gate_1 : INV\n"
+                                    "    port map (\n"
+                                    "      I => net_0,\n"
+                                    "      O => net_global_out\n"
+                                    "    );\n"
+                                    "end STRUCTURE;");
+            hdl_parser_vhdl vhdl_parser(input);
+            std::shared_ptr<netlist> nl = vhdl_parser.parse(g_lib_name);
+
+            ASSERT_NE(nl, nullptr);
+            ASSERT_EQ(nl->get_nets(net_name_filter("net_0")).size(), 1);
+            std::shared_ptr<net> attri_net = *nl->get_nets(net_name_filter("net_0")).begin();
+            EXPECT_NE(attri_net, nullptr);
+            EXPECT_EQ(attri_net->get_data_by_key("vhdl_attribute", "attri_name"), std::make_tuple("attri_type", "attri_value"));
+        }
+    TEST_END
+}
+
+/**
+ * Testing the usage and the correct handling of library prefixes
+ *
+ * Functions: parse
+ */
+TEST_F(hdl_parser_vhdl_test, check_lib_prefix)
+{
+    TEST_START
+        // The prefix of the library SIMPRIM.VCOMPONENTS should be removed from the INV gate type
+        std::stringstream input("-- Device\t: device_name\n"
+                                "library SIMPRIM;\n"
+                                "use SIMPRIM.VCOMPONENTS.ALL;\n"
+                                "entity TEST_Comp is\n"
+                                "  port (\n"
+                                "    net_global_input : in STD_LOGIC := 'X';\n"
+                                "  );\n"
+                                "end TEST_Comp;\n"
+                                "architecture STRUCTURE of TEST_Comp is\n"
+                                "begin\n"
+                                "  gate_0 : SIMPRIM.VCOMPONENTS.INV\n"
+                                "    port map (\n"
+                                "      I => net_global_input\n"
+                                "    );\n"
+                                "end STRUCTURE;");
+        test_def::capture_stdout();
+        hdl_parser_vhdl vhdl_parser(input);
+        std::shared_ptr<netlist> nl = vhdl_parser.parse(g_lib_name);
+        if (nl == nullptr)
+        {
+            std::cout << test_def::get_captured_stdout();
+        }
+        else
+        {
+            test_def::get_captured_stdout();
+        }
+
+        ASSERT_NE(nl, nullptr);
+
+        EXPECT_EQ(nl->get_gates(gate_type_filter("INV")).size(), 1);
+    TEST_END
+}
+
+/**
+ * Testing specific ways of vhdl port assignments
+ *
+ * Functions: parse
+ */
+TEST_F(hdl_parser_vhdl_test, check_vhdl_specific_port_assignment)
+{
+    TEST_START
+        // We need to create another gate library with multiple output ports
+        create_temp_gate_lib();
+        /*{ // NOTE: Not supported?
             // Connect two dimensional ports
             std::stringstream input("-- Device\t: device_name\n"
                                     "entity TEST_Comp is\n"
@@ -1124,7 +1393,7 @@ TEST_F(hdl_parser_vhdl_test, check_port_assignment) {
             ASSERT_NE(net_i_0, nullptr);
             EXPECT_EQ(net_i_0->get_name(), "net_0");
         }*/
-        /*{
+        /*{ // ISSUE: l.1336-1337 + l.1397-1399 flip (4,2)
             // Connect a vector of output pins with global input nets by using a binary string (B"10101010")
             std::stringstream input("-- Device\t: device_name\n"
                                     "entity TEST_Comp is\n"
@@ -1168,7 +1437,7 @@ TEST_F(hdl_parser_vhdl_test, check_port_assignment) {
             ASSERT_NE(net_2, nullptr);
             EXPECT_EQ(net_2->get_name(), "'1'");
         }*/
-        /*{
+        /*{ // ISSUE: l.1336-1337 + l.1397-1399 flip (4,2)
             // Connect a vector of output pins with a vector of nets (O(1)=>l_vec(0), O(2)=>l_vec(1), O(3)=>l_vec(2))
             std::stringstream input("-- Device\t: device_name\n"
                                     "entity TEST_Comp is\n"
@@ -1366,362 +1635,6 @@ TEST_F(hdl_parser_vhdl_test, check_port_assignment) {
     TEST_END
 }
 
-/** IN_PROGRESS: match up with verilog tests (not yet possible)
- *  NOTE: Are multi dim assignments supported?
- * Testing direct assignment (E.g. something like "net_0 <= net_1", so that both net_0 and net_1 can be used for the same net)
- *
- * Functions: parse
- */
-TEST_F(hdl_parser_vhdl_test, check_direct_assignment)
-{
-    TEST_START
-        {
-            // Assign net_1 to net_0
-            std::stringstream input("-- Device\t: device_name\n"
-                                    "entity TEST_Comp is\n"
-                                    "  port (\n"
-                                    "    net_global_in : in STD_LOGIC := 'X';\n"
-                                    "    net_global_out : out STD_LOGIC := 'X';\n"
-                                    "  );\n"
-                                    "end TEST_Comp;\n"
-                                    "architecture STRUCTURE of TEST_Comp is\n"
-                                    "  signal net_0 : STD_LOGIC;\n"
-                                    "  signal net_1 : STD_LOGIC;\n"
-                                    "begin\n"
-                                    "  net_0 <= net_1;\n"
-                                    "  gate_0 : INV\n"
-                                    "    port map (\n"
-                                    "      I => net_global_in,\n"
-                                    "      O => net_1\n"
-                                    "    );\n"
-                                    "  gate_1 : INV\n"
-                                    "    port map (\n"
-                                    "      I => net_0,\n"
-                                    "      O => net_global_out\n"
-                                    "    );\n"
-                                    "end STRUCTURE;");
-            hdl_parser_vhdl vhdl_parser(input);
-            std::shared_ptr<netlist> nl = vhdl_parser.parse(g_lib_name);
-
-            ASSERT_NE(nl, nullptr);
-            ASSERT_EQ(nl->get_nets(net_name_filter("net_1")).size(), 1);
-            std::shared_ptr<net> dir_ass_net = *nl->get_nets(net_name_filter("net_1")).begin();
-
-            ASSERT_EQ(nl->get_gates(gate_filter("INV","gate_0")).size(), 1);
-            ASSERT_EQ(nl->get_gates(gate_filter("INV","gate_1")).size(), 1);
-
-            std::shared_ptr<gate> g_0 = *nl->get_gates(gate_filter("INV","gate_0")).begin();
-            std::shared_ptr<gate> g_1 = *nl->get_gates(gate_filter("INV","gate_1")).begin();
-
-            EXPECT_EQ(g_0->get_fan_out_net("O"), dir_ass_net);
-            EXPECT_EQ(g_1->get_fan_in_net("I"), dir_ass_net);
-
-
-        }
-        /*{ // ISSUE: Fails with map::at (at hdl_parser_vhdl.cpp: l.905)
-            // (Temp) Assign a net_vec_1 to net_vec_0
-            std::stringstream input("-- Device\t: device_name\n"
-                                    "entity TEST_Comp is\n"
-                                    "  port (\n"
-                                    "    net_global_in : in STD_LOGIC := 'X';\n"
-                                    "    net_global_out_0 : out STD_LOGIC := 'X';\n"
-                                    "    net_global_out_1 : out STD_LOGIC := 'X';\n"
-                                    "  );\n"
-                                    "end TEST_Comp;\n"
-                                    "architecture STRUCTURE of TEST_Comp is\n"
-                                    "  signal net_vec_0 : STD_LOGIC_VECTOR ( 0 to 1 ); \n"
-                                    "  signal net_vec_1 : STD_LOGIC_VECTOR ( 0 to 1 );\n"
-                                    "begin\n"
-                                    "  net_vec_0 <= net_vec_1;\n"
-                                    "  gate_0 : INV\n"
-                                    "    port map (\n"
-                                    "      I => net_global_in,\n"
-                                    "      O => net_vec_0(0)\n"
-                                    "    );\n"
-                                    "  gate_1 : INV\n"
-                                    "    port map (\n"
-                                    "      I => net_vec_1(0),\n"
-                                    "      O => net_global_out_0\n"
-                                    "    );\n"
-                                    "  gate_2 : INV\n"
-                                    "    port map (\n"
-                                    "      I => net_global_in,\n"
-                                    "      O => net_vec_0(1)\n"
-                                    "    );\n"
-                                    "  gate_3 : INV\n"
-                                    "    port map (\n"
-                                    "      I => net_vec_1(1),\n"
-                                    "      O => net_global_out_1\n"
-                                    "    );\n"
-                                    "end STRUCTURE;");
-            hdl_parser_vhdl vhdl_parser(input);
-            std::shared_ptr<netlist> nl = vhdl_parser.parse(g_lib_name);
-
-            ASSERT_NE(nl, nullptr);
-
-
-        }*/
-        {
-            // Build up a master-slave hierarchy as follows:
-            /*                                  .--- net_slave_1
-             *   net_master <--- net_slave_0 <--+
-             *                                  '--- net_slave_2
-             */
-            // Testing the correct creation of the master net by considering the inheritance of the attributes and connections
-            // of its slaves
-            std::stringstream input("-- Device\t: device_name\n"
-                                    "entity TEST_Comp is\n"
-                                    "  port (\n"
-                                    "    net_global_in : in STD_LOGIC := 'X';\n"
-                                    "    net_global_out : out STD_LOGIC := 'X';\n"
-                                    "  );\n"
-                                    "end TEST_Comp;\n"
-                                    "architecture STRUCTURE of TEST_Comp is\n"
-                                    "  signal net_slave_0 : STD_LOGIC;\n"
-                                    "  signal net_slave_1 : STD_LOGIC;\n"
-                                    "  signal net_slave_2 : STD_LOGIC;\n"
-                                    "  signal net_master : STD_LOGIC;\n"
-                                    "  attribute slave_0_attr : string;\n"
-                                    "  attribute slave_0_attr of net_slave_0 : signal is \"slave_0_attr\";\n"
-                                    "  attribute slave_1_attr : string;\n"
-                                    "  attribute slave_1_attr of net_slave_1 : signal is \"slave_1_attr\";\n"
-                                    "  attribute slave_2_attr : string;\n"
-                                    "  attribute slave_2_attr of net_slave_2 : signal is \"slave_2_attr\";\n"
-                                    "  attribute master_attr : string;\n"
-                                    "  attribute master_attr of net_master : signal is \"master_attr\";\n"
-                                    "begin\n"
-                                    "  net_slave_1 <= net_slave_0; \n"
-                                    "  net_slave_0 <= net_master;\n"
-                                    "  net_slave_2 <= net_slave_0;\n"
-                                    "  gate_0 : INV\n"
-                                    "    port map (\n"
-                                    "      I => net_global_in,\n"
-                                    "      O => net_slave_0\n"
-                                    "    );\n"
-                                    "  gate_1 : AND3\n"
-                                    "    port map (\n"
-                                    "      I0 => net_master,\n"
-                                    "      I1 => net_slave_1,\n"
-                                    "      I2 => net_slave_2,\n"
-                                    "      O => net_global_out\n"
-                                    "    );\n"
-                                    "end STRUCTURE;");
-            hdl_parser_vhdl vhdl_parser(input);
-            std::shared_ptr<netlist> nl = vhdl_parser.parse(g_lib_name);
-
-            ASSERT_NE(nl, nullptr);
-            EXPECT_EQ(nl->get_nets().size(), 3); // global_in + global_out + net_master
-            ASSERT_EQ(nl->get_nets(net_name_filter("net_master")).size(), 1);
-            std::shared_ptr<net> net_master = *nl->get_nets(net_name_filter("net_master")).begin();
-
-            ASSERT_EQ(nl->get_gates(gate_filter("INV","gate_0")).size(), 1);
-            ASSERT_EQ(nl->get_gates(gate_filter("AND3","gate_1")).size(), 1);
-
-            std::shared_ptr<gate> g_0 = *nl->get_gates(gate_filter("INV","gate_0")).begin();
-            std::shared_ptr<gate> g_1 = *nl->get_gates(gate_filter("AND3","gate_1")).begin();
-
-            // Check the connections
-            EXPECT_EQ(g_0->get_fan_out_net("O"), net_master);
-            EXPECT_EQ(g_1->get_fan_in_net("I0"), net_master);
-            EXPECT_EQ(g_1->get_fan_in_net("I1"), net_master);
-            EXPECT_EQ(g_1->get_fan_in_net("I2"), net_master);
-
-            // Check the attributes
-            EXPECT_EQ(net_master->get_data_by_key("vhdl_attribute", "master_attr"), std::make_tuple("string", "master_attr"));
-            EXPECT_EQ(net_master->get_data_by_key("vhdl_attribute", "slave_0_attr"), std::make_tuple("string", "slave_0_attr"));
-            EXPECT_EQ(net_master->get_data_by_key("vhdl_attribute", "slave_1_attr"), std::make_tuple("string", "slave_1_attr"));
-            EXPECT_EQ(net_master->get_data_by_key("vhdl_attribute", "slave_2_attr"), std::make_tuple("string", "slave_2_attr"));
-
-        }
-    TEST_END
-}
-
-
-
-/*#########################################################################
-   VHDL Specific Tests (Tests that can not be directly applied to Verilog)
-  #########################################################################*/
-
-/**
- * Testing the correct detection of single line comments (initiated with '--') within the vhdl file.
- *
- * Functions: parse
- */
-TEST_F(hdl_parser_vhdl_test, check_comments){
-    TEST_START
-        {
-            // Store an instance of all possible data types in one gate
-            std::stringstream input("-- Device\t: device_name\n"
-                                    "entity TEST_Comp is "
-                                    "  port ( "
-                                    "    net_global_input : in STD_LOGIC := 'X'; "
-                                    "  ); "
-                                    "end TEST_Comp; "
-                                    "architecture STRUCTURE of TEST_Comp is "
-                                    "begin"
-                                    "  test_gate : INV"
-                                    "    generic map(\n"
-                                    "      no_comment_0 => 123, -- comment_0 => 123, \t --comment_1 => 123\n"
-                                    "      no_comment_1 => 123,\n"
-                                    "      -- comment_2 => 123,\n"
-                                    "      no_comment_2 => 123\n"
-                                    "    )\n"
-                                    "    port map ( "
-                                    "      I => net_global_input "
-                                    "    ); "
-                                    "end STRUCTURE;");
-            test_def::capture_stdout();
-            hdl_parser_vhdl vhdl_parser(input);
-            std::shared_ptr<netlist> nl = vhdl_parser.parse(g_lib_name);
-            if (nl == nullptr)
-            {
-                std::cout << test_def::get_captured_stdout();
-            }
-            else
-            {
-                test_def::get_captured_stdout();
-            }
-
-            ASSERT_NE(nl, nullptr);
-            ASSERT_EQ(nl->get_gates(gate_filter("INV", "test_gate")).size(), 1);
-            std::shared_ptr<gate> test_gate = *nl->get_gates(gate_filter("INV", "test_gate")).begin();
-
-            // Test that the comments did not removed other parts (all no_comment_n generics should be created)
-            for (std::string key : std::set<std::string>({"no_comment_0", "no_comment_1", "no_comment_2"}))
-            {
-                EXPECT_NE(test_gate->get_data_by_key("generic", key), std::make_tuple("", ""));
-                if (test_gate->get_data_by_key("generic", key) == std::make_tuple("", "")){
-                    std::cout << "comment test failed for: " << key << std::endl;
-                }
-            }
-
-            // Test that the comments are not interpreted (all comment_n generics shouldn't be created)
-            for (std::string key : std::set<std::string>({"comment_0", "comment_1", "comment_2"}))
-            {
-                EXPECT_EQ(test_gate->get_data_by_key("generic", key), std::make_tuple("", ""));
-                if (test_gate->get_data_by_key("generic", key) != std::make_tuple("", "")){
-                    std::cout << "comment failed for: " << key << std::endl;
-                }
-            }
-        }
-    TEST_END
-}
-
-/**
- * Testing the usage of user-defined attributes within the architecture and the entity header.
- *
- * Functions: parse
- */
-TEST_F(hdl_parser_vhdl_test, check_attributes)
-{
-    TEST_START
-        {
-            // Add a custom attribute for a gate
-            std::stringstream input("-- Device\t: device_name\n"
-                                    "entity TEST_Comp is\n"
-                                    "  port (\n"
-                                    "    net_global_in : in STD_LOGIC := 'X';\n"
-                                    "    net_global_out : out STD_LOGIC := 'X';\n"
-                                    "  );\n"
-                                    "end TEST_Comp;\n"
-                                    "architecture STRUCTURE of TEST_Comp is\n"
-                                    "  attribute attri_name : attri_type;\n"
-                                    "  attribute attri_name of gate_0 : item_class is attri_value;\n"
-                                    "begin\n"
-                                    "  gate_0 : INV\n"
-                                    "    port map (\n"
-                                    "      I => net_global_in,\n"
-                                    "      O => net_global_out\n"
-                                    "    );\n"
-                                    "end STRUCTURE;");
-            hdl_parser_vhdl vhdl_parser(input);
-            std::shared_ptr<netlist> nl = vhdl_parser.parse(g_lib_name);
-
-            ASSERT_NE(nl, nullptr);
-            ASSERT_EQ(nl->get_gates(gate_type_filter("INV")).size(), 1);
-            std::shared_ptr<gate> attri_gate = *nl->get_gates(gate_type_filter("INV")).begin();
-            EXPECT_EQ(attri_gate->get_data_by_key("vhdl_attribute", "attri_name"), std::make_tuple("attri_type", "attri_value"));
-        }
-        {
-            // Add a custom attribute for a net
-            std::stringstream input("-- Device\t: device_name\n"
-                                    "entity TEST_Comp is\n"
-                                    "  port (\n"
-                                    "    net_global_in : in STD_LOGIC := 'X';\n"
-                                    "    net_global_out : out STD_LOGIC := 'X';\n"
-                                    "  );\n"
-                                    "end TEST_Comp;\n"
-                                    "architecture STRUCTURE of TEST_Comp is\n"
-                                    "  signal net_0 : STD_LOGIC;\n"
-                                    "  attribute attri_name : attri_type;\n"
-                                    "  attribute attri_name of net_0 : signal is \"attri_value\";\n"
-                                    "begin\n"
-                                    "  gate_0 : INV\n"
-                                    "    port map (\n"
-                                    "      I => net_global_in,\n"
-                                    "      O => net_0\n"
-                                    "    );\n"
-                                    "  gate_1 : INV\n"
-                                    "    port map (\n"
-                                    "      I => net_0,\n"
-                                    "      O => net_global_out\n"
-                                    "    );\n"
-                                    "end STRUCTURE;");
-            hdl_parser_vhdl vhdl_parser(input);
-            std::shared_ptr<netlist> nl = vhdl_parser.parse(g_lib_name);
-
-            ASSERT_NE(nl, nullptr);
-            ASSERT_EQ(nl->get_nets(net_name_filter("net_0")).size(), 1);
-            std::shared_ptr<net> attri_net = *nl->get_nets(net_name_filter("net_0")).begin();
-            EXPECT_NE(attri_net, nullptr);
-            EXPECT_EQ(attri_net->get_data_by_key("vhdl_attribute", "attri_name"), std::make_tuple("attri_type", "attri_value"));
-        }
-    TEST_END
-}
-
-/**
- * Testing the usage and the correct handling of library prefixes
- *
- * Functions: parse
- */
-TEST_F(hdl_parser_vhdl_test, check_lib_prefix)
-{
-    TEST_START
-        // The prefix of the library SIMPRIM.VCOMPONENTS should be removed from the INV gate type
-        std::stringstream input("-- Device\t: device_name\n"
-                                "library SIMPRIM;\n"
-                                "use SIMPRIM.VCOMPONENTS.ALL;\n"
-                                "entity TEST_Comp is\n"
-                                "  port (\n"
-                                "    net_global_input : in STD_LOGIC := 'X';\n"
-                                "  );\n"
-                                "end TEST_Comp;\n"
-                                "architecture STRUCTURE of TEST_Comp is\n"
-                                "begin\n"
-                                "  gate_0 : SIMPRIM.VCOMPONENTS.INV\n"
-                                "    port map (\n"
-                                "      I => net_global_input\n"
-                                "    );\n"
-                                "end STRUCTURE;");
-        test_def::capture_stdout();
-        hdl_parser_vhdl vhdl_parser(input);
-        std::shared_ptr<netlist> nl = vhdl_parser.parse(g_lib_name);
-        if (nl == nullptr)
-        {
-            std::cout << test_def::get_captured_stdout();
-        }
-        else
-        {
-            test_def::get_captured_stdout();
-        }
-
-        ASSERT_NE(nl, nullptr);
-
-        EXPECT_EQ(nl->get_gates(gate_type_filter("INV")).size(), 1);
-    TEST_END
-}
-
-
 
 /** NOTE: Currently Unsupported...
  * Testing the usage of components, which should define new gate types with custom input/output/inout pins.
@@ -1782,6 +1695,171 @@ TEST_F(hdl_parser_vhdl_test, check_component)
 TEST_F(hdl_parser_vhdl_test, check_invalid_input)
 {
     TEST_START
+        // ------ Tests that are present in booth parsers ------
+        {
+            // The passed gate_library is unknown
+            NO_COUT_TEST_BLOCK;
+            std::stringstream input("-- Device\t: device_name\n"
+                                    "entity TEST_Comp is\n"
+                                    "  port (\n"
+                                    "    net_global_input : in STD_LOGIC := 'X';\n"
+                                    "  );\n"
+                                    "end TEST_Comp;\n"
+                                    "architecture STRUCTURE of TEST_Comp is\n"
+                                    "begin\n"
+                                    "  gate_0 : INV\n"
+                                    "    port map (\n"
+                                    "      O => net_global_input\n"
+                                    "    );\n"
+                                    "end STRUCTURE;");
+            hdl_parser_vhdl vhdl_parser(input);
+            std::shared_ptr<netlist> nl = vhdl_parser.parse("inv4lid_gate_library");
+
+            EXPECT_EQ(nl, nullptr);
+        }
+        {
+            // Try to connect to a pin, that does not exist
+            NO_COUT_TEST_BLOCK;
+            std::stringstream input("-- Device\t: device_name\n"
+                                    "entity TEST_Comp is\n"
+                                    "  port (\n"
+                                    "    global_in: in STD_LOGIC := 'X';\n"
+                                    "  );\n"
+                                    "end TEST_Comp;\n"
+                                    "architecture STRUCTURE of TEST_Comp is\n"
+                                    "begin\n"
+                                    "  gate_0 : INV\n"
+                                    "    port map (\n"
+                                    "      NON_EXISTING_PIN => global_in\n"
+                                    "    );\n"
+                                    "end STRUCTURE;");
+            hdl_parser_vhdl vhdl_parser(input);
+            std::shared_ptr<netlist> nl = vhdl_parser.parse(g_lib_name);
+            ASSERT_EQ(nl, nullptr);
+        }
+        {
+            // Use an unknown gate type (not in gate library)
+            NO_COUT_TEST_BLOCK;
+            std::stringstream input("-- Device\t: device_name\n"
+                                    "entity TEST_Comp is\n"
+                                    "  port (\n"
+                                    "    net_global_in : in STD_LOGIC := 'X';\n"
+                                    "    net_global_out : out STD_LOGIC := 'X';\n"
+                                    "  );\n"
+                                    "end TEST_Comp;\n"
+                                    "architecture STRUCTURE of TEST_Comp is\n"
+                                    "begin\n"
+                                    "  gate_0 : UNKNOWN_GATE_TYPE\n"
+                                    "    port map (\n"
+                                    "      I => net_global_in,\n"
+                                    "      O => net_global_out\n"
+                                    "    );\n"
+                                    "end STRUCTURE;");
+            hdl_parser_vhdl vhdl_parser(input);
+            std::shared_ptr<netlist> nl = vhdl_parser.parse(g_lib_name);
+
+            EXPECT_EQ(nl, nullptr);
+        }
+        /*{
+            // The input does not contain any entity (is empty)
+            // ISSUE: Creates a module named top module with no gates and no nets, while verilog exits with nullptr
+            NO_COUT_TEST_BLOCK;
+            std::stringstream input("");
+            hdl_parser_vhdl vhdl_parser(input);
+            std::shared_ptr<netlist> nl = vhdl_parser.parse(g_lib_name);
+
+            EXPECT_EQ(nl, nullptr);
+        }*/
+        {
+            // Create a non-used entity (should not create any problems...)
+            NO_COUT_TEST_BLOCK;
+            std::stringstream input("-- Device\t: device_name\n"
+                                    "entity IGNORE_ME is\n"
+                                    "  port (\n"
+                                    "    min : in STD_LOGIC := 'X';\n"
+                                    "    mout : out STD_LOGIC := 'X';\n"
+                                    "  );\n"
+                                    "end TEST_Comp;\n"
+                                    "architecture STRUCTURE of IGNORE_ME is\n"
+                                    "begin\n"
+                                    "  gate_0 : INV\n"
+                                    "    port map (\n"
+                                    "      I => min,\n"
+                                    "      O => mout\n"
+                                    "    );\n"
+                                    "end STRUCTURE;\n"
+                                    ""
+                                    "entity TEST_Comp is\n"
+                                    "  port (\n"
+                                    "    net_global_in : in STD_LOGIC := 'X';\n"
+                                    "    net_global_out : out STD_LOGIC := 'X';\n"
+                                    "  );\n"
+                                    "end TEST_Comp;\n"
+                                    "architecture STRUCTURE of TEST_Comp is\n"
+                                    "begin\n"
+                                    "  gate_0 : INV\n"
+                                    "    port map (\n"
+                                    "      I => net_global_in,\n"
+                                    "      O => net_global_out\n"
+                                    "    );\n"
+                                    "end STRUCTURE;");
+            hdl_parser_vhdl vhdl_parser(input);
+            std::shared_ptr<netlist> nl = vhdl_parser.parse(g_lib_name);
+
+            EXPECT_NE(nl, nullptr);
+        }
+        {
+            // Create a cyclic master-slave net hierarchy
+            NO_COUT_TEST_BLOCK;
+            std::stringstream input("-- Device\t: device_name\n"
+                                    "entity TEST_Comp is "
+                                    "  port ( "
+                                    "    net_global_in : in STD_LOGIC := 'X'; "
+                                    "    net_global_out : out STD_LOGIC := 'X'; "
+                                    "  ); "
+                                    "end TEST_Comp; "
+                                    "architecture STRUCTURE of TEST_Comp is "
+                                    "  signal net_0 : STD_LOGIC; "
+                                    "  signal net_1 : STD_LOGIC; "
+                                    "begin "
+                                    "  net_0 <= net_1;  "
+                                    "  net_1 <= net_0; "
+                                    "  gate_0 : INV "
+                                    "    port map ( "
+                                    "      I => net_global_in, "
+                                    "      O => net_0 "
+                                    "    ); "
+                                    "  gate_1 : INV "
+                                    "    port map ( "
+                                    "      I => net_1, "
+                                    "      O => net_global_out "
+                                    "    ); "
+                                    "end STRUCTURE;");
+            hdl_parser_vhdl vhdl_parser(input);
+            std::shared_ptr<netlist> nl = vhdl_parser.parse(g_lib_name);
+
+            EXPECT_EQ(nl, nullptr);
+        }
+        /*{
+            // Use non-numeric ranges (invalid) (ISSUE: stoi failure l.1233)
+            std::stringstream input("-- Device\t: device_name\n"
+                                    "entity TEST_Comp is\n"
+                                    "  port (\n"
+                                    "  );\n"
+                                    "end TEST_Comp;\n"
+                                    "architecture STRUCTURE of TEST_Comp is\n"
+                                    "  signal l_vec : STD_LOGIC_VECTOR ( 4 downto 0 );\n" // <- fails booth independently (l.1229 for 'to', l.1233 for 'downto')
+                                    "begin\n"
+                                    "  gate_0 : GATE_4^1_IN_4^1_OUT\n"
+                                    "    port map (\n"
+                                    "      O(p downto q) => l_vec(p downto q)\n" // <- fails booth independently (l.1336)
+                                    "    );\n"
+                                    "end STRUCTURE;");
+            hdl_parser_vhdl vhdl_parser(input);
+            std::shared_ptr<netlist> nl = vhdl_parser.parse(temp_lib_name);
+            EXPECT_EQ(nl, nullptr);
+        }*/
+        // ------ VHDL specific tests ------
         {
             // The entity contains unknown direction keywords (neither 'in', 'out' nor 'inout')
             NO_COUT_TEST_BLOCK;
@@ -1826,27 +1904,6 @@ TEST_F(hdl_parser_vhdl_test, check_invalid_input)
             EXPECT_EQ(nl, nullptr);
         }
         {
-            // The passed gate_library does not exist
-            NO_COUT_TEST_BLOCK;
-            std::stringstream input("-- Device\t: device_name\n"
-                                    "entity TEST_Comp is\n"
-                                    "  port (\n"
-                                    "    net_global_input : in STD_LOGIC := 'X';\n"
-                                    "  );\n"
-                                    "end TEST_Comp;\n"
-                                    "architecture STRUCTURE of TEST_Comp is\n"
-                                    "begin\n"
-                                    "  gate_0 : INV\n"
-                                    "    port map (\n"
-                                    "      O => net_global_input\n"
-                                    "    );\n"
-                                    "end STRUCTURE;");                      // <- no 'end STRUCTURE;'
-            hdl_parser_vhdl vhdl_parser(input);
-            std::shared_ptr<netlist> nl = vhdl_parser.parse("inv4lid_gate_library");
-
-            EXPECT_EQ(nl, nullptr);
-        }
-        {
             // Testing incorrect data_types in the "generic map" block
             NO_COUT_TEST_BLOCK;
             std::stringstream input("-- Device\t: device_name\n"
@@ -1869,7 +1926,7 @@ TEST_F(hdl_parser_vhdl_test, check_invalid_input)
             std::shared_ptr<netlist> nl = vhdl_parser.parse(g_lib_name);
             EXPECT_EQ(nl, nullptr);
         }
-        /*{ // NOTE: Fails without error message (should work...)
+        {
             // Leave the 'port map' block empty (gate is not connected)
             NO_COUT_TEST_BLOCK;
             std::stringstream input("-- Device\t: device_name\n"
@@ -1891,26 +1948,57 @@ TEST_F(hdl_parser_vhdl_test, check_invalid_input)
             std::shared_ptr<gate> gate_0 = *nl->get_gates(gate_filter("INV", "gate_0")).begin();
             EXPECT_TRUE(gate_0->get_fan_out_nets().empty());
             EXPECT_TRUE(gate_0->get_fan_in_nets().empty());
-        }*/
-        { //NOTE: Fails because of mistype issue line 108: (inout_pin_type.end() <-> input_pin_type.end())
-            // Try to connect to a pin, which does not exist
+        }
+        {
+            // Use an undeclared attribute (an attribute of type 'UNKNOWN' should be created)
             NO_COUT_TEST_BLOCK;
             std::stringstream input("-- Device\t: device_name\n"
                                     "entity TEST_Comp is\n"
                                     "  port (\n"
-                                    "    net_global_input : in STD_LOGIC := 'X';\n"
+                                    "    net_global_in : in STD_LOGIC := 'X';\n"
+                                    "    net_global_out : out STD_LOGIC := 'X';\n"
                                     "  );\n"
                                     "end TEST_Comp;\n"
                                     "architecture STRUCTURE of TEST_Comp is\n"
+                                    "  attribute attri_name of gate_0 : item_class is attri_value;\n"
                                     "begin\n"
                                     "  gate_0 : INV\n"
                                     "    port map (\n"
-                                    "      NOT_EXISTING_PIN => net_global_input\n"
+                                    "      I => net_global_in,\n"
+                                    "      O => net_global_out\n"
                                     "    );\n"
                                     "end STRUCTURE;");
             hdl_parser_vhdl vhdl_parser(input);
             std::shared_ptr<netlist> nl = vhdl_parser.parse(g_lib_name);
-            ASSERT_EQ(nl, nullptr);
+
+            EXPECT_NE(nl, nullptr);
+            ASSERT_EQ(nl->get_gates(gate_type_filter("INV")).size(), 1);
+            std::shared_ptr<gate> attri_gate = *nl->get_gates(gate_type_filter("INV")).begin();
+            EXPECT_EQ(attri_gate->get_data_by_key("vhdl_attribute", "attri_name"), std::make_tuple("UNKNOWN", "attri_value"));
+        }
+        {
+            // Use the 'attribute'-keyword in an unexpected way
+            NO_COUT_TEST_BLOCK;
+            std::stringstream input("-- Device\t: device_name\n"
+                                    "entity TEST_Comp is\n"
+                                    "  port (\n"
+                                    "    net_global_in : in STD_LOGIC := 'X';\n"
+                                    "    net_global_out : out STD_LOGIC := 'X';\n"
+                                    "  );\n"
+                                    "end TEST_Comp;\n"
+                                    "architecture STRUCTURE of TEST_Comp is\n"
+                                    "  attribute WAMBO;\n" // <- attributes do not work like this
+                                    "begin\n"
+                                    "  gate_0 : INV\n"
+                                    "    port map (\n"
+                                    "      I => net_global_in,\n"
+                                    "      O => net_global_out\n"
+                                    "    );\n"
+                                    "end STRUCTURE;");
+            hdl_parser_vhdl vhdl_parser(input);
+            std::shared_ptr<netlist> nl = vhdl_parser.parse(g_lib_name);
+
+            EXPECT_EQ(nl, nullptr);
         }
     TEST_END
 }
