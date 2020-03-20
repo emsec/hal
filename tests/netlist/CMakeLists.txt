@@ -54,5 +54,5 @@ add_test(runTest-gate_library_manager ${CMAKE_BINARY_DIR}/bin/runTest-gate_libra
 add_test(runTest-netlist_serializer ${CMAKE_BINARY_DIR}/bin/runTest-netlist_serializer --gtest_output=xml:${CMAKE_BINARY_DIR}/gtestresults-runBasicTests.xml)
 add_test(runTest-boolean_function ${CMAKE_BINARY_DIR}/bin/runTest-boolean_function --gtest_output=xml:${CMAKE_BINARY_DIR}/gtestresults-runBasicTests.xml)
 add_test(runTest-gate_library ${CMAKE_BINARY_DIR}/bin/runTest-gate_library --gtest_output=xml:${CMAKE_BINARY_DIR}/gtestresults-runBasicTests.xml)
-add_test(runTest-gate_library_parser_liberty ${CMAKE_BINARY_DIR}/bin/runTest-ggate_library_parser_liberty --gtest_output=xml:${CMAKE_BINARY_DIR}/gtestresults-runBasicTests.xml)
+add_test(runTest-gate_library_parser_liberty ${CMAKE_BINARY_DIR}/bin/runTest-gate_library_parser_liberty --gtest_output=xml:${CMAKE_BINARY_DIR}/gtestresults-runBasicTests.xml)
 
