@@ -101,6 +101,8 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
     m_general_table->setFrameStyle(QFrame::NoFrame);
     m_general_table->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     m_general_table->setFixedHeight(m_general_table->verticalHeader()->length());
+//    m_general_table->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+//    m_general_table->setFixedWidth(400);
 
     //(2) Input Pin section
     m_input_pins_table = new QTableWidget(1,3);
@@ -707,6 +709,60 @@ void gate_details_widget::update2(const u32 gate_id)
 
 void gate_details_widget::update(const u32 gate_id)
 {
+    auto g = g_netlist->get_gate_by_id(gate_id);
+    m_current_id = gate_id;
+
+    if(!g || m_current_id == 0)
+        return;
+
+    //update (1)general info section
+    m_name_item->setText(QString::fromStdString(g->get_name()));
+    m_type_item->setText(QString::fromStdString(g->get_type()->get_name()));
+    m_id_item->setText(QString::number(m_current_id));
+
+    QString module_text = "";
+    for (const auto sub : g_netlist->get_modules())
+    {
+        if (sub->contains_gate(g))
+        {
+            module_text = QString::fromStdString(sub->get_name()) + "[" + QString::number(sub->get_id()) + "]";
+            m_module_item->setData(Qt::UserRole, sub->get_id());
+        }
+    }
+    m_module_item->setText(module_text);
+
+    //update (2)input-pin section (put the sections code in extra functions?)
+    m_input_pins_table->clearContents();
+    m_input_pins_button->setText(QString::fromStdString("Input Pins (") + QString::number(g->get_input_pins().size()) + QString::fromStdString(")"));
+    m_input_pins_table->setRowCount(g->get_input_pins().size());
+    m_input_pins_table->setFixedHeight(m_input_pins_table->verticalHeader()->length());
+    int index = 0;
+    for(const auto &pin : g->get_input_pins())
+    {
+        QTableWidgetItem* pin_name = new QTableWidgetItem(QString::fromStdString(pin));
+        QTableWidgetItem* arrow_item = new QTableWidgetItem(QChar(0x2b05));
+        arrow_item->setForeground(QBrush(QColor(114, 140, 0), Qt::SolidPattern));
+        QTableWidgetItem* net_item = new QTableWidgetItem();
+
+        auto input_net = g_netlist->get_gate_by_id(gate_id)->get_fan_in_net(pin);
+        if(input_net)
+        {
+            net_item->setText(QString::fromStdString(input_net->get_name()));
+            net_item->setData(Qt::UserRole, input_net->get_id());
+        }
+        else
+            net_item->setText("unconnected");
+
+
+        m_input_pins_table->setItem(index, 0, pin_name);
+        m_input_pins_table->setItem(index, 1, arrow_item);
+        m_input_pins_table->setItem(index, 2, net_item);
+        index++;
+    }
+    m_input_pins_table->resizeColumnsToContents();
+
+    //update(3) output pins section
+
 
 }
 
