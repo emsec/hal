@@ -126,6 +126,9 @@ private:
     QWidget* m_boolean_functions_container;
     QVBoxLayout* m_boolean_functions_container_layout;
 
+    //function sections
+    void handle_buttons_clicked();
+
 
 
     //OLD CODE

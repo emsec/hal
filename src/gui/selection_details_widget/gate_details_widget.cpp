@@ -139,9 +139,16 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
     m_output_pins_table->setFixedHeight(m_output_pins_table->verticalHeader()->length());
 
 
-//    //(4) Data Field section
-//    m_data_fields_table = new QTableWidget(this);
-//    m_data_fields_table->setColumnCount(2);
+    //(4) Data Fields section
+    m_data_fields_table = new QTableWidget(0, 2);
+    m_data_fields_table->horizontalHeader()->setStretchLastSection(true);
+    m_data_fields_table->horizontalHeader()->hide();
+    m_data_fields_table->resizeColumnToContents(0);
+    m_data_fields_table->setShowGrid(false);
+    m_data_fields_table->setFocusPolicy(Qt::NoFocus);
+    m_data_fields_table->setFrameStyle(QFrame::NoFrame);
+    m_data_fields_table->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    m_data_fields_table->setFixedHeight(m_data_fields_table->verticalHeader()->length());
 //    m_data_fields_table->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 //    m_data_fields_table->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
@@ -154,11 +161,18 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
     m_top_lvl_layout->addWidget(m_input_pins_table);
     m_top_lvl_layout->addWidget(m_output_pins_button);
     m_top_lvl_layout->addWidget(m_output_pins_table);
+    m_top_lvl_layout->addWidget(m_data_fields_button);
+    m_top_lvl_layout->addWidget(m_data_fields_table);
 
     //necessary to add at the end
     m_top_lvl_layout->addSpacerItem(new QSpacerItem(0,0, QSizePolicy::Expanding, QSizePolicy::Expanding));
-
     m_content_layout->addWidget(m_scroll_area);
+
+    //some connections (maybe connect to simple toggle_hide_show function of widgets)
+    connect(m_general_info_button, &QPushButton::clicked, this, &gate_details_widget::handle_buttons_clicked);
+    connect(m_input_pins_button, &QPushButton::clicked, this, &gate_details_widget::handle_buttons_clicked);
+    connect(m_output_pins_button, &QPushButton::clicked, this, &gate_details_widget::handle_buttons_clicked);
+    connect(m_data_fields_button, &QPushButton::clicked, this, &gate_details_widget::handle_buttons_clicked);
 
 
     //OLD
@@ -410,6 +424,23 @@ void gate_details_widget::handle_net_destination_removed(std::shared_ptr<net> ne
     Q_UNUSED(net);
     if (m_current_id == dst_gate_id)
         update(m_current_id);
+}
+
+void gate_details_widget::handle_buttons_clicked()
+{
+    //function that (perhaps) is changed by a toggle-slot of the widget
+    QPushButton* btn = dynamic_cast<QPushButton*>(sender());
+    if(!btn)
+        return;
+
+    int index = m_top_lvl_layout->indexOf(btn);
+    QWidget* widget = m_top_lvl_layout->itemAt(index+1)->widget();
+    if(!widget)
+        return;
+    if(widget->isHidden())
+        widget->show();
+    else
+        widget->hide();
 }
 
 void gate_details_widget::update_boolean_function()
@@ -762,7 +793,51 @@ void gate_details_widget::update(const u32 gate_id)
     m_input_pins_table->resizeColumnsToContents();
 
     //update(3) output pins section
+    m_output_pins_table->clearContents();
+    m_output_pins_button->setText(QString::fromStdString("Output Pins (") + QString::number(g->get_output_pins().size()) + QString::fromStdString(")"));
+    m_output_pins_table->setRowCount(g->get_output_pins().size());
+    m_output_pins_table->setFixedHeight(m_output_pins_table->verticalHeader()->length());
+    index = 0;
+    for(const auto &pin : g->get_output_pins())
+    {
+        QTableWidgetItem* pin_name = new QTableWidgetItem(QString::fromStdString(pin));
+        QTableWidgetItem* arrow_item = new QTableWidgetItem(QChar(0x27a1));
+        arrow_item->setForeground(QBrush(QColor(114, 140, 0), Qt::SolidPattern));
+        QTableWidgetItem* net_item = new QTableWidgetItem();
 
+        auto output_net = g_netlist->get_gate_by_id(gate_id)->get_fan_out_net(pin);
+        if(output_net)
+        {
+            net_item->setText(QString::fromStdString(output_net->get_name()));
+            net_item->setData(Qt::UserRole, output_net->get_id());
+        }
+        else
+            net_item->setText("unconnected");
+
+
+        m_output_pins_table->setItem(index, 0, pin_name);
+        m_output_pins_table->setItem(index, 1, arrow_item);
+        m_output_pins_table->setItem(index, 2, net_item);
+        index++;
+    }
+    m_output_pins_table->resizeColumnsToContents();
+
+    //update(4) data fields section
+    m_data_fields_button->setText(QString::fromStdString("Data Fields (") + QString::number(g->get_data().size()) + QString::fromStdString(")"));
+    m_data_fields_table->clearContents();
+    m_data_fields_table->setRowCount(g->get_data().size());
+    m_data_fields_table->setFixedHeight(m_data_fields_table->verticalHeader()->length());
+    index = 0;
+    for(const auto& [key, value] : g->get_data())
+    {
+        QTableWidgetItem* key_item = new QTableWidgetItem(QString::fromStdString(std::get<1>(key)));
+        QTableWidgetItem* value_item = new QTableWidgetItem(QString::fromStdString(std::get<1>(value)));
+
+        m_data_fields_table->setItem(index, 0, key_item);
+        m_data_fields_table->setItem(index, 1, value_item);
+        index++;
+    }
+    m_data_fields_table->resizeColumnsToContents();
 
 }
 
