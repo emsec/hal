@@ -25,6 +25,7 @@
 #include <QVBoxLayout>
 #include <QGridLayout>
 #include <QPushButton>
+#include <QPropertyAnimation>
 #include "toggleable_label/toggleable_label.h"
 
 gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
@@ -100,7 +101,9 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
     m_general_table->setFocusPolicy(Qt::NoFocus);
     m_general_table->setFrameStyle(QFrame::NoFrame);
     m_general_table->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    m_general_table->setFixedHeight(m_general_table->verticalHeader()->length());
+    //m_general_table->setFixedHeight(m_general_table->verticalHeader()->length());
+    m_general_table->setMaximumHeight(m_general_table->verticalHeader()->length());
+
 //    m_general_table->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 //    m_general_table->setFixedWidth(400);
 
@@ -119,7 +122,8 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
     m_input_pins_table->setFocusPolicy(Qt::NoFocus);
     m_input_pins_table->setFrameStyle(QFrame::NoFrame);
     m_input_pins_table->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    m_input_pins_table->setFixedHeight(m_input_pins_table->verticalHeader()->length());
+    //m_input_pins_table->setFixedHeight(m_input_pins_table->verticalHeader()->length());
+    m_input_pins_table->setMaximumHeight(m_input_pins_table->verticalHeader()->length());
 
     //(3) Output Pin section
     m_output_pins_table = new QTableWidget(1,3);
@@ -136,7 +140,8 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
     m_output_pins_table->setFocusPolicy(Qt::NoFocus);
     m_output_pins_table->setFrameStyle(QFrame::NoFrame);
     m_output_pins_table->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    m_output_pins_table->setFixedHeight(m_output_pins_table->verticalHeader()->length());
+    //m_output_pins_table->setFixedHeight(m_output_pins_table->verticalHeader()->length());
+    m_output_pins_table->setMaximumHeight(m_output_pins_table->verticalHeader()->length());
 
 
     //(4) Data Fields section
@@ -148,7 +153,8 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
     m_data_fields_table->setFocusPolicy(Qt::NoFocus);
     m_data_fields_table->setFrameStyle(QFrame::NoFrame);
     m_data_fields_table->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    m_data_fields_table->setFixedHeight(m_data_fields_table->verticalHeader()->length());
+    //m_data_fields_table->setFixedHeight(m_data_fields_table->verticalHeader()->length());
+    m_data_fields_table->setMaximumHeight(m_data_fields_table->verticalHeader()->length());
 //    m_data_fields_table->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 //    m_data_fields_table->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
@@ -434,13 +440,25 @@ void gate_details_widget::handle_buttons_clicked()
         return;
 
     int index = m_top_lvl_layout->indexOf(btn);
-    QWidget* widget = m_top_lvl_layout->itemAt(index+1)->widget();
+    QTableWidget* widget = dynamic_cast<QTableWidget*>(m_top_lvl_layout->itemAt(index+1)->widget());
     if(!widget)
         return;
-    if(widget->isHidden())
-        widget->show();
-    else
-        widget->hide();
+    if(widget->maximumHeight() == 0){
+        //widget->show();
+        QPropertyAnimation* anim = new QPropertyAnimation(widget, "maximumHeight");
+        anim->setDuration(250);
+        anim->setStartValue(0);
+        anim->setEndValue(widget->verticalHeader()->length());
+        anim->start(QAbstractAnimation::DeleteWhenStopped);
+    }
+    else{
+        //widget->hide();
+        QPropertyAnimation* anim = new QPropertyAnimation(widget, "maximumHeight");
+        anim->setDuration(250);
+        anim->setStartValue(widget->verticalHeader()->length());
+        anim->setEndValue(0);
+        anim->start(QAbstractAnimation::DeleteWhenStopped);
+    }
 }
 
 void gate_details_widget::update_boolean_function()
@@ -766,7 +784,8 @@ void gate_details_widget::update(const u32 gate_id)
     m_input_pins_table->clearContents();
     m_input_pins_button->setText(QString::fromStdString("Input Pins (") + QString::number(g->get_input_pins().size()) + QString::fromStdString(")"));
     m_input_pins_table->setRowCount(g->get_input_pins().size());
-    m_input_pins_table->setFixedHeight(m_input_pins_table->verticalHeader()->length());
+    //m_input_pins_table->setFixedHeight(m_input_pins_table->verticalHeader()->length());
+    m_input_pins_table->setMaximumHeight(m_input_pins_table->verticalHeader()->length());
     int index = 0;
     for(const auto &pin : g->get_input_pins())
     {
@@ -796,7 +815,8 @@ void gate_details_widget::update(const u32 gate_id)
     m_output_pins_table->clearContents();
     m_output_pins_button->setText(QString::fromStdString("Output Pins (") + QString::number(g->get_output_pins().size()) + QString::fromStdString(")"));
     m_output_pins_table->setRowCount(g->get_output_pins().size());
-    m_output_pins_table->setFixedHeight(m_output_pins_table->verticalHeader()->length());
+    //m_output_pins_table->setFixedHeight(m_output_pins_table->verticalHeader()->length());
+    m_output_pins_table->setMaximumHeight(m_output_pins_table->verticalHeader()->length());
     index = 0;
     for(const auto &pin : g->get_output_pins())
     {
@@ -826,7 +846,8 @@ void gate_details_widget::update(const u32 gate_id)
     m_data_fields_button->setText(QString::fromStdString("Data Fields (") + QString::number(g->get_data().size()) + QString::fromStdString(")"));
     m_data_fields_table->clearContents();
     m_data_fields_table->setRowCount(g->get_data().size());
-    m_data_fields_table->setFixedHeight(m_data_fields_table->verticalHeader()->length());
+    //m_data_fields_table->setFixedHeight(m_data_fields_table->verticalHeader()->length());
+    m_data_fields_table->setMaximumHeight(m_data_fields_table->verticalHeader()->length());
     index = 0;
     for(const auto& [key, value] : g->get_data())
     {
