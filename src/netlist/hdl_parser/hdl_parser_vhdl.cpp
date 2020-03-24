@@ -324,7 +324,7 @@ bool hdl_parser_vhdl::parse_entity_definiton()
 
     if (!e.name.empty())
     {
-        m_entities[e.name] = e;
+        m_entities[core_utils::to_lower(e.name)] = e;
         m_last_entity      = e.name;
     }
 
@@ -368,7 +368,7 @@ bool hdl_parser_vhdl::parse_architecture()
     m_token_stream.consume("architecture", true);
     m_token_stream.consume();
     m_token_stream.consume("of", true);
-    auto& e = m_entities[m_token_stream.consume()];
+    auto& e = m_entities[core_utils::to_lower(m_token_stream.consume().string)];
     m_token_stream.consume("is", true);
     return parse_architecture_header(e) && parse_architecture_body(e);
 }
@@ -625,7 +625,7 @@ bool hdl_parser_vhdl::build_netlist(const std::string& top_module)
 {
     m_netlist->set_design_name(top_module);
 
-    auto& top_entity = m_entities[top_module];
+    auto& top_entity = m_entities[core_utils::to_lower(top_module)];
 
     // count the occurences of all names
     // names that occur multiple times will get a unique alias during parsing
@@ -653,7 +653,7 @@ bool hdl_parser_vhdl::build_netlist(const std::string& top_module)
         for (const auto& x : e->instances)
         {
             m_name_occurrences[x.name]++;
-            auto it = m_entities.find(x.type);
+            auto it = m_entities.find(core_utils::to_lower(x.type));
             if (it != m_entities.end())
             {
                 q.push(&(it->second));
@@ -957,7 +957,7 @@ std::shared_ptr<module> hdl_parser_vhdl::instantiate(const entity& e, std::share
         }
 
         // if the instance is another entity, recursively instantiate it
-        auto entity_it = m_entities.find(inst.type);
+        auto entity_it = m_entities.find(core_utils::to_lower(inst.type));
         if (entity_it != m_entities.end())
         {
             container = instantiate(entity_it->second, module, instance_assignments).get();
