@@ -1,7 +1,6 @@
 #include "netlist/hdl_parser/hdl_parser_vhdl.h"
 
 #include "core/log.h"
-#include "core/utils.h"
 
 #include "netlist/gate.h"
 #include "netlist/net.h"
@@ -174,11 +173,18 @@ bool hdl_parser_vhdl::tokenize()
             if (c == '\\')
             {
                 escaped = !escaped;
+                continue;
+            }
+            else if (escaped && std::isspace(c))
+            {
+                escaped = false;
+                continue;
             }
             else if (!escaped && c == '"')
             {
                 in_string = !in_string;
             }
+
             if (delimiters.find(c) == std::string::npos || escaped || in_string)
             {
                 current_token += c;
@@ -324,8 +330,8 @@ bool hdl_parser_vhdl::parse_entity_definiton()
 
     if (!e.name.empty())
     {
-        m_entities[core_utils::to_lower(e.name)] = e;
-        m_last_entity      = e.name;
+        m_entities[e.name] = e;
+        m_last_entity                            = e.name;
     }
 
     return true;
@@ -342,7 +348,7 @@ bool hdl_parser_vhdl::parse_port_definiton(entity& e)
         auto port_names = ports.extract_until(":");
         ports.consume(":", true);
 
-        auto direction = ports.consume();
+        auto direction = ports.consume().string;
         auto type      = ports.extract_until(";");
         ports.consume(";", ports.remaining() > 0);    // last entry has no semicolon, so no throw in that case
 
@@ -368,7 +374,7 @@ bool hdl_parser_vhdl::parse_architecture()
     m_token_stream.consume("architecture", true);
     m_token_stream.consume();
     m_token_stream.consume("of", true);
-    auto& e = m_entities[core_utils::to_lower(m_token_stream.consume().string)];
+    auto& e = m_entities[m_token_stream.consume().string];
     m_token_stream.consume("is", true);
     return parse_architecture_header(e) && parse_architecture_body(e);
 }
@@ -400,10 +406,16 @@ bool hdl_parser_vhdl::parse_architecture_header(entity& e)
         }
         else if (m_token_stream.peek() == "component")
         {
+            m_token_stream.consume("component", true);
+            auto component_name = m_token_stream.consume().string;
             // components are ignored
             m_token_stream.consume_until("end");
             m_token_stream.consume("end", true);
-            m_token_stream.consume();
+            m_token_stream.consume("component", true);
+            if (m_token_stream.peek() != ";")
+            {
+                m_token_stream.consume(component_name, true);    // optional repetition of component name
+            }
             m_token_stream.consume(";", true);
         }
         else if (m_token_stream.peek() == "attribute")
@@ -481,7 +493,7 @@ bool hdl_parser_vhdl::parse_architecture_body(entity& e)
     return true;
 }
 
-bool hdl_parser_vhdl::parse_attribute(std::unordered_map<std::string, std::set<std::tuple<std::string, std::string, std::string>>>& mapping)
+bool hdl_parser_vhdl::parse_attribute(case_insensitive_string_map<std::set<std::tuple<std::string, std::string, std::string>>>& mapping)
 {
     u32 line_number = m_token_stream.peek().number;
     m_token_stream.consume("attribute", true);
@@ -489,7 +501,7 @@ bool hdl_parser_vhdl::parse_attribute(std::unordered_map<std::string, std::set<s
     if (m_token_stream.peek() == ":")
     {
         m_token_stream.consume(":", true);
-        m_attribute_types[core_utils::to_lower(attr_type)] = m_token_stream.join_until(";", " ");
+        m_attribute_types[attr_type] = m_token_stream.join_until(";", " ");
         m_token_stream.consume(";", true);
     }
     else if (m_token_stream.peek() == "of" && m_token_stream.peek(2) == ":")
@@ -506,7 +518,7 @@ bool hdl_parser_vhdl::parse_attribute(std::unordered_map<std::string, std::set<s
         {
             value = value.substr(1, value.size() - 2);
         }
-        auto type_it = m_attribute_types.find(core_utils::to_lower(attr_type));
+        auto type_it = m_attribute_types.find(attr_type);
         if (type_it == m_attribute_types.end())
         {
             log_warning("hdl_parser", "attribute {} has unknown base type in line {}", attr_type, line_number);
@@ -543,6 +555,11 @@ bool hdl_parser_vhdl::parse_instance(entity& e)
         if (pos != std::string::npos)
         {
             inst.type = inst.type.substr(pos + 1);
+        }
+        if (m_entities.find(inst.type) == m_entities.end())
+        {
+            log_error("hdl_parser", "trying to instantiate unknown entity '{}' in line {}", inst.type, inst.line_number);
+            return false;
         }
     }
     else if (m_token_stream.peek() == "component")
@@ -625,7 +642,7 @@ bool hdl_parser_vhdl::build_netlist(const std::string& top_module)
 {
     m_netlist->set_design_name(top_module);
 
-    auto& top_entity = m_entities[core_utils::to_lower(top_module)];
+    auto& top_entity = m_entities[top_module];
 
     // count the occurences of all names
     // names that occur multiple times will get a unique alias during parsing
@@ -653,7 +670,7 @@ bool hdl_parser_vhdl::build_netlist(const std::string& top_module)
         for (const auto& x : e->instances)
         {
             m_name_occurrences[x.name]++;
-            auto it = m_entities.find(core_utils::to_lower(x.type));
+            auto it = m_entities.find(x.type);
             if (it != m_entities.end())
             {
                 q.push(&(it->second));
@@ -670,7 +687,7 @@ bool hdl_parser_vhdl::build_netlist(const std::string& top_module)
         }
     }
 
-    std::unordered_map<std::string, std::string> top_assignments;
+    case_insensitive_string_map<std::string> top_assignments;
 
     for (const auto& [name, direction] : top_entity.ports)
     {
@@ -806,7 +823,7 @@ bool hdl_parser_vhdl::build_netlist(const std::string& top_module)
     return true;
 }
 
-std::shared_ptr<module> hdl_parser_vhdl::instantiate(const entity& e, std::shared_ptr<module> parent, std::unordered_map<std::string, std::string> parent_module_assignments)
+std::shared_ptr<module> hdl_parser_vhdl::instantiate(const entity& e, std::shared_ptr<module> parent, case_insensitive_string_map<std::string> parent_module_assignments)
 {
     // remember assigned aliases so they are not lost when recursively going deeper
     std::unordered_map<std::string, std::string> aliases;
@@ -934,7 +951,7 @@ std::shared_ptr<module> hdl_parser_vhdl::instantiate(const entity& e, std::share
         data_container* container;
 
         // assign actual signal names to ports
-        std::unordered_map<std::string, std::string> instance_assignments;
+        case_insensitive_string_map<std::string> instance_assignments;
         for (const auto& [pin, signal] : inst.ports)
         {
             auto it2 = parent_module_assignments.find(signal);
@@ -957,7 +974,7 @@ std::shared_ptr<module> hdl_parser_vhdl::instantiate(const entity& e, std::share
         }
 
         // if the instance is another entity, recursively instantiate it
-        auto entity_it = m_entities.find(core_utils::to_lower(inst.type));
+        auto entity_it = m_entities.find(inst.type);
         if (entity_it != m_entities.end())
         {
             container = instantiate(entity_it->second, module, instance_assignments).get();
