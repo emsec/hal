@@ -159,6 +159,9 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
 //    m_data_fields_table->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     //(5) Boolean Function section
+    m_boolean_functions_container = new QWidget();
+    m_boolean_functions_container_layout = new QVBoxLayout();
+    m_boolean_functions_container->setLayout(m_boolean_functions_container_layout);
 
     //adding things to the layout
     m_top_lvl_layout->addWidget(m_general_info_button);
@@ -169,6 +172,8 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
     m_top_lvl_layout->addWidget(m_output_pins_table);
     m_top_lvl_layout->addWidget(m_data_fields_button);
     m_top_lvl_layout->addWidget(m_data_fields_table);
+    m_top_lvl_layout->addWidget(m_boolean_functions_button);
+    m_top_lvl_layout->addWidget(m_boolean_functions_container);
 
     //necessary to add at the end
     m_top_lvl_layout->addSpacerItem(new QSpacerItem(0,0, QSizePolicy::Expanding, QSizePolicy::Expanding));
@@ -859,6 +864,29 @@ void gate_details_widget::update(const u32 gate_id)
         index++;
     }
     m_data_fields_table->resizeColumnsToContents();
+
+    //update(5) boolean functions section
+    //clear container layout
+    while(m_boolean_functions_container_layout->itemAt(0) != 0)
+    {
+        QLayoutItem* i = m_boolean_functions_container_layout->takeAt(0);
+        delete i->widget();
+        delete i;
+    }
+
+    m_boolean_functions_button->setText(QString("Boolean Functions (") + QString::number(g->get_boolean_functions().size()) + QString(")"));
+    for(const auto& it : g->get_boolean_functions())
+    {
+        QLabel* fnct = new toggleable_label(QString::fromStdString(it.first) + " = " + QString::fromStdString(it.second.to_string()));
+        fnct->setWordWrap(true);
+        m_boolean_functions_container_layout->addWidget(fnct);
+        QFrame* line = new QFrame;
+        line->setFrameShape(QFrame::HLine);
+        line->setFrameShadow(QFrame::Sunken);
+        line->setStyleSheet("QFrame{background-color: gray;}"); //tmp test
+        m_boolean_functions_container_layout->addWidget(line);
+
+    }
 
 }
 
