@@ -7,10 +7,10 @@
 
 #include "netlist/event_system/event_controls.h"
 
+#include "netlist/gate_library/gate_library_manager.h"
 #include "netlist/hdl_parser/hdl_parser.h"
 #include "netlist/hdl_parser/hdl_parser_verilog.h"
 #include "netlist/hdl_parser/hdl_parser_vhdl.h"
-#include "netlist/gate_library/gate_library_manager.h"
 
 namespace hdl_parser_dispatcher
 {
@@ -32,8 +32,7 @@ namespace hdl_parser_dispatcher
 
         // all supported extension->parser_name mappings
         std::map<std::string, std::string> file_endings = {{".vhdl", "vhdl"}, {".vhd", "vhdl"}, {".v", "verilog"}};
-        auto extension                                  = file_name.extension().string();
-        std::transform(extension.begin(), extension.end(), extension.begin(), ::tolower);
+        auto extension                                  = core_utils::to_lower(file_name.extension().string());
 
         auto parser_name = file_endings[extension];
         if (parser_name.empty())
@@ -50,9 +49,10 @@ namespace hdl_parser_dispatcher
             log_info("hdl_parser", "selected parser '{}' by file name extension.", parser_name);
         }
 
-        if (!args.is_option_set("--gate-library"))
+        if (!args.is_option_set("--gate-library") || gate_library_manager::get_gate_library(args.get_parameter("--gate-library")) == nullptr)
         {
-            log_warning("hdl_parser", "no gate library specified. trying to auto-detect gate library...");
+            log_warning("hdl_parser", "no (valid) gate library specified. trying to auto-detect gate library...");
+            gate_library_manager::load_all();
             for (const auto& lib : gate_library_manager::get_gate_libraries())
             {
                 std::shared_ptr<netlist> netlist = parse(lib->get_name(), parser_name, file_name);

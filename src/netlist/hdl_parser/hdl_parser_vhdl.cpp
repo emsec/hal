@@ -23,7 +23,6 @@ std::shared_ptr<netlist> hdl_parser_vhdl::parse(const std::string& gate_library)
     m_netlist = netlist_factory::create_netlist(gate_library);
     if (m_netlist == nullptr)
     {
-        log_error("hdl_parser", "netlist_factory returned nullptr");
         return nullptr;
     }
 

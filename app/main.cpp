@@ -209,8 +209,6 @@ int main(int argc, const char* argv[])
     }
 
     /* handle input file */
-    gate_library_manager::load_all();
-
     if (args.is_option_set("--empty-netlist") && args.is_option_set("--input-file"))
     {
         log_error("core", "Found --empty-netlist and --input-file!");

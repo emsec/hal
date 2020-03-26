@@ -25,7 +25,6 @@ std::shared_ptr<netlist> hdl_parser_verilog::parse(const std::string& gate_libra
 
     if (m_netlist == nullptr)
     {
-        log_error("hdl_parser", "netlist_factory returned nullptr");
         return nullptr;
     }
 
