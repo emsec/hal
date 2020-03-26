@@ -1,5 +1,9 @@
 #include "netlist_test_utils.h"
 #include "netlist/gate_library/gate_library_manager.h"
+#include "netlist/gate_library/gate_library_parser/gate_library_parser_liberty.h"
+#include "netlist/gate_library/gate_type/gate_type.h"
+#include "netlist/gate_library/gate_type/gate_type_sequential.h"
+#include "netlist/gate_library/gate_type/gate_type_lut.h"
 #include "netlist/netlist.h"
 #include "gtest/gtest.h"
 #include <iostream>
@@ -14,8 +18,6 @@ class gate_library_parser_liberty_test : public ::testing::Test
 protected:
     virtual void SetUp()
     {
-        NO_COUT_BLOCK;
-        gate_library_manager::load_all();
     }
 
     virtual void TearDown()
@@ -24,16 +26,304 @@ protected:
 };
 
 /**
- * Testing the correct usage of the vhdl parser by parse a small vhdl-format string, which describes the netlist
- * shown above.
+ * Testing the creation of a combinatorial gate type with one input pin, one output pin and a boolean function.
  *
  * Functions: parse
  */
-TEST_F(gate_library_parser_liberty_test, check_main_example)
+TEST_F(gate_library_parser_liberty_test, check_combinatorial)
 {
     TEST_START
-        ASSERT_EQ(1,1);
-    // IN PROGRESS ...
+        {
+            std::stringstream input("library (TEST_GATE_LIBRARY) {\n"
+                                    "    define(cell);\n"
+                                    "    cell(TEST_GATE_TYPE) {\n"
+                                    "        pin(I) {\n"
+                                    "            direction: input;\n"
+                                    "        }\n"
+                                    "        pin(O) {\n"
+                                    "            direction: output;\n"
+                                    "            function: \"I\";\n"
+                                    "        }\n"
+                                    "    }\n"
+                                    "}");
+            gate_library_parser_liberty liberty_parser(input);
+            std::shared_ptr<gate_library> gl = liberty_parser.parse();
+
+            ASSERT_NE(gl, nullptr);
+
+            // Check that the name of the gate library
+            EXPECT_EQ(gl->get_name(), "TEST_GATE_LIBRARY");
+
+            // Check that the gate type was created
+            ASSERT_EQ(gl->get_gate_types().size(), 1);
+            auto gt_it = gl->get_gate_types().find("TEST_GATE_TYPE");
+            ASSERT_TRUE(gt_it != gl->get_gate_types().end());
+            std::shared_ptr<const gate_type> gt = gt_it->second;
+
+            // Check the content of the created gate type
+            EXPECT_EQ(gt->get_base_type(), gate_type::base_type::combinatorial);
+            EXPECT_EQ(gt->get_input_pins(), std::vector<std::string>({"I"}));
+            EXPECT_EQ(gt->get_output_pins(), std::vector<std::string>({"O"}));
+            EXPECT_EQ(gt->get_boolean_functions().size(), 1);
+            ASSERT_TRUE(gt->get_boolean_functions().find("O") != gt->get_boolean_functions().end());
+            EXPECT_EQ(gt->get_boolean_functions().at("O"), boolean_function::from_string("I", std::vector<std::string>({"I"})));
+        }
     TEST_END
 }
 
+/**
+ * Testing the creation of a LUT gate type
+ *
+ * Functions: parse
+ */
+TEST_F(gate_library_parser_liberty_test, check_lut)
+{
+    TEST_START
+        {
+            // ISSUE: always descending order
+            // Create a LUT gate type with two input pins and four output pins
+            // O0 and O2 generate their output by an initializer string.
+            // O1 and O3 are given normal boolean functions.
+            std::stringstream input("library (TEST_GATE_LIBRARY) {\n"
+                                    "    define(cell);\n"
+                                    "    cell(TEST_LUT) {\n"
+                                    "        lut (\"lut_out\") {\n"
+                                    "            data_category     : \"test_category\";\n"
+                                    "            data_identifier   : \"test_identifier\";\n"
+                                    "            bit_order         : \"ascending\";\n"
+                                    "        }\n"
+                                    "        pin(I0) {\n"
+                                    "            direction: input;\n"
+                                    "        }\n"
+                                    "        pin(I1) {\n"
+                                    "            direction: input;\n"
+                                    "        }\n"
+                                    "        pin(O0) {\n"
+                                    "            direction: output;\n"
+                                    "            function: \"lut_out\";\n"
+                                    "        }\n"
+                                    "        pin(O1) {\n"
+                                    "            direction: output;\n"
+                                    "            function: \"I0 ^ I1\";\n"
+                                    "        }\n"
+                                    "        pin(O2) {\n"
+                                    "            direction: output;\n"
+                                    "            function: \"lut_out\";\n"
+                                    "        }\n"
+                                    "        pin(O3) {\n"
+                                    "            direction: output;\n"
+                                    "            function: \"I0 & I1\";\n"
+                                    "        }\n"
+                                    "    }"
+                                    "}");
+            gate_library_parser_liberty liberty_parser(input);
+            std::shared_ptr<gate_library> gl = liberty_parser.parse();
+
+            ASSERT_NE(gl, nullptr);
+
+            // Check that the gate type was created
+            ASSERT_EQ(gl->get_gate_types().size(), 1);
+            auto gt_it = gl->get_gate_types().find("TEST_LUT");
+            ASSERT_TRUE(gt_it != gl->get_gate_types().end());
+            std::shared_ptr<const gate_type> gt = gt_it->second;
+            ASSERT_EQ(gt->get_base_type(), gate_type::base_type::lut);
+            std::shared_ptr<const gate_type_lut> gt_lut = std::dynamic_pointer_cast<const gate_type_lut>(gt);
+
+            // Check the content of the created gate type
+            EXPECT_EQ(gt_lut->get_input_pins(), std::vector<std::string>({"I0", "I1"}));
+            EXPECT_EQ(gt_lut->get_output_pins(), std::vector<std::string>({"O0", "O1", "O2", "O3"}));
+            ASSERT_TRUE(gt_lut->get_boolean_functions().find("O1") != gt_lut->get_boolean_functions().end());
+            EXPECT_EQ(gt_lut->get_boolean_functions().at("O1"), boolean_function::from_string("I0 ^ I1", std::vector<std::string>({"I0","I1"})));
+            ASSERT_TRUE(gt_lut->get_boolean_functions().find("O3") != gt_lut->get_boolean_functions().end());
+            EXPECT_EQ(gt_lut->get_boolean_functions().at("O3"), boolean_function::from_string("I0 & I1", std::vector<std::string>({"I0", "I1"})));
+            // -- LUT specific
+            EXPECT_EQ(gt_lut->get_output_from_init_string_pins(), std::unordered_set<std::string>({"O0", "O2"}));
+            EXPECT_EQ(gt_lut->get_config_data_category(), "test_category");
+            EXPECT_EQ(gt_lut->get_config_data_identifier(), "test_identifier");
+            //EXPECT_EQ(gt_lut->is_config_data_ascending_order(), true); // ISSUE: always descending order
+
+        }
+        {
+            // Create a simple LUT gate type with an descending bit order
+            std::stringstream input("library (TEST_GATE_LIBRARY) {\n"
+                                    "    define(cell);\n"
+                                    "    cell(TEST_LUT) {\n"
+                                    "        lut (\"lut_out\") {\n"
+                                    "            data_category     : \"test_category\";\n"
+                                    "            data_identifier   : \"test_identifier\";\n"
+                                    "            bit_order         : \"descending\";\n"
+                                    "        }\n"
+                                    "        pin(I) {\n"
+                                    "            direction: input;\n"
+                                    "        }\n"
+                                    "        pin(O) {\n"
+                                    "            direction: output;\n"
+                                    "            function: \"lut_out\";\n"
+                                    "        }\n"
+                                    "    }"
+                                    "}");
+            gate_library_parser_liberty liberty_parser(input);
+            std::shared_ptr<gate_library> gl = liberty_parser.parse();
+
+            ASSERT_NE(gl, nullptr);
+
+            // Check that the gate type was created
+            ASSERT_EQ(gl->get_gate_types().size(), 1);
+            auto gt_it = gl->get_gate_types().find("TEST_LUT");
+            ASSERT_TRUE(gt_it != gl->get_gate_types().end());
+            std::shared_ptr<const gate_type> gt = gt_it->second;
+            ASSERT_EQ(gt->get_base_type(), gate_type::base_type::lut);
+            std::shared_ptr<const gate_type_lut> gt_lut = std::dynamic_pointer_cast<const gate_type_lut>(gt);
+
+            // Check the content of the created gate type
+            EXPECT_EQ(gt_lut->is_config_data_ascending_order(), false);
+
+        }
+    TEST_END
+}
+
+
+/**
+ * Testing the creation of flip-flops
+ *
+ * Functions: parse
+ */
+TEST_F(gate_library_parser_liberty_test, check_flip_flop)
+{
+    TEST_START
+        {
+            // Create a flip-flop gate type with two input pins and four output pins
+            std::stringstream input("library (TEST_GATE_LIBRARY) {\n"
+                                    "    define(cell);\n"
+                                    "cell(TEST_FF) {\n"
+                                    "        ff (\"IQ\" , \"IQN\") {\n"
+                                    "            next_state          : \"D\";\n"
+                                    "            clocked_on          : \"CLK\";\n"
+                                    "            clocked_on_also     : \"CLK\";\n"
+                                    "            preset              : \"S\";\n"
+                                    "            clear               : \"R\";\n"
+                                    "            clear_preset_var1   : L;\n"
+                                    "            clear_preset_var2   : H;\n"
+                                    "        }\n"
+                                    "        pin(CLK) {\n"
+                                    "            direction: input;\n"
+                                    "            clock: true;\n"
+                                    "        }\n"
+                                    "        pin(CE) {\n"
+                                    "            direction: input;\n"
+                                    "        }\n"
+                                    "        pin(D) {\n"
+                                    "            direction: input;\n"
+                                    "        }\n"
+                                    "        pin(R) {\n"
+                                    "            direction: input;\n"
+                                    "        }\n"
+                                    "        pin(S) {\n"
+                                    "            direction: input;\n"
+                                    "        }\n"
+                                    "        pin(Q) {\n"
+                                    "            direction: output;\n"
+                                    "            function: \"IQ\";\n"
+                                    "        }\n"
+                                    "        pin(QN) {\n"
+                                    "            direction: output;\n"
+                                    "            function: \"IQN\";\n"
+                                    "        }\n"
+                                    "    }"
+                                    "}");
+            gate_library_parser_liberty liberty_parser(input);
+            std::shared_ptr<gate_library> gl = liberty_parser.parse();
+
+            ASSERT_NE(gl, nullptr);
+
+            // Check that the gate type was created
+            ASSERT_EQ(gl->get_gate_types().size(), 1);
+            auto gt_it = gl->get_gate_types().find("TEST_FF");
+            ASSERT_TRUE(gt_it != gl->get_gate_types().end());
+            std::shared_ptr<const gate_type> gt = gt_it->second;
+            ASSERT_EQ(gt->get_base_type(), gate_type::base_type::ff);
+            std::shared_ptr<const gate_type_sequential> gt_ff = std::dynamic_pointer_cast<const gate_type_sequential>(gt);
+
+            // Check the content of the created gate type
+            EXPECT_EQ(gt_ff->get_input_pins(), std::vector<std::string>({"CLK", "CE", "D", "R", "S"}));
+            EXPECT_EQ(gt_ff->get_output_pins(), std::vector<std::string>({"Q", "QN"}));
+            // -- Check the boolean functions that are parsed (currently only next_state, clock_on(clock), preset(set) and clear(reset) are parsed )
+            ASSERT_TRUE(gt_ff->get_boolean_functions().find("reset") != gt_ff->get_boolean_functions().end());
+            EXPECT_EQ(gt_ff->get_boolean_functions().at("reset"), boolean_function::from_string("R", std::vector<std::string>({"R"})));
+            ASSERT_TRUE(gt_ff->get_boolean_functions().find("set") != gt_ff->get_boolean_functions().end());
+            EXPECT_EQ(gt_ff->get_boolean_functions().at("set"), boolean_function::from_string("S", std::vector<std::string>({"S"})));
+            ASSERT_TRUE(gt_ff->get_boolean_functions().find("next_state") != gt_ff->get_boolean_functions().end());
+            EXPECT_EQ(gt_ff->get_boolean_functions().at("next_state"), boolean_function::from_string("D", std::vector<std::string>({"D"})));
+            ASSERT_TRUE(gt_ff->get_boolean_functions().find("clock") != gt_ff->get_boolean_functions().end());
+            EXPECT_EQ(gt_ff->get_boolean_functions().at("clock"), boolean_function::from_string("CLK", std::vector<std::string>({"CLK"})));
+            // -- Check the output pins
+            EXPECT_EQ(gt_ff->get_state_output_pins(), std::unordered_set<std::string>({"Q"}));
+            EXPECT_EQ(gt_ff->get_inverted_state_output_pins(), std::unordered_set<std::string>({"QN"}));
+            // -- Check the set-reset behaviour
+            EXPECT_EQ(gt_ff->get_set_reset_behavior(), std::make_pair(gate_type_sequential::set_reset_behavior::L, gate_type_sequential::set_reset_behavior::H));
+        }
+    TEST_END
+}
+
+/**
+ * Testing the creation of a latches
+ *
+ * Functions: parse
+ */
+TEST_F(gate_library_parser_liberty_test, check_latch)
+{
+    TEST_START
+        {
+            // Create a flip-flop gate type with two input pins and four output pins
+            std::stringstream input("library (TEST_GATE_LIBRARY) {\n"
+                                    "    define(cell);\n"
+                                    "    cell(TEST_LATCH) {\n"
+                                    "        latch (\"IQ\" , \"IQN\") {\n"
+                                    "            enable              : \"G\";\n"
+                                    "            data_in             : \"D\";\n"
+                                    "            preset              : \"S\";\n"
+                                    "            clear               : \"R\";\n"
+                                    "            clear_preset_var1   : L;\n"
+                                    "            clear_preset_var2   : H;\n"
+                                    "        }\n"
+                                    "        pin(G) {\n"
+                                    "            direction: input;\n"
+                                    "        }\n"
+                                    "        pin(D) {\n"
+                                    "            direction: input;\n"
+                                    "        }\n"
+                                    "        pin(S) {\n"
+                                    "            direction: input;\n"
+                                    "        }\n"
+                                    "        pin(R) {\n"
+                                    "            direction: input;\n"
+                                    "        }\n"
+                                    "        pin(Q) {\n"
+                                    "            direction: output;\n"
+                                    "            function: \"IQ\";\n"
+                                    "        }\n"
+                                    "        pin(QN) {\n"
+                                    "            direction: output;\n"
+                                    "            function: \"IQN\";\n"
+                                    "        }\n"
+                                    "    }"
+                                    "}");
+            gate_library_parser_liberty liberty_parser(input);
+            std::shared_ptr<gate_library> gl = liberty_parser.parse();
+
+            ASSERT_NE(gl, nullptr);
+
+            // Check that the gate type was created
+            ASSERT_EQ(gl->get_gate_types().size(), 1);
+            auto gt_it = gl->get_gate_types().find("TEST_LATCH");
+            ASSERT_TRUE(gt_it != gl->get_gate_types().end());
+            std::shared_ptr<const gate_type> gt = gt_it->second;
+            ASSERT_EQ(gt->get_base_type(), gate_type::base_type::latch);
+            std::shared_ptr<const gate_type_sequential> gt_latch = std::dynamic_pointer_cast<const gate_type_sequential>(gt);
+
+            // IN_PROGRESS: Add checks
+        }
+    TEST_END
+}
+
+// IN_PROGRESS: invalid_input, ...
