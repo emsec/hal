@@ -43,6 +43,7 @@ TEST_F(gate_library_parser_liberty_test, check_combinatorial)
                                     "        pin(O) {\n"
                                     "            direction: output;\n"
                                     "            function: \"I\";\n"
+                                    "            x_function: \"!I\";\n"
                                     "        }\n"
                                     "    }\n"
                                     "}");
@@ -62,11 +63,14 @@ TEST_F(gate_library_parser_liberty_test, check_combinatorial)
 
             // Check the content of the created gate type
             EXPECT_EQ(gt->get_base_type(), gate_type::base_type::combinatorial);
+            // -- Check the pins
             EXPECT_EQ(gt->get_input_pins(), std::vector<std::string>({"I"}));
             EXPECT_EQ(gt->get_output_pins(), std::vector<std::string>({"O"}));
-            EXPECT_EQ(gt->get_boolean_functions().size(), 1);
+            // -- Check the boolean functions
             ASSERT_TRUE(gt->get_boolean_functions().find("O") != gt->get_boolean_functions().end());
             EXPECT_EQ(gt->get_boolean_functions().at("O"), boolean_function::from_string("I", std::vector<std::string>({"I"})));
+            ASSERT_TRUE(gt->get_boolean_functions().find("O_undefined") != gt->get_boolean_functions().end()); // x_function
+            EXPECT_EQ(gt->get_boolean_functions().at("O_undefined"), boolean_function::from_string("!I", std::vector<std::string>({"I"})));
         }
     TEST_END
 }
@@ -80,7 +84,6 @@ TEST_F(gate_library_parser_liberty_test, check_lut)
 {
     TEST_START
         {
-            // ISSUE: always descending order
             // Create a LUT gate type with two input pins and four output pins
             // O0 and O2 generate their output by an initializer string.
             // O1 and O3 are given normal boolean functions.
@@ -90,7 +93,7 @@ TEST_F(gate_library_parser_liberty_test, check_lut)
                                     "        lut (\"lut_out\") {\n"
                                     "            data_category     : \"test_category\";\n"
                                     "            data_identifier   : \"test_identifier\";\n"
-                                    "            bit_order         : \"ascending\";\n"
+                                    "            direction         : \"ascending\";\n"
                                     "        }\n"
                                     "        pin(I0) {\n"
                                     "            direction: input;\n"
@@ -140,7 +143,7 @@ TEST_F(gate_library_parser_liberty_test, check_lut)
             EXPECT_EQ(gt_lut->get_output_from_init_string_pins(), std::unordered_set<std::string>({"O0", "O2"}));
             EXPECT_EQ(gt_lut->get_config_data_category(), "test_category");
             EXPECT_EQ(gt_lut->get_config_data_identifier(), "test_identifier");
-            //EXPECT_EQ(gt_lut->is_config_data_ascending_order(), true); // ISSUE: always descending order
+            EXPECT_EQ(gt_lut->is_config_data_ascending_order(), true);
 
         }
         {
@@ -151,7 +154,7 @@ TEST_F(gate_library_parser_liberty_test, check_lut)
                                     "        lut (\"lut_out\") {\n"
                                     "            data_category     : \"test_category\";\n"
                                     "            data_identifier   : \"test_identifier\";\n"
-                                    "            bit_order         : \"descending\";\n"
+                                    "            direction         : \"descending\";\n"
                                     "        }\n"
                                     "        pin(I) {\n"
                                     "            direction: input;\n"
@@ -195,7 +198,7 @@ TEST_F(gate_library_parser_liberty_test, check_flip_flop)
             // Create a flip-flop gate type with two input pins and four output pins
             std::stringstream input("library (TEST_GATE_LIBRARY) {\n"
                                     "    define(cell);\n"
-                                    "cell(TEST_FF) {\n"
+                                    "    cell(TEST_FF) {\n"
                                     "        ff (\"IQ\" , \"IQN\") {\n"
                                     "            next_state          : \"D\";\n"
                                     "            clocked_on          : \"CLK\";\n"
@@ -229,6 +232,10 @@ TEST_F(gate_library_parser_liberty_test, check_flip_flop)
                                     "            direction: output;\n"
                                     "            function: \"IQN\";\n"
                                     "        }\n"
+                                    "        pin(O) {\n"
+                                    "            direction: output;\n"
+                                    "            function: \"S & R & D\";\n"
+                                    "        }\n"
                                     "    }"
                                     "}");
             gate_library_parser_liberty liberty_parser(input);
@@ -246,16 +253,18 @@ TEST_F(gate_library_parser_liberty_test, check_flip_flop)
 
             // Check the content of the created gate type
             EXPECT_EQ(gt_ff->get_input_pins(), std::vector<std::string>({"CLK", "CE", "D", "R", "S"}));
-            EXPECT_EQ(gt_ff->get_output_pins(), std::vector<std::string>({"Q", "QN"}));
-            // -- Check the boolean functions that are parsed (currently only next_state, clock_on(clock), preset(set) and clear(reset) are parsed )
-            ASSERT_TRUE(gt_ff->get_boolean_functions().find("reset") != gt_ff->get_boolean_functions().end());
-            EXPECT_EQ(gt_ff->get_boolean_functions().at("reset"), boolean_function::from_string("R", std::vector<std::string>({"R"})));
-            ASSERT_TRUE(gt_ff->get_boolean_functions().find("set") != gt_ff->get_boolean_functions().end());
-            EXPECT_EQ(gt_ff->get_boolean_functions().at("set"), boolean_function::from_string("S", std::vector<std::string>({"S"})));
+            EXPECT_EQ(gt_ff->get_output_pins(), std::vector<std::string>({"Q", "QN", "O"}));
+            ASSERT_TRUE(gt_ff->get_boolean_functions().find("O") != gt_ff->get_boolean_functions().end());
+            EXPECT_EQ(gt_ff->get_boolean_functions().at("O"), boolean_function::from_string("S & R & D", std::vector<std::string>({"S", "R", "D"})));
+            // -- Check the boolean functions of the ff group that are parsed (currently only next_state, clock_on(clock), preset(set) and clear(reset) are parsed )
             ASSERT_TRUE(gt_ff->get_boolean_functions().find("next_state") != gt_ff->get_boolean_functions().end());
             EXPECT_EQ(gt_ff->get_boolean_functions().at("next_state"), boolean_function::from_string("D", std::vector<std::string>({"D"})));
             ASSERT_TRUE(gt_ff->get_boolean_functions().find("clock") != gt_ff->get_boolean_functions().end());
             EXPECT_EQ(gt_ff->get_boolean_functions().at("clock"), boolean_function::from_string("CLK", std::vector<std::string>({"CLK"})));
+            ASSERT_TRUE(gt_ff->get_boolean_functions().find("set") != gt_ff->get_boolean_functions().end());
+            EXPECT_EQ(gt_ff->get_boolean_functions().at("set"), boolean_function::from_string("S", std::vector<std::string>({"S"})));
+            ASSERT_TRUE(gt_ff->get_boolean_functions().find("reset") != gt_ff->get_boolean_functions().end());
+            EXPECT_EQ(gt_ff->get_boolean_functions().at("reset"), boolean_function::from_string("R", std::vector<std::string>({"R"})));
             // -- Check the output pins
             EXPECT_EQ(gt_ff->get_state_output_pins(), std::unordered_set<std::string>({"Q"}));
             EXPECT_EQ(gt_ff->get_inverted_state_output_pins(), std::unordered_set<std::string>({"QN"}));
@@ -283,8 +292,8 @@ TEST_F(gate_library_parser_liberty_test, check_latch)
                                     "            data_in             : \"D\";\n"
                                     "            preset              : \"S\";\n"
                                     "            clear               : \"R\";\n"
-                                    "            clear_preset_var1   : L;\n"
-                                    "            clear_preset_var2   : H;\n"
+                                    "            clear_preset_var1   : N;\n"
+                                    "            clear_preset_var2   : T;\n"
                                     "        }\n"
                                     "        pin(G) {\n"
                                     "            direction: input;\n"
@@ -306,6 +315,10 @@ TEST_F(gate_library_parser_liberty_test, check_latch)
                                     "            direction: output;\n"
                                     "            function: \"IQN\";\n"
                                     "        }\n"
+                                    "        pin(O) {\n"
+                                    "            direction: output;\n"
+                                    "            function: \"S & R & D\";\n"
+                                    "        }\n"
                                     "    }"
                                     "}");
             gate_library_parser_liberty liberty_parser(input);
@@ -321,9 +334,320 @@ TEST_F(gate_library_parser_liberty_test, check_latch)
             ASSERT_EQ(gt->get_base_type(), gate_type::base_type::latch);
             std::shared_ptr<const gate_type_sequential> gt_latch = std::dynamic_pointer_cast<const gate_type_sequential>(gt);
 
-            // IN_PROGRESS: Add checks
+            // Check the content of the created gate type
+            EXPECT_EQ(gt_latch->get_input_pins(), std::vector<std::string>({"G", "D", "S", "R"}));
+            EXPECT_EQ(gt_latch->get_output_pins(), std::vector<std::string>({"Q", "QN", "O"}));
+            ASSERT_TRUE(gt_latch->get_boolean_functions().find("O") != gt_latch->get_boolean_functions().end());
+            EXPECT_EQ(gt_latch->get_boolean_functions().at("O"), boolean_function::from_string("S & R & D", std::vector<std::string>({"S", "R", "D"})));
+            // -- Check the boolean functions of the latch group that are parsed (currently only enable, data_in, preset(set) and clear(reset) are parsed)
+            ASSERT_TRUE(gt_latch->get_boolean_functions().find("enable") != gt_latch->get_boolean_functions().end());
+            EXPECT_EQ(gt_latch->get_boolean_functions().at("enable"), boolean_function::from_string("G", std::vector<std::string>({"G"})));
+            ASSERT_TRUE(gt_latch->get_boolean_functions().find("data_in") != gt_latch->get_boolean_functions().end());
+            EXPECT_EQ(gt_latch->get_boolean_functions().at("data_in"), boolean_function::from_string("D", std::vector<std::string>({"D"})));
+            ASSERT_TRUE(gt_latch->get_boolean_functions().find("set") != gt_latch->get_boolean_functions().end());
+            EXPECT_EQ(gt_latch->get_boolean_functions().at("set"), boolean_function::from_string("S", std::vector<std::string>({"S"})));
+            ASSERT_TRUE(gt_latch->get_boolean_functions().find("reset") != gt_latch->get_boolean_functions().end());
+            EXPECT_EQ(gt_latch->get_boolean_functions().at("reset"), boolean_function::from_string("R", std::vector<std::string>({"R"})));
+            // -- Check the output pins
+            EXPECT_EQ(gt_latch->get_state_output_pins(), std::unordered_set<std::string>({"Q"}));
+            EXPECT_EQ(gt_latch->get_inverted_state_output_pins(), std::unordered_set<std::string>({"QN"}));
+            // -- Check the set-reset behaviour
+            EXPECT_EQ(gt_latch->get_set_reset_behavior(), std::make_pair(gate_type_sequential::set_reset_behavior::N, gate_type_sequential::set_reset_behavior::T));
+
         }
     TEST_END
 }
 
-// IN_PROGRESS: invalid_input, ...
+/**
+ * Testing the usage of multiline comments (via '/ *' and '* /'  (without space))
+ *
+ * Functions: parse
+ */
+TEST_F(gate_library_parser_liberty_test, check_multiline_comment)
+{
+    TEST_START
+        {
+            // The output pins O0, O1, O2, O3 should be created, C0, C1, C2, C3 shouldn't
+            std::stringstream input("library (TEST_GATE_LIBRARY) {\n"
+                                    "    define(cell);\n"
+                                    "    cell(TEST_GATE_TYPE) {\n"
+                                    "        pin(I) {\n"
+                                    "            direction: input;\n"
+                                    "        }\n"
+                                    "        pin(O0) { direction: output; function: \"I\"; }\n"
+                                    "        pin(O1) { direction: output; function: \"I\"; } /* pin(C0) { direction: output; function: \"I\"; }*/\n"
+                                    "        pin(O2) { direction: output; function: \"I\"; }\n"
+                                    "        /*pin(C1) { direction: output; function: \"I\"; }\n"
+                                    "        pin(C2) { direction: output; function: \"I\"; }\n"
+                                    "        pin(C3) { direction: output; function: \"I\"; }*/\n"
+                                    "        pin(O3) { direction: output; function: \"I\"; }\n"
+                                    "        }\n"
+                                    "    }\n"
+                                    "}");
+            gate_library_parser_liberty liberty_parser(input);
+            std::shared_ptr<gate_library> gl = liberty_parser.parse();
+
+            ASSERT_NE(gl, nullptr);
+            // Check that the gate type was created
+            ASSERT_EQ(gl->get_gate_types().size(), 1);
+            auto gt_it = gl->get_gate_types().find("TEST_GATE_TYPE");
+            ASSERT_TRUE(gt_it != gl->get_gate_types().end());
+            std::shared_ptr<const gate_type> gt = gt_it->second;
+
+            // Check that only the pins outside the comments are created
+            EXPECT_EQ(gt->get_input_pins(), std::vector<std::string>({"I"}));
+            EXPECT_EQ(gt->get_output_pins(), std::vector<std::string>({"O0", "O1", "O2", "O3"}));
+        }
+    TEST_END
+}
+
+/**
+ * Testing the correct handling of invalid input
+ *
+ * Functions: parse
+ */
+TEST_F(gate_library_parser_liberty_test, check_invalid_input)
+{
+    TEST_START
+        {
+            // Pass an empty input stream
+            NO_COUT_TEST_BLOCK;
+            std::stringstream input("");
+            gate_library_parser_liberty liberty_parser(input);
+            std::shared_ptr<gate_library> gl = liberty_parser.parse();
+
+            EXPECT_EQ(gl, nullptr);
+        }
+        {
+            // For a ff, use an undefined clear_preset_var1 behaviour (not in {L,H,N,T,X})
+            NO_COUT_TEST_BLOCK;
+            std::stringstream input("library (TEST_GATE_LIBRARY) {\n"
+                                    "    define(cell);\n"
+                                    "    cell(TEST_FF) {\n"
+                                    "        ff (\"IQ\" , \"IQN\") {\n"
+                                    "            next_state          : \"P\";\n"
+                                    "            clocked_on          : \"P\";\n"
+                                    "            preset              : \"P\";\n"
+                                    "            clear               : \"P\";\n"
+                                    "            clear_preset_var1   : Z;\n"
+                                    "            clear_preset_var2   : L;\n"
+                                    "        }\n"
+                                    "        pin(P) {\n"
+                                    "            direction: input;\n"
+                                    "            clock: true;\n"
+                                    "        }\n"
+                                    "        pin(Q) {\n"
+                                    "            direction: output;\n"
+                                    "            function: \"IQ\";\n"
+                                    "        }\n"
+                                    "    }"
+                                    "}");
+            gate_library_parser_liberty liberty_parser(input);
+            std::shared_ptr<gate_library> gl = liberty_parser.parse();
+
+            EXPECT_EQ(gl, nullptr);
+        }
+        {
+            // For a ff, use an undefined clear_preset_var2 behaviour (not in {L,H,N,T,X})
+            NO_COUT_TEST_BLOCK;
+            std::stringstream input("library (TEST_GATE_LIBRARY) {\n"
+                                    "    define(cell);\n"
+                                    "    cell(TEST_FF) {\n"
+                                    "        ff (\"IQ\" , \"IQN\") {\n"
+                                    "            next_state          : \"P\";\n"
+                                    "            clocked_on          : \"P\";\n"
+                                    "            preset              : \"P\";\n"
+                                    "            clear               : \"P\";\n"
+                                    "            clear_preset_var1   : L;\n"
+                                    "            clear_preset_var2   : Z;\n"
+                                    "        }\n"
+                                    "        pin(P) {\n"
+                                    "            direction: input;\n"
+                                    "            clock: true;\n"
+                                    "        }\n"
+                                    "        pin(Q) {\n"
+                                    "            direction: output;\n"
+                                    "            function: \"IQ\";\n"
+                                    "        }\n"
+                                    "    }"
+                                    "}");
+            gate_library_parser_liberty liberty_parser(input);
+            std::shared_ptr<gate_library> gl = liberty_parser.parse();
+
+            EXPECT_EQ(gl, nullptr);
+        }
+        {
+            // For a latch, use an undefined clear_preset_var1 behaviour (not in {L,H,N,T,X})
+            NO_COUT_TEST_BLOCK;
+            std::stringstream input("library (TEST_GATE_LIBRARY) {\n"
+                                    "    define(cell);\n"
+                                    "    cell(TEST_LATCH) {\n"
+                                    "        latch (\"IQ\" , \"IQN\") {\n"
+                                    "            enable              : \"P\";\n"
+                                    "            data_in             : \"P\";\n"
+                                    "            preset              : \"P\";\n"
+                                    "            clear               : \"P\";\n"
+                                    "            clear_preset_var1   : Z;\n"
+                                    "            clear_preset_var2   : L;\n"
+                                    "        }\n"
+                                    "        pin(P) {\n"
+                                    "            direction: input;\n"
+                                    "        }\n"
+                                    "        pin(Q) {\n"
+                                    "            direction: output;\n"
+                                    "            function: \"IQ\";\n"
+                                    "        }\n"
+                                    "    }"
+                                    "}");
+            gate_library_parser_liberty liberty_parser(input);
+            std::shared_ptr<gate_library> gl = liberty_parser.parse();
+
+            EXPECT_EQ(gl, nullptr);
+        }
+        {
+            // For a latch, use an undefined clear_preset_var1 behaviour (not in {L,H,N,T,X})
+            NO_COUT_TEST_BLOCK;
+            std::stringstream input("library (TEST_GATE_LIBRARY) {\n"
+                                    "    define(cell);\n"
+                                    "    cell(TEST_LATCH) {\n"
+                                    "        latch (\"IQ\" , \"IQN\") {\n"
+                                    "            enable              : \"P\";\n"
+                                    "            data_in             : \"P\";\n"
+                                    "            preset              : \"P\";\n"
+                                    "            clear               : \"P\";\n"
+                                    "            clear_preset_var1   : L;\n"
+                                    "            clear_preset_var2   : Z;\n"
+                                    "        }\n"
+                                    "        pin(P) {\n"
+                                    "            direction: input;\n"
+                                    "        }\n"
+                                    "        pin(Q) {\n"
+                                    "            direction: output;\n"
+                                    "            function: \"IQ\";\n"
+                                    "        }\n"
+                                    "    }"
+                                    "}");
+            gate_library_parser_liberty liberty_parser(input);
+            std::shared_ptr<gate_library> gl = liberty_parser.parse();
+
+            EXPECT_EQ(gl, nullptr);
+        }
+        {
+            // Use an undefined direction in the lut group block (not in {ascending, descending})
+            NO_COUT_TEST_BLOCK;
+            std::stringstream input("library (TEST_GATE_LIBRARY) {\n"
+                                    "    define(cell);\n"
+                                    "    cell(TEST_LUT) {\n"
+                                    "        lut (\"lut_out\") {\n"
+                                    "            data_category     : \"test_category\";\n"
+                                    "            data_identifier   : \"test_identifier\";\n"
+                                    "            direction         : \"north-east\";\n" // <-"north-east" is no valid data direction
+                                    "        }\n"
+                                    "        pin(I) {\n"
+                                    "            direction: input;\n"
+                                    "        }\n"
+                                    "        pin(O) {\n"
+                                    "            direction: output;\n"
+                                    "            function: \"lut_out\";\n"
+                                    "        }\n"
+                                    "    }"
+                                    "}");
+            gate_library_parser_liberty liberty_parser(input);
+            std::shared_ptr<gate_library> gl = liberty_parser.parse();
+
+            EXPECT_EQ(gl, nullptr);
+        }
+        {
+            // Use an undefined direction in the ff group block (not in {ascending, descending})
+            NO_COUT_TEST_BLOCK;
+            std::stringstream input("library (TEST_GATE_LIBRARY) {\n"
+                                    "    define(cell);\n"
+                                    "    cell(TEST_LUT) {\n"
+                                    "        ff (\"IQ\" , \"IQN\") {\n"
+                                    "            direction         : \"north-east\";\n" // <-"north-east" is no valid data direction
+                                    "        }\n"
+                                    "        pin(I) {\n"
+                                    "            direction: input;\n"
+                                    "        }\n"
+                                    "        pin(O) {\n"
+                                    "            direction: output;\n"
+                                    "            function: \"I\";\n"
+                                    "        }\n"
+                                    "    }"
+                                    "}");
+            gate_library_parser_liberty liberty_parser(input);
+            std::shared_ptr<gate_library> gl = liberty_parser.parse();
+
+            EXPECT_EQ(gl, nullptr);
+        }
+        {
+            // Use a pin with an unknown direction (not in {input, output}) as an input pin
+            NO_COUT_TEST_BLOCK;
+            std::stringstream input("library (TEST_GATE_LIBRARY) {\n"
+                                    "    define(cell);\n"
+                                    "    cell(TEST_GATE_TYPE) {\n"
+                                    "        pin(I) {\n"
+                                    "            direction: WAMBO;\n"
+                                    "        }\n"
+                                    "        pin(O) {\n"
+                                    "            direction: output;\n"
+                                    "            function: \"I\";\n"
+                                    "        }\n"
+                                    "    }\n"
+                                    "}");
+            gate_library_parser_liberty liberty_parser(input);
+            std::shared_ptr<gate_library> gl = liberty_parser.parse();
+
+            EXPECT_EQ(gl, nullptr);
+        }
+        {
+            // Use an unknown variable in a boolean function
+            NO_COUT_TEST_BLOCK;
+            std::stringstream input("library (TEST_GATE_LIBRARY) {\n"
+                                    "    define(cell);\n"
+                                    "    cell(TEST_GATE_TYPE) {\n"
+                                    "        pin(I) {\n"
+                                    "            direction: input;\n"
+                                    "        }\n"
+                                    "        pin(O) {\n"
+                                    "            direction: output;\n"
+                                    "            function: \"I & WAMBO\";\n" // <- WAMBO is undefined
+                                    "        }\n"
+                                    "    }\n"
+                                    "}");
+            gate_library_parser_liberty liberty_parser(input);
+            std::shared_ptr<gate_library> gl = liberty_parser.parse();
+
+            EXPECT_EQ(gl, nullptr);
+        }
+        {
+            // Use an unknown cell group (should be filtered out)
+            NO_COUT_TEST_BLOCK;
+            std::stringstream input("library (TEST_GATE_LIBRARY) {\n"
+                                    "    define(cell);\n"
+                                    "    cell(TEST_GATE_TYPE) {\n"
+                                    "        biological_cell (\"A\" , \"B\") {\n" // the parser does not support biological cells ;)
+                                    "            cell_type: eukaryotic; \n"
+                                    "            species: dog; \n  "
+                                    "            has_cell_wall: nope; \n  "
+                                    "        }\n"
+                                    "        pin(P) {\n"
+                                    "            direction: input;\n"
+                                    "        }\n"
+                                    "        pin(Q) {\n"
+                                    "            direction: output;\n"
+                                    "            function: \"P\";\n"
+                                    "        }\n"
+                                    "    }"
+                                    "}");
+            gate_library_parser_liberty liberty_parser(input);
+            std::shared_ptr<gate_library> gl = liberty_parser.parse();
+
+            ASSERT_NE(gl, nullptr);
+
+            ASSERT_TRUE(gl->get_gate_types().find("TEST_GATE_TYPE") != gl->get_gate_types().end());
+            EXPECT_EQ(gl->get_gate_types().at("TEST_GATE_TYPE")->get_base_type(), gate_type::base_type::combinatorial);
+        }
+    TEST_END
+}
+
