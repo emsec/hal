@@ -752,6 +752,18 @@ labeled_frame #right-spacer {
     margin-right : 6px;
 }
 
+/*********************************************
+*             GATE_DETAILS_WIDGET            *
+*********************************************/
+
+gate_details_widget QPushButton{
+    font: bold "Iosevka";
+    font-size: 11px;
+    background: gray;
+    color: blue;
+    height: 11px;
+}
+
 /*
 rgb(107, 135, 255)
 */

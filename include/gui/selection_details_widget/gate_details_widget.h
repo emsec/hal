@@ -43,6 +43,7 @@ class QHBoxLayout;
 class QScrollArea;
 class QGridLayout;
 class QModelIndex;
+class QFont;
 class graph_navigation_widget;
 
 class QPushButton;
@@ -90,6 +91,9 @@ public Q_SLOTS:
 
 private:
     //NEW CODE
+
+    //general
+    QFont m_key_font;
 
     //All sections together are encapsulated in a container to make it scrollable
     QScrollArea* m_scroll_area;
