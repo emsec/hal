@@ -36,7 +36,7 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
     m_last_click_time = 0;
     m_key_font = QFont("Iosevka");
     m_key_font.setBold(true);
-    m_key_font.setPixelSize(15);
+    m_key_font.setPixelSize(13);
 
     m_scroll_area = new QScrollArea();
     m_top_lvl_container = new QWidget();
@@ -54,6 +54,7 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
 
     // buttons
     m_general_info_button = new QPushButton("General Information");
+    m_general_info_button->setEnabled(false);
     m_input_pins_button = new QPushButton("Input Pins");
     m_output_pins_button = new QPushButton("Output Pins");
     m_data_fields_button = new QPushButton("Data Fields");
@@ -105,7 +106,7 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
     m_general_table->horizontalHeader()->hide();
     m_general_table->verticalHeader()->hide();
 //    m_general_table->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
-    m_general_table->verticalHeader()->setDefaultSectionSize(20);
+    m_general_table->verticalHeader()->setDefaultSectionSize(16);
     m_general_table->resizeColumnToContents(0);
     m_general_table->setShowGrid(false);
     m_general_table->setFocusPolicy(Qt::NoFocus);
@@ -122,7 +123,7 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
     m_input_pins_table->horizontalHeader()->setStretchLastSection(true);
     m_input_pins_table->horizontalHeader()->hide();
     m_input_pins_table->verticalHeader()->hide();
-    m_input_pins_table->verticalHeader()->setDefaultSectionSize(20);
+    m_input_pins_table->verticalHeader()->setDefaultSectionSize(16);
     m_input_pins_table->resizeColumnToContents(0);
     m_input_pins_table->setShowGrid(false);
     m_input_pins_table->setFocusPolicy(Qt::NoFocus);
@@ -139,7 +140,7 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
     m_output_pins_table->horizontalHeader()->setStretchLastSection(true);
     m_output_pins_table->horizontalHeader()->hide();
     m_output_pins_table->verticalHeader()->hide();
-    m_output_pins_table->verticalHeader()->setDefaultSectionSize(20);
+    m_output_pins_table->verticalHeader()->setDefaultSectionSize(16);
     m_output_pins_table->resizeColumnToContents(0);
     m_output_pins_table->setShowGrid(false);
     m_output_pins_table->setFocusPolicy(Qt::NoFocus);
@@ -155,7 +156,7 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
     m_data_fields_table->horizontalHeader()->setStretchLastSection(true);
     m_data_fields_table->horizontalHeader()->hide();
     m_data_fields_table->verticalHeader()->hide();
-    m_data_fields_table->verticalHeader()->setDefaultSectionSize(20);
+    m_data_fields_table->verticalHeader()->setDefaultSectionSize(16);
     m_data_fields_table->resizeColumnToContents(0);
     m_data_fields_table->setShowGrid(false);
     m_data_fields_table->setFocusPolicy(Qt::NoFocus);
@@ -895,6 +896,7 @@ void gate_details_widget::update(const u32 gate_id)
     }
 
     m_boolean_functions_button->setText(QString("Boolean Functions (") + QString::number(g->get_boolean_functions().size()) + QString(")"));
+    QFrame* last_line = nullptr; //unexpected behaviour below otherwise
     for(const auto& it : g->get_boolean_functions())
     {
         QLabel* fnct = new toggleable_label(QString::fromStdString(it.first) + " = " + QString::fromStdString(it.second.to_string()));
@@ -904,9 +906,14 @@ void gate_details_widget::update(const u32 gate_id)
         line->setFrameShape(QFrame::HLine);
         line->setFrameShadow(QFrame::Sunken);
         line->setStyleSheet("QFrame{background-color: gray;}"); //tmp test
+        last_line = line;
         m_boolean_functions_container_layout->addWidget(line);
     }
 
+    if(last_line){
+        m_boolean_functions_container_layout->removeWidget(last_line);
+        delete last_line;
+    }
 }
 
 void gate_details_widget::on_treewidget_item_clicked(QTreeWidgetItem* item, int column)
