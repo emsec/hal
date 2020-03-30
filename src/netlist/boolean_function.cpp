@@ -991,7 +991,7 @@ boolean_function boolean_function::to_dnf() const
 
     // the order of the passes is important!
     // every pass after replace_xors expects that there are no more xor operations
-    return replace_xors().propagate_negations().expand_ands()/*.flatten()*/.optimize_constants();
+    return replace_xors().propagate_negations().expand_ands() /*.flatten()*/.optimize_constants();
 }
 
 std::vector<std::vector<std::pair<std::string, bool>>> boolean_function::get_dnf_clauses() const
@@ -1041,15 +1041,18 @@ std::vector<std::vector<std::pair<std::string, bool>>> boolean_function::get_dnf
     return result;
 }
 
-std::vector<boolean_function::value> boolean_function::get_truth_table(const std::vector<std::string>& order) const
+std::vector<boolean_function::value> boolean_function::get_truth_table(std::vector<std::string> variables) const
 {
     std::vector<value> result;
 
-    std::vector<std::string> variables = order;
+    auto unique_vars = get_variables();
     if (variables.empty())
     {
-        auto unique_vars = get_variables();
         variables.insert(variables.end(), unique_vars.begin(), unique_vars.end());
+    }
+    else
+    {
+        variables.erase(std::remove_if(variables.begin(), variables.end(), [&unique_vars](auto& s) { return unique_vars.find(s) == unique_vars.end(); }), variables.end());
     }
 
     for (u32 values = 0; values < (u32)(1 << variables.size()); ++values)

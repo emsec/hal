@@ -306,7 +306,7 @@ public:
      * @param[in] ordered_variables - Specific order in which the inputs shall be structured in the truth table.
      * @returns The vector of output values.
      */
-    std::vector<value> get_truth_table(const std::vector<std::string>& ordered_variables = {}) const;
+    std::vector<value> get_truth_table(std::vector<std::string> ordered_variables = {}) const;
 
 private:
     enum class operation
