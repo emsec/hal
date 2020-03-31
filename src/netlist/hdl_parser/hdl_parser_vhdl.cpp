@@ -825,7 +825,7 @@ bool hdl_parser_vhdl::build_netlist(const std::string& top_module)
 std::shared_ptr<module> hdl_parser_vhdl::instantiate(const entity& e, std::shared_ptr<module> parent, case_insensitive_string_map<std::string> parent_module_assignments)
 {
     // remember assigned aliases so they are not lost when recursively going deeper
-    std::unordered_map<std::string, std::string> aliases;
+    case_insensitive_string_map<std::string> aliases;
 
     aliases[e.name] = get_unique_alias(e.name);
 
