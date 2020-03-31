@@ -919,7 +919,7 @@ std::shared_ptr<module> hdl_parser_vhdl::instantiate(const entity& e, std::share
         {
             a = it->second;
         }
-        else
+        else if (a != "'0'" && a != "'1'" && a != "'Z'")
         {
             log_warning("hdl_parser", "no alias for net '{}'", a);
         }
@@ -931,7 +931,7 @@ std::shared_ptr<module> hdl_parser_vhdl::instantiate(const entity& e, std::share
         {
             b = it->second;
         }
-        else
+        else if (b != "'0'" && b != "'1'" && b != "'Z'")
         {
             log_warning("hdl_parser", "no alias for net '{}'", b);
         }
