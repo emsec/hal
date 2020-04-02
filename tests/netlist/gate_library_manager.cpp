@@ -21,16 +21,20 @@ class gate_library_manager_test : public ::testing::Test
 protected:
     // The path, where the library is temporary stored
     hal::path test_lib_path;
+    std::string lib_file_name;
+    std::string test_lib_name;
 
     virtual void SetUp()
     {
         NO_COUT_BLOCK;
-        //test_lib_path = core_utils::get_gate_library_directories()[0] / "test_lib.json";
+        lib_file_name = "test_lib";
+        test_lib_name = "TEST_GATE_LIBRARY";
+        test_lib_path = (core_utils::get_gate_library_directories()[0]) / (lib_file_name + ".lib");
     }
 
     virtual void TearDown()
     {
-        //boost::filesystem::remove(test_lib_path);
+        fs::remove(test_lib_path);
     }
 
     /**
@@ -39,51 +43,94 @@ protected:
     void create_test_lib()
     {
         std::ofstream test_lib(test_lib_path.string());
-        test_lib << "{\n"
-                    "  \"library\": {\n"
-                    "    \"library_name\": \"test_lib\",\n"
-                    "    \"element_types\": [\n"
-                    "      \"TEST_GATE\"\n"
-                    "    ],\n"
-                    "    \"elements_inout_types\": {\n"
-                    "      \"TEST_GATE\": [\n"
-                    "        \"IO\"\n"
-                    "      ]\n"
-                    "    },\n"
-                    "    \"elements_input_types\": {\n"
-                    "      \"TEST_GATE\": [\n"
-                    "        \"I\"\n"
-                    "      ]\n"
-                    "    },\n"
-                    "    \"elements_output_types\": {\n"
-                    "      \"TEST_GATE\": [\n"
-                    "        \"O\"\n"
-                    "      ]\n"
-                    "    },\n"
-                    "    \"gnd_nodes\": [\n"
-                    "      \"TEST_GATE\"\n"
-                    "    ],\n"
-                    "    \"vcc_nodes\": [\n"
-                    "      \"TEST_GATE\"\n"
-                    "    ],\n"
-                    "    \"inout_types\": [\n"
-                    "      \"IO\"\n"
-                    "    ],\n"
-                    "    \"input_types\": [\n"
-                    "      \"I\"\n"
-                    "    ],\n"
-                    "    \"output_types\": [\n"
-                    "      \"O\"\n"
-                    "    ],\n"
-                    "    \"vhdl_includes\": [\n"
-                    "      \"test_vhdl_include;\"\n"
-                    "    ]\n"
-                    "  }\n"
+        test_lib << "/* This file only exists for testing purposes and should be already destroyed*/\n"
+                    "library (" << test_lib_name <<") {\n"
+                    "    define(cell);\n"
+                    "    cell(GATE_A) {\n"
+                    "        pin(I) {\n"
+                    "            direction: input;\n"
+                    "        }\n"
+                    "        pin(O) {\n"
+                    "            direction: output;\n"
+                    "            function: \"I\";\n"
+                    "        }\n"
+                    "    }\n"
+                    "    cell(GATE_B) {\n"
+                    "        pin(I) {\n"
+                    "            direction: input;\n"
+                    "        }\n"
+                    "        pin(O) {\n"
+                    "            direction: output;\n"
+                    "            function: \"!I\";\n"
+                    "        }\n"
+                    "    }\n"
+                    "    cell(GND) {\n"
+                    "        pin(O) {\n"
+                    "            direction: output;\n"
+                    "            function: \"0\";\n"
+                    "        }\n"
+                    "    }\n"
+                    "    cell(VCC) {\n"
+                    "        pin(O) {\n"
+                    "            direction: output;\n"
+                    "            function: \"1\";\n"
+                    "        }\n"
+                    "    }\n"
                     "}";
 
         test_lib.close();
     }
+
+
 };
+
+/**
+ * Testing the access on a single gate library via the get_gate_library function.
+ *
+ * Functions: get_gate_library, get_gate_libraries
+ */
+TEST_F(gate_library_manager_test, check_get_gate_library)
+{
+    NO_COUT_TEST_BLOCK;
+    create_test_lib();
+    // Load the gate library twice by its filename
+    // ISSUE: get_gate_library can take both filename or library name, but if file isn't loaded, the library name can't...
+    // ISSUE: ... be used (for reasons). Should this one function be split in two (load_gate_library(file_name) + get_gate_library(lib_name))?
+    std::shared_ptr<gate_library> test_lib_0 = gate_library_manager::get_gate_library(lib_file_name);
+    //std::shared_ptr<gate_library> test_lib_1 = gate_library_manager::get_gate_library(lib_file_name);
+    EXPECT_NE(test_lib_0, nullptr);
+    // EXPECT_NE(test_lib_1, nullptr); // <- ISSUE: doesn't work
+
+    // Check that the library can be accessed by get_gate_libraries
+    auto g_libs = gate_library_manager::get_gate_libraries();
+    ASSERT_TRUE(g_libs.find(test_lib_name) != g_libs.end());
+    EXPECT_EQ(g_libs.at(test_lib_name)->get_name(), test_lib_name);
+}
+
+/**
+ * Testing the load_all function that loads all gate_librariesfound in the directories got by
+ * core_utils::get_gate_library_directories().
+ *
+ * Functions: get_gate_library, get_gate_libraries
+ */
+TEST_F(gate_library_manager_test, check_load_all)
+{
+    // Check that load_all also loads the test gate library
+    NO_COUT_TEST_BLOCK;
+    create_test_lib();
+    gate_library_manager::load_all();
+
+    // Check that the test library can be accessed by get_gate_libraries
+    auto g_libs = gate_library_manager::get_gate_libraries();
+    ASSERT_TRUE(g_libs.find(test_lib_name) != g_libs.end());
+    EXPECT_EQ(g_libs.at(test_lib_name)->get_name(), test_lib_name);
+
+}
+
+// IN_PROGRESS: invalid input/negative tests
+
+
+// OLD TESTS (will be removed later)
 #ifdef DONT_BUILD
 /**
  * Testing the loading of gate libraries. Since a test library is added at the start of the test
