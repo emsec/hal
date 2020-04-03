@@ -35,10 +35,14 @@ TEST_F(gate_library_parser_liberty_test, check_combinatorial)
     TEST_START
         {
             std::stringstream input("library (TEST_GATE_LIBRARY) {\n"
+                                    "    date : \"April 3, 2020\"\n" // <- will be ignored
+                                    "    revision : 2015.03; \n"     // <- will be ignored
                                     "    define(cell);\n"
                                     "    cell(TEST_GATE_TYPE) {\n"
+                                    "        area : 3; \n"  // <- will be ignored
                                     "        pin(I) {\n"
                                     "            direction: input;\n"
+                                    "            capacitance : 1;\n"
                                     "        }\n"
                                     "        pin(O) {\n"
                                     "            direction: output;\n"
@@ -647,6 +651,96 @@ TEST_F(gate_library_parser_liberty_test, check_invalid_input)
 
             ASSERT_TRUE(gl->get_gate_types().find("TEST_GATE_TYPE") != gl->get_gate_types().end());
             EXPECT_EQ(gl->get_gate_types().at("TEST_GATE_TYPE")->get_base_type(), gate_type::base_type::combinatorial);
+        }
+        {
+            // Define a pin twice (ISSUE: Pin can be defined twice. Both are added, but only the boolean function of the second one is stored)
+            NO_COUT_TEST_BLOCK;
+            std::stringstream input("library (TEST_GATE_LIBRARY) {\n"
+                                    "    define(cell);\n"
+                                    "    cell(TEST_GATE_TYPE) {\n"
+                                    "        pin(I) {\n"
+                                    "            direction: input;\n"
+                                    "        }\n"
+                                    "        pin(O) {\n"
+                                    "            direction: output;\n"
+                                    "            function: \"I\";\n"
+                                    "        }\n"
+                                    "        pin(O) {\n"
+                                    "            direction: output;\n"
+                                    "            function: \"!I\";\n"
+                                    "        }\n"
+                                    "    }\n"
+                                    "}");
+            gate_library_parser_liberty liberty_parser(input);
+            std::shared_ptr<gate_library> gl = liberty_parser.parse();
+
+            ASSERT_NE(gl, nullptr);
+
+            ASSERT_TRUE(gl->get_gate_types().find("TEST_GATE_TYPE") != gl->get_gate_types().end());
+            EXPECT_EQ(gl->get_gate_types().at("TEST_GATE_TYPE")->get_base_type(), gate_type::base_type::combinatorial);
+            // EXPECT_EQ(gl->get_gate_types().at("TEST_GATE_TYPE")->get_output_pins().size(), 1); // ISSUE
+        }
+        {
+            // Define a gate type twice (ISSUE: Gate can be defined twice, but only the first one is added with no warning)
+            //NO_COUT_TEST_BLOCK;
+            std::stringstream input("library (TEST_GATE_LIBRARY) {\n"
+                                    "    define(cell);\n"
+                                    "    cell(TEST_GATE_TYPE) {\n"
+                                    "        pin(I) {\n"
+                                    "            direction: input;\n"
+                                    "        }\n"
+                                    "        pin(O) {\n"
+                                    "            direction: output;\n"
+                                    "            function: \"!I\";\n"
+                                    "        }\n"
+                                    "    }\n"
+                                    "    cell(TEST_GATE_TYPE) {\n"  // <- is ignored ISSUE?
+                                    "        pin(I0) {\n"
+                                    "            direction: input;\n"
+                                    "        }\n"
+                                    "        pin(O0) {\n"
+                                    "            direction: output;\n"
+                                    "            function: \"!I0\";\n"
+                                    "        }\n"
+                                    "    }\n"
+                                    "}");
+            gate_library_parser_liberty liberty_parser(input);
+            std::shared_ptr<gate_library> gl = liberty_parser.parse();
+
+            ASSERT_NE(gl, nullptr);
+
+            ASSERT_TRUE(gl->get_gate_types().find("TEST_GATE_TYPE") != gl->get_gate_types().end());
+            EXPECT_EQ(gl->get_gate_types().at("TEST_GATE_TYPE")->get_base_type(), gate_type::base_type::combinatorial);
+            // EXPECT_EQ(gl->get_gate_types().at("TEST_GATE_TYPE")->get_output_pins().size(), 1); // ISSUE
+        }
+        {
+            // Pin got no direction (should be ignored)
+            NO_COUT_TEST_BLOCK;
+            std::stringstream input("library (TEST_GATE_LIBRARY) {\n"
+                                    "    define(cell);\n"
+                                    "    cell(TEST_GATE_TYPE) {\n"
+                                    "        pin(I) {\n"
+                                    "            direction: input;\n"
+                                    "        }\n"
+                                    "        pin(I_nodir) {\n"
+                                    "            capacitance : 1.0;"
+                                    "        }\n"
+                                    "        pin(O) {\n"
+                                    "            direction: output;\n"
+                                    "            function: \"I\";\n"
+                                    "        }\n"
+                                    "    }\n"
+                                    "}");
+            gate_library_parser_liberty liberty_parser(input);
+            std::shared_ptr<gate_library> gl = liberty_parser.parse();
+
+            ASSERT_NE(gl, nullptr);
+
+            ASSERT_TRUE(gl->get_gate_types().find("TEST_GATE_TYPE") != gl->get_gate_types().end());
+            EXPECT_EQ(gl->get_gate_types().at("TEST_GATE_TYPE")->get_base_type(), gate_type::base_type::combinatorial);
+            EXPECT_EQ(gl->get_gate_types().at("TEST_GATE_TYPE")->get_input_pins().size(), 1);
+
+
         }
     TEST_END
 }
