@@ -132,6 +132,8 @@ private:
 
     //function sections
     void handle_buttons_clicked();
+    void handle_input_pin_item_clicked(QTableWidgetItem* item);
+    void handle_output_pin_item_clicked(QTableWidgetItem* item);
 
 
 

@@ -191,12 +191,22 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
     m_top_lvl_layout->addSpacerItem(new QSpacerItem(0,0, QSizePolicy::Expanding, QSizePolicy::Expanding));
     m_content_layout->addWidget(m_scroll_area);
 
+    //setup the navigation_table ("activated" by clicking on an input / output pin in the 2 tables)
+    m_navigation_table = new graph_navigation_widget();//set the parent?
+    m_navigation_table->setWindowFlags(Qt::CustomizeWindowHint);
+    m_navigation_table->hide_when_focus_lost(true);
+    m_navigation_table->hide();
+    connect(m_navigation_table, &graph_navigation_widget::navigation_requested, this, &gate_details_widget::handle_navigation_jump_requested);
+
     //some connections (maybe connect to simple toggle_hide_show function of widgets)
     connect(m_general_info_button, &QPushButton::clicked, this, &gate_details_widget::handle_buttons_clicked);
     connect(m_input_pins_button, &QPushButton::clicked, this, &gate_details_widget::handle_buttons_clicked);
     connect(m_output_pins_button, &QPushButton::clicked, this, &gate_details_widget::handle_buttons_clicked);
     connect(m_data_fields_button, &QPushButton::clicked, this, &gate_details_widget::handle_buttons_clicked);
     connect(m_boolean_functions_button, &QPushButton::clicked, this, &gate_details_widget::handle_buttons_clicked);
+
+    connect(m_input_pins_table, &QTableWidget::itemClicked, this, &gate_details_widget::handle_input_pin_item_clicked);
+    connect(m_output_pins_table, &QTableWidget::itemClicked, this, &gate_details_widget::handle_output_pin_item_clicked);
 
 
     //OLD
@@ -477,6 +487,95 @@ void gate_details_widget::handle_buttons_clicked()
 //        anim->setEndValue(0);
 //        anim->start(QAbstractAnimation::DeleteWhenStopped);
     }
+}
+
+void gate_details_widget::handle_input_pin_item_clicked(QTableWidgetItem *item)
+{
+    if(item->column() != 2)
+        return;
+
+    int net_id = item->data(Qt::UserRole).toInt();
+
+    auto clicked_net = g_netlist->get_net_by_id(net_id);
+
+    if(!clicked_net)
+        return;
+
+    auto sources = clicked_net->get_sources();
+
+    if(sources.empty() || clicked_net->is_global_input_net())
+    {
+        g_selection_relay.clear();
+        g_selection_relay.m_selected_nets.insert(net_id);
+        g_selection_relay.relay_selection_changed(this);
+    }
+    else if(sources.size() == 1)
+    {
+        auto ep = *sources.begin();
+        g_selection_relay.clear();
+        g_selection_relay.m_selected_gates.insert(ep.get_gate()->get_id());
+        g_selection_relay.m_focus_type = selection_relay::item_type::gate;
+        g_selection_relay.m_focus_id   = ep.get_gate()->get_id();
+        g_selection_relay.m_subfocus   = selection_relay::subfocus::right;
+
+        auto pins                          = ep.get_gate()->get_output_pins();
+        auto index                         = std::distance(pins.begin(), std::find(pins.begin(), pins.end(), ep.get_pin()));
+        g_selection_relay.m_subfocus_index = index;
+
+        update(ep.get_gate()->get_id());
+        g_selection_relay.relay_selection_changed(this);
+    }
+    else
+    {
+        m_navigation_table->setup(hal::node{hal::node_type::gate, 0}, clicked_net, false);
+        m_navigation_table->move(QCursor::pos());
+        m_navigation_table->show();
+        m_navigation_table->setFocus();
+    }
+}
+
+void gate_details_widget::handle_output_pin_item_clicked(QTableWidgetItem *item)
+{
+    if(item->column() != 2)
+        return;
+
+    int net_id = item->data(Qt::UserRole).toInt();
+    std::shared_ptr<net> clicked_net = g_netlist->get_net_by_id(net_id);
+
+    if(!clicked_net)
+        return;
+
+    auto destinations = clicked_net->get_destinations();
+    if(destinations.empty() || clicked_net->is_global_output_net())
+    {
+        g_selection_relay.clear();
+        g_selection_relay.m_selected_nets.insert(net_id);
+        g_selection_relay.relay_selection_changed(this);
+    }
+    else if (destinations.size() == 1)
+    {
+        auto ep = *destinations.begin();
+        g_selection_relay.clear();
+        g_selection_relay.m_selected_gates.insert(ep.get_gate()->get_id());
+        g_selection_relay.m_focus_type = selection_relay::item_type::gate;
+        g_selection_relay.m_focus_id   = ep.get_gate()->get_id();
+        g_selection_relay.m_subfocus   = selection_relay::subfocus::left;
+
+        auto pins                          = ep.get_gate()->get_input_pins();
+        auto index                         = std::distance(pins.begin(), std::find(pins.begin(), pins.end(), ep.get_pin()));
+        g_selection_relay.m_subfocus_index = index;
+
+        update(ep.get_gate()->get_id());
+        g_selection_relay.relay_selection_changed(this);
+    }
+    else
+    {
+        m_navigation_table->setup(hal::node{hal::node_type::gate, 0}, clicked_net, true);
+        m_navigation_table->move(QCursor::pos());
+        m_navigation_table->show();
+        m_navigation_table->setFocus();
+    }
+
 }
 
 void gate_details_widget::update_boolean_function()
