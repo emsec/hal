@@ -578,6 +578,18 @@ void gate_details_widget::handle_output_pin_item_clicked(QTableWidgetItem *item)
 
 }
 
+QSize gate_details_widget::calculate_table_size(QTableWidget *table)
+{
+    int w = table->verticalHeader()->width() + 4; // +4 seems to be needed
+    for (int i = 0; i < table->columnCount(); i++)
+       w += table->columnWidth(i); // seems to include gridline (on my machine)
+    int h = table->horizontalHeader()->height() + 4;
+    for (int i = 0; i < table->rowCount(); i++)
+       h += table->rowHeight(i);
+    return QSize(w, h);
+
+}
+
 void gate_details_widget::update_boolean_function()
 {
     auto g = g_netlist->get_gate_by_id(m_current_id);
@@ -733,6 +745,7 @@ void gate_details_widget::handle_module_gate_removed(std::shared_ptr<module> mod
 void gate_details_widget::resizeEvent(QResizeEvent* event)
 {
     //m_container->setFixedWidth(event->size().width());
+    m_boolean_functions_container->setFixedWidth(event->size().width());
 }
 
 void gate_details_widget::update2(const u32 gate_id)
@@ -896,6 +909,8 @@ void gate_details_widget::update(const u32 gate_id)
         }
     }
     m_module_item->setText(module_text);
+    m_general_table->resizeColumnsToContents();
+    m_general_table->setFixedWidth(calculate_table_size(m_general_table).width());
 
     //update (2)input-pin section (put the sections code in extra functions?)
     m_input_pins_table->clearContents();
@@ -930,12 +945,12 @@ void gate_details_widget::update(const u32 gate_id)
         index++;
     }
     m_input_pins_table->resizeColumnsToContents();
+    m_input_pins_table->setFixedWidth(calculate_table_size(m_input_pins_table).width());
 
     //update(3) output pins section
     m_output_pins_table->clearContents();
     m_output_pins_button->setText(QString::fromStdString("Output Pins (") + QString::number(g->get_output_pins().size()) + QString::fromStdString(")"));
     m_output_pins_table->setRowCount(g->get_output_pins().size());
-    //m_output_pins_table->setFixedHeight(m_output_pins_table->verticalHeader()->length());
     m_output_pins_table->setMaximumHeight(m_output_pins_table->verticalHeader()->length());
     index = 0;
     for(const auto &pin : g->get_output_pins())
@@ -963,6 +978,7 @@ void gate_details_widget::update(const u32 gate_id)
         index++;
     }
     m_output_pins_table->resizeColumnsToContents();
+    m_output_pins_table->setFixedWidth(calculate_table_size(m_output_pins_table).width());
 
     //update(4) data fields section
     m_data_fields_button->setText(QString::fromStdString("Data Fields (") + QString::number(g->get_data().size()) + QString::fromStdString(")"));
@@ -984,6 +1000,8 @@ void gate_details_widget::update(const u32 gate_id)
         index++;
     }
     m_data_fields_table->resizeColumnsToContents();
+    m_data_fields_table->setFixedWidth(calculate_table_size(m_data_fields_table).width());
+
 
     //update(5) boolean functions section
     //clear container layout
