@@ -459,7 +459,7 @@ void gate_details_widget::handle_net_destination_removed(std::shared_ptr<net> ne
     if (m_current_id == dst_gate_id)
         update(m_current_id);
 }
-
+#include <QDebug>
 void gate_details_widget::handle_buttons_clicked()
 {
     //function that (perhaps) is changed by a toggle-slot of the widget
@@ -469,10 +469,16 @@ void gate_details_widget::handle_buttons_clicked()
 
     int index = m_top_lvl_layout->indexOf(btn);
     QWidget* widget = dynamic_cast<QWidget*>(m_top_lvl_layout->itemAt(index+1)->widget());
+    qDebug() << m_top_lvl_layout->itemAt(index+2)->spacerItem()->isEmpty();
     if(!widget)
         return;
     if(widget->isHidden()){
         widget->show();
+
+        if(index != m_top_lvl_layout->indexOf(m_boolean_functions_button)){
+            m_top_lvl_layout->itemAt(index+2)->spacerItem()->changeSize(0,10, QSizePolicy::Expanding, QSizePolicy::Fixed);
+            m_top_lvl_layout->invalidate();
+        }
 //        QPropertyAnimation* anim = new QPropertyAnimation(widget, "maximumHeight");
 //        anim->setDuration(250);
 //        anim->setStartValue(0);
@@ -481,6 +487,11 @@ void gate_details_widget::handle_buttons_clicked()
     }
     else{
         widget->hide();
+
+        if(index != m_top_lvl_layout->indexOf(m_boolean_functions_button)){
+            m_top_lvl_layout->itemAt(index+2)->spacerItem()->changeSize(0,5, QSizePolicy::Expanding, QSizePolicy::Fixed);
+            m_top_lvl_layout->invalidate();
+        }
 //        QPropertyAnimation* anim = new QPropertyAnimation(widget, "maximumHeight");
 //        anim->setDuration(250);
 //        anim->setStartValue(widget->verticalHeader()->length());
