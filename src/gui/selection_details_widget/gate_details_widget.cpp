@@ -26,7 +26,6 @@
 #include <QGridLayout>
 #include <QPushButton>
 #include <QPropertyAnimation>
-#include "toggleable_label/toggleable_label.h"
 
 gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
 {
@@ -459,7 +458,7 @@ void gate_details_widget::handle_net_destination_removed(std::shared_ptr<net> ne
     if (m_current_id == dst_gate_id)
         update(m_current_id);
 }
-#include <QDebug>
+
 void gate_details_widget::handle_buttons_clicked()
 {
     //function that (perhaps) is changed by a toggle-slot of the widget
@@ -469,7 +468,6 @@ void gate_details_widget::handle_buttons_clicked()
 
     int index = m_top_lvl_layout->indexOf(btn);
     QWidget* widget = dynamic_cast<QWidget*>(m_top_lvl_layout->itemAt(index+1)->widget());
-    qDebug() << m_top_lvl_layout->itemAt(index+2)->spacerItem()->isEmpty();
     if(!widget)
         return;
     if(widget->isHidden()){
@@ -1027,7 +1025,7 @@ void gate_details_widget::update(const u32 gate_id)
     QFrame* last_line = nullptr; //unexpected behaviour below otherwise
     for(const auto& it : g->get_boolean_functions())
     {
-        QLabel* fnct = new toggleable_label(QString::fromStdString(it.first) + " = " + QString::fromStdString(it.second.to_string()));
+        QLabel* fnct = new QLabel(QString::fromStdString(it.first) + " = " + QString::fromStdString(it.second.to_string()));
         fnct->setWordWrap(true);
         m_boolean_functions_container_layout->addWidget(fnct);
         QFrame* line = new QFrame;
