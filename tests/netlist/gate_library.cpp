@@ -75,11 +75,11 @@ TEST_F(gate_library_test, check_pin_management)
 
             gt.add_input_pin("IN_PIN");
             gt.add_input_pin("IN_PIN");
-            //EXPECT_EQ(gt.get_input_pins().size(), 1);
+            //EXPECT_EQ(gt.get_input_pins().size(), 1); // ISSUE: fails
 
             gt.add_output_pin("OUT_PIN");
             gt.add_output_pin("OUT_PIN");
-            //EXPECT_EQ(gt.get_output_pins().size(), 1);
+            //EXPECT_EQ(gt.get_output_pins().size(), 1); // ISSUE: fails
         }
     TEST_END
 }
@@ -327,6 +327,7 @@ TEST_F(gate_library_test, check_state_output_pin)
             gts.add_inverted_state_output_pin("OFIS_0");
             gts.add_inverted_state_output_pin("OFIS_1");
             EXPECT_EQ(gts.get_inverted_state_output_pins(), std::unordered_set<std::string>({"OFIS_0","OFIS_1"}));
+            //EXPECT_EQ(gts.get_output_pins(), std::vector<std::string>({"OFIS_0","OFIS_1"}));
         }
         // NOTE: can be booth (state_output and inverted_state_output)?
     TEST_END
@@ -364,7 +365,7 @@ TEST_F(gate_library_test, check_init_data)
                       std::make_pair(gate_type_sequential::set_reset_behavior::L, gate_type_sequential::set_reset_behavior::H));
         }
         {
-            // Get uninitialized set-reset behavior (NOTE: fails)
+            // Get uninitialized set-reset behavior (ISSUE: fails)
             gate_type_sequential gts_2("gtl_name", gate_type::base_type::ff);
             //EXPECT_EQ(gts_2.get_set_reset_behavior(),
                       //std::make_pair(gate_type_sequential::set_reset_behavior::U, gate_type_sequential::set_reset_behavior::U));
@@ -496,4 +497,3 @@ TEST_F(gate_library_test, check_library)
     TEST_END
 }
 
-// IN PROGRESS: gate_library tests...

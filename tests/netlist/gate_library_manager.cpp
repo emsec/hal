@@ -12,9 +12,6 @@
 #include <netlist/net.h>
 
 
-// NOTE, FIXME: The gate library tests must be updated, due to the changes of the gate library system
-
-
 class gate_library_manager_test : public ::testing::Test
 {
 protected:
@@ -91,15 +88,15 @@ protected:
 TEST_F(gate_library_manager_test, check_get_gate_library)
 {
     TEST_START
-        NO_COUT_TEST_BLOCK;
+        //NO_COUT_TEST_BLOCK;
         create_test_lib();
         // Load the gate library twice by its filename
         // ISSUE: get_gate_library can take both filename or library name, but if file isn't loaded, the library name can't...
         // ISSUE: ... be used (for reasons). Should this one function be split in two (load_gate_library(file_name) + get_gate_library(lib_name))?
         std::shared_ptr<gate_library> test_lib_0 = gate_library_manager::get_gate_library(lib_file_name);
-        //std::shared_ptr<gate_library> test_lib_1 = gate_library_manager::get_gate_library(lib_file_name);
+        std::shared_ptr<gate_library> test_lib_1 = gate_library_manager::get_gate_library(lib_file_name);
         EXPECT_NE(test_lib_0, nullptr);
-        // EXPECT_NE(test_lib_1, nullptr); // <- ISSUE: doesn't work
+        //EXPECT_NE(test_lib_1, nullptr); // <- ISSUE: doesn't work
 
         // Check that the library can be accessed by get_gate_libraries
         auto g_libs = gate_library_manager::get_gate_libraries();
@@ -211,62 +208,6 @@ TEST_F(gate_library_manager_test, check_prepare_library)
             EXPECT_TRUE(vcc_bf.at("O").is_constant_one());
 
         }
-        // NEGATIVE
-        fs::remove(test_lib_path);
-    /*  NOTE: Brackets can't be used as cell identifiers...
-        {
-            // (very very very special)
-            // Parse a file that does contain gate types with the name "GND"/"VCC" and "GND (auto generated)"/"GND (auto generated)" , but they are not constant.
-            // In this very unlikely case, the file won't be loaded.
-            NO_COUT_TEST_BLOCK;
-            std::ofstream test_lib(test_lib_path.string());
-            test_lib << ""
-                        "library (check_prepare_library_3) {\n"
-                        "    define(cell);\n"
-                        "    cell(GND (auto generated)) {\n"
-                        "        pin(I) {\n"
-                        "            direction: input;\n"
-                        "        }\n"
-                        "        pin(O) {\n"
-                        "            direction: output;\n"
-                        "            function: \"I\";\n"
-                        "        }\n"
-                        "    }\n"
-                        "    cell(VCC (auto generated)) {\n"
-                        "        pin(I) {\n"
-                        "            direction: input;\n"
-                        "        }\n"
-                        "        pin(O) {\n"
-                        "            direction: output;\n"
-                        "            function: \"!I\";\n"
-                        "        }\n"
-                        "    }\n"
-                        "    cell(GND) {\n"
-                        "        pin(I) {\n"
-                        "            direction: input;\n"
-                        "        }\n"
-                        "        pin(O) {\n"
-                        "            direction: output;\n"
-                        "            function: \"I\";\n"
-                        "        }\n"
-                        "    }\n"
-                        "    cell(VCC) {\n"
-                        "        pin(I) {\n"
-                        "            direction: input;\n"
-                        "        }\n"
-                        "        pin(O) {\n"
-                        "            direction: output;\n"
-                        "            function: \"!I\";\n"
-                        "        }\n"
-                        "    }\n"
-                        "}";
-
-            test_lib.close();
-            std::shared_ptr<gate_library> very_strange_lib = gate_library_manager::get_gate_library(lib_file_name);
-            EXPECT_EQ(very_strange_lib, nullptr);
-        }*/
-
-
     TEST_END
 
 }
