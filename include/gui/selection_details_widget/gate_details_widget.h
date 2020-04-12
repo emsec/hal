@@ -138,43 +138,12 @@ private:
     //utility function, used to calculate the actual width so the scrollbars and the accuracy of the click functionality is correct
     QSize calculate_table_size(QTableWidget* table);
 
-
-
     //OLD CODE
-//    QVBoxLayout* m_content_layout;
-//    QHBoxLayout* m_tree_row_layout;
-//    QVBoxLayout* m_boolean_functions_layout;
-
-////    QTableWidget* m_general_table;
-////    QTableWidgetItem* m_name_item;
-////    QTableWidgetItem* m_type_item;
-////    QTableWidgetItem* m_id_item;
-////    QTableWidgetItem* m_module_item;
-
-//    // stores Boolean function
-//    QLabel* m_boolean_function;
-//    //stores the initial lut value
-//    QLabel* m_data_fields;
-//    // stores input pin tree view
-//    QTreeWidgetItem* m_input_pins;
-//    // stores output pin tree view
-//    QTreeWidgetItem* m_output_pins;
-
-//    // stores utility objects for input/output pin tree view
-//    //QScrollArea* m_scroll_area;
-//    QTreeWidget* m_tree_widget;
-//    QVBoxLayout* m_scroll_area_layout;
-//    QVBoxLayout* m_container_layout;
-//    QWidget* m_container;
-
     u32 m_current_id;
 
     u64 m_last_click_time;
 
     graph_navigation_widget* m_navigation_table;
-
-    //temporary utility function to have a better understanding
-    void update_boolean_function();
 };
 
 #endif /* __HAL_GATE_DETAILS_WIDGET_H__ */
