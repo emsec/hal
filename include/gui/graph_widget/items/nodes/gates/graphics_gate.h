@@ -24,7 +24,7 @@
 #ifndef GRAPHICS_GATE_H
 #define GRAPHICS_GATE_H
 
-#include "gui/graph_widget/items/graphics_node.h"
+#include "gui/graph_widget/items/nodes/graphics_node.h"
 
 #include <memory>
 

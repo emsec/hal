@@ -1,4 +1,4 @@
-#include "gui/graph_widget/items/graphics_node.h"
+#include "gui/graph_widget/items/nodes/graphics_node.h"
 
 #include "gui/graph_widget/graph_widget_constants.h"
 
@@ -22,6 +22,13 @@ QPainterPath graphics_node::shape() const
     QPainterPath path;
     path.addRect(QRectF(0, 0, m_width, m_height));
     return path;
+}
+
+void graphics_node::set_visuals(const graphics_node::visuals& v)
+{
+    setVisible(v.visible);
+
+    m_color = v.main_color;
 }
 
 qreal graphics_node::width() const

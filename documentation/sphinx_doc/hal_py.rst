@@ -23,6 +23,3 @@ hal_py Documentation
    netlist_factory
    hdl_writer_dispatcher
    graph_algorithm
-   value
-   base_type
-   set_reset_behaviour

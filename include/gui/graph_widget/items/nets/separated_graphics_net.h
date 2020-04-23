@@ -24,7 +24,7 @@
 #ifndef SEPARATED_GRAPHICS_NET_H
 #define SEPARATED_GRAPHICS_NET_H
 
-#include "graph_widget/items/graphics_net.h"
+#include "graph_widget/items/nets/graphics_net.h"
 
 class separated_graphics_net : public graphics_net
 {

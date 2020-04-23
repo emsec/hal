@@ -20,6 +20,7 @@
 #include "netlist/netlist.h"
 #include "netlist/netlist_factory.h"
 #include "netlist/persistent/netlist_serializer.h"
+#include "gui/gui_api/gui_api.h"
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wshadow"

@@ -26,7 +26,7 @@
 
 #include "def.h"
 #include "gui/gui_globals.h"
-#include "items/graphics_gate.h"
+#include "gui/graph_widget/items/nodes/gates/graphics_gate.h"
 
 #include <QGraphicsView>
 #include <QAction>
