@@ -843,7 +843,7 @@ TEST_F(gate_test, check_lut_function)
             std::shared_ptr<gate> lut_gate = nl->create_gate(MIN_GATE_ID+0, lut, "lut");
 
             int i = 3;
-            lut_gate->set_data(lut->get_config_data_category(), lut->get_config_data_identifier(), "string", i_to_hex_string(i));
+            lut_gate->set_data(lut->get_config_data_category(), lut->get_config_data_identifier(), "bit_vector", i_to_hex_string(i));
 
             // Testing the access via the function get_boolean_function
             EXPECT_EQ(lut_gate->get_boolean_function("O_LUT").get_truth_table(input_pins), get_truth_table_from_i(i, 8));
@@ -865,7 +865,7 @@ TEST_F(gate_test, check_lut_function)
             // ISSUE: Doesn't work for 0x0 (issue in geT_lut_function) and for 0xff (issue in optimize function)
             //for (int i = 0x0; i <= 0xff; i++){
             for (int i = 0x1; i <= 0xfe; i++){
-                lut_gate->set_data(lut->get_config_data_category(), lut->get_config_data_identifier(), "string", i_to_hex_string(i));
+                lut_gate->set_data(lut->get_config_data_category(), lut->get_config_data_identifier(), "bit_vector", i_to_hex_string(i));
                 EXPECT_EQ(lut_gate->get_boolean_function("O_LUT").get_truth_table(input_pins), get_truth_table_from_hex_string(i_to_hex_string(i), 8));
             }
         }
@@ -877,10 +877,19 @@ TEST_F(gate_test, check_lut_function)
             // ISSUE: Doesn't work for 0x0 (issue in geT_lut_function) and for 0xff (issue in optimize function)
             //for (int i = 0x0; i <= 0xff; i++){
             for (int i = 0x1; i <= 0xfe; i++){
-                lut_gate->set_data(lut->get_config_data_category(), lut->get_config_data_identifier(), "string", i_to_hex_string(i));
+                lut_gate->set_data(lut->get_config_data_category(), lut->get_config_data_identifier(), "bit_vector", i_to_hex_string(i));
                 EXPECT_EQ(lut_gate->get_boolean_function("O_LUT").get_truth_table(input_pins), get_truth_table_from_hex_string(i_to_hex_string(i), 8, true));
             }
             lut->set_config_data_ascending_order(true);
+        }
+        {
+            // Add a boolean function to a lut pin
+            std::shared_ptr<netlist> nl   = std::make_shared<netlist>(gl);
+            std::shared_ptr<gate> lut_gate = nl->create_gate(MIN_GATE_ID+0, lut, "lut");
+
+            boolean_function lut_bf = boolean_function::from_string("I0 | I1 | I2", input_pins);
+            lut_gate->add_boolean_function("O_LUT", lut_bf);
+            get_truth_table_from_hex_string("EF", 8);
         }
         // NEGATIVE
         {
@@ -888,7 +897,7 @@ TEST_F(gate_test, check_lut_function)
             std::shared_ptr<netlist> nl   = std::make_shared<netlist>(gl);
             std::shared_ptr<gate> lut_gate = nl->create_gate(MIN_GATE_ID+0, lut, "lut");
             for (int i = 0x1; i <= 0xfe; i++){
-                lut_gate->set_data(lut->get_config_data_category(), lut->get_config_data_identifier(), "string", "");
+                lut_gate->set_data(lut->get_config_data_category(), lut->get_config_data_identifier(), "bit_vector", "");
                 EXPECT_EQ(lut_gate->get_boolean_function("O_LUT").get_truth_table(input_pins), get_truth_table_from_i(0, 8));
             }
         }
@@ -897,7 +906,7 @@ TEST_F(gate_test, check_lut_function)
             std::shared_ptr<netlist> nl   = std::make_shared<netlist>(gl);
             std::shared_ptr<gate> lut_gate = nl->create_gate(MIN_GATE_ID+0, lut, "lut");
             for (int i = 0x1; i <= 0xfe; i++){
-                lut_gate->set_data(lut->get_config_data_category(), lut->get_config_data_identifier(), "string", "NOHx");
+                lut_gate->set_data(lut->get_config_data_category(), lut->get_config_data_identifier(), "bit_vector", "NOHx");
                 EXPECT_EQ(lut_gate->get_boolean_function("O_LUT").get_truth_table(input_pins), get_truth_table_from_i(0, 8));
             }
         }*/
@@ -912,7 +921,7 @@ TEST_F(gate_test, check_lut_function)
 
             std::string long_hex = "DEADBEEFC001D00DDEADC0DEDEADDA7A";
 
-            lut_gate->set_data(lut->get_config_data_category(), lut->get_config_data_identifier(), "string", long_hex);
+            lut_gate->set_data(lut->get_config_data_category(), lut->get_config_data_identifier(), "bit_vector", long_hex);
             EXPECT_EQ(lut_gate->get_boolean_function("O_LUT").get_truth_table(input_pins), get_truth_table_from_hex_string(long_hex, (1 << input_pins.size())));
         }*/
         {
@@ -926,7 +935,7 @@ TEST_F(gate_test, check_lut_function)
 
             std::string long_hex = "DEADBEEF";
 
-            lut_gate->set_data(lut->get_config_data_category(), lut->get_config_data_identifier(), "string", long_hex);
+            lut_gate->set_data(lut->get_config_data_category(), lut->get_config_data_identifier(), "bit_vector", long_hex);
 
             EXPECT_EQ(lut_gate->get_boolean_function("O_LUT").get_truth_table(input_pins), get_truth_table_from_hex_string(long_hex, (1 << input_pins.size())));
         }
