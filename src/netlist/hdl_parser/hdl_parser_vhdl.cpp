@@ -1,11 +1,9 @@
 #include "netlist/hdl_parser/hdl_parser_vhdl.h"
 
 #include "core/log.h"
-
 #include "netlist/gate.h"
 #include "netlist/net.h"
 #include "netlist/netlist.h"
-
 #include "netlist/netlist_factory.h"
 
 #include <queue>
@@ -130,7 +128,7 @@ std::shared_ptr<netlist> hdl_parser_vhdl::parse(const std::string& gate_library)
 
     for (const auto& net : m_netlist->get_nets())
     {
-        bool no_source      = net->get_source().get_gate() == nullptr && !net->is_global_input_net();
+        bool no_source      = net->get_num_of_sources() == 0 && !net->is_global_input_net();
         bool no_destination = net->get_num_of_destinations() == 0 && !net->is_global_output_net();
         if (no_source && no_destination)
         {
@@ -330,7 +328,7 @@ bool hdl_parser_vhdl::parse_entity_definiton()
     if (!e.name.empty())
     {
         m_entities[e.name] = e;
-        m_last_entity                            = e.name;
+        m_last_entity      = e.name;
     }
 
     return true;
@@ -761,20 +759,19 @@ bool hdl_parser_vhdl::build_netlist(const std::string& top_module)
             {
                 auto slave_net = m_net_by_name.at(slave);
 
-                // merge source
-                auto slave_source = slave_net->get_source();
-                if (slave_source.get_gate() != nullptr)
+                // merge sources
+                if (slave_net->is_global_input_net())
                 {
-                    slave_net->remove_source(slave_source);
+                    master_net->mark_global_input_net();
+                }
 
-                    if (master_net->get_source().get_gate() == nullptr)
+                for (const auto& src : slave_net->get_sources())
+                {
+                    slave_net->remove_source(src);
+
+                    if (!master_net->is_a_source(src))
                     {
-                        master_net->add_source(slave_source);
-                    }
-                    else if (slave_source.get_gate() != master_net->get_source().get_gate())
-                    {
-                        log_error("hdl_parser", "could not merge nets '{}' and '{}'", slave_net->get_name(), master_net->get_name());
-                        return false;
+                        master_net->add_source(src);
                     }
                 }
 
@@ -1086,23 +1083,9 @@ std::shared_ptr<module> hdl_parser_vhdl::instantiate(const entity& e, std::share
                     return nullptr;
                 }
 
-                if (is_output)
+                if (is_output && !current_net->add_source(new_gate, pin))
                 {
-                    if (current_net->get_source().get_gate() != nullptr)
-                    {
-                        auto src = current_net->get_source().get_gate();
-                        log_error("hdl_parser",
-                                  "net '{}' already has source gate '{}' (type {}), cannot assign '{}' (type {})",
-                                  current_net->get_name(),
-                                  src->get_name(),
-                                  src->get_type()->get_name(),
-                                  new_gate->get_name(),
-                                  new_gate->get_type()->get_name());
-                    }
-                    if (!current_net->add_source(new_gate, pin))
-                    {
-                        return nullptr;
-                    }
+                    return nullptr;
                 }
 
                 if (is_input && !current_net->add_destination(new_gate, pin))
