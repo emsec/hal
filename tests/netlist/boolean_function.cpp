@@ -109,25 +109,7 @@ protected:
 
 };
 
-/**
- * Testing template
- *
- * Functions: <functions>
- */
-TEST_F(boolean_function_test, check_){
-    TEST_START
-        {
-            // Set multiple data with different keys and categories
-            boolean_function a("A");
-            boolean_function b("B");
 
-            boolean_function::from_string("1 & 1 & 1").to_dnf();
-
-            EXPECT_TRUE(true);
-        }
-
-    TEST_END
-}
 
 /**
  * Testing the different constructors and the main functionality, by implement the following boolean function:
@@ -436,5 +418,118 @@ TEST_F(boolean_function_test, check_test_vectors)
         }
     }
 
+    TEST_END
+}
+
+/**
+ * Testing the substitution a variable within a boolean function with another boolean function
+ *
+ * Functions: substitute
+ */
+TEST_F(boolean_function_test, check_substitute){
+    TEST_START
+        boolean_function a("A"), b("B"), c("C"), d("D");
+        {
+            // Substitute a variable with another one
+            boolean_function bf = a & b & c;
+            boolean_function sub_bf = bf.substitute("C", "D");
+
+            EXPECT_EQ(sub_bf, a & b & d);
+        }
+        {
+            // Substitute a variable with a boolean function (negated variable)
+            boolean_function bf = a & b;
+            boolean_function sub_bf = bf.substitute("B", !c );
+
+            EXPECT_EQ(sub_bf, a & !c);
+        }
+        {
+            // Substitute a variable with a boolean function (term)
+            boolean_function bf = a & b;
+            boolean_function sub_bf = bf.substitute("B", b | c | d);
+
+            EXPECT_EQ(sub_bf, a & (b | c | d));
+        }
+        // NEAGATIVE
+        /*{
+            // Pass an empty boolean function (NOTE: requirement?)
+            boolean_function bf = a & b;
+            boolean_function sub_bf = bf.substitute("B", boolean_function());
+
+            EXPECT_EQ(sub_bf, a);
+        }*/
+
+    TEST_END
+}
+
+/**
+ * Testing the get_dnf_clauses function that accesses the clauses of the DNF in a 2D Vector.
+ *
+ * Functions: get_dnf_clauses
+ */
+TEST_F(boolean_function_test, check_get_dnf_clauses){
+    TEST_START
+        boolean_function a("A"), b("B"), c("C"), d("D"), _0(ZERO), _1(ONE);
+        {
+            // Get the dnf clauses of a boolean function that is already in dnf
+            boolean_function bf = (a & b & !c) | (a & !b) | d;
+            auto dnf_clauses = bf.get_dnf_clauses();
+
+            std::vector<std::vector<std::pair<std::string, bool>>> exp_clauses;
+            exp_clauses.push_back(std::vector<std::pair<std::string, bool>>(
+                    { std::make_pair("A", true), std::make_pair("B", true), std::make_pair("C", false) }));
+            exp_clauses.push_back(std::vector<std::pair<std::string, bool>>(
+                    { std::make_pair("A", true), std::make_pair("B", false) }));
+            exp_clauses.push_back(std::vector<std::pair<std::string, bool>>(
+                    { std::make_pair("D", true) }));
+
+            EXPECT_EQ(dnf_clauses, exp_clauses);
+        }
+        {
+            // Get the dnf clauses of a variable
+            boolean_function bf = a;
+            auto dnf_clauses = bf.get_dnf_clauses();
+
+            std::vector<std::vector<std::pair<std::string, bool>>> exp_clauses;
+            exp_clauses.push_back(std::vector<std::pair<std::string, bool>>(
+                    { std::make_pair("A", true) }));
+
+            EXPECT_EQ(dnf_clauses, exp_clauses);
+        }
+        {
+            // Get the dnf clauses of a constant
+            boolean_function bf = _1;
+            auto dnf_clauses = bf.get_dnf_clauses();
+
+            std::vector<std::vector<std::pair<std::string, bool>>> exp_clauses;
+            exp_clauses.push_back(std::vector<std::pair<std::string, bool>>(
+                    { std::make_pair("1", true) }));
+
+            EXPECT_EQ(dnf_clauses, exp_clauses);
+        }
+        {
+            // Get the dnf clauses of a constant
+            boolean_function bf = a & !b & c;
+            auto dnf_clauses = bf.get_dnf_clauses();
+
+            std::vector<std::vector<std::pair<std::string, bool>>> exp_clauses;
+            exp_clauses.push_back(std::vector<std::pair<std::string, bool>>(
+                    { std::make_pair("A", true), std::make_pair("B", false), std::make_pair("C", true) }));
+
+            EXPECT_EQ(dnf_clauses, exp_clauses);
+        }
+        // NEGATIVE
+        /*{ // NOTE: requirements
+            // Get the dnf clauses of an empty boolean function
+            boolean_function bf = boolean_function();
+            auto dnf_clauses = bf.get_dnf_clauses();
+
+            std::vector<std::vector<std::pair<std::string, bool>>> exp_clauses;
+            exp_clauses.push_back(std::vector<std::pair<std::string, bool>>(
+                    { std::make_pair("L", true), std::make_pair("O", false), std::make_pair("L", true) }));
+
+            EXPECT_EQ(dnf_clauses, exp_clauses);
+
+        }*/
     TEST_END
 }
