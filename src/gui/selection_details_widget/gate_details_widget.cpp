@@ -51,6 +51,21 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
     m_top_lvl_layout->setContentsMargins(0,0,0,0);
     m_top_lvl_layout->setSpacing(0);
 
+    //container-layouts to add spacingaddWidget (gt = general table, op = output pins, etc)
+    QHBoxLayout *intermediate_layout_gt = new QHBoxLayout(this);
+    intermediate_layout_gt->setContentsMargins(3,3,0,0);
+    intermediate_layout_gt->setSpacing(0);
+    QHBoxLayout *intermediate_layout_ip = new QHBoxLayout(this);
+    intermediate_layout_ip->setContentsMargins(3,3,0,0);
+    intermediate_layout_ip->setSpacing(0);
+    QHBoxLayout *intermediate_layout_op = new QHBoxLayout(this);
+    intermediate_layout_op->setContentsMargins(3,3,0,0);
+    intermediate_layout_op->setSpacing(0);
+    QHBoxLayout *intermediate_layout_df = new QHBoxLayout(this);
+    intermediate_layout_df->setContentsMargins(3,3,0,0);
+    intermediate_layout_df->setSpacing(0);
+
+
     // buttons
     m_general_info_button = new QPushButton("General Information", this);
     m_general_info_button->setEnabled(false);
@@ -157,21 +172,33 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
     //(5) Boolean Function section
     m_boolean_functions_container = new QWidget();
     m_boolean_functions_container_layout = new QVBoxLayout();
+    m_boolean_functions_container_layout->setContentsMargins(6,5,0,0);
+    m_boolean_functions_container_layout->setSpacing(0);
     m_boolean_functions_container->setLayout(m_boolean_functions_container_layout);
+
+    //adding things to container layout
+    intermediate_layout_gt->addWidget(m_general_table);
+    intermediate_layout_gt->addSpacerItem(new QSpacerItem(0,0, QSizePolicy::Expanding, QSizePolicy::Fixed));
+    intermediate_layout_ip->addWidget(m_input_pins_table);
+    intermediate_layout_ip->addSpacerItem(new QSpacerItem(0,0, QSizePolicy::Expanding, QSizePolicy::Fixed));
+    intermediate_layout_op->addWidget(m_output_pins_table);
+    intermediate_layout_op->addSpacerItem(new QSpacerItem(0,0, QSizePolicy::Expanding, QSizePolicy::Fixed));
+    intermediate_layout_df->addWidget(m_data_fields_table);
+    intermediate_layout_df->addSpacerItem(new QSpacerItem(0,0, QSizePolicy::Expanding, QSizePolicy::Fixed));
 
     //adding things to the layout
     m_top_lvl_layout->addWidget(m_general_info_button);
-    m_top_lvl_layout->addWidget(m_general_table);
-    m_top_lvl_layout->addSpacerItem(new QSpacerItem(0, 5, QSizePolicy::Expanding, QSizePolicy::Fixed));
+    m_top_lvl_layout->addLayout(intermediate_layout_gt);
+    m_top_lvl_layout->addSpacerItem(new QSpacerItem(0, 7, QSizePolicy::Expanding, QSizePolicy::Fixed));
     m_top_lvl_layout->addWidget(m_input_pins_button);
-    m_top_lvl_layout->addWidget(m_input_pins_table);
-    m_top_lvl_layout->addSpacerItem(new QSpacerItem(0, 5, QSizePolicy::Expanding, QSizePolicy::Fixed));
+    m_top_lvl_layout->addLayout(intermediate_layout_ip);
+    m_top_lvl_layout->addSpacerItem(new QSpacerItem(0, 7, QSizePolicy::Expanding, QSizePolicy::Fixed));
     m_top_lvl_layout->addWidget(m_output_pins_button);
-    m_top_lvl_layout->addWidget(m_output_pins_table);
-    m_top_lvl_layout->addSpacerItem(new QSpacerItem(0, 5, QSizePolicy::Expanding, QSizePolicy::Fixed));
+    m_top_lvl_layout->addLayout(intermediate_layout_op);
+    m_top_lvl_layout->addSpacerItem(new QSpacerItem(0, 7, QSizePolicy::Expanding, QSizePolicy::Fixed));
     m_top_lvl_layout->addWidget(m_data_fields_button);
-    m_top_lvl_layout->addWidget(m_data_fields_table);
-    m_top_lvl_layout->addSpacerItem(new QSpacerItem(0, 5, QSizePolicy::Expanding, QSizePolicy::Fixed));
+    m_top_lvl_layout->addLayout(intermediate_layout_df);
+    m_top_lvl_layout->addSpacerItem(new QSpacerItem(0, 7, QSizePolicy::Expanding, QSizePolicy::Fixed));
     m_top_lvl_layout->addWidget(m_boolean_functions_button);
     m_top_lvl_layout->addWidget(m_boolean_functions_container);
 
@@ -186,7 +213,7 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
     m_navigation_table->hide();
     connect(m_navigation_table, &graph_navigation_widget::navigation_requested, this, &gate_details_widget::handle_navigation_jump_requested);
 
-    //some connections (maybe connect to simple toggle_hide_show function of widgets)
+    //some connections (maybe connect to simple toggle_hide_show functiom_boolean_functions_container_layoutn of widgets)
     connect(m_general_info_button, &QPushButton::clicked, this, &gate_details_widget::handle_buttons_clicked);
     connect(m_input_pins_button, &QPushButton::clicked, this, &gate_details_widget::handle_buttons_clicked);
     connect(m_output_pins_button, &QPushButton::clicked, this, &gate_details_widget::handle_buttons_clicked);
@@ -274,7 +301,7 @@ void gate_details_widget::handle_net_destination_removed(std::shared_ptr<net> ne
     if (m_current_id == dst_gate_id)
         update(m_current_id);
 }
-
+#include <QDebug>
 void gate_details_widget::handle_buttons_clicked()
 {
     //function that (perhaps) is changed by a toggle-slot of the widget
@@ -283,9 +310,18 @@ void gate_details_widget::handle_buttons_clicked()
         return;
 
     int index = m_top_lvl_layout->indexOf(btn);
-    QWidget* widget = m_top_lvl_layout->itemAt(index+1)->widget();
-    if(!widget)
+    QWidget* widget;
+    if(btn != m_boolean_functions_button)
+    {
+        widget = m_top_lvl_layout->itemAt(index+1)->layout()->itemAt(0)->widget();
+    }
+    else
+        widget = m_top_lvl_layout->itemAt(index+1)->widget();
+
+    if(!widget){
+        qDebug() << "NEED TOOOOOOO REREEEEEEEEEEEEEEE";
         return;
+    }
     if(widget->isHidden()){
         widget->show();
 
