@@ -778,6 +778,10 @@ gate_details_widget QPushButton:disabled{
     height: 12px;
 }
 
+gate_details_widget QLabel{
+    color: #A9B7C6;
+}
+
 /*
 rgb(107, 135, 255)
 */
