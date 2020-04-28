@@ -26,6 +26,7 @@
 #include <QGridLayout>
 #include <QPushButton>
 #include <QPropertyAnimation>
+#include <QScrollBar>
 
 gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
 {
@@ -315,7 +316,7 @@ void gate_details_widget::handle_net_destination_removed(std::shared_ptr<net> ne
     if (m_current_id == dst_gate_id)
         update(m_current_id);
 }
-#include <QDebug>
+
 void gate_details_widget::handle_buttons_clicked()
 {
     //function that (perhaps) is changed by a toggle-slot of the widget
@@ -325,17 +326,14 @@ void gate_details_widget::handle_buttons_clicked()
 
     int index = m_top_lvl_layout->indexOf(btn);
     QWidget* widget;
+
     if(btn != m_boolean_functions_button)
-    {
         widget = m_top_lvl_layout->itemAt(index+1)->layout()->itemAt(0)->widget();
-    }
     else
         widget = m_top_lvl_layout->itemAt(index+1)->widget();
 
-    if(!widget){
-        qDebug() << "NEED TOOOOOOO REREEEEEEEEEEEEEEE";
+    if(!widget)
         return;
-    }
     if(widget->isHidden()){
         widget->show();
 
@@ -512,7 +510,8 @@ void gate_details_widget::handle_module_gate_removed(std::shared_ptr<module> mod
 
 void gate_details_widget::resizeEvent(QResizeEvent* event)
 {
-    m_boolean_functions_container->setFixedWidth(event->size().width());
+    //2 is needed because just the scrollbarwitdth is not enough (does not include its border?)
+    m_boolean_functions_container->setFixedWidth(event->size().width() - m_scroll_area->verticalScrollBar()->width()-2);
 }
 
 void gate_details_widget::update(const u32 gate_id)
