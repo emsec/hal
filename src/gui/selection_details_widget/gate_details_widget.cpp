@@ -53,21 +53,21 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
     m_top_lvl_layout->setSpacing(0);
 
     //container-layouts to add spacingaddWidget (gt = general table, op = output pins, etc)
-    QHBoxLayout *intermediate_layout_gt = new QHBoxLayout(this);
+    QHBoxLayout *intermediate_layout_gt = new QHBoxLayout();
     intermediate_layout_gt->setContentsMargins(3,3,0,0);
     intermediate_layout_gt->setSpacing(0);
-    QHBoxLayout *intermediate_layout_ip = new QHBoxLayout(this);
+    QHBoxLayout *intermediate_layout_ip = new QHBoxLayout();
     intermediate_layout_ip->setContentsMargins(3,3,0,0);
     intermediate_layout_ip->setSpacing(10);
-    QHBoxLayout *intermediate_layout_op = new QHBoxLayout(this);
+    QHBoxLayout *intermediate_layout_op = new QHBoxLayout();
     intermediate_layout_op->setContentsMargins(3,3,0,0);
     intermediate_layout_op->setSpacing(0);
-    QHBoxLayout *intermediate_layout_df = new QHBoxLayout(this);
+    QHBoxLayout *intermediate_layout_df = new QHBoxLayout();
     intermediate_layout_df->setContentsMargins(3,3,0,0);
     intermediate_layout_df->setSpacing(0);
 
     //intermediate layout for section-buttons to see how an additional button ends up looking
-    QHBoxLayout* intermediate_layout_ib = new QHBoxLayout(this);
+    QHBoxLayout* intermediate_layout_ib = new QHBoxLayout();
     intermediate_layout_ib->setContentsMargins(0,0,0,0);
     intermediate_layout_ib->setSpacing(10);
 
