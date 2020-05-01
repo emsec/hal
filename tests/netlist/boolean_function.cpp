@@ -260,6 +260,12 @@ TEST_F(boolean_function_test, check_compare_operator){
             boolean_function b("B");
             // EXPECT_TRUE(((a|b|b) == (a|b)));
         }
+        /*{ ISSUE: Fails, because m_op is not set in boolean_function()
+            // Compare two empty expressions
+            boolean_function a = boolean_function();
+
+            EXPECT_TRUE(a == boolean_function());
+        }*/
         // Tests for !=
         {
             // The boolean function are equivalent in semantic, but do not share the same variable
@@ -302,22 +308,23 @@ TEST_F(boolean_function_test, check_optimize){
         {
             // Optimize some boolean functions and compare their truth_table
             boolean_function bf = (!(a^b&c)|(b|c&_1))^((a&b) | (a|b|c));
-            EXPECT_EQ(bf.get_truth_table(std::vector<std::string>({"C","B","A"})), bf.optimize().get_truth_table(std::vector<std::string>({"C","B","A"}))); // <- fails
+            EXPECT_EQ(bf.get_truth_table(std::vector<std::string>({"C","B","A"})), bf.optimize().get_truth_table(std::vector<std::string>({"C","B","A"})));
         }
         {
             // Optimize some boolean functions and compare their truth_table
             boolean_function bf = (a|b|c);
-            EXPECT_EQ(bf.get_truth_table(std::vector<std::string>({"C","B","A"})), bf.optimize().get_truth_table(std::vector<std::string>({"C","B","A"}))); // <- fails
-
-            // +++ DEBUG OUTPUT +++
-            //printTruthTable(bf, std::vector<std::string>({"C","B","A"}));
-            //printTruthTable(bf.optimize(), std::vector<std::string>({"C","B","A"}));
-            //std::cout << "Variables: amount = " << bf.optimize().get_variables().size() << std::endl;
-            //for (auto v : bf.optimize().get_variables())
-                //std::cout << v << ",";
-            //std::cout << std::endl;
+            EXPECT_EQ(bf.get_truth_table(std::vector<std::string>({"C","B","A"})), bf.optimize().get_truth_table(std::vector<std::string>({"C","B","A"})));
         }
-
+        /*{ // ISSUE: Fails (resulting truth table is (X,X,X,X))
+            // Optimize a boolean function that is constant one
+            boolean_function bf = (a & b) | (!a & b) | (a & !b) | (!a & !b);
+            EXPECT_EQ(bf.get_truth_table(std::vector<std::string>({"A","B"})), bf.optimize().get_truth_table(std::vector<std::string>({"A","B"}))); // <- fails
+        }*/
+        {
+            // Optimize a boolean function that is constant zero
+            boolean_function bf = (a & !a) | (b & !b);
+            EXPECT_EQ(bf.get_truth_table(std::vector<std::string>({"A","B"})), bf.optimize().get_truth_table(std::vector<std::string>({"A","B"}))); // <- fails
+        }
     TEST_END
 }
 

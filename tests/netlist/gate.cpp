@@ -862,7 +862,7 @@ TEST_F(gate_test, check_lut_function)
             // Access the boolean function of a lut, that is stored in ascending order
             std::shared_ptr<netlist> nl   = std::make_shared<netlist>(gl);
             std::shared_ptr<gate> lut_gate = nl->create_gate(MIN_GATE_ID+0, lut, "lut");
-            // ISSUE: Doesn't work for 0x0 (issue in geT_lut_function) and for 0xff (issue in optimize function)
+            // ISSUE: Doesn't work for 0x0 (issue in get_lut_function) and for 0xff (issue in optimize function)
             //for (int i = 0x0; i <= 0xff; i++){
             for (int i = 0x1; i <= 0xfe; i++){
                 lut_gate->set_data(lut->get_config_data_category(), lut->get_config_data_identifier(), "bit_vector", i_to_hex_string(i));
@@ -874,7 +874,7 @@ TEST_F(gate_test, check_lut_function)
             lut->set_config_data_ascending_order(false);
             std::shared_ptr<netlist> nl   = std::make_shared<netlist>(gl);
             std::shared_ptr<gate> lut_gate = nl->create_gate(MIN_GATE_ID+0, lut, "lut");
-            // ISSUE: Doesn't work for 0x0 (issue in geT_lut_function) and for 0xff (issue in optimize function)
+            // ISSUE: Doesn't work for 0x0 (issue in get_lut_function) and for 0xff (issue in optimize function)
             //for (int i = 0x0; i <= 0xff; i++){
             for (int i = 0x1; i <= 0xfe; i++){
                 lut_gate->set_data(lut->get_config_data_category(), lut->get_config_data_identifier(), "bit_vector", i_to_hex_string(i));
@@ -896,19 +896,17 @@ TEST_F(gate_test, check_lut_function)
             // There is no hex string at the config data path
             std::shared_ptr<netlist> nl   = std::make_shared<netlist>(gl);
             std::shared_ptr<gate> lut_gate = nl->create_gate(MIN_GATE_ID+0, lut, "lut");
-            for (int i = 0x1; i <= 0xfe; i++){
-                lut_gate->set_data(lut->get_config_data_category(), lut->get_config_data_identifier(), "bit_vector", "");
-                EXPECT_EQ(lut_gate->get_boolean_function("O_LUT").get_truth_table(input_pins), get_truth_table_from_i(0, 8));
-            }
+            lut_gate->set_data(lut->get_config_data_category(), lut->get_config_data_identifier(), "bit_vector", "");
+            EXPECT_EQ(lut_gate->get_boolean_function("O_LUT").get_truth_table(input_pins), get_truth_table_from_i(0, 8));
         }
-        /*{ // ISSUE: Fails with stoull
+        /*{ // ISSUE: Fails with stoull if content is not in Hex
             // There is no hex string at the config data path
             std::shared_ptr<netlist> nl   = std::make_shared<netlist>(gl);
             std::shared_ptr<gate> lut_gate = nl->create_gate(MIN_GATE_ID+0, lut, "lut");
-            for (int i = 0x1; i <= 0xfe; i++){
-                lut_gate->set_data(lut->get_config_data_category(), lut->get_config_data_identifier(), "bit_vector", "NOHx");
-                EXPECT_EQ(lut_gate->get_boolean_function("O_LUT").get_truth_table(input_pins), get_truth_table_from_i(0, 8));
-            }
+
+            lut_gate->set_data(lut->get_config_data_category(), lut->get_config_data_identifier(), "bit_vector", "NOHx");
+            EXPECT_EQ(lut_gate->get_boolean_function("O_LUT").get_truth_table(input_pins), get_truth_table_from_i(0, 8));
+
         }*/
         /*{ // ISSUE: Fails with stoull
             // Test a lut with more than 6 inputs
