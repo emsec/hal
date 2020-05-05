@@ -1527,7 +1527,7 @@ graph_layouter::node_box graph_layouter::create_box(const hal::node& node, const
     box.x = x;
     box.y = y;
 
-    // GATE IO SPACING SHOULD BE CALCULATED HERE, FOR NOW IT IS JUST ASSUMED TO BE 40 ACROSS THE BORD
+    // GATE IO SPACING SHOULD BE CALCULATED HERE, FOR NOW IT IS JUST ASSUMED TO BE THE MINIMUM ACROSS THE BORD
     box.input_padding  = minimum_gate_io_padding;
     box.output_padding = minimum_gate_io_padding;
 

@@ -34,7 +34,7 @@ public:
 //    virtual std::string get_input_pin_type_at_position(const size_t pos) const = 0;
 //    virtual std::string get_output_pin_type_at_position(const size_t pos) const = 0;
 
-    virtual void set_visuals(const visuals& v) = 0;
+    virtual void set_visuals(const visuals& v);
 
     qreal width() const;
     qreal height() const;
@@ -45,7 +45,7 @@ public:
 //    qreal y_offset() const;
 
 protected:
-    QVariant itemChange(GraphicsItemChange change, const QVariant& value) Q_DECL_OVERRIDE;
+    QVariant itemChange(GraphicsItemChange change, const QVariant& value) override;
 
     QString m_name;
 

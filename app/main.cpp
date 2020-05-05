@@ -67,6 +67,8 @@ int redirect_control_to_interactive_ui(const std::string& name, program_argument
     event_log::initialize();
 
     auto file_name = core_utils::get_file(std::string("lib" + name + ".") + std::string(LIBRARY_FILE_EXTENSION), {core_utils::get_library_directory()});
+    if (file_name.empty())
+        file_name = core_utils::get_file(std::string(name + ".so"), {core_utils::get_library_directory()});
     if (!plugin_manager::load(name, file_name))
     {
         return ERROR;

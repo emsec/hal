@@ -159,20 +159,31 @@
      # Setup target
      add_custom_target(${Coverage_NAME}
 
-                       # Cleanup lcov
+                       COMMENT "Cleanup lcov"
                        COMMAND ${LCOV_PATH} --directory ${CMAKE_BINARY_DIR} --zerocounters
-                       # Create baseline to make sure untouched files show up in the report
-                       COMMAND ${LCOV_PATH} -c -i -d  ${CMAKE_BINARY_DIR} -o ${Coverage_NAME}.base
 
-                       # Run tests
+                       COMMENT "Create baseline to make sure untouched files show up in the report"
+                       COMMAND ${LCOV_PATH} -c -i -d  ${CMAKE_BINARY_DIR} -o ${CMAKE_BINARY_DIR}/${Coverage_NAME}.base
+
+                       COMMENT "Check if base file exists"
+                       COMMAND [ -f ${CMAKE_BINARY_DIR}/${Coverage_NAME}.base ] || exit -1
+
+                       COMMENT "Run tests"
                        COMMAND ${Coverage_EXECUTABLE}
 
-                       # Capturing lcov counters and generating report
+                       COMMENT "Capturing lcov counters and generating report"
                        COMMAND ${LCOV_PATH} --directory ${CMAKE_BINARY_DIR} --capture --output-file ${Coverage_NAME}.info
-                       # add baseline counters
+
+                       COMMENT "add baseline counters"
                        COMMAND ${LCOV_PATH} -a ${Coverage_NAME}.base -a ${Coverage_NAME}.info --output-file ${Coverage_NAME}.total
+
+                       COMMENT "Remove Coverage excludes"
                        COMMAND ${LCOV_PATH} --remove ${Coverage_NAME}.total ${COVERAGE_EXCLUDES} --output-file ${PROJECT_BINARY_DIR}/${Coverage_NAME}.info.cleaned
+
+                       COMMENT "List cleaned files"
                        COMMAND ${LCOV_PATH} --list ${PROJECT_BINARY_DIR}/${Coverage_NAME}.info.cleaned
+
+                       COMMENT "Genhtml"
                        COMMAND ${GENHTML_PATH} -o ${Coverage_NAME} ${PROJECT_BINARY_DIR}/${Coverage_NAME}.info.cleaned
                        # COMMAND ${CMAKE_COMMAND} -E remove ${Coverage_NAME}.base ${Coverage_NAME}.total ${PROJECT_BINARY_DIR}/${Coverage_NAME}.info.cleaned
 
@@ -236,7 +247,8 @@
 #                       -o ${Coverage_NAME}.xml
                        COMMAND ${GCOVR_PATH} -s --html-details -r ${CMAKE_SOURCE_DIR} ${COBERTURA_EXCLUDES}
                        -o ${Coverage_NAME}/
-                       WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
+#                       WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
+                       WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
                        DEPENDS ${Coverage_DEPENDENCIES}
                        COMMENT "Running gcovr to produce Cobertura code coverage report."
                        )
@@ -251,4 +263,7 @@
 
  function(APPEND_COVERAGE_COMPILER_FLAGS)
      message(STATUS "Appending code coverage compiler flags: ${COVERAGE_COMPILER_FLAGS}")
+     enable_cxx_compile_option_if_supported("--coverage" "" "PRIVATE")
+     enable_cxx_compile_option_if_supported("-fprofile-arcs" "" "PRIVATE")
+     enable_cxx_compile_option_if_supported("-ftest-coverage" "" "PRIVATE")
  endfunction() # APPEND_COVERAGE_COMPILER_FLAGS

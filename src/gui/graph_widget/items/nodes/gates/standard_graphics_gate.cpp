@@ -1,4 +1,4 @@
-#include "gui/graph_widget/items/gates/standard_graphics_gate.h"
+#include "gui/graph_widget/items/nodes/gates/standard_graphics_gate.h"
 
 #include "netlist/gate.h"
 
@@ -83,11 +83,7 @@ void standard_graphics_gate::load_settings()
 void standard_graphics_gate::update_alpha()
 {
     if (s_lod <= graph_widget_constants::gate_max_lod)
-    {
-        const qreal difference = graph_widget_constants::gate_max_lod - graph_widget_constants::gate_min_lod;
-
-        s_alpha = 1 - (s_lod - graph_widget_constants::gate_min_lod) / difference;
-    }
+        s_alpha = 1 - (s_lod - graph_widget_constants::gate_min_lod) / (graph_widget_constants::gate_max_lod - graph_widget_constants::gate_min_lod);
     else
         s_alpha = 0;
 }
@@ -153,12 +149,14 @@ void standard_graphics_gate::paint(QPainter* painter, const QStyleOptionGraphics
                 }
                 case selection_relay::subfocus::left:
                 {
-                    painter->drawText(m_input_pin_positions.at(g_selection_relay.m_subfocus_index), m_input_pins.at(g_selection_relay.m_subfocus_index));
+                    const int index = static_cast<int>(g_selection_relay.m_subfocus_index);
+                    painter->drawText(m_input_pin_positions.at(index), m_input_pins.at(index));
                     break;
                 }
                 case selection_relay::subfocus::right:
                 {
-                    painter->drawText(m_output_pin_positions.at(g_selection_relay.m_subfocus_index), m_output_pins.at(g_selection_relay.m_subfocus_index));
+                    const int index = static_cast<int>(g_selection_relay.m_subfocus_index);
+                    painter->drawText(m_output_pin_positions.at(index), m_output_pins.at(index));
                     break;
                 }
                 }
@@ -168,8 +166,6 @@ void standard_graphics_gate::paint(QPainter* painter, const QStyleOptionGraphics
         {
             QColor fade = m_color;
             fade.setAlphaF(s_alpha);
-
-            //painter->fillRect(QRect(0, 0, m_width, m_height), fade);
             painter->fillRect(QRectF(0, s_color_bar_height, m_width, m_height - s_color_bar_height), fade);
         }
 
@@ -215,11 +211,6 @@ QPointF standard_graphics_gate::get_output_scene_position(const u32 net_id, cons
     y += s_pin_font_height / 2;
 
     return mapToScene(QPointF(m_width, y));
-}
-
-void standard_graphics_gate::set_visuals(const graphics_node::visuals& v)
-{
-    m_color = v.main_color;
 }
 
 void standard_graphics_gate::format(const bool& adjust_size_to_grid)

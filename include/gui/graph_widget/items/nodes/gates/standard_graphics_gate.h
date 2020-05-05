@@ -1,9 +1,9 @@
 #ifndef STANDARD_GRAPHICS_GATE_H
 #define STANDARD_GRAPHICS_GATE_H
 
-#include "gui/graph_widget/items/graphics_gate.h"
+#include "gui/graph_widget/items/nodes/gates/graphics_gate.h"
 
-class standard_graphics_gate : public graphics_gate
+class standard_graphics_gate final : public graphics_gate
 {
 public:
     static void load_settings();
@@ -15,8 +15,6 @@ public:
 
     QPointF get_input_scene_position(const u32 net_id, const QString& pin_type) const override;
     QPointF get_output_scene_position(const u32 net_id, const QString& pin_type) const override;
-
-    virtual void set_visuals(const visuals& v) override;
 
 private:
     static qreal s_alpha;

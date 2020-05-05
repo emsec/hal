@@ -3,8 +3,8 @@
 
 #include "def.h"
 
-#include "gui/graph_widget/items/graphics_net.h"
-#include "gui/graph_widget/items/graphics_node.h"
+#include "gui/graph_widget/items/nets/graphics_net.h"
+#include "gui/graph_widget/items/nodes/graphics_node.h"
 
 #include <QColor>
 #include <QMap>
@@ -24,12 +24,11 @@ public:
     };
 
     graph_shader(const graph_context* const context);
+    virtual ~graph_shader() = default;
 
     virtual void add(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets) = 0;
     virtual void remove(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets) = 0;
-
     virtual void update() = 0;
-    virtual void reset() = 0;
 
     const shading& get_shading();
 
