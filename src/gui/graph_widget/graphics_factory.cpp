@@ -22,14 +22,14 @@ QStringList graphics_gate_types()
     };
 }
 
-graphics_module* create_graphics_module(const std::shared_ptr<const module> m, const int type)
+graphics_module* create_graphics_module(const std::shared_ptr<module> m, const int type)
 {
     assert(m);
 
     switch (type)
     {
     case 0: return new standard_graphics_module(m);
-    default: return nullptr;
+    default: assert(false); return nullptr; // UNREACHABLE
     }
 }
 
@@ -40,7 +40,7 @@ graphics_gate* create_graphics_gate(const std::shared_ptr<const gate> g, const i
     switch (type)
     {
     case 0: return new standard_graphics_gate(g);
-    default: return nullptr;
+    default: assert(false); return nullptr; // UNREACHABLE
     }
 }
 }

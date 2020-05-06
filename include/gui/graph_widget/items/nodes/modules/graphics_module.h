@@ -10,28 +10,22 @@ class module;
 class graphics_module : public graphics_node
 {
 public:
-    graphics_module(const std::shared_ptr<const module> m);
+    explicit graphics_module(const std::shared_ptr<module> m);
 
 protected:
-    struct module_pin // different struct for in / output pins ???
+    struct module_pin
     {
+        QString name;
         u32 net_id;
-        QString pin_type;
-        QString differentiation_number;
-        QString occurrence_number;
 
         bool operator==(const module_pin& rhs) const
         {
-            return this->net_id == rhs.net_id && this->pin_type == rhs.pin_type;
+            return this->name == rhs.name && this->net_id == rhs.net_id;
         }
     };
 
     QVector<module_pin> m_input_pins;
     QVector<module_pin> m_output_pins;
-
-    static bool s_sort_pins;
-    static bool s_show_differentiation_number;
-    static bool s_show_occurence_number;
 };
 
 #endif // GRAPHICS_MODULE_H

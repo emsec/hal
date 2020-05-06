@@ -8,7 +8,6 @@
 #include "gui/graph_widget/items/nodes/modules/standard_graphics_module.h"
 #include "gui/graph_widget/items/nets/arrow_separated_net.h"
 #include "gui/graph_widget/items/nets/circle_separated_net.h"
-#include "gui/graph_widget/items/nets/hollow_arrow_separated_net.h"
 #include "gui/graph_widget/items/nets/labeled_separated_net.h"
 #include "gui/graph_widget/items/nets/separated_graphics_net.h"
 #include "gui/graph_widget/items/nets/standard_graphics_net.h"
@@ -206,7 +205,6 @@ namespace style
         separated_graphics_net::load_settings();
         arrow_separated_net::load_settings();
         circle_separated_net::load_settings();
-        hollow_arrow_separated_net::load_settings();
         labeled_separated_net::load_settings();
 
         node_drag_shadow::load_settings();

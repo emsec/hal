@@ -1,11 +1,12 @@
 #include "graph_widget/graph_navigation_widget.h"
 
+#include "core/log.h"
+
 #include "netlist/gate.h"
 #include "netlist/module.h"
 
 #include "gui_globals.h"
 
-#include "core/log.h"
 #include <QHeaderView>
 #include <QKeyEvent>
 #include <QScrollBar>
@@ -27,9 +28,6 @@ graph_navigation_widget::graph_navigation_widget(QWidget* parent) : QTableWidget
     verticalHeader()->setVisible(false);
 
     connect(this, &QTableWidget::itemDoubleClicked, this, &graph_navigation_widget::handle_item_double_clicked);
-
-    //    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    //    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 }
 
 void graph_navigation_widget::setup(bool direction)

@@ -1,8 +1,8 @@
 #include "gui/graph_widget/graphics_scene.h"
 
+#include "core/log.h"
 #include "netlist/gate.h"
 #include "netlist/net.h"
-#include "core/log.h"
 
 #include "gui/graph_widget/graph_widget_constants.h"
 #include "gui/graph_widget/graphics_factory.h"
@@ -10,8 +10,6 @@
 #include "gui/graph_widget/items/graphics_item.h"
 #include "gui/graph_widget/items/nodes/modules/graphics_module.h"
 #include "gui/graph_widget/items/nets/graphics_net.h"
-#include "netlist/gate.h"
-//#include "gui/graph_widget/graphics_items/utility_items/gate_navigation_popup.h"
 #include "gui/gui_globals.h"
 
 #include <QGraphicsSceneMouseEvent>
@@ -78,7 +76,6 @@ void graphics_scene::set_grid_type(const graph_widget_constants::grid_type& grid
 
 void graphics_scene::set_grid_base_line_color(const QColor& color)
 {
-    // ALTERNATIVELY ADRESS ADAPTER MEMBERS DIRECTLY
     s_grid_base_line_color = color;
 }
 
@@ -106,15 +103,11 @@ QPointF graphics_scene::snap_to_grid(const QPointF& pos)
 
 graphics_scene::graphics_scene(QObject* parent) : QGraphicsScene(parent),
     m_drag_shadow_gate(new node_drag_shadow())
-//    m_left_gate_navigation_popup(new gate_navigation_popup(gate_navigation_popup::type::left)),
-//    m_right_gate_navigation_popup(new gate_navigation_popup(gate_navigation_popup::type::right))
 {
     // FIND OUT IF MANUAL CHANGE TO DEPTH IS NECESSARY / INCREASES PERFORMANCE
     //m_scene.setBspTreeDepth(10);
 
     connect_all();
-
-//    QGraphicsScene::addItem(m_left_gate_navigation_popup);
 
     QGraphicsScene::addItem(m_drag_shadow_gate);
 
@@ -289,31 +282,6 @@ const graphics_gate* graphics_scene::get_gate_item(const u32 id) const
     return nullptr;
 }
 
-//void graphics_scene::update_utility_items()
-//{
-//    // TEST IMPLEMENTATION
-//    // EXPAND WITH MORE ITEMS
-
-//    if (g_selection_relay.m_focus_type == selection_relay::item_type::gate)
-//    {
-//        for (gate_data& d : m_gate_items)
-//        {
-//            if (d.id == g_selection_relay.m_selected_gates[0])
-//            {
-//                graphics_gate* g = d.item;
-
-//                // IF (ANIMATE) ANIMATE ELSE DONT
-//                // ALTERNATIVELY ANIMATE IF SCENE HAS LESS THAN X ITEMS
-//                m_left_gate_navigation_popup->stop();
-//                m_left_gate_navigation_popup->set_height(g->height());
-//                m_left_gate_navigation_popup->start(QPointF(g->pos().x() - 120, g->pos().y()));
-//            }
-//        }
-//    }
-//    else
-//        m_left_gate_navigation_popup->stop();
-//}
-
 void graphics_scene::connect_all()
 {
     connect(&g_settings_relay, &settings_relay::setting_changed, this, &graphics_scene::handle_global_setting_changed);
@@ -355,14 +323,19 @@ void graphics_scene::delete_all_items()
 
 void graphics_scene::update_visuals(const graph_shader::shading& s)
 {
-    for (module_data m : m_module_items)
+    for (module_data& m : m_module_items)
     {
         m.item->set_visuals(s.module_visuals.value(m.id));
     }
 
-    for (gate_data g : m_gate_items)
+    for (gate_data& g : m_gate_items)
     {
         g.item->set_visuals(s.gate_visuals.value(g.id));
+    }
+
+    for (net_data& n : m_net_items)
+    {
+        n.item->set_visuals(s.net_visuals.value(n.id));
     }
 }
 
@@ -483,16 +456,12 @@ void graphics_scene::handle_extern_selection_changed(void* sender)
         }
     }
 
-    //update_utility_items();
-
     blockSignals(original_value);
 }
 
 void graphics_scene::handle_extern_subfocus_changed(void* sender)
 {
     Q_UNUSED(sender)
-
-    //update_utility_items();
 }
 
 void graphics_scene::mousePressEvent(QGraphicsSceneMouseEvent* event)
@@ -509,6 +478,8 @@ void graphics_scene::mousePressEvent(QGraphicsSceneMouseEvent* event)
 
 void graphics_scene::handle_global_setting_changed(void* sender, const QString& key, const QVariant& value)
 {
+    Q_UNUSED(sender)
+
     #ifdef GUI_DEBUG_GRID
     if (key == "debug/grid")
     {
@@ -633,40 +604,53 @@ void graphics_scene::debug_set_layouter_grid(const QVector<qreal>& debug_x_lines
 void graphics_scene::debug_draw_layouter_grid(QPainter* painter, const int x_from, const int x_to, const int y_from, const int y_to)
 {   
     painter->setPen(QPen(Qt::magenta));
-    for (qreal x : m_debug_x_lines) {
-        QLine line(x, y_from, x, y_to);
+
+    for (qreal x : m_debug_x_lines)
+    {
+        QLineF line(x, y_from, x, y_to);
         painter->drawLine(line);
     }
-    for (qreal y : m_debug_y_lines) {
-        QLine line(x_from, y, x_to, y);
+
+    for (qreal y : m_debug_y_lines)
+    {
+        QLineF line(x_from, y, x_to, y);
         painter->drawLine(line);
     }
+
     painter->setPen(QPen(Qt::green));
-    int x = m_debug_x_lines.last() + m_debug_default_width;
+
+    qreal x = m_debug_x_lines.last() + m_debug_default_width;
+
     while (x <= x_to)
     {
-        QLine line(x, y_from, x, y_to);
+        QLineF line(x, y_from, x, y_to);
         painter->drawLine(line);
         x += m_debug_default_width;
     }
+
     x = m_debug_x_lines.first() - m_debug_default_width;
+
     while (x >= x_from)
     {
-        QLine line(x, y_from, x, y_to);
+        QLineF line(x, y_from, x, y_to);
         painter->drawLine(line);
         x -= m_debug_default_width;
     }
-    int y = m_debug_y_lines.last() + m_debug_default_height;
+
+    qreal y = m_debug_y_lines.last() + m_debug_default_height;
+
     while (y <= y_to)
     {
-        QLine line(x_from, y, x_to, y);
+        QLineF line(x_from, y, x_to, y);
         painter->drawLine(line);
         y += m_debug_default_height;
     }
+
     y = m_debug_y_lines.first() - m_debug_default_height;
+
     while (y >= y_from)
     {
-        QLine line(x_from, y, x_to, y);
+        QLineF line(x_from, y, x_to, y);
         painter->drawLine(line);
         y -= m_debug_default_height;
     }

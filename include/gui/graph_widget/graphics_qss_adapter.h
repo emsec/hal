@@ -1,9 +1,9 @@
-#ifndef NETLIST_GRAPHICS_QSS_ADAPTER_H
-#define NETLIST_GRAPHICS_QSS_ADAPTER_H
+#ifndef GRAPHICS_QSS_ADAPTER_H
+#define GRAPHICS_QSS_ADAPTER_H
 
 #include <QWidget>
 
-class netlist_graphics_qss_adapter : public QWidget
+class graphics_qss_adapter : public QWidget
 {
     Q_OBJECT
     Q_PROPERTY(QColor gate_base_color READ gate_base_color WRITE set_gate_base_color)
@@ -25,7 +25,7 @@ class netlist_graphics_qss_adapter : public QWidget
     Q_PROPERTY(QColor grid_cluster_dot_color READ grid_cluster_dot_color WRITE set_grid_cluster_dot_color)
 
 public:
-    explicit netlist_graphics_qss_adapter(QWidget* parent = nullptr);
+    explicit graphics_qss_adapter(QWidget* parent = nullptr);
 
     void repolish();
 
@@ -89,4 +89,4 @@ private:
     QColor m_grid_cluster_dot_color;
 };
 
-#endif // NETLIST_GRAPHICS_QSS_ADAPTER_H
+#endif // GRAPHICS_QSS_ADAPTER_H

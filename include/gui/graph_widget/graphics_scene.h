@@ -3,17 +3,17 @@
 
 #include "def.h"
 
-#include "gui/gui_globals.h"
-#include "gui/graph_widget/shaders/graph_shader.h"
-#include "items/utility_items/node_drag_shadow.h"
 #include "netlist/gate.h"
 #include "netlist/module.h"
+
+#include "gui/gui_globals.h"
+#include "gui/graph_widget/shaders/graph_shader.h"
+#include "gui/graph_widget/items/utility_items/node_drag_shadow.h"
 
 #include <QGraphicsScene>
 #include <QPair>
 #include <QVector>
 
-//class gate_navigation_popup;
 class graphics_gate;
 class graphics_item;
 class graphics_module;
@@ -29,7 +29,6 @@ class graphics_scene : public QGraphicsScene
     Q_OBJECT
 
 public:
-
     static void set_lod(const qreal& lod);
     static void set_grid_enabled(const bool& value);
     static void set_grid_clusters_enabled(const bool& value);
@@ -67,15 +66,13 @@ public:
     void debug_set_layouter_grid(const QVector<qreal>& debug_x_lines, const QVector<qreal>& debug_y_lines, qreal debug_default_height, qreal debug_default_width);
     #endif
 
-//    void update_utility_items();
-
 public Q_SLOTS:
     void handle_intern_selection_changed();
     void handle_extern_selection_changed(void* sender);
     void handle_extern_subfocus_changed(void* sender);
 
 protected:
-    void mousePressEvent(QGraphicsSceneMouseEvent* event) Q_DECL_OVERRIDE;
+    void mousePressEvent(QGraphicsSceneMouseEvent* event) override;
 
 private Q_SLOTS:
     void handle_global_setting_changed(void* sender, const QString& key, const QVariant& value);
@@ -118,7 +115,7 @@ private:
     using QGraphicsScene::removeItem;
     using QGraphicsScene::clear;
 
-    void drawBackground(QPainter* painter, const QRectF& rect) Q_DECL_OVERRIDE;
+    void drawBackground(QPainter* painter, const QRectF& rect) override;
 
     node_drag_shadow* m_drag_shadow_gate;
     
@@ -134,9 +131,6 @@ private:
     qreal m_debug_default_height;
     bool m_debug_grid_enable;
     #endif
-
-//    gate_navigation_popup* m_left_gate_navigation_popup;
-//    gate_navigation_popup* m_right_gate_navigation_popup;
 };
 
 #endif // GRAPH_SCENE_H

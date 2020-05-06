@@ -400,9 +400,8 @@ void graph_graphics_view::dragMoveEvent(QDragMoveEvent* event)
                 }
             }
         }
-
         m_drop_allowed = (cue != node_drag_shadow::drag_cue::rejected);
-
+        
         static_cast<graphics_scene*>(scene())->move_drag_shadow(snap[1], cue);
     }
 }

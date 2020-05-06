@@ -33,20 +33,19 @@ public:
 
     separated_graphics_net(const std::shared_ptr<const net> n);
 
-    virtual void add_output() = 0;
     virtual void add_input(const QPointF& scene_position) = 0;
-
-    virtual void finalize() = 0;
+    virtual void add_output(const QPointF& scene_position) = 0;
 
     virtual qreal input_width() const = 0;
     virtual qreal output_width() const = 0;
 
+    virtual void finalize();
+
 protected:
     static qreal s_alpha;
 
-    QVector<QPointF> m_input_wires;
-    line_style m_line_style;
-    bool m_draw_output;
+    QVector<QPointF> m_input_positions;
+    QVector<QPointF> m_output_positions;
 };
 
 #endif // SEPARATED_GRAPHICS_NET_H

@@ -33,37 +33,40 @@ class net;
 class graphics_net : public graphics_item
 {
 public:
-    enum class line_style
-    {
-        solid,
-        dash,
-        dot
-    };
-
     struct visuals
     {
         bool visible;
         QColor color;
-        line_style style;
+        Qt::PenStyle pen_style;
+        bool fill_icon;
+        QColor fill_color;
+        Qt::BrushStyle brush_style;
     };
 
     static void load_settings();
 
     graphics_net(const std::shared_ptr<const net> n);
 
-    QRectF boundingRect() const Q_DECL_OVERRIDE;
-    virtual QPainterPath shape() const Q_DECL_OVERRIDE;
+    QRectF boundingRect() const override;
+    QPainterPath shape() const override;
 
-    virtual void set_visuals(const visuals& v) = 0;
+    virtual void set_visuals(const visuals& v);
 
 protected:
-    static QPen s_pen;
-
     static qreal s_line_width;
-    static qreal s_stroke_width;
+    static qreal s_shape_width;
+
+    static QPen s_pen;
+    static QBrush s_brush;
 
     QRectF m_rect;
     QPainterPath m_shape;
+
+    Qt::PenStyle m_pen_style;
+
+    bool m_fill_icon;
+    QColor m_fill_color;
+    Qt::BrushStyle m_brush_style;
 };
 
 #endif // GRAPHICS_NET_H

@@ -26,7 +26,7 @@
 
 #include <QObject>
 
-class netlist_graphics_qss_adapter;
+class graphics_qss_adapter;
 class notification_manager_qss_adapter;
 class python_qss_adapter;
 class shared_properties_qss_adapter;
@@ -57,7 +57,7 @@ private:
     explicit style_manager(QObject* parent = nullptr);
     void set_default(QApplication* app);
 
-    netlist_graphics_qss_adapter* m_graphics_qss_adapter;
+    graphics_qss_adapter* m_graphics_qss_adapter;
     shared_properties_qss_adapter* m_shared_properties;
     notification_manager_qss_adapter* m_notification_manager;
     python_qss_adapter* m_python_syntax_highlighter;

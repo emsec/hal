@@ -11,12 +11,12 @@ physical_graph_layouter::physical_graph_layouter(const graph_context* const cont
 {
 }
 
-const QString physical_graph_layouter::name() const
+QString physical_graph_layouter::name() const
 {
     return "Physical Layouter";
 }
 
-const QString physical_graph_layouter::description() const
+QString physical_graph_layouter::description() const
 {
     return "<p>PLACEHOLDER</p>";
 }

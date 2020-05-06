@@ -50,38 +50,46 @@ public:
 
     struct lines
     {
-        qreal src_x;
-        qreal src_y;
+        void append_h_line(const qreal small_x, const qreal big_x, const qreal y);
+        void append_v_line(const qreal x, const qreal small_y, const qreal big_y);
 
+        void merge_lines();
+
+    private:
         QVector<h_line> h_lines;
         QVector<v_line> v_lines;
 
-//        void remove_zero_length_lines();
-//        void fix_order();
-//        void move(qreal x, qreal y);
+        friend standard_graphics_net;
     };
 
     static void load_settings();
     static void update_alpha();
 
-    //standard_graphics_net(const std::shared_ptr<const net> n, const lines& l);
-    standard_graphics_net(const std::shared_ptr<const net> n, lines& l, bool draw_arrow);
+    standard_graphics_net(const std::shared_ptr<const net> n, const lines& l);
 
-    virtual void set_visuals(const visuals& v) override;
-    virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override;
+    void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override;
 
 private:
     static qreal s_alpha;
-    static qreal s_radius;
-    static QBrush s_brush;
+
+    static qreal s_wire_length;
+
+    static qreal s_left_arrow_offset;
+    static qreal s_right_arrow_offset;
+
+    static qreal s_arrow_left_x_shift;
+    static qreal s_arrow_right_x_shift;
+    static qreal s_arrow_side_length;
+
+    static qreal s_arrow_width;
+    static qreal s_arrow_height;
+
     static QPainterPath s_arrow;
+
+    static qreal s_split_radius;
 
     QVector<QLineF> m_lines;
     QVector<QPointF> m_splits;
-
-    line_style m_line_style;
-
-    bool m_draw_arrow;
 };
 
 #endif // STANDARD_GRAPHICS_NET_H

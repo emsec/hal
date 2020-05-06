@@ -8,7 +8,6 @@
 #include "gui/graph_widget/contexts/graph_context.h"
 #include "gui/graph_widget/graph_context_manager.h"
 #include "gui/graph_widget/graph_graphics_view.h"
-#include "gui/graph_widget/graph_layout_progress_widget.h"
 #include "gui/graph_widget/graph_layout_spinner_widget.h"
 #include "gui/graph_widget/graph_navigation_widget.h"
 #include "gui/graph_widget/graphics_scene.h"
@@ -30,7 +29,7 @@
 
 graph_widget::graph_widget(graph_context* context, QWidget* parent)
     : content_widget("Graph", parent), m_view(new graph_graphics_view(this)), m_context(context), m_overlay(new dialog_overlay(this)), m_navigation_widget(new graph_navigation_widget(nullptr)),
-      m_progress_widget(new graph_layout_progress_widget(this)), m_spinner_widget(new graph_layout_spinner_widget(this)), m_current_expansion(0)
+      m_spinner_widget(new graph_layout_spinner_widget(this)), m_current_expansion(0)
 {
     connect(m_navigation_widget, &graph_navigation_widget::navigation_requested, this, &graph_widget::handle_navigation_jump_requested);
     connect(m_navigation_widget, &graph_navigation_widget::close_requested, m_overlay, &dialog_overlay::hide);
@@ -140,7 +139,6 @@ void graph_widget::keyPressEvent(QKeyEvent* event)
         {
             if (event->modifiers() & Qt::ControlModifier)    // modifiers are set as bitmasks
             {
-                handle_history_step_back_request();
             }
             break;
         }
@@ -458,48 +456,6 @@ void graph_widget::handle_navigation_down_request()
             g_selection_relay.navigate_down();
 }
 
-void graph_widget::handle_history_step_back_request()
-{
-    /*
-    if (m_context_history.empty())
-        return;
-
-    auto entry = m_context_history.back();
-    m_context_history.pop_back();
-
-    m_context->begin_change();
-    m_context->clear();
-    m_context->add(entry.m_modules, entry.m_gates);
-    m_context->end_change();
-
-    qDebug() << "REMOVED context to history, full history:";
-    int i = 0;
-
-    for (const context_history_entry& e : m_context_history)
-    {
-        qDebug() << "Entry " + QString::number(i);
-
-        QString modules = "Modules: " + QString::number(e.m_modules.size());
-        //        QString modules = "Modules: ";
-        //        for (u32 id : e.m_modules)
-        //            modules.append(QString::number(id) + ", ");
-
-        qDebug() << modules;
-
-        QString gates = "Gates: " + QString::number(e.m_gates.size());
-        //        QString gates = "Gates: ";
-        //        for (u32 id : e.m_gates)
-        //            gates.append(QString::number(id) + ", ");
-
-        qDebug() << gates;
-
-        ++i;
-    }
-
-    qDebug() << "-------------------------------------";
-    */
-}
-
 void graph_widget::handle_enter_module_requested(const u32 id)
 {
     auto m = g_netlist->get_module_by_id(id);
@@ -554,16 +510,17 @@ void graph_widget::ensure_gates_visible(const QSet<u32> gates)
     int min_y = INT_MAX;
     int max_x = INT_MIN;
     int max_y = INT_MIN;
+
     for (auto id : gates)
     {
         auto rect = m_context->scene()->get_gate_item(id)->sceneBoundingRect();
 
-        min_x = std::min(min_x, (int)rect.left());
-        max_x = std::max(max_x, (int)rect.right());
-        min_y = std::min(min_y, (int)rect.top());
-
-        max_y = std::max(max_y, (int)rect.bottom());
+        min_x = std::min(min_x, static_cast<int>(rect.left()));
+        max_x = std::max(max_x, static_cast<int>(rect.right()));
+        min_y = std::min(min_y, static_cast<int>(rect.top()));
+        max_y = std::max(max_y, static_cast<int>(rect.bottom()));
     }
+
     auto targetRect = QRectF(min_x, min_y, max_x-min_x, max_y-min_y).marginsAdded(QMarginsF(20,20,20,20));
 
     // FIXME This breaks as soon as the layouter call that preceded the call to this function
@@ -587,47 +544,6 @@ void graph_widget::ensure_gates_visible(const QSet<u32> gates)
     connect(anim, &QVariantAnimation::valueChanged, [=](const QVariant& value) { m_view->fitInView(value.toRectF(), Qt::KeepAspectRatio); });
 
     anim->start(QAbstractAnimation::DeleteWhenStopped);
-}
-
-void graph_widget::add_context_to_history()
-{
-    /*context_history_entry entry;
-
-    entry.m_modules = m_context->modules();
-    entry.m_gates   = m_context->gates();
-
-    m_context_history.push_back(entry);
-
-    while (m_context_history.size() > 10)
-    {
-        m_context_history.pop_front();
-    }
-
-    qDebug() << "ADDED context to history, full history:";
-    int i = 0;
-
-    for (const context_history_entry& e : m_context_history)
-    {
-        qDebug() << "Entry " + QString::number(i);
-
-        QString modules = "Modules: " + QString::number(e.m_modules.size());
-        //        QString modules = "Modules: ";
-        //        for (u32 id : e.m_modules)
-        //            modules.append(QString::number(id) + ", ");
-
-        qDebug() << modules;
-
-        QString gates = "Gates: " + QString::number(e.m_gates.size());
-        //        QString gates = "Gates: ";
-        //        for (u32 id : e.m_gates)
-        //            gates.append(QString::number(id) + ", ");
-
-        qDebug() << gates;
-
-        ++i;
-    }
-
-    qDebug() << "-------------------------------------";*/
 }
 
 void graph_widget::reset_focus()

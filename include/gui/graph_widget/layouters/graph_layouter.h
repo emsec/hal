@@ -146,11 +146,11 @@ class graph_layouter : public QObject
 public:
     explicit graph_layouter(const graph_context* const context, QObject* parent = nullptr);
 
+    virtual QString name() const        = 0;
+    virtual QString description() const = 0;
+
     virtual void add(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets, hal::placement_hint placement = hal::placement_hint{hal::placement_mode::standard, hal::node()})    = 0;
     virtual void remove(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets) = 0;
-
-    virtual const QString name() const        = 0;
-    virtual const QString description() const = 0;
 
     void layout();
 

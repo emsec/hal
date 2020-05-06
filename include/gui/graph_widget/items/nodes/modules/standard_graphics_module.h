@@ -9,7 +9,7 @@ public:
     static void load_settings();
     static void update_alpha();
 
-    standard_graphics_module(const std::shared_ptr<const module> m, bool adjust_size_to_grid = true);
+    explicit standard_graphics_module(const std::shared_ptr<module> m, bool adjust_size_to_grid = true);
 
     void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = nullptr) override;
 
@@ -53,7 +53,6 @@ private:
     QPointF m_name_position;
     QPointF m_type_position;
 
-    QVector<QPointF> m_input_pin_positions;
     QVector<QPointF> m_output_pin_positions;
 };
 

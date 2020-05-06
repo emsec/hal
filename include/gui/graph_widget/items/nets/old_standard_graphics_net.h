@@ -21,8 +21,8 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef UNRESTRICTED_GRAPHICS_NET_H
-#define UNRESTRICTED_GRAPHICS_NET_H
+#ifndef OLD_STANDARD_GRAPHICS_NET_H
+#define OLD_STANDARD_GRAPHICS_NET_H
 
 #include "gui/graph_widget/items/nets/graphics_net.h"
 
@@ -31,26 +31,65 @@
 
 class net;
 
-class unrestricted_graphics_net : public graphics_net
+class old_standard_graphics_net : public graphics_net
 {
 public:
-    unrestricted_graphics_net(const std::shared_ptr<const net> n);
+    struct h_line
+    {
+        qreal small_x;
+        qreal big_x;
+        qreal y;
+    };
 
-    virtual void set_visuals(const visuals& v) Q_DECL_OVERRIDE;
-    virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) Q_DECL_OVERRIDE;
+    struct v_line
+    {
+        qreal x;
+        qreal small_y;
+        qreal big_y;
+    };
 
-    void line_to(const QPointF& scene_position);
-    void line_to_x(const qreal scene_x);
-    void line_to_y(const qreal scene_y);
-    void move_pen_to(const QPointF& scene_position);
+    struct lines
+    {
+        QVector<h_line> h_lines;
+        QVector<v_line> v_lines;
 
-    void finalize();
+//        void remove_zero_length_lines();
+//        void fix_order();
+//        void move(qreal x, qreal y);
+    };
 
-    QPointF current_scene_position() const;
+    static void load_settings();
+    static void update_alpha();
+
+    //standard_graphics_net(const std::shared_ptr<const net> n, const lines& l);
+    old_standard_graphics_net(const std::shared_ptr<const net> n, lines& l, bool complete = true);
+
+    void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override;
 
 private:
-    QPainterPath m_path;
-    QVector<QLineF> m_lines;
+    static qreal s_alpha;
+
+    static qreal s_wire_length;
+
+    static qreal s_left_arrow_offset;
+    static qreal s_right_arrow_offset;
+
+    static qreal s_arrow_left_x_shift;
+    static qreal s_arrow_right_x_shift;
+    static qreal s_arrow_side_length;
+
+    static qreal s_arrow_width;
+    static qreal s_arrow_height;
+
+    static QPainterPath s_arrow;
+
+    static qreal s_split_radius;
+
+    QVector<QLineF> m_output_lines;
+    QVector<QLineF> m_other_lines;
+    QVector<QPointF> m_splits;
+
+    bool m_complete;
 };
 
-#endif // UNRESTRICTED_GRAPHICS_NET_H
+#endif // OLD_STANDARD_GRAPHICS_NET_H

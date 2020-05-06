@@ -21,7 +21,6 @@ private:
 
     static QPen s_pen;
 
-    static QColor s_default_main_color;
     static QColor s_text_color;
 
     static QFont s_name_font;
@@ -57,7 +56,6 @@ private:
     QPointF m_name_position;
     QPointF m_type_position;
 
-    QVector<QPointF> m_input_pin_positions;
     QVector<QPointF> m_output_pin_positions;
 };
 

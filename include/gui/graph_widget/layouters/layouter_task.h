@@ -10,7 +10,7 @@ class layouter_task : public task
 public:
     layouter_task(graph_layouter* const layouter);
 
-    void execute() Q_DECL_OVERRIDE;
+    void execute() override;
 
 private:
     graph_layouter* m_layouter;

@@ -33,16 +33,13 @@ public:
 
     labeled_separated_net(const std::shared_ptr<const net> n, const QString& text);
 
-    virtual void set_visuals(const visuals& v) override;
-    virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override;
+    void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override;
 
-    virtual void add_output() override;
-    virtual void add_input(const QPointF& scene_position) override;
+    void add_input(const QPointF& scene_position) override;
+    void add_output(const QPointF& scene_position) override;
 
-    virtual void finalize() override;
-
-    virtual qreal input_width() const override;
-    virtual qreal output_width() const override;
+    qreal input_width() const override;
+    qreal output_width() const override;
 
 private:
     static qreal s_wire_length;

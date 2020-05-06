@@ -6,11 +6,11 @@
 class module_shader final : public graph_shader
 {
 public:
-    module_shader(const graph_context* const context);
+    explicit module_shader(const graph_context* const context);
 
-    virtual void add(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets) override;
-    virtual void remove(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets) override;
-    virtual void update() override;
+    void add(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets) override;
+    void remove(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets) override;
+    void update() override;
 
 private:
     bool m_color_gates;
