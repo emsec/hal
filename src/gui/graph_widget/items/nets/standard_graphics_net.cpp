@@ -9,6 +9,8 @@
 
 #include <limits>
 
+#include <assert.h>
+
 qreal standard_graphics_net::s_alpha;
 
 qreal standard_graphics_net::s_wire_length;
