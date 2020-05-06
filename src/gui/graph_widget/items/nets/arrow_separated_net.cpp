@@ -39,7 +39,13 @@ void arrow_separated_net::load_settings()
 
     QPointF point(s_arrow_left_x_shift, -s_arrow_height / 2);
 
-    s_arrow.clear();
+    #if (QT_VERSION >= QT_VERSION_CHECK(5, 13, 0))
+        // only available in Qt >= 5.13.0
+        s_arrow.clear();
+    #else
+        // low-performance fallback for older Qt
+        s_arrow = QPainterPath();
+    #endif
     s_arrow.lineTo(point);
     point.setX(point.x() + s_arrow_side_length);
     s_arrow.lineTo(point);
