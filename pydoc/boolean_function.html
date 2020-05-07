@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Boolean Function &mdash; hal_py v2.0.0-140-g8c11a3c7b documentation</title>
+  <title>Boolean Function &mdash; hal_py v2.0.0-141-ga50811392 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="hal_py v2.0.0-140-g8c11a3c7b documentation" href="index.html"/>
+    <link rel="top" title="hal_py v2.0.0-141-ga50811392 documentation" href="index.html"/>
         <link rel="up" title="hal_py Documentation" href="hal_py.html"/>
         <link rel="next" title="Gate Type" href="gate_type.html"/>
         <link rel="prev" title="Netlist" href="netlist.html"/> 
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                v2.0.0-140-g8c11a3c7b
+                v2.0.0-141-ga50811392
               </div>
             
           
@@ -277,7 +277,7 @@ If there is an error during bracket matching, X is returned for that part.</p>
 
 <dl class="method">
 <dt id="hal_py.boolean_function.get_truth_table">
-<code class="descname">get_truth_table</code><span class="sig-paren">(</span><em>self: hal_py.boolean_function</em>, <em>ordered_variables: List[str] = []</em><span class="sig-paren">)</span> &#x2192; List[hal_py.boolean_function.value]<a class="headerlink" href="#hal_py.boolean_function.get_truth_table" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_truth_table</code><span class="sig-paren">(</span><em>self: hal_py.boolean_function</em>, <em>ordered_variables: List[str] = []</em>, <em>remove_unknown_variables: bool = False</em><span class="sig-paren">)</span> &#x2192; List[hal_py.boolean_function.value]<a class="headerlink" href="#hal_py.boolean_function.get_truth_table" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the truth table outputs of the function.
 WARNING: Exponential runtime in the number of variables!</p>
 <p>Output is the vector of output values when walking the truth table in ascending order.</p>
@@ -286,11 +286,17 @@ WARNING: Exponential runtime in the number of variables!</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ordered_variables</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em>]</em>) – Specific order in which the inputs shall be structured in the truth table.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>ordered_variables</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em>]</em>) – Specific order in which the inputs shall be structured in the truth table.</li>
+<li><strong>remove_unknown_variables</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – If true, all given variables that are not found in the function are removed from the truth table.</li>
+</ul>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The vector of output values.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The vector of output values.</p>
+</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)">list</a>[<a class="reference internal" href="#hal_py.boolean_function.value" title="hal_py.boolean_function.value">value</a>]</td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)">list</a>[<a class="reference internal" href="#hal_py.boolean_function.value" title="hal_py.boolean_function.value">value</a>]</p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -542,7 +548,7 @@ Applies to all instances of the variable in the function.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'v2.0.0-140-g8c11a3c7b',
+            VERSION:'v2.0.0-141-ga50811392',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

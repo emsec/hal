@@ -107,8 +107,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aa8fa544ef3fe8ba65bbd09ea1a8244f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6f4c73d9cf1b3bb0952ad64036c4f557"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="../../d0/dd3/classmodule.html">module</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/df6/classgate.html#a6f4c73d9cf1b3bb0952ad64036c4f557">get_module</a> () const</td></tr>
 <tr class="separator:a6f4c73d9cf1b3bb0952ad64036c4f557"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7a5c35ad2550ec225ad8397b27817210"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dc/d60/classboolean__function.html">boolean_function</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/df6/classgate.html#a7a5c35ad2550ec225ad8397b27817210">get_boolean_function</a> (const std::string &amp;name=&quot;&quot;) const</td></tr>
-<tr class="separator:a7a5c35ad2550ec225ad8397b27817210"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a447ee94a959567ecf79d810aa3118966"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dc/d60/classboolean__function.html">boolean_function</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/df6/classgate.html#a447ee94a959567ecf79d810aa3118966">get_boolean_function</a> (std::string name=&quot;&quot;) const</td></tr>
+<tr class="separator:a447ee94a959567ecf79d810aa3118966"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab55884298a8b6c65374651677898d838"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; std::string, <a class="el" href="../../dc/d60/classboolean__function.html">boolean_function</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/df6/classgate.html#ab55884298a8b6c65374651677898d838">get_boolean_functions</a> (bool only_custom_functions=false) const</td></tr>
 <tr class="separator:ab55884298a8b6c65374651677898d838"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8a323e43a2366fd3f2a46799d68721bc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/df6/classgate.html#a8a323e43a2366fd3f2a46799d68721bc">add_boolean_function</a> (const std::string &amp;name, const <a class="el" href="../../dc/d60/classboolean__function.html">boolean_function</a> &amp;func)</td></tr>
@@ -188,7 +188,7 @@ Friends</h2></td></tr>
 <p>Gets the unique id of the gate.</p>
 <dl class="section return"><dt>Returns</dt><dd>The gate's id. </dd></dl>
 
-<p class="reference">Referenced by <a class="el" href="../../de/df6/classgate.html#ad09661b6e9836a34047e57ac1ff94035">get_predecessors()</a>, and <a class="el" href="../../db/dd3/python__definitions_8cpp.html#adcb3a2ecbf663140252938c819a3af40">PYBIND11_PLUGIN()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="../../de/df6/classgate.html#ab55884298a8b6c65374651677898d838">get_boolean_functions()</a>, <a class="el" href="../../de/df6/classgate.html#ad09661b6e9836a34047e57ac1ff94035">get_predecessors()</a>, and <a class="el" href="../../db/dd3/python__definitions_8cpp.html#adcb3a2ecbf663140252938c819a3af40">PYBIND11_PLUGIN()</a>.</p>
 
 </div>
 </div>
@@ -230,7 +230,7 @@ Friends</h2></td></tr>
 <p>Gets the gate's name.</p>
 <dl class="section return"><dt>Returns</dt><dd>The name. </dd></dl>
 
-<p class="reference">Referenced by <a class="el" href="../../de/df6/classgate.html#ac0ac28b515234db3b4096daa49a94efd">get_fan_in_net()</a>, <a class="el" href="../../de/df6/classgate.html#ad63c34d2656e0b6004c762c9e52ce85f">get_fan_out_net()</a>, <a class="el" href="../../de/df6/classgate.html#a672c66add84a07229bc78c1d44dd3e57">get_predecessor()</a>, <a class="el" href="../../de/df6/classgate.html#ad09661b6e9836a34047e57ac1ff94035">get_predecessors()</a>, and <a class="el" href="../../db/dd3/python__definitions_8cpp.html#adcb3a2ecbf663140252938c819a3af40">PYBIND11_PLUGIN()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="../../de/df6/classgate.html#ab55884298a8b6c65374651677898d838">get_boolean_functions()</a>, <a class="el" href="../../de/df6/classgate.html#ac0ac28b515234db3b4096daa49a94efd">get_fan_in_net()</a>, <a class="el" href="../../de/df6/classgate.html#ad63c34d2656e0b6004c762c9e52ce85f">get_fan_out_net()</a>, <a class="el" href="../../de/df6/classgate.html#a672c66add84a07229bc78c1d44dd3e57">get_predecessor()</a>, <a class="el" href="../../de/df6/classgate.html#ad09661b6e9836a34047e57ac1ff94035">get_predecessors()</a>, and <a class="el" href="../../db/dd3/python__definitions_8cpp.html#adcb3a2ecbf663140252938c819a3af40">PYBIND11_PLUGIN()</a>.</p>
 
 </div>
 </div>
@@ -476,8 +476,8 @@ Friends</h2></td></tr>
 
 </div>
 </div>
-<a id="a7a5c35ad2550ec225ad8397b27817210"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7a5c35ad2550ec225ad8397b27817210">&#9670;&nbsp;</a></span>get_boolean_function()</h2>
+<a id="a447ee94a959567ecf79d810aa3118966"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a447ee94a959567ecf79d810aa3118966">&#9670;&nbsp;</a></span>get_boolean_function()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -485,7 +485,7 @@ Friends</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="../../dc/d60/classboolean__function.html">boolean_function</a> gate::get_boolean_function </td>
           <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramtype">std::string&#160;</td>
           <td class="paramname"><em>name</em> = <code>&quot;&quot;</code></td><td>)</td>
           <td> const</td>
         </tr>
@@ -500,7 +500,7 @@ Friends</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The boolean function. </dd></dl>
 
-<p class="reference">References <a class="el" href="../../d0/d31/classgate__type.html#a33f863eedb8e65631b45403998f5c3ebab56efdaa67baedcc830a453ecd15b37f">gate_type::lut</a>.</p>
+<p class="reference">References <a class="el" href="../../de/ded/classgate__type__lut.html#a3663e96e9f675704c6650e38b57d563f">gate_type_lut::get_output_from_init_string_pins()</a>, and <a class="el" href="../../d0/d31/classgate__type.html#a33f863eedb8e65631b45403998f5c3ebab56efdaa67baedcc830a453ecd15b37f">gate_type::lut</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="../../db/dd3/python__definitions_8cpp.html#adcb3a2ecbf663140252938c819a3af40">PYBIND11_PLUGIN()</a>.</p>
 
@@ -530,7 +530,7 @@ Friends</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A map from function name to function. </dd></dl>
 
-<p class="reference">References <a class="el" href="../../de/ded/classgate__type__lut.html#a6db93a621c8c50c6ef523969dd2fa91a">gate_type_lut::get_config_data_category()</a>, <a class="el" href="../../df/d2c/classdata__container.html#a958d6f687f2b1b160da7e15896ccc70b">data_container::get_data_by_key()</a>, <a class="el" href="../../de/df6/classgate.html#a5b67fbe087ecfeeb510e145c246caf66">get_input_pins()</a>, <a class="el" href="../../de/df6/classgate.html#a3248010ce2efa6e67cb57310612afad3">get_output_pins()</a>, <a class="el" href="../../d0/d31/classgate__type.html#a33f863eedb8e65631b45403998f5c3ebab56efdaa67baedcc830a453ecd15b37f">gate_type::lut</a>, <a class="el" href="../../dc/d60/classboolean__function.html#af35ec4c3128ed34199ee731e634fea8f">boolean_function::optimize()</a>, and <a class="el" href="../../dc/d60/classboolean__function.html#a384b979ddc938db7e2af2400ae26060aae11c74df9bef6a8b5ab84dddcdac9f6f">boolean_function::ZERO</a>.</p>
+<p class="reference">References <a class="el" href="../../de/ded/classgate__type__lut.html#a6db93a621c8c50c6ef523969dd2fa91a">gate_type_lut::get_config_data_category()</a>, <a class="el" href="../../df/d2c/classdata__container.html#a958d6f687f2b1b160da7e15896ccc70b">data_container::get_data_by_key()</a>, <a class="el" href="../../de/df6/classgate.html#afc2c94acd0d9e0101ece7cbf8ca014bb">get_id()</a>, <a class="el" href="../../de/df6/classgate.html#a5b67fbe087ecfeeb510e145c246caf66">get_input_pins()</a>, <a class="el" href="../../de/df6/classgate.html#afe265ba5ed7a7cf14dcf0520d8fd69b5">get_name()</a>, <a class="el" href="../../d0/de1/group__core.html#ga522d6d0c8a408128993be37c86656280">log_error</a>, <a class="el" href="../../d0/d31/classgate__type.html#a33f863eedb8e65631b45403998f5c3ebab56efdaa67baedcc830a453ecd15b37f">gate_type::lut</a>, <a class="el" href="../../dc/d60/classboolean__function.html#af35ec4c3128ed34199ee731e634fea8f">boolean_function::optimize()</a>, <a class="el" href="../../d4/da4/def_8h.html#aea1d71af1a30c261dbd16745c82e94ba">UNUSED</a>, and <a class="el" href="../../dc/d60/classboolean__function.html#a384b979ddc938db7e2af2400ae26060aae11c74df9bef6a8b5ab84dddcdac9f6f">boolean_function::ZERO</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="../../db/dd3/python__definitions_8cpp.html#adcb3a2ecbf663140252938c819a3af40">PYBIND11_PLUGIN()</a>.</p>
 
@@ -570,7 +570,7 @@ Friends</h2></td></tr>
   </dd>
 </dl>
 
-<p class="reference">References <a class="el" href="../../de/df6/classgate.html#a5b67fbe087ecfeeb510e145c246caf66">get_input_pins()</a>, <a class="el" href="../../dc/d60/classboolean__function.html#ac6df36e6692c236f43d566fb0d03ba4e">boolean_function::get_truth_table()</a>, <a class="el" href="../../d0/de1/group__core.html#ga522d6d0c8a408128993be37c86656280">log_error</a>, <a class="el" href="../../d0/d31/classgate__type.html#a33f863eedb8e65631b45403998f5c3ebab56efdaa67baedcc830a453ecd15b37f">gate_type::lut</a>, <a class="el" href="../../df/d2c/classdata__container.html#a6312365e77abfe0ef51d7b11aec99f36">data_container::set_data()</a>, and <a class="el" href="../../dc/d60/classboolean__function.html#a384b979ddc938db7e2af2400ae26060aaeb58c916c9ad04670d6052dc0447ccd3">boolean_function::X</a>.</p>
+<p class="reference">References <a class="el" href="../../de/df6/classgate.html#a5b67fbe087ecfeeb510e145c246caf66">get_input_pins()</a>, <a class="el" href="../../dc/d60/classboolean__function.html#aa84719d82f9a517421250e19738c74a2">boolean_function::get_truth_table()</a>, <a class="el" href="../../d0/de1/group__core.html#ga522d6d0c8a408128993be37c86656280">log_error</a>, <a class="el" href="../../d0/d31/classgate__type.html#a33f863eedb8e65631b45403998f5c3ebab56efdaa67baedcc830a453ecd15b37f">gate_type::lut</a>, <a class="el" href="../../df/d2c/classdata__container.html#a6312365e77abfe0ef51d7b11aec99f36">data_container::set_data()</a>, and <a class="el" href="../../dc/d60/classboolean__function.html#a384b979ddc938db7e2af2400ae26060aaeb58c916c9ad04670d6052dc0447ccd3">boolean_function::X</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="../../db/dd3/python__definitions_8cpp.html#adcb3a2ecbf663140252938c819a3af40">PYBIND11_PLUGIN()</a>.</p>
 
@@ -740,7 +740,7 @@ Friends</h2></td></tr>
 <p>Get a list of all output pin types of the gate.</p>
 <dl class="section return"><dt>Returns</dt><dd>A vector of output pin types. </dd></dl>
 
-<p class="reference">Referenced by <a class="el" href="../../de/df6/classgate.html#ab55884298a8b6c65374651677898d838">get_boolean_functions()</a>, and <a class="el" href="../../db/dd3/python__definitions_8cpp.html#adcb3a2ecbf663140252938c819a3af40">PYBIND11_PLUGIN()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="../../db/dd3/python__definitions_8cpp.html#adcb3a2ecbf663140252938c819a3af40">PYBIND11_PLUGIN()</a>.</p>
 
 </div>
 </div>
@@ -1026,7 +1026,7 @@ Friends</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu May 7 2020 07:49:00 for hal by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu May 7 2020 11:04:43 for hal by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.13
 </small></address>

@@ -140,8 +140,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aa07f3719545279d7be6ea9b29ffc6f50"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af35ec4c3128ed34199ee731e634fea8f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dc/d60/classboolean__function.html">boolean_function</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d60/classboolean__function.html#af35ec4c3128ed34199ee731e634fea8f">optimize</a> () const</td></tr>
 <tr class="separator:af35ec4c3128ed34199ee731e634fea8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac6df36e6692c236f43d566fb0d03ba4e"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="../../dc/d60/classboolean__function.html#a384b979ddc938db7e2af2400ae26060a">value</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d60/classboolean__function.html#ac6df36e6692c236f43d566fb0d03ba4e">get_truth_table</a> (const std::vector&lt; std::string &gt; &amp;ordered_variables={}) const</td></tr>
-<tr class="separator:ac6df36e6692c236f43d566fb0d03ba4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa84719d82f9a517421250e19738c74a2"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="../../dc/d60/classboolean__function.html#a384b979ddc938db7e2af2400ae26060a">value</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d60/classboolean__function.html#aa84719d82f9a517421250e19738c74a2">get_truth_table</a> (std::vector&lt; std::string &gt; ordered_variables={}, bool remove_unknown_variables=false) const</td></tr>
+<tr class="separator:aa84719d82f9a517421250e19738c74a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -396,7 +396,7 @@ Friends</h2></td></tr>
 
 <p class="reference">References <a class="el" href="../../dc/d60/classboolean__function.html#a384b979ddc938db7e2af2400ae26060aaeb58c916c9ad04670d6052dc0447ccd3">X</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="../../dc/d60/classboolean__function.html#ac6df36e6692c236f43d566fb0d03ba4e">get_truth_table()</a>, <a class="el" href="../../dc/d60/classboolean__function.html#a078889440fbe9654540b99098a43b04a">operator()()</a>, and <a class="el" href="../../db/dd3/python__definitions_8cpp.html#adcb3a2ecbf663140252938c819a3af40">PYBIND11_PLUGIN()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="../../dc/d60/classboolean__function.html#aa84719d82f9a517421250e19738c74a2">get_truth_table()</a>, <a class="el" href="../../dc/d60/classboolean__function.html#a078889440fbe9654540b99098a43b04a">operator()()</a>, and <a class="el" href="../../db/dd3/python__definitions_8cpp.html#adcb3a2ecbf663140252938c819a3af40">PYBIND11_PLUGIN()</a>.</p>
 
 </div>
 </div>
@@ -491,7 +491,7 @@ Friends</h2></td></tr>
 <p>Checks whether the function is empty.</p>
 <dl class="section return"><dt>Returns</dt><dd>True if function is empty, false otherwise. </dd></dl>
 
-<p class="reference">Referenced by <a class="el" href="../../dc/d60/classboolean__function.html#afff7b82010106300a816d8af7a944663">operator!=()</a>, <a class="el" href="../../d0/da9/boolean__function_8cpp.html#a3bd61d70b0f2abb5faf2de0dc3eb5c01">operator&lt;&lt;()</a>, <a class="el" href="../../db/dd3/python__definitions_8cpp.html#adcb3a2ecbf663140252938c819a3af40">PYBIND11_PLUGIN()</a>, and <a class="el" href="../../dc/d60/classboolean__function.html#a80ab040dfaac82496a3013153f6917aa">to_string()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="../../dc/d60/classboolean__function.html#aa07f3719545279d7be6ea9b29ffc6f50">get_dnf_clauses()</a>, <a class="el" href="../../dc/d60/classboolean__function.html#afff7b82010106300a816d8af7a944663">operator!=()</a>, <a class="el" href="../../d0/da9/boolean__function_8cpp.html#a3bd61d70b0f2abb5faf2de0dc3eb5c01">operator&lt;&lt;()</a>, <a class="el" href="../../dc/d60/classboolean__function.html#a40f36b9604789b7f7260658bac331442">operator==()</a>, <a class="el" href="../../dc/d60/classboolean__function.html#af35ec4c3128ed34199ee731e634fea8f">optimize()</a>, <a class="el" href="../../db/dd3/python__definitions_8cpp.html#adcb3a2ecbf663140252938c819a3af40">PYBIND11_PLUGIN()</a>, and <a class="el" href="../../dc/d60/classboolean__function.html#a80ab040dfaac82496a3013153f6917aa">to_string()</a>.</p>
 
 </div>
 </div>
@@ -512,7 +512,7 @@ Friends</h2></td></tr>
 <p>Get all variable names used in this boolean function.</p>
 <dl class="section return"><dt>Returns</dt><dd>A set of all variable names. </dd></dl>
 
-<p class="reference">Referenced by <a class="el" href="../../dc/d60/classboolean__function.html#ac6df36e6692c236f43d566fb0d03ba4e">get_truth_table()</a>, <a class="el" href="../../dc/d60/classboolean__function.html#af35ec4c3128ed34199ee731e634fea8f">optimize()</a>, <a class="el" href="../../d8/dfe/classgate__library__parser__liberty.html#a98d3ce8b3aa652413fc52665f57e2fff">gate_library_parser_liberty::parse()</a>, and <a class="el" href="../../db/dd3/python__definitions_8cpp.html#adcb3a2ecbf663140252938c819a3af40">PYBIND11_PLUGIN()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="../../dc/d60/classboolean__function.html#aa84719d82f9a517421250e19738c74a2">get_truth_table()</a>, <a class="el" href="../../dc/d60/classboolean__function.html#af35ec4c3128ed34199ee731e634fea8f">optimize()</a>, <a class="el" href="../../d8/dfe/classgate__library__parser__liberty.html#a98d3ce8b3aa652413fc52665f57e2fff">gate_library_parser_liberty::parse()</a>, and <a class="el" href="../../db/dd3/python__definitions_8cpp.html#adcb3a2ecbf663140252938c819a3af40">PYBIND11_PLUGIN()</a>.</p>
 
 </div>
 </div>
@@ -694,7 +694,7 @@ Friends</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>The combined boolean function. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Self-reference. </dd></dl>
 
 <p class="reference">Referenced by <a class="el" href="../../dc/d60/classboolean__function.html#a844233e5ccb356ad61e9727e27867e0c">operator^()</a>.</p>
 
@@ -722,7 +722,7 @@ Friends</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>The combined boolean function. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Self-reference. </dd></dl>
 
 </div>
 </div>
@@ -748,7 +748,7 @@ Friends</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>The combined boolean function. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Self-reference. </dd></dl>
 
 </div>
 </div>
@@ -796,6 +796,8 @@ Friends</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True when both boolean functions are equal, false otherwise. </dd></dl>
+
+<p class="reference">References <a class="el" href="../../dc/d60/classboolean__function.html#ac26dd310db0f958bc617ba1e040a42a4">is_empty()</a>.</p>
 
 </div>
 </div>
@@ -887,9 +889,10 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 <p>Gets the DNF clauses of the function. Useful for parsing into other formats etc.</p>
 <p>Returns all clauses that are OR-ed together. Each clause is a vector of pairs &lt;variable name, boolean value&gt;. Example: [[("a", true), ("b", false)], [("c", true)]] -&gt; (a &amp; !b) | c</p>
+<p>If the function is empty, this returns an empty vector.</p>
 <dl class="section return"><dt>Returns</dt><dd>The DNF clauses as a vector of vectors of pairs &lt;string, bool&gt;. </dd></dl>
 
-<p class="reference">References <a class="el" href="../../dc/d60/classboolean__function.html#abbd3b4352985280d73b987154050b6df">to_dnf()</a>, and <a class="el" href="../../dc/d60/classboolean__function.html#a80ab040dfaac82496a3013153f6917aa">to_string()</a>.</p>
+<p class="reference">References <a class="el" href="../../dc/d60/classboolean__function.html#ac26dd310db0f958bc617ba1e040a42a4">is_empty()</a>, <a class="el" href="../../dc/d60/classboolean__function.html#abbd3b4352985280d73b987154050b6df">to_dnf()</a>, and <a class="el" href="../../dc/d60/classboolean__function.html#a80ab040dfaac82496a3013153f6917aa">to_string()</a>.</p>
 
 </div>
 </div>
@@ -910,14 +913,14 @@ Friends</h2></td></tr>
 <p>Optimizes the function by first converting it to DNF and then applying the Quine-McCluskey algorithm.</p>
 <dl class="section return"><dt>Returns</dt><dd>The optimized boolean function. </dd></dl>
 
-<p class="reference">References <a class="el" href="../../dc/d60/classboolean__function.html#af49999944e97f53de8c76ce47f505ed6">boolean_function()</a>, <a class="el" href="../../dc/d60/classboolean__function.html#afaaddbdb07a16d0bb6448785e8b2df8c">get_variables()</a>, and <a class="el" href="../../dc/d60/classboolean__function.html#abbd3b4352985280d73b987154050b6df">to_dnf()</a>.</p>
+<p class="reference">References <a class="el" href="../../dc/d60/classboolean__function.html#af49999944e97f53de8c76ce47f505ed6">boolean_function()</a>, <a class="el" href="../../dc/d60/classboolean__function.html#afaaddbdb07a16d0bb6448785e8b2df8c">get_variables()</a>, <a class="el" href="../../dc/d60/classboolean__function.html#ac26dd310db0f958bc617ba1e040a42a4">is_empty()</a>, and <a class="el" href="../../dc/d60/classboolean__function.html#abbd3b4352985280d73b987154050b6df">to_dnf()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="../../de/df6/classgate.html#ab55884298a8b6c65374651677898d838">gate::get_boolean_functions()</a>, <a class="el" href="../../dc/d60/classboolean__function.html#abfd5fd3d938d398094381313952c3241">is_constant_one()</a>, <a class="el" href="../../dc/d60/classboolean__function.html#afda877508072282b9f5eca53d90b816b">is_constant_zero()</a>, and <a class="el" href="../../db/dd3/python__definitions_8cpp.html#adcb3a2ecbf663140252938c819a3af40">PYBIND11_PLUGIN()</a>.</p>
 
 </div>
 </div>
-<a id="ac6df36e6692c236f43d566fb0d03ba4e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac6df36e6692c236f43d566fb0d03ba4e">&#9670;&nbsp;</a></span>get_truth_table()</h2>
+<a id="aa84719d82f9a517421250e19738c74a2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa84719d82f9a517421250e19738c74a2">&#9670;&nbsp;</a></span>get_truth_table()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -925,9 +928,19 @@ Friends</h2></td></tr>
         <tr>
           <td class="memname">std::vector&lt; <a class="el" href="../../dc/d60/classboolean__function.html#a384b979ddc938db7e2af2400ae26060a">boolean_function::value</a> &gt; boolean_function::get_truth_table </td>
           <td>(</td>
-          <td class="paramtype">const std::vector&lt; std::string &gt; &amp;&#160;</td>
-          <td class="paramname"><em>ordered_variables</em> = <code>{}</code></td><td>)</td>
-          <td> const</td>
+          <td class="paramtype">std::vector&lt; std::string &gt;&#160;</td>
+          <td class="paramname"><em>ordered_variables</em> = <code>{}</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>remove_unknown_variables</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -937,6 +950,7 @@ Friends</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">ordered_variables</td><td>- Specific order in which the inputs shall be structured in the truth table. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">remove_unknown_variables</td><td>- If true, all given variables that are not found in the function are removed from the truth table. </td></tr>
   </table>
   </dd>
 </dl>
@@ -1082,7 +1096,7 @@ Friends</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu May 7 2020 07:49:00 for hal by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu May 7 2020 11:04:43 for hal by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.13
 </small></address>
