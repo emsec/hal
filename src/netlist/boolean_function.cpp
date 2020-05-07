@@ -2,6 +2,8 @@
 
 #include "core/utils.h"
 
+#include <algorithm>
+
 std::string boolean_function::to_string(const operation& op)
 {
     switch (op)
@@ -513,10 +515,33 @@ std::string boolean_function::to_string() const
         return "<empty>";
     }
     auto s = to_string_internal();
-    if (s.front() == '(' && s.back() == ')')
+
+    // remove outer parantheses
+    if (s[0] == '(')
     {
-        return s.substr(1, s.size() - 2);
+        u32 lvl = 0;
+        u32 i   = 0;
+        for (; i < s.size(); ++i)
+        {
+            if (s[i] == '(')
+            {
+                lvl++;
+            }
+            else if (s[i] == ')')
+            {
+                lvl--;
+                if (lvl == 0)
+                {
+                    break;
+                }
+            }
+        }
+        if (i >= s.size() - 1)
+        {
+            s = s.substr(1, s.size() - 2);
+        }
     }
+
     return s;
 }
 
@@ -638,6 +663,10 @@ boolean_function boolean_function::operator!() const
 
 bool boolean_function::operator==(const boolean_function& other) const
 {
+    if (is_empty() && other.is_empty())
+    {
+        return true;
+    }
     if (m_content != other.m_content)
         return false;
     if (m_invert != other.m_invert)
@@ -996,9 +1025,13 @@ boolean_function boolean_function::to_dnf() const
 
 std::vector<std::vector<std::pair<std::string, bool>>> boolean_function::get_dnf_clauses() const
 {
-    auto dnf = to_dnf();
-
     std::vector<std::vector<std::pair<std::string, bool>>> result;
+    if (is_empty())
+    {
+        return result;
+    }
+
+    auto dnf = to_dnf();
 
     if (dnf.m_content == content_type::VARIABLE)
     {
@@ -1041,7 +1074,7 @@ std::vector<std::vector<std::pair<std::string, bool>>> boolean_function::get_dnf
     return result;
 }
 
-std::vector<boolean_function::value> boolean_function::get_truth_table(std::vector<std::string> variables) const
+std::vector<boolean_function::value> boolean_function::get_truth_table(std::vector<std::string> variables, bool remove_unknown_variables) const
 {
     std::vector<value> result;
 
@@ -1050,7 +1083,7 @@ std::vector<boolean_function::value> boolean_function::get_truth_table(std::vect
     {
         variables.insert(variables.end(), unique_vars.begin(), unique_vars.end());
     }
-    else
+    else if (remove_unknown_variables)
     {
         variables.erase(std::remove_if(variables.begin(), variables.end(), [&unique_vars](auto& s) { return unique_vars.find(s) == unique_vars.end(); }), variables.end());
     }
@@ -1122,6 +1155,10 @@ boolean_function boolean_function::optimize() const
             {
                 tmp &= !boolean_function(vars[i]);
             }
+        }
+        if (tmp.is_empty())    // all variables are "dont care"
+        {
+            tmp = value::ONE;
         }
         result |= tmp;
     }

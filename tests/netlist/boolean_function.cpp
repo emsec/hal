@@ -109,25 +109,7 @@ protected:
 
 };
 
-/**
- * Testing template
- *
- * Functions: <functions>
- */
-TEST_F(boolean_function_test, check_){
-    TEST_START
-        {
-            // Set multiple data with different keys and categories
-            boolean_function a("A");
-            boolean_function b("B");
 
-            boolean_function::from_string("1 & 1 & 1").to_dnf();
-
-            EXPECT_TRUE(true);
-        }
-
-    TEST_END
-}
 
 /**
  * Testing the different constructors and the main functionality, by implement the following boolean function:
@@ -278,6 +260,11 @@ TEST_F(boolean_function_test, check_compare_operator){
             boolean_function b("B");
             // EXPECT_TRUE(((a|b|b) == (a|b)));
         }
+        {
+            // Compare two empty expressions
+            boolean_function a = boolean_function();
+            EXPECT_TRUE(a == boolean_function());
+        }
         // Tests for !=
         {
             // The boolean function are equivalent in semantic, but do not share the same variable
@@ -320,22 +307,23 @@ TEST_F(boolean_function_test, check_optimize){
         {
             // Optimize some boolean functions and compare their truth_table
             boolean_function bf = (!(a^b&c)|(b|c&_1))^((a&b) | (a|b|c));
-            EXPECT_EQ(bf.get_truth_table(std::vector<std::string>({"C","B","A"})), bf.optimize().get_truth_table(std::vector<std::string>({"C","B","A"}))); // <- fails
+            EXPECT_EQ(bf.get_truth_table(std::vector<std::string>({"C","B","A"})), bf.optimize().get_truth_table(std::vector<std::string>({"C","B","A"})));
         }
         {
             // Optimize some boolean functions and compare their truth_table
             boolean_function bf = (a|b|c);
-            EXPECT_EQ(bf.get_truth_table(std::vector<std::string>({"C","B","A"})), bf.optimize().get_truth_table(std::vector<std::string>({"C","B","A"}))); // <- fails
-
-            // +++ DEBUG OUTPUT +++
-            //printTruthTable(bf, std::vector<std::string>({"C","B","A"}));
-            //printTruthTable(bf.optimize(), std::vector<std::string>({"C","B","A"}));
-            //std::cout << "Variables: amount = " << bf.optimize().get_variables().size() << std::endl;
-            //for (auto v : bf.optimize().get_variables())
-                //std::cout << v << ",";
-            //std::cout << std::endl;
+            EXPECT_EQ(bf.get_truth_table(std::vector<std::string>({"C","B","A"})), bf.optimize().get_truth_table(std::vector<std::string>({"C","B","A"})));
         }
-
+        {
+            // Optimize a boolean function that is constant one
+            boolean_function bf = (a & b) | (!a & b) | (a & !b) | (!a & !b);
+            EXPECT_EQ(bf.get_truth_table(std::vector<std::string>({"A","B"})), bf.optimize().get_truth_table(std::vector<std::string>({"A","B"})));
+        }
+        {
+            // Optimize a boolean function that is constant zero
+            boolean_function bf = (a & !a) | (b & !b);
+            EXPECT_EQ(bf.get_truth_table(std::vector<std::string>({"A","B"})), bf.optimize().get_truth_table(std::vector<std::string>({"A","B"})));
+        }
     TEST_END
 }
 
@@ -403,6 +391,7 @@ TEST_F(boolean_function_test, check_test_vectors)
             "a ^ b",
             "a | b",
             "a & b",
+            "(!I0 & I1 & I2) | (I0 & I1 & I2)",
             "!(((!8 & !(!(!19 | !20) & 26)) | (8 & !((!26 & !(!19 | !20)) | (26 & !(!19 | 20))))) & !(((((((!(!20 | 19) & 28 & !((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & !28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | ((!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19))))) & 27 & !((9 & (!20 | 19)) | (!9 & !(!20 | 19)))) | (((!(!20 | 19) & 28 & !((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & !28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | ((!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19))))) & !27 & ((9 & (!20 | 19)) | (!9 & !(!20 | 19)))) | (!((!(!20 | 19) & 28 & !((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & !28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | ((!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19))))) & 27 & ((9 & (!20 | 19)) | (!9 & !(!20 | 19)))) | (((!(!20 | 19) & 28 & !((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & !28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | ((!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19))))) & 27 & ((9 & (!20 | 19)) | (!9 & !(!20 | 19))))) & !26 & !((8 & (!20 | 19)) | (!8 & !(!20 | 19)))) | (!((((!(!20 | 19) & 28 & !((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & !28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | ((!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19))))) & 27 & !((9 & (!20 | 19)) | (!9 & !(!20 | 19)))) | (((!(!20 | 19) & 28 & !((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & !28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | ((!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19))))) & !27 & ((9 & (!20 | 19)) | (!9 & !(!20 | 19)))) | (!((!(!20 | 19) & 28 & !((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & !28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | ((!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19))))) & 27 & ((9 & (!20 | 19)) | (!9 & !(!20 | 19)))) | (((!(!20 | 19) & 28 & !((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & !28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | ((!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19))))) & 27 & ((9 & (!20 | 19)) | (!9 & !(!20 | 19))))) & 26 & !((8 & (!20 | 19)) | (!8 & !(!20 | 19)))) | (!((((!(!20 | 19) & 28 & !((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & !28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | ((!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19))))) & 27 & !((9 & (!20 | 19)) | (!9 & !(!20 | 19)))) | (((!(!20 | 19) & 28 & !((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & !28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | ((!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19))))) & !27 & ((9 & (!20 | 19)) | (!9 & !(!20 | 19)))) | (!((!(!20 | 19) & 28 & !((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & !28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | ((!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19))))) & 27 & ((9 & (!20 | 19)) | (!9 & !(!20 | 19)))) | (((!(!20 | 19) & 28 & !((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & !28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | ((!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19))))) & 27 & ((9 & (!20 | 19)) | (!9 & !(!20 | 19))))) & !26 & ((8 & (!20 | 19)) | (!8 & !(!20 | 19)))) | (((((!(!20 | 19) & 28 & !((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & !28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | ((!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19))))) & 27 & !((9 & (!20 | 19)) | (!9 & !(!20 | 19)))) | (((!(!20 | 19) & 28 & !((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & !28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | ((!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19))))) & !27 & ((9 & (!20 | 19)) | (!9 & !(!20 | 19)))) | (!((!(!20 | 19) & 28 & !((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & !28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | ((!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19))))) & 27 & ((9 & (!20 | 19)) | (!9 & !(!20 | 19)))) | (((!(!20 | 19) & 28 & !((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & !28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | ((!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19)))) | (!(!20 | 19) & 28 & ((10 & (!20 | 19)) | (!10 & !(!20 | 19))))) & 27 & ((9 & (!20 | 19)) | (!9 & !(!20 | 19))))) & 26 & ((8 & (!20 | 19)) | (!8 & !(!20 | 19))))) & !19))",
         };
         /* clang-format on */
@@ -436,5 +425,114 @@ TEST_F(boolean_function_test, check_test_vectors)
         }
     }
 
+    TEST_END
+}
+
+/**
+ * Testing the substitution a variable within a boolean function with another boolean function
+ *
+ * Functions: substitute
+ */
+TEST_F(boolean_function_test, check_substitute){
+    TEST_START
+        boolean_function a("A"), b("B"), c("C"), d("D");
+        {
+            // Substitute a variable with another one
+            boolean_function bf = a & b & c;
+            boolean_function sub_bf = bf.substitute("C", "D");
+
+            EXPECT_EQ(sub_bf, a & b & d);
+        }
+        {
+            // Substitute a variable with a boolean function (negated variable)
+            boolean_function bf = a & b;
+            boolean_function sub_bf = bf.substitute("B", !c );
+
+            EXPECT_EQ(sub_bf, a & !c);
+        }
+        {
+            // Substitute a variable with a boolean function (term)
+            boolean_function bf = a & b;
+            boolean_function sub_bf = bf.substitute("B", b | c | d);
+
+            EXPECT_EQ(sub_bf, a & (b | c | d));
+        }
+        // NEAGATIVE
+        /*{
+            // Pass an empty boolean function (NOTE: requirement?)
+            boolean_function bf = a & b;
+            boolean_function sub_bf = bf.substitute("B", boolean_function());
+
+            EXPECT_EQ(sub_bf, a);
+        }*/
+
+    TEST_END
+}
+
+/**
+ * Testing the get_dnf_clauses function that accesses the clauses of the DNF in a 2D Vector.
+ *
+ * Functions: get_dnf_clauses
+ */
+TEST_F(boolean_function_test, check_get_dnf_clauses){
+    TEST_START
+        boolean_function a("A"), b("B"), c("C"), d("D"), _0(ZERO), _1(ONE);
+        {
+            // Get the dnf clauses of a boolean function that is already in dnf
+            boolean_function bf = (a & b & !c) | (a & !b) | d;
+            auto dnf_clauses = bf.get_dnf_clauses();
+
+            std::vector<std::vector<std::pair<std::string, bool>>> exp_clauses;
+            exp_clauses.push_back(std::vector<std::pair<std::string, bool>>(
+                    { std::make_pair("A", true), std::make_pair("B", true), std::make_pair("C", false) }));
+            exp_clauses.push_back(std::vector<std::pair<std::string, bool>>(
+                    { std::make_pair("A", true), std::make_pair("B", false) }));
+            exp_clauses.push_back(std::vector<std::pair<std::string, bool>>(
+                    { std::make_pair("D", true) }));
+
+            EXPECT_EQ(dnf_clauses, exp_clauses);
+        }
+        {
+            // Get the dnf clauses of a variable
+            boolean_function bf = a;
+            auto dnf_clauses = bf.get_dnf_clauses();
+
+            std::vector<std::vector<std::pair<std::string, bool>>> exp_clauses;
+            exp_clauses.push_back(std::vector<std::pair<std::string, bool>>(
+                    { std::make_pair("A", true) }));
+
+            EXPECT_EQ(dnf_clauses, exp_clauses);
+        }
+        {
+            // Get the dnf clauses of a constant
+            boolean_function bf = _1;
+            auto dnf_clauses = bf.get_dnf_clauses();
+
+            std::vector<std::vector<std::pair<std::string, bool>>> exp_clauses;
+            exp_clauses.push_back(std::vector<std::pair<std::string, bool>>(
+                    { std::make_pair("1", true) }));
+
+            EXPECT_EQ(dnf_clauses, exp_clauses);
+        }
+        {
+            // Get the dnf clauses of a constant
+            boolean_function bf = a & !b & c;
+            auto dnf_clauses = bf.get_dnf_clauses();
+
+            std::vector<std::vector<std::pair<std::string, bool>>> exp_clauses;
+            exp_clauses.push_back(std::vector<std::pair<std::string, bool>>(
+                    { std::make_pair("A", true), std::make_pair("B", false), std::make_pair("C", true) }));
+
+            EXPECT_EQ(dnf_clauses, exp_clauses);
+        }
+        // NEGATIVE
+        {
+            // Get the dnf clauses of an empty boolean function
+            boolean_function bf = boolean_function();
+
+            std::vector<std::vector<std::pair<std::string, bool>>> exp_clauses;
+
+            EXPECT_EQ(bf.get_dnf_clauses(), exp_clauses);
+        }
     TEST_END
 }

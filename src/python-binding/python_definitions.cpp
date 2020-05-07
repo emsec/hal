@@ -84,8 +84,7 @@ PYBIND11_PLUGIN(hal_py)
     py::module m("hal_py", "hal python bindings");
 #endif    // ifdef PYBIND11_MODULE
 
-    m.def(
-        "log_info", [](std::string& message) { log_info("python_context", message); }, R"( some documentation info)");
+    m.def("log_info", [](std::string& message) { log_info("python_context", message); }, R"( some documentation info)");
 
     py::class_<hal::path> py_path(m, "hal_path");
 
@@ -2034,7 +2033,7 @@ Unmark a global vcc gate.
 
     py_module.def("get_input_port_name", &module::get_input_port_name, py::arg("input_net"), R"(
         Get the name of the port corresponding to the specified input net.
-        
+
         :param hal_py.net input_net: The input net.
         :returns: The port name.
         :rtype: str
@@ -2042,7 +2041,7 @@ Unmark a global vcc gate.
 
     py_module.def("get_output_port_name", &module::get_output_port_name, py::arg("output_net"), R"(
         Get the name of the port corresponding to the specified output net.
-        
+
         :param hal_py.net output_net: The output net.
         :returns: The port name.
         :rtype: str
@@ -2050,14 +2049,14 @@ Unmark a global vcc gate.
 
     py_module.def("get_input_port_names", &module::get_input_port_names, R"(
         Get the mapping of all input nets to their corresponding port names.
-        
+
         :returns: The map from input net to port name.
         :rtype: dict[hal_py.net,str]
 )");
 
     py_module.def("get_output_port_names", &module::get_output_port_names, R"(
         Get the mapping of all output nets to their corresponding port names.
-        
+
         :returns: The map from output net to port name.
         :rtype: dict[hal_py.net,str]
 )");
@@ -2391,7 +2390,7 @@ Writes the netlist into a file with a defined format.
         :rtype: hal_py.boolean_function
 )");
 
-    py_boolean_function.def("get_truth_table", &boolean_function::get_truth_table, py::arg("ordered_variables") = std::vector<std::string>(), R"(
+py_boolean_function.def("get_truth_table", &boolean_function::get_truth_table, py::arg("ordered_variables") = std::vector<std::string>(), py::arg("remove_unknown_variables") = false, R"(
         Get the truth table outputs of the function.
         WARNING: Exponential runtime in the number of variables!
 
@@ -2400,6 +2399,7 @@ Writes the netlist into a file with a defined format.
         If ordered_variables is empty, all included variables are used and ordered alphabetically.
 
         :param list[str] ordered_variables: Specific order in which the inputs shall be structured in the truth table.
+        :param bool remove_unknown_variables: If true, all given variables that are not found in the function are removed from the truth table.
         :returns: The vector of output values.
         :rtype: list[value]
 )");
