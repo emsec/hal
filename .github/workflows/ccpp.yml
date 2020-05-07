@@ -66,6 +66,21 @@ jobs:
             ${{ runner.OS }}-build-localbrew-${{ env.cache-name }}-
             ${{ runner.OS }}-build-localbrew-
 
+      - name: Prepare ccache timestamp
+        id: ccache_cache_timestamp
+        shell: cmake -P {0}
+        run: |
+          string(TIMESTAMP current_date "%Y-%m-%d-%H;%M;%S" UTC)
+          message("::set-output name=timestamp::${current_date}")
+
+      - name: ccache cache files
+        uses: actions/cache@v1.1.0
+        with:
+          path: ${{runner.workspace}}/.ccache
+          key: ${{ runner.OS }}-ccache-${{ steps.ccache_cache_timestamp.outputs.timestamp }}
+          restore-keys: |
+            ${{ runner.OS }}-ccache-
+
       - name: Install Dependencies
         run: ./install_dependencies.sh
 
@@ -73,16 +88,6 @@ jobs:
         # Some projects don't allow in-source building, so create a separate build directory
         # We'll use this as our working directory for all subsequent commands
         run: cmake -E make_directory ${{runner.workspace}}/build
-
-      - name: Cache CCache
-        uses: actions/cache@v1
-        with:
-          path: ~/.ccache
-          #        key: ${{ runner.OS }}-build-ccache-${{ hashFiles('**/package-lock.json') }}
-          key: ${{ runner.OS }}-build-ccache
-          restore-keys: |
-            ${{ runner.OS }}-build-ccache-${{ env.cache-name }}-
-            ${{ runner.OS }}-build-ccache-
 
       - name: Configure CMake
         if: startsWith(runner.os, 'macOS')
@@ -97,11 +102,15 @@ jobs:
           cd build
           export PATH="/usr/local/opt/qt/bin:$PATH"
           ls ..
-          cmake -G Ninja $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCMAKE_BUILD_TYPE=Debug -DBUILD_ALL_PLUGINS=ON -DBUILD_TESTS=ON -DBUILD_COVERAGE=ON -DWITH_GUI=ON -DBUILD_DOCUMENTATION=ON -DCMAKE_INSTALL_PREFIX=/usr/ -DPACKAGE_MACOS=ON -DCMAKE_C_COMPILER=/usr/local/opt/llvm/bin/clang -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm/bin/clang++
+          cmake -G Ninja .. -DCMAKE_BUILD_TYPE=Debug -DBUILD_ALL_PLUGINS=ON -DBUILD_TESTS=ON -DBUILD_COVERAGE=ON -DWITH_GUI=ON -DCMAKE_C_COMPILER=/usr/local/opt/llvm/bin/clang -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm/bin/clang++
         env:
           LDFLAGS: "-L/usr/local/opt/qt/lib -L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib"
           CPPFLAGS: "-I/usr/local/opt/qt/include -I/usr/local/opt/llvm/include"
           HAL_BASE_PATH: ${{runner.workspace}}/hal/build
+          CCACHE_DIR: ${{runner.workspace}}/.ccache
+          CCACHE_COMPRESS: true
+          CCACHE_COMPRESSLEVEL: 6
+          CCACHE_MAXSIZE: 400M
 
       - name: Build
         if: startsWith(runner.os, 'macOS')
@@ -115,7 +124,13 @@ jobs:
           LDFLAGS: "-L/usr/local/opt/qt/lib -L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib"
           CPPFLAGS: "-I/usr/local/opt/qt/include -I/usr/local/opt/llvm/include"
           HAL_BASE_PATH: ${{runner.workspace}}/hal/build
+          CCACHE_DIR: ${{runner.workspace}}/.ccache
+          CCACHE_COMPRESS: true
+          CCACHE_COMPRESSLEVEL: 6
+          CCACHE_MAXSIZE: 400M
 
+#      - name: Setup tmate session
+#        uses: mxschmitt/action-tmate@v1
 
       - name: Test
         shell: bash
@@ -123,14 +138,17 @@ jobs:
         # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
         run: |
           cd build
-          ctest
-          ls -lah
-          ninja hal_coverage
+          ninja -v hal_coverage
           bash <(curl -s https://codecov.io/bash) -f hal_coverage.info.cleaned || echo "Codecov did not collect coverage reports"
         env:
           LDFLAGS: "-L/usr/local/opt/qt/lib -L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib"
           CPPFLAGS: "-I/usr/local/opt/qt/include -I/usr/local/opt/llvm/include"
           HAL_BASE_PATH: ${{runner.workspace}}/hal/build
+          CCACHE_DIR: ${{runner.workspace}}/.ccache
+          CCACHE_COMPRESS: true
+          CCACHE_COMPRESSLEVEL: 6
+          CCACHE_MAXSIZE: 400M
+
 
       - name: Publish New Homebrew Version
         if: startsWith(runner.os, 'macOS') && startsWith(github.ref, 'refs/tags/v')

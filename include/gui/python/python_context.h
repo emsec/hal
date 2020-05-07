@@ -30,6 +30,10 @@
 #pragma GCC diagnostic ignored "-Wshadow"
 #include "pybind11/embed.h"
 #include "pybind11/eval.h"
+#include "pybind11/operators.h"
+#include "pybind11/stl.h"
+#include "pybind11/stl_bind.h"
+#include "pybind11/functional.h"
 #pragma GCC diagnostic pop
 
 #include "python_console.h"

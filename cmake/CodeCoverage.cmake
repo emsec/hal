@@ -156,69 +156,38 @@
          message(FATAL_ERROR "genhtml not found! Aborting...")
      endif() # NOT GENHTML_PATH
 
-     message(STATUS "@@@@ CMAKE_BINARY_DIR ${CMAKE_BINARY_DIR} @@@@")
-     message(STATUS "@@@@ CMAKE_CURRENT_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR} @@@@")
-
      # Setup target
      add_custom_target(${Coverage_NAME}
 
-                       # Cleanup lcov
+                       COMMENT "Cleanup lcov"
                        COMMAND ${LCOV_PATH} --directory ${CMAKE_BINARY_DIR} --zerocounters
-                       # Create baseline to make sure untouched files show up in the report
-                       COMMAND ${LCOV_PATH} -c -i -d  ${CMAKE_BINARY_DIR} -o ${Coverage_NAME}.base
 
-                       COMMAND ls -lah ${CMAKE_BINARY_DIR}
-                       COMMAND ls -lah ${CMAKE_CURRENT_BINARY_DIR}
-                       COMMAND ls -lah bin/
-                       COMMAND find . -name "${Coverage_NAME}.base"
+                       COMMENT "Create baseline to make sure untouched files show up in the report"
+                       COMMAND ${LCOV_PATH} -c -i -d  ${CMAKE_BINARY_DIR} -o ${CMAKE_BINARY_DIR}/${Coverage_NAME}.base
 
-                       # Run tests
+                       COMMENT "Check if base file exists"
+                       COMMAND [ -f ${CMAKE_BINARY_DIR}/${Coverage_NAME}.base ] || exit -1
+
+                       COMMENT "Run tests"
                        COMMAND ${Coverage_EXECUTABLE}
 
-                       # Capturing lcov counters and generating report
+                       COMMENT "Capturing lcov counters and generating report"
                        COMMAND ${LCOV_PATH} --directory ${CMAKE_BINARY_DIR} --capture --output-file ${Coverage_NAME}.info
 
-                       COMMAND ls -lah ${CMAKE_BINARY_DIR}
-                       COMMAND ls -lah ${CMAKE_CURRENT_BINARY_DIR}
-                       COMMAND ls -lah bin/
-                       COMMAND find . -name "${Coverage_NAME}.base"
-
-                       # add baseline counters
+                       COMMENT "add baseline counters"
                        COMMAND ${LCOV_PATH} -a ${Coverage_NAME}.base -a ${Coverage_NAME}.info --output-file ${Coverage_NAME}.total
 
-                       COMMAND ls -lah ${CMAKE_BINARY_DIR}
-                       COMMAND ls -lah ${CMAKE_CURRENT_BINARY_DIR}
-                       COMMAND ls -lah bin/
-                       COMMAND find . -name "${Coverage_NAME}.base"
+                       COMMENT "Remove Coverage excludes"
+                       COMMAND ${LCOV_PATH} --remove ${Coverage_NAME}.total ${COVERAGE_EXCLUDES} --output-file ${PROJECT_BINARY_DIR}/${Coverage_NAME}.info.cleaned
 
-#                       COMMAND ${LCOV_PATH} --remove ${Coverage_NAME}.total ${COVERAGE_EXCLUDES} --output-file ${PROJECT_BINARY_DIR}/${Coverage_NAME}.info.cleaned
-                       COMMAND ${LCOV_PATH} --remove ${Coverage_NAME}.total ${COVERAGE_EXCLUDES} --output-file ${CMAKE_BINARY_DIR}/${Coverage_NAME}.info.cleaned
+                       COMMENT "List cleaned files"
+                       COMMAND ${LCOV_PATH} --list ${PROJECT_BINARY_DIR}/${Coverage_NAME}.info.cleaned
 
-                       COMMAND ls -lah ${CMAKE_BINARY_DIR}
-                       COMMAND ls -lah ${CMAKE_CURRENT_BINARY_DIR}
-                       COMMAND ls -lah bin/
-                       COMMAND find . -name "${Coverage_NAME}.base"
-
-#                       COMMAND ${LCOV_PATH} --list ${PROJECT_BINARY_DIR}/${Coverage_NAME}.info.cleaned
-                       COMMAND ${LCOV_PATH} --list ${CMAKE_BINARY_DIR}/${Coverage_NAME}.info.cleaned
-
-                       COMMAND ls -lah ${CMAKE_BINARY_DIR}
-                       COMMAND ls -lah ${CMAKE_CURRENT_BINARY_DIR}
-                       COMMAND ls -lah bin/
-                       COMMAND find . -name "${Coverage_NAME}.base"
-
-#                       COMMAND ${GENHTML_PATH} -o ${Coverage_NAME} ${PROJECT_BINARY_DIR}/${Coverage_NAME}.info.cleaned
-                       COMMAND ${GENHTML_PATH} -o ${Coverage_NAME} ${CMAKE_BINARY_DIR}/${Coverage_NAME}.info.cleaned
-
-                       COMMAND ls -lah ${CMAKE_BINARY_DIR}
-                       COMMAND ls -lah ${CMAKE_CURRENT_BINARY_DIR}
-                       COMMAND ls -lah bin/
-                       COMMAND find . -name "${Coverage_NAME}.base"
-
+                       COMMENT "Genhtml"
+                       COMMAND ${GENHTML_PATH} -o ${Coverage_NAME} ${PROJECT_BINARY_DIR}/${Coverage_NAME}.info.cleaned
                        # COMMAND ${CMAKE_COMMAND} -E remove ${Coverage_NAME}.base ${Coverage_NAME}.total ${PROJECT_BINARY_DIR}/${Coverage_NAME}.info.cleaned
 
-#                       WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
-                       WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+                       WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
                        DEPENDS ${Coverage_DEPENDENCIES}
                        COMMENT "Resetting code coverage counters to zero.\nProcessing code coverage counters and generating report."
                        )
@@ -294,4 +263,7 @@
 
  function(APPEND_COVERAGE_COMPILER_FLAGS)
      message(STATUS "Appending code coverage compiler flags: ${COVERAGE_COMPILER_FLAGS}")
+     enable_cxx_compile_option_if_supported("--coverage" "" "PRIVATE")
+     enable_cxx_compile_option_if_supported("-fprofile-arcs" "" "PRIVATE")
+     enable_cxx_compile_option_if_supported("-ftest-coverage" "" "PRIVATE")
  endfunction() # APPEND_COVERAGE_COMPILER_FLAGS
