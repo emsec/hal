@@ -93,11 +93,11 @@ m.def("log_info", [](std::string& message) { log_info("python_context", message)
 
 
 py::class_<hal::path> py_path(m, "hal_path");
-    
+
 py_path.def(py::init<>());
 
 py_path.def(py::init<const hal::path&>());
-    
+
 py_path.def(py::init<const std::string&>()).def("__str__", [](hal::path& p) -> std::string {return std::string(p.c_str());});
 
 py::implicitly_convertible<std::string, hal::path>();
@@ -1623,7 +1623,7 @@ py_net.def("add_dst", py::overload_cast<const std::shared_ptr<gate>&, const std:
         :returns: True on succes
         :rtype: bool
 )");
-        
+
 py_net.def("add_dst", py::overload_cast<const endpoint&>(&net::add_dst), py::arg("dst"), R"(
         Add a destination to this net.
 
@@ -1670,20 +1670,20 @@ py_net.def("is_a_dst", py::overload_cast<const endpoint&>(&net::is_a_dst, py::co
         :returns: True if the input's pin is a destination.
         :rtype: bool
 )");
-        
+
 py_net.def_property_readonly("num_of_dsts", &net::get_num_of_dsts, R"(
         The number of destinations of the net.
 
         :type: int
 )");
-        
+
 py_net.def("get_num_of_dsts", &net::get_num_of_dsts, R"(
         Get the number of destinations.
 
         :returns: The number of destinations of this net.
         :rtype: int
 )");
-        
+
 py_net.def_property_readonly("dsts", [](const std::shared_ptr<net>& n){return n->get_dsts();}, R"(
         Get the vector of destinations of the net.
 
@@ -1711,7 +1711,7 @@ py_net.def("mark_global_input_net", &net::mark_global_input_net, R"(
         :returns: True on success.
         :rtype: bool
 )");
-        
+
 py_net.def("mark_global_output_net", &net::mark_global_output_net, R"(
         Mark this net as a global output net.
 
@@ -1749,7 +1749,7 @@ py_net.def("is_global_output_net", &net::is_global_output_net, R"(
 
 
 py::class_<module, std::shared_ptr<module>, data_container> py_module(m, "module", R"(Module class containing information about a module including its gates, submodules, and parent module.)");
-        
+
 py_module.def_property_readonly("id", &module::get_id, R"(
         The unique ID of the module object.
 
@@ -1775,7 +1775,7 @@ py_module.def("get_name", &module::get_name, R"(
         :returns: The name.
         :rtype: str
 )");
-        
+
 py_module.def("set_name", &module::set_name, py::arg("name"), R"(
         Sets the module's name.
 
@@ -1843,7 +1843,7 @@ py_module.def("get_netlist", &module::get_netlist, R"(
         :returns: The netlist.
         :rtype: hal_py.netlist
 )");
-        
+
 py_module.def_property_readonly("input_nets", &module::get_input_nets, R"(
         The input nets to this module.
 
@@ -1857,13 +1857,13 @@ py_module.def("get_input_nets", &module::get_input_nets, R"(
         :returns: A set of module input nets.
         :rtype: set[hal_py.net]
 )");
-        
+
 py_module.def_property_readonly("output_nets", &module::get_output_nets, R"(
         The output nets to this module.
 
         :type: set[hal_py.net]
 )");
-        
+
 py_module.def("get_output_nets", &module::get_output_nets, R"(
         Get the output nets to this module.
         A module output net is either a global output of the netlist or has a destination outside of the module.
@@ -1871,7 +1871,7 @@ py_module.def("get_output_nets", &module::get_output_nets, R"(
         :returns: The set of module output nets.
         :rtype: set[hal_py.net]
 )");
-        
+
 py_module.def_property_readonly("internal_nets", &module::get_internal_nets, R"(
         The internal nets to this module.
 
@@ -1885,7 +1885,7 @@ py_module.def("get_internal_nets", &module::get_internal_nets, R"(
         :returns: The set of internal nets.
         :rtype: set[hal_py.net]
 )");
-        
+
 py_module.def_property_readonly("gates", [](const std::shared_ptr<module>& mod){return mod->get_gates();}, R"(
         The set of all gates belonging to the module.
 
@@ -1917,7 +1917,7 @@ py_module.def("assign_gate", &module::assign_gate, py::arg("gate"), R"(
         :returns: True on success.
         :rtype: bool
 )");
-        
+
 py_module.def("remove_gate", &module::remove_gate, py::arg("gate"), R"(
         Removes a gate from the module object.
 
@@ -2053,7 +2053,7 @@ py_i_base.def_property_readonly("version", &i_base::get_version, R"(
 
         :type: str
 )");
-        
+
 py_i_base.def("get_version", &i_base::get_version, R"(
         Get the version of the plugin.
 
@@ -2257,7 +2257,7 @@ py_boolean_function.def("to_dnf", &boolean_function::to_dnf, R"(
         :returns: The DNF as a boolean function.
         :rtype: hal_py.boolean_function
 )");
-       
+
 py_boolean_function.def("optimize", &boolean_function::optimize, R"(
         Optimizes the function by first converting it to DNF and then applying the Quine-McCluskey algorithm.
 
@@ -2265,7 +2265,7 @@ py_boolean_function.def("optimize", &boolean_function::optimize, R"(
         :rtype: hal_py.boolean_function
 )");
 
-py_boolean_function.def("get_truth_table", &boolean_function::get_truth_table, py::arg("ordered_variables") = std::vector<std::string>(), R"(
+py_boolean_function.def("get_truth_table", &boolean_function::get_truth_table, py::arg("ordered_variables") = std::vector<std::string>(), py::arg("remove_unknown_variables") = false, R"(
         Get the truth table outputs of the function.
         WARNING: Exponential runtime in the number of variables!
 
@@ -2274,6 +2274,7 @@ py_boolean_function.def("get_truth_table", &boolean_function::get_truth_table, p
         If ordered_variables is empty, all included variables are used and ordered alphabetically.
 
         :param list[str] ordered_variables: Specific order in which the inputs shall be structured in the truth table.
+        :param bool remove_unknown_variables: If true, all given variables that are not found in the function are removed from the truth table.
         :returns: The vector of output values.
         :rtype: list[value]
 )");
