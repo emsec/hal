@@ -781,7 +781,7 @@ TEST_F(gate_test, check_boolean_function_access)
             std::shared_ptr<netlist> nl = create_empty_netlist();
             std::shared_ptr<gate> test_gate = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("INV"), "test_gate");
 
-            // EXPECT_EQ(test_gate->get_boolean_function("unknown_name"), boolean_function()); // ISSUE (boolean_function): empty != empty
+            // EXPECT_EQ(test_gate->get_boolean_function("unknown_name"), boolean_function());
             EXPECT_TRUE(test_gate->get_boolean_function("unknown_name").is_empty());
         }
         {
@@ -803,10 +803,7 @@ TEST_F(gate_test, check_boolean_function_access)
 
             std::shared_ptr<netlist> nl   = std::make_shared<netlist>(gl);
             std::shared_ptr<gate> empty_gate = nl->create_gate(MIN_GATE_ID+0, empty_gate_type, "empty_gate");
-            //EXPECT_TRUE(empty_gate->get_boolean_function().is_empty()); // ISSUE: infinite recursion
-        }
-        {
-
+            EXPECT_TRUE(empty_gate->get_boolean_function().is_empty());
         }
     TEST_END
 }
@@ -837,8 +834,6 @@ TEST_F(gate_test, check_lut_function)
         gl->add_gate_type(lut);
         {
             // Get the boolean function of the lut in different ways
-            // ISSUE: Only the first output pin is handled like the the lut output. The list from get_output_from_init_string_pins
-            // is not taken into account!
             std::shared_ptr<netlist> nl   = std::make_shared<netlist>(gl);
             std::shared_ptr<gate> lut_gate = nl->create_gate(MIN_GATE_ID+0, lut, "lut");
 
@@ -847,14 +842,15 @@ TEST_F(gate_test, check_lut_function)
 
             // Testing the access via the function get_boolean_function
             EXPECT_EQ(lut_gate->get_boolean_function("O_LUT").get_truth_table(input_pins), get_truth_table_from_i(i, 8));
-            // EXPECT_EQ(lut_gate->get_boolean_function("O_LUT_other").get_truth_table(input_pins), get_truth_table_from_i(i, 8)); // ISSUE: fails
+            EXPECT_EQ(lut_gate->get_boolean_function("O_LUT_other").get_truth_table(input_pins), get_truth_table_from_i(i, 8));
+
 
             // Test the access via the get_boolean_functions map
             std::unordered_map<std::string, boolean_function> bfs = lut_gate->get_boolean_functions();
             ASSERT_TRUE(bfs.find("O_LUT") != bfs.end());
             EXPECT_EQ(bfs["O_LUT"].get_truth_table(input_pins), get_truth_table_from_i(i, 8));
-            // ASSERT_TRUE(bfs.find("O_LUT_other") != bfs.end()); // ISSUE: fails
-            // EXPECT_EQ(bfs["O_LUT_other"].get_truth_table(input_pins), get_truth_table_from_i(i, 8)); // ISSUE: fails
+            ASSERT_TRUE(bfs.find("O_LUT_other") != bfs.end());
+            EXPECT_EQ(bfs["O_LUT_other"].get_truth_table(input_pins), get_truth_table_from_i(i, 8));
 
 
         }
@@ -862,9 +858,8 @@ TEST_F(gate_test, check_lut_function)
             // Access the boolean function of a lut, that is stored in ascending order
             std::shared_ptr<netlist> nl   = std::make_shared<netlist>(gl);
             std::shared_ptr<gate> lut_gate = nl->create_gate(MIN_GATE_ID+0, lut, "lut");
-            // ISSUE: Doesn't work for 0x0 (issue in get_lut_function) and for 0xff (issue in optimize function)
-            //for (int i = 0x0; i <= 0xff; i++){
-            for (int i = 0x1; i <= 0xfe; i++){
+            for (int i = 0x0; i <= 0xff; i++)
+            {
                 lut_gate->set_data(lut->get_config_data_category(), lut->get_config_data_identifier(), "bit_vector", i_to_hex_string(i));
                 EXPECT_EQ(lut_gate->get_boolean_function("O_LUT").get_truth_table(input_pins), get_truth_table_from_hex_string(i_to_hex_string(i), 8));
             }
@@ -874,11 +869,12 @@ TEST_F(gate_test, check_lut_function)
             lut->set_config_data_ascending_order(false);
             std::shared_ptr<netlist> nl   = std::make_shared<netlist>(gl);
             std::shared_ptr<gate> lut_gate = nl->create_gate(MIN_GATE_ID+0, lut, "lut");
-            // ISSUE: Doesn't work for 0x0 (issue in get_lut_function) and for 0xff (issue in optimize function)
-            //for (int i = 0x0; i <= 0xff; i++){
-            for (int i = 0x1; i <= 0xfe; i++){
+            for (int i = 0x0; i <= 0xff; i++)
+            {
                 lut_gate->set_data(lut->get_config_data_category(), lut->get_config_data_identifier(), "bit_vector", i_to_hex_string(i));
-                EXPECT_EQ(lut_gate->get_boolean_function("O_LUT").get_truth_table(input_pins), get_truth_table_from_hex_string(i_to_hex_string(i), 8, true));
+                auto expected = get_truth_table_from_hex_string(i_to_hex_string(i), 8);
+                std::reverse(expected.begin(), expected.end());
+                EXPECT_EQ(lut_gate->get_boolean_function("O_LUT").get_truth_table(input_pins), expected);
             }
             lut->set_config_data_ascending_order(true);
         }
@@ -899,16 +895,30 @@ TEST_F(gate_test, check_lut_function)
             lut_gate->set_data(lut->get_config_data_category(), lut->get_config_data_identifier(), "bit_vector", "");
             EXPECT_EQ(lut_gate->get_boolean_function("O_LUT").get_truth_table(input_pins), get_truth_table_from_i(0, 8));
         }
-        /*{ // ISSUE: Fails with stoull if content is not in Hex
+        {
             // There is no hex string at the config data path
             std::shared_ptr<netlist> nl   = std::make_shared<netlist>(gl);
             std::shared_ptr<gate> lut_gate = nl->create_gate(MIN_GATE_ID+0, lut, "lut");
 
             lut_gate->set_data(lut->get_config_data_category(), lut->get_config_data_identifier(), "bit_vector", "NOHx");
-            EXPECT_EQ(lut_gate->get_boolean_function("O_LUT").get_truth_table(input_pins), get_truth_table_from_i(0, 8));
 
-        }*/
-        /*{ // ISSUE: Fails with stoull
+            NO_COUT_BLOCK;
+            EXPECT_EQ(lut_gate->get_boolean_function("O_LUT"), boolean_function());
+
+        }
+        {
+            // Test a lut with a too long input string
+            std::shared_ptr<netlist> nl   = std::make_shared<netlist>(gl);
+            std::shared_ptr<gate> lut_gate = nl->create_gate(MIN_GATE_ID+0, lut, "lut");
+
+            std::string long_hex = "DEADBEEF";
+
+            lut_gate->set_data(lut->get_config_data_category(), lut->get_config_data_identifier(), "bit_vector", long_hex);
+
+            NO_COUT_BLOCK;
+            EXPECT_EQ(lut_gate->get_boolean_function("O_LUT"), boolean_function());
+        }
+        {
             // Test a lut with more than 6 inputs
             std::vector<std::string> new_input_pins({"I3", "I4", "I5", "I6"});
             lut->add_input_pins(new_input_pins);
@@ -918,24 +928,10 @@ TEST_F(gate_test, check_lut_function)
             std::shared_ptr<gate> lut_gate = nl->create_gate(MIN_GATE_ID+0, lut, "lut");
 
             std::string long_hex = "DEADBEEFC001D00DDEADC0DEDEADDA7A";
-
-            lut_gate->set_data(lut->get_config_data_category(), lut->get_config_data_identifier(), "bit_vector", long_hex);
-            EXPECT_EQ(lut_gate->get_boolean_function("O_LUT").get_truth_table(input_pins), get_truth_table_from_hex_string(long_hex, (1 << input_pins.size())));
-        }*/
-        {
-            // Test a lut with a to short input string
-            std::vector<std::string> new_input_pins({"I3", "I4", "I5"});
-            lut->add_input_pins(new_input_pins);
-            input_pins.insert(input_pins.end(), new_input_pins.begin(), new_input_pins.end());
-
-            std::shared_ptr<netlist> nl   = std::make_shared<netlist>(gl);
-            std::shared_ptr<gate> lut_gate = nl->create_gate(MIN_GATE_ID+0, lut, "lut");
-
-            std::string long_hex = "DEADBEEF";
-
             lut_gate->set_data(lut->get_config_data_category(), lut->get_config_data_identifier(), "bit_vector", long_hex);
 
-            EXPECT_EQ(lut_gate->get_boolean_function("O_LUT").get_truth_table(input_pins), get_truth_table_from_hex_string(long_hex, (1 << input_pins.size())));
+            NO_COUT_BLOCK;
+            EXPECT_EQ(lut_gate->get_boolean_function("O_LUT"), boolean_function());
         }
     TEST_END
 }
