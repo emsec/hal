@@ -21,7 +21,7 @@ if(WITH_GUI)
     qt5_wrap_ui(MOC_UI ${UI})
     qt5_add_resources(MOC_RSRC ${RSRC})
 
-    add_library(hal_gui SHARED
+    add_library(gui SHARED
                 ${HDR}
                 ${SRC}
                 #${MOC_source}
@@ -31,21 +31,39 @@ if(WITH_GUI)
                 ${MOC_RSRC}
                 ${QM}
                 )
-    target_include_directories(hal_gui
+    add_library(hal::gui ALIAS gui)
+    set_target_properties(gui PROPERTIES OUTPUT_NAME "hal_gui")
+    set_target_properties(gui PROPERTIES PREFIX "")
+    if(APPLE AND CMAKE_HOST_APPLE)
+        set_target_properties(gui PROPERTIES SUFFIX ".so")
+    endif(APPLE AND CMAKE_HOST_APPLE)
+    target_include_directories(gui
                                PUBLIC
                                $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
                                $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}>
                                $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
                                )
-    target_compile_options(hal_gui
+    target_compile_options(gui
                            PUBLIC ${COMPILE_OPTIONS_PUBLIC}
                            PRIVATE ${COMPILE_OPTIONS_PRIVATE}
                            INTERFACE ${COMPILE_OPTIONS_INTERFACE})
-    target_compile_definitions(hal_gui PUBLIC QT_NO_KEYWORDS)
-    target_link_libraries(hal_gui PUBLIC hal::core hal::netlist Boost::system ${PYTHON_LIBRARIES} pybind11::embed Qt5::Widgets Qt5::Concurrent Qt5::Svg)
+    target_compile_definitions(gui PUBLIC QT_NO_KEYWORDS)
+    target_link_libraries(gui PUBLIC hal::core hal::netlist Boost::system PRIVATE ${PYTHON_LIBRARIES} pybind11::embed Qt5::Widgets Qt5::Concurrent Qt5::Svg)
 
-    install(TARGETS hal_gui LIBRARY DESTINATION ${LIBRARY_INSTALL_DIRECTORY} PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE INCLUDES DESTINATION ${INCLUDE_INSTALL_DIRECTORY})
+    install(TARGETS gui
+            EXPORT hal
+            LIBRARY DESTINATION ${LIBRARY_INSTALL_DIRECTORY}
+            PERMISSIONS
+            OWNER_READ
+            OWNER_WRITE
+            OWNER_EXECUTE
+            GROUP_READ
+            GROUP_EXECUTE
+            WORLD_READ
+            WORLD_EXECUTE
+            INCLUDES DESTINATION ${INCLUDE_INSTALL_DIRECTORY})
+
     if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
-        add_sanitizers(hal_gui)
+        add_sanitizers(gui)
     endif()
 endif(WITH_GUI)

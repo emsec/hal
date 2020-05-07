@@ -16,8 +16,6 @@
  * any errors, it can be an issue of the vhdl parser as well...
  */
 
-#ifdef FIXME
-
 using namespace test_utils;
 
 class netlist_factory_test : public ::testing::Test
@@ -73,10 +71,12 @@ TEST_F(netlist_factory_test, check_create_netlist_by_lib_name)
         {
             {
                 // Create a netlist of an existing gate library
-                ::testing::internal::CaptureStdout();
-                std::shared_ptr<netlist> nl = netlist_factory::create_netlist(g_lib_name);
-                ::testing::internal::GetCapturedStdout();
+                //::testing::internal::CaptureStdout();
+                std::shared_ptr<netlist> nl = netlist_factory::create_netlist("EXAMPLE_GATE_LIBRARY");
+                //std::shared_ptr<netlist> nl_2 = netlist_factory::create_netlist("example_library");
+                //::testing::internal::GetCapturedStdout();
                 EXPECT_EQ(nl->get_gate_library()->get_name(), g_lib_name);
+                //EXPECT_EQ(nl_2->get_gate_library()->get_name(), g_lib_name);
             }
         }
         {
@@ -318,4 +318,3 @@ TEST_F(netlist_factory_test, check_create_netlist_by_program_args)
     TEST_END
 }
 
-#endif FIXME

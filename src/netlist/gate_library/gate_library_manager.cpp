@@ -92,7 +92,7 @@ namespace gate_library_manager
         }
     }    // namespace
 
-    std::shared_ptr<gate_library> load(const hal::path& path, bool reload_if_existing)
+    std::shared_ptr<gate_library> load_file(const hal::path& path, bool reload_if_existing)
     {
         auto file_name = path.string().substr(path.string().find_last_of("/") + 1);
         if (!reload_if_existing)
@@ -158,7 +158,7 @@ namespace gate_library_manager
 
             for (const auto& lib_path : core_utils::recursive_directory_range(lib_dir))
             {
-                load(lib_path.path(), reload_if_existing);
+                load_file(lib_path.path(), reload_if_existing);
             }
         }
     }
@@ -173,12 +173,12 @@ namespace gate_library_manager
             }
         }
 
-        log_info("gate_library_manager", "no gate library '{}' loaded. trying to load '{}.lib' now from default directories...", name, name);
+        // log_info("gate_library_manager", "no gate library '{}' loaded. trying to load '{}.lib' now from default directories...", name, name);
         hal::path path_liberty = core_utils::get_file(name + ".lib", core_utils::get_gate_library_directories());
 
         if (!path_liberty.empty())
         {
-            return load(path_liberty);
+            return load_file(path_liberty);
         }
         else
         {

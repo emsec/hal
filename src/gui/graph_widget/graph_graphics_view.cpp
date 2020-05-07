@@ -10,13 +10,13 @@
 #include "gui/graph_widget/graph_widget.h"
 #include "gui/graph_widget/graph_widget_constants.h"
 #include "gui/graph_widget/graphics_scene.h"
-#include "gui/graph_widget/items/graphics_gate.h"
+#include "gui/graph_widget/items/nodes/gates/graphics_gate.h"
 #include "gui/graph_widget/items/graphics_item.h"
 #include "gui/graph_widget/items/nets/separated_graphics_net.h"
-#include "gui/graph_widget/items/gates/standard_graphics_gate.h"
-#include "gui/graph_widget/items/modules/standard_graphics_module.h"
+#include "gui/graph_widget/items/nodes/gates/standard_graphics_gate.h"
+#include "gui/graph_widget/items/nodes/modules/standard_graphics_module.h"
 #include "gui/graph_widget/items/nets/standard_graphics_net.h"
-#include "gui/graph_widget/items/utility_items/drag_shadow_gate.h"
+#include "gui/graph_widget/items/utility_items/node_drag_shadow.h"
 #include "gui/gui_globals.h"
 #include "gui/gui_utils/netlist.h"
 #include "gui/implementations/qpoint_extension.h"
@@ -199,7 +199,7 @@ void graph_graphics_view::paintEvent(QPaintEvent* event)
     graphics_scene::set_grid_type(m_grid_type);
 
     graphics_item::set_lod(lod);
-    drag_shadow_gate::set_lod(lod);
+    node_drag_shadow::set_lod(lod);
 
     standard_graphics_module::update_alpha();
     standard_graphics_gate::update_alpha();
@@ -346,7 +346,7 @@ void graph_graphics_view::dragEnterEvent(QDragEnterEvent* event)
             g_selection_relay.relay_selection_changed(nullptr);
         }
         m_drop_allowed = false;
-        static_cast<graphics_scene*>(scene())->start_drag_shadow(snap, size, drag_shadow_gate::drag_cue::rejected);
+        static_cast<graphics_scene*>(scene())->start_drag_shadow(snap, size, node_drag_shadow::drag_cue::rejected);
     }
     else
     {
@@ -379,7 +379,7 @@ void graph_graphics_view::dragMoveEvent(QDragMoveEvent* event)
         assert(layouter->done()); // ensure grid stable
         QMap<QPoint, hal::node>::const_iterator node_iter = layouter->position_to_node_map().find(snap[0]);
 
-        drag_shadow_gate::drag_cue cue = drag_shadow_gate::drag_cue::rejected;
+        node_drag_shadow::drag_cue cue = node_drag_shadow::drag_cue::rejected;
         // disallow dropping an item on itself
         if (snap[0] != m_drag_start_gridpos)
         {
@@ -388,7 +388,7 @@ void graph_graphics_view::dragMoveEvent(QDragMoveEvent* event)
                 if (node_iter != layouter->position_to_node_map().end())
                 {
                     // allow move only on empty cells
-                    cue = drag_shadow_gate::drag_cue::swappable;
+                    cue = node_drag_shadow::drag_cue::swappable;
                 }
             }
             else
@@ -396,12 +396,12 @@ void graph_graphics_view::dragMoveEvent(QDragMoveEvent* event)
                 if (node_iter == layouter->position_to_node_map().end())
                 {
                     // allow move only on empty cells
-                    cue = drag_shadow_gate::drag_cue::movable;
+                    cue = node_drag_shadow::drag_cue::movable;
                 }
             }
         }
-        m_drop_allowed = (cue != drag_shadow_gate::drag_cue::rejected);
-
+        m_drop_allowed = (cue != node_drag_shadow::drag_cue::rejected);
+        
         static_cast<graphics_scene*>(scene())->move_drag_shadow(snap[1], cue);
     }
 }

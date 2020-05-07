@@ -288,7 +288,7 @@ namespace test_utils
      * Checks if two nets are equal regardless if they are in the same netlist (they doesn't share a pointer).
      * Two nets are considered equal iff:
      * id is equal AND name is equal AND the stored data is equal AND the connected pin type is equal AND
-     * the connected gates are equal according the function 'gates_are_equal'
+     * the connected gates are equal according the function 'gates_are_equal'  AND booth or neither are global inputs/outputs
      *
      * @param n0[in] - net
      * @param n1[in] - other net
@@ -301,7 +301,7 @@ namespace test_utils
     /**
      * Checks if two gates are equal regardless if they are in the same netlist (they doesn't share a pointer).
      * Two gates are considered equal iff:
-     * id is equal AND name is equal AND the gate type is equal AND the stored data is equal
+     * id is equal AND name is equal AND the gate type is equal AND the stored data is equal AND both or neither are VCC/GND gates
      *
      * @param g0[in] - gate
      * @param g1[in] - other gate
@@ -333,13 +333,13 @@ namespace test_utils
      * their modules are equal according the function 'modules_are_equal' AND
      * they have the same global GND/VCC gates AND they have the same input/output/inout nets
      *
+     *
      * @param nl_0[in] - nl
      * @param nl_1[in] - other nl
-     * @param ignore_id - if the ids should be ignored in comparison
-     * @param ignore_name - if the names should be ignored in comparison
+     * @param ignore_id - if the ids should be ignored in comparison (in this case the module-,gate-,net names must be unique)
      * @returns TRUE if nl_0 and nl_1 are equal under the considered conditions. FALSE otherwise.
      */
-    bool netlists_are_equal(const std::shared_ptr<netlist> nl_0, const std::shared_ptr<netlist> nl_1, const bool ignore_id = false, const bool ignore_name = false);
+    bool netlists_are_equal(const std::shared_ptr<netlist> nl_0, const std::shared_ptr<netlist> nl_1, const bool ignore_id = false);
 
 
     // ===== Filter Factory Functions (used in module::get_gates, netlist::get_nets, moduleget_submodules, gate::get_sucessors, gate::get_predecessors) =====

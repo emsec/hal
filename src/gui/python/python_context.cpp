@@ -1,4 +1,3 @@
-
 #include <QDir>
 #include <fstream>
 #include <gui/python/python_context.h>
@@ -10,6 +9,7 @@
 
 #include "gui/python/python_context_suberscriber.h"
 #include "gui_globals.h"
+#include "gui_api/gui_api.h"
 
 // Following is needed for python_context::check_complete_statement
 #include <Python.h>
@@ -19,19 +19,8 @@
 #include <node.h>
 #include <parsetok.h>
 
-extern grammar _PyParser_Grammar;
-
-PYBIND11_EMBEDDED_MODULE(console, m)
-{
-    m.def("clear", []() -> void { g_python_context->forward_clear(); });
-    m.def("reset", []() -> void { g_python_context->forward_reset(); });
-
-    //m.def("history", []() -> void { g_console->printHistory(g_console->m_cmdColor); });
-
-    py::module m2 = m.def_submodule("redirector", "redirector");
-    m2.def("write_stdout", [](std::string s) -> void { g_python_context->forward_stdout(QString::fromStdString(s)); });
-    m2.def("write_stderr", [](std::string s) -> void { g_python_context->forward_error(QString::fromStdString(s)); });
-}
+    
+    extern grammar _PyParser_Grammar;
 
 python_context::python_context()
 {
@@ -56,28 +45,29 @@ void python_context::initialize_context(py::dict* context)
 {
     py::exec("import __main__\n"
              "import io, sys\n"
-             "from console import reset\n"
-             "from console import clear\n"
+             "sys.path.append('"
+                 + core_utils::get_library_directory().string()
+                 + "')\n"
+             "from hal_gui.console import reset\n"
+             "from hal_gui.console import clear\n"
              "class StdOutCatcher(io.TextIOBase):\n"
              "    def __init__(self):\n"
              "        pass\n"
              "    def write(self, stuff):\n"
-             "        import console\n"
+             "        from hal_gui import console\n"
              "        console.redirector.write_stdout(stuff)\n"
              "class StdErrCatcher(io.TextIOBase):\n"
              "    def __init__(self):\n"
              "        pass\n"
              "    def write(self, stuff):\n"
-             "        import console\n"
+             "        from hal_gui import console\n"
              "        console.redirector.write_stderr(stuff)\n"
              "sys.stdout = StdOutCatcher()\n"
              "sys.__stdout__ = sys.stdout\n"
              "sys.stderr = StdErrCatcher()\n"
              "sys.__stderr__ = sys.stderr\n"
-             "sys.path.append('"
-                 + core_utils::get_library_directory().string()
-                 + "')\n"
-                   "import hal_py\n",
+             "import hal_py\n"
+             "from hal_gui import gui\n",
              *context,
              *context);
 
@@ -92,7 +82,8 @@ void python_context::init_python()
     m_context = new py::dict(**py::globals());
 
     initialize_context(m_context);
-    (*m_context)["console"] = py::module::import("console");
+    (*m_context)["console"] = py::module::import("hal_gui.console");
+    (*m_context)["gui"] = py::module::import("hal_gui.gui");
 }
 
 void python_context::close_python()

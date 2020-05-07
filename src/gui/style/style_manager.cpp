@@ -2,7 +2,7 @@
 
 #include "core/log.h"
 
-#include "graph_widget/netlist_graphics_qss_adapter.h"
+#include "graph_widget/graphics_qss_adapter.h"
 #include "gui/code_editor/syntax_highlighter/python_qss_adapter.h"
 #include "gui/code_editor/syntax_highlighter/vhdl_qss_adapter.h"
 #include "gui/notifications/notification_manager_qss_adapter.h"
@@ -13,7 +13,7 @@
 #include <QFile>
 
 style_manager::style_manager(QObject* parent)
-    : QObject(parent), m_graphics_qss_adapter(new netlist_graphics_qss_adapter()), m_shared_properties(new shared_properties_qss_adapter()),
+    : QObject(parent), m_graphics_qss_adapter(new graphics_qss_adapter()), m_shared_properties(new shared_properties_qss_adapter()),
       m_notification_manager(new notification_manager_qss_adapter()), m_python_syntax_highlighter(new python_qss_adapter()), m_vhdl_syntax_highlighter(new vhdl_qss_adapter())
 {
 }

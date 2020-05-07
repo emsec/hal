@@ -106,13 +106,13 @@ void get_in_touch_widget::handle_about_item_clicked()
 
 void get_in_touch_widget::handle_cpp_documentation_item_clicked()
 {
-    QString link = "https://doc.hal.emsec.rub.de/";
+    QString link = "https://emsec.github.io/hal/doc/";
     QDesktopServices::openUrl(QUrl(link));
 }
 
 void get_in_touch_widget::handle_py_documentation_item_clicked()
 {
-    QString link = "https://py-doc.hal.emsec.rub.de/";
+    QString link = "https://emsec.github.io/hal/pydoc/";
     QDesktopServices::openUrl(QUrl(link));
 }
 

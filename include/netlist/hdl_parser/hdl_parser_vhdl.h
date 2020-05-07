@@ -26,6 +26,7 @@
 #include "def.h"
 
 #include "core/token_stream.h"
+#include "core/utils.h"
 
 #include "netlist/module.h"
 #include "netlist/net.h"
@@ -58,6 +59,54 @@ public:
     std::shared_ptr<netlist> parse(const std::string& gate_library) override;
 
 private:
+    template<typename T>
+    class case_insensitive_string_map
+    {
+    public:
+        const T& at(const std::string& key) const
+        {
+            return m_data.at(core_utils::to_lower(key));
+        }
+
+        T& operator[](const std::string& key)
+        {
+            return m_data[core_utils::to_lower(key)];
+        }
+
+        auto begin() const
+        {
+            return m_data.begin();
+        }
+
+        auto end() const
+        {
+            return m_data.end();
+        }
+
+        auto erase(const std::string& key)
+        {
+            return m_data.erase(core_utils::to_lower(key));
+        }
+
+        auto find(const std::string& key) const
+        {
+            return m_data.find(core_utils::to_lower(key));
+        }
+
+        auto find(const std::string& key)
+        {
+            return m_data.find(core_utils::to_lower(key));
+        }
+
+        auto empty() const
+        {
+            return m_data.empty();
+        }
+
+    private:
+        std::unordered_map<std::string, T> m_data;
+    };
+
     struct instance
     {
         u32 line_number;
@@ -72,25 +121,26 @@ private:
         std::string name;
         u32 line_number;
         std::vector<std::pair<std::string, std::string>> ports;
-        std::unordered_map<std::string, std::vector<std::string>> expanded_signal_names;
-        std::unordered_map<std::string, std::set<std::tuple<std::string, std::string, std::string>>> entity_attributes;
-        std::unordered_map<std::string, std::set<std::tuple<std::string, std::string, std::string>>> instance_attributes;
-        std::unordered_map<std::string, std::set<std::tuple<std::string, std::string, std::string>>> signal_attributes;
+        case_insensitive_string_map<std::vector<std::string>> expanded_signal_names;
+        case_insensitive_string_map<std::set<std::tuple<std::string, std::string, std::string>>> entity_attributes;
+        case_insensitive_string_map<std::set<std::tuple<std::string, std::string, std::string>>> instance_attributes;
+        case_insensitive_string_map<std::set<std::tuple<std::string, std::string, std::string>>> signal_attributes;
         std::vector<std::string> signals;
+        case_insensitive_string_map<token_stream> type_of_signal;
         std::vector<instance> instances;
-        std::unordered_map<std::string, std::string> direct_assignments;
+        case_insensitive_string_map<std::string> direct_assignments;
     };
 
     token_stream m_token_stream;
     std::string m_last_entity;
 
     std::unordered_set<std::string> m_libraries;
-    std::unordered_map<std::string, std::shared_ptr<net>> m_net_by_name;
-    std::unordered_map<std::string, u32> m_name_occurrences;
-    std::unordered_map<std::string, u32> m_current_instance_index;
-    std::unordered_map<std::string, entity> m_entities;
-    std::unordered_map<std::string, std::string> m_attribute_types;
-    std::unordered_map<std::string, std::vector<std::string>> m_nets_to_merge;
+    case_insensitive_string_map<std::shared_ptr<net>> m_net_by_name;
+    case_insensitive_string_map<u32> m_name_occurrences;
+    case_insensitive_string_map<u32> m_current_instance_index;
+    case_insensitive_string_map<entity> m_entities;
+    case_insensitive_string_map<std::string> m_attribute_types;
+    case_insensitive_string_map<std::vector<std::string>> m_nets_to_merge;
 
     bool tokenize();
     bool parse_tokens();
@@ -104,15 +154,16 @@ private:
     bool parse_architecture_body(entity& e);
     bool parse_instance(entity& e);
 
-    bool parse_attribute(std::unordered_map<std::string, std::set<std::tuple<std::string, std::string, std::string>>>& mapping);
+    bool parse_attribute(case_insensitive_string_map<std::set<std::tuple<std::string, std::string, std::string>>>& mapping);
 
     // build the netlist from the intermediate format
     bool build_netlist(const std::string& top_module);
-    std::shared_ptr<module> instantiate(const entity& e, std::shared_ptr<module> parent, std::unordered_map<std::string, std::string> port_assignments);
+    std::shared_ptr<module> instantiate(const entity& e, std::shared_ptr<module> parent, case_insensitive_string_map<std::string> port_assignments);
 
     // helper functions
-    std::unordered_map<std::string, std::string> get_assignments(token_stream& lhs, token_stream& rhs);
-    std::vector<std::string> get_vector_signals(const std::string& base_name, token_stream& type);
+    std::unordered_map<std::string, std::string> get_assignments(entity& e, token_stream& lhs, token_stream& rhs);
+    std::vector<std::string> get_vector_signals(const std::string& base_name, token_stream type);
     std::string get_hex_from_number_literal(const std::string& value);
     std::string get_unique_alias(const std::string& name);
+    std::vector<u32> parse_range(token_stream& range);
 };

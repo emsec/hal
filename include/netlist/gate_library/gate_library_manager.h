@@ -38,9 +38,10 @@ namespace gate_library_manager
     /**
      * Loads all gate libraries which are available.
      *
+     * @param[in] path - the file to load.
      * @param[in] reload_if_existing - If true, reloads all libraries that are already loaded.
      */
-    NETLIST_API std::shared_ptr<gate_library> load(const hal::path& path, bool reload_if_existing = false);
+    NETLIST_API std::shared_ptr<gate_library> load_file(const hal::path& path, bool reload_if_existing = false);
 
     /**
      * Loads all gate libraries which are available.

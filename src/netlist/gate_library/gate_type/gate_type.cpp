@@ -2,8 +2,16 @@
 
 gate_type::gate_type(const std::string& name)
 {
+    static u32 next_id = 1;
+
+    m_id        = next_id++;
     m_name      = name;
     m_base_type = base_type::combinatorial;
+}
+
+u32 gate_type::get_id() const
+{
+    return m_id;
 }
 
 std::string gate_type::to_string() const

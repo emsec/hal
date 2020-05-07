@@ -37,7 +37,7 @@ if __name__ == '__main__':
     if r == None: result, r = _execute_git_describe(commands[1], regex_strings[1], workdir)
 
     if r == None:
-        print("ERROR: could not call 'git describe'", file=sys.stderr)
+        print("ERROR: could not call 'git describe', result: {}".format(result), file=sys.stderr)
         sys.exit(1)
 
     d = r.groupdict('0')

@@ -53,6 +53,14 @@ public:
     virtual ~gate_type() = default;
 
     /**
+     * Get the unique id of the gate type.
+     * The id is never 0.
+     *
+     * @returns id of the gate type.
+     */
+    u32 get_id() const;
+
+    /**
      * Get a string describing the given gate type object.
      *
      * @returns A string describing the gate type.
@@ -161,6 +169,7 @@ protected:
 
 private:
     std::string m_name;
+    u32 m_id;
 
     std::vector<std::string> m_input_pins;
     std::vector<std::string> m_output_pins;

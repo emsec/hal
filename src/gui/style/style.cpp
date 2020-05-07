@@ -3,17 +3,15 @@
 #include "core/log.h"
 
 #include "gui/graph_widget/items/graphics_item.h"
-#include "gui/graph_widget/items/graphics_net.h"
-#include "gui/graph_widget/items/gates/minimal_graphics_gate.h"
-#include "gui/graph_widget/items/gates/standard_graphics_gate.h"
-#include "gui/graph_widget/items/modules/standard_graphics_module.h"
+#include "gui/graph_widget/items/nets/graphics_net.h"
+#include "gui/graph_widget/items/nodes/gates/standard_graphics_gate.h"
+#include "gui/graph_widget/items/nodes/modules/standard_graphics_module.h"
 #include "gui/graph_widget/items/nets/arrow_separated_net.h"
 #include "gui/graph_widget/items/nets/circle_separated_net.h"
-#include "gui/graph_widget/items/nets/hollow_arrow_separated_net.h"
 #include "gui/graph_widget/items/nets/labeled_separated_net.h"
 #include "gui/graph_widget/items/nets/separated_graphics_net.h"
 #include "gui/graph_widget/items/nets/standard_graphics_net.h"
-#include "gui/graph_widget/items/utility_items/drag_shadow_gate.h"
+#include "gui/graph_widget/items/utility_items/node_drag_shadow.h"
 #include "gui/gui_globals.h"
 #include "gui/svg_icon_engine/svg_icon_engine.h"
 
@@ -200,18 +198,16 @@ namespace style
 
         standard_graphics_module::load_settings();
 
-        //graphics_gate::load_settings();
         standard_graphics_gate::load_settings();
-        minimal_graphics_gate::load_settings();
 
         graphics_net::load_settings();
         standard_graphics_net::load_settings();
         separated_graphics_net::load_settings();
         arrow_separated_net::load_settings();
         circle_separated_net::load_settings();
-        hollow_arrow_separated_net::load_settings();
         labeled_separated_net::load_settings();
-        drag_shadow_gate::load_settings();
+
+        node_drag_shadow::load_settings();
     }
 
 } // namespace style

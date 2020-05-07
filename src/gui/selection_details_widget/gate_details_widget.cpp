@@ -6,6 +6,7 @@
 #include "netlist/net.h"
 
 #include "gui_globals.h"
+#include "gui_utils/geometry.h"
 
 #include "graph_widget/graph_navigation_widget.h"
 #include "netlist/module.h"

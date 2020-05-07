@@ -1,13 +1,11 @@
 #include "netlist/gate.h"
 
+#include "core/log.h"
+#include "netlist/event_system/gate_event_handler.h"
 #include "netlist/gate_library/gate_type/gate_type_lut.h"
 #include "netlist/module.h"
 #include "netlist/net.h"
 #include "netlist/netlist.h"
-
-#include "netlist/event_system/gate_event_handler.h"
-
-#include "core/log.h"
 
 #include <assert.h>
 #include <iomanip>
@@ -110,21 +108,26 @@ std::shared_ptr<module> gate::get_module() const
     return m_module;
 }
 
-boolean_function gate::get_boolean_function(const std::string& name) const
+boolean_function gate::get_boolean_function(std::string name) const
 {
     if (name.empty())
     {
         auto output_pins = m_type->get_output_pins();
-        if (!output_pins.empty())
+        if (output_pins.empty())
         {
-            return get_boolean_function(output_pins[0]);
+            return boolean_function();
         }
-        return boolean_function();
+        name = output_pins[0];
     }
 
-    if (m_type->get_base_type() == gate_type::base_type::lut && name == m_type->get_output_pins()[0])
+    if (m_type->get_base_type() == gate_type::base_type::lut)
     {
-        return get_lut_function();
+        auto lut_type = std::static_pointer_cast<const gate_type_lut>(m_type);
+        auto lut_pins = lut_type->get_output_from_init_string_pins();
+        if (lut_pins.find(name) != lut_pins.end())
+        {
+            return get_lut_function(name);
+        }
     }
 
     if (auto it = m_functions.find(name); it != m_functions.end())
@@ -157,33 +160,70 @@ std::unordered_map<std::string, boolean_function> gate::get_boolean_functions(bo
 
     if (!only_custom_functions && m_type->get_base_type() == gate_type::base_type::lut)
     {
-        res.emplace(get_output_pins()[0], get_lut_function());
+        auto lut_type = std::static_pointer_cast<const gate_type_lut>(m_type);
+        for (auto pin : lut_type->get_output_from_init_string_pins())
+        {
+            res.emplace(pin, get_lut_function(pin));
+        }
     }
 
     return res;
 }
 
-boolean_function gate::get_lut_function() const
+boolean_function gate::get_lut_function(const std::string& pin) const
 {
+    UNUSED(pin);
+
     auto lut_type = std::static_pointer_cast<const gate_type_lut>(m_type);
 
     std::string category   = lut_type->get_config_data_category();
     std::string key        = lut_type->get_config_data_identifier();
     std::string config_str = std::get<1>(get_data_by_key(category, key));
+    auto is_ascending      = lut_type->is_config_data_ascending_order();
+    auto inputs            = get_input_pins();
+
+    boolean_function result = boolean_function::ZERO;
 
     if (config_str.empty())
     {
-        return boolean_function::ZERO;
+        return result;
     }
-    u64 config      = std::stoull(config_str, nullptr, 16);
-    u32 config_size = 1 << get_input_pins().size();
 
-    boolean_function result;
+    if (inputs.size() > 6)
+    {
+        log_error("netlist.internal", "LUT-gate '{}' (id = {}) has more than six input pins (unsupported)", get_name(), get_id());
+        return boolean_function();
+    }
 
-    for (u32 i = 0; config != 0; i++)
+    u32 config_size = 1 << inputs.size();
+
+    if (config_str.size() > config_size / 4)
+    {
+        log_error("netlist.internal",
+                  "LUT-gate '{}' (id = {}) supports a config of up to {} bits, but config string {} contains {} bits",
+                  get_name(),
+                  get_id(),
+                  config_size,
+                  config_str,
+                  config_str.size() * 4);
+        return boolean_function();
+    }
+
+    u64 config = 0;
+    try
+    {
+        config = std::stoull(config_str, nullptr, 16);
+    }
+    catch (std::invalid_argument& ex)
+    {
+        log_error("netlist.internal", "LUT-gate '{}' (id = {}) has invalid config string: '{}' is not a hex value", get_name(), get_id(), config_str);
+        return boolean_function();
+    }
+
+    for (u32 i = 0; config != 0 && i < config_size; i++)
     {
         u8 bit;
-        if (lut_type->is_config_data_ascending_order())
+        if (is_ascending)
         {
             bit = (config >> (config_size - 1)) & 1;
             config <<= 1;
@@ -197,7 +237,7 @@ boolean_function gate::get_lut_function() const
         {
             boolean_function clause;
             auto input_values = i;
-            for (auto input : get_input_pins())
+            for (auto input : inputs)
             {
                 if ((input_values & 1) == 1)
                 {
@@ -314,7 +354,7 @@ std::shared_ptr<net> gate::get_fan_in_net(const std::string& pin_type) const
 
     if (it == m_in_nets.end())
     {
-        log_debug("netlist.internal", "gate ('{},  type = {}) has no net connected to input pin '{}'.", get_name(), get_type()->get_name(), pin_type);
+        log_debug("netlist.internal", "gate ('{}',  type = {}) has no net connected to input pin '{}'.", get_name(), get_type()->get_name(), pin_type);
         return nullptr;
     }
 
@@ -339,7 +379,7 @@ std::shared_ptr<net> gate::get_fan_out_net(const std::string& pin_type) const
 
     if (it == m_out_nets.end())
     {
-        log_debug("netlist.internal", "gate ('{},  type = {}) has no net connected to output pin '{}'.", get_name(), get_type()->get_name(), pin_type);
+        log_debug("netlist.internal", "gate ('{}',  type = {}) has no net connected to output pin '{}'.", get_name(), get_type()->get_name(), pin_type);
         return nullptr;
     }
 
@@ -348,14 +388,14 @@ std::shared_ptr<net> gate::get_fan_out_net(const std::string& pin_type) const
 
 std::vector<std::shared_ptr<gate>> gate::get_unique_predecessors(const std::function<bool(const std::string& starting_pin, const endpoint&)>& filter) const
 {
-    std::vector<std::shared_ptr<gate>> res;
+    std::unordered_set<std::shared_ptr<gate>> res;
     auto endpoints = this->get_predecessors(filter);
     res.reserve(endpoints.size());
     for (const auto& ep : endpoints)
     {
-        res.push_back(ep.get_gate());
+        res.insert(ep.get_gate());
     }
-    return res;
+    return std::vector<std::shared_ptr<gate>>(res.begin(), res.end());
 }
 
 std::vector<endpoint> gate::get_predecessors(const std::function<bool(const std::string& starting_pin, const endpoint&)>& filter) const
@@ -403,14 +443,14 @@ endpoint gate::get_predecessor(const std::string& which_pin) const
 
 std::vector<std::shared_ptr<gate>> gate::get_unique_successors(const std::function<bool(const std::string& starting_pin, const endpoint&)>& filter) const
 {
-    std::vector<std::shared_ptr<gate>> res;
+    std::unordered_set<std::shared_ptr<gate>> res;
     auto endpoints = this->get_successors(filter);
     res.reserve(endpoints.size());
     for (const auto& ep : endpoints)
     {
-        res.push_back(ep.get_gate());
+        res.insert(ep.get_gate());
     }
-    return res;
+    return std::vector<std::shared_ptr<gate>>(res.begin(), res.end());
 }
 
 std::vector<endpoint> gate::get_successors(const std::function<bool(const std::string& starting_pin, const endpoint&)>& filter) const

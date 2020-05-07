@@ -6,12 +6,12 @@ standard_graph_layouter::standard_graph_layouter(const graph_context* const cont
 {
 }
 
-const QString standard_graph_layouter::name() const
+QString standard_graph_layouter::name() const
 {
     return "Standard Layouter";
 }
 
-const QString standard_graph_layouter::description() const
+QString standard_graph_layouter::description() const
 {
     return "<p>PLACEHOLDER</p>";
 }

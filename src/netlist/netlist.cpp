@@ -373,11 +373,11 @@ bool netlist::mark_global_input_net(std::shared_ptr<net> const n)
         log_debug("netlist", "net '{}' (id = {:08x}) is already registered as global input net in netlist.", n->get_name(), n->get_id());
         return true;
     }
-    if (n->get_source().get_gate() != nullptr)
-    {
-        log_error("netlist", "net '{}' (id = {:08x}) has a source, so it cannot be marked as a global input net.", n->get_name(), n->get_id());
-        return false;
-    }
+    // if (n->get_num_of_sources() != 0)
+    // {
+    //     log_error("netlist", "net '{}' (id = {:08x}) has a source, so it cannot be marked as a global input net.", n->get_name(), n->get_id());
+    //     return false;
+    // }
     m_global_input_nets.insert(n);
 
     netlist_event_handler::notify(netlist_event_handler::event::marked_global_input, shared_from_this(), n->get_id());

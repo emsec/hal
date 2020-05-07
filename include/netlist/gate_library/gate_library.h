@@ -33,7 +33,7 @@
 
 /**
  * Gate library class containing information about the gates contained in the library.
- * 
+ *
  * @ingroup netlist
  */
 class NETLIST_API gate_library

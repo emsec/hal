@@ -1,17 +1,13 @@
-#include "def.h"
-
+#include "core/interface_base.h"
+#include "core/interface_cli.h"
+#include "core/interface_interactive_ui.h"
 #include "core/log.h"
 #include "core/plugin_manager.h"
-#include "core/utils.h"
-#include "hal_version.h"
-
-#include "core/interface_cli.h"
 #include "core/program_arguments.h"
 #include "core/program_options.h"
-
-#include "core/interface_base.h"
-#include "core/interface_interactive_ui.h"
-
+#include "core/utils.h"
+#include "def.h"
+#include "hal_version.h"
 #include "netlist/event_system/event_log.h"
 #include "netlist/gate_library/gate_library_manager.h"
 #include "netlist/hdl_parser/hdl_parser_dispatcher.h"
@@ -67,6 +63,8 @@ int redirect_control_to_interactive_ui(const std::string& name, program_argument
     event_log::initialize();
 
     auto file_name = core_utils::get_file(std::string("lib" + name + ".") + std::string(LIBRARY_FILE_EXTENSION), {core_utils::get_library_directory()});
+    if (file_name.empty())
+        file_name = core_utils::get_file(std::string(name + ".so"), {core_utils::get_library_directory()});
     if (!plugin_manager::load(name, file_name))
     {
         return ERROR;
@@ -209,8 +207,6 @@ int main(int argc, const char* argv[])
     }
 
     /* handle input file */
-    gate_library_manager::load_all();
-
     if (args.is_option_set("--empty-netlist") && args.is_option_set("--input-file"))
     {
         log_error("core", "Found --empty-netlist and --input-file!");
@@ -228,19 +224,11 @@ int main(int argc, const char* argv[])
 
     if (args.is_option_set("--empty-netlist"))
     {
-        netlist   = netlist_factory::create_netlist(args.get_parameter("--gate-library"));
         file_name = hal::path("./empty_netlist.hal");
     }
     else
     {
-        netlist   = netlist_factory::load_netlist(args);
         file_name = hal::path(args.get_parameter("--input-file"));
-    }
-
-    if (netlist == nullptr)
-    {
-        cleanup();
-        return -1;
     }
 
     if (args.is_option_set("--no-log"))
@@ -253,6 +241,21 @@ int main(int argc, const char* argv[])
     {
         auto log_path = file_name;
         lm.set_file_name(log_path.replace_extension(".log"));
+    }
+
+    if (args.is_option_set("--empty-netlist"))
+    {
+        netlist   = netlist_factory::create_netlist(args.get_parameter("--gate-library"));
+    }
+    else
+    {
+        netlist   = netlist_factory::load_netlist(args);
+    }
+
+    if (netlist == nullptr)
+    {
+        cleanup();
+        return -1;
     }
 
     bool volatile_mode = false;

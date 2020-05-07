@@ -8,6 +8,11 @@
 #include <netlist/gate.h>
 #include <netlist/net.h>
 #include <netlist/module.h>
+#include <netlist/gate_library/gate_type/gate_type_lut.h>
+#include <iomanip>
+#include <sstream>
+#include <algorithm>
+#include <cassert>
 
 using namespace test_utils;
 
@@ -23,6 +28,64 @@ protected:
 
     virtual void TearDown()
     {
+    }
+
+    std::string i_to_hex_string(const int i) const{
+        std::stringstream ss;
+        ss << std::hex << i;
+        return ss.str();
+    }
+
+    // UNUSED
+    std::vector<boolean_function::value> get_truth_table_from_i(const int i, unsigned bit, bool flipped = false){
+        std::vector<boolean_function::value> res;
+        for(int b = bit-1; b >= 0; b--){
+            if(((1 << b) & i) > 0){
+                res.push_back(boolean_function::value::ONE);
+            }
+            else{
+                res.push_back(boolean_function::value::ZERO);
+            }
+        }
+        if (flipped){
+            std::reverse(res.begin(),res.end());
+        }
+        return res;
+    }
+
+    // Turns a hex string into a boolean_function truth table (e.g: "A9" -> {1,0,1,0,1,0,0,1})
+    // If the string is to small/big, the BEGINNING of the table is filled with zero/erased before the flip.
+    std::vector<boolean_function::value> get_truth_table_from_hex_string(std::string str, unsigned bit, bool flipped = false){
+        std::string char_val = "0123456789ABCDEF";
+        std::vector<boolean_function::value> res;
+        std::transform(str.begin(), str.end(),str.begin(), ::toupper);
+        for(char c : str){
+            if (std::size_t val = char_val.find(c) ; val != std::string::npos){
+                for (int b = 3; b >= 0; b--){
+                    if (((1 << b) & val) > 0){
+                        res.push_back(boolean_function::value::ONE);
+                    }
+                    else{
+                        res.push_back(boolean_function::value::ZERO);
+                    }
+                }
+            }
+            else{ // input has non-hex characters
+                return std::vector<boolean_function::value>();
+            }
+        }
+        int size_diff = res.size() - bit;
+        if (size_diff > 0){
+            res.erase (res.begin(), res.begin()+size_diff);
+        }
+        else if (size_diff < 0){
+            res.insert (res.begin(), -size_diff, boolean_function::value::ZERO);
+        }
+        assert(res.size() == bit);
+        if (flipped){
+            std::reverse(res.begin(),res.end());
+        }
+        return res;
     }
 
 };
@@ -510,15 +573,14 @@ TEST_F(gate_test, check_get_unique_predecessors_and_successors)
     {
         // Get the unique predecessors
         std::shared_ptr<gate> gate_1 = nl_2->get_gate_by_id(MIN_GATE_ID+1);
-        std::set<endpoint> pred      = {get_endpoint(nl_2, MIN_GATE_ID+0, "O", false), get_endpoint(nl_2, MIN_GATE_ID+0, "O", false),
-                                        get_endpoint(nl_2, MIN_GATE_ID+2, "O", false)};
-        EXPECT_TRUE((gate_1->get_unique_predecessors() == pred));
+        std::vector<std::shared_ptr<gate>> pred      = {nl_2->get_gate_by_id(MIN_GATE_ID+0), nl_2->get_gate_by_id(MIN_GATE_ID+2)};
+        EXPECT_TRUE(vectors_have_same_content(gate_1->get_unique_predecessors(), pred));
     }
     {
         // Get the unique successors
         std::shared_ptr<gate> gate_0 = nl_2->get_gate_by_id(MIN_GATE_ID+0);
-        std::set<endpoint> succ      = {get_endpoint(nl_2, MIN_GATE_ID+1, "I0", true), get_endpoint(nl_2, MIN_GATE_ID+1, "I1", true), get_endpoint(nl_2, MIN_GATE_ID+1, "I2", true), get_endpoint(nl_2, MIN_GATE_ID+3, "I0", true)};
-        EXPECT_TRUE((gate_0->get_unique_successors() == succ));
+        std::vector<std::shared_ptr<gate>> succ      = {nl_2->get_gate_by_id(MIN_GATE_ID+1), nl_2->get_gate_by_id(MIN_GATE_ID+3)};
+        EXPECT_TRUE(vectors_have_same_content(gate_0->get_unique_successors(), succ));
     }
     TEST_END
 }
@@ -670,3 +732,204 @@ TEST_F(gate_test, check_location_storage)
     TEST_END
 }
 
+/* boolean function access */
+
+/**
+ * Testing the access on boolean function
+ *
+ * Functions: get_boolean_function, get_boolean_functions, add_boolean_function
+ */
+TEST_F(gate_test, check_boolean_function_access)
+{
+    TEST_START
+        boolean_function bf_i = boolean_function::from_string("I", std::vector<std::string>({"I"}));
+        boolean_function bf_i_invert = boolean_function::from_string("!I", std::vector<std::string>({"I"}));
+        {
+            // Access the boolean function of a gate_type
+            std::shared_ptr<netlist> nl = create_empty_netlist();
+            std::shared_ptr<gate> test_gate = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("INV"), "test_gate");
+            std::unordered_map<std::string, boolean_function> bf = test_gate->get_boolean_functions();
+            EXPECT_EQ(bf, (std::unordered_map<std::string, boolean_function>({{"O", bf_i_invert}})));
+        }
+        {
+            // Add a custom boolean function
+            std::shared_ptr<netlist> nl = create_empty_netlist();
+            std::shared_ptr<gate> test_gate = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("INV"), "test_gate");
+            test_gate->add_boolean_function("new_bf", bf_i);
+
+            // -- get all boolean functions
+            std::unordered_map<std::string, boolean_function> bf_all = test_gate->get_boolean_functions(false);
+            EXPECT_EQ(bf_all, (std::unordered_map<std::string, boolean_function>({{"O", bf_i_invert},
+                                                                                  {"new_bf", bf_i  }})));
+            // -- get only custom boolean functions via get_boolean_functions
+            std::unordered_map<std::string, boolean_function> bf_custom = test_gate->get_boolean_functions(true);
+            EXPECT_EQ(bf_custom, (std::unordered_map<std::string, boolean_function>({{"new_bf", bf_i}})));
+
+            // -- get boolean function of the gate type by using the function get_boolean_function
+            EXPECT_EQ(test_gate->get_boolean_function("O"), bf_i_invert);
+
+            // -- get the custom boolean function by using the function get_boolean_function
+            EXPECT_EQ(test_gate->get_boolean_function("new_bf"), bf_i);
+
+            // -- get the boolean function by calling get_boolean_function with name (The first output pin should be taken)
+            EXPECT_EQ(test_gate->get_boolean_function(), bf_i_invert);
+        }
+        // NEGATIVE
+        {
+            // Get a boolean function for a name that is unknown.
+            std::shared_ptr<netlist> nl = create_empty_netlist();
+            std::shared_ptr<gate> test_gate = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("INV"), "test_gate");
+
+            // EXPECT_EQ(test_gate->get_boolean_function("unknown_name"), boolean_function());
+            EXPECT_TRUE(test_gate->get_boolean_function("unknown_name").is_empty());
+        }
+        {
+            // Call the get_boolean_function function with no parameter, for a gate with no outputs
+            std::shared_ptr<gate_library> gl(new gate_library("TEST_LIB"));
+            std::shared_ptr<gate_type> empty_gate_type(new gate_type("EMPTY_GATE"));
+            gl->add_gate_type(empty_gate_type);
+
+            std::shared_ptr<netlist> nl   = std::make_shared<netlist>(gl);
+            std::shared_ptr<gate> empty_gate = nl->create_gate(MIN_GATE_ID+0, empty_gate_type, "empty_gate");
+            EXPECT_TRUE(empty_gate->get_boolean_function().is_empty());
+        }
+        {
+            // Call the get_boolean_function function with no parameter, for a gate with no outputs
+            std::shared_ptr<gate_library> gl(new gate_library("TEST_LIB"));
+            std::shared_ptr<gate_type> empty_gate_type(new gate_type("EMPTY_GATE"));
+            empty_gate_type->add_output_pin("");
+            gl->add_gate_type(empty_gate_type);
+
+            std::shared_ptr<netlist> nl   = std::make_shared<netlist>(gl);
+            std::shared_ptr<gate> empty_gate = nl->create_gate(MIN_GATE_ID+0, empty_gate_type, "empty_gate");
+            EXPECT_TRUE(empty_gate->get_boolean_function().is_empty());
+        }
+    TEST_END
+}
+
+
+/**
+ * Testing the access on the lut function of a lut gate.
+ *
+ * Functions: get_boolean_function, get_boolean_functions, add_boolean_function
+ */
+TEST_F(gate_test, check_lut_function)
+{
+    TEST_START
+        // Create a custom gate_library which contains custom lut gates
+        std::shared_ptr<gate_library> gl(new gate_library("TEST_LIB"));
+        std::shared_ptr<gate_type_lut> lut(new gate_type_lut("LUT_GATE"));
+
+        std::vector<std::string> input_pins({"I0", "I1", "I2"});
+        std::vector<std::string> output_pins({"O_LUT", "O_normal", "O_LUT_other"});
+
+        lut->add_input_pins(input_pins);
+        lut->add_output_pins(output_pins);
+        lut->add_output_from_init_string_pin("O_LUT");
+        lut->add_output_from_init_string_pin("O_LUT_other");
+        lut->set_config_data_ascending_order(true);
+        lut->set_config_data_identifier("data_identifier");
+        lut->set_config_data_category("data_category");
+        gl->add_gate_type(lut);
+
+        {
+            // Get the boolean function of the lut in different ways
+            std::shared_ptr<netlist> nl   = std::make_shared<netlist>(gl);
+            std::shared_ptr<gate> lut_gate = nl->create_gate(MIN_GATE_ID+0, lut, "lut");
+
+            int i = 3;
+            lut_gate->set_data(lut->get_config_data_category(), lut->get_config_data_identifier(), "bit_vector", i_to_hex_string(i));
+
+            // Testing the access via the function get_boolean_function
+            EXPECT_EQ(lut_gate->get_boolean_function("O_LUT").get_truth_table(input_pins), get_truth_table_from_i(i, 8));
+            EXPECT_EQ(lut_gate->get_boolean_function("O_LUT_other").get_truth_table(input_pins), get_truth_table_from_i(i, 8));
+
+
+            // Test the access via the get_boolean_functions map
+            std::unordered_map<std::string, boolean_function> bfs = lut_gate->get_boolean_functions();
+            ASSERT_TRUE(bfs.find("O_LUT") != bfs.end());
+            EXPECT_EQ(bfs["O_LUT"].get_truth_table(input_pins), get_truth_table_from_i(i, 8));
+            ASSERT_TRUE(bfs.find("O_LUT_other") != bfs.end());
+            EXPECT_EQ(bfs["O_LUT_other"].get_truth_table(input_pins), get_truth_table_from_i(i, 8));
+        }
+        {
+            // Access the boolean function of a lut, that is stored in ascending order
+            std::shared_ptr<netlist> nl   = std::make_shared<netlist>(gl);
+            std::shared_ptr<gate> lut_gate = nl->create_gate(MIN_GATE_ID+0, lut, "lut");
+            for (int i = 0x0; i <= 0xff; i++)
+            {
+                lut_gate->set_data(lut->get_config_data_category(), lut->get_config_data_identifier(), "bit_vector", i_to_hex_string(i));
+                EXPECT_EQ(lut_gate->get_boolean_function("O_LUT").get_truth_table(input_pins), get_truth_table_from_hex_string(i_to_hex_string(i), 8));
+            }
+        }
+        {
+            // Access the boolean function of a lut, that is stored in descending order
+            lut->set_config_data_ascending_order(false);
+            std::shared_ptr<netlist> nl   = std::make_shared<netlist>(gl);
+            std::shared_ptr<gate> lut_gate = nl->create_gate(MIN_GATE_ID+0, lut, "lut");
+            for (int i = 0x0; i <= 0xff; i++)
+            {
+                lut_gate->set_data(lut->get_config_data_category(), lut->get_config_data_identifier(), "bit_vector", i_to_hex_string(i));
+                auto expected = get_truth_table_from_hex_string(i_to_hex_string(i), 8);
+                std::reverse(expected.begin(), expected.end());
+                EXPECT_EQ(lut_gate->get_boolean_function("O_LUT").get_truth_table(input_pins), expected);
+            }
+            lut->set_config_data_ascending_order(true);
+        }
+        {
+            // Add a boolean function to a lut pin
+            std::shared_ptr<netlist> nl   = std::make_shared<netlist>(gl);
+            std::shared_ptr<gate> lut_gate = nl->create_gate(MIN_GATE_ID+0, lut, "lut");
+
+            boolean_function lut_bf = boolean_function::from_string("I0 | I1 | I2", input_pins);
+            lut_gate->add_boolean_function("O_LUT", lut_bf);
+            get_truth_table_from_hex_string("EF", 8);
+        }
+        // NEGATIVE
+        {
+            // There is no hex string at the config data path
+            std::shared_ptr<netlist> nl   = std::make_shared<netlist>(gl);
+            std::shared_ptr<gate> lut_gate = nl->create_gate(MIN_GATE_ID+0, lut, "lut");
+            lut_gate->set_data(lut->get_config_data_category(), lut->get_config_data_identifier(), "bit_vector", "");
+            EXPECT_EQ(lut_gate->get_boolean_function("O_LUT").get_truth_table(input_pins), get_truth_table_from_i(0, 8));
+        }
+        {
+            // There is no hex string at the config data path
+            std::shared_ptr<netlist> nl   = std::make_shared<netlist>(gl);
+            std::shared_ptr<gate> lut_gate = nl->create_gate(MIN_GATE_ID+0, lut, "lut");
+
+            lut_gate->set_data(lut->get_config_data_category(), lut->get_config_data_identifier(), "bit_vector", "NOHx");
+
+            NO_COUT_BLOCK;
+            EXPECT_EQ(lut_gate->get_boolean_function("O_LUT"), boolean_function());
+
+        }
+        {
+            // Test a lut with a too long input string
+            std::shared_ptr<netlist> nl   = std::make_shared<netlist>(gl);
+            std::shared_ptr<gate> lut_gate = nl->create_gate(MIN_GATE_ID+0, lut, "lut");
+
+            std::string long_hex = "DEADBEEF";
+
+            lut_gate->set_data(lut->get_config_data_category(), lut->get_config_data_identifier(), "bit_vector", long_hex);
+
+            NO_COUT_BLOCK;
+            EXPECT_EQ(lut_gate->get_boolean_function("O_LUT"), boolean_function());
+        }
+        {
+            // Test a lut with more than 6 inputs
+            std::vector<std::string> new_input_pins({"I3", "I4", "I5", "I6"});
+            lut->add_input_pins(new_input_pins);
+            input_pins.insert(input_pins.begin(), new_input_pins.begin(), new_input_pins.end());
+
+            std::shared_ptr<netlist> nl   = std::make_shared<netlist>(gl);
+            std::shared_ptr<gate> lut_gate = nl->create_gate(MIN_GATE_ID+0, lut, "lut");
+
+            std::string long_hex = "DEADBEEFC001D00DDEADC0DEDEADDA7A";
+            lut_gate->set_data(lut->get_config_data_category(), lut->get_config_data_identifier(), "bit_vector", long_hex);
+
+            NO_COUT_BLOCK;
+            EXPECT_EQ(lut_gate->get_boolean_function("O_LUT"), boolean_function());
+        }
+    TEST_END
+}

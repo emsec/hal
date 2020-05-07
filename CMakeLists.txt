@@ -19,7 +19,7 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 set(AVAILABLE_BUILD_TYPES "Release" "MinSizeRel" "RelWithDebInfo" "Debug" "Perf")
 if(CMAKE_BUILD_TYPE IN_LIST AVAILABLE_BUILD_TYPES)
-    message(VERBOSE "Selected build type: ${CMAKE_BUILD_TYPE}")
+    message(STATUS "Selected build type: ${CMAKE_BUILD_TYPE}")
 else()
     message(FATAL_ERROR "Unsupported build type: ${CMAKE_BUILD_TYPE}, supported are: Debug, Perf, MinSizeRel, RelWithDebInfo, Release")
 endif()
@@ -103,6 +103,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED on)
 
 # Set Build Timestamp (used in configured file)
 string(TIMESTAMP BUILD_TIMESTAMP UTC)
+string(TIMESTAMP CURRENT_YEAR "%Y")
 
 # Setup Directories, e.g. CMAKE_LIBRARY_OUTPUT_DIRECTOR, INCLUDE_INSTALL_DIRECTORY, ...
 setup_output_directories()

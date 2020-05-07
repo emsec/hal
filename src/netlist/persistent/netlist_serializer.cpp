@@ -28,7 +28,7 @@
 #include <sstream>
 
 #ifndef DURATION
-#define DURATION(begin_time) (double)std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - begin_time).count() / 1000
+#define DURATION(begin_time) ((double)std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - begin_time).count() / 1000)
 #endif
 
 namespace netlist_serializer
@@ -36,7 +36,7 @@ namespace netlist_serializer
     // serializing functions
     namespace
     {
-        const int SERIALIZON_FORMAT_VERSION = 5;
+        const int SERIALIZON_FORMAT_VERSION = 6;
 
 #define JSON_STR_HELPER(x) rapidjson::Value{}.SetString(x.c_str(), x.length(), allocator)
         rapidjson::Value serialize(const std::map<std::tuple<std::string, std::string>, std::tuple<std::string, std::string>>& data, rapidjson::Document::AllocatorType& allocator)
@@ -95,9 +95,18 @@ namespace netlist_serializer
             val.AddMember("id", n->get_id(), allocator);
             val.AddMember("name", n->get_name(), allocator);
 
-            if (n->get_source().get_gate() != nullptr)
             {
-                val.AddMember("src", serialize(n->get_source(), allocator), allocator);
+                rapidjson::Value srcs(rapidjson::kArrayType);
+                auto sorted = n->get_sources();
+                std::sort(sorted.begin(), sorted.end(), [](const endpoint& lhs, const endpoint& rhs) { return lhs.get_gate()->get_id() < rhs.get_gate()->get_id(); });
+                for (const auto& src : sorted)
+                {
+                    srcs.PushBack(serialize(src, allocator), allocator);
+                }
+                if (!srcs.Empty())
+                {
+                    val.AddMember("srcs", srcs, allocator);
+                }
             }
 
             {
@@ -299,10 +308,14 @@ namespace netlist_serializer
                 return false;
             }
 
-            if (val.HasMember("src"))
+            if (val.HasMember("srcs"))
             {
-                n->add_source(deserialize_endpoint(nl, val["src"]));
+                for (const auto& src_node : val["srcs"].GetArray())
+                {
+                    n->add_source(deserialize_endpoint(nl, src_node));
+                }
             }
+
             if (val.HasMember("dsts"))
             {
                 for (const auto& dst_node : val["dsts"].GetArray())
