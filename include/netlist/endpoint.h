@@ -38,8 +38,8 @@ class endpoint
 public:
     endpoint(const std::shared_ptr<gate>& gate, const std::string& pin, bool is_a_destination)
     {
-        m_gate     = gate;
-        m_pin      = pin;
+        m_gate             = gate;
+        m_pin              = pin;
         m_is_a_destination = is_a_destination;
     }
     endpoint(const endpoint&) = default;
@@ -91,7 +91,7 @@ public:
     }
 
     /**
-    * Returns the gate of the current endpoint
+    * Returns the gate of the endpoint.
     *
     * @returns The gate.
     */
@@ -101,9 +101,9 @@ public:
     }
 
     /**
-     * Returns the pin of the current endpoint
+     * Returns the pin of the endpoint.
      *
-     * @returns pin as std::string
+     * @returns The pin.
      */
     const std::string& get_pin() const
     {
@@ -111,7 +111,7 @@ public:
     }
 
     /**
-     * Checks the pin type of the current endpoint.
+     * Checks whether the pin of the endpoint is a destination pin.
      *
      * @returns True, if the endpoint is an input pin.
      */
@@ -121,7 +121,7 @@ public:
     }
 
     /**
-     * Checks the pin type of the current endpoint.
+     * Checks whether the pin of the endpoint is a source pin.
      *
      * @returns True, if the endpoint is an output pin.
      */
