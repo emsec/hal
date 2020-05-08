@@ -53,7 +53,7 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
     m_top_lvl_layout->setContentsMargins(0,0,0,0);
     m_top_lvl_layout->setSpacing(0);
 
-    //container-layouts to add spacingaddWidget (gt = general table, op = output pins, etc)
+    //container-layouts to add spacing Widgets (gt = general table, op = output pins, etc)
     QHBoxLayout *intermediate_layout_gt = new QHBoxLayout();
     intermediate_layout_gt->setContentsMargins(3,3,0,0);
     intermediate_layout_gt->setSpacing(0);
@@ -66,12 +66,6 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
     QHBoxLayout *intermediate_layout_df = new QHBoxLayout();
     intermediate_layout_df->setContentsMargins(3,3,0,0);
     intermediate_layout_df->setSpacing(0);
-
-    //intermediate layout for section-buttons to see how an additional button ends up looking
-    QHBoxLayout* intermediate_layout_ib = new QHBoxLayout();
-    intermediate_layout_ib->setContentsMargins(0,0,0,0);
-    intermediate_layout_ib->setSpacing(10);
-
 
     // buttons
     m_general_info_button = new QPushButton("General Information", this);
@@ -127,7 +121,7 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
     m_general_table->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     //(2) Input Pin section
-    m_input_pins_table = new QTableWidget(1,4);
+    m_input_pins_table = new QTableWidget(0,3);
 
     // input pin customization
     m_input_pins_table->horizontalHeader()->setStretchLastSection(true);
@@ -144,7 +138,7 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
     m_input_pins_table->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     //(3) Output Pin section
-    m_output_pins_table = new QTableWidget(0,4);
+    m_output_pins_table = new QTableWidget(0,3);
 
     //output pins customization
     m_output_pins_table->horizontalHeader()->setStretchLastSection(true);
@@ -187,26 +181,18 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
     intermediate_layout_gt->addWidget(m_general_table);
     intermediate_layout_gt->addSpacerItem(new QSpacerItem(0,0, QSizePolicy::Expanding, QSizePolicy::Fixed));
     intermediate_layout_ip->addWidget(m_input_pins_table);
-    intermediate_layout_ip->addWidget(new QPushButton("hehe", this), 0 , Qt::AlignTop);
     intermediate_layout_ip->addSpacerItem(new QSpacerItem(0,0, QSizePolicy::Expanding, QSizePolicy::Fixed));
     intermediate_layout_op->addWidget(m_output_pins_table);
     intermediate_layout_op->addSpacerItem(new QSpacerItem(0,0, QSizePolicy::Expanding, QSizePolicy::Fixed));
     intermediate_layout_df->addWidget(m_data_fields_table);
     intermediate_layout_df->addSpacerItem(new QSpacerItem(0,0, QSizePolicy::Expanding, QSizePolicy::Fixed));
 
-    //adding section header to layout to add an additional button
-    intermediate_layout_ib->addWidget(m_input_pins_button);
-    QPushButton* tst = new QPushButton("tst", this);
-    tst->setMaximumWidth(100);
-    intermediate_layout_ib->addWidget(tst);
-
 
     //adding things to the layout
     m_top_lvl_layout->addWidget(m_general_info_button);
     m_top_lvl_layout->addLayout(intermediate_layout_gt);
     m_top_lvl_layout->addSpacerItem(new QSpacerItem(0, 7, QSizePolicy::Expanding, QSizePolicy::Fixed));
-    //m_top_lvl_layout->addWidget(m_input_pins_button);
-    m_top_lvl_layout->addLayout(intermediate_layout_ib);
+    m_top_lvl_layout->addWidget(m_input_pins_button);
     m_top_lvl_layout->addLayout(intermediate_layout_ip);
     m_top_lvl_layout->addSpacerItem(new QSpacerItem(0, 7, QSizePolicy::Expanding, QSizePolicy::Fixed));
     m_top_lvl_layout->addWidget(m_output_pins_button);
@@ -550,8 +536,6 @@ void gate_details_widget::update(const u32 gate_id)
     int index = 0;
     for(const auto &pin : g->get_input_pins())
     {
-        QPushButton* tmp = new QPushButton("test", this);
-        //tmp->setStyleSheet("QPushButton{color: red; background: white; border-color:blue;} QPushButton:hover{color: blue;}");
         QTableWidgetItem* pin_name = new QTableWidgetItem(QString::fromStdString(pin));
         QTableWidgetItem* arrow_item = new QTableWidgetItem(QChar(0x2b05));
         QTableWidgetItem* net_item = new QTableWidgetItem();
@@ -573,7 +557,6 @@ void gate_details_widget::update(const u32 gate_id)
         m_input_pins_table->setItem(index, 0, pin_name);
         m_input_pins_table->setItem(index, 1, arrow_item);
         m_input_pins_table->setItem(index, 2, net_item);
-        m_input_pins_table->setCellWidget(index, 3, tmp);
         index++;
     }
     m_input_pins_table->resizeColumnsToContents();
@@ -587,7 +570,6 @@ void gate_details_widget::update(const u32 gate_id)
     index = 0;
     for(const auto &pin : g->get_output_pins())
     {
-        QPushButton* tmp = new QPushButton("test", this);
         //tmp->setStyleSheet("QPushButton{color: red; background: white; border-color:blue;} QPushButton:hover{color: blue;}");
         QTableWidgetItem* pin_name = new QTableWidgetItem(QString::fromStdString(pin));
         QTableWidgetItem* arrow_item = new QTableWidgetItem(QChar(0x27a1));
@@ -609,7 +591,6 @@ void gate_details_widget::update(const u32 gate_id)
         m_output_pins_table->setItem(index, 0, pin_name);
         m_output_pins_table->setItem(index, 1, arrow_item);
         m_output_pins_table->setItem(index, 2, net_item);
-        m_output_pins_table->setCellWidget(index, 3, tmp);
         index++;
     }
     m_output_pins_table->resizeColumnsToContents();
