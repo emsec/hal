@@ -282,6 +282,20 @@ const graphics_gate* graphics_scene::get_gate_item(const u32 id) const
     return nullptr;
 }
 
+const graphics_module* graphics_scene::get_module_item(const u32 id) const
+{
+    for (const module_data& d : m_module_items)
+    {
+        if (d.id > id)
+            break;
+
+        if (d.id == id)
+            return d.item;
+    }
+
+    return nullptr;
+}
+
 void graphics_scene::connect_all()
 {
     connect(&g_settings_relay, &settings_relay::setting_changed, this, &graphics_scene::handle_global_setting_changed);

@@ -73,7 +73,7 @@ private:
 
     void handle_enter_module_requested(const u32 id);
 
-    void ensure_gates_visible(const QSet<u32> gates);
+    void ensure_items_visible(const QSet<u32>& gates, const QSet<u32>& modules);
 
     graph_graphics_view* m_view;
     graph_context* m_context;

@@ -12,8 +12,10 @@
 #include "gui/graph_widget/graph_navigation_widget.h"
 #include "gui/graph_widget/graphics_scene.h"
 #include "gui/graph_widget/items/nodes/gates/graphics_gate.h"
+#include "gui/graph_widget/items/nodes/modules/graphics_module.h"
 #include "gui/gui_def.h"
 #include "gui/gui_globals.h"
+#include "gui/gui_utils/netlist.h"
 #include "gui/hal_content_manager/hal_content_manager.h"
 #include "gui/overlay/dialog_overlay.h"
 #include "gui/toolbar/toolbar.h"
@@ -162,17 +164,34 @@ void graph_widget::handle_navigation_jump_requested(const hal::node origin, cons
     auto n = g_netlist->get_net_by_id(via_net);
     if (!n || to_gates.isEmpty())
         return;
-    QList<std::shared_ptr<gate>> gates;
+    std::unordered_set<std::shared_ptr<gate>> gate_ptrs;
     for (u32 id : to_gates)
     {
         auto g = g_netlist->get_gate_by_id(id);
         if (!g)
             return;
-        gates.append(g);
+        gate_ptrs.insert(g);
     }
 
-    if (!m_context->gates().contains(to_gates))
+    QSet<u32> common_modules;
+    std::unordered_set<std::shared_ptr<gate>> filtered_gate_ptrs;
+    QSet<u32> filtered_to_gates;
+    for (auto& g : gate_ptrs)
     {
+        QSet<u32> common = gui_utility::parent_modules(g) & m_context->modules();
+        if (common.empty())
+        {
+            filtered_gate_ptrs.insert(g);
+            filtered_to_gates.insert(g->get_id());
+        }
+        else
+        {
+            common_modules += common;
+        }
+    }
+
+    if (!m_context->gates().contains(filtered_to_gates))
+    {   
         for (const auto& m : g_netlist->get_modules())
         {
             if (m->get_name() == m_context->name().toStdString())
@@ -208,7 +227,7 @@ void graph_widget::handle_navigation_jump_requested(const hal::node origin, cons
         // If we don't have all the gates in the current context, we need to
         // insert them
 
-        auto in_nets = gates.constBegin()->get()->get_fan_in_nets(); // either they're all inputs or all outputs, so just check the first one
+        auto in_nets = gate_ptrs.begin()->get()->get_fan_in_nets(); // either they're all inputs or all outputs, so just check the first one
         bool netIsInput = in_nets.find(n) != in_nets.cend();
         hal::placement_mode placement = netIsInput ? hal::placement_mode::prefer_right : hal::placement_mode::prefer_left;
         m_context->add({}, to_gates, hal::placement_hint{placement, origin});
@@ -226,12 +245,13 @@ void graph_widget::handle_navigation_jump_requested(const hal::node origin, cons
 
     // SELECT IN RELAY
     g_selection_relay.clear();
-    g_selection_relay.m_selected_gates = to_gates;
+    g_selection_relay.m_selected_gates = filtered_to_gates;
+    g_selection_relay.m_selected_modules = common_modules;
     if (to_gates.size() == 1)
     {
         // subfocus only possible when just one gate selected
 
-        auto g = *gates.constBegin();
+        auto g = *filtered_gate_ptrs.begin();
         g_selection_relay.m_focus_type = selection_relay::item_type::gate;
         g_selection_relay.m_focus_id   = g->get_id();
         g_selection_relay.m_subfocus   = selection_relay::subfocus::none;
@@ -271,8 +291,8 @@ void graph_widget::handle_navigation_jump_requested(const hal::node origin, cons
     if (bail_animation)
         return;
 
-    // JUMP TO THE GATE
-    ensure_gates_visible(to_gates);
+    // JUMP TO THE GATES AND MODULES
+    ensure_items_visible(filtered_to_gates, common_modules);
 }
 
 void graph_widget::handle_module_double_clicked(const u32 id)
@@ -501,7 +521,7 @@ void graph_widget::handle_enter_module_requested(const u32 id)
     ctx->add(module_ids, gate_ids);
 }
 
-void graph_widget::ensure_gates_visible(const QSet<u32> gates)
+void graph_widget::ensure_items_visible(const QSet<u32>& gates, const QSet<u32>& modules)
 {
     if (m_context->scene_update_in_progress())
         return;
@@ -514,6 +534,17 @@ void graph_widget::ensure_gates_visible(const QSet<u32> gates)
     for (auto id : gates)
     {
         auto rect = m_context->scene()->get_gate_item(id)->sceneBoundingRect();
+
+        min_x = std::min(min_x, static_cast<int>(rect.left()));
+        max_x = std::max(max_x, static_cast<int>(rect.right()));
+        min_y = std::min(min_y, static_cast<int>(rect.top()));
+        max_y = std::max(max_y, static_cast<int>(rect.bottom()));
+    }
+
+    // TODO clean up redundancy
+    for (auto id : modules)
+    {
+        auto rect = m_context->scene()->get_module_item(id)->sceneBoundingRect();
 
         min_x = std::min(min_x, static_cast<int>(rect.left()));
         max_x = std::max(max_x, static_cast<int>(rect.right()));
