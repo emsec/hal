@@ -173,6 +173,13 @@ void graph_widget::handle_navigation_jump_requested(const hal::node origin, cons
         gate_ptrs.insert(g);
     }
 
+    // filter out any gates for which we need to select the module alternatively
+    // (because we're already showing that module and we would rip the gate out
+    // of the module otherwise)
+
+    // TODO encapsulate this, then move it to the left/right jump handlers and
+    // allow passing of modules into the current method (this step is required
+    // to implement the more flexible cone view navigation)
     QSet<u32> common_modules;
     std::unordered_set<std::shared_ptr<gate>> filtered_gate_ptrs;
     QSet<u32> filtered_to_gates;
@@ -181,11 +188,14 @@ void graph_widget::handle_navigation_jump_requested(const hal::node origin, cons
         QSet<u32> common = gui_utility::parent_modules(g) & m_context->modules();
         if (common.empty())
         {
+            // we can safely select this gate
             filtered_gate_ptrs.insert(g);
             filtered_to_gates.insert(g->get_id());
         }
         else
         {
+            // we must select the module instead
+            // (this "common" set only has one element)
             common_modules += common;
         }
     }
@@ -247,7 +257,11 @@ void graph_widget::handle_navigation_jump_requested(const hal::node origin, cons
     g_selection_relay.clear();
     g_selection_relay.m_selected_gates = filtered_to_gates;
     g_selection_relay.m_selected_modules = common_modules;
-    if (to_gates.size() == 1)
+
+    // TODO implement subselections on modules, then add a case for when the
+    // selection is only one module (instead of one gate)
+
+    if (filtered_to_gates.size() == 1)
     {
         // subfocus only possible when just one gate selected
 
