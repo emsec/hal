@@ -213,7 +213,6 @@ void graph_widget::set_modified_if_module()
 
 void graph_widget::handle_navigation_jump_requested(const hal::node origin, const u32 via_net, const QSet<u32>& to_gates, const QSet<u32>& to_modules)
 {
-
     bool bail_animation = false;
 
     setFocus();
@@ -282,6 +281,7 @@ void graph_widget::handle_navigation_jump_requested(const hal::node origin, cons
         g_selection_relay.m_subfocus   = selection_relay::subfocus::none;
 
         u32 cnt = 0;
+        // TODO simplify
         for (const auto& pin : g->get_input_pins())
         {
             if (g->get_fan_in_net(pin) == n)    // input net
@@ -306,6 +306,45 @@ void graph_widget::handle_navigation_jump_requested(const hal::node origin, cons
                 cnt++;
             }
         }
+    }
+    else if (final_modules.size() == 1)
+    {
+        // subfocus only possible when just one module selected
+        u32 mid = *final_modules.begin();
+        auto m = g_netlist->get_module_by_id(mid);
+
+        g_selection_relay.m_focus_type = selection_relay::item_type::module;
+        g_selection_relay.m_focus_id   = mid;
+        g_selection_relay.m_subfocus   = selection_relay::subfocus::none;
+
+        // TODO implement
+        
+        // u32 cnt = 0;
+        // for (const auto& pin : g->get_input_pins())
+        // {
+        //     if (g->get_fan_in_net(pin) == n)    // input net
+        //     {
+        //         g_selection_relay.m_subfocus       = selection_relay::subfocus::left;
+        //         g_selection_relay.m_subfocus_index = cnt;
+        //         break;
+        //     }
+        //     cnt++;
+        // }
+        // if (g_selection_relay.m_subfocus == selection_relay::subfocus::none)
+        // {
+        //     cnt = 0;
+        //     for (const auto& pin : g->get_output_pins())
+        //     {
+        //         if (g->get_fan_out_net(pin) == n)    // input net
+        //         {
+        //             g_selection_relay.m_subfocus       = selection_relay::subfocus::right;
+        //             g_selection_relay.m_subfocus_index = cnt;
+        //             break;
+        //         }
+        //         cnt++;
+        //     }
+        // }
+        qDebug() << "automatic subfocus not yet implemented";
     }
 
     g_selection_relay.relay_selection_changed(nullptr);
@@ -405,6 +444,47 @@ void graph_widget::handle_navigation_left_request()
         }
         case selection_relay::item_type::module:
         {
+            std::shared_ptr<module> m = g_netlist->get_module_by_id(g_selection_relay.m_focus_id);
+
+            if (!m)
+                return;
+
+            if (g_selection_relay.m_subfocus == selection_relay::subfocus::left)
+            {
+                // std::string pin_type   = g->get_input_pins()[g_selection_relay.m_subfocus_index];
+                // std::shared_ptr<net> n = g->get_fan_in_net(pin_type);
+
+                // if (!n)
+                //     return;
+
+                // if (n->get_num_of_sources() == 0)
+                // {
+                //     g_selection_relay.clear();
+                //     g_selection_relay.m_selected_nets.insert(n->get_id());
+                //     g_selection_relay.m_focus_type = selection_relay::item_type::net;
+                //     g_selection_relay.m_focus_id   = n->get_id();
+                //     g_selection_relay.relay_selection_changed(nullptr);
+                // }
+                // else if (n->get_num_of_sources() == 1)
+                // {
+                //     handle_navigation_jump_requested(hal::node{hal::node_type::gate, g->get_id()}, n->get_id(), {n->get_source().get_gate()->get_id()}, {});
+                // }
+                // else
+                // {
+                //     m_navigation_widget->setup(false);
+                //     m_navigation_widget->setFocus();
+                //     m_overlay->show();
+                // }
+                qDebug() << "not yet implemented";
+            }
+            else if (m->get_input_nets().size())
+            {
+                g_selection_relay.m_subfocus       = selection_relay::subfocus::left;
+                g_selection_relay.m_subfocus_index = 0;
+
+                g_selection_relay.relay_subfocus_changed(nullptr);
+            }
+
             return;
         }
     }
@@ -482,22 +562,62 @@ void graph_widget::handle_navigation_right_request()
         }
         case selection_relay::item_type::module:
         {
-            return;
+            std::shared_ptr<module> m = g_netlist->get_module_by_id(g_selection_relay.m_focus_id);
+
+            if (!m)
+                return;
+
+            if (g_selection_relay.m_subfocus == selection_relay::subfocus::right)
+            {
+            //     auto n = g->get_fan_out_net(g->get_output_pins()[g_selection_relay.m_subfocus_index]);
+            //     if (n->get_num_of_destinations() == 0)
+            //     {
+            //         g_selection_relay.clear();
+            //         g_selection_relay.m_selected_nets.insert(n->get_id());
+            //         g_selection_relay.m_focus_type = selection_relay::item_type::net;
+            //         g_selection_relay.m_focus_id   = n->get_id();
+            //         g_selection_relay.relay_selection_changed(nullptr);
+            //     }
+            //     else if (n->get_num_of_destinations() == 1)
+            //     {
+            //         handle_navigation_jump_requested(hal::node{hal::node_type::gate, g->get_id()}, n->get_id(), {n->get_destinations()[0].get_gate()->get_id()}, {});
+            //     }
+            //     else
+            //     {
+            //         m_navigation_widget->setup(true);
+            //         m_navigation_widget->setFocus();
+            //         m_overlay->show();
+            //     }
+                qDebug() << "not yet implemented";
+            }
+            else if (m->get_output_nets().size())
+            {
+                g_selection_relay.m_subfocus       = selection_relay::subfocus::right;
+                g_selection_relay.m_subfocus_index = 0;
+
+                g_selection_relay.relay_subfocus_changed(nullptr);
+            }
         }
     }
 }
 
 void graph_widget::handle_navigation_up_request()
 {
-    if (g_selection_relay.m_focus_type == selection_relay::item_type::gate)
-        if (m_context->gates().contains(g_selection_relay.m_focus_id))
+    // FIXME this is ugly
+    if ((g_selection_relay.m_focus_type == selection_relay::item_type::gate
+        && m_context->gates().contains(g_selection_relay.m_focus_id))
+        || (g_selection_relay.m_focus_type == selection_relay::item_type::module
+        && m_context->modules().contains(g_selection_relay.m_focus_id)))
             g_selection_relay.navigate_up();
 }
 
 void graph_widget::handle_navigation_down_request()
 {
-    if (g_selection_relay.m_focus_type == selection_relay::item_type::gate)
-        if (m_context->gates().contains(g_selection_relay.m_focus_id))
+    // FIXME this is ugly
+    if ((g_selection_relay.m_focus_type == selection_relay::item_type::gate
+        && m_context->gates().contains(g_selection_relay.m_focus_id))
+        || (g_selection_relay.m_focus_type == selection_relay::item_type::module
+        && m_context->modules().contains(g_selection_relay.m_focus_id)))
             g_selection_relay.navigate_down();
 }
 
