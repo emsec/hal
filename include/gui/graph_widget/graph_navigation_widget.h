@@ -25,7 +25,7 @@ public:
     void hide_when_focus_lost(bool hide);
 
 Q_SIGNALS:
-    void navigation_requested(const hal::node origin, const u32 via_net, const QSet<u32>& to_gates);
+    void navigation_requested(const hal::node origin, const u32 via_net, const QSet<u32>& to_gates, const QSet<u32>& to_modules);
     void close_requested();
     void reset_focus();
 

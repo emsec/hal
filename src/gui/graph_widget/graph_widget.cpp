@@ -154,100 +154,110 @@ void graph_widget::keyPressEvent(QKeyEvent* event)
     }
 }
 
-void graph_widget::handle_navigation_jump_requested(const hal::node origin, const u32 via_net, const QSet<u32>& to_gates)
+void graph_widget::substitute_by_visible_modules(const QSet<u32>& gates, QSet<u32>& to_modules, QSet<u32>& to_gates) const
 {
-    bool bail_animation = false;
-
-    setFocus();
-
-    // ASSERT INPUTS ARE VALID ?
-    auto n = g_netlist->get_net_by_id(via_net);
-    if (!n || to_gates.isEmpty())
-        return;
-    std::unordered_set<std::shared_ptr<gate>> gate_ptrs;
-    for (u32 id : to_gates)
+    for (auto& gid : gates)
     {
-        auto g = g_netlist->get_gate_by_id(id);
-        if (!g)
-            return;
-        gate_ptrs.insert(g);
-    }
-
-    // filter out any gates for which we need to select the module alternatively
-    // (because we're already showing that module and we would rip the gate out
-    // of the module otherwise)
-
-    // TODO encapsulate this, then move it to the left/right jump handlers and
-    // allow passing of modules into the current method (this step is required
-    // to implement the more flexible cone view navigation)
-    QSet<u32> common_modules;
-    std::unordered_set<std::shared_ptr<gate>> filtered_gate_ptrs;
-    QSet<u32> filtered_to_gates;
-    for (auto& g : gate_ptrs)
-    {
+        auto g = g_netlist->get_gate_by_id(gid);
         QSet<u32> common = gui_utility::parent_modules(g) & m_context->modules();
         if (common.empty())
         {
-            // we can safely select this gate
-            filtered_gate_ptrs.insert(g);
-            filtered_to_gates.insert(g->get_id());
+            // we can select the gate
+            to_gates.insert(gid);
         }
         else
         {
             // we must select the module instead
             // (this "common" set only has one element)
-            common_modules += common;
+            to_modules += common;
         }
     }
+}
 
-    if (!m_context->gates().contains(filtered_to_gates))
-    {   
-        for (const auto& m : g_netlist->get_modules())
+void graph_widget::set_modified_if_module()
+{
+    // if our name matches that of a module, add the "modified" label and
+    // optionally a number if a "modified"-labeled context already exists
+    for (const auto& m : g_netlist->get_modules())
+    {
+        if (m->get_name() == m_context->name().toStdString())
         {
-            if (m->get_name() == m_context->name().toStdString())
+            u32 cnt = 0;
+            while (true)
             {
-                u32 cnt = 0;
-                while (true)
+                ++cnt;
+                QString new_name = m_context->name() + " modified";
+                if (cnt > 1)
                 {
-                    ++cnt;
-                    QString new_name = m_context->name() + " modified";
-                    if (cnt > 1)
+                    new_name += " (" + QString::number(cnt) + ")";
+                }
+                bool found = false;
+                for (const auto& ctx : g_graph_context_manager.get_contexts())
+                {
+                    if (ctx->name() == new_name)
                     {
-                        new_name += " (" + QString::number(cnt) + ")";
-                    }
-                    bool found = false;
-                    for (const auto& ctx : g_graph_context_manager.get_contexts())
-                    {
-                        if (ctx->name() == new_name)
-                        {
-                            found = true;
-                            break;
-                        }
-                    }
-                    if (!found)
-                    {
-                        g_graph_context_manager.rename_graph_context(m_context, new_name);
+                        found = true;
                         break;
                     }
                 }
-                break;
+                if (!found)
+                {
+                    g_graph_context_manager.rename_graph_context(m_context, new_name);
+                    break;
+                }
             }
+            break;
         }
+    }
+}
 
-        // If we don't have all the gates in the current context, we need to
-        // insert them
+void graph_widget::handle_navigation_jump_requested(const hal::node origin, const u32 via_net, const QSet<u32>& to_gates, const QSet<u32>& to_modules)
+{
 
-        auto in_nets = gate_ptrs.begin()->get()->get_fan_in_nets(); // either they're all inputs or all outputs, so just check the first one
+    bool bail_animation = false;
+
+    setFocus();
+
+    // ASSERT INPUTS ARE VALID
+    auto n = g_netlist->get_net_by_id(via_net);
+    if (!n || (to_gates.empty() && to_modules.empty()))
+        return;
+
+    // Substitute all gates by their modules if we're showing them.
+    // This avoids ripping gates out of their already visible modules.
+    QSet<u32> final_modules = to_modules;
+    QSet<u32> final_gates;
+    substitute_by_visible_modules(to_gates, final_modules, final_gates);
+
+    // find out which gates and modules we still need to add to the context
+    // (this makes the cone view work)
+    QSet<u32> nonvisible_gates = final_gates - m_context->gates();
+    QSet<u32> nonvisible_modules = final_modules - m_context->modules();
+
+    // if we don't have all gates and modules, we need to add them
+    if (!nonvisible_gates.empty() || !nonvisible_modules.empty())
+    {   
+        // display the "modified" label if we're showing a module context
+        set_modified_if_module();
+
+        // hint the layouter at the direction we're navigating in
+        // (so the cone view nicely extends to the right or left)
+        auto in_nets = g_netlist->get_gate_by_id(*to_gates.begin())->get_fan_in_nets(); // either they're all inputs or all outputs, so just check the first one
         bool netIsInput = in_nets.find(n) != in_nets.cend();
         hal::placement_mode placement = netIsInput ? hal::placement_mode::prefer_right : hal::placement_mode::prefer_left;
-        m_context->add({}, to_gates, hal::placement_hint{placement, origin});
 
+        // add all new gates and modules
+        m_context->add(nonvisible_modules, nonvisible_gates, hal::placement_hint{placement, origin});
+
+        // FIXME find out how to do this properly
         // If we have added any gates, the scene may have resized. In that case, the animation can be erratic,
         // so we set a flag here that we can't run the animation. See end of this method for more details.
         bail_animation = true;
     }
     else
     {
+        // if we don't need to add anything, we're done here
+
         m_overlay->hide();
         //if (hasFocus())
         m_view->setFocus();
@@ -255,19 +265,20 @@ void graph_widget::handle_navigation_jump_requested(const hal::node origin, cons
 
     // SELECT IN RELAY
     g_selection_relay.clear();
-    g_selection_relay.m_selected_gates = filtered_to_gates;
-    g_selection_relay.m_selected_modules = common_modules;
+    g_selection_relay.m_selected_gates = final_gates;
+    g_selection_relay.m_selected_modules = final_modules;
 
     // TODO implement subselections on modules, then add a case for when the
     // selection is only one module (instead of one gate)
 
-    if (filtered_to_gates.size() == 1)
+    if (final_gates.size() == 1)
     {
         // subfocus only possible when just one gate selected
+        u32 gid = *final_gates.begin();
+        auto g = g_netlist->get_gate_by_id(gid);
 
-        auto g = *filtered_gate_ptrs.begin();
         g_selection_relay.m_focus_type = selection_relay::item_type::gate;
-        g_selection_relay.m_focus_id   = g->get_id();
+        g_selection_relay.m_focus_id   = gid;
         g_selection_relay.m_subfocus   = selection_relay::subfocus::none;
 
         u32 cnt = 0;
@@ -306,7 +317,7 @@ void graph_widget::handle_navigation_jump_requested(const hal::node origin, cons
         return;
 
     // JUMP TO THE GATES AND MODULES
-    ensure_items_visible(filtered_to_gates, common_modules);
+    ensure_items_visible(final_gates, final_modules);
 }
 
 void graph_widget::handle_module_double_clicked(const u32 id)
@@ -350,7 +361,7 @@ void graph_widget::handle_navigation_left_request()
                 }
                 else if (n->get_num_of_sources() == 1)
                 {
-                    handle_navigation_jump_requested(hal::node{hal::node_type::gate, g->get_id()}, n->get_id(), {n->get_source().get_gate()->get_id()});
+                    handle_navigation_jump_requested(hal::node{hal::node_type::gate, g->get_id()}, n->get_id(), {n->get_source().get_gate()->get_id()}, {});
                 }
                 else
                 {
@@ -381,7 +392,7 @@ void graph_widget::handle_navigation_left_request()
 
             if (n->get_num_of_sources() == 1)
             {
-                handle_navigation_jump_requested(hal::node{hal::node_type::gate, 0}, n->get_id(), {n->get_sources()[0].get_gate()->get_id()});
+                handle_navigation_jump_requested(hal::node{hal::node_type::gate, 0}, n->get_id(), {n->get_sources()[0].get_gate()->get_id()}, {});
             }
             else
             {
@@ -427,7 +438,7 @@ void graph_widget::handle_navigation_right_request()
                 }
                 else if (n->get_num_of_destinations() == 1)
                 {
-                    handle_navigation_jump_requested(hal::node{hal::node_type::gate, g->get_id()}, n->get_id(), {n->get_destinations()[0].get_gate()->get_id()});
+                    handle_navigation_jump_requested(hal::node{hal::node_type::gate, g->get_id()}, n->get_id(), {n->get_destinations()[0].get_gate()->get_id()}, {});
                 }
                 else
                 {
@@ -458,7 +469,7 @@ void graph_widget::handle_navigation_right_request()
 
             if (n->get_num_of_destinations() == 1)
             {
-                handle_navigation_jump_requested(hal::node{hal::node_type::gate, 0}, n->get_id(), {n->get_destinations()[0].get_gate()->get_id()});
+                handle_navigation_jump_requested(hal::node{hal::node_type::gate, 0}, n->get_id(), {n->get_destinations()[0].get_gate()->get_id()}, {});
             }
             else
             {

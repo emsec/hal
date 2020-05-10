@@ -237,7 +237,7 @@ void graph_navigation_widget::commit_selection()
                 gates.insert(g->get_id());
             }
         }
-        Q_EMIT navigation_requested(m_origin, m_via_net, gates);
+        Q_EMIT navigation_requested(m_origin, m_via_net, gates, {});
         return;
     }
 
@@ -248,6 +248,6 @@ void graph_navigation_widget::commit_selection()
         return;
     }
 
-    Q_EMIT navigation_requested(m_origin, m_via_net, {g->get_id()});
+    Q_EMIT navigation_requested(m_origin, m_via_net, {g->get_id()}, {});
     return;
 }
