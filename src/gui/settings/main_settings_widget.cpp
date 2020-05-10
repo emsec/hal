@@ -447,15 +447,15 @@ void main_settings_widget::handle_text_edited(const QString& text)
 
 void main_settings_widget::handle_setting_updated(settings_widget* sender, const QString& key, const QVariant& value)
 {
-    Q_UNUSED(key);
-    Q_UNUSED(sender);
-    Q_UNUSED(value);
 #ifdef SETTINGS_UPDATE_IMMEDIATELY
     bool conflicts = check_conflict(sender, value);
     if (!conflicts)
     {
         g_settings_manager.update(key, value);
     }
+#else
+    Q_UNUSED(key);
+    check_conflict(sender, value);
 #endif
 }
 
