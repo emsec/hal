@@ -28,6 +28,9 @@
 #include <QPushButton>
 #include <QPropertyAnimation>
 #include <QScrollBar>
+#include <QRegularExpression>
+#include <QRegularExpressionMatch>
+#include <QApplication> //to extract the stylesheet of the main app.
 
 gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
 {
@@ -224,6 +227,13 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
 
     connect(m_input_pins_table, &QTableWidget::itemClicked, this, &gate_details_widget::handle_input_pin_item_clicked);
     connect(m_output_pins_table, &QTableWidget::itemClicked, this, &gate_details_widget::handle_output_pin_item_clicked);
+
+    //extract the width of the scrollbar out of the stylesheet to fix a scrollbar related bug
+    QString main_stylesheet = qApp->styleSheet();
+    main_stylesheet.replace("\n", ""); //remove newlines so the regex is a bit easier
+    QRegularExpression re(".+?QScrollBar:vertical ?{[^}]+?(?: *width *?|; *width *?): *([0-9]*)[^;]*");
+    QRegularExpressionMatch ma = re.match(main_stylesheet);
+    m_scrollbar_width = (ma.hasMatch()) ? ma.captured(1).toInt() : 0;
 }
 
 gate_details_widget::~gate_details_widget()
@@ -498,7 +508,7 @@ void gate_details_widget::handle_module_gate_removed(std::shared_ptr<module> mod
 void gate_details_widget::resizeEvent(QResizeEvent* event)
 {
     //2 is needed because just the scrollbarwitdth is not enough (does not include its border?)
-    m_boolean_functions_container->setFixedWidth(event->size().width() - m_scroll_area->verticalScrollBar()->width()-2);
+    m_boolean_functions_container->setFixedWidth(event->size().width() - m_scrollbar_width-2);
 }
 
 void gate_details_widget::update(const u32 gate_id)

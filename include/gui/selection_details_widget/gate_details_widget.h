@@ -144,6 +144,10 @@ private:
     u64 m_last_click_time;
 
     graph_navigation_widget* m_navigation_table;
+
+    //used to set the boolean function container to its appropriate size, width "must be"
+    //extracted from the stylesheet
+    int m_scrollbar_width;
 };
 
 #endif /* __HAL_GATE_DETAILS_WIDGET_H__ */
