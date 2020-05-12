@@ -450,9 +450,14 @@ void gate_details_widget::handle_output_pin_item_clicked(QTableWidgetItem *item)
 
 QSize gate_details_widget::calculate_table_size(QTableWidget *table)
 {
+    //necessary to test if the table is empty, otherwise (due to the resizeColumnsToContents function)
+    //is the tables width far too big, so just return 0 as the size
+    if(!table->rowCount())
+        return QSize(0,0);
+
     int w = table->verticalHeader()->width() + 4; // +4 seems to be needed
     for (int i = 0; i < table->columnCount(); i++)
-       w += table->columnWidth(i); // seems to include gridline (on my machine)
+       w += table->columnWidth(i); // seems to include gridline
     int h = table->horizontalHeader()->height() + 4;
     for (int i = 0; i < table->rowCount(); i++)
        h += table->rowHeight(i);
