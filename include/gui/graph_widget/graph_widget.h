@@ -71,7 +71,8 @@ private:
     void handle_navigation_up_request();
     void handle_navigation_down_request();
 
-    void substitute_by_visible_modules(const QSet<u32>& gates, QSet<u32>& to_modules, QSet<u32>& to_gates) const;
+    void substitute_by_visible_modules(const QSet<u32>& gates, const QSet<u32>& modules, QSet<u32>& insert_gates, QSet<u32>& insert_modules,
+                                       QSet<u32>& remove_gates, QSet<u32>& remove_modules) const;
     void set_modified_if_module();
 
     void handle_enter_module_requested(const u32 id);

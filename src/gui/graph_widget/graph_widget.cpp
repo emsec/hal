@@ -154,24 +154,103 @@ void graph_widget::keyPressEvent(QKeyEvent* event)
     }
 }
 
-void graph_widget::substitute_by_visible_modules(const QSet<u32>& gates, QSet<u32>& to_modules, QSet<u32>& to_gates) const
+void graph_widget::substitute_by_visible_modules(const QSet<u32>& gates, const QSet<u32>& modules, QSet<u32>& target_gates, QSet<u32>& target_modules, QSet<u32>& remove_gates, QSet<u32>& remove_modules) const
 {
+    // EXPAND SELECTION AND CONTEXT UP THE HIERARCHY TREE
+
+    for (auto& mid : modules)
+    {
+        auto m = g_netlist->get_module_by_id(mid);
+        QSet<u32> common = gui_utility::parent_modules(m) & m_context->modules();
+        if (common.empty())
+        {
+            // we can select the module
+            target_modules.insert(mid);
+        }
+        else
+        {
+            // we must select the respective parent module instead
+            // (this "common" set only has one element)
+            assert(common.size() == 1);
+            target_modules += common;
+        }
+    }
+
     for (auto& gid : gates)
     {
         auto g = g_netlist->get_gate_by_id(gid);
         QSet<u32> common = gui_utility::parent_modules(g) & m_context->modules();
         if (common.empty())
         {
-            // we can select the gate
-            to_gates.insert(gid);
+            target_gates.insert(gid);
         }
         else
         {
-            // we must select the module instead
-            // (this "common" set only has one element)
-            to_modules += common;
+            // At this stage, "common" could contain multiple elements because
+            // we might have inserted a parent module where its child  module is
+            // already visible. This is cleaned up later.
+            target_modules += common;
         }
     }
+
+    // PRUNE SELECTION AND CONTEXT DOWN THE HIERARCHY TREE
+
+    // discard (and if required schedule for removal) all modules whose
+    // parent modules we'll be showing
+    QSet<u32> new_module_set = m_context->modules() + target_modules;
+    for (auto& mid : m_context->modules())
+    {
+        auto m = g_netlist->get_module_by_id(mid);
+        if (gui_utility::parent_modules(m).intersects(new_module_set))
+        {
+            remove_modules.insert(mid);
+        }
+    }
+    auto it = target_modules.constBegin();
+    while(it != target_modules.constEnd())
+    {
+        auto m = g_netlist->get_module_by_id(*it);
+        if (gui_utility::parent_modules(m).intersects(new_module_set))
+        {
+            it = target_modules.erase(it);
+        }
+        else
+        {
+            ++it;
+        }
+    }
+
+    // discard (and if required schedule for removal) all gates whose
+    // parent modules we'll be showing
+    new_module_set = (m_context->modules() - remove_modules) + target_modules;
+    for (auto& gid : m_context->gates())
+    {
+        auto g = g_netlist->get_gate_by_id(gid);
+        if (gui_utility::parent_modules(g).intersects(new_module_set))
+        {
+            remove_gates.insert(gid);
+        }
+    }
+    it = target_gates.constBegin();
+    while(it != target_gates.constEnd())
+    {
+        auto g = g_netlist->get_gate_by_id(*it);
+        if (gui_utility::parent_modules(g).intersects(new_module_set))
+        {
+            it = target_gates.erase(it);
+        }
+        else
+        {
+            ++it;
+        }
+    }
+    qDebug() << "-----------";
+    qDebug() << "requested gates" << gates;
+    qDebug() << "requested modules" << modules;
+    qDebug() << "target gates" << target_gates;
+    qDebug() << "target modules" << target_modules;
+    qDebug() << "remove gates" << remove_gates;
+    qDebug() << "remove modules" << remove_modules;
 }
 
 void graph_widget::set_modified_if_module()
@@ -224,9 +303,9 @@ void graph_widget::handle_navigation_jump_requested(const hal::node origin, cons
 
     // Substitute all gates by their modules if we're showing them.
     // This avoids ripping gates out of their already visible modules.
-    QSet<u32> final_modules = to_modules;
-    QSet<u32> final_gates;
-    substitute_by_visible_modules(to_gates, final_modules, final_gates);
+    QSet<u32> final_modules, remove_modules;
+    QSet<u32> final_gates, remove_gates;
+    substitute_by_visible_modules(to_gates, to_modules, final_gates, final_modules, remove_gates, remove_modules);
 
     // find out which gates and modules we still need to add to the context
     // (this makes the cone view work)
@@ -241,12 +320,25 @@ void graph_widget::handle_navigation_jump_requested(const hal::node origin, cons
 
         // hint the layouter at the direction we're navigating in
         // (so the cone view nicely extends to the right or left)
-        auto in_nets = g_netlist->get_gate_by_id(*to_gates.begin())->get_fan_in_nets(); // either they're all inputs or all outputs, so just check the first one
+        // either they're all inputs or all outputs, so just check the first one
+
+        std::set<std::shared_ptr<net>> in_nets;
+        if (to_gates.empty())
+        {
+            in_nets = g_netlist->get_module_by_id(*to_modules.constBegin())->get_input_nets();
+        }
+        else
+        {
+            in_nets = g_netlist->get_gate_by_id(*to_gates.begin())->get_fan_in_nets();
+        }
         bool netIsInput = in_nets.find(n) != in_nets.cend();
         hal::placement_mode placement = netIsInput ? hal::placement_mode::prefer_right : hal::placement_mode::prefer_left;
 
         // add all new gates and modules
+        m_context->begin_change();
+        m_context->remove(remove_modules, remove_gates);
         m_context->add(nonvisible_modules, nonvisible_gates, hal::placement_hint{placement, origin});
+        m_context->end_change();
 
         // FIXME find out how to do this properly
         // If we have added any gates, the scene may have resized. In that case, the animation can be erratic,

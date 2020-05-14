@@ -56,16 +56,23 @@ namespace gui_utility
         return result;
     }
 
+    QSet<u32> parent_modules(std::shared_ptr<module> m)
+    {
+        assert(m);
+        QSet<u32> parents;
+        while (m = m->get_parent_module())
+        {
+            parents.insert(m->get_id());
+        }
+        return parents;
+    }
+
     QSet<u32> parent_modules(std::shared_ptr<gate> g)
     {
         assert(g);
-        QSet<u32> parents;
         std::shared_ptr<module> m = g->get_module();
-        while (m != nullptr)
-        {
-            parents.insert(m->get_id());
-            m = m->get_parent_module();
-        }
+        QSet<u32> parents = parent_modules(m);
+        parents.insert(m->get_id());
         return parents;
     }
 }    // namespace gui_utility
