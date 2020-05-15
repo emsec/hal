@@ -516,6 +516,11 @@ bool test_utils::nets_are_equal(const std::shared_ptr<net> n0, const std::shared
     }
     if (n0->get_data() != n1->get_data())
         return false;
+    if (n0->is_global_input_net() != n1->is_global_input_net())
+        return false;
+    if (n0->is_global_output_net() != n1->is_global_output_net())
+        return false;
+
     return true;
 }
 
@@ -535,6 +540,10 @@ bool test_utils::gates_are_equal(const std::shared_ptr<gate> g0, const std::shar
     if (g0->get_type() != g1->get_type())
         return false;
     if (g0->get_data() != g1->get_data())
+        return false;
+    if (g0->is_gnd_gate() != g1->is_gnd_gate())
+        return false;
+    if (g0->is_vcc_gate() != g1->is_vcc_gate())
         return false;
     return true;
 }
@@ -590,7 +599,7 @@ bool test_utils::modules_are_equal(const std::shared_ptr<module> m_0, const std:
     return true;
 }
 
-/*bool test_utils::netlists_are_equal(const std::shared_ptr<netlist> nl_0, const std::shared_ptr<netlist> nl_1, const bool ignore_id, const bool ignore_name)
+bool test_utils::netlists_are_equal(const std::shared_ptr<netlist> nl_0, const std::shared_ptr<netlist> nl_1, const bool ignore_id)
 {
     if (nl_0 == nullptr || nl_1 == nullptr)
     {
@@ -601,7 +610,7 @@ bool test_utils::modules_are_equal(const std::shared_ptr<module> m_0, const std:
     }
     if (!ignore_id && nl_0->get_id() != nl_1->get_id())
         return false;
-    if (!ignore_name && nl_0->get_gate_library()->get_name() != nl_1->get_gate_library()->get_name())
+    if (nl_0->get_gate_library()->get_name() != nl_1->get_gate_library()->get_name())
         return false;
 
     // Check if gates and nets are the same
@@ -609,58 +618,34 @@ bool test_utils::modules_are_equal(const std::shared_ptr<module> m_0, const std:
         return false;
     for (auto g_0 : nl_0->get_gates())
     {
-        if (!gates_are_equal(g_0, nl_1->get_gate_by_id(g_0->get_id()), ignore_id, ignore_name))
-            return false;
+        if (ignore_id) {
+            auto g_1_list = nl_1->get_gates(gate_name_filter(g_0->get_name()));
+            if (g_1_list.size() != 1)
+                return false;
+            if (!gates_are_equal(g_0, *g_1_list.begin(), ignore_id))
+                return false;
+        }
+        else {
+            if (!gates_are_equal(g_0, nl_1->get_gate_by_id(g_0->get_id()), ignore_id))
+                return false;
+        }
     }
 
     if (nl_0->get_nets().size() != nl_1->get_nets().size())
         return false;
     for (auto n_0 : nl_0->get_nets())
     {
-        if (!nets_are_equal(n_0, nl_1->get_net_by_id(n_0->get_id()), ignore_id, ignore_name))
-            return false;
-    }
-
-    // Check if global gates are the same
-    if (nl_0->get_global_gnd_gates().size() != nl_1->get_global_gnd_gates().size())
-        return false;
-    for (auto gl_gnd_0 : nl_0->get_global_gnd_gates())
-    {
-        if (!nl_1->is_global_gnd_gate(nl_1->get_gate_by_id(gl_gnd_0->get_id())))
-            return false;
-    }
-
-    if (nl_0->get_global_vcc_gates().size() != nl_1->get_global_vcc_gates().size())
-        return false;
-    for (auto gl_vcc_0 : nl_0->get_global_vcc_gates())
-    {
-        if (!nl_1->is_global_vcc_gate(nl_1->get_gate_by_id(gl_vcc_0->get_id())))
-            return false;
-    }
-
-    // Check if global nets are the same
-    if (nl_0->get_global_input_nets().size() != nl_1->get_global_input_nets().size())
-        return false;
-    for (auto gl_in_net : nl_0->get_global_input_nets())
-    {
-        if (!nl_1->is_global_input_net(nl_1->get_net_by_id(gl_in_net->get_id())))
-            return false;
-    }
-
-    if (nl_0->get_global_output_nets().size() != nl_1->get_global_output_nets().size())
-        return false;
-    for (auto gl_out_net : nl_0->get_global_output_nets())
-    {
-        if (!nl_1->is_global_output_net(nl_1->get_net_by_id(gl_out_net->get_id())))
-            return false;
-    }
-
-    if (nl_0->get_global_inout_nets().size() != nl_1->get_global_inout_nets().size())
-        return false;
-    for (auto gl_inout_net : nl_0->get_global_inout_nets())
-    {
-        if (!nl_1->is_global_inout_net(nl_1->get_net_by_id(gl_inout_net->get_id())))
-            return false;
+        if (ignore_id) {
+            auto n_1_list = nl_1->get_nets(net_name_filter(n_0->get_name()));
+            if (n_1_list.size() != 1)
+                return false;
+            if (!nets_are_equal(n_0, *n_1_list.begin(), ignore_id))
+                return false;
+        }
+        else {
+            if (!nets_are_equal(n_0, nl_1->get_net_by_id(n_0->get_id()), ignore_id))
+                return false;
+        }
     }
 
     // -- Check if the modules are the same
@@ -668,12 +653,23 @@ bool test_utils::modules_are_equal(const std::shared_ptr<module> m_0, const std:
         return false;
     std::set<std::shared_ptr<module>> mods_1 = nl_1->get_modules();
     for(auto m_0 : nl_0->get_modules()){
-        if(!modules_are_equal(m_0, nl_1->get_module_by_id(m_0->get_id()), ignore_id, ignore_name))
-            return false;
+        if (ignore_id) {
+            auto m_1_all = nl_1->get_modules();
+            auto m_1 = std::find_if(m_1_all.begin(), m_1_all.end(),
+                    [m_0](const std::shared_ptr<module> m){ return m->get_name() == m_0->get_name();});
+            if (m_1 == m_1_all.end())
+                return false;
+            if (!modules_are_equal(m_0, *m_1, ignore_id))
+                return false;
+        }
+        else {
+            if (!modules_are_equal(m_0, nl_1->get_module_by_id(m_0->get_id()), ignore_id))
+                return false;
+        }
     }
 
     return true;
-}*/
+}
 
 // Filter Functions
 

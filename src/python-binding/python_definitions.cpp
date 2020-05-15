@@ -93,11 +93,11 @@ m.def("log_info", [](std::string& message) { log_info("python_context", message)
 
 
 py::class_<hal::path> py_path(m, "hal_path");
-    
+
 py_path.def(py::init<>());
 
 py_path.def(py::init<const hal::path&>());
-    
+
 py_path.def(py::init<const std::string&>()).def("__str__", [](hal::path& p) -> std::string {return std::string(p.c_str());});
 
 py::implicitly_convertible<std::string, hal::path>();
@@ -1623,7 +1623,7 @@ py_net.def("add_dst", py::overload_cast<const std::shared_ptr<gate>&, const std:
         :returns: True on succes
         :rtype: bool
 )");
-        
+
 py_net.def("add_dst", py::overload_cast<const endpoint&>(&net::add_dst), py::arg("dst"), R"(
         Add a destination to this net.
 
@@ -1670,20 +1670,20 @@ py_net.def("is_a_dst", py::overload_cast<const endpoint&>(&net::is_a_dst, py::co
         :returns: True if the input's pin is a destination.
         :rtype: bool
 )");
-        
+
 py_net.def_property_readonly("num_of_dsts", &net::get_num_of_dsts, R"(
         The number of destinations of the net.
 
         :type: int
 )");
-        
+
 py_net.def("get_num_of_dsts", &net::get_num_of_dsts, R"(
         Get the number of destinations.
 
         :returns: The number of destinations of this net.
         :rtype: int
 )");
-        
+
 py_net.def_property_readonly("dsts", [](const std::shared_ptr<net>& n){return n->get_dsts();}, R"(
         Get the vector of destinations of the net.
 
@@ -1711,7 +1711,7 @@ py_net.def("mark_global_input_net", &net::mark_global_input_net, R"(
         :returns: True on success.
         :rtype: bool
 )");
-        
+
 py_net.def("mark_global_output_net", &net::mark_global_output_net, R"(
         Mark this net as a global output net.
 
@@ -1749,7 +1749,7 @@ py_net.def("is_global_output_net", &net::is_global_output_net, R"(
 
 
 py::class_<module, std::shared_ptr<module>, data_container> py_module(m, "module", R"(Module class containing information about a module including its gates, submodules, and parent module.)");
-        
+
 py_module.def_property_readonly("id", &module::get_id, R"(
         The unique ID of the module object.
 
@@ -1775,7 +1775,7 @@ py_module.def("get_name", &module::get_name, R"(
         :returns: The name.
         :rtype: str
 )");
-        
+
 py_module.def("set_name", &module::set_name, py::arg("name"), R"(
         Sets the module's name.
 
@@ -1843,7 +1843,7 @@ py_module.def("get_netlist", &module::get_netlist, R"(
         :returns: The netlist.
         :rtype: hal_py.netlist
 )");
-        
+
 py_module.def_property_readonly("input_nets", &module::get_input_nets, R"(
         The input nets to this module.
 
@@ -1857,13 +1857,13 @@ py_module.def("get_input_nets", &module::get_input_nets, R"(
         :returns: A set of module input nets.
         :rtype: set[hal_py.net]
 )");
-        
+
 py_module.def_property_readonly("output_nets", &module::get_output_nets, R"(
         The output nets to this module.
 
         :type: set[hal_py.net]
 )");
-        
+
 py_module.def("get_output_nets", &module::get_output_nets, R"(
         Get the output nets to this module.
         A module output net is either a global output of the netlist or has a destination outside of the module.
@@ -1871,7 +1871,7 @@ py_module.def("get_output_nets", &module::get_output_nets, R"(
         :returns: The set of module output nets.
         :rtype: set[hal_py.net]
 )");
-        
+
 py_module.def_property_readonly("internal_nets", &module::get_internal_nets, R"(
         The internal nets to this module.
 
@@ -1885,7 +1885,7 @@ py_module.def("get_internal_nets", &module::get_internal_nets, R"(
         :returns: The set of internal nets.
         :rtype: set[hal_py.net]
 )");
-        
+
 py_module.def_property_readonly("gates", [](const std::shared_ptr<module>& mod){return mod->get_gates();}, R"(
         The set of all gates belonging to the module.
 
@@ -1917,7 +1917,7 @@ py_module.def("assign_gate", &module::assign_gate, py::arg("gate"), R"(
         :returns: True on success.
         :rtype: bool
 )");
-        
+
 py_module.def("remove_gate", &module::remove_gate, py::arg("gate"), R"(
         Removes a gate from the module object.
 
@@ -2053,7 +2053,7 @@ py_i_base.def_property_readonly("version", &i_base::get_version, R"(
 
         :type: str
 )");
-        
+
 py_i_base.def("get_version", &i_base::get_version, R"(
         Get the version of the plugin.
 
@@ -2257,7 +2257,7 @@ py_boolean_function.def("to_dnf", &boolean_function::to_dnf, R"(
         :returns: The DNF as a boolean function.
         :rtype: hal_py.boolean_function
 )");
-       
+
 py_boolean_function.def("optimize", &boolean_function::optimize, R"(
         Optimizes the function by first converting it to DNF and then applying the Quine-McCluskey algorithm.
 
@@ -2265,7 +2265,7 @@ py_boolean_function.def("optimize", &boolean_function::optimize, R"(
         :rtype: hal_py.boolean_function
 )");
 
-py_boolean_function.def("get_truth_table", &boolean_function::get_truth_table, py::arg("ordered_variables") = std::vector<std::string>(), R"(
+py_boolean_function.def("get_truth_table", &boolean_function::get_truth_table, py::arg("ordered_variables") = std::vector<std::string>(), py::arg("remove_unknown_variables") = false, R"(
         Get the truth table outputs of the function.
         WARNING: Exponential runtime in the number of variables!
 
@@ -2274,376 +2274,9 @@ py_boolean_function.def("get_truth_table", &boolean_function::get_truth_table, p
         If ordered_variables is empty, all included variables are used and ordered alphabetically.
 
         :param list[str] ordered_variables: Specific order in which the inputs shall be structured in the truth table.
+        :param bool remove_unknown_variables: If true, all given variables that are not found in the function are removed from the truth table.
         :returns: The vector of output values.
         :rtype: list[value]
-)");
-
-py::class_<gui_api> py_gui_api(m, "gui", R"(Boolean function class.)");
-
-py_gui_api.def("get_selected_gate_ids", &gui_api::get_selected_gate_ids, R"(
-        Get the gate ids of currently selected gates in the graph view of the GUI.
-
-        :returns: List of the ids of the currently selected gates.
-        :rtype: list[int]
-)");
-
-py_gui_api.def("get_selected_net_ids", &gui_api::get_selected_net_ids, R"(
-        Get the net ids of currently selected nets in the graph view of the GUI.
-
-        :returns: List of the ids of the currently selected nets.
-        :rtype: list[int]
-)");
-
-py_gui_api.def("get_selected_module_ids", &gui_api::get_selected_module_ids, R"(
-        Get the module ids of currently selected modules in the graph view of the GUI.
-
-        :returns: List of the ids of the currently selected modules.
-        :rtype: list[int]
-)");
-
-py_gui_api.def("get_selected_item_ids", &gui_api::get_selected_item_ids, R"(
-        Get all item ids of the currently selected items in the graph view of the GUI.
-
-        :returns: Tuple of lists of the currently selected items.
-        :rtype: tuple(int, int, int)
-)");
-
-py_gui_api.def("get_selected_gates", &gui_api::get_selected_gates, R"(
-        Get the gates which are currently selected in the graph view of the GUI.
-
-        :returns: List of currently selected gates.
-        :rtype: list[hal_py.gate]
-)");
-
-py_gui_api.def("get_selected_nets", &gui_api::get_selected_nets, R"(
-        Get the nets which are currently selected in the graph view of the GUI.
-
-        :returns: List of currently selected nets.
-        :rtype: list[hal_py.net]
-)");
-
-py_gui_api.def("get_selected_modules", &gui_api::get_selected_modules, R"(
-        Get the modules which are currently selected in the graph view of the GUI.
-
-        :returns: List of currently selected modules.
-        :rtype: list[hal_py.module]
-)");
-
-py_gui_api.def("get_selected_items", &gui_api::get_selected_items, R"(
-        Get all selected items which are currently selected in the graph view of the GUI.
-
-        :returns: Tuple of currently selected items.
-        :rtype: tuple(hal_py.gate, hal_py.net, hal_py.module)
-)");
-
-/*
-py_gui_api.def("print_selected_gates", &gui_api::print_selected_gates, R"(
-        Prints id and name of all selected gates to the python console.
-)");
-
-py_gui_api.def("print_selected_nets", &gui_api::print_selected_nets, R"(
-        Prints id and name of all selected nets to the python console.
-)");
-
-py_gui_api.def("print_selected_modules", &gui_api::print_selected_modules, R"(
-        Prints id and name of all selected modules to the python console.
-)");
-
-py_gui_api.def("print_selected_items", &gui_api::print_selected_items, R"(
-        Prints id and name of all selected gates, nets and modules to the python console.
-)");
-*/
-
-py_gui_api.def("select_gate", py::overload_cast<u32, bool>(&gui_api::select_gate), py::arg("gate_id"), py::arg("clear_current_selection") = true, R"(
-        Select the gate with id 'gate_id' in the graph view of the GUI.
-        If 'clear_current_selection' is false, the gate with the id 'gate_id' will be added to the currently existing selection.
-
-        :param int gate_id: The gate id of the gate to be selected.
-        :param bool clear_current_selection: Determines if the previous selection gets cleared before the selection of the gate.
-)");
-
-py_gui_api.def("select_gate", py::overload_cast<const std::shared_ptr<gate>&, bool>(&gui_api::select_gate), py::arg("gate"), py::arg("clear_current_selection") = true, R"(
-        Select the gate in the graph view of the GUI.
-        If 'clear_current_selection' is false, the gate will be added to the currently existing selection.
-
-        :param hal_py.gate gate: The gate to be selected.
-        :param bool clear_current_selection: Determines if the previous selection gets cleared before the selection of the gate.
-)");
-
-py_gui_api.def("select_gate", py::overload_cast<const std::vector<u32>&, bool>(&gui_api::select_gate), py::arg("gate_ids"), py::arg("clear_current_selection") = true, R"(
-        Select the gates with the ids in list 'gate_ids' in the graph view of the GUI.
-        If 'clear_current_selection' is false, the gate with the id 'gate_id' will be added to the currently existing selection.
-
-        :param list[int] gate_ids: List of gate ids of the gates to be selected.
-        :param bool clear_current_selection: Determines if the previous selection gets cleared before the selection of the gates.
-)");
-
-py_gui_api.def("select_gate", py::overload_cast<const std::vector<std::shared_ptr<gate>>&, bool>(&gui_api::select_gate), py::arg("gates"), py::arg("clear_current_selection") = true, R"(
-        Select the gates in the graph view of the GUI.
-        If 'clear_current_selection' is false, the gates will be added to the currently existing selection.
-
-        :param list[hal_py.gate] gates: The gates to be selected.
-        :param bool clear_current_selection: Determines if the previous selection gets cleared before the selection of the gates.
-)");
-
-py_gui_api.def("select_net", py::overload_cast<u32, bool>(&gui_api::select_net), py::arg("net_id"), py::arg("clear_current_selection") = true, R"(
-        Select the net with id 'net_id' in the graph view of the GUI.
-        If 'clear_current_selection' is false, the net with the id 'net_id' will be added to the currently existing selection.
-
-        :param int net_id: The net id of the net to be selected.
-        :param bool clear_current_selection: Determines if the previous selection gets cleared before the selection of the net.
-)");
-
-py_gui_api.def("select_net", py::overload_cast<const std::shared_ptr<net>&, bool>(&gui_api::select_net), py::arg("net"), py::arg("clear_current_selection") = true, R"(
-        Select the net in the graph view of the GUI.
-        If 'clear_current_selection' is false, the net will be added to the currently existing selection.
-
-        :param hal_py.net net: The net to be selected.
-        :param bool clear_current_selection: Determines if the previous selection gets cleared before the selection of the net.
-)");
-
-py_gui_api.def("select_net", py::overload_cast<const std::vector<u32>&, bool>(&gui_api::select_net), py::arg("net_ids"), py::arg("clear_current_selection") = true, R"(
-        Select the nets with the ids in list 'net_ids' in the graph view of the GUI.
-        If 'clear_current_selection' is false, the net with the id 'net_id' will be added to the currently existing selection.
-
-        :param list[int] net_ids: List of net ids of the nets to be selected.
-        :param bool clear_current_selection: Determines if the previous selection gets cleared before the selection of the nets.
-)");
-
-py_gui_api.def("select_net", py::overload_cast<const std::vector<std::shared_ptr<net>>&, bool>(&gui_api::select_net), py::arg("nets"), py::arg("clear_current_selection") = true, R"(
-        Select the nets in the graph view of the GUI.
-        If 'clear_current_selection' is false, the nets will be added to the currently existing selection.
-
-        :param list[hal_py.net] nets: The nets to be selected.
-        :param bool clear_current_selection: Determines if the previous selection gets cleared before the selection of the nets.
-)");
-
-py_gui_api.def("select_module", py::overload_cast<u32, bool>(&gui_api::select_module), py::arg("module_id"), py::arg("clear_current_selection") = true, R"(
-        Select the module with id 'module_id' in the graph view of the GUI.
-        If 'clear_current_selection' is false, the module with the id 'module_id' will be added to the currently existing selection.
-
-        :param int module_id: The module id of the module to be selected.
-        :param bool clear_current_selection: Determines if the previous selection gets cleared before the selection of the module.
-)");
-
-py_gui_api.def("select_module", py::overload_cast<const std::shared_ptr<module>&, bool>(&gui_api::select_module), py::arg("module"), py::arg("clear_current_selection") = true, R"(
-        Select the module in the graph view of the GUI.
-        If 'clear_current_selection' is false, the module will be added to the currently existing selection.
-
-        :param hal_py.module module: The module to be selected.
-        :param bool clear_current_selection: Determines if the previous selection gets cleared before the selection of the module.
-)");
-
-py_gui_api.def("select_module", py::overload_cast<const std::vector<u32>&, bool>(&gui_api::select_module), py::arg("module_ids"), py::arg("clear_current_selection") = true, R"(
-        Select the modules with the ids in list 'module_ids' in the graph view of the GUI.
-        If 'clear_current_selection' is false, the module with the id 'module_id' will be added to the currently existing selection.
-
-        :param list[int] module_ids: List of module ids of the modules to be selected.
-        :param bool clear_current_selection: Determines if the previous selection gets cleared before the selection of the modules.
-)");
-
-py_gui_api.def("select_module", py::overload_cast<const std::vector<std::shared_ptr<module>>&, bool>(&gui_api::select_module), py::arg("modules"), py::arg("clear_current_selection") = true, R"(
-        Select the modules in the graph view of the GUI.
-        If 'clear_current_selection' is false, the modules will be added to the currently existing selection.
-
-        :param list[hal_py.module] modules: The modules to be selected.
-        :param bool clear_current_selection: Determines if the previous selection gets cleared before the selection of the modules.
-)");
-
-py_gui_api.def("select", py::overload_cast<const std::shared_ptr<gate>&, bool>(&gui_api::select), py::arg("gate"), py::arg("clear_current_selection") = true, R"(
-        Select the gate in the graph view of the GUI.
-        If 'clear_current_selection' is false, the gate will be added to the currently existing selection.
-
-        :param hal_py.gate gate: The gate to be selected.
-        :param bool clear_current_selection: Determines if the previous selection gets cleared before the selection of the gate.
-)");
-
-py_gui_api.def("select", py::overload_cast<const std::shared_ptr<net>&, bool>(&gui_api::select), py::arg("net"), py::arg("clear_current_selection") = true, R"(
-        Select the net in the graph view of the GUI.
-        If 'clear_current_selection' is false, the net will be added to the currently existing selection.
-
-        :param hal_py.net net: The net to be selected.
-        :param bool clear_current_selection: Determines if the previous selection gets cleared before the selection of the net.
-)");
-
-py_gui_api.def("select", py::overload_cast<const std::shared_ptr<module>&, bool>(&gui_api::select), py::arg("module"), py::arg("clear_current_selection") = true, R"(
-        Select the module in the graph view of the GUI.
-        If 'clear_current_selection' is false, the module will be added to the currently existing selection.
-
-        :param hal_py.module module: The module to be selected.
-        :param bool clear_current_selection: Determines if the previous selection gets cleared before the selection of the module.
-)");
-
-py_gui_api.def("select", py::overload_cast<const std::vector<std::shared_ptr<gate>>&, bool>(&gui_api::select), py::arg("gates"), py::arg("clear_current_selection") = true, R"(
-        Select the gates in the graph view of the GUI.
-        If 'clear_current_selection' is false, the gates will be added to the currently existing selection.
-
-        :param list[hal_py.gate] gates: The gates to be selected.
-        :param bool clear_current_selection: Determines if the previous selection gets cleared before the selection of the gates.
-)");
-
-py_gui_api.def("select", py::overload_cast<const std::vector<std::shared_ptr<net>>&, bool>(&gui_api::select), py::arg("nets"), py::arg("clear_current_selection") = true, R"(
-        Select the nets in the graph view of the GUI.
-        If 'clear_current_selection' is false, the nets will be added to the currently existing selection.
-
-        :param list[hal_py.net] nets: The nets to be selected.
-        :param bool clear_current_selection: Determines if the previous selection gets cleared before the selection of the nets.
-)");
-
-py_gui_api.def("select", py::overload_cast<const std::vector<std::shared_ptr<module>>&, bool>(&gui_api::select), py::arg("modules"), py::arg("clear_current_selection") = true, R"(
-        Select the modules in the graph view of the GUI.
-        If 'clear_current_selection' is false, the modules will be added to the currently existing selection.
-
-        :param list[hal_py.module] modules: The modules to be selected.
-        :param bool clear_current_selection: Determines if the previous selection gets cleared before the selection of the modules.
-)");
-
-py_gui_api.def("select", py::overload_cast<const std::vector<u32>&, const std::vector<u32>&, const std::vector<u32>&, bool>(&gui_api::select), py::arg("gate_ids"), py::arg("net_ids"), py::arg("module_ids"), py::arg("clear_current_selection") = true, R"(
-        Select the gates, nets and modules with the passed ids in the graph view of the GUI.
-        If 'clear_current_selection' is false, the gates, nets and modules will be added to the currently existing selection.
-
-        :param list[hal_py.gate] gates: The ids of the gates to be selected.
-        :param list[hal_py.net] nets: The ids of the nets to be selected.
-        :param list[hal_py.module] modules: The ids of the modules to be selected.
-        :param bool clear_current_selection: Determines if the previous selection gets cleared before the selection of the modules.
-)");
-
-py_gui_api.def("select", py::overload_cast<const std::vector<std::shared_ptr<gate>>&, const std::vector<std::shared_ptr<net>>&, const std::vector<std::shared_ptr<module>>&, bool>(&gui_api::select), py::arg("gates"), py::arg("nets"), py::arg("modules"), py::arg("clear_current_selection") = true, R"(
-        Select the gates, nets and modules in the graph view of the GUI.
-        If 'clear_current_selection' is false, the gates, nets and modules will be added to the currently existing selection.
-
-        :param list[hal_py.gate] gates: The gates to be selected.
-        :param list[hal_py.net] nets: The nets to be selected.
-        :param list[hal_py.module] modules: The modules to be selected.
-        :param bool clear_current_selection: Determines if the previous selection gets cleared before the selection of the modules.
-)");
-
-py_gui_api.def("deselect_gate", py::overload_cast<u32>(&gui_api::deselect_gate), py::arg("gate_id"), R"(
-        Deselect the gate with id 'gate_id' in the graph view of the GUI.
-
-        :param int gate_id: The gate id of the gate to be selected.
-)");
-
-py_gui_api.def("deselect_gate", py::overload_cast<const std::shared_ptr<gate>&>(&gui_api::deselect_gate), py::arg("gate"), R"(
-        Deselect the gate in the graph view of the GUI.
-
-        :param hal_py.gate gate: The gate to be deselected.
-)");
-
-py_gui_api.def("deselect_gate", py::overload_cast<const std::vector<u32>&>(&gui_api::deselect_gate), py::arg("gate_ids"), R"(
-        Deselect the gates with the ids in list 'gate_ids' in the graph view of the GUI.
-
-        :param list[int] gate_ids: List of gate ids of the gates to be deselected.
-)");
-
-py_gui_api.def("deselect_gate", py::overload_cast<const std::vector<std::shared_ptr<gate>>&>(&gui_api::deselect_gate), py::arg("gates"), R"(
-        Deselect the gates in the graph view of the GUI.
-
-        :param list[hal_py.gate] gates: The gates to be deselected.
-)");
-
-py_gui_api.def("deselect_net", py::overload_cast<u32>(&gui_api::deselect_net), py::arg("net_id"), R"(
-        Deselect the net with id 'net_id' in the graph view of the GUI.
-
-        :param int net_id: The net id of the net to be selected.
-)");
-
-py_gui_api.def("deselect_net", py::overload_cast<const std::shared_ptr<net>&>(&gui_api::deselect_net), py::arg("net"), R"(
-        Deselect the net in the graph view of the GUI.
-
-        :param hal_py.net net: The net to be deselected.
-)");
-
-py_gui_api.def("deselect_net", py::overload_cast<const std::vector<u32>&>(&gui_api::deselect_net), py::arg("net_ids"), R"(
-        Deselect the nets with the ids in list 'net_ids' in the graph view of the GUI.
-
-        :param list[int] net_ids: List of net ids of the nets to be deselected.
-)");
-
-py_gui_api.def("deselect_net", py::overload_cast<const std::vector<std::shared_ptr<net>>&>(&gui_api::deselect_net), py::arg("nets"), R"(
-        Deselect the nets in the graph view of the GUI.
-
-        :param list[hal_py.net] nets: The nets to be deselected.
-)");
-
-py_gui_api.def("deselect_module", py::overload_cast<u32>(&gui_api::deselect_module), py::arg("module_id"), R"(
-        Deselect the module with id 'module_id' in the graph view of the GUI.
-
-        :param int module_id: The module id of the module to be selected.
-)");
-
-py_gui_api.def("deselect_module", py::overload_cast<const std::shared_ptr<module>&>(&gui_api::deselect_module), py::arg("module"), R"(
-        Deselect the module in the graph view of the GUI.
-
-        :param hal_py.module module: The module to be deselected.
-)");
-
-py_gui_api.def("deselect_module", py::overload_cast<const std::vector<u32>&>(&gui_api::deselect_module), py::arg("module_ids"), R"(
-        Deselect the modules with the ids in list 'module_ids' in the graph view of the GUI.
-
-        :param list[int] module_ids: List of module ids of the modules to be deselected.
-)");
-
-py_gui_api.def("deselect_module", py::overload_cast<const std::vector<std::shared_ptr<module>>&>(&gui_api::deselect_module), py::arg("modules"), R"(
-        Deselect the modules in the graph view of the GUI.
-
-        :param list[hal_py.module] modules: The modules to be deselected.
-)");
-
-py_gui_api.def("deselect", py::overload_cast<const std::shared_ptr<gate>&>(&gui_api::deselect), py::arg("gate"), R"(
-        Deselect the gate in the graph view of the GUI.
-
-        :param hal_py.gate gate: The gate to be deselected.
-)");
-
-py_gui_api.def("deselect", py::overload_cast<const std::shared_ptr<net>&>(&gui_api::deselect), py::arg("net"), R"(
-        Deselect the net in the graph view of the GUI.
-
-        :param hal_py.net net: The net to be deselected.
-)");
-
-py_gui_api.def("deselect", py::overload_cast<const std::shared_ptr<module>&>(&gui_api::deselect), py::arg("module"), R"(
-        Deselect the module in the graph view of the GUI.
-
-        :param hal_py.module module: The module to be deselected.
-)");
-
-py_gui_api.def("deselect", py::overload_cast<const std::vector<std::shared_ptr<gate>>&>(&gui_api::deselect), py::arg("gates"), R"(
-        Deselect the gates in the graph view of the GUI.
-
-        :param list[hal_py.gate] gates: The gates to be deselected.
-)");
-
-py_gui_api.def("deselect", py::overload_cast<const std::vector<std::shared_ptr<net>>&>(&gui_api::deselect), py::arg("nets"), R"(
-        Deselect the nets in the graph view of the GUI.
-
-        :param list[hal_py.net] nets: The nets to be deselected.
-)");
-
-py_gui_api.def("deselect", py::overload_cast<const std::vector<std::shared_ptr<module>>&>(&gui_api::deselect), py::arg("modules"), R"(
-        Deselect the modules in the graph view of the GUI.
-
-        :param list[hal_py.module] modules: The modules to be deselected.
-)");
-
-py_gui_api.def("deselect", py::overload_cast<const std::vector<u32>&, const std::vector<u32>&, const std::vector<u32>&>(&gui_api::deselect), py::arg("gate_ids"), py::arg("net_ids"), py::arg("module_ids"), R"(
-        Deselect the gates, nets and modules with the passed ids in the graph view of the GUI.
-
-        :param list[hal_py.gate] gates: The ids of the gates to be deselected.
-        :param list[hal_py.net] nets: The ids of the nets to be deselected.
-        :param list[hal_py.module] modules: The ids of the modules to be deselected.
-)");
-
-py_gui_api.def("deselect", py::overload_cast<const std::vector<std::shared_ptr<gate>>&, const std::vector<std::shared_ptr<net>>&, const std::vector<std::shared_ptr<module>>&>(&gui_api::deselect), py::arg("gates"), py::arg("nets"), py::arg("modules"), R"(
-        Deselect the gates, nets and modules in the graph view of the GUI.
-
-        :param list[hal_py.gate] gates: The gates to be deselected.
-        :param list[hal_py.net] nets: The nets to be deselected.
-        :param list[hal_py.module] modules: The modules to be deselected.
-)");
-
-py_gui_api.def("deselect_all_items", py::overload_cast<>(&gui_api::deselect_all_items), R"(
-        Deselect all gates, nets and modules in the graph view of the GUI.
 )");
 
 #ifndef PYBIND11_MODULE

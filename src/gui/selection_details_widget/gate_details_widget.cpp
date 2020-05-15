@@ -6,6 +6,7 @@
 #include "netlist/net.h"
 
 #include "gui_globals.h"
+#include "gui_utils/geometry.h"
 
 #include "graph_widget/graph_navigation_widget.h"
 #include "netlist/module.h"
@@ -477,10 +478,9 @@ void gate_details_widget::on_treewidget_item_clicked(QTreeWidgetItem* item, int 
         }
         else
         {
-            //            auto rect = QApplication::desktop()->availableGeometry(this);
-            //            w->move(QPoint(rect.x() + (rect.width() - w->width()) / 2, rect.y() + (rect.height() - w->height()) / 2));
             m_navigation_table->setup(hal::node{hal::node_type::gate, 0}, clicked_net);
             m_navigation_table->move(QCursor::pos());
+            gui_utility::ensure_on_screen(m_navigation_table);
             m_navigation_table->show();
             m_navigation_table->setFocus();
         }
