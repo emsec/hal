@@ -57,6 +57,8 @@ public:
 
     graph_graphics_view* view();
 
+    void handle_gui_api_jump_requested();
+
 protected:
     void keyPressEvent(QKeyEvent* event) override;
 
@@ -74,6 +76,8 @@ private:
     void handle_enter_module_requested(const u32 id);
 
     void ensure_gates_visible(const QSet<u32> gates);
+
+    void ensure_selection_visible();
 
     graph_graphics_view* m_view;
     graph_context* m_context;

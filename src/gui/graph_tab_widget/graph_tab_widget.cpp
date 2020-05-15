@@ -58,6 +58,8 @@ void graph_tab_widget::handle_tab_changed(int index)
 
 void graph_tab_widget::handle_tab_close_requested(int index)
 {
+    auto w = dynamic_cast<graph_widget*>(m_tab_widget->widget(index));
+    disconnect(g_gui_api, &gui_api::navigation_requested, w, &graph_widget::handle_gui_api_jump_requested);
     m_tab_widget->removeTab(index);
 
     //right way to do it??
@@ -97,6 +99,7 @@ void graph_tab_widget::handle_context_removed(graph_context* context)
 void graph_tab_widget::add_graph_widget_tab(graph_context* context)
 {
     graph_widget* new_graph_widget = new graph_widget(context);
+    connect(g_gui_api, &gui_api::navigation_requested, new_graph_widget, &graph_widget::handle_gui_api_jump_requested);
     //m_context_widget_map.insert(context, new_graph_widget);
     int tab_index = addTab(new_graph_widget, context->name());
     m_tab_widget->setCurrentIndex(tab_index);

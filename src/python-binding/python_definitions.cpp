@@ -3,7 +3,6 @@
 #include "core/plugin_manager.h"
 #include "core/utils.h"
 #include "def.h"
-#include "gui/gui_api/gui_api.h"
 #include "netlist/boolean_function.h"
 #include "netlist/gate.h"
 #include "netlist/gate_library/gate_library.h"
