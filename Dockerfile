@@ -1,4 +1,4 @@
-FROM ubuntu:latest
+FROM ubuntu:bionic
 
 ENV build_path=/home/build
 RUN mkdir -p $build_path
