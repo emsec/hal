@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Boolean Function &mdash; hal_py v2.0.0-142-g2e26f6374 documentation</title>
+  <title>Boolean Function &mdash; hal_py v2.0.0-144-gd0c81a07c documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="hal_py v2.0.0-142-g2e26f6374 documentation" href="index.html"/>
+    <link rel="top" title="hal_py v2.0.0-144-gd0c81a07c documentation" href="index.html"/>
         <link rel="up" title="hal_py Documentation" href="hal_py.html"/>
         <link rel="next" title="Gate Type" href="gate_type.html"/>
         <link rel="prev" title="Netlist" href="netlist.html"/> 
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                v2.0.0-142-g2e26f6374
+                v2.0.0-144-gd0c81a07c
               </div>
             
           
@@ -182,326 +182,6 @@
             
   <div class="section" id="boolean-function">
 <h1>Boolean Function<a class="headerlink" href="#boolean-function" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
-<dt id="hal_py.boolean_function">
-<em class="property">class </em><code class="descclassname">hal_py.</code><code class="descname">boolean_function</code><a class="headerlink" href="#hal_py.boolean_function" title="Permalink to this definition">¶</a></dt>
-<dd><p>Boolean function class.</p>
-<dl class="method">
-<dt id="hal_py.boolean_function.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.boolean_function.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Overloaded function.</p>
-<ol class="arabic">
-<li><p class="first">__init__(self: hal_py.boolean_function) -&gt; None</p>
-<blockquote>
-<div><p>Constructor for an empty function. Evaluates to X (undefined). Combining a function with an empty function leaves the other one unchanged.</p>
-</div></blockquote>
-</li>
-<li><p class="first">__init__(self: hal_py.boolean_function, variable: str) -&gt; None</p>
-<blockquote>
-<div><p>Constructor for a variable, usable in other functions. Variable name must not be empty.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name" colspan="2">param str variable_name:</th></tr>
-<tr class="field-odd field"><td>&#160;</td><td class="field-body">Name of the variable.</td>
-</tr>
-</tbody>
-</table>
-</div></blockquote>
-</li>
-<li><p class="first">__init__(self: hal_py.boolean_function, arg0: hal_py.boolean_function.value) -&gt; None</p>
-<blockquote>
-<div><p>Constructor for a constant, usable in other functions.
-The constant can be either X, Zero, or ONE.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name" colspan="2">param hal_py.value constant:</th></tr>
-<tr class="field-odd field"><td>&#160;</td><td class="field-body">A constant value.</td>
-</tr>
-</tbody>
-</table>
-</div></blockquote>
-</li>
-</ol>
-</dd></dl>
-
-<dl class="method">
-<dt id="hal_py.boolean_function.evaluate">
-<code class="descname">evaluate</code><span class="sig-paren">(</span><em>self: hal_py.boolean_function</em>, <em>inputs: Dict[str</em>, <em>hal_py.boolean_function.value] = {}</em><span class="sig-paren">)</span> &#x2192; hal_py.boolean_function.value<a class="headerlink" href="#hal_py.boolean_function.evaluate" title="Permalink to this definition">¶</a></dt>
-<dd><p>Evaluates the function on the given inputs and returns the result.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>inputs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><em>dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em>,</em><a class="reference internal" href="#hal_py.boolean_function.value" title="hal_py.boolean_function.value"><em>value</em></a><em>]</em>) – A map from variable names to values.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The value that the function evaluates to.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">hal_py.value</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="staticmethod">
-<dt id="hal_py.boolean_function.from_string">
-<em class="property">static </em><code class="descname">from_string</code><span class="sig-paren">(</span><em>expression: str, variable_names: List[str]</em><span class="sig-paren">)</span> &#x2192; hal_py.boolean_function<a class="headerlink" href="#hal_py.boolean_function.from_string" title="Permalink to this definition">¶</a></dt>
-<dd><p>Parse a function from a string representation.
-Supported operators are  NOT (“!”, “’”), AND (“&amp;”, “<a href="#id1"><span class="problematic" id="id2">*</span></a>”, ” “), OR (“<a href="#id3"><span class="problematic" id="id4">|</span></a>”, “+”), XOR (“^”) and brackets (“(“, “)”).
-Operator precedence is ! &gt; &amp; &gt; ^ &gt; |</p>
-<p>Since, for example, ‘(‘ is interpreted as a new term, but might also be an intended part of a variable,
-a vector of known variable names can be supplied, which are extracted before parsing.
-If there is an error during bracket matching, X is returned for that part.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>expression</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – String containing a boolean function.</li>
-<li><strong>variable_names</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – Names of variables to help resolve problematic functions</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The boolean function extracted from the string.</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#hal_py.boolean_function" title="hal_py.boolean_function">hal_py.boolean_function</a></p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="hal_py.boolean_function.get_truth_table">
-<code class="descname">get_truth_table</code><span class="sig-paren">(</span><em>self: hal_py.boolean_function</em>, <em>ordered_variables: List[str] = []</em>, <em>remove_unknown_variables: bool = False</em><span class="sig-paren">)</span> &#x2192; List[hal_py.boolean_function.value]<a class="headerlink" href="#hal_py.boolean_function.get_truth_table" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the truth table outputs of the function.
-WARNING: Exponential runtime in the number of variables!</p>
-<p>Output is the vector of output values when walking the truth table in ascending order.</p>
-<p>If ordered_variables is empty, all included variables are used and ordered alphabetically.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>ordered_variables</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em>]</em>) – Specific order in which the inputs shall be structured in the truth table.</li>
-<li><strong>remove_unknown_variables</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – If true, all given variables that are not found in the function are removed from the truth table.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The vector of output values.</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)">list</a>[<a class="reference internal" href="#hal_py.boolean_function.value" title="hal_py.boolean_function.value">value</a>]</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="hal_py.boolean_function.get_variables">
-<code class="descname">get_variables</code><span class="sig-paren">(</span><em>self: hal_py.boolean_function</em><span class="sig-paren">)</span> &#x2192; Set[str]<a class="headerlink" href="#hal_py.boolean_function.get_variables" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get all variable names used in this boolean function.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A set of all variable names.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.8)">set</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a>]</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="hal_py.boolean_function.is_constant_one">
-<code class="descname">is_constant_one</code><span class="sig-paren">(</span><em>self: hal_py.boolean_function</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.boolean_function.is_constant_one" title="Permalink to this definition">¶</a></dt>
-<dd><p>Checks whether the function constantly outputs ONE.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if function is constant ONE, false otherwise.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="hal_py.boolean_function.is_constant_zero">
-<code class="descname">is_constant_zero</code><span class="sig-paren">(</span><em>self: hal_py.boolean_function</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.boolean_function.is_constant_zero" title="Permalink to this definition">¶</a></dt>
-<dd><p>Checks whether the function constantly outputs ZERO.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if function is constant ZERO, false otherwise.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="hal_py.boolean_function.is_dnf">
-<code class="descname">is_dnf</code><span class="sig-paren">(</span><em>self: hal_py.boolean_function</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.boolean_function.is_dnf" title="Permalink to this definition">¶</a></dt>
-<dd><p>Tests whether the function is in DNF.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if in DNF, false otherwise.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="hal_py.boolean_function.is_empty">
-<code class="descname">is_empty</code><span class="sig-paren">(</span><em>self: hal_py.boolean_function</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.boolean_function.is_empty" title="Permalink to this definition">¶</a></dt>
-<dd><p>Checks whether the function is empty.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if function is empty, false otherwise.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="hal_py.boolean_function.optimize">
-<code class="descname">optimize</code><span class="sig-paren">(</span><em>self: hal_py.boolean_function</em><span class="sig-paren">)</span> &#x2192; hal_py.boolean_function<a class="headerlink" href="#hal_py.boolean_function.optimize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Optimizes the function by first converting it to DNF and then applying the Quine-McCluskey algorithm.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The optimized boolean function.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#hal_py.boolean_function" title="hal_py.boolean_function">hal_py.boolean_function</a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="hal_py.boolean_function.substitute">
-<code class="descname">substitute</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.boolean_function.substitute" title="Permalink to this definition">¶</a></dt>
-<dd><p>Overloaded function.</p>
-<ol class="arabic">
-<li><p class="first">substitute(self: hal_py.boolean_function, old_variable_name: str, new_variable_name: str) -&gt; hal_py.boolean_function</p>
-<blockquote>
-<div><p>Substitutes a variable with another variable (i.e., variable renaming).
-Applies to all instances of the variable in the function.
-This is just a shorthand for the generic substitute function.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name" colspan="2">param str old_variable_name:</th></tr>
-<tr class="field-odd field"><td>&#160;</td><td class="field-body">The old variable to substitute</td>
-</tr>
-<tr class="field-even field"><th class="field-name" colspan="2">param str new_variable_name:</th></tr>
-<tr class="field-even field"><td>&#160;</td><td class="field-body">The new variable name</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">The new boolean function.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body">hal_py.boolean_function</td>
-</tr>
-</tbody>
-</table>
-</div></blockquote>
-</li>
-<li><p class="first">substitute(self: hal_py.boolean_function, variable_name: str, function: hal_py.boolean_function) -&gt; hal_py.boolean_function</p>
-<blockquote>
-<div><p>Substitutes a variable with another function (can again be a single variable).
-Applies to all instances of the variable in the function.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name" colspan="2">param str variable_name:</th></tr>
-<tr class="field-odd field"><td>&#160;</td><td class="field-body">The variable to substitute</td>
-</tr>
-<tr class="field-even field"><th class="field-name" colspan="2">param hal_py.boolean_function function:</th></tr>
-<tr class="field-even field"><td>&#160;</td><td class="field-body">The function to take the place of the varible</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">The new boolean function.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body">hal_py.boolean_function</td>
-</tr>
-</tbody>
-</table>
-</div></blockquote>
-</li>
-</ol>
-</dd></dl>
-
-<dl class="method">
-<dt id="hal_py.boolean_function.to_dnf">
-<code class="descname">to_dnf</code><span class="sig-paren">(</span><em>self: hal_py.boolean_function</em><span class="sig-paren">)</span> &#x2192; hal_py.boolean_function<a class="headerlink" href="#hal_py.boolean_function.to_dnf" title="Permalink to this definition">¶</a></dt>
-<dd><p>Gets the plain DNF representation of the function.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The DNF as a boolean function.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#hal_py.boolean_function" title="hal_py.boolean_function">hal_py.boolean_function</a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="class">
-<dt id="hal_py.boolean_function.value">
-<em class="property">class </em><code class="descname">value</code><a class="headerlink" href="#hal_py.boolean_function.value" title="Permalink to this definition">¶</a></dt>
-<dd><blockquote>
-<div>Represents the logic value that a boolean function operates on. Available are: X, ZERO, and ONE.</div></blockquote>
-<p>Members:</p>
-<blockquote>
-<div><p>X</p>
-<p>ZERO</p>
-<p>ONE</p>
-</div></blockquote>
-<dl class="attribute">
-<dt id="hal_py.boolean_function.value.name">
-<code class="descname">name</code><a class="headerlink" href="#hal_py.boolean_function.value.name" title="Permalink to this definition">¶</a></dt>
-<dd><p>(self: handle) -&gt; str</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="attribute">
-<dt id="hal_py.boolean_function.variables">
-<code class="descname">variables</code><a class="headerlink" href="#hal_py.boolean_function.variables" title="Permalink to this definition">¶</a></dt>
-<dd><p>A set of all variable names used in this boolean function.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">set[str]</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-</dd></dl>
-
 </div>
 
 
@@ -548,7 +228,7 @@ Applies to all instances of the variable in the function.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'v2.0.0-142-g2e26f6374',
+            VERSION:'v2.0.0-144-gd0c81a07c',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
