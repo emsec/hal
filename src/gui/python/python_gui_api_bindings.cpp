@@ -104,165 +104,205 @@ PYBIND11_PLUGIN(hal_gui)
     py_gui_api.def("select_gate", py::overload_cast<u32, bool, bool>(&gui_api::select_gate), py::arg("gate_id"), py::arg("clear_current_selection") = true, py::arg("navigate_to_selection") = true, R"(
        Select the gate with id 'gate_id' in the graph view of the GUI.
        If 'clear_current_selection' is false, the gate with the id 'gate_id' will be added to the currently existing selection.
+       If 'navigate_to_selection' is false, the graph view will not modify the graph view camera position to fit all selected items.
 
        :param int gate_id: The gate id of the gate to be selected.
        :param bool clear_current_selection: Determines if the previous selection gets cleared before the selection of the gate.
+       :param bool navigate_to_selection: Determines if the graph view scrolls and zooms to show all selected items.
 )");
 
     py_gui_api.def("select_gate", py::overload_cast<const std::shared_ptr<gate>&, bool, bool>(&gui_api::select_gate), py::arg("gate"), py::arg("clear_current_selection") = true, py::arg("navigate_to_selection") = true, R"(
        Select the gate in the graph view of the GUI.
        If 'clear_current_selection' is false, the gate will be added to the currently existing selection.
+       If 'navigate_to_selection' is false, the graph view will not modify the graph view camera position to fit all selected items.
 
        :param hal_py.gate gate: The gate to be selected.
        :param bool clear_current_selection: Determines if the previous selection gets cleared before the selection of the gate.
+       :param bool navigate_to_selection: Determines if the graph view scrolls and zooms to show all selected items.
 )");
 
     py_gui_api.def("select_gate", py::overload_cast<const std::vector<u32>&, bool, bool>(&gui_api::select_gate), py::arg("gate_ids"), py::arg("clear_current_selection") = true, py::arg("navigate_to_selection") = true, R"(
        Select the gates with the ids in list 'gate_ids' in the graph view of the GUI.
        If 'clear_current_selection' is false, the gate with the id 'gate_id' will be added to the currently existing selection.
+       If 'navigate_to_selection' is false, the graph view will not modify the graph view camera position to fit all selected items.
 
        :param list[int] gate_ids: List of gate ids of the gates to be selected.
        :param bool clear_current_selection: Determines if the previous selection gets cleared before the selection of the gates.
+       :param bool navigate_to_selection: Determines if the graph view scrolls and zooms to show all selected items.
 )");
 
     py_gui_api.def("select_gate", py::overload_cast<const std::vector<std::shared_ptr<gate>>&, bool, bool>(&gui_api::select_gate), py::arg("gates"), py::arg("clear_current_selection") = true, py::arg("navigate_to_selection") = true, R"(
        Select the gates in the graph view of the GUI.
        If 'clear_current_selection' is false, the gates will be added to the currently existing selection.
+       If 'navigate_to_selection' is false, the graph view will not modify the graph view camera position to fit all selected items.
 
        :param list[hal_py.gate] gates: The gates to be selected.
        :param bool clear_current_selection: Determines if the previous selection gets cleared before the selection of the gates.
+       :param bool navigate_to_selection: Determines if the graph view scrolls and zooms to show all selected items.
 )");
 
     py_gui_api.def("select_net", py::overload_cast<u32, bool, bool>(&gui_api::select_net), py::arg("net_id"), py::arg("clear_current_selection") = true, py::arg("navigate_to_selection") = true, R"(
        Select the net with id 'net_id' in the graph view of the GUI.
        If 'clear_current_selection' is false, the net with the id 'net_id' will be added to the currently existing selection.
+       If 'navigate_to_selection' is false, the graph view will not modify the graph view camera position to fit all selected items.
 
        :param int net_id: The net id of the net to be selected.
        :param bool clear_current_selection: Determines if the previous selection gets cleared before the selection of the net.
+       :param bool navigate_to_selection: Determines if the graph view scrolls and zooms to show all selected items.
 )");
 
     py_gui_api.def("select_net", py::overload_cast<const std::shared_ptr<net>&, bool, bool>(&gui_api::select_net), py::arg("net"), py::arg("clear_current_selection") = true, py::arg("navigate_to_selection") = true, R"(
        Select the net in the graph view of the GUI.
        If 'clear_current_selection' is false, the net will be added to the currently existing selection.
+       If 'navigate_to_selection' is false, the graph view will not modify the graph view camera position to fit all selected items.
 
        :param hal_py.net net: The net to be selected.
        :param bool clear_current_selection: Determines if the previous selection gets cleared before the selection of the net.
+       :param bool navigate_to_selection: Determines if the graph view scrolls and zooms to show all selected items.
 )");
 
     py_gui_api.def("select_net", py::overload_cast<const std::vector<u32>&, bool, bool>(&gui_api::select_net), py::arg("net_ids"), py::arg("clear_current_selection") = true, py::arg("navigate_to_selection") = true, R"(
        Select the nets with the ids in list 'net_ids' in the graph view of the GUI.
        If 'clear_current_selection' is false, the net with the id 'net_id' will be added to the currently existing selection.
+       If 'navigate_to_selection' is false, the graph view will not modify the graph view camera position to fit all selected items.
 
        :param list[int] net_ids: List of net ids of the nets to be selected.
        :param bool clear_current_selection: Determines if the previous selection gets cleared before the selection of the nets.
+       :param bool navigate_to_selection: Determines if the graph view scrolls and zooms to show all selected items.
 )");
 
     py_gui_api.def("select_net", py::overload_cast<const std::vector<std::shared_ptr<net>>&, bool, bool>(&gui_api::select_net), py::arg("nets"), py::arg("clear_current_selection") = true, py::arg("navigate_to_selection") = true, R"(
        Select the nets in the graph view of the GUI.
        If 'clear_current_selection' is false, the nets will be added to the currently existing selection.
+       If 'navigate_to_selection' is false, the graph view will not modify the graph view camera position to fit all selected items.
 
        :param list[hal_py.net] nets: The nets to be selected.
        :param bool clear_current_selection: Determines if the previous selection gets cleared before the selection of the nets.
+       :param bool navigate_to_selection: Determines if the graph view scrolls and zooms to show all selected items.
 )");
 
     py_gui_api.def("select_module", py::overload_cast<u32, bool, bool>(&gui_api::select_module), py::arg("module_id"), py::arg("clear_current_selection") = true, py::arg("navigate_to_selection") = true, R"(
        Select the module with id 'module_id' in the graph view of the GUI.
        If 'clear_current_selection' is false, the module with the id 'module_id' will be added to the currently existing selection.
+       If 'navigate_to_selection' is false, the graph view will not modify the graph view camera position to fit all selected items.
 
        :param int module_id: The module id of the module to be selected.
        :param bool clear_current_selection: Determines if the previous selection gets cleared before the selection of the module.
+       :param bool navigate_to_selection: Determines if the graph view scrolls and zooms to show all selected items.
 )");
 
     py_gui_api.def("select_module", py::overload_cast<const std::shared_ptr<module>&, bool, bool>(&gui_api::select_module), py::arg("module"), py::arg("clear_current_selection") = true, py::arg("navigate_to_selection") = true, R"(
        Select the module in the graph view of the GUI.
        If 'clear_current_selection' is false, the module will be added to the currently existing selection.
+       If 'navigate_to_selection' is false, the graph view will not modify the graph view camera position to fit all selected items.
 
        :param hal_py.module module: The module to be selected.
        :param bool clear_current_selection: Determines if the previous selection gets cleared before the selection of the module.
+       :param bool navigate_to_selection: Determines if the graph view scrolls and zooms to show all selected items.
 )");
 
     py_gui_api.def("select_module", py::overload_cast<const std::vector<u32>&, bool, bool>(&gui_api::select_module), py::arg("module_ids"), py::arg("clear_current_selection") = true, py::arg("navigate_to_selection") = true, R"(
        Select the modules with the ids in list 'module_ids' in the graph view of the GUI.
        If 'clear_current_selection' is false, the module with the id 'module_id' will be added to the currently existing selection.
+       If 'navigate_to_selection' is false, the graph view will not modify the graph view camera position to fit all selected items.
 
        :param list[int] module_ids: List of module ids of the modules to be selected.
        :param bool clear_current_selection: Determines if the previous selection gets cleared before the selection of the modules.
+       :param bool navigate_to_selection: Determines if the graph view scrolls and zooms to show all selected items.
 )");
 
     py_gui_api.def("select_module", py::overload_cast<const std::vector<std::shared_ptr<module>>&, bool, bool>(&gui_api::select_module), py::arg("modules"), py::arg("clear_current_selection") = true, py::arg("navigate_to_selection") = true, R"(
        Select the modules in the graph view of the GUI.
        If 'clear_current_selection' is false, the modules will be added to the currently existing selection.
+       If 'navigate_to_selection' is false, the graph view will not modify the graph view camera position to fit all selected items.
 
        :param list[hal_py.module] modules: The modules to be selected.
        :param bool clear_current_selection: Determines if the previous selection gets cleared before the selection of the modules.
+       :param bool navigate_to_selection: Determines if the graph view scrolls and zooms to show all selected items.
 )");
 
     py_gui_api.def("select", py::overload_cast<const std::shared_ptr<gate>&, bool, bool>(&gui_api::select), py::arg("gate"), py::arg("clear_current_selection") = true, py::arg("navigate_to_selection") = true, R"(
        Select the gate in the graph view of the GUI.
        If 'clear_current_selection' is false, the gate will be added to the currently existing selection.
+       If 'navigate_to_selection' is false, the graph view will not modify the graph view camera position to fit all selected items.
 
        :param hal_py.gate gate: The gate to be selected.
        :param bool clear_current_selection: Determines if the previous selection gets cleared before the selection of the gate.
+       :param bool navigate_to_selection: Determines if the graph view scrolls and zooms to show all selected items.
 )");
 
     py_gui_api.def("select", py::overload_cast<const std::shared_ptr<net>&, bool, bool>(&gui_api::select), py::arg("net"), py::arg("clear_current_selection") = true, py::arg("navigate_to_selection") = true, R"(
        Select the net in the graph view of the GUI.
        If 'clear_current_selection' is false, the net will be added to the currently existing selection.
+       If 'navigate_to_selection' is false, the graph view will not modify the graph view camera position to fit all selected items.
 
        :param hal_py.net net: The net to be selected.
        :param bool clear_current_selection: Determines if the previous selection gets cleared before the selection of the net.
+       :param bool navigate_to_selection: Determines if the graph view scrolls and zooms to show all selected items.
 )");
 
     py_gui_api.def("select", py::overload_cast<const std::shared_ptr<module>&, bool, bool>(&gui_api::select), py::arg("module"), py::arg("clear_current_selection") = true, py::arg("navigate_to_selection") = true, R"(
        Select the module in the graph view of the GUI.
        If 'clear_current_selection' is false, the module will be added to the currently existing selection.
+       If 'navigate_to_selection' is false, the graph view will not modify the graph view camera position to fit all selected items.
 
        :param hal_py.module module: The module to be selected.
        :param bool clear_current_selection: Determines if the previous selection gets cleared before the selection of the module.
+       :param bool navigate_to_selection: Determines if the graph view scrolls and zooms to show all selected items.
 )");
 
     py_gui_api.def("select", py::overload_cast<const std::vector<std::shared_ptr<gate>>&, bool, bool>(&gui_api::select), py::arg("gates"), py::arg("clear_current_selection") = true, py::arg("navigate_to_selection") = true, R"(
        Select the gates in the graph view of the GUI.
        If 'clear_current_selection' is false, the gates will be added to the currently existing selection.
+       If 'navigate_to_selection' is false, the graph view will not modify the graph view camera position to fit all selected items.
 
        :param list[hal_py.gate] gates: The gates to be selected.
        :param bool clear_current_selection: Determines if the previous selection gets cleared before the selection of the gates.
+       :param bool navigate_to_selection: Determines if the graph view scrolls and zooms to show all selected items.
 )");
 
     py_gui_api.def("select", py::overload_cast<const std::vector<std::shared_ptr<net>>&, bool, bool>(&gui_api::select), py::arg("nets"), py::arg("clear_current_selection") = true, py::arg("navigate_to_selection") = true, R"(
        Select the nets in the graph view of the GUI.
        If 'clear_current_selection' is false, the nets will be added to the currently existing selection.
+       If 'navigate_to_selection' is false, the graph view will not modify the graph view camera position to fit all selected items.
 
        :param list[hal_py.net] nets: The nets to be selected.
        :param bool clear_current_selection: Determines if the previous selection gets cleared before the selection of the nets.
+       :param bool navigate_to_selection: Determines if the graph view scrolls and zooms to show all selected items.
 )");
 
     py_gui_api.def("select", py::overload_cast<const std::vector<std::shared_ptr<module>>&, bool, bool>(&gui_api::select), py::arg("modules"), py::arg("clear_current_selection") = true, py::arg("navigate_to_selection") = true, R"(
        Select the modules in the graph view of the GUI.
        If 'clear_current_selection' is false, the modules will be added to the currently existing selection.
+       If 'navigate_to_selection' is false, the graph view will not modify the graph view camera position to fit all selected items.
 
        :param list[hal_py.module] modules: The modules to be selected.
        :param bool clear_current_selection: Determines if the previous selection gets cleared before the selection of the modules.
+       :param bool navigate_to_selection: Determines if the graph view scrolls and zooms to show all selected items.
 )");
 
     py_gui_api.def("select", py::overload_cast<const std::vector<u32>&, const std::vector<u32>&, const std::vector<u32>&, bool, bool>(&gui_api::select), py::arg("gate_ids"), py::arg("net_ids"), py::arg("module_ids"), py::arg("clear_current_selection") = true, py::arg("navigate_to_selection") = true, R"(
        Select the gates, nets and modules with the passed ids in the graph view of the GUI.
        If 'clear_current_selection' is false, the gates, nets and modules will be added to the currently existing selection.
+       If 'navigate_to_selection' is false, the graph view will not modify the graph view camera position to fit all selected items.
 
        :param list[hal_py.gate] gates: The ids of the gates to be selected.
        :param list[hal_py.net] nets: The ids of the nets to be selected.
        :param list[hal_py.module] modules: The ids of the modules to be selected.
        :param bool clear_current_selection: Determines if the previous selection gets cleared before the selection of the modules.
+       :param bool navigate_to_selection: Determines if the graph view scrolls and zooms to show all selected items.
 )");
 
     py_gui_api.def("select", py::overload_cast<const std::vector<std::shared_ptr<gate>>&, const std::vector<std::shared_ptr<net>>&, const std::vector<std::shared_ptr<module>>&, bool, bool>(&gui_api::select), py::arg("gates"), py::arg("nets"), py::arg("modules"), py::arg("clear_current_selection") = true, py::arg("navigate_to_selection") = true, R"(
        Select the gates, nets and modules in the graph view of the GUI.
        If 'clear_current_selection' is false, the gates, nets and modules will be added to the currently existing selection.
+       If 'navigate_to_selection' is false, the graph view will not modify the graph view camera position to fit all selected items.
 
        :param list[hal_py.gate] gates: The gates to be selected.
        :param list[hal_py.net] nets: The nets to be selected.
        :param list[hal_py.module] modules: The modules to be selected.
        :param bool clear_current_selection: Determines if the previous selection gets cleared before the selection of the modules.
+       :param bool navigate_to_selection: Determines if the graph view scrolls and zooms to show all selected items.
 )");
 
     py_gui_api.def("deselect_gate", py::overload_cast<u32>(&gui_api::deselect_gate), py::arg("gate_id"), R"(
