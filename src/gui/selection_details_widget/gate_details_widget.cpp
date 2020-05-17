@@ -78,9 +78,32 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
     m_data_fields_button = new QPushButton("Data Fields", this);
     m_boolean_functions_button = new QPushButton("Boolean Functions", this);
 
-    //(1) general info section
+    // table initializations (section 1-4)
     m_general_table = new QTableWidget(4,2);
+    m_input_pins_table = new QTableWidget(0,3);
+    m_output_pins_table = new QTableWidget(0,3);
+    m_data_fields_table = new QTableWidget(0, 2);
 
+    //shared stlye options (every option is applied to each table)
+    QList<QTableWidget*> tmp;
+    tmp << m_general_table << m_input_pins_table << m_output_pins_table << m_data_fields_table;
+    for(auto & table : tmp)
+    {
+        table->horizontalHeader()->setStretchLastSection(true);
+        table->horizontalHeader()->hide();
+        table->verticalHeader()->hide();
+        table->verticalHeader()->setDefaultSectionSize(16);
+        table->resizeColumnToContents(0);
+        table->setShowGrid(false);
+        table->setFocusPolicy(Qt::NoFocus);
+        table->setFrameStyle(QFrame::NoFrame);
+        table->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+        table->setMaximumHeight(table->verticalHeader()->length());
+        table->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        table->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    }
+
+    //customize general section by adding the fixed iitems
     QList<QTableWidgetItem*> tmp_general_info_list = {new QTableWidgetItem("Name:"), new QTableWidgetItem("Type:"),
                                                       new QTableWidgetItem("ID:"), new QTableWidgetItem("Module:")};
     for(int i = 0; i < tmp_general_info_list.size(); i++)
@@ -108,70 +131,6 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
     m_module_item->setFlags(Qt::ItemIsEnabled);
     m_general_table->setItem(3, 1, m_module_item);
 
-    //general table customizations
-    m_general_table->horizontalHeader()->setStretchLastSection(true);
-    m_general_table->horizontalHeader()->hide();
-    m_general_table->verticalHeader()->hide();
-//    m_general_table->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
-    m_general_table->verticalHeader()->setDefaultSectionSize(16);
-    m_general_table->resizeColumnToContents(0);
-    m_general_table->setShowGrid(false);
-    m_general_table->setFocusPolicy(Qt::NoFocus);
-    m_general_table->setFrameStyle(QFrame::NoFrame);
-    m_general_table->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    m_general_table->setMaximumHeight(m_general_table->verticalHeader()->length());
-    m_general_table->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    m_general_table->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-
-    //(2) Input Pin section
-    m_input_pins_table = new QTableWidget(0,3);
-
-    // input pin customization
-    m_input_pins_table->horizontalHeader()->setStretchLastSection(true);
-    m_input_pins_table->horizontalHeader()->hide();
-    m_input_pins_table->verticalHeader()->hide();
-    m_input_pins_table->verticalHeader()->setDefaultSectionSize(16);
-    m_input_pins_table->resizeColumnToContents(0);
-    m_input_pins_table->setShowGrid(false);
-    m_input_pins_table->setFocusPolicy(Qt::NoFocus);
-    m_input_pins_table->setFrameStyle(QFrame::NoFrame);
-    m_input_pins_table->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    m_input_pins_table->setMaximumHeight(m_input_pins_table->verticalHeader()->length());
-    m_input_pins_table->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    m_input_pins_table->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-
-    //(3) Output Pin section
-    m_output_pins_table = new QTableWidget(0,3);
-
-    //output pins customization
-    m_output_pins_table->horizontalHeader()->setStretchLastSection(true);
-    m_output_pins_table->horizontalHeader()->hide();
-    m_output_pins_table->verticalHeader()->hide();
-    m_output_pins_table->verticalHeader()->setDefaultSectionSize(16);
-    m_output_pins_table->resizeColumnToContents(0);
-    m_output_pins_table->setShowGrid(false);
-    m_output_pins_table->setFocusPolicy(Qt::NoFocus);
-    m_output_pins_table->setFrameStyle(QFrame::NoFrame);
-    m_output_pins_table->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    m_output_pins_table->setMaximumHeight(m_output_pins_table->verticalHeader()->length());
-    m_output_pins_table->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    m_output_pins_table->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-
-
-    //(4) Data Fields section
-    m_data_fields_table = new QTableWidget(0, 2);
-    m_data_fields_table->horizontalHeader()->setStretchLastSection(true);
-    m_data_fields_table->horizontalHeader()->hide();
-    m_data_fields_table->verticalHeader()->hide();
-    m_data_fields_table->verticalHeader()->setDefaultSectionSize(16);
-    m_data_fields_table->resizeColumnToContents(0);
-    m_data_fields_table->setShowGrid(false);
-    m_data_fields_table->setFocusPolicy(Qt::NoFocus);
-    m_data_fields_table->setFrameStyle(QFrame::NoFrame);
-    m_data_fields_table->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    m_data_fields_table->setMaximumHeight(m_data_fields_table->verticalHeader()->length());
-    m_data_fields_table->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    m_data_fields_table->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     //(5) Boolean Function section
     m_boolean_functions_container = new QWidget();
@@ -180,7 +139,7 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
     m_boolean_functions_container_layout->setSpacing(0);
     m_boolean_functions_container->setLayout(m_boolean_functions_container_layout);
 
-    //adding things to container layout
+    //adding things to intermediate layout (the one thats neccessary for the left spacing)
     intermediate_layout_gt->addWidget(m_general_table);
     intermediate_layout_gt->addSpacerItem(new QSpacerItem(0,0, QSizePolicy::Expanding, QSizePolicy::Fixed));
     intermediate_layout_ip->addWidget(m_input_pins_table);
@@ -191,7 +150,7 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
     intermediate_layout_df->addSpacerItem(new QSpacerItem(0,0, QSizePolicy::Expanding, QSizePolicy::Fixed));
 
 
-    //adding things to the layout
+    //adding things to the main layout
     m_top_lvl_layout->addWidget(m_general_info_button);
     m_top_lvl_layout->addLayout(intermediate_layout_gt);
     m_top_lvl_layout->addSpacerItem(new QSpacerItem(0, 7, QSizePolicy::Expanding, QSizePolicy::Fixed));
@@ -542,11 +501,10 @@ void gate_details_widget::update(const u32 gate_id)
     m_general_table->resizeColumnsToContents();
     m_general_table->setFixedWidth(calculate_table_size(m_general_table).width());
 
-    //update (2)input-pin section (put the sections code in extra functions?)
+    //update (2)input-pin section
     m_input_pins_table->clearContents();
     m_input_pins_button->setText(QString::fromStdString("Input Pins (") + QString::number(g->get_input_pins().size()) + QString::fromStdString(")"));
     m_input_pins_table->setRowCount(g->get_input_pins().size());
-    //m_input_pins_table->setFixedHeight(m_input_pins_table->verticalHeader()->length());
     m_input_pins_table->setMaximumHeight(m_input_pins_table->verticalHeader()->length());
     int index = 0;
     for(const auto &pin : g->get_input_pins())
@@ -557,6 +515,7 @@ void gate_details_widget::update(const u32 gate_id)
         arrow_item->setForeground(QBrush(QColor(114, 140, 0), Qt::SolidPattern));
         pin_name->setFlags(Qt::ItemIsEnabled);
         arrow_item->setFlags(Qt::ItemIsEnabled);
+        //arrow_item->setFlags((Qt::ItemFlag)(~Qt::ItemIsSelectable));
         net_item->setFlags(Qt::ItemIsEnabled);
 
         auto input_net = g_netlist->get_gate_by_id(gate_id)->get_fan_in_net(pin);
@@ -567,7 +526,6 @@ void gate_details_widget::update(const u32 gate_id)
         }
         else
             net_item->setText("unconnected");
-
 
         m_input_pins_table->setItem(index, 0, pin_name);
         m_input_pins_table->setItem(index, 1, arrow_item);
@@ -585,7 +543,6 @@ void gate_details_widget::update(const u32 gate_id)
     index = 0;
     for(const auto &pin : g->get_output_pins())
     {
-        //tmp->setStyleSheet("QPushButton{color: red; background: white; border-color:blue;} QPushButton:hover{color: blue;}");
         QTableWidgetItem* pin_name = new QTableWidgetItem(QString::fromStdString(pin));
         QTableWidgetItem* arrow_item = new QTableWidgetItem(QChar(0x27a1));
         QTableWidgetItem* net_item = new QTableWidgetItem();
@@ -615,7 +572,6 @@ void gate_details_widget::update(const u32 gate_id)
     m_data_fields_button->setText(QString::fromStdString("Data Fields (") + QString::number(g->get_data().size()) + QString::fromStdString(")"));
     m_data_fields_table->clearContents();
     m_data_fields_table->setRowCount(g->get_data().size());
-    //m_data_fields_table->setFixedHeight(m_data_fields_table->verticalHeader()->length());
     m_data_fields_table->setMaximumHeight(m_data_fields_table->verticalHeader()->length());
     index = 0;
     for(const auto& [key, value] : g->get_data())
