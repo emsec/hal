@@ -50,6 +50,7 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
     m_scroll_area->setWidget(m_top_lvl_container);
     m_scroll_area->setWidgetResizable(true);
 
+
     //layout customization
     m_content_layout->setContentsMargins(0,0,0,0);
     m_content_layout->setSpacing(0);
@@ -89,7 +90,7 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
     tmp << m_general_table << m_input_pins_table << m_output_pins_table << m_data_fields_table;
     for(auto & table : tmp)
     {
-        table->horizontalHeader()->setStretchLastSection(true);
+        //table->horizontalHeader()->setStretchLastSection(true);
         table->horizontalHeader()->hide();
         table->verticalHeader()->hide();
         table->verticalHeader()->setDefaultSectionSize(16);
@@ -109,26 +110,26 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
     for(int i = 0; i < tmp_general_info_list.size(); i++)
     {
         auto item = tmp_general_info_list.at(i);
-        item->setFlags(Qt::ItemIsEnabled);
+        item->setFlags((Qt::ItemFlag)~Qt::ItemIsEnabled);
         item->setFont(m_key_font);
         m_general_table->setItem(i, 0, item);
     }
 
 //    //create dynamic items that change when gate is changed
     m_name_item = new QTableWidgetItem();
-    m_name_item->setFlags(Qt::ItemIsEnabled);
+    m_name_item->setFlags((Qt::ItemFlag)~Qt::ItemIsEnabled);
     m_general_table->setItem(0, 1, m_name_item);
 
     m_type_item = new QTableWidgetItem();
-    m_type_item->setFlags(Qt::ItemIsEnabled);
+    m_type_item->setFlags((Qt::ItemFlag)~Qt::ItemIsEnabled);
     m_general_table->setItem(1, 1, m_type_item);
 
     m_id_item = new QTableWidgetItem();
-    m_id_item->setFlags(Qt::ItemIsEnabled);
+    m_id_item->setFlags((Qt::ItemFlag)~Qt::ItemIsEnabled);
     m_general_table->setItem(2, 1, m_id_item);
 
     m_module_item = new QTableWidgetItem();
-    m_module_item->setFlags(Qt::ItemIsEnabled);
+    m_module_item->setFlags((Qt::ItemFlag)~Qt::ItemIsEnabled);
     m_general_table->setItem(3, 1, m_module_item);
 
 
@@ -404,7 +405,6 @@ void gate_details_widget::handle_output_pin_item_clicked(QTableWidgetItem *item)
         m_navigation_table->show();
         m_navigation_table->setFocus();
     }
-
 }
 
 QSize gate_details_widget::calculate_table_size(QTableWidget *table)
@@ -513,8 +513,9 @@ void gate_details_widget::update(const u32 gate_id)
         QTableWidgetItem* arrow_item = new QTableWidgetItem(QChar(0x2b05));
         QTableWidgetItem* net_item = new QTableWidgetItem();
         arrow_item->setForeground(QBrush(QColor(114, 140, 0), Qt::SolidPattern));
-        pin_name->setFlags(Qt::ItemIsEnabled);
-        arrow_item->setFlags(Qt::ItemIsEnabled);
+        //pin_name->setFlags(Qt::ItemIsEnabled);
+        pin_name->setFlags((Qt::ItemFlag)~Qt::ItemIsEnabled);
+        arrow_item->setFlags((Qt::ItemFlag)~Qt::ItemIsEnabled);
         //arrow_item->setFlags((Qt::ItemFlag)(~Qt::ItemIsSelectable));
         net_item->setFlags(Qt::ItemIsEnabled);
 
@@ -547,8 +548,10 @@ void gate_details_widget::update(const u32 gate_id)
         QTableWidgetItem* arrow_item = new QTableWidgetItem(QChar(0x27a1));
         QTableWidgetItem* net_item = new QTableWidgetItem();
         arrow_item->setForeground(QBrush(QColor(114, 140, 0), Qt::SolidPattern));//stylesheet?
-        pin_name->setFlags(Qt::ItemIsEnabled);
-        arrow_item->setFlags(Qt::ItemIsEnabled);
+        //pin_name->setFlags(Qt::ItemIsEnabled);
+        pin_name->setFlags((Qt::ItemFlag)~Qt::ItemIsEnabled);
+        //arrow_item->setFlags(Qt::ItemIsEnabled);
+        arrow_item->setFlags((Qt::ItemFlag)~Qt::ItemIsEnabled);
         net_item->setFlags(Qt::ItemIsEnabled);
 
         auto output_net = g_netlist->get_gate_by_id(gate_id)->get_fan_out_net(pin);

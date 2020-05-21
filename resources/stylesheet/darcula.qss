@@ -778,8 +778,17 @@ gate_details_widget QPushButton:disabled{
     height: 12px;
 }
 
+gate_details_widget QTableWidget::item:!disabled:hover{
+    /*background-color: red;*/
+    color: white;
+}
+
 gate_details_widget QLabel{
     color: #A9B7C6;
+}
+
+gate_details_widget QLabel:hover{
+    color: red;
 }
 
 /*
