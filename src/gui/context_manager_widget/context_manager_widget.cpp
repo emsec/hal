@@ -168,7 +168,7 @@ void context_manager_widget::handle_rename_context_clicked()
 void context_manager_widget::handle_duplicate_context_clicked()
 {
     graph_context* clicked_context = m_assigned_pointers[m_list_widget->currentItem()];
-    graph_context* new_context     = g_graph_context_manager.create_new_context(clicked_context->name());
+    graph_context* new_context     = g_graph_context_manager.create_new_context(clicked_context->name()  + " (" + QDateTime::currentDateTime().toString(Qt::SystemLocaleShortDate) + ")" );
     new_context->add(clicked_context->modules(), clicked_context->gates());
 }
 
