@@ -8,9 +8,9 @@
 
 #include <QTabWidget>
 #include <QVBoxLayout>
-
 #include <QShortcut>
 #include <QKeySequence>
+#include <QDebug>
 
 graph_tab_widget::graph_tab_widget(QWidget* parent) : content_widget("Graph-Views", parent), m_tab_widget(new QTabWidget()), m_layout(new QVBoxLayout()), m_zoom_factor(1.2)
 {
@@ -53,13 +53,17 @@ void graph_tab_widget::handle_tab_changed(int index)
     {
         auto ctx = w->get_context();
         g_content_manager->get_context_manager_widget()->select_view_context(ctx);
+
+        disconnect(g_gui_api, &gui_api::navigation_requested, m_current_widget, &graph_widget::ensure_selection_visible);
+        connect(g_gui_api, &gui_api::navigation_requested, w, &graph_widget::ensure_selection_visible);
+        m_current_widget = w;
     }
 }
 
 void graph_tab_widget::handle_tab_close_requested(int index)
 {
     auto w = dynamic_cast<graph_widget*>(m_tab_widget->widget(index));
-    disconnect(g_gui_api, &gui_api::navigation_requested, w, &graph_widget::handle_gui_api_jump_requested);
+    disconnect(g_gui_api, &gui_api::navigation_requested, w, &graph_widget::ensure_selection_visible);
     m_tab_widget->removeTab(index);
 
     //right way to do it??
@@ -99,7 +103,6 @@ void graph_tab_widget::handle_context_removed(graph_context* context)
 void graph_tab_widget::add_graph_widget_tab(graph_context* context)
 {
     graph_widget* new_graph_widget = new graph_widget(context);
-    connect(g_gui_api, &gui_api::navigation_requested, new_graph_widget, &graph_widget::handle_gui_api_jump_requested);
     //m_context_widget_map.insert(context, new_graph_widget);
     int tab_index = addTab(new_graph_widget, context->name());
     m_tab_widget->setCurrentIndex(tab_index);

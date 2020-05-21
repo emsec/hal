@@ -276,11 +276,6 @@ void graph_widget::handle_navigation_jump_requested(const hal::node origin, cons
     ensure_gates_visible(to_gates);
 }
 
-void graph_widget::handle_gui_api_jump_requested()
-{
-    ensure_selection_visible();
-}
-
 void graph_widget::handle_module_double_clicked(const u32 id)
 {
     // CONNECT DIRECTLY TO HANDLE ???
