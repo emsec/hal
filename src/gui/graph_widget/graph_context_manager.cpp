@@ -10,13 +10,15 @@
 #include "gui/graph_widget/shaders/module_shader.h"
 #include "gui/gui_globals.h"
 
+#include <QDateTime>
+
 graph_context_manager::graph_context_manager()
 {
 }
 
 graph_context* graph_context_manager::create_new_context(const QString& name)
 {
-    graph_context* context = new graph_context(name);
+    graph_context* context = new graph_context(name + " (" + QDateTime::currentDateTime().toString(Qt::SystemLocaleShortDate) + ")");
     context->set_layouter(get_default_layouter(context));
     context->set_shader(get_default_shader(context));
     m_graph_contexts.append(context);
