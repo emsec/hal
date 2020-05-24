@@ -7,7 +7,10 @@
 #include <QSet>
 
 
-gui_api::gui_api(){}
+gui_api::gui_api()
+{
+    g_selection_relay.register_sender(this, "GUI API");
+}
 
 std::vector<u32> gui_api::get_selected_gate_ids()
 {
@@ -67,7 +70,9 @@ void gui_api::select_gate(const std::shared_ptr<gate>& gate, bool clear_current_
         g_selection_relay.clear();
 
     g_selection_relay.m_selected_gates.insert(gate->get_id());
-    g_selection_relay.selection_changed(nullptr);
+    g_selection_relay.selection_changed(this);
+    g_selection_relay.m_focus_type = selection_relay::item_type::gate;
+    g_selection_relay.m_focus_id = gate->get_id();
 
     if(navigate_to_selection)
         Q_EMIT navigation_requested();
@@ -94,7 +99,7 @@ void gui_api::select_gate(const std::vector<std::shared_ptr<gate>>& gates, bool 
         g_selection_relay.clear();
 
     g_selection_relay.m_selected_gates.unite(gate_ids);
-    g_selection_relay.selection_changed(nullptr);
+    g_selection_relay.selection_changed(this);
 
     if(navigate_to_selection)
         Q_EMIT navigation_requested();
@@ -116,7 +121,9 @@ void gui_api::select_net(const std::shared_ptr<net>& net, bool clear_current_sel
         g_selection_relay.clear();
 
     g_selection_relay.m_selected_nets.insert(net->get_id());
-    g_selection_relay.selection_changed(nullptr);
+    g_selection_relay.selection_changed(this);
+    g_selection_relay.m_focus_type = selection_relay::item_type::net;
+    g_selection_relay.m_focus_id = net->get_id();
 
     if(navigate_to_selection)
         Q_EMIT navigation_requested();
@@ -143,7 +150,7 @@ void gui_api::select_net(const std::vector<std::shared_ptr<net>>& nets, bool cle
         g_selection_relay.clear();
 
     g_selection_relay.m_selected_nets.unite(net_ids);
-    g_selection_relay.selection_changed(nullptr);
+    g_selection_relay.selection_changed(this);
 
     if(navigate_to_selection)
         Q_EMIT navigation_requested();
@@ -165,7 +172,9 @@ void gui_api::select_module(const std::shared_ptr<module>& module, bool clear_cu
         g_selection_relay.clear();
 
     g_selection_relay.m_selected_modules.insert(module->get_id());
-    g_selection_relay.selection_changed(nullptr);
+    g_selection_relay.selection_changed(this);
+    g_selection_relay.m_focus_type = selection_relay::item_type::module;
+    g_selection_relay.m_focus_id = module->get_id();
 
     if(navigate_to_selection)
         Q_EMIT navigation_requested();
@@ -192,7 +201,7 @@ void gui_api::select_module(const std::vector<std::shared_ptr<module>>& modules,
         g_selection_relay.clear();
 
     g_selection_relay.m_selected_modules.unite(module_ids);
-    g_selection_relay.selection_changed(nullptr);
+    g_selection_relay.selection_changed(this);
 
     if(navigate_to_selection)
         Q_EMIT navigation_requested();
@@ -265,7 +274,7 @@ void gui_api::deselect_gate(const std::shared_ptr<gate>& gate)
         return;
 
     g_selection_relay.m_selected_gates.remove(gate->get_id());
-    g_selection_relay.selection_changed(nullptr);
+    g_selection_relay.selection_changed(this);
 }
 
 void gui_api::deselect_gate(u32 gate_id)
@@ -286,7 +295,7 @@ void gui_api::deselect_gate(const std::vector<std::shared_ptr<gate>>& gates)
     }
 
     g_selection_relay.m_selected_gates.subtract(gate_ids);
-    g_selection_relay.selection_changed(nullptr);
+    g_selection_relay.selection_changed(this);
 }
 
 void gui_api::deselect_gate(const std::vector<u32>& gate_ids)
@@ -302,7 +311,7 @@ void gui_api::deselect_net(const std::shared_ptr<net>& net)
         return;
 
     g_selection_relay.m_selected_nets.remove(net->get_id());
-    g_selection_relay.selection_changed(nullptr);
+    g_selection_relay.selection_changed(this);
 }
 
 void gui_api::deselect_net(u32 net_id)
@@ -323,7 +332,7 @@ void gui_api::deselect_net(const std::vector<std::shared_ptr<net>>& nets)
     }
 
     g_selection_relay.m_selected_nets.subtract(net_ids);
-    g_selection_relay.selection_changed(nullptr);
+    g_selection_relay.selection_changed(this);
 }
 
 void gui_api::deselect_net(const std::vector<u32>& net_ids)
@@ -339,7 +348,7 @@ void gui_api::deselect_module(const std::shared_ptr<module>& module)
         return;
 
     g_selection_relay.m_selected_modules.remove(module->get_id());
-    g_selection_relay.selection_changed(nullptr);
+    g_selection_relay.selection_changed(this);
 }
 
 void gui_api::deselect_module(u32 module_id)
@@ -360,7 +369,7 @@ void gui_api::deselect_module(const std::vector<std::shared_ptr<module>>& module
     }
 
     g_selection_relay.m_selected_modules.subtract(module_ids);
-    g_selection_relay.selection_changed(nullptr);
+    g_selection_relay.selection_changed(this);
 }
 
 void gui_api::deselect_module(const std::vector<u32>& module_ids)
