@@ -311,7 +311,7 @@ public:
      */
     std::vector<value> get_truth_table(std::vector<std::string> ordered_variables = {}, bool remove_unknown_variables = false) const;
 
-private:
+protected:
     enum class operation
     {
         AND,
