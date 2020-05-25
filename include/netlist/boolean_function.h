@@ -356,6 +356,9 @@ protected:
     // merges nested expressions of the same operands
     static std::vector<std::vector<value>> qmc(const std::vector<std::vector<value>>& terms);
 
+    // helper to allow for substitution with reduced amount of copies
+    static void substitute_helper(boolean_function& f, const std::string& v, const boolean_function& s);
+
     bool m_invert;
 
     enum class content_type
