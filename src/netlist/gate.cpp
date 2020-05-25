@@ -191,23 +191,10 @@ boolean_function gate::get_lut_function(const std::string& pin) const
 
     if (inputs.size() > 6)
     {
-        log_error("netlist.internal", "LUT-gate '{}' (id = {}) has more than six input pins (unsupported)", get_name(), get_id());
+        log_error("netlist.internal", "{}-gate '{}' (id = {}) has more than six input pins (unsupported)", get_type()->get_name(), get_name(), get_id());
         return boolean_function();
     }
 
-    u32 config_size = 1 << inputs.size();
-
-    if (config_str.size() > config_size / 4)
-    {
-        log_error("netlist.internal",
-                  "LUT-gate '{}' (id = {}) supports a config of up to {} bits, but config string {} contains {} bits",
-                  get_name(),
-                  get_id(),
-                  config_size,
-                  config_str,
-                  config_str.size() * 4);
-        return boolean_function();
-    }
 
     u64 config = 0;
     try
@@ -216,16 +203,41 @@ boolean_function gate::get_lut_function(const std::string& pin) const
     }
     catch (std::invalid_argument& ex)
     {
-        log_error("netlist.internal", "LUT-gate '{}' (id = {}) has invalid config string: '{}' is not a hex value", get_name(), get_id(), config_str);
+        log_error("netlist.internal", "{}-gate '{}' (id = {}) has invalid config string: '{}' is not a hex value", get_type()->get_name(), get_name(), get_id(), config_str);
+        return boolean_function();
+    }
+    u32 config_size = 0;
+    {
+        u64 tmp = config;
+        while(tmp != 0){
+            config_size++;
+            tmp >>=1;
+        }
+    }
+
+    u32 max_config_size = 1 << inputs.size();
+
+
+    if (config_size > max_config_size)
+    {
+        log_error("netlist.internal",
+                  "{}-gate '{}' (id = {}) supports a config of up to {} bits, but config string {} contains {} bits.",
+                  get_type()->get_name(),
+                  get_name(),
+                  get_id(),
+                  max_config_size,
+                  config_str,
+                  config_str.size() * 4);
         return boolean_function();
     }
 
-    for (u32 i = 0; config != 0 && i < config_size; i++)
+
+    for (u32 i = 0; config != 0 && i < max_config_size; i++)
     {
         u8 bit;
         if (is_ascending)
         {
-            bit = (config >> (config_size - 1)) & 1;
+            bit = (config >> (max_config_size - 1)) & 1;
             config <<= 1;
         }
         else
