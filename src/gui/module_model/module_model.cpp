@@ -288,3 +288,8 @@ void module_model::update_module(const u32 id)    // SPLIT ???
     QModelIndex index = get_index(item);
     Q_EMIT dataChanged(index, index);
 }
+
+module_item* module_model::get_item(const u32 module_id) const
+{
+    return m_module_items.value(module_id);
+}

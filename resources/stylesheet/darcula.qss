@@ -1466,14 +1466,14 @@ background : rgba(0, 0, 0, 128);
 }
 
 QTreeView {
-    selection-background-color: green; /* Used on Mac ? TEST*/
+    selection-background-color: #0D293E; /* Used on Mac ? TEST*/
     selection-color: white; /* Used on Mac ? TEST*/
     show-decoration-selected: 1;
     outline: none;
 }
 
 QTreeView::item:selected {
-    background-color: green; /* Used on Windows ? TEST*/
+    background-color: #0D293E; /* Used on Windows ? TEST*/
     color: white;
     border: none;
 }
