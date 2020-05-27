@@ -752,6 +752,32 @@ labeled_frame #right-spacer {
     margin-right : 6px;
 }
 
+/*********************************************
+*             MODULE_DETAILS_WIDGET            *
+*********************************************/
+
+module_details_widget QPushButton{
+    font: bold "Iosevka";
+    font-size: 12px;
+    /*background: qlineargradient( x1:0 y1:0, x2:1 y2:0, stop:0 black, stop:1 gray);*/
+    background: #1a1a1a;
+    border-color: #999999;
+    border-width: 1px;
+    color: #eeeeee;
+    height: 12px;
+}
+
+module_details_widget QPushButton:disabled{
+    font: bold "Iosevka";
+    font-size: 12px;
+    /*background: qlineargradient( x1:0 y1:0, x2:1 y2:0, stop:0 black, stop:1 gray);*/
+    background: #1a1a1a;
+    border-color: #999999;
+    border-width: 1px;
+    color: #eeeeee;
+    height: 12px;
+}
+
 /*
 rgb(107, 135, 255)
 */
