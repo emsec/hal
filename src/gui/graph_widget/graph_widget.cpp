@@ -362,7 +362,7 @@ void graph_widget::handle_navigation_jump_requested(const hal::node origin, cons
     // TODO implement subselections on modules, then add a case for when the
     // selection is only one module (instead of one gate)
 
-    if (final_gates.size() == 1)
+    if (final_gates.size() == 1 && final_modules.empty())
     {
         // subfocus only possible when just one gate selected
         u32 gid = *final_gates.begin();
@@ -399,7 +399,7 @@ void graph_widget::handle_navigation_jump_requested(const hal::node origin, cons
             }
         }
     }
-    else if (final_modules.size() == 1)
+    else if (final_modules.size() == 1 && final_gates.empty())
     {
         // subfocus only possible when just one module selected
         u32 mid = *final_modules.begin();
