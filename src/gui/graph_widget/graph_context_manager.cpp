@@ -18,7 +18,7 @@ graph_context_manager::graph_context_manager()
 
 graph_context* graph_context_manager::create_new_context(const QString& name)
 {
-    graph_context* context = new graph_context(name + " (" + QDateTime::currentDateTime().toString(Qt::SystemLocaleShortDate) + ")");
+    graph_context* context = new graph_context(name);
     context->set_layouter(get_default_layouter(context));
     context->set_shader(get_default_shader(context));
     m_graph_contexts.append(context);

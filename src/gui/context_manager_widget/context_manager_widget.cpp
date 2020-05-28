@@ -28,7 +28,7 @@
 
 context_manager_widget::context_manager_widget(graph_tab_widget* tab_view, QWidget* parent)
     : content_widget("View Manager", parent), m_list_widget(new QListWidget()), m_new_view_action(new QAction(this)), m_rename_action(new QAction(this)), m_duplicate_action(new QAction(this)),
-      m_delete_action(new QAction(this))
+      m_delete_action(new QAction(this)), m_timestamp_action(new QAction(this))
 {
     //needed to load the properties
     ensurePolished();
@@ -64,6 +64,9 @@ context_manager_widget::context_manager_widget(graph_tab_widget* tab_view, QWidg
     m_duplicate_action->setToolTip("Duplicate");
     m_delete_action->setIcon(gui_utility::get_styled_svg_icon(m_delete_icon_style, m_delete_icon_path));
     m_delete_action->setToolTip("Delete");
+    m_timestamp_action->setIcon(gui_utility::get_styled_svg_icon(m_timestamp_icon_style, m_timestamp_icon_path));
+    m_timestamp_action->setToolTip("Toggle Timestamps");
+    
 
     m_rename_action->setEnabled(false);
     m_duplicate_action->setEnabled(false);
@@ -73,6 +76,7 @@ context_manager_widget::context_manager_widget(graph_tab_widget* tab_view, QWidg
     connect(m_rename_action, &QAction::triggered, this, &context_manager_widget::handle_rename_context_clicked);
     connect(m_duplicate_action, &QAction::triggered, this, &context_manager_widget::handle_duplicate_context_clicked);
     connect(m_delete_action, &QAction::triggered, this, &context_manager_widget::handle_delete_context_clicked);
+    connect(m_timestamp_action, &QAction::triggered, this, &context_manager_widget::handle_toggle_timestamps_clicked);
 }
 
 void context_manager_widget::resizeEvent(QResizeEvent* event)
@@ -177,12 +181,32 @@ void context_manager_widget::handle_delete_context_clicked()
     g_graph_context_manager.delete_graph_context(clicked_context);
 }
 
+void context_manager_widget::handle_toggle_timestamps_clicked()
+{
+    m_show_timestamps = !m_show_timestamps;
+
+    for(int i = 0; i < m_list_widget->count(); i++)
+    {
+        auto item = m_list_widget->item(i);
+        auto context = m_assigned_pointers[item];
+
+        QString context_name = context->name();
+
+        if(m_show_timestamps)
+            context_name += " (" + context->get_timestamp().toString(Qt::SystemLocaleShortDate) + ")";
+
+        item->setText(context_name);
+    }
+}
+
+
 void context_manager_widget::setup_toolbar(toolbar* toolbar)
 {
     toolbar->addAction(m_new_view_action);
     toolbar->addAction(m_duplicate_action);
     toolbar->addAction(m_rename_action);
     toolbar->addAction(m_delete_action);
+    toolbar->addAction(m_timestamp_action);
 }
 
 void context_manager_widget::handle_item_double_clicked(QListWidgetItem* clicked)
@@ -210,7 +234,12 @@ void context_manager_widget::handle_selection_changed()
 
 void context_manager_widget::handle_context_created(graph_context* context)
 {
-    m_list_widget->addItem(context->name());
+    QString context_name = context->name();
+
+    if(m_show_timestamps)
+        context_name += " (" + context->get_timestamp().toString(Qt::SystemLocaleShortDate) + ")";
+
+    m_list_widget->addItem(context_name);
     auto new_item                 = m_list_widget->item(m_list_widget->count() - 1);
     m_assigned_pointers[new_item] = context;
     select_view_context(context);
@@ -222,7 +251,12 @@ void context_manager_widget::handle_context_renamed(graph_context* context)
     {
         if (m_assigned_pointers[m_list_widget->item(i)] == context)
         {
-            m_list_widget->item(i)->setText(context->name());
+            QString context_name = context->name();
+
+            if(m_show_timestamps)
+                context_name += " (" + context->get_timestamp().toString(Qt::SystemLocaleShortDate) + ")";
+
+            m_list_widget->item(i)->setText(context_name);
             return;
         }
     }
@@ -285,6 +319,16 @@ QString context_manager_widget::delete_icon_style() const
     return m_delete_icon_style;
 }
 
+QString context_manager_widget::timestamp_icon_path() const
+{
+    return m_timestamp_icon_path;
+}
+
+QString context_manager_widget::timestamp_icon_style() const
+{
+    return m_timestamp_icon_style;
+}
+
 void context_manager_widget::set_new_view_icon_path(const QString& path)
 {
     m_new_view_icon_path = path;
@@ -323,4 +367,14 @@ void context_manager_widget::set_delete_icon_path(const QString& path)
 void context_manager_widget::set_delete_icon_style(const QString& style)
 {
     m_delete_icon_style = style;
+}
+
+void context_manager_widget::set_timestamp_icon_path(const QString& path)
+{
+    m_timestamp_icon_path = path;
+}
+
+void context_manager_widget::set_timestamp_icon_style(const QString& style)
+{
+    m_timestamp_icon_style = style;
 }

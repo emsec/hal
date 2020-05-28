@@ -19,6 +19,7 @@ graph_context::graph_context(const QString& name, QObject* parent)
       m_scene_update_required(false),
       m_scene_update_in_progress(false)
 {
+    m_timestamp = QDateTime::currentDateTime();
 }
 
 void graph_context::set_layouter(graph_layouter* layouter)
@@ -500,4 +501,9 @@ void graph_context::start_scene_update()
 
     m_layouter->layout();
     handle_layouter_finished();
+}
+
+QDateTime graph_context::get_timestamp() const
+{
+    return m_timestamp;
 }

@@ -104,6 +104,13 @@ void graph_tab_widget::add_graph_widget_tab(graph_context* context)
 {
     graph_widget* new_graph_widget = new graph_widget(context);
     //m_context_widget_map.insert(context, new_graph_widget);
+    
+    if(m_tab_widget->count() == 0)
+    {
+        connect(g_gui_api, &gui_api::navigation_requested, new_graph_widget, &graph_widget::ensure_selection_visible);
+        m_current_widget = new_graph_widget;
+    }
+    
     int tab_index = addTab(new_graph_widget, context->name());
     m_tab_widget->setCurrentIndex(tab_index);
     m_tab_widget->widget(tab_index)->setFocus();

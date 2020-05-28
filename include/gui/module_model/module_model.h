@@ -58,6 +58,7 @@ public:
 
     module_item* get_item(const QModelIndex& index) const;
     QModelIndex get_index(const module_item* const item) const;
+    module_item* get_item(const u32 module_id) const;
 
     void init();
     void clear();

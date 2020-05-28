@@ -54,7 +54,6 @@ selection_details_widget::selection_details_widget(QWidget* parent) : content_wi
     //    m_table_widget->viewport()->setFocusPolicy(Qt::NoFocus);
 
     connect(&g_selection_relay, &selection_relay::selection_changed, this, &selection_details_widget::handle_selection_update);
-    connect(m_searchbar, &searchbar::text_edited, m_module_details, &module_details_widget::handle_searchbar_text_edited);
 }
 
 void selection_details_widget::handle_selection_update(void* sender)
