@@ -212,7 +212,7 @@ public:
      * Combines two boolean functions using an AND operator in place.
      *
      * @param[in] other - the other function to combine with.
-     * @returns The combined boolean function.
+     * @returns Self-reference.
      */
     boolean_function& operator&=(const boolean_function& other);
 
@@ -220,7 +220,7 @@ public:
      * Combines two boolean functions using an OR operator in place.
      *
      * @param[in] other - the other function to combine with.
-     * @returns The combined boolean function.
+     * @returns Self-reference.
      */
     boolean_function& operator|=(const boolean_function& other);
 
@@ -228,7 +228,7 @@ public:
      * Combines two boolean functions using an XOR operator in place.
      *
      * @param[in] other - the other function to combine with.
-     * @returns The combined boolean function.
+     * @returns Self-reference.
      */
     boolean_function& operator^=(const boolean_function& other);
 
@@ -278,6 +278,8 @@ public:
      * Example:
      * [[("a", true), ("b", false)], [("c", true)]] -> (a & !b) | c
      *
+     * If the function is empty, this returns an empty vector.
+     *
      * @returns The DNF clauses as a vector of vectors of pairs <string, bool>.
      */
     std::vector<std::vector<std::pair<std::string, bool>>> get_dnf_clauses() const;
@@ -304,9 +306,10 @@ public:
      * If ordered_variables is empty, all included variables are used and ordered alphabetically.
      *
      * @param[in] ordered_variables - Specific order in which the inputs shall be structured in the truth table.
+     * @param[in] remove_unknown_variables - If true, all given variables that are not found in the function are removed from the truth table.
      * @returns The vector of output values.
      */
-    std::vector<value> get_truth_table(const std::vector<std::string>& ordered_variables = {}) const;
+    std::vector<value> get_truth_table(std::vector<std::string> ordered_variables = {}, bool remove_unknown_variables = false) const;
 
 private:
     enum class operation

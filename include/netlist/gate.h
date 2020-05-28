@@ -155,7 +155,7 @@ public:
      * @param[in] name - The function name.
      * @returns The boolean function.
      */
-    boolean_function get_boolean_function(const std::string& name = "") const;
+    boolean_function get_boolean_function(std::string name = "") const;
 
     /**
      * Get a map from function name to boolean function for all boolean functions associated with this gate.
@@ -313,7 +313,7 @@ private:
     gate(const gate&) = delete;               //disable copy-constructor
     gate& operator=(const gate&) = delete;    //disable copy-assignment
 
-    boolean_function get_lut_function() const;
+    boolean_function get_lut_function(const std::string& pin) const;
 
     /* pointer to corresponding netlist parent */
     std::shared_ptr<netlist> m_netlist;

@@ -1,17 +1,13 @@
-#include "def.h"
-
+#include "core/interface_base.h"
+#include "core/interface_cli.h"
+#include "core/interface_interactive_ui.h"
 #include "core/log.h"
 #include "core/plugin_manager.h"
-#include "core/utils.h"
-#include "hal_version.h"
-
-#include "core/interface_cli.h"
 #include "core/program_arguments.h"
 #include "core/program_options.h"
-
-#include "core/interface_base.h"
-#include "core/interface_interactive_ui.h"
-
+#include "core/utils.h"
+#include "def.h"
+#include "hal_version.h"
 #include "netlist/event_system/event_log.h"
 #include "netlist/gate_library/gate_library_manager.h"
 #include "netlist/hdl_parser/hdl_parser_dispatcher.h"
