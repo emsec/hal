@@ -1380,6 +1380,9 @@ qproperty-duplicate_icon_path: ":/icons/content";
 
 qproperty-delete_icon_style: "all->#A61F1F";
 qproperty-delete_icon_path: ":/icons/trashcan";
+
+qproperty-timestamp_icon_style: "all->#FFC30B";
+qproperty-timestamp_icon_path: ":/icons/clock";
 }
 
 main_window {

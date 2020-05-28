@@ -47,6 +47,8 @@ class context_manager_widget : public content_widget
     Q_PROPERTY(QString delete_icon_style READ delete_icon_style WRITE set_delete_icon_style)
     Q_PROPERTY(QString duplicate_icon_path READ duplicate_icon_path WRITE set_duplicate_icon_path)
     Q_PROPERTY(QString duplicate_icon_style READ duplicate_icon_style WRITE set_duplicate_icon_style)
+    Q_PROPERTY(QString timestamp_icon_path READ timestamp_icon_path WRITE set_timestamp_icon_path)
+    Q_PROPERTY(QString timestamp_icon_style READ timestamp_icon_style WRITE set_timestamp_icon_style)
 
 
 public:
@@ -66,6 +68,8 @@ public:
     QString delete_icon_style() const;
     QString duplicate_icon_path() const;
     QString duplicate_icon_style() const;
+    QString timestamp_icon_path() const;
+    QString timestamp_icon_style() const;
 
     void set_new_view_icon_path(const QString &path);
     void set_new_view_icon_style(const QString &style);
@@ -75,6 +79,8 @@ public:
     void set_delete_icon_style(const QString &style);
     void set_duplicate_icon_path(const QString &path);
     void set_duplicate_icon_style(const QString &style);
+    void set_timestamp_icon_path(const QString &path);
+    void set_timestamp_icon_style(const QString &style);
 
 
 public Q_SLOTS:
@@ -103,9 +109,15 @@ private:
     QString m_delete_icon_path;
     QString m_delete_icon_style;
 
+    QAction* m_timestamp_action;
+    QString m_timestamp_icon_path;
+    QString m_timestamp_icon_style;
+
     u32 m_context_counter = 0;
 
     std::map<QListWidgetItem*, graph_context*> m_assigned_pointers;
+
+    bool m_show_timestamps = true;
 
     void handle_context_menu_request(const QPoint& point);
 
@@ -113,6 +125,7 @@ private:
     void handle_rename_context_clicked();
     void handle_duplicate_context_clicked();
     void handle_delete_context_clicked();
+    void handle_toggle_timestamps_clicked();
 
     void handle_item_double_clicked(QListWidgetItem*);
 
