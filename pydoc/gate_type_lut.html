@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Gate Type LUT &mdash; hal_py v2.0.0-145-gc1c0926d1 documentation</title>
+  <title>Gate Type LUT &mdash; hal_py v2.0.0-148-gb7666355a documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="hal_py v2.0.0-145-gc1c0926d1 documentation" href="index.html"/>
+    <link rel="top" title="hal_py v2.0.0-148-gb7666355a documentation" href="index.html"/>
         <link rel="up" title="hal_py Documentation" href="hal_py.html"/>
         <link rel="next" title="Gate Type Sequential" href="gate_type_sequential.html"/>
         <link rel="prev" title="Gate Type" href="gate_type.html"/> 
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                v2.0.0-145-gc1c0926d1
+                v2.0.0-148-gb7666355a
               </div>
             
           
@@ -182,6 +182,434 @@
             
   <div class="section" id="gate-type-lut">
 <h1>Gate Type LUT<a class="headerlink" href="#gate-type-lut" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="hal_py.gate_type_lut">
+<em class="property">class </em><code class="descclassname">hal_py.</code><code class="descname">gate_type_lut</code><a class="headerlink" href="#hal_py.gate_type_lut" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="gate_type.html#hal_py.gate_type" title="hal_py.gate_type"><code class="xref py py-class docutils literal"><span class="pre">hal_py.gate_type</span></code></a></p>
+<p>LUT gate type class containing information about the internals of a specific LUT gate type.</p>
+<dl class="method">
+<dt id="hal_py.gate_type_lut.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>self: hal_py.gate_type_lut</em>, <em>name: str</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.gate_type_lut.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Construct a new LUT gate type.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The name of the LUT gate type.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.gate_type_lut.add_boolean_function">
+<code class="descname">add_boolean_function</code><span class="sig-paren">(</span><em>self: hal_py.gate_type</em>, <em>pin_name: str</em>, <em>bf: boolean_function</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.gate_type_lut.add_boolean_function" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a boolean function with the specified name to the gate type.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The name of the boolean function.</li>
+<li><strong>bf</strong> (<a class="reference internal" href="boolean_function.html#hal_py.boolean_function" title="hal_py.boolean_function"><em>hal_py.boolean_function</em></a>) – A boolean function object.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.gate_type_lut.add_input_pin">
+<code class="descname">add_input_pin</code><span class="sig-paren">(</span><em>self: hal_py.gate_type</em>, <em>input_pin: str</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.gate_type_lut.add_input_pin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add an input pin to the gate type.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>input_pin</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The name of an input pin.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.gate_type_lut.add_input_pins">
+<code class="descname">add_input_pins</code><span class="sig-paren">(</span><em>self: hal_py.gate_type, input_pins: List[str]</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.gate_type_lut.add_input_pins" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a list of input pins to the gate type.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>input_pins</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em>]</em>) – The list of input pins.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.gate_type_lut.add_output_from_init_string_pin">
+<code class="descname">add_output_from_init_string_pin</code><span class="sig-paren">(</span><em>self: hal_py.gate_type_lut</em>, <em>output_pin: str</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.gate_type_lut.add_output_from_init_string_pin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds an output pin to the collection of output pins that generate their output not from a boolean function but an initialization string.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>output_pin</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The name of the output string.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.gate_type_lut.add_output_pin">
+<code class="descname">add_output_pin</code><span class="sig-paren">(</span><em>self: hal_py.gate_type</em>, <em>output_pin: str</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.gate_type_lut.add_output_pin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add an output pin to the gate type.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>output_pin</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The name of an output pin.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.gate_type_lut.add_output_pins">
+<code class="descname">add_output_pins</code><span class="sig-paren">(</span><em>self: hal_py.gate_type, output_pins: List[str]</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.gate_type_lut.add_output_pins" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a list of output pins to the gate type.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>output_pins</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em>]</em>) – The list of output pins.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
+<dt id="hal_py.gate_type_lut.base_type">
+<em class="property">class </em><code class="descname">base_type</code><a class="headerlink" href="#hal_py.gate_type_lut.base_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">pybind11_builtins.pybind11_object</span></code></p>
+<blockquote>
+<div>Represents the base type of a gate type. Available are: combinatorial, lut, ff, and latch.</div></blockquote>
+<p>Members:</p>
+<blockquote>
+<div><p>combinatorial</p>
+<p>lut</p>
+<p>ff</p>
+<p>latch</p>
+</div></blockquote>
+<dl class="attribute">
+<dt id="hal_py.gate_type_lut.base_type.name">
+<code class="descname">name</code><a class="headerlink" href="#hal_py.gate_type_lut.base_type.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>(self: handle) -&gt; str</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.gate_type_lut.boolean_functions">
+<code class="descname">boolean_functions</code><a class="headerlink" href="#hal_py.gate_type_lut.boolean_functions" title="Permalink to this definition">¶</a></dt>
+<dd><p>A map from function names to the boolean functions of the gate type.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">dict[str,hal_py.boolean_function]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.gate_type_lut.config_data_ascending_order">
+<code class="descname">config_data_ascending_order</code><a class="headerlink" href="#hal_py.gate_type_lut.config_data_ascending_order" title="Permalink to this definition">¶</a></dt>
+<dd><p>The bit-order of the INIT string, true if ascending.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.gate_type_lut.config_data_category">
+<code class="descname">config_data_category</code><a class="headerlink" href="#hal_py.gate_type_lut.config_data_category" title="Permalink to this definition">¶</a></dt>
+<dd><p>The category in which to find the INIT string.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.gate_type_lut.config_data_identifier">
+<code class="descname">config_data_identifier</code><a class="headerlink" href="#hal_py.gate_type_lut.config_data_identifier" title="Permalink to this definition">¶</a></dt>
+<dd><p>The identifier used to specify the INIT string.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.gate_type_lut.get_base_type">
+<code class="descname">get_base_type</code><span class="sig-paren">(</span><em>self: hal_py.gate_type</em><span class="sig-paren">)</span> &#x2192; hal_py.gate_type.base_type<a class="headerlink" href="#hal_py.gate_type_lut.get_base_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the base type of the gate type. The base type can be either combinatorial, lut, ff, or latch.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The base type of the gate type.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="gate_type.html#hal_py.gate_type.base_type" title="hal_py.gate_type.base_type">hal_py.gate_type.base_type</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.gate_type_lut.get_boolean_functions">
+<code class="descname">get_boolean_functions</code><span class="sig-paren">(</span><em>self: hal_py.gate_type</em><span class="sig-paren">)</span> &#x2192; Dict[str, boolean_function]<a class="headerlink" href="#hal_py.gate_type_lut.get_boolean_functions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a map containing the boolean functions of the gate type.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A map from function names to boolean functions.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)">dict</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a>,<a class="reference internal" href="boolean_function.html#hal_py.boolean_function" title="hal_py.boolean_function">hal_py.boolean_function</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.gate_type_lut.get_config_data_category">
+<code class="descname">get_config_data_category</code><span class="sig-paren">(</span><em>self: hal_py.gate_type_lut</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#hal_py.gate_type_lut.get_config_data_category" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the category in which to find the INIT string.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The category as a string.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.gate_type_lut.get_config_data_identifier">
+<code class="descname">get_config_data_identifier</code><span class="sig-paren">(</span><em>self: hal_py.gate_type_lut</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#hal_py.gate_type_lut.get_config_data_identifier" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the identifier used to specify the INIT string.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The identifier as a string.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.gate_type_lut.get_input_pins">
+<code class="descname">get_input_pins</code><span class="sig-paren">(</span><em>self: hal_py.gate_type</em><span class="sig-paren">)</span> &#x2192; List[str]<a class="headerlink" href="#hal_py.gate_type_lut.get_input_pins" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a list of input pins of the gate type.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A list of input pins of the gate type.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.gate_type_lut.get_name">
+<code class="descname">get_name</code><span class="sig-paren">(</span><em>self: hal_py.gate_type</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#hal_py.gate_type_lut.get_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the name of the gate type.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The name of the gate type.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.gate_type_lut.get_output_from_init_string_pins">
+<code class="descname">get_output_from_init_string_pins</code><span class="sig-paren">(</span><em>self: hal_py.gate_type_lut</em><span class="sig-paren">)</span> &#x2192; Set[str]<a class="headerlink" href="#hal_py.gate_type_lut.get_output_from_init_string_pins" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the set of output pins that generate their output not from a boolean function but an initialization string.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Set of oputput pin names.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.8)">set</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.gate_type_lut.get_output_pins">
+<code class="descname">get_output_pins</code><span class="sig-paren">(</span><em>self: hal_py.gate_type</em><span class="sig-paren">)</span> &#x2192; List[str]<a class="headerlink" href="#hal_py.gate_type_lut.get_output_pins" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a list of output pins of the gate type.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A vector of output pins of the gate type.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.gate_type_lut.input_pins">
+<code class="descname">input_pins</code><a class="headerlink" href="#hal_py.gate_type_lut.input_pins" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of input pins of the gate type.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">list[str]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.gate_type_lut.is_config_data_ascending_order">
+<code class="descname">is_config_data_ascending_order</code><span class="sig-paren">(</span><em>self: hal_py.gate_type_lut</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.gate_type_lut.is_config_data_ascending_order" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the bit-order of the INIT string.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if ascending bit-order, false otherwise.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.gate_type_lut.name">
+<code class="descname">name</code><a class="headerlink" href="#hal_py.gate_type_lut.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the gate type.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.gate_type_lut.output_from_init_string_pins">
+<code class="descname">output_from_init_string_pins</code><a class="headerlink" href="#hal_py.gate_type_lut.output_from_init_string_pins" title="Permalink to this definition">¶</a></dt>
+<dd><p>The set of output pins that generate their output not from a boolean function but an initialization string.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">set[str]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.gate_type_lut.output_pins">
+<code class="descname">output_pins</code><a class="headerlink" href="#hal_py.gate_type_lut.output_pins" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of output pins of the gate type.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">list[str]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.gate_type_lut.set_config_data_ascending_order">
+<code class="descname">set_config_data_ascending_order</code><span class="sig-paren">(</span><em>self: hal_py.gate_type_lut</em>, <em>ascending: bool</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.gate_type_lut.set_config_data_ascending_order" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the bit-order of the INIT string.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ascending</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – True if ascending bit-order, false otherwise.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.gate_type_lut.set_config_data_category">
+<code class="descname">set_config_data_category</code><span class="sig-paren">(</span><em>self: hal_py.gate_type_lut</em>, <em>category: str</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.gate_type_lut.set_config_data_category" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the category in which to find the INIT string.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>category</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The category as a string.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.gate_type_lut.set_config_data_identifier">
+<code class="descname">set_config_data_identifier</code><span class="sig-paren">(</span><em>self: hal_py.gate_type_lut</em>, <em>identifier: str</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.gate_type_lut.set_config_data_identifier" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the identifier used to specify the INIT string.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>identifier</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The identifier as a string.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 
 
@@ -228,7 +656,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'v2.0.0-145-gc1c0926d1',
+            VERSION:'v2.0.0-148-gb7666355a',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

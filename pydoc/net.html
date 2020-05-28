@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Net &mdash; hal_py v2.0.0-145-gc1c0926d1 documentation</title>
+  <title>Net &mdash; hal_py v2.0.0-148-gb7666355a documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="hal_py v2.0.0-145-gc1c0926d1 documentation" href="index.html"/>
+    <link rel="top" title="hal_py v2.0.0-148-gb7666355a documentation" href="index.html"/>
         <link rel="up" title="hal_py Documentation" href="hal_py.html"/>
         <link rel="next" title="Module" href="module.html"/>
         <link rel="prev" title="Gate" href="gate.html"/> 
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                v2.0.0-145-gc1c0926d1
+                v2.0.0-148-gb7666355a
               </div>
             
           
@@ -182,6 +182,595 @@
             
   <div class="section" id="net">
 <h1>Net<a class="headerlink" href="#net" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="hal_py.net">
+<em class="property">class </em><code class="descclassname">hal_py.</code><code class="descname">net</code><a class="headerlink" href="#hal_py.net" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="data_container.html#hal_py.data_container" title="hal_py.data_container"><code class="xref py py-class docutils literal"><span class="pre">hal_py.data_container</span></code></a></p>
+<p>Net class containing information about a net including its source and destination.</p>
+<dl class="method">
+<dt id="hal_py.net.add_dst">
+<code class="descname">add_dst</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.net.add_dst" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic">
+<li><p class="first">add_dst(self: hal_py.net, gate: hal_py.gate, pin_type: str) -&gt; bool</p>
+<blockquote>
+<div><p>Add a destination to this net.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">param gate:</th><td class="field-body">The destination gate.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">type gate:</th><td class="field-body">hal_py.gate</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">param str pin_type:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The input pin of the gate.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">returns:</th><td class="field-body">True on succes</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+<li><p class="first">add_dst(self: hal_py.net, dst: hal_py.endpoint) -&gt; bool</p>
+<blockquote>
+<div><p>Add a destination to this net.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">param dst:</th><td class="field-body">The destination endpoint.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">type dst:</th><td class="field-body">hal_py.endpoint</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">True on succes.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+</ol>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.net.data">
+<code class="descname">data</code><a class="headerlink" href="#hal_py.net.data" title="Permalink to this definition">¶</a></dt>
+<dd><p>A dict from ((1) category, (2) key) to ((1) type, (2) value) containing the stored data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">dict[tuple(str,str),tuple(str,str)]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.net.data_keys">
+<code class="descname">data_keys</code><a class="headerlink" href="#hal_py.net.data_keys" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of tuples ((1) category, (2) key) containing all the data keys.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">list[tuple(str,str)]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.net.delete_data">
+<code class="descname">delete_data</code><span class="sig-paren">(</span><em>self: hal_py.data_container</em>, <em>category: str</em>, <em>key: str</em>, <em>log_with_info_level: bool = False</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.net.delete_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deletes custom data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>category</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – Category of key</li>
+<li><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – Data key</li>
+<li><strong>log_with_info_level</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – Force explicit logging channel ‘netlist’ with log level info to trace GUI events (default = false)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True on success.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.net.dsts">
+<code class="descname">dsts</code><a class="headerlink" href="#hal_py.net.dsts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the vector of destinations of the net.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">set[hal_py.net]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.net.get_data_by_key">
+<code class="descname">get_data_by_key</code><span class="sig-paren">(</span><em>self: hal_py.data_container</em>, <em>category: str</em>, <em>key: str</em><span class="sig-paren">)</span> &#x2192; Tuple[str, str]<a class="headerlink" href="#hal_py.net.get_data_by_key" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets data specified by key and category</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>category</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – Category of key</li>
+<li><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – Data key</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The tuple ((1) type, (2) value)</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)">tuple</a>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a>,<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a>)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.net.get_dsts">
+<code class="descname">get_dsts</code><span class="sig-paren">(</span><em>self: hal_py.net, filter: Callable[[hal_py.endpoint], bool] = None</em><span class="sig-paren">)</span> &#x2192; List[hal_py.endpoint]<a class="headerlink" href="#hal_py.net.get_dsts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the vector of destinations of the net.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filter</strong> – a filter for endpoints.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A list of destination endpoints.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)">list</a>[<a class="reference internal" href="endpoint.html#hal_py.endpoint" title="hal_py.endpoint">hal_py.endpoint</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.net.get_id">
+<code class="descname">get_id</code><span class="sig-paren">(</span><em>self: hal_py.net</em><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#hal_py.net.get_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the unique id of the net.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The net’s id.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.net.get_name">
+<code class="descname">get_name</code><span class="sig-paren">(</span><em>self: hal_py.net</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#hal_py.net.get_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the name of the net.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The name.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.net.get_num_of_dsts">
+<code class="descname">get_num_of_dsts</code><span class="sig-paren">(</span><em>self: hal_py.net</em><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#hal_py.net.get_num_of_dsts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the number of destinations.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The number of destinations of this net.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.net.get_src">
+<code class="descname">get_src</code><span class="sig-paren">(</span><em>self: hal_py.net</em><span class="sig-paren">)</span> &#x2192; hal_py.endpoint<a class="headerlink" href="#hal_py.net.get_src" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the src of the net specified by type. If the specifications don’t match the actual source, the gate element of the returned endpoint is None.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>gate_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The desired source gate type.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The source endpoint.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="endpoint.html#hal_py.endpoint" title="hal_py.endpoint">hal_py.endpoint</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.net.id">
+<code class="descname">id</code><a class="headerlink" href="#hal_py.net.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>The unique id of the net.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.net.is_a_dst">
+<code class="descname">is_a_dst</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.net.is_a_dst" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic">
+<li><p class="first">is_a_dst(self: hal_py.net, gate: hal_py.gate) -&gt; bool</p>
+<blockquote>
+<div><p>Check whether a gate’s input pin is a destination of this net.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">param gate:</th><td class="field-body">The destination gate.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">type gate:</th><td class="field-body">hal_py.gate</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">param str pin_type:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The input pin of the gate. Leave empty if the pin does not matter.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">returns:</th><td class="field-body">True if the input’s pin is a destination.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+<li><p class="first">is_a_dst(self: hal_py.net, endpoint: hal_py.endpoint) -&gt; bool</p>
+<blockquote>
+<div><p>Check whether a gate’s input pin is a destination of this net.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">param endpoint:</th><td class="field-body">The input endpoint.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">type endpoint:</th><td class="field-body">hal_py.endpoint</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">True if the input’s pin is a destination.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+</ol>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.net.is_global_input_net">
+<code class="descname">is_global_input_net</code><span class="sig-paren">(</span><em>self: hal_py.net</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.net.is_global_input_net" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks whether this net is a global input net.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the net is a global input net.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.net.is_global_output_net">
+<code class="descname">is_global_output_net</code><span class="sig-paren">(</span><em>self: hal_py.net</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.net.is_global_output_net" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks whether this net is a global output net.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the net is a global output net.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.net.is_unrouted">
+<code class="descname">is_unrouted</code><span class="sig-paren">(</span><em>self: hal_py.net</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.net.is_unrouted" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check whether the net is routed, i.e. it has no source or no destinations.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the net is unrouted.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.net.mark_global_input_net">
+<code class="descname">mark_global_input_net</code><span class="sig-paren">(</span><em>self: hal_py.net</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.net.mark_global_input_net" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mark this net as a global input net.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True on success.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.net.mark_global_output_net">
+<code class="descname">mark_global_output_net</code><span class="sig-paren">(</span><em>self: hal_py.net</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.net.mark_global_output_net" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mark this net as a global output net.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True on success.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.net.name">
+<code class="descname">name</code><a class="headerlink" href="#hal_py.net.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the net.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.net.num_of_dsts">
+<code class="descname">num_of_dsts</code><a class="headerlink" href="#hal_py.net.num_of_dsts" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of destinations of the net.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.net.remove_dst">
+<code class="descname">remove_dst</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.net.remove_dst" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic">
+<li><p class="first">remove_dst(self: hal_py.net, gate: hal_py.gate, pin_type: str) -&gt; bool</p>
+<blockquote>
+<div><p>Remove a destination from this net.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">param gate:</th><td class="field-body">The destination gate.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">type gate:</th><td class="field-body">hal_py.gate</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">param str pin_type:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The input pin of the gate. Leave empty if the pin does not matter.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">returns:</th><td class="field-body">True on succes</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+<li><p class="first">remove_dst(self: hal_py.net, dst: hal_py.endpoint) -&gt; bool</p>
+<blockquote>
+<div><p>Remove a destination from this net.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">param dst:</th><td class="field-body">The destination endpoint.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">type dst:</th><td class="field-body">hal_py.endpoint</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">True on succes.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+</ol>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.net.remove_src">
+<code class="descname">remove_src</code><span class="sig-paren">(</span><em>self: hal_py.net</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.net.remove_src" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes the source of the net.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True on success.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.net.set_data">
+<code class="descname">set_data</code><span class="sig-paren">(</span><em>self: hal_py.data_container</em>, <em>category: str</em>, <em>key: str</em>, <em>value_data_type: str</em>, <em>value: str</em>, <em>log_with_info_level: bool = False</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.net.set_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets a custom data entry
+If it does not exist yet, it is added.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>category</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – Key category</li>
+<li><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – Data key</li>
+<li><strong>data_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – Data type of value</li>
+<li><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – Data value</li>
+<li><strong>log_with_info_level</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – Force explicit logging channel ‘netlist’ with log level info to trace GUI events (default = false)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True on success.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.net.set_name">
+<code class="descname">set_name</code><span class="sig-paren">(</span><em>self: hal_py.net</em>, <em>name: str</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.net.set_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the name of the net.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The new name.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.net.set_src">
+<code class="descname">set_src</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.net.set_src" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic">
+<li><p class="first">set_src(self: hal_py.net, gate: hal_py.gate, pin_type: str) -&gt; bool</p>
+<blockquote>
+<div><p>Sets the source of this net to a gate’s output pin.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param hal_py.gate gate:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The source gate.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param str pin_type:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">THe pin of the source gate.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">True on succes.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+<li><p class="first">set_src(self: hal_py.net, endpoint: hal_py.endpoint) -&gt; bool</p>
+<blockquote>
+<div><p>Sets the source of this net to a gate’s output pin.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param hal_py.endpoint endpoint:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The source endpoint.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">returns:</th><td class="field-body">True on success.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+</ol>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.net.unmark_global_input_net">
+<code class="descname">unmark_global_input_net</code><span class="sig-paren">(</span><em>self: hal_py.net</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.net.unmark_global_input_net" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unmark this net as a global input net.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True on success.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.net.unmark_global_output_net">
+<code class="descname">unmark_global_output_net</code><span class="sig-paren">(</span><em>self: hal_py.net</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.net.unmark_global_output_net" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div>Unmark this net as a global output net.</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True on success.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 
 
@@ -228,7 +817,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'v2.0.0-145-gc1c0926d1',
+            VERSION:'v2.0.0-148-gb7666355a',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
