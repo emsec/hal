@@ -32,7 +32,6 @@ public:
     void update(const u32 module_id);
 
 public Q_SLOTS:
-    void handle_module_removed(std::shared_ptr<module> module);
     void handle_module_name_changed(std::shared_ptr<module> module);
     void handle_submodule_added(std::shared_ptr<module> module, u32 associated_data);
     void handle_submodule_removed(std::shared_ptr<module> module, u32 associated_data);
