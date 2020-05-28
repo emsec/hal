@@ -19,7 +19,7 @@ hdl_parser_verilog::hdl_parser_verilog(std::stringstream& stream) : hdl_parser(s
 // ###########          Parse HDL into intermediate format          ##########
 // ###########################################################################
 
-std::shared_ptr<netlist> hdl_parser_verilog::parse(const std::string& gate_library)
+std::shared_ptr<netlist> hdl_parser_verilog::parse(const std::shared_ptr<gate_library>& gate_library)
 {
     m_netlist = netlist_factory::create_netlist(gate_library);
 

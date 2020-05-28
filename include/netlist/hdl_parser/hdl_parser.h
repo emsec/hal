@@ -34,6 +34,7 @@
 
 /* forward declaration*/
 class netlist;
+class gate_library;
 
 /**
  * @ingroup hdl_parsers
@@ -51,10 +52,10 @@ public:
     /**
      * Parses hdl code for a specific netlist library.
      *
-     * @param[in] gate_library - The gate library name.
+     * @param[in] gate_library - The gate library.
      * @returns The netlist representation of the hdl code or a nullptr on error.
      */
-    virtual std::shared_ptr<netlist> parse(const std::string& gate_library) = 0;
+    virtual std::shared_ptr<netlist> parse(const std::shared_ptr<gate_library>& gate_library) = 0;
 
 protected:
     // stores the netlist

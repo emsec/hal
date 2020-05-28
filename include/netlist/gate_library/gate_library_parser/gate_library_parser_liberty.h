@@ -43,7 +43,7 @@ public:
     /**
      * @param[in] stream - The string stream filled with gate library definition.
      */
-    explicit gate_library_parser_liberty(std::stringstream& stream);
+    explicit gate_library_parser_liberty(const hal::path& file_path, std::stringstream& file_content);
 
     ~gate_library_parser_liberty() = default;
 

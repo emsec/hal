@@ -1,16 +1,13 @@
 #include "netlist/hdl_parser/hdl_parser_dispatcher.h"
 
 #include "core/log.h"
-
-#include "netlist/netlist.h"
-#include "netlist/netlist_factory.h"
-
 #include "netlist/event_system/event_controls.h"
-
 #include "netlist/gate_library/gate_library_manager.h"
 #include "netlist/hdl_parser/hdl_parser.h"
 #include "netlist/hdl_parser/hdl_parser_verilog.h"
 #include "netlist/hdl_parser/hdl_parser_vhdl.h"
+#include "netlist/netlist.h"
+#include "netlist/netlist_factory.h"
 
 namespace hdl_parser_dispatcher
 {
@@ -49,13 +46,22 @@ namespace hdl_parser_dispatcher
             log_info("hdl_parser", "selected parser '{}' by file name extension.", parser_name);
         }
 
-        if (!args.is_option_set("--gate-library") || gate_library_manager::get_gate_library(args.get_parameter("--gate-library")) == nullptr)
+        if (args.is_option_set("--gate-library"))
+        {
+            auto user_lib = gate_library_manager::get_gate_library(args.get_parameter("--gate-library"));
+            if (user_lib == nullptr)
+            {
+                return nullptr;
+            }
+            return parse(user_lib, parser_name, file_name);
+        }
+        else
         {
             log_warning("hdl_parser", "no (valid) gate library specified. trying to auto-detect gate library...");
             gate_library_manager::load_all();
             for (const auto& lib : gate_library_manager::get_gate_libraries())
             {
-                std::shared_ptr<netlist> netlist = parse(lib->get_name(), parser_name, file_name);
+                std::shared_ptr<netlist> netlist = parse(lib, parser_name, file_name);
                 if (netlist != nullptr)
                 {
                     log_info("hdl_parser", "auto-selected '{}' for this netlist.", lib->get_name());
@@ -65,15 +71,13 @@ namespace hdl_parser_dispatcher
             log_error("hdl_parser", "no suitable gate library found!");
             return nullptr;
         }
-        std::string gate_library = args.get_parameter("--gate-library");
-        return parse(gate_library, parser_name, file_name);
     }
 
-    std::shared_ptr<netlist> parse(const std::string& gate_library, const std::string& parser_name, const hal::path& file_name)
+    std::shared_ptr<netlist> parse(const std::shared_ptr<gate_library>& gate_library, const std::string& parser_name, const hal::path& file_name)
     {
         auto begin_time = std::chrono::high_resolution_clock::now();
 
-        log_info("hdl_parser", "parsing '{}' using gate library '{}'...", file_name.string(), gate_library);
+        log_info("hdl_parser", "parsing '{}' using gate library '{}'...", file_name.string(), gate_library->get_name());
 
         std::ifstream ifs;
         ifs.open(file_name.c_str(), std::ifstream::in);
@@ -115,10 +119,5 @@ namespace hdl_parser_dispatcher
                  file_name.string(),
                  (double)std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - begin_time).count() / 1000);
         return g;
-    }
-
-    std::shared_ptr<netlist> parse(const std::string& gate_library, const std::string& parser_name, const std::string& file_name)
-    {
-        return hdl_parser_dispatcher::parse(gate_library, parser_name, hal::path(file_name));
     }
 }    // namespace hdl_parser_dispatcher

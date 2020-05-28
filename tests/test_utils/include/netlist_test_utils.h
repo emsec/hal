@@ -34,10 +34,10 @@ namespace test_utils
     const u32 TOP_MODULE_ID = 1;
 
     // Name for accessing our example gate library
-    static const std::string g_lib_name = "EXAMPLE_GATE_LIBRARY";
+    static const std::string g_lib_name = "EXAMPLE_GATE_LIBRARY.lib";
     //static const std::string g_lib_name = "example_library";
     // Name for accessing the custom gate library after the call of 'create_temp_gate_lib()'
-    const std::string temp_lib_name = "TEMP_GATE_LIBRARY";
+    const std::string temp_lib_name = "TEMP_GATE_LIBRARY.lib";
 
 
     /*********************************************************

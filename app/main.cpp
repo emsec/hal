@@ -245,11 +245,12 @@ int main(int argc, const char* argv[])
 
     if (args.is_option_set("--empty-netlist"))
     {
-        netlist   = netlist_factory::create_netlist(args.get_parameter("--gate-library"));
+        auto lib = gate_library_manager::load_file(args.get_parameter("--gate-library"));
+        netlist  = netlist_factory::create_netlist(lib);
     }
     else
     {
-        netlist   = netlist_factory::load_netlist(args);
+        netlist = netlist_factory::load_netlist(args);
     }
 
     if (netlist == nullptr)

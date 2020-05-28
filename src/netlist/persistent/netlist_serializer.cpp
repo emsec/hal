@@ -1,18 +1,14 @@
 #include "netlist/persistent/netlist_serializer.h"
 
+#include "core/hal_file_manager.h"
+#include "core/log.h"
 #include "netlist/boolean_function.h"
+#include "netlist/event_system/event_controls.h"
 #include "netlist/gate.h"
+#include "netlist/gate_library/gate_library_manager.h"
 #include "netlist/module.h"
 #include "netlist/net.h"
 #include "netlist/netlist.h"
-
-#include "netlist/event_system/event_controls.h"
-
-#include "netlist/gate_library/gate_library_manager.h"
-
-#include "core/hal_file_manager.h"
-#include "core/log.h"
-
 #include "rapidjson/filereadstream.h"
 #include "rapidjson/stringbuffer.h"
 
@@ -36,7 +32,7 @@ namespace netlist_serializer
     // serializing functions
     namespace
     {
-        const int SERIALIZON_FORMAT_VERSION = 6;
+        const int SERIALIZON_FORMAT_VERSION = 7;
 
 #define JSON_STR_HELPER(x) rapidjson::Value{}.SetString(x.c_str(), x.length(), allocator)
         rapidjson::Value serialize(const std::map<std::tuple<std::string, std::string>, std::tuple<std::string, std::string>>& data, rapidjson::Document::AllocatorType& allocator)
@@ -172,7 +168,7 @@ namespace netlist_serializer
             rapidjson::Document::AllocatorType& allocator = document.GetAllocator();
             rapidjson::Value root(rapidjson::kObjectType);
 
-            root.AddMember("gate_library", nl->get_gate_library()->get_name(), allocator);
+            root.AddMember("gate_library", nl->get_gate_library()->get_path().string(), allocator);
             root.AddMember("id", nl->get_id(), allocator);
             root.AddMember("input_file", nl->get_input_filename().string(), allocator);
             root.AddMember("design_name", nl->get_design_name(), allocator);
@@ -532,15 +528,17 @@ namespace netlist_serializer
 
         std::shared_ptr<netlist> netlist = deserialize(document);
 
-        if (!hal_file_manager::deserialize(hal_file, netlist, document))
+        if (netlist)
         {
-            log_info("netlist.persistent", "deserialization failed");
-            return nullptr;
+            if (!hal_file_manager::deserialize(hal_file, netlist, document))
+            {
+                log_info("netlist.persistent", "deserialization failed");
+                return nullptr;
+            }
+            log_info("netlist.persistent", "deserialized '{}' in {:2.2f} seconds", hal_file.string(), DURATION(begin_time));
         }
 
         // event_controls::enable_all(true);
-
-        log_info("netlist.persistent", "deserialized '{}' in {:2.2f} seconds", hal_file.string(), DURATION(begin_time));
         return netlist;
     }
 }    // namespace netlist_serializer

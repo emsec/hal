@@ -16,7 +16,7 @@ hdl_parser_vhdl::hdl_parser_vhdl(std::stringstream& stream) : hdl_parser(stream)
 // ###########          Parse HDL into intermediate format          ##########
 // ###########################################################################
 
-std::shared_ptr<netlist> hdl_parser_vhdl::parse(const std::string& gate_library)
+std::shared_ptr<netlist> hdl_parser_vhdl::parse(const std::shared_ptr<gate_library>& gate_library)
 {
     m_netlist = netlist_factory::create_netlist(gate_library);
     if (m_netlist == nullptr)

@@ -16,18 +16,12 @@
 
 namespace netlist_factory
 {
-    std::shared_ptr<netlist> create_netlist(const std::string& gate_library)
+    std::shared_ptr<netlist> create_netlist(const std::shared_ptr<gate_library>& gate_library)
     {
-        auto lib = gate_library_manager::get_gate_library(gate_library);
-        if (lib == nullptr)
-        {
-            log_critical("netlist", "error loading gate library '{}'.", gate_library);
-            return nullptr;
-        }
-        return std::make_shared<netlist>(lib);
+        return std::make_shared<netlist>(gate_library);
     }
 
-    std::shared_ptr<netlist> load_netlist(const hal::path& hdl_file, const std::string& language, const std::string& gate_library_name)
+    std::shared_ptr<netlist> load_netlist(const hal::path& hdl_file, const std::string& language, const std::string& gate_library_file)
     {
         if (access(hdl_file.c_str(), F_OK | R_OK) == -1)
         {
@@ -35,7 +29,9 @@ namespace netlist_factory
             return nullptr;
         }
 
-        std::shared_ptr<netlist> nl = hdl_parser_dispatcher::parse(gate_library_name, language, hdl_file);
+        auto lib = gate_library_manager::load_file(gate_library_file);
+
+        std::shared_ptr<netlist> nl = hdl_parser_dispatcher::parse(lib, language, hdl_file);
 
         return nl;
     }
