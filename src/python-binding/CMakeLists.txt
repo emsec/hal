@@ -1,6 +1,7 @@
 file(GLOB_RECURSE PYTHON_BINDING_LIB_source ${CMAKE_SOURCE_DIR}/src/python-binding/python_definitions.cpp)
+file(GLOB_RECURSE PYTHON_BINDING_LIB_bind_files ${CMAKE_SOURCE_DIR}/src/python-binding/bindings/*.cpp)
 
-add_library(py SHARED ${PYTHON_BINDING_LIB_source})
+add_library(py SHARED ${PYTHON_BINDING_LIB_source} ${PYTHON_BINDING_LIB_bind_files})
 set_target_properties(py PROPERTIES OUTPUT_NAME "hal_py")
 add_library(hal::py ALIAS py)
 target_include_directories(py
@@ -9,6 +10,8 @@ target_include_directories(py
                            $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}>
                            $<BUILD_INTERFACE:${PYTHON_INCLUDE_DIRS}>
                            $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+                           PRIVATE
+                           $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src/python-binding/bindings>
                            )
 target_compile_options(py
                        PUBLIC ${COMPILE_OPTIONS_PUBLIC}
