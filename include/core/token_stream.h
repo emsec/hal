@@ -33,6 +33,7 @@
  * @ingroup core
  */
 
+template<typename T>
 struct CORE_API token
 {
     /**
@@ -41,23 +42,24 @@ struct CORE_API token
      *
      * @param[in] n - the line number
      * @param[in] s - the string
-     * @param[in] cs - if true, string comparisons are case sensitive
      */
-    token(u32 n, const std::string s, bool cs = true);
+    token(u32 n, const T s) : number(n), string(s)
+    {
+    }
 
     // the line number
     u32 number;
 
     // the contained string
-    std::string string;
-
-    // if true, string comparisons are case sensitive
-    bool case_sensitive;
+    T string;
 
     /*
      * A token is implicitly cast to string if possible.
      */
-    operator std::string() const;
+    operator T() const
+    {
+        return string;
+    }
 
     /**
      * Assigns a new string to this token.
@@ -65,7 +67,11 @@ struct CORE_API token
      * @param[in] s - the new string
      * @returns A reference to this token.
      */
-    token& operator=(const std::string& s);
+    token<T>& operator=(const T& s)
+    {
+        this->string = s;
+        return *this;
+    }
 
     /**
      * Extends the string in this token.
@@ -73,7 +79,11 @@ struct CORE_API token
      * @param[in] s - the string to add
      * @returns A reference to this token.
      */
-    token& operator+=(const std::string& s);
+    token<T>& operator+=(const T& s)
+    {
+        this->string += s;
+        return *this;
+    }
 
     /**
      * Checks if the string in this token is equal to another string.
@@ -82,7 +92,10 @@ struct CORE_API token
      * @param[in] s - the string to check against
      * @returns True if both strings are equal.
      */
-    bool operator==(const std::string& s) const;
+    bool operator==(const T& s) const
+    {
+        return string == s;
+    }
 
     /**
      * Checks if the string in this token is unequal to another string.
@@ -91,15 +104,19 @@ struct CORE_API token
      * @param[in] s - the string to check against
      * @returns True if both strings are not equal.
      */
-    bool operator!=(const std::string& s) const;
+    bool operator!=(const T& s) const
+    {
+        return !(*this == s);
+    }
 };
 
+template<typename T>
 class NETLIST_API token_stream
 {
 public:
     struct token_stream_exception
     {
-        std::string message;
+        T message;
         u32 line_number;
     };
 
@@ -115,7 +132,12 @@ public:
      * @param[in] decrease_level_tokens - the tokens that mark the start of a new level, i.e., increase the level.
      * @param[in] increase_level_tokens - the tokens that mark the end of a level, i.e., decrease the level.
      */
-    token_stream(const std::vector<std::string>& increase_level_tokens = {"("}, const std::vector<std::string>& decrease_level_tokens = {")"});
+    token_stream(const std::vector<T>& increase_level_tokens = {"("}, const std::vector<T>& decrease_level_tokens = {")"})
+    {
+        m_pos                   = 0;
+        m_increase_level_tokens = increase_level_tokens;
+        m_decrease_level_tokens = decrease_level_tokens;
+    }
 
     /**
      * Initialization constructor.
@@ -127,14 +149,24 @@ public:
      * @param[in] decrease_level_tokens - the tokens that mark the start of a new level, i.e., increase the level.
      * @param[in] increase_level_tokens - the tokens that mark the end of a level, i.e., decrease the level.
      */
-    token_stream(const std::vector<token>& init, const std::vector<std::string>& increase_level_tokens = {"("}, const std::vector<std::string>& decrease_level_tokens = {")"});
+    token_stream(const std::vector<token<T>>& init, const std::vector<T>& increase_level_tokens = {"("}, const std::vector<T>& decrease_level_tokens = {")"})
+        : token_stream(increase_level_tokens, decrease_level_tokens)
+    {
+        m_data = init;
+    }
 
     /**
      * Copy constructor.
      *
      * @param[in] other - the token stream to copy
      */
-    token_stream(const token_stream& other);
+    token_stream(const token_stream& other)
+    {
+        m_pos                   = other.m_pos;
+        m_data                  = other.m_data;
+        m_increase_level_tokens = other.m_increase_level_tokens;
+        m_decrease_level_tokens = other.m_decrease_level_tokens;
+    }
 
     /**
      * Consume the next token(s) in the stream.
@@ -145,7 +177,11 @@ public:
      * @param[in] num - the amount of tokens to consume
      * @returns The last consumed token.
      */
-    token consume(u32 num = 1);
+    token<T> consume(u32 num = 1)
+    {
+        m_pos += num;
+        return at(m_pos - 1);
+    }
 
     /**
      * Consume the next token in the stream *if* it matches the given expected value.
@@ -155,7 +191,29 @@ public:
      * @param[in] throw_on_error - if true, throws an token_stream_exception instead of returning false
      * @returns True, if the next token matches the expected string, false otherwise or if no more tokens are available.
      */
-    bool consume(const std::string& expected, bool throw_on_error = false);
+    bool consume(const T& expected, bool throw_on_error = false)
+    {
+        if (m_pos >= size())
+        {
+            if (throw_on_error)
+            {
+                throw token_stream_exception({"expected token '" + expected + "' but reached the end of the stream", get_current_line_number()});
+            }
+            return false;
+        }
+
+        if (at(m_pos) != expected)
+        {
+            if (throw_on_error)
+            {
+                throw token_stream_exception({"expected token '" + expected + "' but got '" + at(m_pos).string + "'", get_current_line_number()});
+            }
+            return false;
+        }
+
+        m_pos++;
+        return true;
+    }
 
     /**
      * Consume the next tokens in the stream until a token matches a given string.
@@ -169,7 +227,16 @@ public:
      * @param[in] throw_on_error - if true, throws an token_stream_exception instead of returning false
      * @returns The last consumed token.
      */
-    token consume_until(const std::string& match, u32 end = END_OF_STREAM, bool level_aware = true, bool throw_on_error = false);
+    token<T> consume_until(const T& match, u32 end = END_OF_STREAM, bool level_aware = true, bool throw_on_error = false)
+    {
+        auto found = find_next(match, end, level_aware);
+        if (found > size() && throw_on_error)
+        {
+            throw token_stream_exception({"match token '" + match + "' not found", get_current_line_number()});
+        }
+        m_pos = std::min(size(), found);
+        return at(m_pos - 1);
+    }
 
     /**
      * Consume the next tokens in the stream until a token matches the given string.
@@ -184,7 +251,19 @@ public:
      * @param[in] throw_on_error - if true, throws an token_stream_exception instead of returning false
      * @returns All consumed tokens in a new token stream.
      */
-    token_stream extract_until(const std::string& match, u32 end = END_OF_STREAM, bool level_aware = true, bool throw_on_error = false);
+    token_stream<T> extract_until(const T& match, u32 end = END_OF_STREAM, bool level_aware = true, bool throw_on_error = false)
+    {
+        auto found = find_next(match, end, level_aware);
+        if (found > size() && throw_on_error)
+        {
+            throw token_stream_exception({"match token '" + match + "' not found", get_current_line_number()});
+        }
+        auto end_pos = std::min(size(), found);
+        token_stream res(m_increase_level_tokens, m_decrease_level_tokens);
+        res.m_data.insert(res.m_data.begin(), m_data.begin() + m_pos, m_data.begin() + end_pos);
+        m_pos = end_pos;
+        return res;
+    }
 
     /**
      * Consume the next tokens in the stream until a token matches the given string.
@@ -201,7 +280,26 @@ public:
      * @param[in] throw_on_error - if true, throws an token_stream_exception instead of returning false
      * @returns The joined token.
      */
-    token join_until(const std::string& match, const std::string& joiner, u32 end = END_OF_STREAM, bool level_aware = true, bool throw_on_error = false);
+    token<T> join_until(const T& match, const T& joiner, u32 end = END_OF_STREAM, bool level_aware = true, bool throw_on_error = false)
+    {
+        u32 start_line = get_current_line_number();
+        auto found     = find_next(match, end, level_aware);
+        if (found > size() && throw_on_error)
+        {
+            throw token_stream_exception({"match token '" + match + "' not found", start_line});
+        }
+        auto end_pos = std::min(size(), found);
+        T result;
+        while (m_pos < end_pos && remaining() > 0)
+        {
+            if (!result.empty())
+            {
+                result += joiner;
+            }
+            result += consume();
+        }
+        return {start_line, result};
+    }
 
     /**
      * Consume all remaining tokens in the stream.
@@ -211,7 +309,20 @@ public:
      * @param[in] joiner - the string used to join consumed tokens.
      * @returns The joined token.
      */
-    token join(const std::string& joiner);
+    token<T> join(const T& joiner)
+    {
+        u32 start_line = get_current_line_number();
+        T result;
+        while (remaining() > 0)
+        {
+            if (!result.empty())
+            {
+                result += joiner;
+            }
+            result += consume();
+        }
+        return {start_line, result};
+    }
 
     /**
      * Return a token at a *relative* position in the stream.
@@ -223,11 +334,18 @@ public:
      * @param[in] offset - the relative offset from the current position in the stream
      * @returns The token at the queried position.
      */
-    token& peek(i32 offset = 0);
+    token<T>& peek(i32 offset = 0)
+    {
+        return at(m_pos + offset);
+    }
+
     /**
      * @copydoc peek(i32)
      */
-    const token& peek(i32 offset = 0) const;
+    const token<T>& peek(i32 offset = 0) const
+    {
+        return at(m_pos + offset);
+    }
 
     /**
      * Return a token at an *absolute* position in the stream.
@@ -239,11 +357,26 @@ public:
      * @param[in] position - the absolute position in the stream
      * @returns The token at the queried position.
      */
-    token& at(u32 position);
+    token<T>& at(u32 position)
+    {
+        if (position > m_data.size())
+        {
+            throw token_stream_exception({"reached the end of the stream", get_current_line_number()});
+        }
+        return m_data[position];
+    }
+
     /**
      * @copydoc at(i32)
      */
-    const token& at(u32 position) const;
+    const token<T>& at(u32 position) const
+    {
+        if (position > m_data.size())
+        {
+            throw token_stream_exception({"reached the end of the stream", get_current_line_number()});
+        }
+        return m_data[position];
+    }
 
     /**
      * Get the *absolute* position in the stream of the next matching token.
@@ -255,47 +388,95 @@ public:
      * @param[in] level_aware - if false, tokens are also matched if they are not at the top-level.
      * @returns The token at the queried position, or END_OF_STREAM if not found.
      */
-    u32 find_next(const std::string& match, u32 end = END_OF_STREAM, bool level_aware = true) const;
+    u32 find_next(const T& match, u32 end = END_OF_STREAM, bool level_aware = true) const
+    {
+        u32 level = 0;
+        for (u32 i = m_pos; i < size() && i < end; ++i)
+        {
+            const auto& token = at(i);
+            if ((!level_aware || level == 0) && token == match)
+            {
+                return i;
+            }
+            else if (level_aware && std::find_if(m_increase_level_tokens.begin(), m_increase_level_tokens.end(), [&token](const auto& x) { return token == x; }) != m_increase_level_tokens.end())
+            {
+                level++;
+            }
+            else if (level_aware && level > 0
+                     && std::find_if(m_decrease_level_tokens.begin(), m_decrease_level_tokens.end(), [&token](const auto& x) { return token == x; }) != m_decrease_level_tokens.end())
+            {
+                level--;
+            }
+        }
+        return end;
+    }
 
     /**
      * Get the total number of elements in the token stream, regardless of how many have been consumed.
      *
      * @returns The total size of the token stream.
      */
-    u32 size() const;
+    u32 size() const
+    {
+        return m_data.size();
+    }
 
     /**
      * Get the total number of consumed elements in the token stream.
      *
      * @returns The total number of consumed tokens.
      */
-    u32 consumed() const;
+    u32 consumed() const
+    {
+        return m_pos;
+    }
 
     /**
      * Get the total number of remaining elements in the token stream.
      *
      * @returns The number of remaining tokens.
      */
-    u32 remaining() const;
+    u32 remaining() const
+    {
+        return size() - consumed();
+    }
 
     /**
      * Get the current absolute position in the token stream.
      *
      * @returns The current position.
      */
-    u32 position() const;
+    u32 position() const
+    {
+        return m_pos;
+    }
 
     /**
      * Set the current absolute position in the token stream.
      *
      * @param[in] p - the new position
      */
-    void set_position(u32 p);
+    void set_position(u32 p)
+    {
+        m_pos = p;
+    }
 
 private:
-    u32 get_current_line_number() const;
-    std::vector<std::string> m_increase_level_tokens;
-    std::vector<std::string> m_decrease_level_tokens;
-    std::vector<token> m_data;
+    std::vector<T> m_increase_level_tokens;
+    std::vector<T> m_decrease_level_tokens;
+    std::vector<token<T>> m_data;
     u32 m_pos;
+
+    u32 get_current_line_number() const
+    {
+        if (m_pos < m_data.size())
+        {
+            return m_data[m_pos].number;
+        }
+        else if (!m_data.empty())
+        {
+            return m_data.back().number;
+        }
+        return END_OF_STREAM;
+    }
 };

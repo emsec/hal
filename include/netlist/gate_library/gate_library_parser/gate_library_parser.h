@@ -25,6 +25,7 @@
 
 #include "def.h"
 #include "netlist/gate_library/gate_library.h"
+#include "netlist/gate_library/gate_type/gate_type.h"
 
 #include <sstream>
 

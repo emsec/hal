@@ -1,29 +1,22 @@
 #include "netlist/gate_library/gate_type/gate_type_lut.h"
 
+#include "core/log.h"
+
 gate_type_lut::gate_type_lut(const std::string& name) : gate_type(name)
 {
     m_base_type = base_type::lut;
     m_ascending = true;
 }
 
-bool gate_type_lut::do_compare(const gate_type& other) const
+void gate_type_lut::add_output_from_init_string_pin(const std::string& pin_name)
 {
-    bool equal              = false;
-    const gate_type_lut* gt = dynamic_cast<const gate_type_lut*>(&other);
-
-    if (gt)
+    if (const auto& it = std::find(m_input_pins.begin(), m_input_pins.end(), pin_name); it != m_input_pins.end())
     {
-        equal = m_config_data_category == gt->get_config_data_category();
-        equal &= m_config_data_identifier == gt->get_config_data_identifier();
-        equal &= m_ascending == gt->is_config_data_ascending_order();
+        log_warning("gate_type", "pin '{}' of gate type '{}' is not an output pin, ignoring output from INIT string pin assignment", pin_name, m_name);
+        return;
     }
 
-    return equal;
-}
-
-void gate_type_lut::add_output_from_init_string_pin(const std::string& output_pin_name)
-{
-    m_output_from_init_string_pins.insert(output_pin_name);
+    m_output_from_init_string_pins.insert(pin_name);
 }
 
 void gate_type_lut::set_config_data_category(const std::string& category)

@@ -10,8 +10,8 @@ add_executable(runTest-data_container
         data_container.cpp)
 add_executable(runTest-endpoint
         endpoint.cpp)
-add_executable(runTest-netlist_internal_manager
-        netlist_internal_manager.cpp)
+#add_executable(runTest-netlist_internal_manager
+#        netlist_internal_manager.cpp)
 add_executable(runTest-module
         module.cpp)
 add_executable(runTest-netlist_factory
@@ -33,7 +33,7 @@ target_link_libraries(runTest-gate    pthread gtest gtest_main hal::core hal::ne
 target_link_libraries(runTest-net    pthread gtest gtest_main hal::core hal::netlist test_utils)
 target_link_libraries(runTest-data_container    pthread gtest gtest_main hal::core hal::netlist test_utils)
 target_link_libraries(runTest-endpoint   pthread gtest gtest_main hal::core hal::netlist test_utils)
-target_link_libraries(runTest-netlist_internal_manager   pthread gtest gtest_main hal::core hal::netlist test_utils)
+#target_link_libraries(runTest-netlist_internal_manager   pthread gtest gtest_main hal::core hal::netlist test_utils)
 target_link_libraries(runTest-module   pthread gtest gtest_main hal::core hal::netlist test_utils)
 target_link_libraries(runTest-netlist_factory   pthread gtest gtest_main hal::core hal::netlist test_utils)
 target_link_libraries(runTest-gate_library_manager   pthread gtest gtest_main hal::core hal::netlist test_utils)
@@ -47,7 +47,7 @@ add_test(runTest-gate ${CMAKE_BINARY_DIR}/bin/runTest-gate --gtest_output=xml:${
 add_test(runTest-net ${CMAKE_BINARY_DIR}/bin/runTest-net --gtest_output=xml:${CMAKE_BINARY_DIR}/gtestresults-runBasicTests.xml)
 add_test(runTest-data_container ${CMAKE_BINARY_DIR}/bin/runTest-data_container --gtest_output=xml:${CMAKE_BINARY_DIR}/gtestresults-runBasicTests.xml)
 add_test(runTest-endpoint ${CMAKE_BINARY_DIR}/bin/runTest-endpoint --gtest_output=xml:${CMAKE_BINARY_DIR}/gtestresults-runBasicTests.xml)
-add_test(runTest-netlist_internal_manager ${CMAKE_BINARY_DIR}/bin/runTest-netlist_internal_manager --gtest_output=xml:${CMAKE_BINARY_DIR}/gtestresults-runBasicTests.xml)
+#add_test(runTest-netlist_internal_manager ${CMAKE_BINARY_DIR}/bin/runTest-netlist_internal_manager --gtest_output=xml:${CMAKE_BINARY_DIR}/gtestresults-runBasicTests.xml)
 add_test(runTest-module ${CMAKE_BINARY_DIR}/bin/runTest-module --gtest_output=xml:${CMAKE_BINARY_DIR}/gtestresults-runBasicTests.xml)
 add_test(runTest-netlist_factory ${CMAKE_BINARY_DIR}/bin/runTest-netlist_factory --gtest_output=xml:${CMAKE_BINARY_DIR}/gtestresults-runBasicTests.xml)
 add_test(runTest-gate_library_manager ${CMAKE_BINARY_DIR}/bin/runTest-gate_library_manager --gtest_output=xml:${CMAKE_BINARY_DIR}/gtestresults-runBasicTests.xml)

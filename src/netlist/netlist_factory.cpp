@@ -1,14 +1,12 @@
 #include "netlist/netlist_factory.h"
 
 #include "core/log.h"
-
 #include "core/program_arguments.h"
-#include "netlist/hdl_parser/hdl_parser_dispatcher.h"
+#include "netlist/event_system/event_controls.h"
 #include "netlist/gate_library/gate_library_manager.h"
+#include "netlist/hdl_parser/hdl_parser_dispatcher.h"
 #include "netlist/netlist.h"
 #include "netlist/persistent/netlist_serializer.h"
-
-#include "netlist/event_system/event_controls.h"
 
 #include <fstream>
 #include <iostream>

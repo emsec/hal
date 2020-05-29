@@ -17,8 +17,6 @@ class netlist_test : public ::testing::Test
 protected:
     virtual void SetUp()
     {
-        NO_COUT_BLOCK;
-        gate_library_manager::load_all();
     }
 
     virtual void TearDown()
@@ -143,9 +141,9 @@ TEST_F(netlist_test, check_get_unique_gate_id)
     TEST_START
         // Create an empty netlist with some gates
         std::shared_ptr<netlist> nl = create_empty_netlist();
-        std::shared_ptr<gate> g_0   = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("INV"), "gate_0");
-        std::shared_ptr<gate> g_1   = nl->create_gate(MIN_GATE_ID+1, get_gate_type_by_name("INV"), "gate_1");
-        std::shared_ptr<gate> g_2   = nl->create_gate(MIN_GATE_ID+3, get_gate_type_by_name("INV"), "gate_2");
+        std::shared_ptr<gate> g_0   = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("gate_1_to_1"), "gate_0");
+        std::shared_ptr<gate> g_1   = nl->create_gate(MIN_GATE_ID+1, get_gate_type_by_name("gate_1_to_1"), "gate_1");
+        std::shared_ptr<gate> g_2   = nl->create_gate(MIN_GATE_ID+3, get_gate_type_by_name("gate_1_to_1"), "gate_2");
         std::set<u32> used_ids = {MIN_GATE_ID+0,MIN_GATE_ID+1,MIN_GATE_ID+3};
 
         // Get a unique id
@@ -154,7 +152,7 @@ TEST_F(netlist_test, check_get_unique_gate_id)
         EXPECT_NE(unique_id, INVALID_GATE_ID);
 
         // Insert the unique id gate and get a new unique id
-        std::shared_ptr<gate> g_new   = nl->create_gate(unique_id, get_gate_type_by_name("INV"), "gate_2");
+        std::shared_ptr<gate> g_new   = nl->create_gate(unique_id, get_gate_type_by_name("gate_1_to_1"), "gate_2");
         used_ids.insert(unique_id);
 
         unique_id = nl->get_unique_gate_id();
@@ -182,10 +180,10 @@ TEST_F(netlist_test, check_get_num_of_gates)
     TEST_START
         // Create an empty netlist with 4 gates
         std::shared_ptr<netlist> nl = create_empty_netlist();
-        std::shared_ptr<gate> g_0   = nl->create_gate(nl->get_unique_gate_id(), get_gate_type_by_name("INV"), "gate_0");
-        std::shared_ptr<gate> g_1   = nl->create_gate(nl->get_unique_gate_id(), get_gate_type_by_name("INV"), "gate_1");
-        std::shared_ptr<gate> g_2   = nl->create_gate(nl->get_unique_gate_id(), get_gate_type_by_name("INV"), "gate_2");
-        std::shared_ptr<gate> g_3   = nl->create_gate(nl->get_unique_gate_id(), get_gate_type_by_name("INV"), "gate_4");
+        std::shared_ptr<gate> g_0   = nl->create_gate(nl->get_unique_gate_id(), get_gate_type_by_name("gate_1_to_1"), "gate_0");
+        std::shared_ptr<gate> g_1   = nl->create_gate(nl->get_unique_gate_id(), get_gate_type_by_name("gate_1_to_1"), "gate_1");
+        std::shared_ptr<gate> g_2   = nl->create_gate(nl->get_unique_gate_id(), get_gate_type_by_name("gate_1_to_1"), "gate_2");
+        std::shared_ptr<gate> g_3   = nl->create_gate(nl->get_unique_gate_id(), get_gate_type_by_name("gate_1_to_1"), "gate_4");
 
         EXPECT_EQ(nl->get_gates().size(), (size_t)4);
 
@@ -202,15 +200,15 @@ TEST_F(netlist_test, check_add_gate){
         {
             // Add a gate the normal way
             std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::shared_ptr<gate> g_0 = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("INV"), "gate_0");
+            std::shared_ptr<gate> g_0 = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("gate_1_to_1"), "gate_0");
             EXPECT_TRUE(nl->is_gate_in_netlist(g_0));
         }
         {
             // Add a gate, remove it afterwards and add it again (used to test the free_ids logic)
             std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::shared_ptr<gate> g_0 = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("INV"), "gate_0");
+            std::shared_ptr<gate> g_0 = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("gate_1_to_1"), "gate_0");
             nl->delete_gate(g_0);
-            std::shared_ptr<gate> g_new = nl->create_gate(get_gate_type_by_name("INV"), "gate_0");
+            std::shared_ptr<gate> g_new = nl->create_gate(get_gate_type_by_name("gate_1_to_1"), "gate_0");
             EXPECT_TRUE(nl->is_gate_in_netlist(g_new));
         }
         // NEGATIVE
@@ -218,8 +216,8 @@ TEST_F(netlist_test, check_add_gate){
             // Try to add the same gate twice
             NO_COUT_TEST_BLOCK;
             std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::shared_ptr<gate> g_0   = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("INV"), "gate_0");
-            std::shared_ptr<gate> g_1   = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("INV"), "gate_0");
+            std::shared_ptr<gate> g_0   = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("gate_1_to_1"), "gate_0");
+            std::shared_ptr<gate> g_1   = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("gate_1_to_1"), "gate_0");
             EXPECT_NE(g_0, nullptr);
             EXPECT_EQ(g_1, nullptr);
         }
@@ -227,22 +225,22 @@ TEST_F(netlist_test, check_add_gate){
             // Try to add two gates with the same id
             NO_COUT_TEST_BLOCK;
             std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::shared_ptr<gate> g_0 = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("INV"), "gate_0");
-            std::shared_ptr<gate> g_0_other = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("INV"), "gate_0_other");
+            std::shared_ptr<gate> g_0 = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("gate_1_to_1"), "gate_0");
+            std::shared_ptr<gate> g_0_other = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("gate_1_to_1"), "gate_0_other");
             EXPECT_EQ(g_0_other, nullptr);
         }
         {
             // Try to add a gate with an invalid id
             NO_COUT_TEST_BLOCK;
             std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::shared_ptr<gate> g_invalid   = nl->create_gate(INVALID_GATE_ID, get_gate_type_by_name("INV"), "gate_0");
+            std::shared_ptr<gate> g_invalid   = nl->create_gate(INVALID_GATE_ID, get_gate_type_by_name("gate_1_to_1"), "gate_0");
             EXPECT_EQ(g_invalid, nullptr);
         }
         {
             // Try to add a gate with an invalid name (empty string)
             NO_COUT_TEST_BLOCK;
             std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::shared_ptr<gate> g_0   = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("INV"), "");
+            std::shared_ptr<gate> g_0   = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("gate_1_to_1"), "");
             EXPECT_EQ(g_0, nullptr);
         }
     TEST_END
@@ -259,7 +257,7 @@ TEST_F(netlist_test, check_delete_gate){
         {
             // Add and delete an unconnected gate in a normal way
             std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::shared_ptr<gate> g_0 = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("INV"), "gate_0");
+            std::shared_ptr<gate> g_0 = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("gate_1_to_1"), "gate_0");
             bool suc                  = nl->delete_gate(g_0);
             EXPECT_TRUE(suc);
             EXPECT_FALSE(nl->is_gate_in_netlist(g_0));
@@ -272,14 +270,14 @@ TEST_F(netlist_test, check_delete_gate){
             bool suc                     = nl->delete_gate(gate_0);
             EXPECT_TRUE(suc);
             NO_COUT_TEST_BLOCK;
-            EXPECT_FALSE(nl->get_net_by_id(MIN_NET_ID+30)->is_a_destination(gate_0, "I0"));
-            EXPECT_FALSE(nl->get_net_by_id(MIN_NET_ID+20)->is_a_destination(gate_0, "I1"));
-            EXPECT_EQ(nl->get_net_by_id(MIN_NET_ID+045)->get_source(), endpoint(nullptr, "", false));
+            EXPECT_FALSE(nl->get_net_by_id(MIN_NET_ID+30)->is_a_destination(get_endpoint(gate_0, "I0")));
+            EXPECT_FALSE(nl->get_net_by_id(MIN_NET_ID+20)->is_a_destination(get_endpoint(gate_0, "I1")));
+            EXPECT_EQ(nl->get_net_by_id(MIN_NET_ID+045)->get_source(), get_endpoint(nullptr, ""));
         }
         {
             // Add and delete global_gnd gate
             std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::shared_ptr<gate> g_0   = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("GND"), "gate_0");
+            std::shared_ptr<gate> g_0   = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("gnd"), "gate_0");
             nl->mark_gnd_gate(g_0);
             bool suc = nl->delete_gate(g_0);
             EXPECT_TRUE(suc);
@@ -289,7 +287,7 @@ TEST_F(netlist_test, check_delete_gate){
         {
             // Add and delete global_vcc gate
             std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::shared_ptr<gate> g_0   = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("VCC"), "gate_0");
+            std::shared_ptr<gate> g_0   = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("vcc"), "gate_0");
             nl->mark_vcc_gate(g_0);
             bool suc = nl->delete_gate(g_0);
             EXPECT_TRUE(suc);
@@ -308,7 +306,7 @@ TEST_F(netlist_test, check_delete_gate){
             // Try to delete a gate which is not part of the netlist
             NO_COUT_TEST_BLOCK;
             std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::shared_ptr<gate> g_0   = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("INV"), "gate_0");
+            std::shared_ptr<gate> g_0   = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("gate_1_to_1"), "gate_0");
             bool suc                    = nl->delete_gate(g_0);
             EXPECT_TRUE(suc);
         }
@@ -326,13 +324,13 @@ TEST_F(netlist_test, check_is_gate_in_netlist){
         {
             // Gate is part of the netlist
             std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::shared_ptr<gate> g_0 = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("INV"), "gate_0");
+            std::shared_ptr<gate> g_0 = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("gate_1_to_1"), "gate_0");
             EXPECT_TRUE(nl->is_gate_in_netlist(g_0));
         }
         {
             // Gate is not part of the netlist
             std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::shared_ptr<gate> g_0   = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("INV"), "gate_0");
+            std::shared_ptr<gate> g_0   = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("gate_1_to_1"), "gate_0");
             nl->delete_gate(g_0);
             // Gate isn't added
             EXPECT_FALSE(nl->is_gate_in_netlist(g_0));
@@ -356,7 +354,7 @@ TEST_F(netlist_test, check_get_gate_by_id){
         {
             // Get (existing) gate with id 3
             std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::shared_ptr<gate> g_0 = nl->create_gate(MIN_GATE_ID+3, get_gate_type_by_name("INV"), "gate_0");
+            std::shared_ptr<gate> g_0 = nl->create_gate(MIN_GATE_ID+3, get_gate_type_by_name("gate_1_to_1"), "gate_0");
             EXPECT_EQ(nl->get_gate_by_id(MIN_GATE_ID+3), g_0);
         }
         {
@@ -420,8 +418,8 @@ TEST_F(netlist_test, check_get_gates){
             // The expected result
             std::set<std::shared_ptr<gate>> ex_gates = {nl->get_gate_by_id(MIN_GATE_ID+3), nl->get_gate_by_id(MIN_GATE_ID+4)};
 
-            EXPECT_EQ(nl->get_gates(gate_type_filter("INV")), ex_gates);
-            EXPECT_EQ(nl->get_gates(gate_type_filter("INV")), ex_gates);
+            EXPECT_EQ(nl->get_gates(gate_type_filter("gate_1_to_1")), ex_gates);
+            EXPECT_EQ(nl->get_gates(gate_type_filter("gate_1_to_1")), ex_gates);
         }
     TEST_END
 }
@@ -440,7 +438,7 @@ TEST_F(netlist_test, check_mark_vcc_gate){
             // Add a global vcc gate which wasn't added to the netlist before and unmark it after
             std::shared_ptr<netlist> nl = create_empty_netlist();
 
-            std::shared_ptr<gate> vcc_gate = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("VCC"), "gate_vcc");
+            std::shared_ptr<gate> vcc_gate = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("vcc"), "gate_vcc");
             bool suc_mark                       = nl->mark_vcc_gate(vcc_gate);
             EXPECT_TRUE(suc_mark);
             EXPECT_TRUE(nl->is_vcc_gate(vcc_gate));
@@ -455,7 +453,7 @@ TEST_F(netlist_test, check_mark_vcc_gate){
             // Add a global gnd gate which which wasn't added to the netlist before and unmark it after
             std::shared_ptr<netlist> nl = create_empty_netlist();
 
-            std::shared_ptr<gate> gnd_gate = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("GND"), "gate_gnd");
+            std::shared_ptr<gate> gnd_gate = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("gnd"), "gate_gnd");
             bool suc_mark                       = nl->mark_gnd_gate(gnd_gate);
             EXPECT_TRUE(suc_mark);
             EXPECT_TRUE(nl->is_gnd_gate(gnd_gate));
@@ -469,7 +467,7 @@ TEST_F(netlist_test, check_mark_vcc_gate){
             // Add the same global vcc gate twice
             std::shared_ptr<netlist> nl = create_empty_netlist();
 
-            std::shared_ptr<gate> vcc_gate = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("VCC"), "gate_vcc");
+            std::shared_ptr<gate> vcc_gate = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("vcc"), "gate_vcc");
             nl->mark_vcc_gate(vcc_gate);
             bool suc = nl->mark_vcc_gate(vcc_gate);
             EXPECT_TRUE(suc);
@@ -480,7 +478,7 @@ TEST_F(netlist_test, check_mark_vcc_gate){
             // Add the same global gnd gate twice
             std::shared_ptr<netlist> nl = create_empty_netlist();
 
-            std::shared_ptr<gate> gnd_gate = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("GND"), "gate_gnd");
+            std::shared_ptr<gate> gnd_gate = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("gnd"), "gate_gnd");
             nl->mark_gnd_gate(gnd_gate);
             bool suc = nl->mark_gnd_gate(gnd_gate);
             EXPECT_TRUE(suc);
@@ -494,7 +492,7 @@ TEST_F(netlist_test, check_mark_vcc_gate){
             NO_COUT_TEST_BLOCK;
             std::shared_ptr<netlist> nl = create_empty_netlist();
             std::shared_ptr<netlist> nl_other = create_empty_netlist();
-            std::shared_ptr<gate> gnd_gate  = nl_other->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("GND"), "gate_0");
+            std::shared_ptr<gate> gnd_gate  = nl_other->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("gnd"), "gate_0");
 
             bool suc = nl->mark_gnd_gate(gnd_gate);
 
@@ -505,7 +503,7 @@ TEST_F(netlist_test, check_mark_vcc_gate){
             NO_COUT_TEST_BLOCK;
             std::shared_ptr<netlist> nl = create_empty_netlist();
             std::shared_ptr<netlist> nl_other = create_empty_netlist();
-            std::shared_ptr<gate> vcc_gate  = nl_other->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("VCC"), "gate_0");
+            std::shared_ptr<gate> vcc_gate  = nl_other->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("vcc"), "gate_0");
 
             bool suc = nl->mark_vcc_gate(vcc_gate);
 
@@ -516,7 +514,7 @@ TEST_F(netlist_test, check_mark_vcc_gate){
             NO_COUT_TEST_BLOCK;
             std::shared_ptr<netlist> nl = create_empty_netlist();
             std::shared_ptr<netlist> nl_other = create_empty_netlist();
-            std::shared_ptr<gate> gnd_gate  = nl_other->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("GND"), "gate_0");
+            std::shared_ptr<gate> gnd_gate  = nl_other->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("gnd"), "gate_0");
             nl_other->mark_gnd_gate(gnd_gate);
 
             nl->unmark_gnd_gate(gnd_gate);
@@ -528,7 +526,7 @@ TEST_F(netlist_test, check_mark_vcc_gate){
             NO_COUT_TEST_BLOCK;
             std::shared_ptr<netlist> nl = create_empty_netlist();
             std::shared_ptr<netlist> nl_other = create_empty_netlist();
-            std::shared_ptr<gate> vcc_gate  = nl_other->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("VCC"), "gate_0");
+            std::shared_ptr<gate> vcc_gate  = nl_other->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("vcc"), "gate_0");
             nl_other->mark_vcc_gate(vcc_gate);
 
             nl->unmark_vcc_gate(vcc_gate);
@@ -1204,7 +1202,7 @@ TEST_F(netlist_test, check_delete_module)
             std::shared_ptr<module> child = nl->create_module(MIN_MODULE_ID+2, "module_2", test_module);
 
             // Add a net and a gate to the test_module
-            std::shared_ptr<gate> gate_0 = nl->create_gate(get_gate_type_by_name("INV"), "gate_0");
+            std::shared_ptr<gate> gate_0 = nl->create_gate(get_gate_type_by_name("gate_1_to_1"), "gate_0");
             std::shared_ptr<net> net_0 = nl->create_net("net_0");
             test_module->assign_gate(gate_0);
             //test_module->assign_net(net_0);

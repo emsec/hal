@@ -21,22 +21,24 @@ protected:
  *
  * Functions: constructor, get_original_arguments
  */
-TEST_F(program_arguments_test, check_get_original_arguments){TEST_START
-                                                             // ########################
-                                                             // POSITIVE TESTS
-                                                             // ########################
-                                                             {// Call the constructor with some arguments and get them after
-                                                              const char * args[] = {"arg_0", "arg_1"};
-program_arguments p_args(2, args);
-int ret_argc;
-const char** ret_argv;
-p_args.get_original_arguments(&ret_argc, &ret_argv);
+TEST_F(program_arguments_test, check_get_original_arguments){
+    TEST_START
+        // ########################
+        // POSITIVE TESTS
+        // ########################
+        {
+            // Call the constructor with some arguments and get them after
+            const char * args[] = {"arg_0", "arg_1"};
+            program_arguments p_args(2, args);
+            int ret_argc;
+            const char** ret_argv;
+            p_args.get_original_arguments(&ret_argc, &ret_argv);
 
-EXPECT_EQ(ret_argc, 2);
-EXPECT_EQ(ret_argv[0], args[0]);
-EXPECT_EQ(ret_argv[1], args[1]);
-}
-TEST_END
+            EXPECT_EQ(ret_argc, 2);
+            EXPECT_EQ(ret_argv[0], args[0]);
+            EXPECT_EQ(ret_argv[1], args[1]);
+        }
+    TEST_END
 }
 
 /**

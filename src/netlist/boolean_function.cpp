@@ -265,9 +265,10 @@ boolean_function boolean_function::from_string(std::string expression, const std
     for (u32 i = 0; i < sorted_variable_names.size(); ++i)
     {
         auto pos = expression.find(sorted_variable_names[i]);
-        if (pos != std::string::npos)
+        while (pos != std::string::npos)
         {
             expression.replace(pos, sorted_variable_names[i].size(), "__v_" + std::to_string(i));
+            pos = expression.find(sorted_variable_names[i], pos + sorted_variable_names[i].size());
         }
     }
 

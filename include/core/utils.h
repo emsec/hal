@@ -29,12 +29,12 @@
 
 #include "def.h"
 
+#include <functional>
 #include <set>
 #include <sstream>
 #include <string>
 #include <unordered_set>
 #include <vector>
-#include <functional>
 
 /**
  * @ingroup core
@@ -81,6 +81,19 @@
  */
 namespace core_utils
 {
+    template<typename T>
+    bool ends_with_t(const T& full_string, const T& ending)
+    {
+        if (full_string.length() >= ending.length())
+        {
+            return (0 == full_string.compare(full_string.length() - ending.length(), ending.length(), ending));
+        }
+        else
+        {
+            return false;
+        }
+    }
+
     /**
      * Checks whether a string ends with another string.
      *
@@ -89,7 +102,20 @@ namespace core_utils
      * @param[in] ignore_case - If true, ignores case while comparing.
      * @returns True, if \p s ends with \p ending.
      */
-    CORE_API bool ends_with(const std::string& s, const std::string& ending, bool ignore_case = false);
+    CORE_API bool ends_with(const std::string& s, const std::string& ending);
+
+    template<typename T>
+    bool starts_with_t(const T& full_string, const T& start)
+    {
+        if (full_string.length() >= start.length())
+        {
+            return (0 == full_string.compare(0, start.length(), start));
+        }
+        else
+        {
+            return false;
+        }
+    }
 
     /**
      * Checks whether a string begins with another string.
@@ -99,7 +125,7 @@ namespace core_utils
      * @param[in] ignore_case - If true, ignores case while comparing.
      * @returns True, if \p s begins with \p start.
      */
-    CORE_API bool starts_with(const std::string& s, const std::string& start, bool ignore_case = false);
+    CORE_API bool starts_with(const std::string& s, const std::string& start);
 
     /**
      * Checks whether two strings are equal while being case insensitive.
@@ -110,6 +136,20 @@ namespace core_utils
      */
     CORE_API bool equals_ignore_case(const std::string& a, const std::string& b);
 
+    template<typename T>
+    bool is_integer_t(const T& s)
+    {
+        if (s.empty() || ((!isdigit(s[0])) && (s[0] != '-') && (s[0] != '+')))
+        {
+            return false;
+        }
+
+        char* p;
+        strtol(s.c_str(), &p, 10);
+
+        return (*p == 0);
+    }
+
     /**
      * Checks whether a string represents an integer.
      *
@@ -117,6 +157,15 @@ namespace core_utils
      * @returns True, if \p s contains an integer.
      */
     CORE_API bool is_integer(const std::string& s);
+
+    template<typename T>
+    bool is_floating_point_t(const T& s)
+    {
+        std::stringstream ss(s.c_str());
+        float f;
+        ss >> f;
+        return (ss.eof() && !ss.fail());
+    }
 
     /**
      * Checks whether a string represents a real number.
@@ -155,6 +204,22 @@ namespace core_utils
      */
     CORE_API std::string rtrim(const std::string& s, const char* to_remove = " \t\r\n");
 
+    template<typename T>
+    T trim_t(const T& s, const char* to_remove = " \t\r\n")
+    {
+        size_t start = s.find_first_not_of(to_remove);
+        size_t end   = s.find_last_not_of(to_remove);
+
+        if (start != T::npos)
+        {
+            return s.substr(start, end - start + 1);
+        }
+        else
+        {
+            return "";
+        }
+    }
+
     /**
      * Removes any whitespace characters from the beginning and the end of a string.
      *
@@ -163,6 +228,23 @@ namespace core_utils
      * @returns The trimmed string.
      */
     CORE_API std::string trim(const std::string& s, const char* to_remove = " \t\r\n");
+
+    template<typename T>
+    T replace_t(const T& str, const T& search, const T& replace)
+    {
+        auto s     = str;
+        size_t pos = 0;
+        if (search.empty())
+        {
+            return str;
+        }    // Just return the original string as we cannot determine what we want to replace.
+        while ((pos = s.find(search, pos)) != T::npos)
+        {
+            s.replace(pos, search.length(), replace);
+            pos += replace.length();
+        }
+        return s;
+    }
 
     /**
      * Replaces substring from begin to end of a string.
@@ -210,7 +292,7 @@ namespace core_utils
     template<typename T>
     CORE_API std::string join(const std::string& joiner, const T& items)
     {
-        return join(joiner, items, [](const auto& v) {return v;});
+        return join(joiner, items, [](const auto& v) { return v; });
     }
 
     /**
@@ -231,6 +313,14 @@ namespace core_utils
     //     return res;
     // }
 
+    template<typename T>
+    T to_upper_t(const T& s)
+    {
+        T result = s;
+        std::transform(result.begin(), result.end(), result.begin(), [](char c) { return std::toupper(c); });
+        return result;
+    }
+
     /**
      * Convert a string to upper case.
      *
@@ -238,6 +328,14 @@ namespace core_utils
      * @returns The converted string.
      */
     CORE_API std::string to_upper(const std::string& s);
+
+    template<typename T>
+    T to_lower_t(const T& s)
+    {
+        T result = s;
+        std::transform(result.begin(), result.end(), result.begin(), [](char c) { return std::tolower(c); });
+        return result;
+    }
 
     /**
      * Convert a string to lower case.

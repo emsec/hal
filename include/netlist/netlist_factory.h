@@ -23,9 +23,9 @@
 
 #pragma once
 
-#include "def.h"
-
 #include "core/program_options.h"
+#include "def.h"
+#include "netlist/gate_library/gate_library.h"
 
 /* forward declaration */
 class netlist;
