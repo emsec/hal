@@ -547,7 +547,7 @@ TEST_F(gate_library_test, check_library)
         gt_vcc->add_boolean_function("O", boolean_function(boolean_function::value::ONE));
 
         {
-            std::shared_ptr<gate_library> gl(new gate_library("gl_name"));
+            std::shared_ptr<gate_library> gl(new gate_library("imaginary_path", "gl_name"));
             // Check the name
             EXPECT_EQ(gl->get_name(), "gl_name");
 

@@ -51,7 +51,7 @@ TEST_F(gate_library_parser_liberty_test, check_combinatorial)
                                     "        }\n"
                                     "    }\n"
                                     "}");
-            gate_library_parser_liberty liberty_parser(input);
+            gate_library_parser_liberty liberty_parser("imaginary_path", input);
             std::shared_ptr<gate_library> gl = liberty_parser.parse();
 
             ASSERT_NE(gl, nullptr);
@@ -123,7 +123,7 @@ TEST_F(gate_library_parser_liberty_test, check_lut)
                                     "        }\n"
                                     "    }"
                                     "}");
-            gate_library_parser_liberty liberty_parser(input);
+            gate_library_parser_liberty liberty_parser("imaginary_path", input);
             std::shared_ptr<gate_library> gl = liberty_parser.parse();
 
             ASSERT_NE(gl, nullptr);
@@ -169,7 +169,7 @@ TEST_F(gate_library_parser_liberty_test, check_lut)
                                     "        }\n"
                                     "    }"
                                     "}");
-            gate_library_parser_liberty liberty_parser(input);
+            gate_library_parser_liberty liberty_parser("imaginary_path", input);
             std::shared_ptr<gate_library> gl = liberty_parser.parse();
 
             ASSERT_NE(gl, nullptr);
@@ -243,7 +243,7 @@ TEST_F(gate_library_parser_liberty_test, check_flip_flop)
                                     "        }\n"
                                     "    }"
                                     "}");
-            gate_library_parser_liberty liberty_parser(input);
+            gate_library_parser_liberty liberty_parser("imaginary_path", input);
             std::shared_ptr<gate_library> gl = liberty_parser.parse();
 
             ASSERT_NE(gl, nullptr);
@@ -326,7 +326,7 @@ TEST_F(gate_library_parser_liberty_test, check_latch)
                                     "        }\n"
                                     "    }"
                                     "}");
-            gate_library_parser_liberty liberty_parser(input);
+            gate_library_parser_liberty liberty_parser("imaginary_path", input);
             std::shared_ptr<gate_library> gl = liberty_parser.parse();
 
             ASSERT_NE(gl, nullptr);
@@ -389,7 +389,7 @@ TEST_F(gate_library_parser_liberty_test, check_multiline_comment)
                                     "        \n"
                                     "    }\n"
                                     "}");
-            gate_library_parser_liberty liberty_parser(input);
+            gate_library_parser_liberty liberty_parser("imaginary_path", input);
             std::shared_ptr<gate_library> gl = liberty_parser.parse();
 
             ASSERT_NE(gl, nullptr);
@@ -418,7 +418,7 @@ TEST_F(gate_library_parser_liberty_test, check_invalid_input)
             // Pass an empty input stream
             NO_COUT_TEST_BLOCK;
             std::stringstream input("");
-            gate_library_parser_liberty liberty_parser(input);
+            gate_library_parser_liberty liberty_parser("imaginary_path", input);
             std::shared_ptr<gate_library> gl = liberty_parser.parse();
 
             EXPECT_EQ(gl, nullptr);
@@ -447,7 +447,7 @@ TEST_F(gate_library_parser_liberty_test, check_invalid_input)
                                     "        }\n"
                                     "    }"
                                     "}");
-            gate_library_parser_liberty liberty_parser(input);
+            gate_library_parser_liberty liberty_parser("imaginary_path", input);
             std::shared_ptr<gate_library> gl = liberty_parser.parse();
 
             EXPECT_EQ(gl, nullptr);
@@ -476,7 +476,7 @@ TEST_F(gate_library_parser_liberty_test, check_invalid_input)
                                     "        }\n"
                                     "    }"
                                     "}");
-            gate_library_parser_liberty liberty_parser(input);
+            gate_library_parser_liberty liberty_parser("imaginary_path", input);
             std::shared_ptr<gate_library> gl = liberty_parser.parse();
 
             EXPECT_EQ(gl, nullptr);
@@ -504,7 +504,7 @@ TEST_F(gate_library_parser_liberty_test, check_invalid_input)
                                     "        }\n"
                                     "    }"
                                     "}");
-            gate_library_parser_liberty liberty_parser(input);
+            gate_library_parser_liberty liberty_parser("imaginary_path", input);
             std::shared_ptr<gate_library> gl = liberty_parser.parse();
 
             EXPECT_EQ(gl, nullptr);
@@ -532,7 +532,7 @@ TEST_F(gate_library_parser_liberty_test, check_invalid_input)
                                     "        }\n"
                                     "    }"
                                     "}");
-            gate_library_parser_liberty liberty_parser(input);
+            gate_library_parser_liberty liberty_parser("imaginary_path", input);
             std::shared_ptr<gate_library> gl = liberty_parser.parse();
 
             EXPECT_EQ(gl, nullptr);
@@ -557,7 +557,7 @@ TEST_F(gate_library_parser_liberty_test, check_invalid_input)
                                     "        }\n"
                                     "    }"
                                     "}");
-            gate_library_parser_liberty liberty_parser(input);
+            gate_library_parser_liberty liberty_parser("imaginary_path", input);
             std::shared_ptr<gate_library> gl = liberty_parser.parse();
 
             EXPECT_EQ(gl, nullptr);
@@ -580,7 +580,7 @@ TEST_F(gate_library_parser_liberty_test, check_invalid_input)
                                     "        }\n"
                                     "    }"
                                     "}");
-            gate_library_parser_liberty liberty_parser(input);
+            gate_library_parser_liberty liberty_parser("imaginary_path", input);
             std::shared_ptr<gate_library> gl = liberty_parser.parse();
 
             EXPECT_EQ(gl, nullptr);
@@ -600,7 +600,7 @@ TEST_F(gate_library_parser_liberty_test, check_invalid_input)
                                     "        }\n"
                                     "    }\n"
                                     "}");
-            gate_library_parser_liberty liberty_parser(input);
+            gate_library_parser_liberty liberty_parser("imaginary_path", input);
             std::shared_ptr<gate_library> gl = liberty_parser.parse();
 
             ASSERT_NE(gl, nullptr); // NOTE: Ok, only 'I' is not parsed
@@ -649,7 +649,7 @@ TEST_F(gate_library_parser_liberty_test, check_invalid_input)
                                     "        }\n"
                                     "    }"
                                     "}");
-            gate_library_parser_liberty liberty_parser(input);
+            gate_library_parser_liberty liberty_parser("imaginary_path", input);
             std::shared_ptr<gate_library> gl = liberty_parser.parse();
 
             ASSERT_NE(gl, nullptr);
@@ -676,7 +676,7 @@ TEST_F(gate_library_parser_liberty_test, check_invalid_input)
                                     "        }\n"
                                     "    }\n"
                                     "}");
-            gate_library_parser_liberty liberty_parser(input);
+            gate_library_parser_liberty liberty_parser("imaginary_path", input);
             std::shared_ptr<gate_library> gl = liberty_parser.parse();
 
             EXPECT_EQ(gl, nullptr);
@@ -706,7 +706,7 @@ TEST_F(gate_library_parser_liberty_test, check_invalid_input)
                                     "        }\n"
                                     "    }\n"
                                     "}");
-            gate_library_parser_liberty liberty_parser(input);
+            gate_library_parser_liberty liberty_parser("imaginary_path", input);
             std::shared_ptr<gate_library> gl = liberty_parser.parse();
 
             EXPECT_EQ(gl, nullptr);
@@ -729,7 +729,7 @@ TEST_F(gate_library_parser_liberty_test, check_invalid_input)
                                     "        }\n"
                                     "    }\n"
                                     "}");
-            gate_library_parser_liberty liberty_parser(input);
+            gate_library_parser_liberty liberty_parser("imaginary_path", input);
             std::shared_ptr<gate_library> gl = liberty_parser.parse();
 
             ASSERT_NE(gl, nullptr);
@@ -755,7 +755,7 @@ TEST_F(gate_library_parser_liberty_test, check_invalid_input)
                                     "        }\n"
                                     "    }\n"
                                     "}");
-            gate_library_parser_liberty liberty_parser(input);
+            gate_library_parser_liberty liberty_parser("imaginary_path", input);
             std::shared_ptr<gate_library> gl = liberty_parser.parse();
 
             ASSERT_NE(gl, nullptr);
@@ -782,7 +782,7 @@ TEST_F(gate_library_parser_liberty_test, check_invalid_input)
                                     "        }\n"
                                     "    }\n"
                                     "}");
-            gate_library_parser_liberty liberty_parser(input);
+            gate_library_parser_liberty liberty_parser("imaginary_path", input);
             std::shared_ptr<gate_library> gl = liberty_parser.parse();
 
             ASSERT_NE(gl, nullptr);

@@ -156,7 +156,7 @@ std::shared_ptr<gate_library> test_utils::get_testing_gate_library()
     if (gl != nullptr){
         return gl;
     }
-    gl = std::make_shared<gate_library>("Testing Library");
+    gl = std::make_shared<gate_library>("imaginary_path", "Testing Library");
 
     std::shared_ptr<gate_type> gt;
 
