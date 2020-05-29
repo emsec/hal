@@ -110,7 +110,7 @@ bool gate_library_parser_liberty::parse_tokens()
     auto lib_name = m_token_stream.consume();
     m_token_stream.consume(")", true);
     m_token_stream.consume("{", true);
-    m_gate_lib          = std::make_shared<gate_library>(m_path, lib_name.string);
+    m_gate_lib       = std::make_shared<gate_library>(m_path, lib_name.string);
     auto library_str = m_token_stream.extract_until("}", token_stream<std::string>::END_OF_STREAM, true, false);
     m_token_stream.consume("}", false);
 
@@ -318,6 +318,12 @@ std::optional<gate_library_parser_liberty::pin_group>
     str.consume("{", true);
     auto pin_str = str.extract_until("}", token_stream<std::string>::END_OF_STREAM, true, true);
     str.consume("}", true);
+
+    if (pin_names_str.size() == 0)
+    {
+        log_error("liberty_parser", "no pin name given near line {}", pin_names_str.peek().number);
+        return std::nullopt;
+    }
 
     do
     {
