@@ -56,7 +56,7 @@ public:
      * @param[in] gate_library - The gate library used in the serialized file.
      * @returns The deserialized netlist.
      */
-    std::shared_ptr<netlist> parse(const std::string& gate_library) override;
+    std::shared_ptr<netlist> parse(const std::shared_ptr<gate_library>& gate_library) override;
 
 private:
     template<typename T>

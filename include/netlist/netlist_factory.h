@@ -29,6 +29,7 @@
 
 /* forward declaration */
 class netlist;
+class gate_library;
 
 /**
  * @file
@@ -43,10 +44,10 @@ namespace netlist_factory
     /**
      * Creates a new netlist for a specific gate library.
      *
-     * @param[in] gate_library_name - Name of hardware gate library.
+     * @param[in] gate_library - The underlying gate library.
      * @returns The new netlist.
      */
-    NETLIST_API std::shared_ptr<netlist> create_netlist(const std::string& gate_library_name);
+    NETLIST_API std::shared_ptr<netlist> create_netlist(const std::shared_ptr<gate_library>& gate_library);
 
     /**
      * Creates a new netlist for a specific file.

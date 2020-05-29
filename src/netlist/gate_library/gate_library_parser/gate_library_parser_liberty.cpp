@@ -6,7 +6,7 @@
 #include "netlist/gate_library/gate_type/gate_type_lut.h"
 #include "netlist/gate_library/gate_type/gate_type_sequential.h"
 
-gate_library_parser_liberty::gate_library_parser_liberty(std::stringstream& stream) : gate_library_parser(stream)
+gate_library_parser_liberty::gate_library_parser_liberty(const hal::path& file_path, std::stringstream& file_content) : gate_library_parser(file_path, file_content)
 {
 }
 
@@ -111,7 +111,7 @@ bool gate_library_parser_liberty::parse_tokens()
     auto lib_name = m_token_stream.consume();
     m_token_stream.consume(")", true);
     m_token_stream.consume("{", true);
-    m_gate_lib          = std::make_shared<gate_library>(lib_name.string);
+    m_gate_lib          = std::make_shared<gate_library>(m_path, lib_name.string);
     auto library_stream = m_token_stream.extract_until("}", token_stream::END_OF_STREAM, true, false);
     m_token_stream.consume("}", false);
 
