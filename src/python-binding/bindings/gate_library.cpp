@@ -4,12 +4,6 @@ void gate_library_init(py::module& m)
 {
     py::class_<gate_library, std::shared_ptr<gate_library>> py_gate_library(m, "gate_library", R"(Gate library class containing information about the gates contained in the library.)");
 
-    py_gate_library.def(py::init<const std::string&>(), py::arg("name"), R"(
-        Construct a new gate library.
-
-        :param str name: Name of the gate library.
-)");
-
     py_gate_library.def_property_readonly("name", &gate_library::get_name, R"(
         The name of the library.
 
@@ -21,6 +15,19 @@ void gate_library_init(py::module& m)
 
         :returns: The name.
         :rtype: str
+)");
+
+    py_gate_library.def_property_readonly("path", &gate_library::get_name, R"(
+        The path of the library.
+
+        :type: hal_py.hal_path
+)");
+
+    py_gate_library.def("get_path", &gate_library::get_name, R"(
+        Get the file path of the library.
+
+        :returns: The path.
+        :rtype: hal_py.hal_path
 )");
 
     py_gate_library.def("add_gate_types", &gate_library::add_gate_type, py::arg("gt"), R"(
