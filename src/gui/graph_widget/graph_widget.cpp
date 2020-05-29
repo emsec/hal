@@ -19,6 +19,7 @@
 #include "gui/hal_content_manager/hal_content_manager.h"
 #include "gui/overlay/dialog_overlay.h"
 #include "gui/toolbar/toolbar.h"
+#include "gui/graph_widget/items/nodes/modules/graphics_module.h"
 
 #include <QDebug>
 #include <QInputDialog>
@@ -788,6 +789,74 @@ void graph_widget::ensure_items_visible(const QSet<u32>& gates, const QSet<u32>&
         min_y = std::min(min_y, static_cast<int>(rect.top()));
         max_y = std::max(max_y, static_cast<int>(rect.bottom()));
     }
+
+    auto targetRect = QRectF(min_x, min_y, max_x-min_x, max_y-min_y).marginsAdded(QMarginsF(20,20,20,20));
+
+    // FIXME This breaks as soon as the layouter call that preceded the call to this function
+    // changed the scene size. If that happens, mapToScene thinks that the view is looking at (0,0)
+    // and the animation jumps to (0,0) before moving to the correct target.
+    auto currentRect = m_view->mapToScene(m_view->viewport()->geometry()).boundingRect(); // this has incorrect coordinates
+
+    auto centerFix = targetRect.center();
+    targetRect.setWidth(std::max(targetRect.width(), currentRect.width()));
+    targetRect.setHeight(std::max(targetRect.height(), currentRect.height()));
+    targetRect.moveCenter(centerFix);
+
+    //qDebug() << currentRect;
+
+    auto anim = new QVariantAnimation();
+    anim->setDuration(1000);
+    anim->setStartValue(currentRect);
+    anim->setEndValue(targetRect);
+    // FIXME fitInView miscalculates the scale required to actually fit the rect into the viewport,
+    // so that every time fitInView is called this will cause the scene to scale down by a very tiny amount.
+    connect(anim, &QVariantAnimation::valueChanged, [=](const QVariant& value) { m_view->fitInView(value.toRectF(), Qt::KeepAspectRatio); });
+
+    anim->start(QAbstractAnimation::DeleteWhenStopped);
+}
+
+void graph_widget::ensure_selection_visible()
+{
+    if (m_context->scene_update_in_progress())
+        return;
+
+    if(m_context->gates().contains(g_selection_relay.m_selected_gates) == false || m_context->nets().contains(g_selection_relay.m_selected_nets) == false || m_context->modules().contains(g_selection_relay.m_selected_modules) == false)
+        return;
+
+    int min_x = INT_MAX;
+    int min_y = INT_MAX;
+    int max_x = INT_MIN;
+    int max_y = INT_MIN;
+
+    for (auto id : g_selection_relay.m_selected_gates)
+    {
+        auto rect = m_context->scene()->get_gate_item(id)->sceneBoundingRect();
+
+        min_x = std::min(min_x, static_cast<int>(rect.left()));
+        max_x = std::max(max_x, static_cast<int>(rect.right()));
+        min_y = std::min(min_y, static_cast<int>(rect.top()));
+        max_y = std::max(max_y, static_cast<int>(rect.bottom()));
+    }
+
+    for (auto id : g_selection_relay.m_selected_nets)
+    {
+        auto rect = m_context->scene()->get_net_item(id)->sceneBoundingRect();
+
+        min_x = std::min(min_x, static_cast<int>(rect.left()));
+        max_x = std::max(max_x, static_cast<int>(rect.right()));
+        min_y = std::min(min_y, static_cast<int>(rect.top()));
+        max_y = std::max(max_y, static_cast<int>(rect.bottom()));
+    }
+
+    for (auto id : g_selection_relay.m_selected_modules)
+    {
+        auto rect = m_context->scene()->get_module_item(id)->sceneBoundingRect();
+
+        min_x = std::min(min_x, static_cast<int>(rect.left()));
+        max_x = std::max(max_x, static_cast<int>(rect.right()));
+        min_y = std::min(min_y, static_cast<int>(rect.top()));
+        max_y = std::max(max_y, static_cast<int>(rect.bottom()));
+    }    
 
     auto targetRect = QRectF(min_x, min_y, max_x-min_x, max_y-min_y).marginsAdded(QMarginsF(20,20,20,20));
 

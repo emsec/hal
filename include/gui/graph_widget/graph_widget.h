@@ -57,6 +57,8 @@ public:
 
     graph_graphics_view* view();
 
+    void ensure_selection_visible();
+
 protected:
     void keyPressEvent(QKeyEvent* event) override;
 

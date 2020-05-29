@@ -61,6 +61,7 @@ public:
     void move_nets_to_background();
 
     const graphics_gate* get_gate_item(const u32 id) const;
+    const graphics_net* get_net_item(const u32 id) const;
     const graphics_module* get_module_item(const u32 id) const;
 
     #ifdef GUI_DEBUG_GRID

@@ -257,7 +257,7 @@ void file_manager::open_file(QString file_name)
 
         log_info("gui", "Trying to use gate library '{}'...", name);
         event_controls::enable_all(false);
-        std::shared_ptr<netlist> netlist = netlist_factory::load_netlist(file_name.toStdString(), language.toStdString(), name);
+        std::shared_ptr<netlist> netlist = netlist_factory::load_netlist(file_name.toStdString(), language.toStdString(), lib->get_path());
         event_controls::enable_all(true);
 
         if (netlist)

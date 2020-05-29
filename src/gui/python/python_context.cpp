@@ -9,7 +9,6 @@
 
 #include "gui/python/python_context_suberscriber.h"
 #include "gui_globals.h"
-#include "gui_api/gui_api.h"
 
 // Following is needed for python_context::check_complete_statement
 #include <Python.h>
@@ -66,12 +65,14 @@ void python_context::initialize_context(py::dict* context)
              "sys.__stdout__ = sys.stdout\n"
              "sys.stderr = StdErrCatcher()\n"
              "sys.__stderr__ = sys.stderr\n"
-             "import hal_py\n"
-             "from hal_gui import gui\n",
+             "import hal_py\n",
              *context,
              *context);
 
     (*context)["netlist"] = g_netlist;
+
+    if(g_gui_api)
+        (*context)["gui"] = g_gui_api;
 }
 
 void python_context::init_python()
@@ -83,7 +84,7 @@ void python_context::init_python()
 
     initialize_context(m_context);
     (*m_context)["console"] = py::module::import("hal_gui.console");
-    (*m_context)["gui"] = py::module::import("hal_gui.gui");
+    (*m_context)["hal_gui"] = py::module::import("hal_gui");
 }
 
 void python_context::close_python()

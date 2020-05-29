@@ -2,15 +2,12 @@
 
 #include "core/log.h"
 
-#include <fstream>
-#include <sstream>
-
-#include <boost/predef.h>
-
 #include <boost/algorithm/string/predicate.hpp>
-
+#include <boost/predef.h>
 #include <dirent.h>
+#include <fstream>
 #include <iostream>
+#include <sstream>
 #include <sys/stat.h>
 #include <sys/types.h>
 
@@ -29,28 +26,14 @@
 
 namespace core_utils
 {
-    bool ends_with(const std::string& full_string, const std::string& ending, bool ignore_case)
+    bool ends_with(const std::string& s, const std::string& ending)
     {
-        if (ignore_case)
-        {
-            return boost::algorithm::iends_with(full_string, ending);
-        }
-        else
-        {
-            return boost::algorithm::ends_with(full_string, ending);
-        }
+        return ends_with_t<std::string>(s, ending);
     }
 
-    bool starts_with(const std::string& full_string, const std::string& start, bool ignore_case)
+    bool starts_with(const std::string& s, const std::string& start)
     {
-        if (ignore_case)
-        {
-            return boost::algorithm::istarts_with(full_string, start);
-        }
-        else
-        {
-            return boost::algorithm::starts_with(full_string, start);
-        }
+        return starts_with_t<std::string>(s, start);
     }
 
     bool equals_ignore_case(const std::string& a, const std::string& b)
@@ -60,23 +43,12 @@ namespace core_utils
 
     bool is_integer(const std::string& s)
     {
-        if (s.empty() || ((!isdigit(s[0])) && (s[0] != '-') && (s[0] != '+')))
-        {
-            return false;
-        }
-
-        char* p;
-        strtol(s.c_str(), &p, 10);
-
-        return (*p == 0);
+        return is_integer_t<std::string>(s);
     }
 
     bool is_floating_point(const std::string& s)
     {
-        std::stringstream ss(s);
-        float f;
-        ss >> f;
-        return (ss.eof() && !ss.fail());
+        return is_floating_point_t<std::string>(s);
     }
 
     std::vector<std::string> split(const std::string& s, const char delim, bool obey_brackets)
@@ -167,49 +139,24 @@ namespace core_utils
         return "";
     }
 
-    std::string trim(const std::string& line, const char* to_remove)
+    std::string trim(const std::string& s, const char* to_remove)
     {
-        size_t start = line.find_first_not_of(to_remove);
-        size_t end   = line.find_last_not_of(to_remove);
-
-        if (start != std::string::npos)
-        {
-            return line.substr(start, end - start + 1);
-        }
-        else
-        {
-            return "";
-        }
+        return trim_t<std::string>(s, to_remove);
     }
 
     std::string replace(const std::string& str, const std::string& search, const std::string& replace)
     {
-        auto s     = str;
-        size_t pos = 0;
-        if (search.empty())
-        {
-            return str;
-        }    // Just return the original string as we cannot determine what we want to replace.
-        while ((pos = s.find(search, pos)) != std::string::npos)
-        {
-            s.replace(pos, search.length(), replace);
-            pos += replace.length();
-        }
-        return s;
+        return replace_t<std::string>(str, search, replace);
     }
 
     std::string to_upper(const std::string& s)
     {
-        std::string result = s;
-        std::transform(result.begin(), result.end(), result.begin(), [](char c) { return std::toupper(c); });
-        return result;
+        return to_upper_t<std::string>(s);
     }
 
     std::string to_lower(const std::string& s)
     {
-        std::string result = s;
-        std::transform(result.begin(), result.end(), result.begin(), [](char c) { return std::tolower(c); });
-        return result;
+        return to_lower_t<std::string>(s);
     }
 
     u32 num_of_occurrences(const std::string& str, const std::string& substr)

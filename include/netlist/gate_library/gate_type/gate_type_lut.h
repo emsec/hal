@@ -48,10 +48,11 @@ public:
 
     /**
      * Adds an output pin to the collection of output pins that generate their output not from a boolean function but an initialization string.
+     * The pin has to be declared as an output pin beforehand.
      *
      * @param[in] output_pin - The name of the output string.
      */
-    void add_output_from_init_string_pin(const std::string& output_pin);
+    void add_output_from_init_string_pin(const std::string& pin_name);
 
     /**
      * Get the set of output pins that generate their output not from a boolean function but an initialization string.
@@ -107,6 +108,4 @@ private:
     std::string m_config_data_category;
     std::string m_config_data_identifier;
     bool m_ascending;
-
-    bool do_compare(const gate_type& other) const override;
 };

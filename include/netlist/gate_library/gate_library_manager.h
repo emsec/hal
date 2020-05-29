@@ -36,12 +36,13 @@ class gate_library;
 namespace gate_library_manager
 {
     /**
-     * Loads all gate libraries which are available.
+     * Loads a gate library file.
      *
      * @param[in] path - the file to load.
      * @param[in] reload_if_existing - If true, reloads all libraries that are already loaded.
+     * @returns Pointer to the loaded gate library or nullptr on error.
      */
-    NETLIST_API std::shared_ptr<gate_library> load_file(const hal::path& path, bool reload_if_existing = false);
+    NETLIST_API std::shared_ptr<gate_library> load_file(hal::path path, bool reload_if_existing = false);
 
     /**
      * Loads all gate libraries which are available.
@@ -51,17 +52,17 @@ namespace gate_library_manager
     NETLIST_API void load_all(bool reload_if_existing = false);
 
     /**
-     * Get a gate library object by name.
+     * Get a gate library object by file name.
      *
-     * @param[in] name - Name of the gate library.
-     * @returns Pointer to the gate library object.
+     * @param[in] file_name - file name of the gate library.
+     * @returns Pointer to the gate library object or nullptr on error.
      */
-    NETLIST_API std::shared_ptr<gate_library> get_gate_library(const std::string& name);
+    NETLIST_API std::shared_ptr<gate_library> get_gate_library(const std::string& file_name);
 
     /**
-     * Get all gate libraries together with the associated name.
+     * Get all loaded gate libraries.
      *
-     * @returns A map from library name to pointer to the gate library object.
+     * @returns A vector of pointers to the gate library objects.
      */
     NETLIST_API std::vector<std::shared_ptr<gate_library>> get_gate_libraries();
 }    // namespace gate_library_manager

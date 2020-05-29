@@ -1,46 +1,33 @@
 #include "netlist/gate_library/gate_type/gate_type_sequential.h"
 
+#include "core/log.h"
+
 gate_type_sequential::gate_type_sequential(const std::string& name, base_type bt) : gate_type(name)
 {
     m_base_type = bt;
     assert(m_base_type == base_type::ff || m_base_type == base_type::latch);
 }
 
-bool gate_type_sequential::do_compare(const gate_type& other) const
+void gate_type_sequential::add_state_output_pin(std::string pin_name)
 {
-    bool equal    = false;
-    const auto gt = dynamic_cast<const gate_type_sequential*>(&other);
-
-    if (gt)
+    if (const auto& it = std::find(m_input_pins.begin(), m_input_pins.end(), pin_name); it != m_input_pins.end())
     {
-        equal = m_state_pins == gt->get_state_output_pins();
-        equal &= m_inverted_state_pins == gt->get_inverted_state_output_pins();
-        equal &= m_set_reset_behavior == gt->get_set_reset_behavior();
-        equal &= m_init_data_category == gt->get_init_data_category();
-        equal &= m_init_data_identifier == gt->get_init_data_identifier();
+        log_warning("gate_type", "pin '{}' of gate type '{}' is not an output pin, ignoring state output pin assignment", pin_name, m_name);
+        return;
     }
 
-    return equal;
+    m_state_pins.insert(pin_name);
 }
 
-void gate_type_sequential::add_state_output_pin(std::string output_pin_name)
+void gate_type_sequential::add_inverted_state_output_pin(std::string pin_name)
 {
-    m_state_pins.insert(output_pin_name);
-}
+    if (const auto& it = std::find(m_input_pins.begin(), m_input_pins.end(), pin_name); it != m_input_pins.end())
+    {
+        log_warning("gate_type", "pin '{}' of gate type '{}' is not an output pin, ignoring state output pin assignment", pin_name, m_name);
+        return;
+    }
 
-std::unordered_set<std::string> gate_type_sequential::get_state_output_pins() const
-{
-    return m_state_pins;
-}
-
-void gate_type_sequential::add_inverted_state_output_pin(std::string output_pin_name)
-{
-    m_inverted_state_pins.insert(output_pin_name);
-}
-
-std::unordered_set<std::string> gate_type_sequential::get_inverted_state_output_pins() const
-{
-    return m_inverted_state_pins;
+    m_inverted_state_pins.insert(pin_name);
 }
 
 void gate_type_sequential::set_set_reset_behavior(set_reset_behavior sb1, set_reset_behavior sb2)
@@ -48,24 +35,34 @@ void gate_type_sequential::set_set_reset_behavior(set_reset_behavior sb1, set_re
     m_set_reset_behavior = {sb1, sb2};
 }
 
-std::pair<gate_type_sequential::set_reset_behavior, gate_type_sequential::set_reset_behavior> gate_type_sequential::get_set_reset_behavior() const
-{
-    return m_set_reset_behavior;
-}
-
 void gate_type_sequential::set_init_data_category(const std::string& category)
 {
     m_init_data_category = category;
 }
 
-std::string gate_type_sequential::get_init_data_category() const
-{
-    return m_init_data_category;
-}
-
 void gate_type_sequential::set_init_data_identifier(const std::string& identifier)
 {
     m_init_data_identifier = identifier;
+}
+
+std::unordered_set<std::string> gate_type_sequential::get_state_output_pins() const
+{
+    return m_state_pins;
+}
+
+std::unordered_set<std::string> gate_type_sequential::get_inverted_state_output_pins() const
+{
+    return m_inverted_state_pins;
+}
+
+std::pair<gate_type_sequential::set_reset_behavior, gate_type_sequential::set_reset_behavior> gate_type_sequential::get_set_reset_behavior() const
+{
+    return m_set_reset_behavior;
+}
+
+std::string gate_type_sequential::get_init_data_category() const
+{
+    return m_init_data_category;
 }
 
 std::string gate_type_sequential::get_init_data_identifier() const

@@ -44,7 +44,7 @@ public:
      *
 	 * @param[in] name - Name of the gate library.
 	 */
-    gate_library(const std::string& name);
+    gate_library(const hal::path& path, const std::string& name);
 
     ~gate_library() = default;
 
@@ -54,6 +54,13 @@ public:
      * @returns The name.
      */
     std::string get_name() const;
+
+    /**
+     * Get the file path of the library.
+     *
+     * @returns The file path.
+     */
+    hal::path get_path() const;
 
     /**
      * Add a gate type to the gate library.
@@ -99,6 +106,7 @@ public:
 
 private:
     std::string m_name;
+    hal::path m_path;
 
     std::map<std::string, std::shared_ptr<const gate_type>> m_gate_type_map;
     std::map<std::string, std::shared_ptr<const gate_type>> m_vcc_gate_types;

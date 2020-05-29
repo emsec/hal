@@ -6,6 +6,7 @@ configure_file(${CMAKE_SOURCE_DIR}/include/hal_version.h.in ${CMAKE_BINARY_DIR}/
 
 set(CORE_LIB_HDR
     ${CMAKE_SOURCE_DIR}/include/core/callback_hook.h
+    ${CMAKE_SOURCE_DIR}/include/core/special_strings.h
     ${CMAKE_SOURCE_DIR}/include/core/hal_file_manager.h
     ${CMAKE_SOURCE_DIR}/include/core/interface_base.h
     ${CMAKE_SOURCE_DIR}/include/core/interface_cli.h
@@ -33,7 +34,6 @@ set(CORE_LIB_source
     plugin_manager.cpp
     program_arguments.cpp
     program_options.cpp
-    token_stream.cpp
     utils.cpp
     )
 

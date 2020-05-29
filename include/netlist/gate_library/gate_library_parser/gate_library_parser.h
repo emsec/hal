@@ -25,6 +25,7 @@
 
 #include "def.h"
 #include "netlist/gate_library/gate_library.h"
+#include "netlist/gate_library/gate_type/gate_type.h"
 
 #include <sstream>
 
@@ -40,7 +41,7 @@ public:
     /**
      * @param[in] stream - The string stream filled with gate library definition.
      */
-    explicit gate_library_parser(std::stringstream& stream);
+    explicit gate_library_parser(const hal::path& file_path, std::stringstream& file_content);
 
     virtual ~gate_library_parser() = default;
 
@@ -57,4 +58,7 @@ protected:
 
     // stores the input stream to the file
     std::stringstream& m_fs;
+
+    // stores the path to the parsed file
+    hal::path m_path;
 };

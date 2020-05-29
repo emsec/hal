@@ -40,12 +40,12 @@ class gate_type_sequential : public gate_type
 public:
     enum class set_reset_behavior
     {
-        U = -1,    // not set
-        L = 0,
-        H = 1,
-        N = 2,
-        T = 3,
-        X = 4
+        U = 0,    // not set
+        L = 1,
+        H = 2,
+        N = 3,
+        T = 4,
+        X = 5
     };
 
     /**
@@ -59,31 +59,19 @@ public:
 
     /**
      * Add an output pin to the collection of output pins that generate their output from the next_state function.
+     * The pin has to be declared as an output pin beforehand.
      *
      * @param[in] output_pin - Name of the output pin.
      */
-    void add_state_output_pin(std::string output_pin);
-
-    /**
-     * Get the output pins that use the next_state function to generate their output.
-     *
-     * @returns The set of output pin names.
-     */
-    std::unordered_set<std::string> get_state_output_pins() const;
+    void add_state_output_pin(std::string pin_name);
 
     /**
      * Add an output pin to the collection of output pins that generate their output from the inverted next_state function.
+     * The pin has to be declared as an output pin beforehand.
      *
      * @param[in] output_pin - Name of the output pin.
      */
-    void add_inverted_state_output_pin(std::string output_pin);
-
-    /**
-     * Get the output pins that use the inverted next_state function to generate their output.
-     *
-     * @returns The set of output pin names.
-     */
-    std::unordered_set<std::string> get_inverted_state_output_pins() const;
+    void add_inverted_state_output_pin(std::string pin_name);
 
     /**
      * Set the behavior that describes the internal state when both set and reset are active.
@@ -101,6 +89,34 @@ public:
     void set_set_reset_behavior(set_reset_behavior sb1, set_reset_behavior sb2);
 
     /**
+     * Set the category in which to find the INIT string.
+     *
+     * @param[in] category - The category as a string.
+     */
+    void set_init_data_category(const std::string& category);
+
+    /**
+     * Set the identifier used to specify the INIT string.
+     *
+     * @param[in] identifier - The identifier as a string.
+     */
+    void set_init_data_identifier(const std::string& identifier);
+
+    /**
+     * Get the output pins that use the next_state function to generate their output.
+     *
+     * @returns The set of output pin names.
+     */
+    std::unordered_set<std::string> get_state_output_pins() const;
+
+    /**
+     * Get the output pins that use the inverted next_state function to generate their output.
+     *
+     * @returns The set of output pin names.
+     */
+    std::unordered_set<std::string> get_inverted_state_output_pins() const;
+
+    /**
      * Get the behavior of the internal state and the inverted internal state when both set and reset are active.
      * May be one of the following:
      *  - U: not specified for this gate type
@@ -115,25 +131,11 @@ public:
     std::pair<set_reset_behavior, set_reset_behavior> get_set_reset_behavior() const;
 
     /**
-     * Set the category in which to find the INIT string.
-     *
-     * @param[in] category - The category as a string.
-     */
-    void set_init_data_category(const std::string& category);
-
-    /**
      * Get the category in which to find the INIT string.
      *
      * @returns The string describing the category.
      */
     std::string get_init_data_category() const;
-
-    /**
-     * Set the identifier used to specify the INIT string.
-     *
-     * @param[in] identifier - The identifier as a string.
-     */
-    void set_init_data_identifier(const std::string& identifier);
 
     /**
      * Get the identifier used to specify the INIT string.
@@ -143,8 +145,6 @@ public:
     std::string get_init_data_identifier() const;
 
 private:
-    bool do_compare(const gate_type& other) const override;
-
     // set of pins that use the internal state or inverted internal state respectively as output
     std::unordered_set<std::string> m_state_pins, m_inverted_state_pins;
 

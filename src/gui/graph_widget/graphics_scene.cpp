@@ -282,6 +282,20 @@ const graphics_gate* graphics_scene::get_gate_item(const u32 id) const
     return nullptr;
 }
 
+const graphics_net* graphics_scene::get_net_item(const u32 id) const
+{
+    for (const net_data& d : m_net_items)
+    {
+        if (d.id > id)
+            break;
+
+        if (d.id == id)
+            return d.item;
+    }
+
+    return nullptr;
+}
+
 const graphics_module* graphics_scene::get_module_item(const u32 id) const
 {
     for (const module_data& d : m_module_items)

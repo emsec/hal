@@ -4,6 +4,7 @@
 #include "content_widget/content_widget.h"
 
 #include "graph_widget/contexts/graph_context.h"
+#include "graph_widget/graph_widget.h"
 
 #include <QMap>
 
@@ -36,6 +37,8 @@ private:
     float m_zoom_factor;
 
     QMap<graph_context*, QWidget*> m_context_widget_map;
+
+    graph_widget* m_current_widget;
 
     int get_context_tab_index(graph_context* context) const;
 

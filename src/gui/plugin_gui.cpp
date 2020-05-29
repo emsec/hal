@@ -22,6 +22,7 @@
 #include "gui/style/style.h"
 #include "gui/thread_pool/thread_pool.h"
 #include "gui/window_manager/window_manager.h"
+#include "gui/gui_api/gui_api.h"
 
 #include <signal.h>
 
@@ -61,6 +62,8 @@ file_status_manager g_file_status_manager;
 thread_pool* g_thread_pool;
 
 graph_context_manager g_graph_context_manager;
+
+gui_api* g_gui_api;
 
 std::unique_ptr<python_context> g_python_context = nullptr;
 
@@ -186,6 +189,8 @@ bool plugin_gui::exec(program_arguments& args)
     g_notification_manager = new notification_manager();
 
     g_thread_pool = new thread_pool();
+
+    g_gui_api = new gui_api();
 
     signal(SIGINT, m_cleanup);
 

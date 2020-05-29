@@ -1,16 +1,14 @@
 #include "netlist/event_system/event_log.h"
 
 #include "core/log.h"
-
-#include "netlist/gate.h"
-#include "netlist/module.h"
-#include "netlist/net.h"
-#include "netlist/netlist.h"
-
 #include "netlist/event_system/gate_event_handler.h"
 #include "netlist/event_system/module_event_handler.h"
 #include "netlist/event_system/net_event_handler.h"
 #include "netlist/event_system/netlist_event_handler.h"
+#include "netlist/gate.h"
+#include "netlist/module.h"
+#include "netlist/net.h"
+#include "netlist/netlist.h"
 
 namespace event_log
 {
@@ -164,6 +162,10 @@ namespace event_log
             else if (event == module_event_handler::event::name_changed)
             {
                 log_info("event", "changed name of submodule '{}' (id {:08x}) to '{}'", submodule->get_name(), submodule->get_id(), submodule->get_name());
+            }
+            else if (event == module_event_handler::event::type_changed)
+            {
+                log_info("event", "changed type of submodule '{}' (id {:08x}) to '{}'", submodule->get_name(), submodule->get_id(), submodule->get_type());
             }
             else if (event == module_event_handler::event::parent_changed)
             {

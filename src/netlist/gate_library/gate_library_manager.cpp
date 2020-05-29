@@ -28,7 +28,7 @@ namespace gate_library_manager
 
                 buffer << file.rdbuf();
 
-                gate_library_parser_liberty parser(buffer);
+                gate_library_parser_liberty parser(path, buffer);
                 lib = parser.parse();
 
                 file.close();
@@ -92,15 +92,25 @@ namespace gate_library_manager
         }
     }    // namespace
 
-    std::shared_ptr<gate_library> load_file(const hal::path& path, bool reload_if_existing)
+    std::shared_ptr<gate_library> load_file(hal::path path, bool reload_if_existing)
     {
-        auto file_name = path.string().substr(path.string().find_last_of("/") + 1);
+        if (!hal::fs::exists(path))
+        {
+            log_error("gate_library_manager", "gate library file '{}' does not exist.", path.string());
+            return nullptr;
+        }
+
+        if (!path.is_absolute())
+        {
+            path = hal::fs::absolute(path);
+        }
+
         if (!reload_if_existing)
         {
             auto it = m_gate_libraries.find(path);
             if (it != m_gate_libraries.end())
             {
-                log_info("gate_library_manager", "gate library '{}' from '{}' is already loaded.", it->second->get_name(), file_name);
+                log_info("gate_library_manager", "the gate library file '{}' is already loaded.", path.string());
                 return it->second;
             }
         }
@@ -109,12 +119,12 @@ namespace gate_library_manager
         auto begin_time = std::chrono::high_resolution_clock::now();
         if (core_utils::ends_with(path.string(), ".lib"))
         {
-            log_info("gate_library_manager", "loading file '{}'...", file_name);
+            log_info("gate_library_manager", "loading file '{}'...", path.string());
             lib = load_liberty(path);
         }
         else
         {
-            log_error("gate_library_manager", "no parser found for '{}'.", file_name);
+            log_error("gate_library_manager", "no parser found for '{}'.", path.string());
         }
 
         if (lib == nullptr)
@@ -123,22 +133,15 @@ namespace gate_library_manager
         }
 
         auto elapsed = (double)std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - begin_time).count() / 1000;
-        log_info("gate_library_manager", "loaded '{}' in {:2.2f} seconds.", lib->get_name(), elapsed);
 
-        for (const auto& it : m_gate_libraries)
-        {
-            if (it.second->get_name() == lib->get_name())
-            {
-                log_error("gate_library_manager", "a library '{}' was already loaded from '{}'. discarding new library.", lib->get_name(), it.first.string());
-                return nullptr;
-            }
-        }
         if (!prepare_library(lib))
         {
             return nullptr;
         }
 
-        m_gate_libraries[path] = lib;
+        log_info("gate_library_manager", "loaded gate library '{}' in {:2.2f} seconds.", lib->get_name(), elapsed);
+
+        m_gate_libraries[path.string()] = lib;
 
         return lib;
     }
@@ -163,28 +166,37 @@ namespace gate_library_manager
         }
     }
 
-    std::shared_ptr<gate_library> get_gate_library(const std::string& name)
+    std::shared_ptr<gate_library> get_gate_library(const std::string& file_name)
     {
-        for (const auto& it : m_gate_libraries)
-        {
-            if (it.second->get_name() == name)
-            {
-                return it.second;
-            }
-        }
+        hal::path absolute_path;
 
-        // log_info("gate_library_manager", "no gate library '{}' loaded. trying to load '{}.lib' now from default directories...", name, name);
-        hal::path path_liberty = core_utils::get_file(name + ".lib", core_utils::get_gate_library_directories());
-
-        if (!path_liberty.empty())
+        if (hal::fs::exists(file_name))
         {
-            return load_file(path_liberty);
+            // if an existing file is queried, load it by its absolute path
+            absolute_path = hal::fs::absolute(file_name);
         }
         else
         {
-            log_error("gate_library_manager", "could not find gate library file '{}'.", name + ".lib");
-            return nullptr;
+            // if a non existing file is queried, search for it in the standard directories
+            auto stripped_name = hal::path(file_name).filename();
+            log_info("gate_library_manager", "'{}' does not exist, searching for '{}' in standard directories...", file_name, stripped_name.string());
+            auto lib_path = core_utils::get_file(stripped_name, core_utils::get_gate_library_directories());
+            if (lib_path.empty())
+            {
+                log_info("gate_library_manager", "could not find any gate library file named '{}'.", stripped_name.string());
+                return nullptr;
+            }
+            absolute_path = hal::fs::absolute(lib_path);
         }
+
+        // absolute path to file is known, check if it is already loaded
+        if (auto it = m_gate_libraries.find(absolute_path.string()); it != m_gate_libraries.end())
+        {
+            return it->second;
+        }
+
+        // not already loaded -> load
+        return load_file(absolute_path);
     }
 
     std::vector<std::shared_ptr<gate_library>> get_gate_libraries()

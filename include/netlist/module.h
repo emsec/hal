@@ -24,10 +24,8 @@
 #pragma once
 
 #include "def.h"
-
-#include "netlist/gate_library/gate_library.h"
-
 #include "netlist/data_container.h"
+#include "netlist/gate_library/gate_library.h"
 
 #include <functional>
 #include <map>
@@ -74,6 +72,24 @@ public:
      * @params[in] name - The new name.
      */
     void set_name(const std::string& name);
+
+    // TODO python binding
+    // TODO add to GUI
+    /**
+     * Get the module's type.
+     *
+     * @returns The module's type.
+     */
+    std::string get_type() const;
+
+    // TODO python binding
+    // TODO add to GUI
+    /**
+     * Set the module's type.
+     *
+     * @params[in] type - The new type.
+     */
+    void set_type(const std::string& name);
 
     /**
      * Get the parent of this module.<br>
@@ -181,14 +197,14 @@ public:
      * 
      * @returns The map from input net to port name.
      */
-    std::map<std::shared_ptr<net>, std::string> get_input_port_names();
+    const std::map<std::shared_ptr<net>, std::string>& get_input_port_names();
 
     /**
      * Get the mapping of all output nets to their corresponding port names.
      * 
      * @returns The map from output net to port name.
      */
-    std::map<std::shared_ptr<net>, std::string> get_output_port_names();
+    const std::map<std::shared_ptr<net>, std::string>& get_output_port_names();
 
     /*
      * ################################################################
@@ -252,6 +268,7 @@ private:
     module& operator=(const module&) = delete;    //disable copy-assignment
 
     std::string m_name;
+    std::string m_type;
 
     netlist_internal_manager* m_internal_manager;
     u32 m_id;

@@ -35,7 +35,7 @@ protected:
                                         "\n"
                                         "architecture STRUCTURE of TEST_Comp is\n"
                                         "begin\n"
-                                        "  gate_0 : INV\n"
+                                        "  gate_0 : gate_1_to_1\n"
                                         "    port map (\n"
                                         "      I => net_global_in,\n"
                                         "      O => net_global_out\n"

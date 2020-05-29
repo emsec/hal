@@ -752,6 +752,32 @@ labeled_frame #right-spacer {
     margin-right : 6px;
 }
 
+/*********************************************
+*             MODULE_DETAILS_WIDGET            *
+*********************************************/
+
+module_details_widget QPushButton{
+    font: bold "Iosevka";
+    font-size: 12px;
+    /*background: qlineargradient( x1:0 y1:0, x2:1 y2:0, stop:0 black, stop:1 gray);*/
+    background: #1a1a1a;
+    border-color: #999999;
+    border-width: 1px;
+    color: #eeeeee;
+    height: 12px;
+}
+
+module_details_widget QPushButton:disabled{
+    font: bold "Iosevka";
+    font-size: 12px;
+    /*background: qlineargradient( x1:0 y1:0, x2:1 y2:0, stop:0 black, stop:1 gray);*/
+    background: #1a1a1a;
+    border-color: #999999;
+    border-width: 1px;
+    color: #eeeeee;
+    height: 12px;
+}
+
 /*
 rgb(107, 135, 255)
 */
@@ -1354,6 +1380,9 @@ qproperty-duplicate_icon_path: ":/icons/content";
 
 qproperty-delete_icon_style: "all->#A61F1F";
 qproperty-delete_icon_path: ":/icons/trashcan";
+
+qproperty-timestamp_icon_style: "all->#FFC30B";
+qproperty-timestamp_icon_path: ":/icons/clock";
 }
 
 main_window {
@@ -1466,14 +1495,14 @@ background : rgba(0, 0, 0, 128);
 }
 
 QTreeView {
-    selection-background-color: green; /* Used on Mac ? TEST*/
+    selection-background-color: #0D293E; /* Used on Mac ? TEST*/
     selection-color: white; /* Used on Mac ? TEST*/
     show-decoration-selected: 1;
     outline: none;
 }
 
 QTreeView::item:selected {
-    background-color: green; /* Used on Windows ? TEST*/
+    background-color: #0D293E; /* Used on Windows ? TEST*/
     color: white;
     border: none;
 }

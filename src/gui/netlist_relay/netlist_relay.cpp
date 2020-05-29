@@ -320,6 +320,20 @@ void netlist_relay::relay_module_event(module_event_handler::event ev, std::shar
             Q_EMIT module_gate_removed(object, associated_data);
             break;
         }
+        case module_event_handler::event::input_port_name_changed:
+        {
+            //< associated data = respective net 
+
+            Q_EMIT module_input_port_name_changed(object, associated_data);
+            break;
+        }
+        case module_event_handler::event::output_port_name_changed:
+        {
+            //< associated data = respective net
+
+            Q_EMIT module_output_port_name_changed(object, associated_data);
+            break;
+        }
     }
 }
 

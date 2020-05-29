@@ -1,13 +1,11 @@
 #include "netlist/module.h"
 
+#include "core/log.h"
+#include "netlist/event_system/module_event_handler.h"
 #include "netlist/gate.h"
 #include "netlist/net.h"
 #include "netlist/netlist.h"
 #include "netlist/netlist_internal_manager.h"
-
-#include "netlist/event_system/module_event_handler.h"
-
-#include "core/log.h"
 
 module::module(u32 id, std::shared_ptr<module> parent, const std::string& name, netlist_internal_manager* internal_manager)
 {
@@ -39,6 +37,26 @@ void module::set_name(const std::string& name)
         m_name = name;
 
         module_event_handler::notify(module_event_handler::event::name_changed, shared_from_this());
+    }
+}
+
+std::string module::get_type() const
+{
+    return m_type;
+}
+
+void module::set_type(const std::string& type)
+{
+    if (core_utils::trim(type).empty())
+    {
+        log_error("module", "empty name is not allowed");
+        return;
+    }
+    if (type != m_type)
+    {
+        m_type = type;
+
+        module_event_handler::notify(module_event_handler::event::type_changed, shared_from_this());
     }
 }
 
@@ -252,7 +270,7 @@ std::set<std::shared_ptr<net>> module::get_input_nets() const
                 continue;
             }
             auto sources = net->get_sources();
-            if (std::any_of(sources.begin(), sources.end(), [&gates](endpoint src){return gates.find(src.get_gate()) == gates.end();}))
+            if (std::any_of(sources.begin(), sources.end(), [&gates](endpoint src) { return gates.find(src.get_gate()) == gates.end(); }))
             {
                 res.insert(net);
             }
@@ -281,7 +299,7 @@ std::set<std::shared_ptr<net>> module::get_output_nets() const
                 continue;
             }
             auto destinations = net->get_destinations();
-            if (std::any_of(destinations.begin(), destinations.end(), [&gates](endpoint dst){return gates.find(dst.get_gate()) == gates.end();}))
+            if (std::any_of(destinations.begin(), destinations.end(), [&gates](endpoint dst) { return gates.find(dst.get_gate()) == gates.end(); }))
             {
                 res.insert(net);
             }
@@ -305,7 +323,7 @@ std::set<std::shared_ptr<net>> module::get_internal_nets() const
             }
             seen.insert(net->get_id());
             auto destinations = net->get_destinations();
-            if (std::any_of(destinations.begin(), destinations.end(), [&gates](endpoint dst){return gates.find(dst.get_gate()) != gates.end();}))
+            if (std::any_of(destinations.begin(), destinations.end(), [&gates](endpoint dst) { return gates.find(dst.get_gate()) != gates.end(); }))
             {
                 res.insert(net);
             }
@@ -320,10 +338,12 @@ void module::set_input_port_name(const std::shared_ptr<net>& input_net, const st
 
     if (auto it = input_nets.find(input_net); it == input_nets.end())
     {
-        log_error("module", "net '{}' with id {} is not an input net of module '{}' with id {}.", input_net->get_name(), input_net->get_id(), this->get_name(), this->get_id());
+        log_warning(
+            "module", "net '{}' with id {} is not an input net of module '{}' with id {}, ignoring port assignment", input_net->get_name(), input_net->get_id(), this->get_name(), this->get_id());
         return;
     }
 
+    m_named_input_nets.insert(input_net);
     m_input_net_to_port_name.insert_or_assign(input_net, port_name);
 
     module_event_handler::notify(module_event_handler::event::input_port_name_changed, shared_from_this(), input_net->get_id());
@@ -335,10 +355,12 @@ void module::set_output_port_name(const std::shared_ptr<net>& output_net, const 
 
     if (auto it = output_nets.find(output_net); it == output_nets.end())
     {
-        log_error("module", "net '{}' with id {} is not an output net of module '{}' with id {}.", output_net->get_name(), output_net->get_id(), this->get_name(), this->get_id());
+        log_warning(
+            "module", "net '{}' with id {} is not an output net of module '{}' with id {}, ignoring port assignment", output_net->get_name(), output_net->get_id(), this->get_name(), this->get_id());
         return;
     }
 
+    m_named_input_nets.insert(output_net);
     m_output_net_to_port_name.insert_or_assign(output_net, port_name);
 
     module_event_handler::notify(module_event_handler::event::output_port_name_changed, shared_from_this(), output_net->get_id());
@@ -351,7 +373,7 @@ std::string module::get_input_port_name(const std::shared_ptr<net>& input_net)
 
     if (auto it = input_nets.find(input_net); it == input_nets.end())
     {
-        log_error("module", "net '{}' with id {} is not an input net of module '{}' with id {}.", input_net->get_name(), input_net->get_id(), this->get_name(), this->get_id());
+        log_warning("module", "net '{}' with id {} is not an input net of module '{}' with id {}.", input_net->get_name(), input_net->get_id(), this->get_name(), this->get_id());
         return "";
     }
 
@@ -376,7 +398,7 @@ std::string module::get_output_port_name(const std::shared_ptr<net>& output_net)
 
     if (auto it = output_nets.find(output_net); it == output_nets.end())
     {
-        log_error("module", "net '{}' with id {} is not an output net of module '{}' with id {}.", output_net->get_name(), output_net->get_id(), this->get_name(), this->get_id());
+        log_warning("module", "net '{}' with id {} is not an output net of module '{}' with id {}.", output_net->get_name(), output_net->get_id(), this->get_name(), this->get_id());
         return "";
     }
 
@@ -394,7 +416,7 @@ std::string module::get_output_port_name(const std::shared_ptr<net>& output_net)
     return port_name;
 }
 
-std::map<std::shared_ptr<net>, std::string> module::get_input_port_names()
+const std::map<std::shared_ptr<net>, std::string>& module::get_input_port_names()
 {
     auto input_nets = get_input_nets();
     std::set<std::shared_ptr<net>> diff;
@@ -420,7 +442,7 @@ std::map<std::shared_ptr<net>, std::string> module::get_input_port_names()
     return m_input_net_to_port_name;
 }
 
-std::map<std::shared_ptr<net>, std::string> module::get_output_port_names()
+const std::map<std::shared_ptr<net>, std::string>& module::get_output_port_names()
 {
     auto output_nets = get_output_nets();
     std::set<std::shared_ptr<net>> diff;

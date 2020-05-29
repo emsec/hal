@@ -23,15 +23,14 @@
 
 #pragma once
 
-#include "def.h"
-
 #include "core/token_stream.h"
-
+#include "def.h"
 #include "netlist/boolean_function.h"
 #include "netlist/gate_library/gate_library_parser/gate_library_parser.h"
 #include "netlist/gate_library/gate_type/gate_type.h"
 #include "netlist/gate_library/gate_type/gate_type_sequential.h"
 
+#include <optional>
 #include <unordered_map>
 
 /**
@@ -43,7 +42,7 @@ public:
     /**
      * @param[in] stream - The string stream filled with gate library definition.
      */
-    explicit gate_library_parser_liberty(std::stringstream& stream);
+    explicit gate_library_parser_liberty(const hal::path& file_path, std::stringstream& file_content);
 
     ~gate_library_parser_liberty() = default;
 
@@ -65,49 +64,109 @@ public:
     std::shared_ptr<gate_library> parse() override;
 
 private:
-    struct cell
+    enum class pin_direction
     {
+        UNKNOWN,
+        IN,
+        OUT,
+        INOUT
+    };
+
+    struct type_group
+    {
+        u32 line_number;
         std::string name;
-        gate_type::base_type type;
-        std::vector<std::string> input_pins, output_pins;
-        std::unordered_map<std::string, token> functions;
-        std::string next_state, clocked_on, reset, set;
-        gate_type_sequential::set_reset_behavior special_behavior_var1, special_behavior_var2;
-        std::string data_category, data_identifier, data_direction;
+        std::vector<u32> range;
+    };
+
+    struct pin_group
+    {
+        u32 line_number;
+        std::vector<std::string> pin_names;
+        pin_direction direction = pin_direction::UNKNOWN;
+        std::string function;
+        std::string x_function;
+        std::string z_function;
+    };
+
+    struct bus_group
+    {
+        u32 line_number;
+        std::string name;
+        pin_direction direction = pin_direction::UNKNOWN;
+        std::vector<std::string> pin_names;
+        std::vector<pin_group> pins;
+        std::map<u32, std::string> index_to_pin_name;
+    };
+
+    struct ff_group
+    {
+        u32 line_number;
         std::string state1, state2;
+        std::string clocked_on;
+        std::string next_state;
+        std::string clear;
+        std::string preset;
+        gate_type_sequential::set_reset_behavior special_behavior_var1 = gate_type_sequential::set_reset_behavior::U;
+        gate_type_sequential::set_reset_behavior special_behavior_var2 = gate_type_sequential::set_reset_behavior::U;
+        std::string data_category;
+        std::string data_identifier;
+    };
 
-        void clear()
-        {
-            name = "";
-            type = gate_type::base_type::combinatorial;
-            input_pins.clear();
-            output_pins.clear();
-            functions.clear();
-            next_state            = "";
-            clocked_on            = "";
-            reset                 = "";
-            set                   = "";
-            special_behavior_var1 = gate_type_sequential::set_reset_behavior::U;
-            special_behavior_var2 = gate_type_sequential::set_reset_behavior::U;
-            data_category         = "";
-            data_identifier       = "";
-            data_direction        = "";
-            state1                = "";
-            state2                = "";
-        }
-    } m_current_cell;
+    struct latch_group
+    {
+        u32 line_number;
+        std::string state1, state2;
+        std::string enable;
+        std::string data_in;
+        std::string clear;
+        std::string preset;
+        gate_type_sequential::set_reset_behavior special_behavior_var1 = gate_type_sequential::set_reset_behavior::U;
+        gate_type_sequential::set_reset_behavior special_behavior_var2 = gate_type_sequential::set_reset_behavior::U;
+    };
 
-    token_stream m_token_stream;
+    struct lut_group
+    {
+        u32 line_number;
+        std::string name;
+        std::string data_category;
+        std::string data_identifier;
+        std::string data_direction;
+    };
+
+    struct cell_group
+    {
+        u32 line_number;
+        std::string name;
+        gate_type::base_type type = gate_type::base_type::combinatorial;
+        std::map<std::string, bus_group> buses;
+        ff_group ff;
+        latch_group latch;
+        lut_group lut;
+        std::vector<pin_group> pins;
+        std::set<std::string> pin_names;
+        std::map<std::string, std::string> special_functions;
+    };
+
+    token_stream<std::string> m_token_stream;
+    std::map<std::string, type_group> m_bus_types;
+    std::set<std::string> m_cell_names;
 
     bool tokenize();
     bool parse_tokens();
 
-    bool parse_cell(token_stream& library_stream);
-    bool parse_pin(token_stream& cell_stream);
-    bool parse_ff(token_stream& cell_stream);
-    bool parse_latch(token_stream& cell_stream);
-    bool parse_lut(token_stream& cell_stream);
-    std::shared_ptr<gate_type> construct_gate_type();
+    bool parse_cell(token_stream<std::string>& library_stream);
+    bool parse_type(token_stream<std::string>& str);
+    std::optional<pin_group> parse_pin(token_stream<std::string>& str, cell_group& cell, pin_direction direction = pin_direction::UNKNOWN, const std::string& external_pin_name = "");
+    std::optional<bus_group> parse_bus(token_stream<std::string>& str, cell_group& cell);
+    std::optional<ff_group> parse_ff(token_stream<std::string>& str);
+    std::optional<latch_group> parse_latch(token_stream<std::string>& str);
+    std::optional<lut_group> parse_lut(token_stream<std::string>& str);
+    std::shared_ptr<gate_type> construct_gate_type(cell_group& cell);
 
     void remove_comments(std::string& line, bool& multi_line_comment);
+    std::vector<std::string> tokenize_function(const std::string& function);
+    std::map<std::string, std::string> expand_bus_function(const std::map<std::string, bus_group>& buses, const std::vector<std::string>& pin_names, const std::string& function);
+    std::string prepare_pin_function(const std::map<std::string, bus_group>& buses, const std::string& function);
+    std::map<std::string, boolean_function> construct_bus_functions(const cell_group& cell, const std::vector<std::string>& input_pins);
 };
