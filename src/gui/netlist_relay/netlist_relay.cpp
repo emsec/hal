@@ -334,6 +334,13 @@ void netlist_relay::relay_module_event(module_event_handler::event ev, std::shar
             Q_EMIT module_output_port_name_changed(object, associated_data);
             break;
         }
+        case module_event_handler::event::type_changed:
+        {
+            //< no associated_data
+
+            Q_EMIT module_type_changed(object);
+            break;
+        }
     }
 }
 
