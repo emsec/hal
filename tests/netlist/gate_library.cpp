@@ -71,6 +71,7 @@ TEST_F(gate_library_test, check_pin_management)
         // NEGATIVE TESTS
         {
             // Try to add the same input/ouput pin twice (should not work)
+            NO_COUT_TEST_BLOCK;
             gate_type gt("gt_name");
 
             gt.add_input_pin("IN_PIN");
@@ -140,11 +141,11 @@ TEST_F(gate_library_test, DISABLED_check_pin_groups)
                      {"in_pin_group",std::vector<u32>({0,1})}                             })));
             EXPECT_EQ(gt.get_input_pins(), std::vector<std::string>({"in_pin_group(0)","in_pin_group(1)"}));
         }
-        { // ISSUE: is added twice?
+        {
             // Add a pin group, that contains a pin that is already registered
             gate_type gt("gt_name");
             gt.add_output_pin("out_pin(0)");
-            gt.add_output_pin_group("out_pin", std::vector<u32>({0})); // <- shouldn't work
+            gt.add_output_pin_group("out_pin", std::vector<u32>({0}));
             EXPECT_EQ(gt.get_output_pins(), std::vector<std::string>({"out_pin(0)"}));
         }
     TEST_END
@@ -184,46 +185,6 @@ TEST_F(gate_library_test, check_boolean_function_assignment)
 TEST_F(gate_library_test, check_equal_to_operator)
 {
     TEST_START
-        // NOTE: Since gate_types are also compared by their id, and the id is always unique, these test are outdated
-        /*{
-            // Create two equal gate_types and compare them
-            gate_type gt_0("gt_name");
-            gate_type gt_1("gt_name");
-            EXPECT_TRUE(gt_0 == gt_1);
-            // -- add pins
-            gt_0.add_input_pins(std::vector<std::string>({"IN_0", "IN_1"}));
-            gt_1.add_input_pins(std::vector<std::string>({"IN_0", "IN_1"}));
-            EXPECT_TRUE(gt_0 == gt_1);
-            gt_0.add_output_pins(std::vector<std::string>({"OUT_0", "OUT_1"}));
-            gt_1.add_output_pins(std::vector<std::string>({"OUT_0", "OUT_1"}));
-            EXPECT_TRUE(gt_0 == gt_1);
-            // -- add a boolean function
-            boolean_function bf_out = boolean_function::from_string("NO_PIN_A ^ NO_PIN_B");
-            gt_0.add_boolean_function("OUT_0", bf_out);
-            gt_1.add_boolean_function("OUT_0", bf_out);
-            // -- comparison
-            EXPECT_TRUE(gt_0 == gt_1);
-            EXPECT_FALSE(gt_0 != gt_1);
-        }
-        {
-            // Compare the two gate types while they differ in one property (base type, pins, functions)
-            gate_type gt_0("gt_name");
-            gate_type gt_1("gt_name");
-            // -- add pins
-            gt_0.add_input_pins(std::vector<std::string>({"IN_0", "IN_1"}));
-            EXPECT_FALSE(gt_0 == gt_1);
-            gt_1.add_input_pins(std::vector<std::string>({"IN_0", "IN_1"}));
-
-            gt_0.add_output_pins(std::vector<std::string>({"OUT_0", "OUT_1"}));
-            EXPECT_FALSE(gt_0 == gt_1);
-            gt_1.add_output_pins(std::vector<std::string>({"OUT_0", "OUT_1"}));
-
-            // -- add a boolean function
-            boolean_function bf_out = boolean_function::from_string("NO_PIN_A ^ NO_PIN_B");
-            gt_0.add_boolean_function("OUT_0", bf_out);
-            EXPECT_FALSE(gt_0 == gt_1);
-            gt_1.add_boolean_function("OUT_0", bf_out);
-        }*/
         {
             // Testing the comparison of gate types (compared by id)
             gate_type gt_0("gt_name");
@@ -254,15 +215,6 @@ TEST_F(gate_library_test, check_output_from_init_string_pin)
             gtl.add_output_from_init_string_pin("OFIS_0");
             gtl.add_output_from_init_string_pin("OFIS_1");
             EXPECT_EQ(gtl.get_output_from_init_string_pins(), std::unordered_set<std::string>({"OFIS_0","OFIS_1"}));
-        }
-        {
-            // Add and get some output_from_init_string pins for a non existing pin(NOTE: Output-Pin doesn't have to exist)
-            gate_type_lut gtl("gtl_name");
-            gtl.add_output_pins(std::vector<std::string>({"O0","OFIS_0"}));
-            gtl.add_output_from_init_string_pin("OFIS_0");
-            gtl.add_output_from_init_string_pin("OFIS_1"); // <- not added yet
-            EXPECT_EQ(gtl.get_output_from_init_string_pins(), std::unordered_set<std::string>({"OFIS_0","OFIS_1"}));
-            EXPECT_EQ(gtl.get_output_pins(), std::vector<std::string>({"O0", "OFIS_0", "OFIS_1"})); // ISSUE: OFSI_1 is not added to output pin vector
         }
     TEST_END
 }
@@ -303,71 +255,6 @@ TEST_F(gate_library_test, check_config_data)
     TEST_END
 }
 
-/**
- * Testing the equal-to operator.
- *
- * Functions: operator==, (do_compare)
- * NOTE: Since the id is compared as well, these tests are outdated
- */
-TEST_F(gate_library_test, DISABLED_check_lut_comparison)
-{
-    TEST_START
-        /*{
-            // Create two equal gate_types and compare them
-            gate_type_lut gtl_0("gtl_name");
-            gate_type_lut gtl_1("gtl_name");
-            gtl_0.add_output_pin("OFIS_PIN");
-            gtl_1.add_output_pin("OFIS_PIN");
-            // -- set config_data_category
-            gtl_0.set_config_data_category("category");
-            gtl_1.set_config_data_category("category");
-            // -- set config_data_identifier
-            gtl_0.set_config_data_identifier("identifier");
-            gtl_1.set_config_data_identifier("identifier");
-            // -- set ascending order
-            gtl_0.set_config_data_ascending_order(false);
-            gtl_1.set_config_data_ascending_order(false);
-            // -- add output pin from init string pin
-            gtl_0.add_output_from_init_string_pin("OFIS_PIN");
-            gtl_1.add_output_from_init_string_pin("OFIS_PIN");
-
-            EXPECT_TRUE(gtl_0 == gtl_1);
-        }
-        {
-            // Compare two gate_type_luts while they differ in one property (category, identifier,
-            // ascending order, output from init string pins (?) )
-            gate_type_lut gtl_0("gtl_name");
-            gate_type_lut gtl_1("gtl_name");
-            // -- set config_data_category
-            gtl_0.set_config_data_category("category");
-            EXPECT_FALSE(gtl_0 == gtl_1);
-            gtl_1.set_config_data_category("category");
-            // -- set config_data_identifier
-            gtl_0.set_config_data_identifier("identifier");
-            EXPECT_FALSE(gtl_0 == gtl_1);
-            gtl_1.set_config_data_identifier("identifier");
-            // -- set ascending order
-            gtl_0.set_config_data_ascending_order(false);
-            EXPECT_FALSE(gtl_0 == gtl_1);
-            gtl_1.set_config_data_ascending_order(false);
-            // -- add output pin from init string pin
-            gtl_0.add_output_from_init_string_pin("OFIS_PINs");
-            // EXPECT_FALSE(gtl_0 == gtl_1); // ISSUE: outputs from init string are not considered in comparison
-            gtl_1.add_output_from_init_string_pin("OFIS_PINs");
-        }
-        {
-            // Compare two gate_type. One is a gate_type, the other one a gate_type_lut
-            gate_type_lut gt_0("gt_name");
-            gate_type gt_1("gt_name");
-
-            EXPECT_FALSE(gt_0 == gt_1);
-            EXPECT_FALSE(gt_1 == gt_0);
-        }*/
-
-    TEST_END
-}
-
-
 // ===== gate_type_sequential tests ====
 
 /**
@@ -379,7 +266,7 @@ TEST_F(gate_library_test, check_state_output_pin)
 {
     TEST_START
         {
-            // Add and get some state_output pins (NOTE: Output-Pin doesn't have to exist)
+            // Add and get some state_output pins
             gate_type_sequential gts("gts_name", gate_type::base_type::ff);
             gts.add_output_pins(std::vector<std::string>({"OFIS_0","OFIS_1"}));
             gts.add_state_output_pin("OFIS_0");
@@ -387,21 +274,12 @@ TEST_F(gate_library_test, check_state_output_pin)
             EXPECT_EQ(gts.get_state_output_pins(), std::unordered_set<std::string>({"OFIS_0","OFIS_1"}));
         }
         {
-            // Add and get some inverted_state_output pins (NOTE: Output-Pin doesn't have to exist)
+            // Add and get some inverted_state_output pins
             gate_type_sequential gts("gts_name", gate_type::base_type::ff);
             gts.add_output_pins(std::vector<std::string>({"OFIS_0","OFIS_1"}));
             gts.add_inverted_state_output_pin("OFIS_0");
             gts.add_inverted_state_output_pin("OFIS_1");
             EXPECT_EQ(gts.get_inverted_state_output_pins(), std::unordered_set<std::string>({"OFIS_0","OFIS_1"}));
-            EXPECT_EQ(gts.get_output_pins(), std::vector<std::string>({"OFIS_0","OFIS_1"}));
-        }
-        {
-            // Add and get some state- and inverted_state_output pins for a non existing pin
-            gate_type_sequential gts("gts_name", gate_type::base_type::ff);
-            gts.add_state_output_pin("OFIS_0");
-            gts.add_inverted_state_output_pin("OFIS_1");
-            EXPECT_EQ(gts.get_state_output_pins(), std::unordered_set<std::string>({"OFIS_0"}));
-            EXPECT_EQ(gts.get_inverted_state_output_pins(), std::unordered_set<std::string>({"OFIS_1"}));
             EXPECT_EQ(gts.get_output_pins(), std::vector<std::string>({"OFIS_0","OFIS_1"}));
         }
     TEST_END
@@ -444,79 +322,6 @@ TEST_F(gate_library_test, check_init_data)
             EXPECT_EQ(gts_2.get_set_reset_behavior(),
                       std::make_pair(gate_type_sequential::set_reset_behavior::U, gate_type_sequential::set_reset_behavior::U));
         }
-    TEST_END
-}
-
-/**
- * Testing the equal-to operator.
- *
- * Functions: operator==, (do_compare)
- * NOTE: Since the id is compared as well, these tests are outdated
- */
-TEST_F(gate_library_test, DISABLED_check_sequential_comparison)
-{
-    TEST_START
-        /*{
-            // Create two equal gate_types and compare them
-            gate_type_sequential gts_0("gts_name", gate_type::base_type::ff);
-            gate_type_sequential gts_1("gts_name", gate_type::base_type::ff);
-            gts_0.add_output_pins(std::vector<std::string>({"SO_PIN","invSO_PIN"}));
-            gts_1.add_output_pins(std::vector<std::string>({"SO_PIN","invSO_PIN"}));
-
-            // -- set init_data_category
-            gts_0.set_init_data_category("category");
-            gts_1.set_init_data_category("category");
-            // -- set init_data_identifier
-            gts_0.set_init_data_identifier("identifier");
-            gts_1.set_init_data_identifier("identifier");
-            // -- add state output pin
-            gts_0.add_state_output_pin("SO_PIN");
-            gts_1.add_state_output_pin("SO_PIN");
-            // -- add inverted state output pin
-            gts_0.add_inverted_state_output_pin("invSO_PIN");
-            gts_1.add_inverted_state_output_pin("invSO_PIN");
-            // -- set set-reset behavior
-            gts_0.set_set_reset_behavior(gate_type_sequential::set_reset_behavior::H, gate_type_sequential::set_reset_behavior::N);
-            gts_1.set_set_reset_behavior(gate_type_sequential::set_reset_behavior::H, gate_type_sequential::set_reset_behavior::N);
-
-            EXPECT_TRUE(gts_0 == gts_1);
-        }
-        {
-            // Compare two gate_type_sequential while they differ in one property (category, identifier,
-            // state output pins, inverted state output pins)
-            gate_type_sequential gts_0("gts_name", gate_type::base_type::ff);
-            gate_type_sequential gts_1("gts_name", gate_type::base_type::ff);
-            gts_0.add_output_pins(std::vector<std::string>({"SO_PIN","invSO_PIN"}));
-            gts_1.add_output_pins(std::vector<std::string>({"SO_PIN","invSO_PIN"}));
-
-            // -- set init_data_category
-            gts_0.set_init_data_category("category");
-            EXPECT_FALSE(gts_0 == gts_1);
-            gts_1.set_init_data_category("category");
-            // -- set init_data_identifier
-            gts_0.set_init_data_identifier("identifier");
-            EXPECT_FALSE(gts_0 == gts_1);
-            gts_1.set_init_data_identifier("identifier");
-            // -- add state output pin
-            gts_0.add_state_output_pin("SO_PIN");
-            EXPECT_FALSE(gts_0 == gts_1);
-            gts_1.add_state_output_pin("SO_PIN");
-            // -- add inverted state output pin
-            gts_0.add_inverted_state_output_pin("invSO_PIN");
-            EXPECT_FALSE(gts_0 == gts_1);
-            gts_1.add_inverted_state_output_pin("invSO_PIN");
-            // -- set set-reset behavior
-            gts_0.set_set_reset_behavior(gate_type_sequential::set_reset_behavior::H, gate_type_sequential::set_reset_behavior::N);
-            EXPECT_FALSE(gts_0 == gts_1);
-        }
-        {
-            // Compare two gate_type. One is a gate_type, the other one a gate_type_lut
-            gate_type_sequential gt_0("gt_name", gate_type::base_type::latch);
-            gate_type gt_1("gt_name");
-
-            EXPECT_FALSE(gt_0 == gt_1);
-            EXPECT_FALSE(gt_1 == gt_0);
-        }*/
     TEST_END
 }
 
