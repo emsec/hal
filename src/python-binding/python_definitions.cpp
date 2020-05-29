@@ -1,39 +1,4 @@
-#include "core/interface_gui.h"
-#include "core/log.h"
-#include "core/plugin_manager.h"
-#include "core/utils.h"
-#include "def.h"
-#include "netlist/boolean_function.h"
-#include "netlist/gate.h"
-#include "netlist/gate_library/gate_library.h"
-#include "netlist/gate_library/gate_type/gate_type.h"
-#include "netlist/gate_library/gate_type/gate_type_lut.h"
-#include "netlist/gate_library/gate_type/gate_type_sequential.h"
-#include "netlist/hdl_parser/hdl_parser_dispatcher.h"
-#include "netlist/hdl_writer/hdl_writer_dispatcher.h"
-#include "netlist/module.h"
-#include "netlist/net.h"
-#include "netlist/netlist.h"
-#include "netlist/netlist_factory.h"
-#include "netlist/persistent/netlist_serializer.h"
-
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wshadow"
-#pragma GCC diagnostic ignored "-Wself-assign-overloaded"
-#ifdef COMPILER_CLANG
-#pragma clang diagnostic ignored "-Wnested-anon-types"
-#pragma clang diagnostic ignored "-Wshadow-field-in-constructor-modified"
-#endif
-
-#include "pybind11/functional.h"
-#include "pybind11/operators.h"
-#include "pybind11/pybind11.h"
-#include "pybind11/stl.h"
-#include "pybind11/stl_bind.h"
-
-#pragma GCC diagnostic pop
-
-using map_string_to_set_of_string = std::map<std::string, std::set<std::string>>;
+#include "bindings.h"
 
 class Pyi_base : public i_base
 {
@@ -71,7 +36,6 @@ public:
     }
 };
 
-namespace py = pybind11;
 #ifdef PYBIND11_MODULE
 
 PYBIND11_MODULE(hal_py, m)
@@ -95,55 +59,7 @@ PYBIND11_PLUGIN(hal_py)
 
     py::implicitly_convertible<std::string, hal::path>();
 
-    py::class_<data_container, std::shared_ptr<data_container>> py_data_container(m, "data_container");
-
-    py_data_container.def(py::init<>(), R"(
-        Construct a new data container.
-)");
-
-    py_data_container.def("set_data", &data_container::set_data, py::arg("category"), py::arg("key"), py::arg("value_data_type"), py::arg("value"), py::arg("log_with_info_level") = false, R"(
-        Sets a custom data entry
-        If it does not exist yet, it is added.
-
-        :param str category: Key category
-        :param str key: Data key
-        :param str data_type: Data type of value
-        :param str value: Data value
-        :param bool log_with_info_level: Force explicit logging channel 'netlist' with log level info to trace GUI events (default = false)
-        :returns: True on success.
-        :rtype: bool
-)");
-
-    py_data_container.def("delete_data", &data_container::delete_data, py::arg("category"), py::arg("key"), py::arg("log_with_info_level") = false, R"(
-        Deletes custom data.
-
-        :param str category: Category of key
-        :param str key: Data key
-        :param bool log_with_info_level: Force explicit logging channel 'netlist' with log level info to trace GUI events (default = false)
-        :returns: True on success.
-        :rtype: bool
-)");
-
-    py_data_container.def_property_readonly("data", &data_container::get_data, R"(
-        A dict from ((1) category, (2) key) to ((1) type, (2) value) containing the stored data.
-
-        :type: dict[tuple(str,str),tuple(str,str)]
-)");
-
-    py_data_container.def("get_data_by_key", &data_container::get_data_by_key, py::arg("category"), py::arg("key"), R"(
-        Gets data specified by key and category
-
-        :param str category: Category of key
-        :param str key: Data key
-        :returns: The tuple ((1) type, (2) value)
-        :rtype: tuple(str,str)
-)");
-
-    py_data_container.def_property_readonly("data_keys", &data_container::get_data_keys, R"(
-        A list of tuples ((1) category, (2) key) containing all the data keys.
-
-        :type: list[tuple(str,str)]
-)");
+    data_container_init(m);
 
     auto py_core_utils = m.def_submodule("core_utils", R"(
         HAL Core Utility functions.
