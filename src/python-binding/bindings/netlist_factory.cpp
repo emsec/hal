@@ -11,7 +11,7 @@ Creates a new netlist for a specific gate library.
 :rtype: hal_py.netlist
 )")
         .def("load_netlist",
-             py::overload_cast<const hal::path&, const std::string&, const std::string&>(&netlist_factory::load_netlist),
+             py::overload_cast<const hal::path&, const std::string&, const hal::path&>(&netlist_factory::load_netlist),
              py::arg("hdl_file"),
              py::arg("language"),
              py::arg("gate_library_name"),
@@ -21,7 +21,8 @@ Creates a new netlist for a specific file.
 :param hdl_file: Name of the hdl file.
 :type hdl_file: hal_py.hal_path
 :param str language: Programming language uses in parameter file_name.
-:param gate_library_name: Name of hardware gate library.
+:param gate_library_file: Name of hardware gate library file.
+:type gate_library_file: hal_py.hal_path
 :returns: The new netlist.
 :rtype: hal_py.netlist
 )")
