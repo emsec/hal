@@ -115,8 +115,9 @@ module_details_widget::module_details_widget(QWidget* parent) : QWidget(parent)
     connect(&g_netlist_relay, &netlist_relay::module_submodule_removed, this, &module_details_widget::handle_submodule_removed);
     connect(&g_netlist_relay, &netlist_relay::module_gate_assigned, this, &module_details_widget::handle_module_gate_assigned);
     connect(&g_netlist_relay, &netlist_relay::module_gate_removed, this, &module_details_widget::handle_module_gate_removed);
-    connect(&g_netlist_relay, &netlist_relay::module_input_port_name_changed, this, &module_details_widget::handle_input_port_name_changed);
-    connect(&g_netlist_relay, &netlist_relay::module_output_port_name_changed, this, &module_details_widget::handle_output_port_name_changed);
+    connect(&g_netlist_relay, &netlist_relay::module_input_port_name_changed, this, &module_details_widget::handle_module_input_port_name_changed);
+    connect(&g_netlist_relay, &netlist_relay::module_output_port_name_changed, this, &module_details_widget::handle_module_output_port_name_changed);
+    connect(&g_netlist_relay, &netlist_relay::module_type_changed, this, &module_details_widget::handle_module_type_changed);
 
     connect(&g_netlist_relay, &netlist_relay::net_name_changed, this, &module_details_widget::handle_net_name_changed);
     connect(&g_netlist_relay, &netlist_relay::net_source_added, this, &module_details_widget::handle_net_source_added);
@@ -137,7 +138,7 @@ void module_details_widget::update(const u32 module_id)
     //update table with general information
     m_name_item->setText(QString::fromStdString(m->get_name()));
     m_id_item->setText(QString::number(m_current_id));
-    m_type_item->setText("None"); //type does not exist yet
+    m_type_item->setText(QString::fromStdString(m->get_type()));
     m_number_of_submodules_item->setText(QString::number(m->get_submodules(nullptr, true).size()));
     m_number_of_nets_item->setText(QString::number(m->get_internal_nets().size()));
 
@@ -278,7 +279,7 @@ void module_details_widget::handle_module_gate_removed(std::shared_ptr<module> m
         update(m_current_id);
 }
 
-void module_details_widget::handle_input_port_name_changed(std::shared_ptr<module> module, u32 associated_data)
+void module_details_widget::handle_module_input_port_name_changed(std::shared_ptr<module> module, u32 associated_data)
 {
     Q_UNUSED(associated_data);
 
@@ -286,10 +287,16 @@ void module_details_widget::handle_input_port_name_changed(std::shared_ptr<modul
         update(m_current_id);
 }
 
-void module_details_widget::handle_output_port_name_changed(std::shared_ptr<module> module, u32 associated_data)
+void module_details_widget::handle_module_output_port_name_changed(std::shared_ptr<module> module, u32 associated_data)
 {
     Q_UNUSED(associated_data);
 
+    if(m_current_id == module->get_id())
+        update(m_current_id);
+}
+
+void module_details_widget::handle_module_type_changed(std::shared_ptr<module> module)
+{
     if(m_current_id == module->get_id())
         update(m_current_id);
 }

@@ -37,8 +37,9 @@ public Q_SLOTS:
     void handle_submodule_removed(std::shared_ptr<module> module, u32 associated_data);
     void handle_module_gate_assigned(std::shared_ptr<module> module, u32 associated_data);
     void handle_module_gate_removed(std::shared_ptr<module> module, u32 associated_data);
-    void handle_input_port_name_changed(std::shared_ptr<module> module, u32 associated_data);
-    void handle_output_port_name_changed(std::shared_ptr<module> module, u32 associated_data);
+    void handle_module_input_port_name_changed(std::shared_ptr<module> module, u32 associated_data);
+    void handle_module_output_port_name_changed(std::shared_ptr<module> module, u32 associated_data);
+    void handle_module_type_changed(std::shared_ptr<module> module);
 
     void handle_net_name_changed(std::shared_ptr<net> net);
     void handle_net_source_added(std::shared_ptr<net> net, const u32 src_gate_id);
