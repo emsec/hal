@@ -88,11 +88,11 @@ protected:
 TEST_F(gate_library_manager_test, check_get_gate_library)
 {
     TEST_START
-        NO_COUT_TEST_BLOCK;
+        // NO_COUT_TEST_BLOCK;
         create_test_lib();
         // Load the gate library twice by its filename
-        std::shared_ptr<gate_library> test_lib_0 = gate_library_manager::get_gate_library(lib_file_name);
-        std::shared_ptr<gate_library> test_lib_1 = gate_library_manager::get_gate_library(lib_file_name);
+        std::shared_ptr<gate_library> test_lib_0 = gate_library_manager::get_gate_library(test_lib_path);
+        std::shared_ptr<gate_library> test_lib_1 = gate_library_manager::get_gate_library(test_lib_path);
         EXPECT_NE(test_lib_0, nullptr);
         EXPECT_NE(test_lib_1, nullptr);
 
@@ -113,7 +113,7 @@ TEST_F(gate_library_manager_test, check_get_gate_library)
  * core_utils::get_gate_library_directories().
  *
  * Functions: get_gate_library, get_gate_libraries
- * TODO: Embed test gate library in library manager
+ * TODO: Crashes in my environment. Requires further investigation.
  */
 TEST_F(gate_library_manager_test, DISABLED_check_load_all)
 {
@@ -154,7 +154,7 @@ TEST_F(gate_library_manager_test, check_prepare_library)
                                                        "}";
 
             test_lib.close();
-            std::shared_ptr<gate_library> empty_lib = gate_library_manager::get_gate_library(lib_file_name);
+            std::shared_ptr<gate_library> empty_lib = gate_library_manager::get_gate_library(test_lib_path);
             ASSERT_NE(empty_lib, nullptr);
             auto g_types = empty_lib->get_gate_types();
             // Check the creation of a gnd gate type
@@ -170,52 +170,6 @@ TEST_F(gate_library_manager_test, check_prepare_library)
 
         }
         fs::remove(test_lib_path);
-        /*{ // NOTE: Currently not handled like this
-            // (very special)
-            // Parse a file that does contain gate types with the name "GND"/"VCC", but they are not constant.
-            // In this special case, a new GND/VCC gate type is created with
-            // the name "GND (auto generated)"/"VCC (auto generated)"
-            NO_COUT_TEST_BLOCK;
-            std::ofstream test_lib(test_lib_path.string());
-            test_lib << "/" << "* This file only exists for testing purposes and should be already destroyed*"<<"/\n"
-                        "library (check_prepare_library_2) {\n"
-                                                       "    define(cell);\n"
-                                                       "    cell(GND) {\n"
-                                                       "        pin(I) {\n"
-                                                       "            direction: input;\n"
-                                                       "        }\n"
-                                                       "        pin(O) {\n"
-                                                       "            direction: output;\n"
-                                                       "            function: \"I\";\n"
-                                                       "        }\n"
-                                                       "    }\n"
-                                                       "    cell(VCC) {\n"
-                                                       "        pin(I) {\n"
-                                                       "            direction: input;\n"
-                                                       "        }\n"
-                                                       "        pin(O) {\n"
-                                                       "            direction: output;\n"
-                                                       "            function: \"!I\";\n"
-                                                       "        }\n"
-                                                       "    }\n"
-                                                       "}";
-
-            test_lib.close();
-            std::shared_ptr<gate_library> strange_lib = gate_library_manager::get_gate_library(lib_file_name);
-            ASSERT_NE(strange_lib, nullptr);
-            auto g_types = strange_lib->get_gate_types();
-            // Check the creation of a gnd gate type
-            ASSERT_TRUE(g_types.find("GND (auto generated)") != g_types.end());
-            auto gnd_bf = g_types.at("GND (auto generated)")->get_boolean_functions();
-            ASSERT_TRUE(gnd_bf.find("O") != gnd_bf.end());
-            EXPECT_TRUE(gnd_bf.at("O").is_constant_zero());
-            // Check the creation of a vcc gate type
-            ASSERT_TRUE(g_types.find("VCC (auto generated)") != g_types.end());
-            auto vcc_bf = g_types.at("VCC (auto generated)")->get_boolean_functions();
-            ASSERT_TRUE(vcc_bf.find("O") != vcc_bf.end());
-            EXPECT_TRUE(vcc_bf.at("O").is_constant_one());
-
-        }*/
     TEST_END
 
 }
