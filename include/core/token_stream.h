@@ -160,12 +160,27 @@ public:
      *
      * @param[in] other - the token stream to copy
      */
-    token_stream(const token_stream& other)
+    token_stream(const token_stream<T>& other)
     {
         m_pos                   = other.m_pos;
         m_data                  = other.m_data;
         m_increase_level_tokens = other.m_increase_level_tokens;
         m_decrease_level_tokens = other.m_decrease_level_tokens;
+    }
+
+    /**
+     * Assigns a tokenstream.
+     *
+     * @param[in] other - the tokenstream
+     * @returns A reference to this tokenstream.
+     */
+    token_stream<T>& operator=(const token_stream<T>& other)
+    {
+        m_pos                   = other.m_pos;
+        m_data                  = other.m_data;
+        m_increase_level_tokens = other.m_increase_level_tokens;
+        m_decrease_level_tokens = other.m_decrease_level_tokens;
+        return *this;
     }
 
     /**
