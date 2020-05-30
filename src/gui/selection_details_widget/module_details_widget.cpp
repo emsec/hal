@@ -455,15 +455,15 @@ void module_details_widget::handle_net_name_changed(std::shared_ptr<net> net)
 
 void module_details_widget::handle_net_source_added(std::shared_ptr<net> net, const u32 src_gate_id)
 {
-    Q_UNUSED(src_gate_id);
+    Q_UNUSED(net)
 
     if(m_current_id == 0)
         return;
 
     auto module = g_netlist->get_module_by_id(m_current_id);
-    auto output_nets = module->get_output_nets();
-
-    if(output_nets.find(net) != output_nets.end())
+    auto gate = g_netlist->get_gate_by_id(src_gate_id);
+    
+    if(module->contains_gate(gate, true))
         update(m_current_id);
 }
 
@@ -476,22 +476,22 @@ void module_details_widget::handle_net_source_removed(std::shared_ptr<net> net, 
 
     auto module = g_netlist->get_module_by_id(m_current_id);
     auto gate = g_netlist->get_gate_by_id(src_gate_id);
-
+    
     if(module->contains_gate(gate, true))
         update(m_current_id);
 }
 
 void module_details_widget::handle_net_destination_added(std::shared_ptr<net> net, const u32 dst_gate_id)
 {
-    Q_UNUSED(dst_gate_id)
+    Q_UNUSED(net)
 
     if(m_current_id == 0)
         return;
 
     auto module = g_netlist->get_module_by_id(m_current_id);
-    auto input_nets = module->get_input_nets();
-
-    if(input_nets.find(net) != input_nets.end())
+    auto gate = g_netlist->get_gate_by_id(dst_gate_id);
+    
+    if(module->contains_gate(gate, true))
         update(m_current_id);
 }
 
@@ -504,11 +504,10 @@ void module_details_widget::handle_net_destination_removed(std::shared_ptr<net> 
 
     auto module = g_netlist->get_module_by_id(m_current_id);
     auto gate = g_netlist->get_gate_by_id(dst_gate_id);
-
+    
     if(module->contains_gate(gate, true))
         update(m_current_id);
 }
-
 
 void module_details_widget::handle_buttons_clicked()
 {
