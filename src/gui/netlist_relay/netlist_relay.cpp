@@ -153,75 +153,103 @@ void netlist_relay::relay_netlist_event(netlist_event_handler::event ev, std::sh
         case netlist_event_handler::event::id_changed:
         {
             ///< associated_data = old id
+
+            Q_EMIT netlist_id_changed(object, associated_data);
             break;
         }
         case netlist_event_handler::event::input_filename_changed:
         {
             ///< no associated_data
+
+            Q_EMIT netlist_input_filename_changed(object);
             break;
         }
         case netlist_event_handler::event::design_name_changed:
         {
             ///< no associated_data
+
+            Q_EMIT netlist_design_name_changed(object);
             break;
         }
         case netlist_event_handler::event::device_name_changed:
         {
             ///< no associated_data
+
+            Q_EMIT netlist_device_name_changed(object);
             break;
         }
         case netlist_event_handler::event::marked_global_vcc:
         {
             ///< associated_data = id of gate
+
+            Q_EMIT netlist_marked_global_vcc(object, associated_data);
             break;
         }
         case netlist_event_handler::event::marked_global_gnd:
         {
             ///< associated_data = id of gate
+
+            Q_EMIT netlist_marked_global_gnd(object, associated_data);
             break;
         }
         case netlist_event_handler::event::unmarked_global_vcc:
         {
             ///< associated_data = id of gate
+
+            Q_EMIT netlist_unmarked_global_vcc(object, associated_data);
             break;
         }
         case netlist_event_handler::event::unmarked_global_gnd:
         {
             ///< associated_data = id of gate
+
+            Q_EMIT netlist_unmarked_global_gnd(object, associated_data);
             break;
         }
         case netlist_event_handler::event::marked_global_input:
         {
             ///< associated_data = id of net
             g_graph_context_manager.handle_marked_global_input(associated_data);
+
+            Q_EMIT netlist_marked_global_input(object, associated_data);
             break;
         }
         case netlist_event_handler::event::marked_global_output:
         {
             ///< associated_data = id of net
             g_graph_context_manager.handle_marked_global_output(associated_data);
+
+            Q_EMIT netlist_marked_global_output(object, associated_data);
             break;
         }
         case netlist_event_handler::event::marked_global_inout:
         {
             ///< associated_data = id of net
+
+            Q_EMIT netlist_marked_global_inout(object, associated_data);
             break;
         }
         case netlist_event_handler::event::unmarked_global_input:
         {
             ///< associated_data = id of net
             g_graph_context_manager.handle_unmarked_global_input(associated_data);
+
+            Q_EMIT netlist_unmarked_global_input(object, associated_data);
             break;
         }
         case netlist_event_handler::event::unmarked_global_output:
         {
             ///< associated_data = id of net
             g_graph_context_manager.handle_unmarked_global_output(associated_data);
+
+            Q_EMIT netlist_unmarked_global_output(object, associated_data);
             break;
         }
         case netlist_event_handler::event::unmarked_global_inout:
         {
             ///< associated_data = id of net
+
+            Q_EMIT netlist_unmarked_global_inout(object, associated_data);
             break;
         }
     }
