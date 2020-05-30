@@ -209,7 +209,7 @@ void module_details_widget::update(const u32 module_id)
     for(const auto &net : m->get_output_nets())
     {
         QTableWidgetItem* port_name = new QTableWidgetItem(QString::fromStdString(m->get_output_port_name(net)));
-        QTableWidgetItem* arrow_item = new QTableWidgetItem(QChar(0x2b05));
+        QTableWidgetItem* arrow_item = new QTableWidgetItem(QChar(0x27a1));
         QTableWidgetItem* net_item = new QTableWidgetItem(QString::fromStdString(net->get_name()));
 
         arrow_item->setForeground(QBrush(QColor(114, 140, 0), Qt::SolidPattern));
