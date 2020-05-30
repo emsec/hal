@@ -230,6 +230,8 @@ void module_details_widget::update(const u32 module_id)
 
 void module_details_widget::handle_netlist_marked_global_input(std::shared_ptr<netlist> netlist, u32 associated_data)
 {
+    Q_UNUSED(netlist)
+
     if(m_current_id == 0)
         return;
 
@@ -252,6 +254,8 @@ void module_details_widget::handle_netlist_marked_global_input(std::shared_ptr<n
 
 void module_details_widget::handle_netlist_marked_global_output(std::shared_ptr<netlist> netlist, u32 associated_data)
 {
+    Q_UNUSED(netlist)
+
     if(m_current_id == 0)
         return;
 
@@ -274,6 +278,8 @@ void module_details_widget::handle_netlist_marked_global_output(std::shared_ptr<
 
 void module_details_widget::handle_netlist_marked_global_inout(std::shared_ptr<netlist> netlist, u32 associated_data)
 {
+    Q_UNUSED(netlist)
+
     if(m_current_id == 0)
         return;
 
@@ -296,6 +302,8 @@ void module_details_widget::handle_netlist_marked_global_inout(std::shared_ptr<n
 
 void module_details_widget::handle_netlist_unmarked_global_input(std::shared_ptr<netlist> netlist, u32 associated_data)
 {
+     Q_UNUSED(netlist)
+
     if(m_current_id == 0)
         return;
 
@@ -318,6 +326,8 @@ void module_details_widget::handle_netlist_unmarked_global_input(std::shared_ptr
 
 void module_details_widget::handle_netlist_unmarked_global_output(std::shared_ptr<netlist> netlist, u32 associated_data)
 {
+    Q_UNUSED(netlist)
+
     if(m_current_id == 0)
         return;
 
@@ -340,6 +350,8 @@ void module_details_widget::handle_netlist_unmarked_global_output(std::shared_pt
 
 void module_details_widget::handle_netlist_unmarked_global_inout(std::shared_ptr<netlist> netlist, u32 associated_data)
 {
+    Q_UNUSED(netlist)
+
     if(m_current_id == 0)
         return;
 
