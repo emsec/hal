@@ -110,6 +110,13 @@ module_details_widget::module_details_widget(QWidget* parent) : QWidget(parent)
     connect(m_input_ports_button, &QPushButton::clicked, this, &module_details_widget::handle_buttons_clicked);
     connect(m_output_ports_button, &QPushButton::clicked, this, &module_details_widget::handle_buttons_clicked);
 
+    connect(&g_netlist_relay, &netlist_relay::netlist_marked_global_input, this, &module_details_widget::handle_netlist_marked_global_input);
+    connect(&g_netlist_relay, &netlist_relay::netlist_marked_global_output, this, &module_details_widget::handle_netlist_marked_global_output);
+    connect(&g_netlist_relay, &netlist_relay::netlist_marked_global_inout, this, &module_details_widget::handle_netlist_marked_global_inout);
+    connect(&g_netlist_relay, &netlist_relay::netlist_unmarked_global_input, this, &module_details_widget::handle_netlist_unmarked_global_input);
+    connect(&g_netlist_relay, &netlist_relay::netlist_unmarked_global_output, this, &module_details_widget::handle_netlist_unmarked_global_output);
+    connect(&g_netlist_relay, &netlist_relay::netlist_unmarked_global_inout, this, &module_details_widget::handle_netlist_unmarked_global_inout);
+
     connect(&g_netlist_relay, &netlist_relay::module_name_changed, this, &module_details_widget::handle_module_name_changed);
     connect(&g_netlist_relay, &netlist_relay::module_submodule_added, this, &module_details_widget::handle_submodule_added);
     connect(&g_netlist_relay, &netlist_relay::module_submodule_removed, this, &module_details_widget::handle_submodule_removed);
@@ -219,6 +226,138 @@ void module_details_widget::update(const u32 module_id)
 
     m_output_ports_table->resizeColumnsToContents();
     m_output_ports_table->setFixedWidth(calculate_table_size(m_output_ports_table).width());
+}
+
+void module_details_widget::handle_netlist_marked_global_input(std::shared_ptr<netlist> netlist, u32 associated_data)
+{
+    if(m_current_id == 0)
+        return;
+
+    auto module = g_netlist->get_module_by_id(m_current_id);
+    auto gates = module->get_gates(nullptr, true);
+    auto net = g_netlist->get_net_by_id(associated_data);
+
+    for(const auto& gate : gates)
+    {
+        auto in_nets = gate->get_fan_in_nets();
+        auto out_nets = gate->get_fan_out_nets();
+
+        if(in_nets.find(net) != in_nets.end() || out_nets.find(net) != out_nets.end())
+        {
+            update(m_current_id);
+            return;
+        }
+    }
+}
+
+void module_details_widget::handle_netlist_marked_global_output(std::shared_ptr<netlist> netlist, u32 associated_data)
+{
+    if(m_current_id == 0)
+        return;
+
+    auto module = g_netlist->get_module_by_id(m_current_id);
+    auto gates = module->get_gates(nullptr, true);
+    auto net = g_netlist->get_net_by_id(associated_data);
+
+    for(const auto& gate : gates)
+    {
+        auto in_nets = gate->get_fan_in_nets();
+        auto out_nets = gate->get_fan_out_nets();
+
+        if(in_nets.find(net) != in_nets.end() || out_nets.find(net) != out_nets.end())
+        {
+            update(m_current_id);
+            return;
+        }
+    }
+}
+
+void module_details_widget::handle_netlist_marked_global_inout(std::shared_ptr<netlist> netlist, u32 associated_data)
+{
+    if(m_current_id == 0)
+        return;
+
+    auto module = g_netlist->get_module_by_id(m_current_id);
+    auto gates = module->get_gates(nullptr, true);
+    auto net = g_netlist->get_net_by_id(associated_data);
+
+    for(const auto& gate : gates)
+    {
+        auto in_nets = gate->get_fan_in_nets();
+        auto out_nets = gate->get_fan_out_nets();
+
+        if(in_nets.find(net) != in_nets.end() || out_nets.find(net) != out_nets.end())
+        {
+            update(m_current_id);
+            return;
+        }
+    }
+}
+
+void module_details_widget::handle_netlist_unmarked_global_input(std::shared_ptr<netlist> netlist, u32 associated_data)
+{
+    if(m_current_id == 0)
+        return;
+
+    auto module = g_netlist->get_module_by_id(m_current_id);
+    auto gates = module->get_gates(nullptr, true);
+    auto net = g_netlist->get_net_by_id(associated_data);
+
+    for(const auto& gate : gates)
+    {
+        auto in_nets = gate->get_fan_in_nets();
+        auto out_nets = gate->get_fan_out_nets();
+
+        if(in_nets.find(net) != in_nets.end() || out_nets.find(net) != out_nets.end())
+        {
+            update(m_current_id);
+            return;
+        }
+    }
+}
+
+void module_details_widget::handle_netlist_unmarked_global_output(std::shared_ptr<netlist> netlist, u32 associated_data)
+{
+    if(m_current_id == 0)
+        return;
+
+    auto module = g_netlist->get_module_by_id(m_current_id);
+    auto gates = module->get_gates(nullptr, true);
+    auto net = g_netlist->get_net_by_id(associated_data);
+
+    for(const auto& gate : gates)
+    {
+        auto in_nets = gate->get_fan_in_nets();
+        auto out_nets = gate->get_fan_out_nets();
+
+        if(in_nets.find(net) != in_nets.end() || out_nets.find(net) != out_nets.end())
+        {
+            update(m_current_id);
+            return;
+        }
+    }
+}
+
+void module_details_widget::handle_netlist_unmarked_global_inout(std::shared_ptr<netlist> netlist, u32 associated_data)
+{
+    if(m_current_id == 0)
+        return;
+
+    auto module = g_netlist->get_module_by_id(m_current_id);
+    auto gates = module->get_gates(nullptr, true);
+    auto net = g_netlist->get_net_by_id(associated_data);
+
+    for(const auto& gate : gates)
+    {
+        auto in_nets = gate->get_fan_in_nets();
+        auto out_nets = gate->get_fan_out_nets();
+
+        if(in_nets.find(net) != in_nets.end() || out_nets.find(net) != out_nets.end())
+        {
+            update(m_current_id);
+            return;
+        }
+    }
 }
 
 void module_details_widget::handle_module_name_changed(std::shared_ptr<module> module)
