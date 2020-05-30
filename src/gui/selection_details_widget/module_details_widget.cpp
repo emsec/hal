@@ -145,9 +145,15 @@ void module_details_widget::update(const u32 module_id)
     //update table with general information
     m_name_item->setText(QString::fromStdString(m->get_name()));
     m_id_item->setText(QString::number(m_current_id));
-    m_type_item->setText(QString::fromStdString(m->get_type()));
     m_number_of_submodules_item->setText(QString::number(m->get_submodules(nullptr, true).size()));
     m_number_of_nets_item->setText(QString::number(m->get_internal_nets().size()));
+
+    QString type_text = QString::fromStdString(m->get_type());
+
+    if(type_text.isEmpty())
+        type_text = "None";
+
+    m_type_item->setText(type_text);
 
     int total_number_of_gates = m->get_gates(nullptr, true).size();
     int direct_member_number_of_gates = m->get_gates(nullptr, false).size();
