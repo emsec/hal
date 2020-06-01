@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef LABELED_SEPARATED_NET_H
-#define LABELED_SEPARATED_NET_H
+#pragma once
 
 #include "graph_widget/items/nets/separated_graphics_net.h"
 
@@ -52,5 +51,3 @@ private:
     QString m_text;
     qreal m_text_width;
 };
-
-#endif // LABELED_SEPARATED_NET_H

@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef GRAPH_LAYOUTER_H
-#define GRAPH_LAYOUTER_H
+#pragma once
 
 #include "def.h"
 
@@ -30,6 +29,7 @@
 #include "netlist/net.h"
 
 #include "gui/gui_def.h"
+#include "gui/graph_widget/items/nets/standard_graphics_net.h"
 #include "gui/graph_widget/items/nodes/gates/graphics_gate.h"
 #include "gui/netlist_relay/netlist_relay.h"
 
@@ -244,6 +244,9 @@ private:
 
     void commit_used_paths(const used_paths& used);
 
+    void append_non_zero_h_line(standard_graphics_net::lines& lines, const qreal small_x, const qreal big_x, const qreal y);
+    void append_non_zero_v_line(standard_graphics_net::lines& lines, const qreal x, const qreal small_y, const qreal big_y);
+
     QVector<node_box> m_boxes;
 
     QVector<road*> m_h_roads;
@@ -293,5 +296,3 @@ private:
     
     bool m_done;
 };
-
-#endif // GRAPH_LAYOUTER_H

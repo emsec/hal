@@ -1,5 +1,4 @@
-#ifndef GRAPH_WIDGET_CONSTANTS_H
-#define GRAPH_WIDGET_CONSTANTS_H
+#pragma once
 
 #include "QtGlobal"
 
@@ -36,5 +35,3 @@ enum class grid_type
 };
 
 }
-
-#endif // GRAPH_WIDGET_CONSTANTS_H

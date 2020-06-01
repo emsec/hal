@@ -1,5 +1,4 @@
-#ifndef LAYOUTER_TASK_H
-#define LAYOUTER_TASK_H
+#pragma once
 
 #include "gui/thread_pool/task.h"
 
@@ -15,5 +14,3 @@ public:
 private:
     graph_layouter* m_layouter;
 };
-
-#endif // LAYOUTER_TASK_H

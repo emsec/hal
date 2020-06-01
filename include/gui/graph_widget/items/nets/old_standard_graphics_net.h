@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef OLD_STANDARD_GRAPHICS_NET_H
-#define OLD_STANDARD_GRAPHICS_NET_H
+#pragma once
 
 #include "gui/graph_widget/items/nets/graphics_net.h"
 
@@ -91,5 +90,3 @@ private:
 
     bool m_complete;
 };
-
-#endif // OLD_STANDARD_GRAPHICS_NET_H

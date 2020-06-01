@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef CIRCLE_SEPARATED_NET_H
-#define CIRCLE_SEPARATED_NET_H
+#pragma once
 
 #include "graph_widget/items/nets/separated_graphics_net.h"
 
@@ -46,5 +45,3 @@ private:
     static qreal s_circle_offset;
     static qreal s_radius;
 };
-
-#endif // CIRCLE_SEPARATED_NET_H

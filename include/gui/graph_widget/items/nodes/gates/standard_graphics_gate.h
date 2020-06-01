@@ -1,5 +1,4 @@
-#ifndef STANDARD_GRAPHICS_GATE_H
-#define STANDARD_GRAPHICS_GATE_H
+#pragma once
 
 #include "gui/graph_widget/items/nodes/gates/graphics_gate.h"
 
@@ -58,5 +57,3 @@ private:
 
     QVector<QPointF> m_output_pin_positions;
 };
-
-#endif // STANDARD_GRAPHICS_GATE_H

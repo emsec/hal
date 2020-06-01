@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef GRAPHICS_GATE_H
-#define GRAPHICS_GATE_H
+#pragma once
 
 #include "gui/graph_widget/items/nodes/graphics_node.h"
 
@@ -41,5 +40,3 @@ protected:
     QVector<QString> m_input_pins;
     QVector<QString> m_output_pins;
 };
-
-#endif // GRAPHICS_GATE_H

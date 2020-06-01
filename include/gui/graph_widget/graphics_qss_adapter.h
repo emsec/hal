@@ -1,11 +1,11 @@
-#ifndef GRAPHICS_QSS_ADAPTER_H
-#define GRAPHICS_QSS_ADAPTER_H
+#pragma once
 
 #include <QWidget>
 
 class graphics_qss_adapter : public QWidget
 {
     Q_OBJECT
+
     Q_PROPERTY(QColor gate_base_color READ gate_base_color WRITE set_gate_base_color)
     Q_PROPERTY(QColor net_base_color READ net_base_color WRITE set_net_base_color)
 
@@ -88,5 +88,3 @@ private:
     QColor m_grid_base_dot_color;
     QColor m_grid_cluster_dot_color;
 };
-
-#endif // GRAPHICS_QSS_ADAPTER_H

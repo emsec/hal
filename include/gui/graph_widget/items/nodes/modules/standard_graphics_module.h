@@ -1,5 +1,4 @@
-#ifndef STANDARD_GRAPHICS_MODULE_H
-#define STANDARD_GRAPHICS_MODULE_H
+#pragma once
 
 #include "gui/graph_widget/items/nodes/modules/graphics_module.h"
 
@@ -55,5 +54,3 @@ private:
 
     QVector<QPointF> m_output_pin_positions;
 };
-
-#endif // STANDARD_GRAPHICS_MODULE_H

@@ -1,5 +1,4 @@
-#ifndef MODULE_SHADER_H
-#define MODULE_SHADER_H
+#pragma once
 
 #include "gui/graph_widget/shaders/graph_shader.h"
 
@@ -15,5 +14,3 @@ public:
 private:
     bool m_color_gates;
 };
-
-#endif // MODULE_SHADER_H
