@@ -1,5 +1,4 @@
-#ifndef GRAPH_SCENE_H
-#define GRAPH_SCENE_H
+#pragma once
 
 #include "def.h"
 
@@ -134,5 +133,3 @@ private:
     bool m_debug_grid_enable;
     #endif
 };
-
-#endif // GRAPH_SCENE_H

@@ -1,5 +1,4 @@
-#ifndef GRAPH_CONTEXT_H
-#define GRAPH_CONTEXT_H
+#pragma once
 
 #include "gui/graph_widget/layouters/graph_layouter.h"
 #include "gui/graph_widget/shaders/graph_shader.h"
@@ -100,5 +99,3 @@ private:
 
     QDateTime m_timestamp;
 };
-
-#endif // GRAPH_CONTEXT_H

@@ -22,8 +22,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef PHYSICAL_GRAPH_LAYOUTER_H
-#define PHYSICAL_GRAPH_LAYOUTER_H
+#pragma once
 
 #include "graph_widget/layouters/graph_layouter.h"
 
@@ -42,5 +41,3 @@ private:
     float m_min_x_distance;
     float m_min_y_distance;
 };
-
-#endif // PHYSICAL_GRAPH_LAYOUTER_H

@@ -117,7 +117,12 @@ bool gate_library_parser_liberty::parse_tokens()
     do
     {
         auto next_token = library_str.consume();
-        if (next_token == "cell" && library_str.peek() == "(")
+        if (next_token == "{")
+        {
+            library_str.consume_until("}");
+            library_str.consume("}");
+        }
+        else if (next_token == "cell" && library_str.peek() == "(")
         {
             if (!parse_cell(library_str))
             {
@@ -155,7 +160,12 @@ bool gate_library_parser_liberty::parse_type(token_stream<std::string>& str)
     while (type_str.remaining() > 0)
     {
         auto next_token = type_str.consume();
-        if (next_token == "base_type")
+        if (next_token == "{")
+        {
+            type_str.consume_until("}");
+            type_str.consume("}");
+        }
+        else if (next_token == "base_type")
         {
             type_str.consume(":", true);
             type_str.consume("array", true);
@@ -245,7 +255,12 @@ bool gate_library_parser_liberty::parse_cell(token_stream<std::string>& str)
     while (cell_str.remaining() > 0)
     {
         auto next_token = cell_str.consume();
-        if (next_token == "pin")
+        if (next_token == "{")
+        {
+            cell_str.consume_until("}");
+            cell_str.consume("}");
+        }
+        else if (next_token == "pin")
         {
             auto pin = parse_pin(cell_str, cell);
             if (!pin.has_value())

@@ -1,5 +1,4 @@
-#ifndef GRAPH_LAYOUT_SPINNER_WIDGET_H
-#define GRAPH_LAYOUT_SPINNER_WIDGET_H
+#pragma once
 
 #include <QSvgRenderer>
 #include <QWidget>
@@ -24,5 +23,3 @@ protected:
 private:
     QSvgRenderer* m_renderer;
 };
-
-#endif // GRAPH_LAYOUT_SPINNER_WIDGET_H

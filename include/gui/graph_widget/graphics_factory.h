@@ -1,5 +1,4 @@
-#ifndef GRAPHICS_FACTORY_H
-#define GRAPHICS_FACTORY_H
+#pragma once
 
 #include "gui/graph_widget/items/nodes/gates/graphics_gate.h"
 #include "gui/graph_widget/items/nodes/modules/graphics_module.h"
@@ -17,5 +16,3 @@ QStringList graphics_gate_types();
 graphics_module* create_graphics_module(const std::shared_ptr<module> m, const int type);
 graphics_gate* create_graphics_gate(const std::shared_ptr<const gate> g, const int type);
 }
-
-#endif // GRAPHICS_FACTORY_H

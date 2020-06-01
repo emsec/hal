@@ -1,5 +1,4 @@
-#ifndef GRAPH_SHADER_H
-#define GRAPH_SHADER_H
+#pragma once
 
 #include "def.h"
 
@@ -37,5 +36,3 @@ protected:
 
     shading m_shading;
 };
-
-#endif // GRAPH_SHADER_H

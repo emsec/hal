@@ -1,5 +1,4 @@
-#ifndef GRAPH_CONTEXT_MANAGER_H
-#define GRAPH_CONTEXT_MANAGER_H
+#pragma once
 
 #include "def.h"
 
@@ -66,5 +65,3 @@ Q_SIGNALS:
 private:
     QVector<graph_context*> m_graph_contexts;
 };
-
-#endif // GRAPH_CONTEXT_MANAGER_H

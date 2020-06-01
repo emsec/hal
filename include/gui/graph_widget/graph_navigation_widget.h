@@ -1,5 +1,4 @@
-#ifndef GRAPH_NAVIGATION_WIDGET_H
-#define GRAPH_NAVIGATION_WIDGET_H
+#pragma once
 
 #include "def.h"
 
@@ -43,5 +42,3 @@ private:
     hal::node m_origin;
     bool m_hide_when_focus_lost;
 };
-
-#endif // GRAPH_NAVIGATION_WIDGET_H

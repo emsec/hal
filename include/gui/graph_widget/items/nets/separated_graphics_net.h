@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef SEPARATED_GRAPHICS_NET_H
-#define SEPARATED_GRAPHICS_NET_H
+#pragma once
 
 #include "graph_widget/items/nets/graphics_net.h"
 
@@ -47,5 +46,3 @@ protected:
     QVector<QPointF> m_input_positions;
     QVector<QPointF> m_output_positions;
 };
-
-#endif // SEPARATED_GRAPHICS_NET_H

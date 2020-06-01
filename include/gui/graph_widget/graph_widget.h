@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef GRAPH_WIDGET_H
-#define GRAPH_WIDGET_H
+#pragma once
 
 #include "def.h"
 
@@ -90,5 +89,3 @@ private:
 
     u32 m_current_expansion;
 };
-
-#endif // GRAPH_WIDGET_H

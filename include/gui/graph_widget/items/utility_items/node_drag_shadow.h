@@ -1,5 +1,4 @@
-#ifndef NODE_DRAG_SHADOW_H
-#define NODE_DRAG_SHADOW_H
+#pragma once
 
 #include <QGraphicsObject>
 
@@ -49,5 +48,3 @@ private:
     qreal m_width;
     qreal m_height;
 };
-
-#endif // NODE_DRAG_SHADOW_H
