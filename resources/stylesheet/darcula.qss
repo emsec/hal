@@ -1507,6 +1507,10 @@ QTreeView::item:selected {
     border: none;
 }
 
+QTreeWidget::item:disabled {
+    color: #777777;
+}
+
 QMenu::item:disabled{
     /*background: #ffffff;*/
     color: #777777;

@@ -37,6 +37,7 @@ class graph_context;
 class graph_graphics_view;
 class graph_layout_spinner_widget;
 class graph_navigation_widget;
+class graph_navigation_widget_v2;
 
 class graph_widget : public content_widget, public graph_context_subscriber
 {
@@ -85,6 +86,7 @@ private:
 
     dialog_overlay* m_overlay;
     graph_navigation_widget* m_navigation_widget;
+    graph_navigation_widget_v2* m_navigation_widget_v2;
     graph_layout_spinner_widget* m_spinner_widget;
 
     u32 m_current_expansion;

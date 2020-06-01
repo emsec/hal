@@ -10,6 +10,7 @@
 #include "gui/graph_widget/graph_graphics_view.h"
 #include "gui/graph_widget/graph_layout_spinner_widget.h"
 #include "gui/graph_widget/graph_navigation_widget.h"
+#include "gui/graph_widget/graph_navigation_widget_v2.h"
 #include "gui/graph_widget/graphics_scene.h"
 #include "gui/graph_widget/items/nodes/gates/graphics_gate.h"
 #include "gui/graph_widget/items/nodes/modules/graphics_module.h"
@@ -32,18 +33,19 @@
 
 graph_widget::graph_widget(graph_context* context, QWidget* parent)
     : content_widget("Graph", parent), m_view(new graph_graphics_view(this)), m_context(context), m_overlay(new dialog_overlay(this)), m_navigation_widget(new graph_navigation_widget(nullptr)),
+      m_navigation_widget_v2(new graph_navigation_widget_v2(nullptr)),
       m_spinner_widget(new graph_layout_spinner_widget(this)), m_current_expansion(0)
 {
-    connect(m_navigation_widget, &graph_navigation_widget::navigation_requested, this, &graph_widget::handle_navigation_jump_requested);
-    connect(m_navigation_widget, &graph_navigation_widget::close_requested, m_overlay, &dialog_overlay::hide);
-    connect(m_navigation_widget, &graph_navigation_widget::close_requested, this, &graph_widget::reset_focus);
+    connect(m_navigation_widget_v2, &graph_navigation_widget_v2::navigation_requested, this, &graph_widget::handle_navigation_jump_requested);
+    connect(m_navigation_widget_v2, &graph_navigation_widget_v2::close_requested, m_overlay, &dialog_overlay::hide);
+    connect(m_navigation_widget_v2, &graph_navigation_widget_v2::close_requested, this, &graph_widget::reset_focus);
 
     connect(m_overlay, &dialog_overlay::clicked, m_overlay, &dialog_overlay::hide);
 
     connect(m_view, &graph_graphics_view::module_double_clicked, this, &graph_widget::handle_module_double_clicked);
 
     m_overlay->hide();
-    m_overlay->set_widget(m_navigation_widget);
+    m_overlay->set_widget(m_navigation_widget_v2);
     m_spinner_widget->hide();
     m_content_layout->addWidget(m_view);
 
@@ -74,7 +76,7 @@ void graph_widget::handle_scene_available()
 
     m_overlay->hide();
     m_spinner_widget->hide();
-    m_overlay->set_widget(m_navigation_widget);
+    m_overlay->set_widget(m_navigation_widget_v2);
 
     if (hasFocus())
         m_view->setFocus();
@@ -299,8 +301,12 @@ void graph_widget::handle_navigation_jump_requested(const hal::node origin, cons
 
     // ASSERT INPUTS ARE VALID
     auto n = g_netlist->get_net_by_id(via_net);
-    if (!n || (to_gates.empty() && to_modules.empty()))
+    if (!n || (to_gates.empty() && to_modules.empty())) {
+        // prevent stuck navigation widget
+        m_overlay->hide();
+        m_view->setFocus();
         return;
+    }
 
     // Substitute all gates by their modules if we're showing them.
     // This avoids ripping gates out of their already visible modules.
@@ -497,8 +503,8 @@ void graph_widget::handle_navigation_left_request()
                 }
                 else
                 {
-                    m_navigation_widget->setup(false);
-                    m_navigation_widget->setFocus();
+                    m_navigation_widget_v2->setup(false);
+                    m_navigation_widget_v2->setFocus();
                     m_overlay->show();
                 }
             }
@@ -528,8 +534,8 @@ void graph_widget::handle_navigation_left_request()
             }
             else
             {
-                m_navigation_widget->setup(false);
-                m_navigation_widget->setFocus();
+                m_navigation_widget_v2->setup(false);
+                m_navigation_widget_v2->setFocus();
                 m_overlay->show();
             }
 
@@ -615,8 +621,8 @@ void graph_widget::handle_navigation_right_request()
                 }
                 else
                 {
-                    m_navigation_widget->setup(true);
-                    m_navigation_widget->setFocus();
+                    m_navigation_widget_v2->setup(true);
+                    m_navigation_widget_v2->setFocus();
                     m_overlay->show();
                 }
             }
@@ -646,8 +652,8 @@ void graph_widget::handle_navigation_right_request()
             }
             else
             {
-                m_navigation_widget->setup(true);
-                m_navigation_widget->setFocus();
+                m_navigation_widget_v2->setup(true);
+                m_navigation_widget_v2->setFocus();
                 m_overlay->show();
             }
 
