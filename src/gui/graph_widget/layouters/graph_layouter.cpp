@@ -964,14 +964,14 @@ void graph_layouter::draw_nets()
 
                     qreal x = scene_x_for_v_channel_lane(dst_v_road->x, dst_v_road->lanes);
 
-                    append_non_zero_h_line(lines, src_pin_position.x(), x, src_pin_position.y());
+                    lines.append_h_line(src_pin_position.x(), x, src_pin_position.y());
 
                     if (src_pin_position.y() < dst_pin_position.y())
                         lines.append_v_line(x, src_pin_position.y(), dst_pin_position.y());
-                    else
+                    else if (src_pin_position.y() > dst_pin_position.y())
                         lines.append_v_line(x, dst_pin_position.y(), src_pin_position.y());
 
-                    append_non_zero_h_line(lines, x, dst_pin_position.x(), dst_pin_position.y());
+                    lines.append_h_line(x, dst_pin_position.x(), dst_pin_position.y());
 
                     used.v_roads.insert(dst_v_road);
                     continue;
@@ -984,14 +984,14 @@ void graph_layouter::draw_nets()
                     // SPECIAL CASE DIRECT HORIZONTAL NEIGHBORS
                     qreal x = scene_x_for_v_channel_lane(src_v_road->x, src_v_road->lanes);
 
-                    append_non_zero_h_line(lines, src_pin_position.x(), x, src_pin_position.y());
+                    lines.append_h_line(src_pin_position.x(), x, src_pin_position.y());
 
                     if (src_pin_position.y() < dst_pin_position.y())
                         lines.append_v_line(x, src_pin_position.y(), dst_pin_position.y());
                     else if (src_pin_position.y() > dst_pin_position.y())
                         lines.append_v_line(x, dst_pin_position.y(), src_pin_position.y());
 
-                    append_non_zero_h_line(lines, x, dst_pin_position.x(), dst_pin_position.y());
+                    lines.append_h_line(x, dst_pin_position.x(), dst_pin_position.y());
 
                     used.v_roads.insert(src_v_road);
                     continue;
@@ -1069,7 +1069,6 @@ void graph_layouter::draw_nets()
 
                         qreal x = scene_x_for_v_channel_lane(initial_junction->x, initial_junction->v_lanes);
 
-                        // DUPLICATE CODE ?
                         if (current_position.x() < x)
                             lines.append_h_line(current_position.x(), x, current_position.y());
                         else
