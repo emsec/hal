@@ -36,6 +36,25 @@ void module_init(py::module& m)
         :param str name: The new name.
 )");
 
+    py_module.def_property("type", &module::get_type, &module::set_type, R"(
+        The type of the module.
+
+        :type: str
+)");
+
+    py_module.def("get_type", &module::get_type, R"(
+        Gets the module's type.
+
+        :returns: The type.
+        :rtype: str
+)");
+
+    py_module.def("set_type", &module::set_type, py::arg("type"), R"(
+        Sets the module's type.
+
+        :param str name: The new type.
+)");
+
     py_module.def_property("parent_module", &module::get_parent_module, &module::set_parent_module, R"(
         The parent module of this module. Set to None for the top module.
 
