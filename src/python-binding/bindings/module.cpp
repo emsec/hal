@@ -253,17 +253,4 @@ void module_init(py::module& m)
         :returns: The map from output net to port name.
         :rtype: dict[hal_py.net,str]
 )");
-
-    py_module.def("get_type", &module::get_type, R"(
-        Gets the module's type.
-
-        :returns: The type.
-        :rtype: str
-)");
-
-    py_module.def("set_type", &module::set_type, py::arg("type"), R"(
-        Sets the module's type.
-
-        :param str name: The new type.
-)");
 }
