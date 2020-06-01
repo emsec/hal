@@ -180,6 +180,7 @@ void module_details_widget::update(const u32 module_id)
 
     m_input_ports_table->setRowCount(m->get_input_nets().size());
     m_input_ports_table->setMaximumHeight(m_input_ports_table->verticalHeader()->length());
+    m_input_ports_table->setMinimumHeight(m_input_ports_table->verticalHeader()->length());
 
     int index = 0;
     for(const auto &net : m->get_input_nets())
@@ -210,6 +211,7 @@ void module_details_widget::update(const u32 module_id)
 
     m_output_ports_table->setRowCount(m->get_output_nets().size());
     m_output_ports_table->setMaximumHeight(m_output_ports_table->verticalHeader()->length());
+    m_output_ports_table->setMinimumHeight(m_output_ports_table->verticalHeader()->length());
 
     index = 0;
     for(const auto &net : m->get_output_nets())
