@@ -135,6 +135,13 @@ private:
     void handle_input_pin_item_clicked(QTableWidgetItem* item);
     void handle_output_pin_item_clicked(QTableWidgetItem* item);
 
+    //most straightforward and basic custom-context implementation (maybe need to be more dynamic)
+    void handle_general_table_menu_requested(const QPoint &pos);
+    void handle_input_pin_table_menu_requested(const QPoint &pos);
+    void handle_output_pin_table_menu_requested(const QPoint &pos);
+    void handle_data_table_menu_requested(const QPoint &pos);
+    void handle_python_action_clicked(bool checked);
+
     //utility function, used to calculate the actual width so the scrollbars and the accuracy of the click functionality is correct
     QSize calculate_table_size(QTableWidget* table);
 

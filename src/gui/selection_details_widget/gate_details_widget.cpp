@@ -31,6 +31,9 @@
 #include <QRegularExpression>
 #include <QRegularExpressionMatch>
 #include <QApplication> //to extract the stylesheet of the main app.
+#include <QMenu>
+#include <QIcon>
+#include <QClipboard>
 
 gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
 {
@@ -102,6 +105,8 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
         table->setMaximumHeight(table->verticalHeader()->length());
         table->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
         table->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        //context menu related:
+        table->setContextMenuPolicy(Qt::CustomContextMenu);
     }
 
     //customize general section by adding the fixed iitems
@@ -115,7 +120,7 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
         m_general_table->setItem(i, 0, item);
     }
 
-//    //create dynamic items that change when gate is changed
+    //create dynamic items that change when gate is changed
     m_name_item = new QTableWidgetItem();
     m_name_item->setFlags((Qt::ItemFlag)~Qt::ItemIsEnabled);
     m_general_table->setItem(0, 1, m_name_item);
@@ -149,7 +154,6 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
     intermediate_layout_op->addSpacerItem(new QSpacerItem(0,0, QSizePolicy::Expanding, QSizePolicy::Fixed));
     intermediate_layout_df->addWidget(m_data_fields_table);
     intermediate_layout_df->addSpacerItem(new QSpacerItem(0,0, QSizePolicy::Expanding, QSizePolicy::Fixed));
-
 
     //adding things to the main layout
     m_top_lvl_layout->addWidget(m_general_info_button);
@@ -185,8 +189,14 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
     connect(m_data_fields_button, &QPushButton::clicked, this, &gate_details_widget::handle_buttons_clicked);
     connect(m_boolean_functions_button, &QPushButton::clicked, this, &gate_details_widget::handle_buttons_clicked);
 
-    connect(m_input_pins_table, &QTableWidget::itemClicked, this, &gate_details_widget::handle_input_pin_item_clicked);
-    connect(m_output_pins_table, &QTableWidget::itemClicked, this, &gate_details_widget::handle_output_pin_item_clicked);
+    connect(m_input_pins_table, &QTableWidget::itemDoubleClicked, this, &gate_details_widget::handle_input_pin_item_clicked);
+    connect(m_output_pins_table, &QTableWidget::itemDoubleClicked, this, &gate_details_widget::handle_output_pin_item_clicked);
+
+    //context menu connects
+    connect(m_general_table, &QTableWidget::customContextMenuRequested, this, &gate_details_widget::handle_general_table_menu_requested);
+    connect(m_input_pins_table, &QTableWidget::customContextMenuRequested, this, &gate_details_widget::handle_input_pin_table_menu_requested);
+    connect(m_output_pins_table, &QTableWidget::customContextMenuRequested, this, &gate_details_widget::handle_output_pin_table_menu_requested);
+    connect(m_data_fields_table, &QTableWidget::customContextMenuRequested, this, &gate_details_widget::handle_data_table_menu_requested);
 
     //extract the width of the scrollbar out of the stylesheet to fix a scrollbar related bug
     QString main_stylesheet = qApp->styleSheet();
@@ -293,30 +303,10 @@ void gate_details_widget::handle_buttons_clicked()
         return;
     if(widget->isHidden()){
         widget->show();
-
-//        if(index != m_top_lvl_layout->indexOf(m_boolean_functions_button)){
-//            m_top_lvl_layout->itemAt(index+2)->spacerItem()->changeSize(0,10, QSizePolicy::Expanding, QSizePolicy::Fixed);
-//            m_top_lvl_layout->invalidate();
-//        }
-//        QPropertyAnimation* anim = new QPropertyAnimation(widget, "maximumHeight");
-//        anim->setDuration(250);
-//        anim->setStartValue(0);
-//        anim->setEndValue(widget->verticalHeader()->length());
-//        anim->start(QAbstractAnimation::DeleteWhenStopped);
-    }
+     }
     else{
         widget->hide();
-
-//        if(index != m_top_lvl_layout->indexOf(m_boolean_functions_button)){
-//            m_top_lvl_layout->itemAt(index+2)->spacerItem()->changeSize(0,5, QSizePolicy::Expanding, QSizePolicy::Fixed);
-//            m_top_lvl_layout->invalidate();
-//        }
-//        QPropertyAnimation* anim = new QPropertyAnimation(widget, "maximumHeight");
-//        anim->setDuration(250);
-//        anim->setStartValue(widget->verticalHeader()->length());
-//        anim->setEndValue(0);
-//        anim->start(QAbstractAnimation::DeleteWhenStopped);
-    }
+     }
 }
 
 void gate_details_widget::handle_input_pin_item_clicked(QTableWidgetItem *item)
@@ -405,6 +395,91 @@ void gate_details_widget::handle_output_pin_item_clicked(QTableWidgetItem *item)
         m_navigation_table->show();
         m_navigation_table->setFocus();
     }
+}
+
+void gate_details_widget::handle_input_pin_table_menu_requested(const QPoint &pos)
+{
+    if(m_input_pins_table->itemAt(pos)->column() != 2)
+        return;
+
+    QMenu menu;
+    menu.addAction("Jump to source gate", [this, pos](){
+        handle_input_pin_item_clicked(m_input_pins_table->itemAt(pos));
+    });
+
+    menu.addAction(QIcon(":/icons/python"), "Extract net as python code (copy to clipboard)",[this, pos](){
+        QApplication::clipboard()->setText("netlist.get_net_by_id(" + m_input_pins_table->itemAt(pos)->data(Qt::UserRole).toString() + ")");
+    });
+
+    menu.addAction(QIcon(":/icons/python"), "Extract sources as python code (copy to clipboard)",[this, pos](){
+        QApplication::clipboard()->setText("netlist.get_net_by_id(" + m_input_pins_table->itemAt(pos)->data(Qt::UserRole).toString() + ").get_sources()" );
+    });
+
+    menu.move(dynamic_cast<QWidget*>(sender())->mapToGlobal(pos));
+    menu.exec();
+
+}
+
+void gate_details_widget::handle_output_pin_table_menu_requested(const QPoint &pos)
+{
+    if(m_output_pins_table->itemAt(pos)->column() != 2)
+        return;
+
+    QMenu menu;
+    menu.addAction("Jump to destination gate", [this, pos](){
+        handle_output_pin_item_clicked(m_output_pins_table->itemAt(pos));
+    });
+
+    menu.addAction(QIcon(":/icons/python"), "Extract net as python code (copy to clipboard)",[this, pos](){
+        QApplication::clipboard()->setText("netlist.get_net_by_id(" + m_output_pins_table->itemAt(pos)->data(Qt::UserRole).toString() + ")");
+    });
+
+    menu.addAction(QIcon(":/icons/python"), "Extract destinations as python code (copy to clipboard)",[this, pos](){
+        QApplication::clipboard()->setText("netlist.get_net_by_id(" + m_output_pins_table->itemAt(pos)->data(Qt::UserRole).toString() + ").get_destinations()" );
+    });
+
+    menu.move(dynamic_cast<QWidget*>(sender())->mapToGlobal(pos));
+    menu.exec();
+
+}
+
+void gate_details_widget::handle_data_table_menu_requested(const QPoint &pos)
+{
+    QMenu menu;
+    menu.addAction(QIcon(":/icons/python"), "Exctract data as python code (copy to clipboard)", [this, pos](){
+       int row = m_data_fields_table->itemAt(pos)->row();
+       QString key = m_data_fields_table->item(row, 0)->text().left(m_data_fields_table->item(row, 0)->text().length()-1);
+       QApplication::clipboard()->setText("netlist.get_gate_by_id(" + QString::number(m_current_id) + ").data[(\"" + m_data_fields_table->item(row, 0)->data(Qt::UserRole).toString() + "\", \"" + key + "\")]");//(’generic’, ’data’)
+    });
+
+    menu.move(dynamic_cast<QWidget*>(sender())->mapToGlobal(pos));
+    menu.exec();
+
+}
+void gate_details_widget::handle_general_table_menu_requested(const QPoint &pos)
+{
+    QMenu menu;
+    QString description;
+    QString python_command = "netlist.get_gate_by_id(" + QString::number(m_current_id) + ").";
+    switch(m_general_table->itemAt(pos)->row())
+    {
+        case 0: python_command += "get_name()"; description = "Extract name as python code (copy to clipboard)"; break;
+        case 1: python_command += "get_type()"; description = "Extract type as python code (copy to clipboard)"; break;
+        case 2: python_command += "get_id()"; description = "Extract id as python code (copy to clipboard)"; break;
+        case 3: python_command += "get_module()"; description = "Extract module as python code (copy to clipboard)"; break;
+    }
+    menu.addAction(QIcon(":/icons/python"), description, [python_command](){
+        QApplication::clipboard()->setText(python_command);
+    });
+
+    menu.move(dynamic_cast<QWidget*>(sender())->mapToGlobal(pos));
+    menu.exec();
+}
+void gate_details_widget::handle_python_action_clicked(bool checked)
+{
+    Q_UNUSED(checked)
+    //QClipboard* clipboard = QApplication::clipboard();
+    QApplication::clipboard()->setText(dynamic_cast<QAction*>(sender())->data().toString());
 }
 
 QSize gate_details_widget::calculate_table_size(QTableWidget *table)
@@ -582,6 +657,7 @@ void gate_details_widget::update(const u32 gate_id)
         QTableWidgetItem* key_item = new QTableWidgetItem(QString::fromStdString(std::get<1>(key)) + QString(":"));
         key_item->setFont(m_key_font);
         key_item->setFlags(Qt::ItemIsEnabled);
+        key_item->setData(Qt::UserRole, QString::fromStdString(std::get<0>(key)));
         QTableWidgetItem* value_item = new QTableWidgetItem(QString::fromStdString(std::get<1>(value)));
         value_item->setFlags(Qt::ItemIsEnabled);
 
