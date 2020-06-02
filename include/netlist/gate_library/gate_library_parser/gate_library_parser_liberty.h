@@ -155,8 +155,8 @@ private:
     bool tokenize();
     bool parse_tokens();
 
-    bool parse_cell(token_stream<std::string>& library_stream);
-    bool parse_type(token_stream<std::string>& str);
+    std::optional<cell_group> parse_cell(token_stream<std::string>& library_stream);
+    std::optional<type_group> parse_type(token_stream<std::string>& str);
     std::optional<pin_group> parse_pin(token_stream<std::string>& str, cell_group& cell, pin_direction direction = pin_direction::UNKNOWN, const std::string& external_pin_name = "");
     std::optional<bus_group> parse_bus(token_stream<std::string>& str, cell_group& cell);
     std::optional<ff_group> parse_ff(token_stream<std::string>& str);

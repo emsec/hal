@@ -124,24 +124,35 @@ bool gate_library_parser_liberty::parse_tokens()
         }
         else if (next_token == "cell" && library_str.peek() == "(")
         {
-            if (!parse_cell(library_str))
+            auto cell = parse_cell(library_str);
+            if (!cell.has_value())
             {
                 return false;
             }
+
+            auto gt = construct_gate_type(cell.value());
+            if (gt == nullptr)
+            {
+                return false;
+            }
+
+            m_gate_lib->add_gate_type(gt);
         }
         else if (next_token == "type" && library_str.peek() == "(")
         {
-            if (!parse_type(library_str))
+            auto type = parse_type(library_str);
+            if (!type.has_value())
             {
                 return false;
             }
+            m_bus_types.emplace(type->name, type.value());
         }
     } while (library_str.remaining() > 0);
 
     return m_token_stream.remaining() == 0;
 }
 
-bool gate_library_parser_liberty::parse_type(token_stream<std::string>& str)
+std::optional<gate_library_parser_liberty::type_group> gate_library_parser_liberty::parse_type(token_stream<std::string>& str)
 {
     type_group type;
     i32 width     = 1;
@@ -204,13 +215,13 @@ bool gate_library_parser_liberty::parse_type(token_stream<std::string>& str)
             else
             {
                 log_error("liberty_parser", "invalid token '{}' for boolean value in 'downto' statement in type group '{}' near line {}", type_str.peek().string, type.name, type_str.peek().number);
-                return false;
+                return std::nullopt;
             }
         }
         else
         {
             log_error("liberty_parser", "invalid token '{}' in type group '{}' near line {}", type_str.peek().string, type.name, type_str.peek().number);
-            return false;
+            return std::nullopt;
         }
 
         type_str.consume(";");
@@ -219,7 +230,7 @@ bool gate_library_parser_liberty::parse_type(token_stream<std::string>& str)
     if (width != (direction * (end - start)) + 1)
     {
         log_error("liberty_parser", "invalid 'bit_width' value {} for type group '{}' near line {}", width, type.name, type.line_number);
-        return false;
+        return std::nullopt;
     }
 
     for (int i = start; i != end + direction; i += direction)
@@ -227,12 +238,10 @@ bool gate_library_parser_liberty::parse_type(token_stream<std::string>& str)
         type.range.push_back((u32)i);
     }
 
-    m_bus_types.emplace(type.name, type);
-
-    return true;
+    return type;
 }
 
-bool gate_library_parser_liberty::parse_cell(token_stream<std::string>& str)
+std::optional<gate_library_parser_liberty::cell_group> gate_library_parser_liberty::parse_cell(token_stream<std::string>& str)
 {
     cell_group cell;
 
@@ -247,7 +256,7 @@ bool gate_library_parser_liberty::parse_cell(token_stream<std::string>& str)
     if (const auto cell_it = m_cell_names.find(cell.name); cell_it != m_cell_names.end())
     {
         log_error("liberty_parser", "a cell with the name '{}' does already exist", cell.name);
-        return false;
+        return std::nullopt;
     }
 
     m_cell_names.insert(cell.name);
@@ -265,7 +274,7 @@ bool gate_library_parser_liberty::parse_cell(token_stream<std::string>& str)
             auto pin = parse_pin(cell_str, cell);
             if (!pin.has_value())
             {
-                return false;
+                return std::nullopt;
             }
             cell.pins.push_back(pin.value());
         }
@@ -274,7 +283,7 @@ bool gate_library_parser_liberty::parse_cell(token_stream<std::string>& str)
             auto bus = parse_bus(cell_str, cell);
             if (!bus.has_value())
             {
-                return false;
+                return std::nullopt;
             }
             cell.buses.emplace(bus->name, bus.value());
         }
@@ -283,7 +292,7 @@ bool gate_library_parser_liberty::parse_cell(token_stream<std::string>& str)
             auto ff = parse_ff(cell_str);
             if (!ff.has_value())
             {
-                return false;
+                return std::nullopt;
             }
             cell.type = gate_type::base_type::ff;
             cell.ff   = ff.value();
@@ -293,7 +302,7 @@ bool gate_library_parser_liberty::parse_cell(token_stream<std::string>& str)
             auto latch = parse_latch(cell_str);
             if (!latch.has_value())
             {
-                return false;
+                return std::nullopt;
             }
             cell.type  = gate_type::base_type::latch;
             cell.latch = latch.value();
@@ -303,22 +312,14 @@ bool gate_library_parser_liberty::parse_cell(token_stream<std::string>& str)
             auto lut = parse_lut(cell_str);
             if (!lut.has_value())
             {
-                return false;
+                return std::nullopt;
             }
             cell.type = gate_type::base_type::lut;
             cell.lut  = lut.value();
         }
     }
 
-    auto gt = construct_gate_type(cell);
-    if (gt == nullptr)
-    {
-        return false;
-    }
-
-    m_gate_lib->add_gate_type(gt);
-
-    return true;
+    return cell;
 }
 
 std::optional<gate_library_parser_liberty::pin_group>
