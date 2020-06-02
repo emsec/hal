@@ -742,8 +742,8 @@ std::shared_ptr<gate_type> gate_library_parser_liberty::construct_gate_type(cell
     std::shared_ptr<gate_type> gt;
     std::vector<std::string> input_pins;
     std::vector<std::string> output_pins;
-    std::map<std::string, std::vector<u32>> input_pin_groups;
-    std::map<std::string, std::vector<u32>> output_pin_groups;
+    std::map<std::string, std::map<u32, std::string>> input_pin_groups;
+    std::map<std::string, std::map<u32, std::string>> output_pin_groups;
 
     // get input and output pins from pin groups
     for (const auto& pin : cell.pins)
@@ -764,24 +764,22 @@ std::shared_ptr<gate_type> gate_library_parser_liberty::construct_gate_type(cell
     {
         if (bus.second.direction == pin_direction::IN || bus.second.direction == pin_direction::INOUT)
         {
-            std::vector<u32> range;
             for (const auto& [index, pin_name] : bus.second.index_to_pin_name)
             {
                 input_pins.push_back(pin_name);
-                range.push_back(index);
             }
-            input_pin_groups.emplace(bus.first, range);
+
+            input_pin_groups[bus.first].insert(bus.second.index_to_pin_name.begin(), bus.second.index_to_pin_name.end());
         }
 
         if (bus.second.direction == pin_direction::OUT || bus.second.direction == pin_direction::INOUT)
         {
-            std::vector<u32> range;
             for (const auto& [index, pin_name] : bus.second.index_to_pin_name)
             {
                 output_pins.push_back(pin_name);
-                range.push_back(index);
             }
-            output_pin_groups.emplace(bus.first, range);
+
+            output_pin_groups[bus.first].insert(bus.second.index_to_pin_name.begin(), bus.second.index_to_pin_name.end());
         }
     }
 
@@ -983,13 +981,13 @@ std::shared_ptr<gate_type> gate_library_parser_liberty::construct_gate_type(cell
 
     gt->add_input_pins(input_pins);
     gt->add_output_pins(output_pins);
-    for (const auto& [group_name, range] : input_pin_groups)
+    for (const auto& [group_name, index_to_pin] : input_pin_groups)
     {
-        gt->add_input_pin_group(group_name, range);
+        gt->assign_input_pin_group(group_name, index_to_pin);
     }
-    for (const auto& [group_name, range] : output_pin_groups)
+    for (const auto& [group_name, index_to_pin] : output_pin_groups)
     {
-        gt->add_output_pin_group(group_name, range);
+        gt->assign_output_pin_group(group_name, index_to_pin);
     }
 
     if (!cell.buses.empty())
