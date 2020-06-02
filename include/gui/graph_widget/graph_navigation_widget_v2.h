@@ -37,6 +37,7 @@ private:
     void fill_table(bool direction);
     void resize_to_fit();
     int sum_row_heights(const QTreeWidgetItem *itm, bool top = true);
+    void handle_item_double_clicked(QTreeWidgetItem* item);
     void commit_selection();
 
     hal::node m_origin;

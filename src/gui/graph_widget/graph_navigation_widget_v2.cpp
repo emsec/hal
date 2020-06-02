@@ -20,12 +20,16 @@ graph_navigation_widget_v2::graph_navigation_widget_v2(QWidget* parent) : QTreeW
 {
     setSelectionMode(QAbstractItemView::MultiSelection);
     setSelectionBehavior(QAbstractItemView::SelectRows);
-    header()->setStretchLastSection(true);
+    setFocusPolicy(Qt::FocusPolicy::StrongFocus);
+    header()->setStretchLastSection(false);
     setColumnCount(5);
-    setHeaderLabels({"Name", "ID", "Type", "Pin", "Submodule"});
+    setHeaderLabels({"Name", "ID", "Type", "Pin", "Parent Module"});
     setAllColumnsShowFocus(true);
 
     connect(this, &graph_navigation_widget_v2::itemSelectionChanged, this, &graph_navigation_widget_v2::handle_selection_changed);
+    connect(this, &graph_navigation_widget_v2::itemDoubleClicked, this, &graph_navigation_widget_v2::handle_item_double_clicked);
+
+    // FIXME for some reason, arrow key navigation does not work on MacOS
 }
 
 void graph_navigation_widget_v2::setup(bool direction)
@@ -93,6 +97,7 @@ void graph_navigation_widget_v2::hide_when_focus_lost(bool hide)
 
 void graph_navigation_widget_v2::keyPressEvent(QKeyEvent* event)
 {
+    qDebug() << "KeyDebug:" << "dn:" << (event->key() == Qt::Key_Down) << "/ up:" << (event->key() == Qt::Key_Up);
     if (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return || event->key() == Qt::Key_Right)
     {
         commit_selection();
@@ -135,7 +140,7 @@ void graph_navigation_widget_v2::fill_table(bool direction)
         {
             // we're navigating from a net
         }
-        if (m_origin.type == hal::node_type::gate)
+        else if (m_origin.type == hal::node_type::gate)
         {
             std::shared_ptr<gate> origin = g_netlist->get_gate_by_id(m_origin.id);
             assert(origin);
@@ -182,13 +187,25 @@ void graph_navigation_widget_v2::fill_table(bool direction)
             }
             else
             {
+                QString portname = QString::fromStdString(direction ?
+                    parent->get_input_port_name(m_via_net) :
+                    parent->get_output_port_name(m_via_net)
+                );
+                QString type = QString::fromStdString(parent->get_type());
+                if (type.isEmpty())
+                {
+                    type = "<empty-type>";
+                }
+                type+= " Module";
+                auto parents_parent = parent->get_parent_module();
+                QString parents_parent_name = QString::fromStdString(parents_parent ? parents_parent->get_name() : "(none)");
                 // lazy-init the item for this module if it's not in the map yet
                 parent_item = new QTreeWidgetItem({
-                    "[module] " + QString::fromStdString(parent->get_name()),
+                    QString::fromStdString(parent->get_name()),
                     QString::number(parent->get_id()),
-                    "",
-                    "",
-                    ""
+                    type,
+                    portname,
+                    parents_parent_name
                 });
                 // TODO is there a better way?
                 parent_item->setData(1, Qt::ItemDataRole::UserRole, parent->get_id());
@@ -214,15 +231,21 @@ void graph_navigation_widget_v2::fill_table(bool direction)
 
 void graph_navigation_widget_v2::resize_to_fit()
 {
-    int width = verticalScrollBar()->width();
+    // Qt apparently needs these 2 pixels extra, otherwise you get scollbars
+
+    int width = verticalScrollBar()->isVisible() ? verticalScrollBar()->width() : 2;
     for (int i = 0; i < columnCount(); i++)
+    {
+        resizeColumnToContents(i);
         width += columnWidth(i);
+    }
 
     int height = header()->height() + 2;
     height += sum_row_heights(this->invisibleRootItem());
 
-    int MAXIMUM_ALLOWED_HEIGHT = 500;
-    setFixedWidth(width);
+    int MAXIMUM_ALLOWED_HEIGHT = std::min(500, static_cast<QWidget*>(parent())->height());
+    int MAXIMUM_ALLOWED_WIDTH = std::min(700, static_cast<QWidget*>(parent())->width());
+    setFixedWidth((width > MAXIMUM_ALLOWED_WIDTH) ? MAXIMUM_ALLOWED_WIDTH : width);
     setFixedHeight((height > MAXIMUM_ALLOWED_HEIGHT) ? MAXIMUM_ALLOWED_HEIGHT : height);
 }
 
@@ -234,6 +257,12 @@ int graph_navigation_widget_v2::sum_row_heights(const QTreeWidgetItem *itm, bool
     for(int i = 0; i < itm->childCount(); i++)
         row_heights += sum_row_heights(itm->child(i), false);
     return row_heights;
+}
+
+void graph_navigation_widget_v2::handle_item_double_clicked(QTreeWidgetItem* item)
+{
+    Q_UNUSED(item)
+    commit_selection();
 }
 
 void graph_navigation_widget_v2::commit_selection()
