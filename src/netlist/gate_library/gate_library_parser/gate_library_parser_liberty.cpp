@@ -985,17 +985,17 @@ std::shared_ptr<gate_type> gate_library_parser_liberty::construct_gate_type(cell
     gt->add_output_pins(output_pins);
     for (const auto& [group_name, range] : input_pin_groups)
     {
-        gt->add_input_pin_group(group_name, range);
+        gt->assign_input_pin_group(group_name, range);
     }
     for (const auto& [group_name, range] : output_pin_groups)
     {
-        gt->add_output_pin_group(group_name, range);
+        gt->assign_output_pin_group(group_name, range);
     }
 
     if (!cell.buses.empty())
     {
         auto functions = construct_bus_functions(cell, input_pins);
-        // gt->add_boolean_functions(functions);
+        gt->add_boolean_functions(functions);
     }
     else
     {

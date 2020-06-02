@@ -82,6 +82,20 @@ void gate_type_init(py::module& m) {
         :rtype: list[str]
 )");
 
+    py_gate_type.def("assign_input_pin_group", &gate_type::assign_input_pin_group, py::arg("group_name"), py::arg("range"), R"(
+        Assign existing input pins to a input pin group.
+
+        :param str group_name: The name of the input pin group.
+        :param list[int] range: Vector of signal indices.
+)");
+
+    py_gate_type.def("get_input_pin_groups", &gate_type::get_input_pin_groups, R"(
+        Get all input pin groups of the gate type.
+
+        :returns: A map from group name to a range.
+        :rtype: dict[str,list[int]]
+)");
+
     py_gate_type.def("add_output_pin", &gate_type::add_output_pin, py::arg("output_pin"), R"(
         Add an output pin to the gate type.
 
@@ -107,11 +121,31 @@ void gate_type_init(py::module& m) {
         :rtype: list[str]
 )");
 
+    py_gate_type.def("assign_output_pin_group", &gate_type::assign_output_pin_group, py::arg("group_name"), py::arg("range"), R"(
+        Assign existing output pins to a output pin group.
+
+        :param str group_name: The name of the output pin group.
+        :param list[int] range: Vector of signal indices.
+)");
+
+    py_gate_type.def("get_output_pin_groups", &gate_type::get_output_pin_groups, R"(
+        Get all output pin groups of the gate type.
+
+        :returns: A map from group name to a range.
+        :rtype: dict[str,list[int]]
+)");
+
     py_gate_type.def("add_boolean_function", &gate_type::add_boolean_function, py::arg("pin_name"), py::arg("bf"), R"(
         Add a boolean function with the specified name to the gate type.
 
         :param str name: The name of the boolean function.
         :param hal_py.boolean_function bf: A boolean function object.
+)");
+
+    py_gate_type.def("add_boolean_functions", &gate_type::add_boolean_functions, py::arg("functions"), R"(
+        Add multiple boolean functions to the gate type.
+
+        :param dict[str,hal_py.boolean_function] functions: Map from function name to boolean function.
 )");
 
     py_gate_type.def_property_readonly("boolean_functions", &gate_type::get_boolean_functions, R"(

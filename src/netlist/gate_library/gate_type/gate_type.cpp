@@ -61,7 +61,7 @@ void gate_type::add_input_pins(const std::vector<std::string>& pin_names)
     }
 }
 
-void gate_type::add_input_pin_group(std::string group_name, std::vector<u32> range)
+void gate_type::assign_input_pin_group(std::string group_name, std::vector<u32> range)
 {
     if (const auto& it = m_input_pin_groups.find(group_name); it != m_input_pin_groups.end())
     {
@@ -106,7 +106,7 @@ void gate_type::add_output_pins(const std::vector<std::string>& pin_names)
     }
 }
 
-void gate_type::add_output_pin_group(std::string group_name, std::vector<u32> range)
+void gate_type::assign_output_pin_group(std::string group_name, std::vector<u32> range)
 {
     if (const auto& it = m_output_pin_groups.find(group_name); it != m_output_pin_groups.end())
     {
