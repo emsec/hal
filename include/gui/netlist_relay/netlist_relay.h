@@ -87,6 +87,7 @@ Q_SIGNALS:
     void module_gate_removed(const std::shared_ptr<module> m, const u32 removed_gate) const;
     void module_input_port_name_changed(const std::shared_ptr<module> m, const u32 respective_net) const;
     void module_output_port_name_changed(const std::shared_ptr<module> m, const u32 respective_net) const;
+    void module_type_changed(const std::shared_ptr<module> m) const;
 
     void gate_created(const std::shared_ptr<gate> g) const;
     void gate_removed(const std::shared_ptr<gate> g) const;

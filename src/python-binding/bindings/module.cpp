@@ -36,6 +36,25 @@ void module_init(py::module& m)
         :param str name: The new name.
 )");
 
+    py_module.def_property("type", &module::get_type, &module::set_type, R"(
+        The type of the module.
+
+        :type: str
+)");
+
+    py_module.def("get_type", &module::get_type, R"(
+        Gets the module's type.
+
+        :returns: The type.
+        :rtype: str
+)");
+
+    py_module.def("set_type", &module::set_type, py::arg("type"), R"(
+        Sets the module's type.
+
+        :param str name: The new type.
+)");
+
     py_module.def_property("parent_module", &module::get_parent_module, &module::set_parent_module, R"(
         The parent module of this module. Set to None for the top module.
 
@@ -198,19 +217,32 @@ void module_init(py::module& m)
         :param str port_name: The port name.
 )");
 
-    py_module.def("set_output_port_name", &module::set_output_port_name, py::arg("output_net"), py::arg("port_name"), R"(
-        Set the name of the port corresponding to the specified output net to the given string.
-
-        :param hal_py.net output_net: The output net.
-        :param str port_name: The port name.
-)");
-
     py_module.def("get_input_port_name", &module::get_input_port_name, py::arg("input_net"), R"(
         Get the name of the port corresponding to the specified input net.
 
         :param hal_py.net input_net: The input net.
         :returns: The port name.
         :rtype: str
+)");
+
+    py_module.def_property_readonly("input_port_names", &module::get_input_port_names, R"(
+       Get the mapping of all input nets to their corresponding port names.
+
+        :type: dict[hal_py.net,str]
+)");
+
+    py_module.def("get_input_port_names", &module::get_input_port_names, R"(
+        Get the mapping of all input nets to their corresponding port names.
+
+        :returns: The map from input net to port name.
+        :rtype: dict[hal_py.net,str]
+)");
+
+    py_module.def("set_output_port_name", &module::set_output_port_name, py::arg("output_net"), py::arg("port_name"), R"(
+        Set the name of the port corresponding to the specified output net to the given string.
+
+        :param hal_py.net output_net: The output net.
+        :param str port_name: The port name.
 )");
 
     py_module.def("get_output_port_name", &module::get_output_port_name, py::arg("output_net"), R"(
@@ -221,11 +253,10 @@ void module_init(py::module& m)
         :rtype: str
 )");
 
-    py_module.def("get_input_port_names", &module::get_input_port_names, R"(
-        Get the mapping of all input nets to their corresponding port names.
+    py_module.def_property_readonly("output_port_names", &module::get_output_port_names, R"(
+       Get the mapping of all output nets to their corresponding port names.
 
-        :returns: The map from input net to port name.
-        :rtype: dict[hal_py.net,str]
+        :type: dict[hal_py.net,str]
 )");
 
     py_module.def("get_output_port_names", &module::get_output_port_names, R"(

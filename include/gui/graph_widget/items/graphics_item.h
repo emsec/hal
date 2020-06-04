@@ -1,5 +1,4 @@
-#ifndef GRAPHICS_ITEM_H
-#define GRAPHICS_ITEM_H
+#pragma once
 
 #include "def.h"
 
@@ -27,5 +26,3 @@ protected:
     u32 m_id;
     QColor m_color;
 };
-
-#endif // GRAPHICS_ITEM_H

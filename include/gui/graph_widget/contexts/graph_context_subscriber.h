@@ -1,5 +1,4 @@
-#ifndef GRAPH_CONTEXT_SUBSCRIBER_H
-#define GRAPH_CONTEXT_SUBSCRIBER_H
+#pragma once
 
 #include <QString>
 
@@ -15,5 +14,3 @@ public:
     virtual void handle_status_update(const int percent) = 0;
     virtual void handle_status_update(const QString& message) = 0;
 };
-
-#endif // GRAPH_CONTEXT_SUBSCRIBER_H

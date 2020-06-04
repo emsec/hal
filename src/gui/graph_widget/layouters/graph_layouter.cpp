@@ -963,11 +963,12 @@ void graph_layouter::draw_nets()
                     road* dst_v_road = get_v_road(dst_box->x, dst_box->y);
 
                     qreal x = scene_x_for_v_channel_lane(dst_v_road->x, dst_v_road->lanes);
+
                     lines.append_h_line(src_pin_position.x(), x, src_pin_position.y());
 
                     if (src_pin_position.y() < dst_pin_position.y())
                         lines.append_v_line(x, src_pin_position.y(), dst_pin_position.y());
-                    else
+                    else if (src_pin_position.y() > dst_pin_position.y())
                         lines.append_v_line(x, dst_pin_position.y(), src_pin_position.y());
 
                     lines.append_h_line(x, dst_pin_position.x(), dst_pin_position.y());
@@ -982,6 +983,7 @@ void graph_layouter::draw_nets()
                 {
                     // SPECIAL CASE DIRECT HORIZONTAL NEIGHBORS
                     qreal x = scene_x_for_v_channel_lane(src_v_road->x, src_v_road->lanes);
+
                     lines.append_h_line(src_pin_position.x(), x, src_pin_position.y());
 
                     if (src_pin_position.y() < dst_pin_position.y())
@@ -1067,7 +1069,6 @@ void graph_layouter::draw_nets()
 
                         qreal x = scene_x_for_v_channel_lane(initial_junction->x, initial_junction->v_lanes);
 
-                        // DUPLICATE CODE ?
                         if (current_position.x() < x)
                             lines.append_h_line(current_position.x(), x, current_position.y());
                         else
@@ -1909,4 +1910,16 @@ void graph_layouter::commit_used_paths(const graph_layouter::used_paths& used)
 
     for (junction* j : used.far_bottom_junctions)
         j->far_bottom_lane_changes += 1;
+}
+
+void graph_layouter::append_non_zero_h_line(standard_graphics_net::lines& lines, const qreal small_x, const qreal big_x, const qreal y)
+{
+   if (small_x < big_x)
+       lines.append_h_line(small_x, big_x, y);
+}
+
+void graph_layouter::append_non_zero_v_line(standard_graphics_net::lines& lines, const qreal x, const qreal small_y, const qreal big_y)
+{
+    if (small_y < big_y)
+        lines.append_h_line(x, small_y, big_y);
 }

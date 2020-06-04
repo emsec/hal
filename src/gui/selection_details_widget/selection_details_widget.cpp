@@ -58,6 +58,9 @@ selection_details_widget::selection_details_widget(QWidget* parent) : content_wi
 
 void selection_details_widget::handle_selection_update(void* sender)
 {
+    //called update methods with id = 0 to reset widget to the internal state of not updating because its not visible
+    //when all details widgets are finished maybe think about more elegant way 
+
     if (sender == this)
     {
         return;
@@ -67,6 +70,7 @@ void selection_details_widget::handle_selection_update(void* sender)
        g_selection_relay.m_selected_modules.isEmpty() &&
        g_selection_relay.m_selected_nets.isEmpty())
     {
+        m_module_details->update(0);
         m_stacked_widget->setCurrentWidget(m_empty_widget);
     }
 
@@ -78,12 +82,14 @@ void selection_details_widget::handle_selection_update(void* sender)
     else if (!g_selection_relay.m_selected_gates.isEmpty())
     {
         m_searchbar->hide();
+        m_module_details->update(0);
         m_gate_details->update(*g_selection_relay.m_selected_gates.begin());
         m_stacked_widget->setCurrentWidget(m_gate_details);
     }
     else if (!g_selection_relay.m_selected_nets.isEmpty())
     {
         m_searchbar->hide();
+        m_module_details->update(0);
         m_net_details->update(*g_selection_relay.m_selected_nets.begin());
         m_stacked_widget->setCurrentWidget(m_net_details);
     }

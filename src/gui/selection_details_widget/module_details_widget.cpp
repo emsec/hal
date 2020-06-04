@@ -110,13 +110,21 @@ module_details_widget::module_details_widget(QWidget* parent) : QWidget(parent)
     connect(m_input_ports_button, &QPushButton::clicked, this, &module_details_widget::handle_buttons_clicked);
     connect(m_output_ports_button, &QPushButton::clicked, this, &module_details_widget::handle_buttons_clicked);
 
+    connect(&g_netlist_relay, &netlist_relay::netlist_marked_global_input, this, &module_details_widget::handle_netlist_marked_global_input);
+    connect(&g_netlist_relay, &netlist_relay::netlist_marked_global_output, this, &module_details_widget::handle_netlist_marked_global_output);
+    connect(&g_netlist_relay, &netlist_relay::netlist_marked_global_inout, this, &module_details_widget::handle_netlist_marked_global_inout);
+    connect(&g_netlist_relay, &netlist_relay::netlist_unmarked_global_input, this, &module_details_widget::handle_netlist_unmarked_global_input);
+    connect(&g_netlist_relay, &netlist_relay::netlist_unmarked_global_output, this, &module_details_widget::handle_netlist_unmarked_global_output);
+    connect(&g_netlist_relay, &netlist_relay::netlist_unmarked_global_inout, this, &module_details_widget::handle_netlist_unmarked_global_inout);
+
     connect(&g_netlist_relay, &netlist_relay::module_name_changed, this, &module_details_widget::handle_module_name_changed);
     connect(&g_netlist_relay, &netlist_relay::module_submodule_added, this, &module_details_widget::handle_submodule_added);
     connect(&g_netlist_relay, &netlist_relay::module_submodule_removed, this, &module_details_widget::handle_submodule_removed);
     connect(&g_netlist_relay, &netlist_relay::module_gate_assigned, this, &module_details_widget::handle_module_gate_assigned);
     connect(&g_netlist_relay, &netlist_relay::module_gate_removed, this, &module_details_widget::handle_module_gate_removed);
-    connect(&g_netlist_relay, &netlist_relay::module_input_port_name_changed, this, &module_details_widget::handle_input_port_name_changed);
-    connect(&g_netlist_relay, &netlist_relay::module_output_port_name_changed, this, &module_details_widget::handle_output_port_name_changed);
+    connect(&g_netlist_relay, &netlist_relay::module_input_port_name_changed, this, &module_details_widget::handle_module_input_port_name_changed);
+    connect(&g_netlist_relay, &netlist_relay::module_output_port_name_changed, this, &module_details_widget::handle_module_output_port_name_changed);
+    connect(&g_netlist_relay, &netlist_relay::module_type_changed, this, &module_details_widget::handle_module_type_changed);
 
     connect(&g_netlist_relay, &netlist_relay::net_name_changed, this, &module_details_widget::handle_net_name_changed);
     connect(&g_netlist_relay, &netlist_relay::net_source_added, this, &module_details_widget::handle_net_source_added);
@@ -127,19 +135,29 @@ module_details_widget::module_details_widget(QWidget* parent) : QWidget(parent)
 
 void module_details_widget::update(const u32 module_id)
 {    
-    auto m = g_netlist->get_module_by_id(module_id);
     m_current_id = module_id;
 
-    if(!m || m_current_id == 0)
+    if(m_current_id == 0)
+        return;    
+
+    auto m = g_netlist->get_module_by_id(module_id);
+
+    if(!m)
         return;
 
 
     //update table with general information
     m_name_item->setText(QString::fromStdString(m->get_name()));
     m_id_item->setText(QString::number(m_current_id));
-    m_type_item->setText("None"); //type does not exist yet
     m_number_of_submodules_item->setText(QString::number(m->get_submodules(nullptr, true).size()));
     m_number_of_nets_item->setText(QString::number(m->get_internal_nets().size()));
+
+    QString type_text = QString::fromStdString(m->get_type());
+
+    if(type_text.isEmpty())
+        type_text = "None";
+
+    m_type_item->setText(type_text);
 
     int total_number_of_gates = m->get_gates(nullptr, true).size();
     int direct_member_number_of_gates = m->get_gates(nullptr, false).size();
@@ -166,6 +184,7 @@ void module_details_widget::update(const u32 module_id)
 
     m_input_ports_table->setRowCount(m->get_input_nets().size());
     m_input_ports_table->setMaximumHeight(m_input_ports_table->verticalHeader()->length());
+    m_input_ports_table->setMinimumHeight(m_input_ports_table->verticalHeader()->length());
 
     int index = 0;
     for(const auto &net : m->get_input_nets())
@@ -196,12 +215,13 @@ void module_details_widget::update(const u32 module_id)
 
     m_output_ports_table->setRowCount(m->get_output_nets().size());
     m_output_ports_table->setMaximumHeight(m_output_ports_table->verticalHeader()->length());
+    m_output_ports_table->setMinimumHeight(m_output_ports_table->verticalHeader()->length());
 
     index = 0;
     for(const auto &net : m->get_output_nets())
     {
         QTableWidgetItem* port_name = new QTableWidgetItem(QString::fromStdString(m->get_output_port_name(net)));
-        QTableWidgetItem* arrow_item = new QTableWidgetItem(QChar(0x2b05));
+        QTableWidgetItem* arrow_item = new QTableWidgetItem(QChar(0x27a1));
         QTableWidgetItem* net_item = new QTableWidgetItem(QString::fromStdString(net->get_name()));
 
         arrow_item->setForeground(QBrush(QColor(114, 140, 0), Qt::SolidPattern));
@@ -218,6 +238,150 @@ void module_details_widget::update(const u32 module_id)
 
     m_output_ports_table->resizeColumnsToContents();
     m_output_ports_table->setFixedWidth(calculate_table_size(m_output_ports_table).width());
+}
+
+void module_details_widget::handle_netlist_marked_global_input(std::shared_ptr<netlist> netlist, u32 associated_data)
+{
+    Q_UNUSED(netlist)
+
+    if(m_current_id == 0)
+        return;
+
+    auto module = g_netlist->get_module_by_id(m_current_id);
+    auto gates = module->get_gates(nullptr, true);
+    auto net = g_netlist->get_net_by_id(associated_data);
+
+    for(const auto& gate : gates)
+    {
+        auto in_nets = gate->get_fan_in_nets();
+        auto out_nets = gate->get_fan_out_nets();
+
+        if(in_nets.find(net) != in_nets.end() || out_nets.find(net) != out_nets.end())
+        {
+            update(m_current_id);
+            return;
+        }
+    }
+}
+
+void module_details_widget::handle_netlist_marked_global_output(std::shared_ptr<netlist> netlist, u32 associated_data)
+{
+    Q_UNUSED(netlist)
+
+    if(m_current_id == 0)
+        return;
+
+    auto module = g_netlist->get_module_by_id(m_current_id);
+    auto gates = module->get_gates(nullptr, true);
+    auto net = g_netlist->get_net_by_id(associated_data);
+
+    for(const auto& gate : gates)
+    {
+        auto in_nets = gate->get_fan_in_nets();
+        auto out_nets = gate->get_fan_out_nets();
+
+        if(in_nets.find(net) != in_nets.end() || out_nets.find(net) != out_nets.end())
+        {
+            update(m_current_id);
+            return;
+        }
+    }
+}
+
+void module_details_widget::handle_netlist_marked_global_inout(std::shared_ptr<netlist> netlist, u32 associated_data)
+{
+    Q_UNUSED(netlist)
+
+    if(m_current_id == 0)
+        return;
+
+    auto module = g_netlist->get_module_by_id(m_current_id);
+    auto gates = module->get_gates(nullptr, true);
+    auto net = g_netlist->get_net_by_id(associated_data);
+
+    for(const auto& gate : gates)
+    {
+        auto in_nets = gate->get_fan_in_nets();
+        auto out_nets = gate->get_fan_out_nets();
+
+        if(in_nets.find(net) != in_nets.end() || out_nets.find(net) != out_nets.end())
+        {
+            update(m_current_id);
+            return;
+        }
+    }
+}
+
+void module_details_widget::handle_netlist_unmarked_global_input(std::shared_ptr<netlist> netlist, u32 associated_data)
+{
+    Q_UNUSED(netlist)
+
+    if(m_current_id == 0)
+        return;
+
+    auto module = g_netlist->get_module_by_id(m_current_id);
+    auto gates = module->get_gates(nullptr, true);
+    auto net = g_netlist->get_net_by_id(associated_data);
+
+    for(const auto& gate : gates)
+    {
+        auto in_nets = gate->get_fan_in_nets();
+        auto out_nets = gate->get_fan_out_nets();
+
+        if(in_nets.find(net) != in_nets.end() || out_nets.find(net) != out_nets.end())
+        {
+            update(m_current_id);
+            return;
+        }
+    }
+}
+
+void module_details_widget::handle_netlist_unmarked_global_output(std::shared_ptr<netlist> netlist, u32 associated_data)
+{
+    Q_UNUSED(netlist)
+
+    if(m_current_id == 0)
+        return;
+
+    auto module = g_netlist->get_module_by_id(m_current_id);
+    auto gates = module->get_gates(nullptr, true);
+    auto net = g_netlist->get_net_by_id(associated_data);
+
+    for(const auto& gate : gates)
+    {
+        auto in_nets = gate->get_fan_in_nets();
+        auto out_nets = gate->get_fan_out_nets();
+
+        if(in_nets.find(net) != in_nets.end() || out_nets.find(net) != out_nets.end())
+        {
+            update(m_current_id);
+            return;
+        }
+    }
+}
+
+void module_details_widget::handle_netlist_unmarked_global_inout(std::shared_ptr<netlist> netlist, u32 associated_data)
+{
+    Q_UNUSED(netlist)
+
+    if(m_current_id == 0)
+        return;
+
+    auto module = g_netlist->get_module_by_id(m_current_id);
+    auto gates = module->get_gates(nullptr, true);
+    auto net = g_netlist->get_net_by_id(associated_data);
+
+    for(const auto& gate : gates)
+    {
+        auto in_nets = gate->get_fan_in_nets();
+        auto out_nets = gate->get_fan_out_nets();
+
+        if(in_nets.find(net) != in_nets.end() || out_nets.find(net) != out_nets.end())
+        {
+            update(m_current_id);
+            return;
+        }
+    }
 }
 
 void module_details_widget::handle_module_name_changed(std::shared_ptr<module> module)
@@ -242,7 +406,7 @@ void module_details_widget::handle_submodule_added(std::shared_ptr<module> modul
 void module_details_widget::handle_submodule_removed(std::shared_ptr<module> module, u32 associated_data)
 {
     Q_UNUSED(associated_data);
-
+ 
     if(m_current_id == 0)
         return;
 
@@ -278,7 +442,7 @@ void module_details_widget::handle_module_gate_removed(std::shared_ptr<module> m
         update(m_current_id);
 }
 
-void module_details_widget::handle_input_port_name_changed(std::shared_ptr<module> module, u32 associated_data)
+void module_details_widget::handle_module_input_port_name_changed(std::shared_ptr<module> module, u32 associated_data)
 {
     Q_UNUSED(associated_data);
 
@@ -286,10 +450,16 @@ void module_details_widget::handle_input_port_name_changed(std::shared_ptr<modul
         update(m_current_id);
 }
 
-void module_details_widget::handle_output_port_name_changed(std::shared_ptr<module> module, u32 associated_data)
+void module_details_widget::handle_module_output_port_name_changed(std::shared_ptr<module> module, u32 associated_data)
 {
     Q_UNUSED(associated_data);
 
+    if(m_current_id == module->get_id())
+        update(m_current_id);
+}
+
+void module_details_widget::handle_module_type_changed(std::shared_ptr<module> module)
+{
     if(m_current_id == module->get_id())
         update(m_current_id);
 }
@@ -309,15 +479,15 @@ void module_details_widget::handle_net_name_changed(std::shared_ptr<net> net)
 
 void module_details_widget::handle_net_source_added(std::shared_ptr<net> net, const u32 src_gate_id)
 {
-    Q_UNUSED(src_gate_id);
+    Q_UNUSED(net)
 
     if(m_current_id == 0)
         return;
 
     auto module = g_netlist->get_module_by_id(m_current_id);
-    auto output_nets = module->get_output_nets();
-
-    if(output_nets.find(net) != output_nets.end())
+    auto gate = g_netlist->get_gate_by_id(src_gate_id);
+    
+    if(module->contains_gate(gate, true))
         update(m_current_id);
 }
 
@@ -330,22 +500,22 @@ void module_details_widget::handle_net_source_removed(std::shared_ptr<net> net, 
 
     auto module = g_netlist->get_module_by_id(m_current_id);
     auto gate = g_netlist->get_gate_by_id(src_gate_id);
-
+    
     if(module->contains_gate(gate, true))
         update(m_current_id);
 }
 
 void module_details_widget::handle_net_destination_added(std::shared_ptr<net> net, const u32 dst_gate_id)
 {
-    Q_UNUSED(dst_gate_id)
+    Q_UNUSED(net)
 
     if(m_current_id == 0)
         return;
 
     auto module = g_netlist->get_module_by_id(m_current_id);
-    auto input_nets = module->get_input_nets();
-
-    if(input_nets.find(net) != input_nets.end())
+    auto gate = g_netlist->get_gate_by_id(dst_gate_id);
+    
+    if(module->contains_gate(gate, true))
         update(m_current_id);
 }
 
@@ -358,11 +528,10 @@ void module_details_widget::handle_net_destination_removed(std::shared_ptr<net> 
 
     auto module = g_netlist->get_module_by_id(m_current_id);
     auto gate = g_netlist->get_gate_by_id(dst_gate_id);
-
+    
     if(module->contains_gate(gate, true))
         update(m_current_id);
 }
-
 
 void module_details_widget::handle_buttons_clicked()
 {
