@@ -240,7 +240,7 @@ TEST_F(netlist_serializer_test, check_serialize_and_deserialize){
             EXPECT_TRUE(netlists_are_equal(nl, des_nl));
 
         }
-        { //NOTE: SIGABRT
+        {
             // Serialize and deserialize an empty netlist and compare the result with the original netlist
             std::shared_ptr<netlist> nl = std::make_shared<netlist>(m_gl);
 
@@ -265,7 +265,7 @@ TEST_F(netlist_serializer_test, check_serialize_and_deserialize){
 TEST_F(netlist_serializer_test, check_serialize_and_deserialize_negative)
 {
     TEST_START
-        /*{ ISSUE: Failed with SIGSEGV
+        /*{
                 // Serialize a netlist which is a nullptr
                 bool suc = netlist_serializer::serialize_netlist(nullptr, test_hal_file_path);
                 EXPECT_FALSE(suc);
