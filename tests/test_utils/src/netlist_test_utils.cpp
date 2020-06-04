@@ -149,6 +149,44 @@ std::shared_ptr<gate> test_utils::get_gate_by_subname(std::shared_ptr<netlist> n
     return res;
 }
 
+hal::path test_utils::create_sandbox_directory()
+{
+    hal::path sb_path = core_utils::get_base_directory() / sandbox_directory_path;
+    fs::create_directory(sb_path);
+    return sb_path;
+}
+
+void test_utils::remove_sandbox_directory()
+{
+    fs::remove_all((core_utils::get_base_directory() / sandbox_directory_path));
+}
+
+hal::path test_utils::create_sandbox_path(const std::string file_name)
+{
+    hal::path sb_path = (core_utils::get_base_directory() / sandbox_directory_path);
+    if(!fs::exists(sb_path)){
+        std::cerr << "[netlist_test_utils] create_sandbox_path: sandbox is not created yet. "
+                  << "Please use \'create_sandbox_directory()\' to create it beforehand.";
+        return hal::path();
+    }
+    return sb_path / file_name;
+}
+
+hal::path test_utils::create_sandbox_file(std::string file_name, std::string content)
+{
+    hal::path sb_path = (core_utils::get_base_directory() / sandbox_directory_path);
+    if(!fs::exists(sb_path)){
+        std::cerr << "[netlist_test_utils] create_sandbox_file: sandbox is not created yet. "
+                  << "Please use \'create_sandbox_directory()\' to create it beforehand.";
+        return hal::path();
+    }
+    hal::path f_path = sb_path / file_name;
+    std::ofstream sb_file( f_path.string() );
+    sb_file << content;
+    sb_file.close();
+    return f_path;
+}
+
 std::shared_ptr<gate_library> test_utils::get_testing_gate_library()
 {
     //std::shared_ptr<gate_library> gl = std::make_shared<gate_library>("Testing Library");
@@ -487,6 +525,9 @@ bool test_utils::modules_are_equal(const std::shared_ptr<module> m_0, const std:
     // The names should be equal
     if (!ignore_name && m_0->get_name() != m_1->get_name())
         return false;
+    // The types should be the same
+    if (m_0->get_type() != m_1->get_type())
+        return false;
     // The stored data should be equal
     if (m_0->get_data() != m_1->get_data())
         return false;
@@ -502,6 +543,37 @@ bool test_utils::modules_are_equal(const std::shared_ptr<module> m_0, const std:
         if (!m_1->contains_gate(g_1))
             return false;
     }
+
+    // Check that the port names are the same
+    // -- input ports
+    if (m_0->get_input_port_names().size() != m_0->get_input_port_names().size())
+        return false;
+    auto m_1_input_port_names = m_1->get_input_port_names();
+    for (auto const& [n_0, p_name_0] : m_0->get_input_port_names()){
+        auto n_1_list = m_1->get_netlist()->get_nets(net_name_filter(n_0->get_name()));
+        if (n_1_list.size() != 1)
+            return false;
+        std::shared_ptr<net> n_1 = *n_1_list.begin();
+        if (m_1_input_port_names.find(n_1) == m_1_input_port_names.end())
+            return false;
+        if(m_1_input_port_names[n_1] != p_name_0)
+            return false;
+    }
+    // -- output ports
+    if (m_0->get_output_port_names().size() != m_0->get_output_port_names().size())
+        return false;
+    auto m_1_output_port_names = m_1->get_output_port_names();
+    for (auto const& [n_0, p_name_0] : m_0->get_output_port_names()){
+        auto n_1_list = m_1->get_netlist()->get_nets(net_name_filter(n_0->get_name()));
+        if (n_1_list.size() != 1)
+            return false;
+        std::shared_ptr<net> n_1 = *n_1_list.begin();
+        if (m_1_output_port_names.find(n_1) == m_1_output_port_names.end())
+            return false;
+        if(m_1_output_port_names[n_1] != p_name_0)
+            return false;
+    }
+
 
     // The parents and submodules should be equal as well (to test this we only check their id, since
     // their equality will be tested as well)
@@ -534,9 +606,16 @@ bool test_utils::netlists_are_equal(const std::shared_ptr<netlist> nl_0, const s
         else
             return false;
     }
+    // Check if the ids are the same
     if (!ignore_id && nl_0->get_id() != nl_1->get_id())
         return false;
+    // Check that the gate libraries are the same
     if (nl_0->get_gate_library()->get_name() != nl_1->get_gate_library()->get_name())
+        return false;
+    // Check that the design/device names are the same
+    if (nl_0->get_design_name() != nl_1->get_design_name())
+        return false;
+    if (nl_0->get_device_name() != nl_1->get_device_name())
         return false;
 
     // Check if gates and nets are the same
