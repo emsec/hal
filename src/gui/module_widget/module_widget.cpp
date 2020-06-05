@@ -56,6 +56,7 @@ module_widget::module_widget(QWidget* parent) : content_widget("Modules", parent
     connect(m_tree_view->selectionModel(), &QItemSelectionModel::selectionChanged, this, &module_widget::handle_tree_selection_changed);
     connect(m_tree_view, &module_tree_view::doubleClicked, this, &module_widget::handle_item_double_clicked);
     connect(&g_selection_relay, &selection_relay::selection_changed, this, &module_widget::handle_selection_changed);
+    connect(&g_netlist_relay, &netlist_relay::module_submodule_removed, this, &module_widget::handle_module_removed);
 }
 
 void module_widget::setup_toolbar(toolbar* toolbar)
@@ -143,6 +144,14 @@ void module_widget::handle_tree_view_context_menu_requested(const QPoint& point)
 
     if (clicked == &delete_action)
         g_netlist_relay.debug_delete_module(get_module_item_from_index(index)->id());
+}
+
+void module_widget::handle_module_removed(std::shared_ptr<module> module, u32 module_id)
+{
+    //prevents the execution of "handle_tree_selection_changed"
+    //when a module is (re)moved the corresponding item in the tree is deleted and deselected, thus also triggering "handle_tree_selection_changed"
+    //this call due to the selection model signals is unwanted behavior because "handle_tree_selection_changed" is ment to only react to an "real" action performed by the user on the tree itself
+    m_ignore_selection_change = true;
 }
 
 void module_widget::handle_tree_selection_changed(const QItemSelection& selected, const QItemSelection& deselected)

@@ -977,9 +977,13 @@ std::shared_ptr<gate_type> gate_library_parser_liberty::construct_gate_type(cell
     gt->assign_input_pin_groups(input_pin_groups);
     gt->assign_output_pin_groups(output_pin_groups);
 
+
+    std::vector<std::string> all_pins = input_pins;
+    all_pins.insert(all_pins.end(), output_pins.begin(), output_pins.end());
+
     if (!cell.buses.empty())
     {
-        auto functions = construct_bus_functions(cell, input_pins);
+        auto functions = construct_bus_functions(cell, all_pins);
         gt->add_boolean_functions(functions);
     }
     else
@@ -988,7 +992,7 @@ std::shared_ptr<gate_type> gate_library_parser_liberty::construct_gate_type(cell
         {
             if (!pin.function.empty())
             {
-                auto function = boolean_function::from_string(pin.function, input_pins);
+                auto function = boolean_function::from_string(pin.function, all_pins);
                 for (const auto& name : pin.pin_names)
                 {
                     gt->add_boolean_function(name, function);
@@ -997,7 +1001,7 @@ std::shared_ptr<gate_type> gate_library_parser_liberty::construct_gate_type(cell
 
             if (!pin.x_function.empty())
             {
-                auto function = boolean_function::from_string(pin.x_function, input_pins);
+                auto function = boolean_function::from_string(pin.x_function, all_pins);
                 for (const auto& name : pin.pin_names)
                 {
                     gt->add_boolean_function(name + "_undefined", function);
@@ -1006,7 +1010,7 @@ std::shared_ptr<gate_type> gate_library_parser_liberty::construct_gate_type(cell
 
             if (!pin.z_function.empty())
             {
-                auto function = boolean_function::from_string(pin.z_function, input_pins);
+                auto function = boolean_function::from_string(pin.z_function, all_pins);
                 for (const auto& name : pin.pin_names)
                 {
                     gt->add_boolean_function(name + "_tristate", function);
@@ -1016,7 +1020,7 @@ std::shared_ptr<gate_type> gate_library_parser_liberty::construct_gate_type(cell
 
         for (const auto& [name, function] : cell.special_functions)
         {
-            gt->add_boolean_function(name, boolean_function::from_string(function, input_pins));
+            gt->add_boolean_function(name, boolean_function::from_string(function, all_pins));
         }
     }
 
@@ -1215,7 +1219,7 @@ std::string gate_library_parser_liberty::prepare_pin_function(const std::map<std
     return res;
 }
 
-std::map<std::string, boolean_function> gate_library_parser_liberty::construct_bus_functions(const cell_group& cell, const std::vector<std::string>& input_pins)
+std::map<std::string, boolean_function> gate_library_parser_liberty::construct_bus_functions(const cell_group& cell, const std::vector<std::string>& all_pins)
 {
     std::map<std::string, boolean_function> res;
 
@@ -1234,7 +1238,7 @@ std::map<std::string, boolean_function> gate_library_parser_liberty::construct_b
             {
                 for (auto [pin_name, function] : expand_bus_function(cell.buses, pin.pin_names, pin.function))
                 {
-                    res.emplace(pin_name, boolean_function::from_string(function, input_pins));
+                    res.emplace(pin_name, boolean_function::from_string(function, all_pins));
                 }
             }
 
@@ -1242,7 +1246,7 @@ std::map<std::string, boolean_function> gate_library_parser_liberty::construct_b
             {
                 for (auto [pin_name, function] : expand_bus_function(cell.buses, pin.pin_names, pin.x_function))
                 {
-                    res.emplace(pin_name + "_undefined", boolean_function::from_string(function, input_pins));
+                    res.emplace(pin_name + "_undefined", boolean_function::from_string(function, all_pins));
                 }
             }
 
@@ -1250,7 +1254,7 @@ std::map<std::string, boolean_function> gate_library_parser_liberty::construct_b
             {
                 for (auto [pin_name, function] : expand_bus_function(cell.buses, pin.pin_names, pin.z_function))
                 {
-                    res.emplace(pin_name + "_tristate", boolean_function::from_string(function, input_pins));
+                    res.emplace(pin_name + "_tristate", boolean_function::from_string(function, all_pins));
                 }
             }
         }
@@ -1262,7 +1266,7 @@ std::map<std::string, boolean_function> gate_library_parser_liberty::construct_b
         {
             if (auto function = prepare_pin_function(cell.buses, pin.function); !function.empty())
             {
-                auto b_function = boolean_function::from_string(function, input_pins);
+                auto b_function = boolean_function::from_string(function, all_pins);
                 for (const auto& pin_name : pin.pin_names)
                 {
                     res.emplace(pin_name, b_function);
@@ -1274,7 +1278,7 @@ std::map<std::string, boolean_function> gate_library_parser_liberty::construct_b
         {
             if (auto function = prepare_pin_function(cell.buses, pin.x_function); !function.empty())
             {
-                auto b_function = boolean_function::from_string(function, input_pins);
+                auto b_function = boolean_function::from_string(function, all_pins);
                 for (const auto& pin_name : pin.pin_names)
                 {
                     res.emplace(pin_name + "_undefined", b_function);
@@ -1286,7 +1290,7 @@ std::map<std::string, boolean_function> gate_library_parser_liberty::construct_b
         {
             if (auto function = prepare_pin_function(cell.buses, pin.z_function); !function.empty())
             {
-                auto b_function = boolean_function::from_string(function, input_pins);
+                auto b_function = boolean_function::from_string(function, all_pins);
                 for (const auto& pin_name : pin.pin_names)
                 {
                     res.emplace(pin_name + "_tristate", b_function);
@@ -1297,7 +1301,7 @@ std::map<std::string, boolean_function> gate_library_parser_liberty::construct_b
 
     for (const auto& [name, function] : cell.special_functions)
     {
-        res.emplace(name, boolean_function::from_string(prepare_pin_function(cell.buses, function), input_pins));
+        res.emplace(name, boolean_function::from_string(prepare_pin_function(cell.buses, function), all_pins));
     }
 
     return res;

@@ -40,6 +40,8 @@ namespace test_utils
     // Name for accessing the custom gate library after the call of 'create_temp_gate_lib()'
     const std::string temp_lib_name = "TEMP_GATE_LIBRARY.lib";
 
+    const hal::path sandbox_directory_path = "tests/sandbox_directory";
+
     /*********************************************************
      *                      Functions                        *
      *********************************************************/
@@ -187,6 +189,40 @@ namespace test_utils
      * @returns the gate pointer if there is exactly one gate with the subname. Returns nullptr otherwise.
      */
     std::shared_ptr<gate> get_gate_by_subname(std::shared_ptr<netlist> nl, const std::string subname);
+
+
+    // ===== File Management =====
+    /**
+     * Create a sandbox directory within the build folder, where temporary files can be stored. Please use the function
+     * remove_sandbox_directory() at the end of the test in order to remove the directory.
+     *
+     * @returns the absolute path of the sandbox directory
+     */
+    hal::path create_sandbox_directory();
+
+    /**
+     * Remove the sandbox directory if it was created before
+     */
+    void remove_sandbox_directory();
+
+    /**
+     * Creates a file path to a file in the sandbox directory. Note that this function can only called, if the sandbox
+     * directory exists. (Use create_sandbox_directory() to create it)
+     *
+     * @param file_name - The name of the file (including its extension)
+     * @returns the absolute path of the file.
+     */
+    hal::path create_sandbox_path(const std::string file_name);
+
+    /**
+     * Creates a file with a given content within the sandbox directory. Note that this function can only called
+     * if the sandbox directory exists. (Use create_sandbox_directory() to create it)
+     *
+     * @param file_name - The name of the file (including its extension)
+     * @param content - The content of the file
+     * @returns the absolute path of the file
+     */
+    hal::path create_sandbox_file(std::string file_name, std::string content);
 
     /**
      * Creates a gate library dedicated solely to testing. Construction of that gate library is independent of the gate library parser.
