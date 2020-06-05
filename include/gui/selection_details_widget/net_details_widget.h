@@ -104,6 +104,7 @@ private:
 
     //function section
     void handle_buttons_clicked();
+    void handle_table_item_clicked(QTableWidgetItem* item);
 
     //utility function, used to calculate the actual width so the scrollbars and the accuracy of the click functionality is correct
     QSize calculate_table_size(QTableWidget* table);

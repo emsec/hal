@@ -129,6 +129,10 @@ net_details_widget::net_details_widget(QWidget* parent) : QWidget(parent)
     connect(m_source_pins_button, &QPushButton::clicked, this, &net_details_widget::handle_buttons_clicked);
     connect(m_destination_pins_button, &QPushButton::clicked, this, &net_details_widget::handle_buttons_clicked);
 
+    //connect the tables
+    connect(m_source_pins_table, &QTableWidget::itemDoubleClicked, this, &net_details_widget::handle_table_item_clicked);
+    connect(m_destination_pins_table, &QTableWidget::itemDoubleClicked, this, &net_details_widget::handle_table_item_clicked);
+
 
 
 //    m_content_layout = new QVBoxLayout(this);
@@ -315,6 +319,7 @@ void net_details_widget::update(u32 net_id)
             arrow_item->setFlags((Qt::ItemFlag)~Qt::ItemIsEnabled);
             //arrow_item->setFlags((Qt::ItemFlag)(~Qt::ItemIsSelectable));
             gate_name_item->setFlags(Qt::ItemIsEnabled);
+            gate_name_item->setData(Qt::UserRole, ep_source.get_gate()->get_id());
 
             m_source_pins_table->setItem(index, 0, pin_name);
             m_source_pins_table->setItem(index, 1, arrow_item);
@@ -344,6 +349,7 @@ void net_details_widget::update(u32 net_id)
             arrow_item->setFlags((Qt::ItemFlag)~Qt::ItemIsEnabled);
             //arrow_item->setFlags((Qt::ItemFlag)(~Qt::ItemIsSelectable));
             gate_name_item->setFlags(Qt::ItemIsEnabled);
+            gate_name_item->setData(Qt::UserRole, ep_destination.get_gate()->get_id());
 
             m_destination_pins_table->setItem(index, 0, pin_name);
             m_destination_pins_table->setItem(index, 1, arrow_item);
@@ -620,6 +626,34 @@ void net_details_widget::handle_buttons_clicked()
         widget->hide();
      }
 
+}
+
+void net_details_widget::handle_table_item_clicked(QTableWidgetItem* item)
+{
+    if(item->column() != 2)
+        return;
+
+    QTableWidget* sender_table = dynamic_cast<QTableWidget*>(sender());
+
+    selection_relay::subfocus focus = (sender_table == m_source_pins_table) ? selection_relay::subfocus::right : selection_relay::subfocus::left;
+    auto gate_id = item->data(Qt::UserRole).toInt();
+    auto pin = sender_table->item(item->row(), 0)->text().toStdString();
+
+    auto clicked_gate = g_netlist->get_gate_by_id(gate_id);
+    if(!clicked_gate)
+        return;
+
+    g_selection_relay.clear();
+    g_selection_relay.m_selected_gates.insert(gate_id);
+    g_selection_relay.m_focus_type = selection_relay::item_type::gate;
+    g_selection_relay.m_focus_id = gate_id;
+    g_selection_relay.m_subfocus = focus;
+
+    auto pins = (sender_table == m_source_pins_table) ? clicked_gate->get_output_pins() : clicked_gate->get_input_pins();
+    auto index = std::distance(pins.begin(), std::find(pins.begin(), pins.end(), pin));
+    g_selection_relay.m_subfocus_index = index;
+
+    g_selection_relay.relay_selection_changed(this);
 }
 
 QSize net_details_widget::calculate_table_size(QTableWidget *table)

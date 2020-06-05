@@ -753,10 +753,10 @@ labeled_frame #right-spacer {
 }
 
 /*********************************************
-*             GATE_DETAILS_WIDGET            *
+*           GATE_/NET_DETAILS_WIDGET         *
 *********************************************/
 
-gate_details_widget QPushButton{
+gate_details_widget QPushButton, net_details_widget QPushButton{
     font: bold "Iosevka";
     font-size: 12px;
     /*background: qlineargradient( x1:0 y1:0, x2:1 y2:0, stop:0 black, stop:1 gray);*/
@@ -767,7 +767,7 @@ gate_details_widget QPushButton{
     height: 12px;
 }
 
-gate_details_widget QPushButton:disabled{
+gate_details_widget QPushButton:disabled, net_details_widget QPushButton:disabled{
     font: bold "Iosevka";
     font-size: 12px;
     /*background: qlineargradient( x1:0 y1:0, x2:1 y2:0, stop:0 black, stop:1 gray);*/
