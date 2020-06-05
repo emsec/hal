@@ -40,7 +40,7 @@ namespace test_utils
     // Name for accessing the custom gate library after the call of 'create_temp_gate_lib()'
     const std::string temp_lib_name = "TEMP_GATE_LIBRARY.lib";
 
-    const hal::path sandbox_directory_path = "tests/sandbox_directory";
+    const hal::path sandbox_directory_path = hal::path("tests/sandbox_directory");
 
     /*********************************************************
      *                      Functions                        *
