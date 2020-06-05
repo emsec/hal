@@ -143,12 +143,8 @@ protected:
         // Set some input/output port names of module 1
 
         test_m_0->set_input_port_name(net_1_3, "test_m_0_net_1_3_in");
-        // NOTE: Does not work currently (submodule test_m_1 is parsed after test_m_0, but contains necessary gate_0)
-        /*
-        test_m_0->set_input_port_name(net_2_0, "test_m_0_net_2_0_in");
+                test_m_0->set_input_port_name(net_2_0, "test_m_0_net_2_0_in");
         test_m_0->set_output_port_name(net_0_4_5, "test_m_0_net_0_4_5_out");
-         */
-
 
         return nl;
     }
@@ -265,11 +261,12 @@ TEST_F(netlist_serializer_test, check_serialize_and_deserialize){
 TEST_F(netlist_serializer_test, check_serialize_and_deserialize_negative)
 {
     TEST_START
-        /*{
-                // Serialize a netlist which is a nullptr
-                bool suc = netlist_serializer::serialize_netlist(nullptr, test_hal_file_path);
-                EXPECT_FALSE(suc);
-            }*/
+        {
+            // Serialize a netlist which is a nullptr
+            hal::path test_hal_file_path = create_sandbox_path("test_hal_file.hal");
+            bool suc = netlist_serializer::serialize_to_file(nullptr, test_hal_file_path);
+            EXPECT_FALSE(suc);
+        }
         {
             // Serialize a netlist to an invalid path
             NO_COUT_TEST_BLOCK;

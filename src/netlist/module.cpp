@@ -47,11 +47,6 @@ std::string module::get_type() const
 
 void module::set_type(const std::string& type)
 {
-    if (core_utils::trim(type).empty())
-    {
-        log_error("module", "empty name is not allowed");
-        return;
-    }
     if (type != m_type)
     {
         m_type = type;
