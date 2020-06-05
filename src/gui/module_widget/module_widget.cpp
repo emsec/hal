@@ -159,7 +159,7 @@ void module_widget::handle_tree_selection_changed(const QItemSelection& selected
     Q_UNUSED(selected)
     Q_UNUSED(deselected)
 
-    if(m_ignore_selection_change || static_cast<module_model*>(m_tree_view->model())->is_modifying())
+    if(m_ignore_selection_change || g_netlist_relay.get_module_model()->is_modifying())
         return;
 
     g_selection_relay.clear();
