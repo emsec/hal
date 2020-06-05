@@ -867,7 +867,7 @@ std::string hdl_parser_verilog::get_bin_from_literal(const token<std::string>& v
                 }
                 else
                 {
-                    log_error("hdl_parser", "invalid character within octal number literal {} in line {}", value, line_number);
+                    log_error("hdl_parser", "invalid character within decimal number literal {} in line {}", value, line_number);
                     return "";
                 }
             }

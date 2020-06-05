@@ -237,8 +237,10 @@ void module_model::add_module(const u32 id, const u32 parent_module)
     QModelIndex index = get_index(parent);
 
     int row = parent->childCount();
+    m_is_modifying = true;
     beginInsertRows(index, row, row);
     parent->insert_child(row, item);
+    m_is_modifying = false;
     endInsertRows();
 }
 
@@ -266,8 +268,10 @@ void module_model::remove_module(const u32 id)
 
     int row = item->row();
 
+    m_is_modifying = true;
     beginRemoveRows(index, row, row);
     parent->remove_child(item);
+    m_is_modifying = false;
     endRemoveRows();
 
     m_module_items.remove(id);
@@ -292,4 +296,9 @@ void module_model::update_module(const u32 id)    // SPLIT ???
 module_item* module_model::get_item(const u32 module_id) const
 {
     return m_module_items.value(module_id);
+}
+
+bool module_model::is_modifying()
+{
+    return m_is_modifying;
 }

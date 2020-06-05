@@ -73,8 +73,6 @@ public:
      */
     void set_name(const std::string& name);
 
-    // TODO python binding
-    // TODO add to GUI
     /**
      * Get the module's type.
      *
@@ -82,8 +80,6 @@ public:
      */
     std::string get_type() const;
 
-    // TODO python binding
-    // TODO add to GUI
     /**
      * Set the module's type.
      *

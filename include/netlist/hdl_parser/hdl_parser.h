@@ -163,7 +163,7 @@ public:
                 {
                     // cache pin types
                     std::vector<T> pins;
-                    std::map<T, std::vector<u32>> pin_groups;
+                    std::map<T, std::map<u32, std::string>> pin_groups;
 
                     if constexpr (std::is_same<T, std::string>::value)
                     {
@@ -171,8 +171,8 @@ public:
                         std::vector<T> output_pins = gate_it->second->get_output_pins();
                         pins.insert(pins.end(), output_pins.begin(), output_pins.end());
 
-                        pin_groups                                      = gate_it->second->get_input_pin_groups();
-                        std::map<T, std::vector<u32>> output_pin_groups = gate_it->second->get_output_pin_groups();
+                        pin_groups                                                = gate_it->second->get_input_pin_groups();
+                        std::map<T, std::map<u32, std::string>> output_pin_groups = gate_it->second->get_output_pin_groups();
                         pin_groups.insert(output_pin_groups.begin(), output_pin_groups.end());
                     }
                     else
@@ -200,13 +200,18 @@ public:
                     {
                         if (!port.is_ranges_known())
                         {
-                            if (const auto pin_group_it = pin_groups.find(port.get_name()); pin_group_it != pin_groups.end())
-                            {
-                                port.set_ranges({pin_group_it->second});
-                            }
-                            else if (const auto pin_it = std::find(pins.begin(), pins.end(), port.get_name()); pin_it != pins.end())
+                            if (const auto pin_it = std::find(pins.begin(), pins.end(), port.get_name()); pin_it != pins.end())
                             {
                                 port.set_ranges({});
+                            }
+                            else if (const auto pin_group_it = pin_groups.find(port.get_name()); pin_group_it != pin_groups.end())
+                            {
+                                std::vector<u32> range;
+                                for (const auto& pin : pin_group_it->second)
+                                {
+                                    range.push_back(pin.first);
+                                }
+                                port.set_ranges({range});
                             }
                             else
                             {

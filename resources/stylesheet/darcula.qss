@@ -14,7 +14,7 @@
 }
 
 *::item:selected {
-    background   : rgba(13, 41, 62);
+    background   : rgb(13, 41, 62);
 
 }
 

@@ -47,11 +47,6 @@ std::string module::get_type() const
 
 void module::set_type(const std::string& type)
 {
-    if (core_utils::trim(type).empty())
-    {
-        log_error("module", "empty name is not allowed");
-        return;
-    }
     if (type != m_type)
     {
         m_type = type;
@@ -408,7 +403,7 @@ std::string module::get_output_port_name(const std::shared_ptr<net>& output_net)
     }
     else
     {
-        port_name = "O(" + std::to_string(m_next_input_port_id++) + ")";
+        port_name = "O(" + std::to_string(m_next_output_port_id++) + ")";
         m_named_output_nets.insert(output_net);
         m_output_net_to_port_name.emplace(output_net, port_name);
     }

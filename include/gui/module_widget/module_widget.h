@@ -64,6 +64,7 @@ public Q_SLOTS:
     void handle_tree_selection_changed(const QItemSelection& selected, const QItemSelection& deselected);
     void handle_item_double_clicked(const QModelIndex &index);
     void handle_selection_changed(void* sender);
+    void handle_module_removed(std::shared_ptr<module> module, u32 module_id);
 
 private:
     module_tree_view* m_tree_view;

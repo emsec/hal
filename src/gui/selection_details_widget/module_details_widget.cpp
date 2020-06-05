@@ -135,10 +135,14 @@ module_details_widget::module_details_widget(QWidget* parent) : QWidget(parent)
 
 void module_details_widget::update(const u32 module_id)
 {    
-    auto m = g_netlist->get_module_by_id(module_id);
     m_current_id = module_id;
 
-    if(!m || m_current_id == 0)
+    if(m_current_id == 0)
+        return;    
+
+    auto m = g_netlist->get_module_by_id(module_id);
+
+    if(!m)
         return;
 
 
@@ -180,6 +184,7 @@ void module_details_widget::update(const u32 module_id)
 
     m_input_ports_table->setRowCount(m->get_input_nets().size());
     m_input_ports_table->setMaximumHeight(m_input_ports_table->verticalHeader()->length());
+    m_input_ports_table->setMinimumHeight(m_input_ports_table->verticalHeader()->length());
 
     int index = 0;
     for(const auto &net : m->get_input_nets())
@@ -210,6 +215,7 @@ void module_details_widget::update(const u32 module_id)
 
     m_output_ports_table->setRowCount(m->get_output_nets().size());
     m_output_ports_table->setMaximumHeight(m_output_ports_table->verticalHeader()->length());
+    m_output_ports_table->setMinimumHeight(m_output_ports_table->verticalHeader()->length());
 
     index = 0;
     for(const auto &net : m->get_output_nets())
@@ -308,7 +314,7 @@ void module_details_widget::handle_netlist_marked_global_inout(std::shared_ptr<n
 
 void module_details_widget::handle_netlist_unmarked_global_input(std::shared_ptr<netlist> netlist, u32 associated_data)
 {
-     Q_UNUSED(netlist)
+    Q_UNUSED(netlist)
 
     if(m_current_id == 0)
         return;
@@ -400,7 +406,7 @@ void module_details_widget::handle_submodule_added(std::shared_ptr<module> modul
 void module_details_widget::handle_submodule_removed(std::shared_ptr<module> module, u32 associated_data)
 {
     Q_UNUSED(associated_data);
-
+ 
     if(m_current_id == 0)
         return;
 

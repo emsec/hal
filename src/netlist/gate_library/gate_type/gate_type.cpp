@@ -61,26 +61,6 @@ void gate_type::add_input_pins(const std::vector<std::string>& pin_names)
     }
 }
 
-void gate_type::add_input_pin_group(std::string group_name, std::vector<u32> range)
-{
-    if (const auto& it = m_input_pin_groups.find(group_name); it != m_input_pin_groups.end())
-    {
-        log_warning("gate_type", "input pin group '{}' does already exist for gate type '{}', ignoring group", group_name, m_name);
-        return;
-    }
-
-    for (const auto& index : range)
-    {
-        if (std::find(m_input_pins.begin(), m_input_pins.end(), group_name + "(" + std::to_string(index) + ")") == m_input_pins.end())
-        {
-            log_warning("gate_type", "input pin '{}' does not yet exist within pin group '{}' for gate type '{}', ignoring group", group_name + "(" + std::to_string(index) + ")", group_name, m_name);
-            return;
-        }
-    }
-
-    m_input_pin_groups.emplace(group_name, range);
-}
-
 void gate_type::add_output_pin(std::string pin_name)
 {
     if (const auto& it = std::find(m_output_pins.begin(), m_output_pins.end(), pin_name); it != m_output_pins.end())
@@ -106,7 +86,35 @@ void gate_type::add_output_pins(const std::vector<std::string>& pin_names)
     }
 }
 
-void gate_type::add_output_pin_group(std::string group_name, std::vector<u32> range)
+void gate_type::assign_input_pin_group(const std::string& group_name, const std::map<u32, std::string>& index_to_pin)
+{
+    if (const auto& it = m_input_pin_groups.find(group_name); it != m_input_pin_groups.end())
+    {
+        log_warning("gate_type", "input pin group '{}' does already exist for gate type '{}', ignoring group", group_name, m_name);
+        return;
+    }
+
+    for (const auto& pin : index_to_pin)
+    {
+        if (std::find(m_input_pins.begin(), m_input_pins.end(), pin.second) == m_input_pins.end())
+        {
+            log_warning("gate_type", "input pin '{}' does not yet exist within pin group '{}' for gate type '{}', ignoring group", pin.first, group_name, m_name);
+            return;
+        }
+    }
+
+    m_input_pin_groups.emplace(group_name, index_to_pin);
+}
+
+void gate_type::assign_input_pin_groups(const std::map<std::string, std::map<u32, std::string>>& pin_groups)
+{
+    for (const auto& [group_name, index_to_pin] : pin_groups)
+    {
+        assign_input_pin_group(group_name, index_to_pin);
+    }
+}
+
+void gate_type::assign_output_pin_group(const std::string& group_name, const std::map<u32, std::string>& index_to_pin)
 {
     if (const auto& it = m_output_pin_groups.find(group_name); it != m_output_pin_groups.end())
     {
@@ -114,16 +122,24 @@ void gate_type::add_output_pin_group(std::string group_name, std::vector<u32> ra
         return;
     }
 
-    for (const auto& index : range)
+    for (const auto& pin : index_to_pin)
     {
-        if (std::find(m_output_pins.begin(), m_output_pins.end(), group_name + "(" + std::to_string(index) + ")") == m_output_pins.end())
+        if (std::find(m_output_pins.begin(), m_output_pins.end(), pin.second) == m_output_pins.end())
         {
-            log_warning("gate_type", "output pin '{}' does not yet exist within pin group '{}' for gate type '{}', ignoring group", group_name + "(" + std::to_string(index) + ")", group_name, m_name);
+            log_warning("gate_type", "output pin '{}' does not yet exist within pin group '{}' for gate type '{}', ignoring group", pin.first, group_name, m_name);
             return;
         }
     }
 
-    m_output_pin_groups.emplace(group_name, range);
+    m_output_pin_groups.emplace(group_name, index_to_pin);
+}
+
+void gate_type::assign_output_pin_groups(const std::map<std::string, std::map<u32, std::string>>& pin_groups)
+{
+    for (const auto& [group_name, index_to_pin] : pin_groups)
+    {
+        assign_output_pin_group(group_name, index_to_pin);
+    }
 }
 
 void gate_type::add_boolean_function(std::string pin_name, boolean_function bf)
@@ -151,7 +167,7 @@ std::vector<std::string> gate_type::get_input_pins() const
     return m_input_pins;
 }
 
-std::map<std::string, std::vector<u32>> gate_type::get_input_pin_groups() const
+std::map<std::string, std::map<u32, std::string>> gate_type::get_input_pin_groups() const
 {
     return m_input_pin_groups;
 }
@@ -161,7 +177,7 @@ std::vector<std::string> gate_type::get_output_pins() const
     return m_output_pins;
 }
 
-std::map<std::string, std::vector<u32>> gate_type::get_output_pin_groups() const
+std::map<std::string, std::map<u32, std::string>> gate_type::get_output_pin_groups() const
 {
     return m_output_pin_groups;
 }
