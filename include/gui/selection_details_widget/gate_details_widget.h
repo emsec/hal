@@ -58,6 +58,7 @@ public:
     ~gate_details_widget();
 
     virtual void resizeEvent(QResizeEvent* event) Q_DECL_OVERRIDE;
+    virtual bool eventFilter(QObject *watched, QEvent *event) Q_DECL_OVERRIDE;
 
     /**
      * Handles update of gate details widget to display information of selected gate.

@@ -133,7 +133,11 @@ net_details_widget::net_details_widget(QWidget* parent) : QWidget(parent)
     connect(m_source_pins_table, &QTableWidget::itemDoubleClicked, this, &net_details_widget::handle_table_item_clicked);
     connect(m_destination_pins_table, &QTableWidget::itemDoubleClicked, this, &net_details_widget::handle_table_item_clicked);
 
-
+    //install eventfilter to change the cursor when hovering over the second colums of the pin tables
+    m_destination_pins_table->viewport()->setMouseTracking(true);
+    m_destination_pins_table->viewport()->installEventFilter(this);
+    m_source_pins_table->viewport()->setMouseTracking(true);
+    m_source_pins_table->viewport()->installEventFilter(this);
 
 //    m_content_layout = new QVBoxLayout(this);
 //    m_content_layout->setContentsMargins(0, 0, 0, 0);
@@ -273,6 +277,32 @@ net_details_widget::~net_details_widget()
     delete m_id_item;
     //delete m_source_pin;
     //delete m_destination_pins;
+}
+
+bool net_details_widget::eventFilter(QObject *watched, QEvent *event)
+{
+    //need to determine which of the tables is the "owner" of the viewport
+    QTableWidget* table = (watched == m_destination_pins_table->viewport()) ? m_destination_pins_table : m_source_pins_table;
+    if(event->type() == QEvent::MouseMove)
+    {
+        QMouseEvent* ev = dynamic_cast<QMouseEvent*>(event);
+        QTableWidgetItem* item = table->itemAt(ev->pos());
+        if(item)
+        {
+            if(item->column() == 2)
+                setCursor(QCursor(Qt::PointingHandCursor));
+            else
+                setCursor(QCursor(Qt::ArrowCursor));
+        }
+        else
+            setCursor(QCursor(Qt::ArrowCursor));
+    }
+
+    //restore default cursor when leaving the widget (maybe save cursor before entering?)
+    if(event->type() == QEvent::Leave)
+        setCursor(QCursor(Qt::ArrowCursor));
+
+    return false;
 }
 
 void net_details_widget::update(u32 net_id)

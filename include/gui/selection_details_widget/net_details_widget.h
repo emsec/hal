@@ -51,6 +51,7 @@ public:
     net_details_widget(QWidget* parent = 0);
     ~net_details_widget();
 
+    virtual bool eventFilter(QObject *watched, QEvent *event) Q_DECL_OVERRIDE;
     void update(u32 net_id);
 
 public Q_SLOTS:
