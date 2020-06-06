@@ -778,7 +778,7 @@ gate_details_widget QPushButton:disabled, net_details_widget QPushButton:disable
     height: 12px;
 }
 
-gate_details_widget QTableWidget::item:!disabled:hover{
+gate_details_widget QTableWidget::item:!disabled:hover, net_details_widget QTableWidget::item:!disabled:hover{
     /*background-color: red;*/
     color: white;
 }
