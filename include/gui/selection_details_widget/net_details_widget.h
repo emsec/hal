@@ -107,6 +107,11 @@ private:
     void handle_buttons_clicked();
     void handle_table_item_clicked(QTableWidgetItem* item);
 
+    //straightforward context menu handlers
+    void handle_general_table_menu_requeted(const QPoint &pos);
+    void handle_sources_table_menu_requeted(const QPoint &pos);
+    void handle_destinations_table_menu_requeted(const QPoint &pos);
+
     //utility function, used to calculate the actual width so the scrollbars and the accuracy of the click functionality is correct
     QSize calculate_table_size(QTableWidget* table);
 

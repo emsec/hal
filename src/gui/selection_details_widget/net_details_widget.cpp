@@ -12,6 +12,9 @@
 #include <QTreeWidgetItem>
 #include <QVBoxLayout>
 #include <QPushButton>
+#include <QMenu>
+#include <QClipboard>
+#include <QApplication>
 
 net_details_widget::net_details_widget(QWidget* parent) : QWidget(parent)
 {
@@ -132,6 +135,9 @@ net_details_widget::net_details_widget(QWidget* parent) : QWidget(parent)
     //connect the tables
     connect(m_source_pins_table, &QTableWidget::itemDoubleClicked, this, &net_details_widget::handle_table_item_clicked);
     connect(m_destination_pins_table, &QTableWidget::itemDoubleClicked, this, &net_details_widget::handle_table_item_clicked);
+    connect(m_general_table, &QTableWidget::customContextMenuRequested, this, &net_details_widget::handle_general_table_menu_requeted);
+    connect(m_source_pins_table, &QTableWidget::customContextMenuRequested, this, &net_details_widget::handle_sources_table_menu_requeted);
+    connect(m_destination_pins_table, &QTableWidget::customContextMenuRequested, this, &net_details_widget::handle_destinations_table_menu_requeted);
 
     //install eventfilter to change the cursor when hovering over the second colums of the pin tables
     m_destination_pins_table->viewport()->setMouseTracking(true);
@@ -684,6 +690,64 @@ void net_details_widget::handle_table_item_clicked(QTableWidgetItem* item)
     g_selection_relay.m_subfocus_index = index;
 
     g_selection_relay.relay_selection_changed(this);
+}
+
+void net_details_widget::handle_general_table_menu_requeted(const QPoint &pos)
+{
+    QMenu menu;
+    QString description;
+    QString python_command = "netlist.get_net_by_id(" + QString::number(m_current_id) + ").";
+    switch(m_general_table->itemAt(pos)->row())
+    {
+        case 0: python_command += "get_name()"; description = "Extract name as python code (copy to clipboard)"; break;
+        case 1: break; //there is no "explicit" type.... need to check with functions
+        case 2: python_command += "get_id()"; description = "Extract id as python code (copy to clipboard)"; break;
+        case 3: break; //does not have a function either
+    }
+
+    if(m_general_table->itemAt(pos)->row() == 1 || m_general_table->itemAt(pos)->row() == 3)
+        return;
+
+    menu.addAction(QIcon(":/icons/python"), description, [python_command](){
+        QApplication::clipboard()->setText(python_command);
+    });
+
+    menu.move(dynamic_cast<QWidget*>(sender())->mapToGlobal(pos));
+    menu.exec();
+}
+
+void net_details_widget::handle_sources_table_menu_requeted(const QPoint &pos)
+{
+    if(m_source_pins_table->itemAt(pos)->column() != 2)
+        return;
+
+    QMenu menu;
+    menu.addAction("Jump to source gate", [this, pos](){
+        handle_table_item_clicked(m_source_pins_table->itemAt(pos));
+    });
+    menu.addAction("Extract gate as python code (copy to clipboard)", [this, pos](){
+        QApplication::clipboard()->setText("netlist.get_gate_by_id(" + m_source_pins_table->itemAt(pos)->data(Qt::UserRole).toString() + ")");
+    });
+
+    menu.move(dynamic_cast<QWidget*>(sender())->mapToGlobal(pos));
+    menu.exec();
+}
+
+void net_details_widget::handle_destinations_table_menu_requeted(const QPoint &pos)
+{
+    if(m_destination_pins_table->itemAt(pos)->column() != 2)
+        return;
+
+    QMenu menu;
+    menu.addAction("Jump to destination gate", [this, pos](){
+        handle_table_item_clicked(m_destination_pins_table->itemAt(pos));
+    });
+    menu.addAction("Extract gate as python code (copy to clipboard)", [this, pos](){
+        QApplication::clipboard()->setText("netlist.get_gate_by_id(" + m_destination_pins_table->itemAt(pos)->data(Qt::UserRole).toString() + ")");
+    });
+
+    menu.move(dynamic_cast<QWidget*>(sender())->mapToGlobal(pos));
+    menu.exec();
 }
 
 QSize net_details_widget::calculate_table_size(QTableWidget *table)
