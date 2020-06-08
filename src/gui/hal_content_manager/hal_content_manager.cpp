@@ -19,6 +19,7 @@
 #include "gui/python/python_console_widget.h"
 #include "gui/python/python_editor.h"
 #include "gui/selection_details_widget/selection_details_widget.h"
+#include "gui/selection_widget/selection_widget.h"
 #include "gui_globals.h"
 
 #include <QGraphicsScene>
@@ -85,10 +86,14 @@ void hal_content_manager::handle_open_document(const QString& file_name)
     selection_details_widget* details = new selection_details_widget();
     m_main_window->add_content(details, 0, content_anchor::bottom);
 
+    //selection_widget* sel_widget = new selection_widget();
+    //m_main_window->add_content(sel_widget, 2, content_anchor::left);
+
     hal_logger_widget* logger_widget = new hal_logger_widget();
     m_main_window->add_content(logger_widget, 1, content_anchor::bottom);
 
     details->open();
+    //sel_widget->open();
     logger_widget->open();
 
     //m_content.append(code_edit);
