@@ -122,19 +122,19 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
 
     //create dynamic items that change when gate is changed
     m_name_item = new QTableWidgetItem();
-    m_name_item->setFlags((Qt::ItemFlag)~Qt::ItemIsEnabled);
+    m_name_item->setFlags(Qt::ItemIsEnabled);
     m_general_table->setItem(0, 1, m_name_item);
 
     m_type_item = new QTableWidgetItem();
-    m_type_item->setFlags((Qt::ItemFlag)~Qt::ItemIsEnabled);
+    m_type_item->setFlags(Qt::ItemIsEnabled);
     m_general_table->setItem(1, 1, m_type_item);
 
     m_id_item = new QTableWidgetItem();
-    m_id_item->setFlags((Qt::ItemFlag)~Qt::ItemIsEnabled);
+    m_id_item->setFlags(Qt::ItemIsEnabled);
     m_general_table->setItem(2, 1, m_id_item);
 
     m_module_item = new QTableWidgetItem();
-    m_module_item->setFlags((Qt::ItemFlag)~Qt::ItemIsEnabled);
+    m_module_item->setFlags(Qt::ItemIsEnabled);
     m_general_table->setItem(3, 1, m_module_item);
 
 
@@ -464,6 +464,9 @@ void gate_details_widget::handle_data_table_menu_requested(const QPoint &pos)
 }
 void gate_details_widget::handle_general_table_menu_requested(const QPoint &pos)
 {
+    if(m_general_table->itemAt(pos)->column() != 1)
+        return;
+
     QMenu menu;
     QString description;
     QString python_command = "netlist.get_gate_by_id(" + QString::number(m_current_id) + ").";

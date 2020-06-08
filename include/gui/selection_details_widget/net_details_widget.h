@@ -95,7 +95,6 @@ private:
     QTableWidgetItem* m_name_item;
     QTableWidgetItem* m_type_item;
     QTableWidgetItem* m_id_item;
-    QTableWidgetItem* m_module_item;
 
     //(2) source_pins section
     QTableWidget* m_source_pins_table;

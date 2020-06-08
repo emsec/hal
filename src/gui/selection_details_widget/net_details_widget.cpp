@@ -56,7 +56,7 @@ net_details_widget::net_details_widget(QWidget* parent) : QWidget(parent)
     m_destination_pins_button = new QPushButton("Destination Pins", this);
 
     //table initializations
-    m_general_table = new QTableWidget(4, 2);
+    m_general_table = new QTableWidget(3, 2);
     m_source_pins_table = new QTableWidget(0, 3);
     m_destination_pins_table = new QTableWidget(0, 3);
 
@@ -80,7 +80,7 @@ net_details_widget::net_details_widget(QWidget* parent) : QWidget(parent)
     }
 
     QList<QTableWidgetItem*> tmp_general_info_list = {new QTableWidgetItem("Name:"), new QTableWidgetItem("Type:"),
-                                                      new QTableWidgetItem("ID:"), new QTableWidgetItem("Module:")};
+                                                      new QTableWidgetItem("ID:")};
     for(int i = 0; i < tmp_general_info_list.size(); i++)
     {
         auto item = tmp_general_info_list.at(i);
@@ -91,7 +91,7 @@ net_details_widget::net_details_widget(QWidget* parent) : QWidget(parent)
 
     //create dynamic items that change when gate is changed
     m_name_item = new QTableWidgetItem();
-    m_name_item->setFlags((Qt::ItemFlag)~Qt::ItemIsEnabled);
+    m_name_item->setFlags(Qt::ItemIsEnabled);
     m_general_table->setItem(0, 1, m_name_item);
 
     m_type_item = new QTableWidgetItem();
@@ -99,12 +99,8 @@ net_details_widget::net_details_widget(QWidget* parent) : QWidget(parent)
     m_general_table->setItem(1, 1, m_type_item);
 
     m_id_item = new QTableWidgetItem();
-    m_id_item->setFlags((Qt::ItemFlag)~Qt::ItemIsEnabled);
+    m_id_item->setFlags(Qt::ItemIsEnabled);
     m_general_table->setItem(2, 1, m_id_item);
-
-    m_module_item = new QTableWidgetItem();
-    m_module_item->setFlags((Qt::ItemFlag)~Qt::ItemIsEnabled);
-    m_general_table->setItem(3, 1, m_module_item);
 
     //adding things to intermediate layout (the one thats neccessary for the left spacing)
     intermediate_layout_gt->addWidget(m_general_table);
@@ -333,7 +329,6 @@ void net_details_widget::update(u32 net_id)
         n_type = "Output";
 
     m_type_item->setText(n_type);
-    m_module_item->setText("Look up how to calculate the mdoule");
     m_general_table->resizeColumnsToContents();
     m_general_table->setFixedWidth(calculate_table_size(m_general_table).width());
 
@@ -694,6 +689,9 @@ void net_details_widget::handle_table_item_clicked(QTableWidgetItem* item)
 
 void net_details_widget::handle_general_table_menu_requeted(const QPoint &pos)
 {
+    if(m_general_table->itemAt(pos)->column() != 1)
+        return;
+
     QMenu menu;
     QString description;
     QString python_command = "netlist.get_net_by_id(" + QString::number(m_current_id) + ").";
@@ -702,7 +700,6 @@ void net_details_widget::handle_general_table_menu_requeted(const QPoint &pos)
         case 0: python_command += "get_name()"; description = "Extract name as python code (copy to clipboard)"; break;
         case 1: break; //there is no "explicit" type.... need to check with functions
         case 2: python_command += "get_id()"; description = "Extract id as python code (copy to clipboard)"; break;
-        case 3: break; //does not have a function either
     }
 
     if(m_general_table->itemAt(pos)->row() == 1 || m_general_table->itemAt(pos)->row() == 3)
