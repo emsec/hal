@@ -787,10 +787,6 @@ gate_details_widget QLabel{
     color: #A9B7C6;
 }
 
-gate_details_widget QLabel:hover{
-    color: red;
-}
-
 /*
 rgb(107, 135, 255)
 */

@@ -391,6 +391,11 @@ void net_details_widget::update(u32 net_id)
     m_destination_pins_table->resizeColumnsToContents();
     m_destination_pins_table->setFixedWidth(calculate_table_size(m_destination_pins_table).width());
 
+    //to prevent any updating(render) erros that can occur, manually tell the tables to update
+    m_general_table->update();
+    m_source_pins_table->update();
+    m_destination_pins_table->update();
+
     //    m_type_item->setText(n_type);
 //    m_current_id = net_id;
 
@@ -722,7 +727,7 @@ void net_details_widget::handle_sources_table_menu_requeted(const QPoint &pos)
     menu.addAction("Jump to source gate", [this, pos](){
         handle_table_item_clicked(m_source_pins_table->itemAt(pos));
     });
-    menu.addAction("Extract gate as python code (copy to clipboard)", [this, pos](){
+    menu.addAction(QIcon(":/icons/python"),"Extract gate as python code (copy to clipboard)", [this, pos](){
         QApplication::clipboard()->setText("netlist.get_gate_by_id(" + m_source_pins_table->itemAt(pos)->data(Qt::UserRole).toString() + ")");
     });
 
@@ -739,7 +744,7 @@ void net_details_widget::handle_destinations_table_menu_requeted(const QPoint &p
     menu.addAction("Jump to destination gate", [this, pos](){
         handle_table_item_clicked(m_destination_pins_table->itemAt(pos));
     });
-    menu.addAction("Extract gate as python code (copy to clipboard)", [this, pos](){
+    menu.addAction(QIcon(":/icons/python"), "Extract gate as python code (copy to clipboard)", [this, pos](){
         QApplication::clipboard()->setText("netlist.get_gate_by_id(" + m_destination_pins_table->itemAt(pos)->data(Qt::UserRole).toString() + ")");
     });
 

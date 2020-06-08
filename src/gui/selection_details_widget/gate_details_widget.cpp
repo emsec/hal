@@ -451,6 +451,9 @@ void gate_details_widget::handle_output_pin_table_menu_requested(const QPoint &p
 
 void gate_details_widget::handle_data_table_menu_requested(const QPoint &pos)
 {
+    if(m_data_fields_table->itemAt(pos)->column() != 1)
+        return;
+
     QMenu menu;
     menu.addAction(QIcon(":/icons/python"), "Exctract data as python code (copy to clipboard)", [this, pos](){
        int row = m_data_fields_table->itemAt(pos)->row();
@@ -692,7 +695,7 @@ void gate_details_widget::update(const u32 gate_id)
     {
         QTableWidgetItem* key_item = new QTableWidgetItem(QString::fromStdString(std::get<1>(key)) + QString(":"));
         key_item->setFont(m_key_font);
-        key_item->setFlags(Qt::ItemIsEnabled);
+        key_item->setFlags((Qt::ItemFlag)~Qt::ItemIsEnabled);
         key_item->setData(Qt::UserRole, QString::fromStdString(std::get<0>(key)));
         QTableWidgetItem* value_item = new QTableWidgetItem(QString::fromStdString(std::get<1>(value)));
         value_item->setFlags(Qt::ItemIsEnabled);
@@ -733,6 +736,12 @@ void gate_details_widget::update(const u32 gate_id)
         m_boolean_functions_container_layout->removeWidget(last_line);
         delete last_line;
     }
+
+    //to prevent any updating(render) errors that can occur, manually tell the tables to update
+    m_general_table->update();
+    m_input_pins_table->update();
+    m_output_pins_table->update();
+    m_data_fields_table->update();
 }
 
 //always the right-subfocus!!!!!!(the other way is handled: on_treewidget_item_clicked)
