@@ -1,7 +1,5 @@
 #include "selection_details_widget/gate_details_widget.h"
 
-#include "core/plugin_manager.h"
-
 #include "netlist/gate.h"
 #include "netlist/net.h"
 
@@ -13,20 +11,14 @@
 
 #include <QApplication>
 #include <QCursor>
-#include <QDateTime>
-#include <QDesktopWidget>
 #include <QHBoxLayout>
 #include <QHeaderView>
 #include <QLabel>
 #include <QResizeEvent>
 #include <QScrollArea>
 #include <QTableWidget>
-#include <QTreeWidget>
-#include <QTreeWidgetItem>
 #include <QVBoxLayout>
-#include <QGridLayout>
 #include <QPushButton>
-#include <QPropertyAnimation>
 #include <QScrollBar>
 #include <QRegularExpression>
 #include <QRegularExpressionMatch>
@@ -40,16 +32,17 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
     //NEW
     // general initializations
     m_current_id = 0;
-    m_last_click_time = 0;
     m_key_font = QFont("Iosevka");
     m_key_font.setBold(true);
     m_key_font.setPixelSize(13);
 
-    m_scroll_area = new QScrollArea();
-    m_top_lvl_container = new QWidget();
-    m_top_lvl_layout = new QVBoxLayout(m_top_lvl_container);
-    m_top_lvl_container->setLayout(m_top_lvl_layout);
+    //this line throws a warning that there is already an existing layout, yet there is no layout set and
+    //even after calling delete layout(); and then setting the layout, the warning continues
     m_content_layout = new QVBoxLayout(this);
+    m_scroll_area = new QScrollArea(this);
+    m_top_lvl_container = new QWidget(this);
+    m_top_lvl_layout = new QVBoxLayout(m_top_lvl_container);
+    m_top_lvl_container->setLayout(m_top_lvl_layout);;
     m_scroll_area->setWidget(m_top_lvl_container);
     m_scroll_area->setWidgetResizable(true);
 
@@ -83,10 +76,10 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
     m_boolean_functions_button = new QPushButton("Boolean Functions", this);
 
     // table initializations (section 1-4)
-    m_general_table = new QTableWidget(4,2);
-    m_input_pins_table = new QTableWidget(0,3);
-    m_output_pins_table = new QTableWidget(0,3);
-    m_data_fields_table = new QTableWidget(0, 2);
+    m_general_table = new QTableWidget(4,2,this);
+    m_input_pins_table = new QTableWidget(0,3, this);
+    m_output_pins_table = new QTableWidget(0,3, this);
+    m_data_fields_table = new QTableWidget(0, 2, this);
 
     //shared stlye options (every option is applied to each table)
     QList<QTableWidget*> tmp;
@@ -139,8 +132,8 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
 
 
     //(5) Boolean Function section
-    m_boolean_functions_container = new QWidget();
-    m_boolean_functions_container_layout = new QVBoxLayout();
+    m_boolean_functions_container = new QWidget(this);
+    m_boolean_functions_container_layout = new QVBoxLayout(this);
     m_boolean_functions_container_layout->setContentsMargins(6,5,0,0);
     m_boolean_functions_container_layout->setSpacing(0);
     m_boolean_functions_container->setLayout(m_boolean_functions_container_layout);
@@ -176,7 +169,8 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
     m_content_layout->addWidget(m_scroll_area);
 
     //setup the navigation_table ("activated" by clicking on an input / output pin in the 2 tables)
-    m_navigation_table = new graph_navigation_widget();//set the parent?
+    //delete the table manually so its not necessarry to add a property for the stylesheet(otherwise this table is styled like the others)
+    m_navigation_table = new graph_navigation_widget();
     m_navigation_table->setWindowFlags(Qt::CustomizeWindowHint);
     m_navigation_table->hide_when_focus_lost(true);
     m_navigation_table->hide();
@@ -191,7 +185,7 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
 
     connect(m_input_pins_table, &QTableWidget::itemDoubleClicked, this, &gate_details_widget::handle_input_pin_item_clicked);
     connect(m_output_pins_table, &QTableWidget::itemDoubleClicked, this, &gate_details_widget::handle_output_pin_item_clicked);
-    connect(m_general_table, &QTableWidget::itemDoubleClicked, this, &gate_details_widget::handle_general_table_item_double_clicked);
+    connect(m_general_table, &QTableWidget::itemDoubleClicked, this, &gate_details_widget::handle_general_table_item_clicked);
 
     //context menu connects
     connect(m_general_table, &QTableWidget::customContextMenuRequested, this, &gate_details_widget::handle_general_table_menu_requested);
@@ -217,6 +211,7 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
 
 gate_details_widget::~gate_details_widget()
 {
+    delete m_navigation_table;
 }
 
 void gate_details_widget::handle_gate_name_changed(std::shared_ptr<gate> gate)
@@ -310,15 +305,14 @@ void gate_details_widget::handle_buttons_clicked()
 
     if(!widget)
         return;
-    if(widget->isHidden()){
+
+    if(widget->isHidden())
         widget->show();
-     }
-    else{
+    else
         widget->hide();
-     }
 }
 
-void gate_details_widget::handle_input_pin_item_clicked(QTableWidgetItem *item)
+void gate_details_widget::handle_input_pin_item_clicked(const QTableWidgetItem *item)
 {
     if(item->column() != 2)
         return;
@@ -363,7 +357,7 @@ void gate_details_widget::handle_input_pin_item_clicked(QTableWidgetItem *item)
     }
 }
 
-void gate_details_widget::handle_output_pin_item_clicked(QTableWidgetItem *item)
+void gate_details_widget::handle_output_pin_item_clicked(const QTableWidgetItem *item)
 {
     if(item->column() != 2)
         return;
@@ -738,7 +732,9 @@ void gate_details_widget::update(const u32 gate_id)
         QFrame* line = new QFrame;
         line->setFrameShape(QFrame::HLine);
         line->setFrameShadow(QFrame::Sunken);
-        line->setStyleSheet("QFrame{background-color: gray;}"); //tmp test
+        //to outsource this line into the stylesheet, you need to make a new class that inherits from QFrame
+        //and style that class, propertys and the normal way does not work (other tables are also affected)
+        line->setStyleSheet("QFrame{background-color: gray;}");
         last_line = line;
         m_boolean_functions_container_layout->addWidget(line);
     }
@@ -755,7 +751,6 @@ void gate_details_widget::update(const u32 gate_id)
     m_data_fields_table->update();
 }
 
-//always the right-subfocus!!!!!!(the other way is handled: on_treewidget_item_clicked)
 void gate_details_widget::handle_navigation_jump_requested(const hal::node origin, const u32 via_net, const QSet<u32>& to_gates)
 {
     Q_UNUSED(origin);
@@ -798,7 +793,7 @@ void gate_details_widget::handle_navigation_jump_requested(const hal::node origi
     // TODO ensure gates visible in graph
 }
 
-void gate_details_widget::handle_general_table_item_double_clicked(const QTableWidgetItem *item)
+void gate_details_widget::handle_general_table_item_clicked(const QTableWidgetItem *item)
 {
     //cant get the item from the index (static_cast<QTableWidgetItem*>(index.internalPointer()) fails),
     //so ask the item QTableWidgetItem directly

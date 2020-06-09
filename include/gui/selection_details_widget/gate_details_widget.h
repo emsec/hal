@@ -33,19 +33,13 @@
 #include <QWidget>
 
 /* forward declaration */
-class QLabel;
 class QTableWidget;
 class QTableWidgetItem;
-class QTreeWidget;
-class QTreeWidgetItem;
 class QVBoxLayout;
 class QHBoxLayout;
 class QScrollArea;
-class QGridLayout;
-class QModelIndex;
 class QFont;
 class graph_navigation_widget;
-
 class QPushButton;
 
 class gate_details_widget : public QWidget
@@ -68,13 +62,8 @@ public:
      * @returns void
      */
     void update(const u32 gate_id);
-    void update2(const u32 gate_id);
 
 public Q_SLOTS:
-
-    void on_treewidget_item_clicked(QTreeWidgetItem* item, int column);
-    void handle_navigation_jump_requested(const hal::node origin, const u32 via_net, const QSet<u32>& to_gates);
-    void handle_general_table_item_double_clicked(const QTableWidgetItem* item);
 
     void handle_gate_name_changed(std::shared_ptr<gate> gate);
     void handle_gate_removed(std::shared_ptr<gate> gate);
@@ -91,10 +80,13 @@ public Q_SLOTS:
     void handle_net_destination_removed(std::shared_ptr<net> net, const u32 dst_gate_id);
 
 private:
-    //NEW CODE
-
     //general
+    //used to set the boolean function container to its appropriate size, width "must be"
+    //extracted from the stylesheet
+    int m_scrollbar_width;
     QFont m_key_font;
+    u32 m_current_id;
+    graph_navigation_widget* m_navigation_table;
 
     //All sections together are encapsulated in a container to make it scrollable
     QScrollArea* m_scroll_area;
@@ -132,9 +124,12 @@ private:
     QVBoxLayout* m_boolean_functions_container_layout;
 
     //function section
+    void handle_navigation_jump_requested(const hal::node origin, const u32 via_net, const QSet<u32>& to_gates);
+
     void handle_buttons_clicked();
-    void handle_input_pin_item_clicked(QTableWidgetItem* item);
-    void handle_output_pin_item_clicked(QTableWidgetItem* item);
+    void handle_input_pin_item_clicked(const QTableWidgetItem* item);
+    void handle_output_pin_item_clicked(const QTableWidgetItem* item);
+    void handle_general_table_item_clicked(const QTableWidgetItem* item);
 
     //most straightforward and basic custom-context implementation (maybe need to be more dynamic)
     void handle_general_table_menu_requested(const QPoint &pos);
@@ -145,17 +140,6 @@ private:
 
     //utility function, used to calculate the actual width so the scrollbars and the accuracy of the click functionality is correct
     QSize calculate_table_size(QTableWidget* table);
-
-    //OLD CODE
-    u32 m_current_id;
-
-    u64 m_last_click_time;
-
-    graph_navigation_widget* m_navigation_table;
-
-    //used to set the boolean function container to its appropriate size, width "must be"
-    //extracted from the stylesheet
-    int m_scrollbar_width;
 };
 
 #endif /* __HAL_GATE_DETAILS_WIDGET_H__ */
