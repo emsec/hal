@@ -191,6 +191,7 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
 
     connect(m_input_pins_table, &QTableWidget::itemDoubleClicked, this, &gate_details_widget::handle_input_pin_item_clicked);
     connect(m_output_pins_table, &QTableWidget::itemDoubleClicked, this, &gate_details_widget::handle_output_pin_item_clicked);
+    connect(m_general_table, &QTableWidget::itemDoubleClicked, this, &gate_details_widget::handle_general_table_item_double_clicked);
 
     //context menu connects
     connect(m_general_table, &QTableWidget::customContextMenuRequested, this, &gate_details_widget::handle_general_table_menu_requested);
@@ -199,6 +200,8 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
     connect(m_data_fields_table, &QTableWidget::customContextMenuRequested, this, &gate_details_widget::handle_data_table_menu_requested);
 
     //install eventfilers
+    m_general_table->viewport()->setMouseTracking(true);
+    m_general_table->viewport()->installEventFilter(this);
     m_input_pins_table->viewport()->setMouseTracking(true);
     m_input_pins_table->viewport()->installEventFilter(this);
     m_output_pins_table->viewport()->setMouseTracking(true);
@@ -564,8 +567,7 @@ void gate_details_widget::resizeEvent(QResizeEvent* event)
 
 bool gate_details_widget::eventFilter(QObject *watched, QEvent *event)
 {
-    //only the 2 tables are installed and are identically handled, so no explicit "if(watched == target)" check required
-    if(event->type() == QEvent::MouseMove)
+    if((watched == m_input_pins_table->viewport() || watched == m_output_pins_table->viewport()) && event->type() == QEvent::MouseMove)
     {
         //need to determine which of the tables is the "owner" of the viewport
         QTableWidget* table = (watched == m_input_pins_table->viewport()) ? m_input_pins_table : m_output_pins_table;
@@ -580,9 +582,18 @@ bool gate_details_widget::eventFilter(QObject *watched, QEvent *event)
         }
         else
             setCursor(QCursor(Qt::ArrowCursor));
+
+    }
+    if(watched == m_general_table->viewport() && event->type() == QEvent::MouseMove)
+    {
+        QTableWidgetItem* item = m_general_table->itemAt(dynamic_cast<QMouseEvent*>(event)->pos());
+        if(item == m_module_item)
+            setCursor(QCursor(Qt::PointingHandCursor));
+        else
+            setCursor(QCursor(Qt::ArrowCursor));
     }
 
-    //restore default cursor when leaving the widget (maybe save cursor before entering?)
+    //restore default cursor when leaving any watched widget (maybe save cursor before entering?)
     if(event->type() == QEvent::Leave)
         setCursor(QCursor(Qt::ArrowCursor));
 
@@ -787,14 +798,11 @@ void gate_details_widget::handle_navigation_jump_requested(const hal::node origi
     // TODO ensure gates visible in graph
 }
 
-void gate_details_widget::on_general_table_item_double_clicked(const QModelIndex& index)
+void gate_details_widget::handle_general_table_item_double_clicked(const QTableWidgetItem *item)
 {
-    if (!index.isValid())
-        return;
-
     //cant get the item from the index (static_cast<QTableWidgetItem*>(index.internalPointer()) fails),
     //so ask the item QTableWidgetItem directly
-    if (index.row() == m_module_item->row() && index.column() == m_module_item->column())
+    if (item->row() == m_module_item->row() && item->column() == m_module_item->column())
     {
         g_selection_relay.clear();
         g_selection_relay.m_selected_modules.insert(m_module_item->data(Qt::UserRole).toInt());
