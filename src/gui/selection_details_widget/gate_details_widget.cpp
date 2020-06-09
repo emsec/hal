@@ -484,12 +484,6 @@ void gate_details_widget::handle_general_table_menu_requested(const QPoint &pos)
     menu.move(dynamic_cast<QWidget*>(sender())->mapToGlobal(pos));
     menu.exec();
 }
-void gate_details_widget::handle_python_action_clicked(bool checked)
-{
-    Q_UNUSED(checked)
-    //QClipboard* clipboard = QApplication::clipboard();
-    QApplication::clipboard()->setText(dynamic_cast<QAction*>(sender())->data().toString());
-}
 
 QSize gate_details_widget::calculate_table_size(QTableWidget *table)
 {
