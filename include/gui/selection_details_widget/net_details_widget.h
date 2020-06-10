@@ -34,8 +34,6 @@ class QVBoxLayout;
 class QHBoxLayout;
 class QLabel;
 class QScrollArea;
-class QTreeWidget;
-class QTreeWidgetItem;
 class QTableWidget;
 class QTableWidgetItem;
 class QPushButton;
@@ -48,6 +46,7 @@ class net_details_widget : public QWidget
     Q_OBJECT
 
 public:
+
     net_details_widget(QWidget* parent = 0);
     ~net_details_widget();
 
@@ -55,10 +54,6 @@ public:
     void update(u32 net_id);
 
 public Q_SLOTS:
-    void handle_item_expanded(QTreeWidgetItem* item);
-    void handle_item_collapsed(QTreeWidgetItem* item);
-
-    void on_treewidget_item_clicked(QTreeWidgetItem* item, int column);
 
     void handle_net_removed(const std::shared_ptr<net> n);
     void handle_net_name_changed(const std::shared_ptr<net> n);
@@ -66,12 +61,9 @@ public Q_SLOTS:
     void handle_net_source_removed(const std::shared_ptr<net> n, const u32 src_gate_id);
     void handle_net_destination_added(const std::shared_ptr<net> n, const u32 dst_gate_id);
     void handle_net_destination_removed(const std::shared_ptr<net> n, const u32 dst_gate_id);
-
     void handle_gate_name_changed(const std::shared_ptr<gate> g);
 
 private:
-
-    //new design
 
     //general
     int m_current_id;
@@ -89,7 +81,6 @@ private:
     QPushButton* m_destination_pins_button;
 
     //the sections to unfold
-
     //(1) general information section
     QTableWidget* m_general_table;
     QTableWidgetItem* m_name_item;
@@ -113,46 +104,6 @@ private:
 
     //utility function, used to calculate the actual width so the scrollbars and the accuracy of the click functionality is correct
     QSize calculate_table_size(QTableWidget* table);
-
-    //end of new design
-
-    // NEW !!!!!
-
-//    QVBoxLayout* m_content_layout;
-//    QHBoxLayout* m_tree_row_layout;
-
-//    QTableWidget* m_general_table;
-//    QTableWidgetItem* m_name_item;
-//    QTableWidgetItem* m_type_item;
-//    QTableWidgetItem* m_id_item;
-//    QTableWidgetItem* m_module_item;
-
-//    // stores input pin tree view
-//    QTreeWidgetItem* m_source_pin;
-//    // stores output pin tree view
-//    QTreeWidgetItem* m_destination_pins;
-
-//    // stores utility objects for input/output pin tree view
-//    QScrollArea* m_scroll_area;
-//    QTreeWidget* m_tree_widget;
-//    QVBoxLayout* m_scroll_area_layout;
-//    QVBoxLayout* m_container_layout;
-//    QWidget* m_container;
-
-//    //QLabel* m_item_deleted_label;
-
-//    // NEW !!!!!;
-//    QLabel* m_label;
-//    QTableWidget* m_table_widget;
-
-//    int m_tree_height;
-//    int m_table_height;
-//    int m_spacing = 1;
-
-//    u32 m_current_id;
-
-//    QTreeWidgetItem* m_source_item;
-//    QTreeWidgetItem* m_destination_item;
 };
 
 #endif    // NET_DETAILS_WIDGET_H

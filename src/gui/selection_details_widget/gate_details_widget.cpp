@@ -98,7 +98,6 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
         table->setMaximumHeight(table->verticalHeader()->length());
         table->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
         table->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-        //context menu related:
         table->setContextMenuPolicy(Qt::CustomContextMenu);
     }
 
