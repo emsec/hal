@@ -1,5 +1,4 @@
-#ifndef GRAPH_SCENE_H
-#define GRAPH_SCENE_H
+#pragma once
 
 #include "def.h"
 
@@ -61,6 +60,8 @@ public:
     void move_nets_to_background();
 
     const graphics_gate* get_gate_item(const u32 id) const;
+    const graphics_net* get_net_item(const u32 id) const;
+    const graphics_module* get_module_item(const u32 id) const;
 
     #ifdef GUI_DEBUG_GRID
     void debug_set_layouter_grid(const QVector<qreal>& debug_x_lines, const QVector<qreal>& debug_y_lines, qreal debug_default_height, qreal debug_default_width);
@@ -132,5 +133,3 @@ private:
     bool m_debug_grid_enable;
     #endif
 };
-
-#endif // GRAPH_SCENE_H

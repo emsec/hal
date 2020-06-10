@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef STANDARD_GRAPHICS_NET_H
-#define STANDARD_GRAPHICS_NET_H
+#pragma once
 
 #include "gui/graph_widget/items/nets/graphics_net.h"
 
@@ -91,5 +90,3 @@ private:
     QVector<QLineF> m_lines;
     QVector<QPointF> m_splits;
 };
-
-#endif // STANDARD_GRAPHICS_NET_H

@@ -10,6 +10,8 @@
 #include "gui/graph_widget/shaders/module_shader.h"
 #include "gui/gui_globals.h"
 
+#include <QDateTime>
+
 graph_context_manager::graph_context_manager()
 {
 }

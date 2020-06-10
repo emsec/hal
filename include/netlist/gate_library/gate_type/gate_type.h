@@ -110,16 +110,16 @@ public:
     /**
      * Add an input pin to the gate type.
      *
-     * @param[in] input_pin - The name of an input pin.
+     * @param[in] pin_name - The name of an input pin.
      */
-    void add_input_pin(std::string input_pin);
+    void add_input_pin(std::string pin_name);
 
     /**
      * Add a vector of input pins to the gate type.
      *
-     * @param[in] input_pins - A vector of names of input pins.
+     * @param[in] pin_names - A vector of names of input pins.
      */
-    void add_input_pins(const std::vector<std::string>& input_pins);
+    void add_input_pins(const std::vector<std::string>& pin_names);
 
     /**
      * Get a vector of input pins of the gate type.
@@ -131,23 +131,67 @@ public:
     /**
      * Add an output pin to the gate type.
      *
-     * @param[in] output_pin - The name of an output pin.
+     * @param[in] pin_name - The name of an output pin.
      */
-    void add_output_pin(std::string output_pin);
+    void add_output_pin(std::string pin_name);
 
     /**
      * Add a vector of output pins to the gate type.
      *
-     * @param[in] output_pins - A vector of names of output pins.
+     * @param[in] pin_names - A vector of names of output pins.
      */
-    void add_output_pins(const std::vector<std::string>& output_pins);
+    void add_output_pins(const std::vector<std::string>& pin_names);
 
     /**
      * Get a vector of output pins of the gate type.
      *
-     * @returns A vector of output pins of the gate type..
+     * @returns A vector of output pins of the gate type.
      */
     std::vector<std::string> get_output_pins() const;
+
+    /**
+     * Assign existing input pins to a input pin group.
+     *
+     * @param[in] group_name - The name of the input pin group.
+     * @param[in] index_to_pin - Map from index to input pin name.
+     */
+    void assign_input_pin_group(const std::string& group_name, const std::map<u32, std::string>& index_to_pin);
+
+    /**
+     * Assign existing input pins to multiple input pin groups.
+     *
+     * @param[in] pin_groups - A map from group names to a map from indices to pin names. 
+     */
+    void assign_input_pin_groups(const std::map<std::string, std::map<u32, std::string>>& pin_groups);
+
+    /**
+     * Get all input pin groups of the gate type.
+     * 
+     * @returns A map from group names to a map from indices to pin names. 
+     */
+    std::map<std::string, std::map<u32, std::string>> get_input_pin_groups() const;
+
+    /**
+     * Assign existing output pins to a output pin group.
+     *
+     * @param[in] group_name - The name of the output pin group.
+     * @param[in] index_to_pin - Map from index to output pin name.
+     */
+    void assign_output_pin_group(const std::string& group_name, const std::map<u32, std::string>& index_to_pin);
+
+    /**
+     * Assign existing output pins to multiple output pin groups.
+     *
+     * @param[in] pin_groups - A map from group names to a map from indices to pin names. 
+     */
+    void assign_output_pin_groups(const std::map<std::string, std::map<u32, std::string>>& pin_groups);
+
+    /**
+     * Get all output pin groups of the gate type.
+     * 
+     * @returns A map from group names to a map from indices to pin names. 
+     */
+    std::map<std::string, std::map<u32, std::string>> get_output_pin_groups() const;
 
     /**
      * Add a boolean function with the specified name to the gate type.
@@ -158,6 +202,13 @@ public:
     void add_boolean_function(std::string name, boolean_function bf);
 
     /**
+     * Add multiple boolean functions to the gate type.
+     *
+     * @param[in] functions - Map from function name to boolean function.
+     */
+    void add_boolean_functions(const std::map<std::string, boolean_function>& functions);
+
+    /**
      * Get a map containing the boolean functions of the gate type.
      *
      * @returns A map from function names to boolean functions.
@@ -165,19 +216,19 @@ public:
     std::unordered_map<std::string, boolean_function> get_boolean_functions() const;
 
 protected:
-    base_type m_base_type;
-
-private:
-    std::string m_name;
     u32 m_id;
+    std::string m_name;
+    base_type m_base_type;
 
     std::vector<std::string> m_input_pins;
     std::vector<std::string> m_output_pins;
 
+    std::map<std::string, std::map<u32, std::string>> m_input_pin_groups;
+    std::map<std::string, std::map<u32, std::string>> m_output_pin_groups;
+
     std::unordered_map<std::string, boolean_function> m_functions;
 
+private:
     gate_type(const gate_type&) = delete;               // disable copy-constructor
     gate_type& operator=(const gate_type&) = delete;    // disable copy-assignment
-
-    virtual bool do_compare(const gate_type& other) const;
 };

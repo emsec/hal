@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef GRAPH_WIDGET_H
-#define GRAPH_WIDGET_H
+#pragma once
 
 #include "def.h"
 
@@ -57,6 +56,8 @@ public:
 
     graph_graphics_view* view();
 
+    void ensure_selection_visible();
+
 protected:
     void keyPressEvent(QKeyEvent* event) override;
 
@@ -84,5 +85,3 @@ private:
 
     u32 m_current_expansion;
 };
-
-#endif // GRAPH_WIDGET_H

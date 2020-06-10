@@ -14,7 +14,7 @@
 }
 
 *::item:selected {
-    background   : rgba(13, 41, 62);
+    background   : rgb(13, 41, 62);
 
 }
 
@@ -753,10 +753,10 @@ labeled_frame #right-spacer {
 }
 
 /*********************************************
-*           GATE_/NET_DETAILS_WIDGET         *
+*      GATE_/MODULE_/NET_DETAILS_WIDGET      *
 *********************************************/
 
-gate_details_widget QPushButton, net_details_widget QPushButton{
+gate_details_widget QPushButton, net_details_widget QPushButton, module_details_widget QPushButton{
     font: bold "Iosevka";
     font-size: 12px;
     /*background: qlineargradient( x1:0 y1:0, x2:1 y2:0, stop:0 black, stop:1 gray);*/
@@ -767,7 +767,7 @@ gate_details_widget QPushButton, net_details_widget QPushButton{
     height: 12px;
 }
 
-gate_details_widget QPushButton:disabled, net_details_widget QPushButton:disabled{
+gate_details_widget QPushButton:disabled, net_details_widget QPushButton:disabled, module_details_widget QPushButton:disabled{
     font: bold "Iosevka";
     font-size: 12px;
     /*background: qlineargradient( x1:0 y1:0, x2:1 y2:0, stop:0 black, stop:1 gray);*/
@@ -786,7 +786,6 @@ gate_details_widget QTableWidget::item:!disabled:hover, net_details_widget QTabl
 gate_details_widget QLabel{
     color: #A9B7C6;
 }
-
 /*
 rgb(107, 135, 255)
 */
@@ -1389,6 +1388,9 @@ qproperty-duplicate_icon_path: ":/icons/content";
 
 qproperty-delete_icon_style: "all->#A61F1F";
 qproperty-delete_icon_path: ":/icons/trashcan";
+
+qproperty-timestamp_icon_style: "all->#FFC30B";
+qproperty-timestamp_icon_path: ":/icons/clock";
 }
 
 main_window {
@@ -1501,14 +1503,14 @@ background : rgba(0, 0, 0, 128);
 }
 
 QTreeView {
-    selection-background-color: green; /* Used on Mac ? TEST*/
+    selection-background-color: #0D293E; /* Used on Mac ? TEST*/
     selection-color: white; /* Used on Mac ? TEST*/
     show-decoration-selected: 1;
     outline: none;
 }
 
 QTreeView::item:selected {
-    background-color: green; /* Used on Windows ? TEST*/
+    background-color: #0D293E; /* Used on Windows ? TEST*/
     color: white;
     border: none;
 }

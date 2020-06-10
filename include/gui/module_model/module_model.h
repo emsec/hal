@@ -58,6 +58,7 @@ public:
 
     module_item* get_item(const QModelIndex& index) const;
     QModelIndex get_index(const module_item* const item) const;
+    module_item* get_item(const u32 module_id) const;
 
     void init();
     void clear();
@@ -67,10 +68,14 @@ public:
     void remove_module(const u32 id);
     void update_module(const u32 id);
 
+    bool is_modifying();
+
 private:
     module_item* m_top_module_item;
 
     QMap<u32, module_item*> m_module_items;
+
+    bool m_is_modifying;
 };
 
 #endif // MODULE_MODEL_H

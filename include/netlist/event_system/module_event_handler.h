@@ -47,6 +47,7 @@ namespace module_event_handler
         created,                     ///< no associated_data
         removed,                     ///< no associated_data
         name_changed,                ///< no associated_data
+        type_changed,                ///< no associated_data
         parent_changed,              ///< no associated_data
         submodule_added,             ///< associated_data = id of added module
         submodule_removed,           ///< associated_data = id of removed module

@@ -1,10 +1,16 @@
-#include "gui_api/gui_api.h"
+#include "gui/gui_api/gui_api.h"
 
 #include "gui_globals.h"
 
 #include <algorithm>
 
 #include <QSet>
+
+
+gui_api::gui_api()
+{
+    g_selection_relay.register_sender(this, "GUI API");
+}
 
 std::vector<u32> gui_api::get_selected_gate_ids()
 {
@@ -55,69 +61,7 @@ std::tuple<std::vector<std::shared_ptr<gate>>, std::vector<std::shared_ptr<net>>
     return std::make_tuple(get_selected_gates(), get_selected_nets(), get_selected_modules());
 }
 
-/*
-void gui_api::print_selected_gates()
-{
-    u32 number_of_selected_gates = g_selection_relay.m_selected_gates.size();
-    QString header = QString("Selected gates (%1):").arg(number_of_selected_gates);
-    g_python_context->forward_stdout(header + "\n\n");
-    g_python_context->forward_stdout("ID\tName\n");
-
-    for(u32 gate_id : g_selection_relay.m_selected_gates)
-    {
-        auto gate = g_netlist->get_gate_by_id(gate_id);
-        QString id = QString::number(gate->get_id());
-        QString name = QString::fromStdString(gate->get_name());
-
-        g_python_context->forward_stdout(id + "\t" + name + "\n");
-    }
-}
-
-void gui_api::print_selected_nets()
-{
-    u32 number_of_selected_nets = g_selection_relay.m_selected_nets.size();
-    QString header = QString("Selected nets (%1):").arg(number_of_selected_nets);
-    g_python_context->forward_stdout(header + "\n\n");
-    g_python_context->forward_stdout("ID\tName\n");
-
-    for(u32 net_id : g_selection_relay.m_selected_nets)
-    {
-        auto net = g_netlist->get_net_by_id(net_id);
-        QString id = QString::number(net->get_id());
-        QString name = QString::fromStdString(net->get_name());
-
-        g_python_context->forward_stdout(id + "\t" + name + "\n");
-    }
-}
-
-void gui_api::print_selected_modules()
-{
-    u32 number_of_selected_modules = g_selection_relay.m_selected_modules.size();
-    QString header = QString("Selected modules (%1):").arg(number_of_selected_modules);
-    g_python_context->forward_stdout(header + "\n\n");
-    g_python_context->forward_stdout("ID\tName\n");
-
-    for(u32 module_id : g_selection_relay.m_selected_modules)
-    {
-        auto module = g_netlist->get_module_by_id(module_id);
-        QString id = QString::number(module->get_id());
-        QString name = QString::fromStdString(module->get_name());
-
-        g_python_context->forward_stdout(id + "\t" + name + "\n");
-    }
-}
-
-void gui_api::print_selected_items()
-{
-    print_selected_gates();
-    g_python_context->forward_stdout("\n");
-    print_selected_nets();
-    g_python_context->forward_stdout("\n");
-    print_selected_modules();
-}
-*/
-
-void gui_api::select_gate(const std::shared_ptr<gate>& gate, bool clear_current_selection)
+void gui_api::select_gate(const std::shared_ptr<gate>& gate, bool clear_current_selection, bool navigate_to_selection)
 {
     if(!g_netlist->is_gate_in_netlist(gate))
         return;
@@ -126,15 +70,20 @@ void gui_api::select_gate(const std::shared_ptr<gate>& gate, bool clear_current_
         g_selection_relay.clear();
 
     g_selection_relay.m_selected_gates.insert(gate->get_id());
-    g_selection_relay.selection_changed(nullptr);
+    g_selection_relay.selection_changed(this);
+    g_selection_relay.m_focus_type = selection_relay::item_type::gate;
+    g_selection_relay.m_focus_id = gate->get_id();
+
+    if(navigate_to_selection)
+        Q_EMIT navigation_requested();
 }
 
-void gui_api::select_gate(u32 gate_id, bool clear_current_selection)
+void gui_api::select_gate(u32 gate_id, bool clear_current_selection, bool navigate_to_selection)
 {
-    select_gate(g_netlist->get_gate_by_id(gate_id), clear_current_selection);
+    select_gate(g_netlist->get_gate_by_id(gate_id), clear_current_selection, navigate_to_selection);
 }
 
-void gui_api::select_gate(const std::vector<std::shared_ptr<gate>>& gates, bool clear_current_selection)
+void gui_api::select_gate(const std::vector<std::shared_ptr<gate>>& gates, bool clear_current_selection, bool navigate_to_selection)
 {
     QSet<u32> gate_ids;
 
@@ -150,17 +99,20 @@ void gui_api::select_gate(const std::vector<std::shared_ptr<gate>>& gates, bool 
         g_selection_relay.clear();
 
     g_selection_relay.m_selected_gates.unite(gate_ids);
-    g_selection_relay.selection_changed(nullptr);
+    g_selection_relay.selection_changed(this);
+
+    if(navigate_to_selection)
+        Q_EMIT navigation_requested();
 }
 
-void gui_api::select_gate(const std::vector<u32>& gate_ids, bool clear_current_selection)
+void gui_api::select_gate(const std::vector<u32>& gate_ids, bool clear_current_selection, bool navigate_to_selection)
 {
     std::vector<std::shared_ptr<gate>> gates(gate_ids.size());
     std::transform(gate_ids.begin(), gate_ids.end(), gates.begin(), [](u32 gate_id){return g_netlist->get_gate_by_id(gate_id);});
-    select_gate(gates, clear_current_selection);
+    select_gate(gates, clear_current_selection, navigate_to_selection);
 }
 
-void gui_api::select_net(const std::shared_ptr<net>& net, bool clear_current_selection)
+void gui_api::select_net(const std::shared_ptr<net>& net, bool clear_current_selection, bool navigate_to_selection)
 {
     if(!g_netlist->is_net_in_netlist(net))
         return;
@@ -169,15 +121,20 @@ void gui_api::select_net(const std::shared_ptr<net>& net, bool clear_current_sel
         g_selection_relay.clear();
 
     g_selection_relay.m_selected_nets.insert(net->get_id());
-    g_selection_relay.selection_changed(nullptr);
+    g_selection_relay.selection_changed(this);
+    g_selection_relay.m_focus_type = selection_relay::item_type::net;
+    g_selection_relay.m_focus_id = net->get_id();
+
+    if(navigate_to_selection)
+        Q_EMIT navigation_requested();
 }
 
-void gui_api::select_net(u32 net_id, bool clear_current_selection)
+void gui_api::select_net(u32 net_id, bool clear_current_selection, bool navigate_to_selection)
 {
-    select_net(g_netlist->get_net_by_id(net_id), clear_current_selection);
+    select_net(g_netlist->get_net_by_id(net_id), clear_current_selection, navigate_to_selection);
 }
 
-void gui_api::select_net(const std::vector<std::shared_ptr<net>>& nets, bool clear_current_selection)
+void gui_api::select_net(const std::vector<std::shared_ptr<net>>& nets, bool clear_current_selection, bool navigate_to_selection)
 {
     QSet<u32> net_ids;
 
@@ -193,17 +150,20 @@ void gui_api::select_net(const std::vector<std::shared_ptr<net>>& nets, bool cle
         g_selection_relay.clear();
 
     g_selection_relay.m_selected_nets.unite(net_ids);
-    g_selection_relay.selection_changed(nullptr);
+    g_selection_relay.selection_changed(this);
+
+    if(navigate_to_selection)
+        Q_EMIT navigation_requested();
 }
 
-void gui_api::select_net(const std::vector<u32>& net_ids, bool clear_current_selection)
+void gui_api::select_net(const std::vector<u32>& net_ids, bool clear_current_selection, bool navigate_to_selection)
 {
     std::vector<std::shared_ptr<net>> nets(net_ids.size());
     std::transform(net_ids.begin(), net_ids.end(), nets.begin(), [](u32 net_id){return g_netlist->get_net_by_id(net_id);});
-    select_net(nets, clear_current_selection);
+    select_net(nets, clear_current_selection, navigate_to_selection);
 }
 
-void gui_api::select_module(const std::shared_ptr<module>& module, bool clear_current_selection)
+void gui_api::select_module(const std::shared_ptr<module>& module, bool clear_current_selection, bool navigate_to_selection)
 {
     if(!g_netlist->is_module_in_netlist(module))
         return;
@@ -212,15 +172,20 @@ void gui_api::select_module(const std::shared_ptr<module>& module, bool clear_cu
         g_selection_relay.clear();
 
     g_selection_relay.m_selected_modules.insert(module->get_id());
-    g_selection_relay.selection_changed(nullptr);
+    g_selection_relay.selection_changed(this);
+    g_selection_relay.m_focus_type = selection_relay::item_type::module;
+    g_selection_relay.m_focus_id = module->get_id();
+
+    if(navigate_to_selection)
+        Q_EMIT navigation_requested();
 }
 
-void gui_api::select_module(u32 module_id, bool clear_current_selection)
+void gui_api::select_module(u32 module_id, bool clear_current_selection, bool navigate_to_selection)
 {
-    select_module(g_netlist->get_module_by_id(module_id), clear_current_selection);
+    select_module(g_netlist->get_module_by_id(module_id), clear_current_selection, navigate_to_selection);
 }
 
-void gui_api::select_module(const std::vector<std::shared_ptr<module>>& modules, bool clear_current_selection)
+void gui_api::select_module(const std::vector<std::shared_ptr<module>>& modules, bool clear_current_selection, bool navigate_to_selection)
 {
     QSet<u32> module_ids;
 
@@ -236,62 +201,71 @@ void gui_api::select_module(const std::vector<std::shared_ptr<module>>& modules,
         g_selection_relay.clear();
 
     g_selection_relay.m_selected_modules.unite(module_ids);
-    g_selection_relay.selection_changed(nullptr);
+    g_selection_relay.selection_changed(this);
+
+    if(navigate_to_selection)
+        Q_EMIT navigation_requested();
 }
 
-void gui_api::select_module(const std::vector<u32>& module_ids, bool clear_current_selection)
+void gui_api::select_module(const std::vector<u32>& module_ids, bool clear_current_selection, bool navigate_to_selection)
 {
     std::vector<std::shared_ptr<module>> modules(module_ids.size());
     std::transform(module_ids.begin(), module_ids.end(), modules.begin(), [](u32 g_id){return g_netlist->get_module_by_id(g_id);});
-    select_module(modules, clear_current_selection);
+    select_module(modules, clear_current_selection, navigate_to_selection);
 }
 
-void gui_api::select(const std::shared_ptr<gate>& gate, bool clear_current_selection)
+void gui_api::select(const std::shared_ptr<gate>& gate, bool clear_current_selection, bool navigate_to_selection)
 {
-    select_gate(gate, clear_current_selection);
+    select_gate(gate, clear_current_selection, navigate_to_selection);
 }
 
-void gui_api::select(const std::shared_ptr<net>& net, bool clear_current_selection)
+void gui_api::select(const std::shared_ptr<net>& net, bool clear_current_selection, bool navigate_to_selection)
 {
-    select_net(net, clear_current_selection);
+    select_net(net, clear_current_selection, navigate_to_selection);
 }
-void gui_api::select(const std::shared_ptr<module>& module, bool clear_current_selection)
+void gui_api::select(const std::shared_ptr<module>& module, bool clear_current_selection, bool navigate_to_selection)
 {
-    select_module(module, clear_current_selection);
-}
-
-void gui_api::select(const std::vector<std::shared_ptr<gate>>& gates, bool clear_current_selection)
-{
-    select_gate(gates, clear_current_selection);
-}
-void gui_api::select(const std::vector<std::shared_ptr<net>>& nets, bool clear_current_selection)
-{
-    select_net(nets, clear_current_selection);
+    select_module(module, clear_current_selection, navigate_to_selection);
 }
 
-void gui_api::select(const std::vector<std::shared_ptr<module>>& modules, bool clear_current_selection)
+void gui_api::select(const std::vector<std::shared_ptr<gate>>& gates, bool clear_current_selection, bool navigate_to_selection)
 {
-    select_module(modules, clear_current_selection);
+    select_gate(gates, clear_current_selection, navigate_to_selection);
+}
+void gui_api::select(const std::vector<std::shared_ptr<net>>& nets, bool clear_current_selection, bool navigate_to_selection)
+{
+    select_net(nets, clear_current_selection, navigate_to_selection);
 }
 
-void gui_api::select(const std::vector<u32>& gate_ids, const std::vector<u32>& net_ids, const std::vector<u32>& module_ids, bool clear_current_selection)
+void gui_api::select(const std::vector<std::shared_ptr<module>>& modules, bool clear_current_selection, bool navigate_to_selection)
 {
-    if(clear_current_selection)
-        g_selection_relay.clear();
-
-    select_gate(gate_ids, false);
-    select_net(net_ids, false);
-    select_module(module_ids, false);
+    select_module(modules, clear_current_selection, navigate_to_selection);
 }
 
-void gui_api::select(const std::vector<std::shared_ptr<gate>>& gates, const std::vector<std::shared_ptr<net>>& nets, const std::vector<std::shared_ptr<module>>& modules, bool clear_current_selection)
+void gui_api::select(const std::vector<u32>& gate_ids, const std::vector<u32>& net_ids, const std::vector<u32>& module_ids, bool clear_current_selection, bool navigate_to_selection)
 {
     if(clear_current_selection)
         g_selection_relay.clear();
 
-    select_gate(gates, false);
-    select_net(nets, false);
-    select_module(modules, false);
+    select_gate(gate_ids, false, false);
+    select_net(net_ids, false, false);
+    select_module(module_ids, false, false);
+
+    if(navigate_to_selection)
+        Q_EMIT navigation_requested();
+}
+
+void gui_api::select(const std::vector<std::shared_ptr<gate>>& gates, const std::vector<std::shared_ptr<net>>& nets, const std::vector<std::shared_ptr<module>>& modules, bool clear_current_selection, bool navigate_to_selection)
+{
+    if(clear_current_selection)
+        g_selection_relay.clear();
+
+    select_gate(gates, false, false);
+    select_net(nets, false, false);
+    select_module(modules, false, false);
+
+    if(navigate_to_selection)
+        Q_EMIT navigation_requested();
 }
 
 void gui_api::deselect_gate(const std::shared_ptr<gate>& gate)
@@ -300,7 +274,7 @@ void gui_api::deselect_gate(const std::shared_ptr<gate>& gate)
         return;
 
     g_selection_relay.m_selected_gates.remove(gate->get_id());
-    g_selection_relay.selection_changed(nullptr);
+    g_selection_relay.selection_changed(this);
 }
 
 void gui_api::deselect_gate(u32 gate_id)
@@ -321,7 +295,7 @@ void gui_api::deselect_gate(const std::vector<std::shared_ptr<gate>>& gates)
     }
 
     g_selection_relay.m_selected_gates.subtract(gate_ids);
-    g_selection_relay.selection_changed(nullptr);
+    g_selection_relay.selection_changed(this);
 }
 
 void gui_api::deselect_gate(const std::vector<u32>& gate_ids)
@@ -337,7 +311,7 @@ void gui_api::deselect_net(const std::shared_ptr<net>& net)
         return;
 
     g_selection_relay.m_selected_nets.remove(net->get_id());
-    g_selection_relay.selection_changed(nullptr);
+    g_selection_relay.selection_changed(this);
 }
 
 void gui_api::deselect_net(u32 net_id)
@@ -358,7 +332,7 @@ void gui_api::deselect_net(const std::vector<std::shared_ptr<net>>& nets)
     }
 
     g_selection_relay.m_selected_nets.subtract(net_ids);
-    g_selection_relay.selection_changed(nullptr);
+    g_selection_relay.selection_changed(this);
 }
 
 void gui_api::deselect_net(const std::vector<u32>& net_ids)
@@ -374,7 +348,7 @@ void gui_api::deselect_module(const std::shared_ptr<module>& module)
         return;
 
     g_selection_relay.m_selected_modules.remove(module->get_id());
-    g_selection_relay.selection_changed(nullptr);
+    g_selection_relay.selection_changed(this);
 }
 
 void gui_api::deselect_module(u32 module_id)
@@ -395,7 +369,7 @@ void gui_api::deselect_module(const std::vector<std::shared_ptr<module>>& module
     }
 
     g_selection_relay.m_selected_modules.subtract(module_ids);
-    g_selection_relay.selection_changed(nullptr);
+    g_selection_relay.selection_changed(this);
 }
 
 void gui_api::deselect_module(const std::vector<u32>& module_ids)

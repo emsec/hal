@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef GRAPH_GRAPHICS_VIEW_H
-#define GRAPH_GRAPHICS_VIEW_H
+#pragma once
 
 #include "def.h"
 #include "gui/gui_globals.h"
@@ -142,5 +141,3 @@ private:
 
     qreal m_min_scale;
 };
-
-#endif // GRAPH_GRAPHICS_VIEW_H

@@ -1,12 +1,11 @@
 #include "netlist/gate_library/gate_library_parser/gate_library_parser_liberty.h"
 
 #include "core/log.h"
-
 #include "netlist/boolean_function.h"
 #include "netlist/gate_library/gate_type/gate_type_lut.h"
 #include "netlist/gate_library/gate_type/gate_type_sequential.h"
 
-gate_library_parser_liberty::gate_library_parser_liberty(std::stringstream& stream) : gate_library_parser(stream)
+gate_library_parser_liberty::gate_library_parser_liberty(const hal::path& file_path, std::stringstream& file_content) : gate_library_parser(file_path, file_content)
 {
 }
 
@@ -26,7 +25,7 @@ std::shared_ptr<gate_library> gate_library_parser_liberty::parse()
             return nullptr;
         }
     }
-    catch (token_stream::token_stream_exception& e)
+    catch (token_stream<std::string>::token_stream_exception& e)
     {
         if (e.line_number != (u32)-1)
         {
@@ -44,7 +43,7 @@ std::shared_ptr<gate_library> gate_library_parser_liberty::parse()
 
 bool gate_library_parser_liberty::tokenize()
 {
-    std::string delimiters = "{}();:\",";
+    std::string delimiters = "{}()[];:\",";
     std::string current_token;
     u32 line_number = 0;
 
@@ -53,7 +52,7 @@ bool gate_library_parser_liberty::tokenize()
     bool was_in_string      = false;
     bool multi_line_comment = false;
 
-    std::vector<token> parsed_tokens;
+    std::vector<token<std::string>> parsed_tokens;
 
     while (std::getline(m_fs, line))
     {
@@ -65,7 +64,7 @@ bool gate_library_parser_liberty::tokenize()
             if (c == '\"')
             {
                 was_in_string = true;
-                in_string = !in_string;
+                in_string     = !in_string;
                 continue;
             }
 
@@ -100,7 +99,7 @@ bool gate_library_parser_liberty::tokenize()
         }
     }
 
-    m_token_stream = token_stream(parsed_tokens, {"(", "{"}, {")", "}"});
+    m_token_stream = token_stream<std::string>(parsed_tokens, {"(", "{"}, {")", "}"});
     return true;
 }
 
@@ -111,22 +110,27 @@ bool gate_library_parser_liberty::parse_tokens()
     auto lib_name = m_token_stream.consume();
     m_token_stream.consume(")", true);
     m_token_stream.consume("{", true);
-    m_gate_lib          = std::make_shared<gate_library>(lib_name.string);
-    auto library_stream = m_token_stream.extract_until("}", token_stream::END_OF_STREAM, true, false);
+    m_gate_lib       = std::make_shared<gate_library>(m_path, lib_name.string);
+    auto library_str = m_token_stream.extract_until("}", token_stream<std::string>::END_OF_STREAM, true, false);
     m_token_stream.consume("}", false);
 
-    while (library_stream.remaining() > 0)
+    do
     {
-        if (library_stream.peek() == "cell" && library_stream.peek(1) == "(")
+        auto next_token = library_str.consume();
+        if (next_token == "{")
         {
-            m_current_cell.clear();
-
-            if (!parse_cell(library_stream))
+            library_str.consume_until("}");
+            library_str.consume("}");
+        }
+        else if (next_token == "cell" && library_str.peek() == "(")
+        {
+            auto cell = parse_cell(library_str);
+            if (!cell.has_value())
             {
                 return false;
             }
 
-            auto gt = construct_gate_type();
+            auto gt = construct_gate_type(cell.value());
             if (gt == nullptr)
             {
                 return false;
@@ -134,497 +138,890 @@ bool gate_library_parser_liberty::parse_tokens()
 
             m_gate_lib->add_gate_type(gt);
         }
-        else
+        else if (next_token == "type" && library_str.peek() == "(")
         {
-            library_stream.consume();
+            auto type = parse_type(library_str);
+            if (!type.has_value())
+            {
+                return false;
+            }
+            m_bus_types.emplace(type->name, type.value());
         }
-    }
+    } while (library_str.remaining() > 0);
 
     return m_token_stream.remaining() == 0;
 }
 
-bool gate_library_parser_liberty::parse_cell(token_stream& library_stream)
+std::optional<gate_library_parser_liberty::type_group> gate_library_parser_liberty::parse_type(token_stream<std::string>& str)
 {
-    library_stream.consume("cell", true);
-    library_stream.consume("(", true);
-    m_current_cell.name = library_stream.consume();
-    library_stream.consume(")", true);
-    library_stream.consume("{", true);
-    auto cell_stream = library_stream.extract_until("}", token_stream::END_OF_STREAM, true, true);
-    library_stream.consume("}", true);
-    m_current_cell.type = gate_type::base_type::combinatorial;
+    type_group type;
+    i32 width     = 1;
+    i32 start     = 0;
+    i32 end       = 0;
+    i32 direction = 1;
 
-    while (cell_stream.remaining() > 0)
+    type.line_number = str.peek().number;
+    str.consume("(", true);
+    type.name = str.consume().string;
+    str.consume(")", true);
+    str.consume("{", true);
+    auto type_str = str.extract_until("}", token_stream<std::string>::END_OF_STREAM, true, true);
+    str.consume("}", true);
+
+    while (type_str.remaining() > 0)
     {
-        if (cell_stream.peek() == "pin")
+        auto next_token = type_str.consume();
+        if (next_token == "{")
         {
-            if (!parse_pin(cell_stream))
-            {
-                return false;
-            }
+            type_str.consume_until("}");
+            type_str.consume("}");
         }
-        else if (cell_stream.peek() == "ff")
+        else if (next_token == "base_type")
         {
-            if (!parse_ff(cell_stream))
-            {
-                return false;
-            }
+            type_str.consume(":", true);
+            type_str.consume("array", true);
         }
-        else if (cell_stream.peek() == "latch")
+        else if (next_token == "data_type")
         {
-            if (!parse_latch(cell_stream))
-            {
-                return false;
-            }
+            type_str.consume(":", true);
+            type_str.consume("bit", true);
         }
-        else if (cell_stream.peek() == "lut")
+        else if (next_token == "bit_width")
         {
-            if (!parse_lut(cell_stream))
+            type_str.consume(":", true);
+            width = std::stol(type_str.consume().string);
+        }
+        else if (next_token == "bit_from")
+        {
+            type_str.consume(":", true);
+            start = std::stol(type_str.consume().string);
+        }
+        else if (next_token == "bit_to")
+        {
+            type_str.consume(":", true);
+            end = std::stol(type_str.consume().string);
+        }
+        else if (next_token == "downto")
+        {
+            type_str.consume(":", true);
+            if (type_str.consume("false"))
             {
-                return false;
+                direction = 1;
+            }
+            else if (type_str.consume("true"))
+            {
+                direction = -1;
+            }
+            else
+            {
+                log_error("liberty_parser", "invalid token '{}' for boolean value in 'downto' statement in type group '{}' near line {}", type_str.peek().string, type.name, type_str.peek().number);
+                return std::nullopt;
             }
         }
         else
         {
-            cell_stream.consume();
+            log_error("liberty_parser", "invalid token '{}' in type group '{}' near line {}", type_str.peek().string, type.name, type_str.peek().number);
+            return std::nullopt;
         }
+
+        type_str.consume(";");
     }
 
-    return true;
+    if (width != (direction * (end - start)) + 1)
+    {
+        log_error("liberty_parser", "invalid 'bit_width' value {} for type group '{}' near line {}", width, type.name, type.line_number);
+        return std::nullopt;
+    }
+
+    for (int i = start; i != end + direction; i += direction)
+    {
+        type.range.push_back((u32)i);
+    }
+
+    return type;
 }
 
-bool gate_library_parser_liberty::parse_pin(token_stream& cell_stream)
+std::optional<gate_library_parser_liberty::cell_group> gate_library_parser_liberty::parse_cell(token_stream<std::string>& str)
 {
-    cell_stream.consume("pin", true);
-    cell_stream.consume("(", true);
-    auto pin_names_stream = cell_stream.extract_until(")", token_stream::END_OF_STREAM, true, true);
-    cell_stream.consume(")", true);
-    cell_stream.consume("{", true);
-    auto pin_description_stream = cell_stream.extract_until("}", token_stream::END_OF_STREAM, true, true);
-    cell_stream.consume("}", true);
+    cell_group cell;
 
-    std::string pin_direction;
-    std::vector<token> functions;
-    std::vector<token> undefined_functions;
+    cell.line_number = str.peek().number;
+    str.consume("(", true);
+    cell.name = str.consume().string;
+    str.consume(")", true);
+    str.consume("{", true);
+    auto cell_str = str.extract_until("}", token_stream<std::string>::END_OF_STREAM, true, true);
+    str.consume("}", true);
 
-    while (pin_description_stream.remaining() > 0)
+    if (const auto cell_it = m_cell_names.find(cell.name); cell_it != m_cell_names.end())
     {
-        if (pin_description_stream.consume("direction", false))
+        log_error("liberty_parser", "a cell with the name '{}' does already exist", cell.name);
+        return std::nullopt;
+    }
+
+    m_cell_names.insert(cell.name);
+
+    while (cell_str.remaining() > 0)
+    {
+        auto next_token = cell_str.consume();
+        if (next_token == "{")
         {
-            pin_description_stream.consume(":", true);
-            pin_direction = pin_description_stream.consume();
-            pin_description_stream.consume(";", true);
+            cell_str.consume_until("}");
+            cell_str.consume("}");
         }
-        else if (pin_description_stream.consume("function", false))
+        else if (next_token == "pin")
         {
-            pin_description_stream.consume(":", true);
-            functions.push_back(pin_description_stream.consume());
-            pin_description_stream.consume(";", true);
+            auto pin = parse_pin(cell_str, cell);
+            if (!pin.has_value())
+            {
+                return std::nullopt;
+            }
+            cell.pins.push_back(pin.value());
         }
-        else if (pin_description_stream.consume("x_function", false))
+        else if (next_token == "bus")
         {
-            pin_description_stream.consume(":", true);
-            undefined_functions.push_back(pin_description_stream.consume());
-            pin_description_stream.consume(";", true);
+            auto bus = parse_bus(cell_str, cell);
+            if (!bus.has_value())
+            {
+                return std::nullopt;
+            }
+            cell.buses.emplace(bus->name, bus.value());
         }
-        else
+        else if (next_token == "ff")
         {
-            pin_description_stream.consume();
+            auto ff = parse_ff(cell_str);
+            if (!ff.has_value())
+            {
+                return std::nullopt;
+            }
+            cell.type = gate_type::base_type::ff;
+            cell.ff   = ff.value();
+        }
+        else if (next_token == "latch")
+        {
+            auto latch = parse_latch(cell_str);
+            if (!latch.has_value())
+            {
+                return std::nullopt;
+            }
+            cell.type  = gate_type::base_type::latch;
+            cell.latch = latch.value();
+        }
+        else if (next_token == "lut")
+        {
+            auto lut = parse_lut(cell_str);
+            if (!lut.has_value())
+            {
+                return std::nullopt;
+            }
+            cell.type = gate_type::base_type::lut;
+            cell.lut  = lut.value();
         }
     }
 
-    while (pin_names_stream.remaining() > 0)
-    {
-        auto pin_name = pin_names_stream.consume().string;
-        if (pin_names_stream.remaining() > 0)
-        {
-            pin_names_stream.consume(",", true);
-        }
-
-        if (pin_direction == "input")
-        {
-            m_current_cell.input_pins.push_back(pin_name);
-        }
-        else if (pin_direction == "output")
-        {
-            m_current_cell.output_pins.push_back(pin_name);
-        }
-        else if (pin_direction == "inout")
-        {
-            m_current_cell.input_pins.push_back(pin_name);
-            m_current_cell.output_pins.push_back(pin_name);
-        }
-
-        for (const auto& token : functions)
-        {
-            m_current_cell.functions.emplace(pin_name, token);
-        }
-        for (const auto& token : undefined_functions)
-        {
-            m_current_cell.functions.emplace(pin_name + "_undefined", token);
-        }
-    }
-
-    return true;
+    return cell;
 }
 
-bool gate_library_parser_liberty::parse_ff(token_stream& cell_stream)
+std::optional<gate_library_parser_liberty::pin_group>
+    gate_library_parser_liberty::parse_pin(token_stream<std::string>& str, cell_group& cell, pin_direction direction, const std::string& external_pin_name)
 {
-    cell_stream.consume("ff");
-    cell_stream.consume("(", true);
-    m_current_cell.state1 = cell_stream.consume().string;
-    cell_stream.consume(",", true);
-    m_current_cell.state2 = cell_stream.consume().string;
-    cell_stream.consume(")", true);
-    cell_stream.consume("{", true);
-    auto ff_stream = cell_stream.extract_until("}", token_stream::END_OF_STREAM, true, true);
-    cell_stream.consume("}", true);
-    m_current_cell.type = gate_type::base_type::ff;
+    pin_group pin;
 
-    while (ff_stream.remaining() > 0)
+    pin.line_number = str.peek().number;
+    str.consume("(", true);
+    auto pin_names_str = str.extract_until(")", token_stream<std::string>::END_OF_STREAM, true, true);
+    str.consume(")", true);
+    str.consume("{", true);
+    auto pin_str = str.extract_until("}", token_stream<std::string>::END_OF_STREAM, true, true);
+    str.consume("}", true);
+
+    if (pin_names_str.size() == 0)
     {
-        if (ff_stream.consume("next_state"))
-        {
-            ff_stream.consume(":", true);
-            m_current_cell.next_state = ff_stream.consume();
-            ff_stream.consume(";", true);
-        }
-        else if (ff_stream.consume("clear"))
-        {
-            ff_stream.consume(":", true);
-            m_current_cell.reset = ff_stream.consume();
-            ff_stream.consume(";", true);
-        }
-        else if (ff_stream.consume("preset"))
-        {
-            ff_stream.consume(":", true);
-            m_current_cell.set = ff_stream.consume();
-            ff_stream.consume(";", true);
-        }
-        else if (ff_stream.consume("clocked_on"))
-        {
-            ff_stream.consume(":", true);
-            m_current_cell.clocked_on = ff_stream.consume();
-            ff_stream.consume(";", true);
-        }
-        else if (ff_stream.consume("clear_preset_var1"))
-        {
-            ff_stream.consume(":", true);
-            auto behav = ff_stream.consume();
-            ff_stream.consume(";", true);
-
-            std::string behav_string = "LHNTX";
-            auto pos                 = behav_string.find(behav);
-
-            if (pos != std::string::npos)
-            {
-                m_current_cell.special_behavior_var1 = gate_type_sequential::set_reset_behavior(pos);
-            }
-            else
-            {
-                log_error("liberty_parser", "invalid clear_preset behavior '{}' near line {}.", behav.string, behav.number);
-                return false;
-            }
-        }
-        else if (ff_stream.consume("clear_preset_var2"))
-        {
-            ff_stream.consume(":", true);
-            auto behav = ff_stream.consume();
-            ff_stream.consume(";", true);
-
-            std::string behav_string = "LHNTX";
-            auto pos                 = behav_string.find(behav);
-
-            if (pos != std::string::npos)
-            {
-                m_current_cell.special_behavior_var2 = gate_type_sequential::set_reset_behavior(pos);
-            }
-            else
-            {
-                log_error("liberty_parser", "invalid clear_preset behavior '{}' near line {}.", behav.string, behav.number);
-                return false;
-            }
-        }
-        else if (ff_stream.consume("data_category"))
-        {
-            ff_stream.consume(":", true);
-            m_current_cell.data_category = ff_stream.consume();
-            ff_stream.consume(";", true);
-        }
-        else if (ff_stream.consume("data_key"))
-        {
-            ff_stream.consume(":", true);
-            m_current_cell.data_identifier = ff_stream.consume();
-            ff_stream.consume(";", true);
-        }
-        else if (ff_stream.consume("direction"))
-        {
-            ff_stream.consume(":", true);
-            auto direction = ff_stream.consume();
-
-            if (direction == "ascending" || direction == "descending")
-            {
-                m_current_cell.data_direction = direction;
-            }
-            else
-            {
-                log_error("liberty_parser", "invalid data direction '{}' near line {}.", direction.string, direction.number);
-                return false;
-            }
-
-            ff_stream.consume(";", true);
-        }
-        else
-        {
-            ff_stream.consume();
-        }
+        log_error("liberty_parser", "no pin name given near line {}", pin_names_str.peek().number);
+        return std::nullopt;
     }
 
-    return true;
-}
-
-bool gate_library_parser_liberty::parse_latch(token_stream& cell_stream)
-{
-    cell_stream.consume("latch");
-    cell_stream.consume("(", true);
-    m_current_cell.state1 = cell_stream.consume().string;
-    cell_stream.consume(",", true);
-    m_current_cell.state2 = cell_stream.consume().string;
-    cell_stream.consume(")", true);
-    cell_stream.consume("{", true);
-    auto latch_stream = cell_stream.extract_until("}", token_stream::END_OF_STREAM, true, true);
-    cell_stream.consume("}", true);
-    m_current_cell.type = gate_type::base_type::latch;
-
-    while (latch_stream.remaining() > 0)
+    do
     {
-        if (latch_stream.consume("data_in"))
+        std::string name = pin_names_str.consume().string;
+        if (!external_pin_name.empty() && name != external_pin_name)
         {
-            latch_stream.consume(":", true);
-            m_current_cell.next_state = latch_stream.consume();
-            latch_stream.consume(";", true);
+            log_error("liberty_parser", "invalid pin name '{}' near line {}", name, pin_names_str.peek().number);
+            return std::nullopt;
         }
-        else if (latch_stream.consume("clear"))
-        {
-            latch_stream.consume(":", true);
-            m_current_cell.reset = latch_stream.consume();
-            latch_stream.consume(";", true);
-        }
-        else if (latch_stream.consume("preset"))
-        {
-            latch_stream.consume(":", true);
-            m_current_cell.set = latch_stream.consume();
-            latch_stream.consume(";", true);
-        }
-        else if (latch_stream.consume("enable"))
-        {
-            latch_stream.consume(":", true);
-            m_current_cell.clocked_on = latch_stream.consume();
-            latch_stream.consume(";", true);
-        }
-        else if (latch_stream.consume("clear_preset_var1"))
-        {
-            latch_stream.consume(":", true);
-            auto behav = latch_stream.consume();
-            latch_stream.consume(";", true);
 
-            std::string behav_string = "LHNTX";
-            auto pos                 = behav_string.find(behav);
-
-            if (pos != std::string::npos)
+        if (pin_names_str.consume("["))
+        {
+            if (pin_names_str.peek(1) == ":")
             {
-                m_current_cell.special_behavior_var1 = gate_type_sequential::set_reset_behavior(pos);
-            }
-            else
-            {
-                log_error("liberty_parser", "invalid clear_preset behavior '{}' near line {}.", behav.string, behav.number);
-                return false;
-            }
-        }
-        else if (latch_stream.consume("clear_preset_var2"))
-        {
-            latch_stream.consume(":", true);
-            auto behav = latch_stream.consume();
-            latch_stream.consume(";", true);
+                i32 start = std::stol(pin_names_str.consume().string);
+                pin_names_str.consume(":", true);
+                i32 end = std::stol(pin_names_str.consume().string);
+                i32 dir = (start <= end) ? 1 : -1;
 
-            std::string behav_string = "LHNTX";
-            auto pos                 = behav_string.find(behav);
-
-            if (pos != std::string::npos)
-            {
-                m_current_cell.special_behavior_var2 = gate_type_sequential::set_reset_behavior(pos);
-            }
-            else
-            {
-                log_error("liberty_parser", "invalid clear_preset behavior '{}' near line {}.", behav.string, behav.number);
-                return false;
-            }
-        }
-        else
-        {
-            latch_stream.consume();
-        }
-    }
-
-    return true;
-}
-
-bool gate_library_parser_liberty::parse_lut(token_stream& cell_stream)
-{
-    cell_stream.consume("lut");
-    cell_stream.consume("(", true);
-    m_current_cell.state1 = cell_stream.consume().string;
-    cell_stream.consume(")", true);
-    cell_stream.consume("{", true);
-    auto lut_stream = cell_stream.extract_until("}", token_stream::END_OF_STREAM, true, true);
-    cell_stream.consume("}", true);
-    m_current_cell.type = gate_type::base_type::lut;
-
-    while (lut_stream.remaining() > 0)
-    {
-        if (lut_stream.consume("data_category"))
-        {
-            lut_stream.consume(":", true);
-            m_current_cell.data_category = lut_stream.consume();
-            lut_stream.consume(";", true);
-        }
-        else if (lut_stream.consume("data_identifier"))
-        {
-            lut_stream.consume(":", true);
-            m_current_cell.data_identifier = lut_stream.consume();
-            lut_stream.consume(";", true);
-        }
-        else if (lut_stream.consume("direction"))
-        {
-            lut_stream.consume(":", true);
-            auto direction = lut_stream.consume();
-
-            if (direction == "ascending" || direction == "descending")
-            {
-                m_current_cell.data_direction = direction;
-            }
-            else
-            {
-                log_error("liberty_parser", "invalid data direction '{}' near line {}.", direction.string, direction.number);
-                return false;
-            }
-
-            lut_stream.consume(";", true);
-        }
-        else
-        {
-            lut_stream.consume();
-        }
-    }
-
-    return true;
-}
-
-std::shared_ptr<gate_type> gate_library_parser_liberty::construct_gate_type()
-{
-    std::shared_ptr<gate_type> gt;
-
-    if (m_current_cell.type == gate_type::base_type::combinatorial)
-    {
-        gt = std::make_shared<gate_type>(m_current_cell.name);
-
-        gt->add_input_pins(m_current_cell.input_pins);
-        gt->add_output_pins(m_current_cell.output_pins);
-
-        for (auto& [pin_name, bf] : m_current_cell.functions)
-        {
-            auto func = boolean_function::from_string(bf, gt->get_input_pins());
-            auto pins = gt->get_input_pins();
-            auto vars = func.get_variables();
-
-            // verify that all variables correspond to actual input pins
-            for (const auto& var : vars)
-            {
-                if (std::find(pins.begin(), pins.end(), var) == pins.end())
+                for (int i = start; i != (end + dir); i += dir)
                 {
-                    log_error("liberty_parser", "variable '{}' of boolean function '{}' for pin '{}' of gate type '{}' does not match any input pin.", var, func.to_string(), pin_name, gt->get_name());
-                    return nullptr;
+                    auto new_name = name + "(" + std::to_string(i) + ")";
+
+                    if (const auto pin_it = cell.pin_names.find(new_name); pin_it != cell.pin_names.end())
+                    {
+                        log_error("liberty_parser", "a pin with name '{}' does already exist for cell '{}'", new_name, cell.name);
+                        return std::nullopt;
+                    }
+
+                    cell.pin_names.insert(new_name);
+                    pin.pin_names.push_back(new_name);
                 }
             }
-
-            gt->add_boolean_function(pin_name, func);
-        }
-    }
-    else if (m_current_cell.type == gate_type::base_type::ff || m_current_cell.type == gate_type::base_type::latch)
-    {
-        auto seq_gt = std::make_shared<gate_type_sequential>(m_current_cell.name, m_current_cell.type);
-
-        seq_gt->add_input_pins(m_current_cell.input_pins);
-        seq_gt->add_output_pins(m_current_cell.output_pins);
-
-        bool is_ff = (m_current_cell.type == gate_type::base_type::ff);
-
-        if (!m_current_cell.next_state.empty())
-        {
-            seq_gt->add_boolean_function(is_ff ? "next_state" : "data_in", boolean_function::from_string(m_current_cell.next_state, seq_gt->get_input_pins()));
-        }
-
-        if (!m_current_cell.clocked_on.empty())
-        {
-            seq_gt->add_boolean_function(is_ff ? "clock" : "enable", boolean_function::from_string(m_current_cell.clocked_on, seq_gt->get_input_pins()));
-        }
-
-        if (!m_current_cell.set.empty())
-        {
-            seq_gt->add_boolean_function("set", boolean_function::from_string(m_current_cell.set, seq_gt->get_input_pins()));
-        }
-
-        if (!m_current_cell.reset.empty())
-        {
-            seq_gt->add_boolean_function("reset", boolean_function::from_string(m_current_cell.reset, seq_gt->get_input_pins()));
-        }
-
-        seq_gt->set_set_reset_behavior(m_current_cell.special_behavior_var1, m_current_cell.special_behavior_var2);
-        seq_gt->set_init_data_category(m_current_cell.data_category);
-        seq_gt->set_init_data_identifier(m_current_cell.data_identifier);
-
-        for (auto& [pin_name, bf_string] : m_current_cell.functions)
-        {
-            if (bf_string == m_current_cell.state1)
+            else
             {
-                seq_gt->add_state_output_pin(pin_name);
+                u32 index     = std::stoul(pin_names_str.consume().string);
+                auto new_name = name + "(" + std::to_string(index) + ")";
+
+                if (const auto pin_it = cell.pin_names.find(new_name); pin_it != cell.pin_names.end())
+                {
+                    log_error("liberty_parser", "a pin with name '{}' does already exist for cell '{}'", new_name, cell.name);
+                    return std::nullopt;
+                }
+
+                cell.pin_names.insert(new_name);
+                pin.pin_names.push_back(new_name);
             }
-            else if (bf_string == m_current_cell.state2)
+
+            pin_names_str.consume("]", true);
+        }
+        else
+        {
+            if (const auto pin_it = cell.pin_names.find(name); pin_it != cell.pin_names.end())
             {
-                seq_gt->add_inverted_state_output_pin(pin_name);
+                log_error("liberty_parser", "a pin with name '{}' does already exist for cell '{}'", name, cell.name);
+                return std::nullopt;
+            }
+
+            cell.pin_names.insert(name);
+            pin.pin_names.push_back(name);
+        }
+
+        pin_names_str.consume(",", pin_names_str.remaining() > 0);
+    } while (pin_names_str.remaining() > 0);
+
+    pin.direction = direction;
+
+    do
+    {
+        auto next_token = pin_str.consume();
+        if (next_token == "direction")
+        {
+            pin_str.consume(":", true);
+            auto direction_str = pin_str.consume().string;
+            if (direction_str == "input")
+            {
+                pin.direction = pin_direction::IN;
+            }
+            else if (direction_str == "output")
+            {
+                pin.direction = pin_direction::OUT;
+            }
+            else if (direction_str == "inout")
+            {
+                pin.direction = pin_direction::INOUT;
             }
             else
             {
-                seq_gt->add_boolean_function(pin_name, boolean_function::from_string(bf_string, seq_gt->get_input_pins()));
+                log_warning("liberty_parser", "could not handle pin direction '{}' near line {}, ignoring pin", direction_str, pin_str.peek().number);
+            }
+            pin_str.consume(";", true);
+        }
+        else if (next_token == "function")
+        {
+            pin_str.consume(":", true);
+            pin.function = pin_str.consume().string;
+            pin_str.consume(";", true);
+        }
+        else if (next_token == "x_function")
+        {
+            pin_str.consume(":", true);
+            pin.x_function = pin_str.consume().string;
+            pin_str.consume(";", true);
+        }
+        else if (next_token == "three_state")
+        {
+            pin_str.consume(":", true);
+            pin.z_function = pin_str.consume().string;
+            pin_str.consume(";", true);
+        }
+    } while (pin_str.remaining() > 0);
+
+    return pin;
+}
+
+std::optional<gate_library_parser_liberty::bus_group> gate_library_parser_liberty::parse_bus(token_stream<std::string>& str, cell_group& cell)
+{
+    bus_group bus;
+    std::vector<u32> range;
+
+    bus.line_number = str.peek().number;
+    str.consume("(", true);
+    bus.name = str.consume().string;
+    str.consume(")", true);
+    str.consume("{", true);
+    auto bus_str = str.extract_until("}", token_stream<std::string>::END_OF_STREAM, true, true);
+    str.consume("}", true);
+
+    do
+    {
+        auto next_token = bus_str.consume();
+        if (next_token == "bus_type")
+        {
+            bus_str.consume(":", true);
+            auto bus_type_str = bus_str.consume().string;
+            if (const auto& it = m_bus_types.find(bus_type_str); it != m_bus_types.end())
+            {
+                range = it->second.range;
+            }
+            else
+            {
+                log_error("liberty_parser", "invalid bus type '{}' near line {}", bus_type_str, bus_str.peek().number);
+                return std::nullopt;
+            }
+            bus_str.consume(";", true);
+        }
+        else if (next_token == "direction")
+        {
+            bus_str.consume(":", true);
+            auto direction_str = bus_str.consume().string;
+            if (direction_str == "input")
+            {
+                bus.direction = pin_direction::IN;
+            }
+            else if (direction_str == "output")
+            {
+                bus.direction = pin_direction::OUT;
+            }
+            else if (direction_str == "inout")
+            {
+                bus.direction = pin_direction::INOUT;
+            }
+            else
+            {
+                log_error("liberty_parser", "invalid pin direction '{}' near line {}", direction_str, bus_str.peek().number);
+                return std::nullopt;
+            }
+            bus_str.consume(";", true);
+        }
+        else if (next_token == "pin")
+        {
+            auto pin = parse_pin(bus_str, cell, bus.direction, bus.name);
+            if (!pin.has_value())
+            {
+                return std::nullopt;
+            }
+
+            bus.pins.push_back(pin.value());
+        }
+    } while (bus_str.remaining() > 0);
+
+    for (const auto& index : range)
+    {
+        auto pin_name = bus.name + "(" + std::to_string(index) + ")";
+        bus.pin_names.push_back(pin_name);
+        bus.index_to_pin_name.emplace(index, pin_name);
+    }
+
+    if (bus.direction == pin_direction::UNKNOWN)
+    {
+        log_error("liberty_parser", "no bus direction given near line {}", bus.line_number);
+        return std::nullopt;
+    }
+
+    return bus;
+}
+
+std::optional<gate_library_parser_liberty::ff_group> gate_library_parser_liberty::parse_ff(token_stream<std::string>& str)
+{
+    ff_group ff;
+
+    ff.line_number = str.peek().number;
+    str.consume("(", true);
+    ff.state1 = str.consume().string;
+    str.consume(",", true);
+    ff.state2 = str.consume().string;
+    str.consume(")", true);
+    str.consume("{", true);
+    auto ff_str = str.extract_until("}", token_stream<std::string>::END_OF_STREAM, true, true);
+    str.consume("}", true);
+
+    do
+    {
+        auto next_token = ff_str.consume();
+        if (next_token == "clocked_on")
+        {
+            ff_str.consume(":", true);
+            ff.clocked_on = ff_str.consume();
+            ff_str.consume(";", true);
+        }
+        else if (next_token == "next_state")
+        {
+            ff_str.consume(":", true);
+            ff.next_state = ff_str.consume();
+            ff_str.consume(";", true);
+        }
+        else if (next_token == "clear")
+        {
+            ff_str.consume(":", true);
+            ff.clear = ff_str.consume();
+            ff_str.consume(";", true);
+        }
+        else if (next_token == "preset")
+        {
+            ff_str.consume(":", true);
+            ff.preset = ff_str.consume();
+            ff_str.consume(";", true);
+        }
+        else if (next_token == "clear_preset_var1" || next_token == "clear_preset_var2")
+        {
+            ff_str.consume(":", true);
+            auto behav = ff_str.consume();
+            ff_str.consume(";", true);
+
+            std::string behav_string = "LHNTX";
+            if (auto pos = behav_string.find(behav); pos != std::string::npos)
+            {
+                if (next_token == "clear_preset_var1")
+                {
+                    ff.special_behavior_var1 = gate_type_sequential::set_reset_behavior(pos + 1);
+                }
+                else
+                {
+                    ff.special_behavior_var2 = gate_type_sequential::set_reset_behavior(pos + 1);
+                }
+            }
+            else
+            {
+                log_error("liberty_parser", "invalid clear_preset behavior '{}' near line {}.", behav.string, behav.number);
+                return std::nullopt;
+            }
+        }
+        else if (next_token == "data_category")
+        {
+            ff_str.consume(":", true);
+            ff.data_category = ff_str.consume();
+            ff_str.consume(";", true);
+        }
+        else if (next_token == "data_key")
+        {
+            ff_str.consume(":", true);
+            ff.data_identifier = ff_str.consume();
+            ff_str.consume(";", true);
+        }
+    } while (ff_str.remaining() > 0);
+
+    return ff;
+}
+
+std::optional<gate_library_parser_liberty::latch_group> gate_library_parser_liberty::parse_latch(token_stream<std::string>& str)
+{
+    latch_group latch;
+
+    latch.line_number = str.peek().number;
+    str.consume("(", true);
+    latch.state1 = str.consume().string;
+    str.consume(",", true);
+    latch.state2 = str.consume().string;
+    str.consume(")", true);
+    str.consume("{", true);
+    auto latch_str = str.extract_until("}", token_stream<std::string>::END_OF_STREAM, true, true);
+    str.consume("}", true);
+
+    do
+    {
+        auto next_token = latch_str.consume();
+        if (next_token == "enable")
+        {
+            latch_str.consume(":", true);
+            latch.enable = latch_str.consume();
+            latch_str.consume(";", true);
+        }
+        else if (next_token == "data_in")
+        {
+            latch_str.consume(":", true);
+            latch.data_in = latch_str.consume();
+            latch_str.consume(";", true);
+        }
+        else if (next_token == "clear")
+        {
+            latch_str.consume(":", true);
+            latch.clear = latch_str.consume();
+            latch_str.consume(";", true);
+        }
+        else if (next_token == "preset")
+        {
+            latch_str.consume(":", true);
+            latch.preset = latch_str.consume();
+            latch_str.consume(";", true);
+        }
+        else if (next_token == "clear_preset_var1" || next_token == "clear_preset_var2")
+        {
+            latch_str.consume(":", true);
+            auto behav = latch_str.consume();
+            latch_str.consume(";", true);
+
+            std::string behav_string = "LHNTX";
+            if (auto pos = behav_string.find(behav); pos != std::string::npos)
+            {
+                if (next_token == "clear_preset_var1")
+                {
+                    latch.special_behavior_var1 = gate_type_sequential::set_reset_behavior(pos + 1);
+                }
+                else
+                {
+                    latch.special_behavior_var2 = gate_type_sequential::set_reset_behavior(pos + 1);
+                }
+            }
+            else
+            {
+                log_error("liberty_parser", "invalid clear_preset behavior '{}' near line {}.", behav.string, behav.number);
+                return std::nullopt;
+            }
+        }
+    } while (latch_str.remaining() > 0);
+
+    return latch;
+}
+
+std::optional<gate_library_parser_liberty::lut_group> gate_library_parser_liberty::parse_lut(token_stream<std::string>& str)
+{
+    lut_group lut;
+
+    lut.line_number = str.peek().number;
+    str.consume("(", true);
+    lut.name = str.consume().string;
+    str.consume(")", true);
+    str.consume("{", true);
+    auto lut_str = str.extract_until("}", token_stream<std::string>::END_OF_STREAM, true, true);
+    str.consume("}", true);
+
+    do
+    {
+        auto next_token = lut_str.consume();
+        if (next_token == "data_category")
+        {
+            lut_str.consume(":", true);
+            lut.data_category = lut_str.consume();
+            lut_str.consume(";", true);
+        }
+        else if (next_token == "data_identifier")
+        {
+            lut_str.consume(":", true);
+            lut.data_identifier = lut_str.consume();
+            lut_str.consume(";", true);
+        }
+        else if (next_token == "direction")
+        {
+            lut_str.consume(":", true);
+            auto direction = lut_str.consume();
+
+            if (direction == "ascending" || direction == "descending")
+            {
+                lut.data_direction = direction;
+            }
+            else
+            {
+                log_error("liberty_parser", "invalid data direction '{}' near line {}.", direction.string, direction.number);
+                return std::nullopt;
+            }
+
+            lut_str.consume(";", true);
+        }
+    } while (lut_str.remaining() > 0);
+
+    return lut;
+}
+
+std::shared_ptr<gate_type> gate_library_parser_liberty::construct_gate_type(cell_group& cell)
+{
+    std::shared_ptr<gate_type> gt;
+    std::vector<std::string> input_pins;
+    std::vector<std::string> output_pins;
+    std::map<std::string, std::map<u32, std::string>> input_pin_groups;
+    std::map<std::string, std::map<u32, std::string>> output_pin_groups;
+
+    // get input and output pins from pin groups
+    for (const auto& pin : cell.pins)
+    {
+        if (pin.direction == pin_direction::IN || pin.direction == pin_direction::INOUT)
+        {
+            input_pins.insert(input_pins.end(), pin.pin_names.begin(), pin.pin_names.end());
+        }
+
+        if (pin.direction == pin_direction::OUT || pin.direction == pin_direction::INOUT)
+        {
+            output_pins.insert(output_pins.end(), pin.pin_names.begin(), pin.pin_names.end());
+        }
+    }
+
+    // get input and output pins from bus groups
+    for (const auto& bus : cell.buses)
+    {
+        if (bus.second.direction == pin_direction::IN || bus.second.direction == pin_direction::INOUT)
+        {
+            input_pins.insert(input_pins.end(), bus.second.pin_names.begin(), bus.second.pin_names.end());
+            input_pin_groups[bus.first].insert(bus.second.index_to_pin_name.begin(), bus.second.index_to_pin_name.end());
+        }
+
+        if (bus.second.direction == pin_direction::OUT || bus.second.direction == pin_direction::INOUT)
+        {
+            output_pins.insert(output_pins.end(), bus.second.pin_names.begin(), bus.second.pin_names.end());
+            output_pin_groups[bus.first].insert(bus.second.index_to_pin_name.begin(), bus.second.index_to_pin_name.end());
+        }
+    }
+
+    if (cell.type == gate_type::base_type::combinatorial)
+    {
+        gt = std::make_shared<gate_type>(cell.name);
+    }
+    else if (cell.type == gate_type::base_type::ff)
+    {
+        auto seq_gt = std::make_shared<gate_type_sequential>(cell.name, cell.type);
+
+        if (!cell.ff.clocked_on.empty())
+        {
+            cell.special_functions["clock"] = cell.ff.clocked_on;
+        }
+
+        if (!cell.ff.next_state.empty())
+        {
+            cell.special_functions["next_state"] = cell.ff.next_state;
+        }
+
+        if (!cell.ff.preset.empty())
+        {
+            cell.special_functions["preset"] = cell.ff.preset;
+        }
+
+        if (!cell.ff.clear.empty())
+        {
+            cell.special_functions["clear"] = cell.ff.clear;
+        }
+
+        seq_gt->set_set_reset_behavior(cell.ff.special_behavior_var1, cell.ff.special_behavior_var2);
+        seq_gt->set_init_data_category(cell.ff.data_category);
+        seq_gt->set_init_data_identifier(cell.ff.data_identifier);
+
+        for (auto& pin : cell.pins)
+        {
+            if (pin.function == cell.ff.state1)
+            {
+                for (const auto& pin_name : pin.pin_names)
+                {
+                    seq_gt->add_state_output_pin(pin_name);
+                }
+
+                pin.function = "";
+            }
+            else if (pin.function == cell.ff.state2)
+            {
+                for (const auto& pin_name : pin.pin_names)
+                {
+                    seq_gt->add_inverted_state_output_pin(pin_name);
+                }
+
+                pin.function = "";
+            }
+        }
+
+        for (auto& bus : cell.buses)
+        {
+            for (auto& pin : bus.second.pins)
+            {
+                if (pin.function == cell.ff.state1)
+                {
+                    for (const auto& pin_name : pin.pin_names)
+                    {
+                        seq_gt->add_state_output_pin(pin_name);
+                    }
+
+                    pin.function = "";
+                }
+                else if (pin.function == cell.ff.state2)
+                {
+                    for (const auto& pin_name : pin.pin_names)
+                    {
+                        seq_gt->add_inverted_state_output_pin(pin_name);
+                    }
+
+                    pin.function = "";
+                }
             }
         }
 
         gt = seq_gt;
     }
-    else if (m_current_cell.type == gate_type::base_type::lut)
+    else if (cell.type == gate_type::base_type::latch)
     {
-        auto lut_gt = std::make_shared<gate_type_lut>(m_current_cell.name);
+        auto seq_gt = std::make_shared<gate_type_sequential>(cell.name, cell.type);
 
-        lut_gt->add_input_pins(m_current_cell.input_pins);
-        lut_gt->add_output_pins(m_current_cell.output_pins);
-
-        lut_gt->set_config_data_category(m_current_cell.data_category);
-        lut_gt->set_config_data_identifier(m_current_cell.data_identifier);
-        lut_gt->set_config_data_ascending_order(m_current_cell.data_direction == "ascending");
-
-        for (auto& [pin_name, bf_string] : m_current_cell.functions)
+        if (!cell.latch.enable.empty())
         {
-            if (bf_string == m_current_cell.state1)
+            cell.special_functions["enable"] = cell.latch.enable;
+        }
+
+        if (!cell.latch.data_in.empty())
+        {
+            cell.special_functions["data"] = cell.latch.data_in;
+        }
+
+        if (!cell.latch.preset.empty())
+        {
+            cell.special_functions["preset"] = cell.latch.preset;
+        }
+
+        if (!cell.latch.clear.empty())
+        {
+            cell.special_functions["clear"] = cell.latch.clear;
+        }
+
+        seq_gt->set_set_reset_behavior(cell.latch.special_behavior_var1, cell.latch.special_behavior_var2);
+
+        for (auto& pin : cell.pins)
+        {
+            if (pin.function == cell.latch.state1)
             {
-                lut_gt->add_output_from_init_string_pin(pin_name);
+                for (const auto& pin_name : pin.pin_names)
+                {
+                    seq_gt->add_state_output_pin(pin_name);
+                }
+
+                pin.function = "";
             }
-            else
+            else if (pin.function == cell.latch.state2)
             {
-                lut_gt->add_boolean_function(pin_name, boolean_function::from_string(bf_string, lut_gt->get_input_pins()));
+                for (const auto& pin_name : pin.pin_names)
+                {
+                    seq_gt->add_inverted_state_output_pin(pin_name);
+                }
+
+                pin.function = "";
+            }
+        }
+
+        for (auto& bus : cell.buses)
+        {
+            for (auto& pin : bus.second.pins)
+            {
+                if (pin.function == cell.latch.state1)
+                {
+                    for (const auto& pin_name : pin.pin_names)
+                    {
+                        seq_gt->add_state_output_pin(pin_name);
+                    }
+
+                    pin.function = "";
+                }
+                else if (pin.function == cell.latch.state2)
+                {
+                    for (const auto& pin_name : pin.pin_names)
+                    {
+                        seq_gt->add_inverted_state_output_pin(pin_name);
+                    }
+
+                    pin.function = "";
+                }
+            }
+        }
+
+        gt = seq_gt;
+    }
+    else if (cell.type == gate_type::base_type::lut)
+    {
+        auto lut_gt = std::make_shared<gate_type_lut>(cell.name);
+
+        lut_gt->set_config_data_category(cell.lut.data_category);
+        lut_gt->set_config_data_identifier(cell.lut.data_identifier);
+        lut_gt->set_config_data_ascending_order(cell.lut.data_direction == "ascending");
+
+        for (auto& pin : cell.pins)
+        {
+            if (pin.function == cell.lut.name)
+            {
+                for (const auto& pin_name : pin.pin_names)
+                {
+                    lut_gt->add_output_from_init_string_pin(pin_name);
+                }
+
+                pin.function = "";
+            }
+        }
+
+        for (auto& bus : cell.buses)
+        {
+            for (auto& pin : bus.second.pins)
+            {
+                if (pin.function == cell.lut.name)
+                {
+                    for (const auto& pin_name : pin.pin_names)
+                    {
+                        lut_gt->add_output_from_init_string_pin(pin_name);
+                    }
+
+                    pin.function = "";
+                }
             }
         }
 
         gt = lut_gt;
+    }
+
+    gt->add_input_pins(input_pins);
+    gt->add_output_pins(output_pins);
+    gt->assign_input_pin_groups(input_pin_groups);
+    gt->assign_output_pin_groups(output_pin_groups);
+
+
+    std::vector<std::string> all_pins = input_pins;
+    all_pins.insert(all_pins.end(), output_pins.begin(), output_pins.end());
+
+    if (!cell.buses.empty())
+    {
+        auto functions = construct_bus_functions(cell, all_pins);
+        gt->add_boolean_functions(functions);
+    }
+    else
+    {
+        for (const auto& pin : cell.pins)
+        {
+            if (!pin.function.empty())
+            {
+                auto function = boolean_function::from_string(pin.function, all_pins);
+                for (const auto& name : pin.pin_names)
+                {
+                    gt->add_boolean_function(name, function);
+                }
+            }
+
+            if (!pin.x_function.empty())
+            {
+                auto function = boolean_function::from_string(pin.x_function, all_pins);
+                for (const auto& name : pin.pin_names)
+                {
+                    gt->add_boolean_function(name + "_undefined", function);
+                }
+            }
+
+            if (!pin.z_function.empty())
+            {
+                auto function = boolean_function::from_string(pin.z_function, all_pins);
+                for (const auto& name : pin.pin_names)
+                {
+                    gt->add_boolean_function(name + "_tristate", function);
+                }
+            }
+        }
+
+        for (const auto& [name, function] : cell.special_functions)
+        {
+            gt->add_boolean_function(name, boolean_function::from_string(function, all_pins));
+        }
     }
 
     return gt;
@@ -681,4 +1078,231 @@ void gate_library_parser_liberty::remove_comments(std::string& line, bool& multi
             }
         }
     }
+}
+
+std::vector<std::string> gate_library_parser_liberty::tokenize_function(const std::string& function)
+{
+    std::string delimiters = "()[]:!'^+|&* ";
+    std::string current_token;
+    std::vector<std::string> res;
+
+    for (char c : function)
+    {
+        if (delimiters.find(c) == std::string::npos)
+        {
+            current_token += c;
+        }
+        else
+        {
+            if (!current_token.empty())
+            {
+                res.push_back(current_token);
+                current_token.clear();
+            }
+            res.push_back(std::string(1, c));
+        }
+    }
+    if (!current_token.empty())
+    {
+        res.push_back(current_token);
+        current_token.clear();
+    }
+
+    return res;
+}
+
+std::map<std::string, std::string>
+    gate_library_parser_liberty::expand_bus_function(const std::map<std::string, bus_group>& buses, const std::vector<std::string>& pin_names, const std::string& function)
+{
+    auto tokenized_funtion = tokenize_function(function);
+    std::map<std::string, std::string> res;
+
+    for (const auto& name : pin_names)
+    {
+        res.emplace(name, "");
+    }
+
+    std::string tmp = "";
+
+    for (u32 i = 0; i < tokenized_funtion.size(); i++)
+    {
+        if (const auto& it = buses.find(tokenized_funtion.at(i)); it != buses.end())
+        {
+            if (tokenized_funtion.size() > (i + 3) && tokenized_funtion.at(i + 1) == "[")
+            {
+                if (tokenized_funtion.size() > (i + 5) && tokenized_funtion.at(i + 3) == ":" && tokenized_funtion.at(i + 5) == "]")
+                {
+                    i32 start     = std::stoul(tokenized_funtion.at(i + 2));
+                    i32 end       = std::stoul(tokenized_funtion.at(i + 4));
+                    i32 direction = (start < end) ? 1 : -1;
+
+                    for (const auto& name : pin_names)
+                    {
+                        res[name] += tmp + it->second.index_to_pin_name.at(start);
+                        start += direction;
+                    }
+
+                    i += 5;
+                }
+                else if (tokenized_funtion.at(i + 3) == "]")
+                {
+                    u32 index = std::stoul(tokenized_funtion.at(i + 2));
+
+                    for (const auto& name : pin_names)
+                    {
+                        res[name] += tmp + it->second.index_to_pin_name.at(index);
+                    }
+
+                    i += 3;
+                }
+                else
+                {
+                    log_warning("liberty_parser", "could not handle bus '{}' in function '{}' near line {}, ignoring function.", it->first, function, it->second.line_number);
+                    return {};
+                }
+            }
+            else
+            {
+                for (u32 j = 0; j < pin_names.size(); j++)
+                {
+                    res[pin_names.at(j)] += tmp + it->second.pin_names.at(j);
+                }
+            }
+            tmp = "";
+        }
+        else
+        {
+            tmp += tokenized_funtion.at(i);
+        }
+    }
+
+    if (!tmp.empty())
+    {
+        for (const auto& name : pin_names)
+        {
+            res[name] += tmp;
+        }
+    }
+
+    return res;
+}
+
+std::string gate_library_parser_liberty::prepare_pin_function(const std::map<std::string, bus_group>& buses, const std::string& function)
+{
+    auto tokenized_funtion = tokenize_function(function);
+    std::string res        = "";
+
+    for (u32 i = 0; i < tokenized_funtion.size(); i++)
+    {
+        if (const auto& it = buses.find(tokenized_funtion.at(i)); it != buses.end())
+        {
+            if (tokenized_funtion.size() > (i + 3) && tokenized_funtion.at(i + 1) == "[" && tokenized_funtion.at(i + 3) == "]")
+            {
+                u32 index = std::stoul(tokenized_funtion.at(i + 2));
+
+                res += it->second.index_to_pin_name.at(index);
+
+                i += 3;
+            }
+            else
+            {
+                log_warning("liberty_parser", "could not handle bus '{}' in function '{}' near line {}, ignoring function.", it->first, function, it->second.line_number);
+                return "";
+            }
+        }
+        else
+        {
+            res += tokenized_funtion.at(i);
+        }
+    }
+
+    return res;
+}
+
+std::map<std::string, boolean_function> gate_library_parser_liberty::construct_bus_functions(const cell_group& cell, const std::vector<std::string>& all_pins)
+{
+    std::map<std::string, boolean_function> res;
+
+    for (const auto& [bus_name, bus] : cell.buses)
+    {
+        UNUSED(bus_name);
+
+        if (bus.direction != pin_direction::OUT && bus.direction != pin_direction::INOUT)
+        {
+            continue;
+        }
+
+        for (const auto& pin : bus.pins)
+        {
+            if (!pin.function.empty())
+            {
+                for (auto [pin_name, function] : expand_bus_function(cell.buses, pin.pin_names, pin.function))
+                {
+                    res.emplace(pin_name, boolean_function::from_string(function, all_pins));
+                }
+            }
+
+            if (!pin.x_function.empty())
+            {
+                for (auto [pin_name, function] : expand_bus_function(cell.buses, pin.pin_names, pin.x_function))
+                {
+                    res.emplace(pin_name + "_undefined", boolean_function::from_string(function, all_pins));
+                }
+            }
+
+            if (!pin.z_function.empty())
+            {
+                for (auto [pin_name, function] : expand_bus_function(cell.buses, pin.pin_names, pin.z_function))
+                {
+                    res.emplace(pin_name + "_tristate", boolean_function::from_string(function, all_pins));
+                }
+            }
+        }
+    }
+
+    for (const auto& pin : cell.pins)
+    {
+        if (!pin.function.empty())
+        {
+            if (auto function = prepare_pin_function(cell.buses, pin.function); !function.empty())
+            {
+                auto b_function = boolean_function::from_string(function, all_pins);
+                for (const auto& pin_name : pin.pin_names)
+                {
+                    res.emplace(pin_name, b_function);
+                }
+            }
+        }
+
+        if (!pin.x_function.empty())
+        {
+            if (auto function = prepare_pin_function(cell.buses, pin.x_function); !function.empty())
+            {
+                auto b_function = boolean_function::from_string(function, all_pins);
+                for (const auto& pin_name : pin.pin_names)
+                {
+                    res.emplace(pin_name + "_undefined", b_function);
+                }
+            }
+        }
+
+        if (!pin.z_function.empty())
+        {
+            if (auto function = prepare_pin_function(cell.buses, pin.z_function); !function.empty())
+            {
+                auto b_function = boolean_function::from_string(function, all_pins);
+                for (const auto& pin_name : pin.pin_names)
+                {
+                    res.emplace(pin_name + "_tristate", b_function);
+                }
+            }
+        }
+    }
+
+    for (const auto& [name, function] : cell.special_functions)
+    {
+        res.emplace(name, boolean_function::from_string(prepare_pin_function(cell.buses, function), all_pins));
+    }
+
+    return res;
 }

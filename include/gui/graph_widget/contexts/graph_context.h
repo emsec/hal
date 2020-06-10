@@ -1,5 +1,4 @@
-#ifndef GRAPH_CONTEXT_H
-#define GRAPH_CONTEXT_H
+#pragma once
 
 #include "gui/graph_widget/layouters/graph_layouter.h"
 #include "gui/graph_widget/shaders/graph_shader.h"
@@ -7,6 +6,7 @@
 
 #include <QObject>
 #include <QSet>
+#include <QDateTime>
 
 class graph_context_subscriber;
 
@@ -58,6 +58,8 @@ public:
 
     graph_layouter* debug_get_layouter() const;
 
+    QDateTime get_timestamp() const;
+
 private Q_SLOTS:
     void handle_layouter_update(const int percent);
     void handle_layouter_update(const QString& message);
@@ -94,6 +96,6 @@ private:
     bool m_unapplied_changes;
     bool m_scene_update_required;
     bool m_scene_update_in_progress;
-};
 
-#endif // GRAPH_CONTEXT_H
+    QDateTime m_timestamp;
+};

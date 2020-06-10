@@ -87,29 +87,47 @@ boolean_function boolean_function::substitute(const std::string& old_variable_na
     return substitute(old_variable_name, boolean_function(new_variable_name));
 }
 
-boolean_function boolean_function::substitute(const std::string& variable_name, const boolean_function& function) const
+void boolean_function::substitute_helper(boolean_function& f, const std::string& v, const boolean_function& s)
 {
-    if (m_content == content_type::VARIABLE && m_variable == variable_name)
+    if (f.m_content == content_type::VARIABLE && f.m_variable == v)
     {
-        if (m_invert)
+        if (f.m_invert)
         {
-            return !function;
+            f = !s;
         }
         else
         {
-            return function;
+            f = s;
         }
     }
-    else if (m_content == content_type::TERMS)
+    else if (f.m_content == content_type::TERMS)
     {
-        auto result = *this;
-        for (u32 i = 0; i < m_operands.size(); ++i)
+        for (u32 i = 0; i < f.m_operands.size(); ++i)
         {
-            result.m_operands[i] = result.m_operands[i].substitute(variable_name, function);
+            if (f.m_operands[i].m_content == content_type::VARIABLE && f.m_operands[i].m_variable == v)
+            {
+                if (f.m_operands[i].m_invert)
+                {
+                    f.m_operands[i] = !s;
+                }
+                else
+                {
+                    f.m_operands[i] = s;
+                }
+            }
+            else if (f.m_operands[i].m_content == content_type::TERMS)
+            {
+                substitute_helper(f.m_operands[i], v, s);
+            }
         }
-        return result;
     }
-    return *this;
+}
+
+boolean_function boolean_function::substitute(const std::string& variable_name, const boolean_function& function) const
+{
+    auto result = *this;
+    substitute_helper(result, variable_name, function);
+    return result;
 }
 
 boolean_function::value boolean_function::evaluate(const std::map<std::string, value>& inputs) const
@@ -247,9 +265,10 @@ boolean_function boolean_function::from_string(std::string expression, const std
     for (u32 i = 0; i < sorted_variable_names.size(); ++i)
     {
         auto pos = expression.find(sorted_variable_names[i]);
-        if (pos != std::string::npos)
+        while (pos != std::string::npos)
         {
             expression.replace(pos, sorted_variable_names[i].size(), "__v_" + std::to_string(i));
+            pos = expression.find(sorted_variable_names[i], pos + sorted_variable_names[i].size());
         }
     }
 

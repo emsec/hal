@@ -34,12 +34,14 @@
 #include "gui/searchbar/searchbar.h"
 #include "gui/selection_relay/selection_relay.h"
 
+#include "gui/module_model/module_item.h"
+#include "module_tree_view.h"
+
 #include <QAction>
 #include <QItemSelection>
 #include <QList>
 #include <QObject>
 #include <QSortFilterProxyModel>
-#include "module_tree_view.h"
 
 class module_proxy_model;
 
@@ -61,6 +63,8 @@ public Q_SLOTS:
     void handle_tree_view_context_menu_requested(const QPoint& point);
     void handle_tree_selection_changed(const QItemSelection& selected, const QItemSelection& deselected);
     void handle_item_double_clicked(const QModelIndex &index);
+    void handle_selection_changed(void* sender);
+    void handle_module_removed(std::shared_ptr<module> module, u32 module_id);
 
 private:
     module_tree_view* m_tree_view;
@@ -75,6 +79,10 @@ private:
     bool m_ignore_selection_change;
 
     module_proxy_model* m_module_proxy_model;
+
+    void open_module_in_view(const QModelIndex &index);
+
+    module_item* get_module_item_from_index(const QModelIndex &index);
 };
 
 #endif // MODULE_WIDGET_H

@@ -1,12 +1,17 @@
 #include "netlist/gate_library/gate_library.h"
 
-gate_library::gate_library(const std::string& name) : m_name(name)
+gate_library::gate_library(const hal::path& path, const std::string& name) : m_name(name), m_path(path)
 {
 }
 
 std::string gate_library::get_name() const
 {
     return m_name;
+}
+
+hal::path gate_library::get_path() const
+{
+    return m_path;
 }
 
 void gate_library::add_gate_type(std::shared_ptr<const gate_type> gt)

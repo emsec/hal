@@ -46,7 +46,6 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
     m_scroll_area->setWidget(m_top_lvl_container);
     m_scroll_area->setWidgetResizable(true);
 
-
     //layout customization
     m_content_layout->setContentsMargins(0,0,0,0);
     m_content_layout->setSpacing(0);

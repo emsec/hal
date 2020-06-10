@@ -2,43 +2,45 @@
 #ifndef HAL_NETLIST_TEST_UTILS_H
 #define HAL_NETLIST_TEST_UTILS_H
 
-#include <core/utils.h>
-#include "test_def.h"
-#include <fstream>
-#include "netlist/netlist.h"
+#include "netlist/endpoint.h"
+#include "netlist/gate.h"
 #include "netlist/gate_library/gate_library.h"
 #include "netlist/gate_library/gate_library_manager.h"
-#include "netlist/gate.h"
-#include "netlist/net.h"
 #include "netlist/module.h"
-#include "netlist/endpoint.h"
+#include "netlist/net.h"
+#include "netlist/netlist.h"
+#include "test_def.h"
+#include "netlist/boolean_function.h"
+
+#include <core/utils.h>
+#include <fstream>
 
 namespace fs = hal::fs;
 
 namespace test_utils
 {
-
     /*********************************************************
      *                      Constants                        *
      *********************************************************/
 
     // Minimum and invali ids for netlists, gates, nets and modules
-    const u32 INVALID_GATE_ID = 0;
-    const u32 INVALID_NET_ID = 0;
+    const u32 INVALID_GATE_ID   = 0;
+    const u32 INVALID_NET_ID    = 0;
     const u32 INVALID_MODULE_ID = 0;
 
-    const u32 MIN_MODULE_ID = 2;
-    const u32 MIN_GATE_ID = 1;
-    const u32 MIN_NET_ID = 1;
+    const u32 MIN_MODULE_ID  = 2;
+    const u32 MIN_GATE_ID    = 1;
+    const u32 MIN_NET_ID     = 1;
     const u32 MIN_NETLIST_ID = 1;
-    const u32 TOP_MODULE_ID = 1;
+    const u32 TOP_MODULE_ID  = 1;
 
     // Name for accessing our example gate library
-    static const std::string g_lib_name = "EXAMPLE_GATE_LIBRARY";
+    static const std::string g_lib_name = "EXAMPLE_GATE_LIBRARY.lib";
     //static const std::string g_lib_name = "example_library";
     // Name for accessing the custom gate library after the call of 'create_temp_gate_lib()'
-    const std::string temp_lib_name = "TEMP_GATE_LIBRARY";
+    const std::string temp_lib_name = "TEMP_GATE_LIBRARY.lib";
 
+    const hal::path sandbox_directory_path = hal::path("tests/sandbox_directory");
 
     /*********************************************************
      *                      Functions                        *
@@ -65,6 +67,16 @@ namespace test_utils
     endpoint get_endpoint(const std::shared_ptr<netlist>& nl, const int gate_id, const std::string& pin_type, bool is_destination);
 
     /**
+     * Creating an endpoint object by passing the gate and the pin_type. The is_destination flag is taken from the
+     * gate library of the gate and the netlist by the gate.
+     *
+     * @param[in] gate_id - id of the gate
+     * @param[in] pin_type - pin type
+     * @returns the endpoint object
+     */
+    endpoint get_endpoint(const std::shared_ptr<gate> g, const std::string& pin_type);
+
+    /**
      * Checks if an endpoint is empty (i.e. (nullptr, ""))
      *
      * @param[in] ep - endpoint
@@ -73,13 +85,24 @@ namespace test_utils
     bool is_empty(const endpoint& ep);
 
     /**
+     * Minimizes a truth table of a boolean function such that variables that do not matter are eliminated.
+     * E.g: {0,0,1,1,1,1,0,0} becomes {0,1,1,0} (the first variable is eliminated)
+     *
+     * This function is used to compare optimized functions with non-optimized ones
+     *
+     * @param tt - the truth table to minimize
+     * @returns the minimized truth table
+     */
+    std::vector<boolean_function::value> minimize_truth_table(const std::vector<boolean_function::value> tt);
+
+    /**
      * Get a gate type by its name
      *
      * @param name - the name of the gate_type
      * @param gate_library_name - the name of the gate library, the gate_type can be found. If empty, the example gate library (g_lib_name) is taken.
      * @return the gate_type pointer if found. If no gate type matches, return nullptr
      */
-    std::shared_ptr<const gate_type> get_gate_type_by_name(std::string name, std::string gate_library_name = "");
+    std::shared_ptr<const gate_type> get_gate_type_by_name(std::string name, std::shared_ptr<gate_library> gate_library = nullptr);
 
     /**
      * Given a vector of endpoints. Returns the first endpoint that has a certain pin type
@@ -107,7 +130,7 @@ namespace test_utils
      * @param[in] vec_2 - second vector
      * @returns TRUE if both vectors have the same content. FALSE otherwise
      */
-    template <typename T>
+    template<typename T>
     bool vectors_have_same_content(const std::vector<T> vector_1, const std::vector<T> vector_2)
     {
         std::vector<T> vec_1(vector_1);
@@ -167,23 +190,44 @@ namespace test_utils
      */
     std::shared_ptr<gate> get_gate_by_subname(std::shared_ptr<netlist> nl, const std::string subname);
 
+
+    // ===== File Management =====
     /**
-     * Creates a custom gate library that contains certain gate types that aren't supported by the example gate library.
-     * It mainly supports gate types with input and output pin vectors of dimension 1 up to 3. It contains gates of the
-     * form 'GATE_<input pins per dimension>^<input dimentsion>_IN_<output pins per dimension>^<output dimentsion>_IN'
-     * E.g. 'GATE_4^1_IN_1^0' whould have for input pins (I(0)-I(3)) and only one output pin (O)
-     * After the library is created, it can be accessed via the name in 'temp_lib_name'
+     * Create a sandbox directory within the build folder, where temporary files can be stored. Please use the function
+     * remove_sandbox_directory() at the end of the test in order to remove the directory.
      *
-     * IMPORTANT: This function creates a file in a common gate library directory. Don't forget to remove it via
-     * a call of remove_temp_gate_lib()
+     * @returns the absolute path of the sandbox directory
      */
-    void create_temp_gate_lib();
+    hal::path create_sandbox_directory();
 
     /**
-     * Removes the file created by the function 'create_temp_gate_lib()'. If the file doesn't exist it does nothing.
+     * Remove the sandbox directory if it was created before
      */
-    void remove_temp_gate_lib();
+    void remove_sandbox_directory();
 
+    /**
+     * Creates a file path to a file in the sandbox directory. Note that this function can only called, if the sandbox
+     * directory exists. (Use create_sandbox_directory() to create it)
+     *
+     * @param file_name - The name of the file (including its extension)
+     * @returns the absolute path of the file.
+     */
+    hal::path create_sandbox_path(const std::string file_name);
+
+    /**
+     * Creates a file with a given content within the sandbox directory. Note that this function can only called
+     * if the sandbox directory exists. (Use create_sandbox_directory() to create it)
+     *
+     * @param file_name - The name of the file (including its extension)
+     * @param content - The content of the file
+     * @returns the absolute path of the file
+     */
+    hal::path create_sandbox_file(std::string file_name, std::string content);
+
+    /**
+     * Creates a gate library dedicated solely to testing. Construction of that gate library is independent of the gate library parser.
+     */
+    std::shared_ptr<gate_library> get_testing_gate_library();
 
     // ===== Example Netlists =====
 
@@ -191,15 +235,15 @@ namespace test_utils
     *      example_netlist
     *
     *
-    *      GND (1) =-= INV (3) =--=             .------= INV (4) =
-    *                                 AND2 (0) =-
-    *      VCC (2) =--------------=             '------=
-    *                                                     AND2 (5) =
-    *                                                  =
+    *      gnd (1) =--= gate_1_to_1 (3) =--=                  .------= gate_1_to_1 (4) =
+    *                                        gate_2_to_1 (0) =+
+    *      vcc (2) =-----------------------=                  '------=
+    *                                                                  gate_2_to_1 (5) =
+    *                                                                =
     *
-    *     =                       =           =----------=           =
-    *       BUF (6)              ... OR2 (7)             ... OR2 (8)
-    *     =                       =           =          =           =
+    *     =                       =                 =----------=
+    *       gate_2_to_0 (6)         gate_2_to_1 (7)            ...  gate_2_to_1 (8) =
+    *     =                       =                 =          =
     */
     /**
      * Creates the netlist shown in the diagram above. Sets a concrete id if passed.
@@ -209,22 +253,21 @@ namespace test_utils
      */
     std::shared_ptr<netlist> create_example_netlist(const int id = -1);
 
-
     /*
      *      example netlist II
      *
-     *    =             .-------=          =
-     *    =             +-------=          =
-     *    = AND4 (0) =--+-------= AND4 (1) =
-     *    =             |    .--=          =
-     *                  |    |
-     *    =             |    |
-     *    =             |    |
-     *    = AND4 (2) =--~----'
-     *    =             '-------=
-     *                          =
-     *                          =  AND4 (3) =
-     *                          =
+     *    =                    .-------=                 =
+     *    =                    +-------=                 =
+     *    = gate_4_to_1 (0) =--+-------= gate_4_to_1 (1) =
+     *    =                    |    .--=                 =
+     *                         |    |
+     *    =                    |    |
+     *    =                    |    |
+     *    = gate_4_to_1 (2) =--~----'
+     *    =                    '-------=
+     *                                 =
+     *                                 =  gate_4_to_1 (3) =
+     *                                 =
      */
     /**
      * Creates the netlist shown in the diagram above. Sets a concrete id if passed.
@@ -233,7 +276,6 @@ namespace test_utils
      * @returns the created netlist object
      */
     std::shared_ptr<netlist> create_example_netlist_2(const int id = -1);
-
 
     /*
      *      example netlist negative
@@ -248,7 +290,6 @@ namespace test_utils
      * @returns the created netlist object
      */
     std::shared_ptr<netlist> create_example_netlist_negative(const int id = -1);
-
 
     /*
       *      Example netlist circuit diagram (Id in brackets). Used for get fan in and
@@ -275,7 +316,6 @@ namespace test_utils
      * @returns the created netlist object
      */
     std::shared_ptr<netlist> create_example_parse_netlist(int id = -1);
-
 
     // ===== Netlist Comparison Functions (mainly used to test parser and writer) =====
 
@@ -341,7 +381,6 @@ namespace test_utils
      */
     bool netlists_are_equal(const std::shared_ptr<netlist> nl_0, const std::shared_ptr<netlist> nl_1, const bool ignore_id = false);
 
-
     // ===== Filter Factory Functions (used in module::get_gates, netlist::get_nets, moduleget_submodules, gate::get_sucessors, gate::get_predecessors) =====
 
     // +++ Module Filter +++
@@ -402,6 +441,14 @@ namespace test_utils
     std::function<bool(const endpoint&)> endpoint_type_filter(const std::string& type);
 
     /**
+     * Filter returns true, if the type of the gate, the endpoint is connected to, has the name 'name'
+     *
+     * @param type - the name of the gates the filter is searching for
+     * @return the std::function object of the filter function
+     */
+    std::function<bool(const endpoint&)> endpoint_gate_name_filter(const std::string& name);
+
+    /**
      * Filter returns true, for all connected endpoint (of adjacent gates) of type 'pin'
      *
      * @param type - the type of the endpoints the filter is searching for
@@ -425,8 +472,6 @@ namespace test_utils
      */
     std::function<bool(const std::string&, const endpoint&)> type_filter(const std::string& type);
 
-
 }    // namespace test_utils
 
-
-#endif // HAL_NETLIST_TEST_UTILS_H
+#endif    // HAL_NETLIST_TEST_UTILS_H

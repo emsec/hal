@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef GRAPHICS_NET_H
-#define GRAPHICS_NET_H
+#pragma once
 
 #include "graph_widget/items/graphics_item.h"
 
@@ -68,5 +67,3 @@ protected:
     QColor m_fill_color;
     Qt::BrushStyle m_brush_style;
 };
-
-#endif // GRAPHICS_NET_H

@@ -13,10 +13,11 @@ using namespace test_utils;
 class endpoint_test : public ::testing::Test
 {
 protected:
+
     virtual void SetUp()
     {
         NO_COUT_BLOCK;
-        gate_library_manager::load_all();
+        // gate_library_manager::load_all();
     }
 
     virtual void TearDown()
@@ -25,30 +26,20 @@ protected:
 };
 
 /**
- * Testing the get_gate function
+ * Testing the access on the endpoints content
  *
- * Functions: get_gate
+ * Functions: get_gate, get_pin, is_destination_pin, is_source_pin
  */
 TEST_F(endpoint_test, check_set_get_gate)
 {
     TEST_START
-    std::shared_ptr<netlist> nl     = create_empty_netlist(0);
-    std::shared_ptr<gate> test_gate = nl->create_gate(123, get_gate_type_by_name("INV"), "test_gate");
-    endpoint ep(test_gate, "", false);
+    std::shared_ptr<netlist> nl = create_empty_netlist(0);
+    std::shared_ptr<gate> test_gate = nl->create_gate(123, get_gate_type_by_name("gate_1_to_1"), "test_gate");
+    endpoint ep(test_gate, "I", true);
     EXPECT_EQ(ep.get_gate(), test_gate);
-    TEST_END
-}
-
-/**
- * Testing the get_pin function
- *
- * Functions: get_pin
- */
-TEST_F(endpoint_test, check_set_get_pin)
-{
-    TEST_START
-    endpoint ep(nullptr, "PIN_TYPE", false);
-    EXPECT_EQ(ep.get_pin(), "PIN_TYPE");
+    EXPECT_EQ(ep.get_pin(), "I");
+    EXPECT_TRUE(ep.is_destination_pin());
+    EXPECT_FALSE(ep.is_source_pin());
     TEST_END
 }
 
@@ -60,13 +51,13 @@ TEST_F(endpoint_test, check_set_get_pin)
 TEST_F(endpoint_test, check_copy_operator)
 {
     TEST_START
-    std::shared_ptr<netlist> nl     = create_empty_netlist(0);
-    std::shared_ptr<gate> test_gate = nl->create_gate(123, get_gate_type_by_name("INV"), "test_gate");
-    endpoint ep(test_gate, "O", true);
+    std::shared_ptr<netlist> nl = create_empty_netlist(0);
+    std::shared_ptr<gate> test_gate = nl->create_gate(123, get_gate_type_by_name("gate_1_to_1"), "test_gate");
+    endpoint ep(test_gate, "I", true);
 
     endpoint other_ep = ep;
     EXPECT_EQ(other_ep.get_gate(), test_gate);
-    EXPECT_EQ(other_ep.get_pin(), "O");
+    EXPECT_EQ(other_ep.get_pin(), "I");
     EXPECT_TRUE(other_ep.is_destination_pin());
     TEST_END
 }
@@ -81,16 +72,16 @@ TEST_F(endpoint_test, check_comparison_operators)
 {
     TEST_START
     std::shared_ptr<netlist> nl       = create_empty_netlist(0);
-    std::shared_ptr<gate> test_gate_0 = nl->create_gate(1, get_gate_type_by_name("INV"), "test_gate_0");
-    std::shared_ptr<gate> test_gate_1 = nl->create_gate(2, get_gate_type_by_name("INV"), "test_gate_1");
+    std::shared_ptr<gate> test_gate_0 = nl->create_gate(1, get_gate_type_by_name("gate_1_to_1"), "test_gate_0");
+    std::shared_ptr<gate> test_gate_1 = nl->create_gate(2, get_gate_type_by_name("gate_1_to_1"), "test_gate_1");
 
     // Create some endpoints
-    endpoint ep_0 = endpoint(test_gate_0, "I", true);
-    endpoint ep_1 = endpoint(test_gate_0, "0", false);
-    endpoint ep_2 = endpoint(nullptr, "I", true);
-    endpoint ep_3 = endpoint(nullptr, "0", false);
-    endpoint ep_4 = endpoint(nullptr, "", true);
-    endpoint ep_5 = endpoint(test_gate_1, "", false);
+    endpoint ep_0 = get_endpoint(test_gate_0, "I");
+    endpoint ep_1 = get_endpoint(test_gate_0, "0");
+    endpoint ep_2 = get_endpoint(nullptr, "I");
+    endpoint ep_3 = get_endpoint(nullptr, "0");
+    endpoint ep_4 = get_endpoint(nullptr, "");
+    endpoint ep_5 = get_endpoint(test_gate_1, "");
 
     // Add them to a set
     std::set<endpoint> ep_set = {ep_0, ep_1, ep_2, ep_3, ep_4, ep_5};
@@ -104,7 +95,7 @@ TEST_F(endpoint_test, check_comparison_operators)
     EXPECT_NE(ep_set.find(ep_5), ep_set.end());
 
     // Search an endpoint which isn't part of the set
-    endpoint ep_not_in_set = endpoint(test_gate_1, "O", true);
+    endpoint ep_not_in_set = get_endpoint(test_gate_1, "O");
 
     EXPECT_EQ(ep_set.find(ep_not_in_set), ep_set.end());
 
@@ -120,14 +111,13 @@ TEST_F(endpoint_test, check_unequal_operator)
 {
     TEST_START
     std::shared_ptr<netlist> nl     = create_empty_netlist(0);
-    std::shared_ptr<gate> test_gate = nl->create_gate(123, get_gate_type_by_name("INV"), "test_gate");
-    std::shared_ptr<gate> test_gate2 = nl->create_gate(124, get_gate_type_by_name("INV"), "test_gate2");
+    std::shared_ptr<gate> test_gate = nl->create_gate(123, get_gate_type_by_name("gate_1_to_1"), "test_gate");
 
-    EXPECT_FALSE(endpoint(test_gate, "O", true) != endpoint(test_gate, "O", true));
-
-    EXPECT_TRUE(endpoint(test_gate, "O", true) != endpoint(test_gate2, "O", true));
-    EXPECT_TRUE(endpoint(test_gate, "O", true) != endpoint(test_gate, "X", true));
-    EXPECT_TRUE(endpoint(test_gate, "O", true) != endpoint(test_gate, "O", false));
+    endpoint ep       = get_endpoint(test_gate, "O");
+    endpoint other_ep = get_endpoint(test_gate, "O");
+    EXPECT_FALSE(ep != other_ep);
+    other_ep = get_endpoint(test_gate, "Other_Pin");
+    EXPECT_TRUE(ep != other_ep);
 
     TEST_END
 }

@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef ARROW_SEPARATED_NET_H
-#define ARROW_SEPARATED_NET_H
+#pragma once
 
 #include "graph_widget/items/nets/separated_graphics_net.h"
 
@@ -59,5 +58,3 @@ private:
 
     static QPainterPath s_arrow;
 };
-
-#endif // ARROW_SEPARATED_NET_H

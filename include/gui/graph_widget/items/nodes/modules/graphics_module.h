@@ -1,5 +1,4 @@
-#ifndef GRAPHICS_MODULE_H
-#define GRAPHICS_MODULE_H
+#pragma once
 
 #include "gui/graph_widget/items/nodes/graphics_node.h"
 
@@ -27,5 +26,3 @@ protected:
     QVector<module_pin> m_input_pins;
     QVector<module_pin> m_output_pins;
 };
-
-#endif // GRAPHICS_MODULE_H

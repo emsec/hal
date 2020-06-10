@@ -1,34 +1,34 @@
 #include "main_window/main_window.h"
 
-#include "def.h"
-
 #include "core/log.h"
-
-#include "netlist/hdl_parser/hdl_parser_dispatcher.h"
-#include "netlist/event_system/event_controls.h"
-#include "netlist/gate.h"
-#include "netlist/gate_library/gate_library_manager.h"
-#include "netlist/net.h"
-#include "netlist/netlist.h"
-#include "netlist/netlist_factory.h"
-#include "netlist/persistent/netlist_serializer.h"
-
-#include "gui/gui_def.h"
-#include "gui/hal_plugin_access_manager/hal_plugin_access_manager.h"
-#include "gui/main_window/about_dialog.h"
-
+#include "def.h"
+#include "graphics_effects/overlay_effect.h"
 #include "gui/docking_system/dock_bar.h"
 #include "gui/file_manager/file_manager.h"
+#include "gui/gui_def.h"
 #include "gui/gui_globals.h"
 #include "gui/hal_action/hal_action.h"
 #include "gui/hal_content_manager/hal_content_manager.h"
 #include "gui/hal_logger/hal_logger_widget.h"
+#include "gui/hal_plugin_access_manager/hal_plugin_access_manager.h"
+#include "gui/main_window/about_dialog.h"
 #include "gui/plugin_management/plugin_schedule_manager.h"
 #include "gui/plugin_management/plugin_schedule_widget.h"
 #include "gui/plugin_manager/plugin_manager_widget.h"
 #include "gui/plugin_manager/plugin_model.h"
 #include "gui/python/python_editor.h"
 #include "gui/welcome_screen/welcome_screen.h"
+#include "netlist/event_system/event_controls.h"
+#include "netlist/gate.h"
+#include "netlist/gate_library/gate_library_manager.h"
+#include "netlist/hdl_parser/hdl_parser_dispatcher.h"
+#include "netlist/net.h"
+#include "netlist/netlist.h"
+#include "netlist/netlist_factory.h"
+#include "netlist/persistent/netlist_serializer.h"
+#include "notifications/notification.h"
+#include "overlay/reminder_overlay.h"
+#include "plugin_manager/plugin_manager_widget.h"
 
 #include <QApplication>
 #include <QCloseEvent>
@@ -41,11 +41,6 @@
 #include <QSettings>
 #include <QShortcut>
 #include <QtConcurrent>
-
-#include "graphics_effects/overlay_effect.h"
-#include "notifications/notification.h"
-#include "overlay/reminder_overlay.h"
-#include "plugin_manager/plugin_manager_widget.h"
 
 main_window::main_window(QWidget* parent) : QWidget(parent), m_schedule_widget(new plugin_schedule_widget()), m_action_schedule(new hal_action(this)), m_action_content(new hal_action(this))
 {
@@ -474,9 +469,10 @@ void main_window::handle_action_new()
     QString text  = "Please select a gate library";
 
     QStringList items;
-    for (const auto& it : gate_library_manager::get_gate_libraries())
+    auto libraries = gate_library_manager::get_gate_libraries();
+    for (const auto& lib : libraries)
     {
-        items.append(QString::fromStdString(it->get_name()));
+        items.append(QString::fromStdString(lib->get_name()));
     }
     bool ok          = false;
     QString selected = QInputDialog::getItem(this, title, text, items, 0, false, &ok);
@@ -485,7 +481,8 @@ void main_window::handle_action_new()
     {
         // DEBUG -- REMOVE WHEN GUI CAN HANDLE EVENTS DURING CREATION
         event_controls::enable_all(false);
-        g_netlist = netlist_factory::create_netlist(selected.toStdString());
+        auto selected_lib = libraries[items.indexOf(selected)];
+        g_netlist = netlist_factory::create_netlist(selected_lib);
         // DEBUG -- REMOVE WHEN GUI CAN HANDLE EVENTS DURING CREATION
         event_controls::enable_all(true);
         Q_EMIT file_manager::get_instance()->file_opened("new netlist");

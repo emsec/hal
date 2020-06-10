@@ -1,5 +1,4 @@
-#ifndef GRAPHICS_NODE_H
-#define GRAPHICS_NODE_H
+#pragma once
 
 #include "gui/graph_widget/items/graphics_item.h"
 
@@ -55,5 +54,3 @@ protected:
 //    qreal m_x_offset;
 //    qreal m_y_offset;
 };
-
-#endif // GRAPHICS_NODE_H

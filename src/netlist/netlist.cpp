@@ -1,13 +1,11 @@
 #include "netlist/netlist.h"
 
+#include "core/log.h"
+#include "netlist/event_system/netlist_event_handler.h"
 #include "netlist/gate.h"
 #include "netlist/module.h"
 #include "netlist/net.h"
 #include "netlist/netlist_internal_manager.h"
-
-#include "netlist/event_system/netlist_event_handler.h"
-
-#include "core/log.h"
 
 netlist::netlist(std::shared_ptr<gate_library> library) : m_gate_library(library)
 {
