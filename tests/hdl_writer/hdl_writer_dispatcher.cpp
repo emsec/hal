@@ -18,6 +18,7 @@ protected:
     virtual void SetUp()
     {
         NO_COUT_BLOCK;
+        test_utils::init_log_channels();
         gate_library_manager::load_all();
         tmp_dir = core_utils::get_base_directory() / "tests/sandbox_directory";
         fs::remove_all(tmp_dir);

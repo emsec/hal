@@ -13,6 +13,7 @@
 #include "netlist/boolean_function.h"
 
 #include <core/utils.h>
+#include "core/log.h"
 #include <fstream>
 
 namespace fs = hal::fs;
@@ -45,6 +46,8 @@ namespace test_utils
     /*********************************************************
      *                      Functions                        *
      *********************************************************/
+
+    void init_log_channels();
 
     /**
      * Creates an empty netlist.

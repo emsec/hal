@@ -45,7 +45,7 @@ protected:
     virtual void SetUp()
     {
         NO_COUT_BLOCK;
-        //gate_library_manager::load_all();
+        test_utils::init_log_channels();
         create_sandbox_directory();
         m_g_lib_path = create_sandbox_file("min_test_gate_lib.lib", m_min_gl_content);
         m_gl = gate_library_manager::load_file(m_g_lib_path);

@@ -3,6 +3,7 @@
 #include <core/log.h>
 #include <iostream>
 #include <test_def.h>
+#include "netlist_test_utils.h"
 
 class log_test : public ::testing::Test
 {

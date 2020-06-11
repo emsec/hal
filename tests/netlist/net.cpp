@@ -15,8 +15,7 @@ class net_test : public ::testing::Test
 protected:
     virtual void SetUp()
     {
-        NO_COUT_BLOCK;
-        // gate_library_manager::load_all();
+        test_utils::init_log_channels();
     }
 
     virtual void TearDown()

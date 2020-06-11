@@ -22,7 +22,7 @@ protected:
 
     virtual void SetUp()
     {
-        // gate_library_manager::load_all();
+        test_utils::init_log_channels();
     }
 
     virtual void TearDown()

@@ -35,6 +35,7 @@ protected:
 
     virtual void SetUp()
     {
+        test_utils::init_log_channels();
         create_sandbox_directory();
         m_g_lib_path = create_sandbox_file("min_test_gate_lib.lib", m_min_gl_content);
     }

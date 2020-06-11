@@ -22,9 +22,7 @@ protected:
 
     virtual void SetUp()
     {
-        NO_COUT_BLOCK;
-        reset_removed_netlists();
-        reset_updated_netlists();
+        test_utils::init_log_channels();
     }
 
     virtual void TearDown()
