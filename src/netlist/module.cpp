@@ -355,7 +355,7 @@ void module::set_output_port_name(const std::shared_ptr<net>& output_net, const 
         return;
     }
 
-    m_named_input_nets.insert(output_net);
+    m_named_output_nets.insert(output_net);
     m_output_net_to_port_name.insert_or_assign(output_net, port_name);
 
     module_event_handler::notify(module_event_handler::event::output_port_name_changed, shared_from_this(), output_net->get_id());
@@ -442,7 +442,7 @@ const std::map<std::shared_ptr<net>, std::string>& module::get_output_port_names
     auto output_nets = get_output_nets();
     std::set<std::shared_ptr<net>> diff;
 
-    // find nets that are still in the port map but no longer an input net
+    // find nets that are still in the port map but no longer an output net
     std::set_difference(m_named_output_nets.begin(), m_named_output_nets.end(), output_nets.begin(), output_nets.end(), std::inserter(diff, diff.begin()));
     for (const auto& net : diff)
     {
@@ -452,12 +452,12 @@ const std::map<std::shared_ptr<net>, std::string>& module::get_output_port_names
 
     diff.clear();
 
-    // find nets that are input nets but have not yet been assigned a port name
+    // find nets that are output nets but have not yet been assigned a port name
     std::set_difference(output_nets.begin(), output_nets.end(), m_named_output_nets.begin(), m_named_output_nets.end(), std::inserter(diff, diff.begin()));
     for (const auto& net : diff)
     {
         m_named_output_nets.insert(net);
-        m_output_net_to_port_name.emplace(net, "O(" + std::to_string(m_next_input_port_id++) + ")");
+        m_output_net_to_port_name.emplace(net, "O(" + std::to_string(m_next_output_port_id++) + ")");
     }
 
     return m_output_net_to_port_name;
