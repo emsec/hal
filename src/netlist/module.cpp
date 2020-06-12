@@ -378,7 +378,7 @@ std::string module::get_input_port_name(const std::shared_ptr<net>& input_net)
     if (input_net == nullptr)
     {
         log_warning("module", "nullptr given as input net of module {} with id {}.", this->get_name(), this->get_id());
-        return;
+        return "";
     }
 
     auto input_nets = get_input_nets();
@@ -409,7 +409,7 @@ std::string module::get_output_port_name(const std::shared_ptr<net>& output_net)
     if (output_net == nullptr)
     {
         log_warning("module", "nullptr given as output net of module {} with id {}.", this->get_name(), this->get_id());
-        return;
+        return "";
     }
     auto output_nets = get_output_nets();
 
