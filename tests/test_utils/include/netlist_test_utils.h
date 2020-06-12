@@ -47,6 +47,9 @@ namespace test_utils
      *                      Functions                        *
      *********************************************************/
 
+    /**
+     * Initializes all log channels used by hal.
+     */
     void init_log_channels();
 
     /**
