@@ -173,12 +173,19 @@ TEST_F(boolean_function_test, check_to_string){
         std::vector<std::pair<boolean_function, std::string>> test_cases =
         {
                 {(a&b), "A & B"},
-                {(a&(b|c)), "A & (B | C)"}
+                {(a&(b|c)), "A & (B | C)"},
+                {((a&b)^(b&c)), "(A & B) ^ (B & C)"},
+                {(a^_1), "A ^ 1"},
+                {(a^_0), "A ^ 0"},
+                {(!a), "!A"}
         };
 
         for (auto tc : test_cases){
             EXPECT_EQ(no_space(tc.first.to_string()), no_space(tc.second));
         }
+
+        // Check an empty boolean function
+        EXPECT_TRUE(string_contains_substring(boolean_function().to_string(), "empty"));
 
 
     TEST_END
