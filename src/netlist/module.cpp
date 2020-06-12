@@ -329,6 +329,12 @@ std::set<std::shared_ptr<net>> module::get_internal_nets() const
 
 void module::set_input_port_name(const std::shared_ptr<net>& input_net, const std::string& port_name)
 {
+    if (input_net == nullptr)
+    {
+        log_warning("module", "nullptr given as input net of module {} with id {}.", this->get_name(), this->get_id());
+        return;
+    }
+
     auto input_nets = get_input_nets();
 
     if (auto it = input_nets.find(input_net); it == input_nets.end())
@@ -346,6 +352,12 @@ void module::set_input_port_name(const std::shared_ptr<net>& input_net, const st
 
 void module::set_output_port_name(const std::shared_ptr<net>& output_net, const std::string& port_name)
 {
+    if (output_net == nullptr)
+    {
+        log_warning("module", "nullptr given as output net of module {} with id {}.", this->get_name(), this->get_id());
+        return;
+    }
+
     auto output_nets = get_output_nets();
 
     if (auto it = output_nets.find(output_net); it == output_nets.end())
@@ -363,7 +375,12 @@ void module::set_output_port_name(const std::shared_ptr<net>& output_net, const 
 
 std::string module::get_input_port_name(const std::shared_ptr<net>& input_net)
 {
-    std::string port_name;
+    if (input_net == nullptr)
+    {
+        log_warning("module", "nullptr given as input net of module {} with id {}.", this->get_name(), this->get_id());
+        return;
+    }
+
     auto input_nets = get_input_nets();
 
     if (auto it = input_nets.find(input_net); it == input_nets.end())
@@ -372,6 +389,7 @@ std::string module::get_input_port_name(const std::shared_ptr<net>& input_net)
         return "";
     }
 
+    std::string port_name;
     if (auto it = m_input_net_to_port_name.find(input_net); it != m_input_net_to_port_name.end())
     {
         port_name = it->second;
@@ -388,7 +406,11 @@ std::string module::get_input_port_name(const std::shared_ptr<net>& input_net)
 
 std::string module::get_output_port_name(const std::shared_ptr<net>& output_net)
 {
-    std::string port_name;
+    if (output_net == nullptr)
+    {
+        log_warning("module", "nullptr given as output net of module {} with id {}.", this->get_name(), this->get_id());
+        return;
+    }
     auto output_nets = get_output_nets();
 
     if (auto it = output_nets.find(output_net); it == output_nets.end())
@@ -397,6 +419,7 @@ std::string module::get_output_port_name(const std::shared_ptr<net>& output_net)
         return "";
     }
 
+    std::string port_name;
     if (auto it = m_output_net_to_port_name.find(output_net); it != m_output_net_to_port_name.end())
     {
         port_name = it->second;
