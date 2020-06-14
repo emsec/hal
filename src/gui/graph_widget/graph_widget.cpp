@@ -9,7 +9,6 @@
 #include "gui/graph_widget/graph_context_manager.h"
 #include "gui/graph_widget/graph_graphics_view.h"
 #include "gui/graph_widget/graph_layout_spinner_widget.h"
-#include "gui/graph_widget/graph_navigation_widget.h"
 #include "gui/graph_widget/graph_navigation_widget_v2.h"
 #include "gui/graph_widget/graphics_scene.h"
 #include "gui/graph_widget/items/nodes/gates/graphics_gate.h"
@@ -32,7 +31,7 @@
 #include <QTimer>
 
 graph_widget::graph_widget(graph_context* context, QWidget* parent)
-    : content_widget("Graph", parent), m_view(new graph_graphics_view(this)), m_context(context), m_overlay(new dialog_overlay(this)), m_navigation_widget(new graph_navigation_widget(nullptr)),
+    : content_widget("Graph", parent), m_view(new graph_graphics_view(this)), m_context(context), m_overlay(new dialog_overlay(this)),
       m_navigation_widget_v2(new graph_navigation_widget_v2(nullptr)),
       m_spinner_widget(new graph_layout_spinner_widget(this)), m_current_expansion(0)
 {

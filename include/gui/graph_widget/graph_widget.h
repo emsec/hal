@@ -85,7 +85,6 @@ private:
     graph_context* m_context;
 
     dialog_overlay* m_overlay;
-    graph_navigation_widget* m_navigation_widget;
     graph_navigation_widget_v2* m_navigation_widget_v2;
     graph_layout_spinner_widget* m_spinner_widget;
 

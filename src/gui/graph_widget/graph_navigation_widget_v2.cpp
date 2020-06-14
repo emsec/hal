@@ -114,7 +114,14 @@ void graph_navigation_widget_v2::setup(hal::node origin, std::shared_ptr<net> vi
 
 void graph_navigation_widget_v2::hide_when_focus_lost(bool hide)
 {
-    
+    m_hide_when_focus_lost = hide;
+}
+
+void graph_navigation_widget::focusOutEvent(QFocusEvent* event)
+{
+    Q_UNUSED(event);
+    if (m_hide_when_focus_lost)
+        hide();
 }
 
 void graph_navigation_widget_v2::keyPressEvent(QKeyEvent* event)
@@ -167,10 +174,10 @@ void graph_navigation_widget_v2::fill_table(bool direction)
             auto net_sources = m_via_net->get_sources();
             auto net_destinations = m_via_net->get_destinations();
             std::unordered_set<std::shared_ptr<gate>> net_gates;
-            for (auto e : net_sources)
-                net_gates.insert(e.get_gate());
-            for (auto e : net_destinations)
-                net_gates.insert(e.get_gate());
+            for (auto ep : net_sources)
+                net_gates.insert(ep.get_gate());
+            for (auto ep : net_destinations)
+                net_gates.insert(ep.get_gate());
             common_ancestor = gui_utility::first_common_ancestor({}, net_gates);
         }
         else if (m_origin.type == hal::node_type::gate)
