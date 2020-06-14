@@ -112,18 +112,6 @@ void graph_navigation_widget_v2::setup(hal::node origin, std::shared_ptr<net> vi
     m_origin = origin;
 }
 
-void graph_navigation_widget_v2::hide_when_focus_lost(bool hide)
-{
-    m_hide_when_focus_lost = hide;
-}
-
-void graph_navigation_widget::focusOutEvent(QFocusEvent* event)
-{
-    Q_UNUSED(event);
-    if (m_hide_when_focus_lost)
-        hide();
-}
-
 void graph_navigation_widget_v2::keyPressEvent(QKeyEvent* event)
 {
     // qDebug() << "KeyDebug:" << "dn:" << (event->key() == Qt::Key_Down) << "/ up:" << (event->key() == Qt::Key_Up);
@@ -213,7 +201,7 @@ void graph_navigation_widget_v2::fill_table(bool direction)
         // create entries for the parent gates, reusing ones that have already
         // been created for other gates
         std::shared_ptr<module> parent = g->get_module();
-        bool reused_item;
+        bool reused_item = false;
         while(parent != common_ancestor) {
             // qDebug() << QString::fromStdString(parent->get_name());
             QTreeWidgetItem* parent_item;

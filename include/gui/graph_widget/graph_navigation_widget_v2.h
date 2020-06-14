@@ -20,7 +20,6 @@ public:
 
     void setup(bool direction);
     void setup(hal::node origin, std::shared_ptr<net> via_net, bool direction);
-    void hide_when_focus_lost(bool hide);
 
 Q_SIGNALS:
     void navigation_requested(const hal::node origin, const u32 via_net, const QSet<u32>& to_gates, const QSet<u32>& to_modules);
@@ -31,7 +30,6 @@ private Q_SLOTS:
     void handle_selection_changed();
 
 protected:
-    void focusOutEvent(QFocusEvent* event) override;
     void keyPressEvent(QKeyEvent* event) override;
 
 private:
@@ -44,7 +42,7 @@ private:
     hal::node m_origin;
     std::shared_ptr<net> m_via_net;
     QSet<QTreeWidgetItem*> m_previous_selection;
-
+    
 };
 
 #endif
