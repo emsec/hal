@@ -17,6 +17,7 @@ protected:
 
     virtual void SetUp()
     {
+        test_utils::init_log_channels();
     }
 
     virtual void TearDown()
@@ -58,6 +59,12 @@ protected:
             std::cout << std::endl;
         }
 
+    }
+
+    // Remove the spaces from a string
+    std::string no_space(std::string s)
+    {
+        return core_utils::replace(s, " ", "");
     }
 
     /**
@@ -145,6 +152,41 @@ TEST_F(boolean_function_test, check_main_example){
 
             EXPECT_EQ(truth_table, std::vector<boolean_function::value>({ONE, ZERO, ONE, ZERO, ONE, ZERO, ZERO, ZERO}));
         }
+
+    TEST_END
+}
+
+/**
+ * Testing the to_string function
+ *
+ * Functions: to_string
+ */
+TEST_F(boolean_function_test, check_to_string){
+    TEST_START
+        boolean_function a("A");
+        boolean_function b("B");
+        boolean_function c("C");
+        boolean_function _0(ZERO);
+        boolean_function _1(ONE);
+
+        // Check some bf strings
+        std::vector<std::pair<boolean_function, std::string>> test_cases =
+        {
+                {(a&b), "A & B"},
+                {(a&(b|c)), "A & (B | C)"},
+                {((a&b)^(b&c)), "(A & B) ^ (B & C)"},
+                {(a^_1), "A ^ 1"},
+                {(a^_0), "A ^ 0"},
+                {(!a), "!A"}
+        };
+
+        for (auto tc : test_cases){
+            EXPECT_EQ(no_space(tc.first.to_string()), no_space(tc.second));
+        }
+
+        // Check an empty boolean function
+        EXPECT_TRUE(string_contains_substring(boolean_function().to_string(), "empty"));
+
 
     TEST_END
 }

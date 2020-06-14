@@ -35,6 +35,7 @@ protected:
 
     virtual void SetUp()
     {
+        test_utils::init_log_channels();
         create_sandbox_directory();
         m_g_lib_path = create_sandbox_file("min_test_gate_lib.lib", m_min_gl_content);
     }
@@ -86,14 +87,15 @@ TEST_F(netlist_factory_test, check_create_netlist_by_lib_name)
                 EXPECT_EQ(nl->get_gate_library()->get_name(), get_testing_gate_library()->get_name());
             }
         }
+        // NEGATIVE
         {
             // Try to create a netlist by passing a nullptr
             NO_COUT_TEST_BLOCK;
             std::shared_ptr<netlist> nl = netlist_factory::create_netlist(nullptr);
             // ISSUE: should be nullptr
-            // EXPECT_EQ(nl, nullptr);
+            //EXPECT_EQ(nl, nullptr);
             // ISSUE: if nl != nullptr, the following expression leads to a segfault:
-            // nl->create_gate( 815, get_testing_gate_library()->get_gate_types().begin()->second, "dont_crush");
+            //nl->create_gate( 815, get_testing_gate_library()->get_gate_types().begin()->second, "dont_crush");
         }
     TEST_END
 }

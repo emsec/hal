@@ -17,8 +17,7 @@ class module_test : public ::testing::Test
 protected:
     virtual void SetUp()
     {
-        NO_COUT_BLOCK;
-        //gate_library_manager::load_all();
+        test_utils::init_log_channels();
     }
 
     virtual void TearDown()
@@ -76,6 +75,33 @@ TEST_F(module_test, check_set_id){
 
             test_module->set_name("");
             EXPECT_EQ(test_module->get_name(), "test_module");
+        }
+    TEST_END
+}
+
+/**
+ * Testing the access on the modules type
+ *
+ * Functions: set_type, get_type
+ */
+TEST_F(module_test, check_module_type){
+    TEST_START
+        {
+            // Set a new type for module
+            std::shared_ptr<netlist> nl = create_empty_netlist();
+            std::shared_ptr<module> test_module = nl->create_module(MIN_MODULE_ID+0, "test_module", nl->get_top_module());
+
+            test_module->set_type("new_type");
+            EXPECT_EQ(test_module->get_type(), "new_type");
+        }
+        {
+            // Set an already set type
+            std::shared_ptr<netlist> nl = create_empty_netlist();
+            std::shared_ptr<module> test_module = nl->create_module(MIN_MODULE_ID+0, "test_module", nl->get_top_module());
+
+            test_module->set_type("new_type");
+            test_module->set_type("new_type");
+            EXPECT_EQ(test_module->get_type(), "new_type");
         }
     TEST_END
 }
@@ -588,6 +614,104 @@ TEST_F(module_test, check_get_input_nets){
             EXPECT_EQ(test_module->get_internal_nets(), exp_result);
         }
 
+    TEST_END
+}
+
+/**
+ * Testing the usage of port names
+ *
+ * Functions: get_input_port_name, set_input_port_name, get_output_port_name, set_output_port_name,
+ *            get_input_port_names, get_output_port_names
+ */
+TEST_F(module_test, check_port_names){
+    TEST_START
+        // Add some modules to the example netlist
+        std::shared_ptr<netlist> nl = create_example_netlist();
+        std::shared_ptr<module> m_0 = nl->create_module("mod_0", nl->get_top_module(), {nl->get_gate_by_id(MIN_GATE_ID+0), nl->get_gate_by_id(MIN_GATE_ID+3)});
+        {
+            // Get the input port name of a net, which port name was not specified yet
+            EXPECT_EQ(m_0->get_input_port_name(nl->get_net_by_id(MIN_NET_ID+13)), "I(0)");
+        }
+        {
+            // Get the output port name of a net, which port name was not specified yet
+            EXPECT_EQ(m_0->get_output_port_name(nl->get_net_by_id(MIN_NET_ID+045)), "O(0)");
+        }
+        {
+            // Set and get an input port name
+            std::cout << "\n===\n" << m_0->get_input_port_name(nl->get_net_by_id(MIN_NET_ID+13)) << "\n===\n" << std::endl;
+            m_0->set_input_port_name(nl->get_net_by_id(MIN_NET_ID+13), "port_name_net_1_3");
+            EXPECT_EQ(m_0->get_input_port_name(nl->get_net_by_id(MIN_NET_ID+13)), "port_name_net_1_3");
+        }
+        {
+            // Set and get an output port name
+            m_0->set_output_port_name(nl->get_net_by_id(MIN_NET_ID+045), "port_name_net_0_4_5");
+            EXPECT_EQ(m_0->get_output_port_name(nl->get_net_by_id(MIN_NET_ID+045)), "port_name_net_0_4_5");
+        }
+        // Create a new module with more modules (with 2 input and ouput nets)
+        std::shared_ptr<module> m_1 = nl->create_module("mod_1", nl->get_top_module(), {nl->get_gate_by_id(MIN_GATE_ID+0), nl->get_gate_by_id(MIN_GATE_ID+3), nl->get_gate_by_id(MIN_GATE_ID+7)});
+        // Specify exactly one input and output port name
+        m_1->set_input_port_name(nl->get_net_by_id(MIN_NET_ID+13), "port_name_net_1_3");
+        m_1->set_output_port_name(nl->get_net_by_id(MIN_NET_ID+045), "port_name_net_0_4_5");
+
+        {
+           // Get all input port names
+            std::map<std::shared_ptr<net>, std::string> exp_input_port_names = {
+                    {nl->get_net_by_id(MIN_NET_ID+13), "port_name_net_1_3"},
+                    {nl->get_net_by_id(MIN_NET_ID+20), "I(0)"}
+            };
+            EXPECT_EQ(m_1->get_input_port_names(), exp_input_port_names);
+        }
+        {
+            // Get all output port names
+            std::map<std::shared_ptr<net>, std::string> exp_output_port_names = {
+                    {nl->get_net_by_id(MIN_NET_ID+045), "port_name_net_0_4_5"},
+                    {nl->get_net_by_id(MIN_NET_ID+78), "O(0)"}
+            };
+            EXPECT_EQ(m_1->get_output_port_names(), exp_output_port_names);
+        }
+        // Create a new module with more modules (with 2 input and ouput nets)
+        std::shared_ptr<module> m_2 = nl->create_module("mod_2", nl->get_top_module(), {nl->get_gate_by_id(MIN_GATE_ID+3)});
+        // Add an input and an output port name
+        m_2->set_input_port_name(nl->get_net_by_id(MIN_NET_ID+13), "port_name_net_1_3");
+        m_2->set_output_port_name(nl->get_net_by_id(MIN_NET_ID+30), "port_name_net_3_0");
+        // Add additional gates to the module so that the port name nets are no longer input/output nets of the module
+        m_2->assign_gate(nl->get_gate_by_id(MIN_GATE_ID+1));
+        m_2->assign_gate(nl->get_gate_by_id(MIN_GATE_ID+0));
+        {
+            // Get all input port names. The old ports shouldn't be contained.
+            std::map<std::shared_ptr<net>, std::string> exp_input_port_names = {
+                    {nl->get_net_by_id(MIN_NET_ID+20), "I(0)"}
+            };
+            EXPECT_EQ(m_2->get_input_port_names(), exp_input_port_names);
+        }
+        {
+            // Get all output port names. The old ports shouldn't be contained.
+            std::map<std::shared_ptr<net>, std::string> exp_output_port_names = {
+                    {nl->get_net_by_id(MIN_NET_ID+045), "O(0)"}
+            };
+            EXPECT_EQ(m_2->get_output_port_names(), exp_output_port_names);
+        }
+
+        // NEGATIVE
+        {
+            // Set the input port name of a net, that is no input net of the module
+            NO_COUT_TEST_BLOCK;
+            m_0->set_input_port_name(nl->get_net_by_id(MIN_NET_ID+78), "port_name");
+            EXPECT_EQ(m_0->get_input_port_name(nl->get_net_by_id(MIN_NET_ID+78)), "");
+        }
+        {
+            // Set the output port name of a net, that is no input net of the module
+            NO_COUT_TEST_BLOCK;
+            m_0->set_output_port_name(nl->get_net_by_id(MIN_NET_ID+78), "port_name");
+            EXPECT_EQ(m_0->get_output_port_name(nl->get_net_by_id(MIN_NET_ID+78)), "");
+        }
+        {
+            // Pass a nullptr
+            //m_0->set_input_port_name(nullptr, "port_name"); // ISSUE: SIGSEGV
+            //m_0->set_output_port_name(nullptr, "port_name"); // ISSUE: SIGSEGV
+            //EXPECT_EQ(m_0->get_input_port_name(nullptr), ""); // ISSUE: SIGSEGV
+            //EXPECT_EQ(m_0->get_output_port_name(nullptr), ""); // ISSUE: SIGSEGV
+        }
     TEST_END
 }
 

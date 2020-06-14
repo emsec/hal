@@ -3,12 +3,14 @@
 #include <core/log.h>
 #include <core/program_arguments.h>
 #include <iostream>
+#include "netlist_test_utils.h"
 
 class program_arguments_test : public ::testing::Test
 {
 protected:
     virtual void SetUp()
     {
+        test_utils::init_log_channels();
     }
 
     virtual void TearDown()

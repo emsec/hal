@@ -19,6 +19,7 @@ protected:
 
     virtual void SetUp()
     {
+        test_utils::init_log_channels();
     }
 
     virtual void TearDown()

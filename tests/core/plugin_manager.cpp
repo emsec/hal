@@ -29,6 +29,7 @@ protected:
     virtual void SetUp()
     {
         NO_COUT_BLOCK;
+        test_utils::init_log_channels();
         callback_hooks_called = 0;
         plugin_manager::unload_all_plugins();
     }

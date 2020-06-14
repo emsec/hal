@@ -23,6 +23,7 @@ protected:
     virtual void SetUp()
     {
         NO_COUT_BLOCK;
+        test_utils::init_log_channels();
         lib_file_name = "test_lib";
         test_lib_name = "TEST_GATE_LIBRARY";
         test_lib_path = (core_utils::get_gate_library_directories()[0]) / (lib_file_name + ".lib");
