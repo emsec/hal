@@ -380,7 +380,7 @@ void graph_widget::handle_navigation_jump_requested(const hal::node origin, cons
         g_selection_relay.m_subfocus   = selection_relay::subfocus::none;
 
         u32 cnt = 0;
-        // TODO simplify
+        // TODO simplify (we do actually know if we're navigating left or right)
         for (const auto& pin : g->get_input_pins())
         {
             if (g->get_fan_in_net(pin) == n)    // input net
@@ -416,34 +416,40 @@ void graph_widget::handle_navigation_jump_requested(const hal::node origin, cons
         g_selection_relay.m_focus_id   = mid;
         g_selection_relay.m_subfocus   = selection_relay::subfocus::none;
 
-        // TODO implement
-        
-        // u32 cnt = 0;
-        // for (const auto& pin : g->get_input_pins())
-        // {
-        //     if (g->get_fan_in_net(pin) == n)    // input net
-        //     {
-        //         g_selection_relay.m_subfocus       = selection_relay::subfocus::left;
-        //         g_selection_relay.m_subfocus_index = cnt;
-        //         break;
-        //     }
-        //     cnt++;
-        // }
-        // if (g_selection_relay.m_subfocus == selection_relay::subfocus::none)
-        // {
-        //     cnt = 0;
-        //     for (const auto& pin : g->get_output_pins())
-        //     {
-        //         if (g->get_fan_out_net(pin) == n)    // input net
-        //         {
-        //             g_selection_relay.m_subfocus       = selection_relay::subfocus::right;
-        //             g_selection_relay.m_subfocus_index = cnt;
-        //             break;
-        //         }
-        //         cnt++;
-        //     }
-        // }
-        qDebug() << "automatic subfocus not yet implemented";
+        u32 cnt = 0;
+        // FIXME this is super hacky because currently we have no way of
+        // properly indexing port names on modules (since no order is guaranteed
+        // on the port names (different to pin names in gates), but our GUI
+        // wants integer indexes)
+        // (what we use here is the fact that graphics_module builds its port
+        // list by traversing m->get_input_nets(), so we just use that order and
+        // hope nobody touches that implementation)
+
+        // TODO simplify (we do actually know if we're navigating left or right)
+        for (const auto& inet : m->get_input_nets())
+        {
+            if (inet == n)    // input net
+            {
+                g_selection_relay.m_subfocus       = selection_relay::subfocus::left;
+                g_selection_relay.m_subfocus_index = cnt;
+                break;
+            }
+            cnt++;
+        }
+        if (g_selection_relay.m_subfocus == selection_relay::subfocus::none)
+        {
+            cnt = 0;
+            for (const auto& inet : m->get_output_nets())
+            {
+                if (inet == n)    // input net
+                {
+                    g_selection_relay.m_subfocus       = selection_relay::subfocus::right;
+                    g_selection_relay.m_subfocus_index = cnt;
+                    break;
+                }
+                cnt++;
+            }
+        }
     }
 
     g_selection_relay.relay_selection_changed(nullptr);
