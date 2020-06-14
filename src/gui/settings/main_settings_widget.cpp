@@ -181,6 +181,11 @@ void main_settings_widget::init_widgets()
     checkbox_setting* py_minimap = new checkbox_setting("python/minimap", "Minimap", "show", "", this);
     register_widget("python-item", py_minimap);
 
+    make_section("Selection details window", "selection-details-window-item", ":/icons/python");
+
+    checkbox_setting* selection_details_empty_sections_setting = new checkbox_setting("selection_details/hide_empty_sections", "Hide empty sections", "enabled", "", this);
+    register_widget("selection-details-window-item", selection_details_empty_sections_setting);
+
     make_section("Expert settings", "advanced-item", ":/icons/preferences");
 
     checkbox_setting* autosave_setting = new checkbox_setting("advanced/autosave", "Auto-save your project", "enabled", "", this);

@@ -31,6 +31,7 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
 {
     //NEW
     // general initializations
+    init_settings();
     m_current_id = 0;
     m_key_font = QFont("Iosevka");
     m_key_font.setBold(true);
@@ -191,6 +192,9 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
     connect(m_output_pins_table, &QTableWidget::customContextMenuRequested, this, &gate_details_widget::handle_output_pin_table_menu_requested);
     connect(m_data_fields_table, &QTableWidget::customContextMenuRequested, this, &gate_details_widget::handle_data_table_menu_requested);
 
+    //settings
+    connect(&g_settings_relay, &settings_relay::setting_changed, this, &gate_details_widget::handle_global_settings_changed);
+
     //install eventfilers
     m_general_table->viewport()->setMouseTracking(true);
     m_general_table->viewport()->installEventFilter(this);
@@ -205,6 +209,8 @@ gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
     QRegularExpression re(".+?QScrollBar:vertical ?{[^}]+?(?: *width *?|; *width *?): *([0-9]*)[^;]*");
     QRegularExpressionMatch ma = re.match(main_stylesheet);
     m_scrollbar_width = (ma.hasMatch()) ? ma.captured(1).toInt() : 0;
+
+    m_util_list << m_input_pins_button  << m_output_pins_button  << m_data_fields_button << m_boolean_functions_button;
 }
 
 gate_details_widget::~gate_details_widget()
@@ -500,6 +506,61 @@ QSize gate_details_widget::calculate_table_size(QTableWidget *table)
 
 }
 
+void gate_details_widget::show_all_sections()
+{
+    for(auto section_btn : m_util_list)
+    {
+        int index = m_top_lvl_layout->indexOf(section_btn);
+        section_btn->show();
+        if(section_btn != m_boolean_functions_button)
+        {
+            m_top_lvl_layout->itemAt(index+2)->spacerItem()->changeSize(0,7,QSizePolicy::Expanding, QSizePolicy::Fixed);
+            m_top_lvl_layout->itemAt(index+2)->spacerItem()->invalidate();
+        }
+    }
+    m_top_lvl_layout->invalidate();
+    m_top_lvl_layout->update();
+}
+
+void gate_details_widget::hide_empty_sections()
+{
+    //hide when necessary
+    for(auto section_btn : m_util_list)
+    {
+        QPushButton* curr_btn = dynamic_cast<QPushButton*>(section_btn);
+        if(curr_btn->text().contains("(0)"))
+        {
+            curr_btn->hide();
+            int index = m_top_lvl_layout->indexOf(section_btn);
+            if(section_btn != m_boolean_functions_button)
+            {
+                m_top_lvl_layout->itemAt(index+2)->spacerItem()->changeSize(0,0,QSizePolicy::Fixed, QSizePolicy::Fixed);
+                m_top_lvl_layout->itemAt(index+2)->spacerItem()->invalidate();
+            }
+        }
+    }
+    m_top_lvl_layout->invalidate();
+    m_top_lvl_layout->update();
+}
+
+void gate_details_widget::init_settings()
+{
+    m_hide_empty_sections = g_settings_manager.get("selection_details/hide_empty_sections", false).toBool();
+}
+
+void gate_details_widget::handle_global_settings_changed(void* sender, const QString& key, const QVariant& value)
+{
+    Q_UNUSED(sender)
+    if(key == "selection_details/hide_empty_sections")
+    {
+        m_hide_empty_sections = value.toBool();
+        if(!m_hide_empty_sections)
+            show_all_sections();
+        else
+            hide_empty_sections();
+    }
+}
+
 void gate_details_widget::handle_module_removed(std::shared_ptr<module> module)
 {
     if (m_current_id == 0)
@@ -593,6 +654,8 @@ void gate_details_widget::update(const u32 gate_id)
 
     if(!g || m_current_id == 0)
         return;
+
+    show_all_sections();
 
     //update (1)general info section
     m_name_item->setText(QString::fromStdString(g->get_name()));
@@ -735,6 +798,9 @@ void gate_details_widget::update(const u32 gate_id)
         m_boolean_functions_container_layout->removeWidget(last_line);
         delete last_line;
     }
+
+    if(m_hide_empty_sections)
+        hide_empty_sections();
 
     //to prevent any updating(render) errors that can occur, manually tell the tables to update
     m_general_table->update();

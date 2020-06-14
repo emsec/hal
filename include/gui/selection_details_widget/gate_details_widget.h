@@ -84,6 +84,7 @@ private:
     //used to set the boolean function container to its appropriate size, width "must be"
     //extracted from the stylesheet
     int m_scrollbar_width;
+    bool m_hide_empty_sections;
     QFont m_key_font;
     u32 m_current_id;
     graph_navigation_widget* m_navigation_table;
@@ -123,6 +124,9 @@ private:
     QWidget* m_boolean_functions_container;
     QVBoxLayout* m_boolean_functions_container_layout;
 
+    //utility container to hide/show empty sections
+    QList<QPushButton*> m_util_list;
+
     //function section
     void handle_navigation_jump_requested(const hal::node origin, const u32 via_net, const QSet<u32>& to_gates);
 
@@ -139,6 +143,11 @@ private:
 
     //utility function, used to calculate the actual width so the scrollbars and the accuracy of the click functionality is correct
     QSize calculate_table_size(QTableWidget* table);
+
+    void show_all_sections();
+    void hide_empty_sections();
+    void init_settings();
+    void handle_global_settings_changed(void* sender, const QString& key, const QVariant& value);
 };
 
 #endif /* __HAL_GATE_DETAILS_WIDGET_H__ */

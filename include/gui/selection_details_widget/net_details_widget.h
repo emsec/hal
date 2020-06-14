@@ -67,6 +67,7 @@ private:
 
     //general
     int m_current_id;
+    bool m_hide_empty_sections;
     QFont m_key_font;
 
     //utility objects to encapsulate the sections together to make it scrollable
@@ -104,6 +105,11 @@ private:
 
     //utility function, used to calculate the actual width so the scrollbars and the accuracy of the click functionality is correct
     QSize calculate_table_size(QTableWidget* table);
+
+    void show_all_sections();
+    void hide_empty_sections();
+    void init_settings();
+    void handle_global_settings_changed(void* sender, const QString& key, const QVariant& value);
 };
 
 #endif    // NET_DETAILS_WIDGET_H

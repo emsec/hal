@@ -17,6 +17,7 @@
 net_details_widget::net_details_widget(QWidget* parent) : QWidget(parent)
 {
     //general initializations
+    init_settings();
     m_current_id = 0;
     m_key_font = QFont("Iosevka");
     m_key_font.setBold(true);
@@ -132,12 +133,16 @@ net_details_widget::net_details_widget(QWidget* parent) : QWidget(parent)
     connect(m_source_pins_table, &QTableWidget::customContextMenuRequested, this, &net_details_widget::handle_sources_table_menu_requeted);
     connect(m_destination_pins_table, &QTableWidget::customContextMenuRequested, this, &net_details_widget::handle_destinations_table_menu_requeted);
 
+    //settings
+    connect(&g_settings_relay, &settings_relay::setting_changed, this, &net_details_widget::handle_global_settings_changed);
+
     //install eventfilter to change the cursor when hovering over the second colums of the pin tables
     m_destination_pins_table->viewport()->setMouseTracking(true);
     m_destination_pins_table->viewport()->installEventFilter(this);
     m_source_pins_table->viewport()->setMouseTracking(true);
     m_source_pins_table->viewport()->installEventFilter(this);
 
+    //netlist_relay connections
     connect(&g_netlist_relay, &netlist_relay::net_removed, this, &net_details_widget::handle_net_removed);
     connect(&g_netlist_relay, &netlist_relay::net_name_changed, this, &net_details_widget::handle_net_name_changed);
     connect(&g_netlist_relay, &netlist_relay::net_source_added, this, &net_details_widget::handle_net_source_added);
@@ -185,6 +190,8 @@ void net_details_widget::update(u32 net_id)
 
     if(m_current_id == 0 || !n)
         return;
+
+    show_all_sections();
 
     // (1) update general info section
     m_name_item->setText(QString::fromStdString(n->get_name()));
@@ -260,6 +267,9 @@ void net_details_widget::update(u32 net_id)
     }
     m_destination_pins_table->resizeColumnsToContents();
     m_destination_pins_table->setFixedWidth(calculate_table_size(m_destination_pins_table).width());
+
+    if(m_hide_empty_sections)
+        hide_empty_sections();
 
     //to prevent any updating(render) erros that can occur, manually tell the tables to update
     m_general_table->update();
@@ -475,4 +485,52 @@ QSize net_details_widget::calculate_table_size(QTableWidget *table)
     for (int i = 0; i < table->rowCount(); i++)
        h += table->rowHeight(i);
     return QSize(w+5, h);
+}
+
+void net_details_widget::show_all_sections()
+{
+    //no need to be dynamic like in the gate_details_widget since there are only 2 sections that could be hidden
+    m_source_pins_button->show();
+    m_top_lvl_layout->itemAt(5)->spacerItem()->changeSize(0,7,QSizePolicy::Expanding, QSizePolicy::Fixed);
+    m_top_lvl_layout->itemAt(5)->spacerItem()->invalidate();
+    m_destination_pins_button->show();
+    m_top_lvl_layout->invalidate();
+    m_top_lvl_layout->update();
+}
+
+void net_details_widget::hide_empty_sections()
+{
+    //as in show_all_sections, no need to be dynamic, only 2 possible sections that can be hidden
+    if(m_source_pins_button->text().contains("(0)"))
+    {
+        m_source_pins_button->hide();
+        m_top_lvl_layout->itemAt(5)->spacerItem()->changeSize(0,0,QSizePolicy::Fixed, QSizePolicy::Fixed);
+        m_top_lvl_layout->itemAt(5)->spacerItem()->invalidate();
+    }
+
+    if(m_destination_pins_button->text().contains("(0)"))
+        m_destination_pins_button->hide();
+
+    m_top_lvl_layout->invalidate();
+    m_top_lvl_layout->update();
+
+}
+
+void net_details_widget::init_settings()
+{
+    m_hide_empty_sections = g_settings_manager.get("selection_details/hide_empty_sections", false).toBool();
+}
+
+void net_details_widget::handle_global_settings_changed(void* sender, const QString& key, const QVariant& value)
+{
+    Q_UNUSED(sender)
+    if(key == "selection_details/hide_empty_sections")
+    {
+        m_hide_empty_sections = value.toBool();
+        if(!m_hide_empty_sections)
+            show_all_sections();
+        else
+            hide_empty_sections();
+    }
+
 }
