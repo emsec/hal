@@ -3,6 +3,7 @@
 #include <core/log.h>
 #include <core/program_options.h>
 #include <iostream>
+#include "netlist_test_utils.h"
 
 class program_options_test : public ::testing::Test
 {
@@ -10,6 +11,7 @@ protected:
     const std::string REQUIRED_PARAM = program_options::REQUIRED_PARAM;
     virtual void SetUp()
     {
+        test_utils::init_log_channels();
     }
 
     virtual void TearDown()

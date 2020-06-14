@@ -2,9 +2,27 @@
 #include "netlist_test_utils.h"
 
 #include <core/utils.h>
+
 #include <math.h>
 
-//NOTE: Has to be applied to the new gate_library usage
+
+
+void test_utils::init_log_channels(){
+        // All channels that are registered:
+        static bool already_init = false;
+        if(!already_init) {
+            std::vector<std::string> channel_ids =
+                    {"core", "gate_library_manager", "liberty_parser", "netlist", "module", "netlist.internal",
+                     "netlist.persistent", "hdl_parser", "hdl_writer", "python_context"};
+
+            log_manager &lm = log_manager::get_instance();
+            for (std::string ch_id : channel_ids) {
+                lm.add_channel(ch_id, {log_manager::create_stdout_sink()}, "info");
+            }
+            already_init = true;
+        }
+
+}
 
 std::shared_ptr<netlist> test_utils::create_empty_netlist(const int id)
 {

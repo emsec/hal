@@ -16,6 +16,12 @@ namespace netlist_factory
 {
     std::shared_ptr<netlist> create_netlist(const std::shared_ptr<gate_library>& gate_library)
     {
+        if (gate_library == nullptr)
+        {
+            log_critical("netlist", "nullptr given as gate library.");
+            return nullptr;
+        }
+
         return std::make_shared<netlist>(gate_library);
     }
 

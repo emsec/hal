@@ -24,6 +24,7 @@ protected:
     virtual void SetUp()
     {
         NO_COUT_BLOCK;
+        test_utils::init_log_channels();
         m_gl = get_testing_gate_library();
     }
 

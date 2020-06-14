@@ -13,6 +13,7 @@
 #include "netlist/boolean_function.h"
 
 #include <core/utils.h>
+#include "core/log.h"
 #include <fstream>
 
 namespace fs = hal::fs;
@@ -40,11 +41,16 @@ namespace test_utils
     // Name for accessing the custom gate library after the call of 'create_temp_gate_lib()'
     const std::string temp_lib_name = "TEMP_GATE_LIBRARY.lib";
 
-    const hal::path sandbox_directory_path = "tests/sandbox_directory";
+    const hal::path sandbox_directory_path = hal::path("tests/sandbox_directory");
 
     /*********************************************************
      *                      Functions                        *
      *********************************************************/
+
+    /**
+     * Initializes all log channels used by hal.
+     */
+    void init_log_channels();
 
     /**
      * Creates an empty netlist.
