@@ -181,7 +181,7 @@ void main_settings_widget::init_widgets()
     checkbox_setting* py_minimap = new checkbox_setting("python/minimap", "Minimap", "show", "", this);
     register_widget("python-item", py_minimap);
 
-    make_section("Selection details window", "selection-details-window-item", ":/icons/python");
+    make_section("Details window", "selection-details-window-item", ":/icons/gen-window");
 
     checkbox_setting* selection_details_empty_sections_setting = new checkbox_setting("selection_details/hide_empty_sections", "Hide empty sections", "enabled", "", this);
     register_widget("selection-details-window-item", selection_details_empty_sections_setting);
