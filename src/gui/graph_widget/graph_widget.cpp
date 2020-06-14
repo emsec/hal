@@ -247,13 +247,13 @@ void graph_widget::substitute_by_visible_modules(const QSet<u32>& gates, const Q
             ++it;
         }
     }
-    qDebug() << "-----------";
-    qDebug() << "requested gates" << gates;
-    qDebug() << "requested modules" << modules;
-    qDebug() << "target gates" << target_gates;
-    qDebug() << "target modules" << target_modules;
-    qDebug() << "remove gates" << remove_gates;
-    qDebug() << "remove modules" << remove_modules;
+    // qDebug() << "-----------";
+    // qDebug() << "requested gates" << gates;
+    // qDebug() << "requested modules" << modules;
+    // qDebug() << "target gates" << target_gates;
+    // qDebug() << "target modules" << target_modules;
+    // qDebug() << "remove gates" << remove_gates;
+    // qDebug() << "remove modules" << remove_modules;
 }
 
 void graph_widget::set_modified_if_module()

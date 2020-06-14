@@ -119,7 +119,7 @@ void graph_navigation_widget_v2::hide_when_focus_lost(bool hide)
 
 void graph_navigation_widget_v2::keyPressEvent(QKeyEvent* event)
 {
-    qDebug() << "KeyDebug:" << "dn:" << (event->key() == Qt::Key_Down) << "/ up:" << (event->key() == Qt::Key_Up);
+    // qDebug() << "KeyDebug:" << "dn:" << (event->key() == Qt::Key_Down) << "/ up:" << (event->key() == Qt::Key_Up);
     if (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return || event->key() == Qt::Key_Right)
     {
         commit_selection();
@@ -208,7 +208,7 @@ void graph_navigation_widget_v2::fill_table(bool direction)
         std::shared_ptr<module> parent = g->get_module();
         bool reused_item;
         while(parent != common_ancestor) {
-            qDebug() << QString::fromStdString(parent->get_name());
+            // qDebug() << QString::fromStdString(parent->get_name());
             QTreeWidgetItem* parent_item;
             auto it = created_parents.find(parent->get_id());
             if (it != created_parents.end())
