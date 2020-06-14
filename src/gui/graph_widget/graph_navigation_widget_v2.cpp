@@ -48,8 +48,8 @@ void graph_navigation_widget_v2::setup(bool direction)
 
             assert(g);
 
-            std::string pin_type   = (direction ? g->get_output_pins() : g->get_input_pins())[g_selection_relay.m_subfocus_index];
-            std::shared_ptr<net> n = (direction ? g->get_fan_out_net(pin_type) : g->get_fan_in_net(pin_type));
+            std::string pin        = (direction ? g->get_output_pins() : g->get_input_pins())[g_selection_relay.m_subfocus_index];
+            std::shared_ptr<net> n = (direction ? g->get_fan_out_net(pin) : g->get_fan_in_net(pin));
 
             assert(n);
 
@@ -65,7 +65,7 @@ void graph_navigation_widget_v2::setup(bool direction)
             std::shared_ptr<net> n = g_netlist->get_net_by_id(g_selection_relay.m_focus_id);
 
             assert(n);
-            assert(n->get_num_of_sources());
+            assert(direction ? n->get_num_of_destinations() : n->get_num_of_sources());
 
             m_origin = hal::node{hal::node_type::gate, 0};
             m_via_net = n;
@@ -76,8 +76,30 @@ void graph_navigation_widget_v2::setup(bool direction)
         }
         case selection_relay::item_type::module:
         {
-            // TODO ???
+            std::shared_ptr<module> m = g_netlist->get_module_by_id(g_selection_relay.m_focus_id);
+
+            assert(m);
+
+            // FIXME this is super hacky because currently we have no way of
+            // properly indexing port names on modules (since no order is guaranteed
+            // on the port names (different to pin names in gates), but our GUI
+            // wants integer indexes)
+            // (what we use here is the fact that graphics_module builds its port
+            // list by traversing m->get_input_nets(), so we just use that order and
+            // hope nobody touches that implementation)
+            auto it = m->get_output_nets().begin();
+            if (g_selection_relay.m_subfocus_index > 0)
+                std::advance(it, g_selection_relay.m_subfocus_index);
+            auto n = *it;
+
+            assert(n);
+
+            m_origin = hal::node{hal::node_type::module, m->get_id()};
+            m_via_net = n;
+
+            fill_table(direction);
             return;
+
         }
     }
 }
@@ -161,7 +183,7 @@ void graph_navigation_widget_v2::fill_table(bool direction)
         {
             std::shared_ptr<module> origin = g_netlist->get_module_by_id(m_origin.id);
             assert(origin);
-            common_ancestor = gui_utility::first_common_ancestor({origin}, {origin});
+            common_ancestor = gui_utility::first_common_ancestor({origin}, {g});
         }
         else
         {

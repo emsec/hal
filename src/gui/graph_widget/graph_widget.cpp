@@ -556,31 +556,35 @@ void graph_widget::handle_navigation_left_request()
 
             if (g_selection_relay.m_subfocus == selection_relay::subfocus::left)
             {
-                // std::string pin_type   = g->get_input_pins()[g_selection_relay.m_subfocus_index];
-                // std::shared_ptr<net> n = g->get_fan_in_net(pin_type);
-
-                // if (!n)
-                //     return;
-
-                // if (n->get_num_of_sources() == 0)
-                // {
-                //     g_selection_relay.clear();
-                //     g_selection_relay.m_selected_nets.insert(n->get_id());
-                //     g_selection_relay.m_focus_type = selection_relay::item_type::net;
-                //     g_selection_relay.m_focus_id   = n->get_id();
-                //     g_selection_relay.relay_selection_changed(nullptr);
-                // }
-                // else if (n->get_num_of_sources() == 1)
-                // {
-                //     handle_navigation_jump_requested(hal::node{hal::node_type::gate, g->get_id()}, n->get_id(), {n->get_source().get_gate()->get_id()}, {});
-                // }
-                // else
-                // {
-                //     m_navigation_widget->setup(false);
-                //     m_navigation_widget->setFocus();
-                //     m_overlay->show();
-                // }
-                qDebug() << "not yet implemented";
+                // FIXME this is super hacky because currently we have no way of
+                // properly indexing port names on modules (since no order is guaranteed
+                // on the port names (different to pin names in gates), but our GUI
+                // wants integer indexes)
+                // (what we use here is the fact that graphics_module builds its port
+                // list by traversing m->get_input_nets(), so we just use that order and
+                // hope nobody touches that implementation)
+                auto it = m->get_input_nets().begin();
+                if (g_selection_relay.m_subfocus_index > 0)
+                    std::advance(it, g_selection_relay.m_subfocus_index);
+                auto n = *it;
+                if (n->get_num_of_sources() == 0)
+                {
+                    g_selection_relay.clear();
+                    g_selection_relay.m_selected_nets.insert(n->get_id());
+                    g_selection_relay.m_focus_type = selection_relay::item_type::net;
+                    g_selection_relay.m_focus_id   = n->get_id();
+                    g_selection_relay.relay_selection_changed(nullptr);
+                }
+                else if (n->get_num_of_sources() == 1)
+                {
+                    handle_navigation_jump_requested(hal::node{hal::node_type::module, m->get_id()}, n->get_id(), {n->get_sources()[0].get_gate()->get_id()}, {});
+                }
+                else
+                {
+                    m_navigation_widget_v2->setup(false);
+                    m_navigation_widget_v2->setFocus();
+                    m_overlay->show();
+                }
             }
             else if (m->get_input_nets().size())
             {
@@ -674,26 +678,35 @@ void graph_widget::handle_navigation_right_request()
 
             if (g_selection_relay.m_subfocus == selection_relay::subfocus::right)
             {
-            //     auto n = g->get_fan_out_net(g->get_output_pins()[g_selection_relay.m_subfocus_index]);
-            //     if (n->get_num_of_destinations() == 0)
-            //     {
-            //         g_selection_relay.clear();
-            //         g_selection_relay.m_selected_nets.insert(n->get_id());
-            //         g_selection_relay.m_focus_type = selection_relay::item_type::net;
-            //         g_selection_relay.m_focus_id   = n->get_id();
-            //         g_selection_relay.relay_selection_changed(nullptr);
-            //     }
-            //     else if (n->get_num_of_destinations() == 1)
-            //     {
-            //         handle_navigation_jump_requested(hal::node{hal::node_type::gate, g->get_id()}, n->get_id(), {n->get_destinations()[0].get_gate()->get_id()}, {});
-            //     }
-            //     else
-            //     {
-            //         m_navigation_widget->setup(true);
-            //         m_navigation_widget->setFocus();
-            //         m_overlay->show();
-            //     }
-                qDebug() << "not yet implemented";
+                // FIXME this is super hacky because currently we have no way of
+                // properly indexing port names on modules (since no order is guaranteed
+                // on the port names (different to pin names in gates), but our GUI
+                // wants integer indexes)
+                // (what we use here is the fact that graphics_module builds its port
+                // list by traversing m->get_input_nets(), so we just use that order and
+                // hope nobody touches that implementation)
+                auto it = m->get_output_nets().begin();
+                if (g_selection_relay.m_subfocus_index > 0)
+                    std::advance(it, g_selection_relay.m_subfocus_index);
+                auto n = *it;
+                if (n->get_num_of_destinations() == 0)
+                {
+                    g_selection_relay.clear();
+                    g_selection_relay.m_selected_nets.insert(n->get_id());
+                    g_selection_relay.m_focus_type = selection_relay::item_type::net;
+                    g_selection_relay.m_focus_id   = n->get_id();
+                    g_selection_relay.relay_selection_changed(nullptr);
+                }
+                else if (n->get_num_of_destinations() == 1)
+                {
+                    handle_navigation_jump_requested(hal::node{hal::node_type::module, m->get_id()}, n->get_id(), {n->get_destinations()[0].get_gate()->get_id()}, {});
+                }
+                else
+                {
+                    m_navigation_widget_v2->setup(true);
+                    m_navigation_widget_v2->setFocus();
+                    m_overlay->show();
+                }
             }
             else if (m->get_output_nets().size())
             {
