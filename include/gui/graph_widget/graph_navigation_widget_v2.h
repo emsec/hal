@@ -31,6 +31,7 @@ private Q_SLOTS:
     void handle_selection_changed();
 
 protected:
+    void focusOutEvent(QFocusEvent* event) override;
     void keyPressEvent(QKeyEvent* event) override;
 
 private:
