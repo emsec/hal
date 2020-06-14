@@ -139,6 +139,17 @@ void graph_navigation_widget_v2::fill_table(bool direction)
         if (m_origin.id == 0)
         {
             // we're navigating from a net
+            // in this case we don't really know how to limit our view,
+            // so we look for the common ancestor of all sources and sinks of
+            // this net and use that
+            auto net_sources = m_via_net->get_sources();
+            auto net_destinations = m_via_net->get_destinations();
+            std::unordered_set<std::shared_ptr<gate>> net_gates;
+            for (auto e : net_sources)
+                net_gates.insert(e.get_gate());
+            for (auto e : net_destinations)
+                net_gates.insert(e.get_gate());
+            common_ancestor = gui_utility::first_common_ancestor({}, net_gates);
         }
         else if (m_origin.type == hal::node_type::gate)
         {
