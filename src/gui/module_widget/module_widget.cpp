@@ -1,16 +1,12 @@
 #include "module_widget/module_widget.h"
 
-#include <core/log.h>
-
-#include "netlist/gate.h"
-#include "netlist/module.h"
-#include "netlist/net.h"
-
+#include "gui/graph_widget/contexts/graph_context.h"
 #include "gui/gui_globals.h"
 #include "gui/module_model/module_proxy_model.h"
 #include "gui/module_relay/module_relay.h"
-
-#include "gui/graph_widget/contexts/graph_context.h"
+#include "netlist/gate.h"
+#include "netlist/module.h"
+#include "netlist/net.h"
 
 #include <QHeaderView>
 #include <QItemSelectionModel>
@@ -22,10 +18,9 @@
 #include <QShortcut>
 #include <QTreeView>
 #include <QVBoxLayout>
+#include <core/log.h>
 
-module_widget::module_widget(QWidget* parent) : content_widget("Modules", parent),
-    m_tree_view(new module_tree_view(this)),
-    m_module_proxy_model(new module_proxy_model(this))
+module_widget::module_widget(QWidget* parent) : content_widget("Modules", parent), m_tree_view(new module_tree_view(this)), m_module_proxy_model(new module_proxy_model(this))
 {
     connect(m_tree_view, &QTreeView::customContextMenuRequested, this, &module_widget::handle_tree_view_context_menu_requested);
 
@@ -125,13 +120,14 @@ void module_widget::handle_tree_view_context_menu_requested(const QPoint& point)
     if (!clicked)
         return;
 
-    if(clicked == &isolate_action)
+    if (clicked == &isolate_action)
         open_module_in_view(index);
 
     if (clicked == &add_selection_action)
         g_netlist_relay.debug_add_selection_to_module(get_module_item_from_index(index)->id());
 
-    if (clicked == &add_child_action){
+    if (clicked == &add_child_action)
+    {
         g_netlist_relay.debug_add_child_module(get_module_item_from_index(index)->id());
         m_tree_view->setExpanded(index, true);
     }
@@ -148,6 +144,9 @@ void module_widget::handle_tree_view_context_menu_requested(const QPoint& point)
 
 void module_widget::handle_module_removed(std::shared_ptr<module> module, u32 module_id)
 {
+    UNUSED(module);
+    UNUSED(module_id);
+
     //prevents the execution of "handle_tree_selection_changed"
     //when a module is (re)moved the corresponding item in the tree is deleted and deselected, thus also triggering "handle_tree_selection_changed"
     //this call due to the selection model signals is unwanted behavior because "handle_tree_selection_changed" is ment to only react to an "real" action performed by the user on the tree itself
@@ -159,58 +158,58 @@ void module_widget::handle_tree_selection_changed(const QItemSelection& selected
     Q_UNUSED(selected)
     Q_UNUSED(deselected)
 
-    if(m_ignore_selection_change || g_netlist_relay.get_module_model()->is_modifying())
+    if (m_ignore_selection_change || g_netlist_relay.get_module_model()->is_modifying())
         return;
 
     g_selection_relay.clear();
 
     QModelIndexList current_selection = m_tree_view->selectionModel()->selectedIndexes();
 
-    for(const auto &index : current_selection)
+    for (const auto& index : current_selection)
     {
         u32 module_id = get_module_item_from_index(index)->id();
         g_selection_relay.m_selected_modules.insert(module_id);
     }
-    
-    if(current_selection.size() == 1)
+
+    if (current_selection.size() == 1)
     {
         g_selection_relay.m_focus_type = selection_relay::item_type::module;
-        g_selection_relay.m_focus_id = g_netlist_relay.get_module_model()->get_item(m_module_proxy_model->mapToSource(current_selection.first()))->id();
+        g_selection_relay.m_focus_id   = g_netlist_relay.get_module_model()->get_item(m_module_proxy_model->mapToSource(current_selection.first()))->id();
     }
 
     g_selection_relay.relay_selection_changed(this);
 }
 
-void module_widget::handle_item_double_clicked(const QModelIndex &index)
+void module_widget::handle_item_double_clicked(const QModelIndex& index)
 {
     open_module_in_view(index);
 }
 
-void module_widget::open_module_in_view(const QModelIndex &index)
+void module_widget::open_module_in_view(const QModelIndex& index)
 {
     auto module = g_netlist->get_module_by_id(get_module_item_from_index(index)->id());
 
-    if(!module)
+    if (!module)
         return;
 
     graph_context* new_context = nullptr;
-    new_context = g_graph_context_manager.create_new_context(QString::fromStdString(module->get_name()));
+    new_context                = g_graph_context_manager.create_new_context(QString::fromStdString(module->get_name()));
     new_context->add({module->get_id()}, {});
 }
 
 void module_widget::handle_selection_changed(void* sender)
 {
-    if(sender == this)
+    if (sender == this)
         return;
 
     m_ignore_selection_change = true;
 
     QItemSelection module_selection;
 
-    for(auto module_id : g_selection_relay.m_selected_modules)
+    for (auto module_id : g_selection_relay.m_selected_modules)
     {
         QModelIndex index = m_module_proxy_model->mapFromSource(g_netlist_relay.get_module_model()->get_index(g_netlist_relay.get_module_model()->get_item(module_id)));
-        module_selection.select(index,index);
+        module_selection.select(index, index);
     }
 
     m_tree_view->selectionModel()->select(module_selection, QItemSelectionModel::SelectionFlag::ClearAndSelect);
@@ -218,7 +217,7 @@ void module_widget::handle_selection_changed(void* sender)
     m_ignore_selection_change = false;
 }
 
-module_item* module_widget::get_module_item_from_index(const QModelIndex &index)
+module_item* module_widget::get_module_item_from_index(const QModelIndex& index)
 {
     return g_netlist_relay.get_module_model()->get_item(m_module_proxy_model->mapToSource(index));
 }
