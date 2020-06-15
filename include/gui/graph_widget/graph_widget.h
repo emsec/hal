@@ -37,6 +37,7 @@ class graph_context;
 class graph_graphics_view;
 class graph_layout_spinner_widget;
 class graph_navigation_widget;
+class graph_navigation_widget_v2;
 
 class graph_widget : public content_widget, public graph_context_subscriber
 {
@@ -62,7 +63,7 @@ protected:
     void keyPressEvent(QKeyEvent* event) override;
 
 private Q_SLOTS:
-    void handle_navigation_jump_requested(const hal::node origin, const u32 via_net, const QSet<u32>& to_gates);
+    void handle_navigation_jump_requested(const hal::node origin, const u32 via_net, const QSet<u32>& to_gates, const QSet<u32>& to_modules);
     void handle_module_double_clicked(const u32 id);
     void reset_focus();
 
@@ -72,15 +73,19 @@ private:
     void handle_navigation_up_request();
     void handle_navigation_down_request();
 
+    void substitute_by_visible_modules(const QSet<u32>& gates, const QSet<u32>& modules, QSet<u32>& insert_gates, QSet<u32>& insert_modules,
+                                       QSet<u32>& remove_gates, QSet<u32>& remove_modules) const;
+    void set_modified_if_module();
+
     void handle_enter_module_requested(const u32 id);
 
-    void ensure_gates_visible(const QSet<u32> gates);
+    void ensure_items_visible(const QSet<u32>& gates, const QSet<u32>& modules);
 
     graph_graphics_view* m_view;
     graph_context* m_context;
 
     dialog_overlay* m_overlay;
-    graph_navigation_widget* m_navigation_widget;
+    graph_navigation_widget_v2* m_navigation_widget_v2;
     graph_layout_spinner_widget* m_spinner_widget;
 
     u32 m_current_expansion;

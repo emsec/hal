@@ -35,13 +35,25 @@ namespace gui_utility
         {
             return nullptr;
         }
-        // resolve all gates to their parent modules, since we don't want to work with gates
+        std::unordered_set<std::shared_ptr<module>> modules_resolved;
+        // resolve all modules to their parent modules (otherwise a module could be returned as
+        // its own parent)
+        for (const auto& m : modules)
+        {
+            auto p = m->get_parent_module();
+            // this happens m is the top module (which has no parents, thus we can't find
+            // any common ancestors)
+            if (p == nullptr)
+                return nullptr;
+            modules_resolved.insert(p);
+        }
+        // resolve all gates to their parent modules, since we don't want to work with gates at all
         for (const auto& g : gates)
         {
-            modules.insert(g->get_module());
+            modules_resolved.insert(g->get_module());
         }
         // pick two modules and resolve them to their first common ancestor,
-        auto module_list = std::vector<std::shared_ptr<module>>(modules.begin(), modules.end());
+        auto module_list = std::vector<std::shared_ptr<module>>(modules_resolved.begin(), modules_resolved.end());
         auto result      = module_list[0];
         for (u32 i = 1; i < module_list.size(); ++i)
         {
@@ -56,4 +68,23 @@ namespace gui_utility
         return result;
     }
 
+    QSet<u32> parent_modules(std::shared_ptr<module> m)
+    {
+        assert(m);
+        QSet<u32> parents;
+        while (m = m->get_parent_module())
+        {
+            parents.insert(m->get_id());
+        }
+        return parents;
+    }
+
+    QSet<u32> parent_modules(std::shared_ptr<gate> g)
+    {
+        assert(g);
+        std::shared_ptr<module> m = g->get_module();
+        QSet<u32> parents = parent_modules(m);
+        parents.insert(m->get_id());
+        return parents;
+    }
 }    // namespace gui_utility

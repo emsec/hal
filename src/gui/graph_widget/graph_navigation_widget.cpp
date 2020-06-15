@@ -62,7 +62,7 @@ void graph_navigation_widget::setup(bool direction)
             std::shared_ptr<net> n = g_netlist->get_net_by_id(g_selection_relay.m_focus_id);
 
             assert(n);
-            assert(n->get_num_of_sources());
+            assert(direction ? n->get_num_of_destinations() : n->get_num_of_sources());
 
             m_origin = hal::node{hal::node_type::gate, 0};
             
@@ -237,7 +237,7 @@ void graph_navigation_widget::commit_selection()
                 gates.insert(g->get_id());
             }
         }
-        Q_EMIT navigation_requested(m_origin, m_via_net, gates);
+        Q_EMIT navigation_requested(m_origin, m_via_net, gates, {});
         return;
     }
 
@@ -248,6 +248,6 @@ void graph_navigation_widget::commit_selection()
         return;
     }
 
-    Q_EMIT navigation_requested(m_origin, m_via_net, {g->get_id()});
+    Q_EMIT navigation_requested(m_origin, m_via_net, {g->get_id()}, {});
     return;
 }
