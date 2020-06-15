@@ -25,12 +25,11 @@
 #define PYTHON_WIDGET_H
 
 #include "code_editor/code_editor.h"
-
 #include "content_widget/content_widget.h"
-#include "python/python_context_suberscriber.h"
 #include "core/hal_file_manager.h"
 #include "file_modified_bar/file_modified_bar.h"
 #include "hal_action/hal_action.h"
+#include "python/python_context_suberscriber.h"
 
 #include <QEvent>
 #include <QFileSystemWatcher>
@@ -45,7 +44,6 @@ class toolbar;
 class QVBoxLayout;
 class QTabWidget;
 class python_code_editor;
-
 
 class python_editor : public content_widget, public python_context_subscriber
 {
@@ -124,13 +122,13 @@ public:
     void set_run_icon_style(const QString& style);
 
     void set_new_file_icon_path(const QString& path);
-    void set_new_file_icon_style(const QString &style);
+    void set_new_file_icon_style(const QString& style);
 
     void set_toggle_minimap_icon_path(const QString& path);
     void set_toggle_minimap_icon_style(const QString& style);
 
-    bool handle_serialization_to_hal_file(const hal::path& path, std::shared_ptr<netlist> netlist, rapidjson::Document& document);
-    bool handle_deserialization_from_hal_file(const hal::path& path, std::shared_ptr<netlist> netlist, rapidjson::Document& document);
+    bool handle_serialization_to_hal_file(const std::filesystem::path& path, std::shared_ptr<netlist> netlist, rapidjson::Document& document);
+    bool handle_deserialization_from_hal_file(const std::filesystem::path& path, std::shared_ptr<netlist> netlist, rapidjson::Document& document);
 
 Q_SIGNALS:
     void forward_stdout(const QString& output);
@@ -143,7 +141,7 @@ public Q_SLOTS:
     void handle_modification_changed(bool changed);
     void handle_key_pressed();
     void handle_text_changed();
-    void handle_searchbar_text_edited(const QString &text);
+    void handle_searchbar_text_edited(const QString& text);
     void handle_current_tab_changed(int index);
     void handle_tab_file_changed(QString path);
 

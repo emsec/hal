@@ -10,6 +10,7 @@
 #include <boost/graph/dijkstra_shortest_paths.hpp>
 #include <boost/graph/graph_traits.hpp>
 
+namespace hal {
 std::map<std::shared_ptr<gate>, std::tuple<std::vector<std::shared_ptr<gate>>, int>> plugin_graph_algorithm::get_dijkstra_shortest_paths(const std::shared_ptr<gate> g)
 {
     if (g == nullptr)
@@ -108,4 +109,5 @@ std::map<std::shared_ptr<gate>, std::tuple<std::vector<std::shared_ptr<gate>>, i
         }
     }
     return result;
+}
 }

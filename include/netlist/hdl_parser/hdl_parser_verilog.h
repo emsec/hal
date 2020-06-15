@@ -34,50 +34,53 @@
 #include <unordered_set>
 #include <utility>
 
-/**
- * @ingroup hdl_parsers
- */
-class HDL_PARSER_API hdl_parser_verilog : public hdl_parser<std::string>
+namespace hal
 {
-public:
     /**
-     * @param[in] stream - The string stream filled with the hdl code.
+     * @ingroup hdl_parsers
      */
-    explicit hdl_parser_verilog(std::stringstream& stream);
+    class HDL_PARSER_API hdl_parser_verilog : public hdl_parser<std::string>
+    {
+    public:
+        /**
+         * @param[in] stream - The string stream filled with the hdl code.
+         */
+        explicit hdl_parser_verilog(std::stringstream& stream);
 
-    ~hdl_parser_verilog() = default;
+        ~hdl_parser_verilog() = default;
 
-    /**
-     * Deserializes a netlist in Verilog format from the internal string stream into a netlist object.
-     *
-     * @param[in] gate_library - The gate library used in the serialized file.
-     * @returns The deserialized netlist.
-     */
-    bool parse() override;
+        /**
+         * Deserializes a netlist in Verilog format from the internal string stream into a netlist object.
+         *
+         * @param[in] gate_library - The gate library used in the serialized file.
+         * @returns The deserialized netlist.
+         */
+        bool parse() override;
 
-private:
-    token_stream<std::string> m_token_stream;
+    private:
+        token_stream<std::string> m_token_stream;
 
-    bool tokenize();
-    bool parse_tokens();
+        bool tokenize();
+        bool parse_tokens();
 
-    // parse HDL into intermediate format
-    bool parse_entity(std::map<std::string, std::string>& attributes);
-    void parse_port_list(std::set<std::string>& port_names);
-    bool parse_port_definition(entity& e, const std::set<std::string>& port_names, std::map<std::string, std::string>& attributes);
-    bool parse_signal_definition(entity& e, std::map<std::string, std::string>& attributes);
-    bool parse_assign(entity& e);
-    bool parse_attribute(std::map<std::string, std::string>& attributes);
-    bool parse_instance(entity& e, std::map<std::string, std::string>& attributes);
-    bool parse_port_assign(entity& e, instance& inst);
-    bool parse_generic_assign(instance& inst);
+        // parse HDL into intermediate format
+        bool parse_entity(std::map<std::string, std::string>& attributes);
+        void parse_port_list(std::set<std::string>& port_names);
+        bool parse_port_definition(entity& e, const std::set<std::string>& port_names, std::map<std::string, std::string>& attributes);
+        bool parse_signal_definition(entity& e, std::map<std::string, std::string>& attributes);
+        bool parse_assign(entity& e);
+        bool parse_attribute(std::map<std::string, std::string>& attributes);
+        bool parse_instance(entity& e, std::map<std::string, std::string>& attributes);
+        bool parse_port_assign(entity& e, instance& inst);
+        bool parse_generic_assign(instance& inst);
 
-    // helper functions
-    void remove_comments(std::string& line, bool& multi_line_comment);
-    std::vector<u32> parse_range(token_stream<std::string>& range_str);
-    std::map<std::string, signal> parse_signal_list();
-    std::optional<std::pair<std::vector<signal>, i32>> get_assignment_signals(entity& e, token_stream<std::string>& signal_str, bool allow_numerics);
-    std::string get_bin_from_literal(const token<std::string>& value_token);
-    std::string get_hex_from_literal(const token<std::string>& value_token);
-    bool is_in_bounds(const std::vector<std::pair<i32, i32>>& bounds, const std::vector<std::pair<i32, i32>>& reference_bounds) const;
-};
+        // helper functions
+        void remove_comments(std::string& line, bool& multi_line_comment);
+        std::vector<u32> parse_range(token_stream<std::string>& range_str);
+        std::map<std::string, signal> parse_signal_list();
+        std::optional<std::pair<std::vector<signal>, i32>> get_assignment_signals(entity& e, token_stream<std::string>& signal_str, bool allow_numerics);
+        std::string get_bin_from_literal(const token<std::string>& value_token);
+        std::string get_hex_from_literal(const token<std::string>& value_token);
+        bool is_in_bounds(const std::vector<std::pair<i32, i32>>& bounds, const std::vector<std::pair<i32, i32>>& reference_bounds) const;
+    };
+}    // namespace hal

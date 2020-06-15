@@ -26,19 +26,19 @@
  */
 
 /**
-	 * @defgroup persistent Persistency
-	 * @ingroup netlist
-	 */
+ * @defgroup persistent Persistency
+ * @ingroup netlist
+ */
 
 /**
-	 * @defgroup handler Event Handler
-	 * @ingroup netlist
-	 */
+ * @defgroup handler Event Handler
+ * @ingroup netlist
+ */
 
 /**
-	 * @defgroup submodule Submodule Information
-	 * @ingroup netlist
-	 */
+ * @defgroup submodule Submodule Information
+ * @ingroup netlist
+ */
 
 /**
  * @defgroup core HAL Core

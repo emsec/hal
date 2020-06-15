@@ -29,36 +29,39 @@
 
 #include <sstream>
 
-/* forward declaration*/
-class netlist;
-
-/**
- * @ingroup netlist
- */
-class NETLIST_API gate_library_parser
+namespace hal
 {
-public:
-    /**
-     * @param[in] stream - The string stream filled with gate library definition.
-     */
-    explicit gate_library_parser(const hal::path& file_path, std::stringstream& file_content);
-
-    virtual ~gate_library_parser() = default;
+    /* forward declaration*/
+    class netlist;
 
     /**
-     * Parses the gate library definition file.
-     *
-     * @returns The gate library or a nullptr on error.
+     * @ingroup netlist
      */
-    virtual std::shared_ptr<gate_library> parse() = 0;
+    class NETLIST_API gate_library_parser
+    {
+    public:
+        /**
+         * @param[in] stream - The string stream filled with gate library definition.
+         */
+        explicit gate_library_parser(const std::filesystem::path& file_path, std::stringstream& file_content);
 
-protected:
-    // stores the gate library
-    std::shared_ptr<gate_library> m_gate_lib;
+        virtual ~gate_library_parser() = default;
 
-    // stores the input stream to the file
-    std::stringstream& m_fs;
+        /**
+         * Parses the gate library definition file.
+         *
+         * @returns The gate library or a nullptr on error.
+         */
+        virtual std::shared_ptr<gate_library> parse() = 0;
 
-    // stores the path to the parsed file
-    hal::path m_path;
-};
+    protected:
+        // stores the gate library
+        std::shared_ptr<gate_library> m_gate_lib;
+
+        // stores the input stream to the file
+        std::stringstream& m_fs;
+
+        // stores the path to the parsed file
+        std::filesystem::path m_path;
+    };
+}    // namespace hal

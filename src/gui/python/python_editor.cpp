@@ -1,32 +1,29 @@
 #include "python/python_editor.h"
-#include "python/python_code_editor.h"
-#include "python/python_editor_code_completion_dialog.h"
 
 #include "code_editor/syntax_highlighter/python_syntax_highlighter.h"
 #include "core/log.h"
-
 #include "graph_widget/contexts/graph_context.h"
 #include "gui_globals.h"
 #include "gui_utils/graphics.h"
+#include "hal_action/hal_action.h"
+#include "python/python_code_editor.h"
+#include "python/python_editor_code_completion_dialog.h"
 #include "searchbar/searchbar.h"
 #include "splitter/splitter.h"
 #include "toolbar/toolbar.h"
 
-#include "hal_action/hal_action.h"
-
 #include <QAction>
+#include <QDebug>
 #include <QFileDialog>
+#include <QFileInfo>
+#include <QMenu>
+#include <QMessageBox>
 #include <QShortcut>
+#include <QTabBar>
 #include <QTextDocumentFragment>
 #include <QTextStream>
 #include <QToolButton>
 #include <QVBoxLayout>
-
-#include <QDebug>
-#include <QFileInfo>
-#include <QMenu>
-#include <QMessageBox>
-#include <QTabBar>
 #include <chrono>
 #include <fstream>
 
@@ -100,7 +97,7 @@ python_editor::python_editor(QWidget* parent)
     hal_file_manager::register_on_deserialize_callback("python_editor", std::bind(&python_editor::handle_deserialization_from_hal_file, this, _1, _2, _3));
 }
 
-bool python_editor::handle_serialization_to_hal_file(const hal::path& path, std::shared_ptr<netlist> netlist, rapidjson::Document& document)
+bool python_editor::handle_serialization_to_hal_file(const std::filesystem::path& path, std::shared_ptr<netlist> netlist, rapidjson::Document& document)
 {
     UNUSED(path);
     UNUSED(netlist);
@@ -140,7 +137,7 @@ bool python_editor::handle_serialization_to_hal_file(const hal::path& path, std:
     return true;
 }
 
-bool python_editor::handle_deserialization_from_hal_file(const hal::path& path, std::shared_ptr<netlist> netlist, rapidjson::Document& document)
+bool python_editor::handle_deserialization_from_hal_file(const std::filesystem::path& path, std::shared_ptr<netlist> netlist, rapidjson::Document& document)
 {
     UNUSED(path);
     UNUSED(netlist);

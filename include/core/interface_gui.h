@@ -26,23 +26,26 @@
 #include "core/interface_base.h"
 #include "def.h"
 
-/* foward declaration */
-class netlist;
-
-/**
- * @ingroup core
- */
-class CORE_API i_gui : virtual public i_base
+namespace hal
 {
-public:
-    i_gui()          = default;
-    virtual ~i_gui() = default;
+    /* foward declaration */
+    class netlist;
 
     /**
-     * Generic call to run the GUI.
-     *
-     * @param[in] netlist - The netlist object for the GUI.
-	 * @returns True on success.
+     * @ingroup core
      */
-    virtual bool exec(std::shared_ptr<netlist> netlist) = 0;
-};
+    class CORE_API i_gui : virtual public i_base
+    {
+    public:
+        i_gui()          = default;
+        virtual ~i_gui() = default;
+
+        /**
+         * Generic call to run the GUI.
+         *
+         * @param[in] netlist - The netlist object for the GUI.
+         * @returns True on success.
+         */
+        virtual bool exec(std::shared_ptr<netlist> netlist) = 0;
+    };
+}    // namespace hal

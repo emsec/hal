@@ -27,53 +27,56 @@
 #include "def.h"
 #include "netlist/gate_library/gate_library.h"
 
-/* forward declaration */
-class netlist;
-class gate_library;
-
-/**
- * @file
- */
-
-/**
- * \namespace netlist_factory
- * @ingroup netlist
- */
-namespace netlist_factory
+namespace hal
 {
-    /**
-     * Creates a new netlist for a specific gate library.
-     *
-     * @param[in] gate_library - The underlying gate library.
-     * @returns The new netlist.
-     */
-    NETLIST_API std::shared_ptr<netlist> create_netlist(const std::shared_ptr<gate_library>& gate_library);
+    /* forward declaration */
+    class netlist;
+    class gate_library;
 
     /**
-     * Creates a new netlist for a specific file.
-     *
-     * @param[in] hdl_file - Name of the hdl file.
-     * @param[in] language - Programming language used in \p file_name.
-     * @param[in] gate_library_file - Name of hardware gate library file.
-     * @returns The new netlist.
+     * @file
      */
-    NETLIST_API std::shared_ptr<netlist> load_netlist(const hal::path& hdl_file, const std::string& language, const hal::path& gate_library_file);
 
     /**
-     * Creates a new netlist for a specific '.hal' file.
-     *
-     * @param[in] hal_file - Name of the '.hal' file.
-     * file.
-     * @returns The new netlist.
+     * \namespace netlist_factory
+     * @ingroup netlist
      */
-    NETLIST_API std::shared_ptr<netlist> load_netlist(const hal::path& hal_file);
+    namespace netlist_factory
+    {
+        /**
+         * Creates a new netlist for a specific gate library.
+         *
+         * @param[in] gate_library - The underlying gate library.
+         * @returns The new netlist.
+         */
+        NETLIST_API std::shared_ptr<netlist> create_netlist(const std::shared_ptr<gate_library>& gate_library);
 
-    /**
-     * Creates a new netlist entirely from program options.
-     * Invokes parsers or serializers as needed.<br>
-     *
-     * @param[in] args - Command line options.
-     * @returns The new netlist.
-     */
-    NETLIST_API std::shared_ptr<netlist> load_netlist(const program_arguments& args);
-}    // namespace netlist_factory
+        /**
+         * Creates a new netlist for a specific file.
+         *
+         * @param[in] hdl_file - Name of the hdl file.
+         * @param[in] language - Programming language used in \p file_name.
+         * @param[in] gate_library_file - Name of hardware gate library file.
+         * @returns The new netlist.
+         */
+        NETLIST_API std::shared_ptr<netlist> load_netlist(const std::filesystem::path& hdl_file, const std::string& language, const std::filesystem::path& gate_library_file);
+
+        /**
+         * Creates a new netlist for a specific '.hal' file.
+         *
+         * @param[in] hal_file - Name of the '.hal' file.
+         * file.
+         * @returns The new netlist.
+         */
+        NETLIST_API std::shared_ptr<netlist> load_netlist(const std::filesystem::path& hal_file);
+
+        /**
+         * Creates a new netlist entirely from program options.
+         * Invokes parsers or serializers as needed.<br>
+         *
+         * @param[in] args - Command line options.
+         * @returns The new netlist.
+         */
+        NETLIST_API std::shared_ptr<netlist> load_netlist(const program_arguments& args);
+    }    // namespace netlist_factory
+}    // namespace hal

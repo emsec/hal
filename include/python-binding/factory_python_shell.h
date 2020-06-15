@@ -25,20 +25,23 @@
 
 #include "core/interface_factory.h"
 
-class factory_python_shell : public i_factory
+namespace hal
 {
-public:
-    /**
-     * Create a new plugin instance.
-     *
-     * @returns A shared pointer to the new plugin instance.
-     */
-    virtual std::shared_ptr<i_base> get_plugin_instance() override;
-};
+    class factory_python_shell : public i_factory
+    {
+    public:
+        /**
+         * Create a new plugin instance.
+         *
+         * @returns A shared pointer to the new plugin instance.
+         */
+        virtual std::shared_ptr<i_base> get_plugin_instance() override;
+    };
 
-/**
- * Get the (static) factory instance.
- *
- * @returns The factory instance.
- */
-extern "C" PLUGIN_API i_factory* get_factory();
+    /**
+     * Get the (static) factory instance.
+     *
+     * @returns The factory instance.
+     */
+    extern "C" PLUGIN_API i_factory* get_factory();
+}    // namespace hal

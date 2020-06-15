@@ -2,33 +2,31 @@
 #include "netlist_test_utils.h"
 
 #include <core/utils.h>
-
 #include <math.h>
 
+void test_utils::init_log_channels()
+{
+    // All channels that are registered:
+    static bool already_init = false;
+    if (!already_init)
+    {
+        std::vector<std::string> channel_ids = {
+            "core", "gate_library_manager", "liberty_parser", "netlist", "module", "netlist.internal", "netlist.persistent", "hdl_parser", "hdl_writer", "python_context"};
 
-
-void test_utils::init_log_channels(){
-        // All channels that are registered:
-        static bool already_init = false;
-        if(!already_init) {
-            std::vector<std::string> channel_ids =
-                    {"core", "gate_library_manager", "liberty_parser", "netlist", "module", "netlist.internal",
-                     "netlist.persistent", "hdl_parser", "hdl_writer", "python_context"};
-
-            log_manager &lm = log_manager::get_instance();
-            for (std::string ch_id : channel_ids) {
-                lm.add_channel(ch_id, {log_manager::create_stdout_sink()}, "info");
-            }
-            already_init = true;
+        log_manager& lm = log_manager::get_instance();
+        for (std::string ch_id : channel_ids)
+        {
+            lm.add_channel(ch_id, {log_manager::create_stdout_sink()}, "info");
         }
-
+        already_init = true;
+    }
 }
 
 std::shared_ptr<netlist> test_utils::create_empty_netlist(const int id)
 {
     NO_COUT_BLOCK;
     // std::shared_ptr<gate_library> gl = gate_library_manager::get_gate_library(g_lib_name);
-    std::shared_ptr<netlist> nl      = std::make_shared<netlist>(get_testing_gate_library());
+    std::shared_ptr<netlist> nl = std::make_shared<netlist>(get_testing_gate_library());
 
     if (id >= 0)
     {
@@ -70,29 +68,34 @@ bool test_utils::is_empty(const endpoint& ep)
 std::vector<boolean_function::value> test_utils::minimize_truth_table(const std::vector<boolean_function::value> tt)
 {
     int var_amt = round(log2(tt.size()));
-    if((1 << var_amt) != tt.size()){
+    if ((1 << var_amt) != tt.size())
+    {
         std::cerr << "[Test] minimize_truth_table: Tablesize must be a power of two!" << std::endl;
         return std::vector<boolean_function::value>();
     }
-    for(int v = 0; v < var_amt; v++){
+    for (int v = 0; v < var_amt; v++)
+    {
         int interval = 2 << v;
         std::vector<boolean_function::value> v_eq_0;
         std::vector<boolean_function::value> v_eq_1;
-        for (int i = 0; i < tt.size(); i++){
-            if (i%interval < (interval >> 1)){
+        for (int i = 0; i < tt.size(); i++)
+        {
+            if (i % interval < (interval >> 1))
+            {
                 v_eq_0.push_back(tt[i]);
             }
-            else{
+            else
+            {
                 v_eq_1.push_back(tt[i]);
             }
         }
-        if(v_eq_0 == v_eq_1){
+        if (v_eq_0 == v_eq_1)
+        {
             return minimize_truth_table(v_eq_0);
         }
     }
     return tt;
 }
-
 
 std::shared_ptr<const gate_type> test_utils::get_gate_type_by_name(std::string name, std::shared_ptr<gate_library> gate_lib)
 {
@@ -167,9 +170,9 @@ std::shared_ptr<gate> test_utils::get_gate_by_subname(std::shared_ptr<netlist> n
     return res;
 }
 
-hal::path test_utils::create_sandbox_directory()
+std::filesystem::path test_utils::create_sandbox_directory()
 {
-    hal::path sb_path = core_utils::get_base_directory() / sandbox_directory_path;
+    std::filesystem::path sb_path = core_utils::get_base_directory() / sandbox_directory_path;
     fs::create_directory(sb_path);
     return sb_path;
 }
@@ -179,27 +182,29 @@ void test_utils::remove_sandbox_directory()
     fs::remove_all((core_utils::get_base_directory() / sandbox_directory_path));
 }
 
-hal::path test_utils::create_sandbox_path(const std::string file_name)
+std::filesystem::path test_utils::create_sandbox_path(const std::string file_name)
 {
-    hal::path sb_path = (core_utils::get_base_directory() / sandbox_directory_path);
-    if(!fs::exists(sb_path)){
+    std::filesystem::path sb_path = (core_utils::get_base_directory() / sandbox_directory_path);
+    if (!fs::exists(sb_path))
+    {
         std::cerr << "[netlist_test_utils] create_sandbox_path: sandbox is not created yet. "
                   << "Please use \'create_sandbox_directory()\' to create it beforehand.";
-        return hal::path();
+        return std::filesystem::path();
     }
     return sb_path / file_name;
 }
 
-hal::path test_utils::create_sandbox_file(std::string file_name, std::string content)
+std::filesystem::path test_utils::create_sandbox_file(std::string file_name, std::string content)
 {
-    hal::path sb_path = (core_utils::get_base_directory() / sandbox_directory_path);
-    if(!fs::exists(sb_path)){
+    std::filesystem::path sb_path = (core_utils::get_base_directory() / sandbox_directory_path);
+    if (!fs::exists(sb_path))
+    {
         std::cerr << "[netlist_test_utils] create_sandbox_file: sandbox is not created yet. "
                   << "Please use \'create_sandbox_directory()\' to create it beforehand.";
-        return hal::path();
+        return std::filesystem::path();
     }
-    hal::path f_path = sb_path / file_name;
-    std::ofstream sb_file( f_path.string() );
+    std::filesystem::path f_path = sb_path / file_name;
+    std::ofstream sb_file(f_path.string());
     sb_file << content;
     sb_file.close();
     return f_path;
@@ -209,7 +214,8 @@ std::shared_ptr<gate_library> test_utils::get_testing_gate_library()
 {
     //std::shared_ptr<gate_library> gl = std::make_shared<gate_library>("Testing Library");
     static std::shared_ptr<gate_library> gl = nullptr;
-    if (gl != nullptr){
+    if (gl != nullptr)
+    {
         return gl;
     }
     gl = std::make_shared<gate_library>("imaginary_path", "Testing Library");
@@ -567,31 +573,32 @@ bool test_utils::modules_are_equal(const std::shared_ptr<module> m_0, const std:
     if (m_0->get_input_port_names().size() != m_0->get_input_port_names().size())
         return false;
     auto m_1_input_port_names = m_1->get_input_port_names();
-    for (auto const& [n_0, p_name_0] : m_0->get_input_port_names()){
+    for (auto const& [n_0, p_name_0] : m_0->get_input_port_names())
+    {
         auto n_1_list = m_1->get_netlist()->get_nets(net_name_filter(n_0->get_name()));
         if (n_1_list.size() != 1)
             return false;
         std::shared_ptr<net> n_1 = *n_1_list.begin();
         if (m_1_input_port_names.find(n_1) == m_1_input_port_names.end())
             return false;
-        if(m_1_input_port_names[n_1] != p_name_0)
+        if (m_1_input_port_names[n_1] != p_name_0)
             return false;
     }
     // -- output ports
     if (m_0->get_output_port_names().size() != m_0->get_output_port_names().size())
         return false;
     auto m_1_output_port_names = m_1->get_output_port_names();
-    for (auto const& [n_0, p_name_0] : m_0->get_output_port_names()){
+    for (auto const& [n_0, p_name_0] : m_0->get_output_port_names())
+    {
         auto n_1_list = m_1->get_netlist()->get_nets(net_name_filter(n_0->get_name()));
         if (n_1_list.size() != 1)
             return false;
         std::shared_ptr<net> n_1 = *n_1_list.begin();
         if (m_1_output_port_names.find(n_1) == m_1_output_port_names.end())
             return false;
-        if(m_1_output_port_names[n_1] != p_name_0)
+        if (m_1_output_port_names[n_1] != p_name_0)
             return false;
     }
-
 
     // The parents and submodules should be equal as well (to test this we only check their id, since
     // their equality will be tested as well)

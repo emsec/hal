@@ -23,6 +23,8 @@
 #define SUCCESS 0
 #define ERROR 1
 
+using namespace hal;
+
 void initialize_cli_options(program_options& cli_options)
 {
     program_options generic_options("generic options");
@@ -121,7 +123,7 @@ int main(int argc, const char* argv[])
 
     if (args.is_option_set("--logfile"))
     {
-        lm.set_file_name(hal::path(args.get_parameter("--logfile")));
+        lm.set_file_name(std::filesystem::path(args.get_parameter("--logfile")));
     }
     lm.handle_options(args);
 
@@ -219,16 +221,16 @@ int main(int argc, const char* argv[])
         return cleanup();
     }
 
-    hal::path file_name;
+    std::filesystem::path file_name;
     std::shared_ptr<netlist> netlist;
 
     if (args.is_option_set("--empty-netlist"))
     {
-        file_name = hal::path("./empty_netlist.hal");
+        file_name = std::filesystem::path("./empty_netlist.hal");
     }
     else
     {
-        file_name = hal::path(args.get_parameter("--input-file"));
+        file_name = std::filesystem::path(args.get_parameter("--input-file"));
     }
 
     if (args.is_option_set("--no-log"))

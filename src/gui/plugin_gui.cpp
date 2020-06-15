@@ -3,12 +3,10 @@
 #include "core/log.h"
 #include "core/plugin_manager.h"
 #include "core/utils.h"
-
-#include "netlist/gate_library/gate_library_manager.h"
-
 #include "gui/file_manager/file_manager.h"
 #include "gui/file_status_manager/file_status_manager.h"
 #include "gui/graph_widget/graph_context_manager.h"
+#include "gui/gui_api/gui_api.h"
 #include "gui/hal_content_manager/hal_content_manager.h"
 #include "gui/main_window/main_window.h"
 #include "gui/netlist_relay/netlist_relay.h"
@@ -22,9 +20,7 @@
 #include "gui/style/style.h"
 #include "gui/thread_pool/thread_pool.h"
 #include "gui/window_manager/window_manager.h"
-#include "gui/gui_api/gui_api.h"
-
-#include <signal.h>
+#include "netlist/gate_library/gate_library_manager.h"
 
 #include <QApplication>
 #include <QFile>
@@ -35,6 +31,7 @@
 #include <QSettings>
 #include <QString>
 #include <gui/focus_logger/focus_logger.h>
+#include <signal.h>
 
 QSettings g_settings(QString::fromStdString((core_utils::get_user_config_directory() / "guisettings.ini").string()), QSettings::IniFormat);
 QSettings g_gui_state(QString::fromStdString((core_utils::get_user_config_directory() / "guistate.ini").string()), QSettings::IniFormat);
@@ -75,7 +72,7 @@ static void handle_program_arguments(const program_arguments& args)
 {
     if (args.is_option_set("--input-file"))
     {
-        auto file_name = hal::path(args.get_parameter("--input-file"));
+        auto file_name = std::filesystem::path(args.get_parameter("--input-file"));
         log_info("gui", "GUI started with file {}.", file_name.string());
         file_manager::get_instance()->open_file(QString::fromStdString(file_name.string()));
     }

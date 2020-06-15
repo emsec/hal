@@ -23,14 +23,14 @@
 
 #pragma once
 
-#include "def.h"
-
 #include "core/log.h"
+#include "def.h"
 
 #include <set>
 #include <string>
 
-
+namespace hal
+{
 /**
  * Automatically declares a factory function when including this header.
  * Has to be implemented in the plugin.
@@ -39,95 +39,95 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wreturn-type-c-linkage"
 #endif
-class i_base;
-extern "C" PLUGIN_API std::shared_ptr<i_base> get_plugin_instance();
+    class i_base;
+    extern "C" PLUGIN_API std::shared_ptr<i_base> get_plugin_instance();
 #ifdef COMPILER_CLANG
 #pragma clang diagnostic pop
 #endif
 
-
-/**
- * Enum for all possible plugin types
- */
-enum class CORE_API interface_type
-{
-    base,
-    cli,
-    interactive_ui,
-    gui
-};
-
-/**
- * @ingroup core
- */
-class CORE_API i_base
-{
-public:
-    i_base()          = default;
-    virtual ~i_base() = default;
-
     /**
-     * Plugins utilize two phase construction.
-     * Always populate all members etc in the initialize function which is automatically called by
-     * plugin_manager::get_plugin_instance()
+     * Enum for all possible plugin types
      */
-    virtual void initialize();
-
-    /**
-     * Get the name of the plugin.
-     *
-     * @returns Plugin name.
-     */
-    virtual std::string get_name() const = 0;
-
-    /**
-     * Get the version of the plugin.
-     *
-     * @returns Plugin version.
-     */
-    virtual std::string get_version() const = 0;
-
-    /**
-     * Check whether the plugin has a specific type.
-     *
-     * @param[in] t - the type to check
-     * @returns True, if the type is supported.
-     */
-    bool has_type(interface_type t) const;
-
-    /**
-     * Shorthand for fast text logging.
-     *
-     * @param[in] args - The format string, followed by values.
-     */
-    template<typename... Args>
-    inline void log(const Args&... args)
+    enum class CORE_API interface_type
     {
-        log_info(get_name(), args...);
-    }
+        base,
+        cli,
+        interactive_ui,
+        gui
+    };
 
     /**
-     * Get all plugin dependencies of this plugin.
-     *
-     * @return A set of plugins that this plugin depends on.
+     * @ingroup core
      */
-    virtual std::set<std::string> get_dependencies() const;
+    class CORE_API i_base
+    {
+    public:
+        i_base()          = default;
+        virtual ~i_base() = default;
 
-    /**
-     * This function is automatically executed when the factory is loaded by the plugin manager
-     */
-    virtual void on_load() const;
+        /**
+         * Plugins utilize two phase construction.
+         * Always populate all members etc in the initialize function which is automatically called by
+         * plugin_manager::get_plugin_instance()
+         */
+        virtual void initialize();
 
-    /**
-     * This function is automatically executed when the factory is unloaded by the plugin manager
-     */
-    virtual void on_unload() const;
+        /**
+         * Get the name of the plugin.
+         *
+         * @returns Plugin name.
+         */
+        virtual std::string get_name() const = 0;
 
-    /**
-     * Initializes the logging channel(s) of a plugin. <br>
-     * If not overwritten, a logging channel equal to the plugin name is created.
-     */
-    virtual void initialize_logging() const;
-};
+        /**
+         * Get the version of the plugin.
+         *
+         * @returns Plugin version.
+         */
+        virtual std::string get_version() const = 0;
 
-using instantiate_plugin_function = std::shared_ptr<i_base> (*)();
+        /**
+         * Check whether the plugin has a specific type.
+         *
+         * @param[in] t - the type to check
+         * @returns True, if the type is supported.
+         */
+        bool has_type(interface_type t) const;
+
+        /**
+         * Shorthand for fast text logging.
+         *
+         * @param[in] args - The format string, followed by values.
+         */
+        template<typename... Args>
+        inline void log(const Args&... args)
+        {
+            log_info(get_name(), args...);
+        }
+
+        /**
+         * Get all plugin dependencies of this plugin.
+         *
+         * @return A set of plugins that this plugin depends on.
+         */
+        virtual std::set<std::string> get_dependencies() const;
+
+        /**
+         * This function is automatically executed when the factory is loaded by the plugin manager
+         */
+        virtual void on_load() const;
+
+        /**
+         * This function is automatically executed when the factory is unloaded by the plugin manager
+         */
+        virtual void on_unload() const;
+
+        /**
+         * Initializes the logging channel(s) of a plugin. <br>
+         * If not overwritten, a logging channel equal to the plugin name is created.
+         */
+        virtual void initialize_logging() const;
+    };
+
+    using instantiate_plugin_function = std::shared_ptr<i_base> (*)();
+}    // namespace hal

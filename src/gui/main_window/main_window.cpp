@@ -482,7 +482,7 @@ void main_window::handle_action_new()
         // DEBUG -- REMOVE WHEN GUI CAN HANDLE EVENTS DURING CREATION
         event_controls::enable_all(false);
         auto selected_lib = libraries[items.indexOf(selected)];
-        g_netlist = netlist_factory::create_netlist(selected_lib);
+        g_netlist         = netlist_factory::create_netlist(selected_lib);
         // DEBUG -- REMOVE WHEN GUI CAN HANDLE EVENTS DURING CREATION
         event_controls::enable_all(true);
         Q_EMIT file_manager::get_instance()->file_opened("new netlist");
@@ -534,7 +534,7 @@ void main_window::handle_save_triggered()
 {
     if (g_netlist)
     {
-        hal::path path = file_manager::get_instance()->file_name().toStdString();
+        std::filesystem::path path = file_manager::get_instance()->file_name().toStdString();
 
         if (path.empty())
         {

@@ -25,36 +25,39 @@
 
 #include "core/interface_interactive_ui.h"
 
-class plugin_python_shell : virtual public i_interactive_ui
+namespace hal
 {
-public:
-    plugin_python_shell() = default;
+    class plugin_python_shell : virtual public i_interactive_ui
+    {
+    public:
+        plugin_python_shell() = default;
 
-    ~plugin_python_shell() = default;
+        ~plugin_python_shell() = default;
 
-    /*
-     *      interface implementations
-     */
+        /*
+         *      interface implementations
+         */
 
-    /**
-     * Get the name of the plugin.
-     *
-     * @returns Plugin name.
-     */
-    std::string get_name() const override;
+        /**
+         * Get the name of the plugin.
+         *
+         * @returns Plugin name.
+         */
+        std::string get_name() const override;
 
-    /**
-     * Get the version of the plugin.
-     *
-     * @returns Plugin version.
-     */
-    std::string get_version() const override;
+        /**
+         * Get the version of the plugin.
+         *
+         * @returns Plugin version.
+         */
+        std::string get_version() const override;
 
-    /**
-     * Excutes the plugin with given command line parameters.
-     *
-     * @param[in] args - The command line parameters.
-     * @returns True on success.
-     */
-    bool exec(program_arguments& args) override;
-};
+        /**
+         * Excutes the plugin with given command line parameters.
+         *
+         * @param[in] args - The command line parameters.
+         * @returns True on success.
+         */
+        bool exec(program_arguments& args) override;
+    };
+}    // namespace hal

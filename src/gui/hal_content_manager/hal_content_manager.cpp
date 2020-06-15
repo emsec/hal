@@ -1,11 +1,9 @@
 #include "hal_content_manager/hal_content_manager.h"
-#include "main_window/main_window.h"
-#include "vhdl_editor/vhdl_editor.h"
 
-#include "netlist/netlist.h"
-#include "netlist/persistent/netlist_serializer.h"
-
+#include "context_manager_widget/context_manager_widget.h"
 #include "file_manager/file_manager.h"
+#include "graph_tab_widget/graph_tab_widget.h"
+#include "graph_widget/graph_context_manager.h"
 #include "graph_widget/graph_widget.h"
 #include "gui/content_layout_area/content_layout_area.h"
 #include "gui/content_widget/content_widget.h"
@@ -20,14 +18,14 @@
 #include "gui/python/python_editor.h"
 #include "gui/selection_details_widget/selection_details_widget.h"
 #include "gui_globals.h"
+#include "main_window/main_window.h"
+#include "netlist/netlist.h"
+#include "netlist/persistent/netlist_serializer.h"
+#include "vhdl_editor/vhdl_editor.h"
 
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QOpenGLWidget>
-
-#include "context_manager_widget/context_manager_widget.h"
-#include "graph_tab_widget/graph_tab_widget.h"
-#include "graph_widget/graph_context_manager.h"
 
 hal_content_manager::hal_content_manager(main_window* parent) : QObject(parent), m_main_window(parent)
 {
@@ -49,7 +47,6 @@ void hal_content_manager::hack_delete_content()
         delete content;
 }
 
-
 python_editor* hal_content_manager::get_python_editor_widget()
 {
     return m_python_widget;
@@ -67,9 +64,9 @@ context_manager_widget* hal_content_manager::get_context_manager_widget()
 
 void hal_content_manager::handle_open_document(const QString& file_name)
 {
-    m_graph_tab_wid        = new graph_tab_widget(nullptr);
-//    vhdl_editor* code_edit = new vhdl_editor();
-//    m_graph_tab_wid->addTab(code_edit, "Source");
+    m_graph_tab_wid = new graph_tab_widget(nullptr);
+    //    vhdl_editor* code_edit = new vhdl_editor();
+    //    m_graph_tab_wid->addTab(code_edit, "Source");
     m_main_window->add_content(m_graph_tab_wid, 2, content_anchor::center);
 
     module_widget* m = new module_widget();
@@ -122,7 +119,7 @@ void hal_content_manager::handle_open_document(const QString& file_name)
 
     connect(model, &plugin_model::run_plugin, m_main_window, &main_window::run_plugin_triggered);
 
-    m_window_title = "HAL - " + QString::fromStdString(hal::path(file_name.toStdString()).stem().string());
+    m_window_title = "HAL - " + QString::fromStdString(std::filesystem::path(file_name.toStdString()).stem().string());
     m_main_window->setWindowTitle(m_window_title);
 
     m_main_window->add_content(m_python_widget, 3, content_anchor::right);

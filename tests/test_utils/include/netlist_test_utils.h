@@ -2,6 +2,8 @@
 #ifndef HAL_NETLIST_TEST_UTILS_H
 #define HAL_NETLIST_TEST_UTILS_H
 
+#include "core/log.h"
+#include "netlist/boolean_function.h"
 #include "netlist/endpoint.h"
 #include "netlist/gate.h"
 #include "netlist/gate_library/gate_library.h"
@@ -10,13 +12,11 @@
 #include "netlist/net.h"
 #include "netlist/netlist.h"
 #include "test_def.h"
-#include "netlist/boolean_function.h"
 
 #include <core/utils.h>
-#include "core/log.h"
 #include <fstream>
 
-namespace fs = hal::fs;
+namespace fs = std::filesystem;
 
 namespace test_utils
 {
@@ -41,7 +41,7 @@ namespace test_utils
     // Name for accessing the custom gate library after the call of 'create_temp_gate_lib()'
     const std::string temp_lib_name = "TEMP_GATE_LIBRARY.lib";
 
-    const hal::path sandbox_directory_path = hal::path("tests/sandbox_directory");
+    const std::filesystem::path sandbox_directory_path = std::filesystem::path("tests/sandbox_directory");
 
     /*********************************************************
      *                      Functions                        *
@@ -196,7 +196,6 @@ namespace test_utils
      */
     std::shared_ptr<gate> get_gate_by_subname(std::shared_ptr<netlist> nl, const std::string subname);
 
-
     // ===== File Management =====
     /**
      * Create a sandbox directory within the build folder, where temporary files can be stored. Please use the function
@@ -204,7 +203,7 @@ namespace test_utils
      *
      * @returns the absolute path of the sandbox directory
      */
-    hal::path create_sandbox_directory();
+    std::filesystem::path create_sandbox_directory();
 
     /**
      * Remove the sandbox directory if it was created before
@@ -218,7 +217,7 @@ namespace test_utils
      * @param file_name - The name of the file (including its extension)
      * @returns the absolute path of the file.
      */
-    hal::path create_sandbox_path(const std::string file_name);
+    std::filesystem::path create_sandbox_path(const std::string file_name);
 
     /**
      * Creates a file with a given content within the sandbox directory. Note that this function can only called
@@ -228,7 +227,7 @@ namespace test_utils
      * @param content - The content of the file
      * @returns the absolute path of the file
      */
-    hal::path create_sandbox_file(std::string file_name, std::string content);
+    std::filesystem::path create_sandbox_file(std::string file_name, std::string content);
 
     /**
      * Creates a gate library dedicated solely to testing. Construction of that gate library is independent of the gate library parser.

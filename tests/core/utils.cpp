@@ -1,10 +1,11 @@
-#include "test_def.h"
-#include "gtest/gtest.h"
 #include "netlist_test_utils.h"
-#include <experimental/filesystem>
+#include "test_def.h"
+
+#include "gtest/gtest.h"
 #include <core/log.h>
 #include <core/utils.h>
 #include <cstdio>
+#include <experimental/filesystem>
 #include <fstream>
 #include <iostream>
 
@@ -28,22 +29,20 @@ protected:
  *
  * Functions: get_bit
  */
-TEST_F(utils_test, check_get_bit){
-    TEST_START
-      // ########################
-      // POSITIVE TESTS
-      // ########################
-      {
-          // Get some bits of the given int
-            int i = 0b1101;
-            EXPECT_EQ(get_bit(i, 0), 1);
-            EXPECT_EQ(get_bit(i, 1), 0);
-            EXPECT_EQ(get_bit(i, 2), 1);
-            EXPECT_EQ(get_bit(i, 3), 1);
-            EXPECT_EQ(get_bit(i, 4), 0);
-      }
+TEST_F(utils_test, check_get_bit){TEST_START
+                                  // ########################
+                                  // POSITIVE TESTS
+                                  // ########################
+                                  {// Get some bits of the given int
+                                   int i = 0b1101;
+EXPECT_EQ(get_bit(i, 0), 1);
+EXPECT_EQ(get_bit(i, 1), 0);
+EXPECT_EQ(get_bit(i, 2), 1);
+EXPECT_EQ(get_bit(i, 3), 1);
+EXPECT_EQ(get_bit(i, 4), 0);
+}
 
-    TEST_END
+TEST_END
 }
 
 /**
@@ -51,22 +50,20 @@ TEST_F(utils_test, check_get_bit){
  *
  * Functions: set_bit
  */
-TEST_F(utils_test, check_set_bit){
-    TEST_START
-        // ########################
-        // POSITIVE TESTS
-        // ########################
-        {
-            // Set the bit if the bit is 0
-            int i = 0b1001;
-            set_bit(i, 1) EXPECT_EQ(i, 0b1011);
-        }
-        {
-            // Set the bit if the bit is 1
-            int i = 0b1001;
-            set_bit(i, 0) EXPECT_EQ(i, 0b1001);
-        }
-    TEST_END
+TEST_F(utils_test, check_set_bit){TEST_START
+                                  // ########################
+                                  // POSITIVE TESTS
+                                  // ########################
+                                  {// Set the bit if the bit is 0
+                                   int i = 0b1001;
+set_bit(i, 1) EXPECT_EQ(i, 0b1011);
+}
+{
+    // Set the bit if the bit is 1
+    int i = 0b1001;
+    set_bit(i, 0) EXPECT_EQ(i, 0b1001);
+}
+TEST_END
 }
 
 /**
@@ -74,22 +71,20 @@ TEST_F(utils_test, check_set_bit){
  *
  * Functions: clear_bit
  */
-TEST_F(utils_test, check_clear_bit){
-    TEST_START
-    // ########################
-    // POSITIVE TESTS
-    // ########################
-    {
-        // Clear the bit if the bit is 1
-        int i = 0b1001;
-        clear_bit(i, 0) EXPECT_EQ(i, 0b1000);
-    }
-    {
-        // Clear the bit if the bit is 0
-        int i = 0b1001;
-        clear_bit(i, 1) EXPECT_EQ(i, 0b1001);
-    }
-    TEST_END
+TEST_F(utils_test, check_clear_bit){TEST_START
+                                    // ########################
+                                    // POSITIVE TESTS
+                                    // ########################
+                                    {// Clear the bit if the bit is 1
+                                     int i = 0b1001;
+clear_bit(i, 0) EXPECT_EQ(i, 0b1000);
+}
+{
+    // Clear the bit if the bit is 0
+    int i = 0b1001;
+    clear_bit(i, 1) EXPECT_EQ(i, 0b1001);
+}
+TEST_END
 }
 
 /**
@@ -277,12 +272,12 @@ TEST_F(utils_test, check_trim)
     EXPECT_EQ(trim("\t  string\t \n"), "string");
 
     // Test with other char's to remove
-    EXPECT_EQ(trim("$#$str#ing#$#","#$"), "str#ing");
+    EXPECT_EQ(trim("$#$str#ing#$#", "#$"), "str#ing");
 
     // Some special cases
     EXPECT_EQ(trim("      "), "");
     EXPECT_EQ(trim(""), "");
-    EXPECT_EQ(trim("string",""), "string");
+    EXPECT_EQ(trim("string", ""), "string");
 
     TEST_END
 }
@@ -295,24 +290,24 @@ TEST_F(utils_test, check_trim)
 TEST_F(utils_test, check_ltrim)
 {
     TEST_START
-        // ########################
-        // POSITIVE TESTS
-        // ########################
+    // ########################
+    // POSITIVE TESTS
+    // ########################
 
-        // Some 'normal' cases
-        EXPECT_EQ(ltrim("  string  "), "string  ");
-        EXPECT_EQ(ltrim("string  "), "string  ");
-        EXPECT_EQ(ltrim("  stri ng  "), "stri ng  ");
-        EXPECT_EQ(ltrim("\tstring\t"), "string\t");
-        EXPECT_EQ(ltrim("\t\n\r string"), "string");
+    // Some 'normal' cases
+    EXPECT_EQ(ltrim("  string  "), "string  ");
+    EXPECT_EQ(ltrim("string  "), "string  ");
+    EXPECT_EQ(ltrim("  stri ng  "), "stri ng  ");
+    EXPECT_EQ(ltrim("\tstring\t"), "string\t");
+    EXPECT_EQ(ltrim("\t\n\r string"), "string");
 
-        // Test with other char's to remove
-        EXPECT_EQ(ltrim("$#$string#","#$"), "string#");
+    // Test with other char's to remove
+    EXPECT_EQ(ltrim("$#$string#", "#$"), "string#");
 
-        // Some special cases
-        EXPECT_EQ(ltrim("      "), "");
-        EXPECT_EQ(ltrim(""), "");
-        EXPECT_EQ(ltrim("string",""), "string");
+    // Some special cases
+    EXPECT_EQ(ltrim("      "), "");
+    EXPECT_EQ(ltrim(""), "");
+    EXPECT_EQ(ltrim("string", ""), "string");
 
     TEST_END
 }
@@ -325,24 +320,24 @@ TEST_F(utils_test, check_ltrim)
 TEST_F(utils_test, check_rtrim)
 {
     TEST_START
-        // ########################
-        // POSITIVE TESTS
-        // ########################
+    // ########################
+    // POSITIVE TESTS
+    // ########################
 
-        // Some 'normal' cases
-        EXPECT_EQ(rtrim("  string  "), "  string");
-        EXPECT_EQ(rtrim("string  "), "string");
-        EXPECT_EQ(rtrim("  stri ng  "), "  stri ng");
-        EXPECT_EQ(rtrim("\tstring\t"), "\tstring");
-        EXPECT_EQ(rtrim("string\t\n\r "), "string");
+    // Some 'normal' cases
+    EXPECT_EQ(rtrim("  string  "), "  string");
+    EXPECT_EQ(rtrim("string  "), "string");
+    EXPECT_EQ(rtrim("  stri ng  "), "  stri ng");
+    EXPECT_EQ(rtrim("\tstring\t"), "\tstring");
+    EXPECT_EQ(rtrim("string\t\n\r "), "string");
 
-        // Test with other char's to remove
-        EXPECT_EQ(rtrim("#string$#$","#$"), "#string");
+    // Test with other char's to remove
+    EXPECT_EQ(rtrim("#string$#$", "#$"), "#string");
 
-        // Some special cases
-        EXPECT_EQ(rtrim("      "), "");
-        EXPECT_EQ(rtrim(""), "");
-        EXPECT_EQ(ltrim("string",""), "string");
+    // Some special cases
+    EXPECT_EQ(rtrim("      "), "");
+    EXPECT_EQ(rtrim(""), "");
+    EXPECT_EQ(ltrim("string", ""), "string");
 
     TEST_END
 }
@@ -454,7 +449,7 @@ TEST_F(utils_test, check_folder_exists_and_is_accessible)
 {
     TEST_START
     // Create a temporary directory for testing
-    hal::path tmp_dir_path = get_binary_directory().string() + "/tmp_test";
+    std::filesystem::path tmp_dir_path = get_binary_directory().string() + "/tmp_test";
 
     fs::create_directory(tmp_dir_path);
 
@@ -466,7 +461,7 @@ TEST_F(utils_test, check_folder_exists_and_is_accessible)
     EXPECT_TRUE(folder_exists_and_is_accessible(tmp_dir_path));
 
     // The directory does not exists
-    EXPECT_FALSE(folder_exists_and_is_accessible(hal::path("/this/dir/does/not/exist")));
+    EXPECT_FALSE(folder_exists_and_is_accessible(std::filesystem::path("/this/dir/does/not/exist")));
 
     TEST_END
     // removes the temporary directories and files
@@ -518,33 +513,33 @@ TEST_F(utils_test, check_get_first_directory_exists)
 {
     TEST_START
 
-    hal::path base_path = get_base_directory();    // This directory should exist
-    hal::path lib_path  = get_base_directory();    // This directory should exist as well
-    hal::path non_existing_path_1(base_path.string() + "/bin/bam/bum");
-    hal::path non_existing_path_2("not_existing_path");
+    std::filesystem::path base_path = get_base_directory();    // This directory should exist
+    std::filesystem::path lib_path  = get_base_directory();    // This directory should exist as well
+    std::filesystem::path non_existing_path_1(base_path.string() + "/bin/bam/bum");
+    std::filesystem::path non_existing_path_2("not_existing_path");
 
     // ########################
     // POSITIVE TESTS
     // ########################
     {
         // One existing dir
-        std::vector<hal::path> path_set({base_path, non_existing_path_1, non_existing_path_2});
+        std::vector<std::filesystem::path> path_set({base_path, non_existing_path_1, non_existing_path_2});
         EXPECT_EQ(get_first_directory_exists(path_set), base_path);
     }
     {
-        std::vector<hal::path> path_set({non_existing_path_1, non_existing_path_2, base_path});
+        std::vector<std::filesystem::path> path_set({non_existing_path_1, non_existing_path_2, base_path});
         EXPECT_EQ(get_first_directory_exists(path_set), base_path);
     }
     {
         // Two existing dirs (should return the first one)
-        std::vector<hal::path> path_set({lib_path, non_existing_path_2, base_path});
+        std::vector<std::filesystem::path> path_set({lib_path, non_existing_path_2, base_path});
         EXPECT_EQ(get_first_directory_exists(path_set), lib_path);
     }
     {
         // No existing dirs (should return "")
-        std::vector<hal::path> path_set({non_existing_path_1, non_existing_path_2});
+        std::vector<std::filesystem::path> path_set({non_existing_path_1, non_existing_path_2});
         get_first_directory_exists(path_set);
-        EXPECT_EQ(get_first_directory_exists(path_set).string(), hal::path("").string());
+        EXPECT_EQ(get_first_directory_exists(path_set).string(), std::filesystem::path("").string());
     }
 
     // ########################
@@ -552,7 +547,7 @@ TEST_F(utils_test, check_get_first_directory_exists)
     // ########################
     {
         // Empty list of paths
-        std::vector<hal::path> path_set_empty({});
+        std::vector<std::filesystem::path> path_set_empty({});
         EXPECT_EQ(get_first_directory_exists(path_set_empty).string(), "");
     }
 
@@ -569,7 +564,7 @@ TEST_F(utils_test, check_get_file)
     TEST_START
 
     // Create a temporary directory for testing
-    hal::path tmp_dir_path = get_binary_directory().string() + "/tmp_test";
+    std::filesystem::path tmp_dir_path = get_binary_directory().string() + "/tmp_test";
 
     fs::create_directory(tmp_dir_path);
     fs::create_directory(tmp_dir_path.string() + "/dir_1");
@@ -582,10 +577,10 @@ TEST_F(utils_test, check_get_file)
     outfile_1.close();
     outfile_2.close();
 
-    hal::path dir_1_path(tmp_dir_path.string() + "/dir_1");
-    hal::path dir_2_path(tmp_dir_path.string() + "/dir_2");
-    hal::path dir_empty_1_path(tmp_dir_path.string() + "/dir_empty_1");
-    hal::path dir_empty_2_path(tmp_dir_path.string() + "/dir_empty_2");
+    std::filesystem::path dir_1_path(tmp_dir_path.string() + "/dir_1");
+    std::filesystem::path dir_2_path(tmp_dir_path.string() + "/dir_2");
+    std::filesystem::path dir_empty_1_path(tmp_dir_path.string() + "/dir_empty_1");
+    std::filesystem::path dir_empty_2_path(tmp_dir_path.string() + "/dir_empty_2");
 
     // ########################
     // POSITIVE TESTS
@@ -593,23 +588,23 @@ TEST_F(utils_test, check_get_file)
 
     {
         // Only one directory contains the file with the given name
-        std::vector<hal::path> dirs_to_search({dir_1_path, dir_empty_1_path, dir_empty_2_path});
+        std::vector<std::filesystem::path> dirs_to_search({dir_1_path, dir_empty_1_path, dir_empty_2_path});
         EXPECT_EQ(get_file("tmp.txt", dirs_to_search).string(), dir_1_path.string() + "/tmp.txt");
     }
     {
         // Only one directory contains the file with the given name
-        std::vector<hal::path> dirs_to_search({dir_empty_1_path, dir_empty_2_path, dir_1_path});
+        std::vector<std::filesystem::path> dirs_to_search({dir_empty_1_path, dir_empty_2_path, dir_1_path});
         EXPECT_EQ(get_file("tmp.txt", dirs_to_search).string(), dir_1_path.string() + "/tmp.txt");
     }
     {
         // Two directories contain a file with the given name
-        std::vector<hal::path> dirs_to_search({dir_1_path, dir_empty_2_path, dir_2_path});
+        std::vector<std::filesystem::path> dirs_to_search({dir_1_path, dir_empty_2_path, dir_2_path});
         EXPECT_EQ(get_file("tmp.txt", dirs_to_search).string(), dir_1_path.string() + "/tmp.txt");
     }
     {
         // No directory contains the searched file -> wrong documentation?
-        std::vector<hal::path> dirs_to_search({dir_empty_1_path, dir_empty_2_path});
-        EXPECT_EQ(get_file("tmp.txt", dirs_to_search).string(), hal::path(""));
+        std::vector<std::filesystem::path> dirs_to_search({dir_empty_1_path, dir_empty_2_path});
+        EXPECT_EQ(get_file("tmp.txt", dirs_to_search).string(), std::filesystem::path(""));
     }
 
     // ########################
@@ -617,13 +612,13 @@ TEST_F(utils_test, check_get_file)
     // ########################
     {
         // path hints are empty -> wrong documentation?
-        std::vector<hal::path> dirs_to_search({});
-        EXPECT_EQ(get_file("tmp.txt", dirs_to_search).string(), hal::path("").string());
+        std::vector<std::filesystem::path> dirs_to_search({});
+        EXPECT_EQ(get_file("tmp.txt", dirs_to_search).string(), std::filesystem::path("").string());
     }
     {
         // file_name is an empty string -> intended behaviour?
-        std::vector<hal::path> dirs_to_search({dir_empty_1_path});
-        EXPECT_EQ(get_file("", dirs_to_search).string(), hal::path("").string());
+        std::vector<std::filesystem::path> dirs_to_search({dir_empty_1_path});
+        EXPECT_EQ(get_file("", dirs_to_search).string(), std::filesystem::path("").string());
     }
 
     TEST_END
@@ -648,7 +643,7 @@ TEST_F(utils_test, check_which)
     TEST_START
 
     // Create a temporary directory for testing
-    hal::path tmp_dir_path = get_binary_directory().string() + "/tmp_test";
+    std::filesystem::path tmp_dir_path = get_binary_directory().string() + "/tmp_test";
 
     fs::create_directory(tmp_dir_path);
     fs::create_directory(tmp_dir_path.string() + "/dir_txt");
@@ -658,8 +653,8 @@ TEST_F(utils_test, check_which)
     std::ofstream outfile_1(get_binary_directory().string() + "/tmp_test/dir_txt/tmp.txt");
     outfile_1.close();
 
-    hal::path dir_txt_path(tmp_dir_path.string() + "/dir_txt");
-    hal::path dir_empty_path(tmp_dir_path.string() + "/dir_empty");
+    std::filesystem::path dir_txt_path(tmp_dir_path.string() + "/dir_txt");
+    std::filesystem::path dir_empty_path(tmp_dir_path.string() + "/dir_empty");
 
     // ########################
     // POSITIVE TESTS
@@ -670,23 +665,23 @@ TEST_F(utils_test, check_which)
     {
         {
             // Directory exists and contains the given executable
-            hal::path res = which("hal", get_binary_directory().string());
+            std::filesystem::path res = which("hal", get_binary_directory().string());
             EXPECT_EQ(res.string(), get_binary_directory().string() + "/hal");
         }
     }
     {
         // Directory exists but contains no files
-        hal::path res = which("hal", tmp_dir_path.string() + "/dir_empty");
+        std::filesystem::path res = which("hal", tmp_dir_path.string() + "/dir_empty");
         EXPECT_EQ(res.string(), "");
     }
     {
         // Directory exists and contains the given file which is NOT an executable
-        hal::path res = which("tmp.txt", tmp_dir_path.string() + "/dir_txt");
+        std::filesystem::path res = which("tmp.txt", tmp_dir_path.string() + "/dir_txt");
         EXPECT_EQ(res.string(), "");
     }
     {
         // Directory does not exist
-        hal::path res = which("tmp.txt", "/this/directory/does/not/exist");
+        std::filesystem::path res = which("tmp.txt", "/this/directory/does/not/exist");
         EXPECT_EQ(res.string(), "");
     }
 
@@ -696,12 +691,12 @@ TEST_F(utils_test, check_which)
 
     {
         // File name is the empty string "" -> FAILS
-        hal::path res = which("", tmp_dir_path.string() + "/dir_empty");
+        std::filesystem::path res = which("", tmp_dir_path.string() + "/dir_empty");
         EXPECT_EQ(res.string(), "");
     }
     {
         // Directory is the empty string ""
-        hal::path res = which("tmp.txt", "");
+        std::filesystem::path res = which("tmp.txt", "");
         EXPECT_EQ(res.string(), "");
     }
 
@@ -723,12 +718,12 @@ TEST_F(utils_test, check_get_open_source_license)
 {
     TEST_START
 
-        // ########################
-        // POSITIVE TESTS
-        // ########################
+    // ########################
+    // POSITIVE TESTS
+    // ########################
 
-        std::string lic_str = get_open_source_licenses();
-        EXPECT_TRUE(lic_str.length() > 0);
+    std::string lic_str = get_open_source_licenses();
+    EXPECT_TRUE(lic_str.length() > 0);
 
     TEST_END
 }

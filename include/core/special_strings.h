@@ -1,88 +1,118 @@
+//  MIT License
+//
+//  Copyright (c) 2019 Ruhr-University Bochum, Germany, Chair for Embedded Security. All Rights reserved.
+//  Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in all
+//  copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+//  SOFTWARE.
+
 #pragma once
 
 #include <string>
 
-namespace core_strings
+namespace hal
 {
-    template<class T>
-    inline std::string to_std_string(const T& str)
+    /** 
+     * @ingroup core
+     */
+    namespace core_strings
     {
-        if constexpr (std::is_same<T, std::string>::value)
+        // TODO documentation
+        template<class T>
+        inline std::string to_std_string(const T& str)
         {
-            return str;
-        }
-        else
-        {
-            return std::string(str.data());
-        }
-    }
-
-    template<class T>
-    inline T from_std_string(const std::string& str)
-    {
-        if constexpr (std::is_same<T, std::string>::value)
-        {
-            return str;
-        }
-        else
-        {
-            return T(str.data());
-        }
-    }
-
-    struct case_insensitive_char_traits : public std::char_traits<char>
-    {
-        static bool eq(char c1, char c2)
-        {
-            return toupper(c1) == toupper(c2);
-        }
-
-        static bool ne(char c1, char c2)
-        {
-            return toupper(c1) != toupper(c2);
-        }
-
-        static bool lt(char c1, char c2)
-        {
-            return toupper(c1) < toupper(c2);
-        }
-
-        static int compare(const char* s1, const char* s2, size_t n)
-        {
-            while (n-- != 0)
+            if constexpr (std::is_same<T, std::string>::value)
             {
-                if (toupper(*s1) < toupper(*s2))
-                    return -1;
-                if (toupper(*s1) > toupper(*s2))
-                    return 1;
-                ++s1;
-                ++s2;
+                return str;
             }
-            return 0;
+            else
+            {
+                return std::string(str.data());
+            }
         }
 
-        static const char* find(const char* s, int n, char a)
+        template<class T>
+        inline T from_std_string(const std::string& str)
         {
-            while (n-- > 0)
+            if constexpr (std::is_same<T, std::string>::value)
             {
-                if (toupper(*s) == toupper(a))
+                return str;
+            }
+            else
+            {
+                return T(str.data());
+            }
+        }
+
+        struct case_insensitive_char_traits : public std::char_traits<char>
+        {
+            static bool eq(char c1, char c2)
+            {
+                return toupper(c1) == toupper(c2);
+            }
+
+            static bool ne(char c1, char c2)
+            {
+                return toupper(c1) != toupper(c2);
+            }
+
+            static bool lt(char c1, char c2)
+            {
+                return toupper(c1) < toupper(c2);
+            }
+
+            static int compare(const char* s1, const char* s2, size_t n)
+            {
+                while (n-- != 0)
                 {
-                    return s;
+                    if (toupper(*s1) < toupper(*s2))
+                        return -1;
+                    if (toupper(*s1) > toupper(*s2))
+                        return 1;
+                    ++s1;
+                    ++s2;
                 }
-                ++s;
+                return 0;
             }
-            return nullptr;
-        }
-    };
-    using case_insensitive_string = std::basic_string<char, case_insensitive_char_traits>;
-}    // namespace core_strings
+
+            static const char* find(const char* s, int n, char a)
+            {
+                while (n-- > 0)
+                {
+                    if (toupper(*s) == toupper(a))
+                    {
+                        return s;
+                    }
+                    ++s;
+                }
+                return nullptr;
+            }
+        };
+        using case_insensitive_string = std::basic_string<char, case_insensitive_char_traits>;
+    }    // namespace core_strings
+}    // namespace hal
 
 namespace std
 {
     template<>
-    struct hash<core_strings::case_insensitive_string>
+    struct hash<hal::core_strings::case_insensitive_string>
     {
-        std::size_t operator()(const core_strings::case_insensitive_string& str) const
+        std::size_t operator()(const hal::core_strings::case_insensitive_string& str) const
         {
             return std::hash<std::string>{}(std::string(str.data()));
         }

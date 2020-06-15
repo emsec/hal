@@ -27,61 +27,64 @@
 
 #include <string>
 
+namespace hal
+{
 // operating systems independent type definitions for function and handle access
 #ifdef _WIN32
 #include <windows.h>
-using lib_fn_ptr_t = FARPROC;
-using handle_ptr_t = HINSTANCE;
+    using lib_fn_ptr_t = FARPROC;
+    using handle_ptr_t = HINSTANCE;
 #else
 #include <dlfcn.h>
-using lib_fn_ptr_t = void (*)();
-using handle_ptr_t = void*;
+    using lib_fn_ptr_t = void (*)();
+    using handle_ptr_t = void*;
 #endif
 
-/**
- * @ingroup core
- */
-class CORE_API library_loader
-{
-public:
-    library_loader();
-
-    ~library_loader();
-
     /**
-     * Loads a library.
-     *
-     * @param[in] file_name - Name of the library.
-     * @returns True on success.
+     * @ingroup core
      */
-    bool load_library(const std::string& file_name);
+    class CORE_API library_loader
+    {
+    public:
+        library_loader();
 
-    /**
-     * Gets the file name of the loaded library.
-     *
-     * @returns The file name.
-     */
-    std::string get_file_name() const;
+        ~library_loader();
 
-    /**
-     * Unloads the library.
-     *
-     * @returns True on success.
-     */
-    bool unload_library();
+        /**
+         * Loads a library.
+         *
+         * @param[in] file_name - Name of the library.
+         * @returns True on success.
+         */
+        bool load_library(const std::string& file_name);
 
-    /**
-     * Gets the function pointer to a function by name.
-     *
-     * @param[in] function_name - Name of the function.
-     * @returns The function pointer.
-     */
-    lib_fn_ptr_t get_function(const std::string& function_name);
+        /**
+         * Gets the file name of the loaded library.
+         *
+         * @returns The file name.
+         */
+        std::string get_file_name() const;
 
-private:
-    // stores the file name of the library
-    std::string m_file_name;
+        /**
+         * Unloads the library.
+         *
+         * @returns True on success.
+         */
+        bool unload_library();
 
-    // stores the handle_ptr_t to the library
-    handle_ptr_t m_handle;
-};
+        /**
+         * Gets the function pointer to a function by name.
+         *
+         * @param[in] function_name - Name of the function.
+         * @returns The function pointer.
+         */
+        lib_fn_ptr_t get_function(const std::string& function_name);
+
+    private:
+        // stores the file name of the library
+        std::string m_file_name;
+
+        // stores the handle_ptr_t to the library
+        handle_ptr_t m_handle;
+    };
+}    // namespace hal

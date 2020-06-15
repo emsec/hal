@@ -25,52 +25,49 @@
 
 #include "def.h"
 
-// forward declaration
-class netlist;
-class gate;
-class gate_type;
-class net;
-class module;
-class endpoint;
-
-/**
- * @ingroup netlist
- */
-class NETLIST_API netlist_internal_manager
+namespace hal
 {
-    friend class netlist;
-    friend class net;
-    friend class module;
+    // forward declaration
+    class netlist;
+    class gate;
+    class gate_type;
+    class net;
+    class module;
+    class endpoint;
 
-private:
-    netlist* m_netlist;
+    /**
+     * @ingroup netlist
+     */
+    class NETLIST_API netlist_internal_manager
+    {
+        friend class netlist;
+        friend class net;
+        friend class module;
 
-    explicit netlist_internal_manager(netlist* nl);
+    private:
+        netlist* m_netlist;
 
-    ~netlist_internal_manager() = default;
+        explicit netlist_internal_manager(netlist* nl);
 
-    // gate functions
+        ~netlist_internal_manager() = default;
 
-    std::shared_ptr<gate> create_gate(u32 id, const std::shared_ptr<const gate_type>& gt, const std::string& name, float x, float y);
-    bool delete_gate(std::shared_ptr<gate> gate);
+        // gate functions
+        std::shared_ptr<gate> create_gate(u32 id, const std::shared_ptr<const gate_type>& gt, const std::string& name, float x, float y);
+        bool delete_gate(std::shared_ptr<gate> gate);
+        bool is_gate_type_invalid(const std::shared_ptr<const gate_type>& gt) const;
 
-    bool is_gate_type_invalid(const std::shared_ptr<const gate_type>& gt) const;
+        // net functions
+        std::shared_ptr<net> create_net(u32 id, const std::string& name);
+        bool delete_net(const std::shared_ptr<net>& net);
+        bool net_add_source(const std::shared_ptr<net>& net, const endpoint& ep);
+        bool net_remove_source(const std::shared_ptr<net>& net, const endpoint& ep);
+        bool net_add_destination(const std::shared_ptr<net>& net, const endpoint& ep);
+        bool net_remove_destination(const std::shared_ptr<net>& net, const endpoint& ep);
 
-    // net functions
-
-    std::shared_ptr<net> create_net(u32 id, const std::string& name);
-    bool delete_net(const std::shared_ptr<net>& net);
-
-    bool net_add_source(const std::shared_ptr<net>& net, const endpoint& ep);
-    bool net_remove_source(const std::shared_ptr<net>& net, const endpoint& ep);
-    bool net_add_destination(const std::shared_ptr<net>& net, const endpoint& ep);
-    bool net_remove_destination(const std::shared_ptr<net>& net, const endpoint& ep);
-
-    // module functions
-
-    std::shared_ptr<module> create_module(u32 id, const  std::shared_ptr<module>& parent, const std::string& name);
-    bool delete_module(const std::shared_ptr<module>& module);
-
-    bool module_assign_gate(const std::shared_ptr<module>& m, const std::shared_ptr<gate>& g);
-    bool module_remove_gate(const std::shared_ptr<module>& m, const std::shared_ptr<gate>& g);
-};
+        // module functions
+        std::shared_ptr<module> create_module(u32 id, const std::shared_ptr<module>& parent, const std::string& name);
+        bool delete_module(const std::shared_ptr<module>& module);
+        bool module_assign_gate(const std::shared_ptr<module>& m, const std::shared_ptr<gate>& g);
+        bool module_remove_gate(const std::shared_ptr<module>& m, const std::shared_ptr<gate>& g);
+    };
+}    // namespace hal

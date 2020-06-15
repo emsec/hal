@@ -28,14 +28,18 @@
 /**
  * @ingroup handler
  */
-namespace event_controls
-{
-    /**
-     * Enables/disables callbacks for all event handlers.<br>
-     * Enabled by default.
-     *
-     * @param[in] flag - True to enable, false to disable.
-     */
-    NETLIST_API void enable_all(bool flag);
 
-}    // namespace event_controls
+namespace hal
+{
+    namespace event_controls
+    {
+        /**
+         * Enables/disables callbacks for all event handlers.<br>
+         * Enabled by default.
+         *
+         * @param[in] flag - True to enable, false to disable.
+         */
+        NETLIST_API void enable_all(bool flag);
+
+    }    // namespace event_controls
+}    // namespace hal

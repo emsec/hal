@@ -23,76 +23,78 @@
 
 #pragma once
 
-#include "def.h"
-
 #include "core/callback_hook.h"
+#include "def.h"
 
 #define RAPIDJSON_HAS_STDSTRING 1
 #include "rapidjson/document.h"
 
-class netlist;
-
-/**
- * Plugin manager to load and unload plugins
- *
- * @ingroup core
- */
-namespace hal_file_manager
+namespace hal
 {
+    class netlist;
+
     /**
-     * Starts serialization to a .hal file.<br>
-     * This fires all registered on_serialize callbacks.
+     * Plugin manager to load and unload plugins
      *
-     * @param[in] file - The file path.
-     * @param[in] document - The JSON document to serialize to.
-     * @returns True if all registered callbacks succeed.
+     * @ingroup core
      */
-    bool serialize(const hal::path& file, std::shared_ptr<netlist> netlist, rapidjson::Document& document);
+    namespace hal_file_manager
+    {
+        /**
+         * Starts serialization to a .hal file.<br>
+         * This fires all registered on_serialize callbacks.
+         *
+         * @param[in] file - The file path.
+         * @param[in] document - The JSON document to serialize to.
+         * @returns True if all registered callbacks succeed.
+         */
+        bool serialize(const std::filesystem::path& file, std::shared_ptr<netlist> netlist, rapidjson::Document& document);
 
-    /**
-     * Starts deserialization of a .hal file.<br>
-     * This fires all registered on_deserialize callbacks.
-     *
-     * @param[in] file - The file path.
-     * @param[in] document - The JSON document to deserialize from.
-     * @returns True if all registered callbacks succeed.
-     */
-    bool deserialize(const hal::path& file, std::shared_ptr<netlist> netlist, rapidjson::Document& document);
+        /**
+         * Starts deserialization of a .hal file.<br>
+         * This fires all registered on_deserialize callbacks.
+         *
+         * @param[in] file - The file path.
+         * @param[in] document - The JSON document to deserialize from.
+         * @returns True if all registered callbacks succeed.
+         */
+        bool deserialize(const std::filesystem::path& file, std::shared_ptr<netlist> netlist, rapidjson::Document& document);
 
-    /**
-     * Add a callback to notify when a .hal file is being serialized.
-     *
-     * @param[in] identifier - An identifier name that can be used to remove the callback later.
-     * @param[in] callback - The callback function. Parameters are:
-     * * bool - Returns whether data was successfully extended, saving is aborted if False.
-     * * const hal::path& - The hal file.
-     * * rapidjson::Document& - The content to fill.
-    */
-    void register_on_serialize_callback(const std::string& identifier, std::function<bool(const hal::path&, std::shared_ptr<netlist>, rapidjson::Document&)> callback);
+        /**
+         * Add a callback to notify when a .hal file is being serialized.
+         *
+         * @param[in] identifier - An identifier name that can be used to remove the callback later.
+         * @param[in] callback - The callback function. Parameters are:
+         * * bool - Returns whether data was successfully extended, saving is aborted if False.
+         * * const std::filesystem::path& - The hal file.
+         * * rapidjson::Document& - The content to fill.
+         */
+        void register_on_serialize_callback(const std::string& identifier, std::function<bool(const std::filesystem::path&, std::shared_ptr<netlist>, rapidjson::Document&)> callback);
 
-    /**
-     * Removes a callback to notify when a .hal file is being serialized.
-     *
-     * @param[in] identifier - The identifier name given while registering
-    */
-    void unregister_on_serialize_callback(const std::string& identifier);
+        /**
+         * Removes a callback to notify when a .hal file is being serialized.
+         *
+         * @param[in] identifier - The identifier name given while registering
+         */
+        void unregister_on_serialize_callback(const std::string& identifier);
 
-    /**
-     * Add a callback to notify when a .hal file is being deserialized.
-     *
-     * @param[in] identifier - An identifier name that can be used to remove the callback later.
-     * @param[in] callback - The callback function. Parameters are:
-     * * bool - Returns whether data was successfully read, loading is aborted if False.
-     * * const hal::path& - The hal file.
-     * * rapidjson::Document& - The content to fill.
-    */
-    void register_on_deserialize_callback(const std::string& identifier, std::function<bool(const hal::path&, std::shared_ptr<netlist>, rapidjson::Document&)> callback);
+        /**
+         * Add a callback to notify when a .hal file is being deserialized.
+         *
+         * @param[in] identifier - An identifier name that can be used to remove the callback later.
+         * @param[in] callback - The callback function. Parameters are:
+         * * bool - Returns whether data was successfully read, loading is aborted if False.
+         * * const std::filesystem::path& - The hal file.
+         * * rapidjson::Document& - The content to fill.
+         */
+        void register_on_deserialize_callback(const std::string& identifier, std::function<bool(const std::filesystem::path&, std::shared_ptr<netlist>, rapidjson::Document&)> callback);
 
-    /**
-     * Removes a callback to notify when a .hal file is being deserialized.
-     *
-     * @param[in] identifier - The identifier name given while registering
-    */
-    void unregister_on_deserialize_callback(const std::string& identifier);
+        /**
+         * Removes a callback to notify when a .hal file is being deserialized.
+         *
+         * @param[in] identifier - The identifier name given while registering
+         */
+        void unregister_on_deserialize_callback(const std::string& identifier);
 
-}    // namespace hal_file_manager
+    }    // namespace hal_file_manager
+}    // namespace hal

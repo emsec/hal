@@ -18,7 +18,7 @@
 // protected:
 //     const std::string pseudo_simprim_lib_name = "PSEUDO_SIMPRIM_GATE_LIBRARY";
 //     const std::string GATE_SUFFIX = "_inst";
-//     hal::path pseudo_simprim_lib_path;
+//     std::filesystem::path pseudo_simprim_lib_path;
 
 //     virtual void SetUp()
 //     {

@@ -1,14 +1,12 @@
 #include "file_manager/file_manager.h"
 
 #include "core/log.h"
-
+#include "gui/gui_globals.h"
+#include "netlist/event_system/event_controls.h"
 #include "netlist/gate_library/gate_library_manager.h"
 #include "netlist/netlist.h"
 #include "netlist/netlist_factory.h"
 #include "netlist/persistent/netlist_serializer.h"
-#include "netlist/event_system/event_controls.h"
-
-#include "gui/gui_globals.h"
 
 #include <QDateTime>
 #include <QFile>
@@ -25,7 +23,7 @@ file_manager::file_manager(QObject* parent) : QObject(parent), m_file_watcher(ne
 {
     m_autosave_enabled  = g_settings_manager.get("advanced/autosave").toBool();
     m_autosave_interval = g_settings_manager.get("advanced/autosave_interval").toInt();
-    if (m_autosave_interval < 30) // failsafe in case somebody sets "0" in the .ini
+    if (m_autosave_interval < 30)    // failsafe in case somebody sets "0" in the .ini
         m_autosave_interval = 30;
     connect(&g_settings_relay, &settings_relay::setting_changed, this, &file_manager::handle_global_setting_changed);
 
@@ -45,7 +43,7 @@ void file_manager::handle_program_arguments(const program_arguments& args)
 {
     if (args.is_option_set("--input-file"))
     {
-        auto file_name = hal::path(args.get_parameter("--input-file"));
+        auto file_name = std::filesystem::path(args.get_parameter("--input-file"));
         log_info("gui", "GUI started with file {}.", file_name.string());
         open_file(QString::fromStdString(file_name.string()));
     }
@@ -185,9 +183,9 @@ void file_manager::open_file(QString file_name)
         }
     }
 
-    log_manager& lm    = log_manager::get_instance();
-    hal::path log_path = file_name.toStdString();
-    lm.set_file_name(hal::path(log_path.replace_extension(".log")));
+    log_manager& lm                = log_manager::get_instance();
+    std::filesystem::path log_path = file_name.toStdString();
+    lm.set_file_name(std::filesystem::path(log_path.replace_extension(".log")));
 
     if (file_name.endsWith(".hal"))
     {
@@ -395,14 +393,14 @@ void file_manager::update_recent_files(const QString& file) const
 
     g_gui_state.beginWriteArray("recent_files");
     int i = 0;
-    std::vector<hal::path> files;
+    std::vector<std::filesystem::path> files;
     for (QString& string : list)
     {
-        hal::path file_path(string.toStdString());
+        std::filesystem::path file_path(string.toStdString());
         bool skip = false;
         for (const auto& other : files)
         {
-            if (hal::fs::equivalent(file_path, other))
+            if (std::filesystem::equivalent(file_path, other))
             {
                 skip = true;
                 break;

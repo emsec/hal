@@ -23,27 +23,29 @@
 
 #pragma once
 
-#include "def.h"
-
 #include "core/interface_base.h"
 #include "core/program_options.h"
+#include "def.h"
 
-/**
- * generic plugin instance interface
- *
- * @ingroup core
- */
-class CORE_API i_interactive_ui : virtual public i_base
+namespace hal
 {
-public:
-    i_interactive_ui() = default;
-    virtual ~i_interactive_ui() = default;
-
     /**
-     * Generic call to run the interactive UI.
+     * generic plugin instance interface
      *
-     * @param[in] args - Program options for HAL.
-	 * @returns True on success, false otherwise.
+     * @ingroup core
      */
-    virtual bool exec(program_arguments& args) = 0;
-};
+    class CORE_API i_interactive_ui : virtual public i_base
+    {
+    public:
+        i_interactive_ui()          = default;
+        virtual ~i_interactive_ui() = default;
+
+        /**
+         * Generic call to run the interactive UI.
+         *
+         * @param[in] args - Program options for HAL.
+         * @returns True on success, false otherwise.
+         */
+        virtual bool exec(program_arguments& args) = 0;
+    };
+}    // namespace hal

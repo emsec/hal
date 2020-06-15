@@ -1,6 +1,9 @@
 #include "bindings.h"
 
-void core_utils_init(py::module& m){
+namespace hal
+{
+    void core_utils_init(py::module& m)
+    {
         auto py_core_utils = m.def_submodule("core_utils", R"(
             HAL Core Utility functions.
     )");
@@ -78,4 +81,5 @@ void core_utils_init(py::module& m){
 
             :returns: A vector of paths.
     )");
-}
+    }
+}    // namespace hal

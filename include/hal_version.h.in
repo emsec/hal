@@ -25,36 +25,38 @@
 
 #include <string>
 
-namespace hal_version
+namespace hal
 {
-    // Complete git describe version string
-    const std::string version = "@HAL_VERSION_RETURN@";
+    namespace hal_version
+    {
+        // Complete git describe version string
+        const std::string version = "@HAL_VERSION_RETURN@";
 
-    // Major Version Number
-    const int major = @HAL_VERSION_MAJOR@;
+        // Major Version Number
+        const int major = @HAL_VERSION_MAJOR@;
 
-    // Minor Version Number
-    const int minor = @HAL_VERSION_MINOR@;
+        // Minor Version Number
+        const int minor = @HAL_VERSION_MINOR@;
 
-    // Patch Version Number
-    const int patch = @HAL_VERSION_PATCH@;
+        // Patch Version Number
+        const int patch = @HAL_VERSION_PATCH@;
 
-    // Tweak Version Number
-    const int tweak = @HAL_VERSION_TWEAK@;
+        // Tweak Version Number
+        const int tweak = @HAL_VERSION_TWEAK@;
 
-    // Additional number of commits since last assigned version number
-    const int additional_commits = @HAL_VERSION_ADDITIONAL_COMMITS@;
+        // Additional number of commits since last assigned version number
+        const int additional_commits = @HAL_VERSION_ADDITIONAL_COMMITS@;
 
-    // Git Hash used for the current build
-    const std::string git_hash = "@HAL_VERSION_HASH@";
+        // Git Hash used for the current build
+        const std::string git_hash = "@HAL_VERSION_HASH@";
 
-    // Is it build from a dirty source directory?
-    const bool is_dirty = @HAL_VERSION_DIRTY@;
+        // Is it build from a dirty source directory?
+        const bool is_dirty = @HAL_VERSION_DIRTY@;
 
-    // Is the git repository broken on the development machine?
-    const bool is_broken = @HAL_VERSION_BROKEN@;
+        // Is the git repository broken on the development machine?
+        const bool is_broken = @HAL_VERSION_BROKEN@;
 
-    // Build Timestamp.
-    const std::string build_timestamp = "@BUILD_TIMESTAMP@";
-
-}
+        // Build Timestamp.
+        const std::string build_timestamp = "@BUILD_TIMESTAMP@";
+    }    // namespace hal_version
+}    // namespace hal

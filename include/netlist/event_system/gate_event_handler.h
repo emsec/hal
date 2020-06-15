@@ -25,52 +25,55 @@
 
 #include "core/callback_hook.h"
 
-class netlist;
-
-class gate;
-
 /**
  * @ingroup handler
  */
-namespace gate_event_handler
+
+namespace hal
 {
-    /**
-     * Enables/disables callbacks for this handler.<br>
-     * Enabled by default.
-     *
-     * @param[in] flag - True to enable, false to disable.
-     */
-    NETLIST_API void enable(bool flag);
+    class netlist;
+    class gate;
 
-    enum event
+    namespace gate_event_handler
     {
-        created,         ///< no associated_data
-        removed,         ///< no associated_data
-        name_changed,    ///< no associated_data
-        location_changed ///< no associated_data
-    };
+        /**
+         * Enables/disables callbacks for this handler.<br>
+         * Enabled by default.
+         *
+         * @param[in] flag - True to enable, false to disable.
+         */
+        NETLIST_API void enable(bool flag);
 
-    /**
-    * Executes all registered callbacks.
-    *
-    * @param[in] ev - the event which occured.
-    * @param[in] gate - The affected object.
-    * @param[in] associated_data - may have a meaning depending on the event type.
-    */
-    NETLIST_API void notify(event ev, std::shared_ptr<gate> gate, u32 associated_data = 0xFFFFFFFF);
+        enum event
+        {
+            created,            ///< no associated_data
+            removed,            ///< no associated_data
+            name_changed,       ///< no associated_data
+            location_changed    ///< no associated_data
+        };
 
-    /**
-     * Registers a callback function.
-     *
-     * @param[in] name - name of the callback, used for callback removal.
-     * @param[in] function - The callback function.
-     */
-    NETLIST_API void register_callback(const std::string& name, std::function<void(event e, std::shared_ptr<gate>, u32 associated_data)> function);
+        /**
+         * Executes all registered callbacks.
+         *
+         * @param[in] ev - the event which occured.
+         * @param[in] gate - The affected object.
+         * @param[in] associated_data - may have a meaning depending on the event type.
+         */
+        NETLIST_API void notify(event ev, std::shared_ptr<gate> gate, u32 associated_data = 0xFFFFFFFF);
 
-    /**
-     * Removes a callback function.
-     *
-     * @param[in] name - name of the callback.
-     */
-    NETLIST_API void unregister_callback(const std::string& name);
-}    // namespace gate_event_handler
+        /**
+         * Registers a callback function.
+         *
+         * @param[in] name - name of the callback, used for callback removal.
+         * @param[in] function - The callback function.
+         */
+        NETLIST_API void register_callback(const std::string& name, std::function<void(event e, std::shared_ptr<gate>, u32 associated_data)> function);
+
+        /**
+         * Removes a callback function.
+         *
+         * @param[in] name - name of the callback.
+         */
+        NETLIST_API void unregister_callback(const std::string& name);
+    }    // namespace gate_event_handler
+}    // namespace hal

@@ -23,39 +23,41 @@
 
 #pragma once
 
-#include "def.h"
-
 #include "core/interface_base.h"
 #include "core/program_options.h"
+#include "def.h"
 
 #include <tuple>
 #include <vector>
 
-/* forward declaration */
-class netlist;
-
-/**
- * @ingroup core
- */
-class CORE_API i_cli : virtual public i_base
+namespace hal
 {
-public:
-    i_cli()          = default;
-    virtual ~i_cli() = default;
+    /* forward declaration */
+    class netlist;
 
     /**
-     * Returns command line interface options
-     *
-     * @returns The program options description.
+     * @ingroup core
      */
-    virtual program_options get_cli_options() const = 0;
+    class CORE_API i_cli : virtual public i_base
+    {
+    public:
+        i_cli()          = default;
+        virtual ~i_cli() = default;
 
-    /**
-     * Entry point to handle command line interface call
-     *
-     * @param[in] netlist - The netlist.
-     * @param[in] args - Program options.
-     * @returns True on success.
-     */
-    virtual bool handle_cli_call(std::shared_ptr<netlist> netlist, program_arguments& args) = 0;
-};
+        /**
+         * Returns command line interface options
+         *
+         * @returns The program options description.
+         */
+        virtual program_options get_cli_options() const = 0;
+
+        /**
+         * Entry point to handle command line interface call
+         *
+         * @param[in] netlist - The netlist.
+         * @param[in] args - Program options.
+         * @returns True on success.
+         */
+        virtual bool handle_cli_call(std::shared_ptr<netlist> netlist, program_arguments& args) = 0;
+    };
+}    // namespace hal
