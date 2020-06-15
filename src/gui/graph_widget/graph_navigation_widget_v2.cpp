@@ -156,17 +156,26 @@ void graph_navigation_widget_v2::fill_table(bool direction)
         if (m_origin.id == 0)
         {
             // we're navigating from a net
-            // in this case we don't really know how to limit our view,
-            // so we look for the common ancestor of all sources and sinks of
-            // this net and use that
-            auto net_sources = m_via_net->get_sources();
-            auto net_destinations = m_via_net->get_destinations();
-            std::unordered_set<std::shared_ptr<gate>> net_gates;
-            for (auto ep : net_sources)
-                net_gates.insert(ep.get_gate());
-            for (auto ep : net_destinations)
-                net_gates.insert(ep.get_gate());
-            common_ancestor = gui_utility::first_common_ancestor({}, net_gates);
+            if (m_via_net->is_global_input_net() || m_via_net->is_global_output_net())
+            {
+                // in this special case, the net is actually _outside_ the
+                // top module, so we can't do the common ancestor approach
+                common_ancestor = nullptr;
+            }
+            else
+            {
+                // in this case we don't really know how to limit our view,
+                // so we look for the common ancestor of all sources and sinks of
+                // this net and use that
+                auto net_sources = m_via_net->get_sources();
+                auto net_destinations = m_via_net->get_destinations();
+                std::unordered_set<std::shared_ptr<gate>> net_gates;
+                for (auto ep : net_sources)
+                    net_gates.insert(ep.get_gate());
+                for (auto ep : net_destinations)
+                    net_gates.insert(ep.get_gate());
+                common_ancestor = gui_utility::first_common_ancestor({}, net_gates);
+            }
         }
         else if (m_origin.type == hal::node_type::gate)
         {
@@ -200,6 +209,8 @@ void graph_navigation_widget_v2::fill_table(bool direction)
         // recurse up the hierarchy until one prior to the common ancestor and
         // create entries for the parent gates, reusing ones that have already
         // been created for other gates
+        // (if we're navigating from a global in/out net, then common_ancestor
+        // is nullptr, so we stop instead when we run out of parents)
         std::shared_ptr<module> parent = g->get_module();
         bool reused_item = false;
         while(parent != common_ancestor) {
@@ -244,7 +255,9 @@ void graph_navigation_widget_v2::fill_table(bool direction)
             parent_item->addChild(item);
             parent = parent->get_parent_module();
             item = parent_item;
-            assert(parent); // we'll always hit the common ancestor before we run out of parents
+            // we'll always hit the common ancestor before we run out of parents,
+            // except if we're looking at a global input/output net
+            assert(parent || (common_ancestor == nullptr));
         }
         if (!reused_item)
         {
