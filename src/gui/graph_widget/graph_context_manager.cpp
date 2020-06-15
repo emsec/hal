@@ -1,14 +1,13 @@
 #include "gui/graph_widget/graph_context_manager.h"
 
-#include "netlist/gate.h"
-#include "netlist/module.h"
-#include "netlist/netlist.h"
-
 #include "gui/graph_widget/contexts/graph_context.h"
 #include "gui/graph_widget/layouters/physical_graph_layouter.h"
 #include "gui/graph_widget/layouters/standard_graph_layouter.h"
 #include "gui/graph_widget/shaders/module_shader.h"
 #include "gui/gui_globals.h"
+#include "netlist/gate.h"
+#include "netlist/module.h"
+#include "netlist/netlist.h"
 
 #include <QDateTime>
 
@@ -78,8 +77,8 @@ void graph_context_manager::handle_module_color_changed(const std::shared_ptr<mo
     for (auto g : gates)
         gateIDs.insert(g->get_id());
     for (graph_context* context : m_graph_contexts)
-        if (context->modules().contains(m->get_id()) // contains module
-            || context->gates().intersects(gateIDs)) // contains gate from module
+        if (context->modules().contains(m->get_id())    // contains module
+            || context->gates().intersects(gateIDs))    // contains gate from module
             context->schedule_scene_update();
     // a context can contain a gate from a module if it is showing the module
     // or if it's showing a parent and the module is unfolded
@@ -164,9 +163,9 @@ void graph_context_manager::handle_net_name_changed(const std::shared_ptr<net> n
 
 void graph_context_manager::handle_net_source_added(const std::shared_ptr<net> n, const u32 src_gate_id) const
 {
-    for(graph_context* context : m_graph_contexts)
+    for (graph_context* context : m_graph_contexts)
     {
-        if(context->nets().contains(n->get_id()) || context->gates().contains(src_gate_id))
+        if (context->nets().contains(n->get_id()) || context->gates().contains(src_gate_id))
         {
             // forcibly apply changes since nets need to be recalculated
             context->apply_changes();
@@ -177,9 +176,11 @@ void graph_context_manager::handle_net_source_added(const std::shared_ptr<net> n
 
 void graph_context_manager::handle_net_source_removed(const std::shared_ptr<net> n, const u32 src_gate_id) const
 {
-    for(graph_context* context : m_graph_contexts)
+    UNUSED(src_gate_id);
+
+    for (graph_context* context : m_graph_contexts)
     {
-        if(context->nets().contains(n->get_id()))
+        if (context->nets().contains(n->get_id()))
         {
             // forcibly apply changes since nets need to be recalculated
             context->apply_changes();
@@ -190,9 +191,9 @@ void graph_context_manager::handle_net_source_removed(const std::shared_ptr<net>
 
 void graph_context_manager::handle_net_destination_added(const std::shared_ptr<net> n, const u32 dst_gate_id) const
 {
-    for(graph_context* context : m_graph_contexts)
+    for (graph_context* context : m_graph_contexts)
     {
-        if(context->nets().contains(n->get_id()) || context->gates().contains(dst_gate_id))
+        if (context->nets().contains(n->get_id()) || context->gates().contains(dst_gate_id))
         {
             // forcibly apply changes since nets need to be recalculated
             context->apply_changes();
@@ -203,6 +204,8 @@ void graph_context_manager::handle_net_destination_added(const std::shared_ptr<n
 
 void graph_context_manager::handle_net_destination_removed(const std::shared_ptr<net> n, const u32 dst_gate_id) const
 {
+    UNUSED(dst_gate_id);
+
     for (graph_context* context : m_graph_contexts)
     {
         if (context->nets().contains(n->get_id()))
@@ -216,9 +219,9 @@ void graph_context_manager::handle_net_destination_removed(const std::shared_ptr
 
 void graph_context_manager::handle_marked_global_input(u32 net_id)
 {
-    for(graph_context* context : m_graph_contexts)
+    for (graph_context* context : m_graph_contexts)
     {
-        if(context->nets().contains(net_id) || context->is_showing_net_destination(net_id))
+        if (context->nets().contains(net_id) || context->is_showing_net_destination(net_id))
         {
             context->apply_changes();
             context->schedule_scene_update();
@@ -228,9 +231,9 @@ void graph_context_manager::handle_marked_global_input(u32 net_id)
 
 void graph_context_manager::handle_marked_global_output(u32 net_id)
 {
-    for(graph_context* context : m_graph_contexts)
+    for (graph_context* context : m_graph_contexts)
     {
-        if(context->nets().contains(net_id) || context->is_showing_net_source(net_id))
+        if (context->nets().contains(net_id) || context->is_showing_net_source(net_id))
         {
             context->apply_changes();
             context->schedule_scene_update();

@@ -1,9 +1,5 @@
 #include "gui/graph_widget/layouters/graph_layouter.h"
 
-#include "netlist/gate.h"
-#include "netlist/module.h"
-#include "netlist/net.h"
-
 #include "gui/graph_widget/contexts/graph_context.h"
 #include "gui/graph_widget/graphics_factory.h"
 #include "gui/graph_widget/graphics_scene.h"
@@ -13,7 +9,9 @@
 #include "gui/graph_widget/items/nets/standard_graphics_net.h"
 #include "gui/gui_globals.h"
 #include "gui/implementations/qpoint_extension.h"
-
+#include "netlist/gate.h"
+#include "netlist/module.h"
+#include "netlist/net.h"
 #include "qmath.h"
 
 template<typename T1, typename T2>
@@ -75,7 +73,7 @@ void graph_layouter::swap_node_positions(const hal::node& n1, const hal::node& n
     QPoint p1 = m_node_to_position_map.value(n1);
     QPoint p2 = m_node_to_position_map.value(n2);
 
-    m_node_to_position_map.insert(n1, p2); // implicit replace
+    m_node_to_position_map.insert(n1, p2);    // implicit replace
     m_node_to_position_map.insert(n2, p1);
 
     m_position_to_node_map.insert(p1, n2);
@@ -157,9 +155,9 @@ void graph_layouter::layout()
     m_scene->move_nets_to_background();
     m_scene->handle_extern_selection_changed(nullptr);
 
-    #ifdef GUI_DEBUG_GRID
+#ifdef GUI_DEBUG_GRID
     m_scene->debug_set_layouter_grid(x_values(), y_values(), default_grid_height(), default_grid_width());
-    #endif
+#endif
 }
 
 void graph_layouter::clear_layout_data()
@@ -243,7 +241,6 @@ void graph_layouter::calculate_nets()
 
         for (const endpoint& src : n->get_sources())
         {
-
             // FIND SRC BOX
             hal::node node;
 
@@ -827,9 +824,9 @@ void graph_layouter::draw_nets()
             continue;
         }
 
-        bool incomplete_net = false; // PASS TO SHADER ???
-        bool src_found = false;
-        bool dst_found = false;
+        bool incomplete_net = false;    // PASS TO SHADER ???
+        bool src_found      = false;
+        bool dst_found      = false;
 
         for (const endpoint& src : n->get_sources())
         {
@@ -1537,13 +1534,11 @@ graph_layouter::node_box graph_layouter::create_box(const hal::node& node, const
 
     switch (node.type)
     {
-        case hal::node_type::module:
-        {
+        case hal::node_type::module: {
             box.item = graphics_factory::create_graphics_module(g_netlist->get_module_by_id(node.id), 0);
             break;
         }
-        case hal::node_type::gate:
-        {
+        case hal::node_type::gate: {
             box.item = graphics_factory::create_graphics_gate(g_netlist->get_gate_by_id(node.id), 0);
             break;
         }
@@ -1914,8 +1909,8 @@ void graph_layouter::commit_used_paths(const graph_layouter::used_paths& used)
 
 void graph_layouter::append_non_zero_h_line(standard_graphics_net::lines& lines, const qreal small_x, const qreal big_x, const qreal y)
 {
-   if (small_x < big_x)
-       lines.append_h_line(small_x, big_x, y);
+    if (small_x < big_x)
+        lines.append_h_line(small_x, big_x, y);
 }
 
 void graph_layouter::append_non_zero_v_line(standard_graphics_net::lines& lines, const qreal x, const qreal small_y, const qreal big_y)

@@ -66,7 +66,7 @@ public Q_SLOTS:
 private:
 
     //general
-    int m_current_id;
+    u32 m_current_id;
     bool m_hide_empty_sections;
     QFont m_key_font;
 
