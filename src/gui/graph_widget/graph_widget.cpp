@@ -9,11 +9,13 @@
 #include "gui/graph_widget/graph_context_manager.h"
 #include "gui/graph_widget/graph_graphics_view.h"
 #include "gui/graph_widget/graph_layout_spinner_widget.h"
-#include "gui/graph_widget/graph_navigation_widget.h"
+#include "gui/graph_widget/graph_navigation_widget_v2.h"
 #include "gui/graph_widget/graphics_scene.h"
 #include "gui/graph_widget/items/nodes/gates/graphics_gate.h"
+#include "gui/graph_widget/items/nodes/modules/graphics_module.h"
 #include "gui/gui_def.h"
 #include "gui/gui_globals.h"
+#include "gui/gui_utils/netlist.h"
 #include "gui/hal_content_manager/hal_content_manager.h"
 #include "gui/overlay/dialog_overlay.h"
 #include "gui/toolbar/toolbar.h"
@@ -29,19 +31,20 @@
 #include <QTimer>
 
 graph_widget::graph_widget(graph_context* context, QWidget* parent)
-    : content_widget("Graph", parent), m_view(new graph_graphics_view(this)), m_context(context), m_overlay(new dialog_overlay(this)), m_navigation_widget(new graph_navigation_widget(nullptr)),
+    : content_widget("Graph", parent), m_view(new graph_graphics_view(this)), m_context(context), m_overlay(new dialog_overlay(this)),
+      m_navigation_widget_v2(new graph_navigation_widget_v2(nullptr)),
       m_spinner_widget(new graph_layout_spinner_widget(this)), m_current_expansion(0)
 {
-    connect(m_navigation_widget, &graph_navigation_widget::navigation_requested, this, &graph_widget::handle_navigation_jump_requested);
-    connect(m_navigation_widget, &graph_navigation_widget::close_requested, m_overlay, &dialog_overlay::hide);
-    connect(m_navigation_widget, &graph_navigation_widget::close_requested, this, &graph_widget::reset_focus);
+    connect(m_navigation_widget_v2, &graph_navigation_widget_v2::navigation_requested, this, &graph_widget::handle_navigation_jump_requested);
+    connect(m_navigation_widget_v2, &graph_navigation_widget_v2::close_requested, m_overlay, &dialog_overlay::hide);
+    connect(m_navigation_widget_v2, &graph_navigation_widget_v2::close_requested, this, &graph_widget::reset_focus);
 
     connect(m_overlay, &dialog_overlay::clicked, m_overlay, &dialog_overlay::hide);
 
     connect(m_view, &graph_graphics_view::module_double_clicked, this, &graph_widget::handle_module_double_clicked);
 
     m_overlay->hide();
-    m_overlay->set_widget(m_navigation_widget);
+    m_overlay->set_widget(m_navigation_widget_v2);
     m_spinner_widget->hide();
     m_content_layout->addWidget(m_view);
 
@@ -72,7 +75,7 @@ void graph_widget::handle_scene_available()
 
     m_overlay->hide();
     m_spinner_widget->hide();
-    m_overlay->set_widget(m_navigation_widget);
+    m_overlay->set_widget(m_navigation_widget_v2);
 
     if (hasFocus())
         m_view->setFocus();
@@ -153,73 +156,205 @@ void graph_widget::keyPressEvent(QKeyEvent* event)
     }
 }
 
-void graph_widget::handle_navigation_jump_requested(const hal::node origin, const u32 via_net, const QSet<u32>& to_gates)
+void graph_widget::substitute_by_visible_modules(const QSet<u32>& gates, const QSet<u32>& modules, QSet<u32>& target_gates, QSet<u32>& target_modules, QSet<u32>& remove_gates, QSet<u32>& remove_modules) const
+{
+    // EXPAND SELECTION AND CONTEXT UP THE HIERARCHY TREE
+
+    for (auto& mid : modules)
+    {
+        auto m = g_netlist->get_module_by_id(mid);
+        QSet<u32> common = gui_utility::parent_modules(m) & m_context->modules();
+        if (common.empty())
+        {
+            // we can select the module
+            target_modules.insert(mid);
+        }
+        else
+        {
+            // we must select the respective parent module instead
+            // (this "common" set only has one element)
+            assert(common.size() == 1);
+            target_modules += common;
+        }
+    }
+
+    for (auto& gid : gates)
+    {
+        auto g = g_netlist->get_gate_by_id(gid);
+        QSet<u32> common = gui_utility::parent_modules(g) & m_context->modules();
+        if (common.empty())
+        {
+            target_gates.insert(gid);
+        }
+        else
+        {
+            // At this stage, "common" could contain multiple elements because
+            // we might have inserted a parent module where its child  module is
+            // already visible. This is cleaned up later.
+            target_modules += common;
+        }
+    }
+
+    // PRUNE SELECTION AND CONTEXT DOWN THE HIERARCHY TREE
+
+    // discard (and if required schedule for removal) all modules whose
+    // parent modules we'll be showing
+    QSet<u32> new_module_set = m_context->modules() + target_modules;
+    for (auto& mid : m_context->modules())
+    {
+        auto m = g_netlist->get_module_by_id(mid);
+        if (gui_utility::parent_modules(m).intersects(new_module_set))
+        {
+            remove_modules.insert(mid);
+        }
+    }
+    auto it = target_modules.constBegin();
+    while(it != target_modules.constEnd())
+    {
+        auto m = g_netlist->get_module_by_id(*it);
+        if (gui_utility::parent_modules(m).intersects(new_module_set))
+        {
+            it = target_modules.erase(it);
+        }
+        else
+        {
+            ++it;
+        }
+    }
+
+    // discard (and if required schedule for removal) all gates whose
+    // parent modules we'll be showing
+    new_module_set = (m_context->modules() - remove_modules) + target_modules;
+    for (auto& gid : m_context->gates())
+    {
+        auto g = g_netlist->get_gate_by_id(gid);
+        if (gui_utility::parent_modules(g).intersects(new_module_set))
+        {
+            remove_gates.insert(gid);
+        }
+    }
+    it = target_gates.constBegin();
+    while(it != target_gates.constEnd())
+    {
+        auto g = g_netlist->get_gate_by_id(*it);
+        if (gui_utility::parent_modules(g).intersects(new_module_set))
+        {
+            it = target_gates.erase(it);
+        }
+        else
+        {
+            ++it;
+        }
+    }
+    // qDebug() << "-----------";
+    // qDebug() << "requested gates" << gates;
+    // qDebug() << "requested modules" << modules;
+    // qDebug() << "target gates" << target_gates;
+    // qDebug() << "target modules" << target_modules;
+    // qDebug() << "remove gates" << remove_gates;
+    // qDebug() << "remove modules" << remove_modules;
+}
+
+void graph_widget::set_modified_if_module()
+{
+    // if our name matches that of a module, add the "modified" label and
+    // optionally a number if a "modified"-labeled context already exists
+    for (const auto& m : g_netlist->get_modules())
+    {
+        if (m->get_name() == m_context->name().toStdString())
+        {
+            u32 cnt = 0;
+            while (true)
+            {
+                ++cnt;
+                QString new_name = m_context->name() + " modified";
+                if (cnt > 1)
+                {
+                    new_name += " (" + QString::number(cnt) + ")";
+                }
+                bool found = false;
+                for (const auto& ctx : g_graph_context_manager.get_contexts())
+                {
+                    if (ctx->name() == new_name)
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found)
+                {
+                    g_graph_context_manager.rename_graph_context(m_context, new_name);
+                    break;
+                }
+            }
+            break;
+        }
+    }
+}
+
+void graph_widget::handle_navigation_jump_requested(const hal::node origin, const u32 via_net, const QSet<u32>& to_gates, const QSet<u32>& to_modules)
 {
     bool bail_animation = false;
 
     setFocus();
 
-    // ASSERT INPUTS ARE VALID ?
+    // ASSERT INPUTS ARE VALID
     auto n = g_netlist->get_net_by_id(via_net);
-    if (!n || to_gates.isEmpty())
+    if (!n || (to_gates.empty() && to_modules.empty())) {
+        // prevent stuck navigation widget
+        m_overlay->hide();
+        m_view->setFocus();
         return;
-    QList<std::shared_ptr<gate>> gates;
-    for (u32 id : to_gates)
-    {
-        auto g = g_netlist->get_gate_by_id(id);
-        if (!g)
-            return;
-        gates.append(g);
     }
 
-    if (!m_context->gates().contains(to_gates))
-    {
-        for (const auto& m : g_netlist->get_modules())
+    // Substitute all gates by their modules if we're showing them.
+    // This avoids ripping gates out of their already visible modules.
+    QSet<u32> final_modules, remove_modules;
+    QSet<u32> final_gates, remove_gates;
+    substitute_by_visible_modules(to_gates, to_modules, final_gates, final_modules, remove_gates, remove_modules);
+
+    // find out which gates and modules we still need to add to the context
+    // (this makes the cone view work)
+    QSet<u32> nonvisible_gates = final_gates - m_context->gates();
+    QSet<u32> nonvisible_modules = final_modules - m_context->modules();
+
+    // if we don't have all gates and modules, we need to add them
+    if (!nonvisible_gates.empty() || !nonvisible_modules.empty())
+    {   
+        // display the "modified" label if we're showing a module context
+        set_modified_if_module();
+
+        // hint the layouter at the direction we're navigating in
+        // (so the cone view nicely extends to the right or left)
+        // either they're all inputs or all outputs, so just check the first one
+
+        std::set<std::shared_ptr<net>> in_nets;
+        if (to_gates.empty())
         {
-            if (m->get_name() == m_context->name().toStdString())
-            {
-                u32 cnt = 0;
-                while (true)
-                {
-                    ++cnt;
-                    QString new_name = m_context->name() + " modified";
-                    if (cnt > 1)
-                    {
-                        new_name += " (" + QString::number(cnt) + ")";
-                    }
-                    bool found = false;
-                    for (const auto& ctx : g_graph_context_manager.get_contexts())
-                    {
-                        if (ctx->name() == new_name)
-                        {
-                            found = true;
-                            break;
-                        }
-                    }
-                    if (!found)
-                    {
-                        g_graph_context_manager.rename_graph_context(m_context, new_name);
-                        break;
-                    }
-                }
-                break;
-            }
+            in_nets = g_netlist->get_module_by_id(*to_modules.constBegin())->get_input_nets();
         }
-
-        // If we don't have all the gates in the current context, we need to
-        // insert them
-
-        auto in_nets = gates.constBegin()->get()->get_fan_in_nets(); // either they're all inputs or all outputs, so just check the first one
+        else
+        {
+            in_nets = g_netlist->get_gate_by_id(*to_gates.begin())->get_fan_in_nets();
+        }
         bool netIsInput = in_nets.find(n) != in_nets.cend();
         hal::placement_mode placement = netIsInput ? hal::placement_mode::prefer_right : hal::placement_mode::prefer_left;
-        m_context->add({}, to_gates, hal::placement_hint{placement, origin});
 
+        // add all new gates and modules
+        m_context->begin_change();
+        m_context->remove(remove_modules, remove_gates);
+        m_context->add(nonvisible_modules, nonvisible_gates, hal::placement_hint{placement, origin});
+        m_context->end_change();
+
+        // FIXME find out how to do this properly
         // If we have added any gates, the scene may have resized. In that case, the animation can be erratic,
         // so we set a flag here that we can't run the animation. See end of this method for more details.
         bail_animation = true;
     }
     else
     {
+        // if we don't need to add anything, we're done here
+
         m_overlay->hide();
         //if (hasFocus())
         m_view->setFocus();
@@ -227,17 +362,24 @@ void graph_widget::handle_navigation_jump_requested(const hal::node origin, cons
 
     // SELECT IN RELAY
     g_selection_relay.clear();
-    g_selection_relay.m_selected_gates = to_gates;
-    if (to_gates.size() == 1)
+    g_selection_relay.m_selected_gates = final_gates;
+    g_selection_relay.m_selected_modules = final_modules;
+
+    // TODO implement subselections on modules, then add a case for when the
+    // selection is only one module (instead of one gate)
+
+    if (final_gates.size() == 1 && final_modules.empty())
     {
         // subfocus only possible when just one gate selected
+        u32 gid = *final_gates.begin();
+        auto g = g_netlist->get_gate_by_id(gid);
 
-        auto g = *gates.constBegin();
         g_selection_relay.m_focus_type = selection_relay::item_type::gate;
-        g_selection_relay.m_focus_id   = g->get_id();
+        g_selection_relay.m_focus_id   = gid;
         g_selection_relay.m_subfocus   = selection_relay::subfocus::none;
 
         u32 cnt = 0;
+        // TODO simplify (we do actually know if we're navigating left or right)
         for (const auto& pin : g->get_input_pins())
         {
             if (g->get_fan_in_net(pin) == n)    // input net
@@ -263,6 +405,51 @@ void graph_widget::handle_navigation_jump_requested(const hal::node origin, cons
             }
         }
     }
+    else if (final_modules.size() == 1 && final_gates.empty())
+    {
+        // subfocus only possible when just one module selected
+        u32 mid = *final_modules.begin();
+        auto m = g_netlist->get_module_by_id(mid);
+
+        g_selection_relay.m_focus_type = selection_relay::item_type::module;
+        g_selection_relay.m_focus_id   = mid;
+        g_selection_relay.m_subfocus   = selection_relay::subfocus::none;
+
+        u32 cnt = 0;
+        // FIXME this is super hacky because currently we have no way of
+        // properly indexing port names on modules (since no order is guaranteed
+        // on the port names (different to pin names in gates), but our GUI
+        // wants integer indexes)
+        // (what we use here is the fact that graphics_module builds its port
+        // list by traversing m->get_input_nets(), so we just use that order and
+        // hope nobody touches that implementation)
+
+        // TODO simplify (we do actually know if we're navigating left or right)
+        for (const auto& inet : m->get_input_nets())
+        {
+            if (inet == n)    // input net
+            {
+                g_selection_relay.m_subfocus       = selection_relay::subfocus::left;
+                g_selection_relay.m_subfocus_index = cnt;
+                break;
+            }
+            cnt++;
+        }
+        if (g_selection_relay.m_subfocus == selection_relay::subfocus::none)
+        {
+            cnt = 0;
+            for (const auto& inet : m->get_output_nets())
+            {
+                if (inet == n)    // input net
+                {
+                    g_selection_relay.m_subfocus       = selection_relay::subfocus::right;
+                    g_selection_relay.m_subfocus_index = cnt;
+                    break;
+                }
+                cnt++;
+            }
+        }
+    }
 
     g_selection_relay.relay_selection_changed(nullptr);
 
@@ -272,8 +459,8 @@ void graph_widget::handle_navigation_jump_requested(const hal::node origin, cons
     if (bail_animation)
         return;
 
-    // JUMP TO THE GATE
-    ensure_gates_visible(to_gates);
+    // JUMP TO THE GATES AND MODULES
+    ensure_items_visible(final_gates, final_modules);
 }
 
 void graph_widget::handle_module_double_clicked(const u32 id)
@@ -317,12 +504,12 @@ void graph_widget::handle_navigation_left_request()
                 }
                 else if (n->get_num_of_sources() == 1)
                 {
-                    handle_navigation_jump_requested(hal::node{hal::node_type::gate, g->get_id()}, n->get_id(), {n->get_source().get_gate()->get_id()});
+                    handle_navigation_jump_requested(hal::node{hal::node_type::gate, g->get_id()}, n->get_id(), {n->get_source().get_gate()->get_id()}, {});
                 }
                 else
                 {
-                    m_navigation_widget->setup(false);
-                    m_navigation_widget->setFocus();
+                    m_navigation_widget_v2->setup(false);
+                    m_navigation_widget_v2->setFocus();
                     m_overlay->show();
                 }
             }
@@ -348,12 +535,12 @@ void graph_widget::handle_navigation_left_request()
 
             if (n->get_num_of_sources() == 1)
             {
-                handle_navigation_jump_requested(hal::node{hal::node_type::gate, 0}, n->get_id(), {n->get_sources()[0].get_gate()->get_id()});
+                handle_navigation_jump_requested(hal::node{hal::node_type::gate, 0}, n->get_id(), {n->get_sources()[0].get_gate()->get_id()}, {});
             }
             else
             {
-                m_navigation_widget->setup(false);
-                m_navigation_widget->setFocus();
+                m_navigation_widget_v2->setup(false);
+                m_navigation_widget_v2->setFocus();
                 m_overlay->show();
             }
 
@@ -361,6 +548,51 @@ void graph_widget::handle_navigation_left_request()
         }
         case selection_relay::item_type::module:
         {
+            std::shared_ptr<module> m = g_netlist->get_module_by_id(g_selection_relay.m_focus_id);
+
+            if (!m)
+                return;
+
+            if (g_selection_relay.m_subfocus == selection_relay::subfocus::left)
+            {
+                // FIXME this is super hacky because currently we have no way of
+                // properly indexing port names on modules (since no order is guaranteed
+                // on the port names (different to pin names in gates), but our GUI
+                // wants integer indexes)
+                // (what we use here is the fact that graphics_module builds its port
+                // list by traversing m->get_input_nets(), so we just use that order and
+                // hope nobody touches that implementation)
+                auto it = m->get_input_nets().begin();
+                if (g_selection_relay.m_subfocus_index > 0)
+                    std::advance(it, g_selection_relay.m_subfocus_index);
+                auto n = *it;
+                if (n->get_num_of_sources() == 0)
+                {
+                    g_selection_relay.clear();
+                    g_selection_relay.m_selected_nets.insert(n->get_id());
+                    g_selection_relay.m_focus_type = selection_relay::item_type::net;
+                    g_selection_relay.m_focus_id   = n->get_id();
+                    g_selection_relay.relay_selection_changed(nullptr);
+                }
+                else if (n->get_num_of_sources() == 1)
+                {
+                    handle_navigation_jump_requested(hal::node{hal::node_type::module, m->get_id()}, n->get_id(), {n->get_sources()[0].get_gate()->get_id()}, {});
+                }
+                else
+                {
+                    m_navigation_widget_v2->setup(false);
+                    m_navigation_widget_v2->setFocus();
+                    m_overlay->show();
+                }
+            }
+            else if (m->get_input_nets().size())
+            {
+                g_selection_relay.m_subfocus       = selection_relay::subfocus::left;
+                g_selection_relay.m_subfocus_index = 0;
+
+                g_selection_relay.relay_subfocus_changed(nullptr);
+            }
+
             return;
         }
     }
@@ -394,12 +626,12 @@ void graph_widget::handle_navigation_right_request()
                 }
                 else if (n->get_num_of_destinations() == 1)
                 {
-                    handle_navigation_jump_requested(hal::node{hal::node_type::gate, g->get_id()}, n->get_id(), {n->get_destinations()[0].get_gate()->get_id()});
+                    handle_navigation_jump_requested(hal::node{hal::node_type::gate, g->get_id()}, n->get_id(), {n->get_destinations()[0].get_gate()->get_id()}, {});
                 }
                 else
                 {
-                    m_navigation_widget->setup(true);
-                    m_navigation_widget->setFocus();
+                    m_navigation_widget_v2->setup(true);
+                    m_navigation_widget_v2->setFocus();
                     m_overlay->show();
                 }
             }
@@ -425,12 +657,12 @@ void graph_widget::handle_navigation_right_request()
 
             if (n->get_num_of_destinations() == 1)
             {
-                handle_navigation_jump_requested(hal::node{hal::node_type::gate, 0}, n->get_id(), {n->get_destinations()[0].get_gate()->get_id()});
+                handle_navigation_jump_requested(hal::node{hal::node_type::gate, 0}, n->get_id(), {n->get_destinations()[0].get_gate()->get_id()}, {});
             }
             else
             {
-                m_navigation_widget->setup(true);
-                m_navigation_widget->setFocus();
+                m_navigation_widget_v2->setup(true);
+                m_navigation_widget_v2->setFocus();
                 m_overlay->show();
             }
 
@@ -438,22 +670,71 @@ void graph_widget::handle_navigation_right_request()
         }
         case selection_relay::item_type::module:
         {
-            return;
+            std::shared_ptr<module> m = g_netlist->get_module_by_id(g_selection_relay.m_focus_id);
+
+            if (!m)
+                return;
+
+            if (g_selection_relay.m_subfocus == selection_relay::subfocus::right)
+            {
+                // FIXME this is super hacky because currently we have no way of
+                // properly indexing port names on modules (since no order is guaranteed
+                // on the port names (different to pin names in gates), but our GUI
+                // wants integer indexes)
+                // (what we use here is the fact that graphics_module builds its port
+                // list by traversing m->get_input_nets(), so we just use that order and
+                // hope nobody touches that implementation)
+                auto it = m->get_output_nets().begin();
+                if (g_selection_relay.m_subfocus_index > 0)
+                    std::advance(it, g_selection_relay.m_subfocus_index);
+                auto n = *it;
+                if (n->get_num_of_destinations() == 0)
+                {
+                    g_selection_relay.clear();
+                    g_selection_relay.m_selected_nets.insert(n->get_id());
+                    g_selection_relay.m_focus_type = selection_relay::item_type::net;
+                    g_selection_relay.m_focus_id   = n->get_id();
+                    g_selection_relay.relay_selection_changed(nullptr);
+                }
+                else if (n->get_num_of_destinations() == 1)
+                {
+                    handle_navigation_jump_requested(hal::node{hal::node_type::module, m->get_id()}, n->get_id(), {n->get_destinations()[0].get_gate()->get_id()}, {});
+                }
+                else
+                {
+                    m_navigation_widget_v2->setup(true);
+                    m_navigation_widget_v2->setFocus();
+                    m_overlay->show();
+                }
+            }
+            else if (m->get_output_nets().size())
+            {
+                g_selection_relay.m_subfocus       = selection_relay::subfocus::right;
+                g_selection_relay.m_subfocus_index = 0;
+
+                g_selection_relay.relay_subfocus_changed(nullptr);
+            }
         }
     }
 }
 
 void graph_widget::handle_navigation_up_request()
 {
-    if (g_selection_relay.m_focus_type == selection_relay::item_type::gate)
-        if (m_context->gates().contains(g_selection_relay.m_focus_id))
+    // FIXME this is ugly
+    if ((g_selection_relay.m_focus_type == selection_relay::item_type::gate
+        && m_context->gates().contains(g_selection_relay.m_focus_id))
+        || (g_selection_relay.m_focus_type == selection_relay::item_type::module
+        && m_context->modules().contains(g_selection_relay.m_focus_id)))
             g_selection_relay.navigate_up();
 }
 
 void graph_widget::handle_navigation_down_request()
 {
-    if (g_selection_relay.m_focus_type == selection_relay::item_type::gate)
-        if (m_context->gates().contains(g_selection_relay.m_focus_id))
+    // FIXME this is ugly
+    if ((g_selection_relay.m_focus_type == selection_relay::item_type::gate
+        && m_context->gates().contains(g_selection_relay.m_focus_id))
+        || (g_selection_relay.m_focus_type == selection_relay::item_type::module
+        && m_context->modules().contains(g_selection_relay.m_focus_id)))
             g_selection_relay.navigate_down();
 }
 
@@ -502,7 +783,7 @@ void graph_widget::handle_enter_module_requested(const u32 id)
     ctx->add(module_ids, gate_ids);
 }
 
-void graph_widget::ensure_gates_visible(const QSet<u32> gates)
+void graph_widget::ensure_items_visible(const QSet<u32>& gates, const QSet<u32>& modules)
 {
     if (m_context->scene_update_in_progress())
         return;
@@ -515,6 +796,17 @@ void graph_widget::ensure_gates_visible(const QSet<u32> gates)
     for (auto id : gates)
     {
         auto rect = m_context->scene()->get_gate_item(id)->sceneBoundingRect();
+
+        min_x = std::min(min_x, static_cast<int>(rect.left()));
+        max_x = std::max(max_x, static_cast<int>(rect.right()));
+        min_y = std::min(min_y, static_cast<int>(rect.top()));
+        max_y = std::max(max_y, static_cast<int>(rect.bottom()));
+    }
+
+    // TODO clean up redundancy
+    for (auto id : modules)
+    {
+        auto rect = m_context->scene()->get_module_item(id)->sceneBoundingRect();
 
         min_x = std::min(min_x, static_cast<int>(rect.left()));
         max_x = std::max(max_x, static_cast<int>(rect.right()));

@@ -58,6 +58,7 @@ void selection_relay::relay_subfocus_changed(void* sender)
     Q_EMIT subfocus_changed(sender);
 }
 
+// TODO deduplicate navigate_up and navigate_down
 void selection_relay::navigate_up()
 {
     u32 size = 0;
@@ -118,6 +119,31 @@ void selection_relay::navigate_up()
         }
         case item_type::module:
         {
+            std::shared_ptr<module> m = g_netlist->get_module_by_id(m_focus_id);
+
+            if (!m)
+                return;
+
+            if (m_subfocus == subfocus::left)
+            {
+                size = m->get_input_nets().size();
+
+                if (!size)     // CHECK NECESSARY ???
+                    return;    // INVALID STATE, FIX OR IGNORE ???
+
+                break;
+            }
+
+            if (m_subfocus == subfocus::right)
+            {
+                size = m->get_output_nets().size();
+
+                if (!size)     // CHECK NECESSARY ???
+                    return;    // INVALID STATE, FIX OR IGNORE ???
+
+                break;
+            }
+
             return;
         }
     }
@@ -190,6 +216,31 @@ void selection_relay::navigate_down()
         }
         case item_type::module:
         {
+            std::shared_ptr<module> m = g_netlist->get_module_by_id(m_focus_id);
+
+            if (!m)
+                return;
+
+            if (m_subfocus == subfocus::left)
+            {
+                size = m->get_input_nets().size();
+
+                if (!size)     // CHECK NECESSARY ???
+                    return;    // INVALID STATE, FIX OR IGNORE ???
+
+                break;
+            }
+
+            if (m_subfocus == subfocus::right)
+            {
+                size = m->get_output_nets().size();
+
+                if (!size)     // CHECK NECESSARY ???
+                    return;    // INVALID STATE, FIX OR IGNORE ???
+
+                break;
+            }
+
             return;
         }
     }
@@ -202,6 +253,7 @@ void selection_relay::navigate_down()
     Q_EMIT subfocus_changed(nullptr);
 }
 
+// TODO nothing is using this method - do we need it?
 void selection_relay::navigate_left()
 {
     switch (m_focus_type)
@@ -253,11 +305,30 @@ void selection_relay::navigate_left()
         }
         case item_type::module:
         {
+            std::shared_ptr<module> m = g_netlist->get_module_by_id(m_focus_id);
+
+            if (!m)
+                return;
+
+            if (m->get_input_nets().size())    // CHECK HERE OR IN PRIVATE METHODS ?
+            {
+                if (m_subfocus == subfocus::left)
+                    follow_module_input_pin(m, m_subfocus_index);
+                else
+                {
+                    if (s_navigation_skips_enabled && m->get_input_nets().size() == 1)
+                        follow_module_input_pin(m, 0);
+                    else
+                        subfocus_left();
+                }
+            }
+
             return;
         }
     }
 }
 
+// TODO nothing is using this method - do we need it?
 void selection_relay::navigate_right()
 {
     switch (m_focus_type)
@@ -307,6 +378,21 @@ void selection_relay::navigate_right()
         }
         case item_type::module:
         {
+            std::shared_ptr<module> m = g_netlist->get_module_by_id(m_focus_id);
+
+            if (!m)
+                return;
+
+            if (m_subfocus == subfocus::right)
+                follow_module_output_pin(m, m_subfocus_index);
+            else
+            {
+                if (s_navigation_skips_enabled && m->get_output_nets().size() == 1)
+                    follow_module_output_pin(m, 0);
+                else
+                    subfocus_right();
+            }
+
             return;
         }
     }
@@ -410,6 +496,17 @@ void selection_relay::follow_gate_output_pin(std::shared_ptr<gate> g, u32 output
 
     Q_EMIT selection_changed(nullptr);
 }
+
+void selection_relay::follow_module_input_pin(std::shared_ptr<module> m, u32 input_pin_index)
+{
+    // TODO implement
+}
+
+void selection_relay::follow_module_output_pin(std::shared_ptr<module> m, u32 output_pin_index)
+{
+    // TODO implement
+}
+
 
 void selection_relay::follow_net_to_source(std::shared_ptr<net> n)
 {
