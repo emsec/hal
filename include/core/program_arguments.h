@@ -38,7 +38,7 @@ namespace hal
     /**
     * @ingroup core
     */
-    class CORE_API program_arguments
+    class CORE_API ProgramArguments
     {
     public:
         /**
@@ -47,14 +47,14 @@ namespace hal
          * @param[out] argc - Pointer to number of arguments.
          * @param[out] argv - Pointer to array of arguments.
          */
-        program_arguments(int argc, const char** argv);
+        ProgramArguments(int argc, const char** argv);
 
         /**
          * Constructor. Stores no command line arguments internally.
          */
-        program_arguments();
+        ProgramArguments();
 
-        ~program_arguments() = default;
+        ~ProgramArguments() = default;
 
         /**
          * Copies the original command line arguments into the parameters.

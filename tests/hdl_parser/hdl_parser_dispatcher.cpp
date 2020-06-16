@@ -86,7 +86,7 @@ TEST_END
 }
 
 /**
- * Testing the parse function that takes program_arguments as input.
+ * Testing the parse function that takes ProgramArguments as input.
  *
  * Functions: parse
  */
@@ -101,11 +101,11 @@ TEST_F(hdl_parser_dispatcher_test, check_parse_by_program_args)
 
     {
         // Parse a vhdl and a verilog file by passing the parser name and the gate_library name in the program arguments.
-        program_arguments p_args_vhdl;
+        ProgramArguments p_args_vhdl;
         p_args_vhdl.set_option("--parser", std::vector<std::string>({"vhdl"}));
         p_args_vhdl.set_option("--gate-library", std::vector<std::string>({"EXAMPLE_GATE_LIBRARY"}));
 
-        program_arguments p_args_verilog;
+        ProgramArguments p_args_verilog;
         p_args_verilog.set_option("--parser", std::vector<std::string>({"verilog"}));
         p_args_verilog.set_option("--gate-library", std::vector<std::string>({"EXAMPLE_GATE_LIBRARY"}));
 
@@ -118,7 +118,7 @@ TEST_F(hdl_parser_dispatcher_test, check_parse_by_program_args)
     {
         // Parse a vhdl and a verilog file by passing no relevant program arguments. The parser should be determined
         // from the file extension ('.vhdl'/'.v') while the gate_library should be guessed.
-        program_arguments p_args_empty;
+        ProgramArguments p_args_empty;
 
         std::shared_ptr<netlist> nl_vhdl    = hdl_parser_dispatcher::parse(vhdl_file_with_extension, p_args_empty);
         std::shared_ptr<netlist> nl_verilog = hdl_parser_dispatcher::parse(verilog_file_with_extension, p_args_empty);
@@ -129,7 +129,7 @@ TEST_F(hdl_parser_dispatcher_test, check_parse_by_program_args)
     // NEGATIVE
     {
         // Pass an unknown parser
-        program_arguments p_args_vhdl;
+        ProgramArguments p_args_vhdl;
         p_args_vhdl.set_option("--parser", std::vector<std::string>({"verihdl"}));    // <- unknown
         p_args_vhdl.set_option("--gate-library", std::vector<std::string>({"EXAMPLE_GATE_LIBRARY"}));
 
@@ -139,7 +139,7 @@ TEST_F(hdl_parser_dispatcher_test, check_parse_by_program_args)
     }
     {
         // Pass an unknown file path
-        program_arguments p_args_vhdl;
+        ProgramArguments p_args_vhdl;
         p_args_vhdl.set_option("--parser", std::vector<std::string>({"verilog"}));    // <- unknown
         p_args_vhdl.set_option("--gate-library", std::vector<std::string>({"EXAMPLE_GATE_LIBRARY"}));
 
@@ -150,7 +150,7 @@ TEST_F(hdl_parser_dispatcher_test, check_parse_by_program_args)
     /*{ // ISSUE: Some issue in the verilog tokenizer (also vhdl?).
             // (l.189: if(... && parsed_tokens.back() == '#'), parsed_tokens can be empty)
             // Pass an invalid file with no gate-library hint
-            program_arguments p_args;
+            ProgramArguments p_args;
             p_args.set_option("--parser", std::vector<std::string>({"verilog"}));
 
             std::shared_ptr<netlist> nl = hdl_parser_dispatcher::parse(invalid_file, p_args);

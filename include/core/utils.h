@@ -472,7 +472,7 @@ namespace hal
          */
         CORE_API std::string get_open_source_licenses();
 
-        class CORE_API recursive_directory_range
+        class CORE_API RecursiveDirectoryRange
         {
         public:
             using iterator = std::filesystem::recursive_directory_iterator;
@@ -480,7 +480,7 @@ namespace hal
             /**
              * @param[in] p - The top level directory.
              */
-            recursive_directory_range(std::filesystem::path p) : p_(p)
+            RecursiveDirectoryRange(std::filesystem::path p) : p_(p)
             {
             }
 
@@ -509,7 +509,7 @@ namespace hal
             std::filesystem::path p_;
         };
 
-        class CORE_API directory_range
+        class CORE_API DirectoryRange
         {
         public:
             using iterator = std::filesystem::directory_iterator;
@@ -517,7 +517,7 @@ namespace hal
             /**
              * @param[in] p - The top level directory.
              */
-            directory_range(std::filesystem::path p) : p_(p)
+            DirectoryRange(std::filesystem::path p) : p_(p)
             {
             }
 

@@ -1,6 +1,6 @@
 #include "plugin_manager/plugin_model.h"
 
-#include "core/interface_cli.h"
+#include "core/plugin_interface_cli.h"
 #include "core/log.h"
 #include "core/plugin_manager.h"
 #include <QDataStream>
@@ -15,15 +15,15 @@ plugin_model::plugin_model(QObject* parent) : QAbstractItemModel(parent), model_
         m_columns.append(item.first);
     }
     model_changed_callback_id =
-        plugin_manager::add_model_changed_callback(std::bind(&plugin_model::plugin_manager_callback, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
+        PluginManager::add_model_changed_callback(std::bind(&plugin_model::plugin_manager_callback, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
     connect(this, &plugin_model::load_plugin, this, &plugin_model::handle_load_plugin);
     connect(this, &plugin_model::unload_plugin, this, &plugin_model::handle_unload_plugin);
-    plugin_manager::load_all_plugins();
+    PluginManager::load_all_plugins();
 }
 
 plugin_model::~plugin_model()
 {
-    plugin_manager::remove_model_changed_callback(model_changed_callback_id);
+    PluginManager::remove_model_changed_callback(model_changed_callback_id);
 }
 
 bool plugin_model::is_valid_index(const QModelIndex& idx)
@@ -150,7 +150,7 @@ void plugin_model::plugin_manager_callback(bool is_load, std::string const& plug
 
 void plugin_model::handle_load_plugin(QString name, QString path)
 {
-    auto plugin = plugin_manager::get_plugin_instance<i_cli>(name.toStdString(), false);
+    auto plugin = PluginManager::get_plugin_instance<CLIPluginInterface>(name.toStdString(), false);
     if (plugin == nullptr)
     {
         return;
@@ -237,7 +237,7 @@ void plugin_model::request_load_plugin(const QString& name, const QString& path)
 {
     std::string p_name = name.toLocal8Bit().constData();
     std::string p_path = path.toLocal8Bit().constData();
-    plugin_manager::load(p_name, p_path);
+    PluginManager::load(p_name, p_path);
 }
 
 void plugin_model::request_unload_plugin(QModelIndexList idx)
@@ -246,7 +246,7 @@ void plugin_model::request_unload_plugin(QModelIndexList idx)
         return;
 
     int row_idx = idx.at(0).row();
-    plugin_manager::unload((std::string)m_items.at(row_idx).name.toLocal8Bit().constData());
+    PluginManager::unload((std::string)m_items.at(row_idx).name.toLocal8Bit().constData());
 }
 
 const QList<plugin_item> plugin_model::get_plugin_list()

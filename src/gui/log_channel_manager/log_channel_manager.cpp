@@ -2,7 +2,7 @@
 
 log_channel_manager::log_channel_manager()
 {
-    //log_manager::get_instance().get_gui_callback().add_callback("gui", std::bind(&log_channel_manager::logmanager_callback, this, std::placeholders::_1));
+    //LogManager::get_instance().get_gui_callback().add_callback("gui", std::bind(&log_channel_manager::logmanager_callback, this, std::placeholders::_1));
 }
 
 void log_channel_manager::logmanager_callback(const spdlog::details::log_msg& msg)

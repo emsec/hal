@@ -4,30 +4,30 @@
 
 namespace hal
 {
-    program_arguments::program_arguments()
+    ProgramArguments::ProgramArguments()
     {
         m_argc = 0;
         m_argv = nullptr;
     }
 
-    program_arguments::program_arguments(int argc, const char** argv)
+    ProgramArguments::ProgramArguments(int argc, const char** argv)
     {
         m_argc = argc;
         m_argv = argv;
     }
 
-    void program_arguments::get_original_arguments(int* argc, const char*** argv)
+    void ProgramArguments::get_original_arguments(int* argc, const char*** argv)
     {
         *argc = m_argc;
         *argv = m_argv;
     }
 
-    std::vector<std::string> program_arguments::get_set_options() const
+    std::vector<std::string> ProgramArguments::get_set_options() const
     {
         return m_given_flags;
     }
 
-    bool program_arguments::is_option_set(const std::string& flag) const
+    bool ProgramArguments::is_option_set(const std::string& flag) const
     {
         // checks all groups of equivalent flags too
         for (const auto& it : m_set_options)
@@ -40,12 +40,12 @@ namespace hal
         return false;
     }
 
-    void program_arguments::set_option(const std::string& flag, const std::vector<std::string>& parameters)
+    void ProgramArguments::set_option(const std::string& flag, const std::vector<std::string>& parameters)
     {
         set_option(flag, {}, parameters);
     }
 
-    bool program_arguments::set_option(const std::string& flag, const std::set<std::string>& equivalent_flags, const std::vector<std::string>& parameters)
+    bool ProgramArguments::set_option(const std::string& flag, const std::set<std::string>& equivalent_flags, const std::vector<std::string>& parameters)
     {
         std::set<std::string> option_flags = equivalent_flags;
         option_flags.insert(flag);
@@ -108,7 +108,7 @@ namespace hal
         return true;
     }
 
-    std::string program_arguments::get_parameter(const std::string& flag) const
+    std::string ProgramArguments::get_parameter(const std::string& flag) const
     {
         auto list = get_parameters(flag);
         if (list.empty())
@@ -118,7 +118,7 @@ namespace hal
         return list[0];
     }
 
-    std::vector<std::string> program_arguments::get_parameters(const std::string& flag) const
+    std::vector<std::string> ProgramArguments::get_parameters(const std::string& flag) const
     {
         for (const auto& it : m_set_options)
         {

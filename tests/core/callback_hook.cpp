@@ -5,10 +5,10 @@
 #include <iostream>
 #include "netlist_test_utils.h"
 
-typedef callback_hook<std::string(std::string)> test_hook;
+typedef CallbackHook<std::string(std::string)> test_hook;
 typedef std::function<std::string(std::string)> test_function;
 
-typedef callback_hook<void(int&)> sum_up_hook;
+typedef CallbackHook<void(int&)> sum_up_hook;
 typedef std::function<void(int&)> add_function;
 
 #define CALLBACK_HOOK_MIN_IDX 0x1

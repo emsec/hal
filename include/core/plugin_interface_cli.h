@@ -23,7 +23,7 @@
 
 #pragma once
 
-#include "core/interface_base.h"
+#include "core/plugin_interface_base.h"
 #include "core/program_options.h"
 #include "def.h"
 
@@ -38,18 +38,18 @@ namespace hal
     /**
      * @ingroup core
      */
-    class CORE_API i_cli : virtual public i_base
+    class CORE_API CLIPluginInterface : virtual public BasePluginInterface
     {
     public:
-        i_cli()          = default;
-        virtual ~i_cli() = default;
+        CLIPluginInterface()          = default;
+        virtual ~CLIPluginInterface() = default;
 
         /**
          * Returns command line interface options
          *
          * @returns The program options description.
          */
-        virtual program_options get_cli_options() const = 0;
+        virtual ProgramOptions get_cli_options() const = 0;
 
         /**
          * Entry point to handle command line interface call
@@ -58,6 +58,6 @@ namespace hal
          * @param[in] args - Program options.
          * @returns True on success.
          */
-        virtual bool handle_cli_call(std::shared_ptr<netlist> netlist, program_arguments& args) = 0;
+        virtual bool handle_cli_call(std::shared_ptr<netlist> netlist, ProgramArguments& args) = 0;
     };
 }    // namespace hal

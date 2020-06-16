@@ -23,29 +23,29 @@
 
 #pragma once
 
-#include "core/interface_base.h"
+#include "core/plugin_interface_base.h"
+#include "core/program_options.h"
 #include "def.h"
 
 namespace hal
 {
-    /* foward declaration */
-    class netlist;
-
     /**
+     * generic plugin instance interface
+     *
      * @ingroup core
      */
-    class CORE_API i_gui : virtual public i_base
+    class CORE_API InteractiveUIPluginInterface : virtual public BasePluginInterface
     {
     public:
-        i_gui()          = default;
-        virtual ~i_gui() = default;
+        InteractiveUIPluginInterface()          = default;
+        virtual ~InteractiveUIPluginInterface() = default;
 
         /**
-         * Generic call to run the GUI.
+         * Generic call to run the interactive UI.
          *
-         * @param[in] netlist - The netlist object for the GUI.
-         * @returns True on success.
+         * @param[in] args - Program options for HAL.
+         * @returns True on success, false otherwise.
          */
-        virtual bool exec(std::shared_ptr<netlist> netlist) = 0;
+        virtual bool exec(ProgramArguments& args) = 0;
     };
 }    // namespace hal

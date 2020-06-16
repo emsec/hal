@@ -35,13 +35,13 @@
 namespace hal
 {
     template<class>
-    class callback_hook;
+    class CallbackHook;
 
     /**
      * @ingroup core
      */
     template<class R, class... ArgTypes>
-    class callback_hook<R(ArgTypes...)>
+    class CallbackHook<R(ArgTypes...)>
     {
     public:
         /**

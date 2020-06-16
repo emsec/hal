@@ -58,7 +58,7 @@ namespace hal
         bool parse() override;
 
     private:
-        token_stream<std::string> m_token_stream;
+        TokenStream<std::string> m_token_stream;
 
         bool tokenize();
         bool parse_tokens();
@@ -76,11 +76,11 @@ namespace hal
 
         // helper functions
         void remove_comments(std::string& line, bool& multi_line_comment);
-        std::vector<u32> parse_range(token_stream<std::string>& range_str);
+        std::vector<u32> parse_range(TokenStream<std::string>& range_str);
         std::map<std::string, signal> parse_signal_list();
-        std::optional<std::pair<std::vector<signal>, i32>> get_assignment_signals(entity& e, token_stream<std::string>& signal_str, bool allow_numerics);
-        std::string get_bin_from_literal(const token<std::string>& value_token);
-        std::string get_hex_from_literal(const token<std::string>& value_token);
+        std::optional<std::pair<std::vector<signal>, i32>> get_assignment_signals(entity& e, TokenStream<std::string>& signal_str, bool allow_numerics);
+        std::string get_bin_from_literal(const Token<std::string>& value_token);
+        std::string get_hex_from_literal(const Token<std::string>& value_token);
         bool is_in_bounds(const std::vector<std::pair<i32, i32>>& bounds, const std::vector<std::pair<i32, i32>>& reference_bounds) const;
     };
 }    // namespace hal

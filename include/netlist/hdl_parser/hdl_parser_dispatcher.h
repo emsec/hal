@@ -46,7 +46,7 @@ namespace hal
          *
          * @returns The options.
          */
-        program_options get_cli_options();
+        ProgramOptions get_cli_options();
 
         /**
          * Returns the command language options for the parse() function.
@@ -62,7 +62,7 @@ namespace hal
          * @param[in] args - The command line options.
          * @returns The netlist representation of the hdl code or a nullpointer on error.
          */
-        std::shared_ptr<netlist> parse(const std::filesystem::path& file_name, const program_arguments& args);
+        std::shared_ptr<netlist> parse(const std::filesystem::path& file_name, const ProgramArguments& args);
 
         /**
          * Returns the netlist for a file, parsed with a defined parser_name and gate library.

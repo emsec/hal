@@ -212,7 +212,7 @@ TEST_F(netlist_factory_test, check_create_netlist_by_program_args)
         std::shared_ptr<netlist> empty_nl = netlist_factory::create_netlist(gate_library_manager::get_gate_library(m_g_lib_path));    //empty netlist
         netlist_serializer::serialize_to_file(empty_nl, tmp_hal_file_path);                                                           // create the .hal file
 
-        program_arguments p_args;
+        ProgramArguments p_args;
         p_args.set_option("--input-file", std::vector<std::string>({tmp_hal_file_path}));
 
         std::shared_ptr<netlist> nl = netlist_factory::load_netlist(p_args);
@@ -238,7 +238,7 @@ TEST_F(netlist_factory_test, check_create_netlist_by_program_args)
                                                                       "    );\n"
                                                                       "end STRUCTURE;");
 
-        program_arguments p_args;
+        ProgramArguments p_args;
         p_args.set_option("--input-file", std::vector<std::string>({tmp_hdl_file_path}));
         p_args.set_option("--language", std::vector<std::string>({"vhdl"}));
         p_args.set_option("--gate-library", std::vector<std::string>({m_g_lib_path}));
@@ -251,14 +251,14 @@ TEST_F(netlist_factory_test, check_create_netlist_by_program_args)
     {
         // Create a netlist but leaving out the input path
         NO_COUT_TEST_BLOCK;
-        program_arguments p_args;
+        ProgramArguments p_args;
         std::shared_ptr<netlist> nl = netlist_factory::load_netlist(p_args);
         EXPECT_EQ(nl, nullptr);
     }
     {
         // Create a netlist but with an invalid (non-existing) input file path
         NO_COUT_TEST_BLOCK;
-        program_arguments p_args;
+        ProgramArguments p_args;
         p_args.set_option("--input-file", std::vector<std::string>({"/this/file/does/not/exist"}));
         std::shared_ptr<netlist> nl = netlist_factory::load_netlist(p_args);
         EXPECT_EQ(nl, nullptr);
@@ -269,7 +269,7 @@ TEST_F(netlist_factory_test, check_create_netlist_by_program_args)
 
         std::filesystem::path tmp_hdl_file_path = create_sandbox_file("tmp_2.vhdl", "This file does not contain a valid vdl format...");
 
-        program_arguments p_args;
+        ProgramArguments p_args;
         p_args.set_option("--input-file", std::vector<std::string>({tmp_hdl_file_path}));
         p_args.set_option("--language", std::vector<std::string>({"vhdl"}));
         p_args.set_option("--gate-library", std::vector<std::string>({g_lib_name}));

@@ -35,7 +35,7 @@ namespace hal
          *
          * @returns A shared pointer to the new plugin instance.
          */
-        virtual std::shared_ptr<i_base> get_plugin_instance() override;
+        virtual std::shared_ptr<BasePluginInterface> get_plugin_instance() override;
     };
 
     /**

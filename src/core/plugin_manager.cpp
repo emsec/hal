@@ -1,6 +1,6 @@
 #include "core/plugin_manager.h"
 
-#include "core/interface_cli.h"
+#include "core/plugin_interface_cli.h"
 #include "core/log.h"
 #include "core/utils.h"
 
@@ -16,24 +16,24 @@
 
 namespace hal
 {
-    namespace plugin_manager
+    namespace PluginManager
     {
         namespace
         {
             // stores library and factory identified by plugin name)
-            std::map<std::string, std::tuple<library_loader*, instantiate_plugin_function>> m_plugin;
+            std::map<std::string, std::tuple<LibraryLoader*, instantiate_plugin_function>> m_plugin;
 
             // stores the CLI parser option for each plugin
             std::map<std::string, std::string> m_cli_option_to_plugin_name;
 
             // stores the GUI callback
-            callback_hook<void(bool, std::string const&, std::string const&)> m_hook;
+            CallbackHook<void(bool, std::string const&, std::string const&)> m_hook;
 
             // stores the generic option parser
-            program_options m_existing_options("existing options");
+            ProgramOptions m_existing_options("existing options");
 
             // stores the plugin option description
-            program_options m_plugin_options("plugin options");
+            ProgramOptions m_plugin_options("plugin options");
 
             // stores the plugin folder
             std::vector<std::filesystem::path> m_plugin_folders = core_utils::get_plugin_directories();
@@ -99,7 +99,7 @@ namespace hal
             return m_cli_option_to_plugin_name;
         }
 
-        program_options get_cli_plugin_options()
+        ProgramOptions get_cli_plugin_options()
         {
             return m_plugin_options;
         }
@@ -112,7 +112,7 @@ namespace hal
                 if (!std::filesystem::exists(directory))
                     continue;
                 u32 num_of_loaded_plugins = 0;
-                for (const auto& file : core_utils::directory_range(directory))
+                for (const auto& file : core_utils::DirectoryRange(directory))
                 {
                     if (!has_valid_file_extension(file) || std::filesystem::is_directory(file))
                         continue;
@@ -147,7 +147,7 @@ namespace hal
             }
 
             /* load library */
-            library_loader* lib = new library_loader();
+            LibraryLoader* lib = new LibraryLoader();
             if (!lib->load_library(file_name.string()))
                 return false;
 
@@ -171,9 +171,9 @@ namespace hal
                 return false;
 
             /* add cli options */
-            if (instance->has_type(interface_type::cli))
+            if (instance->has_type(PluginInterfaceType::cli))
             {
-                auto plugin = std::dynamic_pointer_cast<i_cli>(instance);
+                auto plugin = std::dynamic_pointer_cast<CLIPluginInterface>(instance);
                 if (plugin == nullptr)
                     return false;
 
@@ -262,7 +262,7 @@ namespace hal
             return true;
         }
 
-        std::shared_ptr<i_base> get_plugin_instance(const std::string& plugin_name, bool initialize)
+        std::shared_ptr<BasePluginInterface> get_plugin_instance(const std::string& plugin_name, bool initialize)
         {
             auto it = m_plugin.find(plugin_name);
             if (it == m_plugin.end())
@@ -299,9 +299,9 @@ namespace hal
             m_hook.remove_callback(id);
         }
 
-        void add_existing_options_description(const program_options& existing_options)
+        void add_existing_options_description(const ProgramOptions& existing_options)
         {
             m_existing_options.add(existing_options);
         }
-    }    // namespace plugin_manager
+    }    // namespace PluginManager
 }    // namespace hal

@@ -75,7 +75,7 @@ TEST_END
 TEST_F(hdl_writer_dispatcher_test, check_write_by_program_args){TEST_START{// Write a netlist to two files, by passing the file path in the arguments
                                                                            std::string out_path_vhdl = get_tmp_file_path(".vhd").string();
 std::string out_path_verilog = get_tmp_file_path(".v").string();
-program_arguments p_args_vhdl;
+ProgramArguments p_args_vhdl;
 p_args_vhdl.set_option("--write-vhdl", std::vector<std::string>({out_path_vhdl}));
 p_args_vhdl.set_option("--write-verilog", std::vector<std::string>({out_path_verilog}));
 

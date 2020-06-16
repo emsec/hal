@@ -12,19 +12,19 @@
 
 namespace hal
 {
-    const std::string program_options::REQUIRED_PARAM = "__REQUIRED_PARAM__";
+    const std::string ProgramOptions::REQUIRED_PARAM = "__REQUIRED_PARAM__";
 
-    program_options::program_options(const std::string& name)
+    ProgramOptions::ProgramOptions(const std::string& name)
     {
         m_name = name;
     }
 
-    std::vector<std::string> program_options::get_unknown_arguments()
+    std::vector<std::string> ProgramOptions::get_unknown_arguments()
     {
         return m_unknown_options;
     }
 
-    program_arguments program_options::parse(int argc, const char* argv[])
+    ProgramArguments ProgramOptions::parse(int argc, const char* argv[])
     {
         std::shared_ptr<option> current_option = nullptr;
 
@@ -36,7 +36,7 @@ namespace hal
         std::vector<std::string> current_parameters;
         size_t param_pos = 0;
 
-        program_arguments args(argc, argv);
+        ProgramArguments args(argc, argv);
 
         // i=1: ignore first argument as it is the program itself
         for (int i = 1; i < argc; ++i)
@@ -114,7 +114,7 @@ namespace hal
         return args;
     }
 
-    bool program_options::is_registered(const std::string& flag) const
+    bool ProgramOptions::is_registered(const std::string& flag) const
     {
         for (const auto& opt : get_all_options())
         {
@@ -126,12 +126,12 @@ namespace hal
         return false;
     }
 
-    bool program_options::add(const std::string& flag, const std::string& description, const std::initializer_list<std::string>& parameters)
+    bool ProgramOptions::add(const std::string& flag, const std::string& description, const std::initializer_list<std::string>& parameters)
     {
         return add({flag}, description, parameters);
     }
 
-    bool program_options::add(const std::initializer_list<std::string>& flags, const std::string& description, const std::initializer_list<std::string>& parameters)
+    bool ProgramOptions::add(const std::initializer_list<std::string>& flags, const std::string& description, const std::initializer_list<std::string>& parameters)
     {
         if (flags.size() == 0)
         {
@@ -205,7 +205,7 @@ namespace hal
         return true;
     }
 
-    bool program_options::add(const program_options& other_options, const std::string& category)
+    bool ProgramOptions::add(const ProgramOptions& other_options, const std::string& category)
     {
         // look for conflicts
         for (const auto& other_opt : other_options.get_all_options())
@@ -234,7 +234,7 @@ namespace hal
         return true;
     }
 
-    std::string program_options::get_options_string() const
+    std::string ProgramOptions::get_options_string() const
     {
         size_t line_width = 80;    // default magic number
 
@@ -254,7 +254,7 @@ namespace hal
         return get_options_string_internal(get_flag_length() + 10, line_width);
     }
 
-    std::vector<std::tuple<std::set<std::string>, std::string>> program_options::get_options() const
+    std::vector<std::tuple<std::set<std::string>, std::string>> ProgramOptions::get_options() const
     {
         std::vector<std::tuple<std::set<std::string>, std::string>> options;
         for (const auto& opt : get_all_options())
@@ -264,9 +264,9 @@ namespace hal
         return options;
     }
 
-    std::vector<std::shared_ptr<program_options::option>> program_options::get_all_options() const
+    std::vector<std::shared_ptr<ProgramOptions::option>> ProgramOptions::get_all_options() const
     {
-        std::vector<std::shared_ptr<program_options::option>> options;
+        std::vector<std::shared_ptr<ProgramOptions::option>> options;
 
         options.insert(options.end(), m_options.begin(), m_options.end());
 
@@ -281,7 +281,7 @@ namespace hal
         return options;
     }
 
-    size_t program_options::get_flag_length() const
+    size_t ProgramOptions::get_flag_length() const
     {
         size_t max_len = 0;
         for (const auto& opt : m_options)
@@ -318,7 +318,7 @@ namespace hal
         return max_len;
     }
 
-    std::string program_options::get_options_string_internal(size_t fill_length, size_t max_line_width) const
+    std::string ProgramOptions::get_options_string_internal(size_t fill_length, size_t max_line_width) const
     {
         std::string s = "";
 

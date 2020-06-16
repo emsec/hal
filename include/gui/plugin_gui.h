@@ -24,9 +24,9 @@
 #ifndef __HAL_PLUGIN_GUI_H__
 #define __HAL_PLUGIN_GUI_H__
 
-#include "core/interface_interactive_ui.h"
+#include "core/plugin_interface_interactive_ui.h"
 
-class plugin_gui : public i_interactive_ui
+class plugin_gui : public InteractiveUIPluginInterface
 {
 public:
     std::string get_name() const override;
@@ -34,12 +34,12 @@ public:
 
     void initialize_logging() const override;
 
-    bool exec(program_arguments& args) override;
+    bool exec(ProgramArguments& args) override;
 };
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wreturn-type-c-linkage"
-extern "C" PLUGIN_API std::shared_ptr<i_base> get_plugin_instance();
+extern "C" PLUGIN_API std::shared_ptr<BasePluginInterface> get_plugin_instance();
 #pragma GCC diagnostic pop
 
 #endif /* __HAL_PLUGIN_GUI_H__ */

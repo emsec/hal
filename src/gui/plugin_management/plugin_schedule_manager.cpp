@@ -1,6 +1,6 @@
 #include "plugin_management/plugin_schedule_manager.h"
 
-#include "core/interface_cli.h"
+#include "core/plugin_interface_cli.h"
 #include "core/plugin_manager.h"
 #include "core/program_arguments.h"
 #include "hal_plugin_access_manager/hal_plugin_access_manager.h"
@@ -19,9 +19,9 @@ plugin_schedule_manager::schedule* plugin_schedule_manager::get_schedule()
     return &m_schedule;
 }
 
-program_arguments plugin_schedule_manager::get_program_arguments(int index)
+ProgramArguments plugin_schedule_manager::get_program_arguments(int index)
 {
-    program_arguments args;
+    ProgramArguments args;
 
     for (argument arg : m_schedule.at(index).second)
     {
@@ -48,7 +48,7 @@ void plugin_schedule_manager::set_current_index(int index)
 
 void plugin_schedule_manager::add_plugin(const QString& plugin, int index)
 {
-    auto cli = plugin_manager::get_plugin_instance<i_cli>(plugin.toStdString(), false);
+    auto cli = PluginManager::get_plugin_instance<CLIPluginInterface>(plugin.toStdString(), false);
 
     if (!cli)
         return;
@@ -82,7 +82,7 @@ void plugin_schedule_manager::run_schedule()
 {
     for (int i = 0; i < m_schedule.length(); i++)
     {
-        program_arguments args = get_program_arguments(i);
+        ProgramArguments args = get_program_arguments(i);
         hal_plugin_access_manager::run_plugin(m_schedule.at(i).first.toStdString(), &args);
     }
 }

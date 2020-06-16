@@ -7,7 +7,7 @@ channel_model channel_model::s_model;
 
 channel_model::channel_model(QObject* parent) : QAbstractTableModel(parent), m_temporary_items(30)
 {
-    log_manager::get_instance().get_gui_callback().add_callback("gui", std::bind(&channel_model::handle_logmanager_callback, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
+    LogManager::get_instance().get_gui_callback().add_callback("gui", std::bind(&channel_model::handle_logmanager_callback, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
 }
 
 channel_model* channel_model::get_instance()

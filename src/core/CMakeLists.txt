@@ -8,12 +8,12 @@ set(CORE_LIB_HDR
     ${CMAKE_SOURCE_DIR}/include/core/callback_hook.h
     ${CMAKE_SOURCE_DIR}/include/core/special_strings.h
     ${CMAKE_SOURCE_DIR}/include/core/hal_file_manager.h
-    ${CMAKE_SOURCE_DIR}/include/core/interface_base.h
-    ${CMAKE_SOURCE_DIR}/include/core/interface_cli.h
-    ${CMAKE_SOURCE_DIR}/include/core/interface_gui.h
-    ${CMAKE_SOURCE_DIR}/include/core/interface_interactive_ui.h
     ${CMAKE_SOURCE_DIR}/include/core/library_loader.h
     ${CMAKE_SOURCE_DIR}/include/core/log.h
+    ${CMAKE_SOURCE_DIR}/include/core/plugin_interface_base.h
+    ${CMAKE_SOURCE_DIR}/include/core/plugin_interface_cli.h
+    ${CMAKE_SOURCE_DIR}/include/core/plugin_interface_gui.h
+    ${CMAKE_SOURCE_DIR}/include/core/plugin_interface_interactive_ui.h
     ${CMAKE_SOURCE_DIR}/include/core/plugin_manager.h
     ${CMAKE_SOURCE_DIR}/include/core/program_arguments.h
     ${CMAKE_SOURCE_DIR}/include/core/program_options.h
@@ -28,9 +28,9 @@ set(CORE_LIB_HDR
 
 set(CORE_LIB_source
     hal_file_manager.cpp
-    interface_base.cpp
     library_loader.cpp
     log.cpp
+    plugin_interface_base.cpp
     plugin_manager.cpp
     program_arguments.cpp
     program_options.cpp

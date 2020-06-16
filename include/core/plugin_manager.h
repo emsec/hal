@@ -24,7 +24,7 @@
 #pragma once
 
 #include "core/callback_hook.h"
-#include "core/interface_base.h"
+#include "core/plugin_interface_base.h"
 #include "core/library_loader.h"
 #include "core/program_options.h"
 #include "def.h"
@@ -42,7 +42,7 @@ namespace hal
      *
      * @ingroup core
      */
-    namespace plugin_manager
+    namespace PluginManager
     {
         /**
          * Add existing program options.<br>
@@ -50,7 +50,7 @@ namespace hal
          *
          * @param[in] existing_options - The existing options.
          */
-        void add_existing_options_description(const program_options& existing_options);
+        void add_existing_options_description(const ProgramOptions& existing_options);
 
         /**
          * Get the names of all loaded plugins.
@@ -71,7 +71,7 @@ namespace hal
          *
          * @returns The program options
          */
-        program_options get_cli_plugin_options();
+        ProgramOptions get_cli_plugin_options();
 
         /**
          * Load all plugins in the specified diretories.<br>
@@ -114,7 +114,7 @@ namespace hal
          * @param[in] initialize - If false, the plugin's initialize function is not called.
          * @returns A plugin instance.
          */
-        std::shared_ptr<i_base> get_plugin_instance(const std::string& plugin_name, bool initialize = true);
+        std::shared_ptr<BasePluginInterface> get_plugin_instance(const std::string& plugin_name, bool initialize = true);
 
         /**
          * Gets a specific interface for a plugin specified by name.
@@ -147,5 +147,5 @@ namespace hal
          * @param[in] id - The id of the registered callback.
          */
         void remove_model_changed_callback(u64 id);
-    }    // namespace plugin_manager
+    }    // namespace PluginManager
 }    // namespace hal

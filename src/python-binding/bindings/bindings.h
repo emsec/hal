@@ -1,6 +1,6 @@
 #pragma once
 
-#include "core/interface_gui.h"
+#include "core/plugin_interface_gui.h"
 #include "core/log.h"
 #include "core/plugin_manager.h"
 #include "core/utils.h"

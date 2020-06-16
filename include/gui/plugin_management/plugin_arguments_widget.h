@@ -30,8 +30,8 @@
 
 #include <memory>
 
-class i_cli;
-class program_arguments;
+class CLIPluginInterface;
+class ProgramArguments;
 
 class QFormLayout;
 class QLineEdit;
@@ -45,7 +45,7 @@ class plugin_arguments_widget : public QFrame
 public:
     explicit plugin_arguments_widget(QWidget* parent = nullptr);
 
-    program_arguments get_args();
+    ProgramArguments get_args();
 
     void setup_plugin_layout(const QString& plugin);
 
@@ -61,7 +61,7 @@ private:
 
     QFormLayout* m_form_layout;
 
-    std::shared_ptr<i_cli> m_plugin;
+    std::shared_ptr<CLIPluginInterface> m_plugin;
 
     QVector<QPair<QPushButton*, QLineEdit*>> m_vector;
 

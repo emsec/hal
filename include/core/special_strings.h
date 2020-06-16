@@ -27,7 +27,7 @@
 
 namespace hal
 {
-    /** 
+    /**
      * @ingroup core
      */
     namespace core_strings
@@ -59,7 +59,7 @@ namespace hal
             }
         }
 
-        struct case_insensitive_char_traits : public std::char_traits<char>
+        struct CaseInsensitiveCharTraits : public std::char_traits<char>
         {
             static bool eq(char c1, char c2)
             {
@@ -103,16 +103,16 @@ namespace hal
                 return nullptr;
             }
         };
-        using case_insensitive_string = std::basic_string<char, case_insensitive_char_traits>;
+        using CaseInsensitiveString = std::basic_string<char, CaseInsensitiveCharTraits>;
     }    // namespace core_strings
 }    // namespace hal
 
 namespace std
 {
     template<>
-    struct hash<hal::core_strings::case_insensitive_string>
+    struct hash<hal::core_strings::CaseInsensitiveString>
     {
-        std::size_t operator()(const hal::core_strings::case_insensitive_string& str) const
+        std::size_t operator()(const hal::core_strings::CaseInsensitiveString& str) const
         {
             return std::hash<std::string>{}(std::string(str.data()));
         }

@@ -35,12 +35,12 @@
 
 namespace hal
 {
-    class program_arguments;
+    class ProgramArguments;
 
     /**
     * @ingroup core
     */
-    class CORE_API program_options
+    class CORE_API ProgramOptions
     {
     public:
         /// constant to specify that a parameter is required and does not have a default value.
@@ -51,9 +51,9 @@ namespace hal
          *
          * @param[in] name - The name of this group of program options.
          */
-        explicit program_options(const std::string& name = "");
+        explicit ProgramOptions(const std::string& name = "");
 
-        ~program_options() = default;
+        ~ProgramOptions() = default;
 
         /**
          * Parses the command line arguments into the internal structure.
@@ -62,7 +62,7 @@ namespace hal
          * @param[in] argv - Array of arguments.
          * @returns The parsed arguments.
          */
-        program_arguments parse(int argc, const char* argv[]);
+        ProgramArguments parse(int argc, const char* argv[]);
 
         /**
          * Returns the command line arguments which could not be parsed.<br>
@@ -84,7 +84,7 @@ namespace hal
         /**
          * Adds a new option with a single flag.<br>
          * The size of \p parameters is the number of parameters this option gets.<br>
-         * Use program_options::REQUIRED_PARAM to set a parameter as required.<br>
+         * Use ProgramOptions::REQUIRED_PARAM to set a parameter as required.<br>
          * The values in \p parameters contain default values, which are returned by
          * get_parameter_list() / get_parameter() if the user did not supply parameters himself.
          *
@@ -98,7 +98,7 @@ namespace hal
         /**
          * Adds a new option with a multiple flags.<br>
          * The size of \p parameters is the number of parameters this option gets.<br>
-         * Use program_options::REQUIRED_PARAM to set a parameter as required.<br>
+         * Use ProgramOptions::REQUIRED_PARAM to set a parameter as required.<br>
          * The values in \p parameters contain default values, which are returned by
          * get_parameter_list() / get_parameter() if the user did not supply parameters himself.
          *
@@ -117,11 +117,11 @@ namespace hal
          * @param[in] category - A category for the added options. [optional]
          * @returns True on success.
          */
-        bool add(const program_options& other_options, const std::string& category = "");
+        bool add(const ProgramOptions& other_options, const std::string& category = "");
 
         /**
          * Returns a nicely formatted string of all options and description.<br>
-         * Includes categorys of added program_options for grouping.<br>
+         * Includes categorys of added ProgramOptions for grouping.<br>
          * Useful for "usage" messages.
          *
          * @returns The formatted string.
@@ -143,10 +143,10 @@ namespace hal
             std::set<std::string> flags;
         };
 
-        // returns all options, including those of added program_options objects
+        // returns all options, including those of added ProgramOptions objects
         std::vector<std::shared_ptr<option>> get_all_options() const;
 
-        // resets all options, including those of added program_options objects
+        // resets all options, including those of added ProgramOptions objects
         void reset_all_options();
 
         // resets a single option
@@ -162,7 +162,7 @@ namespace hal
 
         std::vector<std::shared_ptr<option>> m_options;
 
-        std::map<std::string, std::vector<program_options>> m_suboptions;
+        std::map<std::string, std::vector<ProgramOptions>> m_suboptions;
 
         std::vector<std::string> m_unknown_options;
     };

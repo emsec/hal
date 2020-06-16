@@ -13,15 +13,15 @@ namespace hal
 {
     namespace hdl_writer_dispatcher
     {
-        program_options get_cli_options()
+        ProgramOptions get_cli_options()
         {
-            program_options description;
+            ProgramOptions description;
             description.add("--write-verilog", "Write Verilog to file", {""});
             description.add("--write-vhdl", "Write VHDL to file", {""});
             return description;
         }
 
-        bool write(std::shared_ptr<netlist> g, const program_arguments& args)
+        bool write(std::shared_ptr<netlist> g, const ProgramArguments& args)
         {
             // all configurations: command, language, file extension
             std::vector<std::tuple<std::string, std::string, std::string>> configs = {std::make_tuple("--write-vhdl", "vhdl", ".vhd"), std::make_tuple("--write-verilog", "verilog", ".v")};

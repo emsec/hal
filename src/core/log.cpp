@@ -10,9 +10,9 @@
 
 namespace hal
 {
-    std::map<std::string, std::shared_ptr<log_manager::log_sink>> log_manager::m_file_sinks;
+    std::map<std::string, std::shared_ptr<LogManager::log_sink>> LogManager::m_file_sinks;
 
-    log_manager::log_manager(const std::filesystem::path& file_name)
+    LogManager::LogManager(const std::filesystem::path& file_name)
     {
         m_file_path = (file_name.empty()) ? core_utils::get_default_log_directory() / "hal.log" : file_name;
         std::filesystem::create_directories(m_file_path.parent_path());
@@ -27,7 +27,7 @@ namespace hal
             {"off", spdlog::level::level_enum::off},
         };
 
-        auto gui_sink = log_manager::create_gui_sink();
+        auto gui_sink = LogManager::create_gui_sink();
 
         spdlog::sinks_init_list stdout_init_list = {std::make_shared<spdlog::sinks::ansicolor_stdout_sink_mt>(), gui_sink->spdlog_sink};
 
@@ -46,37 +46,37 @@ namespace hal
         set_format_pattern("[%n] [%l] %v");
     }
 
-    log_manager::~log_manager()
+    LogManager::~LogManager()
     {
         for (const auto& it : m_logger)
             it.second->flush();
         spdlog::drop_all();
     }
 
-    log_manager& log_manager::get_instance(const std::filesystem::path& file_name)
+    LogManager& LogManager::get_instance(const std::filesystem::path& file_name)
     {
-        static log_manager l(file_name);
+        static LogManager l(file_name);
         return l;
     }
 
-    void log_manager::set_format_pattern(const std::string& format)
+    void LogManager::set_format_pattern(const std::string& format)
     {
         spdlog::set_pattern(format);
     }
 
-    std::shared_ptr<spdlog::logger> log_manager::get_channel(const std::string& channel)
+    std::shared_ptr<spdlog::logger> LogManager::get_channel(const std::string& channel)
     {
         auto it = m_logger.find(channel);
         if (it == m_logger.end())
         {
             log_warning("stdout", "log channel '{}' was not registered so far, creating default channel.", channel);
-            return add_channel(channel, {log_manager::create_stdout_sink(), log_manager::create_file_sink(), log_manager::create_gui_sink()}, "info");
+            return add_channel(channel, {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
         }
 
         return it->second;
     }
 
-    std::set<std::string> log_manager::get_channels() const
+    std::set<std::string> LogManager::get_channels() const
     {
         std::set<std::string> channels;
         for (const auto& it : m_logger)
@@ -84,7 +84,7 @@ namespace hal
         return channels;
     }
 
-    std::shared_ptr<spdlog::logger> log_manager::add_channel(const std::string& channel_name, const std::vector<std::shared_ptr<log_sink>>& sinks, const std::string& level)
+    std::shared_ptr<spdlog::logger> LogManager::add_channel(const std::string& channel_name, const std::vector<std::shared_ptr<log_sink>>& sinks, const std::string& level)
     {
         if (auto it = m_logger.find(channel_name); it != m_logger.end())
         {
@@ -109,7 +109,7 @@ namespace hal
         return channel;
     }
 
-    void log_manager::remove_channel(const std::string& channel_name)
+    void LogManager::remove_channel(const std::string& channel_name)
     {
         if (m_logger.find(channel_name) == m_logger.end())
         {
@@ -121,7 +121,7 @@ namespace hal
         m_logger_sinks.erase(channel_name);
     }
 
-    std::string log_manager::get_level_of_channel(const std::string& channel_name) const
+    std::string LogManager::get_level_of_channel(const std::string& channel_name) const
     {
         auto it_channel = m_logger.find(channel_name);
         if (it_channel == m_logger.end())
@@ -140,7 +140,7 @@ namespace hal
         return std::string("");
     }
 
-    void log_manager::set_level_of_channel(const std::string& channel_name, const std::string& level)
+    void LogManager::set_level_of_channel(const std::string& channel_name, const std::string& level)
     {
         auto it_channel = m_logger.find(channel_name);
         auto it_level   = m_level.find(level);
@@ -154,17 +154,17 @@ namespace hal
         m_logger[channel_name] = channel;
     }
 
-    void log_manager::activate_channel(const std::string& channel_name)
+    void LogManager::activate_channel(const std::string& channel_name)
     {
         this->set_level_of_channel(channel_name, "info");
     }
 
-    void log_manager::deactivate_channel(const std::string& channel_name)
+    void LogManager::deactivate_channel(const std::string& channel_name)
     {
         this->set_level_of_channel(channel_name, "off");
     }
 
-    std::shared_ptr<log_manager::log_sink> log_manager::create_stdout_sink(const bool colored)
+    std::shared_ptr<LogManager::log_sink> LogManager::create_stdout_sink(const bool colored)
     {
         auto sink          = std::make_shared<log_sink>();
         sink->is_file_sink = false;
@@ -194,7 +194,7 @@ namespace hal
         return sink;
     }
 
-    std::shared_ptr<log_manager::log_sink> log_manager::create_file_sink(const std::filesystem::path& file_name, const bool truncate)
+    std::shared_ptr<LogManager::log_sink> LogManager::create_file_sink(const std::filesystem::path& file_name, const bool truncate)
     {
         std::filesystem::path path = file_name;
         if (file_name.empty())
@@ -216,7 +216,7 @@ namespace hal
         return sink;
     }
 
-    std::shared_ptr<log_manager::log_sink> log_manager::create_gui_sink()
+    std::shared_ptr<LogManager::log_sink> LogManager::create_gui_sink()
     {
         auto sink          = std::make_shared<log_sink>();
         sink->spdlog_sink  = std::make_shared<log_gui_sink>();
@@ -224,7 +224,7 @@ namespace hal
         return sink;
     }
 
-    std::set<std::string> log_manager::get_available_log_levels() const
+    std::set<std::string> LogManager::get_available_log_levels() const
     {
         std::set<std::string> levels;
         for (const auto& it : m_level)
@@ -232,7 +232,7 @@ namespace hal
         return levels;
     }
 
-    void log_manager::set_file_name(const std::filesystem::path& file_path)
+    void LogManager::set_file_name(const std::filesystem::path& file_path)
     {
         log_info("core", "setting log file to '{}'.", file_path.string());
 
@@ -285,12 +285,12 @@ namespace hal
         m_file_path = file_path;
     }
 
-    program_options& log_manager::get_option_descriptions()
+    ProgramOptions& LogManager::get_option_descriptions()
     {
         if (m_descriptions.get_options().empty())
         {
-            m_descriptions.add("--log.level", "set default log level", {program_options::REQUIRED_PARAM});
-            m_descriptions.add("--log.enabled", "default setting for enable logging", {program_options::REQUIRED_PARAM});
+            m_descriptions.add("--log.level", "set default log level", {ProgramOptions::REQUIRED_PARAM});
+            m_descriptions.add("--log.enabled", "default setting for enable logging", {ProgramOptions::REQUIRED_PARAM});
 
             for (const auto& channel : this->get_channels())
             {
@@ -298,15 +298,15 @@ namespace hal
                 auto level_string   = start + ".level";
                 auto enabled_string = start + ".enabled";
 
-                m_descriptions.add(level_string, "set log level for channel: " + channel, {program_options::REQUIRED_PARAM});
-                m_descriptions.add(enabled_string, "enable logging level for channel: " + channel, {program_options::REQUIRED_PARAM});
+                m_descriptions.add(level_string, "set log level for channel: " + channel, {ProgramOptions::REQUIRED_PARAM});
+                m_descriptions.add(enabled_string, "enable logging level for channel: " + channel, {ProgramOptions::REQUIRED_PARAM});
             }
         }
 
         return m_descriptions;
     }
 
-    void log_manager::handle_options(program_arguments& args)
+    void LogManager::handle_options(ProgramArguments& args)
     {
         bool default_enabled = true;
         if (args.is_option_set("--log.enabled"))
@@ -362,7 +362,7 @@ namespace hal
         }
     }
 
-    callback_hook<void(const spdlog::level::level_enum&, const std::string&, const std::string&)>& log_manager::get_gui_callback()
+    CallbackHook<void(const spdlog::level::level_enum&, const std::string&, const std::string&)>& LogManager::get_gui_callback()
     {
         return m_gui_callback;
     }
@@ -374,7 +374,7 @@ namespace hal
     {
         spdlog::memory_buf_t formatted;
         formatter_->format(msg, formatted);
-        log_manager::get_instance().get_gui_callback()(msg.level, std::string(msg.logger_name.data()), std::string(formatted.data(), formatted.size()));
+        LogManager::get_instance().get_gui_callback()(msg.level, std::string(msg.logger_name.data()), std::string(formatted.data(), formatted.size()));
     }
 
     void log_gui_sink::flush_()

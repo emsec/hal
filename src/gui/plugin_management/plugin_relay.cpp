@@ -4,7 +4,7 @@
 
 plugin_relay::plugin_relay(QObject* parent) : QObject(parent)
 {
-    plugin_manager::add_model_changed_callback(std::bind(&plugin_relay::plugin_manager_callback, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
+    PluginManager::add_model_changed_callback(std::bind(&plugin_relay::plugin_manager_callback, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
 }
 
 void plugin_relay::plugin_manager_callback(bool is_load, const std::string& plugin_name, const std::string& plugin_path)

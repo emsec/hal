@@ -13,10 +13,10 @@ void test_utils::init_log_channels()
         std::vector<std::string> channel_ids = {
             "core", "gate_library_manager", "liberty_parser", "netlist", "module", "netlist.internal", "netlist.persistent", "hdl_parser", "hdl_writer", "python_context"};
 
-        log_manager& lm = log_manager::get_instance();
+        LogManager& lm = LogManager::get_instance();
         for (std::string ch_id : channel_ids)
         {
-            lm.add_channel(ch_id, {log_manager::create_stdout_sink()}, "info");
+            lm.add_channel(ch_id, {LogManager::create_stdout_sink()}, "info");
         }
         already_init = true;
     }

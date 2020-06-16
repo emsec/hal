@@ -20,8 +20,8 @@ namespace hal
     {
         namespace
         {
-            callback_hook<bool(const std::filesystem::path&, std::shared_ptr<netlist>, rapidjson::Document&)> m_on_serialize_hook;
-            callback_hook<bool(const std::filesystem::path&, std::shared_ptr<netlist>, rapidjson::Document&)> m_on_deserialize_hook;
+            CallbackHook<bool(const std::filesystem::path&, std::shared_ptr<netlist>, rapidjson::Document&)> m_on_serialize_hook;
+            CallbackHook<bool(const std::filesystem::path&, std::shared_ptr<netlist>, rapidjson::Document&)> m_on_deserialize_hook;
         }    // namespace
 
         bool serialize(const std::filesystem::path& file, std::shared_ptr<netlist> netlist, rapidjson::Document& document)

@@ -43,12 +43,12 @@ namespace hal
     /**
      * @ingroup core
      */
-    class CORE_API library_loader
+    class CORE_API LibraryLoader
     {
     public:
-        library_loader();
+        LibraryLoader();
 
-        ~library_loader();
+        ~LibraryLoader();
 
         /**
          * Loads a library.

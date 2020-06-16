@@ -77,6 +77,6 @@ namespace hal
          * @param[in] args - Command line options.
          * @returns The new netlist.
          */
-        NETLIST_API std::shared_ptr<netlist> load_netlist(const program_arguments& args);
+        NETLIST_API std::shared_ptr<netlist> load_netlist(const ProgramArguments& args);
     }    // namespace netlist_factory
 }    // namespace hal

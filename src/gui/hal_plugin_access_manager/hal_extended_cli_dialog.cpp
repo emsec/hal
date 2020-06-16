@@ -1,6 +1,6 @@
 #include "hal_plugin_access_manager/hal_extended_cli_dialog.h"
-#include "core/interface_cli.h"
-#include "core/interface_gui.h"
+#include "core/plugin_interface_cli.h"
+#include "core/plugin_interface_gui.h"
 #include "core/plugin_manager.h"
 #include <QChar>
 #include <iostream>
@@ -33,7 +33,7 @@ hal_extended_cli_dialog::hal_extended_cli_dialog(QString plugin_name, QWidget* p
     setup(plugin_name.toStdString());
 }
 
-program_arguments hal_extended_cli_dialog::get_args()
+ProgramArguments hal_extended_cli_dialog::get_args()
 {
     return m_args;
 }
@@ -90,13 +90,13 @@ void hal_extended_cli_dialog::parse_arguments()
     //    try
     //    {
     //        .
-    //        boost::program_options::store(boost::program_options::parse_command_line(argc, argv, (std::get<1>(m_plugin->get_cli_options()))), *m_map);
-    //        boost::program_options::notify(*m_map);
+    //        boost::ProgramOptions::store(boost::ProgramOptions::parse_command_line(argc, argv, (std::get<1>(m_plugin->get_cli_options()))), *m_map);
+    //        boost::ProgramOptions::notify(*m_map);
     //
-    //        //        program_options plugin_options;
+    //        //        ProgramOptions plugin_options;
     //        //        plugin_options.add(*(std::get<1>(m_plugin->get_cli_options())));
-    //        //        boost::program_options::store(boost::program_options::command_line_parser(argc, argv).options(plugin_options).run(), *m_map);
-    //        //        boost::program_options::notify(*m_map);
+    //        //        boost::ProgramOptions::store(boost::ProgramOptions::command_line_parser(argc, argv).options(plugin_options).run(), *m_map);
+    //        //        boost::ProgramOptions::notify(*m_map);
     //    }
     //    catch (const std::exception& e)
     //    {
@@ -119,7 +119,7 @@ void hal_extended_cli_dialog::parse_arguments()
 
 void hal_extended_cli_dialog::setup(std::string plugin_name)
 {
-    m_plugin = plugin_manager::get_plugin_instance<i_cli>(plugin_name, false);
+    m_plugin = PluginManager::get_plugin_instance<CLIPluginInterface>(plugin_name, false);
     if (m_plugin == nullptr)
     {
         return;

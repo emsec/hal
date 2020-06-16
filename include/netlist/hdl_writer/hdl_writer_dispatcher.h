@@ -45,7 +45,7 @@ namespace hal
          * Returns the command line interface options of the hdl writer dispatcher
          * @returns The options.
          */
-        program_options get_cli_options();
+        ProgramOptions get_cli_options();
 
         /**
          * Writes the netlist into a file specified in command line options.
@@ -53,7 +53,7 @@ namespace hal
          * @param[in] args - The command line options.
          * @returns True on success.
          */
-        bool write(std::shared_ptr<netlist> g, const program_arguments& args);
+        bool write(std::shared_ptr<netlist> g, const ProgramArguments& args);
 
         /**
          * Writes the netlist into a file with a defined format

@@ -1,60 +1,60 @@
 #include "hal_plugin_access_manager/hal_plugin_access_manager.h"
-#include "core/interface_cli.h"
-#include "core/interface_gui.h"
+#include "core/plugin_interface_cli.h"
+#include "core/plugin_interface_gui.h"
 #include "core/plugin_manager.h"
 #include "core/program_arguments.h"
 #include "gui_globals.h"
 #include "hal_plugin_access_manager/hal_extended_cli_dialog.h"
 
-program_arguments hal_plugin_access_manager::request_arguments(const std::string plugin_name)
+ProgramArguments hal_plugin_access_manager::request_arguments(const std::string plugin_name)
 {
-    auto pl = plugin_manager::get_plugin_instance<i_base>(plugin_name, false);
+    auto pl = PluginManager::get_plugin_instance<BasePluginInterface>(plugin_name, false);
     if (!pl)
     {
-        return program_arguments();
+        return ProgramArguments();
     }
 
-    interface_type selection;
-    if (pl->has_type(interface_type::cli))
+    PluginInterfaceType selection;
+    if (pl->has_type(PluginInterfaceType::cli))
     {
-        if (pl->has_type(interface_type::gui))
+        if (pl->has_type(PluginInterfaceType::gui))
         {
             // show selection dialog
             //Workaround:
-            selection = interface_type::cli;
+            selection = PluginInterfaceType::cli;
         }
         else
-            selection = interface_type::cli;
+            selection = PluginInterfaceType::cli;
     }
     else
     {
-        if (pl->has_type(interface_type::gui))
-            selection = interface_type::gui;
+        if (pl->has_type(PluginInterfaceType::gui))
+            selection = PluginInterfaceType::gui;
         else
-            return program_arguments();
+            return ProgramArguments();
     }
 
-    if (selection == interface_type::cli)
+    if (selection == PluginInterfaceType::cli)
     {
-        auto plugin = std::dynamic_pointer_cast<i_cli>(pl);
+        auto plugin = std::dynamic_pointer_cast<CLIPluginInterface>(pl);
         plugin->initialize();
         hal_extended_cli_dialog dialog(QString::fromStdString(plugin_name));
         dialog.exec();
         return dialog.get_args();
     }
-    else if (selection == interface_type::gui)
+    else if (selection == PluginInterfaceType::gui)
     {
-        auto plugin = std::dynamic_pointer_cast<i_gui>(pl);
+        auto plugin = std::dynamic_pointer_cast<GUIPluginInterface>(pl);
         plugin->initialize();
 
         // show gui dialog, return results
-        return program_arguments();
+        return ProgramArguments();
     }
 
-    return program_arguments();
+    return ProgramArguments();
 }
 
-int hal_plugin_access_manager::run_plugin(const std::string plugin_name, program_arguments* args)
+int hal_plugin_access_manager::run_plugin(const std::string plugin_name, ProgramArguments* args)
 {
     if (args == nullptr)
     {
@@ -62,7 +62,7 @@ int hal_plugin_access_manager::run_plugin(const std::string plugin_name, program
         return 0;
     }
 
-    auto plugin = plugin_manager::get_plugin_instance<i_cli>(plugin_name);
+    auto plugin = PluginManager::get_plugin_instance<CLIPluginInterface>(plugin_name);
     if (!plugin)
         return 0;
 

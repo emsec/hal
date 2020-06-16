@@ -31,7 +31,7 @@ protected:
         NO_COUT_BLOCK;
         test_utils::init_log_channels();
         callback_hooks_called = 0;
-        plugin_manager::unload_all_plugins();
+        PluginManager::unload_all_plugins();
     }
 
     virtual void TearDown()
@@ -65,10 +65,10 @@ protected:
         return std::filesystem::path();
     }
 
-    // Loads the test_plugin. Requires the correctness of pluign_manager::load and plugin_manager::get_plugin_names
+    // Loads the test_plugin. Requires the correctness of pluign_manager::load and PluginManager::get_plugin_names
     bool load_reference_plugin()
     {
-        std::set<std::string> loaded_plugins = plugin_manager::get_plugin_names();
+        std::set<std::string> loaded_plugins = PluginManager::get_plugin_names();
         if (loaded_plugins.find(reference_library_name) != loaded_plugins.end())
         {
             // If the plugin is already loaded, return true
@@ -81,7 +81,7 @@ protected:
             return false;
         }
 
-        bool load_suc = plugin_manager::load(reference_library_name, plugin_path);
+        bool load_suc = PluginManager::load(reference_library_name, plugin_path);
         if (!load_suc)
         {
             cout << "A plugin file (" << plugin_path.string() << ") is found, but can't be loaded. Is the plugin build corrupted? ";
@@ -110,8 +110,8 @@ TEST_F(plugin_manager_test, check_load_all)
     std::set<std::string> plugin_names;
     {
         // Load all plugins without directory hints
-        plugin_manager::load_all_plugins();
-        plugin_names = plugin_manager::get_plugin_names();
+        PluginManager::load_all_plugins();
+        plugin_names = PluginManager::get_plugin_names();
 
         int plugin_amount = plugin_names.size();
         if (plugin_amount == 0)
@@ -120,23 +120,23 @@ TEST_F(plugin_manager_test, check_load_all)
         }
 
         // Unload all plugins
-        NO_COUT(plugin_manager::unload_all_plugins());
-        EXPECT_EQ(plugin_manager::get_plugin_names().size(), 0);
+        NO_COUT(PluginManager::unload_all_plugins());
+        EXPECT_EQ(PluginManager::get_plugin_names().size(), 0);
     }
     {
         // Load all plugins without directory hints by passing them the plugin folders given
         // by core_utils::get_plugin_directories
         auto dirs = core_utils::get_plugin_directories();
-        plugin_manager::load_all_plugins(dirs);
+        PluginManager::load_all_plugins(dirs);
 
-        int plugin_amount = plugin_manager::get_plugin_names().size();
+        int plugin_amount = PluginManager::get_plugin_names().size();
         if (plugin_amount == 0)
         {
             std::cout << "Warning: No builded plugins are found! Tests might not find issues...";
         }
         // Unload all plugins
-        NO_COUT(plugin_manager::unload_all_plugins());
-        EXPECT_EQ(plugin_manager::get_plugin_names().size(), 0);
+        NO_COUT(PluginManager::unload_all_plugins());
+        EXPECT_EQ(PluginManager::get_plugin_names().size(), 0);
     }
     TEST_END
 }
@@ -152,19 +152,19 @@ TEST_F(plugin_manager_test, check_load_unload_all)
     TEST_START
     NO_COUT_TEST_BLOCK;
     // Load all plugins without directory hints
-    plugin_manager::load_all_plugins();
-    if (plugin_manager::get_plugin_names().empty())
+    PluginManager::load_all_plugins();
+    if (PluginManager::get_plugin_names().empty())
     {
         std::cout << "Warning: No builded plugins are found! Tests might not find issues..." << std::endl;
     }
-    NO_COUT(plugin_manager::unload_all_plugins());
-    EXPECT_TRUE(plugin_manager::get_plugin_names().empty());
+    NO_COUT(PluginManager::unload_all_plugins());
+    EXPECT_TRUE(PluginManager::get_plugin_names().empty());
 
     // Load all plugins with directory hints
-    plugin_manager::load_all_plugins(core_utils::get_plugin_directories());
-    NO_COUT(plugin_manager::unload_all_plugins());
+    PluginManager::load_all_plugins(core_utils::get_plugin_directories());
+    NO_COUT(PluginManager::unload_all_plugins());
 
-    EXPECT_TRUE(plugin_manager::get_plugin_names().empty());
+    EXPECT_TRUE(PluginManager::get_plugin_names().empty());
 
     TEST_END
 }
@@ -187,37 +187,37 @@ TEST_F(plugin_manager_test, check_load)
     {
         // Load a plugin at a non-existing directory
         NO_COUT_TEST_BLOCK;
-        plugin_manager::unload_all_plugins();
-        bool suc = plugin_manager::load(reference_library_name, std::filesystem::path("/this/dir/does/not/exist"));
+        PluginManager::unload_all_plugins();
+        bool suc = PluginManager::load(reference_library_name, std::filesystem::path("/this/dir/does/not/exist"));
         EXPECT_FALSE(suc);
     }
     {
         // Try to load an non-existing plugin at an existing directory
         NO_COUT_TEST_BLOCK;
-        plugin_manager::unload_all_plugins();
-        bool suc = plugin_manager::load(reference_library_name, test_plugin_path / "non_existing_plugin.so");
+        PluginManager::unload_all_plugins();
+        bool suc = PluginManager::load(reference_library_name, test_plugin_path / "non_existing_plugin.so");
         EXPECT_FALSE(suc);
     }
     {
         // Try to load an existing plugin but pass an empty name
         NO_COUT_TEST_BLOCK;
-        plugin_manager::unload_all_plugins();
-        bool suc = plugin_manager::load("", test_plugin_path / (reference_library_name + ".so"));
+        PluginManager::unload_all_plugins();
+        bool suc = PluginManager::load("", test_plugin_path / (reference_library_name + ".so"));
         EXPECT_FALSE(suc);
     }
     {
         // Path is empty string
         NO_COUT_TEST_BLOCK;
-        plugin_manager::unload_all_plugins();
-        bool suc = plugin_manager::load(reference_library_name, std::filesystem::path(""));
+        PluginManager::unload_all_plugins();
+        bool suc = PluginManager::load(reference_library_name, std::filesystem::path(""));
         EXPECT_FALSE(suc);
     }
     /*{ // ISSUE: Fails
             // Load an already loaded plugin (should return true)
             NO_COUT_TEST_BLOCK;
-            plugin_manager::unload_all_plugins();
-            bool suc_first = plugin_manager::load(reference_library_name, test_plugin_path);
-            bool suc       = plugin_manager::load(reference_library_name, test_plugin_path);
+            PluginManager::unload_all_plugins();
+            bool suc_first = PluginManager::load(reference_library_name, test_plugin_path);
+            bool suc       = PluginManager::load(reference_library_name, test_plugin_path);
             EXPECT_TRUE(suc);
             EXPECT_TRUE(suc_first);
         }*/
@@ -242,18 +242,18 @@ TEST_F(plugin_manager_test, check_unload)
     {
         // Unload the libtest_plugin loaded in the previous step
         NO_COUT_TEST_BLOCK;
-        EXPECT_TRUE(plugin_manager::unload(reference_library_name));
+        EXPECT_TRUE(PluginManager::unload(reference_library_name));
     }
     {
         // Unload an unknown plugin
         NO_COUT_TEST_BLOCK;
-        bool suc = plugin_manager::unload("non_existing_plugin");
+        bool suc = PluginManager::unload("non_existing_plugin");
         EXPECT_TRUE(suc);
     }
     {
         // Passing unload an empty string
         NO_COUT_TEST_BLOCK;
-        bool suc = plugin_manager::unload("");
+        bool suc = PluginManager::unload("");
         EXPECT_TRUE(suc);
     }
 
@@ -276,7 +276,7 @@ TEST_F(plugin_manager_test, check_cli_options)
     // Load the test_plugin
     if (load_reference_plugin())
     {
-        std::map<std::string, std::string> cli_opts = plugin_manager::get_flag_to_plugin_mapping();
+        std::map<std::string, std::string> cli_opts = PluginManager::get_flag_to_plugin_mapping();
         for (auto ref_flag_and_desc : reference_lib_options)
         {
             EXPECT_NE(cli_opts.find(ref_flag_and_desc.first), cli_opts.end());
@@ -291,7 +291,7 @@ TEST_F(plugin_manager_test, check_cli_options)
         std::cout << "Can't load libtest_plugin. Some tests are skipped..." << std::endl;
     }
 
-    NO_COUT(plugin_manager::unload_all_plugins());
+    NO_COUT(PluginManager::unload_all_plugins());
 
     TEST_END
 }
@@ -313,14 +313,14 @@ TEST_F(plugin_manager_test, check_cli_plugin_options)
     if (load_reference_plugin())
     {
         // Get the options and find the options of the test plugin
-        program_options cli_plugin_opts = plugin_manager::get_cli_plugin_options();
+        ProgramOptions cli_plugin_opts = PluginManager::get_cli_plugin_options();
 
         for (auto ref_flag_and_desc : reference_lib_options)
         {
             EXPECT_TRUE(cli_plugin_opts.is_registered(ref_flag_and_desc.first));
         }
         NO_COUT_TEST_BLOCK;
-        plugin_manager::unload_all_plugins();
+        PluginManager::unload_all_plugins();
     }
     else
     {
@@ -345,12 +345,12 @@ TEST_F(plugin_manager_test, check_get_plugin_instance)
     // Load the test_plugin
     if (load_reference_plugin())
     {
-        std::shared_ptr<i_cli> test_plugin_instance = plugin_manager::get_plugin_instance<i_cli>(reference_library_name);
+        std::shared_ptr<CLIPluginInterface> test_plugin_instance = PluginManager::get_plugin_instance<CLIPluginInterface>(reference_library_name);
         ASSERT_NE(test_plugin_instance, nullptr);
         EXPECT_EQ(test_plugin_instance->get_name(), reference_name);
         NO_COUT_TEST_BLOCK;
         test_plugin_instance = nullptr;
-        plugin_manager::unload_all_plugins();
+        PluginManager::unload_all_plugins();
     }
     else
     {
@@ -363,13 +363,13 @@ TEST_F(plugin_manager_test, check_get_plugin_instance)
     {
         // Passing an unknown plugin name
         NO_COUT_TEST_BLOCK;
-        std::shared_ptr<i_cli> plugin_instance = plugin_manager::get_plugin_instance<i_cli>("unknown_plugin");
+        std::shared_ptr<CLIPluginInterface> plugin_instance = PluginManager::get_plugin_instance<CLIPluginInterface>("unknown_plugin");
         EXPECT_EQ(plugin_instance, nullptr);
     }
     {
         // Passing an empty string
         NO_COUT_TEST_BLOCK;
-        std::shared_ptr<i_cli> plugin_instance = plugin_manager::get_plugin_instance<i_cli>("");
+        std::shared_ptr<CLIPluginInterface> plugin_instance = PluginManager::get_plugin_instance<CLIPluginInterface>("");
         EXPECT_EQ(plugin_instance, nullptr);
     }
 
@@ -385,9 +385,9 @@ TEST_F(plugin_manager_test, check_callback_hooks)
 {
     TEST_START
     // Add a callback hook
-    plugin_manager::unload_all_plugins();    // Just to assure no plugin is loaded
+    PluginManager::unload_all_plugins();    // Just to assure no plugin is loaded
     callback_hooks_called = 0;
-    u64 callback_id       = plugin_manager::add_model_changed_callback(test_callback);
+    u64 callback_id       = PluginManager::add_model_changed_callback(test_callback);
     EXPECT_EQ(callback_hooks_called, 0);
     if (load_reference_plugin())    // <- should call the callback hook once
     {
@@ -398,7 +398,7 @@ TEST_F(plugin_manager_test, check_callback_hooks)
         callback_hooks_called = 0;
 
         // Unload all plugin (only one is loaded). The hook should be called once.
-        plugin_manager::unload_all_plugins();
+        PluginManager::unload_all_plugins();
 
         EXPECT_EQ(callback_hooks_called, 1);
         EXPECT_EQ(callback_hook_params, std::make_tuple(false, reference_library_name, get_plugin_path(reference_library_name).string()));
@@ -407,10 +407,10 @@ TEST_F(plugin_manager_test, check_callback_hooks)
         callback_hooks_called = 0;
 
         // Unregister the hook
-        plugin_manager::remove_model_changed_callback(callback_id);
+        PluginManager::remove_model_changed_callback(callback_id);
 
         load_reference_plugin();
-        plugin_manager::unload_all_plugins();
+        PluginManager::unload_all_plugins();
 
         EXPECT_EQ(callback_hooks_called, 0);
     }
@@ -421,11 +421,11 @@ TEST_F(plugin_manager_test, check_callback_hooks)
     {
         // The function is a nullptr
         // NO_COUT_TEST_BLOCK;
-        callback_id = plugin_manager::add_model_changed_callback(nullptr);
+        callback_id = PluginManager::add_model_changed_callback(nullptr);
         EXPECT_EQ(callback_id, 0);
     }
 
-    NO_COUT(plugin_manager::unload_all_plugins());
+    NO_COUT(PluginManager::unload_all_plugins());
     TEST_END
 }
 
@@ -449,11 +449,11 @@ TEST_F(plugin_manager_test, check_existing_options_description)
     if (!reference_lib_options.empty())
     {
         NO_COUT_TEST_BLOCK;
-        plugin_manager::unload_all_plugins();
-        program_options overlapping_opt;
+        PluginManager::unload_all_plugins();
+        ProgramOptions overlapping_opt;
         overlapping_opt.add(reference_lib_options[0].first, reference_lib_options[0].second);
-        plugin_manager::add_existing_options_description(overlapping_opt);
-        EXPECT_FALSE(plugin_manager::load(reference_library_name, test_plugin_path));
+        PluginManager::add_existing_options_description(overlapping_opt);
+        EXPECT_FALSE(PluginManager::load(reference_library_name, test_plugin_path));
     }
     else
     {

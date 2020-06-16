@@ -1,6 +1,6 @@
 #pragma once
 
-#include "core/interface_base.h"
+#include "core/plugin_interface_base.h"
 
 #include <igraph/igraph.h>
 
@@ -11,7 +11,7 @@ namespace hal
     class gate;
     class net;
 
-    class PLUGIN_API plugin_graph_algorithm : public i_base
+    class PLUGIN_API plugin_graph_algorithm : public BasePluginInterface
     {
     public:
         /** constructor (= default) */
@@ -24,10 +24,10 @@ namespace hal
         *      interface implementations
         */
 
-        /** interface implementation: i_base */
+        /** interface implementation: BasePluginInterface */
         std::string get_name() const override;
 
-        /** interface implementation: i_base */
+        /** interface implementation: BasePluginInterface */
         std::string get_version() const override;
 
         /*

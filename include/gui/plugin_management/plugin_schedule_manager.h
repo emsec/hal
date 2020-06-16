@@ -27,7 +27,7 @@
 #include <QObject>
 
 class plugin_arguments_widget;
-class program_arguments;
+class ProgramArguments;
 
 struct argument
 {
@@ -47,7 +47,7 @@ public:
     static plugin_schedule_manager* get_instance();
 
     schedule* get_schedule();
-    program_arguments get_program_arguments(int index);
+    ProgramArguments get_program_arguments(int index);
     int get_current_index();
 
     void set_current_index(int index);

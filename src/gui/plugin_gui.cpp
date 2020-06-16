@@ -68,7 +68,7 @@ std::unique_ptr<python_context> g_python_context = nullptr;
 // ORDER = LOGGER -> SETTINGS -> (STYLE / RELAYS / OTHER STUFF) -> MAINWINDOW (= EVERYTHING ELSE & DATA)
 // USE POINTERS FOR EVERYTHING ?
 
-static void handle_program_arguments(const program_arguments& args)
+static void handle_program_arguments(const ProgramArguments& args)
 {
     if (args.is_option_set("--input-file"))
     {
@@ -93,7 +93,7 @@ static void m_cleanup(int sig)
     }
 }
 
-bool plugin_gui::exec(program_arguments& args)
+bool plugin_gui::exec(ProgramArguments& args)
 {
     int argc;
     const char** argv;
@@ -210,13 +210,13 @@ std::string plugin_gui::get_version() const
 
 void plugin_gui::initialize_logging() const
 {
-    log_manager& l = log_manager::get_instance();
-    l.add_channel("user", {log_manager::create_stdout_sink(), log_manager::create_file_sink(), log_manager::create_gui_sink()}, "info");
-    l.add_channel("gui", {log_manager::create_stdout_sink(), log_manager::create_file_sink(), log_manager::create_gui_sink()}, "info");
-    l.add_channel("python", {log_manager::create_stdout_sink(), log_manager::create_file_sink(), log_manager::create_gui_sink()}, "info");
+    LogManager& l = LogManager::get_instance();
+    l.add_channel("user", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
+    l.add_channel("gui", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
+    l.add_channel("python", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
 }
 
-extern std::shared_ptr<i_base> get_plugin_instance()
+extern std::shared_ptr<BasePluginInterface> get_plugin_instance()
 {
     return std::make_shared<plugin_gui>();
 }

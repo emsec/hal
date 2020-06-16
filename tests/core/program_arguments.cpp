@@ -31,7 +31,7 @@ TEST_F(program_arguments_test, check_get_original_arguments){
         {
             // Call the constructor with some arguments and get them after
             const char * args[] = {"arg_0", "arg_1"};
-            program_arguments p_args(2, args);
+            ProgramArguments p_args(2, args);
             int ret_argc;
             const char** ret_argv;
             p_args.get_original_arguments(&ret_argc, &ret_argv);
@@ -57,7 +57,7 @@ TEST_F(program_arguments_test, check_flags_and_parameters)
     // ########################
     {
         // Set a single flag with a set of parameters
-        program_arguments p_args;
+        ProgramArguments p_args;
         std::vector<std::string> flag_params = {"param_0", "param_1"};
         p_args.set_option("flag_0", flag_params);
 
@@ -67,7 +67,7 @@ TEST_F(program_arguments_test, check_flags_and_parameters)
     }
     {
         // Set multiple flags with a set of parameters (found_flag part of flag-list)
-        program_arguments p_args;
+        ProgramArguments p_args;
         std::set<std::string> flags_with_flag_0 = {"flag_0", "flag_1", "flag_2"};
         std::vector<std::string> flag_params_1  = {"param_0", "param_1"};
         p_args.set_option("flag_0", flags_with_flag_0, flag_params_1);
@@ -82,7 +82,7 @@ TEST_F(program_arguments_test, check_flags_and_parameters)
     }
     {
         // Set multiple flags with a set of parameters (found_flag not part of flag-list)
-        program_arguments p_args;
+        ProgramArguments p_args;
         std::set<std::string> flags_without_flag_0 = {"flag_1", "flag_2"};
         std::vector<std::string> flag_params       = {"param_0", "param_1"};
         p_args.set_option("flag_0", flags_without_flag_0, flag_params);
@@ -97,7 +97,7 @@ TEST_F(program_arguments_test, check_flags_and_parameters)
     }
     {
         // Set multiple valid options
-        program_arguments p_args;
+        ProgramArguments p_args;
         std::vector<std::string> flag_params_0 = {"param_0_0"};
         p_args.set_option("flag_0", flag_params_0);
         std::vector<std::string> flag_params_1 = {"param_1_0", "param_1_1"};
@@ -121,7 +121,7 @@ TEST_F(program_arguments_test, check_flags_and_parameters)
     {
         // Get parameter/-s with unknown flag
         NO_COUT_TEST_BLOCK;
-        program_arguments p_args;
+        ProgramArguments p_args;
         std::vector<std::string> unknown_flag_params = p_args.get_parameters("unknown_flag");
         std::string unknown_flag_param               = p_args.get_parameter("unknown_flag");
 
@@ -130,7 +130,7 @@ TEST_F(program_arguments_test, check_flags_and_parameters)
     }
     {
         // Overwrite a given flag
-        program_arguments p_args;
+        ProgramArguments p_args;
         std::vector<std::string> flag_params_0 = {"param_0"};
         std::vector<std::string> flag_params_1 = {"param_1"};
         p_args.set_option("flag", flag_params_0);
@@ -140,7 +140,7 @@ TEST_F(program_arguments_test, check_flags_and_parameters)
     }
     {
         // Overwrite a given flag via alias
-        program_arguments p_args;
+        ProgramArguments p_args;
         std::vector<std::string> flag_params_0 = {"param_0"};
         std::vector<std::string> flag_params_1 = {"param_1"};
         p_args.set_option("flag", {"alternate_flag"}, flag_params_0);
@@ -153,7 +153,7 @@ TEST_F(program_arguments_test, check_flags_and_parameters)
     {
         // Set two options with partially overlapping flags
         NO_COUT_TEST_BLOCK;
-        program_arguments p_args;
+        ProgramArguments p_args;
         p_args.set_option("flag_0", {"alternative_flag_0"}, {"param_0"});
         bool suc = p_args.set_option("flag_1", {"alternative_flag_0"}, {"param_1"});
 
@@ -165,7 +165,7 @@ TEST_F(program_arguments_test, check_flags_and_parameters)
     {
         // Set an options with flags of two different options
         NO_COUT_TEST_BLOCK;
-        program_arguments p_args;
+        ProgramArguments p_args;
         p_args.set_option("flag_0", {"alternative_flag_0"}, {"param_0"});
         p_args.set_option("flag_1", {"alternative_flag_1"}, {"param_1"});
         bool suc = p_args.set_option("flag_1", {"alternative_flag_0"}, {"param_2"});
@@ -179,7 +179,7 @@ TEST_F(program_arguments_test, check_flags_and_parameters)
     {
         // set an existing option but specify more flags than "last time"
         NO_COUT_TEST_BLOCK;
-        program_arguments p_args;
+        ProgramArguments p_args;
         p_args.set_option("flag", {"alternative_flag_0"}, {});
         bool suc = p_args.set_option("flag", {"alternative_flag_0", "alternative_flag_1"}, {});
 
@@ -191,7 +191,7 @@ TEST_F(program_arguments_test, check_flags_and_parameters)
     {
         // Set a flag with empty parameters
         NO_COUT_TEST_BLOCK;
-        program_arguments p_args;
+        ProgramArguments p_args;
         std::vector<std::string> flag_params = {};
         p_args.set_option("flag", flag_params);
         std::string param               = p_args.get_parameter("flag");

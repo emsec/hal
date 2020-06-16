@@ -31,7 +31,7 @@ namespace hal
                 return false;
             }
         }
-        catch (token_stream<std::string>::token_stream_exception& e)
+        catch (TokenStream<std::string>::TokenStreamException& e)
         {
             if (e.line_number != (u32)-1)
             {
@@ -57,7 +57,7 @@ namespace hal
         bool escaped            = false;
         bool multi_line_comment = false;
 
-        std::vector<token<std::string>> parsed_tokens;
+        std::vector<Token<std::string>> parsed_tokens;
         while (std::getline(m_fs, line))
         {
             line_number++;
@@ -120,7 +120,7 @@ namespace hal
             }
         }
 
-        m_token_stream = token_stream(parsed_tokens, {"(", "["}, {")", "]"});
+        m_token_stream = TokenStream(parsed_tokens, {"(", "["}, {")", "]"});
         return true;
     }
 
@@ -622,7 +622,7 @@ namespace hal
         }
     }
 
-    std::vector<u32> hdl_parser_verilog::parse_range(token_stream<std::string>& range_str)
+    std::vector<u32> hdl_parser_verilog::parse_range(TokenStream<std::string>& range_str)
     {
         if (range_str.remaining() == 1)
         {
@@ -672,7 +672,7 @@ namespace hal
         return signals;
     }
 
-    std::optional<std::pair<std::vector<hdl_parser_verilog::signal>, i32>> hdl_parser_verilog::get_assignment_signals(entity& e, token_stream<std::string>& signal_str, bool allow_numerics)
+    std::optional<std::pair<std::vector<hdl_parser_verilog::signal>, i32>> hdl_parser_verilog::get_assignment_signals(entity& e, TokenStream<std::string>& signal_str, bool allow_numerics)
     {
         // PARSE ASSIGNMENT
         //   assignment can currently be one of the following:
@@ -684,7 +684,7 @@ namespace hal
         //   (6) {(1 - 5), (1 - 5), ...}
 
         std::vector<signal> result;
-        std::vector<token_stream<std::string>> parts;
+        std::vector<TokenStream<std::string>> parts;
         i32 size = 0;
 
         // (6) {(1) - (5), (1) - (5), ...}
@@ -798,7 +798,7 @@ namespace hal
                                                            {'e', "1110"},
                                                            {'f', "1111"}};
 
-    std::string hdl_parser_verilog::get_bin_from_literal(const token<std::string>& value_token)
+    std::string hdl_parser_verilog::get_bin_from_literal(const Token<std::string>& value_token)
     {
         const auto line_number = value_token.number;
         const auto value       = core_utils::to_lower(core_utils::replace(value_token.string, "_", ""));
@@ -916,7 +916,7 @@ namespace hal
         return res;
     }
 
-    std::string hdl_parser_verilog::get_hex_from_literal(const token<std::string>& value_token)
+    std::string hdl_parser_verilog::get_hex_from_literal(const Token<std::string>& value_token)
     {
         const auto line_number = value_token.number;
         const auto value       = core_utils::to_lower(core_utils::replace(value_token.string, "_", ""));

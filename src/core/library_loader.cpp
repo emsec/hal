@@ -4,12 +4,12 @@
 
 namespace hal
 {
-    library_loader::library_loader()
+    LibraryLoader::LibraryLoader()
     {
         m_handle = NULL;
     }
 
-    library_loader::~library_loader()
+    LibraryLoader::~LibraryLoader()
     {
         if (m_handle != NULL)
         {
@@ -18,12 +18,12 @@ namespace hal
         m_file_name.clear();
     }
 
-    std::string library_loader::get_file_name() const
+    std::string LibraryLoader::get_file_name() const
     {
         return m_file_name;
     }
 
-    bool library_loader::load_library(const std::string& file_name)
+    bool LibraryLoader::load_library(const std::string& file_name)
     {
 #ifdef _WIN32
         m_handle = LoadLibrary(file_name.c_str());
@@ -48,7 +48,7 @@ namespace hal
         return false;
     }
 
-    bool library_loader::unload_library()
+    bool LibraryLoader::unload_library()
     {
         if (m_handle == NULL)
         {
@@ -75,7 +75,7 @@ namespace hal
         return false;
     }
 
-    lib_fn_ptr_t library_loader::get_function(const std::string& function_name)
+    lib_fn_ptr_t LibraryLoader::get_function(const std::string& function_name)
     {
         lib_fn_ptr_t fptr = NULL;
 #ifdef _WIN32

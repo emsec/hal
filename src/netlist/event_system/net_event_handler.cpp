@@ -8,7 +8,7 @@ namespace hal
     {
         namespace
         {
-            callback_hook<void(event, std::shared_ptr<net>, u32)> m_callback;
+            CallbackHook<void(event, std::shared_ptr<net>, u32)> m_callback;
             bool enabled = true;
         }    // namespace
 

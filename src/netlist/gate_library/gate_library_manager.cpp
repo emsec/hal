@@ -161,7 +161,7 @@ namespace hal
 
                 log_info("gate_library_manager", "Reading all definitions from {}.", lib_dir.string());
 
-                for (const auto& lib_path : core_utils::recursive_directory_range(lib_dir))
+                for (const auto& lib_path : core_utils::RecursiveDirectoryRange(lib_dir))
                 {
                     load_file(lib_path.path(), reload_if_existing);
                 }

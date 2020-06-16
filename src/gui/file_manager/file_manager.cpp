@@ -39,7 +39,7 @@ file_manager* file_manager::get_instance()
     return &manager;
 }
 
-void file_manager::handle_program_arguments(const program_arguments& args)
+void file_manager::handle_program_arguments(const ProgramArguments& args)
 {
     if (args.is_option_set("--input-file"))
     {
@@ -183,7 +183,7 @@ void file_manager::open_file(QString file_name)
         }
     }
 
-    log_manager& lm                = log_manager::get_instance();
+    LogManager& lm                = LogManager::get_instance();
     std::filesystem::path log_path = file_name.toStdString();
     lm.set_file_name(std::filesystem::path(log_path.replace_extension(".log")));
 

@@ -1,6 +1,6 @@
 #include "plugin_management/loaded_plugins_widget.h"
 
-#include "core/interface_cli.h"
+#include "core/plugin_interface_cli.h"
 #include "core/plugin_manager.h"
 #include "gui_globals.h"
 #include "plugin_management/loaded_plugin_item.h"
@@ -33,7 +33,7 @@ void loaded_plugins_widget::handle_plugin_loaded(const QString& name, const QStr
 {
     Q_UNUSED(path)
 
-    if (plugin_manager::get_plugin_instance<i_cli>(name.toStdString(), false) == nullptr)
+    if (PluginManager::get_plugin_instance<CLIPluginInterface>(name.toStdString(), false) == nullptr)
     {
         return;
     }

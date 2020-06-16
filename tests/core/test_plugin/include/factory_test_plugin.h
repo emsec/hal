@@ -13,7 +13,7 @@ public:
     //std::set<std::string> get_dependencies() override;
 
     // interface implementation: i_factory
-    std::shared_ptr<i_base> get_plugin_instance() override;
+    std::shared_ptr<BasePluginInterface> get_plugin_instance() override;
 
 };
 

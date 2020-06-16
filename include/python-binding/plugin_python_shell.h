@@ -23,11 +23,11 @@
 
 #pragma once
 
-#include "core/interface_interactive_ui.h"
+#include "core/plugin_interface_interactive_ui.h"
 
 namespace hal
 {
-    class plugin_python_shell : virtual public i_interactive_ui
+    class plugin_python_shell : virtual public InteractiveUIPluginInterface
     {
     public:
         plugin_python_shell() = default;
@@ -58,6 +58,6 @@ namespace hal
          * @param[in] args - The command line parameters.
          * @returns True on success.
          */
-        bool exec(program_arguments& args) override;
+        bool exec(ProgramArguments& args) override;
     };
 }    // namespace hal

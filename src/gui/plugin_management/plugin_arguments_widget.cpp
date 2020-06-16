@@ -1,6 +1,6 @@
 #include "plugin_management/plugin_arguments_widget.h"
 
-#include "core/interface_cli.h"
+#include "core/plugin_interface_cli.h"
 #include "core/plugin_manager.h"
 #include "core/program_arguments.h"
 #include "plugin_management/plugin_schedule_manager.h"
@@ -15,7 +15,7 @@ plugin_arguments_widget::plugin_arguments_widget(QWidget* parent) : QFrame(paren
     setLayout(m_form_layout);
 }
 
-program_arguments plugin_arguments_widget::get_args()
+ProgramArguments plugin_arguments_widget::get_args()
 {
     std::vector<char*> temp_vector;
 
@@ -52,8 +52,8 @@ program_arguments plugin_arguments_widget::get_args()
     //        printf("argv[%d]: %s\n", i, argv[i]);
     //    }
 
-    program_options options     = m_plugin->get_cli_options();
-    program_arguments arguments = options.parse(argc, const_cast<const char**>(argv));
+    ProgramOptions options     = m_plugin->get_cli_options();
+    ProgramArguments arguments = options.parse(argc, const_cast<const char**>(argv));
 
     for (int i = 0; i < argc; ++i)
         delete[] argv[i];
@@ -78,17 +78,17 @@ program_arguments plugin_arguments_widget::get_args()
 
 //    //USE EXECUTION MANAGER
 
-//    i_factory* factory_ptr = plugin_manager::get_plugin_factory(plugin.toStdString());
+//    i_factory* factory_ptr = PluginManager::get_plugin_factory(plugin.toStdString());
 //    if (!factory_ptr)
 //    {
 //        //log_msg(l_error, "failed to get factory for plugin '%s'\n", plugin_name.c_str());
 //        return;
 //    }
 
-//    m_plugin = std::dynamic_pointer_cast<i_cli>(factory_ptr->query_interface(interface_type::cli));
+//    m_plugin = std::dynamic_pointer_cast<CLIPluginInterface>(factory_ptr->query_interface(PluginInterfaceType::cli));
 //    if (!m_plugin)
 //    {
-//        //log_msg(l_warning, "Plugin %s is not castable to i_cli!\n", plugin_name.c_str());
+//        //log_msg(l_warning, "Plugin %s is not castable to CLIPluginInterface!\n", plugin_name.c_str());
 //        return;
 //    }
 
@@ -118,10 +118,10 @@ void plugin_arguments_widget::setup(const QString& plugin_name)
     }
     m_vector.clear();
 
-    m_plugin = plugin_manager::get_plugin_instance<i_cli>(plugin_name.toStdString(), false);
+    m_plugin = PluginManager::get_plugin_instance<CLIPluginInterface>(plugin_name.toStdString(), false);
     if (!m_plugin)
     {
-        //log_msg(l_warning, "Plugin %s is not castable to i_cli!\n", plugin_name.c_str());
+        //log_msg(l_warning, "Plugin %s is not castable to CLIPluginInterface!\n", plugin_name.c_str());
         return;
     }
 

@@ -81,10 +81,10 @@ namespace hal
             }
         }    // namespace
 
-        program_options get_cli_options()
+        ProgramOptions get_cli_options()
         {
-            program_options description;
-            description.add("--parser", "use a specific parser (optional, normally determined by file name extension)", {program_options::REQUIRED_PARAM});
+            ProgramOptions description;
+            description.add("--parser", "use a specific parser (optional, normally determined by file name extension)", {ProgramOptions::REQUIRED_PARAM});
             return description;
         }
 
@@ -93,7 +93,7 @@ namespace hal
             return {"vhdl", "verilog"};
         }
 
-        std::shared_ptr<netlist> parse(const std::filesystem::path& file_name, const program_arguments& args)
+        std::shared_ptr<netlist> parse(const std::filesystem::path& file_name, const ProgramArguments& args)
         {
             log_info("hdl_parser", "finding a parser for '{}'...", file_name.string());
 

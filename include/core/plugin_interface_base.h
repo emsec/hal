@@ -39,8 +39,8 @@ namespace hal
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wreturn-type-c-linkage"
 #endif
-    class i_base;
-    extern "C" PLUGIN_API std::shared_ptr<i_base> get_plugin_instance();
+    class BasePluginInterface;
+    extern "C" PLUGIN_API std::shared_ptr<BasePluginInterface> get_plugin_instance();
 #ifdef COMPILER_CLANG
 #pragma clang diagnostic pop
 #endif
@@ -48,7 +48,7 @@ namespace hal
     /**
      * Enum for all possible plugin types
      */
-    enum class CORE_API interface_type
+    enum class CORE_API PluginInterfaceType
     {
         base,
         cli,
@@ -59,16 +59,16 @@ namespace hal
     /**
      * @ingroup core
      */
-    class CORE_API i_base
+    class CORE_API BasePluginInterface
     {
     public:
-        i_base()          = default;
-        virtual ~i_base() = default;
+        BasePluginInterface()          = default;
+        virtual ~BasePluginInterface() = default;
 
         /**
          * Plugins utilize two phase construction.
          * Always populate all members etc in the initialize function which is automatically called by
-         * plugin_manager::get_plugin_instance()
+         * PluginManager::get_plugin_instance()
          */
         virtual void initialize();
 
@@ -92,7 +92,7 @@ namespace hal
          * @param[in] t - the type to check
          * @returns True, if the type is supported.
          */
-        bool has_type(interface_type t) const;
+        bool has_type(PluginInterfaceType t) const;
 
         /**
          * Shorthand for fast text logging.
@@ -129,5 +129,5 @@ namespace hal
         virtual void initialize_logging() const;
     };
 
-    using instantiate_plugin_function = std::shared_ptr<i_base> (*)();
+    using instantiate_plugin_function = std::shared_ptr<BasePluginInterface> (*)();
 }    // namespace hal

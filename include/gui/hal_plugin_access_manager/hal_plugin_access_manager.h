@@ -31,8 +31,8 @@
 
 namespace hal_plugin_access_manager
 {
-    program_arguments request_arguments(const std::string plugin_name);
-    int run_plugin(const std::string plugin_name, program_arguments* args);
+    ProgramArguments request_arguments(const std::string plugin_name);
+    int run_plugin(const std::string plugin_name, ProgramArguments* args);
 }    // namespace hal_plugin_access_manager
 
 #endif    // HAL_PLUGIN_ACCESS_MANAGER_H

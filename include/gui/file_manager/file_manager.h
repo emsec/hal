@@ -38,7 +38,7 @@ class file_manager : public QObject
 public:
     static file_manager* get_instance();
 
-    void handle_program_arguments(const program_arguments& args);
+    void handle_program_arguments(const ProgramArguments& args);
 
     QString file_name() const;
     bool file_open() const;

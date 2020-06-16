@@ -1,9 +1,9 @@
 #include "plugin_test_plugin.h"
 #include "core/log.h"
 
-extern std::shared_ptr<i_base> get_plugin_instance()
+extern std::shared_ptr<BasePluginInterface> get_plugin_instance()
 {
-    return std::dynamic_pointer_cast<i_base>(std::make_shared<plugin_test_plugin>());
+    return std::dynamic_pointer_cast<BasePluginInterface>(std::make_shared<plugin_test_plugin>());
 }
 
 std::string plugin_test_plugin::get_name() const
@@ -17,21 +17,21 @@ std::string plugin_test_plugin::get_version() const
 }
 
 /*
-std::set<interface_type> plugin_test_plugin::get_type()
+std::set<PluginInterfaceType> plugin_test_plugin::get_type()
 {
-    return std::set<interface_type>{interface_type::base, interface_type::cli};
+    return std::set<PluginInterfaceType>{PluginInterfaceType::base, PluginInterfaceType::cli};
 }
 */
 
-program_options plugin_test_plugin::get_cli_options() const
+ProgramOptions plugin_test_plugin::get_cli_options() const
 {
-    program_options description;
+    ProgramOptions description;
     description.add("--option_one", "option_one_description");
     description.add("--option_two", "option_two_description");
     return description;
 }
 
-bool plugin_test_plugin::handle_cli_call(std::shared_ptr<netlist> nl, program_arguments& args)
+bool plugin_test_plugin::handle_cli_call(std::shared_ptr<netlist> nl, ProgramArguments& args)
 {
     UNUSED(nl);
     UNUSED(args);

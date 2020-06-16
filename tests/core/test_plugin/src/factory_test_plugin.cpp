@@ -3,9 +3,9 @@
 
 #ifdef REMOVE_ME
 
-std::shared_ptr<i_base> factory_test_plugin::get_plugin_instance()
+std::shared_ptr<BasePluginInterface> factory_test_plugin::get_plugin_instance()
 {
-    return std::dynamic_pointer_cast<i_base>(std::make_shared<plugin_test_plugin>());
+    return std::dynamic_pointer_cast<BasePluginInterface>(std::make_shared<plugin_test_plugin>());
 }
 
 extern i_factory* get_factory()

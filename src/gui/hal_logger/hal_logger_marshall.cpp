@@ -15,7 +15,7 @@ hal_logger_marshall::hal_logger_marshall(QPlainTextEdit* edit, QObject* parent) 
 
 hal_logger_marshall::~hal_logger_marshall()
 {
-    log_manager::get_instance().get_gui_callback().remove_callback("gui");
+    LogManager::get_instance().get_gui_callback().remove_callback("gui");
 }
 
 void hal_logger_marshall::append_log(spdlog::level::level_enum t, const QString& msg, hal_filter_item* filter)

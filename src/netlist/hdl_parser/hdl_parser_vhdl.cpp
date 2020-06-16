@@ -32,7 +32,7 @@ namespace hal
                 return false;
             }
         }
-        catch (token_stream<core_strings::case_insensitive_string>::token_stream_exception& e)
+        catch (TokenStream<core_strings::CaseInsensitiveString>::TokenStreamException& e)
         {
             if (e.line_number != (u32)-1)
             {
@@ -48,16 +48,16 @@ namespace hal
         return true;
     }
 
-    static bool is_digits(const core_strings::case_insensitive_string& str)
+    static bool is_digits(const core_strings::CaseInsensitiveString& str)
     {
         return std::all_of(str.begin(), str.end(), ::isdigit);
     }
 
     bool hdl_parser_vhdl::tokenize()
     {
-        std::vector<token<core_strings::case_insensitive_string>> parsed_tokens;
+        std::vector<Token<core_strings::CaseInsensitiveString>> parsed_tokens;
         const std::string delimiters = ",(): ;=><&";
-        core_strings::case_insensitive_string current_token;
+        core_strings::CaseInsensitiveString current_token;
         u32 line_number = 0;
 
         std::string line;
@@ -129,7 +129,7 @@ namespace hal
 
                     if (!std::isspace(c))
                     {
-                        parsed_tokens.emplace_back(line_number, core_strings::case_insensitive_string(1, c));
+                        parsed_tokens.emplace_back(line_number, core_strings::CaseInsensitiveString(1, c));
                     }
                 }
             }
@@ -139,7 +139,7 @@ namespace hal
                 current_token.clear();
             }
         }
-        m_token_stream = token_stream(parsed_tokens, {"("}, {")"});
+        m_token_stream = TokenStream(parsed_tokens, {"("}, {")"});
         return true;
     }
 
@@ -267,7 +267,7 @@ namespace hal
 
         while (port_def_str.remaining() > 0)
         {
-            std::vector<core_strings::case_insensitive_string> port_names;
+            std::vector<core_strings::CaseInsensitiveString> port_names;
             std::set<signal> signals;
 
             const auto line_number = port_def_str.peek().number;
@@ -347,7 +347,7 @@ namespace hal
             m_token_stream.consume("is", true);
             auto attribute_value = m_token_stream.join_until(";", " ").string;
             m_token_stream.consume(";", true);
-            core_strings::case_insensitive_string attribute_type;
+            core_strings::CaseInsensitiveString attribute_type;
 
             if (attribute_value[0] == '\"' && attribute_value.back() == '\"')
             {
@@ -384,9 +384,9 @@ namespace hal
 
             m_attribute_buffer[target_class].emplace(attribute_target,
                                                      std::make_tuple(line_number,
-                                                                     core_strings::to_std_string<core_strings::case_insensitive_string>(attribute_name),
-                                                                     core_strings::to_std_string<core_strings::case_insensitive_string>(attribute_type),
-                                                                     core_strings::to_std_string<core_strings::case_insensitive_string>(attribute_value)));
+                                                                     core_strings::to_std_string<core_strings::CaseInsensitiveString>(attribute_name),
+                                                                     core_strings::to_std_string<core_strings::CaseInsensitiveString>(attribute_type),
+                                                                     core_strings::to_std_string<core_strings::CaseInsensitiveString>(attribute_value)));
         }
         else
         {
@@ -468,7 +468,7 @@ namespace hal
 
     bool hdl_parser_vhdl::parse_signal_definition(entity& e)
     {
-        std::vector<core_strings::case_insensitive_string> signal_names;
+        std::vector<core_strings::CaseInsensitiveString> signal_names;
 
         m_token_stream.consume("signal", true);
 
@@ -574,7 +574,7 @@ namespace hal
     {
         const auto line_number   = m_token_stream.peek().number;
         const auto instance_name = m_token_stream.consume();
-        core_strings::case_insensitive_string instance_type;
+        core_strings::CaseInsensitiveString instance_type;
         m_token_stream.consume(":", true);
 
         // remove prefix from type
@@ -601,7 +601,7 @@ namespace hal
         else
         {
             instance_type = m_token_stream.consume();
-            core_strings::case_insensitive_string prefix;
+            core_strings::CaseInsensitiveString prefix;
 
             // find longest matching library prefix
             for (const auto& lib : m_libraries)
@@ -686,7 +686,7 @@ namespace hal
 
         while (generic_str.remaining() > 0)
         {
-            core_strings::case_insensitive_string value, data_type;
+            core_strings::CaseInsensitiveString value, data_type;
 
             const auto line_number = generic_str.peek().number;
             const auto lhs         = generic_str.join_until("=>", "");
@@ -710,8 +710,8 @@ namespace hal
                 value     = rhs;
                 data_type = "floating_point";
             }
-            else if (core_utils::ends_with_t(rhs.string, core_strings::case_insensitive_string("s")) || core_utils::ends_with_t(rhs.string, core_strings::case_insensitive_string("sec"))
-                     || core_utils::ends_with_t(rhs.string, core_strings::case_insensitive_string("min")) || core_utils::ends_with_t(rhs.string, core_strings::case_insensitive_string("hr")))
+            else if (core_utils::ends_with_t(rhs.string, core_strings::CaseInsensitiveString("s")) || core_utils::ends_with_t(rhs.string, core_strings::CaseInsensitiveString("sec"))
+                     || core_utils::ends_with_t(rhs.string, core_strings::CaseInsensitiveString("min")) || core_utils::ends_with_t(rhs.string, core_strings::CaseInsensitiveString("hr")))
             {
                 value     = rhs;
                 data_type = "time";
@@ -742,9 +742,9 @@ namespace hal
                 return false;
             }
 
-            inst.add_generic_assignment(core_strings::to_std_string<core_strings::case_insensitive_string>(lhs),
-                                        core_strings::to_std_string<core_strings::case_insensitive_string>(data_type),
-                                        core_strings::to_std_string<core_strings::case_insensitive_string>(value));
+            inst.add_generic_assignment(core_strings::to_std_string<core_strings::CaseInsensitiveString>(lhs),
+                                        core_strings::to_std_string<core_strings::CaseInsensitiveString>(data_type),
+                                        core_strings::to_std_string<core_strings::CaseInsensitiveString>(value));
         }
 
         return true;
@@ -820,15 +820,15 @@ namespace hal
     // ###################          Helper functions          ####################
     // ###########################################################################
 
-    std::vector<u32> hdl_parser_vhdl::parse_range(token_stream<core_strings::case_insensitive_string>& range_str)
+    std::vector<u32> hdl_parser_vhdl::parse_range(TokenStream<core_strings::CaseInsensitiveString>& range_str)
     {
         if (range_str.remaining() == 1)
         {
-            return {(u32)std::stoi(core_strings::to_std_string<core_strings::case_insensitive_string>(range_str.consume().string))};
+            return {(u32)std::stoi(core_strings::to_std_string<core_strings::CaseInsensitiveString>(range_str.consume().string))};
         }
 
         int direction   = 1;
-        const int start = std::stoi(core_strings::to_std_string<core_strings::case_insensitive_string>(range_str.consume().string));
+        const int start = std::stoi(core_strings::to_std_string<core_strings::CaseInsensitiveString>(range_str.consume().string));
 
         if (range_str.peek() == "downto")
         {
@@ -840,7 +840,7 @@ namespace hal
             range_str.consume("to", true);
         }
 
-        const int end = std::stoi(core_strings::to_std_string<core_strings::case_insensitive_string>(range_str.consume().string));
+        const int end = std::stoi(core_strings::to_std_string<core_strings::CaseInsensitiveString>(range_str.consume().string));
 
         std::vector<u32> res;
         for (int i = start; i != end + direction; i += direction)
@@ -850,9 +850,9 @@ namespace hal
         return res;
     }
 
-    static std::map<core_strings::case_insensitive_string, size_t> id_to_dim = {{"std_logic_vector", 1}, {"std_logic_vector2", 2}, {"std_logic_vector3", 3}};
+    static std::map<core_strings::CaseInsensitiveString, size_t> id_to_dim = {{"std_logic_vector", 1}, {"std_logic_vector2", 2}, {"std_logic_vector3", 3}};
 
-    std::optional<std::vector<std::vector<u32>>> hdl_parser_vhdl::parse_signal_ranges(token_stream<core_strings::case_insensitive_string>& signal_str)
+    std::optional<std::vector<std::vector<u32>>> hdl_parser_vhdl::parse_signal_ranges(TokenStream<core_strings::CaseInsensitiveString>& signal_str)
     {
         std::vector<std::vector<u32>> ranges;
         const auto line_number = signal_str.peek().number;
@@ -895,7 +895,7 @@ namespace hal
     }
 
     std::optional<std::pair<std::vector<hdl_parser_vhdl::signal>, i32>>
-        hdl_parser_vhdl::get_assignment_signals(entity& e, token_stream<core_strings::case_insensitive_string>& signal_str, bool is_left_half, bool is_port_assignment)
+        hdl_parser_vhdl::get_assignment_signals(entity& e, TokenStream<core_strings::CaseInsensitiveString>& signal_str, bool is_left_half, bool is_port_assignment)
     {
         // PARSE ASSIGNMENT
         //   assignment can currently be one of the following:
@@ -906,7 +906,7 @@ namespace hal
         //   (5) ((1 - 4), (1 - 4), ...)
 
         std::vector<signal> result;
-        std::vector<token_stream<core_strings::case_insensitive_string>> parts;
+        std::vector<TokenStream<core_strings::CaseInsensitiveString>> parts;
         i32 size = 0;
 
         // (5) ((1 - 4), (1 - 4), ...)
@@ -928,7 +928,7 @@ namespace hal
         }
         else
         {
-            if (signal_str.find_next(",") != token_stream<core_strings::case_insensitive_string>::END_OF_STREAM)
+            if (signal_str.find_next(",") != TokenStream<core_strings::CaseInsensitiveString>::END_OF_STREAM)
             {
                 log_error("hdl_parser", "aggregation is not allowed at this position in line {}", signal_str.peek().number);
                 return std::nullopt;
@@ -946,8 +946,8 @@ namespace hal
             bool is_bound_known = true;
 
             // (2) NUMBER
-            if (core_utils::starts_with_t(signal_name, core_strings::case_insensitive_string("\"")) || core_utils::starts_with_t(signal_name, core_strings::case_insensitive_string("b\""))
-                || core_utils::starts_with_t(signal_name, core_strings::case_insensitive_string("o\"")) || core_utils::starts_with_t(signal_name, core_strings::case_insensitive_string("x\"")))
+            if (core_utils::starts_with_t(signal_name, core_strings::CaseInsensitiveString("\"")) || core_utils::starts_with_t(signal_name, core_strings::CaseInsensitiveString("b\""))
+                || core_utils::starts_with_t(signal_name, core_strings::CaseInsensitiveString("o\"")) || core_utils::starts_with_t(signal_name, core_strings::CaseInsensitiveString("x\"")))
             {
                 if (is_left_half)
                 {
@@ -1031,8 +1031,8 @@ namespace hal
         return std::make_pair(result, size);
     }
 
-    static const std::map<char, core_strings::case_insensitive_string> oct_to_bin = {{'0', "000"}, {'1', "001"}, {'2', "010"}, {'3', "011"}, {'4', "100"}, {'5', "101"}, {'6', "110"}, {'7', "111"}};
-    static const std::map<char, core_strings::case_insensitive_string> hex_to_bin = {{'0', "0000"},
+    static const std::map<char, core_strings::CaseInsensitiveString> oct_to_bin = {{'0', "000"}, {'1', "001"}, {'2', "010"}, {'3', "011"}, {'4', "100"}, {'5', "101"}, {'6', "110"}, {'7', "111"}};
+    static const std::map<char, core_strings::CaseInsensitiveString> hex_to_bin = {{'0', "0000"},
                                                                                      {'1', "0001"},
                                                                                      {'2', "0010"},
                                                                                      {'3', "0011"},
@@ -1049,14 +1049,14 @@ namespace hal
                                                                                      {'e', "1110"},
                                                                                      {'f', "1111"}};
 
-    core_strings::case_insensitive_string hdl_parser_vhdl::get_bin_from_literal(const token<core_strings::case_insensitive_string>& value_token)
+    core_strings::CaseInsensitiveString hdl_parser_vhdl::get_bin_from_literal(const Token<core_strings::CaseInsensitiveString>& value_token)
     {
         const auto line_number = value_token.number;
-        const auto value       = core_utils::to_lower_t(core_utils::replace_t(value_token.string, core_strings::case_insensitive_string("_"), core_strings::case_insensitive_string("")));
+        const auto value       = core_utils::to_lower_t(core_utils::replace_t(value_token.string, core_strings::CaseInsensitiveString("_"), core_strings::CaseInsensitiveString("")));
 
         char prefix;
-        core_strings::case_insensitive_string number;
-        core_strings::case_insensitive_string res;
+        core_strings::CaseInsensitiveString number;
+        core_strings::CaseInsensitiveString res;
 
         if (value[0] != '\"')
         {
@@ -1153,14 +1153,14 @@ namespace hal
         return res;
     }
 
-    core_strings::case_insensitive_string hdl_parser_vhdl::get_hex_from_literal(const token<core_strings::case_insensitive_string>& value_token)
+    core_strings::CaseInsensitiveString hdl_parser_vhdl::get_hex_from_literal(const Token<core_strings::CaseInsensitiveString>& value_token)
     {
         const auto line_number = value_token.number;
-        const auto value       = core_utils::to_lower_t(core_utils::replace_t(value_token.string, core_strings::case_insensitive_string("_"), core_strings::case_insensitive_string("")));
+        const auto value       = core_utils::to_lower_t(core_utils::replace_t(value_token.string, core_strings::CaseInsensitiveString("_"), core_strings::CaseInsensitiveString("")));
 
         i32 len = -1;
         char prefix;
-        core_strings::case_insensitive_string number;
+        core_strings::CaseInsensitiveString number;
         u32 base;
 
         if (value[0] != '\"')
@@ -1234,12 +1234,12 @@ namespace hal
         if (len != -1)
         {
             // fill with '0'
-            ss << std::setfill('0') << std::setw((len + 3) / 4) << std::hex << stoull(core_strings::to_std_string<core_strings::case_insensitive_string>(number), 0, base);
+            ss << std::setfill('0') << std::setw((len + 3) / 4) << std::hex << stoull(core_strings::to_std_string<core_strings::CaseInsensitiveString>(number), 0, base);
         }
         else
         {
-            ss << std::hex << stoull(core_strings::to_std_string<core_strings::case_insensitive_string>(number), 0, base);
+            ss << std::hex << stoull(core_strings::to_std_string<core_strings::CaseInsensitiveString>(number), 0, base);
         }
-        return core_strings::case_insensitive_string(ss.str().data());
+        return core_strings::CaseInsensitiveString(ss.str().data());
     }
 }    // namespace hal

@@ -35,16 +35,16 @@ namespace hal
      * @ingroup core
      */
     template<typename T>
-    struct CORE_API token
+    struct CORE_API Token
     {
         /**
-         * Base token class that holds a string and a line number.
+         * Base Token class that holds a string and a line number.
          * Can be set to be case insensitive in all string comparisons (default).
          *
          * @param[in] n - the line number
          * @param[in] s - the string
          */
-        token(u32 n, const T s) : number(n), string(s)
+        Token(u32 n, const T s) : number(n), string(s)
         {
         }
 
@@ -55,7 +55,7 @@ namespace hal
         T string;
 
         /**
-         * A token is implicitly cast to string if possible.
+         * A Token is implicitly cast to string if possible.
          */
         operator T() const
         {
@@ -63,31 +63,31 @@ namespace hal
         }
 
         /**
-         * Assigns a new string to this token.
+         * Assigns a new string to this Token.
          *
          * @param[in] s - the new string
-         * @returns A reference to this token.
+         * @returns A reference to this Token.
          */
-        token<T>& operator=(const T& s)
+        Token<T>& operator=(const T& s)
         {
             this->string = s;
             return *this;
         }
 
         /**
-         * Extends the string in this token.
+         * Extends the string in this Token.
          *
          * @param[in] s - the string to add
-         * @returns A reference to this token.
+         * @returns A reference to this Token.
          */
-        token<T>& operator+=(const T& s)
+        Token<T>& operator+=(const T& s)
         {
             this->string += s;
             return *this;
         }
 
         /**
-         * Checks if the string in this token is equal to another string.
+         * Checks if the string in this Token is equal to another string.
          * If the case_sensitive member is true, the comparison is case sensitive.
          *
          * @param[in] s - the string to check against
@@ -99,7 +99,7 @@ namespace hal
         }
 
         /**
-         * Checks if the string in this token is unequal to another string.
+         * Checks if the string in this Token is unequal to another string.
          * If the case_sensitive member is true, the comparison is case sensitive.
          *
          * @param[in] s - the string to check against
@@ -115,10 +115,10 @@ namespace hal
      * @ingroup core
      */
     template<typename T>
-    class NETLIST_API token_stream
+    class NETLIST_API TokenStream
     {
     public:
-        struct token_stream_exception
+        struct TokenStreamException
         {
             T message;
             u32 line_number;
@@ -128,7 +128,7 @@ namespace hal
         static const u32 END_OF_STREAM = 0xFFFFFFFF;
 
         /**
-         * Constructor for an empty token stream.
+         * Constructor for an empty Token stream.
          * The increase-level and decrease-level tokens are used for level-aware iteration.
          * If active, only tokens on level 0 are matched
          * Example: consuming until "b" in 'a,(,b,),b,c' would consume 'a,(,b,)', if "(" and ")" are level increase/decrease tokens.
@@ -136,7 +136,7 @@ namespace hal
          * @param[in] decrease_level_tokens - the tokens that mark the start of a new level, i.e., increase the level.
          * @param[in] increase_level_tokens - the tokens that mark the end of a level, i.e., decrease the level.
          */
-        token_stream(const std::vector<T>& increase_level_tokens = {"("}, const std::vector<T>& decrease_level_tokens = {")"})
+        TokenStream(const std::vector<T>& increase_level_tokens = {"("}, const std::vector<T>& decrease_level_tokens = {")"})
         {
             m_pos                   = 0;
             m_increase_level_tokens = increase_level_tokens;
@@ -149,12 +149,12 @@ namespace hal
          * If active, only tokens on level 0 are matched
          * Example: consuming until "b" in 'a,(,b,),b,c' would consume 'a,(,b,)', if "(" and ")" are level increase/decrease tokens.
          *
-         * @param[in] init - a token vector to initialize with
+         * @param[in] init - a Token vector to initialize with
          * @param[in] decrease_level_tokens - the tokens that mark the start of a new level, i.e., increase the level.
          * @param[in] increase_level_tokens - the tokens that mark the end of a level, i.e., decrease the level.
          */
-        token_stream(const std::vector<token<T>>& init, const std::vector<T>& increase_level_tokens = {"("}, const std::vector<T>& decrease_level_tokens = {")"})
-            : token_stream(increase_level_tokens, decrease_level_tokens)
+        TokenStream(const std::vector<Token<T>>& init, const std::vector<T>& increase_level_tokens = {"("}, const std::vector<T>& decrease_level_tokens = {")"})
+            : TokenStream(increase_level_tokens, decrease_level_tokens)
         {
             m_data = init;
         }
@@ -162,9 +162,9 @@ namespace hal
         /**
          * Copy constructor.
          *
-         * @param[in] other - the token stream to copy
+         * @param[in] other - the Token stream to copy
          */
-        token_stream(const token_stream<T>& other)
+        TokenStream(const TokenStream<T>& other)
         {
             m_pos                   = other.m_pos;
             m_data                  = other.m_data;
@@ -178,7 +178,7 @@ namespace hal
          * @param[in] other - the tokenstream
          * @returns A reference to this tokenstream.
          */
-        token_stream<T>& operator=(const token_stream<T>& other)
+        TokenStream<T>& operator=(const TokenStream<T>& other)
         {
             m_pos                   = other.m_pos;
             m_data                  = other.m_data;
@@ -188,27 +188,27 @@ namespace hal
         }
 
         /**
-         * Consume the next token(s) in the stream.
-         * Advances the stream by the given number and returns the last consumed token.
+         * Consume the next Token(s) in the stream.
+         * Advances the stream by the given number and returns the last consumed Token.
          *
          * Throws a std::out_of_range exception if more tokens are consumed than are available.
          *
          * @param[in] num - the amount of tokens to consume
-         * @returns The last consumed token.
+         * @returns The last consumed Token.
          */
-        token<T> consume(u32 num = 1)
+        Token<T> consume(u32 num = 1)
         {
             m_pos += num;
             return at(m_pos - 1);
         }
 
         /**
-         * Consume the next token in the stream *if* it matches the given expected value.
-         * If the token does not match, the stream is unchanged.
+         * Consume the next Token in the stream *if* it matches the given expected value.
+         * If the Token does not match, the stream is unchanged.
          *
-         * @param[in] expected - the expected token
-         * @param[in] throw_on_error - if true, throws an token_stream_exception instead of returning false
-         * @returns True, if the next token matches the expected string, false otherwise or if no more tokens are available.
+         * @param[in] expected - the expected Token
+         * @param[in] throw_on_error - if true, throws an TokenStreamException instead of returning false
+         * @returns True, if the next Token matches the expected string, false otherwise or if no more tokens are available.
          */
         bool consume(const T& expected, bool throw_on_error = false)
         {
@@ -216,7 +216,7 @@ namespace hal
             {
                 if (throw_on_error)
                 {
-                    throw token_stream_exception({"expected token '" + expected + "' but reached the end of the stream", get_current_line_number()});
+                    throw TokenStreamException({"expected Token '" + expected + "' but reached the end of the stream", get_current_line_number()});
                 }
                 return false;
             }
@@ -225,7 +225,7 @@ namespace hal
             {
                 if (throw_on_error)
                 {
-                    throw token_stream_exception({"expected token '" + expected + "' but got '" + at(m_pos).string + "'", get_current_line_number()});
+                    throw TokenStreamException({"expected Token '" + expected + "' but got '" + at(m_pos).string + "'", get_current_line_number()});
                 }
                 return false;
             }
@@ -235,77 +235,77 @@ namespace hal
         }
 
         /**
-         * Consume the next tokens in the stream until a token matches a given string.
-         * This final token is not consumed, i.e., it is now the next token in the stream.
-         * Consumes until the given end position if no token matches the given string.
+         * Consume the next tokens in the stream until a Token matches a given string.
+         * This final Token is not consumed, i.e., it is now the next Token in the stream.
+         * Consumes until the given end position if no Token matches the given string.
          * Can be set to be level-aware with respect to the configured level-down and level-up tokens.
          *
          * @param[in] match - the string on which to end.
          * @param[in] end - the absolute position in the stream on which to stop, even if match was not found until this point.
          * @param[in] level_aware - if false, tokens are also matched if they are not at the top-level.
-         * @param[in] throw_on_error - if true, throws an token_stream_exception instead of returning false
-         * @returns The last consumed token.
+         * @param[in] throw_on_error - if true, throws an TokenStreamException instead of returning false
+         * @returns The last consumed Token.
          */
-        token<T> consume_until(const T& match, u32 end = END_OF_STREAM, bool level_aware = true, bool throw_on_error = false)
+        Token<T> consume_until(const T& match, u32 end = END_OF_STREAM, bool level_aware = true, bool throw_on_error = false)
         {
             auto found = find_next(match, end, level_aware);
             if (found > size() && throw_on_error)
             {
-                throw token_stream_exception({"match token '" + match + "' not found", get_current_line_number()});
+                throw TokenStreamException({"match Token '" + match + "' not found", get_current_line_number()});
             }
             m_pos = std::min(size(), found);
             return at(m_pos - 1);
         }
 
         /**
-         * Consume the next tokens in the stream until a token matches the given string.
-         * This final token is not consumed, i.e., it is now the next token in the stream.
-         * All consumed tokens are returned as a new token stream.
-         * Consumes until the given end position if no token matches the given string, i.e., the entire rest of the stream is returned as a new stream.
+         * Consume the next tokens in the stream until a Token matches the given string.
+         * This final Token is not consumed, i.e., it is now the next Token in the stream.
+         * All consumed tokens are returned as a new Token stream.
+         * Consumes until the given end position if no Token matches the given string, i.e., the entire rest of the stream is returned as a new stream.
          * Can be set to be level-aware with respect to the configured level-down and level-up tokens.
          *
          * @param[in] match - the string on which to end.
          * @param[in] end - the absolute position in the stream on which to stop, even if match was not found until this point.
          * @param[in] level_aware - if false, tokens are also matched if they are not at the top-level.
-         * @param[in] throw_on_error - if true, throws an token_stream_exception instead of returning false
-         * @returns All consumed tokens in a new token stream.
+         * @param[in] throw_on_error - if true, throws an TokenStreamException instead of returning false
+         * @returns All consumed tokens in a new Token stream.
          */
-        token_stream<T> extract_until(const T& match, u32 end = END_OF_STREAM, bool level_aware = true, bool throw_on_error = false)
+        TokenStream<T> extract_until(const T& match, u32 end = END_OF_STREAM, bool level_aware = true, bool throw_on_error = false)
         {
             auto found = find_next(match, end, level_aware);
             if (found > size() && throw_on_error)
             {
-                throw token_stream_exception({"match token '" + match + "' not found", get_current_line_number()});
+                throw TokenStreamException({"match Token '" + match + "' not found", get_current_line_number()});
             }
             auto end_pos = std::min(size(), found);
-            token_stream res(m_increase_level_tokens, m_decrease_level_tokens);
+            TokenStream res(m_increase_level_tokens, m_decrease_level_tokens);
             res.m_data.insert(res.m_data.begin(), m_data.begin() + m_pos, m_data.begin() + end_pos);
             m_pos = end_pos;
             return res;
         }
 
         /**
-         * Consume the next tokens in the stream until a token matches the given string.
-         * This final token is not consumed, i.e., it is now the next token in the stream.
-         * The strings of all consumed tokens are joined with the given joiner string and returned as a new token.
-         * The returned token has the line number of the first consumed token.
-         * Joins until the given end position if no token matches the given string until that point.
+         * Consume the next tokens in the stream until a Token matches the given string.
+         * This final Token is not consumed, i.e., it is now the next Token in the stream.
+         * The strings of all consumed tokens are joined with the given joiner string and returned as a new Token.
+         * The returned Token has the line number of the first consumed Token.
+         * Joins until the given end position if no Token matches the given string until that point.
          * Can be set to be level-aware with respect to the configured level-down and level-up tokens.
          *
          * @param[in] match - the string on which to end.
          * @param[in] joiner - the string used to join consumed tokens.
          * @param[in] end - the absolute position in the stream on which to stop, even if match was not found until this point.
          * @param[in] level_aware - if false, tokens are also matched if they are not at the top-level.
-         * @param[in] throw_on_error - if true, throws an token_stream_exception instead of returning false
-         * @returns The joined token.
+         * @param[in] throw_on_error - if true, throws an TokenStreamException instead of returning false
+         * @returns The joined Token.
          */
-        token<T> join_until(const T& match, const T& joiner, u32 end = END_OF_STREAM, bool level_aware = true, bool throw_on_error = false)
+        Token<T> join_until(const T& match, const T& joiner, u32 end = END_OF_STREAM, bool level_aware = true, bool throw_on_error = false)
         {
             u32 start_line = get_current_line_number();
             auto found     = find_next(match, end, level_aware);
             if (found > size() && throw_on_error)
             {
-                throw token_stream_exception({"match token '" + match + "' not found", start_line});
+                throw TokenStreamException({"match Token '" + match + "' not found", start_line});
             }
             auto end_pos = std::min(size(), found);
             T result;
@@ -322,13 +322,13 @@ namespace hal
 
         /**
          * Consume all remaining tokens in the stream.
-         * The strings of all consumed tokens are joined with the given joiner string and returned as a new token.
-         * The returned token has the line number of the first consumed token.
+         * The strings of all consumed tokens are joined with the given joiner string and returned as a new Token.
+         * The returned Token has the line number of the first consumed Token.
          *
          * @param[in] joiner - the string used to join consumed tokens.
-         * @returns The joined token.
+         * @returns The joined Token.
          */
-        token<T> join(const T& joiner)
+        Token<T> join(const T& joiner)
         {
             u32 start_line = get_current_line_number();
             T result;
@@ -344,16 +344,16 @@ namespace hal
         }
 
         /**
-         * Return a token at a *relative* position in the stream.
+         * Return a Token at a *relative* position in the stream.
          * Can access tokens that have already been consumed.
          * Position 0 is the first element of the stream.
          *
          * Throws a std::out_of_range exception if the position is not contained in the stream.
          *
          * @param[in] offset - the relative offset from the current position in the stream
-         * @returns The token at the queried position.
+         * @returns The Token at the queried position.
          */
-        token<T>& peek(i32 offset = 0)
+        Token<T>& peek(i32 offset = 0)
         {
             return at(m_pos + offset);
         }
@@ -361,26 +361,26 @@ namespace hal
         /**
          * @copydoc peek(i32)
          */
-        const token<T>& peek(i32 offset = 0) const
+        const Token<T>& peek(i32 offset = 0) const
         {
             return at(m_pos + offset);
         }
 
         /**
-         * Return a token at an *absolute* position in the stream.
+         * Return a Token at an *absolute* position in the stream.
          * Can access tokens that have already been consumed.
          * Position 0 is the first element of the stream.
          *
          * Throws a std::out_of_range exception if the position is not contained in the stream.
          *
          * @param[in] position - the absolute position in the stream
-         * @returns The token at the queried position.
+         * @returns The Token at the queried position.
          */
-        token<T>& at(u32 position)
+        Token<T>& at(u32 position)
         {
             if (position > m_data.size())
             {
-                throw token_stream_exception({"reached the end of the stream", get_current_line_number()});
+                throw TokenStreamException({"reached the end of the stream", get_current_line_number()});
             }
             return m_data[position];
         }
@@ -388,41 +388,41 @@ namespace hal
         /**
          * @copydoc at(i32)
          */
-        const token<T>& at(u32 position) const
+        const Token<T>& at(u32 position) const
         {
             if (position > m_data.size())
             {
-                throw token_stream_exception({"reached the end of the stream", get_current_line_number()});
+                throw TokenStreamException({"reached the end of the stream", get_current_line_number()});
             }
             return m_data[position];
         }
 
         /**
-         * Get the *absolute* position in the stream of the next matching token.
-         * If no token is found until the given end position, this end position is returned.
+         * Get the *absolute* position in the stream of the next matching Token.
+         * If no Token is found until the given end position, this end position is returned.
          * Can be set to be level-aware with respect to the configured level-down and level-up tokens.
          *
          * @param[in] match - the string to match
          * @param[in] end - the absolute position in the stream on which to stop, even if match was not found until this point.
          * @param[in] level_aware - if false, tokens are also matched if they are not at the top-level.
-         * @returns The token at the queried position, or END_OF_STREAM if not found.
+         * @returns The Token at the queried position, or END_OF_STREAM if not found.
          */
         u32 find_next(const T& match, u32 end = END_OF_STREAM, bool level_aware = true) const
         {
             u32 level = 0;
             for (u32 i = m_pos; i < size() && i < end; ++i)
             {
-                const auto& token = at(i);
-                if ((!level_aware || level == 0) && token == match)
+                const auto& Token = at(i);
+                if ((!level_aware || level == 0) && Token == match)
                 {
                     return i;
                 }
-                else if (level_aware && std::find_if(m_increase_level_tokens.begin(), m_increase_level_tokens.end(), [&token](const auto& x) { return token == x; }) != m_increase_level_tokens.end())
+                else if (level_aware && std::find_if(m_increase_level_tokens.begin(), m_increase_level_tokens.end(), [&Token](const auto& x) { return Token == x; }) != m_increase_level_tokens.end())
                 {
                     level++;
                 }
                 else if (level_aware && level > 0
-                         && std::find_if(m_decrease_level_tokens.begin(), m_decrease_level_tokens.end(), [&token](const auto& x) { return token == x; }) != m_decrease_level_tokens.end())
+                         && std::find_if(m_decrease_level_tokens.begin(), m_decrease_level_tokens.end(), [&Token](const auto& x) { return Token == x; }) != m_decrease_level_tokens.end())
                 {
                     level--;
                 }
@@ -431,9 +431,9 @@ namespace hal
         }
 
         /**
-         * Get the total number of elements in the token stream, regardless of how many have been consumed.
+         * Get the total number of elements in the Token stream, regardless of how many have been consumed.
          *
-         * @returns The total size of the token stream.
+         * @returns The total size of the Token stream.
          */
         u32 size() const
         {
@@ -441,7 +441,7 @@ namespace hal
         }
 
         /**
-         * Get the total number of consumed elements in the token stream.
+         * Get the total number of consumed elements in the Token stream.
          *
          * @returns The total number of consumed tokens.
          */
@@ -451,7 +451,7 @@ namespace hal
         }
 
         /**
-         * Get the total number of remaining elements in the token stream.
+         * Get the total number of remaining elements in the Token stream.
          *
          * @returns The number of remaining tokens.
          */
@@ -461,7 +461,7 @@ namespace hal
         }
 
         /**
-         * Get the current absolute position in the token stream.
+         * Get the current absolute position in the Token stream.
          *
          * @returns The current position.
          */
@@ -471,7 +471,7 @@ namespace hal
         }
 
         /**
-         * Set the current absolute position in the token stream.
+         * Set the current absolute position in the Token stream.
          *
          * @param[in] p - the new position
          */
@@ -483,7 +483,7 @@ namespace hal
     private:
         std::vector<T> m_increase_level_tokens;
         std::vector<T> m_decrease_level_tokens;
-        std::vector<token<T>> m_data;
+        std::vector<Token<T>> m_data;
         u32 m_pos;
 
         u32 get_current_line_number() const

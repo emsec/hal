@@ -39,7 +39,7 @@ namespace hal
     /**
      * @ingroup hdl_parsers
      */
-    class HDL_PARSER_API hdl_parser_vhdl : public hdl_parser<core_strings::case_insensitive_string>
+    class HDL_PARSER_API hdl_parser_vhdl : public hdl_parser<core_strings::CaseInsensitiveString>
     {
     public:
         /**
@@ -65,13 +65,13 @@ namespace hal
             SIGNAL
         };
 
-        using attribute_buffer_t = std::map<attribute_target_class, std::map<core_strings::case_insensitive_string, std::tuple<u32, std::string, std::string, std::string>>>;
+        using attribute_buffer_t = std::map<attribute_target_class, std::map<core_strings::CaseInsensitiveString, std::tuple<u32, std::string, std::string, std::string>>>;
         attribute_buffer_t m_attribute_buffer;
 
-        std::set<core_strings::case_insensitive_string> m_libraries;
-        std::map<core_strings::case_insensitive_string, core_strings::case_insensitive_string> m_attribute_types;
+        std::set<core_strings::CaseInsensitiveString> m_libraries;
+        std::map<core_strings::CaseInsensitiveString, core_strings::CaseInsensitiveString> m_attribute_types;
 
-        token_stream<core_strings::case_insensitive_string> m_token_stream;
+        TokenStream<core_strings::CaseInsensitiveString> m_token_stream;
 
         bool tokenize();
         bool parse_tokens();
@@ -92,11 +92,11 @@ namespace hal
         bool assign_attributes(entity& e);
 
         // helper functions
-        std::vector<u32> parse_range(token_stream<core_strings::case_insensitive_string>& range_str);
-        std::optional<std::vector<std::vector<u32>>> parse_signal_ranges(token_stream<core_strings::case_insensitive_string>& signal_str);
+        std::vector<u32> parse_range(TokenStream<core_strings::CaseInsensitiveString>& range_str);
+        std::optional<std::vector<std::vector<u32>>> parse_signal_ranges(TokenStream<core_strings::CaseInsensitiveString>& signal_str);
         std::optional<std::pair<std::vector<signal>, i32>>
-            get_assignment_signals(entity& e, token_stream<core_strings::case_insensitive_string>& signal_str, bool is_left_half, bool is_port_assignment);
-        core_strings::case_insensitive_string get_bin_from_literal(const token<core_strings::case_insensitive_string>& value_token);
-        core_strings::case_insensitive_string get_hex_from_literal(const token<core_strings::case_insensitive_string>& value_token);
+            get_assignment_signals(entity& e, TokenStream<core_strings::CaseInsensitiveString>& signal_str, bool is_left_half, bool is_port_assignment);
+        core_strings::CaseInsensitiveString get_bin_from_literal(const Token<core_strings::CaseInsensitiveString>& value_token);
+        core_strings::CaseInsensitiveString get_hex_from_literal(const Token<core_strings::CaseInsensitiveString>& value_token);
     };
 }    // namespace hal

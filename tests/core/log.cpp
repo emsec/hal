@@ -8,7 +8,7 @@
 class log_test : public ::testing::Test
 {
 protected:
-    log_manager& lm = log_manager::get_instance();
+    LogManager& lm = LogManager::get_instance();
     virtual void SetUp()
     {
     }
@@ -33,7 +33,7 @@ TEST_F(log_test, check_channel_functions)
     // ########################
 
     //Add a channel "test_channel"
-    lm.add_channel("test_channel", {log_manager::create_stdout_sink(), log_manager::create_file_sink(), log_manager::create_gui_sink()}, "info");
+    lm.add_channel("test_channel", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
 
     EXPECT_EQ(lm.get_channels().size(), current_channel_count + 1);
     EXPECT_NE(lm.get_channel("test_channel"), lm.get_channel("null"));
@@ -50,10 +50,10 @@ TEST_F(log_test, check_channel_functions)
     NO_COUT_TEST_BLOCK;
     //Add the same channel twice (should not append the channel)
     current_channel_count = lm.get_channels().size();
-    lm.add_channel("test_channel", {log_manager::create_stdout_sink(), log_manager::create_file_sink(), log_manager::create_gui_sink()}, "info");
+    lm.add_channel("test_channel", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
     EXPECT_EQ(lm.get_channels().size(), current_channel_count + 1);
     current_channel_count = lm.get_channels().size();
-    lm.add_channel("test_channel", {log_manager::create_stdout_sink(), log_manager::create_file_sink(), log_manager::create_gui_sink()}, "info");
+    lm.add_channel("test_channel", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
     EXPECT_EQ(lm.get_channels().size(), current_channel_count);
 
     //Get an non existing channel
@@ -64,7 +64,7 @@ TEST_F(log_test, check_channel_functions)
     //Remove a non-existing channel
     current_channel_count = lm.get_channels().size();
     lm.remove_channel("this_channel_does_not_exist");
-    EXPECT_EQ(log_manager::get_instance().get_channels().size(), current_channel_count);
+    EXPECT_EQ(LogManager::get_instance().get_channels().size(), current_channel_count);
 
     //Remove the same channel twice
     current_channel_count = lm.get_channels().size();
@@ -82,7 +82,7 @@ TEST_F(log_test, check_channel_functions)
 TEST_F(log_test, check_channel_activation)
 {
     TEST_START
-    lm.add_channel("test_channel", {log_manager::create_stdout_sink(), log_manager::create_file_sink(), log_manager::create_gui_sink()}, "info");
+    lm.add_channel("test_channel", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
     EXPECT_EQ(lm.get_level_of_channel("test_channel"), "info");
 
     // ########################
@@ -127,7 +127,7 @@ TEST_F(log_test, check_channel_level)
     // ########################
 
     //Adds a channel of level "info"
-    lm.add_channel("test_channel", {log_manager::create_stdout_sink(), log_manager::create_file_sink(), log_manager::create_gui_sink()}, "info");
+    lm.add_channel("test_channel", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
     EXPECT_EQ(lm.get_level_of_channel("test_channel"), "info");
 
     //Set a channel-level
@@ -173,7 +173,7 @@ TEST_F(log_test, check_program_options)
     // ########################
 
     //Test if there are options available
-    program_options& options = lm.get_option_descriptions();
+    ProgramOptions& options = lm.get_option_descriptions();
     EXPECT_FALSE(options.get_options().empty());
     TEST_END
 }
@@ -191,31 +191,31 @@ TEST_F(log_test, check_sink)
     // ########################
 
     //Create a stdout-sink
-    std::shared_ptr<log_manager::log_sink> test_stdout_sink = lm.create_stdout_sink();
+    std::shared_ptr<LogManager::log_sink> test_stdout_sink = lm.create_stdout_sink();
     EXPECT_NE(test_stdout_sink, nullptr);
     EXPECT_FALSE(test_stdout_sink->is_file_sink);
 
     //Create a stdout-sink (colored = false)
-    std::shared_ptr<log_manager::log_sink> test_stdout_sink_2 = lm.create_stdout_sink(false);
+    std::shared_ptr<LogManager::log_sink> test_stdout_sink_2 = lm.create_stdout_sink(false);
     EXPECT_NE(test_stdout_sink_2, nullptr);
     EXPECT_FALSE(test_stdout_sink->is_file_sink);
 
     //Create a file-sink
-    std::shared_ptr<log_manager::log_sink> test_file_sink = lm.create_file_sink("myPath", false);
+    std::shared_ptr<LogManager::log_sink> test_file_sink = lm.create_file_sink("myPath", false);
     EXPECT_NE(test_file_sink, nullptr);
     EXPECT_EQ(test_file_sink->path, "myPath");
     EXPECT_TRUE(test_file_sink->is_file_sink);
     EXPECT_FALSE(test_file_sink->truncate);
 
     //Create a file-sink (truncate = true)
-    std::shared_ptr<log_manager::log_sink> test_file_sink_2 = lm.create_file_sink("myPathTwo", true);
+    std::shared_ptr<LogManager::log_sink> test_file_sink_2 = lm.create_file_sink("myPathTwo", true);
     EXPECT_NE(test_file_sink_2, nullptr);
     EXPECT_EQ(test_file_sink_2->path, "myPathTwo");
     EXPECT_TRUE(test_file_sink_2->is_file_sink);
     EXPECT_TRUE(test_file_sink_2->truncate);
 
     //Create a file-sink (empty path)
-    std::shared_ptr<log_manager::log_sink> test_file_sink_3 = lm.create_file_sink();
+    std::shared_ptr<LogManager::log_sink> test_file_sink_3 = lm.create_file_sink();
     EXPECT_NE(test_file_sink_3, nullptr);
     EXPECT_FALSE(test_file_sink_3->path.empty());
     EXPECT_TRUE(test_file_sink_3->is_file_sink);
@@ -226,7 +226,7 @@ TEST_F(log_test, check_sink)
     // ########################
 
     //Create the same sink
-    std::shared_ptr<log_manager::log_sink> test_file_sink_copy = lm.create_file_sink("myPath", false);
+    std::shared_ptr<LogManager::log_sink> test_file_sink_copy = lm.create_file_sink("myPath", false);
     EXPECT_EQ(test_file_sink, test_file_sink_copy);
     TEST_END
 }
@@ -245,22 +245,22 @@ TEST_F(log_test, check_handle_options)
 
     lm.add_channel("test_channel", {}, "info");
 
-    // Deactivate a channel via program_arguments
-    program_arguments p_arg_deactivate;
+    // Deactivate a channel via ProgramArguments
+    ProgramArguments p_arg_deactivate;
     p_arg_deactivate.set_option("--log.test_channel.enabled", std::vector<std::string>({"false"}));
     lm.handle_options(p_arg_deactivate);
 
     EXPECT_EQ(lm.get_level_of_channel("test_channel"), "off");
 
-    // Activate a channel via program_arguments
-    program_arguments p_arg_activate;
+    // Activate a channel via ProgramArguments
+    ProgramArguments p_arg_activate;
     p_arg_activate.set_option("--log.test_channel.enabled", std::vector<std::string>({"true"}));
     lm.handle_options(p_arg_activate);
 
     EXPECT_EQ(lm.get_level_of_channel("test_channel"), "info");
 
-    // Set a level via program_arguments
-    program_arguments p_arg_lvl_debug;
+    // Set a level via ProgramArguments
+    ProgramArguments p_arg_lvl_debug;
     p_arg_lvl_debug.set_option("--log.test_channel.level", std::vector<std::string>({"debug"}));
     lm.handle_options(p_arg_lvl_debug);
 
@@ -268,7 +268,7 @@ TEST_F(log_test, check_handle_options)
 
     // Deactivate all channels
     lm.add_channel("test_channel_2", {}, "info");
-    program_arguments p_arg_deactivate_all;
+    ProgramArguments p_arg_deactivate_all;
     p_arg_deactivate_all.set_option("--log.enabled", std::vector<std::string>({"false"}));
     lm.handle_options(p_arg_deactivate_all);
 
@@ -277,7 +277,7 @@ TEST_F(log_test, check_handle_options)
 
     // Activate all channels
     lm.add_channel("test_channel_2", {}, "info");
-    program_arguments p_arg_activate_all;
+    ProgramArguments p_arg_activate_all;
     p_arg_activate_all.set_option("--log.enabled", std::vector<std::string>({"true"}));
     lm.handle_options(p_arg_activate_all);
 
@@ -287,7 +287,7 @@ TEST_F(log_test, check_handle_options)
     // Pass more then one option
     lm.add_channel("test_channel_3", {}, "info");
     lm.add_channel("test_channel_4", {}, "off");
-    program_arguments p_arg_multi;
+    ProgramArguments p_arg_multi;
     p_arg_multi.set_option("--log.test_channel.level", std::vector<std::string>({"debug"}));
     p_arg_multi.set_option("--log.test_channel_2.level", std::vector<std::string>({"debug"}));
     p_arg_multi.set_option("--log.test_channel_3.enabled", std::vector<std::string>({"false"}));
@@ -301,7 +301,7 @@ TEST_F(log_test, check_handle_options)
     EXPECT_EQ(lm.get_level_of_channel("test_channel_4"), "info");
 
     // Set all levels to option
-    program_arguments p_arg_level_for_all;
+    ProgramArguments p_arg_level_for_all;
     p_arg_level_for_all.set_option("--log.level", std::vector<std::string>({"info"}));
     lm.handle_options(p_arg_level_for_all);
 
@@ -315,16 +315,16 @@ TEST_F(log_test, check_handle_options)
     // ########################
     NO_COUT_TEST_BLOCK;
     // Pass an empty argument (nothing should happen)
-    program_arguments p_arg_empty;
+    ProgramArguments p_arg_empty;
     lm.handle_options(p_arg_empty);
 
     // Pass an invalid argument (nothing should happen)
-    program_arguments p_arg_invalid;
+    ProgramArguments p_arg_invalid;
     p_arg_invalid.set_option("invalid_flag", std::vector<std::string>({"info"}));
     lm.handle_options(p_arg_invalid);
 
     // Pass an invalid argument followed by a valid one
-    program_arguments p_arg_invalid_valid;
+    ProgramArguments p_arg_invalid_valid;
     p_arg_invalid_valid.set_option("--log.invalid_flag", std::vector<std::string>({"info"}));
     p_arg_invalid_valid.set_option("--log.test_channel.enabled", std::vector<std::string>({"false"}));
     lm.handle_options(p_arg_invalid_valid);
@@ -332,19 +332,19 @@ TEST_F(log_test, check_handle_options)
     EXPECT_EQ(lm.get_level_of_channel("test_channel"), "off");
 
     // Pass an argument with unknown channel name (nothing should happen)
-    program_arguments p_arg_unknown_channel;
+    ProgramArguments p_arg_unknown_channel;
     p_arg_unknown_channel.set_option("--log.unknown_channel.enabled", std::vector<std::string>({"true"}));
     lm.handle_options(p_arg_unknown_channel);
 
     // Set an unknown level via arguments
-    program_arguments p_arg_unknown_level;
+    ProgramArguments p_arg_unknown_level;
     p_arg_unknown_channel.set_option("--log.test_channel.level", std::vector<std::string>({"unknown_level"}));
     lm.handle_options(p_arg_unknown_channel);
 
     EXPECT_EQ(lm.get_level_of_channel("test_channel"), "off");
 
     // Set an unknown level for all channels
-    program_arguments p_arg_unknown_level_all;
+    ProgramArguments p_arg_unknown_level_all;
     p_arg_unknown_channel.set_option("--log.level", std::vector<std::string>({"unknown_level"}));
     lm.handle_options(p_arg_unknown_channel);
 

@@ -61,7 +61,7 @@ namespace hal
             return nl;
         }
 
-        std::shared_ptr<netlist> load_netlist(const program_arguments& args)
+        std::shared_ptr<netlist> load_netlist(const ProgramArguments& args)
         {
             if (!args.is_option_set("--input-file"))
             {

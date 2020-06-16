@@ -50,7 +50,7 @@ namespace hal
 #define STRINGIFY(x) STRINGISTRINGIFY(x)
 
 // macro to get the log channel
-#define LOG_CHANNEL(channel) log_manager::get_instance().get_channel(channel)
+#define LOG_CHANNEL(channel) LogManager::get_instance().get_channel(channel)
 
 /**
  * @ingroup core
@@ -95,7 +95,7 @@ namespace hal
         exit(1);                                                                               \
     } while (0);
 
-    class CORE_API log_manager
+    class CORE_API LogManager
     {
     public:
         struct log_sink
@@ -114,7 +114,7 @@ namespace hal
          * @param[in] file_name - The file where the log is stored.
          * @returns The log manager.
          */
-        static log_manager& get_instance(const std::filesystem::path& file_name = "");
+        static LogManager& get_instance(const std::filesystem::path& file_name = "");
 
         /**
          * Set the log file name.<br>
@@ -207,21 +207,21 @@ namespace hal
          *
          * @returns The GUI callback hook for (level, channel, message).
          */
-        callback_hook<void(const spdlog::level::level_enum&, const std::string&, const std::string&)>& get_gui_callback();
+        CallbackHook<void(const spdlog::level::level_enum&, const std::string&, const std::string&)>& get_gui_callback();
 
         /**
          * Get the program options for the logging system.
          *
          * @returns The program options.
          */
-        program_options& get_option_descriptions();
+        ProgramOptions& get_option_descriptions();
 
         /**
          * Handle parsed program options for the logging system.
          *
          * @param[in] args - The parsed program options.
          */
-        void handle_options(program_arguments& args);
+        void handle_options(ProgramArguments& args);
 
         /**
          * Create a new logging sink which prints to stdout.
@@ -252,17 +252,17 @@ namespace hal
     private:
         static std::map<std::string, std::shared_ptr<log_sink>> m_file_sinks;
 
-        // log_manager class constructor (private due to singleton)
-        log_manager(const std::filesystem::path& file_name);
+        // LogManager class constructor (private due to singleton)
+        LogManager(const std::filesystem::path& file_name);
 
-        // log_manager class destructor (private due to singleton)
-        ~log_manager();
+        // LogManager class destructor (private due to singleton)
+        ~LogManager();
 
-        // log_manager class object non-copyable
-        log_manager(const log_manager&) = delete;
+        // LogManager class object non-copyable
+        LogManager(const LogManager&) = delete;
 
-        // log_manager class object non-copyable
-        log_manager& operator=(const log_manager&) = delete;
+        // LogManager class object non-copyable
+        LogManager& operator=(const LogManager&) = delete;
 
         std::filesystem::path m_file_path;
 
@@ -272,9 +272,9 @@ namespace hal
 
         std::map<std::string, std::vector<std::shared_ptr<log_sink>>> m_logger_sinks;
 
-        callback_hook<void(const spdlog::level::level_enum&, const std::string&, const std::string&)> m_gui_callback;
+        CallbackHook<void(const spdlog::level::level_enum&, const std::string&, const std::string&)> m_gui_callback;
 
-        program_options m_descriptions;
+        ProgramOptions m_descriptions;
     };
 
     class log_gui_sink : public spdlog::sinks::base_sink<std::mutex>

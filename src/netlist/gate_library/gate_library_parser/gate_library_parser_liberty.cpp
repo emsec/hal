@@ -27,7 +27,7 @@ namespace hal
                 return nullptr;
             }
         }
-        catch (token_stream<std::string>::token_stream_exception& e)
+        catch (TokenStream<std::string>::TokenStreamException& e)
         {
             if (e.line_number != (u32)-1)
             {
@@ -54,7 +54,7 @@ namespace hal
         bool was_in_string      = false;
         bool multi_line_comment = false;
 
-        std::vector<token<std::string>> parsed_tokens;
+        std::vector<Token<std::string>> parsed_tokens;
 
         while (std::getline(m_fs, line))
         {
@@ -101,7 +101,7 @@ namespace hal
             }
         }
 
-        m_token_stream = token_stream<std::string>(parsed_tokens, {"(", "{"}, {")", "}"});
+        m_token_stream = TokenStream<std::string>(parsed_tokens, {"(", "{"}, {")", "}"});
         return true;
     }
 
@@ -113,7 +113,7 @@ namespace hal
         m_token_stream.consume(")", true);
         m_token_stream.consume("{", true);
         m_gate_lib       = std::make_shared<gate_library>(m_path, lib_name.string);
-        auto library_str = m_token_stream.extract_until("}", token_stream<std::string>::END_OF_STREAM, true, false);
+        auto library_str = m_token_stream.extract_until("}", TokenStream<std::string>::END_OF_STREAM, true, false);
         m_token_stream.consume("}", false);
 
         do
@@ -154,7 +154,7 @@ namespace hal
         return m_token_stream.remaining() == 0;
     }
 
-    std::optional<gate_library_parser_liberty::type_group> gate_library_parser_liberty::parse_type(token_stream<std::string>& str)
+    std::optional<gate_library_parser_liberty::type_group> gate_library_parser_liberty::parse_type(TokenStream<std::string>& str)
     {
         type_group type;
         i32 width     = 1;
@@ -167,7 +167,7 @@ namespace hal
         type.name = str.consume().string;
         str.consume(")", true);
         str.consume("{", true);
-        auto type_str = str.extract_until("}", token_stream<std::string>::END_OF_STREAM, true, true);
+        auto type_str = str.extract_until("}", TokenStream<std::string>::END_OF_STREAM, true, true);
         str.consume("}", true);
 
         while (type_str.remaining() > 0)
@@ -244,7 +244,7 @@ namespace hal
         return type;
     }
 
-    std::optional<gate_library_parser_liberty::cell_group> gate_library_parser_liberty::parse_cell(token_stream<std::string>& str)
+    std::optional<gate_library_parser_liberty::cell_group> gate_library_parser_liberty::parse_cell(TokenStream<std::string>& str)
     {
         cell_group cell;
 
@@ -253,7 +253,7 @@ namespace hal
         cell.name = str.consume().string;
         str.consume(")", true);
         str.consume("{", true);
-        auto cell_str = str.extract_until("}", token_stream<std::string>::END_OF_STREAM, true, true);
+        auto cell_str = str.extract_until("}", TokenStream<std::string>::END_OF_STREAM, true, true);
         str.consume("}", true);
 
         if (const auto cell_it = m_cell_names.find(cell.name); cell_it != m_cell_names.end())
@@ -326,16 +326,16 @@ namespace hal
     }
 
     std::optional<gate_library_parser_liberty::pin_group>
-        gate_library_parser_liberty::parse_pin(token_stream<std::string>& str, cell_group& cell, pin_direction direction, const std::string& external_pin_name)
+        gate_library_parser_liberty::parse_pin(TokenStream<std::string>& str, cell_group& cell, pin_direction direction, const std::string& external_pin_name)
     {
         pin_group pin;
 
         pin.line_number = str.peek().number;
         str.consume("(", true);
-        auto pin_names_str = str.extract_until(")", token_stream<std::string>::END_OF_STREAM, true, true);
+        auto pin_names_str = str.extract_until(")", TokenStream<std::string>::END_OF_STREAM, true, true);
         str.consume(")", true);
         str.consume("{", true);
-        auto pin_str = str.extract_until("}", token_stream<std::string>::END_OF_STREAM, true, true);
+        auto pin_str = str.extract_until("}", TokenStream<std::string>::END_OF_STREAM, true, true);
         str.consume("}", true);
 
         if (pin_names_str.size() == 0)
@@ -458,7 +458,7 @@ namespace hal
         return pin;
     }
 
-    std::optional<gate_library_parser_liberty::bus_group> gate_library_parser_liberty::parse_bus(token_stream<std::string>& str, cell_group& cell)
+    std::optional<gate_library_parser_liberty::bus_group> gate_library_parser_liberty::parse_bus(TokenStream<std::string>& str, cell_group& cell)
     {
         bus_group bus;
         std::vector<u32> range;
@@ -468,7 +468,7 @@ namespace hal
         bus.name = str.consume().string;
         str.consume(")", true);
         str.consume("{", true);
-        auto bus_str = str.extract_until("}", token_stream<std::string>::END_OF_STREAM, true, true);
+        auto bus_str = str.extract_until("}", TokenStream<std::string>::END_OF_STREAM, true, true);
         str.consume("}", true);
 
         do
@@ -540,7 +540,7 @@ namespace hal
         return bus;
     }
 
-    std::optional<gate_library_parser_liberty::ff_group> gate_library_parser_liberty::parse_ff(token_stream<std::string>& str)
+    std::optional<gate_library_parser_liberty::ff_group> gate_library_parser_liberty::parse_ff(TokenStream<std::string>& str)
     {
         ff_group ff;
 
@@ -551,7 +551,7 @@ namespace hal
         ff.state2 = str.consume().string;
         str.consume(")", true);
         str.consume("{", true);
-        auto ff_str = str.extract_until("}", token_stream<std::string>::END_OF_STREAM, true, true);
+        auto ff_str = str.extract_until("}", TokenStream<std::string>::END_OF_STREAM, true, true);
         str.consume("}", true);
 
         do
@@ -622,7 +622,7 @@ namespace hal
         return ff;
     }
 
-    std::optional<gate_library_parser_liberty::latch_group> gate_library_parser_liberty::parse_latch(token_stream<std::string>& str)
+    std::optional<gate_library_parser_liberty::latch_group> gate_library_parser_liberty::parse_latch(TokenStream<std::string>& str)
     {
         latch_group latch;
 
@@ -633,7 +633,7 @@ namespace hal
         latch.state2 = str.consume().string;
         str.consume(")", true);
         str.consume("{", true);
-        auto latch_str = str.extract_until("}", token_stream<std::string>::END_OF_STREAM, true, true);
+        auto latch_str = str.extract_until("}", TokenStream<std::string>::END_OF_STREAM, true, true);
         str.consume("}", true);
 
         do
@@ -692,7 +692,7 @@ namespace hal
         return latch;
     }
 
-    std::optional<gate_library_parser_liberty::lut_group> gate_library_parser_liberty::parse_lut(token_stream<std::string>& str)
+    std::optional<gate_library_parser_liberty::lut_group> gate_library_parser_liberty::parse_lut(TokenStream<std::string>& str)
     {
         lut_group lut;
 
@@ -701,7 +701,7 @@ namespace hal
         lut.name = str.consume().string;
         str.consume(")", true);
         str.consume("{", true);
-        auto lut_str = str.extract_until("}", token_stream<std::string>::END_OF_STREAM, true, true);
+        auto lut_str = str.extract_until("}", TokenStream<std::string>::END_OF_STREAM, true, true);
         str.consume("}", true);
 
         do

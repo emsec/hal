@@ -24,7 +24,7 @@
 #ifndef HAL_EXTENDED_CLI_DIALOG_H
 #define HAL_EXTENDED_CLI_DIALOG_H
 
-#include "core/interface_cli.h"
+#include "core/plugin_interface_cli.h"
 #include "core/program_arguments.h"
 #include <QBoxLayout>
 #include <QDialog>
@@ -45,7 +45,7 @@ class hal_extended_cli_dialog : public QDialog
 public:
     hal_extended_cli_dialog(QString plugin_name, QWidget* parent = 0);
 
-    program_arguments get_args();
+    ProgramArguments get_args();
 
 private Q_SLOTS:
     void parse_arguments();
@@ -57,8 +57,8 @@ private:
     QLabel* m_status_message;
     QDialogButtonBox* m_button_box;
 
-    program_arguments m_args;
-    std::shared_ptr<i_cli> m_plugin;
+    ProgramArguments m_args;
+    std::shared_ptr<CLIPluginInterface> m_plugin;
 
     std::vector<std::pair<QPushButton*, QLineEdit*>> m_vector;
 

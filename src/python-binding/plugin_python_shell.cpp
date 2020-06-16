@@ -9,9 +9,9 @@
 
 namespace hal
 {
-    extern std::shared_ptr<i_base> get_plugin_instance()
+    extern std::shared_ptr<BasePluginInterface> get_plugin_instance()
     {
-        return std::dynamic_pointer_cast<i_base>(std::make_shared<plugin_python_shell>());
+        return std::dynamic_pointer_cast<BasePluginInterface>(std::make_shared<plugin_python_shell>());
     }
 
     std::string plugin_python_shell::get_name() const
@@ -24,7 +24,7 @@ namespace hal
         return std::string("0.1");
     }
 
-    bool plugin_python_shell::exec(program_arguments& args)
+    bool plugin_python_shell::exec(ProgramArguments& args)
     {
         int argc;
         const char** argv;

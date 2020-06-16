@@ -217,7 +217,7 @@ namespace hal
 
         void initialize()
         {
-            log_manager::get_instance().add_channel("event", {log_manager::create_stdout_sink(), log_manager::create_file_sink(), log_manager::create_gui_sink()}, "info");
+            LogManager::get_instance().add_channel("event", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
 
             gate_event_handler::register_callback("event_log", &handle_gate_event);
             net_event_handler::register_callback("event_log", &handle_net_event);
