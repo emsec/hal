@@ -30,7 +30,7 @@ class arrow_separated_net : public separated_graphics_net
 public:
     static void load_settings();
 
-    arrow_separated_net(const std::shared_ptr<const net> n);
+    arrow_separated_net(const std::shared_ptr<const Net> n);
 
     void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override;
 

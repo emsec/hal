@@ -5,6 +5,9 @@
 #include <iostream>
 #include "netlist_test_utils.h"
 
+namespace hal
+{
+
 class program_arguments_test : public ::testing::Test
 {
 protected:
@@ -201,4 +204,5 @@ TEST_F(program_arguments_test, check_flags_and_parameters)
         EXPECT_TRUE(params.empty());
     }
     TEST_END
+}
 }

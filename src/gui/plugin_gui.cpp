@@ -48,7 +48,7 @@ notification_manager* g_notification_manager;
 
 hal_content_manager* g_content_manager = nullptr;
 
-std::shared_ptr<netlist> g_netlist = nullptr;
+std::shared_ptr<Netlist> g_netlist = nullptr;
 
 netlist_relay g_netlist_relay;
 plugin_relay g_plugin_relay;

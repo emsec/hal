@@ -73,7 +73,7 @@ void standard_graphics_net::update_alpha()
         s_alpha = 1;
 }
 
-standard_graphics_net::standard_graphics_net(const std::shared_ptr<const net> n, const lines& l) : graphics_net(n)
+standard_graphics_net::standard_graphics_net(const std::shared_ptr<const Net> n, const lines& l) : graphics_net(n)
 {
     for (const h_line& h : l.h_lines)
     {

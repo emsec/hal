@@ -10,7 +10,7 @@
 
 namespace hal
 {
-    std::tuple<igraph_t, std::map<int, std::shared_ptr<gate>>> plugin_graph_algorithm::get_igraph_directed(std::shared_ptr<netlist> const nl)
+    std::tuple<igraph_t, std::map<int, std::shared_ptr<Gate>>> plugin_graph_algorithm::get_igraph_directed(std::shared_ptr<Netlist> const nl)
     {
         igraph_t graph;
 
@@ -18,8 +18,8 @@ namespace hal
         u32 edge_counter = 0;
         for (const auto& net : nl->get_nets())
         {
-            std::shared_ptr<gate> src_gate = net->get_source().get_gate();
-            std::vector<std::shared_ptr<gate>> dst_gates;
+            std::shared_ptr<Gate> src_gate = net->get_source().get_gate();
+            std::vector<std::shared_ptr<Gate>> dst_gates;
 
             auto dst_gates_endpoints = net->get_destinations();
 
@@ -57,8 +57,8 @@ namespace hal
 
         for (const auto& net : nl->get_nets())
         {
-            std::shared_ptr<gate> src_gate = net->get_source().get_gate();
-            std::vector<std::shared_ptr<gate>> dst_gates;
+            std::shared_ptr<Gate> src_gate = net->get_source().get_gate();
+            std::vector<std::shared_ptr<Gate>> dst_gates;
 
             auto dst_gates_endpoints = net->get_destinations();
 
@@ -103,7 +103,7 @@ namespace hal
         igraph_create(&graph, &edges, 0, IGRAPH_DIRECTED);
 
         // map with vertice id to hal-gate
-        std::map<int, std::shared_ptr<gate>> vertice_to_gate;
+        std::map<int, std::shared_ptr<Gate>> vertice_to_gate;
         for (auto const& gate : nl->get_gates())
         {
             vertice_to_gate[gate->get_id() - 1] = gate;
@@ -112,11 +112,11 @@ namespace hal
         return std::make_tuple(graph, vertice_to_gate);
     }
 
-    std::map<int, std::set<std::shared_ptr<gate>>> plugin_graph_algorithm::get_memberships_for_hal(igraph_t graph, igraph_vector_t membership, std::map<int, std::shared_ptr<gate>> vertex_to_gate)
+    std::map<int, std::set<std::shared_ptr<Gate>>> plugin_graph_algorithm::get_memberships_for_hal(igraph_t graph, igraph_vector_t membership, std::map<int, std::shared_ptr<Gate>> vertex_to_gate)
     {
         // map back to HAL structures
         int vertices_num = (int)igraph_vcount(&graph);
-        std::map<int, std::set<std::shared_ptr<gate>>> community_sets;
+        std::map<int, std::set<std::shared_ptr<Gate>>> community_sets;
 
         for (int i = 0; i < vertices_num; i++)
         {

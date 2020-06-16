@@ -29,7 +29,7 @@ namespace hal
     public:
         using GUIPluginInterface::GUIPluginInterface;
 
-        bool exec(std::shared_ptr<netlist> g) override
+        bool exec(std::shared_ptr<Netlist> g) override
         {
             PYBIND11_OVERLOAD_PURE(bool,  /* Return type */
                                    GUIPluginInterface, /* Parent class */
@@ -74,7 +74,7 @@ namespace hal
         Generic call to run the GUI.
 
         :param netlist: The netlist object for the GUI.
-        :type netlist: hal_py.netlist
+        :type netlist: hal_py.Netlist
         :returns: True on success.
         :rtype: bool
 )");

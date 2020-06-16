@@ -17,7 +17,7 @@ void circle_separated_net::load_settings()
     s_radius        = 3;
 }
 
-circle_separated_net::circle_separated_net(const std::shared_ptr<const net> n) : separated_graphics_net(n)
+circle_separated_net::circle_separated_net(const std::shared_ptr<const Net> n) : separated_graphics_net(n)
 {
 }
 

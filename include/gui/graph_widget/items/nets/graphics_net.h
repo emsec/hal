@@ -27,7 +27,7 @@
 
 #include <memory>
 
-class net;
+class Net;
 
 class graphics_net : public graphics_item
 {
@@ -44,7 +44,7 @@ public:
 
     static void load_settings();
 
-    graphics_net(const std::shared_ptr<const net> n);
+    graphics_net(const std::shared_ptr<const Net> n);
 
     QRectF boundingRect() const override;
     QPainterPath shape() const override;

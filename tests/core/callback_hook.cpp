@@ -5,6 +5,9 @@
 #include <iostream>
 #include "netlist_test_utils.h"
 
+namespace hal
+{
+
 typedef CallbackHook<std::string(std::string)> test_hook;
 typedef std::function<std::string(std::string)> test_function;
 
@@ -273,4 +276,5 @@ TEST_F(callback_hook_test, check_bracket_operator)
             EXPECT_EQ(res, 0);
         }
     TEST_END
+}
 }

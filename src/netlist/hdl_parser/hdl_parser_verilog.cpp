@@ -7,7 +7,7 @@
 
 namespace hal
 {
-    hdl_parser_verilog::hdl_parser_verilog(std::stringstream& stream) : hdl_parser(stream)
+    HDLParserVerilog::HDLParserVerilog(std::stringstream& stream) : HDLParser(stream)
     {
     }
 
@@ -15,7 +15,7 @@ namespace hal
     // ###########          Parse HDL into intermediate format          ##########
     // ###########################################################################
 
-    bool hdl_parser_verilog::parse()
+    bool HDLParserVerilog::parse()
     {
         // tokenize file
         if (!tokenize())
@@ -47,7 +47,7 @@ namespace hal
         return true;
     }
 
-    bool hdl_parser_verilog::tokenize()
+    bool HDLParserVerilog::tokenize()
     {
         const std::string delimiters = ",()[]{}\\#*: ;=.";
         std::string current_token;
@@ -124,7 +124,7 @@ namespace hal
         return true;
     }
 
-    bool hdl_parser_verilog::parse_tokens()
+    bool HDLParserVerilog::parse_tokens()
     {
         std::map<std::string, std::string> attributes;
 
@@ -149,7 +149,7 @@ namespace hal
         return true;
     }
 
-    bool hdl_parser_verilog::parse_entity(std::map<std::string, std::string>& attributes)
+    bool HDLParserVerilog::parse_entity(std::map<std::string, std::string>& attributes)
     {
         std::set<std::string> port_names;
         std::map<std::string, std::string> internal_attributes;
@@ -243,7 +243,7 @@ namespace hal
         return true;
     }
 
-    void hdl_parser_verilog::parse_port_list(std::set<std::string>& port_names)
+    void HDLParserVerilog::parse_port_list(std::set<std::string>& port_names)
     {
         m_token_stream.consume("(", true);
         auto ports_str = m_token_stream.extract_until(")");
@@ -256,7 +256,7 @@ namespace hal
         }
     }
 
-    bool hdl_parser_verilog::parse_port_definition(entity& e, const std::set<std::string>& port_names, std::map<std::string, std::string>& attributes)
+    bool HDLParserVerilog::parse_port_definition(entity& e, const std::set<std::string>& port_names, std::map<std::string, std::string>& attributes)
     {
         const auto line_number   = m_token_stream.peek().number;
         const auto direction_str = m_token_stream.consume().string;
@@ -310,7 +310,7 @@ namespace hal
         return true;
     }
 
-    bool hdl_parser_verilog::parse_signal_definition(entity& e, std::map<std::string, std::string>& attributes)
+    bool HDLParserVerilog::parse_signal_definition(entity& e, std::map<std::string, std::string>& attributes)
     {
         m_token_stream.consume("wire", true);
         auto signals = parse_signal_list();
@@ -341,7 +341,7 @@ namespace hal
         return true;
     }
 
-    bool hdl_parser_verilog::parse_assign(entity& e)
+    bool HDLParserVerilog::parse_assign(entity& e)
     {
         const auto line_number = m_token_stream.peek().number;
         m_token_stream.consume("assign", true);
@@ -372,7 +372,7 @@ namespace hal
         return true;
     }
 
-    bool hdl_parser_verilog::parse_attribute(std::map<std::string, std::string>& attributes)
+    bool HDLParserVerilog::parse_attribute(std::map<std::string, std::string>& attributes)
     {
         m_token_stream.consume("(*", true);
         auto attribute_str = m_token_stream.extract_until("*)");
@@ -403,7 +403,7 @@ namespace hal
         return true;
     }
 
-    bool hdl_parser_verilog::parse_instance(entity& e, std::map<std::string, std::string>& attributes)
+    bool HDLParserVerilog::parse_instance(entity& e, std::map<std::string, std::string>& attributes)
     {
         const auto line_number   = m_token_stream.peek().number;
         const auto instance_type = m_token_stream.consume().string;
@@ -453,7 +453,7 @@ namespace hal
         return true;
     }
 
-    bool hdl_parser_verilog::parse_port_assign(entity& e, instance& inst)
+    bool HDLParserVerilog::parse_port_assign(entity& e, instance& inst)
     {
         m_token_stream.consume("(", true);
         auto port_str = m_token_stream.extract_until(")");
@@ -490,7 +490,7 @@ namespace hal
         return true;
     }
 
-    bool hdl_parser_verilog::parse_generic_assign(instance& inst)
+    bool HDLParserVerilog::parse_generic_assign(instance& inst)
     {
         auto generic_str = m_token_stream.extract_until(")");
         m_token_stream.consume(")", true);
@@ -555,7 +555,7 @@ namespace hal
     // ###################          Helper functions          ####################
     // ###########################################################################
 
-    void hdl_parser_verilog::remove_comments(std::string& line, bool& multi_line_comment)
+    void HDLParserVerilog::remove_comments(std::string& line, bool& multi_line_comment)
     {
         bool repeat = true;
 
@@ -622,7 +622,7 @@ namespace hal
         }
     }
 
-    std::vector<u32> hdl_parser_verilog::parse_range(TokenStream<std::string>& range_str)
+    std::vector<u32> HDLParserVerilog::parse_range(TokenStream<std::string>& range_str)
     {
         if (range_str.remaining() == 1)
         {
@@ -643,7 +643,7 @@ namespace hal
         return res;
     }
 
-    std::map<std::string, hdl_parser_verilog::signal> hdl_parser_verilog::parse_signal_list()
+    std::map<std::string, HDLParserVerilog::signal> HDLParserVerilog::parse_signal_list()
     {
         std::map<std::string, signal> signals;
         std::vector<std::vector<u32>> ranges;
@@ -672,7 +672,7 @@ namespace hal
         return signals;
     }
 
-    std::optional<std::pair<std::vector<hdl_parser_verilog::signal>, i32>> hdl_parser_verilog::get_assignment_signals(entity& e, TokenStream<std::string>& signal_str, bool allow_numerics)
+    std::optional<std::pair<std::vector<HDLParserVerilog::signal>, i32>> HDLParserVerilog::get_assignment_signals(entity& e, TokenStream<std::string>& signal_str, bool allow_numerics)
     {
         // PARSE ASSIGNMENT
         //   assignment can currently be one of the following:
@@ -798,7 +798,7 @@ namespace hal
                                                            {'e', "1110"},
                                                            {'f', "1111"}};
 
-    std::string hdl_parser_verilog::get_bin_from_literal(const Token<std::string>& value_token)
+    std::string HDLParserVerilog::get_bin_from_literal(const Token<std::string>& value_token)
     {
         const auto line_number = value_token.number;
         const auto value       = core_utils::to_lower(core_utils::replace(value_token.string, "_", ""));
@@ -916,7 +916,7 @@ namespace hal
         return res;
     }
 
-    std::string hdl_parser_verilog::get_hex_from_literal(const Token<std::string>& value_token)
+    std::string HDLParserVerilog::get_hex_from_literal(const Token<std::string>& value_token)
     {
         const auto line_number = value_token.number;
         const auto value       = core_utils::to_lower(core_utils::replace(value_token.string, "_", ""));
@@ -1008,7 +1008,7 @@ namespace hal
         return ss.str();
     }
 
-    bool hdl_parser_verilog::is_in_bounds(const std::vector<std::pair<i32, i32>>& bounds, const std::vector<std::pair<i32, i32>>& reference_bounds) const
+    bool HDLParserVerilog::is_in_bounds(const std::vector<std::pair<i32, i32>>& bounds, const std::vector<std::pair<i32, i32>>& reference_bounds) const
     {
         if (bounds.size() != reference_bounds.size())
         {

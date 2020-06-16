@@ -4,9 +4,9 @@ namespace hal
 {
     void endpoint_init(py::module& m)
     {
-        py::class_<endpoint, std::shared_ptr<endpoint>> py_endpoint(m, "endpoint");
+        py::class_<Endpoint, std::shared_ptr<Endpoint>> py_endpoint(m, "Endpoint");
 
-        py_endpoint.def(py::init<const std::shared_ptr<gate>&, const std::string&, bool>(), py::arg("gate"), py::arg("pin"), py::arg("is_a_destination"), R"(
+        py_endpoint.def(py::init<const std::shared_ptr<Gate>&, const std::string&, bool>(), py::arg("gate"), py::arg("pin"), py::arg("is_a_destination"), R"(
         Construct a new endpoint.
 )");
 
@@ -31,52 +31,52 @@ namespace hal
         :rtype: bool
 )");
 
-        py_endpoint.def_property_readonly("gate", &endpoint::get_gate, R"(
+        py_endpoint.def_property_readonly("gate", &Endpoint::get_gate, R"(
         The gate of the endpoint.
 
-        :type: hal_py.gate
+        :type: hal_py.Gate
 )");
 
-        py_endpoint.def("get_gate", &endpoint::get_gate, R"(
+        py_endpoint.def("get_gate", &Endpoint::get_gate, R"(
         Returns the gate of the endpoint.
 
         :returns: The gate.
-        :rtype: hal_py.gate
+        :rtype: hal_py.Gate
 )");
 
-        py_endpoint.def_property_readonly("pin", &endpoint::get_pin, R"(
+        py_endpoint.def_property_readonly("pin", &Endpoint::get_pin, R"(
         The pin of the endpoint.
 
         :type: str
 )");
 
-        py_endpoint.def("get_pin", &endpoint::get_pin, R"(
+        py_endpoint.def("get_pin", &Endpoint::get_pin, R"(
         Returns the pin of the endpoint.
 
         :returns: The pin.
         :rtype: str
 )");
 
-        py_endpoint.def_property_readonly("is_source", &endpoint::is_source_pin, R"(
+        py_endpoint.def_property_readonly("is_source", &Endpoint::is_source_pin, R"(
         True if the pin of the endpoint is a source pin, false otherwise.
 
         :type: bool
 )");
 
-        py_endpoint.def("is_source_pin", &endpoint::is_source_pin, R"(
+        py_endpoint.def("is_source_pin", &Endpoint::is_source_pin, R"(
         Checks whether the pin of the endpoint is a source pin.
 
         :returns: The pin type.
         :rtype: bool
 )");
 
-        py_endpoint.def_property_readonly("is_destination", &endpoint::is_destination_pin, R"(
+        py_endpoint.def_property_readonly("is_destination", &Endpoint::is_destination_pin, R"(
         True if the pin of the endpoint is a destination pin, false otherwise.
 
         :type: bool
 )");
 
-        py_endpoint.def("is_destination_pin", &endpoint::is_destination_pin, R"(
+        py_endpoint.def("is_destination_pin", &Endpoint::is_destination_pin, R"(
         Checks whether the pin of the endpoint is a destination pin.
 
         :returns: The pin type.

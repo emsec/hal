@@ -18,6 +18,7 @@
  * any errors, it can be an issue of the vhdl parser as well...
  */
 
+using namespace hal;
 using namespace test_utils;
 
 class netlist_factory_test : public ::testing::Test
@@ -48,12 +49,12 @@ protected:
     }
 
     /**
-     * Check if a gate_library with name lib_name can be loaded. Print an error message
+     * Check if a GateLibrary with name lib_name can be loaded. Print an error message
      * if print_error is true and the library can't be loaded
      */
     bool gate_library_exists(std::string lib_name, bool print_error = true)
     {
-        std::shared_ptr<gate_library> gLib;
+        std::shared_ptr<GateLibrary> gLib;
         {
             NO_COUT_BLOCK;
             gLib = gate_library_manager::get_gate_library(g_lib_name);
@@ -85,7 +86,7 @@ TEST_F(netlist_factory_test, check_create_netlist_by_lib_name)
     if (gate_library_exists(g_lib_name))
     {
         {
-            std::shared_ptr<netlist> nl = netlist_factory::create_netlist(get_testing_gate_library());
+            std::shared_ptr<Netlist> nl = netlist_factory::create_netlist(get_testing_gate_library());
             EXPECT_EQ(nl->get_gate_library()->get_name(), get_testing_gate_library()->get_name());
         }
     }
@@ -93,7 +94,7 @@ TEST_F(netlist_factory_test, check_create_netlist_by_lib_name)
     {
         // Try to create a netlist by passing a nullptr
         NO_COUT_TEST_BLOCK;
-        std::shared_ptr<netlist> nl = netlist_factory::create_netlist(nullptr);
+        std::shared_ptr<Netlist> nl = netlist_factory::create_netlist(nullptr);
         // ISSUE: should be nullptr
         //EXPECT_EQ(nl, nullptr);
         // ISSUE: if nl != nullptr, the following expression leads to a segfault:
@@ -128,7 +129,7 @@ TEST_F(netlist_factory_test, check_load_netlist_by_hdl_file)
                                                                   "    );\n"
                                                                   "end STRUCTURE;");
     {
-        std::shared_ptr<netlist> nl = netlist_factory::load_netlist(tmp_hdl_file_path, "vhdl", m_g_lib_path);
+        std::shared_ptr<Netlist> nl = netlist_factory::load_netlist(tmp_hdl_file_path, "vhdl", m_g_lib_path);
 
         ASSERT_NE(nl, nullptr);
         EXPECT_EQ(nl->get_gate_library()->get_name(), "MIN_TEST_GATE_LIBRARY");
@@ -136,15 +137,15 @@ TEST_F(netlist_factory_test, check_load_netlist_by_hdl_file)
     {
         // Try to create a netlist by a non-accessible (non-existing) file
         NO_COUT_TEST_BLOCK;
-        std::shared_ptr<netlist> nl = netlist_factory::load_netlist(std::filesystem::path("/this/file/does/not/exist"), "vhdl", m_g_lib_path);
+        std::shared_ptr<Netlist> nl = netlist_factory::load_netlist(std::filesystem::path("/this/file/does/not/exist"), "vhdl", m_g_lib_path);
 
         EXPECT_EQ(nl, nullptr);
     }
     {
-        // Try to create a netlist by passing a path that does not lead to a gate library
+        // Try to create a netlist by passing a path that does not lead to a Gate library
         NO_COUT_TEST_BLOCK;
 
-        std::shared_ptr<netlist> nl = netlist_factory::load_netlist(tmp_hdl_file_path, "vhdl", std::filesystem::path("/this/file/does/not/exist"));
+        std::shared_ptr<Netlist> nl = netlist_factory::load_netlist(tmp_hdl_file_path, "vhdl", std::filesystem::path("/this/file/does/not/exist"));
 
         EXPECT_EQ(nl, nullptr);
     }
@@ -161,16 +162,16 @@ TEST_F(netlist_factory_test, check_load_netlist_by_hdl_file)
 TEST_F(netlist_factory_test, check_load_netlist_by_hal_file){TEST_START{// Create a netlist by using a temporary created hal file
                                                                         std::filesystem::path tmp_hal_file_path = create_sandbox_path("test_hal_file.hal");
 
-std::shared_ptr<netlist> empty_nl = netlist_factory::create_netlist(gate_library_manager::get_gate_library(m_g_lib_path));    //empty netlist
+std::shared_ptr<Netlist> empty_nl = netlist_factory::create_netlist(gate_library_manager::get_gate_library(m_g_lib_path));    //empty netlist
 netlist_serializer::serialize_to_file(empty_nl, tmp_hal_file_path);
-std::shared_ptr<netlist> nl = netlist_factory::load_netlist(tmp_hal_file_path);
+std::shared_ptr<Netlist> nl = netlist_factory::load_netlist(tmp_hal_file_path);
 
 EXPECT_NE(nl, nullptr);
 }
 {
     // Pass an invalid file path
     NO_COUT_TEST_BLOCK;
-    std::shared_ptr<netlist> nl = netlist_factory::load_netlist(std::filesystem::path("/this/file/does/not/exists.hal"));
+    std::shared_ptr<Netlist> nl = netlist_factory::load_netlist(std::filesystem::path("/this/file/does/not/exists.hal"));
 
     EXPECT_EQ(nl, nullptr);
 }
@@ -179,7 +180,7 @@ EXPECT_NE(nl, nullptr);
     NO_COUT_TEST_BLOCK;
     std::filesystem::path tmp_hal_file_path = create_sandbox_file("invalid_hal_test_file.hal",
                                                                   "{\n"
-                                                                  "    \"gate_library\": \"non_existing_g_lib\",\n"
+                                                                  "    \"GateLibrary\": \"non_existing_g_lib\",\n"
                                                                   "    \"id\": 0,\n"
                                                                   "    \"input_file\": \"\",\n"
                                                                   "    \"design_name\": \"\",\n"
@@ -189,7 +190,7 @@ EXPECT_NE(nl, nullptr);
                                                                   "    \"modules\": []\n"
                                                                   "}");
 
-    std::shared_ptr<netlist> nl = netlist_factory::load_netlist(tmp_hal_file_path);
+    std::shared_ptr<Netlist> nl = netlist_factory::load_netlist(tmp_hal_file_path);
 
     EXPECT_EQ(nl, nullptr);
 }
@@ -209,13 +210,13 @@ TEST_F(netlist_factory_test, check_create_netlist_by_program_args)
         // Create a netlist by passing a .hal file-path via program arguments
         std::filesystem::path tmp_hal_file_path = create_sandbox_path("test_hal_file.hal");
 
-        std::shared_ptr<netlist> empty_nl = netlist_factory::create_netlist(gate_library_manager::get_gate_library(m_g_lib_path));    //empty netlist
+        std::shared_ptr<Netlist> empty_nl = netlist_factory::create_netlist(gate_library_manager::get_gate_library(m_g_lib_path));    //empty netlist
         netlist_serializer::serialize_to_file(empty_nl, tmp_hal_file_path);                                                           // create the .hal file
 
         ProgramArguments p_args;
         p_args.set_option("--input-file", std::vector<std::string>({tmp_hal_file_path}));
 
-        std::shared_ptr<netlist> nl = netlist_factory::load_netlist(p_args);
+        std::shared_ptr<Netlist> nl = netlist_factory::load_netlist(p_args);
 
         EXPECT_NE(nl, nullptr);
     }
@@ -241,10 +242,10 @@ TEST_F(netlist_factory_test, check_create_netlist_by_program_args)
         ProgramArguments p_args;
         p_args.set_option("--input-file", std::vector<std::string>({tmp_hdl_file_path}));
         p_args.set_option("--language", std::vector<std::string>({"vhdl"}));
-        p_args.set_option("--gate-library", std::vector<std::string>({m_g_lib_path}));
+        p_args.set_option("--Gate-library", std::vector<std::string>({m_g_lib_path}));
 
         // NO_COUT_TEST_BLOCK;
-        std::shared_ptr<netlist> nl = netlist_factory::load_netlist(p_args);
+        std::shared_ptr<Netlist> nl = netlist_factory::load_netlist(p_args);
 
         EXPECT_NE(nl, nullptr);
     }
@@ -252,7 +253,7 @@ TEST_F(netlist_factory_test, check_create_netlist_by_program_args)
         // Create a netlist but leaving out the input path
         NO_COUT_TEST_BLOCK;
         ProgramArguments p_args;
-        std::shared_ptr<netlist> nl = netlist_factory::load_netlist(p_args);
+        std::shared_ptr<Netlist> nl = netlist_factory::load_netlist(p_args);
         EXPECT_EQ(nl, nullptr);
     }
     {
@@ -260,7 +261,7 @@ TEST_F(netlist_factory_test, check_create_netlist_by_program_args)
         NO_COUT_TEST_BLOCK;
         ProgramArguments p_args;
         p_args.set_option("--input-file", std::vector<std::string>({"/this/file/does/not/exist"}));
-        std::shared_ptr<netlist> nl = netlist_factory::load_netlist(p_args);
+        std::shared_ptr<Netlist> nl = netlist_factory::load_netlist(p_args);
         EXPECT_EQ(nl, nullptr);
     }
     {
@@ -272,8 +273,8 @@ TEST_F(netlist_factory_test, check_create_netlist_by_program_args)
         ProgramArguments p_args;
         p_args.set_option("--input-file", std::vector<std::string>({tmp_hdl_file_path}));
         p_args.set_option("--language", std::vector<std::string>({"vhdl"}));
-        p_args.set_option("--gate-library", std::vector<std::string>({g_lib_name}));
-        std::shared_ptr<netlist> nl = netlist_factory::load_netlist(p_args);
+        p_args.set_option("--Gate-library", std::vector<std::string>({g_lib_name}));
+        std::shared_ptr<Netlist> nl = netlist_factory::load_netlist(p_args);
 
         EXPECT_EQ(nl, nullptr);
     }

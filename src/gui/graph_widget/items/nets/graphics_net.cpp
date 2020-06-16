@@ -19,7 +19,7 @@ void graphics_net::load_settings()
     s_pen.setJoinStyle(Qt::MiterJoin);
 }
 
-graphics_net::graphics_net(const std::shared_ptr<const net> n) : graphics_item(hal::item_type::net, n->get_id())
+graphics_net::graphics_net(const std::shared_ptr<const Net> n) : graphics_item(hal::item_type::net, n->get_id())
 {
 }
 

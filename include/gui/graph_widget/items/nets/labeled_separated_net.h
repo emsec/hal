@@ -30,7 +30,7 @@ class labeled_separated_net : public separated_graphics_net
 public:
     static void load_settings();
 
-    labeled_separated_net(const std::shared_ptr<const net> n, const QString& text);
+    labeled_separated_net(const std::shared_ptr<const Net> n, const QString& text);
 
     void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override;
 

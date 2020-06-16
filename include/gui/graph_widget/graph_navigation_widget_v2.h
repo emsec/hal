@@ -19,7 +19,7 @@ public:
     explicit graph_navigation_widget_v2(QWidget *parent = nullptr);
 
     void setup(bool direction);
-    void setup(hal::node origin, std::shared_ptr<net> via_net, bool direction);
+    void setup(hal::node origin, std::shared_ptr<Net> via_net, bool direction);
 
 Q_SIGNALS:
     void navigation_requested(const hal::node origin, const u32 via_net, const QSet<u32>& to_gates, const QSet<u32>& to_modules);
@@ -40,9 +40,9 @@ private:
     void commit_selection();
 
     hal::node m_origin;
-    std::shared_ptr<net> m_via_net;
+    std::shared_ptr<Net> m_via_net;
     QSet<QTreeWidgetItem*> m_previous_selection;
-    
+
 };
 
 #endif

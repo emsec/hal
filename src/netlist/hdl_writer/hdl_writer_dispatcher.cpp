@@ -11,7 +11,7 @@
 
 namespace hal
 {
-    namespace hdl_writer_dispatcher
+    namespace HDLWriterDispatcher
     {
         ProgramOptions get_cli_options()
         {
@@ -21,7 +21,7 @@ namespace hal
             return description;
         }
 
-        bool write(std::shared_ptr<netlist> g, const ProgramArguments& args)
+        bool write(std::shared_ptr<Netlist> g, const ProgramArguments& args)
         {
             // all configurations: command, language, file extension
             std::vector<std::tuple<std::string, std::string, std::string>> configs = {std::make_tuple("--write-vhdl", "vhdl", ".vhd"), std::make_tuple("--write-verilog", "verilog", ".v")};
@@ -53,7 +53,7 @@ namespace hal
             return success;    // if nothing is written, the writer is always successful
         }
 
-        bool write(std::shared_ptr<netlist> g, const std::string& format, const std::filesystem::path& file_name)
+        bool write(std::shared_ptr<Netlist> g, const std::string& format, const std::filesystem::path& file_name)
         {
             std::ofstream hdl_file;
 
@@ -71,11 +71,11 @@ namespace hal
 
             if (format == "vhdl")
             {
-                write_success = hdl_writer_vhdl(output_stream).write(g);
+                write_success = HDLWriterVHDL(output_stream).write(g);
             }
             else if (format == "verilog")
             {
-                write_success = hdl_writer_verilog(output_stream).write(g);
+                write_success = HDLWriterVerilog(output_stream).write(g);
             }
             else
             {
@@ -95,5 +95,5 @@ namespace hal
 
             return write_success;
         }
-    }    // namespace hdl_writer_dispatcher
+    }    // namespace HDLWriterDispatcher
 }    // namespace hal

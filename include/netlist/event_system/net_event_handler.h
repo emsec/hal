@@ -31,8 +31,8 @@
 
 namespace hal
 {
-    class netlist;
-    class net;
+    class Netlist;
+    class Net;
 
     namespace net_event_handler
     {
@@ -62,7 +62,7 @@ namespace hal
          * @param[in] net - The affected object.
          * @param[in] associated_data - may have a meaning depending on the event type.
          */
-        NETLIST_API void notify(event ev, std::shared_ptr<net> net, u32 associated_data = 0xFFFFFFFF);
+        NETLIST_API void notify(event ev, std::shared_ptr<Net> net, u32 associated_data = 0xFFFFFFFF);
 
         /**
          * Registers a callback function.
@@ -70,7 +70,7 @@ namespace hal
          * @param[in] name - name of the callback, used for callback removal.
          * @param[in] function - The callback function.
          */
-        NETLIST_API void register_callback(const std::string& name, std::function<void(event e, std::shared_ptr<net>, u32 associated_data)> function);
+        NETLIST_API void register_callback(const std::string& name, std::function<void(event e, std::shared_ptr<Net>, u32 associated_data)> function);
 
         /**
          * Removes a callback function.

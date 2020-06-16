@@ -320,7 +320,7 @@ void graph_widget::handle_navigation_jump_requested(const hal::node origin, cons
 
     // if we don't have all gates and modules, we need to add them
     if (!nonvisible_gates.empty() || !nonvisible_modules.empty())
-    {   
+    {
         // display the "modified" label if we're showing a module context
         set_modified_if_module();
 
@@ -328,7 +328,7 @@ void graph_widget::handle_navigation_jump_requested(const hal::node origin, cons
         // (so the cone view nicely extends to the right or left)
         // either they're all inputs or all outputs, so just check the first one
 
-        std::set<std::shared_ptr<net>> in_nets;
+        std::set<std::shared_ptr<Net>> in_nets;
         if (to_gates.empty())
         {
             in_nets = g_netlist->get_module_by_id(*to_modules.constBegin())->get_input_nets();
@@ -481,7 +481,7 @@ void graph_widget::handle_navigation_left_request()
         }
         case selection_relay::item_type::gate:
         {
-            std::shared_ptr<gate> g = g_netlist->get_gate_by_id(g_selection_relay.m_focus_id);
+            std::shared_ptr<Gate> g = g_netlist->get_gate_by_id(g_selection_relay.m_focus_id);
 
             if (!g)
                 return;
@@ -489,7 +489,7 @@ void graph_widget::handle_navigation_left_request()
             if (g_selection_relay.m_subfocus == selection_relay::subfocus::left)
             {
                 std::string pin_type   = g->get_input_pins()[g_selection_relay.m_subfocus_index];
-                std::shared_ptr<net> n = g->get_fan_in_net(pin_type);
+                std::shared_ptr<Net> n = g->get_fan_in_net(pin_type);
 
                 if (!n)
                     return;
@@ -525,7 +525,7 @@ void graph_widget::handle_navigation_left_request()
         }
         case selection_relay::item_type::net:
         {
-            std::shared_ptr<net> n = g_netlist->get_net_by_id(g_selection_relay.m_focus_id);
+            std::shared_ptr<Net> n = g_netlist->get_net_by_id(g_selection_relay.m_focus_id);
 
             if (!n)
                 return;
@@ -548,7 +548,7 @@ void graph_widget::handle_navigation_left_request()
         }
         case selection_relay::item_type::module:
         {
-            std::shared_ptr<module> m = g_netlist->get_module_by_id(g_selection_relay.m_focus_id);
+            std::shared_ptr<Module> m = g_netlist->get_module_by_id(g_selection_relay.m_focus_id);
 
             if (!m)
                 return;
@@ -608,7 +608,7 @@ void graph_widget::handle_navigation_right_request()
         }
         case selection_relay::item_type::gate:
         {
-            std::shared_ptr<gate> g = g_netlist->get_gate_by_id(g_selection_relay.m_focus_id);
+            std::shared_ptr<Gate> g = g_netlist->get_gate_by_id(g_selection_relay.m_focus_id);
 
             if (!g)
                 return;
@@ -647,7 +647,7 @@ void graph_widget::handle_navigation_right_request()
         }
         case selection_relay::item_type::net:
         {
-            std::shared_ptr<net> n = g_netlist->get_net_by_id(g_selection_relay.m_focus_id);
+            std::shared_ptr<Net> n = g_netlist->get_net_by_id(g_selection_relay.m_focus_id);
 
             if (!n)
                 return;
@@ -670,7 +670,7 @@ void graph_widget::handle_navigation_right_request()
         }
         case selection_relay::item_type::module:
         {
-            std::shared_ptr<module> m = g_netlist->get_module_by_id(g_selection_relay.m_focus_id);
+            std::shared_ptr<Module> m = g_netlist->get_module_by_id(g_selection_relay.m_focus_id);
 
             if (!m)
                 return;
@@ -880,7 +880,7 @@ void graph_widget::ensure_selection_visible()
         max_x = std::max(max_x, static_cast<int>(rect.right()));
         min_y = std::min(min_y, static_cast<int>(rect.top()));
         max_y = std::max(max_y, static_cast<int>(rect.bottom()));
-    }    
+    }
 
     auto targetRect = QRectF(min_x, min_y, max_x-min_x, max_y-min_y).marginsAdded(QMarginsF(20,20,20,20));
 

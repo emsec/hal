@@ -10,7 +10,7 @@ namespace hal
 
                 :param str gate_library_name: Name of hardware gate library.
                 :returns: The new netlist.
-                :rtype: hal_py.netlist
+                :rtype: hal_py.Netlist
                 )")
             .def("load_netlist",
                  py::overload_cast<const std::filesystem::path&, const std::string&, const std::filesystem::path&>(&netlist_factory::load_netlist),
@@ -26,7 +26,7 @@ namespace hal
                 :param gate_library_file: Name of hardware gate library file.
                 :type gate_library_file: hal_py.hal_path
                 :returns: The new netlist.
-                :rtype: hal_py.netlist
+                :rtype: hal_py.Netlist
                 )")
             .def("load_netlist", py::overload_cast<const std::filesystem::path&>(&netlist_factory::load_netlist), py::arg("hal_file"), R"(
                 Creates a new netlist for a specific '.hal' file.
@@ -34,7 +34,7 @@ namespace hal
                 :param hal_file: Name of the '.hal' file.
                 :type hal_file: hal_py.hal_path
                 :returns: The new netlist.
-                :rtype: hal_py.netlist
+                :rtype: hal_py.Netlist
                 )");
     }
 }    // namespace hal

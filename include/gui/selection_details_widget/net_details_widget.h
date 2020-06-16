@@ -38,8 +38,8 @@ class QTableWidget;
 class QTableWidgetItem;
 class QPushButton;
 class QFont;
-class net;
-class gate;
+class Net;
+class Gate;
 
 class net_details_widget : public QWidget
 {
@@ -55,13 +55,13 @@ public:
 
 public Q_SLOTS:
 
-    void handle_net_removed(const std::shared_ptr<net> n);
-    void handle_net_name_changed(const std::shared_ptr<net> n);
-    void handle_net_source_added(const std::shared_ptr<net> n, const u32 src_gate_id);
-    void handle_net_source_removed(const std::shared_ptr<net> n, const u32 src_gate_id);
-    void handle_net_destination_added(const std::shared_ptr<net> n, const u32 dst_gate_id);
-    void handle_net_destination_removed(const std::shared_ptr<net> n, const u32 dst_gate_id);
-    void handle_gate_name_changed(const std::shared_ptr<gate> g);
+    void handle_net_removed(const std::shared_ptr<Net> n);
+    void handle_net_name_changed(const std::shared_ptr<Net> n);
+    void handle_net_source_added(const std::shared_ptr<Net> n, const u32 src_gate_id);
+    void handle_net_source_removed(const std::shared_ptr<Net> n, const u32 src_gate_id);
+    void handle_net_destination_added(const std::shared_ptr<Net> n, const u32 dst_gate_id);
+    void handle_net_destination_removed(const std::shared_ptr<Net> n, const u32 dst_gate_id);
+    void handle_gate_name_changed(const std::shared_ptr<Gate> g);
 
 private:
 

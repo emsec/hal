@@ -47,7 +47,7 @@ void module_relay::set_module_hidden(const u32 id, const bool hidden)
     // MANUAL UPDATE OF SUBSCRIBERS
 }
 
-void module_relay::handle_module_event(module_event_handler::event ev, std::shared_ptr<module> object, u32 associated_data)
+void module_relay::handle_module_event(module_event_handler::event ev, std::shared_ptr<Module> object, u32 associated_data)
 {
     Q_UNUSED(associated_data);
     switch (ev)

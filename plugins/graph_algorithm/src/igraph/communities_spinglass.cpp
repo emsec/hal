@@ -10,20 +10,20 @@
 
 namespace hal
 {
-    std::map<int, std::set<std::shared_ptr<gate>>> plugin_graph_algorithm::get_communities_spinglass(std::shared_ptr<netlist> const nl, u32 const spins)
+    std::map<int, std::set<std::shared_ptr<Gate>>> plugin_graph_algorithm::get_communities_spinglass(std::shared_ptr<Netlist> const nl, u32 const spins)
     {
         if (nl == nullptr)
         {
             log_error(this->get_name(), "{}", "parameter 'nl' is nullptr");
-            return std::map<int, std::set<std::shared_ptr<gate>>>();
+            return std::map<int, std::set<std::shared_ptr<Gate>>>();
         }
 
         log_info("graph_algorithm", "netlist has {} gates and {} nets", nl->get_gates().size(), nl->get_nets().size());
 
-        std::tuple<igraph_t, std::map<int, std::shared_ptr<gate>>> igraph_tuple = get_igraph_directed(nl);
+        std::tuple<igraph_t, std::map<int, std::shared_ptr<Gate>>> igraph_tuple = get_igraph_directed(nl);
 
         igraph_t graph                                      = std::get<0>(igraph_tuple);
-        std::map<int, std::shared_ptr<gate>> vertex_to_gate = std::get<1>(igraph_tuple);
+        std::map<int, std::shared_ptr<Gate>> vertex_to_gate = std::get<1>(igraph_tuple);
 
         igraph_real_t modularity, temperature;
         igraph_vector_t membership, csize;

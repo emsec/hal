@@ -39,19 +39,19 @@
 namespace hal
 {
     /* forward declaration */
-    class netlist;
-    class net;
-    class module;
-    class endpoint;
+    class Netlist;
+    class Net;
+    class Module;
+    class Endpoint;
 
     /**
      * Gate class containing information about a gate including its location, functions, and module.
      *
      * @ingroup netlist
      */
-    class NETLIST_API gate : public data_container, public std::enable_shared_from_this<gate>
+    class NETLIST_API Gate : public DataContainer, public std::enable_shared_from_this<Gate>
     {
-        friend class netlist_internal_manager;
+        friend class NetlistInternalManager;
 
     public:
         /**
@@ -66,7 +66,7 @@ namespace hal
          *
          * @returns The netlist.
          */
-        std::shared_ptr<netlist> get_netlist() const;
+        std::shared_ptr<Netlist> get_netlist() const;
 
         /**
          * Gets the gate's name.
@@ -87,7 +87,7 @@ namespace hal
          *
          * @returns The gate's type.
          */
-        std::shared_ptr<const gate_type> get_type() const;
+        std::shared_ptr<const GateType> get_type() const;
 
         /**
          * Checks whether the gate's location in the layout is available.
@@ -145,7 +145,7 @@ namespace hal
          *
          * @returns The module.
          */
-        std::shared_ptr<module> get_module() const;
+        std::shared_ptr<Module> get_module() const;
 
         /**
          * Get the boolean function associated with a specific name.
@@ -156,7 +156,7 @@ namespace hal
          * @param[in] name - The function name.
          * @returns The boolean function.
          */
-        boolean_function get_boolean_function(std::string name = "") const;
+        BooleanFunction get_boolean_function(std::string name = "") const;
 
         /**
          * Get a map from function name to boolean function for all boolean functions associated with this gate.
@@ -164,7 +164,7 @@ namespace hal
          * @param[in] only_custom_functions - If true, this returns only the functions which were set via add_boolean_function.
          * @returns A map from function name to function.
          */
-        std::unordered_map<std::string, boolean_function> get_boolean_functions(bool only_custom_functions = false) const;
+        std::unordered_map<std::string, BooleanFunction> get_boolean_functions(bool only_custom_functions = false) const;
 
         /**
          * Add the boolean function with the specified name only for this gate.
@@ -172,7 +172,7 @@ namespace hal
          * @param[in] name - The function name, usually an output port.
          * @param[in] func - The function.
          */
-        void add_boolean_function(const std::string& name, const boolean_function& func);
+        void add_boolean_function(const std::string& name, const BooleanFunction& func);
 
         /**
          * Mark this gate as a global vcc gate.
@@ -239,7 +239,7 @@ namespace hal
          *
          * @returns A set of all connected input nets.
          */
-        std::set<std::shared_ptr<net>> get_fan_in_nets() const;
+        std::set<std::shared_ptr<Net>> get_fan_in_nets() const;
 
         /**
          * Get the fan-in net which is connected to a specific input pin.
@@ -247,14 +247,14 @@ namespace hal
          * @param[in] pin_type - The input pin type.
          * @returns The connected input net.
          */
-        std::shared_ptr<net> get_fan_in_net(const std::string& pin_type) const;
+        std::shared_ptr<Net> get_fan_in_net(const std::string& pin_type) const;
 
         /**
          * Get a set of all fan-out nets of the gate, i.e. all nets that are connected to one of the output pins.
          *
          * @returns A set of all connected output nets.
          */
-        std::set<std::shared_ptr<net>> get_fan_out_nets() const;
+        std::set<std::shared_ptr<Net>> get_fan_out_nets() const;
 
         /**
          * Get the fan-out net which is connected to a specific output pin.
@@ -262,7 +262,7 @@ namespace hal
          * @param[in] pin_type - The output pin type.
          * @returns The connected output net.
          */
-        std::shared_ptr<net> get_fan_out_net(const std::string& pin_type) const;
+        std::shared_ptr<Net> get_fan_out_net(const std::string& pin_type) const;
 
         /**
          * Get a set of all unique predecessor gates of the gate.
@@ -271,7 +271,7 @@ namespace hal
          * @param[in] filter - a function to filter the output. Leave empty for no filtering.
          * @returns A vector of unique predecessor gates.
          */
-        std::vector<std::shared_ptr<gate>> get_unique_predecessors(const std::function<bool(const std::string& starting_pin, const endpoint& ep)>& filter = nullptr) const;
+        std::vector<std::shared_ptr<Gate>> get_unique_predecessors(const std::function<bool(const std::string& starting_pin, const Endpoint& ep)>& filter = nullptr) const;
 
         /**
          * Get a vector of all direct predecessor endpoints of the gate.
@@ -280,7 +280,7 @@ namespace hal
          * @param[in] filter - a function to filter the output. Leave empty for no filtering.
          * @returns A vector of predecessor endpoints.
          */
-        std::vector<endpoint> get_predecessors(const std::function<bool(const std::string& starting_pin, const endpoint& ep)>& filter = nullptr) const;
+        std::vector<Endpoint> get_predecessors(const std::function<bool(const std::string& starting_pin, const Endpoint& ep)>& filter = nullptr) const;
 
         /**
          * Get the direct predecessor endpoint of the gate connected to a specific input pin.
@@ -288,7 +288,7 @@ namespace hal
          * @param[in] which_pin - the pin of this gate to get the predecessor from.
          * @returns The predecessor endpoint.
          */
-        endpoint get_predecessor(const std::string& which_pin) const;
+        Endpoint get_predecessor(const std::string& which_pin) const;
 
         /**
          * Get a set of all unique successor gates of the gate.
@@ -297,7 +297,7 @@ namespace hal
          * @param[in] filter - a function to filter the output. Leave empty for no filtering.
          * @returns A vector of unique successor gates.
          */
-        std::vector<std::shared_ptr<gate>> get_unique_successors(const std::function<bool(const std::string& starting_pin, const endpoint& ep)>& filter = nullptr) const;
+        std::vector<std::shared_ptr<Gate>> get_unique_successors(const std::function<bool(const std::string& starting_pin, const Endpoint& ep)>& filter = nullptr) const;
 
         /**
          * Get a vector of all direct successor endpoints of the gate.
@@ -306,18 +306,18 @@ namespace hal
          * @param[in] filter - a function to filter the output. Leave empty for no filtering.
          * @returns A vector of successor endpoints.
          */
-        std::vector<endpoint> get_successors(const std::function<bool(const std::string& starting_pin, const endpoint& ep)>& filter = nullptr) const;
+        std::vector<Endpoint> get_successors(const std::function<bool(const std::string& starting_pin, const Endpoint& ep)>& filter = nullptr) const;
 
     private:
-        gate(std::shared_ptr<netlist> const g, u32 id, std::shared_ptr<const gate_type> gt, const std::string& name, float x, float y);
+        Gate(std::shared_ptr<Netlist> const g, u32 id, std::shared_ptr<const GateType> gt, const std::string& name, float x, float y);
 
-        gate(const gate&) = delete;               //disable copy-constructor
-        gate& operator=(const gate&) = delete;    //disable copy-assignment
+        Gate(const Gate&) = delete;               //disable copy-constructor
+        Gate& operator=(const Gate&) = delete;    //disable copy-assignment
 
-        boolean_function get_lut_function(const std::string& pin) const;
+        BooleanFunction get_lut_function(const std::string& pin) const;
 
         /* pointer to corresponding netlist parent */
-        std::shared_ptr<netlist> m_netlist;
+        std::shared_ptr<Netlist> m_netlist;
 
         /* id of the gate */
         u32 m_id;
@@ -326,20 +326,20 @@ namespace hal
         std::string m_name;
 
         /* type of the gate */
-        std::shared_ptr<const gate_type> m_type;
+        std::shared_ptr<const GateType> m_type;
 
         /* location */
         float m_x;
         float m_y;
 
         /* owning module */
-        std::shared_ptr<module> m_module;
+        std::shared_ptr<Module> m_module;
 
         /* connected nets */
-        std::map<std::string, std::shared_ptr<net>> m_in_nets;
-        std::map<std::string, std::shared_ptr<net>> m_out_nets;
+        std::map<std::string, std::shared_ptr<Net>> m_in_nets;
+        std::map<std::string, std::shared_ptr<Net>> m_out_nets;
 
         /* dedicated functions */
-        std::map<std::string, boolean_function> m_functions;
+        std::map<std::string, BooleanFunction> m_functions;
     };
 }    // namespace hal

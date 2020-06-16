@@ -2,7 +2,7 @@
 
 #include "netlist/gate.h"
 
-graphics_gate::graphics_gate(const std::shared_ptr<const gate> g) : graphics_node(hal::item_type::gate, g->get_id(), QString::fromStdString(g->get_name())),
+graphics_gate::graphics_gate(const std::shared_ptr<const Gate> g) : graphics_node(hal::item_type::gate, g->get_id(), QString::fromStdString(g->get_name())),
     m_type(QString::fromStdString(g->get_type()->get_name()))
 {
     for (const std::string& input_pin : g->get_input_pins())

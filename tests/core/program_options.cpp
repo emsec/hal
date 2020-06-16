@@ -5,6 +5,8 @@
 #include <iostream>
 #include "netlist_test_utils.h"
 
+namespace hal
+{
 class program_options_test : public ::testing::Test
 {
 protected:
@@ -417,4 +419,5 @@ TEST_F(program_options_test, check_parse)
         //        testing::internal::GetCapturedStdout();
     }
     TEST_END
+}
 }

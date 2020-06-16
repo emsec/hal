@@ -38,7 +38,7 @@ namespace hal
      *
      * @ingroup netlist
      */
-    class NETLIST_API gate_library
+    class NETLIST_API GateLibrary
     {
     public:
         /**
@@ -46,9 +46,9 @@ namespace hal
          *
          * @param[in] name - Name of the gate library.
          */
-        gate_library(const std::filesystem::path& path, const std::string& name);
+        GateLibrary(const std::filesystem::path& path, const std::string& name);
 
-        ~gate_library() = default;
+        ~GateLibrary() = default;
 
         /**
          * Get the name of the library.
@@ -69,28 +69,28 @@ namespace hal
          *
          * @param[in] gt - The gate type object.
          */
-        void add_gate_type(std::shared_ptr<const gate_type> gt);
+        void add_gate_type(std::shared_ptr<const GateType> gt);
 
         /**
          * Get all gate types of the library.
          *
          * @returns A map from gate type names to gate type objects.
          */
-        const std::map<std::string, std::shared_ptr<const gate_type>>& get_gate_types();
+        const std::map<std::string, std::shared_ptr<const GateType>>& get_gate_types();
 
         /**
          * Get all VCC gate types of the library.
          *
          * @returns A map from VCC gate type names to gate type objects.
          */
-        const std::map<std::string, std::shared_ptr<const gate_type>>& get_vcc_gate_types();
+        const std::map<std::string, std::shared_ptr<const GateType>>& get_vcc_gate_types();
 
         /**
          * Get all GND gate types of the library.
          *
          * @returns A map from GND gate type names to gate type objects.
          */
-        const std::map<std::string, std::shared_ptr<const gate_type>>& get_gnd_gate_types();
+        const std::map<std::string, std::shared_ptr<const GateType>>& get_gnd_gate_types();
 
         /**
          * Add a necessary includes of the gate library, e.g., VHDL libraries.
@@ -110,9 +110,9 @@ namespace hal
         std::string m_name;
         std::filesystem::path m_path;
 
-        std::map<std::string, std::shared_ptr<const gate_type>> m_gate_type_map;
-        std::map<std::string, std::shared_ptr<const gate_type>> m_vcc_gate_types;
-        std::map<std::string, std::shared_ptr<const gate_type>> m_gnd_gate_types;
+        std::map<std::string, std::shared_ptr<const GateType>> m_gate_type_map;
+        std::map<std::string, std::shared_ptr<const GateType>> m_vcc_gate_types;
+        std::map<std::string, std::shared_ptr<const GateType>> m_gnd_gate_types;
 
         std::vector<std::string> m_includes;
     };

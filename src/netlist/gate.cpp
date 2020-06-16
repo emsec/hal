@@ -13,7 +13,7 @@
 
 namespace hal
 {
-    gate::gate(std::shared_ptr<netlist> const g, const u32 id, std::shared_ptr<const gate_type> gt, const std::string& name, float x, float y)
+    Gate::Gate(std::shared_ptr<Netlist> const g, const u32 id, std::shared_ptr<const GateType> gt, const std::string& name, float x, float y)
     {
         assert(g != nullptr);
         m_netlist = g;
@@ -24,22 +24,22 @@ namespace hal
         m_y       = y;
     }
 
-    u32 gate::get_id() const
+    u32 Gate::get_id() const
     {
         return m_id;
     }
 
-    std::shared_ptr<netlist> gate::get_netlist() const
+    std::shared_ptr<Netlist> Gate::get_netlist() const
     {
         return m_netlist;
     }
 
-    std::string gate::get_name() const
+    std::string Gate::get_name() const
     {
         return m_name;
     }
 
-    void gate::set_name(const std::string& name)
+    void Gate::set_name(const std::string& name)
     {
         if (core_utils::trim(name).empty())
         {
@@ -56,32 +56,32 @@ namespace hal
         }
     }
 
-    std::shared_ptr<const gate_type> gate::get_type() const
+    std::shared_ptr<const GateType> Gate::get_type() const
     {
         return m_type;
     }
 
-    float gate::get_location_x() const
+    float Gate::get_location_x() const
     {
         return m_x;
     }
 
-    float gate::get_location_y() const
+    float Gate::get_location_y() const
     {
         return m_y;
     }
 
-    std::pair<float, float> gate::get_location() const
+    std::pair<float, float> Gate::get_location() const
     {
         return {m_x, m_y};
     }
 
-    bool gate::has_location() const
+    bool Gate::has_location() const
     {
         return m_x >= 0 && m_y >= 0;
     }
 
-    void gate::set_location_x(float x)
+    void Gate::set_location_x(float x)
     {
         if (x != m_x)
         {
@@ -90,7 +90,7 @@ namespace hal
         }
     }
 
-    void gate::set_location_y(float y)
+    void Gate::set_location_y(float y)
     {
         if (y != m_y)
         {
@@ -99,32 +99,32 @@ namespace hal
         }
     }
 
-    void gate::set_location(const std::pair<float, float>& location)
+    void Gate::set_location(const std::pair<float, float>& location)
     {
         set_location_x(location.first);
         set_location_y(location.second);
     }
 
-    std::shared_ptr<module> gate::get_module() const
+    std::shared_ptr<Module> Gate::get_module() const
     {
         return m_module;
     }
 
-    boolean_function gate::get_boolean_function(std::string name) const
+    BooleanFunction Gate::get_boolean_function(std::string name) const
     {
         if (name.empty())
         {
             auto output_pins = m_type->get_output_pins();
             if (output_pins.empty())
             {
-                return boolean_function();
+                return BooleanFunction();
             }
             name = output_pins[0];
         }
 
-        if (m_type->get_base_type() == gate_type::base_type::lut)
+        if (m_type->get_base_type() == GateType::BaseType::lut)
         {
-            auto lut_type = std::static_pointer_cast<const gate_type_lut>(m_type);
+            auto lut_type = std::static_pointer_cast<const GateTypeLut>(m_type);
             auto lut_pins = lut_type->get_output_from_init_string_pins();
             if (lut_pins.find(name) != lut_pins.end())
             {
@@ -143,12 +143,12 @@ namespace hal
             return it->second;
         }
 
-        return boolean_function();
+        return BooleanFunction();
     }
 
-    std::unordered_map<std::string, boolean_function> gate::get_boolean_functions(bool only_custom_functions) const
+    std::unordered_map<std::string, BooleanFunction> Gate::get_boolean_functions(bool only_custom_functions) const
     {
-        std::unordered_map<std::string, boolean_function> res;
+        std::unordered_map<std::string, BooleanFunction> res;
 
         if (!only_custom_functions)
         {
@@ -160,9 +160,9 @@ namespace hal
             res.emplace(it.first, it.second);
         }
 
-        if (!only_custom_functions && m_type->get_base_type() == gate_type::base_type::lut)
+        if (!only_custom_functions && m_type->get_base_type() == GateType::BaseType::lut)
         {
-            auto lut_type = std::static_pointer_cast<const gate_type_lut>(m_type);
+            auto lut_type = std::static_pointer_cast<const GateTypeLut>(m_type);
             for (auto pin : lut_type->get_output_from_init_string_pins())
             {
                 res.emplace(pin, get_lut_function(pin));
@@ -172,11 +172,11 @@ namespace hal
         return res;
     }
 
-    boolean_function gate::get_lut_function(const std::string& pin) const
+    BooleanFunction Gate::get_lut_function(const std::string& pin) const
     {
         UNUSED(pin);
 
-        auto lut_type = std::static_pointer_cast<const gate_type_lut>(m_type);
+        auto lut_type = std::static_pointer_cast<const GateTypeLut>(m_type);
 
         std::string category   = lut_type->get_config_data_category();
         std::string key        = lut_type->get_config_data_identifier();
@@ -184,7 +184,7 @@ namespace hal
         auto is_ascending      = lut_type->is_config_data_ascending_order();
         auto inputs            = get_input_pins();
 
-        boolean_function result = boolean_function::ZERO;
+        BooleanFunction result = BooleanFunction::ZERO;
 
         if (config_str.empty())
         {
@@ -194,7 +194,7 @@ namespace hal
         if (inputs.size() > 6)
         {
             log_error("netlist.internal", "{}-gate '{}' (id = {}) has more than six input pins (unsupported)", get_type()->get_name(), get_name(), get_id());
-            return boolean_function();
+            return BooleanFunction();
         }
 
         u64 config = 0;
@@ -205,7 +205,7 @@ namespace hal
         catch (std::invalid_argument& ex)
         {
             log_error("netlist.internal", "{}-gate '{}' (id = {}) has invalid config string: '{}' is not a hex value", get_type()->get_name(), get_name(), get_id(), config_str);
-            return boolean_function();
+            return BooleanFunction();
         }
         u32 config_size = 0;
         {
@@ -229,7 +229,7 @@ namespace hal
                       max_config_size,
                       config_str,
                       config_str.size() * 4);
-            return boolean_function();
+            return BooleanFunction();
         }
 
         for (u32 i = 0; config != 0 && i < max_config_size; i++)
@@ -247,17 +247,17 @@ namespace hal
             }
             if (bit == 1)
             {
-                boolean_function clause;
+                BooleanFunction clause;
                 auto input_values = i;
                 for (auto input : inputs)
                 {
                     if ((input_values & 1) == 1)
                     {
-                        clause &= boolean_function(input);
+                        clause &= BooleanFunction(input);
                     }
                     else
                     {
-                        clause &= !boolean_function(input);
+                        clause &= !BooleanFunction(input);
                     }
                     input_values >>= 1;
                 }
@@ -268,14 +268,14 @@ namespace hal
         return result.optimize();
     }
 
-    void gate::add_boolean_function(const std::string& name, const boolean_function& func)
+    void Gate::add_boolean_function(const std::string& name, const BooleanFunction& func)
     {
-        if (m_type->get_base_type() == gate_type::base_type::lut)
+        if (m_type->get_base_type() == GateType::BaseType::lut)
         {
             auto output_pins = m_type->get_output_pins();
             if (!output_pins.empty() && name == output_pins[0])
             {
-                auto lut_type = std::static_pointer_cast<const gate_type_lut>(m_type);
+                auto lut_type = std::static_pointer_cast<const GateTypeLut>(m_type);
                 auto tt       = func.get_truth_table(get_input_pins());
 
                 u64 config_value = 0;
@@ -285,7 +285,7 @@ namespace hal
                 }
                 for (auto v : tt)
                 {
-                    if (v == boolean_function::X)
+                    if (v == BooleanFunction::X)
                     {
                         log_error("netlist", "function truth table contained undefined values");
                         return;
@@ -308,49 +308,49 @@ namespace hal
         m_functions.emplace(name, func);
     }
 
-    bool gate::mark_vcc_gate()
+    bool Gate::mark_vcc_gate()
     {
         return m_netlist->mark_vcc_gate(shared_from_this());
     }
 
-    bool gate::mark_gnd_gate()
+    bool Gate::mark_gnd_gate()
     {
         return m_netlist->mark_gnd_gate(shared_from_this());
     }
 
-    bool gate::unmark_vcc_gate()
+    bool Gate::unmark_vcc_gate()
     {
         return m_netlist->unmark_vcc_gate(shared_from_this());
     }
 
-    bool gate::unmark_gnd_gate()
+    bool Gate::unmark_gnd_gate()
     {
         return m_netlist->unmark_gnd_gate(shared_from_this());
     }
 
-    bool gate::is_vcc_gate() const
+    bool Gate::is_vcc_gate() const
     {
-        return m_netlist->is_vcc_gate(const_cast<gate*>(this)->shared_from_this());
+        return m_netlist->is_vcc_gate(const_cast<Gate*>(this)->shared_from_this());
     }
 
-    bool gate::is_gnd_gate() const
+    bool Gate::is_gnd_gate() const
     {
-        return m_netlist->is_gnd_gate(const_cast<gate*>(this)->shared_from_this());
+        return m_netlist->is_gnd_gate(const_cast<Gate*>(this)->shared_from_this());
     }
 
-    std::vector<std::string> gate::get_input_pins() const
+    std::vector<std::string> Gate::get_input_pins() const
     {
         return m_type->get_input_pins();
     }
 
-    std::vector<std::string> gate::get_output_pins() const
+    std::vector<std::string> Gate::get_output_pins() const
     {
         return m_type->get_output_pins();
     }
 
-    std::set<std::shared_ptr<net>> gate::get_fan_in_nets() const
+    std::set<std::shared_ptr<Net>> Gate::get_fan_in_nets() const
     {
-        std::set<std::shared_ptr<net>> nets;
+        std::set<std::shared_ptr<Net>> nets;
 
         for (const auto& it : m_in_nets)
         {
@@ -360,7 +360,7 @@ namespace hal
         return nets;
     }
 
-    std::shared_ptr<net> gate::get_fan_in_net(const std::string& pin_type) const
+    std::shared_ptr<Net> Gate::get_fan_in_net(const std::string& pin_type) const
     {
         auto it = m_in_nets.find(pin_type);
 
@@ -373,9 +373,9 @@ namespace hal
         return it->second;
     }
 
-    std::set<std::shared_ptr<net>> gate::get_fan_out_nets() const
+    std::set<std::shared_ptr<Net>> Gate::get_fan_out_nets() const
     {
-        std::set<std::shared_ptr<net>> nets;
+        std::set<std::shared_ptr<Net>> nets;
 
         for (const auto& it : m_out_nets)
         {
@@ -385,7 +385,7 @@ namespace hal
         return nets;
     }
 
-    std::shared_ptr<net> gate::get_fan_out_net(const std::string& pin_type) const
+    std::shared_ptr<Net> Gate::get_fan_out_net(const std::string& pin_type) const
     {
         auto it = m_out_nets.find(pin_type);
 
@@ -398,21 +398,21 @@ namespace hal
         return it->second;
     }
 
-    std::vector<std::shared_ptr<gate>> gate::get_unique_predecessors(const std::function<bool(const std::string& starting_pin, const endpoint&)>& filter) const
+    std::vector<std::shared_ptr<Gate>> Gate::get_unique_predecessors(const std::function<bool(const std::string& starting_pin, const Endpoint&)>& filter) const
     {
-        std::unordered_set<std::shared_ptr<gate>> res;
+        std::unordered_set<std::shared_ptr<Gate>> res;
         auto endpoints = this->get_predecessors(filter);
         res.reserve(endpoints.size());
         for (const auto& ep : endpoints)
         {
             res.insert(ep.get_gate());
         }
-        return std::vector<std::shared_ptr<gate>>(res.begin(), res.end());
+        return std::vector<std::shared_ptr<Gate>>(res.begin(), res.end());
     }
 
-    std::vector<endpoint> gate::get_predecessors(const std::function<bool(const std::string& starting_pin, const endpoint&)>& filter) const
+    std::vector<Endpoint> Gate::get_predecessors(const std::function<bool(const std::string& starting_pin, const Endpoint&)>& filter) const
     {
-        std::vector<endpoint> result;
+        std::vector<Endpoint> result;
         for (const auto& it : m_in_nets)
         {
             auto& pin         = it.first;
@@ -437,37 +437,37 @@ namespace hal
         return result;
     }
 
-    endpoint gate::get_predecessor(const std::string& which_pin) const
+    Endpoint Gate::get_predecessor(const std::string& which_pin) const
     {
         auto predecessors = this->get_predecessors([&which_pin](auto& starting_pin, auto&) -> bool { return starting_pin == which_pin; });
         if (predecessors.size() == 0)
         {
-            return endpoint(nullptr, "", false);
+            return Endpoint(nullptr, "", false);
         }
         if (predecessors.size() > 1)
         {
             log_error("netlist", "internal error: multiple predecessors for '{}' at pin '{}'.", get_name(), which_pin);
-            return endpoint(nullptr, "", false);
+            return Endpoint(nullptr, "", false);
         }
 
         return predecessors[0];
     }
 
-    std::vector<std::shared_ptr<gate>> gate::get_unique_successors(const std::function<bool(const std::string& starting_pin, const endpoint&)>& filter) const
+    std::vector<std::shared_ptr<Gate>> Gate::get_unique_successors(const std::function<bool(const std::string& starting_pin, const Endpoint&)>& filter) const
     {
-        std::unordered_set<std::shared_ptr<gate>> res;
+        std::unordered_set<std::shared_ptr<Gate>> res;
         auto endpoints = this->get_successors(filter);
         res.reserve(endpoints.size());
         for (const auto& ep : endpoints)
         {
             res.insert(ep.get_gate());
         }
-        return std::vector<std::shared_ptr<gate>>(res.begin(), res.end());
+        return std::vector<std::shared_ptr<Gate>>(res.begin(), res.end());
     }
 
-    std::vector<endpoint> gate::get_successors(const std::function<bool(const std::string& starting_pin, const endpoint&)>& filter) const
+    std::vector<Endpoint> Gate::get_successors(const std::function<bool(const std::string& starting_pin, const Endpoint&)>& filter) const
     {
-        std::vector<endpoint> result;
+        std::vector<Endpoint> result;
         for (const auto& it : m_out_nets)
         {
             auto& pin       = it.first;

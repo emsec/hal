@@ -56,21 +56,21 @@ bool graph_context_manager::context_with_name_exists(const QString& name) const
     return false;
 }
 
-void graph_context_manager::handle_module_removed(const std::shared_ptr<module> m)
+void graph_context_manager::handle_module_removed(const std::shared_ptr<Module> m)
 {
     for (graph_context* context : m_graph_contexts)
         if (context->modules().contains(m->get_id()))
             context->remove({m->get_id()}, {});
 }
 
-void graph_context_manager::handle_module_name_changed(const std::shared_ptr<module> m) const
+void graph_context_manager::handle_module_name_changed(const std::shared_ptr<Module> m) const
 {
     for (graph_context* context : m_graph_contexts)
         if (context->modules().contains(m->get_id()))
             context->schedule_scene_update();
 }
 
-void graph_context_manager::handle_module_color_changed(const std::shared_ptr<module> m) const
+void graph_context_manager::handle_module_color_changed(const std::shared_ptr<Module> m) const
 {
     auto gates = m->get_gates();
     QSet<u32> gateIDs;
@@ -84,14 +84,14 @@ void graph_context_manager::handle_module_color_changed(const std::shared_ptr<mo
     // or if it's showing a parent and the module is unfolded
 }
 
-void graph_context_manager::handle_module_submodule_added(const std::shared_ptr<module> m, const u32 added_module) const
+void graph_context_manager::handle_module_submodule_added(const std::shared_ptr<Module> m, const u32 added_module) const
 {
     for (graph_context* context : m_graph_contexts)
         if (context->is_showing_module(m->get_id(), {added_module}, {}, {}, {}))
             context->add({added_module}, {});
 }
 
-void graph_context_manager::handle_module_submodule_removed(const std::shared_ptr<module> m, const u32 removed_module)
+void graph_context_manager::handle_module_submodule_removed(const std::shared_ptr<Module> m, const u32 removed_module)
 {
     // FIXME this also triggers on module deletion (not only moving)
     // and collides with handle_module_removed
@@ -106,14 +106,14 @@ void graph_context_manager::handle_module_submodule_removed(const std::shared_pt
         }
 }
 
-void graph_context_manager::handle_module_gate_assigned(const std::shared_ptr<module> m, const u32 inserted_gate) const
+void graph_context_manager::handle_module_gate_assigned(const std::shared_ptr<Module> m, const u32 inserted_gate) const
 {
     for (graph_context* context : m_graph_contexts)
         if (context->is_showing_module(m->get_id(), {}, {inserted_gate}, {}, {}))
             context->add({}, {inserted_gate});
 }
 
-void graph_context_manager::handle_module_gate_removed(const std::shared_ptr<module> m, const u32 removed_gate)
+void graph_context_manager::handle_module_gate_removed(const std::shared_ptr<Module> m, const u32 removed_gate)
 {
     for (graph_context* context : m_graph_contexts)
     {
@@ -132,14 +132,14 @@ void graph_context_manager::handle_module_gate_removed(const std::shared_ptr<mod
     }
 }
 
-void graph_context_manager::handle_gate_name_changed(const std::shared_ptr<gate> g) const
+void graph_context_manager::handle_gate_name_changed(const std::shared_ptr<Gate> g) const
 {
     for (graph_context* context : m_graph_contexts)
         if (context->gates().contains(g->get_id()))
             context->schedule_scene_update();
 }
 
-void graph_context_manager::handle_net_created(const std::shared_ptr<net> n) const
+void graph_context_manager::handle_net_created(const std::shared_ptr<Net> n) const
 {
     Q_UNUSED(n)
 
@@ -147,21 +147,21 @@ void graph_context_manager::handle_net_created(const std::shared_ptr<net> n) con
     // IF NOT THIS EVENT DOESNT NEED TO BE HANDLED
 }
 
-void graph_context_manager::handle_net_removed(const std::shared_ptr<net> n) const
+void graph_context_manager::handle_net_removed(const std::shared_ptr<Net> n) const
 {
     for (graph_context* context : m_graph_contexts)
         if (context->nets().contains(n->get_id()))
             context->schedule_scene_update();
 }
 
-void graph_context_manager::handle_net_name_changed(const std::shared_ptr<net> n) const
+void graph_context_manager::handle_net_name_changed(const std::shared_ptr<Net> n) const
 {
     Q_UNUSED(n)
 
     // TRIGGER RESHADE FOR ALL CONTEXTS THAT RECURSIVELY CONTAIN THE NET
 }
 
-void graph_context_manager::handle_net_source_added(const std::shared_ptr<net> n, const u32 src_gate_id) const
+void graph_context_manager::handle_net_source_added(const std::shared_ptr<Net> n, const u32 src_gate_id) const
 {
     for (graph_context* context : m_graph_contexts)
     {
@@ -174,7 +174,7 @@ void graph_context_manager::handle_net_source_added(const std::shared_ptr<net> n
     }
 }
 
-void graph_context_manager::handle_net_source_removed(const std::shared_ptr<net> n, const u32 src_gate_id) const
+void graph_context_manager::handle_net_source_removed(const std::shared_ptr<Net> n, const u32 src_gate_id) const
 {
     UNUSED(src_gate_id);
 
@@ -189,7 +189,7 @@ void graph_context_manager::handle_net_source_removed(const std::shared_ptr<net>
     }
 }
 
-void graph_context_manager::handle_net_destination_added(const std::shared_ptr<net> n, const u32 dst_gate_id) const
+void graph_context_manager::handle_net_destination_added(const std::shared_ptr<Net> n, const u32 dst_gate_id) const
 {
     for (graph_context* context : m_graph_contexts)
     {
@@ -202,7 +202,7 @@ void graph_context_manager::handle_net_destination_added(const std::shared_ptr<n
     }
 }
 
-void graph_context_manager::handle_net_destination_removed(const std::shared_ptr<net> n, const u32 dst_gate_id) const
+void graph_context_manager::handle_net_destination_removed(const std::shared_ptr<Net> n, const u32 dst_gate_id) const
 {
     UNUSED(dst_gate_id);
 

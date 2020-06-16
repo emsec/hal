@@ -34,12 +34,12 @@
 namespace hal
 {
     /** forward declaration */
-    class netlist;
+    class Netlist;
 
     /**
      * @ingroup hdl_parsers
      */
-    namespace hdl_parser_dispatcher
+    namespace HDLParserDispatcher
     {
         /**
          * Returns the command line interface options of the hdl parser dispatcher
@@ -62,7 +62,7 @@ namespace hal
          * @param[in] args - The command line options.
          * @returns The netlist representation of the hdl code or a nullpointer on error.
          */
-        std::shared_ptr<netlist> parse(const std::filesystem::path& file_name, const ProgramArguments& args);
+        std::shared_ptr<Netlist> parse(const std::filesystem::path& file_name, const ProgramArguments& args);
 
         /**
          * Returns the netlist for a file, parsed with a defined parser_name and gate library.
@@ -72,6 +72,6 @@ namespace hal
          * @param[in] file_name - The input file.
          * @returns The netlist representation of the hdl code or a nullpointer on error.
          */
-        std::shared_ptr<netlist> parse(const std::shared_ptr<gate_library>& gate_library, const std::string& parser_name, const std::filesystem::path& file_name);
-    }    // namespace hdl_parser_dispatcher
+        std::shared_ptr<Netlist> parse(const std::shared_ptr<GateLibrary>& gate_library, const std::string& parser_name, const std::filesystem::path& file_name);
+    }    // namespace HDLParserDispatcher
 }    // namespace hal

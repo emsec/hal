@@ -49,25 +49,25 @@
 namespace hal
 {
     /* forward declaration*/
-    class netlist;
-    class gate_library;
+    class Netlist;
+    class GateLibrary;
 
     /**
      * @ingroup hdl_parsers
      */
     template<typename T>
-    class HDL_PARSER_API hdl_parser
+    class HDL_PARSER_API HDLParser
     {
     public:
         /**
          * @param[in] stream - The string stream filled with the hdl code.
          */
-        explicit hdl_parser(std::stringstream& stream) : m_fs(stream)
+        explicit HDLParser(std::stringstream& stream) : m_fs(stream)
         {
             m_netlist = nullptr;
         }
 
-        virtual ~hdl_parser() = default;
+        virtual ~HDLParser() = default;
 
         /**
          * Parses hdl code for a specific netlist library.
@@ -77,7 +77,7 @@ namespace hal
          */
         virtual bool parse() = 0;
 
-        std::shared_ptr<netlist> parse_and_instantiate(std::shared_ptr<gate_library> gl)
+        std::shared_ptr<Netlist> parse_and_instantiate(std::shared_ptr<GateLibrary> gl)
         {
             if (parse())
             {
@@ -87,7 +87,7 @@ namespace hal
             return nullptr;
         }
 
-        std::shared_ptr<netlist> instantiate(std::shared_ptr<gate_library> gl)
+        std::shared_ptr<Netlist> instantiate(std::shared_ptr<GateLibrary> gl)
         {
             // create empty netlist
             m_netlist = netlist_factory::create_netlist(gl);
@@ -624,7 +624,7 @@ namespace hal
                 return m_attributes;
             }
 
-            void initialize(hdl_parser<T>* parser)
+            void initialize(HDLParser<T>* parser)
             {
                 if (m_initialized)
                 {
@@ -746,7 +746,7 @@ namespace hal
 
     private:
         // stores the netlist
-        std::shared_ptr<netlist> m_netlist;
+        std::shared_ptr<Netlist> m_netlist;
 
         // unique alias generation
         std::map<T, u32> m_signal_name_occurrences;
@@ -755,14 +755,14 @@ namespace hal
         std::map<T, u32> m_current_instance_index;
 
         // net generation
-        std::shared_ptr<net> m_zero_net;
-        std::shared_ptr<net> m_one_net;
-        std::map<T, std::shared_ptr<net>> m_net_by_name;
+        std::shared_ptr<Net> m_zero_net;
+        std::shared_ptr<Net> m_one_net;
+        std::map<T, std::shared_ptr<Net>> m_net_by_name;
         std::map<T, std::vector<T>> m_nets_to_merge;
 
         // buffer gate types
-        std::map<T, std::shared_ptr<const gate_type>> m_tmp_gate_types;
-        std::map<std::shared_ptr<net>, std::tuple<port_direction, std::string, std::shared_ptr<module>>> m_module_ports;
+        std::map<T, std::shared_ptr<const GateType>> m_tmp_gate_types;
+        std::map<std::shared_ptr<Net>, std::tuple<port_direction, std::string, std::shared_ptr<Module>>> m_module_ports;
 
         bool build_netlist(const T& top_module)
         {
@@ -833,7 +833,7 @@ namespace hal
 
                 for (const auto& expanded_name : expanded_ports.at(port_name))
                 {
-                    std::shared_ptr<net> new_net = m_netlist->create_net(core_strings::to_std_string<T>(expanded_name));
+                    std::shared_ptr<Net> new_net = m_netlist->create_net(core_strings::to_std_string<T>(expanded_name));
                     if (new_net == nullptr)
                     {
                         log_error("hdl_parser", "could not create new net '{}'", expanded_name);
@@ -989,7 +989,7 @@ namespace hal
             return true;
         }
 
-        std::shared_ptr<module> instantiate(const instance& entity_inst, std::shared_ptr<module> parent, const std::map<T, T>& parent_module_assignments)
+        std::shared_ptr<Module> instantiate(const instance& entity_inst, std::shared_ptr<Module> parent, const std::map<T, T>& parent_module_assignments)
         {
             std::map<T, T> signal_alias;
             std::map<T, T> instance_alias;
@@ -1001,7 +1001,7 @@ namespace hal
 
             instance_alias[entity_inst_name] = get_unique_alias(m_instance_name_occurrences, entity_inst_name);
 
-            std::shared_ptr<module> module;
+            std::shared_ptr<Module> module;
 
             if (parent == nullptr)
             {
@@ -1138,8 +1138,8 @@ namespace hal
                 m_nets_to_merge[b].push_back(a);
             }
 
-            std::map<T, std::shared_ptr<const gate_type>> vcc_gate_types;
-            std::map<T, std::shared_ptr<const gate_type>> gnd_gate_types;
+            std::map<T, std::shared_ptr<const GateType>> vcc_gate_types;
+            std::map<T, std::shared_ptr<const GateType>> gnd_gate_types;
 
             if constexpr (std::is_same<T, std::string>::value)
             {
@@ -1165,7 +1165,7 @@ namespace hal
                 const auto& inst_type = inst.get_type();
 
                 // will later hold either module or gate, so attributes can be assigned properly
-                data_container* container;
+                DataContainer* container;
 
                 // assign actual signal names to ports
                 std::map<T, T> instance_assignments;
@@ -1233,7 +1233,7 @@ namespace hal
                     // create the new gate
                     instance_alias[inst_name] = get_unique_alias(m_instance_name_occurrences, inst_name);
 
-                    std::shared_ptr<gate> new_gate = m_netlist->create_gate(gate_type_it->second, core_strings::to_std_string<T>(instance_alias.at(inst_name)));
+                    std::shared_ptr<Gate> new_gate = m_netlist->create_gate(gate_type_it->second, core_strings::to_std_string<T>(instance_alias.at(inst_name)));
                     if (new_gate == nullptr)
                     {
                         log_error("hdl_parser", "could not instantiate gate '{}' within entity '{}'", inst_name, e.get_name());

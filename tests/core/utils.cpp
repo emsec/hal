@@ -9,6 +9,8 @@
 #include <fstream>
 #include <iostream>
 
+namespace hal
+{
 using namespace core_utils;
 
 class utils_test : public ::testing::Test
@@ -726,4 +728,5 @@ TEST_F(utils_test, check_get_open_source_license)
     EXPECT_TRUE(lic_str.length() > 0);
 
     TEST_END
+}
 }

@@ -37,10 +37,10 @@ namespace hal
      *
      * @ingroup netlist
      */
-    class gate_type_sequential : public gate_type
+    class GateTypeSequential : public GateType
     {
     public:
-        enum class set_reset_behavior
+        enum class SetResetBehavior
         {
             U = 0,    // not set
             L = 1,
@@ -56,8 +56,8 @@ namespace hal
          * @param[in] name - The name of the sequential gate type.
          * @param[in] bt - The base type of the sequential gate type.
          */
-        gate_type_sequential(const std::string& name, base_type bt);
-        ~gate_type_sequential() override = default;
+        GateTypeSequential(const std::string& name, BaseType bt);
+        ~GateTypeSequential() override = default;
 
         /**
          * Add an output pin to the collection of output pins that generate their output from the next_state function.
@@ -88,7 +88,7 @@ namespace hal
          * @param[in] sb1 - The value specifying the behavior for the internal state.
          * @param[in] sb2 - The value specifying the behavior for the inverted internal state.
          */
-        void set_set_reset_behavior(set_reset_behavior sb1, set_reset_behavior sb2);
+        void set_set_reset_behavior(SetResetBehavior sb1, SetResetBehavior sb2);
 
         /**
          * Set the category in which to find the INIT string.
@@ -130,7 +130,7 @@ namespace hal
          *
          * @returns The boolean function.
          */
-        std::pair<set_reset_behavior, set_reset_behavior> get_set_reset_behavior() const;
+        std::pair<SetResetBehavior, SetResetBehavior> get_set_reset_behavior() const;
 
         /**
          * Get the category in which to find the INIT string.
@@ -151,7 +151,7 @@ namespace hal
         std::unordered_set<std::string> m_state_pins, m_inverted_state_pins;
 
         // behavior when both set and reset are active
-        std::pair<set_reset_behavior, set_reset_behavior> m_set_reset_behavior;
+        std::pair<SetResetBehavior, SetResetBehavior> m_set_reset_behavior;
 
         std::string m_init_data_category;
         std::string m_init_data_identifier;

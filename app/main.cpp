@@ -51,10 +51,10 @@ void initialize_cli_options(ProgramOptions& cli_options)
     generic_options.add("--no-log", "prevents hal from creating a .log file");
 
     /* initialize hdl parser options */
-    generic_options.add(hdl_parser_dispatcher::get_cli_options());
+    generic_options.add(HDLParserDispatcher::get_cli_options());
 
     /* initialize hdl writer options */
-    generic_options.add(hdl_writer_dispatcher::get_cli_options());
+    generic_options.add(HDLWriterDispatcher::get_cli_options());
     cli_options.add(generic_options);
 }
 
@@ -83,7 +83,7 @@ int redirect_control_to_interactive_ui(const std::string& name, ProgramArguments
     return ret;
 }
 
-int cleanup(std::shared_ptr<netlist> const g = nullptr)
+int cleanup(std::shared_ptr<Netlist> const g = nullptr)
 {
     if (!PluginManager::unload_all_plugins())
     {
@@ -222,7 +222,7 @@ int main(int argc, const char* argv[])
     }
 
     std::filesystem::path file_name;
-    std::shared_ptr<netlist> netlist;
+    std::shared_ptr<Netlist> netlist;
 
     if (args.is_option_set("--empty-netlist"))
     {
@@ -330,7 +330,7 @@ int main(int argc, const char* argv[])
     }
 
     /* handle file writer */
-    if (!hdl_writer_dispatcher::write(netlist, args))
+    if (!HDLWriterDispatcher::write(netlist, args))
     {
         return cleanup(netlist);
     }

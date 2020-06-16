@@ -277,19 +277,19 @@ void net_details_widget::update(u32 net_id)
     m_destination_pins_table->update();
 }
 
-void net_details_widget::handle_net_removed(const std::shared_ptr<net> n)
+void net_details_widget::handle_net_removed(const std::shared_ptr<Net> n)
 {
     Q_UNUSED(n)
 }
 
-void net_details_widget::handle_net_name_changed(const std::shared_ptr<net> n)
+void net_details_widget::handle_net_name_changed(const std::shared_ptr<Net> n)
 {
     if(m_current_id == n->get_id())
         m_name_item->setText(QString::fromStdString(n->get_name()));
 
 }
 
-void net_details_widget::handle_net_source_added(const std::shared_ptr<net> n, const u32 src_gate_id)
+void net_details_widget::handle_net_source_added(const std::shared_ptr<Net> n, const u32 src_gate_id)
 {
     Q_UNUSED(src_gate_id);
 
@@ -297,7 +297,7 @@ void net_details_widget::handle_net_source_added(const std::shared_ptr<net> n, c
         update(m_current_id);
 }
 
-void net_details_widget::handle_net_source_removed(const std::shared_ptr<net> n, const u32 src_gate_id)
+void net_details_widget::handle_net_source_removed(const std::shared_ptr<Net> n, const u32 src_gate_id)
 {
     Q_UNUSED(src_gate_id);
 
@@ -305,7 +305,7 @@ void net_details_widget::handle_net_source_removed(const std::shared_ptr<net> n,
         update(m_current_id);
 }
 
-void net_details_widget::handle_net_destination_added(const std::shared_ptr<net> n, const u32 dst_gate_id)
+void net_details_widget::handle_net_destination_added(const std::shared_ptr<Net> n, const u32 dst_gate_id)
 {
     Q_UNUSED(dst_gate_id);
 
@@ -313,7 +313,7 @@ void net_details_widget::handle_net_destination_added(const std::shared_ptr<net>
         update(m_current_id);
 }
 
-void net_details_widget::handle_net_destination_removed(const std::shared_ptr<net> n, const u32 dst_gate_id)
+void net_details_widget::handle_net_destination_removed(const std::shared_ptr<Net> n, const u32 dst_gate_id)
 {
     Q_UNUSED(dst_gate_id);
 
@@ -321,7 +321,7 @@ void net_details_widget::handle_net_destination_removed(const std::shared_ptr<ne
         update(m_current_id);
 }
 
-void net_details_widget::handle_gate_name_changed(const std::shared_ptr<gate> g)
+void net_details_widget::handle_gate_name_changed(const std::shared_ptr<Gate> g)
 {
     Q_UNUSED(g)
 

@@ -27,12 +27,12 @@
 
 namespace hal
 {
-    class plugin_python_shell : virtual public InteractiveUIPluginInterface
+    class PluginPythonShell : virtual public InteractiveUIPluginInterface
     {
     public:
-        plugin_python_shell() = default;
+        PluginPythonShell() = default;
 
-        ~plugin_python_shell() = default;
+        ~PluginPythonShell() = default;
 
         /*
          *      interface implementations

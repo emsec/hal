@@ -42,10 +42,10 @@ void module_shader::update()
     {
         for (const u32& id : m_context->gates())
         {
-            std::shared_ptr<gate> g = g_netlist->get_gate_by_id(id);
+            std::shared_ptr<Gate> g = g_netlist->get_gate_by_id(id);
             assert(g);
 
-            std::shared_ptr<module> m = g->get_module();
+            std::shared_ptr<Module> m = g->get_module();
             assert(m);
 
             graphics_node::visuals v;

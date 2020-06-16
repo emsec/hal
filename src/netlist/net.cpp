@@ -11,7 +11,7 @@
 
 namespace hal
 {
-    net::net(netlist_internal_manager* internal_manager, const u32 id, const std::string& name)
+    Net::Net(NetlistInternalManager* internal_manager, const u32 id, const std::string& name)
     {
         assert(internal_manager != nullptr);
         m_internal_manager = internal_manager;
@@ -19,22 +19,22 @@ namespace hal
         m_name             = name;
     }
 
-    u32 net::get_id() const
+    u32 Net::get_id() const
     {
         return m_id;
     }
 
-    std::shared_ptr<netlist> net::get_netlist() const
+    std::shared_ptr<Netlist> Net::get_netlist() const
     {
         return m_internal_manager->m_netlist->get_shared();
     }
 
-    std::string net::get_name() const
+    std::string Net::get_name() const
     {
         return m_name;
     }
 
-    void net::set_name(const std::string& name)
+    void Net::set_name(const std::string& name)
     {
         if (core_utils::trim(name).empty())
         {
@@ -51,12 +51,12 @@ namespace hal
         }
     }
 
-    bool net::add_source(const std::shared_ptr<gate>& gate, const std::string& pin)
+    bool Net::add_source(const std::shared_ptr<Gate>& gate, const std::string& pin)
     {
-        return add_source(endpoint(gate, pin, false));
+        return add_source(Endpoint(gate, pin, false));
     }
 
-    bool net::add_source(const endpoint& ep)
+    bool Net::add_source(const Endpoint& ep)
     {
         if (!ep.is_source_pin())
         {
@@ -66,12 +66,12 @@ namespace hal
         return m_internal_manager->net_add_source(shared_from_this(), ep);
     }
 
-    bool net::remove_source(const std::shared_ptr<gate>& gate, const std::string& pin)
+    bool Net::remove_source(const std::shared_ptr<Gate>& gate, const std::string& pin)
     {
-        return remove_source(endpoint(gate, pin, false));
+        return remove_source(Endpoint(gate, pin, false));
     }
 
-    bool net::remove_source(const endpoint& ep)
+    bool Net::remove_source(const Endpoint& ep)
     {
         if (!ep.is_source_pin())
         {
@@ -81,12 +81,12 @@ namespace hal
         return m_internal_manager->net_remove_source(shared_from_this(), ep);
     }
 
-    bool net::is_a_source(const std::shared_ptr<gate>& gate, const std::string& pin) const
+    bool Net::is_a_source(const std::shared_ptr<Gate>& gate, const std::string& pin) const
     {
-        return is_a_source(endpoint(gate, pin, false));
+        return is_a_source(Endpoint(gate, pin, false));
     }
 
-    bool net::is_a_source(const endpoint& ep) const
+    bool Net::is_a_source(const Endpoint& ep) const
     {
         if (!ep.is_source_pin())
         {
@@ -97,19 +97,19 @@ namespace hal
         return std::find(m_sources.begin(), m_sources.end(), ep) != m_sources.end();
     }
 
-    u32 net::get_num_of_sources() const
+    u32 Net::get_num_of_sources() const
     {
         return (u32)m_sources.size();
     }
 
-    std::vector<endpoint> net::get_sources(const std::function<bool(const endpoint& ep)>& filter) const
+    std::vector<Endpoint> Net::get_sources(const std::function<bool(const Endpoint& ep)>& filter) const
     {
         if (!filter)
         {
             return m_sources;
         }
 
-        std::vector<endpoint> srcs;
+        std::vector<Endpoint> srcs;
         for (const auto& src : m_sources)
         {
             if (!filter(src))
@@ -121,11 +121,11 @@ namespace hal
         return srcs;
     }
 
-    endpoint net::get_source() const
+    Endpoint Net::get_source() const
     {
         if (m_sources.empty())
         {
-            return endpoint(nullptr, "", false);
+            return Endpoint(nullptr, "", false);
         }
         if (m_sources.size() > 1)
         {
@@ -134,12 +134,12 @@ namespace hal
         return m_sources.at(0);
     }
 
-    bool net::add_destination(const std::shared_ptr<gate>& gate, const std::string& pin)
+    bool Net::add_destination(const std::shared_ptr<Gate>& gate, const std::string& pin)
     {
-        return add_destination(endpoint(gate, pin, true));
+        return add_destination(Endpoint(gate, pin, true));
     }
 
-    bool net::add_destination(const endpoint& ep)
+    bool Net::add_destination(const Endpoint& ep)
     {
         if (!ep.is_destination_pin())
         {
@@ -149,12 +149,12 @@ namespace hal
         return m_internal_manager->net_add_destination(shared_from_this(), ep);
     }
 
-    bool net::remove_destination(const std::shared_ptr<gate>& gate, const std::string& pin)
+    bool Net::remove_destination(const std::shared_ptr<Gate>& gate, const std::string& pin)
     {
-        return remove_destination(endpoint(gate, pin, true));
+        return remove_destination(Endpoint(gate, pin, true));
     }
 
-    bool net::remove_destination(const endpoint& ep)
+    bool Net::remove_destination(const Endpoint& ep)
     {
         if (!ep.is_destination_pin())
         {
@@ -164,12 +164,12 @@ namespace hal
         return m_internal_manager->net_remove_destination(shared_from_this(), ep);
     }
 
-    bool net::is_a_destination(const std::shared_ptr<gate>& gate, const std::string& pin) const
+    bool Net::is_a_destination(const std::shared_ptr<Gate>& gate, const std::string& pin) const
     {
-        return is_a_destination(endpoint(gate, pin, true));
+        return is_a_destination(Endpoint(gate, pin, true));
     }
 
-    bool net::is_a_destination(const endpoint& ep) const
+    bool Net::is_a_destination(const Endpoint& ep) const
     {
         if (!ep.is_destination_pin())
         {
@@ -180,19 +180,19 @@ namespace hal
         return std::find(m_destinations.begin(), m_destinations.end(), ep) != m_destinations.end();
     }
 
-    u32 net::get_num_of_destinations() const
+    u32 Net::get_num_of_destinations() const
     {
         return (u32)m_destinations.size();
     }
 
-    std::vector<endpoint> net::get_destinations(const std::function<bool(const endpoint& ep)>& filter) const
+    std::vector<Endpoint> Net::get_destinations(const std::function<bool(const Endpoint& ep)>& filter) const
     {
         if (!filter)
         {
             return m_destinations;
         }
 
-        std::vector<endpoint> dsts;
+        std::vector<Endpoint> dsts;
         for (const auto& dst : m_destinations)
         {
             if (!filter(dst))
@@ -204,38 +204,38 @@ namespace hal
         return dsts;
     }
 
-    bool net::is_unrouted() const
+    bool Net::is_unrouted() const
     {
         return ((this->get_num_of_sources() == 0) || (this->get_num_of_destinations() == 0));
     }
 
-    bool net::mark_global_input_net()
+    bool Net::mark_global_input_net()
     {
         return m_internal_manager->m_netlist->mark_global_input_net(shared_from_this());
     }
 
-    bool net::mark_global_output_net()
+    bool Net::mark_global_output_net()
     {
         return m_internal_manager->m_netlist->mark_global_output_net(shared_from_this());
     }
 
-    bool net::unmark_global_input_net()
+    bool Net::unmark_global_input_net()
     {
         return m_internal_manager->m_netlist->unmark_global_input_net(shared_from_this());
     }
 
-    bool net::unmark_global_output_net()
+    bool Net::unmark_global_output_net()
     {
         return m_internal_manager->m_netlist->unmark_global_output_net(shared_from_this());
     }
 
-    bool net::is_global_input_net() const
+    bool Net::is_global_input_net() const
     {
-        return m_internal_manager->m_netlist->is_global_input_net(const_cast<net*>(this)->shared_from_this());
+        return m_internal_manager->m_netlist->is_global_input_net(const_cast<Net*>(this)->shared_from_this());
     }
 
-    bool net::is_global_output_net() const
+    bool Net::is_global_output_net() const
     {
-        return m_internal_manager->m_netlist->is_global_output_net(const_cast<net*>(this)->shared_from_this());
+        return m_internal_manager->m_netlist->is_global_output_net(const_cast<Net*>(this)->shared_from_this());
     }
 }    // namespace hal

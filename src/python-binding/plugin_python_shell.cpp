@@ -11,20 +11,20 @@ namespace hal
 {
     extern std::shared_ptr<BasePluginInterface> get_plugin_instance()
     {
-        return std::dynamic_pointer_cast<BasePluginInterface>(std::make_shared<plugin_python_shell>());
+        return std::dynamic_pointer_cast<BasePluginInterface>(std::make_shared<PluginPythonShell>());
     }
 
-    std::string plugin_python_shell::get_name() const
+    std::string PluginPythonShell::get_name() const
     {
         return std::string("python shell");
     }
 
-    std::string plugin_python_shell::get_version() const
+    std::string PluginPythonShell::get_version() const
     {
         return std::string("0.1");
     }
 
-    bool plugin_python_shell::exec(ProgramArguments& args)
+    bool PluginPythonShell::exec(ProgramArguments& args)
     {
         int argc;
         const char** argv;
@@ -47,7 +47,7 @@ namespace hal
         PyRun_SimpleString("import sys");
         PyRun_SimpleString(std::string("sys.path.append(\"" + core_utils::get_library_directory().string() + "\")").c_str());
         PyRun_SimpleString("from hal_py import *");
-        //    PyRun_SimpleString(g = hal_py.hdl_parser_dispatcher().parse('XILINX_ISE_SIMPRIM', 'VHDL', '../test_designs/aes128_fast.vhd'));
+        //    PyRun_SimpleString(g = hal_py.HDLParserDispatcher().parse('XILINX_ISE_SIMPRIM', 'VHDL', '../test_designs/aes128_fast.vhd'));
         Py_Main(argc_new, argv_new);
         Py_Finalize();
 

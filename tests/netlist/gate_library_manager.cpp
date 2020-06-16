@@ -13,6 +13,9 @@
 #include <netlist/gate.h>
 #include <netlist/net.h>
 
+namespace hal
+{
+
 class gate_library_manager_test : public ::testing::Test
 {
 protected:
@@ -36,7 +39,7 @@ protected:
     }
 
     /**
-     * Creates a minimal custom gate library used for testing the gate library manager
+     * Creates a minimal custom Gate library used for testing the Gate library manager
      */
     void create_test_lib()
     {
@@ -83,7 +86,7 @@ protected:
 };
 
 /**
- * Testing the access on a single gate library via the get_gate_library function.
+ * Testing the access on a single Gate library via the get_gate_library function.
  *
  * Functions: get_gate_library, get_gate_libraries
  */
@@ -92,15 +95,15 @@ TEST_F(gate_library_manager_test, check_get_gate_library)
     TEST_START
     // NO_COUT_TEST_BLOCK;
     create_test_lib();
-    // Load the gate library twice by its filename
-    std::shared_ptr<gate_library> test_lib_0 = gate_library_manager::get_gate_library(test_lib_path);
-    std::shared_ptr<gate_library> test_lib_1 = gate_library_manager::get_gate_library(test_lib_path);
+    // Load the Gate library twice by its filename
+    std::shared_ptr<GateLibrary> test_lib_0 = gate_library_manager::get_gate_library(test_lib_path);
+    std::shared_ptr<GateLibrary> test_lib_1 = gate_library_manager::get_gate_library(test_lib_path);
     EXPECT_NE(test_lib_0, nullptr);
     EXPECT_NE(test_lib_1, nullptr);
 
     // Check that the test library can be found in the get_gate_libraries vector
     bool found_test_lib = false;
-    for (std::shared_ptr<gate_library> gl : gate_library_manager::get_gate_libraries())
+    for (std::shared_ptr<GateLibrary> gl : gate_library_manager::get_gate_libraries())
     {
         if (gl->get_name() == test_lib_name)
         {
@@ -122,14 +125,14 @@ TEST_F(gate_library_manager_test, check_get_gate_library)
 TEST_F(gate_library_manager_test, DISABLED_check_load_all)
 {
     TEST_START
-    // Check that load_all also loads the test gate library
+    // Check that load_all also loads the test Gate library
     NO_COUT_TEST_BLOCK;
     create_test_lib();
     gate_library_manager::load_all();
 
     // Check that the test library can be found in the get_gate_libraries vector
     bool found_test_lib = false;
-    for (std::shared_ptr<gate_library> gl : gate_library_manager::get_gate_libraries())
+    for (std::shared_ptr<GateLibrary> gl : gate_library_manager::get_gate_libraries())
     {
         if (gl->get_name() == test_lib_name)
         {
@@ -142,7 +145,7 @@ TEST_F(gate_library_manager_test, DISABLED_check_load_all)
 }
 
 /**
- * Testing that a GND/VCC gate type is added to the gate library, if the file does not contain any.
+ * Testing that a GND/VCC Gate type is added to the Gate library, if the file does not contain any.
  *
  * Functions: get_gate_library, get_gate_libraries
  */
@@ -150,7 +153,7 @@ TEST_F(gate_library_manager_test, check_prepare_library)
 {
     TEST_START
     {
-        // Parse a file that does not contain a GND or VCC gate type (constant 0 / constant 1)
+        // Parse a file that does not contain a GND or VCC Gate type (constant 0 / constant 1)
         NO_COUT_TEST_BLOCK;
         std::ofstream test_lib(test_lib_path.string());
         test_lib << "/* This file only exists for testing purposes and should be already destroyed*/\n"
@@ -159,15 +162,15 @@ TEST_F(gate_library_manager_test, check_prepare_library)
                     "}";
 
         test_lib.close();
-        std::shared_ptr<gate_library> empty_lib = gate_library_manager::get_gate_library(test_lib_path);
+        std::shared_ptr<GateLibrary> empty_lib = gate_library_manager::get_gate_library(test_lib_path);
         ASSERT_NE(empty_lib, nullptr);
         auto g_types = empty_lib->get_gate_types();
-        // Check the creation of a gnd gate type
+        // Check the creation of a gnd Gate type
         ASSERT_TRUE(g_types.find("GND") != g_types.end());
         auto gnd_bf = g_types.at("GND")->get_boolean_functions();
         ASSERT_TRUE(gnd_bf.find("O") != gnd_bf.end());
         EXPECT_TRUE(gnd_bf.at("O").is_constant_zero());
-        // Check the creation of a vcc gate type
+        // Check the creation of a vcc Gate type
         ASSERT_TRUE(g_types.find("VCC") != g_types.end());
         auto vcc_bf = g_types.at("VCC")->get_boolean_functions();
         ASSERT_TRUE(vcc_bf.find("O") != vcc_bf.end());
@@ -188,8 +191,9 @@ TEST_F(gate_library_manager_test, check_invalid)
     {
         // The file path does not exist
         NO_COUT_TEST_BLOCK;
-        std::shared_ptr<gate_library> test_lib = gate_library_manager::get_gate_library("/non/existing/path.lib");
+        std::shared_ptr<GateLibrary> test_lib = gate_library_manager::get_gate_library("/non/existing/path.lib");
         EXPECT_EQ(test_lib, nullptr);
     }
     TEST_END
+}
 }

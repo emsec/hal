@@ -60,24 +60,24 @@ namespace hal
                 )")
             .def(
                 "get_communities_fast_greedy",
-                [](plugin_graph_algorithm& a, std::shared_ptr<netlist> const nl) -> std::map<int, std::set<std::shared_ptr<gate>>> { return a.get_communities_fast_greedy(nl); },
+                [](plugin_graph_algorithm& a, std::shared_ptr<Netlist> const nl) -> std::map<int, std::set<std::shared_ptr<Gate>>> { return a.get_communities_fast_greedy(nl); },
                 py::arg("netlist"),
                 R"(
                 Returns the map of community-IDs to communities running the fast-greedy clustering algorithm.
 
-                :param hal_py.netlist netlist: Netlist (internelly transformed to di-graph)
+                :param hal_py.Netlist netlist: Netlist (internelly transformed to di-graph)
                 :param set[hal_py.get_gate()] gates: Set of gates for which the strongly connected components are determined. (default = empty means that all gates of the netlist are considered)
                 :returns: A map of clusters.
                 :rtype: dict[set[hal_py.get_gate()]]
                 )")
             .def(
                 "get_communities_multilevel",
-                [](plugin_graph_algorithm& a, std::shared_ptr<netlist> const nl) -> std::map<int, std::set<std::shared_ptr<gate>>> { return a.get_communities_multilevel(nl); },
+                [](plugin_graph_algorithm& a, std::shared_ptr<Netlist> const nl) -> std::map<int, std::set<std::shared_ptr<Gate>>> { return a.get_communities_multilevel(nl); },
                 py::arg("netlist"),
                 R"(
                 Returns the map of community-IDs to communities running the multilevel clustering algorithm.
 
-                :param hal_py.netlist netlist: Netlist (internelly transformed to di-graph)
+                :param hal_py.Netlist netlist: Netlist (internelly transformed to di-graph)
                 :param set[hal_py.get_gate()] gates: Set of gates for which the strongly connected components are determined. (default = empty means that all gates of the netlist are considered)
                 :returns: A map of clusters.
                 :rtype: dict[int,set[hal_py.get_gate()]]
@@ -85,15 +85,15 @@ namespace hal
             .def("get_communities_spinglass", &plugin_graph_algorithm::get_communities_spinglass, py::arg("nl"), py::arg("spins"), R"(
                 Returns the map of community-IDs to communities running the spinglass clustering algorithm.
 
-                :param hal_py.netlist netlist: Netlist (internelly transformed to di-graph)
+                :param hal_py.Netlist netlist: Netlist (internelly transformed to di-graph)
                 :param int spins: Amount of spins
                 :returns: A map of clusters.
                 :rtype: dict[int,set[hal_py.get_gate()]]
                 )")
             .def(
                 "get_strongly_connected_components",
-                [](plugin_graph_algorithm& a, std::shared_ptr<netlist> const nl, const std::set<std::shared_ptr<gate>> gates = {}) -> std::vector<std::set<std::shared_ptr<gate>>> {
-                    std::vector<std::set<std::shared_ptr<gate>>> s;
+                [](plugin_graph_algorithm& a, std::shared_ptr<Netlist> const nl, const std::set<std::shared_ptr<Gate>> gates = {}) -> std::vector<std::set<std::shared_ptr<Gate>>> {
+                    std::vector<std::set<std::shared_ptr<Gate>>> s;
                     auto vals = a.get_strongly_connected_components(nl, gates);
                     std::copy(vals.begin(), vals.end(), std::back_inserter(s));
                     return s;
@@ -103,7 +103,7 @@ namespace hal
                 R"(
                 Returns the set of strongly connected components.
 
-                :param hal_py.netlist netlist: Netlist (internelly transformed to di-graph)
+                :param hal_py.Netlist netlist: Netlist (internelly transformed to di-graph)
                 :param set[hal_py.get_gate()] gates: Set of gates for which the strongly connected components are determined. (default = empty means that all gates of the netlist are considered)
                 :returns: A set of strongly connected components where each component is a set of gates.
                 :rtype: set[set[hal_py.get_gate()]]
@@ -124,7 +124,7 @@ namespace hal
                  R"(
                 Returns a graph cut for a specific gate and depth.
 
-                :param hal_py.netlist netlist: Netlist (internally transformed to di-graph)
+                :param hal_py.Netlist netlist: Netlist (internally transformed to di-graph)
                 :param hal_py.get_gate() current_gate: Gate (starting vertex for graph cut)
                 :param int depth: Graph cut depth
                 :param terminal_gate_type: Marks terminal vertex gate types of graph cut (typically memory gates such as flip-flops).

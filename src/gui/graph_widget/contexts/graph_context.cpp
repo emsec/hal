@@ -328,12 +328,12 @@ bool graph_context::node_for_gate(hal::node& node, const u32 id) const
         return true;
     }
 
-    std::shared_ptr<gate> g = g_netlist->get_gate_by_id(id);
+    std::shared_ptr<Gate> g = g_netlist->get_gate_by_id(id);
 
     if (!g)
         return false;
 
-    std::shared_ptr<module> m = g->get_module();
+    std::shared_ptr<Module> m = g->get_module();
 
     while (m)
     {

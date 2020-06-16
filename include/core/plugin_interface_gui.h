@@ -29,7 +29,7 @@
 namespace hal
 {
     /* foward declaration */
-    class netlist;
+    class Netlist;
 
     /**
      * @ingroup core
@@ -46,6 +46,6 @@ namespace hal
          * @param[in] netlist - The netlist object for the GUI.
          * @returns True on success.
          */
-        virtual bool exec(std::shared_ptr<netlist> netlist) = 0;
+        virtual bool exec(std::shared_ptr<Netlist> netlist) = 0;
     };
 }    // namespace hal

@@ -4,12 +4,14 @@
 #include <iostream>
 #include <netlist/data_container.h>
 
+namespace hal
+{
 using namespace test_utils;
 
 /*
- * A child of data_container (used for testing)
+ * A child of DataContainer (used for testing)
  */
-class test_data_container : public data_container
+class test_data_container : public DataContainer
 {
 public:
     test_data_container()  = default;
@@ -262,4 +264,5 @@ TEST_F(data_container_test, check_get_data_keys)
     EXPECT_TRUE(vectors_have_same_content(d_cont.get_data_keys(), keys));
 
     TEST_END
+}
 }

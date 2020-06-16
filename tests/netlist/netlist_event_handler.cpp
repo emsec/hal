@@ -9,10 +9,12 @@
 #include <netlist/gate.h>
 #include <netlist/net.h>
 
+using namespace hal;
+
 namespace netlist_handler_test_counter
 {
-    std::vector<std::shared_ptr<netlist>> removed_netlists;
-    std::vector<std::shared_ptr<netlist>> updated_netlists;
+    std::vector<std::shared_ptr<Netlist>> removed_netlists;
+    std::vector<std::shared_ptr<Netlist>> updated_netlists;
 }    // namespace netlist_handler_test_counter
 
 class netlist_handler_test : public ::testing::Test
@@ -30,11 +32,11 @@ protected:
     }
 
     // Creates an empty netlist with a certain id if passed
-    std::shared_ptr<netlist> create_empty_netlist(const int id = -1)
+    std::shared_ptr<Netlist> create_empty_netlist(const int id = -1)
     {
         NO_COUT_BLOCK;
-        std::shared_ptr<gate_library> gl = gate_library_manager::get_gate_library(g_lib_name);
-        std::shared_ptr<netlist> nl(new netlist(gl));
+        std::shared_ptr<GateLibrary> gl = gate_library_manager::get_gate_library(g_lib_name);
+        std::shared_ptr<Netlist> nl(new Netlist(gl));
 
         if (id >= 0)
         {
@@ -48,12 +50,12 @@ protected:
      * They store their passed netlist in a vector to check when they were called.
      *
      */
-    static void add_removed_netlist(const std::shared_ptr<netlist> nl)
+    static void add_removed_netlist(const std::shared_ptr<Netlist> nl)
     {
         netlist_handler_test_counter::removed_netlists.push_back(nl);
     }
 
-    static void add_updated_netlist(const std::shared_ptr<netlist> nl)
+    static void add_updated_netlist(const std::shared_ptr<Netlist> nl)
     {
         netlist_handler_test_counter::updated_netlists.push_back(nl);
     }
@@ -76,12 +78,12 @@ protected:
      * Access on the global vectors removed_netlists/updated_netlists
      */
 
-    std::vector<std::shared_ptr<netlist>> get_removed_netlists()
+    std::vector<std::shared_ptr<Netlist>> get_removed_netlists()
     {
         return netlist_handler_test_counter::removed_netlists;
     }
 
-    std::vector<std::shared_ptr<netlist>> get_updated_netlists()
+    std::vector<std::shared_ptr<Netlist>> get_updated_netlists()
     {
         return netlist_handler_test_counter::updated_netlists;
     }
@@ -125,9 +127,9 @@ protected:
  * Functions: register_update_callback
  */
 TEST_F(netlist_handler_test, check_data_updated){TEST_START{// Create 3 netlists
-                                                            std::shared_ptr<netlist> netlist_0 = create_empty_netlist(0);
-std::shared_ptr<netlist> netlist_1 = create_empty_netlist(1);
-std::shared_ptr<netlist> netlist_2 = create_empty_netlist(2);
+                                                            std::shared_ptr<Netlist> netlist_0 = create_empty_netlist(0);
+std::shared_ptr<Netlist> netlist_1 = create_empty_netlist(1);
+std::shared_ptr<Netlist> netlist_2 = create_empty_netlist(2);
 
 // Register the update callback
 netlist_handler::enable(true);
@@ -140,7 +142,7 @@ netlist_handler::register_update_callback("test_update_callback", add_updated_ne
     netlist_1->set_id(11);
 }
 
-std::vector<std::shared_ptr<netlist>> exp_updated = {netlist_0, netlist_1};
+std::vector<std::shared_ptr<Netlist>> exp_updated = {netlist_0, netlist_1};
 
 EXPECT_TRUE(vectors_have_same_content(get_updated_netlists(), exp_updated));
 
@@ -156,9 +158,9 @@ TEST_END
  * Functions: register_remove_callback
  */
 TEST_F(netlist_handler_test, check_data_removed){TEST_START{// Create 3 netlists
-                                                            std::shared_ptr<netlist> netlist_0 = create_empty_netlist(0);
-std::shared_ptr<netlist> netlist_1 = create_empty_netlist(1);
-std::shared_ptr<netlist> netlist_2 = create_empty_netlist(2);
+                                                            std::shared_ptr<Netlist> netlist_0 = create_empty_netlist(0);
+std::shared_ptr<Netlist> netlist_1 = create_empty_netlist(1);
+std::shared_ptr<Netlist> netlist_2 = create_empty_netlist(2);
 
 // Register the remove callback
 netlist_handler::enable(true);
@@ -172,7 +174,7 @@ netlist_handler::register_remove_callback("test_remove_callback", add_removed_ne
     netlist_handler::notify_data_removed(netlist_1);
 }
 
-std::vector<std::shared_ptr<netlist>> exp_removed = {netlist_0, netlist_1};
+std::vector<std::shared_ptr<Netlist>> exp_removed = {netlist_0, netlist_1};
 
 EXPECT_TRUE(vectors_have_same_content(get_removed_netlists(), exp_removed));
 
@@ -187,7 +189,7 @@ TEST_END
  * Functions: unregister_update_callback, unregister_remove_callback
  */
 TEST_F(netlist_handler_test, check_unregistered){TEST_START{// Create a netlist
-                                                            std::shared_ptr<netlist> netlist_0 = create_empty_netlist(0);
+                                                            std::shared_ptr<Netlist> netlist_0 = create_empty_netlist(0);
 
 // Register the two callbacks and unregister them immediately
 netlist_handler::enable(true);
@@ -221,7 +223,7 @@ TEST_F(netlist_handler_test, check_enable)
     TEST_START
     {
         // Create a netlist
-        std::shared_ptr<netlist> netlist_0 = create_empty_netlist(0);
+        std::shared_ptr<Netlist> netlist_0 = create_empty_netlist(0);
 
         // Register the two callbacks but set enable to false
         netlist_handler::enable(false);

@@ -97,7 +97,7 @@ python_editor::python_editor(QWidget* parent)
     hal_file_manager::register_on_deserialize_callback("python_editor", std::bind(&python_editor::handle_deserialization_from_hal_file, this, _1, _2, _3));
 }
 
-bool python_editor::handle_serialization_to_hal_file(const std::filesystem::path& path, std::shared_ptr<netlist> netlist, rapidjson::Document& document)
+bool python_editor::handle_serialization_to_hal_file(const std::filesystem::path& path, std::shared_ptr<Netlist> netlist, rapidjson::Document& document)
 {
     UNUSED(path);
     UNUSED(netlist);
@@ -137,7 +137,7 @@ bool python_editor::handle_serialization_to_hal_file(const std::filesystem::path
     return true;
 }
 
-bool python_editor::handle_deserialization_from_hal_file(const std::filesystem::path& path, std::shared_ptr<netlist> netlist, rapidjson::Document& document)
+bool python_editor::handle_deserialization_from_hal_file(const std::filesystem::path& path, std::shared_ptr<Netlist> netlist, rapidjson::Document& document)
 {
     UNUSED(path);
     UNUSED(netlist);

@@ -4,12 +4,12 @@
 
 #include <memory>
 
-class module;
+class Module;
 
 class graphics_module : public graphics_node
 {
 public:
-    explicit graphics_module(const std::shared_ptr<module> m);
+    explicit graphics_module(const std::shared_ptr<Module> m);
 
 protected:
     struct module_pin

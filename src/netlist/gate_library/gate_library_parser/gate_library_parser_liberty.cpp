@@ -7,11 +7,11 @@
 
 namespace hal
 {
-    gate_library_parser_liberty::gate_library_parser_liberty(const std::filesystem::path& file_path, std::stringstream& file_content) : gate_library_parser(file_path, file_content)
+    GateLibraryParserLiberty::GateLibraryParserLiberty(const std::filesystem::path& file_path, std::stringstream& file_content) : GateLibaryParser(file_path, file_content)
     {
     }
 
-    std::shared_ptr<gate_library> gate_library_parser_liberty::parse()
+    std::shared_ptr<GateLibrary> GateLibraryParserLiberty::parse()
     {
         // tokenize file
         if (!tokenize())
@@ -43,7 +43,7 @@ namespace hal
         return m_gate_lib;
     }
 
-    bool gate_library_parser_liberty::tokenize()
+    bool GateLibraryParserLiberty::tokenize()
     {
         std::string delimiters = "{}()[];:\",";
         std::string current_token;
@@ -105,14 +105,14 @@ namespace hal
         return true;
     }
 
-    bool gate_library_parser_liberty::parse_tokens()
+    bool GateLibraryParserLiberty::parse_tokens()
     {
         m_token_stream.consume("library", true);
         m_token_stream.consume("(", true);
         auto lib_name = m_token_stream.consume();
         m_token_stream.consume(")", true);
         m_token_stream.consume("{", true);
-        m_gate_lib       = std::make_shared<gate_library>(m_path, lib_name.string);
+        m_gate_lib       = std::make_shared<GateLibrary>(m_path, lib_name.string);
         auto library_str = m_token_stream.extract_until("}", TokenStream<std::string>::END_OF_STREAM, true, false);
         m_token_stream.consume("}", false);
 
@@ -154,7 +154,7 @@ namespace hal
         return m_token_stream.remaining() == 0;
     }
 
-    std::optional<gate_library_parser_liberty::type_group> gate_library_parser_liberty::parse_type(TokenStream<std::string>& str)
+    std::optional<GateLibraryParserLiberty::type_group> GateLibraryParserLiberty::parse_type(TokenStream<std::string>& str)
     {
         type_group type;
         i32 width     = 1;
@@ -244,7 +244,7 @@ namespace hal
         return type;
     }
 
-    std::optional<gate_library_parser_liberty::cell_group> gate_library_parser_liberty::parse_cell(TokenStream<std::string>& str)
+    std::optional<GateLibraryParserLiberty::cell_group> GateLibraryParserLiberty::parse_cell(TokenStream<std::string>& str)
     {
         cell_group cell;
 
@@ -297,7 +297,7 @@ namespace hal
                 {
                     return std::nullopt;
                 }
-                cell.type = gate_type::base_type::ff;
+                cell.type = GateType::BaseType::ff;
                 cell.ff   = ff.value();
             }
             else if (next_token == "latch")
@@ -307,7 +307,7 @@ namespace hal
                 {
                     return std::nullopt;
                 }
-                cell.type  = gate_type::base_type::latch;
+                cell.type  = GateType::BaseType::latch;
                 cell.latch = latch.value();
             }
             else if (next_token == "lut")
@@ -317,7 +317,7 @@ namespace hal
                 {
                     return std::nullopt;
                 }
-                cell.type = gate_type::base_type::lut;
+                cell.type = GateType::BaseType::lut;
                 cell.lut  = lut.value();
             }
         }
@@ -325,8 +325,8 @@ namespace hal
         return cell;
     }
 
-    std::optional<gate_library_parser_liberty::pin_group>
-        gate_library_parser_liberty::parse_pin(TokenStream<std::string>& str, cell_group& cell, pin_direction direction, const std::string& external_pin_name)
+    std::optional<GateLibraryParserLiberty::pin_group>
+        GateLibraryParserLiberty::parse_pin(TokenStream<std::string>& str, cell_group& cell, pin_direction direction, const std::string& external_pin_name)
     {
         pin_group pin;
 
@@ -458,7 +458,7 @@ namespace hal
         return pin;
     }
 
-    std::optional<gate_library_parser_liberty::bus_group> gate_library_parser_liberty::parse_bus(TokenStream<std::string>& str, cell_group& cell)
+    std::optional<GateLibraryParserLiberty::bus_group> GateLibraryParserLiberty::parse_bus(TokenStream<std::string>& str, cell_group& cell)
     {
         bus_group bus;
         std::vector<u32> range;
@@ -540,7 +540,7 @@ namespace hal
         return bus;
     }
 
-    std::optional<gate_library_parser_liberty::ff_group> gate_library_parser_liberty::parse_ff(TokenStream<std::string>& str)
+    std::optional<GateLibraryParserLiberty::ff_group> GateLibraryParserLiberty::parse_ff(TokenStream<std::string>& str)
     {
         ff_group ff;
 
@@ -592,11 +592,11 @@ namespace hal
                 {
                     if (next_token == "clear_preset_var1")
                     {
-                        ff.special_behavior_var1 = gate_type_sequential::set_reset_behavior(pos + 1);
+                        ff.special_behavior_var1 = GateTypeSequential::SetResetBehavior(pos + 1);
                     }
                     else
                     {
-                        ff.special_behavior_var2 = gate_type_sequential::set_reset_behavior(pos + 1);
+                        ff.special_behavior_var2 = GateTypeSequential::SetResetBehavior(pos + 1);
                     }
                 }
                 else
@@ -622,7 +622,7 @@ namespace hal
         return ff;
     }
 
-    std::optional<gate_library_parser_liberty::latch_group> gate_library_parser_liberty::parse_latch(TokenStream<std::string>& str)
+    std::optional<GateLibraryParserLiberty::latch_group> GateLibraryParserLiberty::parse_latch(TokenStream<std::string>& str)
     {
         latch_group latch;
 
@@ -674,11 +674,11 @@ namespace hal
                 {
                     if (next_token == "clear_preset_var1")
                     {
-                        latch.special_behavior_var1 = gate_type_sequential::set_reset_behavior(pos + 1);
+                        latch.special_behavior_var1 = GateTypeSequential::SetResetBehavior(pos + 1);
                     }
                     else
                     {
-                        latch.special_behavior_var2 = gate_type_sequential::set_reset_behavior(pos + 1);
+                        latch.special_behavior_var2 = GateTypeSequential::SetResetBehavior(pos + 1);
                     }
                 }
                 else
@@ -692,7 +692,7 @@ namespace hal
         return latch;
     }
 
-    std::optional<gate_library_parser_liberty::lut_group> gate_library_parser_liberty::parse_lut(TokenStream<std::string>& str)
+    std::optional<GateLibraryParserLiberty::lut_group> GateLibraryParserLiberty::parse_lut(TokenStream<std::string>& str)
     {
         lut_group lut;
 
@@ -741,9 +741,9 @@ namespace hal
         return lut;
     }
 
-    std::shared_ptr<gate_type> gate_library_parser_liberty::construct_gate_type(cell_group& cell)
+    std::shared_ptr<GateType> GateLibraryParserLiberty::construct_gate_type(cell_group& cell)
     {
-        std::shared_ptr<gate_type> gt;
+        std::shared_ptr<GateType> gt;
         std::vector<std::string> input_pins;
         std::vector<std::string> output_pins;
         std::map<std::string, std::map<u32, std::string>> input_pin_groups;
@@ -779,13 +779,13 @@ namespace hal
             }
         }
 
-        if (cell.type == gate_type::base_type::combinatorial)
+        if (cell.type == GateType::BaseType::combinatorial)
         {
-            gt = std::make_shared<gate_type>(cell.name);
+            gt = std::make_shared<GateType>(cell.name);
         }
-        else if (cell.type == gate_type::base_type::ff)
+        else if (cell.type == GateType::BaseType::ff)
         {
-            auto seq_gt = std::make_shared<gate_type_sequential>(cell.name, cell.type);
+            auto seq_gt = std::make_shared<GateTypeSequential>(cell.name, cell.type);
 
             if (!cell.ff.clocked_on.empty())
             {
@@ -860,9 +860,9 @@ namespace hal
 
             gt = seq_gt;
         }
-        else if (cell.type == gate_type::base_type::latch)
+        else if (cell.type == GateType::BaseType::latch)
         {
-            auto seq_gt = std::make_shared<gate_type_sequential>(cell.name, cell.type);
+            auto seq_gt = std::make_shared<GateTypeSequential>(cell.name, cell.type);
 
             if (!cell.latch.enable.empty())
             {
@@ -935,9 +935,9 @@ namespace hal
 
             gt = seq_gt;
         }
-        else if (cell.type == gate_type::base_type::lut)
+        else if (cell.type == GateType::BaseType::lut)
         {
-            auto lut_gt = std::make_shared<gate_type_lut>(cell.name);
+            auto lut_gt = std::make_shared<GateTypeLut>(cell.name);
 
             lut_gt->set_config_data_category(cell.lut.data_category);
             lut_gt->set_config_data_identifier(cell.lut.data_identifier);
@@ -994,7 +994,7 @@ namespace hal
             {
                 if (!pin.function.empty())
                 {
-                    auto function = boolean_function::from_string(pin.function, all_pins);
+                    auto function = BooleanFunction::from_string(pin.function, all_pins);
                     for (const auto& name : pin.pin_names)
                     {
                         gt->add_boolean_function(name, function);
@@ -1003,7 +1003,7 @@ namespace hal
 
                 if (!pin.x_function.empty())
                 {
-                    auto function = boolean_function::from_string(pin.x_function, all_pins);
+                    auto function = BooleanFunction::from_string(pin.x_function, all_pins);
                     for (const auto& name : pin.pin_names)
                     {
                         gt->add_boolean_function(name + "_undefined", function);
@@ -1012,7 +1012,7 @@ namespace hal
 
                 if (!pin.z_function.empty())
                 {
-                    auto function = boolean_function::from_string(pin.z_function, all_pins);
+                    auto function = BooleanFunction::from_string(pin.z_function, all_pins);
                     for (const auto& name : pin.pin_names)
                     {
                         gt->add_boolean_function(name + "_tristate", function);
@@ -1022,14 +1022,14 @@ namespace hal
 
             for (const auto& [name, function] : cell.special_functions)
             {
-                gt->add_boolean_function(name, boolean_function::from_string(function, all_pins));
+                gt->add_boolean_function(name, BooleanFunction::from_string(function, all_pins));
             }
         }
 
         return gt;
     }
 
-    void gate_library_parser_liberty::remove_comments(std::string& line, bool& multi_line_comment)
+    void GateLibraryParserLiberty::remove_comments(std::string& line, bool& multi_line_comment)
     {
         bool repeat = true;
 
@@ -1082,7 +1082,7 @@ namespace hal
         }
     }
 
-    std::vector<std::string> gate_library_parser_liberty::tokenize_function(const std::string& function)
+    std::vector<std::string> GateLibraryParserLiberty::tokenize_function(const std::string& function)
     {
         std::string delimiters = "()[]:!'^+|&* ";
         std::string current_token;
@@ -1114,7 +1114,7 @@ namespace hal
     }
 
     std::map<std::string, std::string>
-        gate_library_parser_liberty::expand_bus_function(const std::map<std::string, bus_group>& buses, const std::vector<std::string>& pin_names, const std::string& function)
+        GateLibraryParserLiberty::expand_bus_function(const std::map<std::string, bus_group>& buses, const std::vector<std::string>& pin_names, const std::string& function)
     {
         auto tokenized_funtion = tokenize_function(function);
         std::map<std::string, std::string> res;
@@ -1189,7 +1189,7 @@ namespace hal
         return res;
     }
 
-    std::string gate_library_parser_liberty::prepare_pin_function(const std::map<std::string, bus_group>& buses, const std::string& function)
+    std::string GateLibraryParserLiberty::prepare_pin_function(const std::map<std::string, bus_group>& buses, const std::string& function)
     {
         auto tokenized_funtion = tokenize_function(function);
         std::string res        = "";
@@ -1221,9 +1221,9 @@ namespace hal
         return res;
     }
 
-    std::map<std::string, boolean_function> gate_library_parser_liberty::construct_bus_functions(const cell_group& cell, const std::vector<std::string>& all_pins)
+    std::map<std::string, BooleanFunction> GateLibraryParserLiberty::construct_bus_functions(const cell_group& cell, const std::vector<std::string>& all_pins)
     {
-        std::map<std::string, boolean_function> res;
+        std::map<std::string, BooleanFunction> res;
 
         for (const auto& [bus_name, bus] : cell.buses)
         {
@@ -1240,7 +1240,7 @@ namespace hal
                 {
                     for (auto [pin_name, function] : expand_bus_function(cell.buses, pin.pin_names, pin.function))
                     {
-                        res.emplace(pin_name, boolean_function::from_string(function, all_pins));
+                        res.emplace(pin_name, BooleanFunction::from_string(function, all_pins));
                     }
                 }
 
@@ -1248,7 +1248,7 @@ namespace hal
                 {
                     for (auto [pin_name, function] : expand_bus_function(cell.buses, pin.pin_names, pin.x_function))
                     {
-                        res.emplace(pin_name + "_undefined", boolean_function::from_string(function, all_pins));
+                        res.emplace(pin_name + "_undefined", BooleanFunction::from_string(function, all_pins));
                     }
                 }
 
@@ -1256,7 +1256,7 @@ namespace hal
                 {
                     for (auto [pin_name, function] : expand_bus_function(cell.buses, pin.pin_names, pin.z_function))
                     {
-                        res.emplace(pin_name + "_tristate", boolean_function::from_string(function, all_pins));
+                        res.emplace(pin_name + "_tristate", BooleanFunction::from_string(function, all_pins));
                     }
                 }
             }
@@ -1268,7 +1268,7 @@ namespace hal
             {
                 if (auto function = prepare_pin_function(cell.buses, pin.function); !function.empty())
                 {
-                    auto b_function = boolean_function::from_string(function, all_pins);
+                    auto b_function = BooleanFunction::from_string(function, all_pins);
                     for (const auto& pin_name : pin.pin_names)
                     {
                         res.emplace(pin_name, b_function);
@@ -1280,7 +1280,7 @@ namespace hal
             {
                 if (auto function = prepare_pin_function(cell.buses, pin.x_function); !function.empty())
                 {
-                    auto b_function = boolean_function::from_string(function, all_pins);
+                    auto b_function = BooleanFunction::from_string(function, all_pins);
                     for (const auto& pin_name : pin.pin_names)
                     {
                         res.emplace(pin_name + "_undefined", b_function);
@@ -1292,7 +1292,7 @@ namespace hal
             {
                 if (auto function = prepare_pin_function(cell.buses, pin.z_function); !function.empty())
                 {
-                    auto b_function = boolean_function::from_string(function, all_pins);
+                    auto b_function = BooleanFunction::from_string(function, all_pins);
                     for (const auto& pin_name : pin.pin_names)
                     {
                         res.emplace(pin_name + "_tristate", b_function);
@@ -1303,7 +1303,7 @@ namespace hal
 
         for (const auto& [name, function] : cell.special_functions)
         {
-            res.emplace(name, boolean_function::from_string(prepare_pin_function(cell.buses, function), all_pins));
+            res.emplace(name, BooleanFunction::from_string(prepare_pin_function(cell.buses, function), all_pins));
         }
 
         return res;

@@ -33,7 +33,7 @@
 namespace hal
 {
     /* forward declaration */
-    class netlist;
+    class Netlist;
 
     /**
      * @ingroup core
@@ -58,6 +58,6 @@ namespace hal
          * @param[in] args - Program options.
          * @returns True on success.
          */
-        virtual bool handle_cli_call(std::shared_ptr<netlist> netlist, ProgramArguments& args) = 0;
+        virtual bool handle_cli_call(std::shared_ptr<Netlist> netlist, ProgramArguments& args) = 0;
     };
 }    // namespace hal

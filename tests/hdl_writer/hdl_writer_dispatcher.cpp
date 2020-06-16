@@ -9,6 +9,8 @@
 #include <core/program_arguments.h>
 #include <experimental/filesystem>
 
+namespace hal
+{
 using namespace test_utils;
 
 class hdl_writer_dispatcher_test : public ::testing::Test
@@ -39,14 +41,14 @@ protected:
     }
 
     // Creates the following netlist:     global_in ---= INV =--- global_out
-    std::shared_ptr<netlist> create_simple_netlist()
+    std::shared_ptr<Netlist> create_simple_netlist()
     {
-        std::shared_ptr<netlist> nl = create_empty_netlist();
+        std::shared_ptr<Netlist> nl = create_empty_netlist();
         nl->set_design_name("top_module");
         nl->get_top_module()->set_name("top_module");
-        std::shared_ptr<gate> inv_gate = nl->create_gate(MIN_GATE_ID + 0, get_gate_type_by_name("INV"), "inv_gate");
-        std::shared_ptr<net> g_in_net  = nl->create_net("global_in");
-        std::shared_ptr<net> g_out_net = nl->create_net("global_out");
+        std::shared_ptr<Gate> inv_gate = nl->create_gate(MIN_GATE_ID + 0, get_gate_type_by_name("INV"), "inv_gate");
+        std::shared_ptr<Net> g_in_net  = nl->create_net("global_in");
+        std::shared_ptr<Net> g_out_net = nl->create_net("global_out");
         nl->mark_global_input_net(g_in_net);
         nl->mark_global_output_net(g_out_net);
         g_in_net->add_destination(inv_gate, "I");
@@ -62,7 +64,7 @@ protected:
  * Functions: get_cli_options
  */
 TEST_F(hdl_writer_dispatcher_test, check_cli_options){TEST_START{// Access the gui-options and the cli-options (shouldn't  be empty)
-                                                                 EXPECT_FALSE(hdl_writer_dispatcher::get_cli_options().get_options().empty());
+                                                                 EXPECT_FALSE(HDLWriterDispatcher::get_cli_options().get_options().empty());
 }
 TEST_END
 }
@@ -79,17 +81,17 @@ ProgramArguments p_args_vhdl;
 p_args_vhdl.set_option("--write-vhdl", std::vector<std::string>({out_path_vhdl}));
 p_args_vhdl.set_option("--write-verilog", std::vector<std::string>({out_path_verilog}));
 
-std::shared_ptr<netlist> simple_nl = create_simple_netlist();
+std::shared_ptr<Netlist> simple_nl = create_simple_netlist();
 // Write the two files
-bool suc = hdl_writer_dispatcher::write(simple_nl, p_args_vhdl);
+bool suc = HDLWriterDispatcher::write(simple_nl, p_args_vhdl);
 EXPECT_TRUE(suc);
 
 // Verify the correctness of the output by parsing it
-std::shared_ptr<netlist> parsed_nl_vhdl    = hdl_parser_dispatcher::parse("EXAMPLE_GATE_LIBRARY", "vhdl", out_path_vhdl);
-std::shared_ptr<netlist> parsed_nl_verilog = hdl_parser_dispatcher::parse("EXAMPLE_GATE_LIBRARY", "verilog", out_path_verilog);
+std::shared_ptr<Netlist> parsed_nl_vhdl    = HDLParserDispatcher::parse("EXAMPLE_GATE_LIBRARY", "vhdl", out_path_vhdl);
+std::shared_ptr<Netlist> parsed_nl_verilog = HDLParserDispatcher::parse("EXAMPLE_GATE_LIBRARY", "verilog", out_path_verilog);
 
 EXPECT_TRUE(test_utils::netlists_are_equal(parsed_nl_vhdl, simple_nl, true));
-// Since the verilog writer adds a "_inst" suffix to all gate names, it must
+// Since the verilog writer adds a "_inst" suffix to all Gate names, it must
 // be added to the simple netlist for comparison
 for (auto g : simple_nl->get_gates())
     g->set_name(g->get_name() + "_inst");
@@ -112,19 +114,19 @@ TEST_F(hdl_writer_dispatcher_test, check_write_by_format_and_filename)
         std::filesystem::path out_path_vhdl    = get_tmp_file_path(".vhd");
         std::filesystem::path out_path_verilog = get_tmp_file_path(".v");
 
-        std::shared_ptr<netlist> simple_nl = create_simple_netlist();
+        std::shared_ptr<Netlist> simple_nl = create_simple_netlist();
         // Write the two files
-        bool suc_vhdl    = hdl_writer_dispatcher::write(simple_nl, "vhdl", out_path_vhdl);
-        bool suc_verilog = hdl_writer_dispatcher::write(simple_nl, "verilog", out_path_verilog);
+        bool suc_vhdl    = HDLWriterDispatcher::write(simple_nl, "vhdl", out_path_vhdl);
+        bool suc_verilog = HDLWriterDispatcher::write(simple_nl, "verilog", out_path_verilog);
         EXPECT_TRUE(suc_vhdl);
         EXPECT_TRUE(suc_verilog);
 
         // Verify the correctness of the output by parsing it
-        std::shared_ptr<netlist> parsed_nl_vhdl    = hdl_parser_dispatcher::parse("EXAMPLE_GATE_LIBRARY", "vhdl", out_path_vhdl);
-        std::shared_ptr<netlist> parsed_nl_verilog = hdl_parser_dispatcher::parse("EXAMPLE_GATE_LIBRARY", "verilog", out_path_verilog);
+        std::shared_ptr<Netlist> parsed_nl_vhdl    = HDLParserDispatcher::parse("EXAMPLE_GATE_LIBRARY", "vhdl", out_path_vhdl);
+        std::shared_ptr<Netlist> parsed_nl_verilog = HDLParserDispatcher::parse("EXAMPLE_GATE_LIBRARY", "verilog", out_path_verilog);
 
         EXPECT_TRUE(test_utils::netlists_are_equal(parsed_nl_vhdl, simple_nl, true));
-        // Since the verilog writer adds a "_inst" suffix to all gate names, it must
+        // Since the verilog writer adds a "_inst" suffix to all Gate names, it must
         // be added to the simple netlist for comparison
         for (auto g : simple_nl->get_gates())
             g->set_name(g->get_name() + "_inst");
@@ -136,9 +138,10 @@ TEST_F(hdl_writer_dispatcher_test, check_write_by_format_and_filename)
         // The format is unknown
         std::filesystem::path out_path = get_tmp_file_path(".txt");
 
-        std::shared_ptr<netlist> simple_nl = create_simple_netlist();
+        std::shared_ptr<Netlist> simple_nl = create_simple_netlist();
         // Write the two files
-        EXPECT_FALSE(hdl_writer_dispatcher::write(simple_nl, "<unknown_format>", out_path));
+        EXPECT_FALSE(HDLWriterDispatcher::write(simple_nl, "<unknown_format>", out_path));
     }
     TEST_END
+}
 }

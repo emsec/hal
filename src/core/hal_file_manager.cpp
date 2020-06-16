@@ -20,11 +20,11 @@ namespace hal
     {
         namespace
         {
-            CallbackHook<bool(const std::filesystem::path&, std::shared_ptr<netlist>, rapidjson::Document&)> m_on_serialize_hook;
-            CallbackHook<bool(const std::filesystem::path&, std::shared_ptr<netlist>, rapidjson::Document&)> m_on_deserialize_hook;
+            CallbackHook<bool(const std::filesystem::path&, std::shared_ptr<Netlist>, rapidjson::Document&)> m_on_serialize_hook;
+            CallbackHook<bool(const std::filesystem::path&, std::shared_ptr<Netlist>, rapidjson::Document&)> m_on_deserialize_hook;
         }    // namespace
 
-        bool serialize(const std::filesystem::path& file, std::shared_ptr<netlist> netlist, rapidjson::Document& document)
+        bool serialize(const std::filesystem::path& file, std::shared_ptr<Netlist> netlist, rapidjson::Document& document)
         {
             for (const auto& id : m_on_serialize_hook.get_ids())
             {
@@ -37,7 +37,7 @@ namespace hal
             return true;
         }
 
-        bool deserialize(const std::filesystem::path& file, std::shared_ptr<netlist> netlist, rapidjson::Document& document)
+        bool deserialize(const std::filesystem::path& file, std::shared_ptr<Netlist> netlist, rapidjson::Document& document)
         {
             for (const auto& id : m_on_deserialize_hook.get_ids())
             {
@@ -50,7 +50,7 @@ namespace hal
             return true;
         }
 
-        void register_on_serialize_callback(const std::string& identifier, std::function<bool(const std::filesystem::path&, std::shared_ptr<netlist>, rapidjson::Document&)> callback)
+        void register_on_serialize_callback(const std::string& identifier, std::function<bool(const std::filesystem::path&, std::shared_ptr<Netlist>, rapidjson::Document&)> callback)
         {
             m_on_serialize_hook.add_callback(identifier, callback);
         }
@@ -60,7 +60,7 @@ namespace hal
             m_on_serialize_hook.remove_callback(identifier);
         }
 
-        void register_on_deserialize_callback(const std::string& identifier, std::function<bool(const std::filesystem::path&, std::shared_ptr<netlist>, rapidjson::Document&)> callback)
+        void register_on_deserialize_callback(const std::string& identifier, std::function<bool(const std::filesystem::path&, std::shared_ptr<Netlist>, rapidjson::Document&)> callback)
         {
             m_on_deserialize_hook.add_callback(identifier, callback);
         }

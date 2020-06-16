@@ -10,17 +10,17 @@
 
 namespace hal
 {
-    std::map<int, std::set<std::shared_ptr<gate>>> plugin_graph_algorithm::get_communities_multilevel(std::shared_ptr<netlist> nl)
+    std::map<int, std::set<std::shared_ptr<Gate>>> plugin_graph_algorithm::get_communities_multilevel(std::shared_ptr<Netlist> nl)
     {
         if (nl == nullptr)
         {
             log_error(this->get_name(), "{}", "parameter 'nl' is nullptr");
-            return std::map<int, std::set<std::shared_ptr<gate>>>();
+            return std::map<int, std::set<std::shared_ptr<Gate>>>();
         }
 
-        std::tuple<igraph_t, std::map<int, std::shared_ptr<gate>>> igraph_tuple = get_igraph_directed(nl);
+        std::tuple<igraph_t, std::map<int, std::shared_ptr<Gate>>> igraph_tuple = get_igraph_directed(nl);
         igraph_t graph                                                          = std::get<0>(igraph_tuple);
-        std::map<int, std::shared_ptr<gate>> vertex_to_gate                     = std::get<1>(igraph_tuple);
+        std::map<int, std::shared_ptr<Gate>> vertex_to_gate                     = std::get<1>(igraph_tuple);
 
         // convert to undirected
         igraph_to_undirected(&graph, IGRAPH_TO_UNDIRECTED_MUTUAL, 0);
@@ -39,7 +39,7 @@ namespace hal
                                     &modularity);
 
         // map back to HAL structures
-        std::map<int, std::set<std::shared_ptr<gate>>> community_sets;
+        std::map<int, std::set<std::shared_ptr<Gate>>> community_sets;
         for (int i = 0; i < igraph_vector_size(&membership_vec); i++)
         {
             community_sets[(int)VECTOR(membership_vec)[i]].insert(vertex_to_gate[i]);

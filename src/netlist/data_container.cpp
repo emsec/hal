@@ -4,7 +4,7 @@
 
 namespace hal
 {
-    bool data_container::set_data(const std::string& category, const std::string& key, const std::string& value_data_type, const std::string& value, const bool log_with_info_level)
+    bool DataContainer::set_data(const std::string& category, const std::string& key, const std::string& value_data_type, const std::string& value, const bool log_with_info_level)
     {
         if (category.empty() || key.empty())
         {
@@ -28,7 +28,7 @@ namespace hal
         return true;
     }
 
-    bool data_container::delete_data(const std::string& category, const std::string& key, const bool log_with_info_level)
+    bool DataContainer::delete_data(const std::string& category, const std::string& key, const bool log_with_info_level)
     {
         if (category.empty() || key.empty())
         {
@@ -59,12 +59,12 @@ namespace hal
         return true;
     }
 
-    std::map<std::tuple<std::string, std::string>, std::tuple<std::string, std::string>> data_container::get_data() const
+    std::map<std::tuple<std::string, std::string>, std::tuple<std::string, std::string>> DataContainer::get_data() const
     {
         return m_data;
     }
 
-    std::tuple<std::string, std::string> data_container::get_data_by_key(const std::string& category, const std::string& key) const
+    std::tuple<std::string, std::string> DataContainer::get_data_by_key(const std::string& category, const std::string& key) const
     {
         if (category.empty() || key.empty())
         {
@@ -81,7 +81,7 @@ namespace hal
         return it->second;
     }
 
-    std::vector<std::tuple<std::string, std::string>> data_container::get_data_keys() const
+    std::vector<std::tuple<std::string, std::string>> DataContainer::get_data_keys() const
     {
         std::vector<std::tuple<std::string, std::string>> keys;
         for (const auto& it : m_data)

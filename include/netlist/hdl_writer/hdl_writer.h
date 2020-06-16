@@ -35,20 +35,20 @@
 namespace hal
 {
     /* forward declaration*/
-    class netlist;
+    class Netlist;
 
     /**
      * @ingroup hdl_writers
      */
-    class HDL_FILE_WRITER_API hdl_writer
+    class HDL_FILE_WRITER_API HDLWriter
     {
     public:
         /**
          * @param[out] stream - The string stream which will be filled with the hdl code.
          */
-        explicit hdl_writer(std::stringstream& stream);
+        explicit HDLWriter(std::stringstream& stream);
 
-        virtual ~hdl_writer() = default;
+        virtual ~HDLWriter() = default;
 
         /**
          * Serializes the netlist into hdl code.
@@ -56,11 +56,11 @@ namespace hal
          * @param[in] g - The netlist.
          * @returns True on success.
          */
-        virtual bool write(std::shared_ptr<netlist> const g) = 0;
+        virtual bool write(std::shared_ptr<Netlist> const g) = 0;
 
     protected:
         // stores the netlist
-        std::shared_ptr<netlist> m_netlist;
+        std::shared_ptr<Netlist> m_netlist;
 
         // holds the output stream to the file
         std::stringstream& m_stream;

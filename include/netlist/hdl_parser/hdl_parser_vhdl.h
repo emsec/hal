@@ -39,15 +39,15 @@ namespace hal
     /**
      * @ingroup hdl_parsers
      */
-    class HDL_PARSER_API hdl_parser_vhdl : public hdl_parser<core_strings::CaseInsensitiveString>
+    class HDL_PARSER_API HDLParserVHDL : public HDLParser<core_strings::CaseInsensitiveString>
     {
     public:
         /**
          * @param[in] stream - The string stream filled with the hdl code.
          */
-        explicit hdl_parser_vhdl(std::stringstream& stream);
+        explicit HDLParserVHDL(std::stringstream& stream);
 
-        ~hdl_parser_vhdl() = default;
+        ~HDLParserVHDL() = default;
 
         /**
          * Deserializes a netlist in VHDL format from the internal string stream into a netlist object.
@@ -58,14 +58,14 @@ namespace hal
         bool parse() override;
 
     private:
-        enum class attribute_target_class
+        enum class AttributeTarget
         {
             ENTITY,
             INSTANCE,
             SIGNAL
         };
 
-        using attribute_buffer_t = std::map<attribute_target_class, std::map<core_strings::CaseInsensitiveString, std::tuple<u32, std::string, std::string, std::string>>>;
+        using attribute_buffer_t = std::map<AttributeTarget, std::map<core_strings::CaseInsensitiveString, std::tuple<u32, std::string, std::string, std::string>>>;
         attribute_buffer_t m_attribute_buffer;
 
         std::set<core_strings::CaseInsensitiveString> m_libraries;

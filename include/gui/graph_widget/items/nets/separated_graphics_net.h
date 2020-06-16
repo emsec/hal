@@ -30,7 +30,7 @@ class separated_graphics_net : public graphics_net
 public:
     static void update_alpha();
 
-    separated_graphics_net(const std::shared_ptr<const net> n);
+    separated_graphics_net(const std::shared_ptr<const Net> n);
 
     virtual void add_input(const QPointF& scene_position) = 0;
     virtual void add_output(const QPointF& scene_position) = 0;

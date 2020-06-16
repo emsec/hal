@@ -197,15 +197,15 @@ void module_model::init()
     // This is broken because it can attempt to insert a child before its parent
     // which will cause an assertion failure and then crash
 
-    // std::set<std::shared_ptr<module>> s = g_netlist->get_modules();
+    // std::set<std::shared_ptr<Module>> s = g_netlist->get_modules();
     // s.erase(g_netlist->get_top_module());
-    // for (std::shared_ptr<module> m : s)
+    // for (std::shared_ptr<Module> m : s)
     //     add_module(m->get_id(), m->get_parent_module()->get_id());
 
     // This works
 
     // recursively insert modules
-    std::shared_ptr<module> m = g_netlist->get_top_module();
+    std::shared_ptr<Module> m = g_netlist->get_top_module();
     add_recursively(m->get_submodules());
 }
 
@@ -244,7 +244,7 @@ void module_model::add_module(const u32 id, const u32 parent_module)
     endInsertRows();
 }
 
-void module_model::add_recursively(std::set<std::shared_ptr<module>> modules)
+void module_model::add_recursively(std::set<std::shared_ptr<Module>> modules)
 {
     for (auto &m : modules)
     {

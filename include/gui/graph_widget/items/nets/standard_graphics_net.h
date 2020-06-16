@@ -28,7 +28,7 @@
 #include <QLineF>
 #include <QVector>
 
-class net;
+class Net;
 
 class standard_graphics_net : public graphics_net
 {
@@ -64,7 +64,7 @@ public:
     static void load_settings();
     static void update_alpha();
 
-    standard_graphics_net(const std::shared_ptr<const net> n, const lines& l);
+    standard_graphics_net(const std::shared_ptr<const Net> n, const lines& l);
 
     void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override;
 

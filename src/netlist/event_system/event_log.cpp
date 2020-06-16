@@ -16,7 +16,7 @@ namespace hal
     {
         namespace
         {
-            void handle_gate_event(gate_event_handler::event event, std::shared_ptr<gate> gate, u32 associated_data)
+            void handle_gate_event(gate_event_handler::event event, std::shared_ptr<Gate> gate, u32 associated_data)
             {
                 UNUSED(associated_data);
                 if (event == gate_event_handler::event::created)
@@ -37,7 +37,7 @@ namespace hal
                 }
             }
 
-            void handle_net_event(net_event_handler::event event, std::shared_ptr<net> net, u32 associated_data)
+            void handle_net_event(net_event_handler::event event, std::shared_ptr<Net> net, u32 associated_data)
             {
                 if (event == net_event_handler::event::created)
                 {
@@ -77,7 +77,7 @@ namespace hal
                 }
             }
 
-            void handle_netlist_event(netlist_event_handler::event event, std::shared_ptr<netlist> netlist, u32 associated_data)
+            void handle_netlist_event(netlist_event_handler::event event, std::shared_ptr<Netlist> netlist, u32 associated_data)
             {
                 if (event == netlist_event_handler::event::id_changed)
                 {
@@ -151,7 +151,7 @@ namespace hal
                 }
             }
 
-            void handle_submodule_event(module_event_handler::event event, std::shared_ptr<module> submodule, u32 associated_data)
+            void handle_submodule_event(module_event_handler::event event, std::shared_ptr<Module> submodule, u32 associated_data)
             {
                 if (event == module_event_handler::event::created)
                 {

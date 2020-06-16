@@ -18,6 +18,8 @@
 
 namespace fs = std::filesystem;
 
+namespace hal
+{
 namespace test_utils
 {
     /*********************************************************
@@ -35,10 +37,10 @@ namespace test_utils
     const u32 MIN_NETLIST_ID = 1;
     const u32 TOP_MODULE_ID  = 1;
 
-    // Name for accessing our example gate library
+    // Name for accessing our example Gate library
     static const std::string g_lib_name = "EXAMPLE_GATE_LIBRARY.lib";
     //static const std::string g_lib_name = "example_library";
-    // Name for accessing the custom gate library after the call of 'create_temp_gate_lib()'
+    // Name for accessing the custom Gate library after the call of 'create_temp_gate_lib()'
     const std::string temp_lib_name = "TEMP_GATE_LIBRARY.lib";
 
     const std::filesystem::path sandbox_directory_path = std::filesystem::path("tests/sandbox_directory");
@@ -58,37 +60,37 @@ namespace test_utils
      * @param[in] id - Id of the netlist
      * @returns An empty netlist
      */
-    std::shared_ptr<netlist> create_empty_netlist(const int id = -1);
+    std::shared_ptr<Netlist> create_empty_netlist(const int id = -1);
 
     /**
-     * Creating an endpoint object by passing the netlist, the id of the gate and the pin type.
-     * if there is no gate with the passed id, it returns (nullptr, "")
+     * Creating an Endpoint object by passing the netlist, the id of the Gate and the pin type.
+     * if there is no Gate with the passed id, it returns (nullptr, "")
      *
      * @param[in] nl - netlist
-     * @param[in] gate_id - id of the gate
+     * @param[in] gate_id - id of the Gate
      * @param[in] pin_type - pin type
-     * @param[in] is_destination - direction of endpoint
-     * @returns the endpoint object
+     * @param[in] is_destination - direction of Endpoint
+     * @returns the Endpoint object
      */
-    endpoint get_endpoint(const std::shared_ptr<netlist>& nl, const int gate_id, const std::string& pin_type, bool is_destination);
+    Endpoint get_endpoint(const std::shared_ptr<Netlist>& nl, const int gate_id, const std::string& pin_type, bool is_destination);
 
     /**
-     * Creating an endpoint object by passing the gate and the pin_type. The is_destination flag is taken from the
-     * gate library of the gate and the netlist by the gate.
+     * Creating an Endpoint object by passing the Gate and the pin_type. The is_destination flag is taken from the
+     * Gate library of the Gate and the netlist by the Gate.
      *
-     * @param[in] gate_id - id of the gate
+     * @param[in] gate_id - id of the Gate
      * @param[in] pin_type - pin type
-     * @returns the endpoint object
+     * @returns the Endpoint object
      */
-    endpoint get_endpoint(const std::shared_ptr<gate> g, const std::string& pin_type);
+    Endpoint get_endpoint(const std::shared_ptr<Gate> g, const std::string& pin_type);
 
     /**
-     * Checks if an endpoint is empty (i.e. (nullptr, ""))
+     * Checks if an Endpoint is empty (i.e. (nullptr, ""))
      *
-     * @param[in] ep - endpoint
-     * @return true, if the endpoint is the empty endpoint
+     * @param[in] ep - Endpoint
+     * @return true, if the Endpoint is the empty Endpoint
      */
-    bool is_empty(const endpoint& ep);
+    bool is_empty(const Endpoint& ep);
 
     /**
      * Minimizes a truth table of a boolean function such that variables that do not matter are eliminated.
@@ -99,35 +101,35 @@ namespace test_utils
      * @param tt - the truth table to minimize
      * @returns the minimized truth table
      */
-    std::vector<boolean_function::value> minimize_truth_table(const std::vector<boolean_function::value> tt);
+    std::vector<BooleanFunction::value> minimize_truth_table(const std::vector<BooleanFunction::value> tt);
 
     /**
-     * Get a gate type by its name
+     * Get a Gate type by its name
      *
-     * @param name - the name of the gate_type
-     * @param gate_library_name - the name of the gate library, the gate_type can be found. If empty, the example gate library (g_lib_name) is taken.
-     * @return the gate_type pointer if found. If no gate type matches, return nullptr
+     * @param name - the name of the GateType
+     * @param gate_library_name - the name of the Gate library, the GateType can be found. If empty, the example Gate library (g_lib_name) is taken.
+     * @return the GateType pointer if found. If no Gate type matches, return nullptr
      */
-    std::shared_ptr<const gate_type> get_gate_type_by_name(std::string name, std::shared_ptr<gate_library> gate_library = nullptr);
+    std::shared_ptr<const GateType> get_gate_type_by_name(std::string name, std::shared_ptr<GateLibrary> GateLibrary = nullptr);
 
     /**
-     * Given a vector of endpoints. Returns the first endpoint that has a certain pin type
+     * Given a vector of endpoints. Returns the first Endpoint that has a certain pin type
      *
      * @param[in] dsts - vector of endpoints
      * @param[in] pin_type - pin type
-     * @returns the first endpoint of a certain pin type. (nullptr, "") if no endpoint matches.
+     * @returns the first Endpoint of a certain pin type. (nullptr, "") if no Endpoint matches.
      */
-    endpoint get_destination_by_pin_type(const std::vector<endpoint> dsts, const std::string pin_type);
+    Endpoint get_destination_by_pin_type(const std::vector<Endpoint> dsts, const std::string pin_type);
 
     // NOTE: Using create_test_gate is messy. It should not exist. Will be removed someday...
     /**
-     * Create a test gate with 3 input pins
+     * Create a test Gate with 3 input pins
      *
-     * @param nl - the netlist, the test gate is created in
-     * @param[in] id - id of the gate
-     * @returns an already created AND3 gate
+     * @param nl - the netlist, the test Gate is created in
+     * @param[in] id - id of the Gate
+     * @returns an already created AND3 Gate
      */
-    std::shared_ptr<gate> create_test_gate(std::shared_ptr<netlist> nl, const u32 id);
+    std::shared_ptr<Gate> create_test_gate(std::shared_ptr<Netlist> nl, const u32 id);
     /**
      * Checks if two vectors have the same content regardless of their order. Shouldn't be used for
      * large vectors, since it isn't really efficient.
@@ -179,22 +181,22 @@ namespace test_utils
     bool string_contains_substring(const std::string str, const std::string sub_str);
 
     /**
-     * Get the pointer of a net, which name contains a certain substring. There must be only one name with this subname.
+     * Get the pointer of a Net, which name contains a certain substring. There must be only one name with this subname.
      *
      * @param nl - netlist
-     * @param subname - substring of the net name
-     * @returns the net pointer if there is exactly one net with the subname. Returns nullptr otherwise.
+     * @param subname - substring of the Net name
+     * @returns the Net pointer if there is exactly one Net with the subname. Returns nullptr otherwise.
      */
-    std::shared_ptr<net> get_net_by_subname(std::shared_ptr<netlist> nl, const std::string subname);
+    std::shared_ptr<Net> get_net_by_subname(std::shared_ptr<Netlist> nl, const std::string subname);
 
     /**
-     * Get the pointer of a gate, which name contains a certain substring. There must be only one name with this subname.
+     * Get the pointer of a Gate, which name contains a certain substring. There must be only one name with this subname.
      *
      * @param nl - netlist
-     * @param subname - substring of the net name
-     * @returns the gate pointer if there is exactly one gate with the subname. Returns nullptr otherwise.
+     * @param subname - substring of the Net name
+     * @returns the Gate pointer if there is exactly one Gate with the subname. Returns nullptr otherwise.
      */
-    std::shared_ptr<gate> get_gate_by_subname(std::shared_ptr<netlist> nl, const std::string subname);
+    std::shared_ptr<Gate> get_gate_by_subname(std::shared_ptr<Netlist> nl, const std::string subname);
 
     // ===== File Management =====
     /**
@@ -230,9 +232,9 @@ namespace test_utils
     std::filesystem::path create_sandbox_file(std::string file_name, std::string content);
 
     /**
-     * Creates a gate library dedicated solely to testing. Construction of that gate library is independent of the gate library parser.
+     * Creates a Gate library dedicated solely to testing. Construction of that Gate library is independent of the Gate library parser.
      */
-    std::shared_ptr<gate_library> get_testing_gate_library();
+    std::shared_ptr<GateLibrary> get_testing_gate_library();
 
     // ===== Example Netlists =====
 
@@ -256,7 +258,7 @@ namespace test_utils
      * @param[in] id - id of the netlist
      * @returns the created netlist object
      */
-    std::shared_ptr<netlist> create_example_netlist(const int id = -1);
+    std::shared_ptr<Netlist> create_example_netlist(const int id = -1);
 
     /*
      *      example netlist II
@@ -280,7 +282,7 @@ namespace test_utils
      * @param[in] id - id of the netlist
      * @returns the created netlist object
      */
-    std::shared_ptr<netlist> create_example_netlist_2(const int id = -1);
+    std::shared_ptr<Netlist> create_example_netlist_2(const int id = -1);
 
     /*
      *      example netlist negative
@@ -294,7 +296,7 @@ namespace test_utils
      * @param[in] id - id of the netlist
      * @returns the created netlist object
      */
-    std::shared_ptr<netlist> create_example_netlist_negative(const int id = -1);
+    std::shared_ptr<Netlist> create_example_netlist_negative(const int id = -1);
 
     /*
       *      Example netlist circuit diagram (Id in brackets). Used for get fan in and
@@ -311,16 +313,16 @@ namespace test_utils
       *                              OR2 (6)  =----'        OR2 (7)  =---
       *                           =                      =
       */
-    // Creates a simple netlist shown in the diagram above. The nets that have a GND/VCC gate as a source are named '0'/'1'
+    // Creates a simple netlist shown in the diagram above. The nets that have a GND/VCC Gate as a source are named '0'/'1'
     /**
      * Creates the netlist shown in the diagram above.
-     * The nets which are connected to a GND/VCC gate are named '0'/'1' (necessary for some parser/writer tests).
+     * The nets which are connected to a GND/VCC Gate are named '0'/'1' (necessary for some parser/writer tests).
      * Sets a concrete id if passed.
      *
      * @param[in] id - id of the netlist
      * @returns the created netlist object
      */
-    std::shared_ptr<netlist> create_example_parse_netlist(int id = -1);
+    std::shared_ptr<Netlist> create_example_parse_netlist(int id = -1);
 
     // ===== Netlist Comparison Functions (mainly used to test parser and writer) =====
 
@@ -335,26 +337,26 @@ namespace test_utils
      * id is equal AND name is equal AND the stored data is equal AND the connected pin type is equal AND
      * the connected gates are equal according the function 'gates_are_equal'  AND booth or neither are global inputs/outputs
      *
-     * @param n0[in] - net
-     * @param n1[in] - other net
+     * @param n0[in] - Net
+     * @param n1[in] - other Net
      * @param ignore_id - if the ids should be ignored in comparison
      * @param ignore_name - if the names should be ignored in comparison
      * @returns TRUE if n0 and n1 are equal under the considered conditions. FALSE otherwise.
      */
-    bool nets_are_equal(const std::shared_ptr<net> n0, const std::shared_ptr<net> n1, const bool ignore_id = false, const bool ignore_name = false);
+    bool nets_are_equal(const std::shared_ptr<Net> n0, const std::shared_ptr<Net> n1, const bool ignore_id = false, const bool ignore_name = false);
 
     /**
      * Checks if two gates are equal regardless if they are in the same netlist (they doesn't share a pointer).
      * Two gates are considered equal iff:
-     * id is equal AND name is equal AND the gate type is equal AND the stored data is equal AND both or neither are VCC/GND gates
+     * id is equal AND name is equal AND the Gate type is equal AND the stored data is equal AND both or neither are VCC/GND gates
      *
-     * @param g0[in] - gate
-     * @param g1[in] - other gate
+     * @param g0[in] - Gate
+     * @param g1[in] - other Gate
      * @param ignore_id - if the ids should be ignored in comparison
      * @param ignore_name - if the names should be ignored in comparison
      * @return
      */
-    bool gates_are_equal(const std::shared_ptr<gate> g0, const std::shared_ptr<gate> g1, const bool ignore_id = false, const bool ignore_name = false);
+    bool gates_are_equal(const std::shared_ptr<Gate> g0, const std::shared_ptr<Gate> g1, const bool ignore_id = false, const bool ignore_name = false);
 
     /**
      * Checks if two modules are equal regardless if they are in the same netlist (they doesn't share a pointer).
@@ -368,12 +370,12 @@ namespace test_utils
      * @param ignore_name - if the names should be ignored in comparison
      * @returns TRUE if m_0 and m_1 are equal under the considered conditions. FALSE otherwise.
      */
-    bool modules_are_equal(const std::shared_ptr<module> m_0, const std::shared_ptr<module> m_1, const bool ignore_id = false, const bool ignore_name = false);
+    bool modules_are_equal(const std::shared_ptr<Module> m_0, const std::shared_ptr<Module> m_1, const bool ignore_id = false, const bool ignore_name = false);
 
     /**
      * Checks if two netlist are equal regardless if they are the same object.
      * Two netlists are considered equal iff:
-     * id is equal AND gate library is equal AND their gates are equal according the function 'gates_are_equal' AND
+     * id is equal AND Gate library is equal AND their gates are equal according the function 'gates_are_equal' AND
      * their nets are equal according the function 'nets_are_equal' AND
      * their modules are equal according the function 'modules_are_equal' AND
      * they have the same global GND/VCC gates AND they have the same input/output/inout nets
@@ -381,12 +383,12 @@ namespace test_utils
      *
      * @param nl_0[in] - nl
      * @param nl_1[in] - other nl
-     * @param ignore_id - if the ids should be ignored in comparison (in this case the module-,gate-,net names must be unique)
+     * @param ignore_id - if the ids should be ignored in comparison (in this case the module-,Gate-,Net names must be unique)
      * @returns TRUE if nl_0 and nl_1 are equal under the considered conditions. FALSE otherwise.
      */
-    bool netlists_are_equal(const std::shared_ptr<netlist> nl_0, const std::shared_ptr<netlist> nl_1, const bool ignore_id = false);
+    bool netlists_are_equal(const std::shared_ptr<Netlist> nl_0, const std::shared_ptr<Netlist> nl_1, const bool ignore_id = false);
 
-    // ===== Filter Factory Functions (used in module::get_gates, netlist::get_nets, moduleget_submodules, gate::get_sucessors, gate::get_predecessors) =====
+    // ===== Filter Factory Functions (used in module::get_gates, netlist::get_nets, moduleget_submodules, Gate::get_sucessors, Gate::get_predecessors) =====
 
     // +++ Module Filter +++
 
@@ -396,18 +398,18 @@ namespace test_utils
      * @param name - the name of the modules the filter is searching for
      * @return the std::function object of the filter function
      */
-    std::function<bool(const std::shared_ptr<module>&)> module_name_filter(const std::string& name);
+    std::function<bool(const std::shared_ptr<Module>&)> module_name_filter(const std::string& name);
 
     // +++ Gate Filter +++
 
     /**
-     * Filter only returns true, if the gate is of type 'type' AND has the name 'name'
+     * Filter only returns true, if the Gate is of type 'type' AND has the name 'name'
      *
      * @param type - the type of the gates the filter is searching for
      * @param name - the name of the gates the filter is searching for
      * @return the std::function object of the filter function
      */
-    std::function<bool(const std::shared_ptr<gate>&)> gate_filter(const std::string& type, const std::string& name);
+    std::function<bool(const std::shared_ptr<Gate>&)> gate_filter(const std::string& type, const std::string& name);
 
     /**
      * Filter returns true for gates with the name 'name'
@@ -415,7 +417,7 @@ namespace test_utils
      * @param name - the name of the gates the filter is searching for
      * @return the std::function object of the filter function
      */
-    std::function<bool(const std::shared_ptr<gate>&)> gate_name_filter(const std::string& name);
+    std::function<bool(const std::shared_ptr<Gate>&)> gate_name_filter(const std::string& name);
 
     /**
      * Filter returns true for gates of type 'type'
@@ -423,7 +425,7 @@ namespace test_utils
      * @param type - the type of the gates the filter is searching for
      * @return the std::function object of the filter function
      */
-    std::function<bool(const std::shared_ptr<gate>&)> gate_type_filter(const std::string& type);
+    std::function<bool(const std::shared_ptr<Gate>&)> gate_type_filter(const std::string& type);
 
     // +++ Net Filter +++
 
@@ -433,50 +435,50 @@ namespace test_utils
      * @param name - the name of the nets the filter is searching for
      * @return the std::function object of the filter function
      */
-    std::function<bool(const std::shared_ptr<net>&)> net_name_filter(const std::string& name);
+    std::function<bool(const std::shared_ptr<Net>&)> net_name_filter(const std::string& name);
 
     // +++ Endpoint Filter +++
 
     /**
-     * Filter returns true, if the type of the gate, the endpoint is connected to, is of type 'type'
+     * Filter returns true, if the type of the Gate, the Endpoint is connected to, is of type 'type'
      *
      * @param type - the type of the gates the filter is searching for
      * @return the std::function object of the filter function
      */
-    std::function<bool(const endpoint&)> endpoint_type_filter(const std::string& type);
+    std::function<bool(const Endpoint&)> endpoint_type_filter(const std::string& type);
 
     /**
-     * Filter returns true, if the type of the gate, the endpoint is connected to, has the name 'name'
+     * Filter returns true, if the type of the Gate, the Endpoint is connected to, has the name 'name'
      *
      * @param type - the name of the gates the filter is searching for
      * @return the std::function object of the filter function
      */
-    std::function<bool(const endpoint&)> endpoint_gate_name_filter(const std::string& name);
+    std::function<bool(const Endpoint&)> endpoint_gate_name_filter(const std::string& name);
 
     /**
-     * Filter returns true, for all connected endpoint (of adjacent gates) of type 'pin'
+     * Filter returns true, for all connected Endpoint (of adjacent gates) of type 'pin'
      *
      * @param type - the type of the endpoints the filter is searching for
      * @return the std::function object of the filter function
      */
-    std::function<bool(const std::string&, const endpoint&)> endpoint_pin_filter(const std::string& pin);
+    std::function<bool(const std::string&, const Endpoint&)> endpoint_pin_filter(const std::string& pin);
 
     /**
-     * Filter returns true for all endpoints, that are connected to the pin of pintype 'pin' of the calling gate
+     * Filter returns true for all endpoints, that are connected to the pin of pintype 'pin' of the calling Gate
      *
-     * @param pin - the pin of the gate, calling the get_predecessors/sucesseors function
+     * @param pin - the pin of the Gate, calling the get_predecessors/sucesseors function
      * @return the std::function object of the filter function
      */
-    std::function<bool(const std::string&, const endpoint&)> starting_pin_filter(const std::string& pin);
+    std::function<bool(const std::string&, const Endpoint&)> starting_pin_filter(const std::string& pin);
 
     /**
-     * Filter returns true for all endpoints of adjacent gates of gate type 'type'
+     * Filter returns true for all endpoints of adjacent gates of Gate type 'type'
      *
      * @param type - the type of adjacent gates, the filter is searching for
      * @return the std::function object of the filter function
      */
-    std::function<bool(const std::string&, const endpoint&)> type_filter(const std::string& type);
+    std::function<bool(const std::string&, const Endpoint&)> type_filter(const std::string& type);
 
 }    // namespace test_utils
-
+}
 #endif    // HAL_NETLIST_TEST_UTILS_H

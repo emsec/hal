@@ -82,7 +82,7 @@ void standard_graphics_module::update_alpha()
         s_alpha = 0;
 }
 
-standard_graphics_module::standard_graphics_module(const std::shared_ptr<module> m, bool adjust_size_to_grid) : graphics_module(m)
+standard_graphics_module::standard_graphics_module(const std::shared_ptr<Module> m, bool adjust_size_to_grid) : graphics_module(m)
 {
     format(adjust_size_to_grid);
 }

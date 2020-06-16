@@ -5,6 +5,8 @@
 #include <test_def.h>
 #include "netlist_test_utils.h"
 
+namespace hal
+{
 class log_test : public ::testing::Test
 {
 protected:
@@ -371,4 +373,5 @@ TEST_F(log_test, check_set_file)
     NO_COUT_TEST_BLOCK;
     lm.set_file_name("newFilePath");
     TEST_END
+}
 }

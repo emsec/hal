@@ -86,7 +86,7 @@ module_details_widget::module_details_widget(QWidget* parent) : QWidget(parent)
 
     for(const auto &item : tmp_general_table_dynamic_items)
         add_general_table_dynamic_item(item);
-    
+
     intermediate_layout_gt->addWidget(m_general_table);
     intermediate_layout_gt->addSpacerItem(new QSpacerItem(0,0, QSizePolicy::Expanding, QSizePolicy::Fixed));
     intermediate_layout_ip->addWidget(m_input_ports_table);
@@ -134,11 +134,11 @@ module_details_widget::module_details_widget(QWidget* parent) : QWidget(parent)
 }
 
 void module_details_widget::update(const u32 module_id)
-{    
+{
     m_current_id = module_id;
 
     if(m_current_id == 0)
-        return;    
+        return;
 
     auto m = g_netlist->get_module_by_id(module_id);
 
@@ -172,12 +172,12 @@ void module_details_widget::update(const u32 module_id)
         number_of_gates_text += " in total, " + QString::number(direct_member_number_of_gates) + " as direct members and " + QString::number(indirect_member_number_of_gates) + " in submodules";
 
     m_number_of_gates_item->setText(number_of_gates_text);
-    
+
     m_general_table->resizeColumnsToContents();
     m_general_table->setFixedWidth(calculate_table_size(m_general_table).width());
     m_general_table->update();
 
-    
+
     //update table with input ports
     m_input_ports_table->clearContents();
     m_input_ports_button->setText(QString::fromStdString("Input Ports (") + QString::number(m->get_input_nets().size()) + QString::fromStdString(")"));
@@ -240,7 +240,7 @@ void module_details_widget::update(const u32 module_id)
     m_output_ports_table->setFixedWidth(calculate_table_size(m_output_ports_table).width());
 }
 
-void module_details_widget::handle_netlist_marked_global_input(std::shared_ptr<netlist> netlist, u32 associated_data)
+void module_details_widget::handle_netlist_marked_global_input(std::shared_ptr<Netlist> netlist, u32 associated_data)
 {
     Q_UNUSED(netlist)
 
@@ -264,7 +264,7 @@ void module_details_widget::handle_netlist_marked_global_input(std::shared_ptr<n
     }
 }
 
-void module_details_widget::handle_netlist_marked_global_output(std::shared_ptr<netlist> netlist, u32 associated_data)
+void module_details_widget::handle_netlist_marked_global_output(std::shared_ptr<Netlist> netlist, u32 associated_data)
 {
     Q_UNUSED(netlist)
 
@@ -288,7 +288,7 @@ void module_details_widget::handle_netlist_marked_global_output(std::shared_ptr<
     }
 }
 
-void module_details_widget::handle_netlist_marked_global_inout(std::shared_ptr<netlist> netlist, u32 associated_data)
+void module_details_widget::handle_netlist_marked_global_inout(std::shared_ptr<Netlist> netlist, u32 associated_data)
 {
     Q_UNUSED(netlist)
 
@@ -312,7 +312,7 @@ void module_details_widget::handle_netlist_marked_global_inout(std::shared_ptr<n
     }
 }
 
-void module_details_widget::handle_netlist_unmarked_global_input(std::shared_ptr<netlist> netlist, u32 associated_data)
+void module_details_widget::handle_netlist_unmarked_global_input(std::shared_ptr<Netlist> netlist, u32 associated_data)
 {
     Q_UNUSED(netlist)
 
@@ -336,7 +336,7 @@ void module_details_widget::handle_netlist_unmarked_global_input(std::shared_ptr
     }
 }
 
-void module_details_widget::handle_netlist_unmarked_global_output(std::shared_ptr<netlist> netlist, u32 associated_data)
+void module_details_widget::handle_netlist_unmarked_global_output(std::shared_ptr<Netlist> netlist, u32 associated_data)
 {
     Q_UNUSED(netlist)
 
@@ -360,7 +360,7 @@ void module_details_widget::handle_netlist_unmarked_global_output(std::shared_pt
     }
 }
 
-void module_details_widget::handle_netlist_unmarked_global_inout(std::shared_ptr<netlist> netlist, u32 associated_data)
+void module_details_widget::handle_netlist_unmarked_global_inout(std::shared_ptr<Netlist> netlist, u32 associated_data)
 {
     Q_UNUSED(netlist)
 
@@ -384,13 +384,13 @@ void module_details_widget::handle_netlist_unmarked_global_inout(std::shared_ptr
     }
 }
 
-void module_details_widget::handle_module_name_changed(std::shared_ptr<module> module)
-{ 
+void module_details_widget::handle_module_name_changed(std::shared_ptr<Module> module)
+{
     if(m_current_id == module->get_id())
         update(m_current_id);
 }
 
-void module_details_widget::handle_submodule_added(std::shared_ptr<module> module, u32 associated_data)
+void module_details_widget::handle_submodule_added(std::shared_ptr<Module> module, u32 associated_data)
 {
     Q_UNUSED(associated_data);
 
@@ -403,20 +403,7 @@ void module_details_widget::handle_submodule_added(std::shared_ptr<module> modul
         update(m_current_id);
 }
 
-void module_details_widget::handle_submodule_removed(std::shared_ptr<module> module, u32 associated_data)
-{
-    Q_UNUSED(associated_data);
- 
-    if(m_current_id == 0)
-        return;
-
-    auto current_module = g_netlist->get_module_by_id(m_current_id);
-
-    if(m_current_id == module->get_id() || current_module->contains_module(module, true))
-        update(m_current_id);
-}
-
-void module_details_widget::handle_module_gate_assigned(std::shared_ptr<module> module, u32 associated_data)
+void module_details_widget::handle_submodule_removed(std::shared_ptr<Module> module, u32 associated_data)
 {
     Q_UNUSED(associated_data);
 
@@ -429,7 +416,7 @@ void module_details_widget::handle_module_gate_assigned(std::shared_ptr<module> 
         update(m_current_id);
 }
 
-void module_details_widget::handle_module_gate_removed(std::shared_ptr<module> module, u32 associated_data)
+void module_details_widget::handle_module_gate_assigned(std::shared_ptr<Module> module, u32 associated_data)
 {
     Q_UNUSED(associated_data);
 
@@ -442,7 +429,20 @@ void module_details_widget::handle_module_gate_removed(std::shared_ptr<module> m
         update(m_current_id);
 }
 
-void module_details_widget::handle_module_input_port_name_changed(std::shared_ptr<module> module, u32 associated_data)
+void module_details_widget::handle_module_gate_removed(std::shared_ptr<Module> module, u32 associated_data)
+{
+    Q_UNUSED(associated_data);
+
+    if(m_current_id == 0)
+        return;
+
+    auto current_module = g_netlist->get_module_by_id(m_current_id);
+
+    if(m_current_id == module->get_id() || current_module->contains_module(module, true))
+        update(m_current_id);
+}
+
+void module_details_widget::handle_module_input_port_name_changed(std::shared_ptr<Module> module, u32 associated_data)
 {
     Q_UNUSED(associated_data);
 
@@ -450,7 +450,7 @@ void module_details_widget::handle_module_input_port_name_changed(std::shared_pt
         update(m_current_id);
 }
 
-void module_details_widget::handle_module_output_port_name_changed(std::shared_ptr<module> module, u32 associated_data)
+void module_details_widget::handle_module_output_port_name_changed(std::shared_ptr<Module> module, u32 associated_data)
 {
     Q_UNUSED(associated_data);
 
@@ -458,13 +458,13 @@ void module_details_widget::handle_module_output_port_name_changed(std::shared_p
         update(m_current_id);
 }
 
-void module_details_widget::handle_module_type_changed(std::shared_ptr<module> module)
+void module_details_widget::handle_module_type_changed(std::shared_ptr<Module> module)
 {
     if(m_current_id == module->get_id())
         update(m_current_id);
 }
 
-void module_details_widget::handle_net_name_changed(std::shared_ptr<net> net)
+void module_details_widget::handle_net_name_changed(std::shared_ptr<Net> net)
 {
     if(m_current_id == 0)
         return;
@@ -477,7 +477,7 @@ void module_details_widget::handle_net_name_changed(std::shared_ptr<net> net)
         update(m_current_id);
 }
 
-void module_details_widget::handle_net_source_added(std::shared_ptr<net> net, const u32 src_gate_id)
+void module_details_widget::handle_net_source_added(std::shared_ptr<Net> net, const u32 src_gate_id)
 {
     Q_UNUSED(net)
 
@@ -486,12 +486,12 @@ void module_details_widget::handle_net_source_added(std::shared_ptr<net> net, co
 
     auto module = g_netlist->get_module_by_id(m_current_id);
     auto gate = g_netlist->get_gate_by_id(src_gate_id);
-    
+
     if(module->contains_gate(gate, true))
         update(m_current_id);
 }
 
-void module_details_widget::handle_net_source_removed(std::shared_ptr<net> net, const u32 src_gate_id)
+void module_details_widget::handle_net_source_removed(std::shared_ptr<Net> net, const u32 src_gate_id)
 {
     Q_UNUSED(net)
 
@@ -500,12 +500,12 @@ void module_details_widget::handle_net_source_removed(std::shared_ptr<net> net, 
 
     auto module = g_netlist->get_module_by_id(m_current_id);
     auto gate = g_netlist->get_gate_by_id(src_gate_id);
-    
+
     if(module->contains_gate(gate, true))
         update(m_current_id);
 }
 
-void module_details_widget::handle_net_destination_added(std::shared_ptr<net> net, const u32 dst_gate_id)
+void module_details_widget::handle_net_destination_added(std::shared_ptr<Net> net, const u32 dst_gate_id)
 {
     Q_UNUSED(net)
 
@@ -514,12 +514,12 @@ void module_details_widget::handle_net_destination_added(std::shared_ptr<net> ne
 
     auto module = g_netlist->get_module_by_id(m_current_id);
     auto gate = g_netlist->get_gate_by_id(dst_gate_id);
-    
+
     if(module->contains_gate(gate, true))
         update(m_current_id);
 }
 
-void module_details_widget::handle_net_destination_removed(std::shared_ptr<net> net, const u32 dst_gate_id)
+void module_details_widget::handle_net_destination_removed(std::shared_ptr<Net> net, const u32 dst_gate_id)
 {
     Q_UNUSED(net)
 
@@ -528,7 +528,7 @@ void module_details_widget::handle_net_destination_removed(std::shared_ptr<net> 
 
     auto module = g_netlist->get_module_by_id(m_current_id);
     auto gate = g_netlist->get_gate_by_id(dst_gate_id);
-    
+
     if(module->contains_gate(gate, true))
         update(m_current_id);
 }

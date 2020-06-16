@@ -16,7 +16,7 @@ namespace hal
 {
     namespace netlist_factory
     {
-        std::shared_ptr<netlist> create_netlist(const std::shared_ptr<gate_library>& gate_library)
+        std::shared_ptr<Netlist> create_netlist(const std::shared_ptr<GateLibrary>& gate_library)
         {
             if (gate_library == nullptr)
             {
@@ -24,10 +24,10 @@ namespace hal
                 return nullptr;
             }
 
-            return std::make_shared<netlist>(gate_library);
+            return std::make_shared<Netlist>(gate_library);
         }
 
-        std::shared_ptr<netlist> load_netlist(const std::filesystem::path& hdl_file, const std::string& language, const std::filesystem::path& gate_library_file)
+        std::shared_ptr<Netlist> load_netlist(const std::filesystem::path& hdl_file, const std::string& language, const std::filesystem::path& gate_library_file)
         {
             if (access(hdl_file.c_str(), F_OK | R_OK) == -1)
             {
@@ -43,12 +43,12 @@ namespace hal
                 return nullptr;
             }
 
-            std::shared_ptr<netlist> nl = hdl_parser_dispatcher::parse(lib, language, hdl_file);
+            std::shared_ptr<Netlist> nl = HDLParserDispatcher::parse(lib, language, hdl_file);
 
             return nl;
         }
 
-        std::shared_ptr<netlist> load_netlist(const std::filesystem::path& hal_file)
+        std::shared_ptr<Netlist> load_netlist(const std::filesystem::path& hal_file)
         {
             if (access(hal_file.c_str(), F_OK | R_OK) == -1)
             {
@@ -56,12 +56,12 @@ namespace hal
                 return nullptr;
             }
 
-            std::shared_ptr<netlist> nl = netlist_serializer::deserialize_from_file(hal_file);
+            std::shared_ptr<Netlist> nl = netlist_serializer::deserialize_from_file(hal_file);
 
             return nl;
         }
 
-        std::shared_ptr<netlist> load_netlist(const ProgramArguments& args)
+        std::shared_ptr<Netlist> load_netlist(const ProgramArguments& args)
         {
             if (!args.is_option_set("--input-file"))
             {
@@ -79,7 +79,7 @@ namespace hal
 
             auto extension = file_name.extension();
 
-            std::shared_ptr<netlist> nl = nullptr;
+            std::shared_ptr<Netlist> nl = nullptr;
 
             if (extension == ".hal")
             {
@@ -87,7 +87,7 @@ namespace hal
             }
             else
             {
-                nl = hdl_parser_dispatcher::parse(file_name, args);
+                nl = HDLParserDispatcher::parse(file_name, args);
             }
 
             return nl;

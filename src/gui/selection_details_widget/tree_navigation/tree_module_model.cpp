@@ -36,7 +36,7 @@ QVariant tree_module_model::data(const QModelIndex& index, int role) const
     {
         if (role == Qt::FontRole)
             return m_structured_font;
-        
+
 //        if(get_item(index) == m_gates_item && role == Qt::DecorationRole)
 //            return m_design_icon;
     }
@@ -163,13 +163,13 @@ void tree_module_model::update(u32 module_id)
     m_gates_item->set_data(NAME_COLUMN, "Gates (" + QString::number(gates.size()) + ")");
     m_nets_item->set_data(NAME_COLUMN, "Nets (" + QString::number(nets.size()) + ")");
 
-    for(const std::shared_ptr<gate> &_g : gates)
+    for(const std::shared_ptr<Gate> &_g : gates)
     {
         tree_module_item* item = new tree_module_item(QVector<QVariant>() << QString::fromStdString(_g->get_name()) << _g->get_id() << QString::fromStdString(_g->get_type()->get_name()), tree_module_item::item_type::gate, m_gates_item);
         insert_item(m_gates_item, m_gates_item->get_child_count(), item);
     }
 
-    for(const std::shared_ptr<net> &_n : nets)
+    for(const std::shared_ptr<Net> &_n : nets)
     {
         tree_module_item* item = new tree_module_item(QVector<QVariant>() << QString::fromStdString(_n->get_name()) << _n->get_id() << "", tree_module_item::item_type::net, m_nets_item);
         insert_item(m_nets_item, m_nets_item->get_child_count(), item);

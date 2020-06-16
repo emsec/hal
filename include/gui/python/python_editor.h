@@ -127,8 +127,8 @@ public:
     void set_toggle_minimap_icon_path(const QString& path);
     void set_toggle_minimap_icon_style(const QString& style);
 
-    bool handle_serialization_to_hal_file(const std::filesystem::path& path, std::shared_ptr<netlist> netlist, rapidjson::Document& document);
-    bool handle_deserialization_from_hal_file(const std::filesystem::path& path, std::shared_ptr<netlist> netlist, rapidjson::Document& document);
+    bool handle_serialization_to_hal_file(const std::filesystem::path& path, std::shared_ptr<Netlist> netlist, rapidjson::Document& document);
+    bool handle_deserialization_from_hal_file(const std::filesystem::path& path, std::shared_ptr<Netlist> netlist, rapidjson::Document& document);
 
 Q_SIGNALS:
     void forward_stdout(const QString& output);

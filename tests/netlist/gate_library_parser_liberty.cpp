@@ -11,6 +11,9 @@
 #include <experimental/filesystem>
 
 
+namespace hal
+{
+
 using namespace test_utils;
 
 class gate_library_parser_liberty_test : public ::testing::Test
@@ -27,7 +30,7 @@ protected:
 };
 
 /**
- * Testing the creation of a combinatorial gate type with one input pin, one output pin and a boolean function.
+ * Testing the creation of a combinatorial Gate type with one input pin, one output pin and a boolean function.
  *
  * Functions: parse
  */
@@ -52,36 +55,36 @@ TEST_F(gate_library_parser_liberty_test, check_combinatorial)
                                     "        }\n"
                                     "    }\n"
                                     "}");
-            gate_library_parser_liberty liberty_parser("imaginary_path", input);
-            std::shared_ptr<gate_library> gl = liberty_parser.parse();
+            GateLibraryParserLiberty liberty_parser("imaginary_path", input);
+            std::shared_ptr<GateLibrary> gl = liberty_parser.parse();
 
             ASSERT_NE(gl, nullptr);
 
-            // Check that the name of the gate library
+            // Check that the name of the Gate library
             EXPECT_EQ(gl->get_name(), "TEST_GATE_LIBRARY");
 
-            // Check that the gate type was created
+            // Check that the Gate type was created
             ASSERT_EQ(gl->get_gate_types().size(), 1);
             auto gt_it = gl->get_gate_types().find("TEST_GATE_TYPE");
             ASSERT_TRUE(gt_it != gl->get_gate_types().end());
-            std::shared_ptr<const gate_type> gt = gt_it->second;
+            std::shared_ptr<const GateType> gt = gt_it->second;
 
-            // Check the content of the created gate type
-            EXPECT_EQ(gt->get_base_type(), gate_type::base_type::combinatorial);
+            // Check the content of the created Gate type
+            EXPECT_EQ(gt->get_base_type(), GateType::BaseType::combinatorial);
             // -- Check the pins
             EXPECT_EQ(gt->get_input_pins(), std::vector<std::string>({"I"}));
             EXPECT_EQ(gt->get_output_pins(), std::vector<std::string>({"O"}));
             // -- Check the boolean functions
             ASSERT_TRUE(gt->get_boolean_functions().find("O") != gt->get_boolean_functions().end());
-            EXPECT_EQ(gt->get_boolean_functions().at("O"), boolean_function::from_string("I", std::vector<std::string>({"I"})));
+            EXPECT_EQ(gt->get_boolean_functions().at("O"), BooleanFunction::from_string("I", std::vector<std::string>({"I"})));
             ASSERT_TRUE(gt->get_boolean_functions().find("O_undefined") != gt->get_boolean_functions().end()); // x_function
-            EXPECT_EQ(gt->get_boolean_functions().at("O_undefined"), boolean_function::from_string("!I", std::vector<std::string>({"I"})));
+            EXPECT_EQ(gt->get_boolean_functions().at("O_undefined"), BooleanFunction::from_string("!I", std::vector<std::string>({"I"})));
         }
     TEST_END
 }
 
 /**
- * Testing the creation of a LUT gate type
+ * Testing the creation of a LUT Gate type
  *
  * Functions: parse
  */
@@ -89,7 +92,7 @@ TEST_F(gate_library_parser_liberty_test, check_lut)
 {
     TEST_START
         {
-            // Create a LUT gate type with two input pins and four output pins
+            // Create a LUT Gate type with two input pins and four output pins
             // O0 and O2 generate their output by an initializer string.
             // O1 and O3 are given normal boolean functions.
             std::stringstream input("library (TEST_GATE_LIBRARY) {\n"
@@ -124,26 +127,26 @@ TEST_F(gate_library_parser_liberty_test, check_lut)
                                     "        }\n"
                                     "    }"
                                     "}");
-            gate_library_parser_liberty liberty_parser("imaginary_path", input);
-            std::shared_ptr<gate_library> gl = liberty_parser.parse();
+            GateLibraryParserLiberty liberty_parser("imaginary_path", input);
+            std::shared_ptr<GateLibrary> gl = liberty_parser.parse();
 
             ASSERT_NE(gl, nullptr);
 
-            // Check that the gate type was created
+            // Check that the Gate type was created
             ASSERT_EQ(gl->get_gate_types().size(), 1);
             auto gt_it = gl->get_gate_types().find("TEST_LUT");
             ASSERT_TRUE(gt_it != gl->get_gate_types().end());
-            std::shared_ptr<const gate_type> gt = gt_it->second;
-            ASSERT_EQ(gt->get_base_type(), gate_type::base_type::lut);
-            std::shared_ptr<const gate_type_lut> gt_lut = std::dynamic_pointer_cast<const gate_type_lut>(gt);
+            std::shared_ptr<const GateType> gt = gt_it->second;
+            ASSERT_EQ(gt->get_base_type(), GateType::BaseType::lut);
+            std::shared_ptr<const GateTypeLut> gt_lut = std::dynamic_pointer_cast<const GateTypeLut>(gt);
 
-            // Check the content of the created gate type
+            // Check the content of the created Gate type
             EXPECT_EQ(gt_lut->get_input_pins(), std::vector<std::string>({"I0", "I1"}));
             EXPECT_EQ(gt_lut->get_output_pins(), std::vector<std::string>({"O0", "O1", "O2", "O3"}));
             ASSERT_TRUE(gt_lut->get_boolean_functions().find("O1") != gt_lut->get_boolean_functions().end());
-            EXPECT_EQ(gt_lut->get_boolean_functions().at("O1"), boolean_function::from_string("I0 ^ I1", std::vector<std::string>({"I0","I1"})));
+            EXPECT_EQ(gt_lut->get_boolean_functions().at("O1"), BooleanFunction::from_string("I0 ^ I1", std::vector<std::string>({"I0","I1"})));
             ASSERT_TRUE(gt_lut->get_boolean_functions().find("O3") != gt_lut->get_boolean_functions().end());
-            EXPECT_EQ(gt_lut->get_boolean_functions().at("O3"), boolean_function::from_string("I0 & I1", std::vector<std::string>({"I0", "I1"})));
+            EXPECT_EQ(gt_lut->get_boolean_functions().at("O3"), BooleanFunction::from_string("I0 & I1", std::vector<std::string>({"I0", "I1"})));
             // -- LUT specific
             EXPECT_EQ(gt_lut->get_output_from_init_string_pins(), std::unordered_set<std::string>({"O0", "O2"}));
             EXPECT_EQ(gt_lut->get_config_data_category(), "test_category");
@@ -152,7 +155,7 @@ TEST_F(gate_library_parser_liberty_test, check_lut)
 
         }
         {
-            // Create a simple LUT gate type with an descending bit order
+            // Create a simple LUT Gate type with an descending bit order
             std::stringstream input("library (TEST_GATE_LIBRARY) {\n"
                                     "    define(cell);\n"
                                     "    cell(TEST_LUT) {\n"
@@ -170,20 +173,20 @@ TEST_F(gate_library_parser_liberty_test, check_lut)
                                     "        }\n"
                                     "    }"
                                     "}");
-            gate_library_parser_liberty liberty_parser("imaginary_path", input);
-            std::shared_ptr<gate_library> gl = liberty_parser.parse();
+            GateLibraryParserLiberty liberty_parser("imaginary_path", input);
+            std::shared_ptr<GateLibrary> gl = liberty_parser.parse();
 
             ASSERT_NE(gl, nullptr);
 
-            // Check that the gate type was created
+            // Check that the Gate type was created
             ASSERT_EQ(gl->get_gate_types().size(), 1);
             auto gt_it = gl->get_gate_types().find("TEST_LUT");
             ASSERT_TRUE(gt_it != gl->get_gate_types().end());
-            std::shared_ptr<const gate_type> gt = gt_it->second;
-            ASSERT_EQ(gt->get_base_type(), gate_type::base_type::lut);
-            std::shared_ptr<const gate_type_lut> gt_lut = std::dynamic_pointer_cast<const gate_type_lut>(gt);
+            std::shared_ptr<const GateType> gt = gt_it->second;
+            ASSERT_EQ(gt->get_base_type(), GateType::BaseType::lut);
+            std::shared_ptr<const GateTypeLut> gt_lut = std::dynamic_pointer_cast<const GateTypeLut>(gt);
 
-            // Check the content of the created gate type
+            // Check the content of the created Gate type
             EXPECT_EQ(gt_lut->is_config_data_ascending_order(), false);
 
         }
@@ -200,7 +203,7 @@ TEST_F(gate_library_parser_liberty_test, check_flip_flop)
 {
     TEST_START
         {
-            // Create a flip-flop gate type with two input pins and four output pins
+            // Create a flip-flop Gate type with two input pins and four output pins
             std::stringstream input("library (TEST_GATE_LIBRARY) {\n"
                                     "    define(cell);\n"
                                     "    cell(TEST_FF) {\n"
@@ -244,38 +247,38 @@ TEST_F(gate_library_parser_liberty_test, check_flip_flop)
                                     "        }\n"
                                     "    }"
                                     "}");
-            gate_library_parser_liberty liberty_parser("imaginary_path", input);
-            std::shared_ptr<gate_library> gl = liberty_parser.parse();
+            GateLibraryParserLiberty liberty_parser("imaginary_path", input);
+            std::shared_ptr<GateLibrary> gl = liberty_parser.parse();
 
             ASSERT_NE(gl, nullptr);
 
-            // Check that the gate type was created
+            // Check that the Gate type was created
             ASSERT_EQ(gl->get_gate_types().size(), 1);
             auto gt_it = gl->get_gate_types().find("TEST_FF");
             ASSERT_TRUE(gt_it != gl->get_gate_types().end());
-            std::shared_ptr<const gate_type> gt = gt_it->second;
-            ASSERT_EQ(gt->get_base_type(), gate_type::base_type::ff);
-            std::shared_ptr<const gate_type_sequential> gt_ff = std::dynamic_pointer_cast<const gate_type_sequential>(gt);
+            std::shared_ptr<const GateType> gt = gt_it->second;
+            ASSERT_EQ(gt->get_base_type(), GateType::BaseType::ff);
+            std::shared_ptr<const GateTypeSequential> gt_ff = std::dynamic_pointer_cast<const GateTypeSequential>(gt);
 
-            // Check the content of the created gate type
+            // Check the content of the created Gate type
             EXPECT_EQ(gt_ff->get_input_pins(), std::vector<std::string>({"CLK", "CE", "D", "R", "S"}));
             EXPECT_EQ(gt_ff->get_output_pins(), std::vector<std::string>({"Q", "QN", "O"}));
             ASSERT_TRUE(gt_ff->get_boolean_functions().find("O") != gt_ff->get_boolean_functions().end());
-            EXPECT_EQ(gt_ff->get_boolean_functions().at("O"), boolean_function::from_string("S & R & D", std::vector<std::string>({"S", "R", "D"})));
+            EXPECT_EQ(gt_ff->get_boolean_functions().at("O"), BooleanFunction::from_string("S & R & D", std::vector<std::string>({"S", "R", "D"})));
             // -- Check the boolean functions of the ff group that are parsed (currently only next_state, clock_on(clock), preset(set) and clear(reset) are parsed )
             ASSERT_TRUE(gt_ff->get_boolean_functions().find("next_state") != gt_ff->get_boolean_functions().end());
-            EXPECT_EQ(gt_ff->get_boolean_functions().at("next_state"), boolean_function::from_string("D", std::vector<std::string>({"D"})));
+            EXPECT_EQ(gt_ff->get_boolean_functions().at("next_state"), BooleanFunction::from_string("D", std::vector<std::string>({"D"})));
             ASSERT_TRUE(gt_ff->get_boolean_functions().find("clock") != gt_ff->get_boolean_functions().end());
-            EXPECT_EQ(gt_ff->get_boolean_functions().at("clock"), boolean_function::from_string("CLK", std::vector<std::string>({"CLK"})));
+            EXPECT_EQ(gt_ff->get_boolean_functions().at("clock"), BooleanFunction::from_string("CLK", std::vector<std::string>({"CLK"})));
             ASSERT_TRUE(gt_ff->get_boolean_functions().find("preset") != gt_ff->get_boolean_functions().end());
-            EXPECT_EQ(gt_ff->get_boolean_functions().at("preset"), boolean_function::from_string("S", std::vector<std::string>({"S"})));
+            EXPECT_EQ(gt_ff->get_boolean_functions().at("preset"), BooleanFunction::from_string("S", std::vector<std::string>({"S"})));
             ASSERT_TRUE(gt_ff->get_boolean_functions().find("clear") != gt_ff->get_boolean_functions().end());
-            EXPECT_EQ(gt_ff->get_boolean_functions().at("clear"), boolean_function::from_string("R", std::vector<std::string>({"R"})));
+            EXPECT_EQ(gt_ff->get_boolean_functions().at("clear"), BooleanFunction::from_string("R", std::vector<std::string>({"R"})));
             // -- Check the output pins
             EXPECT_EQ(gt_ff->get_state_output_pins(), std::unordered_set<std::string>({"Q"}));
             EXPECT_EQ(gt_ff->get_inverted_state_output_pins(), std::unordered_set<std::string>({"QN"}));
             // -- Check the set-reset behaviour
-            EXPECT_EQ(gt_ff->get_set_reset_behavior(), std::make_pair(gate_type_sequential::set_reset_behavior::L, gate_type_sequential::set_reset_behavior::H));
+            EXPECT_EQ(gt_ff->get_set_reset_behavior(), std::make_pair(GateTypeSequential::SetResetBehavior::L, GateTypeSequential::SetResetBehavior::H));
         }
     TEST_END
 }
@@ -289,7 +292,7 @@ TEST_F(gate_library_parser_liberty_test, check_latch)
 {
     TEST_START
         {
-            // Create a flip-flop gate type with two input pins and four output pins
+            // Create a flip-flop Gate type with two input pins and four output pins
             std::stringstream input("library (TEST_GATE_LIBRARY) {\n"
                                     "    define(cell);\n"
                                     "    cell(TEST_LATCH) {\n"
@@ -327,38 +330,38 @@ TEST_F(gate_library_parser_liberty_test, check_latch)
                                     "        }\n"
                                     "    }"
                                     "}");
-            gate_library_parser_liberty liberty_parser("imaginary_path", input);
-            std::shared_ptr<gate_library> gl = liberty_parser.parse();
+            GateLibraryParserLiberty liberty_parser("imaginary_path", input);
+            std::shared_ptr<GateLibrary> gl = liberty_parser.parse();
 
             ASSERT_NE(gl, nullptr);
 
-            // Check that the gate type was created
+            // Check that the Gate type was created
             ASSERT_EQ(gl->get_gate_types().size(), 1);
             auto gt_it = gl->get_gate_types().find("TEST_LATCH");
             ASSERT_TRUE(gt_it != gl->get_gate_types().end());
-            std::shared_ptr<const gate_type> gt = gt_it->second;
-            ASSERT_EQ(gt->get_base_type(), gate_type::base_type::latch);
-            std::shared_ptr<const gate_type_sequential> gt_latch = std::dynamic_pointer_cast<const gate_type_sequential>(gt);
+            std::shared_ptr<const GateType> gt = gt_it->second;
+            ASSERT_EQ(gt->get_base_type(), GateType::BaseType::latch);
+            std::shared_ptr<const GateTypeSequential> gt_latch = std::dynamic_pointer_cast<const GateTypeSequential>(gt);
 
-            // Check the content of the created gate type
+            // Check the content of the created Gate type
             EXPECT_EQ(gt_latch->get_input_pins(), std::vector<std::string>({"G", "D", "S", "R"}));
             EXPECT_EQ(gt_latch->get_output_pins(), std::vector<std::string>({"Q", "QN", "O"}));
             ASSERT_TRUE(gt_latch->get_boolean_functions().find("O") != gt_latch->get_boolean_functions().end());
-            EXPECT_EQ(gt_latch->get_boolean_functions().at("O"), boolean_function::from_string("S & R & D", std::vector<std::string>({"S", "R", "D"})));
+            EXPECT_EQ(gt_latch->get_boolean_functions().at("O"), BooleanFunction::from_string("S & R & D", std::vector<std::string>({"S", "R", "D"})));
             // -- Check the boolean functions of the latch group that are parsed (currently only enable, data_in, preset(set) and clear(reset) are parsed)
             ASSERT_TRUE(gt_latch->get_boolean_functions().find("enable") != gt_latch->get_boolean_functions().end());
-            EXPECT_EQ(gt_latch->get_boolean_functions().at("enable"), boolean_function::from_string("G", std::vector<std::string>({"G"})));
+            EXPECT_EQ(gt_latch->get_boolean_functions().at("enable"), BooleanFunction::from_string("G", std::vector<std::string>({"G"})));
             ASSERT_TRUE(gt_latch->get_boolean_functions().find("data") != gt_latch->get_boolean_functions().end());
-            EXPECT_EQ(gt_latch->get_boolean_functions().at("data"), boolean_function::from_string("D", std::vector<std::string>({"D"})));
+            EXPECT_EQ(gt_latch->get_boolean_functions().at("data"), BooleanFunction::from_string("D", std::vector<std::string>({"D"})));
             ASSERT_TRUE(gt_latch->get_boolean_functions().find("preset") != gt_latch->get_boolean_functions().end());
-            EXPECT_EQ(gt_latch->get_boolean_functions().at("preset"), boolean_function::from_string("S", std::vector<std::string>({"S"})));
+            EXPECT_EQ(gt_latch->get_boolean_functions().at("preset"), BooleanFunction::from_string("S", std::vector<std::string>({"S"})));
             ASSERT_TRUE(gt_latch->get_boolean_functions().find("clear") != gt_latch->get_boolean_functions().end());
-            EXPECT_EQ(gt_latch->get_boolean_functions().at("clear"), boolean_function::from_string("R", std::vector<std::string>({"R"})));
+            EXPECT_EQ(gt_latch->get_boolean_functions().at("clear"), BooleanFunction::from_string("R", std::vector<std::string>({"R"})));
             // -- Check the output pins
             EXPECT_EQ(gt_latch->get_state_output_pins(), std::unordered_set<std::string>({"Q"}));
             EXPECT_EQ(gt_latch->get_inverted_state_output_pins(), std::unordered_set<std::string>({"QN"}));
             // -- Check the set-reset behaviour
-            EXPECT_EQ(gt_latch->get_set_reset_behavior(), std::make_pair(gate_type_sequential::set_reset_behavior::N, gate_type_sequential::set_reset_behavior::T));
+            EXPECT_EQ(gt_latch->get_set_reset_behavior(), std::make_pair(GateTypeSequential::SetResetBehavior::N, GateTypeSequential::SetResetBehavior::T));
 
         }
     TEST_END
@@ -390,15 +393,15 @@ TEST_F(gate_library_parser_liberty_test, check_multiline_comment)
                                     "        \n"
                                     "    }\n"
                                     "}");
-            gate_library_parser_liberty liberty_parser("imaginary_path", input);
-            std::shared_ptr<gate_library> gl = liberty_parser.parse();
+            GateLibraryParserLiberty liberty_parser("imaginary_path", input);
+            std::shared_ptr<GateLibrary> gl = liberty_parser.parse();
 
             ASSERT_NE(gl, nullptr);
-            // Check that the gate type was created
+            // Check that the Gate type was created
             ASSERT_EQ(gl->get_gate_types().size(), 1);
             auto gt_it = gl->get_gate_types().find("TEST_GATE_TYPE");
             ASSERT_TRUE(gt_it != gl->get_gate_types().end());
-            std::shared_ptr<const gate_type> gt = gt_it->second;
+            std::shared_ptr<const GateType> gt = gt_it->second;
 
             // Check that only the pins outside the comments are created
             EXPECT_EQ(gt->get_input_pins(), std::vector<std::string>({"I"}));
@@ -419,8 +422,8 @@ TEST_F(gate_library_parser_liberty_test, check_invalid_input)
             // Pass an empty input stream
             NO_COUT_TEST_BLOCK;
             std::stringstream input("");
-            gate_library_parser_liberty liberty_parser("imaginary_path", input);
-            std::shared_ptr<gate_library> gl = liberty_parser.parse();
+            GateLibraryParserLiberty liberty_parser("imaginary_path", input);
+            std::shared_ptr<GateLibrary> gl = liberty_parser.parse();
 
             EXPECT_EQ(gl, nullptr);
         }
@@ -448,8 +451,8 @@ TEST_F(gate_library_parser_liberty_test, check_invalid_input)
                                     "        }\n"
                                     "    }"
                                     "}");
-            gate_library_parser_liberty liberty_parser("imaginary_path", input);
-            std::shared_ptr<gate_library> gl = liberty_parser.parse();
+            GateLibraryParserLiberty liberty_parser("imaginary_path", input);
+            std::shared_ptr<GateLibrary> gl = liberty_parser.parse();
 
             EXPECT_EQ(gl, nullptr);
         }
@@ -477,8 +480,8 @@ TEST_F(gate_library_parser_liberty_test, check_invalid_input)
                                     "        }\n"
                                     "    }"
                                     "}");
-            gate_library_parser_liberty liberty_parser("imaginary_path", input);
-            std::shared_ptr<gate_library> gl = liberty_parser.parse();
+            GateLibraryParserLiberty liberty_parser("imaginary_path", input);
+            std::shared_ptr<GateLibrary> gl = liberty_parser.parse();
 
             EXPECT_EQ(gl, nullptr);
         }
@@ -505,8 +508,8 @@ TEST_F(gate_library_parser_liberty_test, check_invalid_input)
                                     "        }\n"
                                     "    }"
                                     "}");
-            gate_library_parser_liberty liberty_parser("imaginary_path", input);
-            std::shared_ptr<gate_library> gl = liberty_parser.parse();
+            GateLibraryParserLiberty liberty_parser("imaginary_path", input);
+            std::shared_ptr<GateLibrary> gl = liberty_parser.parse();
 
             EXPECT_EQ(gl, nullptr);
         }
@@ -533,8 +536,8 @@ TEST_F(gate_library_parser_liberty_test, check_invalid_input)
                                     "        }\n"
                                     "    }"
                                     "}");
-            gate_library_parser_liberty liberty_parser("imaginary_path", input);
-            std::shared_ptr<gate_library> gl = liberty_parser.parse();
+            GateLibraryParserLiberty liberty_parser("imaginary_path", input);
+            std::shared_ptr<GateLibrary> gl = liberty_parser.parse();
 
             EXPECT_EQ(gl, nullptr);
         }
@@ -558,8 +561,8 @@ TEST_F(gate_library_parser_liberty_test, check_invalid_input)
                                     "        }\n"
                                     "    }"
                                     "}");
-            gate_library_parser_liberty liberty_parser("imaginary_path", input);
-            std::shared_ptr<gate_library> gl = liberty_parser.parse();
+            GateLibraryParserLiberty liberty_parser("imaginary_path", input);
+            std::shared_ptr<GateLibrary> gl = liberty_parser.parse();
 
             EXPECT_EQ(gl, nullptr);
         }
@@ -581,8 +584,8 @@ TEST_F(gate_library_parser_liberty_test, check_invalid_input)
                                     "        }\n"
                                     "    }"
                                     "}");
-            gate_library_parser_liberty liberty_parser("imaginary_path", input);
-            std::shared_ptr<gate_library> gl = liberty_parser.parse();
+            GateLibraryParserLiberty liberty_parser("imaginary_path", input);
+            std::shared_ptr<GateLibrary> gl = liberty_parser.parse();
 
             EXPECT_EQ(gl, nullptr);
         }
@@ -601,8 +604,8 @@ TEST_F(gate_library_parser_liberty_test, check_invalid_input)
                                     "        }\n"
                                     "    }\n"
                                     "}");
-            gate_library_parser_liberty liberty_parser("imaginary_path", input);
-            std::shared_ptr<gate_library> gl = liberty_parser.parse();
+            GateLibraryParserLiberty liberty_parser("imaginary_path", input);
+            std::shared_ptr<GateLibrary> gl = liberty_parser.parse();
 
             ASSERT_NE(gl, nullptr); // NOTE: Ok, only 'I' is not parsed
             auto g_types = gl->get_gate_types();
@@ -625,8 +628,8 @@ TEST_F(gate_library_parser_liberty_test, check_invalid_input)
                                     "        }\n"
                                     "    }\n"
                                     "}");
-            gate_library_parser_liberty liberty_parser(input);
-            std::shared_ptr<gate_library> gl = liberty_parser.parse();
+            GateLibraryParserLiberty liberty_parser(input);
+            std::shared_ptr<GateLibrary> gl = liberty_parser.parse();
 
             EXPECT_EQ(gl, nullptr); // NOTE: Ok? BF is parsed anyway with Variable WAMBO
         }*/
@@ -650,13 +653,13 @@ TEST_F(gate_library_parser_liberty_test, check_invalid_input)
                                     "        }\n"
                                     "    }"
                                     "}");
-            gate_library_parser_liberty liberty_parser("imaginary_path", input);
-            std::shared_ptr<gate_library> gl = liberty_parser.parse();
+            GateLibraryParserLiberty liberty_parser("imaginary_path", input);
+            std::shared_ptr<GateLibrary> gl = liberty_parser.parse();
 
             ASSERT_NE(gl, nullptr);
 
             ASSERT_TRUE(gl->get_gate_types().find("TEST_GATE_TYPE") != gl->get_gate_types().end());
-            EXPECT_EQ(gl->get_gate_types().at("TEST_GATE_TYPE")->get_base_type(), gate_type::base_type::combinatorial);
+            EXPECT_EQ(gl->get_gate_types().at("TEST_GATE_TYPE")->get_base_type(), GateType::BaseType::combinatorial);
         }
         {
             // Define a pin twice
@@ -677,14 +680,14 @@ TEST_F(gate_library_parser_liberty_test, check_invalid_input)
                                     "        }\n"
                                     "    }\n"
                                     "}");
-            gate_library_parser_liberty liberty_parser("imaginary_path", input);
-            std::shared_ptr<gate_library> gl = liberty_parser.parse();
+            GateLibraryParserLiberty liberty_parser("imaginary_path", input);
+            std::shared_ptr<GateLibrary> gl = liberty_parser.parse();
 
             EXPECT_EQ(gl, nullptr);
 
         }
         {
-            // Define a gate type twice
+            // Define a Gate type twice
             NO_COUT_TEST_BLOCK;
             std::stringstream input("library (TEST_GATE_LIBRARY) {\n"
                                     "    define(cell);\n"
@@ -707,8 +710,8 @@ TEST_F(gate_library_parser_liberty_test, check_invalid_input)
                                     "        }\n"
                                     "    }\n"
                                     "}");
-            gate_library_parser_liberty liberty_parser("imaginary_path", input);
-            std::shared_ptr<gate_library> gl = liberty_parser.parse();
+            GateLibraryParserLiberty liberty_parser("imaginary_path", input);
+            std::shared_ptr<GateLibrary> gl = liberty_parser.parse();
 
             EXPECT_EQ(gl, nullptr);
         }
@@ -730,13 +733,13 @@ TEST_F(gate_library_parser_liberty_test, check_invalid_input)
                                     "        }\n"
                                     "    }\n"
                                     "}");
-            gate_library_parser_liberty liberty_parser("imaginary_path", input);
-            std::shared_ptr<gate_library> gl = liberty_parser.parse();
+            GateLibraryParserLiberty liberty_parser("imaginary_path", input);
+            std::shared_ptr<GateLibrary> gl = liberty_parser.parse();
 
             ASSERT_NE(gl, nullptr);
 
             ASSERT_TRUE(gl->get_gate_types().find("TEST_GATE_TYPE") != gl->get_gate_types().end());
-            EXPECT_EQ(gl->get_gate_types().at("TEST_GATE_TYPE")->get_base_type(), gate_type::base_type::combinatorial);
+            EXPECT_EQ(gl->get_gate_types().at("TEST_GATE_TYPE")->get_base_type(), GateType::BaseType::combinatorial);
             EXPECT_EQ(gl->get_gate_types().at("TEST_GATE_TYPE")->get_input_pins().size(), 1);
 
 
@@ -756,13 +759,13 @@ TEST_F(gate_library_parser_liberty_test, check_invalid_input)
                                     "        }\n"
                                     "    }\n"
                                     "}");
-            gate_library_parser_liberty liberty_parser("imaginary_path", input);
-            std::shared_ptr<gate_library> gl = liberty_parser.parse();
+            GateLibraryParserLiberty liberty_parser("imaginary_path", input);
+            std::shared_ptr<GateLibrary> gl = liberty_parser.parse();
 
             ASSERT_NE(gl, nullptr);
 
             ASSERT_TRUE(gl->get_gate_types().find("TEST_GATE_TYPE") != gl->get_gate_types().end());
-            EXPECT_EQ(gl->get_gate_types().at("TEST_GATE_TYPE")->get_base_type(), gate_type::base_type::combinatorial);
+            EXPECT_EQ(gl->get_gate_types().at("TEST_GATE_TYPE")->get_base_type(), GateType::BaseType::combinatorial);
             EXPECT_EQ(gl->get_gate_types().at("TEST_GATE_TYPE")->get_output_pins().size(), 1);
 
 
@@ -783,13 +786,13 @@ TEST_F(gate_library_parser_liberty_test, check_invalid_input)
                                     "        }\n"
                                     "    }\n"
                                     "}");
-            gate_library_parser_liberty liberty_parser("imaginary_path", input);
-            std::shared_ptr<gate_library> gl = liberty_parser.parse();
+            GateLibraryParserLiberty liberty_parser("imaginary_path", input);
+            std::shared_ptr<GateLibrary> gl = liberty_parser.parse();
 
             ASSERT_NE(gl, nullptr);
 
             ASSERT_TRUE(gl->get_gate_types().find("TEST_GATE_TYPE") != gl->get_gate_types().end());
-            EXPECT_EQ(gl->get_gate_types().at("TEST_GATE_TYPE")->get_base_type(), gate_type::base_type::combinatorial);
+            EXPECT_EQ(gl->get_gate_types().at("TEST_GATE_TYPE")->get_base_type(), GateType::BaseType::combinatorial);
             //EXPECT_EQ(gl->get_gate_types().at("TEST_GATE_TYPE")->get_output_pins().size(), 1); // ISSUE: fails
 
 
@@ -797,3 +800,4 @@ TEST_F(gate_library_parser_liberty_test, check_invalid_input)
     TEST_END
 }
 
+}

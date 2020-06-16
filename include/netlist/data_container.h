@@ -36,13 +36,13 @@ namespace hal
      *
      * @ingroup netlist
      */
-    class NETLIST_API data_container
+    class NETLIST_API DataContainer
     {
     public:
         /** constructor (= default) */
-        data_container() = default;
+        DataContainer() = default;
         /** destructor (= default)  Needs to be virtual to access interface in subclasses via python. */
-        virtual ~data_container() = default;
+        virtual ~DataContainer() = default;
 
         /**
         * Sets a custom data entry.<br>

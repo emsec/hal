@@ -37,7 +37,7 @@ namespace hal
      *
      * @ingroup netlist
      */
-    class gate_type_lut : public gate_type
+    class GateTypeLut : public GateType
     {
     public:
         /**
@@ -45,8 +45,8 @@ namespace hal
          *
          * @param[in] name - The name of the LUT gate type.
          */
-        gate_type_lut(const std::string& name);
-        ~gate_type_lut() override = default;
+        GateTypeLut(const std::string& name);
+        ~GateTypeLut() override = default;
 
         /**
          * Adds an output pin to the collection of output pins that generate their output not from a boolean function but an initialization string.

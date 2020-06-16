@@ -37,20 +37,20 @@
 namespace hal
 {
     /** forward declaration */
-    class netlist_internal_manager;
-    class net;
-    class gate;
-    class module;
-    class endpoint;
+    class NetlistInternalManager;
+    class Net;
+    class Gate;
+    class Module;
+    class Endpoint;
 
     /**
      * Netlist class containing information about the netlist including its gates, modules, and nets, as well as the underlying gate library.
      *
      * @ingroup netlist
      */
-    class NETLIST_API netlist : public std::enable_shared_from_this<netlist>
+    class NETLIST_API Netlist : public std::enable_shared_from_this<Netlist>
     {
-        friend class netlist_internal_manager;
+        friend class NetlistInternalManager;
 
     public:
         /**
@@ -59,16 +59,16 @@ namespace hal
          *
          * @param[in] library - Shared pointer to gate library.
          */
-        explicit netlist(std::shared_ptr<gate_library> library);
+        explicit Netlist(std::shared_ptr<GateLibrary> library);
 
-        ~netlist();
+        ~Netlist();
 
         /**
          * Return shared_ptr for the current netlist object
          *
          * @returns The shared ptr to netlist
          */
-        std::shared_ptr<netlist> get_shared();
+        std::shared_ptr<Netlist> get_shared();
 
         /**
          * Get the netlist id.<br>
@@ -132,7 +132,7 @@ namespace hal
          *
          * @returns A pointer to the gate library.
          */
-        std::shared_ptr<gate_library> get_gate_library() const;
+        std::shared_ptr<GateLibrary> get_gate_library() const;
 
         /*
          * ################################################################
@@ -158,7 +158,7 @@ namespace hal
          * @param[in] gates - Gates to assign to the new gate.
          * @returns The new module on success, nullptr on error.
          */
-        std::shared_ptr<module> create_module(const u32 id, const std::string& name, std::shared_ptr<module> parent, const std::vector<std::shared_ptr<gate>>& gates = {});
+        std::shared_ptr<Module> create_module(const u32 id, const std::string& name, std::shared_ptr<Module> parent, const std::vector<std::shared_ptr<Gate>>& gates = {});
 
         /**
          * Creates and adds a new module to the netlist.<br>
@@ -169,7 +169,7 @@ namespace hal
          * @param[in] gates - Gates to assign to the new gate.
          * @returns The new module on success, nullptr on error.
          */
-        std::shared_ptr<module> create_module(const std::string& name, std::shared_ptr<module> parent, const std::vector<std::shared_ptr<gate>>& gates = {});
+        std::shared_ptr<Module> create_module(const std::string& name, std::shared_ptr<Module> parent, const std::vector<std::shared_ptr<Gate>>& gates = {});
 
         /**
          * Removes and a module from the netlist.
@@ -177,14 +177,14 @@ namespace hal
          * @param[in] module - module to remove.
          * @returns True on success.
          */
-        bool delete_module(const std::shared_ptr<module> module);
+        bool delete_module(const std::shared_ptr<Module> module);
 
         /**
          * Get the top module of the netlist.
          *
          * @returns The top module.
          */
-        std::shared_ptr<module> get_top_module();
+        std::shared_ptr<Module> get_top_module();
 
         /**
          * Get a module by its ID. <br>
@@ -193,14 +193,14 @@ namespace hal
          * @param[in] id - the id of the desired module
          * @returns The desired module.
          */
-        std::shared_ptr<module> get_module_by_id(u32 id) const;
+        std::shared_ptr<Module> get_module_by_id(u32 id) const;
 
         /**
          * Get a set of all modules of the netlist including the top module.
          *
          * @returns The modules of the netlist.
          */
-        std::set<std::shared_ptr<module>> get_modules() const;
+        std::set<std::shared_ptr<Module>> get_modules() const;
 
         /**
          * Checks whether a module is registered in the netlist.
@@ -208,7 +208,7 @@ namespace hal
          * @param[in] module - The module to check.
          * @returns True if the module is in netlist
          */
-        bool is_module_in_netlist(const std::shared_ptr<module> module) const;
+        bool is_module_in_netlist(const std::shared_ptr<Module> module) const;
 
         /*
          * ################################################################
@@ -235,7 +235,7 @@ namespace hal
          * @param[in] y - The y-coordinate of the gate.
          * @returns The new gate on success, nullptr on error.
          */
-        std::shared_ptr<gate> create_gate(const u32 id, std::shared_ptr<const gate_type> gt, const std::string& name = "", float x = -1, float y = -1);
+        std::shared_ptr<Gate> create_gate(const u32 id, std::shared_ptr<const GateType> gt, const std::string& name = "", float x = -1, float y = -1);
 
         /**
          * Creates and adds a new gate to the netlist.<br>
@@ -247,7 +247,7 @@ namespace hal
          * @param[in] y - The y-coordinate of the gate.
          * @returns The new gate on success, nullptr on error.
          */
-        std::shared_ptr<gate> create_gate(std::shared_ptr<const gate_type> gt, const std::string& name = "", float x = -1, float y = -1);
+        std::shared_ptr<Gate> create_gate(std::shared_ptr<const GateType> gt, const std::string& name = "", float x = -1, float y = -1);
 
         /**
          * Removes a gate from the netlist.
@@ -255,7 +255,7 @@ namespace hal
          * @param[in] gate - Pointer to the gate pointer.
          * @returns True on success.
          */
-        bool delete_gate(std::shared_ptr<gate> gate);
+        bool delete_gate(std::shared_ptr<Gate> gate);
 
         /**
          * Checks whether a gate is registered in the netlist.
@@ -263,7 +263,7 @@ namespace hal
          * @param[in] gate - The gate to check.
          * @returns True if the gate is in netlist
          */
-        bool is_gate_in_netlist(const std::shared_ptr<gate> gate) const;
+        bool is_gate_in_netlist(const std::shared_ptr<Gate> gate) const;
 
         /**
          * Get a gate specified by id.
@@ -271,7 +271,7 @@ namespace hal
          * @param[in] gate_id - The gate's id.
          * @returns The gate or a nullptr.
          */
-        std::shared_ptr<gate> get_gate_by_id(const u32 gate_id) const;
+        std::shared_ptr<Gate> get_gate_by_id(const u32 gate_id) const;
 
         /**
          * Get all gates of the netlist regardless of the module they are in. <br>
@@ -280,7 +280,7 @@ namespace hal
          * @param[in] filter - Filter for the gates
          * @returns A set of gates.
          */
-        std::set<std::shared_ptr<gate>> get_gates(const std::function<bool(const std::shared_ptr<gate>&)>& filter = nullptr) const;
+        std::set<std::shared_ptr<Gate>> get_gates(const std::function<bool(const std::shared_ptr<Gate>&)>& filter = nullptr) const;
 
         /**
          * Mark a gate as a global vcc gate.
@@ -288,7 +288,7 @@ namespace hal
          * @param[in] gate - The gate.
          * @returns True on success.
          */
-        bool mark_vcc_gate(const std::shared_ptr<gate> gate);
+        bool mark_vcc_gate(const std::shared_ptr<Gate> gate);
 
         /**
          * Mark a gate as a global gnd gate.
@@ -296,7 +296,7 @@ namespace hal
          * @param[in] gate - The negate.
          * @returns True on success.
          */
-        bool mark_gnd_gate(const std::shared_ptr<gate> gate);
+        bool mark_gnd_gate(const std::shared_ptr<Gate> gate);
 
         /**
          * Unmark a global vcc gate.
@@ -304,7 +304,7 @@ namespace hal
          * @param[in] gate - The gate.
          * @returns True on success.
          */
-        bool unmark_vcc_gate(const std::shared_ptr<gate> gate);
+        bool unmark_vcc_gate(const std::shared_ptr<Gate> gate);
 
         /**
          * Unmark a global gate.
@@ -312,7 +312,7 @@ namespace hal
          * @param[in] gate - The new gate.
          * @returns True on success.
          */
-        bool unmark_gnd_gate(const std::shared_ptr<gate> gate);
+        bool unmark_gnd_gate(const std::shared_ptr<Gate> gate);
 
         /**
          * Checks whether a gate is a global vcc gate.
@@ -320,7 +320,7 @@ namespace hal
          * @param[in] gate - The gate to check.
          * @returns True if the gate is a global vcc gate.
          */
-        bool is_vcc_gate(const std::shared_ptr<gate> gate) const;
+        bool is_vcc_gate(const std::shared_ptr<Gate> gate) const;
 
         /**
          * Checks whether a gate is a global gnd gate.
@@ -328,21 +328,21 @@ namespace hal
          * @param[in] gate - The gate to check.
          * @returns True if the gate is a global gnd gate.
          */
-        bool is_gnd_gate(const std::shared_ptr<gate> gate) const;
+        bool is_gnd_gate(const std::shared_ptr<Gate> gate) const;
 
         /**
          * Get all global vcc gates.
          *
          * @returns A set of gates.
          */
-        std::set<std::shared_ptr<gate>> get_vcc_gates() const;
+        std::set<std::shared_ptr<Gate>> get_vcc_gates() const;
 
         /**
          * Get all global gnd gates.
          *
          * @returns A set of gates.
          */
-        std::set<std::shared_ptr<gate>> get_gnd_gates() const;
+        std::set<std::shared_ptr<Gate>> get_gnd_gates() const;
 
         /*
          * ################################################################
@@ -366,7 +366,7 @@ namespace hal
          * @param[in] name - A name for the net.
          * @returns The new net on success, nullptr on error.
          */
-        std::shared_ptr<net> create_net(const u32 id, const std::string& name = "");
+        std::shared_ptr<Net> create_net(const u32 id, const std::string& name = "");
 
         /**
          * Creates and adds a new net to the netlist.<br>
@@ -375,7 +375,7 @@ namespace hal
          * @param[in] name - A name for the net.
          * @returns The new net on success, nullptr on error.
          */
-        std::shared_ptr<net> create_net(const std::string& name = "");
+        std::shared_ptr<Net> create_net(const std::string& name = "");
 
         /**
          * Removes a net from the netlist.
@@ -383,7 +383,7 @@ namespace hal
          * @param[in] n - Pointer to the net pointer.
          * @returns True on success.
          */
-        bool delete_net(std::shared_ptr<net> n);
+        bool delete_net(std::shared_ptr<Net> n);
 
         /**
          * Checks whether a net is registered in the netlist.
@@ -391,7 +391,7 @@ namespace hal
          * @param[in] n - The net to check.
          * @returns True if the net is in netlist
          */
-        bool is_net_in_netlist(std::shared_ptr<net> const n) const;
+        bool is_net_in_netlist(std::shared_ptr<Net> const n) const;
 
         /**
          * Get a net specified by id.
@@ -399,7 +399,7 @@ namespace hal
          * @param[in] id - The net's id.
          * @returns The net or a nullptr.
          */
-        std::shared_ptr<net> get_net_by_id(u32 id) const;
+        std::shared_ptr<Net> get_net_by_id(u32 id) const;
 
         /**
          * Get all nets of the netlist regardless of the module they are in. <br>
@@ -408,7 +408,7 @@ namespace hal
          * @param[in] filter - Filter for the nets
          * @return A set of nets.
          */
-        std::unordered_set<std::shared_ptr<net>> get_nets(const std::function<bool(const std::shared_ptr<net>&)>& filter = nullptr) const;
+        std::unordered_set<std::shared_ptr<Net>> get_nets(const std::function<bool(const std::shared_ptr<Net>&)>& filter = nullptr) const;
 
         /**
          * Mark a net as a global input net.
@@ -416,7 +416,7 @@ namespace hal
          * @param[in] net - The net.
          * @returns True on success.
          */
-        bool mark_global_input_net(std::shared_ptr<net> const net);
+        bool mark_global_input_net(std::shared_ptr<Net> const net);
 
         /**
          * Mark a net as a global output net.
@@ -424,7 +424,7 @@ namespace hal
          * @param[in] net - The net.
          * @returns True on success.
          */
-        bool mark_global_output_net(std::shared_ptr<net> const net);
+        bool mark_global_output_net(std::shared_ptr<Net> const net);
 
         /**
          * Unmark a global input net.
@@ -432,7 +432,7 @@ namespace hal
          * @param[in] net - The net.
          * @returns True on success.
          */
-        bool unmark_global_input_net(std::shared_ptr<net> const net);
+        bool unmark_global_input_net(std::shared_ptr<Net> const net);
 
         /**
          * Unmark a global output net.
@@ -440,7 +440,7 @@ namespace hal
          * @param[in] net - The net.
          * @returns True on success.
          */
-        bool unmark_global_output_net(std::shared_ptr<net> const net);
+        bool unmark_global_output_net(std::shared_ptr<Net> const net);
 
         /**
          * Checks whether a net is a global input net.
@@ -448,7 +448,7 @@ namespace hal
          * @param[in] net - The net to check.
          * @returns True if the net is a global input net.
          */
-        bool is_global_input_net(std::shared_ptr<net> const net) const;
+        bool is_global_input_net(std::shared_ptr<Net> const net) const;
 
         /**
          * Checks whether a net is a global output net.
@@ -456,28 +456,28 @@ namespace hal
          * @param[in] net - The net to check.
          * @returns True if the net is a global output net.
          */
-        bool is_global_output_net(std::shared_ptr<net> const net) const;
+        bool is_global_output_net(std::shared_ptr<Net> const net) const;
 
         /**
          * Get all global input nets.
          *
          * @returns A set of nets.
          */
-        std::set<std::shared_ptr<net>> get_global_input_nets() const;
+        std::set<std::shared_ptr<Net>> get_global_input_nets() const;
 
         /**
          * Get all global output nets.
          *
          * @returns A set of nets.
          */
-        std::set<std::shared_ptr<net>> get_global_output_nets() const;
+        std::set<std::shared_ptr<Net>> get_global_output_nets() const;
 
     private:
         /* stores the pointer to the netlist internal manager */
-        netlist_internal_manager* m_manager;
+        NetlistInternalManager* m_manager;
 
         /* stores the gate library */
-        std::shared_ptr<gate_library> m_gate_library;
+        std::shared_ptr<GateLibrary> m_gate_library;
 
         /* stores the netlist id */
         u32 m_netlist_id;
@@ -503,17 +503,17 @@ namespace hal
         std::set<u32> m_free_module_ids;
 
         /* stores the modules */
-        std::shared_ptr<module> m_top_module;
-        std::unordered_map<u32, std::shared_ptr<module>> m_modules;
+        std::shared_ptr<Module> m_top_module;
+        std::unordered_map<u32, std::shared_ptr<Module>> m_modules;
 
         /* stores the nets */
-        std::unordered_map<u32, std::shared_ptr<net>> m_nets_map;
-        std::unordered_set<std::shared_ptr<net>> m_nets_set;
+        std::unordered_map<u32, std::shared_ptr<Net>> m_nets_map;
+        std::unordered_set<std::shared_ptr<Net>> m_nets_set;
 
         /* stores the set of global gates and nets */
-        std::set<std::shared_ptr<net>> m_global_input_nets;
-        std::set<std::shared_ptr<net>> m_global_output_nets;
-        std::set<std::shared_ptr<gate>> m_gnd_gates;
-        std::set<std::shared_ptr<gate>> m_vcc_gates;
+        std::set<std::shared_ptr<Net>> m_global_input_nets;
+        std::set<std::shared_ptr<Net>> m_global_output_nets;
+        std::set<std::shared_ptr<Gate>> m_gnd_gates;
+        std::set<std::shared_ptr<Gate>> m_vcc_gates;
     };
 }    // namespace hal

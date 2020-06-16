@@ -28,26 +28,26 @@
 namespace hal
 {
     /* forward declaration */
-    class gate;
+    class Gate;
 
     /**
      *  Endpoint data structure for (gate, pin) tuples
      *
      * @ingroup netlist
      */
-    class endpoint
+    class Endpoint
     {
     public:
-        endpoint(const std::shared_ptr<gate>& gate, const std::string& pin, bool is_a_destination)
+        Endpoint(const std::shared_ptr<Gate>& gate, const std::string& pin, bool is_a_destination)
         {
             m_gate             = gate;
             m_pin              = pin;
             m_is_a_destination = is_a_destination;
         }
-        endpoint(const endpoint&) = default;
-        endpoint(endpoint&&)      = default;
-        endpoint& operator=(const endpoint&) = default;
-        endpoint& operator=(endpoint&&) = default;
+        Endpoint(const Endpoint&) = default;
+        Endpoint(Endpoint&&)      = default;
+        Endpoint& operator=(const Endpoint&) = default;
+        Endpoint& operator=(Endpoint&&) = default;
 
         /**
          * Standard "less than". <br>
@@ -56,7 +56,7 @@ namespace hal
          * @param[in] rhs - Compare target.
          * @returns True if this is less than rhs.
          */
-        bool operator<(const endpoint& rhs) const
+        bool operator<(const Endpoint& rhs) const
         {
             if (this->m_gate != rhs.m_gate)
             {
@@ -76,7 +76,7 @@ namespace hal
          * @param[in] rhs - Compare target.
          * @returns True if this is equal to rhs.
          */
-        bool operator==(const endpoint& rhs) const
+        bool operator==(const Endpoint& rhs) const
         {
             return (this->m_gate == rhs.m_gate) && (this->m_pin == rhs.m_pin) && (this->m_is_a_destination == rhs.m_is_a_destination);
         }
@@ -87,7 +87,7 @@ namespace hal
          * @param[in] rhs - Compare target.
          * @returns True if this is unequal to rhs.
          */
-        bool operator!=(const endpoint& rhs) const
+        bool operator!=(const Endpoint& rhs) const
         {
             return !(*this == rhs);
         }
@@ -97,7 +97,7 @@ namespace hal
          *
          * @returns The gate.
          */
-        const std::shared_ptr<gate>& get_gate() const
+        const std::shared_ptr<Gate>& get_gate() const
         {
             return m_gate;
         }
@@ -133,7 +133,7 @@ namespace hal
         }
 
     private:
-        std::shared_ptr<gate> m_gate;
+        std::shared_ptr<Gate> m_gate;
         std::string m_pin;
         bool m_is_a_destination;
     };

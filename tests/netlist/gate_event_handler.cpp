@@ -9,10 +9,12 @@
 #include <netlist/gate.h>
 #include <netlist/net.h>
 
+namespace hal
+{
 namespace gate_event_handler_test_counter
 {
-    std::vector<std::shared_ptr<gate>> removed_gates;
-    std::vector<std::shared_ptr<gate>> updated_gates;
+    std::vector<std::shared_ptr<Gate>> removed_gates;
+    std::vector<std::shared_ptr<Gate>> updated_gates;
 }    // namespace gate_event_handler_test_counter
 
 class gate_event_handler_test : public ::testing::Test
@@ -32,11 +34,11 @@ protected:
     }
 
     // Creates an empty netlist with a certain id if passed
-    std::shared_ptr<netlist> create_empty_netlist(const int id = -1)
+    std::shared_ptr<Netlist> create_empty_netlist(const int id = -1)
     {
         NO_COUT_BLOCK;
-        std::shared_ptr<gate_library> gl = gate_library_manager::get_gate_library(g_lib_name);
-        std::shared_ptr<netlist> nl(new netlist(gl));
+        std::shared_ptr<GateLibrary> gl = gate_library_manager::get_gate_library(g_lib_name);
+        std::shared_ptr<Netlist> nl(new Netlist(gl));
 
         if (id >= 0)
         {
@@ -47,15 +49,15 @@ protected:
 
     /**
      * These functions are passed the register_update/remove_callback functions.
-     * They store their passed gate in a vector to check when they were called.
+     * They store their passed Gate in a vector to check when they were called.
      *
      */
-    static void add_removed_gate(const std::shared_ptr<gate> g)
+    static void add_removed_gate(const std::shared_ptr<Gate> g)
     {
         gate_event_handler_test_counter::removed_gates.push_back(g);
     }
 
-    static void add_updated_gate(const std::shared_ptr<gate> g)
+    static void add_updated_gate(const std::shared_ptr<Gate> g)
     {
         gate_event_handler_test_counter::updated_gates.push_back(g);
     }
@@ -78,12 +80,12 @@ protected:
      * Access on the global vectors removed_gates/updated_gates
      */
 
-    std::vector<std::shared_ptr<gate>> get_removed_gates()
+    std::vector<std::shared_ptr<Gate>> get_removed_gates()
     {
         return gate_event_handler_test_counter::removed_gates;
     }
 
-    std::vector<std::shared_ptr<gate>> get_updated_gates()
+    std::vector<std::shared_ptr<Gate>> get_updated_gates()
     {
         return gate_event_handler_test_counter::updated_gates;
     }
@@ -121,16 +123,16 @@ protected:
 };
 
 /**
- * Testing the registration of update_callbacks (called whenever data of a gate is changed).
+ * Testing the registration of update_callbacks (called whenever data of a Gate is changed).
  * The notify_data_updated is called by the gates.
  *
  * Functions: register_update_callback
  */
 TEST_F(gate_event_handler_test, check_data_updated){TEST_START{// Create a netlist with 3 gates
-                                                               std::shared_ptr<netlist> nl = create_empty_netlist(0);
-std::shared_ptr<gate> gate_0 = nl->create_gate(0, "X_INV", "gate_0");
-std::shared_ptr<gate> gate_1 = nl->create_gate(1, "X_INV", "gate_1");
-std::shared_ptr<gate> gate_2 = nl->create_gate(2, "X_INV", "gate_2");
+                                                               std::shared_ptr<Netlist> nl = create_empty_netlist(0);
+std::shared_ptr<Gate> gate_0 = nl->create_gate(0, "X_INV", "gate_0");
+std::shared_ptr<Gate> gate_1 = nl->create_gate(1, "X_INV", "gate_1");
+std::shared_ptr<Gate> gate_2 = nl->create_gate(2, "X_INV", "gate_2");
 
 // Register the update callback
 gate_event_handler::enable(true);
@@ -143,7 +145,7 @@ gate_event_handler::register_callback("test_update_callback", std::bind(gate_eve
     gate_1->set_name("new_name_1");
 }
 
-std::vector<std::shared_ptr<gate>> exp_updated = {gate_0, gate_1};
+std::vector<std::shared_ptr<Gate>> exp_updated = {gate_0, gate_1};
 
 EXPECT_TRUE(vectors_have_same_content(get_updated_gates(), exp_updated));
 
@@ -153,16 +155,16 @@ TEST_END
 }
 
 /**
- * Testing the registration of remove_callbacks (called whenever a gate is removed).
+ * Testing the registration of remove_callbacks (called whenever a Gate is removed).
  * The notify_data_removed is called by the gates.
  *
  * Functions: register_remove_callback
  */
 TEST_F(gate_event_handler_test, check_data_removed){TEST_START{// Create a netlist with 3 gates
-                                                               std::shared_ptr<netlist> nl = create_empty_netlist(0);
-std::shared_ptr<gate> gate_0 = nl->create_gate(0, "X_INV", "gate_0");
-std::shared_ptr<gate> gate_1 = nl->create_gate(1, "X_INV", "gate_1");
-std::shared_ptr<gate> gate_2 = nl->create_gate(2, "X_INV", "gate_2");
+                                                               std::shared_ptr<Netlist> nl = create_empty_netlist(0);
+std::shared_ptr<Gate> gate_0 = nl->create_gate(0, "X_INV", "gate_0");
+std::shared_ptr<Gate> gate_1 = nl->create_gate(1, "X_INV", "gate_1");
+std::shared_ptr<Gate> gate_2 = nl->create_gate(2, "X_INV", "gate_2");
 nl->add_gate(gate_0);
 nl->add_gate(gate_1);
 nl->add_gate(gate_2);
@@ -178,7 +180,7 @@ gate_event_handler::register_remove_callback("test_remove_callback", add_removed
     nl->delete_gate(gate_1);
 }
 
-std::vector<std::shared_ptr<gate>> exp_removed = {gate_0, gate_1};
+std::vector<std::shared_ptr<Gate>> exp_removed = {gate_0, gate_1};
 
 EXPECT_TRUE(vectors_have_same_content(get_removed_gates(), exp_removed));
 
@@ -192,9 +194,9 @@ TEST_END
  *
  * Functions: unregister_update_callback, unregister_remove_callback
  */
-TEST_F(gate_event_handler_test, check_unregister){TEST_START{// Create a netlist with one gate
-                                                             std::shared_ptr<netlist> nl = create_empty_netlist(0);
-std::shared_ptr<gate> gate_0 = nl->create_gate(0, "X_INV", "gate_0");
+TEST_F(gate_event_handler_test, check_unregister){TEST_START{// Create a netlist with one Gate
+                                                             std::shared_ptr<Netlist> nl = create_empty_netlist(0);
+std::shared_ptr<Gate> gate_0 = nl->create_gate(0, "X_INV", "gate_0");
 nl->add_gate(gate_0);
 
 // Register the two callbacks and unregister them immediately
@@ -205,7 +207,7 @@ gate_event_handler::register_remove_callback("test_remove_callback", add_removed
 gate_event_handler::unregister_update_callback("test_update_callback");
 gate_event_handler::unregister_remove_callback("test_remove_callback");
 
-// Update and remove the gate
+// Update and remove the Gate
 {
     NO_COUT_TEST_BLOCK;
     gate_0->set_name("new_name");
@@ -228,9 +230,9 @@ TEST_F(gate_event_handler_test, check_enable)
 {
     TEST_START
     {
-        // Create a netlist with one gate
-        std::shared_ptr<netlist> nl  = create_empty_netlist(0);
-        std::shared_ptr<gate> gate_0 = nl->create_gate(0, "X_INV", "gate_0");
+        // Create a netlist with one Gate
+        std::shared_ptr<Netlist> nl  = create_empty_netlist(0);
+        std::shared_ptr<Gate> gate_0 = nl->create_gate(0, "X_INV", "gate_0");
         nl->add_gate(gate_0);
 
         // Register the two callbacks but set enable to false
@@ -238,7 +240,7 @@ TEST_F(gate_event_handler_test, check_enable)
         gate_event_handler::register_update_callback("test_update_callback", add_updated_gate);
         gate_event_handler::register_remove_callback("test_remove_callback", add_removed_gate);
 
-        // Update and remove the gate
+        // Update and remove the Gate
         {
             NO_COUT_TEST_BLOCK;
             gate_0->set_name("new_name");
@@ -250,4 +252,5 @@ TEST_F(gate_event_handler_test, check_enable)
         EXPECT_TRUE(get_removed_gates().empty());
     }
     TEST_END
+}
 }

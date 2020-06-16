@@ -51,7 +51,7 @@ extern notification_manager* g_notification_manager;
 
 extern hal_content_manager* g_content_manager;
 
-extern std::shared_ptr<netlist> g_netlist;
+extern std::shared_ptr<Netlist> g_netlist;
 
 extern netlist_relay g_netlist_relay;
 extern plugin_relay g_plugin_relay;

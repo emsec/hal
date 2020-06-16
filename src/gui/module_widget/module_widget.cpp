@@ -142,7 +142,7 @@ void module_widget::handle_tree_view_context_menu_requested(const QPoint& point)
         g_netlist_relay.debug_delete_module(get_module_item_from_index(index)->id());
 }
 
-void module_widget::handle_module_removed(std::shared_ptr<module> module, u32 module_id)
+void module_widget::handle_module_removed(std::shared_ptr<Module> module, u32 module_id)
 {
     UNUSED(module);
     UNUSED(module_id);

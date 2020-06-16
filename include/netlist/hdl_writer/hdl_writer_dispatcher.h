@@ -33,13 +33,13 @@
 namespace hal
 {
     /** forward declaration */
-    class netlist;
-    class hdl_writer;
+    class Netlist;
+    class HDLWriter;
 
     /**
      * @ingroup hdl_writers
      */
-    namespace hdl_writer_dispatcher
+    namespace HDLWriterDispatcher
     {
         /**
          * Returns the command line interface options of the hdl writer dispatcher
@@ -53,7 +53,7 @@ namespace hal
          * @param[in] args - The command line options.
          * @returns True on success.
          */
-        bool write(std::shared_ptr<netlist> g, const ProgramArguments& args);
+        bool write(std::shared_ptr<Netlist> g, const ProgramArguments& args);
 
         /**
          * Writes the netlist into a file with a defined format
@@ -62,6 +62,6 @@ namespace hal
          * @param[in] file_name - The input file.
          * @returns True on success.
          */
-        bool write(std::shared_ptr<netlist> g, const std::string& format, const std::filesystem::path& file_name);
-    }    // namespace hdl_writer_dispatcher
+        bool write(std::shared_ptr<Netlist> g, const std::string& format, const std::filesystem::path& file_name);
+    }    // namespace HDLWriterDispatcher
 }    // namespace hal

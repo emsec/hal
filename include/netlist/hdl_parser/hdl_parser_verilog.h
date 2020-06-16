@@ -39,15 +39,15 @@ namespace hal
     /**
      * @ingroup hdl_parsers
      */
-    class HDL_PARSER_API hdl_parser_verilog : public hdl_parser<std::string>
+    class HDL_PARSER_API HDLParserVerilog : public HDLParser<std::string>
     {
     public:
         /**
          * @param[in] stream - The string stream filled with the hdl code.
          */
-        explicit hdl_parser_verilog(std::stringstream& stream);
+        explicit HDLParserVerilog(std::stringstream& stream);
 
-        ~hdl_parser_verilog() = default;
+        ~HDLParserVerilog() = default;
 
         /**
          * Deserializes a netlist in Verilog format from the internal string stream into a netlist object.

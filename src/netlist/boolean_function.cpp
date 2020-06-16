@@ -6,7 +6,7 @@
 
 namespace hal
 {
-    std::string boolean_function::to_string(const operation& op)
+    std::string BooleanFunction::to_string(const operation& op)
     {
         switch (op)
         {
@@ -21,12 +21,12 @@ namespace hal
         }
     }
 
-    std::ostream& operator<<(std::ostream& os, const boolean_function::operation& op)
+    std::ostream& operator<<(std::ostream& os, const BooleanFunction::operation& op)
     {
-        return os << boolean_function::to_string(op);
+        return os << BooleanFunction::to_string(op);
     }
 
-    std::string boolean_function::to_string(const value& v)
+    std::string BooleanFunction::to_string(const value& v)
     {
         switch (v)
         {
@@ -39,18 +39,18 @@ namespace hal
         }
     }
 
-    std::ostream& operator<<(std::ostream& os, const boolean_function::value& v)
+    std::ostream& operator<<(std::ostream& os, const BooleanFunction::value& v)
     {
-        return os << boolean_function::to_string(v);
+        return os << BooleanFunction::to_string(v);
     }
 
-    boolean_function::boolean_function()
+    BooleanFunction::BooleanFunction()
     {
         m_content = content_type::TERMS;
         m_invert  = false;
     }
 
-    boolean_function::boolean_function(operation op, const std::vector<boolean_function>& operands, bool invert_result) : boolean_function()
+    BooleanFunction::BooleanFunction(operation op, const std::vector<BooleanFunction>& operands, bool invert_result) : BooleanFunction()
     {
         if (operands.empty())
         {
@@ -71,25 +71,25 @@ namespace hal
         }
     }
 
-    boolean_function::boolean_function(const std::string& variable_name) : boolean_function()
+    BooleanFunction::BooleanFunction(const std::string& variable_name) : BooleanFunction()
     {
         m_content  = content_type::VARIABLE;
         m_variable = core_utils::trim(variable_name);
         assert(!m_variable.empty());
     }
 
-    boolean_function::boolean_function(value constant) : boolean_function()
+    BooleanFunction::BooleanFunction(value constant) : BooleanFunction()
     {
         m_content  = content_type::CONSTANT;
         m_constant = constant;
     }
 
-    boolean_function boolean_function::substitute(const std::string& old_variable_name, const std::string& new_variable_name) const
+    BooleanFunction BooleanFunction::substitute(const std::string& old_variable_name, const std::string& new_variable_name) const
     {
-        return substitute(old_variable_name, boolean_function(new_variable_name));
+        return substitute(old_variable_name, BooleanFunction(new_variable_name));
     }
 
-    void boolean_function::substitute_helper(boolean_function& f, const std::string& v, const boolean_function& s)
+    void BooleanFunction::substitute_helper(BooleanFunction& f, const std::string& v, const BooleanFunction& s)
     {
         if (f.m_content == content_type::VARIABLE && f.m_variable == v)
         {
@@ -125,14 +125,14 @@ namespace hal
         }
     }
 
-    boolean_function boolean_function::substitute(const std::string& variable_name, const boolean_function& function) const
+    BooleanFunction BooleanFunction::substitute(const std::string& variable_name, const BooleanFunction& function) const
     {
         auto result = *this;
         substitute_helper(result, variable_name, function);
         return result;
     }
 
-    boolean_function::value boolean_function::evaluate(const std::map<std::string, value>& inputs) const
+    BooleanFunction::value BooleanFunction::evaluate(const std::map<std::string, value>& inputs) const
     {
         value result = X;
         if (m_content == content_type::VARIABLE)
@@ -210,12 +210,12 @@ namespace hal
         return result;
     }
 
-    boolean_function::value boolean_function::operator()(const std::map<std::string, boolean_function::value>& inputs) const
+    BooleanFunction::value BooleanFunction::operator()(const std::map<std::string, BooleanFunction::value>& inputs) const
     {
         return evaluate(inputs);
     }
 
-    bool boolean_function::is_constant_one() const
+    bool BooleanFunction::is_constant_one() const
     {
         if (m_content == content_type::CONSTANT)
         {
@@ -225,7 +225,7 @@ namespace hal
         return tmp.m_content == content_type::CONSTANT && tmp.m_constant == ONE;
     }
 
-    bool boolean_function::is_constant_zero() const
+    bool BooleanFunction::is_constant_zero() const
     {
         if (m_content == content_type::CONSTANT)
         {
@@ -235,12 +235,12 @@ namespace hal
         return tmp.m_content == content_type::CONSTANT && tmp.m_constant == ZERO;
     }
 
-    bool boolean_function::is_empty() const
+    bool BooleanFunction::is_empty() const
     {
         return m_content == content_type::TERMS && m_operands.empty();
     }
 
-    std::set<std::string> boolean_function::get_variables() const
+    std::set<std::string> BooleanFunction::get_variables() const
     {
         if (m_content == content_type::VARIABLE)
         {
@@ -259,7 +259,7 @@ namespace hal
         return {};
     }
 
-    boolean_function boolean_function::from_string(std::string expression, const std::vector<std::string>& variable_names)
+    BooleanFunction BooleanFunction::from_string(std::string expression, const std::vector<std::string>& variable_names)
     {
         auto sorted_variable_names = variable_names;
         std::sort(sorted_variable_names.begin(), sorted_variable_names.end(), [](const auto& a, const auto& b) { return a.size() > b.size(); });
@@ -277,13 +277,13 @@ namespace hal
         return from_string_internal(expression, sorted_variable_names);
     }
 
-    boolean_function boolean_function::from_string_internal(std::string expression, const std::vector<std::string>& variable_names)
+    BooleanFunction BooleanFunction::from_string_internal(std::string expression, const std::vector<std::string>& variable_names)
     {
         expression = core_utils::trim(expression);
 
         if (expression.empty())
         {
-            return boolean_function();
+            return BooleanFunction();
         }
 
         const std::string delimiters = "!^&|'+* ";
@@ -291,15 +291,15 @@ namespace hal
         // check for constants
         if (expression == "0")
         {
-            return boolean_function(ZERO);
+            return BooleanFunction(ZERO);
         }
         else if (expression == "1")
         {
-            return boolean_function(ONE);
+            return BooleanFunction(ONE);
         }
         else if (expression == "X")
         {
-            return boolean_function(X);
+            return BooleanFunction(X);
         }
         else
         {
@@ -321,7 +321,7 @@ namespace hal
                     expression = variable_names[idx];
                 }
 
-                return boolean_function(expression);
+                return BooleanFunction(expression);
             }
         }
 
@@ -425,7 +425,7 @@ namespace hal
         struct op_term
         {
             operation op;
-            boolean_function term;
+            BooleanFunction term;
         };
         std::vector<op_term> parsed_terms;
 
@@ -440,7 +440,7 @@ namespace hal
                 negate_next = !negate_next;
                 ++i;
             }
-            boolean_function first_term = from_string_internal(terms[i], variable_names);
+            BooleanFunction first_term = from_string_internal(terms[i], variable_names);
             while (i + 1 < terms.size() && terms[i + 1] == "'")
             {
                 negate_next = !negate_next;
@@ -529,7 +529,7 @@ namespace hal
         return parsed_terms[0].term;
     }
 
-    std::string boolean_function::to_string() const
+    std::string BooleanFunction::to_string() const
     {
         if (is_empty())
         {
@@ -566,7 +566,7 @@ namespace hal
         return s;
     }
 
-    std::string boolean_function::to_string_internal() const
+    std::string BooleanFunction::to_string_internal() const
     {
         std::string result = to_string(value::X);
         if (m_content == content_type::VARIABLE)
@@ -597,12 +597,12 @@ namespace hal
         return result;
     }
 
-    std::ostream& operator<<(std::ostream& os, const boolean_function& f)
+    std::ostream& operator<<(std::ostream& os, const BooleanFunction& f)
     {
         return os << f.to_string();
     }
 
-    boolean_function boolean_function::combine(operation op, const boolean_function& other) const
+    BooleanFunction BooleanFunction::combine(operation op, const BooleanFunction& other) const
     {
         if (is_empty())
         {
@@ -616,56 +616,56 @@ namespace hal
         {
             auto joint_operands = m_operands;
             joint_operands.insert(joint_operands.end(), other.m_operands.begin(), other.m_operands.end());
-            boolean_function result(op, joint_operands);
+            BooleanFunction result(op, joint_operands);
             return result;
         }
         else if (m_content == content_type::TERMS && m_op == op && !m_invert)
         {
-            boolean_function result = *this;
+            BooleanFunction result = *this;
             result.m_operands.push_back(other);
             return result;
         }
         else if (other.m_content == content_type::TERMS && other.m_op == op && !other.m_invert)
         {
-            boolean_function result = other;
+            BooleanFunction result = other;
             result.m_operands.insert(result.m_operands.begin(), *this);
             return result;
         }
-        return boolean_function(op, {*this, other});
+        return BooleanFunction(op, {*this, other});
     }
 
-    boolean_function boolean_function::operator&(const boolean_function& other) const
+    BooleanFunction BooleanFunction::operator&(const BooleanFunction& other) const
     {
         return combine(operation::AND, other);
     }
 
-    boolean_function boolean_function::operator|(const boolean_function& other) const
+    BooleanFunction BooleanFunction::operator|(const BooleanFunction& other) const
     {
         return combine(operation::OR, other);
     }
 
-    boolean_function boolean_function::operator^(const boolean_function& other) const
+    BooleanFunction BooleanFunction::operator^(const BooleanFunction& other) const
     {
         return combine(operation::XOR, other);
     }
 
-    boolean_function& boolean_function::operator&=(const boolean_function& other)
+    BooleanFunction& BooleanFunction::operator&=(const BooleanFunction& other)
     {
         *this = combine(operation::AND, other);
         return *this;
     }
-    boolean_function& boolean_function::operator|=(const boolean_function& other)
+    BooleanFunction& BooleanFunction::operator|=(const BooleanFunction& other)
     {
         *this = combine(operation::OR, other);
         return *this;
     }
-    boolean_function& boolean_function::operator^=(const boolean_function& other)
+    BooleanFunction& BooleanFunction::operator^=(const BooleanFunction& other)
     {
         *this = combine(operation::XOR, other);
         return *this;
     }
 
-    boolean_function boolean_function::operator!() const
+    BooleanFunction BooleanFunction::operator!() const
     {
         auto result = *this;
         if ((m_content == content_type::TERMS && !m_operands.empty()) || m_content == content_type::VARIABLE)
@@ -682,7 +682,7 @@ namespace hal
         return result;
     }
 
-    bool boolean_function::operator==(const boolean_function& other) const
+    bool BooleanFunction::operator==(const BooleanFunction& other) const
     {
         if (is_empty() && other.is_empty())
         {
@@ -695,25 +695,25 @@ namespace hal
         return (m_content == content_type::VARIABLE && m_variable == other.m_variable) || (m_content == content_type::CONSTANT && m_constant == other.m_constant)
                || (m_content == content_type::TERMS && m_op == other.m_op && m_operands == other.m_operands);
     }
-    bool boolean_function::operator!=(const boolean_function& other) const
+    bool BooleanFunction::operator!=(const BooleanFunction& other) const
     {
         return !(*this == other);
     }
 
-    boolean_function boolean_function::replace_xors() const
+    BooleanFunction BooleanFunction::replace_xors() const
     {
         if (m_content != content_type::TERMS)
         {
             return *this;
         }
-        std::vector<boolean_function> terms;
+        std::vector<BooleanFunction> terms;
         for (const auto& operand : m_operands)
         {
             terms.push_back(operand.replace_xors());
         }
         if (m_op != operation::XOR)
         {
-            return boolean_function(m_op, terms, m_invert);
+            return BooleanFunction(m_op, terms, m_invert);
         }
 
         // actually replace the current xors
@@ -730,11 +730,11 @@ namespace hal
         return result;
     }
 
-    std::vector<boolean_function> boolean_function::expand_ands_internal(const std::vector<std::vector<boolean_function>>& sub_primitives) const
+    std::vector<BooleanFunction> BooleanFunction::expand_ands_internal(const std::vector<std::vector<BooleanFunction>>& sub_primitives) const
     {
-        std::vector<boolean_function> result = sub_primitives[0];
+        std::vector<BooleanFunction> result = sub_primitives[0];
 
-        auto set_identifier = [](const boolean_function& f) -> std::string {
+        auto set_identifier = [](const BooleanFunction& f) -> std::string {
             std::string id;
             for (const auto& var : f.m_operands)
             {
@@ -749,7 +749,7 @@ namespace hal
         for (u32 i = 1; i < sub_primitives.size(); ++i)
         {
             std::set<std::string> seen;
-            std::vector<boolean_function> tmp;
+            std::vector<BooleanFunction> tmp;
             tmp.reserve(sub_primitives[i].size() * result.size());
             for (const auto& bf : sub_primitives[i])
             {
@@ -777,7 +777,7 @@ namespace hal
         return result;
     }
 
-    std::vector<boolean_function> boolean_function::get_primitives() const
+    std::vector<BooleanFunction> BooleanFunction::get_primitives() const
     {
         if (m_content != content_type::TERMS)
         {
@@ -786,7 +786,7 @@ namespace hal
 
         if (m_op == operation::OR)
         {
-            std::vector<boolean_function> primitives;
+            std::vector<BooleanFunction> primitives;
             for (const auto& operand : m_operands)
             {
                 auto tmp = operand.get_primitives();
@@ -796,7 +796,7 @@ namespace hal
         }
         else    // m_op == AND
         {
-            std::vector<std::vector<boolean_function>> sub_primitives;
+            std::vector<std::vector<BooleanFunction>> sub_primitives;
             for (const auto& operand : m_operands)
             {
                 sub_primitives.push_back(operand.get_primitives());
@@ -805,24 +805,24 @@ namespace hal
         }
     }
 
-    boolean_function boolean_function::expand_ands() const
+    BooleanFunction BooleanFunction::expand_ands() const
     {
         auto primitives = get_primitives();
         if (primitives.empty())
         {
             return value::ZERO;
         }
-        return boolean_function(operation::OR, primitives);
+        return BooleanFunction(operation::OR, primitives);
     }
 
-    boolean_function boolean_function::optimize_constants() const
+    BooleanFunction BooleanFunction::optimize_constants() const
     {
         if (is_empty() || m_content == content_type::VARIABLE || m_content == content_type::CONSTANT)
         {
             return *this;
         }
 
-        std::vector<boolean_function> terms;
+        std::vector<BooleanFunction> terms;
         for (const auto& operand : m_operands)
         {
             auto term = operand.optimize_constants();
@@ -830,7 +830,7 @@ namespace hal
             {
                 if (term.is_constant_one())
                 {
-                    return boolean_function::ONE;
+                    return BooleanFunction::ONE;
                 }
                 else if (term.is_constant_zero())
                 {
@@ -845,7 +845,7 @@ namespace hal
                 }
                 else if (term.is_constant_zero())
                 {
-                    return boolean_function::ZERO;
+                    return BooleanFunction::ZERO;
                 }
             }
             terms.push_back(term);
@@ -855,11 +855,11 @@ namespace hal
         {
             if (m_op == operation::OR)
             {
-                return boolean_function::ZERO;
+                return BooleanFunction::ZERO;
             }
             else if (m_op == operation::AND)
             {
-                return boolean_function::ONE;
+                return BooleanFunction::ONE;
             }
         }
 
@@ -874,11 +874,11 @@ namespace hal
                     {
                         if (m_op == operation::AND)
                         {
-                            return boolean_function::ZERO;
+                            return BooleanFunction::ZERO;
                         }
                         else if (m_op == operation::OR)
                         {
-                            return boolean_function::ONE;
+                            return BooleanFunction::ONE;
                         }
                     }
                     else
@@ -894,10 +894,10 @@ namespace hal
             }
         }
 
-        return boolean_function(m_op, terms);
+        return BooleanFunction(m_op, terms);
     }
 
-    boolean_function boolean_function::propagate_negations(bool negate_term) const
+    BooleanFunction BooleanFunction::propagate_negations(bool negate_term) const
     {
         if (m_content != content_type::TERMS)
         {
@@ -912,39 +912,39 @@ namespace hal
 
         if (!use_de_morgan)
         {
-            std::vector<boolean_function> terms;
+            std::vector<BooleanFunction> terms;
             for (const auto& operand : m_operands)
             {
                 terms.push_back(operand.propagate_negations(false));
             }
-            return boolean_function(m_op, terms);
+            return BooleanFunction(m_op, terms);
         }
         else
         {
-            std::vector<boolean_function> terms;
+            std::vector<BooleanFunction> terms;
             for (const auto& operand : m_operands)
             {
                 terms.push_back(operand.propagate_negations(true));
             }
             if (m_op == operation::AND)
             {
-                return boolean_function(operation::OR, terms);
+                return BooleanFunction(operation::OR, terms);
             }
             else
             {
-                return boolean_function(operation::AND, terms);
+                return BooleanFunction(operation::AND, terms);
             }
         }
     }
 
-    boolean_function boolean_function::flatten() const
+    BooleanFunction BooleanFunction::flatten() const
     {
         if (m_content != content_type::TERMS)
         {
             return *this;
         }
 
-        std::vector<boolean_function> terms;
+        std::vector<BooleanFunction> terms;
         for (const auto& operand : m_operands)
         {
             auto term = operand.flatten();
@@ -960,10 +960,10 @@ namespace hal
                 terms.push_back(term);
             }
         }
-        return boolean_function(m_op, terms);
+        return BooleanFunction(m_op, terms);
     }
 
-    bool boolean_function::is_dnf() const
+    bool BooleanFunction::is_dnf() const
     {
         if (m_content != content_type::TERMS)
         {
@@ -1006,7 +1006,7 @@ namespace hal
         return true;
     }
 
-    boolean_function boolean_function::to_dnf() const
+    BooleanFunction BooleanFunction::to_dnf() const
     {
         if (is_dnf())
         {
@@ -1044,7 +1044,7 @@ namespace hal
         return replace_xors().propagate_negations().expand_ands() /*.flatten()*/.optimize_constants();
     }
 
-    std::vector<std::vector<std::pair<std::string, bool>>> boolean_function::get_dnf_clauses() const
+    std::vector<std::vector<std::pair<std::string, bool>>> BooleanFunction::get_dnf_clauses() const
     {
         std::vector<std::vector<std::pair<std::string, bool>>> result;
         if (is_empty())
@@ -1095,7 +1095,7 @@ namespace hal
         return result;
     }
 
-    std::vector<boolean_function::value> boolean_function::get_truth_table(std::vector<std::string> variables, bool remove_unknown_variables) const
+    std::vector<BooleanFunction::value> BooleanFunction::get_truth_table(std::vector<std::string> variables, bool remove_unknown_variables) const
     {
         std::vector<value> result;
 
@@ -1111,11 +1111,11 @@ namespace hal
 
         for (u32 values = 0; values < (u32)(1 << variables.size()); ++values)
         {
-            std::map<std::string, boolean_function::value> inputs;
+            std::map<std::string, BooleanFunction::value> inputs;
             u32 tmp = values;
             for (const auto& var : variables)
             {
-                inputs[var] = (boolean_function::value)(tmp & 1);
+                inputs[var] = (BooleanFunction::value)(tmp & 1);
                 tmp >>= 1;
             }
             result.push_back(evaluate(inputs));
@@ -1123,14 +1123,14 @@ namespace hal
         return result;
     }
 
-    boolean_function boolean_function::optimize() const
+    BooleanFunction BooleanFunction::optimize() const
     {
         if (m_content != content_type::TERMS)
         {
             return *this;
         }
 
-        boolean_function result = to_dnf().propagate_negations().optimize_constants();
+        BooleanFunction result = to_dnf().propagate_negations().optimize_constants();
 
         if (result.m_content != content_type::TERMS || result.m_op == operation::AND)
         {
@@ -1162,19 +1162,19 @@ namespace hal
 
         terms = qmc(terms);
 
-        result = boolean_function();
+        result = BooleanFunction();
         for (const auto& term : terms)
         {
-            boolean_function tmp;
+            BooleanFunction tmp;
             for (u32 i = 0; i < term.size(); ++i)
             {
                 if (term[i] == value::ONE)
                 {
-                    tmp &= boolean_function(vars[i]);
+                    tmp &= BooleanFunction(vars[i]);
                 }
                 else if (term[i] == value::ZERO)
                 {
-                    tmp &= !boolean_function(vars[i]);
+                    tmp &= !BooleanFunction(vars[i]);
                 }
             }
             if (tmp.is_empty())    // all variables are "dont care"
@@ -1187,7 +1187,7 @@ namespace hal
         return result;
     }
 
-    std::vector<std::vector<boolean_function::value>> boolean_function::qmc(const std::vector<std::vector<value>>& terms)
+    std::vector<std::vector<BooleanFunction::value>> BooleanFunction::qmc(const std::vector<std::vector<value>>& terms)
     {
         std::vector<std::vector<value>> result;
 

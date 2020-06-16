@@ -9,6 +9,8 @@
 #include <netlist/gate.h>
 #include <netlist/net.h>
 
+using namespace hal;
+
 class netlist_internal_manager_test : public ::testing::Test
 {
 protected:
@@ -24,11 +26,11 @@ protected:
     }
 
     // Creates an empty netlist with a certain id if passed
-    std::shared_ptr<netlist> create_empty_netlist(int id = -1)
+    std::shared_ptr<Netlist> create_empty_netlist(int id = -1)
     {
         NO_COUT_BLOCK;
-        std::shared_ptr<gate_library> gl = gate_library_manager::get_gate_library(g_lib_name);
-        std::shared_ptr<netlist> nl(new netlist(gl));
+        std::shared_ptr<GateLibrary> gl = gate_library_manager::get_gate_library(g_lib_name);
+        std::shared_ptr<Netlist> nl(new Netlist(gl));
 
         if (id >= 0)
         {

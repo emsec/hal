@@ -86,7 +86,7 @@ void standard_graphics_gate::update_alpha()
         s_alpha = 0;
 }
 
-standard_graphics_gate::standard_graphics_gate(const std::shared_ptr<const gate> g, const bool adjust_size_to_grid) : graphics_gate(g)
+standard_graphics_gate::standard_graphics_gate(const std::shared_ptr<const Gate> g, const bool adjust_size_to_grid) : graphics_gate(g)
 {
     format(adjust_size_to_grid);
 }

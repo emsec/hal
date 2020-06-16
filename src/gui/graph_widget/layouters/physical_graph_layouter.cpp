@@ -37,7 +37,7 @@ void physical_graph_layouter::add(const QSet<u32> modules, const QSet<u32> gates
 
     for (u32 id : gates)
     {
-        std::shared_ptr<gate> g = g_netlist->get_gate_by_id(id);
+        std::shared_ptr<Gate> g = g_netlist->get_gate_by_id(id);
         assert(g);
 
         if (g->has_location())

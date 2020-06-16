@@ -2,7 +2,7 @@
 #include "test_def.h"
 
 #include "gtest/gtest.h"
-#include <core/interface_cli.h>
+#include <core/plugin_interface_cli.h>
 #include <core/log.h>
 #include <core/plugin_manager.h>
 #include <iostream>
@@ -10,6 +10,8 @@
 // These tests are currently disables, since there are unfixed bugs within the testcases. Will be fixed soon...
 //#ifdef DONT_BUILD
 
+namespace hal
+{
 using std::cout;
 using std::endl;
 
@@ -463,3 +465,4 @@ TEST_F(plugin_manager_test, check_existing_options_description)
 }
 
 // #endif // DONT_BUILD
+}

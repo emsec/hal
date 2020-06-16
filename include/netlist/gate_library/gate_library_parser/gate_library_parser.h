@@ -32,31 +32,31 @@
 namespace hal
 {
     /* forward declaration*/
-    class netlist;
+    class Netlist;
 
     /**
      * @ingroup netlist
      */
-    class NETLIST_API gate_library_parser
+    class NETLIST_API GateLibaryParser
     {
     public:
         /**
          * @param[in] stream - The string stream filled with gate library definition.
          */
-        explicit gate_library_parser(const std::filesystem::path& file_path, std::stringstream& file_content);
+        explicit GateLibaryParser(const std::filesystem::path& file_path, std::stringstream& file_content);
 
-        virtual ~gate_library_parser() = default;
+        virtual ~GateLibaryParser() = default;
 
         /**
          * Parses the gate library definition file.
          *
          * @returns The gate library or a nullptr on error.
          */
-        virtual std::shared_ptr<gate_library> parse() = 0;
+        virtual std::shared_ptr<GateLibrary> parse() = 0;
 
     protected:
         // stores the gate library
-        std::shared_ptr<gate_library> m_gate_lib;
+        std::shared_ptr<GateLibrary> m_gate_lib;
 
         // stores the input stream to the file
         std::stringstream& m_fs;

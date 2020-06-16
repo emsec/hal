@@ -10,11 +10,13 @@
 
 using namespace test_utils;
 
+namespace hal
+{
 class hdl_parser_dispatcher_test : public ::testing::Test
 {
 protected:
     std::filesystem::path tmp_dir;
-    std::string valid_verilog_content = "module top (\n"
+    std::string valid_verilog_content = "Module top (\n"
                                         "  net_global_in,\n"
                                         "  net_global_out\n"
                                         " ) ;\n"
@@ -79,8 +81,8 @@ protected:
  * Functions: get_cli_options, get_gui_option
  */
 TEST_F(hdl_parser_dispatcher_test, check_cli_gui_options){TEST_START{// Access the gui-options and the cli-options (shouldn't  be empty)
-                                                                     EXPECT_FALSE(hdl_parser_dispatcher::get_cli_options().get_options().empty());
-EXPECT_FALSE(hdl_parser_dispatcher::get_gui_option().empty());
+                                                                     EXPECT_FALSE(HDLParserDispatcher::get_cli_options().get_options().empty());
+EXPECT_FALSE(HDLParserDispatcher::get_gui_option().empty());
 }
 TEST_END
 }
@@ -100,28 +102,28 @@ TEST_F(hdl_parser_dispatcher_test, check_parse_by_program_args)
     std::filesystem::path invalid_file                   = create_tmp_file("invalid_file", invalid_input);
 
     {
-        // Parse a vhdl and a verilog file by passing the parser name and the gate_library name in the program arguments.
+        // Parse a vhdl and a verilog file by passing the parser name and the GateLibrary name in the program arguments.
         ProgramArguments p_args_vhdl;
         p_args_vhdl.set_option("--parser", std::vector<std::string>({"vhdl"}));
-        p_args_vhdl.set_option("--gate-library", std::vector<std::string>({"EXAMPLE_GATE_LIBRARY"}));
+        p_args_vhdl.set_option("--Gate-library", std::vector<std::string>({"EXAMPLE_GATE_LIBRARY"}));
 
         ProgramArguments p_args_verilog;
         p_args_verilog.set_option("--parser", std::vector<std::string>({"verilog"}));
-        p_args_verilog.set_option("--gate-library", std::vector<std::string>({"EXAMPLE_GATE_LIBRARY"}));
+        p_args_verilog.set_option("--Gate-library", std::vector<std::string>({"EXAMPLE_GATE_LIBRARY"}));
 
-        std::shared_ptr<netlist> nl_vhdl    = hdl_parser_dispatcher::parse(vhdl_file_without_extension, p_args_vhdl);
-        std::shared_ptr<netlist> nl_verilog = hdl_parser_dispatcher::parse(verilog_file_without_extension, p_args_verilog);
+        std::shared_ptr<Netlist> nl_vhdl    = HDLParserDispatcher::parse(vhdl_file_without_extension, p_args_vhdl);
+        std::shared_ptr<Netlist> nl_verilog = HDLParserDispatcher::parse(verilog_file_without_extension, p_args_verilog);
 
         EXPECT_NE(nl_vhdl, nullptr);
         EXPECT_NE(nl_verilog, nullptr);
     }
     {
         // Parse a vhdl and a verilog file by passing no relevant program arguments. The parser should be determined
-        // from the file extension ('.vhdl'/'.v') while the gate_library should be guessed.
+        // from the file extension ('.vhdl'/'.v') while the GateLibrary should be guessed.
         ProgramArguments p_args_empty;
 
-        std::shared_ptr<netlist> nl_vhdl    = hdl_parser_dispatcher::parse(vhdl_file_with_extension, p_args_empty);
-        std::shared_ptr<netlist> nl_verilog = hdl_parser_dispatcher::parse(verilog_file_with_extension, p_args_empty);
+        std::shared_ptr<Netlist> nl_vhdl    = HDLParserDispatcher::parse(vhdl_file_with_extension, p_args_empty);
+        std::shared_ptr<Netlist> nl_verilog = HDLParserDispatcher::parse(verilog_file_with_extension, p_args_empty);
 
         EXPECT_NE(nl_vhdl, nullptr);
         EXPECT_NE(nl_verilog, nullptr);
@@ -131,9 +133,9 @@ TEST_F(hdl_parser_dispatcher_test, check_parse_by_program_args)
         // Pass an unknown parser
         ProgramArguments p_args_vhdl;
         p_args_vhdl.set_option("--parser", std::vector<std::string>({"verihdl"}));    // <- unknown
-        p_args_vhdl.set_option("--gate-library", std::vector<std::string>({"EXAMPLE_GATE_LIBRARY"}));
+        p_args_vhdl.set_option("--Gate-library", std::vector<std::string>({"EXAMPLE_GATE_LIBRARY"}));
 
-        std::shared_ptr<netlist> nl = hdl_parser_dispatcher::parse(vhdl_file_without_extension, p_args_vhdl);
+        std::shared_ptr<Netlist> nl = HDLParserDispatcher::parse(vhdl_file_without_extension, p_args_vhdl);
 
         EXPECT_EQ(nl, nullptr);
     }
@@ -141,19 +143,19 @@ TEST_F(hdl_parser_dispatcher_test, check_parse_by_program_args)
         // Pass an unknown file path
         ProgramArguments p_args_vhdl;
         p_args_vhdl.set_option("--parser", std::vector<std::string>({"verilog"}));    // <- unknown
-        p_args_vhdl.set_option("--gate-library", std::vector<std::string>({"EXAMPLE_GATE_LIBRARY"}));
+        p_args_vhdl.set_option("--Gate-library", std::vector<std::string>({"EXAMPLE_GATE_LIBRARY"}));
 
-        std::shared_ptr<netlist> nl = hdl_parser_dispatcher::parse(std::filesystem::path("this/path/does/not/exist.v"), p_args_vhdl);
+        std::shared_ptr<Netlist> nl = HDLParserDispatcher::parse(std::filesystem::path("this/path/does/not/exist.v"), p_args_vhdl);
 
         EXPECT_EQ(nl, nullptr);
     }
     /*{ // ISSUE: Some issue in the verilog tokenizer (also vhdl?).
             // (l.189: if(... && parsed_tokens.back() == '#'), parsed_tokens can be empty)
-            // Pass an invalid file with no gate-library hint
+            // Pass an invalid file with no Gate-library hint
             ProgramArguments p_args;
             p_args.set_option("--parser", std::vector<std::string>({"verilog"}));
 
-            std::shared_ptr<netlist> nl = hdl_parser_dispatcher::parse(invalid_file, p_args);
+            std::shared_ptr<Netlist> nl = HDLParserDispatcher::parse(invalid_file, p_args);
 
             EXPECT_EQ(nl, nullptr);
         }*/
@@ -162,7 +164,7 @@ TEST_F(hdl_parser_dispatcher_test, check_parse_by_program_args)
 }
 
 /**
- * Testing the parse function that takes a parser name and a gate library explicitly
+ * Testing the parse function that takes a parser name and a Gate library explicitly
  *
  * Functions: parse
  */
@@ -173,17 +175,17 @@ TEST_F(hdl_parser_dispatcher_test, check_parse_by_parser_name)
     std::filesystem::path verilog_file_without_extension = create_tmp_file("tmp_verilog_file", valid_verilog_content);
 
     {
-        // Parse a vhdl and a verilog file by passing the parser name and the gate_library name. The file is passed by the std::filesystem::path.
-        std::shared_ptr<netlist> nl_vhdl    = hdl_parser_dispatcher::parse("EXAMPLE_GATE_LIBRARY", "vhdl", vhdl_file_without_extension);
-        std::shared_ptr<netlist> nl_verilog = hdl_parser_dispatcher::parse("EXAMPLE_GATE_LIBRARY", "verilog", verilog_file_without_extension);
+        // Parse a vhdl and a verilog file by passing the parser name and the GateLibrary name. The file is passed by the std::filesystem::path.
+        std::shared_ptr<Netlist> nl_vhdl    = HDLParserDispatcher::parse("EXAMPLE_GATE_LIBRARY", "vhdl", vhdl_file_without_extension);
+        std::shared_ptr<Netlist> nl_verilog = HDLParserDispatcher::parse("EXAMPLE_GATE_LIBRARY", "verilog", verilog_file_without_extension);
 
         EXPECT_NE(nl_vhdl, nullptr);
         EXPECT_NE(nl_verilog, nullptr);
     }
     {
-        // Parse a vhdl and a verilog file by passing the parser name and the gate_library name. The file is passed by a string.
-        std::shared_ptr<netlist> nl_vhdl    = hdl_parser_dispatcher::parse("EXAMPLE_GATE_LIBRARY", "vhdl", vhdl_file_without_extension.string());
-        std::shared_ptr<netlist> nl_verilog = hdl_parser_dispatcher::parse("EXAMPLE_GATE_LIBRARY", "verilog", verilog_file_without_extension.string());
+        // Parse a vhdl and a verilog file by passing the parser name and the GateLibrary name. The file is passed by a string.
+        std::shared_ptr<Netlist> nl_vhdl    = HDLParserDispatcher::parse("EXAMPLE_GATE_LIBRARY", "vhdl", vhdl_file_without_extension.string());
+        std::shared_ptr<Netlist> nl_verilog = HDLParserDispatcher::parse("EXAMPLE_GATE_LIBRARY", "verilog", verilog_file_without_extension.string());
 
         EXPECT_NE(nl_vhdl, nullptr);
         EXPECT_NE(nl_verilog, nullptr);
@@ -191,9 +193,10 @@ TEST_F(hdl_parser_dispatcher_test, check_parse_by_parser_name)
     // NEGATIVE
     {
         // Pass an unknown file path
-        std::shared_ptr<netlist> nl = hdl_parser_dispatcher::parse("EXAMPLE_GATE_LIBRARY", "verilog", std::filesystem::path("this/path/does/not/exist.v"));
+        std::shared_ptr<Netlist> nl = HDLParserDispatcher::parse("EXAMPLE_GATE_LIBRARY", "verilog", std::filesystem::path("this/path/does/not/exist.v"));
 
         EXPECT_EQ(nl, nullptr);
     }
     TEST_END
+}
 }

@@ -20,7 +20,7 @@ public:
 
     // right = true
     void setup(bool direction);
-    void setup(hal::node origin, std::shared_ptr<net> via_net, bool direction);
+    void setup(hal::node origin, std::shared_ptr<Net> via_net, bool direction);
     void hide_when_focus_lost(bool hide);
 
 Q_SIGNALS:
@@ -33,7 +33,7 @@ protected:
     void keyPressEvent(QKeyEvent* event) override;
 
 private:
-    void fill_table(std::shared_ptr<net> n, bool direction);
+    void fill_table(std::shared_ptr<Net> n, bool direction);
     void handle_item_double_clicked(QTableWidgetItem* item);
     void commit_selection();
 

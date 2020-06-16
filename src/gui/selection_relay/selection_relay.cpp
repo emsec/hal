@@ -71,7 +71,7 @@ void selection_relay::navigate_up()
         }
         case item_type::gate:
         {
-            std::shared_ptr<gate> g = g_netlist->get_gate_by_id(m_focus_id);
+            std::shared_ptr<Gate> g = g_netlist->get_gate_by_id(m_focus_id);
 
             if (!g)
                 return;
@@ -100,7 +100,7 @@ void selection_relay::navigate_up()
         }
         case item_type::net:
         {
-            std::shared_ptr<net> n = g_netlist->get_net_by_id(m_focus_id);
+            std::shared_ptr<Net> n = g_netlist->get_net_by_id(m_focus_id);
 
             if (!n)
                 return;
@@ -119,7 +119,7 @@ void selection_relay::navigate_up()
         }
         case item_type::module:
         {
-            std::shared_ptr<module> m = g_netlist->get_module_by_id(m_focus_id);
+            std::shared_ptr<Module> m = g_netlist->get_module_by_id(m_focus_id);
 
             if (!m)
                 return;
@@ -168,7 +168,7 @@ void selection_relay::navigate_down()
         }
         case item_type::gate:
         {
-            std::shared_ptr<gate> g = g_netlist->get_gate_by_id(m_focus_id);
+            std::shared_ptr<Gate> g = g_netlist->get_gate_by_id(m_focus_id);
 
             if (!g)
                 return;
@@ -197,7 +197,7 @@ void selection_relay::navigate_down()
         }
         case item_type::net:
         {
-            std::shared_ptr<net> n = g_netlist->get_net_by_id(m_focus_id);
+            std::shared_ptr<Net> n = g_netlist->get_net_by_id(m_focus_id);
 
             if (!n)
                 return;
@@ -216,7 +216,7 @@ void selection_relay::navigate_down()
         }
         case item_type::module:
         {
-            std::shared_ptr<module> m = g_netlist->get_module_by_id(m_focus_id);
+            std::shared_ptr<Module> m = g_netlist->get_module_by_id(m_focus_id);
 
             if (!m)
                 return;
@@ -264,7 +264,7 @@ void selection_relay::navigate_left()
         }
         case item_type::gate:
         {
-            std::shared_ptr<gate> g = g_netlist->get_gate_by_id(m_focus_id);
+            std::shared_ptr<Gate> g = g_netlist->get_gate_by_id(m_focus_id);
 
             if (!g)
                 return;
@@ -286,7 +286,7 @@ void selection_relay::navigate_left()
         }
         case item_type::net:
         {
-            std::shared_ptr<net> n = g_netlist->get_net_by_id(m_focus_id);
+            std::shared_ptr<Net> n = g_netlist->get_net_by_id(m_focus_id);
 
             if (!n)
                 return;
@@ -305,7 +305,7 @@ void selection_relay::navigate_left()
         }
         case item_type::module:
         {
-            std::shared_ptr<module> m = g_netlist->get_module_by_id(m_focus_id);
+            std::shared_ptr<Module> m = g_netlist->get_module_by_id(m_focus_id);
 
             if (!m)
                 return;
@@ -339,7 +339,7 @@ void selection_relay::navigate_right()
         }
         case item_type::gate:
         {
-            std::shared_ptr<gate> g = g_netlist->get_gate_by_id(m_focus_id);
+            std::shared_ptr<Gate> g = g_netlist->get_gate_by_id(m_focus_id);
 
             if (!g)
                 return;
@@ -358,7 +358,7 @@ void selection_relay::navigate_right()
         }
         case item_type::net:
         {
-            std::shared_ptr<net> n = g_netlist->get_net_by_id(m_focus_id);
+            std::shared_ptr<Net> n = g_netlist->get_net_by_id(m_focus_id);
 
             if (!n)
                 return;
@@ -378,7 +378,7 @@ void selection_relay::navigate_right()
         }
         case item_type::module:
         {
-            std::shared_ptr<module> m = g_netlist->get_module_by_id(m_focus_id);
+            std::shared_ptr<Module> m = g_netlist->get_module_by_id(m_focus_id);
 
             if (!m)
                 return;
@@ -430,10 +430,10 @@ void selection_relay::handle_net_removed(const u32 id)
 
 // GET CORE GUARANTEES
 // UNCERTAIN ABOUT UNROUTED (GLOBAL) NETS, DECIDE
-void selection_relay::follow_gate_input_pin(std::shared_ptr<gate> g, u32 input_pin_index)
+void selection_relay::follow_gate_input_pin(std::shared_ptr<Gate> g, u32 input_pin_index)
 {
     std::string pin_type = *std::next(g->get_input_pins().begin(), input_pin_index);
-    std::shared_ptr<net> n = g->get_fan_in_net(pin_type);
+    std::shared_ptr<Net> n = g->get_fan_in_net(pin_type);
 
     if (!n)
         return;    // ADD SOUND OR SOMETHING, ALTERNATIVELY ADD BOOL RETURN VALUE TO METHOD ???
@@ -457,7 +457,7 @@ void selection_relay::follow_gate_input_pin(std::shared_ptr<gate> g, u32 input_p
     else
     {
         int i = 0;
-        for (endpoint& e : n->get_destinations())
+        for (Endpoint& e : n->get_destinations())
         {
             if (e.get_gate() == g && e.get_pin() == pin_type)
                 break;
@@ -472,10 +472,10 @@ void selection_relay::follow_gate_input_pin(std::shared_ptr<gate> g, u32 input_p
     Q_EMIT selection_changed(nullptr);
 }
 
-void selection_relay::follow_gate_output_pin(std::shared_ptr<gate> g, u32 output_pin_index)
+void selection_relay::follow_gate_output_pin(std::shared_ptr<Gate> g, u32 output_pin_index)
 {
     std::string pin_type = *std::next(g->get_output_pins().begin(), output_pin_index);
-    std::shared_ptr<net> n = g->get_fan_out_net(pin_type);
+    std::shared_ptr<Net> n = g->get_fan_out_net(pin_type);
 
     if (!n)
         return;    // ADD SOUND OR SOMETHING, ALTERNATIVELY ADD BOOL RETURN VALUE TO METHOD ???
@@ -497,21 +497,21 @@ void selection_relay::follow_gate_output_pin(std::shared_ptr<gate> g, u32 output
     Q_EMIT selection_changed(nullptr);
 }
 
-void selection_relay::follow_module_input_pin(std::shared_ptr<module> m, u32 input_pin_index)
+void selection_relay::follow_module_input_pin(std::shared_ptr<Module> m, u32 input_pin_index)
 {
     // TODO implement
 }
 
-void selection_relay::follow_module_output_pin(std::shared_ptr<module> m, u32 output_pin_index)
+void selection_relay::follow_module_output_pin(std::shared_ptr<Module> m, u32 output_pin_index)
 {
     // TODO implement
 }
 
 
-void selection_relay::follow_net_to_source(std::shared_ptr<net> n)
+void selection_relay::follow_net_to_source(std::shared_ptr<Net> n)
 {
-    endpoint e              = n->get_source();
-    std::shared_ptr<gate> g = e.get_gate();
+    Endpoint e              = n->get_source();
+    std::shared_ptr<Gate> g = e.get_gate();
 
     if (!g)
         return;
@@ -546,10 +546,10 @@ void selection_relay::follow_net_to_source(std::shared_ptr<net> n)
     Q_EMIT selection_changed(nullptr);
 }
 
-void selection_relay::follow_net_to_destination(std::shared_ptr<net> n, u32 dst_index)
+void selection_relay::follow_net_to_destination(std::shared_ptr<Net> n, u32 dst_index)
 {
-    endpoint e              = n->get_destinations().at(dst_index);
-    std::shared_ptr<gate> g = e.get_gate();
+    Endpoint e              = n->get_destinations().at(dst_index);
+    std::shared_ptr<Gate> g = e.get_gate();
 
     if (!g)
         return;

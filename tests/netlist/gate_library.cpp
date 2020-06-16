@@ -7,10 +7,13 @@
 #include <netlist/gate_library/gate_type/gate_type_lut.h>
 #include <netlist/gate_library/gate_type/gate_type_sequential.h>
 
+namespace hal
+{
+
 using namespace test_utils;
 
 /*
- * Testing the gate_library class, as well as the different gate_types (gate_type, gate_type_lut, gate_type_sequential)
+ * Testing the GateLibrary class, as well as the different gate_types (GateType, GateTypeLut, GateTypeSequential)
  */
 
 class gate_library_test : public ::testing::Test
@@ -27,23 +30,23 @@ protected:
     }
 };
 
-// ========= gate_type tests ===========
+// ========= GateType tests ===========
 
 /**
- * Testing the constructor and the access to the gates name and base_type (combinatorial for gate_type class)
+ * Testing the constructor and the access to the gates name and BaseType (combinatorial for GateType class)
  *
  * Functions: <constructor>, get_name, get_base_type, to_string, operator<<
  */
 TEST_F(gate_library_test, check_constructor)
 {
     TEST_START
-        gate_type gt("gt_name");
+        GateType gt("gt_name");
         EXPECT_EQ(gt.get_name(), "gt_name");
         EXPECT_EQ(gt.to_string(), "gt_name");
         std::stringstream ss;
         ss << gt;
         EXPECT_EQ(ss.str(), "gt_name");
-        EXPECT_EQ(gt.get_base_type(), gate_type::base_type::combinatorial);
+        EXPECT_EQ(gt.get_base_type(), GateType::BaseType::combinatorial);
     TEST_END
 }
 
@@ -57,14 +60,14 @@ TEST_F(gate_library_test, check_pin_management)
     TEST_START
         {
             // Add some input pins
-            gate_type gt("gt_name");
+            GateType gt("gt_name");
             gt.add_input_pin("IN_0"); // Single
             gt.add_input_pins(std::vector<std::string>({"IN_1", "IN_2"})); // Multiple
             EXPECT_EQ(gt.get_input_pins(), std::vector<std::string>({"IN_0", "IN_1", "IN_2"}));
         }
         {
             // Add some output pins
-            gate_type gt("gt_name");
+            GateType gt("gt_name");
             gt.add_output_pin("OUT_0"); // Single
             gt.add_output_pins(std::vector<std::string>({"OUT_1", "OUT_2"})); // Multiple
             EXPECT_EQ(gt.get_output_pins(), std::vector<std::string>({"OUT_0", "OUT_1", "OUT_2"}));
@@ -73,7 +76,7 @@ TEST_F(gate_library_test, check_pin_management)
         {
             // Try to add the same input/ouput pin twice (should not work)
             NO_COUT_TEST_BLOCK;
-            gate_type gt("gt_name");
+            GateType gt("gt_name");
 
             gt.add_input_pin("IN_PIN");
             gt.add_input_pin("IN_PIN");
@@ -87,7 +90,7 @@ TEST_F(gate_library_test, check_pin_management)
 }
 
 /**
- * Testing the usage of gate types with pin groups
+ * Testing the usage of Gate types with pin groups
  *
  * Functions: add_input_pin_group, get_input_pin_groups, add_output_pin_groups, get_output_pin_groups
  */
@@ -96,7 +99,7 @@ TEST_F(gate_library_test, DISABLED_check_pin_groups)
     TEST_START
         {
             // Add input pin groups
-            gate_type gt("gt_name");
+            GateType gt("gt_name");
             std::map<u32, std::string> pin_group_a = {{0, "pin_group_a(0)"}, {1, "pin_group_a(1)"}, {2, "pin_group_a(2)"}, {3, "pin_group_a(3)"}};
             std::map<u32, std::string> pin_group_b = {{0, "pin_group_b(0)"}, {1, "pin_group_b(1)"}};
             std::map<std::string, std::map<u32, std::string>> pin_groups = {{"pin_group_a", pin_group_a}, {"pin_group_b", pin_group_b}};
@@ -109,7 +112,7 @@ TEST_F(gate_library_test, DISABLED_check_pin_groups)
         }
         {
             // Add output pin groups
-            gate_type gt("gt_name");
+            GateType gt("gt_name");
             std::map<u32, std::string> pin_group_a = {{0, "pin_group_a(0)"}, {1, "pin_group_a(1)"}, {2, "pin_group_a(2)"}, {3, "pin_group_a(3)"}};
             std::map<u32, std::string> pin_group_b = {{0, "pin_group_b(0)"}, {1, "pin_group_b(1)"}};
             std::map<std::string, std::map<u32, std::string>> pin_groups = {{"pin_group_a", pin_group_a}, {"pin_group_b", pin_group_b}};
@@ -123,7 +126,7 @@ TEST_F(gate_library_test, DISABLED_check_pin_groups)
         // NEGATIVE TESTS
         {
             // Try to add an already added pin group
-            gate_type gt("gt_name");
+            GateType gt("gt_name");
 
             // Output Pin Group
             std::map<u32, std::string> out_pin_group = {{0, "out_pin_group(0)"}, {1, "out_pin_group(1)"}};
@@ -149,7 +152,7 @@ TEST_F(gate_library_test, DISABLED_check_pin_groups)
         }
         {
             // Add a pin group that contain previously unregistered pins
-            gate_type gt("gt_name");
+            GateType gt("gt_name");
             std::map<u32, std::string> pin_group = {{0, "pin_group(0)"}, {1, "pin_group(1)"}};
             std::map<std::string, std::map<u32, std::string>> empty_pin_groups;
             gt.assign_output_pin_group("out_pin", pin_group);
@@ -173,14 +176,14 @@ TEST_F(gate_library_test, check_boolean_function_assignment)
     TEST_START
         {
             // Add a boolean function for an output pin
-            gate_type gt("gt_name");
+            GateType gt("gt_name");
 
             gt.add_input_pins(std::vector<std::string>({"IN_0", "IN_1"}));
             gt.add_output_pin("OUT");
 
-            boolean_function bf_out = boolean_function::from_string("IN_0 ^ IN_1");
+            BooleanFunction bf_out = BooleanFunction::from_string("IN_0 ^ IN_1");
             gt.add_boolean_function("OUT", bf_out);
-            std::unordered_map<std::string, boolean_function> gt_bf_map = gt.get_boolean_functions();
+            std::unordered_map<std::string, BooleanFunction> gt_bf_map = gt.get_boolean_functions();
             EXPECT_EQ(gt_bf_map.size(), 1);
             ASSERT_FALSE(gt_bf_map.find("OUT") == gt_bf_map.end());
             EXPECT_EQ(gt_bf_map.at("OUT"), bf_out);
@@ -197,9 +200,9 @@ TEST_F(gate_library_test, check_equal_to_operator)
 {
     TEST_START
         {
-            // Testing the comparison of gate types (compared by id)
-            gate_type gt_0("gt_name");
-            gate_type gt_1("gt_name");
+            // Testing the comparison of Gate types (compared by id)
+            GateType gt_0("gt_name");
+            GateType gt_1("gt_name");
 
             EXPECT_TRUE(gt_0 == gt_0);
             EXPECT_FALSE(gt_0 == gt_1);
@@ -209,7 +212,7 @@ TEST_F(gate_library_test, check_equal_to_operator)
     TEST_END
 }
 
-// ======== gate_type_lut tests ========
+// ======== GateTypeLut tests ========
 
 /**
  * Testing the addition of output_from_init_string pins
@@ -221,7 +224,7 @@ TEST_F(gate_library_test, check_output_from_init_string_pin)
     TEST_START
         {
             // Add and get some output_from_init_string pins
-            gate_type_lut gtl("gtl_name");
+            GateTypeLut gtl("gtl_name");
             gtl.add_output_pins(std::vector<std::string>({"O0","OFIS_0","OFIS_1"}));
             gtl.add_output_from_init_string_pin("OFIS_0");
             gtl.add_output_from_init_string_pin("OFIS_1");
@@ -240,10 +243,10 @@ TEST_F(gate_library_test, check_output_from_init_string_pin)
 TEST_F(gate_library_test, check_config_data)
 {
     TEST_START
-        gate_type_lut gtl("gtl_name");
+        GateTypeLut gtl("gtl_name");
         {
             // Base Type
-            EXPECT_EQ(gtl.get_base_type(), gate_type::base_type::lut);
+            EXPECT_EQ(gtl.get_base_type(), GateType::BaseType::lut);
         }
         {
             // Config Data Category
@@ -266,7 +269,7 @@ TEST_F(gate_library_test, check_config_data)
     TEST_END
 }
 
-// ===== gate_type_sequential tests ====
+// ===== GateTypeSequential tests ====
 
 /**
  * Testing the addition of state_output pins and inverted_state_output_pins
@@ -278,7 +281,7 @@ TEST_F(gate_library_test, check_state_output_pin)
     TEST_START
         {
             // Add and get some state_output pins
-            gate_type_sequential gts("gts_name", gate_type::base_type::ff);
+            GateTypeSequential gts("gts_name", GateType::BaseType::ff);
             gts.add_output_pins(std::vector<std::string>({"OFIS_0","OFIS_1"}));
             gts.add_state_output_pin("OFIS_0");
             gts.add_state_output_pin("OFIS_1");
@@ -286,7 +289,7 @@ TEST_F(gate_library_test, check_state_output_pin)
         }
         {
             // Add and get some inverted_state_output pins
-            gate_type_sequential gts("gts_name", gate_type::base_type::ff);
+            GateTypeSequential gts("gts_name", GateType::BaseType::ff);
             gts.add_output_pins(std::vector<std::string>({"OFIS_0","OFIS_1"}));
             gts.add_inverted_state_output_pin("OFIS_0");
             gts.add_inverted_state_output_pin("OFIS_1");
@@ -306,10 +309,10 @@ TEST_F(gate_library_test, check_state_output_pin)
 TEST_F(gate_library_test, check_init_data)
 {
     TEST_START
-        gate_type_sequential gts("gtl_name", gate_type::base_type::ff);
+        GateTypeSequential gts("gtl_name", GateType::BaseType::ff);
         {
             // Base Type
-            EXPECT_EQ(gts.get_base_type(), gate_type::base_type::ff);
+            EXPECT_EQ(gts.get_base_type(), GateType::BaseType::ff);
         }
         {
             // Init Data Category
@@ -323,23 +326,23 @@ TEST_F(gate_library_test, check_init_data)
         }
         {
             // Set-Reset Behavior
-            gts.set_set_reset_behavior(gate_type_sequential::set_reset_behavior::L, gate_type_sequential::set_reset_behavior::H);
+            gts.set_set_reset_behavior(GateTypeSequential::SetResetBehavior::L, GateTypeSequential::SetResetBehavior::H);
             EXPECT_EQ(gts.get_set_reset_behavior(),
-                      std::make_pair(gate_type_sequential::set_reset_behavior::L, gate_type_sequential::set_reset_behavior::H));
+                      std::make_pair(GateTypeSequential::SetResetBehavior::L, GateTypeSequential::SetResetBehavior::H));
         }
         {
             // Get uninitialized set-reset behavior
-            gate_type_sequential gts_2("gtl_name", gate_type::base_type::ff);
+            GateTypeSequential gts_2("gtl_name", GateType::BaseType::ff);
             EXPECT_EQ(gts_2.get_set_reset_behavior(),
-                      std::make_pair(gate_type_sequential::set_reset_behavior::U, gate_type_sequential::set_reset_behavior::U));
+                      std::make_pair(GateTypeSequential::SetResetBehavior::U, GateTypeSequential::SetResetBehavior::U));
         }
     TEST_END
 }
 
-// ======== gate_library tests =========
+// ======== GateLibrary tests =========
 
 /**
- * Testing the creation of a new gate_library and the addition of gate types and includes to it
+ * Testing the creation of a new GateLibrary and the addition of Gate types and includes to it
  *
  * Functions: constructor, get_name, add_gate_type, get_gate_types, get_vcc_gate_types, get_gnd_gate_types,
  *            add_include, get_includes
@@ -347,37 +350,37 @@ TEST_F(gate_library_test, check_init_data)
 TEST_F(gate_library_test, check_library)
 {
     TEST_START
-        // Create some gate types beforehand
-        // -- a simple AND gate
-        std::shared_ptr<gate_type> gt_and(new gate_type("gt_and"));
+        // Create some Gate types beforehand
+        // -- a simple AND Gate
+        std::shared_ptr<GateType> gt_and(new GateType("gt_and"));
         gt_and->add_input_pins(std::vector<std::string>({"I0","I1"}));
         gt_and->add_output_pins(std::vector<std::string>({"O"}));
-        gt_and->add_boolean_function("O", boolean_function::from_string("I0 & I1"));
-        // -- a GND gate
-        std::shared_ptr<gate_type> gt_gnd(new gate_type("gt_gnd"));
+        gt_and->add_boolean_function("O", BooleanFunction::from_string("I0 & I1"));
+        // -- a GND Gate
+        std::shared_ptr<GateType> gt_gnd(new GateType("gt_gnd"));
         gt_gnd->add_output_pins(std::vector<std::string>({"O"}));
-        gt_gnd->add_boolean_function("O", boolean_function(boolean_function::value::ZERO));
-        // -- a VCC gate
-        std::shared_ptr<gate_type> gt_vcc(new gate_type("gt_vcc"));
+        gt_gnd->add_boolean_function("O", BooleanFunction(BooleanFunction::value::ZERO));
+        // -- a VCC Gate
+        std::shared_ptr<GateType> gt_vcc(new GateType("gt_vcc"));
         gt_vcc->add_output_pins(std::vector<std::string>({"O"}));
-        gt_vcc->add_boolean_function("O", boolean_function(boolean_function::value::ONE));
+        gt_vcc->add_boolean_function("O", BooleanFunction(BooleanFunction::value::ONE));
 
         {
-            std::shared_ptr<gate_library> gl(new gate_library("imaginary_path", "gl_name"));
+            std::shared_ptr<GateLibrary> gl(new GateLibrary("imaginary_path", "gl_name"));
             // Check the name
             EXPECT_EQ(gl->get_name(), "gl_name");
 
-            // Check the addition of gate types
-            // -- add the gate types
+            // Check the addition of Gate types
+            // -- add the Gate types
             gl->add_gate_type(gt_and);
             gl->add_gate_type(gt_gnd);
             gl->add_gate_type(gt_vcc);
-            // -- get the gate types
-            EXPECT_EQ(gl->get_gate_types(),(std::map<std::string,std::shared_ptr<const gate_type>>({{"gt_and", gt_and},
+            // -- get the Gate types
+            EXPECT_EQ(gl->get_gate_types(),(std::map<std::string,std::shared_ptr<const GateType>>({{"gt_and", gt_and},
                                                                                                       {"gt_gnd", gt_gnd},
                                                                                                       {"gt_vcc", gt_vcc}})));
-            EXPECT_EQ(gl->get_vcc_gate_types(),(std::map<std::string,std::shared_ptr<const gate_type>>({{"gt_vcc", gt_vcc}})));
-            EXPECT_EQ(gl->get_gnd_gate_types(),(std::map<std::string,std::shared_ptr<const gate_type>>({{"gt_gnd", gt_gnd}})));
+            EXPECT_EQ(gl->get_vcc_gate_types(),(std::map<std::string,std::shared_ptr<const GateType>>({{"gt_vcc", gt_vcc}})));
+            EXPECT_EQ(gl->get_gnd_gate_types(),(std::map<std::string,std::shared_ptr<const GateType>>({{"gt_gnd", gt_gnd}})));
 
             // Check the addition of includes
             gl->add_include("in.clu.de");
@@ -386,4 +389,5 @@ TEST_F(gate_library_test, check_library)
             EXPECT_EQ(gl->get_includes(), std::vector<std::string>({"in.clu.de", "another.include", "last.include"}));
         }
     TEST_END
+}
 }

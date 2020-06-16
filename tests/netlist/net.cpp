@@ -8,6 +8,7 @@
 #include <netlist/gate.h>
 #include <netlist/net.h>
 
+using namespace hal;
 using namespace test_utils;
 
 class net_test : public ::testing::Test
@@ -25,16 +26,16 @@ protected:
 
 
 /**
- * Testing the constructor of the net
+ * Testing the constructor of the Net
  *
  * Functions: constructor, get_id, get_name, get_netlist
  */
 TEST_F(net_test, check_constructor)
 {
     TEST_START
-        // Create a net (id = 100) and append it to its netlist
-        std::shared_ptr<netlist> nl   = create_empty_netlist(MIN_NETLIST_ID+0);
-        std::shared_ptr<net> test_net = nl->create_net(MIN_NET_ID+100, "test_net");
+        // Create a Net (id = 100) and append it to its netlist
+        std::shared_ptr<Netlist> nl   = create_empty_netlist(MIN_NETLIST_ID+0);
+        std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID+100, "test_net");
 
         EXPECT_EQ(test_net->get_id(), (u32)(MIN_NET_ID+100));
         EXPECT_EQ(test_net->get_name(), "test_net");
@@ -51,9 +52,9 @@ TEST_F(net_test, check_constructor)
 TEST_F(net_test, check_set_and_get_name)
 {
     TEST_START
-        // Create a net and append it to its netlist
-        std::shared_ptr<netlist> nl   = create_empty_netlist(MIN_NETLIST_ID+0);
-        std::shared_ptr<net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
+        // Create a Net and append it to its netlist
+        std::shared_ptr<Netlist> nl   = create_empty_netlist(MIN_NETLIST_ID+0);
+        std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
 
         EXPECT_EQ(test_net->get_name(), "test_net");
 
@@ -81,29 +82,29 @@ TEST_F(net_test, check_set_and_get_name)
 TEST_F(net_test, check_add_src){
     TEST_START
         {
-            // Add a source of the net (using a valid gate and pin_type)
-            std::shared_ptr<netlist> nl = create_empty_netlist(MIN_NETLIST_ID+0);
-            std::shared_ptr<net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
-            std::shared_ptr<gate> t_gate                   = create_test_gate(nl, MIN_GATE_ID+1);
+            // Add a source of the Net (using a valid Gate and pin_type)
+            std::shared_ptr<Netlist> nl = create_empty_netlist(MIN_NETLIST_ID+0);
+            std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
+            std::shared_ptr<Gate> t_gate                   = create_test_gate(nl, MIN_GATE_ID+1);
             bool suc                      = test_net->add_source(t_gate, "O");
             EXPECT_TRUE(suc);
             EXPECT_EQ(test_net->get_source(), get_endpoint(t_gate, "O"));
         }
         {
-            // Add a source of the net (passing an endpoint)
-            std::shared_ptr<netlist> nl = create_empty_netlist(MIN_NETLIST_ID+0);
-            std::shared_ptr<net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
-            std::shared_ptr<gate> t_gate                   = create_test_gate(nl, MIN_GATE_ID+1);
+            // Add a source of the Net (passing an Endpoint)
+            std::shared_ptr<Netlist> nl = create_empty_netlist(MIN_NETLIST_ID+0);
+            std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
+            std::shared_ptr<Gate> t_gate                   = create_test_gate(nl, MIN_GATE_ID+1);
             bool suc                      = test_net->add_source(get_endpoint(t_gate, "O"));
             EXPECT_TRUE(suc);
             EXPECT_EQ(test_net->get_source(), get_endpoint(t_gate, "O"));
         }
         // Negative
         {
-            // Set the source of the net (gate is nullptr)
+            // Set the source of the Net (Gate is nullptr)
             NO_COUT_TEST_BLOCK;
-            std::shared_ptr<netlist> nl   = create_empty_netlist(MIN_NETLIST_ID+0);
-            std::shared_ptr<net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
+            std::shared_ptr<Netlist> nl   = create_empty_netlist(MIN_NETLIST_ID+0);
+            std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
             bool suc                      = test_net->add_source(nullptr, "O");
             EXPECT_FALSE(suc);
             EXPECT_TRUE(is_empty(test_net->get_source()));
@@ -111,18 +112,18 @@ TEST_F(net_test, check_add_src){
         {
             // Pin is an input pin (not an output/inout pin)
             NO_COUT_TEST_BLOCK;
-            std::shared_ptr<netlist> nl   = create_empty_netlist(MIN_NETLIST_ID+0);
-            std::shared_ptr<net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
+            std::shared_ptr<Netlist> nl   = create_empty_netlist(MIN_NETLIST_ID+0);
+            std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
             auto t_gate_0                 = create_test_gate(nl, MIN_GATE_ID+1);
             bool suc                      = test_net->add_source(t_gate_0, "I0");    // <- input pin
             EXPECT_FALSE(suc);
             EXPECT_TRUE(is_empty(test_net->get_source()));
         }
         {
-            // Pin is an input pin (not an output/inout pin) (passing an endpoint)
+            // Pin is an input pin (not an output/inout pin) (passing an Endpoint)
             NO_COUT_TEST_BLOCK;
-            std::shared_ptr<netlist> nl   = create_empty_netlist(MIN_NETLIST_ID+0);
-            std::shared_ptr<net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
+            std::shared_ptr<Netlist> nl   = create_empty_netlist(MIN_NETLIST_ID+0);
+            std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
             auto t_gate_0                 = create_test_gate(nl, MIN_GATE_ID+1);
             bool suc                      = test_net->add_source(get_endpoint(t_gate_0, "I0"));    // <- input pin
             EXPECT_FALSE(suc);
@@ -131,16 +132,16 @@ TEST_F(net_test, check_add_src){
         {
             // Pin is already occupied (example netlist is used)
             NO_COUT_TEST_BLOCK;
-            std::shared_ptr<netlist> nl   = create_example_netlist(MIN_NETLIST_ID+0);
-            std::shared_ptr<net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
+            std::shared_ptr<Netlist> nl   = create_example_netlist(MIN_NETLIST_ID+0);
+            std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
             bool suc                      = test_net->add_source(nl->get_gate_by_id(MIN_NET_ID+1), "O");
             EXPECT_FALSE(suc);
             EXPECT_TRUE(is_empty(test_net->get_source()));
         }
         {
-            // Set the source of the net (invalid pin type)
-            std::shared_ptr<netlist> nl   = create_empty_netlist(0);
-            std::shared_ptr<net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
+            // Set the source of the Net (invalid pin type)
+            std::shared_ptr<Netlist> nl   = create_empty_netlist(0);
+            std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
             auto t_gate                   = create_test_gate(nl, MIN_GATE_ID+1);
             testing::internal::CaptureStdout();
             bool suc = test_net->add_source(t_gate, "NEx_PIN");
@@ -161,28 +162,28 @@ TEST_F(net_test, check_get_sources){
     TEST_START
         {
             // Get a single source
-            std::shared_ptr<netlist> nl = create_empty_netlist(MIN_NETLIST_ID+0);
-            std::shared_ptr<net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
+            std::shared_ptr<Netlist> nl = create_empty_netlist(MIN_NETLIST_ID+0);
+            std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
             auto t_gate                   = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("gate_4_to_4"), "test_gate");
             test_net->add_source(t_gate, "O0");
             EXPECT_EQ(test_net->get_source(), get_endpoint(t_gate, "O0"));
         }
         {
             // Get all sources (no filter)
-            std::shared_ptr<netlist> nl = create_empty_netlist(MIN_NETLIST_ID+0);
-            std::shared_ptr<net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
+            std::shared_ptr<Netlist> nl = create_empty_netlist(MIN_NETLIST_ID+0);
+            std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
             auto t_gate                   = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("gate_4_to_4"), "test_gate");
             test_net->add_source(t_gate, "O0");
             test_net->add_source(t_gate, "O1");
             test_net->add_source(t_gate, "O3");
-            EXPECT_EQ(test_net->get_sources(), std::vector<endpoint>({get_endpoint(t_gate, "O0"),
+            EXPECT_EQ(test_net->get_sources(), std::vector<Endpoint>({get_endpoint(t_gate, "O0"),
                                                                       get_endpoint(t_gate, "O1"),
                                                                       get_endpoint(t_gate, "O3")}));
         }
         {
             // Get all sources by using a filter
-            std::shared_ptr<netlist> nl = create_empty_netlist(MIN_NETLIST_ID+0);
-            std::shared_ptr<net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
+            std::shared_ptr<Netlist> nl = create_empty_netlist(MIN_NETLIST_ID+0);
+            std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
             auto t_gate_0                 = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("gate_4_to_4"), "test_gate_0");
             auto t_gate_1                 = nl->create_gate(MIN_GATE_ID+1, get_gate_type_by_name("gate_4_to_4"), "test_gate_1");
             test_net->add_source(t_gate_0, "O0");
@@ -190,12 +191,12 @@ TEST_F(net_test, check_get_sources){
             test_net->add_source(t_gate_1, "O1");
             test_net->add_source(t_gate_1, "O2");
             EXPECT_EQ(test_net->get_sources(endpoint_gate_name_filter("test_gate_0")),
-                      std::vector<endpoint>({get_endpoint(t_gate_0, "O0"), get_endpoint(t_gate_0, "O1")}));
+                      std::vector<Endpoint>({get_endpoint(t_gate_0, "O0"), get_endpoint(t_gate_0, "O1")}));
         }
         {
-            // Get the source(s) if the gate has no source
-            std::shared_ptr<netlist> nl   = create_empty_netlist(MIN_NETLIST_ID+0);
-            std::shared_ptr<net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
+            // Get the source(s) if the Gate has no source
+            std::shared_ptr<Netlist> nl   = create_empty_netlist(MIN_NETLIST_ID+0);
+            std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
             EXPECT_TRUE(is_empty(test_net->get_source()));
             EXPECT_TRUE(test_net->get_sources().empty());
         }
@@ -203,8 +204,8 @@ TEST_F(net_test, check_get_sources){
         {
             // Get source, if there are multiple sources (only the first one is returned)
             NO_COUT_TEST_BLOCK;
-            std::shared_ptr<netlist> nl = create_empty_netlist(MIN_NETLIST_ID+0);
-            std::shared_ptr<net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
+            std::shared_ptr<Netlist> nl = create_empty_netlist(MIN_NETLIST_ID+0);
+            std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
             auto t_gate                   = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("gate_4_to_4"), "test_gate");
             test_net->add_source(t_gate, "O0");
             test_net->add_source(t_gate, "O1");
@@ -221,9 +222,9 @@ TEST_F(net_test, check_get_sources){
 TEST_F(net_test, check_remove_src){
     TEST_START
         {
-            // Remove an existing source (passing a gate and a pin type)
-            std::shared_ptr<netlist> nl = create_empty_netlist(MIN_NETLIST_ID+0);
-            std::shared_ptr<net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
+            // Remove an existing source (passing a Gate and a pin type)
+            std::shared_ptr<Netlist> nl = create_empty_netlist(MIN_NETLIST_ID+0);
+            std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
             auto t_gate                   = create_test_gate(nl, MIN_GATE_ID+1);
             test_net->add_source(t_gate, "O");
             bool suc = test_net->remove_source(t_gate, "O");
@@ -231,9 +232,9 @@ TEST_F(net_test, check_remove_src){
             EXPECT_TRUE(suc);
         }
         {
-            // Remove an existing source (passing an endpoint)
-            std::shared_ptr<netlist> nl = create_empty_netlist(MIN_NETLIST_ID+0);
-            std::shared_ptr<net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
+            // Remove an existing source (passing an Endpoint)
+            std::shared_ptr<Netlist> nl = create_empty_netlist(MIN_NETLIST_ID+0);
+            std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
             auto t_gate                   = create_test_gate(nl, MIN_GATE_ID+1);
             test_net->add_source(t_gate, "O");
             bool suc = test_net->remove_source(get_endpoint(t_gate, "O"));
@@ -242,10 +243,10 @@ TEST_F(net_test, check_remove_src){
         }
         // NEGATIVE
         {
-            // Remove the source if the passed endpoint is a destination not a source
+            // Remove the source if the passed Endpoint is a destination not a source
             //NO_COUT_TEST_BLOCK;
-            std::shared_ptr<netlist> nl = create_empty_netlist(MIN_NETLIST_ID+0);
-            std::shared_ptr<net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
+            std::shared_ptr<Netlist> nl = create_empty_netlist(MIN_NETLIST_ID+0);
+            std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
             auto t_gate                   = create_test_gate(nl, MIN_GATE_ID+1);
             test_net->add_destination(t_gate, "I0");
             bool suc = test_net->remove_source(get_endpoint(t_gate, "I0"));
@@ -254,8 +255,8 @@ TEST_F(net_test, check_remove_src){
         {
             // Remove the source if the passed parameters do not define any source
             NO_COUT_TEST_BLOCK;
-            std::shared_ptr<netlist> nl   = create_empty_netlist(MIN_NETLIST_ID+0);
-            std::shared_ptr<net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
+            std::shared_ptr<Netlist> nl   = create_empty_netlist(MIN_NETLIST_ID+0);
+            std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
             bool suc                      = test_net->remove_source(nullptr, "");
             EXPECT_TRUE(is_empty(test_net->get_source()));
             EXPECT_FALSE(suc);
@@ -272,8 +273,8 @@ TEST_F(net_test, check_add_remove_destination){
     TEST_START
         {
             // Remove a destination in the normal way
-            std::shared_ptr<netlist> nl = create_empty_netlist(MIN_NETLIST_ID+0);
-            std::shared_ptr<net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
+            std::shared_ptr<Netlist> nl = create_empty_netlist(MIN_NETLIST_ID+0);
+            std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
             auto t_gate                   = create_test_gate(nl, MIN_GATE_ID+1);
             test_net->add_destination(t_gate, "I0");
 
@@ -285,8 +286,8 @@ TEST_F(net_test, check_add_remove_destination){
         }
         {
             // Remove the same destination twice
-            std::shared_ptr<netlist> nl   = create_empty_netlist(MIN_NETLIST_ID+0);
-            std::shared_ptr<net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
+            std::shared_ptr<Netlist> nl   = create_empty_netlist(MIN_NETLIST_ID+0);
+            std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
             auto t_gate                   = create_test_gate(nl, MIN_GATE_ID+1);
             test_net->add_destination(t_gate, "I0");
 
@@ -300,10 +301,10 @@ TEST_F(net_test, check_add_remove_destination){
         }
         // NEGATIVE
         {
-            // The endpoint is a source
+            // The Endpoint is a source
             NO_COUT_TEST_BLOCK;
-            std::shared_ptr<netlist> nl   = create_empty_netlist(MIN_NETLIST_ID+0);
-            std::shared_ptr<net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
+            std::shared_ptr<Netlist> nl   = create_empty_netlist(MIN_NETLIST_ID+0);
+            std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
             auto t_gate                   = create_test_gate(nl, MIN_GATE_ID+1);
             test_net->add_source(get_endpoint(t_gate, "O"));
 
@@ -312,21 +313,21 @@ TEST_F(net_test, check_add_remove_destination){
             EXPECT_FALSE(suc);
         }
         {
-            // The gate is a nullptr
+            // The Gate is a nullptr
             NO_COUT_TEST_BLOCK;
-            std::shared_ptr<netlist> nl   = create_empty_netlist(MIN_NETLIST_ID+0);
-            std::shared_ptr<net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
+            std::shared_ptr<Netlist> nl   = create_empty_netlist(MIN_NETLIST_ID+0);
+            std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
 
             bool suc = test_net->remove_destination(nullptr, "I0");
 
             EXPECT_FALSE(suc);
         }
         {
-            // The gate wasn't added to the netlist
+            // The Gate wasn't added to the netlist
             NO_COUT_TEST_BLOCK;
-            std::shared_ptr<netlist> nl   = create_empty_netlist(MIN_NETLIST_ID+0);
-            std::shared_ptr<net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
-            std::shared_ptr<gate> t_gate  = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("gate_1_to_1"), "t_gate");
+            std::shared_ptr<Netlist> nl   = create_empty_netlist(MIN_NETLIST_ID+0);
+            std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
+            std::shared_ptr<Gate> t_gate  = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("gate_1_to_1"), "t_gate");
 
             bool suc = test_net->remove_destination(t_gate, "I0");
 
@@ -345,12 +346,12 @@ TEST_F(net_test, check_add_dst){
     TEST_START
         {
             // Add a destination in the normal way
-            std::shared_ptr<netlist> nl = create_empty_netlist(MIN_NETLIST_ID+0);
-            std::shared_ptr<net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
+            std::shared_ptr<Netlist> nl = create_empty_netlist(MIN_NETLIST_ID+0);
+            std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
 
             auto t_gate                = create_test_gate(nl, MIN_GATE_ID+1);
             bool suc                   = test_net->add_destination(t_gate, "I0");
-            std::vector<endpoint> dsts = {get_endpoint(t_gate, "I0")};
+            std::vector<Endpoint> dsts = {get_endpoint(t_gate, "I0")};
             EXPECT_EQ(test_net->get_destinations(), dsts);
             EXPECT_EQ(test_net->get_num_of_destinations(), (size_t)1);
             EXPECT_TRUE(suc);
@@ -358,13 +359,13 @@ TEST_F(net_test, check_add_dst){
         {
             // Add the same destination twice
             NO_COUT_TEST_BLOCK;
-            std::shared_ptr<netlist> nl   = create_empty_netlist(MIN_NETLIST_ID+0);
-            std::shared_ptr<net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
+            std::shared_ptr<Netlist> nl   = create_empty_netlist(MIN_NETLIST_ID+0);
+            std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
 
             auto t_gate = create_test_gate(nl, MIN_GATE_ID+1);
             test_net->add_destination(t_gate, "I0");
             bool suc                   = test_net->add_destination(t_gate, "I0");
-            std::vector<endpoint> dsts = {get_endpoint(t_gate, "I0")};
+            std::vector<Endpoint> dsts = {get_endpoint(t_gate, "I0")};
             EXPECT_EQ(test_net->get_destinations(), dsts);
             EXPECT_EQ(test_net->get_num_of_destinations(), (size_t)1);
             EXPECT_FALSE(suc);
@@ -372,20 +373,20 @@ TEST_F(net_test, check_add_dst){
 
         // NEGATIVE
         {
-            // The endpoint is a source, not a destination
+            // The Endpoint is a source, not a destination
             NO_COUT_TEST_BLOCK;
-            std::shared_ptr<netlist> nl = create_empty_netlist(MIN_NETLIST_ID+0);
-            std::shared_ptr<net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
+            std::shared_ptr<Netlist> nl = create_empty_netlist(MIN_NETLIST_ID+0);
+            std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
 
             auto t_gate                = create_test_gate(nl, MIN_GATE_ID+1);
             bool suc                   = test_net->add_destination(get_endpoint(t_gate, "O"));
             EXPECT_FALSE(suc);
         }
         {
-            // The gate is a nullptr
+            // The Gate is a nullptr
             NO_COUT_TEST_BLOCK;
-            std::shared_ptr<netlist> nl   = create_empty_netlist(MIN_NETLIST_ID+0);
-            std::shared_ptr<net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
+            std::shared_ptr<Netlist> nl   = create_empty_netlist(MIN_NETLIST_ID+0);
+            std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
             bool suc                      = test_net->add_destination(nullptr, "I0");
 
             EXPECT_FALSE(suc);
@@ -393,12 +394,12 @@ TEST_F(net_test, check_add_dst){
             EXPECT_EQ(test_net->get_num_of_destinations(), (size_t)0);
         }
         {
-            // The gate isn't part of the netlist
+            // The Gate isn't part of the netlist
             NO_COUT_TEST_BLOCK;
-            std::shared_ptr<netlist> nl   = create_empty_netlist(MIN_NETLIST_ID+0);
-            std::shared_ptr<net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
-            std::shared_ptr<gate> t_gate  = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("gate_1_to_1"), "t_gate");
-            // gate isn't added
+            std::shared_ptr<Netlist> nl   = create_empty_netlist(MIN_NETLIST_ID+0);
+            std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
+            std::shared_ptr<Gate> t_gate  = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("gate_1_to_1"), "t_gate");
+            // Gate isn't added
             bool suc = test_net->add_destination(t_gate, "I0");
 
             EXPECT_FALSE(suc);
@@ -408,8 +409,8 @@ TEST_F(net_test, check_add_dst){
         {
             // The pin to connect is weather an input pin nor an inout pin (but an output pin)
             NO_COUT_TEST_BLOCK;
-            std::shared_ptr<netlist> nl   = create_empty_netlist(MIN_NETLIST_ID+0);
-            std::shared_ptr<net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
+            std::shared_ptr<Netlist> nl   = create_empty_netlist(MIN_NETLIST_ID+0);
+            std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
             auto t_gate                   = create_test_gate(nl, MIN_GATE_ID+1);
             bool suc                      = test_net->add_destination(t_gate, "O");
 
@@ -420,8 +421,8 @@ TEST_F(net_test, check_add_dst){
         {
             // The pin is already occupied (example netlist is used)
             NO_COUT_TEST_BLOCK;
-            std::shared_ptr<netlist> nl   = create_example_netlist(MIN_NETLIST_ID+0);
-            std::shared_ptr<net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
+            std::shared_ptr<Netlist> nl   = create_example_netlist(MIN_NETLIST_ID+0);
+            std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
             bool suc                      = test_net->add_destination(nl->get_gate_by_id(MIN_GATE_ID+0), "I1");
 
             EXPECT_FALSE(suc);
@@ -440,34 +441,34 @@ TEST_F(net_test, check_is_a_dest_or_src){
     TEST_START
         {
             // Gate is a destination
-            std::shared_ptr<netlist> nl = create_empty_netlist(MIN_NETLIST_ID+0);
-            std::shared_ptr<net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
+            std::shared_ptr<Netlist> nl = create_empty_netlist(MIN_NETLIST_ID+0);
+            std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
             auto t_gate                   = create_test_gate(nl, MIN_GATE_ID+1);
             test_net->add_destination(t_gate, "I2");
-            // Pass the gate and the pin type
+            // Pass the Gate and the pin type
             EXPECT_TRUE(test_net->is_a_destination(t_gate, "I2"));
             EXPECT_FALSE(test_net->is_a_source(t_gate, "I2"));
-            // Pass the endpoint
+            // Pass the Endpoint
             EXPECT_TRUE(test_net->is_a_destination(get_endpoint(t_gate, "I2")));
             EXPECT_FALSE(test_net->is_a_source(get_endpoint(t_gate, "I2")));
         }
         {
             // Gate is a source
-            std::shared_ptr<netlist> nl   = create_empty_netlist(MIN_NETLIST_ID+0);
-            std::shared_ptr<net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
+            std::shared_ptr<Netlist> nl   = create_empty_netlist(MIN_NETLIST_ID+0);
+            std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
             auto t_gate                   = create_test_gate(nl, MIN_GATE_ID+1);
             test_net->add_source(t_gate, "O");
-            // Pass the gate and the pin type
+            // Pass the Gate and the pin type
             EXPECT_TRUE(test_net->is_a_source(t_gate, "O"));
             EXPECT_FALSE(test_net->is_a_destination(t_gate, "O"));
-            // Pass the endpoint
+            // Pass the Endpoint
             EXPECT_TRUE(test_net->is_a_source(get_endpoint(t_gate, "O")));
             EXPECT_FALSE(test_net->is_a_destination(get_endpoint(t_gate, "O")));
         }
         {
             // Gate is a destination but the pin type doesn't match
-            std::shared_ptr<netlist> nl   = create_empty_netlist(MIN_NETLIST_ID+0);
-            std::shared_ptr<net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
+            std::shared_ptr<Netlist> nl   = create_empty_netlist(MIN_NETLIST_ID+0);
+            std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
             auto t_gate                   = create_test_gate(nl, MIN_GATE_ID+1);
             test_net->add_destination(t_gate, "I2");
             EXPECT_TRUE(test_net->is_a_destination(t_gate, "I2"));
@@ -475,8 +476,8 @@ TEST_F(net_test, check_is_a_dest_or_src){
         }
         {
             // Gate is a destination but the pin type doesn't exist
-            std::shared_ptr<netlist> nl   = create_empty_netlist(MIN_NETLIST_ID+0);
-            std::shared_ptr<net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
+            std::shared_ptr<Netlist> nl   = create_empty_netlist(MIN_NETLIST_ID+0);
+            std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
             auto t_gate                   = create_test_gate(nl, MIN_GATE_ID+1);
             test_net->add_destination(t_gate, "I2");
             EXPECT_TRUE(test_net->is_a_destination(t_gate, "I2"));
@@ -486,8 +487,8 @@ TEST_F(net_test, check_is_a_dest_or_src){
         {
             // Gate is a nullptr
             NO_COUT_TEST_BLOCK;
-            std::shared_ptr<netlist> nl   = create_empty_netlist(MIN_NETLIST_ID+0);
-            std::shared_ptr<net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
+            std::shared_ptr<Netlist> nl   = create_empty_netlist(MIN_NETLIST_ID+0);
+            std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
 
             EXPECT_FALSE(test_net->is_a_destination(nullptr, ""));
             EXPECT_FALSE(test_net->is_a_source(nullptr, ""));
@@ -503,23 +504,23 @@ TEST_F(net_test, check_is_a_dest_or_src){
 TEST_F(net_test, check_get_destinations)
 {
     TEST_START
-        // Create a net with two different destinations (AND3 and INV gate)
-        std::shared_ptr<netlist> nl    = create_empty_netlist(MIN_NETLIST_ID+0);
-        std::shared_ptr<net> test_net  = nl->create_net(MIN_NET_ID+1, "test_net");
+        // Create a Net with two different destinations (AND3 and INV Gate)
+        std::shared_ptr<Netlist> nl    = create_empty_netlist(MIN_NETLIST_ID+0);
+        std::shared_ptr<Net> test_net  = nl->create_net(MIN_NET_ID+1, "test_net");
         auto mult_gate                 = create_test_gate(nl, MIN_GATE_ID+1);
-        std::shared_ptr<gate> inv_gate = nl->create_gate(MIN_GATE_ID+2, get_gate_type_by_name("gate_1_to_1"), "gate_1");
+        std::shared_ptr<Gate> inv_gate = nl->create_gate(MIN_GATE_ID+2, get_gate_type_by_name("gate_1_to_1"), "gate_1");
         test_net->add_destination(mult_gate, "I0");
         test_net->add_destination(inv_gate, "I");
 
         {
             // Get the destinations
-            std::vector<endpoint> dsts = {get_endpoint(mult_gate, "I0"), get_endpoint(inv_gate, "I")};
+            std::vector<Endpoint> dsts = {get_endpoint(mult_gate, "I0"), get_endpoint(inv_gate, "I")};
 
             EXPECT_TRUE(vectors_have_same_content(test_net->get_destinations(), dsts));
         }
         {
-            // Get the destinations by passing a gate type
-            std::vector<endpoint> dsts = {get_endpoint(inv_gate, "I")};
+            // Get the destinations by passing a Gate type
+            std::vector<Endpoint> dsts = {get_endpoint(inv_gate, "I")};
             EXPECT_TRUE(vectors_have_same_content(test_net->get_destinations(endpoint_type_filter("gate_1_to_1")), dsts));
         }
     TEST_END
@@ -535,8 +536,8 @@ TEST_F(net_test, check_is_unrouted)
     TEST_START
         {
             // Net has a source and a destination
-            std::shared_ptr<netlist> nl   = create_empty_netlist(MIN_NETLIST_ID+0);
-            std::shared_ptr<net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
+            std::shared_ptr<Netlist> nl   = create_empty_netlist(MIN_NETLIST_ID+0);
+            std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
 
             auto t_gate_src = create_test_gate(nl, MIN_GATE_ID+1);
             auto t_gate_dst = create_test_gate(nl, MIN_GATE_ID+2);
@@ -547,8 +548,8 @@ TEST_F(net_test, check_is_unrouted)
         }
         {
             // Net has no destination
-            std::shared_ptr<netlist> nl   = create_empty_netlist(MIN_NETLIST_ID+0);
-            std::shared_ptr<net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
+            std::shared_ptr<Netlist> nl   = create_empty_netlist(MIN_NETLIST_ID+0);
+            std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
 
             auto t_gate_src = create_test_gate(nl, MIN_GATE_ID+1);
             test_net->add_source(t_gate_src, "O");
@@ -557,8 +558,8 @@ TEST_F(net_test, check_is_unrouted)
         }
         {
             // Net has no source
-            std::shared_ptr<netlist> nl   = create_empty_netlist(MIN_NETLIST_ID+0);
-            std::shared_ptr<net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
+            std::shared_ptr<Netlist> nl   = create_empty_netlist(MIN_NETLIST_ID+0);
+            std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
 
             auto t_gate_dst = create_test_gate(nl, MIN_GATE_ID+1);
             test_net->add_destination(t_gate_dst, "I0");
@@ -580,9 +581,9 @@ TEST_F(net_test, check_global_nets)
 {
     TEST_START
         {
-            // mark and unmark a global input net
-            std::shared_ptr<netlist> nl   = create_empty_netlist(MIN_NETLIST_ID+0);
-            std::shared_ptr<net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
+            // mark and unmark a global input Net
+            std::shared_ptr<Netlist> nl   = create_empty_netlist(MIN_NETLIST_ID+0);
+            std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
 
             test_net->mark_global_input_net();
             EXPECT_TRUE(test_net->is_global_input_net());
@@ -593,9 +594,9 @@ TEST_F(net_test, check_global_nets)
             EXPECT_FALSE(nl->is_global_input_net(test_net));
         }
         {
-            // mark and unmark a global output net
-            std::shared_ptr<netlist> nl   = create_empty_netlist(MIN_NETLIST_ID+0);
-            std::shared_ptr<net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
+            // mark and unmark a global output Net
+            std::shared_ptr<Netlist> nl   = create_empty_netlist(MIN_NETLIST_ID+0);
+            std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID+1, "test_net");
 
             test_net->mark_global_output_net();
             EXPECT_TRUE(test_net->is_global_output_net());

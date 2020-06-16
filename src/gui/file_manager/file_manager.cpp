@@ -216,7 +216,7 @@ void file_manager::open_file(QString file_name)
     if (file_name.endsWith(".hal"))
     {
         event_controls::enable_all(false);
-        std::shared_ptr<netlist> netlist = netlist_factory::load_netlist(file_name.toStdString());
+        std::shared_ptr<Netlist> netlist = netlist_factory::load_netlist(file_name.toStdString());
         event_controls::enable_all(true);
         if (netlist)
         {
@@ -247,7 +247,7 @@ void file_manager::open_file(QString file_name)
         return;
     }
 
-    QList<QPair<std::string, std::shared_ptr<netlist>>> list;
+    QList<QPair<std::string, std::shared_ptr<Netlist>>> list;
 
     for (const auto& lib : gate_library_manager::get_gate_libraries())
     {
@@ -255,7 +255,7 @@ void file_manager::open_file(QString file_name)
 
         log_info("gui", "Trying to use gate library '{}'...", name);
         event_controls::enable_all(false);
-        std::shared_ptr<netlist> netlist = netlist_factory::load_netlist(file_name.toStdString(), language.toStdString(), lib->get_path());
+        std::shared_ptr<Netlist> netlist = netlist_factory::load_netlist(file_name.toStdString(), language.toStdString(), lib->get_path());
         event_controls::enable_all(true);
 
         if (netlist)

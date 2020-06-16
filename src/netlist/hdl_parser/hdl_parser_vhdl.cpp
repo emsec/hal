@@ -8,7 +8,7 @@
 
 namespace hal
 {
-    hdl_parser_vhdl::hdl_parser_vhdl(std::stringstream& stream) : hdl_parser(stream)
+    HDLParserVHDL::HDLParserVHDL(std::stringstream& stream) : HDLParser(stream)
     {
     }
 
@@ -16,7 +16,7 @@ namespace hal
     // ###########          Parse HDL into intermediate format          ##########
     // ###########################################################################
 
-    bool hdl_parser_vhdl::parse()
+    bool HDLParserVHDL::parse()
     {
         // tokenize file
         if (!tokenize())
@@ -53,7 +53,7 @@ namespace hal
         return std::all_of(str.begin(), str.end(), ::isdigit);
     }
 
-    bool hdl_parser_vhdl::tokenize()
+    bool HDLParserVHDL::tokenize()
     {
         std::vector<Token<core_strings::CaseInsensitiveString>> parsed_tokens;
         const std::string delimiters = ",(): ;=><&";
@@ -143,7 +143,7 @@ namespace hal
         return true;
     }
 
-    bool hdl_parser_vhdl::parse_tokens()
+    bool HDLParserVHDL::parse_tokens()
     {
         while (m_token_stream.remaining() > 0)
         {
@@ -178,7 +178,7 @@ namespace hal
         return true;
     }
 
-    bool hdl_parser_vhdl::parse_library()
+    bool HDLParserVHDL::parse_library()
     {
         if (m_token_stream.peek() == "use")
         {
@@ -198,7 +198,7 @@ namespace hal
         return true;
     }
 
-    bool hdl_parser_vhdl::parse_entity()
+    bool HDLParserVHDL::parse_entity()
     {
         m_token_stream.consume("entity", true);
         const u32 line_number  = m_token_stream.peek().number;
@@ -258,7 +258,7 @@ namespace hal
         return true;
     }
 
-    bool hdl_parser_vhdl::parse_port_definitons(entity& e)
+    bool HDLParserVHDL::parse_port_definitons(entity& e)
     {
         // default port assignments are not supported
         m_token_stream.consume("port", true);
@@ -324,7 +324,7 @@ namespace hal
         return true;
     }
 
-    bool hdl_parser_vhdl::parse_attribute()
+    bool HDLParserVHDL::parse_attribute()
     {
         const auto line_number = m_token_stream.peek().number;
 
@@ -339,7 +339,7 @@ namespace hal
         }
         else if (m_token_stream.peek() == "of" && m_token_stream.peek(2) == ":")
         {
-            attribute_target_class target_class;
+            AttributeTarget target_class;
             m_token_stream.consume("of", true);
             const auto attribute_target = m_token_stream.consume().string;
             m_token_stream.consume(":", true);
@@ -366,15 +366,15 @@ namespace hal
 
             if (attribute_class == "entity")
             {
-                target_class = attribute_target_class::ENTITY;
+                target_class = AttributeTarget::ENTITY;
             }
             else if (attribute_class == "label")
             {
-                target_class = attribute_target_class::INSTANCE;
+                target_class = AttributeTarget::INSTANCE;
             }
             else if (attribute_class == "signal")
             {
-                target_class = attribute_target_class::SIGNAL;
+                target_class = AttributeTarget::SIGNAL;
             }
             else
             {
@@ -397,7 +397,7 @@ namespace hal
         return true;
     }
 
-    bool hdl_parser_vhdl::parse_architecture()
+    bool HDLParserVHDL::parse_architecture()
     {
         m_token_stream.consume("architecture", true);
         m_token_stream.consume();
@@ -420,7 +420,7 @@ namespace hal
         }
     }
 
-    bool hdl_parser_vhdl::parse_architecture_header(entity& e)
+    bool HDLParserVHDL::parse_architecture_header(entity& e)
     {
         auto next_token = m_token_stream.peek();
         while (next_token != "begin")
@@ -466,7 +466,7 @@ namespace hal
         return true;
     }
 
-    bool hdl_parser_vhdl::parse_signal_definition(entity& e)
+    bool HDLParserVHDL::parse_signal_definition(entity& e)
     {
         std::vector<core_strings::CaseInsensitiveString> signal_names;
 
@@ -501,7 +501,7 @@ namespace hal
         return true;
     }
 
-    bool hdl_parser_vhdl::parse_architecture_body(entity& e)
+    bool HDLParserVHDL::parse_architecture_body(entity& e)
     {
         m_token_stream.consume("begin", true);
 
@@ -540,7 +540,7 @@ namespace hal
         return true;
     }
 
-    bool hdl_parser_vhdl::parse_assign(entity& e)
+    bool HDLParserVHDL::parse_assign(entity& e)
     {
         const auto line_number = m_token_stream.peek().number;
         auto left_str          = m_token_stream.extract_until("<=");
@@ -570,7 +570,7 @@ namespace hal
         return true;
     }
 
-    bool hdl_parser_vhdl::parse_instance(entity& e)
+    bool HDLParserVHDL::parse_instance(entity& e)
     {
         const auto line_number   = m_token_stream.peek().number;
         const auto instance_name = m_token_stream.consume();
@@ -644,7 +644,7 @@ namespace hal
         return true;
     }
 
-    bool hdl_parser_vhdl::parse_port_assign(entity& e, instance& inst)
+    bool HDLParserVHDL::parse_port_assign(entity& e, instance& inst)
     {
         m_token_stream.consume("port", true);
         m_token_stream.consume("map", true);
@@ -677,7 +677,7 @@ namespace hal
         return true;
     }
 
-    bool hdl_parser_vhdl::parse_generic_assign(instance& inst)
+    bool HDLParserVHDL::parse_generic_assign(instance& inst)
     {
         m_token_stream.consume("map", true);
         m_token_stream.consume("(", true);
@@ -750,12 +750,12 @@ namespace hal
         return true;
     }
 
-    bool hdl_parser_vhdl::assign_attributes(entity& e)
+    bool HDLParserVHDL::assign_attributes(entity& e)
     {
         for (const auto& [target_class, attributes] : m_attribute_buffer)
         {
             // entity attributes
-            if (target_class == attribute_target_class::ENTITY)
+            if (target_class == AttributeTarget::ENTITY)
             {
                 for (const auto& [target, attribute] : attributes)
                 {
@@ -771,7 +771,7 @@ namespace hal
                 }
             }
             // instance attributes
-            else if (target_class == attribute_target_class::INSTANCE)
+            else if (target_class == AttributeTarget::INSTANCE)
             {
                 auto& instances = e.get_instances();
 
@@ -789,7 +789,7 @@ namespace hal
                 }
             }
             // signal attributes
-            else if (target_class == attribute_target_class::SIGNAL)
+            else if (target_class == AttributeTarget::SIGNAL)
             {
                 auto& signals = e.get_signals();
                 auto& ports   = e.get_ports();
@@ -820,7 +820,7 @@ namespace hal
     // ###################          Helper functions          ####################
     // ###########################################################################
 
-    std::vector<u32> hdl_parser_vhdl::parse_range(TokenStream<core_strings::CaseInsensitiveString>& range_str)
+    std::vector<u32> HDLParserVHDL::parse_range(TokenStream<core_strings::CaseInsensitiveString>& range_str)
     {
         if (range_str.remaining() == 1)
         {
@@ -852,7 +852,7 @@ namespace hal
 
     static std::map<core_strings::CaseInsensitiveString, size_t> id_to_dim = {{"std_logic_vector", 1}, {"std_logic_vector2", 2}, {"std_logic_vector3", 3}};
 
-    std::optional<std::vector<std::vector<u32>>> hdl_parser_vhdl::parse_signal_ranges(TokenStream<core_strings::CaseInsensitiveString>& signal_str)
+    std::optional<std::vector<std::vector<u32>>> HDLParserVHDL::parse_signal_ranges(TokenStream<core_strings::CaseInsensitiveString>& signal_str)
     {
         std::vector<std::vector<u32>> ranges;
         const auto line_number = signal_str.peek().number;
@@ -894,8 +894,8 @@ namespace hal
         return ranges;
     }
 
-    std::optional<std::pair<std::vector<hdl_parser_vhdl::signal>, i32>>
-        hdl_parser_vhdl::get_assignment_signals(entity& e, TokenStream<core_strings::CaseInsensitiveString>& signal_str, bool is_left_half, bool is_port_assignment)
+    std::optional<std::pair<std::vector<HDLParserVHDL::signal>, i32>>
+        HDLParserVHDL::get_assignment_signals(entity& e, TokenStream<core_strings::CaseInsensitiveString>& signal_str, bool is_left_half, bool is_port_assignment)
     {
         // PARSE ASSIGNMENT
         //   assignment can currently be one of the following:
@@ -1049,7 +1049,7 @@ namespace hal
                                                                                      {'e', "1110"},
                                                                                      {'f', "1111"}};
 
-    core_strings::CaseInsensitiveString hdl_parser_vhdl::get_bin_from_literal(const Token<core_strings::CaseInsensitiveString>& value_token)
+    core_strings::CaseInsensitiveString HDLParserVHDL::get_bin_from_literal(const Token<core_strings::CaseInsensitiveString>& value_token)
     {
         const auto line_number = value_token.number;
         const auto value       = core_utils::to_lower_t(core_utils::replace_t(value_token.string, core_strings::CaseInsensitiveString("_"), core_strings::CaseInsensitiveString("")));
@@ -1153,7 +1153,7 @@ namespace hal
         return res;
     }
 
-    core_strings::CaseInsensitiveString hdl_parser_vhdl::get_hex_from_literal(const Token<core_strings::CaseInsensitiveString>& value_token)
+    core_strings::CaseInsensitiveString HDLParserVHDL::get_hex_from_literal(const Token<core_strings::CaseInsensitiveString>& value_token)
     {
         const auto line_number = value_token.number;
         const auto value       = core_utils::to_lower_t(core_utils::replace_t(value_token.string, core_strings::CaseInsensitiveString("_"), core_strings::CaseInsensitiveString("")));

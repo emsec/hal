@@ -9,10 +9,12 @@
 #include <netlist/gate.h>
 #include <netlist/net.h>
 
+using namespace hal;
+
 namespace net_handler_test_counter
 {
-    std::vector<std::shared_ptr<net>> removed_nets;
-    std::vector<std::shared_ptr<net>> updated_nets;
+    std::vector<std::shared_ptr<Net>> removed_nets;
+    std::vector<std::shared_ptr<Net>> updated_nets;
 }    // namespace net_handler_test_counter
 
 class net_handler_test : public ::testing::Test
@@ -32,11 +34,11 @@ protected:
     }
 
     // Creates an empty netlist with a certain id if passed
-    std::shared_ptr<netlist> create_empty_netlist(const int id = -1)
+    std::shared_ptr<Netlist> create_empty_netlist(const int id = -1)
     {
         NO_COUT_BLOCK;
-        std::shared_ptr<gate_library> gl = gate_library_manager::get_gate_library(g_lib_name);
-        std::shared_ptr<netlist> nl(new netlist(gl));
+        std::shared_ptr<GateLibrary> gl = gate_library_manager::get_gate_library(g_lib_name);
+        std::shared_ptr<Netlist> nl(new Netlist(gl));
 
         if (id >= 0)
         {
@@ -50,12 +52,12 @@ protected:
      * They store their passed nets in a vector to check when they were called.
      *
      */
-    static void add_removed_net(const std::shared_ptr<net> n)
+    static void add_removed_net(const std::shared_ptr<Net> n)
     {
         net_handler_test_counter::removed_nets.push_back(n);
     }
 
-    static void add_updated_net(const std::shared_ptr<net> n)
+    static void add_updated_net(const std::shared_ptr<Net> n)
     {
         net_handler_test_counter::updated_nets.push_back(n);
     }
@@ -78,12 +80,12 @@ protected:
      * Access on the global vectors removed_nets/updated_nets
      */
 
-    std::vector<std::shared_ptr<net>> get_removed_nets()
+    std::vector<std::shared_ptr<Net>> get_removed_nets()
     {
         return net_handler_test_counter::removed_nets;
     }
 
-    std::vector<std::shared_ptr<net>> get_updated_nets()
+    std::vector<std::shared_ptr<Net>> get_updated_nets()
     {
         return net_handler_test_counter::updated_nets;
     }
@@ -121,16 +123,16 @@ protected:
 };
 
 /**
- * Testing the registration of update_callbacks (called whenever data of a net is changed).
+ * Testing the registration of update_callbacks (called whenever data of a Net is changed).
  * The notify_data_updated is called by the nets.
  *
  * Functions: register_update_callback
  */
 TEST_F(net_handler_test, check_data_updated){TEST_START{// Create a netlist with 3 nets
-                                                        std::shared_ptr<netlist> nl = create_empty_netlist(0);
-std::shared_ptr<net> net_0(new net(nl, 0, "net_0"));
-std::shared_ptr<net> net_1(new net(nl, 1, "net_1"));
-std::shared_ptr<net> net_2(new net(nl, 2, "net_2"));
+                                                        std::shared_ptr<Netlist> nl = create_empty_netlist(0);
+std::shared_ptr<Net> net_0(new Net(nl, 0, "net_0"));
+std::shared_ptr<Net> net_1(new Net(nl, 1, "net_1"));
+std::shared_ptr<Net> net_2(new Net(nl, 2, "net_2"));
 nl->add_net(net_0);
 nl->add_net(net_1);
 nl->add_net(net_2);
@@ -146,7 +148,7 @@ net_handler::register_update_callback("test_update_callback", add_updated_net);
     net_1->set_name("new_name_1");
 }
 
-std::vector<std::shared_ptr<net>> exp_updated = {net_0, net_1};
+std::vector<std::shared_ptr<Net>> exp_updated = {net_0, net_1};
 
 EXPECT_TRUE(vectors_have_same_content(get_updated_nets(), exp_updated));
 
@@ -156,16 +158,16 @@ TEST_END
 }
 
 /**
- * Testing the registration of remove_callbacks (called whenever a net is removed).
+ * Testing the registration of remove_callbacks (called whenever a Net is removed).
  * The notify_data_removed is called by the nets.
  *
  * Functions: register_remove_callback
  */
 TEST_F(net_handler_test, check_data_removed){TEST_START{// Create a netlist with 3 nets
-                                                        std::shared_ptr<netlist> nl = create_empty_netlist(0);
-std::shared_ptr<net> net_0(new net(nl, 0, "net_0"));
-std::shared_ptr<net> net_1(new net(nl, 1, "net_1"));
-std::shared_ptr<net> net_2(new net(nl, 2, "net_2"));
+                                                        std::shared_ptr<Netlist> nl = create_empty_netlist(0);
+std::shared_ptr<Net> net_0(new Net(nl, 0, "net_0"));
+std::shared_ptr<Net> net_1(new Net(nl, 1, "net_1"));
+std::shared_ptr<Net> net_2(new Net(nl, 2, "net_2"));
 nl->add_net(net_0);
 nl->add_net(net_1);
 nl->add_net(net_2);
@@ -181,7 +183,7 @@ net_handler::register_remove_callback("test_remove_callback", add_removed_net);
     nl->delete_net(net_1);
 }
 
-std::vector<std::shared_ptr<net>> exp_removed = {net_0, net_1};
+std::vector<std::shared_ptr<Net>> exp_removed = {net_0, net_1};
 
 EXPECT_TRUE(vectors_have_same_content(get_removed_nets(), exp_removed));
 
@@ -195,9 +197,9 @@ TEST_END
  *
  * Functions: unregister_update_callback, unregister_remove_callback
  */
-TEST_F(net_handler_test, check_unregister){TEST_START{// Create a netlist with one net
-                                                      std::shared_ptr<netlist> nl = create_empty_netlist(0);
-std::shared_ptr<net> net_0(new net(nl, 0, "net_0"));
+TEST_F(net_handler_test, check_unregister){TEST_START{// Create a netlist with one Net
+                                                      std::shared_ptr<Netlist> nl = create_empty_netlist(0);
+std::shared_ptr<Net> net_0(new Net(nl, 0, "net_0"));
 nl->add_net(net_0);
 
 // Register the two callbacks and unregister them immediately
@@ -208,7 +210,7 @@ net_handler::register_remove_callback("test_remove_callback", add_removed_net);
 net_handler::unregister_update_callback("test_update_callback");
 net_handler::unregister_remove_callback("test_remove_callback");
 
-// Update and remove the net
+// Update and remove the Net
 {
     NO_COUT_TEST_BLOCK;
     net_0->set_name("new_name");
@@ -231,9 +233,9 @@ TEST_F(net_handler_test, check_enable)
 {
     TEST_START
     {
-        // Create a netlist with one net
-        std::shared_ptr<netlist> nl = create_empty_netlist(0);
-        std::shared_ptr<net> net_0(new net(nl, 0, "net_0"));
+        // Create a netlist with one Net
+        std::shared_ptr<Netlist> nl = create_empty_netlist(0);
+        std::shared_ptr<Net> net_0(new Net(nl, 0, "net_0"));
         nl->add_net(net_0);
 
         // Register the two callbacks but set enable to false
@@ -241,7 +243,7 @@ TEST_F(net_handler_test, check_enable)
         net_handler::register_update_callback("test_update_callback", add_updated_net);
         net_handler::register_remove_callback("test_remove_callback", add_removed_net);
 
-        // Update and remove the net
+        // Update and remove the Net
         {
             NO_COUT_TEST_BLOCK;
             net_0->set_name("new_name");

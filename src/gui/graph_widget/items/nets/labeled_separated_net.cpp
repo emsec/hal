@@ -27,7 +27,7 @@ void labeled_separated_net::load_settings()
     s_font_ascend = fm.ascent();
 }
 
-labeled_separated_net::labeled_separated_net(const std::shared_ptr<const net> n, const QString& text) : separated_graphics_net(n),
+labeled_separated_net::labeled_separated_net(const std::shared_ptr<const Net> n, const QString& text) : separated_graphics_net(n),
   m_text(text)
 {
     QFontMetricsF fm(s_font);

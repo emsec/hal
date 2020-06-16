@@ -69,10 +69,10 @@ void old_standard_graphics_net::update_alpha()
         s_alpha = 1;
 }
 
-//standard_graphics_net::standard_graphics_net(const std::shared_ptr<const net> n, const lines& l) : graphics_net(n),
-old_standard_graphics_net::old_standard_graphics_net(const std::shared_ptr<const net> n, lines& l, const bool complete) : graphics_net(n),
+//standard_graphics_net::standard_graphics_net(const std::shared_ptr<const Net> n, const lines& l) : graphics_net(n),
+old_standard_graphics_net::old_standard_graphics_net(const std::shared_ptr<const Net> n, lines& l, const bool complete) : graphics_net(n),
     m_complete(complete)
-{    
+{
     QVector<h_line> collapsed_h;
     QVector<v_line> collapsed_v;
 

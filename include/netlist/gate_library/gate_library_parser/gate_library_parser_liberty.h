@@ -38,15 +38,15 @@ namespace hal
     /**
      * @ingroup netlist
      */
-    class NETLIST_API gate_library_parser_liberty : public gate_library_parser
+    class NETLIST_API GateLibraryParserLiberty : public GateLibaryParser
     {
     public:
         /**
          * @param[in] stream - The string stream filled with gate library definition.
          */
-        explicit gate_library_parser_liberty(const std::filesystem::path& file_path, std::stringstream& file_content);
+        explicit GateLibraryParserLiberty(const std::filesystem::path& file_path, std::stringstream& file_content);
 
-        ~gate_library_parser_liberty() = default;
+        ~GateLibraryParserLiberty() = default;
 
         /**
          * Deserializes a gate library in Liberty format from the internal string stream into a gate library object.
@@ -63,7 +63,7 @@ namespace hal
          *
          * @returns The deserialized gate library.
          */
-        std::shared_ptr<gate_library> parse() override;
+        std::shared_ptr<GateLibrary> parse() override;
 
     private:
         enum class pin_direction
@@ -109,8 +109,8 @@ namespace hal
             std::string next_state;
             std::string clear;
             std::string preset;
-            gate_type_sequential::set_reset_behavior special_behavior_var1 = gate_type_sequential::set_reset_behavior::U;
-            gate_type_sequential::set_reset_behavior special_behavior_var2 = gate_type_sequential::set_reset_behavior::U;
+            GateTypeSequential::SetResetBehavior special_behavior_var1 = GateTypeSequential::SetResetBehavior::U;
+            GateTypeSequential::SetResetBehavior special_behavior_var2 = GateTypeSequential::SetResetBehavior::U;
             std::string data_category;
             std::string data_identifier;
         };
@@ -123,8 +123,8 @@ namespace hal
             std::string data_in;
             std::string clear;
             std::string preset;
-            gate_type_sequential::set_reset_behavior special_behavior_var1 = gate_type_sequential::set_reset_behavior::U;
-            gate_type_sequential::set_reset_behavior special_behavior_var2 = gate_type_sequential::set_reset_behavior::U;
+            GateTypeSequential::SetResetBehavior special_behavior_var1 = GateTypeSequential::SetResetBehavior::U;
+            GateTypeSequential::SetResetBehavior special_behavior_var2 = GateTypeSequential::SetResetBehavior::U;
         };
 
         struct lut_group
@@ -140,7 +140,7 @@ namespace hal
         {
             u32 line_number;
             std::string name;
-            gate_type::base_type type = gate_type::base_type::combinatorial;
+            GateType::BaseType type = GateType::BaseType::combinatorial;
             std::map<std::string, bus_group> buses;
             ff_group ff;
             latch_group latch;
@@ -164,12 +164,12 @@ namespace hal
         std::optional<ff_group> parse_ff(TokenStream<std::string>& str);
         std::optional<latch_group> parse_latch(TokenStream<std::string>& str);
         std::optional<lut_group> parse_lut(TokenStream<std::string>& str);
-        std::shared_ptr<gate_type> construct_gate_type(cell_group& cell);
+        std::shared_ptr<GateType> construct_gate_type(cell_group& cell);
 
         void remove_comments(std::string& line, bool& multi_line_comment);
         std::vector<std::string> tokenize_function(const std::string& function);
         std::map<std::string, std::string> expand_bus_function(const std::map<std::string, bus_group>& buses, const std::vector<std::string>& pin_names, const std::string& function);
         std::string prepare_pin_function(const std::map<std::string, bus_group>& buses, const std::string& function);
-        std::map<std::string, boolean_function> construct_bus_functions(const cell_group& cell, const std::vector<std::string>& input_pins);
+        std::map<std::string, BooleanFunction> construct_bus_functions(const cell_group& cell, const std::vector<std::string>& input_pins);
     };
 }    // namespace hal

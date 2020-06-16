@@ -5,26 +5,26 @@
 
 namespace hal
 {
-    std::vector<std::set<std::shared_ptr<gate>>>
-        plugin_graph_algorithm::get_graph_cut(std::shared_ptr<netlist> const g, std::shared_ptr<gate> const current_gate, const u32 depth, const std::set<std::string> terminal_gate_type)
+    std::vector<std::set<std::shared_ptr<Gate>>>
+        plugin_graph_algorithm::get_graph_cut(std::shared_ptr<Netlist> const g, std::shared_ptr<Gate> const current_gate, const u32 depth, const std::set<std::string> terminal_gate_type)
     {
         if (g == nullptr)
         {
             log_error(this->get_name(), "parameter 'g' is nullptr.");
-            return std::vector<std::set<std::shared_ptr<gate>>>();
+            return std::vector<std::set<std::shared_ptr<Gate>>>();
         }
         if (current_gate == nullptr)
         {
             log_error(this->get_name(), "parameter 'gate' is nullptr.");
-            return std::vector<std::set<std::shared_ptr<gate>>>();
+            return std::vector<std::set<std::shared_ptr<Gate>>>();
         }
         if (depth == std::numeric_limits<u32>::max() && terminal_gate_type.empty())
         {
             log_error(this->get_name(), "parameter 'depth' is 0 and no terminal gate type defined.");
-            return std::vector<std::set<std::shared_ptr<gate>>>();
+            return std::vector<std::set<std::shared_ptr<Gate>>>();
         }
 
-        std::vector<std::set<std::shared_ptr<gate>>> result;
+        std::vector<std::set<std::shared_ptr<Gate>>> result;
         result.push_back({current_gate});
 
         if (depth == 1)
@@ -34,7 +34,7 @@ namespace hal
 
         for (u32 i = 1; i < depth; i++)
         {
-            std::set<std::shared_ptr<gate>> previous_state = result.back(), next_state = std::set<std::shared_ptr<gate>>();
+            std::set<std::shared_ptr<Gate>> previous_state = result.back(), next_state = std::set<std::shared_ptr<Gate>>();
             for (const auto& it : previous_state)
             {
                 for (const auto& predecessor : it->get_predecessors())

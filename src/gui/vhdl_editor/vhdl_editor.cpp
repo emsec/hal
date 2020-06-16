@@ -20,7 +20,7 @@ vhdl_editor::vhdl_editor() : content_widget("Source"), m_code_editor(new code_ed
     new vhdl_syntax_highlighter(m_code_editor->minimap()->document());
 
     std::stringstream stream;
-    hdl_writer_vhdl writer(stream);
+    HDLWriterVHDL writer(stream);
     writer.write(g_netlist);
     QString string = QString::fromStdString(stream.str());
     m_code_editor->setPlainText(string);

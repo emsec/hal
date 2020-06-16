@@ -231,7 +231,7 @@ void graph_layouter::calculate_nets()
 {
     for (const u32 id : m_context->nets())
     {
-        std::shared_ptr<net> n = g_netlist->get_net_by_id(id);
+        std::shared_ptr<Net> n = g_netlist->get_net_by_id(id);
         assert(n);
 
         if (n->is_unrouted())
@@ -239,7 +239,7 @@ void graph_layouter::calculate_nets()
 
         used_paths used;
 
-        for (const endpoint& src : n->get_sources())
+        for (const Endpoint& src : n->get_sources())
         {
             // FIND SRC BOX
             hal::node node;
@@ -259,7 +259,7 @@ void graph_layouter::calculate_nets()
             assert(src_box);
 
             // FOR EVERY DST
-            for (const endpoint& dst : n->get_destinations())
+            for (const Endpoint& dst : n->get_destinations())
             {
                 // FIND DST BOX
                 if (!m_context->node_for_gate(node, dst.get_gate()->get_id()))
@@ -716,7 +716,7 @@ void graph_layouter::draw_nets()
     // ROADS AND JUNCTIONS FILLED LEFT TO RIGHT, TOP TO BOTTOM
     for (const u32 id : m_context->nets())
     {
-        std::shared_ptr<net> n = g_netlist->get_net_by_id(id);
+        std::shared_ptr<Net> n = g_netlist->get_net_by_id(id);
         assert(n);
 
         if (n->is_unrouted())
@@ -724,7 +724,7 @@ void graph_layouter::draw_nets()
             // HANDLE GLOBAL NETS
             arrow_separated_net* net_item = new arrow_separated_net(n);
 
-            for (const endpoint& src : n->get_sources())
+            for (const Endpoint& src : n->get_sources())
             {
                 if (src.get_gate())
                 {
@@ -744,7 +744,7 @@ void graph_layouter::draw_nets()
                 }
             }
 
-            for (const endpoint& dst : n->get_destinations())
+            for (const Endpoint& dst : n->get_destinations())
             {
                 if (dst.get_gate())
                 {
@@ -771,7 +771,7 @@ void graph_layouter::draw_nets()
 
         bool use_label = false;
 
-        for (const endpoint& src : n->get_sources())
+        for (const Endpoint& src : n->get_sources())
         {
             if (src.get_gate()->is_gnd_gate() || src.get_gate()->is_vcc_gate())
             {
@@ -784,7 +784,7 @@ void graph_layouter::draw_nets()
         {
             labeled_separated_net* net_item = new labeled_separated_net(n, QString::fromStdString(n->get_name()));
 
-            for (const endpoint& src : n->get_sources())
+            for (const Endpoint& src : n->get_sources())
             {
                 hal::node node;
 
@@ -801,7 +801,7 @@ void graph_layouter::draw_nets()
                 }
             }
 
-            for (const endpoint& dst : n->get_destinations())
+            for (const Endpoint& dst : n->get_destinations())
             {
                 hal::node node;
 
@@ -828,7 +828,7 @@ void graph_layouter::draw_nets()
         bool src_found      = false;
         bool dst_found      = false;
 
-        for (const endpoint& src : n->get_sources())
+        for (const Endpoint& src : n->get_sources())
         {
             hal::node node;
 
@@ -838,7 +838,7 @@ void graph_layouter::draw_nets()
                 incomplete_net = true;
         }
 
-        for (const endpoint& dst : n->get_destinations())
+        for (const Endpoint& dst : n->get_destinations())
         {
             hal::node node;
 
@@ -852,7 +852,7 @@ void graph_layouter::draw_nets()
         {
             arrow_separated_net* net_item = new arrow_separated_net(n);
 
-            for (const endpoint& src : n->get_sources())
+            for (const Endpoint& src : n->get_sources())
             {
                 hal::node node;
 
@@ -879,7 +879,7 @@ void graph_layouter::draw_nets()
         {
             arrow_separated_net* net_item = new arrow_separated_net(n);
 
-            for (const endpoint& dst : n->get_destinations())
+            for (const Endpoint& dst : n->get_destinations())
             {
                 hal::node node;
 
@@ -907,7 +907,7 @@ void graph_layouter::draw_nets()
         standard_graphics_net::lines lines;
 
         // FOR EVERY SRC
-        for (const endpoint& src : n->get_sources())
+        for (const Endpoint& src : n->get_sources())
         {
             // FIND SRC BOX
             node_box* src_box = nullptr;
@@ -929,7 +929,7 @@ void graph_layouter::draw_nets()
             const QPointF src_pin_position = src_box->item->get_output_scene_position(n->get_id(), QString::fromStdString(src.get_pin()));
 
             // FOR EVERY DST
-            for (const endpoint& dst : n->get_destinations())
+            for (const Endpoint& dst : n->get_destinations())
             {
                 // FIND DST BOX
                 node_box* dst_box = nullptr;

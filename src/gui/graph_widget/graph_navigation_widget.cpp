@@ -31,7 +31,7 @@ graph_navigation_widget::graph_navigation_widget(QWidget* parent) : QTableWidget
 }
 
 void graph_navigation_widget::setup(bool direction)
-{ 
+{
     clearContents();
 
     switch (g_selection_relay.m_focus_type)
@@ -42,14 +42,14 @@ void graph_navigation_widget::setup(bool direction)
         }
         case selection_relay::item_type::gate:
         {
-            std::shared_ptr<gate> g = g_netlist->get_gate_by_id(g_selection_relay.m_focus_id);
+            std::shared_ptr<Gate> g = g_netlist->get_gate_by_id(g_selection_relay.m_focus_id);
 
             assert(g);
 
             m_origin = hal::node{hal::node_type::gate, g->get_id()};
 
             std::string pin_type   = (direction ? g->get_output_pins() : g->get_input_pins())[g_selection_relay.m_subfocus_index];
-            std::shared_ptr<net> n = (direction ? g->get_fan_out_net(pin_type) : g->get_fan_in_net(pin_type));
+            std::shared_ptr<Net> n = (direction ? g->get_fan_out_net(pin_type) : g->get_fan_in_net(pin_type));
 
             assert(n);
 
@@ -59,13 +59,13 @@ void graph_navigation_widget::setup(bool direction)
         }
         case selection_relay::item_type::net:
         {
-            std::shared_ptr<net> n = g_netlist->get_net_by_id(g_selection_relay.m_focus_id);
+            std::shared_ptr<Net> n = g_netlist->get_net_by_id(g_selection_relay.m_focus_id);
 
             assert(n);
             assert(direction ? n->get_num_of_destinations() : n->get_num_of_sources());
 
             m_origin = hal::node{hal::node_type::gate, 0};
-            
+
             fill_table(n, direction);
 
             return;
@@ -78,7 +78,7 @@ void graph_navigation_widget::setup(bool direction)
     }
 }
 
-void graph_navigation_widget::setup(hal::node origin, std::shared_ptr<net> via_net, bool direction)
+void graph_navigation_widget::setup(hal::node origin, std::shared_ptr<Net> via_net, bool direction)
 {
     clearContents();
     fill_table(via_net, direction);
@@ -116,7 +116,7 @@ void graph_navigation_widget::keyPressEvent(QKeyEvent* event)
     }
 }
 
-void graph_navigation_widget::fill_table(std::shared_ptr<net> n, bool direction)
+void graph_navigation_widget::fill_table(std::shared_ptr<Net> n, bool direction)
 {
     assert(n);
 
@@ -140,7 +140,7 @@ void graph_navigation_widget::fill_table(std::shared_ptr<net> n, bool direction)
 
     int row = 1;
 
-    for (const endpoint& e : (direction ? n->get_destinations() : n->get_sources()))
+    for (const Endpoint& e : (direction ? n->get_destinations() : n->get_sources()))
     {
         if (!e.get_gate())
         {
@@ -231,7 +231,7 @@ void graph_navigation_widget::commit_selection()
         QSet<u32> gates;
         for (u32 row = 1; row < (u32)rowCount(); ++row)
         {
-            std::shared_ptr<gate> g = g_netlist->get_gate_by_id(item(row, 0)->text().toLong());
+            std::shared_ptr<Gate> g = g_netlist->get_gate_by_id(item(row, 0)->text().toLong());
             if (g)
             {
                 gates.insert(g->get_id());
@@ -241,7 +241,7 @@ void graph_navigation_widget::commit_selection()
         return;
     }
 
-    std::shared_ptr<gate> g = g_netlist->get_gate_by_id(selectedItems().at(0)->text().toLong());
+    std::shared_ptr<Gate> g = g_netlist->get_gate_by_id(selectedItems().at(0)->text().toLong());
 
     if (!g)
     {

@@ -3,12 +3,12 @@
 #include "gui/graph_widget/items/nodes/modules/graphics_module.h"
 
 class standard_graphics_module final : public graphics_module
-{   
+{
 public:
     static void load_settings();
     static void update_alpha();
 
-    explicit standard_graphics_module(const std::shared_ptr<module> m, bool adjust_size_to_grid = true);
+    explicit standard_graphics_module(const std::shared_ptr<Module> m, bool adjust_size_to_grid = true);
 
     void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = nullptr) override;
 

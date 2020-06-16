@@ -60,7 +60,7 @@ void arrow_separated_net::load_settings()
     s_arrow.closeSubpath();
 }
 
-arrow_separated_net::arrow_separated_net(const std::shared_ptr<const net> n) : separated_graphics_net(n)
+arrow_separated_net::arrow_separated_net(const std::shared_ptr<const Net> n) : separated_graphics_net(n)
 {
 }
 
@@ -190,7 +190,7 @@ void arrow_separated_net::add_output(const QPointF& scene_position)
 }
 
 qreal arrow_separated_net::input_width() const
-{  
+{
     return s_input_width;
 }
 

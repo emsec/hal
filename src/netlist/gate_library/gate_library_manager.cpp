@@ -16,11 +16,11 @@ namespace hal
     {
         namespace
         {
-            std::map<std::filesystem::path, std::shared_ptr<gate_library>> m_gate_libraries;
+            std::map<std::filesystem::path, std::shared_ptr<GateLibrary>> m_gate_libraries;
 
-            std::shared_ptr<gate_library> load_liberty(const std::filesystem::path& path)
+            std::shared_ptr<GateLibrary> load_liberty(const std::filesystem::path& path)
             {
-                std::shared_ptr<gate_library> lib = nullptr;
+                std::shared_ptr<GateLibrary> lib = nullptr;
 
                 std::ifstream file(path.string().c_str());
 
@@ -30,7 +30,7 @@ namespace hal
 
                     buffer << file.rdbuf();
 
-                    gate_library_parser_liberty parser(path, buffer);
+                    GateLibraryParserLiberty parser(path, buffer);
                     lib = parser.parse();
 
                     file.close();
@@ -48,7 +48,7 @@ namespace hal
                 return lib;
             }
 
-            bool prepare_library(std::shared_ptr<gate_library>& lib)
+            bool prepare_library(std::shared_ptr<GateLibrary>& lib)
             {
                 auto types = lib->get_gate_types();
 
@@ -64,9 +64,9 @@ namespace hal
                         log_error("gate_library_manager", "no GND gate found in parsed library but gate types 'GND' and '{}' already exist.", name);
                         return false;
                     }
-                    auto gt = std::make_shared<gate_type>(name);
+                    auto gt = std::make_shared<GateType>(name);
                     gt->add_output_pin("O");
-                    gt->add_boolean_function("O", boolean_function::ZERO);
+                    gt->add_boolean_function("O", BooleanFunction::ZERO);
                     lib->add_gate_type(gt);
                     log_info("gate_library_manager", "gate library did not contain a GND gate, auto-generated type '{}'", name);
                 }
@@ -83,9 +83,9 @@ namespace hal
                         log_error("gate_library_manager", "no VCC gate found in parsed library but gate types 'VCC' and '{}' already exist.", name);
                         return false;
                     }
-                    auto gt = std::make_shared<gate_type>(name);
+                    auto gt = std::make_shared<GateType>(name);
                     gt->add_output_pin("O");
-                    gt->add_boolean_function("O", boolean_function::ONE);
+                    gt->add_boolean_function("O", BooleanFunction::ONE);
                     lib->add_gate_type(gt);
                     log_info("gate_library_manager", "gate library did not contain a VCC gate, auto-generated type '{}'", name);
                 }
@@ -94,7 +94,7 @@ namespace hal
             }
         }    // namespace
 
-        std::shared_ptr<gate_library> load_file(std::filesystem::path path, bool reload_if_existing)
+        std::shared_ptr<GateLibrary> load_file(std::filesystem::path path, bool reload_if_existing)
         {
             if (!std::filesystem::exists(path))
             {
@@ -117,7 +117,7 @@ namespace hal
                 }
             }
 
-            std::shared_ptr<gate_library> lib;
+            std::shared_ptr<GateLibrary> lib;
             auto begin_time = std::chrono::high_resolution_clock::now();
             if (core_utils::ends_with(path.string(), ".lib"))
             {
@@ -168,7 +168,7 @@ namespace hal
             }
         }
 
-        std::shared_ptr<gate_library> get_gate_library(const std::string& file_name)
+        std::shared_ptr<GateLibrary> get_gate_library(const std::string& file_name)
         {
             std::filesystem::path absolute_path;
 
@@ -201,9 +201,9 @@ namespace hal
             return load_file(absolute_path);
         }
 
-        std::vector<std::shared_ptr<gate_library>> get_gate_libraries()
+        std::vector<std::shared_ptr<GateLibrary>> get_gate_libraries()
         {
-            std::vector<std::shared_ptr<gate_library>> res;
+            std::vector<std::shared_ptr<GateLibrary>> res;
             res.reserve(m_gate_libraries.size());
             for (const auto& it : m_gate_libraries)
             {

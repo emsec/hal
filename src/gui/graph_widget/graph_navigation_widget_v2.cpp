@@ -33,7 +33,7 @@ graph_navigation_widget_v2::graph_navigation_widget_v2(QWidget* parent) : QTreeW
 }
 
 void graph_navigation_widget_v2::setup(bool direction)
-{ 
+{
     clear();
 
     switch (g_selection_relay.m_focus_type)
@@ -44,12 +44,12 @@ void graph_navigation_widget_v2::setup(bool direction)
         }
         case selection_relay::item_type::gate:
         {
-            std::shared_ptr<gate> g = g_netlist->get_gate_by_id(g_selection_relay.m_focus_id);
+            std::shared_ptr<Gate> g = g_netlist->get_gate_by_id(g_selection_relay.m_focus_id);
 
             assert(g);
 
             std::string pin        = (direction ? g->get_output_pins() : g->get_input_pins())[g_selection_relay.m_subfocus_index];
-            std::shared_ptr<net> n = (direction ? g->get_fan_out_net(pin) : g->get_fan_in_net(pin));
+            std::shared_ptr<Net> n = (direction ? g->get_fan_out_net(pin) : g->get_fan_in_net(pin));
 
             assert(n);
 
@@ -62,21 +62,21 @@ void graph_navigation_widget_v2::setup(bool direction)
         }
         case selection_relay::item_type::net:
         {
-            std::shared_ptr<net> n = g_netlist->get_net_by_id(g_selection_relay.m_focus_id);
+            std::shared_ptr<Net> n = g_netlist->get_net_by_id(g_selection_relay.m_focus_id);
 
             assert(n);
             assert(direction ? n->get_num_of_destinations() : n->get_num_of_sources());
 
             m_origin = hal::node{hal::node_type::gate, 0};
             m_via_net = n;
-            
+
             fill_table(direction);
 
             return;
         }
         case selection_relay::item_type::module:
         {
-            std::shared_ptr<module> m = g_netlist->get_module_by_id(g_selection_relay.m_focus_id);
+            std::shared_ptr<Module> m = g_netlist->get_module_by_id(g_selection_relay.m_focus_id);
 
             assert(m);
 
@@ -104,7 +104,7 @@ void graph_navigation_widget_v2::setup(bool direction)
     }
 }
 
-void graph_navigation_widget_v2::setup(hal::node origin, std::shared_ptr<net> via_net, bool direction)
+void graph_navigation_widget_v2::setup(hal::node origin, std::shared_ptr<Net> via_net, bool direction)
 {
     clear();
     fill_table(direction);
@@ -139,9 +139,9 @@ void graph_navigation_widget_v2::fill_table(bool direction)
     QMap<u32, QTreeWidgetItem*> created_parents;
 
     // iterate over all sources, respective destinations, of the via net
-    for (const endpoint& e : (direction ? m_via_net->get_destinations() : m_via_net->get_sources()))
+    for (const Endpoint& e : (direction ? m_via_net->get_destinations() : m_via_net->get_sources()))
     {
-        std::shared_ptr<gate> g = e.get_gate();
+        std::shared_ptr<Gate> g = e.get_gate();
         if (!g)
         {
             // skip non-gate endpoints
@@ -152,7 +152,7 @@ void graph_navigation_widget_v2::fill_table(bool direction)
         // gate (if we have a module A that contains both the origin and the target
         // gate, then we don't want to offer navigating to that module or any
         // modules further up the hierarchy)
-        std::shared_ptr<module> common_ancestor;
+        std::shared_ptr<Module> common_ancestor;
         if (m_origin.id == 0)
         {
             // we're navigating from a net
@@ -169,7 +169,7 @@ void graph_navigation_widget_v2::fill_table(bool direction)
                 // this net and use that
                 auto net_sources = m_via_net->get_sources();
                 auto net_destinations = m_via_net->get_destinations();
-                std::unordered_set<std::shared_ptr<gate>> net_gates;
+                std::unordered_set<std::shared_ptr<Gate>> net_gates;
                 for (auto ep : net_sources)
                     net_gates.insert(ep.get_gate());
                 for (auto ep : net_destinations)
@@ -179,13 +179,13 @@ void graph_navigation_widget_v2::fill_table(bool direction)
         }
         else if (m_origin.type == hal::node_type::gate)
         {
-            std::shared_ptr<gate> origin = g_netlist->get_gate_by_id(m_origin.id);
+            std::shared_ptr<Gate> origin = g_netlist->get_gate_by_id(m_origin.id);
             assert(origin);
             common_ancestor = gui_utility::first_common_ancestor({}, {origin, g});
         }
         else if (m_origin.type == hal::node_type::module)
         {
-            std::shared_ptr<module> origin = g_netlist->get_module_by_id(m_origin.id);
+            std::shared_ptr<Module> origin = g_netlist->get_module_by_id(m_origin.id);
             assert(origin);
             common_ancestor = gui_utility::first_common_ancestor({origin}, {g});
         }
@@ -211,7 +211,7 @@ void graph_navigation_widget_v2::fill_table(bool direction)
         // been created for other gates
         // (if we're navigating from a global in/out net, then common_ancestor
         // is nullptr, so we stop instead when we run out of parents)
-        std::shared_ptr<module> parent = g->get_module();
+        std::shared_ptr<Module> parent = g->get_module();
         bool reused_item = false;
         while(parent != common_ancestor) {
             // qDebug() << QString::fromStdString(parent->get_name());

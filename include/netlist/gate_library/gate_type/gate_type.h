@@ -35,10 +35,10 @@ namespace hal
      *
      * @ingroup netlist
      */
-    class NETLIST_API gate_type
+    class NETLIST_API GateType
     {
     public:
-        enum class base_type
+        enum class BaseType
         {
             combinatorial,
             lut,
@@ -51,8 +51,8 @@ namespace hal
          *
          * @param[in] name - The name of the gate type.
          */
-        gate_type(const std::string& name);
-        virtual ~gate_type() = default;
+        GateType(const std::string& name);
+        virtual ~GateType() = default;
 
         /**
          * Get the unique id of the gate type.
@@ -76,7 +76,7 @@ namespace hal
          * @param[in] gt - The gate type object.
          * @returns An output stream.
          */
-        friend std::ostream& operator<<(std::ostream& os, const gate_type& gt);
+        friend std::ostream& operator<<(std::ostream& os, const GateType& gt);
 
         /**
          * Test whether two gate type objects are equal.
@@ -84,7 +84,7 @@ namespace hal
          * @param[in] other - Gate type object to compare to.
          * @returns True when both gate type objects are equal, false otherwise.
          */
-        bool operator==(const gate_type& other) const;
+        bool operator==(const GateType& other) const;
 
         /**
          * Test whether two gate type objects are unequal.
@@ -92,7 +92,7 @@ namespace hal
          * @param[in] other - Gate type object to compare to.
          * @returns True when both gate type objects are unequal, false otherwise.
          */
-        bool operator!=(const gate_type& other) const;
+        bool operator!=(const GateType& other) const;
 
         /**
          * Get the name of the gate type.
@@ -107,7 +107,7 @@ namespace hal
          *
          * @returns The base type of the gate type.
          */
-        base_type get_base_type() const;
+        BaseType get_base_type() const;
 
         /**
          * Add an input pin to the gate type.
@@ -162,14 +162,14 @@ namespace hal
         /**
          * Assign existing input pins to multiple input pin groups.
          *
-         * @param[in] pin_groups - A map from group names to a map from indices to pin names. 
+         * @param[in] pin_groups - A map from group names to a map from indices to pin names.
          */
         void assign_input_pin_groups(const std::map<std::string, std::map<u32, std::string>>& pin_groups);
 
         /**
          * Get all input pin groups of the gate type.
-         * 
-         * @returns A map from group names to a map from indices to pin names. 
+         *
+         * @returns A map from group names to a map from indices to pin names.
          */
         std::map<std::string, std::map<u32, std::string>> get_input_pin_groups() const;
 
@@ -184,14 +184,14 @@ namespace hal
         /**
          * Assign existing output pins to multiple output pin groups.
          *
-         * @param[in] pin_groups - A map from group names to a map from indices to pin names. 
+         * @param[in] pin_groups - A map from group names to a map from indices to pin names.
          */
         void assign_output_pin_groups(const std::map<std::string, std::map<u32, std::string>>& pin_groups);
 
         /**
          * Get all output pin groups of the gate type.
-         * 
-         * @returns A map from group names to a map from indices to pin names. 
+         *
+         * @returns A map from group names to a map from indices to pin names.
          */
         std::map<std::string, std::map<u32, std::string>> get_output_pin_groups() const;
 
@@ -201,26 +201,26 @@ namespace hal
          * @param[in] name - The name of the boolean function.
          * @param[in] bf - A boolean function object.
          */
-        void add_boolean_function(std::string name, boolean_function bf);
+        void add_boolean_function(std::string name, BooleanFunction bf);
 
         /**
          * Add multiple boolean functions to the gate type.
          *
          * @param[in] functions - Map from function name to boolean function.
          */
-        void add_boolean_functions(const std::map<std::string, boolean_function>& functions);
+        void add_boolean_functions(const std::map<std::string, BooleanFunction>& functions);
 
         /**
          * Get a map containing the boolean functions of the gate type.
          *
          * @returns A map from function names to boolean functions.
          */
-        std::unordered_map<std::string, boolean_function> get_boolean_functions() const;
+        std::unordered_map<std::string, BooleanFunction> get_boolean_functions() const;
 
     protected:
         u32 m_id;
         std::string m_name;
-        base_type m_base_type;
+        BaseType m_base_type;
 
         std::vector<std::string> m_input_pins;
         std::vector<std::string> m_output_pins;
@@ -228,10 +228,10 @@ namespace hal
         std::map<std::string, std::map<u32, std::string>> m_input_pin_groups;
         std::map<std::string, std::map<u32, std::string>> m_output_pin_groups;
 
-        std::unordered_map<std::string, boolean_function> m_functions;
+        std::unordered_map<std::string, BooleanFunction> m_functions;
 
     private:
-        gate_type(const gate_type&) = delete;               // disable copy-constructor
-        gate_type& operator=(const gate_type&) = delete;    // disable copy-assignment
+        GateType(const GateType&) = delete;               // disable copy-constructor
+        GateType& operator=(const GateType&) = delete;    // disable copy-assignment
     };
 }    // namespace hal

@@ -39,7 +39,7 @@ namespace hal
      *
      * @ingroup netlist
      */
-    class boolean_function
+    class BooleanFunction
     {
     public:
         enum value
@@ -71,7 +71,7 @@ namespace hal
          * Evaluates to X (undefined).
          * Combining a function with an empty function leaves the other one unchanged.
          */
-        boolean_function();
+        BooleanFunction();
 
         /**
          * Constructor for a variable, usable in other functions.
@@ -79,7 +79,7 @@ namespace hal
          *
          * @param[in] variable_name - Name of the variable.
          */
-        boolean_function(const std::string& variable_name);
+        BooleanFunction(const std::string& variable_name);
 
         /**
          * Constructor for a constant, usable in other functions.
@@ -87,7 +87,7 @@ namespace hal
          *
          * @param[in] constant - A constant value.
          */
-        boolean_function(value constant);
+        BooleanFunction(value constant);
 
         /**
          * Substitutes a variable with another variable (i.e., variable renaming).
@@ -99,7 +99,7 @@ namespace hal
          * @param[in] new_variable_name - The new variable name
          * @returns The new boolean function.
          */
-        boolean_function substitute(const std::string& old_variable_name, const std::string& new_variable_name) const;
+        BooleanFunction substitute(const std::string& old_variable_name, const std::string& new_variable_name) const;
 
         /**
          * Substitutes a variable with another function (can again be a single variable).
@@ -109,7 +109,7 @@ namespace hal
          * @param[in] function - The function to take the place of the varible
          * @returns The new boolean function.
          */
-        boolean_function substitute(const std::string& variable_name, const boolean_function& function) const;
+        BooleanFunction substitute(const std::string& variable_name, const BooleanFunction& function) const;
 
         /**
          * Evaluates the function on the given inputs and returns the result.
@@ -169,7 +169,7 @@ namespace hal
          * @param[in] variable_names - Names of variables to help resolve problematic functions
          * @returns The boolean function extracted from the string.
          */
-        static boolean_function from_string(std::string expression, const std::vector<std::string>& variable_names = {});
+        static BooleanFunction from_string(std::string expression, const std::vector<std::string>& variable_names = {});
 
         /**
          * Returns the boolean function as a string.
@@ -185,7 +185,7 @@ namespace hal
          * @param[in] f - the function.
          * @returns A reference to os.
          */
-        friend std::ostream& operator<<(std::ostream& os, const boolean_function& f);
+        friend std::ostream& operator<<(std::ostream& os, const BooleanFunction& f);
 
         /**
          * Combines two boolean functions using an AND operator.
@@ -193,7 +193,7 @@ namespace hal
          * @param[in] other - the other function to combine with.
          * @returns The combined boolean function.
          */
-        boolean_function operator&(const boolean_function& other) const;
+        BooleanFunction operator&(const BooleanFunction& other) const;
 
         /**
          * Combines two boolean functions using an OR operator.
@@ -201,7 +201,7 @@ namespace hal
          * @param[in] other - the other function to combine with.
          * @returns The combined boolean function.
          */
-        boolean_function operator|(const boolean_function& other) const;
+        BooleanFunction operator|(const BooleanFunction& other) const;
 
         /**
          * Combines two boolean functions using an XOR operator.
@@ -209,7 +209,7 @@ namespace hal
          * @param[in] other - the other function to combine with.
          * @returns The combined boolean function.
          */
-        boolean_function operator^(const boolean_function& other) const;
+        BooleanFunction operator^(const BooleanFunction& other) const;
 
         /**
          * Combines two boolean functions using an AND operator in place.
@@ -217,7 +217,7 @@ namespace hal
          * @param[in] other - the other function to combine with.
          * @returns Self-reference.
          */
-        boolean_function& operator&=(const boolean_function& other);
+        BooleanFunction& operator&=(const BooleanFunction& other);
 
         /**
          * Combines two boolean functions using an OR operator in place.
@@ -225,7 +225,7 @@ namespace hal
          * @param[in] other - the other function to combine with.
          * @returns Self-reference.
          */
-        boolean_function& operator|=(const boolean_function& other);
+        BooleanFunction& operator|=(const BooleanFunction& other);
 
         /**
          * Combines two boolean functions using an XOR operator in place.
@@ -233,14 +233,14 @@ namespace hal
          * @param[in] other - the other function to combine with.
          * @returns Self-reference.
          */
-        boolean_function& operator^=(const boolean_function& other);
+        BooleanFunction& operator^=(const BooleanFunction& other);
 
         /**
          * Negates the boolean function.
          *
          * @returns The negated boolean function.
          */
-        boolean_function operator!() const;
+        BooleanFunction operator!() const;
 
         /**
          * Tests whether two boolean functions are equal.
@@ -248,7 +248,7 @@ namespace hal
          * @param[in] other - Boolean function to compare to.
          * @returns True when both boolean functions are equal, false otherwise.
          */
-        bool operator==(const boolean_function& other) const;
+        bool operator==(const BooleanFunction& other) const;
 
         /**
          * Tests whether two boolean functions are unequal.
@@ -256,7 +256,7 @@ namespace hal
          * @param[in] other - Boolean function to compare to.
          * @returns True when both boolean functions are unequal, false otherwise.
          */
-        bool operator!=(const boolean_function& other) const;
+        bool operator!=(const BooleanFunction& other) const;
 
         /**
          * Tests whether the function is in DNF.
@@ -270,7 +270,7 @@ namespace hal
          *
          * @returns The DNF as a boolean function.
          */
-        boolean_function to_dnf() const;
+        BooleanFunction to_dnf() const;
 
         /**
          * Gets the DNF clauses of the function.
@@ -292,7 +292,7 @@ namespace hal
          *
          * @returns The optimized boolean function.
          */
-        boolean_function optimize() const;
+        BooleanFunction optimize() const;
 
         /**
          * Get the truth table outputs of the function.
@@ -324,43 +324,43 @@ namespace hal
         static std::string to_string(const operation& op);
         friend std::ostream& operator<<(std::ostream& os, const operation& op);
 
-        static boolean_function from_string_internal(std::string expression, const std::vector<std::string>& variable_names);
+        static BooleanFunction from_string_internal(std::string expression, const std::vector<std::string>& variable_names);
 
         /*
         * Constructor for a function of the form "term1 op term2 op term3 op ..."
         * Empty terms behaves like constant X.
         * If there is only a single term, this constructor simply copies said term.
         */
-        boolean_function(operation op, const std::vector<boolean_function>& operands, bool invert_result = false);
+        BooleanFunction(operation op, const std::vector<BooleanFunction>& operands, bool invert_result = false);
 
-        boolean_function combine(operation op, const boolean_function& other) const;
+        BooleanFunction combine(operation op, const BooleanFunction& other) const;
 
         std::string to_string_internal() const;
 
         // replaces a^b with (a & !b | (!a & b)
-        boolean_function replace_xors() const;
+        BooleanFunction replace_xors() const;
 
         // propagates negations down to the variables
-        boolean_function propagate_negations(bool negate_term = false) const;
+        BooleanFunction propagate_negations(bool negate_term = false) const;
 
         // expands ands, i.e., a & (b | c) -> a&b | a&c
-        boolean_function expand_ands() const;
+        BooleanFunction expand_ands() const;
         // helper function 1
-        std::vector<boolean_function> expand_ands_internal(const std::vector<std::vector<boolean_function>>& sub_primitives) const;
+        std::vector<BooleanFunction> expand_ands_internal(const std::vector<std::vector<BooleanFunction>>& sub_primitives) const;
         // helper function 2
-        std::vector<boolean_function> get_primitives() const;
+        std::vector<BooleanFunction> get_primitives() const;
 
         // merges constants if possible and resolves duplicates
-        boolean_function optimize_constants() const;
+        BooleanFunction optimize_constants() const;
 
         // merges nested expressions of the same operands
-        boolean_function flatten() const;
+        BooleanFunction flatten() const;
 
         // merges nested expressions of the same operands
         static std::vector<std::vector<value>> qmc(const std::vector<std::vector<value>>& terms);
 
         // helper to allow for substitution with reduced amount of copies
-        static void substitute_helper(boolean_function& f, const std::string& v, const boolean_function& s);
+        static void substitute_helper(BooleanFunction& f, const std::string& v, const BooleanFunction& s);
 
         bool m_invert;
 
@@ -376,6 +376,6 @@ namespace hal
         value m_constant;
 
         operation m_op;
-        std::vector<boolean_function> m_operands;
+        std::vector<BooleanFunction> m_operands;
     };
 }    // namespace hal

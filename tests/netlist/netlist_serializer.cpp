@@ -17,13 +17,14 @@
 #include <streambuf>
 #include <string>
 
+using namespace hal;
 using namespace test_utils;
 
 class netlist_serializer_test : public ::testing::Test
 {
 protected:
     std::filesystem::path m_g_lib_path;
-    std::shared_ptr<gate_library> m_gl;
+    std::shared_ptr<GateLibrary> m_gl;
 
     std::string m_min_gl_content = "library (MIN_TEST_GATE_LIBRARY) {\n"
                                    "    define(cell);\n"
@@ -74,44 +75,44 @@ protected:
     *       gate_2_to_0 (6)         gate_2_to_1 (7)            ...  gate_2_to_1 (8) =
     *     =                       =                 =          =
     */
-    std::shared_ptr<netlist> create_example_serializer_netlist()
+    std::shared_ptr<Netlist> create_example_serializer_netlist()
     {
-        std::shared_ptr<netlist> nl = std::make_shared<netlist>(m_gl);
+        std::shared_ptr<Netlist> nl = std::make_shared<Netlist>(m_gl);
         nl->set_id(123);
         nl->set_input_filename("esnl_input_filename");
         nl->set_device_name("esnl_device_name");
         nl->get_top_module()->set_type("top_mod_type");
 
         // Create the gates
-        std::shared_ptr<gate> gate_0 = nl->create_gate(MIN_GATE_ID + 0, m_gl->get_gate_types().at("gate_2_to_1"), "gate_0");
-        std::shared_ptr<gate> gate_1 = nl->create_gate(MIN_GATE_ID + 1, m_gl->get_gate_types().at("gnd"), "gate_1");
-        std::shared_ptr<gate> gate_2 = nl->create_gate(MIN_GATE_ID + 2, m_gl->get_gate_types().at("vcc"), "gate_2");
-        std::shared_ptr<gate> gate_3 = nl->create_gate(MIN_GATE_ID + 3, m_gl->get_gate_types().at("gate_1_to_1"), "gate_3");
-        std::shared_ptr<gate> gate_4 = nl->create_gate(MIN_GATE_ID + 4, m_gl->get_gate_types().at("gate_1_to_1"), "gate_4");
-        std::shared_ptr<gate> gate_5 = nl->create_gate(MIN_GATE_ID + 5, m_gl->get_gate_types().at("gate_2_to_1"), "gate_5");
-        std::shared_ptr<gate> gate_6 = nl->create_gate(MIN_GATE_ID + 6, m_gl->get_gate_types().at("gate_2_to_0"), "gate_6");
-        std::shared_ptr<gate> gate_7 = nl->create_gate(MIN_GATE_ID + 7, m_gl->get_gate_types().at("gate_2_to_1"), "gate_7");
-        std::shared_ptr<gate> gate_8 = nl->create_gate(MIN_GATE_ID + 8, m_gl->get_gate_types().at("gate_2_to_1"), "gate_8");
+        std::shared_ptr<Gate> gate_0 = nl->create_gate(MIN_GATE_ID + 0, m_gl->get_gate_types().at("gate_2_to_1"), "gate_0");
+        std::shared_ptr<Gate> gate_1 = nl->create_gate(MIN_GATE_ID + 1, m_gl->get_gate_types().at("gnd"), "gate_1");
+        std::shared_ptr<Gate> gate_2 = nl->create_gate(MIN_GATE_ID + 2, m_gl->get_gate_types().at("vcc"), "gate_2");
+        std::shared_ptr<Gate> gate_3 = nl->create_gate(MIN_GATE_ID + 3, m_gl->get_gate_types().at("gate_1_to_1"), "gate_3");
+        std::shared_ptr<Gate> gate_4 = nl->create_gate(MIN_GATE_ID + 4, m_gl->get_gate_types().at("gate_1_to_1"), "gate_4");
+        std::shared_ptr<Gate> gate_5 = nl->create_gate(MIN_GATE_ID + 5, m_gl->get_gate_types().at("gate_2_to_1"), "gate_5");
+        std::shared_ptr<Gate> gate_6 = nl->create_gate(MIN_GATE_ID + 6, m_gl->get_gate_types().at("gate_2_to_0"), "gate_6");
+        std::shared_ptr<Gate> gate_7 = nl->create_gate(MIN_GATE_ID + 7, m_gl->get_gate_types().at("gate_2_to_1"), "gate_7");
+        std::shared_ptr<Gate> gate_8 = nl->create_gate(MIN_GATE_ID + 8, m_gl->get_gate_types().at("gate_2_to_1"), "gate_8");
 
-        // Add the nets (net_x_y1_y2... := net between the gate with id x and the gates y1,y2,...)
-        std::shared_ptr<net> net_1_3 = nl->create_net(MIN_NET_ID + 13, "net_1_3");
+        // Add the nets (net_x_y1_y2... := Net between the Gate with id x and the gates y1,y2,...)
+        std::shared_ptr<Net> net_1_3 = nl->create_net(MIN_NET_ID + 13, "net_1_3");
         net_1_3->add_source(gate_1, "O");
         net_1_3->add_destination(gate_3, "I");
 
-        std::shared_ptr<net> net_3_0 = nl->create_net(MIN_NET_ID + 30, "net_3_0");
+        std::shared_ptr<Net> net_3_0 = nl->create_net(MIN_NET_ID + 30, "net_3_0");
         net_3_0->add_source(gate_3, "O");
         net_3_0->add_destination(gate_0, "I0");
 
-        std::shared_ptr<net> net_2_0 = nl->create_net(MIN_NET_ID + 20, "net_2_0");
+        std::shared_ptr<Net> net_2_0 = nl->create_net(MIN_NET_ID + 20, "net_2_0");
         net_2_0->add_source(gate_2, "O");
         net_2_0->add_destination(gate_0, "I1");
 
-        std::shared_ptr<net> net_0_4_5 = nl->create_net(MIN_NET_ID + 045, "net_0_4_5");
+        std::shared_ptr<Net> net_0_4_5 = nl->create_net(MIN_NET_ID + 045, "net_0_4_5");
         net_0_4_5->add_source(gate_0, "O");
         net_0_4_5->add_destination(gate_4, "I");
         net_0_4_5->add_destination(gate_5, "I0");
 
-        std::shared_ptr<net> net_7_8 = nl->create_net(MIN_NET_ID + 78, "net_7_8");
+        std::shared_ptr<Net> net_7_8 = nl->create_net(MIN_NET_ID + 78, "net_7_8");
         net_7_8->add_source(gate_7, "O");
         net_7_8->add_destination(gate_8, "I0");
 
@@ -124,16 +125,16 @@ protected:
         nl->mark_global_output_net(nl->get_net_by_id(MIN_NET_ID + 30));
 
         // Create the modules
-        std::shared_ptr<module> test_m_0 = nl->create_module(MIN_MODULE_ID + 0, "test_mod_0", nl->get_top_module());
+        std::shared_ptr<Module> test_m_0 = nl->create_module(MIN_MODULE_ID + 0, "test_mod_0", nl->get_top_module());
         test_m_0->set_type("test_mod_type_0");
         test_m_0->assign_gate(nl->get_gate_by_id(MIN_GATE_ID + 0));
         test_m_0->assign_gate(nl->get_gate_by_id(MIN_GATE_ID + 3));
 
-        std::shared_ptr<module> test_m_1 = nl->create_module(MIN_MODULE_ID + 1, "test_mod_1", test_m_0);
+        std::shared_ptr<Module> test_m_1 = nl->create_module(MIN_MODULE_ID + 1, "test_mod_1", test_m_0);
         test_m_1->set_type("test_mod_type_1");
         test_m_1->assign_gate(nl->get_gate_by_id(MIN_GATE_ID + 0));
 
-        // Store some data in a gate, net and module
+        // Store some data in a Gate, Net and module
         nl->get_gate_by_id(MIN_GATE_ID + 1)->set_data("category_0", "key_0", "data_type", "test_value");
         nl->get_gate_by_id(MIN_GATE_ID + 1)->set_data("category_1", "key_1", "data_type", "test_value_1");
         nl->get_gate_by_id(MIN_GATE_ID + 1)->set_data("category_1", "key_0", "data_type", "test_value_2");
@@ -159,13 +160,13 @@ protected:
  * Functions: serialize_netlist, deserialize_netlist
  */
 TEST_F(netlist_serializer_test, check_serialize_and_deserialize){TEST_START{// Serialize and deserialize the example netlist (with some additions) and compare the result with the original netlist
-                                                                            std::shared_ptr<netlist> nl = create_example_serializer_netlist();
+                                                                            std::shared_ptr<Netlist> nl = create_example_serializer_netlist();
 
 // Serialize and deserialize the netlist now
 std::filesystem::path test_hal_file_path = create_sandbox_path("test_hal_file.hal");
 bool suc                                 = netlist_serializer::serialize_to_file(nl, test_hal_file_path);
 
-std::shared_ptr<netlist> des_nl = netlist_serializer::deserialize_from_file(test_hal_file_path);
+std::shared_ptr<Netlist> des_nl = netlist_serializer::deserialize_from_file(test_hal_file_path);
 
 EXPECT_TRUE(suc);
 
@@ -173,7 +174,7 @@ ASSERT_NE(des_nl, nullptr);
 
 // Check if the original netlist and the deserialized one (from file) are equal
 
-// -- Check if the id and the gate library is the same
+// -- Check if the id and the Gate library is the same
 EXPECT_EQ(nl->get_id(), des_nl->get_id());
 EXPECT_EQ(nl->get_gate_library()->get_name(), des_nl->get_gate_library()->get_name());
 
@@ -219,7 +220,7 @@ for (auto gl_out_net : nl->get_global_output_nets())
 
 // -- Check if the modules are the same
 EXPECT_EQ(nl->get_modules().size(), des_nl->get_modules().size());
-std::set<std::shared_ptr<module>> mods_1 = des_nl->get_modules();
+std::set<std::shared_ptr<Module>> mods_1 = des_nl->get_modules();
 for (auto m_0 : nl->get_modules())
 {
     EXPECT_TRUE(modules_are_equal(m_0, des_nl->get_module_by_id(m_0->get_id())));
@@ -230,17 +231,17 @@ EXPECT_TRUE(netlists_are_equal(nl, des_nl));
 }
 {
     // Test the example netlist against its deserialized version, but flip the module ids
-    std::shared_ptr<netlist> nl = create_example_serializer_netlist();
+    std::shared_ptr<Netlist> nl = create_example_serializer_netlist();
     // -- Remove the modules
     nl->delete_module(nl->get_module_by_id(MIN_MODULE_ID + 0));
     nl->delete_module(nl->get_module_by_id(MIN_MODULE_ID + 1));
     // -- Add them again with flipped ids
-    std::shared_ptr<module> test_m_0_flipped = nl->create_module(MIN_MODULE_ID + 1, "test_mod_0_flipped", nl->get_top_module());
+    std::shared_ptr<Module> test_m_0_flipped = nl->create_module(MIN_MODULE_ID + 1, "test_mod_0_flipped", nl->get_top_module());
     test_m_0_flipped->set_type("test_mod_type_0_flipped");
     test_m_0_flipped->assign_gate(nl->get_gate_by_id(MIN_GATE_ID + 0));
     test_m_0_flipped->assign_gate(nl->get_gate_by_id(MIN_GATE_ID + 3));
 
-    std::shared_ptr<module> test_m_1_flipped = nl->create_module(MIN_MODULE_ID + 0, "test_mod_1_flipped", test_m_0_flipped);
+    std::shared_ptr<Module> test_m_1_flipped = nl->create_module(MIN_MODULE_ID + 0, "test_mod_1_flipped", test_m_0_flipped);
     test_m_1_flipped->set_type("test_mod_type_1_flipped");
     test_m_1_flipped->assign_gate(nl->get_gate_by_id(MIN_GATE_ID + 0));
 
@@ -257,18 +258,18 @@ EXPECT_TRUE(netlists_are_equal(nl, des_nl));
     std::filesystem::path test_hal_file_path = create_sandbox_path("test_hal_file.hal");
     bool suc                                 = netlist_serializer::serialize_to_file(nl, test_hal_file_path);
 
-    std::shared_ptr<netlist> des_nl = netlist_serializer::deserialize_from_file(test_hal_file_path);
+    std::shared_ptr<Netlist> des_nl = netlist_serializer::deserialize_from_file(test_hal_file_path);
 
     // -- Check the netlists as a whole
     EXPECT_TRUE(netlists_are_equal(nl, des_nl));
 }
 {
     // Serialize and deserialize an empty netlist and compare the result with the original netlist
-    std::shared_ptr<netlist> nl = std::make_shared<netlist>(m_gl);
+    std::shared_ptr<Netlist> nl = std::make_shared<Netlist>(m_gl);
 
     std::filesystem::path test_hal_file_path = create_sandbox_path("test_hal_file.hal");
     bool suc                                 = netlist_serializer::serialize_to_file(nl, test_hal_file_path);
-    std::shared_ptr<netlist> des_nl          = netlist_serializer::deserialize_from_file(test_hal_file_path);
+    std::shared_ptr<Netlist> des_nl          = netlist_serializer::deserialize_from_file(test_hal_file_path);
 
     EXPECT_TRUE(suc);
     EXPECT_TRUE(netlists_are_equal(nl, des_nl));
@@ -293,26 +294,26 @@ TEST_F(netlist_serializer_test, check_serialize_and_deserialize_negative)
     {
         // Serialize a netlist to an invalid path
         NO_COUT_TEST_BLOCK;
-        std::shared_ptr<netlist> nl = create_example_serializer_netlist();
+        std::shared_ptr<Netlist> nl = create_example_serializer_netlist();
         bool suc                    = netlist_serializer::serialize_to_file(nl, std::filesystem::path(""));
         EXPECT_FALSE(suc);
     }
     {
         // Deserialize a netlist from a non existing path
         NO_COUT_TEST_BLOCK;
-        std::shared_ptr<netlist> des_nl = netlist_serializer::deserialize_from_file(std::filesystem::path("/using/this/file/is/let.hal"));
+        std::shared_ptr<Netlist> des_nl = netlist_serializer::deserialize_from_file(std::filesystem::path("/using/this/file/is/let.hal"));
         EXPECT_EQ(des_nl, nullptr);
     }
     {
         // Deserialize invalid input
         NO_COUT_TEST_BLOCK;
-        std::shared_ptr<netlist> nl              = create_example_netlist(0);
+        std::shared_ptr<Netlist> nl              = create_example_netlist(0);
         std::filesystem::path test_hal_file_path = create_sandbox_path("test_hal_file.hal");
         std::ofstream myfile;
         myfile.open(test_hal_file_path.string());
         myfile << "I h4ve no JSON f0rmat!!!\n(Temporary file for testing. Should be already deleted...)";
         myfile.close();
-        std::shared_ptr<netlist> des_nl = netlist_serializer::deserialize_from_file(test_hal_file_path);
+        std::shared_ptr<Netlist> des_nl = netlist_serializer::deserialize_from_file(test_hal_file_path);
         EXPECT_EQ(des_nl, nullptr);
     }
     TEST_END

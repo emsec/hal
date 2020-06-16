@@ -34,19 +34,19 @@ netlist_relay::~netlist_relay()
 void netlist_relay::register_callbacks()
 {
     netlist_event_handler::register_callback("relay",
-                                             std::function<void(netlist_event_handler::event, std::shared_ptr<netlist>, u32)>(
+                                             std::function<void(netlist_event_handler::event, std::shared_ptr<Netlist>, u32)>(
                                                  std::bind(&netlist_relay::relay_netlist_event, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)));
 
     net_event_handler::register_callback("relay",
-                                         std::function<void(net_event_handler::event, std::shared_ptr<net>, u32)>(
+                                         std::function<void(net_event_handler::event, std::shared_ptr<Net>, u32)>(
                                              std::bind(&netlist_relay::relay_net_event, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)));
 
     gate_event_handler::register_callback("relay",
-                                          std::function<void(gate_event_handler::event, std::shared_ptr<gate>, u32)>(
+                                          std::function<void(gate_event_handler::event, std::shared_ptr<Gate>, u32)>(
                                               std::bind(&netlist_relay::relay_gate_event, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)));
 
     module_event_handler::register_callback("relay",
-                                            std::function<void(module_event_handler::event, std::shared_ptr<module>, u32)>(
+                                            std::function<void(module_event_handler::event, std::shared_ptr<Module>, u32)>(
                                                 std::bind(&netlist_relay::relay_module_event, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)));
 }
 
@@ -64,7 +64,7 @@ void netlist_relay::debug_change_module_name(const u32 id)
 {
     // NOT THREADSAFE
 
-    std::shared_ptr<module> m = g_netlist->get_module_by_id(id);
+    std::shared_ptr<Module> m = g_netlist->get_module_by_id(id);
     assert(m);
 
     bool ok;
@@ -78,7 +78,7 @@ void netlist_relay::debug_change_module_color(const u32 id)
 {
     // NOT THREADSAFE
 
-    std::shared_ptr<module> m = g_netlist->get_module_by_id(id);
+    std::shared_ptr<Module> m = g_netlist->get_module_by_id(id);
     assert(m);
 
     QColor color = QColorDialog::getColor();
@@ -101,13 +101,13 @@ void netlist_relay::debug_add_selection_to_module(const u32 id)
     // NOT THREADSAFE
     // DECIDE HOW TO HANDLE MODULES
 
-    std::shared_ptr<module> m = g_netlist->get_module_by_id(id);
+    std::shared_ptr<Module> m = g_netlist->get_module_by_id(id);
 
     assert(m);
 
     for (auto sel_id : g_selection_relay.m_selected_gates)
     {
-        std::shared_ptr<gate> g = g_netlist->get_gate_by_id(sel_id);
+        std::shared_ptr<Gate> g = g_netlist->get_gate_by_id(sel_id);
 
         if (g)
             m->assign_gate(g);
@@ -124,23 +124,23 @@ void netlist_relay::debug_add_child_module(const u32 id)
     if (!ok || name.isEmpty())
         return;
 
-    std::shared_ptr<module> m = g_netlist->get_module_by_id(id);
+    std::shared_ptr<Module> m = g_netlist->get_module_by_id(id);
 
     if (!m)
         return;
 
-    std::shared_ptr<module> s = g_netlist->create_module(g_netlist->get_unique_module_id(), name.toStdString(), m);
+    std::shared_ptr<Module> s = g_netlist->create_module(g_netlist->get_unique_module_id(), name.toStdString(), m);
 }
 
 void netlist_relay::debug_delete_module(const u32 id)
 {
-    std::shared_ptr<module> m = g_netlist->get_module_by_id(id);
+    std::shared_ptr<Module> m = g_netlist->get_module_by_id(id);
     assert(m);
 
     g_netlist->delete_module(m);
 }
 
-void netlist_relay::relay_netlist_event(netlist_event_handler::event ev, std::shared_ptr<netlist> object, u32 associated_data)
+void netlist_relay::relay_netlist_event(netlist_event_handler::event ev, std::shared_ptr<Netlist> object, u32 associated_data)
 {
     if (!object)
         return;    // SHOULD NEVER BE REACHED
@@ -255,7 +255,7 @@ void netlist_relay::relay_netlist_event(netlist_event_handler::event ev, std::sh
     }
 }
 
-void netlist_relay::relay_module_event(module_event_handler::event ev, std::shared_ptr<module> object, u32 associated_data)
+void netlist_relay::relay_module_event(module_event_handler::event ev, std::shared_ptr<Module> object, u32 associated_data)
 {
     if (!object)
         return;    // SHOULD NEVER BE REACHED
@@ -350,7 +350,7 @@ void netlist_relay::relay_module_event(module_event_handler::event ev, std::shar
         }
         case module_event_handler::event::input_port_name_changed:
         {
-            //< associated data = respective net 
+            //< associated data = respective net
 
             Q_EMIT module_input_port_name_changed(object, associated_data);
             break;
@@ -372,7 +372,7 @@ void netlist_relay::relay_module_event(module_event_handler::event ev, std::shar
     }
 }
 
-void netlist_relay::relay_gate_event(gate_event_handler::event ev, std::shared_ptr<gate> object, u32 associated_data)
+void netlist_relay::relay_gate_event(gate_event_handler::event ev, std::shared_ptr<Gate> object, u32 associated_data)
 {
     UNUSED(associated_data);
     if (!object)
@@ -413,7 +413,7 @@ void netlist_relay::relay_gate_event(gate_event_handler::event ev, std::shared_p
     }
 }
 
-void netlist_relay::relay_net_event(net_event_handler::event ev, std::shared_ptr<net> object, u32 associated_data)
+void netlist_relay::relay_net_event(net_event_handler::event ev, std::shared_ptr<Net> object, u32 associated_data)
 {
     if (!object)
         return;    // SHOULD NEVER BE REACHED
@@ -502,7 +502,7 @@ void netlist_relay::relay_net_event(net_event_handler::event ev, std::shared_ptr
 
 void netlist_relay::debug_handle_file_opened()
 {
-    for (std::shared_ptr<module> m : g_netlist->get_modules())
+    for (std::shared_ptr<Module> m : g_netlist->get_modules())
         m_module_colors.insert(m->get_id(), gui_utility::get_random_color());
 
     m_module_colors.insert(1, QColor(96, 110, 112));
