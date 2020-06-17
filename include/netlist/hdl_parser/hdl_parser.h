@@ -349,32 +349,56 @@ namespace hal
         class signal
         {
         public:
+            /**
+             * Constructs a signal object 
+             * 
+             * @param[in] line_number - The line number of the signal definition within the HDL file.
+             * @param[in] name - The name of the signal.
+             * @param[in] ranges - The signal range for multi-bit signals, e.g., '{0, 1, 2, 3}' for a four bit signal.
+             * @param[in] binary - Binary signal ('true') or not ('false'). If true, the signal name holds the signals values as bits.
+             * @param[in] ranges_known - Ranges are known on construction ('true') or not ('false').
+             */
             signal(u32 line_number, const T& name, const std::vector<std::vector<u32>>& ranges = {}, bool binary = false, bool ranges_known = true)
                 : m_line_number(line_number), m_name(name), m_ranges(ranges), m_binary(binary), m_ranges_known(ranges_known)
             {
                 compute_size();
             }
 
+            /**
+             * Gets the line number of the signal definition.
+             * 
+             * @returns The line number.
+             */
             u32 get_line_number() const
             {
                 return m_line_number;
             }
 
+            /**
+             * Gets the name of the signal.
+             * 
+             * @returns The signal's name.
+             */
             const T& get_name() const
             {
                 return m_name;
             }
 
+            /**
+             * Gets the size of the signal in bits.
+             * 
+             * @returns The signal's size.
+             */
             i32 get_size() const
             {
                 return m_size;
             }
 
-            const std::vector<std::vector<u32>>& get_ranges() const
-            {
-                return m_ranges;
-            }
-
+            /**
+             * Sets the range of the signal, e.g., '{0, 1, 2, 3}' for a four bit signal.
+             * 
+             * @param[in] ranges - The signal's range.
+             */
             void set_ranges(const std::vector<std::vector<u32>>& ranges)
             {
                 m_ranges       = ranges;
@@ -382,30 +406,66 @@ namespace hal
                 compute_size();
             }
 
+            /**
+             * Gets the range of the signal, e.g., '{0, 1, 2, 3}' for a four bit signal.
+             * 
+             * @returns The signal's range.
+             */
+            const std::vector<std::vector<u32>>& get_ranges() const
+            {
+                return m_ranges;
+            }
+
+            /**
+             * Adds an attribute to the signal.
+             * 
+             * @param[in] name - The name of the attribute.
+             * @param[in] type - The type of the attribute.
+             * @param[in] value - The value of the attribute.
+             */
             void add_attribute(const std::string& name, const std::string& type, const std::string& value)
             {
                 m_attributes.push_back(std::make_tuple(name, type, value));
             }
 
+            /**
+             * Gets the signal's attributes.
+             * 
+             * @returns A vector of attributes in the form '(name, type, value)'.
+             */
             const std::vector<std::tuple<std::string, std::string, std::string>>& get_attributes() const
             {
                 return m_attributes;
             }
 
+            /**
+             * Checks whether the signal is a binary signal.
+             * 
+             * @returns True if binary, false otherwise.
+             */
             bool is_binary() const
             {
                 return m_binary;
             }
 
+            /**
+             * Checks whether the range of the signal is known.
+             * 
+             * @returns True if range is known, false otherwise.
+             */
             bool is_ranges_known() const
             {
                 return m_ranges_known;
             }
 
+            /**
+             * Tests whether a signal is considered smaller than another signal.
+             * 
+             * @param[in] other - The signal to compare with.
+             * @returns True if the signal is smaller than 'other', false otherwise.
+             */
             bool operator<(const signal& other) const
             {
-                // there may be two assignments to the same signal using different bounds
-                // without checking bounds, two such signals would be considered equal
                 return (m_name < other._name) && (m_ranges < other._ranges);
             }
 
@@ -430,6 +490,9 @@ namespace hal
             // are bounds already known? (should only be unknown for left side of port assignments)
             bool m_ranges_known = true;
 
+            /**
+             * Computes the size of the signal.
+             */
             void compute_size()
             {
                 if (m_ranges_known)
@@ -463,65 +526,136 @@ namespace hal
         class instance
         {
         public:
+            /**
+             * Constructs an instance object.
+             * 
+             * @param[in] line number - The line number of the instance definition within the HDL file.
+             * @param[in] type - The type of the instance.
+             * @param[in] name - The name of the instance.
+             */
             instance(u32 line_number, const T& type, const T& name = "") : m_line_number(line_number), m_type(type), m_name(name)
             {
             }
 
+            /**
+             * Gets the line number of the instance definition.
+             * 
+             * @returns The line number.
+             */
             u32 get_line_number() const
             {
                 return m_line_number;
             }
 
+            /**
+             * Gets the type of the instance
+             * 
+             * @returns The instance's type.
+             */
             const T& get_type() const
             {
                 return m_type;
             }
 
+            /**
+             * Sets the name of the instance
+             * 
+             * @param[in] name - The instance's name.
+             */
             void set_name(const T& name)
             {
                 m_name = name;
             }
 
+            /**
+             * Gets the name of the instance
+             * 
+             * @returns The instance's name.
+             */
             const T& get_name() const
             {
                 return m_name;
             }
 
+            /**
+             * Adds a port assignment to a port of the instance.
+             * 
+             * @param[in] port - The port signal.
+             * @param[in] assignment - The signals that are assigned to the port.
+             */
             void add_port_assignment(const signal& port, const std::vector<signal>& assignment)
             {
                 m_port_assignments.push_back(std::make_pair(port, assignment));
             }
 
+            /**
+             * Gets the port assignments of the instance.
+             * 
+             * @returns A vector of port assignments in the form '(port, assignment)'.
+             */
             std::vector<std::pair<signal, std::vector<signal>>>& get_port_assignments()
             {
                 return m_port_assignments;
             }
 
+            /**
+             * @copydoc get_port_assignments()
+             */
             const std::vector<std::pair<signal, std::vector<signal>>>& get_port_assignments() const
             {
                 return m_port_assignments;
             }
 
+            /**
+             * Adds a generic assignment to the instance.
+             * 
+             * @param[in] generic - The name of the generic parameter.
+             * @param[in] data_type - The data type of the generic parameter.
+             * @param[in] assignment - The value assigned to the generic parameter.
+             */
             void add_generic_assignment(const std::string& generic, const std::string& data_type, const std::string& assignment)
             {
                 m_generic_assignments.emplace(generic, std::make_pair(data_type, assignment));
             }
 
+            /**
+             * Gets the generic assignments of the instance.
+             * 
+             * @returns A vector of generic assignments in the form '(generic, data_type, assignment)'.
+             */
             const std::map<std::string, std::pair<std::string, std::string>>& get_generic_assignments() const
             {
                 return m_generic_assignments;
             }
 
+            /**
+             * Adds an attribute to the instance.
+             * 
+             * @param[in] name - The name of the attribute.
+             * @param[in] type - The type of the attribute.
+             * @param[in] value - The value of the attribute.
+             */
             void add_attribute(const std::string& name, const std::string& type, const std::string& value)
             {
                 m_attributes.push_back(std::make_tuple(name, type, value));
             }
 
+            /**
+             * Gets the instance's attributes.
+             * 
+             * @returns A vector of attributes in the form '(name, type, value)'.
+             */
             const std::vector<std::tuple<std::string, std::string, std::string>>& get_attributes() const
             {
                 return m_attributes;
             }
 
+            /**
+             * Tests whether an instance is considered smaller than another instance.
+             * 
+             * @param[in] other - The instance to compare with.
+             * @returns True if the instance is smaller than 'other', false otherwise.
+             */
             bool operator<(const instance& other) const
             {
                 return m_name < other._name;
@@ -549,94 +683,181 @@ namespace hal
         class entity
         {
         public:
-            entity()
-            {
-            }
-
+            /**
+             * Constructs an entity object.
+             * 
+             * @param[in] line number - The line number of the entity definition within the HDL file.
+             * @param[in] name - The name of the entity.
+             */
             entity(u32 line_number, const T& name) : m_line_number(line_number), m_name(name)
             {
             }
 
+            entity() = default;
+
+            /**
+             * Gets the line number of the entity definition.
+             * 
+             * @returns The line number.
+             */
             u32 get_line_number() const
             {
                 return m_line_number;
             }
 
+            /**
+             * Gets the name of the entity
+             * 
+             * @returns The entity's name.
+             */
             const T& get_name() const
             {
                 return m_name;
             }
 
-            void add_port(port_direction direction, const signal& s)
+            /**
+             * Adds a port to the entity.
+             * 
+             * @param[in] direction - The direction of the port.
+             * @param[in] port - The port signal.
+             */
+            void add_port(port_direction direction, const signal& port)
             {
-                m_ports.emplace(s.get_name(), std::make_pair(direction, s));
+                m_ports.emplace(port.get_name(), std::make_pair(direction, port));
             }
 
+            /**
+             * Gets the ports of the entity.
+             * 
+             * @returns A map from port name to the respective port and its direction.
+             */
             std::map<T, std::pair<port_direction, signal>>& get_ports()
             {
                 return m_ports;
             }
 
+            /**
+             * @copydoc get_ports()
+             */
             const std::map<T, std::pair<port_direction, signal>>& get_ports() const
             {
                 return m_ports;
             }
 
+            /**
+             * Adds a signal to the entity.
+             * 
+             * @param[in] s - The signal.
+             */
             void add_signal(const signal& s)
             {
                 m_signals.emplace(s.get_name(), s);
             }
 
+            /**
+             * Adds several signals to the entity at once.
+             * 
+             * @param[in] signals - A map from signal name to the respective signal.
+             */
             void add_signals(const std::map<T, signal>& signals)
             {
                 m_signals.insert(signals.begin(), signals.end());
             }
 
+            /**
+             * Gets the signals of the entity.
+             * 
+             * @returns A map from signal name to the respective signal.
+             */
             std::map<T, signal>& get_signals()
             {
                 return m_signals;
             }
 
+            /**
+             * @copydoc get_signals()
+             */
             const std::map<T, signal>& get_signals() const
             {
                 return m_signals;
             }
 
+            /**
+             * Adds a direct assignment to the entity.
+             * 
+             * @param[in] s - The signal that is assigned to.
+             * @param[in] assignment - The assignment that is assigned to the signal.
+             */
             void add_assignment(const std::vector<signal>& s, const std::vector<signal>& assignment)
             {
                 m_assignments.push_back(std::make_pair(s, assignment));
             }
 
+            /**
+             * Gets the direct assignments of the entity.
+             * 
+             * @returns A vector of direct assignments.
+             */
             const std::vector<std::pair<std::vector<signal>, std::vector<signal>>>& get_assignments() const
             {
                 return m_assignments;
             }
 
+            /**
+             * Adds an instance to the entity.
+             * 
+             * @param[in] inst - The instance.
+             */
             void add_instance(const instance& inst)
             {
                 m_instances.emplace(inst.get_name(), inst);
             }
 
+            /**
+             * Gets the instances of the entity.
+             * 
+             * @returns A map from the instance name to the respective instance.
+             */
             std::map<T, instance>& get_instances()
             {
                 return m_instances;
             }
 
+            /**
+             * @copydoc get_instances()
+             */
             const std::map<T, instance>& get_instances() const
             {
                 return m_instances;
             }
 
+            /**
+             * Adds an attribute to the entity.
+             * 
+             * @param[in] name - The name of the attribute.
+             * @param[in] type - The type of the attribute.
+             * @param[in] value - The value of the attribute.
+             */
             void add_attribute(const std::string& name, const std::string& type, const std::string& value)
             {
                 m_attributes.push_back(std::make_tuple(name, type, value));
             }
 
+            /**
+             * Gets the entity's attributes.
+             * 
+             * @returns A vector of attributes in the form '(name, type, value)'.
+             */
             const std::vector<std::tuple<std::string, std::string, std::string>>& get_attributes() const
             {
                 return m_attributes;
             }
 
+            /**
+             * Expands the ports, signals and assignments of the entity.
+             * 
+             * @param[in] parser - The parser used for parsering of the netlist.
+             */
             void initialize(HDLParser<T>* parser)
             {
                 if (m_initialized)
@@ -691,26 +912,52 @@ namespace hal
                 m_initialized = true;
             }
 
+            /**
+             * Checks whether the entity has been initialized.
+             * 
+             * @returns True if initialized, false otherwise.
+             */
             bool is_initialized() const
             {
                 return m_initialized;
             }
 
+            /**
+             * Gets the expanded ports of the entity.
+             * 
+             * @returns The expanded ports.
+             */
             const std::map<T, std::vector<T>>& get_expanded_ports() const
             {
                 return m_expanded_ports;
             }
 
+            /**
+             * Gets the expanded signals of the entity.
+             * 
+             * @returns The expanded signals.
+             */
             const std::map<T, std::vector<T>>& get_expanded_signals() const
             {
                 return m_expanded_signals;
             }
 
+            /**
+             * Gets the expanded assignments of the entity.
+             * 
+             * @returns The expanded assignments.
+             */
             const std::map<T, T>& get_expanded_assignments() const
             {
                 return m_expanded_assignments;
             }
 
+            /**
+             * Tests whether an entity is considered smaller than another entity.
+             * 
+             * @param[in] other - The entity to compare with.
+             * @returns True if the entity is smaller than 'other', false otherwise.
+             */
             bool operator<(const entity& other) const
             {
                 return m_name < other.get_name();
