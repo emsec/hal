@@ -45,12 +45,7 @@ namespace hal
          * @param[in] pin - The pin of the endpoint.
          * @param[in] is_a_destination - True if the endpoint is an output pin, false if it is an input pin.
          */
-        Endpoint(const std::shared_ptr<Gate>& gate, const std::string& pin, bool is_a_destination)
-        {
-            m_gate             = gate;
-            m_pin              = pin;
-            m_is_a_destination = is_a_destination;
-        }
+        Endpoint(const std::shared_ptr<Gate>& gate, const std::string& pin, bool is_a_destination);
 
         Endpoint(const Endpoint&) = default;
         Endpoint(Endpoint&&)      = default;
@@ -64,18 +59,7 @@ namespace hal
          * @param[in] rhs - Compare target.
          * @returns True if this is less than rhs.
          */
-        bool operator<(const Endpoint& rhs) const
-        {
-            if (this->m_gate != rhs.m_gate)
-            {
-                return (this->m_gate < rhs.m_gate);
-            }
-            if (this->m_pin != rhs.m_pin)
-            {
-                return (this->m_pin < rhs.m_pin);
-            }
-            return (this->m_is_a_destination < rhs.m_is_a_destination);
-        }
+        bool operator<(const Endpoint& rhs) const;
 
         /**
          * Standard "equals". <br>
@@ -84,10 +68,7 @@ namespace hal
          * @param[in] rhs - Compare target.
          * @returns True if this is equal to rhs.
          */
-        bool operator==(const Endpoint& rhs) const
-        {
-            return (this->m_gate == rhs.m_gate) && (this->m_pin == rhs.m_pin) && (this->m_is_a_destination == rhs.m_is_a_destination);
-        }
+        bool operator==(const Endpoint& rhs) const;
 
         /**
          * Standard "unequal".
@@ -95,50 +76,35 @@ namespace hal
          * @param[in] rhs - Compare target.
          * @returns True if this is unequal to rhs.
          */
-        bool operator!=(const Endpoint& rhs) const
-        {
-            return !(*this == rhs);
-        }
+        bool operator!=(const Endpoint& rhs) const;
 
         /**
          * Returns the gate of the endpoint.
          *
          * @returns The gate.
          */
-        const std::shared_ptr<Gate>& get_gate() const
-        {
-            return m_gate;
-        }
+        const std::shared_ptr<Gate>& get_gate() const;
 
         /**
          * Returns the pin of the endpoint.
          *
          * @returns The pin.
          */
-        const std::string& get_pin() const
-        {
-            return m_pin;
-        }
+        const std::string& get_pin() const;
 
         /**
          * Checks whether the pin of the endpoint is a destination pin.
          *
          * @returns True, if the endpoint is an input pin.
          */
-        bool is_destination_pin() const
-        {
-            return m_is_a_destination;
-        }
+        bool is_destination_pin() const;
 
         /**
          * Checks whether the pin of the endpoint is a source pin.
          *
          * @returns True, if the endpoint is an output pin.
          */
-        bool is_source_pin() const
-        {
-            return !m_is_a_destination;
-        }
+        bool is_source_pin() const;
 
     private:
         std::shared_ptr<Gate> m_gate;
