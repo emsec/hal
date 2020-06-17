@@ -42,8 +42,9 @@ namespace hal
     {
     public:
         /**
-         * Constructor.
+         * Constructs a gate library object.
          *
+         * @param[in] path - Path to the file containing the gate library definition.
          * @param[in] name - Name of the gate library.
          */
         GateLibrary(const std::filesystem::path& path, const std::string& name);

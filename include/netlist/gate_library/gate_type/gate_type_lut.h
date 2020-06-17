@@ -52,7 +52,7 @@ namespace hal
          * Adds an output pin to the collection of output pins that generate their output not from a boolean function but an initialization string.
          * The pin has to be declared as an output pin beforehand.
          *
-         * @param[in] output_pin - The name of the output string.
+         * @param[in] pin_name - The name of the output string.
          */
         void add_output_from_init_string_pin(const std::string& pin_name);
 

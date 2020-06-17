@@ -38,12 +38,20 @@ namespace hal
     class Endpoint
     {
     public:
+        /**
+         * Construct an endpoint object.
+         * 
+         * @param[in] gate - A pointer to the gate of the endpoint.
+         * @param[in] pin - The pin of the endpoint.
+         * @param[in] is_a_destination - True if the endpoint is an output pin, false if it is an input pin.
+         */
         Endpoint(const std::shared_ptr<Gate>& gate, const std::string& pin, bool is_a_destination)
         {
             m_gate             = gate;
             m_pin              = pin;
             m_is_a_destination = is_a_destination;
         }
+
         Endpoint(const Endpoint&) = default;
         Endpoint(Endpoint&&)      = default;
         Endpoint& operator=(const Endpoint&) = default;

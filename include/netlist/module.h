@@ -87,7 +87,7 @@ namespace hal
          *
          * @params[in] type - The new type.
          */
-        void set_type(const std::string& name);
+        void set_type(const std::string& type);
 
         /**
          * Get the parent of this module.<br>

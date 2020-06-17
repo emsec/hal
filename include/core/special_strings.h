@@ -93,12 +93,12 @@ namespace hal
             }
 
             /**
-             * Compares to character arrays of size n.
+             * Compares to character arrays of size 'n'.
              * 
              * @param[in] s1 - First character array.
              * @param[in] s2 - Second character array.
              * @param[in] n - Size of the character arrays.
-             * @returns 0 if s1 == s2, 1 if s1 > s2, -1 if s1 < s2.
+             * @returns '0' if 's1 == s2', '1' if 's1 > s2', or '-1' if 's1 < s2'.
              */
             static int compare(const char* s1, const char* s2, size_t n)
             {
@@ -115,12 +115,12 @@ namespace hal
             }
 
             /**
-             * Finds a character within a character array of size n.
+             * Finds a character within a character array of size 'n'.
              * 
              * @param[in] s - The character array to search in.
              * @param[in] n - The size of the character array.
              * @param[in] a - The character to search for.
-             * @returns A pointer to the position of \p a within \p s or a \p nullptr.
+             * @returns A pointer to the position of 'a' within 's' or a 'nullptr'.
              */
             static const char* find(const char* s, int n, char a)
             {

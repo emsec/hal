@@ -41,7 +41,10 @@ namespace hal
     {
     public:
         /**
-         * @param[in] stream - The string stream filled with gate library definition.
+         * Construct a gate library parser object.
+         * 
+         * @param[in] file_path - Path to the file containing the gate library definition.
+         * @param[in] file_content - The string stream containing the gate library definition.
          */
         explicit GateLibaryParser(const std::filesystem::path& file_path, std::stringstream& file_content);
 
