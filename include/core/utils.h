@@ -50,7 +50,7 @@ namespace hal
          * @param[in] index - The bit's position.
          * @returns The bits value (0 or 1).
          */
-        inline u64 get_bit(const u64 value, const u64 index)
+        CORE_API inline u64 get_bit(const u64 value, const u64 index)
         {
             return (value >> index) & 1;
         }
@@ -61,7 +61,7 @@ namespace hal
          * @param[in] value - The integer.
          * @param[in] index - The bit's position.
          */
-        inline u64 set_bit(const u64 value, const u64 index)
+        CORE_API inline u64 set_bit(const u64 value, const u64 index)
         {
             return value | ((u64)1 << index);
         }
@@ -72,7 +72,7 @@ namespace hal
          * @param[in] value - The integer.
          * @param[in] index - The bit's position.
          */
-        inline u64 clear_bit(const u64 value, const u64 index)
+        CORE_API inline u64 clear_bit(const u64 value, const u64 index)
         {
             return value & ~((u64)1 << index);
         }
@@ -83,7 +83,7 @@ namespace hal
          * @param[in] value - The integer.
          * @param[in] index - The bit's position.
          */
-        inline u64 toggle_bit(const u64 value, const u64 index)
+        CORE_API inline u64 toggle_bit(const u64 value, const u64 index)
         {
             return value ^ ((u64)1 << index);
         }
