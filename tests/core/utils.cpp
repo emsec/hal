@@ -232,24 +232,24 @@ TEST_F(utils_test, check_split)
     // ########################
 
     // Some calls without the obey_brackets-flag
-    EXPECT_EQ(split("string", ',', false), std::vector<std::string>({"string"}));
-    EXPECT_EQ(split("str,ing", ',', false), std::vector<std::string>({"str", "ing"}));
-    EXPECT_EQ(split(",str,ing,", ',', false), std::vector<std::string>({"", "str", "ing", ""}));
-    EXPECT_EQ(split("(st,r,ing)", ',', false), std::vector<std::string>({"(st", "r", "ing)"}));
+    EXPECT_EQ(split<std::string>("string", ',', false), std::vector<std::string>({"string"}));
+    EXPECT_EQ(split<std::string>("str,ing", ',', false), std::vector<std::string>({"str", "ing"}));
+    EXPECT_EQ(split<std::string>(",str,ing,", ',', false), std::vector<std::string>({"", "str", "ing", ""}));
+    EXPECT_EQ(split<std::string>("(st,r,ing)", ',', false), std::vector<std::string>({"(st", "r", "ing)"}));
 
     // Some calls with the obey_brackets-flag
-    EXPECT_EQ(split("str,(ing)", ',', true), std::vector<std::string>({"str", "(ing)"}));
-    EXPECT_EQ(split("s(tr,i)ng", ',', true), std::vector<std::string>({"s(tr,i)ng"}));
-    EXPECT_EQ(split("s(tr,i),ng", ',', true), std::vector<std::string>({"s(tr,i)", "ng"}));
-    EXPECT_EQ(split("s(tr(i),(ng))", ',', true), std::vector<std::string>({"s(tr(i),(ng))"}));
-    EXPECT_EQ(split("(s))tr,(in,g)", ',', true), std::vector<std::string>({"(s))tr", "(in,g)"}));
+    EXPECT_EQ(split<std::string>("str,(ing)", ',', true), std::vector<std::string>({"str", "(ing)"}));
+    EXPECT_EQ(split<std::string>("s(tr,i)ng", ',', true), std::vector<std::string>({"s(tr,i)ng"}));
+    EXPECT_EQ(split<std::string>("s(tr,i),ng", ',', true), std::vector<std::string>({"s(tr,i)", "ng"}));
+    EXPECT_EQ(split<std::string>("s(tr(i),(ng))", ',', true), std::vector<std::string>({"s(tr(i),(ng))"}));
+    EXPECT_EQ(split<std::string>("(s))tr,(in,g)", ',', true), std::vector<std::string>({"(s))tr", "(in,g)"}));
 
     // ########################
     // NEGATIVE TESTS
     // ########################
 
-    EXPECT_EQ(split("", ',', true), std::vector<std::string>({}));
-    EXPECT_EQ(split("", ',', false), std::vector<std::string>({}));
+    EXPECT_EQ(split<std::string>("", ',', true), std::vector<std::string>({}));
+    EXPECT_EQ(split<std::string>("", ',', false), std::vector<std::string>({}));
     TEST_END
 }
 

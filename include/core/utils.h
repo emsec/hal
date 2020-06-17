@@ -85,7 +85,6 @@ namespace hal
      */
     namespace core_utils
     {
-        // TODO clean up template functions
         /**
          * Checks whether a string ends with another string.
          *
@@ -172,8 +171,74 @@ namespace hal
          * @param[in] obey_brackets - Flag to indicate whether brackets are obeyed.
          * @returns The string parts.
          */
-        // TODO template
-        CORE_API std::vector<std::string> split(const std::string& s, const char delim, bool obey_brackets = false);
+        template<typename T>
+        CORE_API std::vector<T> split(const T& s, const char delim, bool obey_brackets = false) {
+            std::vector<T> result;
+            T item = "";
+
+            if (obey_brackets)
+            {
+                int bracket_level = 0;
+                
+                for (size_t i = 0; i < s.length(); ++i)
+                {
+                    char c = s.at(i);
+                    switch (c)
+                    {
+                        case '(':
+                        case '{':
+                        case '[':
+                            ++bracket_level;
+                            break;
+                        case ')':
+                        case '}':
+                        case ']':
+                            --bracket_level;
+                            break;
+                        default:
+                            break;
+                    }
+                    if (bracket_level < 0)
+                    {
+                        bracket_level = 0;
+                    }
+                    if (c == delim)
+                    {
+                        // No constant expression, therefore not usable in switch case
+                        if (bracket_level == 0)
+                        {
+                            result.push_back(item);
+                            item = "";
+                        }
+                        else
+                        {
+                            item.push_back(c);
+                        }
+                    }
+                    else
+                    {
+                        item.push_back(c);
+                    }
+                }
+                if (!item.empty())
+                {
+                    result.push_back(item);
+                }
+            }
+            else
+            {
+                std::stringstream ss(s);
+                while (std::getline(ss, item, delim))
+                {
+                    result.push_back(item);
+                }
+            }
+            if (s.back() == delim)
+            {
+                result.push_back("");
+            }
+            return result;
+        }
 
         /**
          * Removes any whitespace characters from the beginning of a string.
@@ -344,7 +409,20 @@ namespace hal
          * @param[in] str - String containing the substring.
          * @returns The number of occurrences.
          */
-        CORE_API u32 num_of_occurrences(const std::string& str, const std::string& substr);
+        template<typename T>
+        CORE_API u32 num_of_occurrences(const T& s, const T& substr)
+        {
+            u32 num_of_occurrences = 0;
+            auto position          = s.find(substr, 0);
+
+            while (position != std::string::npos)
+            {
+                num_of_occurrences++;
+                position = s.find(substr, position + 1);
+            }
+
+            return num_of_occurrences;
+        }
 
         /**
          * Checks whether a file exists.
