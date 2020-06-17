@@ -38,53 +38,56 @@
 
 namespace hal
 {
-/**
- * @ingroup core
- * @{
- */
-
-// TODO replace with inline functions
-
-/**
- * Returns a single bit of an integer value.
- *
- * @param[in] value - The integer.
- * @param[in] index - The bit's position.
- * @returns The bits value (0 or 1).
- */
-#define get_bit(value, index) ((value >> index) & 1)
-
-/**
- * Sets a single bit of an integer to 1.
- *
- * @param[in] value - The integer.
- * @param[in] index - The bit's position.
- */
-#define set_bit(value, index)           \
-    do                                  \
-    {                                   \
-        (value) |= ((u64)1 << (index)); \
-    } while (0);
-
-/**
- * Clears a single bit of an integer to 0.
- *
- * @param[in] value - The integer.
- * @param[in] index - The bit's position.
- */
-#define clear_bit(value, index)          \
-    do                                   \
-    {                                    \
-        (value) &= ~((u64)1 << (index)); \
-    } while (0);
-
-    ///@}
-
     /**
      * @ingroup core
      */
     namespace core_utils
     {
+        /**
+         * Returns a single bit of an integer value.
+         *
+         * @param[in] value - The integer.
+         * @param[in] index - The bit's position.
+         * @returns The bits value (0 or 1).
+         */
+        inline u64 get_bit(const u64 value, const u64 index)
+        {
+            return (value >> index) & 1;
+        }
+
+        /**
+         * Sets a single bit of an integer to 1.
+         *
+         * @param[in] value - The integer.
+         * @param[in] index - The bit's position.
+         */
+        inline u64 set_bit(const u64 value, const u64 index)
+        {
+            return value | ((u64)1 << index);
+        }
+
+        /**
+         * Clears a single bit of an integer to 0.
+         *
+         * @param[in] value - The integer.
+         * @param[in] index - The bit's position.
+         */
+        inline u64 clear_bit(const u64 value, const u64 index)
+        {
+            return value & ~((u64)1 << index);
+        }
+
+        /**
+         * Toggles a single bit of an integer.
+         *
+         * @param[in] value - The integer.
+         * @param[in] index - The bit's position.
+         */
+        inline u64 toggle_bit(const u64 value, const u64 index)
+        {
+            return value ^ ((u64)1 << index);
+        }
+
         /**
          * Checks whether a string ends with another string.
          *
@@ -172,14 +175,15 @@ namespace hal
          * @returns The string parts.
          */
         template<typename T>
-        CORE_API std::vector<T> split(const T& s, const char delim, bool obey_brackets = false) {
+        CORE_API std::vector<T> split(const T& s, const char delim, bool obey_brackets = false)
+        {
             std::vector<T> result;
             T item = "";
 
             if (obey_brackets)
             {
                 int bracket_level = 0;
-                
+
                 for (size_t i = 0; i < s.length(); ++i)
                 {
                     char c = s.at(i);

@@ -53,17 +53,16 @@ TEST_END
  * Functions: set_bit
  */
 TEST_F(utils_test, check_set_bit){TEST_START
-                                  // ########################
-                                  // POSITIVE TESTS
-                                  // ########################
-                                  {// Set the bit if the bit is 0
-                                   int i = 0b1001;
-set_bit(i, 1) EXPECT_EQ(i, 0b1011);
+// ########################
+// POSITIVE TESTS
+// ########################
+{
+    // Set the bit if the bit is 0
+    EXPECT_EQ(set_bit(0b1001, 1), 0b1011);
 }
 {
     // Set the bit if the bit is 1
-    int i = 0b1001;
-    set_bit(i, 0) EXPECT_EQ(i, 0b1001);
+    EXPECT_EQ(set_bit(0b1001, 0), 0b1001);
 }
 TEST_END
 }
@@ -74,17 +73,36 @@ TEST_END
  * Functions: clear_bit
  */
 TEST_F(utils_test, check_clear_bit){TEST_START
-                                    // ########################
-                                    // POSITIVE TESTS
-                                    // ########################
-                                    {// Clear the bit if the bit is 1
-                                     int i = 0b1001;
-clear_bit(i, 0) EXPECT_EQ(i, 0b1000);
+// ########################
+// POSITIVE TESTS
+// ########################
+{
+    // Clear the bit if the bit is 1
+    EXPECT_EQ(clear_bit(0b1001, 0), 0b1000);
 }
 {
     // Clear the bit if the bit is 0
-    int i = 0b1001;
-    clear_bit(i, 1) EXPECT_EQ(i, 0b1001);
+    EXPECT_EQ(clear_bit(0b1001, 1), 0b1001);
+}
+TEST_END
+}
+
+/**
+ * Testing toggle_bit definition of utils
+ *
+ * Functions: toggle_bit
+ */
+TEST_F(utils_test, check_toggle_bit){TEST_START
+// ########################
+// POSITIVE TESTS
+// ########################
+{
+    // Clear the bit if the bit is 1
+    EXPECT_EQ(toggle_bit(0b1001, 0), 0b1000);
+}
+{
+    // Clear the bit if the bit is 0
+    EXPECT_EQ(toggle_bit(0b1001, 1), 0b1011);
 }
 TEST_END
 }
