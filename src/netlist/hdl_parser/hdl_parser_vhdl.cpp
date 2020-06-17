@@ -384,9 +384,9 @@ namespace hal
 
             m_attribute_buffer[target_class].emplace(attribute_target,
                                                      std::make_tuple(line_number,
-                                                                     core_strings::to_std_string<core_strings::CaseInsensitiveString>(attribute_name),
-                                                                     core_strings::to_std_string<core_strings::CaseInsensitiveString>(attribute_type),
-                                                                     core_strings::to_std_string<core_strings::CaseInsensitiveString>(attribute_value)));
+                                                                     core_strings::convert_string<core_strings::CaseInsensitiveString, std::string>(attribute_name),
+                                                                     core_strings::convert_string<core_strings::CaseInsensitiveString, std::string>(attribute_type),
+                                                                     core_strings::convert_string<core_strings::CaseInsensitiveString, std::string>(attribute_value)));
         }
         else
         {
@@ -742,9 +742,9 @@ namespace hal
                 return false;
             }
 
-            inst.add_generic_assignment(core_strings::to_std_string<core_strings::CaseInsensitiveString>(lhs),
-                                        core_strings::to_std_string<core_strings::CaseInsensitiveString>(data_type),
-                                        core_strings::to_std_string<core_strings::CaseInsensitiveString>(value));
+            inst.add_generic_assignment(core_strings::convert_string<core_strings::CaseInsensitiveString, std::string>(lhs),
+                                        core_strings::convert_string<core_strings::CaseInsensitiveString, std::string>(data_type),
+                                        core_strings::convert_string<core_strings::CaseInsensitiveString, std::string>(value));
         }
 
         return true;
@@ -824,11 +824,11 @@ namespace hal
     {
         if (range_str.remaining() == 1)
         {
-            return {(u32)std::stoi(core_strings::to_std_string<core_strings::CaseInsensitiveString>(range_str.consume().string))};
+            return {(u32)std::stoi(core_strings::convert_string<core_strings::CaseInsensitiveString, std::string>(range_str.consume().string))};
         }
 
         int direction   = 1;
-        const int start = std::stoi(core_strings::to_std_string<core_strings::CaseInsensitiveString>(range_str.consume().string));
+        const int start = std::stoi(core_strings::convert_string<core_strings::CaseInsensitiveString, std::string>(range_str.consume().string));
 
         if (range_str.peek() == "downto")
         {
@@ -840,7 +840,7 @@ namespace hal
             range_str.consume("to", true);
         }
 
-        const int end = std::stoi(core_strings::to_std_string<core_strings::CaseInsensitiveString>(range_str.consume().string));
+        const int end = std::stoi(core_strings::convert_string<core_strings::CaseInsensitiveString, std::string>(range_str.consume().string));
 
         std::vector<u32> res;
         for (int i = start; i != end + direction; i += direction)
@@ -1234,11 +1234,11 @@ namespace hal
         if (len != -1)
         {
             // fill with '0'
-            ss << std::setfill('0') << std::setw((len + 3) / 4) << std::hex << stoull(core_strings::to_std_string<core_strings::CaseInsensitiveString>(number), 0, base);
+            ss << std::setfill('0') << std::setw((len + 3) / 4) << std::hex << stoull(core_strings::convert_string<core_strings::CaseInsensitiveString, std::string>(number), 0, base);
         }
         else
         {
-            ss << std::hex << stoull(core_strings::to_std_string<core_strings::CaseInsensitiveString>(number), 0, base);
+            ss << std::hex << stoull(core_strings::convert_string<core_strings::CaseInsensitiveString, std::string>(number), 0, base);
         }
         return core_strings::CaseInsensitiveString(ss.str().data());
     }

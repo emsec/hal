@@ -60,6 +60,8 @@ namespace hal
     {
     public:
         /**
+         * Constructs a verilog parser object.
+         * 
          * @param[in] stream - The string stream filled with the hdl code.
          */
         explicit HDLParser(std::stringstream& stream) : m_fs(stream)
@@ -70,13 +72,18 @@ namespace hal
         virtual ~HDLParser() = default;
 
         /**
-         * Parses hdl code for a specific netlist library.
+         * Parses a netlist into an intermediate format.
          *
-         * @param[in] gate_library - The gate library.
-         * @returns The netlist representation of the hdl code or a nullptr on error.
+         * @returns True on success, false otherwise.
          */
         virtual bool parse() = 0;
 
+        /**
+         * Parses and instantiates a netlist using the specified gate library.
+         * 
+         * @param[in] gl - The gate library.
+         * @returns A pointer to the resulting netlist.
+         */
         std::shared_ptr<Netlist> parse_and_instantiate(std::shared_ptr<GateLibrary> gl)
         {
             if (parse())
@@ -87,6 +94,12 @@ namespace hal
             return nullptr;
         }
 
+        /**
+         * Instantiates a previously parsed netlist using the specified gate library.
+         * 
+         * @param[in] gl - The gate library.
+         * @returns A pointer to the resulting netlist.
+         */
         std::shared_ptr<Netlist> instantiate(std::shared_ptr<GateLibrary> gl)
         {
             // create empty netlist
@@ -113,7 +126,7 @@ namespace hal
             {
                 for (const auto& gt : m_netlist->get_gate_library()->get_gate_types())
                 {
-                    m_tmp_gate_types.emplace(core_strings::from_std_string<T>(gt.first), gt.second);
+                    m_tmp_gate_types.emplace(core_strings::convert_string<std::string, T>(gt.first), gt.second);
                 }
             }
 
@@ -182,20 +195,20 @@ namespace hal
                         {
                             for (const auto& pin : gate_it->second->get_input_pins())
                             {
-                                pins.push_back(core_strings::from_std_string<T>(pin));
+                                pins.push_back(core_strings::convert_string<std::string, T>(pin));
                             }
                             for (const auto& pin : gate_it->second->get_output_pins())
                             {
-                                pins.push_back(core_strings::from_std_string<T>(pin));
+                                pins.push_back(core_strings::convert_string<std::string, T>(pin));
                             }
 
                             for (const auto& pin_group : gate_it->second->get_input_pin_groups())
                             {
-                                pin_groups.emplace(core_strings::from_std_string<T>(pin_group.first), pin_group.second);
+                                pin_groups.emplace(core_strings::convert_string<std::string, T>(pin_group.first), pin_group.second);
                             }
                             for (const auto& pin_group : gate_it->second->get_output_pin_groups())
                             {
-                                pin_groups.emplace(core_strings::from_std_string<T>(pin_group.first), pin_group.second);
+                                pin_groups.emplace(core_strings::convert_string<std::string, T>(pin_group.first), pin_group.second);
                             }
                         }
 
@@ -252,14 +265,14 @@ namespace hal
             {
                 return nullptr;
             }
-            m_net_by_name[core_strings::from_std_string<T>(m_zero_net->get_name())] = m_zero_net;
+            m_net_by_name[core_strings::convert_string<std::string, T>(m_zero_net->get_name())] = m_zero_net;
 
             m_one_net = m_netlist->create_net("'1'");
             if (m_one_net == nullptr)
             {
                 return nullptr;
             }
-            m_net_by_name[core_strings::from_std_string<T>(m_one_net->get_name())] = m_one_net;
+            m_net_by_name[core_strings::convert_string<std::string, T>(m_one_net->get_name())] = m_one_net;
 
             // build the netlist from the intermediate format
             // the last entity in the file is considered the top module
@@ -766,7 +779,7 @@ namespace hal
 
         bool build_netlist(const T& top_module)
         {
-            m_netlist->set_design_name(core_strings::to_std_string<T>(top_module));
+            m_netlist->set_design_name(core_strings::convert_string<T, std::string>(top_module));
 
             auto& top_entity = m_entities[top_module];
 
@@ -833,7 +846,7 @@ namespace hal
 
                 for (const auto& expanded_name : expanded_ports.at(port_name))
                 {
-                    std::shared_ptr<Net> new_net = m_netlist->create_net(core_strings::to_std_string<T>(expanded_name));
+                    std::shared_ptr<Net> new_net = m_netlist->create_net(core_strings::convert_string<T, std::string>(expanded_name));
                     if (new_net == nullptr)
                     {
                         log_error("hdl_parser", "could not create new net '{}'", expanded_name);
@@ -843,7 +856,7 @@ namespace hal
                     m_net_by_name[expanded_name] = new_net;
 
                     // for instances, point the ports to the newly generated signals
-                    top_assignments[expanded_name] = core_strings::from_std_string<T>(new_net->get_name());
+                    top_assignments[expanded_name] = core_strings::convert_string<std::string, T>(new_net->get_name());
 
                     if (direction == port_direction::IN || direction == port_direction::INOUT)
                     {
@@ -1006,11 +1019,11 @@ namespace hal
             if (parent == nullptr)
             {
                 module = m_netlist->get_top_module();
-                module->set_name(core_strings::to_std_string<T>(instance_alias.at(entity_inst_name)));
+                module->set_name(core_strings::convert_string<T, std::string>(instance_alias.at(entity_inst_name)));
             }
             else
             {
-                module = m_netlist->create_module(core_strings::to_std_string<T>(instance_alias.at(entity_inst_name)), parent);
+                module = m_netlist->create_module(core_strings::convert_string<T, std::string>(instance_alias.at(entity_inst_name)), parent);
             }
 
             if (module == nullptr)
@@ -1019,7 +1032,7 @@ namespace hal
                 return nullptr;
             }
 
-            module->set_type(core_strings::to_std_string<T>(e.get_name()));
+            module->set_type(core_strings::convert_string<T, std::string>(e.get_name()));
 
             // assign entity-level attributes
             for (const auto& attr : e.get_attributes())
@@ -1048,7 +1061,7 @@ namespace hal
                     if (const auto it = parent_module_assignments.find(expanded_name); it != parent_module_assignments.end())
                     {
                         auto net            = m_net_by_name.at(it->second);
-                        m_module_ports[net] = std::make_tuple(direction, core_strings::to_std_string(expanded_name), module);
+                        m_module_ports[net] = std::make_tuple(direction, core_strings::convert_string<T, std::string>(expanded_name), module);
 
                         // assign port attributes
                         for (const auto& attr : attributes)
@@ -1077,7 +1090,7 @@ namespace hal
                     signal_alias[expanded_name] = get_unique_alias(m_signal_name_occurrences, expanded_name);
 
                     // create new net for the signal
-                    auto new_net = m_netlist->create_net(core_strings::to_std_string<T>(signal_alias.at(expanded_name)));
+                    auto new_net = m_netlist->create_net(core_strings::convert_string<T, std::string>(signal_alias.at(expanded_name)));
                     if (new_net == nullptr)
                     {
                         log_error("hdl_parser", "could not instantiate net '{}' of instance '{}' of entity '{}'", expanded_name, entity_inst_name, e.get_name());
@@ -1150,12 +1163,12 @@ namespace hal
             {
                 for (const auto& [name, gt] : m_netlist->get_gate_library()->get_vcc_gate_types())
                 {
-                    vcc_gate_types.emplace(core_strings::from_std_string<T>(name), gt);
+                    vcc_gate_types.emplace(core_strings::convert_string<std::string, T>(name), gt);
                 }
 
                 for (const auto& [name, gt] : m_netlist->get_gate_library()->get_gnd_gate_types())
                 {
-                    gnd_gate_types.emplace(core_strings::from_std_string<T>(name), gt);
+                    gnd_gate_types.emplace(core_strings::convert_string<std::string, T>(name), gt);
                 }
             }
 
@@ -1233,7 +1246,7 @@ namespace hal
                     // create the new gate
                     instance_alias[inst_name] = get_unique_alias(m_instance_name_occurrences, inst_name);
 
-                    std::shared_ptr<Gate> new_gate = m_netlist->create_gate(gate_type_it->second, core_strings::to_std_string<T>(instance_alias.at(inst_name)));
+                    std::shared_ptr<Gate> new_gate = m_netlist->create_gate(gate_type_it->second, core_strings::convert_string<T, std::string>(instance_alias.at(inst_name)));
                     if (new_gate == nullptr)
                     {
                         log_error("hdl_parser", "could not instantiate gate '{}' within entity '{}'", inst_name, e.get_name());
@@ -1265,12 +1278,12 @@ namespace hal
                     {
                         for (const auto& pin : new_gate->get_input_pins())
                         {
-                            input_pins.push_back(core_strings::from_std_string<T>(pin));
+                            input_pins.push_back(core_strings::convert_string<std::string, T>(pin));
                         }
 
                         for (const auto& pin : new_gate->get_output_pins())
                         {
-                            output_pins.push_back(core_strings::from_std_string<T>(pin));
+                            output_pins.push_back(core_strings::convert_string<std::string, T>(pin));
                         }
                     }
 
@@ -1310,12 +1323,12 @@ namespace hal
                                 return nullptr;
                             }
 
-                            if (is_output && !current_net->add_source(new_gate, core_strings::to_std_string<T>(pin)))
+                            if (is_output && !current_net->add_source(new_gate, core_strings::convert_string<T, std::string>(pin)))
                             {
                                 return nullptr;
                             }
 
-                            if (is_input && !current_net->add_destination(new_gate, core_strings::to_std_string<T>(pin)))
+                            if (is_input && !current_net->add_destination(new_gate, core_strings::convert_string<T, std::string>(pin)))
                             {
                                 return nullptr;
                             }
@@ -1373,7 +1386,7 @@ namespace hal
             name_occurrences[name]++;
 
             // otherwise, add a unique string to the name
-            return name + core_strings::from_std_string<T>("__[" + std::to_string(name_occurrences[name]) + "]__");
+            return name + core_strings::convert_string<std::string, T>("__[" + std::to_string(name_occurrences[name]) + "]__");
         }
 
         std::vector<T> expand_binary_signal(const signal& s)
@@ -1404,7 +1417,7 @@ namespace hal
             {
                 for (const auto& index : ranges[dimension])
                 {
-                    expand_signal_recursively(expanded_signal, current_signal + "(" + core_strings::from_std_string<T>(std::to_string(index)) + ")", ranges, dimension + 1);
+                    expand_signal_recursively(expanded_signal, current_signal + "(" + core_strings::convert_string<std::string, T>(std::to_string(index)) + ")", ranges, dimension + 1);
                 }
             }
             else
