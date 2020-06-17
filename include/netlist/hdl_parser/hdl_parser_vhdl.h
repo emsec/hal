@@ -43,6 +43,8 @@ namespace hal
     {
     public:
         /**
+         * Constructs a VHDL parser object.
+         * 
          * @param[in] stream - The string stream filled with the hdl code.
          */
         explicit HDLParserVHDL(std::stringstream& stream);
@@ -50,10 +52,9 @@ namespace hal
         ~HDLParserVHDL() = default;
 
         /**
-         * Deserializes a netlist in VHDL format from the internal string stream into a netlist object.
+         * Parses a VHDL netlist into an intermediate format.
          *
-         * @param[in] gate_library - The gate library used in the serialized file.
-         * @returns The deserialized netlist.
+         * @returns True on success, false otherwise.
          */
         bool parse() override;
 
@@ -94,8 +95,7 @@ namespace hal
         // helper functions
         std::vector<u32> parse_range(TokenStream<core_strings::CaseInsensitiveString>& range_str);
         std::optional<std::vector<std::vector<u32>>> parse_signal_ranges(TokenStream<core_strings::CaseInsensitiveString>& signal_str);
-        std::optional<std::pair<std::vector<signal>, i32>>
-            get_assignment_signals(entity& e, TokenStream<core_strings::CaseInsensitiveString>& signal_str, bool is_left_half, bool is_port_assignment);
+        std::optional<std::pair<std::vector<signal>, i32>> get_assignment_signals(entity& e, TokenStream<core_strings::CaseInsensitiveString>& signal_str, bool is_left_half, bool is_port_assignment);
         core_strings::CaseInsensitiveString get_bin_from_literal(const Token<core_strings::CaseInsensitiveString>& value_token);
         core_strings::CaseInsensitiveString get_hex_from_literal(const Token<core_strings::CaseInsensitiveString>& value_token);
     };

@@ -137,7 +137,7 @@ namespace hal
          * Creates the channel if it does not exist yet.
          *
          * @param[in] channel_name - Name of the channel.
-         * @returns The channel.
+         * @returns A pointer to the channel.
          */
         std::shared_ptr<spdlog::logger> get_channel(const std::string& channel_name = "stdout");
 
@@ -154,6 +154,7 @@ namespace hal
          * @param[in] channel_name - Name of the channel.
          * @param[in] sinks - All sinks connected to this channel.
          * @param[in] level - The severity level of that channel.
+         * @returns A pointer to the channel.
          */
         std::shared_ptr<spdlog::logger> add_channel(const std::string& channel_name, const std::vector<std::shared_ptr<log_sink>>& sinks, const std::string& level = "info");
 

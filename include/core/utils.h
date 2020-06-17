@@ -48,7 +48,7 @@ namespace hal
          *
          * @param[in] value - The integer.
          * @param[in] index - The bit's position.
-         * @returns The bits value (0 or 1).
+         * @returns The specified bit (0 or 1).
          */
         CORE_API inline u64 get_bit(const u64 value, const u64 index)
         {
@@ -60,6 +60,7 @@ namespace hal
          *
          * @param[in] value - The integer.
          * @param[in] index - The bit's position.
+         * @returns The manipulated value.
          */
         CORE_API inline u64 set_bit(const u64 value, const u64 index)
         {
@@ -71,6 +72,7 @@ namespace hal
          *
          * @param[in] value - The integer.
          * @param[in] index - The bit's position.
+         * @returns The manipulated value.
          */
         CORE_API inline u64 clear_bit(const u64 value, const u64 index)
         {
@@ -82,6 +84,7 @@ namespace hal
          *
          * @param[in] value - The integer.
          * @param[in] index - The bit's position.
+         * @returns The manipulated value.
          */
         CORE_API inline u64 toggle_bit(const u64 value, const u64 index)
         {
@@ -92,16 +95,15 @@ namespace hal
          * Checks whether a string ends with another string.
          *
          * @param[in] s - The string to analyze.
-         * @param[in] ending - The ending to check for.
-         * @param[in] ignore_case - If true, ignores case while comparing.
-         * @returns True, if \p s ends with \p ending.
+         * @param[in] end - The ending to check for.
+         * @returns True, if \p s ends with \p end.
          */
         template<typename T>
-        CORE_API bool ends_with(const T& full_string, const T& ending)
+        CORE_API bool ends_with(const T& s, const T& end)
         {
-            if (full_string.length() >= ending.length())
+            if (s.length() >= end.length())
             {
-                return (0 == full_string.compare(full_string.length() - ending.length(), ending.length(), ending));
+                return (0 == s.compare(s.length() - end.length(), end.length(), end));
             }
             else
             {
@@ -114,15 +116,14 @@ namespace hal
          *
          * @param[in] s - The string to analyze.
          * @param[in] start - The beginning to check for.
-         * @param[in] ignore_case - If true, ignores case while comparing.
          * @returns True, if \p s begins with \p start.
          */
         template<typename T>
-        CORE_API bool starts_with(const T& full_string, const T& start)
+        CORE_API bool starts_with(const T& s, const T& start)
         {
-            if (full_string.length() >= start.length())
+            if (s.length() >= start.length())
             {
-                return (0 == full_string.compare(0, start.length(), start));
+                return (0 == s.compare(0, start.length(), start));
             }
             else
             {
@@ -409,8 +410,8 @@ namespace hal
         /**
          * Counts number of substring occurrences in a string.
          *
+         * @param[in] s - String containing the substring.
          * @param[in] substr - Substring.
-         * @param[in] str - String containing the substring.
          * @returns The number of occurrences.
          */
         template<typename T>

@@ -50,10 +50,9 @@ namespace hal
         ~HDLParserVerilog() = default;
 
         /**
-         * Deserializes a netlist in Verilog format from the internal string stream into a netlist object.
+         * Parses a verilog netlist into an intermediate format.
          *
-         * @param[in] gate_library - The gate library used in the serialized file.
-         * @returns The deserialized netlist.
+         * @returns True on success, false otherwise.
          */
         bool parse() override;
 
