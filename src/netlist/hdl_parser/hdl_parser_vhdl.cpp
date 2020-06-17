@@ -187,7 +187,7 @@ namespace hal
             m_token_stream.consume(";", true);
 
             // remove specific import like ".all" but keep the "."
-            lib = core_utils::trim_t(lib.substr(0, lib.rfind(".") + 1));
+            lib = core_utils::trim(lib.substr(0, lib.rfind(".") + 1));
             m_libraries.insert(lib);
         }
         else
@@ -606,7 +606,7 @@ namespace hal
             // find longest matching library prefix
             for (const auto& lib : m_libraries)
             {
-                if (lib.size() > prefix.size() && core_utils::starts_with_t(instance_type, lib))
+                if (lib.size() > prefix.size() && core_utils::starts_with(instance_type, lib))
                 {
                     prefix = lib;
                 }
@@ -700,18 +700,18 @@ namespace hal
                 value     = rhs;
                 data_type = "boolean";
             }
-            else if (core_utils::is_integer_t(rhs.string))
+            else if (core_utils::is_integer(rhs.string))
             {
                 value     = rhs;
                 data_type = "integer";
             }
-            else if (core_utils::is_floating_point_t(rhs.string))
+            else if (core_utils::is_floating_point(rhs.string))
             {
                 value     = rhs;
                 data_type = "floating_point";
             }
-            else if (core_utils::ends_with_t(rhs.string, core_strings::CaseInsensitiveString("s")) || core_utils::ends_with_t(rhs.string, core_strings::CaseInsensitiveString("sec"))
-                     || core_utils::ends_with_t(rhs.string, core_strings::CaseInsensitiveString("min")) || core_utils::ends_with_t(rhs.string, core_strings::CaseInsensitiveString("hr")))
+            else if (core_utils::ends_with(rhs.string, core_strings::CaseInsensitiveString("s")) || core_utils::ends_with(rhs.string, core_strings::CaseInsensitiveString("sec"))
+                     || core_utils::ends_with(rhs.string, core_strings::CaseInsensitiveString("min")) || core_utils::ends_with(rhs.string, core_strings::CaseInsensitiveString("hr")))
             {
                 value     = rhs;
                 data_type = "time";
@@ -946,8 +946,8 @@ namespace hal
             bool is_bound_known = true;
 
             // (2) NUMBER
-            if (core_utils::starts_with_t(signal_name, core_strings::CaseInsensitiveString("\"")) || core_utils::starts_with_t(signal_name, core_strings::CaseInsensitiveString("b\""))
-                || core_utils::starts_with_t(signal_name, core_strings::CaseInsensitiveString("o\"")) || core_utils::starts_with_t(signal_name, core_strings::CaseInsensitiveString("x\"")))
+            if (core_utils::starts_with(signal_name, core_strings::CaseInsensitiveString("\"")) || core_utils::starts_with(signal_name, core_strings::CaseInsensitiveString("b\""))
+                || core_utils::starts_with(signal_name, core_strings::CaseInsensitiveString("o\"")) || core_utils::starts_with(signal_name, core_strings::CaseInsensitiveString("x\"")))
             {
                 if (is_left_half)
                 {
@@ -1033,26 +1033,26 @@ namespace hal
 
     static const std::map<char, core_strings::CaseInsensitiveString> oct_to_bin = {{'0', "000"}, {'1', "001"}, {'2', "010"}, {'3', "011"}, {'4', "100"}, {'5', "101"}, {'6', "110"}, {'7', "111"}};
     static const std::map<char, core_strings::CaseInsensitiveString> hex_to_bin = {{'0', "0000"},
-                                                                                     {'1', "0001"},
-                                                                                     {'2', "0010"},
-                                                                                     {'3', "0011"},
-                                                                                     {'4', "0100"},
-                                                                                     {'5', "0101"},
-                                                                                     {'6', "0110"},
-                                                                                     {'7', "0111"},
-                                                                                     {'8', "1000"},
-                                                                                     {'9', "1001"},
-                                                                                     {'a', "1010"},
-                                                                                     {'b', "1011"},
-                                                                                     {'c', "1100"},
-                                                                                     {'d', "1101"},
-                                                                                     {'e', "1110"},
-                                                                                     {'f', "1111"}};
+                                                                                   {'1', "0001"},
+                                                                                   {'2', "0010"},
+                                                                                   {'3', "0011"},
+                                                                                   {'4', "0100"},
+                                                                                   {'5', "0101"},
+                                                                                   {'6', "0110"},
+                                                                                   {'7', "0111"},
+                                                                                   {'8', "1000"},
+                                                                                   {'9', "1001"},
+                                                                                   {'a', "1010"},
+                                                                                   {'b', "1011"},
+                                                                                   {'c', "1100"},
+                                                                                   {'d', "1101"},
+                                                                                   {'e', "1110"},
+                                                                                   {'f', "1111"}};
 
     core_strings::CaseInsensitiveString HDLParserVHDL::get_bin_from_literal(const Token<core_strings::CaseInsensitiveString>& value_token)
     {
         const auto line_number = value_token.number;
-        const auto value       = core_utils::to_lower_t(core_utils::replace_t(value_token.string, core_strings::CaseInsensitiveString("_"), core_strings::CaseInsensitiveString("")));
+        const auto value       = core_utils::to_lower(core_utils::replace(value_token.string, core_strings::CaseInsensitiveString("_"), core_strings::CaseInsensitiveString("")));
 
         char prefix;
         core_strings::CaseInsensitiveString number;
@@ -1156,7 +1156,7 @@ namespace hal
     core_strings::CaseInsensitiveString HDLParserVHDL::get_hex_from_literal(const Token<core_strings::CaseInsensitiveString>& value_token)
     {
         const auto line_number = value_token.number;
-        const auto value       = core_utils::to_lower_t(core_utils::replace_t(value_token.string, core_strings::CaseInsensitiveString("_"), core_strings::CaseInsensitiveString("")));
+        const auto value       = core_utils::to_lower(core_utils::replace(value_token.string, core_strings::CaseInsensitiveString("_"), core_strings::CaseInsensitiveString("")));
 
         i32 len = -1;
         char prefix;

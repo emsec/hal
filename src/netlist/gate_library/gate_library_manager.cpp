@@ -119,7 +119,7 @@ namespace hal
 
             std::shared_ptr<GateLibrary> lib;
             auto begin_time = std::chrono::high_resolution_clock::now();
-            if (core_utils::ends_with(path.string(), ".lib"))
+            if (core_utils::ends_with(path.string(), std::string(".lib")))
             {
                 log_info("gate_library_manager", "loading file '{}'...", path.string());
                 lib = load_liberty(path);

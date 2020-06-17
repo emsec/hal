@@ -28,31 +28,6 @@ namespace hal
 {
     namespace core_utils
     {
-        bool ends_with(const std::string& s, const std::string& ending)
-        {
-            return ends_with_t<std::string>(s, ending);
-        }
-
-        bool starts_with(const std::string& s, const std::string& start)
-        {
-            return starts_with_t<std::string>(s, start);
-        }
-
-        bool equals_ignore_case(const std::string& a, const std::string& b)
-        {
-            return boost::algorithm::iequals(a, b);
-        }
-
-        bool is_integer(const std::string& s)
-        {
-            return is_integer_t<std::string>(s);
-        }
-
-        bool is_floating_point(const std::string& s)
-        {
-            return is_floating_point_t<std::string>(s);
-        }
-
         std::vector<std::string> split(const std::string& s, const char delim, bool obey_brackets)
         {
             std::vector<std::string> result;
@@ -118,47 +93,6 @@ namespace hal
                 result.push_back("");
             }
             return result;
-        }
-
-        std::string ltrim(const std::string& line, const char* to_remove)
-        {
-            size_t start = line.find_first_not_of(to_remove);
-
-            if (start != std::string::npos)
-            {
-                return line.substr(start, line.size() - start);
-            }
-            return "";
-        }
-
-        std::string rtrim(const std::string& line, const char* to_remove)
-        {
-            size_t end = line.find_last_not_of(to_remove);
-            if (end != std::string::npos)
-            {
-                return line.substr(0, end + 1);
-            }
-            return "";
-        }
-
-        std::string trim(const std::string& s, const char* to_remove)
-        {
-            return trim_t<std::string>(s, to_remove);
-        }
-
-        std::string replace(const std::string& str, const std::string& search, const std::string& replace)
-        {
-            return replace_t<std::string>(str, search, replace);
-        }
-
-        std::string to_upper(const std::string& s)
-        {
-            return to_upper_t<std::string>(s);
-        }
-
-        std::string to_lower(const std::string& s)
-        {
-            return to_lower_t<std::string>(s);
         }
 
         u32 num_of_occurrences(const std::string& str, const std::string& substr)

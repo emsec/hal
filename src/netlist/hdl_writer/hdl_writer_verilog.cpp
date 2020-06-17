@@ -226,7 +226,7 @@ namespace hal
     {
         std::string pin_temp = pin;
         std::size_t found;
-        bool marked = core_utils::starts_with(pin_temp, "\\");
+        bool marked = core_utils::starts_with(pin_temp, std::string("\\"));
         while ((found = pin_temp.find("(")) != std::string::npos)
         {
             pin_temp.replace(found, 1, "[");

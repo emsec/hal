@@ -66,7 +66,7 @@ protected:
     // Remove the spaces from a string
     std::string no_space(std::string s)
     {
-        return core_utils::replace(s, " ", "");
+        return core_utils::replace<std::string>(s, " ", "");
     }
 
     /**

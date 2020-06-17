@@ -86,19 +86,6 @@ namespace hal
     namespace core_utils
     {
         // TODO clean up template functions
-        template<typename T>
-        bool ends_with_t(const T& full_string, const T& ending)
-        {
-            if (full_string.length() >= ending.length())
-            {
-                return (0 == full_string.compare(full_string.length() - ending.length(), ending.length(), ending));
-            }
-            else
-            {
-                return false;
-            }
-        }
-
         /**
          * Checks whether a string ends with another string.
          *
@@ -107,14 +94,12 @@ namespace hal
          * @param[in] ignore_case - If true, ignores case while comparing.
          * @returns True, if \p s ends with \p ending.
          */
-        CORE_API bool ends_with(const std::string& s, const std::string& ending);
-
         template<typename T>
-        bool starts_with_t(const T& full_string, const T& start)
+        CORE_API bool ends_with(const T& full_string, const T& ending)
         {
-            if (full_string.length() >= start.length())
+            if (full_string.length() >= ending.length())
             {
-                return (0 == full_string.compare(0, start.length(), start));
+                return (0 == full_string.compare(full_string.length() - ending.length(), ending.length(), ending));
             }
             else
             {
@@ -130,19 +115,27 @@ namespace hal
          * @param[in] ignore_case - If true, ignores case while comparing.
          * @returns True, if \p s begins with \p start.
          */
-        CORE_API bool starts_with(const std::string& s, const std::string& start);
+        template<typename T>
+        CORE_API bool starts_with(const T& full_string, const T& start)
+        {
+            if (full_string.length() >= start.length())
+            {
+                return (0 == full_string.compare(0, start.length(), start));
+            }
+            else
+            {
+                return false;
+            }
+        }
 
         /**
-         * Checks whether two strings are equal while being case insensitive.
+         * Checks whether a string represents an integer.
          *
-         * @param[in] a - The first string to analyze.
-         * @param[in] b - The second string to analyze.
-         * @returns True, if lowercase(a) == lowercase(b).
+         * @param[in] s - The string to analyze.
+         * @returns True, if \p s contains an integer.
          */
-        CORE_API bool equals_ignore_case(const std::string& a, const std::string& b);
-
         template<typename T>
-        bool is_integer_t(const T& s)
+        CORE_API bool is_integer(const T& s)
         {
             if (s.empty() || ((!isdigit(s[0])) && (s[0] != '-') && (s[0] != '+')))
             {
@@ -156,29 +149,19 @@ namespace hal
         }
 
         /**
-         * Checks whether a string represents an integer.
+         * Checks whether a string represents a real number.
          *
          * @param[in] s - The string to analyze.
-         * @returns True, if \p s contains an integer.
+         * @returns True, if \p s contains a real number.
          */
-        CORE_API bool is_integer(const std::string& s);
-
         template<typename T>
-        bool is_floating_point_t(const T& s)
+        CORE_API bool is_floating_point(const T& s)
         {
             std::stringstream ss(s.c_str());
             float f;
             ss >> f;
             return (ss.eof() && !ss.fail());
         }
-
-        /**
-         * Checks whether a string represents a real number.
-         *
-         * @param[in] s - The string to analyze.
-         * @returns True, if \p s contains a real number.
-         */
-        CORE_API bool is_floating_point(const std::string& s);
 
         /**
          * Splits a string into a vector of strings. The split delimiter can be specified.
@@ -189,6 +172,7 @@ namespace hal
          * @param[in] obey_brackets - Flag to indicate whether brackets are obeyed.
          * @returns The string parts.
          */
+        // TODO template
         CORE_API std::vector<std::string> split(const std::string& s, const char delim, bool obey_brackets = false);
 
         /**
@@ -198,7 +182,20 @@ namespace hal
          * @param[in] to_remove - All chars that should be removed.
          * @returns The trimmed string.
          */
-        CORE_API std::string ltrim(const std::string& s, const char* to_remove = " \t\r\n");
+        template<typename T>
+        CORE_API T ltrim(const T& s, const char* to_remove = " \t\r\n")
+        {
+            size_t start = s.find_first_not_of(to_remove);
+
+            if (start != std::string::npos)
+            {
+                return s.substr(start, s.size() - start);
+            }
+            else
+            {
+                return "";
+            }
+        }
 
         /**
          * Removes any whitespace characters from the end of a string.
@@ -207,10 +204,30 @@ namespace hal
          * @param[in] to_remove - All chars that should be removed.
          * @returns The trimmed string.
          */
-        CORE_API std::string rtrim(const std::string& s, const char* to_remove = " \t\r\n");
-
         template<typename T>
-        T trim_t(const T& s, const char* to_remove = " \t\r\n")
+        CORE_API T rtrim(const T& s, const char* to_remove = " \t\r\n")
+        {
+            size_t end = s.find_last_not_of(to_remove);
+
+            if (end != std::string::npos)
+            {
+                return s.substr(0, end + 1);
+            }
+            else
+            {
+                return "";
+            }
+        }
+
+        /**
+         * Removes any whitespace characters from the beginning and the end of a string.
+         *
+         * @param[in] s - The string to trim.
+         * @param[in] to_remove - All chars that should be removed.
+         * @returns The trimmed string.
+         */
+        template<typename T>
+        CORE_API T trim(const T& s, const char* to_remove = " \t\r\n")
         {
             size_t start = s.find_first_not_of(to_remove);
             size_t end   = s.find_last_not_of(to_remove);
@@ -226,32 +243,6 @@ namespace hal
         }
 
         /**
-         * Removes any whitespace characters from the beginning and the end of a string.
-         *
-         * @param[in] s - The string to trim.
-         * @param[in] to_remove - All chars that should be removed.
-         * @returns The trimmed string.
-         */
-        CORE_API std::string trim(const std::string& s, const char* to_remove = " \t\r\n");
-
-        template<typename T>
-        T replace_t(const T& str, const T& search, const T& replace)
-        {
-            auto s     = str;
-            size_t pos = 0;
-            if (search.empty())
-            {
-                return str;
-            }    // Just return the original string as we cannot determine what we want to replace.
-            while ((pos = s.find(search, pos)) != T::npos)
-            {
-                s.replace(pos, search.length(), replace);
-                pos += replace.length();
-            }
-            return s;
-        }
-
-        /**
          * Replaces substring from begin to end of a string.
          *
          * @param[in] str - The string which is subject to replacement.
@@ -259,7 +250,25 @@ namespace hal
          * @param[in] replace - The replacement string which replaces all occurrences of search.
          * @returns String with replaced substring.
          */
-        CORE_API std::string replace(const std::string& str, const std::string& search, const std::string& replace);
+        template<typename T>
+        CORE_API T replace(const T& str, const T& search, const T& replace)
+        {
+            auto s     = str;
+            size_t pos = 0;
+
+            if (search.empty())
+            {
+                return str;
+            }
+
+            while ((pos = s.find(search, pos)) != T::npos)
+            {
+                s.replace(pos, search.length(), replace);
+                pos += replace.length();
+            }
+
+            return s;
+        }
 
         /**
          * Joins all elements of a collection with a joiner-string.
@@ -300,27 +309,17 @@ namespace hal
             return join(joiner, items, [](const auto& v) { return v; });
         }
 
-        template<typename T>
-        T to_upper_t(const T& s)
-        {
-            T result = s;
-            std::transform(result.begin(), result.end(), result.begin(), [](char c) { return std::toupper(c); });
-            return result;
-        }
-
         /**
          * Convert a string to upper case.
          *
          * @param[in] s - The string to convert.
          * @returns The converted string.
          */
-        CORE_API std::string to_upper(const std::string& s);
-
         template<typename T>
-        T to_lower_t(const T& s)
+        CORE_API T to_upper(const T& s)
         {
             T result = s;
-            std::transform(result.begin(), result.end(), result.begin(), [](char c) { return std::tolower(c); });
+            std::transform(result.begin(), result.end(), result.begin(), [](char c) { return std::toupper(c); });
             return result;
         }
 
@@ -330,7 +329,13 @@ namespace hal
          * @param[in] s - The string to convert.
          * @returns The converted string.
          */
-        CORE_API std::string to_lower(const std::string& s);
+        template<typename T>
+        CORE_API T to_lower(const T& s)
+        {
+            T result = s;
+            std::transform(result.begin(), result.end(), result.begin(), [](char c) { return std::tolower(c); });
+            return result;
+        }
 
         /**
          * Counts number of substring occurrences in a string.

@@ -315,7 +315,7 @@ namespace hal
             }
             if (!is_term)
             {
-                if (core_utils::starts_with(expression, "__v_"))
+                if (core_utils::starts_with(expression, std::string("__v_")))
                 {
                     u32 idx    = std::stoul(expression.substr(4));
                     expression = variable_names[idx];

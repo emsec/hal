@@ -507,12 +507,12 @@ namespace hal
             generic_str.consume(")", true);
             generic_str.consume(",", generic_str.remaining() > 0);
 
-            if (core_utils::is_integer(rhs))
+            if (core_utils::is_integer(rhs.string))
             {
                 value     = rhs;
                 data_type = "integer";
             }
-            else if (core_utils::is_floating_point(rhs))
+            else if (core_utils::is_floating_point(rhs.string))
             {
                 value     = rhs;
                 data_type = "floating_point";
@@ -801,7 +801,7 @@ namespace hal
     std::string HDLParserVerilog::get_bin_from_literal(const Token<std::string>& value_token)
     {
         const auto line_number = value_token.number;
-        const auto value       = core_utils::to_lower(core_utils::replace(value_token.string, "_", ""));
+        const auto value       = core_utils::to_lower(core_utils::replace(value_token.string, std::string("_"), std::string("")));
 
         i32 len = -1;
         std::string prefix;
@@ -919,7 +919,7 @@ namespace hal
     std::string HDLParserVerilog::get_hex_from_literal(const Token<std::string>& value_token)
     {
         const auto line_number = value_token.number;
-        const auto value       = core_utils::to_lower(core_utils::replace(value_token.string, "_", ""));
+        const auto value       = core_utils::to_lower(core_utils::replace(value_token.string, std::string("_"), std::string("")));
 
         i32 len = -1;
         std::string prefix;

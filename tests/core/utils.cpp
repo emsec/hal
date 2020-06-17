@@ -11,38 +11,38 @@
 
 namespace hal
 {
-using namespace core_utils;
+    using namespace core_utils;
 
-class utils_test : public ::testing::Test
-{
-protected:
-    virtual void SetUp()
+    class utils_test : public ::testing::Test
     {
-        test_utils::init_log_channels();
-    }
+    protected:
+        virtual void SetUp()
+        {
+            test_utils::init_log_channels();
+        }
 
-    virtual void TearDown()
-    {
-    }
-};
+        virtual void TearDown()
+        {
+        }
+    };
 
-/**
+    /**
  * Testing get_bit definition of utils
  *
  * Functions: get_bit
  */
-TEST_F(utils_test, check_get_bit){TEST_START
-                                  // ########################
-                                  // POSITIVE TESTS
-                                  // ########################
-                                  {// Get some bits of the given int
-                                   int i = 0b1101;
-EXPECT_EQ(get_bit(i, 0), 1);
-EXPECT_EQ(get_bit(i, 1), 0);
-EXPECT_EQ(get_bit(i, 2), 1);
-EXPECT_EQ(get_bit(i, 3), 1);
-EXPECT_EQ(get_bit(i, 4), 0);
-}
+    TEST_F(utils_test, check_get_bit){TEST_START
+                                      // ########################
+                                      // POSITIVE TESTS
+                                      // ########################
+                                      {// Get some bits of the given int
+                                       int i = 0b1101;
+    EXPECT_EQ(get_bit(i, 0), 1);
+    EXPECT_EQ(get_bit(i, 1), 0);
+    EXPECT_EQ(get_bit(i, 2), 1);
+    EXPECT_EQ(get_bit(i, 3), 1);
+    EXPECT_EQ(get_bit(i, 4), 0);
+}    // namespace hal
 
 TEST_END
 }
@@ -102,21 +102,21 @@ TEST_F(utils_test, check_ends_with)
     // ########################
 
     // Some combinations which should result in true
-    EXPECT_TRUE(ends_with("string", "ing"));
-    EXPECT_TRUE(ends_with("string", "g"));
-    EXPECT_TRUE(ends_with("string", "string"));
+    EXPECT_TRUE(ends_with<std::string>("string", "ing"));
+    EXPECT_TRUE(ends_with<std::string>("string", "g"));
+    EXPECT_TRUE(ends_with<std::string>("string", "string"));
 
     // Some combinations which should result in false
-    EXPECT_FALSE(ends_with("string", "in"));
-    EXPECT_FALSE(ends_with("string", "xing"));
-    EXPECT_FALSE(ends_with("string", "x"));
-    EXPECT_FALSE(ends_with("string", "ingx"));
-    EXPECT_FALSE(ends_with("string", "xstring"));
+    EXPECT_FALSE(ends_with<std::string>("string", "in"));
+    EXPECT_FALSE(ends_with<std::string>("string", "xing"));
+    EXPECT_FALSE(ends_with<std::string>("string", "x"));
+    EXPECT_FALSE(ends_with<std::string>("string", "ingx"));
+    EXPECT_FALSE(ends_with<std::string>("string", "xstring"));
 
     // Some special cases
-    EXPECT_TRUE(ends_with("string", ""));
-    EXPECT_TRUE(ends_with("", ""));
-    EXPECT_FALSE(ends_with("", "x"));
+    EXPECT_TRUE(ends_with<std::string>("string", ""));
+    EXPECT_TRUE(ends_with<std::string>("", ""));
+    EXPECT_FALSE(ends_with<std::string>("", "x"));
 
     TEST_END
 }
@@ -134,21 +134,21 @@ TEST_F(utils_test, check_starts_with)
     // ########################
 
     // Some combinations which should result in true
-    EXPECT_TRUE(starts_with("string", "str"));
-    EXPECT_TRUE(starts_with("string", "s"));
-    EXPECT_TRUE(starts_with("string", "string"));
+    EXPECT_TRUE(starts_with<std::string>("string", "str"));
+    EXPECT_TRUE(starts_with<std::string>("string", "s"));
+    EXPECT_TRUE(starts_with<std::string>("string", "string"));
 
     // Some combinations which should result in false
-    EXPECT_FALSE(starts_with("string", "tr"));
-    EXPECT_FALSE(starts_with("string", "strx"));
-    EXPECT_FALSE(starts_with("string", "x"));
-    EXPECT_FALSE(starts_with("string", "xstr"));
-    EXPECT_FALSE(starts_with("string", "stringx"));
+    EXPECT_FALSE(starts_with<std::string>("string", "tr"));
+    EXPECT_FALSE(starts_with<std::string>("string", "strx"));
+    EXPECT_FALSE(starts_with<std::string>("string", "x"));
+    EXPECT_FALSE(starts_with<std::string>("string", "xstr"));
+    EXPECT_FALSE(starts_with<std::string>("string", "stringx"));
 
     // Some special cases
-    EXPECT_TRUE(starts_with("string", ""));
-    EXPECT_TRUE(starts_with("", ""));
-    EXPECT_FALSE(starts_with("", "x"));
+    EXPECT_TRUE(starts_with<std::string>("string", ""));
+    EXPECT_TRUE(starts_with<std::string>("", ""));
+    EXPECT_FALSE(starts_with<std::string>("", "x"));
     TEST_END
 }
 
@@ -166,21 +166,21 @@ TEST_F(utils_test, check_is_integer)
     // ########################
 
     // Some strings which should result in true
-    EXPECT_TRUE(is_integer("12"));
-    EXPECT_TRUE(is_integer("-42"));
-    EXPECT_TRUE(is_integer("0"));
-    EXPECT_TRUE(is_integer("+27"));
+    EXPECT_TRUE(is_integer<std::string>("12"));
+    EXPECT_TRUE(is_integer<std::string>("-42"));
+    EXPECT_TRUE(is_integer<std::string>("0"));
+    EXPECT_TRUE(is_integer<std::string>("+27"));
 
     // Some strings which should result in false
-    EXPECT_FALSE(is_integer("not_a_number"));
-    EXPECT_FALSE(is_integer("12.3"));
-    EXPECT_FALSE(is_integer("18e1234"));
-    EXPECT_FALSE(is_integer(".0"));
+    EXPECT_FALSE(is_integer<std::string>("not_a_number"));
+    EXPECT_FALSE(is_integer<std::string>("12.3"));
+    EXPECT_FALSE(is_integer<std::string>("18e1234"));
+    EXPECT_FALSE(is_integer<std::string>(".0"));
 
     // Some special cases
-    EXPECT_FALSE(is_floating_point(""));
-    EXPECT_FALSE(is_floating_point("+"));
-    EXPECT_FALSE(is_floating_point("-"));
+    EXPECT_FALSE(is_integer<std::string>(""));
+    EXPECT_FALSE(is_integer<std::string>("+"));
+    EXPECT_FALSE(is_integer<std::string>("-"));
 
     TEST_END
 }
@@ -198,23 +198,23 @@ TEST_F(utils_test, check_is_floating_point)
     // ########################
 
     // Some strings which should result in true
-    EXPECT_TRUE(is_floating_point("1.2345"));
-    EXPECT_TRUE(is_floating_point("-0.005"));
-    EXPECT_TRUE(is_floating_point(".05"));
-    EXPECT_TRUE(is_floating_point("123"));
-    EXPECT_TRUE(is_floating_point("+123.3"));
-    EXPECT_TRUE(is_floating_point("+3e33"));
-    EXPECT_TRUE(is_floating_point("+3e-33"));
+    EXPECT_TRUE(is_floating_point<std::string>("1.2345"));
+    EXPECT_TRUE(is_floating_point<std::string>("-0.005"));
+    EXPECT_TRUE(is_floating_point<std::string>(".05"));
+    EXPECT_TRUE(is_floating_point<std::string>("123"));
+    EXPECT_TRUE(is_floating_point<std::string>("+123.3"));
+    EXPECT_TRUE(is_floating_point<std::string>("+3e33"));
+    EXPECT_TRUE(is_floating_point<std::string>("+3e-33"));
 
     // Some strings which should result in false
-    EXPECT_FALSE(is_floating_point("not_a_number"));
-    EXPECT_FALSE(is_floating_point("1.234.5"));
-    EXPECT_FALSE(is_floating_point("?.345"));
-    EXPECT_FALSE(is_floating_point("3e"));
+    EXPECT_FALSE(is_floating_point<std::string>("not_a_number"));
+    EXPECT_FALSE(is_floating_point<std::string>("1.234.5"));
+    EXPECT_FALSE(is_floating_point<std::string>("?.345"));
+    EXPECT_FALSE(is_floating_point<std::string>("3e"));
 
     // Some special cases
-    EXPECT_FALSE(is_floating_point(""));
-    EXPECT_FALSE(is_floating_point("+"));
+    EXPECT_FALSE(is_floating_point<std::string>(""));
+    EXPECT_FALSE(is_floating_point<std::string>("+"));
     TEST_END
 }
 
@@ -266,20 +266,20 @@ TEST_F(utils_test, check_trim)
     // ########################
 
     // Some 'normal' cases
-    EXPECT_EQ(trim("  string  "), "string");
-    EXPECT_EQ(trim("string  "), "string");
-    EXPECT_EQ(trim("   string"), "string");
-    EXPECT_EQ(trim("  stri ng  "), "stri ng");
-    EXPECT_EQ(trim("\tstring\t"), "string");
-    EXPECT_EQ(trim("\t  string\t \n"), "string");
+    EXPECT_EQ(trim<std::string>("  string  "), "string");
+    EXPECT_EQ(trim<std::string>("string  "), "string");
+    EXPECT_EQ(trim<std::string>("   string"), "string");
+    EXPECT_EQ(trim<std::string>("  stri ng  "), "stri ng");
+    EXPECT_EQ(trim<std::string>("\tstring\t"), "string");
+    EXPECT_EQ(trim<std::string>("\t  string\t \n"), "string");
 
     // Test with other char's to remove
-    EXPECT_EQ(trim("$#$str#ing#$#", "#$"), "str#ing");
+    EXPECT_EQ(trim<std::string>("$#$str#ing#$#", "#$"), "str#ing");
 
     // Some special cases
-    EXPECT_EQ(trim("      "), "");
-    EXPECT_EQ(trim(""), "");
-    EXPECT_EQ(trim("string", ""), "string");
+    EXPECT_EQ(trim<std::string>("      "), "");
+    EXPECT_EQ(trim<std::string>(""), "");
+    EXPECT_EQ(trim<std::string>("string", ""), "string");
 
     TEST_END
 }
@@ -297,19 +297,19 @@ TEST_F(utils_test, check_ltrim)
     // ########################
 
     // Some 'normal' cases
-    EXPECT_EQ(ltrim("  string  "), "string  ");
-    EXPECT_EQ(ltrim("string  "), "string  ");
-    EXPECT_EQ(ltrim("  stri ng  "), "stri ng  ");
-    EXPECT_EQ(ltrim("\tstring\t"), "string\t");
-    EXPECT_EQ(ltrim("\t\n\r string"), "string");
+    EXPECT_EQ(ltrim<std::string>("  string  "), "string  ");
+    EXPECT_EQ(ltrim<std::string>("string  "), "string  ");
+    EXPECT_EQ(ltrim<std::string>("  stri ng  "), "stri ng  ");
+    EXPECT_EQ(ltrim<std::string>("\tstring\t"), "string\t");
+    EXPECT_EQ(ltrim<std::string>("\t\n\r string"), "string");
 
     // Test with other char's to remove
-    EXPECT_EQ(ltrim("$#$string#", "#$"), "string#");
+    EXPECT_EQ(ltrim<std::string>("$#$string#", "#$"), "string#");
 
     // Some special cases
-    EXPECT_EQ(ltrim("      "), "");
-    EXPECT_EQ(ltrim(""), "");
-    EXPECT_EQ(ltrim("string", ""), "string");
+    EXPECT_EQ(ltrim<std::string>("      "), "");
+    EXPECT_EQ(ltrim<std::string>(""), "");
+    EXPECT_EQ(ltrim<std::string>("string", ""), "string");
 
     TEST_END
 }
@@ -327,19 +327,19 @@ TEST_F(utils_test, check_rtrim)
     // ########################
 
     // Some 'normal' cases
-    EXPECT_EQ(rtrim("  string  "), "  string");
-    EXPECT_EQ(rtrim("string  "), "string");
-    EXPECT_EQ(rtrim("  stri ng  "), "  stri ng");
-    EXPECT_EQ(rtrim("\tstring\t"), "\tstring");
-    EXPECT_EQ(rtrim("string\t\n\r "), "string");
+    EXPECT_EQ(rtrim<std::string>("  string  "), "  string");
+    EXPECT_EQ(rtrim<std::string>("string  "), "string");
+    EXPECT_EQ(rtrim<std::string>("  stri ng  "), "  stri ng");
+    EXPECT_EQ(rtrim<std::string>("\tstring\t"), "\tstring");
+    EXPECT_EQ(rtrim<std::string>("string\t\n\r "), "string");
 
     // Test with other char's to remove
-    EXPECT_EQ(rtrim("#string$#$", "#$"), "#string");
+    EXPECT_EQ(rtrim<std::string>("#string$#$", "#$"), "#string");
 
     // Some special cases
-    EXPECT_EQ(rtrim("      "), "");
-    EXPECT_EQ(rtrim(""), "");
-    EXPECT_EQ(ltrim("string", ""), "string");
+    EXPECT_EQ(rtrim<std::string>("      "), "");
+    EXPECT_EQ(rtrim<std::string>(""), "");
+    EXPECT_EQ(ltrim<std::string>("string", ""), "string");
 
     TEST_END
 }
@@ -356,16 +356,16 @@ TEST_F(utils_test, check_replace)
     // POSITIVE TESTS
     // ########################
 
-    EXPECT_EQ(replace("This is a string", "is", "XX"), "ThXX XX a string");
-    EXPECT_EQ(replace("This is a string", "is", ""), "Th  a string");
-    EXPECT_EQ(replace("This is a string", "unknown_string", ""), "This is a string");
+    EXPECT_EQ(replace<std::string>("This is a string", "is", "XX"), "ThXX XX a string");
+    EXPECT_EQ(replace<std::string>("This is a string", "is", ""), "Th  a string");
+    EXPECT_EQ(replace<std::string>("This is a string", "unknown_string", ""), "This is a string");
 
     // ########################
     // NEGATIVE TESTS
     // ########################
 
-    EXPECT_EQ(replace("This is a string", "", "XX"), "This is a string");
-    EXPECT_EQ(replace("", "XX", "YY"), "");
+    EXPECT_EQ(replace<std::string>("This is a string", "", "XX"), "This is a string");
+    EXPECT_EQ(replace<std::string>("", "XX", "YY"), "");
     TEST_END
 }
 
@@ -411,12 +411,12 @@ TEST_F(utils_test, check_to_upper)
     // ########################
 
     // Some 'normal' cases
-    EXPECT_EQ(to_upper("string"), "STRING");
-    EXPECT_EQ(to_upper("StRinG"), "STRING");
-    EXPECT_EQ(to_upper("StRinG123"), "STRING123");
+    EXPECT_EQ(to_upper<std::string>("string"), "STRING");
+    EXPECT_EQ(to_upper<std::string>("StRinG"), "STRING");
+    EXPECT_EQ(to_upper<std::string>("StRinG123"), "STRING123");
 
     // A special case
-    EXPECT_EQ(to_upper(""), "");
+    EXPECT_EQ(to_upper<std::string>(""), "");
     TEST_END
 }
 
@@ -433,12 +433,12 @@ TEST_F(utils_test, check_to_lower)
     // ########################
 
     // Some 'normal' cases
-    EXPECT_EQ(to_lower("STRING"), "string");
-    EXPECT_EQ(to_lower("StRinG"), "string");
-    EXPECT_EQ(to_lower("StRinG123"), "string123");
+    EXPECT_EQ(to_lower<std::string>("STRING"), "string");
+    EXPECT_EQ(to_lower<std::string>("StRinG"), "string");
+    EXPECT_EQ(to_lower<std::string>("StRinG123"), "string123");
 
     // A special case
-    EXPECT_EQ(to_lower(""), "");
+    EXPECT_EQ(to_lower<std::string>(""), "");
     TEST_END
 }
 
