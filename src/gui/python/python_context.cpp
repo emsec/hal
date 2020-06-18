@@ -17,9 +17,10 @@
 #include <grammar.h>
 #include <node.h>
 #include <parsetok.h>
+
+extern grammar _PyParser_Grammar;
+
 namespace hal{
-    
-    extern grammar _PyParser_Grammar;
 
 python_context::python_context()
 {

@@ -1,14 +1,15 @@
 #include "graphics_effects/shadow_effect.h"
 
 #include <QPainter>
-namespace hal{
-shadow_effect::shadow_effect(QObject* parent) : QGraphicsEffect(parent), _distance(4.0f), _blurRadius(10.0f), _color(0, 0, 0, 80)
-{
-}
 
 QT_BEGIN_NAMESPACE
 extern Q_WIDGETS_EXPORT void qt_blurImage(QPainter* p, QImage& blurImage, qreal radius, bool quality, bool alphaOnly, int transposed = 0);
 QT_END_NAMESPACE
+
+namespace hal{
+shadow_effect::shadow_effect(QObject* parent) : QGraphicsEffect(parent), _distance(4.0f), _blurRadius(10.0f), _color(0, 0, 0, 80)
+{
+}
 
 void shadow_effect::draw(QPainter* painter)
 {

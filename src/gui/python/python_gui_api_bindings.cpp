@@ -17,6 +17,8 @@
 
 #pragma GCC diagnostic pop
 
+namespace hal{
+
 namespace py = pybind11;
 #ifdef PYBIND11_MODULE
 
@@ -191,7 +193,7 @@ PYBIND11_PLUGIN(hal_gui)
        :param bool navigate_to_selection: Determines if the graph view scrolls and zooms to show all selected items.
 )");
 
-    py_gui_api.def("select_module", py::overload_cast<const std::shared_ptr<module>&, bool, bool>(&gui_api::select_module), py::arg("module"), py::arg("clear_current_selection") = true, py::arg("navigate_to_selection") = true, R"(
+    py_gui_api.def("select_module", py::overload_cast<const std::shared_ptr<Module>&, bool, bool>(&gui_api::select_module), py::arg("module"), py::arg("clear_current_selection") = true, py::arg("navigate_to_selection") = true, R"(
        Select the module in the graph view of the GUI.
        If 'clear_current_selection' is false, the module will be added to the currently existing selection.
        If 'navigate_to_selection' is false, the graph view will not modify the graph view camera position to fit all selected items.
@@ -211,7 +213,7 @@ PYBIND11_PLUGIN(hal_gui)
        :param bool navigate_to_selection: Determines if the graph view scrolls and zooms to show all selected items.
 )");
 
-    py_gui_api.def("select_module", py::overload_cast<const std::vector<std::shared_ptr<module>>&, bool, bool>(&gui_api::select_module), py::arg("modules"), py::arg("clear_current_selection") = true, py::arg("navigate_to_selection") = true, R"(
+    py_gui_api.def("select_module", py::overload_cast<const std::vector<std::shared_ptr<Module>>&, bool, bool>(&gui_api::select_module), py::arg("modules"), py::arg("clear_current_selection") = true, py::arg("navigate_to_selection") = true, R"(
        Select the modules in the graph view of the GUI.
        If 'clear_current_selection' is false, the modules will be added to the currently existing selection.
        If 'navigate_to_selection' is false, the graph view will not modify the graph view camera position to fit all selected items.
@@ -241,7 +243,7 @@ PYBIND11_PLUGIN(hal_gui)
        :param bool navigate_to_selection: Determines if the graph view scrolls and zooms to show all selected items.
 )");
 
-    py_gui_api.def("select", py::overload_cast<const std::shared_ptr<module>&, bool, bool>(&gui_api::select), py::arg("module"), py::arg("clear_current_selection") = true, py::arg("navigate_to_selection") = true, R"(
+    py_gui_api.def("select", py::overload_cast<const std::shared_ptr<Module>&, bool, bool>(&gui_api::select), py::arg("module"), py::arg("clear_current_selection") = true, py::arg("navigate_to_selection") = true, R"(
        Select the module in the graph view of the GUI.
        If 'clear_current_selection' is false, the module will be added to the currently existing selection.
        If 'navigate_to_selection' is false, the graph view will not modify the graph view camera position to fit all selected items.
@@ -271,7 +273,7 @@ PYBIND11_PLUGIN(hal_gui)
        :param bool navigate_to_selection: Determines if the graph view scrolls and zooms to show all selected items.
 )");
 
-    py_gui_api.def("select", py::overload_cast<const std::vector<std::shared_ptr<module>>&, bool, bool>(&gui_api::select), py::arg("modules"), py::arg("clear_current_selection") = true, py::arg("navigate_to_selection") = true, R"(
+    py_gui_api.def("select", py::overload_cast<const std::vector<std::shared_ptr<Module>>&, bool, bool>(&gui_api::select), py::arg("modules"), py::arg("clear_current_selection") = true, py::arg("navigate_to_selection") = true, R"(
        Select the modules in the graph view of the GUI.
        If 'clear_current_selection' is false, the modules will be added to the currently existing selection.
        If 'navigate_to_selection' is false, the graph view will not modify the graph view camera position to fit all selected items.
@@ -293,7 +295,7 @@ PYBIND11_PLUGIN(hal_gui)
        :param bool navigate_to_selection: Determines if the graph view scrolls and zooms to show all selected items.
 )");
 
-    py_gui_api.def("select", py::overload_cast<const std::vector<std::shared_ptr<Gate>>&, const std::vector<std::shared_ptr<Net>>&, const std::vector<std::shared_ptr<module>>&, bool, bool>(&gui_api::select), py::arg("gates"), py::arg("nets"), py::arg("modules"), py::arg("clear_current_selection") = true, py::arg("navigate_to_selection") = true, R"(
+    py_gui_api.def("select", py::overload_cast<const std::vector<std::shared_ptr<Gate>>&, const std::vector<std::shared_ptr<Net>>&, const std::vector<std::shared_ptr<Module>>&, bool, bool>(&gui_api::select), py::arg("gates"), py::arg("nets"), py::arg("modules"), py::arg("clear_current_selection") = true, py::arg("navigate_to_selection") = true, R"(
        Select the gates, nets and modules in the graph view of the GUI.
        If 'clear_current_selection' is false, the gates, nets and modules will be added to the currently existing selection.
        If 'navigate_to_selection' is false, the graph view will not modify the graph view camera position to fit all selected items.
@@ -359,7 +361,7 @@ PYBIND11_PLUGIN(hal_gui)
        :param int module_id: The module id of the module to be selected.
 )");
 
-    py_gui_api.def("deselect_module", py::overload_cast<const std::shared_ptr<module>&>(&gui_api::deselect_module), py::arg("module"), R"(
+    py_gui_api.def("deselect_module", py::overload_cast<const std::shared_ptr<Module>&>(&gui_api::deselect_module), py::arg("module"), R"(
        Deselect the module in the graph view of the GUI.
 
        :param hal_py.module module: The module to be deselected.
@@ -371,7 +373,7 @@ PYBIND11_PLUGIN(hal_gui)
        :param list[int] module_ids: List of module ids of the modules to be deselected.
 )");
 
-    py_gui_api.def("deselect_module", py::overload_cast<const std::vector<std::shared_ptr<module>>&>(&gui_api::deselect_module), py::arg("modules"), R"(
+    py_gui_api.def("deselect_module", py::overload_cast<const std::vector<std::shared_ptr<Module>>&>(&gui_api::deselect_module), py::arg("modules"), R"(
        Deselect the modules in the graph view of the GUI.
 
        :param list[hal_py.module] modules: The modules to be deselected.
@@ -389,7 +391,7 @@ PYBIND11_PLUGIN(hal_gui)
        :param hal_py.Net Net: The net to be deselected.
 )");
 
-    py_gui_api.def("deselect", py::overload_cast<const std::shared_ptr<module>&>(&gui_api::deselect), py::arg("module"), R"(
+    py_gui_api.def("deselect", py::overload_cast<const std::shared_ptr<Module>&>(&gui_api::deselect), py::arg("module"), R"(
        Deselect the module in the graph view of the GUI.
 
        :param hal_py.module module: The module to be deselected.
@@ -407,7 +409,7 @@ PYBIND11_PLUGIN(hal_gui)
        :param list[hal_py.Net] nets: The nets to be deselected.
 )");
 
-    py_gui_api.def("deselect", py::overload_cast<const std::vector<std::shared_ptr<module>>&>(&gui_api::deselect), py::arg("modules"), R"(
+    py_gui_api.def("deselect", py::overload_cast<const std::vector<std::shared_ptr<Module>>&>(&gui_api::deselect), py::arg("modules"), R"(
        Deselect the modules in the graph view of the GUI.
 
        :param list[hal_py.module] modules: The modules to be deselected.
@@ -421,7 +423,7 @@ PYBIND11_PLUGIN(hal_gui)
        :param list[hal_py.module] modules: The ids of the modules to be deselected.
 )");
 
-    py_gui_api.def("deselect", py::overload_cast<const std::vector<std::shared_ptr<Gate>>&, const std::vector<std::shared_ptr<Net>>&, const std::vector<std::shared_ptr<module>>&>(&gui_api::deselect), py::arg("gates"), py::arg("nets"), py::arg("modules"), R"(
+    py_gui_api.def("deselect", py::overload_cast<const std::vector<std::shared_ptr<Gate>>&, const std::vector<std::shared_ptr<Net>>&, const std::vector<std::shared_ptr<Module>>&>(&gui_api::deselect), py::arg("gates"), py::arg("nets"), py::arg("modules"), R"(
        Deselect the gates, nets and modules in the graph view of the GUI.
 
        :param list[hal_py.Gate] gates: The gates to be deselected.
@@ -437,3 +439,4 @@ PYBIND11_PLUGIN(hal_gui)
     return m.ptr();
 #endif    // PYBIND11_MODULE
     }
+}

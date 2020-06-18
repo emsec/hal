@@ -84,5 +84,5 @@ private:
     QString m_icon_path;
     QString m_icon_style;
 };
-
+}
 #endif    // LOADED_PLUGIN_ITEM_H

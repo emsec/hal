@@ -34,6 +34,7 @@
 namespace hal{
 class module_item;
 class module_model;
+class Module;
 
 class netlist_relay : public QObject
 {
