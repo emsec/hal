@@ -3,14 +3,15 @@
 
 #include <QObject>
 #include <QVector>
+
+class QAction;
+
 namespace hal{
 class hal_window;
 class main_settings_widget;
 class plugin_schedule_widget;
 class welcome_screen;
 class work_space; // TEMP NAME ?
-
-class QAction;
 
 class window_manager : public QObject
 {

@@ -2,8 +2,10 @@
 #define HAL_WINDOW_LAYOUT_CONTAINER_H
 
 #include <QFrame>
-namespace hal{
+
 class QKeyEvent;
+
+namespace hal{
 
 class hal_window_layout_container : public QFrame
 {

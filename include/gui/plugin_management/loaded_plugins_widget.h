@@ -25,9 +25,11 @@
 #define LOADED_PLUGINS_WIDGET_H
 
 #include <QScrollArea>
-namespace hal{
+
 class QFrame;
 class QVBoxLayout;
+
+namespace hal{
 
 class loaded_plugins_widget : public QScrollArea
 {

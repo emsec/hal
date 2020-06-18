@@ -31,16 +31,18 @@
 #include "netlist_relay/netlist_relay.h"
 
 #include <QWidget>
-namespace hal{
-/* forward declaration */
+
 class QTableWidget;
 class QTableWidgetItem;
 class QVBoxLayout;
 class QHBoxLayout;
 class QScrollArea;
 class QFont;
-class graph_navigation_widget;
 class QPushButton;
+
+namespace hal{
+/* forward declaration */
+class graph_navigation_widget;
 
 class gate_details_widget : public QWidget
 {

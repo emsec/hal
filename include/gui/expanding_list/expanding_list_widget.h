@@ -25,12 +25,13 @@
 #define EXPANDING_LIST_WIDGET_H
 
 #include <QScrollArea>
-namespace hal{
-class expanding_list_button;
-class expanding_list_item;
 
 class QFrame;
 class QVBoxLayout;
+
+namespace hal{
+class expanding_list_button;
+class expanding_list_item;
 
 class expanding_list_widget : public QScrollArea
 {

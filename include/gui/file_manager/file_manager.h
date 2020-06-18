@@ -28,8 +28,10 @@
 
 #include <QObject>
 #include <QTimer>
-namespace hal{
+
 class QFileSystemWatcher;
+
+namespace hal{
 
 class file_manager : public QObject
 {

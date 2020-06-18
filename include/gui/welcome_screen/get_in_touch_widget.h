@@ -25,11 +25,12 @@
 #define GET_IN_TOUCH_WIDGET_H
 
 #include "QFrame"
-namespace hal{
-class get_in_touch_item;
 
 class QLabel;
 class QVBoxLayout;
+
+namespace hal{
+class get_in_touch_item;
 
 class get_in_touch_widget : public QFrame
 {

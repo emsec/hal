@@ -25,8 +25,10 @@
 #define NOTIFICATION_H
 
 #include <QFrame>
-namespace hal{
+
 class QPropertyAnimation;
+
+namespace hal{
 
 class notification : public QFrame
 {

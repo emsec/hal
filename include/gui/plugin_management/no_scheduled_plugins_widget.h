@@ -26,8 +26,10 @@
 
 #include <QFrame>
 #include <QLabel>
-namespace hal{
+
 class QVBoxLayout;
+
+namespace hal{
 
 class no_scheduled_plugins_widget : public QFrame
 {

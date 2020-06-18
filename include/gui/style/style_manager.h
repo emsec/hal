@@ -25,14 +25,15 @@
 #define STYLE_MANAGER_H
 
 #include <QObject>
+
+class QApplication;
+
 namespace hal{
 class graphics_qss_adapter;
 class notification_manager_qss_adapter;
 class python_qss_adapter;
 class shared_properties_qss_adapter;
 class vhdl_qss_adapter;
-
-class QApplication;
 
 class style_manager : public QObject
 {

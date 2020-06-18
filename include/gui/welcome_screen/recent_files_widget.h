@@ -25,10 +25,11 @@
 #define RECENT_FILES_WIDGET_H
 
 #include <QFrame>
-namespace hal{
-class recent_file_item;
 
 class QVBoxLayout;
+
+namespace hal{
+class recent_file_item;
 
 class recent_files_widget : public QFrame
 {

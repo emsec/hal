@@ -28,11 +28,12 @@
 #include <QList>
 #include <QPair>
 #include <QVector>
+
+class QVBoxLayout;
+
 namespace hal{
 class drop_marker;
 class scheduled_plugin_item;
-
-class QVBoxLayout;
 
 class scheduled_plugin_item_area : public QFrame
 {

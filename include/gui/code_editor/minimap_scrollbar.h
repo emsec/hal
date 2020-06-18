@@ -25,9 +25,11 @@
 #define MINIMAP_SCROLLBAR_H
 
 #include <QWidget>
-namespace hal{
+
 class QFrame;
 class QScrollBar;
+
+namespace hal{
 
 class minimap_scrollbar : public QWidget
 {

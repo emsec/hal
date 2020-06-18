@@ -29,14 +29,15 @@
 #include <QVector>
 
 #include <memory>
-namespace hal{
-class CLIPluginInterface;
-class ProgramArguments;
 
 class QFormLayout;
 class QLineEdit;
 class QPushButton;
 class QVBoxLayout;
+
+namespace hal{
+class CLIPluginInterface;
+class ProgramArguments;
 
 class plugin_arguments_widget : public QFrame
 {

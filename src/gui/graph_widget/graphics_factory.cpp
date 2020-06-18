@@ -2,7 +2,7 @@
 
 #include "gui/graph_widget/items/nodes/gates/standard_graphics_gate.h"
 #include "gui/graph_widget/items/nodes/modules/standard_graphics_module.h"
-
+namespace hal{
 namespace graphics_factory
 {
 
@@ -42,5 +42,6 @@ graphics_gate* create_graphics_gate(const std::shared_ptr<const Gate> g, const i
     case 0: return new standard_graphics_gate(g);
     default: assert(false); return nullptr; // UNREACHABLE
     }
+}
 }
 }

@@ -33,11 +33,12 @@
 #include <QLayout>
 #include <QList>
 #include <QStackedWidget>
+
+class QShortcut;
+
 namespace hal{
 class content_frame;
 class content_widget;
-
-class QShortcut;
 
 class tab_widget : public hal_widget, public hal_content_anchor
 {

@@ -3,7 +3,7 @@
 #include "gui/graph_widget/items/graphics_item.h"
 
 #include <QString>
-
+namespace hal{
 class graphics_node : public graphics_item
 {
 public:
@@ -54,3 +54,4 @@ protected:
 //    qreal m_x_offset;
 //    qreal m_y_offset;
 };
+}

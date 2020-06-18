@@ -26,8 +26,10 @@
 
 #include <QFrame>
 #include <QLabel>
-namespace hal{
+
 class QVBoxLayout;
+
+namespace hal{
 
 class open_file_widget : public QFrame
 {

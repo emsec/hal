@@ -25,10 +25,12 @@
 #define REMINDER_OVERLAY_H
 
 #include "overlay/overlay.h"
-namespace hal{
+
 class QLabel;
 class QPushButton;
 class QVBoxLayout;
+
+namespace hal{
 
 class reminder_overlay : public overlay
 {

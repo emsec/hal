@@ -25,11 +25,13 @@
 #define SCHEDULED_PLUGIN_ITEM_H
 
 #include <QFrame>
-namespace hal{
+
 class QHBoxLayout;
 class QLabel;
 class QPropertyAnimation;
 class QVBoxLayout;
+
+namespace hal{
 
 class scheduled_plugin_item : public QFrame
 {

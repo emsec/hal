@@ -28,12 +28,13 @@
 
 #include <QIcon>
 #include <QList>
-namespace hal{
-class hal_content_anchor;
-class toolbar;
 
 class QShortcut;
 class QVBoxLayout;
+
+namespace hal{
+class hal_content_anchor;
+class toolbar;
 
 class content_widget : public hal_widget
 {

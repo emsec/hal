@@ -25,6 +25,11 @@
 #define PLUGIN_SCHEDULE_WIDGET_H
 
 #include <QFrame>
+
+class QFrame;
+class QHBoxLayout;
+class QVBoxLayout;
+
 namespace hal{
 class labeled_frame;
 class loaded_plugins_widget;
@@ -32,10 +37,6 @@ class plugin_arguments_widget;
 class no_scheduled_plugins_widget;
 class scheduled_plugins_widget;
 class searchbar;
-
-class QFrame;
-class QHBoxLayout;
-class QVBoxLayout;
 
 class plugin_schedule_widget : public QFrame
 {

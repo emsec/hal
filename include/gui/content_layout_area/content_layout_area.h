@@ -27,15 +27,16 @@
 #include "content_widget/content_widget.h"
 
 #include <QWidget>
+
+class QFrame;
+class QHBoxLayout;
+class QVBoxLayout;
+
 namespace hal{
 class dock_bar;
 class splitter;
 class splitter_anchor;
 class tab_widget;
-
-class QFrame;
-class QHBoxLayout;
-class QVBoxLayout;
 
 enum class content_anchor
 {

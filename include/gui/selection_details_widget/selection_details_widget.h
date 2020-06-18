@@ -29,9 +29,11 @@
 #include "selection_details_widget/gate_details_widget.h"
 #include "selection_details_widget/net_details_widget.h"
 #include "selection_details_widget/module_details_widget.h"
-namespace hal{
+
 class QTableWidget;
 class QStackedWidget;
+
+namespace hal{
 class searchbar;
 
 class selection_details_widget : public content_widget

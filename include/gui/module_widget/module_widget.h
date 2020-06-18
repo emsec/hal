@@ -42,10 +42,11 @@
 #include <QList>
 #include <QObject>
 #include <QSortFilterProxyModel>
-namespace hal{
-class module_proxy_model;
 
 class QTreeView;
+
+namespace hal{
+class module_proxy_model;
 
 class module_widget : public content_widget
 {

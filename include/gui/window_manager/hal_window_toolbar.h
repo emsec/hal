@@ -2,9 +2,11 @@
 #define HAL_WINDOW_TOOLBAR_H
 
 #include <QFrame>
-namespace hal{
+
 class QActionEvent;
 class QHBoxLayout;
+
+namespace hal{
 
 class hal_window_toolbar : public QFrame
 {

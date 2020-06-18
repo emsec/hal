@@ -28,10 +28,10 @@
 #include <QList>
 #include <QResizeEvent>
 
+class QPropertyAnimation;
+
 namespace hal{
 class expanding_list_button;
-
-class QPropertyAnimation;
 
 class expanding_list_item : public QFrame
 {

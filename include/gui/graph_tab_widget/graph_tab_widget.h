@@ -7,9 +7,11 @@
 #include "graph_widget/graph_widget.h"
 
 #include <QMap>
-namespace hal{
+
 class QTabWidget;
 class QVBoxLayout;
+
+namespace hal{
 
 class graph_tab_widget : public content_widget
 {

@@ -27,6 +27,7 @@
 #include <QLabel>
 #include <QLayout>
 namespace hal{
+
 class content_widget;
 class toolbar;
 

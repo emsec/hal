@@ -2,8 +2,10 @@
 #define DIALOG_OVERLAY_H
 
 #include "overlay/overlay.h"
-namespace hal{
+
 class QVBoxLayout;
+
+namespace hal{
 
 class dialog_overlay : public overlay
 {

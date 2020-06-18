@@ -8,7 +8,6 @@
 #include "netlist_relay/netlist_relay.h"
 
 #include <QWidget>
-namespace hal{
 /* forward declaration */
 class QLabel;
 class QTableWidget;
@@ -22,6 +21,8 @@ class QGridLayout;
 class QModelIndex;
 class QFont;
 class QPushButton;
+
+namespace hal{
 
 class module_details_widget : public QWidget
 {

@@ -26,12 +26,12 @@
 
 #include <QWidget>
 
+class QTextDocument;
+
 namespace hal {
 
 class code_editor;
 class minimap_scrollbar;
-
-class QTextDocument;
 
 class code_editor_minimap : public QWidget
 {

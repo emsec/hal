@@ -31,11 +31,13 @@
 #include <QBoxLayout>
 #include <QFrame>
 #include <QPair>
-namespace hal{
+
 class QColor;
 class QLabel;
 class QRegularExpression;
 class QVBoxLayout;
+
+namespace hal{
 
 class settings_widget : public QFrame
 {

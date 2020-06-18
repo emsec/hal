@@ -3,7 +3,7 @@
 #include "gui/graph_widget/graph_widget_constants.h"
 
 #include <QApplication>
-
+namespace hal{
 graphics_node::graphics_node(const hal::item_type type, const u32 id, const QString& name) : graphics_item(type, id),
     m_name(name)
 {
@@ -64,4 +64,5 @@ QVariant graphics_node::itemChange(QGraphicsItem::GraphicsItemChange change, con
     // }
     // else
         return QGraphicsItem::itemChange(change, value);
+}
 }

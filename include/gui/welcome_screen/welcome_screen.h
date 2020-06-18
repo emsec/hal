@@ -25,13 +25,14 @@
 #define WELCOME_SCREEN_H
 
 #include "QFrame"
+
+class QHBoxLayout;
+
 namespace hal{
 class get_in_touch_widget;
 class open_file_widget;
 class recent_files_widget;
 class labeled_frame;
-
-class QHBoxLayout;
 
 class welcome_screen : public QFrame
 {

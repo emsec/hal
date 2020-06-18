@@ -25,10 +25,12 @@
 #define WELCOME_WIDGET_H
 
 #include <QFrame>
-namespace hal{
+
 class QHBoxLayout;
 class QLabel;
 class QVBoxLayout;
+
+namespace hal{
 
 class labeled_frame : public QFrame
 {

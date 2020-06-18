@@ -2,14 +2,15 @@
 #define HAL_WINDOW_H
 
 #include <QFrame>
+
+class QAction;
+class QVBoxLayout;
+
 namespace hal{
 class hal_window_layout_container;
 class hal_window_toolbar;
 class overlay;
 class workspace; // TEMP NAME ?
-
-class QAction;
-class QVBoxLayout;
 
 class hal_window : public QFrame
 {

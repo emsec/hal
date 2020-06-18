@@ -25,12 +25,14 @@
 #define RECENT_FILE_ITEM_H
 
 #include <QFrame>
-namespace hal{
+
 class QHBoxLayout;
 class QLabel;
 class QPropertyAnimation;
 class QVBoxLayout;
 class QToolButton;
+
+namespace hal{
 
 class recent_file_item : public QFrame
 {

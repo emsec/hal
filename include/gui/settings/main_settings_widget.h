@@ -28,20 +28,20 @@
 #include <QList>
 #include <QMap>
 #include <QWidget>
-namespace hal{
-class expanding_list_button;
-class expanding_list_widget;
-class searchbar;
-class settings_display;
-class settings_widget;
 
 class QFrame;
 class QHBoxLayout;
 class QPushButton;
 class QScrollArea;
 class QVBoxLayout;
-
 class QScrollBar;
+
+namespace hal{
+class expanding_list_button;
+class expanding_list_widget;
+class searchbar;
+class settings_display;
+class settings_widget;
 
 class main_settings_widget : public QWidget
 {

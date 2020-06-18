@@ -25,11 +25,13 @@
 #define GET_IN_TOUCH_ITEM_H
 
 #include <QFrame>
-namespace hal{
+
 class QHBoxLayout;
 class QLabel;
 class QPropertyAnimation;
 class QVBoxLayout;
+
+namespace hal{
 
 class get_in_touch_item : public QFrame
 {

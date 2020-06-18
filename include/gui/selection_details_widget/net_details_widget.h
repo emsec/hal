@@ -29,7 +29,6 @@
 #include "netlist_relay/netlist_relay.h"
 
 #include <QWidget>
-namespace hal{
 class QVBoxLayout;
 class QHBoxLayout;
 class QLabel;
@@ -38,6 +37,8 @@ class QTableWidget;
 class QTableWidgetItem;
 class QPushButton;
 class QFont;
+
+namespace hal{
 class Net;
 class Gate;
 

@@ -35,14 +35,16 @@
 #include <QFileSystemWatcher>
 #include <QMap>
 #include <QPushButton>
+
+class QVBoxLayout;
+class QTabWidget;
+
 namespace hal{
 class code_editor;
 class searchbar;
 class splitter;
 class toolbar;
 
-class QVBoxLayout;
-class QTabWidget;
 class python_code_editor;
 
 class python_editor : public content_widget, public python_context_subscriber

@@ -25,12 +25,14 @@
 #define SEARCHBAR_H
 
 #include <QFrame>
-namespace hal{
+
 class QLabel;
 class QLineEdit;
 class QHBoxLayout;
 class QPushButton;
 class QToolButton;
+
+namespace hal{
 
 class searchbar : public QFrame
 {
