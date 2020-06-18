@@ -880,7 +880,7 @@ hal--open_file_widget[drag_active=true] {
     qproperty-icon_style : "all->#1f2123";
 }
 
-hal--pen_file_widget QLabel {
+hal--open_file_widget QLabel {
     background : rgb(14, 16, 18);
     /*background: rgb(6, 7, 8);*/
 }
