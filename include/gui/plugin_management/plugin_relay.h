@@ -27,7 +27,7 @@
 #include <QObject>
 
 #include <string>
-
+namespace hal{
 class plugin_relay : public QObject
 {
     Q_OBJECT
@@ -41,5 +41,6 @@ Q_SIGNALS:
     void plugin_loaded(const QString& name, const QString& path);
     void plugin_unloaded(const QString& name, const QString& path);
 };
+}
 
 #endif    // PLUGIN_RELAY_H

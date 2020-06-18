@@ -1,7 +1,7 @@
 #include "code_editor/code_editor_scrollbar.h"
 
 #include "code_editor/minimap_scrollbar.h"
-
+namespace hal{
 code_editor_scrollbar::code_editor_scrollbar(QWidget* parent) : QScrollBar(Qt::Vertical, parent), m_minimap_scrollbar(nullptr)
 {
 }
@@ -30,4 +30,5 @@ void code_editor_scrollbar::sliderChange(QAbstractSlider::SliderChange change)
         default:
             break;
     }
+}
 }

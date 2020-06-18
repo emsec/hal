@@ -1,6 +1,6 @@
 #include "python/python_console_qss_adapter.h"
 #include <QStyle>
-
+namespace hal{
 
 python_console_qss_adapter::python_console_qss_adapter(QWidget *parent) : QWidget(parent)
 {
@@ -47,4 +47,5 @@ void python_console_qss_adapter::set_error_color(const QColor &color)
 void python_console_qss_adapter::set_promt_color(const QColor &color)
 {
     m_promt_color = color;
+}
 }

@@ -1,7 +1,7 @@
 #include "settings/preview_widget.h"
 
 #include <QVBoxLayout>
-
+namespace hal{
 preview_widget::preview_widget(QWidget* parent) : QFrame(parent), m_layout(new QVBoxLayout())
 {
     setFrameStyle(QFrame::NoFrame);
@@ -9,4 +9,5 @@ preview_widget::preview_widget(QWidget* parent) : QFrame(parent), m_layout(new Q
     m_layout->setContentsMargins(0, 0, 0, 0);
     m_layout->setSpacing(0);
     setLayout(m_layout);
+}
 }

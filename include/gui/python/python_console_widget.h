@@ -25,7 +25,7 @@
 #define PYTHON_CONSOLE_WIDGET_H
 
 #include "content_widget/content_widget.h"
-
+namespace hal{
 class python_console;
 
 class python_console_widget : public content_widget
@@ -39,5 +39,6 @@ public:
 private:
     python_console* m_console;
 };
+}
 
 #endif    // PYTHON_CONSOLE_WIDGET_H

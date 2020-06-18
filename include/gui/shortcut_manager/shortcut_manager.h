@@ -3,7 +3,7 @@
 
 #include <QObject>
 #include <QShortcut>
-
+namespace hal{
 class shortcut_manager : public QObject
 {
     Q_OBJECT
@@ -16,5 +16,6 @@ private:
     QShortcut* m_close_file;
     QShortcut* m_save;
 };
+}
 
 #endif // SHORTCUT_MANAGER_H

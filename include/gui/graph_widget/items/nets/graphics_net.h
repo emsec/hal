@@ -26,7 +26,7 @@
 #include "graph_widget/items/graphics_item.h"
 
 #include <memory>
-
+namespace hal{
 class Net;
 
 class graphics_net : public graphics_item
@@ -67,3 +67,4 @@ protected:
     QColor m_fill_color;
     Qt::BrushStyle m_brush_style;
 };
+}

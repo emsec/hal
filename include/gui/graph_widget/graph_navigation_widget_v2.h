@@ -8,7 +8,7 @@
 #include "gui/gui_def.h"
 
 #include <QTreeWidget>
-
+namespace hal{
 class graph_graphics_view;
 
 class graph_navigation_widget_v2 : public QTreeWidget
@@ -44,5 +44,6 @@ private:
     QSet<QTreeWidgetItem*> m_previous_selection;
 
 };
+}
 
 #endif

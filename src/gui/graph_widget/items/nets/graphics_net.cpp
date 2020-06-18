@@ -3,7 +3,7 @@
 #include "netlist/net.h"
 
 #include <QPen>
-
+namespace hal{
 qreal graphics_net::s_line_width;
 qreal graphics_net::s_shape_width;
 
@@ -42,4 +42,5 @@ void graphics_net::set_visuals(const graphics_net::visuals& v)
     m_fill_icon = v.fill_icon;
     m_fill_color = v.fill_color;
     m_brush_style = v.brush_style;
+}
 }

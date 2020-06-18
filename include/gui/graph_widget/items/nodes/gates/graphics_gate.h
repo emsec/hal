@@ -26,7 +26,7 @@
 #include "gui/graph_widget/items/nodes/graphics_node.h"
 
 #include <memory>
-
+namespace hal{
 class Gate;
 
 class graphics_gate : public graphics_node
@@ -40,3 +40,4 @@ protected:
     QVector<QString> m_input_pins;
     QVector<QString> m_output_pins;
 };
+}

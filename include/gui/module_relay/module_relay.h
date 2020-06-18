@@ -13,7 +13,7 @@
 #include <QObject>
 #include <QSet>
 #include <QVector>
-
+namespace hal{
 class module_relay : public QObject
 {
     Q_OBJECT
@@ -56,5 +56,6 @@ private:
     QMap<u32, module_item*> m_module_items;
     module_model* m_model;
 };
+}
 
 #endif // MODULE_RELAY_H

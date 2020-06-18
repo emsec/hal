@@ -31,6 +31,7 @@
 #include <QVariant>
 
 #include <boost/circular_buffer.hpp>
+namespace hal {
 
 struct channel_entry
 {
@@ -86,5 +87,7 @@ private:
     int m_unread_errors;
     int m_unread_successes;
 };
+
+}
 
 #endif    // CHANNEL_ITEM_H

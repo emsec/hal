@@ -1,7 +1,7 @@
 #pragma once
 
 #include "gui/graph_widget/items/nodes/modules/graphics_module.h"
-
+namespace hal{
 class standard_graphics_module final : public graphics_module
 {
 public:
@@ -54,3 +54,4 @@ private:
 
     QVector<QPointF> m_output_pin_positions;
 };
+}

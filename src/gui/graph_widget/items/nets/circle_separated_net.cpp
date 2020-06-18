@@ -5,7 +5,7 @@
 #include <QPainter>
 #include <QPen>
 #include <QStyleOptionGraphicsItem>
-
+namespace hal{
 qreal circle_separated_net::s_wire_length;
 qreal circle_separated_net::s_circle_offset;
 qreal circle_separated_net::s_radius;
@@ -143,4 +143,5 @@ qreal circle_separated_net::input_width() const
 qreal circle_separated_net::output_width() const
 {
     return s_wire_length + s_circle_offset + s_radius + s_line_width / 2;
+}
 }

@@ -40,7 +40,7 @@
 #include <qmath.h>
 
 #include <QDebug>
-
+namespace hal{
 graph_graphics_view::graph_graphics_view(graph_widget* parent)
     : QGraphicsView(parent), m_graph_widget(parent), m_minimap_enabled(false), m_grid_enabled(true), m_grid_clusters_enabled(true), m_grid_type(graph_widget_constants::grid_type::lines),
       m_zoom_modifier(Qt::NoModifier), m_zoom_factor_base(1.0015)
@@ -979,4 +979,5 @@ graph_graphics_view::layouter_point graph_graphics_view::closest_layouter_point(
         }
     }
     return layouter_point{index, pos};
+}
 }

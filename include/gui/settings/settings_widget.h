@@ -31,7 +31,7 @@
 #include <QBoxLayout>
 #include <QFrame>
 #include <QPair>
-
+namespace hal{
 class QColor;
 class QLabel;
 class QRegularExpression;
@@ -102,5 +102,5 @@ private:
     QVariant m_default_value;
     preview_widget* m_preview = nullptr;
 };
-
+}
 #endif    // SETTINGS_WIDGET_H

@@ -27,7 +27,7 @@
 
 #include <QLineF>
 #include <QVector>
-
+namespace hal{
 class Net;
 
 class old_standard_graphics_net : public graphics_net
@@ -90,3 +90,4 @@ private:
 
     bool m_complete;
 };
+}

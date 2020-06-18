@@ -26,7 +26,7 @@
 
 #include <QObject>
 #include <QSettings>
-
+namespace hal{
 class settings_manager : public QObject
 {
 public:
@@ -43,5 +43,6 @@ private:
     QSettings* m_settings;
     QSettings* m_defaults;
 };
+}
 
 #endif // SETTINGS_MANAGER_H

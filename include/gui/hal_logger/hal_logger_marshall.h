@@ -30,7 +30,7 @@
 #include <QPlainTextEdit>
 #include <QQueue>
 #include <QtCore/qreadwritelock.h>
-
+namespace hal{
 struct hal_filter_item;
 
 class hal_logger_marshall : public QObject
@@ -56,5 +56,6 @@ private:
     //will be deleted within the hal_logger_widgets destrcutor (is the parent of the textedit)
     QPlainTextEdit* m_edit;
 };
+}
 
 #endif    // HAL_LOGGER_MARSHALL_H

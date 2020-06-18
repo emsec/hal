@@ -26,7 +26,7 @@
 
 #include <QRegularExpression>
 #include <QSyntaxHighlighter>
-
+namespace hal{
 class vhdl_syntax_highlighter : public QSyntaxHighlighter
 {
     Q_OBJECT
@@ -75,5 +75,6 @@ private:
     QRegularExpression m_comment_start_expression;
     QRegularExpression m_comment_end_expression;
 };
+}
 
 #endif    // VHDL_SYNTAX_HIGHLIGHTER_H

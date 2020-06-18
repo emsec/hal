@@ -31,7 +31,7 @@
 #include <QObject>
 #include <QSet>
 #include <QShortcut>
-
+namespace hal{
 class keybind_manager : public QObject
 {
     Q_OBJECT
@@ -69,6 +69,7 @@ void delete_all_values(QHash<QString, T> map, T value)
             ++it;
         }
     }
+}
 }
  
 #endif // KEYBIND_MANAGER_H

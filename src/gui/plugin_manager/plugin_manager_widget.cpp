@@ -8,7 +8,7 @@
 #include <QFileInfo>
 #include <QHeaderView>
 #include <QVBoxLayout>
-
+namespace hal{
 plugin_manager_widget::plugin_manager_widget(QWidget* parent) : content_widget("plugins", parent)
 {
     m_content_layout->addWidget(&m_table_view);
@@ -60,4 +60,5 @@ void plugin_manager_widget::setup_toolbar(toolbar* toolbar)
 {
     toolbar->addAction(m_add_action);
     toolbar->addAction(m_remove_action);
+}
 }

@@ -27,7 +27,7 @@
 #include "code_editor/code_editor.h"
 
 #include <QUuid>
-
+namespace hal{
 class python_code_editor : public code_editor
 {
     Q_OBJECT
@@ -69,5 +69,6 @@ private:
     
     QUuid m_uuid;
 };
+}
 
 #endif //PYTHON_CODE_EDITOR_H

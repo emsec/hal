@@ -11,7 +11,7 @@
 #include <QPen>
 #include <QStyle>
 #include <QStyleOptionGraphicsItem>
-
+namespace hal{
 static const qreal baseline = 1;
 
 qreal standard_graphics_module::s_alpha;
@@ -307,4 +307,5 @@ void standard_graphics_module::format(const bool& adjust_size_to_grid)
         m_output_pin_positions.append(QPointF(x, y));
         y += (s_pin_font_height + s_pin_inner_vertical_spacing);
     }
+}
 }

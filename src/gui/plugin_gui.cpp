@@ -32,7 +32,7 @@
 #include <QString>
 #include <gui/focus_logger/focus_logger.h>
 #include <signal.h>
-
+namespace hal{
 QSettings g_settings(QString::fromStdString((core_utils::get_user_config_directory() / "guisettings.ini").string()), QSettings::IniFormat);
 QSettings g_gui_state(QString::fromStdString((core_utils::get_user_config_directory() / "guistate.ini").string()), QSettings::IniFormat);
 
@@ -219,4 +219,5 @@ void plugin_gui::initialize_logging() const
 extern std::shared_ptr<BasePluginInterface> get_plugin_instance()
 {
     return std::make_shared<plugin_gui>();
+}
 }

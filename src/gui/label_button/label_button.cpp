@@ -1,5 +1,5 @@
 #include "label_button/label_button.h"
-
+namespace hal{
 label_button::label_button(QWidget* parent, Qt::WindowFlags f) : QLabel(parent, f)
 {
 }
@@ -13,4 +13,5 @@ void label_button::mousePressEvent(QMouseEvent* event)
     Q_UNUSED(event)
 
     Q_EMIT clicked();
+}
 }

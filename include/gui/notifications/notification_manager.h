@@ -26,7 +26,7 @@
 
 #include <QList>
 #include <QObject>
-
+namespace hal{
 class notification;
 
 class notification_manager : public QObject
@@ -56,5 +56,6 @@ private:
 
     QList<notification*> m_list;
 };
+}
 
 #endif    // NOTIFICATION_MANAGER_H

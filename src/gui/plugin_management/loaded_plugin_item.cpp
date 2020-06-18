@@ -12,7 +12,7 @@
 #include <QPropertyAnimation>
 #include <QStyle>
 #include <QVBoxLayout>
-
+namespace hal{
 bool loaded_plugin_item::s_drag_in_progress = false;
 QPoint loaded_plugin_item::s_drag_start_position;
 
@@ -171,4 +171,5 @@ void loaded_plugin_item::set_icon_path(const QString& path)
 void loaded_plugin_item::set_icon_style(const QString& style)
 {
     m_icon_style = style;
+}
 }

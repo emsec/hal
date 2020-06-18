@@ -24,7 +24,7 @@
 #pragma once
 
 #include "graph_widget/items/nets/graphics_net.h"
-
+namespace hal{
 class separated_graphics_net : public graphics_net
 {
 public:
@@ -46,3 +46,4 @@ protected:
     QVector<QPointF> m_input_positions;
     QVector<QPointF> m_output_positions;
 };
+}

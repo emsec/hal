@@ -5,7 +5,7 @@
 #include "selection_relay/selection_relay.h"
 
 #include <vector>
-
+namespace hal{
 class selection
 {
 
@@ -26,5 +26,6 @@ private:
     std::vector<u32> m_module_ids;
 
 };
+}
 
 #endif    // SELECTION_H

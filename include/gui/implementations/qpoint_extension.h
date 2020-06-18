@@ -2,7 +2,7 @@
 #define QPOINT_EXTENSION_H
 
 #include <QPoint>
-
+namespace hal{
 static bool operator<(const QPoint& p1, const QPoint& p2)
 {
     if (p1.x() < p2.x())
@@ -13,6 +13,7 @@ static bool operator<(const QPoint& p1, const QPoint& p2)
         return true;
     else
         return false;
+}
 }
 
 #endif // QPOINT_EXTENSION_H

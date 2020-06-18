@@ -28,7 +28,7 @@
 #include <QLabel>
 #include <QLayout>
 #include <QPlainTextEdit>
-
+namespace hal{
 class about_dialog : public QDialog
 {
     Q_OBJECT
@@ -42,5 +42,6 @@ private:
     QLabel m_licenses_label;
     QPlainTextEdit m_textedit;
 };
+}
 
 #endif    // ABOUT_DIALOG_H

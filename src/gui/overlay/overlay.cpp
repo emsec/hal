@@ -2,7 +2,7 @@
 
 #include <QEvent>
 #include <QResizeEvent>
-
+namespace hal{
 overlay::overlay(QWidget* parent) : QFrame(parent)
 {
 //    setAttribute(Qt::WA_NoSystemBackground);
@@ -63,4 +63,5 @@ void overlay::handle_parent_changed()
 
     if (w)
         resize(w->size());
+}
 }

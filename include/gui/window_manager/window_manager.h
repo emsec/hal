@@ -3,7 +3,7 @@
 
 #include <QObject>
 #include <QVector>
-
+namespace hal{
 class hal_window;
 class main_settings_widget;
 class plugin_schedule_widget;
@@ -70,5 +70,6 @@ private:
     plugin_schedule_widget* m_plugin_schedule_widget;
     main_settings_widget* m_main_settings_widget;
 };
+}
 
 #endif // WINDOW_MANAGER_H

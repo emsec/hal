@@ -33,7 +33,7 @@
 #include <QLayout>
 #include <QList>
 #include <QStackedWidget>
-
+namespace hal{
 class content_frame;
 class content_widget;
 
@@ -71,5 +71,6 @@ private:
     QList<content_frame*> m_detached_frames;
     QList<QShortcut*> m_active_shortcuts;
 };
+}
 
 #endif    // TAB_WIDGET_H

@@ -25,7 +25,7 @@
 #define HAL_ACTION_H
 
 #include <QAction>
-
+namespace hal{
 class hal_action : public QAction
 {
     Q_OBJECT
@@ -46,5 +46,6 @@ private:
     bool m_tooltip_modified;
 
 };
+}
 
 #endif // HAL_ACTION_H

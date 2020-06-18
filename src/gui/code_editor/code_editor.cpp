@@ -9,6 +9,7 @@
 #include <QPainter>
 #include <QPropertyAnimation>
 #include <QTextBlock>
+namespace hal{
 
 code_editor::code_editor(QWidget* parent) : QPlainTextEdit(parent),
       m_scrollbar(new code_editor_scrollbar(this)),
@@ -420,4 +421,5 @@ void code_editor::update_layout()
         m_minimap->hide();
 
     setViewportMargins(left_margin, 0, right_margin, 0);
+}
 }

@@ -36,7 +36,7 @@
 #include <QWidget>
 #include <QtCore/qreadwritelock.h>
 #include <QScrollBar>
-
+namespace hal{
 class hal_filter_tab_bar;
 
 class hal_logger_marshall;
@@ -96,5 +96,6 @@ private:
 
     void scroll_to_bottom();
 };
+}
 
 #endif    // HAL_LOGGER_WIDGET_H

@@ -13,7 +13,7 @@
 #include <QTableWidget>
 #include <QVBoxLayout>
 #include <QShortcut>
-
+namespace hal{
 selection_details_widget::selection_details_widget(QWidget* parent) : content_widget("Details", parent)
 {
     m_stacked_widget = new QStackedWidget(this);
@@ -119,4 +119,5 @@ void selection_details_widget::toggle_searchbar()
         m_searchbar->hide();
         setFocus();
     }
+}
 }

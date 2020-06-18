@@ -26,7 +26,7 @@
 #include <QMenu>
 #include <QIcon>
 #include <QClipboard>
-
+namespace hal{
 gate_details_widget::gate_details_widget(QWidget* parent) : QWidget(parent)
 {
     //NEW
@@ -861,4 +861,5 @@ void gate_details_widget::handle_general_table_item_clicked(const QTableWidgetIt
         g_selection_relay.m_selected_modules.insert(m_module_item->data(Qt::UserRole).toInt());
         g_selection_relay.relay_selection_changed(this);
     }
+}
 }

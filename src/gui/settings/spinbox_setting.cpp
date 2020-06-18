@@ -10,7 +10,7 @@
 #include <QSpinBox>
 #include <QStringList>
 #include "gui_globals.h"
-
+namespace hal{
 spinbox_setting::spinbox_setting(const QString& key, const QString& title, const int min, const int max, const QString& description, QWidget* parent) : settings_widget(key, parent)
 {
     m_labels.append(QPair<QLabel*, QString>(m_name, title));
@@ -45,4 +45,5 @@ void spinbox_setting::on_spinbox_value_changed(int value)
 {
     Q_UNUSED(value);
     trigger_setting_updated();
+}
 }

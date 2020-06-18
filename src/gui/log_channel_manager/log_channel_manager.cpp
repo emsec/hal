@@ -1,5 +1,5 @@
 #include "log_channel_manager/log_channel_manager.h"
-
+namespace hal{
 log_channel_manager::log_channel_manager()
 {
     //LogManager::get_instance().get_gui_callback().add_callback("gui", std::bind(&log_channel_manager::logmanager_callback, this, std::placeholders::_1));
@@ -51,4 +51,5 @@ void log_channel_manager::logmanager_callback(const spdlog::details::log_msg& ms
     //    item->append_entry(new channel_entry(msg_text, t));
     //    Q_EMIT updated(t, ALL_CHANNEL, msg_text);
     //    Q_EMIT updated(t, channel_name, msg_text);
+}
 }

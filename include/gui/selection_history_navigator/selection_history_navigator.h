@@ -6,7 +6,7 @@
 
 #include <QObject>
 #include <list>
-
+namespace hal{
 class selection_history_navigator : public QObject
 {
     Q_OBJECT
@@ -37,5 +37,6 @@ private:
 
     void store_selection(u32 id, selection_relay::item_type type);
 };
+}
 
 #endif    // SELECTION_HISTORY_NAVIGATOR_H

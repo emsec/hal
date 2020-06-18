@@ -2,7 +2,7 @@
 #define HAL_WINDOW_H
 
 #include <QFrame>
-
+namespace hal{
 class hal_window_layout_container;
 class hal_window_toolbar;
 class overlay;
@@ -48,5 +48,6 @@ private:
     overlay* m_overlay;
     QGraphicsEffect* m_effect;
 };
+}
 
 #endif // HAL_WINDOW_H

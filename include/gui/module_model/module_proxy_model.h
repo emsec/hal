@@ -27,7 +27,7 @@
 #include "gui/gui_utils/sort.h"
 
 #include <QSortFilterProxyModel>
-
+namespace hal{
 class module_proxy_model : public QSortFilterProxyModel
 {
     Q_OBJECT
@@ -45,5 +45,6 @@ private Q_SLOTS:
 private:
     gui_utility::sort_mechanism m_sort_mechanism;
 };
+}
 
 #endif // MODULE_PROXY_MODEL_H

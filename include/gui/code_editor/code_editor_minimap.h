@@ -26,6 +26,8 @@
 
 #include <QWidget>
 
+namespace hal {
+
 class code_editor;
 class minimap_scrollbar;
 
@@ -67,5 +69,6 @@ private:
     int m_document_height;
     qreal m_offset;
 };
+}
 
 #endif    // CODE_EDITOR_MINIMAP_H

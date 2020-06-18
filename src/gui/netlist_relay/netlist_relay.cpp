@@ -16,7 +16,7 @@
 #include <QColorDialog>    // DEBUG LINE
 #include <QDebug>
 #include <QInputDialog>    // DEBUG LINE
-
+namespace hal{
 netlist_relay::netlist_relay(QObject* parent) : QObject(parent), m_module_model(new module_model(this))
 {
     connect(file_manager::get_instance(), &file_manager::file_opened, this, &netlist_relay::debug_handle_file_opened);    // DEBUG LINE
@@ -514,4 +514,5 @@ void netlist_relay::debug_handle_file_closed()
 {
     m_module_model->clear();
     m_module_colors.clear();
+}
 }

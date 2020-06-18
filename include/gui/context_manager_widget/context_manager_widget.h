@@ -32,7 +32,7 @@
 
 #include <QListWidget>
 #include <QPoint>
-
+namespace hal{
 class graph_context;
 class graph_tab_widget;
 
@@ -131,5 +131,6 @@ private:
 
     void handle_selection_changed();
 };
+}
 
 #endif    // CONTEXT_MANAGER_WIDGET

@@ -25,6 +25,7 @@
 #define CODE_EDITOR_SCROLLBAR_H
 
 #include <QScrollBar>
+namespace hal{
 
 class minimap_scrollbar;
 
@@ -43,5 +44,6 @@ protected:
 private:
     minimap_scrollbar* m_minimap_scrollbar;
 };
+}
 
 #endif    // CODE_EDITOR_SCROLLBAR_H

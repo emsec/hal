@@ -25,7 +25,7 @@
 #define SVG_ICON_ENGINE_H
 
 #include <QIconEngine>
-
+namespace hal{
 class svg_icon_engine : public QIconEngine
 {
 public:
@@ -38,5 +38,6 @@ public:
 private:
     QByteArray m_data;
 };
+}
 
 #endif    // SVG_ICON_ENGINE_H

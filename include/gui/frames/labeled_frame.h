@@ -25,7 +25,7 @@
 #define WELCOME_WIDGET_H
 
 #include <QFrame>
-
+namespace hal{
 class QHBoxLayout;
 class QLabel;
 class QVBoxLayout;
@@ -47,5 +47,6 @@ protected:
     QLabel* m_label;
     QFrame* m_right_spacer;
 };
+}
 
 #endif    // WELCOME_WIDGET_H

@@ -2,6 +2,7 @@
 
 #include "code_editor/syntax_highlighter/vhdl_qss_adapter.h"
 
+namespace hal {
 vhdl_syntax_highlighter::vhdl_syntax_highlighter(QTextDocument* parent) : QSyntaxHighlighter(parent)
 {
     //        m_pattern_options = QRegularExpression::CaseInsensitiveOption | QRegularExpression::MultilineOption;
@@ -226,6 +227,7 @@ void vhdl_syntax_highlighter::highlightBlock(const QString& text)
         else
             start_index = -1;
     }
+}
 }
 
 //vhdl_syntax_highlighter::highlighting_rule vhdl_syntax_highlighter::make_rule(QString expression,

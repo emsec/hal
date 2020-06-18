@@ -25,7 +25,7 @@
 #define NOTIFICATION_H
 
 #include <QFrame>
-
+namespace hal{
 class QPropertyAnimation;
 
 class notification : public QFrame
@@ -55,5 +55,6 @@ private Q_SLOTS:
 private:
     QPropertyAnimation* m_animation;
 };
+}
 
 #endif    // NOTIFICATION_H

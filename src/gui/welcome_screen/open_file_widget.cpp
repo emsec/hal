@@ -8,7 +8,7 @@
 #include <QMimeData>
 #include <QStyle>
 #include <QVBoxLayout>
-
+namespace hal{
 open_file_widget::open_file_widget(QWidget* parent) : QFrame(parent), m_layout(new QVBoxLayout()), m_text_label(new QLabel()), m_icon_label(new QLabel()), m_drag_active(false)
 {
     setAcceptDrops(true);
@@ -108,4 +108,5 @@ void open_file_widget::repolish()
 
     if (!m_icon_path.isEmpty())
         m_icon_label->setPixmap(gui_utility::get_styled_svg_icon(m_icon_style, m_icon_path).pixmap(QSize(120, 120)));
+}
 }

@@ -27,7 +27,7 @@
 #include <QList>
 #include <QVariant>
 #include <QVector>
-
+namespace hal{
 class tree_module_item
 {
 public:
@@ -65,5 +65,6 @@ private:
     tree_module_item* m_parent_item;
     item_type m_type;
 };
+}
 
 #endif    // tree_module_item_H

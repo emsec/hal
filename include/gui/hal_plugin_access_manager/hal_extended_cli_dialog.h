@@ -37,7 +37,7 @@
 #include <string>
 #include <utility>
 #include <vector>
-
+namespace hal{
 class hal_extended_cli_dialog : public QDialog
 {
     Q_OBJECT
@@ -64,5 +64,6 @@ private:
 
     char** m_argv;
 };
+}
 
 #endif    // HAL_EXTENDED_CLI_DIALOG_H

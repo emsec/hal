@@ -13,7 +13,7 @@
 #include <QVBoxLayout>
 #include <QPushButton>
 #include <QScrollBar>
-
+namespace hal{
 module_details_widget::module_details_widget(QWidget* parent) : QWidget(parent)
 {
     m_current_id = 0;
@@ -608,4 +608,5 @@ void module_details_widget::style_table(QTableWidget* table)
     table->setMaximumHeight(table->verticalHeader()->length());
     table->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     table->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+}
 }

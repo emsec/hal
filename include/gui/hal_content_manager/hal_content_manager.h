@@ -29,7 +29,7 @@
 #include <QStringList>
 
 #include "netlist_watcher/netlist_watcher.h"
-
+namespace hal{
 class main_window;
 class content_widget;
 class python_editor;
@@ -83,5 +83,6 @@ private:
 
     context_manager_widget* m_context_manager_wid;
 };
+}
 
 #endif    // HAL_CONTENT_MANAGER_H

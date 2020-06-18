@@ -1,7 +1,7 @@
 #include "hal_logger/hal_filter_dialog.h"
 #include "hal_logger/hal_filter_item.h"
 #include "hal_logger/hal_filter_tab_bar.h"
-
+namespace hal{
 hal_filter_dialog::hal_filter_dialog(hal_filter_tab_bar* caller, QWidget* parent) : QDialog(parent), m_caller(caller), m_button_box(QDialogButtonBox::Ok | QDialogButtonBox::Cancel)
 {
     setWindowTitle("New Filter");
@@ -120,4 +120,5 @@ hal_filter_item::rule hal_filter_dialog::filter_combo_box::get_data()
             return hal_filter_item::rule::Process;
             break;
     }
+}
 }

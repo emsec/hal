@@ -28,7 +28,7 @@
 
 #include <QObject>
 #include <QTimer>
-
+namespace hal{
 class QFileSystemWatcher;
 
 class file_manager : public QObject
@@ -78,5 +78,6 @@ private:
     bool m_autosave_enabled;
     int m_autosave_interval;
 };
+}
 
 #endif // FILE_MANAGER_H

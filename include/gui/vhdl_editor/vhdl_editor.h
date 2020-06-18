@@ -26,7 +26,7 @@
 
 #include "code_editor/code_editor.h"
 #include "content_widget/content_widget.h"
-
+namespace hal{
 class searchbar;
 
 class vhdl_editor : public content_widget
@@ -46,5 +46,6 @@ private:
     code_editor* m_code_editor;
     searchbar* m_searchbar;
 };
+}
 
 #endif    // VHDL_EDITOR_H

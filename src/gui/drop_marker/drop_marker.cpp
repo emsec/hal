@@ -1,7 +1,7 @@
 #include "drop_marker/drop_marker.h"
 
 #include <QPropertyAnimation>
-
+namespace hal{
 drop_marker::drop_marker(Qt::Orientation orientation, QWidget* parent) : QFrame(parent), m_animation(new QPropertyAnimation(this)), m_orientation(orientation), m_fixed_width(0), m_fixed_height(0)
 {
     m_animation->setTargetObject(this);
@@ -71,4 +71,5 @@ void drop_marker::reset()
         set_fixed_width(0);
     if (m_orientation == Qt::Vertical)
         set_fixed_height(0);
+}
 }

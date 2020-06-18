@@ -8,7 +8,7 @@
 #include <QPropertyAnimation>
 #include <QPainter>
 #include <QPaintEvent>
-
+namespace hal{
 QPen node_drag_shadow::s_pen;
 qreal node_drag_shadow::s_lod;
 
@@ -126,4 +126,5 @@ QPainterPath node_drag_shadow::shape() const
     QPainterPath path;
     path.addRect(QRectF(0, 0, m_width, m_height));
     return path;
+}
 }

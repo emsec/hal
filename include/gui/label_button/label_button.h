@@ -26,7 +26,7 @@
 
 #include <QLabel>
 #include <QMouseEvent>
-
+namespace hal{
 class label_button : public QLabel
 {
     Q_OBJECT
@@ -41,5 +41,6 @@ Q_SIGNALS:
 protected:
     void mousePressEvent(QMouseEvent* event) Q_DECL_OVERRIDE;
 };
+}
 
 #endif    // LABEL_BUTTON_H

@@ -1,5 +1,5 @@
 #include "splitter/splitter.h"
-
+namespace hal{
 splitter::splitter(Qt::Orientation orientation, QWidget* parent) : QSplitter(orientation, parent)
 {
     setHandleWidth(1);
@@ -13,4 +13,5 @@ bool splitter::unused()
             return false;
     }
     return true;
+}
 }

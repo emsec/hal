@@ -28,7 +28,7 @@
 #include <QList>
 #include <QTabBar>
 #include <QToolButton>
-
+namespace hal{
 struct hal_filter_item;
 
 class hal_filter_tab_bar : public QTabBar
@@ -51,5 +51,6 @@ private:
 
     hal_filter_dialog m_dialog;
 };
+}
 
 #endif    // HAL_FILTER_TAB_BAR_H

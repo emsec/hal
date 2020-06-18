@@ -4,7 +4,7 @@
 #include "gui_globals.h"
 #include "gui_utils/graphics.h"
 #include <QPainter>
-
+namespace hal{
 dock_button::dock_button(content_widget* widget, button_orientation orientation, QObject* eventFilter, QWidget* parent) : QToolButton(parent), m_widget(widget), m_orientation(orientation)
 {
     setText(m_widget->name());
@@ -128,4 +128,5 @@ void dock_button::set_relative_height(int height)
 {
     m_relative_height = height;
     adjust_size();
+}
 }

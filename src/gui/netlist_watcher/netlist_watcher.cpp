@@ -1,7 +1,7 @@
 #include "netlist_watcher/netlist_watcher.h"
 
 #include "gui_globals.h"
-
+namespace hal{
 netlist_watcher::netlist_watcher(QObject* parent) : QObject(parent)
 {
     netlist_event_handler::register_callback(
@@ -79,4 +79,5 @@ void netlist_watcher::handle_netlist_modified()
         m_notified = true;
         g_file_status_manager.netlist_changed();
     }
+}
 }

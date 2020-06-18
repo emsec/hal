@@ -13,7 +13,7 @@
 #include "netlist/module.h"
 #include "netlist/net.h"
 #include "qmath.h"
-
+namespace hal{
 template<typename T1, typename T2>
 static void store_max(QMap<T1, T2>& map, T1 key, T2 value)
 {
@@ -1917,4 +1917,5 @@ void graph_layouter::append_non_zero_v_line(standard_graphics_net::lines& lines,
 {
     if (small_y < big_y)
         lines.append_h_line(x, small_y, big_y);
+}
 }

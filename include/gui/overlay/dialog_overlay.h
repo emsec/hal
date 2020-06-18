@@ -2,7 +2,7 @@
 #define DIALOG_OVERLAY_H
 
 #include "overlay/overlay.h"
-
+namespace hal{
 class QVBoxLayout;
 
 class dialog_overlay : public overlay
@@ -21,5 +21,6 @@ private:
     QVBoxLayout* m_layout;
     QWidget* m_widget;
 };
+}
 
 #endif // DIALOG_OVERLAY_H

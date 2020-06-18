@@ -7,7 +7,7 @@
 #include "graph_widget/graph_widget.h"
 
 #include <QMap>
-
+namespace hal{
 class QTabWidget;
 class QVBoxLayout;
 
@@ -50,5 +50,5 @@ private:
     void zoom_in_shortcut();
     void zoom_out_shortcut();
 };
-
+}
 #endif    //GRAPH_TAB_WIDGET

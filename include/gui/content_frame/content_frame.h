@@ -26,7 +26,7 @@
 
 #include <QLabel>
 #include <QLayout>
-
+namespace hal{
 class content_widget;
 class toolbar;
 
@@ -58,5 +58,6 @@ private:
     QString m_detach_icon_path;
     QString m_detach_icon_style;
 };
+}
 
 #endif    // CONTENT_FRAME_H

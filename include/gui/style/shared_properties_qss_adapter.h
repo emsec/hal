@@ -2,7 +2,7 @@
 #define SHARED_PROPERTIES_QSS_ADAPTER_H
 
 #include <QWidget>
-
+namespace hal{
 class shared_properties_qss_adapter : public QWidget
 {
     Q_OBJECT
@@ -85,5 +85,6 @@ public:
     QString m_settings_icon_path;
     QString m_settings_icon_style;
 };
+}
 
 #endif // SHARED_PROPERTIES_QSS_ADAPTER_H

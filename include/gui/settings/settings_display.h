@@ -25,7 +25,7 @@
 #define SETTINGS_DISPLAY_H
 
 #include <QScrollArea>
-
+namespace hal{
 class QVBoxLayout;
 
 class settings_display : public QScrollArea
@@ -41,5 +41,6 @@ private:
     QFrame* m_sub_content;
     QVBoxLayout* m_sub_content_layout;
 };
+}
 
 #endif    // SETTINGS_DISPLAY_H

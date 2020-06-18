@@ -25,7 +25,7 @@
 #define SPLITTER_H
 
 #include <QSplitter>
-
+namespace hal{
 class splitter : public QSplitter
 {
     Q_OBJECT
@@ -35,5 +35,6 @@ public:
 
     bool unused();
 };
+}
 
 #endif    // SPLITTER_H

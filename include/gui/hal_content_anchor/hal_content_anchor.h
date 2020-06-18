@@ -23,7 +23,7 @@
 
 #ifndef HAL_CONTENT_ANCHOR_H
 #define HAL_CONTENT_ANCHOR_H
-
+namespace hal{
 class content_widget;
 
 class hal_content_anchor
@@ -46,6 +46,7 @@ public:
 
 hal_content_anchor::~hal_content_anchor()
 {
+}
 }
 
 #endif    // HAL_CONTENT_ANCHOR_H

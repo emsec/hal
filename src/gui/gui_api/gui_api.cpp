@@ -6,7 +6,7 @@
 
 #include <QSet>
 
-
+namespace hal{
 gui_api::gui_api()
 {
     g_selection_relay.register_sender(this, "GUI API");
@@ -424,4 +424,5 @@ void gui_api::deselect(const std::vector<std::shared_ptr<Gate>>& gates, const st
 void gui_api::deselect_all_items()
 {
     g_selection_relay.clear_and_update();
+}
 }

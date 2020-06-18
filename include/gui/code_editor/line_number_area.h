@@ -25,7 +25,7 @@
 #define LINE_NUMBER_AREA_H
 
 #include <QWidget>
-
+namespace hal{
 class code_editor;
 
 class line_number_area : public QWidget
@@ -55,5 +55,6 @@ private:
     int m_left_offset;
     int m_right_offset;
 };
+}
 
 #endif    // LINE_NUMBER_AREA_H

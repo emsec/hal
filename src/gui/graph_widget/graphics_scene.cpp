@@ -17,7 +17,7 @@
 #include <QString>
 
 #include <QDebug>
-
+namespace hal{
 qreal graphics_scene::s_lod = 0;
 
 const qreal graphics_scene::s_grid_fade_start = 0.4;
@@ -684,3 +684,4 @@ void graphics_scene::debug_draw_layouter_grid(QPainter* painter, const int x_fro
     }
 }
 #endif
+}

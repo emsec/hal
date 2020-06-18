@@ -2,7 +2,7 @@
 #include "selection_details_widget/tree_navigation/tree_module_model.h"
 
 #include "gui/gui_globals.h"
-
+namespace hal{
 tree_module_proxy_model::tree_module_proxy_model(QObject* parent) : QSortFilterProxyModel(parent)
 {
     m_sort_mechanism = gui_utility::sort_mechanism(g_settings_manager.get("navigation/sort_mechanism").toInt());
@@ -59,4 +59,5 @@ void tree_module_proxy_model::handle_global_setting_changed(void* sender, const 
         // force re-sort
         invalidate();
     }
+}
 }

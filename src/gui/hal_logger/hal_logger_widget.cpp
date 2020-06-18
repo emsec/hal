@@ -6,7 +6,7 @@
 #include "hal_logger/hal_logger_marshall.h"
 #include "toolbar/toolbar.h"
 #include <QHeaderView>
-
+namespace hal{
 hal_logger_widget::hal_logger_widget(QWidget* parent) : content_widget("Log", parent)
 {
     m_plain_text_edit = new QPlainTextEdit(this);
@@ -164,4 +164,5 @@ void hal_logger_widget::resizeEvent(QResizeEvent* event)
 void hal_logger_widget::scroll_to_bottom()
 {
     m_plain_text_edit_scrollbar->setValue(m_plain_text_edit_scrollbar->maximum());
+}
 }

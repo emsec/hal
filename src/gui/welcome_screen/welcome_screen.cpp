@@ -8,7 +8,7 @@
 
 #include <QHBoxLayout>
 #include <QStyle>
-
+namespace hal{
 welcome_screen::welcome_screen(QWidget* parent)
     : QFrame(parent), m_layout(new QHBoxLayout()), m_recent_files_frame(new labeled_frame()), m_open_file_frame(new labeled_frame()), m_get_in_touch_frame(new labeled_frame()),
       m_recent_files_widget(new recent_files_widget()), m_open_file_widget(new open_file_widget()), m_get_in_touch_widget(new get_in_touch_widget())
@@ -47,4 +47,5 @@ void welcome_screen::repolish()
     m_recent_files_widget->repolish();
     m_open_file_widget->repolish();
     m_get_in_touch_widget->repolish();
+}
 }

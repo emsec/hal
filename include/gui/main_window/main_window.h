@@ -38,7 +38,7 @@
 #include <QStackedWidget>
 #include <QToolBar>
 #include <core/program_options.h>
-
+namespace hal{
 class plugin_model;
 class plugin_manager_dialog;
 class plugin_schedule_widget;
@@ -200,5 +200,6 @@ private:
     QString m_settings_icon_path;
     QString m_settings_icon_style;
 };
+}
 
 #endif    // MAIN_WINDOW_H

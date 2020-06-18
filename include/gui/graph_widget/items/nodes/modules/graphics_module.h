@@ -3,7 +3,7 @@
 #include "gui/graph_widget/items/nodes/graphics_node.h"
 
 #include <memory>
-
+namespace hal{
 class Module;
 
 class graphics_module : public graphics_node
@@ -26,3 +26,4 @@ protected:
     QVector<module_pin> m_input_pins;
     QVector<module_pin> m_output_pins;
 };
+}

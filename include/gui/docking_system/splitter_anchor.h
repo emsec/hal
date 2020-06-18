@@ -28,7 +28,7 @@
 
 #include <QList>
 #include <QObject>
-
+namespace hal{
 class dock_bar;
 class splitter;
 class content_frame;
@@ -59,5 +59,6 @@ private:
     splitter* m_splitter;
     QList<content_frame*> m_detached_frames;
 };
+}
 
 #endif    // SPLITTER_ANCHOR_H

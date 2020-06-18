@@ -25,7 +25,7 @@
 #define LINE_EDIT_H
 
 #include <QLineEdit>
-
+namespace hal{
 class line_edit : public QLineEdit
 {
     Q_OBJECT
@@ -37,5 +37,6 @@ public:
 public Q_SLOTS:
     void handle_text_changed(const QString& text);
 };
+}
 
 #endif    // LINE_EDIT_H

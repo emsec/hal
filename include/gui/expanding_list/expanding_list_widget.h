@@ -25,7 +25,7 @@
 #define EXPANDING_LIST_WIDGET_H
 
 #include <QScrollArea>
-
+namespace hal{
 class expanding_list_button;
 class expanding_list_item;
 
@@ -66,5 +66,6 @@ private:
     int m_item_width;
     int m_offset;
 };
+}
 
 #endif    // EXPANDING_LIST_WIDGET_H

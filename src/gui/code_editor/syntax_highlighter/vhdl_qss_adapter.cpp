@@ -1,7 +1,7 @@
 #include "code_editor/syntax_highlighter/vhdl_qss_adapter.h"
 
 #include <QStyle>
-
+namespace hal{
 vhdl_qss_adapter::vhdl_qss_adapter(QWidget* parent) : QWidget(parent)
 {
     repolish();
@@ -100,4 +100,5 @@ void vhdl_qss_adapter::set_string_color(const QColor& color)
 void vhdl_qss_adapter::set_comment_color(const QColor& color)
 {
     m_comment_color = color;
+}
 }

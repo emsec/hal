@@ -8,7 +8,7 @@
 #include "gui/gui_def.h"
 
 #include <QTableWidget>
-
+namespace hal{
 class graph_graphics_view;
 
 class graph_navigation_widget : public QTableWidget
@@ -42,3 +42,4 @@ private:
     hal::node m_origin;
     bool m_hide_when_focus_lost;
 };
+}

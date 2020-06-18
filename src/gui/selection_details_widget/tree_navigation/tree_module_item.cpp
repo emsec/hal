@@ -1,5 +1,5 @@
 #include "selection_details_widget/tree_navigation/tree_module_item.h"
-
+namespace hal{
 tree_module_item::tree_module_item(const QVector<QVariant>& data, tree_module_item::item_type type, tree_module_item* parent)
 {
     m_parent_item = parent;
@@ -89,4 +89,5 @@ bool tree_module_item::remove_children(int position, int count)
 bool tree_module_item::remove_child(tree_module_item* item)
 {
     return m_child_items.removeOne(item);
+}
 }

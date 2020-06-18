@@ -1,6 +1,6 @@
 #include "hal_logger/logger_qss_adapter.h"
 #include <QStyle>
-
+namespace hal{
 logger_qss_adapter::logger_qss_adapter(QWidget *parent) : QWidget(parent)
 {
     QStyle* s = style();
@@ -166,4 +166,5 @@ void logger_qss_adapter::set_critical_highlight(const QColor &color)
 void logger_qss_adapter::set_default_highlight(const QColor &color)
 {
     m_default_highlight = color;
+}
 }

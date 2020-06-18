@@ -28,7 +28,7 @@
 #include <QString>
 #include <QVector>
 #include <type_traits>
-
+namespace hal{
 class plugin_item
 {
 public:
@@ -46,5 +46,6 @@ public:
     QString path;
     bool is_valid();
 };
+}
 
 #endif    //HAL_PLUGIN_ITEM_H

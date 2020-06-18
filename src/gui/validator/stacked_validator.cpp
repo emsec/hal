@@ -1,5 +1,5 @@
 #include "validator/stacked_validator.h"
-
+namespace hal{
 stacked_validator::stacked_validator() : m_validators(QList<validator*>())
 {
 
@@ -32,4 +32,5 @@ bool stacked_validator::validate(const QString &input)
     }
 
     return true;
+}
 }

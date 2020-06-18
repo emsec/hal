@@ -1,7 +1,7 @@
 #include "window_manager/workspace.h"
 
 #include <QStyle>
-
+namespace hal{
 workspace::workspace(QWidget* parent) : QFrame(parent)
 {
 
@@ -13,4 +13,5 @@ void workspace::repolish()
 
     s->unpolish(this);
     s->polish(this);
+}
 }

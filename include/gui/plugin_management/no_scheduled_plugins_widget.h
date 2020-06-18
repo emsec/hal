@@ -26,7 +26,7 @@
 
 #include <QFrame>
 #include <QLabel>
-
+namespace hal{
 class QVBoxLayout;
 
 class no_scheduled_plugins_widget : public QFrame
@@ -65,5 +65,6 @@ private:
 
     bool m_drag_active;
 };
+}
 
 #endif    // NO_SCHEDULED_PLUGINS_WIDGET_H

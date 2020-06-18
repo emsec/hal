@@ -2,7 +2,7 @@
 #define WORKSPACE_H
 
 #include <QFrame>
-
+namespace hal{
 class workspace : public QFrame
 {
     Q_OBJECT
@@ -12,5 +12,6 @@ public:
 
     void repolish();
 };
+}
 
 #endif // WORKSPACE_H

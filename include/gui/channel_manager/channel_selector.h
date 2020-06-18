@@ -25,11 +25,12 @@
 #define CHANNEL_SELECTOR_H
 
 #include <QComboBox>
-
+namespace hal{
 class channel_selector : public QComboBox
 {
 public:
     channel_selector(QWidget* parent = nullptr);
 };
+}
 
 #endif    // CHANNEL_SELECTOR_H

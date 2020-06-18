@@ -11,7 +11,7 @@
 #include <QShortcut>
 #include <QKeySequence>
 #include <QDebug>
-
+namespace hal{
 graph_tab_widget::graph_tab_widget(QWidget* parent) : content_widget("Graph-Views", parent), m_tab_widget(new QTabWidget()), m_layout(new QVBoxLayout()), m_zoom_factor(1.2)
 {
     m_content_layout->addWidget(m_tab_widget);
@@ -145,4 +145,5 @@ int graph_tab_widget::get_context_tab_index(graph_context* context) const
         }
     }
     return -1;
+}
 }

@@ -8,7 +8,7 @@
 
 // enable this to apply all settings as they are modified
 //#define SETTINGS_UPDATE_IMMEDIATELY
-
+namespace hal{
 settings_widget::settings_widget(const QString& key, QWidget* parent)
     : QFrame(parent), m_layout(new QVBoxLayout()), m_container(new QBoxLayout(QBoxLayout::TopToBottom)), m_top_bar(new QHBoxLayout()), m_name(new QLabel()), m_revert(new QToolButton()),
       m_default(new QToolButton()), m_highlight_color(52, 56, 57), m_key(key)
@@ -220,4 +220,5 @@ void settings_widget::set_preview_position(preview_position position)
             return;
     }
     m_container->setDirection(direction);
+}
 }

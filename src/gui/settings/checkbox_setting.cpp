@@ -10,7 +10,7 @@
 #include <QCheckBox>
 #include <QStringList>
 #include "gui_globals.h"
-
+namespace hal{
 checkbox_setting::checkbox_setting(const QString& key, const QString& title, const QString& text, const QString& description, QWidget *parent) : settings_widget(key, parent)
 {
     m_labels.append(QPair<QLabel*, QString>(m_name, title));
@@ -50,4 +50,5 @@ void checkbox_setting::on_state_changed(bool checked)
 {
     Q_UNUSED(checked);
     this->trigger_setting_updated();
+}
 }

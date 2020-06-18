@@ -5,7 +5,7 @@
 #include <functional>
 #include <map>
 #include "hal_logger/logger_qss_adapter.h"
-
+namespace hal{
 hal_logger_marshall::hal_logger_marshall(QPlainTextEdit* edit, QObject* parent) : QObject(parent), m_edit(edit)
 {
     m_max_line_count = 1000;
@@ -150,4 +150,5 @@ void hal_logger_marshall::highlight_current_line()
 //    extraSelections.append(selection);
 
 //    m_edit->setExtraSelections(extraSelections);
+}
 }

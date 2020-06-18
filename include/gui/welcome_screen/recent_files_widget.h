@@ -25,7 +25,7 @@
 #define RECENT_FILES_WIDGET_H
 
 #include <QFrame>
-
+namespace hal{
 class recent_file_item;
 
 class QVBoxLayout;
@@ -51,5 +51,6 @@ private:
 
     QList<recent_file_item*> m_items;
 };
+}
 
 #endif    // RECENT_FILES_WIDGET_H

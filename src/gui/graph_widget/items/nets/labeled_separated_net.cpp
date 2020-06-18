@@ -5,7 +5,7 @@
 #include <QPainter>
 #include <QPen>
 #include <QStyleOptionGraphicsItem>
-
+namespace hal{
 static const qreal s_baseline = 1;
 
 qreal labeled_separated_net::s_wire_length;
@@ -161,4 +161,5 @@ qreal labeled_separated_net::input_width() const
 qreal labeled_separated_net::output_width() const
 {
     return s_wire_length + s_text_offset + m_text_width;
+}
 }

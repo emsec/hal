@@ -6,7 +6,7 @@
 
 #include <QColor>
 #include <QGraphicsItem>
-
+namespace hal{
 class graphics_item : public QGraphicsItem
 {
 public:
@@ -26,3 +26,4 @@ protected:
     u32 m_id;
     QColor m_color;
 };
+}

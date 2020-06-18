@@ -27,7 +27,7 @@
 #include <QColor>
 #include <QIcon>
 #include <QString>
-
+namespace hal{
 namespace gui_utility
 {
     extern QString get_svg_data(const QString& svg_path);
@@ -37,6 +37,7 @@ namespace gui_utility
     extern QIcon get_styled_svg_icon(const QString& from_to_colors, const QString& svg_path);
 
     extern QColor get_random_color();
+}
 }
 
 #endif // GUI_UTILITY_H

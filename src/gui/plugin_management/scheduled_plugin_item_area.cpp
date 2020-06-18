@@ -8,7 +8,7 @@
 #include <QDragEnterEvent>
 #include <QMimeData>
 #include <QVBoxLayout>
-
+namespace hal{
 scheduled_plugin_item_area::scheduled_plugin_item_area(QWidget* parent)
     : QFrame(parent), m_layout(new QVBoxLayout()), m_spacer(new QFrame()), m_active_marker(nullptr), m_internal_drag_active(false), m_drag_index(-1)
 {
@@ -197,4 +197,5 @@ void scheduled_plugin_item_area::handle_item_removed(scheduled_plugin_item* item
 
     if (m_list.isEmpty())
         Q_EMIT no_scheduled_plugins();
+}
 }

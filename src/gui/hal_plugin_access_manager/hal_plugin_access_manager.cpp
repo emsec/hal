@@ -5,7 +5,7 @@
 #include "core/program_arguments.h"
 #include "gui_globals.h"
 #include "hal_plugin_access_manager/hal_extended_cli_dialog.h"
-
+namespace hal{
 ProgramArguments hal_plugin_access_manager::request_arguments(const std::string plugin_name)
 {
     auto pl = PluginManager::get_plugin_instance<BasePluginInterface>(plugin_name, false);
@@ -68,4 +68,5 @@ int hal_plugin_access_manager::run_plugin(const std::string plugin_name, Program
 
     log_info("gui", "Running plugin {}", plugin_name);
     return plugin->handle_cli_call(g_netlist, *args);
+}
 }

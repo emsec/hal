@@ -12,7 +12,7 @@
 #include <QScrollBar>
 
 #include <assert.h>
-
+namespace hal{
 graph_navigation_widget::graph_navigation_widget(QWidget* parent) : QTableWidget(parent), m_via_net(0)
 {
     m_hide_when_focus_lost = false;
@@ -250,4 +250,5 @@ void graph_navigation_widget::commit_selection()
 
     Q_EMIT navigation_requested(m_origin, m_via_net, {g->get_id()}, {});
     return;
+}
 }

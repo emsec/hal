@@ -10,7 +10,7 @@
 #include "netlist/netlist.h"
 
 #include <QDateTime>
-
+namespace hal{
 graph_context_manager::graph_context_manager()
 {
 }
@@ -271,4 +271,5 @@ graph_shader* graph_context_manager::get_default_shader(graph_context* const con
 {
     // USE SETTINGS + FACTORY
     return new module_shader(context);
+}
 }

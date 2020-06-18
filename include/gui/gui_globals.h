@@ -42,7 +42,7 @@
 #include "gui/gui_api/gui_api.h"
 
 #include <QSettings>
-
+namespace hal{
 //extern QSettings g_settings;
 extern QSettings g_gui_state;
 
@@ -75,5 +75,6 @@ extern gui_api* g_gui_api;
 // Comment this out to not compile the debug code for the graph grid.
 // This will also hide the respective debug setting from the settings page.
 #define GUI_DEBUG_GRID
+}
 
 #endif    // GUI_GLOBALS_H

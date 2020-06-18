@@ -3,7 +3,7 @@
 #include "validator/stacked_validator.h"
 
 #include<QDialogButtonBox>
-
+namespace hal{
 input_dialog::input_dialog(QWidget* parent, Qt::WindowFlags f) : QDialog(parent, f)
 {
     init();
@@ -133,4 +133,5 @@ void input_dialog::handle_ok_clicked()
 void input_dialog::handle_cancel_clicked()
 {
     done(QDialog::Rejected);
+}
 }

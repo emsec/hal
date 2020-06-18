@@ -26,10 +26,12 @@
 
 #include <QFrame>
 
-class expanding_list_widget;
-
 class QHBoxLayout;
 class QLabel;
+
+namespace hal{
+class expanding_list_widget;
+
 
 class expanding_list_button : public QFrame
 {
@@ -76,5 +78,6 @@ private:
     QString m_icon_style;
     QString m_icon_path;
 };
+}
 
 #endif    // EXPANDING_LIST_BUTTON_H

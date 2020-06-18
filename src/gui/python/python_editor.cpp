@@ -26,7 +26,7 @@
 #include <QVBoxLayout>
 #include <chrono>
 #include <fstream>
-
+namespace hal{
 python_editor::python_editor(QWidget* parent)
     : content_widget("Python Editor", parent), python_context_subscriber(), m_searchbar(new searchbar()), m_action_open_file(new hal_action(this)), m_action_run(new hal_action(this)),
       m_action_save(new hal_action(this)), m_action_save_as(new hal_action(this)), m_action_toggle_minimap(new hal_action(this)), m_action_new_file(new hal_action(this))
@@ -830,4 +830,5 @@ void python_editor::toggle_searchbar()
         else
             this->setFocus();
     }
+}
 }

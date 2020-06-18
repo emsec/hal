@@ -11,7 +11,7 @@
 #include <QVBoxLayout>
 #include <QShortcut>
 
-
+namespace hal{
 python_code_editor::python_code_editor(QWidget *parent) : code_editor(parent), m_uuid(QUuid::createUuid())
 {
     QShortcut* redo_shortcut = new QShortcut(QKeySequence(tr("Ctrl+y")), this);
@@ -326,4 +326,5 @@ bool python_code_editor::is_base_file_modified()
 QUuid python_code_editor::get_uuid() const
 {
     return m_uuid;
+}
 }

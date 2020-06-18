@@ -11,7 +11,7 @@
 
 #include <QApplication>
 #include <QFile>
-
+namespace hal{
 style_manager::style_manager(QObject* parent)
     : QObject(parent), m_graphics_qss_adapter(new graphics_qss_adapter()), m_shared_properties(new shared_properties_qss_adapter()),
       m_notification_manager(new notification_manager_qss_adapter()), m_python_syntax_highlighter(new python_qss_adapter()), m_vhdl_syntax_highlighter(new vhdl_qss_adapter())
@@ -109,4 +109,5 @@ void style_manager::set_default(QApplication* app)
     fallback.open(QFile::ReadOnly);
     app->setStyleSheet(QString(fallback.readAll()));
     fallback.close();
+}
 }

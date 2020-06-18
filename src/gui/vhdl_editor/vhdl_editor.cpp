@@ -8,7 +8,7 @@
 
 #include <QShortcut>
 #include <QVBoxLayout>
-
+namespace hal{
 vhdl_editor::vhdl_editor() : content_widget("Source"), m_code_editor(new code_editor()), m_searchbar(new searchbar())
 {
     connect(m_searchbar, &searchbar::text_edited, m_code_editor, &code_editor::search);
@@ -48,4 +48,5 @@ void vhdl_editor::toggle_searchbar()
         m_searchbar->show();
     else
         m_searchbar->hide();
+}
 }

@@ -32,7 +32,7 @@
 #include <QSize>
 #include <QTableWidget>
 #include <QWidget>
-
+namespace hal{
 class python_editor_code_completion_dialog : public QDialog
 {
     Q_OBJECT
@@ -59,5 +59,6 @@ private:
     /*calculated the "biggest" size of the table*/
     QSize table_widget_size(QTableWidget* table);
 };
+}
 
 #endif    // _PYTHON_EDITOR_CODE_COMPLETION_DIALOG_H_

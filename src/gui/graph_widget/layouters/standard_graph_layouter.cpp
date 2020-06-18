@@ -1,7 +1,7 @@
 #include "gui/graph_widget/layouters/standard_graph_layouter.h"
 
 #include "gui/implementations/qpoint_extension.h"
-
+namespace hal{
 standard_graph_layouter::standard_graph_layouter(const graph_context* const context) : graph_layouter(context)
 {
 }
@@ -216,4 +216,5 @@ void standard_graph_layouter::remove(const QSet<u32> modules, const QSet<u32> ga
 
     for (u32 id : gates)
         remove_node_from_maps({hal::node_type::gate, id});
+}
 }

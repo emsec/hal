@@ -10,7 +10,7 @@
 #include <QStringList>
 #include <QTableWidgetItem>
 #include <core/log.h>
-
+namespace hal{
 python_editor_code_completion_dialog::python_editor_code_completion_dialog(QWidget* parent, std::vector<std::tuple<std::string, std::string>> completions) : QDialog(parent), m_completions(completions)
 {
     //the parent has to be a layouter_view, needs a rework, for now its sufficient
@@ -92,4 +92,5 @@ QSize python_editor_code_completion_dialog::table_widget_size(QTableWidget* tabl
         height += table->rowHeight(i);
 
     return QSize(width, height);
+}
 }

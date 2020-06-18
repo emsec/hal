@@ -8,7 +8,7 @@
 #include <QString>
 
 #include <vector>
-
+namespace hal{
 struct log_entry
 {
     QString m_message;
@@ -41,5 +41,6 @@ private:
     std::vector<log_channel*> m_fixed_channels;
     log_channel* m_temporary_channels[log_channel_manager_constants::max_channels];
 };
+}
 
 #endif // LOG_CHANNEL_MANAGER_H

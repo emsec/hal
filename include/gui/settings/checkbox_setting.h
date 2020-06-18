@@ -27,7 +27,7 @@
 #include "settings_widget.h"
 #include <QCheckBox>
 #include <QStringList>
-
+namespace hal{
 class checkbox_setting : public settings_widget
 {
     Q_OBJECT
@@ -44,5 +44,6 @@ private:
     void on_state_changed(bool checked);
 
 };
+}
 
 #endif //CHECKBOX_SETTINGS_H

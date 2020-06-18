@@ -4,7 +4,7 @@
 #include "core/plugin_manager.h"
 #include <QChar>
 #include <iostream>
-
+namespace hal{
 hal_extended_cli_dialog::hal_extended_cli_dialog(QString plugin_name, QWidget* parent) : QDialog(parent)
 {
     m_content_layout = new QVBoxLayout(this);
@@ -137,4 +137,5 @@ void hal_extended_cli_dialog::setup(std::string plugin_name)
         m_vector.push_back(std::make_pair(button, line_edit));
         m_form_layout->addRow(button, line_edit);
     }
+}
 }

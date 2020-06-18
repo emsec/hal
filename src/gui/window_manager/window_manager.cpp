@@ -12,7 +12,7 @@
 #include <QAction>
 #include <QShortcut>
 #include <QDebug>
-
+namespace hal{
 window_manager::window_manager(QObject* parent) : QObject(parent),
     m_main_window        (nullptr),
     m_action_open_file   (new QAction("Open File", this)),
@@ -200,4 +200,5 @@ void window_manager::handle_action_settings()
 void window_manager::handle_action_about()
 {
 
+}
 }

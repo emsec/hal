@@ -30,7 +30,7 @@
 
 #include <QCheckBox>
 #include <QStringList>
-
+namespace hal{
 class keybind_setting : public settings_widget
 {
     Q_OBJECT
@@ -48,6 +48,7 @@ private:
     void on_keybind_edit_rejected();
 
 };
+}
 
 #endif //KEYBIND_SETTINGS_H
 

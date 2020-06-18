@@ -2,7 +2,7 @@
 
 #include <QDebug>
 #include <QStyle>
-
+namespace hal{
 python_qss_adapter::python_qss_adapter(QWidget* parent) : QWidget(parent)
 {
     repolish();
@@ -158,4 +158,5 @@ void python_qss_adapter::set_double_quoted_string_color(const QColor& color)
 void python_qss_adapter::set_comment_color(const QColor& color)
 {
     m_comment_color = color;
+}
 }

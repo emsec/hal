@@ -8,7 +8,7 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QString>
-
+namespace hal{
 class file_modified_bar : public QFrame
 {
     Q_OBJECT
@@ -40,5 +40,6 @@ private:
     void handle_file_content_modified(QString path);
     void handle_file_mov_or_del(QString path);
 };
+}
 
 #endif    // FILE_MODIFIED_BAR_H

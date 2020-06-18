@@ -1,7 +1,7 @@
 #include "graph_widget/graphics_qss_adapter.h"
 
 #include <QStyle>
-
+namespace hal{
 graphics_qss_adapter::graphics_qss_adapter(QWidget* parent) : QWidget(parent),
     m_gate_base_color(255, 200, 0),
     m_net_base_color(255, 200, 0),
@@ -143,4 +143,5 @@ void graphics_qss_adapter::set_grid_base_dot_color(const QColor& color)
 void graphics_qss_adapter::set_grid_cluster_dot_color(const QColor& color)
 {
     m_grid_cluster_dot_color = color;
+}
 }

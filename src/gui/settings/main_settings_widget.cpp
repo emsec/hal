@@ -28,7 +28,7 @@
 // disable this (and enable SETTINGS_UPDATE_IMMEDIATELY in settings_widget.cpp)
 // to apply all settings as they are modified
 #define ENABLE_OK_BUTTON
-
+namespace hal{
 main_settings_widget::main_settings_widget(QWidget* parent)
     : QWidget(parent), m_layout(new QHBoxLayout()), m_expanding_list_widget(new expanding_list_widget()), m_vertical_layout(new QVBoxLayout()), m_scrollbar(new QScrollBar()),
       m_searchbar_container(new QFrame()), m_searchbar_layout(new QHBoxLayout()), m_searchbar(new searchbar()), m_scroll_area(new QScrollArea()), m_content(new QFrame()),
@@ -516,4 +516,5 @@ void main_settings_widget::rollback_settings()
     {
         widget->handle_rollback();
     }
+}
 }

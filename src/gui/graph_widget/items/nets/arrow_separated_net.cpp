@@ -5,7 +5,7 @@
 #include <QPainter>
 #include <QPen>
 #include <QStyleOptionGraphicsItem>
-
+namespace hal{
 qreal arrow_separated_net::s_wire_length;
 qreal arrow_separated_net::s_input_arrow_offset;
 qreal arrow_separated_net::s_output_arrow_offset;
@@ -197,4 +197,5 @@ qreal arrow_separated_net::input_width() const
 qreal arrow_separated_net::output_width() const
 {
     return s_output_width;
+}
 }

@@ -25,7 +25,7 @@
 #define NOTIFICATION_MANAGER_QSS_ADAPTER_H
 
 #include <QWidget>
-
+namespace hal{
 class notification_manager_qss_adapter : public QWidget
 {
     Q_OBJECT
@@ -51,5 +51,6 @@ public:
     int m_y_offset;
     int m_spacing;
 };
+}
 
 #endif    // NOTIFICATION_MANAGER_QSS_ADAPTER_H

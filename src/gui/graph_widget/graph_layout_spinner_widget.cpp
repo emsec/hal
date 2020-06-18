@@ -1,7 +1,7 @@
 #include "gui/graph_widget/graph_layout_spinner_widget.h"
 
 #include <QPainter>
-
+namespace hal{
 graph_layout_spinner_widget::graph_layout_spinner_widget(QWidget* parent) : QWidget(parent),
     m_renderer(new QSvgRenderer())
 {
@@ -39,4 +39,5 @@ void graph_layout_spinner_widget::start()
 void graph_layout_spinner_widget::stop()
 {
     m_renderer->setFramesPerSecond(0);
+}
 }

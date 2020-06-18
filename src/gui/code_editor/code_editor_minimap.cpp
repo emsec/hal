@@ -11,7 +11,7 @@
 #include <math.h>
 
 #include <QDebug>
-
+namespace hal{
 code_editor_minimap::code_editor_minimap(code_editor* editor)
     : QWidget(editor), m_editor(editor), m_document(new QTextDocument()), m_scrollbar(new minimap_scrollbar(this)), m_document_height(0), m_offset(0)
 {
@@ -168,4 +168,5 @@ void code_editor_minimap::repolish()
     s->polish(this);
 
     m_document->setDefaultFont(font());
+}
 }

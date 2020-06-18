@@ -31,7 +31,7 @@
 #include "netlist_relay/netlist_relay.h"
 
 #include <QWidget>
-
+namespace hal{
 /* forward declaration */
 class QTableWidget;
 class QTableWidgetItem;
@@ -149,5 +149,6 @@ private:
     void init_settings();
     void handle_global_settings_changed(void* sender, const QString& key, const QVariant& value);
 };
+}
 
 #endif /* __HAL_GATE_DETAILS_WIDGET_H__ */

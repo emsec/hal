@@ -27,7 +27,7 @@
 #include "plugin_manager/plugin_item.h"
 #include <QAbstractItemModel>
 #include <def.h>
-
+namespace hal{
 class plugin_model : public QAbstractItemModel
 {
     Q_OBJECT
@@ -67,5 +67,6 @@ private:
     QList<plugin_item> m_items;
     u64 model_changed_callback_id;
 };
+}
 
 #endif    //HAL_PLUGIN_MODEL_H

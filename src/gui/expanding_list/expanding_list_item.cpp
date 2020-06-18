@@ -4,7 +4,7 @@
 
 #include <QPropertyAnimation>
 #include <QStyle>
-
+namespace hal{
 expanding_list_item::expanding_list_item(expanding_list_button* parent_button, QWidget* parent)
     : QFrame(parent), m_parent_button(parent_button), m_collapsed_height(0), m_expanded_height(0),
       //m_animation(new QPropertyAnimation(this, "minimumHeight", this)),
@@ -141,4 +141,5 @@ void expanding_list_item::set_fixed_height(int height)
 
     setMinimumHeight(height);
     setMaximumHeight(height);
+}
 }

@@ -1,7 +1,7 @@
 #include "code_editor/syntax_highlighter/python_syntax_highlighter.h"
 
 #include "code_editor/syntax_highlighter/python_qss_adapter.h"
-
+namespace hal{
 python_syntax_highlighter::python_syntax_highlighter(QTextDocument* parent)
     : QSyntaxHighlighter(parent), m_multi_line_comment_delimiter("('''|\"\"\")"), m_tripple_single_quote("'''"), m_tripple_double_quote("\"\"\"")
 //      //m_keyword_color(177, 240, 0),
@@ -180,4 +180,5 @@ int python_syntax_highlighter::close_multiline_comment(const QString& text, cons
         setFormat(offset, index - offset, python_qss_adapter::instance()->m_comment_format);
 
     return index;
+}
 }

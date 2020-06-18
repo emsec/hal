@@ -9,7 +9,7 @@
 #include "gui_globals.h"
 
 #include <QDebug>
-
+namespace hal{
 // SET VIA SETTINGS OR TOOLBUTTON
 bool selection_relay::s_navigation_skips_enabled = false;
 
@@ -606,4 +606,5 @@ void selection_relay::subfocus_right()
     m_subfocus_index = 0;
 
     Q_EMIT subfocus_changed(nullptr);
+}
 }

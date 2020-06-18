@@ -25,7 +25,7 @@
 #define LOADED_PLUGINS_WIDGET_H
 
 #include <QScrollArea>
-
+namespace hal{
 class QFrame;
 class QVBoxLayout;
 
@@ -45,5 +45,6 @@ private:
     QVBoxLayout* m_layout;
     QFrame* m_spacer;
 };
+}
 
 #endif    // LOADED_PLUGINS_WIDGET_H

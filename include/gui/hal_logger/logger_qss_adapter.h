@@ -26,7 +26,7 @@
 #define LOGGER_QSS_ADAPTER_H
 
 #include <QWidget>
-
+namespace hal{
 class logger_qss_adapter : public QWidget
 {
     Q_OBJECT
@@ -106,5 +106,6 @@ private:
     QColor m_default_highlight;
 
 };
+}
 
 #endif //LOGGER_QSS_ADAPTER_H

@@ -4,7 +4,7 @@
 
 #include "gui/graph_widget/contexts/graph_context.h"
 #include "gui/gui_globals.h"
-
+namespace hal{
 module_shader::module_shader(const graph_context* const context) : graph_shader(context),
     m_color_gates(true) // INITIALIZE WITH DEFAULT VALUE FROM SETTINGS
 {
@@ -61,4 +61,5 @@ void module_shader::update()
         graphics_net::visuals v{true, QColor(200, 200, 200), Qt::SolidLine, true, QColor(100, 100, 100), Qt::SolidPattern};
         m_shading.net_visuals.insert(id, v);
     }
+}
 }

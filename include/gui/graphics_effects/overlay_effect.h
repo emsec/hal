@@ -25,7 +25,7 @@
 #define OVERLAY_EFFECT_H
 
 #include <QGraphicsEffect>
-
+namespace hal{
 class overlay_effect : public QGraphicsEffect
 {
 public:
@@ -33,5 +33,6 @@ public:
 
     void draw(QPainter* painter) Q_DECL_OVERRIDE;
 };
+}
 
 #endif    // OVERLAY_EFFECT_H

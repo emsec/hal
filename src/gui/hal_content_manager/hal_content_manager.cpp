@@ -26,7 +26,7 @@
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QOpenGLWidget>
-
+namespace hal{
 hal_content_manager::hal_content_manager(main_window* parent) : QObject(parent), m_main_window(parent)
 {
     // has to be created this early in order to receive deserialization by the core signals
@@ -155,4 +155,5 @@ void hal_content_manager::handle_filsystem_doc_changed(const QString& file_name)
 void hal_content_manager::handle_save_triggered()
 {
     Q_EMIT save_triggered();
+}
 }

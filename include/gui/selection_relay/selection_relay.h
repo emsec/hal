@@ -30,8 +30,8 @@
 #include <QPair>
 #include <QVector>
 #include <QSet>
-
-class gate;
+namespace hal{
+class Gate;
 class Module;
 class Net;
 
@@ -134,5 +134,6 @@ private:
 
     QVector<QPair<void*, QString>> m_sender_register;
 };
+}
 
 #endif // SELECTION_RELAY_H

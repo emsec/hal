@@ -31,7 +31,7 @@
 #include "gui/graph_widget/contexts/graph_context_subscriber.h"
 
 #include <deque>
-
+namespace hal{
 class dialog_overlay;
 class graph_context;
 class graph_graphics_view;
@@ -90,3 +90,4 @@ private:
 
     u32 m_current_expansion;
 };
+}

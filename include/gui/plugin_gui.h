@@ -25,7 +25,7 @@
 #define __HAL_PLUGIN_GUI_H__
 
 #include "core/plugin_interface_interactive_ui.h"
-
+namespace hal{
 class plugin_gui : public InteractiveUIPluginInterface
 {
 public:
@@ -36,6 +36,7 @@ public:
 
     bool exec(ProgramArguments& args) override;
 };
+}
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wreturn-type-c-linkage"

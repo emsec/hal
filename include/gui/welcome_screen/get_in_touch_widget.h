@@ -25,7 +25,7 @@
 #define GET_IN_TOUCH_WIDGET_H
 
 #include "QFrame"
-
+namespace hal{
 class get_in_touch_item;
 
 class QLabel;
@@ -60,5 +60,6 @@ private:
     QLabel* m_core_version_label;
     QLabel* m_gui_version_label;
 };
+}
 
 #endif    // GET_IN_TOUCH_WIDGET_H

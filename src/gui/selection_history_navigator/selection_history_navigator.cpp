@@ -3,7 +3,7 @@
 #include "gui_globals.h"
 
 #include <QList>
-
+namespace hal{
 selection_history_navigator::selection_history_navigator(unsigned int max_history_size, QObject* parent) : QObject(parent)
 {
     set_max_history_size(max_history_size);
@@ -80,4 +80,5 @@ void selection_history_navigator::set_max_history_size(unsigned int max_size)
 unsigned int selection_history_navigator::get_max_history_size() const
 {
     return m_max_history_size;
+}
 }

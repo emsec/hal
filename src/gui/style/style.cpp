@@ -20,7 +20,7 @@
 #include <QHash>
 #include <QRegularExpression>
 #include <QTextStream>
-
+namespace hal{
 namespace style
 {
     QString default_stylesheet()
@@ -211,3 +211,4 @@ namespace style
     }
 
 } // namespace style
+}

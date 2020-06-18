@@ -27,7 +27,7 @@
 #include <QRegularExpression>
 #include <QSyntaxHighlighter>
 #include <QTextCharFormat>
-
+namespace hal{
 class python_syntax_highlighter : public QSyntaxHighlighter
 {
     Q_OBJECT
@@ -53,5 +53,6 @@ private:
     QRegularExpression m_tripple_single_quote;
     QRegularExpression m_tripple_double_quote;
 };
+}
 
 #endif    // PYTHON_SYNTAX_HIGHLIGHTER_H

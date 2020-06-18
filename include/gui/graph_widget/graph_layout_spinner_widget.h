@@ -2,7 +2,7 @@
 
 #include <QSvgRenderer>
 #include <QWidget>
-
+namespace hal{
 class graph_layout_spinner_widget final : public QWidget
 {
     Q_OBJECT
@@ -23,3 +23,4 @@ protected:
 private:
     QSvgRenderer* m_renderer;
 };
+}

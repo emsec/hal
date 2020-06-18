@@ -4,7 +4,7 @@
 
 #include "gui/gui_globals.h"
 #include "gui/gui_utils/graphics.h"
-
+namespace hal{
 module_item::module_item(const u32 id) :
     m_parent(nullptr),
     m_id(id),
@@ -125,4 +125,5 @@ void module_item::set_color(const QColor& color)
 void module_item::set_highlighted(const bool highlighted)
 {
     m_highlighted = highlighted;
+}
 }

@@ -26,7 +26,7 @@
 #define __MODULE_TREE_VIEW_H
 
 #include <QTreeView>
-
+namespace hal{
 //This class is neccessary to prevent that the right click on the tree-view does not select the
 //underlying item, otherwise you cant select the option "add selection to module" in
 //the contextmenu
@@ -38,6 +38,7 @@ public:
     void mousePressEvent(QMouseEvent *event);
 
 };
+}
 
 
 #endif //__MODULE_TREE_VIEW_H

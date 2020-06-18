@@ -3,7 +3,7 @@
 #include <QEvent>
 #include <QKeyEvent>
 #include <QDebug>
-
+namespace hal{
 keybind_edit::keybind_edit(QWidget* parent): QKeySequenceEdit(parent), m_validator(stacked_validator()), m_old_sequence(QKeySequence())
 {
     // do nothing
@@ -72,4 +72,5 @@ bool keybind_edit::event(QEvent* e)
     }
     recognized |= QKeySequenceEdit::event(e);
     return recognized;
+}
 }

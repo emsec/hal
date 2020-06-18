@@ -6,7 +6,7 @@
 #include <QFrame>
 #include <QStyle>
 #include <QVBoxLayout>
-
+namespace hal{
 expanding_list_widget::expanding_list_widget(QWidget* parent)
     : QScrollArea(parent), m_content(new QFrame()), m_content_layout(new QVBoxLayout()), m_spacer(new QFrame()), m_selected_button(nullptr), m_extended_item(nullptr), m_offset(0)
 {
@@ -113,4 +113,5 @@ void expanding_list_widget::handle_clicked()
     QObject* obj                  = sender();
     expanding_list_button* button = static_cast<expanding_list_button*>(obj);
     select_button(button);
+}
 }

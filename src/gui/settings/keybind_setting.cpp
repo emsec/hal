@@ -12,7 +12,7 @@
 #include <QKeySequenceEdit>
 #include <QStringList>
 #include "gui_globals.h"
-
+namespace hal{
 keybind_setting::keybind_setting(const QString& key, const QString& title, const QString& description, QWidget *parent) : settings_widget(key, parent)
 {
     m_labels.append(QPair<QLabel*, QString>(m_name, title));
@@ -54,4 +54,5 @@ void keybind_setting::on_keybind_changed()
 void keybind_setting::on_keybind_edit_rejected()
 {
     this->set_dirty(false);
+}
 }

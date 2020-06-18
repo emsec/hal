@@ -3,7 +3,7 @@
 #include "gui/gui_globals.h"
 
 #include <QDebug>
-
+namespace hal{
 keybind_manager::keybind_manager(QObject* parent) : QObject(parent)
 {
     connect(&g_settings_relay, &settings_relay::setting_changed, this, &keybind_manager::handle_global_setting_changed);
@@ -72,4 +72,5 @@ void keybind_manager::handle_global_setting_changed(void* sender, const QString&
         s->setKey(seq);
         qDebug() << s->objectName();
     }
+}
 }

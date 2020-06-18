@@ -6,7 +6,7 @@
 #include <QLabel>
 #include <QMouseEvent>
 #include <QStyle>
-
+namespace hal{
 expanding_list_button::expanding_list_button(QWidget* parent)
     : QFrame(parent), m_layout(new QHBoxLayout()), m_left_border(new QFrame()), m_icon_label(new QLabel()), m_text_label(new QLabel()), m_right_border(new QFrame()), m_hover(false), m_selected(false),
       m_type(""), m_icon_style(""), m_icon_path("")
@@ -137,4 +137,5 @@ void expanding_list_button::repolish()
 
     if (!m_icon_path.isEmpty())
         m_icon_label->setPixmap(gui_utility::get_styled_svg_icon(m_icon_style, m_icon_path).pixmap(QSize(20, 20)));
+}
 }

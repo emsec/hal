@@ -2,7 +2,7 @@
 
 #include <QPainter>
 #include <QtSvg/QSvgRenderer>
-
+namespace hal{
 svg_icon_engine::svg_icon_engine(const std::string& svg_data)
 {
     m_data = QByteArray::fromStdString(svg_data);
@@ -31,4 +31,5 @@ QPixmap svg_icon_engine::pixmap(const QSize& size, QIcon::Mode mode, QIcon::Stat
     QRect rect(QPoint(0.0, 0.0), size);
     this->paint(&painter, rect, mode, state);
     return pixmap;
+}
 }

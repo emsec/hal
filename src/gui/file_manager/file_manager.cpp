@@ -18,7 +18,7 @@
 #include <QPushButton>
 #include <QSpacerItem>
 #include <QTextStream>
-
+namespace hal{
 file_manager::file_manager(QObject* parent) : QObject(parent), m_file_watcher(new QFileSystemWatcher(this)), m_file_open(false)
 {
     m_autosave_enabled  = g_settings_manager.get("advanced/autosave").toBool();
@@ -427,4 +427,5 @@ void file_manager::display_error_message(QString error_message)
     msgBox.setStandardButtons(QMessageBox::Ok);
     msgBox.setDefaultButton(QMessageBox::Ok);
     msgBox.exec();
+}
 }

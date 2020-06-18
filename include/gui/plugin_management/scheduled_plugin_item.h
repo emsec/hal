@@ -25,7 +25,7 @@
 #define SCHEDULED_PLUGIN_ITEM_H
 
 #include <QFrame>
-
+namespace hal{
 class QHBoxLayout;
 class QLabel;
 class QPropertyAnimation;
@@ -80,5 +80,6 @@ private:
     QString m_icon_path;
     QString m_icon_style;
 };
+}
 
 #endif    // SCHEDULED_PLUGIN_ITEM_H

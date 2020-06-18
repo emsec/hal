@@ -24,7 +24,7 @@
 #pragma once
 
 #include "graph_widget/items/nets/separated_graphics_net.h"
-
+namespace hal{
 class circle_separated_net : public separated_graphics_net
 {
 public:
@@ -45,3 +45,4 @@ private:
     static qreal s_circle_offset;
     static qreal s_radius;
 };
+}

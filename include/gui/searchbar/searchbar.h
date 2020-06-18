@@ -25,7 +25,7 @@
 #define SEARCHBAR_H
 
 #include <QFrame>
-
+namespace hal{
 class QLabel;
 class QLineEdit;
 class QHBoxLayout;
@@ -86,5 +86,6 @@ private:
     QString m_clear_icon;
     QString m_clear_icon_style;
 };
+}
 
 #endif    // SEARCHBAR_H

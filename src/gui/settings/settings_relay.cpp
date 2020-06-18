@@ -1,6 +1,6 @@
 #include "settings/settings_relay.h"
- #include <QDebug>
-
+#include <QDebug>
+namespace hal{
 settings_relay::settings_relay(QObject* parent) : QObject(parent)
 {
     // DEBUG print the changed setting to stdout
@@ -30,4 +30,5 @@ void settings_relay::debug(void* sender, const QString& key, const QVariant& val
 void settings_relay::relay_setting_changed(void* sender, const QString& key, const QVariant& val)
 {
     Q_EMIT setting_changed(sender, key, val);
+}
 }

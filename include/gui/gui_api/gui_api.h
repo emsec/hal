@@ -10,7 +10,7 @@
 #include <tuple>
 
 #include <QObject>
-
+namespace hal{
 class gui_api : public QObject
 {
     Q_OBJECT
@@ -80,5 +80,6 @@ public:
 Q_SIGNALS:
     void navigation_requested();
 };
+}
 
 #endif // GUI_API_H

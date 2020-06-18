@@ -1,7 +1,7 @@
 #pragma once
 
 #include "gui/graph_widget/shaders/graph_shader.h"
-
+namespace hal{
 class module_shader final : public graph_shader
 {
 public:
@@ -14,3 +14,4 @@ public:
 private:
     bool m_color_gates;
 };
+}

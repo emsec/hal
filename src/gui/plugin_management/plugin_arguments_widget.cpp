@@ -9,7 +9,7 @@
 #include <QLineEdit>
 #include <QPushButton>
 #include <QString>
-
+namespace hal{
 plugin_arguments_widget::plugin_arguments_widget(QWidget* parent) : QFrame(parent), m_form_layout(new QFormLayout())
 {
     setLayout(m_form_layout);
@@ -225,4 +225,5 @@ char* plugin_arguments_widget::to_heap_cstring(const QString& string)
     std::copy(std_string.begin(), std_string.end(), cstring);
     cstring[std_string.size()] = '\0';
     return cstring;
+}
 }

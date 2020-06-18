@@ -7,7 +7,7 @@
 #include <QObject>
 #include <QSet>
 #include <QDateTime>
-
+namespace hal{
 class graph_context_subscriber;
 
 class graph_context : public QObject
@@ -99,3 +99,4 @@ private:
 
     QDateTime m_timestamp;
 };
+}

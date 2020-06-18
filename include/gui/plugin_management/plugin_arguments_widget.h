@@ -29,7 +29,7 @@
 #include <QVector>
 
 #include <memory>
-
+namespace hal{
 class CLIPluginInterface;
 class ProgramArguments;
 
@@ -67,5 +67,6 @@ private:
 
     int m_current_index;
 };
+}
 
 #endif    // PLUGIN_ARGUMENTS_WIDGET_H

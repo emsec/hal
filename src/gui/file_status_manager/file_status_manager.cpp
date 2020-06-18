@@ -2,7 +2,7 @@
 #include "file_manager/file_manager.h"
 
 #include "gui_globals.h"
-
+namespace hal{
 file_status_manager::file_status_manager(QObject* parent) : QObject(parent), m_modified_files_uuid(QSet<QUuid>()), m_modified_files_descriptors(QMap<QUuid, QString>())
 {
 }
@@ -61,4 +61,5 @@ QList<QString> file_status_manager::get_unsaved_change_descriptors() const
     }
 
     return unsaved_changes_descriptors;
+}
 }

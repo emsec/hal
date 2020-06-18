@@ -37,11 +37,10 @@
 #pragma GCC diagnostic pop
 
 #include "python_console.h"
-
+namespace hal{
 class python_context_subscriber;
 
 namespace py = pybind11;
-
 class __attribute__((visibility("default"))) python_context
 {
 public:
@@ -94,5 +93,6 @@ private:
     python_console* m_console;
     bool m_trigger_reset = false;
 };
+}
 
 #endif    // PYTHON_CONTEXT_H

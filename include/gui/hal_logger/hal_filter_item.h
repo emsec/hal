@@ -26,7 +26,7 @@
 
 #include <QList>
 #include <QRegularExpression>
-
+namespace hal{
 struct hal_filter_item
 {
     enum class rule
@@ -59,5 +59,6 @@ struct hal_filter_item
 
     const QRegularExpression m_reg_ex;
 };
+}
 
 #endif    // HAL_FILTER_ITEM_H

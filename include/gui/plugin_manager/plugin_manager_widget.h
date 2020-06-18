@@ -27,7 +27,7 @@
 #include "content_widget/content_widget.h"
 
 #include <QTableView>
-
+namespace hal{
 class plugin_model;
 class toolbar;
 
@@ -50,5 +50,6 @@ private:
     QAction* m_remove_action;
     QTableView m_table_view;
 };
+}
 
 #endif    // PLUGIN_MANAGER_DIALOG_H

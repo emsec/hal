@@ -7,7 +7,7 @@
 #include <QDesktopWidget>
 #include <QShortcut>
 #include <QStyle>
-
+namespace hal{
 tab_widget::tab_widget(QWidget* parent)
     : hal_widget(parent), m_vertical_layout(new QVBoxLayout()), m_horizontal_layout(new QHBoxLayout()), m_dock_bar(new dock_bar(Qt::Horizontal, button_orientation::horizontal, this)),
       m_left_toolbar(new toolbar()), m_right_toolbar(new toolbar()), m_current_widget(nullptr), m_action_detach(new QAction(this))
@@ -198,4 +198,5 @@ void tab_widget::handle_drag_end()
 {
     if (m_dock_bar->unused())
         hide();
+}
 }

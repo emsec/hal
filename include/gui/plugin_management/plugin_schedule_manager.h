@@ -25,7 +25,7 @@
 #define PLUGIN_SCHEDULE_MANAGER_H
 
 #include <QObject>
-
+namespace hal{
 class plugin_arguments_widget;
 class ProgramArguments;
 
@@ -70,5 +70,6 @@ private:
 
     int m_current_index;
 };
+}
 
 #endif    // PLUGIN_SCHEDULE_MANAGER_H

@@ -24,7 +24,7 @@
 #pragma once
 
 #include "graph_widget/items/nets/separated_graphics_net.h"
-
+namespace hal{
 class labeled_separated_net : public separated_graphics_net
 {
 public:
@@ -51,3 +51,4 @@ private:
     QString m_text;
     qreal m_text_width;
 };
+}

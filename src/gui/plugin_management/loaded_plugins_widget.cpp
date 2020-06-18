@@ -7,7 +7,7 @@
 
 #include <QFrame>
 #include <QVBoxLayout>
-
+namespace hal{
 loaded_plugins_widget::loaded_plugins_widget(QWidget* parent) : QScrollArea(parent), m_container(new QFrame()), m_layout(new QVBoxLayout()), m_spacer(new QFrame())
 {
     connect(&g_plugin_relay, &plugin_relay::plugin_loaded, this, &loaded_plugins_widget::handle_plugin_loaded);
@@ -52,4 +52,5 @@ void loaded_plugins_widget::handle_plugin_unloaded(const QString& name, const QS
         if (item->name() == name)
             item->deleteLater();
     }
+}
 }

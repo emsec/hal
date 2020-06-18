@@ -1,7 +1,7 @@
 #pragma once
 
 #include "gui/thread_pool/task.h"
-
+namespace hal{
 class graph_layouter;
 
 class layouter_task : public task
@@ -14,3 +14,4 @@ public:
 private:
     graph_layouter* m_layouter;
 };
+}

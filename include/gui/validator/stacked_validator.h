@@ -4,7 +4,7 @@
 #include "validator/validator.h"
 
 #include <QList>
-
+namespace hal{
 class stacked_validator : public validator
 {
     public:
@@ -19,5 +19,6 @@ class stacked_validator : public validator
     private:
         QList<validator*> m_validators;
 };
+}
 
 #endif      // STACKED_VALIDATOR_H

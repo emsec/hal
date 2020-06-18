@@ -3,7 +3,7 @@
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QWidget>
-
+namespace hal{
 namespace gui_utility
 {
     void ensure_on_screen(QWidget* w)
@@ -23,4 +23,5 @@ namespace gui_utility
         w->move(requiredRect.topLeft());
     }
 
+}
 }

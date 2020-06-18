@@ -8,7 +8,7 @@
 #include "netlist_relay/netlist_relay.h"
 
 #include <QWidget>
-
+namespace hal{
 /* forward declaration */
 class QLabel;
 class QTableWidget;
@@ -90,5 +90,6 @@ private:
     void add_general_table_dynamic_item(QTableWidgetItem* item);
     void style_table(QTableWidget* table);
 };
+}
 
 #endif /* HAL_MODULE_DETAILS_WIDGET_H*/

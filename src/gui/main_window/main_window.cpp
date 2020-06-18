@@ -41,7 +41,7 @@
 #include <QSettings>
 #include <QShortcut>
 #include <QtConcurrent>
-
+namespace hal{
 main_window::main_window(QWidget* parent) : QWidget(parent), m_schedule_widget(new plugin_schedule_widget()), m_action_schedule(new hal_action(this)), m_action_content(new hal_action(this))
 {
     ensurePolished();    // ADD REPOLISH METHOD
@@ -640,4 +640,5 @@ void main_window::save_state()
 void main_window::add_content(content_widget* widget, int index, content_anchor anchor)
 {
     m_layout_area->add_content(widget, index, anchor);
+}
 }

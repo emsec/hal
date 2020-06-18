@@ -7,7 +7,7 @@
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QStyle>
-
+namespace hal{
 splitter_anchor::splitter_anchor(dock_bar* dock_bar, splitter* splitter, QObject* parent) : QObject(parent), m_dock_bar(dock_bar), m_splitter(splitter)
 {
     connect(content_drag_relay::instance(), &content_drag_relay::drag_start, m_dock_bar, &dock_bar::handle_drag_start);
@@ -107,4 +107,5 @@ void splitter_anchor::remove_content()
     }
 
     m_dock_bar->update();
+}
 }

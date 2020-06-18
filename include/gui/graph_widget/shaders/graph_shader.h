@@ -9,7 +9,7 @@
 #include <QMap>
 #include <QSet>
 #include <QVector>
-
+namespace hal{
 class graph_context;
 
 class graph_shader
@@ -36,3 +36,4 @@ protected:
 
     shading m_shading;
 };
+}

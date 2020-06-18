@@ -1,6 +1,6 @@
 #include "main_window/about_dialog.h"
 #include <core/utils.h>
-
+namespace hal{
 about_dialog::about_dialog(QWidget* parent) : QDialog(parent), m_placeholder("about gui"), m_licenses_label("Open Source licenses:"), m_textedit()
 {
     setLayout(&m_content_layout);
@@ -10,4 +10,5 @@ about_dialog::about_dialog(QWidget* parent) : QDialog(parent), m_placeholder("ab
     m_content_layout.addWidget(&m_placeholder);
     m_content_layout.addWidget(&m_licenses_label);
     m_content_layout.addWidget(&m_textedit);
+}
 }

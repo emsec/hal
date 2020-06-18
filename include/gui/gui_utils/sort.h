@@ -25,7 +25,7 @@
 #define SORT_UTIL_H
 
 #include <QString>
-
+namespace hal{
 namespace gui_utility
 {
     enum sort_mechanism
@@ -42,5 +42,6 @@ namespace gui_utility
     int compare(sort_mechanism mechanism, QString a, QString b);
 
 } // namespace gui_utility
+}
 
 #endif // SORT_UTIL_H

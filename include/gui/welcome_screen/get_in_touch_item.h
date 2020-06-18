@@ -25,7 +25,7 @@
 #define GET_IN_TOUCH_ITEM_H
 
 #include <QFrame>
-
+namespace hal{
 class QHBoxLayout;
 class QLabel;
 class QPropertyAnimation;
@@ -71,5 +71,6 @@ private:
     QString m_icon_path;
     QString m_icon_style;
 };
+}
 
 #endif    // GET_IN_TOUCH_ITEM_H

@@ -3,7 +3,7 @@
 #include <gui/python/python_console_history.h>
 
 #include "python/python_console_history.h"
-
+namespace hal{
 python_console_history::python_console_history() : m_file_name(QDir::home().filePath(".hal_history").toLocal8Bit().constData()), m_history()
 {
     update_from_file();
@@ -44,4 +44,5 @@ void python_console_history::append_to_file(const std::string& command)
 {
     std::ofstream f(m_file_name, std::ios::out | std::ios::app);
     f << command << std::endl;
+}
 }

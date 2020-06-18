@@ -42,7 +42,7 @@
 #include <QList>
 #include <QObject>
 #include <QSortFilterProxyModel>
-
+namespace hal{
 class module_proxy_model;
 
 class QTreeView;
@@ -84,5 +84,6 @@ private:
 
     module_item* get_module_item_from_index(const QModelIndex &index);
 };
+}
 
 #endif // MODULE_WIDGET_H

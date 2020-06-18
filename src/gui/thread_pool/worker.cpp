@@ -1,7 +1,7 @@
 #include "gui/thread_pool/worker.h"
 #include <assert.h>
 #include "gui/thread_pool/task.h"
-
+namespace hal{
 worker::worker(QObject* parent) : QThread(parent)
 {
 
@@ -22,4 +22,5 @@ void worker::run()
     m_task->execute();
     Q_EMIT m_task->finished();
     m_task->deleteLater();
+}
 }

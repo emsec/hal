@@ -32,7 +32,7 @@
 #include <QLabel>
 #include <QLayout>
 #include <QLineEdit>
-
+namespace hal{
 class hal_filter_tab_bar;
 
 class hal_filter_dialog : public QDialog
@@ -97,5 +97,6 @@ private:
 
     QDialogButtonBox m_button_box;
 };
+}
 
 #endif    // HAL_FILTER_DIALOG_H

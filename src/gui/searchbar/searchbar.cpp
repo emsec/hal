@@ -11,7 +11,7 @@
 #include <QPushButton>
 #include <QStyle>
 #include <QToolButton>
-
+namespace hal{
 searchbar::searchbar(QWidget* parent)
     : QFrame(parent), m_layout(new QHBoxLayout()), m_search_icon_label(new QLabel()), m_line_edit(new QLineEdit()), m_clear_icon_label(new QLabel()), m_mode_button(new QPushButton()),
       m_down_button(new QToolButton()), m_up_button(new QToolButton())
@@ -150,4 +150,5 @@ void searchbar::handle_return_pressed()
 void searchbar::handle_mode_clicked()
 {
     Q_EMIT mode_clicked();
+}
 }

@@ -2,7 +2,7 @@
 
 #include <QVBoxLayout>
 #include <QVariant>
-
+namespace hal{
 fontsize_preview_widget::fontsize_preview_widget(const QString& text, const QFont& font, QWidget* parent) : preview_widget(parent), m_label(new QLabel()), m_font(font)
 {
     setFrameStyle(QFrame::Box);
@@ -19,4 +19,5 @@ void fontsize_preview_widget::update(const QVariant& value)
 {
     m_font.setPointSize(value.toInt());
     m_label->setFont(m_font);
+}
 }

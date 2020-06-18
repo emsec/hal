@@ -8,7 +8,7 @@
 #include <QStyle>
 #include <QUrl>
 #include <QVBoxLayout>
-
+namespace hal{
 get_in_touch_widget::get_in_touch_widget(QWidget* parent)
     : QFrame(parent), m_layout(new QVBoxLayout()), m_about_item(new get_in_touch_item("About", "Show license and version information")),
       m_news_item(new get_in_touch_item("Stay up to date", "Subscribe to our newsfeed for the latest updates and patchnotes")),
@@ -120,4 +120,5 @@ void get_in_touch_widget::handle_ticket_item_clicked()
 {
     QString link = "https://github.com/emsec/hal/issues";
     QDesktopServices::openUrl(QUrl(link));
+}
 }

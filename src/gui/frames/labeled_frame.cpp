@@ -3,7 +3,7 @@
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QVBoxLayout>
-
+namespace hal{
 labeled_frame::labeled_frame(QWidget* parent)
     : QFrame(parent), m_layout(new QVBoxLayout), m_header(new QFrame()), m_header_layout(new QHBoxLayout()), m_left_spacer(new QFrame()), m_label(new QLabel()), m_right_spacer(new QFrame())
 {
@@ -37,4 +37,5 @@ labeled_frame::labeled_frame(QWidget* parent)
 void labeled_frame::add_content(QWidget* content)
 {
     m_layout->addWidget(content);
+}
 }

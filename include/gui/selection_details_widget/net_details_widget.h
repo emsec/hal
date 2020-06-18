@@ -29,7 +29,7 @@
 #include "netlist_relay/netlist_relay.h"
 
 #include <QWidget>
-
+namespace hal{
 class QVBoxLayout;
 class QHBoxLayout;
 class QLabel;
@@ -111,5 +111,6 @@ private:
     void init_settings();
     void handle_global_settings_changed(void* sender, const QString& key, const QVariant& value);
 };
+}
 
 #endif    // NET_DETAILS_WIDGET_H

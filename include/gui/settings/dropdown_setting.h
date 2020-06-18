@@ -27,7 +27,7 @@
 #include "settings_widget.h"
 #include <QComboBox>
 #include <QStringList>
-
+namespace hal{
 class dropdown_setting : public settings_widget
 {
     Q_OBJECT
@@ -45,5 +45,6 @@ private:
     void on_index_changed(QString text);
 
 };
+}
 
 #endif //DROPDOWN_SETTINGS_H

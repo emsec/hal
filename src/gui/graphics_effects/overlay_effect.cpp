@@ -1,7 +1,7 @@
 #include "graphics_effects/overlay_effect.h"
 
 #include <QPainter>
-
+namespace hal{
 overlay_effect::overlay_effect(QObject* parent) : QGraphicsEffect(parent)
 {
 }
@@ -23,4 +23,5 @@ void overlay_effect::draw(QPainter* painter)
     painter->setBrush(QColor(0, 0, 0));
     painter->setOpacity(0.5);
     painter->drawRect(pixmap.rect());
+}
 }

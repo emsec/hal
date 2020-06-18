@@ -29,7 +29,7 @@
 #include <QVBoxLayout>
 #include <QVariantAnimation>
 #include <QTimer>
-
+namespace hal{
 graph_widget::graph_widget(graph_context* context, QWidget* parent)
     : content_widget("Graph", parent), m_view(new graph_graphics_view(this)), m_context(context), m_overlay(new dialog_overlay(this)),
       m_navigation_widget_v2(new graph_navigation_widget_v2(nullptr)),
@@ -915,4 +915,5 @@ void graph_widget::reset_focus()
 graph_graphics_view* graph_widget::view()
 {
     return m_view;
+}
 }

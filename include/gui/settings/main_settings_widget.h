@@ -28,7 +28,7 @@
 #include <QList>
 #include <QMap>
 #include <QWidget>
-
+namespace hal{
 class expanding_list_button;
 class expanding_list_widget;
 class searchbar;
@@ -107,5 +107,6 @@ private:
     QMap<settings_widget*, QString> m_exclusive_w2g;
     QMap<QString, QList<settings_widget*>*> m_exclusive_g2w;
 };
+}
 
 #endif    // MAIN_SETTINGS_WIDGET_H

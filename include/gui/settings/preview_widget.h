@@ -26,7 +26,7 @@
 
 #include <QLabel>
 #include <QFrame>
-
+namespace hal{
 class preview_widget : public QFrame
 {
     Q_OBJECT
@@ -39,5 +39,6 @@ public:
 protected:
     QLayout* m_layout;
 };
+}
 
 #endif // PREVIEW_WIDGET_H

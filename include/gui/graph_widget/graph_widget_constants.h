@@ -1,7 +1,7 @@
 #pragma once
 
 #include "QtGlobal"
-
+namespace hal{
 namespace graph_widget_constants
 {
 static const int font_size = 12;
@@ -34,4 +34,5 @@ enum class grid_type
     dots
 };
 
+}
 }

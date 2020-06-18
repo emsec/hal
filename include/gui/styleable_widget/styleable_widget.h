@@ -2,7 +2,7 @@
 #define STYLEABLE_WIDGET_H
 
 #include <QWidget>
-
+namespace hal{
 class styleable_widget : public QWidget
 {
     Q_OBJECT
@@ -13,5 +13,6 @@ public:
 protected:
     void paintEvent(QPaintEvent* event);
 };
+}
 
 #endif // STYLEABLE_WIDGET_H

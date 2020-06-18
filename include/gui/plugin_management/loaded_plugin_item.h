@@ -31,6 +31,8 @@ class QLabel;
 class QPropertyAnimation;
 class QVBoxLayout;
 
+namespace hal{
+
 class loaded_plugin_item : public QFrame
 {
     Q_OBJECT

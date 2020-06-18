@@ -7,7 +7,7 @@
 
 #include <cmath>
 #include <math.h>
-
+namespace hal{
 minimap_scrollbar::minimap_scrollbar(QWidget* parent) : QWidget(parent),
       m_slider(new QFrame(this)),
       m_minimum(0),
@@ -202,4 +202,5 @@ void minimap_scrollbar::adjust_slider_to_value()
         y = max;
 
     m_slider->move(0, y);
+}
 }

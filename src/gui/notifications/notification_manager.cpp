@@ -3,7 +3,7 @@
 
 #include "QApplication"
 #include "QDesktopWidget"
-
+namespace hal{
 notification_manager::notification_manager(QObject* parent) : QObject(parent)
 {
     m_width_offset  = 20;
@@ -46,4 +46,5 @@ void notification_manager::rearrange_notifications()
         element->show();
         element->fade_in();
     }
+}
 }

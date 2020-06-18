@@ -1,5 +1,5 @@
 #include "selection_history_navigator/selection.h"
-
+namespace hal{
 selection::selection(u32 id, selection_relay::item_type type)
 {
     m_type = type;
@@ -25,4 +25,5 @@ u32 selection::get_net_id() const
 u32 selection::get_gate_id() const
 {
     return *m_gate_ids.begin();
+}
 }

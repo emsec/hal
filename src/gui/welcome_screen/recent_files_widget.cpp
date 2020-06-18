@@ -13,7 +13,7 @@
 #include <QDir>
 #include <QFileDialog>
 #include <QFileInfo>
-
+namespace hal{
 recent_files_widget::recent_files_widget(QWidget* parent) : QFrame(parent), m_layout(new QVBoxLayout())
 {
     connect(file_manager::get_instance(), &file_manager::file_opened, this, &recent_files_widget::handle_file_opened);
@@ -116,4 +116,5 @@ void recent_files_widget::update_settings()
     }
     g_gui_state.endArray();
 
+}
 }

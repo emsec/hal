@@ -25,7 +25,7 @@
 #define CONTENT_DRAG_RELAY_H
 
 #include <QObject>
-
+namespace hal{
 class content_drag_relay : public QObject
 {
     Q_OBJECT
@@ -42,5 +42,6 @@ Q_SIGNALS:
 private:
     content_drag_relay(QObject* parent = 0);
 };
+}
 
 #endif    // CONTENT_DRAG_RELAY_H

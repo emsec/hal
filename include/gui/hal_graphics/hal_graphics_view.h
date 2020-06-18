@@ -31,7 +31,7 @@
 #include <QPoint>
 #include <QWidget>
 #include <qmath.h>
-
+namespace hal{
 class hal_graphics_view : public QGraphicsView
 {
     Q_OBJECT
@@ -51,5 +51,6 @@ private:
 Q_SIGNALS:
     void zoomed();
 };
+}
 
 #endif    // HAL_GRAPHICS_VIEW_H

@@ -26,7 +26,7 @@
 
 #include "settings_widget.h"
 #include <QSpinBox>
-
+namespace hal{
 class spinbox_setting : public settings_widget
 {
     Q_OBJECT
@@ -42,5 +42,6 @@ private:
     void on_spinbox_value_changed(int value);
 
 };
+}
 
 #endif //SPINBOX_SETTING_H

@@ -2,7 +2,7 @@
 
 #include <QObject>
 
-
+namespace hal{
 namespace __plugin_item_impl
 {
     QVector<QPair<QString, plugin_item::column_t>> column_desc = {{{QObject::tr("Name"), plugin_item::column_t::name}, {QObject::tr("Path"), plugin_item::column_t::path}}};
@@ -27,4 +27,5 @@ bool plugin_item::is_valid()
 QVector<QPair<QString, plugin_item::column_t>> plugin_item::get_column_description()
 {
     return __plugin_item_impl::column_desc;
+}
 }

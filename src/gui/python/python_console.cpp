@@ -10,7 +10,7 @@
 #include "python/python_console_history.h"
 
 #include "python/python_console_qss_adapter.h"
-
+namespace hal{
 python_console::python_console(QWidget* parent)
     : QTextEdit(parent), m_standard_prompt(">>> "), m_compound_prompt("... "), m_prompt_block_number(0), m_prompt_length(0), m_prompt_end_position(0), m_compound_prompt_end_position(0),
       m_in_compound_prompt(false), m_in_completion(false), m_current_compound_input(""), m_current_input(""), m_current_history_index(-1), m_current_completer_index(0),
@@ -384,4 +384,5 @@ void python_console::handle_tab_key_pressed()
             replace_current_command(current_line + matching_prefix);
         }
     }
+}
 }

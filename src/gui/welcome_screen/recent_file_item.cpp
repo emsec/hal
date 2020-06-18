@@ -14,7 +14,7 @@
 #include <QStyle>
 #include <QVBoxLayout>
 #include <QToolButton>
-
+namespace hal{
 recent_file_item::recent_file_item(const QString& file, QWidget* parent)
     : QFrame(parent), m_widget(new QWidget()), m_horizontal_layout(new QHBoxLayout()), m_icon_label(new QLabel()), m_vertical_layout(new QVBoxLayout()), m_name_label(new QLabel()),
       m_path_label(new QLabel()), m_animation(new QPropertyAnimation()), m_remove_button(new QToolButton(this)), m_hover(false), m_disabled(false)
@@ -185,4 +185,5 @@ void recent_file_item::set_icon_style(const QString& style)
 void recent_file_item::handle_close_requested()
 {
     Q_EMIT remove_requested(this);
+}
 }

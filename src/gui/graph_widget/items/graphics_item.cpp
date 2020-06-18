@@ -1,5 +1,5 @@
 #include "gui/graph_widget/items/graphics_item.h"
-
+namespace hal{
 qreal graphics_item::s_lod;
 QColor graphics_item::s_selection_color;
 
@@ -29,4 +29,5 @@ hal::item_type graphics_item::item_type() const
 u32 graphics_item::id() const
 {
     return m_id;
+}
 }

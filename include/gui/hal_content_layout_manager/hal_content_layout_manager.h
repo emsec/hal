@@ -25,7 +25,7 @@
 #define HAL_CONTENT_LAYOUT_MANAGER_H
 
 #include <QObject>
-
+namespace hal{
 class hal_content_layout_manager : public QObject
 {
     Q_OBJECT
@@ -39,5 +39,6 @@ public Q_SLOTS:
 
 private:
 };
+}
 
 #endif    // HAL_CONTENT_LAYOUT_MANAGER_H

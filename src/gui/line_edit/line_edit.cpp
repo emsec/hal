@@ -1,7 +1,7 @@
 #include "line_edit/line_edit.h"
 
 #include <QStyle>
-
+namespace hal{
 line_edit::line_edit(QWidget* parent) : QLineEdit(parent)
 {
     connect(this, &line_edit::textChanged, this, &line_edit::handle_text_changed);
@@ -18,4 +18,5 @@ void line_edit::handle_text_changed(const QString& text)
 
     style()->unpolish(this);
     style()->polish(this);
+}
 }

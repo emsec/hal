@@ -4,7 +4,7 @@
 #include "validator/validator.h"
 
 #include <QStringList>
-
+namespace hal{
 class unique_string_validator : public validator
 {
     public:
@@ -15,5 +15,6 @@ class unique_string_validator : public validator
     private:
         const QStringList &m_unique_strings;
 };
+}
 
 #endif      // UNIQUE_STRING_VALIDATOR_H

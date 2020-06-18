@@ -1,7 +1,7 @@
 #include "notifications/notification_manager_qss_adapter.h"
 
 #include <QStyle>
-
+namespace hal{
 notification_manager_qss_adapter::notification_manager_qss_adapter(QWidget* parent) : QWidget(parent)
 {
     //DEFAULT VALUES
@@ -48,4 +48,5 @@ void notification_manager_qss_adapter::set_y_offset(const int offset)
 void notification_manager_qss_adapter::set_spacing(const int spacing)
 {
     m_spacing = spacing;
+}
 }

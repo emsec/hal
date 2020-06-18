@@ -17,7 +17,7 @@
 #include <grammar.h>
 #include <node.h>
 #include <parsetok.h>
-
+namespace hal{
     
     extern grammar _PyParser_Grammar;
 
@@ -283,4 +283,5 @@ void python_context::forward_reset()
 void python_context::update_netlist()
 {
     (*m_context)["netlist"] = g_netlist;
+}
 }

@@ -1,7 +1,7 @@
 #include "toolbar/toolbar.h"
 
 #include <QStyle>
-
+namespace hal{
 toolbar::toolbar(QWidget* parent) : QToolBar(parent)
 {
 }
@@ -20,4 +20,5 @@ void toolbar::repolish()
 
     s->unpolish(this);
     s->polish(this);
+}
 }

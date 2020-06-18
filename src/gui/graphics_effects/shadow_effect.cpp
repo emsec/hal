@@ -1,7 +1,7 @@
 #include "graphics_effects/shadow_effect.h"
 
 #include <QPainter>
-
+namespace hal{
 shadow_effect::shadow_effect(QObject* parent) : QGraphicsEffect(parent), _distance(4.0f), _blurRadius(10.0f), _color(0, 0, 0, 80)
 {
 }
@@ -71,4 +71,5 @@ QRectF shadow_effect::boundingRectFor(const QRectF& rect) const
 {
     qreal delta = blurRadius() + distance();
     return rect.united(rect.adjusted(-delta, -delta, delta, delta));
+}
 }

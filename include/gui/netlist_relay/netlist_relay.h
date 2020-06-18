@@ -31,7 +31,7 @@
 
 #include <QMap>
 #include <QObject>
-
+namespace hal{
 class module_item;
 class module_model;
 
@@ -121,5 +121,6 @@ private:
 
     module_model* m_module_model;
 };
+}
 
 #endif // NETLIST_RELAY_H

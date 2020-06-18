@@ -26,6 +26,7 @@
 
 #include <QToolButton>
 
+namespace hal{
 class content_widget;
 
 enum class button_orientation
@@ -73,5 +74,6 @@ private:
     bool m_hidden;
     bool m_available = true;
 };
+}
 
 #endif    // DOCK_BUTTON_H

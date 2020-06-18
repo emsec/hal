@@ -28,6 +28,7 @@
 #include <QList>
 #include <QResizeEvent>
 
+namespace hal{
 class expanding_list_button;
 
 class QPropertyAnimation;
@@ -71,5 +72,6 @@ private:
     bool m_expanded;
     int m_fixed_height;
 };
+}
 
 #endif    // EXPANDING_LIST_ITEM_H

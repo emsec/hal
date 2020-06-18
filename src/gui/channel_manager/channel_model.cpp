@@ -2,6 +2,7 @@
 #include "core/log.h"
 
 #define ALL_CHANNEL "all"
+namespace hal {
 
 channel_model channel_model::s_model;
 
@@ -148,4 +149,5 @@ void channel_model::handle_logmanager_callback(const spdlog::level::level_enum& 
     item->append_entry(new channel_entry(msg_text, t));
     Q_EMIT updated(t, ALL_CHANNEL, msg_text);
     Q_EMIT updated(t, channel_name, msg_text);
+}
 }

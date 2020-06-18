@@ -25,7 +25,7 @@
 #define WELCOME_SCREEN_H
 
 #include "QFrame"
-
+namespace hal{
 class get_in_touch_widget;
 class open_file_widget;
 class recent_files_widget;
@@ -56,5 +56,6 @@ private:
     open_file_widget* m_open_file_widget;
     get_in_touch_widget* m_get_in_touch_widget;
 };
+}
 
 #endif    // WELCOME_SCREEN_H

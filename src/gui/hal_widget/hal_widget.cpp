@@ -1,7 +1,7 @@
 #include "hal_widget/hal_widget.h"
 #include <QPainter>
 #include <QStyleOption>
-
+namespace hal{
 hal_widget::hal_widget(QWidget* parent) : QWidget(parent)
 {
 }
@@ -30,4 +30,5 @@ void hal_widget::show()
 {
     QWidget::show();
     Q_EMIT shown();
+}
 }

@@ -26,7 +26,7 @@
 
 #include "settings_widget.h"
 #include <QLineEdit>
-
+namespace hal{
 class text_setting : public settings_widget
 {
     Q_OBJECT
@@ -43,5 +43,6 @@ private:
     void on_text_changed();
 
 };
+}
 
 #endif //TEXT_SETTINGS_H

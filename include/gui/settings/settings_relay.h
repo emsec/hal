@@ -27,7 +27,7 @@
 #include <QObject>
 #include <QPair>
 #include <QVector>
-
+namespace hal{
 class settings_relay : public QObject
 {
     Q_OBJECT
@@ -49,5 +49,6 @@ public Q_SLOTS:
 // private:
 //     QVector<QPair<void*, QString>> m_sender_register;
 };
+}
 
 #endif    // SETTINGS_RELAY_H

@@ -27,7 +27,7 @@
 #include "content_widget/content_widget.h"
 
 #include <QWidget>
-
+namespace hal{
 class dock_bar;
 class splitter;
 class splitter_anchor;
@@ -89,5 +89,6 @@ private:
 
     tab_widget* m_tab_widget;
 };
+}
 
 #endif    // CONTENT_LAYOUT_AREA_H

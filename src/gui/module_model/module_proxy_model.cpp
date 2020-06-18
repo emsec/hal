@@ -2,7 +2,7 @@
 #include "gui/module_model/module_item.h"
 
 #include "gui/gui_globals.h"
-
+namespace hal{
 module_proxy_model::module_proxy_model(QObject* parent) : QSortFilterProxyModel(parent)
 {
     // QTS PROXY MODELS ARE DUMB, IMPLEMENT CUSTOM SOLUTION OR SWITCH TO A DIFFERENT FILTER METHOD
@@ -63,4 +63,5 @@ void module_proxy_model::handle_global_setting_changed(void* sender, const QStri
         // force re-sort
         invalidate();
     }
+}
 }

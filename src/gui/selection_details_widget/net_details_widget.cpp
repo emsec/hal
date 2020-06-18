@@ -13,7 +13,7 @@
 #include <QMenu>
 #include <QClipboard>
 #include <QApplication>
-
+namespace hal{
 net_details_widget::net_details_widget(QWidget* parent) : QWidget(parent)
 {
     //general initializations
@@ -532,5 +532,5 @@ void net_details_widget::handle_global_settings_changed(void* sender, const QStr
         else
             hide_empty_sections();
     }
-
+}
 }

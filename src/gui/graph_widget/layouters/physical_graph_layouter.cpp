@@ -4,7 +4,7 @@
 
 #include <limits>
 #include <set>
-
+namespace hal{
 physical_graph_layouter::physical_graph_layouter(const graph_context* const context) : graph_layouter(context),
     m_min_x_distance(std::numeric_limits<float>::max()),
     m_min_y_distance(std::numeric_limits<float>::max())
@@ -79,4 +79,5 @@ void physical_graph_layouter::remove(const QSet<u32> modules, const QSet<u32> ga
 
     for (u32 id : gates)
         remove_node_from_maps({hal::node_type::gate, id});
+}
 }

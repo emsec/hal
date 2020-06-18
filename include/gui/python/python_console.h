@@ -28,7 +28,7 @@
 
 #include <QTextEdit>
 #include <memory>
-
+namespace hal{
 class python_console_history;
 
 class python_console : public QTextEdit, public python_context_subscriber
@@ -85,5 +85,6 @@ private:
 
     std::shared_ptr<python_console_history> m_history;
 };
+}
 
 #endif    // PYTHON_CONSOLE_H

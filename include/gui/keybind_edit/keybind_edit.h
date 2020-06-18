@@ -5,7 +5,7 @@
 
 #include <QKeySequenceEdit>
 #include <QEvent>
-
+namespace hal{
 class keybind_edit : public QKeySequenceEdit
 {
 Q_OBJECT
@@ -28,6 +28,7 @@ private:
     QKeySequence m_old_sequence;
     bool m_validated = true;
 };
+}
 
 #endif // KEYBIND_EDIT_H
 

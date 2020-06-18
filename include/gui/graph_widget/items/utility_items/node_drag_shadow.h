@@ -1,7 +1,7 @@
 #pragma once
 
 #include <QGraphicsObject>
-
+namespace hal{
 class node_drag_shadow : public QGraphicsObject
 {
     Q_OBJECT
@@ -48,3 +48,4 @@ private:
     qreal m_width;
     qreal m_height;
 };
+}

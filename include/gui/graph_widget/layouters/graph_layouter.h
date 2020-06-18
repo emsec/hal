@@ -37,7 +37,7 @@
 #include <QPoint>
 #include <QSet>
 #include <QVector>
-
+namespace hal{
 class io_graphics_net;
 class graph_context;
 class graphics_gate;
@@ -296,3 +296,4 @@ private:
     
     bool m_done;
 };
+}

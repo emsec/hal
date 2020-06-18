@@ -1,7 +1,7 @@
 #pragma once
 
 #include "gui/graph_widget/items/nodes/gates/graphics_gate.h"
-
+namespace hal{
 class standard_graphics_gate final : public graphics_gate
 {
 public:
@@ -57,3 +57,4 @@ private:
 
     QVector<QPointF> m_output_pin_positions;
 };
+}

@@ -25,7 +25,7 @@
 #define HAL_WIDGET_H
 
 #include <QWidget>
-
+namespace hal{
 class hal_widget : public QWidget
 {
     Q_OBJECT
@@ -47,5 +47,6 @@ public Q_SLOTS:
     void hide();
     void show();
 };
+}
 
 #endif    // HAL_WIDGET_H

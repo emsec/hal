@@ -1,7 +1,7 @@
 #pragma once
 
 #include <QString>
-
+namespace hal{
 class graph_context_subscriber
 {
 public:
@@ -14,3 +14,4 @@ public:
     virtual void handle_status_update(const int percent) = 0;
     virtual void handle_status_update(const QString& message) = 0;
 };
+}

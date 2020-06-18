@@ -10,7 +10,7 @@
 #include <QSlider>
 #include <QStringList>
 #include "gui_globals.h"
-
+namespace hal{
 slider_setting::slider_setting(const QString& key, const QString& title, const int min, const int max, const QString& description, QWidget* parent) : settings_widget(key, parent)
 {
     m_labels.append(QPair<QLabel*, QString>(m_name, title));
@@ -54,4 +54,5 @@ void slider_setting::on_slider_value_changed()
 {
     this->trigger_setting_updated();
     m_number->setText(value().toString());
+}
 }

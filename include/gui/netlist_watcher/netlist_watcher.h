@@ -4,7 +4,7 @@
 #include "netlist_relay/netlist_relay.h"
 
 #include <QObject>
-
+namespace hal{
 class netlist_watcher : public QObject
 {
     Q_OBJECT
@@ -23,5 +23,6 @@ private:
     void handle_netlist_modified();
     bool m_notified;
 };
+}
 
 #endif // NETLIST_WATCHER_H

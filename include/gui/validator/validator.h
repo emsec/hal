@@ -2,7 +2,7 @@
 #define VALIDATOR_H
 
 #include <QString>
-
+namespace hal{
 class validator
 {
     public:
@@ -14,5 +14,6 @@ class validator
     protected:
         QString m_fail_text = "Choosen input is not allowed.";
 };
+}
 
 #endif      // VALIDATOR_H

@@ -25,6 +25,7 @@
 #define __HAL_PYTHON_CONSOLE_HISTORY_H
 #include <string>
 #include <vector>
+namespace hal{
 class python_console_history
 {
 public:
@@ -71,5 +72,6 @@ private:
 
     std::vector<std::string> m_history;
 };
+}
 
 #endif    //__HAL_PYTHON_CONSOLE_HISTORY_H

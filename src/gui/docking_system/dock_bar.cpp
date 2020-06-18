@@ -15,6 +15,7 @@
 #include <QPainter>
 #include <QPropertyAnimation>
 
+namespace hal{
 QPoint dock_bar::s_drag_start_position;
 dock_button* dock_bar::s_drag_button = nullptr;
 int dock_bar::s_begin_drop_range     = 0;
@@ -476,4 +477,5 @@ void dock_bar::handle_drag_end()
 {
     if (m_autohide && unused())
         hide();
+}
 }

@@ -2,7 +2,7 @@
 #define DOCK_WIDGET_H
 
 #include <QFrame>
-
+namespace hal{
 class dock_widget : public QFrame
 {
     Q_OBJECT
@@ -32,5 +32,6 @@ private:
 
     drag_state* m_drag_state;
 };
+}
 
 #endif // DOCK_WIDGET_H

@@ -1,7 +1,7 @@
 #include "file_modified_bar/file_modified_bar.h"
 
 #include <QFileInfo>
-
+namespace hal{
 file_modified_bar::file_modified_bar(QWidget* parent)
 {
     Q_UNUSED(parent);
@@ -69,4 +69,5 @@ void file_modified_bar::handle_ignore_clicked()
 void file_modified_bar::handle_ok_clicked()
 {
     Q_EMIT ok_clicked();
+}
 }

@@ -2,7 +2,7 @@
 
 #include "gui/thread_pool/task.h"
 #include "gui/thread_pool/worker.h"
-
+namespace hal{
 thread_pool::thread_pool(QObject* parent) : QObject(parent)
 {
     for (int i = 0; i < 4; ++i)
@@ -37,4 +37,5 @@ void thread_pool::handle_worker_finished()
         w->assign_task(t);
         w->start();
     }
+}
 }

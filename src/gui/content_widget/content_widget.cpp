@@ -7,7 +7,7 @@
 #include <QShortcut>
 #include <QStyle>
 #include <QVBoxLayout>
-
+namespace hal{
 content_widget::content_widget(QString name, QWidget* parent) : hal_widget(parent), m_name(name), m_content_layout(new QVBoxLayout())
 {
     m_content_layout->setContentsMargins(0, 0, 0, 0);
@@ -134,4 +134,5 @@ void content_widget::set_icon_path(const QString& path)
 
     m_icon_path = path;
     repolish();
+}
 }

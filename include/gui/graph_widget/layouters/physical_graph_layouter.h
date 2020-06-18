@@ -25,7 +25,7 @@
 #pragma once
 
 #include "graph_widget/layouters/graph_layouter.h"
-
+namespace hal{
 class physical_graph_layouter final : public graph_layouter
 {
 public:
@@ -41,3 +41,4 @@ private:
     float m_min_x_distance;
     float m_min_y_distance;
 };
+}

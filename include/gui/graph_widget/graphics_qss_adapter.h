@@ -1,7 +1,7 @@
 #pragma once
 
 #include <QWidget>
-
+namespace hal{
 class graphics_qss_adapter : public QWidget
 {
     Q_OBJECT
@@ -88,3 +88,4 @@ private:
     QColor m_grid_base_dot_color;
     QColor m_grid_cluster_dot_color;
 };
+}

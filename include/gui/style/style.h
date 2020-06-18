@@ -27,7 +27,7 @@
 #include <QColor>
 #include <QIcon>
 #include <QString>
-
+namespace hal{
 namespace style
 {
     extern QString get_stylesheet();
@@ -35,5 +35,6 @@ namespace style
 
     extern void debug_update(); // PLACEHOLDER
 }    // namespace style
+}
 
 #endif    // STYLE_H

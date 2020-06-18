@@ -12,7 +12,7 @@
 #include <QStyle>
 
 #include <QGraphicsBlurEffect>
-
+namespace hal{
 hal_window::hal_window(QWidget* parent) : QFrame(parent),
     m_outer_layout(new QVBoxLayout(this)),
     m_layout_container(new hal_window_layout_container(this)),
@@ -193,3 +193,4 @@ void hal_window::closeEvent(QCloseEvent* event)
 //    m_toolbar->show();
 //    //m_workspace->hide();
 //}
+}

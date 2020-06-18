@@ -3,7 +3,7 @@
 #include "svg_icon_engine/svg_icon_engine.h"
 
 #include <QFile>
-
+namespace hal{
 namespace gui_utility
 {
     QString get_svg_data(const QString& svg_path)
@@ -92,3 +92,4 @@ namespace gui_utility
         return c;
     }
 }    // namespace gui_utility
+}

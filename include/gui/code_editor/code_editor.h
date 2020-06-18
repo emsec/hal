@@ -28,13 +28,15 @@
 
 #include <QPlainTextEdit>
 
-class code_editor_minimap;
-class code_editor_scrollbar;
-class line_number_area;
-
 class QPaintEvent;
 class QPropertyAnimation;
 class QResizeEvent;
+
+namespace hal{
+
+class code_editor_minimap;
+class code_editor_scrollbar;
+class line_number_area;
 
 class code_editor : public QPlainTextEdit
 {
@@ -119,5 +121,7 @@ private:
     QColor m_line_number_highlight_background;
     QColor m_current_line_background;
 };
+
+}
 
 #endif // CODE_EDITOR_H

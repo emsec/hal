@@ -30,7 +30,7 @@
 #include <QList>
 #include <QString>
 #include <QVariant>
-
+namespace hal{
 class module_item
 {
 public:
@@ -73,5 +73,6 @@ private:
     QColor m_color;
     bool m_highlighted;
 };
+}
 
 #endif // MODULE_ITEM_H

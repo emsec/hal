@@ -5,7 +5,7 @@
 #include "core/program_arguments.h"
 #include "hal_plugin_access_manager/hal_plugin_access_manager.h"
 #include "plugin_management/plugin_arguments_widget.h"
-
+namespace hal{
 plugin_schedule_manager* plugin_schedule_manager::get_instance()
 {
     static plugin_schedule_manager* manager = new plugin_schedule_manager();
@@ -89,4 +89,5 @@ void plugin_schedule_manager::run_schedule()
 
 plugin_schedule_manager::plugin_schedule_manager(QObject* parent) : QObject(parent), m_current_index(0)
 {
+}
 }

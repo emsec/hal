@@ -12,7 +12,7 @@
 #include <QHBoxLayout>
 #include <QShortcut>
 #include <QVBoxLayout>
-
+namespace hal{
 plugin_schedule_widget::plugin_schedule_widget(QWidget* parent)
     : QFrame(parent), m_vertical_layout(new QVBoxLayout()), m_searchbar_container(new QFrame()), m_container_layout(new QHBoxLayout()), m_searchbar(new searchbar()),
       m_horizontal_layout(new QHBoxLayout()), m_plugin_frame(new labeled_frame()), m_schedule_frame(new labeled_frame()), m_schedule_frame_layout_container(new QWidget()),
@@ -88,4 +88,5 @@ void plugin_schedule_widget::handle_no_scheduled_plugins()
 {
     m_scheduled_plugins_widget->hide();
     m_no_scheduled_plugins_widget->show();
+}
 }

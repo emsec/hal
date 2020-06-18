@@ -1,5 +1,5 @@
 #include "hal_action/hal_action.h"
-
+namespace hal{
 hal_action::hal_action(QObject* parent) : QAction(parent), m_tooltip_modified(false)
 {
 
@@ -49,4 +49,5 @@ void hal_action::update_tooltip(const QKeySequence& seq)
     {
         QAction::setToolTip(text());
     }
+}
 }

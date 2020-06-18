@@ -31,6 +31,7 @@
 #include <QList>
 #include <QPoint>
 
+namespace hal{
 class hal_content_anchor;
 class content_widget;
 
@@ -90,5 +91,6 @@ private:
     static int s_drop_spacing;
     static dock_button* s_move_marker;
 };
+}
 
 #endif    // DOCK_BAR_H

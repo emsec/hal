@@ -25,7 +25,7 @@
 #include <QStringList>
 #include <QStringListModel>
 #include <QVBoxLayout>
-
+namespace hal{
 context_manager_widget::context_manager_widget(graph_tab_widget* tab_view, QWidget* parent)
     : content_widget("View Manager", parent), m_list_widget(new QListWidget()), m_new_view_action(new QAction(this)), m_rename_action(new QAction(this)), m_duplicate_action(new QAction(this)),
       m_delete_action(new QAction(this)), m_timestamp_action(new QAction(this))
@@ -377,4 +377,5 @@ void context_manager_widget::set_timestamp_icon_path(const QString& path)
 void context_manager_widget::set_timestamp_icon_style(const QString& style)
 {
     m_timestamp_icon_style = style;
+}
 }

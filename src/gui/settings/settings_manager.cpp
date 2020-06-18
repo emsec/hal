@@ -6,7 +6,7 @@
 #include "gui/gui_globals.h"
 
 #include <QSettings>
-
+namespace hal{
 settings_manager::settings_manager(QObject* parent) : QObject(parent),
     m_settings(new QSettings(QString::fromStdString((core_utils::get_user_config_directory() / "guisettings.ini").string()), QSettings::IniFormat)),
     m_defaults(new QSettings(QString::fromStdString((core_utils::get_config_directory() / "guidefaults.ini").string()), QSettings::IniFormat))
@@ -70,4 +70,5 @@ void settings_manager::update(const QString& key, const QVariant& value)
 void settings_manager::sync()
 {
     m_settings->sync();
+}
 }

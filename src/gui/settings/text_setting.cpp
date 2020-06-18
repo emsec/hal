@@ -10,7 +10,7 @@
 #include <QComboBox>
 #include <QStringList>
 #include "gui_globals.h"
-
+namespace hal{
 text_setting::text_setting(const QString& key, const QString& title, const QString& description, const QString& placeholder, QWidget *parent) : settings_widget(key, parent)
 {
     m_labels.append(QPair<QLabel*, QString>(m_name, title));
@@ -50,4 +50,5 @@ QVariant text_setting::value()
 void text_setting::on_text_changed()
 {
     this->trigger_setting_updated();
+}
 }

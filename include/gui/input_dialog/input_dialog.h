@@ -8,7 +8,7 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QPushButton>
-
+namespace hal{
 class input_dialog : public QDialog
 {
     public:
@@ -55,5 +55,6 @@ class input_dialog : public QDialog
 
         void handle_text_changed(const QString &text);
 };
+}
 
 #endif      // INPUT_DIALOG_H

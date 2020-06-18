@@ -7,7 +7,7 @@
 #include <QIODevice>
 #include <QMimeData>
 #include <functional>
-
+namespace hal{
 plugin_model::plugin_model(QObject* parent) : QAbstractItemModel(parent), model_changed_callback_id(CALLBACK_HOOK_INVALID_IDX)
 {
     for (auto item : plugin_item::get_column_description())
@@ -260,4 +260,5 @@ void plugin_model::handle_run_plugin_triggered(const QModelIndex& index)
         return;
     int row_idx = index.row();
     Q_EMIT run_plugin(m_items.at(row_idx).name);
+}
 }

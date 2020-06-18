@@ -26,7 +26,7 @@
 
 #include <QObject>
 #include <QApplication>
-
+namespace hal{
 class focus_logger : public QObject
 {
     Q_OBJECT
@@ -37,5 +37,6 @@ public Q_SLOTS:
     void handle_focus_change(QWidget* old, QWidget* new_obj);
 
 };
+}
 
 #endif //__HAL_FOCUS_LOGGER_H

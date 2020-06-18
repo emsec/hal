@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QQueue>
 #include <QStack>
-
+namespace hal{
 class task;
 class worker;
 
@@ -24,5 +24,6 @@ private:
     QStack<worker*> m_free_threads;
     QQueue<task*> m_tasks;
 };
+}
 
 #endif // THREAD_POOL_H

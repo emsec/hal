@@ -25,7 +25,7 @@
 #define TOOLBAR_H
 
 #include <QToolBar>
-
+namespace hal{
 class toolbar : public QToolBar
 {
     Q_OBJECT
@@ -37,5 +37,6 @@ public:
 
     void repolish();
 };
+}
 
 #endif    // TOOLBAR_H

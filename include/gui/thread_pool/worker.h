@@ -2,7 +2,7 @@
 #define WORKER_H
 
 #include <QThread>
-
+namespace hal{
 class task;
 
 class worker : public QThread
@@ -19,5 +19,6 @@ public:
 private:
     task* m_task;
 };
+}
 
 #endif // WORKER_H

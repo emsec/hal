@@ -7,7 +7,7 @@
 
 #include <QHBoxLayout>
 #include <QVBoxLayout>
-
+namespace hal{
 content_layout_area::content_layout_area(QWidget* parent)
     : QWidget(parent), m_top_level_layout(new QVBoxLayout()), m_second_level_layout(new QHBoxLayout()), m_third_level_layout(new QVBoxLayout()), m_fourth_level_layout(new QHBoxLayout()),
       m_splitter_layout(new QVBoxLayout()), m_central_layout(new QHBoxLayout()), m_spacer_layout(new QHBoxLayout()),
@@ -168,4 +168,5 @@ void content_layout_area::update_bottom_dock_bar()
         m_bottom_container->show();
     else
         m_bottom_container->hide();
+}
 }

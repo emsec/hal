@@ -2,7 +2,7 @@
 #define TASK_H
 
 #include <QObject>
-
+namespace hal{
 class task : public QObject
 {
     Q_OBJECT
@@ -15,5 +15,6 @@ public:
 Q_SIGNALS:
     void finished();
 };
+}
 
 #endif // TASK_H

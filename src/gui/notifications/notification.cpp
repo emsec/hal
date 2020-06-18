@@ -6,7 +6,7 @@
 #include <QGraphicsEffect>
 #include <QMouseEvent>
 #include <QPropertyAnimation>
-
+namespace hal{
 notification::notification(QWidget* parent) : QFrame(parent)
 {
     hide();
@@ -67,4 +67,5 @@ void notification::fade_out()
 void notification::cleanup()
 {
     g_notification_manager->remove(this);
+}
 }

@@ -25,7 +25,7 @@
 #define STYLE_MANAGER_H
 
 #include <QObject>
-
+namespace hal{
 class graphics_qss_adapter;
 class notification_manager_qss_adapter;
 class python_qss_adapter;
@@ -63,5 +63,6 @@ private:
     python_qss_adapter* m_python_syntax_highlighter;
     vhdl_qss_adapter* m_vhdl_syntax_highlighter;
 };
+}
 
 #endif    // STYLE_MANAGER_H

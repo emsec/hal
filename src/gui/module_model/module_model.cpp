@@ -8,7 +8,7 @@
 
 #include "netlist/gate.h"
 #include "netlist/net.h"
-
+namespace hal{
 module_model::module_model(QObject* parent) : QAbstractItemModel(parent), m_top_module_item(nullptr)
 {
 }
@@ -301,4 +301,5 @@ module_item* module_model::get_item(const u32 module_id) const
 bool module_model::is_modifying()
 {
     return m_is_modifying;
+}
 }

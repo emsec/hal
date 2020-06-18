@@ -19,7 +19,7 @@
 #include <QTreeView>
 #include <QVBoxLayout>
 #include <core/log.h>
-
+namespace hal{
 module_widget::module_widget(QWidget* parent) : content_widget("Modules", parent), m_tree_view(new module_tree_view(this)), m_module_proxy_model(new module_proxy_model(this))
 {
     connect(m_tree_view, &QTreeView::customContextMenuRequested, this, &module_widget::handle_tree_view_context_menu_requested);
@@ -220,4 +220,5 @@ void module_widget::handle_selection_changed(void* sender)
 module_item* module_widget::get_module_item_from_index(const QModelIndex& index)
 {
     return g_netlist_relay.get_module_model()->get_item(m_module_proxy_model->mapToSource(index));
+}
 }

@@ -1,7 +1,7 @@
 #include "style/shared_properties_qss_adapter.h"
 
 #include <QStyle>
-
+namespace hal{
 shared_properties_qss_adapter::shared_properties_qss_adapter(QWidget* parent) : QWidget(parent)
 {
     //DEFAULT VALUES
@@ -157,4 +157,5 @@ void shared_properties_qss_adapter::set_settings_icon_path(const QString& path)
 void shared_properties_qss_adapter::set_settings_icon_style(const QString& style)
 {
     m_settings_icon_style = style;
+}
 }

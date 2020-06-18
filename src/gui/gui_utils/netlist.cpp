@@ -7,7 +7,7 @@
 // TODO Consider these for moving into the core if they are useful
 
 #include <unordered_set>
-
+namespace hal{
 namespace gui_utility
 {
     std::shared_ptr<Module> first_common_ancestor(std::shared_ptr<Module> m1, std::shared_ptr<Module> m2)
@@ -88,3 +88,4 @@ namespace gui_utility
         return parents;
     }
 }    // namespace gui_utility
+}

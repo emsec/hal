@@ -8,7 +8,7 @@
 #include "gui/gui_globals.h"
 
 #include <QVector>
-
+namespace hal{
 static const bool lazy_updates = false;
 
 graph_context::graph_context(const QString& name, QObject* parent)
@@ -506,4 +506,5 @@ void graph_context::start_scene_update()
 QDateTime graph_context::get_timestamp() const
 {
     return m_timestamp;
+}
 }

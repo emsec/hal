@@ -36,6 +36,7 @@
 #include <QModelIndex>
 #include <QVariant>
 
+namespace hal{
 class module_item;
 
 class module_model : public QAbstractItemModel
@@ -77,5 +78,6 @@ private:
 
     bool m_is_modifying;
 };
+}
 
 #endif // MODULE_MODEL_H

@@ -25,7 +25,7 @@
 #define PYTHON_CONTEXT_SUBSCRIBER_H
 
 #include <QString>
-
+namespace hal{
 class python_context_subscriber
 {
 public:
@@ -33,5 +33,5 @@ public:
     virtual void handle_error(const QString& output)  = 0;
     virtual void clear()                              = 0;
 };
-
+}
 #endif    // PYTHON_CONTEXT_SUBSCRIBER_H

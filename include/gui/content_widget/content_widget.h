@@ -28,7 +28,7 @@
 
 #include <QIcon>
 #include <QList>
-
+namespace hal{
 class hal_content_anchor;
 class toolbar;
 
@@ -89,5 +89,6 @@ private:
 protected:
     QVBoxLayout* m_content_layout;
 };
+}
 
 #endif    // CONTENT_WIDGET_H

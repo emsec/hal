@@ -28,7 +28,7 @@
 #include <QList>
 #include <QPair>
 #include <QVector>
-
+namespace hal{
 class drop_marker;
 class scheduled_plugin_item;
 
@@ -74,5 +74,6 @@ private:
     bool m_internal_drag_active;
     int m_drag_index;
 };
+}
 
 #endif    // SCHEDULED_PLUGIN_ITEM_AREA_H

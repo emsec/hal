@@ -7,7 +7,7 @@
 #include <QPropertyAnimation>
 #include <QPushButton>
 #include <QVBoxLayout>
-
+namespace hal{
 reminder_overlay::reminder_overlay(QWidget* parent) : overlay(parent), m_layout(new QVBoxLayout()), m_image_label(new QLabel()), m_text_label(new QLabel()), m_button(new QPushButton())
 {
     connect(m_button, &QPushButton::clicked, this, &reminder_overlay::self_destruct);
@@ -77,4 +77,5 @@ void reminder_overlay::self_destruct()
     a4->setEasingCurve(QEasingCurve::OutCubic);
     connect(a4, &QPropertyAnimation::finished, this, &QObject::deleteLater);
     a4->start();
+}
 }

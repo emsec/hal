@@ -25,7 +25,7 @@
 #define DROP_MARKER_H
 
 #include <QFrame>
-
+namespace hal{
 class QPropertyAnimation;
 
 class drop_marker : public QFrame
@@ -58,5 +58,6 @@ private:
     int m_fixed_width;
     int m_fixed_height;
 };
+}
 
 #endif    // DROP_MARKER_H

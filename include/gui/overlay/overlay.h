@@ -25,7 +25,7 @@
 #define OVERLAY_H
 
 #include <QFrame>
-
+namespace hal{
 class overlay : public QFrame
 {
     Q_OBJECT
@@ -44,5 +44,6 @@ protected:
 private:
     void handle_parent_changed();
 };
+}
 
 #endif    // OVERLAY_H

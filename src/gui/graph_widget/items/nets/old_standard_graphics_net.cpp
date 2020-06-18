@@ -7,6 +7,7 @@
 #include <QPointF>
 #include <QStyleOptionGraphicsItem>
 
+namespace hal{
 qreal old_standard_graphics_net::s_alpha;
 
 qreal old_standard_graphics_net::s_wire_length;
@@ -332,4 +333,5 @@ void old_standard_graphics_net::paint(QPainter* painter, const QStyleOptionGraph
     painter->drawPath(m_shape);
     s_pen.setCosmetic(original_cosmetic);
 #endif
+}
 }

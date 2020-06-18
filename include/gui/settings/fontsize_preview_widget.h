@@ -28,7 +28,7 @@
 
 #include <QLabel>
 #include <QFrame>
-
+namespace hal{
 class fontsize_preview_widget : public preview_widget
 {
     Q_OBJECT
@@ -41,5 +41,6 @@ private:
     QLabel* m_label;
     QFont m_font;
 };
+}
 
 #endif // FONT_PREVIEW_WIDGET_H

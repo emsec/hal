@@ -4,7 +4,7 @@
 
 #include <QPainter>
 #include <QStyleOption>
-
+namespace hal{
 line_number_area::line_number_area(code_editor* editor) : QWidget(editor), m_editor(editor)
 {
     repolish();
@@ -50,4 +50,5 @@ void line_number_area::paintEvent(QPaintEvent* event)
 void line_number_area::wheelEvent(QWheelEvent* event)
 {
     m_editor->handle_wheel_event(event);
+}
 }

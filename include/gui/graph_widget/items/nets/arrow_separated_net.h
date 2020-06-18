@@ -24,7 +24,7 @@
 #pragma once
 
 #include "graph_widget/items/nets/separated_graphics_net.h"
-
+namespace hal{
 class arrow_separated_net : public separated_graphics_net
 {
 public:
@@ -58,3 +58,4 @@ private:
 
     static QPainterPath s_arrow;
 };
+}

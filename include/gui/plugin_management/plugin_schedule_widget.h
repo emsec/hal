@@ -25,7 +25,7 @@
 #define PLUGIN_SCHEDULE_WIDGET_H
 
 #include <QFrame>
-
+namespace hal{
 class labeled_frame;
 class loaded_plugins_widget;
 class plugin_arguments_widget;
@@ -64,5 +64,5 @@ private:
     scheduled_plugins_widget* m_scheduled_plugins_widget;
     loaded_plugins_widget* m_loaded_plugins_widget;
 };
-
+}
 #endif    // PLUGIN_SCHEDULE_WIDGET_H

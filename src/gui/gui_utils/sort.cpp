@@ -3,7 +3,7 @@
 #include "def.h"
 
 #include <assert.h>
-
+namespace hal{
 namespace gui_utility
 {
 
@@ -110,3 +110,4 @@ namespace gui_utility
 
 
 } // namespace gui_utility
+}

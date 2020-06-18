@@ -35,7 +35,7 @@
 #include <QIcon>
 #include <QModelIndex>
 #include <QVariant>
-
+namespace hal{
 class tree_module_item;
 
 class tree_module_model : public QAbstractItemModel
@@ -84,4 +84,5 @@ private:
     QIcon m_design_icon;
     QFont m_structured_font;
 };
+}
 #endif    // tree_module_model_H

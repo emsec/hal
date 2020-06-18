@@ -1,5 +1,5 @@
 #include "channel_manager/channel_item.h"
-
+namespace hal {
 channel_item::channel_item(QString name)
     : m_name(name), m_log_entries(1000){Q_UNUSED(m_observer) Q_UNUSED(m_unread) Q_UNUSED(m_unread_warnings) Q_UNUSED(m_unread_errors) Q_UNUSED(m_unread_successes)}
 
@@ -32,4 +32,5 @@ QReadWriteLock* channel_item::get_lock()
 void channel_item::append_entry(channel_entry* entry)
 {
     m_log_entries.push_back(entry);
+}
 }

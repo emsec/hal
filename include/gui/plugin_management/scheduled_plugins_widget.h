@@ -25,7 +25,7 @@
 #define SCHEDULED_PLUGINS_WIDGET_H
 
 #include <QScrollArea>
-
+namespace hal{
 class scheduled_plugin_item_area;
 
 class scheduled_plugins_widget : public QScrollArea
@@ -43,5 +43,6 @@ public Q_SLOTS:
 private:
     scheduled_plugin_item_area* m_area;
 };
+}
 
 #endif    // SCHEDULED_PLUGINS_WIDGET_H

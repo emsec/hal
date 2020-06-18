@@ -15,7 +15,7 @@
 
 #include <assert.h>
 #include <QDebug>
-
+namespace hal{
 graph_navigation_widget_v2::graph_navigation_widget_v2(QWidget* parent) : QTreeWidget(parent)
 {
     setSelectionMode(QAbstractItemView::MultiSelection);
@@ -361,4 +361,5 @@ void graph_navigation_widget_v2::handle_selection_changed()
         }
     }
     m_previous_selection = new_selection;
+}
 }

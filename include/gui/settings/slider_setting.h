@@ -27,7 +27,7 @@
 #include "settings_widget.h"
 #include <QSlider>
 #include <QStringList>
-
+namespace hal{
 class slider_setting : public settings_widget
 {
     Q_OBJECT
@@ -45,5 +45,6 @@ private:
     void on_slider_value_changed();
 
 };
+}
 
 #endif //SLIDER_SETTING_H

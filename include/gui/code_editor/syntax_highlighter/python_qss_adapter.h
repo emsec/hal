@@ -27,6 +27,7 @@
 #include <QTextCharFormat>
 #include <QWidget>
 
+namespace hal{
 class python_qss_adapter : public QWidget
 {
     Q_OBJECT
@@ -93,5 +94,6 @@ private:
     QColor m_double_quoted_string_color;
     QColor m_comment_color;
 };
+}
 
 #endif    // PYTHON_QSS_ADAPTER_H

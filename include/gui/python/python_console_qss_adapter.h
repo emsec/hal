@@ -27,7 +27,7 @@
 
 #include <QWidget>
 #include <QColor>
-
+namespace hal{
 class python_console_qss_adapter : public QWidget
 {
     Q_OBJECT
@@ -55,5 +55,6 @@ private:
     QColor m_promt_color;
 
 };
+}
 
 #endif //PYTHON_CONSOLE_QSS_ADAPTER

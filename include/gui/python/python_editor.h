@@ -35,7 +35,7 @@
 #include <QFileSystemWatcher>
 #include <QMap>
 #include <QPushButton>
-
+namespace hal{
 class code_editor;
 class searchbar;
 class splitter;
@@ -198,5 +198,6 @@ private:
 
     QString m_last_opened_path;
 };
+}
 
 #endif    // PYTHON_WIDGET_H

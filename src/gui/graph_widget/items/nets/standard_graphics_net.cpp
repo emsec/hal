@@ -10,7 +10,7 @@
 #include <limits>
 
 #include <assert.h>
-
+namespace hal{
 qreal standard_graphics_net::s_alpha;
 
 qreal standard_graphics_net::s_wire_length;
@@ -287,4 +287,5 @@ void standard_graphics_net::lines::merge_lines()
 
     h_lines = merged_h_lines;
     v_lines = merged_v_lines;
+}
 }

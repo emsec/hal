@@ -26,7 +26,7 @@
 
 #include <QTextCharFormat>
 #include <QWidget>
-
+namespace hal{
 class vhdl_qss_adapter : public QWidget
 {
     Q_OBJECT
@@ -71,5 +71,6 @@ private:
     QColor m_string_color;
     QColor m_comment_color;
 };
+}
 
 #endif    // VHDL_QSS_ADAPTER_H

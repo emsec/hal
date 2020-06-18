@@ -5,7 +5,7 @@
 #include <QHBoxLayout>
 #include <QStyle>
 #include <QToolButton>
-
+namespace hal{
 hal_window_toolbar::hal_window_toolbar(QWidget* parent) : QFrame(parent),
     m_layout(new QHBoxLayout(this))
 {
@@ -74,4 +74,5 @@ void hal_window_toolbar::actionEvent(QActionEvent* event)
         break;
     }
     }
+}
 }

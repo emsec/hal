@@ -30,7 +30,7 @@
 #include <QModelIndex>
 #include <QVariant>
 #include <boost/circular_buffer.hpp>
-
+namespace hal{
 class channel_model : public QAbstractTableModel
 {
     enum class ColumnNumber
@@ -65,5 +65,6 @@ private:
     QList<channel_item*> m_permanent_items;
     boost::circular_buffer<channel_item*> m_temporary_items;
 };
+}
 
 #endif    // CHANNEL_MODEL_H

@@ -2,7 +2,7 @@
 #define HAL_WINDOW_TOOLBAR_H
 
 #include <QFrame>
-
+namespace hal{
 class QActionEvent;
 class QHBoxLayout;
 
@@ -25,5 +25,6 @@ protected:
 private:
     QHBoxLayout* m_layout;
 };
+}
 
 #endif // HAL_WINDOW_TOOLBAR_H

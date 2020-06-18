@@ -12,7 +12,7 @@
 #include <QGraphicsScene>
 #include <QPair>
 #include <QVector>
-
+namespace hal{
 class graphics_gate;
 class graphics_item;
 class graphics_module;
@@ -133,3 +133,4 @@ private:
     bool m_debug_grid_enable;
     #endif
 };
+}

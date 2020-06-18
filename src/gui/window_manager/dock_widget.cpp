@@ -2,7 +2,7 @@
 
 #include <QApplication>
 #include <QMouseEvent>
-
+namespace hal{
 dock_widget::dock_widget(QWidget* parent) : QFrame(parent),
     m_drag_state(nullptr)
 {
@@ -147,4 +147,5 @@ void dock_widget::end_drag(bool abort)
 //    }
     delete m_drag_state;
     m_drag_state = nullptr;
+}
 }

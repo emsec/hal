@@ -7,7 +7,7 @@
 #include <QString>
 #include <QList>
 #include <QUuid>
-
+namespace hal{
 class file_status_manager : public QObject
 {
     Q_OBJECT
@@ -33,5 +33,6 @@ private:
 
     bool m_netlist_modified;
 };
+}
 
 #endif // FILE_STATUS_MANAGER_H

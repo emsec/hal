@@ -26,7 +26,7 @@
 
 #include <QFrame>
 #include <QLabel>
-
+namespace hal{
 class QVBoxLayout;
 
 class open_file_widget : public QFrame
@@ -62,5 +62,6 @@ private:
 
     bool m_drag_active;
 };
+}
 
 #endif    // OPEN_FILE_WIDGET_H

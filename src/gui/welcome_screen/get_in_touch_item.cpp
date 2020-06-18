@@ -9,7 +9,7 @@
 #include <QPropertyAnimation>
 #include <QStyle>
 #include <QVBoxLayout>
-
+namespace hal{
 get_in_touch_item::get_in_touch_item(const QString& title, const QString& description, QWidget* parent)
     : QFrame(parent), m_horizontal_layout(new QHBoxLayout()), m_icon_label(new QLabel()), m_vertical_layout(new QVBoxLayout()), m_title_label(new QLabel()), m_description_label(new QLabel()),
       m_animation(new QPropertyAnimation(this)), m_hover(false)
@@ -113,4 +113,5 @@ void get_in_touch_item::set_icon_path(const QString& path)
 void get_in_touch_item::set_icon_style(const QString& style)
 {
     m_icon_style = style;
+}
 }

@@ -5,7 +5,7 @@
 #include <QObject>
 #include <QStringList>
 #include <QVector>
-
+namespace hal{
 class Gate;
 class Module;
 class Net;
@@ -65,3 +65,4 @@ Q_SIGNALS:
 private:
     QVector<graph_context*> m_graph_contexts;
 };
+}

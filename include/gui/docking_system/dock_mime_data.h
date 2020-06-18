@@ -26,7 +26,7 @@
 
 #include <QMimeData>
 #include <QObject>
-
+namespace hal{
 class content_widget;
 
 class dock_mime_data : public QMimeData
@@ -40,5 +40,6 @@ public:
 private:
     content_widget* m_widget;
 };
+}
 
 #endif    // DOCK_MIME_DATA_H

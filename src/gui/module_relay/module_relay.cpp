@@ -2,7 +2,7 @@
 
 #include "gui_globals.h"
 #include "netlist/module.h"
-
+namespace hal{
 module_relay::module_relay(QObject* parent) : QObject(parent), m_model(new module_model())
 {
     connect(&g_netlist_relay, &netlist_relay::module_event, this, &module_relay::handle_module_event);
@@ -113,4 +113,5 @@ void module_relay::handle_module_event(module_event_handler::event ev, std::shar
             break;
         }
     }
+}
 }

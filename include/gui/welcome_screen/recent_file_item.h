@@ -25,7 +25,7 @@
 #define RECENT_FILE_ITEM_H
 
 #include <QFrame>
-
+namespace hal{
 class QHBoxLayout;
 class QLabel;
 class QPropertyAnimation;
@@ -89,5 +89,6 @@ private:
     //functions
     void handle_close_requested();
 };
+}
 
 #endif    // RECENT_FILE_ITEM_H

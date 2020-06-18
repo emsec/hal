@@ -2,7 +2,7 @@
 
 #include <QFrame>
 #include <QVBoxLayout>
-
+namespace hal{
 settings_display::settings_display(QWidget* parent)
     : QScrollArea(parent), m_content(new QFrame), m_content_layout(new QVBoxLayout()), m_sub_content(new QFrame()), m_sub_content_layout(new QVBoxLayout())
 {
@@ -31,4 +31,5 @@ void settings_display::add_widget(QWidget* widget)
     //m_sub_content_layout->addWidget(widget);
     widget->setParent(0);
     widget->show();
+}
 }

@@ -1,7 +1,7 @@
 #include "hal_graphics/hal_graphics_view.h"
 #include <QOpenGLWidget>
 #include <Qt>
-
+namespace hal{
 hal_graphics_view::hal_graphics_view()
 {
     QOpenGLWidget* viewport = new QOpenGLWidget();
@@ -54,4 +54,5 @@ bool hal_graphics_view::eventFilter(QObject* object, QEvent* event)
         }
     }
     return false;
+}
 }

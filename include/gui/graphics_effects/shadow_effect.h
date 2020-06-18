@@ -25,7 +25,7 @@
 #define SHADOW_EFFECT_H
 
 #include <QGraphicsEffect>
-
+namespace hal{
 class shadow_effect : public QGraphicsEffect
 {
     Q_OBJECT
@@ -70,5 +70,6 @@ private:
     qreal _blurRadius;
     QColor _color;
 };
+}
 
 #endif    // SHADOW_EFFECT_H

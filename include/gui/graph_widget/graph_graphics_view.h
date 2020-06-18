@@ -29,7 +29,7 @@
 
 #include <QGraphicsView>
 #include <QAction>
-
+namespace hal{
 class graphics_item;
 class graph_widget;
 
@@ -141,3 +141,4 @@ private:
 
     qreal m_min_scale;
 };
+}

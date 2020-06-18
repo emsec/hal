@@ -3,7 +3,7 @@
 #include "netlist/net.h"
 
 #include "graph_widget/graph_widget_constants.h"
-
+namespace hal{
 qreal separated_graphics_net::s_alpha;
 
 void separated_graphics_net::update_alpha()
@@ -23,4 +23,5 @@ void separated_graphics_net::finalize()
     // RECT INTENTIONALLY SET SLIGHTLY TOO BIG
     m_rect = m_shape.boundingRect();
     m_rect.adjust(-s_line_width, -s_line_width, s_line_width, s_line_width);
+}
 }
