@@ -1,7 +1,7 @@
 #include "hal_logger/hal_filter_tab_bar.h"
 #include "hal_logger/hal_filter_item.h"
 #include "hal_logger/hal_logger_widget.h"
-
+namespace hal{
 hal_filter_tab_bar::hal_filter_tab_bar() : m_dialog(this)
 {
     m_button.setText("+");
@@ -30,4 +30,5 @@ void hal_filter_tab_bar::addNewFilter(QString name, hal_filter_item* item)
 hal_filter_item* hal_filter_tab_bar::get_current_filter()
 {
     return m_filter_items.value(this->currentIndex());
+}
 }
