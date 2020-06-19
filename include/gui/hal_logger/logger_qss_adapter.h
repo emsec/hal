@@ -22,8 +22,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef LOGGER_QSS_ADAPTER_H
-#define LOGGER_QSS_ADAPTER_H
+#pragma once
 
 #include <QWidget>
 namespace hal{
@@ -107,5 +106,3 @@ private:
 
 };
 }
-
-#endif //LOGGER_QSS_ADAPTER_H

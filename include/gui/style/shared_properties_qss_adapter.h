@@ -1,5 +1,4 @@
-#ifndef SHARED_PROPERTIES_QSS_ADAPTER_H
-#define SHARED_PROPERTIES_QSS_ADAPTER_H
+#pragma once
 
 #include <QWidget>
 namespace hal{
@@ -86,5 +85,3 @@ public:
     QString m_settings_icon_style;
 };
 }
-
-#endif // SHARED_PROPERTIES_QSS_ADAPTER_H

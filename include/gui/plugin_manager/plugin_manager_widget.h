@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef PLUGIN_MANAGER_DIALOG_H
-#define PLUGIN_MANAGER_DIALOG_H
+#pragma once
 
 #include "content_widget/content_widget.h"
 
@@ -51,5 +50,3 @@ private:
     QTableView m_table_view;
 };
 }
-
-#endif    // PLUGIN_MANAGER_DIALOG_H

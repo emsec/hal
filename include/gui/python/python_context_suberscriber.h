@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef PYTHON_CONTEXT_SUBSCRIBER_H
-#define PYTHON_CONTEXT_SUBSCRIBER_H
+#pragma once
 
 #include <QString>
 namespace hal{
@@ -34,4 +33,3 @@ public:
     virtual void clear()                              = 0;
 };
 }
-#endif    // PYTHON_CONTEXT_SUBSCRIBER_H

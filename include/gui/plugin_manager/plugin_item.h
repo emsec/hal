@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef HAL_PLUGIN_ITEM_H
-#define HAL_PLUGIN_ITEM_H
+#pragma once
 
 #include <QPair>
 #include <QString>
@@ -47,5 +46,3 @@ public:
     bool is_valid();
 };
 }
-
-#endif    //HAL_PLUGIN_ITEM_H

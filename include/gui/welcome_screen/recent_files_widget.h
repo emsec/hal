@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef RECENT_FILES_WIDGET_H
-#define RECENT_FILES_WIDGET_H
+#pragma once
 
 #include <QFrame>
 
@@ -53,5 +52,3 @@ private:
     QList<recent_file_item*> m_items;
 };
 }
-
-#endif    // RECENT_FILES_WIDGET_H

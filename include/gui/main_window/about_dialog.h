@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef ABOUT_DIALOG_H
-#define ABOUT_DIALOG_H
+#pragma once
 
 #include <QDialog>
 #include <QLabel>
@@ -44,4 +43,3 @@ private:
 };
 }
 
-#endif    // ABOUT_DIALOG_H

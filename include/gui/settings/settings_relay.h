@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef SETTINGS_RELAY_H
-#define SETTINGS_RELAY_H
+#pragma once
 
 #include <QObject>
 #include <QPair>
@@ -50,5 +49,3 @@ public Q_SLOTS:
 //     QVector<QPair<void*, QString>> m_sender_register;
 };
 }
-
-#endif    // SETTINGS_RELAY_H

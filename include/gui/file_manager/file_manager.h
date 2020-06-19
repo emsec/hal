@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef FILE_MANAGER_H
-#define FILE_MANAGER_H
+#pragma once
 
 #include "core/program_arguments.h"
 
@@ -81,5 +80,3 @@ private:
     int m_autosave_interval;
 };
 }
-
-#endif // FILE_MANAGER_H

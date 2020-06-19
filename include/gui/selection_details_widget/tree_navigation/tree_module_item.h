@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef tree_module_item_H
-#define tree_module_item_H
+#pragma once
 
 #include <QList>
 #include <QVariant>
@@ -66,5 +65,3 @@ private:
     item_type m_type;
 };
 }
-
-#endif    // tree_module_item_H

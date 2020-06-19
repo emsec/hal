@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef SELECTION_DETAILS_WIDGET_H
-#define SELECTION_DETAILS_WIDGET_H
+#pragma once
 
 #include "content_widget/content_widget.h"
 #include "def.h"
@@ -62,5 +61,3 @@ private:
     void toggle_searchbar();
 };
 }
-
-#endif    // SELECTION_DETAILS_WIDGET_H

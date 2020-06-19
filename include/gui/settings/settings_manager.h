@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef SETTINGS_MANAGER_H
-#define SETTINGS_MANAGER_H
+#pragma once
 
 #include <QObject>
 #include <QSettings>
@@ -44,5 +43,3 @@ private:
     QSettings* m_defaults;
 };
 }
-
-#endif // SETTINGS_MANAGER_H

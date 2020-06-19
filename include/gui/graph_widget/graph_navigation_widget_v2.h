@@ -1,5 +1,4 @@
-#ifndef GRAPH_NAVIGATION_WIDGET_V2_H
-#define GRAPH_NAVIGATION_WIDGET_V2_H
+#pragma once
 
 #include "def.h"
 
@@ -45,5 +44,3 @@ private:
 
 };
 }
-
-#endif

@@ -22,8 +22,7 @@
  * SOFTWARE.
  */
 
-#ifndef MODULE_MODEL_H
-#define MODULE_MODEL_H
+#pragma once
 
 #include "def.h"
 
@@ -79,5 +78,3 @@ private:
     bool m_is_modifying;
 };
 }
-
-#endif // MODULE_MODEL_H

@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef CONTENT_DRAG_RELAY_H
-#define CONTENT_DRAG_RELAY_H
+#pragma once
 
 #include <QObject>
 namespace hal{
@@ -43,5 +42,3 @@ private:
     content_drag_relay(QObject* parent = 0);
 };
 }
-
-#endif    // CONTENT_DRAG_RELAY_H

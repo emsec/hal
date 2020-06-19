@@ -1,5 +1,4 @@
-#ifndef HAL_WINDOW_TOOLBAR_H
-#define HAL_WINDOW_TOOLBAR_H
+#pragma once
 
 #include <QFrame>
 
@@ -28,5 +27,3 @@ private:
     QHBoxLayout* m_layout;
 };
 }
-
-#endif // HAL_WINDOW_TOOLBAR_H

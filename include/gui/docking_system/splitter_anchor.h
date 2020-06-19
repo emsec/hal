@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef SPLITTER_ANCHOR_H
-#define SPLITTER_ANCHOR_H
+#pragma once
 
 #include "hal_content_anchor/hal_content_anchor.h"
 
@@ -60,5 +59,3 @@ private:
     QList<content_frame*> m_detached_frames;
 };
 }
-
-#endif    // SPLITTER_ANCHOR_H

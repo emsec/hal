@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef DOCK_MIME_DATA_H
-#define DOCK_MIME_DATA_H
+#pragma once
 
 #include <QMimeData>
 #include <QObject>
@@ -41,5 +40,3 @@ private:
     content_widget* m_widget;
 };
 }
-
-#endif    // DOCK_MIME_DATA_H

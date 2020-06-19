@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef HAL_EXTENDED_CLI_DIALOG_H
-#define HAL_EXTENDED_CLI_DIALOG_H
+#pragma once
 
 #include "core/plugin_interface_cli.h"
 #include "core/program_arguments.h"
@@ -65,5 +64,3 @@ private:
     char** m_argv;
 };
 }
-
-#endif    // HAL_EXTENDED_CLI_DIALOG_H

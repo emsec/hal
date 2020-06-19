@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef __HAL_PLUGIN_GUI_H__
-#define __HAL_PLUGIN_GUI_H__
+#pragma once
 
 #include "core/plugin_interface_interactive_ui.h"
 namespace hal{
@@ -43,4 +42,3 @@ public:
 extern "C" PLUGIN_API std::shared_ptr<BasePluginInterface> get_plugin_instance();
 #pragma GCC diagnostic pop
 }
-#endif /* __HAL_PLUGIN_GUI_H__ */

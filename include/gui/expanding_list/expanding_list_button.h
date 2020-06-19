@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef EXPANDING_LIST_BUTTON_H
-#define EXPANDING_LIST_BUTTON_H
+#pragma once
 
 #include <QFrame>
 
@@ -79,5 +78,3 @@ private:
     QString m_icon_path;
 };
 }
-
-#endif    // EXPANDING_LIST_BUTTON_H

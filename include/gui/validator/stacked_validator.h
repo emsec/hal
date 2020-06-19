@@ -1,5 +1,4 @@
-#ifndef STACKED_VALIDATOR_H
-#define STACKED_VALIDATOR_H
+#pragma once
 
 #include "validator/validator.h"
 
@@ -20,5 +19,3 @@ class stacked_validator : public validator
         QList<validator*> m_validators;
 };
 }
-
-#endif      // STACKED_VALIDATOR_H

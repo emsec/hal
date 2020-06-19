@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef WELCOME_WIDGET_H
-#define WELCOME_WIDGET_H
+#pragma once
 
 #include <QFrame>
 
@@ -50,5 +49,3 @@ protected:
     QFrame* m_right_spacer;
 };
 }
-
-#endif    // WELCOME_WIDGET_H

@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef HAL_WIDGET_H
-#define HAL_WIDGET_H
+#pragma once
 
 #include <QWidget>
 namespace hal{
@@ -48,5 +47,3 @@ public Q_SLOTS:
     void show();
 };
 }
-
-#endif    // HAL_WIDGET_H

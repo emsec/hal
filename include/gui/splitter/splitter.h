@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef SPLITTER_H
-#define SPLITTER_H
+#pragma once
 
 #include <QSplitter>
 namespace hal{
@@ -36,5 +35,3 @@ public:
     bool unused();
 };
 }
-
-#endif    // SPLITTER_H

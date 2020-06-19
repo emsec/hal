@@ -1,5 +1,4 @@
-#ifndef SELECTION_H
-#define SELECTION_H
+#pragma once
 
 #include "def.h"
 #include "selection_relay/selection_relay.h"
@@ -27,5 +26,3 @@ private:
 
 };
 }
-
-#endif    // SELECTION_H

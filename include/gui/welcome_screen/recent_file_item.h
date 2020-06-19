@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef RECENT_FILE_ITEM_H
-#define RECENT_FILE_ITEM_H
+#pragma once
 
 #include <QFrame>
 
@@ -92,5 +91,3 @@ private:
     void handle_close_requested();
 };
 }
-
-#endif    // RECENT_FILE_ITEM_H

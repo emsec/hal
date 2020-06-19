@@ -1,5 +1,4 @@
-#ifndef WINDOW_MANAGER_H
-#define WINDOW_MANAGER_H
+#pragma once
 
 #include <QObject>
 #include <QVector>
@@ -72,5 +71,3 @@ private:
     main_settings_widget* m_main_settings_widget;
 };
 }
-
-#endif // WINDOW_MANAGER_H

@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef HAL_CONTENT_LAYOUT_MANAGER_H
-#define HAL_CONTENT_LAYOUT_MANAGER_H
+#pragma once
 
 #include <QObject>
 namespace hal{
@@ -40,5 +39,3 @@ public Q_SLOTS:
 private:
 };
 }
-
-#endif    // HAL_CONTENT_LAYOUT_MANAGER_H

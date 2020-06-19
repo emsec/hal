@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef SORT_UTIL_H
-#define SORT_UTIL_H
+#pragma once
 
 #include <QString>
 namespace hal{
@@ -43,5 +42,3 @@ namespace gui_utility
 
 } // namespace gui_utility
 }
-
-#endif // SORT_UTIL_H

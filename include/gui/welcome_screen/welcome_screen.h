@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef WELCOME_SCREEN_H
-#define WELCOME_SCREEN_H
+#pragma once
 
 #include "QFrame"
 
@@ -58,5 +57,3 @@ private:
     get_in_touch_widget* m_get_in_touch_widget;
 };
 }
-
-#endif    // WELCOME_SCREEN_H

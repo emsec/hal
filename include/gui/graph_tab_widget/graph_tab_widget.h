@@ -1,5 +1,4 @@
-#ifndef GRAPH_TAB_WIDGET
-#define GRAPH_TAB_WIDGET
+#pragma once
 
 #include "content_widget/content_widget.h"
 
@@ -53,4 +52,3 @@ private:
     void zoom_out_shortcut();
 };
 }
-#endif    //GRAPH_TAB_WIDGET

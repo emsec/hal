@@ -1,5 +1,4 @@
-#ifndef VALIDATOR_H
-#define VALIDATOR_H
+#pragma once
 
 #include <QString>
 namespace hal{
@@ -15,5 +14,3 @@ class validator
         QString m_fail_text = "Choosen input is not allowed.";
 };
 }
-
-#endif      // VALIDATOR_H

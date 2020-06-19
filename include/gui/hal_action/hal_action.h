@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef HAL_ACTION_H
-#define HAL_ACTION_H
+#pragma once
 
 #include <QAction>
 namespace hal{
@@ -47,5 +46,3 @@ private:
 
 };
 }
-
-#endif // HAL_ACTION_H

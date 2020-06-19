@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef PYTHON_CONSOLE_WIDGET_H
-#define PYTHON_CONSOLE_WIDGET_H
+#pragma once
 
 #include "content_widget/content_widget.h"
 namespace hal{
@@ -40,5 +39,3 @@ private:
     python_console* m_console;
 };
 }
-
-#endif    // PYTHON_CONSOLE_WIDGET_H

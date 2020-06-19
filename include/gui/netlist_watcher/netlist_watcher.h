@@ -1,5 +1,4 @@
-#ifndef NETLIST_WATCHER_H
-#define NETLIST_WATCHER_H
+#pragma once
 
 #include "netlist_relay/netlist_relay.h"
 
@@ -24,5 +23,3 @@ private:
     bool m_notified;
 };
 }
-
-#endif // NETLIST_WATCHER_H

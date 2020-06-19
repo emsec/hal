@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef CONTENT_WIDGET_H
-#define CONTENT_WIDGET_H
+#pragma once
 
 #include "hal_widget/hal_widget.h"
 
@@ -91,5 +90,3 @@ protected:
     QVBoxLayout* m_content_layout;
 };
 }
-
-#endif    // CONTENT_WIDGET_H

@@ -1,5 +1,4 @@
-#ifndef HAL_WINDOW_H
-#define HAL_WINDOW_H
+#pragma once
 
 #include <QFrame>
 
@@ -50,5 +49,3 @@ private:
     QGraphicsEffect* m_effect;
 };
 }
-
-#endif // HAL_WINDOW_H

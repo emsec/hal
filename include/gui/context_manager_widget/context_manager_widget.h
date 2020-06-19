@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef CONTEXT_MANAGER_WIDGET
-#define CONTEXT_MANAGER_WIDGET
+#pragma once
 
 #include "content_widget/content_widget.h"
 
@@ -132,5 +131,3 @@ private:
     void handle_selection_changed();
 };
 }
-
-#endif    // CONTEXT_MANAGER_WIDGET

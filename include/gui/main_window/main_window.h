@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef MAIN_WINDOW_H
-#define MAIN_WINDOW_H
+#pragma once
 
 #include "content_layout_area/content_layout_area.h"
 #include "core/program_options.h"
@@ -201,5 +200,3 @@ private:
     QString m_settings_icon_style;
 };
 }
-
-#endif    // MAIN_WINDOW_H

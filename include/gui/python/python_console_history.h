@@ -21,8 +21,8 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef __HAL_PYTHON_CONSOLE_HISTORY_H
-#define __HAL_PYTHON_CONSOLE_HISTORY_H
+#pragma once
+
 #include <string>
 #include <vector>
 namespace hal{
@@ -73,5 +73,3 @@ private:
     std::vector<std::string> m_history;
 };
 }
-
-#endif    //__HAL_PYTHON_CONSOLE_HISTORY_H

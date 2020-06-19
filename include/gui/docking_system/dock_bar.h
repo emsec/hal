@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef DOCK_BAR_H
-#define DOCK_BAR_H
+#pragma once
 
 #include "docking_system/dock_button.h"
 #include "hal_widget/hal_widget.h"
@@ -92,5 +91,3 @@ private:
     static dock_button* s_move_marker;
 };
 }
-
-#endif    // DOCK_BAR_H

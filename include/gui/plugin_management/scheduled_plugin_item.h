@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef SCHEDULED_PLUGIN_ITEM_H
-#define SCHEDULED_PLUGIN_ITEM_H
+#pragma once
 
 #include <QFrame>
 
@@ -83,5 +82,3 @@ private:
     QString m_icon_style;
 };
 }
-
-#endif    // SCHEDULED_PLUGIN_ITEM_H

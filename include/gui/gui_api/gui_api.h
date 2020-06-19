@@ -1,5 +1,4 @@
-#ifndef GUI_API_H
-#define GUI_API_H
+#pragma once
 
 #include "netlist/gate.h"
 #include "netlist/net.h"
@@ -81,5 +80,3 @@ Q_SIGNALS:
     void navigation_requested();
 };
 }
-
-#endif // GUI_API_H

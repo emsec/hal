@@ -22,8 +22,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef PYTHON_CONSOLE_QSS_ADAPTER
-#define PYTHON_CONSOLE_QSS_ADAPTER
+#pragma once
 
 #include <QWidget>
 #include <QColor>
@@ -56,5 +55,3 @@ private:
 
 };
 }
-
-#endif //PYTHON_CONSOLE_QSS_ADAPTER

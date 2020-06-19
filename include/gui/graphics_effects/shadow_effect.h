@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef SHADOW_EFFECT_H
-#define SHADOW_EFFECT_H
+#pragma once
 
 #include <QGraphicsEffect>
 namespace hal{
@@ -71,5 +70,3 @@ private:
     QColor _color;
 };
 }
-
-#endif    // SHADOW_EFFECT_H

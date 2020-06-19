@@ -1,5 +1,4 @@
-#ifndef DOCK_WIDGET_H
-#define DOCK_WIDGET_H
+#pragma once
 
 #include <QFrame>
 namespace hal{
@@ -33,5 +32,3 @@ private:
     drag_state* m_drag_state;
 };
 }
-
-#endif // DOCK_WIDGET_H

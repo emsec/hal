@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef SELECTION_RELAY_H
-#define SELECTION_RELAY_H
+#pragma once
 
 #include "def.h"
 
@@ -135,5 +134,3 @@ private:
     QVector<QPair<void*, QString>> m_sender_register;
 };
 }
-
-#endif // SELECTION_RELAY_H

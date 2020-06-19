@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef NOTIFICATION_H
-#define NOTIFICATION_H
+#pragma once
 
 #include <QFrame>
 
@@ -58,5 +57,3 @@ private:
     QPropertyAnimation* m_animation;
 };
 }
-
-#endif    // NOTIFICATION_H

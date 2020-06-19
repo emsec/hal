@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef tree_module_model_H
-#define tree_module_model_H
+#pragma once
 
 #include "def.h"
 #include "netlist/event_system/gate_event_handler.h"
@@ -85,4 +84,3 @@ private:
     QFont m_structured_font;
 };
 }
-#endif    // tree_module_model_H

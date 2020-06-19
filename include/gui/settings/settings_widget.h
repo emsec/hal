@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef SETTINGS_WIDGET_H
-#define SETTINGS_WIDGET_H
+#pragma once
 
 #include "settings/preview_widget.h"
 
@@ -105,4 +104,3 @@ private:
     preview_widget* m_preview = nullptr;
 };
 }
-#endif    // SETTINGS_WIDGET_H

@@ -1,5 +1,4 @@
-#ifndef LOG_CHANNEL_MANAGER_H
-#define LOG_CHANNEL_MANAGER_H
+#pragma once
 
 #include "core/log.h"
 
@@ -42,5 +41,3 @@ private:
     log_channel* m_temporary_channels[log_channel_manager_constants::max_channels];
 };
 }
-
-#endif // LOG_CHANNEL_MANAGER_H

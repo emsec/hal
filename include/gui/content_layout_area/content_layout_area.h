@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef CONTENT_LAYOUT_AREA_H
-#define CONTENT_LAYOUT_AREA_H
+#pragma once
 
 #include "content_widget/content_widget.h"
 
@@ -91,5 +90,3 @@ private:
     tab_widget* m_tab_widget;
 };
 }
-
-#endif    // CONTENT_LAYOUT_AREA_H

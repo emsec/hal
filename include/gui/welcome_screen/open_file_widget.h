@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef OPEN_FILE_WIDGET_H
-#define OPEN_FILE_WIDGET_H
+#pragma once
 
 #include <QFrame>
 #include <QLabel>
@@ -65,5 +64,3 @@ private:
     bool m_drag_active;
 };
 }
-
-#endif    // OPEN_FILE_WIDGET_H

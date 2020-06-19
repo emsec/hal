@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef MODULE_ITEM_H
-#define MODULE_ITEM_H
+#pragma once
 
 #include "def.h"
 
@@ -74,5 +73,3 @@ private:
     bool m_highlighted;
 };
 }
-
-#endif // MODULE_ITEM_H

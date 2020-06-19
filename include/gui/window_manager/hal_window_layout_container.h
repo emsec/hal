@@ -1,5 +1,4 @@
-#ifndef HAL_WINDOW_LAYOUT_CONTAINER_H
-#define HAL_WINDOW_LAYOUT_CONTAINER_H
+#pragma once
 
 #include <QFrame>
 
@@ -18,5 +17,3 @@ protected:
     void keyPressEvent(QKeyEvent* event);
 };
 }
-
-#endif // HAL_WINDOW_LAYOUT_CONTAINER_H

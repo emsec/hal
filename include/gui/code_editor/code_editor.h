@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef CODE_EDITOR_H
-#define CODE_EDITOR_H
+#pragma once
 
 #include "code_editor/code_editor_minimap.h"
 
@@ -121,7 +120,4 @@ private:
     QColor m_line_number_highlight_background;
     QColor m_current_line_background;
 };
-
 }
-
-#endif // CODE_EDITOR_H

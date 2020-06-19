@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef _PYTHON_EDITOR_CODE_COMPLETION_DIALOG_H_
-#define _PYTHON_EDITOR_CODE_COMPLETION_DIALOG_H_
+#pragma once
 
 #include "netlist/gate.h"
 #include "netlist/netlist.h"
@@ -60,5 +59,3 @@ private:
     QSize table_widget_size(QTableWidget* table);
 };
 }
-
-#endif    // _PYTHON_EDITOR_CODE_COMPLETION_DIALOG_H_

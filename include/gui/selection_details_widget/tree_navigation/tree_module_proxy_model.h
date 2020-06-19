@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef tree_module_proxy_model_H
-#define tree_module_proxy_model_H
+#pragma once
 
 #include "gui/gui_utils/sort.h"
 
@@ -45,5 +44,3 @@ private:
     gui_utility::sort_mechanism m_sort_mechanism;
 };
 }
-
-#endif    // tree_module_proxy_model_H

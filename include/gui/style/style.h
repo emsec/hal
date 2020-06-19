@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef STYLE_H
-#define STYLE_H
+#pragma once
 
 #include <QColor>
 #include <QIcon>
@@ -36,5 +35,3 @@ namespace style
     extern void debug_update(); // PLACEHOLDER
 }    // namespace style
 }
-
-#endif    // STYLE_H

@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef GUI_UTILITY_H
-#define GUI_UTILITY_H
+#pragma once
 
 #include <QColor>
 #include <QIcon>
@@ -39,5 +38,3 @@ namespace gui_utility
     extern QColor get_random_color();
 }
 }
-
-#endif // GUI_UTILITY_H

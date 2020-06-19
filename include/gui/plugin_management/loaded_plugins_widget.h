@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef LOADED_PLUGINS_WIDGET_H
-#define LOADED_PLUGINS_WIDGET_H
+#pragma once
 
 #include <QScrollArea>
 
@@ -48,5 +47,3 @@ private:
     QFrame* m_spacer;
 };
 }
-
-#endif    // LOADED_PLUGINS_WIDGET_H

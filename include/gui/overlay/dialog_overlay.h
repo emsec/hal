@@ -1,5 +1,4 @@
-#ifndef DIALOG_OVERLAY_H
-#define DIALOG_OVERLAY_H
+#pragma once
 
 #include "overlay/overlay.h"
 
@@ -24,5 +23,3 @@ private:
     QWidget* m_widget;
 };
 }
-
-#endif // DIALOG_OVERLAY_H

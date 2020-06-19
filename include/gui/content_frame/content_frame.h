@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef CONTENT_FRAME_H
-#define CONTENT_FRAME_H
+#pragma once
 
 #include <QLabel>
 #include <QLayout>
@@ -60,5 +59,3 @@ private:
     QString m_detach_icon_style;
 };
 }
-
-#endif    // CONTENT_FRAME_H

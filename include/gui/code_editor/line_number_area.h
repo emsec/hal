@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef LINE_NUMBER_AREA_H
-#define LINE_NUMBER_AREA_H
+#pragma once
 
 #include <QWidget>
 namespace hal{
@@ -56,5 +55,3 @@ private:
     int m_right_offset;
 };
 }
-
-#endif    // LINE_NUMBER_AREA_H

@@ -1,5 +1,4 @@
-#ifndef EMPTY_STRING_VALIDATOR_H
-#define EMPTY_STRING_VALIDATOR_H
+#pragma once
 
 #include "validator/validator.h"
 namespace hal{
@@ -11,5 +10,3 @@ class empty_string_validator : public validator
         bool validate(const QString &input);
 };
 }
-
-#endif      // EMPTY_STRING_VALIDATOR_H

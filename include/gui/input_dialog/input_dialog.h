@@ -1,5 +1,4 @@
-#ifndef INPUT_DIALOG_H
-#define INPUT_DIALOG_H
+#pragma once
 
 #include "validator/stacked_validator.h"
 
@@ -56,5 +55,3 @@ class input_dialog : public QDialog
         void handle_text_changed(const QString &text);
 };
 }
-
-#endif      // INPUT_DIALOG_H

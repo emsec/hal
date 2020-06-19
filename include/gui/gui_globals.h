@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef GUI_GLOBALS_H
-#define GUI_GLOBALS_H
+#pragma once
 
 #include "netlist/netlist.h"
 
@@ -76,5 +75,3 @@ extern gui_api* g_gui_api;
 // This will also hide the respective debug setting from the settings page.
 #define GUI_DEBUG_GRID
 }
-
-#endif    // GUI_GLOBALS_H

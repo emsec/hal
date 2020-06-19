@@ -1,5 +1,4 @@
-#ifndef QPOINT_EXTENSION_H
-#define QPOINT_EXTENSION_H
+#pragma once
 
 #include <QPoint>
 static bool operator<(const QPoint& p1, const QPoint& p2)
@@ -13,6 +12,3 @@ static bool operator<(const QPoint& p1, const QPoint& p2)
     else
         return false;
 }
-
-
-#endif // QPOINT_EXTENSION_H

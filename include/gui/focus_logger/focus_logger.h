@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef __HAL_FOCUS_LOGGER_H
-#define __HAL_FOCUS_LOGGER_H
+#pragma once
 
 #include <QObject>
 #include <QApplication>
@@ -38,5 +37,3 @@ public Q_SLOTS:
 
 };
 }
-
-#endif //__HAL_FOCUS_LOGGER_H

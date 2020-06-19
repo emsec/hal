@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef KEYBIND_SETTINGS_H
-#define KEYBIND_SETTINGS_H
+#pragma once
 
 #include "settings_widget.h"
 
@@ -49,6 +48,3 @@ private:
 
 };
 }
-
-#endif //KEYBIND_SETTINGS_H
-

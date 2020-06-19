@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef PLUGIN_RELAY_H
-#define PLUGIN_RELAY_H
+#pragma once
 
 #include <QObject>
 
@@ -42,5 +41,3 @@ Q_SIGNALS:
     void plugin_unloaded(const QString& name, const QString& path);
 };
 }
-
-#endif    // PLUGIN_RELAY_H

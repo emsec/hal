@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef HAL_FILTER_DIALOG_H
-#define HAL_FILTER_DIALOG_H
+#pragma once
 
 #include "hal_logger/hal_filter_item.h"
 #include <QComboBox>
@@ -98,5 +97,3 @@ private:
     QDialogButtonBox m_button_box;
 };
 }
-
-#endif    // HAL_FILTER_DIALOG_H

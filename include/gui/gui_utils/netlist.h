@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef NETLIST_UTIL_H
-#define NETLIST_UTIL_H
+#pragma once
 
 #include "netlist/gate.h"
 #include "netlist/module.h"
@@ -38,5 +37,3 @@ namespace gui_utility
     QSet<u32> parent_modules(std::shared_ptr<Module> m);
 }
 }
-
-#endif // NETLIST_UTIL_H

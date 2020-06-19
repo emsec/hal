@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef PREVIEW_WIDGET_H
-#define PREVIEW_WIDGET_H
+#pragma once
 
 #include <QLabel>
 #include <QFrame>
@@ -40,5 +39,3 @@ protected:
     QLayout* m_layout;
 };
 }
-
-#endif // PREVIEW_WIDGET_H

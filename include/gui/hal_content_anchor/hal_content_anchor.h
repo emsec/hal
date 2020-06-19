@@ -21,8 +21,8 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef HAL_CONTENT_ANCHOR_H
-#define HAL_CONTENT_ANCHOR_H
+#pragma once
+
 namespace hal{
 class content_widget;
 
@@ -48,5 +48,3 @@ hal_content_anchor::~hal_content_anchor()
 {
 }
 }
-
-#endif    // HAL_CONTENT_ANCHOR_H

@@ -1,5 +1,4 @@
-#ifndef SHORTCUT_MANAGER_H
-#define SHORTCUT_MANAGER_H
+#pragma once
 
 #include <QObject>
 #include <QShortcut>
@@ -17,5 +16,3 @@ private:
     QShortcut* m_save;
 };
 }
-
-#endif // SHORTCUT_MANAGER_H

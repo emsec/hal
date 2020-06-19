@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef KEYBIND_MANAGER_H
-#define KEYBIND_MANAGER_H
+#pragma once
 
 #include "gui/hal_action/hal_action.h"
 
@@ -71,5 +70,3 @@ void delete_all_values(QHash<QString, T> map, T value)
     }
 }
 }
- 
-#endif // KEYBIND_MANAGER_H

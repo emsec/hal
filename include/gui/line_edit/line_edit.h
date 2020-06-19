@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef LINE_EDIT_H
-#define LINE_EDIT_H
+#pragma once
 
 #include <QLineEdit>
 namespace hal{
@@ -38,5 +37,3 @@ public Q_SLOTS:
     void handle_text_changed(const QString& text);
 };
 }
-
-#endif    // LINE_EDIT_H

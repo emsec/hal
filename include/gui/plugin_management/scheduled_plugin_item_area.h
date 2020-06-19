@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef SCHEDULED_PLUGIN_ITEM_AREA_H
-#define SCHEDULED_PLUGIN_ITEM_AREA_H
+#pragma once
 
 #include <QFrame>
 #include <QList>
@@ -76,5 +75,3 @@ private:
     int m_drag_index;
 };
 }
-
-#endif    // SCHEDULED_PLUGIN_ITEM_AREA_H

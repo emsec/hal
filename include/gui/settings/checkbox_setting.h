@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef CHECKBOX_SETTINGS_H
-#define CHECKBOX_SETTINGS_H
+#pragma once
 
 #include "settings_widget.h"
 #include <QCheckBox>
@@ -45,5 +44,3 @@ private:
 
 };
 }
-
-#endif //CHECKBOX_SETTINGS_H

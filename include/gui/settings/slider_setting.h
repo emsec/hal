@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef SLIDER_SETTING_H
-#define SLIDER_SETTING_H
+#pragma once
 
 #include "settings_widget.h"
 #include <QSlider>
@@ -46,5 +45,3 @@ private:
 
 };
 }
-
-#endif //SLIDER_SETTING_H

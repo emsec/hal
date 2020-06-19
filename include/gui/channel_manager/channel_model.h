@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef CHANNEL_MODEL_H
-#define CHANNEL_MODEL_H
+#pragma once
 
 #include "channel_manager/channel_item.h"
 #include "core/log.h"
@@ -66,5 +65,3 @@ private:
     boost::circular_buffer<channel_item*> m_temporary_items;
 };
 }
-
-#endif    // CHANNEL_MODEL_H

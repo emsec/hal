@@ -22,8 +22,7 @@
  * SOFTWARE.
  */
 
-#ifndef __MODULE_TREE_VIEW_H
-#define __MODULE_TREE_VIEW_H
+#pragma once
 
 #include <QTreeView>
 namespace hal{
@@ -39,6 +38,3 @@ public:
 
 };
 }
-
-
-#endif //__MODULE_TREE_VIEW_H

@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef GET_IN_TOUCH_ITEM_H
-#define GET_IN_TOUCH_ITEM_H
+#pragma once
 
 #include <QFrame>
 
@@ -74,5 +73,3 @@ private:
     QString m_icon_style;
 };
 }
-
-#endif    // GET_IN_TOUCH_ITEM_H

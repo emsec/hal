@@ -1,5 +1,4 @@
-#ifndef UNIQUE_STRING_VALIDATOR_H
-#define UNIQUE_STRING_VALIDATOR_H
+#pragma once
 
 #include "validator/validator.h"
 
@@ -16,5 +15,3 @@ class unique_string_validator : public validator
         const QStringList &m_unique_strings;
 };
 }
-
-#endif      // UNIQUE_STRING_VALIDATOR_H

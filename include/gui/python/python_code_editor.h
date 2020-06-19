@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef PYTHON_CODE_EDITOR_H
-#define PYTHON_CODE_EDITOR_H
+#pragma once
 
 #include "code_editor/code_editor.h"
 
@@ -70,5 +69,3 @@ private:
     QUuid m_uuid;
 };
 }
-
-#endif //PYTHON_CODE_EDITOR_H

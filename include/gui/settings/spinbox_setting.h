@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef SPINBOX_SETTING_H
-#define SPINBOX_SETTING_H
+#pragma once
 
 #include "settings_widget.h"
 #include <QSpinBox>
@@ -43,5 +42,3 @@ private:
 
 };
 }
-
-#endif //SPINBOX_SETTING_H

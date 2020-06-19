@@ -1,5 +1,4 @@
-#ifndef HAL_MODULE_DETAILS_WIDGET_H
-#define HAL_MODULE_DETAILS_WIDGET_H
+#pragma once
 
 #include "def.h"
 
@@ -92,5 +91,3 @@ private:
     void style_table(QTableWidget* table);
 };
 }
-
-#endif /* HAL_MODULE_DETAILS_WIDGET_H*/

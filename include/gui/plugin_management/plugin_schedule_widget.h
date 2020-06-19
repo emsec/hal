@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef PLUGIN_SCHEDULE_WIDGET_H
-#define PLUGIN_SCHEDULE_WIDGET_H
+#pragma once
 
 #include <QFrame>
 
@@ -66,4 +65,3 @@ private:
     loaded_plugins_widget* m_loaded_plugins_widget;
 };
 }
-#endif    // PLUGIN_SCHEDULE_WIDGET_H

@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef MAIN_SETTINGS_WIDGET_H
-#define MAIN_SETTINGS_WIDGET_H
+#pragma once
 
 #include "expanding_list/expanding_list_button.h"
 #include <QList>
@@ -108,5 +107,3 @@ private:
     QMap<QString, QList<settings_widget*>*> m_exclusive_g2w;
 };
 }
-
-#endif    // MAIN_SETTINGS_WIDGET_H

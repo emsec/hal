@@ -1,5 +1,4 @@
-#ifndef WORKER_H
-#define WORKER_H
+#pragma once
 
 #include <QThread>
 namespace hal{
@@ -20,5 +19,3 @@ private:
     task* m_task;
 };
 }
-
-#endif // WORKER_H

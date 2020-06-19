@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef HAL_FILTER_ITEM_H
-#define HAL_FILTER_ITEM_H
+#pragma once
 
 #include <QList>
 #include <QRegularExpression>
@@ -60,5 +59,3 @@ struct hal_filter_item
     const QRegularExpression m_reg_ex;
 };
 }
-
-#endif    // HAL_FILTER_ITEM_H

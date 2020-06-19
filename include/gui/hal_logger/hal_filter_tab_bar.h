@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef HAL_FILTER_TAB_BAR_H
-#define HAL_FILTER_TAB_BAR_H
+#pragma once
 
 #include "hal_logger/hal_filter_dialog.h"
 #include <QList>
@@ -52,5 +51,3 @@ private:
     hal_filter_dialog m_dialog;
 };
 }
-
-#endif    // HAL_FILTER_TAB_BAR_H

@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef PYTHON_WIDGET_H
-#define PYTHON_WIDGET_H
+#pragma once
 
 #include "code_editor/code_editor.h"
 #include "content_widget/content_widget.h"
@@ -201,5 +200,3 @@ private:
     QString m_last_opened_path;
 };
 }
-
-#endif    // PYTHON_WIDGET_H

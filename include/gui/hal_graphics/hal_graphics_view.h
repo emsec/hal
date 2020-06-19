@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef HAL_GRAPHICS_VIEW_H
-#define HAL_GRAPHICS_VIEW_H
+#pragma once
 
 #include <QApplication>
 #include <QGraphicsView>
@@ -52,5 +51,3 @@ Q_SIGNALS:
     void zoomed();
 };
 }
-
-#endif    // HAL_GRAPHICS_VIEW_H

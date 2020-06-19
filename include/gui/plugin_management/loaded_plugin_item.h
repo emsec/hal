@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef LOADED_PLUGIN_ITEM_H
-#define LOADED_PLUGIN_ITEM_H
+#pragma once
 
 #include <QFrame>
 
@@ -85,4 +84,3 @@ private:
     QString m_icon_style;
 };
 }
-#endif    // LOADED_PLUGIN_ITEM_H

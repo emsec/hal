@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef CHANNEL_ITEM_H
-#define CHANNEL_ITEM_H
+#pragma once
 
 #include "core/log.h"
 
@@ -89,5 +88,3 @@ private:
 };
 
 }
-
-#endif    // CHANNEL_ITEM_H

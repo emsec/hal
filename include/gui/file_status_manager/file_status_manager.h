@@ -1,5 +1,4 @@
-#ifndef FILE_STATUS_MANAGER_H
-#define FILE_STATUS_MANAGER_H
+#pragma once
 
 #include <QObject>
 #include <QSet>
@@ -34,5 +33,3 @@ private:
     bool m_netlist_modified;
 };
 }
-
-#endif // FILE_STATUS_MANAGER_H

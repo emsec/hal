@@ -1,5 +1,4 @@
-#ifndef WORKSPACE_H
-#define WORKSPACE_H
+#pragma once
 
 #include <QFrame>
 namespace hal{
@@ -13,5 +12,3 @@ public:
     void repolish();
 };
 }
-
-#endif // WORKSPACE_H

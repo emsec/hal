@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef GET_IN_TOUCH_WIDGET_H
-#define GET_IN_TOUCH_WIDGET_H
+#pragma once
 
 #include "QFrame"
 
@@ -62,5 +61,3 @@ private:
     QLabel* m_gui_version_label;
 };
 }
-
-#endif    // GET_IN_TOUCH_WIDGET_H

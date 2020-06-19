@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef STYLE_MANAGER_H
-#define STYLE_MANAGER_H
+#pragma once
 
 #include <QObject>
 
@@ -65,5 +64,3 @@ private:
     vhdl_qss_adapter* m_vhdl_syntax_highlighter;
 };
 }
-
-#endif    // STYLE_MANAGER_H

@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef MODULE_PROXY_MODEL_H
-#define MODULE_PROXY_MODEL_H
+#pragma once
 
 #include "gui/gui_utils/sort.h"
 
@@ -46,5 +45,3 @@ private:
     gui_utility::sort_mechanism m_sort_mechanism;
 };
 }
-
-#endif // MODULE_PROXY_MODEL_H

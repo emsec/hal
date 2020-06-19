@@ -1,5 +1,4 @@
-#ifndef SELECTION_HISTORY_NAVIGATOR_H
-#define SELECTION_HISTORY_NAVIGATOR_H
+#pragma once
 
 #include "def.h"
 #include "selection_history_navigator/selection.h"
@@ -38,5 +37,3 @@ private:
     void store_selection(u32 id, selection_relay::item_type type);
 };
 }
-
-#endif    // SELECTION_HISTORY_NAVIGATOR_H

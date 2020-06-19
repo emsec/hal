@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef EXPANDING_LIST_ITEM_H
-#define EXPANDING_LIST_ITEM_H
+#pragma once
 
 #include <QFrame>
 #include <QList>
@@ -73,5 +72,3 @@ private:
     int m_fixed_height;
 };
 }
-
-#endif    // EXPANDING_LIST_ITEM_H

@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef VHDL_QSS_ADAPTER_H
-#define VHDL_QSS_ADAPTER_H
+#pragma once
 
 #include <QTextCharFormat>
 #include <QWidget>
@@ -72,5 +71,3 @@ private:
     QColor m_comment_color;
 };
 }
-
-#endif    // VHDL_QSS_ADAPTER_H

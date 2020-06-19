@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef DOCK_BUTTON_H
-#define DOCK_BUTTON_H
+#pragma once
 
 #include <QToolButton>
 
@@ -75,5 +74,3 @@ private:
     bool m_available = true;
 };
 }
-
-#endif    // DOCK_BUTTON_H

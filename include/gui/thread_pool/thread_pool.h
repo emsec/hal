@@ -1,5 +1,4 @@
-#ifndef THREAD_POOL_H
-#define THREAD_POOL_H
+#pragma once
 
 #include <QObject>
 #include <QQueue>
@@ -25,5 +24,3 @@ private:
     QQueue<task*> m_tasks;
 };
 }
-
-#endif // THREAD_POOL_H

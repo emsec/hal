@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef CODE_EDITOR_MINIMAP_H
-#define CODE_EDITOR_MINIMAP_H
+#pragma once
 
 #include <QWidget>
 
@@ -70,5 +69,3 @@ private:
     qreal m_offset;
 };
 }
-
-#endif    // CODE_EDITOR_MINIMAP_H

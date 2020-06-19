@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef NOTIFICATION_MANAGER_H
-#define NOTIFICATION_MANAGER_H
+#pragma once
 
 #include <QList>
 #include <QObject>
@@ -57,5 +56,3 @@ private:
     QList<notification*> m_list;
 };
 }
-
-#endif    // NOTIFICATION_MANAGER_H

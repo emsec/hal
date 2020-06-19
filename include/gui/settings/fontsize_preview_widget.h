@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef FONT_PREVIEW_WIDGET_H
-#define FONT_PREVIEW_WIDGET_H
+#pragma once
 
 #include "settings/preview_widget.h"
 
@@ -42,5 +41,3 @@ private:
     QFont m_font;
 };
 }
-
-#endif // FONT_PREVIEW_WIDGET_H

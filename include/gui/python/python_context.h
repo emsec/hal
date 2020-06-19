@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef PYTHON_CONTEXT_H
-#define PYTHON_CONTEXT_H
+#pragma once
 
 #include <QString>
 
@@ -94,5 +93,3 @@ private:
     bool m_trigger_reset = false;
 };
 }
-
-#endif    // PYTHON_CONTEXT_H

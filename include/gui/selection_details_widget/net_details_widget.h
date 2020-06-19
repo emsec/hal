@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef NET_DETAILS_WIDGET_H
-#define NET_DETAILS_WIDGET_H
+#pragma once
 
 #include "def.h"
 
@@ -113,5 +112,3 @@ private:
     void handle_global_settings_changed(void* sender, const QString& key, const QVariant& value);
 };
 }
-
-#endif    // NET_DETAILS_WIDGET_H

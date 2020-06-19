@@ -22,8 +22,7 @@
  * SOFTWARE.
  */
 
-#ifndef MODULE_WIDGET_H
-#define MODULE_WIDGET_H
+#pragma once
 
 #include "def.h"
 
@@ -86,5 +85,3 @@ private:
     module_item* get_module_item_from_index(const QModelIndex &index);
 };
 }
-
-#endif // MODULE_WIDGET_H

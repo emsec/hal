@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef PYTHON_SYNTAX_HIGHLIGHTER_H
-#define PYTHON_SYNTAX_HIGHLIGHTER_H
+#pragma once
 
 #include <QRegularExpression>
 #include <QSyntaxHighlighter>
@@ -54,5 +53,3 @@ private:
     QRegularExpression m_tripple_double_quote;
 };
 }
-
-#endif    // PYTHON_SYNTAX_HIGHLIGHTER_H

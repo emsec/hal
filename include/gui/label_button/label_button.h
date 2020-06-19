@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef LABEL_BUTTON_H
-#define LABEL_BUTTON_H
+#pragma once
 
 #include <QLabel>
 #include <QMouseEvent>
@@ -42,5 +41,3 @@ protected:
     void mousePressEvent(QMouseEvent* event) Q_DECL_OVERRIDE;
 };
 }
-
-#endif    // LABEL_BUTTON_H

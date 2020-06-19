@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef HAL_PLUGIN_ACCESS_MANAGER_H
-#define HAL_PLUGIN_ACCESS_MANAGER_H
+#pragma once
 
 #include "core/program_options.h"
 #include <core/program_options.h>
@@ -35,5 +34,3 @@ namespace hal_plugin_access_manager
     int run_plugin(const std::string plugin_name, ProgramArguments* args);
 }    // namespace hal_plugin_access_manager
 }
-
-#endif    // HAL_PLUGIN_ACCESS_MANAGER_H

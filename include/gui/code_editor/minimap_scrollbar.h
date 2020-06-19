@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef MINIMAP_SCROLLBAR_H
-#define MINIMAP_SCROLLBAR_H
+#pragma once
 
 #include <QWidget>
 
@@ -79,5 +78,3 @@ private:
     QScrollBar* m_scrollbar;
 };
 }
-
-#endif    // MINIMAP_SCROLLBAR_H

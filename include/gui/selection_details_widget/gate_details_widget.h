@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef __HAL_GATE_DETAILS_WIDGET_H__
-#define __HAL_GATE_DETAILS_WIDGET_H__
+#pragma once
 
 #include "def.h"
 
@@ -152,5 +151,3 @@ private:
     void handle_global_settings_changed(void* sender, const QString& key, const QVariant& value);
 };
 }
-
-#endif /* __HAL_GATE_DETAILS_WIDGET_H__ */

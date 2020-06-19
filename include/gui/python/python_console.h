@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef PYTHON_CONSOLE_H
-#define PYTHON_CONSOLE_H
+#pragma once
 
 #include "python/python_context_suberscriber.h"
 
@@ -86,5 +85,3 @@ private:
     std::shared_ptr<python_console_history> m_history;
 };
 }
-
-#endif    // PYTHON_CONSOLE_H

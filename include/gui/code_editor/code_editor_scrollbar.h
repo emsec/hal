@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef CODE_EDITOR_SCROLLBAR_H
-#define CODE_EDITOR_SCROLLBAR_H
+#pragma once
 
 #include <QScrollBar>
 namespace hal{
@@ -45,5 +44,3 @@ private:
     minimap_scrollbar* m_minimap_scrollbar;
 };
 }
-
-#endif    // CODE_EDITOR_SCROLLBAR_H

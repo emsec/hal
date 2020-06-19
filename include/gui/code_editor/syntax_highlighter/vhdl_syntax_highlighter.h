@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef VHDL_SYNTAX_HIGHLIGHTER_H
-#define VHDL_SYNTAX_HIGHLIGHTER_H
+#pragma once
 
 #include <QRegularExpression>
 #include <QSyntaxHighlighter>
@@ -76,5 +75,3 @@ private:
     QRegularExpression m_comment_end_expression;
 };
 }
-
-#endif    // VHDL_SYNTAX_HIGHLIGHTER_H

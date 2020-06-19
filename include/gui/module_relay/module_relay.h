@@ -1,5 +1,4 @@
-#ifndef MODULE_RELAY_H
-#define MODULE_RELAY_H
+#pragma once
 
 #include "def.h"
 
@@ -57,5 +56,3 @@ private:
     module_model* m_model;
 };
 }
-
-#endif // MODULE_RELAY_H

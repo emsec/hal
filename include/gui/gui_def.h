@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef HAL_GUI_DEF_H
-#define HAL_GUI_DEF_H
+#pragma once
 
 #include "def.h"
 
@@ -101,5 +100,3 @@ struct placement_hint
 };
 
 }
-
-#endif // HAL_GUI_DEF_H

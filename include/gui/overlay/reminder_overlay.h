@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef REMINDER_OVERLAY_H
-#define REMINDER_OVERLAY_H
+#pragma once
 
 #include "overlay/overlay.h"
 
@@ -49,5 +48,3 @@ private:
     QPushButton* m_button;
 };
 }
-
-#endif    // REMINDER_OVERLAY_H

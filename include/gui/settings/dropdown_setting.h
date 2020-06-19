@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef DROPDOWN_SETTINGS_H
-#define DROPDOWN_SETTINGS_H
+#pragma once
 
 #include "settings_widget.h"
 #include <QComboBox>
@@ -46,5 +45,3 @@ private:
 
 };
 }
-
-#endif //DROPDOWN_SETTINGS_H

@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef HAL_CONTENT_MANAGER_H
-#define HAL_CONTENT_MANAGER_H
+#pragma once
 
 #include <QGraphicsScene>
 #include <QObject>
@@ -84,5 +83,3 @@ private:
     context_manager_widget* m_context_manager_wid;
 };
 }
-
-#endif    // HAL_CONTENT_MANAGER_H

@@ -1,5 +1,4 @@
-#ifndef TASK_H
-#define TASK_H
+#pragma once
 
 #include <QObject>
 namespace hal{
@@ -16,5 +15,3 @@ Q_SIGNALS:
     void finished();
 };
 }
-
-#endif // TASK_H

@@ -1,5 +1,4 @@
-#ifndef STYLEABLE_WIDGET_H
-#define STYLEABLE_WIDGET_H
+#pragma once
 
 #include <QWidget>
 namespace hal{
@@ -14,5 +13,3 @@ protected:
     void paintEvent(QPaintEvent* event);
 };
 }
-
-#endif // STYLEABLE_WIDGET_H

@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef PLUGIN_SCHEDULE_MANAGER_H
-#define PLUGIN_SCHEDULE_MANAGER_H
+#pragma once
 
 #include <QObject>
 namespace hal{
@@ -71,5 +70,3 @@ private:
     int m_current_index;
 };
 }
-
-#endif    // PLUGIN_SCHEDULE_MANAGER_H

@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef SEARCHBAR_H
-#define SEARCHBAR_H
+#pragma once
 
 #include <QFrame>
 
@@ -89,5 +88,3 @@ private:
     QString m_clear_icon_style;
 };
 }
-
-#endif    // SEARCHBAR_H

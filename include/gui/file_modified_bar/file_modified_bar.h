@@ -1,5 +1,4 @@
-#ifndef FILE_MODIFIED_BAR_H
-#define FILE_MODIFIED_BAR_H
+#pragma once
 
 #include "gui_def.h"
 
@@ -41,5 +40,3 @@ private:
     void handle_file_mov_or_del(QString path);
 };
 }
-
-#endif    // FILE_MODIFIED_BAR_H

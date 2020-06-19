@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef PYTHON_QSS_ADAPTER_H
-#define PYTHON_QSS_ADAPTER_H
+#pragma once
 
 #include <QTextCharFormat>
 #include <QWidget>
@@ -95,5 +94,3 @@ private:
     QColor m_comment_color;
 };
 }
-
-#endif    // PYTHON_QSS_ADAPTER_H

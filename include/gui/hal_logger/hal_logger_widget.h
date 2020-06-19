@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef HAL_LOGGER_WIDGET_H
-#define HAL_LOGGER_WIDGET_H
+#pragma once
 
 #include "channel_manager/channel_item.h"
 #include "content_widget/content_widget.h"
@@ -97,5 +96,3 @@ private:
     void scroll_to_bottom();
 };
 }
-
-#endif    // HAL_LOGGER_WIDGET_H

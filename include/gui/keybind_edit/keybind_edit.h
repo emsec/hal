@@ -1,5 +1,4 @@
-#ifndef KEYBIND_EDIT_H
-#define KEYBIND_EDIT_H
+#pragma once
 
 #include "validator/stacked_validator.h"
 
@@ -29,6 +28,3 @@ private:
     bool m_validated = true;
 };
 }
-
-#endif // KEYBIND_EDIT_H
-

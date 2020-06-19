@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef TOOLBAR_H
-#define TOOLBAR_H
+#pragma once
 
 #include <QToolBar>
 namespace hal{
@@ -38,5 +37,3 @@ public:
     void repolish();
 };
 }
-
-#endif    // TOOLBAR_H

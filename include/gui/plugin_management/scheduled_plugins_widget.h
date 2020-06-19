@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef SCHEDULED_PLUGINS_WIDGET_H
-#define SCHEDULED_PLUGINS_WIDGET_H
+#pragma once
 
 #include <QScrollArea>
 namespace hal{
@@ -44,5 +43,3 @@ private:
     scheduled_plugin_item_area* m_area;
 };
 }
-
-#endif    // SCHEDULED_PLUGINS_WIDGET_H

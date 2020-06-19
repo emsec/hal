@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef HAL_LOGGER_MARSHALL_H
-#define HAL_LOGGER_MARSHALL_H
+#pragma once
 
 #include "core/log.h"
 #include <QMutex>
@@ -57,5 +56,3 @@ private:
     QPlainTextEdit* m_edit;
 };
 }
-
-#endif    // HAL_LOGGER_MARSHALL_H

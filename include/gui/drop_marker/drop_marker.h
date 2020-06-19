@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef DROP_MARKER_H
-#define DROP_MARKER_H
+#pragma once
 
 #include <QFrame>
 
@@ -61,5 +60,3 @@ private:
     int m_fixed_height;
 };
 }
-
-#endif    // DROP_MARKER_H

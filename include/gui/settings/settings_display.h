@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef SETTINGS_DISPLAY_H
-#define SETTINGS_DISPLAY_H
+#pragma once
 
 #include <QScrollArea>
 
@@ -44,5 +43,3 @@ private:
     QVBoxLayout* m_sub_content_layout;
 };
 }
-
-#endif    // SETTINGS_DISPLAY_H

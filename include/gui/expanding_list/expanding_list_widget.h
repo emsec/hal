@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef EXPANDING_LIST_WIDGET_H
-#define EXPANDING_LIST_WIDGET_H
+#pragma once
 
 #include <QScrollArea>
 
@@ -68,5 +67,3 @@ private:
     int m_offset;
 };
 }
-
-#endif    // EXPANDING_LIST_WIDGET_H

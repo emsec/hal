@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef VHDL_EDITOR_H
-#define VHDL_EDITOR_H
+#pragma once
 
 #include "code_editor/code_editor.h"
 #include "content_widget/content_widget.h"
@@ -47,5 +46,3 @@ private:
     searchbar* m_searchbar;
 };
 }
-
-#endif    // VHDL_EDITOR_H

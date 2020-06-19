@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef NO_SCHEDULED_PLUGINS_WIDGET_H
-#define NO_SCHEDULED_PLUGINS_WIDGET_H
+#pragma once
 
 #include <QFrame>
 #include <QLabel>
@@ -68,5 +67,3 @@ private:
     bool m_drag_active;
 };
 }
-
-#endif    // NO_SCHEDULED_PLUGINS_WIDGET_H

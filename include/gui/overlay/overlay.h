@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef OVERLAY_H
-#define OVERLAY_H
+#pragma once
 
 #include <QFrame>
 namespace hal{
@@ -45,5 +44,3 @@ private:
     void handle_parent_changed();
 };
 }
-
-#endif    // OVERLAY_H

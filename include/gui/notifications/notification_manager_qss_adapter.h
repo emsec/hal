@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef NOTIFICATION_MANAGER_QSS_ADAPTER_H
-#define NOTIFICATION_MANAGER_QSS_ADAPTER_H
+#pragma once
 
 #include <QWidget>
 namespace hal{
@@ -52,5 +51,3 @@ public:
     int m_spacing;
 };
 }
-
-#endif    // NOTIFICATION_MANAGER_QSS_ADAPTER_H

@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef HAL_PLUGIN_MODEL_H
-#define HAL_PLUGIN_MODEL_H
+#pragma once
 
 #include "plugin_manager/plugin_item.h"
 #include <QAbstractItemModel>
@@ -68,5 +67,3 @@ private:
     u64 model_changed_callback_id;
 };
 }
-
-#endif    //HAL_PLUGIN_MODEL_H

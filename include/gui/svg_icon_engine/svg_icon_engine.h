@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef SVG_ICON_ENGINE_H
-#define SVG_ICON_ENGINE_H
+#pragma once
 
 #include <QIconEngine>
 namespace hal{
@@ -39,5 +38,3 @@ private:
     QByteArray m_data;
 };
 }
-
-#endif    // SVG_ICON_ENGINE_H
