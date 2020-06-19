@@ -25,52 +25,53 @@
 
 #include <QToolButton>
 
-namespace hal{
-class content_widget;
-
-enum class button_orientation
+namespace hal
 {
-    horizontal    = 0,
-    vertical_up   = 1,
-    vertical_down = 2
-};
+    class content_widget;
 
-class dock_button : public QToolButton
-{
-    Q_OBJECT
+    enum class button_orientation
+    {
+        horizontal    = 0,
+        vertical_up   = 1,
+        vertical_down = 2
+    };
 
-public:
-    dock_button(content_widget* widget, button_orientation orientation, QObject* eventFilter, QWidget* parent);
+    class dock_button : public QToolButton
+    {
+        Q_OBJECT
 
-    void paintEvent(QPaintEvent* event) Q_DECL_OVERRIDE;
+    public:
+        dock_button(content_widget* widget, button_orientation orientation, QObject* eventFilter, QWidget* parent);
 
-    void adjust_size();
-    int relative_width();
-    content_widget* widget();
-    bool hidden();
-    bool available();
-    void set_available(bool available);
-    void set_relative_height(int height);
+        void paintEvent(QPaintEvent* event) Q_DECL_OVERRIDE;
 
-    //overshadowed functions
-    void hide();
-    void show();
+        void adjust_size();
+        int relative_width();
+        content_widget* widget();
+        bool hidden();
+        bool available();
+        void set_available(bool available);
+        void set_relative_height(int height);
 
-public Q_SLOTS:
-    void handle_clicked(bool checked);
+        //overshadowed functions
+        void hide();
+        void show();
 
-private:
-    content_widget* m_widget;
-    button_orientation m_orientation;
-    int m_width;
-    int m_height;
-    int m_relative_width;
-    int m_relative_height;
-    int m_icon_size;
-    int m_text_offset;
-    int m_width_padding;
-    int m_height_padding;
-    bool m_hidden;
-    bool m_available = true;
-};
+    public Q_SLOTS:
+        void handle_clicked(bool checked);
+
+    private:
+        content_widget* m_widget;
+        button_orientation m_orientation;
+        int m_width;
+        int m_height;
+        int m_relative_width;
+        int m_relative_height;
+        int m_icon_size;
+        int m_text_offset;
+        int m_width_padding;
+        int m_height_padding;
+        bool m_hidden;
+        bool m_available = true;
+    };
 }

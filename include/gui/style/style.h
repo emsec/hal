@@ -26,12 +26,14 @@
 #include <QColor>
 #include <QIcon>
 #include <QString>
-namespace hal{
-namespace style
-{
-    extern QString get_stylesheet();
-    extern QIcon get_styled_svg_icon(const QString& from_to_colors, const QString& svg_path);
 
-    extern void debug_update(); // PLACEHOLDER
-}    // namespace style
+namespace hal
+{
+    namespace style
+    {
+        extern QString get_stylesheet();
+        extern QIcon get_styled_svg_icon(const QString& from_to_colors, const QString& svg_path);
+
+        extern void debug_update(); // PLACEHOLDER
+    }    // namespace style
 }

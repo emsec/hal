@@ -24,10 +24,11 @@
 #pragma once
 
 #include <QComboBox>
-namespace hal{
-class channel_selector : public QComboBox
+namespace hal
 {
-public:
-    channel_selector(QWidget* parent = nullptr);
-};
+    class channel_selector : public QComboBox
+    {
+    public:
+        channel_selector(QWidget* parent = nullptr);
+    };
 }

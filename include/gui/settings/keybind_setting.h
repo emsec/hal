@@ -29,22 +29,24 @@
 
 #include <QCheckBox>
 #include <QStringList>
-namespace hal{
-class keybind_setting : public settings_widget
+
+namespace hal
 {
-    Q_OBJECT
+    class keybind_setting : public settings_widget
+    {
+        Q_OBJECT
 
-public:
-    keybind_setting(const QString& key, const QString& title, const QString& description, QWidget *parent = nullptr);
+    public:
+        keybind_setting(const QString& key, const QString& title, const QString& description, QWidget *parent = nullptr);
 
-    virtual void load(const QVariant& value) Q_DECL_OVERRIDE;
-    virtual QVariant value() Q_DECL_OVERRIDE;
-    //virtual void rollback() Q_DECL_OVERRIDE;
+        virtual void load(const QVariant& value) Q_DECL_OVERRIDE;
+        virtual QVariant value() Q_DECL_OVERRIDE;
+        //virtual void rollback() Q_DECL_OVERRIDE;
 
-private:
-    keybind_edit* m_keybind_edit;
-    void on_keybind_changed();
-    void on_keybind_edit_rejected();
+    private:
+        keybind_edit* m_keybind_edit;
+        void on_keybind_changed();
+        void on_keybind_edit_rejected();
 
-};
+    };
 }

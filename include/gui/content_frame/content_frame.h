@@ -25,37 +25,39 @@
 
 #include <QLabel>
 #include <QLayout>
-namespace hal{
 
-class content_widget;
-class toolbar;
-
-class content_frame : public QWidget
+namespace hal
 {
-    Q_OBJECT
 
-public:
-    explicit content_frame(content_widget* widget, bool attached, QWidget* parent = nullptr);
+    class content_widget;
+    class toolbar;
 
-    void childEvent(QChildEvent* event) Q_DECL_OVERRIDE;
+    class content_frame : public QWidget
+    {
+        Q_OBJECT
 
-    content_widget* content();
+    public:
+        explicit content_frame(content_widget* widget, bool attached, QWidget* parent = nullptr);
 
-public Q_SLOTS:
-    void detach_widget();
-    void reattach_widget();
+        void childEvent(QChildEvent* event) Q_DECL_OVERRIDE;
 
-private:
-    void closeEvent(QCloseEvent* event) Q_DECL_OVERRIDE;
+        content_widget* content();
 
-    QVBoxLayout* m_vertical_layout;
-    QHBoxLayout* m_horizontal_layout;
-    toolbar* m_left_toolbar;
-    toolbar* m_right_toolbar;
-    content_widget* m_widget;
-    QLabel* m_name_label;
+    public Q_SLOTS:
+        void detach_widget();
+        void reattach_widget();
 
-    QString m_detach_icon_path;
-    QString m_detach_icon_style;
-};
+    private:
+        void closeEvent(QCloseEvent* event) Q_DECL_OVERRIDE;
+
+        QVBoxLayout* m_vertical_layout;
+        QHBoxLayout* m_horizontal_layout;
+        toolbar* m_left_toolbar;
+        toolbar* m_right_toolbar;
+        content_widget* m_widget;
+        QLabel* m_name_label;
+
+        QString m_detach_icon_path;
+        QString m_detach_icon_style;
+    };
 }

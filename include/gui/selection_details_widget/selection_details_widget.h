@@ -32,32 +32,33 @@
 class QTableWidget;
 class QStackedWidget;
 
-namespace hal{
-class searchbar;
-
-class selection_details_widget : public content_widget
+namespace hal
 {
-    Q_OBJECT
+    class searchbar;
 
-public:
-    selection_details_widget(QWidget* parent = 0);
-    void clear();
+    class selection_details_widget : public content_widget
+    {
+        Q_OBJECT
 
-public Q_SLOTS:
-    void handle_selection_update(void* sender);
-    QList<QShortcut*> create_shortcuts() Q_DECL_OVERRIDE;
+    public:
+        selection_details_widget(QWidget* parent = 0);
+        void clear();
 
-private:
-    QStackedWidget* m_stacked_widget;
+    public Q_SLOTS:
+        void handle_selection_update(void* sender);
+        QList<QShortcut*> create_shortcuts() Q_DECL_OVERRIDE;
 
-    QWidget* m_empty_widget;
-    gate_details_widget* m_gate_details;
-    net_details_widget* m_net_details;
-    module_details_widget* m_module_details;
-    QLabel* m_item_deleted_label;
+    private:
+        QStackedWidget* m_stacked_widget;
 
-    searchbar* m_searchbar;
+        QWidget* m_empty_widget;
+        gate_details_widget* m_gate_details;
+        net_details_widget* m_net_details;
+        module_details_widget* m_module_details;
+        QLabel* m_item_deleted_label;
 
-    void toggle_searchbar();
-};
+        searchbar* m_searchbar;
+
+        void toggle_searchbar();
+    };
 }

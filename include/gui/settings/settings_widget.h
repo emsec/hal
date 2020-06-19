@@ -36,71 +36,71 @@ class QLabel;
 class QRegularExpression;
 class QVBoxLayout;
 
-namespace hal{
-
-class settings_widget : public QFrame
+namespace hal
 {
-    Q_OBJECT
-    Q_PROPERTY(QColor highlight_color READ highlight_color WRITE set_highlight_color)
-    Q_PROPERTY(bool dirty READ dirty WRITE set_dirty)
-    Q_PROPERTY(bool conflicts READ conflicts WRITE set_conflicts)
-
-public:
-    enum class preview_position
+    class settings_widget : public QFrame
     {
-        bottom = 0,
-        right = 1
+        Q_OBJECT
+        Q_PROPERTY(QColor highlight_color READ highlight_color WRITE set_highlight_color)
+        Q_PROPERTY(bool dirty READ dirty WRITE set_dirty)
+        Q_PROPERTY(bool conflicts READ conflicts WRITE set_conflicts)
+
+    public:
+        enum class preview_position
+        {
+            bottom = 0,
+            right = 1
+        };
+
+        explicit settings_widget(const QString& key, QWidget* parent = 0);
+
+        QColor highlight_color();
+        QString key();
+        void set_highlight_color(const QColor& color);
+
+        void reset_labels();
+        bool match_labels(const QString& string);
+
+        void trigger_setting_updated();
+        void set_dirty(bool dirty);
+        bool dirty() const;
+        void prepare(const QVariant& value, const QVariant& default_value);
+        void mark_saved();
+        void set_conflicts(bool conflicts);
+        bool conflicts() const;
+
+        void set_preview_widget(preview_widget* widget);
+        void set_preview_position(preview_position position);
+
+        virtual void load(const QVariant& value) = 0;
+        virtual QVariant value()                  = 0;
+
+    public Q_SLOTS:
+        void handle_rollback();
+        void handle_reset();
+
+    Q_SIGNALS:
+        void setting_updated(settings_widget* sender, const QString& key, const QVariant& value);
+
+    protected:
+        QVBoxLayout* m_layout;
+        QBoxLayout* m_container;
+        QHBoxLayout* m_top_bar;
+        QLabel* m_name;
+        QToolButton* m_revert;
+        QToolButton* m_default;
+
+        QList<QPair<QLabel*, QString>> m_labels;
+
+    private:
+        QColor m_highlight_color;
+        QString m_key;
+        bool m_signals_enabled = true;
+        bool m_prepared = false;
+        bool m_dirty = false;
+        bool m_conflicts = false;
+        QVariant m_loaded_value;
+        QVariant m_default_value;
+        preview_widget* m_preview = nullptr;
     };
-
-    explicit settings_widget(const QString& key, QWidget* parent = 0);
-
-    QColor highlight_color();
-    QString key();
-    void set_highlight_color(const QColor& color);
-
-    void reset_labels();
-    bool match_labels(const QString& string);
-
-    void trigger_setting_updated();
-    void set_dirty(bool dirty);
-    bool dirty() const;
-    void prepare(const QVariant& value, const QVariant& default_value);
-    void mark_saved();
-    void set_conflicts(bool conflicts);
-    bool conflicts() const;
-
-    void set_preview_widget(preview_widget* widget);
-    void set_preview_position(preview_position position);
-
-    virtual void load(const QVariant& value) = 0;
-    virtual QVariant value()                  = 0;
-
-public Q_SLOTS:
-    void handle_rollback();
-    void handle_reset();
-
-Q_SIGNALS:
-    void setting_updated(settings_widget* sender, const QString& key, const QVariant& value);
-
-protected:
-    QVBoxLayout* m_layout;
-    QBoxLayout* m_container;
-    QHBoxLayout* m_top_bar;
-    QLabel* m_name;
-    QToolButton* m_revert;
-    QToolButton* m_default;
-
-    QList<QPair<QLabel*, QString>> m_labels;
-
-private:
-    QColor m_highlight_color;
-    QString m_key;
-    bool m_signals_enabled = true;
-    bool m_prepared = false;
-    bool m_dirty = false;
-    bool m_conflicts = false;
-    QVariant m_loaded_value;
-    QVariant m_default_value;
-    preview_widget* m_preview = nullptr;
-};
 }

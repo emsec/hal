@@ -26,21 +26,23 @@
 #include "settings_widget.h"
 #include <QCheckBox>
 #include <QStringList>
-namespace hal{
-class checkbox_setting : public settings_widget
+
+namespace hal
 {
-    Q_OBJECT
+    class checkbox_setting : public settings_widget
+    {
+        Q_OBJECT
 
-public:
-    checkbox_setting(const QString& key, const QString& title, const QString& text, const QString& description, QWidget* parent = 0);
+    public:
+        checkbox_setting(const QString& key, const QString& title, const QString& text, const QString& description, QWidget* parent = 0);
 
-    virtual void load(const QVariant& value) Q_DECL_OVERRIDE;
-    virtual QVariant value() Q_DECL_OVERRIDE;
-    //virtual void rollback() Q_DECL_OVERRIDE;
+        virtual void load(const QVariant& value) Q_DECL_OVERRIDE;
+        virtual QVariant value() Q_DECL_OVERRIDE;
+        //virtual void rollback() Q_DECL_OVERRIDE;
 
-private:
-    QCheckBox* m_check_box;
-    void on_state_changed(bool checked);
+    private:
+        QCheckBox* m_check_box;
+        void on_state_changed(bool checked);
 
-};
+    };
 }

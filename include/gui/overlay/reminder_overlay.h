@@ -29,22 +29,22 @@ class QLabel;
 class QPushButton;
 class QVBoxLayout;
 
-namespace hal{
-
-class reminder_overlay : public overlay
+namespace hal
 {
-    Q_OBJECT
+    class reminder_overlay : public overlay
+    {
+        Q_OBJECT
 
-public:
-    reminder_overlay(QWidget* parent = nullptr);
+    public:
+        reminder_overlay(QWidget* parent = nullptr);
 
-private Q_SLOTS:
-    void self_destruct();
+    private Q_SLOTS:
+        void self_destruct();
 
-private:
-    QVBoxLayout* m_layout;
-    QLabel* m_image_label;
-    QLabel* m_text_label;
-    QPushButton* m_button;
-};
+    private:
+        QVBoxLayout* m_layout;
+        QLabel* m_image_label;
+        QLabel* m_text_label;
+        QPushButton* m_button;
+    };
 }

@@ -30,46 +30,46 @@ class QLabel;
 class QPropertyAnimation;
 class QVBoxLayout;
 
-namespace hal{
-
-class get_in_touch_item : public QFrame
+namespace hal
 {
-    Q_OBJECT
-    Q_PROPERTY(bool hover READ hover)
-    Q_PROPERTY(QString icon_path READ icon_path WRITE set_icon_path)
-    Q_PROPERTY(QString icon_style READ icon_style WRITE set_icon_style)
+    class get_in_touch_item : public QFrame
+    {
+        Q_OBJECT
+        Q_PROPERTY(bool hover READ hover)
+        Q_PROPERTY(QString icon_path READ icon_path WRITE set_icon_path)
+        Q_PROPERTY(QString icon_style READ icon_style WRITE set_icon_style)
 
-public:
-    explicit get_in_touch_item(const QString& title, const QString& description, QWidget* parent = nullptr);
+    public:
+        explicit get_in_touch_item(const QString& title, const QString& description, QWidget* parent = nullptr);
 
-    void enterEvent(QEvent* event) Q_DECL_OVERRIDE;
-    void leaveEvent(QEvent* event) Q_DECL_OVERRIDE;
-    void mousePressEvent(QMouseEvent* event) Q_DECL_OVERRIDE;
+        void enterEvent(QEvent* event) Q_DECL_OVERRIDE;
+        void leaveEvent(QEvent* event) Q_DECL_OVERRIDE;
+        void mousePressEvent(QMouseEvent* event) Q_DECL_OVERRIDE;
 
-    void repolish();
+        void repolish();
 
-    bool hover();
-    QString icon_path();
-    QString icon_style();
+        bool hover();
+        QString icon_path();
+        QString icon_style();
 
-    void set_hover_active(bool active);
-    void set_icon_path(const QString& path);
-    void set_icon_style(const QString& style);
+        void set_hover_active(bool active);
+        void set_icon_path(const QString& path);
+        void set_icon_style(const QString& style);
 
-Q_SIGNALS:
-    void clicked();
+    Q_SIGNALS:
+        void clicked();
 
-private:
-    QHBoxLayout* m_horizontal_layout;
-    QLabel* m_icon_label;
-    QVBoxLayout* m_vertical_layout;
-    QLabel* m_title_label;
-    QLabel* m_description_label;
-    QPropertyAnimation* m_animation;
+    private:
+        QHBoxLayout* m_horizontal_layout;
+        QLabel* m_icon_label;
+        QVBoxLayout* m_vertical_layout;
+        QLabel* m_title_label;
+        QLabel* m_description_label;
+        QPropertyAnimation* m_animation;
 
-    bool m_hover;
+        bool m_hover;
 
-    QString m_icon_path;
-    QString m_icon_style;
-};
+        QString m_icon_path;
+        QString m_icon_style;
+    };
 }

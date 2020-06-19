@@ -26,44 +26,46 @@
 #include "plugin_manager/plugin_item.h"
 #include <QAbstractItemModel>
 #include <def.h>
-namespace hal{
-class plugin_model : public QAbstractItemModel
+
+namespace hal
 {
-    Q_OBJECT
+    class plugin_model : public QAbstractItemModel
+    {
+        Q_OBJECT
 
-public:
-    explicit plugin_model(QObject* parent = 0);
-    ~plugin_model();
-    bool is_valid_index(const QModelIndex& idx);
-    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
-    virtual int columnCount(const QModelIndex& parent = QModelIndex()) const;
-    virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const;
-    virtual QModelIndex parent(const QModelIndex& child) const;
-    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
-    virtual QVariant headerData(int section, Qt::Orientation orientation, int role) const;
-    virtual bool moveRows(const QModelIndex& sourceParent, int sourceRow, int count, const QModelIndex& destinationParent, int destinationChild);
-    virtual bool dropMimeData(const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent);
-    virtual Qt::DropActions supportedDropActions() const;
-    virtual Qt::ItemFlags flags(const QModelIndex& index) const;
-    virtual bool setData(const QModelIndex& index, const QVariant& value, int role);
-    void plugin_manager_callback(bool is_load, std::string const& plugin_name, std::string const& plugin_path);
-    void request_load_plugin(const QString& name, const QString& path);
-    void request_unload_plugin(QModelIndexList idx);
-    const QList<plugin_item> get_plugin_list();
+    public:
+        explicit plugin_model(QObject* parent = 0);
+        ~plugin_model();
+        bool is_valid_index(const QModelIndex& idx);
+        virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
+        virtual int columnCount(const QModelIndex& parent = QModelIndex()) const;
+        virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const;
+        virtual QModelIndex parent(const QModelIndex& child) const;
+        virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
+        virtual QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+        virtual bool moveRows(const QModelIndex& sourceParent, int sourceRow, int count, const QModelIndex& destinationParent, int destinationChild);
+        virtual bool dropMimeData(const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent);
+        virtual Qt::DropActions supportedDropActions() const;
+        virtual Qt::ItemFlags flags(const QModelIndex& index) const;
+        virtual bool setData(const QModelIndex& index, const QVariant& value, int role);
+        void plugin_manager_callback(bool is_load, std::string const& plugin_name, std::string const& plugin_path);
+        void request_load_plugin(const QString& name, const QString& path);
+        void request_unload_plugin(QModelIndexList idx);
+        const QList<plugin_item> get_plugin_list();
 
-Q_SIGNALS:
-    void load_plugin(QString name, QString path);
-    void unload_plugin(QString name, QString path);
-    void run_plugin(const QString& name);
+    Q_SIGNALS:
+        void load_plugin(QString name, QString path);
+        void unload_plugin(QString name, QString path);
+        void run_plugin(const QString& name);
 
-public Q_SLOTS:
-    void handle_load_plugin(QString name, QString path);
-    void handle_unload_plugin(QString name, QString path);
-    void handle_run_plugin_triggered(const QModelIndex& index);
+    public Q_SLOTS:
+        void handle_load_plugin(QString name, QString path);
+        void handle_unload_plugin(QString name, QString path);
+        void handle_run_plugin_triggered(const QModelIndex& index);
 
-private:
-    QStringList m_columns;
-    QList<plugin_item> m_items;
-    u64 model_changed_callback_id;
-};
+    private:
+        QStringList m_columns;
+        QList<plugin_item> m_items;
+        u64 m_model_changed_callback_id;
+    };
 }

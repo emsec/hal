@@ -34,37 +34,38 @@ class QLineEdit;
 class QPushButton;
 class QVBoxLayout;
 
-namespace hal{
-class CLIPluginInterface;
-class ProgramArguments;
-
-class plugin_arguments_widget : public QFrame
+namespace hal
 {
-    Q_OBJECT
+    class CLIPluginInterface;
+    class ProgramArguments;
 
-public:
-    explicit plugin_arguments_widget(QWidget* parent = nullptr);
+    class plugin_arguments_widget : public QFrame
+    {
+        Q_OBJECT
 
-    ProgramArguments get_args();
+    public:
+        explicit plugin_arguments_widget(QWidget* parent = nullptr);
 
-    void setup_plugin_layout(const QString& plugin);
+        ProgramArguments get_args();
 
-public Q_SLOTS:
-    void setup(const QString& plugin_name);
-    void handle_plugin_selected(int index);
+        void setup_plugin_layout(const QString& plugin);
 
-    void handle_button_clicked(bool checked);
-    void handle_text_edited(const QString& text);
+    public Q_SLOTS:
+        void setup(const QString& plugin_name);
+        void handle_plugin_selected(int index);
 
-private:
-    char* to_heap_cstring(const QString& string);
+        void handle_button_clicked(bool checked);
+        void handle_text_edited(const QString& text);
 
-    QFormLayout* m_form_layout;
+    private:
+        char* to_heap_cstring(const QString& string);
 
-    std::shared_ptr<CLIPluginInterface> m_plugin;
+        QFormLayout* m_form_layout;
 
-    QVector<QPair<QPushButton*, QLineEdit*>> m_vector;
+        std::shared_ptr<CLIPluginInterface> m_plugin;
 
-    int m_current_index;
-};
+        QVector<QPair<QPushButton*, QLineEdit*>> m_vector;
+
+        int m_current_index;
+    };
 }

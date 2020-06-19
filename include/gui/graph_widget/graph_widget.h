@@ -31,63 +31,65 @@
 #include "gui/graph_widget/contexts/graph_context_subscriber.h"
 
 #include <deque>
-namespace hal{
-class dialog_overlay;
-class graph_context;
-class graph_graphics_view;
-class graph_layout_spinner_widget;
-class graph_navigation_widget;
-class graph_navigation_widget_v2;
 
-class graph_widget : public content_widget, public graph_context_subscriber
+namespace hal
 {
-    Q_OBJECT
+    class dialog_overlay;
+    class graph_context;
+    class graph_graphics_view;
+    class graph_layout_spinner_widget;
+    class graph_navigation_widget;
+    class graph_navigation_widget_v2;
 
-public:
-    explicit graph_widget(graph_context* context, QWidget* parent = nullptr);
+    class graph_widget : public content_widget, public graph_context_subscriber
+    {
+        Q_OBJECT
 
-    graph_context* get_context() const;
+    public:
+        explicit graph_widget(graph_context* context, QWidget* parent = nullptr);
 
-    void handle_scene_available() override;
-    void handle_scene_unavailable() override;
-    void handle_context_about_to_be_deleted() override;
+        graph_context* get_context() const;
 
-    void handle_status_update(const int percent) override;
-    void handle_status_update(const QString& message) override;
+        void handle_scene_available() override;
+        void handle_scene_unavailable() override;
+        void handle_context_about_to_be_deleted() override;
 
-    graph_graphics_view* view();
+        void handle_status_update(const int percent) override;
+        void handle_status_update(const QString& message) override;
 
-    void ensure_selection_visible();
+        graph_graphics_view* view();
 
-protected:
-    void keyPressEvent(QKeyEvent* event) override;
+        void ensure_selection_visible();
 
-private Q_SLOTS:
-    void handle_navigation_jump_requested(const hal::node origin, const u32 via_net, const QSet<u32>& to_gates, const QSet<u32>& to_modules);
-    void handle_module_double_clicked(const u32 id);
-    void reset_focus();
+    protected:
+        void keyPressEvent(QKeyEvent* event) override;
 
-private:
-    void handle_navigation_left_request();
-    void handle_navigation_right_request();
-    void handle_navigation_up_request();
-    void handle_navigation_down_request();
+    private Q_SLOTS:
+        void handle_navigation_jump_requested(const hal::node origin, const u32 via_net, const QSet<u32>& to_gates, const QSet<u32>& to_modules);
+        void handle_module_double_clicked(const u32 id);
+        void reset_focus();
 
-    void substitute_by_visible_modules(const QSet<u32>& gates, const QSet<u32>& modules, QSet<u32>& insert_gates, QSet<u32>& insert_modules,
-                                       QSet<u32>& remove_gates, QSet<u32>& remove_modules) const;
-    void set_modified_if_module();
+    private:
+        void handle_navigation_left_request();
+        void handle_navigation_right_request();
+        void handle_navigation_up_request();
+        void handle_navigation_down_request();
 
-    void handle_enter_module_requested(const u32 id);
+        void substitute_by_visible_modules(const QSet<u32>& gates, const QSet<u32>& modules, QSet<u32>& insert_gates, QSet<u32>& insert_modules,
+                                           QSet<u32>& remove_gates, QSet<u32>& remove_modules) const;
+        void set_modified_if_module();
 
-    void ensure_items_visible(const QSet<u32>& gates, const QSet<u32>& modules);
+        void handle_enter_module_requested(const u32 id);
 
-    graph_graphics_view* m_view;
-    graph_context* m_context;
+        void ensure_items_visible(const QSet<u32>& gates, const QSet<u32>& modules);
 
-    dialog_overlay* m_overlay;
-    graph_navigation_widget_v2* m_navigation_widget_v2;
-    graph_layout_spinner_widget* m_spinner_widget;
+        graph_graphics_view* m_view;
+        graph_context* m_context;
 
-    u32 m_current_expansion;
-};
+        dialog_overlay* m_overlay;
+        graph_navigation_widget_v2* m_navigation_widget_v2;
+        graph_layout_spinner_widget* m_spinner_widget;
+
+        u32 m_current_expansion;
+    };
 }

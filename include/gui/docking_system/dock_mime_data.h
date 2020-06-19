@@ -25,18 +25,20 @@
 
 #include <QMimeData>
 #include <QObject>
-namespace hal{
-class content_widget;
 
-class dock_mime_data : public QMimeData
+namespace hal
 {
-    Q_OBJECT
+    class content_widget;
 
-public:
-    dock_mime_data(content_widget* widget);
-    content_widget* widget() const;
+    class dock_mime_data : public QMimeData
+    {
+        Q_OBJECT
 
-private:
-    content_widget* m_widget;
-};
+    public:
+        dock_mime_data(content_widget* widget);
+        content_widget* widget() const;
+
+    private:
+        content_widget* m_widget;
+    };
 }

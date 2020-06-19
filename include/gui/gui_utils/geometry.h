@@ -24,9 +24,11 @@
 #pragma once
 
 #include <QWidget>
-namespace hal{
-namespace gui_utility
+
+namespace hal
 {
-    void ensure_on_screen(QWidget* w);
-}
+    namespace gui_utility
+    {
+        void ensure_on_screen(QWidget* w);
+    }
 }

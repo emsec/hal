@@ -24,26 +24,28 @@
 #pragma once
 
 #include <QWidget>
-namespace hal{
-class hal_widget : public QWidget
+
+namespace hal
 {
-    Q_OBJECT
+    class hal_widget : public QWidget
+    {
+        Q_OBJECT
 
-public:
-    explicit hal_widget(QWidget* parent = 0);
+    public:
+        explicit hal_widget(QWidget* parent = 0);
 
-    //virtual void paintEvent(QPaintEvent*) Q_DECL_OVERRIDE;
-    //overshadowed functions
-    void setParent(QWidget* parent);
+        //virtual void paintEvent(QPaintEvent*) Q_DECL_OVERRIDE;
+        //overshadowed functions
+        void setParent(QWidget* parent);
 
-Q_SIGNALS:
-    void parent_set_to(QWidget* parent);
-    void hidden();
-    void shown();
+    Q_SIGNALS:
+        void parent_set_to(QWidget* parent);
+        void hidden();
+        void shown();
 
-public Q_SLOTS:
-    //overshadowed functions (slots)
-    void hide();
-    void show();
-};
+    public Q_SLOTS:
+        //overshadowed functions (slots)
+        void hide();
+        void show();
+    };
 }

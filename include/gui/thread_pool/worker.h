@@ -24,21 +24,23 @@
 #pragma once
 
 #include <QThread>
-namespace hal{
-class task;
 
-class worker : public QThread
+namespace hal
 {
-    Q_OBJECT
+    class task;
 
-public:
-    worker(QObject* parent = nullptr);
+    class worker : public QThread
+    {
+        Q_OBJECT
 
-    void assign_task(task* const t);
+    public:
+        worker(QObject* parent = nullptr);
 
-    void run() Q_DECL_OVERRIDE;
+        void assign_task(task* const t);
 
-private:
-    task* m_task;
-};
+        void run() Q_DECL_OVERRIDE;
+
+    private:
+        task* m_task;
+    };
 }

@@ -26,18 +26,20 @@
 #include "gui/graph_widget/items/nodes/graphics_node.h"
 
 #include <memory>
-namespace hal{
-class Gate;
 
-class graphics_gate : public graphics_node
+namespace hal
 {
-public:
-    graphics_gate(const std::shared_ptr<const Gate> g);
+    class Gate;
 
-protected:
-    QString m_type;
+    class graphics_gate : public graphics_node
+    {
+    public:
+        graphics_gate(const std::shared_ptr<const Gate> g);
 
-    QVector<QString> m_input_pins;
-    QVector<QString> m_output_pins;
-};
+    protected:
+        QString m_type;
+
+        QVector<QString> m_input_pins;
+        QVector<QString> m_output_pins;
+    };
 }

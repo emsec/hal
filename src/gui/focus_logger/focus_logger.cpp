@@ -5,21 +5,23 @@
 #include "gui/focus_logger/focus_logger.h"
 #include "core/log.h"
 #include <QWidget>
-namespace hal{
-focus_logger::focus_logger(QApplication* app, QObject* parent) : QObject(parent)
-{
-    connect(app, &QApplication::focusChanged, this, &focus_logger::handle_focus_change);
-}
 
-void focus_logger::handle_focus_change(QWidget* old, QWidget* new_obj)
+namespace hal
 {
-    if (old == nullptr && new_obj != nullptr)
+    focus_logger::focus_logger(QApplication* app, QObject* parent) : QObject(parent)
     {
-        log_info("gui", "GUI gained focus.");
+        connect(app, &QApplication::focusChanged, this, &focus_logger::handle_focus_change);
     }
-    else if (old != nullptr && new_obj == nullptr)
+
+    void focus_logger::handle_focus_change(QWidget* old, QWidget* new_obj)
     {
-        log_info("gui", "GUI lost focus.");
+        if (old == nullptr && new_obj != nullptr)
+        {
+            log_info("gui", "GUI gained focus.");
+        }
+        else if (old != nullptr && new_obj == nullptr)
+        {
+            log_info("gui", "GUI lost focus.");
+        }
     }
-}
 }

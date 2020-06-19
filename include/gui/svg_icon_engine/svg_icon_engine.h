@@ -24,17 +24,19 @@
 #pragma once
 
 #include <QIconEngine>
-namespace hal{
-class svg_icon_engine : public QIconEngine
+
+namespace hal
 {
-public:
-    explicit svg_icon_engine(const std::string& svg_data);
+    class svg_icon_engine : public QIconEngine
+    {
+    public:
+        explicit svg_icon_engine(const std::string& svg_data);
 
-    void paint(QPainter* painter, const QRect& rect, QIcon::Mode mode, QIcon::State state) Q_DECL_OVERRIDE;
-    QIconEngine* clone() const Q_DECL_OVERRIDE;
-    QPixmap pixmap(const QSize& size, QIcon::Mode mode, QIcon::State state) Q_DECL_OVERRIDE;
+        void paint(QPainter* painter, const QRect& rect, QIcon::Mode mode, QIcon::State state) Q_DECL_OVERRIDE;
+        QIconEngine* clone() const Q_DECL_OVERRIDE;
+        QPixmap pixmap(const QSize& size, QIcon::Mode mode, QIcon::State state) Q_DECL_OVERRIDE;
 
-private:
-    QByteArray m_data;
-};
+    private:
+        QByteArray m_data;
+    };
 }

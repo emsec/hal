@@ -28,25 +28,25 @@
 class QActionEvent;
 class QHBoxLayout;
 
-namespace hal{
-
-class hal_window_toolbar : public QFrame
+namespace hal
 {
-    Q_OBJECT
+    class hal_window_toolbar : public QFrame
+    {
+        Q_OBJECT
 
-public:
-    explicit hal_window_toolbar(QWidget* parent = nullptr);
+    public:
+        explicit hal_window_toolbar(QWidget* parent = nullptr);
 
-    void add_widget(QWidget* widget);
-    void add_spacer();
-    void clear();
+        void add_widget(QWidget* widget);
+        void add_spacer();
+        void clear();
 
-    void repolish();
+        void repolish();
 
-protected:
-    void actionEvent(QActionEvent* event) Q_DECL_OVERRIDE;
+    protected:
+        void actionEvent(QActionEvent* event) Q_DECL_OVERRIDE;
 
-private:
-    QHBoxLayout* m_layout;
-};
+    private:
+        QHBoxLayout* m_layout;
+    };
 }

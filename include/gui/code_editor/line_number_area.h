@@ -24,34 +24,36 @@
 #pragma once
 
 #include <QWidget>
-namespace hal{
-class code_editor;
 
-class line_number_area : public QWidget
+namespace hal
 {
-    Q_OBJECT
-    Q_PROPERTY(int left_offset READ left_offset WRITE set_left_offset)
-    Q_PROPERTY(int right_offset READ right_offset WRITE set_right_offset)
+    class code_editor;
 
-public:
-    explicit line_number_area(code_editor* editor);
+    class line_number_area : public QWidget
+    {
+        Q_OBJECT
+        Q_PROPERTY(int left_offset READ left_offset WRITE set_left_offset)
+        Q_PROPERTY(int right_offset READ right_offset WRITE set_right_offset)
 
-    int left_offset() const;
-    int right_offset() const;
+    public:
+        explicit line_number_area(code_editor* editor);
 
-    void set_left_offset(const int offset);
-    void set_right_offset(const int offset);
+        int left_offset() const;
+        int right_offset() const;
 
-    void repolish();
+        void set_left_offset(const int offset);
+        void set_right_offset(const int offset);
 
-protected:
-    void paintEvent(QPaintEvent* event) Q_DECL_OVERRIDE;
-    void wheelEvent(QWheelEvent* event) Q_DECL_OVERRIDE;
+        void repolish();
 
-private:
-    code_editor* m_editor;
+    protected:
+        void paintEvent(QPaintEvent* event) Q_DECL_OVERRIDE;
+        void wheelEvent(QWheelEvent* event) Q_DECL_OVERRIDE;
 
-    int m_left_offset;
-    int m_right_offset;
-};
+    private:
+        code_editor* m_editor;
+
+        int m_left_offset;
+        int m_right_offset;
+    };
 }

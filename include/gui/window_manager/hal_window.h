@@ -28,47 +28,48 @@
 class QAction;
 class QVBoxLayout;
 
-namespace hal{
-class hal_window_layout_container;
-class hal_window_toolbar;
-class overlay;
-class workspace; // TEMP NAME ?
-
-class hal_window : public QFrame
+namespace hal
 {
-    Q_OBJECT
+    class hal_window_layout_container;
+    class hal_window_toolbar;
+    class overlay;
+    class workspace; // TEMP NAME ?
 
-public:
-    explicit hal_window(QWidget* parent = nullptr);
+    class hal_window : public QFrame
+    {
+        Q_OBJECT
 
-    void lock();
-    void unlock();
+    public:
+        explicit hal_window(QWidget* parent = nullptr);
 
-    void standard_view();
-    void special_view(QWidget* widget);
+        void lock();
+        void unlock();
 
-    void repolish();
+        void standard_view();
+        void special_view(QWidget* widget);
 
-    hal_window_toolbar* get_toolbar();
-    overlay* get_overlay();
+        void repolish();
 
-protected:
-    //void paintEvent(QPaintEvent* event) Q_DECL_OVERRIDE;
-    //bool event(QEvent* event) Q_DECL_OVERRIDE;
-    void closeEvent(QCloseEvent* event) Q_DECL_OVERRIDE;
-//    void changeEvent(QEvent* event) Q_DECL_OVERRIDE;
-//    void resizeEvent(QResizeEvent* event) Q_DECL_OVERRIDE;
+        hal_window_toolbar* get_toolbar();
+        overlay* get_overlay();
 
-private:
-    //void rearrange();
+    protected:
+        //void paintEvent(QPaintEvent* event) Q_DECL_OVERRIDE;
+        //bool event(QEvent* event) Q_DECL_OVERRIDE;
+        void closeEvent(QCloseEvent* event) Q_DECL_OVERRIDE;
+    //    void changeEvent(QEvent* event) Q_DECL_OVERRIDE;
+    //    void resizeEvent(QResizeEvent* event) Q_DECL_OVERRIDE;
 
-    QVBoxLayout* m_outer_layout;
-    hal_window_layout_container* m_layout_container;
-    QVBoxLayout* m_inner_layout;
-    hal_window_toolbar* m_toolbar;
-    workspace* m_workspace;
+    private:
+        //void rearrange();
 
-    overlay* m_overlay;
-    QGraphicsEffect* m_effect;
-};
+        QVBoxLayout* m_outer_layout;
+        hal_window_layout_container* m_layout_container;
+        QVBoxLayout* m_inner_layout;
+        hal_window_toolbar* m_toolbar;
+        workspace* m_workspace;
+
+        overlay* m_overlay;
+        QGraphicsEffect* m_effect;
+    };
 }

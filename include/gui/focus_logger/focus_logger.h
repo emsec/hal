@@ -25,15 +25,17 @@
 
 #include <QObject>
 #include <QApplication>
-namespace hal{
-class focus_logger : public QObject
+
+namespace hal
 {
-    Q_OBJECT
-public:
-    focus_logger(QApplication* app, QObject* parent = nullptr);
+    class focus_logger : public QObject
+    {
+        Q_OBJECT
+    public:
+        focus_logger(QApplication* app, QObject* parent = nullptr);
 
-public Q_SLOTS:
-    void handle_focus_change(QWidget* old, QWidget* new_obj);
+    public Q_SLOTS:
+        void handle_focus_change(QWidget* old, QWidget* new_obj);
 
-};
+    };
 }

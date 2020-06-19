@@ -25,19 +25,21 @@
 
 #include <QLabel>
 #include <QMouseEvent>
-namespace hal{
-class label_button : public QLabel
+
+namespace hal
 {
-    Q_OBJECT
+    class label_button : public QLabel
+    {
+        Q_OBJECT
 
-public:
-    explicit label_button(QWidget* parent = 0, Qt::WindowFlags f = Qt::WindowFlags());
-    explicit label_button(const QString& text, QWidget* parent = 0, Qt::WindowFlags f = Qt::WindowFlags());
+    public:
+        explicit label_button(QWidget* parent = 0, Qt::WindowFlags f = Qt::WindowFlags());
+        explicit label_button(const QString& text, QWidget* parent = 0, Qt::WindowFlags f = Qt::WindowFlags());
 
-Q_SIGNALS:
-    void clicked();
+    Q_SIGNALS:
+        void clicked();
 
-protected:
-    void mousePressEvent(QMouseEvent* event) Q_DECL_OVERRIDE;
-};
+    protected:
+        void mousePressEvent(QMouseEvent* event) Q_DECL_OVERRIDE;
+    };
 }

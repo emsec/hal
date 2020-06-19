@@ -27,33 +27,34 @@
 
 class QHBoxLayout;
 
-namespace hal{
-class get_in_touch_widget;
-class open_file_widget;
-class recent_files_widget;
-class labeled_frame;
-
-class welcome_screen : public QFrame
+namespace hal
 {
-    Q_OBJECT
+    class get_in_touch_widget;
+    class open_file_widget;
+    class recent_files_widget;
+    class labeled_frame;
 
-public:
-    explicit welcome_screen(QWidget* parent = nullptr);
+    class welcome_screen : public QFrame
+    {
+        Q_OBJECT
 
-    void repolish();
+    public:
+        explicit welcome_screen(QWidget* parent = nullptr);
 
-    //    void intro();
-    //    void reset();
+        void repolish();
 
-private:
-    QHBoxLayout* m_layout;
+        //    void intro();
+        //    void reset();
 
-    labeled_frame* m_recent_files_frame;
-    labeled_frame* m_open_file_frame;
-    labeled_frame* m_get_in_touch_frame;
+    private:
+        QHBoxLayout* m_layout;
 
-    recent_files_widget* m_recent_files_widget;
-    open_file_widget* m_open_file_widget;
-    get_in_touch_widget* m_get_in_touch_widget;
-};
+        labeled_frame* m_recent_files_frame;
+        labeled_frame* m_open_file_frame;
+        labeled_frame* m_get_in_touch_frame;
+
+        recent_files_widget* m_recent_files_widget;
+        open_file_widget* m_open_file_widget;
+        get_in_touch_widget* m_get_in_touch_widget;
+    };
 }

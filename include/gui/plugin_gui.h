@@ -24,21 +24,22 @@
 #pragma once
 
 #include "core/plugin_interface_interactive_ui.h"
-namespace hal{
-class plugin_gui : public InteractiveUIPluginInterface
+namespace hal
 {
-public:
-    std::string get_name() const override;
-    std::string get_version() const override;
+    class plugin_gui : public InteractiveUIPluginInterface
+    {
+    public:
+        std::string get_name() const override;
+        std::string get_version() const override;
 
-    void initialize_logging() const override;
+        void initialize_logging() const override;
 
-    bool exec(ProgramArguments& args) override;
-};
+        bool exec(ProgramArguments& args) override;
+    };
 
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wreturn-type-c-linkage"
-extern "C" PLUGIN_API std::shared_ptr<BasePluginInterface> get_plugin_instance();
-#pragma GCC diagnostic pop
+    #pragma GCC diagnostic push
+    #pragma GCC diagnostic ignored "-Wreturn-type-c-linkage"
+    extern "C" PLUGIN_API std::shared_ptr<BasePluginInterface> get_plugin_instance();
+    #pragma GCC diagnostic pop
 }

@@ -24,23 +24,25 @@
 #pragma once
 
 #include <QFrame>
-namespace hal{
-class overlay : public QFrame
+
+namespace hal
 {
-    Q_OBJECT
+    class overlay : public QFrame
+    {
+        Q_OBJECT
 
-public:
-    explicit overlay(QWidget* parent = nullptr);
+    public:
+        explicit overlay(QWidget* parent = nullptr);
 
-Q_SIGNALS:
-    void clicked();
+    Q_SIGNALS:
+        void clicked();
 
-protected:
-    bool eventFilter(QObject* watched, QEvent* event) Q_DECL_OVERRIDE;
-    bool event(QEvent* event) Q_DECL_OVERRIDE;
-    void mousePressEvent(QMouseEvent* event) Q_DECL_OVERRIDE;
+    protected:
+        bool eventFilter(QObject* watched, QEvent* event) Q_DECL_OVERRIDE;
+        bool event(QEvent* event) Q_DECL_OVERRIDE;
+        void mousePressEvent(QMouseEvent* event) Q_DECL_OVERRIDE;
 
-private:
-    void handle_parent_changed();
-};
+    private:
+        void handle_parent_changed();
+    };
 }

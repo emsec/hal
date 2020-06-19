@@ -24,18 +24,20 @@
 #pragma once
 
 #include <QObject>
-namespace hal{
-class hal_content_layout_manager : public QObject
+
+namespace hal
 {
-    Q_OBJECT
+    class hal_content_layout_manager : public QObject
+    {
+        Q_OBJECT
 
-public:
-    explicit hal_content_layout_manager(QObject* parent = 0);
+    public:
+        explicit hal_content_layout_manager(QObject* parent = 0);
 
-Q_SIGNALS:
+    Q_SIGNALS:
 
-public Q_SLOTS:
+    public Q_SLOTS:
 
-private:
-};
+    private:
+    };
 }

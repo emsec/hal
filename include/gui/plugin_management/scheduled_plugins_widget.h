@@ -24,22 +24,24 @@
 #pragma once
 
 #include <QScrollArea>
-namespace hal{
-class scheduled_plugin_item_area;
 
-class scheduled_plugins_widget : public QScrollArea
+namespace hal
 {
-    Q_OBJECT
+    class scheduled_plugin_item_area;
 
-public:
-    explicit scheduled_plugins_widget(QWidget* parent = nullptr);
+    class scheduled_plugins_widget : public QScrollArea
+    {
+        Q_OBJECT
 
-    scheduled_plugin_item_area* area();
+    public:
+        explicit scheduled_plugins_widget(QWidget* parent = nullptr);
 
-public Q_SLOTS:
-    void append_plugin(const QString& name);
+        scheduled_plugin_item_area* area();
 
-private:
-    scheduled_plugin_item_area* m_area;
-};
+    public Q_SLOTS:
+        void append_plugin(const QString& name);
+
+    private:
+        scheduled_plugin_item_area* m_area;
+    };
 }

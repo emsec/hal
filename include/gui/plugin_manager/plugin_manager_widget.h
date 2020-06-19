@@ -26,27 +26,29 @@
 #include "content_widget/content_widget.h"
 
 #include <QTableView>
-namespace hal{
-class plugin_model;
-class toolbar;
 
-class plugin_manager_widget : public content_widget
+namespace hal
 {
-    Q_OBJECT
+    class plugin_model;
+    class toolbar;
 
-public:
-    explicit plugin_manager_widget(QWidget* parent = 0);
-    void set_plugin_model(plugin_model* m_plugin_model);
-    virtual void setup_toolbar(toolbar* toolbar);
+    class plugin_manager_widget : public content_widget
+    {
+        Q_OBJECT
 
-private Q_SLOTS:
-    void on_action_add_triggered();
-    void on_action_remove_triggered();
+    public:
+        explicit plugin_manager_widget(QWidget* parent = 0);
+        void set_plugin_model(plugin_model* m_plugin_model);
+        virtual void setup_toolbar(toolbar* toolbar);
 
-private:
-    plugin_model* m_model;
-    QAction* m_add_action;
-    QAction* m_remove_action;
-    QTableView m_table_view;
-};
+    private Q_SLOTS:
+        void on_action_add_triggered();
+        void on_action_remove_triggered();
+
+    private:
+        plugin_model* m_model;
+        QAction* m_add_action;
+        QAction* m_remove_action;
+        QTableView m_table_view;
+    };
 }

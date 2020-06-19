@@ -24,17 +24,19 @@
 #pragma once
 
 #include <QObject>
-namespace hal{
-class task : public QObject
+
+namespace hal
 {
-    Q_OBJECT
+    class task : public QObject
+    {
+        Q_OBJECT
 
-public:
-    task();
+    public:
+        task();
 
-    virtual void execute() = 0;
+        virtual void execute() = 0;
 
-Q_SIGNALS:
-    void finished();
-};
+    Q_SIGNALS:
+        void finished();
+    };
 }

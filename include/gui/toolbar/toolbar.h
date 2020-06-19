@@ -24,16 +24,18 @@
 #pragma once
 
 #include <QToolBar>
-namespace hal{
-class toolbar : public QToolBar
+
+namespace hal
 {
-    Q_OBJECT
+    class toolbar : public QToolBar
+    {
+        Q_OBJECT
 
-public:
-    toolbar(QWidget* parent = nullptr);
+    public:
+        toolbar(QWidget* parent = nullptr);
 
-    void add_spacer();
+        void add_spacer();
 
-    void repolish();
-};
+        void repolish();
+    };
 }

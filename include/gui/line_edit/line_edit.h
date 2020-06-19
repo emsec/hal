@@ -24,16 +24,18 @@
 #pragma once
 
 #include <QLineEdit>
-namespace hal{
-class line_edit : public QLineEdit
+
+namespace hal
 {
-    Q_OBJECT
+    class line_edit : public QLineEdit
+    {
+        Q_OBJECT
 
-public:
-    line_edit(QWidget* parent = 0);
-    line_edit(const QString& contents, QWidget* parent = 0);
+    public:
+        line_edit(QWidget* parent = 0);
+        line_edit(const QString& contents, QWidget* parent = 0);
 
-public Q_SLOTS:
-    void handle_text_changed(const QString& text);
-};
+    public Q_SLOTS:
+        void handle_text_changed(const QString& text);
+    };
 }

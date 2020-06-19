@@ -25,51 +25,53 @@
 
 #include <string>
 #include <vector>
-namespace hal{
-class python_console_history
+
+namespace hal
 {
-public:
-    /**
-     * Constructs a new python_console_history object.
-     *
-     */
-    python_console_history();
+    class python_console_history
+    {
+    public:
+        /**
+         * Constructs a new python_console_history object.
+         *
+         */
+        python_console_history();
 
-    ~python_console_history();
+        ~python_console_history();
 
-    /**
-     * Add command to history and writes it back to the history file.
-     *
-     * @param command - Command to remember
-     */
-    void add_history(const std::string& command);
+        /**
+         * Add command to history and writes it back to the history file.
+         *
+         * @param command - Command to remember
+         */
+        void add_history(const std::string& command);
 
-    /**
-     * Returns the history item at index.
-     *
-     * @param index - Index of the history item to resolve.
-     * @return command at index.
-     */
-    const std::string& get_history_item(const int& index) const;
+        /**
+         * Returns the history item at index.
+         *
+         * @param index - Index of the history item to resolve.
+         * @return command at index.
+         */
+        const std::string& get_history_item(const int& index) const;
 
-    /**
-     * Get the current size of the index;
-     *
-     * @return - History size.
-     */
-    int size() const;
+        /**
+         * Get the current size of the index;
+         *
+         * @return - History size.
+         */
+        int size() const;
 
-    /**
-     * Reloads the history from the history file.
-     *
-     */
-    void update_from_file();
+        /**
+         * Reloads the history from the history file.
+         *
+         */
+        void update_from_file();
 
-private:
-    void append_to_file(const std::string& command);
+    private:
+        void append_to_file(const std::string& command);
 
-    std::string m_file_name;
+        std::string m_file_name;
 
-    std::vector<std::string> m_history;
-};
+        std::vector<std::string> m_history;
+    };
 }

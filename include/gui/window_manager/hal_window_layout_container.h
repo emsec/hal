@@ -27,16 +27,16 @@
 
 class QKeyEvent;
 
-namespace hal{
-
-class hal_window_layout_container : public QFrame
+namespace hal
 {
-    Q_OBJECT
+    class hal_window_layout_container : public QFrame
+    {
+        Q_OBJECT
 
-public:
-    explicit hal_window_layout_container(QWidget* parent = nullptr);
+    public:
+        explicit hal_window_layout_container(QWidget* parent = nullptr);
 
-protected:
-    void keyPressEvent(QKeyEvent* event);
-};
+    protected:
+        void keyPressEvent(QKeyEvent* event);
+    };
 }

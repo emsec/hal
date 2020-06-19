@@ -28,39 +28,39 @@
 
 class QVBoxLayout;
 
-namespace hal{
-
-class open_file_widget : public QFrame
+namespace hal
 {
-    Q_OBJECT
-    Q_PROPERTY(bool drag_active READ drag_active)
-    Q_PROPERTY(QString icon_path READ icon_path WRITE set_icon_path)
-    Q_PROPERTY(QString icon_style READ icon_style WRITE set_icon_style)
+    class open_file_widget : public QFrame
+    {
+        Q_OBJECT
+        Q_PROPERTY(bool drag_active READ drag_active)
+        Q_PROPERTY(QString icon_path READ icon_path WRITE set_icon_path)
+        Q_PROPERTY(QString icon_style READ icon_style WRITE set_icon_style)
 
-public:
-    explicit open_file_widget(QWidget* parent = nullptr);
+    public:
+        explicit open_file_widget(QWidget* parent = nullptr);
 
-    void dragEnterEvent(QDragEnterEvent* event) Q_DECL_OVERRIDE;
-    void dragLeaveEvent(QDragLeaveEvent* event) Q_DECL_OVERRIDE;
-    void dropEvent(QDropEvent* event) Q_DECL_OVERRIDE;
+        void dragEnterEvent(QDragEnterEvent* event) Q_DECL_OVERRIDE;
+        void dragLeaveEvent(QDragLeaveEvent* event) Q_DECL_OVERRIDE;
+        void dropEvent(QDropEvent* event) Q_DECL_OVERRIDE;
 
-    bool drag_active();
-    QString icon_path();
-    QString icon_style();
+        bool drag_active();
+        QString icon_path();
+        QString icon_style();
 
-    void set_icon_path(const QString& path);
-    void set_icon_style(const QString& style);
+        void set_icon_path(const QString& path);
+        void set_icon_style(const QString& style);
 
-    void repolish();
+        void repolish();
 
-private:
-    QVBoxLayout* m_layout;
-    QLabel* m_text_label;
-    QLabel* m_icon_label;
+    private:
+        QVBoxLayout* m_layout;
+        QLabel* m_text_label;
+        QLabel* m_icon_label;
 
-    QString m_icon_path;
-    QString m_icon_style;
+        QString m_icon_path;
+        QString m_icon_style;
 
-    bool m_drag_active;
-};
+        bool m_drag_active;
+    };
 }

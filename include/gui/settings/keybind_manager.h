@@ -30,43 +30,45 @@
 #include <QObject>
 #include <QSet>
 #include <QShortcut>
-namespace hal{
-class keybind_manager : public QObject
+
+namespace hal
 {
-    Q_OBJECT
-
-public:
-    explicit keybind_manager(QObject* parent = nullptr);
-    void bind(hal_action* action, const QString& key);
-    void bind(QShortcut* shortcut, const QString& key);
-    void release(hal_action* action);
-    void release(QShortcut* shortcut);
-    QShortcut* make_shortcut(QWidget* parent, const QString& key);
-
-private Q_SLOTS:
-    void handle_global_setting_changed(void* sender, const QString& key, const QVariant& value);
-
-private:
-    QHash<QString, hal_action*> m_bindings_actions;
-    QSet<hal_action*> m_bound_actions;
-
-    QHash<QString, QShortcut*> m_bindings_shortcuts;
-    QSet<QShortcut*> m_bound_shortcuts;
-};
-
-template<typename T>
-void delete_all_values(QHash<QString, T> map, T value)
-{
-    for (auto it = map.begin(); it != map.end();)
+    class keybind_manager : public QObject
     {
-        if (it.value() == value)
+        Q_OBJECT
+
+    public:
+        explicit keybind_manager(QObject* parent = nullptr);
+        void bind(hal_action* action, const QString& key);
+        void bind(QShortcut* shortcut, const QString& key);
+        void release(hal_action* action);
+        void release(QShortcut* shortcut);
+        QShortcut* make_shortcut(QWidget* parent, const QString& key);
+
+    private Q_SLOTS:
+        void handle_global_setting_changed(void* sender, const QString& key, const QVariant& value);
+
+    private:
+        QHash<QString, hal_action*> m_bindings_actions;
+        QSet<hal_action*> m_bound_actions;
+
+        QHash<QString, QShortcut*> m_bindings_shortcuts;
+        QSet<QShortcut*> m_bound_shortcuts;
+    };
+
+    template<typename T>
+    void delete_all_values(QHash<QString, T> map, T value)
+    {
+        for (auto it = map.begin(); it != map.end();)
         {
-            it = map.erase(it);
-        }
-        else
-        {
-            ++it;
+            if (it.value() == value)
+            {
+                it = map.erase(it);
+            }
+            else
+            {
+                ++it;
+            }
         }
     }
-}
 }

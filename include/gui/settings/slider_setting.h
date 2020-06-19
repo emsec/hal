@@ -26,22 +26,24 @@
 #include "settings_widget.h"
 #include <QSlider>
 #include <QStringList>
-namespace hal{
-class slider_setting : public settings_widget
+
+namespace hal
 {
-    Q_OBJECT
+    class slider_setting : public settings_widget
+    {
+        Q_OBJECT
 
-public:
-    slider_setting(const QString& key, const QString& title, const int min, const int max, const QString& description, QWidget* parent = 0);
+    public:
+        slider_setting(const QString& key, const QString& title, const int min, const int max, const QString& description, QWidget* parent = 0);
 
-    virtual void load(const QVariant& value) Q_DECL_OVERRIDE;
-    virtual QVariant value() Q_DECL_OVERRIDE;
-    //virtual void rollback() Q_DECL_OVERRIDE;
+        virtual void load(const QVariant& value) Q_DECL_OVERRIDE;
+        virtual QVariant value() Q_DECL_OVERRIDE;
+        //virtual void rollback() Q_DECL_OVERRIDE;
 
-private:
-    QSlider* m_slider;
-    QLabel* m_number;
-    void on_slider_value_changed();
+    private:
+        QSlider* m_slider;
+        QLabel* m_number;
+        void on_slider_value_changed();
 
-};
+    };
 }

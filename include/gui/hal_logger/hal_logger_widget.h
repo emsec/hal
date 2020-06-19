@@ -35,64 +35,66 @@
 #include <QWidget>
 #include <QtCore/qreadwritelock.h>
 #include <QScrollBar>
-namespace hal{
-class hal_filter_tab_bar;
 
-class hal_logger_marshall;
-
-struct hal_filter_item;
-
-class channel_selector;
-
-class hal_logger_widget : public content_widget
+namespace hal
 {
-    Q_OBJECT
+    class hal_filter_tab_bar;
 
-public:
-    hal_logger_widget(QWidget* parent = 0);
-    ~hal_logger_widget();
+    class hal_logger_marshall;
 
-    virtual void setup_toolbar(toolbar* toolbar) Q_DECL_OVERRIDE;
+    struct hal_filter_item;
 
-    QPlainTextEdit* get_plain_text_edit();
+    class channel_selector;
 
-    hal_filter_tab_bar* get_tab_bar();
+    class hal_logger_widget : public content_widget
+    {
+        Q_OBJECT
 
-    void reload_log_content();
+    public:
+        hal_logger_widget(QWidget* parent = 0);
+        ~hal_logger_widget();
 
-    void resizeEvent(QResizeEvent* event) override;
+        virtual void setup_toolbar(toolbar* toolbar) Q_DECL_OVERRIDE;
 
-Q_SIGNALS:
-    void queue_log_update(spdlog::level::level_enum t, QString const& msg, hal_filter_item* filter);
+        QPlainTextEdit* get_plain_text_edit();
 
-public Q_SLOTS:
+        hal_filter_tab_bar* get_tab_bar();
 
-    //void handle_current_channel_changed(hal_channel_item* item);
-    void handle_current_channel_updated(spdlog::level::level_enum t, QString const& msg);
-    void handle_channel_updated(spdlog::level::level_enum t, const std::string& logger_name, std::string const& msg);
-    void handle_current_channel_changed(int index);
-    void show_text_edit_context_menu(const QPoint& point);
-    void filter_item_clicked(const int& index);
-    void handle_first_user_interaction(int value);
-    //    void queue_log_update_adapter(spdlog::level::level_enum t, QString const &msg);
+        void reload_log_content();
 
-private:
-    hal_filter_tab_bar* m_tab_bar;
+        void resizeEvent(QResizeEvent* event) override;
 
-    QPlainTextEdit* m_plain_text_edit;
+    Q_SIGNALS:
+        void queue_log_update(spdlog::level::level_enum t, QString const& msg, hal_filter_item* filter);
 
-    channel_selector* m_selector;
+    public Q_SLOTS:
 
-    hal_logger_marshall* m_log_marshall;
+        //void handle_current_channel_changed(hal_channel_item* item);
+        void handle_current_channel_updated(spdlog::level::level_enum t, QString const& msg);
+        void handle_channel_updated(spdlog::level::level_enum t, const std::string& logger_name, std::string const& msg);
+        void handle_current_channel_changed(int index);
+        void show_text_edit_context_menu(const QPoint& point);
+        void filter_item_clicked(const int& index);
+        void handle_first_user_interaction(int value);
+        //    void queue_log_update_adapter(spdlog::level::level_enum t, QString const &msg);
 
-    std::string m_current_channel;
+    private:
+        hal_filter_tab_bar* m_tab_bar;
 
-    QReadWriteLock m_lock;
+        QPlainTextEdit* m_plain_text_edit;
 
-    QScrollBar* m_plain_text_edit_scrollbar;
+        channel_selector* m_selector;
 
-    bool m_user_interacted_with_scrollbar;
+        hal_logger_marshall* m_log_marshall;
 
-    void scroll_to_bottom();
-};
+        std::string m_current_channel;
+
+        QReadWriteLock m_lock;
+
+        QScrollBar* m_plain_text_edit_scrollbar;
+
+        bool m_user_interacted_with_scrollbar;
+
+        void scroll_to_bottom();
+    };
 }

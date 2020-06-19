@@ -25,17 +25,19 @@
 
 #include <QLabel>
 #include <QFrame>
-namespace hal{
-class preview_widget : public QFrame
+
+namespace hal
 {
-    Q_OBJECT
+    class preview_widget : public QFrame
+    {
+        Q_OBJECT
 
-public:
-    explicit preview_widget(QWidget* parent = 0);
+    public:
+        explicit preview_widget(QWidget* parent = 0);
 
-    virtual void update(const QVariant& value) = 0;
+        virtual void update(const QVariant& value) = 0;
 
-protected:
-    QLayout* m_layout;
-};
+    protected:
+        QLayout* m_layout;
+    };
 }

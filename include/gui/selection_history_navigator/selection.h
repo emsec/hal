@@ -27,25 +27,27 @@
 #include "selection_relay/selection_relay.h"
 
 #include <vector>
-namespace hal{
-class selection
+
+namespace hal
 {
+    class selection
+    {
 
-public:
-    selection(u32 id, selection_relay::item_type type);
-    ~selection();
+    public:
+        selection(u32 id, selection_relay::item_type type);
+        ~selection();
 
-    selection_relay::item_type get_type() const;
+        selection_relay::item_type get_type() const;
 
-    u32 get_net_id() const;
-    u32 get_gate_id() const;
-   
-private:
-    selection_relay::item_type m_type;
+        u32 get_net_id() const;
+        u32 get_gate_id() const;
 
-    std::vector<u32> m_net_ids;
-    std::vector<u32> m_gate_ids;
-    std::vector<u32> m_module_ids;
+    private:
+        selection_relay::item_type m_type;
 
-};
+        std::vector<u32> m_net_ids;
+        std::vector<u32> m_gate_ids;
+        std::vector<u32> m_module_ids;
+
+    };
 }

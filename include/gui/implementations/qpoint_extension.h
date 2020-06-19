@@ -24,6 +24,7 @@
 #pragma once
 
 #include <QPoint>
+
 static bool operator<(const QPoint& p1, const QPoint& p2)
 {
     if (p1.x() < p2.x())

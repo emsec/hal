@@ -31,63 +31,63 @@ class QPropertyAnimation;
 class QVBoxLayout;
 class QToolButton;
 
-namespace hal{
-
-class recent_file_item : public QFrame
+namespace hal
 {
-    Q_OBJECT
-    Q_PROPERTY(bool hover READ hover)
-    Q_PROPERTY(bool disabled READ disabled)
-    Q_PROPERTY(QString icon_path READ icon_path WRITE set_icon_path)
-    Q_PROPERTY(QString icon_style READ icon_style WRITE set_icon_style)
+    class recent_file_item : public QFrame
+    {
+        Q_OBJECT
+        Q_PROPERTY(bool hover READ hover)
+        Q_PROPERTY(bool disabled READ disabled)
+        Q_PROPERTY(QString icon_path READ icon_path WRITE set_icon_path)
+        Q_PROPERTY(QString icon_style READ icon_style WRITE set_icon_style)
 
-public:
-    explicit recent_file_item(const QString& file, QWidget* parent = nullptr);
+    public:
+        explicit recent_file_item(const QString& file, QWidget* parent = nullptr);
 
-    void enterEvent(QEvent* event) Q_DECL_OVERRIDE;
-    void leaveEvent(QEvent* event) Q_DECL_OVERRIDE;
-    void mousePressEvent(QMouseEvent* event) Q_DECL_OVERRIDE;
+        void enterEvent(QEvent* event) Q_DECL_OVERRIDE;
+        void leaveEvent(QEvent* event) Q_DECL_OVERRIDE;
+        void mousePressEvent(QMouseEvent* event) Q_DECL_OVERRIDE;
 
-    virtual QSize sizeHint() const Q_DECL_OVERRIDE;
-    virtual bool eventFilter(QObject* object, QEvent* event) Q_DECL_OVERRIDE;
+        virtual QSize sizeHint() const Q_DECL_OVERRIDE;
+        virtual bool eventFilter(QObject* object, QEvent* event) Q_DECL_OVERRIDE;
 
-    QString file();
+        QString file();
 
-    void repolish();
+        void repolish();
 
-    bool hover();
-    bool disabled();
-    QString icon_path();
-    QString icon_style();
+        bool hover();
+        bool disabled();
+        QString icon_path();
+        QString icon_style();
 
-    void set_hover_active(bool active);
-    void set_disabled(bool disable);
-    void set_icon_path(const QString& path);
-    void set_icon_style(const QString& style);
+        void set_hover_active(bool active);
+        void set_disabled(bool disable);
+        void set_icon_path(const QString& path);
+        void set_icon_style(const QString& style);
 
-Q_SIGNALS:
-    void remove_requested(recent_file_item* item);
+    Q_SIGNALS:
+        void remove_requested(recent_file_item* item);
 
-private:
-    QWidget* m_widget;
-    QHBoxLayout* m_horizontal_layout;
-    QLabel* m_icon_label;
-    QVBoxLayout* m_vertical_layout;
-    QLabel* m_name_label;
-    QLabel* m_path_label;
-    QPropertyAnimation* m_animation;
-    QToolButton* m_remove_button;
+    private:
+        QWidget* m_widget;
+        QHBoxLayout* m_horizontal_layout;
+        QLabel* m_icon_label;
+        QVBoxLayout* m_vertical_layout;
+        QLabel* m_name_label;
+        QLabel* m_path_label;
+        QPropertyAnimation* m_animation;
+        QToolButton* m_remove_button;
 
-    QString m_file;
-    QString m_path;
+        QString m_file;
+        QString m_path;
 
-    bool m_hover;
-    bool m_disabled;
+        bool m_hover;
+        bool m_disabled;
 
-    QString m_icon_path;
-    QString m_icon_style;
+        QString m_icon_path;
+        QString m_icon_style;
 
-    //functions
-    void handle_close_requested();
-};
+        //functions
+        void handle_close_requested();
+    };
 }

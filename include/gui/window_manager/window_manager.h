@@ -28,69 +28,70 @@
 
 class QAction;
 
-namespace hal{
-class hal_window;
-class main_settings_widget;
-class plugin_schedule_widget;
-class welcome_screen;
-class work_space; // TEMP NAME ?
-
-class window_manager : public QObject
+namespace hal
 {
-    Q_OBJECT
+    class hal_window;
+    class main_settings_widget;
+    class plugin_schedule_widget;
+    class welcome_screen;
+    class work_space; // TEMP NAME ?
 
-public:
-    explicit window_manager(QObject* parent = nullptr);
+    class window_manager : public QObject
+    {
+        Q_OBJECT
 
-    void setup();
+    public:
+        explicit window_manager(QObject* parent = nullptr);
 
-    void add_window();
-    void remove_window(hal_window* window);
-    void set_main_window(hal_window* window);
+        void setup();
 
-    void lock_all();
-    void unlock_all();
+        void add_window();
+        void remove_window(hal_window* window);
+        void set_main_window(hal_window* window);
 
-    void save_layout(const QString& name);
-    void restore_layout(const QString& name);
+        void lock_all();
+        void unlock_all();
 
-    void handle_window_close_request(hal_window* window);
+        void save_layout(const QString& name);
+        void restore_layout(const QString& name);
 
-    void repolish();
+        void handle_window_close_request(hal_window* window);
 
-public Q_SLOTS:
-    void handle_overlay_clicked();
+        void repolish();
 
-private Q_SLOTS:
-    void handle_action_open();
-    void handle_action_close();
-    void handle_action_save();
-    void handle_action_schedule();
-    void handle_action_run_schedule();
-    void handle_action_content();
-    void handle_action_settings();
-    void handle_action_about();
+    public Q_SLOTS:
+        void handle_overlay_clicked();
 
-private:
-    hal_window* m_main_window;
+    private Q_SLOTS:
+        void handle_action_open();
+        void handle_action_close();
+        void handle_action_save();
+        void handle_action_schedule();
+        void handle_action_run_schedule();
+        void handle_action_content();
+        void handle_action_settings();
+        void handle_action_about();
 
-    QVector<hal_window*> m_windows;
+    private:
+        hal_window* m_main_window;
 
-    bool m_static_windows;
-    bool m_shared_minimize;
-    bool m_switch_main_on_focus;
+        QVector<hal_window*> m_windows;
 
-    QAction* m_action_open_file;
-    QAction* m_action_close_file;
-    QAction* m_action_save;
-    QAction* m_action_schedule;
-    QAction* m_action_run_schedule;
-    QAction* m_action_content;
-    QAction* m_action_settings;
-    QAction* m_action_about;
+        bool m_static_windows;
+        bool m_shared_minimize;
+        bool m_switch_main_on_focus;
 
-    welcome_screen* m_welcome_screen;
-    plugin_schedule_widget* m_plugin_schedule_widget;
-    main_settings_widget* m_main_settings_widget;
-};
+        QAction* m_action_open_file;
+        QAction* m_action_close_file;
+        QAction* m_action_save;
+        QAction* m_action_schedule;
+        QAction* m_action_run_schedule;
+        QAction* m_action_content;
+        QAction* m_action_settings;
+        QAction* m_action_about;
+
+        welcome_screen* m_welcome_screen;
+        plugin_schedule_widget* m_plugin_schedule_widget;
+        main_settings_widget* m_main_settings_widget;
+    };
 }

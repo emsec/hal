@@ -29,30 +29,32 @@
 #include <QString>
 #include <QList>
 #include <QUuid>
-namespace hal{
-class file_status_manager : public QObject
+
+namespace hal
 {
-    Q_OBJECT
-public:
-    file_status_manager(QObject* parent = 0);
-    ~file_status_manager();
+    class file_status_manager : public QObject
+    {
+        Q_OBJECT
+    public:
+        file_status_manager(QObject* parent = 0);
+        ~file_status_manager();
 
-    bool modified_files_existing() const;
+        bool modified_files_existing() const;
 
-    void file_changed(const QUuid uuid, const QString& descriptor);
-    void file_saved(const QUuid uuid);
+        void file_changed(const QUuid uuid, const QString& descriptor);
+        void file_saved(const QUuid uuid);
 
-    void netlist_changed();
-    void netlist_saved();
+        void netlist_changed();
+        void netlist_saved();
 
-    void flush_unsaved_changes();
+        void flush_unsaved_changes();
 
-    QList<QString> get_unsaved_change_descriptors() const;
+        QList<QString> get_unsaved_change_descriptors() const;
 
-private:
-    QSet<QUuid> m_modified_files_uuid;
-    QMap<QUuid, QString> m_modified_files_descriptors;
+    private:
+        QSet<QUuid> m_modified_files_uuid;
+        QMap<QUuid, QString> m_modified_files_descriptors;
 
-    bool m_netlist_modified;
-};
+        bool m_netlist_modified;
+    };
 }

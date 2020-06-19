@@ -26,32 +26,34 @@
 
 #include <QWidget>
 #include <QColor>
-namespace hal{
-class python_console_qss_adapter : public QWidget
+
+namespace hal
 {
-    Q_OBJECT
-    Q_PROPERTY(QColor standard_color READ standard_color WRITE set_standard_color)
-    Q_PROPERTY(QColor error_color READ error_color WRITE set_error_color)
-    Q_PROPERTY(QColor promt_color READ promt_color WRITE set_promt_color)
+    class python_console_qss_adapter : public QWidget
+    {
+        Q_OBJECT
+        Q_PROPERTY(QColor standard_color READ standard_color WRITE set_standard_color)
+        Q_PROPERTY(QColor error_color READ error_color WRITE set_error_color)
+        Q_PROPERTY(QColor promt_color READ promt_color WRITE set_promt_color)
 
-public:
+    public:
 
-    static python_console_qss_adapter* instance();
+        static python_console_qss_adapter* instance();
 
-    QColor standard_color() const;
-    QColor error_color() const;
-    QColor promt_color() const;
+        QColor standard_color() const;
+        QColor error_color() const;
+        QColor promt_color() const;
 
-    void set_standard_color(const QColor& color);
-    void set_error_color(const QColor& color);
-    void set_promt_color(const QColor& color);
+        void set_standard_color(const QColor& color);
+        void set_error_color(const QColor& color);
+        void set_promt_color(const QColor& color);
 
-private:
-    explicit python_console_qss_adapter(QWidget* parent = nullptr);
+    private:
+        explicit python_console_qss_adapter(QWidget* parent = nullptr);
 
-    QColor m_standard_color;
-    QColor m_error_color;
-    QColor m_promt_color;
+        QColor m_standard_color;
+        QColor m_error_color;
+        QColor m_promt_color;
 
-};
+    };
 }

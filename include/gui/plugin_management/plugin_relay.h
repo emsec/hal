@@ -26,18 +26,20 @@
 #include <QObject>
 
 #include <string>
-namespace hal{
-class plugin_relay : public QObject
+
+namespace hal
 {
-    Q_OBJECT
+    class plugin_relay : public QObject
+    {
+        Q_OBJECT
 
-public:
-    explicit plugin_relay(QObject* parent = nullptr);
+    public:
+        explicit plugin_relay(QObject* parent = nullptr);
 
-    void plugin_manager_callback(bool is_load, const std::string& plugin_name, const std::string& plugin_path);
+        void plugin_manager_callback(bool is_load, const std::string& plugin_name, const std::string& plugin_path);
 
-Q_SIGNALS:
-    void plugin_loaded(const QString& name, const QString& path);
-    void plugin_unloaded(const QString& name, const QString& path);
-};
+    Q_SIGNALS:
+        void plugin_loaded(const QString& name, const QString& path);
+        void plugin_unloaded(const QString& name, const QString& path);
+    };
 }

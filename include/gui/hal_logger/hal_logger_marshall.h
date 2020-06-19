@@ -29,30 +29,32 @@
 #include <QPlainTextEdit>
 #include <QQueue>
 #include <QtCore/qreadwritelock.h>
-namespace hal{
-struct hal_filter_item;
 
-class hal_logger_marshall : public QObject
+namespace hal
 {
-    Q_OBJECT
+    struct hal_filter_item;
 
-public:
-    explicit hal_logger_marshall(QPlainTextEdit* edit, QObject* parent = 0);
+    class hal_logger_marshall : public QObject
+    {
+        Q_OBJECT
 
-    ~hal_logger_marshall();
+    public:
+        explicit hal_logger_marshall(QPlainTextEdit* edit, QObject* parent = 0);
 
-Q_SIGNALS:
+        ~hal_logger_marshall();
 
-public Q_SLOTS:
+    Q_SIGNALS:
 
-    void append_log(spdlog::level::level_enum log_type, QString const& msg, hal_filter_item* filter);
+    public Q_SLOTS:
 
-    void highlight_current_line();
+        void append_log(spdlog::level::level_enum log_type, QString const& msg, hal_filter_item* filter);
 
-private:
-    int m_max_line_count;
+        void highlight_current_line();
 
-    //will be deleted within the hal_logger_widgets destrcutor (is the parent of the textedit)
-    QPlainTextEdit* m_edit;
-};
+    private:
+        int m_max_line_count;
+
+        //will be deleted within the hal_logger_widgets destrcutor (is the parent of the textedit)
+        QPlainTextEdit* m_edit;
+    };
 }

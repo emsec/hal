@@ -30,40 +30,42 @@
 #include "gui/gui_def.h"
 
 #include <QTreeWidget>
-namespace hal{
-class graph_graphics_view;
 
-class graph_navigation_widget_v2 : public QTreeWidget
+namespace hal
 {
-    Q_OBJECT
+    class graph_graphics_view;
 
-public:
-    explicit graph_navigation_widget_v2(QWidget *parent = nullptr);
+    class graph_navigation_widget_v2 : public QTreeWidget
+    {
+        Q_OBJECT
 
-    void setup(bool direction);
-    void setup(hal::node origin, std::shared_ptr<Net> via_net, bool direction);
+    public:
+        explicit graph_navigation_widget_v2(QWidget *parent = nullptr);
 
-Q_SIGNALS:
-    void navigation_requested(const hal::node origin, const u32 via_net, const QSet<u32>& to_gates, const QSet<u32>& to_modules);
-    void close_requested();
-    void reset_focus();
+        void setup(bool direction);
+        void setup(hal::node origin, std::shared_ptr<Net> via_net, bool direction);
 
-private Q_SLOTS:
-    void handle_selection_changed();
+    Q_SIGNALS:
+        void navigation_requested(const hal::node origin, const u32 via_net, const QSet<u32>& to_gates, const QSet<u32>& to_modules);
+        void close_requested();
+        void reset_focus();
 
-protected:
-    void keyPressEvent(QKeyEvent* event) override;
+    private Q_SLOTS:
+        void handle_selection_changed();
 
-private:
-    void fill_table(bool direction);
-    void resize_to_fit();
-    int sum_row_heights(const QTreeWidgetItem *itm, bool top = true);
-    void handle_item_double_clicked(QTreeWidgetItem* item);
-    void commit_selection();
+    protected:
+        void keyPressEvent(QKeyEvent* event) override;
 
-    hal::node m_origin;
-    std::shared_ptr<Net> m_via_net;
-    QSet<QTreeWidgetItem*> m_previous_selection;
+    private:
+        void fill_table(bool direction);
+        void resize_to_fit();
+        int sum_row_heights(const QTreeWidgetItem *itm, bool top = true);
+        void handle_item_double_clicked(QTreeWidgetItem* item);
+        void commit_selection();
 
-};
+        hal::node m_origin;
+        std::shared_ptr<Net> m_via_net;
+        QSet<QTreeWidgetItem*> m_previous_selection;
+
+    };
 }

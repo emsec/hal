@@ -41,37 +41,39 @@
 #include "gui/gui_api/gui_api.h"
 
 #include <QSettings>
-namespace hal{
-//extern QSettings g_settings;
-extern QSettings g_gui_state;
 
-extern window_manager* g_window_manager;
-extern notification_manager* g_notification_manager;
+namespace hal
+{
+    //extern QSettings g_settings;
+    extern QSettings g_gui_state;
 
-extern hal_content_manager* g_content_manager;
+    extern window_manager* g_window_manager;
+    extern notification_manager* g_notification_manager;
 
-extern std::shared_ptr<Netlist> g_netlist;
+    extern hal_content_manager* g_content_manager;
 
-extern netlist_relay g_netlist_relay;
-extern plugin_relay g_plugin_relay;
-extern selection_relay g_selection_relay;
-extern settings_relay g_settings_relay;
+    extern std::shared_ptr<Netlist> g_netlist;
 
-extern settings_manager g_settings_manager;
+    extern netlist_relay g_netlist_relay;
+    extern plugin_relay g_plugin_relay;
+    extern selection_relay g_selection_relay;
+    extern settings_relay g_settings_relay;
 
-extern keybind_manager g_keybind_manager;
+    extern settings_manager g_settings_manager;
 
-extern file_status_manager g_file_status_manager;
+    extern keybind_manager g_keybind_manager;
 
-extern graph_context_manager g_graph_context_manager;
+    extern file_status_manager g_file_status_manager;
 
-extern thread_pool* g_thread_pool;
+    extern graph_context_manager g_graph_context_manager;
 
-extern std::unique_ptr<python_context> g_python_context;
+    extern thread_pool* g_thread_pool;
 
-extern gui_api* g_gui_api;
+    extern std::unique_ptr<python_context> g_python_context;
 
-// Comment this out to not compile the debug code for the graph grid.
-// This will also hide the respective debug setting from the settings page.
-#define GUI_DEBUG_GRID
+    extern gui_api* g_gui_api;
+
+    // Comment this out to not compile the debug code for the graph grid.
+    // This will also hide the respective debug setting from the settings page.
+    #define GUI_DEBUG_GRID
 }

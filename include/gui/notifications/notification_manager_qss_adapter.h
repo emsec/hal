@@ -24,30 +24,32 @@
 #pragma once
 
 #include <QWidget>
-namespace hal{
-class notification_manager_qss_adapter : public QWidget
+
+namespace hal
 {
-    Q_OBJECT
-    Q_PROPERTY(int x_offset READ x_offset WRITE set_x_offset)
-    Q_PROPERTY(int y_offset READ y_offset WRITE set_y_offset)
-    Q_PROPERTY(int spacing READ spacing WRITE set_spacing)
+    class notification_manager_qss_adapter : public QWidget
+    {
+        Q_OBJECT
+        Q_PROPERTY(int x_offset READ x_offset WRITE set_x_offset)
+        Q_PROPERTY(int y_offset READ y_offset WRITE set_y_offset)
+        Q_PROPERTY(int spacing READ spacing WRITE set_spacing)
 
-public:
-    explicit notification_manager_qss_adapter(QWidget* parent = nullptr);
+    public:
+        explicit notification_manager_qss_adapter(QWidget* parent = nullptr);
 
-    void repolish();
+        void repolish();
 
-    int x_offset() const;
-    int y_offset() const;
-    int spacing() const;
+        int x_offset() const;
+        int y_offset() const;
+        int spacing() const;
 
-    void set_x_offset(const int offset);
-    void set_y_offset(const int offset);
-    void set_spacing(const int spacing);
+        void set_x_offset(const int offset);
+        void set_y_offset(const int offset);
+        void set_spacing(const int spacing);
 
-    // LEFT PUBLIC INTENTIONALLY
-    int m_x_offset;
-    int m_y_offset;
-    int m_spacing;
-};
+        // LEFT PUBLIC INTENTIONALLY
+        int m_x_offset;
+        int m_y_offset;
+        int m_spacing;
+    };
 }

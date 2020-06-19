@@ -29,47 +29,49 @@
 #include <QList>
 #include <QString>
 #include <QVariant>
-namespace hal{
-class module_item
+
+namespace hal
 {
-public:
-    module_item(const u32 id);
-    module_item(const QString& name, const u32 id);
+    class module_item
+    {
+    public:
+        module_item(const u32 id);
+        module_item(const QString& name, const u32 id);
 
-    void insert_child(int row, module_item* child);
-    void remove_child(module_item* child);
+        void insert_child(int row, module_item* child);
+        void remove_child(module_item* child);
 
-    void append_child(module_item* child);
-    void prepend_child(module_item* child);
+        void append_child(module_item* child);
+        void prepend_child(module_item* child);
 
-    module_item* parent();
-    module_item* child(int row);
+        module_item* parent();
+        module_item* child(int row);
 
-    const module_item* const_parent() const;
-    const module_item* const_child(int row) const;
+        const module_item* const_parent() const;
+        const module_item* const_child(int row) const;
 
-    int childCount() const;
-    QVariant data(int column) const;
-    int row() const;
+        int childCount() const;
+        QVariant data(int column) const;
+        int row() const;
 
-    QString name() const;
-    u32 id() const;
-    QColor color() const;
-    bool highlighted() const;
+        QString name() const;
+        u32 id() const;
+        QColor color() const;
+        bool highlighted() const;
 
-    void set_parent(module_item* parent);
-    void set_name(const QString& name);
-    void set_color(const QColor& color);
-    void set_highlighted(const bool highlighted);
+        void set_parent(module_item* parent);
+        void set_name(const QString& name);
+        void set_color(const QColor& color);
+        void set_highlighted(const bool highlighted);
 
-private:
-    module_item* m_parent;
-    QList<module_item*> m_child_items;
+    private:
+        module_item* m_parent;
+        QList<module_item*> m_child_items;
 
-    u32 m_id;
-    QString m_name;
+        u32 m_id;
+        QString m_name;
 
-    QColor m_color;
-    bool m_highlighted;
-};
+        QColor m_color;
+        bool m_highlighted;
+    };
 }

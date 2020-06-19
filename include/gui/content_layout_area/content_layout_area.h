@@ -31,62 +31,63 @@ class QFrame;
 class QHBoxLayout;
 class QVBoxLayout;
 
-namespace hal{
-class dock_bar;
-class splitter;
-class splitter_anchor;
-class tab_widget;
-
-enum class content_anchor
+namespace hal
 {
-    center = 0,
-    left   = 1,
-    right  = 2,
-    bottom = 3
-};
+    class dock_bar;
+    class splitter;
+    class splitter_anchor;
+    class tab_widget;
 
-class content_layout_area : public QWidget
-{
-    Q_OBJECT
+    enum class content_anchor
+    {
+        center = 0,
+        left   = 1,
+        right  = 2,
+        bottom = 3
+    };
 
-public:
-    explicit content_layout_area(QWidget* parent = 0);
-    void add_content(content_widget* widget, int index, content_anchor anchor);
+    class content_layout_area : public QWidget
+    {
+        Q_OBJECT
 
-    void init_splitter_size(const QSize& size);
+    public:
+        explicit content_layout_area(QWidget* parent = 0);
+        void add_content(content_widget* widget, int index, content_anchor anchor);
 
-public Q_SLOTS:
-    void update_left_dock_bar();
-    void update_right_dock_bar();
-    void update_bottom_dock_bar();
+        void init_splitter_size(const QSize& size);
 
-private:
-    QVBoxLayout* m_top_level_layout;
-    QHBoxLayout* m_second_level_layout;
-    QVBoxLayout* m_third_level_layout;
-    QHBoxLayout* m_fourth_level_layout;
-    QVBoxLayout* m_splitter_layout;
-    QHBoxLayout* m_central_layout;
-    QHBoxLayout* m_spacer_layout;
+    public Q_SLOTS:
+        void update_left_dock_bar();
+        void update_right_dock_bar();
+        void update_bottom_dock_bar();
 
-    splitter* m_vertical_splitter;
-    splitter* m_horizontal_splitter;
-    splitter* m_left_splitter;
-    splitter* m_right_splitter;
-    splitter* m_bottom_splitter;
+    private:
+        QVBoxLayout* m_top_level_layout;
+        QHBoxLayout* m_second_level_layout;
+        QVBoxLayout* m_third_level_layout;
+        QHBoxLayout* m_fourth_level_layout;
+        QVBoxLayout* m_splitter_layout;
+        QHBoxLayout* m_central_layout;
+        QHBoxLayout* m_spacer_layout;
 
-    dock_bar* m_left_dock;
-    dock_bar* m_right_dock;
-    dock_bar* m_bottom_dock;
+        splitter* m_vertical_splitter;
+        splitter* m_horizontal_splitter;
+        splitter* m_left_splitter;
+        splitter* m_right_splitter;
+        splitter* m_bottom_splitter;
 
-    QWidget* m_bottom_container;
-    QFrame* m_left_spacer;
-    QFrame* m_right_spacer;
+        dock_bar* m_left_dock;
+        dock_bar* m_right_dock;
+        dock_bar* m_bottom_dock;
 
-    splitter_anchor* m_left_anchor;
-    splitter_anchor* m_right_anchor;
-    splitter_anchor* m_bottom_anchor;
+        QWidget* m_bottom_container;
+        QFrame* m_left_spacer;
+        QFrame* m_right_spacer;
 
-    tab_widget* m_tab_widget;
-};
+        splitter_anchor* m_left_anchor;
+        splitter_anchor* m_right_anchor;
+        splitter_anchor* m_bottom_anchor;
+
+        tab_widget* m_tab_widget;
+    };
 }

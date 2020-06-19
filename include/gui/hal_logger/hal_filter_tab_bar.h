@@ -27,27 +27,29 @@
 #include <QList>
 #include <QTabBar>
 #include <QToolButton>
-namespace hal{
-struct hal_filter_item;
 
-class hal_filter_tab_bar : public QTabBar
+namespace hal
 {
-    Q_OBJECT
+    struct hal_filter_item;
 
-public:
-    hal_filter_tab_bar();
+    class hal_filter_tab_bar : public QTabBar
+    {
+        Q_OBJECT
 
-    ~hal_filter_tab_bar();
+    public:
+        hal_filter_tab_bar();
 
-    void addNewFilter(QString name, hal_filter_item* item);
+        ~hal_filter_tab_bar();
 
-    hal_filter_item* get_current_filter();
+        void addNewFilter(QString name, hal_filter_item* item);
 
-private:
-    QToolButton m_button;
+        hal_filter_item* get_current_filter();
 
-    QList<hal_filter_item*> m_filter_items;
+    private:
+        QToolButton m_button;
 
-    hal_filter_dialog m_dialog;
-};
+        QList<hal_filter_item*> m_filter_items;
+
+        hal_filter_dialog m_dialog;
+    };
 }

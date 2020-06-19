@@ -26,24 +26,26 @@
 #include <QObject>
 #include <QQueue>
 #include <QStack>
-namespace hal{
-class task;
-class worker;
 
-class thread_pool : public QObject
+namespace hal
 {
-    Q_OBJECT
+    class task;
+    class worker;
 
-public:
-    explicit thread_pool(QObject* parent = nullptr);
+    class thread_pool : public QObject
+    {
+        Q_OBJECT
 
-    void queue_task(task* const t);
+    public:
+        explicit thread_pool(QObject* parent = nullptr);
 
-private Q_SLOTS:
-    void handle_worker_finished();
+        void queue_task(task* const t);
 
-private:
-    QStack<worker*> m_free_threads;
-    QQueue<task*> m_tasks;
-};
+    private Q_SLOTS:
+        void handle_worker_finished();
+
+    private:
+        QStack<worker*> m_free_threads;
+        QQueue<task*> m_tasks;
+    };
 }

@@ -24,21 +24,23 @@
 #pragma once
 
 #include <QObject>
-namespace hal{
-class content_drag_relay : public QObject
+
+namespace hal
 {
-    Q_OBJECT
+    class content_drag_relay : public QObject
+    {
+        Q_OBJECT
 
-public:
-    static content_drag_relay* instance();
-    void relay_drag_start();
-    void relay_drag_end();
+    public:
+        static content_drag_relay* instance();
+        void relay_drag_start();
+        void relay_drag_end();
 
-Q_SIGNALS:
-    void drag_start();
-    void drag_end();
+    Q_SIGNALS:
+        void drag_start();
+        void drag_end();
 
-private:
-    content_drag_relay(QObject* parent = 0);
-};
+    private:
+        content_drag_relay(QObject* parent = 0);
+    };
 }

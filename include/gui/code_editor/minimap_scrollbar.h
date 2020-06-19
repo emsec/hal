@@ -28,53 +28,54 @@
 class QFrame;
 class QScrollBar;
 
-namespace hal{
-
-class minimap_scrollbar : public QWidget
+namespace hal
 {
-    Q_OBJECT
 
-public:
-    minimap_scrollbar(QWidget* parent = nullptr);
+    class minimap_scrollbar : public QWidget
+    {
+        Q_OBJECT
 
-    int minimum() const;
-    int maximum() const;
-    int value() const;
-    int slider_height() const;
-    int slider_position() const;
+    public:
+        minimap_scrollbar(QWidget* parent = nullptr);
 
-    //    void set_minimum(const int minimum);
-    //    void set_maximum(const int maximum);
-    void set_range(const int minimum, const int maximum);
-    void set_value(const int value);
-    void set_slider_height(const int height);
+        int minimum() const;
+        int maximum() const;
+        int value() const;
+        int slider_height() const;
+        int slider_position() const;
 
-    void set_scrollbar(QScrollBar* scrollbar);
+        //    void set_minimum(const int minimum);
+        //    void set_maximum(const int maximum);
+        void set_range(const int minimum, const int maximum);
+        void set_value(const int value);
+        void set_slider_height(const int height);
 
-protected:
-    void paintEvent(QPaintEvent* event) Q_DECL_OVERRIDE;
-    void resizeEvent(QResizeEvent* event) Q_DECL_OVERRIDE;
+        void set_scrollbar(QScrollBar* scrollbar);
 
-    void mousePressEvent(QMouseEvent* event) Q_DECL_OVERRIDE;
-    void mouseMoveEvent(QMouseEvent* event) Q_DECL_OVERRIDE;
-    void mouseReleaseEvent(QMouseEvent* event) Q_DECL_OVERRIDE;
-    void leaveEvent(QEvent* event) Q_DECL_OVERRIDE;
+    protected:
+        void paintEvent(QPaintEvent* event) Q_DECL_OVERRIDE;
+        void resizeEvent(QResizeEvent* event) Q_DECL_OVERRIDE;
 
-private:
-    void adjust_slider_to_value();
+        void mousePressEvent(QMouseEvent* event) Q_DECL_OVERRIDE;
+        void mouseMoveEvent(QMouseEvent* event) Q_DECL_OVERRIDE;
+        void mouseReleaseEvent(QMouseEvent* event) Q_DECL_OVERRIDE;
+        void leaveEvent(QEvent* event) Q_DECL_OVERRIDE;
 
-    QFrame* m_slider;
+    private:
+        void adjust_slider_to_value();
 
-    int m_minimum;
-    int m_maximum;
-    int m_value;
+        QFrame* m_slider;
 
-    int m_handle_length;
-    int m_handle_position;
+        int m_minimum;
+        int m_maximum;
+        int m_value;
 
-    bool m_mouse_pressed;
-    int m_drag_offset;
+        int m_handle_length;
+        int m_handle_position;
 
-    QScrollBar* m_scrollbar;
-};
+        bool m_mouse_pressed;
+        int m_drag_offset;
+
+        QScrollBar* m_scrollbar;
+    };
 }

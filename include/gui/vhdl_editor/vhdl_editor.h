@@ -25,24 +25,26 @@
 
 #include "code_editor/code_editor.h"
 #include "content_widget/content_widget.h"
-namespace hal{
-class searchbar;
 
-class vhdl_editor : public content_widget
+namespace hal
 {
-    Q_OBJECT
+    class searchbar;
 
-public:
-    vhdl_editor();
+    class vhdl_editor : public content_widget
+    {
+        Q_OBJECT
 
-    virtual void setup_toolbar(toolbar* toolbar) Q_DECL_OVERRIDE;
-    virtual QList<QShortcut*> create_shortcuts() Q_DECL_OVERRIDE;
+    public:
+        vhdl_editor();
 
-public Q_SLOTS:
-    void toggle_searchbar();
+        virtual void setup_toolbar(toolbar* toolbar) Q_DECL_OVERRIDE;
+        virtual QList<QShortcut*> create_shortcuts() Q_DECL_OVERRIDE;
 
-private:
-    code_editor* m_code_editor;
-    searchbar* m_searchbar;
-};
+    public Q_SLOTS:
+        void toggle_searchbar();
+
+    private:
+        code_editor* m_code_editor;
+        searchbar* m_searchbar;
+    };
 }

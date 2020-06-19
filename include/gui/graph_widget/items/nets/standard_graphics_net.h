@@ -27,67 +27,69 @@
 
 #include <QLineF>
 #include <QVector>
-namespace hal{
-class Net;
 
-class standard_graphics_net : public graphics_net
+namespace hal
 {
-public:
-    struct h_line
-    {
-        qreal small_x;
-        qreal big_x;
-        qreal y;
-    };
+    class Net;
 
-    struct v_line
+    class standard_graphics_net : public graphics_net
     {
-        qreal x;
-        qreal small_y;
-        qreal big_y;
-    };
+    public:
+        struct h_line
+        {
+            qreal small_x;
+            qreal big_x;
+            qreal y;
+        };
 
-    struct lines
-    {
-        void append_h_line(const qreal small_x, const qreal big_x, const qreal y);
-        void append_v_line(const qreal x, const qreal small_y, const qreal big_y);
+        struct v_line
+        {
+            qreal x;
+            qreal small_y;
+            qreal big_y;
+        };
 
-        void merge_lines();
+        struct lines
+        {
+            void append_h_line(const qreal small_x, const qreal big_x, const qreal y);
+            void append_v_line(const qreal x, const qreal small_y, const qreal big_y);
+
+            void merge_lines();
+
+        private:
+            QVector<h_line> h_lines;
+            QVector<v_line> v_lines;
+
+            friend standard_graphics_net;
+        };
+
+        static void load_settings();
+        static void update_alpha();
+
+        standard_graphics_net(const std::shared_ptr<const Net> n, const lines& l);
+
+        void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override;
 
     private:
-        QVector<h_line> h_lines;
-        QVector<v_line> v_lines;
+        static qreal s_alpha;
 
-        friend standard_graphics_net;
+        static qreal s_wire_length;
+
+        static qreal s_left_arrow_offset;
+        static qreal s_right_arrow_offset;
+
+        static qreal s_arrow_left_x_shift;
+        static qreal s_arrow_right_x_shift;
+        static qreal s_arrow_side_length;
+
+        static qreal s_arrow_width;
+        static qreal s_arrow_height;
+
+        static QPainterPath s_arrow;
+
+        static qreal s_split_radius;
+
+        QVector<QLineF> m_lines;
+        QVector<QPointF> m_splits;
     };
-
-    static void load_settings();
-    static void update_alpha();
-
-    standard_graphics_net(const std::shared_ptr<const Net> n, const lines& l);
-
-    void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override;
-
-private:
-    static qreal s_alpha;
-
-    static qreal s_wire_length;
-
-    static qreal s_left_arrow_offset;
-    static qreal s_right_arrow_offset;
-
-    static qreal s_arrow_left_x_shift;
-    static qreal s_arrow_right_x_shift;
-    static qreal s_arrow_side_length;
-
-    static qreal s_arrow_width;
-    static qreal s_arrow_height;
-
-    static QPainterPath s_arrow;
-
-    static qreal s_split_radius;
-
-    QVector<QLineF> m_lines;
-    QVector<QPointF> m_splits;
-};
 }

@@ -27,19 +27,21 @@
 #include <QLabel>
 #include <QLayout>
 #include <QPlainTextEdit>
-namespace hal{
-class about_dialog : public QDialog
+
+namespace hal
 {
-    Q_OBJECT
+    class about_dialog : public QDialog
+    {
+        Q_OBJECT
 
-public:
-    explicit about_dialog(QWidget* parent = 0);
+    public:
+        explicit about_dialog(QWidget* parent = 0);
 
-private:
-    QVBoxLayout m_content_layout;
-    QLabel m_placeholder;
-    QLabel m_licenses_label;
-    QPlainTextEdit m_textedit;
-};
+    private:
+        QVBoxLayout m_content_layout;
+        QLabel m_placeholder;
+        QLabel m_licenses_label;
+        QPlainTextEdit m_textedit;
+    };
 }
 

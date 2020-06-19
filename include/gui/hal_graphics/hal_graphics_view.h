@@ -30,24 +30,26 @@
 #include <QPoint>
 #include <QWidget>
 #include <qmath.h>
-namespace hal{
-class hal_graphics_view : public QGraphicsView
+
+namespace hal
 {
-    Q_OBJECT
+    class hal_graphics_view : public QGraphicsView
+    {
+        Q_OBJECT
 
-public:
-    hal_graphics_view();
-    void gentle_zoom(double factor);
-    void set_modifiers(Qt::KeyboardModifiers modifiers);
-    void set_zoom_factor_base(double value);
+    public:
+        hal_graphics_view();
+        void gentle_zoom(double factor);
+        void set_modifiers(Qt::KeyboardModifiers modifiers);
+        void set_zoom_factor_base(double value);
 
-private:
-    Qt::KeyboardModifiers _modifiers;
-    double _zoom_factor_base;
-    QPointF target_scene_pos, target_viewport_pos;
-    bool eventFilter(QObject* object, QEvent* event);
+    private:
+        Qt::KeyboardModifiers m_modifiers;
+        double m_zoom_factor_base;
+        QPointF m_target_scene_pos, m_target_viewport_pos;
+        bool eventFilter(QObject* object, QEvent* event);
 
-Q_SIGNALS:
-    void zoomed();
-};
+    Q_SIGNALS:
+        void zoomed();
+    };
 }

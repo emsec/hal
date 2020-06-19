@@ -37,166 +37,168 @@
 #include <QStackedWidget>
 #include <QToolBar>
 #include <core/program_options.h>
-namespace hal{
-class plugin_model;
-class plugin_manager_dialog;
-class plugin_schedule_widget;
-class python_editor;
-class file_manager;
-class hal_content_manager;
-class dropdown_list;
-class about_dialog;
-class welcome_screen;
 
-class main_window : public QWidget
+namespace hal
 {
-    Q_OBJECT
-    Q_PROPERTY(QString hal_icon_path READ hal_icon_path WRITE set_hal_icon_path)
-    Q_PROPERTY(QString hal_icon_style READ hal_icon_style WRITE set_hal_icon_style)
+    class plugin_model;
+    class plugin_manager_dialog;
+    class plugin_schedule_widget;
+    class python_editor;
+    class file_manager;
+    class hal_content_manager;
+    class dropdown_list;
+    class about_dialog;
+    class welcome_screen;
 
-    Q_PROPERTY(QString new_file_icon_path READ new_file_icon_path WRITE set_new_file_icon_path)
-    Q_PROPERTY(QString new_file_icon_style READ new_file_icon_style WRITE set_new_file_icon_style)
-    Q_PROPERTY(QString open_icon_path READ open_icon_path WRITE set_open_icon_path)
-    Q_PROPERTY(QString open_icon_style READ open_icon_style WRITE set_open_icon_style)
-    Q_PROPERTY(QString save_icon_path READ save_icon_path WRITE set_save_icon_path)
-    Q_PROPERTY(QString save_icon_style READ save_icon_style WRITE set_save_icon_style)
-    Q_PROPERTY(QString schedule_icon_path READ schedule_icon_path WRITE set_schedule_icon_path)
-    Q_PROPERTY(QString schedule_icon_style READ schedule_icon_style WRITE set_schedule_icon_style)
-    Q_PROPERTY(QString run_icon_path READ run_icon_path WRITE set_run_icon_path)
-    Q_PROPERTY(QString run_icon_style READ run_icon_style WRITE set_run_icon_style)
-    Q_PROPERTY(QString content_icon_path READ content_icon_path WRITE set_content_icon_path)
-    Q_PROPERTY(QString content_icon_style READ content_icon_style WRITE set_content_icon_style)
-    Q_PROPERTY(QString settings_icon_path READ settings_icon_path WRITE set_settings_icon_path)
-    Q_PROPERTY(QString settings_icon_style READ settings_icon_style WRITE set_settings_icon_style)
+    class main_window : public QWidget
+    {
+        Q_OBJECT
+        Q_PROPERTY(QString hal_icon_path READ hal_icon_path WRITE set_hal_icon_path)
+        Q_PROPERTY(QString hal_icon_style READ hal_icon_style WRITE set_hal_icon_style)
 
-public:
-    explicit main_window(QWidget* parent = nullptr);
-    void add_content(content_widget* widget, int index, content_anchor anchor);
+        Q_PROPERTY(QString new_file_icon_path READ new_file_icon_path WRITE set_new_file_icon_path)
+        Q_PROPERTY(QString new_file_icon_style READ new_file_icon_style WRITE set_new_file_icon_style)
+        Q_PROPERTY(QString open_icon_path READ open_icon_path WRITE set_open_icon_path)
+        Q_PROPERTY(QString open_icon_style READ open_icon_style WRITE set_open_icon_style)
+        Q_PROPERTY(QString save_icon_path READ save_icon_path WRITE set_save_icon_path)
+        Q_PROPERTY(QString save_icon_style READ save_icon_style WRITE set_save_icon_style)
+        Q_PROPERTY(QString schedule_icon_path READ schedule_icon_path WRITE set_schedule_icon_path)
+        Q_PROPERTY(QString schedule_icon_style READ schedule_icon_style WRITE set_schedule_icon_style)
+        Q_PROPERTY(QString run_icon_path READ run_icon_path WRITE set_run_icon_path)
+        Q_PROPERTY(QString run_icon_style READ run_icon_style WRITE set_run_icon_style)
+        Q_PROPERTY(QString content_icon_path READ content_icon_path WRITE set_content_icon_path)
+        Q_PROPERTY(QString content_icon_style READ content_icon_style WRITE set_content_icon_style)
+        Q_PROPERTY(QString settings_icon_path READ settings_icon_path WRITE set_settings_icon_path)
+        Q_PROPERTY(QString settings_icon_style READ settings_icon_style WRITE set_settings_icon_style)
 
-    QString hal_icon_path() const;
-    QString hal_icon_style() const;
+    public:
+        explicit main_window(QWidget* parent = nullptr);
+        void add_content(content_widget* widget, int index, content_anchor anchor);
 
-    QString new_file_icon_path() const;
-    QString new_file_icon_style() const;
+        QString hal_icon_path() const;
+        QString hal_icon_style() const;
 
-    QString open_icon_path() const;
-    QString open_icon_style() const;
+        QString new_file_icon_path() const;
+        QString new_file_icon_style() const;
 
-    QString save_icon_path() const;
-    QString save_icon_style() const;
+        QString open_icon_path() const;
+        QString open_icon_style() const;
 
-    QString schedule_icon_path() const;
-    QString schedule_icon_style() const;
+        QString save_icon_path() const;
+        QString save_icon_style() const;
 
-    QString run_icon_path() const;
-    QString run_icon_style() const;
+        QString schedule_icon_path() const;
+        QString schedule_icon_style() const;
 
-    QString content_icon_path() const;
-    QString content_icon_style() const;
+        QString run_icon_path() const;
+        QString run_icon_style() const;
 
-    QString settings_icon_path() const;
-    QString settings_icon_style() const;
+        QString content_icon_path() const;
+        QString content_icon_style() const;
+
+        QString settings_icon_path() const;
+        QString settings_icon_style() const;
 
 
-    void set_hal_icon_path(const QString& path);
-    void set_hal_icon_style(const QString &style);
+        void set_hal_icon_path(const QString& path);
+        void set_hal_icon_style(const QString &style);
 
-    void set_new_file_icon_path(const QString& path);
-    void set_new_file_icon_style(const QString &style);
+        void set_new_file_icon_path(const QString& path);
+        void set_new_file_icon_style(const QString &style);
 
-    void set_open_icon_path(const QString& path);
-    void set_open_icon_style(const QString& style);
+        void set_open_icon_path(const QString& path);
+        void set_open_icon_style(const QString& style);
 
-    void set_save_icon_path(const QString& path);
-    void set_save_icon_style(const QString& style);
+        void set_save_icon_path(const QString& path);
+        void set_save_icon_style(const QString& style);
 
-    void set_schedule_icon_path(const QString& path);
-    void set_schedule_icon_style(const QString& style);
+        void set_schedule_icon_path(const QString& path);
+        void set_schedule_icon_style(const QString& style);
 
-    void set_run_icon_path(const QString& path);
-    void set_run_icon_style(const QString& style);
+        void set_run_icon_path(const QString& path);
+        void set_run_icon_style(const QString& style);
 
-    void set_content_icon_path(const QString& path);
-    void set_content_icon_style(const QString& style);
+        void set_content_icon_path(const QString& path);
+        void set_content_icon_style(const QString& style);
 
-    void set_settings_icon_path(const QString& path);
-    void set_settings_icon_style(const QString& style);
+        void set_settings_icon_path(const QString& path);
+        void set_settings_icon_style(const QString& style);
 
-Q_SIGNALS:
-    void save_triggered();
+    Q_SIGNALS:
+        void save_triggered();
 
-public Q_SLOTS:
-    void on_action_quit_triggered();
-    void on_action_close_document_triggered();
-    void run_plugin_triggered(const QString& name);
-    void toggle_schedule();
-    void toggle_settings();
-    void close_settings();
+    public Q_SLOTS:
+        void on_action_quit_triggered();
+        void on_action_close_document_triggered();
+        void run_plugin_triggered(const QString& name);
+        void toggle_schedule();
+        void toggle_settings();
+        void close_settings();
 
-    void handle_action_new();
-    void handle_action_open();
-    void handle_file_opened(const QString& file_name);
-    void handle_save_triggered();
-    void handle_action_closed();
+        void handle_action_new();
+        void handle_action_open();
+        void handle_file_opened(const QString& file_name);
+        void handle_save_triggered();
+        void handle_action_closed();
 
-private:
-    void closeEvent(QCloseEvent* event);
-    void restore_state();
-    void save_state();
+    private:
+        void closeEvent(QCloseEvent* event);
+        void restore_state();
+        void save_state();
 
-    QVBoxLayout* m_layout;
-    QMenuBar* m_menu_bar;
-    QStackedWidget* m_stacked_widget;
+        QVBoxLayout* m_layout;
+        QMenuBar* m_menu_bar;
+        QStackedWidget* m_stacked_widget;
 
-    plugin_schedule_widget* m_schedule_widget;
-    main_settings_widget* m_settings;
-    welcome_screen* m_welcome_screen;
-    QHBoxLayout* m_tool_bar_layout;
-    QToolBar* m_left_tool_bar;
-    QToolBar* m_right_tool_bar;
-    content_layout_area* m_layout_area;
+        plugin_schedule_widget* m_schedule_widget;
+        main_settings_widget* m_settings;
+        welcome_screen* m_welcome_screen;
+        QHBoxLayout* m_tool_bar_layout;
+        QToolBar* m_left_tool_bar;
+        QToolBar* m_right_tool_bar;
+        content_layout_area* m_layout_area;
 
-    hal_action* m_action_new;
-    hal_action* m_action_open;
-    hal_action* m_action_save;
-    hal_action* m_action_save_as;
-    hal_action* m_action_about;
-    hal_action* m_action_schedule;
-    hal_action* m_action_run_schedule;
-    hal_action* m_action_content;
-    hal_action* m_action_settings;
-    hal_action* m_action_close;
+        hal_action* m_action_new;
+        hal_action* m_action_open;
+        hal_action* m_action_save;
+        hal_action* m_action_save_as;
+        hal_action* m_action_about;
+        hal_action* m_action_schedule;
+        hal_action* m_action_run_schedule;
+        hal_action* m_action_content;
+        hal_action* m_action_settings;
+        hal_action* m_action_close;
 
-    QMenu* m_menu_file;
-    QMenu* m_menu_edit;
-    QMenu* m_menu_help;
+        QMenu* m_menu_file;
+        QMenu* m_menu_edit;
+        QMenu* m_menu_help;
 
-    about_dialog* m_about_dialog;
+        about_dialog* m_about_dialog;
 
-    plugin_model* m_plugin_model;
+        plugin_model* m_plugin_model;
 
-    QString m_hal_icon_style;
-    QString m_hal_icon_path;
+        QString m_hal_icon_style;
+        QString m_hal_icon_path;
 
-    QString m_new_file_icon_style;
-    QString m_new_file_icon_path;
+        QString m_new_file_icon_style;
+        QString m_new_file_icon_path;
 
-    QString m_open_icon_path;
-    QString m_open_icon_style;
+        QString m_open_icon_path;
+        QString m_open_icon_style;
 
-    QString m_save_icon_path;
-    QString m_save_icon_style;
+        QString m_save_icon_path;
+        QString m_save_icon_style;
 
-    QString m_schedule_icon_path;
-    QString m_schedule_icon_style;
+        QString m_schedule_icon_path;
+        QString m_schedule_icon_style;
 
-    QString m_run_icon_path;
-    QString m_run_icon_style;
+        QString m_run_icon_path;
+        QString m_run_icon_style;
 
-    QString m_content_icon_path;
-    QString m_content_icon_style;
+        QString m_content_icon_path;
+        QString m_content_icon_style;
 
-    QString m_settings_icon_path;
-    QString m_settings_icon_style;
-};
+        QString m_settings_icon_path;
+        QString m_settings_icon_style;
+    };
 }

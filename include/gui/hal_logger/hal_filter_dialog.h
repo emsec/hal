@@ -31,69 +31,71 @@
 #include <QLabel>
 #include <QLayout>
 #include <QLineEdit>
-namespace hal{
-class hal_filter_tab_bar;
 
-class hal_filter_dialog : public QDialog
+namespace hal
 {
-    Q_OBJECT
+    class hal_filter_tab_bar;
 
-public:
-    hal_filter_dialog(hal_filter_tab_bar* caller, QWidget* parent = 0);
-
-    ~hal_filter_dialog();
-
-    void append_filter_item(QString name, hal_filter_item* item);
-
-Q_SIGNALS:
-
-    void input_valid();
-
-public Q_SLOTS:
-
-    void verify();
-
-    void reset(int);
-
-private:
-    class filter_combo_box : public QComboBox
+    class hal_filter_dialog : public QDialog
     {
+        Q_OBJECT
+
     public:
-        filter_combo_box(QWidget* parent = 0);
+        hal_filter_dialog(hal_filter_tab_bar* caller, QWidget* parent = 0);
 
-        hal_filter_item::rule get_data();
+        ~hal_filter_dialog();
+
+        void append_filter_item(QString name, hal_filter_item* item);
+
+    Q_SIGNALS:
+
+        void input_valid();
+
+    public Q_SLOTS:
+
+        void verify();
+
+        void reset(int);
+
+    private:
+        class filter_combo_box : public QComboBox
+        {
+        public:
+            filter_combo_box(QWidget* parent = 0);
+
+            hal_filter_item::rule get_data();
+        };
+
+        hal_filter_tab_bar* m_caller;
+
+        QVBoxLayout m_content_layout;
+
+        QFormLayout m_form_layout;
+
+        QGridLayout m_grid_layout;
+
+        QLineEdit m_name;
+
+        QLineEdit m_keywords;
+
+        QLineEdit m_regex;
+
+        QLabel m_status_message;
+
+        filter_combo_box m_trace_box;
+
+        filter_combo_box m_debug_box;
+
+        filter_combo_box m_info_box;
+
+        filter_combo_box m_warning_box;
+
+        filter_combo_box m_error_box;
+
+        filter_combo_box m_critical_box;
+
+        filter_combo_box m_default_box;
+
+        QDialogButtonBox m_button_box;
     };
-
-    hal_filter_tab_bar* m_caller;
-
-    QVBoxLayout m_content_layout;
-
-    QFormLayout m_form_layout;
-
-    QGridLayout m_grid_layout;
-
-    QLineEdit m_name;
-
-    QLineEdit m_keywords;
-
-    QLineEdit m_regex;
-
-    QLabel m_status_message;
-
-    filter_combo_box m_trace_box;
-
-    filter_combo_box m_debug_box;
-
-    filter_combo_box m_info_box;
-
-    filter_combo_box m_warning_box;
-
-    filter_combo_box m_error_box;
-
-    filter_combo_box m_critical_box;
-
-    filter_combo_box m_default_box;
-
-    QDialogButtonBox m_button_box;
-};
 }

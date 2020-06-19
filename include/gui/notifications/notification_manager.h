@@ -25,34 +25,36 @@
 
 #include <QList>
 #include <QObject>
-namespace hal{
-class notification;
 
-class notification_manager : public QObject
+namespace hal
 {
-    Q_OBJECT
+    class notification;
 
-public:
-    explicit notification_manager(QObject* parent = nullptr);
+    class notification_manager : public QObject
+    {
+        Q_OBJECT
 
-    void remove(notification* n);
+    public:
+        explicit notification_manager(QObject* parent = nullptr);
 
-Q_SIGNALS:
+        void remove(notification* n);
 
-public Q_SLOTS:
-    void debug_add_notification();
+    Q_SIGNALS:
 
-private:
-    void rearrange_notifications();
+    public Q_SLOTS:
+        void debug_add_notification();
 
-    int m_desktop_width;
-    int m_desktop_height;
+    private:
+        void rearrange_notifications();
 
-    int m_width_offset;
-    int m_height_offset;
+        int m_desktop_width;
+        int m_desktop_height;
 
-    int m_spacing;
+        int m_width_offset;
+        int m_height_offset;
 
-    QList<notification*> m_list;
-};
+        int m_spacing;
+
+        QList<notification*> m_list;
+    };
 }

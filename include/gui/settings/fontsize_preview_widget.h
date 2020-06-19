@@ -27,17 +27,19 @@
 
 #include <QLabel>
 #include <QFrame>
-namespace hal{
-class fontsize_preview_widget : public preview_widget
+
+namespace hal
 {
-    Q_OBJECT
+    class fontsize_preview_widget : public preview_widget
+    {
+        Q_OBJECT
 
-public:
-    explicit fontsize_preview_widget(const QString& text, const QFont& font, QWidget* parent = 0);
-    void update(const QVariant& value) Q_DECL_OVERRIDE;
+    public:
+        explicit fontsize_preview_widget(const QString& text, const QFont& font, QWidget* parent = 0);
+        void update(const QVariant& value) Q_DECL_OVERRIDE;
 
-private:
-    QLabel* m_label;
-    QFont m_font;
-};
+    private:
+        QLabel* m_label;
+        QFont m_font;
+    };
 }

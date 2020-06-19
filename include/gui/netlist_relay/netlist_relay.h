@@ -30,95 +30,97 @@
 
 #include <QMap>
 #include <QObject>
-namespace hal{
-class module_item;
-class module_model;
-class Module;
 
-class netlist_relay : public QObject
+namespace hal
 {
-    Q_OBJECT
+    class module_item;
+    class module_model;
+    class Module;
 
-public:
-    explicit netlist_relay(QObject* parent = nullptr);
-    ~netlist_relay();
+    class netlist_relay : public QObject
+    {
+        Q_OBJECT
 
-    void register_callbacks();
+    public:
+        explicit netlist_relay(QObject* parent = nullptr);
+        ~netlist_relay();
 
-    QColor get_module_color(const u32 id);
+        void register_callbacks();
 
-    module_model* get_module_model();
+        QColor get_module_color(const u32 id);
 
-    void debug_change_module_name(const u32 id);
-    void debug_change_module_color(const u32 id);
-    void debug_add_selection_to_module(const u32 id);
-    void debug_add_child_module(const u32 id);
-    void debug_delete_module(const u32 id);
+        module_model* get_module_model();
 
-Q_SIGNALS:
-    // PROBABLY OBSOLETE
-    void netlist_event(netlist_event_handler::event ev, std::shared_ptr<Netlist> object, u32 associated_data) const;
-    void module_event(module_event_handler::event ev, std::shared_ptr<Module> object, u32 associated_data) const;
-    void gate_event(gate_event_handler::event ev, std::shared_ptr<Gate> object, u32 associated_data) const;
-    void net_event(net_event_handler::event ev, std::shared_ptr<Net> object, u32 associated_data) const;
+        void debug_change_module_name(const u32 id);
+        void debug_change_module_color(const u32 id);
+        void debug_add_selection_to_module(const u32 id);
+        void debug_add_child_module(const u32 id);
+        void debug_delete_module(const u32 id);
 
-    void netlist_id_changed(const std::shared_ptr<Netlist> n, const u32 associated_data) const;
-    void netlist_input_filename_changed(const std::shared_ptr<Netlist> n) const;
-    void netlist_design_name_changed(const std::shared_ptr<Netlist> n) const;
-    void netlist_device_name_changed(const std::shared_ptr<Netlist> n) const;
-    void netlist_marked_global_vcc(const std::shared_ptr<Netlist> n, const u32 associated_data) const;
-    void netlist_marked_global_gnd(const std::shared_ptr<Netlist> n, const u32 associated_data) const;
-    void netlist_unmarked_global_vcc(const std::shared_ptr<Netlist> n, const u32 associated_data) const;
-    void netlist_unmarked_global_gnd(const std::shared_ptr<Netlist> n, const u32 associated_data) const;
-    void netlist_marked_global_input(const std::shared_ptr<Netlist> n, const u32 associated_data) const;
-    void netlist_marked_global_output(const std::shared_ptr<Netlist> n, const u32 associated_data) const;
-    void netlist_marked_global_inout(const std::shared_ptr<Netlist> n, const u32 associated_data) const;
-    void netlist_unmarked_global_input(const std::shared_ptr<Netlist> n, const u32 associated_data) const;
-    void netlist_unmarked_global_output(const std::shared_ptr<Netlist> n, const u32 associated_data) const;
-    void netlist_unmarked_global_inout(const std::shared_ptr<Netlist> n, const u32 associated_data) const;
+    Q_SIGNALS:
+        // PROBABLY OBSOLETE
+        void netlist_event(netlist_event_handler::event ev, std::shared_ptr<Netlist> object, u32 associated_data) const;
+        void module_event(module_event_handler::event ev, std::shared_ptr<Module> object, u32 associated_data) const;
+        void gate_event(gate_event_handler::event ev, std::shared_ptr<Gate> object, u32 associated_data) const;
+        void net_event(net_event_handler::event ev, std::shared_ptr<Net> object, u32 associated_data) const;
 
-    void module_created(const std::shared_ptr<Module> m) const;
-    void module_removed(const std::shared_ptr<Module> m) const;
-    void module_name_changed(const std::shared_ptr<Module> m) const;
-    void module_parent_changed(const std::shared_ptr<Module> m) const;
-    void module_submodule_added(const std::shared_ptr<Module> m, const u32 added_module) const;
-    void module_submodule_removed(const std::shared_ptr<Module> m, const u32 removed_module) const;
-    void module_gate_assigned(const std::shared_ptr<Module> m, const u32 assigned_gate) const;
-    void module_gate_removed(const std::shared_ptr<Module> m, const u32 removed_gate) const;
-    void module_input_port_name_changed(const std::shared_ptr<Module> m, const u32 respective_net) const;
-    void module_output_port_name_changed(const std::shared_ptr<Module> m, const u32 respective_net) const;
-    void module_type_changed(const std::shared_ptr<Module> m) const;
+        void netlist_id_changed(const std::shared_ptr<Netlist> n, const u32 associated_data) const;
+        void netlist_input_filename_changed(const std::shared_ptr<Netlist> n) const;
+        void netlist_design_name_changed(const std::shared_ptr<Netlist> n) const;
+        void netlist_device_name_changed(const std::shared_ptr<Netlist> n) const;
+        void netlist_marked_global_vcc(const std::shared_ptr<Netlist> n, const u32 associated_data) const;
+        void netlist_marked_global_gnd(const std::shared_ptr<Netlist> n, const u32 associated_data) const;
+        void netlist_unmarked_global_vcc(const std::shared_ptr<Netlist> n, const u32 associated_data) const;
+        void netlist_unmarked_global_gnd(const std::shared_ptr<Netlist> n, const u32 associated_data) const;
+        void netlist_marked_global_input(const std::shared_ptr<Netlist> n, const u32 associated_data) const;
+        void netlist_marked_global_output(const std::shared_ptr<Netlist> n, const u32 associated_data) const;
+        void netlist_marked_global_inout(const std::shared_ptr<Netlist> n, const u32 associated_data) const;
+        void netlist_unmarked_global_input(const std::shared_ptr<Netlist> n, const u32 associated_data) const;
+        void netlist_unmarked_global_output(const std::shared_ptr<Netlist> n, const u32 associated_data) const;
+        void netlist_unmarked_global_inout(const std::shared_ptr<Netlist> n, const u32 associated_data) const;
 
-    void gate_created(const std::shared_ptr<Gate> g) const;
-    void gate_removed(const std::shared_ptr<Gate> g) const;
-    void gate_name_changed(const std::shared_ptr<Gate> g) const;
+        void module_created(const std::shared_ptr<Module> m) const;
+        void module_removed(const std::shared_ptr<Module> m) const;
+        void module_name_changed(const std::shared_ptr<Module> m) const;
+        void module_parent_changed(const std::shared_ptr<Module> m) const;
+        void module_submodule_added(const std::shared_ptr<Module> m, const u32 added_module) const;
+        void module_submodule_removed(const std::shared_ptr<Module> m, const u32 removed_module) const;
+        void module_gate_assigned(const std::shared_ptr<Module> m, const u32 assigned_gate) const;
+        void module_gate_removed(const std::shared_ptr<Module> m, const u32 removed_gate) const;
+        void module_input_port_name_changed(const std::shared_ptr<Module> m, const u32 respective_net) const;
+        void module_output_port_name_changed(const std::shared_ptr<Module> m, const u32 respective_net) const;
+        void module_type_changed(const std::shared_ptr<Module> m) const;
 
-    void net_created(const std::shared_ptr<Net> n) const;
-    void net_removed(const std::shared_ptr<Net> n) const;
-    void net_name_changed(const std::shared_ptr<Net> n) const;
-    void net_source_added(const std::shared_ptr<Net> n, const u32 dst_gate_id) const;
-    void net_source_removed(const std::shared_ptr<Net> n, const u32 dst_gate_id) const;
-    void net_destination_added(const std::shared_ptr<Net> n, const u32 dst_gate_id) const;
-    void net_destination_removed(const std::shared_ptr<Net> n, const u32 dst_gate_id) const;
+        void gate_created(const std::shared_ptr<Gate> g) const;
+        void gate_removed(const std::shared_ptr<Gate> g) const;
+        void gate_name_changed(const std::shared_ptr<Gate> g) const;
 
-    // GUI
-    void module_color_changed(const std::shared_ptr<Module> m) const;
+        void net_created(const std::shared_ptr<Net> n) const;
+        void net_removed(const std::shared_ptr<Net> n) const;
+        void net_name_changed(const std::shared_ptr<Net> n) const;
+        void net_source_added(const std::shared_ptr<Net> n, const u32 dst_gate_id) const;
+        void net_source_removed(const std::shared_ptr<Net> n, const u32 dst_gate_id) const;
+        void net_destination_added(const std::shared_ptr<Net> n, const u32 dst_gate_id) const;
+        void net_destination_removed(const std::shared_ptr<Net> n, const u32 dst_gate_id) const;
 
-private Q_SLOTS:
-    void debug_handle_file_opened();
-    void debug_handle_file_closed();
+        // GUI
+        void module_color_changed(const std::shared_ptr<Module> m) const;
 
-private:
-    void relay_netlist_event(netlist_event_handler::event ev, std::shared_ptr<Netlist> object, u32 associated_data);
-    void relay_module_event(module_event_handler::event ev, std::shared_ptr<Module> object, u32 associated_data);
-    void relay_gate_event(gate_event_handler::event ev, std::shared_ptr<Gate> object, u32 associated_data);
-    void relay_net_event(net_event_handler::event ev, std::shared_ptr<Net> object, u32 associated_data);
+    private Q_SLOTS:
+        void debug_handle_file_opened();
+        void debug_handle_file_closed();
 
-    QMap<u32, QColor> m_module_colors;
+    private:
+        void relay_netlist_event(netlist_event_handler::event ev, std::shared_ptr<Netlist> object, u32 associated_data);
+        void relay_module_event(module_event_handler::event ev, std::shared_ptr<Module> object, u32 associated_data);
+        void relay_gate_event(gate_event_handler::event ev, std::shared_ptr<Gate> object, u32 associated_data);
+        void relay_net_event(net_event_handler::event ev, std::shared_ptr<Net> object, u32 associated_data);
 
-    QMap<u32, QString> m_gate_aliases;
-    QMap<u32, QString> m_net_aliases;
+        QMap<u32, QColor> m_module_colors;
 
-    module_model* m_module_model;
-};
+        QMap<u32, QString> m_gate_aliases;
+        QMap<u32, QString> m_net_aliases;
+
+        module_model* m_module_model;
+    };
 }

@@ -25,21 +25,23 @@
 
 #include "settings_widget.h"
 #include <QLineEdit>
-namespace hal{
-class text_setting : public settings_widget
+
+namespace hal
 {
-    Q_OBJECT
+    class text_setting : public settings_widget
+    {
+        Q_OBJECT
 
-public:
-    text_setting(const QString& key, const QString& title, const QString& description, const QString& placeholder = "", QWidget* parent = 0);
+    public:
+        text_setting(const QString& key, const QString& title, const QString& description, const QString& placeholder = "", QWidget* parent = 0);
 
-    virtual void load(const QVariant& value) Q_DECL_OVERRIDE;
-    virtual QVariant value() Q_DECL_OVERRIDE;
-    //virtual void rollback() Q_DECL_OVERRIDE;
+        virtual void load(const QVariant& value) Q_DECL_OVERRIDE;
+        virtual QVariant value() Q_DECL_OVERRIDE;
+        //virtual void rollback() Q_DECL_OVERRIDE;
 
-private:
-    QLineEdit* m_textfield;
-    void on_text_changed();
+    private:
+        QLineEdit* m_textfield;
+        void on_text_changed();
 
-};
+    };
 }

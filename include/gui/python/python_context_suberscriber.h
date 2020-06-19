@@ -24,12 +24,13 @@
 #pragma once
 
 #include <QString>
-namespace hal{
-class python_context_subscriber
+namespace hal
 {
-public:
-    virtual void handle_stdout(const QString& output) = 0;
-    virtual void handle_error(const QString& output)  = 0;
-    virtual void clear()                              = 0;
-};
+    class python_context_subscriber
+    {
+    public:
+        virtual void handle_stdout(const QString& output) = 0;
+        virtual void handle_error(const QString& output)  = 0;
+        virtual void clear()                              = 0;
+    };
 }

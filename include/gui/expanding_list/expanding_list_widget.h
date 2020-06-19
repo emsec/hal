@@ -28,42 +28,43 @@
 class QFrame;
 class QVBoxLayout;
 
-namespace hal{
-class expanding_list_button;
-class expanding_list_item;
-
-class expanding_list_widget : public QScrollArea
+namespace hal
 {
-    Q_OBJECT
+    class expanding_list_button;
+    class expanding_list_item;
 
-public:
-    expanding_list_widget(QWidget* parent = 0);
+    class expanding_list_widget : public QScrollArea
+    {
+        Q_OBJECT
 
-    //    bool eventFilter(QObject* object, QEvent* event) Q_DECL_OVERRIDE;
+    public:
+        expanding_list_widget(QWidget* parent = 0);
 
-    void append_item(expanding_list_button* button, expanding_list_button* parent_button = 0);
-    void select_button(expanding_list_button* button);
-    void select_item(int index);
+        //    bool eventFilter(QObject* object, QEvent* event) Q_DECL_OVERRIDE;
 
-    void repolish();
+        void append_item(expanding_list_button* button, expanding_list_button* parent_button = 0);
+        void select_button(expanding_list_button* button);
+        void select_item(int index);
 
-Q_SIGNALS:
-    void button_selected(expanding_list_button* button);
+        void repolish();
 
-public Q_SLOTS:
-    void handle_clicked();
+    Q_SIGNALS:
+        void button_selected(expanding_list_button* button);
 
-private:
-    QFrame* m_content;
-    QVBoxLayout* m_content_layout;
-    QFrame* m_spacer;
+    public Q_SLOTS:
+        void handle_clicked();
 
-    QList<expanding_list_item*> m_items;
+    private:
+        QFrame* m_content;
+        QVBoxLayout* m_content_layout;
+        QFrame* m_spacer;
 
-    expanding_list_button* m_selected_button;
-    expanding_list_item* m_extended_item;
+        QList<expanding_list_item*> m_items;
 
-    int m_item_width;
-    int m_offset;
-};
+        expanding_list_button* m_selected_button;
+        expanding_list_item* m_extended_item;
+
+        int m_item_width;
+        int m_offset;
+    };
 }

@@ -23,28 +23,29 @@
 
 #pragma once
 
-namespace hal{
-class content_widget;
-
-class hal_content_anchor
+namespace hal
 {
-public:
-    virtual void add(content_widget* widget, int index) = 0;
+    class content_widget;
 
-    virtual void remove(content_widget* widget) = 0;
+    class hal_content_anchor
+    {
+    public:
+        virtual void add(content_widget* widget, int index) = 0;
 
-    virtual void detach(content_widget* widget) = 0;
+        virtual void remove(content_widget* widget) = 0;
 
-    virtual void reattach(content_widget* widget) = 0;
+        virtual void detach(content_widget* widget) = 0;
 
-    virtual void open(content_widget* widget) = 0;
+        virtual void reattach(content_widget* widget) = 0;
 
-    virtual void close(content_widget* widget) = 0;
+        virtual void open(content_widget* widget) = 0;
 
-    virtual inline ~hal_content_anchor() = 0;
-};
+        virtual void close(content_widget* widget) = 0;
 
-hal_content_anchor::~hal_content_anchor()
-{
-}
+        virtual inline ~hal_content_anchor() = 0;
+    };
+
+    hal_content_anchor::~hal_content_anchor()
+    {
+    }
 }

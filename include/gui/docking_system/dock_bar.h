@@ -30,64 +30,65 @@
 #include <QList>
 #include <QPoint>
 
-namespace hal{
-class hal_content_anchor;
-class content_widget;
-
-class dock_bar : public QFrame
+namespace hal
 {
-    Q_OBJECT
+    class hal_content_anchor;
+    class content_widget;
 
-public:
-    dock_bar(Qt::Orientation orientation, button_orientation b_orientation, QWidget* parent = 0);
+    class dock_bar : public QFrame
+    {
+        Q_OBJECT
 
-    void mouseMoveEvent(QMouseEvent* event) Q_DECL_OVERRIDE;
-    void dragEnterEvent(QDragEnterEvent* event) Q_DECL_OVERRIDE;
-    void dragMoveEvent(QDragMoveEvent* event) Q_DECL_OVERRIDE;
-    void dragLeaveEvent(QDragLeaveEvent* event) Q_DECL_OVERRIDE;
-    void dropEvent(QDropEvent* event) Q_DECL_OVERRIDE;
-    bool eventFilter(QObject* watched, QEvent* event) Q_DECL_OVERRIDE;
-    QSize sizeHint() const Q_DECL_OVERRIDE;
-    QSize minimumSizeHint() const Q_DECL_OVERRIDE;
+    public:
+        dock_bar(Qt::Orientation orientation, button_orientation b_orientation, QWidget* parent = 0);
 
-    void set_anchor(hal_content_anchor* anchor);
-    void set_autohide(bool autohide);
-    bool unused();
-    int count();
-    int index(content_widget* widget);
-    void rearrange_buttons();
-    void collapse_buttons();
-    void add_button(content_widget* widget, int index);
-    bool remove_button(content_widget* widget);
-    bool remove_button(int index);
+        void mouseMoveEvent(QMouseEvent* event) Q_DECL_OVERRIDE;
+        void dragEnterEvent(QDragEnterEvent* event) Q_DECL_OVERRIDE;
+        void dragMoveEvent(QDragMoveEvent* event) Q_DECL_OVERRIDE;
+        void dragLeaveEvent(QDragLeaveEvent* event) Q_DECL_OVERRIDE;
+        void dropEvent(QDropEvent* event) Q_DECL_OVERRIDE;
+        bool eventFilter(QObject* watched, QEvent* event) Q_DECL_OVERRIDE;
+        QSize sizeHint() const Q_DECL_OVERRIDE;
+        QSize minimumSizeHint() const Q_DECL_OVERRIDE;
 
-    void detach_button(content_widget* widget);
-    void reattach_button(content_widget* widget);
-    void check_button(content_widget* widget);
-    void uncheck_button(content_widget* widget);
-    content_widget* widget_at(int index);
-    content_widget* next_available_widget(int index);
+        void set_anchor(hal_content_anchor* anchor);
+        void set_autohide(bool autohide);
+        bool unused();
+        int count();
+        int index(content_widget* widget);
+        void rearrange_buttons();
+        void collapse_buttons();
+        void add_button(content_widget* widget, int index);
+        bool remove_button(content_widget* widget);
+        bool remove_button(int index);
 
-Q_SIGNALS:
-    void stop_animations();
+        void detach_button(content_widget* widget);
+        void reattach_button(content_widget* widget);
+        void check_button(content_widget* widget);
+        void uncheck_button(content_widget* widget);
+        content_widget* widget_at(int index);
+        content_widget* next_available_widget(int index);
 
-public Q_SLOTS:
-    void handle_drag_start();
-    void handle_drag_end();
+    Q_SIGNALS:
+        void stop_animations();
 
-private:
-    hal_content_anchor* m_anchor;
-    QList<dock_button*> m_buttons;
-    button_orientation m_button_orientation;
-    int m_button_offset  = 0;
-    int m_button_spacing = 1;
-    bool m_autohide      = true;
+    public Q_SLOTS:
+        void handle_drag_start();
+        void handle_drag_end();
 
-    static QPoint s_drag_start_position;
-    static dock_button* s_drag_button;
-    static int s_begin_drop_range;
-    static int s_end_drop_range;
-    static int s_drop_spacing;
-    static dock_button* s_move_marker;
-};
+    private:
+        hal_content_anchor* m_anchor;
+        QList<dock_button*> m_buttons;
+        button_orientation m_button_orientation;
+        int m_button_offset  = 0;
+        int m_button_spacing = 1;
+        bool m_autohide      = true;
+
+        static QPoint s_drag_start_position;
+        static dock_button* s_drag_button;
+        static int s_begin_drop_range;
+        static int s_end_drop_range;
+        static int s_drop_spacing;
+        static dock_button* s_move_marker;
+    };
 }

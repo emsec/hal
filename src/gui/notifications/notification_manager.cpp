@@ -3,48 +3,50 @@
 
 #include "QApplication"
 #include "QDesktopWidget"
-namespace hal{
-notification_manager::notification_manager(QObject* parent) : QObject(parent)
-{
-    m_width_offset  = 20;
-    m_height_offset = 20;
 
-    m_spacing = 10;
-}
-
-void notification_manager::remove(notification* n)
+namespace hal
 {
-    if (m_list.removeOne(n))
+    notification_manager::notification_manager(QObject* parent) : QObject(parent)
     {
-        n->hide();
-        n->deleteLater();
+        m_width_offset  = 20;
+        m_height_offset = 20;
+
+        m_spacing = 10;
     }
-    rearrange_notifications();
-}
 
-void notification_manager::debug_add_notification()
-{
-    notification* n = new notification(nullptr);
-    m_list.append(n);
-    rearrange_notifications();
-}
-
-void notification_manager::rearrange_notifications()
-{
-    //QRect rec = QApplication::desktop()->availableGeometry();
-    QRect rec        = QApplication::desktop()->screenGeometry();
-    m_desktop_width  = rec.width();
-    m_desktop_height = rec.height();
-
-    int y = m_height_offset;
-
-    for (auto& element : m_list)
+    void notification_manager::remove(notification* n)
     {
-        y += element->height();
-        element->move(m_desktop_width - m_width_offset - element->width(), m_desktop_height - y);
-        y += m_spacing;
-        element->show();
-        element->fade_in();
+        if (m_list.removeOne(n))
+        {
+            n->hide();
+            n->deleteLater();
+        }
+        rearrange_notifications();
     }
-}
+
+    void notification_manager::debug_add_notification()
+    {
+        notification* n = new notification(nullptr);
+        m_list.append(n);
+        rearrange_notifications();
+    }
+
+    void notification_manager::rearrange_notifications()
+    {
+        //QRect rec = QApplication::desktop()->availableGeometry();
+        QRect rec        = QApplication::desktop()->screenGeometry();
+        m_desktop_width  = rec.width();
+        m_desktop_height = rec.height();
+
+        int y = m_height_offset;
+
+        for (auto& element : m_list)
+        {
+            y += element->height();
+            element->move(m_desktop_width - m_width_offset - element->width(), m_desktop_height - y);
+            y += m_spacing;
+            element->show();
+            element->fade_in();
+        }
+    }
 }

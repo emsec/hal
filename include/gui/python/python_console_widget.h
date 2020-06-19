@@ -24,18 +24,20 @@
 #pragma once
 
 #include "content_widget/content_widget.h"
-namespace hal{
-class python_console;
 
-class python_console_widget : public content_widget
+namespace hal
 {
-public:
-    python_console_widget(QWidget* parent = nullptr);
+    class python_console;
 
-    virtual void setup_toolbar(toolbar* toolbar) Q_DECL_OVERRIDE;
-    virtual QList<QShortcut*> create_shortcuts() Q_DECL_OVERRIDE;
+    class python_console_widget : public content_widget
+    {
+    public:
+        python_console_widget(QWidget* parent = nullptr);
 
-private:
-    python_console* m_console;
-};
+        virtual void setup_toolbar(toolbar* toolbar) Q_DECL_OVERRIDE;
+        virtual QList<QShortcut*> create_shortcuts() Q_DECL_OVERRIDE;
+
+    private:
+        python_console* m_console;
+    };
 }

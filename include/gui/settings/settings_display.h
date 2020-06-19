@@ -27,19 +27,19 @@
 
 class QVBoxLayout;
 
-namespace hal{
-
-class settings_display : public QScrollArea
+namespace hal
 {
-public:
-    settings_display(QWidget* parent = 0);
+    class settings_display : public QScrollArea
+    {
+    public:
+        settings_display(QWidget* parent = 0);
 
-    void add_widget(QWidget* widget);
+        void add_widget(QWidget* widget);
 
-private:
-    QFrame* m_content;
-    QVBoxLayout* m_content_layout;
-    QFrame* m_sub_content;
-    QVBoxLayout* m_sub_content_layout;
-};
+    private:
+        QFrame* m_content;
+        QVBoxLayout* m_content_layout;
+        QFrame* m_sub_content;
+        QVBoxLayout* m_sub_content_layout;
+    };
 }

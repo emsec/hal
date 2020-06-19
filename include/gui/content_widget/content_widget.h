@@ -31,62 +31,63 @@
 class QShortcut;
 class QVBoxLayout;
 
-namespace hal{
-class hal_content_anchor;
-class toolbar;
-
-class content_widget : public hal_widget
+namespace hal
 {
-    Q_OBJECT
-    Q_PROPERTY(QString icon_style READ icon_style WRITE set_icon_style)
-    Q_PROPERTY(QString icon_path READ icon_path WRITE set_icon_path)
+    class hal_content_anchor;
+    class toolbar;
 
-public:
-    explicit content_widget(QString name, QWidget* parent = nullptr);
+    class content_widget : public hal_widget
+    {
+        Q_OBJECT
+        Q_PROPERTY(QString icon_style READ icon_style WRITE set_icon_style)
+        Q_PROPERTY(QString icon_path READ icon_path WRITE set_icon_path)
 
-    virtual void setup_toolbar(toolbar* toolbar);
-    virtual QList<QShortcut*> create_shortcuts();
+    public:
+        explicit content_widget(QString name, QWidget* parent = nullptr);
 
-    void repolish();
+        virtual void setup_toolbar(toolbar* toolbar);
+        virtual QList<QShortcut*> create_shortcuts();
 
-    QString name();
-    QIcon icon();
+        void repolish();
 
-    void set_anchor(hal_content_anchor* anchor);
-    void set_icon(QIcon icon);
+        QString name();
+        QIcon icon();
 
-    QString icon_style();
-    QString icon_path();
+        void set_anchor(hal_content_anchor* anchor);
+        void set_icon(QIcon icon);
 
-    void set_icon_style(const QString& style);
-    void set_icon_path(const QString& path);
+        QString icon_style();
+        QString icon_path();
 
-Q_SIGNALS:
-    void removed();
-    void detached();
-    void reattached();
-    void opened();
-    void closed();
+        void set_icon_style(const QString& style);
+        void set_icon_path(const QString& path);
 
-public Q_SLOTS:
-    void remove();
-    void detach();
-    void reattach();
-    void open();
-    void close();
+    Q_SIGNALS:
+        void removed();
+        void detached();
+        void reattached();
+        void opened();
+        void closed();
 
-private:
-    void closeEvent(QCloseEvent* event);
+    public Q_SLOTS:
+        void remove();
+        void detach();
+        void reattach();
+        void open();
+        void close();
 
-    QString m_name;
-    QIcon m_icon;
-    hal_content_anchor* m_anchor = nullptr;
-    int m_index_priority         = 0;
+    private:
+        void closeEvent(QCloseEvent* event);
 
-    QString m_icon_style;
-    QString m_icon_path;
+        QString m_name;
+        QIcon m_icon;
+        hal_content_anchor* m_anchor = nullptr;
+        int m_index_priority         = 0;
 
-protected:
-    QVBoxLayout* m_content_layout;
-};
+        QString m_icon_style;
+        QString m_icon_path;
+
+    protected:
+        QVBoxLayout* m_content_layout;
+    };
 }

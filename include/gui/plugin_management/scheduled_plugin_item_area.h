@@ -30,48 +30,49 @@
 
 class QVBoxLayout;
 
-namespace hal{
-class drop_marker;
-class scheduled_plugin_item;
-
-class scheduled_plugin_item_area : public QFrame
+namespace hal
 {
-    Q_OBJECT
+    class drop_marker;
+    class scheduled_plugin_item;
 
-public:
-    explicit scheduled_plugin_item_area(QWidget* parent = nullptr);
+    class scheduled_plugin_item_area : public QFrame
+    {
+        Q_OBJECT
 
-    void dragEnterEvent(QDragEnterEvent* event) Q_DECL_OVERRIDE;
-    void dragMoveEvent(QDragMoveEvent* event) Q_DECL_OVERRIDE;
-    void dragLeaveEvent(QDragLeaveEvent* event) Q_DECL_OVERRIDE;
-    void dropEvent(QDropEvent* event) Q_DECL_OVERRIDE;
+    public:
+        explicit scheduled_plugin_item_area(QWidget* parent = nullptr);
 
-    void insert_plugin(const QString& name);
+        void dragEnterEvent(QDragEnterEvent* event) Q_DECL_OVERRIDE;
+        void dragMoveEvent(QDragMoveEvent* event) Q_DECL_OVERRIDE;
+        void dragLeaveEvent(QDragLeaveEvent* event) Q_DECL_OVERRIDE;
+        void dropEvent(QDropEvent* event) Q_DECL_OVERRIDE;
 
-Q_SIGNALS:
-    void plugin_added(QString plugin, int index);
-    void plugin_moved(int from, int to);
-    void plugin_removed(int index);
+        void insert_plugin(const QString& name);
 
-    void plugin_selected(int index);
+    Q_SIGNALS:
+        void plugin_added(QString plugin, int index);
+        void plugin_moved(int from, int to);
+        void plugin_removed(int index);
 
-    void no_scheduled_plugins();
+        void plugin_selected(int index);
 
-public Q_SLOTS:
-    void handle_item_clicked(scheduled_plugin_item* item);
-    void handle_item_drag_started(scheduled_plugin_item* item);
-    void handle_item_removed(scheduled_plugin_item* item);
+        void no_scheduled_plugins();
 
-private:
-    QVBoxLayout* m_layout;
-    QFrame* m_spacer;
+    public Q_SLOTS:
+        void handle_item_clicked(scheduled_plugin_item* item);
+        void handle_item_drag_started(scheduled_plugin_item* item);
+        void handle_item_removed(scheduled_plugin_item* item);
 
-    QVector<int> m_y_values;
-    QList<QPair<scheduled_plugin_item*, drop_marker*>> m_list;
+    private:
+        QVBoxLayout* m_layout;
+        QFrame* m_spacer;
 
-    drop_marker* m_active_marker;
+        QVector<int> m_y_values;
+        QList<QPair<scheduled_plugin_item*, drop_marker*>> m_list;
 
-    bool m_internal_drag_active;
-    int m_drag_index;
-};
+        drop_marker* m_active_marker;
+
+        bool m_internal_drag_active;
+        int m_drag_index;
+    };
 }

@@ -24,25 +24,27 @@
 #pragma once
 
 #include <QAction>
-namespace hal{
-class hal_action : public QAction
+
+namespace hal
 {
-    Q_OBJECT
+    class hal_action : public QAction
+    {
+        Q_OBJECT
 
-public:
-    explicit hal_action(QObject *parent = nullptr);
-    explicit hal_action(const QString &text, QObject *parent = nullptr);
-    explicit hal_action(const QIcon &icon, const QString &text, QObject *parent = nullptr);
+    public:
+        explicit hal_action(QObject *parent = nullptr);
+        explicit hal_action(const QString &text, QObject *parent = nullptr);
+        explicit hal_action(const QIcon &icon, const QString &text, QObject *parent = nullptr);
 
-    // hides non-virtual methods in QAction
-    void setText(const QString& text);
-    void setShortcut(const QKeySequence &shortcut);
-    void setToolTip(const QString& tooltip);
+        // hides non-virtual methods in QAction
+        void setText(const QString& text);
+        void setShortcut(const QKeySequence &shortcut);
+        void setToolTip(const QString& tooltip);
 
-private:
-    QString m_description_text;
-    void update_tooltip(const QKeySequence& seq);
-    bool m_tooltip_modified;
+    private:
+        QString m_description_text;
+        void update_tooltip(const QKeySequence& seq);
+        bool m_tooltip_modified;
 
-};
+    };
 }

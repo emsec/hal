@@ -30,61 +30,62 @@
 #include <QVariant>
 
 #include <boost/circular_buffer.hpp>
-namespace hal {
-
-struct channel_entry
+namespace hal
 {
-    channel_entry(std::string msg, spdlog::level::level_enum msg_type) : m_msg(msg), m_msg_type(msg_type)
+
+    struct channel_entry
     {
-    }
+        channel_entry(std::string msg, spdlog::level::level_enum msg_type) : m_msg(msg), m_msg_type(msg_type)
+        {
+        }
 
-    const std::string m_msg;    // USE QSTRING HERE
-    const spdlog::level::level_enum m_msg_type;
-};
+        const std::string m_msg;    // USE QSTRING HERE
+        const spdlog::level::level_enum m_msg_type;
+    };
 
-static const int max_entries = 1000;
+    static const int max_entries = 1000;
 
-struct log_channel
-{
-    //    log_channel(const QString& name) : m_name(name)
-    //    {
-    //    }
+    struct log_channel
+    {
+        //    log_channel(const QString& name) : m_name(name)
+        //    {
+        //    }
 
-    const QString m_name;
+        const QString m_name;
 
-    channel_entry m_entries[max_entries];
+        channel_entry m_entries[max_entries];
 
-    int m_entry_count;
-    int m_first_entry;
+        int m_entry_count;
+        int m_first_entry;
 
-    int unread_entries;
-    int unread_warnings;
-    int unread_errors;
-    int unread_successes;
-};
+        int unread_entries;
+        int unread_warnings;
+        int unread_errors;
+        int unread_successes;
+    };
 
-class channel_item
-{
-public:
-    channel_item(QString name);
+    class channel_item
+    {
+    public:
+        channel_item(QString name);
 
-    QVariant data(int column) const;
-    const QString name() const;
-    const boost::circular_buffer<channel_entry*>* get_buffer() const;
-    QReadWriteLock* get_lock();
+        QVariant data(int column) const;
+        const QString name() const;
+        const boost::circular_buffer<channel_entry*>* get_buffer() const;
+        QReadWriteLock* get_lock();
 
-    void append_entry(channel_entry* entry);
+        void append_entry(channel_entry* entry);
 
-private:
-    const QString m_name;
-    boost::circular_buffer<channel_entry*> m_log_entries;
-    QReadWriteLock m_lock;
+    private:
+        const QString m_name;
+        boost::circular_buffer<channel_entry*> m_log_entries;
+        QReadWriteLock m_lock;
 
-    int m_observer;
-    int m_unread;
-    int m_unread_warnings;
-    int m_unread_errors;
-    int m_unread_successes;
-};
+        int m_observer;
+        int m_unread;
+        int m_unread_warnings;
+        int m_unread_errors;
+        int m_unread_successes;
+    };
 
 }

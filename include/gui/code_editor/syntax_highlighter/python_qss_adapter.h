@@ -26,71 +26,72 @@
 #include <QTextCharFormat>
 #include <QWidget>
 
-namespace hal{
-class python_qss_adapter : public QWidget
+namespace hal
 {
-    Q_OBJECT
-    Q_PROPERTY(QColor text_color READ text_color WRITE set_text_color)
-    Q_PROPERTY(QColor keyword_color READ keyword_color WRITE set_keyword_color)
-    Q_PROPERTY(QColor operator_color READ operator_color WRITE set_operator_color)
-    Q_PROPERTY(QColor brace_color READ brace_color WRITE set_brace_color)
-    Q_PROPERTY(QColor defclass_color READ defclass_color WRITE set_defclass_color)
-    Q_PROPERTY(QColor self_color READ self_color WRITE set_self_color)
-    Q_PROPERTY(QColor number_color READ number_color WRITE set_number_color)
-    Q_PROPERTY(QColor single_quoted_string_color READ single_quoted_string_color WRITE set_single_quoted_string_color)
-    Q_PROPERTY(QColor double_quoted_string_color READ double_quoted_string_color WRITE set_double_quoted_string_color)
-    Q_PROPERTY(QColor comment_color READ comment_color WRITE set_comment_color)
+    class python_qss_adapter : public QWidget
+    {
+        Q_OBJECT
+        Q_PROPERTY(QColor text_color READ text_color WRITE set_text_color)
+        Q_PROPERTY(QColor keyword_color READ keyword_color WRITE set_keyword_color)
+        Q_PROPERTY(QColor operator_color READ operator_color WRITE set_operator_color)
+        Q_PROPERTY(QColor brace_color READ brace_color WRITE set_brace_color)
+        Q_PROPERTY(QColor defclass_color READ defclass_color WRITE set_defclass_color)
+        Q_PROPERTY(QColor self_color READ self_color WRITE set_self_color)
+        Q_PROPERTY(QColor number_color READ number_color WRITE set_number_color)
+        Q_PROPERTY(QColor single_quoted_string_color READ single_quoted_string_color WRITE set_single_quoted_string_color)
+        Q_PROPERTY(QColor double_quoted_string_color READ double_quoted_string_color WRITE set_double_quoted_string_color)
+        Q_PROPERTY(QColor comment_color READ comment_color WRITE set_comment_color)
 
-public:
-    explicit python_qss_adapter(QWidget* parent = nullptr);
-    ~python_qss_adapter();    // DEBUG CODE, DELETE LATER
-    static python_qss_adapter* instance();
+    public:
+        explicit python_qss_adapter(QWidget* parent = nullptr);
+        ~python_qss_adapter();    // DEBUG CODE, DELETE LATER
+        static python_qss_adapter* instance();
 
-    void repolish();
+        void repolish();
 
-    QColor text_color() const;
-    QColor keyword_color() const;
-    QColor operator_color() const;
-    QColor brace_color() const;
-    QColor defclass_color() const;
-    QColor self_color() const;
-    QColor number_color() const;
-    QColor single_quoted_string_color() const;
-    QColor double_quoted_string_color() const;
-    QColor comment_color() const;
+        QColor text_color() const;
+        QColor keyword_color() const;
+        QColor operator_color() const;
+        QColor brace_color() const;
+        QColor defclass_color() const;
+        QColor self_color() const;
+        QColor number_color() const;
+        QColor single_quoted_string_color() const;
+        QColor double_quoted_string_color() const;
+        QColor comment_color() const;
 
-    void set_text_color(const QColor& color);
-    void set_keyword_color(const QColor& color);
-    void set_operator_color(const QColor& color);
-    void set_brace_color(const QColor& color);
-    void set_defclass_color(const QColor& color);
-    void set_self_color(const QColor& color);
-    void set_number_color(const QColor& color);
-    void set_single_quoted_string_color(const QColor& color);
-    void set_double_quoted_string_color(const QColor& color);
-    void set_comment_color(const QColor& color);
+        void set_text_color(const QColor& color);
+        void set_keyword_color(const QColor& color);
+        void set_operator_color(const QColor& color);
+        void set_brace_color(const QColor& color);
+        void set_defclass_color(const QColor& color);
+        void set_self_color(const QColor& color);
+        void set_number_color(const QColor& color);
+        void set_single_quoted_string_color(const QColor& color);
+        void set_double_quoted_string_color(const QColor& color);
+        void set_comment_color(const QColor& color);
 
-    // LEFT PUBLIC INTENTIONALLY
-    QTextCharFormat m_keyword_format;
-    QTextCharFormat m_operator_format;
-    QTextCharFormat m_brace_format;
-    QTextCharFormat m_defclass_format;
-    QTextCharFormat m_self_format;
-    QTextCharFormat m_number_format;
-    QTextCharFormat m_single_quoted_string_format;
-    QTextCharFormat m_double_quoted_string_format;
-    QTextCharFormat m_comment_format;
+        // LEFT PUBLIC INTENTIONALLY
+        QTextCharFormat m_keyword_format;
+        QTextCharFormat m_operator_format;
+        QTextCharFormat m_brace_format;
+        QTextCharFormat m_defclass_format;
+        QTextCharFormat m_self_format;
+        QTextCharFormat m_number_format;
+        QTextCharFormat m_single_quoted_string_format;
+        QTextCharFormat m_double_quoted_string_format;
+        QTextCharFormat m_comment_format;
 
-private:
-    QColor m_text_color;
-    QColor m_keyword_color;
-    QColor m_operator_color;
-    QColor m_brace_color;
-    QColor m_defclass_color;
-    QColor m_self_color;
-    QColor m_number_color;
-    QColor m_single_quoted_string_color;
-    QColor m_double_quoted_string_color;
-    QColor m_comment_color;
-};
+    private:
+        QColor m_text_color;
+        QColor m_keyword_color;
+        QColor m_operator_color;
+        QColor m_brace_color;
+        QColor m_defclass_color;
+        QColor m_self_color;
+        QColor m_number_color;
+        QColor m_single_quoted_string_color;
+        QColor m_double_quoted_string_color;
+        QColor m_comment_color;
+    };
 }

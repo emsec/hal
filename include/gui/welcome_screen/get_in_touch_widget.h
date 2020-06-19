@@ -28,36 +28,37 @@
 class QLabel;
 class QVBoxLayout;
 
-namespace hal{
-class get_in_touch_item;
-
-class get_in_touch_widget : public QFrame
+namespace hal
 {
-    Q_OBJECT
+    class get_in_touch_item;
 
-public:
-    get_in_touch_widget(QWidget* parent = nullptr);
+    class get_in_touch_widget : public QFrame
+    {
+        Q_OBJECT
 
-    void repolish();
+    public:
+        get_in_touch_widget(QWidget* parent = nullptr);
 
-public Q_SLOTS:
-    void handle_about_item_clicked();
-    void handle_cpp_documentation_item_clicked();
-    void handle_py_documentation_item_clicked();
-    void handle_ticket_item_clicked();
+        void repolish();
 
-private:
-    QVBoxLayout* m_layout;
+    public Q_SLOTS:
+        void handle_about_item_clicked();
+        void handle_cpp_documentation_item_clicked();
+        void handle_py_documentation_item_clicked();
+        void handle_ticket_item_clicked();
 
-    get_in_touch_item* m_about_item;
-    get_in_touch_item* m_news_item;
-    get_in_touch_item* m_forum_item;
-    get_in_touch_item* m_cpp_documentation_item;
-    get_in_touch_item* m_py_documentation_item;
-    get_in_touch_item* m_ticket_item;
+    private:
+        QVBoxLayout* m_layout;
 
-    //    QFrame* m_line;
-    QLabel* m_core_version_label;
-    QLabel* m_gui_version_label;
-};
+        get_in_touch_item* m_about_item;
+        get_in_touch_item* m_news_item;
+        get_in_touch_item* m_forum_item;
+        get_in_touch_item* m_cpp_documentation_item;
+        get_in_touch_item* m_py_documentation_item;
+        get_in_touch_item* m_ticket_item;
+
+        //    QFrame* m_line;
+        QLabel* m_core_version_label;
+        QLabel* m_gui_version_label;
+    };
 }

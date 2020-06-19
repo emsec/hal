@@ -27,22 +27,22 @@
 
 class QVBoxLayout;
 
-namespace hal{
-
-class dialog_overlay : public overlay
+namespace hal
 {
-    Q_OBJECT
+    class dialog_overlay : public overlay
+    {
+        Q_OBJECT
 
-public:
-    dialog_overlay(QWidget* parent = nullptr);
+    public:
+        dialog_overlay(QWidget* parent = nullptr);
 
-    void set_widget(QWidget* widget);
+        void set_widget(QWidget* widget);
 
-//protected:
-//    void resizeEvent(QResizeEvent* event) Q_DECL_OVERRIDE;
+    //protected:
+    //    void resizeEvent(QResizeEvent* event) Q_DECL_OVERRIDE;
 
-private:
-    QVBoxLayout* m_layout;
-    QWidget* m_widget;
-};
+    private:
+        QVBoxLayout* m_layout;
+        QWidget* m_widget;
+    };
 }

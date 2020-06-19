@@ -39,115 +39,116 @@ class QScrollArea;
 class QFont;
 class QPushButton;
 
-namespace hal{
-/* forward declaration */
-class graph_navigation_widget;
-
-class gate_details_widget : public QWidget
+namespace hal
 {
-    Q_OBJECT
-public:
-    /** constructor */
-    gate_details_widget(QWidget* parent = nullptr);
-    /** destructor */
-    ~gate_details_widget();
+    /* forward declaration */
+    class graph_navigation_widget;
 
-    virtual void resizeEvent(QResizeEvent* event) Q_DECL_OVERRIDE;
-    virtual bool eventFilter(QObject *watched, QEvent *event) Q_DECL_OVERRIDE;
+    class gate_details_widget : public QWidget
+    {
+        Q_OBJECT
+    public:
+        /** constructor */
+        gate_details_widget(QWidget* parent = nullptr);
+        /** destructor */
+        ~gate_details_widget();
 
-    /**
-     * Handles update of gate details widget to display information of selected gate.
-     * update() is called by selection details widget
-     *
-     * @param[in] gate_id - Selected gate id
-     * @returns void
-     */
-    void update(const u32 gate_id);
+        virtual void resizeEvent(QResizeEvent* event) Q_DECL_OVERRIDE;
+        virtual bool eventFilter(QObject *watched, QEvent *event) Q_DECL_OVERRIDE;
 
-public Q_SLOTS:
+        /**
+         * Handles update of gate details widget to display information of selected gate.
+         * update() is called by selection details widget
+         *
+         * @param[in] gate_id - Selected gate id
+         * @returns void
+         */
+        void update(const u32 gate_id);
 
-    void handle_gate_name_changed(std::shared_ptr<Gate> gate);
-    void handle_gate_removed(std::shared_ptr<Gate> gate);
+    public Q_SLOTS:
 
-    void handle_module_name_changed(std::shared_ptr<Module> module);
-    void handle_module_removed(std::shared_ptr<Module> module);
-    void handle_module_gate_assigned(std::shared_ptr<Module> module, u32 associated_data);
-    void handle_module_gate_removed(std::shared_ptr<Module> module, u32 associated_data);
+        void handle_gate_name_changed(std::shared_ptr<Gate> gate);
+        void handle_gate_removed(std::shared_ptr<Gate> gate);
 
-    void handle_net_name_changed(std::shared_ptr<Net> net);
-    void handle_net_source_added(std::shared_ptr<Net> net, const u32 src_gate_id);
-    void handle_net_source_removed(std::shared_ptr<Net> net, const u32 src_gate_id);
-    void handle_net_destination_added(std::shared_ptr<Net> net, const u32 dst_gate_id);
-    void handle_net_destination_removed(std::shared_ptr<Net> net, const u32 dst_gate_id);
+        void handle_module_name_changed(std::shared_ptr<Module> module);
+        void handle_module_removed(std::shared_ptr<Module> module);
+        void handle_module_gate_assigned(std::shared_ptr<Module> module, u32 associated_data);
+        void handle_module_gate_removed(std::shared_ptr<Module> module, u32 associated_data);
 
-private:
-    //general
-    //used to set the boolean function container to its appropriate size, width "must be"
-    //extracted from the stylesheet
-    int m_scrollbar_width;
-    bool m_hide_empty_sections;
-    QFont m_key_font;
-    u32 m_current_id;
-    graph_navigation_widget* m_navigation_table;
+        void handle_net_name_changed(std::shared_ptr<Net> net);
+        void handle_net_source_added(std::shared_ptr<Net> net, const u32 src_gate_id);
+        void handle_net_source_removed(std::shared_ptr<Net> net, const u32 src_gate_id);
+        void handle_net_destination_added(std::shared_ptr<Net> net, const u32 dst_gate_id);
+        void handle_net_destination_removed(std::shared_ptr<Net> net, const u32 dst_gate_id);
 
-    //All sections together are encapsulated in a container to make it scrollable
-    QScrollArea* m_scroll_area;
-    QWidget* m_top_lvl_container;
-    QVBoxLayout* m_top_lvl_layout;
-    QVBoxLayout* m_content_layout;
+    private:
+        //general
+        //used to set the boolean function container to its appropriate size, width "must be"
+        //extracted from the stylesheet
+        int m_scrollbar_width;
+        bool m_hide_empty_sections;
+        QFont m_key_font;
+        u32 m_current_id;
+        graph_navigation_widget* m_navigation_table;
 
-    // buttons to fold/unfold corresponding sections
-    QPushButton* m_general_info_button;//(1)
-    QPushButton* m_input_pins_button;//(2)
-    QPushButton* m_output_pins_button;//(3)
-    QPushButton* m_data_fields_button;//(4)
-    QPushButton* m_boolean_functions_button;//(5)
+        //All sections together are encapsulated in a container to make it scrollable
+        QScrollArea* m_scroll_area;
+        QWidget* m_top_lvl_container;
+        QVBoxLayout* m_top_lvl_layout;
+        QVBoxLayout* m_content_layout;
 
-    // widgets / sections to be unfold (not all structures are sections in itself, it may be a container necessary)
+        // buttons to fold/unfold corresponding sections
+        QPushButton* m_general_info_button;//(1)
+        QPushButton* m_input_pins_button;//(2)
+        QPushButton* m_output_pins_button;//(3)
+        QPushButton* m_data_fields_button;//(4)
+        QPushButton* m_boolean_functions_button;//(5)
 
-    //(1) general-information section ("static" information)
-    QTableWidget* m_general_table;
-    QTableWidgetItem* m_name_item;
-    QTableWidgetItem* m_type_item;
-    QTableWidgetItem* m_id_item;
-    QTableWidgetItem* m_module_item;
+        // widgets / sections to be unfold (not all structures are sections in itself, it may be a container necessary)
 
-    //(2) input-pins section
-    QTableWidget* m_input_pins_table;
+        //(1) general-information section ("static" information)
+        QTableWidget* m_general_table;
+        QTableWidgetItem* m_name_item;
+        QTableWidgetItem* m_type_item;
+        QTableWidgetItem* m_id_item;
+        QTableWidgetItem* m_module_item;
 
-    //(3) output-pins section
-    QTableWidget* m_output_pins_table;
+        //(2) input-pins section
+        QTableWidget* m_input_pins_table;
 
-    //(4) data-fields section (label or also table? if table: maybe tooltip if data is too long)
-    QTableWidget* m_data_fields_table;
+        //(3) output-pins section
+        QTableWidget* m_output_pins_table;
 
-    //(5) boolean-function section (consisting of a container that encapsulates multiple labels and design structures)
-    QWidget* m_boolean_functions_container;
-    QVBoxLayout* m_boolean_functions_container_layout;
+        //(4) data-fields section (label or also table? if table: maybe tooltip if data is too long)
+        QTableWidget* m_data_fields_table;
 
-    //utility container to hide/show empty sections
-    QList<QPushButton*> m_util_list;
+        //(5) boolean-function section (consisting of a container that encapsulates multiple labels and design structures)
+        QWidget* m_boolean_functions_container;
+        QVBoxLayout* m_boolean_functions_container_layout;
 
-    //function section
-    void handle_navigation_jump_requested(const hal::node origin, const u32 via_net, const QSet<u32>& to_gates);
+        //utility container to hide/show empty sections
+        QList<QPushButton*> m_util_list;
 
-    void handle_buttons_clicked();
-    void handle_input_pin_item_clicked(const QTableWidgetItem* item);
-    void handle_output_pin_item_clicked(const QTableWidgetItem* item);
-    void handle_general_table_item_clicked(const QTableWidgetItem* item);
+        //function section
+        void handle_navigation_jump_requested(const hal::node origin, const u32 via_net, const QSet<u32>& to_gates);
 
-    //most straightforward and basic custom-context implementation (maybe need to be more dynamic)
-    void handle_general_table_menu_requested(const QPoint &pos);
-    void handle_input_pin_table_menu_requested(const QPoint &pos);
-    void handle_output_pin_table_menu_requested(const QPoint &pos);
-    void handle_data_table_menu_requested(const QPoint &pos);
+        void handle_buttons_clicked();
+        void handle_input_pin_item_clicked(const QTableWidgetItem* item);
+        void handle_output_pin_item_clicked(const QTableWidgetItem* item);
+        void handle_general_table_item_clicked(const QTableWidgetItem* item);
 
-    //utility function, used to calculate the actual width so the scrollbars and the accuracy of the click functionality is correct
-    QSize calculate_table_size(QTableWidget* table);
+        //most straightforward and basic custom-context implementation (maybe need to be more dynamic)
+        void handle_general_table_menu_requested(const QPoint &pos);
+        void handle_input_pin_table_menu_requested(const QPoint &pos);
+        void handle_output_pin_table_menu_requested(const QPoint &pos);
+        void handle_data_table_menu_requested(const QPoint &pos);
 
-    void show_all_sections();
-    void hide_empty_sections();
-    void init_settings();
-    void handle_global_settings_changed(void* sender, const QString& key, const QVariant& value);
-};
+        //utility function, used to calculate the actual width so the scrollbars and the accuracy of the click functionality is correct
+        QSize calculate_table_size(QTableWidget* table);
+
+        void show_all_sections();
+        void hide_empty_sections();
+        void init_settings();
+        void handle_global_settings_changed(void* sender, const QString& key, const QVariant& value);
+    };
 }

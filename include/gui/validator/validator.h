@@ -24,16 +24,17 @@
 #pragma once
 
 #include <QString>
-namespace hal{
-class validator
+namespace hal
 {
-    public:
-        virtual bool validate(const QString &input) = 0;
+    class validator
+    {
+        public:
+            virtual bool validate(const QString &input) = 0;
 
-        void set_fail_text(const QString& text);
-        QString fail_text() const;
+            void set_fail_text(const QString& text);
+            QString fail_text() const;
 
-    protected:
-        QString m_fail_text = "Choosen input is not allowed.";
-};
+        protected:
+            QString m_fail_text = "Choosen input is not allowed.";
+    };
 }

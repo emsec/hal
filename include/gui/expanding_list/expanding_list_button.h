@@ -28,53 +28,54 @@
 class QHBoxLayout;
 class QLabel;
 
-namespace hal{
-class expanding_list_widget;
-
-
-class expanding_list_button : public QFrame
+namespace hal
 {
-    Q_OBJECT
-    Q_PROPERTY(bool hover READ hover)
-    Q_PROPERTY(bool selected READ selected)
-    Q_PROPERTY(QString type READ type)
-    Q_PROPERTY(QString icon_style READ icon_style WRITE set_icon_style)
+    class expanding_list_widget;
 
-public:
-    expanding_list_button(QWidget* parent = 0);
 
-    void enterEvent(QEvent* event) Q_DECL_OVERRIDE;
-    void leaveEvent(QEvent* event) Q_DECL_OVERRIDE;
-    void mousePressEvent(QMouseEvent* event) Q_DECL_OVERRIDE;
+    class expanding_list_button : public QFrame
+    {
+        Q_OBJECT
+        Q_PROPERTY(bool hover READ hover)
+        Q_PROPERTY(bool selected READ selected)
+        Q_PROPERTY(QString type READ type)
+        Q_PROPERTY(QString icon_style READ icon_style WRITE set_icon_style)
 
-    bool hover();
-    bool selected();
-    QString type();
-    QString icon_style();
+    public:
+        expanding_list_button(QWidget* parent = 0);
 
-    void set_selected(bool selected);
-    void set_type(const QString& type);
-    void set_icon_style(const QString& style);
+        void enterEvent(QEvent* event) Q_DECL_OVERRIDE;
+        void leaveEvent(QEvent* event) Q_DECL_OVERRIDE;
+        void mousePressEvent(QMouseEvent* event) Q_DECL_OVERRIDE;
 
-    void set_icon_path(const QString& path);
-    void set_text(const QString& text);
+        bool hover();
+        bool selected();
+        QString type();
+        QString icon_style();
 
-    void repolish();
+        void set_selected(bool selected);
+        void set_type(const QString& type);
+        void set_icon_style(const QString& style);
 
-Q_SIGNALS:
-    void clicked();
+        void set_icon_path(const QString& path);
+        void set_text(const QString& text);
 
-private:
-    QHBoxLayout* m_layout;
-    QFrame* m_left_border;
-    QLabel* m_icon_label;
-    QLabel* m_text_label;
-    QFrame* m_right_border;
+        void repolish();
 
-    bool m_hover;
-    bool m_selected;
-    QString m_type;
-    QString m_icon_style;
-    QString m_icon_path;
-};
+    Q_SIGNALS:
+        void clicked();
+
+    private:
+        QHBoxLayout* m_layout;
+        QFrame* m_left_border;
+        QLabel* m_icon_label;
+        QLabel* m_text_label;
+        QFrame* m_right_border;
+
+        bool m_hover;
+        bool m_selected;
+        QString m_type;
+        QString m_icon_style;
+        QString m_icon_path;
+    };
 }

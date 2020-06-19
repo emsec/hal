@@ -25,20 +25,22 @@
 
 #include "settings_widget.h"
 #include <QSpinBox>
-namespace hal{
-class spinbox_setting : public settings_widget
+
+namespace hal
 {
-    Q_OBJECT
+    class spinbox_setting : public settings_widget
+    {
+        Q_OBJECT
 
-public:
-    spinbox_setting(const QString& key, const QString& title, const int min, const int max, const QString& description, QWidget* parent = 0);
+    public:
+        spinbox_setting(const QString& key, const QString& title, const int min, const int max, const QString& description, QWidget* parent = 0);
 
-    virtual void load(const QVariant& value) Q_DECL_OVERRIDE;
-    virtual QVariant value() Q_DECL_OVERRIDE;
+        virtual void load(const QVariant& value) Q_DECL_OVERRIDE;
+        virtual QVariant value() Q_DECL_OVERRIDE;
 
-private:
-    QSpinBox* m_spinbox;
-    void on_spinbox_value_changed(int value);
+    private:
+        QSpinBox* m_spinbox;
+        void on_spinbox_value_changed(int value);
 
-};
+    };
 }

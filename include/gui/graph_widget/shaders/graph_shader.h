@@ -32,31 +32,33 @@
 #include <QMap>
 #include <QSet>
 #include <QVector>
-namespace hal{
-class graph_context;
 
-class graph_shader
+namespace hal
 {
-public:
-    struct shading
+    class graph_context;
+
+    class graph_shader
     {
-        QMap<u32, graphics_node::visuals> module_visuals;
-        QMap<u32, graphics_node::visuals> gate_visuals;
-        QMap<u32, graphics_net::visuals> net_visuals;
+    public:
+        struct shading
+        {
+            QMap<u32, graphics_node::visuals> module_visuals;
+            QMap<u32, graphics_node::visuals> gate_visuals;
+            QMap<u32, graphics_net::visuals> net_visuals;
+        };
+
+        explicit graph_shader(const graph_context* const context);
+        virtual ~graph_shader() = default;
+
+        virtual void add(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets) = 0;
+        virtual void remove(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets) = 0;
+        virtual void update() = 0;
+
+        const shading& get_shading();
+
+    protected:
+        const graph_context* const m_context;
+
+        shading m_shading;
     };
-
-    explicit graph_shader(const graph_context* const context);
-    virtual ~graph_shader() = default;
-
-    virtual void add(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets) = 0;
-    virtual void remove(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets) = 0;
-    virtual void update() = 0;
-
-    const shading& get_shading();
-
-protected:
-    const graph_context* const m_context;
-
-    shading m_shading;
-};
 }

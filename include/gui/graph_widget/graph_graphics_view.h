@@ -29,116 +29,118 @@
 
 #include <QGraphicsView>
 #include <QAction>
-namespace hal{
-class graphics_item;
-class graph_widget;
 
-namespace graph_widget_constants
+namespace hal
 {
-enum class grid_type;
-}
+    class graphics_item;
+    class graph_widget;
 
-class graph_graphics_view : public QGraphicsView
-{
-    Q_OBJECT
-
-public:
-    graph_graphics_view(graph_widget* parent);
-
-    //zooms into the mouse position
-    void gentle_zoom(const qreal factor);
-    //zooms into the center of the viewport
-    void viewport_center_zoom(const qreal factor);
-
-Q_SIGNALS:
-    void module_double_clicked(u32 id);
-
-private Q_SLOTS:
-    void conditional_update();
-    void handle_change_color_action();
-    void handle_isolation_view_action();
-    void handle_move_action(QAction* action);
-    void handle_move_new_action();
-    void handle_rename_action();
-    void adjust_min_scale();
-
-    void handle_fold_single_action();
-    void handle_fold_all_action();
-    void handle_unfold_single_action();
-    void handle_unfold_all_action();
-
-    void handle_select_outputs();
-    void handle_select_inputs();
-
-    void handle_global_setting_changed(void* sender, const QString& key, const QVariant& value);
-
-private:
-    void paintEvent(QPaintEvent* event) override;
-    void drawForeground(QPainter* painter, const QRectF& rect) override;
-    void mousePressEvent(QMouseEvent* event) override;
-    void mouseMoveEvent(QMouseEvent* event) override;
-    void mouseDoubleClickEvent(QMouseEvent* event) override;
-    void dragEnterEvent(QDragEnterEvent *event) override;
-    void dragLeaveEvent(QDragLeaveEvent *event) override;
-    void dragMoveEvent(QDragMoveEvent *event) override;
-    void dropEvent(QDropEvent *event) override;
-    void wheelEvent(QWheelEvent* event) override;
-    void keyPressEvent(QKeyEvent* event) override;
-    void keyReleaseEvent(QKeyEvent* event) override;
-    void resizeEvent(QResizeEvent* event) override;
-
-    void initialize_settings();
-
-    void show_context_menu(const QPoint& pos);
-
-    void update_matrix(const int delta);
-
-    void toggle_antialiasing();
-
-    bool item_draggable(graphics_item* item);
-
-    struct layouter_point
+    namespace graph_widget_constants
     {
-        int index;
-        qreal pos;
+    enum class grid_type;
+    }
+
+    class graph_graphics_view : public QGraphicsView
+    {
+        Q_OBJECT
+
+    public:
+        graph_graphics_view(graph_widget* parent);
+
+        //zooms into the mouse position
+        void gentle_zoom(const qreal factor);
+        //zooms into the center of the viewport
+        void viewport_center_zoom(const qreal factor);
+
+    Q_SIGNALS:
+        void module_double_clicked(u32 id);
+
+    private Q_SLOTS:
+        void conditional_update();
+        void handle_change_color_action();
+        void handle_isolation_view_action();
+        void handle_move_action(QAction* action);
+        void handle_move_new_action();
+        void handle_rename_action();
+        void adjust_min_scale();
+
+        void handle_fold_single_action();
+        void handle_fold_all_action();
+        void handle_unfold_single_action();
+        void handle_unfold_all_action();
+
+        void handle_select_outputs();
+        void handle_select_inputs();
+
+        void handle_global_setting_changed(void* sender, const QString& key, const QVariant& value);
+
+    private:
+        void paintEvent(QPaintEvent* event) override;
+        void drawForeground(QPainter* painter, const QRectF& rect) override;
+        void mousePressEvent(QMouseEvent* event) override;
+        void mouseMoveEvent(QMouseEvent* event) override;
+        void mouseDoubleClickEvent(QMouseEvent* event) override;
+        void dragEnterEvent(QDragEnterEvent *event) override;
+        void dragLeaveEvent(QDragLeaveEvent *event) override;
+        void dragMoveEvent(QDragMoveEvent *event) override;
+        void dropEvent(QDropEvent *event) override;
+        void wheelEvent(QWheelEvent* event) override;
+        void keyPressEvent(QKeyEvent* event) override;
+        void keyReleaseEvent(QKeyEvent* event) override;
+        void resizeEvent(QResizeEvent* event) override;
+
+        void initialize_settings();
+
+        void show_context_menu(const QPoint& pos);
+
+        void update_matrix(const int delta);
+
+        void toggle_antialiasing();
+
+        bool item_draggable(graphics_item* item);
+
+        struct layouter_point
+        {
+            int index;
+            qreal pos;
+        };
+        QVector<QPoint> closest_layouter_pos(const QPointF& scene_pos) const;
+        layouter_point closest_layouter_point(qreal scene_pos, int default_spacing, int min_index, QVector<qreal> sections) const;
+
+        #ifdef GUI_DEBUG_GRID
+        void debug_show_layouter_gridpos(const QPoint& mouse_pos);
+        void debug_draw_layouter_gridpos(QPainter* painter);
+        QPoint m_debug_gridpos = QPoint(0,0);
+        bool m_debug_gridpos_enable;
+        #endif
+
+        graph_widget* m_graph_widget;
+
+        graphics_item* m_item;
+
+        bool m_minimap_enabled;
+
+        bool m_grid_enabled;
+        bool m_grid_clusters_enabled;
+        graph_widget_constants::grid_type m_grid_type;
+
+        QPoint m_drag_mousedown_position;
+        QPoint m_drag_start_gridpos;
+        graphics_gate* m_drag_item;
+        QPoint m_drag_current_gridpos;
+        bool m_drag_current_modifier;
+        bool m_drop_allowed;
+
+        Qt::KeyboardModifier m_drag_modifier;
+
+        QPoint m_move_position;
+        Qt::KeyboardModifier m_move_modifier;
+
+        Qt::KeyboardModifier m_zoom_modifier;
+        qreal m_zoom_factor_base;
+        QPointF m_target_scene_pos;
+        QPointF m_target_viewport_pos;
+
+        qreal m_min_scale;
     };
-    QVector<QPoint> closest_layouter_pos(const QPointF& scene_pos) const;
-    layouter_point closest_layouter_point(qreal scene_pos, int default_spacing, int min_index, QVector<qreal> sections) const;
-
-    #ifdef GUI_DEBUG_GRID
-    void debug_show_layouter_gridpos(const QPoint& mouse_pos);
-    void debug_draw_layouter_gridpos(QPainter* painter);
-    QPoint m_debug_gridpos = QPoint(0,0);
-    bool m_debug_gridpos_enable;
-    #endif
-
-    graph_widget* m_graph_widget;
-
-    graphics_item* m_item;
-
-    bool m_minimap_enabled;
-
-    bool m_grid_enabled;
-    bool m_grid_clusters_enabled;
-    graph_widget_constants::grid_type m_grid_type;
-
-    QPoint m_drag_mousedown_position;
-    QPoint m_drag_start_gridpos;
-    graphics_gate* m_drag_item;
-    QPoint m_drag_current_gridpos;
-    bool m_drag_current_modifier;
-    bool m_drop_allowed;
-
-    Qt::KeyboardModifier m_drag_modifier;
-
-    QPoint m_move_position;
-    Qt::KeyboardModifier m_move_modifier;
-
-    Qt::KeyboardModifier m_zoom_modifier;
-    qreal m_zoom_factor_base;
-    QPointF target_scene_pos;
-    QPointF target_viewport_pos;
-
-    qreal m_min_scale;
-};
 }

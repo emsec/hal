@@ -36,31 +36,33 @@
 #include <string>
 #include <utility>
 #include <vector>
-namespace hal{
-class hal_extended_cli_dialog : public QDialog
+
+namespace hal
 {
-    Q_OBJECT
+    class hal_extended_cli_dialog : public QDialog
+    {
+        Q_OBJECT
 
-public:
-    hal_extended_cli_dialog(QString plugin_name, QWidget* parent = 0);
+    public:
+        hal_extended_cli_dialog(QString plugin_name, QWidget* parent = 0);
 
-    ProgramArguments get_args();
+        ProgramArguments get_args();
 
-private Q_SLOTS:
-    void parse_arguments();
+    private Q_SLOTS:
+        void parse_arguments();
 
-private:
-    void setup(std::string plugin_name);
-    QVBoxLayout* m_content_layout;
-    QFormLayout* m_form_layout;
-    QLabel* m_status_message;
-    QDialogButtonBox* m_button_box;
+    private:
+        void setup(std::string plugin_name);
+        QVBoxLayout* m_content_layout;
+        QFormLayout* m_form_layout;
+        QLabel* m_status_message;
+        QDialogButtonBox* m_button_box;
 
-    ProgramArguments m_args;
-    std::shared_ptr<CLIPluginInterface> m_plugin;
+        ProgramArguments m_args;
+        std::shared_ptr<CLIPluginInterface> m_plugin;
 
-    std::vector<std::pair<QPushButton*, QLineEdit*>> m_vector;
+        std::vector<std::pair<QPushButton*, QLineEdit*>> m_vector;
 
-    char** m_argv;
-};
+        char** m_argv;
+    };
 }

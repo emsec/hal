@@ -24,14 +24,16 @@
 #pragma once
 
 #include <QSplitter>
-namespace hal{
-class splitter : public QSplitter
+
+namespace hal
 {
-    Q_OBJECT
+    class splitter : public QSplitter
+    {
+        Q_OBJECT
 
-public:
-    explicit splitter(Qt::Orientation orientation, QWidget* parent = 0);
+    public:
+        explicit splitter(Qt::Orientation orientation, QWidget* parent = 0);
 
-    bool unused();
-};
+        bool unused();
+    };
 }

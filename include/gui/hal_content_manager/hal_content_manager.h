@@ -28,58 +28,60 @@
 #include <QStringList>
 
 #include "netlist_watcher/netlist_watcher.h"
-namespace hal{
-class main_window;
-class content_widget;
-class python_editor;
-class graph_tab_widget;
-class old_graph_navigation_widget;
-class context_manager_widget;
-class netlist_watcher;
 
-class hal_content_manager : public QObject
+namespace hal
 {
-    Q_OBJECT
+    class main_window;
+    class content_widget;
+    class python_editor;
+    class graph_tab_widget;
+    class old_graph_navigation_widget;
+    class context_manager_widget;
+    class netlist_watcher;
 
-public:
-    explicit hal_content_manager(main_window* parent);
+    class hal_content_manager : public QObject
+    {
+        Q_OBJECT
 
-    ~hal_content_manager();
+    public:
+        explicit hal_content_manager(main_window* parent);
 
-    python_editor* get_python_editor_widget();
+        ~hal_content_manager();
 
-    graph_tab_widget* get_graph_tab_widget();
+        python_editor* get_python_editor_widget();
 
-    context_manager_widget* get_context_manager_widget();
+        graph_tab_widget* get_graph_tab_widget();
 
-    void hack_delete_content();
+        context_manager_widget* get_context_manager_widget();
 
-Q_SIGNALS:
-    void save_triggered();
+        void hack_delete_content();
 
-public Q_SLOTS:
+    Q_SIGNALS:
+        void save_triggered();
 
-    void handle_open_document(const QString& file_name);
+    public Q_SLOTS:
 
-    void handle_close_document();
+        void handle_open_document(const QString& file_name);
 
-    void handle_filsystem_doc_changed(const QString& file_name);
+        void handle_close_document();
 
-    void handle_save_triggered();
+        void handle_filsystem_doc_changed(const QString& file_name);
 
-private:
-    main_window* m_main_window;
+        void handle_save_triggered();
 
-    QString m_window_title;
+    private:
+        main_window* m_main_window;
 
-    QList<content_widget*> m_content;
+        QString m_window_title;
 
-    netlist_watcher* m_netlist_watcher;
+        QList<content_widget*> m_content;
 
-    python_editor* m_python_widget;
+        netlist_watcher* m_netlist_watcher;
 
-    graph_tab_widget* m_graph_tab_wid;
+        python_editor* m_python_widget;
 
-    context_manager_widget* m_context_manager_wid;
-};
+        graph_tab_widget* m_graph_tab_wid;
+
+        context_manager_widget* m_context_manager_wid;
+    };
 }

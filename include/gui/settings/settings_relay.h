@@ -26,26 +26,28 @@
 #include <QObject>
 #include <QPair>
 #include <QVector>
-namespace hal{
-class settings_relay : public QObject
+
+namespace hal
 {
-    Q_OBJECT
+    class settings_relay : public QObject
+    {
+        Q_OBJECT
 
-public:
-    explicit settings_relay(QObject* parent = nullptr);
-    // TODO do we need a sender registry?
-    // void register_sender(void* sender, QString name);
-    // void remove_sender(void* sender);
+    public:
+        explicit settings_relay(QObject* parent = nullptr);
+        // TODO do we need a sender registry?
+        // void register_sender(void* sender, QString name);
+        // void remove_sender(void* sender);
 
-    void relay_setting_changed(void* sender, const QString& key, const QVariant& val);
+        void relay_setting_changed(void* sender, const QString& key, const QVariant& val);
 
-Q_SIGNALS:
-    void setting_changed(void* sender, const QString& key, const QVariant& val);
+    Q_SIGNALS:
+        void setting_changed(void* sender, const QString& key, const QVariant& val);
 
-public Q_SLOTS:
-    void debug(void* sender, const QString& key, const QVariant& val);
+    public Q_SLOTS:
+        void debug(void* sender, const QString& key, const QVariant& val);
 
-// private:
-//     QVector<QPair<void*, QString>> m_sender_register;
-};
+    // private:
+    //     QVector<QPair<void*, QString>> m_sender_register;
+    };
 }

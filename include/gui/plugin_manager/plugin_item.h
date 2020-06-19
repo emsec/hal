@@ -27,22 +27,24 @@
 #include <QString>
 #include <QVector>
 #include <type_traits>
-namespace hal{
-class plugin_item
-{
-public:
-    enum class column_t
-    {
-        name = 0,
-        path = 1
-    };
 
-    using column_utype = std::underlying_type<column_t>::type;
-    static QVector<QPair<QString, column_t>> get_column_description();
-    explicit plugin_item();
-    explicit plugin_item(QString plugin_name, QString plugin_path);
-    QString name;
-    QString path;
-    bool is_valid();
-};
+namespace hal
+{
+    class plugin_item
+    {
+    public:
+        enum class column_t
+        {
+            name = 0,
+            path = 1
+        };
+
+        using column_utype = std::underlying_type<column_t>::type;
+        static QVector<QPair<QString, column_t>> get_column_description();
+        explicit plugin_item();
+        explicit plugin_item(QString plugin_name, QString plugin_path);
+        QString name;
+        QString path;
+        bool is_valid();
+    };
 }

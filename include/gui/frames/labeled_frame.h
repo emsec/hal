@@ -29,23 +29,23 @@ class QHBoxLayout;
 class QLabel;
 class QVBoxLayout;
 
-namespace hal{
-
-class labeled_frame : public QFrame
+namespace hal
 {
-    Q_OBJECT
+    class labeled_frame : public QFrame
+    {
+        Q_OBJECT
 
-public:
-    labeled_frame(QWidget* parent = nullptr);
+    public:
+        labeled_frame(QWidget* parent = nullptr);
 
-    void add_content(QWidget* content);
+        void add_content(QWidget* content);
 
-protected:
-    QVBoxLayout* m_layout;
-    QFrame* m_header;
-    QHBoxLayout* m_header_layout;
-    QFrame* m_left_spacer;
-    QLabel* m_label;
-    QFrame* m_right_spacer;
-};
+    protected:
+        QVBoxLayout* m_layout;
+        QFrame* m_header;
+        QHBoxLayout* m_header_layout;
+        QFrame* m_left_spacer;
+        QLabel* m_label;
+        QFrame* m_right_spacer;
+    };
 }

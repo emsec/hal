@@ -27,45 +27,46 @@
 
 class QTextDocument;
 
-namespace hal {
-
-class code_editor;
-class minimap_scrollbar;
-
-class code_editor_minimap : public QWidget
+namespace hal
 {
-    Q_OBJECT
 
-public:
-    explicit code_editor_minimap(code_editor* editor);
+    class code_editor;
+    class minimap_scrollbar;
 
-    minimap_scrollbar* scrollbar();
-    QTextDocument* document();
+    class code_editor_minimap : public QWidget
+    {
+        Q_OBJECT
 
-    void adjust_slider_height(int viewport_height);
-    void adjust_slider_height(qreal ratio);
-    void adjust_slider_height(int first_visible_block, int last_visible_block);
+    public:
+        explicit code_editor_minimap(code_editor* editor);
 
-    void repolish();
+        minimap_scrollbar* scrollbar();
+        QTextDocument* document();
 
-public Q_SLOTS:
-    void handle_document_size_changed(const QSizeF& new_size);
-    void handle_contents_change(int position, int chars_removed, int chars_added);
+        void adjust_slider_height(int viewport_height);
+        void adjust_slider_height(qreal ratio);
+        void adjust_slider_height(int first_visible_block, int last_visible_block);
 
-protected:
-    void paintEvent(QPaintEvent* event) Q_DECL_OVERRIDE;
-    void resizeEvent(QResizeEvent* event) Q_DECL_OVERRIDE;
-    void mousePressEvent(QMouseEvent* event) Q_DECL_OVERRIDE;
-    void wheelEvent(QWheelEvent* event) Q_DECL_OVERRIDE;
+        void repolish();
 
-private:
-    void resize_scrollbar();
+    public Q_SLOTS:
+        void handle_document_size_changed(const QSizeF& new_size);
+        void handle_contents_change(int position, int chars_removed, int chars_added);
 
-    code_editor* m_editor;
-    QTextDocument* m_document;
-    minimap_scrollbar* m_scrollbar;
+    protected:
+        void paintEvent(QPaintEvent* event) Q_DECL_OVERRIDE;
+        void resizeEvent(QResizeEvent* event) Q_DECL_OVERRIDE;
+        void mousePressEvent(QMouseEvent* event) Q_DECL_OVERRIDE;
+        void wheelEvent(QWheelEvent* event) Q_DECL_OVERRIDE;
 
-    int m_document_height;
-    qreal m_offset;
-};
+    private:
+        void resize_scrollbar();
+
+        code_editor* m_editor;
+        QTextDocument* m_document;
+        minimap_scrollbar* m_scrollbar;
+
+        int m_document_height;
+        qreal m_offset;
+    };
 }

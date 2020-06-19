@@ -27,35 +27,37 @@
 
 #include <QList>
 #include <QObject>
-namespace hal{
-class dock_bar;
-class splitter;
-class content_frame;
-class content_widget;
 
-class splitter_anchor : public QObject, public hal_content_anchor
+namespace hal
 {
-    Q_OBJECT
+    class dock_bar;
+    class splitter;
+    class content_frame;
+    class content_widget;
 
-public:
-    splitter_anchor(dock_bar* dock_bar, splitter* splitter, QObject* parent = 0);
+    class splitter_anchor : public QObject, public hal_content_anchor
+    {
+        Q_OBJECT
 
-    virtual void add(content_widget* widget, int index = -1) override;
-    virtual void remove(content_widget* widget) override;
-    virtual void detach(content_widget* widget) override;
-    virtual void reattach(content_widget* widget) override;
-    virtual void open(content_widget* widget) override;
-    virtual void close(content_widget* widget) override;
+    public:
+        splitter_anchor(dock_bar* dock_bar, splitter* splitter, QObject* parent = 0);
 
-    int count();
-    void remove_content();
+        virtual void add(content_widget* widget, int index = -1) override;
+        virtual void remove(content_widget* widget) override;
+        virtual void detach(content_widget* widget) override;
+        virtual void reattach(content_widget* widget) override;
+        virtual void open(content_widget* widget) override;
+        virtual void close(content_widget* widget) override;
 
-Q_SIGNALS:
-    void content_changed();
+        int count();
+        void remove_content();
 
-private:
-    dock_bar* m_dock_bar;
-    splitter* m_splitter;
-    QList<content_frame*> m_detached_frames;
-};
+    Q_SIGNALS:
+        void content_changed();
+
+    private:
+        dock_bar* m_dock_bar;
+        splitter* m_splitter;
+        QList<content_frame*> m_detached_frames;
+    };
 }
