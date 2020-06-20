@@ -57,7 +57,7 @@ namespace hal
         {
             if (y < m_y_values.at(i))
             {
-                drop_marker* new_marker = m_list.at(i).second;
+                DropMarker* new_marker = m_list.at(i).second;
 
                 if (m_active_marker == new_marker)
                     return;
@@ -102,7 +102,7 @@ namespace hal
         connect(item, &scheduled_plugin_item::clicked, this, &scheduled_plugin_item_area::handle_item_clicked);
         connect(item, &scheduled_plugin_item::drag_started, this, &scheduled_plugin_item_area::handle_item_drag_started);
         connect(item, &scheduled_plugin_item::removed, this, &scheduled_plugin_item_area::handle_item_removed);
-        drop_marker* marker = new drop_marker(Qt::Vertical);
+        DropMarker* marker = new DropMarker(Qt::Vertical);
 
         int drop_index = -1;
         if (m_active_marker)
@@ -111,7 +111,7 @@ namespace hal
             {
                 if (m_list.at(i).second == m_active_marker)
                 {
-                    m_list.insert(i, QPair<scheduled_plugin_item*, drop_marker*>(item, marker));
+                    m_list.insert(i, QPair<scheduled_plugin_item*, DropMarker*>(item, marker));
                     //                m_layout->insertWidget(i+1, item);
                     //                m_layout->insertWidget(i+1, marker); //DOESNT WORK, FIX
 
@@ -134,7 +134,7 @@ namespace hal
         }
         else
         {
-            m_list.append(QPair<scheduled_plugin_item*, drop_marker*>(item, marker));
+            m_list.append(QPair<scheduled_plugin_item*, DropMarker*>(item, marker));
             m_layout->addWidget(marker);
             m_layout->addWidget(item);
             drop_index = m_list.length() - 1;
@@ -169,7 +169,7 @@ namespace hal
     {
         m_internal_drag_active = true;
         m_drag_index           = 0;
-        drop_marker* marker    = nullptr;
+        DropMarker* marker    = nullptr;
 
         for (auto& pair : m_list)
         {

@@ -16,7 +16,7 @@ namespace hal
         setAttribute(Qt::WA_ShowWithoutActivating);
         //setAttribute(Qt::WA_TranslucentBackground);
         setFixedSize(280, 130);
-        //setGraphicsEffect(new shadow_effect(this));
+        //setGraphicsEffect(new ShadowEffect(this));
 
         QGraphicsOpacityEffect* effect = new QGraphicsOpacityEffect(this);
         effect->setOpacity(0);

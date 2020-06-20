@@ -31,7 +31,7 @@ namespace hal
 {
     class Net;
 
-    class graphics_net : public graphics_item
+    class GraphicsNet : public GraphicsItem
     {
     public:
         struct visuals
@@ -46,7 +46,7 @@ namespace hal
 
         static void load_settings();
 
-        graphics_net(const std::shared_ptr<const Net> n);
+        GraphicsNet(const std::shared_ptr<const Net> n);
 
         QRectF boundingRect() const override;
         QPainterPath shape() const override;

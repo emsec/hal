@@ -10,13 +10,13 @@
 
 namespace hal
 {
-    tab_widget::tab_widget(QWidget* parent)
-        : hal_widget(parent), m_vertical_layout(new QVBoxLayout()), m_horizontal_layout(new QHBoxLayout()), m_dock_bar(new dock_bar(Qt::Horizontal, button_orientation::horizontal, this)),
+    TabWidget::TabWidget(QWidget* parent)
+        : hal_widget(parent), m_vertical_layout(new QVBoxLayout()), m_horizontal_layout(new QHBoxLayout()), m_dock_bar(new DockBar(Qt::Horizontal, button_orientation::horizontal, this)),
           m_left_toolbar(new toolbar()), m_right_toolbar(new toolbar()), m_current_widget(nullptr), m_action_detach(new QAction(this))
     {
-        connect(m_action_detach, &QAction::triggered, this, &tab_widget::detach_current_widget);
-        connect(content_drag_relay::instance(), &content_drag_relay::drag_start, this, &tab_widget::handle_drag_start);
-        connect(content_drag_relay::instance(), &content_drag_relay::drag_end, this, &tab_widget::handle_drag_end);
+        connect(m_action_detach, &QAction::triggered, this, &TabWidget::detach_current_widget);
+        connect(ContentDragRelay::instance(), &ContentDragRelay::drag_start, this, &TabWidget::handle_drag_start);
+        connect(ContentDragRelay::instance(), &ContentDragRelay::drag_end, this, &TabWidget::handle_drag_end);
 
         setFocusPolicy(Qt::FocusPolicy::StrongFocus);
 
@@ -55,7 +55,7 @@ namespace hal
         hide();
     }
 
-    void tab_widget::add(content_widget* widget, int index)
+    void TabWidget::add(ContentWidget* widget, int index)
     {
         widget->set_anchor(this);
         m_dock_bar->add_button(widget, index);
@@ -64,7 +64,7 @@ namespace hal
         show();
     }
 
-    void tab_widget::remove(content_widget* widget)
+    void TabWidget::remove(ContentWidget* widget)
     {
         int index = m_dock_bar->index(widget);
         if (index != -1)
@@ -82,13 +82,13 @@ namespace hal
         }
     }
 
-    void tab_widget::detach(content_widget* widget)
+    void TabWidget::detach(ContentWidget* widget)
     {
         int index = m_dock_bar->index(widget);
         if (index != -1)
         {
             m_dock_bar->detach_button(widget);
-            content_frame* frame = new content_frame(widget, false, nullptr);
+            ContentFrame* frame = new ContentFrame(widget, false, nullptr);
             m_detached_frames.append(frame);
             frame->setGeometry(QStyle::alignedRect(Qt::LeftToRight, Qt::AlignCenter, frame->size(), qApp->desktop()->availableGeometry()));
             frame->show();
@@ -101,7 +101,7 @@ namespace hal
         }
     }
 
-    void tab_widget::reattach(content_widget* widget)
+    void TabWidget::reattach(ContentWidget* widget)
     {
         int index = m_dock_bar->index(widget);
         if (index != -1)
@@ -111,7 +111,7 @@ namespace hal
             m_dock_bar->reattach_button(widget);
             show();
 
-            for (content_frame* frame : m_detached_frames)
+            for (ContentFrame* frame : m_detached_frames)
             {
                 if (frame->content() == widget)
                     m_detached_frames.removeOne(frame);
@@ -119,7 +119,7 @@ namespace hal
         }
     }
 
-    void tab_widget::open(content_widget* widget)
+    void TabWidget::open(ContentWidget* widget)
     {
         int index = m_dock_bar->index(widget);
         if (index == -1)
@@ -154,16 +154,16 @@ namespace hal
         }
     }
 
-    void tab_widget::close(content_widget* widget)
+    void TabWidget::close(ContentWidget* widget)
     {
         Q_UNUSED(widget)
 
         m_dock_bar->check_button(m_current_widget);
     }
 
-    void tab_widget::handle_no_current_widget(int index)
+    void TabWidget::handle_no_current_widget(int index)
     {
-        content_widget* widget = m_dock_bar->next_available_widget(index);
+        ContentWidget* widget = m_dock_bar->next_available_widget(index);
         if (widget)
             open(widget);
         else
@@ -174,29 +174,29 @@ namespace hal
     }
 
     //does not delete the widgets, just removes
-    void tab_widget::remove_content()
+    void TabWidget::remove_content()
     {
         for (int i = m_dock_bar->count() - 1; i >= 0; i--)
         {
-            content_widget* widget = m_dock_bar->widget_at(i);
+            ContentWidget* widget = m_dock_bar->widget_at(i);
             remove(widget);
         }
 
         m_dock_bar->update();
     }
 
-    void tab_widget::detach_current_widget()
+    void TabWidget::detach_current_widget()
     {
         if (m_current_widget)
             detach(m_current_widget);
     }
 
-    void tab_widget::handle_drag_start()
+    void TabWidget::handle_drag_start()
     {
         show();
     }
 
-    void tab_widget::handle_drag_end()
+    void TabWidget::handle_drag_end()
     {
         if (m_dock_bar->unused())
             hide();

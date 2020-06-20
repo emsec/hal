@@ -31,7 +31,7 @@
 namespace hal
 {
     main_settings_widget::main_settings_widget(QWidget* parent)
-        : QWidget(parent), m_layout(new QHBoxLayout()), m_expanding_list_widget(new expanding_list_widget()), m_vertical_layout(new QVBoxLayout()), m_scrollbar(new QScrollBar()),
+        : QWidget(parent), m_layout(new QHBoxLayout()), m_expanding_list_widget(new ExpandingListWidget()), m_vertical_layout(new QVBoxLayout()), m_scrollbar(new QScrollBar()),
           m_searchbar_container(new QFrame()), m_searchbar_layout(new QHBoxLayout()), m_searchbar(new searchbar()), m_scroll_area(new QScrollArea()), m_content(new QFrame()),
           m_content_layout(new QHBoxLayout()), m_settings_container(new QFrame()), m_container_layout(new QVBoxLayout()), m_button_layout(new QHBoxLayout()), m_restore_defaults(new QPushButton()),
           m_cancel(new QPushButton()), m_ok(new QPushButton())
@@ -105,7 +105,7 @@ namespace hal
         connect(m_cancel, &QPushButton::clicked, this, &main_settings_widget::handle_cancel_clicked);
         connect(m_ok, &QPushButton::clicked, this, &main_settings_widget::handle_ok_clicked);
 
-        connect(m_expanding_list_widget, &expanding_list_widget::button_selected, this, &main_settings_widget::handle_button_selected);
+        connect(m_expanding_list_widget, &ExpandingListWidget::button_selected, this, &main_settings_widget::handle_button_selected);
         connect(m_searchbar, &searchbar::text_edited, this, &main_settings_widget::handle_text_edited);
 
     #ifndef ENABLE_OK_BUTTON
@@ -258,7 +258,7 @@ namespace hal
 
     void main_settings_widget::make_section(const QString& label, const QString& name, const QString& icon_path)
     {
-        expanding_list_button* btn = new expanding_list_button();
+        ExpandingListButton* btn = new ExpandingListButton();
         btn->setObjectName(name);
         btn->set_text(label);
         btn->set_icon_path(icon_path);
@@ -392,7 +392,7 @@ namespace hal
         Q_EMIT close();
     }
 
-    void main_settings_widget::handle_button_selected(expanding_list_button* button)
+    void main_settings_widget::handle_button_selected(ExpandingListButton* button)
     {
         m_searchbar->clear();
         hide_all_settings();

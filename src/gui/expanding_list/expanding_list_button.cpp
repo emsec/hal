@@ -9,7 +9,7 @@
 
 namespace hal
 {
-    expanding_list_button::expanding_list_button(QWidget* parent)
+    ExpandingListButton::ExpandingListButton(QWidget* parent)
         : QFrame(parent), m_layout(new QHBoxLayout()), m_left_border(new QFrame()), m_icon_label(new QLabel()), m_text_label(new QLabel()), m_right_border(new QFrame()), m_hover(false), m_selected(false),
           m_type(""), m_icon_style(""), m_icon_path("")
     {
@@ -33,7 +33,7 @@ namespace hal
         m_layout->addWidget(m_right_border);
     }
 
-    void expanding_list_button::enterEvent(QEvent* event)
+    void ExpandingListButton::enterEvent(QEvent* event)
     {
         Q_UNUSED(event)
 
@@ -41,7 +41,7 @@ namespace hal
         repolish();
     }
 
-    void expanding_list_button::leaveEvent(QEvent* event)
+    void ExpandingListButton::leaveEvent(QEvent* event)
     {
         Q_UNUSED(event)
 
@@ -49,7 +49,7 @@ namespace hal
         repolish();
     }
 
-    void expanding_list_button::mousePressEvent(QMouseEvent* event)
+    void ExpandingListButton::mousePressEvent(QMouseEvent* event)
     {
         Q_UNUSED(event)
 
@@ -57,27 +57,27 @@ namespace hal
         event->accept();
     }
 
-    bool expanding_list_button::hover()
+    bool ExpandingListButton::hover()
     {
         return m_hover;
     }
 
-    bool expanding_list_button::selected()
+    bool ExpandingListButton::selected()
     {
         return m_selected;
     }
 
-    QString expanding_list_button::type()
+    QString ExpandingListButton::type()
     {
         return m_type;
     }
 
-    QString expanding_list_button::icon_style()
+    QString ExpandingListButton::icon_style()
     {
         return m_icon_style;
     }
 
-    void expanding_list_button::set_selected(bool selected)
+    void ExpandingListButton::set_selected(bool selected)
     {
         if (m_selected == selected)
             return;
@@ -86,7 +86,7 @@ namespace hal
         repolish();
     }
 
-    void expanding_list_button::set_type(const QString& type)
+    void ExpandingListButton::set_type(const QString& type)
     {
         if (m_type == type)
             return;
@@ -95,7 +95,7 @@ namespace hal
         repolish();
     }
 
-    void expanding_list_button::set_icon_style(const QString& style)
+    void ExpandingListButton::set_icon_style(const QString& style)
     {
         if (m_icon_style == style)
             return;
@@ -104,7 +104,7 @@ namespace hal
         repolish();
     }
 
-    void expanding_list_button::set_icon_path(const QString& path)
+    void ExpandingListButton::set_icon_path(const QString& path)
     {
         if (m_icon_path == path)
             return;
@@ -113,12 +113,12 @@ namespace hal
         repolish();
     }
 
-    void expanding_list_button::set_text(const QString& text)
+    void ExpandingListButton::set_text(const QString& text)
     {
         m_text_label->setText(text);
     }
 
-    void expanding_list_button::repolish()
+    void ExpandingListButton::repolish()
     {
         QStyle* s = style();
 

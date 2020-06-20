@@ -196,20 +196,20 @@ namespace hal
 
         void debug_update()
         {
-            graphics_item::load_settings();
+            GraphicsItem::load_settings();
 
-            standard_graphics_module::load_settings();
+            StandardGraphicsModule::load_settings();
 
-            standard_graphics_gate::load_settings();
+            StandardGraphicsGate::load_settings();
 
-            graphics_net::load_settings();
-            standard_graphics_net::load_settings();
-            separated_graphics_net::load_settings();
-            arrow_separated_net::load_settings();
-            circle_separated_net::load_settings();
-            labeled_separated_net::load_settings();
+            GraphicsNet::load_settings();
+            StandardGraphicsNet::load_settings();
+            SeparatedGraphicsNet::load_settings();
+            ArrowSeparatedNet::load_settings();
+            CircleSeparatedNet::load_settings();
+            LabeledSeparatedNet::load_settings();
 
-            node_drag_shadow::load_settings();
+            NodeDragShadow::load_settings();
         }
 
     } // namespace style

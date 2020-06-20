@@ -4,7 +4,7 @@
 
 namespace hal
 {
-    vhdl_syntax_highlighter::vhdl_syntax_highlighter(QTextDocument* parent) : QSyntaxHighlighter(parent)
+    VhdlSyntaxHighlighter::VhdlSyntaxHighlighter(QTextDocument* parent) : QSyntaxHighlighter(parent)
     {
         //        m_pattern_options = QRegularExpression::CaseInsensitiveOption | QRegularExpression::MultilineOption;
         //        m_match_type = QRegularExpression::NormalMatch;
@@ -129,37 +129,37 @@ namespace hal
                                           "severity|signal|shared|sla|sll|sra|srl|subtype|then|to|transport|type|unaffected|units|until|use|variable|wait|when|while|with|xnor|xor)\\b|=>|<=|:=))",
                                           QRegularExpression::CaseInsensitiveOption);
         rule.pattern.optimize();
-        rule.format = vhdl_qss_adapter::instance()->m_keyword_format;
+        rule.format = VhdlQssAdapter::instance()->m_keyword_format;
         m_highlighting_rules.append(rule);
 
         rule.pattern = QRegularExpression("(?<match>\\b[a-h,j-z]s\\b|\\bns\\b|rising_edge|falling_edge|TRUE|true|FALSE|false)");
         rule.pattern.optimize();
-        rule.format = vhdl_qss_adapter::instance()->m_type_format;
+        rule.format = VhdlQssAdapter::instance()->m_type_format;
         m_highlighting_rules.append(rule);
 
         rule.pattern = QRegularExpression("(\\:\\s|in\\s|out\\s)(?<match>\\w*)(\\s?\\;|\\s:=|\\s\\()");
         rule.pattern.optimize();
-        rule.format = vhdl_qss_adapter::instance()->m_type_format;
+        rule.format = VhdlQssAdapter::instance()->m_type_format;
         m_highlighting_rules.append(rule);
 
         rule.pattern = QRegularExpression("(\\:\\s+)(?<match>\\b.+\\b)(\\s*)$");
         rule.pattern.optimize();
-        rule.format = vhdl_qss_adapter::instance()->m_keyword_format;
+        rule.format = VhdlQssAdapter::instance()->m_keyword_format;
         m_highlighting_rules.append(rule);
 
         rule.pattern = QRegularExpression("(?<match>'.+'|\\b'?\\d+'?\\b)");
         rule.pattern.optimize();
-        rule.format = vhdl_qss_adapter::instance()->m_number_format;
+        rule.format = VhdlQssAdapter::instance()->m_number_format;
         m_highlighting_rules.append(rule);
 
         rule.pattern = QRegularExpression("(?<match>\"\\D.*\")");
         rule.pattern.optimize();
-        rule.format = vhdl_qss_adapter::instance()->m_string_format;
+        rule.format = VhdlQssAdapter::instance()->m_string_format;
         m_highlighting_rules.append(rule);
 
         rule.pattern = QRegularExpression("(?<match>\\bX\".*\")");
         rule.pattern.optimize();
-        rule.format = vhdl_qss_adapter::instance()->m_number_format;
+        rule.format = VhdlQssAdapter::instance()->m_number_format;
         m_highlighting_rules.append(rule);
 
         m_single_line_comment_expression = QRegularExpression("(?<match>--[^\n]*)");
@@ -167,7 +167,7 @@ namespace hal
         m_comment_end_expression         = QRegularExpression("(\\*/)");
     }
 
-    void vhdl_syntax_highlighter::highlightBlock(const QString& text)
+    void VhdlSyntaxHighlighter::highlightBlock(const QString& text)
     {
         //this->run_current_state(text);
         for (const highlighting_rule& rule : m_highlighting_rules)
@@ -188,7 +188,7 @@ namespace hal
             QRegularExpressionMatch match = it.next();
             int index                     = match.capturedStart("match");
             int length                    = match.capturedLength("match");
-            setFormat(index, length, vhdl_qss_adapter::instance()->m_comment_format);
+            setFormat(index, length, VhdlQssAdapter::instance()->m_comment_format);
         }
 
         setCurrentBlockState(0);
@@ -221,7 +221,7 @@ namespace hal
             {
                 comment_length = end_index - start_index + match.capturedLength(0);
             }
-            setFormat(start_index, comment_length, vhdl_qss_adapter::instance()->m_comment_format);
+            setFormat(start_index, comment_length, VhdlQssAdapter::instance()->m_comment_format);
             match = m_comment_start_expression.match(text, start_index + comment_length);
             if (match.hasMatch())
                 start_index = match.capturedStart(0);
@@ -231,7 +231,7 @@ namespace hal
     }
 }
 
-//vhdl_syntax_highlighter::highlighting_rule vhdl_syntax_highlighter::make_rule(QString expression,
+//VhdlSyntaxHighlighter::highlighting_rule VhdlSyntaxHighlighter::make_rule(QString expression,
 //                                                                              QStringList list, QString state)
 //{
 //        highlighting_rule rule;
@@ -242,7 +242,7 @@ namespace hal
 //        return rule;
 //}
 //
-//void vhdl_syntax_highlighter::run_current_state(const QString &text, int offset)
+//void VhdlSyntaxHighlighter::run_current_state(const QString &text, int offset)
 //{
 //        if (!m_rules.contains(m_current_state)) {
 //                log_error("Current state not found in syntax highlighter!\n");

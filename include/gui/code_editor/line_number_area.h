@@ -27,16 +27,16 @@
 
 namespace hal
 {
-    class code_editor;
+    class CodeEditor;
 
-    class line_number_area : public QWidget
+    class LineNumberArea : public QWidget
     {
         Q_OBJECT
         Q_PROPERTY(int left_offset READ left_offset WRITE set_left_offset)
         Q_PROPERTY(int right_offset READ right_offset WRITE set_right_offset)
 
     public:
-        explicit line_number_area(code_editor* editor);
+        explicit LineNumberArea(CodeEditor* editor);
 
         int left_offset() const;
         int right_offset() const;
@@ -51,7 +51,7 @@ namespace hal
         void wheelEvent(QWheelEvent* event) Q_DECL_OVERRIDE;
 
     private:
-        code_editor* m_editor;
+        CodeEditor* m_editor;
 
         int m_left_offset;
         int m_right_offset;

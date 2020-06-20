@@ -11,7 +11,7 @@
 
 namespace hal
 {
-    plugin_manager_widget::plugin_manager_widget(QWidget* parent) : content_widget("plugins", parent)
+    plugin_manager_widget::plugin_manager_widget(QWidget* parent) : ContentWidget("plugins", parent)
     {
         m_content_layout->addWidget(&m_table_view);
         m_table_view.setSelectionBehavior(QAbstractItemView::SelectRows);

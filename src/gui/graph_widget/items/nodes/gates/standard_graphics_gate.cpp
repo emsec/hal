@@ -14,41 +14,41 @@
 namespace hal{
 static const qreal baseline = 1;
 
-qreal standard_graphics_gate::s_alpha;
+qreal StandardGraphicsGate::s_alpha;
 
-QPen standard_graphics_gate::s_pen;
+QPen StandardGraphicsGate::s_pen;
 
-QColor standard_graphics_gate::s_text_color;
+QColor StandardGraphicsGate::s_text_color;
 
-QFont standard_graphics_gate::s_name_font;
-QFont standard_graphics_gate::s_type_font;
-QFont standard_graphics_gate::s_pin_font;
+QFont StandardGraphicsGate::s_name_font;
+QFont StandardGraphicsGate::s_type_font;
+QFont StandardGraphicsGate::s_pin_font;
 
-qreal standard_graphics_gate::s_name_font_height;
-qreal standard_graphics_gate::s_type_font_height;
+qreal StandardGraphicsGate::s_name_font_height;
+qreal StandardGraphicsGate::s_type_font_height;
 
-qreal standard_graphics_gate::s_color_bar_height = 30;
+qreal StandardGraphicsGate::s_color_bar_height = 30;
 
-qreal standard_graphics_gate::s_pin_inner_horizontal_spacing = 12;
-qreal standard_graphics_gate::s_pin_outer_horizontal_spacing = 2.4;
+qreal StandardGraphicsGate::s_pin_inner_horizontal_spacing = 12;
+qreal StandardGraphicsGate::s_pin_outer_horizontal_spacing = 2.4;
 
-qreal standard_graphics_gate::s_pin_inner_vertical_spacing = 1.2;
-qreal standard_graphics_gate::s_pin_outer_vertical_spacing = 0.6;
-qreal standard_graphics_gate::s_pin_upper_vertical_spacing = 2;
-qreal standard_graphics_gate::s_pin_lower_vertical_spacing = 1.8;
+qreal StandardGraphicsGate::s_pin_inner_vertical_spacing = 1.2;
+qreal StandardGraphicsGate::s_pin_outer_vertical_spacing = 0.6;
+qreal StandardGraphicsGate::s_pin_upper_vertical_spacing = 2;
+qreal StandardGraphicsGate::s_pin_lower_vertical_spacing = 1.8;
 
-qreal standard_graphics_gate::s_pin_font_height;
-qreal standard_graphics_gate::s_pin_font_ascent;
-qreal standard_graphics_gate::s_pin_font_descent;
-qreal standard_graphics_gate::s_pin_font_baseline;
+qreal StandardGraphicsGate::s_pin_font_height;
+qreal StandardGraphicsGate::s_pin_font_ascent;
+qreal StandardGraphicsGate::s_pin_font_descent;
+qreal StandardGraphicsGate::s_pin_font_baseline;
 
-qreal standard_graphics_gate::s_inner_name_type_spacing = 1.2;
-qreal standard_graphics_gate::s_outer_name_type_spacing = 3;
+qreal StandardGraphicsGate::s_inner_name_type_spacing = 1.2;
+qreal StandardGraphicsGate::s_outer_name_type_spacing = 3;
 
-qreal standard_graphics_gate::s_first_pin_y;
-qreal standard_graphics_gate::s_pin_y_stride;
+qreal StandardGraphicsGate::s_first_pin_y;
+qreal StandardGraphicsGate::s_pin_y_stride;
 
-void standard_graphics_gate::load_settings()
+void StandardGraphicsGate::load_settings()
 {
     s_pen.setCosmetic(true);
     s_pen.setJoinStyle(Qt::MiterJoin);
@@ -78,7 +78,7 @@ void standard_graphics_gate::load_settings()
     s_pin_y_stride = s_pin_font_height + s_pin_inner_vertical_spacing;
 }
 
-void standard_graphics_gate::update_alpha()
+void StandardGraphicsGate::update_alpha()
 {
     if (s_lod <= graph_widget_constants::gate_max_lod)
         s_alpha = 1 - (s_lod - graph_widget_constants::gate_min_lod) / (graph_widget_constants::gate_max_lod - graph_widget_constants::gate_min_lod);
@@ -86,12 +86,12 @@ void standard_graphics_gate::update_alpha()
         s_alpha = 0;
 }
 
-standard_graphics_gate::standard_graphics_gate(const std::shared_ptr<const Gate> g, const bool adjust_size_to_grid) : graphics_gate(g)
+StandardGraphicsGate::StandardGraphicsGate(const std::shared_ptr<const Gate> g, const bool adjust_size_to_grid) : GraphicsGate(g)
 {
     format(adjust_size_to_grid);
 }
 
-void standard_graphics_gate::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
+void StandardGraphicsGate::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
 {
     Q_UNUSED(widget);
 
@@ -193,7 +193,7 @@ void standard_graphics_gate::paint(QPainter* painter, const QStyleOptionGraphics
     }
 }
 
-QPointF standard_graphics_gate::get_input_scene_position(const u32 net_id, const QString& pin_type) const
+QPointF StandardGraphicsGate::get_input_scene_position(const u32 net_id, const QString& pin_type) const
 {
     Q_UNUSED(net_id)
 
@@ -207,7 +207,7 @@ QPointF standard_graphics_gate::get_input_scene_position(const u32 net_id, const
     return mapToScene(QPointF(0, y));
 }
 
-QPointF standard_graphics_gate::get_output_scene_position(const u32 net_id, const QString& pin_type) const
+QPointF StandardGraphicsGate::get_output_scene_position(const u32 net_id, const QString& pin_type) const
 {
     Q_UNUSED(net_id)
 
@@ -221,7 +221,7 @@ QPointF standard_graphics_gate::get_output_scene_position(const u32 net_id, cons
     return mapToScene(QPointF(m_width, y));
 }
 
-void standard_graphics_gate::format(const bool& adjust_size_to_grid)
+void StandardGraphicsGate::format(const bool& adjust_size_to_grid)
 {
     QFontMetricsF name_fm(s_name_font);
     qreal name_width = name_fm.width(m_name);

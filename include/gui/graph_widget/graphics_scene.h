@@ -38,17 +38,17 @@
 
 namespace hal
 {
-    class graphics_gate;
-    class graphics_item;
-    class graphics_module;
-    class graphics_net;
+    class GraphicsGate;
+    class GraphicsItem;
+    class GraphicsModule;
+    class GraphicsNet;
 
     namespace graph_widget_constants
     {
     enum class grid_type;
     }
 
-    class graphics_scene : public QGraphicsScene
+    class GraphicsScene : public QGraphicsScene
     {
         Q_OBJECT
 
@@ -65,28 +65,28 @@ namespace hal
 
         static QPointF snap_to_grid(const QPointF& pos) Q_DECL_DEPRECATED;
 
-        graphics_scene(QObject* parent = nullptr);
+        GraphicsScene(QObject* parent = nullptr);
 
-        void start_drag_shadow(const QPointF& posF, const QSizeF& sizeF, const node_drag_shadow::drag_cue cue);
-        void move_drag_shadow(const QPointF& posF, const node_drag_shadow::drag_cue cue);
+        void start_drag_shadow(const QPointF& posF, const QSizeF& sizeF, const NodeDragShadow::drag_cue cue);
+        void move_drag_shadow(const QPointF& posF, const NodeDragShadow::drag_cue cue);
         void stop_drag_shadow();
         QPointF drop_target();
 
-        void add_item(graphics_item* item);
-        void remove_item(graphics_item* item);
+        void add_item(GraphicsItem* item);
+        void remove_item(GraphicsItem* item);
 
         void delete_all_items();
 
         void connect_all();
         void disconnect_all();
 
-        void update_visuals(const graph_shader::shading& s);
+        void update_visuals(const GraphShader::shading& s);
 
         void move_nets_to_background();
 
-        const graphics_gate* get_gate_item(const u32 id) const;
-        const graphics_net* get_net_item(const u32 id) const;
-        const graphics_module* get_module_item(const u32 id) const;
+        const GraphicsGate* get_gate_item(const u32 id) const;
+        const GraphicsNet* get_net_item(const u32 id) const;
+        const GraphicsModule* get_module_item(const u32 id) const;
 
         #ifdef GUI_DEBUG_GRID
         void debug_set_layouter_grid(const QVector<qreal>& debug_x_lines, const QVector<qreal>& debug_y_lines, qreal debug_default_height, qreal debug_default_width);
@@ -107,19 +107,19 @@ namespace hal
         struct module_data
         {
             u32 id;
-            graphics_module* item;
+            GraphicsModule* item;
         };
 
         struct gate_data
         {
             u32 id;
-            graphics_gate* item;
+            GraphicsGate* item;
         };
 
         struct net_data
         {
             u32 id;
-            graphics_net* item;
+            GraphicsNet* item;
         };
 
         static qreal s_lod;
@@ -143,7 +143,7 @@ namespace hal
 
         void drawBackground(QPainter* painter, const QRectF& rect) override;
 
-        node_drag_shadow* m_drag_shadow_gate;
+        NodeDragShadow* m_drag_shadow_gate;
 
         QVector<module_data> m_module_items;
         QVector<gate_data> m_gate_items;

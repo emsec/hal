@@ -32,12 +32,12 @@ class QFileSystemWatcher;
 
 namespace hal
 {
-    class file_manager : public QObject
+    class FileManager : public QObject
     {
         Q_OBJECT
 
     public:
-        static file_manager* get_instance();
+        static FileManager* get_instance();
 
         void handle_program_arguments(const ProgramArguments& args);
 
@@ -64,7 +64,7 @@ namespace hal
         void handle_global_setting_changed(void* sender, const QString& key, const QVariant& value);
 
     private:
-        file_manager(QObject* parent = nullptr);
+        FileManager(QObject* parent = nullptr);
         void file_successfully_loaded(QString file_name);
         void update_recent_files(const QString& file) const;
         void display_error_message(QString error_message);

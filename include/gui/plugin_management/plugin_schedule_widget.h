@@ -31,7 +31,7 @@ class QVBoxLayout;
 
 namespace hal
 {
-    class labeled_frame;
+    class LabeledFrame;
     class loaded_plugins_widget;
     class plugin_arguments_widget;
     class no_scheduled_plugins_widget;
@@ -55,8 +55,8 @@ namespace hal
         QHBoxLayout* m_container_layout;
         searchbar* m_searchbar;
         QHBoxLayout* m_horizontal_layout;
-        labeled_frame* m_plugin_frame;
-        labeled_frame* m_schedule_frame;
+        LabeledFrame* m_plugin_frame;
+        LabeledFrame* m_schedule_frame;
         QWidget* m_schedule_frame_layout_container;
         QHBoxLayout* m_horizontal_schedule_frame_layout;
         QVBoxLayout* m_vertical_schedule_frame_layout;

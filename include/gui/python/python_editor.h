@@ -40,14 +40,14 @@ class QTabWidget;
 
 namespace hal
 {
-    class code_editor;
+    class CodeEditor;
     class searchbar;
     class splitter;
     class toolbar;
 
     class python_code_editor;
 
-    class python_editor : public content_widget, public python_context_subscriber
+    class python_editor : public ContentWidget, public python_context_subscriber
     {
         Q_OBJECT
         Q_PROPERTY(QString open_icon_path READ open_icon_path WRITE set_open_icon_path)
@@ -161,12 +161,12 @@ namespace hal
 
         searchbar* m_searchbar;
 
-        hal_action* m_action_open_file;
-        hal_action* m_action_run;
-        hal_action* m_action_save;
-        hal_action* m_action_save_as;
-        hal_action* m_action_toggle_minimap;
-        hal_action* m_action_new_file;
+        HalAction* m_action_open_file;
+        HalAction* m_action_run;
+        HalAction* m_action_save;
+        HalAction* m_action_save_as;
+        HalAction* m_action_toggle_minimap;
+        HalAction* m_action_new_file;
 
         QString m_open_icon_style;
         QString m_open_icon_path;
@@ -192,7 +192,7 @@ namespace hal
         QFileSystemWatcher* m_file_watcher;
         QMap<QString, python_code_editor*> m_path_editor_map;
 
-        file_modified_bar* m_file_modified_bar;
+        FileModifiedBar* m_file_modified_bar;
 
         int m_new_file_counter;
 

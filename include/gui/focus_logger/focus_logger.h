@@ -28,11 +28,11 @@
 
 namespace hal
 {
-    class focus_logger : public QObject
+    class FocusLogger : public QObject
     {
         Q_OBJECT
     public:
-        focus_logger(QApplication* app, QObject* parent = nullptr);
+        FocusLogger(QApplication* app, QObject* parent = nullptr);
 
     public Q_SLOTS:
         void handle_focus_change(QWidget* old, QWidget* new_obj);

@@ -25,27 +25,27 @@
 
 namespace hal
 {
-    class content_widget;
+    class ContentWidget;
 
-    class hal_content_anchor
+    class HalContentAnchor
     {
     public:
-        virtual void add(content_widget* widget, int index) = 0;
+        virtual void add(ContentWidget* widget, int index) = 0;
 
-        virtual void remove(content_widget* widget) = 0;
+        virtual void remove(ContentWidget* widget) = 0;
 
-        virtual void detach(content_widget* widget) = 0;
+        virtual void detach(ContentWidget* widget) = 0;
 
-        virtual void reattach(content_widget* widget) = 0;
+        virtual void reattach(ContentWidget* widget) = 0;
 
-        virtual void open(content_widget* widget) = 0;
+        virtual void open(ContentWidget* widget) = 0;
 
-        virtual void close(content_widget* widget) = 0;
+        virtual void close(ContentWidget* widget) = 0;
 
-        virtual inline ~hal_content_anchor() = 0;
+        virtual inline ~HalContentAnchor() = 0;
     };
 
-    hal_content_anchor::~hal_content_anchor()
+    HalContentAnchor::~HalContentAnchor()
     {
     }
 }

@@ -18,7 +18,7 @@ namespace hal
 {
     recent_files_widget::recent_files_widget(QWidget* parent) : QFrame(parent), m_layout(new QVBoxLayout())
     {
-        connect(file_manager::get_instance(), &file_manager::file_opened, this, &recent_files_widget::handle_file_opened);
+        connect(FileManager::get_instance(), &FileManager::file_opened, this, &recent_files_widget::handle_file_opened);
 
         m_layout->setContentsMargins(0, 0, 0, 0);
         m_layout->setSpacing(0);

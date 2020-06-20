@@ -33,17 +33,17 @@ class QVBoxLayout;
 
 namespace hal
 {
-    class hal_content_anchor;
+    class HalContentAnchor;
     class toolbar;
 
-    class content_widget : public hal_widget
+    class ContentWidget : public hal_widget
     {
         Q_OBJECT
         Q_PROPERTY(QString icon_style READ icon_style WRITE set_icon_style)
         Q_PROPERTY(QString icon_path READ icon_path WRITE set_icon_path)
 
     public:
-        explicit content_widget(QString name, QWidget* parent = nullptr);
+        explicit ContentWidget(QString name, QWidget* parent = nullptr);
 
         virtual void setup_toolbar(toolbar* toolbar);
         virtual QList<QShortcut*> create_shortcuts();
@@ -53,7 +53,7 @@ namespace hal
         QString name();
         QIcon icon();
 
-        void set_anchor(hal_content_anchor* anchor);
+        void set_anchor(HalContentAnchor* anchor);
         void set_icon(QIcon icon);
 
         QString icon_style();
@@ -81,7 +81,7 @@ namespace hal
 
         QString m_name;
         QIcon m_icon;
-        hal_content_anchor* m_anchor = nullptr;
+        HalContentAnchor* m_anchor = nullptr;
         int m_index_priority         = 0;
 
         QString m_icon_style;

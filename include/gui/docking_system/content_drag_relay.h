@@ -27,12 +27,12 @@
 
 namespace hal
 {
-    class content_drag_relay : public QObject
+    class ContentDragRelay : public QObject
     {
         Q_OBJECT
 
     public:
-        static content_drag_relay* instance();
+        static ContentDragRelay* instance();
         void relay_drag_start();
         void relay_drag_end();
 
@@ -41,6 +41,6 @@ namespace hal
         void drag_end();
 
     private:
-        content_drag_relay(QObject* parent = 0);
+        ContentDragRelay(QObject* parent = 0);
     };
 }

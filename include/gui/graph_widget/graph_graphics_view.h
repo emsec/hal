@@ -32,20 +32,20 @@
 
 namespace hal
 {
-    class graphics_item;
-    class graph_widget;
+    class GraphicsItem;
+    class GraphWidget;
 
     namespace graph_widget_constants
     {
     enum class grid_type;
     }
 
-    class graph_graphics_view : public QGraphicsView
+    class GraphGraphicsView : public QGraphicsView
     {
         Q_OBJECT
 
     public:
-        graph_graphics_view(graph_widget* parent);
+        GraphGraphicsView(GraphWidget* parent);
 
         //zooms into the mouse position
         void gentle_zoom(const qreal factor);
@@ -97,7 +97,7 @@ namespace hal
 
         void toggle_antialiasing();
 
-        bool item_draggable(graphics_item* item);
+        bool item_draggable(GraphicsItem* item);
 
         struct layouter_point
         {
@@ -114,9 +114,9 @@ namespace hal
         bool m_debug_gridpos_enable;
         #endif
 
-        graph_widget* m_graph_widget;
+        GraphWidget* m_graph_widget;
 
-        graphics_item* m_item;
+        GraphicsItem* m_item;
 
         bool m_minimap_enabled;
 
@@ -126,7 +126,7 @@ namespace hal
 
         QPoint m_drag_mousedown_position;
         QPoint m_drag_start_gridpos;
-        graphics_gate* m_drag_item;
+        GraphicsGate* m_drag_item;
         QPoint m_drag_current_gridpos;
         bool m_drag_current_modifier;
         bool m_drop_allowed;

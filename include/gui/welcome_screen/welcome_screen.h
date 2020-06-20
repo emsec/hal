@@ -32,7 +32,7 @@ namespace hal
     class get_in_touch_widget;
     class open_file_widget;
     class recent_files_widget;
-    class labeled_frame;
+    class LabeledFrame;
 
     class welcome_screen : public QFrame
     {
@@ -49,9 +49,9 @@ namespace hal
     private:
         QHBoxLayout* m_layout;
 
-        labeled_frame* m_recent_files_frame;
-        labeled_frame* m_open_file_frame;
-        labeled_frame* m_get_in_touch_frame;
+        LabeledFrame* m_recent_files_frame;
+        LabeledFrame* m_open_file_frame;
+        LabeledFrame* m_get_in_touch_frame;
 
         recent_files_widget* m_recent_files_widget;
         open_file_widget* m_open_file_widget;

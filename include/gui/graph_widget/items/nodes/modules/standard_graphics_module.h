@@ -27,13 +27,13 @@
 
 namespace hal
 {
-    class standard_graphics_module final : public graphics_module
+    class StandardGraphicsModule final : public GraphicsModule
     {
     public:
         static void load_settings();
         static void update_alpha();
 
-        explicit standard_graphics_module(const std::shared_ptr<Module> m, bool adjust_size_to_grid = true);
+        explicit StandardGraphicsModule(const std::shared_ptr<Module> m, bool adjust_size_to_grid = true);
 
         void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = nullptr) override;
 

@@ -12,26 +12,26 @@
 namespace hal
 {
 
-    code_editor::code_editor(QWidget* parent) : QPlainTextEdit(parent),
-          m_scrollbar(new code_editor_scrollbar(this)),
-          m_line_number_area(new line_number_area(this)),
-          m_minimap(new code_editor_minimap(this)),
+    CodeEditor::CodeEditor(QWidget* parent) : QPlainTextEdit(parent),
+          m_scrollbar(new CodeEditorScrollbar(this)),
+          m_line_number_area(new LineNumberArea(this)),
+          m_minimap(new CodeEditorMinimap(this)),
           m_animation(new QPropertyAnimation(m_scrollbar, "value", this))
     {
-        connect(this, &code_editor::blockCountChanged, this, &code_editor::handle_block_count_changed);
-        connect(this, &code_editor::updateRequest, this, &code_editor::update_line_number_area);
-        connect(this, &code_editor::updateRequest, this, &code_editor::update_minimap);
+        connect(this, &CodeEditor::blockCountChanged, this, &CodeEditor::handle_block_count_changed);
+        connect(this, &CodeEditor::updateRequest, this, &CodeEditor::update_line_number_area);
+        connect(this, &CodeEditor::updateRequest, this, &CodeEditor::update_minimap);
 
         m_line_highlight_enabled = g_settings_manager.get("python/highlight_current_line").toBool();
         if (m_line_highlight_enabled)
         {
-            connect(this, &code_editor::cursorPositionChanged, this, &code_editor::highlight_current_line);
+            connect(this, &CodeEditor::cursorPositionChanged, this, &CodeEditor::highlight_current_line);
         }
         m_line_numbers_enabled = g_settings_manager.get("python/line_numbers").toBool();
         m_line_wrap_enabled = g_settings_manager.get("python/line_wrap").toBool();
         m_minimap_enabled = g_settings_manager.get("python/minimap").toBool();
 
-        connect(&g_settings_relay, &settings_relay::setting_changed, this, &code_editor::handle_global_setting_changed);
+        connect(&g_settings_relay, &settings_relay::setting_changed, this, &CodeEditor::handle_global_setting_changed);
 
         setVerticalScrollBar(m_scrollbar);
         m_scrollbar->set_minimap_scrollbar(m_minimap->scrollbar());
@@ -53,7 +53,7 @@ namespace hal
         document()->setDocumentMargin(0);
     }
 
-    bool code_editor::eventFilter(QObject* object, QEvent* event)
+    bool CodeEditor::eventFilter(QObject* object, QEvent* event)
     {
         Q_UNUSED(object)
 
@@ -73,7 +73,7 @@ namespace hal
         return false;
     }
 
-    void code_editor::line_number_area_paint_event(QPaintEvent* event)
+    void CodeEditor::line_number_area_paint_event(QPaintEvent* event)
     {
         QPainter painter(m_line_number_area);
         painter.setFont(m_line_number_font);
@@ -102,14 +102,14 @@ namespace hal
         }
     }
 
-    void code_editor::minimap_paint_event(QPaintEvent* event)
+    void CodeEditor::minimap_paint_event(QPaintEvent* event)
     {
         Q_UNUSED(event)
 
         // MIGHT BE NEEDED LATER
     }
 
-    int code_editor::line_number_area_width()
+    int CodeEditor::line_number_area_width()
     {
         // ADD MID SPACE FOR COLOR INDICATORS ?
         // WARNING FUNCTION ONLY RETURNS CORRECT VALUES FOR MONOSPACE FONTS !
@@ -117,13 +117,13 @@ namespace hal
         return m_line_number_area->left_offset() + fm.width(QString::number(blockCount())) + m_line_number_area->right_offset();
     }
 
-    int code_editor::minimap_width()
+    int CodeEditor::minimap_width()
     {
         // SET VIA STYLESHEET OR DYNAMICALLY ?
         return 160;
     }
 
-    void code_editor::resizeEvent(QResizeEvent* event)
+    void CodeEditor::resizeEvent(QResizeEvent* event)
     {
         update_layout();
 
@@ -153,13 +153,13 @@ namespace hal
         QPlainTextEdit::resizeEvent(event);
     }
 
-    void code_editor::clear_line_highlight()
+    void CodeEditor::clear_line_highlight()
     {
         QList<QTextEdit::ExtraSelection> no_selections;
         setExtraSelections(no_selections);
     }
 
-    void code_editor::highlight_current_line()
+    void CodeEditor::highlight_current_line()
     {
         /*
          * Qt doesn't want to highlight blocks in line-wrap mode (even if the docs
@@ -191,7 +191,7 @@ namespace hal
         setExtraSelections(extra_selections);
     }
 
-    void code_editor::handle_block_count_changed(int new_block_count)
+    void CodeEditor::handle_block_count_changed(int new_block_count)
     {
         Q_UNUSED(new_block_count);
 
@@ -201,7 +201,7 @@ namespace hal
         m_minimap->adjust_slider_height(ratio);
     }
 
-    void code_editor::update_line_number_area(const QRect& rect, int dy)
+    void CodeEditor::update_line_number_area(const QRect& rect, int dy)
     {
         Q_UNUSED(rect)
         Q_UNUSED(dy)
@@ -209,7 +209,7 @@ namespace hal
         m_line_number_area->update();
     }
 
-    void code_editor::update_minimap(const QRect& rect, int dy)
+    void CodeEditor::update_minimap(const QRect& rect, int dy)
     {
         Q_UNUSED(rect)
         Q_UNUSED(dy)
@@ -217,7 +217,7 @@ namespace hal
         m_minimap->update();
     }
 
-    void code_editor::handle_global_setting_changed(void* sender, const QString& key, const QVariant& value)
+    void CodeEditor::handle_global_setting_changed(void* sender, const QString& key, const QVariant& value)
     {
         Q_UNUSED(sender);
         if (key == "python/highlight_current_line")
@@ -228,12 +228,12 @@ namespace hal
             m_line_highlight_enabled = enable;
             if (enable)
             {
-                connect(this, &code_editor::cursorPositionChanged, this, &code_editor::highlight_current_line);
+                connect(this, &CodeEditor::cursorPositionChanged, this, &CodeEditor::highlight_current_line);
                 highlight_current_line();
             }
             else
             {
-                disconnect(this, &code_editor::cursorPositionChanged, this, &code_editor::highlight_current_line);
+                disconnect(this, &CodeEditor::cursorPositionChanged, this, &CodeEditor::highlight_current_line);
                 clear_line_highlight();
             }
         }
@@ -254,7 +254,7 @@ namespace hal
         }
     }
 
-    void code_editor::search(const QString& string)
+    void CodeEditor::search(const QString& string)
     {
         // THREAD ?
         QList<QTextEdit::ExtraSelection> extraSelections;
@@ -275,30 +275,30 @@ namespace hal
         setExtraSelections(extraSelections);
     }
 
-    void code_editor::toggle_line_numbers()
+    void CodeEditor::toggle_line_numbers()
     {
         m_line_numbers_enabled = !m_line_numbers_enabled;
         update_layout();
     }
 
-    void code_editor::toggle_minimap()
+    void CodeEditor::toggle_minimap()
     {
         m_minimap_enabled = !m_minimap_enabled;
         update_layout();
     }
 
-    int code_editor::first_visible_block()
+    int CodeEditor::first_visible_block()
     {
         return firstVisibleBlock().blockNumber();
     }
 
-    int code_editor::visible_block_count()
+    int CodeEditor::visible_block_count()
     {
         // MIGHT BE NEEDED LATER, ADDED RETURN VALUE TO AVOID WARNING
         return 0;
     }
 
-    void code_editor::center_on_line(const int number)
+    void CodeEditor::center_on_line(const int number)
     {
         int total = document()->lineCount();
 
@@ -326,77 +326,77 @@ namespace hal
         m_animation->start();
     }
 
-    void code_editor::handle_wheel_event(QWheelEvent* event)
+    void CodeEditor::handle_wheel_event(QWheelEvent* event)
     {
         QPlainTextEdit::wheelEvent(event);
     }
 
-    code_editor_minimap* code_editor::minimap()
+    CodeEditorMinimap* CodeEditor::minimap()
     {
         return m_minimap;
     }
 
-    QFont code_editor::line_number_font() const
+    QFont CodeEditor::line_number_font() const
     {
         return m_line_number_font;
     }
 
-    QColor code_editor::line_number_color() const
+    QColor CodeEditor::line_number_color() const
     {
         return m_line_number_color;
     }
 
-    QColor code_editor::line_number_background() const
+    QColor CodeEditor::line_number_background() const
     {
         return m_line_number_background;
     }
 
-    QColor code_editor::line_number_highlight_color() const
+    QColor CodeEditor::line_number_highlight_color() const
     {
         return m_line_number_highlight_color;
     }
 
-    QColor code_editor::line_number_highlight_background() const
+    QColor CodeEditor::line_number_highlight_background() const
     {
         return m_line_number_highlight_background;
     }
 
-    QColor code_editor::current_line_background() const
+    QColor CodeEditor::current_line_background() const
     {
         return m_current_line_background;
     }
 
-    void code_editor::set_line_number_font(QFont& font)
+    void CodeEditor::set_line_number_font(QFont& font)
     {
         m_line_number_font = font;
     }
 
-    void code_editor::set_line_number_color(QColor& color)
+    void CodeEditor::set_line_number_color(QColor& color)
     {
         m_line_number_color = color;
     }
 
-    void code_editor::set_line_number_background(QColor& color)
+    void CodeEditor::set_line_number_background(QColor& color)
     {
         m_line_number_background = color;
     }
 
-    void code_editor::set_line_number_highlight_color(QColor& color)
+    void CodeEditor::set_line_number_highlight_color(QColor& color)
     {
         m_line_number_highlight_color = color;
     }
 
-    void code_editor::set_line_number_highlight_background(QColor& color)
+    void CodeEditor::set_line_number_highlight_background(QColor& color)
     {
         m_line_number_highlight_background = color;
     }
 
-    void code_editor::set_current_line_background(QColor& color)
+    void CodeEditor::set_current_line_background(QColor& color)
     {
         m_current_line_background = color;
     }
 
-    void code_editor::update_layout()
+    void CodeEditor::update_layout()
     {
         int left_margin = 0;
         int right_margin = 0;

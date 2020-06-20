@@ -31,7 +31,7 @@
 #include <boost/circular_buffer.hpp>
 namespace hal
 {
-    class channel_model : public QAbstractTableModel
+    class ChannelModel : public QAbstractTableModel
     {
         enum class ColumnNumber
         {
@@ -43,7 +43,7 @@ namespace hal
         Q_OBJECT
 
     public:
-        static channel_model* get_instance();
+        static ChannelModel* get_instance();
 
         QVariant data(const QModelIndex& index, int role) const Q_DECL_OVERRIDE;
         Qt::ItemFlags flags(const QModelIndex& index) const Q_DECL_OVERRIDE;
@@ -52,17 +52,17 @@ namespace hal
         int rowCount(const QModelIndex& parent = QModelIndex()) const Q_DECL_OVERRIDE;
         int columnCount(const QModelIndex& parent = QModelIndex()) const Q_DECL_OVERRIDE;
 
-        channel_item* add_channel(const QString name);
+        ChannelItem* add_channel(const QString name);
         void handle_logmanager_callback(const spdlog::level::level_enum& t, const std::string& channel_name, const std::string& msg_text);
 
     Q_SIGNALS:
         void updated(spdlog::level::level_enum t, const std::string& logger_name, std::string const& msg);
 
     private:
-        static channel_model s_model;
+        static ChannelModel s_model;
 
-        explicit channel_model(QObject* parent = 0);
-        QList<channel_item*> m_permanent_items;
-        boost::circular_buffer<channel_item*> m_temporary_items;
+        explicit ChannelModel(QObject* parent = 0);
+        QList<ChannelItem*> m_permanent_items;
+        boost::circular_buffer<ChannelItem*> m_temporary_items;
     };
 }

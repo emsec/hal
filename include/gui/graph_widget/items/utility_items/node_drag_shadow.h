@@ -27,7 +27,7 @@
 
 namespace hal
 {
-    class node_drag_shadow : public QGraphicsObject
+    class NodeDragShadow : public QGraphicsObject
     {
         Q_OBJECT
 
@@ -39,7 +39,7 @@ namespace hal
             rejected = 2
         };
 
-        node_drag_shadow();
+        NodeDragShadow();
 
         void start(const QPointF& posF, const QSizeF& sizeF);
         void stop();

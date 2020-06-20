@@ -37,21 +37,21 @@ class QShortcut;
 
 namespace hal
 {
-    class content_frame;
-    class content_widget;
+    class ContentFrame;
+    class ContentWidget;
 
-    class tab_widget : public hal_widget, public hal_content_anchor
+    class TabWidget : public hal_widget, public HalContentAnchor
     {
         Q_OBJECT
 
     public:
-        explicit tab_widget(QWidget* parent = nullptr);
-        virtual void add(content_widget* widget, int index = -1);
-        virtual void remove(content_widget* widget);
-        virtual void detach(content_widget* widget);
-        virtual void reattach(content_widget* widget);
-        virtual void open(content_widget* widget);
-        virtual void close(content_widget* widget);
+        explicit TabWidget(QWidget* parent = nullptr);
+        virtual void add(ContentWidget* widget, int index = -1);
+        virtual void remove(ContentWidget* widget);
+        virtual void detach(ContentWidget* widget);
+        virtual void reattach(ContentWidget* widget);
+        virtual void open(ContentWidget* widget);
+        virtual void close(ContentWidget* widget);
 
         void handle_no_current_widget(int index);
         void remove_content();
@@ -64,12 +64,12 @@ namespace hal
     private:
         QVBoxLayout* m_vertical_layout;
         QHBoxLayout* m_horizontal_layout;
-        dock_bar* m_dock_bar;
+        DockBar* m_dock_bar;
         toolbar* m_left_toolbar;
         toolbar* m_right_toolbar;
-        content_widget* m_current_widget;
+        ContentWidget* m_current_widget;
         QAction* m_action_detach;
-        QList<content_frame*> m_detached_frames;
+        QList<ContentFrame*> m_detached_frames;
         QList<QShortcut*> m_active_shortcuts;
     };
 }

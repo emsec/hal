@@ -29,44 +29,44 @@
 
 namespace hal
 {
-    hal_content_manager::hal_content_manager(main_window* parent) : QObject(parent), m_main_window(parent)
+    HalContentManager::HalContentManager(main_window* parent) : QObject(parent), m_main_window(parent)
     {
         // has to be created this early in order to receive deserialization by the core signals
         m_python_widget = new python_editor();
 
-        connect(file_manager::get_instance(), &file_manager::file_opened, this, &hal_content_manager::handle_open_document);
-        connect(file_manager::get_instance(), &file_manager::file_closed, this, &hal_content_manager::handle_close_document);
-        connect(file_manager::get_instance(), &file_manager::file_changed, this, &hal_content_manager::handle_filsystem_doc_changed);
+        connect(FileManager::get_instance(), &FileManager::file_opened, this, &HalContentManager::handle_open_document);
+        connect(FileManager::get_instance(), &FileManager::file_closed, this, &HalContentManager::handle_close_document);
+        connect(FileManager::get_instance(), &FileManager::file_changed, this, &HalContentManager::handle_filsystem_doc_changed);
     }
 
-    hal_content_manager::~hal_content_manager()
+    HalContentManager::~HalContentManager()
     {
     }
 
-    void hal_content_manager::hack_delete_content()
+    void HalContentManager::hack_delete_content()
     {
         for (auto content : m_content)
             delete content;
     }
 
-    python_editor* hal_content_manager::get_python_editor_widget()
+    python_editor* HalContentManager::get_python_editor_widget()
     {
         return m_python_widget;
     }
 
-    graph_tab_widget* hal_content_manager::get_graph_tab_widget()
+    GraphTabWidget* HalContentManager::get_graph_tab_widget()
     {
         return m_graph_tab_wid;
     }
 
-    context_manager_widget* hal_content_manager::get_context_manager_widget()
+    ContextManagerWidget* HalContentManager::get_context_manager_widget()
     {
         return m_context_manager_wid;
     }
 
-    void hal_content_manager::handle_open_document(const QString& file_name)
+    void HalContentManager::handle_open_document(const QString& file_name)
     {
-        m_graph_tab_wid = new graph_tab_widget(nullptr);
+        m_graph_tab_wid = new GraphTabWidget(nullptr);
         //    vhdl_editor* code_edit = new vhdl_editor();
         //    m_graph_tab_wid->addTab(code_edit, "Source");
         m_main_window->add_content(m_graph_tab_wid, 2, content_anchor::center);
@@ -75,7 +75,7 @@ namespace hal
         m_main_window->add_content(m, 0, content_anchor::left);
         m->open();
 
-        m_context_manager_wid = new context_manager_widget(m_graph_tab_wid);
+        m_context_manager_wid = new ContextManagerWidget(m_graph_tab_wid);
         m_main_window->add_content(m_context_manager_wid, 1, content_anchor::left);
         m_context_manager_wid->open();
 
@@ -84,7 +84,7 @@ namespace hal
         selection_details_widget* details = new selection_details_widget();
         m_main_window->add_content(details, 0, content_anchor::bottom);
 
-        hal_logger_widget* logger_widget = new hal_logger_widget();
+        HalLoggerWidget* logger_widget = new HalLoggerWidget();
         m_main_window->add_content(logger_widget, 1, content_anchor::bottom);
 
         details->open();
@@ -97,11 +97,11 @@ namespace hal
 
         //-------------------------Test Buttons---------------------------
 
-        content_widget* blue = new content_widget("blue");
+        ContentWidget* blue = new ContentWidget("blue");
         blue->setStyleSheet("* {background-color: #2B3856;}");
-        content_widget* venomgreen = new content_widget("venomgreen");
+        ContentWidget* venomgreen = new ContentWidget("venomgreen");
         venomgreen->setStyleSheet("* {background-color: #728C00;}");
-        content_widget* jade = new content_widget("jade");
+        ContentWidget* jade = new ContentWidget("jade");
         jade->setStyleSheet("* {background-color: #C3FDB8;}");
 
         //    m_main_window->add_content(blue, content_anchor::left);
@@ -133,7 +133,7 @@ namespace hal
         m_netlist_watcher = new netlist_watcher(this);
     }
 
-    void hal_content_manager::handle_close_document()
+    void HalContentManager::handle_close_document()
     {
         //(if possible) store state first, then remove all subwindows from main window
         m_window_title = "HAL";
@@ -146,15 +146,15 @@ namespace hal
             delete content;
         }
 
-        file_manager::get_instance()->close_file();
+        FileManager::get_instance()->close_file();
     }
 
-    void hal_content_manager::handle_filsystem_doc_changed(const QString& file_name)
+    void HalContentManager::handle_filsystem_doc_changed(const QString& file_name)
     {
         Q_UNUSED(file_name)
     }
 
-    void hal_content_manager::handle_save_triggered()
+    void HalContentManager::handle_save_triggered()
     {
         Q_EMIT save_triggered();
     }

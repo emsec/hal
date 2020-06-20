@@ -32,22 +32,22 @@
 
 namespace hal
 {
-    struct hal_filter_item;
+    struct HalFilterItem;
 
-    class hal_logger_marshall : public QObject
+    class HalLoggerMarshall : public QObject
     {
         Q_OBJECT
 
     public:
-        explicit hal_logger_marshall(QPlainTextEdit* edit, QObject* parent = 0);
+        explicit HalLoggerMarshall(QPlainTextEdit* edit, QObject* parent = 0);
 
-        ~hal_logger_marshall();
+        ~HalLoggerMarshall();
 
     Q_SIGNALS:
 
     public Q_SLOTS:
 
-        void append_log(spdlog::level::level_enum log_type, QString const& msg, hal_filter_item* filter);
+        void append_log(spdlog::level::level_enum log_type, QString const& msg, HalFilterItem* filter);
 
         void highlight_current_line();
 

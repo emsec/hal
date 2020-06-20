@@ -32,12 +32,12 @@
 
 namespace hal
 {
-    class file_status_manager : public QObject
+    class FileStatusManager : public QObject
     {
         Q_OBJECT
     public:
-        file_status_manager(QObject* parent = 0);
-        ~file_status_manager();
+        FileStatusManager(QObject* parent = 0);
+        ~FileStatusManager();
 
         bool modified_files_existing() const;
 

@@ -30,26 +30,26 @@
 
 namespace hal
 {
-    struct hal_filter_item;
+    struct HalFilterItem;
 
-    class hal_filter_tab_bar : public QTabBar
+    class HalFilterTabBar : public QTabBar
     {
         Q_OBJECT
 
     public:
-        hal_filter_tab_bar();
+        HalFilterTabBar();
 
-        ~hal_filter_tab_bar();
+        ~HalFilterTabBar();
 
-        void addNewFilter(QString name, hal_filter_item* item);
+        void addNewFilter(QString name, HalFilterItem* item);
 
-        hal_filter_item* get_current_filter();
+        HalFilterItem* get_current_filter();
 
     private:
         QToolButton m_button;
 
-        QList<hal_filter_item*> m_filter_items;
+        QList<HalFilterItem*> m_filter_items;
 
-        hal_filter_dialog m_dialog;
+        HalFilterDialog m_dialog;
     };
 }

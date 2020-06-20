@@ -2,7 +2,7 @@
 
 namespace hal
 {
-    hal_content_layout_manager::hal_content_layout_manager(QObject* parent) : QObject(parent)
+    HalContentLayoutManager::HalContentLayoutManager(QObject* parent) : QObject(parent)
     {
     }
 }

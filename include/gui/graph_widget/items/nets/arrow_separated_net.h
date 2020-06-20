@@ -27,12 +27,12 @@
 
 namespace hal
 {
-    class arrow_separated_net : public separated_graphics_net
+    class ArrowSeparatedNet : public SeparatedGraphicsNet
     {
     public:
         static void load_settings();
 
-        arrow_separated_net(const std::shared_ptr<const Net> n);
+        ArrowSeparatedNet(const std::shared_ptr<const Net> n);
 
         void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override;
 

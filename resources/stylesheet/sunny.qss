@@ -491,27 +491,27 @@ main_settings_widget preview_widget *{
     background-color: rgba(255, 255, 255, 0);
 }
 
-/* EXPANDING_LIST_WIDGET */
+/* ExpandingListWidget */
 
-main_settings_widget expanding_list_widget {
+main_settings_widget ExpandingListWidget {
     border-right : 1px solid rgb(23, 26, 26);
     min-width    : 250px;
     max-width    : 250px;
 }
 
-main_settings_widget expanding_list_widget #content {
+main_settings_widget ExpandingListWidget #content {
     background   : rgb(9, 11, 13);
     border-right : 5px solid rgb(13, 15, 17);
 }
 
-main_settings_widget expanding_list_widget #spacer {
+main_settings_widget ExpandingListWidget #spacer {
     min-height   : 80px;
     max-height   : 80px;
     background   : rgb(9, 11, 13);
     border-right : 5px solid rgb(13, 15, 17);
 }
 
-main_settings_widget expanding_list_button {
+main_settings_widget ExpandingListButton {
     min-height           : 42px;
     max-height           : 42px;
     background-color     : rgb(9, 11, 13);
@@ -520,107 +520,107 @@ main_settings_widget expanding_list_button {
     qproperty-icon_style : "all -> #969696";
 }
 
-main_settings_widget expanding_list_button[hover=true] {
+main_settings_widget ExpandingListButton[hover=true] {
     qproperty-icon_style : "all -> #E4E4E4";
 }
 
-main_settings_widget expanding_list_button[hover=true] * {
+main_settings_widget ExpandingListButton[hover=true] * {
     /*color: rgb(228, 228, 228);*/
     color            : rgb(255, 255, 255);
     background-color : rgba(255, 255, 255, 0.012);
 }
 
-main_settings_widget expanding_list_button[selected=true] {
+main_settings_widget ExpandingListButton[selected=true] {
     background-color     : rgb(34, 37, 38);
     qproperty-icon_style : "all -> #A9B7C6";
 }
 
-main_settings_widget expanding_list_button[type="child"] {
+main_settings_widget ExpandingListButton[type="child"] {
     background-color : rgb(14, 17, 20);
 }
 
-main_settings_widget expanding_list_button[type="child"][selected=true] {
+main_settings_widget ExpandingListButton[type="child"][selected=true] {
     background-color : rgb(34, 37, 38);
 }
 
-main_settings_widget expanding_list_button * {
+main_settings_widget ExpandingListButton * {
     font             : 14px bold "Iosevka";
     background-color : transparent;
 }
 
-main_settings_widget expanding_list_button #left-border {
+main_settings_widget ExpandingListButton #left-border {
     min-width : 4px;
     max-width : 4px;
     /*padding-right: 40px;*/
 }
 
-main_settings_widget expanding_list_button #icon-label {
+main_settings_widget ExpandingListButton #icon-label {
     padding-left  : 40px;
     padding-right : 10px;
 }
 
-main_settings_widget expanding_list_button #right-border {
+main_settings_widget ExpandingListButton #right-border {
     min-width : 4px;
     max-width : 4px;
 }
 
-main_settings_widget expanding_list_button[selected=true] #text-label {
+main_settings_widget ExpandingListButton[selected=true] #text-label {
     /*color : rgb(114, 140, 0);*/
     /*color : rgb(35, 200, 46);*/
     color : rgb(85, 255, 0);
     /*color : rgb(0, 255, 0);*/
 }
 
-main_settings_widget expanding_list_button[selected=true] #right-border {
+main_settings_widget ExpandingListButton[selected=true] #right-border {
     /*background-color: rgb(114, 140, 0);*/
     /*background-color : rgb(35, 200, 46);*/
     background-color : rgb(85, 255, 0);
     /*background-color : rgb(0, 255, 0);*/
 }
 
-/*dock_bar {
+/*DockBar {
 background-color : rgb(9, 11, 13);
 }*/
 
-content_layout_area #left-dock-bar {
+ContentLayoutArea #left-dock-bar {
     min-width    : 19px;
     max-width    : 19px;
     border-right : 1px solid rgb(23, 26, 26);
 }
 
-content_layout_area #right-dock-bar {
+ContentLayoutArea #right-dock-bar {
     min-width   : 19px;
     max-width   : 19px;
     border-left : 1px solid rgb(23, 26, 26);
 }
 
-content_layout_area #bottom-dock-bar {
+ContentLayoutArea #bottom-dock-bar {
     min-height : 19px;
     max-height : 19px;
     border-top : 1px solid rgb(23, 26, 26);
 }
 
-content_layout_area #left-spacer {
+ContentLayoutArea #left-spacer {
     min-width  : 19px;
     max-width  : 19px;
     min-height : 19px;
     max-height : 19px;
 }
 
-content_layout_area #right-spacer {
+ContentLayoutArea #right-spacer {
     min-width  : 19px;
     max-width  : 19px;
     min-height : 19px;
     max-height : 19px;
 }
 
-tab_widget dock_bar {
+TabWidget DockBar {
     background : rgb(60, 60, 60);
     min-height : 24px;
     max-height : 24px;
 }
 
-code_editor {
+CodeEditor {
     font-style                                 : normal;
     font-size                                  : 14px;
     font-weight                                : normal;
@@ -631,7 +631,7 @@ code_editor {
     /*qproperty-line_number_background : rgb(14, 16, 18);*/
 }
 
-code_editor line_number_area {
+CodeEditor LineNumberArea {
     /*background : rgb(31, 34, 35);*/
     /*background : rgb(42, 44, 46);*/
     background             : rgb(219, 219, 219);
@@ -648,7 +648,7 @@ code_editor line_number_area {
 /*background: qlineargradient( x1:0 y1:0, x2:1 y2:0, stop:0 cyan, stop:1 blue);}*/
 /*}*/
 
-vhdl_syntax_highlighter {
+VhdlSyntaxHighlighter {
     qproperty-keyword_color : rgb(204, 120, 50);
     qproperty-comment_color : rgb(97, 150, 71);
     qproperty-type_color    : rgb(152, 118, 170);
@@ -656,7 +656,7 @@ vhdl_syntax_highlighter {
     qproperty-text_color    : rgb(169, 183, 198);
 }
 
-/*labeled_frame {
+/*LabeledFrame {
 background : rgb(9, 11, 13);
 border : 1px solid rgb(73, 74, 76);
 min-width : 400px;
@@ -667,7 +667,7 @@ margin-left : 30px;
 margin-right : 30px;
 }*/
 
-labeled_frame {
+LabeledFrame {
     /*background : rgb(39, 49, 56);*/
     background    : rgb(219, 219, 219);
     /*border : 1px solid rgb(49, 61, 70);*/
@@ -697,19 +697,19 @@ welcome_screen {
         stop       : 1 rgb(234, 234, 234));
 }
 
-welcome_screen labeled_frame {
+welcome_screen LabeledFrame {
     min-width  : 200px;
     max-width  : 400px;
     min-height : 200px;
     max-height : 800px;
 }
 
-labeled_frame #header {
+LabeledFrame #header {
     /*background : rgb(49, 61, 70);*/
     background : #37a4de;
 }
 
-labeled_frame #left-spacer {
+LabeledFrame #left-spacer {
     /*background : rgb(49, 61, 70);*/
     /*background : #313d46;*/
     background  : rgb(255, 255, 255);
@@ -721,7 +721,7 @@ labeled_frame #left-spacer {
     margin-left : 6px;
 }
 
-labeled_frame #label {
+LabeledFrame #label {
     /*background : rgb(49, 61, 70);*/
     background     : #37a4de;
     padding-top    : 21px;
@@ -750,7 +750,7 @@ labeled_frame #label {
     qproperty-text : "GET IN <font color='#FFFFFF'>TOUCH</font>";
 }
 
-labeled_frame #right-spacer {
+LabeledFrame #right-spacer {
     /*background : rgb(49, 61, 70);*/
     /*background : #313d46;*/
     background   : rgb(255, 255, 255);
@@ -1003,7 +1003,7 @@ reminder_overlay #text-label {
 *               CONTENT WIDGET               *
 *********************************************/
 
-content_widget * {
+ContentWidget * {
     background : rgb(240, 240, 240);
 }
 
@@ -1254,7 +1254,7 @@ scheduled_plugin_item_area {
     background : rgb(219, 219, 219);
 }
 
-drop_marker {
+DropMarker {
     background : rgb(14, 16, 18);
 }
 
@@ -1268,7 +1268,7 @@ python_editor {
     stop       : 1 rgb(23, 30, 34));
 }
 
-python_editor code_editor {
+python_editor CodeEditor {
     /*font-family : "SourceCodePro-Black";*/
     font-family                       : "Iosevka";
     font-size                         : 14px;
@@ -1289,14 +1289,14 @@ python_editor code_editor {
     qproperty-current_line_background : #323232;
 }
 
-python_editor code_editor line_number_area {
+python_editor CodeEditor LineNumberArea {
     /*background : #0C1112;*/
     /*background : #0C0F12;*/
     background   : rgb(219, 219, 219);
     border-right : 1px solid #606366;
 }
 
-code_editor_minimap {
+CodeEditorMinimap {
     font-style  : normal;
     font-size   : 3px;
     font-weight : normal;
@@ -1305,13 +1305,13 @@ code_editor_minimap {
     color       : black;
 }
 
-code_editor_minimap QScrollBar:vertical {
+CodeEditorMinimap QScrollBar:vertical {
     border     : 0px;
     background : transparent;
     margin     : 0px 0px 0px 0px;
 }
 
-code_editor_minimap QScrollBar::handle:vertical {
+CodeEditorMinimap QScrollBar::handle:vertical {
     background    : rgba(120, 120, 120, 0.1);
     border-radius : 0px;
 }
@@ -1341,7 +1341,7 @@ python_console {
     color       : red;
 }
 
-minimap_scrollbar #slider {
+MinimapScrollbar #slider {
 background : rgba(120, 120, 120, 0.3);
 }
 
@@ -1368,7 +1368,7 @@ qproperty-new_file_icon_style: "";
 qproperty-new_file_icon_path: ":/icons/new-file";
 }
 
-context_manager_widget {
+ContextManagerWidget {
 qproperty-new_view_icon_style: "all->#00AA00";
 qproperty-new_view_icon_path: ":/icons/plus";
 
@@ -1411,7 +1411,7 @@ qproperty-settings_icon_style: "all->#AFB1B3";
 qproperty-settings_icon_path: ":/icons/settings";
 }
 
-python_qss_adapter {
+PythonQssAdapter {
 qproperty-text_color: #DEE9AF;
 qproperty-keyword_color: #7805c1;
 qproperty-operator_color: black;
@@ -1424,7 +1424,7 @@ qproperty-double_quoted_string_color: #a80b0b;
 qproperty-comment_color: #629755;
 }
 
-vhdl_qss_adapter {
+VhdlQssAdapter {
 qproperty-keyword_color: #0042d7;
 qproperty-type_color: #7805c1;
 qproperty-number_color: #013220;
@@ -1432,7 +1432,7 @@ qproperty-string_color: #a80b0b;
 qproperty-comment_color: #1fc600;
 }
 
-logger_qss_adapter {
+LoggerQssAdapter {
     qproperty-trace_color: #90C023;
     qproperty-debug_color: #90C023;
     qproperty-info_color: #000000;
@@ -1513,7 +1513,7 @@ graph_layouter_view QScrollBar{
     color: red;
 }
 
-dock_bar{
+DockBar{
     background: rgb(110, 110, 110);
 }
 

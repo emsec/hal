@@ -11,15 +11,15 @@
 
 namespace hal
 {
-    vhdl_editor::vhdl_editor() : content_widget("Source"), m_code_editor(new code_editor()), m_searchbar(new searchbar())
+    vhdl_editor::vhdl_editor() : ContentWidget("Source"), m_code_editor(new CodeEditor()), m_searchbar(new searchbar())
     {
-        connect(m_searchbar, &searchbar::text_edited, m_code_editor, &code_editor::search);
+        connect(m_searchbar, &searchbar::text_edited, m_code_editor, &CodeEditor::search);
 
         m_code_editor->setReadOnly(true);
         m_searchbar->hide();
 
-        new vhdl_syntax_highlighter(m_code_editor->document());
-        new vhdl_syntax_highlighter(m_code_editor->minimap()->document());
+        new VhdlSyntaxHighlighter(m_code_editor->document());
+        new VhdlSyntaxHighlighter(m_code_editor->minimap()->document());
 
         std::stringstream stream;
         HDLWriterVHDL writer(stream);

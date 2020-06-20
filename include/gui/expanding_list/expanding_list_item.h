@@ -31,16 +31,16 @@ class QPropertyAnimation;
 
 namespace hal
 {
-    class expanding_list_button;
+    class ExpandingListButton;
 
-    class expanding_list_item : public QFrame
+    class ExpandingListItem : public QFrame
     {
         Q_OBJECT
         Q_PROPERTY(bool expanded READ expanded)
         Q_PROPERTY(int fixed_height READ fixed_height WRITE set_fixed_height)
 
     public:
-        expanding_list_item(expanding_list_button* parent_button, QWidget* parent = 0);
+        ExpandingListItem(ExpandingListButton* parent_button, QWidget* parent = 0);
 
         virtual QSize minimumSizeHint() const Q_DECL_OVERRIDE;
         virtual QSize sizeHint() const Q_DECL_OVERRIDE;
@@ -48,9 +48,9 @@ namespace hal
 
         bool expanded();
         int fixed_height();
-        bool contains(expanding_list_button* button);
-        expanding_list_button* parent_button();
-        void append_child_button(expanding_list_button* button);
+        bool contains(ExpandingListButton* button);
+        ExpandingListButton* parent_button();
+        void append_child_button(ExpandingListButton* button);
 
         void repolish();
 
@@ -61,8 +61,8 @@ namespace hal
         void set_fixed_height(int height);
 
     private:
-        expanding_list_button* m_parent_button;
-        QList<expanding_list_button*> m_child_buttons;
+        ExpandingListButton* m_parent_button;
+        QList<ExpandingListButton*> m_child_buttons;
 
         int m_collapsed_height;
         int m_expanded_height;

@@ -8,19 +8,19 @@
 
 namespace hal
 {
-    hal_logger_marshall::hal_logger_marshall(QPlainTextEdit* edit, QObject* parent) : QObject(parent), m_edit(edit)
+    HalLoggerMarshall::HalLoggerMarshall(QPlainTextEdit* edit, QObject* parent) : QObject(parent), m_edit(edit)
     {
         m_max_line_count = 1000;
         m_edit->document()->setMaximumBlockCount(m_max_line_count);
-        connect(m_edit, &QPlainTextEdit::cursorPositionChanged, this, &hal_logger_marshall::highlight_current_line);
+        connect(m_edit, &QPlainTextEdit::cursorPositionChanged, this, &HalLoggerMarshall::highlight_current_line);
     }
 
-    hal_logger_marshall::~hal_logger_marshall()
+    HalLoggerMarshall::~HalLoggerMarshall()
     {
         LogManager::get_instance().get_gui_callback().remove_callback("gui");
     }
 
-    void hal_logger_marshall::append_log(spdlog::level::level_enum t, const QString& msg, hal_filter_item* filter)
+    void HalLoggerMarshall::append_log(spdlog::level::level_enum t, const QString& msg, HalFilterItem* filter)
     {
         static const QString beginHTML        = "<p><font color=\"";
         static const QString intermediateHTML = "\">";
@@ -33,25 +33,25 @@ namespace hal
         switch (t)
         {
             case spdlog::level::level_enum::trace:
-                color = logger_qss_adapter::instance()->trace_color().name();
+                color = LoggerQssAdapter::instance()->trace_color().name();
                 break;
             case spdlog::level::level_enum::debug:
-                color = logger_qss_adapter::instance()->debug_color().name();
+                color = LoggerQssAdapter::instance()->debug_color().name();
                 break;
             case spdlog::level::level_enum::info:
-                color = logger_qss_adapter::instance()->info_color().name();
+                color = LoggerQssAdapter::instance()->info_color().name();
                 break;
             case spdlog::level::level_enum::warn:
-                color = logger_qss_adapter::instance()->warning_color().name();
+                color = LoggerQssAdapter::instance()->warning_color().name();
                 break;
             case spdlog::level::level_enum::err:
-                color = logger_qss_adapter::instance()->error_color().name();
+                color = LoggerQssAdapter::instance()->error_color().name();
                 break;
             case spdlog::level::level_enum::critical:
-                color = logger_qss_adapter::instance()->critical_color().name();
+                color = LoggerQssAdapter::instance()->critical_color().name();
                 break;
             default:
-                color = logger_qss_adapter::instance()->default_color().name();
+                color = LoggerQssAdapter::instance()->default_color().name();
                 break;
         }
         QString msg_to_print;
@@ -59,7 +59,7 @@ namespace hal
             msg_to_print = beginHTML + color + intermediateHTML + html_ready_msg + endHTML;
         else
         {
-            hal_filter_item::rule rule;
+            HalFilterItem::rule rule;
             switch (t)
             {
                 case spdlog::level::level_enum::trace:
@@ -85,7 +85,7 @@ namespace hal
                     break;
             }
 
-            if (rule != hal_filter_item::rule::HideAll)
+            if (rule != HalFilterItem::rule::HideAll)
             {
                 bool match = false;
                 for (QString key : filter->m_keywords)
@@ -102,32 +102,32 @@ namespace hal
                     switch (t)
                     {
                         case spdlog::level::level_enum::trace:
-                            color = logger_qss_adapter::instance()->trace_highlight().name();
+                            color = LoggerQssAdapter::instance()->trace_highlight().name();
                             break;
                         case spdlog::level::level_enum::debug:
-                            color = logger_qss_adapter::instance()->debug_highlight().name();
+                            color = LoggerQssAdapter::instance()->debug_highlight().name();
                             break;
                         case spdlog::level::level_enum::info:
-                            color = logger_qss_adapter::instance()->info_highlight().name();
+                            color = LoggerQssAdapter::instance()->info_highlight().name();
                             break;
                         case spdlog::level::level_enum::warn:
-                            color = logger_qss_adapter::instance()->warning_highlight().name();
+                            color = LoggerQssAdapter::instance()->warning_highlight().name();
                             break;
                         case spdlog::level::level_enum::err:
-                            color = logger_qss_adapter::instance()->error_highlight().name();
+                            color = LoggerQssAdapter::instance()->error_highlight().name();
                             break;
                         case spdlog::level::level_enum::critical:
-                            color = logger_qss_adapter::instance()->critical_highlight().name();
+                            color = LoggerQssAdapter::instance()->critical_highlight().name();
                             break;
                         default:
-                            color = logger_qss_adapter::instance()->default_highlight().name();
+                            color = LoggerQssAdapter::instance()->default_highlight().name();
                             break;
                     }
                     msg_to_print = beginHTML + color + intermediateHTML + html_ready_msg + endHTML;
                 }
                 else
                 {
-                    if (rule == hal_filter_item::rule::ShowAll)
+                    if (rule == HalFilterItem::rule::ShowAll)
                         msg_to_print = beginHTML + color + intermediateHTML + html_ready_msg + endHTML;
                     else
                         return;
@@ -139,7 +139,7 @@ namespace hal
         m_edit->appendHtml(msg_to_print);
     }
 
-    void hal_logger_marshall::highlight_current_line()
+    void HalLoggerMarshall::highlight_current_line()
     {
     //    QList<QTextEdit::ExtraSelection> extraSelections;
     //    QTextEdit::ExtraSelection selection;

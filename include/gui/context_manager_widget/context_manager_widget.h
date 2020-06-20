@@ -34,10 +34,10 @@
 
 namespace hal
 {
-    class graph_context;
-    class graph_tab_widget;
+    class GraphContext;
+    class GraphTabWidget;
 
-    class context_manager_widget : public content_widget
+    class ContextManagerWidget : public ContentWidget
     {
         Q_OBJECT
         Q_PROPERTY(QString new_view_icon_path READ new_view_icon_path WRITE set_new_view_icon_path)
@@ -53,11 +53,11 @@ namespace hal
 
 
     public:
-        context_manager_widget(graph_tab_widget* tab_view, QWidget* parent = nullptr);
+        ContextManagerWidget(GraphTabWidget* tab_view, QWidget* parent = nullptr);
         void resizeEvent(QResizeEvent* event) override;
         void handle_create_context_clicked();
 
-        void select_view_context(graph_context* context);
+        void select_view_context(GraphContext* context);
 
         virtual void setup_toolbar(toolbar* toolbar) Q_DECL_OVERRIDE;
 
@@ -85,12 +85,12 @@ namespace hal
 
 
     public Q_SLOTS:
-        void handle_context_created(graph_context* context);
-        void handle_context_renamed(graph_context* context);
-        void handle_context_removed(graph_context* context);
+        void handle_context_created(GraphContext* context);
+        void handle_context_renamed(GraphContext* context);
+        void handle_context_removed(GraphContext* context);
 
     private:
-        graph_tab_widget* m_tab_view;
+        GraphTabWidget* m_tab_view;
 
         QListWidget* m_list_widget;
 
@@ -116,7 +116,7 @@ namespace hal
 
         u32 m_context_counter = 0;
 
-        std::map<QListWidgetItem*, graph_context*> m_assigned_pointers;
+        std::map<QListWidgetItem*, GraphContext*> m_assigned_pointers;
 
         bool m_show_timestamps = true;
 

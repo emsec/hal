@@ -29,11 +29,11 @@ class QApplication;
 
 namespace hal
 {
-    class graphics_qss_adapter;
+    class GraphicsQssAdapter;
     class notification_manager_qss_adapter;
-    class python_qss_adapter;
+    class PythonQssAdapter;
     class shared_properties_qss_adapter;
-    class vhdl_qss_adapter;
+    class VhdlQssAdapter;
 
     class style_manager : public QObject
     {
@@ -51,17 +51,17 @@ namespace hal
 
         const shared_properties_qss_adapter* shared_properties() const;
         const notification_manager_qss_adapter* notification_manager() const;
-        const python_qss_adapter* python_syntax_highlighter() const;
-        const vhdl_qss_adapter* vhdl_syntax_highlighter() const;
+        const PythonQssAdapter* PythonSyntaxHighlighter() const;
+        const VhdlQssAdapter* VhdlSyntaxHighlighter() const;
 
     private:
         explicit style_manager(QObject* parent = nullptr);
         void set_default(QApplication* app);
 
-        graphics_qss_adapter* m_graphics_qss_adapter;
+        GraphicsQssAdapter* m_graphics_qss_adapter;
         shared_properties_qss_adapter* m_shared_properties;
         notification_manager_qss_adapter* m_notification_manager;
-        python_qss_adapter* m_python_syntax_highlighter;
-        vhdl_qss_adapter* m_vhdl_syntax_highlighter;
+        PythonQssAdapter* m_python_syntax_highlighter;
+        VhdlQssAdapter* m_vhdl_syntax_highlighter;
     };
 }

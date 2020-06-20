@@ -20,22 +20,22 @@
 
 namespace hal
 {
-    qreal graphics_scene::s_lod = 0;
+    qreal GraphicsScene::s_lod = 0;
 
-    const qreal graphics_scene::s_grid_fade_start = 0.4;
-    const qreal graphics_scene::s_grid_fade_end = 1.0;
+    const qreal GraphicsScene::s_grid_fade_start = 0.4;
+    const qreal GraphicsScene::s_grid_fade_end = 1.0;
 
-    bool graphics_scene::s_grid_enabled = true;
-    bool graphics_scene::s_grid_clusters_enabled = true;
-    graph_widget_constants::grid_type graphics_scene::s_grid_type = graph_widget_constants::grid_type::lines;
+    bool GraphicsScene::s_grid_enabled = true;
+    bool GraphicsScene::s_grid_clusters_enabled = true;
+    graph_widget_constants::grid_type GraphicsScene::s_grid_type = graph_widget_constants::grid_type::lines;
 
-    QColor graphics_scene::s_grid_base_line_color = QColor(30, 30, 30);
-    QColor graphics_scene::s_grid_cluster_line_color = QColor(15, 15, 15);
+    QColor GraphicsScene::s_grid_base_line_color = QColor(30, 30, 30);
+    QColor GraphicsScene::s_grid_cluster_line_color = QColor(15, 15, 15);
 
-    QColor graphics_scene::s_grid_base_dot_color = QColor(25, 25, 25);
-    QColor graphics_scene::s_grid_cluster_dot_color = QColor(170, 160, 125);
+    QColor GraphicsScene::s_grid_base_dot_color = QColor(25, 25, 25);
+    QColor GraphicsScene::s_grid_cluster_dot_color = QColor(170, 160, 125);
 
-    void graphics_scene::set_lod(const qreal& lod)
+    void GraphicsScene::set_lod(const qreal& lod)
     {
         s_lod = lod;
 
@@ -61,50 +61,50 @@ namespace hal
         }
     }
 
-    void graphics_scene::set_grid_enabled(const bool& value)
+    void GraphicsScene::set_grid_enabled(const bool& value)
     {
         s_grid_enabled = value;
     }
 
-    void graphics_scene::set_grid_clusters_enabled(const bool& value)
+    void GraphicsScene::set_grid_clusters_enabled(const bool& value)
     {
         s_grid_clusters_enabled = value;
     }
 
-    void graphics_scene::set_grid_type(const graph_widget_constants::grid_type& grid_type)
+    void GraphicsScene::set_grid_type(const graph_widget_constants::grid_type& grid_type)
     {
         s_grid_type = grid_type;
     }
 
-    void graphics_scene::set_grid_base_line_color(const QColor& color)
+    void GraphicsScene::set_grid_base_line_color(const QColor& color)
     {
         s_grid_base_line_color = color;
     }
 
-    void graphics_scene::set_grid_cluster_line_color(const QColor& color)
+    void GraphicsScene::set_grid_cluster_line_color(const QColor& color)
     {
         s_grid_cluster_line_color = color;
     }
 
-    void graphics_scene::set_grid_base_dot_color(const QColor& color)
+    void GraphicsScene::set_grid_base_dot_color(const QColor& color)
     {
         s_grid_base_dot_color = color;
     }
 
-    void graphics_scene::set_grid_cluster_dot_color(const QColor& color)
+    void GraphicsScene::set_grid_cluster_dot_color(const QColor& color)
     {
         s_grid_cluster_dot_color = color;
     }
 
-    QPointF graphics_scene::snap_to_grid(const QPointF& pos)
+    QPointF GraphicsScene::snap_to_grid(const QPointF& pos)
     {
         int adjusted_x = qRound(pos.x() / graph_widget_constants::grid_size) * graph_widget_constants::grid_size;
         int adjusted_y = qRound(pos.y() / graph_widget_constants::grid_size) * graph_widget_constants::grid_size;
         return QPoint(adjusted_x, adjusted_y);
     }
 
-    graphics_scene::graphics_scene(QObject* parent) : QGraphicsScene(parent),
-        m_drag_shadow_gate(new node_drag_shadow())
+    GraphicsScene::GraphicsScene(QObject* parent) : QGraphicsScene(parent),
+        m_drag_shadow_gate(new NodeDragShadow())
     {
         // FIND OUT IF MANUAL CHANGE TO DEPTH IS NECESSARY / INCREASES PERFORMANCE
         //m_scene.setBspTreeDepth(10);
@@ -118,29 +118,29 @@ namespace hal
         #endif
     }
 
-    void graphics_scene::start_drag_shadow(const QPointF& posF, const QSizeF& sizeF, const node_drag_shadow::drag_cue cue)
+    void GraphicsScene::start_drag_shadow(const QPointF& posF, const QSizeF& sizeF, const NodeDragShadow::drag_cue cue)
     {
         m_drag_shadow_gate->set_visual_cue(cue);
         m_drag_shadow_gate->start(posF, sizeF);
     }
 
-    void graphics_scene::move_drag_shadow(const QPointF& posF, const node_drag_shadow::drag_cue cue)
+    void GraphicsScene::move_drag_shadow(const QPointF& posF, const NodeDragShadow::drag_cue cue)
     {
         m_drag_shadow_gate->setPos(posF);
         m_drag_shadow_gate->set_visual_cue(cue);
     }
 
-    void graphics_scene::stop_drag_shadow()
+    void GraphicsScene::stop_drag_shadow()
     {
         m_drag_shadow_gate->stop();
     }
 
-    QPointF graphics_scene::drop_target()
+    QPointF GraphicsScene::drop_target()
     {
         return m_drag_shadow_gate->pos();
     }
 
-    void graphics_scene::add_item(graphics_item* item)
+    void GraphicsScene::add_item(GraphicsItem* item)
     {
         // SELECTION HAS TO BE UPDATED MANUALLY AFTER ADDING / REMOVING ITEMS
 
@@ -153,7 +153,7 @@ namespace hal
         {
         case hal::item_type::gate:
         {
-            graphics_gate* g = static_cast<graphics_gate*>(item);
+            GraphicsGate* g = static_cast<GraphicsGate*>(item);
             int i = 0;
             while (i < m_gate_items.size())
             {
@@ -167,7 +167,7 @@ namespace hal
         }
         case hal::item_type::net:
         {
-            graphics_net* n = static_cast<graphics_net*>(item);
+            GraphicsNet* n = static_cast<GraphicsNet*>(item);
             int i = 0;
             while (i < m_net_items.size())
             {
@@ -181,7 +181,7 @@ namespace hal
         }
         case hal::item_type::module:
         {
-            graphics_module* m = static_cast<graphics_module*>(item);
+            GraphicsModule* m = static_cast<GraphicsModule*>(item);
             int i = 0;
             while (i < m_module_items.size())
             {
@@ -196,7 +196,7 @@ namespace hal
         }
     }
 
-    void graphics_scene::remove_item(graphics_item* item)
+    void GraphicsScene::remove_item(GraphicsItem* item)
     {
         // SELECTION HAS TO BE UPDATED MANUALLY AFTER ADDING / REMOVING ITEMS
 
@@ -209,7 +209,7 @@ namespace hal
         {
         case hal::item_type::gate:
         {
-            graphics_gate* g = static_cast<graphics_gate*>(item);
+            GraphicsGate* g = static_cast<GraphicsGate*>(item);
             u32 id = g->id();
 
             int i = 0;
@@ -229,7 +229,7 @@ namespace hal
         }
         case hal::item_type::net:
         {
-            graphics_net* n = static_cast<graphics_net*>(item);
+            GraphicsNet* n = static_cast<GraphicsNet*>(item);
             u32 id = n->id();
 
             int i = 0;
@@ -249,7 +249,7 @@ namespace hal
         }
         case hal::item_type::module:
         {
-            graphics_module* m = static_cast<graphics_module*>(item);
+            GraphicsModule* m = static_cast<GraphicsModule*>(item);
             u32 id = m->id();
 
             int i = 0;
@@ -270,7 +270,7 @@ namespace hal
         }
     }
 
-    const graphics_gate* graphics_scene::get_gate_item(const u32 id) const
+    const GraphicsGate* GraphicsScene::get_gate_item(const u32 id) const
     {
         for (const gate_data& d : m_gate_items)
         {
@@ -284,7 +284,7 @@ namespace hal
         return nullptr;
     }
 
-    const graphics_net* graphics_scene::get_net_item(const u32 id) const
+    const GraphicsNet* GraphicsScene::get_net_item(const u32 id) const
     {
         for (const net_data& d : m_net_items)
         {
@@ -298,7 +298,7 @@ namespace hal
         return nullptr;
     }
 
-    const graphics_module* graphics_scene::get_module_item(const u32 id) const
+    const GraphicsModule* GraphicsScene::get_module_item(const u32 id) const
     {
         for (const module_data& d : m_module_items)
         {
@@ -312,27 +312,27 @@ namespace hal
         return nullptr;
     }
 
-    void graphics_scene::connect_all()
+    void GraphicsScene::connect_all()
     {
-        connect(&g_settings_relay, &settings_relay::setting_changed, this, &graphics_scene::handle_global_setting_changed);
+        connect(&g_settings_relay, &settings_relay::setting_changed, this, &GraphicsScene::handle_global_setting_changed);
 
-        connect(this, &graphics_scene::selectionChanged, this, &graphics_scene::handle_intern_selection_changed);
+        connect(this, &GraphicsScene::selectionChanged, this, &GraphicsScene::handle_intern_selection_changed);
 
-        connect(&g_selection_relay, &selection_relay::selection_changed, this, &graphics_scene::handle_extern_selection_changed);
-        connect(&g_selection_relay, &selection_relay::subfocus_changed, this, &graphics_scene::handle_extern_subfocus_changed);
+        connect(&g_selection_relay, &selection_relay::selection_changed, this, &GraphicsScene::handle_extern_selection_changed);
+        connect(&g_selection_relay, &selection_relay::subfocus_changed, this, &GraphicsScene::handle_extern_subfocus_changed);
     }
 
-    void graphics_scene::disconnect_all()
+    void GraphicsScene::disconnect_all()
     {
-        disconnect(&g_settings_relay, &settings_relay::setting_changed, this, &graphics_scene::handle_global_setting_changed);
+        disconnect(&g_settings_relay, &settings_relay::setting_changed, this, &GraphicsScene::handle_global_setting_changed);
 
-        disconnect(this, &graphics_scene::selectionChanged, this, &graphics_scene::handle_intern_selection_changed);
+        disconnect(this, &GraphicsScene::selectionChanged, this, &GraphicsScene::handle_intern_selection_changed);
 
-        disconnect(&g_selection_relay, &selection_relay::selection_changed, this, &graphics_scene::handle_extern_selection_changed);
-        disconnect(&g_selection_relay, &selection_relay::subfocus_changed, this, &graphics_scene::handle_extern_subfocus_changed);
+        disconnect(&g_selection_relay, &selection_relay::selection_changed, this, &GraphicsScene::handle_extern_selection_changed);
+        disconnect(&g_selection_relay, &selection_relay::subfocus_changed, this, &GraphicsScene::handle_extern_subfocus_changed);
     }
 
-    void graphics_scene::delete_all_items()
+    void GraphicsScene::delete_all_items()
     {
         // this breaks the m_drag_shadow_gate
         // clear();
@@ -351,7 +351,7 @@ namespace hal
         m_net_items.clear();
     }
 
-    void graphics_scene::update_visuals(const graph_shader::shading& s)
+    void GraphicsScene::update_visuals(const GraphShader::shading& s)
     {
         for (module_data& m : m_module_items)
         {
@@ -369,13 +369,13 @@ namespace hal
         }
     }
 
-    void graphics_scene::move_nets_to_background()
+    void GraphicsScene::move_nets_to_background()
     {
         for (net_data d : m_net_items)
             d.item->setZValue(-1);
     }
 
-    void graphics_scene::handle_intern_selection_changed()
+    void GraphicsScene::handle_intern_selection_changed()
     {
         g_selection_relay.clear();
 
@@ -385,23 +385,23 @@ namespace hal
 
         for (const QGraphicsItem* const item : selectedItems())
         {
-            switch (static_cast<const graphics_item* const>(item)->item_type())
+            switch (static_cast<const GraphicsItem* const>(item)->item_type())
             {
             case hal::item_type::gate:
             {
-                g_selection_relay.m_selected_gates.insert(static_cast<const graphics_item* const>(item)->id());
+                g_selection_relay.m_selected_gates.insert(static_cast<const GraphicsItem* const>(item)->id());
                 ++gates;
                 break;
             }
             case hal::item_type::net:
             {
-                g_selection_relay.m_selected_nets.insert(static_cast<const graphics_item* const>(item)->id());
+                g_selection_relay.m_selected_nets.insert(static_cast<const GraphicsItem* const>(item)->id());
                 ++nets;
                 break;
             }
             case hal::item_type::module:
             {
-                g_selection_relay.m_selected_modules.insert(static_cast<const graphics_item* const>(item)->id());
+                g_selection_relay.m_selected_modules.insert(static_cast<const GraphicsItem* const>(item)->id());
                 ++modules;
                 break;
             }
@@ -438,7 +438,7 @@ namespace hal
         g_selection_relay.relay_selection_changed(this);
     }
 
-    void graphics_scene::handle_extern_selection_changed(void* sender)
+    void GraphicsScene::handle_extern_selection_changed(void* sender)
     {
         // CLEAR CURRENT SELECTION EITHER MANUALLY OR USING clearSelection()
         // UNCERTAIN ABOUT THE SENDER PARAMETER
@@ -489,12 +489,12 @@ namespace hal
         blockSignals(original_value);
     }
 
-    void graphics_scene::handle_extern_subfocus_changed(void* sender)
+    void GraphicsScene::handle_extern_subfocus_changed(void* sender)
     {
         Q_UNUSED(sender)
     }
 
-    void graphics_scene::mousePressEvent(QGraphicsSceneMouseEvent* event)
+    void GraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent* event)
     {
         // CONTEXT MENU CLEARING SELECTION WORKAROUND
         if (event->button() == Qt::RightButton)
@@ -506,7 +506,7 @@ namespace hal
         QGraphicsScene::mousePressEvent(event);
     }
 
-    void graphics_scene::handle_global_setting_changed(void* sender, const QString& key, const QVariant& value)
+    void GraphicsScene::handle_global_setting_changed(void* sender, const QString& key, const QVariant& value)
     {
         Q_UNUSED(sender)
 
@@ -518,7 +518,7 @@ namespace hal
         #endif
     }
 
-    void graphics_scene::drawBackground(QPainter* painter, const QRectF& rect)
+    void GraphicsScene::drawBackground(QPainter* painter, const QRectF& rect)
     {
         if (!s_grid_enabled)
             return;
@@ -532,7 +532,7 @@ namespace hal
         QPen pen;
         pen.setWidth(2);
 
-        // OVERDRAW NEEDED BECAUSE QT FAILS AT BASIC GEOMETRY
+        // OVERDRAW NEEDED BECAUSE QT FAILS AT BASIC geometry
         const int overdraw = 2;
 
         const int x_from = rect.left() - overdraw;
@@ -623,7 +623,7 @@ namespace hal
     }
 
     #ifdef GUI_DEBUG_GRID
-    void graphics_scene::debug_set_layouter_grid(const QVector<qreal>& debug_x_lines, const QVector<qreal>& debug_y_lines, qreal debug_default_height, qreal debug_default_width)
+    void GraphicsScene::debug_set_layouter_grid(const QVector<qreal>& debug_x_lines, const QVector<qreal>& debug_y_lines, qreal debug_default_height, qreal debug_default_width)
     {
         m_debug_x_lines = debug_x_lines;
         m_debug_y_lines = debug_y_lines;
@@ -631,7 +631,7 @@ namespace hal
         m_debug_default_width = debug_default_width;
     }
 
-    void graphics_scene::debug_draw_layouter_grid(QPainter* painter, const int x_from, const int x_to, const int y_from, const int y_to)
+    void GraphicsScene::debug_draw_layouter_grid(QPainter* painter, const int x_from, const int x_to, const int y_from, const int y_to)
     {
         painter->setPen(QPen(Qt::magenta));
 

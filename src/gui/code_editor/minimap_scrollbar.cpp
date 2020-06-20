@@ -10,7 +10,7 @@
 
 namespace hal
 {
-    minimap_scrollbar::minimap_scrollbar(QWidget* parent) : QWidget(parent),
+    MinimapScrollbar::MinimapScrollbar(QWidget* parent) : QWidget(parent),
           m_slider(new QFrame(this)),
           m_minimum(0),
           m_maximum(100),
@@ -25,32 +25,32 @@ namespace hal
         m_slider->show();
     }
 
-    int minimap_scrollbar::minimum() const
+    int MinimapScrollbar::minimum() const
     {
         return m_minimum;
     }
 
-    int minimap_scrollbar::maximum() const
+    int MinimapScrollbar::maximum() const
     {
         return m_maximum;
     }
 
-    int minimap_scrollbar::value() const
+    int MinimapScrollbar::value() const
     {
         return m_value;
     }
 
-    int minimap_scrollbar::slider_height() const
+    int MinimapScrollbar::slider_height() const
     {
         return m_slider->height();
     }
 
-    int minimap_scrollbar::slider_position() const
+    int MinimapScrollbar::slider_position() const
     {
         return m_slider->pos().y();
     }
 
-    //void minimap_scrollbar::set_minimum(const int minimum)
+    //void MinimapScrollbar::set_minimum(const int minimum)
     //{
     //    m_minimum = minimum;
 
@@ -60,7 +60,7 @@ namespace hal
     //    adjust_slider_to_value();
     //}
 
-    //void minimap_scrollbar::set_maximum(const int maximum)
+    //void MinimapScrollbar::set_maximum(const int maximum)
     //{
     //    m_maximum = maximum;
 
@@ -70,7 +70,7 @@ namespace hal
     //    adjust_slider_to_value();
     //}
 
-    void minimap_scrollbar::set_range(const int minimum, const int maximum)
+    void MinimapScrollbar::set_range(const int minimum, const int maximum)
     {
         m_minimum = minimum;
         m_maximum = maximum;
@@ -85,7 +85,7 @@ namespace hal
         adjust_slider_to_value();
     }
 
-    void minimap_scrollbar::set_value(const int value)
+    void MinimapScrollbar::set_value(const int value)
     {
         if (m_value != value)
         {
@@ -102,24 +102,24 @@ namespace hal
         }
     }
 
-    void minimap_scrollbar::set_slider_height(int height)
+    void MinimapScrollbar::set_slider_height(int height)
     {
         m_slider->resize(m_slider->width(), height);
         adjust_slider_to_value();
     }
 
-    void minimap_scrollbar::set_scrollbar(QScrollBar* scrollbar)
+    void MinimapScrollbar::set_scrollbar(QScrollBar* scrollbar)
     {
         m_scrollbar = scrollbar;
     }
 
-    void minimap_scrollbar::paintEvent(QPaintEvent* event)
+    void MinimapScrollbar::paintEvent(QPaintEvent* event)
     {
         Q_UNUSED(event);
         // LEFT EMPTY INTENTIONALLY FOR TRANSPARENT BACKGROUND
     }
 
-    void minimap_scrollbar::resizeEvent(QResizeEvent* event)
+    void MinimapScrollbar::resizeEvent(QResizeEvent* event)
     {
         //QWidget::resizeEvent(event); // UNNECESSARY ?
         Q_UNUSED(event)
@@ -128,7 +128,7 @@ namespace hal
         adjust_slider_to_value();
     }
 
-    void minimap_scrollbar::mousePressEvent(QMouseEvent* event)
+    void MinimapScrollbar::mousePressEvent(QMouseEvent* event)
     {
         if (m_slider->geometry().contains(event->pos()))
         {
@@ -141,7 +141,7 @@ namespace hal
             event->ignore();
     }
 
-    void minimap_scrollbar::mouseMoveEvent(QMouseEvent* event)
+    void MinimapScrollbar::mouseMoveEvent(QMouseEvent* event)
     {
         if (!m_scrollbar)
             return;
@@ -174,19 +174,19 @@ namespace hal
         }
     }
 
-    void minimap_scrollbar::mouseReleaseEvent(QMouseEvent* event)
+    void MinimapScrollbar::mouseReleaseEvent(QMouseEvent* event)
     {
         m_mouse_pressed = false;
         event->accept();
     }
 
-    void minimap_scrollbar::leaveEvent(QEvent* event)
+    void MinimapScrollbar::leaveEvent(QEvent* event)
     {
         m_mouse_pressed = false;
         QWidget::leaveEvent(event);
     }
 
-    void minimap_scrollbar::adjust_slider_to_value()
+    void MinimapScrollbar::adjust_slider_to_value()
     {
         int available_pixel = height() - m_slider->height();
         if (available_pixel <= 0)

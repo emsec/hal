@@ -27,10 +27,10 @@
 
 namespace hal
 {
-    class overlay_effect : public QGraphicsEffect
+    class OverlayEffect : public QGraphicsEffect
     {
     public:
-        overlay_effect(QObject* parent = 0);
+        OverlayEffect(QObject* parent = 0);
 
         void draw(QPainter* painter) Q_DECL_OVERRIDE;
     };

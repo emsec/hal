@@ -27,7 +27,7 @@
 
 namespace hal
 {
-    class graphics_qss_adapter : public QWidget
+    class GraphicsQssAdapter : public QWidget
     {
         Q_OBJECT
 
@@ -50,7 +50,7 @@ namespace hal
         Q_PROPERTY(QColor grid_cluster_dot_color READ grid_cluster_dot_color WRITE set_grid_cluster_dot_color)
 
     public:
-        explicit graphics_qss_adapter(QWidget* parent = nullptr);
+        explicit GraphicsQssAdapter(QWidget* parent = nullptr);
 
         void repolish();
 

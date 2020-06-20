@@ -42,7 +42,7 @@ class QPushButton;
 namespace hal
 {
     /* forward declaration */
-    class graph_navigation_widget;
+    class GraphNavigationWidget;
 
     class gate_details_widget : public QWidget
     {
@@ -89,7 +89,7 @@ namespace hal
         bool m_hide_empty_sections;
         QFont m_key_font;
         u32 m_current_id;
-        graph_navigation_widget* m_navigation_table;
+        GraphNavigationWidget* m_navigation_table;
 
         //All sections together are encapsulated in a container to make it scrollable
         QScrollArea* m_scroll_area;

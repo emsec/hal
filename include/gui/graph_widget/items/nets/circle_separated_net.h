@@ -27,12 +27,12 @@
 
 namespace hal
 {
-    class circle_separated_net : public separated_graphics_net
+    class CircleSeparatedNet : public SeparatedGraphicsNet
     {
     public:
         static void load_settings();
 
-        circle_separated_net(const std::shared_ptr<const Net> n);
+        CircleSeparatedNet(const std::shared_ptr<const Net> n);
 
         void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override;
 

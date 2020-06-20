@@ -3,7 +3,7 @@
 #include <Qt>
 namespace hal
 {
-    hal_graphics_view::hal_graphics_view()
+    HalGraphicsView::HalGraphicsView()
     {
         QOpenGLWidget* viewport = new QOpenGLWidget();
         viewport->setUpdateBehavior(QOpenGLWidget::PartialUpdate);
@@ -15,7 +15,7 @@ namespace hal
         //setAttribute(Qt::WA_TranslucentBackground);
     }
 
-    void hal_graphics_view::gentle_zoom(double factor)
+    void HalGraphicsView::gentle_zoom(double factor)
     {
         this->scale(factor, factor);
         this->centerOn(m_target_scene_pos);
@@ -25,17 +25,17 @@ namespace hal
         Q_EMIT zoomed();
     }
 
-    void hal_graphics_view::set_modifiers(Qt::KeyboardModifiers modifiers)
+    void HalGraphicsView::set_modifiers(Qt::KeyboardModifiers modifiers)
     {
         m_modifiers = modifiers;
     }
 
-    void hal_graphics_view::set_zoom_factor_base(double value)
+    void HalGraphicsView::set_zoom_factor_base(double value)
     {
         m_zoom_factor_base = value;
     }
 
-    bool hal_graphics_view::eventFilter(QObject* object, QEvent* event)
+    bool HalGraphicsView::eventFilter(QObject* object, QEvent* event)
     {
         Q_UNUSED(object)
         if (event->type() == QEvent::Wheel)

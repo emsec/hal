@@ -37,8 +37,8 @@ class QScrollBar;
 
 namespace hal
 {
-    class expanding_list_button;
-    class expanding_list_widget;
+    class ExpandingListButton;
+    class ExpandingListWidget;
     class searchbar;
     class settings_display;
     class settings_widget;
@@ -58,7 +58,7 @@ namespace hal
         void handle_restore_defaults_clicked();
         void handle_cancel_clicked();
         void handle_ok_clicked();
-        void handle_button_selected(expanding_list_button* button);
+        void handle_button_selected(ExpandingListButton* button);
         void handle_text_edited(const QString& text);
         void handle_setting_updated(settings_widget* sender, const QString& key, const QVariant& value);
 
@@ -77,7 +77,7 @@ namespace hal
         void rollback_settings();
 
         QHBoxLayout* m_layout;
-        expanding_list_widget* m_expanding_list_widget;
+        ExpandingListWidget* m_expanding_list_widget;
         QVBoxLayout* m_vertical_layout;
         QScrollBar* m_scrollbar;
 
@@ -98,7 +98,7 @@ namespace hal
         QPushButton* m_ok;
 
         QMap<QString, QList<settings_widget*>*> m_map;
-        QMap<QString, expanding_list_button*> m_sections;
+        QMap<QString, ExpandingListButton*> m_sections;
         QString m_active_section;
 
         QList<settings_widget*> m_all_settings;

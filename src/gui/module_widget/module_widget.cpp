@@ -22,7 +22,7 @@
 
 namespace hal
 {
-    module_widget::module_widget(QWidget* parent) : content_widget("Modules", parent), m_tree_view(new module_tree_view(this)), m_module_proxy_model(new module_proxy_model(this))
+    module_widget::module_widget(QWidget* parent) : ContentWidget("Modules", parent), m_tree_view(new module_tree_view(this)), m_module_proxy_model(new module_proxy_model(this))
     {
         connect(m_tree_view, &QTreeView::customContextMenuRequested, this, &module_widget::handle_tree_view_context_menu_requested);
 
@@ -194,7 +194,7 @@ namespace hal
         if (!module)
             return;
 
-        graph_context* new_context = nullptr;
+        GraphContext* new_context = nullptr;
         new_context                = g_graph_context_manager.create_new_context(QString::fromStdString(module->get_name()));
         new_context->add({module->get_id()}, {});
     }

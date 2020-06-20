@@ -50,7 +50,7 @@ namespace hal
     extern window_manager* g_window_manager;
     extern notification_manager* g_notification_manager;
 
-    extern hal_content_manager* g_content_manager;
+    extern HalContentManager* g_content_manager;
 
     extern std::shared_ptr<Netlist> g_netlist;
 
@@ -63,15 +63,15 @@ namespace hal
 
     extern keybind_manager g_keybind_manager;
 
-    extern file_status_manager g_file_status_manager;
+    extern FileStatusManager g_file_status_manager;
 
-    extern graph_context_manager g_graph_context_manager;
+    extern GraphContextManager g_graph_context_manager;
 
     extern thread_pool* g_thread_pool;
 
     extern std::unique_ptr<python_context> g_python_context;
 
-    extern gui_api* g_gui_api;
+    extern GuiApi* g_gui_api;
 
     // Comment this out to not compile the debug code for the graph grid.
     // This will also hide the respective debug setting from the settings page.

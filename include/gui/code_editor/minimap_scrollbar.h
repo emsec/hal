@@ -31,12 +31,12 @@ class QScrollBar;
 namespace hal
 {
 
-    class minimap_scrollbar : public QWidget
+    class MinimapScrollbar : public QWidget
     {
         Q_OBJECT
 
     public:
-        minimap_scrollbar(QWidget* parent = nullptr);
+        MinimapScrollbar(QWidget* parent = nullptr);
 
         int minimum() const;
         int maximum() const;

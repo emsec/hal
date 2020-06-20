@@ -6,7 +6,7 @@
 
 namespace hal
 {
-    labeled_frame::labeled_frame(QWidget* parent)
+    LabeledFrame::LabeledFrame(QWidget* parent)
         : QFrame(parent), m_layout(new QVBoxLayout), m_header(new QFrame()), m_header_layout(new QHBoxLayout()), m_left_spacer(new QFrame()), m_label(new QLabel()), m_right_spacer(new QFrame())
     {
         setLayout(m_layout);
@@ -36,7 +36,7 @@ namespace hal
         m_header_layout->addWidget(m_right_spacer);
     }
 
-    void labeled_frame::add_content(QWidget* content)
+    void LabeledFrame::add_content(QWidget* content)
     {
         m_layout->addWidget(content);
     }

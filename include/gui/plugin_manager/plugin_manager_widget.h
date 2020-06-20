@@ -32,7 +32,7 @@ namespace hal
     class plugin_model;
     class toolbar;
 
-    class plugin_manager_widget : public content_widget
+    class plugin_manager_widget : public ContentWidget
     {
         Q_OBJECT
 

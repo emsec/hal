@@ -33,19 +33,19 @@
 
 namespace hal
 {
-    class graph_context_subscriber;
+    class GraphContextSubscriber;
 
-    class graph_context : public QObject
+    class GraphContext : public QObject
     {
-        friend class graph_context_manager;
+        friend class GraphContextManager;
         Q_OBJECT
 
     public:
-        explicit graph_context(const QString& name, QObject* parent = nullptr);
-        ~graph_context();
+        explicit GraphContext(const QString& name, QObject* parent = nullptr);
+        ~GraphContext();
 
-        void subscribe(graph_context_subscriber* const subscriber);
-        void unsubscribe(graph_context_subscriber* const subscriber);
+        void subscribe(GraphContextSubscriber* const subscriber);
+        void unsubscribe(GraphContextSubscriber* const subscriber);
 
         void begin_change();
         void end_change();
@@ -68,12 +68,12 @@ namespace hal
         const QSet<u32>& gates() const;
         const QSet<u32>& nets() const;
 
-        graphics_scene* scene();
+        GraphicsScene* scene();
 
         QString name() const;
 
-        void set_layouter(graph_layouter* layouter);
-        void set_shader(graph_shader* shader);
+        void set_layouter(GraphLayouter* layouter);
+        void set_shader(GraphShader* shader);
 
         bool scene_update_in_progress() const;
 
@@ -81,7 +81,7 @@ namespace hal
 
         bool node_for_gate(hal::node& node, const u32 id) const;
 
-        graph_layouter* debug_get_layouter() const;
+        GraphLayouter* debug_get_layouter() const;
 
         QDateTime get_timestamp() const;
 
@@ -96,12 +96,12 @@ namespace hal
         void apply_changes();
         void start_scene_update();
 
-        QList<graph_context_subscriber*> m_subscribers;
+        QList<GraphContextSubscriber*> m_subscribers;
 
         QString m_name;
 
-        graph_layouter* m_layouter;
-        graph_shader* m_shader;
+        GraphLayouter* m_layouter;
+        GraphShader* m_shader;
 
         QSet<u32> m_modules;
         QSet<u32> m_gates;

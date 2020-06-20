@@ -29,14 +29,14 @@ class QPropertyAnimation;
 
 namespace hal
 {
-    class drop_marker : public QFrame
+    class DropMarker : public QFrame
     {
         Q_OBJECT
         Q_PROPERTY(int fixed_width READ fixed_width WRITE set_fixed_width)
         Q_PROPERTY(int fixed_height READ fixed_height WRITE set_fixed_height)
 
     public:
-        drop_marker(Qt::Orientation orientation, QWidget* parent = nullptr);
+        DropMarker(Qt::Orientation orientation, QWidget* parent = nullptr);
 
         int fixed_width();
         int fixed_height();

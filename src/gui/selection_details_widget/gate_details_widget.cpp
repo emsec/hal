@@ -171,11 +171,11 @@ namespace hal
 
         //setup the navigation_table ("activated" by clicking on an input / output pin in the 2 tables)
         //delete the table manually so its not necessarry to add a property for the stylesheet(otherwise this table is styled like the others)
-        m_navigation_table = new graph_navigation_widget();
+        m_navigation_table = new GraphNavigationWidget();
         m_navigation_table->setWindowFlags(Qt::CustomizeWindowHint);
         m_navigation_table->hide_when_focus_lost(true);
         m_navigation_table->hide();
-        connect(m_navigation_table, &graph_navigation_widget::navigation_requested, this, &gate_details_widget::handle_navigation_jump_requested);
+        connect(m_navigation_table, &GraphNavigationWidget::navigation_requested, this, &gate_details_widget::handle_navigation_jump_requested);
 
         //some connections (maybe connect to simple toggle_hide_show functiom_boolean_functions_container_layoutn of widgets)
         connect(m_general_info_button, &QPushButton::clicked, this, &gate_details_widget::handle_buttons_clicked);

@@ -27,10 +27,10 @@
 
 namespace hal
 {
-    class standard_graph_layouter final : public graph_layouter
+    class StandardGraphLayouter final : public GraphLayouter
     {
     public:
-        standard_graph_layouter(const graph_context* const context);
+        StandardGraphLayouter(const GraphContext* const context);
 
         QString name() const override;
         QString description() const override;

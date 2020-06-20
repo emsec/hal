@@ -3,7 +3,7 @@
 #include "code_editor/syntax_highlighter/python_qss_adapter.h"
 namespace hal
 {
-    python_syntax_highlighter::python_syntax_highlighter(QTextDocument* parent)
+    PythonSyntaxHighlighter::PythonSyntaxHighlighter(QTextDocument* parent)
         : QSyntaxHighlighter(parent), m_multi_line_comment_delimiter("('''|\"\"\")"), m_tripple_single_quote("'''"), m_tripple_double_quote("\"\"\"")
     //      //m_keyword_color(177, 240, 0),
     //      //m_keyword_color("#ffd200"),
@@ -33,32 +33,32 @@ namespace hal
         rule.pattern = QRegularExpression("\\b(and|as|assert|break|class|continue|def|del|elif|else|except|finally|for|from|global|if|import|in|is|lambda|"
                                           "nonlocal|not|or|pass|raise|return|try|while|with|yield|False|None|True)\\b");
         rule.pattern.optimize();
-        rule.format = python_qss_adapter::instance()->m_keyword_format;
+        rule.format = PythonQssAdapter::instance()->m_keyword_format;
         m_highlighting_rules.append(rule);
 
         rule.pattern = QRegularExpression("=|==|!=|<|<=|>|>=|\\+|-|\\*|/|//|%|\\*\\*|\\+=|-=|\\*=|/=|%=|\\^|\\||&|~|>>|<<");
         rule.pattern.optimize();
-        rule.format = python_qss_adapter::instance()->m_operator_format;
+        rule.format = PythonQssAdapter::instance()->m_operator_format;
         m_highlighting_rules.append(rule);
 
         rule.pattern = QRegularExpression("{|}|\\(|\\)|\\[|]");
         rule.pattern.optimize();
-        rule.format = python_qss_adapter::instance()->m_brace_format;
+        rule.format = PythonQssAdapter::instance()->m_brace_format;
         m_highlighting_rules.append(rule);
 
         rule.pattern = QRegularExpression("'[^']*'");
         rule.pattern.optimize();
-        rule.format = python_qss_adapter::instance()->m_single_quoted_string_format;
+        rule.format = PythonQssAdapter::instance()->m_single_quoted_string_format;
         m_highlighting_rules.append(rule);
 
         rule.pattern = QRegularExpression("\"[^\"]*\"");
         rule.pattern.optimize();
-        rule.format = python_qss_adapter::instance()->m_double_quoted_string_format;
+        rule.format = PythonQssAdapter::instance()->m_double_quoted_string_format;
         m_highlighting_rules.append(rule);
 
         rule.pattern = QRegularExpression("\\bself\\b");
         rule.pattern.optimize();
-        rule.format = python_qss_adapter::instance()->m_self_format;
+        rule.format = PythonQssAdapter::instance()->m_self_format;
         m_highlighting_rules.append(rule);
 
         rule.pattern = QRegularExpression("(\\b([1-9][0-9]*|0)\\.[0-9]*[eE][+-]?[0-9]+\\b)|"    // Exponent float
@@ -68,16 +68,16 @@ namespace hal
                                           "(\\b([1-9][0-9]*|0)[lL]?\\b)");                      // Decimal integer
 
         rule.pattern.optimize();
-        rule.format = python_qss_adapter::instance()->m_number_format;
+        rule.format = PythonQssAdapter::instance()->m_number_format;
         m_highlighting_rules.append(rule);
 
         rule.pattern = QRegularExpression("#[^\\n]*");
         rule.pattern.optimize();
-        rule.format = python_qss_adapter::instance()->m_comment_format;
+        rule.format = PythonQssAdapter::instance()->m_comment_format;
         m_highlighting_rules.append(rule);
     }
 
-    void python_syntax_highlighter::highlightBlock(const QString& text)
+    void PythonSyntaxHighlighter::highlightBlock(const QString& text)
     {
         for (const highlighting_rule& rule : m_highlighting_rules)
         {
@@ -139,12 +139,12 @@ namespace hal
                 if (single_match_index < 0)
                 {
                     setCurrentBlockState(1);
-                    setFormat(comment_start_index, text.length() - comment_start_index, python_qss_adapter::instance()->m_comment_format);
+                    setFormat(comment_start_index, text.length() - comment_start_index, PythonQssAdapter::instance()->m_comment_format);
                     return;
                 }
                 else
                 {
-                    setFormat(comment_start_index, comment_start_index - single_match_index + 3, python_qss_adapter::instance()->m_comment_format);
+                    setFormat(comment_start_index, comment_start_index - single_match_index + 3, PythonQssAdapter::instance()->m_comment_format);
                     match = m_multi_line_comment_delimiter.match(text, single_match_index + 3);
                 }
             }
@@ -156,12 +156,12 @@ namespace hal
                 if (double_match_index < 0)
                 {
                     setCurrentBlockState(2);
-                    setFormat(comment_start_index, text.length() - comment_start_index, python_qss_adapter::instance()->m_comment_format);
+                    setFormat(comment_start_index, text.length() - comment_start_index, PythonQssAdapter::instance()->m_comment_format);
                     return;
                 }
                 else
                 {
-                    setFormat(comment_start_index, comment_start_index - double_match_index + 3, python_qss_adapter::instance()->m_comment_format);
+                    setFormat(comment_start_index, comment_start_index - double_match_index + 3, PythonQssAdapter::instance()->m_comment_format);
                     match = m_multi_line_comment_delimiter.match(text, double_match_index + 3);
                 }
             }
@@ -170,15 +170,15 @@ namespace hal
         return;
     }
 
-    int python_syntax_highlighter::close_multiline_comment(const QString& text, const QRegularExpression& delimiter, const int offset)
+    int PythonSyntaxHighlighter::close_multiline_comment(const QString& text, const QRegularExpression& delimiter, const int offset)
     {
         QRegularExpressionMatch match = delimiter.match(text, offset);
         int index                     = match.capturedEnd();
 
         if (index < 0)
-            setFormat(offset, text.length() - offset, python_qss_adapter::instance()->m_comment_format);
+            setFormat(offset, text.length() - offset, PythonQssAdapter::instance()->m_comment_format);
         else
-            setFormat(offset, index - offset, python_qss_adapter::instance()->m_comment_format);
+            setFormat(offset, index - offset, PythonQssAdapter::instance()->m_comment_format);
 
         return index;
     }

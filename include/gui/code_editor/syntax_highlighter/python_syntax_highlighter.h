@@ -29,12 +29,12 @@
 
 namespace hal
 {
-    class python_syntax_highlighter : public QSyntaxHighlighter
+    class PythonSyntaxHighlighter : public QSyntaxHighlighter
     {
         Q_OBJECT
 
     public:
-        explicit python_syntax_highlighter(QTextDocument* parent = nullptr);
+        explicit PythonSyntaxHighlighter(QTextDocument* parent = nullptr);
 
     protected:
         void highlightBlock(const QString& text) Q_DECL_OVERRIDE;

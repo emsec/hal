@@ -8,21 +8,21 @@
 
 namespace hal
 {
-    qreal arrow_separated_net::s_wire_length;
-    qreal arrow_separated_net::s_input_arrow_offset;
-    qreal arrow_separated_net::s_output_arrow_offset;
-    qreal arrow_separated_net::s_arrow_left_x_shift;
-    qreal arrow_separated_net::s_arrow_right_x_shift;
-    qreal arrow_separated_net::s_arrow_side_length;
-    qreal arrow_separated_net::s_arrow_width;
-    qreal arrow_separated_net::s_arrow_height;
+    qreal ArrowSeparatedNet::s_wire_length;
+    qreal ArrowSeparatedNet::s_input_arrow_offset;
+    qreal ArrowSeparatedNet::s_output_arrow_offset;
+    qreal ArrowSeparatedNet::s_arrow_left_x_shift;
+    qreal ArrowSeparatedNet::s_arrow_right_x_shift;
+    qreal ArrowSeparatedNet::s_arrow_side_length;
+    qreal ArrowSeparatedNet::s_arrow_width;
+    qreal ArrowSeparatedNet::s_arrow_height;
 
-    qreal arrow_separated_net::s_input_width;
-    qreal arrow_separated_net::s_output_width;
+    qreal ArrowSeparatedNet::s_input_width;
+    qreal ArrowSeparatedNet::s_output_width;
 
-    QPainterPath arrow_separated_net::s_arrow;
+    QPainterPath ArrowSeparatedNet::s_arrow;
 
-    void arrow_separated_net::load_settings()
+    void ArrowSeparatedNet::load_settings()
     {
         s_wire_length = 26;
 
@@ -62,11 +62,11 @@ namespace hal
         s_arrow.closeSubpath();
     }
 
-    arrow_separated_net::arrow_separated_net(const std::shared_ptr<const Net> n) : separated_graphics_net(n)
+    ArrowSeparatedNet::ArrowSeparatedNet(const std::shared_ptr<const Net> n) : SeparatedGraphicsNet(n)
     {
     }
 
-    void arrow_separated_net::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
+    void ArrowSeparatedNet::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
     {
         Q_UNUSED(widget);
 
@@ -129,7 +129,7 @@ namespace hal
     #endif
     }
 
-    void arrow_separated_net::add_input(const QPointF& scene_position)
+    void ArrowSeparatedNet::add_input(const QPointF& scene_position)
     {
         QPointF mapped_position = mapFromScene(scene_position);
         m_input_positions.append(mapped_position);
@@ -160,7 +160,7 @@ namespace hal
         m_shape.closeSubpath();
     }
 
-    void arrow_separated_net::add_output(const QPointF& scene_position)
+    void ArrowSeparatedNet::add_output(const QPointF& scene_position)
     {
         QPointF mapped_position = mapFromScene(scene_position);
         m_output_positions.append(mapped_position);
@@ -191,12 +191,12 @@ namespace hal
         m_shape.closeSubpath();
     }
 
-    qreal arrow_separated_net::input_width() const
+    qreal ArrowSeparatedNet::input_width() const
     {
         return s_input_width;
     }
 
-    qreal arrow_separated_net::output_width() const
+    qreal ArrowSeparatedNet::output_width() const
     {
         return s_output_width;
     }

@@ -4,7 +4,7 @@
 
 namespace hal
 {
-    hal_filter_dialog::hal_filter_dialog(hal_filter_tab_bar* caller, QWidget* parent) : QDialog(parent), m_caller(caller), m_button_box(QDialogButtonBox::Ok | QDialogButtonBox::Cancel)
+    HalFilterDialog::HalFilterDialog(HalFilterTabBar* caller, QWidget* parent) : QDialog(parent), m_caller(caller), m_button_box(QDialogButtonBox::Ok | QDialogButtonBox::Cancel)
     {
         setWindowTitle("New Filter");
         setSizeGripEnabled(true);
@@ -40,20 +40,20 @@ namespace hal
         connect(this, SIGNAL(finished(int)), this, SLOT(reset(int)));
     }
 
-    hal_filter_dialog::~hal_filter_dialog()
+    HalFilterDialog::~HalFilterDialog()
     {
     }
 
-    void hal_filter_dialog::verify()
+    void HalFilterDialog::verify()
     {
         QString name                        = m_name.text();
-        hal_filter_item::rule trace_rule    = m_trace_box.get_data();
-        hal_filter_item::rule debug_rule    = m_debug_box.get_data();
-        hal_filter_item::rule info_rule     = m_info_box.get_data();
-        hal_filter_item::rule warning_rule  = m_warning_box.get_data();
-        hal_filter_item::rule error_rule    = m_error_box.get_data();
-        hal_filter_item::rule critical_rule = m_critical_box.get_data();
-        hal_filter_item::rule default_rule  = m_default_box.get_data();
+        HalFilterItem::rule trace_rule    = m_trace_box.get_data();
+        HalFilterItem::rule debug_rule    = m_debug_box.get_data();
+        HalFilterItem::rule info_rule     = m_info_box.get_data();
+        HalFilterItem::rule warning_rule  = m_warning_box.get_data();
+        HalFilterItem::rule error_rule    = m_error_box.get_data();
+        HalFilterItem::rule critical_rule = m_critical_box.get_data();
+        HalFilterItem::rule default_rule  = m_default_box.get_data();
         QString keywordString               = m_keywords.text();
         QStringList keywordList             = keywordString.split(",", QString::SkipEmptyParts);
         QRegularExpression regex(m_regex.text());
@@ -74,17 +74,17 @@ namespace hal
         {
             m_status_message.hide();
         }
-        hal_filter_item* item = new hal_filter_item(trace_rule, debug_rule, info_rule, warning_rule, error_rule, critical_rule, default_rule, keywordList, regex);
+        HalFilterItem* item = new HalFilterItem(trace_rule, debug_rule, info_rule, warning_rule, error_rule, critical_rule, default_rule, keywordList, regex);
         append_filter_item(name, item);
     }
 
-    void hal_filter_dialog::append_filter_item(QString name, hal_filter_item* item)
+    void HalFilterDialog::append_filter_item(QString name, HalFilterItem* item)
     {
         m_caller->addNewFilter(name, item);
         accept();
     }
 
-    void hal_filter_dialog::reset(int)
+    void HalFilterDialog::reset(int)
     {
         m_name.clear();
         m_trace_box.setCurrentIndex(0);
@@ -98,28 +98,28 @@ namespace hal
         m_regex.clear();
     }
 
-    hal_filter_dialog::filter_combo_box::filter_combo_box(QWidget* parent) : QComboBox(parent)
+    HalFilterDialog::filter_combo_box::filter_combo_box(QWidget* parent) : QComboBox(parent)
     {
         addItem("Process", QVariant(0));
         addItem("Show All", QVariant(1));
         addItem("Hide All", QVariant(2));
     }
 
-    hal_filter_item::rule hal_filter_dialog::filter_combo_box::get_data()
+    HalFilterItem::rule HalFilterDialog::filter_combo_box::get_data()
     {
         switch (currentData().toInt())
         {
             case 0:
-                return hal_filter_item::rule::Process;
+                return HalFilterItem::rule::Process;
                 break;
             case 1:
-                return hal_filter_item::rule::ShowAll;
+                return HalFilterItem::rule::ShowAll;
                 break;
             case 2:
-                return hal_filter_item::rule::HideAll;
+                return HalFilterItem::rule::HideAll;
                 break;
             default:
-                return hal_filter_item::rule::Process;
+                return HalFilterItem::rule::Process;
                 break;
         }
     }

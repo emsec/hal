@@ -27,13 +27,13 @@
 
 namespace hal
 {
-    class standard_graphics_gate final : public graphics_gate
+    class StandardGraphicsGate final : public GraphicsGate
     {
     public:
         static void load_settings();
         static void update_alpha();
 
-        standard_graphics_gate(const std::shared_ptr<const Gate> g, const bool adjust_size_to_grid = true);
+        StandardGraphicsGate(const std::shared_ptr<const Gate> g, const bool adjust_size_to_grid = true);
 
         void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = nullptr) override;
 

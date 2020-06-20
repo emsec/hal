@@ -8,22 +8,22 @@
 
 namespace hal
 {
-    qreal circle_separated_net::s_wire_length;
-    qreal circle_separated_net::s_circle_offset;
-    qreal circle_separated_net::s_radius;
+    qreal CircleSeparatedNet::s_wire_length;
+    qreal CircleSeparatedNet::s_circle_offset;
+    qreal CircleSeparatedNet::s_radius;
 
-    void circle_separated_net::load_settings()
+    void CircleSeparatedNet::load_settings()
     {
         s_wire_length   = 26;
         s_circle_offset = 0;
         s_radius        = 3;
     }
 
-    circle_separated_net::circle_separated_net(const std::shared_ptr<const Net> n) : separated_graphics_net(n)
+    CircleSeparatedNet::CircleSeparatedNet(const std::shared_ptr<const Net> n) : SeparatedGraphicsNet(n)
     {
     }
 
-    void circle_separated_net::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
+    void CircleSeparatedNet::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
     {
         Q_UNUSED(widget);
 
@@ -87,7 +87,7 @@ namespace hal
     #endif
     }
 
-    void circle_separated_net::add_input(const QPointF& scene_position)
+    void CircleSeparatedNet::add_input(const QPointF& scene_position)
     {
         QPointF mapped_position = mapFromScene(scene_position);
         m_input_positions.append(mapped_position);
@@ -112,7 +112,7 @@ namespace hal
         m_shape.addEllipse(point, radius, radius);
     }
 
-    void circle_separated_net::add_output(const QPointF& scene_position)
+    void CircleSeparatedNet::add_output(const QPointF& scene_position)
     {
         QPointF mapped_position = mapFromScene(scene_position);
         m_output_positions.append(mapped_position);
@@ -137,12 +137,12 @@ namespace hal
         m_shape.addEllipse(point, radius, radius);
     }
 
-    qreal circle_separated_net::input_width() const
+    qreal CircleSeparatedNet::input_width() const
     {
         return s_wire_length + s_circle_offset + s_radius + s_line_width / 2;
     }
 
-    qreal circle_separated_net::output_width() const
+    qreal CircleSeparatedNet::output_width() const
     {
         return s_wire_length + s_circle_offset + s_radius + s_line_width / 2;
     }

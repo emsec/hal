@@ -7,23 +7,23 @@
 
 namespace hal
 {
-    physical_graph_layouter::physical_graph_layouter(const graph_context* const context) : graph_layouter(context),
+    PhysicalGraphLayouter::PhysicalGraphLayouter(const GraphContext* const context) : GraphLayouter(context),
         m_min_x_distance(std::numeric_limits<float>::max()),
         m_min_y_distance(std::numeric_limits<float>::max())
     {
     }
 
-    QString physical_graph_layouter::name() const
+    QString PhysicalGraphLayouter::name() const
     {
         return "Physical Layouter";
     }
 
-    QString physical_graph_layouter::description() const
+    QString PhysicalGraphLayouter::description() const
     {
         return "<p>PLACEHOLDER</p>";
     }
 
-    void physical_graph_layouter::add(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets, hal::placement_hint placement)
+    void PhysicalGraphLayouter::add(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets, hal::placement_hint placement)
     {
         Q_UNUSED(modules)
         Q_UNUSED(gates)
@@ -70,7 +70,7 @@ namespace hal
                 }
     }
 
-    void physical_graph_layouter::remove(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets)
+    void PhysicalGraphLayouter::remove(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets)
     {
         Q_UNUSED(modules)
         Q_UNUSED(gates)

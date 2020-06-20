@@ -4,11 +4,11 @@
 
 namespace hal
 {
-    overlay_effect::overlay_effect(QObject* parent) : QGraphicsEffect(parent)
+    OverlayEffect::OverlayEffect(QObject* parent) : QGraphicsEffect(parent)
     {
     }
 
-    void overlay_effect::draw(QPainter* painter)
+    void OverlayEffect::draw(QPainter* painter)
     {
         QPixmap pixmap;
         QPoint offset;

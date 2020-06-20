@@ -14,8 +14,8 @@ namespace hal
         //    std::string channel_name    = *msg.logger_name;
         //    std::string msg_text        = msg.formatted.str();
 
-        //    channel_item* all_channel = nullptr;
-        //    channel_item* item        = nullptr;
+        //    ChannelItem* all_channel = nullptr;
+        //    ChannelItem* item        = nullptr;
         //    for (auto element : m_permanent_items)
         //    {
         //        if (element->name().toStdString() == ALL_CHANNEL)

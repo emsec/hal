@@ -33,12 +33,12 @@
 
 namespace hal
 {
-    class file_modified_bar : public QFrame
+    class FileModifiedBar : public QFrame
     {
         Q_OBJECT
 
     public:
-        file_modified_bar(QWidget* parent = 0);
+        FileModifiedBar(QWidget* parent = 0);
 
         void set_message(QString message);
 

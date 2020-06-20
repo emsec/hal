@@ -90,7 +90,7 @@ namespace hal
         {
             // DEBUG -- REMOVE WHEN GUI CAN HANDLE EVENTS DURING CREATION
             event_controls::enable_all(false);
-            file_manager::get_instance()->open_file(m_file);
+            FileManager::get_instance()->open_file(m_file);
             // DEBUG -- REMOVE WHEN GUI CAN HANDLE EVENTS DURING CREATION
             event_controls::enable_all(true);
             event->accept();

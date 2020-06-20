@@ -27,12 +27,12 @@
 
 namespace hal
 {
-    class shadow_effect : public QGraphicsEffect
+    class ShadowEffect : public QGraphicsEffect
     {
         Q_OBJECT
 
     public:
-        explicit shadow_effect(QObject* parent = 0);
+        explicit ShadowEffect(QObject* parent = 0);
 
         void draw(QPainter* painter);
         QRectF boundingRectFor(const QRectF& rect) const;

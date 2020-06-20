@@ -28,10 +28,10 @@
 
 namespace hal
 {
-    class physical_graph_layouter final : public graph_layouter
+    class PhysicalGraphLayouter final : public GraphLayouter
     {
     public:
-        explicit physical_graph_layouter(const graph_context* const context);
+        explicit PhysicalGraphLayouter(const GraphContext* const context);
 
         QString name() const override;
         QString description() const override;

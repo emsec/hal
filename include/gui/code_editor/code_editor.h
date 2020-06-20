@@ -34,11 +34,11 @@ class QResizeEvent;
 namespace hal
 {
 
-    class code_editor_minimap;
-    class code_editor_scrollbar;
-    class line_number_area;
+    class CodeEditorMinimap;
+    class CodeEditorScrollbar;
+    class LineNumberArea;
 
-    class code_editor : public QPlainTextEdit
+    class CodeEditor : public QPlainTextEdit
     {
         Q_OBJECT
         Q_PROPERTY(QFont line_number_font READ line_number_font WRITE set_line_number_font)
@@ -49,7 +49,7 @@ namespace hal
         Q_PROPERTY(QColor current_line_background READ current_line_background WRITE set_current_line_background)
 
     public:
-        explicit code_editor(QWidget* parent = nullptr);
+        explicit CodeEditor(QWidget* parent = nullptr);
 
         virtual bool eventFilter(QObject* object, QEvent* event) Q_DECL_OVERRIDE;
 
@@ -66,7 +66,7 @@ namespace hal
 
         void handle_wheel_event(QWheelEvent* event);
 
-        code_editor_minimap* minimap();
+        CodeEditorMinimap* minimap();
 
         QFont line_number_font() const;
         QColor line_number_color() const;
@@ -102,10 +102,10 @@ namespace hal
         void update_layout();
         void clear_line_highlight();
 
-        code_editor_scrollbar* m_scrollbar;
+        CodeEditorScrollbar* m_scrollbar;
 
-        line_number_area* m_line_number_area;
-        code_editor_minimap* m_minimap;
+        LineNumberArea* m_line_number_area;
+        CodeEditorMinimap* m_minimap;
 
         QPropertyAnimation* m_animation;
 

@@ -7,7 +7,7 @@
 
 namespace hal
 {
-    dock_button::dock_button(content_widget* widget, button_orientation orientation, QObject* eventFilter, QWidget* parent) : QToolButton(parent), m_widget(widget), m_orientation(orientation)
+    DockButton::DockButton(ContentWidget* widget, button_orientation orientation, QObject* eventFilter, QWidget* parent) : QToolButton(parent), m_widget(widget), m_orientation(orientation)
     {
         setText(m_widget->name());
         setCheckable(true);
@@ -21,10 +21,10 @@ namespace hal
         m_relative_height = 18;
         adjust_size();
 
-        connect(this, &dock_button::clicked, this, &dock_button::handle_clicked);
+        connect(this, &DockButton::clicked, this, &DockButton::handle_clicked);
     }
 
-    void dock_button::paintEvent(QPaintEvent* event)
+    void DockButton::paintEvent(QPaintEvent* event)
     {
         Q_UNUSED(event)
         auto font = property("font").value<QFont>();
@@ -58,7 +58,7 @@ namespace hal
         painter.drawText(QRectF(QRect(m_icon_size, 0, m_relative_width, m_relative_height)), Qt::AlignVCenter, text());
     }
 
-    void dock_button::adjust_size()
+    void DockButton::adjust_size()
     {
         auto font = property("font").value<QFont>();
         //, QFont::PreferAntialias);
@@ -81,12 +81,12 @@ namespace hal
         setFixedWidth(m_width);
     }
 
-    int dock_button::relative_width()
+    int DockButton::relative_width()
     {
         return m_relative_width;
     }
 
-    void dock_button::handle_clicked(bool checked)
+    void DockButton::handle_clicked(bool checked)
     {
         if (checked)
             m_widget->open();
@@ -94,39 +94,39 @@ namespace hal
             m_widget->close();
     }
 
-    content_widget* dock_button::widget()
+    ContentWidget* DockButton::widget()
     {
         return m_widget;
     }
 
-    void dock_button::hide()
+    void DockButton::hide()
     {
         QWidget::hide();
         m_hidden = true;
     }
 
-    void dock_button::show()
+    void DockButton::show()
     {
         QWidget::show();
         m_hidden = false;
     }
 
-    bool dock_button::hidden()
+    bool DockButton::hidden()
     {
         return m_hidden;
     }
 
-    bool dock_button::available()
+    bool DockButton::available()
     {
         return m_available;
     }
 
-    void dock_button::set_available(bool available)
+    void DockButton::set_available(bool available)
     {
         m_available = available;
     }
 
-    void dock_button::set_relative_height(int height)
+    void DockButton::set_relative_height(int height)
     {
         m_relative_height = height;
         adjust_size();

@@ -6,7 +6,7 @@
 
 namespace hal
 {
-    graphics_node::graphics_node(const hal::item_type type, const u32 id, const QString& name) : graphics_item(type, id),
+    GraphicsNode::GraphicsNode(const hal::item_type type, const u32 id, const QString& name) : GraphicsItem(type, id),
         m_name(name)
     {
         setFlags(QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemSendsGeometryChanges);
@@ -14,41 +14,41 @@ namespace hal
         //setAcceptHoverEvents(true);
     }
 
-    QRectF graphics_node::boundingRect() const
+    QRectF GraphicsNode::boundingRect() const
     {
         return QRectF(0, 0, m_width, m_height);
     }
 
-    QPainterPath graphics_node::shape() const
+    QPainterPath GraphicsNode::shape() const
     {
         QPainterPath path;
         path.addRect(QRectF(0, 0, m_width, m_height));
         return path;
     }
 
-    void graphics_node::set_visuals(const graphics_node::visuals& v)
+    void GraphicsNode::set_visuals(const GraphicsNode::visuals& v)
     {
         setVisible(v.visible);
 
         m_color = v.main_color;
     }
 
-    qreal graphics_node::width() const
+    qreal GraphicsNode::width() const
     {
         return m_width;
     }
 
-    qreal graphics_node::height() const
+    qreal GraphicsNode::height() const
     {
         return m_height;
     }
 
-    void graphics_node::set_name(QString name)
+    void GraphicsNode::set_name(QString name)
     {
         m_name = name;
     }
 
-    QVariant graphics_node::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant& value)
+    QVariant GraphicsNode::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant& value)
     {
         // NOT FUNCTIONAL, NEEDS TO USE LAYOUT DATA
         // superseded by new drag and drop function

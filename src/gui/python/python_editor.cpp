@@ -30,8 +30,8 @@
 namespace hal
 {
     python_editor::python_editor(QWidget* parent)
-        : content_widget("Python Editor", parent), python_context_subscriber(), m_searchbar(new searchbar()), m_action_open_file(new hal_action(this)), m_action_run(new hal_action(this)),
-          m_action_save(new hal_action(this)), m_action_save_as(new hal_action(this)), m_action_toggle_minimap(new hal_action(this)), m_action_new_file(new hal_action(this))
+        : ContentWidget("Python Editor", parent), python_context_subscriber(), m_searchbar(new searchbar()), m_action_open_file(new HalAction(this)), m_action_run(new HalAction(this)),
+          m_action_save(new HalAction(this)), m_action_save_as(new HalAction(this)), m_action_toggle_minimap(new HalAction(this)), m_action_new_file(new HalAction(this))
     {
         ensurePolished();
         m_new_file_counter = 0;
@@ -69,28 +69,28 @@ namespace hal
         m_action_new_file->setText("New File");
         m_action_toggle_minimap->setText("Toggle Minimap");
 
-        connect(m_action_open_file, &hal_action::triggered, this, &python_editor::handle_action_open_file);
-        connect(m_action_save, &hal_action::triggered, this, &python_editor::handle_action_save_file);
-        connect(m_action_save_as, &hal_action::triggered, this, &python_editor::handle_action_save_file_as);
-        connect(m_action_run, &hal_action::triggered, this, &python_editor::handle_action_run);
-        connect(m_action_new_file, &hal_action::triggered, this, &python_editor::handle_action_new_tab);
-        connect(m_action_toggle_minimap, &hal_action::triggered, this, &python_editor::handle_action_toggle_minimap);
+        connect(m_action_open_file, &HalAction::triggered, this, &python_editor::handle_action_open_file);
+        connect(m_action_save, &HalAction::triggered, this, &python_editor::handle_action_save_file);
+        connect(m_action_save_as, &HalAction::triggered, this, &python_editor::handle_action_save_file_as);
+        connect(m_action_run, &HalAction::triggered, this, &python_editor::handle_action_run);
+        connect(m_action_new_file, &HalAction::triggered, this, &python_editor::handle_action_new_tab);
+        connect(m_action_toggle_minimap, &HalAction::triggered, this, &python_editor::handle_action_toggle_minimap);
 
         connect(m_searchbar, &searchbar::text_edited, this, &python_editor::handle_searchbar_text_edited);
         connect(m_tab_widget, &QTabWidget::currentChanged, this, &python_editor::handle_current_tab_changed);
 
         m_path_editor_map = QMap<QString, python_code_editor*>();
 
-        m_file_modified_bar = new file_modified_bar();
+        m_file_modified_bar = new FileModifiedBar();
         m_file_modified_bar->setHidden(true);
         m_content_layout->addWidget(m_file_modified_bar);
-        connect(m_file_modified_bar, &file_modified_bar::reload_clicked, this, &python_editor::handle_base_file_modified_reload);
-        connect(m_file_modified_bar, &file_modified_bar::ignore_clicked, this, &python_editor::handle_base_file_modified_ignore);
-        connect(m_file_modified_bar, &file_modified_bar::ok_clicked, this, &python_editor::handle_base_file_modified_ok);
+        connect(m_file_modified_bar, &FileModifiedBar::reload_clicked, this, &python_editor::handle_base_file_modified_reload);
+        connect(m_file_modified_bar, &FileModifiedBar::ignore_clicked, this, &python_editor::handle_base_file_modified_ignore);
+        connect(m_file_modified_bar, &FileModifiedBar::ok_clicked, this, &python_editor::handle_base_file_modified_ok);
 
         m_file_watcher = new QFileSystemWatcher(this);
         connect(m_file_watcher, &QFileSystemWatcher::fileChanged, this, &python_editor::handle_tab_file_changed);
-        connect(m_file_watcher, &QFileSystemWatcher::fileChanged, m_file_modified_bar, &file_modified_bar::handle_file_changed);
+        connect(m_file_watcher, &QFileSystemWatcher::fileChanged, m_file_modified_bar, &FileModifiedBar::handle_file_changed);
 
         handle_action_new_tab();
 
@@ -530,8 +530,8 @@ namespace hal
     void python_editor::handle_action_new_tab()
     {
         python_code_editor* editor = new python_code_editor();
-        new python_syntax_highlighter(editor->document());
-        new python_syntax_highlighter(editor->minimap()->document());
+        new PythonSyntaxHighlighter(editor->document());
+        new PythonSyntaxHighlighter(editor->minimap()->document());
         m_tab_widget->addTab(editor, QString("New File ").append(QString::number(++m_new_file_counter)));
         m_tab_widget->setCurrentIndex(m_tab_widget->count() - 1);
         editor->document()->setModified(false);

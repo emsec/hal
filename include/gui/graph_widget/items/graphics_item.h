@@ -32,13 +32,13 @@
 
 namespace hal
 {
-    class graphics_item : public QGraphicsItem
+    class GraphicsItem : public QGraphicsItem
     {
     public:
         static void load_settings();
         static void set_lod(const qreal lod);
 
-        graphics_item(const hal::item_type type, const u32 id);
+        GraphicsItem(const hal::item_type type, const u32 id);
 
         hal::item_type item_type() const;
         u32 id() const;

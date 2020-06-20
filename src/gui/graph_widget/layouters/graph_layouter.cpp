@@ -34,26 +34,26 @@ namespace hal
     const static qreal minimum_h_channel_height = 20;
     const static qreal minimum_gate_io_padding  = 60;
 
-    graph_layouter::graph_layouter(const graph_context* const context, QObject* parent) : QObject(parent), m_scene(new graphics_scene(this)), m_context(context), m_done(false)
+    GraphLayouter::GraphLayouter(const GraphContext* const context, QObject* parent) : QObject(parent), m_scene(new GraphicsScene(this)), m_context(context), m_done(false)
     {
     }
 
-    graphics_scene* graph_layouter::scene() const
+    GraphicsScene* GraphLayouter::scene() const
     {
         return m_scene;
     }
 
-    const QMap<hal::node, QPoint> graph_layouter::node_to_position_map() const
+    const QMap<hal::node, QPoint> GraphLayouter::node_to_position_map() const
     {
         return m_node_to_position_map;
     }
 
-    const QMap<QPoint, hal::node> graph_layouter::position_to_node_map() const
+    const QMap<QPoint, hal::node> GraphLayouter::position_to_node_map() const
     {
         return m_position_to_node_map;
     }
 
-    void graph_layouter::set_node_position(const hal::node& n, const QPoint& p)
+    void GraphLayouter::set_node_position(const hal::node& n, const QPoint& p)
     {
         if (m_node_to_position_map.contains(n))
         {
@@ -67,7 +67,7 @@ namespace hal
         //manual relayout call needed
     }
 
-    void graph_layouter::swap_node_positions(const hal::node& n1, const hal::node& n2)
+    void GraphLayouter::swap_node_positions(const hal::node& n1, const hal::node& n2)
     {
         assert(m_node_to_position_map.contains(n1));
         assert(m_node_to_position_map.contains(n2));
@@ -82,7 +82,7 @@ namespace hal
         m_position_to_node_map.insert(p2, n1);
     }
 
-    void graph_layouter::remove_node_from_maps(const hal::node& n)
+    void GraphLayouter::remove_node_from_maps(const hal::node& n)
     {
         if (m_node_to_position_map.contains(n))
         {
@@ -92,52 +92,52 @@ namespace hal
         }
     }
 
-    int graph_layouter::min_x_index() const
+    int GraphLayouter::min_x_index() const
     {
         return m_min_x_index;
     }
 
-    int graph_layouter::min_y_index() const
+    int GraphLayouter::min_y_index() const
     {
         return m_min_y_index;
     }
 
-    bool graph_layouter::done() const
+    bool GraphLayouter::done() const
     {
         return m_done;
     }
 
-    QVector<qreal> graph_layouter::x_values() const
+    QVector<qreal> GraphLayouter::x_values() const
     {
         return m_x_values;
     }
 
-    QVector<qreal> graph_layouter::y_values() const
+    QVector<qreal> GraphLayouter::y_values() const
     {
         return m_y_values;
     }
 
-    qreal graph_layouter::max_node_width() const
+    qreal GraphLayouter::max_node_width() const
     {
         return m_max_node_width;
     }
 
-    qreal graph_layouter::max_node_height() const
+    qreal GraphLayouter::max_node_height() const
     {
         return m_max_node_height;
     }
 
-    qreal graph_layouter::default_grid_width() const
+    qreal GraphLayouter::default_grid_width() const
     {
         return m_max_node_width + minimum_v_channel_width;
     }
 
-    qreal graph_layouter::default_grid_height() const
+    qreal GraphLayouter::default_grid_height() const
     {
         return m_max_node_height + minimum_h_channel_height;
     }
 
-    void graph_layouter::layout()
+    void GraphLayouter::layout()
     {
         m_scene->delete_all_items();
         clear_layout_data();
@@ -162,21 +162,21 @@ namespace hal
     #endif
     }
 
-    void graph_layouter::clear_layout_data()
+    void GraphLayouter::clear_layout_data()
     {
         m_done = false;
 
         m_boxes.clear();
 
-        for (const graph_layouter::road* r : m_h_roads)
+        for (const GraphLayouter::road* r : m_h_roads)
             delete r;
         m_h_roads.clear();
 
-        for (const graph_layouter::road* r : m_v_roads)
+        for (const GraphLayouter::road* r : m_v_roads)
             delete r;
         m_v_roads.clear();
 
-        for (const graph_layouter::junction* j : m_junctions)
+        for (const GraphLayouter::junction* j : m_junctions)
             delete j;
         m_junctions.clear();
 
@@ -219,7 +219,7 @@ namespace hal
         m_max_node_height = 0;
     }
 
-    void graph_layouter::create_boxes()
+    void GraphLayouter::create_boxes()
     {
         QMap<QPoint, hal::node>::const_iterator i = position_to_node_map().constBegin();
         while (i != position_to_node_map().constEnd())
@@ -229,7 +229,7 @@ namespace hal
         }
     }
 
-    void graph_layouter::calculate_nets()
+    void GraphLayouter::calculate_nets()
     {
         for (const u32 id : m_context->nets())
         {
@@ -518,7 +518,7 @@ namespace hal
         }
     }
 
-    void graph_layouter::find_max_box_dimensions()
+    void GraphLayouter::find_max_box_dimensions()
     {
         for (const node_box& box : m_boxes)
         {
@@ -546,7 +546,7 @@ namespace hal
         }
     }
 
-    void graph_layouter::find_max_channel_lanes()
+    void GraphLayouter::find_max_channel_lanes()
     {
         for (const road* r : m_v_roads)
             store_max(m_max_v_channel_lanes_for_x, r->x, r->lanes);
@@ -561,7 +561,7 @@ namespace hal
         }
     }
 
-    void graph_layouter::reset_roads_and_junctions()
+    void GraphLayouter::reset_roads_and_junctions()
     {
         for (road* r : m_h_roads)
             r->lanes = 0;
@@ -622,7 +622,7 @@ namespace hal
         }
     }
 
-    void graph_layouter::calculate_max_channel_dimensions()
+    void GraphLayouter::calculate_max_channel_dimensions()
     {
         auto i = m_max_v_channel_lanes_for_x.constBegin();
         while (i != m_max_v_channel_lanes_for_x.constEnd())
@@ -663,7 +663,7 @@ namespace hal
         }
     }
 
-    void graph_layouter::calculate_gate_offsets()
+    void GraphLayouter::calculate_gate_offsets()
     {
         m_node_offset_for_x.insert(0, 0);
         m_node_offset_for_y.insert(0, 0);
@@ -704,7 +704,7 @@ namespace hal
             }
     }
 
-    void graph_layouter::place_gates()
+    void GraphLayouter::place_gates()
     {
         for (node_box& box : m_boxes)
         {
@@ -713,7 +713,7 @@ namespace hal
         }
     }
 
-    void graph_layouter::draw_nets()
+    void GraphLayouter::draw_nets()
     {
         // ROADS AND JUNCTIONS FILLED LEFT TO RIGHT, TOP TO BOTTOM
         for (const u32 id : m_context->nets())
@@ -724,7 +724,7 @@ namespace hal
             if (n->is_unrouted())
             {
                 // HANDLE GLOBAL NETS
-                arrow_separated_net* net_item = new arrow_separated_net(n);
+                ArrowSeparatedNet* net_item = new ArrowSeparatedNet(n);
 
                 for (const Endpoint& src : n->get_sources())
                 {
@@ -784,7 +784,7 @@ namespace hal
 
             if (use_label)
             {
-                labeled_separated_net* net_item = new labeled_separated_net(n, QString::fromStdString(n->get_name()));
+                LabeledSeparatedNet* net_item = new LabeledSeparatedNet(n, QString::fromStdString(n->get_name()));
 
                 for (const Endpoint& src : n->get_sources())
                 {
@@ -852,7 +852,7 @@ namespace hal
 
             if (src_found && !dst_found)
             {
-                arrow_separated_net* net_item = new arrow_separated_net(n);
+                ArrowSeparatedNet* net_item = new ArrowSeparatedNet(n);
 
                 for (const Endpoint& src : n->get_sources())
                 {
@@ -879,7 +879,7 @@ namespace hal
 
             if (!src_found && dst_found)
             {
-                arrow_separated_net* net_item = new arrow_separated_net(n);
+                ArrowSeparatedNet* net_item = new ArrowSeparatedNet(n);
 
                 for (const Endpoint& dst : n->get_destinations())
                 {
@@ -906,7 +906,7 @@ namespace hal
 
             // HANDLE NORMAL NETS
             used_paths used;
-            standard_graphics_net::lines lines;
+            StandardGraphicsNet::lines lines;
 
             // FOR EVERY SRC
             for (const Endpoint& src : n->get_sources())
@@ -1512,14 +1512,14 @@ namespace hal
             }
 
             lines.merge_lines();
-            standard_graphics_net* graphics_net = new standard_graphics_net(n, lines);
-            m_scene->add_item(graphics_net);
+            StandardGraphicsNet* GraphicsNet = new StandardGraphicsNet(n, lines);
+            m_scene->add_item(GraphicsNet);
 
             commit_used_paths(used);
         }
     }
 
-    void graph_layouter::update_scene_rect()
+    void GraphLayouter::update_scene_rect()
     {
         // SCENE RECT STUFF BEHAVES WEIRDLY, FURTHER RESEARCH REQUIRED
         //QRectF rect = m_scene->sceneRect();
@@ -1529,7 +1529,7 @@ namespace hal
         m_scene->setSceneRect(rect);
     }
 
-    graph_layouter::node_box graph_layouter::create_box(const hal::node& node, const int x, const int y) const
+    GraphLayouter::node_box GraphLayouter::create_box(const hal::node& node, const int x, const int y) const
     {
         node_box box;
         box.node = node;
@@ -1537,11 +1537,11 @@ namespace hal
         switch (node.type)
         {
             case hal::node_type::module: {
-                box.item = graphics_factory::create_graphics_module(g_netlist->get_module_by_id(node.id), 0);
+                box.item = GraphicsFactory::create_graphics_module(g_netlist->get_module_by_id(node.id), 0);
                 break;
             }
             case hal::node_type::gate: {
-                box.item = graphics_factory::create_graphics_gate(g_netlist->get_gate_by_id(node.id), 0);
+                box.item = GraphicsFactory::create_graphics_gate(g_netlist->get_gate_by_id(node.id), 0);
                 break;
             }
         }
@@ -1556,16 +1556,16 @@ namespace hal
         return box;
     }
 
-    bool graph_layouter::box_exists(const int x, const int y) const
+    bool GraphLayouter::box_exists(const int x, const int y) const
     {
-        for (const graph_layouter::node_box& box : m_boxes)
+        for (const GraphLayouter::node_box& box : m_boxes)
             if (box.x == x && box.y == y)
                 return true;
 
         return false;
     }
 
-    bool graph_layouter::h_road_jump_possible(const int x, const int y1, const int y2) const
+    bool GraphLayouter::h_road_jump_possible(const int x, const int y1, const int y2) const
     {
         if (y1 == y2)
             return false;
@@ -1590,7 +1590,7 @@ namespace hal
         return true;
     }
 
-    bool graph_layouter::h_road_jump_possible(const graph_layouter::road* const r1, const graph_layouter::road* const r2) const
+    bool GraphLayouter::h_road_jump_possible(const GraphLayouter::road* const r1, const GraphLayouter::road* const r2) const
     {
         // CONVENIENCE METHOD
         assert(r1 && r2);
@@ -1599,7 +1599,7 @@ namespace hal
         return h_road_jump_possible(r1->x, r1->y, r2->y);
     }
 
-    bool graph_layouter::v_road_jump_possible(const int x1, const int x2, const int y) const
+    bool GraphLayouter::v_road_jump_possible(const int x1, const int x2, const int y) const
     {
         if (x1 == x2)
             return false;
@@ -1624,7 +1624,7 @@ namespace hal
         return true;
     }
 
-    bool graph_layouter::v_road_jump_possible(const graph_layouter::road* const r1, const graph_layouter::road* const r2) const
+    bool GraphLayouter::v_road_jump_possible(const GraphLayouter::road* const r1, const GraphLayouter::road* const r2) const
     {
         // CONVENIENCE METHOD
         assert(r1 && r2);
@@ -1633,40 +1633,40 @@ namespace hal
         return v_road_jump_possible(r1->x, r2->x, r1->y);
     }
 
-    graph_layouter::road* graph_layouter::get_h_road(const int x, const int y)
+    GraphLayouter::road* GraphLayouter::get_h_road(const int x, const int y)
     {
-        for (graph_layouter::road* r : m_h_roads)
+        for (GraphLayouter::road* r : m_h_roads)
             if (r->x == x && r->y == y)
                 return r;
 
-        graph_layouter::road* new_r = new road(x, y);
+        GraphLayouter::road* new_r = new road(x, y);
         m_h_roads.append(new_r);
         return new_r;
     }
 
-    graph_layouter::road* graph_layouter::get_v_road(const int x, const int y)
+    GraphLayouter::road* GraphLayouter::get_v_road(const int x, const int y)
     {
-        for (graph_layouter::road* r : m_v_roads)
+        for (GraphLayouter::road* r : m_v_roads)
             if (r->x == x && r->y == y)
                 return r;
 
-        graph_layouter::road* new_r = new road(x, y);
+        GraphLayouter::road* new_r = new road(x, y);
         m_v_roads.append(new_r);
         return new_r;
     }
 
-    graph_layouter::junction* graph_layouter::get_junction(const int x, const int y)
+    GraphLayouter::junction* GraphLayouter::get_junction(const int x, const int y)
     {
-        for (graph_layouter::junction* j : m_junctions)
+        for (GraphLayouter::junction* j : m_junctions)
             if (j->x == x && j->y == y)
                 return j;
 
-        graph_layouter::junction* new_j = new junction(x, y);
+        GraphLayouter::junction* new_j = new junction(x, y);
         m_junctions.append(new_j);
         return new_j;
     }
 
-    qreal graph_layouter::h_road_height(const unsigned int lanes) const
+    qreal GraphLayouter::h_road_height(const unsigned int lanes) const
     {
         // LANES COUNTED FROM 1
         qreal height = h_road_padding * 2;
@@ -1677,7 +1677,7 @@ namespace hal
         return height;
     }
 
-    qreal graph_layouter::v_road_width(const unsigned int lanes) const
+    qreal GraphLayouter::v_road_width(const unsigned int lanes) const
     {
         // LANES COUNTED FROM 1
         qreal width = v_road_padding * 2;
@@ -1688,7 +1688,7 @@ namespace hal
         return width;
     }
 
-    qreal graph_layouter::scene_y_for_h_channel_lane(const int y, const unsigned int lane) const
+    qreal GraphLayouter::scene_y_for_h_channel_lane(const int y, const unsigned int lane) const
     {
         // LINES NUMBERED FROM 0
         assert(m_node_offset_for_y.contains(y) || m_node_offset_for_y.contains(y - 1));
@@ -1701,7 +1701,7 @@ namespace hal
             return m_node_offset_for_y.value(y - 1) + m_max_node_height_for_y.value(y - 1) + m_max_h_channel_top_spacing_for_y.value(y) + offset;
     }
 
-    qreal graph_layouter::scene_x_for_v_channel_lane(const int x, const unsigned int lane) const
+    qreal GraphLayouter::scene_x_for_v_channel_lane(const int x, const unsigned int lane) const
     {
         // LINES NUMBERED FROM 0
         assert(m_node_offset_for_x.contains(x) || m_node_offset_for_x.contains(x - 1));
@@ -1714,7 +1714,7 @@ namespace hal
             return m_node_offset_for_x.value(x - 1) + m_max_node_width_for_x.value(x - 1) + m_max_v_channel_left_spacing_for_x.value(x) + offset;
     }
 
-    qreal graph_layouter::scene_x_for_close_left_lane_change(const int channel_x, unsigned int lane_change) const
+    qreal GraphLayouter::scene_x_for_close_left_lane_change(const int channel_x, unsigned int lane_change) const
     {
         // LANE CHANGES COUNTED FROM 0
         assert(m_node_offset_for_x.contains(channel_x) || m_node_offset_for_x.contains(channel_x - 1));
@@ -1727,7 +1727,7 @@ namespace hal
                    - lane_change * lane_spacing;
     }
 
-    qreal graph_layouter::scene_x_for_far_left_lane_change(const int channel_x, unsigned int lane_change) const
+    qreal GraphLayouter::scene_x_for_far_left_lane_change(const int channel_x, unsigned int lane_change) const
     {
         // LANE CHANGES COUNTED FROM 0
         assert(m_node_offset_for_x.contains(channel_x) || m_node_offset_for_x.contains(channel_x - 1));
@@ -1740,7 +1740,7 @@ namespace hal
                    - m_max_left_junction_spacing_for_x.value(channel_x) + lane_change * lane_spacing;
     }
 
-    qreal graph_layouter::scene_x_for_close_right_lane_change(const int channel_x, unsigned int lane_change) const
+    qreal GraphLayouter::scene_x_for_close_right_lane_change(const int channel_x, unsigned int lane_change) const
     {
         // LANE CHANGES COUNTED FROM 0
         assert(m_node_offset_for_x.contains(channel_x) || m_node_offset_for_x.contains(channel_x - 1));
@@ -1752,7 +1752,7 @@ namespace hal
                    - m_max_v_channel_right_spacing_for_x.value(channel_x) + junction_padding + lane_change * lane_spacing;
     }
 
-    qreal graph_layouter::scene_x_for_far_right_lane_change(const int channel_x, unsigned int lane_change) const
+    qreal GraphLayouter::scene_x_for_far_right_lane_change(const int channel_x, unsigned int lane_change) const
     {
         // LANE CHANGES COUNTED FROM 0
         assert(m_node_offset_for_x.contains(channel_x) || m_node_offset_for_x.contains(channel_x - 1));
@@ -1764,7 +1764,7 @@ namespace hal
                    - m_max_v_channel_right_spacing_for_x.value(channel_x) + m_max_right_junction_spacing_for_x.value(channel_x) - lane_change * lane_spacing;
     }
 
-    qreal graph_layouter::scene_y_for_close_top_lane_change(const int channel_y, unsigned int lane_change) const
+    qreal GraphLayouter::scene_y_for_close_top_lane_change(const int channel_y, unsigned int lane_change) const
     {
         // LANE CHANGES COUNTED FROM 0
         if (channel_y == 0)
@@ -1775,7 +1775,7 @@ namespace hal
                    - lane_change * lane_spacing;
     }
 
-    qreal graph_layouter::scene_y_for_far_top_lane_change(const int channel_y, unsigned int lane_change) const
+    qreal GraphLayouter::scene_y_for_far_top_lane_change(const int channel_y, unsigned int lane_change) const
     {
         // LANE CHANGES COUNTED FROM 0
         if (channel_y == 0)
@@ -1786,7 +1786,7 @@ namespace hal
                    - m_max_top_junction_spacing_for_y.value(channel_y) + lane_change * lane_spacing;
     }
 
-    qreal graph_layouter::scene_y_for_close_bottom_lane_change(const int channel_y, unsigned int lane_change) const
+    qreal GraphLayouter::scene_y_for_close_bottom_lane_change(const int channel_y, unsigned int lane_change) const
     {
         // LANE CHANGES COUNTED FROM 0
         if (channel_y == 0)
@@ -1796,7 +1796,7 @@ namespace hal
                    - m_max_h_channel_bottom_spacing_for_y.value(channel_y) + junction_padding + lane_change * lane_spacing;
     }
 
-    qreal graph_layouter::scene_y_for_far_bottom_lane_change(const int channel_y, unsigned int lane_change) const
+    qreal GraphLayouter::scene_y_for_far_bottom_lane_change(const int channel_y, unsigned int lane_change) const
     {
         // LANE CHANGES COUNTED FROM 0
         if (channel_y == 0)
@@ -1806,7 +1806,7 @@ namespace hal
                    - m_max_h_channel_bottom_spacing_for_y.value(channel_y) + m_max_bottom_junction_spacing_for_y.value(channel_y) - lane_change * lane_spacing;
     }
 
-    qreal graph_layouter::scene_x_for_close_left_lane_change(const junction* const j) const
+    qreal GraphLayouter::scene_x_for_close_left_lane_change(const junction* const j) const
     {
         // CONVENIENCE METHOD
         assert(j);
@@ -1814,7 +1814,7 @@ namespace hal
         return scene_x_for_close_left_lane_change(j->x, j->close_left_lane_changes);
     }
 
-    qreal graph_layouter::scene_x_for_far_left_lane_change(const graph_layouter::junction* const j) const
+    qreal GraphLayouter::scene_x_for_far_left_lane_change(const GraphLayouter::junction* const j) const
     {
         // CONVENIENCE METHOD
         assert(j);
@@ -1822,7 +1822,7 @@ namespace hal
         return scene_x_for_far_left_lane_change(j->x, j->far_left_lane_changes);
     }
 
-    qreal graph_layouter::scene_x_for_close_right_lane_change(const junction* const j) const
+    qreal GraphLayouter::scene_x_for_close_right_lane_change(const junction* const j) const
     {
         // CONVENIENCE METHOD
         assert(j);
@@ -1830,7 +1830,7 @@ namespace hal
         return scene_x_for_close_right_lane_change(j->x, j->close_right_lane_changes);
     }
 
-    qreal graph_layouter::scene_x_for_far_right_lane_change(const graph_layouter::junction* const j) const
+    qreal GraphLayouter::scene_x_for_far_right_lane_change(const GraphLayouter::junction* const j) const
     {
         // CONVENIENCE METHOD
         assert(j);
@@ -1838,7 +1838,7 @@ namespace hal
         return scene_x_for_far_right_lane_change(j->x, j->far_right_lane_changes);
     }
 
-    qreal graph_layouter::scene_y_for_close_top_lane_change(const junction* const j) const
+    qreal GraphLayouter::scene_y_for_close_top_lane_change(const junction* const j) const
     {
         // CONVENIENCE METHOD
         assert(j);
@@ -1846,7 +1846,7 @@ namespace hal
         return scene_y_for_close_top_lane_change(j->y, j->close_top_lane_changes);
     }
 
-    qreal graph_layouter::scene_y_for_far_top_lane_change(const graph_layouter::junction* const j) const
+    qreal GraphLayouter::scene_y_for_far_top_lane_change(const GraphLayouter::junction* const j) const
     {
         // CONVENIENCE METHOD
         assert(j);
@@ -1854,7 +1854,7 @@ namespace hal
         return scene_y_for_far_top_lane_change(j->y, j->far_top_lane_changes);
     }
 
-    qreal graph_layouter::scene_y_for_close_bottom_lane_change(const junction* const j) const
+    qreal GraphLayouter::scene_y_for_close_bottom_lane_change(const junction* const j) const
     {
         // CONVENIENCE METHOD
         assert(j);
@@ -1862,7 +1862,7 @@ namespace hal
         return scene_y_for_close_bottom_lane_change(j->y, j->close_bottom_lane_changes);
     }
 
-    qreal graph_layouter::scene_y_for_far_bottom_lane_change(const graph_layouter::junction* const j) const
+    qreal GraphLayouter::scene_y_for_far_bottom_lane_change(const GraphLayouter::junction* const j) const
     {
         // CONVENIENCE METHOD
         assert(j);
@@ -1870,7 +1870,7 @@ namespace hal
         return scene_y_for_far_bottom_lane_change(j->y, j->far_bottom_lane_changes);
     }
 
-    void graph_layouter::commit_used_paths(const graph_layouter::used_paths& used)
+    void GraphLayouter::commit_used_paths(const GraphLayouter::used_paths& used)
     {
         for (road* r : used.h_roads)
             r->lanes += 1;
@@ -1909,13 +1909,13 @@ namespace hal
             j->far_bottom_lane_changes += 1;
     }
 
-    void graph_layouter::append_non_zero_h_line(standard_graphics_net::lines& lines, const qreal small_x, const qreal big_x, const qreal y)
+    void GraphLayouter::append_non_zero_h_line(StandardGraphicsNet::lines& lines, const qreal small_x, const qreal big_x, const qreal y)
     {
         if (small_x < big_x)
             lines.append_h_line(small_x, big_x, y);
     }
 
-    void graph_layouter::append_non_zero_v_line(standard_graphics_net::lines& lines, const qreal x, const qreal small_y, const qreal big_y)
+    void GraphLayouter::append_non_zero_v_line(StandardGraphicsNet::lines& lines, const qreal x, const qreal small_y, const qreal big_y)
     {
         if (small_y < big_y)
             lines.append_h_line(x, small_y, big_y);

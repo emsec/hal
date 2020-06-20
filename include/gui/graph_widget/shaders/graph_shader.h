@@ -35,20 +35,20 @@
 
 namespace hal
 {
-    class graph_context;
+    class GraphContext;
 
-    class graph_shader
+    class GraphShader
     {
     public:
         struct shading
         {
-            QMap<u32, graphics_node::visuals> module_visuals;
-            QMap<u32, graphics_node::visuals> gate_visuals;
-            QMap<u32, graphics_net::visuals> net_visuals;
+            QMap<u32, GraphicsNode::visuals> module_visuals;
+            QMap<u32, GraphicsNode::visuals> gate_visuals;
+            QMap<u32, GraphicsNet::visuals> net_visuals;
         };
 
-        explicit graph_shader(const graph_context* const context);
-        virtual ~graph_shader() = default;
+        explicit GraphShader(const GraphContext* const context);
+        virtual ~GraphShader() = default;
 
         virtual void add(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets) = 0;
         virtual void remove(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets) = 0;
@@ -57,7 +57,7 @@ namespace hal
         const shading& get_shading();
 
     protected:
-        const graph_context* const m_context;
+        const GraphContext* const m_context;
 
         shading m_shading;
     };

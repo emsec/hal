@@ -10,14 +10,14 @@ namespace hal
 {
     static const qreal s_baseline = 1;
 
-    qreal labeled_separated_net::s_wire_length;
-    qreal labeled_separated_net::s_text_offset;
+    qreal LabeledSeparatedNet::s_wire_length;
+    qreal LabeledSeparatedNet::s_text_offset;
 
-    QFont labeled_separated_net::s_font;
-    qreal labeled_separated_net::s_font_height;
-    qreal labeled_separated_net::s_font_ascend;
+    QFont LabeledSeparatedNet::s_font;
+    qreal LabeledSeparatedNet::s_font_height;
+    qreal LabeledSeparatedNet::s_font_ascend;
 
-    void labeled_separated_net::load_settings()
+    void LabeledSeparatedNet::load_settings()
     {
         s_wire_length = 20;
         s_text_offset = 2.4;
@@ -29,14 +29,14 @@ namespace hal
         s_font_ascend = fm.ascent();
     }
 
-    labeled_separated_net::labeled_separated_net(const std::shared_ptr<const Net> n, const QString& text) : separated_graphics_net(n),
+    LabeledSeparatedNet::LabeledSeparatedNet(const std::shared_ptr<const Net> n, const QString& text) : SeparatedGraphicsNet(n),
       m_text(text)
     {
         QFontMetricsF fm(s_font);
         m_text_width = fm.width(m_text);
     }
 
-    void labeled_separated_net::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
+    void LabeledSeparatedNet::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
     {
         Q_UNUSED(widget);
 
@@ -91,7 +91,7 @@ namespace hal
     #endif
     }
 
-    void labeled_separated_net::add_input(const QPointF& scene_position)
+    void LabeledSeparatedNet::add_input(const QPointF& scene_position)
     {
         const QPointF mapped_position = mapFromScene(scene_position);
         m_input_positions.append(mapped_position);
@@ -123,7 +123,7 @@ namespace hal
         m_shape.closeSubpath();
     }
 
-    void labeled_separated_net::add_output(const QPointF& scene_position)
+    void LabeledSeparatedNet::add_output(const QPointF& scene_position)
     {
         const QPointF mapped_position = mapFromScene(scene_position);
         m_output_positions.append(mapped_position);
@@ -155,12 +155,12 @@ namespace hal
         m_shape.closeSubpath();
     }
 
-    qreal labeled_separated_net::input_width() const
+    qreal LabeledSeparatedNet::input_width() const
     {
         return s_wire_length + s_text_offset + m_text_width;
     }
 
-    qreal labeled_separated_net::output_width() const
+    qreal LabeledSeparatedNet::output_width() const
     {
         return s_wire_length + s_text_offset + m_text_width;
     }

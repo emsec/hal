@@ -44,10 +44,10 @@
 
 namespace hal
 {
-    main_window::main_window(QWidget* parent) : QWidget(parent), m_schedule_widget(new plugin_schedule_widget()), m_action_schedule(new hal_action(this)), m_action_content(new hal_action(this))
+    main_window::main_window(QWidget* parent) : QWidget(parent), m_schedule_widget(new plugin_schedule_widget()), m_action_schedule(new HalAction(this)), m_action_content(new HalAction(this))
     {
         ensurePolished();    // ADD REPOLISH METHOD
-        connect(file_manager::get_instance(), &file_manager::file_opened, this, &main_window::handle_file_opened);
+        connect(FileManager::get_instance(), &FileManager::file_opened, this, &main_window::handle_file_opened);
 
         m_layout = new QVBoxLayout(this);
         m_layout->setContentsMargins(0, 0, 0, 0);
@@ -88,7 +88,7 @@ namespace hal
         m_settings = new main_settings_widget();
         m_stacked_widget->addWidget(m_settings);
 
-        m_layout_area = new content_layout_area();
+        m_layout_area = new ContentLayoutArea();
         m_stacked_widget->addWidget(m_layout_area);
 
         //    m_container = new QWidget();
@@ -117,15 +117,15 @@ namespace hal
 
         setLocale(QLocale(QLocale::English, QLocale::UnitedStates));
 
-        m_action_new          = new hal_action(this);
-        m_action_open         = new hal_action(this);
-        m_action_save         = new hal_action(this);
-        m_action_about        = new hal_action(this);
-        m_action_run_schedule = new hal_action(this);
-        //m_action_content      = new hal_action(this);
-        m_action_settings = new hal_action(this);
-        m_action_close    = new hal_action(this);
-        m_action_content  = new hal_action(this);
+        m_action_new          = new HalAction(this);
+        m_action_open         = new HalAction(this);
+        m_action_save         = new HalAction(this);
+        m_action_about        = new HalAction(this);
+        m_action_run_schedule = new HalAction(this);
+        //m_action_content      = new HalAction(this);
+        m_action_settings = new HalAction(this);
+        m_action_close    = new HalAction(this);
+        m_action_content  = new HalAction(this);
 
         //    //m_open_icon_style = "all->#fcfcb0";
         //    //m_open_icon_style = "all->#f2e4a4";
@@ -208,21 +208,21 @@ namespace hal
 
         g_python_context = std::make_unique<python_context>();
 
-        g_content_manager = new hal_content_manager(this);
+        g_content_manager = new HalContentManager(this);
 
-        connect(m_action_new, &hal_action::triggered, this, &main_window::handle_action_new);
-        connect(m_action_open, &hal_action::triggered, this, &main_window::handle_action_open);
-        connect(m_action_about, &hal_action::triggered, m_about_dialog, &about_dialog::exec);
-        connect(m_action_schedule, &hal_action::triggered, this, &main_window::toggle_schedule);
-        connect(m_action_settings, &hal_action::triggered, this, &main_window::toggle_settings);
+        connect(m_action_new, &HalAction::triggered, this, &main_window::handle_action_new);
+        connect(m_action_open, &HalAction::triggered, this, &main_window::handle_action_open);
+        connect(m_action_about, &HalAction::triggered, m_about_dialog, &about_dialog::exec);
+        connect(m_action_schedule, &HalAction::triggered, this, &main_window::toggle_schedule);
+        connect(m_action_settings, &HalAction::triggered, this, &main_window::toggle_settings);
         connect(m_settings, &main_settings_widget::close, this, &main_window::close_settings);
-        connect(m_action_save, &hal_action::triggered, this, &main_window::handle_save_triggered);
+        connect(m_action_save, &HalAction::triggered, this, &main_window::handle_save_triggered);
         //debug
-        connect(m_action_close, &hal_action::triggered, this, &main_window::handle_action_closed);
+        connect(m_action_close, &HalAction::triggered, this, &main_window::handle_action_closed);
 
-        connect(m_action_run_schedule, &hal_action::triggered, plugin_schedule_manager::get_instance(), &plugin_schedule_manager::run_schedule);
+        connect(m_action_run_schedule, &HalAction::triggered, plugin_schedule_manager::get_instance(), &plugin_schedule_manager::run_schedule);
 
-        connect(this, &main_window::save_triggered, g_content_manager, &hal_content_manager::handle_save_triggered);
+        connect(this, &main_window::save_triggered, g_content_manager, &HalContentManager::handle_save_triggered);
 
         restore_state();
 
@@ -230,7 +230,7 @@ namespace hal
         //    widget->set_plugin_model(m_plugin_model);
         //    widget->show();
 
-        //setGraphicsEffect(new overlay_effect());
+        //setGraphicsEffect(new OverlayEffect());
 
         //reminder_overlay* o = new reminder_overlay(this);
         //Q_UNUSED(o)
@@ -400,7 +400,7 @@ namespace hal
 
     void main_window::run_plugin_triggered(const QString& name)
     {
-        if (!file_manager::get_instance()->file_open())
+        if (!FileManager::get_instance()->file_open())
         {
             return;
         }
@@ -419,7 +419,7 @@ namespace hal
     {
         if (m_stacked_widget->currentWidget() == m_schedule_widget)
         {
-            if (file_manager::get_instance()->file_open())
+            if (FileManager::get_instance()->file_open())
                 m_stacked_widget->setCurrentWidget(m_layout_area);
             else
                 m_stacked_widget->setCurrentWidget(m_welcome_screen);
@@ -447,7 +447,7 @@ namespace hal
     {
         if (!m_settings->handle_about_to_close())
             return;
-        if (file_manager::get_instance()->file_open())
+        if (FileManager::get_instance()->file_open())
             m_stacked_widget->setCurrentWidget(m_layout_area);
         else
             m_stacked_widget->setCurrentWidget(m_welcome_screen);
@@ -487,7 +487,7 @@ namespace hal
             g_netlist         = netlist_factory::create_netlist(selected_lib);
             // DEBUG -- REMOVE WHEN GUI CAN HANDLE EVENTS DURING CREATION
             event_controls::enable_all(true);
-            Q_EMIT file_manager::get_instance()->file_opened("new netlist");
+            Q_EMIT FileManager::get_instance()->file_opened("new netlist");
         }
     }
 
@@ -515,7 +515,7 @@ namespace hal
         {
             // DEBUG -- REMOVE WHEN GUI CAN HANDLE EVENTS DURING CREATION
             event_controls::enable_all(false);
-            file_manager::get_instance()->open_file(file_name);
+            FileManager::get_instance()->open_file(file_name);
             // DEBUG -- REMOVE WHEN GUI CAN HANDLE EVENTS DURING CREATION
             event_controls::enable_all(true);
         }
@@ -536,7 +536,7 @@ namespace hal
     {
         if (g_netlist)
         {
-            std::filesystem::path path = file_manager::get_instance()->file_name().toStdString();
+            std::filesystem::path path = FileManager::get_instance()->file_name().toStdString();
 
             if (path.empty())
             {
@@ -559,7 +559,7 @@ namespace hal
             netlist_serializer::serialize_to_file(g_netlist, path);
 
             g_file_status_manager.flush_unsaved_changes();
-            file_manager::get_instance()->watch_file(QString::fromStdString(path.string()));
+            FileManager::get_instance()->watch_file(QString::fromStdString(path.string()));
 
             Q_EMIT save_triggered();
         }
@@ -611,7 +611,7 @@ namespace hal
             }
         }
 
-        file_manager::get_instance()->close_file();
+        FileManager::get_instance()->close_file();
 
         save_state();
         event->accept();
@@ -639,7 +639,7 @@ namespace hal
         g_settings_manager.sync();
     }
 
-    void main_window::add_content(content_widget* widget, int index, content_anchor anchor)
+    void main_window::add_content(ContentWidget* widget, int index, content_anchor anchor)
     {
         m_layout_area->add_content(widget, index, anchor);
     }

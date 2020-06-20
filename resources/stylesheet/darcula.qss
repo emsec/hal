@@ -490,27 +490,27 @@ hal--main_settings_widget hal--preview_widget *{
     background-color: rgba(255, 255, 255, 0);
 }
 
-/* EXPANDING_LIST_WIDGET */
+/* ExpandingListWidget */
 
-hal--main_settings_widget hal--expanding_list_widget {
+hal--main_settings_widget hal--ExpandingListWidget {
     border-right : 1px solid rgb(23, 26, 26);
     min-width    : 250px;
     max-width    : 250px;
 }
 
-hal--main_settings_widget hal--expanding_list_widget #content {
+hal--main_settings_widget hal--ExpandingListWidget #content {
     background   : rgb(9, 11, 13);
     border-right : 5px solid rgb(13, 15, 17);
 }
 
-hal--main_settings_widget hal--expanding_list_widget #spacer {
+hal--main_settings_widget hal--ExpandingListWidget #spacer {
     min-height   : 80px;
     max-height   : 80px;
     background   : rgb(9, 11, 13);
     border-right : 5px solid rgb(13, 15, 17);
 }
 
-hal--main_settings_widget hal--expanding_list_button {
+hal--main_settings_widget hal--ExpandingListButton {
     min-height           : 42px;
     max-height           : 42px;
     background-color     : rgb(9, 11, 13);
@@ -519,107 +519,107 @@ hal--main_settings_widget hal--expanding_list_button {
     qproperty-icon_style : "all -> #969696";
 }
 
-hal--main_settings_widget hal--expanding_list_button[hover=true] {
+hal--main_settings_widget hal--ExpandingListButton[hover=true] {
     qproperty-icon_style : "all -> #E4E4E4";
 }
 
-hal--main_settings_widget hal--expanding_list_button[hover=true] * {
+hal--main_settings_widget hal--ExpandingListButton[hover=true] * {
     /*color: rgb(228, 228, 228);*/
     color            : rgb(255, 255, 255);
     background-color : rgba(255, 255, 255, 0.012);
 }
 
-hal--main_settings_widget hal--expanding_list_button[selected=true] {
+hal--main_settings_widget hal--ExpandingListButton[selected=true] {
     background-color     : rgb(34, 37, 38);
     qproperty-icon_style : "all -> #A9B7C6";
 }
 
-hal--main_settings_widget hal--expanding_list_button[type="child"] {
+hal--main_settings_widget hal--ExpandingListButton[type="child"] {
     background-color : rgb(14, 17, 20);
 }
 
-hal--main_settings_widget hal--expanding_list_button[type="child"][selected=true] {
+hal--main_settings_widget hal--ExpandingListButton[type="child"][selected=true] {
     background-color : rgb(34, 37, 38);
 }
 
-hal--main_settings_widget hal--expanding_list_button * {
+hal--main_settings_widget hal--ExpandingListButton * {
     font             : 14px bold "Iosevka";
     background-color : transparent;
 }
 
-hal--main_settings_widget hal--expanding_list_button #left-border {
+hal--main_settings_widget hal--ExpandingListButton #left-border {
     min-width : 4px;
     max-width : 4px;
     /*padding-right: 40px;*/
 }
 
-hal--main_settings_widget hal--expanding_list_button #icon-label {
+hal--main_settings_widget hal--ExpandingListButton #icon-label {
     padding-left  : 40px;
     padding-right : 10px;
 }
 
-hal--main_settings_widget hal--expanding_list_button #right-border {
+hal--main_settings_widget hal--ExpandingListButton #right-border {
     min-width : 4px;
     max-width : 4px;
 }
 
-hal--main_settings_widget hal--expanding_list_button[selected=true] #text-label {
+hal--main_settings_widget hal--ExpandingListButton[selected=true] #text-label {
     /*color : rgb(114, 140, 0);*/
     /*color : rgb(35, 200, 46);*/
     color : rgb(85, 255, 0);
     /*color : rgb(0, 255, 0);*/
 }
 
-hal--main_settings_widget hal--expanding_list_button[selected=true] #right-border {
+hal--main_settings_widget hal--ExpandingListButton[selected=true] #right-border {
     /*background-color: rgb(114, 140, 0);*/
     /*background-color : rgb(35, 200, 46);*/
     background-color : rgb(85, 255, 0);
     /*background-color : rgb(0, 255, 0);*/
 }
 
-/*dock_bar {
+/*DockBar {
 background-color : rgb(9, 11, 13);
 }*/
 
-hal--content_layout_area #left-dock-bar {
+hal--ContentLayoutArea #left-dock-bar {
     min-width    : 19px;
     max-width    : 19px;
     border-right : 1px solid rgb(23, 26, 26);
 }
 
-hal--content_layout_area #right-dock-bar {
+hal--ContentLayoutArea #right-dock-bar {
     min-width   : 19px;
     max-width   : 19px;
     border-left : 1px solid rgb(23, 26, 26);
 }
 
-hal--content_layout_area #bottom-dock-bar {
+hal--ContentLayoutArea #bottom-dock-bar {
     min-height : 19px;
     max-height : 19px;
     border-top : 1px solid rgb(23, 26, 26);
 }
 
-hal--content_layout_area #left-spacer {
+hal--ContentLayoutArea #left-spacer {
     min-width  : 19px;
     max-width  : 19px;
     min-height : 19px;
     max-height : 19px;
 }
 
-hal--content_layout_area #right-spacer {
+hal--ContentLayoutArea #right-spacer {
     min-width  : 19px;
     max-width  : 19px;
     min-height : 19px;
     max-height : 19px;
 }
 
-hal--tab_widget hal--dock_bar {
+hal--TabWidget hal--DockBar {
     background : rgb(9, 11, 13);
     min-height : 24px;
     max-height : 24px;
 }
 
-hal--code_editor {
+hal--CodeEditor {
     font-style                                 : normal;
     font-size                                  : 14px;
     font-weight                                : normal;
@@ -630,7 +630,7 @@ hal--code_editor {
     /*qproperty-line_number_background : rgb(14, 16, 18);*/
 }
 
-hal--code_editor hal--line_number_area {
+hal--CodeEditor hal--LineNumberArea {
     /*background : rgb(31, 34, 35);*/
     /*background : rgb(42, 44, 46);*/
     background             : rgb(49, 51, 53);
@@ -647,7 +647,7 @@ hal--code_editor hal--line_number_area {
 /*background: qlineargradient( x1:0 y1:0, x2:1 y2:0, stop:0 cyan, stop:1 blue);}*/
 /*}*/
 
-hal--vhdl_syntax_highlighter {
+hal--VhdlSyntaxHighlighter {
     qproperty-keyword_color : rgb(204, 120, 50);
     qproperty-comment_color : rgb(97, 150, 71);
     qproperty-type_color    : rgb(152, 118, 170);
@@ -655,7 +655,7 @@ hal--vhdl_syntax_highlighter {
     qproperty-text_color    : rgb(169, 183, 198);
 }
 
-/*labeled_frame {
+/*LabeledFrame {
 background : rgb(9, 11, 13);
 border : 1px solid rgb(73, 74, 76);
 min-width : 400px;
@@ -666,7 +666,7 @@ margin-left : 30px;
 margin-right : 30px;
 }*/
 
-hal--labeled_frame {
+hal--LabeledFrame {
     /*background : rgb(39, 49, 56);*/
     background    : rgb(14, 16, 18);
     /*border : 1px solid rgb(49, 61, 70);*/
@@ -689,19 +689,19 @@ hal--welcome_screen {
     stop       : 1 rgb(23, 30, 34));
 }
 
-hal--welcome_screen hal--labeled_frame {
+hal--welcome_screen hal--LabeledFrame {
     min-width  : 200px;
     max-width  : 400px;
     min-height : 200px;
     max-height : 800px;
 }
 
-hal--labeled_frame #header {
+hal--LabeledFrame #header {
     /*background : rgb(49, 61, 70);*/
     background : rgb(9, 11, 13);
 }
 
-hal--labeled_frame #left-spacer {
+hal--LabeledFrame #left-spacer {
     /*background : rgb(49, 61, 70);*/
     /*background : #313d46;*/
     background  : rgb(24, 26, 28);
@@ -713,7 +713,7 @@ hal--labeled_frame #left-spacer {
     margin-left : 6px;
 }
 
-hal--labeled_frame #label {
+hal--LabeledFrame #label {
     /*background : rgb(49, 61, 70);*/
     background     : rgb(9, 11, 13);
     padding-top    : 21px;
@@ -742,7 +742,7 @@ hal--labeled_frame #label {
     qproperty-text : "GET IN <font color='#A9B7C6'>TOUCH</font>";
 }
 
-hal--labeled_frame #right-spacer {
+hal--LabeledFrame #right-spacer {
     /*background : rgb(49, 61, 70);*/
     /*background : #313d46;*/
     background   : rgb(24, 26, 28);
@@ -1022,7 +1022,7 @@ hal--reminder_overlay #text-label {
 *               CONTENT WIDGET               *
 *********************************************/
 
-hal--content_widget * {
+hal--ContentWidget * {
     background : rgb(43, 43, 43);
 }
 
@@ -1262,7 +1262,7 @@ hal--scheduled_plugin_item_area {
     background : rgb(14, 16, 18);
 }
 
-hal--drop_marker {
+hal--DropMarker {
     background : rgb(14, 16, 18);
 }
 
@@ -1276,7 +1276,7 @@ hal--python_editor {
     stop       : 1 rgb(23, 30, 34));
 }
 
-hal--python_editor hal--code_editor {
+hal--python_editor hal--CodeEditor {
     /*font-family : "SourceCodePro-Black";*/
     font-family                       : "Iosevka";
     font-size                         : 14px;
@@ -1297,14 +1297,14 @@ hal--python_editor hal--code_editor {
     qproperty-current_line_background : #323232;
 }
 
-hal--python_editor hal--code_editor hal--line_number_area {
+hal--python_editor hal--CodeEditor hal--LineNumberArea {
     /*background : #0C1112;*/
     /*background : #0C0F12;*/
     background   : rgb(49, 51, 53);
     border-right : 1px solid #606366;
 }
 
-hal--code_editor_minimap {
+hal--CodeEditorMinimap {
     font-style  : normal;
     font-size   : 3px;
     font-weight : normal;
@@ -1313,13 +1313,13 @@ hal--code_editor_minimap {
     color       : #A9B7C6;
 }
 
-hal--code_editor_minimap QScrollBar:vertical {
+hal--CodeEditorMinimap QScrollBar:vertical {
     border     : 0px;
     background : transparent;
     margin     : 0px 0px 0px 0px;
 }
 
-hal--code_editor_minimap QScrollBar::handle:vertical {
+hal--CodeEditorMinimap QScrollBar::handle:vertical {
     background    : rgba(120, 120, 120, 0.1);
     border-radius : 0px;
 }
@@ -1349,7 +1349,7 @@ hal--python_console {
     color       : #A9B7C6;
 }
 
-hal--minimap_scrollbar #slider {
+hal--MinimapScrollbar #slider {
 background : rgba(120, 120, 120, 0.1);
 }
 
@@ -1376,7 +1376,7 @@ qproperty-new_file_icon_style: "";
 qproperty-new_file_icon_path: ":/icons/new-file";
 }
 
-hal--context_manager_widget {
+hal--ContextManagerWidget {
 qproperty-new_view_icon_style: "all->#30AC4F";
 qproperty-new_view_icon_path: ":/icons/plus";
 
@@ -1419,7 +1419,7 @@ qproperty-settings_icon_style: "all->#AFB1B3";
 qproperty-settings_icon_path: ":/icons/settings";
 }
 
-hal--python_qss_adapter {
+hal--PythonQssAdapter {
 qproperty-text_color: #DEE9AF;
 qproperty-keyword_color: #CC7832;
 qproperty-operator_color: #A9B7C6;
@@ -1432,7 +1432,7 @@ qproperty-double_quoted_string_color: #A5C25C;
 qproperty-comment_color: #629755;
 }
 
-hal--vhdl_qss_adapter {
+hal--VhdlQssAdapter {
 qproperty-keyword_color: #CC7832;
 qproperty-type_color: #A9B7C6;
 qproperty-number_color: #6897BB;
@@ -1440,7 +1440,7 @@ qproperty-string_color: #A5C25C;
 qproperty-comment_color: #629755;
 }
 
-hal--logger_qss_adapter {
+hal--LoggerQssAdapter {
     qproperty-trace_color: #90C023;
     qproperty-debug_color: #90C023;
     qproperty-info_color: #e4e4e4;

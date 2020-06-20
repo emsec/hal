@@ -30,17 +30,17 @@ class QTextDocument;
 namespace hal
 {
 
-    class code_editor;
-    class minimap_scrollbar;
+    class CodeEditor;
+    class MinimapScrollbar;
 
-    class code_editor_minimap : public QWidget
+    class CodeEditorMinimap : public QWidget
     {
         Q_OBJECT
 
     public:
-        explicit code_editor_minimap(code_editor* editor);
+        explicit CodeEditorMinimap(CodeEditor* editor);
 
-        minimap_scrollbar* scrollbar();
+        MinimapScrollbar* scrollbar();
         QTextDocument* document();
 
         void adjust_slider_height(int viewport_height);
@@ -62,9 +62,9 @@ namespace hal
     private:
         void resize_scrollbar();
 
-        code_editor* m_editor;
+        CodeEditor* m_editor;
         QTextDocument* m_document;
-        minimap_scrollbar* m_scrollbar;
+        MinimapScrollbar* m_scrollbar;
 
         int m_document_height;
         qreal m_offset;

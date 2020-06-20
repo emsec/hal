@@ -458,9 +458,9 @@ main_settings_widget {
 border : 1px solid rgb(23, 26, 26);
 }
 
-/* EXPANDING_LIST_WIDGET STUFF */
+/* ExpandingListWidget STUFF */
 
-main_settings_widget expanding_list_widget {
+main_settings_widget ExpandingListWidget {
 min-width : 250px;
 max-width : 250px;
 background-color: rgb(31, 34, 35);
@@ -468,17 +468,17 @@ background-color: rgb(31, 34, 35);
 /*border : 1px solid rgb(23, 26, 26);*/
 }
 
-main_settings_widget expanding_list_widget #content {
+main_settings_widget ExpandingListWidget #content {
 background-color : rgb(31, 34, 35);
 }
 
-main_settings_widget expanding_list_widget #spacer {
+main_settings_widget ExpandingListWidget #spacer {
 min-height : 80px;
 max-height : 80px;
 background-color : rgb(31, 34, 35);
 }
 
-main_settings_widget expanding_list_button {
+main_settings_widget ExpandingListButton {
 min-height : 42px;
 max-height : 42px;
 background-color: rgb(31, 34, 35);
@@ -487,17 +487,17 @@ qproperty-icon_style : "all -> #969696";
 /*qproperty-icon_style : "all -> #E4E4E4";*/
 }
 
-main_settings_widget expanding_list_button[hover=true] {
+main_settings_widget ExpandingListButton[hover=true] {
 qproperty-icon_style : "all -> #E4E4E4";
 }
 
-main_settings_widget expanding_list_button[hover=true] * {
+main_settings_widget ExpandingListButton[hover=true] * {
 /*color: rgb(228, 228, 228);*/
 color : rgb(255, 255, 255);
 background-color: rgba(255, 255, 255, 0.012);
 }
 
-main_settings_widget expanding_list_button[selected=true] {
+main_settings_widget ExpandingListButton[selected=true] {
 background-color: rgb(34, 37, 38);
 /*qproperty-icon_style : "all -> #728C00";*/
 /*qproperty-icon_style : "all -> #23C82E";*/
@@ -506,43 +506,43 @@ qproperty-icon_style : "all -> #55FF00";
 }
 
 
-main_settings_widget expanding_list_button[type="child"] {
+main_settings_widget ExpandingListButton[type="child"] {
 background-color: rgb(26, 29, 30);
 }
 
-main_settings_widget expanding_list_button[type="child"][selected=true] {
+main_settings_widget ExpandingListButton[type="child"][selected=true] {
 background-color: rgb(29, 32, 33);
 }
 
-main_settings_widget expanding_list_button * {
+main_settings_widget ExpandingListButton * {
 font : 14px bold "Iosevka";
 background-color: transparent;
 }
 
-main_settings_widget expanding_list_button #left-border {
+main_settings_widget ExpandingListButton #left-border {
 min-width : 4px;
 max-width : 4px;
 /*padding-right: 40px;*/
 }
 
-main_settings_widget expanding_list_button #icon-label {
+main_settings_widget ExpandingListButton #icon-label {
 padding-left : 40px;
 padding-right: 10px;
 }
 
-main_settings_widget expanding_list_button #right-border {
+main_settings_widget ExpandingListButton #right-border {
 min-width : 4px;
 max-width : 4px;
 }
 
-main_settings_widget expanding_list_button[selected=true] #text-label{
+main_settings_widget ExpandingListButton[selected=true] #text-label{
 /*color : rgb(114, 140, 0);*/
 /*color : rgb(35, 200, 46);*/
 color : rgb(85, 255, 0);
 /*color : rgb(0, 255, 0);*/
 }
 
-main_settings_widget expanding_list_button[selected=true] #right-border {
+main_settings_widget ExpandingListButton[selected=true] #right-border {
 /*background-color: rgb(114, 140, 0);*/
 /*background-color : rgb(35, 200, 46);*/
 background-color : rgb(85, 255, 0);

@@ -18,7 +18,7 @@
 
 namespace hal
 {
-    graph_navigation_widget_v2::graph_navigation_widget_v2(QWidget* parent) : QTreeWidget(parent)
+    GraphNavigationWidgetV2::GraphNavigationWidgetV2(QWidget* parent) : QTreeWidget(parent)
     {
         setSelectionMode(QAbstractItemView::MultiSelection);
         setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -28,13 +28,13 @@ namespace hal
         setHeaderLabels({"Name", "ID", "Type", "Pin", "Parent Module"});
         setAllColumnsShowFocus(true);
 
-        connect(this, &graph_navigation_widget_v2::itemSelectionChanged, this, &graph_navigation_widget_v2::handle_selection_changed);
-        connect(this, &graph_navigation_widget_v2::itemDoubleClicked, this, &graph_navigation_widget_v2::handle_item_double_clicked);
+        connect(this, &GraphNavigationWidgetV2::itemSelectionChanged, this, &GraphNavigationWidgetV2::handle_selection_changed);
+        connect(this, &GraphNavigationWidgetV2::itemDoubleClicked, this, &GraphNavigationWidgetV2::handle_item_double_clicked);
 
         // FIXME for some reason, arrow key navigation does not work on MacOS
     }
 
-    void graph_navigation_widget_v2::setup(bool direction)
+    void GraphNavigationWidgetV2::setup(bool direction)
     {
         clear();
 
@@ -86,7 +86,7 @@ namespace hal
                 // properly indexing port names on modules (since no order is guaranteed
                 // on the port names (different to pin names in gates), but our GUI
                 // wants integer indexes)
-                // (what we use here is the fact that graphics_module builds its port
+                // (what we use here is the fact that GraphicsModule builds its port
                 // list by traversing m->get_input_nets(), so we just use that order and
                 // hope nobody touches that implementation)
                 auto it = m->get_output_nets().begin();
@@ -106,7 +106,7 @@ namespace hal
         }
     }
 
-    void graph_navigation_widget_v2::setup(hal::node origin, std::shared_ptr<Net> via_net, bool direction)
+    void GraphNavigationWidgetV2::setup(hal::node origin, std::shared_ptr<Net> via_net, bool direction)
     {
         clear();
         fill_table(direction);
@@ -114,7 +114,7 @@ namespace hal
         m_origin = origin;
     }
 
-    void graph_navigation_widget_v2::keyPressEvent(QKeyEvent* event)
+    void GraphNavigationWidgetV2::keyPressEvent(QKeyEvent* event)
     {
         // qDebug() << "KeyDebug:" << "dn:" << (event->key() == Qt::Key_Down) << "/ up:" << (event->key() == Qt::Key_Up);
         if (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return || event->key() == Qt::Key_Right)
@@ -135,7 +135,7 @@ namespace hal
         return QTreeWidget::keyPressEvent(event);
     }
 
-    void graph_navigation_widget_v2::fill_table(bool direction)
+    void GraphNavigationWidgetV2::fill_table(bool direction)
     {
         int row = 0;
         QMap<u32, QTreeWidgetItem*> created_parents;
@@ -272,7 +272,7 @@ namespace hal
         resize_to_fit();
     }
 
-    void graph_navigation_widget_v2::resize_to_fit()
+    void GraphNavigationWidgetV2::resize_to_fit()
     {
         // Qt apparently needs these 2 pixels extra, otherwise you get scollbars
 
@@ -292,7 +292,7 @@ namespace hal
         setFixedHeight((height > MAXIMUM_ALLOWED_HEIGHT) ? MAXIMUM_ALLOWED_HEIGHT : height);
     }
 
-    int graph_navigation_widget_v2::sum_row_heights(const QTreeWidgetItem *itm, bool top)
+    int GraphNavigationWidgetV2::sum_row_heights(const QTreeWidgetItem *itm, bool top)
     {
         int row_heights = 0;
         if (!top)
@@ -302,13 +302,13 @@ namespace hal
         return row_heights;
     }
 
-    void graph_navigation_widget_v2::handle_item_double_clicked(QTreeWidgetItem* item)
+    void GraphNavigationWidgetV2::handle_item_double_clicked(QTreeWidgetItem* item)
     {
         Q_UNUSED(item)
         commit_selection();
     }
 
-    void graph_navigation_widget_v2::commit_selection()
+    void GraphNavigationWidgetV2::commit_selection()
     {
         if (selectedItems().isEmpty())
         {
@@ -339,7 +339,7 @@ namespace hal
         Q_EMIT navigation_requested(m_origin, m_via_net->get_id(), target_gates, target_modules);
     }
 
-    void graph_navigation_widget_v2::handle_selection_changed()
+    void GraphNavigationWidgetV2::handle_selection_changed()
     {
         auto new_selection = selectedItems().toSet();
         auto deselected = m_previous_selection - new_selection;

@@ -30,26 +30,26 @@ class QVBoxLayout;
 
 namespace hal
 {
-    class expanding_list_button;
-    class expanding_list_item;
+    class ExpandingListButton;
+    class ExpandingListItem;
 
-    class expanding_list_widget : public QScrollArea
+    class ExpandingListWidget : public QScrollArea
     {
         Q_OBJECT
 
     public:
-        expanding_list_widget(QWidget* parent = 0);
+        ExpandingListWidget(QWidget* parent = 0);
 
         //    bool eventFilter(QObject* object, QEvent* event) Q_DECL_OVERRIDE;
 
-        void append_item(expanding_list_button* button, expanding_list_button* parent_button = 0);
-        void select_button(expanding_list_button* button);
+        void append_item(ExpandingListButton* button, ExpandingListButton* parent_button = 0);
+        void select_button(ExpandingListButton* button);
         void select_item(int index);
 
         void repolish();
 
     Q_SIGNALS:
-        void button_selected(expanding_list_button* button);
+        void button_selected(ExpandingListButton* button);
 
     public Q_SLOTS:
         void handle_clicked();
@@ -59,10 +59,10 @@ namespace hal
         QVBoxLayout* m_content_layout;
         QFrame* m_spacer;
 
-        QList<expanding_list_item*> m_items;
+        QList<ExpandingListItem*> m_items;
 
-        expanding_list_button* m_selected_button;
-        expanding_list_item* m_extended_item;
+        ExpandingListButton* m_selected_button;
+        ExpandingListItem* m_extended_item;
 
         int m_item_width;
         int m_offset;

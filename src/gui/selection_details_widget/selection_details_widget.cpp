@@ -16,7 +16,7 @@
 
 namespace hal
 {
-    selection_details_widget::selection_details_widget(QWidget* parent) : content_widget("Details", parent)
+    selection_details_widget::selection_details_widget(QWidget* parent) : ContentWidget("Details", parent)
     {
         m_stacked_widget = new QStackedWidget(this);
 

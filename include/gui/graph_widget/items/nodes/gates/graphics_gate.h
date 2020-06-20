@@ -31,10 +31,10 @@ namespace hal
 {
     class Gate;
 
-    class graphics_gate : public graphics_node
+    class GraphicsGate : public GraphicsNode
     {
     public:
-        graphics_gate(const std::shared_ptr<const Gate> g);
+        GraphicsGate(const std::shared_ptr<const Gate> g);
 
     protected:
         QString m_type;

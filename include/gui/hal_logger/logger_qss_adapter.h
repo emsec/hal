@@ -28,7 +28,7 @@
 
 namespace hal
 {
-    class logger_qss_adapter : public QWidget
+    class LoggerQssAdapter : public QWidget
     {
         Q_OBJECT
         Q_PROPERTY(QColor trace_color READ trace_color WRITE set_trace_color)
@@ -49,7 +49,7 @@ namespace hal
         Q_PROPERTY(QColor default_highlight READ default_highlight WRITE set_default_highlight)
 
     public:
-        static logger_qss_adapter* instance();
+        static LoggerQssAdapter* instance();
 
         QColor trace_color() const;
         QColor debug_color() const;
@@ -87,7 +87,7 @@ namespace hal
 
 
     private:
-        explicit logger_qss_adapter(QWidget* parent = nullptr);
+        explicit LoggerQssAdapter(QWidget* parent = nullptr);
 
         QColor m_trace_color;
         QColor m_debug_color;

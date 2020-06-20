@@ -29,7 +29,7 @@
 
 namespace hal
 {
-    class python_code_editor : public code_editor
+    class python_code_editor : public CodeEditor
     {
         Q_OBJECT
     public:

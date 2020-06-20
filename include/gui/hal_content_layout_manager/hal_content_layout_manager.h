@@ -27,12 +27,12 @@
 
 namespace hal
 {
-    class hal_content_layout_manager : public QObject
+    class HalContentLayoutManager : public QObject
     {
         Q_OBJECT
 
     public:
-        explicit hal_content_layout_manager(QObject* parent = 0);
+        explicit HalContentLayoutManager(QObject* parent = 0);
 
     Q_SIGNALS:
 

@@ -33,12 +33,12 @@
 
 namespace hal
 {
-    namespace graphics_factory
+    namespace GraphicsFactory
     {
         QStringList graphics_module_types();
         QStringList graphics_gate_types();
 
-        graphics_module* create_graphics_module(const std::shared_ptr<Module> m, const int type);
-        graphics_gate* create_graphics_gate(const std::shared_ptr<const Gate> g, const int type);
+        GraphicsModule* create_graphics_module(const std::shared_ptr<Module> m, const int type);
+        GraphicsGate* create_graphics_gate(const std::shared_ptr<const Gate> g, const int type);
     }
 }

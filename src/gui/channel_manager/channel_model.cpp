@@ -5,19 +5,19 @@
 namespace hal
 {
 
-    channel_model channel_model::s_model;
+    ChannelModel ChannelModel::s_model;
 
-    channel_model::channel_model(QObject* parent) : QAbstractTableModel(parent), m_temporary_items(30)
+    ChannelModel::ChannelModel(QObject* parent) : QAbstractTableModel(parent), m_temporary_items(30)
     {
-        LogManager::get_instance().get_gui_callback().add_callback("gui", std::bind(&channel_model::handle_logmanager_callback, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
+        LogManager::get_instance().get_gui_callback().add_callback("gui", std::bind(&ChannelModel::handle_logmanager_callback, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
     }
 
-    channel_model* channel_model::get_instance()
+    ChannelModel* ChannelModel::get_instance()
     {
         return &s_model;
     }
 
-    QVariant channel_model::data(const QModelIndex& index, int role) const
+    QVariant ChannelModel::data(const QModelIndex& index, int role) const
     {
         if (!index.isValid())
             return QVariant();
@@ -25,11 +25,11 @@ namespace hal
         if (role != Qt::DisplayRole)
             return QVariant();
 
-        channel_item* item = static_cast<channel_item*>(index.internalPointer());
+        ChannelItem* item = static_cast<ChannelItem*>(index.internalPointer());
         return item->data(index.column());
     }
 
-    Qt::ItemFlags channel_model::flags(const QModelIndex& index) const
+    Qt::ItemFlags ChannelModel::flags(const QModelIndex& index) const
     {
         if (!index.isValid())
             return 0;
@@ -37,7 +37,7 @@ namespace hal
         return QAbstractItemModel::flags(index);
     }
 
-    QVariant channel_model::headerData(int section, Qt::Orientation orientation, int role) const
+    QVariant ChannelModel::headerData(int section, Qt::Orientation orientation, int role) const
     {
         if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
         {
@@ -50,7 +50,7 @@ namespace hal
         return QVariant();
     }
 
-    QModelIndex channel_model::index(int row, int column, const QModelIndex& parent) const
+    QModelIndex ChannelModel::index(int row, int column, const QModelIndex& parent) const
     {
         if (!hasIndex(row, column, parent))
             return QModelIndex();
@@ -73,7 +73,7 @@ namespace hal
         }
     }
 
-    int channel_model::rowCount(const QModelIndex& parent) const
+    int ChannelModel::rowCount(const QModelIndex& parent) const
     {
         if (parent.isValid())
             return 0;
@@ -81,7 +81,7 @@ namespace hal
             return m_permanent_items.size() + m_temporary_items.size();
     }
 
-    int channel_model::columnCount(const QModelIndex& parent) const
+    int ChannelModel::columnCount(const QModelIndex& parent) const
     {
         if (parent.isValid())
             return 0;
@@ -89,7 +89,7 @@ namespace hal
             return 2;
     }
 
-    channel_item* channel_model::add_channel(const QString name)
+    ChannelItem* ChannelModel::add_channel(const QString name)
     {
         int offset = m_permanent_items.size() + m_temporary_items.size();
 
@@ -100,7 +100,7 @@ namespace hal
             delete m_temporary_items.back();
             endRemoveRows();
         }
-        channel_item* item = new channel_item(name);
+        ChannelItem* item = new ChannelItem(name);
 
         beginInsertRows(QModelIndex(), offset, offset);
         m_temporary_items.push_back(item);
@@ -108,10 +108,10 @@ namespace hal
         return item;
     }
 
-    void channel_model::handle_logmanager_callback(const spdlog::level::level_enum& t, const std::string& channel_name, const std::string& msg_text)
+    void ChannelModel::handle_logmanager_callback(const spdlog::level::level_enum& t, const std::string& channel_name, const std::string& msg_text)
     {
-        channel_item* all_channel = nullptr;
-        channel_item* item        = nullptr;
+        ChannelItem* all_channel = nullptr;
+        ChannelItem* item        = nullptr;
         for (auto element : m_permanent_items)
         {
             if (element->name().toStdString() == ALL_CHANNEL)

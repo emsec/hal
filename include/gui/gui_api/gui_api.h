@@ -35,12 +35,12 @@
 
 namespace hal
 {
-    class gui_api : public QObject
+    class GuiApi : public QObject
     {
         Q_OBJECT
 
     public:
-        gui_api();
+        GuiApi();
 
         std::vector<u32> get_selected_gate_ids();
         std::vector<u32> get_selected_net_ids();

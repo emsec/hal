@@ -34,18 +34,18 @@
 
 namespace hal
 {
-    class hal_filter_tab_bar;
+    class HalFilterTabBar;
 
-    class hal_filter_dialog : public QDialog
+    class HalFilterDialog : public QDialog
     {
         Q_OBJECT
 
     public:
-        hal_filter_dialog(hal_filter_tab_bar* caller, QWidget* parent = 0);
+        HalFilterDialog(HalFilterTabBar* caller, QWidget* parent = 0);
 
-        ~hal_filter_dialog();
+        ~HalFilterDialog();
 
-        void append_filter_item(QString name, hal_filter_item* item);
+        void append_filter_item(QString name, HalFilterItem* item);
 
     Q_SIGNALS:
 
@@ -63,10 +63,10 @@ namespace hal
         public:
             filter_combo_box(QWidget* parent = 0);
 
-            hal_filter_item::rule get_data();
+            HalFilterItem::rule get_data();
         };
 
-        hal_filter_tab_bar* m_caller;
+        HalFilterTabBar* m_caller;
 
         QVBoxLayout m_content_layout;
 

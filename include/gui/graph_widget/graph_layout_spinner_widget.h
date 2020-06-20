@@ -28,12 +28,12 @@
 
 namespace hal
 {
-    class graph_layout_spinner_widget final : public QWidget
+    class GraphLayoutSpinnerWidget final : public QWidget
     {
         Q_OBJECT
 
     public:
-        explicit graph_layout_spinner_widget(QWidget* parent = nullptr);
+        explicit GraphLayoutSpinnerWidget(QWidget* parent = nullptr);
 
         void start();
         void stop();

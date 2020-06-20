@@ -13,11 +13,11 @@
 #include <QDebug>
 namespace hal
 {
-    code_editor_minimap::code_editor_minimap(code_editor* editor)
-        : QWidget(editor), m_editor(editor), m_document(new QTextDocument()), m_scrollbar(new minimap_scrollbar(this)), m_document_height(0), m_offset(0)
+    CodeEditorMinimap::CodeEditorMinimap(CodeEditor* editor)
+        : QWidget(editor), m_editor(editor), m_document(new QTextDocument()), m_scrollbar(new MinimapScrollbar(this)), m_document_height(0), m_offset(0)
     {
-        connect(m_editor->document(), &QTextDocument::contentsChange, this, &code_editor_minimap::handle_contents_change);
-        connect(m_document->documentLayout(), &QAbstractTextDocumentLayout::documentSizeChanged, this, &code_editor_minimap::handle_document_size_changed);
+        connect(m_editor->document(), &QTextDocument::contentsChange, this, &CodeEditorMinimap::handle_contents_change);
+        connect(m_document->documentLayout(), &QAbstractTextDocumentLayout::documentSizeChanged, this, &CodeEditorMinimap::handle_document_size_changed);
 
         m_document->setDocumentMargin(0);
         m_scrollbar->show();
@@ -25,17 +25,17 @@ namespace hal
         repolish();
     }
 
-    minimap_scrollbar* code_editor_minimap::scrollbar()
+    MinimapScrollbar* CodeEditorMinimap::scrollbar()
     {
         return m_scrollbar;
     }
 
-    QTextDocument* code_editor_minimap::document()
+    QTextDocument* CodeEditorMinimap::document()
     {
         return m_document;
     }
 
-    void code_editor_minimap::adjust_slider_height(int viewport_height)
+    void CodeEditorMinimap::adjust_slider_height(int viewport_height)
     {
         //m_scrollbar->set_slider_height(viewport_height * 0.25f);
 
@@ -53,13 +53,13 @@ namespace hal
         m_scrollbar->set_slider_height(std::round(m_editor->viewport()->contentsRect().height() * ratio));
     }
 
-    void code_editor_minimap::adjust_slider_height(qreal ratio)
+    void CodeEditorMinimap::adjust_slider_height(qreal ratio)
     {
         m_scrollbar->set_slider_height(std::round(ratio * m_document->documentLayout()->blockBoundingRect(m_document->firstBlock()).height()));
         resize_scrollbar();
     }
 
-    void code_editor_minimap::adjust_slider_height(int first_visible_block, int last_visible_block)
+    void CodeEditorMinimap::adjust_slider_height(int first_visible_block, int last_visible_block)
     {
         qDebug() << "first block: " + QString::number(first_visible_block);
         qDebug() << "last block: " + QString::number(last_visible_block);
@@ -73,13 +73,13 @@ namespace hal
         m_scrollbar->set_slider_height(std::round(bottom - top));
     }
 
-    void code_editor_minimap::handle_document_size_changed(const QSizeF& new_size)
+    void CodeEditorMinimap::handle_document_size_changed(const QSizeF& new_size)
     {
         m_document_height = std::ceil(new_size.height());
         resize_scrollbar();
     }
 
-    void code_editor_minimap::handle_contents_change(int position, int chars_removed, int chars_added)
+    void CodeEditorMinimap::handle_contents_change(int position, int chars_removed, int chars_added)
     {
         QTextCursor cursor = QTextCursor(m_document);
         cursor.setPosition(position);
@@ -94,7 +94,7 @@ namespace hal
             cursor.insertText(m_editor->document()->toPlainText().mid(position, chars_added));
     }
 
-    void code_editor_minimap::paintEvent(QPaintEvent* event)
+    void CodeEditorMinimap::paintEvent(QPaintEvent* event)
     {
         Q_UNUSED(event)
 
@@ -133,14 +133,14 @@ namespace hal
         m_document->documentLayout()->draw(&painter, ctx);
     }
 
-    void code_editor_minimap::resizeEvent(QResizeEvent* event)
+    void CodeEditorMinimap::resizeEvent(QResizeEvent* event)
     {
         Q_UNUSED(event)
 
         resize_scrollbar();
     }
 
-    void code_editor_minimap::mousePressEvent(QMouseEvent* event)
+    void CodeEditorMinimap::mousePressEvent(QMouseEvent* event)
     {
         int position = m_document->documentLayout()->hitTest(QPointF(event->pos().x(), event->pos().y() + m_offset), Qt::FuzzyHit);
         QTextCursor cursor(m_document);
@@ -148,12 +148,12 @@ namespace hal
         m_editor->center_on_line(cursor.blockNumber());
     }
 
-    void code_editor_minimap::wheelEvent(QWheelEvent* event)
+    void CodeEditorMinimap::wheelEvent(QWheelEvent* event)
     {
         m_editor->handle_wheel_event(event);
     }
 
-    void code_editor_minimap::resize_scrollbar()
+    void CodeEditorMinimap::resize_scrollbar()
     {
         if (m_document_height < height())
             m_scrollbar->resize(width(), std::max(m_scrollbar->slider_height(), m_document_height));
@@ -161,7 +161,7 @@ namespace hal
             m_scrollbar->resize(width(), height());
     }
 
-    void code_editor_minimap::repolish()
+    void CodeEditorMinimap::repolish()
     {
         QStyle* s = style();
 

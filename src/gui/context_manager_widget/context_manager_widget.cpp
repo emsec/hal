@@ -28,8 +28,8 @@
 
 namespace hal
 {
-    context_manager_widget::context_manager_widget(graph_tab_widget* tab_view, QWidget* parent)
-        : content_widget("View Manager", parent), m_list_widget(new QListWidget()), m_new_view_action(new QAction(this)), m_rename_action(new QAction(this)), m_duplicate_action(new QAction(this)),
+    ContextManagerWidget::ContextManagerWidget(GraphTabWidget* tab_view, QWidget* parent)
+        : ContentWidget("View Manager", parent), m_list_widget(new QListWidget()), m_new_view_action(new QAction(this)), m_rename_action(new QAction(this)), m_duplicate_action(new QAction(this)),
           m_delete_action(new QAction(this)), m_timestamp_action(new QAction(this))
     {
         //needed to load the properties
@@ -40,13 +40,13 @@ namespace hal
 
         m_content_layout->addWidget(m_list_widget);
 
-        connect(m_list_widget, &QListWidget::customContextMenuRequested, this, &context_manager_widget::handle_context_menu_request);
-        connect(m_list_widget, &QListWidget::itemDoubleClicked, this, &context_manager_widget::handle_item_double_clicked);
-        connect(m_list_widget, &QListWidget::itemSelectionChanged, this, &context_manager_widget::handle_selection_changed);
+        connect(m_list_widget, &QListWidget::customContextMenuRequested, this, &ContextManagerWidget::handle_context_menu_request);
+        connect(m_list_widget, &QListWidget::itemDoubleClicked, this, &ContextManagerWidget::handle_item_double_clicked);
+        connect(m_list_widget, &QListWidget::itemSelectionChanged, this, &ContextManagerWidget::handle_selection_changed);
 
-        connect(&g_graph_context_manager, &graph_context_manager::context_created, this, &context_manager_widget::handle_context_created);
-        connect(&g_graph_context_manager, &graph_context_manager::context_renamed, this, &context_manager_widget::handle_context_renamed);
-        connect(&g_graph_context_manager, &graph_context_manager::deleting_context, this, &context_manager_widget::handle_context_removed);
+        connect(&g_graph_context_manager, &GraphContextManager::context_created, this, &ContextManagerWidget::handle_context_created);
+        connect(&g_graph_context_manager, &GraphContextManager::context_renamed, this, &ContextManagerWidget::handle_context_renamed);
+        connect(&g_graph_context_manager, &GraphContextManager::deleting_context, this, &ContextManagerWidget::handle_context_removed);
 
         //load top context (top module) into list
         for (const auto& ctx : g_graph_context_manager.get_contexts())
@@ -74,19 +74,19 @@ namespace hal
         m_duplicate_action->setEnabled(false);
         m_delete_action->setEnabled(false);
 
-        connect(m_new_view_action, &QAction::triggered, this, &context_manager_widget::handle_create_context_clicked);
-        connect(m_rename_action, &QAction::triggered, this, &context_manager_widget::handle_rename_context_clicked);
-        connect(m_duplicate_action, &QAction::triggered, this, &context_manager_widget::handle_duplicate_context_clicked);
-        connect(m_delete_action, &QAction::triggered, this, &context_manager_widget::handle_delete_context_clicked);
-        connect(m_timestamp_action, &QAction::triggered, this, &context_manager_widget::handle_toggle_timestamps_clicked);
+        connect(m_new_view_action, &QAction::triggered, this, &ContextManagerWidget::handle_create_context_clicked);
+        connect(m_rename_action, &QAction::triggered, this, &ContextManagerWidget::handle_rename_context_clicked);
+        connect(m_duplicate_action, &QAction::triggered, this, &ContextManagerWidget::handle_duplicate_context_clicked);
+        connect(m_delete_action, &QAction::triggered, this, &ContextManagerWidget::handle_delete_context_clicked);
+        connect(m_timestamp_action, &QAction::triggered, this, &ContextManagerWidget::handle_toggle_timestamps_clicked);
     }
 
-    void context_manager_widget::resizeEvent(QResizeEvent* event)
+    void ContextManagerWidget::resizeEvent(QResizeEvent* event)
     {
         m_list_widget->setFixedWidth(event->size().width());
     }
 
-    void context_manager_widget::handle_context_menu_request(const QPoint& point)
+    void ContextManagerWidget::handle_context_menu_request(const QPoint& point)
     {
         //check if right click / context menu request occured on position of an list item
         QModelIndex clicked_index = m_list_widget->indexAt(point);
@@ -100,7 +100,7 @@ namespace hal
         QAction delete_action("Remove View", &context_menu);
 
         context_menu.addAction(&create_action);
-        connect(&create_action, &QAction::triggered, this, &context_manager_widget::handle_create_context_clicked);
+        connect(&create_action, &QAction::triggered, this, &ContextManagerWidget::handle_create_context_clicked);
 
         if (clicked_index.isValid())
         {
@@ -109,18 +109,18 @@ namespace hal
             context_menu.addAction(&delete_action);
             context_menu.addAction(&duplicate_action);
 
-            connect(&open_action, &QAction::triggered, this, &context_manager_widget::handle_open_context_clicked);
-            connect(&rename_action, &QAction::triggered, this, &context_manager_widget::handle_rename_context_clicked);
-            connect(&duplicate_action, &QAction::triggered, this, &context_manager_widget::handle_duplicate_context_clicked);
-            connect(&delete_action, &QAction::triggered, this, &context_manager_widget::handle_delete_context_clicked);
+            connect(&open_action, &QAction::triggered, this, &ContextManagerWidget::handle_open_context_clicked);
+            connect(&rename_action, &QAction::triggered, this, &ContextManagerWidget::handle_rename_context_clicked);
+            connect(&duplicate_action, &QAction::triggered, this, &ContextManagerWidget::handle_duplicate_context_clicked);
+            connect(&delete_action, &QAction::triggered, this, &ContextManagerWidget::handle_delete_context_clicked);
         }
         //show context menu
         context_menu.exec(m_list_widget->viewport()->mapToGlobal(point));
     }
 
-    void context_manager_widget::handle_create_context_clicked()
+    void ContextManagerWidget::handle_create_context_clicked()
     {
-        graph_context* new_context = nullptr;
+        GraphContext* new_context = nullptr;
 
         new_context = g_graph_context_manager.create_new_context(QString::fromStdString(g_netlist->get_top_module()->get_name()));
         new_context->add({g_netlist->get_top_module()->get_id()}, {});
@@ -128,7 +128,7 @@ namespace hal
         m_tab_view->show_context(new_context);
     }
 
-    void context_manager_widget::select_view_context(graph_context* context)
+    void ContextManagerWidget::select_view_context(GraphContext* context)
     {
         for (int i = 0; i < m_list_widget->count(); ++i)
         {
@@ -140,15 +140,15 @@ namespace hal
         }
     }
 
-    void context_manager_widget::handle_open_context_clicked()
+    void ContextManagerWidget::handle_open_context_clicked()
     {
-        graph_context* clicked_context = m_assigned_pointers[m_list_widget->currentItem()];
+        GraphContext* clicked_context = m_assigned_pointers[m_list_widget->currentItem()];
         m_tab_view->show_context(clicked_context);
     }
 
-    void context_manager_widget::handle_rename_context_clicked()
+    void ContextManagerWidget::handle_rename_context_clicked()
     {
-        graph_context* clicked_context = m_assigned_pointers[m_list_widget->currentItem()];
+        GraphContext* clicked_context = m_assigned_pointers[m_list_widget->currentItem()];
 
         QStringList used_context_names;
         for (const auto& ctx : g_graph_context_manager.get_contexts())
@@ -170,20 +170,20 @@ namespace hal
             g_graph_context_manager.rename_graph_context(clicked_context, ipd.text_value());
     }
 
-    void context_manager_widget::handle_duplicate_context_clicked()
+    void ContextManagerWidget::handle_duplicate_context_clicked()
     {
-        graph_context* clicked_context = m_assigned_pointers[m_list_widget->currentItem()];
-        graph_context* new_context     = g_graph_context_manager.create_new_context(clicked_context->name());
+        GraphContext* clicked_context = m_assigned_pointers[m_list_widget->currentItem()];
+        GraphContext* new_context     = g_graph_context_manager.create_new_context(clicked_context->name());
         new_context->add(clicked_context->modules(), clicked_context->gates());
     }
 
-    void context_manager_widget::handle_delete_context_clicked()
+    void ContextManagerWidget::handle_delete_context_clicked()
     {
-        graph_context* clicked_context = m_assigned_pointers[m_list_widget->currentItem()];
+        GraphContext* clicked_context = m_assigned_pointers[m_list_widget->currentItem()];
         g_graph_context_manager.delete_graph_context(clicked_context);
     }
 
-    void context_manager_widget::handle_toggle_timestamps_clicked()
+    void ContextManagerWidget::handle_toggle_timestamps_clicked()
     {
         m_show_timestamps = !m_show_timestamps;
 
@@ -202,7 +202,7 @@ namespace hal
     }
 
 
-    void context_manager_widget::setup_toolbar(toolbar* toolbar)
+    void ContextManagerWidget::setup_toolbar(toolbar* toolbar)
     {
         toolbar->addAction(m_new_view_action);
         toolbar->addAction(m_duplicate_action);
@@ -211,14 +211,14 @@ namespace hal
         toolbar->addAction(m_timestamp_action);
     }
 
-    void context_manager_widget::handle_item_double_clicked(QListWidgetItem* clicked)
+    void ContextManagerWidget::handle_item_double_clicked(QListWidgetItem* clicked)
     {
         Q_UNUSED(clicked);
-        graph_context* clicked_context = m_assigned_pointers[m_list_widget->currentItem()];
+        GraphContext* clicked_context = m_assigned_pointers[m_list_widget->currentItem()];
         m_tab_view->show_context(clicked_context);
     }
 
-    void context_manager_widget::handle_selection_changed()
+    void ContextManagerWidget::handle_selection_changed()
     {
         if (m_list_widget->selectedItems().isEmpty())
         {
@@ -234,7 +234,7 @@ namespace hal
         }
     }
 
-    void context_manager_widget::handle_context_created(graph_context* context)
+    void ContextManagerWidget::handle_context_created(GraphContext* context)
     {
         QString context_name = context->name();
 
@@ -247,7 +247,7 @@ namespace hal
         select_view_context(context);
     }
 
-    void context_manager_widget::handle_context_renamed(graph_context* context)
+    void ContextManagerWidget::handle_context_renamed(GraphContext* context)
     {
         for (int i = 0; i < m_list_widget->count(); ++i)
         {
@@ -264,7 +264,7 @@ namespace hal
         }
     }
 
-    void context_manager_widget::handle_context_removed(graph_context* context)
+    void ContextManagerWidget::handle_context_removed(GraphContext* context)
     {
         for (int i = 0; i < m_list_widget->count(); ++i)
         {
@@ -281,102 +281,102 @@ namespace hal
     // ##########################################################
     // ##########################################################
 
-    QString context_manager_widget::new_view_icon_path() const
+    QString ContextManagerWidget::new_view_icon_path() const
     {
         return m_new_view_icon_path;
     }
 
-    QString context_manager_widget::new_view_icon_style() const
+    QString ContextManagerWidget::new_view_icon_style() const
     {
         return m_new_view_icon_style;
     }
 
-    QString context_manager_widget::rename_icon_path() const
+    QString ContextManagerWidget::rename_icon_path() const
     {
         return m_rename_icon_path;
     }
 
-    QString context_manager_widget::rename_icon_style() const
+    QString ContextManagerWidget::rename_icon_style() const
     {
         return m_rename_icon_style;
     }
 
-    QString context_manager_widget::duplicate_icon_path() const
+    QString ContextManagerWidget::duplicate_icon_path() const
     {
         return m_duplicate_icon_path;
     }
 
-    QString context_manager_widget::duplicate_icon_style() const
+    QString ContextManagerWidget::duplicate_icon_style() const
     {
         return m_duplicate_icon_style;
     }
 
-    QString context_manager_widget::delete_icon_path() const
+    QString ContextManagerWidget::delete_icon_path() const
     {
         return m_delete_icon_path;
     }
 
-    QString context_manager_widget::delete_icon_style() const
+    QString ContextManagerWidget::delete_icon_style() const
     {
         return m_delete_icon_style;
     }
 
-    QString context_manager_widget::timestamp_icon_path() const
+    QString ContextManagerWidget::timestamp_icon_path() const
     {
         return m_timestamp_icon_path;
     }
 
-    QString context_manager_widget::timestamp_icon_style() const
+    QString ContextManagerWidget::timestamp_icon_style() const
     {
         return m_timestamp_icon_style;
     }
 
-    void context_manager_widget::set_new_view_icon_path(const QString& path)
+    void ContextManagerWidget::set_new_view_icon_path(const QString& path)
     {
         m_new_view_icon_path = path;
     }
 
-    void context_manager_widget::set_new_view_icon_style(const QString& style)
+    void ContextManagerWidget::set_new_view_icon_style(const QString& style)
     {
         m_new_view_icon_style = style;
     }
 
-    void context_manager_widget::set_rename_icon_path(const QString& path)
+    void ContextManagerWidget::set_rename_icon_path(const QString& path)
     {
         m_rename_icon_path = path;
     }
 
-    void context_manager_widget::set_rename_icon_style(const QString& style)
+    void ContextManagerWidget::set_rename_icon_style(const QString& style)
     {
         m_rename_icon_style = style;
     }
 
-    void context_manager_widget::set_duplicate_icon_path(const QString& path)
+    void ContextManagerWidget::set_duplicate_icon_path(const QString& path)
     {
         m_duplicate_icon_path = path;
     }
 
-    void context_manager_widget::set_duplicate_icon_style(const QString& style)
+    void ContextManagerWidget::set_duplicate_icon_style(const QString& style)
     {
         m_duplicate_icon_style = style;
     }
 
-    void context_manager_widget::set_delete_icon_path(const QString& path)
+    void ContextManagerWidget::set_delete_icon_path(const QString& path)
     {
         m_delete_icon_path = path;
     }
 
-    void context_manager_widget::set_delete_icon_style(const QString& style)
+    void ContextManagerWidget::set_delete_icon_style(const QString& style)
     {
         m_delete_icon_style = style;
     }
 
-    void context_manager_widget::set_timestamp_icon_path(const QString& path)
+    void ContextManagerWidget::set_timestamp_icon_path(const QString& path)
     {
         m_timestamp_icon_path = path;
     }
 
-    void context_manager_widget::set_timestamp_icon_style(const QString& style)
+    void ContextManagerWidget::set_timestamp_icon_style(const QString& style)
     {
         m_timestamp_icon_style = style;
     }

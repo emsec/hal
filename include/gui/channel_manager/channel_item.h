@@ -64,10 +64,10 @@ namespace hal
         int unread_successes;
     };
 
-    class channel_item
+    class ChannelItem
     {
     public:
-        channel_item(QString name);
+        ChannelItem(QString name);
 
         QVariant data(int column) const;
         const QString name() const;

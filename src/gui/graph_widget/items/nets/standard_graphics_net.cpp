@@ -13,22 +13,22 @@
 
 namespace hal
 {
-    qreal standard_graphics_net::s_alpha;
+    qreal StandardGraphicsNet::s_alpha;
 
-    qreal standard_graphics_net::s_wire_length;
-    qreal standard_graphics_net::s_left_arrow_offset;
-    qreal standard_graphics_net::s_right_arrow_offset;
-    qreal standard_graphics_net::s_arrow_left_x_shift;
-    qreal standard_graphics_net::s_arrow_right_x_shift;
-    qreal standard_graphics_net::s_arrow_side_length;
-    qreal standard_graphics_net::s_arrow_width;
-    qreal standard_graphics_net::s_arrow_height;
+    qreal StandardGraphicsNet::s_wire_length;
+    qreal StandardGraphicsNet::s_left_arrow_offset;
+    qreal StandardGraphicsNet::s_right_arrow_offset;
+    qreal StandardGraphicsNet::s_arrow_left_x_shift;
+    qreal StandardGraphicsNet::s_arrow_right_x_shift;
+    qreal StandardGraphicsNet::s_arrow_side_length;
+    qreal StandardGraphicsNet::s_arrow_width;
+    qreal StandardGraphicsNet::s_arrow_height;
 
-    QPainterPath standard_graphics_net::s_arrow;
+    QPainterPath StandardGraphicsNet::s_arrow;
 
-    qreal standard_graphics_net::s_split_radius;
+    qreal StandardGraphicsNet::s_split_radius;
 
-    void standard_graphics_net::load_settings()
+    void StandardGraphicsNet::load_settings()
     {
         s_wire_length = 26;
 
@@ -67,7 +67,7 @@ namespace hal
         s_split_radius = 3;
     }
 
-    void standard_graphics_net::update_alpha()
+    void StandardGraphicsNet::update_alpha()
     {
         if (s_lod >= graph_widget_constants::net_fade_in_lod && s_lod <= graph_widget_constants::net_fade_out_lod)
             s_alpha = (s_lod - graph_widget_constants::net_fade_in_lod) / (graph_widget_constants::net_fade_out_lod - graph_widget_constants::net_fade_in_lod);
@@ -75,7 +75,7 @@ namespace hal
             s_alpha = 1;
     }
 
-    standard_graphics_net::standard_graphics_net(const std::shared_ptr<const Net> n, const lines& l) : graphics_net(n)
+    StandardGraphicsNet::StandardGraphicsNet(const std::shared_ptr<const Net> n, const lines& l) : GraphicsNet(n)
     {
         for (const h_line& h : l.h_lines)
         {
@@ -147,7 +147,7 @@ namespace hal
         m_rect = QRectF(smallest_x - padding, smallest_y - padding, biggest_x - smallest_x + padding, biggest_y - smallest_y + padding);
     }
 
-    void standard_graphics_net::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
+    void StandardGraphicsNet::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
     {
         Q_UNUSED(widget);
 
@@ -192,21 +192,21 @@ namespace hal
     #endif
     }
 
-    void standard_graphics_net::lines::append_h_line(const qreal small_x, const qreal big_x, const qreal y)
+    void StandardGraphicsNet::lines::append_h_line(const qreal small_x, const qreal big_x, const qreal y)
     {
         assert(small_x < big_x);
 
         h_lines.append(h_line{small_x, big_x, y});
     }
 
-    void standard_graphics_net::lines::append_v_line(const qreal x, const qreal small_y, const qreal big_y)
+    void StandardGraphicsNet::lines::append_v_line(const qreal x, const qreal small_y, const qreal big_y)
     {
         assert(small_y < big_y);
 
         v_lines.append(v_line{x, small_y, big_y});
     }
 
-    void standard_graphics_net::lines::merge_lines()
+    void StandardGraphicsNet::lines::merge_lines()
     {
         QVector<h_line> merged_h_lines;
         QVector<v_line> merged_v_lines;

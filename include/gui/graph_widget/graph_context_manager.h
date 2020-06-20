@@ -35,22 +35,22 @@ namespace hal
     class Module;
     class Net;
 
-    class graph_context;
-    class graph_layouter;
-    class graph_shader;
-    class graph_context;
+    class GraphContext;
+    class GraphLayouter;
+    class GraphShader;
+    class GraphContext;
 
-    class graph_context_manager : public QObject
+    class GraphContextManager : public QObject
     {
         Q_OBJECT
 
     public:
-        graph_context_manager();
+        GraphContextManager();
 
-        graph_context* create_new_context(const QString& name);
-        void rename_graph_context(graph_context* ctx, const QString& new_name);
-        void delete_graph_context(graph_context* ctx);
-        QVector<graph_context*> get_contexts() const;
+        GraphContext* create_new_context(const QString& name);
+        void rename_graph_context(GraphContext* ctx, const QString& new_name);
+        void delete_graph_context(GraphContext* ctx);
+        QVector<GraphContext*> get_contexts() const;
         bool context_with_name_exists(const QString& name) const;
 
         //void handle_module_created(const std::shared_ptr<Module> m) const;
@@ -79,15 +79,15 @@ namespace hal
         void handle_unmarked_global_input(u32 net_id);
         void handle_unmarked_global_output(u32 net_id);
 
-        graph_layouter* get_default_layouter(graph_context* const context) const;
-        graph_shader* get_default_shader(graph_context* const context) const;
+        GraphLayouter* get_default_layouter(GraphContext* const context) const;
+        GraphShader* get_default_shader(GraphContext* const context) const;
 
     Q_SIGNALS:
-        void context_created(graph_context* context);
-        void context_renamed(graph_context* context);
-        void deleting_context(graph_context* context);
+        void context_created(GraphContext* context);
+        void context_renamed(GraphContext* context);
+        void deleting_context(GraphContext* context);
 
     private:
-        QVector<graph_context*> m_graph_contexts;
+        QVector<GraphContext*> m_graph_contexts;
     };
 }

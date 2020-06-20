@@ -38,34 +38,34 @@
 
 namespace hal
 {
-    class hal_filter_tab_bar;
+    class HalFilterTabBar;
 
-    class hal_logger_marshall;
+    class HalLoggerMarshall;
 
-    struct hal_filter_item;
+    struct HalFilterItem;
 
-    class channel_selector;
+    class ChannelSelector;
 
-    class hal_logger_widget : public content_widget
+    class HalLoggerWidget : public ContentWidget
     {
         Q_OBJECT
 
     public:
-        hal_logger_widget(QWidget* parent = 0);
-        ~hal_logger_widget();
+        HalLoggerWidget(QWidget* parent = 0);
+        ~HalLoggerWidget();
 
         virtual void setup_toolbar(toolbar* toolbar) Q_DECL_OVERRIDE;
 
         QPlainTextEdit* get_plain_text_edit();
 
-        hal_filter_tab_bar* get_tab_bar();
+        HalFilterTabBar* get_tab_bar();
 
         void reload_log_content();
 
         void resizeEvent(QResizeEvent* event) override;
 
     Q_SIGNALS:
-        void queue_log_update(spdlog::level::level_enum t, QString const& msg, hal_filter_item* filter);
+        void queue_log_update(spdlog::level::level_enum t, QString const& msg, HalFilterItem* filter);
 
     public Q_SLOTS:
 
@@ -79,13 +79,13 @@ namespace hal
         //    void queue_log_update_adapter(spdlog::level::level_enum t, QString const &msg);
 
     private:
-        hal_filter_tab_bar* m_tab_bar;
+        HalFilterTabBar* m_tab_bar;
 
         QPlainTextEdit* m_plain_text_edit;
 
-        channel_selector* m_selector;
+        ChannelSelector* m_selector;
 
-        hal_logger_marshall* m_log_marshall;
+        HalLoggerMarshall* m_log_marshall;
 
         std::string m_current_channel;
 

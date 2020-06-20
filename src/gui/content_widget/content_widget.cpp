@@ -10,7 +10,7 @@
 
 namespace hal
 {
-    content_widget::content_widget(QString name, QWidget* parent) : hal_widget(parent), m_name(name), m_content_layout(new QVBoxLayout())
+    ContentWidget::ContentWidget(QString name, QWidget* parent) : hal_widget(parent), m_name(name), m_content_layout(new QVBoxLayout())
     {
         m_content_layout->setContentsMargins(0, 0, 0, 0);
         m_content_layout->setSpacing(0);
@@ -25,7 +25,7 @@ namespace hal
         set_icon(temp);
     }
 
-    void content_widget::remove()
+    void ContentWidget::remove()
     {
         if (m_anchor)
         {
@@ -34,7 +34,7 @@ namespace hal
         }
     }
 
-    void content_widget::detach()
+    void ContentWidget::detach()
     {
         if (m_anchor)
         {
@@ -43,7 +43,7 @@ namespace hal
         }
     }
 
-    void content_widget::reattach()
+    void ContentWidget::reattach()
     {
         if (m_anchor)
         {
@@ -52,7 +52,7 @@ namespace hal
         }
     }
 
-    void content_widget::open()
+    void ContentWidget::open()
     {
         if (m_anchor)
         {
@@ -61,7 +61,7 @@ namespace hal
         }
     }
 
-    void content_widget::close()
+    void ContentWidget::close()
     {
         if (m_anchor)
         {
@@ -70,36 +70,36 @@ namespace hal
         }
     }
 
-    void content_widget::closeEvent(QCloseEvent* event){Q_UNUSED(event)}
+    void ContentWidget::closeEvent(QCloseEvent* event){Q_UNUSED(event)}
 
-    QString content_widget::name()
+    QString ContentWidget::name()
     {
         return m_name;
     }
 
-    QIcon content_widget::icon()
+    QIcon ContentWidget::icon()
     {
         return m_icon;
     }
 
-    void content_widget::set_anchor(hal_content_anchor* anchor)
+    void ContentWidget::set_anchor(HalContentAnchor* anchor)
     {
         m_anchor = anchor;
     }
 
-    void content_widget::set_icon(QIcon icon)
+    void ContentWidget::set_icon(QIcon icon)
     {
         m_icon = icon;
     }
 
-    void content_widget::setup_toolbar(toolbar* toolbar){Q_UNUSED(toolbar)}
+    void ContentWidget::setup_toolbar(toolbar* toolbar){Q_UNUSED(toolbar)}
 
-    QList<QShortcut*> content_widget::create_shortcuts()
+    QList<QShortcut*> ContentWidget::create_shortcuts()
     {
         return QList<QShortcut*>();
     }
 
-    void content_widget::repolish()
+    void ContentWidget::repolish()
     {
         QStyle* s = style();
 
@@ -110,17 +110,17 @@ namespace hal
         //        m_icon_label->setPixmap(gui_utility::get_styled_svg_icon(m_icon_style, m_icon_path).pixmap(QSize(20, 20)));
     }
 
-    QString content_widget::icon_style()
+    QString ContentWidget::icon_style()
     {
         return m_icon_style;
     }
 
-    QString content_widget::icon_path()
+    QString ContentWidget::icon_path()
     {
         return m_icon_path;
     }
 
-    void content_widget::set_icon_style(const QString& style)
+    void ContentWidget::set_icon_style(const QString& style)
     {
         if (m_icon_style == style)
             return;
@@ -129,7 +129,7 @@ namespace hal
         repolish();
     }
 
-    void content_widget::set_icon_path(const QString& path)
+    void ContentWidget::set_icon_path(const QString& path)
     {
         if (m_icon_path == path)
             return;

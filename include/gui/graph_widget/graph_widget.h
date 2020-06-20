@@ -35,20 +35,20 @@
 namespace hal
 {
     class dialog_overlay;
-    class graph_context;
-    class graph_graphics_view;
-    class graph_layout_spinner_widget;
-    class graph_navigation_widget;
-    class graph_navigation_widget_v2;
+    class GraphContext;
+    class GraphGraphicsView;
+    class GraphLayoutSpinnerWidget;
+    class GraphNavigationWidget;
+    class GraphNavigationWidgetV2;
 
-    class graph_widget : public content_widget, public graph_context_subscriber
+    class GraphWidget : public ContentWidget, public GraphContextSubscriber
     {
         Q_OBJECT
 
     public:
-        explicit graph_widget(graph_context* context, QWidget* parent = nullptr);
+        explicit GraphWidget(GraphContext* context, QWidget* parent = nullptr);
 
-        graph_context* get_context() const;
+        GraphContext* get_context() const;
 
         void handle_scene_available() override;
         void handle_scene_unavailable() override;
@@ -57,7 +57,7 @@ namespace hal
         void handle_status_update(const int percent) override;
         void handle_status_update(const QString& message) override;
 
-        graph_graphics_view* view();
+        GraphGraphicsView* view();
 
         void ensure_selection_visible();
 
@@ -83,12 +83,12 @@ namespace hal
 
         void ensure_items_visible(const QSet<u32>& gates, const QSet<u32>& modules);
 
-        graph_graphics_view* m_view;
-        graph_context* m_context;
+        GraphGraphicsView* m_view;
+        GraphContext* m_context;
 
         dialog_overlay* m_overlay;
-        graph_navigation_widget_v2* m_navigation_widget_v2;
-        graph_layout_spinner_widget* m_spinner_widget;
+        GraphNavigationWidgetV2* m_navigation_widget_v2;
+        GraphLayoutSpinnerWidget* m_spinner_widget;
 
         u32 m_current_expansion;
     };

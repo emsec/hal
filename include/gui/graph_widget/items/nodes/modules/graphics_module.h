@@ -31,10 +31,10 @@ namespace hal
 {
     class Module;
 
-    class graphics_module : public graphics_node
+    class GraphicsModule : public GraphicsNode
     {
     public:
-        explicit graphics_module(const std::shared_ptr<Module> m);
+        explicit GraphicsModule(const std::shared_ptr<Module> m);
 
     protected:
         struct module_pin

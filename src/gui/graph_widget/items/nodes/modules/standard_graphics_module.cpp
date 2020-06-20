@@ -16,38 +16,38 @@ namespace hal
 {
     static const qreal baseline = 1;
 
-    qreal standard_graphics_module::s_alpha;
+    qreal StandardGraphicsModule::s_alpha;
 
-    QPen standard_graphics_module::s_pen;
+    QPen StandardGraphicsModule::s_pen;
 
-    QColor standard_graphics_module::s_text_color;
+    QColor StandardGraphicsModule::s_text_color;
 
-    QFont standard_graphics_module::s_name_font;
-    QFont standard_graphics_module::s_type_font;
-    QFont standard_graphics_module::s_pin_font;
+    QFont StandardGraphicsModule::s_name_font;
+    QFont StandardGraphicsModule::s_type_font;
+    QFont StandardGraphicsModule::s_pin_font;
 
-    qreal standard_graphics_module::s_name_font_height;
-    qreal standard_graphics_module::s_type_font_height;
+    qreal StandardGraphicsModule::s_name_font_height;
+    qreal StandardGraphicsModule::s_type_font_height;
 
-    qreal standard_graphics_module::s_color_bar_height = 30;
+    qreal StandardGraphicsModule::s_color_bar_height = 30;
 
-    qreal standard_graphics_module::s_pin_inner_horizontal_spacing = 12;
-    qreal standard_graphics_module::s_pin_outer_horizontal_spacing = 2.4;
+    qreal StandardGraphicsModule::s_pin_inner_horizontal_spacing = 12;
+    qreal StandardGraphicsModule::s_pin_outer_horizontal_spacing = 2.4;
 
-    qreal standard_graphics_module::s_pin_inner_vertical_spacing = 1.2;
-    qreal standard_graphics_module::s_pin_outer_vertical_spacing = 0.6;
-    qreal standard_graphics_module::s_pin_upper_vertical_spacing = 0.6;
-    qreal standard_graphics_module::s_pin_lower_vertical_spacing = 1.8;
+    qreal StandardGraphicsModule::s_pin_inner_vertical_spacing = 1.2;
+    qreal StandardGraphicsModule::s_pin_outer_vertical_spacing = 0.6;
+    qreal StandardGraphicsModule::s_pin_upper_vertical_spacing = 0.6;
+    qreal StandardGraphicsModule::s_pin_lower_vertical_spacing = 1.8;
 
-    qreal standard_graphics_module::s_pin_font_height;
-    qreal standard_graphics_module::s_pin_font_ascent;
-    qreal standard_graphics_module::s_pin_font_descent;
-    qreal standard_graphics_module::s_pin_font_baseline;
+    qreal StandardGraphicsModule::s_pin_font_height;
+    qreal StandardGraphicsModule::s_pin_font_ascent;
+    qreal StandardGraphicsModule::s_pin_font_descent;
+    qreal StandardGraphicsModule::s_pin_font_baseline;
 
-    qreal standard_graphics_module::s_inner_name_type_spacing = 1.2;
-    qreal standard_graphics_module::s_outer_name_type_spacing = 3;
+    qreal StandardGraphicsModule::s_inner_name_type_spacing = 1.2;
+    qreal StandardGraphicsModule::s_outer_name_type_spacing = 3;
 
-    void standard_graphics_module::load_settings()
+    void StandardGraphicsModule::load_settings()
     {
         s_pen.setCosmetic(true);
         s_pen.setJoinStyle(Qt::MiterJoin);
@@ -76,7 +76,7 @@ namespace hal
         s_selection_color = QColor(240, 173, 0);
     }
 
-    void standard_graphics_module::update_alpha()
+    void StandardGraphicsModule::update_alpha()
     {
         if (s_lod <= graph_widget_constants::gate_max_lod)
             s_alpha = 1 - (s_lod - graph_widget_constants::gate_min_lod) / (graph_widget_constants::gate_max_lod - graph_widget_constants::gate_min_lod);
@@ -84,12 +84,12 @@ namespace hal
             s_alpha = 0;
     }
 
-    standard_graphics_module::standard_graphics_module(const std::shared_ptr<Module> m, bool adjust_size_to_grid) : graphics_module(m)
+    StandardGraphicsModule::StandardGraphicsModule(const std::shared_ptr<Module> m, bool adjust_size_to_grid) : GraphicsModule(m)
     {
         format(adjust_size_to_grid);
     }
 
-    void standard_graphics_module::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
+    void StandardGraphicsModule::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
     {
         Q_UNUSED(widget);
 
@@ -191,7 +191,7 @@ namespace hal
         }
     }
 
-    QPointF standard_graphics_module::get_input_scene_position(const u32 net_id, const QString& pin_type) const
+    QPointF StandardGraphicsModule::get_input_scene_position(const u32 net_id, const QString& pin_type) const
     {
         Q_UNUSED(pin_type)
 
@@ -213,7 +213,7 @@ namespace hal
         return mapToScene(QPointF(0, y));
     }
 
-    QPointF standard_graphics_module::get_output_scene_position(const u32 net_id, const QString& pin_type) const
+    QPointF StandardGraphicsModule::get_output_scene_position(const u32 net_id, const QString& pin_type) const
     {
         Q_UNUSED(pin_type)
 
@@ -235,7 +235,7 @@ namespace hal
         return mapToScene(QPointF(m_width, y));
     }
 
-    void standard_graphics_module::format(const bool& adjust_size_to_grid)
+    void StandardGraphicsModule::format(const bool& adjust_size_to_grid)
     {
         QFontMetricsF name_fm(s_name_font);
         qreal name_width = name_fm.width(m_name);

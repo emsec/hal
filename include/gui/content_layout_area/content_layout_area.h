@@ -33,10 +33,10 @@ class QVBoxLayout;
 
 namespace hal
 {
-    class dock_bar;
+    class DockBar;
     class splitter;
-    class splitter_anchor;
-    class tab_widget;
+    class SplitterAnchor;
+    class TabWidget;
 
     enum class content_anchor
     {
@@ -46,13 +46,13 @@ namespace hal
         bottom = 3
     };
 
-    class content_layout_area : public QWidget
+    class ContentLayoutArea : public QWidget
     {
         Q_OBJECT
 
     public:
-        explicit content_layout_area(QWidget* parent = 0);
-        void add_content(content_widget* widget, int index, content_anchor anchor);
+        explicit ContentLayoutArea(QWidget* parent = 0);
+        void add_content(ContentWidget* widget, int index, content_anchor anchor);
 
         void init_splitter_size(const QSize& size);
 
@@ -76,18 +76,18 @@ namespace hal
         splitter* m_right_splitter;
         splitter* m_bottom_splitter;
 
-        dock_bar* m_left_dock;
-        dock_bar* m_right_dock;
-        dock_bar* m_bottom_dock;
+        DockBar* m_left_dock;
+        DockBar* m_right_dock;
+        DockBar* m_bottom_dock;
 
         QWidget* m_bottom_container;
         QFrame* m_left_spacer;
         QFrame* m_right_spacer;
 
-        splitter_anchor* m_left_anchor;
-        splitter_anchor* m_right_anchor;
-        splitter_anchor* m_bottom_anchor;
+        SplitterAnchor* m_left_anchor;
+        SplitterAnchor* m_right_anchor;
+        SplitterAnchor* m_bottom_anchor;
 
-        tab_widget* m_tab_widget;
+        TabWidget* m_tab_widget;
     };
 }

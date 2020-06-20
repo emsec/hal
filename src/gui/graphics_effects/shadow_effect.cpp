@@ -8,11 +8,11 @@ QT_END_NAMESPACE
 
 namespace hal
 {
-    shadow_effect::shadow_effect(QObject* parent) : QGraphicsEffect(parent), _distance(4.0f), _blurRadius(10.0f), _color(0, 0, 0, 80)
+    ShadowEffect::ShadowEffect(QObject* parent) : QGraphicsEffect(parent), _distance(4.0f), _blurRadius(10.0f), _color(0, 0, 0, 80)
     {
     }
 
-    void shadow_effect::draw(QPainter* painter)
+    void ShadowEffect::draw(QPainter* painter)
     {
         // if nothing to show outside the item, just draw source
         if ((blurRadius() + distance()) <= 0)
@@ -69,7 +69,7 @@ namespace hal
         painter->setWorldTransform(restoreTransform);
     }
 
-    QRectF shadow_effect::boundingRectFor(const QRectF& rect) const
+    QRectF ShadowEffect::boundingRectFor(const QRectF& rect) const
     {
         qreal delta = blurRadius() + distance();
         return rect.united(rect.adjusted(-delta, -delta, delta, delta));

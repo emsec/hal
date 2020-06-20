@@ -29,7 +29,7 @@ namespace hal
 {
     class python_console;
 
-    class python_console_widget : public content_widget
+    class python_console_widget : public ContentWidget
     {
     public:
         python_console_widget(QWidget* parent = nullptr);

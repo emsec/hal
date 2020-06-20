@@ -27,7 +27,7 @@
 
 namespace hal
 {
-    class content_widget;
+    class ContentWidget;
 
     enum class button_orientation
     {
@@ -36,18 +36,18 @@ namespace hal
         vertical_down = 2
     };
 
-    class dock_button : public QToolButton
+    class DockButton : public QToolButton
     {
         Q_OBJECT
 
     public:
-        dock_button(content_widget* widget, button_orientation orientation, QObject* eventFilter, QWidget* parent);
+        DockButton(ContentWidget* widget, button_orientation orientation, QObject* eventFilter, QWidget* parent);
 
         void paintEvent(QPaintEvent* event) Q_DECL_OVERRIDE;
 
         void adjust_size();
         int relative_width();
-        content_widget* widget();
+        ContentWidget* widget();
         bool hidden();
         bool available();
         void set_available(bool available);
@@ -61,7 +61,7 @@ namespace hal
         void handle_clicked(bool checked);
 
     private:
-        content_widget* m_widget;
+        ContentWidget* m_widget;
         button_orientation m_orientation;
         int m_width;
         int m_height;

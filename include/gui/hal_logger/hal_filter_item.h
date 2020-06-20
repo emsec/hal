@@ -28,7 +28,7 @@
 
 namespace hal
 {
-    struct hal_filter_item
+    struct HalFilterItem
     {
         enum class rule
         {
@@ -37,7 +37,7 @@ namespace hal
             Process = 2
         };
 
-        hal_filter_item(rule trace, rule debug, rule info, rule warning, rule error, rule critical, rule default_rule, QStringList& keywords, QRegularExpression& reg_ex)
+        HalFilterItem(rule trace, rule debug, rule info, rule warning, rule error, rule critical, rule default_rule, QStringList& keywords, QRegularExpression& reg_ex)
             : m_trace(trace), m_debug(debug), m_info(info), m_warning(warning), m_error(error), m_critical(critical), m_default(default_rule), m_keywords(keywords), m_reg_ex(reg_ex)
         {
         }

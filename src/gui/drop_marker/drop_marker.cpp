@@ -4,7 +4,7 @@
 
 namespace hal
 {
-    drop_marker::drop_marker(Qt::Orientation orientation, QWidget* parent) : QFrame(parent), m_animation(new QPropertyAnimation(this)), m_orientation(orientation), m_fixed_width(0), m_fixed_height(0)
+    DropMarker::DropMarker(Qt::Orientation orientation, QWidget* parent) : QFrame(parent), m_animation(new QPropertyAnimation(this)), m_orientation(orientation), m_fixed_width(0), m_fixed_height(0)
     {
         m_animation->setTargetObject(this);
         m_animation->setDuration(200);
@@ -17,17 +17,17 @@ namespace hal
             m_animation->setPropertyName("fixed_height");
     }
 
-    int drop_marker::fixed_width()
+    int DropMarker::fixed_width()
     {
         return m_fixed_width;
     }
 
-    int drop_marker::fixed_height()
+    int DropMarker::fixed_height()
     {
         return m_fixed_height;
     }
 
-    void drop_marker::set_fixed_width(int width)
+    void DropMarker::set_fixed_width(int width)
     {
         m_fixed_width = width;
 
@@ -35,7 +35,7 @@ namespace hal
         setMaximumWidth(width);
     }
 
-    void drop_marker::set_fixed_height(int height)
+    void DropMarker::set_fixed_height(int height)
     {
         m_fixed_height = height;
 
@@ -43,12 +43,12 @@ namespace hal
         setMaximumHeight(height);
     }
 
-    void drop_marker::set_end_value(int value)
+    void DropMarker::set_end_value(int value)
     {
         m_animation->setEndValue(value);
     }
 
-    void drop_marker::expand()
+    void DropMarker::expand()
     {
         m_animation->setDirection(QPropertyAnimation::Forward);
 
@@ -56,7 +56,7 @@ namespace hal
             m_animation->start();
     }
 
-    void drop_marker::collapse()
+    void DropMarker::collapse()
     {
         m_animation->setDirection(QPropertyAnimation::Backward);
 
@@ -64,7 +64,7 @@ namespace hal
             m_animation->start();
     }
 
-    void drop_marker::reset()
+    void DropMarker::reset()
     {
         if (m_animation->state() == QAbstractAnimation::Running)
             m_animation->stop();

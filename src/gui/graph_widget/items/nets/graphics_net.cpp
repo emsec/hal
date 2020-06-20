@@ -6,13 +6,13 @@
 
 namespace hal
 {
-    qreal graphics_net::s_line_width;
-    qreal graphics_net::s_shape_width;
+    qreal GraphicsNet::s_line_width;
+    qreal GraphicsNet::s_shape_width;
 
-    QPen graphics_net::s_pen;
-    QBrush graphics_net::s_brush;
+    QPen GraphicsNet::s_pen;
+    QBrush GraphicsNet::s_brush;
 
-    void graphics_net::load_settings()
+    void GraphicsNet::load_settings()
     {
         s_line_width = 1.8;
         s_shape_width = 5;
@@ -21,21 +21,21 @@ namespace hal
         s_pen.setJoinStyle(Qt::MiterJoin);
     }
 
-    graphics_net::graphics_net(const std::shared_ptr<const Net> n) : graphics_item(hal::item_type::net, n->get_id())
+    GraphicsNet::GraphicsNet(const std::shared_ptr<const Net> n) : GraphicsItem(hal::item_type::net, n->get_id())
     {
     }
 
-    QRectF graphics_net::boundingRect() const
+    QRectF GraphicsNet::boundingRect() const
     {
         return m_rect;
     }
 
-    QPainterPath graphics_net::shape() const
+    QPainterPath GraphicsNet::shape() const
     {
         return m_shape;
     }
 
-    void graphics_net::set_visuals(const graphics_net::visuals& v)
+    void GraphicsNet::set_visuals(const GraphicsNet::visuals& v)
     {
         setVisible(v.visible);
 

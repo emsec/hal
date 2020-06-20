@@ -9,22 +9,22 @@
 
 namespace hal
 {
-    qreal old_standard_graphics_net::s_alpha;
+    qreal OldStandardGraphicsNet::s_alpha;
 
-    qreal old_standard_graphics_net::s_wire_length;
-    qreal old_standard_graphics_net::s_left_arrow_offset;
-    qreal old_standard_graphics_net::s_right_arrow_offset;
-    qreal old_standard_graphics_net::s_arrow_left_x_shift;
-    qreal old_standard_graphics_net::s_arrow_right_x_shift;
-    qreal old_standard_graphics_net::s_arrow_side_length;
-    qreal old_standard_graphics_net::s_arrow_width;
-    qreal old_standard_graphics_net::s_arrow_height;
+    qreal OldStandardGraphicsNet::s_wire_length;
+    qreal OldStandardGraphicsNet::s_left_arrow_offset;
+    qreal OldStandardGraphicsNet::s_right_arrow_offset;
+    qreal OldStandardGraphicsNet::s_arrow_left_x_shift;
+    qreal OldStandardGraphicsNet::s_arrow_right_x_shift;
+    qreal OldStandardGraphicsNet::s_arrow_side_length;
+    qreal OldStandardGraphicsNet::s_arrow_width;
+    qreal OldStandardGraphicsNet::s_arrow_height;
 
-    QPainterPath old_standard_graphics_net::s_arrow;
+    QPainterPath OldStandardGraphicsNet::s_arrow;
 
-    qreal old_standard_graphics_net::s_split_radius;
+    qreal OldStandardGraphicsNet::s_split_radius;
 
-    void old_standard_graphics_net::load_settings()
+    void OldStandardGraphicsNet::load_settings()
     {
         s_wire_length = 26;
 
@@ -63,7 +63,7 @@ namespace hal
         s_split_radius = 3;
     }
 
-    void old_standard_graphics_net::update_alpha()
+    void OldStandardGraphicsNet::update_alpha()
     {
         if (s_lod >= graph_widget_constants::net_fade_in_lod && s_lod <= graph_widget_constants::net_fade_out_lod)
             s_alpha = (s_lod - graph_widget_constants::net_fade_in_lod) / (graph_widget_constants::net_fade_out_lod - graph_widget_constants::net_fade_in_lod);
@@ -71,8 +71,8 @@ namespace hal
             s_alpha = 1;
     }
 
-    //standard_graphics_net::standard_graphics_net(const std::shared_ptr<const Net> n, const lines& l) : graphics_net(n),
-    old_standard_graphics_net::old_standard_graphics_net(const std::shared_ptr<const Net> n, lines& l, const bool complete) : graphics_net(n),
+    //StandardGraphicsNet::StandardGraphicsNet(const std::shared_ptr<const Net> n, const lines& l) : GraphicsNet(n),
+    OldStandardGraphicsNet::OldStandardGraphicsNet(const std::shared_ptr<const Net> n, lines& l, const bool complete) : GraphicsNet(n),
         m_complete(complete)
     {
         QVector<h_line> collapsed_h;
@@ -277,7 +277,7 @@ namespace hal
         //        m_lines.append(QLineF(v.x - l.src_x, v.small_y - l.src_y, v.x - l.src_x, v.big_y - l.src_y));
     }
 
-    void old_standard_graphics_net::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
+    void OldStandardGraphicsNet::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
     {
         Q_UNUSED(widget);
 

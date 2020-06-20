@@ -27,10 +27,10 @@
 
 namespace hal
 {
-    class module_shader final : public graph_shader
+    class ModuleShader final : public GraphShader
     {
     public:
-        explicit module_shader(const graph_context* const context);
+        explicit ModuleShader(const GraphContext* const context);
 
         void add(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets) override;
         void remove(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets) override;

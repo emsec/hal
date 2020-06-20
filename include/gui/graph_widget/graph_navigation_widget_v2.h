@@ -33,14 +33,14 @@
 
 namespace hal
 {
-    class graph_graphics_view;
+    class GraphGraphicsView;
 
-    class graph_navigation_widget_v2 : public QTreeWidget
+    class GraphNavigationWidgetV2 : public QTreeWidget
     {
         Q_OBJECT
 
     public:
-        explicit graph_navigation_widget_v2(QWidget *parent = nullptr);
+        explicit GraphNavigationWidgetV2(QWidget *parent = nullptr);
 
         void setup(bool direction);
         void setup(hal::node origin, std::shared_ptr<Net> via_net, bool direction);

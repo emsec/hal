@@ -10,26 +10,26 @@
 
 namespace hal
 {
-    content_layout_area::content_layout_area(QWidget* parent)
+    ContentLayoutArea::ContentLayoutArea(QWidget* parent)
         : QWidget(parent), m_top_level_layout(new QVBoxLayout()), m_second_level_layout(new QHBoxLayout()), m_third_level_layout(new QVBoxLayout()), m_fourth_level_layout(new QHBoxLayout()),
           m_splitter_layout(new QVBoxLayout()), m_central_layout(new QHBoxLayout()), m_spacer_layout(new QHBoxLayout()),
 
           m_vertical_splitter(new splitter(Qt::Vertical, this)), m_horizontal_splitter(new splitter(Qt::Horizontal, this)), m_left_splitter(new splitter(Qt::Vertical, this)),
           m_right_splitter(new splitter(Qt::Vertical, this)), m_bottom_splitter(new splitter(Qt::Horizontal, this)),
 
-          m_left_dock(new dock_bar(Qt::Vertical, button_orientation::vertical_up, this)), m_right_dock(new dock_bar(Qt::Vertical, button_orientation::vertical_down, this)),
-          m_bottom_dock(new dock_bar(Qt::Horizontal, button_orientation::horizontal, this)),
+          m_left_dock(new DockBar(Qt::Vertical, button_orientation::vertical_up, this)), m_right_dock(new DockBar(Qt::Vertical, button_orientation::vertical_down, this)),
+          m_bottom_dock(new DockBar(Qt::Horizontal, button_orientation::horizontal, this)),
 
           m_bottom_container(new QWidget(this)), m_left_spacer(new QFrame(this)), m_right_spacer(new QFrame(this)),
 
-          m_left_anchor(new splitter_anchor(m_left_dock, m_left_splitter, this)), m_right_anchor(new splitter_anchor(m_right_dock, m_right_splitter, this)),
-          m_bottom_anchor(new splitter_anchor(m_bottom_dock, m_bottom_splitter, this)),
+          m_left_anchor(new SplitterAnchor(m_left_dock, m_left_splitter, this)), m_right_anchor(new SplitterAnchor(m_right_dock, m_right_splitter, this)),
+          m_bottom_anchor(new SplitterAnchor(m_bottom_dock, m_bottom_splitter, this)),
 
-          m_tab_widget(new tab_widget(this))
+          m_tab_widget(new TabWidget(this))
     {
-        connect(m_left_anchor, &splitter_anchor::content_changed, this, &content_layout_area::update_left_dock_bar);
-        connect(m_right_anchor, &splitter_anchor::content_changed, this, &content_layout_area::update_right_dock_bar);
-        connect(m_bottom_anchor, &splitter_anchor::content_changed, this, &content_layout_area::update_bottom_dock_bar);
+        connect(m_left_anchor, &SplitterAnchor::content_changed, this, &ContentLayoutArea::update_left_dock_bar);
+        connect(m_right_anchor, &SplitterAnchor::content_changed, this, &ContentLayoutArea::update_right_dock_bar);
+        connect(m_bottom_anchor, &SplitterAnchor::content_changed, this, &ContentLayoutArea::update_bottom_dock_bar);
 
         m_left_dock->setObjectName("left-dock-bar");
         m_right_dock->setObjectName("right-dock-bar");
@@ -102,7 +102,7 @@ namespace hal
         m_horizontal_splitter->addWidget(m_right_splitter);
     }
 
-    void content_layout_area::add_content(content_widget* widget, int index, content_anchor anchor)
+    void ContentLayoutArea::add_content(ContentWidget* widget, int index, content_anchor anchor)
     {
         switch (anchor)
         {
@@ -121,7 +121,7 @@ namespace hal
         }
     }
 
-    void content_layout_area::init_splitter_size(const QSize& size)
+    void ContentLayoutArea::init_splitter_size(const QSize& size)
     {
         int height = size.height() - 240;
         if (height > 0)
@@ -136,7 +136,7 @@ namespace hal
             m_horizontal_splitter->setSizes(QList<int>{240, 120, 240});
     }
 
-    void content_layout_area::update_left_dock_bar()
+    void ContentLayoutArea::update_left_dock_bar()
     {
         if (m_left_dock->count())
         {
@@ -150,7 +150,7 @@ namespace hal
         }
     }
 
-    void content_layout_area::update_right_dock_bar()
+    void ContentLayoutArea::update_right_dock_bar()
     {
         if (m_right_dock->count())
         {
@@ -164,7 +164,7 @@ namespace hal
         }
     }
 
-    void content_layout_area::update_bottom_dock_bar()
+    void ContentLayoutArea::update_bottom_dock_bar()
     {
         if (m_bottom_dock->count())
             m_bottom_container->show();

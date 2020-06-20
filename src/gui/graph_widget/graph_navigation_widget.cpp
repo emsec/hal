@@ -15,7 +15,7 @@
 
 namespace hal
 {
-    graph_navigation_widget::graph_navigation_widget(QWidget* parent) : QTableWidget(parent), m_via_net(0)
+    GraphNavigationWidget::GraphNavigationWidget(QWidget* parent) : QTableWidget(parent), m_via_net(0)
     {
         m_hide_when_focus_lost = false;
         setSelectionMode(QAbstractItemView::SingleSelection);
@@ -29,10 +29,10 @@ namespace hal
 
         verticalHeader()->setVisible(false);
 
-        connect(this, &QTableWidget::itemDoubleClicked, this, &graph_navigation_widget::handle_item_double_clicked);
+        connect(this, &QTableWidget::itemDoubleClicked, this, &GraphNavigationWidget::handle_item_double_clicked);
     }
 
-    void graph_navigation_widget::setup(bool direction)
+    void GraphNavigationWidget::setup(bool direction)
     {
         clearContents();
 
@@ -80,26 +80,26 @@ namespace hal
         }
     }
 
-    void graph_navigation_widget::setup(hal::node origin, std::shared_ptr<Net> via_net, bool direction)
+    void GraphNavigationWidget::setup(hal::node origin, std::shared_ptr<Net> via_net, bool direction)
     {
         clearContents();
         fill_table(via_net, direction);
         m_origin = origin;
     }
 
-    void graph_navigation_widget::hide_when_focus_lost(bool hide)
+    void GraphNavigationWidget::hide_when_focus_lost(bool hide)
     {
         m_hide_when_focus_lost = hide;
     }
 
-    void graph_navigation_widget::focusOutEvent(QFocusEvent* event)
+    void GraphNavigationWidget::focusOutEvent(QFocusEvent* event)
     {
         Q_UNUSED(event);
         if (m_hide_when_focus_lost)
             hide();
     }
 
-    void graph_navigation_widget::keyPressEvent(QKeyEvent* event)
+    void GraphNavigationWidget::keyPressEvent(QKeyEvent* event)
     {
         if (event->key() == Qt::Key_Up || event->key() == Qt::Key_Down)
         {
@@ -118,7 +118,7 @@ namespace hal
         }
     }
 
-    void graph_navigation_widget::fill_table(std::shared_ptr<Net> n, bool direction)
+    void GraphNavigationWidget::fill_table(std::shared_ptr<Net> n, bool direction)
     {
         assert(n);
 
@@ -214,13 +214,13 @@ namespace hal
         setFixedHeight((height > MAXIMUM_ALLOWED_HEIGHT) ? MAXIMUM_ALLOWED_HEIGHT : height);
     }
 
-    void graph_navigation_widget::handle_item_double_clicked(QTableWidgetItem* item)
+    void GraphNavigationWidget::handle_item_double_clicked(QTableWidgetItem* item)
     {
         Q_UNUSED(item)
         commit_selection();
     }
 
-    void graph_navigation_widget::commit_selection()
+    void GraphNavigationWidget::commit_selection()
     {
         if (selectedItems().isEmpty())
         {

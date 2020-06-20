@@ -6,7 +6,7 @@
 
 namespace hal
 {
-    python_console_widget::python_console_widget(QWidget* parent) : content_widget("Python Console", parent), m_console(new python_console())
+    python_console_widget::python_console_widget(QWidget* parent) : ContentWidget("Python Console", parent), m_console(new python_console())
     {
         m_content_layout->addWidget(m_console);
     }

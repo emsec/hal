@@ -30,10 +30,10 @@ class QLabel;
 
 namespace hal
 {
-    class expanding_list_widget;
+    class ExpandingListWidget;
 
 
-    class expanding_list_button : public QFrame
+    class ExpandingListButton : public QFrame
     {
         Q_OBJECT
         Q_PROPERTY(bool hover READ hover)
@@ -42,7 +42,7 @@ namespace hal
         Q_PROPERTY(QString icon_style READ icon_style WRITE set_icon_style)
 
     public:
-        expanding_list_button(QWidget* parent = 0);
+        ExpandingListButton(QWidget* parent = 0);
 
         void enterEvent(QEvent* event) Q_DECL_OVERRIDE;
         void leaveEvent(QEvent* event) Q_DECL_OVERRIDE;

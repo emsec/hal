@@ -21,27 +21,27 @@
 
 namespace hal
 {
-    file_manager::file_manager(QObject* parent) : QObject(parent), m_file_watcher(new QFileSystemWatcher(this)), m_file_open(false)
+    FileManager::FileManager(QObject* parent) : QObject(parent), m_file_watcher(new QFileSystemWatcher(this)), m_file_open(false)
     {
         m_autosave_enabled  = g_settings_manager.get("advanced/autosave").toBool();
         m_autosave_interval = g_settings_manager.get("advanced/autosave_interval").toInt();
         if (m_autosave_interval < 30)    // failsafe in case somebody sets "0" in the .ini
             m_autosave_interval = 30;
-        connect(&g_settings_relay, &settings_relay::setting_changed, this, &file_manager::handle_global_setting_changed);
+        connect(&g_settings_relay, &settings_relay::setting_changed, this, &FileManager::handle_global_setting_changed);
 
-        connect(m_file_watcher, &QFileSystemWatcher::fileChanged, this, &file_manager::handle_file_changed);
-        connect(m_file_watcher, &QFileSystemWatcher::directoryChanged, this, &file_manager::handle_directory_changed);
+        connect(m_file_watcher, &QFileSystemWatcher::fileChanged, this, &FileManager::handle_file_changed);
+        connect(m_file_watcher, &QFileSystemWatcher::directoryChanged, this, &FileManager::handle_directory_changed);
         m_timer = new QTimer(this);
-        connect(m_timer, &QTimer::timeout, this, &file_manager::autosave);
+        connect(m_timer, &QTimer::timeout, this, &FileManager::autosave);
     }
 
-    file_manager* file_manager::get_instance()
+    FileManager* FileManager::get_instance()
     {
-        static file_manager manager;
+        static FileManager manager;
         return &manager;
     }
 
-    void file_manager::handle_program_arguments(const ProgramArguments& args)
+    void FileManager::handle_program_arguments(const ProgramArguments& args)
     {
         if (args.is_option_set("--input-file"))
         {
@@ -51,12 +51,12 @@ namespace hal
         }
     }
 
-    bool file_manager::file_open() const
+    bool FileManager::file_open() const
     {
         return m_file_open;
     }
 
-    void file_manager::autosave()
+    void FileManager::autosave()
     {
         if (!m_shadow_file_name.isEmpty() && m_autosave_enabled)
         {
@@ -65,7 +65,7 @@ namespace hal
         }
     }
 
-    QString file_manager::file_name() const
+    QString FileManager::file_name() const
     {
         if (m_file_open)
             return m_file_name;
@@ -73,7 +73,7 @@ namespace hal
         return QString();
     }
 
-    void file_manager::watch_file(const QString& file_name)
+    void FileManager::watch_file(const QString& file_name)
     {
         if (file_name == m_file_name)
         {
@@ -106,13 +106,13 @@ namespace hal
         }
     }
 
-    void file_manager::file_successfully_loaded(QString file_name)
+    void FileManager::file_successfully_loaded(QString file_name)
     {
         watch_file(file_name);
         Q_EMIT file_opened(m_file_name);
     }
 
-    void file_manager::remove_shadow_file()
+    void FileManager::remove_shadow_file()
     {
         if (QFileInfo::exists(m_shadow_file_name) && QFileInfo(m_shadow_file_name).isFile())
         {
@@ -120,7 +120,7 @@ namespace hal
         }
     }
 
-    QString file_manager::get_shadow_file(QString file)
+    QString FileManager::get_shadow_file(QString file)
     {
         QString shadow_file_name;
         if (file.contains('/'))
@@ -134,7 +134,7 @@ namespace hal
         return shadow_file_name.left(shadow_file_name.lastIndexOf('.')) + ".hal";
     }
 
-    void file_manager::open_file(QString file_name)
+    void FileManager::open_file(QString file_name)
     {
         QString logical_file_name = file_name;
 
@@ -315,7 +315,7 @@ namespace hal
         file_successfully_loaded(logical_file_name);
     }
 
-    void file_manager::close_file()
+    void FileManager::close_file()
     {
         if (!m_file_open)
             return;
@@ -333,17 +333,17 @@ namespace hal
         Q_EMIT file_closed();
     }
 
-    void file_manager::handle_file_changed(const QString& path)
+    void FileManager::handle_file_changed(const QString& path)
     {
         Q_EMIT file_changed(path);
     }
 
-    void file_manager::handle_directory_changed(const QString& path)
+    void FileManager::handle_directory_changed(const QString& path)
     {
         Q_EMIT file_directory_changed(path);
     }
 
-    void file_manager::handle_global_setting_changed(void* sender, const QString& key, const QVariant& value)
+    void FileManager::handle_global_setting_changed(void* sender, const QString& key, const QVariant& value)
     {
         Q_UNUSED(sender);
         if (key == "advanced/autosave")
@@ -366,7 +366,7 @@ namespace hal
         }
     }
 
-    void file_manager::update_recent_files(const QString& file) const
+    void FileManager::update_recent_files(const QString& file) const
     {
         QStringList list;
 
@@ -420,7 +420,7 @@ namespace hal
         g_gui_state.endArray();
     }
 
-    void file_manager::display_error_message(QString error_message)
+    void FileManager::display_error_message(QString error_message)
     {
         QMessageBox msgBox;
         msgBox.setText("Error");

@@ -32,15 +32,15 @@
 
 namespace hal
 {
-    class hal_content_anchor;
-    class content_widget;
+    class HalContentAnchor;
+    class ContentWidget;
 
-    class dock_bar : public QFrame
+    class DockBar : public QFrame
     {
         Q_OBJECT
 
     public:
-        dock_bar(Qt::Orientation orientation, button_orientation b_orientation, QWidget* parent = 0);
+        DockBar(Qt::Orientation orientation, button_orientation b_orientation, QWidget* parent = 0);
 
         void mouseMoveEvent(QMouseEvent* event) Q_DECL_OVERRIDE;
         void dragEnterEvent(QDragEnterEvent* event) Q_DECL_OVERRIDE;
@@ -51,23 +51,23 @@ namespace hal
         QSize sizeHint() const Q_DECL_OVERRIDE;
         QSize minimumSizeHint() const Q_DECL_OVERRIDE;
 
-        void set_anchor(hal_content_anchor* anchor);
+        void set_anchor(HalContentAnchor* anchor);
         void set_autohide(bool autohide);
         bool unused();
         int count();
-        int index(content_widget* widget);
+        int index(ContentWidget* widget);
         void rearrange_buttons();
         void collapse_buttons();
-        void add_button(content_widget* widget, int index);
-        bool remove_button(content_widget* widget);
+        void add_button(ContentWidget* widget, int index);
+        bool remove_button(ContentWidget* widget);
         bool remove_button(int index);
 
-        void detach_button(content_widget* widget);
-        void reattach_button(content_widget* widget);
-        void check_button(content_widget* widget);
-        void uncheck_button(content_widget* widget);
-        content_widget* widget_at(int index);
-        content_widget* next_available_widget(int index);
+        void detach_button(ContentWidget* widget);
+        void reattach_button(ContentWidget* widget);
+        void check_button(ContentWidget* widget);
+        void uncheck_button(ContentWidget* widget);
+        ContentWidget* widget_at(int index);
+        ContentWidget* next_available_widget(int index);
 
     Q_SIGNALS:
         void stop_animations();
@@ -77,18 +77,18 @@ namespace hal
         void handle_drag_end();
 
     private:
-        hal_content_anchor* m_anchor;
-        QList<dock_button*> m_buttons;
+        HalContentAnchor* m_anchor;
+        QList<DockButton*> m_buttons;
         button_orientation m_button_orientation;
         int m_button_offset  = 0;
         int m_button_spacing = 1;
         bool m_autohide      = true;
 
         static QPoint s_drag_start_position;
-        static dock_button* s_drag_button;
+        static DockButton* s_drag_button;
         static int s_begin_drop_range;
         static int s_end_drop_range;
         static int s_drop_spacing;
-        static dock_button* s_move_marker;
+        static DockButton* s_move_marker;
     };
 }

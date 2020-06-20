@@ -32,7 +32,7 @@ class QVBoxLayout;
 
 namespace hal
 {
-    class drop_marker;
+    class DropMarker;
     class scheduled_plugin_item;
 
     class scheduled_plugin_item_area : public QFrame
@@ -68,9 +68,9 @@ namespace hal
         QFrame* m_spacer;
 
         QVector<int> m_y_values;
-        QList<QPair<scheduled_plugin_item*, drop_marker*>> m_list;
+        QList<QPair<scheduled_plugin_item*, DropMarker*>> m_list;
 
-        drop_marker* m_active_marker;
+        DropMarker* m_active_marker;
 
         bool m_internal_drag_active;
         int m_drag_index;

@@ -29,7 +29,7 @@
 
 namespace hal
 {
-    class graphics_node : public graphics_item
+    class GraphicsNode : public GraphicsItem
     {
     public:
         struct visuals
@@ -47,7 +47,7 @@ namespace hal
             // DRAW TYPE ENUM
         };
 
-        graphics_node(const hal::item_type type, const u32 id, const QString& name);
+        GraphicsNode(const hal::item_type type, const u32 id, const QString& name);
 
         virtual QRectF boundingRect() const override;
         virtual QPainterPath shape() const override;

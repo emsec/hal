@@ -29,19 +29,19 @@
 namespace hal
 {
 
-    class content_widget;
+    class ContentWidget;
     class toolbar;
 
-    class content_frame : public QWidget
+    class ContentFrame : public QWidget
     {
         Q_OBJECT
 
     public:
-        explicit content_frame(content_widget* widget, bool attached, QWidget* parent = nullptr);
+        explicit ContentFrame(ContentWidget* widget, bool attached, QWidget* parent = nullptr);
 
         void childEvent(QChildEvent* event) Q_DECL_OVERRIDE;
 
-        content_widget* content();
+        ContentWidget* content();
 
     public Q_SLOTS:
         void detach_widget();
@@ -54,7 +54,7 @@ namespace hal
         QHBoxLayout* m_horizontal_layout;
         toolbar* m_left_toolbar;
         toolbar* m_right_toolbar;
-        content_widget* m_widget;
+        ContentWidget* m_widget;
         QLabel* m_name_label;
 
         QString m_detach_icon_path;

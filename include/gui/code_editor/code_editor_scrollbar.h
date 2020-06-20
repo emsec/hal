@@ -26,21 +26,21 @@
 #include <QScrollBar>
 namespace hal
 {
-    class minimap_scrollbar;
+    class MinimapScrollbar;
 
-    class code_editor_scrollbar : public QScrollBar
+    class CodeEditorScrollbar : public QScrollBar
     {
         Q_OBJECT
 
     public:
-        explicit code_editor_scrollbar(QWidget* parent = nullptr);
+        explicit CodeEditorScrollbar(QWidget* parent = nullptr);
 
-        void set_minimap_scrollbar(minimap_scrollbar* scrollbar);
+        void set_minimap_scrollbar(MinimapScrollbar* scrollbar);
 
     protected:
         virtual void sliderChange(SliderChange change) Q_DECL_OVERRIDE;
 
     private:
-        minimap_scrollbar* m_minimap_scrollbar;
+        MinimapScrollbar* m_minimap_scrollbar;
     };
 }

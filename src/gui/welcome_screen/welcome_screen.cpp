@@ -12,7 +12,7 @@
 namespace hal
 {
     welcome_screen::welcome_screen(QWidget* parent)
-        : QFrame(parent), m_layout(new QHBoxLayout()), m_recent_files_frame(new labeled_frame()), m_open_file_frame(new labeled_frame()), m_get_in_touch_frame(new labeled_frame()),
+        : QFrame(parent), m_layout(new QHBoxLayout()), m_recent_files_frame(new LabeledFrame()), m_open_file_frame(new LabeledFrame()), m_get_in_touch_frame(new LabeledFrame()),
           m_recent_files_widget(new recent_files_widget()), m_open_file_widget(new open_file_widget()), m_get_in_touch_widget(new get_in_touch_widget())
     {
         m_layout->setContentsMargins(0, 0, 0, 0);
@@ -27,9 +27,9 @@ namespace hal
         m_open_file_frame->add_content(m_open_file_widget);
         m_get_in_touch_frame->add_content(m_get_in_touch_widget);
 
-        m_recent_files_frame->setGraphicsEffect(new shadow_effect());
-        m_open_file_frame->setGraphicsEffect(new shadow_effect());
-        m_get_in_touch_frame->setGraphicsEffect(new shadow_effect());
+        m_recent_files_frame->setGraphicsEffect(new ShadowEffect());
+        m_open_file_frame->setGraphicsEffect(new ShadowEffect());
+        m_get_in_touch_frame->setGraphicsEffect(new ShadowEffect());
 
         setLayout(m_layout);
         m_layout->addWidget(m_recent_files_frame);

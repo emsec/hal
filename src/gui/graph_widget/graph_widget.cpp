@@ -32,18 +32,18 @@
 
 namespace hal
 {
-    graph_widget::graph_widget(graph_context* context, QWidget* parent)
-        : content_widget("Graph", parent), m_view(new graph_graphics_view(this)), m_context(context), m_overlay(new dialog_overlay(this)),
-          m_navigation_widget_v2(new graph_navigation_widget_v2(nullptr)),
-          m_spinner_widget(new graph_layout_spinner_widget(this)), m_current_expansion(0)
+    GraphWidget::GraphWidget(GraphContext* context, QWidget* parent)
+        : ContentWidget("Graph", parent), m_view(new GraphGraphicsView(this)), m_context(context), m_overlay(new dialog_overlay(this)),
+          m_navigation_widget_v2(new GraphNavigationWidgetV2(nullptr)),
+          m_spinner_widget(new GraphLayoutSpinnerWidget(this)), m_current_expansion(0)
     {
-        connect(m_navigation_widget_v2, &graph_navigation_widget_v2::navigation_requested, this, &graph_widget::handle_navigation_jump_requested);
-        connect(m_navigation_widget_v2, &graph_navigation_widget_v2::close_requested, m_overlay, &dialog_overlay::hide);
-        connect(m_navigation_widget_v2, &graph_navigation_widget_v2::close_requested, this, &graph_widget::reset_focus);
+        connect(m_navigation_widget_v2, &GraphNavigationWidgetV2::navigation_requested, this, &GraphWidget::handle_navigation_jump_requested);
+        connect(m_navigation_widget_v2, &GraphNavigationWidgetV2::close_requested, m_overlay, &dialog_overlay::hide);
+        connect(m_navigation_widget_v2, &GraphNavigationWidgetV2::close_requested, this, &GraphWidget::reset_focus);
 
         connect(m_overlay, &dialog_overlay::clicked, m_overlay, &dialog_overlay::hide);
 
-        connect(m_view, &graph_graphics_view::module_double_clicked, this, &graph_widget::handle_module_double_clicked);
+        connect(m_view, &GraphGraphicsView::module_double_clicked, this, &GraphWidget::handle_module_double_clicked);
 
         m_overlay->hide();
         m_overlay->set_widget(m_navigation_widget_v2);
@@ -64,12 +64,12 @@ namespace hal
         }
     }
 
-    graph_context* graph_widget::get_context() const
+    GraphContext* GraphWidget::get_context() const
     {
         return m_context;
     }
 
-    void graph_widget::handle_scene_available()
+    void GraphWidget::handle_scene_available()
     {
         m_view->setScene(m_context->scene());
 
@@ -83,7 +83,7 @@ namespace hal
             m_view->setFocus();
     }
 
-    void graph_widget::handle_scene_unavailable()
+    void GraphWidget::handle_scene_unavailable()
     {
         m_view->setScene(nullptr);
 
@@ -95,23 +95,23 @@ namespace hal
             m_overlay->show();
     }
 
-    void graph_widget::handle_context_about_to_be_deleted()
+    void GraphWidget::handle_context_about_to_be_deleted()
     {
         m_view->setScene(nullptr);
         m_context = nullptr;
     }
 
-    void graph_widget::handle_status_update(const int percent)
+    void GraphWidget::handle_status_update(const int percent)
     {
         Q_UNUSED(percent)
     }
 
-    void graph_widget::handle_status_update(const QString& message)
+    void GraphWidget::handle_status_update(const QString& message)
     {
         Q_UNUSED(message)
     }
 
-    void graph_widget::keyPressEvent(QKeyEvent* event)
+    void GraphWidget::keyPressEvent(QKeyEvent* event)
     {
         if (!m_context)
             return;
@@ -158,7 +158,7 @@ namespace hal
         }
     }
 
-    void graph_widget::substitute_by_visible_modules(const QSet<u32>& gates, const QSet<u32>& modules, QSet<u32>& target_gates, QSet<u32>& target_modules, QSet<u32>& remove_gates, QSet<u32>& remove_modules) const
+    void GraphWidget::substitute_by_visible_modules(const QSet<u32>& gates, const QSet<u32>& modules, QSet<u32>& target_gates, QSet<u32>& target_modules, QSet<u32>& remove_gates, QSet<u32>& remove_modules) const
     {
         // EXPAND SELECTION AND CONTEXT UP THE HIERARCHY TREE
 
@@ -257,7 +257,7 @@ namespace hal
         // qDebug() << "remove modules" << remove_modules;
     }
 
-    void graph_widget::set_modified_if_module()
+    void GraphWidget::set_modified_if_module()
     {
         // if our name matches that of a module, add the "modified" label and
         // optionally a number if a "modified"-labeled context already exists
@@ -294,7 +294,7 @@ namespace hal
         }
     }
 
-    void graph_widget::handle_navigation_jump_requested(const hal::node origin, const u32 via_net, const QSet<u32>& to_gates, const QSet<u32>& to_modules)
+    void GraphWidget::handle_navigation_jump_requested(const hal::node origin, const u32 via_net, const QSet<u32>& to_gates, const QSet<u32>& to_modules)
     {
         bool bail_animation = false;
 
@@ -422,7 +422,7 @@ namespace hal
             // properly indexing port names on modules (since no order is guaranteed
             // on the port names (different to pin names in gates), but our GUI
             // wants integer indexes)
-            // (what we use here is the fact that graphics_module builds its port
+            // (what we use here is the fact that GraphicsModule builds its port
             // list by traversing m->get_input_nets(), so we just use that order and
             // hope nobody touches that implementation)
 
@@ -465,7 +465,7 @@ namespace hal
         ensure_items_visible(final_gates, final_modules);
     }
 
-    void graph_widget::handle_module_double_clicked(const u32 id)
+    void GraphWidget::handle_module_double_clicked(const u32 id)
     {
         // CONNECT DIRECTLY TO HANDLE ???
         // MAYBE ADDITIONAL CODE NECESSARY HERE...
@@ -473,7 +473,7 @@ namespace hal
     }
 
     // ADD SOUND OR ERROR MESSAGE TO FAILED NAVIGATION ATTEMPTS
-    void graph_widget::handle_navigation_left_request()
+    void GraphWidget::handle_navigation_left_request()
     {
         switch (g_selection_relay.m_focus_type)
         {
@@ -561,7 +561,7 @@ namespace hal
                     // properly indexing port names on modules (since no order is guaranteed
                     // on the port names (different to pin names in gates), but our GUI
                     // wants integer indexes)
-                    // (what we use here is the fact that graphics_module builds its port
+                    // (what we use here is the fact that GraphicsModule builds its port
                     // list by traversing m->get_input_nets(), so we just use that order and
                     // hope nobody touches that implementation)
                     auto it = m->get_input_nets().begin();
@@ -600,7 +600,7 @@ namespace hal
         }
     }
 
-    void graph_widget::handle_navigation_right_request()
+    void GraphWidget::handle_navigation_right_request()
     {
         switch (g_selection_relay.m_focus_type)
         {
@@ -683,7 +683,7 @@ namespace hal
                     // properly indexing port names on modules (since no order is guaranteed
                     // on the port names (different to pin names in gates), but our GUI
                     // wants integer indexes)
-                    // (what we use here is the fact that graphics_module builds its port
+                    // (what we use here is the fact that GraphicsModule builds its port
                     // list by traversing m->get_input_nets(), so we just use that order and
                     // hope nobody touches that implementation)
                     auto it = m->get_output_nets().begin();
@@ -720,7 +720,7 @@ namespace hal
         }
     }
 
-    void graph_widget::handle_navigation_up_request()
+    void GraphWidget::handle_navigation_up_request()
     {
         // FIXME this is ugly
         if ((g_selection_relay.m_focus_type == selection_relay::item_type::gate
@@ -730,7 +730,7 @@ namespace hal
                 g_selection_relay.navigate_up();
     }
 
-    void graph_widget::handle_navigation_down_request()
+    void GraphWidget::handle_navigation_down_request()
     {
         // FIXME this is ugly
         if ((g_selection_relay.m_focus_type == selection_relay::item_type::gate
@@ -740,7 +740,7 @@ namespace hal
                 g_selection_relay.navigate_down();
     }
 
-    void graph_widget::handle_enter_module_requested(const u32 id)
+    void GraphWidget::handle_enter_module_requested(const u32 id)
     {
         auto m = g_netlist->get_module_by_id(id);
         if (m->get_gates().empty() && m->get_submodules().empty())
@@ -785,7 +785,7 @@ namespace hal
         ctx->add(module_ids, gate_ids);
     }
 
-    void graph_widget::ensure_items_visible(const QSet<u32>& gates, const QSet<u32>& modules)
+    void GraphWidget::ensure_items_visible(const QSet<u32>& gates, const QSet<u32>& modules)
     {
         if (m_context->scene_update_in_progress())
             return;
@@ -841,7 +841,7 @@ namespace hal
         anim->start(QAbstractAnimation::DeleteWhenStopped);
     }
 
-    void graph_widget::ensure_selection_visible()
+    void GraphWidget::ensure_selection_visible()
     {
         if (m_context->scene_update_in_progress())
             return;
@@ -909,12 +909,12 @@ namespace hal
         anim->start(QAbstractAnimation::DeleteWhenStopped);
     }
 
-    void graph_widget::reset_focus()
+    void GraphWidget::reset_focus()
     {
         m_view->setFocus();
     }
 
-    graph_graphics_view* graph_widget::view()
+    GraphGraphicsView* GraphWidget::view()
     {
         return m_view;
     }

@@ -4,7 +4,7 @@
 
 namespace hal
 {
-    hal_filter_tab_bar::hal_filter_tab_bar() : m_dialog(this)
+    HalFilterTabBar::HalFilterTabBar() : m_dialog(this)
     {
         m_button.setText("+");
         m_button.setAutoRaise(true);
@@ -19,17 +19,17 @@ namespace hal
         setTabButton(1, QTabBar::RightSide, &m_button);
     }
 
-    hal_filter_tab_bar::~hal_filter_tab_bar()
+    HalFilterTabBar::~HalFilterTabBar()
     {
     }
 
-    void hal_filter_tab_bar::addNewFilter(QString name, hal_filter_item* item)
+    void HalFilterTabBar::addNewFilter(QString name, HalFilterItem* item)
     {
         insertTab(count() - 1, name);
         m_filter_items.append(item);
     }
 
-    hal_filter_item* hal_filter_tab_bar::get_current_filter()
+    HalFilterItem* HalFilterTabBar::get_current_filter()
     {
         return m_filter_items.value(this->currentIndex());
     }

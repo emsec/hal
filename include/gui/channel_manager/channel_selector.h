@@ -26,9 +26,9 @@
 #include <QComboBox>
 namespace hal
 {
-    class channel_selector : public QComboBox
+    class ChannelSelector : public QComboBox
     {
     public:
-        channel_selector(QWidget* parent = nullptr);
+        ChannelSelector(QWidget* parent = nullptr);
     };
 }

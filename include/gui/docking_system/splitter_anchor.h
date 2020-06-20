@@ -30,24 +30,24 @@
 
 namespace hal
 {
-    class dock_bar;
+    class DockBar;
     class splitter;
-    class content_frame;
-    class content_widget;
+    class ContentFrame;
+    class ContentWidget;
 
-    class splitter_anchor : public QObject, public hal_content_anchor
+    class SplitterAnchor : public QObject, public HalContentAnchor
     {
         Q_OBJECT
 
     public:
-        splitter_anchor(dock_bar* dock_bar, splitter* splitter, QObject* parent = 0);
+        SplitterAnchor(DockBar* DockBar, splitter* splitter, QObject* parent = 0);
 
-        virtual void add(content_widget* widget, int index = -1) override;
-        virtual void remove(content_widget* widget) override;
-        virtual void detach(content_widget* widget) override;
-        virtual void reattach(content_widget* widget) override;
-        virtual void open(content_widget* widget) override;
-        virtual void close(content_widget* widget) override;
+        virtual void add(ContentWidget* widget, int index = -1) override;
+        virtual void remove(ContentWidget* widget) override;
+        virtual void detach(ContentWidget* widget) override;
+        virtual void reattach(ContentWidget* widget) override;
+        virtual void open(ContentWidget* widget) override;
+        virtual void close(ContentWidget* widget) override;
 
         int count();
         void remove_content();
@@ -56,8 +56,8 @@ namespace hal
         void content_changed();
 
     private:
-        dock_bar* m_dock_bar;
+        DockBar* m_dock_bar;
         splitter* m_splitter;
-        QList<content_frame*> m_detached_frames;
+        QList<ContentFrame*> m_detached_frames;
     };
 }

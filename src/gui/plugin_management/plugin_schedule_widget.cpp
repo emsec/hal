@@ -17,7 +17,7 @@ namespace hal
 {
     plugin_schedule_widget::plugin_schedule_widget(QWidget* parent)
         : QFrame(parent), m_vertical_layout(new QVBoxLayout()), m_searchbar_container(new QFrame()), m_container_layout(new QHBoxLayout()), m_searchbar(new searchbar()),
-          m_horizontal_layout(new QHBoxLayout()), m_plugin_frame(new labeled_frame()), m_schedule_frame(new labeled_frame()), m_schedule_frame_layout_container(new QWidget()),
+          m_horizontal_layout(new QHBoxLayout()), m_plugin_frame(new LabeledFrame()), m_schedule_frame(new LabeledFrame()), m_schedule_frame_layout_container(new QWidget()),
           m_horizontal_schedule_frame_layout(new QHBoxLayout()), m_vertical_schedule_frame_layout(new QVBoxLayout()), m_no_scheduled_plugins_widget(new no_scheduled_plugins_widget()),
           m_plugin_arguments_widget(new plugin_arguments_widget()), m_scheduled_plugins_widget(new scheduled_plugins_widget()), m_loaded_plugins_widget(new loaded_plugins_widget())
     {
@@ -68,8 +68,8 @@ namespace hal
         m_scheduled_plugins_widget->hide();
         m_horizontal_schedule_frame_layout->addWidget(m_plugin_arguments_widget);
 
-        m_plugin_frame->setGraphicsEffect(new shadow_effect());
-        m_schedule_frame->setGraphicsEffect(new shadow_effect());
+        m_plugin_frame->setGraphicsEffect(new ShadowEffect());
+        m_schedule_frame->setGraphicsEffect(new ShadowEffect());
 
         m_no_scheduled_plugins_widget->repolish();    // MOVE TO REPOLISH METHOD
 

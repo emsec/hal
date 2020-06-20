@@ -32,27 +32,27 @@
 namespace hal
 {
     class main_window;
-    class content_widget;
+    class ContentWidget;
     class python_editor;
-    class graph_tab_widget;
+    class GraphTabWidget;
     class old_graph_navigation_widget;
-    class context_manager_widget;
+    class ContextManagerWidget;
     class netlist_watcher;
 
-    class hal_content_manager : public QObject
+    class HalContentManager : public QObject
     {
         Q_OBJECT
 
     public:
-        explicit hal_content_manager(main_window* parent);
+        explicit HalContentManager(main_window* parent);
 
-        ~hal_content_manager();
+        ~HalContentManager();
 
         python_editor* get_python_editor_widget();
 
-        graph_tab_widget* get_graph_tab_widget();
+        GraphTabWidget* get_graph_tab_widget();
 
-        context_manager_widget* get_context_manager_widget();
+        ContextManagerWidget* get_context_manager_widget();
 
         void hack_delete_content();
 
@@ -74,14 +74,14 @@ namespace hal
 
         QString m_window_title;
 
-        QList<content_widget*> m_content;
+        QList<ContentWidget*> m_content;
 
         netlist_watcher* m_netlist_watcher;
 
         python_editor* m_python_widget;
 
-        graph_tab_widget* m_graph_tab_wid;
+        GraphTabWidget* m_graph_tab_wid;
 
-        context_manager_widget* m_context_manager_wid;
+        ContextManagerWidget* m_context_manager_wid;
     };
 }

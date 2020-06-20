@@ -110,7 +110,7 @@ Note: This is an API breaking release.
 ## [1.1.2] - 2019-06-27 14:21:03+02:00 (urgency: medium)
 
 * Add hint to gate_libraries to README.md
-* Changes to the global state can be handled via hal_content_manager
+* Changes to the global state can be handled via HalContentManager
 
 ## [1.1.1] - 2019-06-27 14:21:03+02:00 (urgency: medium)
 

@@ -5,7 +5,7 @@
 
 namespace hal
 {
-    namespace graphics_factory
+    namespace GraphicsFactory
     {
         QStringList graphics_module_types()
         {
@@ -23,24 +23,24 @@ namespace hal
             };
         }
 
-        graphics_module* create_graphics_module(const std::shared_ptr<Module> m, const int type)
+        GraphicsModule* create_graphics_module(const std::shared_ptr<Module> m, const int type)
         {
             assert(m);
 
             switch (type)
             {
-            case 0: return new standard_graphics_module(m);
+            case 0: return new StandardGraphicsModule(m);
             default: assert(false); return nullptr; // UNREACHABLE
             }
         }
 
-        graphics_gate* create_graphics_gate(const std::shared_ptr<const Gate> g, const int type)
+        GraphicsGate* create_graphics_gate(const std::shared_ptr<const Gate> g, const int type)
         {
             assert(g);
 
             switch (type)
             {
-            case 0: return new standard_graphics_gate(g);
+            case 0: return new StandardGraphicsGate(g);
             default: assert(false); return nullptr; // UNREACHABLE
             }
         }

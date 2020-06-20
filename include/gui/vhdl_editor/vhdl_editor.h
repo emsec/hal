@@ -30,7 +30,7 @@ namespace hal
 {
     class searchbar;
 
-    class vhdl_editor : public content_widget
+    class vhdl_editor : public ContentWidget
     {
         Q_OBJECT
 
@@ -44,7 +44,7 @@ namespace hal
         void toggle_searchbar();
 
     private:
-        code_editor* m_code_editor;
+        CodeEditor* m_code_editor;
         searchbar* m_searchbar;
     };
 }

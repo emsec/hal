@@ -3,13 +3,13 @@
 #include <QStyle>
 namespace hal
 {
-    vhdl_qss_adapter::vhdl_qss_adapter(QWidget* parent) : QWidget(parent)
+    VhdlQssAdapter::VhdlQssAdapter(QWidget* parent) : QWidget(parent)
     {
         repolish();
         hide();
     }
 
-    void vhdl_qss_adapter::repolish()
+    void VhdlQssAdapter::repolish()
     {
         QStyle* s = style();
 
@@ -32,73 +32,73 @@ namespace hal
         m_comment_format.setFontItalic(false);
     }
 
-    vhdl_qss_adapter* vhdl_qss_adapter::instance()
+    VhdlQssAdapter* VhdlQssAdapter::instance()
     {
         // CLEANUP NECESSARY ?
-        static vhdl_qss_adapter* instance = nullptr;
+        static VhdlQssAdapter* instance = nullptr;
 
         if (!instance)
-            instance = new vhdl_qss_adapter();
+            instance = new VhdlQssAdapter();
 
         return instance;
     }
 
-    QColor vhdl_qss_adapter::text_color() const
+    QColor VhdlQssAdapter::text_color() const
     {
         return m_text_color;
     }
 
-    QColor vhdl_qss_adapter::keyword_color() const
+    QColor VhdlQssAdapter::keyword_color() const
     {
         return m_keyword_color;
     }
 
-    QColor vhdl_qss_adapter::type_color() const
+    QColor VhdlQssAdapter::type_color() const
     {
         return m_type_color;
     }
 
-    QColor vhdl_qss_adapter::number_color() const
+    QColor VhdlQssAdapter::number_color() const
     {
         return m_number_color;
     }
 
-    QColor vhdl_qss_adapter::string_color() const
+    QColor VhdlQssAdapter::string_color() const
     {
         return m_string_color;
     }
 
-    QColor vhdl_qss_adapter::comment_color() const
+    QColor VhdlQssAdapter::comment_color() const
     {
         return m_comment_color;
     }
 
-    void vhdl_qss_adapter::set_text_color(const QColor& color)
+    void VhdlQssAdapter::set_text_color(const QColor& color)
     {
         m_text_color = color;
     }
 
-    void vhdl_qss_adapter::set_keyword_color(const QColor& color)
+    void VhdlQssAdapter::set_keyword_color(const QColor& color)
     {
         m_keyword_color = color;
     }
 
-    void vhdl_qss_adapter::set_type_color(const QColor& color)
+    void VhdlQssAdapter::set_type_color(const QColor& color)
     {
         m_type_color = color;
     }
 
-    void vhdl_qss_adapter::set_number_color(const QColor& color)
+    void VhdlQssAdapter::set_number_color(const QColor& color)
     {
         m_number_color = color;
     }
 
-    void vhdl_qss_adapter::set_string_color(const QColor& color)
+    void VhdlQssAdapter::set_string_color(const QColor& color)
     {
         m_string_color = color;
     }
 
-    void vhdl_qss_adapter::set_comment_color(const QColor& color)
+    void VhdlQssAdapter::set_comment_color(const QColor& color)
     {
         m_comment_color = color;
     }

@@ -27,16 +27,16 @@
 
 namespace hal
 {
-    class graph_layouter;
+    class GraphLayouter;
 
-    class layouter_task : public task
+    class LayouterTask : public task
     {
     public:
-        layouter_task(graph_layouter* const layouter);
+        LayouterTask(GraphLayouter* const layouter);
 
         void execute() override;
 
     private:
-        graph_layouter* m_layouter;
+        GraphLayouter* m_layouter;
     };
 }

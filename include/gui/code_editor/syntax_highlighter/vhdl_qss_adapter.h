@@ -28,7 +28,7 @@
 
 namespace hal
 {
-    class vhdl_qss_adapter : public QWidget
+    class VhdlQssAdapter : public QWidget
     {
         Q_OBJECT
         Q_PROPERTY(QColor keyword_color READ keyword_color WRITE set_keyword_color)
@@ -38,8 +38,8 @@ namespace hal
         Q_PROPERTY(QColor comment_color READ comment_color WRITE set_comment_color)
 
     public:
-        explicit vhdl_qss_adapter(QWidget* parent = nullptr);
-        static vhdl_qss_adapter* instance();
+        explicit VhdlQssAdapter(QWidget* parent = nullptr);
+        static VhdlQssAdapter* instance();
 
         void repolish();
 

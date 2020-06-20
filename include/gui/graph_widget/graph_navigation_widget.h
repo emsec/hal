@@ -34,14 +34,14 @@
 
 namespace hal
 {
-    class graph_graphics_view;
+    class GraphGraphicsView;
 
-    class graph_navigation_widget : public QTableWidget
+    class GraphNavigationWidget : public QTableWidget
     {
         Q_OBJECT
 
     public:
-        explicit graph_navigation_widget(QWidget *parent = nullptr);
+        explicit GraphNavigationWidget(QWidget *parent = nullptr);
 
         // right = true
         void setup(bool direction);
@@ -62,7 +62,7 @@ namespace hal
         void handle_item_double_clicked(QTableWidgetItem* item);
         void commit_selection();
 
-        graph_graphics_view* m_view;
+        GraphGraphicsView* m_view;
         u32 m_via_net;
         hal::node m_origin;
         bool m_hide_when_focus_lost;

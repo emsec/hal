@@ -28,7 +28,7 @@
 
 namespace hal
 {
-    class python_qss_adapter : public QWidget
+    class PythonQssAdapter : public QWidget
     {
         Q_OBJECT
         Q_PROPERTY(QColor text_color READ text_color WRITE set_text_color)
@@ -43,9 +43,9 @@ namespace hal
         Q_PROPERTY(QColor comment_color READ comment_color WRITE set_comment_color)
 
     public:
-        explicit python_qss_adapter(QWidget* parent = nullptr);
-        ~python_qss_adapter();    // DEBUG CODE, DELETE LATER
-        static python_qss_adapter* instance();
+        explicit PythonQssAdapter(QWidget* parent = nullptr);
+        ~PythonQssAdapter();    // DEBUG CODE, DELETE LATER
+        static PythonQssAdapter* instance();
 
         void repolish();
 

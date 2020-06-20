@@ -36,7 +36,7 @@ namespace hal
 {
     class searchbar;
 
-    class selection_details_widget : public content_widget
+    class selection_details_widget : public ContentWidget
     {
         Q_OBJECT
 

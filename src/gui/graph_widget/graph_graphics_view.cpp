@@ -43,13 +43,13 @@
 
 namespace hal
 {
-    graph_graphics_view::graph_graphics_view(graph_widget* parent)
+    GraphGraphicsView::GraphGraphicsView(GraphWidget* parent)
         : QGraphicsView(parent), m_graph_widget(parent), m_minimap_enabled(false), m_grid_enabled(true), m_grid_clusters_enabled(true), m_grid_type(graph_widget_constants::grid_type::lines),
           m_zoom_modifier(Qt::NoModifier), m_zoom_factor_base(1.0015)
     {
-        connect(&g_selection_relay, &selection_relay::subfocus_changed, this, &graph_graphics_view::conditional_update);
-        connect(this, &graph_graphics_view::customContextMenuRequested, this, &graph_graphics_view::show_context_menu);
-        connect(&g_settings_relay, &settings_relay::setting_changed, this, &graph_graphics_view::handle_global_setting_changed);
+        connect(&g_selection_relay, &selection_relay::subfocus_changed, this, &GraphGraphicsView::conditional_update);
+        connect(this, &GraphGraphicsView::customContextMenuRequested, this, &GraphGraphicsView::show_context_menu);
+        connect(&g_settings_relay, &settings_relay::setting_changed, this, &GraphGraphicsView::handle_global_setting_changed);
 
         initialize_settings();
 
@@ -61,7 +61,7 @@ namespace hal
         setMouseTracking(true);
     }
 
-    void graph_graphics_view::initialize_settings()
+    void GraphGraphicsView::initialize_settings()
     {
         unsigned int drag_modifier_setting = g_settings_manager.get("graph_view/drag_mode_modifier").toUInt();
         m_drag_modifier                    = Qt::KeyboardModifier(drag_modifier_setting);
@@ -72,13 +72,13 @@ namespace hal
         #endif
     }
 
-    void graph_graphics_view::conditional_update()
+    void GraphGraphicsView::conditional_update()
     {
         if (QStyleOptionGraphicsItem::levelOfDetailFromTransform(transform()) >= graph_widget_constants::gate_min_lod)
             update();
     }
 
-    void graph_graphics_view::handle_change_color_action()
+    void GraphGraphicsView::handle_change_color_action()
     {
         QColor color = QColorDialog::getColor();
 
@@ -86,7 +86,7 @@ namespace hal
             return;
     }
 
-    void graph_graphics_view::handle_isolation_view_action()
+    void GraphGraphicsView::handle_isolation_view_action()
     {
         u32 cnt = 0;
         while (true)
@@ -102,7 +102,7 @@ namespace hal
         }
     }
 
-    void graph_graphics_view::handle_move_action(QAction* action)
+    void GraphGraphicsView::handle_move_action(QAction* action)
     {
         const u32 mod_id          = action->data().toInt();
         std::shared_ptr<Module> m = g_netlist->get_module_by_id(mod_id);
@@ -121,7 +121,7 @@ namespace hal
         g_selection_relay.relay_selection_changed(this);
     }
 
-    void graph_graphics_view::handle_move_new_action()
+    void GraphGraphicsView::handle_move_new_action()
     {
         std::unordered_set<std::shared_ptr<Gate>> gate_objs;
         std::unordered_set<std::shared_ptr<Module>> module_objs;
@@ -156,7 +156,7 @@ namespace hal
         g_selection_relay.relay_selection_changed(this);
     }
 
-    void graph_graphics_view::handle_rename_action()
+    void GraphGraphicsView::handle_rename_action()
     {
         if (m_item->item_type() == hal::item_type::gate)
         {
@@ -182,7 +182,7 @@ namespace hal
         }
     }
 
-    void graph_graphics_view::adjust_min_scale()
+    void GraphGraphicsView::adjust_min_scale()
     {
         if (!scene())
             return;
@@ -190,33 +190,33 @@ namespace hal
         m_min_scale = std::min(viewport()->width() / scene()->width(), viewport()->height() / scene()->height());
     }
 
-    void graph_graphics_view::paintEvent(QPaintEvent* event)
+    void GraphGraphicsView::paintEvent(QPaintEvent* event)
     {
         qreal lod = QStyleOptionGraphicsItem::levelOfDetailFromTransform(transform());
 
         // USE CONSISTENT METHOD NAMES
-        graphics_scene::set_lod(lod);
-        graphics_scene::set_grid_enabled(m_grid_enabled);
-        graphics_scene::set_grid_clusters_enabled(m_grid_clusters_enabled);
-        graphics_scene::set_grid_type(m_grid_type);
+        GraphicsScene::set_lod(lod);
+        GraphicsScene::set_grid_enabled(m_grid_enabled);
+        GraphicsScene::set_grid_clusters_enabled(m_grid_clusters_enabled);
+        GraphicsScene::set_grid_type(m_grid_type);
 
-        graphics_item::set_lod(lod);
-        node_drag_shadow::set_lod(lod);
+        GraphicsItem::set_lod(lod);
+        NodeDragShadow::set_lod(lod);
 
-        standard_graphics_module::update_alpha();
-        standard_graphics_gate::update_alpha();
-        standard_graphics_net::update_alpha();
-        separated_graphics_net::update_alpha();
+        StandardGraphicsModule::update_alpha();
+        StandardGraphicsGate::update_alpha();
+        StandardGraphicsNet::update_alpha();
+        SeparatedGraphicsNet::update_alpha();
 
         QGraphicsView::paintEvent(event);
     }
 
-    void graph_graphics_view::mouseDoubleClickEvent(QMouseEvent* event)
+    void GraphGraphicsView::mouseDoubleClickEvent(QMouseEvent* event)
     {
         if (event->button() != Qt::LeftButton)
             return;
 
-        graphics_item* item = static_cast<graphics_item*>(itemAt(event->pos()));
+        GraphicsItem* item = static_cast<GraphicsItem*>(itemAt(event->pos()));
 
         if (!item)
             return;
@@ -225,7 +225,7 @@ namespace hal
             Q_EMIT module_double_clicked(item->id());
     }
 
-    void graph_graphics_view::drawForeground(QPainter* painter, const QRectF& rect)
+    void GraphGraphicsView::drawForeground(QPainter* painter, const QRectF& rect)
     {
         Q_UNUSED(rect)
 
@@ -243,7 +243,7 @@ namespace hal
     }
 
     #ifdef GUI_DEBUG_GRID
-    void graph_graphics_view::debug_draw_layouter_gridpos(QPainter* painter)
+    void GraphGraphicsView::debug_draw_layouter_gridpos(QPainter* painter)
     {
         painter->resetTransform();
         painter->setPen(QPen(Qt::magenta));
@@ -252,7 +252,7 @@ namespace hal
     }
     #endif
 
-    void graph_graphics_view::mousePressEvent(QMouseEvent* event)
+    void GraphGraphicsView::mousePressEvent(QMouseEvent* event)
     {
         if (event->modifiers() == m_move_modifier)
         {
@@ -261,10 +261,10 @@ namespace hal
         }
         else if (event->button() == Qt::LeftButton)
         {
-            graphics_item* item = static_cast<graphics_item*>(itemAt(event->pos()));
+            GraphicsItem* item = static_cast<GraphicsItem*>(itemAt(event->pos()));
             if (item && item_draggable(item))
             {
-                m_drag_item               = static_cast<graphics_gate*>(item);
+                m_drag_item               = static_cast<GraphicsGate*>(item);
                 m_drag_mousedown_position = event->pos();
                 m_drag_start_gridpos      = closest_layouter_pos(mapToScene(m_drag_mousedown_position))[0];
             }
@@ -280,7 +280,7 @@ namespace hal
             QGraphicsView::mousePressEvent(event);
     }
 
-    void graph_graphics_view::mouseMoveEvent(QMouseEvent* event)
+    void GraphGraphicsView::mouseMoveEvent(QMouseEvent* event)
     {
         if (!scene())
             return;
@@ -328,7 +328,7 @@ namespace hal
         QGraphicsView::mouseMoveEvent(event);
     }
 
-    void graph_graphics_view::dragEnterEvent(QDragEnterEvent* event)
+    void GraphGraphicsView::dragEnterEvent(QDragEnterEvent* event)
     {
         if (event->source() == this && event->proposedAction() == Qt::MoveAction)
         {
@@ -348,7 +348,7 @@ namespace hal
                 g_selection_relay.relay_selection_changed(nullptr);
             }
             m_drop_allowed = false;
-            static_cast<graphics_scene*>(scene())->start_drag_shadow(snap, size, node_drag_shadow::drag_cue::rejected);
+            static_cast<GraphicsScene*>(scene())->start_drag_shadow(snap, size, NodeDragShadow::drag_cue::rejected);
         }
         else
         {
@@ -356,13 +356,13 @@ namespace hal
         }
     }
 
-    void graph_graphics_view::dragLeaveEvent(QDragLeaveEvent* event)
+    void GraphGraphicsView::dragLeaveEvent(QDragLeaveEvent* event)
     {
         Q_UNUSED(event)
-        static_cast<graphics_scene*>(scene())->stop_drag_shadow();
+        static_cast<GraphicsScene*>(scene())->stop_drag_shadow();
     }
 
-    void graph_graphics_view::dragMoveEvent(QDragMoveEvent* event)
+    void GraphGraphicsView::dragMoveEvent(QDragMoveEvent* event)
     {
         if (event->source() == this && event->proposedAction() == Qt::MoveAction)
         {
@@ -377,11 +377,11 @@ namespace hal
             m_drag_current_modifier = swapModifier;
 
             auto context = m_graph_widget->get_context();
-            graph_layouter* layouter = context->debug_get_layouter();
+            GraphLayouter* layouter = context->debug_get_layouter();
             assert(layouter->done()); // ensure grid stable
             QMap<QPoint, hal::node>::const_iterator node_iter = layouter->position_to_node_map().find(snap[0]);
 
-            node_drag_shadow::drag_cue cue = node_drag_shadow::drag_cue::rejected;
+            NodeDragShadow::drag_cue cue = NodeDragShadow::drag_cue::rejected;
             // disallow dropping an item on itself
             if (snap[0] != m_drag_start_gridpos)
             {
@@ -390,7 +390,7 @@ namespace hal
                     if (node_iter != layouter->position_to_node_map().end())
                     {
                         // allow move only on empty cells
-                        cue = node_drag_shadow::drag_cue::swappable;
+                        cue = NodeDragShadow::drag_cue::swappable;
                     }
                 }
                 else
@@ -398,27 +398,27 @@ namespace hal
                     if (node_iter == layouter->position_to_node_map().end())
                     {
                         // allow move only on empty cells
-                        cue = node_drag_shadow::drag_cue::movable;
+                        cue = NodeDragShadow::drag_cue::movable;
                     }
                 }
             }
-            m_drop_allowed = (cue != node_drag_shadow::drag_cue::rejected);
+            m_drop_allowed = (cue != NodeDragShadow::drag_cue::rejected);
 
-            static_cast<graphics_scene*>(scene())->move_drag_shadow(snap[1], cue);
+            static_cast<GraphicsScene*>(scene())->move_drag_shadow(snap[1], cue);
         }
     }
 
-    void graph_graphics_view::dropEvent(QDropEvent* event)
+    void GraphGraphicsView::dropEvent(QDropEvent* event)
     {
         if (event->source() == this && event->proposedAction() == Qt::MoveAction)
         {
             event->acceptProposedAction();
-            graphics_scene* s = static_cast<graphics_scene*>(scene());
+            GraphicsScene* s = static_cast<GraphicsScene*>(scene());
             s->stop_drag_shadow();
             if (m_drop_allowed)
             {
                 auto context = m_graph_widget->get_context();
-                graph_layouter* layouter = context->debug_get_layouter();
+                GraphLayouter* layouter = context->debug_get_layouter();
                 assert(layouter->done()); // ensure grid stable
 
                 // convert scene coordinates into layouter grid coordinates
@@ -462,7 +462,7 @@ namespace hal
         }
     }
 
-    void graph_graphics_view::wheelEvent(QWheelEvent* event)
+    void GraphGraphicsView::wheelEvent(QWheelEvent* event)
     {
         if (QApplication::keyboardModifiers() == m_zoom_modifier)
         {
@@ -475,7 +475,7 @@ namespace hal
         }
     }
 
-    void graph_graphics_view::keyPressEvent(QKeyEvent* event)
+    void GraphGraphicsView::keyPressEvent(QKeyEvent* event)
     {
         switch (event->key())
         {
@@ -489,7 +489,7 @@ namespace hal
         event->ignore();
     }
 
-    void graph_graphics_view::keyReleaseEvent(QKeyEvent* event)
+    void GraphGraphicsView::keyReleaseEvent(QKeyEvent* event)
     {
         switch (event->key())
         {
@@ -503,15 +503,15 @@ namespace hal
         event->ignore();
     }
 
-    void graph_graphics_view::resizeEvent(QResizeEvent* event)
+    void GraphGraphicsView::resizeEvent(QResizeEvent* event)
     {
         QGraphicsView::resizeEvent(event);
         adjust_min_scale();
     }
 
-    void graph_graphics_view::show_context_menu(const QPoint& pos)
+    void GraphGraphicsView::show_context_menu(const QPoint& pos)
     {
-        graphics_scene* s = static_cast<graphics_scene*>(scene());
+        GraphicsScene* s = static_cast<GraphicsScene*>(scene());
 
         if (!s)
             return;
@@ -525,7 +525,7 @@ namespace hal
         // bool isNet = false;
         if (item)
         {
-            m_item   = static_cast<graphics_item*>(item);
+            m_item   = static_cast<GraphicsItem*>(item);
             isGate   = m_item->item_type() == hal::item_type::gate;
             isModule = m_item->item_type() == hal::item_type::module;
             // isNet    = m_item->item_type() == hal::item_type::net;
@@ -545,10 +545,10 @@ namespace hal
                 context_menu.addAction("This gate:")->setEnabled(false);
 
                 action = context_menu.addAction("  Rename …");
-                QObject::connect(action, &QAction::triggered, this, &graph_graphics_view::handle_rename_action);
+                QObject::connect(action, &QAction::triggered, this, &GraphGraphicsView::handle_rename_action);
 
                 action = context_menu.addAction("  Fold parent module");
-                QObject::connect(action, &QAction::triggered, this, &graph_graphics_view::handle_fold_single_action);
+                QObject::connect(action, &QAction::triggered, this, &GraphGraphicsView::handle_fold_single_action);
             }
             else if (isModule)
             {
@@ -565,10 +565,10 @@ namespace hal
                 context_menu.addAction("This module:")->setEnabled(false);
 
                 action = context_menu.addAction("  Rename …");
-                QObject::connect(action, &QAction::triggered, this, &graph_graphics_view::handle_rename_action);
+                QObject::connect(action, &QAction::triggered, this, &GraphGraphicsView::handle_rename_action);
 
                 action = context_menu.addAction("  Unfold module");
-                QObject::connect(action, &QAction::triggered, this, &graph_graphics_view::handle_unfold_single_action);
+                QObject::connect(action, &QAction::triggered, this, &GraphGraphicsView::handle_unfold_single_action);
             }
 
             if (g_selection_relay.m_selected_gates.size() + g_selection_relay.m_selected_modules.size() > 1)
@@ -580,13 +580,13 @@ namespace hal
             if (isGate || isModule)
             {
                 action = context_menu.addAction("  Isolate In New View");
-                QObject::connect(action, &QAction::triggered, this, &graph_graphics_view::handle_isolation_view_action);
+                QObject::connect(action, &QAction::triggered, this, &GraphGraphicsView::handle_isolation_view_action);
 
                 action = context_menu.addAction("  Add successors to view");
-                connect(action, &QAction::triggered, this, &graph_graphics_view::handle_select_outputs);
+                connect(action, &QAction::triggered, this, &GraphGraphicsView::handle_select_outputs);
 
                 action = context_menu.addAction("  Add predecessors to view");
-                connect(action, &QAction::triggered, this, &graph_graphics_view::handle_select_inputs);
+                connect(action, &QAction::triggered, this, &GraphGraphicsView::handle_select_inputs);
 
                 std::shared_ptr<Gate> g   = isGate ? g_netlist->get_gate_by_id(m_item->id()) : nullptr;
                 std::shared_ptr<Module> m = isModule ? g_netlist->get_module_by_id(m_item->id()) : nullptr;
@@ -597,7 +597,7 @@ namespace hal
                     QMenu* module_submenu = context_menu.addMenu("  Move to module …");
 
                     action = module_submenu->addAction("New module …");
-                    QObject::connect(action, &QAction::triggered, this, &graph_graphics_view::handle_move_new_action);
+                    QObject::connect(action, &QAction::triggered, this, &GraphGraphicsView::handle_move_new_action);
                     module_submenu->addSeparator();
 
                     QActionGroup* module_actions = new QActionGroup(module_submenu);
@@ -629,7 +629,7 @@ namespace hal
                     context_menu.addAction("All selected gates:")->setEnabled(false);
 
                     action = context_menu.addAction("  Fold all parent modules");
-                    QObject::connect(action, &QAction::triggered, this, &graph_graphics_view::handle_fold_all_action);
+                    QObject::connect(action, &QAction::triggered, this, &GraphGraphicsView::handle_fold_all_action);
                 }
                 if (!g_selection_relay.m_selected_modules.empty())
                 {
@@ -637,7 +637,7 @@ namespace hal
                     context_menu.addAction("All selected modules:")->setEnabled(false);
 
                     action = context_menu.addAction("  Unfold all");
-                    QObject::connect(action, &QAction::triggered, this, &graph_graphics_view::handle_unfold_all_action);
+                    QObject::connect(action, &QAction::triggered, this, &GraphGraphicsView::handle_unfold_all_action);
                 }
             }
         }
@@ -659,7 +659,7 @@ namespace hal
         update();
     }
 
-    void graph_graphics_view::update_matrix(const int delta)
+    void GraphGraphicsView::update_matrix(const int delta)
     {
         qreal scale = qPow(2.0, delta / 100.0);
 
@@ -668,18 +668,18 @@ namespace hal
         setMatrix(matrix);
     }
 
-    void graph_graphics_view::toggle_antialiasing()
+    void GraphGraphicsView::toggle_antialiasing()
     {
         setRenderHint(QPainter::Antialiasing, !(renderHints() & QPainter::Antialiasing));
     }
 
-    bool graph_graphics_view::item_draggable(graphics_item* item)
+    bool GraphGraphicsView::item_draggable(GraphicsItem* item)
     {
         hal::item_type type = item->item_type();
         return type == hal::item_type::gate || type == hal::item_type::module;
     }
 
-    void graph_graphics_view::gentle_zoom(const qreal factor)
+    void GraphGraphicsView::gentle_zoom(const qreal factor)
     {
         scale(factor, factor);
         centerOn(m_target_scene_pos);
@@ -688,14 +688,14 @@ namespace hal
         centerOn(mapToScene(viewport_center.toPoint()));
     }
 
-    void graph_graphics_view::viewport_center_zoom(const qreal factor)
+    void GraphGraphicsView::viewport_center_zoom(const qreal factor)
     {
         QPointF target_pos = mapToScene(viewport()->rect().center());
         scale(factor, factor);
         centerOn(target_pos.toPoint());
     }
 
-    void graph_graphics_view::handle_select_outputs()
+    void GraphGraphicsView::handle_select_outputs()
     {
         auto context           = m_graph_widget->get_context();
         QAction* sender_action = dynamic_cast<QAction*>(sender());
@@ -754,7 +754,7 @@ namespace hal
             context->add({}, gates);
         }
     }
-    void graph_graphics_view::handle_select_inputs()
+    void GraphGraphicsView::handle_select_inputs()
     {
         auto context           = m_graph_widget->get_context();
         QAction* sender_action = dynamic_cast<QAction*>(sender());
@@ -813,7 +813,7 @@ namespace hal
         }
     }
 
-    void graph_graphics_view::handle_global_setting_changed(void* sender, const QString& key, const QVariant& value)
+    void GraphGraphicsView::handle_global_setting_changed(void* sender, const QString& key, const QVariant& value)
     {
         UNUSED(sender);
         if (key == "graph_view/drag_mode_modifier")
@@ -834,13 +834,13 @@ namespace hal
         #endif
     }
 
-    void graph_graphics_view::handle_fold_single_action()
+    void GraphGraphicsView::handle_fold_single_action()
     {
         auto context = m_graph_widget->get_context();
         context->fold_module_of_gate(m_item->id());
     }
 
-    void graph_graphics_view::handle_unfold_single_action()
+    void GraphGraphicsView::handle_unfold_single_action()
     {
         auto context = m_graph_widget->get_context();
         auto m       = g_netlist->get_module_by_id(m_item->id());
@@ -857,7 +857,7 @@ namespace hal
         context->unfold_module(m_item->id());
     }
 
-    void graph_graphics_view::handle_fold_all_action()
+    void GraphGraphicsView::handle_fold_all_action()
     {
         auto context = m_graph_widget->get_context();
 
@@ -869,7 +869,7 @@ namespace hal
         context->end_change();
     }
 
-    void graph_graphics_view::handle_unfold_all_action()
+    void GraphGraphicsView::handle_unfold_all_action()
     {
         auto context = m_graph_widget->get_context();
 
@@ -882,13 +882,13 @@ namespace hal
     }
 
     #ifdef GUI_DEBUG_GRID
-    void graph_graphics_view::debug_show_layouter_gridpos(const QPoint& mouse_pos)
+    void GraphGraphicsView::debug_show_layouter_gridpos(const QPoint& mouse_pos)
     {
         auto context = m_graph_widget->get_context();
         if (!context)
             return;
 
-        graph_layouter* layouter = context->debug_get_layouter();
+        GraphLayouter* layouter = context->debug_get_layouter();
         if (!(layouter->done()))
             return;
 
@@ -898,12 +898,12 @@ namespace hal
     }
     #endif
 
-    QVector<QPoint> graph_graphics_view::closest_layouter_pos(const QPointF& scene_pos) const
+    QVector<QPoint> GraphGraphicsView::closest_layouter_pos(const QPointF& scene_pos) const
     {
         auto context = m_graph_widget->get_context();
         assert(context);
 
-        graph_layouter* layouter = context->debug_get_layouter();
+        GraphLayouter* layouter = context->debug_get_layouter();
         assert(layouter->done()); // ensure grid stable
 
         int default_width = layouter->default_grid_width();
@@ -917,7 +917,7 @@ namespace hal
         return  QVector({QPoint(x_point.index, y_point.index), QPoint(x_point.pos, y_point.pos)});
     }
 
-    graph_graphics_view::layouter_point graph_graphics_view::closest_layouter_point(qreal scene_pos, int default_spacing, int min_index, QVector<qreal> sections) const
+    GraphGraphicsView::layouter_point GraphGraphicsView::closest_layouter_point(qreal scene_pos, int default_spacing, int min_index, QVector<qreal> sections) const
     {
         int index = min_index;
         qreal pos = 0;

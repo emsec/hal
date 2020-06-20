@@ -10,7 +10,7 @@
 
 namespace hal
 {
-    content_frame::content_frame(content_widget* widget, bool attached, QWidget* parent)
+    ContentFrame::ContentFrame(ContentWidget* widget, bool attached, QWidget* parent)
         : QWidget(parent), m_vertical_layout(new QVBoxLayout()), m_horizontal_layout(new QHBoxLayout()), m_left_toolbar(new toolbar()), m_right_toolbar(new toolbar()), m_widget(widget),
           m_name_label(new QLabel())
 
@@ -41,12 +41,12 @@ namespace hal
             m_left_toolbar->addSeparator();
             action->setText("Detach");
             action->setIcon(gui_utility::get_styled_svg_icon(m_detach_icon_style, m_detach_icon_path));
-            connect(action, &QAction::triggered, this, &content_frame::detach_widget);
+            connect(action, &QAction::triggered, this, &ContentFrame::detach_widget);
         }
         else
         {
             action->setText("Reattach");
-            connect(action, &QAction::triggered, this, &content_frame::reattach_widget);
+            connect(action, &QAction::triggered, this, &ContentFrame::reattach_widget);
         }
         widget->setup_toolbar(m_left_toolbar);
         m_right_toolbar->addAction(action);
@@ -66,7 +66,7 @@ namespace hal
         widget->show();
     }
 
-    void content_frame::childEvent(QChildEvent* event)
+    void ContentFrame::childEvent(QChildEvent* event)
     {
         if (event->removed() && event->child() == m_widget)
         {
@@ -86,24 +86,24 @@ namespace hal
         }
     }
 
-    content_widget* content_frame::content()
+    ContentWidget* ContentFrame::content()
     {
         return m_widget;
     }
 
-    void content_frame::detach_widget()
+    void ContentFrame::detach_widget()
     {
         hide();
         m_widget->detach();
     }
 
-    void content_frame::reattach_widget()
+    void ContentFrame::reattach_widget()
     {
         hide();
         m_widget->reattach();
     }
 
-    void content_frame::closeEvent(QCloseEvent* event)
+    void ContentFrame::closeEvent(QCloseEvent* event)
     {
         Q_UNUSED(event)
         reattach_widget();

@@ -11,7 +11,7 @@ namespace hal
         connect(&g_settings_relay, &settings_relay::setting_changed, this, &keybind_manager::handle_global_setting_changed);
     }
 
-    void keybind_manager::bind(hal_action* action, const QString& key)
+    void keybind_manager::bind(HalAction* action, const QString& key)
     {
         Q_ASSERT(!m_bound_actions.contains(action));
         // keep track of this action
@@ -33,7 +33,7 @@ namespace hal
         shortcut->setKey(seq);
     }
 
-    void keybind_manager::release(hal_action* action)
+    void keybind_manager::release(HalAction* action)
     {
         Q_ASSERT(m_bound_actions.remove(action));
         // remove all matching values from map
@@ -62,8 +62,8 @@ namespace hal
     {
         Q_UNUSED(sender);
         QKeySequence seq = value.toString();
-        QList<hal_action*> affected_actions = m_bindings_actions.values(key);
-        for (hal_action* a : affected_actions)
+        QList<HalAction*> affected_actions = m_bindings_actions.values(key);
+        for (HalAction* a : affected_actions)
         {
             a->setShortcut(seq);
             qDebug() << a->text();

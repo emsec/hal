@@ -6,13 +6,13 @@
 
 namespace hal
 {
-    layouter_task::layouter_task(graph_layouter* const layouter) :
+    LayouterTask::LayouterTask(GraphLayouter* const layouter) :
         m_layouter(layouter)
     {
         m_layouter->setParent(this);
     }
 
-    void layouter_task::execute()
+    void LayouterTask::execute()
     {
         m_layouter->layout();
         m_layouter->setParent(nullptr);

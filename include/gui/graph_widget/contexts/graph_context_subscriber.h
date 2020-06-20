@@ -26,10 +26,10 @@
 #include <QString>
 namespace hal
 {
-    class graph_context_subscriber
+    class GraphContextSubscriber
     {
     public:
-        virtual ~graph_context_subscriber() = default;
+        virtual ~GraphContextSubscriber() = default;
 
         virtual void handle_scene_available() = 0;
         virtual void handle_scene_unavailable() = 0;

@@ -44,8 +44,8 @@ namespace hal
     class plugin_manager_dialog;
     class plugin_schedule_widget;
     class python_editor;
-    class file_manager;
-    class hal_content_manager;
+    class FileManager;
+    class HalContentManager;
     class dropdown_list;
     class about_dialog;
     class welcome_screen;
@@ -73,7 +73,7 @@ namespace hal
 
     public:
         explicit main_window(QWidget* parent = nullptr);
-        void add_content(content_widget* widget, int index, content_anchor anchor);
+        void add_content(ContentWidget* widget, int index, content_anchor anchor);
 
         QString hal_icon_path() const;
         QString hal_icon_style() const;
@@ -156,18 +156,18 @@ namespace hal
         QHBoxLayout* m_tool_bar_layout;
         QToolBar* m_left_tool_bar;
         QToolBar* m_right_tool_bar;
-        content_layout_area* m_layout_area;
+        ContentLayoutArea* m_layout_area;
 
-        hal_action* m_action_new;
-        hal_action* m_action_open;
-        hal_action* m_action_save;
-        hal_action* m_action_save_as;
-        hal_action* m_action_about;
-        hal_action* m_action_schedule;
-        hal_action* m_action_run_schedule;
-        hal_action* m_action_content;
-        hal_action* m_action_settings;
-        hal_action* m_action_close;
+        HalAction* m_action_new;
+        HalAction* m_action_open;
+        HalAction* m_action_save;
+        HalAction* m_action_save_as;
+        HalAction* m_action_about;
+        HalAction* m_action_schedule;
+        HalAction* m_action_run_schedule;
+        HalAction* m_action_content;
+        HalAction* m_action_settings;
+        HalAction* m_action_close;
 
         QMenu* m_menu_file;
         QMenu* m_menu_edit;

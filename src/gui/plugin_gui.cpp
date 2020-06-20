@@ -48,7 +48,7 @@ namespace hal
     window_manager* g_window_manager;
     notification_manager* g_notification_manager;
 
-    hal_content_manager* g_content_manager = nullptr;
+    HalContentManager* g_content_manager = nullptr;
 
     std::shared_ptr<Netlist> g_netlist = nullptr;
 
@@ -56,13 +56,13 @@ namespace hal
     plugin_relay g_plugin_relay;
     selection_relay g_selection_relay;
 
-    file_status_manager g_file_status_manager;
+    FileStatusManager g_file_status_manager;
 
     thread_pool* g_thread_pool;
 
-    graph_context_manager g_graph_context_manager;
+    GraphContextManager g_graph_context_manager;
 
-    gui_api* g_gui_api;
+    GuiApi* g_gui_api;
 
     std::unique_ptr<python_context> g_python_context = nullptr;
 
@@ -76,7 +76,7 @@ namespace hal
         {
             auto file_name = std::filesystem::path(args.get_parameter("--input-file"));
             log_info("gui", "GUI started with file {}.", file_name.string());
-            file_manager::get_instance()->open_file(QString::fromStdString(file_name.string()));
+            FileManager::get_instance()->open_file(QString::fromStdString(file_name.string()));
         }
     }
 
@@ -101,7 +101,7 @@ namespace hal
         const char** argv;
         args.get_original_arguments(&argc, &argv);
         QApplication a(argc, const_cast<char**>(argv));
-        focus_logger focusLogger(&a);
+        FocusLogger focusLogger(&a);
 
         QObject::connect(&a, &QApplication::aboutToQuit, cleanup);
 
@@ -189,7 +189,7 @@ namespace hal
 
         g_thread_pool = new thread_pool();
 
-        g_gui_api = new gui_api();
+        g_gui_api = new GuiApi();
 
         signal(SIGINT, m_cleanup);
 

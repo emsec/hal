@@ -41,16 +41,16 @@
 namespace hal
 {
     class io_graphics_net;
-    class graph_context;
-    class graphics_gate;
-    class graphics_item;
-    class graphics_net;
-    class graphics_node;
-    class graphics_scene;
-    class separated_graphics_net;
-    class standard_graphics_net;
+    class GraphContext;
+    class GraphicsGate;
+    class GraphicsItem;
+    class GraphicsNet;
+    class GraphicsNode;
+    class GraphicsScene;
+    class SeparatedGraphicsNet;
+    class StandardGraphicsNet;
 
-    class graph_layouter : public QObject
+    class GraphLayouter : public QObject
     {
         Q_OBJECT
 
@@ -63,7 +63,7 @@ namespace hal
         struct node_box
         {
             hal::node node;
-            graphics_node* item;
+            GraphicsNode* item;
 
             int x;
             int y;
@@ -146,7 +146,7 @@ namespace hal
         };
 
     public:
-        explicit graph_layouter(const graph_context* const context, QObject* parent = nullptr);
+        explicit GraphLayouter(const GraphContext* const context, QObject* parent = nullptr);
 
         virtual QString name() const        = 0;
         virtual QString description() const = 0;
@@ -156,7 +156,7 @@ namespace hal
 
         void layout();
 
-        graphics_scene* scene() const;
+        GraphicsScene* scene() const;
 
         const QMap<hal::node, QPoint> node_to_position_map() const;
         const QMap<QPoint, hal::node> position_to_node_map() const;
@@ -184,8 +184,8 @@ namespace hal
         void status_update(const QString& message);
 
     protected:
-        graphics_scene* m_scene;
-        const graph_context* const m_context;
+        GraphicsScene* m_scene;
+        const GraphContext* const m_context;
 
     private:
         void clear_layout_data();
@@ -246,8 +246,8 @@ namespace hal
 
         void commit_used_paths(const used_paths& used);
 
-        void append_non_zero_h_line(standard_graphics_net::lines& lines, const qreal small_x, const qreal big_x, const qreal y);
-        void append_non_zero_v_line(standard_graphics_net::lines& lines, const qreal x, const qreal small_y, const qreal big_y);
+        void append_non_zero_h_line(StandardGraphicsNet::lines& lines, const qreal small_x, const qreal big_x, const qreal y);
+        void append_non_zero_v_line(StandardGraphicsNet::lines& lines, const qreal x, const qreal small_y, const qreal big_y);
 
         QVector<node_box> m_boxes;
 

@@ -3,13 +3,13 @@
 
 namespace hal
 {
-    graph_shader::graph_shader(const graph_context* const context) :
+    GraphShader::GraphShader(const GraphContext* const context) :
         m_context(context)
     {
         assert(context);
     }
 
-    const graph_shader::shading& graph_shader::get_shading()
+    const GraphShader::shading& GraphShader::get_shading()
     {
         return m_shading;
     }

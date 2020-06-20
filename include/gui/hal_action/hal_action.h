@@ -27,14 +27,14 @@
 
 namespace hal
 {
-    class hal_action : public QAction
+    class HalAction : public QAction
     {
         Q_OBJECT
 
     public:
-        explicit hal_action(QObject *parent = nullptr);
-        explicit hal_action(const QString &text, QObject *parent = nullptr);
-        explicit hal_action(const QIcon &icon, const QString &text, QObject *parent = nullptr);
+        explicit HalAction(QObject *parent = nullptr);
+        explicit HalAction(const QString &text, QObject *parent = nullptr);
+        explicit HalAction(const QIcon &icon, const QString &text, QObject *parent = nullptr);
 
         // hides non-virtual methods in QAction
         void setText(const QString& text);

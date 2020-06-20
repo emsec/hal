@@ -48,7 +48,7 @@ namespace hal
 {
     class module_proxy_model;
 
-    class module_widget : public content_widget
+    class module_widget : public ContentWidget
     {
         Q_OBJECT
 

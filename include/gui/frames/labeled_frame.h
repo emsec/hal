@@ -31,12 +31,12 @@ class QVBoxLayout;
 
 namespace hal
 {
-    class labeled_frame : public QFrame
+    class LabeledFrame : public QFrame
     {
         Q_OBJECT
 
     public:
-        labeled_frame(QWidget* parent = nullptr);
+        LabeledFrame(QWidget* parent = nullptr);
 
         void add_content(QWidget* content);
 

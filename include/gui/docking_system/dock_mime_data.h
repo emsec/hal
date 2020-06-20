@@ -28,17 +28,17 @@
 
 namespace hal
 {
-    class content_widget;
+    class ContentWidget;
 
-    class dock_mime_data : public QMimeData
+    class DockMimeData : public QMimeData
     {
         Q_OBJECT
 
     public:
-        dock_mime_data(content_widget* widget);
-        content_widget* widget() const;
+        DockMimeData(ContentWidget* widget);
+        ContentWidget* widget() const;
 
     private:
-        content_widget* m_widget;
+        ContentWidget* m_widget;
     };
 }

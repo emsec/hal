@@ -28,12 +28,12 @@
 
 namespace hal
 {
-    class vhdl_syntax_highlighter : public QSyntaxHighlighter
+    class VhdlSyntaxHighlighter : public QSyntaxHighlighter
     {
         Q_OBJECT
 
     public:
-        explicit vhdl_syntax_highlighter(QTextDocument* parent = nullptr);
+        explicit VhdlSyntaxHighlighter(QTextDocument* parent = nullptr);
 
     protected:
         void highlightBlock(const QString& text) Q_DECL_OVERRIDE;

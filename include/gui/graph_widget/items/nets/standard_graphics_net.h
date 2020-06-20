@@ -32,7 +32,7 @@ namespace hal
 {
     class Net;
 
-    class standard_graphics_net : public graphics_net
+    class StandardGraphicsNet : public GraphicsNet
     {
     public:
         struct h_line
@@ -60,13 +60,13 @@ namespace hal
             QVector<h_line> h_lines;
             QVector<v_line> v_lines;
 
-            friend standard_graphics_net;
+            friend StandardGraphicsNet;
         };
 
         static void load_settings();
         static void update_alpha();
 
-        standard_graphics_net(const std::shared_ptr<const Net> n, const lines& l);
+        StandardGraphicsNet(const std::shared_ptr<const Net> n, const lines& l);
 
         void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override;
 

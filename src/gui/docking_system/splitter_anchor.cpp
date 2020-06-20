@@ -10,18 +10,18 @@
 
 namespace hal
 {
-    splitter_anchor::splitter_anchor(dock_bar* dock_bar, splitter* splitter, QObject* parent) : QObject(parent), m_dock_bar(dock_bar), m_splitter(splitter)
+    SplitterAnchor::SplitterAnchor(DockBar* DockBar, splitter* splitter, QObject* parent) : QObject(parent), m_dock_bar(DockBar), m_splitter(splitter)
     {
-        connect(content_drag_relay::instance(), &content_drag_relay::drag_start, m_dock_bar, &dock_bar::handle_drag_start);
-        connect(content_drag_relay::instance(), &content_drag_relay::drag_end, m_dock_bar, &dock_bar::handle_drag_end);
+        connect(ContentDragRelay::instance(), &ContentDragRelay::drag_start, m_dock_bar, &DockBar::handle_drag_start);
+        connect(ContentDragRelay::instance(), &ContentDragRelay::drag_end, m_dock_bar, &DockBar::handle_drag_end);
 
         m_dock_bar->set_anchor(this);
     }
 
-    void splitter_anchor::add(content_widget* widget, int index)
+    void SplitterAnchor::add(ContentWidget* widget, int index)
     {
         widget->set_anchor(this);
-        content_frame* frame = new content_frame(widget, true, nullptr);
+        ContentFrame* frame = new ContentFrame(widget, true, nullptr);
         frame->hide();
         m_splitter->insertWidget(index, frame);
         m_dock_bar->add_button(widget, index);
@@ -29,7 +29,7 @@ namespace hal
         Q_EMIT content_changed();
     }
 
-    void splitter_anchor::remove(content_widget* widget)
+    void SplitterAnchor::remove(ContentWidget* widget)
     {
         widget->set_anchor(nullptr);
         widget->hide();
@@ -39,11 +39,11 @@ namespace hal
         Q_EMIT content_changed();
     }
 
-    void splitter_anchor::detach(content_widget* widget)
+    void SplitterAnchor::detach(ContentWidget* widget)
     {
         widget->hide();
         widget->setParent(nullptr);
-        content_frame* frame = new content_frame(widget, false, nullptr);
+        ContentFrame* frame = new ContentFrame(widget, false, nullptr);
         frame->setGeometry(QStyle::alignedRect(Qt::LeftToRight, Qt::AlignCenter, frame->size(), qApp->desktop()->availableGeometry()));
         frame->show();
 
@@ -55,10 +55,10 @@ namespace hal
         Q_EMIT content_changed();
     }
 
-    void splitter_anchor::reattach(content_widget* widget)
+    void SplitterAnchor::reattach(ContentWidget* widget)
     {
         int index            = m_dock_bar->index(widget);
-        content_frame* frame = new content_frame(widget, true, nullptr);
+        ContentFrame* frame = new ContentFrame(widget, true, nullptr);
         frame->hide();
         m_splitter->insertWidget(index, frame);
         m_dock_bar->reattach_button(widget);
@@ -66,13 +66,13 @@ namespace hal
         Q_EMIT content_changed();
     }
 
-    void splitter_anchor::open(content_widget* widget)
+    void SplitterAnchor::open(ContentWidget* widget)
     {
         for (int i = 0; i < m_splitter->count(); i++)
         {
-            if (static_cast<content_frame*>(m_splitter->widget(i))->content() == widget)
+            if (static_cast<ContentFrame*>(m_splitter->widget(i))->content() == widget)
             {
-                static_cast<content_frame*>(m_splitter->widget(i))->show();
+                static_cast<ContentFrame*>(m_splitter->widget(i))->show();
                 m_splitter->show();
                 break;
             }
@@ -80,13 +80,13 @@ namespace hal
         m_dock_bar->check_button(widget);
     }
 
-    void splitter_anchor::close(content_widget* widget)
+    void SplitterAnchor::close(ContentWidget* widget)
     {
         for (int i = 0; i < m_splitter->count(); i++)
         {
-            if (static_cast<content_frame*>(m_splitter->widget(i))->content() == widget)
+            if (static_cast<ContentFrame*>(m_splitter->widget(i))->content() == widget)
             {
-                static_cast<content_frame*>(m_splitter->widget(i))->hide();
+                static_cast<ContentFrame*>(m_splitter->widget(i))->hide();
                 if (m_splitter->unused())
                     m_splitter->hide();
                 break;
@@ -95,16 +95,16 @@ namespace hal
         m_dock_bar->uncheck_button(widget);
     }
 
-    int splitter_anchor::count()
+    int SplitterAnchor::count()
     {
         return m_dock_bar->count();
     }
 
-    void splitter_anchor::remove_content()
+    void SplitterAnchor::remove_content()
     {
         for (int i = m_dock_bar->count() - 1; i >= 0; i--)
         {
-            content_widget* widget = m_dock_bar->widget_at(i);
+            ContentWidget* widget = m_dock_bar->widget_at(i);
             remove(widget);
         }
 

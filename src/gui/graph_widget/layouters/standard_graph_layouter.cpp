@@ -4,21 +4,21 @@
 
 namespace hal
 {
-    standard_graph_layouter::standard_graph_layouter(const graph_context* const context) : graph_layouter(context)
+    StandardGraphLayouter::StandardGraphLayouter(const GraphContext* const context) : GraphLayouter(context)
     {
     }
 
-    QString standard_graph_layouter::name() const
+    QString StandardGraphLayouter::name() const
     {
         return "Standard Layouter";
     }
 
-    QString standard_graph_layouter::description() const
+    QString StandardGraphLayouter::description() const
     {
         return "<p>PLACEHOLDER</p>";
     }
 
-    void standard_graph_layouter::add(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets, hal::placement_hint placement)
+    void StandardGraphLayouter::add(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets, hal::placement_hint placement)
     {
         switch(placement.mode)
         {
@@ -37,7 +37,7 @@ namespace hal
         }
     }
 
-    void standard_graph_layouter::add_compact(const QSet<u32>& modules, const QSet<u32>& gates, const QSet<u32>& nets)
+    void StandardGraphLayouter::add_compact(const QSet<u32>& modules, const QSet<u32>& gates, const QSet<u32>& nets)
     {
         Q_UNUSED(nets)
 
@@ -158,7 +158,7 @@ namespace hal
         }
     }
 
-    void standard_graph_layouter::add_vertical(const QSet<u32>& modules, const QSet<u32>& gates, const QSet<u32>& nets, bool left, const hal::node& preferred_origin) {
+    void StandardGraphLayouter::add_vertical(const QSet<u32>& modules, const QSet<u32>& gates, const QSet<u32>& nets, bool left, const hal::node& preferred_origin) {
         Q_UNUSED(nets);
 
         int x;
@@ -209,7 +209,7 @@ namespace hal
     }
 
 
-    void standard_graph_layouter::remove(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets)
+    void StandardGraphLayouter::remove(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets)
     {
         Q_UNUSED(nets)
 

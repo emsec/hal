@@ -27,12 +27,12 @@
 
 namespace hal
 {
-    class separated_graphics_net : public graphics_net
+    class SeparatedGraphicsNet : public GraphicsNet
     {
     public:
         static void update_alpha();
 
-        separated_graphics_net(const std::shared_ptr<const Net> n);
+        SeparatedGraphicsNet(const std::shared_ptr<const Net> n);
 
         virtual void add_input(const QPointF& scene_position) = 0;
         virtual void add_output(const QPointF& scene_position) = 0;
