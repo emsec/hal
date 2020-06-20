@@ -193,7 +193,7 @@ namespace hal
 
         signal(SIGINT, m_cleanup);
 
-        main_window w;
+        MainWindow w;
         handle_program_arguments(args);
         w.show();
         auto ret = a.exec();

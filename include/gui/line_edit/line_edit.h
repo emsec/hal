@@ -27,13 +27,13 @@
 
 namespace hal
 {
-    class line_edit : public QLineEdit
+    class LineEdit : public QLineEdit
     {
         Q_OBJECT
 
     public:
-        line_edit(QWidget* parent = 0);
-        line_edit(const QString& contents, QWidget* parent = 0);
+        LineEdit(QWidget* parent = 0);
+        LineEdit(const QString& contents, QWidget* parent = 0);
 
     public Q_SLOTS:
         void handle_text_changed(const QString& text);

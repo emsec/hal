@@ -40,7 +40,7 @@ namespace hal
         {
             auto plugin = std::dynamic_pointer_cast<CLIPluginInterface>(pl);
             plugin->initialize();
-            hal_extended_cli_dialog dialog(QString::fromStdString(plugin_name));
+            HalExtendedCliDialog dialog(QString::fromStdString(plugin_name));
             dialog.exec();
             return dialog.get_args();
         }

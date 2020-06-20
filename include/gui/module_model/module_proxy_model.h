@@ -29,12 +29,12 @@
 
 namespace hal
 {
-    class module_proxy_model : public QSortFilterProxyModel
+    class ModuleProxyModel : public QSortFilterProxyModel
     {
         Q_OBJECT
 
     public:
-        module_proxy_model(QObject* parent = nullptr);
+        ModuleProxyModel(QObject* parent = nullptr);
 
     protected:
         bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const Q_DECL_OVERRIDE;

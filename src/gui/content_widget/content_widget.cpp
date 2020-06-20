@@ -10,7 +10,7 @@
 
 namespace hal
 {
-    ContentWidget::ContentWidget(QString name, QWidget* parent) : hal_widget(parent), m_name(name), m_content_layout(new QVBoxLayout())
+    ContentWidget::ContentWidget(QString name, QWidget* parent) : HalWidget(parent), m_name(name), m_content_layout(new QVBoxLayout())
     {
         m_content_layout->setContentsMargins(0, 0, 0, 0);
         m_content_layout->setSpacing(0);

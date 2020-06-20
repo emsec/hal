@@ -7,7 +7,7 @@
 
 namespace hal
 {
-    hal_extended_cli_dialog::hal_extended_cli_dialog(QString plugin_name, QWidget* parent) : QDialog(parent)
+    HalExtendedCliDialog::HalExtendedCliDialog(QString plugin_name, QWidget* parent) : QDialog(parent)
     {
         m_content_layout = new QVBoxLayout(this);
         m_form_layout    = new QFormLayout();
@@ -35,12 +35,12 @@ namespace hal
         setup(plugin_name.toStdString());
     }
 
-    ProgramArguments hal_extended_cli_dialog::get_args()
+    ProgramArguments HalExtendedCliDialog::get_args()
     {
         return m_args;
     }
 
-    void hal_extended_cli_dialog::parse_arguments()
+    void HalExtendedCliDialog::parse_arguments()
     {
         std::vector<char*> temp_vector;
 
@@ -119,7 +119,7 @@ namespace hal
         accept();
     }
 
-    void hal_extended_cli_dialog::setup(std::string plugin_name)
+    void HalExtendedCliDialog::setup(std::string plugin_name)
     {
         m_plugin = PluginManager::get_plugin_instance<CLIPluginInterface>(plugin_name, false);
         if (m_plugin == nullptr)
@@ -133,11 +133,11 @@ namespace hal
             QString description = QString::fromStdString(std::get<1>(option_tupel));
             QPushButton* button = new QPushButton(flag, this);
             button->setStyleSheet("QPushButton:checked { background-color: rgba(114, 114, 0, 1); }");
-            QLineEdit* line_edit = new QLineEdit(this);
+            QLineEdit* LineEdit = new QLineEdit(this);
             button->setToolTip(description);
             button->setCheckable(true);
-            m_vector.push_back(std::make_pair(button, line_edit));
-            m_form_layout->addRow(button, line_edit);
+            m_vector.push_back(std::make_pair(button, LineEdit));
+            m_form_layout->addRow(button, LineEdit);
         }
     }
 }

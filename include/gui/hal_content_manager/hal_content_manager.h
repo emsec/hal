@@ -31,7 +31,7 @@
 
 namespace hal
 {
-    class main_window;
+    class MainWindow;
     class ContentWidget;
     class python_editor;
     class GraphTabWidget;
@@ -44,7 +44,7 @@ namespace hal
         Q_OBJECT
 
     public:
-        explicit HalContentManager(main_window* parent);
+        explicit HalContentManager(MainWindow* parent);
 
         ~HalContentManager();
 
@@ -70,7 +70,7 @@ namespace hal
         void handle_save_triggered();
 
     private:
-        main_window* m_main_window;
+        MainWindow* m_MainWindow;
 
         QString m_window_title;
 

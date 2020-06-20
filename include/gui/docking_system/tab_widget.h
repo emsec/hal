@@ -40,7 +40,7 @@ namespace hal
     class ContentFrame;
     class ContentWidget;
 
-    class TabWidget : public hal_widget, public HalContentAnchor
+    class TabWidget : public HalWidget, public HalContentAnchor
     {
         Q_OBJECT
 

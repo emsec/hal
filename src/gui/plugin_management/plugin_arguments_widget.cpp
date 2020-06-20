@@ -103,11 +103,11 @@ namespace hal
     //        QPushButton* button = new QPushButton(name, this);
     //        button->setToolTip(description);
     //        button->setCheckable(true);
-    //        QLineEdit* line_edit = new QLineEdit(this);
-    //        m_vector.append(QPair<QPushButton*, QLineEdit*>(button, line_edit));
-    //        m_form_layout->addRow(button, line_edit);
-    //        line_edit->setDisabled(true);
-    //        connect(button, &QPushButton::toggled, line_edit, &QLineEdit::setEnabled);
+    //        QLineEdit* LineEdit = new QLineEdit(this);
+    //        m_vector.append(QPair<QPushButton*, QLineEdit*>(button, LineEdit));
+    //        m_form_layout->addRow(button, LineEdit);
+    //        LineEdit->setDisabled(true);
+    //        connect(button, &QPushButton::toggled, LineEdit, &QLineEdit::setEnabled);
     //    }
     //}
 
@@ -134,13 +134,13 @@ namespace hal
             QPushButton* button = new QPushButton(name, this);
             button->setToolTip(description);
             button->setCheckable(true);
-            QLineEdit* line_edit = new QLineEdit(this);
-            m_vector.append(QPair<QPushButton*, QLineEdit*>(button, line_edit));
-            m_form_layout->addRow(button, line_edit);
-            line_edit->setDisabled(true);
-            connect(button, &QPushButton::toggled, line_edit, &QLineEdit::setEnabled);
-            /*line_edit->hide();
-            connect(button, &QPushButton::toggled, line_edit, &QLineEdit::setVisible);*/
+            QLineEdit* LineEdit = new QLineEdit(this);
+            m_vector.append(QPair<QPushButton*, QLineEdit*>(button, LineEdit));
+            m_form_layout->addRow(button, LineEdit);
+            LineEdit->setDisabled(true);
+            connect(button, &QPushButton::toggled, LineEdit, &QLineEdit::setEnabled);
+            /*LineEdit->hide();
+            connect(button, &QPushButton::toggled, LineEdit, &QLineEdit::setVisible);*/
         }
     }
 
@@ -163,14 +163,14 @@ namespace hal
             button->setToolTip(arg.description);
             button->setCheckable(true);
             button->setChecked(arg.checked);
-            QLineEdit* line_edit = new QLineEdit(arg.value, this);
-            line_edit->setEnabled(arg.checked);
-            m_vector.append(QPair<QPushButton*, QLineEdit*>(button, line_edit));
-            m_form_layout->addRow(button, line_edit);
-            connect(button, &QPushButton::toggled, line_edit, &QLineEdit::setEnabled);
+            QLineEdit* LineEdit = new QLineEdit(arg.value, this);
+            LineEdit->setEnabled(arg.checked);
+            m_vector.append(QPair<QPushButton*, QLineEdit*>(button, LineEdit));
+            m_form_layout->addRow(button, LineEdit);
+            connect(button, &QPushButton::toggled, LineEdit, &QLineEdit::setEnabled);
 
             connect(button, &QPushButton::clicked, this, &plugin_arguments_widget::handle_button_clicked);
-            connect(line_edit, &QLineEdit::textEdited, this, &plugin_arguments_widget::handle_text_edited);
+            connect(LineEdit, &QLineEdit::textEdited, this, &plugin_arguments_widget::handle_text_edited);
         }
     }
 
@@ -195,13 +195,13 @@ namespace hal
     void plugin_arguments_widget::handle_text_edited(const QString& text)
     {
         QObject* sender      = QObject::sender();
-        QLineEdit* line_edit = static_cast<QLineEdit*>(sender);
-        //QString value = line_edit->text();
+        QLineEdit* LineEdit = static_cast<QLineEdit*>(sender);
+        //QString value = LineEdit->text();
 
         QString flag = "";
         for (auto& pair : m_vector)
         {
-            if (pair.second == line_edit)
+            if (pair.second == LineEdit)
             {
                 flag = pair.first->text();
                 break;

@@ -2,15 +2,15 @@
 
 namespace hal
 {
-    label_button::label_button(QWidget* parent, Qt::WindowFlags f) : QLabel(parent, f)
+    LabelButton::LabelButton(QWidget* parent, Qt::WindowFlags f) : QLabel(parent, f)
     {
     }
 
-    label_button::label_button(const QString& text, QWidget* parent, Qt::WindowFlags f) : QLabel(text, parent, f)
+    LabelButton::LabelButton(const QString& text, QWidget* parent, Qt::WindowFlags f) : QLabel(text, parent, f)
     {
     }
 
-    void label_button::mousePressEvent(QMouseEvent* event)
+    void LabelButton::mousePressEvent(QMouseEvent* event)
     {
         Q_UNUSED(event)
 

@@ -5,7 +5,7 @@
 
 namespace hal
 {
-    module_relay::module_relay(QObject* parent) : QObject(parent), m_model(new module_model())
+    module_relay::module_relay(QObject* parent) : QObject(parent), m_model(new ModuleModel())
     {
         connect(&g_netlist_relay, &netlist_relay::module_event, this, &module_relay::handle_module_event);
     }
@@ -57,7 +57,7 @@ namespace hal
             case module_event_handler::event::created: {
                 //< no associated_data
 
-                module_item* parent_item = m_module_items.value(object->get_parent_module()->get_id());
+                ModuleItem* parent_item = m_ModuleItems.value(object->get_parent_module()->get_id());
 
                 if (!parent_item)
                     return;    // SHOULD NOT BE POSSIBLE

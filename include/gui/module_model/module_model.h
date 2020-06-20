@@ -37,14 +37,14 @@
 
 namespace hal
 {
-    class module_item;
+    class ModuleItem;
 
-    class module_model : public QAbstractItemModel
+    class ModuleModel : public QAbstractItemModel
     {
         Q_OBJECT
 
     public:
-        explicit module_model(QObject* parent = nullptr);
+        explicit ModuleModel(QObject* parent = nullptr);
 
         // PURE VIRTUAL
         QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const override;
@@ -57,9 +57,9 @@ namespace hal
         Qt::ItemFlags flags(const QModelIndex& index) const override;
         QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 
-        module_item* get_item(const QModelIndex& index) const;
-        QModelIndex get_index(const module_item* const item) const;
-        module_item* get_item(const u32 module_id) const;
+        ModuleItem* get_item(const QModelIndex& index) const;
+        QModelIndex get_index(const ModuleItem* const item) const;
+        ModuleItem* get_item(const u32 module_id) const;
 
         void init();
         void clear();
@@ -72,9 +72,9 @@ namespace hal
         bool is_modifying();
 
     private:
-        module_item* m_top_module_item;
+        ModuleItem* m_top_ModuleItem;
 
-        QMap<u32, module_item*> m_module_items;
+        QMap<u32, ModuleItem*> m_ModuleItems;
 
         bool m_is_modifying;
     };

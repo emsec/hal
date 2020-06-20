@@ -33,8 +33,8 @@
 
 namespace hal
 {
-    class module_item;
-    class module_model;
+    class ModuleItem;
+    class ModuleModel;
     class Module;
 
     class netlist_relay : public QObject
@@ -49,7 +49,7 @@ namespace hal
 
         QColor get_module_color(const u32 id);
 
-        module_model* get_module_model();
+        ModuleModel* get_ModuleModel();
 
         void debug_change_module_name(const u32 id);
         void debug_change_module_color(const u32 id);
@@ -121,6 +121,6 @@ namespace hal
         QMap<u32, QString> m_gate_aliases;
         QMap<u32, QString> m_net_aliases;
 
-        module_model* m_module_model;
+        ModuleModel* m_ModuleModel;
     };
 }

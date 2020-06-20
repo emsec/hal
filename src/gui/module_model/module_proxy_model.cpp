@@ -5,7 +5,7 @@
 
 namespace hal
 {
-    module_proxy_model::module_proxy_model(QObject* parent) : QSortFilterProxyModel(parent)
+    ModuleProxyModel::ModuleProxyModel(QObject* parent) : QSortFilterProxyModel(parent)
     {
         // QTS PROXY MODELS ARE DUMB, IMPLEMENT CUSTOM SOLUTION OR SWITCH TO A DIFFERENT FILTER METHOD
 
@@ -14,10 +14,10 @@ namespace hal
         // STYLED DELEGATES USE THAT DATA STRUCTURE TO DRAW THEMSELVES
 
         m_sort_mechanism = gui_utility::sort_mechanism(g_settings_manager.get("navigation/sort_mechanism").toInt());
-        connect(&g_settings_relay, &settings_relay::setting_changed, this, &module_proxy_model::handle_global_setting_changed);
+        connect(&g_settings_relay, &settings_relay::setting_changed, this, &ModuleProxyModel::handle_global_setting_changed);
     }
 
-    bool module_proxy_model::filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const
+    bool ModuleProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const
     {
         if(!filterRegExp().isEmpty())
         {
@@ -27,23 +27,23 @@ namespace hal
             {
                 if (sourceModel()->data(source_index, filterRole()).toString().contains(filterRegExp()))
                 {
-                    static_cast<module_item*>(sourceModel()->index(sourceRow, 0, sourceParent).internalPointer())->set_highlighted(true);
+                    static_cast<ModuleItem*>(sourceModel()->index(sourceRow, 0, sourceParent).internalPointer())->set_highlighted(true);
                     return true;
                 }
                 else
                 {
-                    static_cast<module_item*>(sourceModel()->index(sourceRow, 0, sourceParent).internalPointer())->set_highlighted(false);
+                    static_cast<ModuleItem*>(sourceModel()->index(sourceRow, 0, sourceParent).internalPointer())->set_highlighted(false);
                     return false;
                 }
             }
         }
 
-        static_cast<module_item*>(sourceModel()->index(sourceRow, 0, sourceParent).internalPointer())->set_highlighted(false);
+        static_cast<ModuleItem*>(sourceModel()->index(sourceRow, 0, sourceParent).internalPointer())->set_highlighted(false);
         return true;
         //return QSortFilterProxyModel::filterAcceptsRow(sourceRow, sourceParent);
     }
 
-    bool module_proxy_model::lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const
+    bool ModuleProxyModel::lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const
     {
         QString name_left = source_left.data().toString();
         QString name_right = source_right.data().toString();
@@ -56,7 +56,7 @@ namespace hal
         return gui_utility::compare(m_sort_mechanism, name_left, name_right);
     }
 
-    void module_proxy_model::handle_global_setting_changed(void* sender, const QString& key, const QVariant& value)
+    void ModuleProxyModel::handle_global_setting_changed(void* sender, const QString& key, const QVariant& value)
     {
         Q_UNUSED(sender);
         if (key == "navigation/sort_mechanism")

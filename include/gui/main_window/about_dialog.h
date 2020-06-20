@@ -30,12 +30,12 @@
 
 namespace hal
 {
-    class about_dialog : public QDialog
+    class AboutDialog : public QDialog
     {
         Q_OBJECT
 
     public:
-        explicit about_dialog(QWidget* parent = 0);
+        explicit AboutDialog(QWidget* parent = 0);
 
     private:
         QVBoxLayout m_content_layout;

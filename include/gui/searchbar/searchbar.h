@@ -76,7 +76,7 @@ namespace hal
         QHBoxLayout* m_layout;
 
         QLabel* m_search_icon_label;
-        QLineEdit* m_line_edit;
+        QLineEdit* m_LineEdit;
         QLabel* m_clear_icon_label;
         QPushButton* m_mode_button;
         QToolButton* m_down_button;

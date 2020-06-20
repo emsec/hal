@@ -4,11 +4,11 @@
 
 namespace hal
 {
-    hal_widget::hal_widget(QWidget* parent) : QWidget(parent)
+    HalWidget::HalWidget(QWidget* parent) : QWidget(parent)
     {
     }
 
-    //void hal_widget::paintEvent(QPaintEvent* /*event*/)
+    //void HalWidget::paintEvent(QPaintEvent* /*event*/)
     //{
     //    QStyleOption opt;
     //    opt.init(this);
@@ -16,19 +16,19 @@ namespace hal
     //    style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
     //}
 
-    void hal_widget::setParent(QWidget* parent)
+    void HalWidget::setParent(QWidget* parent)
     {
         QWidget::setParent(parent);
         Q_EMIT parent_set_to(parent);
     }
 
-    void hal_widget::hide()
+    void HalWidget::hide()
     {
         QWidget::hide();
         Q_EMIT hidden();
     }
 
-    void hal_widget::show()
+    void HalWidget::show()
     {
         QWidget::show();
         Q_EMIT shown();

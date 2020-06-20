@@ -22,16 +22,16 @@
 
 namespace hal
 {
-    module_widget::module_widget(QWidget* parent) : ContentWidget("Modules", parent), m_tree_view(new module_tree_view(this)), m_module_proxy_model(new module_proxy_model(this))
+    module_widget::module_widget(QWidget* parent) : ContentWidget("Modules", parent), m_tree_view(new module_tree_view(this)), m_ModuleProxyModel(new ModuleProxyModel(this))
     {
         connect(m_tree_view, &QTreeView::customContextMenuRequested, this, &module_widget::handle_tree_view_context_menu_requested);
 
-        m_module_proxy_model->setFilterKeyColumn(-1);
-        m_module_proxy_model->setDynamicSortFilter(true);
-        m_module_proxy_model->setSourceModel(g_netlist_relay.get_module_model());
-        //m_module_proxy_model->setRecursiveFilteringEnabled(true);
-        m_module_proxy_model->setSortCaseSensitivity(Qt::CaseInsensitive);
-        m_tree_view->setModel(m_module_proxy_model);
+        m_ModuleProxyModel->setFilterKeyColumn(-1);
+        m_ModuleProxyModel->setDynamicSortFilter(true);
+        m_ModuleProxyModel->setSourceModel(g_netlist_relay.get_ModuleModel());
+        //m_ModuleProxyModel->setRecursiveFilteringEnabled(true);
+        m_ModuleProxyModel->setSortCaseSensitivity(Qt::CaseInsensitive);
+        m_tree_view->setModel(m_ModuleProxyModel);
         m_tree_view->setSortingEnabled(true);
         m_tree_view->sortByColumn(0, Qt::AscendingOrder);
         m_tree_view->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -88,7 +88,7 @@ namespace hal
         QRegExp* regex = new QRegExp(text);
         if (regex->isValid())
         {
-            m_module_proxy_model->setFilterRegExp(*regex);
+            m_ModuleProxyModel->setFilterRegExp(*regex);
             QString output = "navigation regular expression '" + text + "' entered.";
             log_info("user", output.toStdString());
         }
@@ -126,22 +126,22 @@ namespace hal
             open_module_in_view(index);
 
         if (clicked == &add_selection_action)
-            g_netlist_relay.debug_add_selection_to_module(get_module_item_from_index(index)->id());
+            g_netlist_relay.debug_add_selection_to_module(get_ModuleItem_from_index(index)->id());
 
         if (clicked == &add_child_action)
         {
-            g_netlist_relay.debug_add_child_module(get_module_item_from_index(index)->id());
+            g_netlist_relay.debug_add_child_module(get_ModuleItem_from_index(index)->id());
             m_tree_view->setExpanded(index, true);
         }
 
         if (clicked == &change_name_action)
-            g_netlist_relay.debug_change_module_name(get_module_item_from_index(index)->id());
+            g_netlist_relay.debug_change_module_name(get_ModuleItem_from_index(index)->id());
 
         if (clicked == &change_color_action)
-            g_netlist_relay.debug_change_module_color(get_module_item_from_index(index)->id());
+            g_netlist_relay.debug_change_module_color(get_ModuleItem_from_index(index)->id());
 
         if (clicked == &delete_action)
-            g_netlist_relay.debug_delete_module(get_module_item_from_index(index)->id());
+            g_netlist_relay.debug_delete_module(get_ModuleItem_from_index(index)->id());
     }
 
     void module_widget::handle_module_removed(std::shared_ptr<Module> module, u32 module_id)
@@ -160,7 +160,7 @@ namespace hal
         Q_UNUSED(selected)
         Q_UNUSED(deselected)
 
-        if (m_ignore_selection_change || g_netlist_relay.get_module_model()->is_modifying())
+        if (m_ignore_selection_change || g_netlist_relay.get_ModuleModel()->is_modifying())
             return;
 
         g_selection_relay.clear();
@@ -169,14 +169,14 @@ namespace hal
 
         for (const auto& index : current_selection)
         {
-            u32 module_id = get_module_item_from_index(index)->id();
+            u32 module_id = get_ModuleItem_from_index(index)->id();
             g_selection_relay.m_selected_modules.insert(module_id);
         }
 
         if (current_selection.size() == 1)
         {
             g_selection_relay.m_focus_type = selection_relay::item_type::module;
-            g_selection_relay.m_focus_id   = g_netlist_relay.get_module_model()->get_item(m_module_proxy_model->mapToSource(current_selection.first()))->id();
+            g_selection_relay.m_focus_id   = g_netlist_relay.get_ModuleModel()->get_item(m_ModuleProxyModel->mapToSource(current_selection.first()))->id();
         }
 
         g_selection_relay.relay_selection_changed(this);
@@ -189,7 +189,7 @@ namespace hal
 
     void module_widget::open_module_in_view(const QModelIndex& index)
     {
-        auto module = g_netlist->get_module_by_id(get_module_item_from_index(index)->id());
+        auto module = g_netlist->get_module_by_id(get_ModuleItem_from_index(index)->id());
 
         if (!module)
             return;
@@ -210,7 +210,7 @@ namespace hal
 
         for (auto module_id : g_selection_relay.m_selected_modules)
         {
-            QModelIndex index = m_module_proxy_model->mapFromSource(g_netlist_relay.get_module_model()->get_index(g_netlist_relay.get_module_model()->get_item(module_id)));
+            QModelIndex index = m_ModuleProxyModel->mapFromSource(g_netlist_relay.get_ModuleModel()->get_index(g_netlist_relay.get_ModuleModel()->get_item(module_id)));
             module_selection.select(index, index);
         }
 
@@ -219,8 +219,8 @@ namespace hal
         m_ignore_selection_change = false;
     }
 
-    module_item* module_widget::get_module_item_from_index(const QModelIndex& index)
+    ModuleItem* module_widget::get_ModuleItem_from_index(const QModelIndex& index)
     {
-        return g_netlist_relay.get_module_model()->get_item(m_module_proxy_model->mapToSource(index));
+        return g_netlist_relay.get_ModuleModel()->get_item(m_ModuleProxyModel->mapToSource(index));
     }
 }

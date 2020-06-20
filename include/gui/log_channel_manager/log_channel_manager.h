@@ -43,7 +43,7 @@ namespace hal
     {
         QString m_name;
 
-        log_entry m_entries[log_channel_manager_constants::max_entries];
+        log_entry m_entries[LogChannelManager_constants::max_entries];
 
         int m_entry_count;
         int m_first_entry;
@@ -54,15 +54,15 @@ namespace hal
         int unread_successes;
     };
 
-    class log_channel_manager
+    class LogChannelManager
     {
     public:
-        log_channel_manager();
+        LogChannelManager();
 
         void logmanager_callback(const spdlog::details::log_msg& msg);
 
     private:
         std::vector<log_channel*> m_fixed_channels;
-        log_channel* m_temporary_channels[log_channel_manager_constants::max_channels];
+        log_channel* m_temporary_channels[LogChannelManager_constants::max_channels];
     };
 }

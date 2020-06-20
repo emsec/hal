@@ -9,32 +9,32 @@
 
 namespace hal
 {
-    tree_module_model::tree_module_model(QObject* parent) : QAbstractItemModel(parent)
+    tree_ModuleModel::tree_ModuleModel(QObject* parent) : QAbstractItemModel(parent)
     {
         QVector<QVariant> rootHeaderData;
         rootHeaderData << "Name"
                        << "ID"
                        << "Type";
-        m_root_item = new tree_module_item(rootHeaderData);
+        m_root_item = new tree_ModuleItem(rootHeaderData);
         load_data_settings();
         setup_model_data();
     }
 
-    tree_module_model::~tree_module_model()
+    tree_ModuleModel::~tree_ModuleModel()
     {
         delete m_root_item;
     }
 
-    QVariant tree_module_model::data(const QModelIndex& index, int role) const
+    QVariant tree_ModuleModel::data(const QModelIndex& index, int role) const
     {
         if (!index.isValid())
             return QVariant();
 
         // UserRole is mapped to "is a structure element?"
         if (role == Qt::UserRole)
-            return get_item(index)->get_type() == tree_module_item::item_type::structure;
+            return get_item(index)->get_type() == tree_ModuleItem::item_type::structure;
 
-        if (get_item(index)->get_type() == tree_module_item::item_type::structure && index.column() == 0)
+        if (get_item(index)->get_type() == tree_ModuleItem::item_type::structure && index.column() == 0)
         {
             if (role == Qt::FontRole)
                 return m_structured_font;
@@ -46,11 +46,11 @@ namespace hal
         if (role != Qt::DisplayRole)
             return QVariant();
 
-        tree_module_item* item = get_item(index);
+        tree_ModuleItem* item = get_item(index);
         return item->data(index.column());
     }
 
-    QVariant tree_module_model::headerData(int section, Qt::Orientation orientation, int role) const
+    QVariant tree_ModuleModel::headerData(int section, Qt::Orientation orientation, int role) const
     {
         if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
             return m_root_item->data(section);
@@ -58,13 +58,13 @@ namespace hal
         return QVariant();
     }
 
-    QModelIndex tree_module_model::index(int row, int column, const QModelIndex& parent) const
+    QModelIndex tree_ModuleModel::index(int row, int column, const QModelIndex& parent) const
     {
         if (parent.isValid() && parent.column() != 0)
             return QModelIndex();
 
-        tree_module_item* parentItem = get_item(parent);
-        tree_module_item* childItem  = parentItem->get_child(row);
+        tree_ModuleItem* parentItem = get_item(parent);
+        tree_ModuleItem* childItem  = parentItem->get_child(row);
 
         if (childItem)
             return createIndex(row, column, childItem);
@@ -72,13 +72,13 @@ namespace hal
             return QModelIndex();
     }
 
-    QModelIndex tree_module_model::parent(const QModelIndex& index) const
+    QModelIndex tree_ModuleModel::parent(const QModelIndex& index) const
     {
         if (!index.isValid())
             return QModelIndex();
 
-        tree_module_item* childItem  = get_item(index);
-        tree_module_item* parentItem = childItem->get_parent();
+        tree_ModuleItem* childItem  = get_item(index);
+        tree_ModuleItem* parentItem = childItem->get_parent();
 
         if (parentItem == m_root_item)
             return QModelIndex();
@@ -86,7 +86,7 @@ namespace hal
         return createIndex(parentItem->get_row_number(), 0, parentItem);
     }
 
-    Qt::ItemFlags tree_module_model::flags(const QModelIndex& index) const
+    Qt::ItemFlags tree_ModuleModel::flags(const QModelIndex& index) const
     {
         if (!index.isValid())
             return 0;
@@ -94,56 +94,56 @@ namespace hal
         return Qt::ItemIsEditable | QAbstractItemModel::flags(index);
     }
 
-    int tree_module_model::rowCount(const QModelIndex& parent) const
+    int tree_ModuleModel::rowCount(const QModelIndex& parent) const
     {
-        tree_module_item* item = get_item(parent);
+        tree_ModuleItem* item = get_item(parent);
         return item->get_child_count();
     }
 
-    int tree_module_model::columnCount(const QModelIndex& parent) const
+    int tree_ModuleModel::columnCount(const QModelIndex& parent) const
     {
         Q_UNUSED(parent)
         return m_root_item->get_column_count();
     }
 
-    QModelIndexList tree_module_model::get_corresponding_indexes(const QList<u32>& gate_ids, const QList<u32>& net_ids)
+    QModelIndexList tree_ModuleModel::get_corresponding_indexes(const QList<u32>& gate_ids, const QList<u32>& net_ids)
     {
         QModelIndexList list;
         for (int i = 0; i < m_gates_item->get_child_count(); i++)
         {
-            tree_module_item* current_item = m_gates_item->get_child(i);
+            tree_ModuleItem* current_item = m_gates_item->get_child(i);
             if (gate_ids.contains(current_item->data(1).toInt()))
                 list.append(get_modelindexes_for_row(current_item));
         }
         for (int i = 2; i < m_nets_item->get_child_count(); i++)    //first two items are the global input/output items
         {
-            tree_module_item* current_item = m_nets_item->get_child(i);
+            tree_ModuleItem* current_item = m_nets_item->get_child(i);
             if (net_ids.contains(current_item->data(1).toInt()))
                 list.append(get_modelindexes_for_row(current_item));
         }
         return list;
     //    for (int i = 0; i < m_global_output_nets_item->get_child_count(); i++)
     //    {
-    //        tree_module_item* current_item = m_global_output_nets_item->get_child(i);
+    //        tree_ModuleItem* current_item = m_global_output_nets_item->get_child(i);
     //        if (net_ids.contains(current_item->data(1).toInt()))
     //            list.append(get_modelindexes_for_row(current_item));
     //    }
     //    for (int i = 0; i < m_global_input_nets_item->get_child_count(); i++)
     //    {
-    //        tree_module_item* current_item = m_global_input_nets_item->get_child(i);
+    //        tree_ModuleItem* current_item = m_global_input_nets_item->get_child(i);
     //        if (net_ids.contains(current_item->data(1).toInt()))
     //            list.append(get_modelindexes_for_row(current_item));
     //    }
     //    for (int i = 0; i < m_modules_item->get_child_count(); i++)
     //    {
-    //        tree_module_item* current_item = m_modules_item->get_child(i);
+    //        tree_ModuleItem* current_item = m_modules_item->get_child(i);
     //        if (module_ids.contains(current_item->data(1).toInt()))
     //            list.append(get_modelindexes_for_row(current_item));
     //    }
     //    return list;
     }
 
-    void tree_module_model::update(u32 module_id)
+    void tree_ModuleModel::update(u32 module_id)
     {
         int gates_child_count = m_gates_item->get_child_count();
         int nets_child_count = m_nets_item->get_child_count();
@@ -167,37 +167,37 @@ namespace hal
 
         for(const std::shared_ptr<Gate> &_g : gates)
         {
-            tree_module_item* item = new tree_module_item(QVector<QVariant>() << QString::fromStdString(_g->get_name()) << _g->get_id() << QString::fromStdString(_g->get_type()->get_name()), tree_module_item::item_type::gate, m_gates_item);
+            tree_ModuleItem* item = new tree_ModuleItem(QVector<QVariant>() << QString::fromStdString(_g->get_name()) << _g->get_id() << QString::fromStdString(_g->get_type()->get_name()), tree_ModuleItem::item_type::gate, m_gates_item);
             insert_item(m_gates_item, m_gates_item->get_child_count(), item);
         }
 
         for(const std::shared_ptr<Net> &_n : nets)
         {
-            tree_module_item* item = new tree_module_item(QVector<QVariant>() << QString::fromStdString(_n->get_name()) << _n->get_id() << "", tree_module_item::item_type::net, m_nets_item);
+            tree_ModuleItem* item = new tree_ModuleItem(QVector<QVariant>() << QString::fromStdString(_n->get_name()) << _n->get_id() << "", tree_ModuleItem::item_type::net, m_nets_item);
             insert_item(m_nets_item, m_nets_item->get_child_count(), item);
         }
     }
 
-    void tree_module_model::setup_model_data()
+    void tree_ModuleModel::setup_model_data()
     {
-        m_gates_item = new tree_module_item(QVector<QVariant>() << "Gates" << "" << "", tree_module_item::item_type::structure, m_root_item);
-        m_nets_item = new tree_module_item(QVector<QVariant>() << "Nets" << "" << "", tree_module_item::item_type::structure, m_root_item);
+        m_gates_item = new tree_ModuleItem(QVector<QVariant>() << "Gates" << "" << "", tree_ModuleItem::item_type::structure, m_root_item);
+        m_nets_item = new tree_ModuleItem(QVector<QVariant>() << "Nets" << "" << "", tree_ModuleItem::item_type::structure, m_root_item);
         m_root_item->insert_child(0, m_gates_item);
         m_root_item->insert_child(1, m_nets_item);
     }
 
-    tree_module_item* tree_module_model::get_item(const QModelIndex& index) const
+    tree_ModuleItem* tree_ModuleModel::get_item(const QModelIndex& index) const
     {
         if (index.isValid())
         {
-            tree_module_item* item = static_cast<tree_module_item*>(index.internalPointer());
+            tree_ModuleItem* item = static_cast<tree_ModuleItem*>(index.internalPointer());
             if (item)
                 return item;
         }
         return m_root_item;
     }
 
-    QModelIndex tree_module_model::get_modelindex(tree_module_item* item)
+    QModelIndex tree_ModuleModel::get_modelindex(tree_ModuleItem* item)
     {
         if (item == m_root_item)
             return QModelIndex();
@@ -207,7 +207,7 @@ namespace hal
         return createIndex(row, column, item);
     }
 
-    QList<QModelIndex> tree_module_model::get_modelindexes_for_row(tree_module_item* item)
+    QList<QModelIndex> tree_ModuleModel::get_modelindexes_for_row(tree_ModuleItem* item)
     {
         QList<QModelIndex> row_indexes;
         if (item == m_root_item)
@@ -219,7 +219,7 @@ namespace hal
         return row_indexes;
     }
 
-    void tree_module_model::insert_item(tree_module_item* parent, int position, tree_module_item* item)
+    void tree_ModuleModel::insert_item(tree_ModuleItem* parent, int position, tree_ModuleItem* item)
     {
         const QModelIndex parent_index = get_modelindex(parent);
         int firstRow                   = position;
@@ -230,9 +230,9 @@ namespace hal
         endInsertRows();
     }
 
-    void tree_module_model::remove_item(tree_module_item* item)
+    void tree_ModuleModel::remove_item(tree_ModuleItem* item)
     {
-        tree_module_item* parent  = item->get_parent();
+        tree_ModuleItem* parent  = item->get_parent();
         const QModelIndex parentIndex = get_modelindex(parent);
         int pos                       = item->get_row_number();
         int firstRow                  = pos;
@@ -242,7 +242,7 @@ namespace hal
         endRemoveRows();
     }
 
-    void tree_module_model::load_data_settings()
+    void tree_ModuleModel::load_data_settings()
     {
         m_structured_font = QFont();
         m_structured_font.setBold(true);

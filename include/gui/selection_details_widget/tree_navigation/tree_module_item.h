@@ -29,7 +29,7 @@
 
 namespace hal
 {
-    class tree_module_item
+    class tree_ModuleItem
     {
     public:
         enum class item_type
@@ -41,29 +41,29 @@ namespace hal
             ignore    = 4
         };
 
-        tree_module_item(const QVector<QVariant>& data, item_type type = item_type::ignore, tree_module_item* parent = 0);
-        ~tree_module_item();
+        tree_ModuleItem(const QVector<QVariant>& data, item_type type = item_type::ignore, tree_ModuleItem* parent = 0);
+        ~tree_ModuleItem();
 
         //information access
         int get_child_count() const;
         int get_column_count() const;
         int get_row_number() const;
-        tree_module_item* get_child(int row);
-        tree_module_item* get_parent();
+        tree_ModuleItem* get_child(int row);
+        tree_ModuleItem* get_parent();
         QVariant data(int column) const;
         item_type get_type();
 
         //information manipulation
-        bool insert_child(int row_position, tree_module_item* item);
+        bool insert_child(int row_position, tree_ModuleItem* item);
         bool set_data(int column, const QVariant& value);
         bool remove_all_children();
         bool remove_children(int position, int count);
-        bool remove_child(tree_module_item* item);
+        bool remove_child(tree_ModuleItem* item);
 
     private:
-        QList<tree_module_item*> m_child_items;
+        QList<tree_ModuleItem*> m_child_items;
         QVector<QVariant> m_data;
-        tree_module_item* m_parent_item;
+        tree_ModuleItem* m_parent_item;
         item_type m_type;
     };
 }

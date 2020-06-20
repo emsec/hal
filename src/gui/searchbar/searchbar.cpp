@@ -15,7 +15,7 @@
 namespace hal
 {
     searchbar::searchbar(QWidget* parent)
-        : QFrame(parent), m_layout(new QHBoxLayout()), m_search_icon_label(new QLabel()), m_line_edit(new QLineEdit()), m_clear_icon_label(new QLabel()), m_mode_button(new QPushButton()),
+        : QFrame(parent), m_layout(new QHBoxLayout()), m_search_icon_label(new QLabel()), m_LineEdit(new QLineEdit()), m_clear_icon_label(new QLabel()), m_mode_button(new QPushButton()),
           m_down_button(new QToolButton()), m_up_button(new QToolButton())
     {
         setLayout(m_layout);
@@ -26,7 +26,7 @@ namespace hal
         ensurePolished();
 
         m_search_icon_label->setPixmap(gui_utility::get_styled_svg_icon(m_search_icon_style, m_search_icon).pixmap(QSize(16, 16)));
-        m_line_edit->setPlaceholderText("Search");
+        m_LineEdit->setPlaceholderText("Search");
         m_clear_icon_label->setPixmap(gui_utility::get_styled_svg_icon(m_clear_icon_style, m_clear_icon).pixmap(QSize(10, 10)));
         m_mode_button->setText("Mode");
 
@@ -35,16 +35,16 @@ namespace hal
         m_up_button->setIcon(QIcon(":/icons/arrow-up"));
 
         m_search_icon_label->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::MinimumExpanding);
-        m_line_edit->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+        m_LineEdit->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
         m_mode_button->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::MinimumExpanding);
 
         m_layout->addWidget(m_search_icon_label);
-        m_layout->addWidget(m_line_edit);
+        m_layout->addWidget(m_LineEdit);
         //m_layout->addWidget(m_clear_icon_label);
         //m_layout.addWidget(m_button);
 
         //Hack solution, because QPushButton not working as expected, fix
-        label_button* hack = new label_button("Mode", this);
+        LabelButton* hack = new LabelButton("Mode", this);
         hack->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::MinimumExpanding);
         m_layout->addWidget(hack);
 
@@ -53,11 +53,11 @@ namespace hal
 
         setFrameStyle(QFrame::NoFrame);
 
-        connect(m_line_edit, &QLineEdit::textEdited, this, &searchbar::handle_text_edited);
-        connect(m_line_edit, &QLineEdit::returnPressed, this, &searchbar::handle_return_pressed);
-        connect(hack, &label_button::clicked, this, &searchbar::handle_mode_clicked);
+        connect(m_LineEdit, &QLineEdit::textEdited, this, &searchbar::handle_text_edited);
+        connect(m_LineEdit, &QLineEdit::returnPressed, this, &searchbar::handle_return_pressed);
+        connect(hack, &LabelButton::clicked, this, &searchbar::handle_mode_clicked);
 
-        setFocusProxy(m_line_edit);
+        setFocusProxy(m_LineEdit);
     }
 
     QString searchbar::search_icon() const
@@ -102,7 +102,7 @@ namespace hal
 
     void searchbar::set_placeholder_text(const QString& text)
     {
-        m_line_edit->setPlaceholderText(text);
+        m_LineEdit->setPlaceholderText(text);
     }
 
     void searchbar::set_mode_button_text(const QString& text)
@@ -112,13 +112,13 @@ namespace hal
 
     void searchbar::clear()
     {
-        m_line_edit->clear();
+        m_LineEdit->clear();
         repolish();
     }
 
     QString searchbar::get_current_text()
     {
-        return m_line_edit->text();
+        return m_LineEdit->text();
     }
 
     void searchbar::repolish()
@@ -131,8 +131,8 @@ namespace hal
         s->unpolish(m_search_icon_label);
         s->polish(m_search_icon_label);
 
-        s->unpolish(m_line_edit);
-        s->polish(m_line_edit);
+        s->unpolish(m_LineEdit);
+        s->polish(m_LineEdit);
 
         s->unpolish(m_mode_button);
         s->polish(m_mode_button);

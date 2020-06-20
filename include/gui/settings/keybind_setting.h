@@ -44,9 +44,9 @@ namespace hal
         //virtual void rollback() Q_DECL_OVERRIDE;
 
     private:
-        keybind_edit* m_keybind_edit;
+        KeybindEdit* m_KeybindEdit;
         void on_keybind_changed();
-        void on_keybind_edit_rejected();
+        void on_KeybindEdit_rejected();
 
     };
 }

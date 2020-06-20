@@ -47,7 +47,7 @@ namespace hal
 
         void add_window();
         void remove_window(hal_window* window);
-        void set_main_window(hal_window* window);
+        void set_MainWindow(hal_window* window);
 
         void lock_all();
         void unlock_all();
@@ -73,7 +73,7 @@ namespace hal
         void handle_action_about();
 
     private:
-        hal_window* m_main_window;
+        hal_window* m_MainWindow;
 
         QVector<hal_window*> m_windows;
 

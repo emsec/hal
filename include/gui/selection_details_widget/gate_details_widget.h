@@ -111,7 +111,7 @@ namespace hal
         QTableWidgetItem* m_name_item;
         QTableWidgetItem* m_type_item;
         QTableWidgetItem* m_id_item;
-        QTableWidgetItem* m_module_item;
+        QTableWidgetItem* m_ModuleItem;
 
         //(2) input-pins section
         QTableWidget* m_input_pins_table;

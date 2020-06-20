@@ -44,10 +44,10 @@
 
 namespace hal
 {
-    main_window::main_window(QWidget* parent) : QWidget(parent), m_schedule_widget(new plugin_schedule_widget()), m_action_schedule(new HalAction(this)), m_action_content(new HalAction(this))
+    MainWindow::MainWindow(QWidget* parent) : QWidget(parent), m_schedule_widget(new plugin_schedule_widget()), m_action_schedule(new HalAction(this)), m_action_content(new HalAction(this))
     {
         ensurePolished();    // ADD REPOLISH METHOD
-        connect(FileManager::get_instance(), &FileManager::file_opened, this, &main_window::handle_file_opened);
+        connect(FileManager::get_instance(), &FileManager::file_opened, this, &MainWindow::handle_file_opened);
 
         m_layout = new QVBoxLayout(this);
         m_layout->setContentsMargins(0, 0, 0, 0);
@@ -203,26 +203,26 @@ namespace hal
         m_menu_edit->setTitle("Edit");
         m_menu_help->setTitle("Help");
 
-        m_about_dialog = new about_dialog(this);
+        m_AboutDialog = new AboutDialog(this);
         m_plugin_model = new plugin_model(this);
 
         g_python_context = std::make_unique<python_context>();
 
         g_content_manager = new HalContentManager(this);
 
-        connect(m_action_new, &HalAction::triggered, this, &main_window::handle_action_new);
-        connect(m_action_open, &HalAction::triggered, this, &main_window::handle_action_open);
-        connect(m_action_about, &HalAction::triggered, m_about_dialog, &about_dialog::exec);
-        connect(m_action_schedule, &HalAction::triggered, this, &main_window::toggle_schedule);
-        connect(m_action_settings, &HalAction::triggered, this, &main_window::toggle_settings);
-        connect(m_settings, &main_settings_widget::close, this, &main_window::close_settings);
-        connect(m_action_save, &HalAction::triggered, this, &main_window::handle_save_triggered);
+        connect(m_action_new, &HalAction::triggered, this, &MainWindow::handle_action_new);
+        connect(m_action_open, &HalAction::triggered, this, &MainWindow::handle_action_open);
+        connect(m_action_about, &HalAction::triggered, m_AboutDialog, &AboutDialog::exec);
+        connect(m_action_schedule, &HalAction::triggered, this, &MainWindow::toggle_schedule);
+        connect(m_action_settings, &HalAction::triggered, this, &MainWindow::toggle_settings);
+        connect(m_settings, &main_settings_widget::close, this, &MainWindow::close_settings);
+        connect(m_action_save, &HalAction::triggered, this, &MainWindow::handle_save_triggered);
         //debug
-        connect(m_action_close, &HalAction::triggered, this, &main_window::handle_action_closed);
+        connect(m_action_close, &HalAction::triggered, this, &MainWindow::handle_action_closed);
 
         connect(m_action_run_schedule, &HalAction::triggered, plugin_schedule_manager::get_instance(), &plugin_schedule_manager::run_schedule);
 
-        connect(this, &main_window::save_triggered, g_content_manager, &HalContentManager::handle_save_triggered);
+        connect(this, &MainWindow::save_triggered, g_content_manager, &HalContentManager::handle_save_triggered);
 
         restore_state();
 
@@ -236,169 +236,169 @@ namespace hal
         //Q_UNUSED(o)
     }
 
-    QString main_window::hal_icon_path() const
+    QString MainWindow::hal_icon_path() const
     {
         return m_hal_icon_path;
     }
 
-    QString main_window::hal_icon_style() const
+    QString MainWindow::hal_icon_style() const
     {
         return m_hal_icon_style;
     }
 
-    QString main_window::new_file_icon_path() const
+    QString MainWindow::new_file_icon_path() const
     {
         return m_new_file_icon_path;
     }
 
-    QString main_window::new_file_icon_style() const
+    QString MainWindow::new_file_icon_style() const
     {
         return m_new_file_icon_style;
     }
 
-    QString main_window::open_icon_path() const
+    QString MainWindow::open_icon_path() const
     {
         return m_open_icon_path;
     }
 
-    QString main_window::open_icon_style() const
+    QString MainWindow::open_icon_style() const
     {
         return m_open_icon_style;
     }
 
-    QString main_window::save_icon_path() const
+    QString MainWindow::save_icon_path() const
     {
         return m_save_icon_path;
     }
 
-    QString main_window::save_icon_style() const
+    QString MainWindow::save_icon_style() const
     {
         return m_save_icon_style;
     }
 
-    QString main_window::schedule_icon_path() const
+    QString MainWindow::schedule_icon_path() const
     {
         return m_schedule_icon_path;
     }
 
-    QString main_window::schedule_icon_style() const
+    QString MainWindow::schedule_icon_style() const
     {
         return m_schedule_icon_style;
     }
 
-    QString main_window::run_icon_path() const
+    QString MainWindow::run_icon_path() const
     {
         return m_run_icon_path;
     }
 
-    QString main_window::run_icon_style() const
+    QString MainWindow::run_icon_style() const
     {
         return m_run_icon_style;
     }
 
-    QString main_window::content_icon_path() const
+    QString MainWindow::content_icon_path() const
     {
         return m_content_icon_path;
     }
 
-    QString main_window::content_icon_style() const
+    QString MainWindow::content_icon_style() const
     {
         return m_content_icon_style;
     }
 
-    QString main_window::settings_icon_path() const
+    QString MainWindow::settings_icon_path() const
     {
         return m_settings_icon_path;
     }
 
-    QString main_window::settings_icon_style() const
+    QString MainWindow::settings_icon_style() const
     {
         return m_settings_icon_style;
     }
 
-    void main_window::set_hal_icon_path(const QString& path)
+    void MainWindow::set_hal_icon_path(const QString& path)
     {
         m_hal_icon_path = path;
     }
 
-    void main_window::set_hal_icon_style(const QString& style)
+    void MainWindow::set_hal_icon_style(const QString& style)
     {
         m_hal_icon_style = style;
     }
 
-    void main_window::set_new_file_icon_path(const QString& path)
+    void MainWindow::set_new_file_icon_path(const QString& path)
     {
         m_new_file_icon_path = path;
     }
 
-    void main_window::set_new_file_icon_style(const QString& style)
+    void MainWindow::set_new_file_icon_style(const QString& style)
     {
         m_new_file_icon_style = style;
     }
 
-    void main_window::set_open_icon_path(const QString& path)
+    void MainWindow::set_open_icon_path(const QString& path)
     {
         m_open_icon_path = path;
     }
 
-    void main_window::set_open_icon_style(const QString& style)
+    void MainWindow::set_open_icon_style(const QString& style)
     {
         m_open_icon_style = style;
     }
 
-    void main_window::set_save_icon_path(const QString& path)
+    void MainWindow::set_save_icon_path(const QString& path)
     {
         m_save_icon_path = path;
     }
 
-    void main_window::set_save_icon_style(const QString& style)
+    void MainWindow::set_save_icon_style(const QString& style)
     {
         m_save_icon_style = style;
     }
 
-    void main_window::set_schedule_icon_path(const QString& path)
+    void MainWindow::set_schedule_icon_path(const QString& path)
     {
         m_schedule_icon_path = path;
     }
 
-    void main_window::set_schedule_icon_style(const QString& style)
+    void MainWindow::set_schedule_icon_style(const QString& style)
     {
         m_schedule_icon_style = style;
     }
 
-    void main_window::set_run_icon_path(const QString& path)
+    void MainWindow::set_run_icon_path(const QString& path)
     {
         m_run_icon_path = path;
     }
 
-    void main_window::set_run_icon_style(const QString& style)
+    void MainWindow::set_run_icon_style(const QString& style)
     {
         m_run_icon_style = style;
     }
 
-    void main_window::set_content_icon_path(const QString& path)
+    void MainWindow::set_content_icon_path(const QString& path)
     {
         m_content_icon_path = path;
     }
 
-    void main_window::set_content_icon_style(const QString& style)
+    void MainWindow::set_content_icon_style(const QString& style)
     {
         m_content_icon_style = style;
     }
 
-    void main_window::set_settings_icon_path(const QString& path)
+    void MainWindow::set_settings_icon_path(const QString& path)
     {
         m_settings_icon_path = path;
     }
 
-    void main_window::set_settings_icon_style(const QString& style)
+    void MainWindow::set_settings_icon_style(const QString& style)
     {
         m_settings_icon_style = style;
     }
 
     extern void run_main(const QString file_name, const QList<QString> plugins);
 
-    void main_window::run_plugin_triggered(const QString& name)
+    void MainWindow::run_plugin_triggered(const QString& name)
     {
         if (!FileManager::get_instance()->file_open())
         {
@@ -415,7 +415,7 @@ namespace hal
     }
 
     // GENERALIZE TOGGLE METHODS
-    void main_window::toggle_schedule()
+    void MainWindow::toggle_schedule()
     {
         if (m_stacked_widget->currentWidget() == m_schedule_widget)
         {
@@ -428,12 +428,12 @@ namespace hal
             m_stacked_widget->setCurrentWidget(m_schedule_widget);
     }
 
-    void main_window::on_action_close_document_triggered()
+    void MainWindow::on_action_close_document_triggered()
     {
         //m_layout_area->remove_content();
     }
 
-    void main_window::toggle_settings()
+    void MainWindow::toggle_settings()
     {
         if (m_stacked_widget->currentWidget() == m_settings)
         {
@@ -443,7 +443,7 @@ namespace hal
             m_stacked_widget->setCurrentWidget(m_settings);
     }
 
-    void main_window::close_settings()
+    void MainWindow::close_settings()
     {
         if (!m_settings->handle_about_to_close())
             return;
@@ -453,7 +453,7 @@ namespace hal
             m_stacked_widget->setCurrentWidget(m_welcome_screen);
     }
 
-    void main_window::handle_action_new()
+    void MainWindow::handle_action_new()
     {
         if (g_netlist != nullptr)
         {
@@ -491,7 +491,7 @@ namespace hal
         }
     }
 
-    void main_window::handle_action_open()
+    void MainWindow::handle_action_open()
     {
         if (g_netlist != nullptr)
         {
@@ -521,7 +521,7 @@ namespace hal
         }
     }
 
-    void main_window::handle_file_opened(const QString& file_name)
+    void MainWindow::handle_file_opened(const QString& file_name)
     {
         Q_UNUSED(file_name)
         if (m_stacked_widget->currentWidget() == m_welcome_screen)
@@ -532,7 +532,7 @@ namespace hal
         g_python_context->update_netlist();
     }
 
-    void main_window::handle_save_triggered()
+    void MainWindow::handle_save_triggered()
     {
         if (g_netlist)
         {
@@ -565,16 +565,16 @@ namespace hal
         }
     }
 
-    void main_window::handle_action_closed()
+    void MainWindow::handle_action_closed()
     {
     }
 
-    void main_window::on_action_quit_triggered()
+    void MainWindow::on_action_quit_triggered()
     {
         close();
     }
 
-    void main_window::closeEvent(QCloseEvent* event)
+    void MainWindow::closeEvent(QCloseEvent* event)
     {
         //check for unsaved changes and show confirmation dialog
         if (g_file_status_manager.modified_files_existing())
@@ -620,26 +620,26 @@ namespace hal
         qApp->quit();
     }
 
-    void main_window::restore_state()
+    void MainWindow::restore_state()
     {
-        QPoint pos = g_settings_manager.get("main_window/position", QPoint(0, 0)).toPoint();
+        QPoint pos = g_settings_manager.get("MainWindow/position", QPoint(0, 0)).toPoint();
         move(pos);
         QRect rect = QApplication::desktop()->screenGeometry();
-        QSize size = g_settings_manager.get("main_window/size", QSize(rect.width(), rect.height())).toSize();
+        QSize size = g_settings_manager.get("MainWindow/size", QSize(rect.width(), rect.height())).toSize();
         resize(size);
         //restore state of all subwindows
         m_layout_area->init_splitter_size(size);
     }
 
-    void main_window::save_state()
+    void MainWindow::save_state()
     {
-        g_settings_manager.update("main_window/position", pos());
-        g_settings_manager.update("main_window/size", size());
+        g_settings_manager.update("MainWindow/position", pos());
+        g_settings_manager.update("MainWindow/size", size());
         //save state of all subwindows and everything else that might need to be restored on the next program start
         g_settings_manager.sync();
     }
 
-    void main_window::add_content(ContentWidget* widget, int index, content_anchor anchor)
+    void MainWindow::add_content(ContentWidget* widget, int index, content_anchor anchor)
     {
         m_layout_area->add_content(widget, index, anchor);
     }

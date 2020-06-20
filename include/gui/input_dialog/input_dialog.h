@@ -33,11 +33,11 @@
 
 namespace hal
 {
-    class input_dialog : public QDialog
+    class InputDialog : public QDialog
     {
         public:
-            input_dialog(QWidget* parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
-            input_dialog(const QString& window_title, const QString& info_text, const QString& input_text, QWidget* parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
+            InputDialog(QWidget* parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
+            InputDialog(const QString& window_title, const QString& info_text, const QString& input_text, QWidget* parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
 
             void set_window_title(const QString& title);
 

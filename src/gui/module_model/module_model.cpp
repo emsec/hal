@@ -4,26 +4,26 @@
 
 #include "gui/gui_globals.h"
 #include "gui/gui_utils/graphics.h"
-#include "gui/module_model/module_item.h"
+//#include "gui/ModuleModel/ModuleItem.h"
 
 #include "netlist/gate.h"
 #include "netlist/net.h"
 
 namespace hal
 {
-    module_model::module_model(QObject* parent) : QAbstractItemModel(parent), m_top_module_item(nullptr)
+    ModuleModel::ModuleModel(QObject* parent) : QAbstractItemModel(parent), m_top_ModuleItem(nullptr)
     {
     }
 
-    QModelIndex module_model::index(int row, int column, const QModelIndex& parent) const
+    QModelIndex ModuleModel::index(int row, int column, const QModelIndex& parent) const
     {
         // BEHAVIOR FOR ILLEGAL INDICES IS UNDEFINED
         // SEE QT DOCUMENTATION
 
         if (!parent.isValid())
         {
-            if (row == 0 && column == 0 && m_top_module_item)
-                return createIndex(0, 0, m_top_module_item);
+            if (row == 0 && column == 0 && m_top_ModuleItem)
+                return createIndex(0, 0, m_top_ModuleItem);
             else
                 return QModelIndex();
         }
@@ -31,9 +31,9 @@ namespace hal
         if (column != 0 || parent.column() != 0)
             return QModelIndex();
 
-        module_item* parent_item = get_item(parent);
+        ModuleItem* parent_item = get_item(parent);
 
-        module_item* child_item = static_cast<module_item*>(parent_item)->child(row);
+        ModuleItem* child_item = static_cast<ModuleItem*>(parent_item)->child(row);
         assert(child_item);
 
         return createIndex(row, column, child_item);
@@ -46,8 +46,8 @@ namespace hal
         //    if (parent.isValid() && parent.column() != 0)
         //        return QModelIndex();
 
-        //    module_item* parent_item = get_item(parent);
-        //    module_item* child_item = parent_item->child(row);
+        //    ModuleItem* parent_item = get_item(parent);
+        //    ModuleItem* child_item = parent_item->child(row);
 
         //    if (child_item)
         //        return createIndex(row, column, child_item);
@@ -55,24 +55,24 @@ namespace hal
         //        return QModelIndex();
     }
 
-    QModelIndex module_model::parent(const QModelIndex& index) const
+    QModelIndex ModuleModel::parent(const QModelIndex& index) const
     {
         if (!index.isValid())
             return QModelIndex();
 
-        module_item* item = get_item(index);
+        ModuleItem* item = get_item(index);
 
-        if (item == m_top_module_item)
+        if (item == m_top_ModuleItem)
             return QModelIndex();
 
-        module_item* parent_item = item->parent();
+        ModuleItem* parent_item = item->parent();
         return createIndex(parent_item->row(), 0, parent_item);
 
         //    if (!index.isValid())
         //        return QModelIndex();
 
-        //    module_item* child_item  = get_item(index);
-        //    module_item* parent_item = child_item->parent();
+        //    ModuleItem* child_item  = get_item(index);
+        //    ModuleItem* parent_item = child_item->parent();
 
         //    if (parent_item == m_root_item)
         //        return QModelIndex();
@@ -80,7 +80,7 @@ namespace hal
         //    return createIndex(parent_item->row(), 0, parent_item);
     }
 
-    int module_model::rowCount(const QModelIndex& parent) const
+    int ModuleModel::rowCount(const QModelIndex& parent) const
     {
         if (!parent.isValid())    // ??
             return 1;
@@ -88,24 +88,24 @@ namespace hal
         if (parent.column() != 0)
             return 0;
 
-        module_item* parent_item = get_item(parent);
+        ModuleItem* parent_item = get_item(parent);
 
         return parent_item->childCount();
     }
 
-    int module_model::columnCount(const QModelIndex& parent) const
+    int ModuleModel::columnCount(const QModelIndex& parent) const
     {
         Q_UNUSED(parent)
 
         return 1;
     }
 
-    QVariant module_model::data(const QModelIndex& index, int role) const
+    QVariant ModuleModel::data(const QModelIndex& index, int role) const
     {
         if (!index.isValid())
             return QVariant();
 
-        module_item* item = static_cast<module_item*>(index.internalPointer());
+        ModuleItem* item = static_cast<ModuleItem*>(index.internalPointer());
 
         if (!item)
             return QVariant();
@@ -140,7 +140,7 @@ namespace hal
         return QVariant();
     }
 
-    Qt::ItemFlags module_model::flags(const QModelIndex& index) const
+    Qt::ItemFlags ModuleModel::flags(const QModelIndex& index) const
     {
         if (!index.isValid())
             return 0;
@@ -148,7 +148,7 @@ namespace hal
         return QAbstractItemModel::flags(index);
     }
 
-    QVariant module_model::headerData(int section, Qt::Orientation orientation, int role) const
+    QVariant ModuleModel::headerData(int section, Qt::Orientation orientation, int role) const
     {
         Q_UNUSED(section)
         Q_UNUSED(orientation)
@@ -157,22 +157,22 @@ namespace hal
         return QVariant();
     }
 
-    module_item* module_model::get_item(const QModelIndex& index) const
+    ModuleItem* ModuleModel::get_item(const QModelIndex& index) const
     {
         if (index.isValid())
-            return static_cast<module_item*>(index.internalPointer());
+            return static_cast<ModuleItem*>(index.internalPointer());
         else
             return nullptr;
     }
 
-    QModelIndex module_model::get_index(const module_item* const item) const
+    QModelIndex ModuleModel::get_index(const ModuleItem* const item) const
     {
         assert(item);
 
         QVector<int> row_numbers;
-        const module_item* current_item = item;
+        const ModuleItem* current_item = item;
 
-        while (current_item != m_top_module_item)
+        while (current_item != m_top_ModuleItem)
         {
             row_numbers.append(current_item->row());
             current_item = current_item->const_parent();
@@ -186,14 +186,14 @@ namespace hal
         return model_index;
     }
 
-    void module_model::init()
+    void ModuleModel::init()
     {
-        module_item* item = new module_item(1);
+        ModuleItem* item = new ModuleItem(1);
 
-        m_module_items.insert(1, item);
+        m_ModuleItems.insert(1, item);
 
         beginInsertRows(index(0, 0, QModelIndex()), 0, 0);
-        m_top_module_item = item;
+        m_top_ModuleItem = item;
         endInsertRows();
 
         // This is broken because it can attempt to insert a child before its parent
@@ -211,30 +211,30 @@ namespace hal
         add_recursively(m->get_submodules());
     }
 
-    void module_model::clear()
+    void ModuleModel::clear()
     {
         beginResetModel();
 
-        m_top_module_item = nullptr;
+        m_top_ModuleItem = nullptr;
 
-        for (module_item* m : m_module_items)
+        for (ModuleItem* m : m_ModuleItems)
             delete m;
 
         endResetModel();
     }
 
-    void module_model::add_module(const u32 id, const u32 parent_module)
+    void ModuleModel::add_module(const u32 id, const u32 parent_module)
     {
         assert(g_netlist->get_module_by_id(id));
         assert(g_netlist->get_module_by_id(parent_module));
-        assert(!m_module_items.contains(id));
-        assert(m_module_items.contains(parent_module));
+        assert(!m_ModuleItems.contains(id));
+        assert(m_ModuleItems.contains(parent_module));
 
-        module_item* item   = new module_item(id);
-        module_item* parent = m_module_items.value(parent_module);
+        ModuleItem* item   = new ModuleItem(id);
+        ModuleItem* parent = m_ModuleItems.value(parent_module);
 
         item->set_parent(parent);
-        m_module_items.insert(id, item);
+        m_ModuleItems.insert(id, item);
 
         QModelIndex index = get_index(parent);
 
@@ -246,7 +246,7 @@ namespace hal
         endInsertRows();
     }
 
-    void module_model::add_recursively(std::set<std::shared_ptr<Module>> modules)
+    void ModuleModel::add_recursively(std::set<std::shared_ptr<Module>> modules)
     {
         for (auto &m : modules)
         {
@@ -255,14 +255,14 @@ namespace hal
         }
     }
 
-    void module_model::remove_module(const u32 id)
+    void ModuleModel::remove_module(const u32 id)
     {
         assert(id != 1);
         assert(g_netlist->get_module_by_id(id));
-        assert(m_module_items.contains(id));
+        assert(m_ModuleItems.contains(id));
 
-        module_item* item   = m_module_items.value(id);
-        module_item* parent = item->parent();
+        ModuleItem* item   = m_ModuleItems.value(id);
+        ModuleItem* parent = item->parent();
         assert(item);
         assert(parent);
 
@@ -276,16 +276,16 @@ namespace hal
         m_is_modifying = false;
         endRemoveRows();
 
-        m_module_items.remove(id);
+        m_ModuleItems.remove(id);
         delete item;
     }
 
-    void module_model::update_module(const u32 id)    // SPLIT ???
+    void ModuleModel::update_module(const u32 id)    // SPLIT ???
     {
         assert(g_netlist->get_module_by_id(id));
-        assert(m_module_items.contains(id));
+        assert(m_ModuleItems.contains(id));
 
-        module_item* item = m_module_items.value(id);
+        ModuleItem* item = m_ModuleItems.value(id);
         assert(item);
 
         item->set_name(QString::fromStdString(g_netlist->get_module_by_id(id)->get_name()));    // REMOVE & ADD AGAIN
@@ -295,12 +295,12 @@ namespace hal
         Q_EMIT dataChanged(index, index);
     }
 
-    module_item* module_model::get_item(const u32 module_id) const
+    ModuleItem* ModuleModel::get_item(const u32 module_id) const
     {
-        return m_module_items.value(module_id);
+        return m_ModuleItems.value(module_id);
     }
 
-    bool module_model::is_modifying()
+    bool ModuleModel::is_modifying()
     {
         return m_is_modifying;
     }

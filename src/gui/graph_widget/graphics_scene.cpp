@@ -183,14 +183,14 @@ namespace hal
         {
             GraphicsModule* m = static_cast<GraphicsModule*>(item);
             int i = 0;
-            while (i < m_module_items.size())
+            while (i < m_ModuleItems.size())
             {
-                if (m->id() < m_module_items.at(i).id)
+                if (m->id() < m_ModuleItems.at(i).id)
                     break;
 
                 i++;
             }
-            m_module_items.insert(i, module_data{m->id(), m});
+            m_ModuleItems.insert(i, module_data{m->id(), m});
             return;
         }
         }
@@ -253,11 +253,11 @@ namespace hal
             u32 id = m->id();
 
             int i = 0;
-            while (i < m_module_items.size())
+            while (i < m_ModuleItems.size())
             {
-                if (m_module_items[i].id == id)
+                if (m_ModuleItems[i].id == id)
                 {
-                    m_module_items.remove(i);
+                    m_ModuleItems.remove(i);
                     delete m;
                     return;
                 }
@@ -298,9 +298,9 @@ namespace hal
         return nullptr;
     }
 
-    const GraphicsModule* GraphicsScene::get_module_item(const u32 id) const
+    const GraphicsModule* GraphicsScene::get_ModuleItem(const u32 id) const
     {
-        for (const module_data& d : m_module_items)
+        for (const module_data& d : m_ModuleItems)
         {
             if (d.id > id)
                 break;
@@ -346,14 +346,14 @@ namespace hal
             }
         }
 
-        m_module_items.clear();
+        m_ModuleItems.clear();
         m_gate_items.clear();
         m_net_items.clear();
     }
 
     void GraphicsScene::update_visuals(const GraphShader::shading& s)
     {
-        for (module_data& m : m_module_items)
+        for (module_data& m : m_ModuleItems)
         {
             m.item->set_visuals(s.module_visuals.value(m.id));
         }
@@ -452,7 +452,7 @@ namespace hal
 
         if (!g_selection_relay.m_selected_modules.isEmpty())
         {
-            for (auto& element : m_module_items)
+            for (auto& element : m_ModuleItems)
             {
                 if (g_selection_relay.m_selected_modules.find(element.id) != g_selection_relay.m_selected_modules.end())
                 {

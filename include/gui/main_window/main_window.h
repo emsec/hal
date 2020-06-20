@@ -47,10 +47,10 @@ namespace hal
     class FileManager;
     class HalContentManager;
     class dropdown_list;
-    class about_dialog;
+    class AboutDialog;
     class welcome_screen;
 
-    class main_window : public QWidget
+    class MainWindow : public QWidget
     {
         Q_OBJECT
         Q_PROPERTY(QString hal_icon_path READ hal_icon_path WRITE set_hal_icon_path)
@@ -72,7 +72,7 @@ namespace hal
         Q_PROPERTY(QString settings_icon_style READ settings_icon_style WRITE set_settings_icon_style)
 
     public:
-        explicit main_window(QWidget* parent = nullptr);
+        explicit MainWindow(QWidget* parent = nullptr);
         void add_content(ContentWidget* widget, int index, content_anchor anchor);
 
         QString hal_icon_path() const;
@@ -173,7 +173,7 @@ namespace hal
         QMenu* m_menu_edit;
         QMenu* m_menu_help;
 
-        about_dialog* m_about_dialog;
+        AboutDialog* m_AboutDialog;
 
         plugin_model* m_plugin_model;
 

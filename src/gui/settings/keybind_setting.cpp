@@ -25,24 +25,24 @@ namespace hal
         QLabel* label = new QLabel();
         layout->addWidget(label);
 
-        m_keybind_edit = new keybind_edit(this);
+        m_KeybindEdit = new KeybindEdit(this);
         //unique_string_validator* v = new unique_string_validator(); // TODO
-        //m_keybind_edit->add_validator(v);
-        connect(m_keybind_edit, &keybind_edit::editingFinished, this, &keybind_setting::on_keybind_changed);
-        connect(m_keybind_edit, &keybind_edit::edit_rejected, this, &keybind_setting::on_keybind_edit_rejected);
-        layout->addWidget(m_keybind_edit);
+        //m_KeybindEdit->add_validator(v);
+        connect(m_KeybindEdit, &KeybindEdit::editingFinished, this, &keybind_setting::on_keybind_changed);
+        connect(m_KeybindEdit, &KeybindEdit::edit_rejected, this, &keybind_setting::on_KeybindEdit_rejected);
+        layout->addWidget(m_KeybindEdit);
 
         m_labels.append(QPair<QLabel*, QString>(label, description));
     }
 
     void keybind_setting::load(const QVariant& value)
     {
-        m_keybind_edit->setKeySequence(value.toString()); // auto-cast
+        m_KeybindEdit->setKeySequence(value.toString()); // auto-cast
     }
 
     QVariant keybind_setting::value()
     {
-        QKeySequence seq = m_keybind_edit->keySequence();
+        QKeySequence seq = m_KeybindEdit->keySequence();
         if (seq.isEmpty())
             return QVariant(QVariant::Invalid);
         return QVariant(seq); // auto-cast
@@ -53,7 +53,7 @@ namespace hal
        this->trigger_setting_updated();
     }
 
-    void keybind_setting::on_keybind_edit_rejected()
+    void keybind_setting::on_KeybindEdit_rejected()
     {
         this->set_dirty(false);
     }

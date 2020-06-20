@@ -3,7 +3,7 @@
 
 namespace hal
 {
-    about_dialog::about_dialog(QWidget* parent) : QDialog(parent), m_placeholder("about gui"), m_licenses_label("Open Source licenses:"), m_textedit()
+    AboutDialog::AboutDialog(QWidget* parent) : QDialog(parent), m_placeholder("about gui"), m_licenses_label("Open Source licenses:"), m_textedit()
     {
         setLayout(&m_content_layout);
         m_placeholder.setText(QString("Compiled with Qt Version ") + QString(QT_VERSION_STR));

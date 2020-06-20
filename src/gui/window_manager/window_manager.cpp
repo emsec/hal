@@ -16,7 +16,7 @@
 namespace hal
 {
     window_manager::window_manager(QObject* parent) : QObject(parent),
-        m_main_window        (nullptr),
+        m_MainWindow        (nullptr),
         m_action_open_file   (new QAction("Open File", this)),
         m_action_close_file  (new QAction("Close File", this)),
         m_action_save        (new QAction("Save", this)),
@@ -53,7 +53,7 @@ namespace hal
         add_window();
         add_window();
 
-        m_main_window->special_view(m_welcome_screen);
+        m_MainWindow->special_view(m_welcome_screen);
 
         // THIS WORKS, COMPARE TO HARDCODED EVENT LISTENER
         QShortcut* shortcut = new QShortcut(QKeySequence("F1"), m_windows.at(0));
@@ -66,8 +66,8 @@ namespace hal
         hal_window* window = new hal_window(nullptr);
         m_windows.append(window);
 
-        if (!m_main_window)
-            set_main_window(window);
+        if (!m_MainWindow)
+            set_MainWindow(window);
 
         window->show();
     }
@@ -79,21 +79,21 @@ namespace hal
 
         if (m_windows.removeOne(window))
         {
-            if (window == m_main_window)
+            if (window == m_MainWindow)
             {
                 if (!m_windows.empty())
-                    set_main_window(m_windows[0]);
+                    set_MainWindow(m_windows[0]);
                 else
-                    m_main_window = nullptr;
+                    m_MainWindow = nullptr;
             }
             window->deleteLater();
         }
     }
 
-    void window_manager::set_main_window(hal_window* window)
+    void window_manager::set_MainWindow(hal_window* window)
     {
-        if (m_main_window)
-            m_main_window->get_toolbar()->clear();
+        if (m_MainWindow)
+            m_MainWindow->get_toolbar()->clear();
         // REMOVE CORRECT ACTIONS
 
         // MAYBE BETTER TO JUST HAVE 1 TOOLBAR, LESS WORK TO MANAGE
@@ -111,7 +111,7 @@ namespace hal
         t->add_spacer();
         t->addAction(m_action_settings);
 
-        m_main_window = window;
+        m_MainWindow = window;
     }
 
     void window_manager::lock_all()

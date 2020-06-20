@@ -127,9 +127,9 @@ namespace hal
         m_id_item->setFlags(Qt::ItemIsEnabled);
         m_general_table->setItem(2, 1, m_id_item);
 
-        m_module_item = new QTableWidgetItem();
-        m_module_item->setFlags(Qt::ItemIsEnabled);
-        m_general_table->setItem(3, 1, m_module_item);
+        m_ModuleItem = new QTableWidgetItem();
+        m_ModuleItem->setFlags(Qt::ItemIsEnabled);
+        m_general_table->setItem(3, 1, m_ModuleItem);
 
 
         //(5) Boolean Function section
@@ -636,7 +636,7 @@ namespace hal
         if(watched == m_general_table->viewport() && event->type() == QEvent::MouseMove)
         {
             QTableWidgetItem* item = m_general_table->itemAt(dynamic_cast<QMouseEvent*>(event)->pos());
-            if(item == m_module_item)
+            if(item == m_ModuleItem)
                 setCursor(QCursor(Qt::PointingHandCursor));
             else
                 setCursor(QCursor(Qt::ArrowCursor));
@@ -670,10 +670,10 @@ namespace hal
             if (sub->contains_gate(g))
             {
                 module_text = QString::fromStdString(sub->get_name()) + "[" + QString::number(sub->get_id()) + "]";
-                m_module_item->setData(Qt::UserRole, sub->get_id());
+                m_ModuleItem->setData(Qt::UserRole, sub->get_id());
             }
         }
-        m_module_item->setText(module_text);
+        m_ModuleItem->setText(module_text);
         m_general_table->resizeColumnsToContents();
         m_general_table->setFixedWidth(calculate_table_size(m_general_table).width());
 
@@ -857,10 +857,10 @@ namespace hal
     {
         //cant get the item from the index (static_cast<QTableWidgetItem*>(index.internalPointer()) fails),
         //so ask the item QTableWidgetItem directly
-        if (item->row() == m_module_item->row() && item->column() == m_module_item->column())
+        if (item->row() == m_ModuleItem->row() && item->column() == m_ModuleItem->column())
         {
             g_selection_relay.clear();
-            g_selection_relay.m_selected_modules.insert(m_module_item->data(Qt::UserRole).toInt());
+            g_selection_relay.m_selected_modules.insert(m_ModuleItem->data(Qt::UserRole).toInt());
             g_selection_relay.relay_selection_changed(this);
         }
     }

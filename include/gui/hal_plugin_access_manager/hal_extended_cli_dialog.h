@@ -39,12 +39,12 @@
 
 namespace hal
 {
-    class hal_extended_cli_dialog : public QDialog
+    class HalExtendedCliDialog : public QDialog
     {
         Q_OBJECT
 
     public:
-        hal_extended_cli_dialog(QString plugin_name, QWidget* parent = 0);
+        HalExtendedCliDialog(QString plugin_name, QWidget* parent = 0);
 
         ProgramArguments get_args();
 

@@ -77,7 +77,7 @@ namespace hal
         void handle_module_event(module_event_handler::event ev, std::shared_ptr<Module> object, u32 associated_data);
 
     private:
-        QMap<u32, module_item*> m_module_items;
-        module_model* m_model;
+        QMap<u32, ModuleItem*> m_ModuleItems;
+        ModuleModel* m_model;
     };
 }

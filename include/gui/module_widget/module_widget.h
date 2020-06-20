@@ -46,7 +46,7 @@ class QTreeView;
 
 namespace hal
 {
-    class module_proxy_model;
+    class ModuleProxyModel;
 
     class module_widget : public ContentWidget
     {
@@ -79,10 +79,10 @@ namespace hal
 
         bool m_ignore_selection_change;
 
-        module_proxy_model* m_module_proxy_model;
+        ModuleProxyModel* m_ModuleProxyModel;
 
         void open_module_in_view(const QModelIndex &index);
 
-        module_item* get_module_item_from_index(const QModelIndex &index);
+        ModuleItem* get_ModuleItem_from_index(const QModelIndex &index);
     };
 }

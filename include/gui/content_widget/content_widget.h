@@ -36,7 +36,7 @@ namespace hal
     class HalContentAnchor;
     class toolbar;
 
-    class ContentWidget : public hal_widget
+    class ContentWidget : public HalWidget
     {
         Q_OBJECT
         Q_PROPERTY(QString icon_style READ icon_style WRITE set_icon_style)

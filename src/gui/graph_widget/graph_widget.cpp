@@ -808,7 +808,7 @@ namespace hal
         // TODO clean up redundancy
         for (auto id : modules)
         {
-            auto rect = m_context->scene()->get_module_item(id)->sceneBoundingRect();
+            auto rect = m_context->scene()->get_ModuleItem(id)->sceneBoundingRect();
 
             min_x = std::min(min_x, static_cast<int>(rect.left()));
             max_x = std::max(max_x, static_cast<int>(rect.right()));
@@ -876,7 +876,7 @@ namespace hal
 
         for (auto id : g_selection_relay.m_selected_modules)
         {
-            auto rect = m_context->scene()->get_module_item(id)->sceneBoundingRect();
+            auto rect = m_context->scene()->get_ModuleItem(id)->sceneBoundingRect();
 
             min_x = std::min(min_x, static_cast<int>(rect.left()));
             max_x = std::max(max_x, static_cast<int>(rect.right()));

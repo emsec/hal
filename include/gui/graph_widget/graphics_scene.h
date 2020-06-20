@@ -86,7 +86,7 @@ namespace hal
 
         const GraphicsGate* get_gate_item(const u32 id) const;
         const GraphicsNet* get_net_item(const u32 id) const;
-        const GraphicsModule* get_module_item(const u32 id) const;
+        const GraphicsModule* get_ModuleItem(const u32 id) const;
 
         #ifdef GUI_DEBUG_GRID
         void debug_set_layouter_grid(const QVector<qreal>& debug_x_lines, const QVector<qreal>& debug_y_lines, qreal debug_default_height, qreal debug_default_width);
@@ -145,7 +145,7 @@ namespace hal
 
         NodeDragShadow* m_drag_shadow_gate;
 
-        QVector<module_data> m_module_items;
+        QVector<module_data> m_ModuleItems;
         QVector<gate_data> m_gate_items;
         QVector<net_data> m_net_items;
 

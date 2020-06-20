@@ -27,12 +27,12 @@
 
 namespace hal
 {
-    class hal_widget : public QWidget
+    class HalWidget : public QWidget
     {
         Q_OBJECT
 
     public:
-        explicit hal_widget(QWidget* parent = 0);
+        explicit HalWidget(QWidget* parent = 0);
 
         //virtual void paintEvent(QPaintEvent*) Q_DECL_OVERRIDE;
         //overshadowed functions

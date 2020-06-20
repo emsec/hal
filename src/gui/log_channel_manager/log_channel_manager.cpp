@@ -2,12 +2,12 @@
 
 namespace hal
 {
-    log_channel_manager::log_channel_manager()
+    LogChannelManager::LogChannelManager()
     {
-        //LogManager::get_instance().get_gui_callback().add_callback("gui", std::bind(&log_channel_manager::logmanager_callback, this, std::placeholders::_1));
+        //LogManager::get_instance().get_gui_callback().add_callback("gui", std::bind(&LogChannelManager::logmanager_callback, this, std::placeholders::_1));
     }
 
-    void log_channel_manager::logmanager_callback(const spdlog::details::log_msg& msg)
+    void LogChannelManager::logmanager_callback(const spdlog::details::log_msg& msg)
     {
         Q_UNUSED(msg);
         //    spdlog::level::level_enum t = msg.level;

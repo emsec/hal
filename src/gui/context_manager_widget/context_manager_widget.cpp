@@ -159,7 +159,7 @@ namespace hal
         unique_string_validator unique_validator(used_context_names);
         empty_string_validator empty_validator;
 
-        input_dialog ipd;
+        InputDialog ipd;
         ipd.set_window_title("Rename View");
         ipd.set_info_text("Please select a new and unique name for the view");
         ipd.set_input_text(clicked_context->name());

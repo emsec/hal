@@ -6,33 +6,33 @@
 
 namespace hal
 {
-    keybind_edit::keybind_edit(QWidget* parent): QKeySequenceEdit(parent), m_validator(stacked_validator()), m_old_sequence(QKeySequence())
+    KeybindEdit::KeybindEdit(QWidget* parent): QKeySequenceEdit(parent), m_validator(stacked_validator()), m_old_sequence(QKeySequence())
     {
         // do nothing
     }
 
-    void keybind_edit::add_validator(validator* v)
+    void KeybindEdit::add_validator(validator* v)
     {
         m_validator.add_validator(v);
     }
 
-    void keybind_edit::set_validated(bool validated)
+    void KeybindEdit::set_validated(bool validated)
     {
         qDebug() << validated;
         m_validated = validated;
     }
 
-    bool keybind_edit::validated()
+    bool KeybindEdit::validated()
     {
         return m_validated;
     }
 
-    void keybind_edit::revalidate()
+    void KeybindEdit::revalidate()
     {
         set_validated(m_validator.validate(keySequence().toString()));
     }
 
-    bool keybind_edit::event(QEvent* e)
+    bool KeybindEdit::event(QEvent* e)
     {
         bool recognized = false;
         switch(e->type())

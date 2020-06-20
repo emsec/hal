@@ -28,13 +28,13 @@
 
 namespace hal
 {
-    class label_button : public QLabel
+    class LabelButton : public QLabel
     {
         Q_OBJECT
 
     public:
-        explicit label_button(QWidget* parent = 0, Qt::WindowFlags f = Qt::WindowFlags());
-        explicit label_button(const QString& text, QWidget* parent = 0, Qt::WindowFlags f = Qt::WindowFlags());
+        explicit LabelButton(QWidget* parent = 0, Qt::WindowFlags f = Qt::WindowFlags());
+        explicit LabelButton(const QString& text, QWidget* parent = 0, Qt::WindowFlags f = Qt::WindowFlags());
 
     Q_SIGNALS:
         void clicked();
