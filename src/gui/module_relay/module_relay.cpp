@@ -5,12 +5,12 @@
 
 namespace hal
 {
-    module_relay::module_relay(QObject* parent) : QObject(parent), m_model(new ModuleModel())
+    ModuleRelay::ModuleRelay(QObject* parent) : QObject(parent), m_model(new ModuleModel())
     {
-        connect(&g_netlist_relay, &netlist_relay::module_event, this, &module_relay::handle_module_event);
+        connect(&g_NetlistRelay, &NetlistRelay::module_event, this, &ModuleRelay::handle_module_event);
     }
 
-    void module_relay::set_module_color(const u32 id, const QColor& color)
+    void ModuleRelay::set_module_color(const u32 id, const QColor& color)
     {
         Q_UNUSED(id);
         Q_UNUSED(color);
@@ -23,7 +23,7 @@ namespace hal
         // MANUAL UPDATE OF SUBSCRIBERS
     }
 
-    void module_relay::set_module_compressed(const u32 id, const bool compressed)
+    void ModuleRelay::set_module_compressed(const u32 id, const bool compressed)
     {
         Q_UNUSED(id);
         Q_UNUSED(compressed);
@@ -36,7 +36,7 @@ namespace hal
         // MANUAL UPDATE OF SUBSCRIBERS
     }
 
-    void module_relay::set_module_hidden(const u32 id, const bool hidden)
+    void ModuleRelay::set_module_hidden(const u32 id, const bool hidden)
     {
         Q_UNUSED(id);
         Q_UNUSED(hidden);
@@ -49,7 +49,7 @@ namespace hal
         // MANUAL UPDATE OF SUBSCRIBERS
     }
 
-    void module_relay::handle_module_event(module_event_handler::event ev, std::shared_ptr<Module> object, u32 associated_data)
+    void ModuleRelay::handle_module_event(module_event_handler::event ev, std::shared_ptr<Module> object, u32 associated_data)
     {
         Q_UNUSED(associated_data);
         switch (ev)

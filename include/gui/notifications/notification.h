@@ -29,13 +29,13 @@ class QPropertyAnimation;
 
 namespace hal
 {
-    class notification : public QFrame
+    class Notification : public QFrame
     {
         Q_OBJECT
         Q_PROPERTY(qreal opacity READ get_opacity WRITE set_opacity)
 
     public:
-        notification(QWidget* parent = 0);
+        Notification(QWidget* parent = 0);
 
         qreal get_opacity();
         void set_opacity(qreal opacity);

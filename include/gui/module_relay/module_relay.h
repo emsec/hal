@@ -38,7 +38,7 @@
 
 namespace hal
 {
-    class module_relay : public QObject
+    class ModuleRelay : public QObject
     {
         Q_OBJECT
 
@@ -65,7 +65,7 @@ namespace hal
         };
 
     public:
-        explicit module_relay(QObject* parent = nullptr);
+        explicit ModuleRelay(QObject* parent = nullptr);
 
         void add_selection_to_module(const u32 id);
 

@@ -968,22 +968,22 @@ hal--get_in_touch_item[hover=true] #description-label {
 }
 
 /*********************************************
-*                  OVERLAY                   *
+*                  Overlay                   *
 *********************************************/
 
-hal--overlay {
+hal--Overlay {
     background : rgba(0, 0, 0, 128);
 }
 
 /*********************************************
-*              REMINDER OVERLAY              *
+*              REMINDER Overlay              *
 *********************************************/
 
-hal--reminder_overlay {
+hal--ReminderOverlay {
     background : rgb(0, 0, 0);
 }
 
-hal--reminder_overlay * {
+hal--ReminderOverlay * {
     font-family : "Iosevka";
     font-weight : 700;
     font-size   : 32px;
@@ -991,7 +991,7 @@ hal--reminder_overlay * {
     background  : rgb(0, 0, 0);
 }
 
-hal--reminder_overlay QPushButton {
+hal--ReminderOverlay QPushButton {
     padding-left  : 20px;
     padding-right : 20px;
     border-style  : solid;
@@ -1000,13 +1000,13 @@ hal--reminder_overlay QPushButton {
     border-radius : 0px;
 }
 
-hal--reminder_overlay QPushButton:hover {
+hal--ReminderOverlay QPushButton:hover {
     color        : #A9B7C6;
     background   : rgb(0, 0, 0);
     border-color : #A9B7C6;
 }
 
-hal--reminder_overlay #image-label {
+hal--ReminderOverlay #image-label {
     min-width     : 320px;
     min-height    : 320px;
     max-width     : 320px;
@@ -1014,7 +1014,7 @@ hal--reminder_overlay #image-label {
     margin-bottom : 15px;
 }
 
-hal--reminder_overlay #text-label {
+hal--ReminderOverlay #text-label {
     margin-bottom : 15px;
 }
 
@@ -1030,7 +1030,7 @@ hal--ContentWidget * {
 *         PLUGIN SCHEDULE WIDGET             *
 *********************************************/
 
-hal--plugin_schedule_widget {
+hal--PluginScheduleWidget {
     background : qlineargradient(spread:pad,
     x1         : 0,
     y1         : 0,
@@ -1040,63 +1040,63 @@ hal--plugin_schedule_widget {
     stop       : 1 rgb(23, 30, 34));
 }
 
-hal--plugin_schedule_widget #searchbar-container {
+hal--PluginScheduleWidget #searchbar-container {
     background : transparent;
     min-height : 80px;
     max-height : 80px;
 }
 
-hal--plugin_schedule_widget hal--searchbar {
+hal--PluginScheduleWidget hal--searchbar {
     min-width : 400px;
     max-width : 400px;
     border    : 1px solid rgb(73, 74, 76);
 }
 
-hal--plugin_schedule_widget #plugin-frame {
+hal--PluginScheduleWidget #plugin-frame {
     min-width : 400px;
     max-width : 400px;
 }
 
-hal--plugin_schedule_widget #description-frame {
+hal--PluginScheduleWidget #description-frame {
     border : 1px solid #313D46;
 }
 
-hal--plugin_schedule_widget #description-frame #header {
+hal--PluginScheduleWidget #description-frame #header {
     background : #313D46;
 }
 
-hal--plugin_schedule_widget #description-frame #left-spacer {
+hal--PluginScheduleWidget #description-frame #left-spacer {
     background : #171E22;
 }
 
-hal--plugin_schedule_widget #description-frame #label {
+hal--PluginScheduleWidget #description-frame #label {
     background : #313D46;
 }
 
-hal--plugin_schedule_widget #description-frame #right-spacer {
+hal--PluginScheduleWidget #description-frame #right-spacer {
     background : #171E22;
 }
 
-hal--plugin_schedule_widget #schedule-frame {
+hal--PluginScheduleWidget #schedule-frame {
     /*min-width : 400px;
     max-width : 400px;*/
     margin-left : 0px;
     /*margin-right: 0px;*/
 }
 
-hal--plugin_schedule_widget #plugin-frame #label {
+hal--PluginScheduleWidget #plugin-frame #label {
     qproperty-text : "LOADED <font color='#A9B7C6'>PLUGINS</font>";
 }
 
-hal--plugin_schedule_widget #description-frame #label {
+hal--PluginScheduleWidget #description-frame #label {
     qproperty-text : "<font color='#171e22'>PLUGIN DESCRIPTION</font>";
 }
 
-hal--plugin_schedule_widget #schedule-frame #label {
+hal--PluginScheduleWidget #schedule-frame #label {
     qproperty-text : "SCHEDULED <font color='#A9B7C6'>PLUGINS</font>";
 }
 
-hal--plugin_schedule_widget QPlainTextEdit {
+hal--PluginScheduleWidget QPlainTextEdit {
     font-family    : "Iosevka";
     /*font-weight    : 400;*/
     font-size      : 15px;
@@ -1111,21 +1111,21 @@ hal--plugin_schedule_widget QPlainTextEdit {
 *               LOADED PLUGINS               *
 *********************************************/
 
-hal--loaded_plugins_widget {
+hal--LoadedPluginsWidget {
     background : rgb(14, 16, 18);
 }
 
-hal--loaded_plugins_widget #container {
+hal--LoadedPluginsWidget #container {
     background : rgb(14, 16, 18);
 }
 
-hal--loaded_plugins_widget #spacer {
+hal--LoadedPluginsWidget #spacer {
     background : rgb(14, 16, 18);
     min-height : 14px;
     max-height : 14px;
 }
 
-hal--loaded_plugin_item #name-label {
+hal--LoadedPluginItem #name-label {
     background     : rgb(14, 16, 18);
     font-family    : "Iosevka";
     font-weight    : 400;
@@ -1137,7 +1137,7 @@ hal--loaded_plugin_item #name-label {
     padding-right  : 10px;
 }
 
-hal--loaded_plugin_item[hover=true] #name-label {
+hal--LoadedPluginItem[hover=true] #name-label {
     background : rgb(21, 23, 25);
 }
 
@@ -1145,23 +1145,23 @@ hal--loaded_plugin_item[hover=true] #name-label {
 *              SCHEDULED PLUGINS             *
 *********************************************/
 
-hal--scheduled_plugins_widget {
+hal--ScheduledPluginsWidget {
     background : rgb(14, 16, 18);
     min-width  : 400px;
     max-width  : 400px;
 }
 
-hal--scheduled_plugins_widget #container {
+hal--ScheduledPluginsWidget #container {
     background : rgb(14, 16, 18);
 }
 
-hal--scheduled_plugins_widget #spacer {
+hal--ScheduledPluginsWidget #spacer {
     background : rgb(14, 16, 18);
     min-height : 14px;
     max-height : 14px;
 }
 
-hal--scheduled_plugin_item #name-label {
+hal--ScheduledPluginItem #name-label {
     background     : rgb(14, 16, 18);
     font-family    : "Iosevka";
     font-weight    : 400;
@@ -1173,7 +1173,7 @@ hal--scheduled_plugin_item #name-label {
     padding-right  : 10px;
 }
 
-hal--scheduled_plugin_item[hover=true] #name-label {
+hal--ScheduledPluginItem[hover=true] #name-label {
     background : rgb(21, 23, 25);
 }
 
@@ -1181,7 +1181,7 @@ hal--scheduled_plugin_item[hover=true] #name-label {
 *            NO_SCHEDULED PLUGINS            *
 *********************************************/
 
-hal--no_scheduled_plugins_widget {
+hal--NoScheduledPluginsWidget {
     background           : rgb(14, 16, 18);
     qproperty-icon_path  : ":/icons/drop";
     qproperty-icon_style : "all->#151719";
@@ -1189,15 +1189,15 @@ hal--no_scheduled_plugins_widget {
     max-width            : 400px;
 }
 
-hal--no_scheduled_plugins_widget[drag_active=true] {
+hal--NoScheduledPluginsWidget[drag_active=true] {
     qproperty-icon_style : "all->#1f2123";
 }
 
-hal--no_scheduled_plugins_widget QLabel {
+hal--NoScheduledPluginsWidget QLabel {
     background : rgb(14, 16, 18);
 }
 
-hal--no_scheduled_plugins_widget #text-label {
+hal--NoScheduledPluginsWidget #text-label {
     background    : rgb(14, 16, 18);
     font-family   : "Iosevka";
     font-weight   : 400;
@@ -1210,7 +1210,7 @@ hal--no_scheduled_plugins_widget #text-label {
     margin-right  : 10px;
 }
 
-hal--no_scheduled_plugins_widget #icon-label {
+hal--NoScheduledPluginsWidget #icon-label {
     margin-top : 220px;
 }
 
@@ -1218,13 +1218,13 @@ hal--no_scheduled_plugins_widget #icon-label {
 *          PLUGIN ARGUMENTS WIDGET           *
 *********************************************/
 
-hal--plugin_arguments_widget {
+hal--PluginArgumentsWidget {
     /*background: rgb(14, 16, 18);*/
     background  : rgb(17, 19, 21);
     padding-top : 7px;
 }
 
-hal--plugin_arguments_widget QPushButton {
+hal--PluginArgumentsWidget QPushButton {
     font-family : "Iosevka";
     font-weight : 500;
     font-size   : 14px;
@@ -1233,13 +1233,13 @@ hal--plugin_arguments_widget QPushButton {
     border      : 1px solid #969696;
 }
 
-hal--plugin_arguments_widget QPushButton:checked {
+hal--PluginArgumentsWidget QPushButton:checked {
     color            : rgb(14, 16, 18);
     background-color : rgba(85, 255, 0, 0.6);
     border           : 1px solid #A9B7C6;
 }
 
-hal--plugin_arguments_widget QLineEdit {
+hal--PluginArgumentsWidget QLineEdit {
     font-family    : "Iosevka";
     font-weight    : 500;
     font-size      : 14px;
@@ -1253,12 +1253,12 @@ hal--plugin_arguments_widget QLineEdit {
     border         : none;
 }
 
-hal--plugin_arguments_widget QLineEdit:disabled {
+hal--PluginArgumentsWidget QLineEdit:disabled {
     color      : rgb(32, 32, 32);
     background : rgb(20, 22, 24);
 }
 
-hal--scheduled_plugin_item_area {
+hal--ScheduledPluginItemArea {
     background : rgb(14, 16, 18);
 }
 
@@ -1498,7 +1498,7 @@ hal--gui_graph_gate_selection_widget::item {
     border-right : 1px solid rgb(169, 183, 198);
 }
 
-hal--dialog_overlay {
+hal--DialogOverlay {
 background : rgba(0, 0, 0, 128);
 }
 

@@ -6,7 +6,7 @@
 
 namespace hal
 {
-    notification_manager::notification_manager(QObject* parent) : QObject(parent)
+    NotificationManager::NotificationManager(QObject* parent) : QObject(parent)
     {
         m_width_offset  = 20;
         m_height_offset = 20;
@@ -14,24 +14,24 @@ namespace hal
         m_spacing = 10;
     }
 
-    void notification_manager::remove(notification* n)
+    void NotificationManager::remove(Notification* n)
     {
         if (m_list.removeOne(n))
         {
             n->hide();
             n->deleteLater();
         }
-        rearrange_notifications();
+        rearrange_Notifications();
     }
 
-    void notification_manager::debug_add_notification()
+    void NotificationManager::debug_add_Notification()
     {
-        notification* n = new notification(nullptr);
+        Notification* n = new Notification(nullptr);
         m_list.append(n);
-        rearrange_notifications();
+        rearrange_Notifications();
     }
 
-    void notification_manager::rearrange_notifications()
+    void NotificationManager::rearrange_Notifications()
     {
         //QRect rec = QApplication::desktop()->availableGeometry();
         QRect rec        = QApplication::desktop()->screenGeometry();

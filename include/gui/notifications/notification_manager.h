@@ -28,24 +28,24 @@
 
 namespace hal
 {
-    class notification;
+    class Notification;
 
-    class notification_manager : public QObject
+    class NotificationManager : public QObject
     {
         Q_OBJECT
 
     public:
-        explicit notification_manager(QObject* parent = nullptr);
+        explicit NotificationManager(QObject* parent = nullptr);
 
-        void remove(notification* n);
+        void remove(Notification* n);
 
     Q_SIGNALS:
 
     public Q_SLOTS:
-        void debug_add_notification();
+        void debug_add_Notification();
 
     private:
-        void rearrange_notifications();
+        void rearrange_Notifications();
 
         int m_desktop_width;
         int m_desktop_height;
@@ -55,6 +55,6 @@ namespace hal
 
         int m_spacing;
 
-        QList<notification*> m_list;
+        QList<Notification*> m_list;
     };
 }

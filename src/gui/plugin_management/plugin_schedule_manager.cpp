@@ -8,20 +8,20 @@
 
 namespace hal
 {
-    plugin_schedule_manager* plugin_schedule_manager::get_instance()
+    PluginScheduleManager* PluginScheduleManager::get_instance()
     {
-        static plugin_schedule_manager* manager = new plugin_schedule_manager();
+        static PluginScheduleManager* manager = new PluginScheduleManager();
         return manager;
 
         // IMPLEMENT INDEX UPDATES (OR CHANGE ARCHITECTURE)
     }
 
-    plugin_schedule_manager::schedule* plugin_schedule_manager::get_schedule()
+    PluginScheduleManager::schedule* PluginScheduleManager::get_schedule()
     {
         return &m_schedule;
     }
 
-    ProgramArguments plugin_schedule_manager::get_program_arguments(int index)
+    ProgramArguments PluginScheduleManager::get_program_arguments(int index)
     {
         ProgramArguments args;
 
@@ -38,17 +38,17 @@ namespace hal
         return args;
     }
 
-    int plugin_schedule_manager::get_current_index()
+    int PluginScheduleManager::get_current_index()
     {
         return m_current_index;
     }
 
-    void plugin_schedule_manager::set_current_index(int index)
+    void PluginScheduleManager::set_current_index(int index)
     {
         m_current_index = index;
     }
 
-    void plugin_schedule_manager::add_plugin(const QString& plugin, int index)
+    void PluginScheduleManager::add_plugin(const QString& plugin, int index)
     {
         auto cli = PluginManager::get_plugin_instance<CLIPluginInterface>(plugin.toStdString(), false);
 
@@ -70,17 +70,17 @@ namespace hal
         m_schedule.insert(index, QPair<QString, QList<argument>>(plugin, list));
     }
 
-    void plugin_schedule_manager::move_plugin(int from, int to)
+    void PluginScheduleManager::move_plugin(int from, int to)
     {
         m_schedule.move(from, to);
     }
 
-    void plugin_schedule_manager::remove_plugin(int index)
+    void PluginScheduleManager::remove_plugin(int index)
     {
         m_schedule.removeAt(index);
     }
 
-    void plugin_schedule_manager::run_schedule()
+    void PluginScheduleManager::run_schedule()
     {
         for (int i = 0; i < m_schedule.length(); i++)
         {
@@ -89,7 +89,7 @@ namespace hal
         }
     }
 
-    plugin_schedule_manager::plugin_schedule_manager(QObject* parent) : QObject(parent), m_current_index(0)
+    PluginScheduleManager::PluginScheduleManager(QObject* parent) : QObject(parent), m_current_index(0)
     {
     }
 }

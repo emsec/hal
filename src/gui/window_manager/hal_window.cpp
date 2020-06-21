@@ -21,7 +21,7 @@ namespace hal
         m_inner_layout(new QVBoxLayout(m_layout_container)),
         m_toolbar(new hal_window_toolbar(this)),
         m_workspace(new workspace(this)),
-        m_overlay(nullptr),
+        m_Overlay(nullptr),
         m_effect(nullptr)
     {
     //    m_layout_container->setGeometry(geometry());
@@ -44,13 +44,13 @@ namespace hal
 
     void hal_window::lock()
     {
-        if (!m_overlay)
+        if (!m_Overlay)
         {
             m_layout_container->setEnabled(false);
     //        m_toolbar->setEnabled(false);
     //        m_workspace->setEnabled(false);
 
-            m_overlay = new overlay(this); // DEBUG CODE, USE FACTORY AND STYLESHEETS ?
+            m_Overlay = new Overlay(this); // DEBUG CODE, USE FACTORY AND STYLESHEETS ?
             m_effect = new QGraphicsBlurEffect();
             //m_effect->setBlurHints(QGraphicsBlurEffect::QualityHint);
             m_layout_container->setGraphicsEffect(m_effect);
@@ -63,16 +63,16 @@ namespace hal
     //        effect2->setBlurHints(QGraphicsBlurEffect::QualityHint);
     //        m_workspace->setGraphicsEffect(effect2);
 
-            m_overlay->setParent(this);
-            m_overlay->show();
-            connect(m_overlay, &overlay::clicked, g_window_manager, &window_manager::handle_overlay_clicked);
+            m_Overlay->setParent(this);
+            m_Overlay->show();
+            connect(m_Overlay, &Overlay::clicked, g_window_manager, &window_manager::handle_Overlay_clicked);
             // FADE IN ???
         }
     }
 
     void hal_window::unlock()
     {
-        if (m_overlay)
+        if (m_Overlay)
         {
             m_layout_container->setEnabled(true);
     //        m_toolbar->setEnabled(true);
@@ -80,8 +80,8 @@ namespace hal
 
             // FADE OUT ???
             m_effect->deleteLater();
-            m_overlay->deleteLater();
-            m_overlay = nullptr;
+            m_Overlay->deleteLater();
+            m_Overlay = nullptr;
         }
     }
 
@@ -115,9 +115,9 @@ namespace hal
         return m_toolbar;
     }
 
-    overlay* hal_window::get_overlay()
+    Overlay* hal_window::get_Overlay()
     {
-        return m_overlay;
+        return m_Overlay;
     }
 
     //void hal_window::paintEvent(QPaintEvent* event)

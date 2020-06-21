@@ -289,7 +289,7 @@ namespace hal
         assert(item);
 
         item->set_name(QString::fromStdString(g_netlist->get_module_by_id(id)->get_name()));    // REMOVE & ADD AGAIN
-        item->set_color(g_netlist_relay.get_module_color(id));
+        item->set_color(g_NetlistRelay.get_module_color(id));
 
         QModelIndex index = get_index(item);
         Q_EMIT dataChanged(index, index);

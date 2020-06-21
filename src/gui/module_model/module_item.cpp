@@ -11,7 +11,7 @@ namespace hal
         m_parent(nullptr),
         m_id(id),
         m_name(QString::fromStdString(g_netlist->get_module_by_id(id)->get_name())),
-        m_color(g_netlist_relay.get_module_color(id)),
+        m_color(g_NetlistRelay.get_module_color(id)),
         m_highlighted(false)
     {
 
@@ -21,7 +21,7 @@ namespace hal
         m_parent(nullptr),
         m_id(id),
         m_name(name),
-        m_color(g_netlist_relay.get_module_color(id)),
+        m_color(g_NetlistRelay.get_module_color(id)),
         m_highlighted(false)
     {
     }

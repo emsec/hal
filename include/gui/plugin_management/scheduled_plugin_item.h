@@ -32,7 +32,7 @@ class QVBoxLayout;
 
 namespace hal
 {
-    class scheduled_plugin_item : public QFrame
+    class ScheduledPluginItem : public QFrame
     {
         Q_OBJECT
         Q_PROPERTY(bool hover READ hover)
@@ -40,7 +40,7 @@ namespace hal
         Q_PROPERTY(QString icon_style READ icon_style WRITE set_icon_style)
 
     public:
-        explicit scheduled_plugin_item(const QString& name, QWidget* parent = nullptr);
+        explicit ScheduledPluginItem(const QString& name, QWidget* parent = nullptr);
 
         void enterEvent(QEvent* event) Q_DECL_OVERRIDE;
         void leaveEvent(QEvent* event) Q_DECL_OVERRIDE;
@@ -61,9 +61,9 @@ namespace hal
         void set_icon_style(const QString& style);
 
     Q_SIGNALS:
-        void clicked(scheduled_plugin_item*);
-        void drag_started(scheduled_plugin_item*);
-        void removed(scheduled_plugin_item*);
+        void clicked(ScheduledPluginItem*);
+        void drag_started(ScheduledPluginItem*);
+        void removed(ScheduledPluginItem*);
 
     private:
         static bool s_drag_in_progress;

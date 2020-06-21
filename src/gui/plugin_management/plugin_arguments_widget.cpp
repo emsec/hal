@@ -12,12 +12,12 @@
 
 namespace hal
 {
-    plugin_arguments_widget::plugin_arguments_widget(QWidget* parent) : QFrame(parent), m_form_layout(new QFormLayout())
+    PluginArgumentsWidget::PluginArgumentsWidget(QWidget* parent) : QFrame(parent), m_form_layout(new QFormLayout())
     {
         setLayout(m_form_layout);
     }
 
-    ProgramArguments plugin_arguments_widget::get_args()
+    ProgramArguments PluginArgumentsWidget::get_args()
     {
         std::vector<char*> temp_vector;
 
@@ -65,7 +65,7 @@ namespace hal
         return arguments;
     }
 
-    //void plugin_arguments_widget::setup_plugin_layout(const QString& plugin)
+    //void PluginArgumentsWidget::setup_plugin_layout(const QString& plugin)
     //{
     //    for (QPair<QPushButton*, QLineEdit*>& pair : m_vector)
     //    {
@@ -111,7 +111,7 @@ namespace hal
     //    }
     //}
 
-    void plugin_arguments_widget::setup(const QString& plugin_name)
+    void PluginArgumentsWidget::setup(const QString& plugin_name)
     {
         for (QPair<QPushButton*, QLineEdit*> pair : m_vector)
         {
@@ -144,7 +144,7 @@ namespace hal
         }
     }
 
-    void plugin_arguments_widget::handle_plugin_selected(int index)
+    void PluginArgumentsWidget::handle_plugin_selected(int index)
     {
         for (QPair<QPushButton*, QLineEdit*>& pair : m_vector)
         {
@@ -157,7 +157,7 @@ namespace hal
         }
         m_vector.clear();
 
-        for (auto arg : plugin_schedule_manager::get_instance()->get_schedule()->at(index).second)
+        for (auto arg : PluginScheduleManager::get_instance()->get_schedule()->at(index).second)
         {
             QPushButton* button = new QPushButton(arg.flag, this);
             button->setToolTip(arg.description);
@@ -169,19 +169,19 @@ namespace hal
             m_form_layout->addRow(button, LineEdit);
             connect(button, &QPushButton::toggled, LineEdit, &QLineEdit::setEnabled);
 
-            connect(button, &QPushButton::clicked, this, &plugin_arguments_widget::handle_button_clicked);
-            connect(LineEdit, &QLineEdit::textEdited, this, &plugin_arguments_widget::handle_text_edited);
+            connect(button, &QPushButton::clicked, this, &PluginArgumentsWidget::handle_button_clicked);
+            connect(LineEdit, &QLineEdit::textEdited, this, &PluginArgumentsWidget::handle_text_edited);
         }
     }
 
-    void plugin_arguments_widget::handle_button_clicked(bool checked)
+    void PluginArgumentsWidget::handle_button_clicked(bool checked)
     {
         QObject* sender     = QObject::sender();
         QPushButton* button = static_cast<QPushButton*>(sender);
         QString flag        = button->text();
 
-        int current_index                     = plugin_schedule_manager::get_instance()->get_current_index();
-        QPair<QString, QList<argument>>& pair = (*plugin_schedule_manager::get_instance()->get_schedule())[current_index];
+        int current_index                     = PluginScheduleManager::get_instance()->get_current_index();
+        QPair<QString, QList<argument>>& pair = (*PluginScheduleManager::get_instance()->get_schedule())[current_index];
         for (argument& arg : pair.second)
         {
             if (arg.flag == flag)
@@ -192,7 +192,7 @@ namespace hal
         }
     }
 
-    void plugin_arguments_widget::handle_text_edited(const QString& text)
+    void PluginArgumentsWidget::handle_text_edited(const QString& text)
     {
         QObject* sender      = QObject::sender();
         QLineEdit* LineEdit = static_cast<QLineEdit*>(sender);
@@ -208,7 +208,7 @@ namespace hal
             }
         }
 
-        QPair<QString, QList<argument>>& pair = (*plugin_schedule_manager::get_instance()->get_schedule())[m_current_index];
+        QPair<QString, QList<argument>>& pair = (*PluginScheduleManager::get_instance()->get_schedule())[m_current_index];
         for (argument& arg : pair.second)
         {
             if (arg.flag == flag)
@@ -220,7 +220,7 @@ namespace hal
         }
     }
 
-    char* plugin_arguments_widget::to_heap_cstring(const QString& string)
+    char* PluginArgumentsWidget::to_heap_cstring(const QString& string)
     {
         std::string std_string = string.toStdString();
         char* cstring          = new char[std_string.size() + 1];

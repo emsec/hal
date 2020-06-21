@@ -239,7 +239,7 @@ namespace hal
 
             log_info("core", "unloading plugin '{}'...", plugin_name);
 
-            /* store file name for callback notification */
+            /* store file name for callback Notification */
             auto file_name = std::get<0>(it->second)->get_file_name();
 
             /* unload and delete factory */

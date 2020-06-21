@@ -11,7 +11,7 @@
 
 namespace hal
 {
-    scheduled_plugin_item_area::scheduled_plugin_item_area(QWidget* parent)
+    ScheduledPluginItemArea::ScheduledPluginItemArea(QWidget* parent)
         : QFrame(parent), m_layout(new QVBoxLayout()), m_spacer(new QFrame()), m_active_marker(nullptr), m_internal_drag_active(false), m_drag_index(-1)
     {
         m_layout->setContentsMargins(0, 0, 0, 0);
@@ -26,7 +26,7 @@ namespace hal
         setAcceptDrops(true);
     }
 
-    void scheduled_plugin_item_area::dragEnterEvent(QDragEnterEvent* event)
+    void ScheduledPluginItemArea::dragEnterEvent(QDragEnterEvent* event)
     {
         const QMimeData* mime_data = event->mimeData();
         QString name               = QString(mime_data->data("hal/plugin_name"));
@@ -49,7 +49,7 @@ namespace hal
         event->acceptProposedAction();
     }
 
-    void scheduled_plugin_item_area::dragMoveEvent(QDragMoveEvent* event)
+    void ScheduledPluginItemArea::dragMoveEvent(QDragMoveEvent* event)
     {
         int y = event->pos().y();
 
@@ -78,7 +78,7 @@ namespace hal
         // SHOW APPEND MARKER (MAYBE)
     }
 
-    void scheduled_plugin_item_area::dragLeaveEvent(QDragLeaveEvent* event)
+    void ScheduledPluginItemArea::dragLeaveEvent(QDragLeaveEvent* event)
     {
         Q_UNUSED(event)
 
@@ -88,7 +88,7 @@ namespace hal
         m_active_marker = nullptr;
     }
 
-    void scheduled_plugin_item_area::dropEvent(QDropEvent* event)
+    void ScheduledPluginItemArea::dropEvent(QDropEvent* event)
     {
         const QMimeData* mime_data = event->mimeData();
         QString name               = QString(mime_data->data("hal/plugin_name"));
@@ -96,12 +96,12 @@ namespace hal
         event->acceptProposedAction();
     }
 
-    void scheduled_plugin_item_area::insert_plugin(const QString& name)
+    void ScheduledPluginItemArea::insert_plugin(const QString& name)
     {
-        scheduled_plugin_item* item = new scheduled_plugin_item(name);
-        connect(item, &scheduled_plugin_item::clicked, this, &scheduled_plugin_item_area::handle_item_clicked);
-        connect(item, &scheduled_plugin_item::drag_started, this, &scheduled_plugin_item_area::handle_item_drag_started);
-        connect(item, &scheduled_plugin_item::removed, this, &scheduled_plugin_item_area::handle_item_removed);
+        ScheduledPluginItem* item = new ScheduledPluginItem(name);
+        connect(item, &ScheduledPluginItem::clicked, this, &ScheduledPluginItemArea::handle_item_clicked);
+        connect(item, &ScheduledPluginItem::drag_started, this, &ScheduledPluginItemArea::handle_item_drag_started);
+        connect(item, &ScheduledPluginItem::removed, this, &ScheduledPluginItemArea::handle_item_removed);
         DropMarker* marker = new DropMarker(Qt::Vertical);
 
         int drop_index = -1;
@@ -111,7 +111,7 @@ namespace hal
             {
                 if (m_list.at(i).second == m_active_marker)
                 {
-                    m_list.insert(i, QPair<scheduled_plugin_item*, DropMarker*>(item, marker));
+                    m_list.insert(i, QPair<ScheduledPluginItem*, DropMarker*>(item, marker));
                     //                m_layout->insertWidget(i+1, item);
                     //                m_layout->insertWidget(i+1, marker); //DOESNT WORK, FIX
 
@@ -134,7 +134,7 @@ namespace hal
         }
         else
         {
-            m_list.append(QPair<scheduled_plugin_item*, DropMarker*>(item, marker));
+            m_list.append(QPair<ScheduledPluginItem*, DropMarker*>(item, marker));
             m_layout->addWidget(marker);
             m_layout->addWidget(item);
             drop_index = m_list.length() - 1;
@@ -142,14 +142,14 @@ namespace hal
 
         if (m_internal_drag_active)
         {
-            plugin_schedule_manager::get_instance()->move_plugin(m_drag_index, drop_index);
+            PluginScheduleManager::get_instance()->move_plugin(m_drag_index, drop_index);
             m_internal_drag_active = false;
         }
         else
-            plugin_schedule_manager::get_instance()->add_plugin(name, drop_index);
+            PluginScheduleManager::get_instance()->add_plugin(name, drop_index);
     }
 
-    void scheduled_plugin_item_area::handle_item_clicked(scheduled_plugin_item* item)
+    void ScheduledPluginItemArea::handle_item_clicked(ScheduledPluginItem* item)
     {
         int i = 0;
 
@@ -157,7 +157,7 @@ namespace hal
         {
             if (pair.first == item)
             {
-                plugin_schedule_manager::get_instance()->set_current_index(i);
+                PluginScheduleManager::get_instance()->set_current_index(i);
                 Q_EMIT plugin_selected(i);
                 return;
             }
@@ -165,7 +165,7 @@ namespace hal
         }
     }
 
-    void scheduled_plugin_item_area::handle_item_drag_started(scheduled_plugin_item* item)
+    void ScheduledPluginItemArea::handle_item_drag_started(ScheduledPluginItem* item)
     {
         m_internal_drag_active = true;
         m_drag_index           = 0;
@@ -190,12 +190,12 @@ namespace hal
         m_list.removeAt(m_drag_index);
     }
 
-    void scheduled_plugin_item_area::handle_item_removed(scheduled_plugin_item* item)
+    void ScheduledPluginItemArea::handle_item_removed(ScheduledPluginItem* item)
     {
         Q_UNUSED(item)
 
         m_internal_drag_active = false;
-        plugin_schedule_manager::get_instance()->remove_plugin(m_drag_index);
+        PluginScheduleManager::get_instance()->remove_plugin(m_drag_index);
 
         if (m_list.isEmpty())
             Q_EMIT no_scheduled_plugins();

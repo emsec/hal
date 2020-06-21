@@ -835,7 +835,7 @@ ContentWidget * {
 *         PLUGIN SCHEDULE WIDGET             *
 *********************************************/
 
-plugin_schedule_widget {
+PluginScheduleWidget {
     background : qlineargradient(spread:pad,
     x1         : 0,
     y1         : 0,
@@ -845,63 +845,63 @@ plugin_schedule_widget {
     stop       : 1 rgb(23, 30, 34));
 }
 
-plugin_schedule_widget #searchbar-container {
+PluginScheduleWidget #searchbar-container {
     background : transparent;
     min-height : 80px;
     max-height : 80px;
 }
 
-plugin_schedule_widget searchbar {
+PluginScheduleWidget searchbar {
     min-width : 400px;
     max-width : 400px;
     border    : 1px solid rgb(73, 74, 76);
 }
 
-plugin_schedule_widget #plugin-frame {
+PluginScheduleWidget #plugin-frame {
     min-width : 400px;
     max-width : 400px;
 }
 
-plugin_schedule_widget #description-frame {
+PluginScheduleWidget #description-frame {
     border : 1px solid #313D46;
 }
 
-plugin_schedule_widget #description-frame #header {
+PluginScheduleWidget #description-frame #header {
     background : #313D46;
 }
 
-plugin_schedule_widget #description-frame #left-spacer {
+PluginScheduleWidget #description-frame #left-spacer {
     background : #171E22;
 }
 
-plugin_schedule_widget #description-frame #label {
+PluginScheduleWidget #description-frame #label {
     background : #313D46;
 }
 
-plugin_schedule_widget #description-frame #right-spacer {
+PluginScheduleWidget #description-frame #right-spacer {
     background : #171E22;
 }
 
-plugin_schedule_widget #schedule-frame {
+PluginScheduleWidget #schedule-frame {
     /*min-width : 400px;
     max-width : 400px;*/
     margin-left : 0px;
     /*margin-right: 0px;*/
 }
 
-plugin_schedule_widget #plugin-frame #label {
+PluginScheduleWidget #plugin-frame #label {
     qproperty-text : "LOADED <font color='#55ff00'>PLUGINS</font>";
 }
 
-plugin_schedule_widget #description-frame #label {
+PluginScheduleWidget #description-frame #label {
     qproperty-text : "<font color='#171e22'>PLUGIN DESCRIPTION</font>";
 }
 
-plugin_schedule_widget #schedule-frame #label {
+PluginScheduleWidget #schedule-frame #label {
     qproperty-text : "SCHEDULED <font color='#55ff00'>PLUGINS</font>";
 }
 
-plugin_schedule_widget QPlainTextEdit {
+PluginScheduleWidget QPlainTextEdit {
     font-family    : "Montserrat-Black";
     font-weight    : 400;
     font-size      : 15px;
@@ -916,21 +916,21 @@ plugin_schedule_widget QPlainTextEdit {
 *               LOADED PLUGINS               *
 *********************************************/
 
-loaded_plugins_widget {
+LoadedPluginsWidget {
     background : rgb(14, 16, 18);
 }
 
-loaded_plugins_widget #container {
+LoadedPluginsWidget #container {
     background : rgb(14, 16, 18);
 }
 
-loaded_plugins_widget #spacer {
+LoadedPluginsWidget #spacer {
     background : rgb(14, 16, 18);
     min-height : 14px;
     max-height : 14px;
 }
 
-loaded_plugin_item #name-label {
+LoadedPluginItem #name-label {
     background     : rgb(14, 16, 18);
     font-family    : "Montserrat-Black";
     font-weight    : 400;
@@ -942,7 +942,7 @@ loaded_plugin_item #name-label {
     padding-right  : 10px;
 }
 
-loaded_plugin_item[hover=true] #name-label {
+LoadedPluginItem[hover=true] #name-label {
     background : rgb(21, 23, 25);
 }
 
@@ -950,23 +950,23 @@ loaded_plugin_item[hover=true] #name-label {
 *              SCHEDULED PLUGINS             *
 *********************************************/
 
-scheduled_plugins_widget {
+ScheduledPluginsWidget {
     background : rgb(14, 16, 18);
     min-width  : 400px;
     max-width  : 400px;
 }
 
-scheduled_plugins_widget #container {
+ScheduledPluginsWidget #container {
     background : rgb(14, 16, 18);
 }
 
-scheduled_plugins_widget #spacer {
+ScheduledPluginsWidget #spacer {
     background : rgb(14, 16, 18);
     min-height : 14px;
     max-height : 14px;
 }
 
-scheduled_plugin_item #name-label {
+ScheduledPluginItem #name-label {
     background     : rgb(14, 16, 18);
     font-family    : "Montserrat-Black";
     font-weight    : 400;
@@ -978,7 +978,7 @@ scheduled_plugin_item #name-label {
     padding-right  : 10px;
 }
 
-scheduled_plugin_item[hover=true] #name-label {
+ScheduledPluginItem[hover=true] #name-label {
     background : rgb(21, 23, 25);
 }
 
@@ -986,7 +986,7 @@ scheduled_plugin_item[hover=true] #name-label {
 *            NO_SCHEDULED PLUGINS            *
 *********************************************/
 
-no_scheduled_plugins_widget {
+NoScheduledPluginsWidget {
     background           : rgb(14, 16, 18);
     qproperty-icon_path  : ":/icons/drop";
     qproperty-icon_style : "all->#151719";
@@ -994,15 +994,15 @@ no_scheduled_plugins_widget {
     max-width            : 400px;
 }
 
-no_scheduled_plugins_widget[drag_active=true] {
+NoScheduledPluginsWidget[drag_active=true] {
     qproperty-icon_style : "all->#1f2123";
 }
 
-no_scheduled_plugins_widget QLabel {
+NoScheduledPluginsWidget QLabel {
     background : rgb(14, 16, 18);
 }
 
-no_scheduled_plugins_widget #text-label {
+NoScheduledPluginsWidget #text-label {
     background    : rgb(14, 16, 18);
     font-family   : "Montserrat-Black";
     font-weight   : 400;
@@ -1015,7 +1015,7 @@ no_scheduled_plugins_widget #text-label {
     margin-right  : 10px;
 }
 
-no_scheduled_plugins_widget #icon-label {
+NoScheduledPluginsWidget #icon-label {
     margin-top : 220px;
 }
 
@@ -1023,13 +1023,13 @@ no_scheduled_plugins_widget #icon-label {
 *          PLUGIN ARGUMENTS WIDGET           *
 *********************************************/
 
-plugin_arguments_widget {
+PluginArgumentsWidget {
     /*background: rgb(14, 16, 18);*/
     background  : rgb(17, 19, 21);
     padding-top : 7px;
 }
 
-plugin_arguments_widget QPushButton {
+PluginArgumentsWidget QPushButton {
     font-family : "Montserrat-Black";
     font-weight : 500;
     font-size   : 14px;
@@ -1038,13 +1038,13 @@ plugin_arguments_widget QPushButton {
     border      : 1px solid #969696;
 }
 
-plugin_arguments_widget QPushButton:checked {
+PluginArgumentsWidget QPushButton:checked {
     color            : rgb(14, 16, 18);
     background-color : rgba(85, 255, 0, 0.6);
     border           : 1px solid rgb(85, 255, 0);
 }
 
-plugin_arguments_widget QLineEdit {
+PluginArgumentsWidget QLineEdit {
     font-family    : "Montserrat-Black";
     font-weight    : 500;
     font-size      : 14px;
@@ -1058,12 +1058,12 @@ plugin_arguments_widget QLineEdit {
     border         : none;
 }
 
-plugin_arguments_widget QLineEdit:disabled {
+PluginArgumentsWidget QLineEdit:disabled {
     color      : rgb(32, 32, 32);
     background : rgb(20, 22, 24);
 }
 
-scheduled_plugin_item_area {
+ScheduledPluginItemArea {
     background : rgb(14, 16, 18);
 }
 
@@ -1191,7 +1191,7 @@ font-size : 13px;
 color : #DEE9AF;
 }*/
 
-notification {
+Notification {
 background: rgb(9, 11, 13);
 /*border-top: 2px solid qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(0, 128, 255, 32), stop:1 rgba(0, 0, 0, 0));
 border-bottom: 2px solid qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(0, 0, 0, 0), stop:1 rgba(0, 128, 255, 32));
@@ -1264,18 +1264,18 @@ background       : qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 rg
 border           : none;
 }
 
-overlay
+Overlay
 {
 background       : rgba(0, 0, 0, 128);
 /*background       : rgb(255, 0, 255);*/
 }
 
-reminder_overlay
+ReminderOverlay
 {
 background       : rgb(0, 0, 0);
 }
 
-reminder_overlay *
+ReminderOverlay *
 {
 font-family      : "Iosevka";
 font-weight      : 700;
@@ -1284,7 +1284,7 @@ color            : rgb(48, 84, 106);
 background       : rgb(0, 0, 0);
 }
 
-reminder_overlay QPushButton
+ReminderOverlay QPushButton
 {
 padding-left     : 20px;
 padding-right    : 20px;
@@ -1294,14 +1294,14 @@ border-width     : 2px;
 border-radius    : 0px;
 }
 
-reminder_overlay QPushButton:hover
+ReminderOverlay QPushButton:hover
 {
 color            : rgb(0, 255, 0);
 background       : rgb(0, 0, 0);
 border-color     : rgb(0, 255, 0);
 }
 
-reminder_overlay #image-label
+ReminderOverlay #image-label
 {
 min-width        : 320px;
 min-height       : 320px;
@@ -1310,7 +1310,7 @@ max-height       : 320px;
 margin-bottom    : 15px;
 }
 
-reminder_overlay #text-label
+ReminderOverlay #text-label
 {
 margin-bottom    : 15px;
 }

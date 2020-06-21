@@ -15,16 +15,16 @@
 
 namespace hal
 {
-    plugin_schedule_widget::plugin_schedule_widget(QWidget* parent)
+    PluginScheduleWidget::PluginScheduleWidget(QWidget* parent)
         : QFrame(parent), m_vertical_layout(new QVBoxLayout()), m_searchbar_container(new QFrame()), m_container_layout(new QHBoxLayout()), m_searchbar(new searchbar()),
           m_horizontal_layout(new QHBoxLayout()), m_plugin_frame(new LabeledFrame()), m_schedule_frame(new LabeledFrame()), m_schedule_frame_layout_container(new QWidget()),
-          m_horizontal_schedule_frame_layout(new QHBoxLayout()), m_vertical_schedule_frame_layout(new QVBoxLayout()), m_no_scheduled_plugins_widget(new no_scheduled_plugins_widget()),
-          m_plugin_arguments_widget(new plugin_arguments_widget()), m_scheduled_plugins_widget(new scheduled_plugins_widget()), m_loaded_plugins_widget(new loaded_plugins_widget())
+          m_horizontal_schedule_frame_layout(new QHBoxLayout()), m_vertical_schedule_frame_layout(new QVBoxLayout()), m_NoScheduledPluginsWidget(new NoScheduledPluginsWidget()),
+          m_PluginArgumentsWidget(new PluginArgumentsWidget()), m_ScheduledPluginsWidget(new ScheduledPluginsWidget()), m_LoadedPluginsWidget(new LoadedPluginsWidget())
     {
-        connect(m_no_scheduled_plugins_widget, &no_scheduled_plugins_widget::append_plugin, m_scheduled_plugins_widget, &scheduled_plugins_widget::append_plugin);
-        connect(m_scheduled_plugins_widget->area(), &scheduled_plugin_item_area::no_scheduled_plugins, this, &plugin_schedule_widget::handle_no_scheduled_plugins);
+        connect(m_NoScheduledPluginsWidget, &NoScheduledPluginsWidget::append_plugin, m_ScheduledPluginsWidget, &ScheduledPluginsWidget::append_plugin);
+        connect(m_ScheduledPluginsWidget->area(), &ScheduledPluginItemArea::no_scheduled_plugins, this, &PluginScheduleWidget::handle_no_scheduled_plugins);
 
-        connect(m_scheduled_plugins_widget->area(), &scheduled_plugin_item_area::plugin_selected, m_plugin_arguments_widget, &plugin_arguments_widget::handle_plugin_selected);
+        connect(m_ScheduledPluginsWidget->area(), &ScheduledPluginItemArea::plugin_selected, m_PluginArgumentsWidget, &PluginArgumentsWidget::handle_plugin_selected);
 
         m_vertical_layout->setContentsMargins(0, 0, 0, 0);
         m_vertical_layout->setSpacing(0);
@@ -40,7 +40,7 @@ namespace hal
         m_horizontal_layout->setSpacing(0);
 
         m_plugin_frame->setObjectName("plugin-frame");
-        m_plugin_frame->add_content(m_loaded_plugins_widget);
+        m_plugin_frame->add_content(m_LoadedPluginsWidget);
 
         m_schedule_frame->setObjectName("schedule-frame");
 
@@ -63,32 +63,32 @@ namespace hal
         m_schedule_frame->add_content(m_schedule_frame_layout_container);
         m_schedule_frame_layout_container->setLayout(m_horizontal_schedule_frame_layout);
         m_horizontal_schedule_frame_layout->addLayout(m_vertical_schedule_frame_layout);
-        m_vertical_schedule_frame_layout->addWidget(m_no_scheduled_plugins_widget);
-        m_vertical_schedule_frame_layout->addWidget(m_scheduled_plugins_widget);
-        m_scheduled_plugins_widget->hide();
-        m_horizontal_schedule_frame_layout->addWidget(m_plugin_arguments_widget);
+        m_vertical_schedule_frame_layout->addWidget(m_NoScheduledPluginsWidget);
+        m_vertical_schedule_frame_layout->addWidget(m_ScheduledPluginsWidget);
+        m_ScheduledPluginsWidget->hide();
+        m_horizontal_schedule_frame_layout->addWidget(m_PluginArgumentsWidget);
 
         m_plugin_frame->setGraphicsEffect(new ShadowEffect());
         m_schedule_frame->setGraphicsEffect(new ShadowEffect());
 
-        m_no_scheduled_plugins_widget->repolish();    // MOVE TO REPOLISH METHOD
+        m_NoScheduledPluginsWidget->repolish();    // MOVE TO REPOLISH METHOD
 
         m_schedule_frame->ensurePolished();
         ensurePolished();
 
         QShortcut* debug_shortcut = new QShortcut(QKeySequence(tr("Ctrl+x")), this);
-        connect(debug_shortcut, &QShortcut::activated, this, &plugin_schedule_widget::debug_stuff);
+        connect(debug_shortcut, &QShortcut::activated, this, &PluginScheduleWidget::debug_stuff);
     }
 
-    void plugin_schedule_widget::debug_stuff()
+    void PluginScheduleWidget::debug_stuff()
     {
         QString plugin = "libfsm_detection";
-        m_plugin_arguments_widget->setup(plugin);
+        m_PluginArgumentsWidget->setup(plugin);
     }
 
-    void plugin_schedule_widget::handle_no_scheduled_plugins()
+    void PluginScheduleWidget::handle_no_scheduled_plugins()
     {
-        m_scheduled_plugins_widget->hide();
-        m_no_scheduled_plugins_widget->show();
+        m_ScheduledPluginsWidget->hide();
+        m_NoScheduledPluginsWidget->show();
     }
 }

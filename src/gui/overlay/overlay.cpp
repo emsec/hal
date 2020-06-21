@@ -5,7 +5,7 @@
 
 namespace hal
 {
-    overlay::overlay(QWidget* parent) : QFrame(parent)
+    Overlay::Overlay(QWidget* parent) : QFrame(parent)
     {
     //    setAttribute(Qt::WA_NoSystemBackground);
     //    setAttribute(Qt::WA_TranslucentBackground);
@@ -13,7 +13,7 @@ namespace hal
         handle_parent_changed();
     }
 
-    bool overlay::eventFilter(QObject* watched, QEvent* event)
+    bool Overlay::eventFilter(QObject* watched, QEvent* event)
     {
         if (watched == parent())
         {
@@ -27,7 +27,7 @@ namespace hal
         return QFrame::eventFilter(watched, event);
     }
 
-    bool overlay::event(QEvent* event)
+    bool Overlay::event(QEvent* event)
     {
         if (event->type() == QEvent::ParentAboutToChange)
         {
@@ -47,13 +47,13 @@ namespace hal
         return QFrame::event(event);
     }
 
-    void overlay::mousePressEvent(QMouseEvent* event)
+    void Overlay::mousePressEvent(QMouseEvent* event)
     {
         Q_EMIT clicked();
         event->accept(); // ACCEPT EXPLICITLY
     }
 
-    void overlay::handle_parent_changed()
+    void Overlay::handle_parent_changed()
     {
         if (!parent())
             return;

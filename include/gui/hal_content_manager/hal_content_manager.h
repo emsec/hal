@@ -37,7 +37,7 @@ namespace hal
     class GraphTabWidget;
     class old_graph_navigation_widget;
     class ContextManagerWidget;
-    class netlist_watcher;
+    class NetlistWatcher;
 
     class HalContentManager : public QObject
     {
@@ -76,7 +76,7 @@ namespace hal
 
         QList<ContentWidget*> m_content;
 
-        netlist_watcher* m_netlist_watcher;
+        NetlistWatcher* m_NetlistWatcher;
 
         python_editor* m_python_widget;
 

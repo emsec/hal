@@ -16,7 +16,7 @@ namespace hal
 {
     style_manager::style_manager(QObject* parent)
         : QObject(parent), m_graphics_qss_adapter(new GraphicsQssAdapter()), m_shared_properties(new shared_properties_qss_adapter()),
-          m_notification_manager(new notification_manager_qss_adapter()), m_python_syntax_highlighter(new PythonQssAdapter()), m_vhdl_syntax_highlighter(new VhdlQssAdapter())
+          m_NotificationManager(new NotificationManagerQssAdapter()), m_python_syntax_highlighter(new PythonQssAdapter()), m_vhdl_syntax_highlighter(new VhdlQssAdapter())
     {
     }
 
@@ -90,9 +90,9 @@ namespace hal
         return m_shared_properties;
     }
 
-    const notification_manager_qss_adapter* style_manager::notification_manager() const
+    const NotificationManagerQssAdapter* style_manager::NotificationManager() const
     {
-        return m_notification_manager;
+        return m_NotificationManager;
     }
 
     const PythonQssAdapter* style_manager::PythonSyntaxHighlighter() const

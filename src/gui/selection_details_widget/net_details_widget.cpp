@@ -144,14 +144,14 @@ namespace hal
         m_source_pins_table->viewport()->setMouseTracking(true);
         m_source_pins_table->viewport()->installEventFilter(this);
 
-        //netlist_relay connections
-        connect(&g_netlist_relay, &netlist_relay::net_removed, this, &net_details_widget::handle_net_removed);
-        connect(&g_netlist_relay, &netlist_relay::net_name_changed, this, &net_details_widget::handle_net_name_changed);
-        connect(&g_netlist_relay, &netlist_relay::net_source_added, this, &net_details_widget::handle_net_source_added);
-        connect(&g_netlist_relay, &netlist_relay::net_source_removed, this, &net_details_widget::handle_net_source_removed);
-        connect(&g_netlist_relay, &netlist_relay::net_destination_added, this, &net_details_widget::handle_net_destination_added);
-        connect(&g_netlist_relay, &netlist_relay::net_destination_removed, this, &net_details_widget::handle_net_destination_removed);
-        connect(&g_netlist_relay, &netlist_relay::gate_name_changed, this, &net_details_widget::handle_gate_name_changed);
+        //NetlistRelay connections
+        connect(&g_NetlistRelay, &NetlistRelay::net_removed, this, &net_details_widget::handle_net_removed);
+        connect(&g_NetlistRelay, &NetlistRelay::net_name_changed, this, &net_details_widget::handle_net_name_changed);
+        connect(&g_NetlistRelay, &NetlistRelay::net_source_added, this, &net_details_widget::handle_net_source_added);
+        connect(&g_NetlistRelay, &NetlistRelay::net_source_removed, this, &net_details_widget::handle_net_source_removed);
+        connect(&g_NetlistRelay, &NetlistRelay::net_destination_added, this, &net_details_widget::handle_net_destination_added);
+        connect(&g_NetlistRelay, &NetlistRelay::net_destination_removed, this, &net_details_widget::handle_net_destination_removed);
+        connect(&g_NetlistRelay, &NetlistRelay::gate_name_changed, this, &net_details_widget::handle_gate_name_changed);
     }
 
     net_details_widget::~net_details_widget()

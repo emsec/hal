@@ -31,12 +31,12 @@ class QVBoxLayout;
 
 namespace hal
 {
-    class reminder_overlay : public overlay
+    class ReminderOverlay : public Overlay
     {
         Q_OBJECT
 
     public:
-        reminder_overlay(QWidget* parent = nullptr);
+        ReminderOverlay(QWidget* parent = nullptr);
 
     private Q_SLOTS:
         void self_destruct();

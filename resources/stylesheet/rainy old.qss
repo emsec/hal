@@ -563,11 +563,11 @@ background : rgb(18, 20, 23);
 /*background: qlineargradient( x1:0 y1:0, x2:1 y2:0, stop:0 cyan, stop:1 blue);}*/
 /*}*/
 
-overlay {
+Overlay {
 background : rgba(0, 0, 0, 128);
 }
 
-reminder_overlay {
+ReminderOverlay {
 background : rgb(0, 0, 0);
 }
 

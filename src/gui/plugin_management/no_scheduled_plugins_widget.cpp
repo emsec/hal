@@ -11,7 +11,7 @@
 
 namespace hal
 {
-    no_scheduled_plugins_widget::no_scheduled_plugins_widget(QWidget* parent) : QFrame(parent), m_layout(new QVBoxLayout()), m_text_label(new QLabel()), m_icon_label(new QLabel()), m_drag_active(false)
+    NoScheduledPluginsWidget::NoScheduledPluginsWidget(QWidget* parent) : QFrame(parent), m_layout(new QVBoxLayout()), m_text_label(new QLabel()), m_icon_label(new QLabel()), m_drag_active(false)
     {
         setAcceptDrops(true);
 
@@ -30,7 +30,7 @@ namespace hal
         m_layout->addWidget(m_icon_label);
     }
 
-    void no_scheduled_plugins_widget::dragEnterEvent(QDragEnterEvent* event)
+    void NoScheduledPluginsWidget::dragEnterEvent(QDragEnterEvent* event)
     {
         const QMimeData* mime_data = event->mimeData();
         QString name               = QString(mime_data->data("hal/plugin_name"));
@@ -42,7 +42,7 @@ namespace hal
         repolish();
     }
 
-    void no_scheduled_plugins_widget::dragLeaveEvent(QDragLeaveEvent* event)
+    void NoScheduledPluginsWidget::dragLeaveEvent(QDragLeaveEvent* event)
     {
         Q_UNUSED(event)
 
@@ -50,7 +50,7 @@ namespace hal
         repolish();
     }
 
-    void no_scheduled_plugins_widget::dropEvent(QDropEvent* event)
+    void NoScheduledPluginsWidget::dropEvent(QDropEvent* event)
     {
         const QMimeData* mime_data = event->mimeData();
         QString name               = QString(mime_data->data("hal/plugin_name"));
@@ -65,32 +65,32 @@ namespace hal
         Q_EMIT append_plugin(name);
     }
 
-    bool no_scheduled_plugins_widget::drag_active()
+    bool NoScheduledPluginsWidget::drag_active()
     {
         return m_drag_active;
     }
 
-    QString no_scheduled_plugins_widget::icon_style()
+    QString NoScheduledPluginsWidget::icon_style()
     {
         return m_icon_style;
     }
 
-    QString no_scheduled_plugins_widget::icon_path()
+    QString NoScheduledPluginsWidget::icon_path()
     {
         return m_icon_path;
     }
 
-    void no_scheduled_plugins_widget::set_icon_style(const QString& style)
+    void NoScheduledPluginsWidget::set_icon_style(const QString& style)
     {
         m_icon_style = style;
     }
 
-    void no_scheduled_plugins_widget::set_icon_path(const QString& path)
+    void NoScheduledPluginsWidget::set_icon_path(const QString& path)
     {
         m_icon_path = path;
     }
 
-    void no_scheduled_plugins_widget::repolish()
+    void NoScheduledPluginsWidget::repolish()
     {
         QStyle* s = style();
 

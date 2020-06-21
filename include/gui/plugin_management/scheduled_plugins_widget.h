@@ -27,21 +27,21 @@
 
 namespace hal
 {
-    class scheduled_plugin_item_area;
+    class ScheduledPluginItemArea;
 
-    class scheduled_plugins_widget : public QScrollArea
+    class ScheduledPluginsWidget : public QScrollArea
     {
         Q_OBJECT
 
     public:
-        explicit scheduled_plugins_widget(QWidget* parent = nullptr);
+        explicit ScheduledPluginsWidget(QWidget* parent = nullptr);
 
-        scheduled_plugin_item_area* area();
+        ScheduledPluginItemArea* area();
 
     public Q_SLOTS:
         void append_plugin(const QString& name);
 
     private:
-        scheduled_plugin_item_area* m_area;
+        ScheduledPluginItemArea* m_area;
     };
 }

@@ -248,7 +248,7 @@ namespace hal
         make_section("Debug", "debug-item", ":/icons/bug");
 
         #ifdef GUI_DEBUG_GRID
-        checkbox_setting* grid_debug_setting = new checkbox_setting("debug/grid", "Show grid debug overlay", "enabled", "<-- shows you how the layouter sees the graph", this);
+        checkbox_setting* grid_debug_setting = new checkbox_setting("debug/grid", "Show grid debug Overlay", "enabled", "<-- shows you how the layouter sees the graph", this);
         register_widget("debug-item", grid_debug_setting);
         #endif
 

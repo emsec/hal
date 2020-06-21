@@ -39,12 +39,12 @@ namespace hal
     class CLIPluginInterface;
     class ProgramArguments;
 
-    class plugin_arguments_widget : public QFrame
+    class PluginArgumentsWidget : public QFrame
     {
         Q_OBJECT
 
     public:
-        explicit plugin_arguments_widget(QWidget* parent = nullptr);
+        explicit PluginArgumentsWidget(QWidget* parent = nullptr);
 
         ProgramArguments get_args();
 

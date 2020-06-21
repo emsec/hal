@@ -32,7 +32,7 @@ namespace hal
 {
     class hal_window;
     class main_settings_widget;
-    class plugin_schedule_widget;
+    class PluginScheduleWidget;
     class welcome_screen;
     class work_space; // TEMP NAME ?
 
@@ -60,7 +60,7 @@ namespace hal
         void repolish();
 
     public Q_SLOTS:
-        void handle_overlay_clicked();
+        void handle_Overlay_clicked();
 
     private Q_SLOTS:
         void handle_action_open();
@@ -91,7 +91,7 @@ namespace hal
         QAction* m_action_about;
 
         welcome_screen* m_welcome_screen;
-        plugin_schedule_widget* m_plugin_schedule_widget;
+        PluginScheduleWidget* m_PluginScheduleWidget;
         main_settings_widget* m_main_settings_widget;
     };
 }

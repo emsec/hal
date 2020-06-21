@@ -10,9 +10,9 @@
 
 namespace hal
 {
-    reminder_overlay::reminder_overlay(QWidget* parent) : overlay(parent), m_layout(new QVBoxLayout()), m_image_label(new QLabel()), m_text_label(new QLabel()), m_button(new QPushButton())
+    ReminderOverlay::ReminderOverlay(QWidget* parent) : Overlay(parent), m_layout(new QVBoxLayout()), m_image_label(new QLabel()), m_text_label(new QLabel()), m_button(new QPushButton())
     {
-        connect(m_button, &QPushButton::clicked, this, &reminder_overlay::self_destruct);
+        connect(m_button, &QPushButton::clicked, this, &ReminderOverlay::self_destruct);
 
         m_layout->setContentsMargins(0, 0, 0, 0);
         m_layout->setSpacing(0);
@@ -39,7 +39,7 @@ namespace hal
         m_image_label->setPixmap(QPixmap(":/images/hal").scaled(m_image_label->width(), m_image_label->height()));
     }
 
-    void reminder_overlay::self_destruct()
+    void ReminderOverlay::self_destruct()
     {
         m_button->setEnabled(false);
 

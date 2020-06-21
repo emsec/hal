@@ -44,7 +44,7 @@
 
 namespace hal
 {
-    MainWindow::MainWindow(QWidget* parent) : QWidget(parent), m_schedule_widget(new plugin_schedule_widget()), m_action_schedule(new HalAction(this)), m_action_content(new HalAction(this))
+    MainWindow::MainWindow(QWidget* parent) : QWidget(parent), m_schedule_widget(new PluginScheduleWidget()), m_action_schedule(new HalAction(this)), m_action_content(new HalAction(this))
     {
         ensurePolished();    // ADD REPOLISH METHOD
         connect(FileManager::get_instance(), &FileManager::file_opened, this, &MainWindow::handle_file_opened);
@@ -220,7 +220,7 @@ namespace hal
         //debug
         connect(m_action_close, &HalAction::triggered, this, &MainWindow::handle_action_closed);
 
-        connect(m_action_run_schedule, &HalAction::triggered, plugin_schedule_manager::get_instance(), &plugin_schedule_manager::run_schedule);
+        connect(m_action_run_schedule, &HalAction::triggered, PluginScheduleManager::get_instance(), &PluginScheduleManager::run_schedule);
 
         connect(this, &MainWindow::save_triggered, g_content_manager, &HalContentManager::handle_save_triggered);
 
@@ -232,7 +232,7 @@ namespace hal
 
         //setGraphicsEffect(new OverlayEffect());
 
-        //reminder_overlay* o = new reminder_overlay(this);
+        //ReminderOverlay* o = new ReminderOverlay(this);
         //Q_UNUSED(o)
     }
 

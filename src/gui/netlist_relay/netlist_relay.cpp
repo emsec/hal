@@ -19,13 +19,13 @@
 
 namespace hal
 {
-    netlist_relay::netlist_relay(QObject* parent) : QObject(parent), m_ModuleModel(new ModuleModel(this))
+    NetlistRelay::NetlistRelay(QObject* parent) : QObject(parent), m_ModuleModel(new ModuleModel(this))
     {
-        connect(FileManager::get_instance(), &FileManager::file_opened, this, &netlist_relay::debug_handle_file_opened);    // DEBUG LINE
+        connect(FileManager::get_instance(), &FileManager::file_opened, this, &NetlistRelay::debug_handle_file_opened);    // DEBUG LINE
         register_callbacks();
     }
 
-    netlist_relay::~netlist_relay()
+    NetlistRelay::~NetlistRelay()
     {
         netlist_event_handler::unregister_callback("relay");
         net_event_handler::unregister_callback("relay");
@@ -33,36 +33,36 @@ namespace hal
         module_event_handler::unregister_callback("relay");
     }
 
-    void netlist_relay::register_callbacks()
+    void NetlistRelay::register_callbacks()
     {
         netlist_event_handler::register_callback("relay",
                                                  std::function<void(netlist_event_handler::event, std::shared_ptr<Netlist>, u32)>(
-                                                     std::bind(&netlist_relay::relay_netlist_event, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)));
+                                                     std::bind(&NetlistRelay::relay_netlist_event, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)));
 
         net_event_handler::register_callback("relay",
                                              std::function<void(net_event_handler::event, std::shared_ptr<Net>, u32)>(
-                                                 std::bind(&netlist_relay::relay_net_event, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)));
+                                                 std::bind(&NetlistRelay::relay_net_event, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)));
 
         gate_event_handler::register_callback("relay",
                                               std::function<void(gate_event_handler::event, std::shared_ptr<Gate>, u32)>(
-                                                  std::bind(&netlist_relay::relay_gate_event, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)));
+                                                  std::bind(&NetlistRelay::relay_gate_event, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)));
 
         module_event_handler::register_callback("relay",
                                                 std::function<void(module_event_handler::event, std::shared_ptr<Module>, u32)>(
-                                                    std::bind(&netlist_relay::relay_module_event, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)));
+                                                    std::bind(&NetlistRelay::relay_module_event, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)));
     }
 
-    QColor netlist_relay::get_module_color(const u32 id)
+    QColor NetlistRelay::get_module_color(const u32 id)
     {
         return m_module_colors.value(id);
     }
 
-    ModuleModel* netlist_relay::get_ModuleModel()
+    ModuleModel* NetlistRelay::get_ModuleModel()
     {
         return m_ModuleModel;
     }
 
-    void netlist_relay::debug_change_module_name(const u32 id)
+    void NetlistRelay::debug_change_module_name(const u32 id)
     {
         // NOT THREADSAFE
 
@@ -76,7 +76,7 @@ namespace hal
             m->set_name(text.toStdString());
     }
 
-    void netlist_relay::debug_change_module_color(const u32 id)
+    void NetlistRelay::debug_change_module_color(const u32 id)
     {
         // NOT THREADSAFE
 
@@ -91,14 +91,14 @@ namespace hal
         m_module_colors.insert(id, color);
         m_ModuleModel->update_module(id);
 
-        // Since color is our overlay over the netlist data, no event is
+        // Since color is our Overlay over the netlist data, no event is
         // automatically fired. We need to take care of that ourselves here.
         g_graph_context_manager.handle_module_color_changed(m);
 
         Q_EMIT module_color_changed(m);
     }
 
-    void netlist_relay::debug_add_selection_to_module(const u32 id)
+    void NetlistRelay::debug_add_selection_to_module(const u32 id)
     {
         // NOT THREADSAFE
         // DECIDE HOW TO HANDLE MODULES
@@ -116,7 +116,7 @@ namespace hal
         }
     }
 
-    void netlist_relay::debug_add_child_module(const u32 id)
+    void NetlistRelay::debug_add_child_module(const u32 id)
     {
         // NOT THREADSAFE
 
@@ -134,7 +134,7 @@ namespace hal
         std::shared_ptr<Module> s = g_netlist->create_module(g_netlist->get_unique_module_id(), name.toStdString(), m);
     }
 
-    void netlist_relay::debug_delete_module(const u32 id)
+    void NetlistRelay::debug_delete_module(const u32 id)
     {
         std::shared_ptr<Module> m = g_netlist->get_module_by_id(id);
         assert(m);
@@ -142,7 +142,7 @@ namespace hal
         g_netlist->delete_module(m);
     }
 
-    void netlist_relay::relay_netlist_event(netlist_event_handler::event ev, std::shared_ptr<Netlist> object, u32 associated_data)
+    void NetlistRelay::relay_netlist_event(netlist_event_handler::event ev, std::shared_ptr<Netlist> object, u32 associated_data)
     {
         if (!object)
             return;    // SHOULD NEVER BE REACHED
@@ -257,7 +257,7 @@ namespace hal
         }
     }
 
-    void netlist_relay::relay_module_event(module_event_handler::event ev, std::shared_ptr<Module> object, u32 associated_data)
+    void NetlistRelay::relay_module_event(module_event_handler::event ev, std::shared_ptr<Module> object, u32 associated_data)
     {
         if (!object)
             return;    // SHOULD NEVER BE REACHED
@@ -374,7 +374,7 @@ namespace hal
         }
     }
 
-    void netlist_relay::relay_gate_event(gate_event_handler::event ev, std::shared_ptr<Gate> object, u32 associated_data)
+    void NetlistRelay::relay_gate_event(gate_event_handler::event ev, std::shared_ptr<Gate> object, u32 associated_data)
     {
         UNUSED(associated_data);
         if (!object)
@@ -415,7 +415,7 @@ namespace hal
         }
     }
 
-    void netlist_relay::relay_net_event(net_event_handler::event ev, std::shared_ptr<Net> object, u32 associated_data)
+    void NetlistRelay::relay_net_event(net_event_handler::event ev, std::shared_ptr<Net> object, u32 associated_data)
     {
         if (!object)
             return;    // SHOULD NEVER BE REACHED
@@ -502,7 +502,7 @@ namespace hal
         }
     }
 
-    void netlist_relay::debug_handle_file_opened()
+    void NetlistRelay::debug_handle_file_opened()
     {
         for (std::shared_ptr<Module> m : g_netlist->get_modules())
             m_module_colors.insert(m->get_id(), gui_utility::get_random_color());
@@ -512,7 +512,7 @@ namespace hal
         m_ModuleModel->init();
     }
 
-    void netlist_relay::debug_handle_file_closed()
+    void NetlistRelay::debug_handle_file_closed()
     {
         m_ModuleModel->clear();
         m_module_colors.clear();

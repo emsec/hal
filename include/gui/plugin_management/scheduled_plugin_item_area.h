@@ -33,14 +33,14 @@ class QVBoxLayout;
 namespace hal
 {
     class DropMarker;
-    class scheduled_plugin_item;
+    class ScheduledPluginItem;
 
-    class scheduled_plugin_item_area : public QFrame
+    class ScheduledPluginItemArea : public QFrame
     {
         Q_OBJECT
 
     public:
-        explicit scheduled_plugin_item_area(QWidget* parent = nullptr);
+        explicit ScheduledPluginItemArea(QWidget* parent = nullptr);
 
         void dragEnterEvent(QDragEnterEvent* event) Q_DECL_OVERRIDE;
         void dragMoveEvent(QDragMoveEvent* event) Q_DECL_OVERRIDE;
@@ -59,16 +59,16 @@ namespace hal
         void no_scheduled_plugins();
 
     public Q_SLOTS:
-        void handle_item_clicked(scheduled_plugin_item* item);
-        void handle_item_drag_started(scheduled_plugin_item* item);
-        void handle_item_removed(scheduled_plugin_item* item);
+        void handle_item_clicked(ScheduledPluginItem* item);
+        void handle_item_drag_started(ScheduledPluginItem* item);
+        void handle_item_removed(ScheduledPluginItem* item);
 
     private:
         QVBoxLayout* m_layout;
         QFrame* m_spacer;
 
         QVector<int> m_y_values;
-        QList<QPair<scheduled_plugin_item*, DropMarker*>> m_list;
+        QList<QPair<ScheduledPluginItem*, DropMarker*>> m_list;
 
         DropMarker* m_active_marker;
 

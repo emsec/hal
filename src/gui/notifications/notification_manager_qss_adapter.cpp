@@ -4,7 +4,7 @@
 
 namespace hal
 {
-    notification_manager_qss_adapter::notification_manager_qss_adapter(QWidget* parent) : QWidget(parent)
+    NotificationManagerQssAdapter::NotificationManagerQssAdapter(QWidget* parent) : QWidget(parent)
     {
         //DEFAULT VALUES
         m_x_offset = 20;
@@ -14,7 +14,7 @@ namespace hal
         repolish();
     }
 
-    void notification_manager_qss_adapter::repolish()
+    void NotificationManagerQssAdapter::repolish()
     {
         QStyle* s = style();
 
@@ -22,32 +22,32 @@ namespace hal
         s->polish(this);
     }
 
-    int notification_manager_qss_adapter::x_offset() const
+    int NotificationManagerQssAdapter::x_offset() const
     {
         return m_x_offset;
     }
 
-    int notification_manager_qss_adapter::y_offset() const
+    int NotificationManagerQssAdapter::y_offset() const
     {
         return m_y_offset;
     }
 
-    int notification_manager_qss_adapter::spacing() const
+    int NotificationManagerQssAdapter::spacing() const
     {
         return m_spacing;
     }
 
-    void notification_manager_qss_adapter::set_x_offset(const int offset)
+    void NotificationManagerQssAdapter::set_x_offset(const int offset)
     {
         m_x_offset = offset;
     }
 
-    void notification_manager_qss_adapter::set_y_offset(const int offset)
+    void NotificationManagerQssAdapter::set_y_offset(const int offset)
     {
         m_y_offset = offset;
     }
 
-    void notification_manager_qss_adapter::set_spacing(const int spacing)
+    void NotificationManagerQssAdapter::set_spacing(const int spacing)
     {
         m_spacing = spacing;
     }

@@ -32,7 +32,7 @@ namespace hal
 {
     class hal_window_layout_container;
     class hal_window_toolbar;
-    class overlay;
+    class Overlay;
     class workspace; // TEMP NAME ?
 
     class hal_window : public QFrame
@@ -51,7 +51,7 @@ namespace hal
         void repolish();
 
         hal_window_toolbar* get_toolbar();
-        overlay* get_overlay();
+        Overlay* get_Overlay();
 
     protected:
         //void paintEvent(QPaintEvent* event) Q_DECL_OVERRIDE;
@@ -69,7 +69,7 @@ namespace hal
         hal_window_toolbar* m_toolbar;
         workspace* m_workspace;
 
-        overlay* m_overlay;
+        Overlay* m_Overlay;
         QGraphicsEffect* m_effect;
     };
 }

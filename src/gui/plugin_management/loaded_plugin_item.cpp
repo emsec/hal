@@ -15,10 +15,10 @@
 
 namespace hal
 {
-    bool loaded_plugin_item::s_drag_in_progress = false;
-    QPoint loaded_plugin_item::s_drag_start_position;
+    bool LoadedPluginItem::s_drag_in_progress = false;
+    QPoint LoadedPluginItem::s_drag_start_position;
 
-    loaded_plugin_item::loaded_plugin_item(const QString& name, QWidget* parent)
+    LoadedPluginItem::LoadedPluginItem(const QString& name, QWidget* parent)
         : QFrame(parent), m_horizontal_layout(new QHBoxLayout()), m_icon_label(new QLabel()), m_vertical_layout(new QVBoxLayout()), m_name_label(new QLabel()), m_description_label(new QLabel()),
           m_animation(new QPropertyAnimation()), m_hover(false)
     {
@@ -49,7 +49,7 @@ namespace hal
         repolish();
     }
 
-    void loaded_plugin_item::enterEvent(QEvent* event)
+    void LoadedPluginItem::enterEvent(QEvent* event)
     {
         if (event->type() == QEvent::Enter)
         {
@@ -58,7 +58,7 @@ namespace hal
         }
     }
 
-    void loaded_plugin_item::leaveEvent(QEvent* event)
+    void LoadedPluginItem::leaveEvent(QEvent* event)
     {
         if (event->type() == QEvent::Leave)
         {
@@ -70,7 +70,7 @@ namespace hal
         }
     }
 
-    void loaded_plugin_item::mouseMoveEvent(QMouseEvent* event)
+    void LoadedPluginItem::mouseMoveEvent(QMouseEvent* event)
     {
         if (!s_drag_in_progress)
             return;
@@ -82,7 +82,7 @@ namespace hal
         exec_drag();
     }
 
-    void loaded_plugin_item::mousePressEvent(QMouseEvent* event)
+    void LoadedPluginItem::mousePressEvent(QMouseEvent* event)
     {
         if (event->button() == Qt::LeftButton)
         {
@@ -93,7 +93,7 @@ namespace hal
         event->accept();
     }
 
-    void loaded_plugin_item::mouseReleaseEvent(QMouseEvent* event)
+    void LoadedPluginItem::mouseReleaseEvent(QMouseEvent* event)
     {
         if (event->button() == Qt::LeftButton)
             s_drag_in_progress = false;
@@ -102,7 +102,7 @@ namespace hal
         event->accept();
     }
 
-    void loaded_plugin_item::repolish()
+    void LoadedPluginItem::repolish()
     {
         QStyle* s = style();
 
@@ -122,7 +122,7 @@ namespace hal
             m_icon_label->setPixmap(gui_utility::get_styled_svg_icon(m_icon_style, m_icon_path).pixmap(QSize(17, 17)));
     }
 
-    void loaded_plugin_item::exec_drag()
+    void LoadedPluginItem::exec_drag()
     {
         s_drag_in_progress   = false;
         QDrag* drag          = new QDrag(this);
@@ -140,37 +140,37 @@ namespace hal
         m_name_label->setText(m_name);
     }
 
-    bool loaded_plugin_item::hover()
+    bool LoadedPluginItem::hover()
     {
         return m_hover;
     }
 
-    QString loaded_plugin_item::icon_path()
+    QString LoadedPluginItem::icon_path()
     {
         return m_icon_path;
     }
 
-    QString loaded_plugin_item::icon_style()
+    QString LoadedPluginItem::icon_style()
     {
         return m_icon_style;
     }
 
-    QString loaded_plugin_item::name()
+    QString LoadedPluginItem::name()
     {
         return m_name_label->text();
     }
 
-    void loaded_plugin_item::set_hover_active(bool active)
+    void LoadedPluginItem::set_hover_active(bool active)
     {
         m_hover = active;
     }
 
-    void loaded_plugin_item::set_icon_path(const QString& path)
+    void LoadedPluginItem::set_icon_path(const QString& path)
     {
         m_icon_path = path;
     }
 
-    void loaded_plugin_item::set_icon_style(const QString& style)
+    void LoadedPluginItem::set_icon_style(const QString& style)
     {
         m_icon_style = style;
     }

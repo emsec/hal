@@ -27,7 +27,7 @@
 
 namespace hal
 {
-    class plugin_arguments_widget;
+    class PluginArgumentsWidget;
     class ProgramArguments;
 
     struct argument
@@ -38,14 +38,14 @@ namespace hal
         bool checked;
     };
 
-    class plugin_schedule_manager : public QObject
+    class PluginScheduleManager : public QObject
     {
         using schedule = QList<QPair<QString, QList<argument>>>;
 
         Q_OBJECT
 
     public:
-        static plugin_schedule_manager* get_instance();
+        static PluginScheduleManager* get_instance();
 
         schedule* get_schedule();
         ProgramArguments get_program_arguments(int index);
@@ -64,7 +64,7 @@ namespace hal
         void run_schedule();
 
     private:
-        explicit plugin_schedule_manager(QObject* parent = nullptr);
+        explicit PluginScheduleManager(QObject* parent = nullptr);
 
         schedule m_schedule;
         QList<QPair<QString, schedule*>> m_saved_schedules;

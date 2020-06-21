@@ -29,12 +29,12 @@ class QVBoxLayout;
 
 namespace hal
 {
-    class dialog_overlay : public overlay
+    class DialogOverlay : public Overlay
     {
         Q_OBJECT
 
     public:
-        dialog_overlay(QWidget* parent = nullptr);
+        DialogOverlay(QWidget* parent = nullptr);
 
         void set_widget(QWidget* widget);
 

@@ -130,7 +130,7 @@ namespace hal
         python_console_widget* python_console = new python_console_widget();
         m_MainWindow->add_content(python_console, 5, content_anchor::bottom);
         python_console->open();
-        m_netlist_watcher = new netlist_watcher(this);
+        m_NetlistWatcher = new NetlistWatcher(this);
     }
 
     void HalContentManager::handle_close_document()

@@ -32,7 +32,7 @@ class QVBoxLayout;
 
 namespace hal
 {
-    class loaded_plugin_item : public QFrame
+    class LoadedPluginItem : public QFrame
     {
         Q_OBJECT
         Q_PROPERTY(bool hover READ hover)
@@ -40,7 +40,7 @@ namespace hal
         Q_PROPERTY(QString icon_style READ icon_style WRITE set_icon_style)
 
     public:
-        explicit loaded_plugin_item(const QString& name, QWidget* parent = nullptr);
+        explicit LoadedPluginItem(const QString& name, QWidget* parent = nullptr);
 
         void enterEvent(QEvent* event) Q_DECL_OVERRIDE;
         void leaveEvent(QEvent* event) Q_DECL_OVERRIDE;

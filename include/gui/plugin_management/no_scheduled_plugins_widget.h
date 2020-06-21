@@ -30,7 +30,7 @@ class QVBoxLayout;
 
 namespace hal
 {
-    class no_scheduled_plugins_widget : public QFrame
+    class NoScheduledPluginsWidget : public QFrame
     {
         Q_OBJECT
         Q_PROPERTY(bool drag_active READ drag_active)
@@ -38,7 +38,7 @@ namespace hal
         Q_PROPERTY(QString icon_style READ icon_style WRITE set_icon_style)
 
     public:
-        explicit no_scheduled_plugins_widget(QWidget* parent = nullptr);
+        explicit NoScheduledPluginsWidget(QWidget* parent = nullptr);
 
         void dragEnterEvent(QDragEnterEvent* event) Q_DECL_OVERRIDE;
         void dragLeaveEvent(QDragLeaveEvent* event) Q_DECL_OVERRIDE;

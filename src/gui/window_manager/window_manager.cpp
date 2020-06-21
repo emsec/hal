@@ -26,7 +26,7 @@ namespace hal
         m_action_settings    (new QAction("Settings", this)),
         m_action_about       (new QAction("About", this)),
         m_welcome_screen     (new welcome_screen()),
-        m_plugin_schedule_widget(new plugin_schedule_widget()),
+        m_PluginScheduleWidget(new PluginScheduleWidget()),
         m_main_settings_widget(new main_settings_widget())
     {
         // DEBUG CODE
@@ -158,7 +158,7 @@ namespace hal
             window->repolish();
     }
 
-    void window_manager::handle_overlay_clicked()
+    void window_manager::handle_Overlay_clicked()
     {
         unlock_all();
     }

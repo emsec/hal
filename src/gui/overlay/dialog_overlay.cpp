@@ -4,14 +4,14 @@
 
 namespace hal
 {
-    dialog_overlay::dialog_overlay(QWidget* parent) : overlay(parent),
+    DialogOverlay::DialogOverlay(QWidget* parent) : Overlay(parent),
         m_layout(new QVBoxLayout(this)),
         m_widget(nullptr)
     {
 
     }
 
-    void dialog_overlay::set_widget(QWidget* widget)
+    void DialogOverlay::set_widget(QWidget* widget)
     {
         if (m_widget)
         {
@@ -33,7 +33,7 @@ namespace hal
     }
 }
 
-//void dialog_overlay::resizeEvent(QResizeEvent* event)
+//void DialogOverlay::resizeEvent(QResizeEvent* event)
 //{
 
 //}

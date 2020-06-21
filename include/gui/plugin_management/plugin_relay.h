@@ -29,12 +29,12 @@
 
 namespace hal
 {
-    class plugin_relay : public QObject
+    class PluginRelay : public QObject
     {
         Q_OBJECT
 
     public:
-        explicit plugin_relay(QObject* parent = nullptr);
+        explicit PluginRelay(QObject* parent = nullptr);
 
         void plugin_manager_callback(bool is_load, const std::string& plugin_name, const std::string& plugin_path);
 

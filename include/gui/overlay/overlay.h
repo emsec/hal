@@ -27,12 +27,12 @@
 
 namespace hal
 {
-    class overlay : public QFrame
+    class Overlay : public QFrame
     {
         Q_OBJECT
 
     public:
-        explicit overlay(QWidget* parent = nullptr);
+        explicit Overlay(QWidget* parent = nullptr);
 
     Q_SIGNALS:
         void clicked();

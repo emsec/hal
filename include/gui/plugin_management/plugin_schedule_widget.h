@@ -32,18 +32,18 @@ class QVBoxLayout;
 namespace hal
 {
     class LabeledFrame;
-    class loaded_plugins_widget;
-    class plugin_arguments_widget;
-    class no_scheduled_plugins_widget;
-    class scheduled_plugins_widget;
+    class LoadedPluginsWidget;
+    class PluginArgumentsWidget;
+    class NoScheduledPluginsWidget;
+    class ScheduledPluginsWidget;
     class searchbar;
 
-    class plugin_schedule_widget : public QFrame
+    class PluginScheduleWidget : public QFrame
     {
         Q_OBJECT
 
     public:
-        explicit plugin_schedule_widget(QWidget* parent = nullptr);
+        explicit PluginScheduleWidget(QWidget* parent = nullptr);
 
     public Q_SLOTS:
         void debug_stuff();
@@ -60,9 +60,9 @@ namespace hal
         QWidget* m_schedule_frame_layout_container;
         QHBoxLayout* m_horizontal_schedule_frame_layout;
         QVBoxLayout* m_vertical_schedule_frame_layout;
-        no_scheduled_plugins_widget* m_no_scheduled_plugins_widget;
-        plugin_arguments_widget* m_plugin_arguments_widget;
-        scheduled_plugins_widget* m_scheduled_plugins_widget;
-        loaded_plugins_widget* m_loaded_plugins_widget;
+        NoScheduledPluginsWidget* m_NoScheduledPluginsWidget;
+        PluginArgumentsWidget* m_PluginArgumentsWidget;
+        ScheduledPluginsWidget* m_ScheduledPluginsWidget;
+        LoadedPluginsWidget* m_LoadedPluginsWidget;
     };
 }

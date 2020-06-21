@@ -9,7 +9,7 @@
 
 namespace hal
 {
-    notification::notification(QWidget* parent) : QFrame(parent)
+    Notification::Notification(QWidget* parent) : QFrame(parent)
     {
         hide();
         setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint | Qt::WindowDoesNotAcceptFocus | Qt::ToolTip);
@@ -30,17 +30,17 @@ namespace hal
         m_animation->setEasingCurve(QEasingCurve::Linear);
     }
 
-    qreal notification::get_opacity()
+    qreal Notification::get_opacity()
     {
         return windowOpacity();
     }
 
-    void notification::set_opacity(qreal opacity)
+    void Notification::set_opacity(qreal opacity)
     {
         setWindowOpacity(opacity);
     }
 
-    void notification::mousePressEvent(QMouseEvent* event)
+    void Notification::mousePressEvent(QMouseEvent* event)
     {
         Q_UNUSED(event)
 
@@ -50,24 +50,24 @@ namespace hal
         cleanup();
     }
 
-    void notification::fade_in()
+    void Notification::fade_in()
     {
         show();
         QApplication::beep();
         m_animation->start();
     }
 
-    void notification::fade_out()
+    void Notification::fade_out()
     {
         m_animation->setDirection(QPropertyAnimation::Backward);
-        connect(m_animation, &QPropertyAnimation::finished, this, &notification::cleanup);
+        connect(m_animation, &QPropertyAnimation::finished, this, &Notification::cleanup);
 
         if (m_animation->state() != QPropertyAnimation::Running)
             m_animation->start();
     }
 
-    void notification::cleanup()
+    void Notification::cleanup()
     {
-        g_notification_manager->remove(this);
+        g_NotificationManager->remove(this);
     }
 }

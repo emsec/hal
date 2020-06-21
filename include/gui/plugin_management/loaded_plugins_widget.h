@@ -30,12 +30,12 @@ class QVBoxLayout;
 
 namespace hal
 {
-    class loaded_plugins_widget : public QScrollArea
+    class LoadedPluginsWidget : public QScrollArea
     {
         Q_OBJECT
 
     public:
-        explicit loaded_plugins_widget(QWidget* parent = nullptr);
+        explicit LoadedPluginsWidget(QWidget* parent = nullptr);
 
     public Q_SLOTS:
         void handle_plugin_loaded(const QString& name, const QString& path);

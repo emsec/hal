@@ -27,7 +27,7 @@
 
 namespace hal
 {
-    class notification_manager_qss_adapter : public QWidget
+    class NotificationManagerQssAdapter : public QWidget
     {
         Q_OBJECT
         Q_PROPERTY(int x_offset READ x_offset WRITE set_x_offset)
@@ -35,7 +35,7 @@ namespace hal
         Q_PROPERTY(int spacing READ spacing WRITE set_spacing)
 
     public:
-        explicit notification_manager_qss_adapter(QWidget* parent = nullptr);
+        explicit NotificationManagerQssAdapter(QWidget* parent = nullptr);
 
         void repolish();
 

@@ -30,7 +30,7 @@ class QApplication;
 namespace hal
 {
     class GraphicsQssAdapter;
-    class notification_manager_qss_adapter;
+    class NotificationManagerQssAdapter;
     class PythonQssAdapter;
     class shared_properties_qss_adapter;
     class VhdlQssAdapter;
@@ -50,7 +50,7 @@ namespace hal
         void update_style();
 
         const shared_properties_qss_adapter* shared_properties() const;
-        const notification_manager_qss_adapter* notification_manager() const;
+        const NotificationManagerQssAdapter* NotificationManager() const;
         const PythonQssAdapter* PythonSyntaxHighlighter() const;
         const VhdlQssAdapter* VhdlSyntaxHighlighter() const;
 
@@ -60,7 +60,7 @@ namespace hal
 
         GraphicsQssAdapter* m_graphics_qss_adapter;
         shared_properties_qss_adapter* m_shared_properties;
-        notification_manager_qss_adapter* m_notification_manager;
+        NotificationManagerQssAdapter* m_NotificationManager;
         PythonQssAdapter* m_python_syntax_highlighter;
         VhdlQssAdapter* m_vhdl_syntax_highlighter;
     };

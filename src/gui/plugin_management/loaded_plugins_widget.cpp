@@ -10,10 +10,10 @@
 
 namespace hal
 {
-    loaded_plugins_widget::loaded_plugins_widget(QWidget* parent) : QScrollArea(parent), m_container(new QFrame()), m_layout(new QVBoxLayout()), m_spacer(new QFrame())
+    LoadedPluginsWidget::LoadedPluginsWidget(QWidget* parent) : QScrollArea(parent), m_container(new QFrame()), m_layout(new QVBoxLayout()), m_spacer(new QFrame())
     {
-        connect(&g_plugin_relay, &plugin_relay::plugin_loaded, this, &loaded_plugins_widget::handle_plugin_loaded);
-        connect(&g_plugin_relay, &plugin_relay::plugin_unloaded, this, &loaded_plugins_widget::handle_plugin_unloaded);
+        connect(&g_PluginRelay, &PluginRelay::plugin_loaded, this, &LoadedPluginsWidget::handle_plugin_loaded);
+        connect(&g_PluginRelay, &PluginRelay::plugin_unloaded, this, &LoadedPluginsWidget::handle_plugin_unloaded);
 
         m_container->setObjectName("container");
 
@@ -31,7 +31,7 @@ namespace hal
         setWidget(m_container);
     }
 
-    void loaded_plugins_widget::handle_plugin_loaded(const QString& name, const QString& path)
+    void LoadedPluginsWidget::handle_plugin_loaded(const QString& name, const QString& path)
     {
         Q_UNUSED(path)
 
@@ -40,16 +40,16 @@ namespace hal
             return;
         }
 
-        m_layout->addWidget(new loaded_plugin_item(name, this));
+        m_layout->addWidget(new LoadedPluginItem(name, this));
     }
 
-    void loaded_plugins_widget::handle_plugin_unloaded(const QString& name, const QString& path)
+    void LoadedPluginsWidget::handle_plugin_unloaded(const QString& name, const QString& path)
     {
         Q_UNUSED(path)
 
         for (QObject* child : m_layout->children())
         {
-            loaded_plugin_item* item = static_cast<loaded_plugin_item*>(child);
+            LoadedPluginItem* item = static_cast<LoadedPluginItem*>(child);
 
             if (item->name() == name)
                 item->deleteLater();

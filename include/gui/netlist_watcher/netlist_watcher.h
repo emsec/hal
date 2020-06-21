@@ -29,12 +29,12 @@
 
 namespace hal
 {
-    class netlist_watcher : public QObject
+    class NetlistWatcher : public QObject
     {
         Q_OBJECT
     public:
-        netlist_watcher(QObject* parent = 0);
-        ~netlist_watcher();
+        NetlistWatcher(QObject* parent = 0);
+        ~NetlistWatcher();
 
         void reset();
 

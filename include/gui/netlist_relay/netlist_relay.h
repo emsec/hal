@@ -37,13 +37,13 @@ namespace hal
     class ModuleModel;
     class Module;
 
-    class netlist_relay : public QObject
+    class NetlistRelay : public QObject
     {
         Q_OBJECT
 
     public:
-        explicit netlist_relay(QObject* parent = nullptr);
-        ~netlist_relay();
+        explicit NetlistRelay(QObject* parent = nullptr);
+        ~NetlistRelay();
 
         void register_callbacks();
 
