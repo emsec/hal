@@ -42,11 +42,11 @@ namespace hal
     class python_context_subscriber;
 
     namespace py = pybind11;
-    class __attribute__((visibility("default"))) python_context
+    class __attribute__((visibility("default"))) PythonContext
     {
     public:
-        python_context();
-        ~python_context();
+        PythonContext();
+        ~PythonContext();
 
         void interpret(const QString& input, bool multiple_expressions = false);
         void interpret_script(const QString& input);
@@ -58,7 +58,7 @@ namespace hal
 
         void forward_reset();
 
-        void set_console(python_console* console);
+        void set_console(PythonConsole* console);
 
         std::vector<std::tuple<std::string, std::string>> complete(const QString& text, bool use_console_context);
 
@@ -91,7 +91,7 @@ namespace hal
 
         std::string m_history_file;
 
-        python_console* m_console;
+        PythonConsole* m_console;
         bool m_trigger_reset = false;
     };
 }

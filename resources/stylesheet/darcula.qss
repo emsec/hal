@@ -335,7 +335,7 @@ hal--double_toolbar {
     max-height : 24px;
 }
 
-hal--searchbar {
+hal--Searchbar {
     background-color            : #25292D /*rgb(25, 28, 29)*/;
     min-height                  : 30px;
     max-height                  : 30px;
@@ -349,7 +349,7 @@ hal--searchbar {
     qproperty-clear_icon_style  : "all -> #E4E4E4";
 }
 
-hal--searchbar QLabel {
+hal--Searchbar QLabel {
     font             : bold "Iosevka";
     color            : rgb(165, 165, 165);
     background-color : rgb(25, 28, 29);
@@ -357,12 +357,12 @@ hal--searchbar QLabel {
     padding-right    : 4px;
 }
 
-hal--searchbar QLabel:hover {
+hal--Searchbar QLabel:hover {
     color       : rgb(255, 255, 255);
     font-weight : bold;
 }
 
-hal--searchbar QPushButton {
+hal--Searchbar QPushButton {
     font-weight      : normal;
     background-color : rgb(25, 28, 29);
     border           : none;
@@ -371,7 +371,7 @@ hal--searchbar QPushButton {
     max-width        : 25;
 }
 
-hal--searchbar QLineEdit {
+hal--Searchbar QLineEdit {
     color            : #CBD2D0;
     font-family      : "Iosevka";
     font-style       : normal;
@@ -379,16 +379,16 @@ hal--searchbar QLineEdit {
     border           : none;
 }
 
-hal--searchbar QLineEdit[text=""] {
+hal--Searchbar QLineEdit[text=""] {
     font-style : italic;
 }
 
-hal--searchbar QToolButton {
+hal--Searchbar QToolButton {
     background-color : rgb(25, 28, 29);
     border           : none;
 }
 
-hal--settings_widget {
+hal--SettingsWidget {
     /*background-color : #c1bdb3;*/
     background-color : #25292D;
     /*border : 1px solid rgb(23, 26, 26);*/
@@ -401,22 +401,22 @@ hal--settings_widget {
     /*border-left : 5px solid #232ed1;*/
 }
 
-hal--settings_widget[conflicts=true] {
+hal--SettingsWidget[conflicts=true] {
     border-left      : 5px solid #A61F1F;
     background-color : rgb(70, 35, 35);
 }
 
-hal--settings_widget[dirty=true][conflicts=false] {
+hal--SettingsWidget[dirty=true][conflicts=false] {
     border-left      : 5px solid rgb(73, 200, 76);
 }
 
-hal--settings_widget QLabel {
+hal--SettingsWidget QLabel {
     color            : #D3DCE6;
     background-color : rgba(255, 255, 255, 0);
     margin-right     : 10px;
 }
 
-hal--settings_widget #name-label {
+hal--SettingsWidget #name-label {
     min-height : 42px;
     max-height : 42px;
     font       : 14px bold "Iosevka";
@@ -424,7 +424,7 @@ hal--settings_widget #name-label {
 
 /* LABEL_BUTTON */
 
-hal--settings_widget hal--label_button {
+hal--SettingsWidget hal--label_button {
     font           : bold "Iosevka";
     /*background: rgba(228, 228, 228, 0.05);*/
     border         : 1px solid rgb(228, 228, 228);
@@ -437,48 +437,48 @@ hal--settings_widget hal--label_button {
 
 /* KEYBIND_EDIT */
 
-hal--settings_widget hal--keybind_edit QLineEdit {
+hal--SettingsWidget hal--keybind_edit QLineEdit {
     border-radius: 2px;
     margin-top: 8px;
     margin-left: 0px;
     padding: 4px;
 }
 
-hal--settings_widget hal--keybind_edit[validated=false] QLineEdit {
+hal--SettingsWidget hal--keybind_edit[validated=false] QLineEdit {
     border: 1px solid red;
     background-color: rgba(255, 13, 13, 0.281);
     /*color: red;*/
 }
 
-/* MAIN_SETTINGS_WIDGET */
+/* MainSettingsWidget */
 
-hal--main_settings_widget {
+hal--MainSettingsWidget {
     border : 1px solid rgb(23, 26, 26);
 }
 
-hal--main_settings_widget #searchbar-container {
+hal--MainSettingsWidget #Searchbar-container {
     min-height : 80px;
     max-height : 80px;
     /*background-color : rgba(38, 40, 41, 1);*/
 }
 
-hal--main_settings_widget #searchbar-container hal--searchbar {
+hal--MainSettingsWidget #Searchbar-container hal--Searchbar {
     min-width : 400px;
     max-width : 400px;
     border    : 1px solid rgb(73, 74, 76);
 }
 
-hal--main_settings_widget hal--settings_display {
+hal--MainSettingsWidget hal--SettingsDisplay {
     background-color : red;
     border           : 1px solid #A9B7C6;
 }
 
-hal--main_settings_widget hal--settings_display * {
+hal--MainSettingsWidget hal--SettingsDisplay * {
     background-color : red;
     border           : 1px solid #A9B7C6;
 }
 
-hal--main_settings_widget hal--preview_widget {
+hal--MainSettingsWidget hal--PreviewWidget {
     background-color: rgb(9, 11, 13);
     border          : 2px solid rgb(73, 74, 76);
     border-radius   : 8px;
@@ -486,31 +486,31 @@ hal--main_settings_widget hal--preview_widget {
     padding         : 5px 0;
 }
 
-hal--main_settings_widget hal--preview_widget *{
+hal--MainSettingsWidget hal--PreviewWidget *{
     background-color: rgba(255, 255, 255, 0);
 }
 
 /* ExpandingListWidget */
 
-hal--main_settings_widget hal--ExpandingListWidget {
+hal--MainSettingsWidget hal--ExpandingListWidget {
     border-right : 1px solid rgb(23, 26, 26);
     min-width    : 250px;
     max-width    : 250px;
 }
 
-hal--main_settings_widget hal--ExpandingListWidget #content {
+hal--MainSettingsWidget hal--ExpandingListWidget #content {
     background   : rgb(9, 11, 13);
     border-right : 5px solid rgb(13, 15, 17);
 }
 
-hal--main_settings_widget hal--ExpandingListWidget #spacer {
+hal--MainSettingsWidget hal--ExpandingListWidget #spacer {
     min-height   : 80px;
     max-height   : 80px;
     background   : rgb(9, 11, 13);
     border-right : 5px solid rgb(13, 15, 17);
 }
 
-hal--main_settings_widget hal--ExpandingListButton {
+hal--MainSettingsWidget hal--ExpandingListButton {
     min-height           : 42px;
     max-height           : 42px;
     background-color     : rgb(9, 11, 13);
@@ -519,58 +519,58 @@ hal--main_settings_widget hal--ExpandingListButton {
     qproperty-icon_style : "all -> #969696";
 }
 
-hal--main_settings_widget hal--ExpandingListButton[hover=true] {
+hal--MainSettingsWidget hal--ExpandingListButton[hover=true] {
     qproperty-icon_style : "all -> #E4E4E4";
 }
 
-hal--main_settings_widget hal--ExpandingListButton[hover=true] * {
+hal--MainSettingsWidget hal--ExpandingListButton[hover=true] * {
     /*color: rgb(228, 228, 228);*/
     color            : rgb(255, 255, 255);
     background-color : rgba(255, 255, 255, 0.012);
 }
 
-hal--main_settings_widget hal--ExpandingListButton[selected=true] {
+hal--MainSettingsWidget hal--ExpandingListButton[selected=true] {
     background-color     : rgb(34, 37, 38);
     qproperty-icon_style : "all -> #A9B7C6";
 }
 
-hal--main_settings_widget hal--ExpandingListButton[type="child"] {
+hal--MainSettingsWidget hal--ExpandingListButton[type="child"] {
     background-color : rgb(14, 17, 20);
 }
 
-hal--main_settings_widget hal--ExpandingListButton[type="child"][selected=true] {
+hal--MainSettingsWidget hal--ExpandingListButton[type="child"][selected=true] {
     background-color : rgb(34, 37, 38);
 }
 
-hal--main_settings_widget hal--ExpandingListButton * {
+hal--MainSettingsWidget hal--ExpandingListButton * {
     font             : 14px bold "Iosevka";
     background-color : transparent;
 }
 
-hal--main_settings_widget hal--ExpandingListButton #left-border {
+hal--MainSettingsWidget hal--ExpandingListButton #left-border {
     min-width : 4px;
     max-width : 4px;
     /*padding-right: 40px;*/
 }
 
-hal--main_settings_widget hal--ExpandingListButton #icon-label {
+hal--MainSettingsWidget hal--ExpandingListButton #icon-label {
     padding-left  : 40px;
     padding-right : 10px;
 }
 
-hal--main_settings_widget hal--ExpandingListButton #right-border {
+hal--MainSettingsWidget hal--ExpandingListButton #right-border {
     min-width : 4px;
     max-width : 4px;
 }
 
-hal--main_settings_widget hal--ExpandingListButton[selected=true] #text-label {
+hal--MainSettingsWidget hal--ExpandingListButton[selected=true] #text-label {
     /*color : rgb(114, 140, 0);*/
     /*color : rgb(35, 200, 46);*/
     color : rgb(85, 255, 0);
     /*color : rgb(0, 255, 0);*/
 }
 
-hal--main_settings_widget hal--ExpandingListButton[selected=true] #right-border {
+hal--MainSettingsWidget hal--ExpandingListButton[selected=true] #right-border {
     /*background-color: rgb(114, 140, 0);*/
     /*background-color : rgb(35, 200, 46);*/
     background-color : rgb(85, 255, 0);
@@ -753,10 +753,10 @@ hal--LabeledFrame #right-spacer {
 }
 
 /*********************************************
-*      GATE_/MODULE_/NET_DETAILS_WIDGET      *
+*      GATE_/MODULE_/NetDetailsWidget      *
 *********************************************/
 
-hal--gate_details_widget QPushButton, hal--net_details_widget QPushButton, hal--module_details_widget QPushButton{
+hal--GateDetailsWidget QPushButton, hal--NetDetailsWidget QPushButton, hal--ModuleDetailsWidget QPushButton{
     font: bold "Iosevka";
     font-size: 12px;
     /*background: qlineargradient( x1:0 y1:0, x2:1 y2:0, stop:0 black, stop:1 gray);*/
@@ -767,7 +767,7 @@ hal--gate_details_widget QPushButton, hal--net_details_widget QPushButton, hal--
     height: 12px;
 }
 
-hal--gate_details_widget QPushButton:disabled, hal--net_details_widget QPushButton:disabled, hal--module_details_widget QPushButton:disabled{
+hal--GateDetailsWidget QPushButton:disabled, hal--NetDetailsWidget QPushButton:disabled, hal--ModuleDetailsWidget QPushButton:disabled{
     font: bold "Iosevka";
     font-size: 12px;
     /*background: qlineargradient( x1:0 y1:0, x2:1 y2:0, stop:0 black, stop:1 gray);*/
@@ -778,12 +778,12 @@ hal--gate_details_widget QPushButton:disabled, hal--net_details_widget QPushButt
     height: 12px;
 }
 
-hal--gate_details_widget QTableWidget::item:!disabled:hover, hal--net_details_widget QTableWidget::item:!disabled:hover{
+hal--GateDetailsWidget QTableWidget::item:!disabled:hover, hal--NetDetailsWidget QTableWidget::item:!disabled:hover{
     /*background-color: red;*/
     color: white;
 }
 
-hal--gate_details_widget QLabel{
+hal--GateDetailsWidget QLabel{
     color: #A9B7C6;
 }
 /*
@@ -1040,13 +1040,13 @@ hal--PluginScheduleWidget {
     stop       : 1 rgb(23, 30, 34));
 }
 
-hal--PluginScheduleWidget #searchbar-container {
+hal--PluginScheduleWidget #Searchbar-container {
     background : transparent;
     min-height : 80px;
     max-height : 80px;
 }
 
-hal--PluginScheduleWidget hal--searchbar {
+hal--PluginScheduleWidget hal--Searchbar {
     min-width : 400px;
     max-width : 400px;
     border    : 1px solid rgb(73, 74, 76);
@@ -1266,7 +1266,7 @@ hal--DropMarker {
     background : rgb(14, 16, 18);
 }
 
-hal--python_editor {
+hal--PythonEditor {
     background : qlineargradient(spread:pad,
     x1         : 0,
     y1         : 0,
@@ -1276,7 +1276,7 @@ hal--python_editor {
     stop       : 1 rgb(23, 30, 34));
 }
 
-hal--python_editor hal--CodeEditor {
+hal--PythonEditor hal--CodeEditor {
     /*font-family : "SourceCodePro-Black";*/
     font-family                       : "Iosevka";
     font-size                         : 14px;
@@ -1297,7 +1297,7 @@ hal--python_editor hal--CodeEditor {
     qproperty-current_line_background : #323232;
 }
 
-hal--python_editor hal--CodeEditor hal--LineNumberArea {
+hal--PythonEditor hal--CodeEditor hal--LineNumberArea {
     /*background : #0C1112;*/
     /*background : #0C0F12;*/
     background   : rgb(49, 51, 53);
@@ -1342,7 +1342,7 @@ hal--get_in_touch_item#ticket_item {
     qproperty-icon_path  : ":/icons/github"
 }
 
-hal--python_console {
+hal--PythonConsole {
     font-family : "Iosevka";
     /*font-family : "DroidSansMono";*/
     font-size   : 14px;
@@ -1353,7 +1353,7 @@ hal--MinimapScrollbar #slider {
 background : rgba(120, 120, 120, 0.1);
 }
 
-hal--python_editor {
+hal--PythonEditor {
 background : qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 rgb(33, 40, 44), stop:1 rgb(23, 30, 34));
 
 qproperty-open_icon_style: "all->#3192C5";
@@ -1458,7 +1458,7 @@ hal--LoggerQssAdapter {
     qproperty-default_highlight: #FFEF0B;
 }
 
-hal--python_console_qss_adapter {
+hal--PythonConsoleQssAdapter {
     qproperty-standard_color: #BBBBBB;
     qproperty-error_color: #FF6B63;
     qproperty-promt_color: #917EB7;

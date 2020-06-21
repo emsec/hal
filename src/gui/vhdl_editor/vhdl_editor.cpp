@@ -11,9 +11,9 @@
 
 namespace hal
 {
-    vhdl_editor::vhdl_editor() : ContentWidget("Source"), m_code_editor(new CodeEditor()), m_searchbar(new searchbar())
+    vhdl_editor::vhdl_editor() : ContentWidget("Source"), m_code_editor(new CodeEditor()), m_searchbar(new Searchbar())
     {
-        connect(m_searchbar, &searchbar::text_edited, m_code_editor, &CodeEditor::search);
+        connect(m_searchbar, &Searchbar::text_edited, m_code_editor, &CodeEditor::search);
 
         m_code_editor->setReadOnly(true);
         m_searchbar->hide();

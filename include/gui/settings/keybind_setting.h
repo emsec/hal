@@ -32,12 +32,12 @@
 
 namespace hal
 {
-    class keybind_setting : public settings_widget
+    class KeybindSetting : public SettingsWidget
     {
         Q_OBJECT
 
     public:
-        keybind_setting(const QString& key, const QString& title, const QString& description, QWidget *parent = nullptr);
+        KeybindSetting(const QString& key, const QString& title, const QString& description, QWidget *parent = nullptr);
 
         virtual void load(const QVariant& value) Q_DECL_OVERRIDE;
         virtual QVariant value() Q_DECL_OVERRIDE;

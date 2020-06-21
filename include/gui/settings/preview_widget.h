@@ -28,12 +28,12 @@
 
 namespace hal
 {
-    class preview_widget : public QFrame
+    class PreviewWidget : public QFrame
     {
         Q_OBJECT
 
     public:
-        explicit preview_widget(QWidget* parent = 0);
+        explicit PreviewWidget(QWidget* parent = 0);
 
         virtual void update(const QVariant& value) = 0;
 

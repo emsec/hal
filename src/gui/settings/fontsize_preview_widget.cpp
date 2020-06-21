@@ -5,7 +5,7 @@
 
 namespace hal
 {
-    fontsize_preview_widget::fontsize_preview_widget(const QString& text, const QFont& font, QWidget* parent) : preview_widget(parent), m_label(new QLabel()), m_font(font)
+    FontsizePreviewWidget::FontsizePreviewWidget(const QString& text, const QFont& font, QWidget* parent) : PreviewWidget(parent), m_label(new QLabel()), m_font(font)
     {
         setFrameStyle(QFrame::Box);
         m_layout->setAlignment(Qt::AlignTop | Qt::AlignLeft);
@@ -17,7 +17,7 @@ namespace hal
         m_layout->addWidget(m_label);
     }
 
-    void fontsize_preview_widget::update(const QVariant& value)
+    void FontsizePreviewWidget::update(const QVariant& value)
     {
         m_font.setPointSize(value.toInt());
         m_label->setFont(m_font);

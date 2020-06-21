@@ -13,7 +13,7 @@ namespace hal
 #endif    // ifdef PYBIND11_MODULE
 
         m.def(
-            "log_info", [](std::string& message) { log_info("python_context", message); }, R"( some documentation info)");
+            "log_info", [](std::string& message) { log_info("PythonContext", message); }, R"( some documentation info)");
 
         path_init(m);
 

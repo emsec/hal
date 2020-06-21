@@ -29,7 +29,7 @@
 
 namespace hal
 {
-    class python_console_qss_adapter : public QWidget
+    class PythonConsoleQssAdapter : public QWidget
     {
         Q_OBJECT
         Q_PROPERTY(QColor standard_color READ standard_color WRITE set_standard_color)
@@ -38,7 +38,7 @@ namespace hal
 
     public:
 
-        static python_console_qss_adapter* instance();
+        static PythonConsoleQssAdapter* instance();
 
         QColor standard_color() const;
         QColor error_color() const;
@@ -49,7 +49,7 @@ namespace hal
         void set_promt_color(const QColor& color);
 
     private:
-        explicit python_console_qss_adapter(QWidget* parent = nullptr);
+        explicit PythonConsoleQssAdapter(QWidget* parent = nullptr);
 
         QColor m_standard_color;
         QColor m_error_color;

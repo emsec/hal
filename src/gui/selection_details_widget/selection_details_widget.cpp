@@ -16,20 +16,20 @@
 
 namespace hal
 {
-    selection_details_widget::selection_details_widget(QWidget* parent) : ContentWidget("Details", parent)
+    SelectionDetailsWidget::SelectionDetailsWidget(QWidget* parent) : ContentWidget("Details", parent)
     {
         m_stacked_widget = new QStackedWidget(this);
 
         m_empty_widget = new QWidget(this);
         m_stacked_widget->addWidget(m_empty_widget);
 
-        m_gate_details = new gate_details_widget(this);
+        m_gate_details = new GateDetailsWidget(this);
         m_stacked_widget->addWidget(m_gate_details);
 
-        m_net_details = new net_details_widget(this);
+        m_net_details = new NetDetailsWidget(this);
         m_stacked_widget->addWidget(m_net_details);
 
-        m_module_details = new module_details_widget(this);
+        m_module_details = new ModuleDetailsWidget(this);
         m_stacked_widget->addWidget(m_module_details);
 
         m_item_deleted_label = new QLabel(this);
@@ -40,7 +40,7 @@ namespace hal
 
         m_stacked_widget->setCurrentWidget(m_empty_widget);
 
-        m_searchbar = new searchbar(this);
+        m_searchbar = new Searchbar(this);
         m_searchbar->hide();
 
         m_content_layout->addWidget(m_stacked_widget);
@@ -55,10 +55,10 @@ namespace hal
         //    m_table_widget->horizontalHeader()->setStretchLastSection(true);
         //    m_table_widget->viewport()->setFocusPolicy(Qt::NoFocus);
 
-        connect(&g_selection_relay, &selection_relay::selection_changed, this, &selection_details_widget::handle_selection_update);
+        connect(&g_selection_relay, &SelectionRelay::selection_changed, this, &SelectionDetailsWidget::handle_selection_update);
     }
 
-    void selection_details_widget::handle_selection_update(void* sender)
+    void SelectionDetailsWidget::handle_selection_update(void* sender)
     {
         //called update methods with id = 0 to reset widget to the internal state of not updating because its not visible
         //when all details widgets are finished maybe think about more elegant way
@@ -98,15 +98,15 @@ namespace hal
         }
     }
 
-    QList<QShortcut *> selection_details_widget::create_shortcuts()
+    QList<QShortcut *> SelectionDetailsWidget::create_shortcuts()
     {
         QShortcut* search_shortcut = new QShortcut(QKeySequence("Ctrl+f"),this);
-        connect(search_shortcut, &QShortcut::activated, this, &selection_details_widget::toggle_searchbar);
+        connect(search_shortcut, &QShortcut::activated, this, &SelectionDetailsWidget::toggle_searchbar);
 
         return (QList<QShortcut*>() << search_shortcut);
     }
 
-    void selection_details_widget::toggle_searchbar()
+    void SelectionDetailsWidget::toggle_searchbar()
     {
         if(m_stacked_widget->currentWidget() != m_module_details)
             return;

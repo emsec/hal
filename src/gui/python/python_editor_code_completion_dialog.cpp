@@ -13,7 +13,7 @@
 
 namespace hal
 {
-    python_editor_code_completion_dialog::python_editor_code_completion_dialog(QWidget* parent, std::vector<std::tuple<std::string, std::string>> completions) : QDialog(parent), m_completions(completions)
+    PythonEditorCodeCompletionDialog::PythonEditorCodeCompletionDialog(QWidget* parent, std::vector<std::tuple<std::string, std::string>> completions) : QDialog(parent), m_completions(completions)
     {
         //the parent has to be a layouter_view, needs a rework, for now its sufficient
         m_table = new QTableWidget(this);
@@ -68,7 +68,7 @@ namespace hal
     }
 
     //list is focused, so no need to implement down/up button, because the list automatically does the right thing for you
-    void python_editor_code_completion_dialog::keyPressEvent(QKeyEvent* event)
+    void PythonEditorCodeCompletionDialog::keyPressEvent(QKeyEvent* event)
     {
         if (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return)
         {
@@ -83,7 +83,7 @@ namespace hal
         }
     }
 
-    QSize python_editor_code_completion_dialog::table_widget_size(QTableWidget* table)
+    QSize PythonEditorCodeCompletionDialog::table_widget_size(QTableWidget* table)
     {
         int width = 4;
         for (int i = 0; i < table->columnCount(); i++)

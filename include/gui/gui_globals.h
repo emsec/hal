@@ -56,12 +56,12 @@ namespace hal
 
     extern NetlistRelay g_NetlistRelay;
     extern PluginRelay g_PluginRelay;
-    extern selection_relay g_selection_relay;
-    extern settings_relay g_settings_relay;
+    extern SelectionRelay g_selection_relay;
+    extern SettingsRelay g_settings_relay;
 
-    extern settings_manager g_settings_manager;
+    extern SettingsManager g_settings_manager;
 
-    extern keybind_manager g_keybind_manager;
+    extern KeybindManager g_keybind_manager;
 
     extern FileStatusManager g_file_status_manager;
 
@@ -69,7 +69,7 @@ namespace hal
 
     extern thread_pool* g_thread_pool;
 
-    extern std::unique_ptr<python_context> g_python_context;
+    extern std::unique_ptr<PythonContext> g_python_context;
 
     extern GuiApi* g_gui_api;
 

@@ -28,12 +28,12 @@
 
 namespace hal
 {
-    class spinbox_setting : public settings_widget
+    class SpinboxSetting : public SettingsWidget
     {
         Q_OBJECT
 
     public:
-        spinbox_setting(const QString& key, const QString& title, const int min, const int max, const QString& description, QWidget* parent = 0);
+        SpinboxSetting(const QString& key, const QString& title, const int min, const int max, const QString& description, QWidget* parent = 0);
 
         virtual void load(const QVariant& value) Q_DECL_OVERRIDE;
         virtual QVariant value() Q_DECL_OVERRIDE;

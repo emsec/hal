@@ -16,7 +16,7 @@
 
 namespace hal
 {
-    net_details_widget::net_details_widget(QWidget* parent) : QWidget(parent)
+    NetDetailsWidget::NetDetailsWidget(QWidget* parent) : QWidget(parent)
     {
         //general initializations
         init_settings();
@@ -125,18 +125,18 @@ namespace hal
         m_content_layout->addWidget(m_scroll_area);
 
         //connect the buttons
-        connect(m_source_pins_button, &QPushButton::clicked, this, &net_details_widget::handle_buttons_clicked);
-        connect(m_destination_pins_button, &QPushButton::clicked, this, &net_details_widget::handle_buttons_clicked);
+        connect(m_source_pins_button, &QPushButton::clicked, this, &NetDetailsWidget::handle_buttons_clicked);
+        connect(m_destination_pins_button, &QPushButton::clicked, this, &NetDetailsWidget::handle_buttons_clicked);
 
         //connect the tables
-        connect(m_source_pins_table, &QTableWidget::itemDoubleClicked, this, &net_details_widget::handle_table_item_clicked);
-        connect(m_destination_pins_table, &QTableWidget::itemDoubleClicked, this, &net_details_widget::handle_table_item_clicked);
-        connect(m_general_table, &QTableWidget::customContextMenuRequested, this, &net_details_widget::handle_general_table_menu_requeted);
-        connect(m_source_pins_table, &QTableWidget::customContextMenuRequested, this, &net_details_widget::handle_sources_table_menu_requeted);
-        connect(m_destination_pins_table, &QTableWidget::customContextMenuRequested, this, &net_details_widget::handle_destinations_table_menu_requeted);
+        connect(m_source_pins_table, &QTableWidget::itemDoubleClicked, this, &NetDetailsWidget::handle_table_item_clicked);
+        connect(m_destination_pins_table, &QTableWidget::itemDoubleClicked, this, &NetDetailsWidget::handle_table_item_clicked);
+        connect(m_general_table, &QTableWidget::customContextMenuRequested, this, &NetDetailsWidget::handle_general_table_menu_requeted);
+        connect(m_source_pins_table, &QTableWidget::customContextMenuRequested, this, &NetDetailsWidget::handle_sources_table_menu_requeted);
+        connect(m_destination_pins_table, &QTableWidget::customContextMenuRequested, this, &NetDetailsWidget::handle_destinations_table_menu_requeted);
 
         //settings
-        connect(&g_settings_relay, &settings_relay::setting_changed, this, &net_details_widget::handle_global_settings_changed);
+        connect(&g_settings_relay, &SettingsRelay::setting_changed, this, &NetDetailsWidget::handle_global_settings_changed);
 
         //install eventfilter to change the cursor when hovering over the second colums of the pin tables
         m_destination_pins_table->viewport()->setMouseTracking(true);
@@ -145,20 +145,20 @@ namespace hal
         m_source_pins_table->viewport()->installEventFilter(this);
 
         //NetlistRelay connections
-        connect(&g_NetlistRelay, &NetlistRelay::net_removed, this, &net_details_widget::handle_net_removed);
-        connect(&g_NetlistRelay, &NetlistRelay::net_name_changed, this, &net_details_widget::handle_net_name_changed);
-        connect(&g_NetlistRelay, &NetlistRelay::net_source_added, this, &net_details_widget::handle_net_source_added);
-        connect(&g_NetlistRelay, &NetlistRelay::net_source_removed, this, &net_details_widget::handle_net_source_removed);
-        connect(&g_NetlistRelay, &NetlistRelay::net_destination_added, this, &net_details_widget::handle_net_destination_added);
-        connect(&g_NetlistRelay, &NetlistRelay::net_destination_removed, this, &net_details_widget::handle_net_destination_removed);
-        connect(&g_NetlistRelay, &NetlistRelay::gate_name_changed, this, &net_details_widget::handle_gate_name_changed);
+        connect(&g_NetlistRelay, &NetlistRelay::net_removed, this, &NetDetailsWidget::handle_net_removed);
+        connect(&g_NetlistRelay, &NetlistRelay::net_name_changed, this, &NetDetailsWidget::handle_net_name_changed);
+        connect(&g_NetlistRelay, &NetlistRelay::net_source_added, this, &NetDetailsWidget::handle_net_source_added);
+        connect(&g_NetlistRelay, &NetlistRelay::net_source_removed, this, &NetDetailsWidget::handle_net_source_removed);
+        connect(&g_NetlistRelay, &NetlistRelay::net_destination_added, this, &NetDetailsWidget::handle_net_destination_added);
+        connect(&g_NetlistRelay, &NetlistRelay::net_destination_removed, this, &NetDetailsWidget::handle_net_destination_removed);
+        connect(&g_NetlistRelay, &NetlistRelay::gate_name_changed, this, &NetDetailsWidget::handle_gate_name_changed);
     }
 
-    net_details_widget::~net_details_widget()
+    NetDetailsWidget::~NetDetailsWidget()
     {
     }
 
-    bool net_details_widget::eventFilter(QObject *watched, QEvent *event)
+    bool NetDetailsWidget::eventFilter(QObject *watched, QEvent *event)
     {
         //need to determine which of the tables is the "owner" of the viewport
         QTableWidget* table = (watched == m_destination_pins_table->viewport()) ? m_destination_pins_table : m_source_pins_table;
@@ -184,7 +184,7 @@ namespace hal
         return false;
     }
 
-    void net_details_widget::update(u32 net_id)
+    void NetDetailsWidget::update(u32 net_id)
     {
 
         m_current_id = net_id;
@@ -279,19 +279,19 @@ namespace hal
         m_destination_pins_table->update();
     }
 
-    void net_details_widget::handle_net_removed(const std::shared_ptr<Net> n)
+    void NetDetailsWidget::handle_net_removed(const std::shared_ptr<Net> n)
     {
         Q_UNUSED(n)
     }
 
-    void net_details_widget::handle_net_name_changed(const std::shared_ptr<Net> n)
+    void NetDetailsWidget::handle_net_name_changed(const std::shared_ptr<Net> n)
     {
         if(m_current_id == n->get_id())
             m_name_item->setText(QString::fromStdString(n->get_name()));
 
     }
 
-    void net_details_widget::handle_net_source_added(const std::shared_ptr<Net> n, const u32 src_gate_id)
+    void NetDetailsWidget::handle_net_source_added(const std::shared_ptr<Net> n, const u32 src_gate_id)
     {
         Q_UNUSED(src_gate_id);
 
@@ -299,7 +299,7 @@ namespace hal
             update(m_current_id);
     }
 
-    void net_details_widget::handle_net_source_removed(const std::shared_ptr<Net> n, const u32 src_gate_id)
+    void NetDetailsWidget::handle_net_source_removed(const std::shared_ptr<Net> n, const u32 src_gate_id)
     {
         Q_UNUSED(src_gate_id);
 
@@ -307,7 +307,7 @@ namespace hal
             update(m_current_id);
     }
 
-    void net_details_widget::handle_net_destination_added(const std::shared_ptr<Net> n, const u32 dst_gate_id)
+    void NetDetailsWidget::handle_net_destination_added(const std::shared_ptr<Net> n, const u32 dst_gate_id)
     {
         Q_UNUSED(dst_gate_id);
 
@@ -315,7 +315,7 @@ namespace hal
             update(m_current_id);
     }
 
-    void net_details_widget::handle_net_destination_removed(const std::shared_ptr<Net> n, const u32 dst_gate_id)
+    void NetDetailsWidget::handle_net_destination_removed(const std::shared_ptr<Net> n, const u32 dst_gate_id)
     {
         Q_UNUSED(dst_gate_id);
 
@@ -323,7 +323,7 @@ namespace hal
             update(m_current_id);
     }
 
-    void net_details_widget::handle_gate_name_changed(const std::shared_ptr<Gate> g)
+    void NetDetailsWidget::handle_gate_name_changed(const std::shared_ptr<Gate> g)
     {
         Q_UNUSED(g)
 
@@ -366,7 +366,7 @@ namespace hal
             update(m_current_id);
     }
 
-    void net_details_widget::handle_buttons_clicked()
+    void NetDetailsWidget::handle_buttons_clicked()
     {
         QPushButton* btn = dynamic_cast<QPushButton*>(sender());
         if(!btn)
@@ -385,14 +385,14 @@ namespace hal
             widget->hide();
     }
 
-    void net_details_widget::handle_table_item_clicked(QTableWidgetItem* item)
+    void NetDetailsWidget::handle_table_item_clicked(QTableWidgetItem* item)
     {
         if(item->column() != 2)
             return;
 
         QTableWidget* sender_table = dynamic_cast<QTableWidget*>(sender());
 
-        selection_relay::subfocus focus = (sender_table == m_source_pins_table) ? selection_relay::subfocus::right : selection_relay::subfocus::left;
+        SelectionRelay::subfocus focus = (sender_table == m_source_pins_table) ? SelectionRelay::subfocus::right : SelectionRelay::subfocus::left;
         auto gate_id = item->data(Qt::UserRole).toInt();
         auto pin = sender_table->item(item->row(), 0)->text().toStdString();
 
@@ -402,7 +402,7 @@ namespace hal
 
         g_selection_relay.clear();
         g_selection_relay.m_selected_gates.insert(gate_id);
-        g_selection_relay.m_focus_type = selection_relay::item_type::gate;
+        g_selection_relay.m_focus_type = SelectionRelay::item_type::gate;
         g_selection_relay.m_focus_id = gate_id;
         g_selection_relay.m_subfocus = focus;
 
@@ -413,7 +413,7 @@ namespace hal
         g_selection_relay.relay_selection_changed(this);
     }
 
-    void net_details_widget::handle_general_table_menu_requeted(const QPoint &pos)
+    void NetDetailsWidget::handle_general_table_menu_requeted(const QPoint &pos)
     {
         if(m_general_table->itemAt(pos)->column() != 1)
             return;
@@ -439,7 +439,7 @@ namespace hal
         menu.exec();
     }
 
-    void net_details_widget::handle_sources_table_menu_requeted(const QPoint &pos)
+    void NetDetailsWidget::handle_sources_table_menu_requeted(const QPoint &pos)
     {
         if(m_source_pins_table->itemAt(pos)->column() != 2)
             return;
@@ -456,7 +456,7 @@ namespace hal
         menu.exec();
     }
 
-    void net_details_widget::handle_destinations_table_menu_requeted(const QPoint &pos)
+    void NetDetailsWidget::handle_destinations_table_menu_requeted(const QPoint &pos)
     {
         if(m_destination_pins_table->itemAt(pos)->column() != 2)
             return;
@@ -473,7 +473,7 @@ namespace hal
         menu.exec();
     }
 
-    QSize net_details_widget::calculate_table_size(QTableWidget *table)
+    QSize NetDetailsWidget::calculate_table_size(QTableWidget *table)
     {
         //necessary to test if the table is empty, otherwise (due to the resizeColumnsToContents function)
         //is the tables width far too big, so just return 0 as the size
@@ -489,9 +489,9 @@ namespace hal
         return QSize(w+5, h);
     }
 
-    void net_details_widget::show_all_sections()
+    void NetDetailsWidget::show_all_sections()
     {
-        //no need to be dynamic like in the gate_details_widget since there are only 2 sections that could be hidden
+        //no need to be dynamic like in the GateDetailsWidget since there are only 2 sections that could be hidden
         m_source_pins_button->show();
         m_top_lvl_layout->itemAt(5)->spacerItem()->changeSize(0,7,QSizePolicy::Expanding, QSizePolicy::Fixed);
         m_top_lvl_layout->itemAt(5)->spacerItem()->invalidate();
@@ -500,7 +500,7 @@ namespace hal
         m_top_lvl_layout->update();
     }
 
-    void net_details_widget::hide_empty_sections()
+    void NetDetailsWidget::hide_empty_sections()
     {
         //as in show_all_sections, no need to be dynamic, only 2 possible sections that can be hidden
         if(m_source_pins_button->text().contains("(0)"))
@@ -518,12 +518,12 @@ namespace hal
 
     }
 
-    void net_details_widget::init_settings()
+    void NetDetailsWidget::init_settings()
     {
         m_hide_empty_sections = g_settings_manager.get("selection_details/hide_empty_sections", false).toBool();
     }
 
-    void net_details_widget::handle_global_settings_changed(void* sender, const QString& key, const QVariant& value)
+    void NetDetailsWidget::handle_global_settings_changed(void* sender, const QString& key, const QVariant& value)
     {
         Q_UNUSED(sender)
         if(key == "selection_details/hide_empty_sections")

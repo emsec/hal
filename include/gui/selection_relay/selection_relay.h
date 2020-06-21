@@ -36,7 +36,7 @@ namespace hal
     class Module;
     class Net;
 
-    class selection_relay : public QObject
+    class SelectionRelay : public QObject
     {
         Q_OBJECT
 
@@ -66,7 +66,7 @@ namespace hal
             remove   = 2
         };
 
-        explicit selection_relay(QObject* parent = nullptr);
+        explicit SelectionRelay(QObject* parent = nullptr);
 
         void clear(); // does not emit the "update" signal!
         void clear_and_update();

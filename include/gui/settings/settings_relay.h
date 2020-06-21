@@ -29,12 +29,12 @@
 
 namespace hal
 {
-    class settings_relay : public QObject
+    class SettingsRelay : public QObject
     {
         Q_OBJECT
 
     public:
-        explicit settings_relay(QObject* parent = nullptr);
+        explicit SettingsRelay(QObject* parent = nullptr);
         // TODO do we need a sender registry?
         // void register_sender(void* sender, QString name);
         // void remove_sender(void* sender);

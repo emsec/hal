@@ -31,13 +31,13 @@
 
 namespace hal
 {
-    class selection_history_navigator : public QObject
+    class SelectionHistoryNavigator : public QObject
     {
         Q_OBJECT
 
     public:
-        selection_history_navigator(unsigned int max_history_size, QObject* parent = 0);
-        ~selection_history_navigator();
+        SelectionHistoryNavigator(unsigned int max_history_size, QObject* parent = 0);
+        ~SelectionHistoryNavigator();
 
         void navigate_to_prev_item();
         void navigate_to_next_item();
@@ -59,6 +59,6 @@ namespace hal
 
         void relay_selection(selection selection);
 
-        void store_selection(u32 id, selection_relay::item_type type);
+        void store_selection(u32 id, SelectionRelay::item_type type);
     };
 }

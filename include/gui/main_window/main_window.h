@@ -40,10 +40,10 @@
 
 namespace hal
 {
-    class plugin_model;
+    class PluginModel;
     class plugin_manager_dialog;
     class PluginScheduleWidget;
-    class python_editor;
+    class PythonEditor;
     class FileManager;
     class HalContentManager;
     class dropdown_list;
@@ -151,7 +151,7 @@ namespace hal
         QStackedWidget* m_stacked_widget;
 
         PluginScheduleWidget* m_schedule_widget;
-        main_settings_widget* m_settings;
+        MainSettingsWidget* m_settings;
         welcome_screen* m_welcome_screen;
         QHBoxLayout* m_tool_bar_layout;
         QToolBar* m_left_tool_bar;
@@ -175,7 +175,7 @@ namespace hal
 
         AboutDialog* m_AboutDialog;
 
-        plugin_model* m_plugin_model;
+        PluginModel* m_plugin_model;
 
         QString m_hal_icon_style;
         QString m_hal_icon_path;

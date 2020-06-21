@@ -30,12 +30,12 @@
 
 namespace hal
 {
-    class fontsize_preview_widget : public preview_widget
+    class FontsizePreviewWidget : public PreviewWidget
     {
         Q_OBJECT
 
     public:
-        explicit fontsize_preview_widget(const QString& text, const QFont& font, QWidget* parent = 0);
+        explicit FontsizePreviewWidget(const QString& text, const QFont& font, QWidget* parent = 0);
         void update(const QVariant& value) Q_DECL_OVERRIDE;
 
     private:

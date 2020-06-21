@@ -28,16 +28,16 @@
 
 namespace hal
 {
-    class python_console_history
+    class PythonConsoleHistory
     {
     public:
         /**
-         * Constructs a new python_console_history object.
+         * Constructs a new PythonConsoleHistory object.
          *
          */
-        python_console_history();
+        PythonConsoleHistory();
 
-        ~python_console_history();
+        ~PythonConsoleHistory();
 
         /**
          * Add command to history and writes it back to the history file.

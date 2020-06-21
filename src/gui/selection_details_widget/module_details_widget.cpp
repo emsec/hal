@@ -16,7 +16,7 @@
 
 namespace hal
 {
-    module_details_widget::module_details_widget(QWidget* parent) : QWidget(parent)
+    ModuleDetailsWidget::ModuleDetailsWidget(QWidget* parent) : QWidget(parent)
     {
         m_current_id = 0;
 
@@ -108,34 +108,34 @@ namespace hal
         m_top_lvl_layout->addSpacerItem(new QSpacerItem(0,0, QSizePolicy::Expanding, QSizePolicy::Expanding));
         m_content_layout->addWidget(m_scroll_area);
 
-        connect(m_general_info_button, &QPushButton::clicked, this, &module_details_widget::handle_buttons_clicked);
-        connect(m_input_ports_button, &QPushButton::clicked, this, &module_details_widget::handle_buttons_clicked);
-        connect(m_output_ports_button, &QPushButton::clicked, this, &module_details_widget::handle_buttons_clicked);
+        connect(m_general_info_button, &QPushButton::clicked, this, &ModuleDetailsWidget::handle_buttons_clicked);
+        connect(m_input_ports_button, &QPushButton::clicked, this, &ModuleDetailsWidget::handle_buttons_clicked);
+        connect(m_output_ports_button, &QPushButton::clicked, this, &ModuleDetailsWidget::handle_buttons_clicked);
 
-        connect(&g_NetlistRelay, &NetlistRelay::netlist_marked_global_input, this, &module_details_widget::handle_netlist_marked_global_input);
-        connect(&g_NetlistRelay, &NetlistRelay::netlist_marked_global_output, this, &module_details_widget::handle_netlist_marked_global_output);
-        connect(&g_NetlistRelay, &NetlistRelay::netlist_marked_global_inout, this, &module_details_widget::handle_netlist_marked_global_inout);
-        connect(&g_NetlistRelay, &NetlistRelay::netlist_unmarked_global_input, this, &module_details_widget::handle_netlist_unmarked_global_input);
-        connect(&g_NetlistRelay, &NetlistRelay::netlist_unmarked_global_output, this, &module_details_widget::handle_netlist_unmarked_global_output);
-        connect(&g_NetlistRelay, &NetlistRelay::netlist_unmarked_global_inout, this, &module_details_widget::handle_netlist_unmarked_global_inout);
+        connect(&g_NetlistRelay, &NetlistRelay::netlist_marked_global_input, this, &ModuleDetailsWidget::handle_netlist_marked_global_input);
+        connect(&g_NetlistRelay, &NetlistRelay::netlist_marked_global_output, this, &ModuleDetailsWidget::handle_netlist_marked_global_output);
+        connect(&g_NetlistRelay, &NetlistRelay::netlist_marked_global_inout, this, &ModuleDetailsWidget::handle_netlist_marked_global_inout);
+        connect(&g_NetlistRelay, &NetlistRelay::netlist_unmarked_global_input, this, &ModuleDetailsWidget::handle_netlist_unmarked_global_input);
+        connect(&g_NetlistRelay, &NetlistRelay::netlist_unmarked_global_output, this, &ModuleDetailsWidget::handle_netlist_unmarked_global_output);
+        connect(&g_NetlistRelay, &NetlistRelay::netlist_unmarked_global_inout, this, &ModuleDetailsWidget::handle_netlist_unmarked_global_inout);
 
-        connect(&g_NetlistRelay, &NetlistRelay::module_name_changed, this, &module_details_widget::handle_module_name_changed);
-        connect(&g_NetlistRelay, &NetlistRelay::module_submodule_added, this, &module_details_widget::handle_submodule_added);
-        connect(&g_NetlistRelay, &NetlistRelay::module_submodule_removed, this, &module_details_widget::handle_submodule_removed);
-        connect(&g_NetlistRelay, &NetlistRelay::module_gate_assigned, this, &module_details_widget::handle_module_gate_assigned);
-        connect(&g_NetlistRelay, &NetlistRelay::module_gate_removed, this, &module_details_widget::handle_module_gate_removed);
-        connect(&g_NetlistRelay, &NetlistRelay::module_input_port_name_changed, this, &module_details_widget::handle_module_input_port_name_changed);
-        connect(&g_NetlistRelay, &NetlistRelay::module_output_port_name_changed, this, &module_details_widget::handle_module_output_port_name_changed);
-        connect(&g_NetlistRelay, &NetlistRelay::module_type_changed, this, &module_details_widget::handle_module_type_changed);
+        connect(&g_NetlistRelay, &NetlistRelay::module_name_changed, this, &ModuleDetailsWidget::handle_module_name_changed);
+        connect(&g_NetlistRelay, &NetlistRelay::module_submodule_added, this, &ModuleDetailsWidget::handle_submodule_added);
+        connect(&g_NetlistRelay, &NetlistRelay::module_submodule_removed, this, &ModuleDetailsWidget::handle_submodule_removed);
+        connect(&g_NetlistRelay, &NetlistRelay::module_gate_assigned, this, &ModuleDetailsWidget::handle_module_gate_assigned);
+        connect(&g_NetlistRelay, &NetlistRelay::module_gate_removed, this, &ModuleDetailsWidget::handle_module_gate_removed);
+        connect(&g_NetlistRelay, &NetlistRelay::module_input_port_name_changed, this, &ModuleDetailsWidget::handle_module_input_port_name_changed);
+        connect(&g_NetlistRelay, &NetlistRelay::module_output_port_name_changed, this, &ModuleDetailsWidget::handle_module_output_port_name_changed);
+        connect(&g_NetlistRelay, &NetlistRelay::module_type_changed, this, &ModuleDetailsWidget::handle_module_type_changed);
 
-        connect(&g_NetlistRelay, &NetlistRelay::net_name_changed, this, &module_details_widget::handle_net_name_changed);
-        connect(&g_NetlistRelay, &NetlistRelay::net_source_added, this, &module_details_widget::handle_net_source_added);
-        connect(&g_NetlistRelay, &NetlistRelay::net_source_removed, this, &module_details_widget::handle_net_source_removed);
-        connect(&g_NetlistRelay, &NetlistRelay::net_destination_added, this, &module_details_widget::handle_net_destination_added);
-        connect(&g_NetlistRelay, &NetlistRelay::net_destination_removed, this, &module_details_widget::handle_net_destination_removed);
+        connect(&g_NetlistRelay, &NetlistRelay::net_name_changed, this, &ModuleDetailsWidget::handle_net_name_changed);
+        connect(&g_NetlistRelay, &NetlistRelay::net_source_added, this, &ModuleDetailsWidget::handle_net_source_added);
+        connect(&g_NetlistRelay, &NetlistRelay::net_source_removed, this, &ModuleDetailsWidget::handle_net_source_removed);
+        connect(&g_NetlistRelay, &NetlistRelay::net_destination_added, this, &ModuleDetailsWidget::handle_net_destination_added);
+        connect(&g_NetlistRelay, &NetlistRelay::net_destination_removed, this, &ModuleDetailsWidget::handle_net_destination_removed);
     }
 
-    void module_details_widget::update(const u32 module_id)
+    void ModuleDetailsWidget::update(const u32 module_id)
     {
         m_current_id = module_id;
 
@@ -242,7 +242,7 @@ namespace hal
         m_output_ports_table->setFixedWidth(calculate_table_size(m_output_ports_table).width());
     }
 
-    void module_details_widget::handle_netlist_marked_global_input(std::shared_ptr<Netlist> netlist, u32 associated_data)
+    void ModuleDetailsWidget::handle_netlist_marked_global_input(std::shared_ptr<Netlist> netlist, u32 associated_data)
     {
         Q_UNUSED(netlist)
 
@@ -266,7 +266,7 @@ namespace hal
         }
     }
 
-    void module_details_widget::handle_netlist_marked_global_output(std::shared_ptr<Netlist> netlist, u32 associated_data)
+    void ModuleDetailsWidget::handle_netlist_marked_global_output(std::shared_ptr<Netlist> netlist, u32 associated_data)
     {
         Q_UNUSED(netlist)
 
@@ -290,7 +290,7 @@ namespace hal
         }
     }
 
-    void module_details_widget::handle_netlist_marked_global_inout(std::shared_ptr<Netlist> netlist, u32 associated_data)
+    void ModuleDetailsWidget::handle_netlist_marked_global_inout(std::shared_ptr<Netlist> netlist, u32 associated_data)
     {
         Q_UNUSED(netlist)
 
@@ -314,7 +314,7 @@ namespace hal
         }
     }
 
-    void module_details_widget::handle_netlist_unmarked_global_input(std::shared_ptr<Netlist> netlist, u32 associated_data)
+    void ModuleDetailsWidget::handle_netlist_unmarked_global_input(std::shared_ptr<Netlist> netlist, u32 associated_data)
     {
         Q_UNUSED(netlist)
 
@@ -338,7 +338,7 @@ namespace hal
         }
     }
 
-    void module_details_widget::handle_netlist_unmarked_global_output(std::shared_ptr<Netlist> netlist, u32 associated_data)
+    void ModuleDetailsWidget::handle_netlist_unmarked_global_output(std::shared_ptr<Netlist> netlist, u32 associated_data)
     {
         Q_UNUSED(netlist)
 
@@ -362,7 +362,7 @@ namespace hal
         }
     }
 
-    void module_details_widget::handle_netlist_unmarked_global_inout(std::shared_ptr<Netlist> netlist, u32 associated_data)
+    void ModuleDetailsWidget::handle_netlist_unmarked_global_inout(std::shared_ptr<Netlist> netlist, u32 associated_data)
     {
         Q_UNUSED(netlist)
 
@@ -386,13 +386,13 @@ namespace hal
         }
     }
 
-    void module_details_widget::handle_module_name_changed(std::shared_ptr<Module> module)
+    void ModuleDetailsWidget::handle_module_name_changed(std::shared_ptr<Module> module)
     {
         if(m_current_id == module->get_id())
             update(m_current_id);
     }
 
-    void module_details_widget::handle_submodule_added(std::shared_ptr<Module> module, u32 associated_data)
+    void ModuleDetailsWidget::handle_submodule_added(std::shared_ptr<Module> module, u32 associated_data)
     {
         Q_UNUSED(associated_data);
 
@@ -405,7 +405,7 @@ namespace hal
             update(m_current_id);
     }
 
-    void module_details_widget::handle_submodule_removed(std::shared_ptr<Module> module, u32 associated_data)
+    void ModuleDetailsWidget::handle_submodule_removed(std::shared_ptr<Module> module, u32 associated_data)
     {
         Q_UNUSED(associated_data);
 
@@ -418,7 +418,7 @@ namespace hal
             update(m_current_id);
     }
 
-    void module_details_widget::handle_module_gate_assigned(std::shared_ptr<Module> module, u32 associated_data)
+    void ModuleDetailsWidget::handle_module_gate_assigned(std::shared_ptr<Module> module, u32 associated_data)
     {
         Q_UNUSED(associated_data);
 
@@ -431,7 +431,7 @@ namespace hal
             update(m_current_id);
     }
 
-    void module_details_widget::handle_module_gate_removed(std::shared_ptr<Module> module, u32 associated_data)
+    void ModuleDetailsWidget::handle_module_gate_removed(std::shared_ptr<Module> module, u32 associated_data)
     {
         Q_UNUSED(associated_data);
 
@@ -444,7 +444,7 @@ namespace hal
             update(m_current_id);
     }
 
-    void module_details_widget::handle_module_input_port_name_changed(std::shared_ptr<Module> module, u32 associated_data)
+    void ModuleDetailsWidget::handle_module_input_port_name_changed(std::shared_ptr<Module> module, u32 associated_data)
     {
         Q_UNUSED(associated_data);
 
@@ -452,7 +452,7 @@ namespace hal
             update(m_current_id);
     }
 
-    void module_details_widget::handle_module_output_port_name_changed(std::shared_ptr<Module> module, u32 associated_data)
+    void ModuleDetailsWidget::handle_module_output_port_name_changed(std::shared_ptr<Module> module, u32 associated_data)
     {
         Q_UNUSED(associated_data);
 
@@ -460,13 +460,13 @@ namespace hal
             update(m_current_id);
     }
 
-    void module_details_widget::handle_module_type_changed(std::shared_ptr<Module> module)
+    void ModuleDetailsWidget::handle_module_type_changed(std::shared_ptr<Module> module)
     {
         if(m_current_id == module->get_id())
             update(m_current_id);
     }
 
-    void module_details_widget::handle_net_name_changed(std::shared_ptr<Net> net)
+    void ModuleDetailsWidget::handle_net_name_changed(std::shared_ptr<Net> net)
     {
         if(m_current_id == 0)
             return;
@@ -479,7 +479,7 @@ namespace hal
             update(m_current_id);
     }
 
-    void module_details_widget::handle_net_source_added(std::shared_ptr<Net> net, const u32 src_gate_id)
+    void ModuleDetailsWidget::handle_net_source_added(std::shared_ptr<Net> net, const u32 src_gate_id)
     {
         Q_UNUSED(net)
 
@@ -493,7 +493,7 @@ namespace hal
             update(m_current_id);
     }
 
-    void module_details_widget::handle_net_source_removed(std::shared_ptr<Net> net, const u32 src_gate_id)
+    void ModuleDetailsWidget::handle_net_source_removed(std::shared_ptr<Net> net, const u32 src_gate_id)
     {
         Q_UNUSED(net)
 
@@ -507,7 +507,7 @@ namespace hal
             update(m_current_id);
     }
 
-    void module_details_widget::handle_net_destination_added(std::shared_ptr<Net> net, const u32 dst_gate_id)
+    void ModuleDetailsWidget::handle_net_destination_added(std::shared_ptr<Net> net, const u32 dst_gate_id)
     {
         Q_UNUSED(net)
 
@@ -521,7 +521,7 @@ namespace hal
             update(m_current_id);
     }
 
-    void module_details_widget::handle_net_destination_removed(std::shared_ptr<Net> net, const u32 dst_gate_id)
+    void ModuleDetailsWidget::handle_net_destination_removed(std::shared_ptr<Net> net, const u32 dst_gate_id)
     {
         Q_UNUSED(net)
 
@@ -535,7 +535,7 @@ namespace hal
             update(m_current_id);
     }
 
-    void module_details_widget::handle_buttons_clicked()
+    void ModuleDetailsWidget::handle_buttons_clicked()
     {
         QPushButton* btn = dynamic_cast<QPushButton*>(sender());
 
@@ -556,7 +556,7 @@ namespace hal
             widget->hide();
     }
 
-    void module_details_widget::add_general_table_static_item(QTableWidgetItem* item)
+    void ModuleDetailsWidget::add_general_table_static_item(QTableWidgetItem* item)
     {
         static int row_index = 0;
 
@@ -567,7 +567,7 @@ namespace hal
         row_index++;
     }
 
-    void module_details_widget::add_general_table_dynamic_item(QTableWidgetItem* item)
+    void ModuleDetailsWidget::add_general_table_dynamic_item(QTableWidgetItem* item)
     {
         static int row_index = 0;
 
@@ -577,7 +577,7 @@ namespace hal
         row_index++;
     }
 
-    QSize module_details_widget::calculate_table_size(QTableWidget *table)
+    QSize ModuleDetailsWidget::calculate_table_size(QTableWidget *table)
     {
         //necessary to test if the table is empty, otherwise (due to the resizeColumnsToContents function)
         //is the tables width far too big, so just return 0 as the size
@@ -597,7 +597,7 @@ namespace hal
         return QSize(w+5, h);
     }
 
-    void module_details_widget::style_table(QTableWidget* table)
+    void ModuleDetailsWidget::style_table(QTableWidget* table)
     {
         table->horizontalHeader()->hide();
         table->verticalHeader()->hide();

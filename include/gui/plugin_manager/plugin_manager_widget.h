@@ -29,16 +29,16 @@
 
 namespace hal
 {
-    class plugin_model;
+    class PluginModel;
     class toolbar;
 
-    class plugin_manager_widget : public ContentWidget
+    class PluginManagerWidget : public ContentWidget
     {
         Q_OBJECT
 
     public:
-        explicit plugin_manager_widget(QWidget* parent = 0);
-        void set_plugin_model(plugin_model* m_plugin_model);
+        explicit PluginManagerWidget(QWidget* parent = 0);
+        void set_plugin_model(PluginModel* m_plugin_model);
         virtual void setup_toolbar(toolbar* toolbar);
 
     private Q_SLOTS:
@@ -46,7 +46,7 @@ namespace hal
         void on_action_remove_triggered();
 
     private:
-        plugin_model* m_model;
+        PluginModel* m_model;
         QAction* m_add_action;
         QAction* m_remove_action;
         QTableView m_table_view;

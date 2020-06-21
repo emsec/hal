@@ -42,14 +42,14 @@ namespace hal
     class Net;
     class Gate;
 
-    class net_details_widget : public QWidget
+    class NetDetailsWidget : public QWidget
     {
         Q_OBJECT
 
     public:
 
-        net_details_widget(QWidget* parent = 0);
-        ~net_details_widget();
+        NetDetailsWidget(QWidget* parent = 0);
+        ~NetDetailsWidget();
 
         virtual bool eventFilter(QObject *watched, QEvent *event) Q_DECL_OVERRIDE;
         void update(u32 net_id);

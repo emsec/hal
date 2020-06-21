@@ -10,7 +10,7 @@
 #include "gui/python/python_context_suberscriber.h"
 #include "gui_globals.h"
 
-// Following is needed for python_context::check_complete_statement
+// Following is needed for PythonContext::check_complete_statement
 #include <Python.h>
 #include <compile.h>
 #include <errcode.h>
@@ -22,7 +22,7 @@ extern grammar _PyParser_Grammar;
 
 namespace hal
 {
-    python_context::python_context()
+    PythonContext::PythonContext()
     {
         Q_UNUSED(m_sender)
         m_context = nullptr;
@@ -30,18 +30,18 @@ namespace hal
         init_python();
     }
 
-    python_context::~python_context()
+    PythonContext::~PythonContext()
     {
         close_python();
         py::finalize_interpreter();
     }
 
-    void python_context::set_console(python_console* c)
+    void PythonContext::set_console(PythonConsole* c)
     {
         m_console = c;
     }
 
-    void python_context::initialize_context(py::dict* context)
+    void PythonContext::initialize_context(py::dict* context)
     {
         py::exec("import __main__\n"
                  "import io, sys\n"
@@ -76,7 +76,7 @@ namespace hal
             (*context)["gui"] = g_gui_api;
     }
 
-    void python_context::init_python()
+    void PythonContext::init_python()
     {
         //    using namespace py::literals;
 
@@ -88,13 +88,13 @@ namespace hal
         (*m_context)["hal_gui"] = py::module::import("hal_gui");
     }
 
-    void python_context::close_python()
+    void PythonContext::close_python()
     {
         delete m_context;
         m_context = nullptr;
     }
 
-    void python_context::interpret(const QString& input, bool multiple_expressions)
+    void PythonContext::interpret(const QString& input, bool multiple_expressions)
     {
         if (input.isEmpty())
         {
@@ -148,7 +148,7 @@ namespace hal
         }
     }
 
-    void python_context::interpret_script(const QString& input)
+    void PythonContext::interpret_script(const QString& input)
     {
         // py::print(py::globals());
         py::dict tmp_context(py::globals());
@@ -179,7 +179,7 @@ namespace hal
         }
     }
 
-    void python_context::forward_stdout(const QString& output)
+    void PythonContext::forward_stdout(const QString& output)
     {
         if (output != "\n")
         {
@@ -191,7 +191,7 @@ namespace hal
         }
     }
 
-    void python_context::forward_error(const QString& output)
+    void PythonContext::forward_error(const QString& output)
     {
         log_error("python", "{}", output.toStdString());
         if (m_console)
@@ -200,7 +200,7 @@ namespace hal
         }
     }
 
-    void python_context::forward_clear()
+    void PythonContext::forward_clear()
     {
         if (m_console)
         {
@@ -208,7 +208,7 @@ namespace hal
         }
     }
 
-    std::vector<std::tuple<std::string, std::string>> python_context::complete(const QString& text, bool use_console_context)
+    std::vector<std::tuple<std::string, std::string>> PythonContext::complete(const QString& text, bool use_console_context)
     {
         std::vector<std::tuple<std::string, std::string>> ret_val;
         try
@@ -246,7 +246,7 @@ namespace hal
         return ret_val;
     }
 
-    int python_context::check_complete_statement(const QString& text)
+    int PythonContext::check_complete_statement(const QString& text)
     {
         node* n;
         perrdetail e;
@@ -265,7 +265,7 @@ namespace hal
         return 1;
     }
 
-    void python_context::handle_reset()
+    void PythonContext::handle_reset()
     {
         if (m_trigger_reset)
         {
@@ -276,12 +276,12 @@ namespace hal
         }
     }
 
-    void python_context::forward_reset()
+    void PythonContext::forward_reset()
     {
         m_trigger_reset = true;
     }
 
-    void python_context::update_netlist()
+    void PythonContext::update_netlist()
     {
         (*m_context)["netlist"] = g_netlist;
     }

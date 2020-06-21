@@ -6,7 +6,7 @@
 
 namespace hal
 {
-    selection_history_navigator::selection_history_navigator(unsigned int max_history_size, QObject* parent) : QObject(parent)
+    SelectionHistoryNavigator::SelectionHistoryNavigator(unsigned int max_history_size, QObject* parent) : QObject(parent)
     {
         set_max_history_size(max_history_size);
 
@@ -14,29 +14,29 @@ namespace hal
 
         g_selection_relay.register_sender(this, "History Navigator");
 
-        connect(&g_selection_relay, &selection_relay::selection_changed, this, &selection_history_navigator::handle_selection_changed);
+        connect(&g_selection_relay, &SelectionRelay::selection_changed, this, &SelectionHistoryNavigator::handle_selection_changed);
     }
 
-    selection_history_navigator::~selection_history_navigator()
+    SelectionHistoryNavigator::~SelectionHistoryNavigator()
     {
     }
 
-    void selection_history_navigator::handle_selection_changed(void* sender)
+    void SelectionHistoryNavigator::handle_selection_changed(void* sender)
     {
         if (sender == this)
             return;
 
         if (!g_selection_relay.m_selected_gates.isEmpty())
         {
-            store_selection(*g_selection_relay.m_selected_gates.begin(), selection_relay::item_type::gate);
+            store_selection(*g_selection_relay.m_selected_gates.begin(), SelectionRelay::item_type::gate);
         }
         else if (!g_selection_relay.m_selected_nets.isEmpty())
         {
-            store_selection(*g_selection_relay.m_selected_nets.begin(), selection_relay::item_type::net);
+            store_selection(*g_selection_relay.m_selected_nets.begin(), SelectionRelay::item_type::net);
         }
     }
 
-    void selection_history_navigator::store_selection(u32 id, selection_relay::item_type type)
+    void SelectionHistoryNavigator::store_selection(u32 id, SelectionRelay::item_type type)
     {
         m_current_item_iterator = m_selection_container.insert(m_current_item_iterator, selection(id, type));
 
@@ -44,29 +44,29 @@ namespace hal
             m_selection_container.pop_back();
     }
 
-    void selection_history_navigator::navigate_to_prev_item()
+    void SelectionHistoryNavigator::navigate_to_prev_item()
     {
         if (!(m_current_item_iterator == --m_selection_container.end()))
             relay_selection(*++m_current_item_iterator);
     }
 
-    void selection_history_navigator::navigate_to_next_item()
+    void SelectionHistoryNavigator::navigate_to_next_item()
     {
         if (!(m_current_item_iterator == m_selection_container.begin()))
             relay_selection(*--m_current_item_iterator);
     }
 
-    void selection_history_navigator::relay_selection(selection selection)
+    void SelectionHistoryNavigator::relay_selection(selection selection)
     {
         g_selection_relay.clear();
 
-        selection_relay::item_type type = selection.get_type();
+        SelectionRelay::item_type type = selection.get_type();
 
-        if (type == selection_relay::item_type::net)
+        if (type == SelectionRelay::item_type::net)
         {
             g_selection_relay.m_selected_nets.insert(selection.get_net_id());
         }
-        else if (type == selection_relay::item_type::gate)
+        else if (type == SelectionRelay::item_type::gate)
         {
             g_selection_relay.m_selected_gates.insert(selection.get_gate_id());
         }
@@ -74,12 +74,12 @@ namespace hal
         Q_EMIT g_selection_relay.selection_changed(this);
     }
 
-    void selection_history_navigator::set_max_history_size(unsigned int max_size)
+    void SelectionHistoryNavigator::set_max_history_size(unsigned int max_size)
     {
         m_max_history_size = max_size;
     }
 
-    unsigned int selection_history_navigator::get_max_history_size() const
+    unsigned int SelectionHistoryNavigator::get_max_history_size() const
     {
         return m_max_history_size;
     }

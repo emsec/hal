@@ -30,7 +30,7 @@
 
 namespace hal
 {
-    class plugin_item
+    class PluginItem
     {
     public:
         enum class column_t
@@ -41,8 +41,8 @@ namespace hal
 
         using column_utype = std::underlying_type<column_t>::type;
         static QVector<QPair<QString, column_t>> get_column_description();
-        explicit plugin_item();
-        explicit plugin_item(QString plugin_name, QString plugin_path);
+        explicit PluginItem();
+        explicit PluginItem(QString plugin_name, QString plugin_path);
         QString name;
         QString path;
         bool is_valid();

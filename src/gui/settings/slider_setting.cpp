@@ -13,7 +13,7 @@
 
 namespace hal
 {
-    slider_setting::slider_setting(const QString& key, const QString& title, const int min, const int max, const QString& description, QWidget* parent) : settings_widget(key, parent)
+    SliderSetting::SliderSetting(const QString& key, const QString& title, const int min, const int max, const QString& description, QWidget* parent) : SettingsWidget(key, parent)
     {
         m_labels.append(QPair<QLabel*, QString>(m_name, title));
 
@@ -23,7 +23,7 @@ namespace hal
         m_slider = new QSlider(Qt::Orientation::Horizontal, this);
         m_slider->setMinimum(min);
         m_slider->setMaximum(max);
-        connect(m_slider, &QSlider::valueChanged, this, &slider_setting::on_slider_value_changed);
+        connect(m_slider, &QSlider::valueChanged, this, &SliderSetting::on_slider_value_changed);
 
         layout->addWidget(m_slider);
 
@@ -36,23 +36,23 @@ namespace hal
         m_labels.append(QPair<QLabel*, QString>(label, description));
     }
 
-    void slider_setting::load(const QVariant& value)
+    void SliderSetting::load(const QVariant& value)
     {
         m_slider->setValue(value.toInt());
         m_number->setText(value.toString());
     }
 
-    QVariant slider_setting::value()
+    QVariant SliderSetting::value()
     {
         return QVariant(m_slider->value());
     }
 
-    // void dropdown_setting::rollback()
+    // void DropdownSetting::rollback()
     // {
 
     // }
 
-    void slider_setting::on_slider_value_changed()
+    void SliderSetting::on_slider_value_changed()
     {
         this->trigger_setting_updated();
         m_number->setText(value().toString());

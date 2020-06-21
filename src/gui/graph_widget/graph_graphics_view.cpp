@@ -47,9 +47,9 @@ namespace hal
         : QGraphicsView(parent), m_graph_widget(parent), m_minimap_enabled(false), m_grid_enabled(true), m_grid_clusters_enabled(true), m_grid_type(graph_widget_constants::grid_type::lines),
           m_zoom_modifier(Qt::NoModifier), m_zoom_factor_base(1.0015)
     {
-        connect(&g_selection_relay, &selection_relay::subfocus_changed, this, &GraphGraphicsView::conditional_update);
+        connect(&g_selection_relay, &SelectionRelay::subfocus_changed, this, &GraphGraphicsView::conditional_update);
         connect(this, &GraphGraphicsView::customContextMenuRequested, this, &GraphGraphicsView::show_context_menu);
-        connect(&g_settings_relay, &settings_relay::setting_changed, this, &GraphGraphicsView::handle_global_setting_changed);
+        connect(&g_settings_relay, &SettingsRelay::setting_changed, this, &GraphGraphicsView::handle_global_setting_changed);
 
         initialize_settings();
 
@@ -342,9 +342,9 @@ namespace hal
                 // item we are dragging
                 g_selection_relay.clear();
                 g_selection_relay.m_selected_gates.insert(m_drag_item->id());
-                g_selection_relay.m_focus_type = selection_relay::item_type::gate;
+                g_selection_relay.m_focus_type = SelectionRelay::item_type::gate;
                 g_selection_relay.m_focus_id   = m_drag_item->id();
-                g_selection_relay.m_subfocus   = selection_relay::subfocus::none;
+                g_selection_relay.m_subfocus   = SelectionRelay::subfocus::none;
                 g_selection_relay.relay_selection_changed(nullptr);
             }
             m_drop_allowed = false;
@@ -536,9 +536,9 @@ namespace hal
                 {
                     g_selection_relay.clear();
                     g_selection_relay.m_selected_gates.insert(m_item->id());
-                    g_selection_relay.m_focus_type = selection_relay::item_type::gate;
+                    g_selection_relay.m_focus_type = SelectionRelay::item_type::gate;
                     g_selection_relay.m_focus_id   = m_item->id();
-                    g_selection_relay.m_subfocus   = selection_relay::subfocus::none;
+                    g_selection_relay.m_subfocus   = SelectionRelay::subfocus::none;
                     g_selection_relay.relay_selection_changed(this);
                 }
 
@@ -556,9 +556,9 @@ namespace hal
                 {
                     g_selection_relay.clear();
                     g_selection_relay.m_selected_modules.insert(m_item->id());
-                    g_selection_relay.m_focus_type = selection_relay::item_type::module;
+                    g_selection_relay.m_focus_type = SelectionRelay::item_type::module;
                     g_selection_relay.m_focus_id   = m_item->id();
-                    g_selection_relay.m_subfocus   = selection_relay::subfocus::none;
+                    g_selection_relay.m_subfocus   = SelectionRelay::subfocus::none;
                     g_selection_relay.relay_selection_changed(this);
                 }
 

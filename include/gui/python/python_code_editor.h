@@ -29,11 +29,11 @@
 
 namespace hal
 {
-    class python_code_editor : public CodeEditor
+    class PythonCodeEditor : public CodeEditor
     {
         Q_OBJECT
     public:
-        python_code_editor(QWidget* parent = nullptr);
+        PythonCodeEditor(QWidget* parent = nullptr);
 
         QString get_file_name();
         void set_file_name(const QString name);

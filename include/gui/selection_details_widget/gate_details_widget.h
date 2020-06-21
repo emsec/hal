@@ -44,14 +44,14 @@ namespace hal
     /* forward declaration */
     class GraphNavigationWidget;
 
-    class gate_details_widget : public QWidget
+    class GateDetailsWidget : public QWidget
     {
         Q_OBJECT
     public:
         /** constructor */
-        gate_details_widget(QWidget* parent = nullptr);
+        GateDetailsWidget(QWidget* parent = nullptr);
         /** destructor */
-        ~gate_details_widget();
+        ~GateDetailsWidget();
 
         virtual void resizeEvent(QResizeEvent* event) Q_DECL_OVERRIDE;
         virtual bool eventFilter(QObject *watched, QEvent *event) Q_DECL_OVERRIDE;

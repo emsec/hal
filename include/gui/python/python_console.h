@@ -30,14 +30,14 @@
 
 namespace hal
 {
-    class python_console_history;
+    class PythonConsoleHistory;
 
-    class python_console : public QTextEdit, public python_context_subscriber
+    class PythonConsole : public QTextEdit, public python_context_subscriber
     {
         Q_OBJECT
 
     public:
-        python_console(QWidget* parent = nullptr);
+        PythonConsole(QWidget* parent = nullptr);
 
         void keyPressEvent(QKeyEvent* e) Q_DECL_OVERRIDE;
         void mousePressEvent(QMouseEvent* event) Q_DECL_OVERRIDE;
@@ -84,6 +84,6 @@ namespace hal
         int m_current_history_index;
         int m_current_completer_index;
 
-        std::shared_ptr<python_console_history> m_history;
+        std::shared_ptr<PythonConsoleHistory> m_history;
     };
 }

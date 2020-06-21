@@ -33,12 +33,12 @@
 
 namespace hal
 {
-    class keybind_manager : public QObject
+    class KeybindManager : public QObject
     {
         Q_OBJECT
 
     public:
-        explicit keybind_manager(QObject* parent = nullptr);
+        explicit KeybindManager(QObject* parent = nullptr);
         void bind(HalAction* action, const QString& key);
         void bind(QShortcut* shortcut, const QString& key);
         void release(HalAction* action);

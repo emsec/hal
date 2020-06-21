@@ -38,7 +38,7 @@ class QVBoxLayout;
 
 namespace hal
 {
-    class settings_widget : public QFrame
+    class SettingsWidget : public QFrame
     {
         Q_OBJECT
         Q_PROPERTY(QColor highlight_color READ highlight_color WRITE set_highlight_color)
@@ -52,7 +52,7 @@ namespace hal
             right = 1
         };
 
-        explicit settings_widget(const QString& key, QWidget* parent = 0);
+        explicit SettingsWidget(const QString& key, QWidget* parent = 0);
 
         QColor highlight_color();
         QString key();
@@ -69,7 +69,7 @@ namespace hal
         void set_conflicts(bool conflicts);
         bool conflicts() const;
 
-        void set_preview_widget(preview_widget* widget);
+        void set_preview_widget(PreviewWidget* widget);
         void set_preview_position(preview_position position);
 
         virtual void load(const QVariant& value) = 0;
@@ -80,7 +80,7 @@ namespace hal
         void handle_reset();
 
     Q_SIGNALS:
-        void setting_updated(settings_widget* sender, const QString& key, const QVariant& value);
+        void setting_updated(SettingsWidget* sender, const QString& key, const QVariant& value);
 
     protected:
         QVBoxLayout* m_layout;
@@ -101,6 +101,6 @@ namespace hal
         bool m_conflicts = false;
         QVariant m_loaded_value;
         QVariant m_default_value;
-        preview_widget* m_preview = nullptr;
+        PreviewWidget* m_preview = nullptr;
     };
 }

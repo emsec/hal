@@ -49,10 +49,10 @@ namespace hal
 
         g_selection_relay.register_sender(this, name());
 
-        connect(&m_searchbar, &searchbar::text_edited, this, &module_widget::filter);
+        connect(&m_searchbar, &Searchbar::text_edited, this, &module_widget::filter);
         connect(m_tree_view->selectionModel(), &QItemSelectionModel::selectionChanged, this, &module_widget::handle_tree_selection_changed);
         connect(m_tree_view, &module_tree_view::doubleClicked, this, &module_widget::handle_item_double_clicked);
-        connect(&g_selection_relay, &selection_relay::selection_changed, this, &module_widget::handle_selection_changed);
+        connect(&g_selection_relay, &SelectionRelay::selection_changed, this, &module_widget::handle_selection_changed);
         connect(&g_NetlistRelay, &NetlistRelay::module_submodule_removed, this, &module_widget::handle_module_removed);
     }
 
@@ -175,7 +175,7 @@ namespace hal
 
         if (current_selection.size() == 1)
         {
-            g_selection_relay.m_focus_type = selection_relay::item_type::module;
+            g_selection_relay.m_focus_type = SelectionRelay::item_type::module;
             g_selection_relay.m_focus_id   = g_NetlistRelay.get_ModuleModel()->get_item(m_ModuleProxyModel->mapToSource(current_selection.first()))->id();
         }
 

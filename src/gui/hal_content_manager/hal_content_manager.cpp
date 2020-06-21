@@ -32,7 +32,7 @@ namespace hal
     HalContentManager::HalContentManager(MainWindow* parent) : QObject(parent), m_MainWindow(parent)
     {
         // has to be created this early in order to receive deserialization by the core signals
-        m_python_widget = new python_editor();
+        m_python_widget = new PythonEditor();
 
         connect(FileManager::get_instance(), &FileManager::file_opened, this, &HalContentManager::handle_open_document);
         connect(FileManager::get_instance(), &FileManager::file_closed, this, &HalContentManager::handle_close_document);
@@ -49,7 +49,7 @@ namespace hal
             delete content;
     }
 
-    python_editor* HalContentManager::get_python_editor_widget()
+    PythonEditor* HalContentManager::get_python_editor_widget()
     {
         return m_python_widget;
     }
@@ -81,7 +81,7 @@ namespace hal
 
         QTimer::singleShot(50, [this]() { this->m_context_manager_wid->handle_create_context_clicked(); });
 
-        selection_details_widget* details = new selection_details_widget();
+        SelectionDetailsWidget* details = new SelectionDetailsWidget();
         m_MainWindow->add_content(details, 0, content_anchor::bottom);
 
         HalLoggerWidget* logger_widget = new HalLoggerWidget();
@@ -113,13 +113,13 @@ namespace hal
         //    view->setDragMode(QGraphicsView::ScrollHandDrag);
         //    view->show();
 
-        plugin_model* model                  = new plugin_model(this);
-        plugin_manager_widget* plugin_widget = new plugin_manager_widget();
+        PluginModel* model                  = new PluginModel(this);
+        PluginManagerWidget* plugin_widget = new PluginManagerWidget();
         plugin_widget->set_plugin_model(model);
 
         //    m_MainWindow->add_content(plugin_widget, content_anchor::bottom);
 
-        connect(model, &plugin_model::run_plugin, m_MainWindow, &MainWindow::run_plugin_triggered);
+        connect(model, &PluginModel::run_plugin, m_MainWindow, &MainWindow::run_plugin_triggered);
 
         m_window_title = "HAL - " + QString::fromStdString(std::filesystem::path(file_name.toStdString()).stem().string());
         m_MainWindow->setWindowTitle(m_window_title);
@@ -127,9 +127,9 @@ namespace hal
         m_MainWindow->add_content(m_python_widget, 3, content_anchor::right);
         //m_python_widget->open();
 
-        python_console_widget* python_console = new python_console_widget();
-        m_MainWindow->add_content(python_console, 5, content_anchor::bottom);
-        python_console->open();
+        PythonConsoleWidget* PythonConsole = new PythonConsoleWidget();
+        m_MainWindow->add_content(PythonConsole, 5, content_anchor::bottom);
+        PythonConsole->open();
         m_NetlistWatcher = new NetlistWatcher(this);
     }
 

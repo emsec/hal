@@ -85,7 +85,7 @@ namespace hal
 
         m_stacked_widget->addWidget(m_schedule_widget);
 
-        m_settings = new main_settings_widget();
+        m_settings = new MainSettingsWidget();
         m_stacked_widget->addWidget(m_settings);
 
         m_layout_area = new ContentLayoutArea();
@@ -204,9 +204,9 @@ namespace hal
         m_menu_help->setTitle("Help");
 
         m_AboutDialog = new AboutDialog(this);
-        m_plugin_model = new plugin_model(this);
+        m_plugin_model = new PluginModel(this);
 
-        g_python_context = std::make_unique<python_context>();
+        g_python_context = std::make_unique<PythonContext>();
 
         g_content_manager = new HalContentManager(this);
 
@@ -215,7 +215,7 @@ namespace hal
         connect(m_action_about, &HalAction::triggered, m_AboutDialog, &AboutDialog::exec);
         connect(m_action_schedule, &HalAction::triggered, this, &MainWindow::toggle_schedule);
         connect(m_action_settings, &HalAction::triggered, this, &MainWindow::toggle_settings);
-        connect(m_settings, &main_settings_widget::close, this, &MainWindow::close_settings);
+        connect(m_settings, &MainSettingsWidget::close, this, &MainWindow::close_settings);
         connect(m_action_save, &HalAction::triggered, this, &MainWindow::handle_save_triggered);
         //debug
         connect(m_action_close, &HalAction::triggered, this, &MainWindow::handle_action_closed);
@@ -226,7 +226,7 @@ namespace hal
 
         restore_state();
 
-        //    plugin_manager_widget* widget = new plugin_manager_widget(nullptr);
+        //    PluginManagerWidget* widget = new PluginManagerWidget(nullptr);
         //    widget->set_plugin_model(m_plugin_model);
         //    widget->show();
 

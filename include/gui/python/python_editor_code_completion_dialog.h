@@ -34,12 +34,12 @@
 
 namespace hal
 {
-    class python_editor_code_completion_dialog : public QDialog
+    class PythonEditorCodeCompletionDialog : public QDialog
     {
         Q_OBJECT
 
     public:
-        explicit python_editor_code_completion_dialog(QWidget* parent, std::vector<std::tuple<std::string, std::string>> completions);
+        explicit PythonEditorCodeCompletionDialog(QWidget* parent, std::vector<std::tuple<std::string, std::string>> completions);
 
         void keyPressEvent(QKeyEvent* event);
 

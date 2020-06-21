@@ -13,7 +13,7 @@ void test_utils::init_log_channels()
     if (!already_init)
     {
         std::vector<std::string> channel_ids = {
-            "core", "gate_library_manager", "liberty_parser", "netlist", "module", "netlist.internal", "netlist.persistent", "hdl_parser", "HDLWriter", "python_context"};
+            "core", "gate_library_manager", "liberty_parser", "netlist", "module", "netlist.internal", "netlist.persistent", "hdl_parser", "HDLWriter", "PythonContext"};
 
         LogManager& lm = LogManager::get_instance();
         for (std::string ch_id : channel_ids)

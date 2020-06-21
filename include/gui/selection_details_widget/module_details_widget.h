@@ -46,11 +46,11 @@ class QPushButton;
 
 namespace hal
 {
-    class module_details_widget : public QWidget
+    class ModuleDetailsWidget : public QWidget
     {
         Q_OBJECT
     public:
-        module_details_widget(QWidget* parent = nullptr);
+        ModuleDetailsWidget(QWidget* parent = nullptr);
 
         void update(const u32 module_id);
 

@@ -33,7 +33,7 @@ namespace hal
 {
     class MainWindow;
     class ContentWidget;
-    class python_editor;
+    class PythonEditor;
     class GraphTabWidget;
     class old_graph_navigation_widget;
     class ContextManagerWidget;
@@ -48,7 +48,7 @@ namespace hal
 
         ~HalContentManager();
 
-        python_editor* get_python_editor_widget();
+        PythonEditor* get_python_editor_widget();
 
         GraphTabWidget* get_graph_tab_widget();
 
@@ -78,7 +78,7 @@ namespace hal
 
         NetlistWatcher* m_NetlistWatcher;
 
-        python_editor* m_python_widget;
+        PythonEditor* m_python_widget;
 
         GraphTabWidget* m_graph_tab_wid;
 

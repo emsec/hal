@@ -31,7 +31,7 @@ class QAction;
 namespace hal
 {
     class hal_window;
-    class main_settings_widget;
+    class MainSettingsWidget;
     class PluginScheduleWidget;
     class welcome_screen;
     class work_space; // TEMP NAME ?
@@ -92,6 +92,6 @@ namespace hal
 
         welcome_screen* m_welcome_screen;
         PluginScheduleWidget* m_PluginScheduleWidget;
-        main_settings_widget* m_main_settings_widget;
+        MainSettingsWidget* m_main_settings_widget;
     };
 }

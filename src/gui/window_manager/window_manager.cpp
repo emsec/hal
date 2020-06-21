@@ -27,7 +27,7 @@ namespace hal
         m_action_about       (new QAction("About", this)),
         m_welcome_screen     (new welcome_screen()),
         m_PluginScheduleWidget(new PluginScheduleWidget()),
-        m_main_settings_widget(new main_settings_widget())
+        m_main_settings_widget(new MainSettingsWidget())
     {
         // DEBUG CODE
         // CHECK IF SHORTCUTS WORK AS EXPECTED

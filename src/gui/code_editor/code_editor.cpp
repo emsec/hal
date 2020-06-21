@@ -31,7 +31,7 @@ namespace hal
         m_line_wrap_enabled = g_settings_manager.get("python/line_wrap").toBool();
         m_minimap_enabled = g_settings_manager.get("python/minimap").toBool();
 
-        connect(&g_settings_relay, &settings_relay::setting_changed, this, &CodeEditor::handle_global_setting_changed);
+        connect(&g_settings_relay, &SettingsRelay::setting_changed, this, &CodeEditor::handle_global_setting_changed);
 
         setVerticalScrollBar(m_scrollbar);
         m_scrollbar->set_minimap_scrollbar(m_minimap->scrollbar());

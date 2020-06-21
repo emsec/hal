@@ -27,17 +27,17 @@
 
 namespace hal
 {
-    class python_console;
+    class PythonConsole;
 
-    class python_console_widget : public ContentWidget
+    class PythonConsoleWidget : public ContentWidget
     {
     public:
-        python_console_widget(QWidget* parent = nullptr);
+        PythonConsoleWidget(QWidget* parent = nullptr);
 
         virtual void setup_toolbar(toolbar* toolbar) Q_DECL_OVERRIDE;
         virtual QList<QShortcut*> create_shortcuts() Q_DECL_OVERRIDE;
 
     private:
-        python_console* m_console;
+        PythonConsole* m_console;
     };
 }

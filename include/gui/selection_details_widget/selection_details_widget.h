@@ -34,14 +34,14 @@ class QStackedWidget;
 
 namespace hal
 {
-    class searchbar;
+    class Searchbar;
 
-    class selection_details_widget : public ContentWidget
+    class SelectionDetailsWidget : public ContentWidget
     {
         Q_OBJECT
 
     public:
-        selection_details_widget(QWidget* parent = 0);
+        SelectionDetailsWidget(QWidget* parent = 0);
         void clear();
 
     public Q_SLOTS:
@@ -52,12 +52,12 @@ namespace hal
         QStackedWidget* m_stacked_widget;
 
         QWidget* m_empty_widget;
-        gate_details_widget* m_gate_details;
-        net_details_widget* m_net_details;
-        module_details_widget* m_module_details;
+        GateDetailsWidget* m_gate_details;
+        NetDetailsWidget* m_net_details;
+        ModuleDetailsWidget* m_module_details;
         QLabel* m_item_deleted_label;
 
-        searchbar* m_searchbar;
+        Searchbar* m_searchbar;
 
         void toggle_searchbar();
     };

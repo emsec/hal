@@ -38,11 +38,11 @@ namespace hal
 
         switch (g_selection_relay.m_focus_type)
         {
-            case selection_relay::item_type::none:
+            case SelectionRelay::item_type::none:
             {
                 return;
             }
-            case selection_relay::item_type::gate:
+            case SelectionRelay::item_type::gate:
             {
                 std::shared_ptr<Gate> g = g_netlist->get_gate_by_id(g_selection_relay.m_focus_id);
 
@@ -59,7 +59,7 @@ namespace hal
 
                 return;
             }
-            case selection_relay::item_type::net:
+            case SelectionRelay::item_type::net:
             {
                 std::shared_ptr<Net> n = g_netlist->get_net_by_id(g_selection_relay.m_focus_id);
 
@@ -72,7 +72,7 @@ namespace hal
 
                 return;
             }
-            case selection_relay::item_type::module:
+            case SelectionRelay::item_type::module:
             {
                 // TODO ???
                 return;

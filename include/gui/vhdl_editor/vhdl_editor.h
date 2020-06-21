@@ -28,7 +28,7 @@
 
 namespace hal
 {
-    class searchbar;
+    class Searchbar;
 
     class vhdl_editor : public ContentWidget
     {
@@ -45,6 +45,6 @@ namespace hal
 
     private:
         CodeEditor* m_code_editor;
-        searchbar* m_searchbar;
+        Searchbar* m_searchbar;
     };
 }

@@ -69,7 +69,7 @@ namespace hal
 
     private:
         module_tree_view* m_tree_view;
-        searchbar m_searchbar;
+        Searchbar m_searchbar;
 
         QAction* m_filter_action;
 

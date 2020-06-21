@@ -29,12 +29,12 @@
 
 namespace hal
 {
-    class checkbox_setting : public settings_widget
+    class CheckboxSetting : public SettingsWidget
     {
         Q_OBJECT
 
     public:
-        checkbox_setting(const QString& key, const QString& title, const QString& text, const QString& description, QWidget* parent = 0);
+        CheckboxSetting(const QString& key, const QString& title, const QString& text, const QString& description, QWidget* parent = 0);
 
         virtual void load(const QVariant& value) Q_DECL_OVERRIDE;
         virtual QVariant value() Q_DECL_OVERRIDE;

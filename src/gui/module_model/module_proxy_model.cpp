@@ -14,7 +14,7 @@ namespace hal
         // STYLED DELEGATES USE THAT DATA STRUCTURE TO DRAW THEMSELVES
 
         m_sort_mechanism = gui_utility::sort_mechanism(g_settings_manager.get("navigation/sort_mechanism").toInt());
-        connect(&g_settings_relay, &settings_relay::setting_changed, this, &ModuleProxyModel::handle_global_setting_changed);
+        connect(&g_settings_relay, &SettingsRelay::setting_changed, this, &ModuleProxyModel::handle_global_setting_changed);
     }
 
     bool ModuleProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const

@@ -16,7 +16,7 @@
 namespace hal
 {
     PluginScheduleWidget::PluginScheduleWidget(QWidget* parent)
-        : QFrame(parent), m_vertical_layout(new QVBoxLayout()), m_searchbar_container(new QFrame()), m_container_layout(new QHBoxLayout()), m_searchbar(new searchbar()),
+        : QFrame(parent), m_vertical_layout(new QVBoxLayout()), m_searchbar_container(new QFrame()), m_container_layout(new QHBoxLayout()), m_searchbar(new Searchbar()),
           m_horizontal_layout(new QHBoxLayout()), m_plugin_frame(new LabeledFrame()), m_schedule_frame(new LabeledFrame()), m_schedule_frame_layout_container(new QWidget()),
           m_horizontal_schedule_frame_layout(new QHBoxLayout()), m_vertical_schedule_frame_layout(new QVBoxLayout()), m_NoScheduledPluginsWidget(new NoScheduledPluginsWidget()),
           m_PluginArgumentsWidget(new PluginArgumentsWidget()), m_ScheduledPluginsWidget(new ScheduledPluginsWidget()), m_LoadedPluginsWidget(new LoadedPluginsWidget())
@@ -29,12 +29,12 @@ namespace hal
         m_vertical_layout->setContentsMargins(0, 0, 0, 0);
         m_vertical_layout->setSpacing(0);
 
-        m_searchbar_container->setObjectName("searchbar-container");
+        m_searchbar_container->setObjectName("Searchbar-container");
 
         m_container_layout->setContentsMargins(0, 0, 0, 0);
         m_container_layout->setSpacing(0);
 
-        m_searchbar->setObjectName("searchbar");
+        m_searchbar->setObjectName("Searchbar");
 
         m_horizontal_layout->setContentsMargins(0, 0, 0, 0);
         m_horizontal_layout->setSpacing(0);

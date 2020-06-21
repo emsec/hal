@@ -13,26 +13,26 @@
 
 namespace hal
 {
-    python_console::python_console(QWidget* parent)
+    PythonConsole::PythonConsole(QWidget* parent)
         : QTextEdit(parent), m_standard_prompt(">>> "), m_compound_prompt("... "), m_prompt_block_number(0), m_prompt_length(0), m_prompt_end_position(0), m_compound_prompt_end_position(0),
           m_in_compound_prompt(false), m_in_completion(false), m_current_compound_input(""), m_current_input(""), m_current_history_index(-1), m_current_completer_index(0),
-          m_history(std::make_shared<python_console_history>())
+          m_history(std::make_shared<PythonConsoleHistory>())
     {
         this->document()->setMaximumBlockCount(1000);
         setFrameStyle(QFrame::NoFrame);
         setUndoRedoEnabled(false);
         ensureCursorVisible();
 
-        m_standard_color = python_console_qss_adapter::instance()->standard_color();
-        m_error_color = python_console_qss_adapter::instance()->error_color();
-        m_prompt_color = python_console_qss_adapter::instance()->promt_color();
+        m_standard_color = PythonConsoleQssAdapter::instance()->standard_color();
+        m_error_color = PythonConsoleQssAdapter::instance()->error_color();
+        m_prompt_color = PythonConsoleQssAdapter::instance()->promt_color();
         g_python_context->set_console(this);
         g_python_context->interpret("print(\"Python \" + sys.version)", false);
         g_python_context->interpret("print(sys.executable + \" on \" + sys.platform)", false);
         display_prompt();
     }
 
-    void python_console::keyPressEvent(QKeyEvent* e)
+    void PythonConsole::keyPressEvent(QKeyEvent* e)
     {
         auto cursor = textCursor();
         if (textCursor().hasSelection())
@@ -156,7 +156,7 @@ namespace hal
         QTextEdit::keyPressEvent(e);
     }
 
-    void python_console::mousePressEvent(QMouseEvent* event)
+    void PythonConsole::mousePressEvent(QMouseEvent* event)
     {
         //        m_position = textCursor().position();
         //        if (event->button() == Qt::MidButton)
@@ -171,19 +171,19 @@ namespace hal
         QTextEdit::mousePressEvent(event);
     }
 
-    void python_console::insertAtEnd(const QString& text, QColor textColor)
+    void PythonConsole::insertAtEnd(const QString& text, QColor textColor)
     {
         moveCursor(QTextCursor::End);
         setTextColor(textColor);
         insertPlainText(QString(text));
     }
 
-    void python_console::handle_stdout(const QString& output)
+    void PythonConsole::handle_stdout(const QString& output)
     {
         insertAtEnd(output, m_standard_color);
     }
 
-    void python_console::handle_error(const QString& output)
+    void PythonConsole::handle_error(const QString& output)
     {
         QString append_out = output;
         if (!append_out.endsWith("\n"))
@@ -191,12 +191,12 @@ namespace hal
         insertAtEnd(append_out, m_error_color);
     }
 
-    void python_console::clear()
+    void PythonConsole::clear()
     {
         QTextEdit::clear();
     }
 
-    void python_console::display_prompt()
+    void PythonConsole::display_prompt()
     {
         //QTextCursor cursor = textCursor();
         QTextCursor cursor(document());
@@ -226,7 +226,7 @@ namespace hal
         m_prompt_end_position = textCursor().position();
     }
 
-    void python_console::interpret_command()
+    void PythonConsole::interpret_command()
     {
         QString input      = get_current_command();
         QTextCursor cursor = textCursor();
@@ -262,7 +262,7 @@ namespace hal
         //qDebug() << m_current_compound_input;
     }
 
-    QString python_console::get_current_command()
+    QString PythonConsole::get_current_command()
     {
         QTextCursor cursor = textCursor();
 
@@ -274,7 +274,7 @@ namespace hal
         return command;
     }
 
-    void python_console::replace_current_command(const QString& new_command)
+    void PythonConsole::replace_current_command(const QString& new_command)
     {
         QTextCursor cursor = textCursor();
         cursor.setPosition(m_prompt_end_position);
@@ -282,21 +282,21 @@ namespace hal
         cursor.insertText(new_command);
     }
 
-    void python_console::append_to_current_command(const QString& appendix)
+    void PythonConsole::append_to_current_command(const QString& appendix)
     {
         QTextCursor cursor = textCursor();
         cursor.movePosition(QTextCursor::End);
         cursor.insertText(appendix);
     }
 
-    bool python_console::selection_editable()
+    bool PythonConsole::selection_editable()
     {
         QTextCursor cursor(document());
         cursor.setPosition(textCursor().selectionStart());
         return false;
     }
 
-    void python_console::handle_up_key_pressed()
+    void PythonConsole::handle_up_key_pressed()
     {
         auto length = m_history->size() - 1;
 
@@ -318,7 +318,7 @@ namespace hal
         }
     }
 
-    void python_console::handle_down_key_pressed()
+    void PythonConsole::handle_down_key_pressed()
     {
         auto length = m_history->size() - 1;
 
@@ -339,7 +339,7 @@ namespace hal
         }
     }
 
-    void python_console::handle_tab_key_pressed()
+    void PythonConsole::handle_tab_key_pressed()
     {
         if (m_in_compound_prompt)
         {

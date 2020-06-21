@@ -12,14 +12,14 @@
 namespace hal
 {
     // SET VIA SETTINGS OR TOOLBUTTON
-    bool selection_relay::s_navigation_skips_enabled = false;
+    bool SelectionRelay::s_navigation_skips_enabled = false;
 
-    selection_relay::selection_relay(QObject* parent) : QObject(parent), m_current_type(item_type::none), m_focus_type(item_type::none), m_subfocus(subfocus::none)
+    SelectionRelay::SelectionRelay(QObject* parent) : QObject(parent), m_current_type(item_type::none), m_focus_type(item_type::none), m_subfocus(subfocus::none)
     {
         clear();
     }
 
-    void selection_relay::clear()
+    void SelectionRelay::clear()
     {
         m_selected_gates.clear();
         m_selected_nets.clear();
@@ -29,18 +29,18 @@ namespace hal
         m_focus_id                   = 0;
     }
 
-    void selection_relay::clear_and_update()
+    void SelectionRelay::clear_and_update()
     {
         clear();
         Q_EMIT selection_changed(nullptr);
     }
 
-    void selection_relay::register_sender(void* sender, QString name)
+    void SelectionRelay::register_sender(void* sender, QString name)
     {
         m_sender_register.append(QPair<void*, QString>(sender, name));
     }
 
-    void selection_relay::remove_sender(void* sender)
+    void SelectionRelay::remove_sender(void* sender)
     {
         for (QPair<void*, QString> pair : m_sender_register)
         {
@@ -49,18 +49,18 @@ namespace hal
         }
     }
 
-    void selection_relay::relay_selection_changed(void* sender)
+    void SelectionRelay::relay_selection_changed(void* sender)
     {
         Q_EMIT selection_changed(sender);
     }
 
-    void selection_relay::relay_subfocus_changed(void* sender)
+    void SelectionRelay::relay_subfocus_changed(void* sender)
     {
         Q_EMIT subfocus_changed(sender);
     }
 
     // TODO deduplicate navigate_up and navigate_down
-    void selection_relay::navigate_up()
+    void SelectionRelay::navigate_up()
     {
         u32 size = 0;
 
@@ -157,7 +157,7 @@ namespace hal
         Q_EMIT subfocus_changed(nullptr);
     }
 
-    void selection_relay::navigate_down()
+    void SelectionRelay::navigate_down()
     {
         u32 size = 0;
 
@@ -255,7 +255,7 @@ namespace hal
     }
 
     // TODO nothing is using this method - do we need it?
-    void selection_relay::navigate_left()
+    void SelectionRelay::navigate_left()
     {
         switch (m_focus_type)
         {
@@ -330,7 +330,7 @@ namespace hal
     }
 
     // TODO nothing is using this method - do we need it?
-    void selection_relay::navigate_right()
+    void SelectionRelay::navigate_right()
     {
         switch (m_focus_type)
         {
@@ -399,7 +399,7 @@ namespace hal
         }
     }
 
-    void selection_relay::handle_module_removed(const u32 id)
+    void SelectionRelay::handle_module_removed(const u32 id)
     {
         auto it = m_selected_modules.find(id);
         if (it != m_selected_modules.end())
@@ -409,7 +409,7 @@ namespace hal
         }
     }
 
-    void selection_relay::handle_gate_removed(const u32 id)
+    void SelectionRelay::handle_gate_removed(const u32 id)
     {
         auto it = m_selected_gates.find(id);
         if (it != m_selected_gates.end())
@@ -419,7 +419,7 @@ namespace hal
         }
     }
 
-    void selection_relay::handle_net_removed(const u32 id)
+    void SelectionRelay::handle_net_removed(const u32 id)
     {
         auto it = m_selected_nets.find(id);
         if (it != m_selected_nets.end())
@@ -431,7 +431,7 @@ namespace hal
 
     // GET CORE GUARANTEES
     // UNCERTAIN ABOUT UNROUTED (GLOBAL) NETS, DECIDE
-    void selection_relay::follow_gate_input_pin(std::shared_ptr<Gate> g, u32 input_pin_index)
+    void SelectionRelay::follow_gate_input_pin(std::shared_ptr<Gate> g, u32 input_pin_index)
     {
         std::string pin_type = *std::next(g->get_input_pins().begin(), input_pin_index);
         std::shared_ptr<Net> n = g->get_fan_in_net(pin_type);
@@ -473,7 +473,7 @@ namespace hal
         Q_EMIT selection_changed(nullptr);
     }
 
-    void selection_relay::follow_gate_output_pin(std::shared_ptr<Gate> g, u32 output_pin_index)
+    void SelectionRelay::follow_gate_output_pin(std::shared_ptr<Gate> g, u32 output_pin_index)
     {
         std::string pin_type = *std::next(g->get_output_pins().begin(), output_pin_index);
         std::shared_ptr<Net> n = g->get_fan_out_net(pin_type);
@@ -498,18 +498,18 @@ namespace hal
         Q_EMIT selection_changed(nullptr);
     }
 
-    void selection_relay::follow_module_input_pin(std::shared_ptr<Module> m, u32 input_pin_index)
+    void SelectionRelay::follow_module_input_pin(std::shared_ptr<Module> m, u32 input_pin_index)
     {
         // TODO implement
     }
 
-    void selection_relay::follow_module_output_pin(std::shared_ptr<Module> m, u32 output_pin_index)
+    void SelectionRelay::follow_module_output_pin(std::shared_ptr<Module> m, u32 output_pin_index)
     {
         // TODO implement
     }
 
 
-    void selection_relay::follow_net_to_source(std::shared_ptr<Net> n)
+    void SelectionRelay::follow_net_to_source(std::shared_ptr<Net> n)
     {
         Endpoint e              = n->get_source();
         std::shared_ptr<Gate> g = e.get_gate();
@@ -547,7 +547,7 @@ namespace hal
         Q_EMIT selection_changed(nullptr);
     }
 
-    void selection_relay::follow_net_to_destination(std::shared_ptr<Net> n, u32 dst_index)
+    void SelectionRelay::follow_net_to_destination(std::shared_ptr<Net> n, u32 dst_index)
     {
         Endpoint e              = n->get_destinations().at(dst_index);
         std::shared_ptr<Gate> g = e.get_gate();
@@ -585,7 +585,7 @@ namespace hal
         Q_EMIT selection_changed(nullptr);
     }
 
-    void selection_relay::subfocus_none()
+    void SelectionRelay::subfocus_none()
     {
         m_subfocus       = subfocus::none;
         m_subfocus_index = 0;    // TECHNICALLY REDUNDANT, KEEP FOR COMPLETENESS ???
@@ -593,7 +593,7 @@ namespace hal
         Q_EMIT subfocus_changed(nullptr);
     }
 
-    void selection_relay::subfocus_left()
+    void SelectionRelay::subfocus_left()
     {
         m_subfocus       = subfocus::left;
         m_subfocus_index = 0;
@@ -601,7 +601,7 @@ namespace hal
         Q_EMIT subfocus_changed(nullptr);
     }
 
-    void selection_relay::subfocus_right()
+    void SelectionRelay::subfocus_right()
     {
         m_subfocus       = subfocus::right;
         m_subfocus_index = 0;

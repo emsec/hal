@@ -34,16 +34,16 @@ namespace hal
     {
 
     public:
-        selection(u32 id, selection_relay::item_type type);
+        selection(u32 id, SelectionRelay::item_type type);
         ~selection();
 
-        selection_relay::item_type get_type() const;
+        SelectionRelay::item_type get_type() const;
 
         u32 get_net_id() const;
         u32 get_gate_id() const;
 
     private:
-        selection_relay::item_type m_type;
+        SelectionRelay::item_type m_type;
 
         std::vector<u32> m_net_ids;
         std::vector<u32> m_gate_ids;

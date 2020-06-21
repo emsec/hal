@@ -38,12 +38,12 @@ namespace hal
     QSettings g_settings(QString::fromStdString((core_utils::get_user_config_directory() / "guisettings.ini").string()), QSettings::IniFormat);
     QSettings g_gui_state(QString::fromStdString((core_utils::get_user_config_directory() / "guistate.ini").string()), QSettings::IniFormat);
 
-    settings_manager g_settings_manager;
+    SettingsManager g_settings_manager;
     // this relay MUST be initialized before everything else since other components
     // need to connect() to it when initializing
-    settings_relay g_settings_relay;
+    SettingsRelay g_settings_relay;
 
-    keybind_manager g_keybind_manager;
+    KeybindManager g_keybind_manager;
 
     window_manager* g_window_manager;
     NotificationManager* g_NotificationManager;
@@ -54,7 +54,7 @@ namespace hal
 
     NetlistRelay g_NetlistRelay;
     PluginRelay g_PluginRelay;
-    selection_relay g_selection_relay;
+    SelectionRelay g_selection_relay;
 
     FileStatusManager g_file_status_manager;
 
@@ -64,7 +64,7 @@ namespace hal
 
     GuiApi* g_gui_api;
 
-    std::unique_ptr<python_context> g_python_context = nullptr;
+    std::unique_ptr<PythonContext> g_python_context = nullptr;
 
     // NOTE
     // ORDER = LOGGER -> SETTINGS -> (STYLE / RELAYS / OTHER STUFF) -> MAINWINDOW (= EVERYTHING ELSE & DATA)

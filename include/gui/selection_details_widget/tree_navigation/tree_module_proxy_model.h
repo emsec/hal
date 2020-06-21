@@ -29,11 +29,11 @@
 
 namespace hal
 {
-    class tree_ModuleProxyModel : public QSortFilterProxyModel
+    class TreeModuleProxyModel : public QSortFilterProxyModel
     {
         Q_OBJECT
     public:
-        tree_ModuleProxyModel(QObject* parent = 0);
+        TreeModuleProxyModel(QObject* parent = 0);
 
     protected:
         bool filterAcceptsRow(int source_row, const QModelIndex& source_parent) const override;

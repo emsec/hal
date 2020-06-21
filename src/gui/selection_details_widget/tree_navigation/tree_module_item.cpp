@@ -2,56 +2,56 @@
 
 namespace hal
 {
-    tree_ModuleItem::tree_ModuleItem(const QVector<QVariant>& data, tree_ModuleItem::item_type type, tree_ModuleItem* parent)
+    TreeModuleItem::TreeModuleItem(const QVector<QVariant>& data, TreeModuleItem::item_type type, TreeModuleItem* parent)
     {
         m_parent_item = parent;
         m_data        = data;
         m_type        = type;
     }
 
-    tree_ModuleItem::~tree_ModuleItem()
+    TreeModuleItem::~TreeModuleItem()
     {
         qDeleteAll(m_child_items);
     }
 
-    int tree_ModuleItem::get_child_count() const
+    int TreeModuleItem::get_child_count() const
     {
         return m_child_items.size();
     }
 
-    int tree_ModuleItem::get_column_count() const
+    int TreeModuleItem::get_column_count() const
     {
         return m_data.size();
     }
 
-    int tree_ModuleItem::get_row_number() const
+    int TreeModuleItem::get_row_number() const
     {
         if (m_parent_item)
-            return m_parent_item->m_child_items.indexOf(const_cast<tree_ModuleItem*>(this));
+            return m_parent_item->m_child_items.indexOf(const_cast<TreeModuleItem*>(this));
         return 0;
     }
 
-    tree_ModuleItem* tree_ModuleItem::get_child(int row)
+    TreeModuleItem* TreeModuleItem::get_child(int row)
     {
         return m_child_items.at(row);
     }
 
-    tree_ModuleItem* tree_ModuleItem::get_parent()
+    TreeModuleItem* TreeModuleItem::get_parent()
     {
         return m_parent_item;
     }
 
-    QVariant tree_ModuleItem::data(int column) const
+    QVariant TreeModuleItem::data(int column) const
     {
         return m_data.at(column);
     }
 
-    tree_ModuleItem::item_type tree_ModuleItem::get_type()
+    TreeModuleItem::item_type TreeModuleItem::get_type()
     {
         return m_type;
     }
 
-    bool tree_ModuleItem::insert_child(int row_position, tree_ModuleItem* item)
+    bool TreeModuleItem::insert_child(int row_position, TreeModuleItem* item)
     {
         if (row_position < 0 || row_position > m_child_items.size())
             return false;
@@ -60,7 +60,7 @@ namespace hal
         return true;
     }
 
-    bool tree_ModuleItem::set_data(int column, const QVariant& value)
+    bool TreeModuleItem::set_data(int column, const QVariant& value)
     {
         if (column < 0 || column >= m_data.size())
             return false;
@@ -69,7 +69,7 @@ namespace hal
         return true;
     }
 
-    bool tree_ModuleItem::remove_all_children()
+    bool TreeModuleItem::remove_all_children()
     {
         for(int i = 0; i < m_child_items.size();i++)
             delete m_child_items.takeAt(0);
@@ -77,7 +77,7 @@ namespace hal
         return true;
     }
 
-    bool tree_ModuleItem::remove_children(int position, int count)
+    bool TreeModuleItem::remove_children(int position, int count)
     {
         if (position < 0 || position + count > m_child_items.size())
             return false;
@@ -88,7 +88,7 @@ namespace hal
         return true;
     }
 
-    bool tree_ModuleItem::remove_child(tree_ModuleItem* item)
+    bool TreeModuleItem::remove_child(TreeModuleItem* item)
     {
         return m_child_items.removeOne(item);
     }

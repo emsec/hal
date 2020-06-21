@@ -13,7 +13,7 @@
 
 namespace hal
 {
-    text_setting::text_setting(const QString& key, const QString& title, const QString& description, const QString& placeholder, QWidget *parent) : settings_widget(key, parent)
+    TextSetting::TextSetting(const QString& key, const QString& title, const QString& description, const QString& placeholder, QWidget *parent) : SettingsWidget(key, parent)
     {
         m_labels.append(QPair<QLabel*, QString>(m_name, title));
 
@@ -23,7 +23,7 @@ namespace hal
         m_textfield = new QLineEdit(this);
         m_textfield->setPlaceholderText(placeholder);
         m_textfield->setStyleSheet("QLineEdit{width: 200px;}");
-        connect(m_textfield, &QLineEdit::textChanged, this, &text_setting::on_text_changed);
+        connect(m_textfield, &QLineEdit::textChanged, this, &TextSetting::on_text_changed);
 
 
         layout->addWidget(m_textfield);
@@ -34,22 +34,22 @@ namespace hal
         m_labels.append(QPair<QLabel*, QString>(label, description));
     }
 
-    void text_setting::load(const QVariant& value)
+    void TextSetting::load(const QVariant& value)
     {
         m_textfield->setText(value.toString());
     }
 
-    QVariant text_setting::value()
+    QVariant TextSetting::value()
     {
         return QVariant(m_textfield->text());
     }
 
-    // void dropdown_setting::rollback()
+    // void DropdownSetting::rollback()
     // {
 
     // }
 
-    void text_setting::on_text_changed()
+    void TextSetting::on_text_changed()
     {
         this->trigger_setting_updated();
     }

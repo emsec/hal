@@ -5,7 +5,7 @@
 
 namespace hal
 {
-    settings_display::settings_display(QWidget* parent)
+    SettingsDisplay::SettingsDisplay(QWidget* parent)
         : QScrollArea(parent), m_content(new QFrame), m_content_layout(new QVBoxLayout()), m_sub_content(new QFrame()), m_sub_content_layout(new QVBoxLayout())
     {
         m_content->setFrameStyle(QFrame::NoFrame);
@@ -27,7 +27,7 @@ namespace hal
         setWidget(m_content);
     }
 
-    void settings_display::add_widget(QWidget* widget)
+    void SettingsDisplay::add_widget(QWidget* widget)
     {
         //widget->hide();
         //m_sub_content_layout->addWidget(widget);

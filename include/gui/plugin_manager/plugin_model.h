@@ -29,13 +29,13 @@
 
 namespace hal
 {
-    class plugin_model : public QAbstractItemModel
+    class PluginModel : public QAbstractItemModel
     {
         Q_OBJECT
 
     public:
-        explicit plugin_model(QObject* parent = 0);
-        ~plugin_model();
+        explicit PluginModel(QObject* parent = 0);
+        ~PluginModel();
         bool is_valid_index(const QModelIndex& idx);
         virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
         virtual int columnCount(const QModelIndex& parent = QModelIndex()) const;
@@ -51,7 +51,7 @@ namespace hal
         void plugin_manager_callback(bool is_load, std::string const& plugin_name, std::string const& plugin_path);
         void request_load_plugin(const QString& name, const QString& path);
         void request_unload_plugin(QModelIndexList idx);
-        const QList<plugin_item> get_plugin_list();
+        const QList<PluginItem> get_plugin_list();
 
     Q_SIGNALS:
         void load_plugin(QString name, QString path);
@@ -65,7 +65,7 @@ namespace hal
 
     private:
         QStringList m_columns;
-        QList<plugin_item> m_items;
+        QList<PluginItem> m_items;
         u64 m_model_changed_callback_id;
     };
 }

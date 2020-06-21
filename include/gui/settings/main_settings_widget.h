@@ -39,16 +39,16 @@ namespace hal
 {
     class ExpandingListButton;
     class ExpandingListWidget;
-    class searchbar;
-    class settings_display;
-    class settings_widget;
+    class Searchbar;
+    class SettingsDisplay;
+    class SettingsWidget;
 
-    class main_settings_widget : public QWidget
+    class MainSettingsWidget : public QWidget
     {
         Q_OBJECT
 
     public:
-        explicit main_settings_widget(QWidget* parent = 0);
+        explicit MainSettingsWidget(QWidget* parent = 0);
         bool handle_about_to_close();
 
     Q_SIGNALS:
@@ -60,16 +60,16 @@ namespace hal
         void handle_ok_clicked();
         void handle_button_selected(ExpandingListButton* button);
         void handle_text_edited(const QString& text);
-        void handle_setting_updated(settings_widget* sender, const QString& key, const QVariant& value);
+        void handle_setting_updated(SettingsWidget* sender, const QString& key, const QVariant& value);
 
     private:
         void init_widgets();
         void make_section(const QString& label, const QString& name, const QString& icon_path);
-        void register_widget(const QString& section_name, settings_widget* widget);
-        bool check_conflict(settings_widget* widget, const QVariant& value) const;
+        void register_widget(const QString& section_name, SettingsWidget* widget);
+        bool check_conflict(SettingsWidget* widget, const QVariant& value) const;
         void make_exclusive_group(const QString& name);
-        void assign_exclusive_group(const QString& group_name, settings_widget* widget);
-        void release_exclusive_group(const QString& group_name, settings_widget* widget);
+        void assign_exclusive_group(const QString& group_name, SettingsWidget* widget);
+        void release_exclusive_group(const QString& group_name, SettingsWidget* widget);
         void hide_all_settings();
         void show_all_settings();
         void remove_all_highlights();
@@ -83,7 +83,7 @@ namespace hal
 
         QFrame* m_searchbar_container;
         QHBoxLayout* m_searchbar_layout;
-        searchbar* m_searchbar;
+        Searchbar* m_searchbar;
 
         QScrollArea* m_scroll_area;
         QFrame* m_content;
@@ -97,14 +97,14 @@ namespace hal
         QPushButton* m_cancel;
         QPushButton* m_ok;
 
-        QMap<QString, QList<settings_widget*>*> m_map;
+        QMap<QString, QList<SettingsWidget*>*> m_map;
         QMap<QString, ExpandingListButton*> m_sections;
         QString m_active_section;
 
-        QList<settings_widget*> m_all_settings;
+        QList<SettingsWidget*> m_all_settings;
 
         QList<QString> m_exclusive_groups;
-        QMap<settings_widget*, QString> m_exclusive_w2g;
-        QMap<QString, QList<settings_widget*>*> m_exclusive_g2w;
+        QMap<SettingsWidget*, QString> m_exclusive_w2g;
+        QMap<QString, QList<SettingsWidget*>*> m_exclusive_g2w;
     };
 }

@@ -37,15 +37,15 @@
 
 namespace hal
 {
-    class tree_ModuleItem;
+    class TreeModuleItem;
 
-    class tree_ModuleModel : public QAbstractItemModel
+    class TreeModuleModel : public QAbstractItemModel
     {
         Q_OBJECT
 
     public:
-        tree_ModuleModel(QObject* parent = 0);
-        ~tree_ModuleModel();
+        TreeModuleModel(QObject* parent = 0);
+        ~TreeModuleModel();
 
         //information access
         QVariant data(const QModelIndex& index, int role) const Q_DECL_OVERRIDE;
@@ -69,18 +69,18 @@ namespace hal
         void setup_model_data();
 
         //helper functions to convert between index and item
-        tree_ModuleItem* get_item(const QModelIndex& index) const;
-        QModelIndex get_modelindex(tree_ModuleItem* item);
-        QList<QModelIndex> get_modelindexes_for_row(tree_ModuleItem* item);
+        TreeModuleItem* get_item(const QModelIndex& index) const;
+        QModelIndex get_modelindex(TreeModuleItem* item);
+        QList<QModelIndex> get_modelindexes_for_row(TreeModuleItem* item);
 
-        void insert_item(tree_ModuleItem* parent, int position, tree_ModuleItem* item);
-        void remove_item(tree_ModuleItem* item);
+        void insert_item(TreeModuleItem* parent, int position, TreeModuleItem* item);
+        void remove_item(TreeModuleItem* item);
 
         void load_data_settings();
 
-        tree_ModuleItem* m_root_item;
-        tree_ModuleItem* m_gates_item;
-        tree_ModuleItem* m_nets_item;
+        TreeModuleItem* m_root_item;
+        TreeModuleItem* m_gates_item;
+        TreeModuleItem* m_nets_item;
 
         QIcon m_design_icon;
         QFont m_structured_font;

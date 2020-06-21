@@ -6,12 +6,12 @@
 
 namespace hal
 {
-    keybind_manager::keybind_manager(QObject* parent) : QObject(parent)
+    KeybindManager::KeybindManager(QObject* parent) : QObject(parent)
     {
-        connect(&g_settings_relay, &settings_relay::setting_changed, this, &keybind_manager::handle_global_setting_changed);
+        connect(&g_settings_relay, &SettingsRelay::setting_changed, this, &KeybindManager::handle_global_setting_changed);
     }
 
-    void keybind_manager::bind(HalAction* action, const QString& key)
+    void KeybindManager::bind(HalAction* action, const QString& key)
     {
         Q_ASSERT(!m_bound_actions.contains(action));
         // keep track of this action
@@ -22,7 +22,7 @@ namespace hal
         action->setShortcut(seq);
     }
 
-    void keybind_manager::bind(QShortcut* shortcut, const QString& key)
+    void KeybindManager::bind(QShortcut* shortcut, const QString& key)
     {
         Q_ASSERT(!m_bound_shortcuts.contains(shortcut));
         // keep track of this shortcut
@@ -33,21 +33,21 @@ namespace hal
         shortcut->setKey(seq);
     }
 
-    void keybind_manager::release(HalAction* action)
+    void KeybindManager::release(HalAction* action)
     {
         Q_ASSERT(m_bound_actions.remove(action));
         // remove all matching values from map
         delete_all_values(m_bindings_actions, action);
     }
 
-    void keybind_manager::release(QShortcut* shortcut)
+    void KeybindManager::release(QShortcut* shortcut)
     {
         Q_ASSERT(m_bound_shortcuts.remove(shortcut));
         // remove all matching values from map
         delete_all_values(m_bindings_shortcuts, shortcut);
     }
 
-    QShortcut* keybind_manager::make_shortcut(QWidget* parent, const QString& key)
+    QShortcut* KeybindManager::make_shortcut(QWidget* parent, const QString& key)
     {
         // initialize shortcut with whatever keybind is configured under that key
         QKeySequence seq = g_settings_manager.get(key).toString();
@@ -58,7 +58,7 @@ namespace hal
         return shortcut;
     }
 
-    void keybind_manager::handle_global_setting_changed(void* sender, const QString& key, const QVariant& value)
+    void KeybindManager::handle_global_setting_changed(void* sender, const QString& key, const QVariant& value)
     {
         Q_UNUSED(sender);
         QKeySequence seq = value.toString();

@@ -28,12 +28,12 @@
 
 namespace hal
 {
-    class text_setting : public settings_widget
+    class TextSetting : public SettingsWidget
     {
         Q_OBJECT
 
     public:
-        text_setting(const QString& key, const QString& title, const QString& description, const QString& placeholder = "", QWidget* parent = 0);
+        TextSetting(const QString& key, const QString& title, const QString& description, const QString& placeholder = "", QWidget* parent = 0);
 
         virtual void load(const QVariant& value) Q_DECL_OVERRIDE;
         virtual QVariant value() Q_DECL_OVERRIDE;

@@ -10,7 +10,7 @@
 //#define SETTINGS_UPDATE_IMMEDIATELY
 namespace hal
 {
-    settings_widget::settings_widget(const QString& key, QWidget* parent)
+    SettingsWidget::SettingsWidget(const QString& key, QWidget* parent)
         : QFrame(parent), m_layout(new QVBoxLayout()), m_container(new QBoxLayout(QBoxLayout::TopToBottom)), m_top_bar(new QHBoxLayout()), m_name(new QLabel()), m_revert(new QToolButton()),
           m_default(new QToolButton()), m_highlight_color(52, 56, 57), m_key(key)
     {
@@ -27,11 +27,11 @@ namespace hal
         m_revert->setText("R");
         m_revert->setToolTip("Revert your last change");
         m_revert->setMaximumWidth(20);
-        connect(m_revert, &QToolButton::clicked, this, &settings_widget::handle_rollback);
+        connect(m_revert, &QToolButton::clicked, this, &SettingsWidget::handle_rollback);
         m_default->setText("D");
         m_default->setToolTip("Load the default value");
         m_default->setMaximumWidth(20);
-        connect(m_default, &QToolButton::clicked, this, &settings_widget::handle_reset);
+        connect(m_default, &QToolButton::clicked, this, &SettingsWidget::handle_reset);
         m_top_bar->addWidget(m_name);
         m_top_bar->addStretch();
         m_top_bar->addWidget(m_revert);
@@ -42,22 +42,22 @@ namespace hal
         hide();
     }
 
-    QColor settings_widget::highlight_color()
+    QColor SettingsWidget::highlight_color()
     {
         return m_highlight_color;
     }
 
-    QString settings_widget::key()
+    QString SettingsWidget::key()
     {
         return m_key;
     }
 
-    void settings_widget::set_highlight_color(const QColor& color)
+    void SettingsWidget::set_highlight_color(const QColor& color)
     {
         m_highlight_color = color;
     }
 
-    void settings_widget::reset_labels()
+    void SettingsWidget::reset_labels()
     {
         for (QPair<QLabel*, QString>& pair : m_labels)
         {
@@ -73,7 +73,7 @@ namespace hal
         }
     }
 
-    bool settings_widget::match_labels(const QString& string)
+    bool SettingsWidget::match_labels(const QString& string)
     {
         bool match_found = false;
 
@@ -109,7 +109,7 @@ namespace hal
         return match_found;
     }
 
-    void settings_widget::trigger_setting_updated()
+    void SettingsWidget::trigger_setting_updated()
     {
         QVariant val = value();
         if (m_preview)
@@ -125,7 +125,7 @@ namespace hal
         }
     }
 
-    void settings_widget::handle_reset()
+    void SettingsWidget::handle_reset()
     {
         if (m_prepared)
         {
@@ -137,7 +137,7 @@ namespace hal
         }
     }
 
-    void settings_widget::handle_rollback()
+    void SettingsWidget::handle_rollback()
     {
         if (m_prepared)
         {
@@ -149,7 +149,7 @@ namespace hal
         }
     }
 
-    void settings_widget::set_dirty(bool dirty)
+    void SettingsWidget::set_dirty(bool dirty)
     {
         m_dirty   = dirty;
         QStyle* s = style();
@@ -157,12 +157,12 @@ namespace hal
         s->polish(this);
     }
 
-    bool settings_widget::dirty() const
+    bool SettingsWidget::dirty() const
     {
         return m_dirty;
     }
 
-    void settings_widget::prepare(const QVariant& value, const QVariant& default_value)
+    void SettingsWidget::prepare(const QVariant& value, const QVariant& default_value)
     {
         m_signals_enabled = false;
         load(value);
@@ -173,13 +173,13 @@ namespace hal
         set_dirty(false);
     }
 
-    void settings_widget::mark_saved()
+    void SettingsWidget::mark_saved()
     {
         set_dirty(false);
         m_loaded_value = value();
     }
 
-    void settings_widget::set_conflicts(bool conflicts)
+    void SettingsWidget::set_conflicts(bool conflicts)
     {
         m_conflicts = conflicts;
         QStyle* s   = style();
@@ -187,12 +187,12 @@ namespace hal
         s->polish(this);
     }
 
-    bool settings_widget::conflicts() const
+    bool SettingsWidget::conflicts() const
     {
         return m_conflicts;
     }
 
-    void settings_widget::set_preview_widget(preview_widget* widget)
+    void SettingsWidget::set_preview_widget(PreviewWidget* widget)
     {
         if (m_preview)
         {
@@ -206,7 +206,7 @@ namespace hal
         }
     }
 
-    void settings_widget::set_preview_position(preview_position position)
+    void SettingsWidget::set_preview_position(preview_position position)
     {
         QBoxLayout::Direction direction;
         switch (position)

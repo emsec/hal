@@ -11,7 +11,7 @@
 
 namespace hal
 {
-    plugin_manager_widget::plugin_manager_widget(QWidget* parent) : ContentWidget("plugins", parent)
+    PluginManagerWidget::PluginManagerWidget(QWidget* parent) : ContentWidget("plugins", parent)
     {
         m_content_layout->addWidget(&m_table_view);
         m_table_view.setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -31,14 +31,14 @@ namespace hal
         connect(m_remove_action, SIGNAL(triggered()), this, SLOT(on_action_remove_triggered()));
     }
 
-    void plugin_manager_widget::set_plugin_model(plugin_model* m_plugin_model)
+    void PluginManagerWidget::set_plugin_model(PluginModel* m_plugin_model)
     {
         m_table_view.setModel(m_plugin_model);
         m_model = m_plugin_model;
-        connect(&m_table_view, &QTableView::doubleClicked, m_model, &plugin_model::handle_run_plugin_triggered);
+        connect(&m_table_view, &QTableView::doubleClicked, m_model, &PluginModel::handle_run_plugin_triggered);
     }
 
-    void plugin_manager_widget::on_action_add_triggered()
+    void PluginManagerWidget::on_action_add_triggered()
     {
         QString file_name = QFileDialog::getOpenFileName(this, tr("Open Plugin"), QDir::currentPath());
         QFileInfo fi(file_name);
@@ -49,7 +49,7 @@ namespace hal
         m_table_view.resizeColumnsToContents();
     }
 
-    void plugin_manager_widget::on_action_remove_triggered()
+    void PluginManagerWidget::on_action_remove_triggered()
     {
         QModelIndexList index = m_table_view.selectionModel()->selectedIndexes();
         if (index.isEmpty())
@@ -58,7 +58,7 @@ namespace hal
         m_table_view.resizeColumnsToContents();
     }
 
-    void plugin_manager_widget::setup_toolbar(toolbar* toolbar)
+    void PluginManagerWidget::setup_toolbar(toolbar* toolbar)
     {
         toolbar->addAction(m_add_action);
         toolbar->addAction(m_remove_action);

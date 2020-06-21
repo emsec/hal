@@ -41,13 +41,13 @@ class QTabWidget;
 namespace hal
 {
     class CodeEditor;
-    class searchbar;
+    class Searchbar;
     class splitter;
     class toolbar;
 
-    class python_code_editor;
+    class PythonCodeEditor;
 
-    class python_editor : public ContentWidget, public python_context_subscriber
+    class PythonEditor : public ContentWidget, public python_context_subscriber
     {
         Q_OBJECT
         Q_PROPERTY(QString open_icon_path READ open_icon_path WRITE set_open_icon_path)
@@ -64,8 +64,8 @@ namespace hal
         Q_PROPERTY(QString toggle_minimap_icon_style READ toggle_minimap_icon_style WRITE set_toggle_minimap_icon_style)
 
     public:
-        explicit python_editor(QWidget* parent = nullptr);
-        ~python_editor();
+        explicit PythonEditor(QWidget* parent = nullptr);
+        ~PythonEditor();
 
         virtual void setup_toolbar(toolbar* toolbar) Q_DECL_OVERRIDE;
         virtual QList<QShortcut*> create_shortcuts() Q_DECL_OVERRIDE;
@@ -159,7 +159,7 @@ namespace hal
         toolbar* m_toolbar;
         splitter* m_splitter;
 
-        searchbar* m_searchbar;
+        Searchbar* m_searchbar;
 
         HalAction* m_action_open_file;
         HalAction* m_action_run;
@@ -190,7 +190,7 @@ namespace hal
         int m_tab_rightclicked = -1;
 
         QFileSystemWatcher* m_file_watcher;
-        QMap<QString, python_code_editor*> m_path_editor_map;
+        QMap<QString, PythonCodeEditor*> m_path_editor_map;
 
         FileModifiedBar* m_file_modified_bar;
 

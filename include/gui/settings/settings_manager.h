@@ -28,11 +28,11 @@
 
 namespace hal
 {
-    class settings_manager : public QObject
+    class SettingsManager : public QObject
     {
     public:
-        explicit settings_manager(QObject* parent = nullptr);
-        ~settings_manager();
+        explicit SettingsManager(QObject* parent = nullptr);
+        ~SettingsManager();
         QVariant get(const QString& key);
         QVariant get(const QString& key, const QVariant& defaultVal);
         QVariant get_default(const QString& key);

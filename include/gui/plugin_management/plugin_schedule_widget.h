@@ -36,7 +36,7 @@ namespace hal
     class PluginArgumentsWidget;
     class NoScheduledPluginsWidget;
     class ScheduledPluginsWidget;
-    class searchbar;
+    class Searchbar;
 
     class PluginScheduleWidget : public QFrame
     {
@@ -53,7 +53,7 @@ namespace hal
         QVBoxLayout* m_vertical_layout;
         QFrame* m_searchbar_container;
         QHBoxLayout* m_container_layout;
-        searchbar* m_searchbar;
+        Searchbar* m_searchbar;
         QHBoxLayout* m_horizontal_layout;
         LabeledFrame* m_plugin_frame;
         LabeledFrame* m_schedule_frame;

@@ -314,22 +314,22 @@ namespace hal
 
     void GraphicsScene::connect_all()
     {
-        connect(&g_settings_relay, &settings_relay::setting_changed, this, &GraphicsScene::handle_global_setting_changed);
+        connect(&g_settings_relay, &SettingsRelay::setting_changed, this, &GraphicsScene::handle_global_setting_changed);
 
         connect(this, &GraphicsScene::selectionChanged, this, &GraphicsScene::handle_intern_selection_changed);
 
-        connect(&g_selection_relay, &selection_relay::selection_changed, this, &GraphicsScene::handle_extern_selection_changed);
-        connect(&g_selection_relay, &selection_relay::subfocus_changed, this, &GraphicsScene::handle_extern_subfocus_changed);
+        connect(&g_selection_relay, &SelectionRelay::selection_changed, this, &GraphicsScene::handle_extern_selection_changed);
+        connect(&g_selection_relay, &SelectionRelay::subfocus_changed, this, &GraphicsScene::handle_extern_subfocus_changed);
     }
 
     void GraphicsScene::disconnect_all()
     {
-        disconnect(&g_settings_relay, &settings_relay::setting_changed, this, &GraphicsScene::handle_global_setting_changed);
+        disconnect(&g_settings_relay, &SettingsRelay::setting_changed, this, &GraphicsScene::handle_global_setting_changed);
 
         disconnect(this, &GraphicsScene::selectionChanged, this, &GraphicsScene::handle_intern_selection_changed);
 
-        disconnect(&g_selection_relay, &selection_relay::selection_changed, this, &GraphicsScene::handle_extern_selection_changed);
-        disconnect(&g_selection_relay, &selection_relay::subfocus_changed, this, &GraphicsScene::handle_extern_subfocus_changed);
+        disconnect(&g_selection_relay, &SelectionRelay::selection_changed, this, &GraphicsScene::handle_extern_selection_changed);
+        disconnect(&g_selection_relay, &SelectionRelay::subfocus_changed, this, &GraphicsScene::handle_extern_subfocus_changed);
     }
 
     void GraphicsScene::delete_all_items()
@@ -414,25 +414,25 @@ namespace hal
         {
             if (gates)
             {
-                g_selection_relay.m_focus_type = selection_relay::item_type::gate;
+                g_selection_relay.m_focus_type = SelectionRelay::item_type::gate;
                 g_selection_relay.m_focus_id = *g_selection_relay.m_selected_gates.begin(); // UNNECESSARY ??? USE ARRAY[0] INSTEAD OF MEMBER VARIABLE ???
             }
             else if (nets)
             {
-                g_selection_relay.m_focus_type = selection_relay::item_type::net;
+                g_selection_relay.m_focus_type = SelectionRelay::item_type::net;
                 g_selection_relay.m_focus_id = *g_selection_relay.m_selected_nets.begin(); // UNNECESSARY ??? USE ARRAY[0] INSTEAD OF MEMBER VARIABLE ???
             }
             else
             {
-                g_selection_relay.m_focus_type = selection_relay::item_type::module;
+                g_selection_relay.m_focus_type = SelectionRelay::item_type::module;
                 g_selection_relay.m_focus_id = *g_selection_relay.m_selected_modules.begin(); // UNNECESSARY ??? USE ARRAY[0] INSTEAD OF MEMBER VARIABLE ???
             }
         }
         else
         {
-            g_selection_relay.m_focus_type = selection_relay::item_type::none;
+            g_selection_relay.m_focus_type = SelectionRelay::item_type::none;
         }
-        g_selection_relay.m_subfocus = selection_relay::subfocus::none;
+        g_selection_relay.m_subfocus = SelectionRelay::subfocus::none;
         // END OF TEST CODE
 
         g_selection_relay.relay_selection_changed(this);

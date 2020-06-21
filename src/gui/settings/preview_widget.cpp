@@ -4,7 +4,7 @@
 
 namespace hal
 {
-    preview_widget::preview_widget(QWidget* parent) : QFrame(parent), m_layout(new QVBoxLayout())
+    PreviewWidget::PreviewWidget(QWidget* parent) : QFrame(parent), m_layout(new QVBoxLayout())
     {
         setFrameStyle(QFrame::NoFrame);
         m_layout->setAlignment(Qt::AlignTop | Qt::AlignLeft);

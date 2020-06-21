@@ -9,7 +9,7 @@
 
 namespace hal
 {
-    settings_manager::settings_manager(QObject* parent) : QObject(parent),
+    SettingsManager::SettingsManager(QObject* parent) : QObject(parent),
         m_settings(new QSettings(QString::fromStdString((core_utils::get_user_config_directory() / "guisettings.ini").string()), QSettings::IniFormat)),
         m_defaults(new QSettings(QString::fromStdString((core_utils::get_config_directory() / "guidefaults.ini").string()), QSettings::IniFormat))
     {
@@ -22,27 +22,27 @@ namespace hal
         }
     }
 
-    settings_manager::~settings_manager()
+    SettingsManager::~SettingsManager()
     {
         //g_settings_relay.remove_sender(this);
     }
 
-    QVariant settings_manager::get(const QString& key)
+    QVariant SettingsManager::get(const QString& key)
     {
         return this->get(key, get_default(key));
     }
 
-    QVariant settings_manager::get(const QString& key, const QVariant& defaultVal)
+    QVariant SettingsManager::get(const QString& key, const QVariant& defaultVal)
     {
         return m_settings->value(key, defaultVal);
     }
 
-    QVariant settings_manager::get_default(const QString& key)
+    QVariant SettingsManager::get_default(const QString& key)
     {
         return m_defaults->value(key);
     }
 
-    QVariant settings_manager::reset(const QString& key)
+    QVariant SettingsManager::reset(const QString& key)
     {
         QVariant value = this->get_default(key);
         m_settings->remove(key);
@@ -50,7 +50,7 @@ namespace hal
         return value;
     }
 
-    void settings_manager::update(const QString& key, const QVariant& value)
+    void SettingsManager::update(const QString& key, const QVariant& value)
     {
         QVariant current = this->get(key, QVariant(QVariant::Invalid));
         if (m_defaults->value(key) == value)
@@ -69,7 +69,7 @@ namespace hal
         }
     }
 
-    void settings_manager::sync()
+    void SettingsManager::sync()
     {
         m_settings->sync();
     }

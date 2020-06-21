@@ -343,7 +343,7 @@ double_toolbar {
     max-height : 24px;
 }
 
-searchbar {
+Searchbar {
     background-color            : #25292D /*rgb(25, 28, 29)*/;
     min-height                  : 30px;
     max-height                  : 30px;
@@ -357,7 +357,7 @@ searchbar {
     qproperty-clear_icon_style  : "all -> #E4E4E4";
 }
 
-searchbar QLabel {
+Searchbar QLabel {
     font             : bold "Iosevka";
     color            : rgb(165, 165, 165);
     background-color : rgb(25, 28, 29);
@@ -365,12 +365,12 @@ searchbar QLabel {
     padding-right    : 4px;
 }
 
-searchbar QLabel:hover {
+Searchbar QLabel:hover {
     color       : rgb(255, 255, 255);
     font-weight : bold;
 }
 
-searchbar QPushButton {
+Searchbar QPushButton {
     font-weight      : normal;
     background-color : rgb(25, 28, 29);
     border           : none;
@@ -379,7 +379,7 @@ searchbar QPushButton {
     max-width        : 25;
 }
 
-searchbar QLineEdit {
+Searchbar QLineEdit {
     color            : #CBD2D0;
     font-family      : "Iosevka";
     font-style       : normal;
@@ -387,16 +387,16 @@ searchbar QLineEdit {
     border           : none;
 }
 
-searchbar QLineEdit[text=""] {
+Searchbar QLineEdit[text=""] {
     font-style : italic;
 }
 
-searchbar QToolButton {
+Searchbar QToolButton {
     background-color : rgb(25, 28, 29);
     border           : none;
 }
 
-settings_widget {
+SettingsWidget {
     /*background-color : #c1bdb3;*/
     background-color : rgb(189, 189, 189);
     /*border : 1px solid rgb(23, 26, 26);*/
@@ -409,16 +409,16 @@ settings_widget {
     /*border-left : 5px solid #232ed1;*/
 }
 
-settings_widget[conflicts=true] {
+SettingsWidget[conflicts=true] {
     border-left      : 5px solid #A61F1F;
     background-color : rgb(231, 137, 137);
 }
 
-settings_widget[dirty=true][conflicts=false] {
+SettingsWidget[dirty=true][conflicts=false] {
     border-left      : 5px solid rgb(73, 200, 76);
 }
 
-settings_widget QLabel {
+SettingsWidget QLabel {
     /* color            : #D3DCE6;
     background-color : #25292D; */
     color: rgb(0, 0, 0);
@@ -426,7 +426,7 @@ settings_widget QLabel {
     margin-right     : 10px;
 }
 
-settings_widget #name-label {
+SettingsWidget #name-label {
     min-height : 42px;
     max-height : 42px;
     font       : 14px bold "Iosevka";
@@ -434,7 +434,7 @@ settings_widget #name-label {
 
 /* LABEL_BUTTON */
 
-settings_widget label_button {
+SettingsWidget label_button {
     font           : bold "Iosevka";
     /*background: rgba(228, 228, 228, 0.05);*/
     border         : 1px solid rgb(228, 228, 228);
@@ -447,39 +447,39 @@ settings_widget label_button {
 
 /* KEYBIND_EDIT */
 
-settings_widget keybind_edit [validated=false] {
+SettingsWidget keybind_edit [validated=false] {
     color: red;
 }
 
-/* MAIN_SETTINGS_WIDGET */
+/* MainSettingsWidget */
 
-main_settings_widget {
+MainSettingsWidget {
     border : 1px solid rgb(23, 26, 26);
 }
 
-main_settings_widget #searchbar-container {
+MainSettingsWidget #Searchbar-container {
     min-height : 80px;
     max-height : 80px;
     /*background-color : rgba(38, 40, 41, 1);*/
 }
 
-main_settings_widget #searchbar-container searchbar {
+MainSettingsWidget #Searchbar-container Searchbar {
     min-width : 400px;
     max-width : 400px;
     border    : 1px solid rgb(73, 74, 76);
 }
 
-main_settings_widget settings_display {
+MainSettingsWidget SettingsDisplay {
     background-color : red;
     border           : 1px solid #A9B7C6;
 }
 
-main_settings_widget settings_display * {
+MainSettingsWidget SettingsDisplay * {
     background-color : red;
     border           : 1px solid #A9B7C6;
 }
 
-main_settings_widget preview_widget {
+MainSettingsWidget PreviewWidget {
     /*background-color: rgb(9, 11, 13);*/
     border          : 2px solid rgb(73, 74, 76);
     border-radius   : 8px;
@@ -487,31 +487,31 @@ main_settings_widget preview_widget {
     padding         : 5px 0;
 }
 
-main_settings_widget preview_widget *{
+MainSettingsWidget PreviewWidget *{
     background-color: rgba(255, 255, 255, 0);
 }
 
 /* ExpandingListWidget */
 
-main_settings_widget ExpandingListWidget {
+MainSettingsWidget ExpandingListWidget {
     border-right : 1px solid rgb(23, 26, 26);
     min-width    : 250px;
     max-width    : 250px;
 }
 
-main_settings_widget ExpandingListWidget #content {
+MainSettingsWidget ExpandingListWidget #content {
     background   : rgb(9, 11, 13);
     border-right : 5px solid rgb(13, 15, 17);
 }
 
-main_settings_widget ExpandingListWidget #spacer {
+MainSettingsWidget ExpandingListWidget #spacer {
     min-height   : 80px;
     max-height   : 80px;
     background   : rgb(9, 11, 13);
     border-right : 5px solid rgb(13, 15, 17);
 }
 
-main_settings_widget ExpandingListButton {
+MainSettingsWidget ExpandingListButton {
     min-height           : 42px;
     max-height           : 42px;
     background-color     : rgb(9, 11, 13);
@@ -520,58 +520,58 @@ main_settings_widget ExpandingListButton {
     qproperty-icon_style : "all -> #969696";
 }
 
-main_settings_widget ExpandingListButton[hover=true] {
+MainSettingsWidget ExpandingListButton[hover=true] {
     qproperty-icon_style : "all -> #E4E4E4";
 }
 
-main_settings_widget ExpandingListButton[hover=true] * {
+MainSettingsWidget ExpandingListButton[hover=true] * {
     /*color: rgb(228, 228, 228);*/
     color            : rgb(255, 255, 255);
     background-color : rgba(255, 255, 255, 0.012);
 }
 
-main_settings_widget ExpandingListButton[selected=true] {
+MainSettingsWidget ExpandingListButton[selected=true] {
     background-color     : rgb(34, 37, 38);
     qproperty-icon_style : "all -> #A9B7C6";
 }
 
-main_settings_widget ExpandingListButton[type="child"] {
+MainSettingsWidget ExpandingListButton[type="child"] {
     background-color : rgb(14, 17, 20);
 }
 
-main_settings_widget ExpandingListButton[type="child"][selected=true] {
+MainSettingsWidget ExpandingListButton[type="child"][selected=true] {
     background-color : rgb(34, 37, 38);
 }
 
-main_settings_widget ExpandingListButton * {
+MainSettingsWidget ExpandingListButton * {
     font             : 14px bold "Iosevka";
     background-color : transparent;
 }
 
-main_settings_widget ExpandingListButton #left-border {
+MainSettingsWidget ExpandingListButton #left-border {
     min-width : 4px;
     max-width : 4px;
     /*padding-right: 40px;*/
 }
 
-main_settings_widget ExpandingListButton #icon-label {
+MainSettingsWidget ExpandingListButton #icon-label {
     padding-left  : 40px;
     padding-right : 10px;
 }
 
-main_settings_widget ExpandingListButton #right-border {
+MainSettingsWidget ExpandingListButton #right-border {
     min-width : 4px;
     max-width : 4px;
 }
 
-main_settings_widget ExpandingListButton[selected=true] #text-label {
+MainSettingsWidget ExpandingListButton[selected=true] #text-label {
     /*color : rgb(114, 140, 0);*/
     /*color : rgb(35, 200, 46);*/
     color : rgb(85, 255, 0);
     /*color : rgb(0, 255, 0);*/
 }
 
-main_settings_widget ExpandingListButton[selected=true] #right-border {
+MainSettingsWidget ExpandingListButton[selected=true] #right-border {
     /*background-color: rgb(114, 140, 0);*/
     /*background-color : rgb(35, 200, 46);*/
     background-color : rgb(85, 255, 0);
@@ -1028,13 +1028,13 @@ PluginScheduleWidget {
     stop       : 1 rgb(234, 234, 234));
 }
 
-PluginScheduleWidget #searchbar-container {
+PluginScheduleWidget #Searchbar-container {
     background : transparent;
     min-height : 80px;
     max-height : 80px;
 }
 
-PluginScheduleWidget searchbar {
+PluginScheduleWidget Searchbar {
     min-width : 400px;
     max-width : 400px;
     border    : 1px solid rgb(73, 74, 76);
@@ -1258,7 +1258,7 @@ DropMarker {
     background : rgb(14, 16, 18);
 }
 
-python_editor {
+PythonEditor {
     background : qlineargradient(spread:pad,
     x1         : 0,
     y1         : 0,
@@ -1268,7 +1268,7 @@ python_editor {
     stop       : 1 rgb(23, 30, 34));
 }
 
-python_editor CodeEditor {
+PythonEditor CodeEditor {
     /*font-family : "SourceCodePro-Black";*/
     font-family                       : "Iosevka";
     font-size                         : 14px;
@@ -1289,7 +1289,7 @@ python_editor CodeEditor {
     qproperty-current_line_background : #323232;
 }
 
-python_editor CodeEditor LineNumberArea {
+PythonEditor CodeEditor LineNumberArea {
     /*background : #0C1112;*/
     /*background : #0C0F12;*/
     background   : rgb(219, 219, 219);
@@ -1334,7 +1334,7 @@ get_in_touch_item#ticket_item {
     qproperty-icon_path  : ":/icons/gitlab"
 }
 
-python_console {
+PythonConsole {
     font-family : "Iosevka";
     /*font-family : "DroidSansMono";*/
     font-size   : 14px;
@@ -1345,7 +1345,7 @@ MinimapScrollbar #slider {
 background : rgba(120, 120, 120, 0.3);
 }
 
-python_editor {
+PythonEditor {
 background : qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 rgb(33, 40, 44), stop:1 rgb(23, 30, 34));
 
 qproperty-open_icon_style: "all->#ff6a47";
@@ -1450,7 +1450,7 @@ LoggerQssAdapter {
     qproperty-default_highlight: #FFEF0B;
 }
 
-python_console_qss_adapter {
+PythonConsoleQssAdapter {
     qproperty-standard_color: #000000;
     qproperty-error_color: #FF0000;
     qproperty-promt_color: #7805c1;
@@ -1505,7 +1505,7 @@ QFileDialog QLineEdit{
     background: #dfdfdf;
 }
 
-gate_details_widget QLabel{
+GateDetailsWidget QLabel{
     color: black;
 }
 
@@ -1517,7 +1517,7 @@ DockBar{
     background: rgb(110, 110, 110);
 }
 
-main_settings_widget{
+MainSettingsWidget{
     background: red;
 }
 

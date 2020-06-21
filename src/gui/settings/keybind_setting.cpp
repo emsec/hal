@@ -15,7 +15,7 @@
 
 namespace hal
 {
-    keybind_setting::keybind_setting(const QString& key, const QString& title, const QString& description, QWidget *parent) : settings_widget(key, parent)
+    KeybindSetting::KeybindSetting(const QString& key, const QString& title, const QString& description, QWidget *parent) : SettingsWidget(key, parent)
     {
         m_labels.append(QPair<QLabel*, QString>(m_name, title));
 
@@ -28,19 +28,19 @@ namespace hal
         m_KeybindEdit = new KeybindEdit(this);
         //unique_string_validator* v = new unique_string_validator(); // TODO
         //m_KeybindEdit->add_validator(v);
-        connect(m_KeybindEdit, &KeybindEdit::editingFinished, this, &keybind_setting::on_keybind_changed);
-        connect(m_KeybindEdit, &KeybindEdit::edit_rejected, this, &keybind_setting::on_KeybindEdit_rejected);
+        connect(m_KeybindEdit, &KeybindEdit::editingFinished, this, &KeybindSetting::on_keybind_changed);
+        connect(m_KeybindEdit, &KeybindEdit::edit_rejected, this, &KeybindSetting::on_KeybindEdit_rejected);
         layout->addWidget(m_KeybindEdit);
 
         m_labels.append(QPair<QLabel*, QString>(label, description));
     }
 
-    void keybind_setting::load(const QVariant& value)
+    void KeybindSetting::load(const QVariant& value)
     {
         m_KeybindEdit->setKeySequence(value.toString()); // auto-cast
     }
 
-    QVariant keybind_setting::value()
+    QVariant KeybindSetting::value()
     {
         QKeySequence seq = m_KeybindEdit->keySequence();
         if (seq.isEmpty())
@@ -48,12 +48,12 @@ namespace hal
         return QVariant(seq); // auto-cast
     }
 
-    void keybind_setting::on_keybind_changed()
+    void KeybindSetting::on_keybind_changed()
     {
        this->trigger_setting_updated();
     }
 
-    void keybind_setting::on_KeybindEdit_rejected()
+    void KeybindSetting::on_KeybindEdit_rejected()
     {
         this->set_dirty(false);
     }
