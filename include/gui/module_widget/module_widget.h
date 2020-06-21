@@ -48,14 +48,14 @@ namespace hal
 {
     class ModuleProxyModel;
 
-    class module_widget : public ContentWidget
+    class ModuleWidget : public ContentWidget
     {
         Q_OBJECT
 
     public:
-        module_widget(QWidget* parent = nullptr);
+        ModuleWidget(QWidget* parent = nullptr);
 
-        virtual void setup_toolbar(toolbar* toolbar) override;
+        virtual void setup_toolbar(Toolbar* Toolbar) override;
         virtual QList<QShortcut*> create_shortcuts() override;
 
     public Q_SLOTS:
@@ -68,7 +68,7 @@ namespace hal
         void handle_module_removed(std::shared_ptr<Module> module, u32 module_id);
 
     private:
-        module_tree_view* m_tree_view;
+        ModuleTreeView* m_tree_view;
         Searchbar m_searchbar;
 
         QAction* m_filter_action;

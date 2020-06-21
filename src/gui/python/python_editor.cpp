@@ -30,7 +30,7 @@
 namespace hal
 {
     PythonEditor::PythonEditor(QWidget* parent)
-        : ContentWidget("Python Editor", parent), python_context_subscriber(), m_searchbar(new Searchbar()), m_action_open_file(new HalAction(this)), m_action_run(new HalAction(this)),
+        : ContentWidget("Python Editor", parent), PythonContextSubscriber(), m_searchbar(new Searchbar()), m_action_open_file(new HalAction(this)), m_action_run(new HalAction(this)),
           m_action_save(new HalAction(this)), m_action_save_as(new HalAction(this)), m_action_toggle_minimap(new HalAction(this)), m_action_new_file(new HalAction(this))
     {
         ensurePolished();
@@ -286,14 +286,14 @@ namespace hal
         hal_file_manager::unregister_on_deserialize_callback("PythonEditor");
     }
 
-    void PythonEditor::setup_toolbar(toolbar* toolbar)
+    void PythonEditor::setup_toolbar(Toolbar* Toolbar)
     {
-        toolbar->addAction(m_action_new_file);
-        toolbar->addAction(m_action_open_file);
-        toolbar->addAction(m_action_save);
-        toolbar->addAction(m_action_save_as);
-        toolbar->addAction(m_action_run);
-        toolbar->addAction(m_action_toggle_minimap);
+        Toolbar->addAction(m_action_new_file);
+        Toolbar->addAction(m_action_open_file);
+        Toolbar->addAction(m_action_save);
+        Toolbar->addAction(m_action_save_as);
+        Toolbar->addAction(m_action_run);
+        Toolbar->addAction(m_action_toggle_minimap);
     }
 
     QList<QShortcut*> PythonEditor::create_shortcuts()

@@ -8,20 +8,20 @@
 
 namespace hal
 {
-    hal_window_toolbar::hal_window_toolbar(QWidget* parent) : QFrame(parent),
+    HalWindowToolbar::HalWindowToolbar(QWidget* parent) : QFrame(parent),
         m_layout(new QHBoxLayout(this))
     {
         m_layout->setContentsMargins(0, 0, 0, 0);
         m_layout->setSpacing(2); // USE PROPERTY
     }
 
-    void hal_window_toolbar::add_widget(QWidget* widget)
+    void HalWindowToolbar::add_widget(QWidget* widget)
     {
         // ADD FANCY ANIMATIONS MAYBE ?
         m_layout->addWidget(widget);
     }
 
-    void hal_window_toolbar::add_spacer()
+    void HalWindowToolbar::add_spacer()
     {
         QWidget* spacer = new QWidget(this);
         spacer->setAttribute(Qt::WA_NoSystemBackground);
@@ -30,7 +30,7 @@ namespace hal
         m_layout->addWidget(spacer);
     }
 
-    void hal_window_toolbar::clear()
+    void HalWindowToolbar::clear()
     {
         QLayoutItem* item = nullptr;
         while ((item = m_layout->takeAt(0)))
@@ -45,7 +45,7 @@ namespace hal
         }
     }
 
-    void hal_window_toolbar::repolish()
+    void HalWindowToolbar::repolish()
     {
         QStyle* s = style();
 
@@ -53,7 +53,7 @@ namespace hal
         s->polish(this);
     }
 
-    void hal_window_toolbar::actionEvent(QActionEvent* event)
+    void HalWindowToolbar::actionEvent(QActionEvent* event)
     {
         switch (event->type())
         {

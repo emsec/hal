@@ -29,7 +29,7 @@ namespace hal
 {
     class GraphLayouter;
 
-    class LayouterTask : public task
+    class LayouterTask : public Task
     {
     public:
         LayouterTask(GraphLayouter* const layouter);

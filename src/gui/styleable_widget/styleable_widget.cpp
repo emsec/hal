@@ -5,11 +5,11 @@
 
 namespace hal
 {
-    styleable_widget::styleable_widget(QWidget* parent) : QWidget(parent)
+    StyleableWidget::StyleableWidget(QWidget* parent) : QWidget(parent)
     {
     }
 
-    void styleable_widget::paintEvent(QPaintEvent* event)
+    void StyleableWidget::paintEvent(QPaintEvent* event)
     {
        Q_UNUSED(event)
 

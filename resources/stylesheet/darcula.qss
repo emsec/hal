@@ -105,7 +105,7 @@ QToolBar {
     border           : none; /* Fixes Mac Toolbar issue */
 }
 
-/*main_window #toolbar {
+/*main_window #Toolbar {
     background-color : rgba(38, 40, 41, 1);
     spacing : 1px;
     min-height: 40px;
@@ -321,7 +321,7 @@ min-height: 1px;
 max-height: 1px;
 }*/
 
-hal--toolbar {
+hal--Toolbar {
     background : rgb(9, 11, 13);
     spacing    : 1px;
     min-height : 24px;
@@ -677,7 +677,7 @@ hal--LabeledFrame {
     margin-right  : 30px;
 }
 
-hal--welcome_screen {
+hal--WelcomeScreen {
     /*background : qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0.273, stop:0 rgba(0, 0, 0, 255), stop:1 rgba(255, 255, 255, 255));*/
     /*background : qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0.273, stop:0 rgb(13, 20, 24), stop:1 rgb(23, 30, 34));*/
     background : qlineargradient(spread:pad,
@@ -689,7 +689,7 @@ hal--welcome_screen {
     stop       : 1 rgb(23, 30, 34));
 }
 
-hal--welcome_screen hal--LabeledFrame {
+hal--WelcomeScreen hal--LabeledFrame {
     min-width  : 200px;
     max-width  : 400px;
     min-height : 200px;
@@ -794,7 +794,7 @@ rgb(107, 135, 255)
 *                RECENT_FILES                *
 *********************************************/
 
-hal--recent_files_widget {
+hal--RecentFilesWidget {
     background    : rgb(14, 16, 18);
     margin-top    : 15px;
     margin-bottom : 15px;
@@ -802,7 +802,7 @@ hal--recent_files_widget {
     margin-right : 5px;*/
 }
 
-hal--recent_file_item {
+hal--RecentFileItem {
     background           : rgb(14, 16, 18);
     /*background: rgb(12, 15, 19);*/
     /*padding : 5px;*/
@@ -815,7 +815,7 @@ hal--recent_file_item {
     qproperty-icon_style : "all->#3192C5";
 }
 
-hal--recent_file_item * {
+hal--RecentFileItem * {
     background  : rgb(14, 16, 18);
     color       : #6F7D87;
     /*color : #31383D;*/
@@ -824,44 +824,44 @@ hal--recent_file_item * {
     font-size   : 15px;
 }
 
-hal--recent_file_item #icon-label {
+hal--RecentFileItem #icon-label {
     margin-right : 10px;
 }
 
-hal--recent_file_item #path-label {
+hal--RecentFileItem #path-label {
     /*color : #1f2123;*/
     color : #292B2D;
 }
 
-hal--recent_file_item[hover=true] {
+hal--RecentFileItem[hover=true] {
     background : rgb(21, 23, 25);
     /*qproperty-icon_style : "all->#ffeea5";*/
 }
 
-hal--recent_file_item[hover=true] * {
+hal--RecentFileItem[hover=true] * {
     background : rgb(21, 23, 25);
     /*color : #6F7D87;*/
 }
 
-hal--recent_file_item[hover=true] #path-label {
+hal--RecentFileItem[hover=true] #path-label {
     color : #44494D;
 }
 
-hal--recent_file_item QToolButton:hover {
+hal--RecentFileItem QToolButton:hover {
     background: #222222;
     color: white;
 }
 
-hal--recent_file_item[disabled=true]{
+hal--RecentFileItem[disabled=true]{
     qproperty-icon_style : "all->#888888"
     /*qproperty-icon_style : "all->#ffeea5";*/
 }
 
-hal--recent_file_item[disabled=true] #name-label{
+hal--RecentFileItem[disabled=true] #name-label{
     color: #555555;
     /*qproperty-icon_style : "all->#ffeea5";*/
 }
-hal--recent_file_item[disabled=true] #path-label {
+hal--RecentFileItem[disabled=true] #path-label {
     /*color : #292B2D;*/
     color: red;
 }
@@ -870,22 +870,22 @@ hal--recent_file_item[disabled=true] #path-label {
 *                OPEN_FILE                   *
 *********************************************/
 
-hal--open_file_widget {
+hal--OpenFileWidget {
     background           : rgb(14, 16, 18);
     qproperty-icon_path  : ":/icons/drop";
     qproperty-icon_style : "all->#151719";
 }
 
-hal--open_file_widget[drag_active=true] {
+hal--OpenFileWidget[drag_active=true] {
     qproperty-icon_style : "all->#1f2123";
 }
 
-hal--open_file_widget QLabel {
+hal--OpenFileWidget QLabel {
     background : rgb(14, 16, 18);
     /*background: rgb(6, 7, 8);*/
 }
 
-hal--open_file_widget #text-label {
+hal--OpenFileWidget #text-label {
     background    : rgb(14, 16, 18);
     font-family   : "Iosevka";
     font-weight   : 400;
@@ -898,7 +898,7 @@ hal--open_file_widget #text-label {
     margin-right  : 10px;
 }
 
-hal--open_file_widget #icon-label {
+hal--OpenFileWidget #icon-label {
     margin-top : 220px;
 }
 
@@ -906,13 +906,13 @@ hal--open_file_widget #icon-label {
 *                GET IN TOUCH                *
 *********************************************/
 
-hal--get_in_touch_widget {
+hal--GetInTouchWidget {
     background    : rgb(14, 16, 18);
     margin-top    : 15px;
     margin-bottom : 15px;
 }
 
-hal--get_in_touch_widget #core-version-label {
+hal--GetInTouchWidget #core-version-label {
     background  : rgb(14, 16, 18);
     color       : #6F7D87;
     font-family : "Iosevka";
@@ -920,7 +920,7 @@ hal--get_in_touch_widget #core-version-label {
     font-size   : 15px;
 }
 
-hal--get_in_touch_widget #gui-version-label {
+hal--GetInTouchWidget #gui-version-label {
     background    : rgb(14, 16, 18);
     color         : #6F7D87;
     font-family   : "Iosevka";
@@ -929,7 +929,7 @@ hal--get_in_touch_widget #gui-version-label {
     margin-bottom : 10px;
 }
 
-hal--get_in_touch_item {
+hal--GetInTouchItem {
     background           : rgb(14, 16, 18);
     padding-top          : 6px;
     padding-bottom       : 6px;
@@ -939,7 +939,7 @@ hal--get_in_touch_item {
     qproperty-icon_style : "all->#D3C68A";
 }
 
-hal--get_in_touch_item * {
+hal--GetInTouchItem * {
     background  : rgb(14, 16, 18);
     color       : #6F7D87;
     font-family : "Iosevka";
@@ -947,23 +947,23 @@ hal--get_in_touch_item * {
     font-size   : 15px;
 }
 
-hal--get_in_touch_item #icon-label {
+hal--GetInTouchItem #icon-label {
     margin-right : 10px;
 }
 
-hal--get_in_touch_item #description-label {
+hal--GetInTouchItem #description-label {
     color : #292B2D;
 }
 
-hal--get_in_touch_item[hover=true] {
+hal--GetInTouchItem[hover=true] {
     background : rgb(21, 23, 25);
 }
 
-hal--get_in_touch_item[hover=true] * {
+hal--GetInTouchItem[hover=true] * {
     background : rgb(21, 23, 25);
 }
 
-hal--get_in_touch_item[hover=true] #description-label {
+hal--GetInTouchItem[hover=true] #description-label {
     /*color : #44494D;*/
 }
 
@@ -1324,20 +1324,20 @@ hal--CodeEditorMinimap QScrollBar::handle:vertical {
     border-radius : 0px;
 }
 
-hal--get_in_touch_item#about_item {
+hal--GetInTouchItem#about_item {
     /*qproperty-icon_style: "all->#969696";*/
     qproperty-icon_style : "all->#FFDD00";
     qproperty-icon_path  : ":/icons/info" /*qproperty-icon_style: "";
 qproperty-icon_path: ":/icons/hal"*/
 }
 
-hal--get_in_touch_item#documentation_item {
+hal--GetInTouchItem#documentation_item {
     /*qproperty-icon_style: "all->#969696";*/
     qproperty-icon_style : "all->#FFDD00";
     qproperty-icon_path  : ":/icons/info"
 }
 
-hal--get_in_touch_item#ticket_item {
+hal--GetInTouchItem#ticket_item {
     qproperty-icon_style : "all->#ff9000";
     qproperty-icon_path  : ":/icons/github"
 }

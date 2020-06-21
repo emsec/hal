@@ -32,7 +32,7 @@ class QVBoxLayout;
 
 namespace hal
 {
-    class get_in_touch_item : public QFrame
+    class GetInTouchItem : public QFrame
     {
         Q_OBJECT
         Q_PROPERTY(bool hover READ hover)
@@ -40,7 +40,7 @@ namespace hal
         Q_PROPERTY(QString icon_style READ icon_style WRITE set_icon_style)
 
     public:
-        explicit get_in_touch_item(const QString& title, const QString& description, QWidget* parent = nullptr);
+        explicit GetInTouchItem(const QString& title, const QString& description, QWidget* parent = nullptr);
 
         void enterEvent(QEvent* event) Q_DECL_OVERRIDE;
         void leaveEvent(QEvent* event) Q_DECL_OVERRIDE;

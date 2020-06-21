@@ -40,7 +40,6 @@
 
 namespace hal
 {
-    class io_graphics_net;
     class GraphContext;
     class GraphicsGate;
     class GraphicsItem;

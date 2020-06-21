@@ -29,23 +29,23 @@
 
 namespace hal
 {
-    class task;
-    class worker;
+    class Task;
+    class Worker;
 
-    class thread_pool : public QObject
+    class ThreadPool : public QObject
     {
         Q_OBJECT
 
     public:
-        explicit thread_pool(QObject* parent = nullptr);
+        explicit ThreadPool(QObject* parent = nullptr);
 
-        void queue_task(task* const t);
+        void queue_task(Task* const t);
 
     private Q_SLOTS:
         void handle_worker_finished();
 
     private:
-        QStack<worker*> m_free_threads;
-        QQueue<task*> m_tasks;
+        QStack<Worker*> m_free_threads;
+        QQueue<Task*> m_tasks;
     };
 }

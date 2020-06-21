@@ -53,11 +53,11 @@ namespace hal
     private:
         unsigned int m_max_history_size;
 
-        std::list<selection> m_selection_container;
+        std::list<Selection> m_selection_container;
 
-        std::list<selection>::iterator m_current_item_iterator;
+        std::list<Selection>::iterator m_current_item_iterator;
 
-        void relay_selection(selection selection);
+        void relay_selection(Selection selection);
 
         void store_selection(u32 id, SelectionRelay::item_type type);
     };

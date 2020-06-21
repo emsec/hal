@@ -10,7 +10,7 @@
 
 namespace hal
 {
-    SplitterAnchor::SplitterAnchor(DockBar* DockBar, splitter* splitter, QObject* parent) : QObject(parent), m_dock_bar(DockBar), m_splitter(splitter)
+    SplitterAnchor::SplitterAnchor(DockBar* DockBar, Splitter* Splitter, QObject* parent) : QObject(parent), m_dock_bar(DockBar), m_splitter(Splitter)
     {
         connect(ContentDragRelay::instance(), &ContentDragRelay::drag_start, m_dock_bar, &DockBar::handle_drag_start);
         connect(ContentDragRelay::instance(), &ContentDragRelay::drag_end, m_dock_bar, &DockBar::handle_drag_end);

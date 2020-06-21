@@ -30,12 +30,12 @@ class QHBoxLayout;
 
 namespace hal
 {
-    class hal_window_toolbar : public QFrame
+    class HalWindowToolbar : public QFrame
     {
         Q_OBJECT
 
     public:
-        explicit hal_window_toolbar(QWidget* parent = nullptr);
+        explicit HalWindowToolbar(QWidget* parent = nullptr);
 
         void add_widget(QWidget* widget);
         void add_spacer();

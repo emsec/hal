@@ -30,17 +30,17 @@ class QVBoxLayout;
 
 namespace hal
 {
-    class hal_window_layout_container;
-    class hal_window_toolbar;
+    class HalWindowLayoutContainer;
+    class HalWindowToolbar;
     class Overlay;
-    class workspace; // TEMP NAME ?
+    class Workspace; // TEMP NAME ?
 
-    class hal_window : public QFrame
+    class HalWindow : public QFrame
     {
         Q_OBJECT
 
     public:
-        explicit hal_window(QWidget* parent = nullptr);
+        explicit HalWindow(QWidget* parent = nullptr);
 
         void lock();
         void unlock();
@@ -50,7 +50,7 @@ namespace hal
 
         void repolish();
 
-        hal_window_toolbar* get_toolbar();
+        HalWindowToolbar* get_toolbar();
         Overlay* get_Overlay();
 
     protected:
@@ -64,10 +64,10 @@ namespace hal
         //void rearrange();
 
         QVBoxLayout* m_outer_layout;
-        hal_window_layout_container* m_layout_container;
+        HalWindowLayoutContainer* m_layout_container;
         QVBoxLayout* m_inner_layout;
-        hal_window_toolbar* m_toolbar;
-        workspace* m_workspace;
+        HalWindowToolbar* m_toolbar;
+        Workspace* m_workspace;
 
         Overlay* m_Overlay;
         QGraphicsEffect* m_effect;

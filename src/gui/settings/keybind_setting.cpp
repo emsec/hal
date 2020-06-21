@@ -26,7 +26,7 @@ namespace hal
         layout->addWidget(label);
 
         m_KeybindEdit = new KeybindEdit(this);
-        //unique_string_validator* v = new unique_string_validator(); // TODO
+        //UniqueStringValidator* v = new UniqueStringValidator(); // TODO
         //m_KeybindEdit->add_validator(v);
         connect(m_KeybindEdit, &KeybindEdit::editingFinished, this, &KeybindSetting::on_keybind_changed);
         connect(m_KeybindEdit, &KeybindEdit::edit_rejected, this, &KeybindSetting::on_KeybindEdit_rejected);

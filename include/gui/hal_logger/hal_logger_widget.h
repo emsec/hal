@@ -54,7 +54,7 @@ namespace hal
         HalLoggerWidget(QWidget* parent = 0);
         ~HalLoggerWidget();
 
-        virtual void setup_toolbar(toolbar* toolbar) Q_DECL_OVERRIDE;
+        virtual void setup_toolbar(Toolbar* Toolbar) Q_DECL_OVERRIDE;
 
         QPlainTextEdit* get_plain_text_edit();
 

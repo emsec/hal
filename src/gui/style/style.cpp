@@ -191,7 +191,7 @@ namespace hal
                 }
             }
 
-            return QIcon(new svg_icon_engine(svg_data.toStdString()));
+            return QIcon(new SvgIconEngine(svg_data.toStdString()));
         }
 
         void debug_update()

@@ -65,8 +65,8 @@ namespace hal
         QVBoxLayout* m_vertical_layout;
         QHBoxLayout* m_horizontal_layout;
         DockBar* m_dock_bar;
-        toolbar* m_left_toolbar;
-        toolbar* m_right_toolbar;
+        Toolbar* m_left_toolbar;
+        Toolbar* m_right_toolbar;
         ContentWidget* m_current_widget;
         QAction* m_action_detach;
         QList<ContentFrame*> m_detached_frames;

@@ -26,7 +26,7 @@
 #include <QString>
 namespace hal
 {
-    class python_context_subscriber
+    class PythonContextSubscriber
     {
     public:
         virtual void handle_stdout(const QString& output) = 0;

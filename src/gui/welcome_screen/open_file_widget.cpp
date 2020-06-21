@@ -11,7 +11,7 @@
 
 namespace hal
 {
-    open_file_widget::open_file_widget(QWidget* parent) : QFrame(parent), m_layout(new QVBoxLayout()), m_text_label(new QLabel()), m_icon_label(new QLabel()), m_drag_active(false)
+    OpenFileWidget::OpenFileWidget(QWidget* parent) : QFrame(parent), m_layout(new QVBoxLayout()), m_text_label(new QLabel()), m_icon_label(new QLabel()), m_drag_active(false)
     {
         setAcceptDrops(true);
 
@@ -30,7 +30,7 @@ namespace hal
         m_layout->addWidget(m_icon_label);
     }
 
-    void open_file_widget::dragEnterEvent(QDragEnterEvent* event)
+    void OpenFileWidget::dragEnterEvent(QDragEnterEvent* event)
     {
         const QMimeData* mime_data = event->mimeData();
         if (mime_data->hasUrls())
@@ -41,7 +41,7 @@ namespace hal
         }
     }
 
-    void open_file_widget::dragLeaveEvent(QDragLeaveEvent* event)
+    void OpenFileWidget::dragLeaveEvent(QDragLeaveEvent* event)
     {
         Q_UNUSED(event)
 
@@ -49,7 +49,7 @@ namespace hal
         repolish();
     }
 
-    void open_file_widget::dropEvent(QDropEvent* event)
+    void OpenFileWidget::dropEvent(QDropEvent* event)
     {
         // pass url list to file manager and check for matching file extensions,
         //if match found -> show progress screen else do nothing
@@ -76,32 +76,32 @@ namespace hal
         }
     }
 
-    bool open_file_widget::drag_active()
+    bool OpenFileWidget::drag_active()
     {
         return m_drag_active;
     }
 
-    QString open_file_widget::icon_style()
+    QString OpenFileWidget::icon_style()
     {
         return m_icon_style;
     }
 
-    QString open_file_widget::icon_path()
+    QString OpenFileWidget::icon_path()
     {
         return m_icon_path;
     }
 
-    void open_file_widget::set_icon_style(const QString& style)
+    void OpenFileWidget::set_icon_style(const QString& style)
     {
         m_icon_style = style;
     }
 
-    void open_file_widget::set_icon_path(const QString& path)
+    void OpenFileWidget::set_icon_path(const QString& path)
     {
         m_icon_path = path;
     }
 
-    void open_file_widget::repolish()
+    void OpenFileWidget::repolish()
     {
         QStyle* s = style();
 

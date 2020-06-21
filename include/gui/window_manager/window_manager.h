@@ -30,24 +30,24 @@ class QAction;
 
 namespace hal
 {
-    class hal_window;
+    class HalWindow;
     class MainSettingsWidget;
     class PluginScheduleWidget;
-    class welcome_screen;
+    class WelcomeScreen;
     class work_space; // TEMP NAME ?
 
-    class window_manager : public QObject
+    class WindowManager : public QObject
     {
         Q_OBJECT
 
     public:
-        explicit window_manager(QObject* parent = nullptr);
+        explicit WindowManager(QObject* parent = nullptr);
 
         void setup();
 
         void add_window();
-        void remove_window(hal_window* window);
-        void set_MainWindow(hal_window* window);
+        void remove_window(HalWindow* window);
+        void set_MainWindow(HalWindow* window);
 
         void lock_all();
         void unlock_all();
@@ -55,7 +55,7 @@ namespace hal
         void save_layout(const QString& name);
         void restore_layout(const QString& name);
 
-        void handle_window_close_request(hal_window* window);
+        void handle_window_close_request(HalWindow* window);
 
         void repolish();
 
@@ -73,9 +73,9 @@ namespace hal
         void handle_action_about();
 
     private:
-        hal_window* m_MainWindow;
+        HalWindow* m_MainWindow;
 
-        QVector<hal_window*> m_windows;
+        QVector<HalWindow*> m_windows;
 
         bool m_static_windows;
         bool m_shared_minimize;
@@ -90,7 +90,7 @@ namespace hal
         QAction* m_action_settings;
         QAction* m_action_about;
 
-        welcome_screen* m_welcome_screen;
+        WelcomeScreen* m_welcome_screen;
         PluginScheduleWidget* m_PluginScheduleWidget;
         MainSettingsWidget* m_main_settings_widget;
     };

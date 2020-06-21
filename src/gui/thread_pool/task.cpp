@@ -2,7 +2,7 @@
 
 namespace hal
 {
-    task::task() : QObject(nullptr)
+    Task::Task() : QObject(nullptr)
     {
 
     }

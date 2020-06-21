@@ -11,7 +11,7 @@
 namespace hal
 {
     ContentFrame::ContentFrame(ContentWidget* widget, bool attached, QWidget* parent)
-        : QWidget(parent), m_vertical_layout(new QVBoxLayout()), m_horizontal_layout(new QHBoxLayout()), m_left_toolbar(new toolbar()), m_right_toolbar(new toolbar()), m_widget(widget),
+        : QWidget(parent), m_vertical_layout(new QVBoxLayout()), m_horizontal_layout(new QHBoxLayout()), m_left_toolbar(new Toolbar()), m_right_toolbar(new Toolbar()), m_widget(widget),
           m_name_label(new QLabel())
 
     {

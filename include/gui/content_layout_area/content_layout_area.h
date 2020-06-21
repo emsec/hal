@@ -34,7 +34,7 @@ class QVBoxLayout;
 namespace hal
 {
     class DockBar;
-    class splitter;
+    class Splitter;
     class SplitterAnchor;
     class TabWidget;
 
@@ -70,11 +70,11 @@ namespace hal
         QHBoxLayout* m_central_layout;
         QHBoxLayout* m_spacer_layout;
 
-        splitter* m_vertical_splitter;
-        splitter* m_horizontal_splitter;
-        splitter* m_left_splitter;
-        splitter* m_right_splitter;
-        splitter* m_bottom_splitter;
+        Splitter* m_vertical_splitter;
+        Splitter* m_horizontal_splitter;
+        Splitter* m_left_splitter;
+        Splitter* m_right_splitter;
+        Splitter* m_bottom_splitter;
 
         DockBar* m_left_dock;
         DockBar* m_right_dock;

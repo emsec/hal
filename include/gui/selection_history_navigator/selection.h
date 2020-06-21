@@ -30,12 +30,12 @@
 
 namespace hal
 {
-    class selection
+    class Selection
     {
 
     public:
-        selection(u32 id, SelectionRelay::item_type type);
-        ~selection();
+        Selection(u32 id, SelectionRelay::item_type type);
+        ~Selection();
 
         SelectionRelay::item_type get_type() const;
 

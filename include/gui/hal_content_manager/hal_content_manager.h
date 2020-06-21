@@ -35,7 +35,7 @@ namespace hal
     class ContentWidget;
     class PythonEditor;
     class GraphTabWidget;
-    class old_graph_navigation_widget;
+    class vigation_widget;
     class ContextManagerWidget;
     class NetlistWatcher;
 

@@ -30,7 +30,7 @@ namespace hal
 {
 
     class ContentWidget;
-    class toolbar;
+    class Toolbar;
 
     class ContentFrame : public QWidget
     {
@@ -52,8 +52,8 @@ namespace hal
 
         QVBoxLayout* m_vertical_layout;
         QHBoxLayout* m_horizontal_layout;
-        toolbar* m_left_toolbar;
-        toolbar* m_right_toolbar;
+        Toolbar* m_left_toolbar;
+        Toolbar* m_right_toolbar;
         ContentWidget* m_widget;
         QLabel* m_name_label;
 

@@ -15,12 +15,12 @@
 
 namespace hal
 {
-    hal_window::hal_window(QWidget* parent) : QFrame(parent),
+    HalWindow::HalWindow(QWidget* parent) : QFrame(parent),
         m_outer_layout(new QVBoxLayout(this)),
-        m_layout_container(new hal_window_layout_container(this)),
+        m_layout_container(new HalWindowLayoutContainer(this)),
         m_inner_layout(new QVBoxLayout(m_layout_container)),
-        m_toolbar(new hal_window_toolbar(this)),
-        m_workspace(new workspace(this)),
+        m_toolbar(new HalWindowToolbar(this)),
+        m_workspace(new Workspace(this)),
         m_Overlay(nullptr),
         m_effect(nullptr)
     {
@@ -42,7 +42,7 @@ namespace hal
         // OPTIMIZATION: MANAGE SUB WIDGETS MANUALLY TO AVOID (MINIMAL) LAYOUT OVERHEAD ?
     }
 
-    void hal_window::lock()
+    void HalWindow::lock()
     {
         if (!m_Overlay)
         {
@@ -65,12 +65,12 @@ namespace hal
 
             m_Overlay->setParent(this);
             m_Overlay->show();
-            connect(m_Overlay, &Overlay::clicked, g_window_manager, &window_manager::handle_Overlay_clicked);
+            connect(m_Overlay, &Overlay::clicked, g_window_manager, &WindowManager::handle_Overlay_clicked);
             // FADE IN ???
         }
     }
 
-    void hal_window::unlock()
+    void HalWindow::unlock()
     {
         if (m_Overlay)
         {
@@ -85,18 +85,18 @@ namespace hal
         }
     }
 
-    void hal_window::standard_view()
+    void HalWindow::standard_view()
     {
         m_workspace->show();
     }
 
-    void hal_window::special_view(QWidget* widget)
+    void HalWindow::special_view(QWidget* widget)
     {
         m_workspace->hide();
         m_inner_layout->addWidget(widget);
     }
 
-    void hal_window::repolish()
+    void HalWindow::repolish()
     {
         QStyle* s = style();
 
@@ -110,24 +110,24 @@ namespace hal
         //rearrange();
     }
 
-    hal_window_toolbar* hal_window::get_toolbar()
+    HalWindowToolbar* HalWindow::get_toolbar()
     {
         return m_toolbar;
     }
 
-    Overlay* hal_window::get_Overlay()
+    Overlay* HalWindow::get_Overlay()
     {
         return m_Overlay;
     }
 
-    //void hal_window::paintEvent(QPaintEvent* event)
+    //void HalWindow::paintEvent(QPaintEvent* event)
     // {
     //    Q_UNUSED(event)
 
     //    // LEFT EMPTY INTENTIONALLY
     // }
 
-    //bool hal_window::event(QEvent* event)
+    //bool HalWindow::event(QEvent* event)
     //{
     //    if (event->type() == QEvent::WindowStateChange)
     //    {
@@ -144,13 +144,13 @@ namespace hal
     //    QWidget::event(event);
     //}
 
-    void hal_window::closeEvent(QCloseEvent* event)
+    void HalWindow::closeEvent(QCloseEvent* event)
     {
         g_window_manager->handle_window_close_request(this);
         event->ignore();
     }
 
-    //void hal_window::changeEvent(QEvent* event)
+    //void HalWindow::changeEvent(QEvent* event)
     //{
     //    if (event->type() == QEvent::WindowStateChange)
     //    {
@@ -166,14 +166,14 @@ namespace hal
     //    }
     //}
 
-    //void hal_window::resizeEvent(QResizeEvent* event)
+    //void HalWindow::resizeEvent(QResizeEvent* event)
     //{
     //    m_layout_container->resize(size());
     //    event->accept(); // UNNECESSARY ?
     //    //rearrange();
     //}
 
-    //void hal_window::rearrange()
+    //void HalWindow::rearrange()
     //{
     //    // USE QT LAYOUT ?
     //    // SMALL OVERHEAD, PROBABLY STILL SMARTER

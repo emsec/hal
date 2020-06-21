@@ -14,25 +14,25 @@
 
 namespace hal
 {
-    style_manager::style_manager(QObject* parent)
-        : QObject(parent), m_graphics_qss_adapter(new GraphicsQssAdapter()), m_shared_properties(new shared_properties_qss_adapter()),
+    StyleManager::StyleManager(QObject* parent)
+        : QObject(parent), m_graphics_qss_adapter(new GraphicsQssAdapter()), m_shared_properties(new SharedPropertiesQssAdapter()),
           m_NotificationManager(new NotificationManagerQssAdapter()), m_python_syntax_highlighter(new PythonQssAdapter()), m_vhdl_syntax_highlighter(new VhdlQssAdapter())
     {
     }
 
-    style_manager* style_manager::get_instance()
+    StyleManager* StyleManager::get_instance()
     {
-        static style_manager instance;
+        static StyleManager instance;
         return &instance;
     }
 
-    style_manager::~style_manager()
+    StyleManager::~StyleManager()
     {
         // QT DELETES WIDGETS AUTOMATICALLY NOT SURE IF NEEDED, CHECK
         // POSSIBLY USEFUL TO ENSURE DESTRUCTION ORDER
     }
 
-    void style_manager::update_style()
+    void StyleManager::update_style()
     {
         QCoreApplication* core = QApplication::instance();
         QApplication* app      = qobject_cast<QApplication*>(core);
@@ -85,27 +85,27 @@ namespace hal
         // COMBINE BASE AND DEFINITIONS INTO FINAL STYLESHEET
     }
 
-    const shared_properties_qss_adapter* style_manager::shared_properties() const
+    const SharedPropertiesQssAdapter* StyleManager::shared_properties() const
     {
         return m_shared_properties;
     }
 
-    const NotificationManagerQssAdapter* style_manager::NotificationManager() const
+    const NotificationManagerQssAdapter* StyleManager::NotificationManager() const
     {
         return m_NotificationManager;
     }
 
-    const PythonQssAdapter* style_manager::PythonSyntaxHighlighter() const
+    const PythonQssAdapter* StyleManager::PythonSyntaxHighlighter() const
     {
         return m_python_syntax_highlighter;
     }
 
-    const VhdlQssAdapter* style_manager::VhdlSyntaxHighlighter() const
+    const VhdlQssAdapter* StyleManager::VhdlSyntaxHighlighter() const
     {
         return m_vhdl_syntax_highlighter;
     }
 
-    void style_manager::set_default(QApplication* app)
+    void StyleManager::set_default(QApplication* app)
     {
         QFile fallback(":/style/hal");
         fallback.open(QFile::ReadOnly);

@@ -29,17 +29,17 @@ class QHBoxLayout;
 
 namespace hal
 {
-    class get_in_touch_widget;
-    class open_file_widget;
-    class recent_files_widget;
+    class GetInTouchWidget;
+    class OpenFileWidget;
+    class RecentFilesWidget;
     class LabeledFrame;
 
-    class welcome_screen : public QFrame
+    class WelcomeScreen : public QFrame
     {
         Q_OBJECT
 
     public:
-        explicit welcome_screen(QWidget* parent = nullptr);
+        explicit WelcomeScreen(QWidget* parent = nullptr);
 
         void repolish();
 
@@ -53,8 +53,8 @@ namespace hal
         LabeledFrame* m_open_file_frame;
         LabeledFrame* m_get_in_touch_frame;
 
-        recent_files_widget* m_recent_files_widget;
-        open_file_widget* m_open_file_widget;
-        get_in_touch_widget* m_get_in_touch_widget;
+        RecentFilesWidget* m_recent_files_widget;
+        OpenFileWidget* m_open_file_widget;
+        GetInTouchWidget* m_get_in_touch_widget;
     };
 }

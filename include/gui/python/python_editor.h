@@ -28,7 +28,7 @@
 #include "core/hal_file_manager.h"
 #include "file_modified_bar/file_modified_bar.h"
 #include "hal_action/hal_action.h"
-#include "python/python_context_suberscriber.h"
+#include "python/python_context_subscriber.h"
 
 #include <QEvent>
 #include <QFileSystemWatcher>
@@ -42,12 +42,12 @@ namespace hal
 {
     class CodeEditor;
     class Searchbar;
-    class splitter;
-    class toolbar;
+    class Splitter;
+    class Toolbar;
 
     class PythonCodeEditor;
 
-    class PythonEditor : public ContentWidget, public python_context_subscriber
+    class PythonEditor : public ContentWidget, public PythonContextSubscriber
     {
         Q_OBJECT
         Q_PROPERTY(QString open_icon_path READ open_icon_path WRITE set_open_icon_path)
@@ -67,7 +67,7 @@ namespace hal
         explicit PythonEditor(QWidget* parent = nullptr);
         ~PythonEditor();
 
-        virtual void setup_toolbar(toolbar* toolbar) Q_DECL_OVERRIDE;
+        virtual void setup_toolbar(Toolbar* Toolbar) Q_DECL_OVERRIDE;
         virtual QList<QShortcut*> create_shortcuts() Q_DECL_OVERRIDE;
 
         virtual void handle_stdout(const QString& output) Q_DECL_OVERRIDE;
@@ -156,8 +156,8 @@ namespace hal
 
     private:
         QVBoxLayout* m_layout;
-        toolbar* m_toolbar;
-        splitter* m_splitter;
+        Toolbar* m_toolbar;
+        Splitter* m_splitter;
 
         Searchbar* m_searchbar;
 

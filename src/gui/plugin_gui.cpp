@@ -45,7 +45,7 @@ namespace hal
 
     KeybindManager g_keybind_manager;
 
-    window_manager* g_window_manager;
+    WindowManager* g_window_manager;
     NotificationManager* g_NotificationManager;
 
     HalContentManager* g_content_manager = nullptr;
@@ -58,7 +58,7 @@ namespace hal
 
     FileStatusManager g_file_status_manager;
 
-    thread_pool* g_thread_pool;
+    ThreadPool* g_thread_pool;
 
     GraphContextManager g_graph_context_manager;
 
@@ -95,7 +95,7 @@ namespace hal
         }
     }
 
-    bool plugin_gui::exec(ProgramArguments& args)
+    bool PluginGui::exec(ProgramArguments& args)
     {
         int argc;
         const char** argv;
@@ -184,10 +184,10 @@ namespace hal
 
         qRegisterMetaType<spdlog::level::level_enum>("spdlog::level::level_enum");
 
-        //    g_window_manager       = new window_manager();
+        //    g_window_manager       = new WindowManager();
         g_NotificationManager = new NotificationManager();
 
-        g_thread_pool = new thread_pool();
+        g_thread_pool = new ThreadPool();
 
         g_gui_api = new GuiApi();
 
@@ -200,17 +200,17 @@ namespace hal
         return ret;
     }
 
-    std::string plugin_gui::get_name() const
+    std::string PluginGui::get_name() const
     {
         return std::string("hal_gui");
     }
 
-    std::string plugin_gui::get_version() const
+    std::string PluginGui::get_version() const
     {
         return std::string("0.1");
     }
 
-    void plugin_gui::initialize_logging() const
+    void PluginGui::initialize_logging() const
     {
         LogManager& l = LogManager::get_instance();
         l.add_channel("user", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
@@ -220,6 +220,6 @@ namespace hal
 
     extern std::shared_ptr<BasePluginInterface> get_plugin_instance()
     {
-        return std::make_shared<plugin_gui>();
+        return std::make_shared<PluginGui>();
     }
 }

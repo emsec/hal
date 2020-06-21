@@ -23,7 +23,7 @@
 
 #pragma once
 
-#include "python/python_context_suberscriber.h"
+#include "python/python_context_subscriber.h"
 
 #include <QTextEdit>
 #include <memory>
@@ -32,7 +32,7 @@ namespace hal
 {
     class PythonConsoleHistory;
 
-    class PythonConsole : public QTextEdit, public python_context_subscriber
+    class PythonConsole : public QTextEdit, public PythonContextSubscriber
     {
         Q_OBJECT
 

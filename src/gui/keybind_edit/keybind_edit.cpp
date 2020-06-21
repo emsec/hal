@@ -6,12 +6,12 @@
 
 namespace hal
 {
-    KeybindEdit::KeybindEdit(QWidget* parent): QKeySequenceEdit(parent), m_validator(stacked_validator()), m_old_sequence(QKeySequence())
+    KeybindEdit::KeybindEdit(QWidget* parent): QKeySequenceEdit(parent), m_validator(StackedValidator()), m_old_sequence(QKeySequence())
     {
         // do nothing
     }
 
-    void KeybindEdit::add_validator(validator* v)
+    void KeybindEdit::add_validator(Validator* v)
     {
         m_validator.add_validator(v);
     }
@@ -49,7 +49,7 @@ namespace hal
                 recognized = true;
                 break;
             case QEvent::FocusOut:
-                // FIXME this messes with the API. Better define a validator that
+                // FIXME this messes with the API. Better define a Validator that
                 // can actually handle QVariants and thus QKeySequences.
                 if (!m_validator.validate(keySequence().toString()))
                 {
@@ -65,7 +65,7 @@ namespace hal
                 recognized = true;
                 break;
             case QEvent::KeyRelease:
-                // FIXME this messes with the API. Better define a validator that
+                // FIXME this messes with the API. Better define a Validator that
                 // can actually handle QVariants and thus QKeySequences.
                 revalidate();
                 recognized = true;

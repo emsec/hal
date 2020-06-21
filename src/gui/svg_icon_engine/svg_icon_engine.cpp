@@ -5,12 +5,12 @@
 
 namespace hal
 {
-    svg_icon_engine::svg_icon_engine(const std::string& svg_data)
+    SvgIconEngine::SvgIconEngine(const std::string& svg_data)
     {
         m_data = QByteArray::fromStdString(svg_data);
     }
 
-    void svg_icon_engine::paint(QPainter* painter, const QRect& rect, QIcon::Mode mode, QIcon::State state)
+    void SvgIconEngine::paint(QPainter* painter, const QRect& rect, QIcon::Mode mode, QIcon::State state)
     {
         Q_UNUSED(mode)
         Q_UNUSED(state)
@@ -19,12 +19,12 @@ namespace hal
         renderer.render(painter, rect);
     }
 
-    QIconEngine* svg_icon_engine::clone() const
+    QIconEngine* SvgIconEngine::clone() const
     {
-        return new svg_icon_engine(*this);
+        return new SvgIconEngine(*this);
     }
 
-    QPixmap svg_icon_engine::pixmap(const QSize& size, QIcon::Mode mode, QIcon::State state)
+    QPixmap SvgIconEngine::pixmap(const QSize& size, QIcon::Mode mode, QIcon::State state)
     {
         QImage image(size, QImage::Format_ARGB32);
         image.fill(qRgba(0, 0, 0, 0));

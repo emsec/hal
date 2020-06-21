@@ -156,8 +156,8 @@ namespace hal
             used_context_names.append(ctx->name());
         }
 
-        unique_string_validator unique_validator(used_context_names);
-        empty_string_validator empty_validator;
+        UniqueStringValidator unique_validator(used_context_names);
+        EmptyStringValidator empty_validator;
 
         InputDialog ipd;
         ipd.set_window_title("Rename View");
@@ -202,13 +202,13 @@ namespace hal
     }
 
 
-    void ContextManagerWidget::setup_toolbar(toolbar* toolbar)
+    void ContextManagerWidget::setup_toolbar(Toolbar* Toolbar)
     {
-        toolbar->addAction(m_new_view_action);
-        toolbar->addAction(m_duplicate_action);
-        toolbar->addAction(m_rename_action);
-        toolbar->addAction(m_delete_action);
-        toolbar->addAction(m_timestamp_action);
+        Toolbar->addAction(m_new_view_action);
+        Toolbar->addAction(m_duplicate_action);
+        Toolbar->addAction(m_rename_action);
+        Toolbar->addAction(m_delete_action);
+        Toolbar->addAction(m_timestamp_action);
     }
 
     void ContextManagerWidget::handle_item_double_clicked(QListWidgetItem* clicked)

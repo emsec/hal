@@ -36,7 +36,7 @@ namespace hal
     Q_PROPERTY(bool validated READ validated WRITE set_validated)
     public:
         KeybindEdit(QWidget* parent = nullptr);
-        void add_validator(validator* v);
+        void add_validator(Validator* v);
         void set_validated(bool validated);
         bool validated();
         void revalidate();
@@ -48,7 +48,7 @@ namespace hal
         bool event(QEvent* e) Q_DECL_OVERRIDE;
 
     private:
-        stacked_validator m_validator;
+        StackedValidator m_validator;
         QKeySequence m_old_sequence;
         bool m_validated = true;
     };

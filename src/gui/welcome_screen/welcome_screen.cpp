@@ -11,9 +11,9 @@
 
 namespace hal
 {
-    welcome_screen::welcome_screen(QWidget* parent)
+    WelcomeScreen::WelcomeScreen(QWidget* parent)
         : QFrame(parent), m_layout(new QHBoxLayout()), m_recent_files_frame(new LabeledFrame()), m_open_file_frame(new LabeledFrame()), m_get_in_touch_frame(new LabeledFrame()),
-          m_recent_files_widget(new recent_files_widget()), m_open_file_widget(new open_file_widget()), m_get_in_touch_widget(new get_in_touch_widget())
+          m_recent_files_widget(new RecentFilesWidget()), m_open_file_widget(new OpenFileWidget()), m_get_in_touch_widget(new GetInTouchWidget())
     {
         m_layout->setContentsMargins(0, 0, 0, 0);
         m_layout->setSpacing(0);
@@ -39,7 +39,7 @@ namespace hal
         repolish();    // CALL FROM PARENT
     }
 
-    void welcome_screen::repolish()
+    void WelcomeScreen::repolish()
     {
         QStyle* s = style();
 

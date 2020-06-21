@@ -39,7 +39,7 @@
 
 namespace hal
 {
-    class python_context_subscriber;
+    class PythonContextSubscriber;
 
     namespace py = pybind11;
     class __attribute__((visibility("default"))) PythonContext
@@ -87,7 +87,7 @@ namespace hal
         // only one object for global and local is needed, as for the console we run it always in global scope wher globals() == locals()
         py::dict* m_context;
 
-        python_context_subscriber* m_sender;
+        PythonContextSubscriber* m_sender;
 
         std::string m_history_file;
 

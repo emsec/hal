@@ -32,34 +32,34 @@ namespace hal
     class GraphicsQssAdapter;
     class NotificationManagerQssAdapter;
     class PythonQssAdapter;
-    class shared_properties_qss_adapter;
+    class SharedPropertiesQssAdapter;
     class VhdlQssAdapter;
 
-    class style_manager : public QObject
+    class StyleManager : public QObject
     {
         Q_OBJECT
 
     public:
-        static style_manager* get_instance();
+        static StyleManager* get_instance();
 
-        ~style_manager();
+        ~StyleManager();
 
-        style_manager(style_manager const&) = delete;
-        void operator=(style_manager const&) = delete;
+        StyleManager(StyleManager const&) = delete;
+        void operator=(StyleManager const&) = delete;
 
         void update_style();
 
-        const shared_properties_qss_adapter* shared_properties() const;
+        const SharedPropertiesQssAdapter* shared_properties() const;
         const NotificationManagerQssAdapter* NotificationManager() const;
         const PythonQssAdapter* PythonSyntaxHighlighter() const;
         const VhdlQssAdapter* VhdlSyntaxHighlighter() const;
 
     private:
-        explicit style_manager(QObject* parent = nullptr);
+        explicit StyleManager(QObject* parent = nullptr);
         void set_default(QApplication* app);
 
         GraphicsQssAdapter* m_graphics_qss_adapter;
-        shared_properties_qss_adapter* m_shared_properties;
+        SharedPropertiesQssAdapter* m_shared_properties;
         NotificationManagerQssAdapter* m_NotificationManager;
         PythonQssAdapter* m_python_syntax_highlighter;
         VhdlQssAdapter* m_vhdl_syntax_highlighter;

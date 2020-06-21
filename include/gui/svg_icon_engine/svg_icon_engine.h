@@ -27,10 +27,10 @@
 
 namespace hal
 {
-    class svg_icon_engine : public QIconEngine
+    class SvgIconEngine : public QIconEngine
     {
     public:
-        explicit svg_icon_engine(const std::string& svg_data);
+        explicit SvgIconEngine(const std::string& svg_data);
 
         void paint(QPainter* painter, const QRect& rect, QIcon::Mode mode, QIcon::State state) Q_DECL_OVERRIDE;
         QIconEngine* clone() const Q_DECL_OVERRIDE;

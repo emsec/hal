@@ -29,18 +29,18 @@
 
 namespace hal
 {
-    class stacked_validator : public validator
+    class StackedValidator : public Validator
     {
         public:
-            stacked_validator();
+            StackedValidator();
 
-            void add_validator(validator* validator);
-            void remove_validator(validator* validator);
+            void add_validator(Validator* Validator);
+            void remove_validator(Validator* Validator);
             void clear_validators();
 
             bool validate(const QString &input);
 
         private:
-            QList<validator*> m_validators;
+            QList<Validator*> m_validators;
     };
 }

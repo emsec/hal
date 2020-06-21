@@ -3,11 +3,11 @@
 
 namespace hal
 {
-    module_tree_view::module_tree_view(QWidget *parent) : QTreeView(parent)
+    ModuleTreeView::ModuleTreeView(QWidget *parent) : QTreeView(parent)
     {
     }
 
-    void module_tree_view::mousePressEvent(QMouseEvent *event)
+    void ModuleTreeView::mousePressEvent(QMouseEvent *event)
     {
         if(event->button() != Qt::RightButton)
             QTreeView::mousePressEvent(event);

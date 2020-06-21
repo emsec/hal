@@ -74,7 +74,7 @@ QToolBar {
     height: 24px;
 }
 
-/*main_window #toolbar {
+/*main_window #Toolbar {
     background-color : rgba(38, 40, 41, 1);
     spacing : 1px;
     min-height: 40px;
@@ -289,7 +289,7 @@ min-height: 1px;
 max-height: 1px;
 }*/
 
-toolbar {
+Toolbar {
     background-color : rgb(9, 11, 13);
     spacing: 1px;
 }

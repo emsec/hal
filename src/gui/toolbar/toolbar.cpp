@@ -4,11 +4,11 @@
 
 namespace hal
 {
-    toolbar::toolbar(QWidget* parent) : QToolBar(parent)
+    Toolbar::Toolbar(QWidget* parent) : QToolBar(parent)
     {
     }
 
-    void toolbar::add_spacer()
+    void Toolbar::add_spacer()
     {
         QWidget* spacer = new QWidget(this);
         spacer->setAttribute(Qt::WA_NoSystemBackground);
@@ -16,7 +16,7 @@ namespace hal
         addWidget(spacer);
     }
 
-    void toolbar::repolish()
+    void Toolbar::repolish()
     {
         QStyle* s = style();
 

@@ -29,10 +29,10 @@
 
 namespace hal
 {
-    class unique_string_validator : public validator
+    class UniqueStringValidator : public Validator
     {
         public:
-            unique_string_validator(const QStringList &unique_strings);
+            UniqueStringValidator(const QStringList &unique_strings);
 
             bool validate(const QString &input);
 

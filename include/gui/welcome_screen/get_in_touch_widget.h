@@ -30,14 +30,14 @@ class QVBoxLayout;
 
 namespace hal
 {
-    class get_in_touch_item;
+    class GetInTouchItem;
 
-    class get_in_touch_widget : public QFrame
+    class GetInTouchWidget : public QFrame
     {
         Q_OBJECT
 
     public:
-        get_in_touch_widget(QWidget* parent = nullptr);
+        GetInTouchWidget(QWidget* parent = nullptr);
 
         void repolish();
 
@@ -50,12 +50,12 @@ namespace hal
     private:
         QVBoxLayout* m_layout;
 
-        get_in_touch_item* m_about_item;
-        get_in_touch_item* m_news_item;
-        get_in_touch_item* m_forum_item;
-        get_in_touch_item* m_cpp_documentation_item;
-        get_in_touch_item* m_py_documentation_item;
-        get_in_touch_item* m_ticket_item;
+        GetInTouchItem* m_about_item;
+        GetInTouchItem* m_news_item;
+        GetInTouchItem* m_forum_item;
+        GetInTouchItem* m_cpp_documentation_item;
+        GetInTouchItem* m_py_documentation_item;
+        GetInTouchItem* m_ticket_item;
 
         //    QFrame* m_line;
         QLabel* m_core_version_label;

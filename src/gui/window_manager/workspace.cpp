@@ -4,12 +4,12 @@
 
 namespace hal
 {
-    workspace::workspace(QWidget* parent) : QFrame(parent)
+    Workspace::Workspace(QWidget* parent) : QFrame(parent)
     {
 
     }
 
-    void workspace::repolish()
+    void Workspace::repolish()
     {
         QStyle* s = style();
 

@@ -30,7 +30,7 @@
 namespace hal
 {
     class PluginModel;
-    class toolbar;
+    class Toolbar;
 
     class PluginManagerWidget : public ContentWidget
     {
@@ -39,7 +39,7 @@ namespace hal
     public:
         explicit PluginManagerWidget(QWidget* parent = 0);
         void set_plugin_model(PluginModel* m_plugin_model);
-        virtual void setup_toolbar(toolbar* toolbar);
+        virtual void setup_toolbar(Toolbar* Toolbar);
 
     private Q_SLOTS:
         void on_action_add_triggered();

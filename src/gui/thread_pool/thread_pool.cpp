@@ -5,37 +5,37 @@
 
 namespace hal
 {
-    thread_pool::thread_pool(QObject* parent) : QObject(parent)
+    ThreadPool::ThreadPool(QObject* parent) : QObject(parent)
     {
         for (int i = 0; i < 4; ++i)
         {
-            worker* w = new worker(this);
-            connect(w, &worker::finished, this, &thread_pool::handle_worker_finished);
+            Worker* w = new Worker(this);
+            connect(w, &Worker::finished, this, &ThreadPool::handle_worker_finished);
             m_free_threads.push(w);
         }
     }
 
-    void thread_pool::queue_task(task* const t)
+    void ThreadPool::queue_task(Task* const t)
     {
         if (m_free_threads.isEmpty())
             m_tasks.enqueue(t);
         else
         {
-            worker* w = m_free_threads.pop();
+            Worker* w = m_free_threads.pop();
             w->assign_task(t);
             w->start();
         }
     }
 
-    void thread_pool::handle_worker_finished()
+    void ThreadPool::handle_worker_finished()
     {
-        worker* w = static_cast<worker*>(QObject::sender());
+        Worker* w = static_cast<Worker*>(QObject::sender());
 
         if (m_tasks.empty())
             m_free_threads.push(w);
         else
         {
-            task* t = m_tasks.dequeue();
+            Task* t = m_tasks.dequeue();
             w->assign_task(t);
             w->start();
         }

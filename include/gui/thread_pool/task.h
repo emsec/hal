@@ -27,12 +27,12 @@
 
 namespace hal
 {
-    class task : public QObject
+    class Task : public QObject
     {
         Q_OBJECT
 
     public:
-        task();
+        Task();
 
         virtual void execute() = 0;
 

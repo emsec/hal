@@ -7,7 +7,7 @@
 #include "core/log.h"
 #include "core/utils.h"
 
-#include "gui/python/python_context_suberscriber.h"
+#include "gui/python/python_context_subscriber.h"
 #include "gui_globals.h"
 
 // Following is needed for PythonContext::check_complete_statement

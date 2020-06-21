@@ -26,7 +26,7 @@
 #include "core/plugin_interface_interactive_ui.h"
 namespace hal
 {
-    class plugin_gui : public InteractiveUIPluginInterface
+    class PluginGui : public InteractiveUIPluginInterface
     {
     public:
         std::string get_name() const override;

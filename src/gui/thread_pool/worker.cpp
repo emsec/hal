@@ -4,12 +4,12 @@
 
 namespace hal
 {
-    worker::worker(QObject* parent) : QThread(parent)
+    Worker::Worker(QObject* parent) : QThread(parent)
     {
 
     }
 
-    void worker::assign_task(task* const t)
+    void Worker::assign_task(Task* const t)
     {
         assert(t);
 
@@ -17,7 +17,7 @@ namespace hal
         m_task = t;
     }
 
-    void worker::run()
+    void Worker::run()
     {
         assert(m_task);
 

@@ -12,7 +12,7 @@
 
 namespace hal
 {
-    get_in_touch_item::get_in_touch_item(const QString& title, const QString& description, QWidget* parent)
+    GetInTouchItem::GetInTouchItem(const QString& title, const QString& description, QWidget* parent)
         : QFrame(parent), m_horizontal_layout(new QHBoxLayout()), m_icon_label(new QLabel()), m_vertical_layout(new QVBoxLayout()), m_title_label(new QLabel()), m_description_label(new QLabel()),
           m_animation(new QPropertyAnimation(this)), m_hover(false)
     {
@@ -43,7 +43,7 @@ namespace hal
         repolish();
     }
 
-    void get_in_touch_item::enterEvent(QEvent* event)
+    void GetInTouchItem::enterEvent(QEvent* event)
     {
         Q_UNUSED(event)
 
@@ -51,7 +51,7 @@ namespace hal
         repolish();
     }
 
-    void get_in_touch_item::leaveEvent(QEvent* event)
+    void GetInTouchItem::leaveEvent(QEvent* event)
     {
         Q_UNUSED(event)
 
@@ -59,7 +59,7 @@ namespace hal
         repolish();
     }
 
-    void get_in_touch_item::mousePressEvent(QMouseEvent* event)
+    void GetInTouchItem::mousePressEvent(QMouseEvent* event)
     {
         Q_UNUSED(event)
 
@@ -67,7 +67,7 @@ namespace hal
         Q_EMIT clicked();
     }
 
-    void get_in_touch_item::repolish()
+    void GetInTouchItem::repolish()
     {
         QStyle* s = style();
 
@@ -87,32 +87,32 @@ namespace hal
             m_icon_label->setPixmap(gui_utility::get_styled_svg_icon(m_icon_style, m_icon_path).pixmap(QSize(17, 17)));
     }
 
-    bool get_in_touch_item::hover()
+    bool GetInTouchItem::hover()
     {
         return m_hover;
     }
 
-    QString get_in_touch_item::icon_path()
+    QString GetInTouchItem::icon_path()
     {
         return m_icon_path;
     }
 
-    QString get_in_touch_item::icon_style()
+    QString GetInTouchItem::icon_style()
     {
         return m_icon_style;
     }
 
-    void get_in_touch_item::set_hover_active(bool active)
+    void GetInTouchItem::set_hover_active(bool active)
     {
         m_hover = active;
     }
 
-    void get_in_touch_item::set_icon_path(const QString& path)
+    void GetInTouchItem::set_icon_path(const QString& path)
     {
         m_icon_path = path;
     }
 
-    void get_in_touch_item::set_icon_style(const QString& style)
+    void GetInTouchItem::set_icon_style(const QString& style)
     {
         m_icon_style = style;
     }

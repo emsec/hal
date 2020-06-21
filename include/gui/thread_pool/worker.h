@@ -27,20 +27,20 @@
 
 namespace hal
 {
-    class task;
+    class Task;
 
-    class worker : public QThread
+    class Worker : public QThread
     {
         Q_OBJECT
 
     public:
-        worker(QObject* parent = nullptr);
+        Worker(QObject* parent = nullptr);
 
-        void assign_task(task* const t);
+        void assign_task(Task* const t);
 
         void run() Q_DECL_OVERRIDE;
 
     private:
-        task* m_task;
+        Task* m_task;
     };
 }

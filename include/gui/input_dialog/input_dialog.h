@@ -46,8 +46,8 @@ namespace hal
 
             void set_warning_text(const QString& text);
 
-            void add_validator(validator* validator);
-            void remove_validator(validator* validator);
+            void add_validator(Validator* Validator);
+            void remove_validator(Validator* Validator);
             void clear_validators();
 
             QString text_value() const;
@@ -61,7 +61,7 @@ namespace hal
 
             QString m_warning_text = "";
 
-            stacked_validator m_validator;
+            StackedValidator m_validator;
 
             void init();
 

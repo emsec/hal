@@ -27,7 +27,7 @@
 
 namespace hal
 {
-    class dock_widget : public QFrame
+    class DockWidget : public QFrame
     {
         Q_OBJECT
 
@@ -42,7 +42,7 @@ namespace hal
         };
 
     public:
-        explicit dock_widget(QWidget* parent = nullptr);
+        explicit DockWidget(QWidget* parent = nullptr);
 
     protected:
         void mousePressEvent(QMouseEvent* event) Q_DECL_OVERRIDE;

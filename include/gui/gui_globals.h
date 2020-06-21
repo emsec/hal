@@ -47,7 +47,7 @@ namespace hal
     //extern QSettings g_settings;
     extern QSettings g_gui_state;
 
-    extern window_manager* g_window_manager;
+    extern WindowManager* g_window_manager;
     extern NotificationManager* g_NotificationManager;
 
     extern HalContentManager* g_content_manager;
@@ -67,7 +67,7 @@ namespace hal
 
     extern GraphContextManager g_graph_context_manager;
 
-    extern thread_pool* g_thread_pool;
+    extern ThreadPool* g_thread_pool;
 
     extern std::unique_ptr<PythonContext> g_python_context;
 

@@ -22,9 +22,9 @@
 
 namespace hal
 {
-    module_widget::module_widget(QWidget* parent) : ContentWidget("Modules", parent), m_tree_view(new module_tree_view(this)), m_ModuleProxyModel(new ModuleProxyModel(this))
+    ModuleWidget::ModuleWidget(QWidget* parent) : ContentWidget("Modules", parent), m_tree_view(new ModuleTreeView(this)), m_ModuleProxyModel(new ModuleProxyModel(this))
     {
-        connect(m_tree_view, &QTreeView::customContextMenuRequested, this, &module_widget::handle_tree_view_context_menu_requested);
+        connect(m_tree_view, &QTreeView::customContextMenuRequested, this, &ModuleWidget::handle_tree_view_context_menu_requested);
 
         m_ModuleProxyModel->setFilterKeyColumn(-1);
         m_ModuleProxyModel->setDynamicSortFilter(true);
@@ -49,22 +49,22 @@ namespace hal
 
         g_selection_relay.register_sender(this, name());
 
-        connect(&m_searchbar, &Searchbar::text_edited, this, &module_widget::filter);
-        connect(m_tree_view->selectionModel(), &QItemSelectionModel::selectionChanged, this, &module_widget::handle_tree_selection_changed);
-        connect(m_tree_view, &module_tree_view::doubleClicked, this, &module_widget::handle_item_double_clicked);
-        connect(&g_selection_relay, &SelectionRelay::selection_changed, this, &module_widget::handle_selection_changed);
-        connect(&g_NetlistRelay, &NetlistRelay::module_submodule_removed, this, &module_widget::handle_module_removed);
+        connect(&m_searchbar, &Searchbar::text_edited, this, &ModuleWidget::filter);
+        connect(m_tree_view->selectionModel(), &QItemSelectionModel::selectionChanged, this, &ModuleWidget::handle_tree_selection_changed);
+        connect(m_tree_view, &ModuleTreeView::doubleClicked, this, &ModuleWidget::handle_item_double_clicked);
+        connect(&g_selection_relay, &SelectionRelay::selection_changed, this, &ModuleWidget::handle_selection_changed);
+        connect(&g_NetlistRelay, &NetlistRelay::module_submodule_removed, this, &ModuleWidget::handle_module_removed);
     }
 
-    void module_widget::setup_toolbar(toolbar* toolbar)
+    void ModuleWidget::setup_toolbar(Toolbar* Toolbar)
     {
-        Q_UNUSED(toolbar)
+        Q_UNUSED(Toolbar)
     }
 
-    QList<QShortcut*> module_widget::create_shortcuts()
+    QList<QShortcut*> ModuleWidget::create_shortcuts()
     {
         QShortcut* search_shortcut = g_keybind_manager.make_shortcut(this, "keybinds/searchbar_toggle");
-        connect(search_shortcut, &QShortcut::activated, this, &module_widget::toggle_searchbar);
+        connect(search_shortcut, &QShortcut::activated, this, &ModuleWidget::toggle_searchbar);
 
         QList<QShortcut*> list;
         list.append(search_shortcut);
@@ -72,7 +72,7 @@ namespace hal
         return list;
     }
 
-    void module_widget::toggle_searchbar()
+    void ModuleWidget::toggle_searchbar()
     {
         if (m_searchbar.isHidden())
         {
@@ -83,7 +83,7 @@ namespace hal
             m_searchbar.hide();
     }
 
-    void module_widget::filter(const QString& text)
+    void ModuleWidget::filter(const QString& text)
     {
         QRegExp* regex = new QRegExp(text);
         if (regex->isValid())
@@ -94,7 +94,7 @@ namespace hal
         }
     }
 
-    void module_widget::handle_tree_view_context_menu_requested(const QPoint& point)
+    void ModuleWidget::handle_tree_view_context_menu_requested(const QPoint& point)
     {
         QModelIndex index = m_tree_view->indexAt(point);
 
@@ -144,7 +144,7 @@ namespace hal
             g_NetlistRelay.debug_delete_module(get_ModuleItem_from_index(index)->id());
     }
 
-    void module_widget::handle_module_removed(std::shared_ptr<Module> module, u32 module_id)
+    void ModuleWidget::handle_module_removed(std::shared_ptr<Module> module, u32 module_id)
     {
         UNUSED(module);
         UNUSED(module_id);
@@ -155,7 +155,7 @@ namespace hal
         m_ignore_selection_change = true;
     }
 
-    void module_widget::handle_tree_selection_changed(const QItemSelection& selected, const QItemSelection& deselected)
+    void ModuleWidget::handle_tree_selection_changed(const QItemSelection& selected, const QItemSelection& deselected)
     {
         Q_UNUSED(selected)
         Q_UNUSED(deselected)
@@ -182,12 +182,12 @@ namespace hal
         g_selection_relay.relay_selection_changed(this);
     }
 
-    void module_widget::handle_item_double_clicked(const QModelIndex& index)
+    void ModuleWidget::handle_item_double_clicked(const QModelIndex& index)
     {
         open_module_in_view(index);
     }
 
-    void module_widget::open_module_in_view(const QModelIndex& index)
+    void ModuleWidget::open_module_in_view(const QModelIndex& index)
     {
         auto module = g_netlist->get_module_by_id(get_ModuleItem_from_index(index)->id());
 
@@ -199,7 +199,7 @@ namespace hal
         new_context->add({module->get_id()}, {});
     }
 
-    void module_widget::handle_selection_changed(void* sender)
+    void ModuleWidget::handle_selection_changed(void* sender)
     {
         if (sender == this)
             return;
@@ -219,7 +219,7 @@ namespace hal
         m_ignore_selection_change = false;
     }
 
-    ModuleItem* module_widget::get_ModuleItem_from_index(const QModelIndex& index)
+    ModuleItem* ModuleWidget::get_ModuleItem_from_index(const QModelIndex& index)
     {
         return g_NetlistRelay.get_ModuleModel()->get_item(m_ModuleProxyModel->mapToSource(index));
     }

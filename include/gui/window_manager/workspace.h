@@ -27,12 +27,12 @@
 
 namespace hal
 {
-    class workspace : public QFrame
+    class Workspace : public QFrame
     {
         Q_OBJECT
 
     public:
-        explicit workspace(QWidget* parent = nullptr);
+        explicit Workspace(QWidget* parent = nullptr);
 
         void repolish();
     };

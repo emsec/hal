@@ -11,9 +11,9 @@ namespace hal
         m_content_layout->addWidget(m_console);
     }
 
-    void PythonConsoleWidget::setup_toolbar(toolbar* toolbar)
+    void PythonConsoleWidget::setup_toolbar(Toolbar* Toolbar)
     {
-        Q_UNUSED(toolbar);
+        Q_UNUSED(Toolbar);
     }
 
     QList<QShortcut*> PythonConsoleWidget::create_shortcuts()

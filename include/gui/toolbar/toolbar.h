@@ -27,12 +27,12 @@
 
 namespace hal
 {
-    class toolbar : public QToolBar
+    class Toolbar : public QToolBar
     {
         Q_OBJECT
 
     public:
-        toolbar(QWidget* parent = nullptr);
+        Toolbar(QWidget* parent = nullptr);
 
         void add_spacer();
 

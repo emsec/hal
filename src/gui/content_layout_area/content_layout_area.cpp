@@ -14,8 +14,8 @@ namespace hal
         : QWidget(parent), m_top_level_layout(new QVBoxLayout()), m_second_level_layout(new QHBoxLayout()), m_third_level_layout(new QVBoxLayout()), m_fourth_level_layout(new QHBoxLayout()),
           m_splitter_layout(new QVBoxLayout()), m_central_layout(new QHBoxLayout()), m_spacer_layout(new QHBoxLayout()),
 
-          m_vertical_splitter(new splitter(Qt::Vertical, this)), m_horizontal_splitter(new splitter(Qt::Horizontal, this)), m_left_splitter(new splitter(Qt::Vertical, this)),
-          m_right_splitter(new splitter(Qt::Vertical, this)), m_bottom_splitter(new splitter(Qt::Horizontal, this)),
+          m_vertical_splitter(new Splitter(Qt::Vertical, this)), m_horizontal_splitter(new Splitter(Qt::Horizontal, this)), m_left_splitter(new Splitter(Qt::Vertical, this)),
+          m_right_splitter(new Splitter(Qt::Vertical, this)), m_bottom_splitter(new Splitter(Qt::Horizontal, this)),
 
           m_left_dock(new DockBar(Qt::Vertical, button_orientation::vertical_up, this)), m_right_dock(new DockBar(Qt::Vertical, button_orientation::vertical_down, this)),
           m_bottom_dock(new DockBar(Qt::Horizontal, button_orientation::horizontal, this)),

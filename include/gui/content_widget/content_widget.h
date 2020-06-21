@@ -34,7 +34,7 @@ class QVBoxLayout;
 namespace hal
 {
     class HalContentAnchor;
-    class toolbar;
+    class Toolbar;
 
     class ContentWidget : public HalWidget
     {
@@ -45,7 +45,7 @@ namespace hal
     public:
         explicit ContentWidget(QString name, QWidget* parent = nullptr);
 
-        virtual void setup_toolbar(toolbar* toolbar);
+        virtual void setup_toolbar(Toolbar* Toolbar);
         virtual QList<QShortcut*> create_shortcuts();
 
         void repolish();

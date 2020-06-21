@@ -16,9 +16,9 @@
 
 namespace hal
 {
-    recent_files_widget::recent_files_widget(QWidget* parent) : QFrame(parent), m_layout(new QVBoxLayout())
+    RecentFilesWidget::RecentFilesWidget(QWidget* parent) : QFrame(parent), m_layout(new QVBoxLayout())
     {
-        connect(FileManager::get_instance(), &FileManager::file_opened, this, &recent_files_widget::handle_file_opened);
+        connect(FileManager::get_instance(), &FileManager::file_opened, this, &RecentFilesWidget::handle_file_opened);
 
         m_layout->setContentsMargins(0, 0, 0, 0);
         m_layout->setSpacing(0);
@@ -30,7 +30,7 @@ namespace hal
         read_settings();
     }
 
-    void recent_files_widget::repolish()
+    void RecentFilesWidget::repolish()
     {
         QStyle* s = style();
 
@@ -39,14 +39,14 @@ namespace hal
 
         for (QObject* object : m_layout->children())
         {
-            recent_file_item* item = qobject_cast<recent_file_item*>(object);
+            RecentFileItem* item = qobject_cast<RecentFileItem*>(object);
 
             if (item)
                 item->repolish();
         }
     }
 
-    void recent_files_widget::handle_file_opened(const QString& file_name)
+    void RecentFilesWidget::handle_file_opened(const QString& file_name)
     {
         Q_UNUSED(file_name)
         for (const auto item : m_items)
@@ -58,13 +58,13 @@ namespace hal
 
         //    for (const QString& file : recent_files)
         //    {
-        //        recent_file_item* item = new recent_file_item(file, this);
+        //        RecentFileItem* item = new RecentFileItem(file, this);
         //        m_items.append(item);
         //        m_layout->addWidget(item);
         //    }
     }
 
-    void recent_files_widget::handle_remove_requested(recent_file_item *item)
+    void RecentFilesWidget::handle_remove_requested(RecentFileItem *item)
     {
         m_layout->removeWidget(item);
         m_items.removeOne(item);
@@ -75,7 +75,7 @@ namespace hal
         update_settings();
     }
 
-    void recent_files_widget::read_settings()
+    void RecentFilesWidget::read_settings()
     {
         g_gui_state.beginReadArray("recent_files");
         for (int i = 0; i < 14; ++i)
@@ -86,8 +86,8 @@ namespace hal
             if (file.isEmpty())
                 continue;
 
-            recent_file_item* item = new recent_file_item(g_gui_state.value("file").toString(), this);
-            connect(item, &recent_file_item::remove_requested, this, &recent_files_widget::handle_remove_requested);
+            RecentFileItem* item = new RecentFileItem(g_gui_state.value("file").toString(), this);
+            connect(item, &RecentFileItem::remove_requested, this, &RecentFilesWidget::handle_remove_requested);
 
             QFileInfo info(file);
             if(!(info.exists() && info.isFile()))
@@ -100,7 +100,7 @@ namespace hal
         g_gui_state.endArray();
     }
 
-    void recent_files_widget::update_settings()
+    void RecentFilesWidget::update_settings()
     {
         g_gui_state.beginGroup("recent_files");
         g_gui_state.remove("");
@@ -108,7 +108,7 @@ namespace hal
 
         g_gui_state.beginWriteArray("recent_files");
         int index = 0;
-        for(recent_file_item* item : m_items)
+        for(RecentFileItem* item : m_items)
         {
             g_gui_state.setArrayIndex(index);
             g_gui_state.setValue("file", item->file());

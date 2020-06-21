@@ -31,7 +31,7 @@
 namespace hal
 {
     class DockBar;
-    class splitter;
+    class Splitter;
     class ContentFrame;
     class ContentWidget;
 
@@ -40,7 +40,7 @@ namespace hal
         Q_OBJECT
 
     public:
-        SplitterAnchor(DockBar* DockBar, splitter* splitter, QObject* parent = 0);
+        SplitterAnchor(DockBar* DockBar, Splitter* Splitter, QObject* parent = 0);
 
         virtual void add(ContentWidget* widget, int index = -1) override;
         virtual void remove(ContentWidget* widget) override;
@@ -57,7 +57,7 @@ namespace hal
 
     private:
         DockBar* m_dock_bar;
-        splitter* m_splitter;
+        Splitter* m_splitter;
         QList<ContentFrame*> m_detached_frames;
     };
 }

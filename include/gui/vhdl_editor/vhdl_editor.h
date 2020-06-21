@@ -30,14 +30,14 @@ namespace hal
 {
     class Searchbar;
 
-    class vhdl_editor : public ContentWidget
+    class VhdlEditor : public ContentWidget
     {
         Q_OBJECT
 
     public:
-        vhdl_editor();
+        VhdlEditor();
 
-        virtual void setup_toolbar(toolbar* toolbar) Q_DECL_OVERRIDE;
+        virtual void setup_toolbar(Toolbar* Toolbar) Q_DECL_OVERRIDE;
         virtual QList<QShortcut*> create_shortcuts() Q_DECL_OVERRIDE;
 
     public Q_SLOTS:

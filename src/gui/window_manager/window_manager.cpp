@@ -15,7 +15,7 @@
 
 namespace hal
 {
-    window_manager::window_manager(QObject* parent) : QObject(parent),
+    WindowManager::WindowManager(QObject* parent) : QObject(parent),
         m_MainWindow        (nullptr),
         m_action_open_file   (new QAction("Open File", this)),
         m_action_close_file  (new QAction("Close File", this)),
@@ -25,7 +25,7 @@ namespace hal
         m_action_content     (new QAction("Content", this)),
         m_action_settings    (new QAction("Settings", this)),
         m_action_about       (new QAction("About", this)),
-        m_welcome_screen     (new welcome_screen()),
+        m_welcome_screen     (new WelcomeScreen()),
         m_PluginScheduleWidget(new PluginScheduleWidget()),
         m_main_settings_widget(new MainSettingsWidget())
     {
@@ -35,14 +35,14 @@ namespace hal
         m_action_save->setShortcut(QKeySequence("Ctrl+S"));
         m_action_run_schedule->setShortcut(QKeySequence("Ctrl+Shift+R"));
 
-        connect(m_action_open_file,    &QAction::triggered, this, &window_manager::handle_action_open);
-        connect(m_action_close_file,   &QAction::triggered, this, &window_manager::handle_action_close);
-        connect(m_action_save,         &QAction::triggered, this, &window_manager::handle_action_save);
-        connect(m_action_schedule,     &QAction::triggered, this, &window_manager::handle_action_schedule);
-        connect(m_action_run_schedule, &QAction::triggered, this, &window_manager::handle_action_run_schedule);
-        connect(m_action_content,      &QAction::triggered, this, &window_manager::handle_action_content);
-        connect(m_action_settings,     &QAction::triggered, this, &window_manager::handle_action_settings);
-        connect(m_action_about,        &QAction::triggered, this, &window_manager::handle_action_about);
+        connect(m_action_open_file,    &QAction::triggered, this, &WindowManager::handle_action_open);
+        connect(m_action_close_file,   &QAction::triggered, this, &WindowManager::handle_action_close);
+        connect(m_action_save,         &QAction::triggered, this, &WindowManager::handle_action_save);
+        connect(m_action_schedule,     &QAction::triggered, this, &WindowManager::handle_action_schedule);
+        connect(m_action_run_schedule, &QAction::triggered, this, &WindowManager::handle_action_run_schedule);
+        connect(m_action_content,      &QAction::triggered, this, &WindowManager::handle_action_content);
+        connect(m_action_settings,     &QAction::triggered, this, &WindowManager::handle_action_settings);
+        connect(m_action_about,        &QAction::triggered, this, &WindowManager::handle_action_about);
 
         repolish();
 
@@ -58,12 +58,12 @@ namespace hal
         // THIS WORKS, COMPARE TO HARDCODED EVENT LISTENER
         QShortcut* shortcut = new QShortcut(QKeySequence("F1"), m_windows.at(0));
         shortcut->setContext(Qt::ApplicationShortcut);
-        connect(shortcut, &QShortcut::activated, this, &window_manager::handle_action_close);
+        connect(shortcut, &QShortcut::activated, this, &WindowManager::handle_action_close);
     }
 
-    void window_manager::add_window()
+    void WindowManager::add_window()
     {
-        hal_window* window = new hal_window(nullptr);
+        HalWindow* window = new HalWindow(nullptr);
         m_windows.append(window);
 
         if (!m_MainWindow)
@@ -72,7 +72,7 @@ namespace hal
         window->show();
     }
 
-    void window_manager::remove_window(hal_window* window)
+    void WindowManager::remove_window(HalWindow* window)
     {
         if (!window)
             return;
@@ -90,7 +90,7 @@ namespace hal
         }
     }
 
-    void window_manager::set_MainWindow(hal_window* window)
+    void WindowManager::set_MainWindow(HalWindow* window)
     {
         if (m_MainWindow)
             m_MainWindow->get_toolbar()->clear();
@@ -101,7 +101,7 @@ namespace hal
         // CHANGE TOOLBAR CONTENT DEPENDING ON APPLICATION STATE
         // ADD FANCY ANIMATION
         // WRITE OWN TOOLBAR CLASS BECAUSE QT CLASS SUCKS
-        hal_window_toolbar* t = window->get_toolbar();
+        HalWindowToolbar* t = window->get_toolbar();
 
         t->addAction(m_action_open_file);
         t->addAction(m_action_save);
@@ -114,19 +114,19 @@ namespace hal
         m_MainWindow = window;
     }
 
-    void window_manager::lock_all()
+    void WindowManager::lock_all()
     {
-        for (hal_window*& window : m_windows)
+        for (HalWindow*& window : m_windows)
             window->lock();
     }
 
-    void window_manager::unlock_all()
+    void WindowManager::unlock_all()
     {
-        for (hal_window*& window : m_windows)
+        for (HalWindow*& window : m_windows)
             window->unlock();
     }
 
-    void window_manager::handle_window_close_request(hal_window* window)
+    void WindowManager::handle_window_close_request(HalWindow* window)
     {
         Q_UNUSED(window);
         if (m_static_windows)
@@ -139,9 +139,9 @@ namespace hal
         }
     }
 
-    void window_manager::repolish()
+    void WindowManager::repolish()
     {
-        const shared_properties_qss_adapter* a = shared_properties_qss_adapter::instance();
+        const SharedPropertiesQssAdapter* a = SharedPropertiesQssAdapter::instance();
 
         m_action_open_file   ->setIcon(style::get_styled_svg_icon(a->m_open_icon_style, a->m_open_icon_path));
         //m_action_close_file  ->setIcon(style::get_styled_svg_icon(a->m_close_icon_style, a->m_close_icon_path));
@@ -154,52 +154,52 @@ namespace hal
 
         // UPDATE ICONS IN TOOLBAR
 
-        for (hal_window*& window : m_windows)
+        for (HalWindow*& window : m_windows)
             window->repolish();
     }
 
-    void window_manager::handle_Overlay_clicked()
+    void WindowManager::handle_Overlay_clicked()
     {
         unlock_all();
     }
 
-    void window_manager::handle_action_open()
+    void WindowManager::handle_action_open()
     {
         qDebug() << "handle action open called";
         lock_all(); // DEBUG CODE
     }
 
-    void window_manager::handle_action_close()
+    void WindowManager::handle_action_close()
     {
         qDebug() << "handle action close called";
     }
 
-    void window_manager::handle_action_save()
+    void WindowManager::handle_action_save()
     {
 
     }
 
-    void window_manager::handle_action_schedule()
+    void WindowManager::handle_action_schedule()
     {
 
     }
 
-    void window_manager::handle_action_run_schedule()
+    void WindowManager::handle_action_run_schedule()
     {
 
     }
 
-    void window_manager::handle_action_content()
+    void WindowManager::handle_action_content()
     {
 
     }
 
-    void window_manager::handle_action_settings()
+    void WindowManager::handle_action_settings()
     {
 
     }
 
-    void window_manager::handle_action_about()
+    void WindowManager::handle_action_about()
     {
 
     }

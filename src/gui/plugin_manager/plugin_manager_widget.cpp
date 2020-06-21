@@ -58,9 +58,9 @@ namespace hal
         m_table_view.resizeColumnsToContents();
     }
 
-    void PluginManagerWidget::setup_toolbar(toolbar* toolbar)
+    void PluginManagerWidget::setup_toolbar(Toolbar* Toolbar)
     {
-        toolbar->addAction(m_add_action);
-        toolbar->addAction(m_remove_action);
+        Toolbar->addAction(m_add_action);
+        Toolbar->addAction(m_remove_action);
     }
 }

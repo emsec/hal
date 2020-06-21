@@ -11,19 +11,19 @@
 
 namespace hal
 {
-    get_in_touch_widget::get_in_touch_widget(QWidget* parent)
-        : QFrame(parent), m_layout(new QVBoxLayout()), m_about_item(new get_in_touch_item("About", "Show license and version information")),
-          m_news_item(new get_in_touch_item("Stay up to date", "Subscribe to our newsfeed for the latest updates and patchnotes")),
-          m_forum_item(new get_in_touch_item("Get in touch", "Check out the forum and so on and so on i dont know what to write here")),
-          m_cpp_documentation_item(new get_in_touch_item("Open C++ Documentation", "Check out the C++ documentation of the HAL core to develop your own plugins")),
-          m_py_documentation_item(new get_in_touch_item("Open Python Documentation", "Check out the Python documentation of HAL")),
-          m_ticket_item(new get_in_touch_item("Found a bug ?", "Submit a bug report or feature request to our public tracker")), m_core_version_label(new QLabel()),
+    GetInTouchWidget::GetInTouchWidget(QWidget* parent)
+        : QFrame(parent), m_layout(new QVBoxLayout()), m_about_item(new GetInTouchItem("About", "Show license and version information")),
+          m_news_item(new GetInTouchItem("Stay up to date", "Subscribe to our newsfeed for the latest updates and patchnotes")),
+          m_forum_item(new GetInTouchItem("Get in touch", "Check out the forum and so on and so on i dont know what to write here")),
+          m_cpp_documentation_item(new GetInTouchItem("Open C++ Documentation", "Check out the C++ documentation of the HAL core to develop your own plugins")),
+          m_py_documentation_item(new GetInTouchItem("Open Python Documentation", "Check out the Python documentation of HAL")),
+          m_ticket_item(new GetInTouchItem("Found a bug ?", "Submit a bug report or feature request to our public tracker")), m_core_version_label(new QLabel()),
           m_gui_version_label(new QLabel())
     {
-        connect(m_about_item, &get_in_touch_item::clicked, this, &get_in_touch_widget::handle_about_item_clicked);
-        connect(m_cpp_documentation_item, &get_in_touch_item::clicked, this, &get_in_touch_widget::handle_cpp_documentation_item_clicked);
-        connect(m_py_documentation_item, &get_in_touch_item::clicked, this, &get_in_touch_widget::handle_py_documentation_item_clicked);
-        connect(m_ticket_item, &get_in_touch_item::clicked, this, &get_in_touch_widget::handle_ticket_item_clicked);
+        connect(m_about_item, &GetInTouchItem::clicked, this, &GetInTouchWidget::handle_about_item_clicked);
+        connect(m_cpp_documentation_item, &GetInTouchItem::clicked, this, &GetInTouchWidget::handle_cpp_documentation_item_clicked);
+        connect(m_py_documentation_item, &GetInTouchItem::clicked, this, &GetInTouchWidget::handle_py_documentation_item_clicked);
+        connect(m_ticket_item, &GetInTouchItem::clicked, this, &GetInTouchWidget::handle_ticket_item_clicked);
 
         m_layout->setContentsMargins(0, 0, 0, 0);
         m_layout->setSpacing(0);
@@ -72,7 +72,7 @@ namespace hal
         repolish();
     }
 
-    void get_in_touch_widget::repolish()
+    void GetInTouchWidget::repolish()
     {
         QStyle* s = style();
 
@@ -85,7 +85,7 @@ namespace hal
 
         //    for (QObject* object : m_layout->children())
         //    {
-        //        get_in_touch_item* item = qobject_cast<get_in_touch_item*>(object);
+        //        GetInTouchItem* item = qobject_cast<GetInTouchItem*>(object);
 
         //        if (item)
         //            item->repolish();
@@ -94,31 +94,31 @@ namespace hal
         for (int i = 0; i < m_layout->count(); i++)
         {
             QWidget* widget         = m_layout->itemAt(i)->widget();
-            get_in_touch_item* item = qobject_cast<get_in_touch_item*>(widget);
+            GetInTouchItem* item = qobject_cast<GetInTouchItem*>(widget);
 
             if (item)
                 item->repolish();
         }
     }
 
-    void get_in_touch_widget::handle_about_item_clicked()
+    void GetInTouchWidget::handle_about_item_clicked()
     {
 
     }
 
-    void get_in_touch_widget::handle_cpp_documentation_item_clicked()
+    void GetInTouchWidget::handle_cpp_documentation_item_clicked()
     {
         QString link = "https://emsec.github.io/hal/doc/";
         QDesktopServices::openUrl(QUrl(link));
     }
 
-    void get_in_touch_widget::handle_py_documentation_item_clicked()
+    void GetInTouchWidget::handle_py_documentation_item_clicked()
     {
         QString link = "https://emsec.github.io/hal/pydoc/";
         QDesktopServices::openUrl(QUrl(link));
     }
 
-    void get_in_touch_widget::handle_ticket_item_clicked()
+    void GetInTouchWidget::handle_ticket_item_clicked()
     {
         QString link = "https://github.com/emsec/hal/issues";
         QDesktopServices::openUrl(QUrl(link));

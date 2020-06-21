@@ -26,7 +26,7 @@
 #include <QString>
 namespace hal
 {
-    class validator
+    class Validator
     {
         public:
             virtual bool validate(const QString &input) = 0;

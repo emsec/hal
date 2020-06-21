@@ -17,7 +17,7 @@
 
 namespace hal
 {
-    recent_file_item::recent_file_item(const QString& file, QWidget* parent)
+    RecentFileItem::RecentFileItem(const QString& file, QWidget* parent)
         : QFrame(parent), m_widget(new QWidget()), m_horizontal_layout(new QHBoxLayout()), m_icon_label(new QLabel()), m_vertical_layout(new QVBoxLayout()), m_name_label(new QLabel()),
           m_path_label(new QLabel()), m_animation(new QPropertyAnimation()), m_remove_button(new QToolButton(this)), m_hover(false), m_disabled(false)
     {
@@ -35,7 +35,7 @@ namespace hal
 
 
         m_remove_button->setText("x");
-        connect(m_remove_button, &QToolButton::clicked, this, &recent_file_item::handle_close_requested);
+        connect(m_remove_button, &QToolButton::clicked, this, &RecentFileItem::handle_close_requested);
 
         setLayout(m_horizontal_layout);
         m_horizontal_layout->addWidget(m_icon_label);
@@ -59,7 +59,7 @@ namespace hal
         repolish();
     }
 
-    void recent_file_item::enterEvent(QEvent* event)
+    void RecentFileItem::enterEvent(QEvent* event)
     {
         Q_UNUSED(event)
         if(m_disabled)
@@ -69,7 +69,7 @@ namespace hal
         repolish();
     }
 
-    void recent_file_item::leaveEvent(QEvent* event)
+    void RecentFileItem::leaveEvent(QEvent* event)
     {
         Q_UNUSED(event)
         if(m_disabled)
@@ -79,7 +79,7 @@ namespace hal
         repolish();
     }
 
-    void recent_file_item::mousePressEvent(QMouseEvent* event)
+    void RecentFileItem::mousePressEvent(QMouseEvent* event)
     {
         Q_UNUSED(event)
 
@@ -97,12 +97,12 @@ namespace hal
         }
     }
 
-    QSize recent_file_item::sizeHint() const
+    QSize RecentFileItem::sizeHint() const
     {
         return m_widget->sizeHint();
     }
 
-    bool recent_file_item::eventFilter(QObject* object, QEvent* event)
+    bool RecentFileItem::eventFilter(QObject* object, QEvent* event)
     {
         if (object == m_path_label && event->type() == QEvent::Resize)
         {
@@ -117,12 +117,12 @@ namespace hal
         return false;
     }
 
-    QString recent_file_item::file()
+    QString RecentFileItem::file()
     {
         return m_file;
     }
 
-    void recent_file_item::repolish()
+    void RecentFileItem::repolish()
     {
         QStyle* s = style();
 
@@ -142,49 +142,49 @@ namespace hal
             m_icon_label->setPixmap(gui_utility::get_styled_svg_icon(m_icon_style, m_icon_path).pixmap(QSize(17, 17)));
     }
 
-    bool recent_file_item::hover()
+    bool RecentFileItem::hover()
     {
         return m_hover;
     }
 
-    bool recent_file_item::disabled()
+    bool RecentFileItem::disabled()
     {
         return m_disabled;
     }
 
-    QString recent_file_item::icon_path()
+    QString RecentFileItem::icon_path()
     {
         return m_icon_path;
     }
 
-    QString recent_file_item::icon_style()
+    QString RecentFileItem::icon_style()
     {
         return m_icon_style;
     }
 
-    void recent_file_item::set_hover_active(bool active)
+    void RecentFileItem::set_hover_active(bool active)
     {
         m_hover = active;
     }
 
-    void recent_file_item::set_disabled(bool disable)
+    void RecentFileItem::set_disabled(bool disable)
     {
         m_disabled = disable;
         m_name_label->setText(m_name_label->text().append(" [Missing]"));
         m_hover = false;
     }
 
-    void recent_file_item::set_icon_path(const QString& path)
+    void RecentFileItem::set_icon_path(const QString& path)
     {
         m_icon_path = path;
     }
 
-    void recent_file_item::set_icon_style(const QString& style)
+    void RecentFileItem::set_icon_style(const QString& style)
     {
         m_icon_style = style;
     }
 
-    void recent_file_item::handle_close_requested()
+    void RecentFileItem::handle_close_requested()
     {
         Q_EMIT remove_requested(this);
     }

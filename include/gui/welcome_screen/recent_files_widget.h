@@ -29,20 +29,20 @@ class QVBoxLayout;
 
 namespace hal
 {
-    class recent_file_item;
+    class RecentFileItem;
 
-    class recent_files_widget : public QFrame
+    class RecentFilesWidget : public QFrame
     {
         Q_OBJECT
 
     public:
-        recent_files_widget(QWidget* parent = nullptr);
+        RecentFilesWidget(QWidget* parent = nullptr);
 
         void repolish();
 
     public Q_SLOTS:
         void handle_file_opened(const QString& file_name);
-        void handle_remove_requested(recent_file_item* item);
+        void handle_remove_requested(RecentFileItem* item);
 
     private:
         void read_settings();
@@ -50,6 +50,6 @@ namespace hal
 
         QVBoxLayout* m_layout;
 
-        QList<recent_file_item*> m_items;
+        QList<RecentFileItem*> m_items;
     };
 }

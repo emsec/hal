@@ -27,12 +27,12 @@
 
 namespace hal
 {
-    class styleable_widget : public QWidget
+    class StyleableWidget : public QWidget
     {
         Q_OBJECT
 
     public:
-        explicit styleable_widget(QWidget* parent = nullptr);
+        explicit StyleableWidget(QWidget* parent = nullptr);
 
     protected:
         void paintEvent(QPaintEvent* event);

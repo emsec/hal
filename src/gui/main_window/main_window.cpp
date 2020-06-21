@@ -64,7 +64,7 @@ namespace hal
         m_layout->addLayout(m_tool_bar_layout);
 
         m_left_tool_bar = new QToolBar();
-        m_left_tool_bar->setObjectName("toolbar");
+        m_left_tool_bar->setObjectName("Toolbar");
         m_left_tool_bar->setMovable(false);
         m_left_tool_bar->setFloatable(false);
         m_left_tool_bar->setIconSize(QSize(18, 18));
@@ -72,7 +72,7 @@ namespace hal
         m_tool_bar_layout->addWidget(m_left_tool_bar);
 
         m_right_tool_bar = new QToolBar();
-        m_right_tool_bar->setObjectName("toolbar");
+        m_right_tool_bar->setObjectName("Toolbar");
         m_right_tool_bar->setMovable(false);
         m_right_tool_bar->setFloatable(false);
         m_right_tool_bar->setIconSize(QSize(18, 18));
@@ -111,7 +111,7 @@ namespace hal
 
         //welcome screen + other screens (?)
 
-        m_welcome_screen = new welcome_screen();
+        m_welcome_screen = new WelcomeScreen();
         m_stacked_widget->addWidget(m_welcome_screen);
         m_stacked_widget->setCurrentWidget(m_welcome_screen);
 

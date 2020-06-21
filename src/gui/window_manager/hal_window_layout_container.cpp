@@ -2,12 +2,12 @@
 
 namespace hal
 {
-    hal_window_layout_container::hal_window_layout_container(QWidget* parent) : QFrame(parent)
+    HalWindowLayoutContainer::HalWindowLayoutContainer(QWidget* parent) : QFrame(parent)
     {
 
     }
 
-    void hal_window_layout_container::keyPressEvent(QKeyEvent* event)
+    void HalWindowLayoutContainer::keyPressEvent(QKeyEvent* event)
     {
         // FORWARD (RELEVANT BUTTONS / EVENT) TO MANAGER
         QFrame::keyPressEvent(event);

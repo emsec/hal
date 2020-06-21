@@ -28,12 +28,12 @@
 
 namespace hal
 {
-    class shortcut_manager : public QObject
+    class ShortcutManager : public QObject
     {
         Q_OBJECT
 
     public:
-        explicit shortcut_manager(QObject* parent = nullptr);
+        explicit ShortcutManager(QObject* parent = nullptr);
 
     private:
         QShortcut* m_open_file;

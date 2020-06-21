@@ -67,11 +67,11 @@ namespace hal
     void HalContentManager::handle_open_document(const QString& file_name)
     {
         m_graph_tab_wid = new GraphTabWidget(nullptr);
-        //    vhdl_editor* code_edit = new vhdl_editor();
+        //    VhdlEditor* code_edit = new VhdlEditor();
         //    m_graph_tab_wid->addTab(code_edit, "Source");
         m_MainWindow->add_content(m_graph_tab_wid, 2, content_anchor::center);
 
-        module_widget* m = new module_widget();
+        ModuleWidget* m = new ModuleWidget();
         m_MainWindow->add_content(m, 0, content_anchor::left);
         m->open();
 

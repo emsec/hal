@@ -33,7 +33,7 @@ class QToolButton;
 
 namespace hal
 {
-    class recent_file_item : public QFrame
+    class RecentFileItem : public QFrame
     {
         Q_OBJECT
         Q_PROPERTY(bool hover READ hover)
@@ -42,7 +42,7 @@ namespace hal
         Q_PROPERTY(QString icon_style READ icon_style WRITE set_icon_style)
 
     public:
-        explicit recent_file_item(const QString& file, QWidget* parent = nullptr);
+        explicit RecentFileItem(const QString& file, QWidget* parent = nullptr);
 
         void enterEvent(QEvent* event) Q_DECL_OVERRIDE;
         void leaveEvent(QEvent* event) Q_DECL_OVERRIDE;
@@ -66,7 +66,7 @@ namespace hal
         void set_icon_style(const QString& style);
 
     Q_SIGNALS:
-        void remove_requested(recent_file_item* item);
+        void remove_requested(RecentFileItem* item);
 
     private:
         QWidget* m_widget;

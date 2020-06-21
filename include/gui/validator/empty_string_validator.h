@@ -27,10 +27,10 @@
 
 namespace hal
 {
-    class empty_string_validator : public validator
+    class EmptyStringValidator : public Validator
     {
         public:
-            empty_string_validator();
+            EmptyStringValidator();
 
             bool validate(const QString &input);
     };

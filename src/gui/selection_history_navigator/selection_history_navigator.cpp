@@ -38,7 +38,7 @@ namespace hal
 
     void SelectionHistoryNavigator::store_selection(u32 id, SelectionRelay::item_type type)
     {
-        m_current_item_iterator = m_selection_container.insert(m_current_item_iterator, selection(id, type));
+        m_current_item_iterator = m_selection_container.insert(m_current_item_iterator, Selection(id, type));
 
         if (m_selection_container.size() > m_max_history_size)
             m_selection_container.pop_back();
@@ -56,7 +56,7 @@ namespace hal
             relay_selection(*--m_current_item_iterator);
     }
 
-    void SelectionHistoryNavigator::relay_selection(selection selection)
+    void SelectionHistoryNavigator::relay_selection(Selection selection)
     {
         g_selection_relay.clear();
 

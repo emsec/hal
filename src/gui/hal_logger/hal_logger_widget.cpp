@@ -43,14 +43,14 @@ namespace hal
         delete m_selector;
     }
 
-    void HalLoggerWidget::setup_toolbar(toolbar* toolbar)
+    void HalLoggerWidget::setup_toolbar(Toolbar* Toolbar)
     {
-        //toolbar->add_widget(m_selector);
+        //Toolbar->add_widget(m_selector);
 
         //selector will be deleted within the toolbars destructor
         ChannelSelector* selector = new ChannelSelector();
         connect(selector, SIGNAL(currentIndexChanged(int)), this, SLOT(handle_current_channel_changed(int)));
-        toolbar->addWidget(selector);
+        Toolbar->addWidget(selector);
     }
 
     QPlainTextEdit* HalLoggerWidget::get_plain_text_edit()

@@ -11,7 +11,7 @@
 
 namespace hal
 {
-    vhdl_editor::vhdl_editor() : ContentWidget("Source"), m_code_editor(new CodeEditor()), m_searchbar(new Searchbar())
+    VhdlEditor::VhdlEditor() : ContentWidget("Source"), m_code_editor(new CodeEditor()), m_searchbar(new Searchbar())
     {
         connect(m_searchbar, &Searchbar::text_edited, m_code_editor, &CodeEditor::search);
 
@@ -31,12 +31,12 @@ namespace hal
         m_content_layout->addWidget(m_searchbar);
     }
 
-    void vhdl_editor::setup_toolbar(toolbar* toolbar){Q_UNUSED(toolbar)}
+    void VhdlEditor::setup_toolbar(Toolbar* Toolbar){Q_UNUSED(Toolbar)}
 
-    QList<QShortcut*> vhdl_editor::create_shortcuts()
+    QList<QShortcut*> VhdlEditor::create_shortcuts()
     {
         QShortcut* search_shortcut = new QShortcut(QKeySequence("Ctrl+f"), this);
-        connect(search_shortcut, &QShortcut::activated, this, &vhdl_editor::toggle_searchbar);
+        connect(search_shortcut, &QShortcut::activated, this, &VhdlEditor::toggle_searchbar);
 
         QList<QShortcut*> list;
         list.append(search_shortcut);
@@ -44,7 +44,7 @@ namespace hal
         return list;
     }
 
-    void vhdl_editor::toggle_searchbar()
+    void VhdlEditor::toggle_searchbar()
     {
         if (m_searchbar->isHidden())
             m_searchbar->show();

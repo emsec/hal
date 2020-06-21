@@ -48,7 +48,7 @@ namespace hal
         m_layout->setContentsMargins(15, 15, 15, 10);
 
 
-        m_validator = stacked_validator();
+        m_validator = StackedValidator();
 
         connect(button_box, &QDialogButtonBox::accepted, this, &InputDialog::handle_ok_clicked);
         connect(button_box, &QDialogButtonBox::rejected, this, &InputDialog::handle_cancel_clicked);
@@ -99,14 +99,14 @@ namespace hal
         show_warning_text();
     }
 
-    void InputDialog::add_validator(validator* validator)
+    void InputDialog::add_validator(Validator* Validator)
     {
-        m_validator.add_validator(validator);
+        m_validator.add_validator(Validator);
     }
 
-    void InputDialog::remove_validator(validator* validator)
+    void InputDialog::remove_validator(Validator* Validator)
     {
-        m_validator.remove_validator(validator);
+        m_validator.remove_validator(Validator);
     }
 
     void InputDialog::clear_validators()

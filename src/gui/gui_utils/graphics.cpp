@@ -30,7 +30,7 @@ namespace hal
 
         QIcon get_icon_from_svg_data(const QString& svg_data)
         {
-            return QIcon(new svg_icon_engine(svg_data.toStdString()));
+            return QIcon(new SvgIconEngine(svg_data.toStdString()));
         }
 
         QIcon get_styled_svg_icon(const QString& from_to_colors, const QString& svg_path)

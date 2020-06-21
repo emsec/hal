@@ -111,7 +111,7 @@ QToolBar {
     border           : none; /* Fixes Mac Toolbar issue */
 }
 
-/*main_window #toolbar {
+/*main_window #Toolbar {
     background-color : rgba(38, 40, 41, 1);
     spacing : 1px;
     min-height: 40px;
@@ -329,7 +329,7 @@ min-height: 1px;
 max-height: 1px;
 }*/
 
-toolbar {
+Toolbar {
     background : rgb(60, 60, 60);
     spacing    : 1px;
     min-height : 24px;
@@ -678,7 +678,7 @@ LabeledFrame {
     margin-right  : 30px;
 }
 
-welcome_screen {
+WelcomeScreen {
     /*background : qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0.273, stop:0 rgba(0, 0, 0, 255), stop:1 rgba(255, 255, 255, 255));*/
     /*background : qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0.273, stop:0 rgb(13, 20, 24), stop:1 rgb(23, 30, 34));*/
     /*background : qlineargradient(spread:pad,
@@ -697,7 +697,7 @@ welcome_screen {
         stop       : 1 rgb(234, 234, 234));
 }
 
-welcome_screen LabeledFrame {
+WelcomeScreen LabeledFrame {
     min-width  : 200px;
     max-width  : 400px;
     min-height : 200px;
@@ -768,7 +768,7 @@ rgb(107, 135, 255)
 *                RECENT_FILES                *
 *********************************************/
 
-recent_files_widget {
+RecentFilesWidget {
     background    : rgb(14, 16, 18);
     margin-top    : 15px;
     margin-bottom : 15px;
@@ -776,7 +776,7 @@ recent_files_widget {
     margin-right : 5px;*/
 }
 
-recent_file_item {
+RecentFileItem {
     background           : rgb(219, 219, 219);
     /*background: rgb(12, 15, 19);*/
     /*padding : 5px;*/
@@ -789,7 +789,7 @@ recent_file_item {
     qproperty-icon_style : "all->#ff6a47";
 }
 
-recent_file_item * {
+RecentFileItem * {
     background  : rgb(219, 219, 219);
     color       : #000000;
     /*color : #31383D;*/
@@ -798,46 +798,46 @@ recent_file_item * {
     font-size   : 16px;
 }
 
-recent_file_item #icon-label {
+RecentFileItem #icon-label {
     margin-right : 10px;
 }
 
-recent_file_item #path-label {
+RecentFileItem #path-label {
     /*color : #1f2123;*/
     color : #292B2D;
 }
 
-recent_file_item[hover=true] {
+RecentFileItem[hover=true] {
     background : #7D7D7D;
     /*qproperty-icon_style : "all->#ffeea5";*/
 }
 
-recent_file_item[hover=true] * {
+RecentFileItem[hover=true] * {
     background : rgb(255, 255 255);
     color: #FFFFFF;
     /*color : #6F7D87;*/
 }
 
-recent_file_item[hover=true] #path-label {
+RecentFileItem[hover=true] #path-label {
     color: #FFFFFF;
     /*color : #44494D;*/
 }
 
-recent_file_item QToolButton:hover {
+RecentFileItem QToolButton:hover {
     background: #222222;
     color: white;
 }
 
-recent_file_item[disabled=true]{
+RecentFileItem[disabled=true]{
     qproperty-icon_style : "all->#888888"
     /*qproperty-icon_style : "all->#ffeea5";*/
 }
 
-recent_file_item[disabled=true] #name-label{
+RecentFileItem[disabled=true] #name-label{
     color: #555555;
     /*qproperty-icon_style : "all->#ffeea5";*/
 }
-recent_file_item[disabled=true] #path-label {
+RecentFileItem[disabled=true] #path-label {
     /*color : #555555;*/
     color: red;
 }
@@ -846,22 +846,22 @@ recent_file_item[disabled=true] #path-label {
 *                OPEN_FILE                   *
 *********************************************/
 
-open_file_widget {
+OpenFileWidget {
     background           : rgb(219, 219, 219);
     qproperty-icon_path  : ":/icons/drop";
     qproperty-icon_style : "all->#3b3c3d";/*151719*/
 }
 
-open_file_widget[drag_active=true] {
+OpenFileWidget[drag_active=true] {
     qproperty-icon_style : "all->#000000";
 }
 
-open_file_widget QLabel {
+OpenFileWidget QLabel {
     background : rgb(219, 219, 219);
     /*background: rgb(6, 7, 8);*/
 }
 
-open_file_widget #text-label {
+OpenFileWidget #text-label {
     background    : rgb(219, 219, 219);
     font-family   : "Iosevka";
     font-weight   : 550;
@@ -874,7 +874,7 @@ open_file_widget #text-label {
     margin-right  : 10px;
 }
 
-open_file_widget #icon-label {
+OpenFileWidget #icon-label {
     margin-top : 220px;
 }
 
@@ -882,13 +882,13 @@ open_file_widget #icon-label {
 *                GET IN TOUCH                *
 *********************************************/
 
-get_in_touch_widget {
+GetInTouchWidget {
     background    : rgb(255, 255, 255);
     margin-top    : 15px;
     margin-bottom : 15px;
 }
 
-get_in_touch_widget #core-version-label {
+GetInTouchWidget #core-version-label {
     background  : rgb(255, 255, 255);
     color       : #FFFFFF;
     font-family : "Iosevka";
@@ -896,7 +896,7 @@ get_in_touch_widget #core-version-label {
     font-size   : 15px;
 }
 
-get_in_touch_widget #gui-version-label {
+GetInTouchWidget #gui-version-label {
     background    : rgb(255, 255, 255);
     color         : #FFFFFF;
     font-family   : "Iosevka";
@@ -905,7 +905,7 @@ get_in_touch_widget #gui-version-label {
     margin-bottom : 10px;
 }
 
-get_in_touch_item {
+GetInTouchItem {
     background           : rgb(219, 219, 219);
     padding-top          : 6px;
     padding-bottom       : 6px;
@@ -915,7 +915,7 @@ get_in_touch_item {
     qproperty-icon_style : "all->#D3C68A";
 }
 
-get_in_touch_item * {
+GetInTouchItem * {
     background  : rgb(219, 219, 219);
     color       : #000000;
     font-family : "Iosevka";
@@ -923,28 +923,28 @@ get_in_touch_item * {
     font-size   : 16px;
 }
 
-get_in_touch_item #icon-label {
+GetInTouchItem #icon-label {
     margin-right : 10px;
 }
 
-get_in_touch_item #description-label {
+GetInTouchItem #description-label {
     color : #292B2D;
 }
 
-get_in_touch_item[hover=true] {
+GetInTouchItem[hover=true] {
    background : #7D7D7D;
    color: white;
 }
 
-get_in_touch_item[hover=true] * {
+GetInTouchItem[hover=true] * {
     background : #7D7D7D;
     color: white;
 }
-get_in_touch_item[hover=true] #description-label {/**neccessary, the * specifier above does not work */
+GetInTouchItem[hover=true] #description-label {/**neccessary, the * specifier above does not work */
     color : white;
 }
 
-get_in_touch_item[hover=true] #description-label {
+GetInTouchItem[hover=true] #description-label {
     /*color : #44494D;*/
 }
 
@@ -1316,20 +1316,20 @@ CodeEditorMinimap QScrollBar::handle:vertical {
     border-radius : 0px;
 }
 
-get_in_touch_item#about_item {
+GetInTouchItem#about_item {
     /*qproperty-icon_style: "all->#FFFFFF";*/
     qproperty-icon_style : "all->#f27800";
     qproperty-icon_path  : ":/icons/info" /*qproperty-icon_style: "";
 qproperty-icon_path: ":/icons/hal"*/
 }
 
-get_in_touch_item#documentation_item {
+GetInTouchItem#documentation_item {
     /*qproperty-icon_style: "all->#FFFFFF";*/
     qproperty-icon_style : "all->#f27800";
     qproperty-icon_path  : ":/icons/info"
 }
 
-get_in_touch_item#ticket_item {
+GetInTouchItem#ticket_item {
     qproperty-icon_style : "";
     qproperty-icon_path  : ":/icons/gitlab"
 }

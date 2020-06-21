@@ -46,9 +46,8 @@ namespace hal
     class PythonEditor;
     class FileManager;
     class HalContentManager;
-    class dropdown_list;
     class AboutDialog;
-    class welcome_screen;
+    class WelcomeScreen;
 
     class MainWindow : public QWidget
     {
@@ -152,7 +151,7 @@ namespace hal
 
         PluginScheduleWidget* m_schedule_widget;
         MainSettingsWidget* m_settings;
-        welcome_screen* m_welcome_screen;
+        WelcomeScreen* m_welcome_screen;
         QHBoxLayout* m_tool_bar_layout;
         QToolBar* m_left_tool_bar;
         QToolBar* m_right_tool_bar;

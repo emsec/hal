@@ -5,13 +5,13 @@
 
 namespace hal
 {
-    dock_widget::dock_widget(QWidget* parent) : QFrame(parent),
+    DockWidget::DockWidget(QWidget* parent) : QFrame(parent),
         m_drag_state(nullptr)
     {
 
     }
 
-    void dock_widget::mousePressEvent(QMouseEvent* event)
+    void DockWidget::mousePressEvent(QMouseEvent* event)
     {
         // CHECK IF PRESS IS INSIDE THE RIGHT AREA
             init_drag(event->pos(), false);
@@ -23,7 +23,7 @@ namespace hal
     //    return false;
     }
 
-    void dock_widget::mouseMoveEvent(QMouseEvent* event)
+    void DockWidget::mouseMoveEvent(QMouseEvent* event)
     {
         if (!m_drag_state)
             return;
@@ -53,7 +53,7 @@ namespace hal
         //    return ret;
     }
 
-    void dock_widget::mouseReleaseEvent(QMouseEvent* event)
+    void DockWidget::mouseReleaseEvent(QMouseEvent* event)
     {
         if (event->button() == Qt::LeftButton && m_drag_state && !m_drag_state->nca)
         {
@@ -63,7 +63,7 @@ namespace hal
         event->ignore();
     }
 
-    void dock_widget::init_drag(const QPoint& pos, bool nca)
+    void DockWidget::init_drag(const QPoint& pos, bool nca)
     {
         if (m_drag_state)
             return;
@@ -81,7 +81,7 @@ namespace hal
         // IS STATE SUPPOSED TO BE STATIC ???
     }
 
-    void dock_widget::start_drag(bool group)
+    void DockWidget::start_drag(bool group)
     {
         Q_UNUSED(group);
         if (!m_drag_state || m_drag_state->dragging)
@@ -100,7 +100,7 @@ namespace hal
         m_drag_state->dragging = true;
     }
 
-    void dock_widget::end_drag(bool abort)
+    void DockWidget::end_drag(bool abort)
     {
         Q_UNUSED(abort);
         releaseMouse();

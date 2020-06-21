@@ -2,12 +2,12 @@
 
 namespace hal
 {
-    splitter::splitter(Qt::Orientation orientation, QWidget* parent) : QSplitter(orientation, parent)
+    Splitter::Splitter(Qt::Orientation orientation, QWidget* parent) : QSplitter(orientation, parent)
     {
         setHandleWidth(1);
     }
 
-    bool splitter::unused()
+    bool Splitter::unused()
     {
         for (int i = 0; i < count(); i++)
         {

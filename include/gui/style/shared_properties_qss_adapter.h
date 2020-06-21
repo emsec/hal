@@ -27,7 +27,7 @@
 
 namespace hal
 {
-    class shared_properties_qss_adapter : public QWidget
+    class SharedPropertiesQssAdapter : public QWidget
     {
         Q_OBJECT
         Q_PROPERTY(QString open_icon_path READ open_icon_path WRITE set_open_icon_path)
@@ -49,8 +49,8 @@ namespace hal
         Q_PROPERTY(QString settings_icon_style READ settings_icon_style WRITE set_settings_icon_style)
 
     public:
-        explicit shared_properties_qss_adapter(QWidget* parent = nullptr);
-        static const shared_properties_qss_adapter* instance();
+        explicit SharedPropertiesQssAdapter(QWidget* parent = nullptr);
+        static const SharedPropertiesQssAdapter* instance();
 
         void repolish();
 
