@@ -327,13 +327,7 @@ hal--Toolbar {
     min-height : 24px;
     max-height : 24px;
     border     : 0px solid black; /* HACKFIX FOR MAC, REMOVE LATER */
-}
-
-hal--double_toolbar {
-    background : #273138;
-    min-height : 24px;
-    max-height : 24px;
-}
+}w
 
 hal--Searchbar {
     background-color            : #25292D /*rgb(25, 28, 29)*/;
@@ -1393,7 +1387,7 @@ qproperty-timestamp_icon_style: "all->#FFC30B";
 qproperty-timestamp_icon_path: ":/icons/clock";
 }
 
-hal--main_window {
+hal--MainWindow {
 qproperty-hal_icon_style: "";
 qproperty-hal_icon_path: ":/icons/hal";
 

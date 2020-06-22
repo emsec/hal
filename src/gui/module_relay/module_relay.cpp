@@ -7,7 +7,7 @@ namespace hal
 {
     ModuleRelay::ModuleRelay(QObject* parent) : QObject(parent), m_model(new ModuleModel())
     {
-        connect(&g_NetlistRelay, &NetlistRelay::module_event, this, &ModuleRelay::handle_module_event);
+        connect(&g_netlist_relay, &NetlistRelay::module_event, this, &ModuleRelay::handle_module_event);
     }
 
     void ModuleRelay::set_module_color(const u32 id, const QColor& color)

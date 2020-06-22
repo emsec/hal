@@ -35,7 +35,7 @@ namespace hal
         for (const u32& id : m_context->modules())
         {
             GraphicsNode::visuals v;
-            v.main_color = g_NetlistRelay.get_module_color(id);
+            v.main_color = g_netlist_relay.get_module_color(id);
             v.visible = true;
             m_shading.module_visuals.insert(id, v);
         }
@@ -51,7 +51,7 @@ namespace hal
                 assert(m);
 
                 GraphicsNode::visuals v;
-                v.main_color = g_NetlistRelay.get_module_color(m->get_id());
+                v.main_color = g_netlist_relay.get_module_color(m->get_id());
                 v.visible = true;
                 m_shading.gate_visuals.insert(id, v);
             }

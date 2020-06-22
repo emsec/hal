@@ -112,27 +112,27 @@ namespace hal
         connect(m_input_ports_button, &QPushButton::clicked, this, &ModuleDetailsWidget::handle_buttons_clicked);
         connect(m_output_ports_button, &QPushButton::clicked, this, &ModuleDetailsWidget::handle_buttons_clicked);
 
-        connect(&g_NetlistRelay, &NetlistRelay::netlist_marked_global_input, this, &ModuleDetailsWidget::handle_netlist_marked_global_input);
-        connect(&g_NetlistRelay, &NetlistRelay::netlist_marked_global_output, this, &ModuleDetailsWidget::handle_netlist_marked_global_output);
-        connect(&g_NetlistRelay, &NetlistRelay::netlist_marked_global_inout, this, &ModuleDetailsWidget::handle_netlist_marked_global_inout);
-        connect(&g_NetlistRelay, &NetlistRelay::netlist_unmarked_global_input, this, &ModuleDetailsWidget::handle_netlist_unmarked_global_input);
-        connect(&g_NetlistRelay, &NetlistRelay::netlist_unmarked_global_output, this, &ModuleDetailsWidget::handle_netlist_unmarked_global_output);
-        connect(&g_NetlistRelay, &NetlistRelay::netlist_unmarked_global_inout, this, &ModuleDetailsWidget::handle_netlist_unmarked_global_inout);
+        connect(&g_netlist_relay, &NetlistRelay::netlist_marked_global_input, this, &ModuleDetailsWidget::handle_netlist_marked_global_input);
+        connect(&g_netlist_relay, &NetlistRelay::netlist_marked_global_output, this, &ModuleDetailsWidget::handle_netlist_marked_global_output);
+        connect(&g_netlist_relay, &NetlistRelay::netlist_marked_global_inout, this, &ModuleDetailsWidget::handle_netlist_marked_global_inout);
+        connect(&g_netlist_relay, &NetlistRelay::netlist_unmarked_global_input, this, &ModuleDetailsWidget::handle_netlist_unmarked_global_input);
+        connect(&g_netlist_relay, &NetlistRelay::netlist_unmarked_global_output, this, &ModuleDetailsWidget::handle_netlist_unmarked_global_output);
+        connect(&g_netlist_relay, &NetlistRelay::netlist_unmarked_global_inout, this, &ModuleDetailsWidget::handle_netlist_unmarked_global_inout);
 
-        connect(&g_NetlistRelay, &NetlistRelay::module_name_changed, this, &ModuleDetailsWidget::handle_module_name_changed);
-        connect(&g_NetlistRelay, &NetlistRelay::module_submodule_added, this, &ModuleDetailsWidget::handle_submodule_added);
-        connect(&g_NetlistRelay, &NetlistRelay::module_submodule_removed, this, &ModuleDetailsWidget::handle_submodule_removed);
-        connect(&g_NetlistRelay, &NetlistRelay::module_gate_assigned, this, &ModuleDetailsWidget::handle_module_gate_assigned);
-        connect(&g_NetlistRelay, &NetlistRelay::module_gate_removed, this, &ModuleDetailsWidget::handle_module_gate_removed);
-        connect(&g_NetlistRelay, &NetlistRelay::module_input_port_name_changed, this, &ModuleDetailsWidget::handle_module_input_port_name_changed);
-        connect(&g_NetlistRelay, &NetlistRelay::module_output_port_name_changed, this, &ModuleDetailsWidget::handle_module_output_port_name_changed);
-        connect(&g_NetlistRelay, &NetlistRelay::module_type_changed, this, &ModuleDetailsWidget::handle_module_type_changed);
+        connect(&g_netlist_relay, &NetlistRelay::module_name_changed, this, &ModuleDetailsWidget::handle_module_name_changed);
+        connect(&g_netlist_relay, &NetlistRelay::module_submodule_added, this, &ModuleDetailsWidget::handle_submodule_added);
+        connect(&g_netlist_relay, &NetlistRelay::module_submodule_removed, this, &ModuleDetailsWidget::handle_submodule_removed);
+        connect(&g_netlist_relay, &NetlistRelay::module_gate_assigned, this, &ModuleDetailsWidget::handle_module_gate_assigned);
+        connect(&g_netlist_relay, &NetlistRelay::module_gate_removed, this, &ModuleDetailsWidget::handle_module_gate_removed);
+        connect(&g_netlist_relay, &NetlistRelay::module_input_port_name_changed, this, &ModuleDetailsWidget::handle_module_input_port_name_changed);
+        connect(&g_netlist_relay, &NetlistRelay::module_output_port_name_changed, this, &ModuleDetailsWidget::handle_module_output_port_name_changed);
+        connect(&g_netlist_relay, &NetlistRelay::module_type_changed, this, &ModuleDetailsWidget::handle_module_type_changed);
 
-        connect(&g_NetlistRelay, &NetlistRelay::net_name_changed, this, &ModuleDetailsWidget::handle_net_name_changed);
-        connect(&g_NetlistRelay, &NetlistRelay::net_source_added, this, &ModuleDetailsWidget::handle_net_source_added);
-        connect(&g_NetlistRelay, &NetlistRelay::net_source_removed, this, &ModuleDetailsWidget::handle_net_source_removed);
-        connect(&g_NetlistRelay, &NetlistRelay::net_destination_added, this, &ModuleDetailsWidget::handle_net_destination_added);
-        connect(&g_NetlistRelay, &NetlistRelay::net_destination_removed, this, &ModuleDetailsWidget::handle_net_destination_removed);
+        connect(&g_netlist_relay, &NetlistRelay::net_name_changed, this, &ModuleDetailsWidget::handle_net_name_changed);
+        connect(&g_netlist_relay, &NetlistRelay::net_source_added, this, &ModuleDetailsWidget::handle_net_source_added);
+        connect(&g_netlist_relay, &NetlistRelay::net_source_removed, this, &ModuleDetailsWidget::handle_net_source_removed);
+        connect(&g_netlist_relay, &NetlistRelay::net_destination_added, this, &ModuleDetailsWidget::handle_net_destination_added);
+        connect(&g_netlist_relay, &NetlistRelay::net_destination_removed, this, &ModuleDetailsWidget::handle_net_destination_removed);
     }
 
     void ModuleDetailsWidget::update(const u32 module_id)

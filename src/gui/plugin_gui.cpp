@@ -46,14 +46,14 @@ namespace hal
     KeybindManager g_keybind_manager;
 
     WindowManager* g_window_manager;
-    NotificationManager* g_NotificationManager;
+    NotificationManager* g_notification_manager;
 
     HalContentManager* g_content_manager = nullptr;
 
     std::shared_ptr<Netlist> g_netlist = nullptr;
 
-    NetlistRelay g_NetlistRelay;
-    PluginRelay g_PluginRelay;
+    NetlistRelay g_netlist_relay;
+    PluginRelay g_plugin_relay;
     SelectionRelay g_selection_relay;
 
     FileStatusManager g_file_status_manager;
@@ -82,7 +82,7 @@ namespace hal
 
     static void cleanup()
     {
-        delete g_NotificationManager;
+        delete g_notification_manager;
         //    delete g_window_manager;
     }
 
@@ -185,7 +185,7 @@ namespace hal
         qRegisterMetaType<spdlog::level::level_enum>("spdlog::level::level_enum");
 
         //    g_window_manager       = new WindowManager();
-        g_NotificationManager = new NotificationManager();
+        g_notification_manager = new NotificationManager();
 
         g_thread_pool = new ThreadPool();
 

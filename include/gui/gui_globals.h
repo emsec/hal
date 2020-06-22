@@ -48,14 +48,14 @@ namespace hal
     extern QSettings g_gui_state;
 
     extern WindowManager* g_window_manager;
-    extern NotificationManager* g_NotificationManager;
+    extern NotificationManager* g_notification_manager;
 
     extern HalContentManager* g_content_manager;
 
     extern std::shared_ptr<Netlist> g_netlist;
 
-    extern NetlistRelay g_NetlistRelay;
-    extern PluginRelay g_PluginRelay;
+    extern NetlistRelay g_netlist_relay;
+    extern PluginRelay g_plugin_relay;
     extern SelectionRelay g_selection_relay;
     extern SettingsRelay g_settings_relay;
 

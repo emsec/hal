@@ -12,8 +12,8 @@ namespace hal
 {
     LoadedPluginsWidget::LoadedPluginsWidget(QWidget* parent) : QScrollArea(parent), m_container(new QFrame()), m_layout(new QVBoxLayout()), m_spacer(new QFrame())
     {
-        connect(&g_PluginRelay, &PluginRelay::plugin_loaded, this, &LoadedPluginsWidget::handle_plugin_loaded);
-        connect(&g_PluginRelay, &PluginRelay::plugin_unloaded, this, &LoadedPluginsWidget::handle_plugin_unloaded);
+        connect(&g_plugin_relay, &PluginRelay::plugin_loaded, this, &LoadedPluginsWidget::handle_plugin_loaded);
+        connect(&g_plugin_relay, &PluginRelay::plugin_unloaded, this, &LoadedPluginsWidget::handle_plugin_unloaded);
 
         m_container->setObjectName("container");
 

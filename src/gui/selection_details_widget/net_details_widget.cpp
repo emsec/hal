@@ -145,13 +145,13 @@ namespace hal
         m_source_pins_table->viewport()->installEventFilter(this);
 
         //NetlistRelay connections
-        connect(&g_NetlistRelay, &NetlistRelay::net_removed, this, &NetDetailsWidget::handle_net_removed);
-        connect(&g_NetlistRelay, &NetlistRelay::net_name_changed, this, &NetDetailsWidget::handle_net_name_changed);
-        connect(&g_NetlistRelay, &NetlistRelay::net_source_added, this, &NetDetailsWidget::handle_net_source_added);
-        connect(&g_NetlistRelay, &NetlistRelay::net_source_removed, this, &NetDetailsWidget::handle_net_source_removed);
-        connect(&g_NetlistRelay, &NetlistRelay::net_destination_added, this, &NetDetailsWidget::handle_net_destination_added);
-        connect(&g_NetlistRelay, &NetlistRelay::net_destination_removed, this, &NetDetailsWidget::handle_net_destination_removed);
-        connect(&g_NetlistRelay, &NetlistRelay::gate_name_changed, this, &NetDetailsWidget::handle_gate_name_changed);
+        connect(&g_netlist_relay, &NetlistRelay::net_removed, this, &NetDetailsWidget::handle_net_removed);
+        connect(&g_netlist_relay, &NetlistRelay::net_name_changed, this, &NetDetailsWidget::handle_net_name_changed);
+        connect(&g_netlist_relay, &NetlistRelay::net_source_added, this, &NetDetailsWidget::handle_net_source_added);
+        connect(&g_netlist_relay, &NetlistRelay::net_source_removed, this, &NetDetailsWidget::handle_net_source_removed);
+        connect(&g_netlist_relay, &NetlistRelay::net_destination_added, this, &NetDetailsWidget::handle_net_destination_added);
+        connect(&g_netlist_relay, &NetlistRelay::net_destination_removed, this, &NetDetailsWidget::handle_net_destination_removed);
+        connect(&g_netlist_relay, &NetlistRelay::gate_name_changed, this, &NetDetailsWidget::handle_gate_name_changed);
     }
 
     NetDetailsWidget::~NetDetailsWidget()

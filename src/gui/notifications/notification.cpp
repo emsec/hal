@@ -68,6 +68,6 @@ namespace hal
 
     void Notification::cleanup()
     {
-        g_NotificationManager->remove(this);
+        g_notification_manager->remove(this);
     }
 }
