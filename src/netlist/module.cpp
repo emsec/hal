@@ -379,9 +379,9 @@ namespace hal
         module_event_handler::notify(module_event_handler::event::output_port_name_changed, shared_from_this(), output_net->get_id());
     }
 
-    std::string Module::get_input_port_name(const std::shared_ptr<Net>& input_net)
+    std::string Module::get_input_port_name(const std::shared_ptr<Net>& net)
     {
-        if (input_net == nullptr)
+        if (net == nullptr)
         {
             log_warning("module", "nullptr given as input net of module {} with id {}.", this->get_name(), this->get_id());
             return "";
@@ -389,55 +389,82 @@ namespace hal
 
         auto input_nets = get_input_nets();
 
-        if (auto it = input_nets.find(input_net); it == input_nets.end())
+        if (auto it = input_nets.find(net); it == input_nets.end())
         {
-            log_warning("module", "net '{}' with id {} is not an input net of module '{}' with id {}.", input_net->get_name(), input_net->get_id(), this->get_name(), this->get_id());
+            log_warning("module", "net '{}' with id {} is not an input net of module '{}' with id {}.", net->get_name(), net->get_id(), this->get_name(), this->get_id());
             return "";
         }
 
         std::string port_name;
-        if (auto it = m_input_net_to_port_name.find(input_net); it != m_input_net_to_port_name.end())
+        if (auto it = m_input_net_to_port_name.find(net); it != m_input_net_to_port_name.end())
         {
             port_name = it->second;
         }
         else
         {
             port_name = "I(" + std::to_string(m_next_input_port_id++) + ")";
-            m_named_input_nets.insert(input_net);
-            m_input_net_to_port_name.emplace(input_net, port_name);
+            m_named_input_nets.insert(net);
+            m_input_net_to_port_name.emplace(net, port_name);
         }
 
         return port_name;
     }
 
-    std::string Module::get_output_port_name(const std::shared_ptr<Net>& output_net)
+    std::string Module::get_output_port_name(const std::shared_ptr<Net>& net)
     {
-        if (output_net == nullptr)
+        if (net == nullptr)
         {
             log_warning("module", "nullptr given as output net of module {} with id {}.", this->get_name(), this->get_id());
             return "";
         }
         auto output_nets = get_output_nets();
 
-        if (auto it = output_nets.find(output_net); it == output_nets.end())
+        if (auto it = output_nets.find(net); it == output_nets.end())
         {
-            log_warning("module", "net '{}' with id {} is not an output net of module '{}' with id {}.", output_net->get_name(), output_net->get_id(), this->get_name(), this->get_id());
+            log_warning("module", "net '{}' with id {} is not an output net of module '{}' with id {}.", net->get_name(), net->get_id(), this->get_name(), this->get_id());
             return "";
         }
 
         std::string port_name;
-        if (auto it = m_output_net_to_port_name.find(output_net); it != m_output_net_to_port_name.end())
+        if (auto it = m_output_net_to_port_name.find(net); it != m_output_net_to_port_name.end())
         {
             port_name = it->second;
         }
         else
         {
             port_name = "O(" + std::to_string(m_next_output_port_id++) + ")";
-            m_named_output_nets.insert(output_net);
-            m_output_net_to_port_name.emplace(output_net, port_name);
+            m_named_output_nets.insert(net);
         }
 
         return port_name;
+    }
+
+    std::shared_ptr<Net> Module::get_input_port_net(const std::string& port_name)
+    {
+        for (const auto& [net, name] : m_input_net_to_port_name)
+        {
+            if (name == port_name)
+            {
+                return net;
+            }
+        }
+
+        log_warning("module", "port '{}' is not an input port of module '{}' with id {}.", port_name, this->get_name(), this->get_id());
+        return nullptr;
+    }
+
+    std::shared_ptr<Net> Module::get_output_port_net(const std::string& port_name)
+    {
+        for (const auto& [net, name] : m_output_net_to_port_name)
+        {
+            if (name == port_name)
+            {
+                return net;
+            }
+        }
+
+        log_warning("module", "port '{}' is not an output port of module '{}' with id {}.", port_name, this->get_name(), this->get_id());
+        return nullptr;
     }
 
     const std::map<std::shared_ptr<Net>, std::string>& Module::get_input_port_names()

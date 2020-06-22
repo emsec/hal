@@ -177,18 +177,34 @@ namespace hal
         /**
          * Get the name of the port corresponding to the specified input net.
          *
-         * @param[in] input_net - The input net.
+         * @param[in] net - The input net.
          * @returns The port name.
          */
-        std::string get_input_port_name(const std::shared_ptr<Net>& input_net);
+        std::string get_input_port_name(const std::shared_ptr<Net>& net);
 
         /**
          * Get the name of the port corresponding to the specified output net.
          *
-         * @param[in] output_net - The output net.
+         * @param[in] net - The output net.
          * @returns The port name.
          */
-        std::string get_output_port_name(const std::shared_ptr<Net>& output_net);
+        std::string get_output_port_name(const std::shared_ptr<Net>& net);
+
+        /**
+         * Get the input net of the port corresponding to the specified port name.
+         *
+         * @param[in] port_name - The input port name.
+         * @returns The input net.
+         */
+        std::shared_ptr<Net> get_input_port_net(const std::string& port_name);
+
+        /**
+         * Get the output net of the port corresponding to the specified port name.
+         *
+         * @param[in] port_name - The output port name.
+         * @returns The output net.
+         */
+        std::shared_ptr<Net> get_output_port_net(const std::string& port_name);
 
         /**
          * Get the mapping of all input nets to their corresponding port names.
