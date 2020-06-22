@@ -7,10 +7,10 @@
 #include "gui/file_manager/file_manager.h"
 #include "gui/gui_def.h"
 #include "gui/gui_globals.h"
-#include "gui/hal_action/hal_action.h"
-#include "gui/hal_content_manager/hal_content_manager.h"
-#include "gui/hal_logger/hal_logger_widget.h"
-#include "gui/hal_plugin_access_manager/hal_plugin_access_manager.h"
+#include "gui/action/action.h"
+#include "gui/content_manager/content_manager.h"
+#include "gui/logger/logger_widget.h"
+#include "gui/plugin_access_manager/plugin_access_manager.h"
 #include "gui/main_window/about_dialog.h"
 #include "gui/plugin_management/plugin_schedule_manager.h"
 #include "gui/plugin_management/plugin_schedule_widget.h"
@@ -44,7 +44,7 @@
 
 namespace hal
 {
-    MainWindow::MainWindow(QWidget* parent) : QWidget(parent), m_schedule_widget(new PluginScheduleWidget()), m_action_schedule(new HalAction(this)), m_action_content(new HalAction(this))
+    MainWindow::MainWindow(QWidget* parent) : QWidget(parent), m_schedule_widget(new PluginScheduleWidget()), m_action_schedule(new Action(this)), m_action_content(new Action(this))
     {
         ensurePolished();    // ADD REPOLISH METHOD
         connect(FileManager::get_instance(), &FileManager::file_opened, this, &MainWindow::handle_file_opened);
@@ -117,15 +117,15 @@ namespace hal
 
         setLocale(QLocale(QLocale::English, QLocale::UnitedStates));
 
-        m_action_new          = new HalAction(this);
-        m_action_open         = new HalAction(this);
-        m_action_save         = new HalAction(this);
-        m_action_about        = new HalAction(this);
-        m_action_run_schedule = new HalAction(this);
-        //m_action_content      = new HalAction(this);
-        m_action_settings = new HalAction(this);
-        m_action_close    = new HalAction(this);
-        m_action_content  = new HalAction(this);
+        m_action_new          = new Action(this);
+        m_action_open         = new Action(this);
+        m_action_save         = new Action(this);
+        m_action_about        = new Action(this);
+        m_action_run_schedule = new Action(this);
+        //m_action_content      = new Action(this);
+        m_action_settings = new Action(this);
+        m_action_close    = new Action(this);
+        m_action_content  = new Action(this);
 
         //    //m_open_icon_style = "all->#fcfcb0";
         //    //m_open_icon_style = "all->#f2e4a4";
@@ -208,21 +208,21 @@ namespace hal
 
         g_python_context = std::make_unique<PythonContext>();
 
-        g_content_manager = new HalContentManager(this);
+        g_content_manager = new ContentManager(this);
 
-        connect(m_action_new, &HalAction::triggered, this, &MainWindow::handle_action_new);
-        connect(m_action_open, &HalAction::triggered, this, &MainWindow::handle_action_open);
-        connect(m_action_about, &HalAction::triggered, m_AboutDialog, &AboutDialog::exec);
-        connect(m_action_schedule, &HalAction::triggered, this, &MainWindow::toggle_schedule);
-        connect(m_action_settings, &HalAction::triggered, this, &MainWindow::toggle_settings);
+        connect(m_action_new, &Action::triggered, this, &MainWindow::handle_action_new);
+        connect(m_action_open, &Action::triggered, this, &MainWindow::handle_action_open);
+        connect(m_action_about, &Action::triggered, m_AboutDialog, &AboutDialog::exec);
+        connect(m_action_schedule, &Action::triggered, this, &MainWindow::toggle_schedule);
+        connect(m_action_settings, &Action::triggered, this, &MainWindow::toggle_settings);
         connect(m_settings, &MainSettingsWidget::close, this, &MainWindow::close_settings);
-        connect(m_action_save, &HalAction::triggered, this, &MainWindow::handle_save_triggered);
+        connect(m_action_save, &Action::triggered, this, &MainWindow::handle_save_triggered);
         //debug
-        connect(m_action_close, &HalAction::triggered, this, &MainWindow::handle_action_closed);
+        connect(m_action_close, &Action::triggered, this, &MainWindow::handle_action_closed);
 
-        connect(m_action_run_schedule, &HalAction::triggered, PluginScheduleManager::get_instance(), &PluginScheduleManager::run_schedule);
+        connect(m_action_run_schedule, &Action::triggered, PluginScheduleManager::get_instance(), &PluginScheduleManager::run_schedule);
 
-        connect(this, &MainWindow::save_triggered, g_content_manager, &HalContentManager::handle_save_triggered);
+        connect(this, &MainWindow::save_triggered, g_content_manager, &ContentManager::handle_save_triggered);
 
         restore_state();
 
@@ -410,8 +410,8 @@ namespace hal
         //    plugins.append(name);
         //    QFuture<void> future = QtConcurrent::run(run_main, document, plugins);
 
-        auto args            = hal_plugin_access_manager::request_arguments(name.toStdString());
-        QFuture<void> future = QtConcurrent::run(hal_plugin_access_manager::run_plugin, name.toStdString(), &args);
+        auto args            = plugin_access_manager::request_arguments(name.toStdString());
+        QFuture<void> future = QtConcurrent::run(plugin_access_manager::run_plugin, name.toStdString(), &args);
     }
 
     // GENERALIZE TOGGLE METHODS

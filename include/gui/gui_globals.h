@@ -27,7 +27,7 @@
 
 #include "file_status_manager/file_status_manager.h"
 #include "gui/graph_widget/graph_context_manager.h"
-#include "gui/hal_content_manager/hal_content_manager.h"
+#include "gui/content_manager/content_manager.h"
 #include "gui/netlist_relay/netlist_relay.h"
 #include "gui/notifications/notification_manager.h"
 #include "gui/plugin_management/plugin_relay.h"
@@ -50,7 +50,7 @@ namespace hal
     extern WindowManager* g_window_manager;
     extern NotificationManager* g_notification_manager;
 
-    extern HalContentManager* g_content_manager;
+    extern ContentManager* g_content_manager;
 
     extern std::shared_ptr<Netlist> g_netlist;
 

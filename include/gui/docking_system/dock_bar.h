@@ -24,7 +24,7 @@
 #pragma once
 
 #include "docking_system/dock_button.h"
-#include "hal_widget/hal_widget.h"
+#include "widget/widget.h"
 
 #include <QFrame>
 #include <QList>
@@ -32,7 +32,7 @@
 
 namespace hal
 {
-    class HalContentAnchor;
+    class ContentAnchor;
     class ContentWidget;
 
     class DockBar : public QFrame
@@ -51,7 +51,7 @@ namespace hal
         QSize sizeHint() const Q_DECL_OVERRIDE;
         QSize minimumSizeHint() const Q_DECL_OVERRIDE;
 
-        void set_anchor(HalContentAnchor* anchor);
+        void set_anchor(ContentAnchor* anchor);
         void set_autohide(bool autohide);
         bool unused();
         int count();
@@ -77,7 +77,7 @@ namespace hal
         void handle_drag_end();
 
     private:
-        HalContentAnchor* m_anchor;
+        ContentAnchor* m_anchor;
         QList<DockButton*> m_buttons;
         button_orientation m_button_orientation;
         int m_button_offset  = 0;

@@ -23,71 +23,46 @@
 
 #pragma once
 
-#include "widget/widget.h"
-
-#include <QIcon>
-#include <QList>
-
-class QShortcut;
-class QVBoxLayout;
+#include "core/plugin_interface_cli.h"
+#include "core/program_arguments.h"
+#include <QBoxLayout>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QFormLayout>
+#include <QLabel>
+#include <QLineEdit>
+#include <QPushButton>
+#include <QString>
+#include <string>
+#include <utility>
+#include <vector>
 
 namespace hal
 {
-    class ContentAnchor;
-    class Toolbar;
-
-    class ContentWidget : public Widget
+    class ExtendedCliDialog : public QDialog
     {
         Q_OBJECT
-        Q_PROPERTY(QString icon_style READ icon_style WRITE set_icon_style)
-        Q_PROPERTY(QString icon_path READ icon_path WRITE set_icon_path)
 
     public:
-        explicit ContentWidget(QString name, QWidget* parent = nullptr);
+        ExtendedCliDialog(QString plugin_name, QWidget* parent = 0);
 
-        virtual void setup_toolbar(Toolbar* Toolbar);
-        virtual QList<QShortcut*> create_shortcuts();
+        ProgramArguments get_args();
 
-        void repolish();
-
-        QString name();
-        QIcon icon();
-
-        void set_anchor(ContentAnchor* anchor);
-        void set_icon(QIcon icon);
-
-        QString icon_style();
-        QString icon_path();
-
-        void set_icon_style(const QString& style);
-        void set_icon_path(const QString& path);
-
-    Q_SIGNALS:
-        void removed();
-        void detached();
-        void reattached();
-        void opened();
-        void closed();
-
-    public Q_SLOTS:
-        void remove();
-        void detach();
-        void reattach();
-        void open();
-        void close();
+    private Q_SLOTS:
+        void parse_arguments();
 
     private:
-        void closeEvent(QCloseEvent* event);
-
-        QString m_name;
-        QIcon m_icon;
-        ContentAnchor* m_anchor = nullptr;
-        int m_index_priority         = 0;
-
-        QString m_icon_style;
-        QString m_icon_path;
-
-    protected:
+        void setup(std::string plugin_name);
         QVBoxLayout* m_content_layout;
+        QFormLayout* m_form_layout;
+        QLabel* m_status_message;
+        QDialogButtonBox* m_button_box;
+
+        ProgramArguments m_args;
+        std::shared_ptr<CLIPluginInterface> m_plugin;
+
+        std::vector<std::pair<QPushButton*, QLineEdit*>> m_vector;
+
+        char** m_argv;
     };
 }

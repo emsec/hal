@@ -6,8 +6,8 @@
 #include "style/style.h"
 #include "style/shared_properties_qss_adapter.h"
 #include "welcome_screen/welcome_screen.h"
-#include "window_manager/hal_window.h"
-#include "window_manager/hal_window_toolbar.h"
+#include "window_manager/window.h"
+#include "window_manager/window_toolbar.h"
 
 #include <QAction>
 #include <QShortcut>
@@ -63,7 +63,7 @@ namespace hal
 
     void WindowManager::add_window()
     {
-        HalWindow* window = new HalWindow(nullptr);
+        Window* window = new Window(nullptr);
         m_windows.append(window);
 
         if (!m_MainWindow)
@@ -72,7 +72,7 @@ namespace hal
         window->show();
     }
 
-    void WindowManager::remove_window(HalWindow* window)
+    void WindowManager::remove_window(Window* window)
     {
         if (!window)
             return;
@@ -90,7 +90,7 @@ namespace hal
         }
     }
 
-    void WindowManager::set_MainWindow(HalWindow* window)
+    void WindowManager::set_MainWindow(Window* window)
     {
         if (m_MainWindow)
             m_MainWindow->get_toolbar()->clear();
@@ -101,7 +101,7 @@ namespace hal
         // CHANGE TOOLBAR CONTENT DEPENDING ON APPLICATION STATE
         // ADD FANCY ANIMATION
         // WRITE OWN TOOLBAR CLASS BECAUSE QT CLASS SUCKS
-        HalWindowToolbar* t = window->get_toolbar();
+        WindowToolbar* t = window->get_toolbar();
 
         t->addAction(m_action_open_file);
         t->addAction(m_action_save);
@@ -116,17 +116,17 @@ namespace hal
 
     void WindowManager::lock_all()
     {
-        for (HalWindow*& window : m_windows)
+        for (Window*& window : m_windows)
             window->lock();
     }
 
     void WindowManager::unlock_all()
     {
-        for (HalWindow*& window : m_windows)
+        for (Window*& window : m_windows)
             window->unlock();
     }
 
-    void WindowManager::handle_window_close_request(HalWindow* window)
+    void WindowManager::handle_window_close_request(Window* window)
     {
         Q_UNUSED(window);
         if (m_static_windows)
@@ -154,7 +154,7 @@ namespace hal
 
         // UPDATE ICONS IN TOOLBAR
 
-        for (HalWindow*& window : m_windows)
+        for (Window*& window : m_windows)
             window->repolish();
     }
 

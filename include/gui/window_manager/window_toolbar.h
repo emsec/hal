@@ -23,71 +23,30 @@
 
 #pragma once
 
-#include "widget/widget.h"
+#include <QFrame>
 
-#include <QIcon>
-#include <QList>
-
-class QShortcut;
-class QVBoxLayout;
+class QActionEvent;
+class QHBoxLayout;
 
 namespace hal
 {
-    class ContentAnchor;
-    class Toolbar;
-
-    class ContentWidget : public Widget
+    class WindowToolbar : public QFrame
     {
         Q_OBJECT
-        Q_PROPERTY(QString icon_style READ icon_style WRITE set_icon_style)
-        Q_PROPERTY(QString icon_path READ icon_path WRITE set_icon_path)
 
     public:
-        explicit ContentWidget(QString name, QWidget* parent = nullptr);
+        explicit WindowToolbar(QWidget* parent = nullptr);
 
-        virtual void setup_toolbar(Toolbar* Toolbar);
-        virtual QList<QShortcut*> create_shortcuts();
+        void add_widget(QWidget* widget);
+        void add_spacer();
+        void clear();
 
         void repolish();
 
-        QString name();
-        QIcon icon();
-
-        void set_anchor(ContentAnchor* anchor);
-        void set_icon(QIcon icon);
-
-        QString icon_style();
-        QString icon_path();
-
-        void set_icon_style(const QString& style);
-        void set_icon_path(const QString& path);
-
-    Q_SIGNALS:
-        void removed();
-        void detached();
-        void reattached();
-        void opened();
-        void closed();
-
-    public Q_SLOTS:
-        void remove();
-        void detach();
-        void reattach();
-        void open();
-        void close();
+    protected:
+        void actionEvent(QActionEvent* event) Q_DECL_OVERRIDE;
 
     private:
-        void closeEvent(QCloseEvent* event);
-
-        QString m_name;
-        QIcon m_icon;
-        ContentAnchor* m_anchor = nullptr;
-        int m_index_priority         = 0;
-
-        QString m_icon_style;
-        QString m_icon_path;
-
-    protected:
-        QVBoxLayout* m_content_layout;
+        QHBoxLayout* m_layout;
     };
 }

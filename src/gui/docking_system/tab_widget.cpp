@@ -11,7 +11,7 @@
 namespace hal
 {
     TabWidget::TabWidget(QWidget* parent)
-        : HalWidget(parent), m_vertical_layout(new QVBoxLayout()), m_horizontal_layout(new QHBoxLayout()), m_dock_bar(new DockBar(Qt::Horizontal, button_orientation::horizontal, this)),
+        : Widget(parent), m_vertical_layout(new QVBoxLayout()), m_horizontal_layout(new QHBoxLayout()), m_dock_bar(new DockBar(Qt::Horizontal, button_orientation::horizontal, this)),
           m_left_toolbar(new Toolbar()), m_right_toolbar(new Toolbar()), m_current_widget(nullptr), m_action_detach(new QAction(this))
     {
         connect(m_action_detach, &QAction::triggered, this, &TabWidget::detach_current_widget);

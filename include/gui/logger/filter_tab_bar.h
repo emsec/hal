@@ -23,71 +23,33 @@
 
 #pragma once
 
-#include "widget/widget.h"
-
-#include <QIcon>
+#include "logger/filter_dialog.h"
 #include <QList>
-
-class QShortcut;
-class QVBoxLayout;
+#include <QTabBar>
+#include <QToolButton>
 
 namespace hal
 {
-    class ContentAnchor;
-    class Toolbar;
+    struct FilterItem;
 
-    class ContentWidget : public Widget
+    class FilterTabBar : public QTabBar
     {
         Q_OBJECT
-        Q_PROPERTY(QString icon_style READ icon_style WRITE set_icon_style)
-        Q_PROPERTY(QString icon_path READ icon_path WRITE set_icon_path)
 
     public:
-        explicit ContentWidget(QString name, QWidget* parent = nullptr);
+        FilterTabBar();
 
-        virtual void setup_toolbar(Toolbar* Toolbar);
-        virtual QList<QShortcut*> create_shortcuts();
+        ~FilterTabBar();
 
-        void repolish();
+        void addNewFilter(QString name, FilterItem* item);
 
-        QString name();
-        QIcon icon();
-
-        void set_anchor(ContentAnchor* anchor);
-        void set_icon(QIcon icon);
-
-        QString icon_style();
-        QString icon_path();
-
-        void set_icon_style(const QString& style);
-        void set_icon_path(const QString& path);
-
-    Q_SIGNALS:
-        void removed();
-        void detached();
-        void reattached();
-        void opened();
-        void closed();
-
-    public Q_SLOTS:
-        void remove();
-        void detach();
-        void reattach();
-        void open();
-        void close();
+        FilterItem* get_current_filter();
 
     private:
-        void closeEvent(QCloseEvent* event);
+        QToolButton m_button;
 
-        QString m_name;
-        QIcon m_icon;
-        ContentAnchor* m_anchor = nullptr;
-        int m_index_priority         = 0;
+        QList<FilterItem*> m_filter_items;
 
-        QString m_icon_style;
-        QString m_icon_path;
-
-    protected:
-        QVBoxLayout* m_content_layout;
+        FilterDialog m_dialog;
     };
 }

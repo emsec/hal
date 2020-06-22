@@ -1,7 +1,7 @@
 #include "content_widget/content_widget.h"
 
 #include "gui_utils/graphics.h"
-#include "hal_content_anchor/hal_content_anchor.h"
+#include "content_anchor/content_anchor.h"
 #include "toolbar/toolbar.h"
 
 #include <QShortcut>
@@ -10,7 +10,7 @@
 
 namespace hal
 {
-    ContentWidget::ContentWidget(QString name, QWidget* parent) : HalWidget(parent), m_name(name), m_content_layout(new QVBoxLayout())
+    ContentWidget::ContentWidget(QString name, QWidget* parent) : Widget(parent), m_name(name), m_content_layout(new QVBoxLayout())
     {
         m_content_layout->setContentsMargins(0, 0, 0, 0);
         m_content_layout->setSpacing(0);
@@ -82,7 +82,7 @@ namespace hal
         return m_icon;
     }
 
-    void ContentWidget::set_anchor(HalContentAnchor* anchor)
+    void ContentWidget::set_anchor(ContentAnchor* anchor)
     {
         m_anchor = anchor;
     }

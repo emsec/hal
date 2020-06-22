@@ -3,7 +3,7 @@
 #include "core/plugin_interface_cli.h"
 #include "core/plugin_manager.h"
 #include "core/program_arguments.h"
-#include "hal_plugin_access_manager/hal_plugin_access_manager.h"
+#include "plugin_access_manager/plugin_access_manager.h"
 #include "plugin_management/plugin_arguments_widget.h"
 
 namespace hal
@@ -85,7 +85,7 @@ namespace hal
         for (int i = 0; i < m_schedule.length(); i++)
         {
             ProgramArguments args = get_program_arguments(i);
-            hal_plugin_access_manager::run_plugin(m_schedule.at(i).first.toStdString(), &args);
+            plugin_access_manager::run_plugin(m_schedule.at(i).first.toStdString(), &args);
         }
     }
 

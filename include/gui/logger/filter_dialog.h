@@ -23,71 +23,79 @@
 
 #pragma once
 
-#include "widget/widget.h"
-
-#include <QIcon>
-#include <QList>
-
-class QShortcut;
-class QVBoxLayout;
+#include "logger/filter_item.h"
+#include <QComboBox>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QFormLayout>
+#include <QLabel>
+#include <QLayout>
+#include <QLineEdit>
 
 namespace hal
 {
-    class ContentAnchor;
-    class Toolbar;
+    class FilterTabBar;
 
-    class ContentWidget : public Widget
+    class FilterDialog : public QDialog
     {
         Q_OBJECT
-        Q_PROPERTY(QString icon_style READ icon_style WRITE set_icon_style)
-        Q_PROPERTY(QString icon_path READ icon_path WRITE set_icon_path)
 
     public:
-        explicit ContentWidget(QString name, QWidget* parent = nullptr);
+        FilterDialog(FilterTabBar* caller, QWidget* parent = 0);
 
-        virtual void setup_toolbar(Toolbar* Toolbar);
-        virtual QList<QShortcut*> create_shortcuts();
+        ~FilterDialog();
 
-        void repolish();
-
-        QString name();
-        QIcon icon();
-
-        void set_anchor(ContentAnchor* anchor);
-        void set_icon(QIcon icon);
-
-        QString icon_style();
-        QString icon_path();
-
-        void set_icon_style(const QString& style);
-        void set_icon_path(const QString& path);
+        void append_filter_item(QString name, FilterItem* item);
 
     Q_SIGNALS:
-        void removed();
-        void detached();
-        void reattached();
-        void opened();
-        void closed();
+
+        void input_valid();
 
     public Q_SLOTS:
-        void remove();
-        void detach();
-        void reattach();
-        void open();
-        void close();
+
+        void verify();
+
+        void reset(int);
 
     private:
-        void closeEvent(QCloseEvent* event);
+        class filter_combo_box : public QComboBox
+        {
+        public:
+            filter_combo_box(QWidget* parent = 0);
 
-        QString m_name;
-        QIcon m_icon;
-        ContentAnchor* m_anchor = nullptr;
-        int m_index_priority         = 0;
+            FilterItem::rule get_data();
+        };
 
-        QString m_icon_style;
-        QString m_icon_path;
+        FilterTabBar* m_caller;
 
-    protected:
-        QVBoxLayout* m_content_layout;
+        QVBoxLayout m_content_layout;
+
+        QFormLayout m_form_layout;
+
+        QGridLayout m_grid_layout;
+
+        QLineEdit m_name;
+
+        QLineEdit m_keywords;
+
+        QLineEdit m_regex;
+
+        QLabel m_status_message;
+
+        filter_combo_box m_trace_box;
+
+        filter_combo_box m_debug_box;
+
+        filter_combo_box m_info_box;
+
+        filter_combo_box m_warning_box;
+
+        filter_combo_box m_error_box;
+
+        filter_combo_box m_critical_box;
+
+        filter_combo_box m_default_box;
+
+        QDialogButtonBox m_button_box;
     };
 }

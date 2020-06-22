@@ -30,7 +30,7 @@ class QAction;
 
 namespace hal
 {
-    class HalWindow;
+    class Window;
     class MainSettingsWidget;
     class PluginScheduleWidget;
     class WelcomeScreen;
@@ -46,8 +46,8 @@ namespace hal
         void setup();
 
         void add_window();
-        void remove_window(HalWindow* window);
-        void set_MainWindow(HalWindow* window);
+        void remove_window(Window* window);
+        void set_MainWindow(Window* window);
 
         void lock_all();
         void unlock_all();
@@ -55,7 +55,7 @@ namespace hal
         void save_layout(const QString& name);
         void restore_layout(const QString& name);
 
-        void handle_window_close_request(HalWindow* window);
+        void handle_window_close_request(Window* window);
 
         void repolish();
 
@@ -73,9 +73,9 @@ namespace hal
         void handle_action_about();
 
     private:
-        HalWindow* m_MainWindow;
+        Window* m_MainWindow;
 
-        QVector<HalWindow*> m_windows;
+        QVector<Window*> m_windows;
 
         bool m_static_windows;
         bool m_shared_minimize;

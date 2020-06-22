@@ -4,7 +4,7 @@
 #include "docking_system/content_drag_relay.h"
 #include "docking_system/dock_mime_data.h"
 #include "gui_globals.h"
-#include "hal_content_anchor/hal_content_anchor.h"
+#include "content_anchor/content_anchor.h"
 #include <QApplication>
 #include <QDrag>
 #include <QDragEnterEvent>
@@ -228,7 +228,7 @@ namespace hal
         return QSize(width, height());
     }
 
-    void DockBar::set_anchor(HalContentAnchor* anchor)
+    void DockBar::set_anchor(ContentAnchor* anchor)
     {
         m_anchor = anchor;
     }

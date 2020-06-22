@@ -23,41 +23,29 @@
 
 #pragma once
 
-#include "content_anchor/content_anchor.h"
-
-#include <QList>
-#include <QObject>
-
 namespace hal
 {
-    class DockBar;
-    class Splitter;
-    class ContentFrame;
     class ContentWidget;
 
-    class SplitterAnchor : public QObject, public ContentAnchor
+    class ContentAnchor
     {
-        Q_OBJECT
-
     public:
-        SplitterAnchor(DockBar* DockBar, Splitter* Splitter, QObject* parent = 0);
+        virtual void add(ContentWidget* widget, int index) = 0;
 
-        virtual void add(ContentWidget* widget, int index = -1) override;
-        virtual void remove(ContentWidget* widget) override;
-        virtual void detach(ContentWidget* widget) override;
-        virtual void reattach(ContentWidget* widget) override;
-        virtual void open(ContentWidget* widget) override;
-        virtual void close(ContentWidget* widget) override;
+        virtual void remove(ContentWidget* widget) = 0;
 
-        int count();
-        void remove_content();
+        virtual void detach(ContentWidget* widget) = 0;
 
-    Q_SIGNALS:
-        void content_changed();
+        virtual void reattach(ContentWidget* widget) = 0;
 
-    private:
-        DockBar* m_dock_bar;
-        Splitter* m_splitter;
-        QList<ContentFrame*> m_detached_frames;
+        virtual void open(ContentWidget* widget) = 0;
+
+        virtual void close(ContentWidget* widget) = 0;
+
+        virtual inline ~ContentAnchor() = 0;
     };
+
+    ContentAnchor::~ContentAnchor()
+    {
+    }
 }

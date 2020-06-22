@@ -16,7 +16,7 @@
 #include "gui/gui_def.h"
 #include "gui/gui_globals.h"
 #include "gui/gui_utils/netlist.h"
-#include "gui/hal_content_manager/hal_content_manager.h"
+#include "gui/content_manager/content_manager.h"
 #include "gui/overlay/dialog_overlay.h"
 #include "gui/toolbar/toolbar.h"
 #include "gui/graph_widget/items/nodes/modules/graphics_module.h"

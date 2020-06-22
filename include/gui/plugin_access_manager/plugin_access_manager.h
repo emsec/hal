@@ -23,41 +23,16 @@
 
 #pragma once
 
-#include "content_anchor/content_anchor.h"
-
-#include <QList>
-#include <QObject>
+#include "core/program_options.h"
+#include <core/program_options.h>
+#include <memory>
+#include <string>
 
 namespace hal
 {
-    class DockBar;
-    class Splitter;
-    class ContentFrame;
-    class ContentWidget;
-
-    class SplitterAnchor : public QObject, public ContentAnchor
+    namespace plugin_access_manager
     {
-        Q_OBJECT
-
-    public:
-        SplitterAnchor(DockBar* DockBar, Splitter* Splitter, QObject* parent = 0);
-
-        virtual void add(ContentWidget* widget, int index = -1) override;
-        virtual void remove(ContentWidget* widget) override;
-        virtual void detach(ContentWidget* widget) override;
-        virtual void reattach(ContentWidget* widget) override;
-        virtual void open(ContentWidget* widget) override;
-        virtual void close(ContentWidget* widget) override;
-
-        int count();
-        void remove_content();
-
-    Q_SIGNALS:
-        void content_changed();
-
-    private:
-        DockBar* m_dock_bar;
-        Splitter* m_splitter;
-        QList<ContentFrame*> m_detached_frames;
-    };
+        ProgramArguments request_arguments(const std::string plugin_name);
+        int run_plugin(const std::string plugin_name, ProgramArguments* args);
+    }    // namespace plugin_access_manager
 }

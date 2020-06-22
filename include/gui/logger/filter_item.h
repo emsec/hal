@@ -23,41 +23,41 @@
 
 #pragma once
 
-#include "content_anchor/content_anchor.h"
-
 #include <QList>
-#include <QObject>
+#include <QRegularExpression>
 
 namespace hal
 {
-    class DockBar;
-    class Splitter;
-    class ContentFrame;
-    class ContentWidget;
-
-    class SplitterAnchor : public QObject, public ContentAnchor
+    struct FilterItem
     {
-        Q_OBJECT
+        enum class rule
+        {
+            ShowAll = 0,
+            HideAll = 1,
+            Process = 2
+        };
 
-    public:
-        SplitterAnchor(DockBar* DockBar, Splitter* Splitter, QObject* parent = 0);
+        FilterItem(rule trace, rule debug, rule info, rule warning, rule error, rule critical, rule default_rule, QStringList& keywords, QRegularExpression& reg_ex)
+            : m_trace(trace), m_debug(debug), m_info(info), m_warning(warning), m_error(error), m_critical(critical), m_default(default_rule), m_keywords(keywords), m_reg_ex(reg_ex)
+        {
+        }
 
-        virtual void add(ContentWidget* widget, int index = -1) override;
-        virtual void remove(ContentWidget* widget) override;
-        virtual void detach(ContentWidget* widget) override;
-        virtual void reattach(ContentWidget* widget) override;
-        virtual void open(ContentWidget* widget) override;
-        virtual void close(ContentWidget* widget) override;
+        const rule m_trace;
 
-        int count();
-        void remove_content();
+        const rule m_debug;
 
-    Q_SIGNALS:
-        void content_changed();
+        const rule m_info;
 
-    private:
-        DockBar* m_dock_bar;
-        Splitter* m_splitter;
-        QList<ContentFrame*> m_detached_frames;
+        const rule m_warning;
+
+        const rule m_error;
+
+        const rule m_critical;
+
+        const rule m_default;
+
+        const QStringList m_keywords;
+
+        const QRegularExpression m_reg_ex;
     };
 }

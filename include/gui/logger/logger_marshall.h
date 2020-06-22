@@ -23,71 +23,38 @@
 
 #pragma once
 
-#include "widget/widget.h"
-
-#include <QIcon>
-#include <QList>
-
-class QShortcut;
-class QVBoxLayout;
+#include "core/log.h"
+#include <QMutex>
+#include <QObject>
+#include <QPlainTextEdit>
+#include <QQueue>
+#include <QtCore/qreadwritelock.h>
 
 namespace hal
 {
-    class ContentAnchor;
-    class Toolbar;
+    struct FilterItem;
 
-    class ContentWidget : public Widget
+    class LoggerMarshall : public QObject
     {
         Q_OBJECT
-        Q_PROPERTY(QString icon_style READ icon_style WRITE set_icon_style)
-        Q_PROPERTY(QString icon_path READ icon_path WRITE set_icon_path)
 
     public:
-        explicit ContentWidget(QString name, QWidget* parent = nullptr);
+        explicit LoggerMarshall(QPlainTextEdit* edit, QObject* parent = 0);
 
-        virtual void setup_toolbar(Toolbar* Toolbar);
-        virtual QList<QShortcut*> create_shortcuts();
-
-        void repolish();
-
-        QString name();
-        QIcon icon();
-
-        void set_anchor(ContentAnchor* anchor);
-        void set_icon(QIcon icon);
-
-        QString icon_style();
-        QString icon_path();
-
-        void set_icon_style(const QString& style);
-        void set_icon_path(const QString& path);
+        ~LoggerMarshall();
 
     Q_SIGNALS:
-        void removed();
-        void detached();
-        void reattached();
-        void opened();
-        void closed();
 
     public Q_SLOTS:
-        void remove();
-        void detach();
-        void reattach();
-        void open();
-        void close();
+
+        void append_log(spdlog::level::level_enum log_type, QString const& msg, FilterItem* filter);
+
+        void highlight_current_line();
 
     private:
-        void closeEvent(QCloseEvent* event);
+        int m_max_line_count;
 
-        QString m_name;
-        QIcon m_icon;
-        ContentAnchor* m_anchor = nullptr;
-        int m_index_priority         = 0;
-
-        QString m_icon_style;
-        QString m_icon_path;
-
-    protected:
-        QVBoxLayout* m_content_layout;
+        //will be deleted within the logger_widgets destrcutor (is the parent of the textedit)
+        QPlainTextEdit* m_edit;
     };
 }

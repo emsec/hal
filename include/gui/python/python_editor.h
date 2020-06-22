@@ -27,7 +27,7 @@
 #include "content_widget/content_widget.h"
 #include "core/hal_file_manager.h"
 #include "file_modified_bar/file_modified_bar.h"
-#include "hal_action/hal_action.h"
+#include "action/action.h"
 #include "python/python_context_subscriber.h"
 
 #include <QEvent>
@@ -161,12 +161,12 @@ namespace hal
 
         Searchbar* m_searchbar;
 
-        HalAction* m_action_open_file;
-        HalAction* m_action_run;
-        HalAction* m_action_save;
-        HalAction* m_action_save_as;
-        HalAction* m_action_toggle_minimap;
-        HalAction* m_action_new_file;
+        Action* m_action_open_file;
+        Action* m_action_run;
+        Action* m_action_save;
+        Action* m_action_save_as;
+        Action* m_action_toggle_minimap;
+        Action* m_action_new_file;
 
         QString m_open_icon_style;
         QString m_open_icon_path;

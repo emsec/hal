@@ -5,7 +5,7 @@
 #include "graph_widget/contexts/graph_context.h"
 #include "gui_globals.h"
 #include "gui_utils/graphics.h"
-#include "hal_action/hal_action.h"
+#include "action/action.h"
 #include "python/python_code_editor.h"
 #include "python/python_editor_code_completion_dialog.h"
 #include "searchbar/searchbar.h"
@@ -30,8 +30,8 @@
 namespace hal
 {
     PythonEditor::PythonEditor(QWidget* parent)
-        : ContentWidget("Python Editor", parent), PythonContextSubscriber(), m_searchbar(new Searchbar()), m_action_open_file(new HalAction(this)), m_action_run(new HalAction(this)),
-          m_action_save(new HalAction(this)), m_action_save_as(new HalAction(this)), m_action_toggle_minimap(new HalAction(this)), m_action_new_file(new HalAction(this))
+        : ContentWidget("Python Editor", parent), PythonContextSubscriber(), m_searchbar(new Searchbar()), m_action_open_file(new Action(this)), m_action_run(new Action(this)),
+          m_action_save(new Action(this)), m_action_save_as(new Action(this)), m_action_toggle_minimap(new Action(this)), m_action_new_file(new Action(this))
     {
         ensurePolished();
         m_new_file_counter = 0;
@@ -69,12 +69,12 @@ namespace hal
         m_action_new_file->setText("New File");
         m_action_toggle_minimap->setText("Toggle Minimap");
 
-        connect(m_action_open_file, &HalAction::triggered, this, &PythonEditor::handle_action_open_file);
-        connect(m_action_save, &HalAction::triggered, this, &PythonEditor::handle_action_save_file);
-        connect(m_action_save_as, &HalAction::triggered, this, &PythonEditor::handle_action_save_file_as);
-        connect(m_action_run, &HalAction::triggered, this, &PythonEditor::handle_action_run);
-        connect(m_action_new_file, &HalAction::triggered, this, &PythonEditor::handle_action_new_tab);
-        connect(m_action_toggle_minimap, &HalAction::triggered, this, &PythonEditor::handle_action_toggle_minimap);
+        connect(m_action_open_file, &Action::triggered, this, &PythonEditor::handle_action_open_file);
+        connect(m_action_save, &Action::triggered, this, &PythonEditor::handle_action_save_file);
+        connect(m_action_save_as, &Action::triggered, this, &PythonEditor::handle_action_save_file_as);
+        connect(m_action_run, &Action::triggered, this, &PythonEditor::handle_action_run);
+        connect(m_action_new_file, &Action::triggered, this, &PythonEditor::handle_action_new_tab);
+        connect(m_action_toggle_minimap, &Action::triggered, this, &PythonEditor::handle_action_toggle_minimap);
 
         connect(m_searchbar, &Searchbar::text_edited, this, &PythonEditor::handle_searchbar_text_edited);
         connect(m_tab_widget, &QTabWidget::currentChanged, this, &PythonEditor::handle_current_tab_changed);

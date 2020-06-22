@@ -23,7 +23,7 @@
 
 #pragma once
 
-#include "gui/hal_action/hal_action.h"
+#include "gui/action/action.h"
 
 #include <QAction>
 #include <QHash>
@@ -39,9 +39,9 @@ namespace hal
 
     public:
         explicit KeybindManager(QObject* parent = nullptr);
-        void bind(HalAction* action, const QString& key);
+        void bind(Action* action, const QString& key);
         void bind(QShortcut* shortcut, const QString& key);
-        void release(HalAction* action);
+        void release(Action* action);
         void release(QShortcut* shortcut);
         QShortcut* make_shortcut(QWidget* parent, const QString& key);
 
@@ -49,8 +49,8 @@ namespace hal
         void handle_global_setting_changed(void* sender, const QString& key, const QVariant& value);
 
     private:
-        QHash<QString, HalAction*> m_bindings_actions;
-        QSet<HalAction*> m_bound_actions;
+        QHash<QString, Action*> m_bindings_actions;
+        QSet<Action*> m_bound_actions;
 
         QHash<QString, QShortcut*> m_bindings_shortcuts;
         QSet<QShortcut*> m_bound_shortcuts;

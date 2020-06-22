@@ -1,0 +1,24 @@
+{
+    "buttons": [
+        {
+            "name": "Run",
+            "script": "./build/bin/hal -g"
+        },
+        {
+            "name": "Build",
+            "script": "(cd build && ninja)"
+        },
+        {
+            "name": "Build & Run",
+            "script": "(cd build && ninja) && (./build/bin/hal -g)"
+        },
+        {
+            "name": "Rebuild (Release)",
+            "script": "rm -rf build && mkdir build && (cd build && cmake -DCMAKE_BUILD_TYPE=Release -DWITH_GUI=ON -GNinja ..) && (cd build && ninja)"
+        },
+        {
+            "name": "Rebuild (Debug)",
+            "script": "rm -rf build && mkdir build && (cd build && cmake -DCMAKE_BUILD_TYPE=Debug -DWITH_GUI=ON -GNinja ..) && (cd build && ninja)"
+        }
+    ]
+}

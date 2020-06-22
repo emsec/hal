@@ -25,7 +25,7 @@
 
 #include "content_layout_area/content_layout_area.h"
 #include "core/program_options.h"
-#include "hal_action/hal_action.h"
+#include "action/action.h"
 #include "plugin_manager/plugin_manager_widget.h"
 #include "plugin_manager/plugin_model.h"
 #include "settings/main_settings_widget.h"
@@ -45,7 +45,7 @@ namespace hal
     class PluginScheduleWidget;
     class PythonEditor;
     class FileManager;
-    class HalContentManager;
+    class ContentManager;
     class AboutDialog;
     class WelcomeScreen;
 
@@ -157,16 +157,16 @@ namespace hal
         QToolBar* m_right_tool_bar;
         ContentLayoutArea* m_layout_area;
 
-        HalAction* m_action_new;
-        HalAction* m_action_open;
-        HalAction* m_action_save;
-        HalAction* m_action_save_as;
-        HalAction* m_action_about;
-        HalAction* m_action_schedule;
-        HalAction* m_action_run_schedule;
-        HalAction* m_action_content;
-        HalAction* m_action_settings;
-        HalAction* m_action_close;
+        Action* m_action_new;
+        Action* m_action_open;
+        Action* m_action_save;
+        Action* m_action_save_as;
+        Action* m_action_about;
+        Action* m_action_schedule;
+        Action* m_action_run_schedule;
+        Action* m_action_content;
+        Action* m_action_settings;
+        Action* m_action_close;
 
         QMenu* m_menu_file;
         QMenu* m_menu_edit;

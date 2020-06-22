@@ -7,7 +7,7 @@
 #include "gui/file_status_manager/file_status_manager.h"
 #include "gui/graph_widget/graph_context_manager.h"
 #include "gui/gui_api/gui_api.h"
-#include "gui/hal_content_manager/hal_content_manager.h"
+#include "gui/content_manager/content_manager.h"
 #include "gui/main_window/main_window.h"
 #include "gui/netlist_relay/netlist_relay.h"
 #include "gui/notifications/notification_manager.h"
@@ -48,7 +48,7 @@ namespace hal
     WindowManager* g_window_manager;
     NotificationManager* g_notification_manager;
 
-    HalContentManager* g_content_manager = nullptr;
+    ContentManager* g_content_manager = nullptr;
 
     std::shared_ptr<Netlist> g_netlist = nullptr;
 

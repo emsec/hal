@@ -24,8 +24,8 @@
 #pragma once
 
 #include "docking_system/dock_bar.h"
-#include "hal_content_anchor/hal_content_anchor.h"
-#include "hal_widget/hal_widget.h"
+#include "content_anchor/content_anchor.h"
+#include "widget/widget.h"
 #include "toolbar/toolbar.h"
 
 #include <QAction>
@@ -40,7 +40,7 @@ namespace hal
     class ContentFrame;
     class ContentWidget;
 
-    class TabWidget : public HalWidget, public HalContentAnchor
+    class TabWidget : public Widget, public ContentAnchor
     {
         Q_OBJECT
 

@@ -23,71 +23,65 @@
 
 #pragma once
 
-#include "widget/widget.h"
+#include <QGraphicsScene>
+#include <QObject>
+#include <QStringList>
 
-#include <QIcon>
-#include <QList>
-
-class QShortcut;
-class QVBoxLayout;
+#include "netlist_watcher/netlist_watcher.h"
 
 namespace hal
 {
-    class ContentAnchor;
-    class Toolbar;
+    class MainWindow;
+    class ContentWidget;
+    class PythonEditor;
+    class GraphTabWidget;
+    class vigation_widget;
+    class ContextManagerWidget;
+    class NetlistWatcher;
 
-    class ContentWidget : public Widget
+    class ContentManager : public QObject
     {
         Q_OBJECT
-        Q_PROPERTY(QString icon_style READ icon_style WRITE set_icon_style)
-        Q_PROPERTY(QString icon_path READ icon_path WRITE set_icon_path)
 
     public:
-        explicit ContentWidget(QString name, QWidget* parent = nullptr);
+        explicit ContentManager(MainWindow* parent);
 
-        virtual void setup_toolbar(Toolbar* Toolbar);
-        virtual QList<QShortcut*> create_shortcuts();
+        ~ContentManager();
 
-        void repolish();
+        PythonEditor* get_python_editor_widget();
 
-        QString name();
-        QIcon icon();
+        GraphTabWidget* get_graph_tab_widget();
 
-        void set_anchor(ContentAnchor* anchor);
-        void set_icon(QIcon icon);
+        ContextManagerWidget* get_context_manager_widget();
 
-        QString icon_style();
-        QString icon_path();
-
-        void set_icon_style(const QString& style);
-        void set_icon_path(const QString& path);
+        void hack_delete_content();
 
     Q_SIGNALS:
-        void removed();
-        void detached();
-        void reattached();
-        void opened();
-        void closed();
+        void save_triggered();
 
     public Q_SLOTS:
-        void remove();
-        void detach();
-        void reattach();
-        void open();
-        void close();
+
+        void handle_open_document(const QString& file_name);
+
+        void handle_close_document();
+
+        void handle_filsystem_doc_changed(const QString& file_name);
+
+        void handle_save_triggered();
 
     private:
-        void closeEvent(QCloseEvent* event);
+        MainWindow* m_MainWindow;
 
-        QString m_name;
-        QIcon m_icon;
-        ContentAnchor* m_anchor = nullptr;
-        int m_index_priority         = 0;
+        QString m_window_title;
 
-        QString m_icon_style;
-        QString m_icon_path;
+        QList<ContentWidget*> m_content;
 
-    protected:
-        QVBoxLayout* m_content_layout;
+        NetlistWatcher* m_NetlistWatcher;
+
+        PythonEditor* m_python_widget;
+
+        GraphTabWidget* m_graph_tab_wid;
+
+        ContextManagerWidget* m_context_manager_wid;
     };
 }

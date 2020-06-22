@@ -23,71 +23,53 @@
 
 #pragma once
 
-#include "widget/widget.h"
+#include <QFrame>
 
-#include <QIcon>
-#include <QList>
-
-class QShortcut;
+class QAction;
 class QVBoxLayout;
 
 namespace hal
 {
-    class ContentAnchor;
-    class Toolbar;
+    class WindowLayoutContainer;
+    class WindowToolbar;
+    class Overlay;
+    class Workspace; // TEMP NAME ?
 
-    class ContentWidget : public Widget
+    class Window : public QFrame
     {
         Q_OBJECT
-        Q_PROPERTY(QString icon_style READ icon_style WRITE set_icon_style)
-        Q_PROPERTY(QString icon_path READ icon_path WRITE set_icon_path)
 
     public:
-        explicit ContentWidget(QString name, QWidget* parent = nullptr);
+        explicit Window(QWidget* parent = nullptr);
 
-        virtual void setup_toolbar(Toolbar* Toolbar);
-        virtual QList<QShortcut*> create_shortcuts();
+        void lock();
+        void unlock();
+
+        void standard_view();
+        void special_view(QWidget* widget);
 
         void repolish();
 
-        QString name();
-        QIcon icon();
-
-        void set_anchor(ContentAnchor* anchor);
-        void set_icon(QIcon icon);
-
-        QString icon_style();
-        QString icon_path();
-
-        void set_icon_style(const QString& style);
-        void set_icon_path(const QString& path);
-
-    Q_SIGNALS:
-        void removed();
-        void detached();
-        void reattached();
-        void opened();
-        void closed();
-
-    public Q_SLOTS:
-        void remove();
-        void detach();
-        void reattach();
-        void open();
-        void close();
-
-    private:
-        void closeEvent(QCloseEvent* event);
-
-        QString m_name;
-        QIcon m_icon;
-        ContentAnchor* m_anchor = nullptr;
-        int m_index_priority         = 0;
-
-        QString m_icon_style;
-        QString m_icon_path;
+        WindowToolbar* get_toolbar();
+        Overlay* get_Overlay();
 
     protected:
-        QVBoxLayout* m_content_layout;
+        //void paintEvent(QPaintEvent* event) Q_DECL_OVERRIDE;
+        //bool event(QEvent* event) Q_DECL_OVERRIDE;
+        void closeEvent(QCloseEvent* event) Q_DECL_OVERRIDE;
+    //    void changeEvent(QEvent* event) Q_DECL_OVERRIDE;
+    //    void resizeEvent(QResizeEvent* event) Q_DECL_OVERRIDE;
+
+    private:
+        //void rearrange();
+
+        QVBoxLayout* m_outer_layout;
+        WindowLayoutContainer* m_layout_container;
+        QVBoxLayout* m_inner_layout;
+        WindowToolbar* m_toolbar;
+        Workspace* m_workspace;
+
+        Overlay* m_Overlay;
+        QGraphicsEffect* m_effect;
     };
 }

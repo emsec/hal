@@ -1211,7 +1211,7 @@ border-right: 2px solid qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop
 border: 2px solid rgb(59, 0, 157);
 }
 
-HalWindow
+Window
 {
 /*background: #FF00FF;*/
 /*border: 1px solid #FF00FF;*/
@@ -1220,13 +1220,13 @@ HalWindow
 border: 1px solid rgb(82, 83, 84);
 }
 
-HalWindowLayoutContainer
+WindowLayoutContainer
 {
 background: #FF00FF;
 /*border: 1px solid #A9B7C6;*/
 }
 
-HalWindowToolbar
+WindowToolbar
 {
 background       : rgb(28, 29, 30);
 /*background       : rgba(38, 40, 41, 1);*/
@@ -1238,7 +1238,7 @@ min-height       : 27px;
 max-height       : 27px;
 }
 
-HalWindowToolbar QToolButton
+WindowToolbar QToolButton
 {
 background       : transparent;
 border           : none;
@@ -1247,12 +1247,12 @@ padding          : 3px;
 margin           : 0;
 }
 
-HalWindowToolbar QToolButton:hover
+WindowToolbar QToolButton:hover
 {
 background       : rgba(128, 128, 128, 0.2);
 }
 
-HalWindowToolbar QToolButton:checked
+WindowToolbar QToolButton:checked
 {
 color            : rgb(0, 255, 0);
 background       : rgba(128, 128, 128, 0.2);
