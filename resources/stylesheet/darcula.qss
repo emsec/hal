@@ -327,7 +327,7 @@ hal--Toolbar {
     min-height : 24px;
     max-height : 24px;
     border     : 0px solid black; /* HACKFIX FOR MAC, REMOVE LATER */
-}w
+}
 
 hal--Searchbar {
     background-color            : #25292D /*rgb(25, 28, 29)*/;
