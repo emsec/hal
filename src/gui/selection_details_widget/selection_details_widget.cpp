@@ -74,6 +74,7 @@ namespace hal
         {
             m_module_details->update(0);
             m_stacked_widget->setCurrentWidget(m_empty_widget);
+            set_name("Details");
             return;
         }
 
@@ -81,6 +82,7 @@ namespace hal
         {
             m_module_details->update(*g_selection_relay.m_selected_modules.begin());
             m_stacked_widget->setCurrentWidget(m_module_details);
+            set_name("Module Details");
         }
         else if (!g_selection_relay.m_selected_gates.isEmpty())
         {
@@ -88,6 +90,7 @@ namespace hal
             m_module_details->update(0);
             m_gate_details->update(*g_selection_relay.m_selected_gates.begin());
             m_stacked_widget->setCurrentWidget(m_gate_details);
+            set_name("Gate Details");
         }
         else if (!g_selection_relay.m_selected_nets.isEmpty())
         {
@@ -95,6 +98,7 @@ namespace hal
             m_module_details->update(0);
             m_net_details->update(*g_selection_relay.m_selected_nets.begin());
             m_stacked_widget->setCurrentWidget(m_net_details);
+            set_name("Net Details");
         }
     }
 

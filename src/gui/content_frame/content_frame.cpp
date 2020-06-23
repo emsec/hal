@@ -64,6 +64,7 @@ namespace hal
         m_horizontal_layout->addWidget(m_right_toolbar);
         m_vertical_layout->addWidget(widget, Qt::AlignBottom);
         widget->show();
+        connect(widget, &ContentWidget::name_changed, this, &ContentFrame::handle_name_changed);
     }
 
     void ContentFrame::childEvent(QChildEvent* event)
@@ -101,6 +102,13 @@ namespace hal
     {
         hide();
         m_widget->reattach();
+    }
+
+    void ContentFrame::handle_name_changed(const QString &name)
+    {
+        m_name_label->setText(name);
+        setWindowTitle(name);
+        //m_name_label->update();
     }
 
     void ContentFrame::closeEvent(QCloseEvent* event)

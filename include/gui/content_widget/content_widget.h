@@ -55,6 +55,7 @@ namespace hal
 
         void set_anchor(ContentAnchor* anchor);
         void set_icon(QIcon icon);
+        void set_name(const QString& name);
 
         QString icon_style();
         QString icon_path();
@@ -68,6 +69,7 @@ namespace hal
         void reattached();
         void opened();
         void closed();
+        void name_changed(const QString& name);
 
     public Q_SLOTS:
         void remove();

@@ -46,6 +46,7 @@ namespace hal
     public Q_SLOTS:
         void detach_widget();
         void reattach_widget();
+        void handle_name_changed(const QString& name);
 
     private:
         void closeEvent(QCloseEvent* event) Q_DECL_OVERRIDE;

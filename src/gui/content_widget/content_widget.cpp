@@ -92,6 +92,12 @@ namespace hal
         m_icon = icon;
     }
 
+    void ContentWidget::set_name(const QString &name)
+    {
+        m_name = name;
+        Q_EMIT name_changed(name);
+    }
+
     void ContentWidget::setup_toolbar(Toolbar* Toolbar){Q_UNUSED(Toolbar)}
 
     QList<QShortcut*> ContentWidget::create_shortcuts()
