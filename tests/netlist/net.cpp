@@ -529,7 +529,7 @@ namespace hal {
                 // Get the destinations by passing a Gate type
                 std::vector<Endpoint> dsts = {test_utils::get_endpoint(inv_gate, "I")};
                 EXPECT_TRUE(test_utils::vectors_have_same_content(test_net
-                                                                      ->get_destinations(test_utils::endpoint_type_filter(
+                                                                      ->get_destinations(test_utils::endpoint_gate_type_filter(
                                                                           "gate_1_to_1")),
                                                                   dsts));
             }

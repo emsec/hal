@@ -13,6 +13,8 @@
 
 namespace hal {
 
+    // IN_PROGRESS: Check disabled tests
+
     class HDLWriterVerilogTest : public ::testing::Test {
     protected:
         const std::string m_pseudo_simprim_lib_name = "PSEUDO_SIMPRIM_GATE_LIBRARY";

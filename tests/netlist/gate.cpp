@@ -399,14 +399,14 @@ namespace hal {
                 std::shared_ptr<Gate> gate_3 = nl_2->get_gate_by_id(MIN_GATE_ID + 3);
                 std::vector<Endpoint> pred = {test_utils::get_endpoint(nl_2, MIN_GATE_ID + 0, "O", false)};
                 EXPECT_TRUE(test_utils::vectors_have_same_content(gate_3
-                                                                      ->get_predecessors(test_utils::endpoint_pin_filter(
+                                                                      ->get_predecessors(test_utils::adjacent_pin_filter(
                                                                           "O")), pred));
             }
             {
                 // Get predecessors for a given (non-existing) output pin type
                 std::shared_ptr<Gate> gate_1 = nl_2->get_gate_by_id(MIN_GATE_ID + 1);
-                EXPECT_TRUE(gate_1->get_predecessors(test_utils::endpoint_pin_filter("NEx_PIN")).empty());
-                EXPECT_EQ(gate_1->get_predecessors(test_utils::endpoint_pin_filter("NEx_PIN")).size(), (size_t) 0);
+                EXPECT_TRUE(gate_1->get_predecessors(test_utils::adjacent_pin_filter("NEx_PIN")).empty());
+                EXPECT_EQ(gate_1->get_predecessors(test_utils::adjacent_pin_filter("NEx_PIN")).size(), (size_t) 0);
             }
             {
                 // Get predecessors for a given (existing) input pin type
@@ -434,15 +434,15 @@ namespace hal {
                 // Get predecessors for a given (existing) Gate type
                 std::shared_ptr<Gate> gate_0 = nl_1->get_gate_by_id(MIN_GATE_ID + 0);
                 std::vector<Endpoint> pred = {test_utils::get_endpoint(nl_1, MIN_GATE_ID + 3, "O", false)};
-                EXPECT_TRUE(test_utils::vectors_have_same_content(gate_0->get_predecessors(test_utils::type_filter(
+                EXPECT_TRUE(test_utils::vectors_have_same_content(gate_0->get_predecessors(test_utils::adjacent_gate_type_filter(
                     "gate_1_to_1")), pred));
-                EXPECT_EQ(gate_0->get_predecessors(test_utils::type_filter("gate_1_to_1")).size(), (size_t) 1);
+                EXPECT_EQ(gate_0->get_predecessors(test_utils::adjacent_gate_type_filter("gate_1_to_1")).size(), (size_t) 1);
             }
             {
                 // Get predecessors for a given (non-existing) Gate type
                 std::shared_ptr<Gate> gate_1 = nl_2->get_gate_by_id(MIN_GATE_ID + 1);
-                EXPECT_TRUE(gate_1->get_predecessors(test_utils::type_filter("NEx_GATE")).empty());
-                EXPECT_EQ(gate_1->get_predecessors(test_utils::type_filter("NEx_GATE")).size(), (size_t) 0);
+                EXPECT_TRUE(gate_1->get_predecessors(test_utils::adjacent_gate_type_filter("NEx_GATE")).empty());
+                EXPECT_EQ(gate_1->get_predecessors(test_utils::adjacent_gate_type_filter("NEx_GATE")).size(), (size_t) 0);
             }
             // ########################
             // NEGATIVE TESTS
@@ -498,15 +498,15 @@ namespace hal {
                 std::vector<Endpoint> succ = {test_utils::get_endpoint(nl_2, MIN_GATE_ID + 1, "I0", true),
                                               test_utils::get_endpoint(nl_2, MIN_GATE_ID + 3, "I0", true)};
                 EXPECT_TRUE(test_utils::vectors_have_same_content(gate_0
-                                                                      ->get_successors(test_utils::endpoint_pin_filter(
+                                                                      ->get_successors(test_utils::adjacent_pin_filter(
                                                                           "I0")), succ));
-                EXPECT_EQ(gate_0->get_successors(test_utils::endpoint_pin_filter("I0")).size(), (size_t) 2);
+                EXPECT_EQ(gate_0->get_successors(test_utils::adjacent_pin_filter("I0")).size(), (size_t) 2);
             }
             {
                 // Get successors for a given (non-existing) intput pin type
                 std::shared_ptr<Gate> gate_0 = nl_2->get_gate_by_id(MIN_GATE_ID + 0);
-                EXPECT_TRUE(gate_0->get_successors(test_utils::endpoint_pin_filter("NEx_PIN")).empty());
-                EXPECT_EQ(gate_0->get_successors(test_utils::endpoint_pin_filter("NEx_PIN")).size(), (size_t) 0);
+                EXPECT_TRUE(gate_0->get_successors(test_utils::adjacent_pin_filter("NEx_PIN")).empty());
+                EXPECT_EQ(gate_0->get_successors(test_utils::adjacent_pin_filter("NEx_PIN")).size(), (size_t) 0);
             }
             {
                 // Get successors for a given (existing) output pin type
@@ -534,15 +534,15 @@ namespace hal {
                 // Get successors for a given (existing) Gate type
                 std::shared_ptr<Gate> gate_0 = nl_1->get_gate_by_id(MIN_GATE_ID + 0);
                 std::vector<Endpoint> succ = {test_utils::get_endpoint(nl_1, MIN_GATE_ID + 4, "I", true)};
-                EXPECT_TRUE(test_utils::vectors_have_same_content(gate_0->get_successors(test_utils::type_filter(
+                EXPECT_TRUE(test_utils::vectors_have_same_content(gate_0->get_successors(test_utils::adjacent_gate_type_filter(
                     "gate_1_to_1")), succ));
-                EXPECT_EQ(gate_0->get_successors(test_utils::type_filter("gate_1_to_1")).size(), (size_t) 1);
+                EXPECT_EQ(gate_0->get_successors(test_utils::adjacent_gate_type_filter("gate_1_to_1")).size(), (size_t) 1);
             }
             {
                 // Get successors for a given (non-existing) Gate type
                 std::shared_ptr<Gate> gate_0 = nl_1->get_gate_by_id(MIN_GATE_ID + 0);
-                EXPECT_TRUE(gate_0->get_successors(test_utils::type_filter("NEx_GATE")).empty());
-                EXPECT_EQ(gate_0->get_successors(test_utils::type_filter("NEx_GATE")).size(), (size_t) 0);
+                EXPECT_TRUE(gate_0->get_successors(test_utils::adjacent_gate_type_filter("NEx_GATE")).empty());
+                EXPECT_EQ(gate_0->get_successors(test_utils::adjacent_gate_type_filter("NEx_GATE")).size(), (size_t) 0);
             }
             // ########################
             // NEGATIVE TESTS

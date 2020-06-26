@@ -11,14 +11,23 @@
 namespace hal {
     class HDLParserDispatcherTest : public ::testing::Test {
     protected:
-        std::filesystem::path m_tmp_dir;
-        std::string m_valid_verilog_content = "Module top (\n"
+        const std::string m_min_gl_content = "library (MIN_TEST_GATE_LIBRARY) {\n"
+                                             "    define(cell);\n"
+                                             "    cell(gate_1_to_1) {\n"
+                                             "        pin(I) { direction: input; }\n"
+                                             "        pin(O) { direction: output; } }\n"
+                                             "    cell(gnd) {\n"
+                                             "        pin(O) { direction: output; function: \"0\"; } }\n"
+                                             "    cell(vcc) {\n"
+                                             "        pin(O) { direction: output; function: \"1\"; } }\n"
+                                             "}";
+        std::string m_valid_verilog_content = "module top (\n"
                                               "  net_global_in,\n"
                                               "  net_global_out\n"
                                               " ) ;\n"
                                               "  input net_global_in ;\n"
                                               "  output net_global_out ;\n"
-                                              "INV gate_0 (\n"
+                                              "gate_1_to_1 gate_0 (\n"
                                               "  .\\I (net_global_in ),\n"
                                               "  .\\O (net_global_out)\n"
                                               " ) ;\n"
@@ -43,30 +52,20 @@ namespace hal {
 
         // std::string m_invalid_input         = "(#+;$: INVALID INPUT :$;+#(";
         std::string m_invalid_input = "(+;$: INVALID INPUT :$;+(";
-        std::shared_ptr<GateLibrary> m_gl;
+        //std::shared_ptr<GateLibrary> m_gl;
+        std::filesystem::path m_g_lib_path;
 
         virtual void SetUp() {
             NO_COUT_BLOCK;
             test_utils::init_log_channels();
-            gate_library_manager::load_all();
-            m_tmp_dir = core_utils::get_base_directory() / "tests/sandbox_directory";
-            std::filesystem::remove_all(m_tmp_dir);
-            m_gl = test_utils::get_testing_gate_library();
+            test_utils::create_sandbox_directory();
+            //m_gl = test_utils::get_testing_gate_library();
+            m_g_lib_path = test_utils::create_sandbox_file("min_test_gate_lib.lib", m_min_gl_content);
+
         }
 
         virtual void TearDown() {
-            std::filesystem::remove_all(m_tmp_dir);
-        }
-
-        // Creates a temporary file within a specific directory that is removed at the end of the test fixture
-        std::filesystem::path create_tmp_file(std::string file_name, std::string content) {
-            std::filesystem::create_directory(m_tmp_dir);
-            std::filesystem::path path_in_dir = file_name;
-            std::filesystem::path full_path = m_tmp_dir / path_in_dir;
-            std::ofstream tmp_file(full_path.string());
-            tmp_file << content;
-            tmp_file.close();
-            return full_path;
+            test_utils::remove_sandbox_directory();
         }
     };
 
@@ -91,24 +90,26 @@ namespace hal {
      */
     TEST_F(HDLParserDispatcherTest, check_parse_by_program_args) {
         TEST_START
+            // Create the files to parse
             std::filesystem::path
-                vhdl_file_with_extension = create_tmp_file("tmp_vhdl_file.vhdl", m_valid_vhdl_content);
+                vhdl_file_with_extension = test_utils::create_sandbox_file("tmp_vhdl_file.vhdl", m_valid_vhdl_content);
             std::filesystem::path
-                verilog_file_with_extension = create_tmp_file("tmp_verilog_file.v", m_valid_verilog_content);
-            std::filesystem::path vhdl_file_without_extension = create_tmp_file("tmp_vhdl_file", m_valid_vhdl_content);
+                verilog_file_with_extension = test_utils::create_sandbox_file("tmp_verilog_file.v", m_valid_verilog_content);
+            std::filesystem::path vhdl_file_without_extension = test_utils::create_sandbox_file("tmp_vhdl_file", m_valid_vhdl_content);
             std::filesystem::path
-                verilog_file_without_extension = create_tmp_file("tmp_verilog_file", m_valid_verilog_content);
-            std::filesystem::path invalid_file = create_tmp_file("invalid_file", m_invalid_input);
-
+                verilog_file_without_extension = test_utils::create_sandbox_file("tmp_verilog_file", m_valid_verilog_content);
+            std::filesystem::path invalid_file = test_utils::create_sandbox_file("invalid_file", m_invalid_input);
+            // Load a gate library
+            gate_library_manager::load_file(m_g_lib_path);
             {
                 // Parse a vhdl and a verilog file by passing the parser name and the GateLibrary name in the program arguments.
                 ProgramArguments p_args_vhdl;
                 p_args_vhdl.set_option("--parser", std::vector<std::string>({"vhdl"}));
-                p_args_vhdl.set_option("--Gate-library", std::vector<std::string>({"EXAMPLE_GATE_LIBRARY"}));
+                p_args_vhdl.set_option("--gate-library", std::vector<std::string>({m_g_lib_path}));
 
                 ProgramArguments p_args_verilog;
                 p_args_verilog.set_option("--parser", std::vector<std::string>({"verilog"}));
-                p_args_verilog.set_option("--Gate-library", std::vector<std::string>({"EXAMPLE_GATE_LIBRARY"}));
+                p_args_verilog.set_option("--gate-library", std::vector<std::string>({m_g_lib_path}));
 
                 std::shared_ptr<Netlist> nl_vhdl = HDLParserDispatcher::parse(vhdl_file_without_extension, p_args_vhdl);
                 std::shared_ptr<Netlist>
@@ -121,6 +122,7 @@ namespace hal {
                 // Parse a vhdl and a verilog file by passing no relevant program arguments. The parser should be determined
                 // from the file extension ('.vhdl'/'.v') while the GateLibrary should be guessed.
                 ProgramArguments p_args_empty;
+                p_args_empty.set_option("--gate-library", std::vector<std::string>({m_g_lib_path}));
 
                 std::shared_ptr<Netlist> nl_vhdl = HDLParserDispatcher::parse(vhdl_file_with_extension, p_args_empty);
                 std::shared_ptr<Netlist>
@@ -134,7 +136,7 @@ namespace hal {
                 // Pass an unknown parser
                 ProgramArguments p_args_vhdl;
                 p_args_vhdl.set_option("--parser", std::vector<std::string>({"verihdl"}));    // <- unknown
-                p_args_vhdl.set_option("--Gate-library", std::vector<std::string>({"EXAMPLE_GATE_LIBRARY"}));
+                p_args_vhdl.set_option("--gate-library", std::vector<std::string>({m_g_lib_path}));
 
                 std::shared_ptr<Netlist> nl = HDLParserDispatcher::parse(vhdl_file_without_extension, p_args_vhdl);
 
@@ -144,23 +146,23 @@ namespace hal {
                 // Pass an unknown file path
                 ProgramArguments p_args_vhdl;
                 p_args_vhdl.set_option("--parser", std::vector<std::string>({"verilog"}));    // <- unknown
-                p_args_vhdl.set_option("--Gate-library", std::vector<std::string>({"EXAMPLE_GATE_LIBRARY"}));
+                p_args_vhdl.set_option("--gate-library", std::vector<std::string>({m_g_lib_path}));
 
                 std::shared_ptr<Netlist>
                     nl = HDLParserDispatcher::parse(std::filesystem::path("this/path/does/not/exist.v"), p_args_vhdl);
 
                 EXPECT_EQ(nl, nullptr);
             }
-            /*{ // ISSUE: Some issue in the verilog tokenizer (also vhdl?).
-                    // (l.189: if(... && parsed_tokens.back() == '#'), parsed_tokens can be empty)
+            {
                     // Pass an invalid file with no Gate-library hint
                     ProgramArguments p_args;
                     p_args.set_option("--parser", std::vector<std::string>({"verilog"}));
+                    p_args.set_option("--gate-library", std::vector<std::string>({m_g_lib_path}));
 
                     std::shared_ptr<Netlist> nl = HDLParserDispatcher::parse(invalid_file, p_args);
 
                     EXPECT_EQ(nl, nullptr);
-                }*/
+            }
 
         TEST_END
     }
@@ -172,16 +174,18 @@ namespace hal {
      */
     TEST_F(HDLParserDispatcherTest, check_parse_by_parser_name) {
         TEST_START
-            std::filesystem::path vhdl_file_without_extension = create_tmp_file("tmp_vhdl_file", m_valid_vhdl_content);
+            // Create the files to parse
+            std::filesystem::path vhdl_file_without_extension = test_utils::create_sandbox_file("tmp_vhdl_file", m_valid_vhdl_content);
             std::filesystem::path
-                verilog_file_without_extension = create_tmp_file("tmp_verilog_file", m_valid_verilog_content);
-
+                verilog_file_without_extension = test_utils::create_sandbox_file("tmp_verilog_file", m_valid_verilog_content);
+            // Load a gate library
+            std::shared_ptr<GateLibrary> min_gl = gate_library_manager::load_file(m_g_lib_path);
             {
                 // Parse a vhdl and a verilog file by passing the parser name and the GateLibrary name. The file is passed by the std::filesystem::path.
                 std::shared_ptr<Netlist>
-                    nl_vhdl = HDLParserDispatcher::parse(m_gl, "vhdl", vhdl_file_without_extension);
+                    nl_vhdl = HDLParserDispatcher::parse(min_gl, "vhdl", vhdl_file_without_extension);
                 std::shared_ptr<Netlist> nl_verilog =
-                    HDLParserDispatcher::parse(m_gl, "verilog", verilog_file_without_extension);
+                    HDLParserDispatcher::parse(min_gl, "verilog", verilog_file_without_extension);
 
                 EXPECT_NE(nl_vhdl, nullptr);
                 EXPECT_NE(nl_verilog, nullptr);
@@ -189,8 +193,8 @@ namespace hal {
             {
                 // Parse a vhdl and a verilog file by passing the parser name and the GateLibrary name. The file is passed by a string.
                 std::shared_ptr<Netlist> nl_vhdl =
-                    HDLParserDispatcher::parse(m_gl, "vhdl", vhdl_file_without_extension.string());
-                std::shared_ptr<Netlist> nl_verilog = HDLParserDispatcher::parse(m_gl,
+                    HDLParserDispatcher::parse(min_gl, "vhdl", vhdl_file_without_extension.string());
+                std::shared_ptr<Netlist> nl_verilog = HDLParserDispatcher::parse(min_gl,
                                                                                  "verilog",
                                                                                  verilog_file_without_extension
                                                                                      .string());
@@ -201,7 +205,7 @@ namespace hal {
             // NEGATIVE
             {
                 // Pass an unknown file path
-                std::shared_ptr<Netlist> nl = HDLParserDispatcher::parse(m_gl,
+                std::shared_ptr<Netlist> nl = HDLParserDispatcher::parse(min_gl,
                                                                          "verilog",
                                                                          std::filesystem::path(
                                                                              "this/path/does/not/exist.v"));

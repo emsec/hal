@@ -31,7 +31,7 @@ namespace hal
         if (!already_init)
         {
             std::vector<std::string> channel_ids = {
-                "core", "gate_library_manager", "liberty_parser", "netlist", "module", "netlist.internal", "netlist.persistent", "hdl_parser", "HDLWriter", "python_context"};
+                "core", "gate_library_manager", "liberty_parser", "netlist", "module", "netlist.internal", "netlist.persistent", "hdl_parser", "hdl_writer", "python_context"};
 
             LogManager& lm = LogManager::get_instance();
             for (std::string ch_id : channel_ids)
@@ -639,6 +639,8 @@ namespace hal
         if (!ignore_id && nl_0->get_id() != nl_1->get_id())
             return false;
         // Check that the Gate libraries are the same
+        auto t_1 = nl_0->get_gate_library()->get_name();
+        auto t_2 = nl_1->get_gate_library()->get_name();
         if (nl_0->get_gate_library()->get_name() != nl_1->get_gate_library()->get_name())
             return false;
         // Check that the design/device names are the same
@@ -738,9 +740,9 @@ namespace hal
         return [name](auto& n) { return n->get_name() == name; };
     }
 
-    std::function<bool(const Endpoint&)> test_utils::endpoint_type_filter(const std::string& type)
+    std::function<bool(const Endpoint&)> test_utils::endpoint_gate_type_filter(const std::string& gate_type)
     {
-        return [type](auto& ep) { return ep.get_gate()->get_type()->get_name() == type; };
+        return [gate_type](auto& ep) { return ep.get_gate()->get_type()->get_name() == gate_type; };
     }
 
     std::function<bool(const Endpoint&)> test_utils::endpoint_gate_name_filter(const std::string& name)
@@ -748,7 +750,12 @@ namespace hal
         return [name](auto& ep) { return ep.get_gate()->get_name() == name; };
     }
 
-    std::function<bool(const std::string&, const Endpoint&)> test_utils::endpoint_pin_filter(const std::string& pin)
+    std::function<bool(const Endpoint&)> test_utils::endpoint_pin_type_filter(const std::string& pin_type)
+    {
+        return [pin_type](auto& ep) { return ep.get_pin() == pin_type; };
+    }
+
+    std::function<bool(const std::string&, const Endpoint&)> test_utils::adjacent_pin_filter(const std::string& pin)
     {
         return [pin](auto&, auto& ep) { return ep.get_pin() == pin; };
     }
@@ -757,7 +764,7 @@ namespace hal
         return [pin](auto& starting_pin, auto&) { return starting_pin == pin; };
     }
 
-    std::function<bool(const std::string&, const Endpoint&)> test_utils::type_filter(const std::string& type)
+    std::function<bool(const std::string&, const Endpoint&)> test_utils::adjacent_gate_type_filter(const std::string& type)
     {
         return [type](auto&, auto& ep) { return ep.get_gate()->get_type()->get_name() == type; };
     }
