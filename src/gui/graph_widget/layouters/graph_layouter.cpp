@@ -950,6 +950,12 @@ namespace hal
 
                     assert(dst_box);
 
+                    // don't attempt to loop back a module output into its input
+                    // (if this triggers, we found the net because it also has
+                    // destinations outside the module)
+                    if (src_box == dst_box && src_box->node.type == hal::node_type::module)
+                        continue;
+
                     QPointF dst_pin_position = dst_box->item->get_input_scene_position(n->get_id(), QString::fromStdString(dst.get_pin()));
 
                     // ROAD BASED DISTANCE (x_distance - 1)
