@@ -564,7 +564,8 @@ namespace hal
                     // (what we use here is the fact that GraphicsModule builds its port
                     // list by traversing m->get_input_nets(), so we just use that order and
                     // hope nobody touches that implementation)
-                    auto it = m->get_input_nets().begin();
+                    auto nets = m->get_input_nets();
+                    auto it = nets.begin();
                     if (g_selection_relay.m_subfocus_index > 0)
                         std::advance(it, g_selection_relay.m_subfocus_index);
                     auto n = *it;
@@ -686,7 +687,8 @@ namespace hal
                     // (what we use here is the fact that GraphicsModule builds its port
                     // list by traversing m->get_input_nets(), so we just use that order and
                     // hope nobody touches that implementation)
-                    auto it = m->get_output_nets().begin();
+                    auto nets = m->get_output_nets();
+                    auto it = nets.begin();
                     if (g_selection_relay.m_subfocus_index > 0)
                         std::advance(it, g_selection_relay.m_subfocus_index);
                     auto n = *it;
