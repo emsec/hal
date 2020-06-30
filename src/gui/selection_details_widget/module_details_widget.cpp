@@ -680,7 +680,7 @@ namespace hal
 
         auto curr_item = m_general_table->itemAt(pos);
 
-        if(curr_item->column() != 1 || curr_item->row() >= 3)
+        if(!curr_item || curr_item->column() != 1 || curr_item->row() >= 3)
             return;
 
         QMenu menu;
@@ -711,7 +711,7 @@ namespace hal
     {
         auto curr_item = m_input_ports_table->itemAt(pos);
 
-        if(curr_item->column() != 2)
+        if(!curr_item || curr_item->column() != 2)
             return;
 
         QMenu menu;
@@ -739,7 +739,7 @@ namespace hal
     void ModuleDetailsWidget::handle_output_ports_table_menu_requested(const QPoint &pos)
     {
         auto curr_item = m_output_ports_table->itemAt(pos);
-        if(curr_item->column() != 2)
+        if(!curr_item || curr_item->column() != 2)
             return;
 
         QMenu menu;

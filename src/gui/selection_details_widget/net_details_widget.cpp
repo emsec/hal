@@ -415,7 +415,7 @@ namespace hal
 
     void NetDetailsWidget::handle_general_table_menu_requeted(const QPoint &pos)
     {
-        if(m_general_table->itemAt(pos)->column() != 1 || m_general_table->itemAt(pos)->row() == 1)
+        if(!m_general_table->itemAt(pos) || m_general_table->itemAt(pos)->column() != 1 || m_general_table->itemAt(pos)->row() == 1)
             return;
 
         QMenu menu;
@@ -448,7 +448,7 @@ namespace hal
 
     void NetDetailsWidget::handle_sources_table_menu_requeted(const QPoint &pos)
     {
-        if(m_source_pins_table->itemAt(pos)->column() != 2)
+        if(!m_source_pins_table->itemAt(pos) || m_source_pins_table->itemAt(pos)->column() != 2)
             return;
 
         QMenu menu;
@@ -465,7 +465,7 @@ namespace hal
 
     void NetDetailsWidget::handle_destinations_table_menu_requeted(const QPoint &pos)
     {
-        if(m_destination_pins_table->itemAt(pos)->column() != 2)
+        if(!m_destination_pins_table->itemAt(pos) || m_destination_pins_table->itemAt(pos)->column() != 2)
             return;
 
         QMenu menu;

@@ -408,7 +408,7 @@ namespace hal
 
     void GateDetailsWidget::handle_input_pin_table_menu_requested(const QPoint &pos)
     {
-        if(m_input_pins_table->itemAt(pos)->column() != 2)
+        if(!m_input_pins_table->itemAt(pos) || m_input_pins_table->itemAt(pos)->column() != 2)
             return;
 
         QMenu menu;
@@ -436,7 +436,7 @@ namespace hal
 
     void GateDetailsWidget::handle_output_pin_table_menu_requested(const QPoint &pos)
     {
-        if(m_output_pins_table->itemAt(pos)->column() != 2)
+        if(!m_output_pins_table->itemAt(pos) || m_output_pins_table->itemAt(pos)->column() != 2)
             return;
 
         QMenu menu;
@@ -462,7 +462,7 @@ namespace hal
 
     void GateDetailsWidget::handle_data_table_menu_requested(const QPoint &pos)
     {
-        if(m_data_fields_table->itemAt(pos)->column() != 1)
+        if(!m_data_fields_table->itemAt(pos) ||m_data_fields_table->itemAt(pos)->column() != 1)
             return;
 
         QMenu menu;
@@ -478,7 +478,7 @@ namespace hal
     }
     void GateDetailsWidget::handle_general_table_menu_requested(const QPoint &pos)
     {
-        if(m_general_table->itemAt(pos)->column() != 1)
+        if(!m_general_table->itemAt(pos) || m_general_table->itemAt(pos)->column() != 1)
             return;
 
         QMenu menu;
