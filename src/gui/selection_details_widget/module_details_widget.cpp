@@ -1,4 +1,5 @@
 #include "selection_details_widget/module_details_widget.h"
+#include "graph_widget/graph_navigation_widget.h"
 
 #include "gui_globals.h"
 
@@ -13,6 +14,8 @@
 #include <QVBoxLayout>
 #include <QPushButton>
 #include <QScrollBar>
+#include <QMenu>
+#include <QClipboard>
 
 namespace hal
 {
@@ -89,6 +92,12 @@ namespace hal
         for(const auto &item : tmp_general_table_dynamic_items)
             add_general_table_dynamic_item(item);
 
+        //first 3 items of the general table are interactive, instead of checking id the function above
+        //just declare it here
+        m_name_item->setFlags(Qt::ItemIsEnabled);
+        m_id_item->setFlags(Qt::ItemIsEnabled);
+        m_type_item->setFlags(Qt::ItemIsEnabled);
+
         intermediate_layout_gt->addWidget(m_general_table);
         intermediate_layout_gt->addSpacerItem(new QSpacerItem(0,0, QSizePolicy::Expanding, QSizePolicy::Fixed));
         intermediate_layout_ip->addWidget(m_input_ports_table);
@@ -107,6 +116,15 @@ namespace hal
 
         m_top_lvl_layout->addSpacerItem(new QSpacerItem(0,0, QSizePolicy::Expanding, QSizePolicy::Expanding));
         m_content_layout->addWidget(m_scroll_area);
+
+        //setup the navigation_table ("activated" by clicking on an input / output pin in the 2 tables)
+        //delete the table manually so its not necessarry to add a property for the stylesheet(otherwise this table is styled like the others)
+        m_navigation_table = new GraphNavigationWidget();
+        m_navigation_table->setWindowFlags(Qt::CustomizeWindowHint);
+        m_navigation_table->hide_when_focus_lost(true);
+        m_navigation_table->hide();
+
+        connect(m_navigation_table, &GraphNavigationWidget::navigation_requested, this, &ModuleDetailsWidget::handle_navigation_jump_requested);
 
         connect(m_general_info_button, &QPushButton::clicked, this, &ModuleDetailsWidget::handle_buttons_clicked);
         connect(m_input_ports_button, &QPushButton::clicked, this, &ModuleDetailsWidget::handle_buttons_clicked);
@@ -133,6 +151,48 @@ namespace hal
         connect(&g_netlist_relay, &NetlistRelay::net_source_removed, this, &ModuleDetailsWidget::handle_net_source_removed);
         connect(&g_netlist_relay, &NetlistRelay::net_destination_added, this, &ModuleDetailsWidget::handle_net_destination_added);
         connect(&g_netlist_relay, &NetlistRelay::net_destination_removed, this, &ModuleDetailsWidget::handle_net_destination_removed);
+
+        connect(m_general_table, &QTableWidget::customContextMenuRequested, this, &ModuleDetailsWidget::handle_general_table_menu_requested);
+        connect(m_input_ports_table, &QTableWidget::customContextMenuRequested, this, &ModuleDetailsWidget::handle_input_ports_table_menu_requested);
+        connect(m_output_ports_table, &QTableWidget::customContextMenuRequested, this, &ModuleDetailsWidget::handle_output_ports_table_menu_requested);
+        connect(m_input_ports_table, &QTableWidget::itemDoubleClicked, this, &ModuleDetailsWidget::handle_input_net_item_clicked);
+        connect(m_output_ports_table, &QTableWidget::itemDoubleClicked, this, &ModuleDetailsWidget::handle_output_net_item_clicked);
+
+        //eventfilters
+        m_input_ports_table->viewport()->setMouseTracking(true);
+        m_input_ports_table->viewport()->installEventFilter(this);
+        m_output_ports_table->viewport()->setMouseTracking(true);
+        m_output_ports_table->viewport()->installEventFilter(this);
+    }
+
+    ModuleDetailsWidget::~ModuleDetailsWidget()
+    {
+        delete m_navigation_table;
+    }
+
+    bool ModuleDetailsWidget::eventFilter(QObject *watched, QEvent *event)
+    {
+        if(event->type() == QEvent::MouseMove)
+        {
+            QTableWidget* table = (watched == m_input_ports_table->viewport()) ? m_input_ports_table : m_output_ports_table;
+            QMouseEvent* ev = dynamic_cast<QMouseEvent*>(event);
+            QTableWidgetItem* item = table->itemAt(ev->pos());
+            if(item)
+            {
+                if(item->column() == 2)
+                    setCursor(QCursor(Qt::PointingHandCursor));
+                else
+                    setCursor(QCursor(Qt::ArrowCursor));
+            }
+            else
+                setCursor(QCursor(Qt::ArrowCursor));
+        }
+
+        //restore default cursor when leaving any watched widget (maybe save cursor before entering?)
+        if(event->type() == QEvent::Leave)
+            setCursor(QCursor(Qt::ArrowCursor));
+
+        return false;
     }
 
     void ModuleDetailsWidget::update(const u32 module_id)
@@ -146,7 +206,6 @@ namespace hal
 
         if(!m)
             return;
-
 
         //update table with general information
         m_name_item->setText(QString::fromStdString(m->get_name()));
@@ -199,6 +258,7 @@ namespace hal
             port_name->setFlags((Qt::ItemFlag)~Qt::ItemIsEnabled);
             arrow_item->setFlags((Qt::ItemFlag)~Qt::ItemIsEnabled);
             net_item->setFlags(Qt::ItemIsEnabled);
+            net_item->setData(Qt::UserRole, net->get_id());
 
             m_input_ports_table->setItem(index, 0, port_name);
             m_input_ports_table->setItem(index, 1, arrow_item);
@@ -230,6 +290,7 @@ namespace hal
             port_name->setFlags((Qt::ItemFlag)~Qt::ItemIsEnabled);
             arrow_item->setFlags((Qt::ItemFlag)~Qt::ItemIsEnabled);
             net_item->setFlags(Qt::ItemIsEnabled);
+            net_item->setData(Qt::UserRole, net->get_id());
 
             m_output_ports_table->setItem(index, 0, port_name);
             m_output_ports_table->setItem(index, 1, arrow_item);
@@ -610,5 +671,223 @@ namespace hal
         table->setMaximumHeight(table->verticalHeader()->length());
         table->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
         table->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        //not really a style, yet it applys to all tables
+        table->setContextMenuPolicy(Qt::CustomContextMenu);
+    }
+
+    void ModuleDetailsWidget::handle_general_table_menu_requested(const QPoint &pos)
+    {
+
+        auto curr_item = m_general_table->itemAt(pos);
+
+        if(curr_item->column() != 1 || curr_item->row() >= 3)
+            return;
+
+        QMenu menu;
+        QString description;
+        QString python_command = "netlist.get_module_by_id(" + QString::number(m_current_id) + ").";
+        QString raw_string = curr_item->text(), raw_desc = "";
+        switch(curr_item->row())
+        {
+            case 0: python_command += "get_name()"; description = "Extract name as python code (copy to clipboard)"; raw_desc = "Extract raw name (copy to clipboard)"; break;
+            case 1: python_command += "get_id()"; description = "Extract id as python code (copy to clipboard)"; raw_desc = "Extract raw id (copy to clipboard)"; break;
+            case 2: python_command += "get_type()"; description = "Extract type as python code (copy to clipboard)"; raw_desc = "Extract raw type (copy to clipboard)"; break;
+            default: break; //cases 3-5 are currently not in use
+        }
+
+        menu.addAction(raw_desc, [raw_string](){
+            QApplication::clipboard()->setText(raw_string);
+        });
+
+        menu.addAction(QIcon(":/icons/python"), description, [python_command](){
+            QApplication::clipboard()->setText(python_command);
+        });
+
+        menu.move(dynamic_cast<QWidget*>(sender())->mapToGlobal(pos));
+        menu.exec();
+    }
+
+    void ModuleDetailsWidget::handle_input_ports_table_menu_requested(const QPoint &pos)
+    {
+        auto curr_item = m_input_ports_table->itemAt(pos);
+
+        if(curr_item->column() != 2)
+            return;
+
+        QMenu menu;
+        auto clicked_net = g_netlist->get_net_by_id(curr_item->data(Qt::UserRole).toInt());
+        if(!g_netlist->is_global_input_net(clicked_net))
+        {
+            menu.addAction("Jump to source gate", [this, curr_item](){
+                handle_input_net_item_clicked(curr_item);
+            });
+        }
+
+        menu.addAction(QIcon(":/icons/python"), "Extract net as python code (copy to clipboard)",[this, curr_item](){
+            QApplication::clipboard()->setText("netlist.get_net_by_id(" + curr_item->data(Qt::UserRole).toString() + ")");
+        });
+
+        menu.addAction(QIcon(":/icons/python"), "Extract sources as python code (copy to clipboard)",[this, curr_item](){
+            QApplication::clipboard()->setText("netlist.get_net_by_id(" + curr_item->data(Qt::UserRole).toString() + ").get_sources()" );
+        });
+
+        menu.move(dynamic_cast<QWidget*>(sender())->mapToGlobal(pos));
+        menu.exec();
+
+    }
+
+    void ModuleDetailsWidget::handle_output_ports_table_menu_requested(const QPoint &pos)
+    {
+        auto curr_item = m_output_ports_table->itemAt(pos);
+        if(curr_item->column() != 2)
+            return;
+
+        QMenu menu;
+
+        auto clicked_net = g_netlist->get_net_by_id(curr_item->data(Qt::UserRole).toInt());
+        if(!g_netlist->is_global_output_net(clicked_net))
+        {
+            menu.addAction("Jump to destination gate", [this, curr_item](){
+                handle_output_net_item_clicked(curr_item);
+            });
+        }
+        menu.addAction(QIcon(":/icons/python"), "Extract net as python code (copy to clipboard)",[this, curr_item](){
+            QApplication::clipboard()->setText("netlist.get_net_by_id(" + curr_item->data(Qt::UserRole).toString() + ")");
+        });
+
+        menu.addAction(QIcon(":/icons/python"), "Extract destinations as python code (copy to clipboard)",[this, curr_item](){
+            QApplication::clipboard()->setText("netlist.get_net_by_id(" + curr_item->data(Qt::UserRole).toString() + ").get_destinations()" );
+        });
+
+        menu.move(dynamic_cast<QWidget*>(sender())->mapToGlobal(pos));
+        menu.exec();
+    }
+
+    void ModuleDetailsWidget::handle_output_net_item_clicked(const QTableWidgetItem *item)
+    {
+        if(item->column() != 2)
+            return;
+
+        int net_id = item->data(Qt::UserRole).toInt();
+        std::shared_ptr<Net> clicked_net = g_netlist->get_net_by_id(net_id);
+
+        if(!clicked_net)
+            return;
+
+        auto destinations = clicked_net->get_destinations();
+        if(destinations.empty() || clicked_net->is_global_output_net())
+        {
+            g_selection_relay.clear();
+            g_selection_relay.m_selected_nets.insert(net_id);
+            g_selection_relay.relay_selection_changed(this);
+        }
+        else if (destinations.size() == 1)
+        {
+            auto ep = *destinations.begin();
+            g_selection_relay.clear();
+            g_selection_relay.m_selected_gates.insert(ep.get_gate()->get_id());
+            g_selection_relay.m_focus_type = SelectionRelay::item_type::gate;
+            g_selection_relay.m_focus_id   = ep.get_gate()->get_id();
+            g_selection_relay.m_subfocus   = SelectionRelay::subfocus::left;
+
+            auto pins                          = ep.get_gate()->get_input_pins();
+            auto index                         = std::distance(pins.begin(), std::find(pins.begin(), pins.end(), ep.get_pin()));
+            g_selection_relay.m_subfocus_index = index;
+
+            update(ep.get_gate()->get_id());
+            g_selection_relay.relay_selection_changed(this);
+        }
+        else
+        {
+            m_navigation_table->setup(hal::node{hal::node_type::gate, 0}, clicked_net, true);
+            m_navigation_table->move(QCursor::pos());
+            m_navigation_table->show();
+            m_navigation_table->setFocus();
+        }
+
+    }
+
+    void ModuleDetailsWidget::handle_input_net_item_clicked(const QTableWidgetItem *item)
+    {
+        if(item->column() != 2)
+            return;
+
+        auto net = g_netlist->get_net_by_id(item->data(Qt::UserRole).toInt());
+
+        if(!net)
+            return;
+
+        auto sources = net->get_sources();
+
+        if(sources.empty() || net->is_global_input_net())
+        {
+            g_selection_relay.clear();
+            g_selection_relay.m_selected_nets.insert(net->get_id());
+            g_selection_relay.relay_selection_changed(this);
+        }
+        else if(sources.size() == 1)
+        {
+            auto ep = *sources.begin();
+            g_selection_relay.clear();
+            g_selection_relay.m_selected_gates.insert(ep.get_gate()->get_id());
+            g_selection_relay.m_focus_type = SelectionRelay::item_type::gate;
+            g_selection_relay.m_focus_id   = ep.get_gate()->get_id();
+            g_selection_relay.m_subfocus   = SelectionRelay::subfocus::right;
+
+            auto pins                          = ep.get_gate()->get_output_pins();
+            auto index                         = std::distance(pins.begin(), std::find(pins.begin(), pins.end(), ep.get_pin()));
+            g_selection_relay.m_subfocus_index = index;
+
+            update(ep.get_gate()->get_id());
+            g_selection_relay.relay_selection_changed(this);
+        }
+        else
+        {
+            m_navigation_table->setup(hal::node{hal::node_type::gate, 0}, net, false);
+            m_navigation_table->move(QCursor::pos());
+            m_navigation_table->show();
+            m_navigation_table->setFocus();
+        }
+    }
+
+    void ModuleDetailsWidget::handle_navigation_jump_requested(const node origin, const u32 via_net, const QSet<u32> &to_gates)
+    {
+        Q_UNUSED(origin);
+
+        auto n = g_netlist->get_net_by_id(via_net);
+
+        if (to_gates.isEmpty() || !n)
+            return;
+        for (u32 id : to_gates)
+        {
+            if (!g_netlist->get_gate_by_id(id))
+                return;
+        }
+
+        m_navigation_table->hide();
+        g_selection_relay.clear();
+        g_selection_relay.m_selected_gates = to_gates;
+        if (to_gates.size() == 1)
+        {
+            g_selection_relay.m_focus_type = SelectionRelay::item_type::gate;
+            auto g                         = g_netlist->get_gate_by_id(*to_gates.constBegin());
+            g_selection_relay.m_focus_id   = g->get_id();
+            g_selection_relay.m_subfocus   = SelectionRelay::subfocus::left;
+
+            u32 index_cnt = 0;
+            for (const auto& pin : g->get_input_pins())
+            {
+                if (g->get_fan_in_net(pin) == n)
+                {
+                    g_selection_relay.m_subfocus_index = index_cnt;
+                    break;
+                }
+                index_cnt++;
+            }
+
+            g_selection_relay.relay_selection_changed(this);
+        }
+        m_navigation_table->hide();
+
     }
 }

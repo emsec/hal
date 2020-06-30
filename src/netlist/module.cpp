@@ -434,6 +434,7 @@ namespace hal
         {
             port_name = "O(" + std::to_string(m_next_output_port_id++) + ")";
             m_named_output_nets.insert(net);
+            m_output_net_to_port_name.emplace(net, port_name);
         }
 
         return port_name;

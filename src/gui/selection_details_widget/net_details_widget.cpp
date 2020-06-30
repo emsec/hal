@@ -415,21 +415,28 @@ namespace hal
 
     void NetDetailsWidget::handle_general_table_menu_requeted(const QPoint &pos)
     {
-        if(m_general_table->itemAt(pos)->column() != 1)
+        if(m_general_table->itemAt(pos)->column() != 1 || m_general_table->itemAt(pos)->row() == 1)
             return;
 
         QMenu menu;
         QString description;
         QString python_command = "netlist.get_net_by_id(" + QString::number(m_current_id) + ").";
+        QString raw_string = "", raw_desc = "";
         switch(m_general_table->itemAt(pos)->row())
         {
-            case 0: python_command += "get_name()"; description = "Extract name as python code (copy to clipboard)"; break;
-            case 1: break; //there is no "explicit" type.... need to check with functions
-            case 2: python_command += "get_id()"; description = "Extract id as python code (copy to clipboard)"; break;
+            case 0: python_command += "get_name()"; description = "Extract name as python code (copy to clipboard)";
+                    raw_string = m_general_table->itemAt(pos)->text(); raw_desc = "Extract raw name (copy to clipboard)"; break;
+            case 1: break; //there is no "explicit" type
+            case 2: python_command += "get_id()"; description = "Extract id as python code (copy to clipboard)";
+                    raw_string = m_general_table->itemAt(pos)->text(); raw_desc = "Ectract raw id (copy to clipboard)"; break;
         }
 
-        if(m_general_table->itemAt(pos)->row() == 1 || m_general_table->itemAt(pos)->row() == 3)
-            return;
+        if(!raw_string.isEmpty())
+        {
+            menu.addAction(raw_desc, [raw_string](){
+                QApplication::clipboard()->setText(raw_string);
+            });
+        }
 
         menu.addAction(QIcon(":/icons/python"), description, [python_command](){
             QApplication::clipboard()->setText(python_command);

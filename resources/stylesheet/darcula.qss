@@ -772,7 +772,7 @@ hal--GateDetailsWidget QPushButton:disabled, hal--NetDetailsWidget QPushButton:d
     height: 12px;
 }
 
-hal--GateDetailsWidget QTableWidget::item:!disabled:hover, hal--NetDetailsWidget QTableWidget::item:!disabled:hover{
+hal--GateDetailsWidget QTableWidget::item:!disabled:hover, hal--NetDetailsWidget QTableWidget::item:!disabled:hover, hal--ModuleDetailsWidget QTableWidget::item:!disabled:hover{
     /*background-color: red;*/
     color: white;
 }

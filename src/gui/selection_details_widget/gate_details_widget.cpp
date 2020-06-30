@@ -412,9 +412,14 @@ namespace hal
             return;
 
         QMenu menu;
-        menu.addAction("Jump to source gate", [this, pos](){
-            handle_input_pin_item_clicked(m_input_pins_table->itemAt(pos));
-        });
+
+        auto clicked_net = g_netlist->get_net_by_id(m_input_pins_table->itemAt(pos)->data(Qt::UserRole).toInt());
+        if(!g_netlist->is_global_input_net(clicked_net))
+        {
+            menu.addAction("Jump to source gate", [this, pos](){
+                handle_input_pin_item_clicked(m_input_pins_table->itemAt(pos));
+            });
+        }
 
         menu.addAction(QIcon(":/icons/python"), "Extract net as python code (copy to clipboard)",[this, pos](){
             QApplication::clipboard()->setText("netlist.get_net_by_id(" + m_input_pins_table->itemAt(pos)->data(Qt::UserRole).toString() + ")");
@@ -435,10 +440,14 @@ namespace hal
             return;
 
         QMenu menu;
-        menu.addAction("Jump to destination gate", [this, pos](){
-            handle_output_pin_item_clicked(m_output_pins_table->itemAt(pos));
-        });
 
+        auto clicked_net = g_netlist->get_net_by_id(m_output_pins_table->itemAt(pos)->data(Qt::UserRole).toInt());
+        if(!g_netlist->is_global_output_net(clicked_net))
+        {
+            menu.addAction("Jump to destination gate", [this, pos](){
+                handle_output_pin_item_clicked(m_output_pins_table->itemAt(pos));
+            });
+        }
         menu.addAction(QIcon(":/icons/python"), "Extract net as python code (copy to clipboard)",[this, pos](){
             QApplication::clipboard()->setText("netlist.get_net_by_id(" + m_output_pins_table->itemAt(pos)->data(Qt::UserRole).toString() + ")");
         });
@@ -449,7 +458,6 @@ namespace hal
 
         menu.move(dynamic_cast<QWidget*>(sender())->mapToGlobal(pos));
         menu.exec();
-
     }
 
     void GateDetailsWidget::handle_data_table_menu_requested(const QPoint &pos)
@@ -476,12 +484,23 @@ namespace hal
         QMenu menu;
         QString description;
         QString python_command = "netlist.get_gate_by_id(" + QString::number(m_current_id) + ").";
+        QString raw_string = "", raw_desc = "";
         switch(m_general_table->itemAt(pos)->row())
         {
-            case 0: python_command += "get_name()"; description = "Extract name as python code (copy to clipboard)"; break;
-            case 1: python_command += "get_type()"; description = "Extract type as python code (copy to clipboard)"; break;
-            case 2: python_command += "get_id()"; description = "Extract id as python code (copy to clipboard)"; break;
+            case 0: python_command += "get_name()"; description = "Extract name as python code (copy to clipboard)";
+                    raw_string = m_general_table->itemAt(pos)->text(); raw_desc = "Extract raw name (copy to clipboard)"; break;
+            case 1: python_command += "get_type()"; description = "Extract type as python code (copy to clipboard)";
+                    raw_string = m_general_table->itemAt(pos)->text(); raw_desc = "Extraxt raw type(copy to clipboard)";break;
+            case 2: python_command += "get_id()"; description = "Extract id as python code (copy to clipboard)";
+                    raw_string = m_general_table->itemAt(pos)->text(); raw_desc = "Extract raw id as string (copy to clipboard)";break;
             case 3: python_command += "get_module()"; description = "Extract module as python code (copy to clipboard)"; break;
+        }
+
+        if(!raw_desc.isEmpty())
+        {
+            menu.addAction(raw_desc,[raw_string](){
+                QApplication::clipboard()->setText(raw_string);
+            });
         }
         menu.addAction(QIcon(":/icons/python"), description, [python_command](){
             QApplication::clipboard()->setText(python_command);
@@ -789,8 +808,8 @@ namespace hal
             QFrame* line = new QFrame;
             line->setFrameShape(QFrame::HLine);
             line->setFrameShadow(QFrame::Sunken);
-            //to outsource this line into the stylesheet, you need to make a new class that inherits from QFrame
-            //and style that class, propertys and the normal way does not work (other tables are also affected)
+            //to outsource this line into the stylesheet you need to make a new class that inherits from QFrame
+            //and style that class. properties and the normal way does not work (other tables are also affected)
             line->setStyleSheet("QFrame{background-color: gray;}");
             last_line = line;
             m_boolean_functions_container_layout->addWidget(line);
