@@ -24,12 +24,12 @@
 #pragma once
 
 #include "def.h"
-
 #include "gui/gui_def.h"
 #include "netlist/endpoint.h"
 #include "netlist_relay/netlist_relay.h"
 
 #include <QWidget>
+
 /* forward declaration */
 class QLabel;
 class QTableWidget;
@@ -43,6 +43,7 @@ class QGridLayout;
 class QModelIndex;
 class QFont;
 class QPushButton;
+class QMouseEvent;
 
 namespace hal
 {
@@ -56,7 +57,7 @@ namespace hal
         ModuleDetailsWidget(QWidget* parent = nullptr);
         ~ModuleDetailsWidget();
 
-        virtual bool eventFilter(QObject *watched, QEvent *event) Q_DECL_OVERRIDE;
+        virtual bool eventFilter(QObject* watched, QEvent* event) Q_DECL_OVERRIDE;
 
         void update(const u32 module_id);
 
@@ -121,14 +122,13 @@ namespace hal
         void style_table(QTableWidget* table);
 
         //most straightforward and basic custom-context implementation (maybe need to be more dynamic)
-        void handle_general_table_menu_requested(const QPoint &pos);
-        void handle_input_ports_table_menu_requested(const QPoint &pos);
-        void handle_output_ports_table_menu_requested(const QPoint &pos);
+        void handle_general_table_menu_requested(const QPoint& pos);
+        void handle_input_ports_table_menu_requested(const QPoint& pos);
+        void handle_output_ports_table_menu_requested(const QPoint& pos);
 
         //jump logic
         void handle_output_net_item_clicked(const QTableWidgetItem* item);
         void handle_input_net_item_clicked(const QTableWidgetItem* item);
         void handle_navigation_jump_requested(const hal::node origin, const u32 via_net, const QSet<u32>& to_gates);
-
     };
-}
+}    // namespace hal

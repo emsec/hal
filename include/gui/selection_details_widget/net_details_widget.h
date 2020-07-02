@@ -24,10 +24,10 @@
 #pragma once
 
 #include "def.h"
-
 #include "netlist_relay/netlist_relay.h"
 
 #include <QWidget>
+
 class QVBoxLayout;
 class QHBoxLayout;
 class QLabel;
@@ -36,6 +36,7 @@ class QTableWidget;
 class QTableWidgetItem;
 class QPushButton;
 class QFont;
+class QMouseEvent;
 
 namespace hal
 {
@@ -47,11 +48,10 @@ namespace hal
         Q_OBJECT
 
     public:
-
         NetDetailsWidget(QWidget* parent = 0);
         ~NetDetailsWidget();
 
-        virtual bool eventFilter(QObject *watched, QEvent *event) Q_DECL_OVERRIDE;
+        virtual bool eventFilter(QObject* watched, QEvent* event) Q_DECL_OVERRIDE;
         void update(u32 net_id);
 
     public Q_SLOTS:
@@ -65,7 +65,6 @@ namespace hal
         void handle_gate_name_changed(const std::shared_ptr<Gate> g);
 
     private:
-
         //general
         u32 m_current_id;
         bool m_hide_empty_sections;
@@ -100,9 +99,9 @@ namespace hal
         void handle_table_item_clicked(QTableWidgetItem* item);
 
         //straightforward context menu handlers
-        void handle_general_table_menu_requeted(const QPoint &pos);
-        void handle_sources_table_menu_requeted(const QPoint &pos);
-        void handle_destinations_table_menu_requeted(const QPoint &pos);
+        void handle_general_table_menu_requeted(const QPoint& pos);
+        void handle_sources_table_menu_requeted(const QPoint& pos);
+        void handle_destinations_table_menu_requeted(const QPoint& pos);
 
         //utility function, used to calculate the actual width so the scrollbars and the accuracy of the click functionality is correct
         QSize calculate_table_size(QTableWidget* table);
@@ -112,4 +111,4 @@ namespace hal
         void init_settings();
         void handle_global_settings_changed(void* sender, const QString& key, const QVariant& value);
     };
-}
+}    // namespace hal

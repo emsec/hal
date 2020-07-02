@@ -1,21 +1,21 @@
 #include "selection_details_widget/module_details_widget.h"
+
 #include "graph_widget/graph_navigation_widget.h"
-
 #include "gui_globals.h"
-
 #include "netlist/gate.h"
-#include "netlist/net.h"
 #include "netlist/module.h"
+#include "netlist/net.h"
 
 #include <QApplication>
+#include <QClipboard>
 #include <QHeaderView>
+#include <QMenu>
+#include <QMouseEvent>
+#include <QPushButton>
 #include <QScrollArea>
+#include <QScrollBar>
 #include <QTableWidget>
 #include <QVBoxLayout>
-#include <QPushButton>
-#include <QScrollBar>
-#include <QMenu>
-#include <QClipboard>
 
 namespace hal
 {
@@ -27,69 +27,61 @@ namespace hal
         m_key_font.setBold(true);
         m_key_font.setPixelSize(13);
 
-        m_scroll_area = new QScrollArea();
+        m_scroll_area       = new QScrollArea();
         m_top_lvl_container = new QWidget();
-        m_top_lvl_layout = new QVBoxLayout(m_top_lvl_container);
+        m_top_lvl_layout    = new QVBoxLayout(m_top_lvl_container);
         m_top_lvl_container->setLayout(m_top_lvl_layout);
         m_content_layout = new QVBoxLayout(this);
         m_scroll_area->setWidget(m_top_lvl_container);
         m_scroll_area->setWidgetResizable(true);
 
-        m_content_layout->setContentsMargins(0,0,0,0);
+        m_content_layout->setContentsMargins(0, 0, 0, 0);
         m_content_layout->setSpacing(0);
-        m_top_lvl_layout->setContentsMargins(0,0,0,0);
+        m_top_lvl_layout->setContentsMargins(0, 0, 0, 0);
         m_top_lvl_layout->setSpacing(0);
 
-        QHBoxLayout *intermediate_layout_gt = new QHBoxLayout();
-        intermediate_layout_gt->setContentsMargins(3,3,0,0);
+        QHBoxLayout* intermediate_layout_gt = new QHBoxLayout();
+        intermediate_layout_gt->setContentsMargins(3, 3, 0, 0);
         intermediate_layout_gt->setSpacing(0);
-        QHBoxLayout *intermediate_layout_ip = new QHBoxLayout();
-        intermediate_layout_ip->setContentsMargins(3,3,0,0);
+        QHBoxLayout* intermediate_layout_ip = new QHBoxLayout();
+        intermediate_layout_ip->setContentsMargins(3, 3, 0, 0);
         intermediate_layout_ip->setSpacing(10);
-        QHBoxLayout *intermediate_layout_op = new QHBoxLayout();
-        intermediate_layout_op->setContentsMargins(3,3,0,0);
+        QHBoxLayout* intermediate_layout_op = new QHBoxLayout();
+        intermediate_layout_op->setContentsMargins(3, 3, 0, 0);
         intermediate_layout_op->setSpacing(0);
 
         m_general_info_button = new QPushButton("General Information", this);
         m_general_info_button->setEnabled(false);
-        m_input_ports_button = new QPushButton("Input Ports", this);
+        m_input_ports_button  = new QPushButton("Input Ports", this);
         m_output_ports_button = new QPushButton("Output Ports", this);
 
-        m_general_table = new QTableWidget(6,2);
-        m_input_ports_table = new QTableWidget(0,3);
-        m_output_ports_table = new QTableWidget(0,3);
+        m_general_table      = new QTableWidget(6, 2);
+        m_input_ports_table  = new QTableWidget(0, 3);
+        m_output_ports_table = new QTableWidget(0, 3);
 
-        QList<QTableWidget*> tmp_tables = {
-            m_general_table,
-            m_input_ports_table,
-            m_output_ports_table
-        };
+        QList<QTableWidget*> tmp_tables = {m_general_table, m_input_ports_table, m_output_ports_table};
 
-        QList<QTableWidgetItem*> tmp_general_table_static_items = {
-            new QTableWidgetItem("Name:"),
-            new QTableWidgetItem("Id:"),
-            new QTableWidgetItem("Type:"),
-            new QTableWidgetItem("Gates:"),
-            new QTableWidgetItem("Submodules:"),
-            new QTableWidgetItem("Nets:")
-        };
+        QList<QTableWidgetItem*> tmp_general_table_static_items = {new QTableWidgetItem("Name:"),
+                                                                   new QTableWidgetItem("Id:"),
+                                                                   new QTableWidgetItem("Type:"),
+                                                                   new QTableWidgetItem("Gates:"),
+                                                                   new QTableWidgetItem("Submodules:"),
+                                                                   new QTableWidgetItem("Nets:")};
 
-        QList<QTableWidgetItem*> tmp_general_table_dynamic_items = {
-            m_name_item = new QTableWidgetItem(),
-            m_id_item = new QTableWidgetItem(),
-            m_type_item = new QTableWidgetItem(),
-            m_number_of_gates_item = new QTableWidgetItem(),
-            m_number_of_submodules_item = new QTableWidgetItem(),
-            m_number_of_nets_item = new QTableWidgetItem()
-        };
+        QList<QTableWidgetItem*> tmp_general_table_dynamic_items = {m_name_item                 = new QTableWidgetItem(),
+                                                                    m_id_item                   = new QTableWidgetItem(),
+                                                                    m_type_item                 = new QTableWidgetItem(),
+                                                                    m_number_of_gates_item      = new QTableWidgetItem(),
+                                                                    m_number_of_submodules_item = new QTableWidgetItem(),
+                                                                    m_number_of_nets_item       = new QTableWidgetItem()};
 
-        for(const auto &table : tmp_tables)
+        for (const auto& table : tmp_tables)
             style_table(table);
 
-        for(const auto &item : tmp_general_table_static_items)
+        for (const auto& item : tmp_general_table_static_items)
             add_general_table_static_item(item);
 
-        for(const auto &item : tmp_general_table_dynamic_items)
+        for (const auto& item : tmp_general_table_dynamic_items)
             add_general_table_dynamic_item(item);
 
         //first 3 items of the general table are interactive, instead of checking id the function above
@@ -99,11 +91,11 @@ namespace hal
         m_type_item->setFlags(Qt::ItemIsEnabled);
 
         intermediate_layout_gt->addWidget(m_general_table);
-        intermediate_layout_gt->addSpacerItem(new QSpacerItem(0,0, QSizePolicy::Expanding, QSizePolicy::Fixed));
+        intermediate_layout_gt->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Fixed));
         intermediate_layout_ip->addWidget(m_input_ports_table);
-        intermediate_layout_ip->addSpacerItem(new QSpacerItem(0,0, QSizePolicy::Expanding, QSizePolicy::Fixed));
+        intermediate_layout_ip->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Fixed));
         intermediate_layout_op->addWidget(m_output_ports_table);
-        intermediate_layout_op->addSpacerItem(new QSpacerItem(0,0, QSizePolicy::Expanding, QSizePolicy::Fixed));
+        intermediate_layout_op->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Fixed));
 
         m_top_lvl_layout->addWidget(m_general_info_button);
         m_top_lvl_layout->addLayout(intermediate_layout_gt);
@@ -114,7 +106,7 @@ namespace hal
         m_top_lvl_layout->addWidget(m_output_ports_button);
         m_top_lvl_layout->addLayout(intermediate_layout_op);
 
-        m_top_lvl_layout->addSpacerItem(new QSpacerItem(0,0, QSizePolicy::Expanding, QSizePolicy::Expanding));
+        m_top_lvl_layout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding));
         m_content_layout->addWidget(m_scroll_area);
 
         //setup the navigation_table ("activated" by clicking on an input / output pin in the 2 tables)
@@ -170,16 +162,16 @@ namespace hal
         delete m_navigation_table;
     }
 
-    bool ModuleDetailsWidget::eventFilter(QObject *watched, QEvent *event)
+    bool ModuleDetailsWidget::eventFilter(QObject* watched, QEvent* event)
     {
-        if(event->type() == QEvent::MouseMove)
+        if (event->type() == QEvent::MouseMove)
         {
-            QTableWidget* table = (watched == m_input_ports_table->viewport()) ? m_input_ports_table : m_output_ports_table;
-            QMouseEvent* ev = dynamic_cast<QMouseEvent*>(event);
+            QTableWidget* table    = (watched == m_input_ports_table->viewport()) ? m_input_ports_table : m_output_ports_table;
+            QMouseEvent* ev        = dynamic_cast<QMouseEvent*>(event);
             QTableWidgetItem* item = table->itemAt(ev->pos());
-            if(item)
+            if (item)
             {
-                if(item->column() == 2)
+                if (item->column() == 2)
                     setCursor(QCursor(Qt::PointingHandCursor));
                 else
                     setCursor(QCursor(Qt::ArrowCursor));
@@ -189,7 +181,7 @@ namespace hal
         }
 
         //restore default cursor when leaving any watched widget (maybe save cursor before entering?)
-        if(event->type() == QEvent::Leave)
+        if (event->type() == QEvent::Leave)
             setCursor(QCursor(Qt::ArrowCursor));
 
         return false;
@@ -199,12 +191,12 @@ namespace hal
     {
         m_current_id = module_id;
 
-        if(m_current_id == 0)
+        if (m_current_id == 0)
             return;
 
         auto m = g_netlist->get_module_by_id(module_id);
 
-        if(!m)
+        if (!m)
             return;
 
         //update table with general information
@@ -215,21 +207,21 @@ namespace hal
 
         QString type_text = QString::fromStdString(m->get_type());
 
-        if(type_text.isEmpty())
+        if (type_text.isEmpty())
             type_text = "None";
 
         m_type_item->setText(type_text);
 
-        int total_number_of_gates = m->get_gates(nullptr, true).size();
-        int direct_member_number_of_gates = m->get_gates(nullptr, false).size();
+        int total_number_of_gates           = m->get_gates(nullptr, true).size();
+        int direct_member_number_of_gates   = m->get_gates(nullptr, false).size();
         int indirect_member_number_of_gates = 0;
 
-        for(const auto &module : m->get_submodules())
+        for (const auto& module : m->get_submodules())
             indirect_member_number_of_gates += module->get_gates(nullptr, true).size();
 
         QString number_of_gates_text = QString::number(total_number_of_gates);
 
-        if(indirect_member_number_of_gates > 0)
+        if (indirect_member_number_of_gates > 0)
             number_of_gates_text += " in total, " + QString::number(direct_member_number_of_gates) + " as direct members and " + QString::number(indirect_member_number_of_gates) + " in submodules";
 
         m_number_of_gates_item->setText(number_of_gates_text);
@@ -237,7 +229,6 @@ namespace hal
         m_general_table->resizeColumnsToContents();
         m_general_table->setFixedWidth(calculate_table_size(m_general_table).width());
         m_general_table->update();
-
 
         //update table with input ports
         m_input_ports_table->clearContents();
@@ -248,11 +239,11 @@ namespace hal
         m_input_ports_table->setMinimumHeight(m_input_ports_table->verticalHeader()->length());
 
         int index = 0;
-        for(const auto &net : m->get_input_nets())
+        for (const auto& net : m->get_input_nets())
         {
-            QTableWidgetItem* port_name = new QTableWidgetItem(QString::fromStdString(m->get_input_port_name(net)));
+            QTableWidgetItem* port_name  = new QTableWidgetItem(QString::fromStdString(m->get_input_port_name(net)));
             QTableWidgetItem* arrow_item = new QTableWidgetItem(QChar(0x2b05));
-            QTableWidgetItem* net_item = new QTableWidgetItem(QString::fromStdString(net->get_name()));
+            QTableWidgetItem* net_item   = new QTableWidgetItem(QString::fromStdString(net->get_name()));
 
             arrow_item->setForeground(QBrush(QColor(114, 140, 0), Qt::SolidPattern));
             port_name->setFlags((Qt::ItemFlag)~Qt::ItemIsEnabled);
@@ -270,7 +261,6 @@ namespace hal
         m_input_ports_table->resizeColumnsToContents();
         m_input_ports_table->setFixedWidth(calculate_table_size(m_input_ports_table).width());
 
-
         //update table with output ports
         m_output_ports_table->clearContents();
         m_output_ports_button->setText(QString::fromStdString("Output Ports (") + QString::number(m->get_output_nets().size()) + QString::fromStdString(")"));
@@ -280,11 +270,11 @@ namespace hal
         m_output_ports_table->setMinimumHeight(m_output_ports_table->verticalHeader()->length());
 
         index = 0;
-        for(const auto &net : m->get_output_nets())
+        for (const auto& net : m->get_output_nets())
         {
-            QTableWidgetItem* port_name = new QTableWidgetItem(QString::fromStdString(m->get_output_port_name(net)));
+            QTableWidgetItem* port_name  = new QTableWidgetItem(QString::fromStdString(m->get_output_port_name(net)));
             QTableWidgetItem* arrow_item = new QTableWidgetItem(QChar(0x27a1));
-            QTableWidgetItem* net_item = new QTableWidgetItem(QString::fromStdString(net->get_name()));
+            QTableWidgetItem* net_item   = new QTableWidgetItem(QString::fromStdString(net->get_name()));
 
             arrow_item->setForeground(QBrush(QColor(114, 140, 0), Qt::SolidPattern));
             port_name->setFlags((Qt::ItemFlag)~Qt::ItemIsEnabled);
@@ -307,19 +297,19 @@ namespace hal
     {
         Q_UNUSED(netlist)
 
-        if(m_current_id == 0)
+        if (m_current_id == 0)
             return;
 
         auto module = g_netlist->get_module_by_id(m_current_id);
-        auto gates = module->get_gates(nullptr, true);
-        auto net = g_netlist->get_net_by_id(associated_data);
+        auto gates  = module->get_gates(nullptr, true);
+        auto net    = g_netlist->get_net_by_id(associated_data);
 
-        for(const auto& gate : gates)
+        for (const auto& gate : gates)
         {
-            auto in_nets = gate->get_fan_in_nets();
+            auto in_nets  = gate->get_fan_in_nets();
             auto out_nets = gate->get_fan_out_nets();
 
-            if(in_nets.find(net) != in_nets.end() || out_nets.find(net) != out_nets.end())
+            if (in_nets.find(net) != in_nets.end() || out_nets.find(net) != out_nets.end())
             {
                 update(m_current_id);
                 return;
@@ -331,19 +321,19 @@ namespace hal
     {
         Q_UNUSED(netlist)
 
-        if(m_current_id == 0)
+        if (m_current_id == 0)
             return;
 
         auto module = g_netlist->get_module_by_id(m_current_id);
-        auto gates = module->get_gates(nullptr, true);
-        auto net = g_netlist->get_net_by_id(associated_data);
+        auto gates  = module->get_gates(nullptr, true);
+        auto net    = g_netlist->get_net_by_id(associated_data);
 
-        for(const auto& gate : gates)
+        for (const auto& gate : gates)
         {
-            auto in_nets = gate->get_fan_in_nets();
+            auto in_nets  = gate->get_fan_in_nets();
             auto out_nets = gate->get_fan_out_nets();
 
-            if(in_nets.find(net) != in_nets.end() || out_nets.find(net) != out_nets.end())
+            if (in_nets.find(net) != in_nets.end() || out_nets.find(net) != out_nets.end())
             {
                 update(m_current_id);
                 return;
@@ -355,19 +345,19 @@ namespace hal
     {
         Q_UNUSED(netlist)
 
-        if(m_current_id == 0)
+        if (m_current_id == 0)
             return;
 
         auto module = g_netlist->get_module_by_id(m_current_id);
-        auto gates = module->get_gates(nullptr, true);
-        auto net = g_netlist->get_net_by_id(associated_data);
+        auto gates  = module->get_gates(nullptr, true);
+        auto net    = g_netlist->get_net_by_id(associated_data);
 
-        for(const auto& gate : gates)
+        for (const auto& gate : gates)
         {
-            auto in_nets = gate->get_fan_in_nets();
+            auto in_nets  = gate->get_fan_in_nets();
             auto out_nets = gate->get_fan_out_nets();
 
-            if(in_nets.find(net) != in_nets.end() || out_nets.find(net) != out_nets.end())
+            if (in_nets.find(net) != in_nets.end() || out_nets.find(net) != out_nets.end())
             {
                 update(m_current_id);
                 return;
@@ -379,19 +369,19 @@ namespace hal
     {
         Q_UNUSED(netlist)
 
-        if(m_current_id == 0)
+        if (m_current_id == 0)
             return;
 
         auto module = g_netlist->get_module_by_id(m_current_id);
-        auto gates = module->get_gates(nullptr, true);
-        auto net = g_netlist->get_net_by_id(associated_data);
+        auto gates  = module->get_gates(nullptr, true);
+        auto net    = g_netlist->get_net_by_id(associated_data);
 
-        for(const auto& gate : gates)
+        for (const auto& gate : gates)
         {
-            auto in_nets = gate->get_fan_in_nets();
+            auto in_nets  = gate->get_fan_in_nets();
             auto out_nets = gate->get_fan_out_nets();
 
-            if(in_nets.find(net) != in_nets.end() || out_nets.find(net) != out_nets.end())
+            if (in_nets.find(net) != in_nets.end() || out_nets.find(net) != out_nets.end())
             {
                 update(m_current_id);
                 return;
@@ -403,19 +393,19 @@ namespace hal
     {
         Q_UNUSED(netlist)
 
-        if(m_current_id == 0)
+        if (m_current_id == 0)
             return;
 
         auto module = g_netlist->get_module_by_id(m_current_id);
-        auto gates = module->get_gates(nullptr, true);
-        auto net = g_netlist->get_net_by_id(associated_data);
+        auto gates  = module->get_gates(nullptr, true);
+        auto net    = g_netlist->get_net_by_id(associated_data);
 
-        for(const auto& gate : gates)
+        for (const auto& gate : gates)
         {
-            auto in_nets = gate->get_fan_in_nets();
+            auto in_nets  = gate->get_fan_in_nets();
             auto out_nets = gate->get_fan_out_nets();
 
-            if(in_nets.find(net) != in_nets.end() || out_nets.find(net) != out_nets.end())
+            if (in_nets.find(net) != in_nets.end() || out_nets.find(net) != out_nets.end())
             {
                 update(m_current_id);
                 return;
@@ -427,19 +417,19 @@ namespace hal
     {
         Q_UNUSED(netlist)
 
-        if(m_current_id == 0)
+        if (m_current_id == 0)
             return;
 
         auto module = g_netlist->get_module_by_id(m_current_id);
-        auto gates = module->get_gates(nullptr, true);
-        auto net = g_netlist->get_net_by_id(associated_data);
+        auto gates  = module->get_gates(nullptr, true);
+        auto net    = g_netlist->get_net_by_id(associated_data);
 
-        for(const auto& gate : gates)
+        for (const auto& gate : gates)
         {
-            auto in_nets = gate->get_fan_in_nets();
+            auto in_nets  = gate->get_fan_in_nets();
             auto out_nets = gate->get_fan_out_nets();
 
-            if(in_nets.find(net) != in_nets.end() || out_nets.find(net) != out_nets.end())
+            if (in_nets.find(net) != in_nets.end() || out_nets.find(net) != out_nets.end())
             {
                 update(m_current_id);
                 return;
@@ -449,7 +439,7 @@ namespace hal
 
     void ModuleDetailsWidget::handle_module_name_changed(std::shared_ptr<Module> module)
     {
-        if(m_current_id == module->get_id())
+        if (m_current_id == module->get_id())
             update(m_current_id);
     }
 
@@ -457,12 +447,12 @@ namespace hal
     {
         Q_UNUSED(associated_data);
 
-        if(m_current_id == 0)
+        if (m_current_id == 0)
             return;
 
         auto current_module = g_netlist->get_module_by_id(m_current_id);
 
-        if(m_current_id == module->get_id() || current_module->contains_module(module, true))
+        if (m_current_id == module->get_id() || current_module->contains_module(module, true))
             update(m_current_id);
     }
 
@@ -470,12 +460,12 @@ namespace hal
     {
         Q_UNUSED(associated_data);
 
-        if(m_current_id == 0)
+        if (m_current_id == 0)
             return;
 
         auto current_module = g_netlist->get_module_by_id(m_current_id);
 
-        if(m_current_id == module->get_id() || current_module->contains_module(module, true))
+        if (m_current_id == module->get_id() || current_module->contains_module(module, true))
             update(m_current_id);
     }
 
@@ -483,12 +473,12 @@ namespace hal
     {
         Q_UNUSED(associated_data);
 
-        if(m_current_id == 0)
+        if (m_current_id == 0)
             return;
 
         auto current_module = g_netlist->get_module_by_id(m_current_id);
 
-        if(m_current_id == module->get_id() || current_module->contains_module(module, true))
+        if (m_current_id == module->get_id() || current_module->contains_module(module, true))
             update(m_current_id);
     }
 
@@ -496,12 +486,12 @@ namespace hal
     {
         Q_UNUSED(associated_data);
 
-        if(m_current_id == 0)
+        if (m_current_id == 0)
             return;
 
         auto current_module = g_netlist->get_module_by_id(m_current_id);
 
-        if(m_current_id == module->get_id() || current_module->contains_module(module, true))
+        if (m_current_id == module->get_id() || current_module->contains_module(module, true))
             update(m_current_id);
     }
 
@@ -509,7 +499,7 @@ namespace hal
     {
         Q_UNUSED(associated_data);
 
-        if(m_current_id == module->get_id())
+        if (m_current_id == module->get_id())
             update(m_current_id);
     }
 
@@ -517,26 +507,26 @@ namespace hal
     {
         Q_UNUSED(associated_data);
 
-        if(m_current_id == module->get_id())
+        if (m_current_id == module->get_id())
             update(m_current_id);
     }
 
     void ModuleDetailsWidget::handle_module_type_changed(std::shared_ptr<Module> module)
     {
-        if(m_current_id == module->get_id())
+        if (m_current_id == module->get_id())
             update(m_current_id);
     }
 
     void ModuleDetailsWidget::handle_net_name_changed(std::shared_ptr<Net> net)
     {
-        if(m_current_id == 0)
+        if (m_current_id == 0)
             return;
 
-        auto module = g_netlist->get_module_by_id(m_current_id);
-        auto input_nets = module->get_input_nets();
+        auto module      = g_netlist->get_module_by_id(m_current_id);
+        auto input_nets  = module->get_input_nets();
         auto output_nets = module->get_output_nets();
 
-        if(input_nets.find(net) != input_nets.end() || output_nets.find(net) != output_nets.end())
+        if (input_nets.find(net) != input_nets.end() || output_nets.find(net) != output_nets.end())
             update(m_current_id);
     }
 
@@ -544,13 +534,13 @@ namespace hal
     {
         Q_UNUSED(net)
 
-        if(m_current_id == 0)
+        if (m_current_id == 0)
             return;
 
         auto module = g_netlist->get_module_by_id(m_current_id);
-        auto gate = g_netlist->get_gate_by_id(src_gate_id);
+        auto gate   = g_netlist->get_gate_by_id(src_gate_id);
 
-        if(module->contains_gate(gate, true))
+        if (module->contains_gate(gate, true))
             update(m_current_id);
     }
 
@@ -558,13 +548,13 @@ namespace hal
     {
         Q_UNUSED(net)
 
-        if(m_current_id == 0)
+        if (m_current_id == 0)
             return;
 
         auto module = g_netlist->get_module_by_id(m_current_id);
-        auto gate = g_netlist->get_gate_by_id(src_gate_id);
+        auto gate   = g_netlist->get_gate_by_id(src_gate_id);
 
-        if(module->contains_gate(gate, true))
+        if (module->contains_gate(gate, true))
             update(m_current_id);
     }
 
@@ -572,13 +562,13 @@ namespace hal
     {
         Q_UNUSED(net)
 
-        if(m_current_id == 0)
+        if (m_current_id == 0)
             return;
 
         auto module = g_netlist->get_module_by_id(m_current_id);
-        auto gate = g_netlist->get_gate_by_id(dst_gate_id);
+        auto gate   = g_netlist->get_gate_by_id(dst_gate_id);
 
-        if(module->contains_gate(gate, true))
+        if (module->contains_gate(gate, true))
             update(m_current_id);
     }
 
@@ -586,13 +576,13 @@ namespace hal
     {
         Q_UNUSED(net)
 
-        if(m_current_id == 0)
+        if (m_current_id == 0)
             return;
 
         auto module = g_netlist->get_module_by_id(m_current_id);
-        auto gate = g_netlist->get_gate_by_id(dst_gate_id);
+        auto gate   = g_netlist->get_gate_by_id(dst_gate_id);
 
-        if(module->contains_gate(gate, true))
+        if (module->contains_gate(gate, true))
             update(m_current_id);
     }
 
@@ -600,18 +590,18 @@ namespace hal
     {
         QPushButton* btn = dynamic_cast<QPushButton*>(sender());
 
-        if(!btn)
+        if (!btn)
             return;
 
         int index = m_top_lvl_layout->indexOf(btn);
 
         QWidget* widget;
-        widget = m_top_lvl_layout->itemAt(index+1)->layout()->itemAt(0)->widget();
+        widget = m_top_lvl_layout->itemAt(index + 1)->layout()->itemAt(0)->widget();
 
-        if(!widget)
+        if (!widget)
             return;
 
-        if(widget->isHidden())
+        if (widget->isHidden())
             widget->show();
         else
             widget->hide();
@@ -638,24 +628,24 @@ namespace hal
         row_index++;
     }
 
-    QSize ModuleDetailsWidget::calculate_table_size(QTableWidget *table)
+    QSize ModuleDetailsWidget::calculate_table_size(QTableWidget* table)
     {
         //necessary to test if the table is empty, otherwise (due to the resizeColumnsToContents function)
         //is the tables width far too big, so just return 0 as the size
-        if(!table->rowCount())
-            return QSize(0,0);
+        if (!table->rowCount())
+            return QSize(0, 0);
 
-        int w = table->verticalHeader()->width() + 4; // +4 seems to be needed
+        int w = table->verticalHeader()->width() + 4;    // +4 seems to be needed
 
         for (int i = 0; i < table->columnCount(); i++)
-           w += table->columnWidth(i); // seems to include gridline
+            w += table->columnWidth(i);    // seems to include gridline
 
         int h = table->horizontalHeader()->height() + 4;
 
         for (int i = 0; i < table->rowCount(); i++)
-           h += table->rowHeight(i);
+            h += table->rowHeight(i);
 
-        return QSize(w+5, h);
+        return QSize(w + 5, h);
     }
 
     void ModuleDetailsWidget::style_table(QTableWidget* table)
@@ -675,107 +665,110 @@ namespace hal
         table->setContextMenuPolicy(Qt::CustomContextMenu);
     }
 
-    void ModuleDetailsWidget::handle_general_table_menu_requested(const QPoint &pos)
+    void ModuleDetailsWidget::handle_general_table_menu_requested(const QPoint& pos)
     {
-
         auto curr_item = m_general_table->itemAt(pos);
 
-        if(!curr_item || curr_item->column() != 1 || curr_item->row() >= 3)
+        if (!curr_item || curr_item->column() != 1 || curr_item->row() >= 3)
             return;
 
         QMenu menu;
         QString description;
         QString python_command = "netlist.get_module_by_id(" + QString::number(m_current_id) + ").";
         QString raw_string = curr_item->text(), raw_desc = "";
-        switch(curr_item->row())
+        switch (curr_item->row())
         {
-            case 0: python_command += "get_name()"; description = "Extract name as python code (copy to clipboard)"; raw_desc = "Extract raw name (copy to clipboard)"; break;
-            case 1: python_command += "get_id()"; description = "Extract id as python code (copy to clipboard)"; raw_desc = "Extract raw id (copy to clipboard)"; break;
-            case 2: python_command += "get_type()"; description = "Extract type as python code (copy to clipboard)"; raw_desc = "Extract raw type (copy to clipboard)"; break;
-            default: break; //cases 3-5 are currently not in use
+            case 0:
+                python_command += "get_name()";
+                description = "Extract name as python code (copy to clipboard)";
+                raw_desc    = "Extract raw name (copy to clipboard)";
+                break;
+            case 1:
+                python_command += "get_id()";
+                description = "Extract id as python code (copy to clipboard)";
+                raw_desc    = "Extract raw id (copy to clipboard)";
+                break;
+            case 2:
+                python_command += "get_type()";
+                description = "Extract type as python code (copy to clipboard)";
+                raw_desc    = "Extract raw type (copy to clipboard)";
+                break;
+            default:
+                break;    //cases 3-5 are currently not in use
         }
 
-        menu.addAction(raw_desc, [raw_string](){
-            QApplication::clipboard()->setText(raw_string);
-        });
+        menu.addAction(raw_desc, [raw_string]() { QApplication::clipboard()->setText(raw_string); });
 
-        menu.addAction(QIcon(":/icons/python"), description, [python_command](){
-            QApplication::clipboard()->setText(python_command);
-        });
+        menu.addAction(QIcon(":/icons/python"), description, [python_command]() { QApplication::clipboard()->setText(python_command); });
 
         menu.move(dynamic_cast<QWidget*>(sender())->mapToGlobal(pos));
         menu.exec();
     }
 
-    void ModuleDetailsWidget::handle_input_ports_table_menu_requested(const QPoint &pos)
+    void ModuleDetailsWidget::handle_input_ports_table_menu_requested(const QPoint& pos)
     {
         auto curr_item = m_input_ports_table->itemAt(pos);
 
-        if(!curr_item || curr_item->column() != 2)
+        if (!curr_item || curr_item->column() != 2)
             return;
 
         QMenu menu;
         auto clicked_net = g_netlist->get_net_by_id(curr_item->data(Qt::UserRole).toInt());
-        if(!g_netlist->is_global_input_net(clicked_net))
+        if (!g_netlist->is_global_input_net(clicked_net))
         {
-            menu.addAction("Jump to source gate", [this, curr_item](){
-                handle_input_net_item_clicked(curr_item);
-            });
+            menu.addAction("Jump to source gate", [this, curr_item]() { handle_input_net_item_clicked(curr_item); });
         }
 
-        menu.addAction(QIcon(":/icons/python"), "Extract net as python code (copy to clipboard)",[this, curr_item](){
+        menu.addAction(QIcon(":/icons/python"), "Extract net as python code (copy to clipboard)", [this, curr_item]() {
             QApplication::clipboard()->setText("netlist.get_net_by_id(" + curr_item->data(Qt::UserRole).toString() + ")");
         });
 
-        menu.addAction(QIcon(":/icons/python"), "Extract sources as python code (copy to clipboard)",[this, curr_item](){
-            QApplication::clipboard()->setText("netlist.get_net_by_id(" + curr_item->data(Qt::UserRole).toString() + ").get_sources()" );
+        menu.addAction(QIcon(":/icons/python"), "Extract sources as python code (copy to clipboard)", [this, curr_item]() {
+            QApplication::clipboard()->setText("netlist.get_net_by_id(" + curr_item->data(Qt::UserRole).toString() + ").get_sources()");
         });
 
         menu.move(dynamic_cast<QWidget*>(sender())->mapToGlobal(pos));
         menu.exec();
-
     }
 
-    void ModuleDetailsWidget::handle_output_ports_table_menu_requested(const QPoint &pos)
+    void ModuleDetailsWidget::handle_output_ports_table_menu_requested(const QPoint& pos)
     {
         auto curr_item = m_output_ports_table->itemAt(pos);
-        if(!curr_item || curr_item->column() != 2)
+        if (!curr_item || curr_item->column() != 2)
             return;
 
         QMenu menu;
 
         auto clicked_net = g_netlist->get_net_by_id(curr_item->data(Qt::UserRole).toInt());
-        if(!g_netlist->is_global_output_net(clicked_net))
+        if (!g_netlist->is_global_output_net(clicked_net))
         {
-            menu.addAction("Jump to destination gate", [this, curr_item](){
-                handle_output_net_item_clicked(curr_item);
-            });
+            menu.addAction("Jump to destination gate", [this, curr_item]() { handle_output_net_item_clicked(curr_item); });
         }
-        menu.addAction(QIcon(":/icons/python"), "Extract net as python code (copy to clipboard)",[this, curr_item](){
+        menu.addAction(QIcon(":/icons/python"), "Extract net as python code (copy to clipboard)", [this, curr_item]() {
             QApplication::clipboard()->setText("netlist.get_net_by_id(" + curr_item->data(Qt::UserRole).toString() + ")");
         });
 
-        menu.addAction(QIcon(":/icons/python"), "Extract destinations as python code (copy to clipboard)",[this, curr_item](){
-            QApplication::clipboard()->setText("netlist.get_net_by_id(" + curr_item->data(Qt::UserRole).toString() + ").get_destinations()" );
+        menu.addAction(QIcon(":/icons/python"), "Extract destinations as python code (copy to clipboard)", [this, curr_item]() {
+            QApplication::clipboard()->setText("netlist.get_net_by_id(" + curr_item->data(Qt::UserRole).toString() + ").get_destinations()");
         });
 
         menu.move(dynamic_cast<QWidget*>(sender())->mapToGlobal(pos));
         menu.exec();
     }
 
-    void ModuleDetailsWidget::handle_output_net_item_clicked(const QTableWidgetItem *item)
+    void ModuleDetailsWidget::handle_output_net_item_clicked(const QTableWidgetItem* item)
     {
-        if(item->column() != 2)
+        if (item->column() != 2)
             return;
 
-        int net_id = item->data(Qt::UserRole).toInt();
+        int net_id                       = item->data(Qt::UserRole).toInt();
         std::shared_ptr<Net> clicked_net = g_netlist->get_net_by_id(net_id);
 
-        if(!clicked_net)
+        if (!clicked_net)
             return;
 
         auto destinations = clicked_net->get_destinations();
-        if(destinations.empty() || clicked_net->is_global_output_net())
+        if (destinations.empty() || clicked_net->is_global_output_net())
         {
             g_selection_relay.clear();
             g_selection_relay.m_selected_nets.insert(net_id);
@@ -804,28 +797,27 @@ namespace hal
             m_navigation_table->show();
             m_navigation_table->setFocus();
         }
-
     }
 
-    void ModuleDetailsWidget::handle_input_net_item_clicked(const QTableWidgetItem *item)
+    void ModuleDetailsWidget::handle_input_net_item_clicked(const QTableWidgetItem* item)
     {
-        if(item->column() != 2)
+        if (item->column() != 2)
             return;
 
         auto net = g_netlist->get_net_by_id(item->data(Qt::UserRole).toInt());
 
-        if(!net)
+        if (!net)
             return;
 
         auto sources = net->get_sources();
 
-        if(sources.empty() || net->is_global_input_net())
+        if (sources.empty() || net->is_global_input_net())
         {
             g_selection_relay.clear();
             g_selection_relay.m_selected_nets.insert(net->get_id());
             g_selection_relay.relay_selection_changed(this);
         }
-        else if(sources.size() == 1)
+        else if (sources.size() == 1)
         {
             auto ep = *sources.begin();
             g_selection_relay.clear();
@@ -850,7 +842,7 @@ namespace hal
         }
     }
 
-    void ModuleDetailsWidget::handle_navigation_jump_requested(const node origin, const u32 via_net, const QSet<u32> &to_gates)
+    void ModuleDetailsWidget::handle_navigation_jump_requested(const node origin, const u32 via_net, const QSet<u32>& to_gates)
     {
         Q_UNUSED(origin);
 
@@ -888,6 +880,5 @@ namespace hal
             g_selection_relay.relay_selection_changed(this);
         }
         m_navigation_table->hide();
-
     }
-}
+}    // namespace hal
