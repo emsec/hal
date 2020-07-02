@@ -12,44 +12,47 @@
 #include <QStringList>
 #include "gui_globals.h"
 
-dropdown_setting::dropdown_setting(const QString& key, const QString& title, const QMap<QString, QVariant>& options, const QString& description, QWidget *parent) : settings_widget(key, parent), m_options(options)
+namespace hal
 {
-    m_labels.append(QPair<QLabel*, QString>(m_name, title));
+    DropdownSetting::DropdownSetting(const QString& key, const QString& title, const QMap<QString, QVariant>& options, const QString& description, QWidget *parent) : SettingsWidget(key, parent), m_options(options)
+    {
+        m_labels.append(QPair<QLabel*, QString>(m_name, title));
 
-    QHBoxLayout* layout = new QHBoxLayout();
-    m_container->addLayout(layout);
+        QHBoxLayout* layout = new QHBoxLayout();
+        m_container->addLayout(layout);
 
-    m_combo_box = new QComboBox(this);
-    m_combo_box->addItems(options.keys());
-    m_combo_box->setStyleSheet("QComboBox{width: 150px;}");
-    connect(m_combo_box, QOverload<const QString &>::of(&QComboBox::currentIndexChanged), this, &dropdown_setting::on_index_changed);
+        m_combo_box = new QComboBox(this);
+        m_combo_box->addItems(options.keys());
+        m_combo_box->setStyleSheet("QComboBox{width: 150px;}");
+        connect(m_combo_box, QOverload<const QString &>::of(&QComboBox::currentIndexChanged), this, &DropdownSetting::on_index_changed);
 
 
-    layout->addWidget(m_combo_box);
+        layout->addWidget(m_combo_box);
 
-    QLabel* label = new QLabel();
-    layout->addWidget(label);
+        QLabel* label = new QLabel();
+        layout->addWidget(label);
 
-    m_labels.append(QPair<QLabel*, QString>(label, description));
-}
+        m_labels.append(QPair<QLabel*, QString>(label, description));
+    }
 
-void dropdown_setting::load(const QVariant& value)
-{
-    m_combo_box->setCurrentText(m_options.key(value.toString()));
-}
+    void DropdownSetting::load(const QVariant& value)
+    {
+        m_combo_box->setCurrentText(m_options.key(value.toString()));
+    }
 
-QVariant dropdown_setting::value()
-{
-    return m_options.value(m_combo_box->currentText());
-}
+    QVariant DropdownSetting::value()
+    {
+        return m_options.value(m_combo_box->currentText());
+    }
 
-// void dropdown_setting::rollback()
-// {
+    // void DropdownSetting::rollback()
+    // {
 
-// }
+    // }
 
-void dropdown_setting::on_index_changed(QString text)
-{
-    Q_UNUSED(text);
-    this->trigger_setting_updated();
+    void DropdownSetting::on_index_changed(QString text)
+    {
+        Q_UNUSED(text);
+        this->trigger_setting_updated();
+    }
 }

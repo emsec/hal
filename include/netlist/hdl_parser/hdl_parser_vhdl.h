@@ -23,96 +23,80 @@
 
 #pragma once
 
-#include "def.h"
-
 #include "core/token_stream.h"
-
+#include "def.h"
+#include "hdl_parser.h"
 #include "netlist/module.h"
 #include "netlist/net.h"
 
-#include "hdl_parser.h"
-
+#include <optional>
 #include <unordered_map>
 #include <unordered_set>
 #include <utility>
 
-/**
- * @ingroup hdl_parsers
- */
-class HDL_PARSER_API hdl_parser_vhdl : public hdl_parser
+namespace hal
 {
-public:
     /**
-     * @param[in] stream - The string stream filled with the hdl code.
+     * @ingroup hdl_parsers
      */
-    explicit hdl_parser_vhdl(std::stringstream& stream);
-
-    ~hdl_parser_vhdl() = default;
-
-    /**
-     * Deserializes a netlist in VHDL format from the internal string stream into a netlist object.
-     *
-     * @param[in] gate_library - The gate library used in the serialized file.
-     * @returns The deserialized netlist.
-     */
-    std::shared_ptr<netlist> parse(const std::string& gate_library) override;
-
-private:
-    struct instance
+    class HDL_PARSER_API HDLParserVHDL : public HDLParser<core_strings::CaseInsensitiveString>
     {
-        u32 line_number;
-        std::string name;
-        std::string type;
-        std::vector<std::pair<std::string, std::string>> generics;
-        std::vector<std::pair<std::string, std::string>> ports;
+    public:
+        /**
+         * Constructs a VHDL parser object.
+         * 
+         * @param[in] stream - The string stream filled with the hdl code.
+         */
+        explicit HDLParserVHDL(std::stringstream& stream);
+
+        ~HDLParserVHDL() = default;
+
+        /**
+         * Parses a VHDL netlist into an intermediate format.
+         *
+         * @returns True on success, false otherwise.
+         */
+        bool parse() override;
+
+    private:
+        enum class AttributeTarget
+        {
+            ENTITY,
+            INSTANCE,
+            SIGNAL
+        };
+
+        using attribute_buffer_t = std::map<AttributeTarget, std::map<core_strings::CaseInsensitiveString, std::tuple<u32, std::string, std::string, std::string>>>;
+        attribute_buffer_t m_attribute_buffer;
+
+        std::set<core_strings::CaseInsensitiveString> m_libraries;
+        std::map<core_strings::CaseInsensitiveString, core_strings::CaseInsensitiveString> m_attribute_types;
+
+        TokenStream<core_strings::CaseInsensitiveString> m_token_stream;
+
+        bool tokenize();
+        bool parse_tokens();
+
+        // parse HDL into intermediate format
+        bool parse_library();
+        bool parse_entity();
+        bool parse_port_definitons(entity& e);
+        bool parse_attribute();
+        bool parse_architecture();
+        bool parse_architecture_header(entity& e);
+        bool parse_signal_definition(entity& e);
+        bool parse_architecture_body(entity& e);
+        bool parse_assign(entity& e);
+        bool parse_instance(entity& e);
+        bool parse_port_assign(entity& e, instance& inst);
+        bool parse_generic_assign(instance& inst);
+        bool assign_attributes(entity& e);
+
+        // helper functions
+        std::vector<u32> parse_range(TokenStream<core_strings::CaseInsensitiveString>& range_str);
+        std::optional<std::vector<std::vector<u32>>> parse_signal_ranges(TokenStream<core_strings::CaseInsensitiveString>& signal_str);
+        std::optional<std::pair<std::vector<signal>, i32>> get_assignment_signals(entity& e, TokenStream<core_strings::CaseInsensitiveString>& signal_str, bool is_left_half, bool is_port_assignment);
+        core_strings::CaseInsensitiveString get_bin_from_literal(const Token<core_strings::CaseInsensitiveString>& value_token);
+        core_strings::CaseInsensitiveString get_hex_from_literal(const Token<core_strings::CaseInsensitiveString>& value_token);
     };
-
-    struct entity
-    {
-        std::string name;
-        u32 line_number;
-        std::vector<std::pair<std::string, std::string>> ports;
-        std::unordered_map<std::string, std::vector<std::string>> expanded_signal_names;
-        std::unordered_map<std::string, std::set<std::tuple<std::string, std::string, std::string>>> entity_attributes;
-        std::unordered_map<std::string, std::set<std::tuple<std::string, std::string, std::string>>> instance_attributes;
-        std::unordered_map<std::string, std::set<std::tuple<std::string, std::string, std::string>>> signal_attributes;
-        std::vector<std::string> signals;
-        std::vector<instance> instances;
-        std::unordered_map<std::string, std::string> direct_assignments;
-    };
-
-    token_stream m_token_stream;
-    std::string m_last_entity;
-
-    std::unordered_set<std::string> m_libraries;
-    std::unordered_map<std::string, std::shared_ptr<net>> m_net_by_name;
-    std::unordered_map<std::string, u32> m_name_occurrences;
-    std::unordered_map<std::string, u32> m_current_instance_index;
-    std::unordered_map<std::string, entity> m_entities;
-    std::unordered_map<std::string, std::string> m_attribute_types;
-    std::unordered_map<std::string, std::vector<std::string>> m_nets_to_merge;
-
-    bool tokenize();
-    bool parse_tokens();
-
-    // parse the hdl into an intermediate format
-    bool parse_library();
-    bool parse_entity_definiton();
-    bool parse_port_definiton(entity& e);
-    bool parse_architecture();
-    bool parse_architecture_header(entity& e);
-    bool parse_architecture_body(entity& e);
-    bool parse_instance(entity& e);
-
-    bool parse_attribute(std::unordered_map<std::string, std::set<std::tuple<std::string, std::string, std::string>>>& mapping);
-
-    // build the netlist from the intermediate format
-    bool build_netlist(const std::string& top_module);
-    std::shared_ptr<module> instantiate(const entity& e, std::shared_ptr<module> parent, std::unordered_map<std::string, std::string> port_assignments);
-
-    // helper functions
-    std::unordered_map<std::string, std::string> get_assignments(token_stream& lhs, token_stream& rhs);
-    std::vector<std::string> get_vector_signals(const std::string& base_name, token_stream& type);
-    std::string get_hex_from_number_literal(const std::string& value);
-    std::string get_unique_alias(const std::string& name);
-};
+}    // namespace hal

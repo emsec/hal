@@ -21,39 +21,39 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef NOTIFICATION_H
-#define NOTIFICATION_H
+#pragma once
 
 #include <QFrame>
 
 class QPropertyAnimation;
 
-class notification : public QFrame
+namespace hal
 {
-    Q_OBJECT
-    Q_PROPERTY(qreal opacity READ get_opacity WRITE set_opacity)
+    class Notification : public QFrame
+    {
+        Q_OBJECT
+        Q_PROPERTY(qreal opacity READ get_opacity WRITE set_opacity)
 
-public:
-    notification(QWidget* parent = 0);
+    public:
+        Notification(QWidget* parent = 0);
 
-    qreal get_opacity();
-    void set_opacity(qreal opacity);
+        qreal get_opacity();
+        void set_opacity(qreal opacity);
 
-    void mousePressEvent(QMouseEvent* event) Q_DECL_OVERRIDE;
+        void mousePressEvent(QMouseEvent* event) Q_DECL_OVERRIDE;
 
-    void fade_in();
-    void fade_out();
+        void fade_in();
+        void fade_out();
 
-Q_SIGNALS:
-    void clicked();
+    Q_SIGNALS:
+        void clicked();
 
-public Q_SLOTS:
+    public Q_SLOTS:
 
-private Q_SLOTS:
-    void cleanup();
+    private Q_SLOTS:
+        void cleanup();
 
-private:
-    QPropertyAnimation* m_animation;
-};
-
-#endif    // NOTIFICATION_H
+    private:
+        QPropertyAnimation* m_animation;
+    };
+}

@@ -2356,7 +2356,7 @@ FMT_CONSTEXPR const Char* parse_precision(const Char* begin, const Char* end,
   return begin;
 }
 
-// Parses standard format specifiers and sends notifications about parsed
+// Parses standard format specifiers and sends Notifications about parsed
 // components to handler.
 template <typename Char, typename SpecHandler>
 FMT_CONSTEXPR const Char* parse_format_specs(const Char* begin, const Char* end,

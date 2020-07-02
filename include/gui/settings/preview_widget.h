@@ -21,23 +21,23 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef PREVIEW_WIDGET_H
-#define PREVIEW_WIDGET_H
+#pragma once
 
 #include <QLabel>
 #include <QFrame>
 
-class preview_widget : public QFrame
+namespace hal
 {
-    Q_OBJECT
+    class PreviewWidget : public QFrame
+    {
+        Q_OBJECT
 
-public:
-    explicit preview_widget(QWidget* parent = 0);
+    public:
+        explicit PreviewWidget(QWidget* parent = 0);
 
-    virtual void update(const QVariant& value) = 0;
+        virtual void update(const QVariant& value) = 0;
 
-protected:
-    QLayout* m_layout;
-};
-
-#endif // PREVIEW_WIDGET_H
+    protected:
+        QLayout* m_layout;
+    };
+}

@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef PYTHON_CONTEXT_H
-#define PYTHON_CONTEXT_H
+#pragma once
 
 #include <QString>
 
@@ -38,61 +37,61 @@
 
 #include "python_console.h"
 
-class python_context_subscriber;
-
-namespace py = pybind11;
-
-class __attribute__((visibility("default"))) python_context
+namespace hal
 {
-public:
-    python_context();
-    ~python_context();
+    class PythonContextSubscriber;
 
-    void interpret(const QString& input, bool multiple_expressions = false);
-    void interpret_script(const QString& input);
+    namespace py = pybind11;
+    class __attribute__((visibility("default"))) PythonContext
+    {
+    public:
+        PythonContext();
+        ~PythonContext();
 
-    void forward_stdout(const QString& output);
-    void forward_error(const QString& output);
+        void interpret(const QString& input, bool multiple_expressions = false);
+        void interpret_script(const QString& input);
 
-    void forward_clear();
+        void forward_stdout(const QString& output);
+        void forward_error(const QString& output);
 
-    void forward_reset();
+        void forward_clear();
 
-    void set_console(python_console* console);
+        void forward_reset();
 
-    std::vector<std::tuple<std::string, std::string>> complete(const QString& text, bool use_console_context);
+        void set_console(PythonConsole* console);
 
-    /**
-     * Check if given statement is a complete or incomplete statement for compound statement processing.
-     * @param[text] text - The text to check.
-     * @returns -1 on error, 0 for an incomplete statement and 1 for an complete statement.
-     */
-    int check_complete_statement(const QString& text);
+        std::vector<std::tuple<std::string, std::string>> complete(const QString& text, bool use_console_context);
 
-    //    void set_history_length();
+        /**
+         * Check if given statement is a complete or incomplete statement for compound statement processing.
+         * @param[text] text - The text to check.
+         * @returns -1 on error, 0 for an incomplete statement and 1 for an complete statement.
+         */
+        int check_complete_statement(const QString& text);
 
-    //    void read_history_file(const QString& file);
-    //    void write_history_file(const QString& file);
-    void init_python();
-    void close_python();
-    
-    void update_netlist();
+        //    void set_history_length();
 
-private:
-    void initialize_context(py::dict* context);
+        //    void read_history_file(const QString& file);
+        //    void write_history_file(const QString& file);
+        void init_python();
+        void close_python();
 
-    void handle_reset();
+        void update_netlist();
 
-    // these have to be pointers, otherwise they are destructed after py::finalize_interpreter and segfault
-    // only one object for global and local is needed, as for the console we run it always in global scope wher globals() == locals()
-    py::dict* m_context;
+    private:
+        void initialize_context(py::dict* context);
 
-    python_context_subscriber* m_sender;
+        void handle_reset();
 
-    std::string m_history_file;
+        // these have to be pointers, otherwise they are destructed after py::finalize_interpreter and segfault
+        // only one object for global and local is needed, as for the console we run it always in global scope wher globals() == locals()
+        py::dict* m_context;
 
-    python_console* m_console;
-    bool m_trigger_reset = false;
-};
+        PythonContextSubscriber* m_sender;
 
-#endif    // PYTHON_CONTEXT_H
+        std::string m_history_file;
+
+        PythonConsole* m_console;
+        bool m_trigger_reset = false;
+    };
+}

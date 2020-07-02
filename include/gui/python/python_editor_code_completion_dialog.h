@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef _PYTHON_EDITOR_CODE_COMPLETION_DIALOG_H_
-#define _PYTHON_EDITOR_CODE_COMPLETION_DIALOG_H_
+#pragma once
 
 #include "netlist/gate.h"
 #include "netlist/netlist.h"
@@ -33,31 +32,32 @@
 #include <QTableWidget>
 #include <QWidget>
 
-class python_editor_code_completion_dialog : public QDialog
+namespace hal
 {
-    Q_OBJECT
+    class PythonEditorCodeCompletionDialog : public QDialog
+    {
+        Q_OBJECT
 
-public:
-    explicit python_editor_code_completion_dialog(QWidget* parent, std::vector<std::tuple<std::string, std::string>> completions);
+    public:
+        explicit PythonEditorCodeCompletionDialog(QWidget* parent, std::vector<std::tuple<std::string, std::string>> completions);
 
-    void keyPressEvent(QKeyEvent* event);
+        void keyPressEvent(QKeyEvent* event);
 
-Q_SIGNALS:
-    void completionSelected(std::tuple<std::string, std::string> selected);
+    Q_SIGNALS:
+        void completionSelected(std::tuple<std::string, std::string> selected);
 
-private:
-    /*
-     * private members
-     */
-    QTableWidget* m_table;
-    std::vector<std::tuple<std::string, std::string>> m_completions;
+    private:
+        /*
+         * private members
+         */
+        QTableWidget* m_table;
+        std::vector<std::tuple<std::string, std::string>> m_completions;
 
-    /*
-     * private functions
-     */
+        /*
+         * private functions
+         */
 
-    /*calculated the "biggest" size of the table*/
-    QSize table_widget_size(QTableWidget* table);
-};
-
-#endif    // _PYTHON_EDITOR_CODE_COMPLETION_DIALOG_H_
+        /*calculated the "biggest" size of the table*/
+        QSize table_widget_size(QTableWidget* table);
+    };
+}

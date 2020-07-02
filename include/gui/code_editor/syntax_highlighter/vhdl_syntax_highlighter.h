@@ -21,59 +21,59 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef VHDL_SYNTAX_HIGHLIGHTER_H
-#define VHDL_SYNTAX_HIGHLIGHTER_H
+#pragma once
 
 #include <QRegularExpression>
 #include <QSyntaxHighlighter>
 
-class vhdl_syntax_highlighter : public QSyntaxHighlighter
+namespace hal
 {
-    Q_OBJECT
-
-public:
-    explicit vhdl_syntax_highlighter(QTextDocument* parent = nullptr);
-
-protected:
-    void highlightBlock(const QString& text) Q_DECL_OVERRIDE;
-    //void run_current_state(const QString &text, int offset = 0);
-
-private:
-    //    QRegularExpression::PatternOptions m_pattern_options;
-    //    QRegularExpression::MatchType m_match_type;
-    //    QRegularExpression::MatchOptions m_match_options;
-    //    QStringList m_valid_identifier;
-    //    QStringList m_types;
-    //    QStringList m_keywords;
-    //    QHash<QString, QTextCharFormat> m_formatters;
-    //
-    //    QString m_current_state;
-    //    QStack<QString> m_stack;
-    //
-    //    struct highlighting_rule
-    //    {
-    //        QRegularExpression expression;
-    //        QStringList list;
-    //        QString state;
-    //    };
-    //
-    //    highlighting_rule make_rule(QString expression, QStringList list, QString state);
-    //
-    //    highlighting_rule m_keyword_rule;
-    //    highlighting_rule m_type_rule;
-    //    QHash<QString, QList<highlighting_rule>> m_rules;
-
-    struct highlighting_rule
+    class VhdlSyntaxHighlighter : public QSyntaxHighlighter
     {
-        QRegularExpression pattern;
-        QTextCharFormat format;
+        Q_OBJECT
+
+    public:
+        explicit VhdlSyntaxHighlighter(QTextDocument* parent = nullptr);
+
+    protected:
+        void highlightBlock(const QString& text) Q_DECL_OVERRIDE;
+        //void run_current_state(const QString &text, int offset = 0);
+
+    private:
+        //    QRegularExpression::PatternOptions m_pattern_options;
+        //    QRegularExpression::MatchType m_match_type;
+        //    QRegularExpression::MatchOptions m_match_options;
+        //    QStringList m_valid_identifier;
+        //    QStringList m_types;
+        //    QStringList m_keywords;
+        //    QHash<QString, QTextCharFormat> m_formatters;
+        //
+        //    QString m_current_state;
+        //    QStack<QString> m_stack;
+        //
+        //    struct highlighting_rule
+        //    {
+        //        QRegularExpression expression;
+        //        QStringList list;
+        //        QString state;
+        //    };
+        //
+        //    highlighting_rule make_rule(QString expression, QStringList list, QString state);
+        //
+        //    highlighting_rule m_keyword_rule;
+        //    highlighting_rule m_type_rule;
+        //    QHash<QString, QList<highlighting_rule>> m_rules;
+
+        struct highlighting_rule
+        {
+            QRegularExpression pattern;
+            QTextCharFormat format;
+        };
+
+        QVector<highlighting_rule> m_highlighting_rules;
+
+        QRegularExpression m_single_line_comment_expression;
+        QRegularExpression m_comment_start_expression;
+        QRegularExpression m_comment_end_expression;
     };
-
-    QVector<highlighting_rule> m_highlighting_rules;
-
-    QRegularExpression m_single_line_comment_expression;
-    QRegularExpression m_comment_start_expression;
-    QRegularExpression m_comment_end_expression;
-};
-
-#endif    // VHDL_SYNTAX_HIGHLIGHTER_H
+}

@@ -1,28 +1,31 @@
 #include "selection_history_navigator/selection.h"
 
-selection::selection(u32 id, selection_relay::item_type type)
+namespace hal
 {
-    m_type = type;
+    Selection::Selection(u32 id, SelectionRelay::item_type type)
+    {
+        m_type = type;
 
-    if(type == selection_relay::item_type::net)
-        m_net_ids.push_back(id);
-    else if(type == selection_relay::item_type::gate)
-        m_gate_ids.push_back(id);
-}
+        if(type == SelectionRelay::item_type::net)
+            m_net_ids.push_back(id);
+        else if(type == SelectionRelay::item_type::gate)
+            m_gate_ids.push_back(id);
+    }
 
-selection::~selection(){}
+    Selection::~Selection(){}
 
-selection_relay::item_type selection::get_type() const
-{
-    return m_type;
-}
+    SelectionRelay::item_type Selection::get_type() const
+    {
+        return m_type;
+    }
 
-u32 selection::get_net_id() const
-{
-    return *m_net_ids.begin();
-}
+    u32 Selection::get_net_id() const
+    {
+        return *m_net_ids.begin();
+    }
 
-u32 selection::get_gate_id() const
-{
-    return *m_gate_ids.begin();
+    u32 Selection::get_gate_id() const
+    {
+        return *m_gate_ids.begin();
+    }
 }

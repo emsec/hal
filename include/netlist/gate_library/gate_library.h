@@ -31,78 +31,90 @@
 #include <string>
 #include <vector>
 
-/**
- * Gate library class containing information about the gates contained in the library.
- *
- * @ingroup netlist
- */
-class NETLIST_API gate_library
+namespace hal
 {
-public:
     /**
-     * Constructor.
+     * Gate library class containing information about the gates contained in the library.
      *
-	 * @param[in] name - Name of the gate library.
-	 */
-    gate_library(const std::string& name);
-
-    ~gate_library() = default;
-
-    /**
-     * Get the name of the library.
-     *
-     * @returns The name.
+     * @ingroup netlist
      */
-    std::string get_name() const;
+    class NETLIST_API GateLibrary
+    {
+    public:
+        /**
+         * Constructs a gate library object.
+         *
+         * @param[in] path - Path to the file containing the gate library definition.
+         * @param[in] name - Name of the gate library.
+         */
+        GateLibrary(const std::filesystem::path& path, const std::string& name);
 
-    /**
-     * Add a gate type to the gate library.
-     *
-     * @param[in] gt - The gate type object.
-     */
-    void add_gate_type(std::shared_ptr<const gate_type> gt);
+        ~GateLibrary() = default;
 
-    /**
-     * Get all gate types of the library.
-     *
-     * @returns A map from gate type names to gate type objects.
-     */
-    const std::map<std::string, std::shared_ptr<const gate_type>>& get_gate_types();
+        /**
+         * Get the name of the library.
+         *
+         * @returns The name.
+         */
+        std::string get_name() const;
 
-    /**
-     * Get all VCC gate types of the library.
-     *
-     * @returns A map from VCC gate type names to gate type objects.
-     */
-    const std::map<std::string, std::shared_ptr<const gate_type>>& get_vcc_gate_types();
+        /**
+         * Get the file path of the library.
+         *
+         * @returns The file path.
+         */
+        std::filesystem::path get_path() const;
 
-    /**
-     * Get all GND gate types of the library.
-     *
-     * @returns A map from GND gate type names to gate type objects.
-     */
-    const std::map<std::string, std::shared_ptr<const gate_type>>& get_gnd_gate_types();
+        /**
+         * Add a gate type to the gate library.
+         *
+         * @param[in] gt - The gate type object.
+         */
+        void add_gate_type(std::shared_ptr<const GateType> gt);
 
-    /**
-     * Add a necessary includes of the gate library, e.g., VHDL libraries.
-     *
-     * @param[in] inc - The include to add.
-     */
-    void add_include(const std::string& inc);
+        /**
+         * Get all gate types of the library.
+         *
+         * @returns A map from gate type names to gate type objects.
+         */
+        const std::map<std::string, std::shared_ptr<const GateType>>& get_gate_types();
 
-    /**
-     * Get a vector of necessary includes of the gate library, e.g., VHDL libraries.
-     *
-     * @returns A vector of includes.
-     */
-    std::vector<std::string> get_includes() const;
+        /**
+         * Get all VCC gate types of the library.
+         *
+         * @returns A map from VCC gate type names to gate type objects.
+         */
+        const std::map<std::string, std::shared_ptr<const GateType>>& get_vcc_gate_types();
 
-private:
-    std::string m_name;
+        /**
+         * Get all GND gate types of the library.
+         *
+         * @returns A map from GND gate type names to gate type objects.
+         */
+        const std::map<std::string, std::shared_ptr<const GateType>>& get_gnd_gate_types();
 
-    std::map<std::string, std::shared_ptr<const gate_type>> m_gate_type_map;
-    std::map<std::string, std::shared_ptr<const gate_type>> m_vcc_gate_types;
-    std::map<std::string, std::shared_ptr<const gate_type>> m_gnd_gate_types;
+        /**
+         * Add a necessary includes of the gate library, e.g., VHDL libraries.
+         *
+         * @param[in] inc - The include to add.
+         */
+        void add_include(const std::string& inc);
 
-    std::vector<std::string> m_includes;
-};
+        /**
+         * Get a vector of necessary includes of the gate library, e.g., VHDL libraries.
+         *
+         * @returns A vector of includes.
+         */
+        std::vector<std::string> get_includes() const;
+
+    private:
+        std::string m_name;
+        std::filesystem::path m_path;
+
+        std::map<std::string, std::shared_ptr<const GateType>> m_gate_type_map;
+        std::map<std::string, std::shared_ptr<const GateType>> m_vcc_gate_types;
+        std::map<std::string, std::shared_ptr<const GateType>> m_gnd_gate_types;
+
+        std::vector<std::string> m_includes;
+    };
+}    // namespace hal

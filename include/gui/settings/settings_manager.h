@@ -21,27 +21,27 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef SETTINGS_MANAGER_H
-#define SETTINGS_MANAGER_H
+#pragma once
 
 #include <QObject>
 #include <QSettings>
 
-class settings_manager : public QObject
+namespace hal
 {
-public:
-    explicit settings_manager(QObject* parent = nullptr);
-    ~settings_manager();
-    QVariant get(const QString& key);
-    QVariant get(const QString& key, const QVariant& defaultVal);
-    QVariant get_default(const QString& key);
-    QVariant reset(const QString& key);
-    void update(const QString& key, const QVariant& value);
-    void sync();
+    class SettingsManager : public QObject
+    {
+    public:
+        explicit SettingsManager(QObject* parent = nullptr);
+        ~SettingsManager();
+        QVariant get(const QString& key);
+        QVariant get(const QString& key, const QVariant& defaultVal);
+        QVariant get_default(const QString& key);
+        QVariant reset(const QString& key);
+        void update(const QString& key, const QVariant& value);
+        void sync();
 
-private:
-    QSettings* m_settings;
-    QSettings* m_defaults;
-};
-
-#endif // SETTINGS_MANAGER_H
+    private:
+        QSettings* m_settings;
+        QSettings* m_defaults;
+    };
+}

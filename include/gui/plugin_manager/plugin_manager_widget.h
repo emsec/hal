@@ -21,34 +21,34 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef PLUGIN_MANAGER_DIALOG_H
-#define PLUGIN_MANAGER_DIALOG_H
+#pragma once
 
 #include "content_widget/content_widget.h"
 
 #include <QTableView>
 
-class plugin_model;
-class toolbar;
-
-class plugin_manager_widget : public content_widget
+namespace hal
 {
-    Q_OBJECT
+    class PluginModel;
+    class Toolbar;
 
-public:
-    explicit plugin_manager_widget(QWidget* parent = 0);
-    void set_plugin_model(plugin_model* m_plugin_model);
-    virtual void setup_toolbar(toolbar* toolbar);
+    class PluginManagerWidget : public ContentWidget
+    {
+        Q_OBJECT
 
-private Q_SLOTS:
-    void on_action_add_triggered();
-    void on_action_remove_triggered();
+    public:
+        explicit PluginManagerWidget(QWidget* parent = 0);
+        void set_plugin_model(PluginModel* m_plugin_model);
+        virtual void setup_toolbar(Toolbar* Toolbar);
 
-private:
-    plugin_model* m_model;
-    QAction* m_add_action;
-    QAction* m_remove_action;
-    QTableView m_table_view;
-};
+    private Q_SLOTS:
+        void on_action_add_triggered();
+        void on_action_remove_triggered();
 
-#endif    // PLUGIN_MANAGER_DIALOG_H
+    private:
+        PluginModel* m_model;
+        QAction* m_add_action;
+        QAction* m_remove_action;
+        QTableView m_table_view;
+    };
+}

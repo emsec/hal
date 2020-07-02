@@ -25,30 +25,33 @@
 
 #include "def.h"
 
-/* forward declaration */
-class netlist;
-
-/**
- * @ingroup persistent
- */
-namespace netlist_serializer
+namespace hal
 {
-    /**
-     * Serializes a netlist into a .hal file.<br>
-     * Invokes the hal_file_manager and all associated callbacks.
-     *
-     * @param[in] nl - The netlist to serialize.
-     * @param[in] hal_file - The file to serialize to.
-     * @returns True on success.
-     */
-    NETLIST_API bool serialize_to_file(std::shared_ptr<netlist> nl, const hal::path& hal_file);
+    /* forward declaration */
+    class Netlist;
 
     /**
-     * Deserializes a netlist from a .hal file.<br>
-     * Invokes the hal_file_manager and all associated callbacks.
-     *
-     * @param[in] hal_file - The file to deserialize from.
-     * @returns The deserialized netlist.
+     * @ingroup persistent
      */
-    NETLIST_API std::shared_ptr<netlist> deserialize_from_file(const hal::path& hal_file);
-}    // namespace netlist_serializer
+    namespace netlist_serializer
+    {
+        /**
+         * Serializes a netlist into a .hal file.<br>
+         * Invokes the hal_file_manager and all associated callbacks.
+         *
+         * @param[in] nl - The netlist to serialize.
+         * @param[in] hal_file - The file to serialize to.
+         * @returns True on success.
+         */
+        NETLIST_API bool serialize_to_file(std::shared_ptr<Netlist> nl, const std::filesystem::path& hal_file);
+
+        /**
+         * Deserializes a netlist from a .hal file.<br>
+         * Invokes the hal_file_manager and all associated callbacks.
+         *
+         * @param[in] hal_file - The file to deserialize from.
+         * @returns The deserialized netlist.
+         */
+        NETLIST_API std::shared_ptr<Netlist> deserialize_from_file(const std::filesystem::path& hal_file);
+    }    // namespace netlist_serializer
+}    // namespace hal

@@ -1,9 +1,11 @@
 #include "channel_manager/channel_selector.h"
 
 #include "channel_manager/channel_model.h"
-
-channel_selector::channel_selector(QWidget* parent) : QComboBox(parent)
+namespace hal
 {
-    channel_model* model = channel_model::get_instance();
-    this->setModel(model);
+    ChannelSelector::ChannelSelector(QWidget* parent) : QComboBox(parent)
+    {
+        ChannelModel* model = ChannelModel::get_instance();
+        this->setModel(model);
+    }
 }

@@ -21,51 +21,52 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef CODE_EDITOR_MINIMAP_H
-#define CODE_EDITOR_MINIMAP_H
+#pragma once
 
 #include <QWidget>
 
-class code_editor;
-class minimap_scrollbar;
-
 class QTextDocument;
 
-class code_editor_minimap : public QWidget
+namespace hal
 {
-    Q_OBJECT
 
-public:
-    explicit code_editor_minimap(code_editor* editor);
+    class CodeEditor;
+    class MinimapScrollbar;
 
-    minimap_scrollbar* scrollbar();
-    QTextDocument* document();
+    class CodeEditorMinimap : public QWidget
+    {
+        Q_OBJECT
 
-    void adjust_slider_height(int viewport_height);
-    void adjust_slider_height(qreal ratio);
-    void adjust_slider_height(int first_visible_block, int last_visible_block);
+    public:
+        explicit CodeEditorMinimap(CodeEditor* editor);
 
-    void repolish();
+        MinimapScrollbar* scrollbar();
+        QTextDocument* document();
 
-public Q_SLOTS:
-    void handle_document_size_changed(const QSizeF& new_size);
-    void handle_contents_change(int position, int chars_removed, int chars_added);
+        void adjust_slider_height(int viewport_height);
+        void adjust_slider_height(qreal ratio);
+        void adjust_slider_height(int first_visible_block, int last_visible_block);
 
-protected:
-    void paintEvent(QPaintEvent* event) Q_DECL_OVERRIDE;
-    void resizeEvent(QResizeEvent* event) Q_DECL_OVERRIDE;
-    void mousePressEvent(QMouseEvent* event) Q_DECL_OVERRIDE;
-    void wheelEvent(QWheelEvent* event) Q_DECL_OVERRIDE;
+        void repolish();
 
-private:
-    void resize_scrollbar();
+    public Q_SLOTS:
+        void handle_document_size_changed(const QSizeF& new_size);
+        void handle_contents_change(int position, int chars_removed, int chars_added);
 
-    code_editor* m_editor;
-    QTextDocument* m_document;
-    minimap_scrollbar* m_scrollbar;
+    protected:
+        void paintEvent(QPaintEvent* event) Q_DECL_OVERRIDE;
+        void resizeEvent(QResizeEvent* event) Q_DECL_OVERRIDE;
+        void mousePressEvent(QMouseEvent* event) Q_DECL_OVERRIDE;
+        void wheelEvent(QWheelEvent* event) Q_DECL_OVERRIDE;
 
-    int m_document_height;
-    qreal m_offset;
-};
+    private:
+        void resize_scrollbar();
 
-#endif    // CODE_EDITOR_MINIMAP_H
+        CodeEditor* m_editor;
+        QTextDocument* m_document;
+        MinimapScrollbar* m_scrollbar;
+
+        int m_document_height;
+        qreal m_offset;
+    };
+}

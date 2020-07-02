@@ -21,48 +21,48 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef PLUGIN_SCHEDULE_WIDGET_H
-#define PLUGIN_SCHEDULE_WIDGET_H
+#pragma once
 
 #include <QFrame>
-
-class labeled_frame;
-class loaded_plugins_widget;
-class plugin_arguments_widget;
-class no_scheduled_plugins_widget;
-class scheduled_plugins_widget;
-class searchbar;
 
 class QFrame;
 class QHBoxLayout;
 class QVBoxLayout;
 
-class plugin_schedule_widget : public QFrame
+namespace hal
 {
-    Q_OBJECT
+    class LabeledFrame;
+    class LoadedPluginsWidget;
+    class PluginArgumentsWidget;
+    class NoScheduledPluginsWidget;
+    class ScheduledPluginsWidget;
+    class Searchbar;
 
-public:
-    explicit plugin_schedule_widget(QWidget* parent = nullptr);
+    class PluginScheduleWidget : public QFrame
+    {
+        Q_OBJECT
 
-public Q_SLOTS:
-    void debug_stuff();
-    void handle_no_scheduled_plugins();
+    public:
+        explicit PluginScheduleWidget(QWidget* parent = nullptr);
 
-private:
-    QVBoxLayout* m_vertical_layout;
-    QFrame* m_searchbar_container;
-    QHBoxLayout* m_container_layout;
-    searchbar* m_searchbar;
-    QHBoxLayout* m_horizontal_layout;
-    labeled_frame* m_plugin_frame;
-    labeled_frame* m_schedule_frame;
-    QWidget* m_schedule_frame_layout_container;
-    QHBoxLayout* m_horizontal_schedule_frame_layout;
-    QVBoxLayout* m_vertical_schedule_frame_layout;
-    no_scheduled_plugins_widget* m_no_scheduled_plugins_widget;
-    plugin_arguments_widget* m_plugin_arguments_widget;
-    scheduled_plugins_widget* m_scheduled_plugins_widget;
-    loaded_plugins_widget* m_loaded_plugins_widget;
-};
+    public Q_SLOTS:
+        void debug_stuff();
+        void handle_no_scheduled_plugins();
 
-#endif    // PLUGIN_SCHEDULE_WIDGET_H
+    private:
+        QVBoxLayout* m_vertical_layout;
+        QFrame* m_searchbar_container;
+        QHBoxLayout* m_container_layout;
+        Searchbar* m_searchbar;
+        QHBoxLayout* m_horizontal_layout;
+        LabeledFrame* m_plugin_frame;
+        LabeledFrame* m_schedule_frame;
+        QWidget* m_schedule_frame_layout_container;
+        QHBoxLayout* m_horizontal_schedule_frame_layout;
+        QVBoxLayout* m_vertical_schedule_frame_layout;
+        NoScheduledPluginsWidget* m_NoScheduledPluginsWidget;
+        PluginArgumentsWidget* m_PluginArgumentsWidget;
+        ScheduledPluginsWidget* m_ScheduledPluginsWidget;
+        LoadedPluginsWidget* m_LoadedPluginsWidget;
+    };
+}

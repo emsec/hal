@@ -4,7 +4,7 @@ add_executable(runTest-hdl_parser_vhdl
         hdl_parser_vhdl.cpp)
 add_executable(runTest-hdl_parser_verilog
         hdl_parser_verilog.cpp)
-add_executable(runTest-hdl_parser_dispatcher
+add_executable(runTest-hdl_parser_dispatcher # currently Disabled...
         hdl_parser_dispatcher.cpp)
 
 target_link_libraries(runTest-hdl_parser_vhdl   pthread gtest gtest_main hal::core hal::netlist test_utils)

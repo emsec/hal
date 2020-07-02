@@ -21,44 +21,44 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef GET_IN_TOUCH_WIDGET_H
-#define GET_IN_TOUCH_WIDGET_H
+#pragma once
 
 #include "QFrame"
-
-class get_in_touch_item;
 
 class QLabel;
 class QVBoxLayout;
 
-class get_in_touch_widget : public QFrame
+namespace hal
 {
-    Q_OBJECT
+    class GetInTouchItem;
 
-public:
-    get_in_touch_widget(QWidget* parent = nullptr);
+    class GetInTouchWidget : public QFrame
+    {
+        Q_OBJECT
 
-    void repolish();
+    public:
+        GetInTouchWidget(QWidget* parent = nullptr);
 
-public Q_SLOTS:
-    void handle_about_item_clicked();
-    void handle_cpp_documentation_item_clicked();
-    void handle_py_documentation_item_clicked();
-    void handle_ticket_item_clicked();
+        void repolish();
 
-private:
-    QVBoxLayout* m_layout;
+    public Q_SLOTS:
+        void handle_about_item_clicked();
+        void handle_cpp_documentation_item_clicked();
+        void handle_py_documentation_item_clicked();
+        void handle_ticket_item_clicked();
 
-    get_in_touch_item* m_about_item;
-    get_in_touch_item* m_news_item;
-    get_in_touch_item* m_forum_item;
-    get_in_touch_item* m_cpp_documentation_item;
-    get_in_touch_item* m_py_documentation_item;
-    get_in_touch_item* m_ticket_item;
+    private:
+        QVBoxLayout* m_layout;
 
-    //    QFrame* m_line;
-    QLabel* m_core_version_label;
-    QLabel* m_gui_version_label;
-};
+        GetInTouchItem* m_about_item;
+        GetInTouchItem* m_news_item;
+        GetInTouchItem* m_forum_item;
+        GetInTouchItem* m_cpp_documentation_item;
+        GetInTouchItem* m_py_documentation_item;
+        GetInTouchItem* m_ticket_item;
 
-#endif    // GET_IN_TOUCH_WIDGET_H
+        //    QFrame* m_line;
+        QLabel* m_core_version_label;
+        QLabel* m_gui_version_label;
+    };
+}

@@ -1,192 +1,241 @@
 #include "netlist/net.h"
 
+#include "core/log.h"
+#include "netlist/event_system/net_event_handler.h"
 #include "netlist/gate.h"
 #include "netlist/netlist.h"
 #include "netlist/netlist_internal_manager.h"
 
-#include "netlist/event_system/net_event_handler.h"
-
-#include "core/log.h"
-
 #include <assert.h>
 #include <memory>
 
-net::net(netlist_internal_manager* internal_manager, const u32 id, const std::string& name)
+namespace hal
 {
-    assert(internal_manager != nullptr);
-    m_internal_manager = internal_manager;
-    m_id               = id;
-    m_name             = name;
-    m_src              = {nullptr, ""};
-}
-
-u32 net::get_id() const
-{
-    return m_id;
-}
-
-std::shared_ptr<netlist> net::get_netlist() const
-{
-    return m_internal_manager->m_netlist->get_shared();
-}
-
-std::string net::get_name() const
-{
-    return m_name;
-}
-
-void net::set_name(const std::string& name)
-{
-    if (core_utils::trim(name).empty())
+    Net::Net(NetlistInternalManager* internal_manager, const u32 id, const std::string& name)
     {
-        log_error("netlist.internal", "net::set_name: empty name is not allowed");
-        return;
-    }
-    if (name != m_name)
-    {
-        log_info("netlist.internal", "changed name for net (id = {}) from '{}' to '{}'.", m_id, m_name, name);
-
-        m_name = name;
-
-        net_event_handler::notify(net_event_handler::event::name_changed, shared_from_this());
-    }
-}
-
-bool net::set_src(const std::shared_ptr<gate>& gate, const std::string& pin_type)
-{
-    return set_src({gate, pin_type});
-}
-
-bool net::set_src(const endpoint& src)
-{
-    return m_internal_manager->net_set_src(shared_from_this(), src);
-}
-
-bool net::remove_src()
-{
-    return m_internal_manager->net_remove_src(shared_from_this());
-}
-
-endpoint net::get_src() const
-{
-    return m_src;
-}
-
-bool net::add_dst(const std::shared_ptr<gate>& gate, const std::string& pin_type)
-{
-    return add_dst({gate, pin_type});
-}
-
-bool net::add_dst(const endpoint& dst)
-{
-    return m_internal_manager->net_add_dst(shared_from_this(), dst);
-}
-
-bool net::remove_dst(const std::shared_ptr<gate>& gate, const std::string& pin_type)
-{
-    return remove_dst({gate, pin_type});
-}
-
-bool net::remove_dst(const endpoint& dst)
-{
-    return m_internal_manager->net_remove_dst(shared_from_this(), dst);
-}
-
-bool net::is_a_dst(const std::shared_ptr<gate>& gate) const
-{
-    if (gate == nullptr)
-    {
-        log_error("netlist", "parameter 'gate' is nullptr.");
-        return false;
-    }
-    if (!get_netlist()->is_gate_in_netlist(gate))
-    {
-        log_error("netlist", "gate '{}' does not belong to netlist.", gate->get_name());
-        return false;
+        assert(internal_manager != nullptr);
+        m_internal_manager = internal_manager;
+        m_id               = id;
+        m_name             = name;
     }
 
-    for (const auto& dst : m_dsts)
+    u32 Net::get_id() const
     {
-        if (dst.gate == gate)
+        return m_id;
+    }
+
+    std::shared_ptr<Netlist> Net::get_netlist() const
+    {
+        return m_internal_manager->m_netlist->get_shared();
+    }
+
+    std::string Net::get_name() const
+    {
+        return m_name;
+    }
+
+    void Net::set_name(const std::string& name)
+    {
+        if (core_utils::trim(name).empty())
         {
-            return true;
+            log_error("netlist.internal", "net::set_name: empty name is not allowed");
+            return;
+        }
+        if (name != m_name)
+        {
+            log_info("netlist.internal", "changed name for net (id = {}) from '{}' to '{}'.", m_id, m_name, name);
+
+            m_name = name;
+
+            net_event_handler::notify(net_event_handler::event::name_changed, shared_from_this());
         }
     }
-    return false;
-}
 
-bool net::is_a_dst(const endpoint& ep) const
-{
-    if (ep.gate == nullptr)
+    bool Net::add_source(const std::shared_ptr<Gate>& gate, const std::string& pin)
     {
-        log_error("netlist", "parameter 'gate' is nullptr.");
-        return false;
-    }
-    if (!get_netlist()->is_gate_in_netlist(ep.gate))
-    {
-        log_error("netlist", "gate '{}' does not belong to netlist.", ep.gate->get_name());
-        return false;
+        return add_source(Endpoint(gate, pin, false));
     }
 
-    return std::find(m_dsts.begin(), m_dsts.end(), ep) != m_dsts.end();
-}
-
-u32 net::get_num_of_dsts() const
-{
-    return (u32)m_dsts.size();
-}
-
-std::vector<endpoint> net::get_dsts(const std::function<bool(const endpoint& ep)>& filter) const
-{
-    if (!filter)
+    bool Net::add_source(const Endpoint& ep)
     {
-        return m_dsts;
-    }
-
-    std::vector<endpoint> dsts;
-    for (const auto& dst : m_dsts)
-    {
-        if (!filter(dst))
+        if (!ep.is_source_pin())
         {
-            continue;
+            log_error("netlist", "net::add_source: tried to use a destination-endpoint as a source-endpoint");
+            return false;
         }
-        dsts.push_back(dst);
+        return m_internal_manager->net_add_source(shared_from_this(), ep);
     }
-    return dsts;
-}
 
+    bool Net::remove_source(const std::shared_ptr<Gate>& gate, const std::string& pin)
+    {
+        return remove_source(Endpoint(gate, pin, false));
+    }
 
-bool net::is_unrouted() const
-{
-    return ((m_src.gate == nullptr) || (this->get_num_of_dsts() == 0));
-}
+    bool Net::remove_source(const Endpoint& ep)
+    {
+        if (!ep.is_source_pin())
+        {
+            log_error("netlist", "net::remove_source: tried to use a destination-endpoint as a source-endpoint");
+            return false;
+        }
+        return m_internal_manager->net_remove_source(shared_from_this(), ep);
+    }
 
-bool net::mark_global_input_net()
-{
-    return m_internal_manager->m_netlist->mark_global_input_net(shared_from_this());
-}
+    bool Net::is_a_source(const std::shared_ptr<Gate>& gate, const std::string& pin) const
+    {
+        return is_a_source(Endpoint(gate, pin, false));
+    }
 
-bool net::mark_global_output_net()
-{
-    return m_internal_manager->m_netlist->mark_global_output_net(shared_from_this());
-}
+    bool Net::is_a_source(const Endpoint& ep) const
+    {
+        if (!ep.is_source_pin())
+        {
+            log_error("netlist", "net::is_a_source: tried to use a destination-endpoint as a source-endpoint");
+            return false;
+        }
 
-bool net::unmark_global_input_net()
-{
-    return m_internal_manager->m_netlist->unmark_global_input_net(shared_from_this());
-}
+        return std::find(m_sources.begin(), m_sources.end(), ep) != m_sources.end();
+    }
 
-bool net::unmark_global_output_net()
-{
-    return m_internal_manager->m_netlist->unmark_global_output_net(shared_from_this());
-}
+    u32 Net::get_num_of_sources() const
+    {
+        return (u32)m_sources.size();
+    }
 
-bool net::is_global_input_net() const
-{
-    return m_internal_manager->m_netlist->is_global_input_net(const_cast<net*>(this)->shared_from_this());
-}
+    std::vector<Endpoint> Net::get_sources(const std::function<bool(const Endpoint& ep)>& filter) const
+    {
+        if (!filter)
+        {
+            return m_sources;
+        }
 
-bool net::is_global_output_net() const
-{
-    return m_internal_manager->m_netlist->is_global_output_net(const_cast<net*>(this)->shared_from_this());
-}
+        std::vector<Endpoint> srcs;
+        for (const auto& src : m_sources)
+        {
+            if (!filter(src))
+            {
+                continue;
+            }
+            srcs.push_back(src);
+        }
+        return srcs;
+    }
+
+    Endpoint Net::get_source() const
+    {
+        if (m_sources.empty())
+        {
+            return Endpoint(nullptr, "", false);
+        }
+        if (m_sources.size() > 1)
+        {
+            log_warning("netlist", "queried only the first source of multi driven net '{}' (id {})", m_name, m_id);
+        }
+        return m_sources.at(0);
+    }
+
+    bool Net::add_destination(const std::shared_ptr<Gate>& gate, const std::string& pin)
+    {
+        return add_destination(Endpoint(gate, pin, true));
+    }
+
+    bool Net::add_destination(const Endpoint& ep)
+    {
+        if (!ep.is_destination_pin())
+        {
+            log_error("netlist", "net::add_destination: tried to use a source-endpoint as a destination-endpoint");
+            return false;
+        }
+        return m_internal_manager->net_add_destination(shared_from_this(), ep);
+    }
+
+    bool Net::remove_destination(const std::shared_ptr<Gate>& gate, const std::string& pin)
+    {
+        return remove_destination(Endpoint(gate, pin, true));
+    }
+
+    bool Net::remove_destination(const Endpoint& ep)
+    {
+        if (!ep.is_destination_pin())
+        {
+            log_error("netlist", "net::remove_destination: tried to use a source-endpoint as a destination-endpoint");
+            return false;
+        }
+        return m_internal_manager->net_remove_destination(shared_from_this(), ep);
+    }
+
+    bool Net::is_a_destination(const std::shared_ptr<Gate>& gate, const std::string& pin) const
+    {
+        return is_a_destination(Endpoint(gate, pin, true));
+    }
+
+    bool Net::is_a_destination(const Endpoint& ep) const
+    {
+        if (!ep.is_destination_pin())
+        {
+            log_error("netlist", "net::is_a_destination: tried to use a source-endpoint as a destination-endpoint");
+            return false;
+        }
+
+        return std::find(m_destinations.begin(), m_destinations.end(), ep) != m_destinations.end();
+    }
+
+    u32 Net::get_num_of_destinations() const
+    {
+        return (u32)m_destinations.size();
+    }
+
+    std::vector<Endpoint> Net::get_destinations(const std::function<bool(const Endpoint& ep)>& filter) const
+    {
+        if (!filter)
+        {
+            return m_destinations;
+        }
+
+        std::vector<Endpoint> dsts;
+        for (const auto& dst : m_destinations)
+        {
+            if (!filter(dst))
+            {
+                continue;
+            }
+            dsts.push_back(dst);
+        }
+        return dsts;
+    }
+
+    bool Net::is_unrouted() const
+    {
+        return ((this->get_num_of_sources() == 0) || (this->get_num_of_destinations() == 0));
+    }
+
+    bool Net::mark_global_input_net()
+    {
+        return m_internal_manager->m_netlist->mark_global_input_net(shared_from_this());
+    }
+
+    bool Net::mark_global_output_net()
+    {
+        return m_internal_manager->m_netlist->mark_global_output_net(shared_from_this());
+    }
+
+    bool Net::unmark_global_input_net()
+    {
+        return m_internal_manager->m_netlist->unmark_global_input_net(shared_from_this());
+    }
+
+    bool Net::unmark_global_output_net()
+    {
+        return m_internal_manager->m_netlist->unmark_global_output_net(shared_from_this());
+    }
+
+    bool Net::is_global_input_net() const
+    {
+        return m_internal_manager->m_netlist->is_global_input_net(const_cast<Net*>(this)->shared_from_this());
+    }
+
+    bool Net::is_global_output_net() const
+    {
+        return m_internal_manager->m_netlist->is_global_output_net(const_cast<Net*>(this)->shared_from_this());
+    }
+}    // namespace hal

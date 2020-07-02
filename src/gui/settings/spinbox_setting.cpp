@@ -11,38 +11,41 @@
 #include <QStringList>
 #include "gui_globals.h"
 
-spinbox_setting::spinbox_setting(const QString& key, const QString& title, const int min, const int max, const QString& description, QWidget* parent) : settings_widget(key, parent)
+namespace hal
 {
-    m_labels.append(QPair<QLabel*, QString>(m_name, title));
+    SpinboxSetting::SpinboxSetting(const QString& key, const QString& title, const int min, const int max, const QString& description, QWidget* parent) : SettingsWidget(key, parent)
+    {
+        m_labels.append(QPair<QLabel*, QString>(m_name, title));
 
-    QHBoxLayout* layout = new QHBoxLayout();
-    m_container->addLayout(layout);
+        QHBoxLayout* layout = new QHBoxLayout();
+        m_container->addLayout(layout);
 
-    m_spinbox = new QSpinBox(this);
-    m_spinbox->setMinimum(min);
-    m_spinbox->setMaximum(max);
-    connect(m_spinbox, static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &spinbox_setting::on_spinbox_value_changed);
+        m_spinbox = new QSpinBox(this);
+        m_spinbox->setMinimum(min);
+        m_spinbox->setMaximum(max);
+        connect(m_spinbox, static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &SpinboxSetting::on_spinbox_value_changed);
 
-    layout->addWidget(m_spinbox);
+        layout->addWidget(m_spinbox);
 
-    QLabel* label = new QLabel();
-    layout->addWidget(label);
+        QLabel* label = new QLabel();
+        layout->addWidget(label);
 
-    m_labels.append(QPair<QLabel*, QString>(label, description));
-}
+        m_labels.append(QPair<QLabel*, QString>(label, description));
+    }
 
-void spinbox_setting::load(const QVariant& value)
-{
-    m_spinbox->setValue(value.toInt());
-}
+    void SpinboxSetting::load(const QVariant& value)
+    {
+        m_spinbox->setValue(value.toInt());
+    }
 
-QVariant spinbox_setting::value()
-{
-    return QVariant(m_spinbox->value());
-}
+    QVariant SpinboxSetting::value()
+    {
+        return QVariant(m_spinbox->value());
+    }
 
-void spinbox_setting::on_spinbox_value_changed(int value)
-{
-    Q_UNUSED(value);
-    trigger_setting_updated();
+    void SpinboxSetting::on_spinbox_value_changed(int value)
+    {
+        Q_UNUSED(value);
+        trigger_setting_updated();
+    }
 }

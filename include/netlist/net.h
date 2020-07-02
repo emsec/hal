@@ -24,241 +24,292 @@
 #pragma once
 
 #include "def.h"
-
 #include "netlist/data_container.h"
 #include "netlist/endpoint.h"
 
+#include <functional>
 #include <map>
 #include <memory>
 #include <set>
 #include <string>
 #include <tuple>
 #include <vector>
-#include <functional>
 
-/* forward declaration */
-class netlist;
-class gate;
-class netlist_internal_manager;
-
-/**
- * Net class containing information about a net including its source and destination.
- *
- * @ingroup netlist
- */
-class NETLIST_API net : public data_container, public std::enable_shared_from_this<net>
+namespace hal
 {
-    friend class netlist_internal_manager;
+    /* forward declaration */
+    class Netlist;
+    class Gate;
+    class NetlistInternalManager;
 
-public:
     /**
-     * Gets the unique id of the net.
+     * Net class containing information about a net including its source and destination.
      *
-     * @returns The net's id.
+     * @ingroup netlist
      */
-    u32 get_id() const;
+    class NETLIST_API Net : public DataContainer, public std::enable_shared_from_this<Net>
+    {
+        friend class NetlistInternalManager;
 
-    /**
-     * Get the parent netlist of the net.
-     *
-     * @returns The netlist.
-     */
-    std::shared_ptr<netlist> get_netlist() const;
+    public:
+        /**
+         * Gets the unique id of the net.
+         *
+         * @returns The net's id.
+         */
+        u32 get_id() const;
 
-    /**
-     * Get the name of the net.
-     *
-     * @returns The name.
-     */
-    std::string get_name() const;
+        /**
+         * Get the parent netlist of the net.
+         *
+         * @returns The netlist.
+         */
+        std::shared_ptr<Netlist> get_netlist() const;
 
-    /**
-     * Set the name of the net.
-     *
-     * @param[in] name - The new name.
-     */
-    void set_name(const std::string& name);
+        /**
+         * Get the name of the net.
+         *
+         * @returns The name.
+         */
+        std::string get_name() const;
 
-    /**
-     *      src specific functions
-     */
+        /**
+         * Set the name of the net.
+         *
+         * @param[in] name - The new name.
+         */
+        void set_name(const std::string& name);
 
-    /**
-     * Set the source of this net to a gate's output pin.
-     *
-     * @param[in] gate - The source gate.
-     * @param[in] pin_type - The pin of the source gate.
-     * @returns True on success.
-     **/
-    bool set_src(const std::shared_ptr<gate>& gate, const std::string& pin_type);
+        /*
+         *      src specific functions
+         */
 
-    /**
-     * Set the source of this net to a gate's output pin.
-     *
-     * @param[in] src - The source endpoint.
-     * @returns True on success.
-     **/
-    bool set_src(const endpoint& src);
+        /**
+         * Add a source to this net.
+         *
+         * @param[in] gate - The source gate.
+         * @param[in] pin - The input pin of the gate.
+         * @returns True on success.
+         */
+        bool add_source(const std::shared_ptr<Gate>& gate, const std::string& pin);
 
-    /**
-     * Remove the source of the net.
-     *
-     * @returns True on success.
-     */
-    bool remove_src();
+        /**
+         * Add a source to this net by endpoint.
+         * If the endpoint is a destination-endpoint this function aborts.
+         *
+         * @param[in] ep - The endpoint.
+         * @returns True on success.
+         */
+        bool add_source(const Endpoint& ep);
 
-    /**
-     * Get the src of the net.
-     * If there was no src assigned, the gate element of the returned endpoint is a nullptr.
-     *
-     * @returns The source endpoint.
-     */
-    endpoint get_src() const;
+        /**
+         * Remove a source from this net.
+         *
+         * @param[in] gate - The source gate.
+         * @param[in] pin - The input pin of the gate.
+         * @returns True on success.
+         */
+        bool remove_source(const std::shared_ptr<Gate>& gate, const std::string& pin);
 
-    /**
-     *      dst specific functions
-     */
+        /**
+         * Remove a source from this net by endpoint.
+         * If the endpoint is a destination-endpoint this function aborts.
+         *
+         * @param[in] ep - The endoint.
+         * @returns True on success.
+         */
+        bool remove_source(const Endpoint& ep);
 
-    /**
-     * Add a destination to this net.
-     *
-     * @param[in] gate - The destination gate.
-     * @param[in] pin_type - The input pin of the gate.
-     * @returns True on success.
-     **/
-    bool add_dst(const std::shared_ptr<gate>& gate, const std::string& pin_type);
+        /**
+         * Check whether a gate is a source of this net.
+         *
+         * @param[in] gate - The source gate.
+         * @param[in] pin - The source output pin.
+         * @returns True if the gate's pin is a source of this net.
+         */
+        bool is_a_source(const std::shared_ptr<Gate>& gate, const std::string& pin) const;
 
-    /**
-     * Add a destination to this net.
-     *
-     * @param[in] dst - The destination endpoint.
-     * @returns True on success.
-     **/
-    bool add_dst(const endpoint& dst);
+        /**
+         * Check whether an endpoint is a source of this net.
+         * If the endpoint is a destination-endpoint this function aborts.
+         *
+         * @param[in] ep - The endpoint.
+         * @returns True if the endpoint is a source of this net.
+         */
+        bool is_a_source(const Endpoint& ep) const;
 
-    /**
-     * Remove a destination from this net.
-     *
-     * @param[in] gate - The destination gate.
-     * @param[in] pin_type - The input pin of the gate.
-     * @returns True on success.
-     **/
-    bool remove_dst(const std::shared_ptr<gate>& gate, const std::string& pin_type);
+        /**
+         * Get the number of sources.<br>
+         * Faster than get_sources().size().
+         *
+         * @returns The number of sources of this net.
+         */
+        u32 get_num_of_sources() const;
 
-    /**
-     * Remove a destination from this net.
-     *
-     * @param[in] dst - The destination endpoint.
-     * @returns True on success.
-     **/
-    bool remove_dst(const endpoint& dst);
+        /**
+         * Get the vector of sources of the net.
+         *
+         * @param[in] filter - a filter for endpoints.
+         * @returns A vector of source endpoints.
+         */
+        std::vector<Endpoint> get_sources(const std::function<bool(const Endpoint& ep)>& filter = nullptr) const;
 
-    /**
-     * Check whether a gate is a destination of this net.
-     *
-     * @param[in] gate - The destination gate.
-     * @returns True if the input's pin is a destination.
-     **/
-    bool is_a_dst(const std::shared_ptr<gate>& gate) const;
+        /**
+         * Get the (first) src of the net.
+         * If there was no src assigned, the gate element of the returned endpoint is a nullptr.
+         * If the net is multi-driven a warning is printed.
+         *
+         * @returns The (first) source endpoint.
+         */
+        Endpoint get_source() const;
 
-    /**
-     * Check whether a gate's input pin is a destination of this net.
-     *
-     * @param[in] ep - The input endpoint.
-     * @returns True if the input's pin is a destination.
-     **/
-    bool is_a_dst(const endpoint& ep) const;
+        /*
+         *      dst specific functions
+         */
 
-    /**
-     * Get the number of destinations.<br>
-     * Faster than get_dsts().size().
-     *
-     * @returns The number of destinations of this net.
-     */
-    u32 get_num_of_dsts() const;
+        /**
+         * Add a destination to this net.
+         *
+         * @param[in] gate - The destination gate.
+         * @param[in] pin - The input pin of the gate.
+         * @returns True on success.
+         */
+        bool add_destination(const std::shared_ptr<Gate>& gate, const std::string& pin);
 
-    /**
-     * Get the vector of destinations of the net.
-     *
-     * @param[in] filter - a filter for endpoints.
-     * @returns A vector of destination endpoints.
-     */
-    std::vector<endpoint> get_dsts(const std::function<bool(const endpoint& ep)>& filter = nullptr) const;
+        /**
+         * Add a destination to this net by endpoint.
+         *
+         * @param[in] ep - The endpoint.
+         * @returns True on success.
+         */
+        bool add_destination(const Endpoint& ep);
 
-    /**
-     * Check whether the net is routed, i.e. it has no source or the no destinations.
-     *
-     * @returns True if the net is unrouted.
-     */
-    bool is_unrouted() const;
+        /**
+         * Remove a destination from this net.
+         * If the endpoint is a source-endpoint this function aborts.
+         *
+         * @param[in] gate - The destination gate.
+         * @param[in] pin - The input pin of the gate.
+         * @returns True on success.
+         */
+        bool remove_destination(const std::shared_ptr<Gate>& gate, const std::string& pin);
 
-    /**
-     * Mark this net as a global input net.
-     *
-     * @returns True on success.
-     */
-    bool mark_global_input_net();
+        /**
+         * Remove a destination from this net by endpoint.
+         * If the endpoint is a source-endpoint this function aborts.
+         *
+         * @param[in] ep - The endoint.
+         * @returns True on success.
+         */
+        bool remove_destination(const Endpoint& ep);
 
-    /**
-     * Mark this net as a global output net.
-     *
-     * @returns True on success.
-     */
-    bool mark_global_output_net();
+        /**
+         * Check whether a gate is a destination of this net.
+         *
+         * @param[in] gate - The destination gate.
+         * @param[in] pin - The destination output pin.
+         * @returns True if the gate's pin is a destination of this net.
+         */
+        bool is_a_destination(const std::shared_ptr<Gate>& gate, const std::string& pin) const;
 
-    /**
-     * Unmark this net as a global input net.
-     *
-     * @returns True on success.
-     */
-    bool unmark_global_input_net();
+        /**
+         * Check whether an endpoint is a destination of this net.
+         * If the endpoint is a source-endpoint this function aborts.
+         *
+         * @param[in] ep - The endpoint.
+         * @returns True if the endpoint is a destination of this net.
+         */
+        bool is_a_destination(const Endpoint& ep) const;
 
-    /**
-     * Unmark this net as a global output net.
-     *
-     * @returns True on success.
-     */
-    bool unmark_global_output_net();
+        /**
+         * Get the number of destinations.<br>
+         * Faster than get_destinations().size().
+         *
+         * @returns The number of destinations of this net.
+         */
+        u32 get_num_of_destinations() const;
 
-    /**
-     * Checks whether this net is a global input net.
-     *
-     * @returns True if the net is a global input net.
-     */
-    bool is_global_input_net() const;
+        /**
+         * Get the vector of destinations of the net.
+         *
+         * @param[in] filter - a filter for endpoints.
+         * @returns A vector of destination endpoints.
+         */
+        std::vector<Endpoint> get_destinations(const std::function<bool(const Endpoint& ep)>& filter = nullptr) const;
 
-    /**
-     * Checks whether this net is a global output net.
-     *
-     * @returns True if the net is a global output net.
-     */
-    bool is_global_output_net() const;
+        /**
+         * Check whether the net is routed, i.e. it has no source or the no destinations.
+         *
+         * @returns True if the net is unrouted.
+         */
+        bool is_unrouted() const;
 
-private:
-    /**
-     * Constructs a new net and initializes it with the parameter fields.<br>
-     * The net is not automatically added to the netlist.
-     *
-     * @param[in] g - The parent netlist.
-     * @param[in] id - A unique id.
-     * @param[in] name - A name for the net.
-     */
-    explicit net(netlist_internal_manager* internal_manager, const u32 id, const std::string& name = "");
+        /**
+         * Mark this net as a global input net.
+         *
+         * @returns True on success.
+         */
+        bool mark_global_input_net();
 
-    net(const net&) = delete;               //disable copy-constructor
-    net& operator=(const net&) = delete;    //disable copy-assignment
+        /**
+         * Mark this net as a global output net.
+         *
+         * @returns True on success.
+         */
+        bool mark_global_output_net();
 
-    netlist_internal_manager* m_internal_manager;
+        /**
+         * Unmark this net as a global input net.
+         *
+         * @returns True on success.
+         */
+        bool unmark_global_input_net();
 
-    /** stores the id of the net */
-    u32 m_id;
+        /**
+         * Unmark this net as a global output net.
+         *
+         * @returns True on success.
+         */
+        bool unmark_global_output_net();
 
-    /** stores the name of the net */
-    std::string m_name;
+        /**
+         * Checks whether this net is a global input net.
+         *
+         * @returns True if the net is a global input net.
+         */
+        bool is_global_input_net() const;
 
-    /** stores the src gate and pin id of src gate*/
-    endpoint m_src;
+        /**
+         * Checks whether this net is a global output net.
+         *
+         * @returns True if the net is a global output net.
+         */
+        bool is_global_output_net() const;
 
-    /** stores the dst gate and pin id of the dst gate*/
-    std::vector<endpoint> m_dsts;
-};
+    private:
+        /**
+         * Constructs a new net and initializes it with the parameter fields.<br>
+         * The net is not automatically added to the netlist.
+         *
+         * @param[in] g - The parent netlist.
+         * @param[in] id - A unique id.
+         * @param[in] name - A name for the net.
+         */
+        explicit Net(NetlistInternalManager* internal_manager, const u32 id, const std::string& name = "");
+
+        Net(const Net&) = delete;               //disable copy-constructor
+        Net& operator=(const Net&) = delete;    //disable copy-assignment
+
+        NetlistInternalManager* m_internal_manager;
+
+        /* stores the id of the net */
+        u32 m_id;
+
+        /* stores the name of the net */
+        std::string m_name;
+
+        /* stores the dst gate and pin id of the dst gate */
+        std::vector<Endpoint> m_destinations;
+        std::vector<Endpoint> m_sources;
+    };
+}    // namespace hal

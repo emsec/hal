@@ -27,7 +27,7 @@ if(PL_##UPPER## OR BUILD_ALL_PLUGINS)
     file(GLOB_RECURSE ##UPPER##_INC ${CMAKE_CURRENT_SOURCE_DIR}/include/*.h)
     file(GLOB_RECURSE ##UPPER##_SRC ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
     file(GLOB_RECURSE ##UPPER##_PYTHON_SRC ${CMAKE_CURRENT_SOURCE_DIR}/python/*.cpp)
-    
+
     hal_add_plugin(##LOWER##
                    SHARED
                    HEADER ${##UPPER##_INC}
@@ -41,7 +41,7 @@ endif()
 
 PLUGIN_H_TEMPLATE = """#pragma once
 
-#include "core/interface_base.h"
+#include "core/plugin_interface_base.h"
 
 class PLUGIN_API plugin_##LOWER## : virtual public i_base
 {

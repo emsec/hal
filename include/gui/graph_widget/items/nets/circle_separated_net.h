@@ -21,35 +21,30 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef CIRCLE_SEPARATED_NET_H
-#define CIRCLE_SEPARATED_NET_H
+#pragma once
 
 #include "graph_widget/items/nets/separated_graphics_net.h"
 
-class circle_separated_net : public separated_graphics_net
+namespace hal
 {
-public:
-    static void load_settings();
+    class CircleSeparatedNet : public SeparatedGraphicsNet
+    {
+    public:
+        static void load_settings();
 
-    circle_separated_net(const std::shared_ptr<const net> n);
+        CircleSeparatedNet(const std::shared_ptr<const Net> n);
 
-    virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override;
-    virtual void set_visuals(const visuals& v) override;
+        void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override;
 
-    virtual void add_output() override;
-    virtual void add_input(const QPointF& scene_position) override;
+        void add_input(const QPointF& scene_position) override;
+        void add_output(const QPointF& scene_position) override;
 
-    virtual void finalize() override;
+        qreal input_width() const override;
+        qreal output_width() const override;
 
-    virtual qreal input_width() const override;
-    virtual qreal output_width() const override;
-
-private:
-    static qreal s_wire_length;
-    static qreal s_circle_offset;
-    static qreal s_radius;
-
-    static QBrush s_brush;
-};
-
-#endif // CIRCLE_SEPARATED_NET_H
+    private:
+        static qreal s_wire_length;
+        static qreal s_circle_offset;
+        static qreal s_radius;
+    };
+}

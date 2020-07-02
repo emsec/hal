@@ -21,54 +21,54 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef PLUGIN_SCHEDULE_MANAGER_H
-#define PLUGIN_SCHEDULE_MANAGER_H
+#pragma once
 
 #include <QObject>
 
-class plugin_arguments_widget;
-class program_arguments;
-
-struct argument
+namespace hal
 {
-    QString flag;
-    QString description;
-    QString value;
-    bool checked;
-};
+    class PluginArgumentsWidget;
+    class ProgramArguments;
 
-class plugin_schedule_manager : public QObject
-{
-    using schedule = QList<QPair<QString, QList<argument>>>;
+    struct argument
+    {
+        QString flag;
+        QString description;
+        QString value;
+        bool checked;
+    };
 
-    Q_OBJECT
+    class PluginScheduleManager : public QObject
+    {
+        using schedule = QList<QPair<QString, QList<argument>>>;
 
-public:
-    static plugin_schedule_manager* get_instance();
+        Q_OBJECT
 
-    schedule* get_schedule();
-    program_arguments get_program_arguments(int index);
-    int get_current_index();
+    public:
+        static PluginScheduleManager* get_instance();
 
-    void set_current_index(int index);
+        schedule* get_schedule();
+        ProgramArguments get_program_arguments(int index);
+        int get_current_index();
 
-    void add_plugin(const QString& plugin, int index);
-    void move_plugin(int from, int to);
-    void remove_plugin(int index);
+        void set_current_index(int index);
 
-    void save_schedule(const QString& name);
-    void load_schedule(const QString& name);
-    void delete_schedule(const QString& name);
+        void add_plugin(const QString& plugin, int index);
+        void move_plugin(int from, int to);
+        void remove_plugin(int index);
 
-    void run_schedule();
+        void save_schedule(const QString& name);
+        void load_schedule(const QString& name);
+        void delete_schedule(const QString& name);
 
-private:
-    explicit plugin_schedule_manager(QObject* parent = nullptr);
+        void run_schedule();
 
-    schedule m_schedule;
-    QList<QPair<QString, schedule*>> m_saved_schedules;
+    private:
+        explicit PluginScheduleManager(QObject* parent = nullptr);
 
-    int m_current_index;
-};
+        schedule m_schedule;
+        QList<QPair<QString, schedule*>> m_saved_schedules;
 
-#endif    // PLUGIN_SCHEDULE_MANAGER_H
+        int m_current_index;
+    };
+}

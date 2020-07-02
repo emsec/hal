@@ -11,43 +11,46 @@
 #include <QStringList>
 #include "gui_globals.h"
 
-text_setting::text_setting(const QString& key, const QString& title, const QString& description, const QString& placeholder, QWidget *parent) : settings_widget(key, parent)
+namespace hal
 {
-    m_labels.append(QPair<QLabel*, QString>(m_name, title));
+    TextSetting::TextSetting(const QString& key, const QString& title, const QString& description, const QString& placeholder, QWidget *parent) : SettingsWidget(key, parent)
+    {
+        m_labels.append(QPair<QLabel*, QString>(m_name, title));
 
-    QHBoxLayout* layout = new QHBoxLayout();
-    m_container->addLayout(layout);
+        QHBoxLayout* layout = new QHBoxLayout();
+        m_container->addLayout(layout);
 
-    m_textfield = new QLineEdit(this);
-    m_textfield->setPlaceholderText(placeholder);
-    m_textfield->setStyleSheet("QLineEdit{width: 200px;}");
-    connect(m_textfield, &QLineEdit::textChanged, this, &text_setting::on_text_changed);
+        m_textfield = new QLineEdit(this);
+        m_textfield->setPlaceholderText(placeholder);
+        m_textfield->setStyleSheet("QLineEdit{width: 200px;}");
+        connect(m_textfield, &QLineEdit::textChanged, this, &TextSetting::on_text_changed);
 
 
-    layout->addWidget(m_textfield);
+        layout->addWidget(m_textfield);
 
-    QLabel* label = new QLabel();
-    layout->addWidget(label);
+        QLabel* label = new QLabel();
+        layout->addWidget(label);
 
-    m_labels.append(QPair<QLabel*, QString>(label, description));
-}
+        m_labels.append(QPair<QLabel*, QString>(label, description));
+    }
 
-void text_setting::load(const QVariant& value)
-{
-    m_textfield->setText(value.toString());
-}
+    void TextSetting::load(const QVariant& value)
+    {
+        m_textfield->setText(value.toString());
+    }
 
-QVariant text_setting::value()
-{
-    return QVariant(m_textfield->text());
-}
+    QVariant TextSetting::value()
+    {
+        return QVariant(m_textfield->text());
+    }
 
-// void dropdown_setting::rollback()
-// {
+    // void DropdownSetting::rollback()
+    // {
 
-// }
+    // }
 
-void text_setting::on_text_changed()
-{
-    this->trigger_setting_updated();
+    void TextSetting::on_text_changed()
+    {
+        this->trigger_setting_updated();
+    }
 }

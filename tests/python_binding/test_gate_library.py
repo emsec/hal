@@ -62,7 +62,7 @@ class TestGateLibrary(unittest.TestCase):
 
     # Testing the python binding for the gate_type class
     def test_gate_type(self):
-        gt = hal_py.gate_type("TEST_GATE_TYPE")
+        gt = hal_py.Gate_type("TEST_GATE_TYPE")
 
         # Identifier
         self.assertEqual(gt.get_base_type(), hal_py.base_type.combinatorial)
@@ -92,7 +92,7 @@ class TestGateLibrary(unittest.TestCase):
 
     # Testing the python binding for the gate_type_lut class
     def test_gate_type_lut(self):
-        gt = hal_py.gate_type_lut("TEST_GATE_TYPE")
+        gt = hal_py.Gate_type_lut("TEST_GATE_TYPE")
 
         # Identifier
         self.assertEqual(gt.get_base_type(), hal_py.base_type.lut)
@@ -122,7 +122,7 @@ class TestGateLibrary(unittest.TestCase):
 
     # Testing the python binding for the gate_type_sequential class
     def test_gate_type_sequential(self):
-        gt = hal_py.gate_type_sequential("TEST_GATE_TYPE", hal_py.base_type.ff)
+        gt = hal_py.Gate_type_sequential("TEST_GATE_TYPE", hal_py.base_type.ff)
 
         # Identifier
         self.assertEqual(gt.get_base_type(), hal_py.base_type.ff)
@@ -154,7 +154,7 @@ class TestGateLibrary(unittest.TestCase):
 
     # Testing the python binding for the gate_library class
     def test_gate_library(self):
-        gl = hal_py.gate_library("test_glib")
+        gl = hal_py.Gate_library("test_glib")
 
         # Identifier
         self.assertEqual(gl.get_name(), "test_glib")
@@ -166,12 +166,12 @@ class TestGateLibrary(unittest.TestCase):
 
         # Gate Types
         # -- create some gate types
-        gt_gnd = hal_py.gate_type("TEST_GND")
+        gt_gnd = hal_py.Gate_type("TEST_GND")
         gt_gnd.add_output_pin("O")
         _0 = hal_py.boolean_function(hal_py.value.ZERO)
         gt_gnd.add_boolean_function("O", _0)
 
-        gt_vcc = hal_py.gate_type("TEST_VCC")
+        gt_vcc = hal_py.Gate_type("TEST_VCC")
         gt_vcc.add_output_pin("O")
         _1 = hal_py.boolean_function(hal_py.value.ONE)
         gt_vcc.add_boolean_function("O", _1)

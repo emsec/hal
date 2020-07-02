@@ -4,18 +4,21 @@
 
 #include <QVBoxLayout>
 
-python_console_widget::python_console_widget(QWidget* parent) : content_widget("Python Console", parent), m_console(new python_console())
+namespace hal
 {
-    m_content_layout->addWidget(m_console);
-}
+    PythonConsoleWidget::PythonConsoleWidget(QWidget* parent) : ContentWidget("Python Console", parent), m_console(new PythonConsole())
+    {
+        m_content_layout->addWidget(m_console);
+    }
 
-void python_console_widget::setup_toolbar(toolbar* toolbar)
-{
-    Q_UNUSED(toolbar);
-}
+    void PythonConsoleWidget::setup_toolbar(Toolbar* Toolbar)
+    {
+        Q_UNUSED(Toolbar);
+    }
 
-QList<QShortcut*> python_console_widget::create_shortcuts()
-{
-    QList<QShortcut*> list;
-    return list;
+    QList<QShortcut*> PythonConsoleWidget::create_shortcuts()
+    {
+        QList<QShortcut*> list;
+        return list;
+    }
 }

@@ -2,22 +2,25 @@
 
 #include <QStyle>
 
-toolbar::toolbar(QWidget* parent) : QToolBar(parent)
+namespace hal
 {
-}
+    Toolbar::Toolbar(QWidget* parent) : QToolBar(parent)
+    {
+    }
 
-void toolbar::add_spacer()
-{
-    QWidget* spacer = new QWidget(this);
-    spacer->setAttribute(Qt::WA_NoSystemBackground);
-    spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    addWidget(spacer);
-}
+    void Toolbar::add_spacer()
+    {
+        QWidget* spacer = new QWidget(this);
+        spacer->setAttribute(Qt::WA_NoSystemBackground);
+        spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        addWidget(spacer);
+    }
 
-void toolbar::repolish()
-{
-    QStyle* s = style();
+    void Toolbar::repolish()
+    {
+        QStyle* s = style();
 
-    s->unpolish(this);
-    s->polish(this);
+        s->unpolish(this);
+        s->polish(this);
+    }
 }

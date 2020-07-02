@@ -12,7 +12,7 @@ protected:
     virtual graph *get_graph(std::stringstream &stream)
     {
         graph* g_obj = graph_factory::create_graph("XILINX_ISE_SIMPRIM");
-        hdl_parser_vhdl parser;
+        HDLParserVHDL parser;
         if (parser.parse(g_obj, std::move(stream)) != SUCCESS) {
             delete g_obj;
             return nullptr;

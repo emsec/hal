@@ -21,37 +21,37 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef PYTHON_SYNTAX_HIGHLIGHTER_H
-#define PYTHON_SYNTAX_HIGHLIGHTER_H
+#pragma once
 
 #include <QRegularExpression>
 #include <QSyntaxHighlighter>
 #include <QTextCharFormat>
 
-class python_syntax_highlighter : public QSyntaxHighlighter
+namespace hal
 {
-    Q_OBJECT
-
-public:
-    explicit python_syntax_highlighter(QTextDocument* parent = nullptr);
-
-protected:
-    void highlightBlock(const QString& text) Q_DECL_OVERRIDE;
-
-private:
-    int close_multiline_comment(const QString& text, const QRegularExpression& delimiter, const int offset = 0);
-
-    struct highlighting_rule
+    class PythonSyntaxHighlighter : public QSyntaxHighlighter
     {
-        QRegularExpression pattern;
-        QTextCharFormat format;
+        Q_OBJECT
+
+    public:
+        explicit PythonSyntaxHighlighter(QTextDocument* parent = nullptr);
+
+    protected:
+        void highlightBlock(const QString& text) Q_DECL_OVERRIDE;
+
+    private:
+        int close_multiline_comment(const QString& text, const QRegularExpression& delimiter, const int offset = 0);
+
+        struct highlighting_rule
+        {
+            QRegularExpression pattern;
+            QTextCharFormat format;
+        };
+
+        QVector<highlighting_rule> m_highlighting_rules;
+
+        QRegularExpression m_multi_line_comment_delimiter;
+        QRegularExpression m_tripple_single_quote;
+        QRegularExpression m_tripple_double_quote;
     };
-
-    QVector<highlighting_rule> m_highlighting_rules;
-
-    QRegularExpression m_multi_line_comment_delimiter;
-    QRegularExpression m_tripple_single_quote;
-    QRegularExpression m_tripple_double_quote;
-};
-
-#endif    // PYTHON_SYNTAX_HIGHLIGHTER_H
+}

@@ -21,49 +21,49 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef tree_module_item_H
-#define tree_module_item_H
+#pragma once
 
 #include <QList>
 #include <QVariant>
 #include <QVector>
 
-class tree_module_item
+namespace hal
 {
-public:
-    enum class item_type
+    class TreeModuleItem
     {
-        gate      = 0,
-        net       = 1,
-        module = 2,
-        structure = 3,
-        ignore    = 4
+    public:
+        enum class item_type
+        {
+            gate      = 0,
+            net       = 1,
+            module = 2,
+            structure = 3,
+            ignore    = 4
+        };
+
+        TreeModuleItem(const QVector<QVariant>& data, item_type type = item_type::ignore, TreeModuleItem* parent = 0);
+        ~TreeModuleItem();
+
+        //information access
+        int get_child_count() const;
+        int get_column_count() const;
+        int get_row_number() const;
+        TreeModuleItem* get_child(int row);
+        TreeModuleItem* get_parent();
+        QVariant data(int column) const;
+        item_type get_type();
+
+        //information manipulation
+        bool insert_child(int row_position, TreeModuleItem* item);
+        bool set_data(int column, const QVariant& value);
+        bool remove_all_children();
+        bool remove_children(int position, int count);
+        bool remove_child(TreeModuleItem* item);
+
+    private:
+        QList<TreeModuleItem*> m_child_items;
+        QVector<QVariant> m_data;
+        TreeModuleItem* m_parent_item;
+        item_type m_type;
     };
-
-    tree_module_item(const QVector<QVariant>& data, item_type type = item_type::ignore, tree_module_item* parent = 0);
-    ~tree_module_item();
-
-    //information access
-    int get_child_count() const;
-    int get_column_count() const;
-    int get_row_number() const;
-    tree_module_item* get_child(int row);
-    tree_module_item* get_parent();
-    QVariant data(int column) const;
-    item_type get_type();
-
-    //information manipulation
-    bool insert_child(int row_position, tree_module_item* item);
-    bool set_data(int column, const QVariant& value);
-    bool remove_all_children();
-    bool remove_children(int position, int count);
-    bool remove_child(tree_module_item* item);
-
-private:
-    QList<tree_module_item*> m_child_items;
-    QVector<QVariant> m_data;
-    tree_module_item* m_parent_item;
-    item_type m_type;
-};
-
-#endif    // tree_module_item_H
+}

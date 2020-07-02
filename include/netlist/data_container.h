@@ -29,71 +29,74 @@
 #include <tuple>
 #include <vector>
 
-/**
- *  Data structure for custom data associations.
- *
- * @ingroup netlist
- */
-class NETLIST_API data_container
+namespace hal
 {
-public:
-    /** constructor (= default) */
-    data_container() = default;
-    /** destructor (= default)  Needs to be virtual to access interface in subclasses via python. */
-    virtual ~data_container() = default;
-
     /**
-     * Sets a custom data entry.<br>
-     * If it does not exist yet, it is added.
+     *  Data structure for custom data associations.
      *
-     * @param[in] category - Key category
-     * @param[in] key - Data key
-     * @param[in] data_type - Data type of value
-     * @param[in] value - Data value
-     * @param[in] log_with_info_level - Force explicit logging channel 'netlist' with log level info to trace GUI events (default = false)
-     * @returns True on success.
+     * @ingroup netlist
      */
-    bool set_data(const std::string& category, const std::string& key, const std::string& data_type, const std::string& value, const bool log_with_info_level = false);
+    class NETLIST_API DataContainer
+    {
+    public:
+        /** constructor (= default) */
+        DataContainer() = default;
+        /** destructor (= default)  Needs to be virtual to access interface in subclasses via python. */
+        virtual ~DataContainer() = default;
 
-    /**
-     * Deletes custom data.
-     *
-     * @param[in] category - Category of key
-     * @param[in] key - Data key
-     * @param[in] log_with_info_level - Force explicit logging channel 'netlist' with log level info to trace GUI events (default = false)
-     * @returns True on success.
-     */
-    bool delete_data(const std::string& category, const std::string& key, const bool log_with_info_level = false);
+        /**
+        * Sets a custom data entry.<br>
+        * If it does not exist yet, it is added.
+        *
+        * @param[in] category - Key category
+        * @param[in] key - Data key
+        * @param[in] data_type - Data type of value
+        * @param[in] value - Data value
+        * @param[in] log_with_info_level - Force explicit logging channel 'netlist' with log level info to trace GUI events (default = false)
+        * @returns True on success.
+        */
+        bool set_data(const std::string& category, const std::string& key, const std::string& data_type, const std::string& value, const bool log_with_info_level = false);
 
-    /**
-     * Gets all stored data.
-     *
-     * @returns A map from ((1) category, (2) key) to ((1) type, (2) value)
-     */
-    std::map<std::tuple<std::string, std::string>, std::tuple<std::string, std::string>> get_data() const;
+        /**
+         * Deletes custom data.
+         *
+         * @param[in] category - Category of key
+         * @param[in] key - Data key
+         * @param[in] log_with_info_level - Force explicit logging channel 'netlist' with log level info to trace GUI events (default = false)
+         * @returns True on success.
+         */
+        bool delete_data(const std::string& category, const std::string& key, const bool log_with_info_level = false);
 
-    /**
-     * Gets data specified by key and category.
-     *
-     * @param[in] category - Category of key
-     * @param[in] key - Data key
-     * @returns The tuple ((1) type, (2) value)
-     */
-    std::tuple<std::string, std::string> get_data_by_key(const std::string& category, const std::string& key) const;
+        /**
+         * Gets all stored data.
+         *
+         * @returns A map from ((1) category, (2) key) to ((1) type, (2) value)
+         */
+        std::map<std::tuple<std::string, std::string>, std::tuple<std::string, std::string>> get_data() const;
 
-    /**
-     * Returns all data keys
-     *
-     * @returns A vector of tuples ((1) category, (2) key)
-     */
-    std::vector<std::tuple<std::string, std::string>> get_data_keys() const;
+        /**
+         * Gets data specified by key and category.
+         *
+         * @param[in] category - Category of key
+         * @param[in] key - Data key
+         * @returns The tuple ((1) type, (2) value)
+         */
+        std::tuple<std::string, std::string> get_data_by_key(const std::string& category, const std::string& key) const;
 
-protected:
-    /**
-     * A function called when data has changed.
-     * Has to be implemented by the child class.
-     */
-    //virtual void notify_updated() = 0;
+        /**
+         * Returns all data keys
+         *
+         * @returns A vector of tuples ((1) category, (2) key)
+         */
+        std::vector<std::tuple<std::string, std::string>> get_data_keys() const;
 
-    std::map<std::tuple<std::string, std::string>, std::tuple<std::string, std::string>> m_data;
-};
+    protected:
+        /**
+         * A function called when data has changed.
+         * Has to be implemented by the child class.
+         */
+        //virtual void notify_updated() = 0;
+
+        std::map<std::tuple<std::string, std::string>, std::tuple<std::string, std::string>> m_data;
+    };
+}    // namespace hal

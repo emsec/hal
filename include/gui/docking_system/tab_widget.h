@@ -21,12 +21,11 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef TAB_WIDGET_H
-#define TAB_WIDGET_H
+#pragma once
 
 #include "docking_system/dock_bar.h"
-#include "hal_content_anchor/hal_content_anchor.h"
-#include "hal_widget/hal_widget.h"
+#include "content_anchor/content_anchor.h"
+#include "widget/widget.h"
 #include "toolbar/toolbar.h"
 
 #include <QAction>
@@ -34,42 +33,43 @@
 #include <QList>
 #include <QStackedWidget>
 
-class content_frame;
-class content_widget;
-
 class QShortcut;
 
-class tab_widget : public hal_widget, public hal_content_anchor
+namespace hal
 {
-    Q_OBJECT
+    class ContentFrame;
+    class ContentWidget;
 
-public:
-    explicit tab_widget(QWidget* parent = nullptr);
-    virtual void add(content_widget* widget, int index = -1);
-    virtual void remove(content_widget* widget);
-    virtual void detach(content_widget* widget);
-    virtual void reattach(content_widget* widget);
-    virtual void open(content_widget* widget);
-    virtual void close(content_widget* widget);
+    class TabWidget : public Widget, public ContentAnchor
+    {
+        Q_OBJECT
 
-    void handle_no_current_widget(int index);
-    void remove_content();
+    public:
+        explicit TabWidget(QWidget* parent = nullptr);
+        virtual void add(ContentWidget* widget, int index = -1);
+        virtual void remove(ContentWidget* widget);
+        virtual void detach(ContentWidget* widget);
+        virtual void reattach(ContentWidget* widget);
+        virtual void open(ContentWidget* widget);
+        virtual void close(ContentWidget* widget);
 
-public Q_SLOTS:
-    void detach_current_widget();
-    void handle_drag_start();
-    void handle_drag_end();
+        void handle_no_current_widget(int index);
+        void remove_content();
 
-private:
-    QVBoxLayout* m_vertical_layout;
-    QHBoxLayout* m_horizontal_layout;
-    dock_bar* m_dock_bar;
-    toolbar* m_left_toolbar;
-    toolbar* m_right_toolbar;
-    content_widget* m_current_widget;
-    QAction* m_action_detach;
-    QList<content_frame*> m_detached_frames;
-    QList<QShortcut*> m_active_shortcuts;
-};
+    public Q_SLOTS:
+        void detach_current_widget();
+        void handle_drag_start();
+        void handle_drag_end();
 
-#endif    // TAB_WIDGET_H
+    private:
+        QVBoxLayout* m_vertical_layout;
+        QHBoxLayout* m_horizontal_layout;
+        DockBar* m_dock_bar;
+        Toolbar* m_left_toolbar;
+        Toolbar* m_right_toolbar;
+        ContentWidget* m_current_widget;
+        QAction* m_action_detach;
+        QList<ContentFrame*> m_detached_frames;
+        QList<QShortcut*> m_active_shortcuts;
+    };
+}

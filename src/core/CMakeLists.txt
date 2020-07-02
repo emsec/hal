@@ -6,13 +6,14 @@ configure_file(${CMAKE_SOURCE_DIR}/include/hal_version.h.in ${CMAKE_BINARY_DIR}/
 
 set(CORE_LIB_HDR
     ${CMAKE_SOURCE_DIR}/include/core/callback_hook.h
+    ${CMAKE_SOURCE_DIR}/include/core/special_strings.h
     ${CMAKE_SOURCE_DIR}/include/core/hal_file_manager.h
-    ${CMAKE_SOURCE_DIR}/include/core/interface_base.h
-    ${CMAKE_SOURCE_DIR}/include/core/interface_cli.h
-    ${CMAKE_SOURCE_DIR}/include/core/interface_gui.h
-    ${CMAKE_SOURCE_DIR}/include/core/interface_interactive_ui.h
     ${CMAKE_SOURCE_DIR}/include/core/library_loader.h
     ${CMAKE_SOURCE_DIR}/include/core/log.h
+    ${CMAKE_SOURCE_DIR}/include/core/plugin_interface_base.h
+    ${CMAKE_SOURCE_DIR}/include/core/plugin_interface_cli.h
+    ${CMAKE_SOURCE_DIR}/include/core/plugin_interface_gui.h
+    ${CMAKE_SOURCE_DIR}/include/core/plugin_interface_interactive_ui.h
     ${CMAKE_SOURCE_DIR}/include/core/plugin_manager.h
     ${CMAKE_SOURCE_DIR}/include/core/program_arguments.h
     ${CMAKE_SOURCE_DIR}/include/core/program_options.h
@@ -25,19 +26,18 @@ set(CORE_LIB_HDR
     ${CMAKE_SOURCE_DIR}/include/doxy_groups.h
     )
 
-set(CORE_LIB_SRC
+set(CORE_LIB_source
     hal_file_manager.cpp
-    interface_base.cpp
     library_loader.cpp
     log.cpp
+    plugin_interface_base.cpp
     plugin_manager.cpp
     program_arguments.cpp
     program_options.cpp
-    token_stream.cpp
     utils.cpp
     )
 
-add_library(core SHARED ${CORE_LIB_HDR} ${CORE_LIB_SRC} ${CMAKE_BINARY_DIR}/hal_version.h)
+add_library(core SHARED ${CORE_LIB_HDR} ${CORE_LIB_source} ${CMAKE_BINARY_DIR}/hal_version.h)
 set_target_properties(core PROPERTIES OUTPUT_NAME "hal_core")
 add_library(hal::core ALIAS core)
 target_include_directories(core

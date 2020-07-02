@@ -21,28 +21,28 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef OVERLAY_H
-#define OVERLAY_H
+#pragma once
 
 #include <QFrame>
 
-class overlay : public QFrame
+namespace hal
 {
-    Q_OBJECT
+    class Overlay : public QFrame
+    {
+        Q_OBJECT
 
-public:
-    explicit overlay(QWidget* parent = nullptr);
+    public:
+        explicit Overlay(QWidget* parent = nullptr);
 
-Q_SIGNALS:
-    void clicked();
+    Q_SIGNALS:
+        void clicked();
 
-protected:
-    bool eventFilter(QObject* watched, QEvent* event) Q_DECL_OVERRIDE;
-    bool event(QEvent* event) Q_DECL_OVERRIDE;
-    void mousePressEvent(QMouseEvent* event) Q_DECL_OVERRIDE;
+    protected:
+        bool eventFilter(QObject* watched, QEvent* event) Q_DECL_OVERRIDE;
+        bool event(QEvent* event) Q_DECL_OVERRIDE;
+        void mousePressEvent(QMouseEvent* event) Q_DECL_OVERRIDE;
 
-private:
-    void handle_parent_changed();
-};
-
-#endif    // OVERLAY_H
+    private:
+        void handle_parent_changed();
+    };
+}

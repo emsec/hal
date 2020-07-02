@@ -21,25 +21,25 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef LABEL_BUTTON_H
-#define LABEL_BUTTON_H
+#pragma once
 
 #include <QLabel>
 #include <QMouseEvent>
 
-class label_button : public QLabel
+namespace hal
 {
-    Q_OBJECT
+    class LabelButton : public QLabel
+    {
+        Q_OBJECT
 
-public:
-    explicit label_button(QWidget* parent = 0, Qt::WindowFlags f = Qt::WindowFlags());
-    explicit label_button(const QString& text, QWidget* parent = 0, Qt::WindowFlags f = Qt::WindowFlags());
+    public:
+        explicit LabelButton(QWidget* parent = 0, Qt::WindowFlags f = Qt::WindowFlags());
+        explicit LabelButton(const QString& text, QWidget* parent = 0, Qt::WindowFlags f = Qt::WindowFlags());
 
-Q_SIGNALS:
-    void clicked();
+    Q_SIGNALS:
+        void clicked();
 
-protected:
-    void mousePressEvent(QMouseEvent* event) Q_DECL_OVERRIDE;
-};
-
-#endif    // LABEL_BUTTON_H
+    protected:
+        void mousePressEvent(QMouseEvent* event) Q_DECL_OVERRIDE;
+    };
+}

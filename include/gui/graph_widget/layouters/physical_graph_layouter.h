@@ -22,25 +22,25 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef PHYSICAL_GRAPH_LAYOUTER_H
-#define PHYSICAL_GRAPH_LAYOUTER_H
+#pragma once
 
 #include "graph_widget/layouters/graph_layouter.h"
 
-class physical_graph_layouter final : public graph_layouter
+namespace hal
 {
-public:
-    physical_graph_layouter(const graph_context* const context);
+    class PhysicalGraphLayouter final : public GraphLayouter
+    {
+    public:
+        explicit PhysicalGraphLayouter(const GraphContext* const context);
 
-    virtual const QString name() const override;
-    virtual const QString description() const override;
+        QString name() const override;
+        QString description() const override;
 
-    virtual void add(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets, hal::placement_hint placement) override;
-    virtual void remove(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets) override;
+        virtual void add(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets, hal::placement_hint placement) override;
+        virtual void remove(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets) override;
 
-private:
-    float m_min_x_distance;
-    float m_min_y_distance;
-};
-
-#endif // PHYSICAL_GRAPH_LAYOUTER_H
+    private:
+        float m_min_x_distance;
+        float m_min_y_distance;
+    };
+}

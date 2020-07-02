@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef SELECTION_DETAILS_WIDGET_H
-#define SELECTION_DETAILS_WIDGET_H
+#pragma once
 
 #include "content_widget/content_widget.h"
 #include "def.h"
@@ -32,32 +31,34 @@
 
 class QTableWidget;
 class QStackedWidget;
-class searchbar;
 
-class selection_details_widget : public content_widget
+namespace hal
 {
-    Q_OBJECT
+    class Searchbar;
 
-public:
-    selection_details_widget(QWidget* parent = 0);
-    void clear();
+    class SelectionDetailsWidget : public ContentWidget
+    {
+        Q_OBJECT
 
-public Q_SLOTS:
-    void handle_selection_update(void* sender);
-    QList<QShortcut*> create_shortcuts() Q_DECL_OVERRIDE;
+    public:
+        SelectionDetailsWidget(QWidget* parent = 0);
+        void clear();
 
-private:
-    QStackedWidget* m_stacked_widget;
+    public Q_SLOTS:
+        void handle_selection_update(void* sender);
+        QList<QShortcut*> create_shortcuts() Q_DECL_OVERRIDE;
 
-    QWidget* m_empty_widget;
-    gate_details_widget* m_gate_details;
-    net_details_widget* m_net_details;
-    module_details_widget* m_module_details;
-    QLabel* m_item_deleted_label;
+    private:
+        QStackedWidget* m_stacked_widget;
 
-    searchbar* m_searchbar;
+        QWidget* m_empty_widget;
+        GateDetailsWidget* m_gate_details;
+        NetDetailsWidget* m_net_details;
+        ModuleDetailsWidget* m_module_details;
+        QLabel* m_item_deleted_label;
 
-    void toggle_searchbar();
-};
+        Searchbar* m_searchbar;
 
-#endif    // SELECTION_DETAILS_WIDGET_H
+        void toggle_searchbar();
+    };
+}

@@ -1,35 +1,37 @@
 #include "validator/stacked_validator.h"
-
-stacked_validator::stacked_validator() : m_validators(QList<validator*>())
+namespace hal
 {
-
-}
-
-void stacked_validator::add_validator(validator* v)
-{
-    m_validators.append(v);
-}
-
-void stacked_validator::remove_validator(validator* v)
-{
-    m_validators.removeAll(v);
-}
-
-void stacked_validator::clear_validators()
-{
-    m_validators.clear();
-}
-
-bool stacked_validator::validate(const QString &input)
-{
-    for(const auto& v : m_validators)
+    StackedValidator::StackedValidator() : m_validators(QList<Validator*>())
     {
-        if(v != nullptr && !v->validate(input))
-        {
-            set_fail_text(v->fail_text());
-            return false;
-        }
+
     }
 
-    return true;
+    void StackedValidator::add_validator(Validator* v)
+    {
+        m_validators.append(v);
+    }
+
+    void StackedValidator::remove_validator(Validator* v)
+    {
+        m_validators.removeAll(v);
+    }
+
+    void StackedValidator::clear_validators()
+    {
+        m_validators.clear();
+    }
+
+    bool StackedValidator::validate(const QString &input)
+    {
+        for(const auto& v : m_validators)
+        {
+            if(v != nullptr && !v->validate(input))
+            {
+                set_fail_text(v->fail_text());
+                return false;
+            }
+        }
+
+        return true;
+    }
 }

@@ -21,30 +21,30 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef VHDL_EDITOR_H
-#define VHDL_EDITOR_H
+#pragma once
 
 #include "code_editor/code_editor.h"
 #include "content_widget/content_widget.h"
 
-class searchbar;
-
-class vhdl_editor : public content_widget
+namespace hal
 {
-    Q_OBJECT
+    class Searchbar;
 
-public:
-    vhdl_editor();
+    class VhdlEditor : public ContentWidget
+    {
+        Q_OBJECT
 
-    virtual void setup_toolbar(toolbar* toolbar) Q_DECL_OVERRIDE;
-    virtual QList<QShortcut*> create_shortcuts() Q_DECL_OVERRIDE;
+    public:
+        VhdlEditor();
 
-public Q_SLOTS:
-    void toggle_searchbar();
+        virtual void setup_toolbar(Toolbar* Toolbar) Q_DECL_OVERRIDE;
+        virtual QList<QShortcut*> create_shortcuts() Q_DECL_OVERRIDE;
 
-private:
-    code_editor* m_code_editor;
-    searchbar* m_searchbar;
-};
+    public Q_SLOTS:
+        void toggle_searchbar();
 
-#endif    // VHDL_EDITOR_H
+    private:
+        CodeEditor* m_code_editor;
+        Searchbar* m_searchbar;
+    };
+}

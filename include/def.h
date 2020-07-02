@@ -45,14 +45,7 @@ using u64 = uint64_t;
 
 namespace hal
 {
-#if defined(__GNUC__) && ((__GNUC__ == 7 && __GNUC_MINOR__ >= 4))
-    namespace fs = std::experimental::filesystem;
-#else
-    namespace fs = std::filesystem;
-#endif
     typedef std::error_code error_code;
-    
-    typedef fs::path path;
 }    // namespace hal
 
 #define UNUSED(expr) (void)expr

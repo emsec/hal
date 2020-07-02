@@ -21,23 +21,23 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef PYTHON_CONSOLE_WIDGET_H
-#define PYTHON_CONSOLE_WIDGET_H
+#pragma once
 
 #include "content_widget/content_widget.h"
 
-class python_console;
-
-class python_console_widget : public content_widget
+namespace hal
 {
-public:
-    python_console_widget(QWidget* parent = nullptr);
+    class PythonConsole;
 
-    virtual void setup_toolbar(toolbar* toolbar) Q_DECL_OVERRIDE;
-    virtual QList<QShortcut*> create_shortcuts() Q_DECL_OVERRIDE;
+    class PythonConsoleWidget : public ContentWidget
+    {
+    public:
+        PythonConsoleWidget(QWidget* parent = nullptr);
 
-private:
-    python_console* m_console;
-};
+        virtual void setup_toolbar(Toolbar* Toolbar) Q_DECL_OVERRIDE;
+        virtual QList<QShortcut*> create_shortcuts() Q_DECL_OVERRIDE;
 
-#endif    // PYTHON_CONSOLE_WIDGET_H
+    private:
+        PythonConsole* m_console;
+    };
+}
