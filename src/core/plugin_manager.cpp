@@ -1,7 +1,7 @@
 #include "core/plugin_manager.h"
 
-#include "core/plugin_interface_cli.h"
 #include "core/log.h"
+#include "core/plugin_interface_cli.h"
 #include "core/utils.h"
 
 #include <vector>
@@ -73,11 +73,11 @@ namespace hal
             bool has_valid_file_extension(std::filesystem::path file_name)
             {
 #if defined(__APPLE__) && defined(__MACH__)
-                if (core_utils::ends_with(file_name.string(), ".so"))
+                if (core_utils::ends_with(file_name.string(), std::string(".so")))
                     return true;
                 if (file_name.string().find(".so") != std::string::npos)
                     return true;
-                if (core_utils::ends_with(file_name.string(), ".icloud"))
+                if (core_utils::ends_with(file_name.string(), std::string(".icloud")))
                     return false;
 #endif
                 return (core_utils::ends_with(file_name.string(), std::string(".") + std::string(LIBRARY_FILE_EXTENSION)));
