@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['line_5fnumber',['line_number',['../d3/d86/structtoken__stream_1_1token__stream__exception.html#a2b44355c8496a18074f0e8aaee17d945',1,'token_stream::token_stream_exception']]]
+  ['message_1169',['message',['../df/df6/structhal_1_1TokenStream_1_1TokenStreamException.html#ad45051801a87dc6ab7384e4971b7c59a',1,'hal::TokenStream::TokenStreamException']]]
 ];

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['x',['X',['../dc/d60/classboolean__function.html#a384b979ddc938db7e2af2400ae26060aaeb58c916c9ad04670d6052dc0447ccd3',1,'boolean_function::X()'],['../de/d46/classgate__type__sequential.html#ab520d3545e520ec3e304c677b70021efa02129bb861061d1a052c592e2dc6b383',1,'gate_type_sequential::X()']]]
+  ['x_597',['X',['../d6/d9d/classhal_1_1BooleanFunction.html#af3a2f30e94d05d31b31f27bf5db85787a65f3ff6b5989443249c6173d99e8815e',1,'hal::BooleanFunction::X()'],['../dd/dd1/classhal_1_1GateTypeSequential.html#ad93f67223d7126d479110c33e00b6968a02129bb861061d1a052c592e2dc6b383',1,'hal::GateTypeSequential::X()']]]
 ];

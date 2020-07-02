@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['required_5fparam',['REQUIRED_PARAM',['../db/de6/classprogram__options.html#a687db47abb4914b7344c3460cdee3feb',1,'program_options']]]
+  ['spdlog_5fsink_1173',['spdlog_sink',['../d3/d1f/structhal_1_1LogManager_1_1log__sink.html#aa6c054fb308f53d9786ee4134413de27',1,'hal::LogManager::log_sink']]],
+  ['string_1174',['string',['../d7/d7a/structhal_1_1Token.html#a851dd465345e9aab0ed6b974170b7d0c',1,'hal::Token']]]
 ];

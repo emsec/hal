@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['boolean_5ffunction',['boolean_function',['../dc/d60/classboolean__function.html',1,'']]]
+  ['baseplugininterface_622',['BasePluginInterface',['../d5/ddc/classhal_1_1BasePluginInterface.html',1,'hal']]],
+  ['booleanfunction_623',['BooleanFunction',['../d6/d9d/classhal_1_1BooleanFunction.html',1,'hal']]]
 ];

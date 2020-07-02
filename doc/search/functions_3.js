@@ -1,12 +1,13 @@
 var searchData=
 [
-  ['data_5fcontainer',['data_container',['../df/d2c/classdata__container.html#a014b95425cd80e40fcf89c6af75fa237',1,'data_container']]],
-  ['deactivate_5fchannel',['deactivate_channel',['../de/dcc/classlog__manager.html#a60844c16a0752828bbb3d7283a046e77',1,'log_manager']]],
-  ['delete_5fdata',['delete_data',['../df/d2c/classdata__container.html#a7a7e24501fa9390be81de441884f0b26',1,'data_container']]],
-  ['delete_5fgate',['delete_gate',['../d2/d8e/classnetlist.html#a872c2675c4de25464a9acdb882538166',1,'netlist']]],
-  ['delete_5fmodule',['delete_module',['../d2/d8e/classnetlist.html#af50168a13d1256dc1e9b9eb9094dd447',1,'netlist']]],
-  ['delete_5fnet',['delete_net',['../d2/d8e/classnetlist.html#af6ecf3e0db9a9043cbcffaeee00663ea',1,'netlist']]],
-  ['deserialize',['deserialize',['../d9/d0b/namespacehal__file__manager.html#a92fdee42de982f1e5acf1138e6713ac9',1,'hal_file_manager']]],
-  ['deserialize_5ffrom_5ffile',['deserialize_from_file',['../da/d25/namespacenetlist__serializer.html#a5ba3671048e77a018b52dded2fd913f1',1,'netlist_serializer']]],
-  ['directory_5frange',['directory_range',['../d0/d76/classcore__utils_1_1directory__range.html#acc396610d29528a2f6da18bfb9db04e1',1,'core_utils::directory_range']]]
+  ['data_5fcontainer_5finit_828',['data_container_init',['../d0/d7f/namespacehal.html#adc243ad319cf87e17b4593eec859d1f4',1,'hal']]],
+  ['datacontainer_829',['DataContainer',['../d1/d7d/classhal_1_1DataContainer.html#a268c27a803da43b036ac0d324dfd31c9',1,'hal::DataContainer']]],
+  ['deactivate_5fchannel_830',['deactivate_channel',['../d5/d2e/classhal_1_1LogManager.html#a2e5339547fcb310f216555a68b26ca37',1,'hal::LogManager']]],
+  ['delete_5fdata_831',['delete_data',['../d1/d7d/classhal_1_1DataContainer.html#ad982665a18a25310ea22abf141dd9b65',1,'hal::DataContainer']]],
+  ['delete_5fgate_832',['delete_gate',['../dc/d06/classhal_1_1Netlist.html#a63b0194bf0f5d2ba40e19bd86b3ac4dc',1,'hal::Netlist']]],
+  ['delete_5fmodule_833',['delete_module',['../dc/d06/classhal_1_1Netlist.html#a073486b849b4a9e989814a30c1d8e8b3',1,'hal::Netlist']]],
+  ['delete_5fnet_834',['delete_net',['../dc/d06/classhal_1_1Netlist.html#a32a697a153f4deeaa9296a6b97c35a27',1,'hal::Netlist']]],
+  ['deserialize_835',['deserialize',['../d7/d09/namespacehal_1_1hal__file__manager.html#add6143551a7265afe50789813121e6fe',1,'hal::hal_file_manager']]],
+  ['deserialize_5ffrom_5ffile_836',['deserialize_from_file',['../d9/dcb/namespacehal_1_1netlist__serializer.html#abf1907f99adb6289792ad8d986a2cfa3',1,'hal::netlist_serializer']]],
+  ['directoryrange_837',['DirectoryRange',['../d5/dfc/classhal_1_1core__utils_1_1DirectoryRange.html#a1881fa5646e4fa4dc95fef700eda1955',1,'hal::core_utils::DirectoryRange']]]
 ];

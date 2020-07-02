@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Netlist Factory &mdash; hal_py v2.0.0-150-g702c8b69e documentation</title>
+  <title>Netlist Factory &mdash; hal_py v2.0.0-408-g381f785d2 documentation</title>
   
 
   
@@ -17,43 +17,36 @@
   
 
   
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
-  
-  
-    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  
-
-  
-
-  
-        <link rel="index" title="Index"
-              href="genindex.html"/>
-        <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="hal_py v2.0.0-150-g702c8b69e documentation" href="index.html"/>
-        <link rel="up" title="hal_py Documentation" href="hal_py.html"/>
-        <link rel="next" title="HDL Writer Dispatcher" href="hdl_writer_dispatcher.html"/>
-        <link rel="prev" title="Plugin Manager" href="plugin_manager.html"/> 
-
-  
-  <script src="_static/js/modernizr.min.js"></script>
-
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="HDL Writer Dispatcher" href="hdl_writer_dispatcher.html" />
+    <link rel="prev" title="Plugin Manager" href="plugin_manager.html" /> 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -67,7 +60,7 @@
             
             
               <div class="version">
-                v2.0.0-150-g702c8b69e
+                v2.0.0-408-g381f785d2
               </div>
             
           
@@ -126,7 +119,7 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+      <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">hal_py</a>
@@ -134,9 +127,10 @@
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
 
@@ -184,7 +178,7 @@
 <span id="netlist-factory"></span><h1>Netlist Factory<a class="headerlink" href="#module-hal_py.netlist_factory" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="hal_py.netlist_factory.create_netlist">
-<code class="descclassname">hal_py.netlist_factory.</code><code class="descname">create_netlist</code><span class="sig-paren">(</span><em>gate_library_name: str</em><span class="sig-paren">)</span> &#x2192; hal_py.netlist<a class="headerlink" href="#hal_py.netlist_factory.create_netlist" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">hal_py.netlist_factory.</code><code class="descname">create_netlist</code><span class="sig-paren">(</span><em>gate_library_name: hal_py.GateLibrary</em><span class="sig-paren">)</span> &#x2192; hal_py.netlist<a class="headerlink" href="#hal_py.netlist_factory.create_netlist" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a new netlist for a specific gate library.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -194,7 +188,7 @@
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The new netlist.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="netlist.html#hal_py.netlist" title="hal_py.netlist">hal_py.netlist</a></td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">hal_py.Netlist</td>
 </tr>
 </tbody>
 </table>
@@ -204,54 +198,62 @@
 <dt id="hal_py.netlist_factory.load_netlist">
 <code class="descclassname">hal_py.netlist_factory.</code><code class="descname">load_netlist</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.netlist_factory.load_netlist" title="Permalink to this definition">¶</a></dt>
 <dd><p>Overloaded function.</p>
-<ol class="arabic simple">
-<li>load_netlist(hdl_file: hal_py.hal_path, language: str, gate_library_name: str) -&gt; hal_py.netlist</li>
-</ol>
-<p>Creates a new netlist for a specific file.</p>
+<ol class="arabic">
+<li><p class="first">load_netlist(hdl_file: hal_py.hal_path, language: str, gate_library_name: hal_py.hal_path) -&gt; hal_py.netlist</p>
+<blockquote>
+<div><p>Creates a new netlist for a specific file.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>hdl_file</strong> (<a class="reference internal" href="path.html#hal_py.hal_path" title="hal_py.hal_path"><em>hal_py.hal_path</em></a>) – Name of the hdl file.</li>
-<li><strong>language</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – Programming language uses in parameter file_name.</li>
-<li><strong>gate_library_name</strong> – Name of hardware gate library.</li>
-</ul>
-</td>
+<tr class="field-odd field"><th class="field-name">param hdl_file:</th><td class="field-body">Name of the hdl file.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The new netlist.</p>
-</td>
+<tr class="field-even field"><th class="field-name">type hdl_file:</th><td class="field-body">hal_py.hal_path</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="netlist.html#hal_py.netlist" title="hal_py.netlist">hal_py.netlist</a></p>
-</td>
+<tr class="field-odd field"><th class="field-name" colspan="2">param str language:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">Programming language uses in parameter file_name.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param gate_library_file:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">Name of hardware gate library file.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">type gate_library_file:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">hal_py.hal_path</td>
+</tr>
+<tr class="field-even field"><th class="field-name">returns:</th><td class="field-body">The new netlist.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">hal_py.Netlist</td>
 </tr>
 </tbody>
 </table>
-<ol class="arabic simple" start="2">
-<li>load_netlist(hal_file: hal_py.hal_path) -&gt; hal_py.netlist</li>
-</ol>
-<p>Creates a new netlist for a specific ‘.hal’ file.</p>
+</div></blockquote>
+</li>
+<li><p class="first">load_netlist(hal_file: hal_py.hal_path) -&gt; hal_py.netlist</p>
+<blockquote>
+<div><p>Creates a new netlist for a specific ‘.hal’ file.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>hal_file</strong> (<a class="reference internal" href="path.html#hal_py.hal_path" title="hal_py.hal_path"><em>hal_py.hal_path</em></a>) – Name of the ‘.hal’ file.</td>
+<tr class="field-odd field"><th class="field-name">param hal_file:</th><td class="field-body">Name of the ‘.hal’ file.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The new netlist.</td>
+<tr class="field-even field"><th class="field-name">type hal_file:</th><td class="field-body">hal_py.hal_path</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="netlist.html#hal_py.netlist" title="hal_py.netlist">hal_py.netlist</a></td>
+<tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">The new netlist.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body">hal_py.Netlist</td>
 </tr>
 </tbody>
 </table>
+</div></blockquote>
+</li>
+</ol>
 </dd></dl>
 
 </div>
 
 
            </div>
-           <div class="articleComments">
-            
-           </div>
+           
           </div>
           <footer>
   
@@ -260,7 +262,7 @@
         <a href="hdl_writer_dispatcher.html" class="btn btn-neutral float-right" title="HDL Writer Dispatcher" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="plugin_manager.html" class="btn btn-neutral" title="Plugin Manager" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="plugin_manager.html" class="btn btn-neutral float-left" title="Plugin Manager" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -269,11 +271,11 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2020, Marc Fyrbiak, Sebastian Wallat, Max Hoffmann.
+        &copy; Copyright 2020, Marc Fyrbiak, Sebastian Wallat, Max Hoffmann
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -286,37 +288,15 @@
   
 
 
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'./',
-            VERSION:'v2.0.0-150-g702c8b69e',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="_static/jquery.js"></script>
-      <script type="text/javascript" src="_static/underscore.js"></script>
-      <script type="text/javascript" src="_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
-  
-
-  
-  
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-  
-
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
   </script>
+
+  
+  
+    
    
 
 </body>

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['handle_5fptr_5ft',['handle_ptr_t',['../dd/de7/library__loader_8h.html#a61ac8fb71f7fc4bb6132e7537b35def8',1,'library_loader.h']]]
+  ['error_5fcode_1177',['error_code',['../d0/d7f/namespacehal.html#a12b4c436625fa7f009bc4e5015e5e01c',1,'hal']]]
 ];

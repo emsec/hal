@@ -1,13 +1,14 @@
 var searchData=
 [
-  ['handle_5fcli_5fcall',['handle_cli_call',['../d2/da9/classi__cli.html#a898098c79bb608d2774b5d8d6bccdf0f',1,'i_cli']]],
-  ['handle_5foptions',['handle_options',['../de/dcc/classlog__manager.html#aed517854d7e214f5f03b5ec0d2bd338c',1,'log_manager']]],
-  ['has_5flocation',['has_location',['../de/df6/classgate.html#a4421a1911156becc0adecc853e4f10ce',1,'gate']]],
-  ['has_5ftype',['has_type',['../d5/d32/classi__base.html#a5b28498d8c7302156b362433dd7dd173',1,'i_base']]],
-  ['hdl_5fparser',['hdl_parser',['../db/d90/classhdl__parser.html#a32592da2f4977eac240a9811b649354e',1,'hdl_parser']]],
-  ['hdl_5fparser_5fverilog',['hdl_parser_verilog',['../de/d78/classhdl__parser__verilog.html#a3d7e75c5af0cca21447b526c4191aefd',1,'hdl_parser_verilog']]],
-  ['hdl_5fparser_5fvhdl',['hdl_parser_vhdl',['../d7/d03/classhdl__parser__vhdl.html#a1341d5da6202e98582e07ca00c20fe46',1,'hdl_parser_vhdl']]],
-  ['hdl_5fwriter',['hdl_writer',['../d2/db7/classhdl__writer.html#a5d6a5b8d74d0fe8288a50a523daaf2dd',1,'hdl_writer']]],
-  ['hdl_5fwriter_5fverilog',['hdl_writer_verilog',['../d7/df7/classhdl__writer__verilog.html#afa2f85961dcbe94faf675760a0bf18ab',1,'hdl_writer_verilog']]],
-  ['hdl_5fwriter_5fvhdl',['hdl_writer_vhdl',['../db/d0b/classhdl__writer__vhdl.html#a2e7718f0d2284a796399d8e6a5b5a35c',1,'hdl_writer_vhdl']]]
+  ['handle_5fcli_5fcall_985',['handle_cli_call',['../d1/d82/classhal_1_1CLIPluginInterface.html#a6f5992f3ceedaed4962084e0a4bad16b',1,'hal::CLIPluginInterface']]],
+  ['handle_5foptions_986',['handle_options',['../d5/d2e/classhal_1_1LogManager.html#ad3e0a37bb3366fc8b538251694a23b8c',1,'hal::LogManager']]],
+  ['has_5flocation_987',['has_location',['../d5/d57/classhal_1_1Gate.html#a773848569c5f30d2a21b73ae23d60650',1,'hal::Gate']]],
+  ['has_5ftype_988',['has_type',['../d5/ddc/classhal_1_1BasePluginInterface.html#ab0a32bab81edf3a6d6db644bc459ddb7',1,'hal::BasePluginInterface']]],
+  ['hdl_5fwriter_5fdispatcher_5finit_989',['hdl_writer_dispatcher_init',['../d0/d7f/namespacehal.html#a07b5de2892cd878cf1a593dd4e27ecb6',1,'hal']]],
+  ['hdlparser_990',['HDLParser',['../d0/d0e/classhal_1_1HDLParser.html#ac30d8e28d0721e1b9db050d00d53cba9',1,'hal::HDLParser']]],
+  ['hdlparserverilog_991',['HDLParserVerilog',['../d1/d0b/classhal_1_1HDLParserVerilog.html#ae5a8337c67361b2ab9329d46091d4607',1,'hal::HDLParserVerilog']]],
+  ['hdlparservhdl_992',['HDLParserVHDL',['../d3/d12/classhal_1_1HDLParserVHDL.html#a429efe3c1afff0c8d4f490bccb7e7109',1,'hal::HDLParserVHDL']]],
+  ['hdlwriter_993',['HDLWriter',['../dd/d9e/classhal_1_1HDLWriter.html#a3103236e0c11efbd34a04f30be6e4f66',1,'hal::HDLWriter']]],
+  ['hdlwriterverilog_994',['HDLWriterVerilog',['../d2/d2f/classhal_1_1HDLWriterVerilog.html#a30a82929a98e33076222e402465d2c3c',1,'hal::HDLWriterVerilog']]],
+  ['hdlwritervhdl_995',['HDLWriterVHDL',['../d2/d17/classhal_1_1HDLWriterVHDL.html#a02d305cc5a6f0739e93eca82be8332c2',1,'hal::HDLWriterVHDL']]]
 ];

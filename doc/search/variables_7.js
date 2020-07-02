@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['number',['number',['../d4/df4/structtoken.html#ae9c14bd006df00b2db1fc793d1400640',1,'token']]]
+  ['path_1171',['path',['../d3/d1f/structhal_1_1LogManager_1_1log__sink.html#a267e71d77e6f2a52ee57d934e88df357',1,'hal::LogManager::log_sink']]]
 ];

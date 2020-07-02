@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['base_5ftype',['base_type',['../d0/d31/classgate__type.html#a33f863eedb8e65631b45403998f5c3eb',1,'gate_type']]]
+  ['basetype_1191',['BaseType',['../d1/d05/classhal_1_1GateType.html#a9aee0f1be5eb3241a7e2d5e5a99fff36',1,'hal::GateType']]]
 ];

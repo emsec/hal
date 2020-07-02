@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['join',['join',['../d5/dfa/classtoken__stream.html#aa311065d3bc4dee6f44d8a6b12d8a7fa',1,'token_stream::join()'],['../d8/d12/namespacecore__utils.html#a9e84dc016e269854ed9a970f0d371a5e',1,'core_utils::join()']]],
-  ['join_5funtil',['join_until',['../d5/dfa/classtoken__stream.html#a9e90aeb17eb05aa8dbd32b1d992daab6',1,'token_stream']]]
+  ['join_1022',['join',['../db/d9d/classhal_1_1TokenStream.html#ae4346d26864f6943820f83af91896420',1,'hal::TokenStream::join()'],['../d6/d5e/namespacehal_1_1core__utils.html#a14e98ca721f090b35985fb63070ce4bc',1,'hal::core_utils::join(const std::string &amp;joiner, const T &amp;items, const Transform &amp;transform)'],['../d6/d5e/namespacehal_1_1core__utils.html#af2bf79833868bdad2d38973980e2855e',1,'hal::core_utils::join(const std::string &amp;joiner, const T &amp;items)']]],
+  ['join_5funtil_1023',['join_until',['../db/d9d/classhal_1_1TokenStream.html#a8cd436414ae5483c8cb37b24fffd88e2',1,'hal::TokenStream']]]
 ];

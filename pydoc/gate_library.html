@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Gate Library &mdash; hal_py v2.0.0-150-g702c8b69e documentation</title>
+  <title>Gate Library &mdash; hal_py v2.0.0-408-g381f785d2 documentation</title>
   
 
   
@@ -17,43 +17,36 @@
   
 
   
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
-  
-  
-    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  
-
-  
-
-  
-        <link rel="index" title="Index"
-              href="genindex.html"/>
-        <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="hal_py v2.0.0-150-g702c8b69e documentation" href="index.html"/>
-        <link rel="up" title="hal_py Documentation" href="hal_py.html"/>
-        <link rel="next" title="Endpoint" href="endpoint.html"/>
-        <link rel="prev" title="Data Container" href="data_container.html"/> 
-
-  
-  <script src="_static/js/modernizr.min.js"></script>
-
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Endpoint" href="endpoint.html" />
+    <link rel="prev" title="Data Container" href="data_container.html" /> 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -67,7 +60,7 @@
             
             
               <div class="version">
-                v2.0.0-150-g702c8b69e
+                v2.0.0-408-g381f785d2
               </div>
             
           
@@ -126,7 +119,7 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+      <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">hal_py</a>
@@ -134,9 +127,10 @@
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
 
@@ -182,213 +176,11 @@
             
   <div class="section" id="gate-library">
 <h1>Gate Library<a class="headerlink" href="#gate-library" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
-<dt id="hal_py.gate_library">
-<em class="property">class </em><code class="descclassname">hal_py.</code><code class="descname">gate_library</code><a class="headerlink" href="#hal_py.gate_library" title="Permalink to this definition">¶</a></dt>
-<dd><p>Gate library class containing information about the gates contained in the library.</p>
-<dl class="method">
-<dt id="hal_py.gate_library.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>self: hal_py.gate_library</em>, <em>name: str</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.gate_library.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Construct a new gate library.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – Name of the gate library.</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="hal_py.gate_library.add_gate_types">
-<code class="descname">add_gate_types</code><span class="sig-paren">(</span><em>self: hal_py.gate_library</em>, <em>gt: hal_py.gate_type</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.gate_library.add_gate_types" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add a gate type to the gate library.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>gt</strong> (<a class="reference internal" href="gate_type.html#hal_py.gate_type" title="hal_py.gate_type"><em>hal_py.gate_type</em></a>) – The gate type object.</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="hal_py.gate_library.add_include">
-<code class="descname">add_include</code><span class="sig-paren">(</span><em>self: hal_py.gate_library</em>, <em>include: str</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.gate_library.add_include" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add a necessary includes of the gate library, e.g., VHDL libraries.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>inc</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The include to add.</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="hal_py.gate_library.gate_types">
-<code class="descname">gate_types</code><a class="headerlink" href="#hal_py.gate_library.gate_types" title="Permalink to this definition">¶</a></dt>
-<dd><p>A dict from gate type names to gate type objects containing all gate types of the gate library.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">dict[str,hal_py.gate_type]</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="hal_py.gate_library.get_gate_types">
-<code class="descname">get_gate_types</code><span class="sig-paren">(</span><em>self: hal_py.gate_library</em><span class="sig-paren">)</span> &#x2192; Dict[str, hal_py.gate_type]<a class="headerlink" href="#hal_py.gate_library.get_gate_types" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get dict from gate type names to gate type objects containing all gate types of the gate library.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A dict from gate type names to gate type objects.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)">dict</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a>,<a class="reference internal" href="gate_type.html#hal_py.gate_type" title="hal_py.gate_type">hal_py.gate_type</a>]</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="hal_py.gate_library.get_gnd_gate_types">
-<code class="descname">get_gnd_gate_types</code><span class="sig-paren">(</span><em>self: hal_py.gate_library</em><span class="sig-paren">)</span> &#x2192; Dict[str, hal_py.gate_type]<a class="headerlink" href="#hal_py.gate_library.get_gnd_gate_types" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get dict from gate type names to gate type objects containing all GND gate types of the gate library.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A dictp from GND gate type names to gate type objects.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)">dict</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a>,<a class="reference internal" href="gate_type.html#hal_py.gate_type" title="hal_py.gate_type">hal_py.gate_type</a>]</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="hal_py.gate_library.get_includes">
-<code class="descname">get_includes</code><span class="sig-paren">(</span><em>self: hal_py.gate_library</em><span class="sig-paren">)</span> &#x2192; List[str]<a class="headerlink" href="#hal_py.gate_library.get_includes" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get a list of necessary includes of the gate library, e.g., VHDL libraries.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A list of includes.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a>]</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="hal_py.gate_library.get_name">
-<code class="descname">get_name</code><span class="sig-paren">(</span><em>self: hal_py.gate_library</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#hal_py.gate_library.get_name" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the name of the library.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The name.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="hal_py.gate_library.get_vcc_gate_types">
-<code class="descname">get_vcc_gate_types</code><span class="sig-paren">(</span><em>self: hal_py.gate_library</em><span class="sig-paren">)</span> &#x2192; Dict[str, hal_py.gate_type]<a class="headerlink" href="#hal_py.gate_library.get_vcc_gate_types" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get dict from gate type names to gate type objects containing all VCC gate types of the gate library.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A dict from VCC gate type names to gate type objects.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)">dict</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a>,<a class="reference internal" href="gate_type.html#hal_py.gate_type" title="hal_py.gate_type">hal_py.gate_type</a>]</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="hal_py.gate_library.gnd_gate_types">
-<code class="descname">gnd_gate_types</code><a class="headerlink" href="#hal_py.gate_library.gnd_gate_types" title="Permalink to this definition">¶</a></dt>
-<dd><p>A dict from gate type names to gate type objects containing all GND gate types of the gate library.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">dict[str,hal_py.gate_type]</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="hal_py.gate_library.includes">
-<code class="descname">includes</code><a class="headerlink" href="#hal_py.gate_library.includes" title="Permalink to this definition">¶</a></dt>
-<dd><p>A list of necessary includes of the gate library, e.g., VHDL libraries.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">VHDL includes to use by serializer.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a>]</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="hal_py.gate_library.name">
-<code class="descname">name</code><a class="headerlink" href="#hal_py.gate_library.name" title="Permalink to this definition">¶</a></dt>
-<dd><p>The name of the library.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">str</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="hal_py.gate_library.vcc_gate_types">
-<code class="descname">vcc_gate_types</code><a class="headerlink" href="#hal_py.gate_library.vcc_gate_types" title="Permalink to this definition">¶</a></dt>
-<dd><p>A dict from gate type names to gate type objects containing all VCC gate types of the gate library.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">dict[str,hal_py.gate_type]</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-</dd></dl>
-
 </div>
 
 
            </div>
-           <div class="articleComments">
-            
-           </div>
+           
           </div>
           <footer>
   
@@ -397,7 +189,7 @@
         <a href="endpoint.html" class="btn btn-neutral float-right" title="Endpoint" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="data_container.html" class="btn btn-neutral" title="Data Container" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="data_container.html" class="btn btn-neutral float-left" title="Data Container" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -406,11 +198,11 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2020, Marc Fyrbiak, Sebastian Wallat, Max Hoffmann.
+        &copy; Copyright 2020, Marc Fyrbiak, Sebastian Wallat, Max Hoffmann
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -423,37 +215,15 @@
   
 
 
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'./',
-            VERSION:'v2.0.0-150-g702c8b69e',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="_static/jquery.js"></script>
-      <script type="text/javascript" src="_static/underscore.js"></script>
-      <script type="text/javascript" src="_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
-  
-
-  
-  
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-  
-
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
   </script>
+
+  
+  
+    
    
 
 </body>

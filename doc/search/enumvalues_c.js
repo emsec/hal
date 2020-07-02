@@ -1,6 +1,7 @@
 var searchData=
 [
-  ['src_5fchanged',['src_changed',['../d9/d92/namespacenet__event__handler.html#ae5d496d5c8742da077e14857d8ff9a61a23f4efd0183ccb2e1d79eb71ca78d633',1,'net_event_handler']]],
-  ['submodule_5fadded',['submodule_added',['../d3/d7e/namespacemodule__event__handler.html#aa6a9f2f666f4c3ef1edc9885fd6c75f2a50586179223e9e1bc83e2de6c0b36d7a',1,'module_event_handler']]],
-  ['submodule_5fremoved',['submodule_removed',['../d3/d7e/namespacemodule__event__handler.html#aa6a9f2f666f4c3ef1edc9885fd6c75f2a155202c2af20970abc3678e72e3fde22',1,'module_event_handler']]]
+  ['src_5fadded_1223',['src_added',['../da/ddd/namespacehal_1_1net__event__handler.html#afd5006dc61f74916461dc0647567fed9ae8e900cd963192cd34b218f8bae610f6',1,'hal::net_event_handler']]],
+  ['src_5fremoved_1224',['src_removed',['../da/ddd/namespacehal_1_1net__event__handler.html#afd5006dc61f74916461dc0647567fed9af4fbf993ec8941614f5d71199a25615a',1,'hal::net_event_handler']]],
+  ['submodule_5fadded_1225',['submodule_added',['../d9/df4/namespacehal_1_1module__event__handler.html#af00b94311e9de6106b00acfaa58d520ea817c0a3f6f3b22d5f248061f2c56c672',1,'hal::module_event_handler']]],
+  ['submodule_5fremoved_1226',['submodule_removed',['../d9/df4/namespacehal_1_1module__event__handler.html#af00b94311e9de6106b00acfaa58d520eadb7bfef0159034f6d6268c148b35d585',1,'hal::module_event_handler']]]
 ];

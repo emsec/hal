@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Netlist &mdash; hal_py v2.0.0-150-g702c8b69e documentation</title>
+  <title>Netlist &mdash; hal_py v2.0.0-408-g381f785d2 documentation</title>
   
 
   
@@ -17,43 +17,36 @@
   
 
   
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
-  
-  
-    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  
-
-  
-
-  
-        <link rel="index" title="Index"
-              href="genindex.html"/>
-        <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="hal_py v2.0.0-150-g702c8b69e documentation" href="index.html"/>
-        <link rel="up" title="hal_py Documentation" href="hal_py.html"/>
-        <link rel="next" title="Boolean Function" href="boolean_function.html"/>
-        <link rel="prev" title="Endpoint" href="endpoint.html"/> 
-
-  
-  <script src="_static/js/modernizr.min.js"></script>
-
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Boolean Function" href="boolean_function.html" />
+    <link rel="prev" title="Endpoint" href="endpoint.html" /> 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -67,7 +60,7 @@
             
             
               <div class="version">
-                v2.0.0-150-g702c8b69e
+                v2.0.0-408-g381f785d2
               </div>
             
           
@@ -126,7 +119,7 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+      <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">hal_py</a>
@@ -134,9 +127,10 @@
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
 
@@ -186,12 +180,26 @@
 <dt id="hal_py.netlist">
 <em class="property">class </em><code class="descclassname">hal_py.</code><code class="descname">netlist</code><a class="headerlink" href="#hal_py.netlist" title="Permalink to this definition">¶</a></dt>
 <dd><p>Netlist class containing information about the netlist including its gates, modules, and nets, as well as the underlying gate library.</p>
+<dl class="attribute">
+<dt id="hal_py.netlist.GateLibrary">
+<code class="descname">GateLibrary</code><a class="headerlink" href="#hal_py.netlist.GateLibrary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the gate library associated with the netlist.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">hal_py.GateLibrary</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 <dl class="method">
 <dt id="hal_py.netlist.create_gate">
 <code class="descname">create_gate</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.netlist.create_gate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Overloaded function.</p>
 <ol class="arabic">
-<li><p class="first">create_gate(self: hal_py.netlist, id: int, gt: hal_py.gate_type, name: str, x: float = -1, y: float = -1) -&gt; gate</p>
+<li><p class="first">create_gate(self: hal_py.netlist, id: int, gt: hal_py.GateType, name: str, x: float = -1, y: float = -1) -&gt; hal::Gate</p>
 <blockquote>
 <div><p>Creates and adds a new gate to the netlist.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -200,24 +208,24 @@
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">param int id:</th><td class="field-body">The unique ID != 0 for the new gate.</td>
 </tr>
-<tr class="field-even field"><th class="field-name" colspan="2">param hal_py.gate_type gt:</th></tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param hal_py.Gate_type gt:</th></tr>
 <tr class="field-even field"><td>&#160;</td><td class="field-body">The gate type.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">param str name:</th><td class="field-body">A name for the gate.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">param float x:</th><td class="field-body">The x-coordinate of the game.</td>
+<tr class="field-even field"><th class="field-name">param float x:</th><td class="field-body">The x-coordinate of the gate.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">param float y:</th><td class="field-body">The y-coordinate of the game.</td>
+<tr class="field-odd field"><th class="field-name">param float y:</th><td class="field-body">The y-coordinate of the gate.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">returns:</th><td class="field-body">The new gate on success, None on error.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">hal_py.gate or None</td>
+<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">hal_py.Gate or None</td>
 </tr>
 </tbody>
 </table>
 </div></blockquote>
 </li>
-<li><p class="first">create_gate(self: hal_py.netlist, gt: hal_py.gate_type, name: str, x: float = -1, y: float = -1) -&gt; gate</p>
+<li><p class="first">create_gate(self: hal_py.netlist, gt: hal_py.GateType, name: str, x: float = -1, y: float = -1) -&gt; hal::Gate</p>
 <blockquote>
 <div><p>Creates and adds a new gate to the netlist.
 It is identifiable via its unique ID which is automatically set to the next free ID.</p>
@@ -225,18 +233,18 @@ It is identifiable via its unique ID which is automatically set to the next free
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name" colspan="2">param hal_py.gate_type gt:</th></tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">param hal_py.Gate_type gt:</th></tr>
 <tr class="field-odd field"><td>&#160;</td><td class="field-body">The gate type.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">param str name:</th><td class="field-body">A name for the gate.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">param float x:</th><td class="field-body">The x-coordinate of the game.</td>
+<tr class="field-odd field"><th class="field-name">param float x:</th><td class="field-body">The x-coordinate of the gate.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">param float y:</th><td class="field-body">The y-coordinate of the game.</td>
+<tr class="field-even field"><th class="field-name">param float y:</th><td class="field-body">The y-coordinate of the gate.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">The new gate on success, None on error.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body">hal_py.gate or None</td>
+<tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body">hal_py.Gate or None</td>
 </tr>
 </tbody>
 </table>
@@ -250,7 +258,7 @@ It is identifiable via its unique ID which is automatically set to the next free
 <code class="descname">create_module</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.netlist.create_module" title="Permalink to this definition">¶</a></dt>
 <dd><p>Overloaded function.</p>
 <ol class="arabic">
-<li><p class="first">create_module(self: hal_py.netlist, id: int, name: str, parent: module, gates: List[gate] = []) -&gt; module</p>
+<li><p class="first">create_module(self: hal_py.netlist, id: int, name: str, parent: hal::Module, gates: List[hal::Gate] = []) -&gt; hal::Module</p>
 <blockquote>
 <div><p>Creates and adds a new module to the netlist. It is identifiable via its unique id.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -261,7 +269,7 @@ It is identifiable via its unique ID which is automatically set to the next free
 </tr>
 <tr class="field-even field"><th class="field-name">param str name:</th><td class="field-body">A name for the module.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name" colspan="2">param hal_py.module parent:</th></tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">param hal_py.Module parent:</th></tr>
 <tr class="field-odd field"><td>&#160;</td><td class="field-body">The parent module.</td>
 </tr>
 <tr class="field-even field"><th class="field-name" colspan="2">param list gates:</th></tr>
@@ -269,13 +277,13 @@ It is identifiable via its unique ID which is automatically set to the next free
 </tr>
 <tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">The new module on succes, None on error.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body">hal_py.module or None</td>
+<tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body">hal_py.Module or None</td>
 </tr>
 </tbody>
 </table>
 </div></blockquote>
 </li>
-<li><p class="first">create_module(self: hal_py.netlist, name: str, parent: module, gates: List[gate] = []) -&gt; module</p>
+<li><p class="first">create_module(self: hal_py.netlist, name: str, parent: hal::Module, gates: List[hal::Gate] = []) -&gt; hal::Module</p>
 <blockquote>
 <div><p>Creates and adds a new module to the netlist. It is identifiable via its unique ID which is automatically set to the next free ID.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -284,7 +292,7 @@ It is identifiable via its unique ID which is automatically set to the next free
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">param str name:</th><td class="field-body">A name for the module.</td>
 </tr>
-<tr class="field-even field"><th class="field-name" colspan="2">param hal_py.module parent:</th></tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param hal_py.Module parent:</th></tr>
 <tr class="field-even field"><td>&#160;</td><td class="field-body">The parent module.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name" colspan="2">param list gates:</th></tr>
@@ -292,7 +300,7 @@ It is identifiable via its unique ID which is automatically set to the next free
 </tr>
 <tr class="field-even field"><th class="field-name">returns:</th><td class="field-body">The new module on succes, None on error.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">hal_py.module or None</td>
+<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">hal_py.Module or None</td>
 </tr>
 </tbody>
 </table>
@@ -306,7 +314,7 @@ It is identifiable via its unique ID which is automatically set to the next free
 <code class="descname">create_net</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.netlist.create_net" title="Permalink to this definition">¶</a></dt>
 <dd><p>Overloaded function.</p>
 <ol class="arabic">
-<li><p class="first">create_net(self: hal_py.netlist, id: int, name: str) -&gt; net</p>
+<li><p class="first">create_net(self: hal_py.netlist, id: int, name: str) -&gt; hal::Net</p>
 <blockquote>
 <div><p>Creates and adds a new net to the netlist. It is identifiable via its unique id.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -319,13 +327,13 @@ It is identifiable via its unique ID which is automatically set to the next free
 </tr>
 <tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">The new net on success, None on error.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body">hal_py.net or None</td>
+<tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body">hal_py.Net or None</td>
 </tr>
 </tbody>
 </table>
 </div></blockquote>
 </li>
-<li><p class="first">create_net(self: hal_py.netlist, name: str) -&gt; net</p>
+<li><p class="first">create_net(self: hal_py.netlist, name: str) -&gt; hal::Net</p>
 <blockquote>
 <div><p>Creates and adds a new net to the netlist. It is identifiable via its unique ID which is automatically set to the next free ID.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -336,7 +344,7 @@ It is identifiable via its unique ID which is automatically set to the next free
 </tr>
 <tr class="field-even field"><th class="field-name">returns:</th><td class="field-body">The new net on success, None on error.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">hal_py.net or None</td>
+<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">hal_py.Net or None</td>
 </tr>
 </tbody>
 </table>
@@ -347,13 +355,13 @@ It is identifiable via its unique ID which is automatically set to the next free
 
 <dl class="method">
 <dt id="hal_py.netlist.delete_gate">
-<code class="descname">delete_gate</code><span class="sig-paren">(</span><em>self: hal_py.netlist</em>, <em>gate: gate</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.netlist.delete_gate" title="Permalink to this definition">¶</a></dt>
+<code class="descname">delete_gate</code><span class="sig-paren">(</span><em>self: hal_py.netlist</em>, <em>gate: hal::Gate</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.netlist.delete_gate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Removes a gate from the netlist.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>gate</strong> (<a class="reference internal" href="gate.html#hal_py.gate" title="hal_py.gate"><em>hal_py.gate</em></a>) – The gate to be removed.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>gate</strong> (<em>hal_py.Gate</em>) – The gate to be removed.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True on success.</td>
 </tr>
@@ -365,13 +373,13 @@ It is identifiable via its unique ID which is automatically set to the next free
 
 <dl class="method">
 <dt id="hal_py.netlist.delete_module">
-<code class="descname">delete_module</code><span class="sig-paren">(</span><em>self: hal_py.netlist</em>, <em>module: module</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.netlist.delete_module" title="Permalink to this definition">¶</a></dt>
+<code class="descname">delete_module</code><span class="sig-paren">(</span><em>self: hal_py.netlist</em>, <em>module: hal::Module</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.netlist.delete_module" title="Permalink to this definition">¶</a></dt>
 <dd><p>Removes a module from the netlist.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>module</strong> (<a class="reference internal" href="module.html#hal_py.module" title="hal_py.module"><em>hal_py.module</em></a>) – The module to be removed.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>module</strong> (<em>hal_py.Module</em>) – The module to be removed.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True on success.</td>
 </tr>
@@ -383,13 +391,13 @@ It is identifiable via its unique ID which is automatically set to the next free
 
 <dl class="method">
 <dt id="hal_py.netlist.delete_net">
-<code class="descname">delete_net</code><span class="sig-paren">(</span><em>self: hal_py.netlist</em>, <em>net: net</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.netlist.delete_net" title="Permalink to this definition">¶</a></dt>
+<code class="descname">delete_net</code><span class="sig-paren">(</span><em>self: hal_py.netlist</em>, <em>net: hal::Net</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.netlist.delete_net" title="Permalink to this definition">¶</a></dt>
 <dd><p>Removes a net from the netlist.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>net</strong> (<a class="reference internal" href="net.html#hal_py.net" title="hal_py.net"><em>hal_py.net</em></a>) – The net to be removed.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>net</strong> (<em>hal_py.Net</em>) – The net to be removed.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True on success.</td>
 </tr>
@@ -407,7 +415,7 @@ It is identifiable via its unique ID which is automatically set to the next free
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">str</td>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></td>
 </tr>
 </tbody>
 </table>
@@ -421,21 +429,7 @@ It is identifiable via its unique ID which is automatically set to the next free
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">str</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="hal_py.netlist.gate_library">
-<code class="descname">gate_library</code><a class="headerlink" href="#hal_py.netlist.gate_library" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the gate library associated with the netlist.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">hal_py.gate_library</td>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></td>
 </tr>
 </tbody>
 </table>
@@ -449,7 +443,7 @@ It is identifiable via its unique ID which is automatically set to the next free
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">set[hal_py.gate]</td>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.8)">set</a>[hal_py.Gate]</td>
 </tr>
 </tbody>
 </table>
@@ -489,7 +483,7 @@ It is identifiable via its unique ID which is automatically set to the next free
 
 <dl class="method">
 <dt id="hal_py.netlist.get_gate_by_id">
-<code class="descname">get_gate_by_id</code><span class="sig-paren">(</span><em>self: hal_py.netlist</em>, <em>gate_id: int</em><span class="sig-paren">)</span> &#x2192; gate<a class="headerlink" href="#hal_py.netlist.get_gate_by_id" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_gate_by_id</code><span class="sig-paren">(</span><em>self: hal_py.netlist</em>, <em>gate_id: int</em><span class="sig-paren">)</span> &#x2192; hal::Gate<a class="headerlink" href="#hal_py.netlist.get_gate_by_id" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a gate specified by id.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -499,7 +493,7 @@ It is identifiable via its unique ID which is automatically set to the next free
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The gate or None.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="gate.html#hal_py.gate" title="hal_py.gate">hal_py.gate</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)">None</a></td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">hal_py.Gate or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)">None</a></td>
 </tr>
 </tbody>
 </table>
@@ -507,7 +501,7 @@ It is identifiable via its unique ID which is automatically set to the next free
 
 <dl class="method">
 <dt id="hal_py.netlist.get_gate_library">
-<code class="descname">get_gate_library</code><span class="sig-paren">(</span><em>self: hal_py.netlist</em><span class="sig-paren">)</span> &#x2192; hal_py.gate_library<a class="headerlink" href="#hal_py.netlist.get_gate_library" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_gate_library</code><span class="sig-paren">(</span><em>self: hal_py.netlist</em><span class="sig-paren">)</span> &#x2192; hal_py.GateLibrary<a class="headerlink" href="#hal_py.netlist.get_gate_library" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the gate library associated with the netlist.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -515,7 +509,7 @@ It is identifiable via its unique ID which is automatically set to the next free
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The gate library.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="gate_library.html#hal_py.gate_library" title="hal_py.gate_library">hal_py.gate_library</a></td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">hal_py.GateLibrary</td>
 </tr>
 </tbody>
 </table>
@@ -523,7 +517,7 @@ It is identifiable via its unique ID which is automatically set to the next free
 
 <dl class="method">
 <dt id="hal_py.netlist.get_gates">
-<code class="descname">get_gates</code><span class="sig-paren">(</span><em>self: hal_py.netlist, filter: Callable[[gate], bool] = None</em><span class="sig-paren">)</span> &#x2192; Set[gate]<a class="headerlink" href="#hal_py.netlist.get_gates" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_gates</code><span class="sig-paren">(</span><em>self: hal_py.netlist, filter: Callable[[hal::Gate], bool] = None</em><span class="sig-paren">)</span> &#x2192; Set[hal::Gate]<a class="headerlink" href="#hal_py.netlist.get_gates" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get all gates of the netlist. You can filter the set before output with the optional parameters.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -533,7 +527,7 @@ It is identifiable via its unique ID which is automatically set to the next free
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A set of gates.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.8)">set</a>[<a class="reference internal" href="gate.html#hal_py.gate" title="hal_py.gate">hal_py.gate</a>]</td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.8)">set</a>[hal_py.Gate]</td>
 </tr>
 </tbody>
 </table>
@@ -541,7 +535,7 @@ It is identifiable via its unique ID which is automatically set to the next free
 
 <dl class="method">
 <dt id="hal_py.netlist.get_global_input_nets">
-<code class="descname">get_global_input_nets</code><span class="sig-paren">(</span><em>self: hal_py.netlist</em><span class="sig-paren">)</span> &#x2192; Set[net]<a class="headerlink" href="#hal_py.netlist.get_global_input_nets" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_global_input_nets</code><span class="sig-paren">(</span><em>self: hal_py.netlist</em><span class="sig-paren">)</span> &#x2192; Set[hal::Net]<a class="headerlink" href="#hal_py.netlist.get_global_input_nets" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get all global input nets.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -549,7 +543,7 @@ It is identifiable via its unique ID which is automatically set to the next free
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A set of nets.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.8)">set</a>[<a class="reference internal" href="net.html#hal_py.net" title="hal_py.net">hal_py.net</a>]</td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.8)">set</a>[hal_py.Net]</td>
 </tr>
 </tbody>
 </table>
@@ -557,7 +551,7 @@ It is identifiable via its unique ID which is automatically set to the next free
 
 <dl class="method">
 <dt id="hal_py.netlist.get_global_output_nets">
-<code class="descname">get_global_output_nets</code><span class="sig-paren">(</span><em>self: hal_py.netlist</em><span class="sig-paren">)</span> &#x2192; Set[net]<a class="headerlink" href="#hal_py.netlist.get_global_output_nets" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_global_output_nets</code><span class="sig-paren">(</span><em>self: hal_py.netlist</em><span class="sig-paren">)</span> &#x2192; Set[hal::Net]<a class="headerlink" href="#hal_py.netlist.get_global_output_nets" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get all global output nets.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -565,7 +559,7 @@ It is identifiable via its unique ID which is automatically set to the next free
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A set of nets.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.8)">set</a>[<a class="reference internal" href="net.html#hal_py.net" title="hal_py.net">hal_py.net</a>]</td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.8)">set</a>[hal_py.Net]</td>
 </tr>
 </tbody>
 </table>
@@ -573,7 +567,7 @@ It is identifiable via its unique ID which is automatically set to the next free
 
 <dl class="method">
 <dt id="hal_py.netlist.get_gnd_gates">
-<code class="descname">get_gnd_gates</code><span class="sig-paren">(</span><em>self: hal_py.netlist</em><span class="sig-paren">)</span> &#x2192; Set[gate]<a class="headerlink" href="#hal_py.netlist.get_gnd_gates" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_gnd_gates</code><span class="sig-paren">(</span><em>self: hal_py.netlist</em><span class="sig-paren">)</span> &#x2192; Set[hal::Gate]<a class="headerlink" href="#hal_py.netlist.get_gnd_gates" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get all global gnd gates.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -581,7 +575,7 @@ It is identifiable via its unique ID which is automatically set to the next free
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A set of gates.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.8)">set</a>[<a class="reference internal" href="gate.html#hal_py.gate" title="hal_py.gate">hal_py.gate</a>]</td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.8)">set</a>[hal_py.Gate]</td>
 </tr>
 </tbody>
 </table>
@@ -624,7 +618,7 @@ It is identifiable via its unique ID which is automatically set to the next free
 <code class="descname">get_module_by_id</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.netlist.get_module_by_id" title="Permalink to this definition">¶</a></dt>
 <dd><p>Overloaded function.</p>
 <ol class="arabic">
-<li><p class="first">get_module_by_id(self: hal_py.netlist, id: int) -&gt; module</p>
+<li><p class="first">get_module_by_id(self: hal_py.netlist, id: int) -&gt; hal::Module</p>
 <blockquote>
 <div><p>Get a single module specified by its id.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -635,13 +629,13 @@ It is identifiable via its unique ID which is automatically set to the next free
 </tr>
 <tr class="field-even field"><th class="field-name">returns:</th><td class="field-body">The module.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">hal_py.module</td>
+<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">hal_py.Module</td>
 </tr>
 </tbody>
 </table>
 </div></blockquote>
 </li>
-<li><p class="first">get_module_by_id(self: hal_py.netlist, id: int) -&gt; module</p>
+<li><p class="first">get_module_by_id(self: hal_py.netlist, id: int) -&gt; hal::Module</p>
 <blockquote>
 <div><p>Get a single module specified by its id.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -652,7 +646,7 @@ It is identifiable via its unique ID which is automatically set to the next free
 </tr>
 <tr class="field-even field"><th class="field-name">returns:</th><td class="field-body">The module.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">hal_py.module</td>
+<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">hal_py.Module</td>
 </tr>
 </tbody>
 </table>
@@ -663,7 +657,7 @@ It is identifiable via its unique ID which is automatically set to the next free
 
 <dl class="method">
 <dt id="hal_py.netlist.get_modules">
-<code class="descname">get_modules</code><span class="sig-paren">(</span><em>self: hal_py.netlist</em><span class="sig-paren">)</span> &#x2192; Set[module]<a class="headerlink" href="#hal_py.netlist.get_modules" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_modules</code><span class="sig-paren">(</span><em>self: hal_py.netlist</em><span class="sig-paren">)</span> &#x2192; Set[hal::Module]<a class="headerlink" href="#hal_py.netlist.get_modules" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get all modules of the netlist. The top module is included!</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -671,7 +665,7 @@ It is identifiable via its unique ID which is automatically set to the next free
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A set of modules.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.8)">set</a>[<a class="reference internal" href="module.html#hal_py.module" title="hal_py.module">hal_py.module</a>]</td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.8)">set</a>[hal_py.Module]</td>
 </tr>
 </tbody>
 </table>
@@ -679,7 +673,7 @@ It is identifiable via its unique ID which is automatically set to the next free
 
 <dl class="method">
 <dt id="hal_py.netlist.get_net_by_id">
-<code class="descname">get_net_by_id</code><span class="sig-paren">(</span><em>self: hal_py.netlist</em>, <em>net_id: int</em><span class="sig-paren">)</span> &#x2192; net<a class="headerlink" href="#hal_py.netlist.get_net_by_id" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_net_by_id</code><span class="sig-paren">(</span><em>self: hal_py.netlist</em>, <em>net_id: int</em><span class="sig-paren">)</span> &#x2192; hal::Net<a class="headerlink" href="#hal_py.netlist.get_net_by_id" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a net specified by id.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -689,7 +683,7 @@ It is identifiable via its unique ID which is automatically set to the next free
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The net or None.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="net.html#hal_py.net" title="hal_py.net">hal_py.net</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)">None</a></td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">hal_py.Net or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)">None</a></td>
 </tr>
 </tbody>
 </table>
@@ -697,7 +691,7 @@ It is identifiable via its unique ID which is automatically set to the next free
 
 <dl class="method">
 <dt id="hal_py.netlist.get_nets">
-<code class="descname">get_nets</code><span class="sig-paren">(</span><em>self: hal_py.netlist, filter: Callable[[net], bool] = None</em><span class="sig-paren">)</span> &#x2192; Set[net]<a class="headerlink" href="#hal_py.netlist.get_nets" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_nets</code><span class="sig-paren">(</span><em>self: hal_py.netlist, filter: Callable[[hal::Net], bool] = None</em><span class="sig-paren">)</span> &#x2192; Set[hal::Net]<a class="headerlink" href="#hal_py.netlist.get_nets" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get all nets of the netlist. You can filter the set before output with the optional parameters.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -707,7 +701,7 @@ It is identifiable via its unique ID which is automatically set to the next free
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A set of nets.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.8)">set</a>[<a class="reference internal" href="net.html#hal_py.net" title="hal_py.net">hal_py.net</a>]</td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.8)">set</a>[hal_py.Net]</td>
 </tr>
 </tbody>
 </table>
@@ -715,7 +709,7 @@ It is identifiable via its unique ID which is automatically set to the next free
 
 <dl class="method">
 <dt id="hal_py.netlist.get_top_module">
-<code class="descname">get_top_module</code><span class="sig-paren">(</span><em>self: hal_py.netlist</em><span class="sig-paren">)</span> &#x2192; module<a class="headerlink" href="#hal_py.netlist.get_top_module" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_top_module</code><span class="sig-paren">(</span><em>self: hal_py.netlist</em><span class="sig-paren">)</span> &#x2192; hal::Module<a class="headerlink" href="#hal_py.netlist.get_top_module" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the top module of the netlist.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -723,7 +717,7 @@ It is identifiable via its unique ID which is automatically set to the next free
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The top module.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="module.html#hal_py.module" title="hal_py.module">hal_py.module</a></td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">hal_py.Module</td>
 </tr>
 </tbody>
 </table>
@@ -779,7 +773,7 @@ It is identifiable via its unique ID which is automatically set to the next free
 
 <dl class="method">
 <dt id="hal_py.netlist.get_vcc_gates">
-<code class="descname">get_vcc_gates</code><span class="sig-paren">(</span><em>self: hal_py.netlist</em><span class="sig-paren">)</span> &#x2192; Set[gate]<a class="headerlink" href="#hal_py.netlist.get_vcc_gates" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_vcc_gates</code><span class="sig-paren">(</span><em>self: hal_py.netlist</em><span class="sig-paren">)</span> &#x2192; Set[hal::Gate]<a class="headerlink" href="#hal_py.netlist.get_vcc_gates" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get all global vcc gates.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -787,7 +781,7 @@ It is identifiable via its unique ID which is automatically set to the next free
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A set of gates.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.8)">set</a>[<a class="reference internal" href="gate.html#hal_py.gate" title="hal_py.gate">hal_py.gate</a>]</td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.8)">set</a>[hal_py.Gate]</td>
 </tr>
 </tbody>
 </table>
@@ -801,7 +795,7 @@ It is identifiable via its unique ID which is automatically set to the next free
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">set[hal_py.net]</td>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.8)">set</a>[hal_py.Net]</td>
 </tr>
 </tbody>
 </table>
@@ -815,7 +809,7 @@ It is identifiable via its unique ID which is automatically set to the next free
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">set[hal_py.net]</td>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.8)">set</a>[hal_py.Net]</td>
 </tr>
 </tbody>
 </table>
@@ -829,7 +823,7 @@ It is identifiable via its unique ID which is automatically set to the next free
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">set[hal_py.gate]</td>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.8)">set</a>[hal_py.Gate]</td>
 </tr>
 </tbody>
 </table>
@@ -843,7 +837,7 @@ It is identifiable via its unique ID which is automatically set to the next free
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">int</td>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></td>
 </tr>
 </tbody>
 </table>
@@ -857,7 +851,7 @@ It is identifiable via its unique ID which is automatically set to the next free
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">str</td>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></td>
 </tr>
 </tbody>
 </table>
@@ -865,13 +859,13 @@ It is identifiable via its unique ID which is automatically set to the next free
 
 <dl class="method">
 <dt id="hal_py.netlist.is_gate_in_netlist">
-<code class="descname">is_gate_in_netlist</code><span class="sig-paren">(</span><em>self: hal_py.netlist</em>, <em>gate: gate</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.netlist.is_gate_in_netlist" title="Permalink to this definition">¶</a></dt>
+<code class="descname">is_gate_in_netlist</code><span class="sig-paren">(</span><em>self: hal_py.netlist</em>, <em>gate: hal::Gate</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.netlist.is_gate_in_netlist" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check wether a gate is registered in the netlist.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>gate</strong> (<a class="reference internal" href="gate.html#hal_py.gate" title="hal_py.gate"><em>hal_py.gate</em></a>) – The gate to check.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>gate</strong> (<em>hal_py.Gate</em>) – The gate to check.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if the gate is in netlist.</td>
 </tr>
@@ -883,13 +877,13 @@ It is identifiable via its unique ID which is automatically set to the next free
 
 <dl class="method">
 <dt id="hal_py.netlist.is_global_input_net">
-<code class="descname">is_global_input_net</code><span class="sig-paren">(</span><em>self: hal_py.netlist</em>, <em>net: net</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.netlist.is_global_input_net" title="Permalink to this definition">¶</a></dt>
+<code class="descname">is_global_input_net</code><span class="sig-paren">(</span><em>self: hal_py.netlist</em>, <em>net: hal::Net</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.netlist.is_global_input_net" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks wether a net is a global input net.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>net</strong> (<a class="reference internal" href="net.html#hal_py.net" title="hal_py.net"><em>hal_py.net</em></a>) – The net to check.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>net</strong> (<em>hal_py.Net</em>) – The net to check.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if the net is a global input net.</td>
 </tr>
@@ -901,13 +895,13 @@ It is identifiable via its unique ID which is automatically set to the next free
 
 <dl class="method">
 <dt id="hal_py.netlist.is_global_output_net">
-<code class="descname">is_global_output_net</code><span class="sig-paren">(</span><em>self: hal_py.netlist</em>, <em>net: net</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.netlist.is_global_output_net" title="Permalink to this definition">¶</a></dt>
+<code class="descname">is_global_output_net</code><span class="sig-paren">(</span><em>self: hal_py.netlist</em>, <em>net: hal::Net</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.netlist.is_global_output_net" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks wether a net is a global output net.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>net</strong> (<a class="reference internal" href="net.html#hal_py.net" title="hal_py.net"><em>hal_py.net</em></a>) – The net to check.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>net</strong> (<em>hal_py.Net</em>) – The net to check.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if the net is a global output net.</td>
 </tr>
@@ -919,13 +913,13 @@ It is identifiable via its unique ID which is automatically set to the next free
 
 <dl class="method">
 <dt id="hal_py.netlist.is_gnd_gate">
-<code class="descname">is_gnd_gate</code><span class="sig-paren">(</span><em>self: hal_py.netlist</em>, <em>gate: gate</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.netlist.is_gnd_gate" title="Permalink to this definition">¶</a></dt>
+<code class="descname">is_gnd_gate</code><span class="sig-paren">(</span><em>self: hal_py.netlist</em>, <em>gate: hal::Gate</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.netlist.is_gnd_gate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks whether a gate is a global gnd gate.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>gate</strong> (<a class="reference internal" href="gate.html#hal_py.gate" title="hal_py.gate"><em>hal_py.gate</em></a>) – The gate to check.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>gate</strong> (<em>hal_py.Gate</em>) – The gate to check.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if the gate is a global gnd gate.</td>
 </tr>
@@ -937,14 +931,14 @@ It is identifiable via its unique ID which is automatically set to the next free
 
 <dl class="method">
 <dt id="hal_py.netlist.is_module_in_netlist">
-<code class="descname">is_module_in_netlist</code><span class="sig-paren">(</span><em>self: hal_py.netlist</em>, <em>module: module</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.netlist.is_module_in_netlist" title="Permalink to this definition">¶</a></dt>
+<code class="descname">is_module_in_netlist</code><span class="sig-paren">(</span><em>self: hal_py.netlist</em>, <em>module: hal::Module</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.netlist.is_module_in_netlist" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks whether a module is registered in the netlist.</p>
 <blockquote>
 <div><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name" colspan="2">param hal_py.module module:</th></tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">param hal_py.Module module:</th></tr>
 <tr class="field-odd field"><td>&#160;</td><td class="field-body">The module to check.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">returns:</th><td class="field-body">True if the module is in netlist.</td>
@@ -958,13 +952,13 @@ It is identifiable via its unique ID which is automatically set to the next free
 
 <dl class="method">
 <dt id="hal_py.netlist.is_net_in_netlist">
-<code class="descname">is_net_in_netlist</code><span class="sig-paren">(</span><em>self: hal_py.netlist</em>, <em>net: net</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.netlist.is_net_in_netlist" title="Permalink to this definition">¶</a></dt>
+<code class="descname">is_net_in_netlist</code><span class="sig-paren">(</span><em>self: hal_py.netlist</em>, <em>net: hal::Net</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.netlist.is_net_in_netlist" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks whether a net is registered in the netlist.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>net</strong> (<a class="reference internal" href="net.html#hal_py.net" title="hal_py.net"><em>hal_py.net</em></a>) – The net to check.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>net</strong> (<em>hal_py.Net</em>) – The net to check.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if the net is in netlist.</td>
 </tr>
@@ -976,13 +970,13 @@ It is identifiable via its unique ID which is automatically set to the next free
 
 <dl class="method">
 <dt id="hal_py.netlist.is_vcc_gate">
-<code class="descname">is_vcc_gate</code><span class="sig-paren">(</span><em>self: hal_py.netlist</em>, <em>gate: gate</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.netlist.is_vcc_gate" title="Permalink to this definition">¶</a></dt>
+<code class="descname">is_vcc_gate</code><span class="sig-paren">(</span><em>self: hal_py.netlist</em>, <em>gate: hal::Gate</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.netlist.is_vcc_gate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks whether a gate is a global vcc gate.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>gate</strong> (<a class="reference internal" href="gate.html#hal_py.gate" title="hal_py.gate"><em>hal_py.gate</em></a>) – The gate to check.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>gate</strong> (<em>hal_py.Gate</em>) – The gate to check.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if the gate is a global vcc gate.</td>
 </tr>
@@ -994,13 +988,13 @@ It is identifiable via its unique ID which is automatically set to the next free
 
 <dl class="method">
 <dt id="hal_py.netlist.mark_global_input_net">
-<code class="descname">mark_global_input_net</code><span class="sig-paren">(</span><em>self: hal_py.netlist</em>, <em>net: net</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.netlist.mark_global_input_net" title="Permalink to this definition">¶</a></dt>
+<code class="descname">mark_global_input_net</code><span class="sig-paren">(</span><em>self: hal_py.netlist</em>, <em>net: hal::Net</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.netlist.mark_global_input_net" title="Permalink to this definition">¶</a></dt>
 <dd><p>Mark a net as a global input net.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>net</strong> (<a class="reference internal" href="net.html#hal_py.net" title="hal_py.net"><em>hal_py.net</em></a>) – The net.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>net</strong> (<em>hal_py.Net</em>) – The net.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True on success.</td>
 </tr>
@@ -1012,13 +1006,13 @@ It is identifiable via its unique ID which is automatically set to the next free
 
 <dl class="method">
 <dt id="hal_py.netlist.mark_global_output_net">
-<code class="descname">mark_global_output_net</code><span class="sig-paren">(</span><em>self: hal_py.netlist</em>, <em>net: net</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.netlist.mark_global_output_net" title="Permalink to this definition">¶</a></dt>
+<code class="descname">mark_global_output_net</code><span class="sig-paren">(</span><em>self: hal_py.netlist</em>, <em>net: hal::Net</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.netlist.mark_global_output_net" title="Permalink to this definition">¶</a></dt>
 <dd><p>Mark a net as a global output net.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>net</strong> (<a class="reference internal" href="net.html#hal_py.net" title="hal_py.net"><em>hal_py.net</em></a>) – The net.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>net</strong> (<em>hal_py.Net</em>) – The net.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True on success.</td>
 </tr>
@@ -1030,13 +1024,13 @@ It is identifiable via its unique ID which is automatically set to the next free
 
 <dl class="method">
 <dt id="hal_py.netlist.mark_gnd_gate">
-<code class="descname">mark_gnd_gate</code><span class="sig-paren">(</span><em>self: hal_py.netlist</em>, <em>gate: gate</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.netlist.mark_gnd_gate" title="Permalink to this definition">¶</a></dt>
+<code class="descname">mark_gnd_gate</code><span class="sig-paren">(</span><em>self: hal_py.netlist</em>, <em>gate: hal::Gate</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.netlist.mark_gnd_gate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Mark a gate as global gnd gate.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>gate</strong> (<a class="reference internal" href="gate.html#hal_py.gate" title="hal_py.gate"><em>hal_py.gate</em></a>) – The gate.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>gate</strong> (<em>hal_py.Gate</em>) – The gate.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True on success.</td>
 </tr>
@@ -1048,13 +1042,13 @@ It is identifiable via its unique ID which is automatically set to the next free
 
 <dl class="method">
 <dt id="hal_py.netlist.mark_vcc_gate">
-<code class="descname">mark_vcc_gate</code><span class="sig-paren">(</span><em>self: hal_py.netlist</em>, <em>gate: gate</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.netlist.mark_vcc_gate" title="Permalink to this definition">¶</a></dt>
+<code class="descname">mark_vcc_gate</code><span class="sig-paren">(</span><em>self: hal_py.netlist</em>, <em>gate: hal::Gate</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.netlist.mark_vcc_gate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Mark a gate as global vcc gate.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>gate</strong> (<a class="reference internal" href="gate.html#hal_py.gate" title="hal_py.gate"><em>hal_py.gate</em></a>) – The gate.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>gate</strong> (<em>hal_py.Gate</em>) – The gate.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True on success.</td>
 </tr>
@@ -1072,7 +1066,7 @@ It is identifiable via its unique ID which is automatically set to the next free
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.8)">set</a>[<a class="reference internal" href="module.html#hal_py.module" title="hal_py.module">hal_py.module</a>]</td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.8)">set</a>[hal_py.Module]</td>
 </tr>
 </tbody>
 </table>
@@ -1086,7 +1080,7 @@ It is identifiable via its unique ID which is automatically set to the next free
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">set[hal_py.net]</td>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.8)">set</a>[hal_py.Net]</td>
 </tr>
 </tbody>
 </table>
@@ -1156,7 +1150,7 @@ It is identifiable via its unique ID which is automatically set to the next free
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">hal_py.module</td>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">hal_py.Module</td>
 </tr>
 </tbody>
 </table>
@@ -1164,13 +1158,13 @@ It is identifiable via its unique ID which is automatically set to the next free
 
 <dl class="method">
 <dt id="hal_py.netlist.unmark_global_input_net">
-<code class="descname">unmark_global_input_net</code><span class="sig-paren">(</span><em>self: hal_py.netlist</em>, <em>net: net</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.netlist.unmark_global_input_net" title="Permalink to this definition">¶</a></dt>
+<code class="descname">unmark_global_input_net</code><span class="sig-paren">(</span><em>self: hal_py.netlist</em>, <em>net: hal::Net</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.netlist.unmark_global_input_net" title="Permalink to this definition">¶</a></dt>
 <dd><p>Unmark a global input net.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>net</strong> (<a class="reference internal" href="net.html#hal_py.net" title="hal_py.net"><em>hal_py.net</em></a>) – The net.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>net</strong> (<em>hal_py.Net</em>) – The net.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True on success.</td>
 </tr>
@@ -1182,13 +1176,13 @@ It is identifiable via its unique ID which is automatically set to the next free
 
 <dl class="method">
 <dt id="hal_py.netlist.unmark_global_output_net">
-<code class="descname">unmark_global_output_net</code><span class="sig-paren">(</span><em>self: hal_py.netlist</em>, <em>net: net</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.netlist.unmark_global_output_net" title="Permalink to this definition">¶</a></dt>
+<code class="descname">unmark_global_output_net</code><span class="sig-paren">(</span><em>self: hal_py.netlist</em>, <em>net: hal::Net</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.netlist.unmark_global_output_net" title="Permalink to this definition">¶</a></dt>
 <dd><p>Unmark a global output net.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>net</strong> (<a class="reference internal" href="net.html#hal_py.net" title="hal_py.net"><em>hal_py.net</em></a>) – The net.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>net</strong> (<em>hal_py.Net</em>) – The net.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True on success.</td>
 </tr>
@@ -1200,13 +1194,13 @@ It is identifiable via its unique ID which is automatically set to the next free
 
 <dl class="method">
 <dt id="hal_py.netlist.unmark_gnd_gate">
-<code class="descname">unmark_gnd_gate</code><span class="sig-paren">(</span><em>self: hal_py.netlist</em>, <em>gate: gate</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.netlist.unmark_gnd_gate" title="Permalink to this definition">¶</a></dt>
+<code class="descname">unmark_gnd_gate</code><span class="sig-paren">(</span><em>self: hal_py.netlist</em>, <em>gate: hal::Gate</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.netlist.unmark_gnd_gate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Unmark a global gnd gate.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>gate</strong> (<a class="reference internal" href="gate.html#hal_py.gate" title="hal_py.gate"><em>hal_py.gate</em></a>) – The gate.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>gate</strong> (<em>hal_py.Gate</em>) – The gate.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True on success.</td>
 </tr>
@@ -1218,7 +1212,7 @@ It is identifiable via its unique ID which is automatically set to the next free
 
 <dl class="method">
 <dt id="hal_py.netlist.unmark_vcc_gate">
-<code class="descname">unmark_vcc_gate</code><span class="sig-paren">(</span><em>self: hal_py.netlist</em>, <em>gate: gate</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.netlist.unmark_vcc_gate" title="Permalink to this definition">¶</a></dt>
+<code class="descname">unmark_vcc_gate</code><span class="sig-paren">(</span><em>self: hal_py.netlist</em>, <em>gate: hal::Gate</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.netlist.unmark_vcc_gate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Unmark a global vcc gate.</p>
 <blockquote>
 <div><table class="docutils field-list" frame="void" rules="none">
@@ -1227,7 +1221,7 @@ It is identifiable via its unique ID which is automatically set to the next free
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">param  gate:</th><td class="field-body">The gate.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">type gate:</th><td class="field-body">hal_py.gate</td>
+<tr class="field-even field"><th class="field-name">type gate:</th><td class="field-body">hal_py.Gate</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">bool</td>
 </tr>
@@ -1244,7 +1238,7 @@ It is identifiable via its unique ID which is automatically set to the next free
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">set[hal_py.gate]</td>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.8)">set</a>[hal_py.Gate]</td>
 </tr>
 </tbody>
 </table>
@@ -1256,9 +1250,7 @@ It is identifiable via its unique ID which is automatically set to the next free
 
 
            </div>
-           <div class="articleComments">
-            
-           </div>
+           
           </div>
           <footer>
   
@@ -1267,7 +1259,7 @@ It is identifiable via its unique ID which is automatically set to the next free
         <a href="boolean_function.html" class="btn btn-neutral float-right" title="Boolean Function" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="endpoint.html" class="btn btn-neutral" title="Endpoint" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="endpoint.html" class="btn btn-neutral float-left" title="Endpoint" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -1276,11 +1268,11 @@ It is identifiable via its unique ID which is automatically set to the next free
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2020, Marc Fyrbiak, Sebastian Wallat, Max Hoffmann.
+        &copy; Copyright 2020, Marc Fyrbiak, Sebastian Wallat, Max Hoffmann
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -1293,37 +1285,15 @@ It is identifiable via its unique ID which is automatically set to the next free
   
 
 
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'./',
-            VERSION:'v2.0.0-150-g702c8b69e',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="_static/jquery.js"></script>
-      <script type="text/javascript" src="_static/underscore.js"></script>
-      <script type="text/javascript" src="_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
-  
-
-  
-  
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-  
-
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
   </script>
+
+  
+  
+    
    
 
 </body>

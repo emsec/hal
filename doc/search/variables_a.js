@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['spdlog_5fsink',['spdlog_sink',['../d6/dd3/structlog__manager_1_1log__sink.html#afbb51a036981a65dcc3e13b480fc5b74',1,'log_manager::log_sink']]],
-  ['string',['string',['../d4/df4/structtoken.html#a2150b4d92215b15d0c62c40cafd407ba',1,'token']]]
+  ['truncate_1175',['truncate',['../d3/d1f/structhal_1_1LogManager_1_1log__sink.html#a3a09ddb29a0af4fec0ad93a7cb76a498',1,'hal::LogManager::log_sink']]]
 ];

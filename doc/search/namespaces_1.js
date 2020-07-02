@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['event_5fcontrols',['event_controls',['../d2/d53/namespaceevent__controls.html',1,'']]],
-  ['event_5flog',['event_log',['../da/d20/namespaceevent__log.html',1,'']]]
+  ['netlist_5ffactory_683',['netlist_factory',['../d8/de7/namespacenetlist__factory.html',1,'']]]
 ];

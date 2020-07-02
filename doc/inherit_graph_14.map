@@ -1,7 +1,4 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$d5/d32/classi__base.html" title="i_base" alt="" coords="5,56,65,83"/>
-<area shape="rect" id="node2" href="$d2/da9/classi__cli.html" title="i_cli" alt="" coords="145,5,191,32"/>
-<area shape="rect" id="node3" href="$d7/d64/classi__gui.html" title="i_gui" alt="" coords="143,56,193,83"/>
-<area shape="rect" id="node4" href="$d0/dc1/classi__interactive__ui.html" title="i_interactive_ui" alt="" coords="113,107,223,133"/>
-<area shape="rect" id="node5" href="$d1/d61/classplugin__python__shell.html" title="plugin_python_shell" alt="" coords="271,107,407,133"/>
+<area shape="rect" id="node1" href="$d0/d0e/classhal_1_1HDLParser.html" title=" " alt="" coords="5,5,157,47"/>
+<area shape="rect" id="node2" href="$d1/d0b/classhal_1_1HDLParserVerilog.html" title=" " alt="" coords="205,13,368,39"/>
 </map>
