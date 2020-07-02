@@ -1,4 +1,4 @@
-FROM ubuntu:bionic
+FROM ubuntu:focal
 
 ENV build_path=/home/build
 RUN mkdir -p $build_path
