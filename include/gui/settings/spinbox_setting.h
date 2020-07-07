@@ -21,26 +21,26 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef SPINBOX_SETTING_H
-#define SPINBOX_SETTING_H
+#pragma once
 
 #include "settings_widget.h"
 #include <QSpinBox>
 
-class spinbox_setting : public settings_widget
+namespace hal
 {
-    Q_OBJECT
+    class SpinboxSetting : public SettingsWidget
+    {
+        Q_OBJECT
 
-public:
-    spinbox_setting(const QString& key, const QString& title, const int min, const int max, const QString& description, QWidget* parent = 0);
+    public:
+        SpinboxSetting(const QString& key, const QString& title, const int min, const int max, const QString& description, QWidget* parent = 0);
 
-    virtual void load(const QVariant& value) Q_DECL_OVERRIDE;
-    virtual QVariant value() Q_DECL_OVERRIDE;
+        virtual void load(const QVariant& value) Q_DECL_OVERRIDE;
+        virtual QVariant value() Q_DECL_OVERRIDE;
 
-private:
-    QSpinBox* m_spinbox;
-    void on_spinbox_value_changed(int value);
+    private:
+        QSpinBox* m_spinbox;
+        void on_spinbox_value_changed(int value);
 
-};
-
-#endif //SPINBOX_SETTING_H
+    };
+}

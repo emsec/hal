@@ -21,43 +21,43 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef SPLITTER_ANCHOR_H
-#define SPLITTER_ANCHOR_H
+#pragma once
 
-#include "hal_content_anchor/hal_content_anchor.h"
+#include "content_anchor/content_anchor.h"
 
 #include <QList>
 #include <QObject>
 
-class dock_bar;
-class splitter;
-class content_frame;
-class content_widget;
-
-class splitter_anchor : public QObject, public hal_content_anchor
+namespace hal
 {
-    Q_OBJECT
+    class DockBar;
+    class Splitter;
+    class ContentFrame;
+    class ContentWidget;
 
-public:
-    splitter_anchor(dock_bar* dock_bar, splitter* splitter, QObject* parent = 0);
+    class SplitterAnchor : public QObject, public ContentAnchor
+    {
+        Q_OBJECT
 
-    virtual void add(content_widget* widget, int index = -1) override;
-    virtual void remove(content_widget* widget) override;
-    virtual void detach(content_widget* widget) override;
-    virtual void reattach(content_widget* widget) override;
-    virtual void open(content_widget* widget) override;
-    virtual void close(content_widget* widget) override;
+    public:
+        SplitterAnchor(DockBar* DockBar, Splitter* Splitter, QObject* parent = 0);
 
-    int count();
-    void remove_content();
+        virtual void add(ContentWidget* widget, int index = -1) override;
+        virtual void remove(ContentWidget* widget) override;
+        virtual void detach(ContentWidget* widget) override;
+        virtual void reattach(ContentWidget* widget) override;
+        virtual void open(ContentWidget* widget) override;
+        virtual void close(ContentWidget* widget) override;
 
-Q_SIGNALS:
-    void content_changed();
+        int count();
+        void remove_content();
 
-private:
-    dock_bar* m_dock_bar;
-    splitter* m_splitter;
-    QList<content_frame*> m_detached_frames;
-};
+    Q_SIGNALS:
+        void content_changed();
 
-#endif    // SPLITTER_ANCHOR_H
+    private:
+        DockBar* m_dock_bar;
+        Splitter* m_splitter;
+        QList<ContentFrame*> m_detached_frames;
+    };
+}

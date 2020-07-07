@@ -24,33 +24,49 @@
 #pragma once
 
 #include "def.h"
+
 #include <map>
 #include <memory>
+#include <vector>
 
-class gate_library;
-
-/**
- * @ingroup netlist
- */
-namespace gate_library_manager
+namespace hal
 {
-    /**
-     * Get a gate library object by name.
-     *
-     * @param[in] name - Name of the gate library.
-     * @returns Pointer to the gate library object.
-     */
-    NETLIST_API std::shared_ptr<gate_library> get_gate_library(const std::string& name);
+    class GateLibrary;
 
     /**
-     * Loads all gate libraries which are available.
+     * @ingroup netlist
      */
-    NETLIST_API void load_all();
+    namespace gate_library_manager
+    {
+        /**
+         * Loads a gate library file.
+         *
+         * @param[in] path - the file to load.
+         * @param[in] reload_if_existing - If true, reloads all libraries that are already loaded.
+         * @returns Pointer to the loaded gate library or nullptr on error.
+         */
+        NETLIST_API std::shared_ptr<GateLibrary> load_file(std::filesystem::path path, bool reload_if_existing = false);
 
-    /**
-     * Get all gate libraries together with the associated name.
-     *
-     * @returns A map from library name to pointer to the gate library object.
-     */
-    NETLIST_API std::map<std::string, std::shared_ptr<gate_library>> get_gate_libraries();
-}    // namespace gate_library_manager
+        /**
+         * Loads all gate libraries which are available.
+         *
+         * @param[in] reload_if_existing - If true, reloads all libraries that are already loaded.
+         */
+        NETLIST_API void load_all(bool reload_if_existing = false);
+
+        /**
+         * Get a gate library object by file name.
+         *
+         * @param[in] file_name - file name of the gate library.
+         * @returns Pointer to the gate library object or nullptr on error.
+         */
+        NETLIST_API std::shared_ptr<GateLibrary> get_gate_library(const std::string& file_name);
+
+        /**
+         * Get all loaded gate libraries.
+         *
+         * @returns A vector of pointers to the gate library objects.
+         */
+        NETLIST_API std::vector<std::shared_ptr<GateLibrary>> get_gate_libraries();
+    }    // namespace gate_library_manager
+}    // namespace hal

@@ -1,5 +1,7 @@
 #include "test_def.h"
 
+using namespace hal;
+
 void test_def::capture_stdout()
 {
     if (!output_captured)

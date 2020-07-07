@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef GRAPH_WIDGET_H
-#define GRAPH_WIDGET_H
+#pragma once
 
 #include "def.h"
 
@@ -33,70 +32,64 @@
 
 #include <deque>
 
-class dialog_overlay;
-class cone_layouter;
-class graph_context;
-class graph_graphics_view;
-class graph_layout_progress_widget;
-class graph_layout_spinner_widget;
-class graph_navigation_widget;
-
-class graph_widget : public content_widget, public graph_context_subscriber
+namespace hal
 {
-    Q_OBJECT
+    class DialogOverlay;
+    class GraphContext;
+    class GraphGraphicsView;
+    class GraphLayoutSpinnerWidget;
+    class GraphNavigationWidget;
+    class GraphNavigationWidgetV2;
 
-public:
-    graph_widget(graph_context* context, QWidget* parent = nullptr);
-
-    graph_context* get_context() const;
-
-    virtual void handle_scene_available() Q_DECL_OVERRIDE;
-    virtual void handle_scene_unavailable() Q_DECL_OVERRIDE;
-    virtual void handle_context_about_to_be_deleted() Q_DECL_OVERRIDE;
-
-    virtual void handle_status_update(const int percent) Q_DECL_OVERRIDE;
-    virtual void handle_status_update(const QString& message) Q_DECL_OVERRIDE;
-
-    graph_graphics_view* view();
-
-    void add_context_to_history();
-
-protected:
-    void keyPressEvent(QKeyEvent* event) Q_DECL_OVERRIDE;
-
-private Q_SLOTS:
-    void handle_navigation_jump_requested(const hal::node origin, const u32 via_net, const QSet<u32>& to_gates);
-    void handle_module_double_clicked(const u32 id);
-    void reset_focus();
-
-private:
-    void handle_navigation_left_request();
-    void handle_navigation_right_request();
-    void handle_navigation_up_request();
-    void handle_navigation_down_request();
-
-    void handle_history_step_back_request();
-    void handle_enter_module_requested(const u32 id);
-
-    void ensure_gates_visible(const QSet<u32> gates);
-
-    struct context_history_entry
+    class GraphWidget : public ContentWidget, public GraphContextSubscriber
     {
-        QSet<u32> m_modules;
-        QSet<u32> m_gates;
+        Q_OBJECT
+
+    public:
+        explicit GraphWidget(GraphContext* context, QWidget* parent = nullptr);
+
+        GraphContext* get_context() const;
+
+        void handle_scene_available() override;
+        void handle_scene_unavailable() override;
+        void handle_context_about_to_be_deleted() override;
+
+        void handle_status_update(const int percent) override;
+        void handle_status_update(const QString& message) override;
+
+        GraphGraphicsView* view();
+
+        void ensure_selection_visible();
+
+    protected:
+        void keyPressEvent(QKeyEvent* event) override;
+
+    private Q_SLOTS:
+        void handle_navigation_jump_requested(const hal::node origin, const u32 via_net, const QSet<u32>& to_gates, const QSet<u32>& to_modules);
+        void handle_module_double_clicked(const u32 id);
+        void reset_focus();
+
+    private:
+        void handle_navigation_left_request();
+        void handle_navigation_right_request();
+        void handle_navigation_up_request();
+        void handle_navigation_down_request();
+
+        void substitute_by_visible_modules(const QSet<u32>& gates, const QSet<u32>& modules, QSet<u32>& insert_gates, QSet<u32>& insert_modules,
+                                           QSet<u32>& remove_gates, QSet<u32>& remove_modules) const;
+        void set_modified_if_module();
+
+        void handle_enter_module_requested(const u32 id);
+
+        void ensure_items_visible(const QSet<u32>& gates, const QSet<u32>& modules);
+
+        GraphGraphicsView* m_view;
+        GraphContext* m_context;
+
+        DialogOverlay* m_Overlay;
+        GraphNavigationWidgetV2* m_navigation_widget_v2;
+        GraphLayoutSpinnerWidget* m_spinner_widget;
+
+        u32 m_current_expansion;
     };
-
-    std::deque<context_history_entry> m_context_history;
-
-    graph_graphics_view* m_view;
-    graph_context* m_context;
-
-    dialog_overlay* m_overlay;
-    graph_navigation_widget* m_navigation_widget;
-    graph_layout_progress_widget* m_progress_widget;
-    graph_layout_spinner_widget* m_spinner_widget;
-
-    u32 m_current_expansion;
-};
-
-#endif    // GRAPH_WIDGET_H
+}

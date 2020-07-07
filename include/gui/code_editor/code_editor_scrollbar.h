@@ -21,27 +21,26 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef CODE_EDITOR_SCROLLBAR_H
-#define CODE_EDITOR_SCROLLBAR_H
+#pragma once
 
 #include <QScrollBar>
-
-class minimap_scrollbar;
-
-class code_editor_scrollbar : public QScrollBar
+namespace hal
 {
-    Q_OBJECT
+    class MinimapScrollbar;
 
-public:
-    explicit code_editor_scrollbar(QWidget* parent = nullptr);
+    class CodeEditorScrollbar : public QScrollBar
+    {
+        Q_OBJECT
 
-    void set_minimap_scrollbar(minimap_scrollbar* scrollbar);
+    public:
+        explicit CodeEditorScrollbar(QWidget* parent = nullptr);
 
-protected:
-    virtual void sliderChange(SliderChange change) Q_DECL_OVERRIDE;
+        void set_minimap_scrollbar(MinimapScrollbar* scrollbar);
 
-private:
-    minimap_scrollbar* m_minimap_scrollbar;
-};
+    protected:
+        virtual void sliderChange(SliderChange change) Q_DECL_OVERRIDE;
 
-#endif    // CODE_EDITOR_SCROLLBAR_H
+    private:
+        MinimapScrollbar* m_minimap_scrollbar;
+    };
+}

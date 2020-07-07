@@ -21,22 +21,22 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef GUI_UTILITY_H
-#define GUI_UTILITY_H
+#pragma once
 
 #include <QColor>
 #include <QIcon>
 #include <QString>
 
-namespace gui_utility
+namespace hal
 {
-    extern QString get_svg_data(const QString& svg_path);
-    extern void change_svg_color(QString& svg_data, const QColor& from, const QColor& to);
-    extern void change_all_svg_colors(QString& svg_data, const QColor& to);
-    extern QIcon get_icon_from_svg_data(const QString& svg_data);
-    extern QIcon get_styled_svg_icon(const QString& from_to_colors, const QString& svg_path);
+    namespace gui_utility
+    {
+        extern QString get_svg_data(const QString& svg_path);
+        extern void change_svg_color(QString& svg_data, const QColor& from, const QColor& to);
+        extern void change_all_svg_colors(QString& svg_data, const QColor& to);
+        extern QIcon get_icon_from_svg_data(const QString& svg_data);
+        extern QIcon get_styled_svg_icon(const QString& from_to_colors, const QString& svg_path);
 
-    extern QColor get_random_color();
+        extern QColor get_random_color();
+    }
 }
-
-#endif // GUI_UTILITY_H

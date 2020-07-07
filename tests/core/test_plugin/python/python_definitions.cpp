@@ -19,7 +19,7 @@ PYBIND11_MODULE(libtest_plugin, m)
 #else
 PYBIND11_PLUGIN(libtest_plugin)
         {
-                py::module m("libtest_plugin", "hal test plugin");
+                py::Module m("libtest_plugin", "hal test plugin");
 #endif    // ifdef PYBIND11_MODULE
 
         py::class_<boolean_function_t>(m, "boolean_function_t")
@@ -55,7 +55,7 @@ Get the version of the plugin.
 :rtype: str
 )")
         .def("get_boolean_function", py::overload_cast<const std::vector<bool>&>(&plugin_test_plugin::get_boolean_function))
-        .def("get_boolean_function_str", py::overload_cast<std::shared_ptr<gate> const, bool>(&plugin_test_plugin::get_boolean_function_str), py::arg("gate"), py::arg("css_beautified") = false)
+        .def("get_boolean_function_str", py::overload_cast<std::shared_ptr<Gate> const, bool>(&plugin_test_plugin::get_boolean_function_str), py::arg("gate"), py::arg("css_beautified") = false)
         ;
 
 #ifndef PYBIND11_MODULE

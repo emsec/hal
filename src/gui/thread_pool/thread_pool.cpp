@@ -3,38 +3,41 @@
 #include "gui/thread_pool/task.h"
 #include "gui/thread_pool/worker.h"
 
-thread_pool::thread_pool(QObject* parent) : QObject(parent)
+namespace hal
 {
-    for (int i = 0; i < 4; ++i)
+    ThreadPool::ThreadPool(QObject* parent) : QObject(parent)
     {
-        worker* w = new worker(this);
-        connect(w, &worker::finished, this, &thread_pool::handle_worker_finished);
-        m_free_threads.push(w);
+        for (int i = 0; i < 4; ++i)
+        {
+            Worker* w = new Worker(this);
+            connect(w, &Worker::finished, this, &ThreadPool::handle_worker_finished);
+            m_free_threads.push(w);
+        }
     }
-}
 
-void thread_pool::queue_task(task* const t)
-{
-    if (m_free_threads.isEmpty())
-        m_tasks.enqueue(t);
-    else
+    void ThreadPool::queue_task(Task* const t)
     {
-        worker* w = m_free_threads.pop();
-        w->assign_task(t);
-        w->start();
+        if (m_free_threads.isEmpty())
+            m_tasks.enqueue(t);
+        else
+        {
+            Worker* w = m_free_threads.pop();
+            w->assign_task(t);
+            w->start();
+        }
     }
-}
 
-void thread_pool::handle_worker_finished()
-{
-    worker* w = static_cast<worker*>(QObject::sender());
-
-    if (m_tasks.empty())
-        m_free_threads.push(w);
-    else
+    void ThreadPool::handle_worker_finished()
     {
-        task* t = m_tasks.dequeue();
-        w->assign_task(t);
-        w->start();
+        Worker* w = static_cast<Worker*>(QObject::sender());
+
+        if (m_tasks.empty())
+            m_free_threads.push(w);
+        else
+        {
+            Task* t = m_tasks.dequeue();
+            w->assign_task(t);
+            w->start();
+        }
     }
 }

@@ -21,28 +21,28 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef CHECKBOX_SETTINGS_H
-#define CHECKBOX_SETTINGS_H
+#pragma once
 
 #include "settings_widget.h"
 #include <QCheckBox>
 #include <QStringList>
 
-class checkbox_setting : public settings_widget
+namespace hal
 {
-    Q_OBJECT
+    class CheckboxSetting : public SettingsWidget
+    {
+        Q_OBJECT
 
-public:
-    checkbox_setting(const QString& key, const QString& title, const QString& text, const QString& description, QWidget* parent = 0);
+    public:
+        CheckboxSetting(const QString& key, const QString& title, const QString& text, const QString& description, QWidget* parent = 0);
 
-    virtual void load(const QVariant& value) Q_DECL_OVERRIDE;
-    virtual QVariant value() Q_DECL_OVERRIDE;
-    //virtual void rollback() Q_DECL_OVERRIDE;
+        virtual void load(const QVariant& value) Q_DECL_OVERRIDE;
+        virtual QVariant value() Q_DECL_OVERRIDE;
+        //virtual void rollback() Q_DECL_OVERRIDE;
 
-private:
-    QCheckBox* m_check_box;
-    void on_state_changed(bool checked);
+    private:
+        QCheckBox* m_check_box;
+        void on_state_changed(bool checked);
 
-};
-
-#endif //CHECKBOX_SETTINGS_H
+    };
+}

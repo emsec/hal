@@ -21,25 +21,25 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef FONT_PREVIEW_WIDGET_H
-#define FONT_PREVIEW_WIDGET_H
+#pragma once
 
 #include "settings/preview_widget.h"
 
 #include <QLabel>
 #include <QFrame>
 
-class fontsize_preview_widget : public preview_widget
+namespace hal
 {
-    Q_OBJECT
+    class FontsizePreviewWidget : public PreviewWidget
+    {
+        Q_OBJECT
 
-public:
-    explicit fontsize_preview_widget(const QString& text, const QFont& font, QWidget* parent = 0);
-    void update(const QVariant& value) Q_DECL_OVERRIDE;
+    public:
+        explicit FontsizePreviewWidget(const QString& text, const QFont& font, QWidget* parent = 0);
+        void update(const QVariant& value) Q_DECL_OVERRIDE;
 
-private:
-    QLabel* m_label;
-    QFont m_font;
-};
-
-#endif // FONT_PREVIEW_WIDGET_H
+    private:
+        QLabel* m_label;
+        QFont m_font;
+    };
+}

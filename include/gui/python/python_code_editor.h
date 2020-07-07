@@ -21,53 +21,53 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef PYTHON_CODE_EDITOR_H
-#define PYTHON_CODE_EDITOR_H
+#pragma once
 
 #include "code_editor/code_editor.h"
 
 #include <QUuid>
 
-class python_code_editor : public code_editor
+namespace hal
 {
-    Q_OBJECT
-public:
-    python_code_editor(QWidget* parent = nullptr);
+    class PythonCodeEditor : public CodeEditor
+    {
+        Q_OBJECT
+    public:
+        PythonCodeEditor(QWidget* parent = nullptr);
 
-    QString get_file_name();
-    void set_file_name(const QString name);
+        QString get_file_name();
+        void set_file_name(const QString name);
 
-    void set_base_file_modified(bool base_file_modified);
-    bool is_base_file_modified();
-    
-    QUuid get_uuid() const;
+        void set_base_file_modified(bool base_file_modified);
+        bool is_base_file_modified();
 
-Q_SIGNALS:
-    void key_pressed(QKeyEvent* e);
+        QUuid get_uuid() const;
 
-private:
-    void keyPressEvent(QKeyEvent* e) Q_DECL_OVERRIDE;
-    void handle_tab_key_pressed();
-    void handle_shift_tab_key_pressed();
-    void handle_return_key_pressed();
-    void handle_backspace_key_pressed(QKeyEvent* e);
-    void handle_delete_key_pressed(QKeyEvent* e);
-    void handle_insert_key_pressed();
+    Q_SIGNALS:
+        void key_pressed(QKeyEvent* e);
 
-    void handle_redo_requested();
+    private:
+        void keyPressEvent(QKeyEvent* e) Q_DECL_OVERRIDE;
+        void handle_tab_key_pressed();
+        void handle_shift_tab_key_pressed();
+        void handle_return_key_pressed();
+        void handle_backspace_key_pressed(QKeyEvent* e);
+        void handle_delete_key_pressed(QKeyEvent* e);
+        void handle_insert_key_pressed();
 
-    void indent_selection(bool indentUnindent);
-    int next_indent(bool indentUnindent, int current_indent);
+        void handle_redo_requested();
 
-    void handle_autocomplete();
-    void perform_code_completion(std::tuple<std::string, std::string> completion);
+        void indent_selection(bool indentUnindent);
+        int next_indent(bool indentUnindent, int current_indent);
 
-    QString m_file_name;
-    QString m_text_state;
+        void handle_autocomplete();
+        void perform_code_completion(std::tuple<std::string, std::string> completion);
 
-    bool m_base_file_modified;
-    
-    QUuid m_uuid;
-};
+        QString m_file_name;
+        QString m_text_state;
 
-#endif //PYTHON_CODE_EDITOR_H
+        bool m_base_file_modified;
+
+        QUuid m_uuid;
+    };
+}

@@ -21,40 +21,40 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef NOTIFICATION_MANAGER_H
-#define NOTIFICATION_MANAGER_H
+#pragma once
 
 #include <QList>
 #include <QObject>
 
-class notification;
-
-class notification_manager : public QObject
+namespace hal
 {
-    Q_OBJECT
+    class Notification;
 
-public:
-    explicit notification_manager(QObject* parent = nullptr);
+    class NotificationManager : public QObject
+    {
+        Q_OBJECT
 
-    void remove(notification* n);
+    public:
+        explicit NotificationManager(QObject* parent = nullptr);
 
-Q_SIGNALS:
+        void remove(Notification* n);
 
-public Q_SLOTS:
-    void debug_add_notification();
+    Q_SIGNALS:
 
-private:
-    void rearrange_notifications();
+    public Q_SLOTS:
+        void debug_add_Notification();
 
-    int m_desktop_width;
-    int m_desktop_height;
+    private:
+        void rearrange_Notifications();
 
-    int m_width_offset;
-    int m_height_offset;
+        int m_desktop_width;
+        int m_desktop_height;
 
-    int m_spacing;
+        int m_width_offset;
+        int m_height_offset;
 
-    QList<notification*> m_list;
-};
+        int m_spacing;
 
-#endif    // NOTIFICATION_MANAGER_H
+        QList<Notification*> m_list;
+    };
+}

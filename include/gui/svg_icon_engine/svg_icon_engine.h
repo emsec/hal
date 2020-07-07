@@ -21,22 +21,22 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef SVG_ICON_ENGINE_H
-#define SVG_ICON_ENGINE_H
+#pragma once
 
 #include <QIconEngine>
 
-class svg_icon_engine : public QIconEngine
+namespace hal
 {
-public:
-    explicit svg_icon_engine(const std::string& svg_data);
+    class SvgIconEngine : public QIconEngine
+    {
+    public:
+        explicit SvgIconEngine(const std::string& svg_data);
 
-    void paint(QPainter* painter, const QRect& rect, QIcon::Mode mode, QIcon::State state) Q_DECL_OVERRIDE;
-    QIconEngine* clone() const Q_DECL_OVERRIDE;
-    QPixmap pixmap(const QSize& size, QIcon::Mode mode, QIcon::State state) Q_DECL_OVERRIDE;
+        void paint(QPainter* painter, const QRect& rect, QIcon::Mode mode, QIcon::State state) Q_DECL_OVERRIDE;
+        QIconEngine* clone() const Q_DECL_OVERRIDE;
+        QPixmap pixmap(const QSize& size, QIcon::Mode mode, QIcon::State state) Q_DECL_OVERRIDE;
 
-private:
-    QByteArray m_data;
-};
-
-#endif    // SVG_ICON_ENGINE_H
+    private:
+        QByteArray m_data;
+    };
+}

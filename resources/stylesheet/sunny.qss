@@ -111,7 +111,7 @@ QToolBar {
     border           : none; /* Fixes Mac Toolbar issue */
 }
 
-/*main_window #toolbar {
+/*main_window #Toolbar {
     background-color : rgba(38, 40, 41, 1);
     spacing : 1px;
     min-height: 40px;
@@ -329,7 +329,7 @@ min-height: 1px;
 max-height: 1px;
 }*/
 
-toolbar {
+Toolbar {
     background : rgb(60, 60, 60);
     spacing    : 1px;
     min-height : 24px;
@@ -343,7 +343,7 @@ double_toolbar {
     max-height : 24px;
 }
 
-searchbar {
+Searchbar {
     background-color            : #25292D /*rgb(25, 28, 29)*/;
     min-height                  : 30px;
     max-height                  : 30px;
@@ -357,7 +357,7 @@ searchbar {
     qproperty-clear_icon_style  : "all -> #E4E4E4";
 }
 
-searchbar QLabel {
+Searchbar QLabel {
     font             : bold "Iosevka";
     color            : rgb(165, 165, 165);
     background-color : rgb(25, 28, 29);
@@ -365,12 +365,12 @@ searchbar QLabel {
     padding-right    : 4px;
 }
 
-searchbar QLabel:hover {
+Searchbar QLabel:hover {
     color       : rgb(255, 255, 255);
     font-weight : bold;
 }
 
-searchbar QPushButton {
+Searchbar QPushButton {
     font-weight      : normal;
     background-color : rgb(25, 28, 29);
     border           : none;
@@ -379,7 +379,7 @@ searchbar QPushButton {
     max-width        : 25;
 }
 
-searchbar QLineEdit {
+Searchbar QLineEdit {
     color            : #CBD2D0;
     font-family      : "Iosevka";
     font-style       : normal;
@@ -387,16 +387,16 @@ searchbar QLineEdit {
     border           : none;
 }
 
-searchbar QLineEdit[text=""] {
+Searchbar QLineEdit[text=""] {
     font-style : italic;
 }
 
-searchbar QToolButton {
+Searchbar QToolButton {
     background-color : rgb(25, 28, 29);
     border           : none;
 }
 
-settings_widget {
+SettingsWidget {
     /*background-color : #c1bdb3;*/
     background-color : rgb(189, 189, 189);
     /*border : 1px solid rgb(23, 26, 26);*/
@@ -409,16 +409,16 @@ settings_widget {
     /*border-left : 5px solid #232ed1;*/
 }
 
-settings_widget[conflicts=true] {
+SettingsWidget[conflicts=true] {
     border-left      : 5px solid #A61F1F;
     background-color : rgb(231, 137, 137);
 }
 
-settings_widget[dirty=true][conflicts=false] {
+SettingsWidget[dirty=true][conflicts=false] {
     border-left      : 5px solid rgb(73, 200, 76);
 }
 
-settings_widget QLabel {
+SettingsWidget QLabel {
     /* color            : #D3DCE6;
     background-color : #25292D; */
     color: rgb(0, 0, 0);
@@ -426,7 +426,7 @@ settings_widget QLabel {
     margin-right     : 10px;
 }
 
-settings_widget #name-label {
+SettingsWidget #name-label {
     min-height : 42px;
     max-height : 42px;
     font       : 14px bold "Iosevka";
@@ -434,7 +434,7 @@ settings_widget #name-label {
 
 /* LABEL_BUTTON */
 
-settings_widget label_button {
+SettingsWidget label_button {
     font           : bold "Iosevka";
     /*background: rgba(228, 228, 228, 0.05);*/
     border         : 1px solid rgb(228, 228, 228);
@@ -447,39 +447,39 @@ settings_widget label_button {
 
 /* KEYBIND_EDIT */
 
-settings_widget keybind_edit [validated=false] {
+SettingsWidget keybind_edit [validated=false] {
     color: red;
 }
 
-/* MAIN_SETTINGS_WIDGET */
+/* MainSettingsWidget */
 
-main_settings_widget {
+MainSettingsWidget {
     border : 1px solid rgb(23, 26, 26);
 }
 
-main_settings_widget #searchbar-container {
+MainSettingsWidget #Searchbar-container {
     min-height : 80px;
     max-height : 80px;
     /*background-color : rgba(38, 40, 41, 1);*/
 }
 
-main_settings_widget #searchbar-container searchbar {
+MainSettingsWidget #Searchbar-container Searchbar {
     min-width : 400px;
     max-width : 400px;
     border    : 1px solid rgb(73, 74, 76);
 }
 
-main_settings_widget settings_display {
+MainSettingsWidget SettingsDisplay {
     background-color : red;
     border           : 1px solid #A9B7C6;
 }
 
-main_settings_widget settings_display * {
+MainSettingsWidget SettingsDisplay * {
     background-color : red;
     border           : 1px solid #A9B7C6;
 }
 
-main_settings_widget preview_widget {
+MainSettingsWidget PreviewWidget {
     /*background-color: rgb(9, 11, 13);*/
     border          : 2px solid rgb(73, 74, 76);
     border-radius   : 8px;
@@ -487,31 +487,31 @@ main_settings_widget preview_widget {
     padding         : 5px 0;
 }
 
-main_settings_widget preview_widget *{
+MainSettingsWidget PreviewWidget *{
     background-color: rgba(255, 255, 255, 0);
 }
 
-/* EXPANDING_LIST_WIDGET */
+/* ExpandingListWidget */
 
-main_settings_widget expanding_list_widget {
+MainSettingsWidget ExpandingListWidget {
     border-right : 1px solid rgb(23, 26, 26);
     min-width    : 250px;
     max-width    : 250px;
 }
 
-main_settings_widget expanding_list_widget #content {
+MainSettingsWidget ExpandingListWidget #content {
     background   : rgb(9, 11, 13);
     border-right : 5px solid rgb(13, 15, 17);
 }
 
-main_settings_widget expanding_list_widget #spacer {
+MainSettingsWidget ExpandingListWidget #spacer {
     min-height   : 80px;
     max-height   : 80px;
     background   : rgb(9, 11, 13);
     border-right : 5px solid rgb(13, 15, 17);
 }
 
-main_settings_widget expanding_list_button {
+MainSettingsWidget ExpandingListButton {
     min-height           : 42px;
     max-height           : 42px;
     background-color     : rgb(9, 11, 13);
@@ -520,107 +520,107 @@ main_settings_widget expanding_list_button {
     qproperty-icon_style : "all -> #969696";
 }
 
-main_settings_widget expanding_list_button[hover=true] {
+MainSettingsWidget ExpandingListButton[hover=true] {
     qproperty-icon_style : "all -> #E4E4E4";
 }
 
-main_settings_widget expanding_list_button[hover=true] * {
+MainSettingsWidget ExpandingListButton[hover=true] * {
     /*color: rgb(228, 228, 228);*/
     color            : rgb(255, 255, 255);
     background-color : rgba(255, 255, 255, 0.012);
 }
 
-main_settings_widget expanding_list_button[selected=true] {
+MainSettingsWidget ExpandingListButton[selected=true] {
     background-color     : rgb(34, 37, 38);
     qproperty-icon_style : "all -> #A9B7C6";
 }
 
-main_settings_widget expanding_list_button[type="child"] {
+MainSettingsWidget ExpandingListButton[type="child"] {
     background-color : rgb(14, 17, 20);
 }
 
-main_settings_widget expanding_list_button[type="child"][selected=true] {
+MainSettingsWidget ExpandingListButton[type="child"][selected=true] {
     background-color : rgb(34, 37, 38);
 }
 
-main_settings_widget expanding_list_button * {
+MainSettingsWidget ExpandingListButton * {
     font             : 14px bold "Iosevka";
     background-color : transparent;
 }
 
-main_settings_widget expanding_list_button #left-border {
+MainSettingsWidget ExpandingListButton #left-border {
     min-width : 4px;
     max-width : 4px;
     /*padding-right: 40px;*/
 }
 
-main_settings_widget expanding_list_button #icon-label {
+MainSettingsWidget ExpandingListButton #icon-label {
     padding-left  : 40px;
     padding-right : 10px;
 }
 
-main_settings_widget expanding_list_button #right-border {
+MainSettingsWidget ExpandingListButton #right-border {
     min-width : 4px;
     max-width : 4px;
 }
 
-main_settings_widget expanding_list_button[selected=true] #text-label {
+MainSettingsWidget ExpandingListButton[selected=true] #text-label {
     /*color : rgb(114, 140, 0);*/
     /*color : rgb(35, 200, 46);*/
     color : rgb(85, 255, 0);
     /*color : rgb(0, 255, 0);*/
 }
 
-main_settings_widget expanding_list_button[selected=true] #right-border {
+MainSettingsWidget ExpandingListButton[selected=true] #right-border {
     /*background-color: rgb(114, 140, 0);*/
     /*background-color : rgb(35, 200, 46);*/
     background-color : rgb(85, 255, 0);
     /*background-color : rgb(0, 255, 0);*/
 }
 
-/*dock_bar {
+/*DockBar {
 background-color : rgb(9, 11, 13);
 }*/
 
-content_layout_area #left-dock-bar {
+ContentLayoutArea #left-dock-bar {
     min-width    : 19px;
     max-width    : 19px;
     border-right : 1px solid rgb(23, 26, 26);
 }
 
-content_layout_area #right-dock-bar {
+ContentLayoutArea #right-dock-bar {
     min-width   : 19px;
     max-width   : 19px;
     border-left : 1px solid rgb(23, 26, 26);
 }
 
-content_layout_area #bottom-dock-bar {
+ContentLayoutArea #bottom-dock-bar {
     min-height : 19px;
     max-height : 19px;
     border-top : 1px solid rgb(23, 26, 26);
 }
 
-content_layout_area #left-spacer {
+ContentLayoutArea #left-spacer {
     min-width  : 19px;
     max-width  : 19px;
     min-height : 19px;
     max-height : 19px;
 }
 
-content_layout_area #right-spacer {
+ContentLayoutArea #right-spacer {
     min-width  : 19px;
     max-width  : 19px;
     min-height : 19px;
     max-height : 19px;
 }
 
-tab_widget dock_bar {
+TabWidget DockBar {
     background : rgb(60, 60, 60);
     min-height : 24px;
     max-height : 24px;
 }
 
-code_editor {
+CodeEditor {
     font-style                                 : normal;
     font-size                                  : 14px;
     font-weight                                : normal;
@@ -631,7 +631,7 @@ code_editor {
     /*qproperty-line_number_background : rgb(14, 16, 18);*/
 }
 
-code_editor line_number_area {
+CodeEditor LineNumberArea {
     /*background : rgb(31, 34, 35);*/
     /*background : rgb(42, 44, 46);*/
     background             : rgb(219, 219, 219);
@@ -648,7 +648,7 @@ code_editor line_number_area {
 /*background: qlineargradient( x1:0 y1:0, x2:1 y2:0, stop:0 cyan, stop:1 blue);}*/
 /*}*/
 
-vhdl_syntax_highlighter {
+VhdlSyntaxHighlighter {
     qproperty-keyword_color : rgb(204, 120, 50);
     qproperty-comment_color : rgb(97, 150, 71);
     qproperty-type_color    : rgb(152, 118, 170);
@@ -656,7 +656,7 @@ vhdl_syntax_highlighter {
     qproperty-text_color    : rgb(169, 183, 198);
 }
 
-/*labeled_frame {
+/*LabeledFrame {
 background : rgb(9, 11, 13);
 border : 1px solid rgb(73, 74, 76);
 min-width : 400px;
@@ -667,7 +667,7 @@ margin-left : 30px;
 margin-right : 30px;
 }*/
 
-labeled_frame {
+LabeledFrame {
     /*background : rgb(39, 49, 56);*/
     background    : rgb(219, 219, 219);
     /*border : 1px solid rgb(49, 61, 70);*/
@@ -678,7 +678,7 @@ labeled_frame {
     margin-right  : 30px;
 }
 
-welcome_screen {
+WelcomeScreen {
     /*background : qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0.273, stop:0 rgba(0, 0, 0, 255), stop:1 rgba(255, 255, 255, 255));*/
     /*background : qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0.273, stop:0 rgb(13, 20, 24), stop:1 rgb(23, 30, 34));*/
     /*background : qlineargradient(spread:pad,
@@ -697,19 +697,19 @@ welcome_screen {
         stop       : 1 rgb(234, 234, 234));
 }
 
-welcome_screen labeled_frame {
+WelcomeScreen LabeledFrame {
     min-width  : 200px;
     max-width  : 400px;
     min-height : 200px;
     max-height : 800px;
 }
 
-labeled_frame #header {
+LabeledFrame #header {
     /*background : rgb(49, 61, 70);*/
     background : #37a4de;
 }
 
-labeled_frame #left-spacer {
+LabeledFrame #left-spacer {
     /*background : rgb(49, 61, 70);*/
     /*background : #313d46;*/
     background  : rgb(255, 255, 255);
@@ -721,7 +721,7 @@ labeled_frame #left-spacer {
     margin-left : 6px;
 }
 
-labeled_frame #label {
+LabeledFrame #label {
     /*background : rgb(49, 61, 70);*/
     background     : #37a4de;
     padding-top    : 21px;
@@ -750,7 +750,7 @@ labeled_frame #label {
     qproperty-text : "GET IN <font color='#FFFFFF'>TOUCH</font>";
 }
 
-labeled_frame #right-spacer {
+LabeledFrame #right-spacer {
     /*background : rgb(49, 61, 70);*/
     /*background : #313d46;*/
     background   : rgb(255, 255, 255);
@@ -768,7 +768,7 @@ rgb(107, 135, 255)
 *                RECENT_FILES                *
 *********************************************/
 
-recent_files_widget {
+RecentFilesWidget {
     background    : rgb(14, 16, 18);
     margin-top    : 15px;
     margin-bottom : 15px;
@@ -776,7 +776,7 @@ recent_files_widget {
     margin-right : 5px;*/
 }
 
-recent_file_item {
+RecentFileItem {
     background           : rgb(219, 219, 219);
     /*background: rgb(12, 15, 19);*/
     /*padding : 5px;*/
@@ -789,7 +789,7 @@ recent_file_item {
     qproperty-icon_style : "all->#ff6a47";
 }
 
-recent_file_item * {
+RecentFileItem * {
     background  : rgb(219, 219, 219);
     color       : #000000;
     /*color : #31383D;*/
@@ -798,46 +798,46 @@ recent_file_item * {
     font-size   : 16px;
 }
 
-recent_file_item #icon-label {
+RecentFileItem #icon-label {
     margin-right : 10px;
 }
 
-recent_file_item #path-label {
+RecentFileItem #path-label {
     /*color : #1f2123;*/
     color : #292B2D;
 }
 
-recent_file_item[hover=true] {
+RecentFileItem[hover=true] {
     background : #7D7D7D;
     /*qproperty-icon_style : "all->#ffeea5";*/
 }
 
-recent_file_item[hover=true] * {
+RecentFileItem[hover=true] * {
     background : rgb(255, 255 255);
     color: #FFFFFF;
     /*color : #6F7D87;*/
 }
 
-recent_file_item[hover=true] #path-label {
+RecentFileItem[hover=true] #path-label {
     color: #FFFFFF;
     /*color : #44494D;*/
 }
 
-recent_file_item QToolButton:hover {
+RecentFileItem QToolButton:hover {
     background: #222222;
     color: white;
 }
 
-recent_file_item[disabled=true]{
+RecentFileItem[disabled=true]{
     qproperty-icon_style : "all->#888888"
     /*qproperty-icon_style : "all->#ffeea5";*/
 }
 
-recent_file_item[disabled=true] #name-label{
+RecentFileItem[disabled=true] #name-label{
     color: #555555;
     /*qproperty-icon_style : "all->#ffeea5";*/
 }
-recent_file_item[disabled=true] #path-label {
+RecentFileItem[disabled=true] #path-label {
     /*color : #555555;*/
     color: red;
 }
@@ -846,22 +846,22 @@ recent_file_item[disabled=true] #path-label {
 *                OPEN_FILE                   *
 *********************************************/
 
-open_file_widget {
+OpenFileWidget {
     background           : rgb(219, 219, 219);
     qproperty-icon_path  : ":/icons/drop";
     qproperty-icon_style : "all->#3b3c3d";/*151719*/
 }
 
-open_file_widget[drag_active=true] {
+OpenFileWidget[drag_active=true] {
     qproperty-icon_style : "all->#000000";
 }
 
-open_file_widget QLabel {
+OpenFileWidget QLabel {
     background : rgb(219, 219, 219);
     /*background: rgb(6, 7, 8);*/
 }
 
-open_file_widget #text-label {
+OpenFileWidget #text-label {
     background    : rgb(219, 219, 219);
     font-family   : "Iosevka";
     font-weight   : 550;
@@ -874,7 +874,7 @@ open_file_widget #text-label {
     margin-right  : 10px;
 }
 
-open_file_widget #icon-label {
+OpenFileWidget #icon-label {
     margin-top : 220px;
 }
 
@@ -882,13 +882,13 @@ open_file_widget #icon-label {
 *                GET IN TOUCH                *
 *********************************************/
 
-get_in_touch_widget {
+GetInTouchWidget {
     background    : rgb(255, 255, 255);
     margin-top    : 15px;
     margin-bottom : 15px;
 }
 
-get_in_touch_widget #core-version-label {
+GetInTouchWidget #core-version-label {
     background  : rgb(255, 255, 255);
     color       : #FFFFFF;
     font-family : "Iosevka";
@@ -896,7 +896,7 @@ get_in_touch_widget #core-version-label {
     font-size   : 15px;
 }
 
-get_in_touch_widget #gui-version-label {
+GetInTouchWidget #gui-version-label {
     background    : rgb(255, 255, 255);
     color         : #FFFFFF;
     font-family   : "Iosevka";
@@ -905,7 +905,7 @@ get_in_touch_widget #gui-version-label {
     margin-bottom : 10px;
 }
 
-get_in_touch_item {
+GetInTouchItem {
     background           : rgb(219, 219, 219);
     padding-top          : 6px;
     padding-bottom       : 6px;
@@ -915,7 +915,7 @@ get_in_touch_item {
     qproperty-icon_style : "all->#D3C68A";
 }
 
-get_in_touch_item * {
+GetInTouchItem * {
     background  : rgb(219, 219, 219);
     color       : #000000;
     font-family : "Iosevka";
@@ -923,48 +923,48 @@ get_in_touch_item * {
     font-size   : 16px;
 }
 
-get_in_touch_item #icon-label {
+GetInTouchItem #icon-label {
     margin-right : 10px;
 }
 
-get_in_touch_item #description-label {
+GetInTouchItem #description-label {
     color : #292B2D;
 }
 
-get_in_touch_item[hover=true] {
+GetInTouchItem[hover=true] {
    background : #7D7D7D;
    color: white;
 }
 
-get_in_touch_item[hover=true] * {
+GetInTouchItem[hover=true] * {
     background : #7D7D7D;
     color: white;
 }
-get_in_touch_item[hover=true] #description-label {/**neccessary, the * specifier above does not work */
+GetInTouchItem[hover=true] #description-label {/**neccessary, the * specifier above does not work */
     color : white;
 }
 
-get_in_touch_item[hover=true] #description-label {
+GetInTouchItem[hover=true] #description-label {
     /*color : #44494D;*/
 }
 
 /*********************************************
-*                  OVERLAY                   *
+*                  Overlay                   *
 *********************************************/
 
-overlay {
+Overlay {
     background : rgba(255, 255, 255, 128);
 }
 
 /*********************************************
-*              REMINDER OVERLAY              *
+*              REMINDER Overlay              *
 *********************************************/
 
-reminder_overlay {
+ReminderOverlay {
     background : rgb(0, 0, 0);
 }
 
-reminder_overlay * {
+ReminderOverlay * {
     font-family : "Iosevka";
     font-weight : 700;
     font-size   : 32px;
@@ -972,7 +972,7 @@ reminder_overlay * {
     background  : rgb(0, 0, 0);
 }
 
-reminder_overlay QPushButton {
+ReminderOverlay QPushButton {
     padding-left  : 20px;
     padding-right : 20px;
     border-style  : solid;
@@ -981,13 +981,13 @@ reminder_overlay QPushButton {
     border-radius : 0px;
 }
 
-reminder_overlay QPushButton:hover {
+ReminderOverlay QPushButton:hover {
     color        : #A9B7C6;
     background   : rgb(0, 0, 0);
     border-color : #A9B7C6;
 }
 
-reminder_overlay #image-label {
+ReminderOverlay #image-label {
     min-width     : 320px;
     min-height    : 320px;
     max-width     : 320px;
@@ -995,7 +995,7 @@ reminder_overlay #image-label {
     margin-bottom : 15px;
 }
 
-reminder_overlay #text-label {
+ReminderOverlay #text-label {
     margin-bottom : 15px;
 }
 
@@ -1003,7 +1003,7 @@ reminder_overlay #text-label {
 *               CONTENT WIDGET               *
 *********************************************/
 
-content_widget * {
+ContentWidget * {
     background : rgb(240, 240, 240);
 }
 
@@ -1011,7 +1011,7 @@ content_widget * {
 *         PLUGIN SCHEDULE WIDGET             *
 *********************************************/
 
-plugin_schedule_widget {
+PluginScheduleWidget {
     /* background : qlineargradient(spread:pad,
     x1         : 0,
     y1         : 0,
@@ -1028,63 +1028,63 @@ plugin_schedule_widget {
     stop       : 1 rgb(234, 234, 234));
 }
 
-plugin_schedule_widget #searchbar-container {
+PluginScheduleWidget #Searchbar-container {
     background : transparent;
     min-height : 80px;
     max-height : 80px;
 }
 
-plugin_schedule_widget searchbar {
+PluginScheduleWidget Searchbar {
     min-width : 400px;
     max-width : 400px;
     border    : 1px solid rgb(73, 74, 76);
 }
 
-plugin_schedule_widget #plugin-frame {
+PluginScheduleWidget #plugin-frame {
     min-width : 400px;
     max-width : 400px;
 }
 
-plugin_schedule_widget #description-frame {
+PluginScheduleWidget #description-frame {
     border : 1px solid #313D46;
 }
 
-plugin_schedule_widget #description-frame #header {
+PluginScheduleWidget #description-frame #header {
     background : #313D46;
 }
 
-plugin_schedule_widget #description-frame #left-spacer {
+PluginScheduleWidget #description-frame #left-spacer {
     background : #171E22;
 }
 
-plugin_schedule_widget #description-frame #label {
+PluginScheduleWidget #description-frame #label {
     background : #313D46;
 }
 
-plugin_schedule_widget #description-frame #right-spacer {
+PluginScheduleWidget #description-frame #right-spacer {
     background : #171E22;
 }
 
-plugin_schedule_widget #schedule-frame {
+PluginScheduleWidget #schedule-frame {
     /*min-width : 400px;
     max-width : 400px;*/
     margin-left : 0px;
     /*margin-right: 0px;*/
 }
 
-plugin_schedule_widget #plugin-frame #label {
+PluginScheduleWidget #plugin-frame #label {
     qproperty-text : "LOADED <font color='#A9B7C6'>PLUGINS</font>";
 }
 
-plugin_schedule_widget #description-frame #label {
+PluginScheduleWidget #description-frame #label {
     qproperty-text : "<font color='#171e22'>PLUGIN DESCRIPTION</font>";
 }
 
-plugin_schedule_widget #schedule-frame #label {
+PluginScheduleWidget #schedule-frame #label {
     qproperty-text : "SCHEDULED <font color='#A9B7C6'>PLUGINS</font>";
 }
 
-plugin_schedule_widget QPlainTextEdit {
+PluginScheduleWidget QPlainTextEdit {
     font-family    : "Iosevka";
     /*font-weight    : 400;*/
     font-size      : 15px;
@@ -1099,21 +1099,21 @@ plugin_schedule_widget QPlainTextEdit {
 *               LOADED PLUGINS               *
 *********************************************/
 
-loaded_plugins_widget {
+LoadedPluginsWidget {
     background : rgb(219, 219, 219);
 }
 
-loaded_plugins_widget #container {
+LoadedPluginsWidget #container {
     background : rgb(219, 219, 219);
 }
 
-loaded_plugins_widget #spacer {
+LoadedPluginsWidget #spacer {
     background : rgb(219, 219, 219);
     min-height : 14px;
     max-height : 14px;
 }
 
-loaded_plugin_item #name-label {
+LoadedPluginItem #name-label {
     background     : rgb(219, 219, 219);
     font-family    : "Iosevka";
     font-weight    : 400;
@@ -1125,7 +1125,7 @@ loaded_plugin_item #name-label {
     padding-right  : 10px;
 }
 
-loaded_plugin_item[hover=true] #name-label {
+LoadedPluginItem[hover=true] #name-label {
     background : rgb(79, 79, 79);
     color: white;
 }
@@ -1134,23 +1134,23 @@ loaded_plugin_item[hover=true] #name-label {
 *              SCHEDULED PLUGINS             *
 *********************************************/
 
-scheduled_plugins_widget {
+ScheduledPluginsWidget {
     background : rgb(219, 219, 219);
     min-width  : 400px;
     max-width  : 400px;
 }
 
-scheduled_plugins_widget #container {
+ScheduledPluginsWidget #container {
     background : rgb(219, 219, 219);
 }
 
-scheduled_plugins_widget #spacer {
+ScheduledPluginsWidget #spacer {
     background : rgb(219, 219, 219);
     min-height : 14px;
     max-height : 14px;
 }
 
-scheduled_plugin_item #name-label {
+ScheduledPluginItem #name-label {
     background     : rgb(219, 219, 219);
     font-family    : "Iosevka";
     font-weight    : 400;
@@ -1162,7 +1162,7 @@ scheduled_plugin_item #name-label {
     padding-right  : 10px;
 }
 
-scheduled_plugin_item[hover=true] #name-label {
+ScheduledPluginItem[hover=true] #name-label {
     background : rgb(99, 99, 99);
     color: white;
 }
@@ -1171,7 +1171,7 @@ scheduled_plugin_item[hover=true] #name-label {
 *            NO_SCHEDULED PLUGINS            *
 *********************************************/
 
-no_scheduled_plugins_widget {
+NoScheduledPluginsWidget {
     background           : rgb(219, 219, 219);
     qproperty-icon_path  : ":/icons/drop";
     qproperty-icon_style : "all->#3b3c3d";
@@ -1179,15 +1179,15 @@ no_scheduled_plugins_widget {
     max-width            : 400px;
 }
 
-no_scheduled_plugins_widget[drag_active=true] {
+NoScheduledPluginsWidget[drag_active=true] {
     qproperty-icon_style : "all->#000000";
 }
 
-no_scheduled_plugins_widget QLabel {
+NoScheduledPluginsWidget QLabel {
     background : rgb(219, 219, 219);
 }
 
-no_scheduled_plugins_widget #text-label {
+NoScheduledPluginsWidget #text-label {
     background    : rgb(219, 219, 219);
     font-family   : "Iosevka";
     font-weight   : 400;
@@ -1200,7 +1200,7 @@ no_scheduled_plugins_widget #text-label {
     margin-right  : 10px;
 }
 
-no_scheduled_plugins_widget #icon-label {
+NoScheduledPluginsWidget #icon-label {
     margin-top : 220px;
 }
 
@@ -1208,13 +1208,13 @@ no_scheduled_plugins_widget #icon-label {
 *          PLUGIN ARGUMENTS WIDGET           *
 *********************************************/
 
-plugin_arguments_widget {
+PluginArgumentsWidget {
     /*background: rgb(14, 16, 18);*/
     background  : rgb(199, 199, 199);
     padding-top : 7px;
 }
 
-plugin_arguments_widget QPushButton {
+PluginArgumentsWidget QPushButton {
     font-family : "Iosevka";
     font-weight : 500;
     font-size   : 14px;
@@ -1223,13 +1223,13 @@ plugin_arguments_widget QPushButton {
     border      : 1px solid black;
 }
 
-plugin_arguments_widget QPushButton:checked {
+PluginArgumentsWidget QPushButton:checked {
     color            : rgb(14, 16, 18);
     background-color : rgba(85, 255, 0, 0.6);
     border           : 1px solid black;
 }
 
-plugin_arguments_widget QLineEdit {
+PluginArgumentsWidget QLineEdit {
     font-family    : "Iosevka";
     font-weight    : 500;
     font-size      : 14px;
@@ -1245,20 +1245,20 @@ plugin_arguments_widget QLineEdit {
     border         : none;
 }
 
-plugin_arguments_widget QLineEdit:disabled {
+PluginArgumentsWidget QLineEdit:disabled {
     color      : rgb(32, 32, 32);
     background : rgb(199, 199, 199);
 }
 
-scheduled_plugin_item_area {
+ScheduledPluginItemArea {
     background : rgb(219, 219, 219);
 }
 
-drop_marker {
+DropMarker {
     background : rgb(14, 16, 18);
 }
 
-python_editor {
+PythonEditor {
     background : qlineargradient(spread:pad,
     x1         : 0,
     y1         : 0,
@@ -1268,7 +1268,7 @@ python_editor {
     stop       : 1 rgb(23, 30, 34));
 }
 
-python_editor code_editor {
+PythonEditor CodeEditor {
     /*font-family : "SourceCodePro-Black";*/
     font-family                       : "Iosevka";
     font-size                         : 14px;
@@ -1289,14 +1289,14 @@ python_editor code_editor {
     qproperty-current_line_background : #323232;
 }
 
-python_editor code_editor line_number_area {
+PythonEditor CodeEditor LineNumberArea {
     /*background : #0C1112;*/
     /*background : #0C0F12;*/
     background   : rgb(219, 219, 219);
     border-right : 1px solid #606366;
 }
 
-code_editor_minimap {
+CodeEditorMinimap {
     font-style  : normal;
     font-size   : 3px;
     font-weight : normal;
@@ -1305,47 +1305,47 @@ code_editor_minimap {
     color       : black;
 }
 
-code_editor_minimap QScrollBar:vertical {
+CodeEditorMinimap QScrollBar:vertical {
     border     : 0px;
     background : transparent;
     margin     : 0px 0px 0px 0px;
 }
 
-code_editor_minimap QScrollBar::handle:vertical {
+CodeEditorMinimap QScrollBar::handle:vertical {
     background    : rgba(120, 120, 120, 0.1);
     border-radius : 0px;
 }
 
-get_in_touch_item#about_item {
+GetInTouchItem#about_item {
     /*qproperty-icon_style: "all->#FFFFFF";*/
     qproperty-icon_style : "all->#f27800";
     qproperty-icon_path  : ":/icons/info" /*qproperty-icon_style: "";
 qproperty-icon_path: ":/icons/hal"*/
 }
 
-get_in_touch_item#documentation_item {
+GetInTouchItem#documentation_item {
     /*qproperty-icon_style: "all->#FFFFFF";*/
     qproperty-icon_style : "all->#f27800";
     qproperty-icon_path  : ":/icons/info"
 }
 
-get_in_touch_item#ticket_item {
+GetInTouchItem#ticket_item {
     qproperty-icon_style : "";
     qproperty-icon_path  : ":/icons/gitlab"
 }
 
-python_console {
+PythonConsole {
     font-family : "Iosevka";
     /*font-family : "DroidSansMono";*/
     font-size   : 14px;
     color       : red;
 }
 
-minimap_scrollbar #slider {
+MinimapScrollbar #slider {
 background : rgba(120, 120, 120, 0.3);
 }
 
-python_editor {
+PythonEditor {
 background : qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 rgb(33, 40, 44), stop:1 rgb(23, 30, 34));
 
 qproperty-open_icon_style: "all->#ff6a47";
@@ -1368,7 +1368,7 @@ qproperty-new_file_icon_style: "";
 qproperty-new_file_icon_path: ":/icons/new-file";
 }
 
-context_manager_widget {
+ContextManagerWidget {
 qproperty-new_view_icon_style: "all->#00AA00";
 qproperty-new_view_icon_path: ":/icons/plus";
 
@@ -1380,6 +1380,9 @@ qproperty-duplicate_icon_path: ":/icons/content";
 
 qproperty-delete_icon_style: "all->#A61F1F";
 qproperty-delete_icon_path: ":/icons/trashcan";
+
+qproperty-timestamp_icon_style: "all->#FFC30B";
+qproperty-timestamp_icon_path: ":/icons/clock";
 }
 
 main_window {
@@ -1408,7 +1411,7 @@ qproperty-settings_icon_style: "all->#AFB1B3";
 qproperty-settings_icon_path: ":/icons/settings";
 }
 
-python_qss_adapter {
+PythonQssAdapter {
 qproperty-text_color: #DEE9AF;
 qproperty-keyword_color: #7805c1;
 qproperty-operator_color: black;
@@ -1421,7 +1424,7 @@ qproperty-double_quoted_string_color: #a80b0b;
 qproperty-comment_color: #629755;
 }
 
-vhdl_qss_adapter {
+VhdlQssAdapter {
 qproperty-keyword_color: #0042d7;
 qproperty-type_color: #7805c1;
 qproperty-number_color: #013220;
@@ -1429,7 +1432,7 @@ qproperty-string_color: #a80b0b;
 qproperty-comment_color: #1fc600;
 }
 
-logger_qss_adapter {
+LoggerQssAdapter {
     qproperty-trace_color: #90C023;
     qproperty-debug_color: #90C023;
     qproperty-info_color: #000000;
@@ -1447,7 +1450,7 @@ logger_qss_adapter {
     qproperty-default_highlight: #FFEF0B;
 }
 
-python_console_qss_adapter {
+PythonConsoleQssAdapter {
     qproperty-standard_color: #000000;
     qproperty-error_color: #FF0000;
     qproperty-promt_color: #7805c1;
@@ -1502,7 +1505,7 @@ QFileDialog QLineEdit{
     background: #dfdfdf;
 }
 
-gate_details_widget QLabel{
+GateDetailsWidget QLabel{
     color: black;
 }
 
@@ -1510,11 +1513,11 @@ graph_layouter_view QScrollBar{
     color: red;
 }
 
-dock_bar{
+DockBar{
     background: rgb(110, 110, 110);
 }
 
-main_settings_widget{
+MainSettingsWidget{
     background: red;
 }
 

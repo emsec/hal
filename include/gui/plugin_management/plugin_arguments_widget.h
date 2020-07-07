@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef PLUGIN_ARGUMENTS_WIDGET_H
-#define PLUGIN_ARGUMENTS_WIDGET_H
+#pragma once
 
 #include <QFrame>
 #include <QPair>
@@ -30,42 +29,43 @@
 
 #include <memory>
 
-class i_cli;
-class program_arguments;
-
 class QFormLayout;
 class QLineEdit;
 class QPushButton;
 class QVBoxLayout;
 
-class plugin_arguments_widget : public QFrame
+namespace hal
 {
-    Q_OBJECT
+    class CLIPluginInterface;
+    class ProgramArguments;
 
-public:
-    explicit plugin_arguments_widget(QWidget* parent = nullptr);
+    class PluginArgumentsWidget : public QFrame
+    {
+        Q_OBJECT
 
-    program_arguments get_args();
+    public:
+        explicit PluginArgumentsWidget(QWidget* parent = nullptr);
 
-    void setup_plugin_layout(const QString& plugin);
+        ProgramArguments get_args();
 
-public Q_SLOTS:
-    void setup(const QString& plugin_name);
-    void handle_plugin_selected(int index);
+        void setup_plugin_layout(const QString& plugin);
 
-    void handle_button_clicked(bool checked);
-    void handle_text_edited(const QString& text);
+    public Q_SLOTS:
+        void setup(const QString& plugin_name);
+        void handle_plugin_selected(int index);
 
-private:
-    char* to_heap_cstring(const QString& string);
+        void handle_button_clicked(bool checked);
+        void handle_text_edited(const QString& text);
 
-    QFormLayout* m_form_layout;
+    private:
+        char* to_heap_cstring(const QString& string);
 
-    std::shared_ptr<i_cli> m_plugin;
+        QFormLayout* m_form_layout;
 
-    QVector<QPair<QPushButton*, QLineEdit*>> m_vector;
+        std::shared_ptr<CLIPluginInterface> m_plugin;
 
-    int m_current_index;
-};
+        QVector<QPair<QPushButton*, QLineEdit*>> m_vector;
 
-#endif    // PLUGIN_ARGUMENTS_WIDGET_H
+        int m_current_index;
+    };
+}

@@ -22,8 +22,7 @@
  * SOFTWARE.
  */
 
-#ifndef MODULE_WIDGET_H
-#define MODULE_WIDGET_H
+#pragma once
 
 #include "def.h"
 
@@ -34,47 +33,56 @@
 #include "gui/searchbar/searchbar.h"
 #include "gui/selection_relay/selection_relay.h"
 
+#include "gui/module_model/module_item.h"
+#include "module_tree_view.h"
+
 #include <QAction>
 #include <QItemSelection>
 #include <QList>
 #include <QObject>
 #include <QSortFilterProxyModel>
-#include "module_tree_view.h"
-
-class module_proxy_model;
 
 class QTreeView;
 
-class module_widget : public content_widget
+namespace hal
 {
-    Q_OBJECT
+    class ModuleProxyModel;
 
-public:
-    module_widget(QWidget* parent = nullptr);
+    class ModuleWidget : public ContentWidget
+    {
+        Q_OBJECT
 
-    virtual void setup_toolbar(toolbar* toolbar) override;
-    virtual QList<QShortcut*> create_shortcuts() override;
+    public:
+        ModuleWidget(QWidget* parent = nullptr);
 
-public Q_SLOTS:
-    void toggle_searchbar();
-    void filter(const QString& text);
-    void handle_tree_view_context_menu_requested(const QPoint& point);
-    void handle_tree_selection_changed(const QItemSelection& selected, const QItemSelection& deselected);
-    void handle_item_double_clicked(const QModelIndex &index);
+        virtual void setup_toolbar(Toolbar* Toolbar) override;
+        virtual QList<QShortcut*> create_shortcuts() override;
 
-private:
-    module_tree_view* m_tree_view;
-    searchbar m_searchbar;
+    public Q_SLOTS:
+        void toggle_searchbar();
+        void filter(const QString& text);
+        void handle_tree_view_context_menu_requested(const QPoint& point);
+        void handle_tree_selection_changed(const QItemSelection& selected, const QItemSelection& deselected);
+        void handle_item_double_clicked(const QModelIndex &index);
+        void handle_selection_changed(void* sender);
+        void handle_module_removed(std::shared_ptr<Module> module, u32 module_id);
 
-    QAction* m_filter_action;
+    private:
+        ModuleTreeView* m_tree_view;
+        Searchbar m_searchbar;
 
-    QSortFilterProxyModel* m_current_model;
+        QAction* m_filter_action;
 
-    QList<QRegExp*> m_regexps;
+        QSortFilterProxyModel* m_current_model;
 
-    bool m_ignore_selection_change;
+        QList<QRegExp*> m_regexps;
 
-    module_proxy_model* m_module_proxy_model;
-};
+        bool m_ignore_selection_change;
 
-#endif // MODULE_WIDGET_H
+        ModuleProxyModel* m_ModuleProxyModel;
+
+        void open_module_in_view(const QModelIndex &index);
+
+        ModuleItem* get_ModuleItem_from_index(const QModelIndex &index);
+    };
+}

@@ -8,103 +8,106 @@
 #include <QDesktopWidget>
 #include <QStyle>
 
-splitter_anchor::splitter_anchor(dock_bar* dock_bar, splitter* splitter, QObject* parent) : QObject(parent), m_dock_bar(dock_bar), m_splitter(splitter)
+namespace hal
 {
-    connect(content_drag_relay::instance(), &content_drag_relay::drag_start, m_dock_bar, &dock_bar::handle_drag_start);
-    connect(content_drag_relay::instance(), &content_drag_relay::drag_end, m_dock_bar, &dock_bar::handle_drag_end);
-
-    m_dock_bar->set_anchor(this);
-}
-
-void splitter_anchor::add(content_widget* widget, int index)
-{
-    widget->set_anchor(this);
-    content_frame* frame = new content_frame(widget, true, nullptr);
-    frame->hide();
-    m_splitter->insertWidget(index, frame);
-    m_dock_bar->add_button(widget, index);
-
-    Q_EMIT content_changed();
-}
-
-void splitter_anchor::remove(content_widget* widget)
-{
-    widget->set_anchor(nullptr);
-    widget->hide();
-    widget->setParent(nullptr);
-    m_dock_bar->remove_button(widget);
-
-    Q_EMIT content_changed();
-}
-
-void splitter_anchor::detach(content_widget* widget)
-{
-    widget->hide();
-    widget->setParent(nullptr);
-    content_frame* frame = new content_frame(widget, false, nullptr);
-    frame->setGeometry(QStyle::alignedRect(Qt::LeftToRight, Qt::AlignCenter, frame->size(), qApp->desktop()->availableGeometry()));
-    frame->show();
-
-    if (m_splitter->unused())
-        m_splitter->hide();
-
-    m_dock_bar->detach_button(widget);
-
-    Q_EMIT content_changed();
-}
-
-void splitter_anchor::reattach(content_widget* widget)
-{
-    int index            = m_dock_bar->index(widget);
-    content_frame* frame = new content_frame(widget, true, nullptr);
-    frame->hide();
-    m_splitter->insertWidget(index, frame);
-    m_dock_bar->reattach_button(widget);
-
-    Q_EMIT content_changed();
-}
-
-void splitter_anchor::open(content_widget* widget)
-{
-    for (int i = 0; i < m_splitter->count(); i++)
+    SplitterAnchor::SplitterAnchor(DockBar* DockBar, Splitter* Splitter, QObject* parent) : QObject(parent), m_dock_bar(DockBar), m_splitter(Splitter)
     {
-        if (static_cast<content_frame*>(m_splitter->widget(i))->content() == widget)
+        connect(ContentDragRelay::instance(), &ContentDragRelay::drag_start, m_dock_bar, &DockBar::handle_drag_start);
+        connect(ContentDragRelay::instance(), &ContentDragRelay::drag_end, m_dock_bar, &DockBar::handle_drag_end);
+
+        m_dock_bar->set_anchor(this);
+    }
+
+    void SplitterAnchor::add(ContentWidget* widget, int index)
+    {
+        widget->set_anchor(this);
+        ContentFrame* frame = new ContentFrame(widget, true, nullptr);
+        frame->hide();
+        m_splitter->insertWidget(index, frame);
+        m_dock_bar->add_button(widget, index);
+
+        Q_EMIT content_changed();
+    }
+
+    void SplitterAnchor::remove(ContentWidget* widget)
+    {
+        widget->set_anchor(nullptr);
+        widget->hide();
+        widget->setParent(nullptr);
+        m_dock_bar->remove_button(widget);
+
+        Q_EMIT content_changed();
+    }
+
+    void SplitterAnchor::detach(ContentWidget* widget)
+    {
+        widget->hide();
+        widget->setParent(nullptr);
+        ContentFrame* frame = new ContentFrame(widget, false, nullptr);
+        frame->setGeometry(QStyle::alignedRect(Qt::LeftToRight, Qt::AlignCenter, frame->size(), qApp->desktop()->availableGeometry()));
+        frame->show();
+
+        if (m_splitter->unused())
+            m_splitter->hide();
+
+        m_dock_bar->detach_button(widget);
+
+        Q_EMIT content_changed();
+    }
+
+    void SplitterAnchor::reattach(ContentWidget* widget)
+    {
+        int index            = m_dock_bar->index(widget);
+        ContentFrame* frame = new ContentFrame(widget, true, nullptr);
+        frame->hide();
+        m_splitter->insertWidget(index, frame);
+        m_dock_bar->reattach_button(widget);
+
+        Q_EMIT content_changed();
+    }
+
+    void SplitterAnchor::open(ContentWidget* widget)
+    {
+        for (int i = 0; i < m_splitter->count(); i++)
         {
-            static_cast<content_frame*>(m_splitter->widget(i))->show();
-            m_splitter->show();
-            break;
+            if (static_cast<ContentFrame*>(m_splitter->widget(i))->content() == widget)
+            {
+                static_cast<ContentFrame*>(m_splitter->widget(i))->show();
+                m_splitter->show();
+                break;
+            }
         }
+        m_dock_bar->check_button(widget);
     }
-    m_dock_bar->check_button(widget);
-}
 
-void splitter_anchor::close(content_widget* widget)
-{
-    for (int i = 0; i < m_splitter->count(); i++)
+    void SplitterAnchor::close(ContentWidget* widget)
     {
-        if (static_cast<content_frame*>(m_splitter->widget(i))->content() == widget)
+        for (int i = 0; i < m_splitter->count(); i++)
         {
-            static_cast<content_frame*>(m_splitter->widget(i))->hide();
-            if (m_splitter->unused())
-                m_splitter->hide();
-            break;
+            if (static_cast<ContentFrame*>(m_splitter->widget(i))->content() == widget)
+            {
+                static_cast<ContentFrame*>(m_splitter->widget(i))->hide();
+                if (m_splitter->unused())
+                    m_splitter->hide();
+                break;
+            }
         }
+        m_dock_bar->uncheck_button(widget);
     }
-    m_dock_bar->uncheck_button(widget);
-}
 
-int splitter_anchor::count()
-{
-    return m_dock_bar->count();
-}
-
-void splitter_anchor::remove_content()
-{
-    for (int i = m_dock_bar->count() - 1; i >= 0; i--)
+    int SplitterAnchor::count()
     {
-        content_widget* widget = m_dock_bar->widget_at(i);
-        remove(widget);
+        return m_dock_bar->count();
     }
 
-    m_dock_bar->update();
+    void SplitterAnchor::remove_content()
+    {
+        for (int i = m_dock_bar->count() - 1; i >= 0; i--)
+        {
+            ContentWidget* widget = m_dock_bar->widget_at(i);
+            remove(widget);
+        }
+
+        m_dock_bar->update();
+    }
 }

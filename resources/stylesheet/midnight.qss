@@ -74,7 +74,7 @@ QToolBar {
     height: 24px;
 }
 
-/*main_window #toolbar {
+/*main_window #Toolbar {
     background-color : rgba(38, 40, 41, 1);
     spacing : 1px;
     min-height: 40px;
@@ -289,7 +289,7 @@ min-height: 1px;
 max-height: 1px;
 }*/
 
-toolbar {
+Toolbar {
     background-color : rgb(9, 11, 13);
     spacing: 1px;
 }
@@ -300,7 +300,7 @@ double_toolbar {
     max-height: 24px;
 }
 
-searchbar {
+Searchbar {
 background-color : #25292d/*rgb(25, 28, 29)*/;
 min-height: 30px;
 max-height: 30px;
@@ -314,7 +314,7 @@ qproperty-clear_icon: ":/icons/cross";
 qproperty-clear_icon_style: "all -> #E4E4E4";
 }
 
-searchbar QLabel {
+Searchbar QLabel {
 font: bold "Iosevka Regular";
 color : rgb(165, 165, 165);
 background-color : rgb(25, 28, 29);
@@ -322,12 +322,12 @@ padding-left: 4px;
 padding-right: 4px;
 }
 
-searchbar QLabel:hover {
+Searchbar QLabel:hover {
 color : rgb(255, 255, 255);
 font-weight: bold;
 }
 
-searchbar QPushButton {
+Searchbar QPushButton {
 font-weight : normal;
 background-color : rgb(25, 28, 29);
 border: none;
@@ -336,23 +336,23 @@ min-width: 25;
 max-width: 25;
 }
 
-searchbar QLineEdit {
+Searchbar QLineEdit {
 font-family : "Iosevka";
 font-style : normal;
 background-color : rgb(25, 28, 29);
 border: none;
 }
 
-searchbar QLineEdit[text=""] {
+Searchbar QLineEdit[text=""] {
 font-style : italic;
 }
 
-searchbar QToolButton {
+Searchbar QToolButton {
 background-color : rgb(25, 28, 29);
 border: none;
 }
 
-settings_widget {
+SettingsWidget {
 /*background-color : #c1bdb3;*/
 background-color : #25292d;
 /*border : 1px solid rgb(23, 26, 26);*/
@@ -365,13 +365,13 @@ border-left : 5px solid rgb(73, 74, 76);
 /*border-left : 5px solid #232ed1;*/
 }
 
-settings_widget QLabel {
+SettingsWidget QLabel {
 color : #d3dce6;
 background-color : #25292d;
 margin-right : 10px;
 }
 
-settings_widget #name-label {
+SettingsWidget #name-label {
 min-height : 42px;
 max-height : 42px;
 font : 14px bold "Iosevka";
@@ -379,7 +379,7 @@ font : 14px bold "Iosevka";
 
 /* LABEL_BUTTON */
 
-settings_widget label_button {
+SettingsWidget label_button {
 font: bold "Iosevka";
 /*background: rgba(228, 228, 228, 0.05);*/
 border: 1px solid rgb(228, 228, 228);
@@ -390,54 +390,54 @@ padding-right: 14px;
 min-width: 50px;
 }
 
-/* MAIN_SETTINGS_WIDGET */
+/* MainSettingsWidget */
 
-main_settings_widget {
+MainSettingsWidget {
 border : 1px solid rgb(23, 26, 26);
 }
 
-main_settings_widget #searchbar-container{
+MainSettingsWidget #Searchbar-container{
 min-height : 80px;
 max-height : 80px;
 /*background-color : rgba(38, 40, 41, 1);*/
 }
 
-main_settings_widget #searchbar-container searchbar{
+MainSettingsWidget #Searchbar-container Searchbar{
 min-width : 400px;
 max-width : 400px;
 border : 1px solid rgb(73, 74, 76);
 }
 
-main_settings_widget settings_display {
+MainSettingsWidget SettingsDisplay {
 background-color : red;
 border : 1px solid green;
 }
 
-main_settings_widget settings_display * {
+MainSettingsWidget SettingsDisplay * {
 background-color : red;
 border : 1px solid green;
 }
 
-/* EXPANDING_LIST_WIDGET STUFF */
+/* ExpandingListWidget STUFF */
 
-main_settings_widget expanding_list_widget {
+MainSettingsWidget ExpandingListWidget {
 border-right : 1px solid rgb(23, 26, 26);
 min-width : 200px;
 max-width : 200px;
 background-color: #25292d;
 }
 
-main_settings_widget expanding_list_widget #content {
+MainSettingsWidget ExpandingListWidget #content {
 background-color : rgb(9, 11, 13);
 }
 
-main_settings_widget expanding_list_widget #spacer {
+MainSettingsWidget ExpandingListWidget #spacer {
 min-height : 80px;
 max-height : 80px;
 background-color : rgb(9, 11, 13);
 }
 
-main_settings_widget expanding_list_button {
+MainSettingsWidget ExpandingListButton {
 min-height : 42px;
 max-height : 42px;
 background-color: rgb(9, 11, 13);
@@ -446,65 +446,65 @@ qproperty-icon_style : "all -> #969696";
 /*qproperty-icon_style : "all -> #E4E4E4";*/
 }
 
-main_settings_widget expanding_list_button[hover=true] {
+MainSettingsWidget ExpandingListButton[hover=true] {
 qproperty-icon_style : "all -> #E4E4E4";
 }
 
-main_settings_widget expanding_list_button[hover=true] * {
+MainSettingsWidget ExpandingListButton[hover=true] * {
 /*color: rgb(228, 228, 228);*/
 color : rgb(255, 255, 255);
 background-color: rgba(255, 255, 255, 0.012);
 }
 
-main_settings_widget expanding_list_button[selected=true] {
+MainSettingsWidget ExpandingListButton[selected=true] {
 background-color: rgb(34, 37, 38);
 qproperty-icon_style : "all -> #55FF00";
 }
 
-main_settings_widget expanding_list_button[type="child"] {
+MainSettingsWidget ExpandingListButton[type="child"] {
 background-color: rgb(14, 17, 20);
 }
 
-main_settings_widget expanding_list_button[type="child"][selected=true] {
+MainSettingsWidget ExpandingListButton[type="child"][selected=true] {
 background-color: rgb(34, 37, 38);
 }
 
-main_settings_widget expanding_list_button * {
+MainSettingsWidget ExpandingListButton * {
 font : 14px bold "Iosevka";
 background-color: transparent;
 }
 
-main_settings_widget expanding_list_button #left-border {
+MainSettingsWidget ExpandingListButton #left-border {
 min-width : 4px;
 max-width : 4px;
 /*padding-right: 40px;*/
 }
 
-main_settings_widget expanding_list_button #icon-label {
+MainSettingsWidget ExpandingListButton #icon-label {
 padding-left : 40px;
 padding-right: 10px;
 }
 
-main_settings_widget expanding_list_button #right-border {
+MainSettingsWidget ExpandingListButton #right-border {
 min-width : 4px;
 max-width : 4px;
 }
 
-main_settings_widget expanding_list_button[selected=true] #text-label{
+MainSettingsWidget ExpandingListButton[selected=true] #text-label{
 /*color : rgb(114, 140, 0);*/
 /*color : rgb(35, 200, 46);*/
 color : rgb(85, 255, 0);
 /*color : rgb(0, 255, 0);*/
 }
 
-main_settings_widget expanding_list_button[selected=true] #right-border {
+MainSettingsWidget ExpandingListButton[selected=true] #right-border {
 /*background-color: rgb(114, 140, 0);*/
 /*background-color : rgb(35, 200, 46);*/
 background-color : rgb(85, 255, 0);
 /*background-color : rgb(0, 255, 0);*/
 }
 
-/*dock_bar {
+/*DockBar {
 background-color : rgb(9, 11, 13);
 }*/
 
@@ -540,11 +540,11 @@ min-height : 19px;
 max-height : 19px;
 }
 
-tab_widget dock_bar {
+TabWidget DockBar {
 background-color : rgb(9, 11, 13);
 }
 
-code_editor {
+CodeEditor {
 font-style: normal;
 font-size: 12px;
 font-weight: normal;
@@ -553,7 +553,7 @@ qproperty-line_number_color : #cbd2d0;
 qproperty-line_number_background : rgb(14, 16, 18);
 }
 
-code_editor line_number_area {
+CodeEditor LineNumberArea {
 /*background : rgb(31, 34, 35);*/
 /*background : rgb(42, 44, 46);*/
 background : rgb(18, 20, 23);

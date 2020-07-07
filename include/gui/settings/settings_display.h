@@ -21,25 +21,25 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef SETTINGS_DISPLAY_H
-#define SETTINGS_DISPLAY_H
+#pragma once
 
 #include <QScrollArea>
 
 class QVBoxLayout;
 
-class settings_display : public QScrollArea
+namespace hal
 {
-public:
-    settings_display(QWidget* parent = 0);
+    class SettingsDisplay : public QScrollArea
+    {
+    public:
+        SettingsDisplay(QWidget* parent = 0);
 
-    void add_widget(QWidget* widget);
+        void add_widget(QWidget* widget);
 
-private:
-    QFrame* m_content;
-    QVBoxLayout* m_content_layout;
-    QFrame* m_sub_content;
-    QVBoxLayout* m_sub_content_layout;
-};
-
-#endif    // SETTINGS_DISPLAY_H
+    private:
+        QFrame* m_content;
+        QVBoxLayout* m_content_layout;
+        QFrame* m_sub_content;
+        QVBoxLayout* m_sub_content_layout;
+    };
+}

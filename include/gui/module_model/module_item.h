@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef MODULE_ITEM_H
-#define MODULE_ITEM_H
+#pragma once
 
 #include "def.h"
 
@@ -31,47 +30,48 @@
 #include <QString>
 #include <QVariant>
 
-class module_item
+namespace hal
 {
-public:
-    module_item(const u32 id);
-    module_item(const QString& name, const u32 id);
+    class ModuleItem
+    {
+    public:
+        ModuleItem(const u32 id);
+        ModuleItem(const QString& name, const u32 id);
 
-    void insert_child(int row, module_item* child);
-    void remove_child(module_item* child);
+        void insert_child(int row, ModuleItem* child);
+        void remove_child(ModuleItem* child);
 
-    void append_child(module_item* child);
-    void prepend_child(module_item* child);
+        void append_child(ModuleItem* child);
+        void prepend_child(ModuleItem* child);
 
-    module_item* parent();
-    module_item* child(int row);
+        ModuleItem* parent();
+        ModuleItem* child(int row);
 
-    const module_item* const_parent() const;
-    const module_item* const_child(int row) const;
+        const ModuleItem* const_parent() const;
+        const ModuleItem* const_child(int row) const;
 
-    int childCount() const;
-    QVariant data(int column) const;
-    int row() const;
+        int childCount() const;
+        QVariant data(int column) const;
+        int row() const;
 
-    QString name() const;
-    u32 id() const;
-    QColor color() const;
-    bool highlighted() const;
+        QString name() const;
+        u32 id() const;
+        QColor color() const;
+        bool highlighted() const;
 
-    void set_parent(module_item* parent);
-    void set_name(const QString& name);
-    void set_color(const QColor& color);
-    void set_highlighted(const bool highlighted);
+        void set_parent(ModuleItem* parent);
+        void set_name(const QString& name);
+        void set_color(const QColor& color);
+        void set_highlighted(const bool highlighted);
 
-private:
-    module_item* m_parent;
-    QList<module_item*> m_child_items;
+    private:
+        ModuleItem* m_parent;
+        QList<ModuleItem*> m_child_items;
 
-    u32 m_id;
-    QString m_name;
+        u32 m_id;
+        QString m_name;
 
-    QColor m_color;
-    bool m_highlighted;
-};
-
-#endif // MODULE_ITEM_H
+        QColor m_color;
+        bool m_highlighted;
+    };
+}

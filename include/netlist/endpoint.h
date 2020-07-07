@@ -25,104 +25,90 @@
 
 #include "def.h"
 
-/* forward declaration */
-class gate;
-
-/**
- *  Endpoint data structure for (gate, pin) tuples
- *
- * @ingroup netlist
- */
-struct endpoint
+namespace hal
 {
-    std::shared_ptr<::gate> gate;
-
-    std::string pin_type;
-
-    /**
-    * Copies the value of an endpoint over to another endpoint.
-    *
-    * @param[in] copy - The endpoint to copy.
-    * @returns The target endpoint.
-    */
-    endpoint& operator=(const endpoint& copy)
-    {
-        this->gate     = copy.gate;
-        this->pin_type = copy.pin_type;
-        return *this;
-    }
+    /* forward declaration */
+    class Gate;
 
     /**
-    * Standard "less than". <br>
-    * Required for searching through sets.
-    *
-    * @param[in] rhs - Compare target.
-    * @returns True if this is less than rhs.
-    */
-    bool operator<(const endpoint& rhs) const
-    {
-        return (this->gate < rhs.gate) || ((this->gate == rhs.gate) && (this->pin_type < rhs.pin_type));
-    }
-
-    /**
-    * Standard "equals". <br>
-    * Required for searching through sets.
-    *
-    * @param[in] rhs - Compare target.
-    * @returns True if this is equal to rhs.
-    */
-    bool operator==(const endpoint& rhs) const
-    {
-        return (this->gate == rhs.gate) && (this->pin_type == rhs.pin_type);
-    }
-
-    /**
-    * Standard "unequal".
-    *
-    * @param[in] rhs - Compare target.
-    * @returns True if this is unequal to rhs.
-    */
-    bool operator!=(const endpoint& rhs) const
-    {
-        return !(*this == rhs);
-    }
-
-    /**
-    * Returns the gate of the current endpoint
-    *
-    * @returns The gate.
-    */
-    const std::shared_ptr<::gate>& get_gate() const
-    {
-        return gate;
-    }
-
-    /**
-     * Sets the gate of the endpoint/
-     * @param[in] g gate to be set
-     */
-    void set_gate(const std::shared_ptr<::gate>& g)
-    {
-        endpoint::gate = g;
-    }
-
-    /**
-     * Returns the pin type of the current endpoint
+     *  Endpoint data structure for (gate, pin) tuples
      *
-     * @returns pin_type as std::string
+     * @ingroup netlist
      */
-    const std::string& get_pin_type() const
+    class Endpoint
     {
-        return pin_type;
-    }
+    public:
+        /**
+         * Construct an endpoint object.
+         * 
+         * @param[in] gate - A pointer to the gate of the endpoint.
+         * @param[in] pin - The pin of the endpoint.
+         * @param[in] is_a_destination - True if the endpoint is an output pin, false if it is an input pin.
+         */
+        Endpoint(const std::shared_ptr<Gate>& gate, const std::string& pin, bool is_a_destination);
 
-    /**
-     * Sets the pin type of the current endpoint
-     *
-     * @param[in] type to be set
-     */
-    void set_pin_type(const std::string& type)
-    {
-        endpoint::pin_type = type;
-    }
-};
+        Endpoint(const Endpoint&) = default;
+        Endpoint(Endpoint&&)      = default;
+        Endpoint& operator=(const Endpoint&) = default;
+        Endpoint& operator=(Endpoint&&) = default;
+
+        /**
+         * Standard "less than". <br>
+         * Required for searching through sets.
+         *
+         * @param[in] rhs - Compare target.
+         * @returns True if this is less than rhs.
+         */
+        bool operator<(const Endpoint& rhs) const;
+
+        /**
+         * Standard "equals". <br>
+         * Required for searching through sets.
+         *
+         * @param[in] rhs - Compare target.
+         * @returns True if this is equal to rhs.
+         */
+        bool operator==(const Endpoint& rhs) const;
+
+        /**
+         * Standard "unequal".
+         *
+         * @param[in] rhs - Compare target.
+         * @returns True if this is unequal to rhs.
+         */
+        bool operator!=(const Endpoint& rhs) const;
+
+        /**
+         * Returns the gate of the endpoint.
+         *
+         * @returns The gate.
+         */
+        const std::shared_ptr<Gate>& get_gate() const;
+
+        /**
+         * Returns the pin of the endpoint.
+         *
+         * @returns The pin.
+         */
+        const std::string& get_pin() const;
+
+        /**
+         * Checks whether the pin of the endpoint is a destination pin.
+         *
+         * @returns True, if the endpoint is an input pin.
+         */
+        bool is_destination_pin() const;
+
+        /**
+         * Checks whether the pin of the endpoint is a source pin.
+         *
+         * @returns True, if the endpoint is an output pin.
+         */
+        bool is_source_pin() const;
+
+    private:
+        std::shared_ptr<Gate> m_gate;
+        std::string m_pin;
+        bool m_is_a_destination;
+    };
+}    // namespace hal

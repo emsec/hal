@@ -21,35 +21,35 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef RECENT_FILES_WIDGET_H
-#define RECENT_FILES_WIDGET_H
+#pragma once
 
 #include <QFrame>
 
-class recent_file_item;
-
 class QVBoxLayout;
 
-class recent_files_widget : public QFrame
+namespace hal
 {
-    Q_OBJECT
+    class RecentFileItem;
 
-public:
-    recent_files_widget(QWidget* parent = nullptr);
+    class RecentFilesWidget : public QFrame
+    {
+        Q_OBJECT
 
-    void repolish();
+    public:
+        RecentFilesWidget(QWidget* parent = nullptr);
 
-public Q_SLOTS:
-    void handle_file_opened(const QString& file_name);
-    void handle_remove_requested(recent_file_item* item);
+        void repolish();
 
-private:
-    void read_settings();
-    void update_settings();
+    public Q_SLOTS:
+        void handle_file_opened(const QString& file_name);
+        void handle_remove_requested(RecentFileItem* item);
 
-    QVBoxLayout* m_layout;
+    private:
+        void read_settings();
+        void update_settings();
 
-    QList<recent_file_item*> m_items;
-};
+        QVBoxLayout* m_layout;
 
-#endif    // RECENT_FILES_WIDGET_H
+        QList<RecentFileItem*> m_items;
+    };
+}

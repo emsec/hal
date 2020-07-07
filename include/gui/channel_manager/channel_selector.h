@@ -21,15 +21,14 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef CHANNEL_SELECTOR_H
-#define CHANNEL_SELECTOR_H
+#pragma once
 
 #include <QComboBox>
-
-class channel_selector : public QComboBox
+namespace hal
 {
-public:
-    channel_selector(QWidget* parent = nullptr);
-};
-
-#endif    // CHANNEL_SELECTOR_H
+    class ChannelSelector : public QComboBox
+    {
+    public:
+        ChannelSelector(QWidget* parent = nullptr);
+    };
+}

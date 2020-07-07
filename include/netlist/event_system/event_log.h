@@ -28,10 +28,14 @@
 /**
  * @ingroup handler
  */
-namespace event_log
+
+namespace hal
 {
-    /**
-    * Initializes the event log channel.
-    */
-    NETLIST_API void initialize();
-}    // namespace event_log
+    namespace event_log
+    {
+        /**
+        * Initializes the event log channel.
+        */
+        NETLIST_API void initialize();
+    }    // namespace event_log
+}    // namespace hal

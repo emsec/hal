@@ -1,11 +1,11 @@
 #include "core/hal_file_manager.h"
+
 #include "core/log.h"
+#include "rapidjson/filereadstream.h"
+#include "rapidjson/stringbuffer.h"
 
 #include <fstream>
 #include <sstream>
-
-#include "rapidjson/filereadstream.h"
-#include "rapidjson/stringbuffer.h"
 
 #define PRETTY_JSON_OUTPUT 0
 #if PRETTY_JSON_OUTPUT == 1
@@ -14,58 +14,61 @@
 #include "rapidjson/writer.h"
 #endif
 
-namespace hal_file_manager
+namespace hal
 {
-    namespace
+    namespace hal_file_manager
     {
-        callback_hook<bool(const hal::path&, std::shared_ptr<netlist>, rapidjson::Document&)> m_on_serialize_hook;
-        callback_hook<bool(const hal::path&, std::shared_ptr<netlist>, rapidjson::Document&)> m_on_deserialize_hook;
-    }    // namespace
-
-    bool serialize(const hal::path& file, std::shared_ptr<netlist> netlist, rapidjson::Document& document)
-    {
-        for (const auto& id : m_on_serialize_hook.get_ids())
+        namespace
         {
-            if (!m_on_serialize_hook.call(id, file, netlist, document))
-            {
-                log_error("core", "serializer '{}' signaled a serialization error", m_on_serialize_hook.get_name(id));
-                return false;
-            }
-        }
-        return true;
-    }
+            CallbackHook<bool(const std::filesystem::path&, std::shared_ptr<Netlist>, rapidjson::Document&)> m_on_serialize_hook;
+            CallbackHook<bool(const std::filesystem::path&, std::shared_ptr<Netlist>, rapidjson::Document&)> m_on_deserialize_hook;
+        }    // namespace
 
-    bool deserialize(const hal::path& file, std::shared_ptr<netlist> netlist, rapidjson::Document& document)
-    {
-        for (const auto& id : m_on_deserialize_hook.get_ids())
+        bool serialize(const std::filesystem::path& file, std::shared_ptr<Netlist> netlist, rapidjson::Document& document)
         {
-            if (!m_on_deserialize_hook.call(id, file, netlist, document))
+            for (const auto& id : m_on_serialize_hook.get_ids())
             {
-                log_error("core", "deserializer '{}' signaled a deserialization error", m_on_deserialize_hook.get_name(id));
-                return false;
+                if (!m_on_serialize_hook.call(id, file, netlist, document))
+                {
+                    log_error("core", "serializer '{}' signaled a serialization error", m_on_serialize_hook.get_name(id));
+                    return false;
+                }
             }
+            return true;
         }
-        return true;
-    }
 
-    void register_on_serialize_callback(const std::string& identifier, std::function<bool(const hal::path&, std::shared_ptr<netlist>, rapidjson::Document&)> callback)
-    {
-        m_on_serialize_hook.add_callback(identifier, callback);
-    }
+        bool deserialize(const std::filesystem::path& file, std::shared_ptr<Netlist> netlist, rapidjson::Document& document)
+        {
+            for (const auto& id : m_on_deserialize_hook.get_ids())
+            {
+                if (!m_on_deserialize_hook.call(id, file, netlist, document))
+                {
+                    log_error("core", "deserializer '{}' signaled a deserialization error", m_on_deserialize_hook.get_name(id));
+                    return false;
+                }
+            }
+            return true;
+        }
 
-    void unregister_on_serialize_callback(const std::string& identifier)
-    {
-        m_on_serialize_hook.remove_callback(identifier);
-    }
+        void register_on_serialize_callback(const std::string& identifier, std::function<bool(const std::filesystem::path&, std::shared_ptr<Netlist>, rapidjson::Document&)> callback)
+        {
+            m_on_serialize_hook.add_callback(identifier, callback);
+        }
 
-    void register_on_deserialize_callback(const std::string& identifier, std::function<bool(const hal::path&, std::shared_ptr<netlist>, rapidjson::Document&)> callback)
-    {
-        m_on_deserialize_hook.add_callback(identifier, callback);
-    }
+        void unregister_on_serialize_callback(const std::string& identifier)
+        {
+            m_on_serialize_hook.remove_callback(identifier);
+        }
 
-    void unregister_on_deserialize_callback(const std::string& identifier)
-    {
-        m_on_deserialize_hook.remove_callback(identifier);
-    }
+        void register_on_deserialize_callback(const std::string& identifier, std::function<bool(const std::filesystem::path&, std::shared_ptr<Netlist>, rapidjson::Document&)> callback)
+        {
+            m_on_deserialize_hook.add_callback(identifier, callback);
+        }
 
-}    // namespace hal_file_manager
+        void unregister_on_deserialize_callback(const std::string& identifier)
+        {
+            m_on_deserialize_hook.remove_callback(identifier);
+        }
+
+    }    // namespace hal_file_manager
+}    // namespace hal

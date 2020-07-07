@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef KEYBIND_SETTINGS_H
-#define KEYBIND_SETTINGS_H
+#pragma once
 
 #include "settings_widget.h"
 
@@ -31,23 +30,23 @@
 #include <QCheckBox>
 #include <QStringList>
 
-class keybind_setting : public settings_widget
+namespace hal
 {
-    Q_OBJECT
+    class KeybindSetting : public SettingsWidget
+    {
+        Q_OBJECT
 
-public:
-    keybind_setting(const QString& key, const QString& title, const QString& description, QWidget *parent = nullptr);
+    public:
+        KeybindSetting(const QString& key, const QString& title, const QString& description, QWidget *parent = nullptr);
 
-    virtual void load(const QVariant& value) Q_DECL_OVERRIDE;
-    virtual QVariant value() Q_DECL_OVERRIDE;
-    //virtual void rollback() Q_DECL_OVERRIDE;
+        virtual void load(const QVariant& value) Q_DECL_OVERRIDE;
+        virtual QVariant value() Q_DECL_OVERRIDE;
+        //virtual void rollback() Q_DECL_OVERRIDE;
 
-private:
-    keybind_edit* m_keybind_edit;
-    void on_keybind_changed();
-    void on_keybind_edit_rejected();
+    private:
+        KeybindEdit* m_KeybindEdit;
+        void on_keybind_changed();
+        void on_KeybindEdit_rejected();
 
-};
-
-#endif //KEYBIND_SETTINGS_H
-
+    };
+}

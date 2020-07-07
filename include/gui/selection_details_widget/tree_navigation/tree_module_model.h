@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef tree_module_model_H
-#define tree_module_model_H
+#pragma once
 
 #include "def.h"
 #include "netlist/event_system/gate_event_handler.h"
@@ -36,52 +35,54 @@
 #include <QModelIndex>
 #include <QVariant>
 
-class tree_module_item;
-
-class tree_module_model : public QAbstractItemModel
+namespace hal
 {
-    Q_OBJECT
+    class TreeModuleItem;
 
-public:
-    tree_module_model(QObject* parent = 0);
-    ~tree_module_model();
+    class TreeModuleModel : public QAbstractItemModel
+    {
+        Q_OBJECT
 
-    //information access
-    QVariant data(const QModelIndex& index, int role) const Q_DECL_OVERRIDE;
-    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const Q_DECL_OVERRIDE;
-    QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const Q_DECL_OVERRIDE;
-    QModelIndex parent(const QModelIndex& index) const Q_DECL_OVERRIDE;
-    Qt::ItemFlags flags(const QModelIndex& index) const Q_DECL_OVERRIDE;
-    int rowCount(const QModelIndex& parent = QModelIndex()) const Q_DECL_OVERRIDE;
-    int columnCount(const QModelIndex& parent = QModelIndex()) const Q_DECL_OVERRIDE;
+    public:
+        TreeModuleModel(QObject* parent = 0);
+        ~TreeModuleModel();
 
-    //this function provides the indexes for the navigation widget to handle a selection_changed for the view
-    QModelIndexList get_corresponding_indexes(const QList<u32>& gate_ids, const QList<u32>& net_ids);
+        //information access
+        QVariant data(const QModelIndex& index, int role) const Q_DECL_OVERRIDE;
+        QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const Q_DECL_OVERRIDE;
+        QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const Q_DECL_OVERRIDE;
+        QModelIndex parent(const QModelIndex& index) const Q_DECL_OVERRIDE;
+        Qt::ItemFlags flags(const QModelIndex& index) const Q_DECL_OVERRIDE;
+        int rowCount(const QModelIndex& parent = QModelIndex()) const Q_DECL_OVERRIDE;
+        int columnCount(const QModelIndex& parent = QModelIndex()) const Q_DECL_OVERRIDE;
 
-    void update(u32 module_id);
+        //this function provides the indexes for the navigation widget to handle a selection_changed for the view
+        QModelIndexList get_corresponding_indexes(const QList<u32>& gate_ids, const QList<u32>& net_ids);
 
-    static const int NAME_COLUMN = 0;
-    static const int ID_COLUMN   = 1;
-    static const int TYPE_COLUMN = 2;
+        void update(u32 module_id);
 
-private:
-    void setup_model_data();
+        static const int NAME_COLUMN = 0;
+        static const int ID_COLUMN   = 1;
+        static const int TYPE_COLUMN = 2;
 
-    //helper functions to convert between index and item
-    tree_module_item* get_item(const QModelIndex& index) const;
-    QModelIndex get_modelindex(tree_module_item* item);
-    QList<QModelIndex> get_modelindexes_for_row(tree_module_item* item);
+    private:
+        void setup_model_data();
 
-    void insert_item(tree_module_item* parent, int position, tree_module_item* item);
-    void remove_item(tree_module_item* item);
+        //helper functions to convert between index and item
+        TreeModuleItem* get_item(const QModelIndex& index) const;
+        QModelIndex get_modelindex(TreeModuleItem* item);
+        QList<QModelIndex> get_modelindexes_for_row(TreeModuleItem* item);
 
-    void load_data_settings();
-    
-    tree_module_item* m_root_item;
-    tree_module_item* m_gates_item;
-    tree_module_item* m_nets_item;
+        void insert_item(TreeModuleItem* parent, int position, TreeModuleItem* item);
+        void remove_item(TreeModuleItem* item);
 
-    QIcon m_design_icon;
-    QFont m_structured_font;
-};
-#endif    // tree_module_model_H
+        void load_data_settings();
+
+        TreeModuleItem* m_root_item;
+        TreeModuleItem* m_gates_item;
+        TreeModuleItem* m_nets_item;
+
+        QIcon m_design_icon;
+        QFont m_structured_font;
+    };
+}

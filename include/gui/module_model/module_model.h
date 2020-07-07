@@ -22,8 +22,7 @@
  * SOFTWARE.
  */
 
-#ifndef MODULE_MODEL_H
-#define MODULE_MODEL_H
+#pragma once
 
 #include "def.h"
 
@@ -36,41 +35,47 @@
 #include <QModelIndex>
 #include <QVariant>
 
-class module_item;
-
-class module_model : public QAbstractItemModel
+namespace hal
 {
-    Q_OBJECT
+    class ModuleItem;
 
-public:
-    explicit module_model(QObject* parent = nullptr);
+    class ModuleModel : public QAbstractItemModel
+    {
+        Q_OBJECT
 
-    // PURE VIRTUAL
-    QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const override;
-    QModelIndex parent(const QModelIndex& index) const override;
-    int rowCount(const QModelIndex& parent = QModelIndex()) const override;
-    int columnCount(const QModelIndex& parent = QModelIndex()) const override;
-    QVariant data(const QModelIndex& index, int role) const override;
+    public:
+        explicit ModuleModel(QObject* parent = nullptr);
 
-    // VIRTUAL
-    Qt::ItemFlags flags(const QModelIndex& index) const override;
-    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
+        // PURE VIRTUAL
+        QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const override;
+        QModelIndex parent(const QModelIndex& index) const override;
+        int rowCount(const QModelIndex& parent = QModelIndex()) const override;
+        int columnCount(const QModelIndex& parent = QModelIndex()) const override;
+        QVariant data(const QModelIndex& index, int role) const override;
 
-    module_item* get_item(const QModelIndex& index) const;
-    QModelIndex get_index(const module_item* const item) const;
+        // VIRTUAL
+        Qt::ItemFlags flags(const QModelIndex& index) const override;
+        QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 
-    void init();
-    void clear();
+        ModuleItem* get_item(const QModelIndex& index) const;
+        QModelIndex get_index(const ModuleItem* const item) const;
+        ModuleItem* get_item(const u32 module_id) const;
 
-    void add_module(const u32 id, const u32 parent_module);
-    void add_recursively(std::set<std::shared_ptr<module>> modules);
-    void remove_module(const u32 id);
-    void update_module(const u32 id);
+        void init();
+        void clear();
 
-private:
-    module_item* m_top_module_item;
+        void add_module(const u32 id, const u32 parent_module);
+        void add_recursively(std::set<std::shared_ptr<Module>> modules);
+        void remove_module(const u32 id);
+        void update_module(const u32 id);
 
-    QMap<u32, module_item*> m_module_items;
-};
+        bool is_modifying();
 
-#endif // MODULE_MODEL_H
+    private:
+        ModuleItem* m_top_ModuleItem;
+
+        QMap<u32, ModuleItem*> m_ModuleItems;
+
+        bool m_is_modifying;
+    };
+}

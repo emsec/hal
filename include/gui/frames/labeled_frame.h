@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef WELCOME_WIDGET_H
-#define WELCOME_WIDGET_H
+#pragma once
 
 #include <QFrame>
 
@@ -30,22 +29,23 @@ class QHBoxLayout;
 class QLabel;
 class QVBoxLayout;
 
-class labeled_frame : public QFrame
+namespace hal
 {
-    Q_OBJECT
+    class LabeledFrame : public QFrame
+    {
+        Q_OBJECT
 
-public:
-    labeled_frame(QWidget* parent = nullptr);
+    public:
+        LabeledFrame(QWidget* parent = nullptr);
 
-    void add_content(QWidget* content);
+        void add_content(QWidget* content);
 
-protected:
-    QVBoxLayout* m_layout;
-    QFrame* m_header;
-    QHBoxLayout* m_header_layout;
-    QFrame* m_left_spacer;
-    QLabel* m_label;
-    QFrame* m_right_spacer;
-};
-
-#endif    // WELCOME_WIDGET_H
+    protected:
+        QVBoxLayout* m_layout;
+        QFrame* m_header;
+        QHBoxLayout* m_header_layout;
+        QFrame* m_left_spacer;
+        QLabel* m_label;
+        QFrame* m_right_spacer;
+    };
+}

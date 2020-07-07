@@ -2,9 +2,21 @@
 #
 #   - https://github.com/blog/2392-introducing-code-owners
 
+* @swallat @SJulianS @devhoffmann
+
 /packaging/ @swallat
 /deps/ @swallat
 /cmake/ @swallat
 *.cmake @swallat
 */CMakeLists.txt @swallat
 CMakeLists.txt @swallat
+*.in @swallat
+
+/include/core/ @swallat @SJulianS @devhoffmann
+/src/core/ @swallat @SJulianS @devhoffmann
+
+/include/netlist/ @swallat @SJulianS @devhoffmann
+/src/netlist/ @swallat @SJulianS @devhoffmann
+
+/include/python-binding/ @swallat
+/src/python-binding/ @swallat

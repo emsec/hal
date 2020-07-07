@@ -3,64 +3,67 @@
 #include <QEvent>
 #include <QResizeEvent>
 
-overlay::overlay(QWidget* parent) : QFrame(parent)
+namespace hal
 {
-//    setAttribute(Qt::WA_NoSystemBackground);
-//    setAttribute(Qt::WA_TranslucentBackground);
-    //setAttribute(Qt::WA_TransparentForMouseEvents);
-    handle_parent_changed();
-}
-
-bool overlay::eventFilter(QObject* watched, QEvent* event)
-{
-    if (watched == parent())
+    Overlay::Overlay(QWidget* parent) : QFrame(parent)
     {
-        if (event->type() == QEvent::Resize)
-            resize(static_cast<QResizeEvent*>(event)->size());
-        else if (event->type() == QEvent::ChildAdded)
-            raise();
+    //    setAttribute(Qt::WA_NoSystemBackground);
+    //    setAttribute(Qt::WA_TranslucentBackground);
+        //setAttribute(Qt::WA_TransparentForMouseEvents);
+        handle_parent_changed();
     }
 
-    // PASS UNHANDLED EVENTS TO BASE CLASS
-    return QFrame::eventFilter(watched, event);
-}
-
-bool overlay::event(QEvent* event)
-{
-    if (event->type() == QEvent::ParentAboutToChange)
+    bool Overlay::eventFilter(QObject* watched, QEvent* event)
     {
-        if (parent())
+        if (watched == parent())
         {
-            parent()->removeEventFilter(this);
+            if (event->type() == QEvent::Resize)
+                resize(static_cast<QResizeEvent*>(event)->size());
+            else if (event->type() == QEvent::ChildAdded)
+                raise();
+        }
+
+        // PASS UNHANDLED EVENTS TO BASE CLASS
+        return QFrame::eventFilter(watched, event);
+    }
+
+    bool Overlay::event(QEvent* event)
+    {
+        if (event->type() == QEvent::ParentAboutToChange)
+        {
+            if (parent())
+            {
+                parent()->removeEventFilter(this);
+                return true;
+            }
+        }
+        else if (event->type() == QEvent::ParentChange)
+        {
+            handle_parent_changed();
             return true;
         }
+
+        // PASS UNHANDLED EVENTS TO BASE CLASS
+        return QFrame::event(event);
     }
-    else if (event->type() == QEvent::ParentChange)
+
+    void Overlay::mousePressEvent(QMouseEvent* event)
     {
-        handle_parent_changed();
-        return true;
+        Q_EMIT clicked();
+        event->accept(); // ACCEPT EXPLICITLY
     }
 
-    // PASS UNHANDLED EVENTS TO BASE CLASS
-    return QFrame::event(event);
-}
+    void Overlay::handle_parent_changed()
+    {
+        if (!parent())
+            return;
 
-void overlay::mousePressEvent(QMouseEvent* event)
-{
-    Q_EMIT clicked();
-    event->accept(); // ACCEPT EXPLICITLY
-}
+        parent()->installEventFilter(this);
+        raise();
 
-void overlay::handle_parent_changed()
-{
-    if (!parent())
-        return;
+        QWidget* w = qobject_cast<QWidget*>(parent());
 
-    parent()->installEventFilter(this);
-    raise();
-
-    QWidget* w = qobject_cast<QWidget*>(parent());
-
-    if (w)
-        resize(w->size());
+        if (w)
+            resize(w->size());
+    }
 }

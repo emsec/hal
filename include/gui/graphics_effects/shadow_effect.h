@@ -21,54 +21,54 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef SHADOW_EFFECT_H
-#define SHADOW_EFFECT_H
+#pragma once
 
 #include <QGraphicsEffect>
 
-class shadow_effect : public QGraphicsEffect
+namespace hal
 {
-    Q_OBJECT
-
-public:
-    explicit shadow_effect(QObject* parent = 0);
-
-    void draw(QPainter* painter);
-    QRectF boundingRectFor(const QRectF& rect) const;
-
-    inline void setDistance(qreal distance)
+    class ShadowEffect : public QGraphicsEffect
     {
-        _distance = distance;
-        updateBoundingRect();
-    }
-    inline qreal distance() const
-    {
-        return _distance;
-    }
+        Q_OBJECT
 
-    inline void setBlurRadius(qreal blurRadius)
-    {
-        _blurRadius = blurRadius;
-        updateBoundingRect();
-    }
-    inline qreal blurRadius() const
-    {
-        return _blurRadius;
-    }
+    public:
+        explicit ShadowEffect(QObject* parent = 0);
 
-    inline void setColor(const QColor& color)
-    {
-        _color = color;
-    }
-    inline QColor color() const
-    {
-        return _color;
-    }
+        void draw(QPainter* painter);
+        QRectF boundingRectFor(const QRectF& rect) const;
 
-private:
-    qreal _distance;
-    qreal _blurRadius;
-    QColor _color;
-};
+        inline void setDistance(qreal distance)
+        {
+            _distance = distance;
+            updateBoundingRect();
+        }
+        inline qreal distance() const
+        {
+            return _distance;
+        }
 
-#endif    // SHADOW_EFFECT_H
+        inline void setBlurRadius(qreal blurRadius)
+        {
+            _blurRadius = blurRadius;
+            updateBoundingRect();
+        }
+        inline qreal blurRadius() const
+        {
+            return _blurRadius;
+        }
+
+        inline void setColor(const QColor& color)
+        {
+            _color = color;
+        }
+        inline QColor color() const
+        {
+            return _color;
+        }
+
+    private:
+        qreal _distance;
+        qreal _blurRadius;
+        QColor _color;
+    };
+}

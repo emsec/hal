@@ -21,73 +21,73 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef CONTENT_LAYOUT_AREA_H
-#define CONTENT_LAYOUT_AREA_H
+#pragma once
 
 #include "content_widget/content_widget.h"
 
 #include <QWidget>
 
-class dock_bar;
-class splitter;
-class splitter_anchor;
-class tab_widget;
-
 class QFrame;
 class QHBoxLayout;
 class QVBoxLayout;
 
-enum class content_anchor
+namespace hal
 {
-    center = 0,
-    left   = 1,
-    right  = 2,
-    bottom = 3
-};
+    class DockBar;
+    class Splitter;
+    class SplitterAnchor;
+    class TabWidget;
 
-class content_layout_area : public QWidget
-{
-    Q_OBJECT
+    enum class content_anchor
+    {
+        center = 0,
+        left   = 1,
+        right  = 2,
+        bottom = 3
+    };
 
-public:
-    explicit content_layout_area(QWidget* parent = 0);
-    void add_content(content_widget* widget, int index, content_anchor anchor);
+    class ContentLayoutArea : public QWidget
+    {
+        Q_OBJECT
 
-    void init_splitter_size(const QSize& size);
+    public:
+        explicit ContentLayoutArea(QWidget* parent = 0);
+        void add_content(ContentWidget* widget, int index, content_anchor anchor);
 
-public Q_SLOTS:
-    void update_left_dock_bar();
-    void update_right_dock_bar();
-    void update_bottom_dock_bar();
+        void init_splitter_size(const QSize& size);
 
-private:
-    QVBoxLayout* m_top_level_layout;
-    QHBoxLayout* m_second_level_layout;
-    QVBoxLayout* m_third_level_layout;
-    QHBoxLayout* m_fourth_level_layout;
-    QVBoxLayout* m_splitter_layout;
-    QHBoxLayout* m_central_layout;
-    QHBoxLayout* m_spacer_layout;
+    public Q_SLOTS:
+        void update_left_dock_bar();
+        void update_right_dock_bar();
+        void update_bottom_dock_bar();
 
-    splitter* m_vertical_splitter;
-    splitter* m_horizontal_splitter;
-    splitter* m_left_splitter;
-    splitter* m_right_splitter;
-    splitter* m_bottom_splitter;
+    private:
+        QVBoxLayout* m_top_level_layout;
+        QHBoxLayout* m_second_level_layout;
+        QVBoxLayout* m_third_level_layout;
+        QHBoxLayout* m_fourth_level_layout;
+        QVBoxLayout* m_splitter_layout;
+        QHBoxLayout* m_central_layout;
+        QHBoxLayout* m_spacer_layout;
 
-    dock_bar* m_left_dock;
-    dock_bar* m_right_dock;
-    dock_bar* m_bottom_dock;
+        Splitter* m_vertical_splitter;
+        Splitter* m_horizontal_splitter;
+        Splitter* m_left_splitter;
+        Splitter* m_right_splitter;
+        Splitter* m_bottom_splitter;
 
-    QWidget* m_bottom_container;
-    QFrame* m_left_spacer;
-    QFrame* m_right_spacer;
+        DockBar* m_left_dock;
+        DockBar* m_right_dock;
+        DockBar* m_bottom_dock;
 
-    splitter_anchor* m_left_anchor;
-    splitter_anchor* m_right_anchor;
-    splitter_anchor* m_bottom_anchor;
+        QWidget* m_bottom_container;
+        QFrame* m_left_spacer;
+        QFrame* m_right_spacer;
 
-    tab_widget* m_tab_widget;
-};
+        SplitterAnchor* m_left_anchor;
+        SplitterAnchor* m_right_anchor;
+        SplitterAnchor* m_bottom_anchor;
 
-#endif    // CONTENT_LAYOUT_AREA_H
+        TabWidget* m_tab_widget;
+    };
+}

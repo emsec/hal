@@ -5,124 +5,127 @@
 #include "gui/gui_globals.h"
 #include "gui/gui_utils/graphics.h"
 
-module_item::module_item(const u32 id) :
-    m_parent(nullptr),
-    m_id(id),
-    m_name(QString::fromStdString(g_netlist->get_module_by_id(id)->get_name())),
-    m_color(g_netlist_relay.get_module_color(id)),
-    m_highlighted(false)
+namespace hal
 {
+    ModuleItem::ModuleItem(const u32 id) :
+        m_parent(nullptr),
+        m_id(id),
+        m_name(QString::fromStdString(g_netlist->get_module_by_id(id)->get_name())),
+        m_color(g_netlist_relay.get_module_color(id)),
+        m_highlighted(false)
+    {
 
-}
+    }
 
-module_item::module_item(const QString& name, const u32 id) :
-    m_parent(nullptr),
-    m_id(id),
-    m_name(name),
-    m_color(g_netlist_relay.get_module_color(id)),
-    m_highlighted(false)
-{
-}
+    ModuleItem::ModuleItem(const QString& name, const u32 id) :
+        m_parent(nullptr),
+        m_id(id),
+        m_name(name),
+        m_color(g_netlist_relay.get_module_color(id)),
+        m_highlighted(false)
+    {
+    }
 
-void module_item::insert_child(int row, module_item* child)
-{
-    m_child_items.insert(row, child);
-}
+    void ModuleItem::insert_child(int row, ModuleItem* child)
+    {
+        m_child_items.insert(row, child);
+    }
 
-void module_item::remove_child(module_item* child)
-{
-    m_child_items.removeOne(child);
-}
+    void ModuleItem::remove_child(ModuleItem* child)
+    {
+        m_child_items.removeOne(child);
+    }
 
-void module_item::append_child(module_item* child)
-{
-    // PROBABLY OBSOLETE
-    m_child_items.append(child);
-}
+    void ModuleItem::append_child(ModuleItem* child)
+    {
+        // PROBABLY OBSOLETE
+        m_child_items.append(child);
+    }
 
-void module_item::prepend_child(module_item* child)
-{
-    // PROBABLY OBSOLETE
-    m_child_items.prepend(child);
-}
+    void ModuleItem::prepend_child(ModuleItem* child)
+    {
+        // PROBABLY OBSOLETE
+        m_child_items.prepend(child);
+    }
 
-module_item* module_item::parent()
-{
-    return m_parent;
-}
+    ModuleItem* ModuleItem::parent()
+    {
+        return m_parent;
+    }
 
-module_item* module_item::child(int row)
-{
-    return m_child_items.value(row);
-}
+    ModuleItem* ModuleItem::child(int row)
+    {
+        return m_child_items.value(row);
+    }
 
-const module_item* module_item::const_parent() const
-{
-    return m_parent;
-}
+    const ModuleItem* ModuleItem::const_parent() const
+    {
+        return m_parent;
+    }
 
-const module_item* module_item::const_child(int row) const
-{
-    return m_child_items.value(row);
-}
+    const ModuleItem* ModuleItem::const_child(int row) const
+    {
+        return m_child_items.value(row);
+    }
 
-int module_item::childCount() const
-{
-    return m_child_items.count();
-}
+    int ModuleItem::childCount() const
+    {
+        return m_child_items.count();
+    }
 
-int module_item::row() const
-{
-    if (m_parent)
-        return m_parent->m_child_items.indexOf(const_cast<module_item*>(this));
-    else
-        return 0;
-}
+    int ModuleItem::row() const
+    {
+        if (m_parent)
+            return m_parent->m_child_items.indexOf(const_cast<ModuleItem*>(this));
+        else
+            return 0;
+    }
 
-QVariant module_item::data(int column) const
-{
-    // DEBUG CODE, USE STYLED DELEGATES OR SOMETHING
-    if (column != 0)
-        return QVariant();
-    return m_name;
-}
+    QVariant ModuleItem::data(int column) const
+    {
+        // DEBUG CODE, USE STYLED DELEGATES OR SOMETHING
+        if (column != 0)
+            return QVariant();
+        return m_name;
+    }
 
-QString module_item::name() const
-{
-    return m_name;
-}
+    QString ModuleItem::name() const
+    {
+        return m_name;
+    }
 
-u32 module_item::id() const
-{
-    return m_id;
-}
+    u32 ModuleItem::id() const
+    {
+        return m_id;
+    }
 
-QColor module_item::color() const
-{
-    return m_color;
-}
+    QColor ModuleItem::color() const
+    {
+        return m_color;
+    }
 
-bool module_item::highlighted() const
-{
-    return m_highlighted;
-}
+    bool ModuleItem::highlighted() const
+    {
+        return m_highlighted;
+    }
 
-void module_item::set_parent(module_item* parent)
-{
-    m_parent = parent;
-}
+    void ModuleItem::set_parent(ModuleItem* parent)
+    {
+        m_parent = parent;
+    }
 
-void module_item::set_name(const QString& name)
-{
-    m_name = name;
-}
+    void ModuleItem::set_name(const QString& name)
+    {
+        m_name = name;
+    }
 
-void module_item::set_color(const QColor& color)
-{
-    m_color = color;
-}
+    void ModuleItem::set_color(const QColor& color)
+    {
+        m_color = color;
+    }
 
-void module_item::set_highlighted(const bool highlighted)
-{
-    m_highlighted = highlighted;
+    void ModuleItem::set_highlighted(const bool highlighted)
+    {
+        m_highlighted = highlighted;
+    }
 }

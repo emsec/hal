@@ -21,25 +21,25 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef GRAPHICS_GATE_H
-#define GRAPHICS_GATE_H
+#pragma once
 
 #include "gui/graph_widget/items/nodes/graphics_node.h"
 
 #include <memory>
 
-class gate;
-
-class graphics_gate : public graphics_node
+namespace hal
 {
-public:
-    graphics_gate(const std::shared_ptr<const gate> g);
+    class Gate;
 
-protected:
-    QString m_type;
+    class GraphicsGate : public GraphicsNode
+    {
+    public:
+        GraphicsGate(const std::shared_ptr<const Gate> g);
 
-    QVector<QString> m_input_pins;
-    QVector<QString> m_output_pins;
-};
+    protected:
+        QString m_type;
 
-#endif // GRAPHICS_GATE_H
+        QVector<QString> m_input_pins;
+        QVector<QString> m_output_pins;
+    };
+}

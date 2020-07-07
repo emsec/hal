@@ -21,29 +21,29 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef LOADED_PLUGINS_WIDGET_H
-#define LOADED_PLUGINS_WIDGET_H
+#pragma once
 
 #include <QScrollArea>
 
 class QFrame;
 class QVBoxLayout;
 
-class loaded_plugins_widget : public QScrollArea
+namespace hal
 {
-    Q_OBJECT
+    class LoadedPluginsWidget : public QScrollArea
+    {
+        Q_OBJECT
 
-public:
-    explicit loaded_plugins_widget(QWidget* parent = nullptr);
+    public:
+        explicit LoadedPluginsWidget(QWidget* parent = nullptr);
 
-public Q_SLOTS:
-    void handle_plugin_loaded(const QString& name, const QString& path);
-    void handle_plugin_unloaded(const QString& name, const QString& path);
+    public Q_SLOTS:
+        void handle_plugin_loaded(const QString& name, const QString& path);
+        void handle_plugin_unloaded(const QString& name, const QString& path);
 
-private:
-    QFrame* m_container;
-    QVBoxLayout* m_layout;
-    QFrame* m_spacer;
-};
-
-#endif    // LOADED_PLUGINS_WIDGET_H
+    private:
+        QFrame* m_container;
+        QVBoxLayout* m_layout;
+        QFrame* m_spacer;
+    };
+}

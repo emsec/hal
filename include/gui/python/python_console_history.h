@@ -21,55 +21,57 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef __HAL_PYTHON_CONSOLE_HISTORY_H
-#define __HAL_PYTHON_CONSOLE_HISTORY_H
+#pragma once
+
 #include <string>
 #include <vector>
-class python_console_history
+
+namespace hal
 {
-public:
-    /**
-     * Constructs a new python_console_history object.
-     *
-     */
-    python_console_history();
+    class PythonConsoleHistory
+    {
+    public:
+        /**
+         * Constructs a new PythonConsoleHistory object.
+         *
+         */
+        PythonConsoleHistory();
 
-    ~python_console_history();
+        ~PythonConsoleHistory();
 
-    /**
-     * Add command to history and writes it back to the history file.
-     *
-     * @param command - Command to remember
-     */
-    void add_history(const std::string& command);
+        /**
+         * Add command to history and writes it back to the history file.
+         *
+         * @param command - Command to remember
+         */
+        void add_history(const std::string& command);
 
-    /**
-     * Returns the history item at index.
-     *
-     * @param index - Index of the history item to resolve.
-     * @return command at index.
-     */
-    const std::string& get_history_item(const int& index) const;
+        /**
+         * Returns the history item at index.
+         *
+         * @param index - Index of the history item to resolve.
+         * @return command at index.
+         */
+        const std::string& get_history_item(const int& index) const;
 
-    /**
-     * Get the current size of the index;
-     *
-     * @return - History size.
-     */
-    int size() const;
+        /**
+         * Get the current size of the index;
+         *
+         * @return - History size.
+         */
+        int size() const;
 
-    /**
-     * Reloads the history from the history file.
-     *
-     */
-    void update_from_file();
+        /**
+         * Reloads the history from the history file.
+         *
+         */
+        void update_from_file();
 
-private:
-    void append_to_file(const std::string& command);
+    private:
+        void append_to_file(const std::string& command);
 
-    std::string m_file_name;
+        std::string m_file_name;
 
-    std::vector<std::string> m_history;
-};
-
-#endif    //__HAL_PYTHON_CONSOLE_HISTORY_H
+        std::vector<std::string> m_history;
+    };
+}

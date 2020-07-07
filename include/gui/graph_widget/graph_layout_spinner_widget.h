@@ -1,28 +1,51 @@
-#ifndef GRAPH_LAYOUT_SPINNER_WIDGET_H
-#define GRAPH_LAYOUT_SPINNER_WIDGET_H
+//  MIT License
+//
+//  Copyright (c) 2019 Ruhr-University Bochum, Germany, Chair for Embedded Security. All Rights reserved.
+//  Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in all
+//  copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+//  SOFTWARE.
+
+#pragma once
 
 #include <QSvgRenderer>
 #include <QWidget>
 
-class graph_layout_spinner_widget final : public QWidget
+namespace hal
 {
-    Q_OBJECT
+    class GraphLayoutSpinnerWidget final : public QWidget
+    {
+        Q_OBJECT
 
-public:
-    graph_layout_spinner_widget(QWidget* parent = nullptr);
-    
-    void start();
-    void stop();
+    public:
+        explicit GraphLayoutSpinnerWidget(QWidget* parent = nullptr);
 
-private Q_SLOTS:
-    void handle_repaint_needed();
+        void start();
+        void stop();
 
-protected:
-    void paintEvent(QPaintEvent* event) Q_DECL_OVERRIDE;
-    QSize sizeHint() const Q_DECL_OVERRIDE;
+    private Q_SLOTS:
+        void handle_repaint_needed();
 
-private:
-    QSvgRenderer* m_renderer;
-};
+    protected:
+        void paintEvent(QPaintEvent* event) override;
+        QSize sizeHint() const override;
 
-#endif // GRAPH_LAYOUT_SPINNER_WIDGET_H
+    private:
+        QSvgRenderer* m_renderer;
+    };
+}

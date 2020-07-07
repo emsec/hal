@@ -21,21 +21,21 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef TOOLBAR_H
-#define TOOLBAR_H
+#pragma once
 
 #include <QToolBar>
 
-class toolbar : public QToolBar
+namespace hal
 {
-    Q_OBJECT
+    class Toolbar : public QToolBar
+    {
+        Q_OBJECT
 
-public:
-    toolbar(QWidget* parent = nullptr);
+    public:
+        Toolbar(QWidget* parent = nullptr);
 
-    void add_spacer();
+        void add_spacer();
 
-    void repolish();
-};
-
-#endif    // TOOLBAR_H
+        void repolish();
+    };
+}

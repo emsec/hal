@@ -21,24 +21,24 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef DOCK_MIME_DATA_H
-#define DOCK_MIME_DATA_H
+#pragma once
 
 #include <QMimeData>
 #include <QObject>
 
-class content_widget;
-
-class dock_mime_data : public QMimeData
+namespace hal
 {
-    Q_OBJECT
+    class ContentWidget;
 
-public:
-    dock_mime_data(content_widget* widget);
-    content_widget* widget() const;
+    class DockMimeData : public QMimeData
+    {
+        Q_OBJECT
 
-private:
-    content_widget* m_widget;
-};
+    public:
+        DockMimeData(ContentWidget* widget);
+        ContentWidget* widget() const;
 
-#endif    // DOCK_MIME_DATA_H
+    private:
+        ContentWidget* m_widget;
+    };
+}

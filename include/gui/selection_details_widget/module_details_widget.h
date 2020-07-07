@@ -21,71 +21,114 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef MODULE_DETAILS_WIDGET_H
-#define MODULE_DETAILS_WIDGET_H
+#pragma once
 
 #include "def.h"
-
+#include "gui/gui_def.h"
+#include "netlist/endpoint.h"
 #include "netlist_relay/netlist_relay.h"
 
 #include <QWidget>
-#include <QTreeView>
-#include "selection_details_widget/tree_navigation/tree_module_model.h"
-#include "selection_details_widget/tree_navigation/tree_module_proxy_model.h"
 
-class module;
-
-class QVBoxLayout;
+/* forward declaration */
 class QLabel;
 class QTableWidget;
 class QTableWidgetItem;
+class QTreeWidget;
+class QTreeWidgetItem;
+class QVBoxLayout;
+class QHBoxLayout;
+class QScrollArea;
+class QGridLayout;
+class QModelIndex;
+class QFont;
+class QPushButton;
+class QMouseEvent;
 
-class module_details_widget : public QWidget
+namespace hal
 {
-    Q_OBJECT
-public:
-    module_details_widget(QWidget* parent = nullptr);
+    /*forward declaration*/
+    class GraphNavigationWidget;
 
-    void update(u32 module_id);
+    class ModuleDetailsWidget : public QWidget
+    {
+        Q_OBJECT
+    public:
+        ModuleDetailsWidget(QWidget* parent = nullptr);
+        ~ModuleDetailsWidget();
 
-public Q_SLOTS:
+        virtual bool eventFilter(QObject* watched, QEvent* event) Q_DECL_OVERRIDE;
 
-    void handle_selection_changed(void* sender);
-    void handle_searchbar_text_edited(const QString &text);
+        void update(const u32 module_id);
 
-    //relevant handler methods for net relay
-    void handle_module_name_changed(const std::shared_ptr<module> m);
-    void handle_module_gate_assigned(const std::shared_ptr<module> m, const u32 assigned_gate);
-    void handle_module_gate_removed(const std::shared_ptr<module> m, const u32 removed_gate);
+    public Q_SLOTS:
 
-    void handle_gate_name_changed(const std::shared_ptr<gate> g);
-    void handle_gate_removed(const std::shared_ptr<gate> g);
+        void handle_netlist_marked_global_input(std::shared_ptr<Netlist> netlist, u32 associated_data);
+        void handle_netlist_marked_global_output(std::shared_ptr<Netlist> netlist, u32 associated_data);
+        void handle_netlist_marked_global_inout(std::shared_ptr<Netlist> netlist, u32 associated_data);
+        void handle_netlist_unmarked_global_input(std::shared_ptr<Netlist> netlist, u32 associated_data);
+        void handle_netlist_unmarked_global_output(std::shared_ptr<Netlist> netlist, u32 associated_data);
+        void handle_netlist_unmarked_global_inout(std::shared_ptr<Netlist> netlist, u32 associated_data);
 
-    void handle_net_removed(const std::shared_ptr<net> n);
-    void handle_net_name_changed(const std::shared_ptr<net> n);
-    void handle_net_src_changed(const std::shared_ptr<net> n);
-    void handle_net_dst_added(const std::shared_ptr<net> n, const u32 dst_gate_id);
-    void handle_net_dst_removed(const std::shared_ptr<net> n, const u32 dst_gate_id);
+        void handle_module_name_changed(std::shared_ptr<Module> module);
+        void handle_submodule_added(std::shared_ptr<Module> module, u32 associated_data);
+        void handle_submodule_removed(std::shared_ptr<Module> module, u32 associated_data);
+        void handle_module_gate_assigned(std::shared_ptr<Module> module, u32 associated_data);
+        void handle_module_gate_removed(std::shared_ptr<Module> module, u32 associated_data);
+        void handle_module_input_port_name_changed(std::shared_ptr<Module> module, u32 associated_data);
+        void handle_module_output_port_name_changed(std::shared_ptr<Module> module, u32 associated_data);
+        void handle_module_type_changed(std::shared_ptr<Module> module);
 
-private:
+        void handle_net_name_changed(std::shared_ptr<Net> net);
+        void handle_net_source_added(std::shared_ptr<Net> net, const u32 src_gate_id);
+        void handle_net_source_removed(std::shared_ptr<Net> net, const u32 src_gate_id);
+        void handle_net_destination_added(std::shared_ptr<Net> net, const u32 dst_gate_id);
+        void handle_net_destination_removed(std::shared_ptr<Net> net, const u32 dst_gate_id);
 
-    void toggle_searchbar();
-    void handle_tree_double_clicked(const QModelIndex &index);
-    void toggle_resize_columns();
+    private:
+        QFont m_key_font;
+        GraphNavigationWidget* m_navigation_table;
 
-    QVBoxLayout* m_content_layout;
+        QScrollArea* m_scroll_area;
+        QWidget* m_top_lvl_container;
+        QVBoxLayout* m_top_lvl_layout;
+        QVBoxLayout* m_content_layout;
 
-    u32 m_current_id;
-    bool m_ignore_selection_change;
+        QPushButton* m_general_info_button;
+        QPushButton* m_input_ports_button;
+        QPushButton* m_output_ports_button;
 
-    QTableWidget* m_general_table;
-    QTableWidgetItem* m_name_item;
-    QTableWidgetItem* m_id_item;
-    QTableWidgetItem* m_gates_count_item;
+        QTableWidget* m_general_table;
 
-    QTreeView* m_treeview;
-    tree_module_model* m_tree_module_model;
-    tree_module_proxy_model* m_tree_module_proxy_model;
-};
+        QTableWidgetItem* m_name_item;
+        QTableWidgetItem* m_id_item;
+        QTableWidgetItem* m_type_item;
+        QTableWidgetItem* m_number_of_gates_item;
+        QTableWidgetItem* m_number_of_submodules_item;
+        QTableWidgetItem* m_number_of_nets_item;
 
-#endif // MODULE_DETAILS_WIDGET_H
+        QTableWidget* m_input_ports_table;
+
+        QTableWidget* m_output_ports_table;
+
+        void handle_buttons_clicked();
+
+        QSize calculate_table_size(QTableWidget* table);
+
+        u32 m_current_id;
+
+        void add_general_table_static_item(QTableWidgetItem* item);
+        void add_general_table_dynamic_item(QTableWidgetItem* item);
+        void style_table(QTableWidget* table);
+
+        //most straightforward and basic custom-context implementation (maybe need to be more dynamic)
+        void handle_general_table_menu_requested(const QPoint& pos);
+        void handle_input_ports_table_menu_requested(const QPoint& pos);
+        void handle_output_ports_table_menu_requested(const QPoint& pos);
+
+        //jump logic
+        void handle_output_net_item_clicked(const QTableWidgetItem* item);
+        void handle_input_net_item_clicked(const QTableWidgetItem* item);
+        void handle_navigation_jump_requested(const hal::node origin, const u32 via_net, const QSet<u32>& to_gates);
+    };
+}    // namespace hal

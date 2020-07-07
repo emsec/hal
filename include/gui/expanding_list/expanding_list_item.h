@@ -21,55 +21,55 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef EXPANDING_LIST_ITEM_H
-#define EXPANDING_LIST_ITEM_H
+#pragma once
 
 #include <QFrame>
 #include <QList>
 #include <QResizeEvent>
 
-class expanding_list_button;
-
 class QPropertyAnimation;
 
-class expanding_list_item : public QFrame
+namespace hal
 {
-    Q_OBJECT
-    Q_PROPERTY(bool expanded READ expanded)
-    Q_PROPERTY(int fixed_height READ fixed_height WRITE set_fixed_height)
+    class ExpandingListButton;
 
-public:
-    expanding_list_item(expanding_list_button* parent_button, QWidget* parent = 0);
+    class ExpandingListItem : public QFrame
+    {
+        Q_OBJECT
+        Q_PROPERTY(bool expanded READ expanded)
+        Q_PROPERTY(int fixed_height READ fixed_height WRITE set_fixed_height)
 
-    virtual QSize minimumSizeHint() const Q_DECL_OVERRIDE;
-    virtual QSize sizeHint() const Q_DECL_OVERRIDE;
-    virtual void resizeEvent(QResizeEvent* event) Q_DECL_OVERRIDE;
+    public:
+        ExpandingListItem(ExpandingListButton* parent_button, QWidget* parent = 0);
 
-    bool expanded();
-    int fixed_height();
-    bool contains(expanding_list_button* button);
-    expanding_list_button* parent_button();
-    void append_child_button(expanding_list_button* button);
+        virtual QSize minimumSizeHint() const Q_DECL_OVERRIDE;
+        virtual QSize sizeHint() const Q_DECL_OVERRIDE;
+        virtual void resizeEvent(QResizeEvent* event) Q_DECL_OVERRIDE;
 
-    void repolish();
+        bool expanded();
+        int fixed_height();
+        bool contains(ExpandingListButton* button);
+        ExpandingListButton* parent_button();
+        void append_child_button(ExpandingListButton* button);
 
-    void collapse();
-    void expand();
+        void repolish();
 
-    void set_expanded(bool expanded);
-    void set_fixed_height(int height);
+        void collapse();
+        void expand();
 
-private:
-    expanding_list_button* m_parent_button;
-    QList<expanding_list_button*> m_child_buttons;
+        void set_expanded(bool expanded);
+        void set_fixed_height(int height);
 
-    int m_collapsed_height;
-    int m_expanded_height;
+    private:
+        ExpandingListButton* m_parent_button;
+        QList<ExpandingListButton*> m_child_buttons;
 
-    QPropertyAnimation* m_animation;
+        int m_collapsed_height;
+        int m_expanded_height;
 
-    bool m_expanded;
-    int m_fixed_height;
-};
+        QPropertyAnimation* m_animation;
 
-#endif    // EXPANDING_LIST_ITEM_H
+        bool m_expanded;
+        int m_fixed_height;
+    };
+}

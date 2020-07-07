@@ -21,49 +21,52 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef GRAPHICS_NET_H
-#define GRAPHICS_NET_H
+#pragma once
 
 #include "graph_widget/items/graphics_item.h"
 
 #include <memory>
 
-class net;
-
-class graphics_net : public graphics_item
+namespace hal
 {
-public:
-    enum class line_style
+    class Net;
+
+    class GraphicsNet : public GraphicsItem
     {
-        solid,
-        dash,
-        dot
+    public:
+        struct visuals
+        {
+            bool visible;
+            QColor color;
+            Qt::PenStyle pen_style;
+            bool fill_icon;
+            QColor fill_color;
+            Qt::BrushStyle brush_style;
+        };
+
+        static void load_settings();
+
+        GraphicsNet(const std::shared_ptr<const Net> n);
+
+        QRectF boundingRect() const override;
+        QPainterPath shape() const override;
+
+        virtual void set_visuals(const visuals& v);
+
+    protected:
+        static qreal s_line_width;
+        static qreal s_shape_width;
+
+        static QPen s_pen;
+        static QBrush s_brush;
+
+        QRectF m_rect;
+        QPainterPath m_shape;
+
+        Qt::PenStyle m_pen_style;
+
+        bool m_fill_icon;
+        QColor m_fill_color;
+        Qt::BrushStyle m_brush_style;
     };
-
-    struct visuals
-    {
-        bool visible;
-        QColor color;
-        line_style style;
-    };
-
-    static void load_settings();
-
-    graphics_net(const std::shared_ptr<const net> n);
-
-    QRectF boundingRect() const Q_DECL_OVERRIDE;
-    virtual QPainterPath shape() const Q_DECL_OVERRIDE;
-
-    virtual void set_visuals(const visuals& v) = 0;
-
-protected:
-    static QPen s_pen;
-
-    static qreal s_line_width;
-    static qreal s_stroke_width;
-
-    QRectF m_rect;
-    QPainterPath m_shape;
-};
-
-#endif // GRAPHICS_NET_H
+}

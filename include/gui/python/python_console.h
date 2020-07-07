@@ -21,69 +21,69 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef PYTHON_CONSOLE_H
-#define PYTHON_CONSOLE_H
+#pragma once
 
-#include "python/python_context_suberscriber.h"
+#include "python/python_context_subscriber.h"
 
 #include <QTextEdit>
 #include <memory>
 
-class python_console_history;
-
-class python_console : public QTextEdit, public python_context_subscriber
+namespace hal
 {
-    Q_OBJECT
+    class PythonConsoleHistory;
 
-public:
-    python_console(QWidget* parent = nullptr);
+    class PythonConsole : public QTextEdit, public PythonContextSubscriber
+    {
+        Q_OBJECT
 
-    void keyPressEvent(QKeyEvent* e) Q_DECL_OVERRIDE;
-    void mousePressEvent(QMouseEvent* event) Q_DECL_OVERRIDE;
+    public:
+        PythonConsole(QWidget* parent = nullptr);
 
-    virtual void handle_stdout(const QString& output) Q_DECL_OVERRIDE;
-    virtual void handle_error(const QString& output) Q_DECL_OVERRIDE;
-    virtual void clear() Q_DECL_OVERRIDE;
+        void keyPressEvent(QKeyEvent* e) Q_DECL_OVERRIDE;
+        void mousePressEvent(QMouseEvent* event) Q_DECL_OVERRIDE;
 
-    void display_prompt();
+        virtual void handle_stdout(const QString& output) Q_DECL_OVERRIDE;
+        virtual void handle_error(const QString& output) Q_DECL_OVERRIDE;
+        virtual void clear() Q_DECL_OVERRIDE;
 
-    void interpret_command();
-    QString get_current_command();
-    void replace_current_command(const QString& new_command);
-    void append_to_current_command(const QString& new_command);
+        void display_prompt();
 
-    bool selection_editable();
+        void interpret_command();
+        QString get_current_command();
+        void replace_current_command(const QString& new_command);
+        void append_to_current_command(const QString& new_command);
 
-    void handle_up_key_pressed();
-    void handle_down_key_pressed();
+        bool selection_editable();
 
-    void handle_tab_key_pressed();
+        void handle_up_key_pressed();
+        void handle_down_key_pressed();
 
-    void insertAtEnd(const QString& text, QColor textColor);
+        void handle_tab_key_pressed();
 
-private:
-    QColor m_prompt_color;
-    QColor m_standard_color;
-    QColor m_error_color;
+        void insertAtEnd(const QString& text, QColor textColor);
 
-    QString m_standard_prompt;
-    QString m_compound_prompt;
+    private:
+        QColor m_prompt_color;
+        QColor m_standard_color;
+        QColor m_error_color;
 
-    int m_prompt_block_number;
-    int m_prompt_length;
-    int m_prompt_end_position;
-    int m_compound_prompt_end_position;
+        QString m_standard_prompt;
+        QString m_compound_prompt;
 
-    bool m_in_compound_prompt;
-    bool m_in_completion;
+        int m_prompt_block_number;
+        int m_prompt_length;
+        int m_prompt_end_position;
+        int m_compound_prompt_end_position;
 
-    QString m_current_compound_input;
-    QString m_current_input;
+        bool m_in_compound_prompt;
+        bool m_in_completion;
 
-    int m_current_history_index;
-    int m_current_completer_index;
+        QString m_current_compound_input;
+        QString m_current_input;
 
-    std::shared_ptr<python_console_history> m_history;
-};
+        int m_current_history_index;
+        int m_current_completer_index;
 
-#endif    // PYTHON_CONSOLE_H
+        std::shared_ptr<PythonConsoleHistory> m_history;
+    };
+}
