@@ -55,8 +55,9 @@ namespace hal
 
         enum class grid_type
         {
-            lines,
-            dots
+            Lines,
+            Dots,
+            None
         };
     }
 }

@@ -44,7 +44,7 @@
 namespace hal
 {
     GraphGraphicsView::GraphGraphicsView(GraphWidget* parent)
-        : QGraphicsView(parent), m_graph_widget(parent), m_minimap_enabled(false), m_grid_enabled(true), m_grid_clusters_enabled(true), m_grid_type(graph_widget_constants::grid_type::lines),
+        : QGraphicsView(parent), m_graph_widget(parent), m_minimap_enabled(false), m_grid_enabled(true), m_grid_clusters_enabled(true), m_grid_type(graph_widget_constants::grid_type::Lines),
           m_zoom_modifier(Qt::NoModifier), m_zoom_factor_base(1.0015)
     {
         connect(&g_selection_relay, &SelectionRelay::subfocus_changed, this, &GraphGraphicsView::conditional_update);
@@ -67,6 +67,18 @@ namespace hal
         m_drag_modifier                    = Qt::KeyboardModifier(drag_modifier_setting);
         unsigned int move_modifier_setting = g_settings_manager.get("graph_view/move_modifier").toUInt();
         m_move_modifier                    = Qt::KeyboardModifier(move_modifier_setting);
+
+        // might think about Q_ENUM to avoid separate enum and config file tokens
+        const char* gridTypeNames[] = { "lines", "dots", "none", 0};
+
+        QString sGridType = g_settings_manager.get("graph_view/grid_type").toString();
+        for (int i=0; gridTypeNames[i]; i++)
+            if (sGridType == gridTypeNames[i])
+            {
+                m_grid_type = static_cast<graph_widget_constants::grid_type>(i);
+                break;
+            }
+
         #ifdef GUI_DEBUG_GRID
         m_debug_gridpos_enable = g_settings_manager.get("debug/grid").toBool();
         #endif
