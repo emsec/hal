@@ -19,6 +19,7 @@
 #include <QTreeView>
 #include <QVBoxLayout>
 #include <core/log.h>
+#include <QDebug>
 
 namespace hal
 {
@@ -115,8 +116,13 @@ namespace hal
         context_menu.addAction(&add_child_action);
         context_menu.addAction(&change_name_action);
         context_menu.addAction(&change_color_action);
-        context_menu.addAction(&delete_action);
 
+        u32 module_id = get_ModuleItem_from_index(index)->id();
+        auto module = g_netlist->get_module_by_id(module_id);
+
+        if(!(module == g_netlist->get_top_module()))
+            context_menu.addAction(&delete_action);
+ 
         QAction* clicked = context_menu.exec(m_tree_view->viewport()->mapToGlobal(point));
 
         if (!clicked)
