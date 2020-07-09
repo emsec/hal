@@ -48,9 +48,6 @@ namespace hal
         Q_PROPERTY(QString delete_icon_style READ delete_icon_style WRITE set_delete_icon_style)
         Q_PROPERTY(QString duplicate_icon_path READ duplicate_icon_path WRITE set_duplicate_icon_path)
         Q_PROPERTY(QString duplicate_icon_style READ duplicate_icon_style WRITE set_duplicate_icon_style)
-        Q_PROPERTY(QString timestamp_icon_path READ timestamp_icon_path WRITE set_timestamp_icon_path)
-        Q_PROPERTY(QString timestamp_icon_style READ timestamp_icon_style WRITE set_timestamp_icon_style)
-
 
     public:
         ContextManagerWidget(GraphTabWidget* tab_view, QWidget* parent = nullptr);
@@ -80,9 +77,6 @@ namespace hal
         void set_delete_icon_style(const QString &style);
         void set_duplicate_icon_path(const QString &path);
         void set_duplicate_icon_style(const QString &style);
-        void set_timestamp_icon_path(const QString &path);
-        void set_timestamp_icon_style(const QString &style);
-
 
     public Q_SLOTS:
         void handle_context_created(GraphContext* context);
@@ -109,10 +103,6 @@ namespace hal
         QAction* m_delete_action;
         QString m_delete_icon_path;
         QString m_delete_icon_style;
-
-        QAction* m_timestamp_action;
-        QString m_timestamp_icon_path;
-        QString m_timestamp_icon_style;
 
         u32 m_context_counter = 0;
 
