@@ -27,7 +27,7 @@ namespace hal
             return std::make_shared<Netlist>(gate_library);
         }
 
-        std::shared_ptr<Netlist> load_netlist(const std::filesystem::path& hdl_file, const std::string& language, const std::filesystem::path& gate_library_file)
+        std::shared_ptr<Netlist> load_netlist(const std::filesystem::path& hdl_file, const std::string& parser_name, const std::filesystem::path& gate_library_file)
         {
             if (access(hdl_file.c_str(), F_OK | R_OK) == -1)
             {
@@ -43,7 +43,7 @@ namespace hal
                 return nullptr;
             }
 
-            std::shared_ptr<Netlist> nl = HDLParserDispatcher::parse(lib, language, hdl_file);
+            std::shared_ptr<Netlist> nl = HDLParserDispatcher::parse(hdl_file, parser_name, lib);
 
             return nl;
         }
@@ -69,25 +69,25 @@ namespace hal
                 return nullptr;
             }
 
-            std::filesystem::path file_name = std::filesystem::path(args.get_parameter("--input-file"));
+            std::filesystem::path hdl_file = std::filesystem::path(args.get_parameter("--input-file"));
 
-            if (access(file_name.c_str(), F_OK | R_OK) == -1)
+            if (access(hdl_file.c_str(), F_OK | R_OK) == -1)
             {
-                log_critical("netlist", "cannot access file '{}'.", file_name.string());
+                log_critical("netlist", "cannot access file '{}'.", hdl_file.string());
                 return nullptr;
             }
 
-            auto extension = file_name.extension();
+            auto extension = hdl_file.extension();
 
             std::shared_ptr<Netlist> nl = nullptr;
 
             if (extension == ".hal")
             {
-                nl = netlist_serializer::deserialize_from_file(file_name);
+                nl = netlist_serializer::deserialize_from_file(hdl_file);
             }
             else
             {
-                nl = HDLParserDispatcher::parse(file_name, args);
+                nl = HDLParserDispatcher::parse(hdl_file, args);
             }
 
             return nl;

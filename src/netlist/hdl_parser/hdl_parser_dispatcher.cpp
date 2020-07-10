@@ -93,42 +93,63 @@ namespace hal
             return {"vhdl", "verilog"};
         }
 
-        std::shared_ptr<Netlist> parse(const std::filesystem::path& file_name, const ProgramArguments& args)
+        std::shared_ptr<Netlist> parse(const std::filesystem::path& hdl_file, const ProgramArguments& args)
         {
-            log_info("hdl_parser", "finding a parser for '{}'...", file_name.string());
+            std::string parser_name;
+            std::shared_ptr<GateLibrary> gate_library;
 
-            // all supported extension->parser_name mappings
-            std::map<std::string, std::string> file_endings = {{".vhdl", "vhdl"}, {".vhd", "vhdl"}, {".v", "verilog"}};
-            auto extension                                  = core_utils::to_lower(file_name.extension().string());
+            //log_info("hdl_parser", "finding a parser for '{}'...", hdl_file.string());
 
-            auto parser_name = file_endings[extension];
-            if (parser_name.empty())
+            if (args.is_option_set("--parser"))
             {
-                if (!args.is_option_set("--parser"))
-                {
-                    log_error("hdl_parser", "no parser found for '{}'. Use '--parser' to use a specific parser.", extension);
-                    return nullptr;
-                }
                 parser_name = args.get_parameter("--parser");
             }
-            else
-            {
-                log_info("hdl_parser", "selected parser '{}' by file name extension.", parser_name);
-            }
 
-            std::vector<std::shared_ptr<GateLibrary>> gate_libraries;
             if (args.is_option_set("--gate-library"))
             {
-                auto user_lib = gate_library_manager::get_gate_library(args.get_parameter("--gate-library"));
-                if (user_lib == nullptr)
+                std::string gate_library_file = args.get_parameter("--gate-library");
+                gate_library                  = gate_library_manager::get_gate_library(gate_library_file);
+                if (gate_library == nullptr)
                 {
-                    return nullptr;
+                    log_warning("hdl_parser", "invalid gate library '{}' specified by user", gate_library_file);
                 }
-                gate_libraries.push_back(user_lib);
+            }
+
+            return parse(hdl_file, parser_name, gate_library);
+        }
+
+        std::shared_ptr<Netlist> parse(const std::filesystem::path& hdl_file, std::string parser_name, const std::shared_ptr<GateLibrary>& gate_library)
+        {
+            std::vector<std::shared_ptr<GateLibrary>> gate_libraries;
+
+            if (!parser_name.empty())
+            {
+                log_info("hdl_parser", "selected parser '{}' provided by user.", parser_name);
             }
             else
             {
-                log_warning("hdl_parser", "no (valid) gate library specified. trying to auto-detect gate library...");
+                std::map<std::string, std::string> file_endings = {{".vhdl", "vhdl"}, {".vhd", "vhdl"}, {".v", "verilog"}};
+                std::string extension                           = core_utils::to_lower(hdl_file.extension().string());
+
+                if (const auto it = file_endings.find(extension); it == file_endings.end())
+                {
+                    log_error("hdl_parser", "could not handle file extension '{}'.", extension);
+                    return nullptr;
+                }
+                else
+                {
+                    parser_name = it->second;
+                    log_info("hdl_parser", "selected parser '{}' by file name extension.", parser_name);
+                }
+            }
+
+            if (gate_library != nullptr)
+            {
+                gate_libraries = {gate_library};
+            }
+            else
+            {
+                log_warning("hdl_parser", "no (valid) gate library specified, trying to auto-detect gate library...");
                 gate_library_manager::load_all();
 
                 for (const auto& lib_it : gate_library_manager::get_gate_libraries())
@@ -139,28 +160,11 @@ namespace hal
 
             if (parser_name == "vhdl")
             {
-                return parse_hdl<HDLParserVHDL>(file_name, gate_libraries);
+                return parse_hdl<HDLParserVHDL>(hdl_file, gate_libraries);
             }
             else if (parser_name == "verilog")
             {
-                return parse_hdl<HDLParserVerilog>(file_name, gate_libraries);
-            }
-            else
-            {
-                log_error("hdl_parser", "parser '{}' is unknown.", parser_name);
-                return nullptr;
-            }
-        }
-
-        std::shared_ptr<Netlist> parse(const std::shared_ptr<GateLibrary>& gate_library, const std::string& parser_name, const std::filesystem::path& file_name)
-        {
-            if (parser_name == "vhdl")
-            {
-                return parse_hdl<HDLParserVHDL>(file_name, {gate_library});
-            }
-            else if (parser_name == "verilog")
-            {
-                return parse_hdl<HDLParserVerilog>(file_name, {gate_library});
+                return parse_hdl<HDLParserVerilog>(hdl_file, gate_libraries);
             }
             else
             {

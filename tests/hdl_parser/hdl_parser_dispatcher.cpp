@@ -182,22 +182,16 @@ namespace hal {
             std::shared_ptr<GateLibrary> min_gl = gate_library_manager::load_file(m_g_lib_path);
             {
                 // Parse a vhdl and a verilog file by passing the parser name and the GateLibrary name. The file is passed by the std::filesystem::path.
-                std::shared_ptr<Netlist>
-                    nl_vhdl = HDLParserDispatcher::parse(min_gl, "vhdl", vhdl_file_without_extension);
-                std::shared_ptr<Netlist> nl_verilog =
-                    HDLParserDispatcher::parse(min_gl, "verilog", verilog_file_without_extension);
+                std::shared_ptr<Netlist> nl_vhdl = HDLParserDispatcher::parse(vhdl_file_without_extension, "vhdl", min_gl);
+                std::shared_ptr<Netlist> nl_verilog = HDLParserDispatcher::parse(verilog_file_without_extension, "verilog", min_gl);
 
                 EXPECT_NE(nl_vhdl, nullptr);
                 EXPECT_NE(nl_verilog, nullptr);
             }
             {
                 // Parse a vhdl and a verilog file by passing the parser name and the GateLibrary name. The file is passed by a string.
-                std::shared_ptr<Netlist> nl_vhdl =
-                    HDLParserDispatcher::parse(min_gl, "vhdl", vhdl_file_without_extension.string());
-                std::shared_ptr<Netlist> nl_verilog = HDLParserDispatcher::parse(min_gl,
-                                                                                 "verilog",
-                                                                                 verilog_file_without_extension
-                                                                                     .string());
+                std::shared_ptr<Netlist> nl_vhdl = HDLParserDispatcher::parse(vhdl_file_without_extension.string(), "vhdl", min_gl);
+                std::shared_ptr<Netlist> nl_verilog = HDLParserDispatcher::parse(verilog_file_without_extension.string(), "verilog", min_gl);
 
                 EXPECT_NE(nl_vhdl, nullptr);
                 EXPECT_NE(nl_verilog, nullptr);
@@ -205,10 +199,7 @@ namespace hal {
             // NEGATIVE
             {
                 // Pass an unknown file path
-                std::shared_ptr<Netlist> nl = HDLParserDispatcher::parse(min_gl,
-                                                                         "verilog",
-                                                                         std::filesystem::path(
-                                                                             "this/path/does/not/exist.v"));
+                std::shared_ptr<Netlist> nl = HDLParserDispatcher::parse(std::filesystem::path("this/path/does/not/exist.v"), "verilog", min_gl);
 
                 EXPECT_EQ(nl, nullptr);
             }
