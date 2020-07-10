@@ -410,7 +410,7 @@ namespace hal
 
         pin.direction = direction;
 
-        do
+        while (pin_str.remaining() > 0)
         {
             auto next_token = pin_str.consume();
             if (next_token == "direction")
@@ -453,7 +453,7 @@ namespace hal
                 pin.z_function = pin_str.consume().string;
                 pin_str.consume(";", true);
             }
-        } while (pin_str.remaining() > 0);
+        }
 
         return pin;
     }
