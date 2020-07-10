@@ -27,37 +27,44 @@ namespace hal
             return std::make_shared<Netlist>(gate_library);
         }
 
-        std::shared_ptr<Netlist> load_netlist(const std::filesystem::path& hdl_file, const std::string& parser_name, const std::filesystem::path& gate_library_file)
+        std::shared_ptr<Netlist> load_netlist(const std::filesystem::path& hdl_file, const std::filesystem::path& gate_library_file, const std::string& parser_name)
         {
             if (access(hdl_file.c_str(), F_OK | R_OK) == -1)
             {
-                log_critical("netlist", "cannot access file '{}'.", hdl_file.string());
+                log_critical("netlist", "could not access file '{}'.", hdl_file.string());
                 return nullptr;
             }
 
             auto lib = gate_library_manager::load_file(gate_library_file);
             if (!lib)
             {
-                log_critical("netlist", "cannot read netlist without gate library.");
+                log_critical("netlist", "could not load specified gate library.");
                 return nullptr;
             }
 
-            std::shared_ptr<Netlist> nl = HDLParserDispatcher::parse(hdl_file, parser_name, lib);
+            return HDLParserDispatcher::parse(hdl_file, parser_name, lib);
+        }
 
-            return nl;
+        std::vector<std::shared_ptr<Netlist>> load_netlists(const std::filesystem::path& hdl_file, const std::string& parser_name)
+        {
+            if (access(hdl_file.c_str(), F_OK | R_OK) == -1)
+            {
+                log_critical("netlist", "could not access file '{}'.", hdl_file.string());
+                return {};
+            }
+
+            return HDLParserDispatcher::parse_all(hdl_file, parser_name);
         }
 
         std::shared_ptr<Netlist> load_netlist(const std::filesystem::path& hal_file)
         {
             if (access(hal_file.c_str(), F_OK | R_OK) == -1)
             {
-                log_critical("netlist", "cannot access file '{}'.", hal_file.string());
+                log_critical("netlist", "could not access file '{}'.", hal_file.string());
                 return nullptr;
             }
 
-            std::shared_ptr<Netlist> nl = netlist_serializer::deserialize_from_file(hal_file);
-
-            return nl;
+            return netlist_serializer::deserialize_from_file(hal_file);
         }
 
         std::shared_ptr<Netlist> load_netlist(const ProgramArguments& args)
@@ -72,7 +79,7 @@ namespace hal
 
             if (access(hdl_file.c_str(), F_OK | R_OK) == -1)
             {
-                log_critical("netlist", "cannot access file '{}'.", hdl_file.string());
+                log_critical("netlist", "could not access file '{}'.", hdl_file.string());
                 return nullptr;
             }
 
@@ -82,14 +89,12 @@ namespace hal
 
             if (extension == ".hal")
             {
-                nl = netlist_serializer::deserialize_from_file(hdl_file);
+                return netlist_serializer::deserialize_from_file(hdl_file);
             }
             else
             {
-                nl = HDLParserDispatcher::parse(hdl_file, args);
+                return HDLParserDispatcher::parse(hdl_file, args);
             }
-
-            return nl;
         }
     }    // namespace netlist_factory
 }    // namespace hal

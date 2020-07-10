@@ -73,5 +73,14 @@ namespace hal
          * @returns The netlist representation of the hdl code or a nullpointer on error.
          */
         std::shared_ptr<Netlist> parse(const std::filesystem::path& hdl_file, std::string parser_name = "", const std::shared_ptr<GateLibrary>& gate_library = nullptr);
+
+        /**
+         * Tries to match the HDL file with each of the preloaded gate libraries and returns a vector of netlist objects for which the matching was successful.
+         *
+         * @param[in] hdl_file - The netlist file.
+         * @param[in] parser_name - The name of the parser to use, e.g. vhdl, verilog...
+         * @returns A vector containing one netlist per matching gate library.
+         */
+        std::vector<std::shared_ptr<Netlist>> parse_all(const std::filesystem::path& hdl_file, std::string parser_name = "");
     }    // namespace HDLParserDispatcher
 }    // namespace hal

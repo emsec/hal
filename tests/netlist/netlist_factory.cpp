@@ -119,7 +119,7 @@ namespace hal {
                                                                                       "    );\n"
                                                                                       "end STRUCTURE;");
             {
-                std::shared_ptr<Netlist> nl = netlist_factory::load_netlist(tmp_hdl_file_path, "vhdl", m_g_lib_path);
+                std::shared_ptr<Netlist> nl = netlist_factory::load_netlist(tmp_hdl_file_path, m_g_lib_path, "vhdl");
 
                 ASSERT_NE(nl, nullptr);
                 EXPECT_EQ(nl->get_gate_library()->get_name(), "MIN_TEST_GATE_LIBRARY");
@@ -127,10 +127,7 @@ namespace hal {
             {
                 // Try to create a netlist by a non-accessible (non-existing) file
                 NO_COUT_TEST_BLOCK;
-                std::shared_ptr<Netlist> nl =
-                    netlist_factory::load_netlist(std::filesystem::path("/this/file/does/not/exist"),
-                                                  "vhdl",
-                                                  m_g_lib_path);
+                std::shared_ptr<Netlist> nl = netlist_factory::load_netlist(std::filesystem::path("/this/file/does/not/exist"), m_g_lib_path, "vhdl");
 
                 EXPECT_EQ(nl, nullptr);
             }
@@ -138,10 +135,7 @@ namespace hal {
                 // Try to create a netlist by passing a path that does not lead to a Gate library
                 NO_COUT_TEST_BLOCK;
 
-                std::shared_ptr<Netlist> nl = netlist_factory::load_netlist(tmp_hdl_file_path,
-                                                                            "vhdl",
-                                                                            std::filesystem::path(
-                                                                                "/this/file/does/not/exist"));
+                std::shared_ptr<Netlist> nl = netlist_factory::load_netlist(tmp_hdl_file_path, std::filesystem::path("/this/file/does/not/exist"), "vhdl");
 
                 EXPECT_EQ(nl, nullptr);
             }

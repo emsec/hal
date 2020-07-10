@@ -46,20 +46,20 @@ namespace hal
         /**
          * Creates a new netlist for a specific gate library.
          *
-         * @param[in] gate_library - The underlying gate library.
+         * @param[in] gate_library - The gate library.
          * @returns The new netlist.
          */
         NETLIST_API std::shared_ptr<Netlist> create_netlist(const std::shared_ptr<GateLibrary>& gate_library);
 
         /**
-         * Creates a new netlist for a specific file.
+         * Creates a new netlist from an HDL file by matching it with a pre-loaded gate library.
          *
-         * @param[in] hdl_file - The netlist file.
-         * @param[in] parser_name - Programming language used in \p file_name.
-         * @param[in] gate_library_file - Name of hardware gate library file.
+         * @param[in] hdl_file - The HDL file.
+         * @param[in] gate_library_file - Path to the gate library file.
+         * @param[in] parser_name - Name of the parser to be used.
          * @returns The new netlist.
          */
-        NETLIST_API std::shared_ptr<Netlist> load_netlist(const std::filesystem::path& hdl_file, const std::string& parser_name, const std::filesystem::path& gate_library_file);
+        NETLIST_API std::shared_ptr<Netlist> load_netlist(const std::filesystem::path& hdl_file, const std::filesystem::path& gate_library_file, const std::string& parser_name = "");
 
         /**
          * Creates a new netlist for a specific '.hal' file.
@@ -78,5 +78,14 @@ namespace hal
          * @returns The new netlist.
          */
         NETLIST_API std::shared_ptr<Netlist> load_netlist(const ProgramArguments& args);
+
+        /**
+         * Creates a new netlist from an HDL file for each matching pre-loaded gate library.
+         *
+         * @param[in] hdl_file - The HDL file.
+         * @param[in] parser_name - Name of the parser to be used.
+         * @returns A vector of netlists.
+         */
+        NETLIST_API std::vector<std::shared_ptr<Netlist>> load_netlists(const std::filesystem::path& hdl_file, const std::string& parser_name = "");
     }    // namespace netlist_factory
 }    // namespace hal
