@@ -36,7 +36,6 @@ namespace hal
             }
 
             auto lib = gate_library_manager::load_file(gate_library_file);
-
             if (!lib)
             {
                 log_critical("netlist", "cannot read netlist without gate library.");

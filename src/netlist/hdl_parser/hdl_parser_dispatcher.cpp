@@ -28,7 +28,7 @@ namespace hal
                 ifs.open(file_name.c_str(), std::ifstream::in);
                 if (!ifs.is_open())
                 {
-                    log_error("hdl_parser", "cannot open '{}'", file_name.string());
+                    log_error("hdl_parser", "could not open file '{}'", file_name.string());
                     return nullptr;
                 }
                 ss << ifs.rdbuf();
@@ -37,7 +37,7 @@ namespace hal
                 auto parser = T(ss);
                 if (!parser.parse())
                 {
-                    log_error("hdl_parser", "parser cannot parse file '{}'.", file_name.string());
+                    log_error("hdl_parser", "could not parse file '{}'.", file_name.string());
                     return nullptr;
                 }
 
@@ -55,14 +55,14 @@ namespace hal
                     auto gl = gate_library_manager::get_gate_library(gate_library->get_path());
                     if (gl == nullptr)
                     {
-                        log_critical("netlist", "error loading gate library '{}'.", gate_library->get_name());
+                        log_critical("netlist", "could not load gate library '{}'.", gate_library->get_name());
                         return nullptr;
                     }
 
                     std::shared_ptr<Netlist> netlist = parser.instantiate(gl);
                     if (netlist == nullptr)
                     {
-                        log_error("hdl_parser", "parser cannot instantiate file '{}' using gate library '{}'.", file_name.string(), gate_library->get_name());
+                        log_error("hdl_parser", "could not instantiate file '{}' using gate library '{}'.", file_name.string(), gate_library->get_name());
                         continue;
                     }
 
@@ -76,7 +76,7 @@ namespace hal
                     return netlist;
                 }
 
-                log_error("hdl_parser", "no suitable gate library found!");
+                log_error("hdl_parser", "could not find suitable gate library.");
                 return nullptr;
             }
         }    // namespace
@@ -111,7 +111,7 @@ namespace hal
                 gate_library                  = gate_library_manager::get_gate_library(gate_library_file);
                 if (gate_library == nullptr)
                 {
-                    log_warning("hdl_parser", "invalid gate library '{}' specified by user", gate_library_file);
+                    log_warning("hdl_parser", "invalid gate library '{}' specified by user.", gate_library_file);
                 }
             }
 
