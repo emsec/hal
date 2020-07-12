@@ -158,11 +158,18 @@ namespace hal
                                         right_size += s.get_size();
                                     }
 
-                                    if (left_size != right_size)
+                                    // verify matching port assignment width for VHDL parser
+                                    if constexpr (!std::is_same<T, std::string>::value)
                                     {
-                                        log_error(
-                                            "hdl_parser", "port assignment width mismatch: left side has size {} and right side has size {} in line {}", left_size, right_size, port.get_line_number());
-                                        return nullptr;
+                                        if (left_size != right_size)
+                                        {
+                                            log_error("hdl_parser",
+                                                      "port assignment width mismatch: left side has size {} and right side has size {} in line {}",
+                                                      left_size,
+                                                      right_size,
+                                                      port.get_line_number());
+                                            return nullptr;
+                                        }
                                     }
                                 }
                                 else
@@ -242,10 +249,18 @@ namespace hal
                                     right_size += s.get_size();
                                 }
 
-                                if (left_size != right_size)
+                                // verify matching port assignment width for VHDL parser
+                                if constexpr (!std::is_same<T, std::string>::value)
                                 {
-                                    log_warning(
-                                        "hdl_parser", "port assignment width mismatch: port has width {} and assigned signal has width {} in line {}", left_size, right_size, port.get_line_number());
+                                    if (left_size != right_size)
+                                    {
+                                        log_error("hdl_parser",
+                                                  "port assignment width mismatch: port has width {} and assigned signal has width {} in line {}",
+                                                  left_size,
+                                                  right_size,
+                                                  port.get_line_number());
+                                        return nullptr;
+                                    }
                                 }
                             }
                         }
@@ -1453,7 +1468,7 @@ namespace hal
                     }
                 }
 
-                unsigned int limit = (instance_assignments.size() < expanded_ports.size()) ? instance_assignments.size() : expanded_ports.size();
+                unsigned int limit = (expanded_assignments.size() < expanded_ports.size()) ? expanded_assignments.size() : expanded_ports.size();
                 for (unsigned int i = 0; i < limit; i++)
                 {
                     if (const auto it = parent_module_assignments.find(expanded_assignments[i]); it != parent_module_assignments.end())
