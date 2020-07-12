@@ -1,6 +1,7 @@
 #include "selection_details_widget/module_details_widget.h"
 
 #include "graph_widget/graph_navigation_widget.h"
+#include "input_dialog/input_dialog.h"
 #include "gui_globals.h"
 #include "netlist/gate.h"
 #include "netlist/module.h"
@@ -695,6 +696,18 @@ namespace hal
                 break;
             default:
                 break;    //cases 3-5 are currently not in use
+        }
+
+        if(curr_item->row() == 0)
+        {
+            menu.addAction("Change name", [this](){
+                InputDialog ipd("Change name", "New name", m_general_table->item(0,1)->text());
+                if(ipd.exec() == QDialog::Accepted)
+                {
+                    g_netlist->get_module_by_id(m_current_id)->set_name(ipd.text_value().toStdString());
+                    update(m_current_id);
+                }
+            });
         }
 
         menu.addAction(raw_desc, [raw_string]() { QApplication::clipboard()->setText(raw_string); });

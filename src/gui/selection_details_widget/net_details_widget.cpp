@@ -4,6 +4,7 @@
 #include "netlist/gate.h"
 #include "netlist/module.h"
 #include "netlist/net.h"
+#include "input_dialog/input_dialog.h"
 
 #include <QApplication>
 #include <QClipboard>
@@ -438,6 +439,18 @@ namespace hal
                 raw_string  = m_general_table->itemAt(pos)->text();
                 raw_desc    = "Ectract raw id (copy to clipboard)";
                 break;
+        }
+
+        if(m_general_table->itemAt(pos)->row() == 0)
+        {
+            menu.addAction("Change name", [this](){
+                InputDialog ipd("Change name", "New name", m_general_table->item(0,1)->text());
+                if(ipd.exec() == QDialog::Accepted)
+                {
+                    g_netlist->get_net_by_id(m_current_id)->set_name(ipd.text_value().toStdString());
+                    update(m_current_id);
+                }
+            });
         }
 
         if (!raw_string.isEmpty())

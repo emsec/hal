@@ -7,6 +7,7 @@
 #include "gui_utils/geometry.h"
 
 #include "graph_widget/graph_navigation_widget.h"
+#include "input_dialog/input_dialog.h"
 #include "netlist/module.h"
 
 #include <QApplication>
@@ -494,6 +495,19 @@ namespace hal
             case 2: python_command += "get_id()"; description = "Extract id as python code (copy to clipboard)";
                     raw_string = m_general_table->itemAt(pos)->text(); raw_desc = "Extract raw id as string (copy to clipboard)";break;
             case 3: python_command += "get_module()"; description = "Extract module as python code (copy to clipboard)"; break;
+        }
+
+        //special case row 0, change name is also an option
+        if(m_general_table->itemAt(pos)->row() == 0)
+        {
+            menu.addAction("Change name", [this](){
+                InputDialog ipd("Change name", "New name", m_general_table->item(0,1)->text());
+                if(ipd.exec() == QDialog::Accepted)
+                {
+                    g_netlist->get_gate_by_id(m_current_id)->set_name(ipd.text_value().toStdString());
+                    update(m_current_id);
+                }
+            });
         }
 
         if(!raw_desc.isEmpty())
