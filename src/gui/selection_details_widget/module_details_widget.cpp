@@ -722,23 +722,40 @@ namespace hal
     {
         auto curr_item = m_input_ports_table->itemAt(pos);
 
-        if (!curr_item || curr_item->column() != 2)
+        if (!curr_item || curr_item->column() == 1)
             return;
 
         QMenu menu;
-        auto clicked_net = g_netlist->get_net_by_id(curr_item->data(Qt::UserRole).toInt());
-        if (!g_netlist->is_global_input_net(clicked_net))
+        if(curr_item->column() == 2)
         {
-            menu.addAction("Jump to source gate", [this, curr_item]() { handle_input_net_item_clicked(curr_item); });
+            auto clicked_net = g_netlist->get_net_by_id(curr_item->data(Qt::UserRole).toInt());
+            if (!g_netlist->is_global_input_net(clicked_net))
+            {
+                menu.addAction("Jump to source gate", [this, curr_item]() { handle_input_net_item_clicked(curr_item); });
+            }
+
+            menu.addAction(QIcon(":/icons/python"), "Extract net as python code (copy to clipboard)", [this, curr_item]() {
+                QApplication::clipboard()->setText("netlist.get_net_by_id(" + curr_item->data(Qt::UserRole).toString() + ")");
+            });
+
+            menu.addAction(QIcon(":/icons/python"), "Extract sources as python code (copy to clipboard)", [this, curr_item]() {
+                QApplication::clipboard()->setText("netlist.get_net_by_id(" + curr_item->data(Qt::UserRole).toString() + ").get_sources()");
+            });
         }
-
-        menu.addAction(QIcon(":/icons/python"), "Extract net as python code (copy to clipboard)", [this, curr_item]() {
-            QApplication::clipboard()->setText("netlist.get_net_by_id(" + curr_item->data(Qt::UserRole).toString() + ")");
-        });
-
-        menu.addAction(QIcon(":/icons/python"), "Extract sources as python code (copy to clipboard)", [this, curr_item]() {
-            QApplication::clipboard()->setText("netlist.get_net_by_id(" + curr_item->data(Qt::UserRole).toString() + ").get_sources()");
-        });
+        else
+        {
+            menu.addAction("Change input port name", [this, curr_item](){
+                InputDialog ipd("Change port name", "New port name", curr_item->text());
+                if(ipd.exec() == QDialog::Accepted)
+                {
+                    auto corresponding_net = g_netlist->get_net_by_id(m_input_ports_table->item(curr_item->row(), 2)->data(Qt::UserRole).toInt());
+                    if(!corresponding_net)
+                        return;
+                    g_netlist->get_module_by_id(m_current_id)->set_input_port_name(corresponding_net, ipd.text_value().toStdString());
+                    update(m_current_id);
+                }
+            });
+        }
 
         menu.move(dynamic_cast<QWidget*>(sender())->mapToGlobal(pos));
         menu.exec();
@@ -747,23 +764,39 @@ namespace hal
     void ModuleDetailsWidget::handle_output_ports_table_menu_requested(const QPoint& pos)
     {
         auto curr_item = m_output_ports_table->itemAt(pos);
-        if (!curr_item || curr_item->column() != 2)
+        if (!curr_item || curr_item->column() == 1)
             return;
 
         QMenu menu;
-
-        auto clicked_net = g_netlist->get_net_by_id(curr_item->data(Qt::UserRole).toInt());
-        if (!g_netlist->is_global_output_net(clicked_net))
+        if(curr_item->column() == 2)
         {
-            menu.addAction("Jump to destination gate", [this, curr_item]() { handle_output_net_item_clicked(curr_item); });
-        }
-        menu.addAction(QIcon(":/icons/python"), "Extract net as python code (copy to clipboard)", [this, curr_item]() {
-            QApplication::clipboard()->setText("netlist.get_net_by_id(" + curr_item->data(Qt::UserRole).toString() + ")");
-        });
+            auto clicked_net = g_netlist->get_net_by_id(curr_item->data(Qt::UserRole).toInt());
+            if (!g_netlist->is_global_output_net(clicked_net))
+            {
+                menu.addAction("Jump to destination gate", [this, curr_item]() { handle_output_net_item_clicked(curr_item); });
+            }
+            menu.addAction(QIcon(":/icons/python"), "Extract net as python code (copy to clipboard)", [this, curr_item]() {
+                QApplication::clipboard()->setText("netlist.get_net_by_id(" + curr_item->data(Qt::UserRole).toString() + ")");
+            });
 
-        menu.addAction(QIcon(":/icons/python"), "Extract destinations as python code (copy to clipboard)", [this, curr_item]() {
-            QApplication::clipboard()->setText("netlist.get_net_by_id(" + curr_item->data(Qt::UserRole).toString() + ").get_destinations()");
-        });
+            menu.addAction(QIcon(":/icons/python"), "Extract destinations as python code (copy to clipboard)", [this, curr_item]() {
+                QApplication::clipboard()->setText("netlist.get_net_by_id(" + curr_item->data(Qt::UserRole).toString() + ").get_destinations()");
+            });
+        }
+        else
+        {
+            menu.addAction("Change output port name", [this, curr_item](){
+                InputDialog ipd("Change port name", "New port name", curr_item->text());
+                if(ipd.exec() == QDialog::Accepted)
+                {
+                    auto corresponding_net = g_netlist->get_net_by_id(m_output_ports_table->item(curr_item->row(), 2)->data(Qt::UserRole).toInt());
+                    if(!corresponding_net)
+                        return;
+                    g_netlist->get_module_by_id(m_current_id)->set_output_port_name(corresponding_net, ipd.text_value().toStdString());
+                    update(m_current_id);
+                }
+            });
+        }
 
         menu.move(dynamic_cast<QWidget*>(sender())->mapToGlobal(pos));
         menu.exec();
