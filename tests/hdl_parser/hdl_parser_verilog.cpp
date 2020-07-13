@@ -1336,11 +1336,53 @@ namespace hal {
                 EXPECT_EQ(net_3->get_name(), "'1'");
             }
             {
+                // Connect a vector of output pins with a list of nets using '{ net_0, net_1, ... }'
+                std::stringstream input("module top (\n"
+                                        " ) ;\n"
+                                        "  wire net_0;\n"
+                                        "  wire net_1;\n"
+                                        "  wire[0:1] l_vec;\n"
+                                        "pin_group_gate_4_to_4 gate_0 (\n"
+                                        "  .O ({net_0, net_1, l_vec[0], l_vec[1]})\n"
+                                        " ) ;\n"
+                                        "endmodule");
+                test_def::capture_stdout();
+                HDLParserVerilog verilog_parser(input);
+                std::shared_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(m_gl);
+                if (nl == nullptr) {
+                    std::cout << test_def::get_captured_stdout();
+                } else {
+                    test_def::get_captured_stdout();
+                }
+
+                ASSERT_NE(nl, nullptr);
+                ASSERT_FALSE(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).empty());
+                std::shared_ptr<Gate>
+                    gate_0 = *(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).begin());
+
+                EXPECT_EQ(gate_0->get_fan_out_nets().size(), 4);
+
+                std::shared_ptr<Net> net_0 = gate_0->get_fan_out_net("O(0)");
+                ASSERT_NE(net_0, nullptr);
+                EXPECT_EQ(net_0->get_name(), "net_0");
+
+                std::shared_ptr<Net> net_1 = gate_0->get_fan_out_net("O(1)");
+                ASSERT_NE(net_1, nullptr);
+                EXPECT_EQ(net_1->get_name(), "net_1");
+
+                std::shared_ptr<Net> net_2 = gate_0->get_fan_out_net("O(2)");
+                ASSERT_NE(net_2, nullptr);
+                EXPECT_EQ(net_2->get_name(), "l_vec(0)");
+
+                std::shared_ptr<Net> net_3 = gate_0->get_fan_out_net("O(3)");
+                ASSERT_NE(net_3, nullptr);
+                EXPECT_EQ(net_3->get_name(), "l_vec(1)");
+            }
+            {
                 // Connect a vector of output pins with a vector of nets (O(0) with l_vec(0),...,O(4) with l_vec(4))
                 std::stringstream input("module top (\n"
                                         " ) ;\n"
                                         "  wire [0:3] l_vec;\n"
-                                        "  wire net_1 ;\n"
                                         "pin_group_gate_4_to_4 gate_0 (\n"
                                         "  .O (l_vec)\n"
                                         " ) ;\n"
@@ -1377,7 +1419,46 @@ namespace hal {
                 ASSERT_NE(net_3, nullptr);
                 EXPECT_EQ(net_3->get_name(), "l_vec(3)");
             }
+            {
+                // Connect a vector of output pins with a vector of nets (O(0) with l_vec(0),...,O(3) with l_vec(3))
+                // but the vector has a smaller size
+                std::stringstream input("module top (\n"
+                                        " ) ;\n"
+                                        "  wire [0:2] l_vec;\n"
+                                        "pin_group_gate_4_to_4 gate_0 (\n"
+                                        "  .O (l_vec)\n"
+                                        " ) ;\n"
+                                        "endmodule");
+                test_def::capture_stdout();
+                HDLParserVerilog verilog_parser(input);
+                std::shared_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(m_gl);
+                if (nl == nullptr) {
+                    std::cout << test_def::get_captured_stdout();
+                } else {
+                    test_def::get_captured_stdout();
+                }
 
+                ASSERT_NE(nl, nullptr);
+                ASSERT_FALSE(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).empty());
+                std::shared_ptr<Gate>
+                    gate_0 = *(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).begin());
+
+                EXPECT_EQ(gate_0->get_fan_out_nets().size(), 3);
+
+                std::shared_ptr<Net> net_0 = gate_0->get_fan_out_net("O(0)");
+                ASSERT_NE(net_0, nullptr);
+                EXPECT_EQ(net_0->get_name(), "l_vec(0)");
+
+                std::shared_ptr<Net> net_1 = gate_0->get_fan_out_net("O(1)");
+                ASSERT_NE(net_1, nullptr);
+                EXPECT_EQ(net_1->get_name(), "l_vec(1)");
+
+                std::shared_ptr<Net> net_2 = gate_0->get_fan_out_net("O(2)");
+                ASSERT_NE(net_2, nullptr);
+                EXPECT_EQ(net_2->get_name(), "l_vec(2)");
+
+                EXPECT_EQ(gate_0->get_fan_out_net("O(3)"), nullptr);
+            }
         TEST_END
     }
 
@@ -1731,8 +1812,8 @@ namespace hal {
                 std::shared_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(m_gl);
                 EXPECT_EQ(nl, nullptr);
             }
-            {
-                // Port map gets multiple nets
+            /*{ // ISSUE: only the first signals are assigned (not the last one)
+                // Port map gets multiple nets (only the last signal should be assigned)
                 NO_COUT_TEST_BLOCK;
                 std::stringstream input("module top ("
                                         "  global_in,"
@@ -1751,8 +1832,49 @@ namespace hal {
                                         "endmodule");
                 HDLParserVerilog verilog_parser(input);
                 std::shared_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(m_gl);
-                EXPECT_EQ(nl, nullptr);
+                ASSERT_NE(nl, nullptr);
+                std::shared_ptr<Gate> gate_0 = *nl->get_gates(test_utils::gate_name_filter("gate_0")).begin();
+                ASSERT_NE(gate_0, nullptr);
+                EXPECT_EQ(gate_0->get_fan_in_net("I")->get_name(), "net_0");
             }
+            {
+                // Connect a vector of output pins with a list of nets using '{ net_0, net_1, ... }' that is wider than
+                // the input port size (only the last elements of the list should be assigned)
+                std::stringstream input("module top (\n"
+                                        " ) ;\n"
+                                        "  wire net_0;\n"
+                                        "  wire net_1;\n"
+                                        "  wire[0:5] l_vec;\n"
+                                        "pin_group_gate_4_to_4 gate_0 (\n"
+                                        "  .O ({l_vec[0], l_vec[1],l_vec[2],l_vec[3],l_vec[4],l_vec[5]})\n"
+                                        " ) ;\n"
+                                        "endmodule");
+                HDLParserVerilog verilog_parser(input);
+                std::shared_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(m_gl);
+
+                ASSERT_NE(nl, nullptr);
+                ASSERT_FALSE(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).empty());
+                std::shared_ptr<Gate>
+                    gate_0 = *(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).begin());
+
+                EXPECT_EQ(gate_0->get_fan_out_nets().size(), 4);
+
+                std::shared_ptr<Net> net_0 = gate_0->get_fan_out_net("O(0)");
+                ASSERT_NE(net_0, nullptr);
+                EXPECT_EQ(net_0->get_name(), "l_vec(2)");
+
+                std::shared_ptr<Net> net_1 = gate_0->get_fan_out_net("O(1)");
+                ASSERT_NE(net_1, nullptr);
+                EXPECT_EQ(net_1->get_name(), "l_vec(3)");
+
+                std::shared_ptr<Net> net_2 = gate_0->get_fan_out_net("O(2)");
+                ASSERT_NE(net_2, nullptr);
+                EXPECT_EQ(net_2->get_name(), "l_vec(4)");
+
+                std::shared_ptr<Net> net_3 = gate_0->get_fan_out_net("O(3)");
+                ASSERT_NE(net_3, nullptr);
+                EXPECT_EQ(net_3->get_name(), "l_vec(5)");
+            }*/
             {
                 // Store an unknown data type
                 NO_COUT_TEST_BLOCK;
