@@ -22,8 +22,8 @@ namespace hal
 {
     ModuleDetailsWidget::ModuleDetailsWidget(QWidget* parent) : QWidget(parent)
     {
+        init_settings();
         m_current_id = 0;
-
         m_key_font = QFont("Iosevka");
         m_key_font.setBold(true);
         m_key_font.setPixelSize(13);
@@ -50,17 +50,22 @@ namespace hal
         QHBoxLayout* intermediate_layout_op = new QHBoxLayout();
         intermediate_layout_op->setContentsMargins(3, 3, 0, 0);
         intermediate_layout_op->setSpacing(0);
+        QHBoxLayout* intermediate_layout_df = new QHBoxLayout();
+        intermediate_layout_df->setContentsMargins(3, 3, 0, 0);
+        intermediate_layout_df->setSpacing(0);
 
         m_general_info_button = new QPushButton("General Information", this);
         m_general_info_button->setEnabled(false);
         m_input_ports_button  = new QPushButton("Input Ports", this);
         m_output_ports_button = new QPushButton("Output Ports", this);
+        m_data_fields_button = new QPushButton("Data Fields", this);
 
         m_general_table      = new QTableWidget(6, 2);
         m_input_ports_table  = new QTableWidget(0, 3);
         m_output_ports_table = new QTableWidget(0, 3);
+        m_data_fields_table = new QTableWidget(0, 2);
 
-        QList<QTableWidget*> tmp_tables = {m_general_table, m_input_ports_table, m_output_ports_table};
+        QList<QTableWidget*> tmp_tables = {m_general_table, m_input_ports_table, m_output_ports_table, m_data_fields_table};
 
         QList<QTableWidgetItem*> tmp_general_table_static_items = {new QTableWidgetItem("Name:"),
                                                                    new QTableWidgetItem("Id:"),
@@ -97,6 +102,8 @@ namespace hal
         intermediate_layout_ip->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Fixed));
         intermediate_layout_op->addWidget(m_output_ports_table);
         intermediate_layout_op->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Fixed));
+        intermediate_layout_df->addWidget(m_data_fields_table);
+        intermediate_layout_df->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Fixed));
 
         m_top_lvl_layout->addWidget(m_general_info_button);
         m_top_lvl_layout->addLayout(intermediate_layout_gt);
@@ -106,9 +113,14 @@ namespace hal
         m_top_lvl_layout->addSpacerItem(new QSpacerItem(0, 7, QSizePolicy::Expanding, QSizePolicy::Fixed));
         m_top_lvl_layout->addWidget(m_output_ports_button);
         m_top_lvl_layout->addLayout(intermediate_layout_op);
+        m_top_lvl_layout->addSpacerItem(new QSpacerItem(0, 7, QSizePolicy::Expanding, QSizePolicy::Fixed));
+        m_top_lvl_layout->addWidget(m_data_fields_button);
+        m_top_lvl_layout->addLayout(intermediate_layout_df);
 
         m_top_lvl_layout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding));
         m_content_layout->addWidget(m_scroll_area);
+
+        m_util_list << m_input_ports_button << m_output_ports_button << m_data_fields_button;
 
         //setup the navigation_table ("activated" by clicking on an input / output pin in the 2 tables)
         //delete the table manually so its not necessarry to add a property for the stylesheet(otherwise this table is styled like the others)
@@ -119,9 +131,10 @@ namespace hal
 
         connect(m_navigation_table, &GraphNavigationWidget::navigation_requested, this, &ModuleDetailsWidget::handle_navigation_jump_requested);
 
-        connect(m_general_info_button, &QPushButton::clicked, this, &ModuleDetailsWidget::handle_buttons_clicked);
+        //connect(m_general_info_button, &QPushButton::clicked, this, &ModuleDetailsWidget::handle_buttons_clicked);
         connect(m_input_ports_button, &QPushButton::clicked, this, &ModuleDetailsWidget::handle_buttons_clicked);
         connect(m_output_ports_button, &QPushButton::clicked, this, &ModuleDetailsWidget::handle_buttons_clicked);
+        connect(m_data_fields_button, &QPushButton::clicked, this, &ModuleDetailsWidget::handle_buttons_clicked);
 
         connect(&g_netlist_relay, &NetlistRelay::netlist_marked_global_input, this, &ModuleDetailsWidget::handle_netlist_marked_global_input);
         connect(&g_netlist_relay, &NetlistRelay::netlist_marked_global_output, this, &ModuleDetailsWidget::handle_netlist_marked_global_output);
@@ -150,6 +163,9 @@ namespace hal
         connect(m_output_ports_table, &QTableWidget::customContextMenuRequested, this, &ModuleDetailsWidget::handle_output_ports_table_menu_requested);
         connect(m_input_ports_table, &QTableWidget::itemDoubleClicked, this, &ModuleDetailsWidget::handle_input_net_item_clicked);
         connect(m_output_ports_table, &QTableWidget::itemDoubleClicked, this, &ModuleDetailsWidget::handle_output_net_item_clicked);
+
+        //settings
+        connect(&g_settings_relay, &SettingsRelay::setting_changed, this, &ModuleDetailsWidget::handle_global_settings_changed);
 
         //eventfilters
         m_input_ports_table->viewport()->setMouseTracking(true);
@@ -199,6 +215,8 @@ namespace hal
 
         if (!m)
             return;
+
+        show_all_sections();
 
         //update table with general information
         m_name_item->setText(QString::fromStdString(m->get_name()));
@@ -292,6 +310,31 @@ namespace hal
 
         m_output_ports_table->resizeColumnsToContents();
         m_output_ports_table->setFixedWidth(calculate_table_size(m_output_ports_table).width());
+
+        //update data fields table
+        m_data_fields_table->clearContents();
+        m_data_fields_button->setText("Data Fields (" + QString::number(m->get_data().size()) + ")");
+        m_data_fields_table->setRowCount(m->get_data().size());
+        m_data_fields_table->setMaximumHeight(m_data_fields_table->verticalHeader()->length());
+        index = 0;
+        for(const auto& [key, value] : m->get_data())
+        {
+            QTableWidgetItem* key_item = new QTableWidgetItem(QString::fromStdString(std::get<1>(key)) + QString(":"));
+            key_item->setFont(m_key_font);
+            key_item->setFlags((Qt::ItemFlag)~Qt::ItemIsEnabled);
+            key_item->setData(Qt::UserRole, QString::fromStdString(std::get<0>(key)));
+            QTableWidgetItem* value_item = new QTableWidgetItem(QString::fromStdString(std::get<1>(value)));
+            value_item->setFlags(Qt::ItemIsEnabled);
+
+            m_data_fields_table->setItem(index, 0, key_item);
+            m_data_fields_table->setItem(index, 1, value_item);
+            index++;
+        }
+        m_data_fields_table->resizeColumnsToContents();
+        m_data_fields_table->setFixedWidth(calculate_table_size(m_data_fields_table).width());
+
+        if(m_hide_empty_sections)
+            hide_empty_sections();
     }
 
     void ModuleDetailsWidget::handle_netlist_marked_global_input(std::shared_ptr<Netlist> netlist, u32 associated_data)
@@ -926,5 +969,59 @@ namespace hal
             g_selection_relay.relay_selection_changed(this);
         }
         m_navigation_table->hide();
+    }
+
+    void ModuleDetailsWidget::show_all_sections()
+    {
+        for(auto section_btn : m_util_list)
+        {
+            int index = m_top_lvl_layout->indexOf(section_btn);
+            section_btn->show();
+            if(section_btn != m_data_fields_button)
+            {
+                m_top_lvl_layout->itemAt(index+2)->spacerItem()->changeSize(0,7,QSizePolicy::Expanding, QSizePolicy::Fixed);
+                m_top_lvl_layout->itemAt(index+2)->spacerItem()->invalidate();
+            }
+        }
+        m_top_lvl_layout->invalidate();
+        m_top_lvl_layout->update();
+    }
+
+    void ModuleDetailsWidget::hide_empty_sections()
+    {
+        for(auto section_btn : m_util_list)
+        {
+            QPushButton* curr_btn = dynamic_cast<QPushButton*>(section_btn);
+            if(curr_btn->text().contains("(0)"))
+            {
+                curr_btn->hide();
+                int index = m_top_lvl_layout->indexOf(section_btn);
+                if(section_btn != m_data_fields_button)
+                {
+                    m_top_lvl_layout->itemAt(index+2)->spacerItem()->changeSize(0,0,QSizePolicy::Fixed, QSizePolicy::Fixed);
+                    m_top_lvl_layout->itemAt(index+2)->spacerItem()->invalidate();
+                }
+            }
+        }
+        m_top_lvl_layout->invalidate();
+        m_top_lvl_layout->update();
+    }
+
+    void ModuleDetailsWidget::init_settings()
+    {
+        m_hide_empty_sections = g_settings_manager.get("selection_details/hide_empty_sections", false).toBool();
+    }
+
+    void ModuleDetailsWidget::handle_global_settings_changed(void *sender, const QString &key, const QVariant &value)
+    {
+        Q_UNUSED(sender)
+        if(key == "selection_details/hide_empty_sections")
+        {
+            m_hide_empty_sections = value.toBool();
+            if(!m_hide_empty_sections)
+                show_all_sections();
+            else
+                hide_empty_sections();
+        }
     }
 }    // namespace hal
