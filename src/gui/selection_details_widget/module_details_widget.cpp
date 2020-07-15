@@ -743,11 +743,23 @@ namespace hal
 
         if(curr_item->row() == 0)
         {
-            menu.addAction("Change name", [this](){
-                InputDialog ipd("Change name", "New name", m_general_table->item(0,1)->text());
+            menu.addAction("Change name", [this, curr_item](){
+                InputDialog ipd("Change name", "New name", curr_item->text());
                 if(ipd.exec() == QDialog::Accepted)
                 {
                     g_netlist->get_module_by_id(m_current_id)->set_name(ipd.text_value().toStdString());
+                    update(m_current_id);
+                }
+            });
+        }
+
+        if(curr_item->row() == 2)
+        {
+            menu.addAction("Change type", [this, curr_item](){
+                InputDialog ipd("Change type", "New type", curr_item->text());
+                if(ipd.exec() == QDialog::Accepted)
+                {
+                    g_netlist->get_module_by_id(m_current_id)->set_type(ipd.text_value().toStdString());
                     update(m_current_id);
                 }
             });
