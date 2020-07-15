@@ -42,7 +42,7 @@ namespace hal
 
         //this line throws a warning that there is already an existing layout, yet there is no layout set and
         //even after calling delete layout(); and then setting the layout, the warning continues
-        m_content_layout = new QVBoxLayout();
+        m_content_layout = new QVBoxLayout(this);
         m_scroll_area = new QScrollArea(this);
         m_top_lvl_container = new QWidget(this);
         m_top_lvl_layout = new QVBoxLayout(m_top_lvl_container);
