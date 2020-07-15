@@ -1,6 +1,6 @@
 # Dataflow Analysis (DANA)
 
-This plugin belongs to our CHES2020 publication (Pre-Print available online at https://eprint.iacr.org/2020/751):
+This plugin belongs to our publication: (pre-print available online at https://eprint.iacr.org/2020/751)
 ```
 DANA - Universal Dataflow Analysis for Gate-Level Netlist Reverse Engineering
 Nils Albartus, Max Hoffmann, Sebastian Temme, Leonid Azriel and Christof Paar
