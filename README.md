@@ -113,11 +113,11 @@ OUTPUT_BUF_1_inst_i_1_inst (id 20, type LUT2)
 ```
 
 ## Benchmarks
-A benchmark suite with modern open source hardware designs for ASICs and FPGAs can be found here: [repository](https://github.com/emsec/hal-benchmarks)
+A benchmark suite with modern open-source hardware designs for ASICs and FPGAs can be found here: [hal-benchmarks](https://github.com/emsec/hal-benchmarks)
 
 ## Contributing
 
-You are very welcome to contribute to the development of HAL. Feel free to submit a new pull request via github. Please consider running the static checks + clang format before that. You can also install these checks as git hooks before any commit.
+You are welcome to contribute to the development of HAL. Feel free to submit a new pull request via github. Please consider running the static checks + clang format before that. You can also install these checks as git hooks before any commit.
 
 ### Run static checks and clang format locally
 To install clang-format hook install [git-hooks](https://github.com/icefox/git-hooks) and run:
