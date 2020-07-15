@@ -125,7 +125,7 @@ You have to set the following options, when executing the plugin:
 An exemplary call looks as follows:
 
 ```
-hal -i hal-benchmarks/crypto/rsa/rsa_lsi_10k_synopsys.v --dataflow --layer 1 --path /home/user/dataflow_out --gate-library lsi_10k.lib
+hal -i hal-benchmarks/crypto/rsa/rsa_lsi_10k_synopsys.v --dataflow --layer 1 --sizes "512,514" --path /home/user/dataflow_out --gate-library lsi_10k.lib
 ```
 
 
