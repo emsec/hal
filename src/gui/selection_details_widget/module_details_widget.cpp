@@ -265,7 +265,7 @@ namespace hal
             QTableWidgetItem* net_item   = new QTableWidgetItem(QString::fromStdString(net->get_name()));
 
             arrow_item->setForeground(QBrush(QColor(114, 140, 0), Qt::SolidPattern));
-            port_name->setFlags((Qt::ItemFlag)~Qt::ItemIsEnabled);
+            port_name->setFlags(Qt::ItemIsEnabled);
             arrow_item->setFlags((Qt::ItemFlag)~Qt::ItemIsEnabled);
             net_item->setFlags(Qt::ItemIsEnabled);
             net_item->setData(Qt::UserRole, net->get_id());
@@ -296,7 +296,7 @@ namespace hal
             QTableWidgetItem* net_item   = new QTableWidgetItem(QString::fromStdString(net->get_name()));
 
             arrow_item->setForeground(QBrush(QColor(114, 140, 0), Qt::SolidPattern));
-            port_name->setFlags((Qt::ItemFlag)~Qt::ItemIsEnabled);
+            port_name->setFlags(Qt::ItemIsEnabled);
             arrow_item->setFlags((Qt::ItemFlag)~Qt::ItemIsEnabled);
             net_item->setFlags(Qt::ItemIsEnabled);
             net_item->setData(Qt::UserRole, net->get_id());
