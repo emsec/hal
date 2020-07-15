@@ -27,6 +27,44 @@ HAL is currently under active developement by the Embedded Security group of the
 The C++ documentation is available [here](https://emsec.github.io/hal/doc/).
 The Python documentation can be found [here](https://emsec.github.io/hal/pydoc/).
 
+## Install Instructions
+
+### Ubuntu
+
+HAL releases are available via it's own ppa. You can find it here: [ppa:sebastian-wallat/hal](https://launchpad.net/~sebastian-wallat/+archive/ubuntu/hal)
+
+### macOS
+
+Use the following commands to install hal via [homebrew](https://brew.sh/index_de).
+
+```bash
+brew tap emsec/hal
+brew install hal
+```
+
+### Build Instructions
+
+If you want to build HAL locally on your machine, run the following commands:
+
+1. `git clone https://github.com/emsec/hal.git && cd hal`
+2. To install all neccessary dependencies execute `./install_dependencies.sh`
+3. `mkdir build && cd build`
+4. `cmake .. `
+5. `make`
+
+Optionally you can install HAL:
+
+`make install`
+
+#### Build on macOS
+
+Please make sure to use a compiler that supports OpenMP. You can install one from e.g. Homebrew via: `brew install llvm`.
+
+To let cmake know of the custom compiler use following command.
+
+`cmake .. -DCMAKE_C_COMPILER=/usr/local/opt/llvm/bin/clang -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm/bin/clang++`
+
+
 ## Quick Start
 
 Install or build HAL and start the GUI via `hal -g`. You can list all available options via `hal [--help|-h]`.
@@ -74,42 +112,8 @@ OUTPUT_BUF_1_inst_i_1_inst (id 20, type LUT2)
   O: (I0 & !I1) | (!I0 & I1)
 ```
 
-## Install Instructions
-
-### Ubuntu
-
-HAL releases are available via it's own ppa. You can find it here: [ppa:sebastian-wallat/hal](https://launchpad.net/~sebastian-wallat/+archive/ubuntu/hal)
-
-### macOS
-
-Use the following commands to install hal via [homebrew](https://brew.sh/index_de).
-
-```bash
-brew tap emsec/hal
-brew install hal
-```
-
-## Build Instructions
-
-If you want to build HAL locally on your machine, run the following commands:
-
-1. `git clone https://github.com/emsec/hal.git && cd hal`
-2. To install all neccessary dependencies execute `./install_dependencies.sh`
-3. `mkdir build && cd build`
-4. `cmake .. `
-5. `make`
-
-Optionally you can install HAL:
-
-`make install`
-
-### Build on macOS
-
-Please make sure to use a compiler that supports OpenMP. You can install one from e.g. Homebrew via: `brew install llvm`.
-
-To let cmake know of the custom compiler use following command.
-
-`cmake .. -DCMAKE_C_COMPILER=/usr/local/opt/llvm/bin/clang -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm/bin/clang++`
+## Benchmarks
+A benchmark suite with modern open source hardware designs for ASICs and FPGAs can be found here: [repository](https://github.com/emsec/hal-benchmarks)
 
 ## Contributing
 
