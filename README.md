@@ -2,35 +2,25 @@
 
 # Welcome to HAL!
 
-[HAL](http://eprint.iacr.org/2017/783) \[/hel/\] is a comprehensive reverse engineering and manipulation framework for gate-level netlists focusing on efficiency, extendability and portability. HAL comes with a fully-fledged plugin system, allowing to introduce arbitrary functionalities to the core.
+[HAL](http://eprint.iacr.org/2017/783) \[/hel/\] is a comprehensive reverse engineering and manipulation framework for gate-level netlists focusing on efficiency, extendability, and portability. HAL comes with a full-fledged plugin system, allowing to introduce arbitrary functionalities to the core.
 
 ![HAL Screenshot](https://raw.githubusercontent.com/emsec/hal/master/hal_screenshot.png "HAL Screenshot")
 
-Apart from multiple research projects, HAL is also used in our university lecture [Introduction to Hardware Reverse Engineering](https://www.ei.ruhr-uni-bochum.de/studium/lehrveranstaltungen/832/).
+HAL is currently under active developement by the Embedded Security group of the [Max Planck Institute for Security and Privacy](https://www.mpi-sp.org). Apart from multiple research projects, it is also used in our university lecture [Introduction to Hardware Reverse Engineering](https://www.ei.ruhr-uni-bochum.de/studium/lehrveranstaltungen/832/).
 
 ## Features
+
 - Natural directed graph representation of netlist elements and their connections
-- Support for custom gate libraries
+- Support for custom gate libraries using the `liberty` gate library format
 - High performance thanks to optimized C++ core
-- Modularity: write your own C++ Plugins for efficient netlist analysis and manipulation (e.g. via graph algorithms)
+- Modularity: write your own Python or C++ Plugins for efficient netlist analysis and manipulation
+- Ships with a selection of plugins for a variety of purposes such as
+  - [DANA](https://eprint.iacr.org/2020/751.pdf) for data flow analsysis
+  - [igraph](https://igraph.org) integration for graph analysis
 - A feature-rich GUI allowing for visual netlist inspection and interactive analysis
+  - Includes features such as hierarchization and isolation/cone view
 - An integrated Python shell to exploratively interact with netlist elements and to interface plugins from the GUI
-- **Update v2.0.0**:
-  -  Heavily improved VHDL and Verilog parsers
-  - Updated CMake build system to use target-based configurations
-   - Changes to gate library system
-     - Replaced BDDs with Boolean functions
-     - Major changes to internal representation of gate types
-     - Allows for differentiation between LUTs, flip-flops, latches and combinational gate types
-     - Flip-flops and latches may now specify special sequential inputs such as enable, clock, set, and reset
-     - Replaced JSON gate libraries with liberty files
-  - Simplified plugin system
-  - Included igraph library
-  - Major GUI revision
-    - Added isolation view/cone view feature
-    - New layouting system
-    - Added support for hierarchization/modularization
-  - Tons of bug fixes and smaller issues ...
+- A set of state-of-the-art benchmarks for the evaluation of netlist reverse engineering techniques available in a seperate [repository](https://github.com/emsec/hal-benchmarks).
 
 ## API Documentation
 
@@ -84,44 +74,6 @@ OUTPUT_BUF_1_inst_i_1_inst (id 20, type LUT2)
   O: (I0 & !I1) | (!I0 & I1)
 ```
 
-## Citation
-
-If you use HAL in an academic context, please cite the framework using the reference below:
-```latex
-@misc{hal,
-    author = {{Chair for Embedded Security}},
-    publisher = {{Ruhr University Bochum}},
-    title = {{HAL - The Hardware Analyzer}},
-    year = {2019},
-    howpublished = {\url{https://github.com/emsec/hal}},
-}
-```
-
-Feel free to also include the original [paper](http://eprint.iacr.org/2017/783)
-```latex
-@article{2018:Fyrbiak:HAL,
-      author    = {Marc Fyrbiak and
-                   Sebastian Wallat and
-                   Pawel Swierczynski and
-                   Max Hoffmann and
-                   Sebastian Hoppach and
-                   Matthias Wilhelm and
-                   Tobias Weidlich and
-                   Russell Tessier and
-                   Christof Paar},
-  title     	= {{HAL-} The Missing Piece of the Puzzle for Hardware Reverse Engineering,
-               	  Trojan Detection and Insertion},
-  journal	= {IEEE Transactions on Dependable and Secure Computing},
-  year		= {2018},
-  publisher	= {IEEE},
-  howpublished 	= {\url{https://github.com/emsec/hal}}
-}
-```
-
-## Contact and Support
-
-Please contact us via our Slack workspace. Get your invite here: [![Slack](https://img.shields.io/badge/slack-join-blue.svg)](https://communityinviter.com/apps/hal-re/hal-re)
-
 ## Install Instructions
 
 ### Ubuntu
@@ -139,7 +91,7 @@ brew install hal
 
 ## Build Instructions
 
-Run the following commands to download and install HAL.
+If you want to build HAL locally on your machine, run the following commands:
 
 1. `git clone https://github.com/emsec/hal.git && cd hal`
 2. To install all neccessary dependencies execute `./install_dependencies.sh`
@@ -174,6 +126,44 @@ Start Docker build via:
 ### Generate Changelog
 
 `git log $(git describe --tags --abbrev=0)..HEAD --pretty=format:"%s" --no-merges`
+
+## Citation
+
+If you use HAL in an academic context, please cite the framework using the reference below:
+```latex
+@misc{hal,
+    author = {{Embedded Security Group}},
+    publisher = {{Max Planck Institute for Security and Privacy}},
+    title = {{HAL - The Hardware Analyzer}},
+    year = {2019},
+    howpublished = {\url{https://github.com/emsec/hal}},
+}
+```
+
+Feel free to also include the original [paper](http://eprint.iacr.org/2017/783)
+```latex
+@article{2018:Fyrbiak:HAL,
+      author    = {Marc Fyrbiak and
+                   Sebastian Wallat and
+                   Pawel Swierczynski and
+                   Max Hoffmann and
+                   Sebastian Hoppach and
+                   Matthias Wilhelm and
+                   Tobias Weidlich and
+                   Russell Tessier and
+                   Christof Paar},
+  title     	= {{HAL-} The Missing Piece of the Puzzle for Hardware Reverse Engineering,
+               	  Trojan Detection and Insertion},
+  journal	= {IEEE Transactions on Dependable and Secure Computing},
+  year		= {2018},
+  publisher	= {IEEE},
+  howpublished 	= {\url{https://github.com/emsec/hal}}
+}
+```
+
+## Contact and Support
+
+For all kinds of inquiries, please contact us using our dedicated e-mail address: [hal@csp.mpg.de](mailto:hal@csp.mpg.de).
 
 ## Licensing
 
