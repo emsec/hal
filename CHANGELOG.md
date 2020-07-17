@@ -9,31 +9,36 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 * support for multi-driven nets (i.e., nets with more than one source)
-* module types (parsed from netlist or set by user)
-* named module ports (parsed from netlist or set by user)
+* support for gate types with multi-bit pins
+* module types and named module ports (parsed from netlist or set by user)
 * Python GUI API to control the graph view
-* added right click options to details widget to copy strings or Python code to the clipboard
-* added number of gates, nets, and submodules to module details widget
-* view manager now shows a date and time of when the view has been created
-* "hal" namespace
-* Verilog parser now parses attributes as well
+* entirely new details widget
+  * details widget sections can be collapsed and expanded
+  * right-click context menu allows to...
+    * copy strings or Python code to the clipboard
+    * change module name, type, and port names
+  * added number of gates, nets, and submodules to module details widget  
+* view manager now shows date and time of creation
 * state-of-the-art suite of benchmark netlists
 
 ### CHANGED
 
-* redesigned details widgets
-* details widget sections can now be collapsed and expanded
 * double-clicking module in module widget will open it in new view
 * zoom level of graph view can now be controlled by shortcuts
-* restructured liberty gate library parser to allow for inout-ports and bus-groups (for multi-bit pins)
-* split Python API into multiple files
-* now using TitleCase for class names
-* gate library manager now operates on file paths instead of library names
+* gate library
+  * liberty gate library parser now supports inout-ports and bus-groups 
+  * gate library manager now operates on file paths instead of library names
+* netlist parsers
+  * VHDL and Verilog parser now use common intermediate structure for parsing
+  * attribute parsing for Verilog parser
+  * support for inout ports
+  * improved syntax checking
+* code refactoring
+  * "hal" namespace
+  * TitleCase for classes
+  * moved to std::filesystem internally
+  * split Python API into multiple files
 * massively expanded testing coverage
-* netlist parsers now use common intermediate structure for parsing
-* improved syntax checking for netlist parsers
-* netlist parseres now support inout ports
-* moved to std::filesystem internally
 * the project is now affiliated with the Max Planck Institute for Security and Privacy
 
 ### FIXED
