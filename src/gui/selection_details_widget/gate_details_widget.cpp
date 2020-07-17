@@ -414,20 +414,21 @@ namespace hal
 
         QMenu menu;
 
-        auto clicked_net = g_netlist->get_net_by_id(m_input_pins_table->itemAt(pos)->data(Qt::UserRole).toInt());
+        auto curr_item = m_input_pins_table->itemAt(pos);
+        auto clicked_net = g_netlist->get_net_by_id(curr_item->data(Qt::UserRole).toInt());
         if(!g_netlist->is_global_input_net(clicked_net))
         {
-            menu.addAction("Jump to source gate", [this, pos](){
-                handle_input_pin_item_clicked(m_input_pins_table->itemAt(pos));
+            menu.addAction("Jump to source gate", [this, curr_item](){
+                handle_input_pin_item_clicked(curr_item);
             });
         }
 
-        menu.addAction(QIcon(":/icons/python"), "Extract net as python code (copy to clipboard)",[this, pos](){
-            QApplication::clipboard()->setText("netlist.get_net_by_id(" + m_input_pins_table->itemAt(pos)->data(Qt::UserRole).toString() + ")");
+        menu.addAction(QIcon(":/icons/python"), "Extract net as python code (copy to clipboard)",[this, curr_item](){
+            QApplication::clipboard()->setText("netlist.get_net_by_id(" + curr_item->data(Qt::UserRole).toString() + ")");
         });
 
-        menu.addAction(QIcon(":/icons/python"), "Extract sources as python code (copy to clipboard)",[this, pos](){
-            QApplication::clipboard()->setText("netlist.get_net_by_id(" + m_input_pins_table->itemAt(pos)->data(Qt::UserRole).toString() + ").get_sources()" );
+        menu.addAction(QIcon(":/icons/python"), "Extract sources as python code (copy to clipboard)",[this, curr_item](){
+            QApplication::clipboard()->setText("netlist.get_net_by_id(" + curr_item->data(Qt::UserRole).toString() + ").get_sources()" );
         });
 
         menu.move(dynamic_cast<QWidget*>(sender())->mapToGlobal(pos));
@@ -442,19 +443,20 @@ namespace hal
 
         QMenu menu;
 
-        auto clicked_net = g_netlist->get_net_by_id(m_output_pins_table->itemAt(pos)->data(Qt::UserRole).toInt());
+        auto curr_item = m_output_pins_table->itemAt(pos);
+        auto clicked_net = g_netlist->get_net_by_id(curr_item->data(Qt::UserRole).toInt());
         if(!g_netlist->is_global_output_net(clicked_net))
         {
-            menu.addAction("Jump to destination gate", [this, pos](){
-                handle_output_pin_item_clicked(m_output_pins_table->itemAt(pos));
+            menu.addAction("Jump to destination gate", [this, curr_item](){
+                handle_output_pin_item_clicked(curr_item);
             });
         }
-        menu.addAction(QIcon(":/icons/python"), "Extract net as python code (copy to clipboard)",[this, pos](){
-            QApplication::clipboard()->setText("netlist.get_net_by_id(" + m_output_pins_table->itemAt(pos)->data(Qt::UserRole).toString() + ")");
+        menu.addAction(QIcon(":/icons/python"), "Extract net as python code (copy to clipboard)",[this, curr_item](){
+            QApplication::clipboard()->setText("netlist.get_net_by_id(" + curr_item->data(Qt::UserRole).toString() + ")");
         });
 
-        menu.addAction(QIcon(":/icons/python"), "Extract destinations as python code (copy to clipboard)",[this, pos](){
-            QApplication::clipboard()->setText("netlist.get_net_by_id(" + m_output_pins_table->itemAt(pos)->data(Qt::UserRole).toString() + ").get_destinations()" );
+        menu.addAction(QIcon(":/icons/python"), "Extract destinations as python code (copy to clipboard)",[this, curr_item](){
+            QApplication::clipboard()->setText("netlist.get_net_by_id(" + curr_item->data(Qt::UserRole).toString() + ").get_destinations()" );
         });
 
         menu.move(dynamic_cast<QWidget*>(sender())->mapToGlobal(pos));
@@ -463,13 +465,13 @@ namespace hal
 
     void GateDetailsWidget::handle_data_table_menu_requested(const QPoint &pos)
     {
-        if(!m_data_fields_table->itemAt(pos) ||m_data_fields_table->itemAt(pos)->column() != 1)
+        if(!m_data_fields_table->itemAt(pos) || m_data_fields_table->itemAt(pos)->column() != 1)
             return;
 
         QMenu menu;
         menu.addAction(QIcon(":/icons/python"), "Exctract data as python code (copy to clipboard)", [this, pos](){
            int row = m_data_fields_table->itemAt(pos)->row();
-           QString key = m_data_fields_table->item(row, 0)->text().left(m_data_fields_table->item(row, 0)->text().length()-1);
+           QString key = m_data_fields_table->item(row, 0)->text().left(m_data_fields_table->item(row, 0)->text().length()-1);//-1 since the key in the table ends with ':'
            QApplication::clipboard()->setText("netlist.get_gate_by_id(" + QString::number(m_current_id) + ").data[(\"" + m_data_fields_table->item(row, 0)->data(Qt::UserRole).toString() + "\", \"" + key + "\")]");//(’generic’, ’data’)
         });
 
@@ -482,26 +484,27 @@ namespace hal
         if(!m_general_table->itemAt(pos) || m_general_table->itemAt(pos)->column() != 1)
             return;
 
+        auto curr_item = m_general_table->itemAt(pos);
         QMenu menu;
         QString description;
         QString python_command = "netlist.get_gate_by_id(" + QString::number(m_current_id) + ").";
         QString raw_string = "", raw_desc = "";
-        switch(m_general_table->itemAt(pos)->row())
+        switch(curr_item->row())
         {
             case 0: python_command += "get_name()"; description = "Extract name as python code (copy to clipboard)";
-                    raw_string = m_general_table->itemAt(pos)->text(); raw_desc = "Extract raw name (copy to clipboard)"; break;
+                    raw_string = curr_item->text(); raw_desc = "Extract raw name (copy to clipboard)"; break;
             case 1: python_command += "get_type()"; description = "Extract type as python code (copy to clipboard)";
-                    raw_string = m_general_table->itemAt(pos)->text(); raw_desc = "Extraxt raw type(copy to clipboard)";break;
+                    raw_string = curr_item->text(); raw_desc = "Extraxt raw type(copy to clipboard)";break;
             case 2: python_command += "get_id()"; description = "Extract id as python code (copy to clipboard)";
-                    raw_string = m_general_table->itemAt(pos)->text(); raw_desc = "Extract raw id as string (copy to clipboard)";break;
+                    raw_string = curr_item->text(); raw_desc = "Extract raw id as string (copy to clipboard)";break;
             case 3: python_command += "get_module()"; description = "Extract module as python code (copy to clipboard)"; break;
         }
 
         //special case row 0, change name is also an option
-        if(m_general_table->itemAt(pos)->row() == 0)
+        if(curr_item->row() == 0)
         {
-            menu.addAction("Change name", [this](){
-                InputDialog ipd("Change name", "New name", m_general_table->item(0,1)->text());
+            menu.addAction("Change name", [this, curr_item](){
+                InputDialog ipd("Change name", "New name", curr_item->text());
                 if(ipd.exec() == QDialog::Accepted)
                 {
                     g_netlist->get_gate_by_id(m_current_id)->set_name(ipd.text_value().toStdString());

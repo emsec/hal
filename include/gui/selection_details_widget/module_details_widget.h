@@ -31,19 +31,13 @@
 #include <QWidget>
 
 /* forward declaration */
-class QLabel;
 class QTableWidget;
 class QTableWidgetItem;
-class QTreeWidget;
-class QTreeWidgetItem;
 class QVBoxLayout;
 class QHBoxLayout;
 class QScrollArea;
-class QGridLayout;
-class QModelIndex;
 class QFont;
 class QPushButton;
-class QMouseEvent;
 
 namespace hal
 {

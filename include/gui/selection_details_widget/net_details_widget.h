@@ -28,18 +28,18 @@
 
 #include <QWidget>
 
+/* forward declaration */
 class QVBoxLayout;
 class QHBoxLayout;
-class QLabel;
 class QScrollArea;
 class QTableWidget;
 class QTableWidgetItem;
 class QPushButton;
 class QFont;
-class QMouseEvent;
 
 namespace hal
 {
+    /* forward declaration */
     class Net;
     class Gate;
 
