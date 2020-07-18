@@ -76,6 +76,20 @@ namespace hal
             m->set_name(text.toStdString());
     }
 
+    void NetlistRelay::debug_change_module_type(const u32 id)
+    {
+        // NOT THREADSAFE
+
+        std::shared_ptr<Module> m = g_netlist->get_module_by_id(id);
+        assert(m);
+
+        bool ok;
+        QString text = QInputDialog::getText(nullptr, "Change Module Type", "New Type", QLineEdit::Normal, QString::fromStdString(m->get_type()), &ok);
+
+        if (ok && !text.isEmpty())
+            m->set_type(text.toStdString());
+    }
+
     void NetlistRelay::debug_change_module_color(const u32 id)
     {
         // NOT THREADSAFE

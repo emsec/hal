@@ -6,9 +6,58 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+* support for multi-driven nets (i.e., nets with more than one source)
+* support for gate types with multi-bit pins
+* module types and named module ports (parsed from netlist or set by user)
+* Python GUI API to control the graph view
+* entirely new details widget
+  * details widget sections can be collapsed and expanded
+  * right-click context menu allows to...
+    * copy strings or Python code to the clipboard
+    * change module name, type, and port names
+  * added number of gates, nets, and submodules to module details widget  
+* view manager now shows date and time of creation
+* state-of-the-art suite of benchmark netlists
+
+### CHANGED
+
+* double-clicking module in module widget will open it in new view
+* zoom level of graph view can now be controlled by shortcuts
+* gate library
+  * liberty gate library parser now supports inout-ports and bus-groups 
+  * gate library manager now operates on file paths instead of library names
+* netlist parsers
+  * VHDL and Verilog parser now use common intermediate structure for parsing
+  * attribute parsing for Verilog parser
+  * support for inout ports
+  * improved syntax checking
+* code refactoring
+  * "hal" namespace
+  * TitleCase for classes
+  * moved to std::filesystem internally
+  * split Python API into multiple files
+* massively expanded testing coverage
+* the project is now affiliated with the Max Planck Institute for Security and Privacy
+
+### FIXED
+
+* cone-view now works correctly for modules
+* module widget selection is now more consistent with graph view
+* inconsistencies with case insensitivity of the VHDL parser fixed
+* delete option no longer shown for top module in right-click context menu
+
+### REMOVED
+
+* list of nets and gates no longer present in module details widget (will be replaced by selection widget in the future)
+
+### DEPRECATED
+
+* accessing the single source of a net is superseeded by accessing its source list to support multi-driven nets
+
 ## [2.0.0] - 2019-12-19 22:00:00+02:00 (urgency: medium)
 Note: This is an API breaking release.
-
 
 * Heavily improved VHDL and Verilog parsers
 * Updated CMake build system to use target-based configurations
