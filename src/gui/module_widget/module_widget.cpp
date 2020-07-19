@@ -103,10 +103,11 @@ namespace hal
 
         QMenu context_menu;
 
-        QAction isolate_action("Isolate in new View", &context_menu);
-        QAction add_selection_action("Add Selection to Module", &context_menu);
+        QAction isolate_action("Isolate In New View", &context_menu);
+        QAction add_selection_action("Add Graph Selection To Module", &context_menu);
         QAction add_child_action("Add Child Module", &context_menu);
         QAction change_name_action("Change Module Name", &context_menu);
+        QAction change_type_action("Change Module Type", &context_menu);
         QAction change_color_action("Change Module Color", &context_menu);
         QAction delete_action("Delete Module", &context_menu);
 
@@ -114,9 +115,15 @@ namespace hal
         context_menu.addAction(&add_selection_action);
         context_menu.addAction(&add_child_action);
         context_menu.addAction(&change_name_action);
+        context_menu.addAction(&change_type_action);
         context_menu.addAction(&change_color_action);
-        context_menu.addAction(&delete_action);
 
+        u32 module_id = get_ModuleItem_from_index(index)->id();
+        auto module = g_netlist->get_module_by_id(module_id);
+
+        if(!(module == g_netlist->get_top_module()))
+            context_menu.addAction(&delete_action);
+ 
         QAction* clicked = context_menu.exec(m_tree_view->viewport()->mapToGlobal(point));
 
         if (!clicked)
@@ -136,6 +143,9 @@ namespace hal
 
         if (clicked == &change_name_action)
             g_netlist_relay.debug_change_module_name(get_ModuleItem_from_index(index)->id());
+
+        if (clicked == &change_type_action)
+            g_netlist_relay.debug_change_module_type(get_ModuleItem_from_index(index)->id());
 
         if (clicked == &change_color_action)
             g_netlist_relay.debug_change_module_color(get_ModuleItem_from_index(index)->id());
