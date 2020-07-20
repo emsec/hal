@@ -12,30 +12,33 @@
 
 #include<QTableView>
 
-class selection_widget : public content_widget
+namespace hal
 {
-    Q_OBJECT
+    class selection_widget : public ContentWidget
+    {
+        Q_OBJECT
 
-public:
-    selection_widget(QWidget* parent = nullptr);
+    public:
+        selection_widget(QWidget* parent = nullptr);
 
-public Q_SLOTS:
-    void handle_selection_update(void* sender);
+    public Q_SLOTS:
+        void handle_selection_update(void* sender);
 
-private:
-    searchbar m_searchbar;
+    private:
+        Searchbar mSearchbar;
 
-    QTableView* m_gate_table_view;
-    QTableView* m_net_table_view;
+        QTableView* m_gate_table_view;
+        QTableView* m_net_table_view;
 
-    gate_table_model* m_gate_table_model;
-    net_table_model* m_net_table_model;
+        gate_table_model* m_gate_table_model;
+        net_table_model* m_net_table_model;
 
-    gate_table_proxy_model* m_gate_table_proxy_model;
-    net_table_proxy_model* m_net_table_proxy_model;
+        gate_table_proxy_model* m_gate_table_proxy_model;
+        net_table_proxy_model* m_net_table_proxy_model;
 
-    void toggle_searchbar();
-    QList<QShortcut*> create_shortcuts();
+        void toggle_searchbar();
+        QList<QShortcut*> create_shortcuts();
 
-    void update();
-};
+        void update();
+    };
+}
