@@ -4,7 +4,7 @@ namespace hal
 {
     void core_utils_init(py::module& m)
     {
-        auto py_core_utils = m.def_submodule("core_utils", R"(
+        auto py_core_utils = m.def_submodule("CoreUtils", R"(
             HAL Core Utility functions.
     )");
 
