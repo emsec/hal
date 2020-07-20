@@ -2,73 +2,76 @@
 
 #include <QPainter>
 
-shadow_effect::shadow_effect(QObject* parent) : QGraphicsEffect(parent), _distance(4.0f), _blurRadius(10.0f), _color(0, 0, 0, 80)
-{
-}
-
 QT_BEGIN_NAMESPACE
 extern Q_WIDGETS_EXPORT void qt_blurImage(QPainter* p, QImage& blurImage, qreal radius, bool quality, bool alphaOnly, int transposed = 0);
 QT_END_NAMESPACE
 
-void shadow_effect::draw(QPainter* painter)
+namespace hal
 {
-    // if nothing to show outside the item, just draw source
-    if ((blurRadius() + distance()) <= 0)
+    ShadowEffect::ShadowEffect(QObject* parent) : QGraphicsEffect(parent), _distance(4.0f), _blurRadius(10.0f), _color(0, 0, 0, 80)
     {
-        drawSource(painter);
-        return;
     }
 
-    PixmapPadMode mode = QGraphicsEffect::PadToEffectiveBoundingRect;
-    QPoint offset;
-    const QPixmap px = sourcePixmap(Qt::DeviceCoordinates, &offset, mode);
+    void ShadowEffect::draw(QPainter* painter)
+    {
+        // if nothing to show outside the item, just draw source
+        if ((blurRadius() + distance()) <= 0)
+        {
+            drawSource(painter);
+            return;
+        }
 
-    // return if no source
-    if (px.isNull())
-        return;
+        PixmapPadMode mode = QGraphicsEffect::PadToEffectiveBoundingRect;
+        QPoint offset;
+        const QPixmap px = sourcePixmap(Qt::DeviceCoordinates, &offset, mode);
 
-    // save world transform
-    QTransform restoreTransform = painter->worldTransform();
-    painter->setWorldTransform(QTransform());
+        // return if no source
+        if (px.isNull())
+            return;
 
-    // Calculate size for the background image
-    QSize szi(px.size().width() + 2 * distance(), px.size().height() + 2 * distance());
+        // save world transform
+        QTransform restoreTransform = painter->worldTransform();
+        painter->setWorldTransform(QTransform());
 
-    QImage tmp(szi, QImage::Format_ARGB32_Premultiplied);
-    QPixmap scaled = px.scaled(szi);
-    tmp.fill(0);
-    QPainter tmpPainter(&tmp);
-    tmpPainter.setCompositionMode(QPainter::CompositionMode_Source);
-    tmpPainter.drawPixmap(QPointF(-distance(), -distance()), scaled);
-    tmpPainter.end();
+        // Calculate size for the background image
+        QSize szi(px.size().width() + 2 * distance(), px.size().height() + 2 * distance());
 
-    // blur the alpha channel
-    QImage blurred(tmp.size(), QImage::Format_ARGB32_Premultiplied);
-    blurred.fill(0);
-    QPainter blurPainter(&blurred);
-    qt_blurImage(&blurPainter, tmp, blurRadius(), false, true);
-    blurPainter.end();
+        QImage tmp(szi, QImage::Format_ARGB32_Premultiplied);
+        QPixmap scaled = px.scaled(szi);
+        tmp.fill(0);
+        QPainter tmpPainter(&tmp);
+        tmpPainter.setCompositionMode(QPainter::CompositionMode_Source);
+        tmpPainter.drawPixmap(QPointF(-distance(), -distance()), scaled);
+        tmpPainter.end();
 
-    tmp = blurred;
+        // blur the alpha channel
+        QImage blurred(tmp.size(), QImage::Format_ARGB32_Premultiplied);
+        blurred.fill(0);
+        QPainter blurPainter(&blurred);
+        qt_blurImage(&blurPainter, tmp, blurRadius(), false, true);
+        blurPainter.end();
 
-    // blacken the image...
-    tmpPainter.begin(&tmp);
-    tmpPainter.setCompositionMode(QPainter::CompositionMode_SourceIn);
-    tmpPainter.fillRect(tmp.rect(), color());
-    tmpPainter.end();
+        tmp = blurred;
 
-    // draw the blurred shadow...
-    painter->drawImage(offset, tmp);
+        // blacken the image...
+        tmpPainter.begin(&tmp);
+        tmpPainter.setCompositionMode(QPainter::CompositionMode_SourceIn);
+        tmpPainter.fillRect(tmp.rect(), color());
+        tmpPainter.end();
 
-    // draw the actual pixmap...
-    painter->drawPixmap(offset, px, QRectF());
+        // draw the blurred shadow...
+        painter->drawImage(offset, tmp);
 
-    // restore world transform
-    painter->setWorldTransform(restoreTransform);
-}
+        // draw the actual pixmap...
+        painter->drawPixmap(offset, px, QRectF());
 
-QRectF shadow_effect::boundingRectFor(const QRectF& rect) const
-{
-    qreal delta = blurRadius() + distance();
-    return rect.united(rect.adjusted(-delta, -delta, delta, delta));
+        // restore world transform
+        painter->setWorldTransform(restoreTransform);
+    }
+
+    QRectF ShadowEffect::boundingRectFor(const QRectF& rect) const
+    {
+        qreal delta = blurRadius() + distance();
+        return rect.united(rect.adjusted(-delta, -delta, delta, delta));
+    }
 }

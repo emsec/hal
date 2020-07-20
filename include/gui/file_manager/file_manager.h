@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef FILE_MANAGER_H
-#define FILE_MANAGER_H
+#pragma once
 
 #include "core/program_arguments.h"
 
@@ -31,52 +30,53 @@
 
 class QFileSystemWatcher;
 
-class file_manager : public QObject
+namespace hal
 {
-    Q_OBJECT
+    class FileManager : public QObject
+    {
+        Q_OBJECT
 
-public:
-    static file_manager* get_instance();
+    public:
+        static FileManager* get_instance();
 
-    void handle_program_arguments(const program_arguments& args);
+        void handle_program_arguments(const ProgramArguments& args);
 
-    QString file_name() const;
-    bool file_open() const;
+        QString file_name() const;
+        bool file_open() const;
 
-    void watch_file(const QString& file_name);
+        void watch_file(const QString& file_name);
 
 
-Q_SIGNALS:
-    void file_opened(const QString& file_name);
-    void file_changed(const QString& path);
-    void file_directory_changed(const QString& path);
-    void file_closed();
+    Q_SIGNALS:
+        void file_opened(const QString& file_name);
+        void file_changed(const QString& path);
+        void file_directory_changed(const QString& path);
+        void file_closed();
 
-public Q_SLOTS:
-    void open_file(QString file_name);
-    void close_file();
-    void autosave();
+    public Q_SLOTS:
+        void open_file(QString file_name);
+        void close_file();
+        void autosave();
 
-private Q_SLOTS:
-    void handle_file_changed(const QString& path);
-    void handle_directory_changed(const QString& path);
-    void handle_global_setting_changed(void* sender, const QString& key, const QVariant& value);
+    private Q_SLOTS:
+        void handle_file_changed(const QString& path);
+        void handle_directory_changed(const QString& path);
+        void handle_global_setting_changed(void* sender, const QString& key, const QVariant& value);
 
-private:
-    file_manager(QObject* parent = nullptr);
-    void file_successfully_loaded(QString file_name);
-    void update_recent_files(const QString& file) const;
-    void display_error_message(QString error_message);
-    QString get_shadow_file(QString file);
-    void remove_shadow_file();
+    private:
+        FileManager(QObject* parent = nullptr);
+        void file_successfully_loaded(QString file_name);
+        void update_recent_files(const QString& file) const;
+        void display_error_message(QString error_message);
+        QString get_shadow_file(QString file);
+        void remove_shadow_file();
 
-    QString m_file_name;
-    QString m_shadow_file_name;
-    QFileSystemWatcher* m_file_watcher;
-    bool m_file_open;
-    QTimer* m_timer;
-    bool m_autosave_enabled;
-    int m_autosave_interval;
-};
-
-#endif // FILE_MANAGER_H
+        QString m_file_name;
+        QString m_shadow_file_name;
+        QFileSystemWatcher* m_file_watcher;
+        bool m_file_open;
+        QTimer* m_timer;
+        bool m_autosave_enabled;
+        int m_autosave_interval;
+    };
+}

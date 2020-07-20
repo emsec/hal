@@ -67,7 +67,7 @@ class TestNetlist(unittest.TestCase):
         # Minimal ID for all: netlists, gates, nets, modules, ...
         self.min_id = 3 # <- just to be sure ;)
         self.log = logging.getLogger("LOG")
-        self.netlist = hal_py.netlist
+        self.netlist = hal_py.Netlist
         self.g_lib_name = "EXAMPLE_GATE_LIBRARY"
 
     def tearDown(self):
@@ -75,7 +75,7 @@ class TestNetlist(unittest.TestCase):
 
     # ====== HELPER FUNCTIONS =======
     def create_empty_netlist(self):
-        nl = hal_py.netlist_factory.create_netlist(self.g_lib_name)
+        nl = hal_py.Netlist_factory.create_netlist(self.g_lib_name)
         return nl
 
     # Gets the first module with the name <name> from a module set <module_set>

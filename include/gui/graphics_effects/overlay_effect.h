@@ -21,17 +21,17 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef OVERLAY_EFFECT_H
-#define OVERLAY_EFFECT_H
+#pragma once
 
 #include <QGraphicsEffect>
 
-class overlay_effect : public QGraphicsEffect
+namespace hal
 {
-public:
-    overlay_effect(QObject* parent = 0);
+    class OverlayEffect : public QGraphicsEffect
+    {
+    public:
+        OverlayEffect(QObject* parent = 0);
 
-    void draw(QPainter* painter) Q_DECL_OVERRIDE;
-};
-
-#endif    // OVERLAY_EFFECT_H
+        void draw(QPainter* painter) Q_DECL_OVERRIDE;
+    };
+}

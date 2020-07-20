@@ -21,27 +21,27 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef TEXT_SETTINGS_H
-#define TEXT_SETTINGS_H
+#pragma once
 
 #include "settings_widget.h"
 #include <QLineEdit>
 
-class text_setting : public settings_widget
+namespace hal
 {
-    Q_OBJECT
+    class TextSetting : public SettingsWidget
+    {
+        Q_OBJECT
 
-public:
-    text_setting(const QString& key, const QString& title, const QString& description, const QString& placeholder = "", QWidget* parent = 0);
+    public:
+        TextSetting(const QString& key, const QString& title, const QString& description, const QString& placeholder = "", QWidget* parent = 0);
 
-    virtual void load(const QVariant& value) Q_DECL_OVERRIDE;
-    virtual QVariant value() Q_DECL_OVERRIDE;
-    //virtual void rollback() Q_DECL_OVERRIDE;
+        virtual void load(const QVariant& value) Q_DECL_OVERRIDE;
+        virtual QVariant value() Q_DECL_OVERRIDE;
+        //virtual void rollback() Q_DECL_OVERRIDE;
 
-private:
-    QLineEdit* m_textfield;
-    void on_text_changed();
+    private:
+        QLineEdit* m_textfield;
+        void on_text_changed();
 
-};
-
-#endif //TEXT_SETTINGS_H
+    };
+}

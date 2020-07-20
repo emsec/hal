@@ -128,3 +128,5 @@ Testing
 tools/__pycache__/
 
 .envrc
+
+buttons.jsonc

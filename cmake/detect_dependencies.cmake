@@ -155,7 +155,7 @@ endif()
 #####   Python support
 ################################
 
-set(Python_ADDITIONAL_VERSIONS 3.5 3.6)
+set(Python_ADDITIONAL_VERSIONS 3.5 3.6 3.8)
 find_package(PythonInterp 3.5 REQUIRED)
 if(PythonInterp_FOUND)
     message(VERBOSE "PYTHON_INCLUDE_DIRS: ${PYTHON_INCLUDE_DIRS}")

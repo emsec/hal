@@ -10,585 +10,771 @@
 #include <netlist/gate.h>
 #include <netlist/net.h>
 
-using namespace test_utils;
+namespace hal {
 
-class module_test : public ::testing::Test
-{
-protected:
-    virtual void SetUp()
-    {
-        NO_COUT_BLOCK;
-        //gate_library_manager::load_all();
+    using test_utils::MIN_MODULE_ID;
+    using test_utils::MIN_GATE_ID;
+    using test_utils::MIN_NET_ID;
+
+    class ModuleTest : public ::testing::Test {
+    protected:
+        virtual void SetUp() {
+            test_utils::init_log_channels();
+        }
+
+        virtual void TearDown() {
+        }
+    };
+
+    /**
+     * Testing the access on the id, the type and the stored netlist after calling the constructor
+     *
+     * Functions: constructor, get_id, get_name
+     */
+    TEST_F(ModuleTest, check_constructor) {
+        TEST_START
+            {
+                // Creating a Module of id 123 and type "test Module"
+                std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist();
+                std::shared_ptr<Module>
+                    test_module = nl->create_module(MIN_MODULE_ID + 123, "test Module", nl->get_top_module());
+
+                EXPECT_EQ(test_module->get_id(), (u32) (MIN_MODULE_ID + 123));
+                EXPECT_EQ(test_module->get_name(), "test Module");
+                EXPECT_EQ(test_module->get_netlist(), nl);
+            }
+        TEST_END
     }
 
-    virtual void TearDown()
-    {
+    /**
+     * Testing the set_name function of Module
+     *
+     * Functions: set_name
+     */
+    TEST_F(ModuleTest, check_set_id) {
+        TEST_START
+            {
+                // Set a new name for Module
+                std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist();
+                std::shared_ptr<Module>
+                    test_module = nl->create_module(MIN_MODULE_ID + 0, "test_module", nl->get_top_module());
+
+                test_module->set_name("new_name");
+                EXPECT_EQ(test_module->get_name(), "new_name");
+            }
+            {
+                // Set an already set name
+                std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist();
+                std::shared_ptr<Module>
+                    test_module = nl->create_module(MIN_MODULE_ID + 0, "test_module", nl->get_top_module());
+
+                test_module->set_name("test_module");
+                EXPECT_EQ(test_module->get_name(), "test_module");
+            }
+            {
+                // Set an empty name
+                NO_COUT_TEST_BLOCK;
+                std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist();
+                std::shared_ptr<Module>
+                    test_module = nl->create_module(MIN_MODULE_ID + 0, "test_module", nl->get_top_module());
+
+                test_module->set_name("");
+                EXPECT_EQ(test_module->get_name(), "test_module");
+            }
+        TEST_END
     }
-};
 
-/**
- * Testing the access on the id, the type and the stored netlist after calling the constructor
- *
- * Functions: constructor, get_id, get_name
- */
-TEST_F(module_test, check_constructor){
-    TEST_START
-        {
-            // Creating a module of id 123 and type "test module"
-            std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::shared_ptr<module> test_module = nl->create_module(MIN_MODULE_ID+123, "test module", nl->get_top_module());
+    /**
+     * Testing the access on the modules type
+     *
+     * Functions: set_type, get_type
+     */
+    TEST_F(ModuleTest, check_module_type) {
+        TEST_START
+            {
+                // Set a new type for Module
+                std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist();
+                std::shared_ptr<Module>
+                    test_module = nl->create_module(MIN_MODULE_ID + 0, "test_module", nl->get_top_module());
 
-            EXPECT_EQ(test_module->get_id(), (u32)(MIN_MODULE_ID+123));
-            EXPECT_EQ(test_module->get_name(), "test module");
-            EXPECT_EQ(test_module->get_netlist(), nl);
-        }
-    TEST_END
-}
+                test_module->set_type("new_type");
+                EXPECT_EQ(test_module->get_type(), "new_type");
+            }
+            {
+                // Set an already set type
+                std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist();
+                std::shared_ptr<Module>
+                    test_module = nl->create_module(MIN_MODULE_ID + 0, "test_module", nl->get_top_module());
 
-/**
- * Testing the set_name function of module
- *
- * Functions: set_name
- */
-TEST_F(module_test, check_set_id){
-    TEST_START
-        {
-            // Set a new name for module
-            std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::shared_ptr<module> test_module = nl->create_module(MIN_MODULE_ID+0, "test_module", nl->get_top_module());
+                test_module->set_type("new_type");
+                test_module->set_type("new_type");
+                EXPECT_EQ(test_module->get_type(), "new_type");
+            }
+        TEST_END
+    }
 
-            test_module->set_name("new_name");
-            EXPECT_EQ(test_module->get_name(), "new_name");
-        }
-        {
-            // Set an already set name
-            std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::shared_ptr<module> test_module = nl->create_module(MIN_MODULE_ID+0, "test_module", nl->get_top_module());
+    /**
+     * Testing the set_parent_module function
+     *
+     * Functions: set_parent_module
+     */
+    TEST_F(ModuleTest, check_set_parent_module) {
+        TEST_START
+            // POSITIVE
+            {
+                /*  Consider the Module scheme below. We set the parent_module of m_0 from the top_module to m_1
+                 *
+                 *                  .--> m_2
+                 *        .--> m_0 -|
+                 *   top -|         '--> m_3     ==>      top-.                 .--> m_2
+                 *        '--> m_1                            '-> m_1 --> m_0 --|
+                 *                                                              '--> m_3
+                 *
+                 */
+                std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist();
+                std::shared_ptr<Module>
+                    m_0 = nl->create_module(MIN_MODULE_ID + 0, "test_module_0", nl->get_top_module());
+                std::shared_ptr<Module>
+                    m_1 = nl->create_module(MIN_MODULE_ID + 1, "test_module_1", nl->get_top_module());
+                std::shared_ptr<Module> m_2 = nl->create_module(MIN_MODULE_ID + 2, "test_module_2", m_0);
+                std::shared_ptr<Module> m_3 = nl->create_module(MIN_MODULE_ID + 3, "test_module_3", m_0);
 
-            test_module->set_name("test_module");
-            EXPECT_EQ(test_module->get_name(), "test_module");
-        }
-        {
-            // Set an empty name
-            NO_COUT_TEST_BLOCK;
-            std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::shared_ptr<module> test_module = nl->create_module(MIN_MODULE_ID+0, "test_module", nl->get_top_module());
+                m_0->set_parent_module(m_1);
+                EXPECT_EQ(m_0->get_parent_module(), m_1);
+                EXPECT_FALSE(m_1->get_submodules(test_utils::module_name_filter("test_module_0"), false).empty());
+                EXPECT_FALSE(m_1->get_submodules(test_utils::module_name_filter("test_module_2"), true).empty());
+                EXPECT_FALSE(m_1->get_submodules(test_utils::module_name_filter("test_module_3"), true).empty());
+            }
+            {
+                /*  Hang m_0 to one of its childs (m_1). m_1 should be connected to the top_module afterwards
+                 *
+                 *
+                 *               .--- m_1
+                 *  top --- m_0 -|              ==>     top --- m_1 --- m_0 --- m_2
+                 *               '--- m_2
+                 *
+                 */
+                std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist();
+                std::shared_ptr<Module>
+                    m_0 = nl->create_module(MIN_MODULE_ID + 0, "test_module_0", nl->get_top_module());
+                std::shared_ptr<Module> m_1 = nl->create_module(MIN_MODULE_ID + 1, "test_module_1", m_0);
+                std::shared_ptr<Module> m_2 = nl->create_module(MIN_MODULE_ID + 2, "test_module_2", m_0);
 
-            test_module->set_name("");
-            EXPECT_EQ(test_module->get_name(), "test_module");
-        }
-    TEST_END
-}
+                m_0->set_parent_module(m_1);
+                EXPECT_EQ(m_1->get_parent_module(), nl->get_top_module());
+                EXPECT_EQ(m_0->get_parent_module(), m_1);
+                EXPECT_EQ(m_2->get_parent_module(), m_0);
+            }
+            // NEGATIVE
+            /*{ // FAILS: new_parent == m_parent wrong! => new_parent == this
+                // Hang a Module to itself
+                NO_COUT_TEST_BLOCK;
+                std::shared_ptr<Netlist> nl = create_empty_netlist();
+                std::shared_ptr<Module> m_0 = nl->create_module(MIN_MODULE_ID+0, "test_module_0", nl->get_top_module());
 
-/**
- * Testing the set_parent_module function
- *
- * Functions: set_parent_module
- */
-TEST_F(module_test, check_set_parent_module){
-    TEST_START
-        // POSITIVE
-        {
-            /*  Consider the module scheme below. We set the parent_module of m_0 from the top_module to m_1
-             *
-             *                  .--> m_2
-             *        .--> m_0 -|
-             *   top -|         '--> m_3     ==>      top-.                 .--> m_2
-             *        '--> m_1                            '-> m_1 --> m_0 --|
-             *                                                              '--> m_3
-             *
-             */
-            std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::shared_ptr<module> m_0 = nl->create_module(MIN_MODULE_ID+0, "test_module_0", nl->get_top_module());
-            std::shared_ptr<module> m_1 = nl->create_module(MIN_MODULE_ID+1, "test_module_1", nl->get_top_module());
-            std::shared_ptr<module> m_2 = nl->create_module(MIN_MODULE_ID+2, "test_module_2", m_0);
-            std::shared_ptr<module> m_3 = nl->create_module(MIN_MODULE_ID+3, "test_module_3", m_0);
+                m_0->set_parent_module(m_0);
+                EXPECT_EQ(m_0->get_parent_module(), nl->get_top_module());
+            }*/
+            {
+                // Try to change the parent of the top_module
+                NO_COUT_TEST_BLOCK;
+                std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist();
+                std::shared_ptr<Module>
+                    m_0 = nl->create_module(MIN_MODULE_ID + 0, "test_module_0", nl->get_top_module());
 
-            m_0->set_parent_module(m_1);
-            EXPECT_EQ(m_0->get_parent_module(), m_1);
-            EXPECT_FALSE(m_1->get_submodules(module_name_filter("test_module_0"),false).empty());
-            EXPECT_FALSE(m_1->get_submodules(module_name_filter("test_module_2"),true).empty());
-            EXPECT_FALSE(m_1->get_submodules(module_name_filter("test_module_3"),true).empty());
-        }
-        {
-            /*  Hang m_0 to one of its childs (m_1). m_1 should be connected to the top_module afterwards
-             *
-             *
-             *               .--- m_1
-             *  top --- m_0 -|              ==>     top --- m_1 --- m_0 --- m_2
-             *               '--- m_2
-             *
-             */
-            std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::shared_ptr<module> m_0 = nl->create_module(MIN_MODULE_ID+0, "test_module_0", nl->get_top_module());
-            std::shared_ptr<module> m_1 = nl->create_module(MIN_MODULE_ID+1, "test_module_1", m_0);
-            std::shared_ptr<module> m_2 = nl->create_module(MIN_MODULE_ID+2, "test_module_2", m_0);
+                nl->get_top_module()->set_parent_module(m_0);
+                EXPECT_EQ(m_0->get_parent_module(), nl->get_top_module());
+                EXPECT_EQ(nl->get_top_module()->get_parent_module(), nullptr);
+            }
+            /*{ // FAILS with SIGSEGV
+                // new_parent is a nullptr
+                NO_COUT_TEST_BLOCK;
+                std::shared_ptr<Netlist> nl = create_empty_netlist();
+                std::shared_ptr<Module> m_0 = nl->create_module(MIN_MODULE_ID+0, "test_module_0", nl->get_top_module());
 
-            m_0->set_parent_module(m_1);
-            EXPECT_EQ(m_1->get_parent_module(), nl->get_top_module());
-            EXPECT_EQ(m_0->get_parent_module(), m_1);
-            EXPECT_EQ(m_2->get_parent_module(), m_0);
-        }
-        // NEGATIVE
-        /*{ // FAILS: new_parent == m_parent wrong! => new_parent == this
-            // Hang a module to itself
-            NO_COUT_TEST_BLOCK;
-            std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::shared_ptr<module> m_0 = nl->create_module(MIN_MODULE_ID+0, "test_module_0", nl->get_top_module());
+                m_0->set_parent_module(nullptr);
+                nl->get_top_module()->set_parent_module(m_0);
+                EXPECT_EQ(m_0->get_parent_module(), nl->get_top_module());
+            }*/
+            /*{ // FAILS (necessary?)
+                // new_parent not part of the netlist (anymore)
+                NO_COUT_TEST_BLOCK;
+                std::shared_ptr<Netlist> nl = create_empty_netlist();
+                std::shared_ptr<Netlist> nl_other = create_empty_netlist();
+                std::shared_ptr<Module> m_0 = nl->create_module(MIN_MODULE_ID+0, "test_module_0", nl->get_top_module());
+                std::shared_ptr<Module> m_1 = nl->create_module(MIN_MODULE_ID+1, "test_module_1", nl->get_top_module());
+                nl->delete_module(m_0); // m_0 is removed from the netlist
 
-            m_0->set_parent_module(m_0);
-            EXPECT_EQ(m_0->get_parent_module(), nl->get_top_module());
-        }*/
-        {
-            // Try to change the parent of the top_module
-            NO_COUT_TEST_BLOCK;
-            std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::shared_ptr<module> m_0 = nl->create_module(MIN_MODULE_ID+0, "test_module_0", nl->get_top_module());
+                m_1->set_parent_module(m_0);
+                EXPECT_EQ(m_1->get_parent_module(), nl->get_top_module());
+            }*/
+        TEST_END
+    }
 
-            nl->get_top_module()->set_parent_module(m_0);
-            EXPECT_EQ(m_0->get_parent_module(), nl->get_top_module());
-            EXPECT_EQ(nl->get_top_module()->get_parent_module(), nullptr);
-        }
-        /*{ // FAILS with SIGSEGV
-            // new_parent is a nullptr
-            NO_COUT_TEST_BLOCK;
-            std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::shared_ptr<module> m_0 = nl->create_module(MIN_MODULE_ID+0, "test_module_0", nl->get_top_module());
+    /**
+     * Testing the contains_gate function
+     *
+     * Functions: contains_gate
+     */
+    TEST_F(ModuleTest, check_contains_gate) {
+        TEST_START
+            // POSITIVE
+            {
+                // Check a Gate, that is part of the Module (not recursive)
+                std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist();
+                std::shared_ptr<Module> m_0 = nl->create_module(MIN_MODULE_ID + 0, "test_module", nl->get_top_module());
+                std::shared_ptr<Gate>
+                    gate_0 =
+                    nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_0");
+                m_0->assign_gate(gate_0);
 
-            m_0->set_parent_module(nullptr);
-            nl->get_top_module()->set_parent_module(m_0);
-            EXPECT_EQ(m_0->get_parent_module(), nl->get_top_module());
-        }*/
-        /*{ // FAILS (necessary?)
-            // new_parent not part of the netlist (anymore)
-            NO_COUT_TEST_BLOCK;
-            std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::shared_ptr<netlist> nl_other = create_empty_netlist();
-            std::shared_ptr<module> m_0 = nl->create_module(MIN_MODULE_ID+0, "test_module_0", nl->get_top_module());
-            std::shared_ptr<module> m_1 = nl->create_module(MIN_MODULE_ID+1, "test_module_1", nl->get_top_module());
-            nl->delete_module(m_0); // m_0 is removed from the netlist
+                EXPECT_TRUE(m_0->contains_gate(gate_0));
+            }
+            {
+                // Check a Gate, that isn't part of the Module (not recursive)
+                std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist();
+                std::shared_ptr<Module> m_0 = nl->create_module(MIN_MODULE_ID + 0, "test_module", nl->get_top_module());
+                std::shared_ptr<Gate>
+                    gate_0 =
+                    nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_0");
 
-            m_1->set_parent_module(m_0);
-            EXPECT_EQ(m_1->get_parent_module(), nl->get_top_module());
-        }*/
-    TEST_END
-}
+                EXPECT_FALSE(m_0->contains_gate(gate_0));
+            }
+            {
+                // Check a Gate, that isn't part of the Module, but of a submodule (not recursive)
+                std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist();
+                std::shared_ptr<Module> m_0 = nl->create_module(MIN_MODULE_ID + 0, "test_module", nl->get_top_module());
+                std::shared_ptr<Module> submodule = nl->create_module(MIN_MODULE_ID + 1, "test_module", m_0);
+                ASSERT_NE(submodule, nullptr);
+                std::shared_ptr<Gate>
+                    gate_0 =
+                    nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_0");
+                submodule->assign_gate(gate_0);
 
-/**
- * Testing the contains_gate function
- *
- * Functions: contains_gate
- */
-TEST_F(module_test, check_contains_gate){
-    TEST_START
-        // POSITIVE
-        {
-            // Check a gate, that is part of the module (not recursive)
-            std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::shared_ptr<module> m_0 = nl->create_module(MIN_MODULE_ID+0, "test_module", nl->get_top_module());
-            std::shared_ptr<gate> gate_0 = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("gate_1_to_1"), "gate_0");
-            m_0->assign_gate(gate_0);
+                EXPECT_FALSE(m_0->contains_gate(gate_0));
+            }
+            {
+                // Check a Gate, that isn't part of the Module, but of a submodule (recursive)
+                std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist();
+                std::shared_ptr<Module> m_0 = nl->create_module(MIN_MODULE_ID + 0, "test_module", nl->get_top_module());
+                std::shared_ptr<Module> submodule = nl->create_module(MIN_MODULE_ID + 1, "test_module", m_0);
+                ASSERT_NE(submodule, nullptr);
+                std::shared_ptr<Gate>
+                    gate_0 =
+                    nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_0");
+                submodule->assign_gate(gate_0);
 
-            EXPECT_TRUE(m_0->contains_gate(gate_0));
-        }
-        {
-            // Check a gate, that isn't part of the module (not recursive)
-            std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::shared_ptr<module> m_0 = nl->create_module(MIN_MODULE_ID+0, "test_module", nl->get_top_module());
-            std::shared_ptr<gate> gate_0 = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("gate_1_to_1"), "gate_0");
+                EXPECT_TRUE(m_0->contains_gate(gate_0, true));
+            }
+        TEST_END
+    }
 
-            EXPECT_FALSE(m_0->contains_gate(gate_0));
-        }
-        {
-            // Check a gate, that isn't part of the module, but of a submodule (not recursive)
-            std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::shared_ptr<module> m_0 = nl->create_module(MIN_MODULE_ID+0, "test_module", nl->get_top_module());
-            std::shared_ptr<module> submodule = nl->create_module(MIN_MODULE_ID+1, "test_module", m_0);
-            ASSERT_NE(submodule, nullptr);
-            std::shared_ptr<gate> gate_0 = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("gate_1_to_1"), "gate_0");
-            submodule->assign_gate(gate_0);
+    /**
+     * Testing the addition of gates to the Module. Verify the addition by call the
+     * get_gates function and the contains_gate function
+     *
+     * Functions: assign_gate
+     */
+    TEST_F(ModuleTest, check_assign_gate) {
+        TEST_START
+            {
+                // Add some gates to the Module
+                std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist();
+                std::shared_ptr<Gate>
+                    gate_0 =
+                    nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_0");
+                std::shared_ptr<Gate>
+                    gate_1 =
+                    nl->create_gate(MIN_GATE_ID + 1, test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_1");
+                // this Gate is not part of the Module
+                std::shared_ptr<Gate> gate_not_in_m =
+                    nl->create_gate(MIN_GATE_ID + 2, test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_not_in_m");
 
-            EXPECT_FALSE(m_0->contains_gate(gate_0));
-        }
-        {
-            // Check a gate, that isn't part of the module, but of a submodule (recursive)
-            std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::shared_ptr<module> m_0 = nl->create_module(MIN_MODULE_ID+0, "test_module", nl->get_top_module());
-            std::shared_ptr<module> submodule = nl->create_module(MIN_MODULE_ID+1, "test_module", m_0);
-            ASSERT_NE(submodule, nullptr);
-            std::shared_ptr<gate> gate_0 = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("gate_1_to_1"), "gate_0");
-            submodule->assign_gate(gate_0);
+                // Add gate_0 and gate_1 to a Module
+                std::shared_ptr<Module>
+                    test_module = nl->create_module(MIN_MODULE_ID + 0, "test Module", nl->get_top_module());
+                test_module->assign_gate(gate_0);
+                test_module->assign_gate(gate_1);
 
-            EXPECT_TRUE(m_0->contains_gate(gate_0, true));
-        }
-    TEST_END
-}
+                std::set<std::shared_ptr<Gate>> expRes = {gate_0, gate_1};
 
-/**
- * Testing the addition of gates to the module. Verify the addition by call the
- * get_gates function and the contains_gate function
- *
- * Functions: assign_gate
- */
-TEST_F(module_test, check_assign_gate){
-    TEST_START
-        {
-            // Add some gates to the module
-            std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::shared_ptr<gate> gate_0 = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("gate_1_to_1"), "gate_0");
-            std::shared_ptr<gate> gate_1 = nl->create_gate(MIN_GATE_ID+1, get_gate_type_by_name("gate_1_to_1"), "gate_1");
-            // this gate is not part of the module
-            std::shared_ptr<gate> gate_not_in_m = nl->create_gate(MIN_GATE_ID+2, get_gate_type_by_name("gate_1_to_1"), "gate_not_in_m");
+                EXPECT_EQ(test_module->get_gates(), expRes);
+                EXPECT_TRUE(test_module->contains_gate(gate_0));
+                EXPECT_TRUE(test_module->contains_gate(gate_1));
+                EXPECT_FALSE(test_module->contains_gate(gate_not_in_m));
+            }
+            {
+                // Add the same Gate twice to the Module
+                NO_COUT_TEST_BLOCK;
+                std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist();
+                std::shared_ptr<Gate>
+                    gate_0 =
+                    nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_0");
 
-            // Add gate_0 and gate_1 to a module
-            std::shared_ptr<module> test_module = nl->create_module(MIN_MODULE_ID+0, "test module", nl->get_top_module());
-            test_module->assign_gate(gate_0);
-            test_module->assign_gate(gate_1);
+                // Add gate_0 twice
+                std::shared_ptr<Module>
+                    test_module = nl->create_module(MIN_MODULE_ID + 0, "test Module", nl->get_top_module());
+                test_module->assign_gate(gate_0);
+                test_module->assign_gate(gate_0);
 
-            std::set<std::shared_ptr<gate>> expRes = {gate_0, gate_1};
-
-            EXPECT_EQ(test_module->get_gates(), expRes);
-            EXPECT_TRUE(test_module->contains_gate(gate_0));
-            EXPECT_TRUE(test_module->contains_gate(gate_1));
-            EXPECT_FALSE(test_module->contains_gate(gate_not_in_m));
-        }
-        {
-            // Add the same gate twice to the module
-            NO_COUT_TEST_BLOCK;
-            std::shared_ptr<netlist> nl  = create_empty_netlist();
-            std::shared_ptr<gate> gate_0 = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("gate_1_to_1"), "gate_0");
-
-            // Add gate_0 twice
-            std::shared_ptr<module> test_module = nl->create_module(MIN_MODULE_ID+0, "test module", nl->get_top_module());
-            test_module->assign_gate(gate_0);
-            test_module->assign_gate(gate_0);
-
-            std::set<std::shared_ptr<gate>> expRes = {
+                std::set<std::shared_ptr<Gate>> expRes = {
                     gate_0,
-            };
+                };
 
-            EXPECT_EQ(test_module->get_gates(), expRes);
-            EXPECT_TRUE(test_module->contains_gate(gate_0));
-        }
-        {
-            // Insert a gate owned by a submodule
-            NO_COUT_TEST_BLOCK;
-            std::shared_ptr<netlist> nl  = create_empty_netlist();
-            std::shared_ptr<gate> gate_0 = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("gate_1_to_1"), "gate_0");
+                EXPECT_EQ(test_module->get_gates(), expRes);
+                EXPECT_TRUE(test_module->contains_gate(gate_0));
+            }
+            {
+                // Insert a Gate owned by a submodule
+                NO_COUT_TEST_BLOCK;
+                std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist();
+                std::shared_ptr<Gate>
+                    gate_0 =
+                    nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_0");
 
-            std::shared_ptr<module> test_module = nl->create_module(MIN_MODULE_ID+0, "test module", nl->get_top_module());
-            std::shared_ptr<module> submodule = nl->create_module(MIN_MODULE_ID+1, "submodule", test_module);
-            submodule->assign_gate(gate_0);
-            ASSERT_TRUE(submodule->contains_gate(gate_0));
-            ASSERT_FALSE(test_module->contains_gate(gate_0));
+                std::shared_ptr<Module>
+                    test_module = nl->create_module(MIN_MODULE_ID + 0, "test Module", nl->get_top_module());
+                std::shared_ptr<Module> submodule = nl->create_module(MIN_MODULE_ID + 1, "submodule", test_module);
+                submodule->assign_gate(gate_0);
+                ASSERT_TRUE(submodule->contains_gate(gate_0));
+                ASSERT_FALSE(test_module->contains_gate(gate_0));
 
-            test_module->assign_gate(gate_0);
+                test_module->assign_gate(gate_0);
 
-            std::set<std::shared_ptr<gate>> expRes = {
+                std::set<std::shared_ptr<Gate>> expRes = {
                     gate_0
-            };
+                };
 
-            EXPECT_EQ(test_module->get_gates(), expRes);
-            EXPECT_FALSE(submodule->contains_gate(gate_0));
-        }
+                EXPECT_EQ(test_module->get_gates(), expRes);
+                EXPECT_FALSE(submodule->contains_gate(gate_0));
+            }
 
-        // NEGATIVE
-        {
-            // Gate is a nullptr
-            NO_COUT_TEST_BLOCK;
-            std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::shared_ptr<module> test_module = nl->create_module(MIN_MODULE_ID+0, "test module", nl->get_top_module());
-            test_module->assign_gate(nullptr);
-            EXPECT_TRUE(test_module->get_gates().empty());
-        }
-    TEST_END
-}
-
-/**
- * Testing the deletion of gates from modules
- *
- * Functions: remove_gate
- */
-TEST_F(module_test, check_remove_gate){
-    TEST_START
-        {
-            // Delete a gate from a module (gate owned by the modules)
-            std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::shared_ptr<module> m_0 = nl->create_module(MIN_MODULE_ID+0, "test_module", nl->get_top_module());
-            std::shared_ptr<gate> gate_0 = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("gate_1_to_1"), "gate_0");
-            m_0->assign_gate(gate_0);
-
-            ASSERT_TRUE(m_0->contains_gate(gate_0));
-            m_0->remove_gate(gate_0);
-            EXPECT_FALSE(m_0->contains_gate(gate_0));
-        }
-        {
-            // Try to delete a gate from a module (gate owned by another module)
-            NO_COUT_TEST_BLOCK;
-            std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::shared_ptr<module> m_0 = nl->create_module(MIN_MODULE_ID+0, "test_module", nl->get_top_module());
-            std::shared_ptr<module> m_other = nl->create_module(MIN_MODULE_ID+1, "other_test_module", nl->get_top_module());
-            std::shared_ptr<gate> gate_0 = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("gate_1_to_1"), "gate_0");
-            m_other->assign_gate(gate_0);
-
-            m_0->remove_gate(gate_0);
-            EXPECT_FALSE(m_0->contains_gate(gate_0));
-            EXPECT_TRUE(m_other->contains_gate(gate_0));
-        }
-        // NEGATIVE
-        {
-            // Try to delete a gate from the top-module (should change nothing)
-            NO_COUT_TEST_BLOCK;
-            std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::shared_ptr<gate> gate_0 = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("gate_1_to_1"), "gate_0");
-            std::shared_ptr<module> tm =  nl->get_top_module();
-
-            ASSERT_TRUE(tm->contains_gate(gate_0));
-            tm->remove_gate(gate_0);
-            EXPECT_TRUE(tm->contains_gate(gate_0));
-        }
-        {
-            // Try to delete a nullptr (should not crash)
-            NO_COUT_TEST_BLOCK;
-            std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::shared_ptr<module> m_0 = nl->create_module(MIN_MODULE_ID+0, "test_module", nl->get_top_module());
-
-            m_0->remove_gate(nullptr);
-        }
-    TEST_END
-}
-
-/**
- * Testing the get_gate_by_id function
- *
- * Functions: get_gate_by_id
- */
-TEST_F(module_test, check_get_gate_by_id){
-    TEST_START
-        // POSITIVE
-        {
-            // get a gate by its id (gate owned by module)(not recursive)
-            std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::shared_ptr<module> m_0 = nl->create_module(MIN_MODULE_ID+0, "test_module", nl->get_top_module());
-            std::shared_ptr<gate> gate_123 = nl->create_gate(MIN_GATE_ID+123, get_gate_type_by_name("gate_1_to_1"), "gate_123");
-            m_0->assign_gate(gate_123);
-
-            ASSERT_TRUE(m_0->contains_gate(gate_123));
-            EXPECT_EQ(m_0->get_gate_by_id(MIN_GATE_ID+123), gate_123);
-        }
-        {
-            // get a gate by its id (not owned by a submodule)(not recursive)
-            std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::shared_ptr<module> m_0 = nl->create_module(MIN_MODULE_ID+0, "test_module", nl->get_top_module());
-            std::shared_ptr<module> submodule = nl->create_module(MIN_MODULE_ID+1, "other_module", m_0);
-            std::shared_ptr<gate> gate_123 = nl->create_gate(MIN_GATE_ID+123, get_gate_type_by_name("gate_1_to_1"), "gate_123");
-            submodule->assign_gate(gate_123);
-
-            EXPECT_EQ(m_0->get_gate_by_id(MIN_GATE_ID+123), nullptr);
-        }
-        {
-            // get a gate by its id (not owned by a submodule)(recursive)
-            std::shared_ptr<netlist> nl = create_empty_netlist();
-            std::shared_ptr<module> m_0 = nl->create_module(MIN_MODULE_ID+0, "test_module", nl->get_top_module());
-            std::shared_ptr<module> submodule = nl->create_module(MIN_MODULE_ID+1, "other_module", m_0);
-            std::shared_ptr<gate> gate_123 = nl->create_gate(MIN_GATE_ID+123, get_gate_type_by_name("gate_1_to_1"), "gate_123");
-            submodule->assign_gate(gate_123);
-
-            EXPECT_EQ(m_0->get_gate_by_id(MIN_GATE_ID+123, true), gate_123);
-        }
-    TEST_END
-}
-
-/**
- * Testing the access on submodules as well as the contains module function. Therefore we build up a module tree like this:
- *
- *               .----> MODULE_0
- *               |
- * TOP_MODULE ---+                .--> MODULE_2
- *               |                |
- *               '----> MODULE_1 -+
- *                                |
- *                                '--> MODULE_3
- *
- *   (Remark: MODULE_0 and MODULE_2 are both named "even_module", while MODULE_1 and MODULE_3 are named "odd_module")
- *
- * Functions: get_submodules, contains_module
- */
-TEST_F(module_test, check_get_submodules){
-    TEST_START
-        // Set up the module tree
-        std::shared_ptr<netlist> nl = create_empty_netlist();
-        std::shared_ptr<module> tm = nl->get_top_module();
-        ASSERT_NE(tm, nullptr);
-        std::shared_ptr<module> m_0 = nl->create_module(MIN_MODULE_ID+0, "even_module", tm);
-        ASSERT_NE(m_0, nullptr);
-        std::shared_ptr<module> m_1 = nl->create_module(MIN_MODULE_ID+1, "odd_module", tm);
-        ASSERT_NE(m_1, nullptr);
-        std::shared_ptr<module> m_2 = nl->create_module(MIN_MODULE_ID+2, "even_module", m_1);
-        ASSERT_NE(m_2, nullptr);
-        std::shared_ptr<module> m_3 = nl->create_module(MIN_MODULE_ID+3, "odd_module", m_1);
-        ASSERT_NE(m_3, nullptr);
-        {
-            // Testing the access on submodules (no module_name_filter, not recursive)
+            // NEGATIVE
             {
-                // Submodules of TOP_MODULE;
-                std::set<std::shared_ptr<module>> exp_result = {m_0, m_1};
-                EXPECT_EQ(tm->get_submodules(nullptr, false), exp_result);
-                EXPECT_TRUE(tm->contains_module(m_0, false));
-                EXPECT_TRUE(tm->contains_module(m_1, false));
-                EXPECT_FALSE(tm->contains_module(m_2, false));
-                EXPECT_FALSE(tm->contains_module(m_3, false));
+                // Gate is a nullptr
+                NO_COUT_TEST_BLOCK;
+                std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist();
+                std::shared_ptr<Module>
+                    test_module = nl->create_module(MIN_MODULE_ID + 0, "test Module", nl->get_top_module());
+                test_module->assign_gate(nullptr);
+                EXPECT_TRUE(test_module->get_gates().empty());
+            }
+        TEST_END
+    }
+
+    /**
+     * Testing the deletion of gates from modules
+     *
+     * Functions: remove_gate
+     */
+    TEST_F(ModuleTest, check_remove_gate) {
+        TEST_START
+            {
+                // Delete a Gate from a Module (Gate owned by the modules)
+                std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist();
+                std::shared_ptr<Module> m_0 = nl->create_module(MIN_MODULE_ID + 0, "test_module", nl->get_top_module());
+                std::shared_ptr<Gate>
+                    gate_0 =
+                    nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_0");
+                m_0->assign_gate(gate_0);
+
+                ASSERT_TRUE(m_0->contains_gate(gate_0));
+                m_0->remove_gate(gate_0);
+                EXPECT_FALSE(m_0->contains_gate(gate_0));
             }
             {
-                // Submodules of MODULE_1;
-                std::set<std::shared_ptr<module>> exp_result = {m_2, m_3};
-                EXPECT_EQ(m_1->get_submodules(nullptr, false), exp_result);
+                // Try to delete a Gate from a Module (Gate owned by another Module)
+                NO_COUT_TEST_BLOCK;
+                std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist();
+                std::shared_ptr<Module> m_0 = nl->create_module(MIN_MODULE_ID + 0, "test_module", nl->get_top_module());
+                std::shared_ptr<Module>
+                    m_other = nl->create_module(MIN_MODULE_ID + 1, "other_test_module", nl->get_top_module());
+                std::shared_ptr<Gate>
+                    gate_0 =
+                    nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_0");
+                m_other->assign_gate(gate_0);
+
+                m_0->remove_gate(gate_0);
+                EXPECT_FALSE(m_0->contains_gate(gate_0));
+                EXPECT_TRUE(m_other->contains_gate(gate_0));
+            }
+            // NEGATIVE
+            {
+                // Try to delete a Gate from the top-Module (should change nothing)
+                NO_COUT_TEST_BLOCK;
+                std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist();
+                std::shared_ptr<Gate>
+                    gate_0 =
+                    nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_0");
+                std::shared_ptr<Module> tm = nl->get_top_module();
+
+                ASSERT_TRUE(tm->contains_gate(gate_0));
+                tm->remove_gate(gate_0);
+                EXPECT_TRUE(tm->contains_gate(gate_0));
             }
             {
-                // Submodules of MODULE_0;
-                std::set<std::shared_ptr<module>> exp_result = {};
-                EXPECT_EQ(m_0->get_submodules(nullptr, false), exp_result);
+                // Try to delete a nullptr (should not crash)
+                NO_COUT_TEST_BLOCK;
+                std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist();
+                std::shared_ptr<Module> m_0 = nl->create_module(MIN_MODULE_ID + 0, "test_module", nl->get_top_module());
+
+                m_0->remove_gate(nullptr);
             }
-        }
-        {
-            // Testing the access on submodules (module_name_filter set, not recursive)
+        TEST_END
+    }
+
+    /**
+     * Testing the get_gate_by_id function
+     *
+     * Functions: get_gate_by_id
+     */
+    TEST_F(ModuleTest, check_get_gate_by_id) {
+        TEST_START
+            // POSITIVE
             {
-                // Submodules of TOP_MODULE;
-                std::set<std::shared_ptr<module>> exp_result = {m_0};
-                EXPECT_EQ(tm->get_submodules(module_name_filter("even_module"), false), exp_result);
-            }
-            {
-                // Submodules of MODULE_1;
-                std::set<std::shared_ptr<module>> exp_result = {m_2};
-                EXPECT_EQ(m_1->get_submodules(module_name_filter("even_module"), false), exp_result);
-            }
-            {
-                // Submodules of TOP_MODULE (name does not exists);
-                std::set<std::shared_ptr<module>> exp_result = {};
-                EXPECT_EQ(tm->get_submodules(module_name_filter("non_existing_name"), false), exp_result);
-            }
-        }
-        {
-            // Testing the access on submodules (recursive)
-            {
-                // Submodules of TOP_MODULE;
-                std::set<std::shared_ptr<module>> exp_result = {m_0,m_1,m_2,m_3};
-                EXPECT_EQ(tm->get_submodules(nullptr, true), exp_result);
-                EXPECT_TRUE(tm->contains_module(m_0, true));
-                EXPECT_TRUE(tm->contains_module(m_1, true));
-                EXPECT_TRUE(tm->contains_module(m_2, true));
-                EXPECT_TRUE(tm->contains_module(m_3, true));
+                // get a Gate by its id (Gate owned by Module)(not recursive)
+                std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist();
+                std::shared_ptr<Module> m_0 = nl->create_module(MIN_MODULE_ID + 0, "test_module", nl->get_top_module());
+                std::shared_ptr<Gate>
+                    gate_123 =
+                    nl->create_gate(MIN_GATE_ID + 123, test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_123");
+                m_0->assign_gate(gate_123);
+
+                ASSERT_TRUE(m_0->contains_gate(gate_123));
+                EXPECT_EQ(m_0->get_gate_by_id(MIN_GATE_ID + 123), gate_123);
             }
             {
-                // Submodules of TOP_MODULE (with module_name_filter);
-                std::set<std::shared_ptr<module>> exp_result = {m_0,m_2};
-                EXPECT_EQ(tm->get_submodules(module_name_filter("even_module"), true), exp_result);
+                // get a Gate by its id (not owned by a submodule)(not recursive)
+                std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist();
+                std::shared_ptr<Module> m_0 = nl->create_module(MIN_MODULE_ID + 0, "test_module", nl->get_top_module());
+                std::shared_ptr<Module> submodule = nl->create_module(MIN_MODULE_ID + 1, "other_module", m_0);
+                std::shared_ptr<Gate>
+                    gate_123 =
+                    nl->create_gate(MIN_GATE_ID + 123, test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_123");
+                submodule->assign_gate(gate_123);
+
+                EXPECT_EQ(m_0->get_gate_by_id(MIN_GATE_ID + 123), nullptr);
             }
             {
-                // Submodules of MODULE_0
-                std::set<std::shared_ptr<module>> exp_result = {};
-                EXPECT_EQ(m_0->get_submodules(nullptr, true), exp_result);
+                // get a Gate by its id (not owned by a submodule)(recursive)
+                std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist();
+                std::shared_ptr<Module> m_0 = nl->create_module(MIN_MODULE_ID + 0, "test_module", nl->get_top_module());
+                std::shared_ptr<Module> submodule = nl->create_module(MIN_MODULE_ID + 1, "other_module", m_0);
+                std::shared_ptr<Gate>
+                    gate_123 =
+                    nl->create_gate(MIN_GATE_ID + 123, test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_123");
+                submodule->assign_gate(gate_123);
+
+                EXPECT_EQ(m_0->get_gate_by_id(MIN_GATE_ID + 123, true), gate_123);
             }
-        }
-        {
-            // Testing edge cases of contains_module
+        TEST_END
+    }
 
-            // -- the passed module is a nullptr
-            EXPECT_FALSE(tm->contains_module(nullptr, false));
-            // -- the calling module is a leave
-            EXPECT_FALSE(m_2->contains_module(tm, false));
-            // -- the passed module is the same as the calling one
-            EXPECT_FALSE(m_2->contains_module(m_2, false));
-        }
-    TEST_END
-}
+    /**
+     * Testing the access on submodules as well as the contains Module function. Therefore we build up a Module tree like this:
+     *
+     *               .----> MODULE_0
+     *               |
+     * TOP_MODULE ---+                .--> MODULE_2
+     *               |                |
+     *               '----> MODULE_1 -+
+     *                                |
+     *                                '--> MODULE_3
+     *
+     *   (Remark: MODULE_0 and MODULE_2 are both named "even_module", while MODULE_1 and MODULE_3 are named "odd_module")
+     *
+     * Functions: get_submodules, contains_module
+     */
+    TEST_F(ModuleTest, check_get_submodules) {
+        TEST_START
+            // Set up the Module tree
+            std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist();
+            std::shared_ptr<Module> tm = nl->get_top_module();
+            ASSERT_NE(tm, nullptr);
+            std::shared_ptr<Module> m_0 = nl->create_module(MIN_MODULE_ID + 0, "even_module", tm);
+            ASSERT_NE(m_0, nullptr);
+            std::shared_ptr<Module> m_1 = nl->create_module(MIN_MODULE_ID + 1, "odd_module", tm);
+            ASSERT_NE(m_1, nullptr);
+            std::shared_ptr<Module> m_2 = nl->create_module(MIN_MODULE_ID + 2, "even_module", m_1);
+            ASSERT_NE(m_2, nullptr);
+            std::shared_ptr<Module> m_3 = nl->create_module(MIN_MODULE_ID + 3, "odd_module", m_1);
+            ASSERT_NE(m_3, nullptr);
+            {
+                // Testing the access on submodules (no module_name_filter, not recursive)
+                {
+                    // Submodules of TOP_MODULE;
+                    std::set<std::shared_ptr<Module>> exp_result = {m_0, m_1};
+                    EXPECT_EQ(tm->get_submodules(nullptr, false), exp_result);
+                    EXPECT_TRUE(tm->contains_module(m_0, false));
+                    EXPECT_TRUE(tm->contains_module(m_1, false));
+                    EXPECT_FALSE(tm->contains_module(m_2, false));
+                    EXPECT_FALSE(tm->contains_module(m_3, false));
+                }
+                {
+                    // Submodules of MODULE_1;
+                    std::set<std::shared_ptr<Module>> exp_result = {m_2, m_3};
+                    EXPECT_EQ(m_1->get_submodules(nullptr, false), exp_result);
+                }
+                {
+                    // Submodules of MODULE_0;
+                    std::set<std::shared_ptr<Module>> exp_result = {};
+                    EXPECT_EQ(m_0->get_submodules(nullptr, false), exp_result);
+                }
+            }
+            {
+                // Testing the access on submodules (module_name_filter set, not recursive)
+                {
+                    // Submodules of TOP_MODULE;
+                    std::set<std::shared_ptr<Module>> exp_result = {m_0};
+                    EXPECT_EQ(tm->get_submodules(test_utils::module_name_filter("even_module"), false), exp_result);
+                }
+                {
+                    // Submodules of MODULE_1;
+                    std::set<std::shared_ptr<Module>> exp_result = {m_2};
+                    EXPECT_EQ(m_1->get_submodules(test_utils::module_name_filter("even_module"), false), exp_result);
+                }
+                {
+                    // Submodules of TOP_MODULE (name does not exists);
+                    std::set<std::shared_ptr<Module>> exp_result = {};
+                    EXPECT_EQ(tm->get_submodules(test_utils::module_name_filter("non_existing_name"), false),
+                              exp_result);
+                }
+            }
+            {
+                // Testing the access on submodules (recursive)
+                {
+                    // Submodules of TOP_MODULE;
+                    std::set<std::shared_ptr<Module>> exp_result = {m_0, m_1, m_2, m_3};
+                    EXPECT_EQ(tm->get_submodules(nullptr, true), exp_result);
+                    EXPECT_TRUE(tm->contains_module(m_0, true));
+                    EXPECT_TRUE(tm->contains_module(m_1, true));
+                    EXPECT_TRUE(tm->contains_module(m_2, true));
+                    EXPECT_TRUE(tm->contains_module(m_3, true));
+                }
+                {
+                    // Submodules of TOP_MODULE (with module_name_filter);
+                    std::set<std::shared_ptr<Module>> exp_result = {m_0, m_2};
+                    EXPECT_EQ(tm->get_submodules(test_utils::module_name_filter("even_module"), true), exp_result);
+                }
+                {
+                    // Submodules of MODULE_0
+                    std::set<std::shared_ptr<Module>> exp_result = {};
+                    EXPECT_EQ(m_0->get_submodules(nullptr, true), exp_result);
+                }
+            }
+            {
+                // Testing edge cases of contains_module
 
-/*
- *      Testing the get_input_nets, get_output_nets, get_internal_nets by using the following example netlist with a module
- *
- *                     ################################################
- *                     # TEST_MODULE                                  #
- *                     #                                              #
- *      global_in -----§---------------=  INV (0)  = -----------------§----- global_out
- *                     #                                              #
- *                 .---§--= INV (1) =--=                              #
- *                 |   #                  AND2 (2) =--+---------------§----= INV (5)
- *    = INV (4) =--+---§---------------=              |               #
- *                     #                              '--= INV (3) =  #
- *                     #                                              #
- *                     ################################################
- *
- *
- */
+                // -- the passed Module is a nullptr
+                EXPECT_FALSE(tm->contains_module(nullptr, false));
+                // -- the calling Module is a leave
+                EXPECT_FALSE(m_2->contains_module(tm, false));
+                // -- the passed Module is the same as the calling one
+                EXPECT_FALSE(m_2->contains_module(m_2, false));
+            }
+        TEST_END
+    }
 
-/**
- * Testing the get_input_nets, get_output_nets and get_internal_nets function
- *
- * Functions: get_input_nets, get_output_nets, get_internal_nets
- */
-TEST_F(module_test, check_get_input_nets){
-    TEST_START
-        // +++ Create the example netlist (see above)
+    /*
+     *      Testing the get_input_nets, get_output_nets, get_internal_nets by using the following example netlist with a Module
+     *
+     *                     ################################################
+     *                     # TEST_MODULE                                  #
+     *                     #                                              #
+     *      global_in -----§---------------=  INV (0)  = -----------------§----- global_out
+     *                     #                                              #
+     *                 .---§--= INV (1) =--=                              #
+     *                 |   #                  AND2 (2) =--+---------------§----= INV (5)
+     *    = INV (4) =--+---§---------------=              |               #
+     *                     #                              '--= INV (3) =  #
+     *                     #                                              #
+     *                     ################################################
+     *
+     *
+     */
 
-        std::shared_ptr<netlist> nl = create_empty_netlist();
+    /**
+     * Testing the get_input_nets, get_output_nets and get_internal_nets function
+     *
+     * Functions: get_input_nets, get_output_nets, get_internal_nets
+     */
+    TEST_F(ModuleTest, check_get_input_nets) {
+        TEST_START
+            // +++ Create the example netlist (see above)
 
-        // Add the gates
-        std::shared_ptr<gate> gate_0 = nl->create_gate(MIN_GATE_ID+0, get_gate_type_by_name("gate_1_to_1") , "gate_0");
-        std::shared_ptr<gate> gate_1 = nl->create_gate(MIN_GATE_ID+1, get_gate_type_by_name("gate_1_to_1") , "gate_1");
-        std::shared_ptr<gate> gate_2 = nl->create_gate(MIN_GATE_ID+2, get_gate_type_by_name("gate_2_to_1"), "gate_2");
-        std::shared_ptr<gate> gate_3 = nl->create_gate(MIN_GATE_ID+3, get_gate_type_by_name("gate_1_to_1") , "gate_3");
-        std::shared_ptr<gate> gate_4 = nl->create_gate(MIN_GATE_ID+4, get_gate_type_by_name("gate_1_to_1") , "gate_4");
-        std::shared_ptr<gate> gate_5 = nl->create_gate(MIN_GATE_ID+5, get_gate_type_by_name("gate_1_to_1") , "gate_5");
+            std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist();
 
-        // Add the nets (net_x_y1_y2_... is net from x to y1,y2,... (g = global input/output))
-        std::shared_ptr<net> net_g_0   = nl->create_net(MIN_NET_ID+0, "name_0");
-        std::shared_ptr<net> net_0_g   = nl->create_net(MIN_NET_ID+1, "name_0");
-        std::shared_ptr<net> net_1_2   = nl->create_net(MIN_NET_ID+3, "name_0");
-        std::shared_ptr<net> net_4_1_2 = nl->create_net(MIN_NET_ID+4, "name_1");
-        std::shared_ptr<net> net_2_3_5 = nl->create_net(MIN_NET_ID+5, "name_1");
+            // Add the gates
+            std::shared_ptr<Gate>
+                gate_0 = nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_0");
+            std::shared_ptr<Gate>
+                gate_1 = nl->create_gate(MIN_GATE_ID + 1, test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_1");
+            std::shared_ptr<Gate>
+                gate_2 = nl->create_gate(MIN_GATE_ID + 2, test_utils::get_gate_type_by_name("gate_2_to_1"), "gate_2");
+            std::shared_ptr<Gate>
+                gate_3 = nl->create_gate(MIN_GATE_ID + 3, test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_3");
+            std::shared_ptr<Gate>
+                gate_4 = nl->create_gate(MIN_GATE_ID + 4, test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_4");
+            std::shared_ptr<Gate>
+                gate_5 = nl->create_gate(MIN_GATE_ID + 5, test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_5");
 
-        // Connect the nets
-        net_g_0->add_destination(gate_0, "I");
+            // Add the nets (net_x_y1_y2_... is Net from x to y1,y2,... (g = global input/output))
+            std::shared_ptr<Net> net_g_0 = nl->create_net(MIN_NET_ID + 0, "name_0");
+            std::shared_ptr<Net> net_0_g = nl->create_net(MIN_NET_ID + 1, "name_0");
+            std::shared_ptr<Net> net_1_2 = nl->create_net(MIN_NET_ID + 3, "name_0");
+            std::shared_ptr<Net> net_4_1_2 = nl->create_net(MIN_NET_ID + 4, "name_1");
+            std::shared_ptr<Net> net_2_3_5 = nl->create_net(MIN_NET_ID + 5, "name_1");
 
-        net_0_g->add_source(gate_0, "O");
+            // Connect the nets
+            net_g_0->add_destination(gate_0, "I");
 
-        net_4_1_2->add_source(gate_4, "O");
-        net_4_1_2->add_destination(gate_1, "I");
-        net_4_1_2->add_destination(gate_2, "I1");
+            net_0_g->add_source(gate_0, "O");
 
-        net_1_2->add_source(gate_1, "O");
-        net_1_2->add_destination(gate_2, "I0");
+            net_4_1_2->add_source(gate_4, "O");
+            net_4_1_2->add_destination(gate_1, "I");
+            net_4_1_2->add_destination(gate_2, "I1");
 
-        net_2_3_5->add_source(gate_2, "O");
-        net_2_3_5->add_destination(gate_3, "I");
-        net_2_3_5->add_destination(gate_5, "I");
+            net_1_2->add_source(gate_1, "O");
+            net_1_2->add_destination(gate_2, "I0");
 
-        // Mark global nets
-        nl->mark_global_input_net(net_g_0);
-        nl->mark_global_output_net(net_0_g);
+            net_2_3_5->add_source(gate_2, "O");
+            net_2_3_5->add_destination(gate_3, "I");
+            net_2_3_5->add_destination(gate_5, "I");
 
-        // Create the module
-        std::shared_ptr<module> test_module = nl->create_module(MIN_MODULE_ID+0, "test_module", nl->get_top_module());
-        for(auto g : std::set<std::shared_ptr<gate>>({gate_0, gate_1, gate_2, gate_3})){
-            test_module->assign_gate(g);
-        }
-        {
-            // Get input nets of the test module
-            std::set<std::shared_ptr<net>> exp_result = {net_g_0, net_4_1_2};
-            EXPECT_EQ(test_module->get_input_nets(), exp_result);
-        }
-        {
-            // Get output nets of the test module
-            std::set<std::shared_ptr<net>> exp_result = {net_0_g, net_2_3_5};
-            EXPECT_EQ(test_module->get_output_nets(), exp_result);
-        }
-        {
-            // Get internal nets of the test module
-            std::set<std::shared_ptr<net>> exp_result = {net_1_2, net_2_3_5};
-            EXPECT_EQ(test_module->get_internal_nets(), exp_result);
-        }
+            // Mark global nets
+            nl->mark_global_input_net(net_g_0);
+            nl->mark_global_output_net(net_0_g);
 
-    TEST_END
-}
+            // Create the Module
+            std::shared_ptr<Module>
+                test_module = nl->create_module(MIN_MODULE_ID + 0, "test_module", nl->get_top_module());
+            for (auto g : std::set<std::shared_ptr<Gate>>({gate_0, gate_1, gate_2, gate_3})) {
+                test_module->assign_gate(g);
+            }
+            {
+                // Get input nets of the test Module
+                std::set<std::shared_ptr<Net>> exp_result = {net_g_0, net_4_1_2};
+                EXPECT_EQ(test_module->get_input_nets(), exp_result);
+            }
+            {
+                // Get output nets of the test Module
+                std::set<std::shared_ptr<Net>> exp_result = {net_0_g, net_2_3_5};
+                EXPECT_EQ(test_module->get_output_nets(), exp_result);
+            }
+            {
+                // Get internal nets of the test Module
+                std::set<std::shared_ptr<Net>> exp_result = {net_1_2, net_2_3_5};
+                EXPECT_EQ(test_module->get_internal_nets(), exp_result);
+            }
 
+        TEST_END
+    }
 
+    /**
+     * Testing the usage of port names
+     *
+     * Functions: get_input_port_name, set_input_port_name, get_output_port_name, set_output_port_name,
+     *            get_input_port_names, get_output_port_names
+     */
+    TEST_F(ModuleTest, check_port_names) {
+        TEST_START
+            // Add some modules to the example netlist
+            std::shared_ptr<Netlist> nl = test_utils::create_example_netlist();
+            std::shared_ptr<Module> m_0 = nl->create_module("mod_0",
+                                                            nl->get_top_module(),
+                                                            {nl->get_gate_by_id(MIN_GATE_ID + 0),
+                                                             nl->get_gate_by_id(MIN_GATE_ID + 3)});
+            {
+                // Get the input port name of a Net, which port name was not specified yet
+                EXPECT_EQ(m_0->get_input_port_name(nl->get_net_by_id(MIN_NET_ID + 13)), "I(0)");
+            }
+            {
+                // Get the output port name of a Net, which port name was not specified yet
+                EXPECT_EQ(m_0->get_output_port_name(nl->get_net_by_id(MIN_NET_ID + 045)), "O(0)");
+            }
+            {
+                // Set and get an input port name
+                std::cout << "\n===\n" << m_0->get_input_port_name(nl->get_net_by_id(MIN_NET_ID + 13)) << "\n===\n"
+                          << std::endl;
+                m_0->set_input_port_name(nl->get_net_by_id(MIN_NET_ID + 13), "port_name_net_1_3");
+                EXPECT_EQ(m_0->get_input_port_name(nl->get_net_by_id(MIN_NET_ID + 13)), "port_name_net_1_3");
+            }
+            {
+                // Set and get an output port name
+                m_0->set_output_port_name(nl->get_net_by_id(MIN_NET_ID + 045), "port_name_net_0_4_5");
+                EXPECT_EQ(m_0->get_output_port_name(nl->get_net_by_id(MIN_NET_ID + 045)), "port_name_net_0_4_5");
+            }
+            // Create a new Module with more modules (with 2 input and ouput nets)
+            std::shared_ptr<Module> m_1 = nl->create_module("mod_1",
+                                                            nl->get_top_module(),
+                                                            {nl->get_gate_by_id(MIN_GATE_ID + 0),
+                                                             nl->get_gate_by_id(MIN_GATE_ID + 3),
+                                                             nl->get_gate_by_id(MIN_GATE_ID + 7)});
+            // Specify exactly one input and output port name
+            m_1->set_input_port_name(nl->get_net_by_id(MIN_NET_ID + 13), "port_name_net_1_3");
+            m_1->set_output_port_name(nl->get_net_by_id(MIN_NET_ID + 045), "port_name_net_0_4_5");
+
+            {
+                // Get all input port names
+                std::map<std::shared_ptr<Net>, std::string> exp_input_port_names = {
+                    {nl->get_net_by_id(MIN_NET_ID + 13), "port_name_net_1_3"},
+                    {nl->get_net_by_id(MIN_NET_ID + 20), "I(0)"}
+                };
+                EXPECT_EQ(m_1->get_input_port_names(), exp_input_port_names);
+            }
+            {
+                // Get all output port names
+                std::map<std::shared_ptr<Net>, std::string> exp_output_port_names = {
+                    {nl->get_net_by_id(MIN_NET_ID + 045), "port_name_net_0_4_5"},
+                    {nl->get_net_by_id(MIN_NET_ID + 78), "O(0)"}
+                };
+                EXPECT_EQ(m_1->get_output_port_names(), exp_output_port_names);
+            }
+            // Create a new Module with more modules (with 2 input and ouput nets)
+            std::shared_ptr<Module>
+                m_2 = nl->create_module("mod_2", nl->get_top_module(), {nl->get_gate_by_id(MIN_GATE_ID + 3)});
+            // Add an input and an output port name
+            m_2->set_input_port_name(nl->get_net_by_id(MIN_NET_ID + 13), "port_name_net_1_3");
+            m_2->set_output_port_name(nl->get_net_by_id(MIN_NET_ID + 30), "port_name_net_3_0");
+            // Add additional gates to the Module so that the port name nets are no longer input/output nets of the Module
+            m_2->assign_gate(nl->get_gate_by_id(MIN_GATE_ID + 1));
+            m_2->assign_gate(nl->get_gate_by_id(MIN_GATE_ID + 0));
+            {
+                // Get all input port names. The old ports shouldn't be contained.
+                std::map<std::shared_ptr<Net>, std::string> exp_input_port_names = {
+                    {nl->get_net_by_id(MIN_NET_ID + 20), "I(0)"}
+                };
+                EXPECT_EQ(m_2->get_input_port_names(), exp_input_port_names);
+            }
+            {
+                // Get all output port names. The old ports shouldn't be contained.
+                std::map<std::shared_ptr<Net>, std::string> exp_output_port_names = {
+                    {nl->get_net_by_id(MIN_NET_ID + 045), "O(0)"}
+                };
+                EXPECT_EQ(m_2->get_output_port_names(), exp_output_port_names);
+            }
+
+            // NEGATIVE
+            {
+                // Set the input port name of a Net, that is no input Net of the Module
+                NO_COUT_TEST_BLOCK;
+                m_0->set_input_port_name(nl->get_net_by_id(MIN_NET_ID + 78), "port_name");
+                EXPECT_EQ(m_0->get_input_port_name(nl->get_net_by_id(MIN_NET_ID + 78)), "");
+            }
+            {
+                // Set the output port name of a Net, that is no input Net of the Module
+                NO_COUT_TEST_BLOCK;
+                m_0->set_output_port_name(nl->get_net_by_id(MIN_NET_ID + 78), "port_name");
+                EXPECT_EQ(m_0->get_output_port_name(nl->get_net_by_id(MIN_NET_ID + 78)), "");
+            }
+            {
+                // Pass a nullptr
+                m_0->set_input_port_name(nullptr, "port_name");
+                m_0->set_output_port_name(nullptr, "port_name");
+                EXPECT_EQ(m_0->get_input_port_name(nullptr), "");
+                EXPECT_EQ(m_0->get_output_port_name(nullptr), "");
+            }
+        TEST_END
+    }
+
+} //namespace hal

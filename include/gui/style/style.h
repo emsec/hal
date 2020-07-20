@@ -21,19 +21,19 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef STYLE_H
-#define STYLE_H
+#pragma once
 
 #include <QColor>
 #include <QIcon>
 #include <QString>
 
-namespace style
+namespace hal
 {
-    extern QString get_stylesheet();
-    extern QIcon get_styled_svg_icon(const QString& from_to_colors, const QString& svg_path);
+    namespace style
+    {
+        extern QString get_stylesheet();
+        extern QIcon get_styled_svg_icon(const QString& from_to_colors, const QString& svg_path);
 
-    extern void debug_update(); // PLACEHOLDER
-}    // namespace style
-
-#endif    // STYLE_H
+        extern void debug_update(); // PLACEHOLDER
+    }    // namespace style
+}

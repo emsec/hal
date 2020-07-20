@@ -25,24 +25,27 @@
 
 #include "graph_widget/items/nets/graphics_net.h"
 
-class separated_graphics_net : public graphics_net
+namespace hal
 {
-public:
-    static void update_alpha();
+    class SeparatedGraphicsNet : public GraphicsNet
+    {
+    public:
+        static void update_alpha();
 
-    separated_graphics_net(const std::shared_ptr<const net> n);
+        SeparatedGraphicsNet(const std::shared_ptr<const Net> n);
 
-    virtual void add_input(const QPointF& scene_position) = 0;
-    virtual void add_output(const QPointF& scene_position) = 0;
+        virtual void add_input(const QPointF& scene_position) = 0;
+        virtual void add_output(const QPointF& scene_position) = 0;
 
-    virtual qreal input_width() const = 0;
-    virtual qreal output_width() const = 0;
+        virtual qreal input_width() const = 0;
+        virtual qreal output_width() const = 0;
 
-    virtual void finalize();
+        virtual void finalize();
 
-protected:
-    static qreal s_alpha;
+    protected:
+        static qreal s_alpha;
 
-    QVector<QPointF> m_input_positions;
-    QVector<QPointF> m_output_positions;
-};
+        QVector<QPointF> m_input_positions;
+        QVector<QPointF> m_output_positions;
+    };
+}

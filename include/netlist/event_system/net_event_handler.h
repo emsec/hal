@@ -25,55 +25,58 @@
 
 #include "core/callback_hook.h"
 
-class netlist;
-
-class net;
-
 /**
  * @ingroup handler
  */
-namespace net_event_handler
+
+namespace hal
 {
-    /**
-     * Enables/disables callbacks for this handler.<br>
-     * Enabled by default.
-     *
-     * @param[in] flag - True to enable, false to disable.
-     */
-    NETLIST_API void enable(bool flag);
+    class Netlist;
+    class Net;
 
-    enum event
+    namespace net_event_handler
     {
-        created,         ///< no associated_data
-        removed,         ///< no associated_data
-        name_changed,    ///< no associated_data
-        src_added,       ///< associated_data = id of src gate
-        src_removed,     ///< associated_data = id of src gate
-        dst_added,       ///< associated_data = id of dst gate
-        dst_removed      ///< associated_data = id of dst gate
-    };
+        /**
+         * Enables/disables callbacks for this handler.<br>
+         * Enabled by default.
+         *
+         * @param[in] flag - True to enable, false to disable.
+         */
+        NETLIST_API void enable(bool flag);
 
-    /**
-    * Executes all registered callbacks.
-    *
-    * @param[in] ev - the event which occured.
-    * @param[in] net - The affected object.
-    * @param[in] associated_data - may have a meaning depending on the event type.
-    */
-    NETLIST_API void notify(event ev, std::shared_ptr<net> net, u32 associated_data = 0xFFFFFFFF);
+        enum event
+        {
+            created,         ///< no associated_data
+            removed,         ///< no associated_data
+            name_changed,    ///< no associated_data
+            src_added,       ///< associated_data = id of src gate
+            src_removed,     ///< associated_data = id of src gate
+            dst_added,       ///< associated_data = id of dst gate
+            dst_removed      ///< associated_data = id of dst gate
+        };
 
-    /**
-     * Registers a callback function.
-     *
-     * @param[in] name - name of the callback, used for callback removal.
-     * @param[in] function - The callback function.
-     */
-    NETLIST_API void register_callback(const std::string& name, std::function<void(event e, std::shared_ptr<net>, u32 associated_data)> function);
+        /**
+         * Executes all registered callbacks.
+         *
+         * @param[in] ev - the event which occured.
+         * @param[in] net - The affected object.
+         * @param[in] associated_data - may have a meaning depending on the event type.
+         */
+        NETLIST_API void notify(event ev, std::shared_ptr<Net> net, u32 associated_data = 0xFFFFFFFF);
 
-    /**
-     * Removes a callback function.
-     *
-     * @param[in] name - name of the callback.
-     */
-    NETLIST_API void unregister_callback(const std::string& name);
-}    // namespace net_event_handler
+        /**
+         * Registers a callback function.
+         *
+         * @param[in] name - name of the callback, used for callback removal.
+         * @param[in] function - The callback function.
+         */
+        NETLIST_API void register_callback(const std::string& name, std::function<void(event e, std::shared_ptr<Net>, u32 associated_data)> function);
+
+        /**
+         * Removes a callback function.
+         *
+         * @param[in] name - name of the callback.
+         */
+        NETLIST_API void unregister_callback(const std::string& name);
+    }    // namespace net_event_handler
+}    // namespace hal

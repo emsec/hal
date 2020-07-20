@@ -21,25 +21,25 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef PLUGIN_RELAY_H
-#define PLUGIN_RELAY_H
+#pragma once
 
 #include <QObject>
 
 #include <string>
 
-class plugin_relay : public QObject
+namespace hal
 {
-    Q_OBJECT
+    class PluginRelay : public QObject
+    {
+        Q_OBJECT
 
-public:
-    explicit plugin_relay(QObject* parent = nullptr);
+    public:
+        explicit PluginRelay(QObject* parent = nullptr);
 
-    void plugin_manager_callback(bool is_load, const std::string& plugin_name, const std::string& plugin_path);
+        void plugin_manager_callback(bool is_load, const std::string& plugin_name, const std::string& plugin_path);
 
-Q_SIGNALS:
-    void plugin_loaded(const QString& name, const QString& path);
-    void plugin_unloaded(const QString& name, const QString& path);
-};
-
-#endif    // PLUGIN_RELAY_H
+    Q_SIGNALS:
+        void plugin_loaded(const QString& name, const QString& path);
+        void plugin_unloaded(const QString& name, const QString& path);
+    };
+}

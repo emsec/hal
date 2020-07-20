@@ -21,18 +21,21 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef NETLIST_UTIL_H
-#define NETLIST_UTIL_H
+#pragma once
 
 #include "netlist/gate.h"
 #include "netlist/module.h"
 
 #include <unordered_set>
+#include <QSet>
 
-namespace gui_utility
+namespace hal
 {
-    std::shared_ptr<module> first_common_ancestor(std::unordered_set<std::shared_ptr<module>> modules, const std::unordered_set<std::shared_ptr<gate>>& gates);
-    std::shared_ptr<module> first_common_ancestor(std::shared_ptr<module> m1, std::shared_ptr<module> m2);
+    namespace gui_utility
+    {
+        std::shared_ptr<Module> first_common_ancestor(std::unordered_set<std::shared_ptr<Module>> modules, const std::unordered_set<std::shared_ptr<Gate>>& gates);
+        std::shared_ptr<Module> first_common_ancestor(std::shared_ptr<Module> m1, std::shared_ptr<Module> m2);
+        QSet<u32> parent_modules(std::shared_ptr<Gate> g);
+        QSet<u32> parent_modules(std::shared_ptr<Module> m);
+    }
 }
-
-#endif // NETLIST_UTIL_H

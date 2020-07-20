@@ -21,19 +21,19 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef SPLITTER_H
-#define SPLITTER_H
+#pragma once
 
 #include <QSplitter>
 
-class splitter : public QSplitter
+namespace hal
 {
-    Q_OBJECT
+    class Splitter : public QSplitter
+    {
+        Q_OBJECT
 
-public:
-    explicit splitter(Qt::Orientation orientation, QWidget* parent = 0);
+    public:
+        explicit Splitter(Qt::Orientation orientation, QWidget* parent = 0);
 
-    bool unused();
-};
-
-#endif    // SPLITTER_H
+        bool unused();
+    };
+}

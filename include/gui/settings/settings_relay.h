@@ -21,33 +21,33 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef SETTINGS_RELAY_H
-#define SETTINGS_RELAY_H
+#pragma once
 
 #include <QObject>
 #include <QPair>
 #include <QVector>
 
-class settings_relay : public QObject
+namespace hal
 {
-    Q_OBJECT
+    class SettingsRelay : public QObject
+    {
+        Q_OBJECT
 
-public:
-    explicit settings_relay(QObject* parent = nullptr);
-    // TODO do we need a sender registry?
-    // void register_sender(void* sender, QString name);
-    // void remove_sender(void* sender);
+    public:
+        explicit SettingsRelay(QObject* parent = nullptr);
+        // TODO do we need a sender registry?
+        // void register_sender(void* sender, QString name);
+        // void remove_sender(void* sender);
 
-    void relay_setting_changed(void* sender, const QString& key, const QVariant& val);
+        void relay_setting_changed(void* sender, const QString& key, const QVariant& val);
 
-Q_SIGNALS:
-    void setting_changed(void* sender, const QString& key, const QVariant& val);
+    Q_SIGNALS:
+        void setting_changed(void* sender, const QString& key, const QVariant& val);
 
-public Q_SLOTS:
-    void debug(void* sender, const QString& key, const QVariant& val);
+    public Q_SLOTS:
+        void debug(void* sender, const QString& key, const QVariant& val);
 
-// private:
-//     QVector<QPair<void*, QString>> m_sender_register;
-};
-
-#endif    // SETTINGS_RELAY_H
+    // private:
+    //     QVector<QPair<void*, QString>> m_sender_register;
+    };
+}

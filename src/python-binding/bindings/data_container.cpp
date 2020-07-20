@@ -1,14 +1,16 @@
 #include "bindings.h"
 
-void data_container_init(py::module &m)
+namespace hal
 {
-    py::class_<data_container, std::shared_ptr<data_container>> py_data_container(m, "data_container");
+    void data_container_init(py::module& m)
+    {
+        py::class_<DataContainer, std::shared_ptr<DataContainer>> py_data_container(m, "DataContainer");
 
-    py_data_container.def(py::init<>(), R"(
+        py_data_container.def(py::init<>(), R"(
         Construct a new data container.
 )");
 
-    py_data_container.def("set_data", &data_container::set_data, py::arg("category"), py::arg("key"), py::arg("value_data_type"), py::arg("value"), py::arg("log_with_info_level") = false, R"(
+        py_data_container.def("set_data", &DataContainer::set_data, py::arg("category"), py::arg("key"), py::arg("value_data_type"), py::arg("value"), py::arg("log_with_info_level") = false, R"(
         Sets a custom data entry
         If it does not exist yet, it is added.
 
@@ -21,7 +23,7 @@ void data_container_init(py::module &m)
         :rtype: bool
 )");
 
-    py_data_container.def("delete_data", &data_container::delete_data, py::arg("category"), py::arg("key"), py::arg("log_with_info_level") = false, R"(
+        py_data_container.def("delete_data", &DataContainer::delete_data, py::arg("category"), py::arg("key"), py::arg("log_with_info_level") = false, R"(
         Deletes custom data.
 
         :param str category: Category of key
@@ -31,13 +33,13 @@ void data_container_init(py::module &m)
         :rtype: bool
 )");
 
-    py_data_container.def_property_readonly("data", &data_container::get_data, R"(
+        py_data_container.def_property_readonly("data", &DataContainer::get_data, R"(
         A dict from ((1) category, (2) key) to ((1) type, (2) value) containing the stored data.
 
         :type: dict[tuple(str,str),tuple(str,str)]
 )");
 
-    py_data_container.def("get_data_by_key", &data_container::get_data_by_key, py::arg("category"), py::arg("key"), R"(
+        py_data_container.def("get_data_by_key", &DataContainer::get_data_by_key, py::arg("category"), py::arg("key"), R"(
         Gets data specified by key and category
 
         :param str category: Category of key
@@ -46,9 +48,10 @@ void data_container_init(py::module &m)
         :rtype: tuple(str,str)
 )");
 
-    py_data_container.def_property_readonly("data_keys", &data_container::get_data_keys, R"(
+        py_data_container.def_property_readonly("data_keys", &DataContainer::get_data_keys, R"(
         A list of tuples ((1) category, (2) key) containing all the data keys.
 
         :type: list[tuple(str,str)]
 )");
-}
+    }
+}    // namespace hal

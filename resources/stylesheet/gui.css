@@ -261,7 +261,7 @@ QHeaderView::row {
     border     : 1px solid rgba(43, 43, 43, 1);
 }
 
-#line_number_area {
+#LineNumberArea {
     background : rgba(49, 51, 53, 1);
 
 }

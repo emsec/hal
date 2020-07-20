@@ -2,7 +2,7 @@ name: Release
 
 on:
   push:
-    branches: [ master ]
+    branches: [ master, fix-release]
   pull_request:
     branches: [ master ]
 
@@ -12,8 +12,8 @@ jobs:
 
     strategy:
       matrix:
-        #        runs-on: [ubuntu-latest, macOS-latest]
-        runs-on: [ubuntu-latest]
+        #        runs-on: [ ubuntu-20.04, macOS-latest]
+        runs-on: [ ubuntu-20.04 ]
       fail-fast: false
 
     runs-on: ${{ matrix.runs-on }}
@@ -83,7 +83,7 @@ jobs:
           cd build
           cp $GITHUB_WORKSPACE/documentation/index.html doc/
           $GITHUB_WORKSPACE/tools/genversion.py $GITHUB_WORKSPACE
-          cmake -G Ninja $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_ALL_PLUGINS=ON -DBUILD_TESTS=ON -DBUILD_COVERAGE=ON -DWITH_GUI=ON -DBUILD_DOCUMENTATION=ON -DPACKAGE_DEB=OFF -DCMAKE_INSTALL_PREFIX=/usr/
+          cmake -G Ninja $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_ALL_PLUGINS=ON -DBUILD_TESTS=ON -DBUILD_COVERAGE=ON -DWITH_GUI=ON -DBUILD_DOCUMENTATION=ON -DPACKAGE_DEB=OFF -DCMAKE_INSTALL_PREFIX=/usr/ -DPYBIND11_PYTHON_VERSION=3.6
         env:
           CCACHE_DIR: ${{runner.workspace}}/.ccache
           CCACHE_COMPRESS: true

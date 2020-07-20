@@ -21,42 +21,42 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef DROP_MARKER_H
-#define DROP_MARKER_H
+#pragma once
 
 #include <QFrame>
 
 class QPropertyAnimation;
 
-class drop_marker : public QFrame
+namespace hal
 {
-    Q_OBJECT
-    Q_PROPERTY(int fixed_width READ fixed_width WRITE set_fixed_width)
-    Q_PROPERTY(int fixed_height READ fixed_height WRITE set_fixed_height)
+    class DropMarker : public QFrame
+    {
+        Q_OBJECT
+        Q_PROPERTY(int fixed_width READ fixed_width WRITE set_fixed_width)
+        Q_PROPERTY(int fixed_height READ fixed_height WRITE set_fixed_height)
 
-public:
-    drop_marker(Qt::Orientation orientation, QWidget* parent = nullptr);
+    public:
+        DropMarker(Qt::Orientation orientation, QWidget* parent = nullptr);
 
-    int fixed_width();
-    int fixed_height();
+        int fixed_width();
+        int fixed_height();
 
-    void set_fixed_width(int width);
-    void set_fixed_height(int height);
+        void set_fixed_width(int width);
+        void set_fixed_height(int height);
 
-    void set_end_value(int value);
+        void set_end_value(int value);
 
-    void expand();
-    void collapse();
+        void expand();
+        void collapse();
 
-    void reset();
+        void reset();
 
-private:
-    QPropertyAnimation* m_animation;
+    private:
+        QPropertyAnimation* m_animation;
 
-    Qt::Orientation m_orientation;
+        Qt::Orientation m_orientation;
 
-    int m_fixed_width;
-    int m_fixed_height;
-};
-
-#endif    // DROP_MARKER_H
+        int m_fixed_width;
+        int m_fixed_height;
+    };
+}

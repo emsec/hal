@@ -27,43 +27,46 @@
 
 #include <memory>
 
-class net;
-
-class graphics_net : public graphics_item
+namespace hal
 {
-public:
-    struct visuals
+    class Net;
+
+    class GraphicsNet : public GraphicsItem
     {
-        bool visible;
-        QColor color;
-        Qt::PenStyle pen_style;
-        bool fill_icon;
-        QColor fill_color;
-        Qt::BrushStyle brush_style;
+    public:
+        struct visuals
+        {
+            bool visible;
+            QColor color;
+            Qt::PenStyle pen_style;
+            bool fill_icon;
+            QColor fill_color;
+            Qt::BrushStyle brush_style;
+        };
+
+        static void load_settings();
+
+        GraphicsNet(const std::shared_ptr<const Net> n);
+
+        QRectF boundingRect() const override;
+        QPainterPath shape() const override;
+
+        virtual void set_visuals(const visuals& v);
+
+    protected:
+        static qreal s_line_width;
+        static qreal s_shape_width;
+
+        static QPen s_pen;
+        static QBrush s_brush;
+
+        QRectF m_rect;
+        QPainterPath m_shape;
+
+        Qt::PenStyle m_pen_style;
+
+        bool m_fill_icon;
+        QColor m_fill_color;
+        Qt::BrushStyle m_brush_style;
     };
-
-    static void load_settings();
-
-    graphics_net(const std::shared_ptr<const net> n);
-
-    QRectF boundingRect() const override;
-    QPainterPath shape() const override;
-
-    virtual void set_visuals(const visuals& v);
-
-protected:
-    static qreal s_line_width;
-    static qreal s_shape_width;
-
-    static QPen s_pen;
-    static QBrush s_brush;
-
-    QRectF m_rect;
-    QPainterPath m_shape;
-
-    Qt::PenStyle m_pen_style;
-
-    bool m_fill_icon;
-    QColor m_fill_color;
-    Qt::BrushStyle m_brush_style;
-};
+}

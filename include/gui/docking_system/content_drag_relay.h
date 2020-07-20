@@ -21,26 +21,26 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef CONTENT_DRAG_RELAY_H
-#define CONTENT_DRAG_RELAY_H
+#pragma once
 
 #include <QObject>
 
-class content_drag_relay : public QObject
+namespace hal
 {
-    Q_OBJECT
+    class ContentDragRelay : public QObject
+    {
+        Q_OBJECT
 
-public:
-    static content_drag_relay* instance();
-    void relay_drag_start();
-    void relay_drag_end();
+    public:
+        static ContentDragRelay* instance();
+        void relay_drag_start();
+        void relay_drag_end();
 
-Q_SIGNALS:
-    void drag_start();
-    void drag_end();
+    Q_SIGNALS:
+        void drag_start();
+        void drag_end();
 
-private:
-    content_drag_relay(QObject* parent = 0);
-};
-
-#endif    // CONTENT_DRAG_RELAY_H
+    private:
+        ContentDragRelay(QObject* parent = 0);
+    };
+}

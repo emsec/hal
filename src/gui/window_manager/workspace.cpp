@@ -2,15 +2,18 @@
 
 #include <QStyle>
 
-workspace::workspace(QWidget* parent) : QFrame(parent)
+namespace hal
 {
+    Workspace::Workspace(QWidget* parent) : QFrame(parent)
+    {
 
-}
+    }
 
-void workspace::repolish()
-{
-    QStyle* s = style();
+    void Workspace::repolish()
+    {
+        QStyle* s = style();
 
-    s->unpolish(this);
-    s->polish(this);
+        s->unpolish(this);
+        s->polish(this);
+    }
 }

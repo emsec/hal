@@ -27,48 +27,51 @@
 #include "def.h"
 #include "netlist/hdl_parser/hdl_parser.h"
 
-/** forward declaration */
-class netlist;
-
 #include <set>
 #include <string>
 #include <tuple>
 
-/**
- * @ingroup hdl_parsers
- */
-namespace hdl_parser_dispatcher
+namespace hal
 {
-    /**
-     * Returns the command line interface options of the hdl parser dispatcher
-     *
-     * @returns The options.
-     */
-    program_options get_cli_options();
+    /** forward declaration */
+    class Netlist;
 
     /**
-     * Returns the command language options for the parse() function.
-     *
-     * @returns The language options.
+     * @ingroup hdl_parsers
      */
-    std::set<std::string> get_gui_option();
+    namespace HDLParserDispatcher
+    {
+        /**
+         * Returns the command line interface options of the hdl parser dispatcher
+         *
+         * @returns The options.
+         */
+        ProgramOptions get_cli_options();
 
-    /**
-     * Returns the netlist for the file and specified command line options.
-     *
-     * @param[in] file_name - The input file.
-     * @param[in] args - The command line options.
-     * @returns The netlist representation of the hdl code or a nullpointer on error.
-     */
-    std::shared_ptr<netlist> parse(const hal::path& file_name, const program_arguments& args);
+        /**
+         * Returns the command language options for the parse() function.
+         *
+         * @returns The language options.
+         */
+        std::set<std::string> get_gui_option();
 
-    /**
-     * Returns the netlist for a file, parsed with a defined parser_name and gate library.
-     *
-     * @param[in] gate_library - The gate library used in the file.
-     * @param[in] parser_name - The name of the parser to use, e.g. vhdl, verilog...
-     * @param[in] file_name - The input file.
-     * @returns The netlist representation of the hdl code or a nullpointer on error.
-     */
-    std::shared_ptr<netlist> parse(const std::shared_ptr<gate_library>& gate_library, const std::string& parser_name, const hal::path& file_name);
-}    // namespace hdl_parser_dispatcher
+        /**
+         * Returns the netlist for the file and specified command line options.
+         *
+         * @param[in] file_name - The input file.
+         * @param[in] args - The command line options.
+         * @returns The netlist representation of the hdl code or a nullpointer on error.
+         */
+        std::shared_ptr<Netlist> parse(const std::filesystem::path& file_name, const ProgramArguments& args);
+
+        /**
+         * Returns the netlist for a file, parsed with a defined parser_name and gate library.
+         *
+         * @param[in] gate_library - The gate library used in the file.
+         * @param[in] parser_name - The name of the parser to use, e.g. vhdl, verilog...
+         * @param[in] file_name - The input file.
+         * @returns The netlist representation of the hdl code or a nullpointer on error.
+         */
+        std::shared_ptr<Netlist> parse(const std::shared_ptr<GateLibrary>& gate_library, const std::string& parser_name, const std::filesystem::path& file_name);
+    }    // namespace HDLParserDispatcher
+}    // namespace hal

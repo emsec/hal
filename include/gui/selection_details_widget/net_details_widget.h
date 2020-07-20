@@ -21,11 +21,9 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef NET_DETAILS_WIDGET_H
-#define NET_DETAILS_WIDGET_H
+#pragma once
 
 #include "def.h"
-
 #include "netlist_relay/netlist_relay.h"
 
 #include <QWidget>
@@ -34,76 +32,83 @@ class QVBoxLayout;
 class QHBoxLayout;
 class QLabel;
 class QScrollArea;
-class QTreeWidget;
-class QTreeWidgetItem;
 class QTableWidget;
 class QTableWidgetItem;
-class net;
-class gate;
+class QPushButton;
+class QFont;
+class QMouseEvent;
 
-class net_details_widget : public QWidget
+namespace hal
 {
-    Q_OBJECT
+    class Net;
+    class Gate;
 
-public:
-    net_details_widget(QWidget* parent = 0);
-    ~net_details_widget();
+    class NetDetailsWidget : public QWidget
+    {
+        Q_OBJECT
 
-    void update(u32 net_id);
+    public:
+        NetDetailsWidget(QWidget* parent = 0);
+        ~NetDetailsWidget();
 
-public Q_SLOTS:
-    void handle_item_expanded(QTreeWidgetItem* item);
-    void handle_item_collapsed(QTreeWidgetItem* item);
+        virtual bool eventFilter(QObject* watched, QEvent* event) Q_DECL_OVERRIDE;
+        void update(u32 net_id);
 
-    void on_treewidget_item_clicked(QTreeWidgetItem* item, int column);
+    public Q_SLOTS:
 
-    void handle_net_removed(const std::shared_ptr<net> n);
-    void handle_net_name_changed(const std::shared_ptr<net> n);
-    void handle_net_source_added(const std::shared_ptr<net> n, const u32 src_gate_id);
-    void handle_net_source_removed(const std::shared_ptr<net> n, const u32 src_gate_id);
-    void handle_net_destination_added(const std::shared_ptr<net> n, const u32 dst_gate_id);
-    void handle_net_destination_removed(const std::shared_ptr<net> n, const u32 dst_gate_id);
+        void handle_net_removed(const std::shared_ptr<Net> n);
+        void handle_net_name_changed(const std::shared_ptr<Net> n);
+        void handle_net_source_added(const std::shared_ptr<Net> n, const u32 src_gate_id);
+        void handle_net_source_removed(const std::shared_ptr<Net> n, const u32 src_gate_id);
+        void handle_net_destination_added(const std::shared_ptr<Net> n, const u32 dst_gate_id);
+        void handle_net_destination_removed(const std::shared_ptr<Net> n, const u32 dst_gate_id);
+        void handle_gate_name_changed(const std::shared_ptr<Gate> g);
 
-    void handle_gate_name_changed(const std::shared_ptr<gate> g);
+    private:
+        //general
+        u32 m_current_id;
+        bool m_hide_empty_sections;
+        QFont m_key_font;
 
-private:
-    // NEW !!!!!
+        //utility objects to encapsulate the sections together to make it scrollable
+        QScrollArea* m_scroll_area;
+        QWidget* m_top_lvl_container;
+        QVBoxLayout* m_top_lvl_layout;
+        QVBoxLayout* m_content_layout;
 
-    QVBoxLayout* m_content_layout;
-    QHBoxLayout* m_tree_row_layout;
+        //buttons to fold/unfold the corresponding sections
+        QPushButton* m_general_info_button;
+        QPushButton* m_source_pins_button;
+        QPushButton* m_destination_pins_button;
 
-    QTableWidget* m_general_table;
-    QTableWidgetItem* m_name_item;
-    QTableWidgetItem* m_type_item;
-    QTableWidgetItem* m_id_item;
-    QTableWidgetItem* m_module_item;
+        //the sections to unfold
+        //(1) general information section
+        QTableWidget* m_general_table;
+        QTableWidgetItem* m_name_item;
+        QTableWidgetItem* m_type_item;
+        QTableWidgetItem* m_id_item;
 
-    // stores input pin tree view
-    QTreeWidgetItem* m_source_pin;
-    // stores output pin tree view
-    QTreeWidgetItem* m_destination_pins;
+        //(2) source_pins section
+        QTableWidget* m_source_pins_table;
 
-    // stores utility objects for input/output pin tree view
-    QScrollArea* m_scroll_area;
-    QTreeWidget* m_tree_widget;
-    QVBoxLayout* m_scroll_area_layout;
-    QVBoxLayout* m_container_layout;
-    QWidget* m_container;
+        //(3) destination_pins section
+        QTableWidget* m_destination_pins_table;
 
-    //QLabel* m_item_deleted_label;
+        //function section
+        void handle_buttons_clicked();
+        void handle_table_item_clicked(QTableWidgetItem* item);
 
-    // NEW !!!!!;
-    QLabel* m_label;
-    QTableWidget* m_table_widget;
+        //straightforward context menu handlers
+        void handle_general_table_menu_requeted(const QPoint& pos);
+        void handle_sources_table_menu_requeted(const QPoint& pos);
+        void handle_destinations_table_menu_requeted(const QPoint& pos);
 
-    int m_tree_height;
-    int m_table_height;
-    int m_spacing = 1;
+        //utility function, used to calculate the actual width so the scrollbars and the accuracy of the click functionality is correct
+        QSize calculate_table_size(QTableWidget* table);
 
-    u32 m_current_id;
-
-    QTreeWidgetItem* m_source_item;
-    QTreeWidgetItem* m_destination_item;
-};
-
-#endif    // NET_DETAILS_WIDGET_H
+        void show_all_sections();
+        void hide_empty_sections();
+        void init_settings();
+        void handle_global_settings_changed(void* sender, const QString& key, const QVariant& value);
+    };
+}    // namespace hal

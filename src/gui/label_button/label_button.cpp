@@ -1,16 +1,19 @@
 #include "label_button/label_button.h"
 
-label_button::label_button(QWidget* parent, Qt::WindowFlags f) : QLabel(parent, f)
+namespace hal
 {
-}
+    LabelButton::LabelButton(QWidget* parent, Qt::WindowFlags f) : QLabel(parent, f)
+    {
+    }
 
-label_button::label_button(const QString& text, QWidget* parent, Qt::WindowFlags f) : QLabel(text, parent, f)
-{
-}
+    LabelButton::LabelButton(const QString& text, QWidget* parent, Qt::WindowFlags f) : QLabel(text, parent, f)
+    {
+    }
 
-void label_button::mousePressEvent(QMouseEvent* event)
-{
-    Q_UNUSED(event)
+    void LabelButton::mousePressEvent(QMouseEvent* event)
+    {
+        Q_UNUSED(event)
 
-    Q_EMIT clicked();
+        Q_EMIT clicked();
+    }
 }

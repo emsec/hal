@@ -25,29 +25,32 @@
 
 #include "graph_widget/items/nets/separated_graphics_net.h"
 
-class labeled_separated_net : public separated_graphics_net
+namespace hal
 {
-public:
-    static void load_settings();
+    class LabeledSeparatedNet : public SeparatedGraphicsNet
+    {
+    public:
+        static void load_settings();
 
-    labeled_separated_net(const std::shared_ptr<const net> n, const QString& text);
+        LabeledSeparatedNet(const std::shared_ptr<const Net> n, const QString& text);
 
-    void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override;
+        void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override;
 
-    void add_input(const QPointF& scene_position) override;
-    void add_output(const QPointF& scene_position) override;
+        void add_input(const QPointF& scene_position) override;
+        void add_output(const QPointF& scene_position) override;
 
-    qreal input_width() const override;
-    qreal output_width() const override;
+        qreal input_width() const override;
+        qreal output_width() const override;
 
-private:
-    static qreal s_wire_length;
-    static qreal s_text_offset;
+    private:
+        static qreal s_wire_length;
+        static qreal s_text_offset;
 
-    static QFont s_font;
-    static qreal s_font_height;
-    static qreal s_font_ascend;
+        static QFont s_font;
+        static qreal s_font_height;
+        static qreal s_font_ascend;
 
-    QString m_text;
-    qreal m_text_width;
-};
+        QString m_text;
+        qreal m_text_width;
+    };
+}

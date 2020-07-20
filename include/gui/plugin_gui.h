@@ -21,25 +21,25 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef __HAL_PLUGIN_GUI_H__
-#define __HAL_PLUGIN_GUI_H__
+#pragma once
 
-#include "core/interface_interactive_ui.h"
-
-class plugin_gui : public i_interactive_ui
+#include "core/plugin_interface_interactive_ui.h"
+namespace hal
 {
-public:
-    std::string get_name() const override;
-    std::string get_version() const override;
+    class PluginGui : public InteractiveUIPluginInterface
+    {
+    public:
+        std::string get_name() const override;
+        std::string get_version() const override;
 
-    void initialize_logging() const override;
+        void initialize_logging() const override;
 
-    bool exec(program_arguments& args) override;
-};
+        bool exec(ProgramArguments& args) override;
+    };
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wreturn-type-c-linkage"
-extern "C" PLUGIN_API std::shared_ptr<i_base> get_plugin_instance();
-#pragma GCC diagnostic pop
 
-#endif /* __HAL_PLUGIN_GUI_H__ */
+    #pragma GCC diagnostic push
+    #pragma GCC diagnostic ignored "-Wreturn-type-c-linkage"
+    extern "C" PLUGIN_API std::shared_ptr<BasePluginInterface> get_plugin_instance();
+    #pragma GCC diagnostic pop
+}

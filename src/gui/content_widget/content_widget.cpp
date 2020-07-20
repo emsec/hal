@@ -1,137 +1,146 @@
 #include "content_widget/content_widget.h"
 
 #include "gui_utils/graphics.h"
-#include "hal_content_anchor/hal_content_anchor.h"
+#include "content_anchor/content_anchor.h"
 #include "toolbar/toolbar.h"
 
 #include <QShortcut>
 #include <QStyle>
 #include <QVBoxLayout>
 
-content_widget::content_widget(QString name, QWidget* parent) : hal_widget(parent), m_name(name), m_content_layout(new QVBoxLayout())
+namespace hal
 {
-    m_content_layout->setContentsMargins(0, 0, 0, 0);
-    m_content_layout->setSpacing(0);
-    setMinimumSize(100, 100);
-    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    setWindowTitle(name);
-
-    setLayout(m_content_layout);
-    //debug code, delete later
-    QIcon temp;
-    temp.addFile(QStringLiteral(":/icons/start"), QSize(), QIcon::Normal, QIcon::Off);
-    set_icon(temp);
-}
-
-void content_widget::remove()
-{
-    if (m_anchor)
+    ContentWidget::ContentWidget(QString name, QWidget* parent) : Widget(parent), m_name(name), m_content_layout(new QVBoxLayout())
     {
-        m_anchor->remove(this);
-        Q_EMIT removed();
-    }
-}
+        m_content_layout->setContentsMargins(0, 0, 0, 0);
+        m_content_layout->setSpacing(0);
+        setMinimumSize(100, 100);
+        setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        setWindowTitle(name);
 
-void content_widget::detach()
-{
-    if (m_anchor)
+        setLayout(m_content_layout);
+        //debug code, delete later
+        QIcon temp;
+        temp.addFile(QStringLiteral(":/icons/start"), QSize(), QIcon::Normal, QIcon::Off);
+        set_icon(temp);
+    }
+
+    void ContentWidget::remove()
     {
-        m_anchor->detach(this);
-        Q_EMIT detached();
+        if (m_anchor)
+        {
+            m_anchor->remove(this);
+            Q_EMIT removed();
+        }
     }
-}
 
-void content_widget::reattach()
-{
-    if (m_anchor)
+    void ContentWidget::detach()
     {
-        m_anchor->reattach(this);
-        Q_EMIT reattached();
+        if (m_anchor)
+        {
+            m_anchor->detach(this);
+            Q_EMIT detached();
+        }
     }
-}
 
-void content_widget::open()
-{
-    if (m_anchor)
+    void ContentWidget::reattach()
     {
-        m_anchor->open(this);
-        Q_EMIT opened();
+        if (m_anchor)
+        {
+            m_anchor->reattach(this);
+            Q_EMIT reattached();
+        }
     }
-}
 
-void content_widget::close()
-{
-    if (m_anchor)
+    void ContentWidget::open()
     {
-        m_anchor->close(this);
-        Q_EMIT closed();
+        if (m_anchor)
+        {
+            m_anchor->open(this);
+            Q_EMIT opened();
+        }
     }
-}
 
-void content_widget::closeEvent(QCloseEvent* event){Q_UNUSED(event)}
+    void ContentWidget::close()
+    {
+        if (m_anchor)
+        {
+            m_anchor->close(this);
+            Q_EMIT closed();
+        }
+    }
 
-QString content_widget::name()
-{
-    return m_name;
-}
+    void ContentWidget::closeEvent(QCloseEvent* event){Q_UNUSED(event)}
 
-QIcon content_widget::icon()
-{
-    return m_icon;
-}
+    QString ContentWidget::name()
+    {
+        return m_name;
+    }
 
-void content_widget::set_anchor(hal_content_anchor* anchor)
-{
-    m_anchor = anchor;
-}
+    QIcon ContentWidget::icon()
+    {
+        return m_icon;
+    }
 
-void content_widget::set_icon(QIcon icon)
-{
-    m_icon = icon;
-}
+    void ContentWidget::set_anchor(ContentAnchor* anchor)
+    {
+        m_anchor = anchor;
+    }
 
-void content_widget::setup_toolbar(toolbar* toolbar){Q_UNUSED(toolbar)}
+    void ContentWidget::set_icon(QIcon icon)
+    {
+        m_icon = icon;
+    }
 
-QList<QShortcut*> content_widget::create_shortcuts()
-{
-    return QList<QShortcut*>();
-}
+    void ContentWidget::set_name(const QString &name)
+    {
+        m_name = name;
+        Q_EMIT name_changed(name);
+    }
 
-void content_widget::repolish()
-{
-    QStyle* s = style();
+    void ContentWidget::setup_toolbar(Toolbar* Toolbar){Q_UNUSED(Toolbar)}
 
-    s->unpolish(this);
-    s->polish(this);
+    QList<QShortcut*> ContentWidget::create_shortcuts()
+    {
+        return QList<QShortcut*>();
+    }
 
-    //    if (!m_icon_path.isEmpty())
-    //        m_icon_label->setPixmap(gui_utility::get_styled_svg_icon(m_icon_style, m_icon_path).pixmap(QSize(20, 20)));
-}
+    void ContentWidget::repolish()
+    {
+        QStyle* s = style();
 
-QString content_widget::icon_style()
-{
-    return m_icon_style;
-}
+        s->unpolish(this);
+        s->polish(this);
 
-QString content_widget::icon_path()
-{
-    return m_icon_path;
-}
+        //    if (!m_icon_path.isEmpty())
+        //        m_icon_label->setPixmap(gui_utility::get_styled_svg_icon(m_icon_style, m_icon_path).pixmap(QSize(20, 20)));
+    }
 
-void content_widget::set_icon_style(const QString& style)
-{
-    if (m_icon_style == style)
-        return;
+    QString ContentWidget::icon_style()
+    {
+        return m_icon_style;
+    }
 
-    m_icon_style = style;
-    repolish();
-}
+    QString ContentWidget::icon_path()
+    {
+        return m_icon_path;
+    }
 
-void content_widget::set_icon_path(const QString& path)
-{
-    if (m_icon_path == path)
-        return;
+    void ContentWidget::set_icon_style(const QString& style)
+    {
+        if (m_icon_style == style)
+            return;
 
-    m_icon_path = path;
-    repolish();
+        m_icon_style = style;
+        repolish();
+    }
+
+    void ContentWidget::set_icon_path(const QString& path)
+    {
+        if (m_icon_path == path)
+            return;
+
+        m_icon_path = path;
+        repolish();
+    }
 }

@@ -25,113 +25,90 @@
 
 #include "def.h"
 
-/* forward declaration */
-class gate;
-
-/**
- *  Endpoint data structure for (gate, pin) tuples
- *
- * @ingroup netlist
- */
-class endpoint
+namespace hal
 {
-public:
-    endpoint(const std::shared_ptr<gate>& gate, const std::string& pin, bool is_a_destination)
-    {
-        m_gate             = gate;
-        m_pin              = pin;
-        m_is_a_destination = is_a_destination;
-    }
-    endpoint(const endpoint&) = default;
-    endpoint(endpoint&&)      = default;
-    endpoint& operator=(const endpoint&) = default;
-    endpoint& operator=(endpoint&&) = default;
+    /* forward declaration */
+    class Gate;
 
     /**
-    * Standard "less than". <br>
-    * Required for searching through sets.
-    *
-    * @param[in] rhs - Compare target.
-    * @returns True if this is less than rhs.
-    */
-    bool operator<(const endpoint& rhs) const
-    {
-        if (this->m_gate != rhs.m_gate)
-        {
-            return (this->m_gate < rhs.m_gate);
-        }
-        if (this->m_pin != rhs.m_pin)
-        {
-            return (this->m_pin < rhs.m_pin);
-        }
-        return (this->m_is_a_destination < rhs.m_is_a_destination);
-    }
-
-    /**
-    * Standard "equals". <br>
-    * Required for searching through sets.
-    *
-    * @param[in] rhs - Compare target.
-    * @returns True if this is equal to rhs.
-    */
-    bool operator==(const endpoint& rhs) const
-    {
-        return (this->m_gate == rhs.m_gate) && (this->m_pin == rhs.m_pin) && (this->m_is_a_destination == rhs.m_is_a_destination);
-    }
-
-    /**
-    * Standard "unequal".
-    *
-    * @param[in] rhs - Compare target.
-    * @returns True if this is unequal to rhs.
-    */
-    bool operator!=(const endpoint& rhs) const
-    {
-        return !(*this == rhs);
-    }
-
-    /**
-    * Returns the gate of the endpoint.
-    *
-    * @returns The gate.
-    */
-    const std::shared_ptr<::gate>& get_gate() const
-    {
-        return m_gate;
-    }
-
-    /**
-     * Returns the pin of the endpoint.
+     *  Endpoint data structure for (gate, pin) tuples
      *
-     * @returns The pin.
+     * @ingroup netlist
      */
-    const std::string& get_pin() const
+    class Endpoint
     {
-        return m_pin;
-    }
+    public:
+        /**
+         * Construct an endpoint object.
+         * 
+         * @param[in] gate - A pointer to the gate of the endpoint.
+         * @param[in] pin - The pin of the endpoint.
+         * @param[in] is_a_destination - True if the endpoint is an output pin, false if it is an input pin.
+         */
+        Endpoint(const std::shared_ptr<Gate>& gate, const std::string& pin, bool is_a_destination);
 
-    /**
-     * Checks whether the pin of the endpoint is a destination pin.
-     *
-     * @returns True, if the endpoint is an input pin.
-     */
-    bool is_destination_pin() const
-    {
-        return m_is_a_destination;
-    }
+        Endpoint(const Endpoint&) = default;
+        Endpoint(Endpoint&&)      = default;
+        Endpoint& operator=(const Endpoint&) = default;
+        Endpoint& operator=(Endpoint&&) = default;
 
-    /**
-     * Checks whether the pin of the endpoint is a source pin.
-     *
-     * @returns True, if the endpoint is an output pin.
-     */
-    bool is_source_pin() const
-    {
-        return !m_is_a_destination;
-    }
+        /**
+         * Standard "less than". <br>
+         * Required for searching through sets.
+         *
+         * @param[in] rhs - Compare target.
+         * @returns True if this is less than rhs.
+         */
+        bool operator<(const Endpoint& rhs) const;
 
-private:
-    std::shared_ptr<gate> m_gate;
-    std::string m_pin;
-    bool m_is_a_destination;
-};
+        /**
+         * Standard "equals". <br>
+         * Required for searching through sets.
+         *
+         * @param[in] rhs - Compare target.
+         * @returns True if this is equal to rhs.
+         */
+        bool operator==(const Endpoint& rhs) const;
+
+        /**
+         * Standard "unequal".
+         *
+         * @param[in] rhs - Compare target.
+         * @returns True if this is unequal to rhs.
+         */
+        bool operator!=(const Endpoint& rhs) const;
+
+        /**
+         * Returns the gate of the endpoint.
+         *
+         * @returns The gate.
+         */
+        const std::shared_ptr<Gate>& get_gate() const;
+
+        /**
+         * Returns the pin of the endpoint.
+         *
+         * @returns The pin.
+         */
+        const std::string& get_pin() const;
+
+        /**
+         * Checks whether the pin of the endpoint is a destination pin.
+         *
+         * @returns True, if the endpoint is an input pin.
+         */
+        bool is_destination_pin() const;
+
+        /**
+         * Checks whether the pin of the endpoint is a source pin.
+         *
+         * @returns True, if the endpoint is an output pin.
+         */
+        bool is_source_pin() const;
+
+    private:
+        std::shared_ptr<Gate> m_gate;
+        std::string m_pin;
+        bool m_is_a_destination;
+    };
+}    // namespace hal

@@ -2,25 +2,9 @@
     <qresource prefix="/fonts">
         <file alias="iosevka-bold">fonts/iosevka-bold.ttf</file>
         <file alias="iosevka-bolditalic">fonts/iosevka-bolditalic.ttf</file>
-        <file alias="iosevka-boldoblique">fonts/iosevka-boldoblique.ttf</file>
-        <file alias="iosevka-extralight">fonts/iosevka-extralight.ttf</file>
-        <file alias="iosevka-extralightitalic">fonts/iosevka-extralightitalic.ttf</file>
-        <file alias="iosevka-extralightoblique">fonts/iosevka-extralightoblique.ttf</file>
-        <file alias="iosevka-heavy">fonts/iosevka-heavy.ttf</file>
-        <file alias="iosevka-heavyitalic">fonts/iosevka-heavyitalic.ttf</file>
-        <file alias="iosevka-heavyoblique">fonts/iosevka-heavyoblique.ttf</file>
         <file alias="iosevka-italic">fonts/iosevka-italic.ttf</file>
-        <file alias="iosevka-light">fonts/iosevka-light.ttf</file>
-        <file alias="iosevka-lightitalic">fonts/iosevka-lightitalic.ttf</file>
-        <file alias="iosevka-lightoblique">fonts/iosevka-lightoblique.ttf</file>
-        <file alias="iosevka-medium">fonts/iosevka-medium.ttf</file>
-        <file alias="iosevka-mediumitalic">fonts/iosevka-mediumitalic.ttf</file>
-        <file alias="iosevka-mediumoblique">fonts/iosevka-mediumoblique.ttf</file>
         <file alias="iosevka-oblique">fonts/iosevka-oblique.ttf</file>
         <file alias="iosevka-regular">fonts/iosevka-regular.ttf</file>
-        <file alias="iosevka-thin">fonts/iosevka-thin.ttf</file>
-        <file alias="iosevka-thinitalic">fonts/iosevka-thinitalic.ttf</file>
-        <file alias="iosevka-thinoblique">fonts/iosevka-thinoblique.ttf</file>
         <file alias="Hack-Bold">fonts/Hack-Bold.ttf</file>
         <file alias="Hack-BoldItalic">fonts/Hack-BoldItalic.ttf</file>
         <file alias="Hack-Regular">fonts/Hack-Regular.ttf</file>
@@ -93,6 +77,7 @@
         <file alias="graph">icons/0189-tree.svg</file>
         <file alias="keyboard">icons/0086-keyboard.svg</file>
         <file alias="clock">icons/0079-clock.svg</file>
+        <file alias="gen-window">icons/generic-window.svg</file>
     </qresource>
     <qresource prefix="/images">
         <file alias="hal">images/hal_9000_by_johnnyslowhand.png</file>

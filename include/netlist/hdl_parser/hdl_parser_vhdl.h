@@ -34,65 +34,69 @@
 #include <unordered_set>
 #include <utility>
 
-/**
- * @ingroup hdl_parsers
- */
-class HDL_PARSER_API hdl_parser_vhdl : public hdl_parser<core_strings::case_insensitive_string>
+namespace hal
 {
-public:
     /**
-     * @param[in] stream - The string stream filled with the hdl code.
+     * @ingroup hdl_parsers
      */
-    explicit hdl_parser_vhdl(std::stringstream& stream);
-
-    ~hdl_parser_vhdl() = default;
-
-    /**
-     * Deserializes a netlist in VHDL format from the internal string stream into a netlist object.
-     *
-     * @param[in] gate_library - The gate library used in the serialized file.
-     * @returns The deserialized netlist.
-     */
-    bool parse() override;
-
-private:
-    enum class attribute_target_class
+    class HDL_PARSER_API HDLParserVHDL : public HDLParser<core_strings::CaseInsensitiveString>
     {
-        ENTITY,
-        INSTANCE,
-        SIGNAL
+    public:
+        /**
+         * Constructs a VHDL parser object.
+         * 
+         * @param[in] stream - The string stream filled with the hdl code.
+         */
+        explicit HDLParserVHDL(std::stringstream& stream);
+
+        ~HDLParserVHDL() = default;
+
+        /**
+         * Parses a VHDL netlist into an intermediate format.
+         *
+         * @returns True on success, false otherwise.
+         */
+        bool parse() override;
+
+    private:
+        enum class AttributeTarget
+        {
+            ENTITY,
+            INSTANCE,
+            SIGNAL
+        };
+
+        using attribute_buffer_t = std::map<AttributeTarget, std::map<core_strings::CaseInsensitiveString, std::tuple<u32, std::string, std::string, std::string>>>;
+        attribute_buffer_t m_attribute_buffer;
+
+        std::set<core_strings::CaseInsensitiveString> m_libraries;
+        std::map<core_strings::CaseInsensitiveString, core_strings::CaseInsensitiveString> m_attribute_types;
+
+        TokenStream<core_strings::CaseInsensitiveString> m_token_stream;
+
+        bool tokenize();
+        bool parse_tokens();
+
+        // parse HDL into intermediate format
+        bool parse_library();
+        bool parse_entity();
+        bool parse_port_definitons(entity& e);
+        bool parse_attribute();
+        bool parse_architecture();
+        bool parse_architecture_header(entity& e);
+        bool parse_signal_definition(entity& e);
+        bool parse_architecture_body(entity& e);
+        bool parse_assign(entity& e);
+        bool parse_instance(entity& e);
+        bool parse_port_assign(entity& e, instance& inst);
+        bool parse_generic_assign(instance& inst);
+        bool assign_attributes(entity& e);
+
+        // helper functions
+        std::vector<u32> parse_range(TokenStream<core_strings::CaseInsensitiveString>& range_str);
+        std::optional<std::vector<std::vector<u32>>> parse_signal_ranges(TokenStream<core_strings::CaseInsensitiveString>& signal_str);
+        std::optional<std::pair<std::vector<signal>, i32>> get_assignment_signals(entity& e, TokenStream<core_strings::CaseInsensitiveString>& signal_str, bool is_left_half, bool is_port_assignment);
+        core_strings::CaseInsensitiveString get_bin_from_literal(const Token<core_strings::CaseInsensitiveString>& value_token);
+        core_strings::CaseInsensitiveString get_hex_from_literal(const Token<core_strings::CaseInsensitiveString>& value_token);
     };
-
-    using attribute_buffer_t = std::map<attribute_target_class, std::map<core_strings::case_insensitive_string, std::tuple<u32, std::string, std::string, std::string>>>;
-    attribute_buffer_t m_attribute_buffer;
-
-    std::set<core_strings::case_insensitive_string> m_libraries;
-    std::map<core_strings::case_insensitive_string, core_strings::case_insensitive_string> m_attribute_types;
-
-    token_stream<core_strings::case_insensitive_string> m_token_stream;
-
-    bool tokenize();
-    bool parse_tokens();
-
-    // parse HDL into intermediate format
-    bool parse_library();
-    bool parse_entity();
-    bool parse_port_definitons(entity& e);
-    bool parse_attribute();
-    bool parse_architecture();
-    bool parse_architecture_header(entity& e);
-    bool parse_signal_definition(entity& e);
-    bool parse_architecture_body(entity& e);
-    bool parse_assign(entity& e);
-    bool parse_instance(entity& e);
-    bool parse_port_assign(entity& e, instance& inst);
-    bool parse_generic_assign(instance& inst);
-    bool assign_attributes(entity& e);
-
-    // helper functions
-    std::vector<u32> parse_range(token_stream<core_strings::case_insensitive_string>& range_str);
-    std::optional<std::vector<std::vector<u32>>> parse_signal_ranges(token_stream<core_strings::case_insensitive_string>& signal_str);
-    std::optional<std::pair<std::vector<signal>, i32>> get_assignment_signals(entity& e, token_stream<core_strings::case_insensitive_string>& signal_str, bool is_left_half, bool is_port_assignment);
-    core_strings::case_insensitive_string get_bin_from_literal(const token<core_strings::case_insensitive_string>& value_token);
-    core_strings::case_insensitive_string get_hex_from_literal(const token<core_strings::case_insensitive_string>& value_token);
-};
+}    // namespace hal

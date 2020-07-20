@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef CHANNEL_MODEL_H
-#define CHANNEL_MODEL_H
+#pragma once
 
 #include "channel_manager/channel_item.h"
 #include "core/log.h"
@@ -30,40 +29,40 @@
 #include <QModelIndex>
 #include <QVariant>
 #include <boost/circular_buffer.hpp>
-
-class channel_model : public QAbstractTableModel
+namespace hal
 {
-    enum class ColumnNumber
+    class ChannelModel : public QAbstractTableModel
     {
-        NameColumn        = 0,
-        ProgressBarColumn = 1,
-        StatusColumn      = 2
+        enum class ColumnNumber
+        {
+            NameColumn        = 0,
+            ProgressBarColumn = 1,
+            StatusColumn      = 2
+        };
+
+        Q_OBJECT
+
+    public:
+        static ChannelModel* get_instance();
+
+        QVariant data(const QModelIndex& index, int role) const Q_DECL_OVERRIDE;
+        Qt::ItemFlags flags(const QModelIndex& index) const Q_DECL_OVERRIDE;
+        QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const Q_DECL_OVERRIDE;
+        QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const Q_DECL_OVERRIDE;
+        int rowCount(const QModelIndex& parent = QModelIndex()) const Q_DECL_OVERRIDE;
+        int columnCount(const QModelIndex& parent = QModelIndex()) const Q_DECL_OVERRIDE;
+
+        ChannelItem* add_channel(const QString name);
+        void handle_logmanager_callback(const spdlog::level::level_enum& t, const std::string& channel_name, const std::string& msg_text);
+
+    Q_SIGNALS:
+        void updated(spdlog::level::level_enum t, const std::string& logger_name, std::string const& msg);
+
+    private:
+        static ChannelModel s_model;
+
+        explicit ChannelModel(QObject* parent = 0);
+        QList<ChannelItem*> m_permanent_items;
+        boost::circular_buffer<ChannelItem*> m_temporary_items;
     };
-
-    Q_OBJECT
-
-public:
-    static channel_model* get_instance();
-
-    QVariant data(const QModelIndex& index, int role) const Q_DECL_OVERRIDE;
-    Qt::ItemFlags flags(const QModelIndex& index) const Q_DECL_OVERRIDE;
-    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const Q_DECL_OVERRIDE;
-    QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const Q_DECL_OVERRIDE;
-    int rowCount(const QModelIndex& parent = QModelIndex()) const Q_DECL_OVERRIDE;
-    int columnCount(const QModelIndex& parent = QModelIndex()) const Q_DECL_OVERRIDE;
-
-    channel_item* add_channel(const QString name);
-    void handle_logmanager_callback(const spdlog::level::level_enum& t, const std::string& channel_name, const std::string& msg_text);
-
-Q_SIGNALS:
-    void updated(spdlog::level::level_enum t, const std::string& logger_name, std::string const& msg);
-
-private:
-    static channel_model s_model;
-
-    explicit channel_model(QObject* parent = 0);
-    QList<channel_item*> m_permanent_items;
-    boost::circular_buffer<channel_item*> m_temporary_items;
-};
-
-#endif    // CHANNEL_MODEL_H
+}

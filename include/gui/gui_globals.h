@@ -21,14 +21,13 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef GUI_GLOBALS_H
-#define GUI_GLOBALS_H
+#pragma once
 
 #include "netlist/netlist.h"
 
 #include "file_status_manager/file_status_manager.h"
 #include "gui/graph_widget/graph_context_manager.h"
-#include "gui/hal_content_manager/hal_content_manager.h"
+#include "gui/content_manager/content_manager.h"
 #include "gui/netlist_relay/netlist_relay.h"
 #include "gui/notifications/notification_manager.h"
 #include "gui/plugin_management/plugin_relay.h"
@@ -43,37 +42,38 @@
 
 #include <QSettings>
 
-//extern QSettings g_settings;
-extern QSettings g_gui_state;
+namespace hal
+{
+    //extern QSettings g_settings;
+    extern QSettings g_gui_state;
 
-extern window_manager* g_window_manager;
-extern notification_manager* g_notification_manager;
+    extern WindowManager* g_window_manager;
+    extern NotificationManager* g_notification_manager;
 
-extern hal_content_manager* g_content_manager;
+    extern ContentManager* g_content_manager;
 
-extern std::shared_ptr<netlist> g_netlist;
+    extern std::shared_ptr<Netlist> g_netlist;
 
-extern netlist_relay g_netlist_relay;
-extern plugin_relay g_plugin_relay;
-extern selection_relay g_selection_relay;
-extern settings_relay g_settings_relay;
+    extern NetlistRelay g_netlist_relay;
+    extern PluginRelay g_plugin_relay;
+    extern SelectionRelay g_selection_relay;
+    extern SettingsRelay g_settings_relay;
 
-extern settings_manager g_settings_manager;
+    extern SettingsManager g_settings_manager;
 
-extern keybind_manager g_keybind_manager;
+    extern KeybindManager g_keybind_manager;
 
-extern file_status_manager g_file_status_manager;
+    extern FileStatusManager g_file_status_manager;
 
-extern graph_context_manager g_graph_context_manager;
+    extern GraphContextManager g_graph_context_manager;
 
-extern thread_pool* g_thread_pool;
+    extern ThreadPool* g_thread_pool;
 
-extern std::unique_ptr<python_context> g_python_context;
+    extern std::unique_ptr<PythonContext> g_python_context;
 
-extern gui_api* g_gui_api;
+    extern GuiApi* g_gui_api;
 
-// Comment this out to not compile the debug code for the graph grid.
-// This will also hide the respective debug setting from the settings page.
-#define GUI_DEBUG_GRID
-
-#endif    // GUI_GLOBALS_H
+    // Comment this out to not compile the debug code for the graph grid.
+    // This will also hide the respective debug setting from the settings page.
+    #define GUI_DEBUG_GRID
+}

@@ -18,669 +18,674 @@
 
 #include <QDebug>
 
-qreal graphics_scene::s_lod = 0;
-
-const qreal graphics_scene::s_grid_fade_start = 0.4;
-const qreal graphics_scene::s_grid_fade_end = 1.0;
-
-bool graphics_scene::s_grid_enabled = true;
-bool graphics_scene::s_grid_clusters_enabled = true;
-graph_widget_constants::grid_type graphics_scene::s_grid_type = graph_widget_constants::grid_type::lines;
-
-QColor graphics_scene::s_grid_base_line_color = QColor(30, 30, 30);
-QColor graphics_scene::s_grid_cluster_line_color = QColor(15, 15, 15);
-
-QColor graphics_scene::s_grid_base_dot_color = QColor(25, 25, 25);
-QColor graphics_scene::s_grid_cluster_dot_color = QColor(170, 160, 125);
-
-void graphics_scene::set_lod(const qreal& lod)
+namespace hal
 {
-    s_lod = lod;
+    qreal GraphicsScene::s_lod = 0;
 
-    if (lod >= s_grid_fade_start && lod <= s_grid_fade_end)
+    const qreal GraphicsScene::s_grid_fade_start = 0.4;
+    const qreal GraphicsScene::s_grid_fade_end = 1.0;
+
+    bool GraphicsScene::s_grid_enabled = true;
+    bool GraphicsScene::s_grid_clusters_enabled = true;
+    graph_widget_constants::grid_type GraphicsScene::s_grid_type = graph_widget_constants::grid_type::Lines;
+
+    QColor GraphicsScene::s_grid_base_line_color = QColor(30, 30, 30);
+    QColor GraphicsScene::s_grid_cluster_line_color = QColor(15, 15, 15);
+
+    QColor GraphicsScene::s_grid_base_dot_color = QColor(25, 25, 25);
+    QColor GraphicsScene::s_grid_cluster_dot_color = QColor(170, 160, 125);
+
+    void GraphicsScene::set_lod(const qreal& lod)
     {
-        const qreal alpha = (lod - s_grid_fade_start) / (s_grid_fade_end - s_grid_fade_start);
+        s_lod = lod;
 
-        s_grid_base_line_color.setAlphaF(alpha);
-        s_grid_cluster_line_color.setAlphaF(alpha);
-
-        s_grid_base_dot_color.setAlphaF(alpha);
-        s_grid_cluster_dot_color.setAlphaF(alpha);
-    }
-    else
-    {
-        const int alpha = 255;
-
-        s_grid_base_line_color.setAlpha(alpha);
-        s_grid_cluster_line_color.setAlpha(alpha);
-
-        s_grid_base_dot_color.setAlpha(alpha);
-        s_grid_cluster_dot_color.setAlpha(alpha);
-    }
-}
-
-void graphics_scene::set_grid_enabled(const bool& value)
-{
-    s_grid_enabled = value;
-}
-
-void graphics_scene::set_grid_clusters_enabled(const bool& value)
-{
-    s_grid_clusters_enabled = value;
-}
-
-void graphics_scene::set_grid_type(const graph_widget_constants::grid_type& grid_type)
-{
-    s_grid_type = grid_type;
-}
-
-void graphics_scene::set_grid_base_line_color(const QColor& color)
-{
-    s_grid_base_line_color = color;
-}
-
-void graphics_scene::set_grid_cluster_line_color(const QColor& color)
-{
-    s_grid_cluster_line_color = color;
-}
-
-void graphics_scene::set_grid_base_dot_color(const QColor& color)
-{
-    s_grid_base_dot_color = color;
-}
-
-void graphics_scene::set_grid_cluster_dot_color(const QColor& color)
-{
-    s_grid_cluster_dot_color = color;
-}
-
-QPointF graphics_scene::snap_to_grid(const QPointF& pos)
-{
-    int adjusted_x = qRound(pos.x() / graph_widget_constants::grid_size) * graph_widget_constants::grid_size;
-    int adjusted_y = qRound(pos.y() / graph_widget_constants::grid_size) * graph_widget_constants::grid_size;
-    return QPoint(adjusted_x, adjusted_y);
-}
-
-graphics_scene::graphics_scene(QObject* parent) : QGraphicsScene(parent),
-    m_drag_shadow_gate(new node_drag_shadow())
-{
-    // FIND OUT IF MANUAL CHANGE TO DEPTH IS NECESSARY / INCREASES PERFORMANCE
-    //m_scene.setBspTreeDepth(10);
-
-    connect_all();
-
-    QGraphicsScene::addItem(m_drag_shadow_gate);
-
-    #ifdef GUI_DEBUG_GRID
-    m_debug_grid_enable = g_settings_manager.get("debug/grid").toBool();
-    #endif
-}
-
-void graphics_scene::start_drag_shadow(const QPointF& posF, const QSizeF& sizeF, const node_drag_shadow::drag_cue cue)
-{
-    m_drag_shadow_gate->set_visual_cue(cue);
-    m_drag_shadow_gate->start(posF, sizeF);
-}
-
-void graphics_scene::move_drag_shadow(const QPointF& posF, const node_drag_shadow::drag_cue cue)
-{
-    m_drag_shadow_gate->setPos(posF);
-    m_drag_shadow_gate->set_visual_cue(cue);
-}
-
-void graphics_scene::stop_drag_shadow()
-{
-    m_drag_shadow_gate->stop();
-}
-
-QPointF graphics_scene::drop_target()
-{
-    return m_drag_shadow_gate->pos();
-}
-
-void graphics_scene::add_item(graphics_item* item)
-{
-    // SELECTION HAS TO BE UPDATED MANUALLY AFTER ADDING / REMOVING ITEMS
-
-    if (!item)
-        return;
-
-    QGraphicsScene::addItem(item);
-
-    switch (item->item_type())
-    {
-    case hal::item_type::gate:
-    {
-        graphics_gate* g = static_cast<graphics_gate*>(item);
-        int i = 0;
-        while (i < m_gate_items.size())
+        if (lod >= s_grid_fade_start && lod <= s_grid_fade_end)
         {
-            if (g->id() < m_gate_items.at(i).id)
-                break;
+            const qreal alpha = (lod - s_grid_fade_start) / (s_grid_fade_end - s_grid_fade_start);
 
-            i++;
-        }
-        m_gate_items.insert(i, gate_data{g->id(), g});
-        return;
-    }
-    case hal::item_type::net:
-    {
-        graphics_net* n = static_cast<graphics_net*>(item);
-        int i = 0;
-        while (i < m_net_items.size())
-        {
-            if (n->id() < m_net_items.at(i).id)
-                break;
+            s_grid_base_line_color.setAlphaF(alpha);
+            s_grid_cluster_line_color.setAlphaF(alpha);
 
-            i++;
-        }
-        m_net_items.insert(i, net_data{n->id(), n});
-        return;
-    }
-    case hal::item_type::module:
-    {
-        graphics_module* m = static_cast<graphics_module*>(item);
-        int i = 0;
-        while (i < m_module_items.size())
-        {
-            if (m->id() < m_module_items.at(i).id)
-                break;
-
-            i++;
-        }
-        m_module_items.insert(i, module_data{m->id(), m});
-        return;
-    }
-    }
-}
-
-void graphics_scene::remove_item(graphics_item* item)
-{
-    // SELECTION HAS TO BE UPDATED MANUALLY AFTER ADDING / REMOVING ITEMS
-
-    if (!item)
-        return;
-
-    QGraphicsScene::removeItem(item);
-
-    switch (item->item_type())
-    {
-    case hal::item_type::gate:
-    {
-        graphics_gate* g = static_cast<graphics_gate*>(item);
-        u32 id = g->id();
-
-        int i = 0;
-        while (i < m_gate_items.size())
-        {
-            if (m_gate_items[i].id == id)
-            {
-                m_gate_items.remove(i);
-                delete g;
-                return;
-            }
-
-            ++i;
-        }
-
-        return;
-    }
-    case hal::item_type::net:
-    {
-        graphics_net* n = static_cast<graphics_net*>(item);
-        u32 id = n->id();
-
-        int i = 0;
-        while (i < m_net_items.size())
-        {
-            if (m_net_items[i].id == id)
-            {
-                m_net_items.remove(i);
-                delete n;
-                return;
-            }
-
-            ++i;
-        }
-
-        return;
-    }
-    case hal::item_type::module:
-    {
-        graphics_module* m = static_cast<graphics_module*>(item);
-        u32 id = m->id();
-
-        int i = 0;
-        while (i < m_module_items.size())
-        {
-            if (m_module_items[i].id == id)
-            {
-                m_module_items.remove(i);
-                delete m;
-                return;
-            }
-
-            ++i;
-        }
-
-        return;
-    }
-    }
-}
-
-const graphics_gate* graphics_scene::get_gate_item(const u32 id) const
-{
-    for (const gate_data& d : m_gate_items)
-    {
-        if (d.id > id)
-            break;
-
-        if (d.id == id)
-            return d.item;
-    }
-
-    return nullptr;
-}
-
-const graphics_net* graphics_scene::get_net_item(const u32 id) const
-{
-    for (const net_data& d : m_net_items)
-    {
-        if (d.id > id)
-            break;
-
-        if (d.id == id)
-            return d.item;
-    }
-
-    return nullptr;
-}
-
-const graphics_module* graphics_scene::get_module_item(const u32 id) const
-{
-    for (const module_data& d : m_module_items)
-    {
-        if (d.id > id)
-            break;
-
-        if (d.id == id)
-            return d.item;
-    }
-
-    return nullptr;
-}
-
-void graphics_scene::connect_all()
-{
-    connect(&g_settings_relay, &settings_relay::setting_changed, this, &graphics_scene::handle_global_setting_changed);
-
-    connect(this, &graphics_scene::selectionChanged, this, &graphics_scene::handle_intern_selection_changed);
-
-    connect(&g_selection_relay, &selection_relay::selection_changed, this, &graphics_scene::handle_extern_selection_changed);
-    connect(&g_selection_relay, &selection_relay::subfocus_changed, this, &graphics_scene::handle_extern_subfocus_changed);
-}
-
-void graphics_scene::disconnect_all()
-{
-    disconnect(&g_settings_relay, &settings_relay::setting_changed, this, &graphics_scene::handle_global_setting_changed);
-
-    disconnect(this, &graphics_scene::selectionChanged, this, &graphics_scene::handle_intern_selection_changed);
-
-    disconnect(&g_selection_relay, &selection_relay::selection_changed, this, &graphics_scene::handle_extern_selection_changed);
-    disconnect(&g_selection_relay, &selection_relay::subfocus_changed, this, &graphics_scene::handle_extern_subfocus_changed);
-}
-
-void graphics_scene::delete_all_items()
-{
-    // this breaks the m_drag_shadow_gate
-    // clear();
-    // so we do this instead
-    // TODO check performance hit
-    for (auto item : items())
-    {
-        if (item != m_drag_shadow_gate)
-        {
-            removeItem(item);
-        }
-    }
-
-    m_module_items.clear();
-    m_gate_items.clear();
-    m_net_items.clear();
-}
-
-void graphics_scene::update_visuals(const graph_shader::shading& s)
-{
-    for (module_data& m : m_module_items)
-    {
-        m.item->set_visuals(s.module_visuals.value(m.id));
-    }
-
-    for (gate_data& g : m_gate_items)
-    {
-        g.item->set_visuals(s.gate_visuals.value(g.id));
-    }
-
-    for (net_data& n : m_net_items)
-    {
-        n.item->set_visuals(s.net_visuals.value(n.id));
-    }
-}
-
-void graphics_scene::move_nets_to_background()
-{
-    for (net_data d : m_net_items)
-        d.item->setZValue(-1);
-}
-
-void graphics_scene::handle_intern_selection_changed()
-{
-    g_selection_relay.clear();
-
-    int gates = 0;
-    int nets = 0;
-    int modules = 0;
-
-    for (const QGraphicsItem* const item : selectedItems())
-    {
-        switch (static_cast<const graphics_item* const>(item)->item_type())
-        {
-        case hal::item_type::gate:
-        {
-            g_selection_relay.m_selected_gates.insert(static_cast<const graphics_item* const>(item)->id());
-            ++gates;
-            break;
-        }
-        case hal::item_type::net:
-        {
-            g_selection_relay.m_selected_nets.insert(static_cast<const graphics_item* const>(item)->id());
-            ++nets;
-            break;
-        }
-        case hal::item_type::module:
-        {
-            g_selection_relay.m_selected_modules.insert(static_cast<const graphics_item* const>(item)->id());
-            ++modules;
-            break;
-        }
-        }
-    }
-
-    // TEST CODE
-    // ADD FOCUS DEDUCTION INTO RELAY ???
-    if (gates + nets + modules == 1)
-    {
-        if (gates)
-        {
-            g_selection_relay.m_focus_type = selection_relay::item_type::gate;
-            g_selection_relay.m_focus_id = *g_selection_relay.m_selected_gates.begin(); // UNNECESSARY ??? USE ARRAY[0] INSTEAD OF MEMBER VARIABLE ???
-        }
-        else if (nets)
-        {
-            g_selection_relay.m_focus_type = selection_relay::item_type::net;
-            g_selection_relay.m_focus_id = *g_selection_relay.m_selected_nets.begin(); // UNNECESSARY ??? USE ARRAY[0] INSTEAD OF MEMBER VARIABLE ???
+            s_grid_base_dot_color.setAlphaF(alpha);
+            s_grid_cluster_dot_color.setAlphaF(alpha);
         }
         else
         {
-            g_selection_relay.m_focus_type = selection_relay::item_type::module;
-            g_selection_relay.m_focus_id = *g_selection_relay.m_selected_modules.begin(); // UNNECESSARY ??? USE ARRAY[0] INSTEAD OF MEMBER VARIABLE ???
+            const int alpha = 255;
+
+            s_grid_base_line_color.setAlpha(alpha);
+            s_grid_cluster_line_color.setAlpha(alpha);
+
+            s_grid_base_dot_color.setAlpha(alpha);
+            s_grid_cluster_dot_color.setAlpha(alpha);
         }
     }
-    else
+
+    void GraphicsScene::set_grid_enabled(const bool& value)
     {
-        g_selection_relay.m_focus_type = selection_relay::item_type::none;
+        s_grid_enabled = value;
     }
-    g_selection_relay.m_subfocus = selection_relay::subfocus::none;
-    // END OF TEST CODE
 
-    g_selection_relay.relay_selection_changed(this);
-}
-
-void graphics_scene::handle_extern_selection_changed(void* sender)
-{
-    // CLEAR CURRENT SELECTION EITHER MANUALLY OR USING clearSelection()
-    // UNCERTAIN ABOUT THE SENDER PARAMETER
-
-    if (sender == this)
-        return;
-
-    bool original_value = blockSignals(true);
-
-    clearSelection();
-
-    if (!g_selection_relay.m_selected_modules.isEmpty())
+    void GraphicsScene::set_grid_clusters_enabled(const bool& value)
     {
-        for (auto& element : m_module_items)
+        s_grid_clusters_enabled = value;
+    }
+
+    void GraphicsScene::set_grid_type(const graph_widget_constants::grid_type& grid_type)
+    {
+        s_grid_type = grid_type;
+    }
+
+    void GraphicsScene::set_grid_base_line_color(const QColor& color)
+    {
+        s_grid_base_line_color = color;
+    }
+
+    void GraphicsScene::set_grid_cluster_line_color(const QColor& color)
+    {
+        s_grid_cluster_line_color = color;
+    }
+
+    void GraphicsScene::set_grid_base_dot_color(const QColor& color)
+    {
+        s_grid_base_dot_color = color;
+    }
+
+    void GraphicsScene::set_grid_cluster_dot_color(const QColor& color)
+    {
+        s_grid_cluster_dot_color = color;
+    }
+
+    QPointF GraphicsScene::snap_to_grid(const QPointF& pos)
+    {
+        int adjusted_x = qRound(pos.x() / graph_widget_constants::grid_size) * graph_widget_constants::grid_size;
+        int adjusted_y = qRound(pos.y() / graph_widget_constants::grid_size) * graph_widget_constants::grid_size;
+        return QPoint(adjusted_x, adjusted_y);
+    }
+
+    GraphicsScene::GraphicsScene(QObject* parent) : QGraphicsScene(parent),
+        m_drag_shadow_gate(new NodeDragShadow())
+    {
+        // FIND OUT IF MANUAL CHANGE TO DEPTH IS NECESSARY / INCREASES PERFORMANCE
+        //m_scene.setBspTreeDepth(10);
+
+        connect_all();
+
+        QGraphicsScene::addItem(m_drag_shadow_gate);
+
+        #ifdef GUI_DEBUG_GRID
+        m_debug_grid_enable = g_settings_manager.get("debug/grid").toBool();
+        #endif
+    }
+
+    void GraphicsScene::start_drag_shadow(const QPointF& posF, const QSizeF& sizeF, const NodeDragShadow::drag_cue cue)
+    {
+        m_drag_shadow_gate->set_visual_cue(cue);
+        m_drag_shadow_gate->start(posF, sizeF);
+    }
+
+    void GraphicsScene::move_drag_shadow(const QPointF& posF, const NodeDragShadow::drag_cue cue)
+    {
+        m_drag_shadow_gate->setPos(posF);
+        m_drag_shadow_gate->set_visual_cue(cue);
+    }
+
+    void GraphicsScene::stop_drag_shadow()
+    {
+        m_drag_shadow_gate->stop();
+    }
+
+    QPointF GraphicsScene::drop_target()
+    {
+        return m_drag_shadow_gate->pos();
+    }
+
+    void GraphicsScene::add_item(GraphicsItem* item)
+    {
+        // SELECTION HAS TO BE UPDATED MANUALLY AFTER ADDING / REMOVING ITEMS
+
+        if (!item)
+            return;
+
+        QGraphicsScene::addItem(item);
+
+        switch (item->item_type())
         {
-            if (g_selection_relay.m_selected_modules.find(element.id) != g_selection_relay.m_selected_modules.end())
+        case hal::item_type::gate:
+        {
+            GraphicsGate* g = static_cast<GraphicsGate*>(item);
+            int i = 0;
+            while (i < m_gate_items.size())
             {
-                element.item->setSelected(true);
-                element.item->update();
+                if (g->id() < m_gate_items.at(i).id)
+                    break;
+
+                i++;
+            }
+            m_gate_items.insert(i, gate_data{g->id(), g});
+            return;
+        }
+        case hal::item_type::net:
+        {
+            GraphicsNet* n = static_cast<GraphicsNet*>(item);
+            int i = 0;
+            while (i < m_net_items.size())
+            {
+                if (n->id() < m_net_items.at(i).id)
+                    break;
+
+                i++;
+            }
+            m_net_items.insert(i, net_data{n->id(), n});
+            return;
+        }
+        case hal::item_type::module:
+        {
+            GraphicsModule* m = static_cast<GraphicsModule*>(item);
+            int i = 0;
+            while (i < m_ModuleItems.size())
+            {
+                if (m->id() < m_ModuleItems.at(i).id)
+                    break;
+
+                i++;
+            }
+            m_ModuleItems.insert(i, module_data{m->id(), m});
+            return;
+        }
+        }
+    }
+
+    void GraphicsScene::remove_item(GraphicsItem* item)
+    {
+        // SELECTION HAS TO BE UPDATED MANUALLY AFTER ADDING / REMOVING ITEMS
+
+        if (!item)
+            return;
+
+        QGraphicsScene::removeItem(item);
+
+        switch (item->item_type())
+        {
+        case hal::item_type::gate:
+        {
+            GraphicsGate* g = static_cast<GraphicsGate*>(item);
+            u32 id = g->id();
+
+            int i = 0;
+            while (i < m_gate_items.size())
+            {
+                if (m_gate_items[i].id == id)
+                {
+                    m_gate_items.remove(i);
+                    delete g;
+                    return;
+                }
+
+                ++i;
+            }
+
+            return;
+        }
+        case hal::item_type::net:
+        {
+            GraphicsNet* n = static_cast<GraphicsNet*>(item);
+            u32 id = n->id();
+
+            int i = 0;
+            while (i < m_net_items.size())
+            {
+                if (m_net_items[i].id == id)
+                {
+                    m_net_items.remove(i);
+                    delete n;
+                    return;
+                }
+
+                ++i;
+            }
+
+            return;
+        }
+        case hal::item_type::module:
+        {
+            GraphicsModule* m = static_cast<GraphicsModule*>(item);
+            u32 id = m->id();
+
+            int i = 0;
+            while (i < m_ModuleItems.size())
+            {
+                if (m_ModuleItems[i].id == id)
+                {
+                    m_ModuleItems.remove(i);
+                    delete m;
+                    return;
+                }
+
+                ++i;
+            }
+
+            return;
+        }
+        }
+    }
+
+    const GraphicsGate* GraphicsScene::get_gate_item(const u32 id) const
+    {
+        for (const gate_data& d : m_gate_items)
+        {
+            if (d.id > id)
+                break;
+
+            if (d.id == id)
+                return d.item;
+        }
+
+        return nullptr;
+    }
+
+    const GraphicsNet* GraphicsScene::get_net_item(const u32 id) const
+    {
+        for (const net_data& d : m_net_items)
+        {
+            if (d.id > id)
+                break;
+
+            if (d.id == id)
+                return d.item;
+        }
+
+        return nullptr;
+    }
+
+    const GraphicsModule* GraphicsScene::get_ModuleItem(const u32 id) const
+    {
+        for (const module_data& d : m_ModuleItems)
+        {
+            if (d.id > id)
+                break;
+
+            if (d.id == id)
+                return d.item;
+        }
+
+        return nullptr;
+    }
+
+    void GraphicsScene::connect_all()
+    {
+        connect(&g_settings_relay, &SettingsRelay::setting_changed, this, &GraphicsScene::handle_global_setting_changed);
+
+        connect(this, &GraphicsScene::selectionChanged, this, &GraphicsScene::handle_intern_selection_changed);
+
+        connect(&g_selection_relay, &SelectionRelay::selection_changed, this, &GraphicsScene::handle_extern_selection_changed);
+        connect(&g_selection_relay, &SelectionRelay::subfocus_changed, this, &GraphicsScene::handle_extern_subfocus_changed);
+    }
+
+    void GraphicsScene::disconnect_all()
+    {
+        disconnect(&g_settings_relay, &SettingsRelay::setting_changed, this, &GraphicsScene::handle_global_setting_changed);
+
+        disconnect(this, &GraphicsScene::selectionChanged, this, &GraphicsScene::handle_intern_selection_changed);
+
+        disconnect(&g_selection_relay, &SelectionRelay::selection_changed, this, &GraphicsScene::handle_extern_selection_changed);
+        disconnect(&g_selection_relay, &SelectionRelay::subfocus_changed, this, &GraphicsScene::handle_extern_subfocus_changed);
+    }
+
+    void GraphicsScene::delete_all_items()
+    {
+        // this breaks the m_drag_shadow_gate
+        // clear();
+        // so we do this instead
+        // TODO check performance hit
+        for (auto item : items())
+        {
+            if (item != m_drag_shadow_gate)
+            {
+                removeItem(item);
             }
         }
+
+        m_ModuleItems.clear();
+        m_gate_items.clear();
+        m_net_items.clear();
     }
 
-    if (!g_selection_relay.m_selected_gates.isEmpty())
+    void GraphicsScene::update_visuals(const GraphShader::shading& s)
     {
-        for (auto& element : m_gate_items)
+        for (module_data& m : m_ModuleItems)
         {
-            if (g_selection_relay.m_selected_gates.find(element.id) != g_selection_relay.m_selected_gates.end())
-            {
-                element.item->setSelected(true);
-                element.item->update();
-            }
+            m.item->set_visuals(s.module_visuals.value(m.id));
+        }
+
+        for (gate_data& g : m_gate_items)
+        {
+            g.item->set_visuals(s.gate_visuals.value(g.id));
+        }
+
+        for (net_data& n : m_net_items)
+        {
+            n.item->set_visuals(s.net_visuals.value(n.id));
         }
     }
 
-    if (!g_selection_relay.m_selected_nets.isEmpty())
+    void GraphicsScene::move_nets_to_background()
     {
-        for (auto& element : m_net_items)
+        for (net_data d : m_net_items)
+            d.item->setZValue(-1);
+    }
+
+    void GraphicsScene::handle_intern_selection_changed()
+    {
+        g_selection_relay.clear();
+
+        int gates = 0;
+        int nets = 0;
+        int modules = 0;
+
+        for (const QGraphicsItem* item : selectedItems())
         {
-            if (g_selection_relay.m_selected_nets.find(element.id) != g_selection_relay.m_selected_nets.end())
+            switch (static_cast<const GraphicsItem*>(item)->item_type())
             {
-                element.item->setSelected(true);
-                element.item->update();
+            case hal::item_type::gate:
+            {
+                g_selection_relay.m_selected_gates.insert(static_cast<const GraphicsItem*>(item)->id());
+                ++gates;
+                break;
+            }
+            case hal::item_type::net:
+            {
+                g_selection_relay.m_selected_nets.insert(static_cast<const GraphicsItem*>(item)->id());
+                ++nets;
+                break;
+            }
+            case hal::item_type::module:
+            {
+                g_selection_relay.m_selected_modules.insert(static_cast<const GraphicsItem*>(item)->id());
+                ++modules;
+                break;
+            }
             }
         }
-    }
 
-    blockSignals(original_value);
-}
-
-void graphics_scene::handle_extern_subfocus_changed(void* sender)
-{
-    Q_UNUSED(sender)
-}
-
-void graphics_scene::mousePressEvent(QGraphicsSceneMouseEvent* event)
-{
-    // CONTEXT MENU CLEARING SELECTION WORKAROUND
-    if (event->button() == Qt::RightButton)
-    {
-        event->accept();
-        return;
-    }
-
-    QGraphicsScene::mousePressEvent(event);
-}
-
-void graphics_scene::handle_global_setting_changed(void* sender, const QString& key, const QVariant& value)
-{
-    Q_UNUSED(sender)
-
-    #ifdef GUI_DEBUG_GRID
-    if (key == "debug/grid")
-    {
-        m_debug_grid_enable = value.toBool();
-    }
-    #endif
-}
-
-void graphics_scene::drawBackground(QPainter* painter, const QRectF& rect)
-{
-    if (!s_grid_enabled)
-        return;
-
-    if (s_lod < s_grid_fade_start)
-        return;
-
-    QFlags original_flags = painter->renderHints(); // UNNECESSARY ?
-    painter->setRenderHint(QPainter::Antialiasing, true);
-
-    QPen pen;
-    pen.setWidth(2);
-
-    // OVERDRAW NEEDED BECAUSE QT FAILS AT BASIC GEOMETRY
-    const int overdraw = 2;
-
-    const int x_from = rect.left() - overdraw;
-    const int x_to = rect.right() + overdraw;
-
-    const int y_from = rect.top() - overdraw;
-    const int y_to = rect.bottom() + overdraw;
-
-    const int x_offset = x_from % graph_widget_constants::grid_size;
-    const int y_offset = y_from % graph_widget_constants::grid_size;
-
-    switch (s_grid_type)
-    {
-    case graph_widget_constants::grid_type::lines:
-    {
-        QVarLengthArray<QLine, 512> base_lines;
-        QVarLengthArray<QLine, 64> cluster_lines;
-
-        for (int x = x_from - x_offset; x < x_to; x += graph_widget_constants::grid_size)
+        // TEST CODE
+        // ADD FOCUS DEDUCTION INTO RELAY ???
+        if (gates + nets + modules == 1)
         {
-            QLine line(x, y_from, x, y_to);
-            if (x % (graph_widget_constants::grid_size * graph_widget_constants::cluster_size))
-                base_lines.append(line);
+            if (gates)
+            {
+                g_selection_relay.m_focus_type = SelectionRelay::item_type::gate;
+                g_selection_relay.m_focus_id = *g_selection_relay.m_selected_gates.begin(); // UNNECESSARY ??? USE ARRAY[0] INSTEAD OF MEMBER VARIABLE ???
+            }
+            else if (nets)
+            {
+                g_selection_relay.m_focus_type = SelectionRelay::item_type::net;
+                g_selection_relay.m_focus_id = *g_selection_relay.m_selected_nets.begin(); // UNNECESSARY ??? USE ARRAY[0] INSTEAD OF MEMBER VARIABLE ???
+            }
             else
-                cluster_lines.append(line);
+            {
+                g_selection_relay.m_focus_type = SelectionRelay::item_type::module;
+                g_selection_relay.m_focus_id = *g_selection_relay.m_selected_modules.begin(); // UNNECESSARY ??? USE ARRAY[0] INSTEAD OF MEMBER VARIABLE ???
+            }
         }
-
-        for (int y = y_from - y_offset; y < y_to; y += graph_widget_constants::grid_size)
+        else
         {
-            QLine line(x_from, y, x_to, y);
-            if (y % (graph_widget_constants::grid_size * graph_widget_constants::cluster_size))
-                base_lines.append(line);
-            else
-                cluster_lines.append(line);
+            g_selection_relay.m_focus_type = SelectionRelay::item_type::none;
         }
+        g_selection_relay.m_subfocus = SelectionRelay::subfocus::none;
+        // END OF TEST CODE
 
-        pen.setColor(s_grid_base_line_color);
-        painter->setPen(pen);
-
-        painter->drawLines(base_lines.data(), base_lines.size());
-
-        if (s_grid_clusters_enabled)
-        {
-            pen.setColor(s_grid_cluster_line_color);
-            painter->setPen(pen);
-        }
-
-        painter->drawLines(cluster_lines.data(), cluster_lines.size());
-        break;
+        g_selection_relay.relay_selection_changed(this);
     }
 
-    case graph_widget_constants::grid_type::dots:
+    void GraphicsScene::handle_extern_selection_changed(void* sender)
     {
-        QVector<QPoint> base_points;
-        QVector<QPoint> cluster_points;
+        // CLEAR CURRENT SELECTION EITHER MANUALLY OR USING clearSelection()
+        // UNCERTAIN ABOUT THE SENDER PARAMETER
 
-        for (int x = x_from - x_offset; x < x_to; x += graph_widget_constants::grid_size)
+        if (sender == this)
+            return;
+
+        bool original_value = blockSignals(true);
+
+        clearSelection();
+
+        if (!g_selection_relay.m_selected_modules.isEmpty())
+        {
+            for (auto& element : m_ModuleItems)
+            {
+                if (g_selection_relay.m_selected_modules.find(element.id) != g_selection_relay.m_selected_modules.end())
+                {
+                    element.item->setSelected(true);
+                    element.item->update();
+                }
+            }
+        }
+
+        if (!g_selection_relay.m_selected_gates.isEmpty())
+        {
+            for (auto& element : m_gate_items)
+            {
+                if (g_selection_relay.m_selected_gates.find(element.id) != g_selection_relay.m_selected_gates.end())
+                {
+                    element.item->setSelected(true);
+                    element.item->update();
+                }
+            }
+        }
+
+        if (!g_selection_relay.m_selected_nets.isEmpty())
+        {
+            for (auto& element : m_net_items)
+            {
+                if (g_selection_relay.m_selected_nets.find(element.id) != g_selection_relay.m_selected_nets.end())
+                {
+                    element.item->setSelected(true);
+                    element.item->update();
+                }
+            }
+        }
+
+        blockSignals(original_value);
+    }
+
+    void GraphicsScene::handle_extern_subfocus_changed(void* sender)
+    {
+        Q_UNUSED(sender)
+    }
+
+    void GraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent* event)
+    {
+        // CONTEXT MENU CLEARING SELECTION WORKAROUND
+        if (event->button() == Qt::RightButton)
+        {
+            event->accept();
+            return;
+        }
+
+        QGraphicsScene::mousePressEvent(event);
+    }
+
+    void GraphicsScene::handle_global_setting_changed(void* sender, const QString& key, const QVariant& value)
+    {
+        Q_UNUSED(sender)
+
+        #ifdef GUI_DEBUG_GRID
+        if (key == "debug/grid")
+        {
+            m_debug_grid_enable = value.toBool();
+        }
+        #endif
+    }
+
+    void GraphicsScene::drawBackground(QPainter* painter, const QRectF& rect)
+    {
+        if (!s_grid_enabled)
+            return;
+
+        if (s_lod < s_grid_fade_start)
+            return;
+
+        QFlags original_flags = painter->renderHints(); // UNNECESSARY ?
+        painter->setRenderHint(QPainter::Antialiasing, true);
+
+        QPen pen;
+        pen.setWidth(2);
+
+        // OVERDRAW NEEDED BECAUSE QT FAILS AT BASIC geometry
+        const int overdraw = 2;
+
+        const int x_from = rect.left() - overdraw;
+        const int x_to = rect.right() + overdraw;
+
+        const int y_from = rect.top() - overdraw;
+        const int y_to = rect.bottom() + overdraw;
+
+        const int x_offset = x_from % graph_widget_constants::grid_size;
+        const int y_offset = y_from % graph_widget_constants::grid_size;
+
+        switch (s_grid_type)
+        {
+        case graph_widget_constants::grid_type::None:
+            return; // nothing to do
+        case graph_widget_constants::grid_type::Lines:
+        {
+            QVarLengthArray<QLine, 512> base_lines;
+            QVarLengthArray<QLine, 64> cluster_lines;
+
+            for (int x = x_from - x_offset; x < x_to; x += graph_widget_constants::grid_size)
+            {
+                QLine line(x, y_from, x, y_to);
+                if (x % (graph_widget_constants::grid_size * graph_widget_constants::cluster_size))
+                    base_lines.append(line);
+                else
+                    cluster_lines.append(line);
+            }
+
             for (int y = y_from - y_offset; y < y_to; y += graph_widget_constants::grid_size)
             {
-                if ((x % (graph_widget_constants::grid_size * graph_widget_constants::cluster_size)) && (y % (graph_widget_constants::grid_size * graph_widget_constants::cluster_size)))
-                    base_points.append(QPoint(x,y));
+                QLine line(x_from, y, x_to, y);
+                if (y % (graph_widget_constants::grid_size * graph_widget_constants::cluster_size))
+                    base_lines.append(line);
                 else
-                    cluster_points.append(QPoint(x,y));
+                    cluster_lines.append(line);
             }
 
-        pen.setColor(s_grid_base_dot_color);
-        painter->setPen(pen);
-
-        painter->drawPoints(base_points.data(), base_points.size());
-
-        if (s_grid_clusters_enabled)
-        {
-            pen.setColor(s_grid_cluster_dot_color);
+            pen.setColor(s_grid_base_line_color);
             painter->setPen(pen);
+
+            painter->drawLines(base_lines.data(), base_lines.size());
+
+            if (s_grid_clusters_enabled)
+            {
+                pen.setColor(s_grid_cluster_line_color);
+                painter->setPen(pen);
+            }
+
+            painter->drawLines(cluster_lines.data(), cluster_lines.size());
+            break;
         }
 
-        painter->drawPoints(cluster_points.data(), cluster_points.size());
-        break;
-    }
+        case graph_widget_constants::grid_type::Dots:
+        {
+            QVector<QPoint> base_points;
+            QVector<QPoint> cluster_points;
+
+            for (int x = x_from - x_offset; x < x_to; x += graph_widget_constants::grid_size)
+                for (int y = y_from - y_offset; y < y_to; y += graph_widget_constants::grid_size)
+                {
+                    if ((x % (graph_widget_constants::grid_size * graph_widget_constants::cluster_size)) && (y % (graph_widget_constants::grid_size * graph_widget_constants::cluster_size)))
+                        base_points.append(QPoint(x,y));
+                    else
+                        cluster_points.append(QPoint(x,y));
+                }
+
+            pen.setColor(s_grid_base_dot_color);
+            painter->setPen(pen);
+
+            painter->drawPoints(base_points.data(), base_points.size());
+
+            if (s_grid_clusters_enabled)
+            {
+                pen.setColor(s_grid_cluster_dot_color);
+                painter->setPen(pen);
+            }
+
+            painter->drawPoints(cluster_points.data(), cluster_points.size());
+            break;
+        }
+        }
+
+        #ifdef GUI_DEBUG_GRID
+        if (m_debug_grid_enable)
+            debug_draw_layouter_grid(painter, x_from, x_to, y_from, y_to);
+        #endif
+
+        painter->setRenderHints(original_flags); // UNNECESSARY ?
     }
 
     #ifdef GUI_DEBUG_GRID
-    if (m_debug_grid_enable)
-        debug_draw_layouter_grid(painter, x_from, x_to, y_from, y_to);
+    void GraphicsScene::debug_set_layouter_grid(const QVector<qreal>& debug_x_lines, const QVector<qreal>& debug_y_lines, qreal debug_default_height, qreal debug_default_width)
+    {
+        m_debug_x_lines = debug_x_lines;
+        m_debug_y_lines = debug_y_lines;
+        m_debug_default_height = debug_default_height;
+        m_debug_default_width = debug_default_width;
+    }
+
+    void GraphicsScene::debug_draw_layouter_grid(QPainter* painter, const int x_from, const int x_to, const int y_from, const int y_to)
+    {
+        painter->setPen(QPen(Qt::magenta));
+
+        for (qreal x : m_debug_x_lines)
+        {
+            QLineF line(x, y_from, x, y_to);
+            painter->drawLine(line);
+        }
+
+        for (qreal y : m_debug_y_lines)
+        {
+            QLineF line(x_from, y, x_to, y);
+            painter->drawLine(line);
+        }
+
+        painter->setPen(QPen(Qt::green));
+
+        qreal x = m_debug_x_lines.last() + m_debug_default_width;
+
+        while (x <= x_to)
+        {
+            QLineF line(x, y_from, x, y_to);
+            painter->drawLine(line);
+            x += m_debug_default_width;
+        }
+
+        x = m_debug_x_lines.first() - m_debug_default_width;
+
+        while (x >= x_from)
+        {
+            QLineF line(x, y_from, x, y_to);
+            painter->drawLine(line);
+            x -= m_debug_default_width;
+        }
+
+        qreal y = m_debug_y_lines.last() + m_debug_default_height;
+
+        while (y <= y_to)
+        {
+            QLineF line(x_from, y, x_to, y);
+            painter->drawLine(line);
+            y += m_debug_default_height;
+        }
+
+        y = m_debug_y_lines.first() - m_debug_default_height;
+
+        while (y >= y_from)
+        {
+            QLineF line(x_from, y, x_to, y);
+            painter->drawLine(line);
+            y -= m_debug_default_height;
+        }
+    }
     #endif
-
-    painter->setRenderHints(original_flags); // UNNECESSARY ?
 }
-
-#ifdef GUI_DEBUG_GRID
-void graphics_scene::debug_set_layouter_grid(const QVector<qreal>& debug_x_lines, const QVector<qreal>& debug_y_lines, qreal debug_default_height, qreal debug_default_width)
-{
-    m_debug_x_lines = debug_x_lines;
-    m_debug_y_lines = debug_y_lines;
-    m_debug_default_height = debug_default_height;
-    m_debug_default_width = debug_default_width;
-}
-
-void graphics_scene::debug_draw_layouter_grid(QPainter* painter, const int x_from, const int x_to, const int y_from, const int y_to)
-{   
-    painter->setPen(QPen(Qt::magenta));
-
-    for (qreal x : m_debug_x_lines)
-    {
-        QLineF line(x, y_from, x, y_to);
-        painter->drawLine(line);
-    }
-
-    for (qreal y : m_debug_y_lines)
-    {
-        QLineF line(x_from, y, x_to, y);
-        painter->drawLine(line);
-    }
-
-    painter->setPen(QPen(Qt::green));
-
-    qreal x = m_debug_x_lines.last() + m_debug_default_width;
-
-    while (x <= x_to)
-    {
-        QLineF line(x, y_from, x, y_to);
-        painter->drawLine(line);
-        x += m_debug_default_width;
-    }
-
-    x = m_debug_x_lines.first() - m_debug_default_width;
-
-    while (x >= x_from)
-    {
-        QLineF line(x, y_from, x, y_to);
-        painter->drawLine(line);
-        x -= m_debug_default_width;
-    }
-
-    qreal y = m_debug_y_lines.last() + m_debug_default_height;
-
-    while (y <= y_to)
-    {
-        QLineF line(x_from, y, x_to, y);
-        painter->drawLine(line);
-        y += m_debug_default_height;
-    }
-
-    y = m_debug_y_lines.first() - m_debug_default_height;
-
-    while (y >= y_from)
-    {
-        QLineF line(x_from, y, x_to, y);
-        painter->drawLine(line);
-        y -= m_debug_default_height;
-    }
-}
-#endif

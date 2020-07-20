@@ -21,47 +21,47 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef STYLE_MANAGER_H
-#define STYLE_MANAGER_H
+#pragma once
 
 #include <QObject>
 
-class graphics_qss_adapter;
-class notification_manager_qss_adapter;
-class python_qss_adapter;
-class shared_properties_qss_adapter;
-class vhdl_qss_adapter;
-
 class QApplication;
 
-class style_manager : public QObject
+namespace hal
 {
-    Q_OBJECT
+    class GraphicsQssAdapter;
+    class NotificationManagerQssAdapter;
+    class PythonQssAdapter;
+    class SharedPropertiesQssAdapter;
+    class VhdlQssAdapter;
 
-public:
-    static style_manager* get_instance();
+    class StyleManager : public QObject
+    {
+        Q_OBJECT
 
-    ~style_manager();
+    public:
+        static StyleManager* get_instance();
 
-    style_manager(style_manager const&) = delete;
-    void operator=(style_manager const&) = delete;
+        ~StyleManager();
 
-    void update_style();
+        StyleManager(StyleManager const&) = delete;
+        void operator=(StyleManager const&) = delete;
 
-    const shared_properties_qss_adapter* shared_properties() const;
-    const notification_manager_qss_adapter* notification_manager() const;
-    const python_qss_adapter* python_syntax_highlighter() const;
-    const vhdl_qss_adapter* vhdl_syntax_highlighter() const;
+        void update_style();
 
-private:
-    explicit style_manager(QObject* parent = nullptr);
-    void set_default(QApplication* app);
+        const SharedPropertiesQssAdapter* shared_properties() const;
+        const NotificationManagerQssAdapter* NotificationManager() const;
+        const PythonQssAdapter* PythonSyntaxHighlighter() const;
+        const VhdlQssAdapter* VhdlSyntaxHighlighter() const;
 
-    graphics_qss_adapter* m_graphics_qss_adapter;
-    shared_properties_qss_adapter* m_shared_properties;
-    notification_manager_qss_adapter* m_notification_manager;
-    python_qss_adapter* m_python_syntax_highlighter;
-    vhdl_qss_adapter* m_vhdl_syntax_highlighter;
-};
+    private:
+        explicit StyleManager(QObject* parent = nullptr);
+        void set_default(QApplication* app);
 
-#endif    // STYLE_MANAGER_H
+        GraphicsQssAdapter* m_graphics_qss_adapter;
+        SharedPropertiesQssAdapter* m_shared_properties;
+        NotificationManagerQssAdapter* m_NotificationManager;
+        PythonQssAdapter* m_python_syntax_highlighter;
+        VhdlQssAdapter* m_vhdl_syntax_highlighter;
+    };
+}

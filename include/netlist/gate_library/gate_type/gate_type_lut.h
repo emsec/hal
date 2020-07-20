@@ -30,82 +30,85 @@
 #include <unordered_map>
 #include <unordered_set>
 
-/**
- * LUT gate type class containing information about the internals of a specific LUT gate type.
- *
- * @ingroup netlist
- */
-class gate_type_lut : public gate_type
+namespace hal
 {
-public:
     /**
-     * Constructor for a LUT gate type.
+     * LUT gate type class containing information about the internals of a specific LUT gate type.
      *
-     * @param[in] name - The name of the LUT gate type.
+     * @ingroup netlist
      */
-    gate_type_lut(const std::string& name);
-    ~gate_type_lut() override = default;
+    class GateTypeLut : public GateType
+    {
+    public:
+        /**
+         * Constructor for a LUT gate type.
+         *
+         * @param[in] name - The name of the LUT gate type.
+         */
+        GateTypeLut(const std::string& name);
+        ~GateTypeLut() override = default;
 
-    /**
-     * Adds an output pin to the collection of output pins that generate their output not from a boolean function but an initialization string.
-     * The pin has to be declared as an output pin beforehand.
-     *
-     * @param[in] output_pin - The name of the output string.
-     */
-    void add_output_from_init_string_pin(const std::string& pin_name);
+        /**
+         * Adds an output pin to the collection of output pins that generate their output not from a boolean function but an initialization string.
+         * The pin has to be declared as an output pin beforehand.
+         *
+         * @param[in] pin_name - The name of the output string.
+         */
+        void add_output_from_init_string_pin(const std::string& pin_name);
 
-    /**
-     * Get the set of output pins that generate their output not from a boolean function but an initialization string.
-     *
-     * @returns Set of oputput pin names.
-     */
-    std::unordered_set<std::string> get_output_from_init_string_pins() const;
+        /**
+         * Get the set of output pins that generate their output not from a boolean function but an initialization string.
+         *
+         * @returns Set of oputput pin names.
+         */
+        std::unordered_set<std::string> get_output_from_init_string_pins() const;
 
-    /**
-     * Set the category in which to find the INIT string.
-     *
-     * @param[in] category - The category as a string.
-     */
-    void set_config_data_category(const std::string& category);
+        /**
+         * Set the category in which to find the INIT string.
+         *
+         * @param[in] category - The category as a string.
+         */
+        void set_config_data_category(const std::string& category);
 
-    /**
-     * Get the category in which to find the INIT string.
-     *
-     * @returns The string describing the category.
-     */
-    std::string get_config_data_category() const;
+        /**
+         * Get the category in which to find the INIT string.
+         *
+         * @returns The string describing the category.
+         */
+        std::string get_config_data_category() const;
 
-    /**
-     * Set the identifier used to specify the INIT string.
-     *
-     * @param[in] identifier - The identifier as a string.
-     */
-    void set_config_data_identifier(const std::string& identifier);
+        /**
+         * Set the identifier used to specify the INIT string.
+         *
+         * @param[in] identifier - The identifier as a string.
+         */
+        void set_config_data_identifier(const std::string& identifier);
 
-    /**
-     * Get the identifier used to specify the INIT string.
-     *
-     * @returns The identifier as a string.
-     */
-    std::string get_config_data_identifier() const;
+        /**
+         * Get the identifier used to specify the INIT string.
+         *
+         * @returns The identifier as a string.
+         */
+        std::string get_config_data_identifier() const;
 
-    /**
-     * Set the bit-order of the INIT string.
-     *
-     * @param[in] ascending - True if ascending bit-order, false otherwise.
-     */
-    void set_config_data_ascending_order(bool ascending);
+        /**
+         * Set the bit-order of the INIT string.
+         *
+         * @param[in] ascending - True if ascending bit-order, false otherwise.
+         */
+        void set_config_data_ascending_order(bool ascending);
 
-    /**
-     * Get the bit-order of the INIT string.
-     *
-     * @returns True if ascending bit-order, false otherwise.
-     */
-    bool is_config_data_ascending_order() const;
+        /**
+         * Get the bit-order of the INIT string.
+         *
+         * @returns True if ascending bit-order, false otherwise.
+         */
+        bool is_config_data_ascending_order() const;
 
-private:
-    std::unordered_set<std::string> m_output_from_init_string_pins;
-    std::string m_config_data_category;
-    std::string m_config_data_identifier;
-    bool m_ascending;
-};
+    private:
+        std::unordered_set<std::string> m_output_from_init_string_pins;
+        std::string m_config_data_category;
+        std::string m_config_data_identifier;
+        bool m_ascending;
+    };
+}    // namespace hal

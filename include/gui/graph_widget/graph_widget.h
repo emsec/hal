@@ -32,56 +32,64 @@
 
 #include <deque>
 
-class dialog_overlay;
-class graph_context;
-class graph_graphics_view;
-class graph_layout_spinner_widget;
-class graph_navigation_widget;
-
-class graph_widget : public content_widget, public graph_context_subscriber
+namespace hal
 {
-    Q_OBJECT
+    class DialogOverlay;
+    class GraphContext;
+    class GraphGraphicsView;
+    class GraphLayoutSpinnerWidget;
+    class GraphNavigationWidget;
+    class GraphNavigationWidgetV2;
 
-public:
-    explicit graph_widget(graph_context* context, QWidget* parent = nullptr);
+    class GraphWidget : public ContentWidget, public GraphContextSubscriber
+    {
+        Q_OBJECT
 
-    graph_context* get_context() const;
+    public:
+        explicit GraphWidget(GraphContext* context, QWidget* parent = nullptr);
 
-    void handle_scene_available() override;
-    void handle_scene_unavailable() override;
-    void handle_context_about_to_be_deleted() override;
+        GraphContext* get_context() const;
 
-    void handle_status_update(const int percent) override;
-    void handle_status_update(const QString& message) override;
+        void handle_scene_available() override;
+        void handle_scene_unavailable() override;
+        void handle_context_about_to_be_deleted() override;
 
-    graph_graphics_view* view();
+        void handle_status_update(const int percent) override;
+        void handle_status_update(const QString& message) override;
 
-    void ensure_selection_visible();
+        GraphGraphicsView* view();
 
-protected:
-    void keyPressEvent(QKeyEvent* event) override;
+        void ensure_selection_visible();
 
-private Q_SLOTS:
-    void handle_navigation_jump_requested(const hal::node origin, const u32 via_net, const QSet<u32>& to_gates);
-    void handle_module_double_clicked(const u32 id);
-    void reset_focus();
+    protected:
+        void keyPressEvent(QKeyEvent* event) override;
 
-private:
-    void handle_navigation_left_request();
-    void handle_navigation_right_request();
-    void handle_navigation_up_request();
-    void handle_navigation_down_request();
+    private Q_SLOTS:
+        void handle_navigation_jump_requested(const hal::node origin, const u32 via_net, const QSet<u32>& to_gates, const QSet<u32>& to_modules);
+        void handle_module_double_clicked(const u32 id);
+        void reset_focus();
 
-    void handle_enter_module_requested(const u32 id);
+    private:
+        void handle_navigation_left_request();
+        void handle_navigation_right_request();
+        void handle_navigation_up_request();
+        void handle_navigation_down_request();
 
-    void ensure_gates_visible(const QSet<u32> gates);
+        void substitute_by_visible_modules(const QSet<u32>& gates, const QSet<u32>& modules, QSet<u32>& insert_gates, QSet<u32>& insert_modules,
+                                           QSet<u32>& remove_gates, QSet<u32>& remove_modules) const;
+        void set_modified_if_module();
 
-    graph_graphics_view* m_view;
-    graph_context* m_context;
+        void handle_enter_module_requested(const u32 id);
 
-    dialog_overlay* m_overlay;
-    graph_navigation_widget* m_navigation_widget;
-    graph_layout_spinner_widget* m_spinner_widget;
+        void ensure_items_visible(const QSet<u32>& gates, const QSet<u32>& modules);
 
-    u32 m_current_expansion;
-};
+        GraphGraphicsView* m_view;
+        GraphContext* m_context;
+
+        DialogOverlay* m_Overlay;
+        GraphNavigationWidgetV2* m_navigation_widget_v2;
+        GraphLayoutSpinnerWidget* m_spinner_widget;
+
+        u32 m_current_expansion;
+    };
+}

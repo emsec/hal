@@ -21,21 +21,21 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef __HAL_FOCUS_LOGGER_H
-#define __HAL_FOCUS_LOGGER_H
+#pragma once
 
 #include <QObject>
 #include <QApplication>
 
-class focus_logger : public QObject
+namespace hal
 {
-    Q_OBJECT
-public:
-    focus_logger(QApplication* app, QObject* parent = nullptr);
+    class FocusLogger : public QObject
+    {
+        Q_OBJECT
+    public:
+        FocusLogger(QApplication* app, QObject* parent = nullptr);
 
-public Q_SLOTS:
-    void handle_focus_change(QWidget* old, QWidget* new_obj);
+    public Q_SLOTS:
+        void handle_focus_change(QWidget* old, QWidget* new_obj);
 
-};
-
-#endif //__HAL_FOCUS_LOGGER_H
+    };
+}

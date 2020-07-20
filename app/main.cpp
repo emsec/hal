@@ -1,6 +1,6 @@
-#include "core/interface_base.h"
-#include "core/interface_cli.h"
-#include "core/interface_interactive_ui.h"
+#include "core/plugin_interface_base.h"
+#include "core/plugin_interface_cli.h"
+#include "core/plugin_interface_interactive_ui.h"
 #include "core/log.h"
 #include "core/plugin_manager.h"
 #include "core/program_arguments.h"
@@ -23,9 +23,11 @@
 #define SUCCESS 0
 #define ERROR 1
 
-void initialize_cli_options(program_options& cli_options)
+using namespace hal;
+
+void initialize_cli_options(ProgramOptions& cli_options)
 {
-    program_options generic_options("generic options");
+    ProgramOptions generic_options("generic options");
     /* initialize generic options */
     generic_options.add({"-h", "--help"}, "print help messages");
     generic_options.add({"-v", "--version"}, "displays the current version");
@@ -34,8 +36,8 @@ void initialize_cli_options(program_options& cli_options)
     generic_options.add({"--log-time"}, "includes time information into the log");
     generic_options.add({"--licenses"}, "Shows the licenses of projects used by HAL");
 
-    generic_options.add({"-i", "--input-file"}, "input file", {program_options::REQUIRED_PARAM});
-    generic_options.add({"-gl", "--gate-library"}, "used gate-library of the netlist", {program_options::REQUIRED_PARAM});
+    generic_options.add({"-i", "--input-file"}, "input file", {ProgramOptions::REQUIRED_PARAM});
+    generic_options.add({"-gl", "--gate-library"}, "used gate-library of the netlist", {ProgramOptions::REQUIRED_PARAM});
     generic_options.add({"-e", "--empty-netlist"}, "create a new empty netlist, requires a gate library to be specified");
 #ifdef WITH_GUI
     generic_options.add({"-g", "--gui"}, "start graphical user interface");
@@ -49,29 +51,29 @@ void initialize_cli_options(program_options& cli_options)
     generic_options.add("--no-log", "prevents hal from creating a .log file");
 
     /* initialize hdl parser options */
-    generic_options.add(hdl_parser_dispatcher::get_cli_options());
+    generic_options.add(HDLParserDispatcher::get_cli_options());
 
     /* initialize hdl writer options */
-    generic_options.add(hdl_writer_dispatcher::get_cli_options());
+    generic_options.add(HDLWriterDispatcher::get_cli_options());
     cli_options.add(generic_options);
 }
 
-int redirect_control_to_interactive_ui(const std::string& name, program_arguments& args)
+int redirect_control_to_interactive_ui(const std::string& name, ProgramArguments& args)
 {
     /* add timestamp to log output */
-    log_manager::get_instance().set_format_pattern("[%d.%m.%Y %H:%M:%S] [%n] [%l] %v");
+    LogManager::get_instance().set_format_pattern("[%d.%m.%Y %H:%M:%S] [%n] [%l] %v");
     event_log::initialize();
 
     auto file_name = core_utils::get_file(std::string("lib" + name + ".") + std::string(LIBRARY_FILE_EXTENSION), {core_utils::get_library_directory()});
     if (file_name.empty())
         file_name = core_utils::get_file(std::string(name + ".so"), {core_utils::get_library_directory()});
-    if (!plugin_manager::load(name, file_name))
+    if (!PluginManager::load(name, file_name))
     {
         return ERROR;
     }
 
     log_info("core", "Starting {}.", name);
-    auto plugin = plugin_manager::get_plugin_instance<i_interactive_ui>(name);
+    auto plugin = PluginManager::get_plugin_instance<InteractiveUIPluginInterface>(name);
     if (plugin == nullptr)
     {
         return ERROR;
@@ -81,9 +83,9 @@ int redirect_control_to_interactive_ui(const std::string& name, program_argument
     return ret;
 }
 
-int cleanup(std::shared_ptr<netlist> const g = nullptr)
+int cleanup(std::shared_ptr<Netlist> const g = nullptr)
 {
-    if (!plugin_manager::unload_all_plugins())
+    if (!PluginManager::unload_all_plugins())
     {
         return ERROR;
     }
@@ -98,30 +100,30 @@ int cleanup(std::shared_ptr<netlist> const g = nullptr)
 int main(int argc, const char* argv[])
 {
     /* initialize and parse generic cli options */
-    program_options cli_options("cli options");
+    ProgramOptions cli_options("cli options");
     initialize_cli_options(cli_options);
-    program_options all_options("all options");
+    ProgramOptions all_options("all options");
     all_options.add(cli_options);
-    all_options.add(log_manager::get_instance().get_option_descriptions());
+    all_options.add(LogManager::get_instance().get_option_descriptions());
     auto args = all_options.parse(argc, argv);
 
     /* initialize logging */
-    log_manager& lm = log_manager::get_instance();
+    LogManager& lm = LogManager::get_instance();
 
-    lm.add_channel("core", {log_manager::create_stdout_sink(), log_manager::create_file_sink(), log_manager::create_gui_sink()}, "info");
-    lm.add_channel("gate_library_manager", {log_manager::create_stdout_sink(), log_manager::create_file_sink(), log_manager::create_gui_sink()}, "info");
-    lm.add_channel("liberty_parser", {log_manager::create_stdout_sink(), log_manager::create_file_sink(), log_manager::create_gui_sink()}, "info");
-    lm.add_channel("netlist", {log_manager::create_stdout_sink(), log_manager::create_file_sink(), log_manager::create_gui_sink()}, "info");
-    lm.add_channel("module", {log_manager::create_stdout_sink(), log_manager::create_file_sink(), log_manager::create_gui_sink()}, "info");
-    lm.add_channel("netlist.internal", {log_manager::create_stdout_sink(), log_manager::create_file_sink(), log_manager::create_gui_sink()}, "info");
-    lm.add_channel("netlist.persistent", {log_manager::create_stdout_sink(), log_manager::create_file_sink(), log_manager::create_gui_sink()}, "info");
-    lm.add_channel("hdl_parser", {log_manager::create_stdout_sink(), log_manager::create_file_sink(), log_manager::create_gui_sink()}, "info");
-    lm.add_channel("hdl_writer", {log_manager::create_stdout_sink(), log_manager::create_file_sink(), log_manager::create_gui_sink()}, "info");
-    lm.add_channel("python_context", {log_manager::create_stdout_sink(), log_manager::create_file_sink(), log_manager::create_gui_sink()}, "info");
+    lm.add_channel("core", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
+    lm.add_channel("gate_library_manager", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
+    lm.add_channel("liberty_parser", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
+    lm.add_channel("netlist", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
+    lm.add_channel("module", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
+    lm.add_channel("netlist.internal", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
+    lm.add_channel("netlist.persistent", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
+    lm.add_channel("hdl_parser", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
+    lm.add_channel("hdl_writer", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
+    lm.add_channel("PythonContext", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
 
     if (args.is_option_set("--logfile"))
     {
-        lm.set_file_name(hal::path(args.get_parameter("--logfile")));
+        lm.set_file_name(std::filesystem::path(args.get_parameter("--logfile")));
     }
     lm.handle_options(args);
 
@@ -148,19 +150,19 @@ int main(int argc, const char* argv[])
     UNUSED(redirect_control_to_interactive_ui);    // in case neither gui nor python is defined
 
     /* initialize plugin manager */
-    plugin_manager::add_existing_options_description(cli_options);
+    PluginManager::add_existing_options_description(cli_options);
 
-    if (!plugin_manager::load_all_plugins())
+    if (!PluginManager::load_all_plugins())
     {
         return ERROR;
     }
 
     /* add plugin cli options */
-    auto program_options = plugin_manager::get_cli_plugin_options();
-    if (!program_options.get_options().empty())
+    auto ProgramOptions = PluginManager::get_cli_plugin_options();
+    if (!ProgramOptions.get_options().empty())
     {
-        cli_options.add(plugin_manager::get_cli_plugin_options());
-        all_options.add(plugin_manager::get_cli_plugin_options());
+        cli_options.add(PluginManager::get_cli_plugin_options());
+        all_options.add(PluginManager::get_cli_plugin_options());
     }
 
     /* process help output */
@@ -219,16 +221,16 @@ int main(int argc, const char* argv[])
         return cleanup();
     }
 
-    hal::path file_name;
-    std::shared_ptr<netlist> netlist;
+    std::filesystem::path file_name;
+    std::shared_ptr<Netlist> netlist;
 
     if (args.is_option_set("--empty-netlist"))
     {
-        file_name = hal::path("./empty_netlist.hal");
+        file_name = std::filesystem::path("./empty_netlist.hal");
     }
     else
     {
-        file_name = hal::path(args.get_parameter("--input-file"));
+        file_name = std::filesystem::path(args.get_parameter("--input-file"));
     }
 
     if (args.is_option_set("--no-log"))
@@ -268,7 +270,7 @@ int main(int argc, const char* argv[])
 
     /* parse plugin options */
     std::vector<std::string> plugins_to_execute;
-    auto option_to_plugin_name = plugin_manager::get_flag_to_plugin_mapping();
+    auto option_to_plugin_name = PluginManager::get_flag_to_plugin_mapping();
     for (const auto& option : args.get_set_options())
     {
         auto it = option_to_plugin_name.find(option);
@@ -284,13 +286,13 @@ int main(int argc, const char* argv[])
     bool plugins_successful = true;
     for (const auto& plugin_name : plugins_to_execute)
     {
-        auto plugin = plugin_manager::get_plugin_instance<i_cli>(plugin_name);
+        auto plugin = PluginManager::get_plugin_instance<CLIPluginInterface>(plugin_name);
         if (plugin == nullptr)
         {
             return cleanup(netlist);
         }
 
-        program_arguments plugin_args;
+        ProgramArguments plugin_args;
 
         for (const auto& option : plugin->get_cli_options().get_options())
         {
@@ -328,7 +330,7 @@ int main(int argc, const char* argv[])
     }
 
     /* handle file writer */
-    if (!hdl_writer_dispatcher::write(netlist, args))
+    if (!HDLWriterDispatcher::write(netlist, args))
     {
         return cleanup(netlist);
     }

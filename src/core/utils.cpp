@@ -24,376 +24,233 @@
 #include <unistd.h>
 #endif
 
-namespace core_utils
+namespace hal
 {
-    bool ends_with(const std::string& s, const std::string& ending)
+    namespace core_utils
     {
-        return ends_with_t<std::string>(s, ending);
-    }
-
-    bool starts_with(const std::string& s, const std::string& start)
-    {
-        return starts_with_t<std::string>(s, start);
-    }
-
-    bool equals_ignore_case(const std::string& a, const std::string& b)
-    {
-        return boost::algorithm::iequals(a, b);
-    }
-
-    bool is_integer(const std::string& s)
-    {
-        return is_integer_t<std::string>(s);
-    }
-
-    bool is_floating_point(const std::string& s)
-    {
-        return is_floating_point_t<std::string>(s);
-    }
-
-    std::vector<std::string> split(const std::string& s, const char delim, bool obey_brackets)
-    {
-        std::vector<std::string> result;
-        std::string item = "";
-        if (obey_brackets)
+        bool file_exists(const std::string& filename)
         {
-            int bracket_level = 0;
-            for (size_t i = 0; i < s.length(); ++i)
-            {
-                char c = s.at(i);
-                switch (c)
-                {
-                    case '(':
-                    case '{':
-                    case '[':
-                        ++bracket_level;
-                        break;
-                    case ')':
-                    case '}':
-                    case ']':
-                        --bracket_level;
-                        break;
-                    default:
-                        break;
-                }
-                if (bracket_level < 0)
-                {
-                    bracket_level = 0;
-                }
-                if (c == delim)
-                {
-                    // No constant expression, therefore not usable in switch case
-                    if (bracket_level == 0)
-                    {
-                        result.push_back(item);
-                        item = "";
-                    }
-                    else
-                    {
-                        item.push_back(c);
-                    }
-                }
-                else
-                {
-                    item.push_back(c);
-                }
-            }
-            if (!item.empty())
-            {
-                result.push_back(item);
-            }
+            std::ifstream ifile(filename.c_str());
+            return (bool)ifile;
         }
-        else
+
+        bool folder_exists_and_is_accessible(const std::filesystem::path& folder)
         {
-            std::stringstream ss(s);
-            while (std::getline(ss, item, delim))
-            {
-                result.push_back(item);
-            }
-        }
-        if (s.back() == delim)
-        {
-            result.push_back("");
-        }
-        return result;
-    }
-
-    std::string ltrim(const std::string& line, const char* to_remove)
-    {
-        size_t start = line.find_first_not_of(to_remove);
-
-        if (start != std::string::npos)
-        {
-            return line.substr(start, line.size() - start);
-        }
-        return "";
-    }
-
-    std::string rtrim(const std::string& line, const char* to_remove)
-    {
-        size_t end = line.find_last_not_of(to_remove);
-        if (end != std::string::npos)
-        {
-            return line.substr(0, end + 1);
-        }
-        return "";
-    }
-
-    std::string trim(const std::string& s, const char* to_remove)
-    {
-        return trim_t<std::string>(s, to_remove);
-    }
-
-    std::string replace(const std::string& str, const std::string& search, const std::string& replace)
-    {
-        return replace_t<std::string>(str, search, replace);
-    }
-
-    std::string to_upper(const std::string& s)
-    {
-        return to_upper_t<std::string>(s);
-    }
-
-    std::string to_lower(const std::string& s)
-    {
-        return to_lower_t<std::string>(s);
-    }
-
-    u32 num_of_occurrences(const std::string& str, const std::string& substr)
-    {
-        u32 num_of_occurrences = 0;
-        auto position          = str.find(substr, 0);
-        while (position != std::string::npos)
-        {
-            num_of_occurrences++;
-            position = str.find(substr, position + 1);
-        }
-        return num_of_occurrences;
-    }
-
-    bool file_exists(const std::string& filename)
-    {
-        std::ifstream ifile(filename.c_str());
-        return (bool)ifile;
-    }
-
-    bool folder_exists_and_is_accessible(const hal::path& folder)
-    {
 #ifdef _WIN32
-        DWORD ftyp = GetFileAttributesA(folder.c_str());
-        if (ftyp == INVALID_FILE_ATTRIBUTES)
-            return false;    //something is wrong with your path!
+            DWORD ftyp = GetFileAttributesA(folder.c_str());
+            if (ftyp == INVALID_FILE_ATTRIBUTES)
+                return false;    //something is wrong with your path!
 
-        if (ftyp & FILE_ATTRIBUTE_DIRECTORY)
-            if (0 == access(folder.c_str(), R_OK))
-                return true;
+            if (ftyp & FILE_ATTRIBUTE_DIRECTORY)
+                if (0 == access(folder.c_str(), R_OK))
+                    return true;
 
-        return false;    // this is not a directory!
+            return false;    // this is not a directory!
 #else
 
-        struct stat sb;
-
-        if (stat(folder.c_str(), &sb) == 0 && S_ISDIR(sb.st_mode))
-        {
-            if (0 == access(folder.c_str(), R_OK))
-            {
-                return true;
-            }
-        }
-        return false;
-#endif
-    }
-
-    hal::path get_binary_directory()
-    {
-        char buf[1024] = {0};
-#ifdef _WIN32
-        DWORD ret = GetModuleFileNameA(NULL, buf, sizeof(buf));
-        if (ret == 0 || ret == sizeof(buf))
-            return std::string();
-        return hal::path(buf);
-#elif __APPLE__ && __MACH__
-        uint32_t size = sizeof(buf);
-        int ret       = _NSGetExecutablePath(buf, &size);
-        if (0 != ret)
-        {
-            return std::string();
-        }
-
-        hal::error_code ec;
-        hal::path p(hal::fs::canonical(buf, ec));
-        return p.parent_path().make_preferred();
-#elif __linux__
-        ssize_t size = readlink("/proc/self/exe", buf, sizeof(buf));
-        std::string path(buf, size);
-        hal::error_code ec;
-        hal::path p(hal::fs::canonical(path, ec));
-        return p.make_preferred().parent_path();
-#endif
-    }
-
-    hal::path get_base_directory()
-    {
-        auto environ_path = std::getenv("HAL_BASE_PATH");
-        if (environ_path)
-        {
-            return hal::path(environ_path).make_preferred();
-        }
-        hal::error_code ec;
-        auto bin_dir = get_binary_directory();
-        auto p       = bin_dir / "hal";
-        if (hal::fs::exists(p, ec))
-        {
-            return bin_dir.parent_path();
-        }
-        hal::path which_result = which("hal");
-        if (!which_result.empty())
-        {
-            return which_result.parent_path().parent_path();
-        }
-        die("core", "Cannot determine base path of hal installation. Please set the environment variable HAL_BASE_PATH. Giving up!");
-    }
-
-    hal::path get_library_directory()
-    {
-        std::vector<hal::path> path_hints = {
-            get_base_directory() / "lib64/",
-            get_base_directory() / "lib/x86_64-linux-gnu",
-            get_base_directory() / "lib/",
-        };
-        return get_first_directory_exists(path_hints);
-    }
-
-    hal::path get_share_directory()
-    {
-        std::vector<hal::path> path_hints = {
-            get_base_directory() / "share/hal",
-        };
-        return get_first_directory_exists(path_hints);
-    }
-
-    hal::path get_user_share_directory()
-    {
-        hal::path dir = hal::path(getenv("HOME")) / ".local/share/hal";
-        hal::fs::create_directories(dir);
-        return dir;
-    }
-
-    hal::path get_config_directory()
-    {
-        std::vector<hal::path> path_hints = {
-            get_base_directory() / "share/hal/defaults",
-        };
-        return get_first_directory_exists(path_hints);
-    }
-
-    hal::path get_user_config_directory()
-    {
-        hal::path dir = hal::path(getenv("HOME")) / ".config/hal";
-        hal::fs::create_directories(dir);
-        return dir;
-    }
-
-    hal::path get_default_log_directory(hal::path source_file)
-    {
-        hal::path dir = (source_file.empty()) ? get_user_share_directory() / "log" : source_file.parent_path();
-        hal::fs::create_directories(dir);
-        return dir;
-    }
-
-    std::vector<hal::path> get_gate_library_directories()
-    {
-        std::vector<hal::path> path_hints = {
-            get_share_directory() / "gate_libraries",
-            get_user_share_directory() / "gate_libraries",
-        };
-        return path_hints;
-    }
-
-    std::vector<hal::path> get_plugin_directories()
-    {
-        std::vector<hal::path> path_hints = {
-
-            get_library_directory() / "hal_plugins/",
-            get_library_directory() / "plugins/",
-            get_user_share_directory() / "plugins/",
-            hal::path(getenv("HOME")) / "plugins/",
-        };
-        return path_hints;
-    }
-
-    hal::path get_first_directory_exists(std::vector<hal::path> path_hints)
-    {
-        for (const auto& path : path_hints)
-        {
-            hal::error_code ec;
-            if (hal::fs::exists(path, ec))
-            {
-                return path;
-            }
-        }
-        return hal::path();
-    }
-
-    hal::path get_file(std::string file_name, std::vector<hal::path> path_hints)
-    {
-        if (file_name.empty())
-        {
-            return hal::path();
-        }
-
-        for (const auto& path : path_hints)
-        {
-            hal::error_code ec1;
-            if (hal::fs::exists(hal::path(path), ec1))
-            {
-                hal::path file_path = hal::path(path).string() + "/" + hal::path(file_name).string();
-                hal::error_code ec2;
-                if (hal::fs::exists(file_path, ec2))
-                {
-                    return file_path;
-                }
-            }
-        }
-        return hal::path();
-    }
-
-    hal::path which(const std::string& name, const std::string& path)
-    {
-        if (name.empty())
-        {
-            return hal::path();
-        }
-        std::string internal_path = path;
-        if (internal_path.empty())
-        {
-            internal_path = std::getenv("PATH");
-        }
-#ifdef _WIN32
-        const char which_delimiter = ';';
-        return hal::path();    // Curerently no support for windows. Sorry ...
-#else
-        const char which_delimiter = ':';
-#endif
-        auto folders = split(internal_path, which_delimiter, false);
-        for (const auto& folder : folders)
-        {
-            hal::error_code ec;
-            UNUSED(ec);
-            hal::path p = hal::path(folder) / name;
             struct stat sb;
 
-            if (stat(p.c_str(), &sb) == 0 && sb.st_mode & S_IXUSR)
+            if (stat(folder.c_str(), &sb) == 0 && S_ISDIR(sb.st_mode))
             {
-                return p;
+                if (0 == access(folder.c_str(), R_OK))
+                {
+                    return true;
+                }
             }
+            return false;
+#endif
         }
-        return hal::path();
-    }
 
-    std::string get_open_source_licenses()
-    {
-        return R"(pybind11 (https://github.com/pybind/pybind11):
+        std::filesystem::path get_binary_directory()
+        {
+            char buf[1024] = {0};
+#ifdef _WIN32
+            DWORD ret = GetModuleFileNameA(NULL, buf, sizeof(buf));
+            if (ret == 0 || ret == sizeof(buf))
+                return std::string();
+            return std::filesystem::path(buf);
+#elif __APPLE__ && __MACH__
+            uint32_t size = sizeof(buf);
+            int ret       = _NSGetExecutablePath(buf, &size);
+            if (0 != ret)
+            {
+                return std::string();
+            }
+
+            hal::error_code ec;
+            std::filesystem::path p(std::filesystem::canonical(buf, ec));
+            return p.parent_path().make_preferred();
+#elif __linux__
+            ssize_t size = readlink("/proc/self/exe", buf, sizeof(buf));
+            std::string path(buf, size);
+            hal::error_code ec;
+            std::filesystem::path p(std::filesystem::canonical(path, ec));
+            return p.make_preferred().parent_path();
+#endif
+        }
+
+        std::filesystem::path get_base_directory()
+        {
+            auto environ_path = std::getenv("HAL_BASE_PATH");
+            if (environ_path)
+            {
+                return std::filesystem::path(environ_path).make_preferred();
+            }
+            hal::error_code ec;
+            auto bin_dir = get_binary_directory();
+            auto p       = bin_dir / "hal";
+            if (std::filesystem::exists(p, ec))
+            {
+                return bin_dir.parent_path();
+            }
+            std::filesystem::path which_result = which("hal");
+            if (!which_result.empty())
+            {
+                return which_result.parent_path().parent_path();
+            }
+            die("core", "Cannot determine base path of hal installation. Please set the environment variable HAL_BASE_PATH. Giving up!");
+        }
+
+        std::filesystem::path get_library_directory()
+        {
+            std::vector<std::filesystem::path> path_hints = {
+                get_base_directory() / "lib64/",
+                get_base_directory() / "lib/x86_64-linux-gnu",
+                get_base_directory() / "lib/",
+            };
+            return get_first_directory_exists(path_hints);
+        }
+
+        std::filesystem::path get_share_directory()
+        {
+            std::vector<std::filesystem::path> path_hints = {
+                get_base_directory() / "share/hal",
+            };
+            return get_first_directory_exists(path_hints);
+        }
+
+        std::filesystem::path get_user_share_directory()
+        {
+            std::filesystem::path dir = std::filesystem::path(getenv("HOME")) / ".local/share/hal";
+            std::filesystem::create_directories(dir);
+            return dir;
+        }
+
+        std::filesystem::path get_config_directory()
+        {
+            std::vector<std::filesystem::path> path_hints = {
+                get_base_directory() / "share/hal/defaults",
+            };
+            return get_first_directory_exists(path_hints);
+        }
+
+        std::filesystem::path get_user_config_directory()
+        {
+            std::filesystem::path dir = std::filesystem::path(getenv("HOME")) / ".config/hal";
+            std::filesystem::create_directories(dir);
+            return dir;
+        }
+
+        std::filesystem::path get_default_log_directory(std::filesystem::path source_file)
+        {
+            std::filesystem::path dir = (source_file.empty()) ? get_user_share_directory() / "log" : source_file.parent_path();
+            std::filesystem::create_directories(dir);
+            return dir;
+        }
+
+        std::vector<std::filesystem::path> get_gate_library_directories()
+        {
+            std::vector<std::filesystem::path> path_hints = {
+                get_share_directory() / "gate_libraries",
+                get_user_share_directory() / "gate_libraries",
+            };
+            return path_hints;
+        }
+
+        std::vector<std::filesystem::path> get_plugin_directories()
+        {
+            std::vector<std::filesystem::path> path_hints = {
+
+                get_library_directory() / "hal_plugins/",
+                get_library_directory() / "plugins/",
+                get_user_share_directory() / "plugins/",
+                std::filesystem::path(getenv("HOME")) / "plugins/",
+            };
+            return path_hints;
+        }
+
+        std::filesystem::path get_first_directory_exists(std::vector<std::filesystem::path> path_hints)
+        {
+            for (const auto& path : path_hints)
+            {
+                hal::error_code ec;
+                if (std::filesystem::exists(path, ec))
+                {
+                    return path;
+                }
+            }
+            return std::filesystem::path();
+        }
+
+        std::filesystem::path get_file(std::string file_name, std::vector<std::filesystem::path> path_hints)
+        {
+            if (file_name.empty())
+            {
+                return std::filesystem::path();
+            }
+
+            for (const auto& path : path_hints)
+            {
+                hal::error_code ec1;
+                if (std::filesystem::exists(std::filesystem::path(path), ec1))
+                {
+                    std::filesystem::path file_path = std::filesystem::path(path).string() + "/" + std::filesystem::path(file_name).string();
+                    hal::error_code ec2;
+                    if (std::filesystem::exists(file_path, ec2))
+                    {
+                        return file_path;
+                    }
+                }
+            }
+            return std::filesystem::path();
+        }
+
+        std::filesystem::path which(const std::string& name, const std::string& path)
+        {
+            if (name.empty())
+            {
+                return std::filesystem::path();
+            }
+            std::string internal_path = path;
+            if (internal_path.empty())
+            {
+                internal_path = std::getenv("PATH");
+            }
+#ifdef _WIN32
+            const char which_delimiter = ';';
+            return std::filesystem::path();    // Curerently no support for windows. Sorry ...
+#else
+            const char which_delimiter = ':';
+#endif
+            auto folders = split(internal_path, which_delimiter, false);
+            for (const auto& folder : folders)
+            {
+                hal::error_code ec;
+                UNUSED(ec);
+                std::filesystem::path p = std::filesystem::path(folder) / name;
+                struct stat sb;
+
+                if (stat(p.c_str(), &sb) == 0 && sb.st_mode & S_IXUSR)
+                {
+                    return p;
+                }
+            }
+            return std::filesystem::path();
+        }
+
+        std::string get_open_source_licenses()
+        {
+            return R"(pybind11 (https://github.com/pybind/pybind11):
 Copyright (c) 2016 Wenzel Jakob <wenzel.jakob@epfl.ch>, All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -786,5 +643,6 @@ whether future versions of the GNU Lesser General Public License shall
 apply, that proxy's public statement of acceptance of any version is
 permanent authorization for you to choose that version for the Library.
 )";
-    }
-}    // namespace core_utils
+        }
+    }    // namespace core_utils
+}    // namespace hal

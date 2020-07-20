@@ -21,8 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef REMINDER_OVERLAY_H
-#define REMINDER_OVERLAY_H
+#pragma once
 
 #include "overlay/overlay.h"
 
@@ -30,21 +29,22 @@ class QLabel;
 class QPushButton;
 class QVBoxLayout;
 
-class reminder_overlay : public overlay
+namespace hal
 {
-    Q_OBJECT
+    class ReminderOverlay : public Overlay
+    {
+        Q_OBJECT
 
-public:
-    reminder_overlay(QWidget* parent = nullptr);
+    public:
+        ReminderOverlay(QWidget* parent = nullptr);
 
-private Q_SLOTS:
-    void self_destruct();
+    private Q_SLOTS:
+        void self_destruct();
 
-private:
-    QVBoxLayout* m_layout;
-    QLabel* m_image_label;
-    QLabel* m_text_label;
-    QPushButton* m_button;
-};
-
-#endif    // REMINDER_OVERLAY_H
+    private:
+        QVBoxLayout* m_layout;
+        QLabel* m_image_label;
+        QLabel* m_text_label;
+        QPushButton* m_button;
+    };
+}

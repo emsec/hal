@@ -1,11 +1,14 @@
 #include "validator/validator.h"
 
-void validator::set_fail_text(const QString& text)
+namespace hal
 {
-    m_fail_text = text;
-}
+    void Validator::set_fail_text(const QString& text)
+    {
+        m_fail_text = text;
+    }
 
-QString validator::fail_text() const
-{
-    return m_fail_text;
+    QString Validator::fail_text() const
+    {
+        return m_fail_text;
+    }
 }

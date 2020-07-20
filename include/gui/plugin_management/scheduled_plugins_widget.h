@@ -21,27 +21,27 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef SCHEDULED_PLUGINS_WIDGET_H
-#define SCHEDULED_PLUGINS_WIDGET_H
+#pragma once
 
 #include <QScrollArea>
 
-class scheduled_plugin_item_area;
-
-class scheduled_plugins_widget : public QScrollArea
+namespace hal
 {
-    Q_OBJECT
+    class ScheduledPluginItemArea;
 
-public:
-    explicit scheduled_plugins_widget(QWidget* parent = nullptr);
+    class ScheduledPluginsWidget : public QScrollArea
+    {
+        Q_OBJECT
 
-    scheduled_plugin_item_area* area();
+    public:
+        explicit ScheduledPluginsWidget(QWidget* parent = nullptr);
 
-public Q_SLOTS:
-    void append_plugin(const QString& name);
+        ScheduledPluginItemArea* area();
 
-private:
-    scheduled_plugin_item_area* m_area;
-};
+    public Q_SLOTS:
+        void append_plugin(const QString& name);
 
-#endif    // SCHEDULED_PLUGINS_WIDGET_H
+    private:
+        ScheduledPluginItemArea* m_area;
+    };
+}

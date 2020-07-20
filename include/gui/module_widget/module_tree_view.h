@@ -22,22 +22,21 @@
  * SOFTWARE.
  */
 
-#ifndef __MODULE_TREE_VIEW_H
-#define __MODULE_TREE_VIEW_H
+#pragma once
 
 #include <QTreeView>
 
+namespace hal
+{
 //This class is neccessary to prevent that the right click on the tree-view does not select the
 //underlying item, otherwise you cant select the option "add selection to module" in
 //the contextmenu
-class module_tree_view : public QTreeView
-{
-    Q_OBJECT
-public:
-    module_tree_view(QWidget* parent = nullptr);
-    void mousePressEvent(QMouseEvent *event);
+    class ModuleTreeView : public QTreeView
+    {
+        Q_OBJECT
+    public:
+        ModuleTreeView(QWidget* parent = nullptr);
+        void mousePressEvent(QMouseEvent *event);
 
-};
-
-
-#endif //__MODULE_TREE_VIEW_H
+    };
+}

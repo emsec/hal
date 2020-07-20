@@ -25,60 +25,63 @@
 
 #include "core/callback_hook.h"
 
-class netlist;
-
-class module;
-
 /**
  * @ingroup handler
  */
-namespace module_event_handler
+
+namespace hal
 {
-    /**
-     * Enables/disables callbacks for this handler.<br>
-     * Enabled by default.
-     *
-     * @param[in] flag - True to enable, false to disable.
-     */
-    NETLIST_API void enable(bool flag);
+    class Netlist;
+    class Module;
 
-    enum event
+    namespace module_event_handler
     {
-        created,                     ///< no associated_data
-        removed,                     ///< no associated_data
-        name_changed,                ///< no associated_data
-        type_changed,                ///< no associated_data
-        parent_changed,              ///< no associated_data
-        submodule_added,             ///< associated_data = id of added module
-        submodule_removed,           ///< associated_data = id of removed module
-        gate_assigned,               ///< associated_data = id of inserted gate
-        gate_removed,                ///< associated_data = id of removed gate
-        input_port_name_changed,     ///< associated_data = id of respective net
-        output_port_name_changed,    ///< associated_data = id of respective net
-    };
+        /**
+         * Enables/disables callbacks for this handler.<br>
+         * Enabled by default.
+         *
+         * @param[in] flag - True to enable, false to disable.
+         */
+        NETLIST_API void enable(bool flag);
 
-    /**
-    * Executes all registered callbacks.
-    *
-    * @param[in] ev - the event which occured.
-    * @param[in] module - The affected object.
-    * @param[in] associated_data - may have a meaning depending on the event type.
-    */
-    NETLIST_API void notify(event ev, std::shared_ptr<module> module, u32 associated_data = 0xFFFFFFFF);
+        enum event
+        {
+            created,                     ///< no associated_data
+            removed,                     ///< no associated_data
+            name_changed,                ///< no associated_data
+            type_changed,                ///< no associated_data
+            parent_changed,              ///< no associated_data
+            submodule_added,             ///< associated_data = id of added module
+            submodule_removed,           ///< associated_data = id of removed module
+            gate_assigned,               ///< associated_data = id of inserted gate
+            gate_removed,                ///< associated_data = id of removed gate
+            input_port_name_changed,     ///< associated_data = id of respective net
+            output_port_name_changed,    ///< associated_data = id of respective net
+        };
 
-    /**
-     * Registers a callback function.
-     *
-     * @param[in] name - name of the callback, used for callback removal.
-     * @param[in] function - The callback function.
-     */
-    NETLIST_API void register_callback(const std::string& name, std::function<void(event e, std::shared_ptr<module> module, u32 associated_data)> function);
+        /**
+         * Executes all registered callbacks.
+         *
+         * @param[in] ev - the event which occured.
+         * @param[in] module - The affected object.
+         * @param[in] associated_data - may have a meaning depending on the event type.
+         */
+        NETLIST_API void notify(event ev, std::shared_ptr<Module> module, u32 associated_data = 0xFFFFFFFF);
 
-    /**
-     * Removes a callback function.
-     *
-     * @param[in] name - name of the callback.
-     */
-    NETLIST_API void unregister_callback(const std::string& name);
+        /**
+         * Registers a callback function.
+         *
+         * @param[in] name - name of the callback, used for callback removal.
+         * @param[in] function - The callback function.
+         */
+        NETLIST_API void register_callback(const std::string& name, std::function<void(event e, std::shared_ptr<Module> module, u32 associated_data)> function);
 
-}    // namespace module_event_handler
+        /**
+         * Removes a callback function.
+         *
+         * @param[in] name - name of the callback.
+         */
+        NETLIST_API void unregister_callback(const std::string& name);
+
+    }    // namespace module_event_handler
+}    // namespace hal

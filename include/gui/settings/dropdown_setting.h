@@ -21,29 +21,29 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef DROPDOWN_SETTINGS_H
-#define DROPDOWN_SETTINGS_H
+#pragma once
 
 #include "settings_widget.h"
 #include <QComboBox>
 #include <QStringList>
 
-class dropdown_setting : public settings_widget
+namespace hal
 {
-    Q_OBJECT
+    class DropdownSetting : public SettingsWidget
+    {
+        Q_OBJECT
 
-public:
-    dropdown_setting(const QString& key, const QString& title, const QMap<QString, QVariant>& options, const QString& description, QWidget* parent = 0);
+    public:
+        DropdownSetting(const QString& key, const QString& title, const QMap<QString, QVariant>& options, const QString& description, QWidget* parent = 0);
 
-    virtual void load(const QVariant& value) Q_DECL_OVERRIDE;
-    virtual QVariant value() Q_DECL_OVERRIDE;
-    //virtual void rollback() Q_DECL_OVERRIDE;
+        virtual void load(const QVariant& value) Q_DECL_OVERRIDE;
+        virtual QVariant value() Q_DECL_OVERRIDE;
+        //virtual void rollback() Q_DECL_OVERRIDE;
 
-private:
-    QMap<QString, QVariant> m_options;
-    QComboBox* m_combo_box;
-    void on_index_changed(QString text);
+    private:
+        QMap<QString, QVariant> m_options;
+        QComboBox* m_combo_box;
+        void on_index_changed(QString text);
 
-};
-
-#endif //DROPDOWN_SETTINGS_H
+    };
+}

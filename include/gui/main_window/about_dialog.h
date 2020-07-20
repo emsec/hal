@@ -21,26 +21,27 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef ABOUT_DIALOG_H
-#define ABOUT_DIALOG_H
+#pragma once
 
 #include <QDialog>
 #include <QLabel>
 #include <QLayout>
 #include <QPlainTextEdit>
 
-class about_dialog : public QDialog
+namespace hal
 {
-    Q_OBJECT
+    class AboutDialog : public QDialog
+    {
+        Q_OBJECT
 
-public:
-    explicit about_dialog(QWidget* parent = 0);
+    public:
+        explicit AboutDialog(QWidget* parent = 0);
 
-private:
-    QVBoxLayout m_content_layout;
-    QLabel m_placeholder;
-    QLabel m_licenses_label;
-    QPlainTextEdit m_textedit;
-};
+    private:
+        QVBoxLayout m_content_layout;
+        QLabel m_placeholder;
+        QLabel m_licenses_label;
+        QPlainTextEdit m_textedit;
+    };
+}
 
-#endif    // ABOUT_DIALOG_H

@@ -21,30 +21,30 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef HAL_PLUGIN_ITEM_H
-#define HAL_PLUGIN_ITEM_H
+#pragma once
 
 #include <QPair>
 #include <QString>
 #include <QVector>
 #include <type_traits>
 
-class plugin_item
+namespace hal
 {
-public:
-    enum class column_t
+    class PluginItem
     {
-        name = 0,
-        path = 1
+    public:
+        enum class column_t
+        {
+            name = 0,
+            path = 1
+        };
+
+        using column_utype = std::underlying_type<column_t>::type;
+        static QVector<QPair<QString, column_t>> get_column_description();
+        explicit PluginItem();
+        explicit PluginItem(QString plugin_name, QString plugin_path);
+        QString name;
+        QString path;
+        bool is_valid();
     };
-
-    using column_utype = std::underlying_type<column_t>::type;
-    static QVector<QPair<QString, column_t>> get_column_description();
-    explicit plugin_item();
-    explicit plugin_item(QString plugin_name, QString plugin_path);
-    QString name;
-    QString path;
-    bool is_valid();
-};
-
-#endif    //HAL_PLUGIN_ITEM_H
+}

@@ -21,26 +21,26 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef SORT_UTIL_H
-#define SORT_UTIL_H
+#pragma once
 
 #include <QString>
 
-namespace gui_utility
+namespace hal
 {
-    enum sort_mechanism
+    namespace gui_utility
     {
-        lexical = 0,
-        natural = 1
-    };
+        enum sort_mechanism
+        {
+            lexical = 0,
+            natural = 1
+        };
 
-    bool natural_order_compare(const QString& a, const QString& b);
-    bool lexical_order_compare(const QString& a, const QString& b);
-    int numeric_string_compare(QString a_num, QString b_num);
+        bool natural_order_compare(const QString& a, const QString& b);
+        bool lexical_order_compare(const QString& a, const QString& b);
+        int numeric_string_compare(QString a_num, QString b_num);
 
-    // convenience method to select an algoritm
-    int compare(sort_mechanism mechanism, QString a, QString b);
+        // convenience method to select an algoritm
+        int compare(sort_mechanism mechanism, QString a, QString b);
 
-} // namespace gui_utility
-
-#endif // SORT_UTIL_H
+    } // namespace gui_utility
+}

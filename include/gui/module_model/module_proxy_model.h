@@ -21,29 +21,29 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#ifndef MODULE_PROXY_MODEL_H
-#define MODULE_PROXY_MODEL_H
+#pragma once
 
 #include "gui/gui_utils/sort.h"
 
 #include <QSortFilterProxyModel>
 
-class module_proxy_model : public QSortFilterProxyModel
+namespace hal
 {
-    Q_OBJECT
+    class ModuleProxyModel : public QSortFilterProxyModel
+    {
+        Q_OBJECT
 
-public:
-    module_proxy_model(QObject* parent = nullptr);
+    public:
+        ModuleProxyModel(QObject* parent = nullptr);
 
-protected:
-    bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const Q_DECL_OVERRIDE;
-    bool lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const override;
+    protected:
+        bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const Q_DECL_OVERRIDE;
+        bool lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const override;
 
-private Q_SLOTS:
-    void handle_global_setting_changed(void* sender, const QString& key, const QVariant& value);
+    private Q_SLOTS:
+        void handle_global_setting_changed(void* sender, const QString& key, const QVariant& value);
 
-private:
-    gui_utility::sort_mechanism m_sort_mechanism;
-};
-
-#endif // MODULE_PROXY_MODEL_H
+    private:
+        gui_utility::sort_mechanism m_sort_mechanism;
+    };
+}
