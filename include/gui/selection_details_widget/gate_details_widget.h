@@ -31,6 +31,7 @@
 
 #include <QWidget>
 
+/* forward declaration */
 class QTableWidget;
 class QTableWidgetItem;
 class QVBoxLayout;
