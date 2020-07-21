@@ -4,7 +4,7 @@ namespace hal
 {
     void netlist_factory_init(py::module& m)
     {
-        m.def_submodule("netlist_factory")
+        m.def_submodule("NetlistFactory")
             .def("create_netlist", &netlist_factory::create_netlist, py::arg("gate_library_name"), R"(
                 Creates a new netlist for a specific gate library.
 
